@@ -465,7 +465,7 @@ void SAL_CALL SwXTextPortion::SetPropertyValues_Impl(
             if (!pEntry)
                 throw beans::UnknownPropertyException(OUString( "Unknown property: " ) + pPropertyNames[nProp], static_cast < cppu::OWeakObject * > ( this ) );
             if ( pEntry->nFlags & beans::PropertyAttribute::READONLY)
-                throw beans::PropertyVetoException ( OUString( "Property is read-only: " ) + pPropertyNames[nProp], static_cast < cppu::OWeakObject * > ( this ) );
+                throw beans::PropertyVetoException ("Property is read-only: " + pPropertyNames[nProp], static_cast < cppu::OWeakObject * > ( this ) );
 
             SwUnoCursorHelper::SetPropertyValue( *pUnoCrsr, *m_pPropSet,
                      pPropertyNames[nProp], pValues[nProp]);
@@ -510,11 +510,11 @@ uno::Sequence< uno::Any > SwXTextPortion::getPropertyValues(
     }
     catch (beans::UnknownPropertyException &)
     {
-        throw uno::RuntimeException(OUString( "Unknown property exception caught" ), static_cast < cppu::OWeakObject * > ( this ) );
+        throw uno::RuntimeException("Unknown property exception caught", static_cast < cppu::OWeakObject * > ( this ) );
     }
     catch (lang::WrappedTargetException &)
     {
-        throw uno::RuntimeException(OUString( "WrappedTargetException caught" ), static_cast < cppu::OWeakObject * > ( this ) );
+        throw uno::RuntimeException("WrappedTargetException caught", static_cast < cppu::OWeakObject * > ( this ) );
     }
 
     return aValues;

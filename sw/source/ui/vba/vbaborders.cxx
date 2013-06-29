@@ -226,12 +226,12 @@ public:
                     break;
                 }
                 default:
-                    throw uno::RuntimeException( OUString( "Bad param" ), uno::Reference< uno::XInterface >() );
+                    throw uno::RuntimeException("Bad param", uno::Reference< uno::XInterface >() );
             }
             setBorderLine( aBorderLine );
         }
         else
-            throw uno::RuntimeException( OUString( "Method failed" ), uno::Reference< uno::XInterface >() );
+            throw uno::RuntimeException("Method failed", uno::Reference< uno::XInterface >() );
     }
 };
 

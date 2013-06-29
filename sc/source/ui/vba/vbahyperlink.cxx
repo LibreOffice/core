@@ -53,7 +53,7 @@ ScVbaHyperlink::ScVbaHyperlink( const uno::Reference< XHelperInterface >& rxAnch
     UrlComponents aUrlComp;
     OUString aTextToDisplay;
     if( !(rAddress >>= aUrlComp.first) || aUrlComp.first.isEmpty() )
-        throw uno::RuntimeException( OUString( "Cannot get address" ), uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException("Cannot get address", uno::Reference< uno::XInterface >() );
     rSubAddress >>= aUrlComp.second;
     rScreenTip >>= maScreenTip;
     rTextToDisplay >>= aTextToDisplay;
@@ -82,7 +82,7 @@ ScVbaHyperlink::ScVbaHyperlink( const uno::Reference< XHelperInterface >& rxAnch
         }
         // create and initialize a new URL text field
         uno::Reference< lang::XMultiServiceFactory > xFactory( ScVbaRange::getUnoModel( xAnchorRange ), uno::UNO_QUERY_THROW );
-        uno::Reference< text::XTextContent > xUrlField( xFactory->createInstance( OUString( "com.sun.star.text.TextField.URL" ) ), uno::UNO_QUERY_THROW );
+        uno::Reference< text::XTextContent > xUrlField( xFactory->createInstance("com.sun.star.text.TextField.URL"), uno::UNO_QUERY_THROW );
         mxTextField.set( xUrlField, uno::UNO_QUERY_THROW );
         setUrlComponents( aUrlComp );
         setTextToDisplay( aTextToDisplay );
@@ -153,14 +153,14 @@ OUString ScVbaHyperlink::getTextToDisplay() throw (uno::RuntimeException)
 {
     ensureTextField();
     OUString aTextToDisplay;
-    mxTextField->getPropertyValue( OUString( "Representation" ) ) >>= aTextToDisplay;
+    mxTextField->getPropertyValue("Representation") >>= aTextToDisplay;
     return aTextToDisplay;
 }
 
 void ScVbaHyperlink::setTextToDisplay( const OUString& rTextToDisplay ) throw (uno::RuntimeException)
 {
     ensureTextField();
-    mxTextField->setPropertyValue( OUString( "Representation" ), uno::Any( rTextToDisplay ) );
+    mxTextField->setPropertyValue("Representation", uno::Any( rTextToDisplay ) );
 }
 
 sal_Int32 SAL_CALL ScVbaHyperlink::getType() throw (uno::RuntimeException)
@@ -207,7 +207,7 @@ ScVbaHyperlink::UrlComponents ScVbaHyperlink::getUrlComponents() throw (uno::Run
 {
     ensureTextField();
     OUString aUrl;
-    mxTextField->getPropertyValue( OUString( "URL" ) ) >>= aUrl;
+    mxTextField->getPropertyValue("URL") >>= aUrl;
     sal_Int32 nHashPos = aUrl.indexOf( '#' );
     if( nHashPos < 0 )
         return UrlComponents( aUrl, OUString() );
@@ -220,7 +220,7 @@ void ScVbaHyperlink::setUrlComponents( const UrlComponents& rUrlComp ) throw (un
     OUStringBuffer aUrl( rUrlComp.first );
     if( !rUrlComp.second.isEmpty() )
         aUrl.append( sal_Unicode( '#' ) ).append( rUrlComp.second );
-    mxTextField->setPropertyValue( OUString( "URL" ), uno::Any( aUrl.makeStringAndClear() ) );
+    mxTextField->setPropertyValue("URL", uno::Any( aUrl.makeStringAndClear() ) );
 }
 
 namespace hyperlink

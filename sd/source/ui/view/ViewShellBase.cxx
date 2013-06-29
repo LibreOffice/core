@@ -1582,7 +1582,7 @@ void CurrentPageSetter::operator() (bool)
             // Switch to the page last edited by setting the CurrentPage
             // property.
             Reference<beans::XPropertySet> xSet (mrBase.GetController(), UNO_QUERY_THROW);
-            xSet->setPropertyValue (OUString("CurrentPage"), aPage);
+            xSet->setPropertyValue ("CurrentPage", aPage);
         }
         catch (const RuntimeException&)
         {

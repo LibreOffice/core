@@ -140,7 +140,7 @@ void SwVbaBookmarks::removeBookmarkByName( const OUString& rName ) throw (uno::R
 void SwVbaBookmarks::addBookmarkByName( const uno::Reference< frame::XModel >& xModel, const OUString& rName, const uno::Reference< text::XTextRange >& rTextRange ) throw (uno::RuntimeException)
 {
     uno::Reference< lang::XMultiServiceFactory > xDocMSF( xModel, uno::UNO_QUERY_THROW );
-    uno::Reference< text::XTextContent > xBookmark( xDocMSF->createInstance(  OUString("com.sun.star.text.Bookmark") ), uno::UNO_QUERY_THROW );
+    uno::Reference< text::XTextContent > xBookmark( xDocMSF->createInstance("com.sun.star.text.Bookmark"), uno::UNO_QUERY_THROW );
     uno::Reference< container::XNamed > xNamed( xBookmark, uno::UNO_QUERY_THROW );
     xNamed->setName( rName );
     rTextRange->getText()->insertTextContent( rTextRange, xBookmark, sal_False );

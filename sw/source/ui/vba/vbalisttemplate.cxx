@@ -45,7 +45,7 @@ SwVbaListTemplate::ListLevels( const uno::Any& index ) throw (uno::RuntimeExcept
 void SwVbaListTemplate::applyListTemplate( uno::Reference< beans::XPropertySet >& xProps ) throw (uno::RuntimeException)
 {
     uno::Reference< container::XIndexReplace > xNumberingRules = pListHelper->getNumberingRules();
-    xProps->setPropertyValue( OUString("NumberingRules") , uno::makeAny( xNumberingRules ) );
+    xProps->setPropertyValue("NumberingRules", uno::makeAny( xNumberingRules ) );
 }
 
 OUString

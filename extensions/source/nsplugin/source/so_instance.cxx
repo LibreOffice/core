@@ -182,9 +182,9 @@ sal_Bool SoPluginInstance::LoadDocument(NSP_HWND hParent)
             // currently ignore errors in this code
             uno::Reference< beans::XPropertySet > xFrameProps( m_xFrame, uno::UNO_QUERY_THROW );
             uno::Reference< beans::XPropertySet > xLMProps;
-            xFrameProps->getPropertyValue( OUString("LayoutManager") ) >>= xLMProps;
+            xFrameProps->getPropertyValue("LayoutManager") >>= xLMProps;
             if ( xLMProps.is() )
-                xLMProps->setPropertyValue( OUString("AutomaticToolbars"), uno::makeAny( (sal_Bool)sal_False ) );
+                xLMProps->setPropertyValue("AutomaticToolbars", uno::makeAny( (sal_Bool)sal_False ) );
         }
         catch( const uno::Exception& )
         {}
@@ -300,7 +300,7 @@ sal_Bool SoPluginInstance::LoadDocument(NSP_HWND hParent)
             uno::Reference< presentation::XPresentationSupplier > xPresSuppl( m_xComponent, uno::UNO_QUERY_THROW );
             uno::Reference< presentation::XPresentation > xPres( xPresSuppl->getPresentation(), uno::UNO_SET_THROW );
             uno::Reference< beans::XPropertySet > xProps( xPresSuppl->getPresentation(), uno::UNO_QUERY_THROW );
-            xProps->setPropertyValue( OUString( "IsFullScreen" ), uno::makeAny( sal_False ) );
+            xProps->setPropertyValue("IsFullScreen", uno::makeAny( sal_False ) );
             xPres->start();
         }
         catch( const uno::Exception& )

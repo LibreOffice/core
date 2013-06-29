@@ -48,7 +48,7 @@ ScVbaPane::setScrollColumn( sal_Int32 _scrollcolumn ) throw (uno::RuntimeExcepti
 {
     if( _scrollcolumn < 1 )
     {
-        throw uno::RuntimeException( OUString( "Column number should not less than 1" ),
+        throw uno::RuntimeException("Column number should not less than 1",
                 uno::Reference< uno::XInterface >() );
     }
     m_xViewPane->setFirstVisibleColumn( _scrollcolumn - 1 );
@@ -65,7 +65,7 @@ ScVbaPane::setScrollRow( sal_Int32 _scrollrow ) throw (uno::RuntimeException)
 {
     if( _scrollrow < 1 )
     {
-        throw uno::RuntimeException( OUString( "Row number should not less than 1" ),
+        throw uno::RuntimeException("Row number should not less than 1",
                 uno::Reference< uno::XInterface >() );
     }
     m_xViewPane->setFirstVisibleRow( _scrollrow - 1 );

@@ -102,7 +102,7 @@ AquaClipboard::AquaClipboard(NSPasteboard* pasteboard, bool bUseSystemPasteboard
 
       if (mPasteboard == nil)
         {
-          throw RuntimeException(OUString("AquaClipboard: Cannot create Cocoa pasteboard"),
+          throw RuntimeException("AquaClipboard: Cannot create Cocoa pasteboard",
                 static_cast<XClipboardEx*>(this));
         }
     }
@@ -213,7 +213,7 @@ void SAL_CALL AquaClipboard::addClipboardListener(const Reference< XClipboardLis
   MutexGuard aGuard(m_aMutex);
 
   if (!listener.is())
-     throw IllegalArgumentException(OUString("empty reference"),
+     throw IllegalArgumentException("empty reference",
                                    static_cast<XClipboardEx*>(this), 1);
 
   mClipboardListeners.push_back(listener);
@@ -226,7 +226,7 @@ void SAL_CALL AquaClipboard::removeClipboardListener(const Reference< XClipboard
   MutexGuard aGuard(m_aMutex);
 
   if (!listener.is())
-     throw IllegalArgumentException(OUString("empty reference"),
+     throw IllegalArgumentException("empty reference",
                                    static_cast<XClipboardEx*>(this), 1);
 
   mClipboardListeners.remove(listener);

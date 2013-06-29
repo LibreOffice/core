@@ -188,102 +188,102 @@ void test_merge()
 
     ///////////////////////////////////////////////////////////////////////////
 
-    REG_ENSURE(!rootKey.openKey(OUString("/stardiv/IchbineinMergeKey"), key1), "testMerge error 5");
+    REG_ENSURE(!rootKey.openKey("/stardiv/IchbineinMergeKey", key1), "testMerge error 5");
 
-    REG_ENSURE(!key1.openKey(OUString("MergeKey1"), mkey1), "testMerge error 6");
+    REG_ENSURE(!key1.openKey("MergeKey1", mkey1), "testMerge error 6");
     REG_ENSURE(!mkey1.closeKey(), "testMerge error 7");
 
-    REG_ENSURE(!key1.openKey(OUString("/MergeKey1/MK1SubKey1"), mkey1), "testMerge error 8");
+    REG_ENSURE(!key1.openKey("/MergeKey1/MK1SubKey1", mkey1), "testMerge error 8");
     REG_ENSURE(!mkey1.closeKey(), "testMerge error 9");
-    REG_ENSURE(!key1.openKey(OUString("/MergeKey1/MK1SubKey1/KeyWithLongValue"), mkey1), "testMerge error 10");
+    REG_ENSURE(!key1.openKey("/MergeKey1/MK1SubKey1/KeyWithLongValue", mkey1), "testMerge error 10");
     REG_ENSURE(!mkey1.closeKey(), "testMerge error 11");
 
-    REG_ENSURE(!key1.openKey(OUString("/MergeKey1/MK1SubKey2"), mkey1), "testMerge error 12");
+    REG_ENSURE(!key1.openKey("/MergeKey1/MK1SubKey2", mkey1), "testMerge error 12");
     REG_ENSURE(!mkey1.closeKey(), "testMerge error 13");
-    REG_ENSURE(!key1.openKey(OUString("/MergeKey1/MK1SubKey2/KeyWithStringValue"), mkey1), "testMerge error 14");
+    REG_ENSURE(!key1.openKey("/MergeKey1/MK1SubKey2/KeyWithStringValue", mkey1), "testMerge error 14");
     REG_ENSURE(!mkey1.closeKey(), "testMerge error 15");
 
-    REG_ENSURE(!key1.openKey(OUString("/MergeKey1/MK1SubKey3"), mkey1), "testMerge error 16");
+    REG_ENSURE(!key1.openKey("/MergeKey1/MK1SubKey3", mkey1), "testMerge error 16");
     REG_ENSURE(!mkey1.closeKey(), "testMerge error 17");
-    REG_ENSURE(!key1.openKey(OUString("/MergeKey1/MK1SubKey3/KeyWithUnicodeValue"), mkey1), "testMerge error 18");
+    REG_ENSURE(!key1.openKey("/MergeKey1/MK1SubKey3/KeyWithUnicodeValue", mkey1), "testMerge error 18");
     REG_ENSURE(!mkey1.closeKey(), "testMerge error 19");
 
-    REG_ENSURE(!key1.openKey(OUString("/MergeKey1/MK1SubKey4"), mkey1), "testMerge error 20");
+    REG_ENSURE(!key1.openKey("/MergeKey1/MK1SubKey4", mkey1), "testMerge error 20");
     REG_ENSURE(!mkey1.closeKey(), "testMerge error 21");
-    REG_ENSURE(!key1.openKey(OUString("/MergeKey1/MK1SubKey4/KeyWithBinaryValue"), mkey1), "testMerge error 22");
+    REG_ENSURE(!key1.openKey("/MergeKey1/MK1SubKey4/KeyWithBinaryValue", mkey1), "testMerge error 22");
     REG_ENSURE(!mkey1.closeKey(), "testMerge error 23");
 
     REG_ENSURE(!key1.closeKey(), "testMerge error 24");
 
     ///////////////////////////////////////////////////////////////////////////
 
-    REG_ENSURE(!rootKey.openKey(OUString("/stardiv/IchbineinMergeKey"), key2), "testMerge error 25");
+    REG_ENSURE(!rootKey.openKey("/stardiv/IchbineinMergeKey", key2), "testMerge error 25");
 
-    REG_ENSURE(!key2.openKey(OUString("MergeKey2"), mkey2), "testMerge error 26");
+    REG_ENSURE(!key2.openKey("MergeKey2", mkey2), "testMerge error 26");
     REG_ENSURE(!mkey2.closeKey(), "testMerge error 27");
 
-    REG_ENSURE(!key2.openKey(OUString("/MergeKey2/MK2SubKey1"), mkey2), "testMerge error 28");
+    REG_ENSURE(!key2.openKey("/MergeKey2/MK2SubKey1", mkey2), "testMerge error 28");
     REG_ENSURE(!mkey2.closeKey(), "testMerge error 29");
-    REG_ENSURE(!key2.openKey(OUString("/MergeKey2/MK2SubKey1/KeyWithBinaryValue"), mkey2), "testMerge error 30");
+    REG_ENSURE(!key2.openKey("/MergeKey2/MK2SubKey1/KeyWithBinaryValue", mkey2), "testMerge error 30");
     REG_ENSURE(!mkey2.closeKey(), "testMerge error 31");
 
-    REG_ENSURE(!key2.openKey(OUString("/MergeKey2/MK2SubKey2"), mkey2), "testMerge error 31");
+    REG_ENSURE(!key2.openKey("/MergeKey2/MK2SubKey2", mkey2), "testMerge error 31");
     REG_ENSURE(!mkey2.closeKey(), "testMerge error 33");
-    REG_ENSURE(!key2.openKey(OUString("/MergeKey2/MK2SubKey2/KeyWithUnicodeValue"), mkey2), "testMerge error 34");
+    REG_ENSURE(!key2.openKey("/MergeKey2/MK2SubKey2/KeyWithUnicodeValue", mkey2), "testMerge error 34");
     REG_ENSURE(!mkey2.closeKey(), "testMerge error 35");
 
-    REG_ENSURE(!key2.openKey(OUString("/MergeKey2/MK2SubKey3"), mkey2), "testMerge error 36");
+    REG_ENSURE(!key2.openKey("/MergeKey2/MK2SubKey3", mkey2), "testMerge error 36");
     REG_ENSURE(!mkey2.closeKey(), "testMerge error 37");
-    REG_ENSURE(!key2.openKey(OUString("/MergeKey2/MK2SubKey3/KeyWithStringValue"), mkey2), "testMerge error 38");
+    REG_ENSURE(!key2.openKey("/MergeKey2/MK2SubKey3/KeyWithStringValue", mkey2), "testMerge error 38");
     REG_ENSURE(!mkey2.closeKey(), "testMerge error 39");
 
-    REG_ENSURE(!key2.openKey(OUString("/MergeKey2/MK2SubKey4"), mkey2), "testMerge error 40");
+    REG_ENSURE(!key2.openKey("/MergeKey2/MK2SubKey4", mkey2), "testMerge error 40");
     REG_ENSURE(!mkey2.closeKey(), "testMerge error 41");
-    REG_ENSURE(!key2.openKey(OUString("/MergeKey2/MK2SubKey4/KeyWithLongValue"), mkey2), "testMerge error 42");
+    REG_ENSURE(!key2.openKey("/MergeKey2/MK2SubKey4/KeyWithLongValue", mkey2), "testMerge error 42");
     REG_ENSURE(!mkey2.closeKey(), "testMerge error 43");
 
     REG_ENSURE(!key2.closeKey(), "testMerge error 44");
 
     ///////////////////////////////////////////////////////////////////////////
 
-    REG_ENSURE(!rootKey.openKey(OUString("/stardiv/IchbineinMergeKey"), key1u2), "testMerge error 40");
+    REG_ENSURE(!rootKey.openKey("/stardiv/IchbineinMergeKey", key1u2), "testMerge error 40");
 
-    REG_ENSURE(!key1u2.openKey(OUString("MergeKey1u2"), mkey1u2), "testMerge error 41");
+    REG_ENSURE(!key1u2.openKey("MergeKey1u2", mkey1u2), "testMerge error 41");
     REG_ENSURE(!mkey1u2.closeKey(), "testMerge error 42");
 
-    REG_ENSURE(!key1u2.openKey(OUString("/MergeKey1u2/MK1SubKey11"), mkey1u2), "testMerge error 43");
+    REG_ENSURE(!key1u2.openKey("/MergeKey1u2/MK1SubKey11", mkey1u2), "testMerge error 43");
     REG_ENSURE(!mkey1u2.closeKey(), "testMerge error 44");
-    REG_ENSURE(!key1u2.openKey(OUString("/MergeKey1u2/MK1SubKey11/KeyWithLongValue"), mkey1u2), "testMerge error 45");
+    REG_ENSURE(!key1u2.openKey("/MergeKey1u2/MK1SubKey11/KeyWithLongValue", mkey1u2), "testMerge error 45");
     REG_ENSURE(!mkey1u2.closeKey(), "testMerge error 46");
 
-    REG_ENSURE(!key1u2.openKey(OUString("/MergeKey1u2/MK1SubKey12"), mkey1u2), "testMerge error 47");
+    REG_ENSURE(!key1u2.openKey("/MergeKey1u2/MK1SubKey12", mkey1u2), "testMerge error 47");
     REG_ENSURE(!mkey1u2.closeKey(), "testMerge error 48");
-    REG_ENSURE(!key1u2.openKey(OUString("/MergeKey1u2/MK1SubKey12/KeyWithStringValue"), mkey1u2), "testMerge error 49");
+    REG_ENSURE(!key1u2.openKey("/MergeKey1u2/MK1SubKey12/KeyWithStringValue", mkey1u2), "testMerge error 49");
     REG_ENSURE(!mkey1u2.closeKey(), "testMerge error 50");
 
-    REG_ENSURE(!key1u2.openKey(OUString("/MergeKey1u2/MK1SubKey13"), mkey1u2), "testMerge error 51");
+    REG_ENSURE(!key1u2.openKey("/MergeKey1u2/MK1SubKey13", mkey1u2), "testMerge error 51");
     REG_ENSURE(!mkey1u2.closeKey(), "testMerge error 52");
-    REG_ENSURE(!key1u2.openKey(OUString("/MergeKey1u2/MK1SubKey13/KeyWithUnicodeValue"), mkey1u2), "testMerge error 53");
+    REG_ENSURE(!key1u2.openKey("/MergeKey1u2/MK1SubKey13/KeyWithUnicodeValue", mkey1u2), "testMerge error 53");
     REG_ENSURE(!mkey1u2.closeKey(), "testMerge error 54");
 
-    REG_ENSURE(!key1u2.openKey(OUString("/MergeKey1u2/MK2SubKey21"), mkey1u2), "testMerge error 55");
+    REG_ENSURE(!key1u2.openKey("/MergeKey1u2/MK2SubKey21", mkey1u2), "testMerge error 55");
     REG_ENSURE(!mkey1u2.closeKey(), "testMerge error 56");
-    REG_ENSURE(!key1u2.openKey(OUString("/MergeKey1u2/MK2SubKey21/KeyWithBinaryValue"), mkey1u2), "testMerge error 57");
+    REG_ENSURE(!key1u2.openKey("/MergeKey1u2/MK2SubKey21/KeyWithBinaryValue", mkey1u2), "testMerge error 57");
     REG_ENSURE(!mkey1u2.closeKey(), "testMerge error 58");
 
-    REG_ENSURE(!key1u2.openKey(OUString("/MergeKey1u2/MK2SubKey22"), mkey1u2), "testMerge error 59");
+    REG_ENSURE(!key1u2.openKey("/MergeKey1u2/MK2SubKey22", mkey1u2), "testMerge error 59");
     REG_ENSURE(!mkey1u2.closeKey(), "testMerge error 60");
-    REG_ENSURE(!key1u2.openKey(OUString("/MergeKey1u2/MK2SubKey22/KeyWithLongValue"), mkey1u2), "testMerge error 61");
+    REG_ENSURE(!key1u2.openKey("/MergeKey1u2/MK2SubKey22/KeyWithLongValue", mkey1u2), "testMerge error 61");
     REG_ENSURE(!mkey1u2.closeKey(), "testMerge error 62");
 
-    REG_ENSURE(!key1u2.openKey(OUString("/MergeKey1u2/MK2SubKey23"), mkey1u2), "testMerge error 63");
+    REG_ENSURE(!key1u2.openKey("/MergeKey1u2/MK2SubKey23", mkey1u2), "testMerge error 63");
     REG_ENSURE(!mkey1u2.closeKey(), "testMerge error 64");
-    REG_ENSURE(!key1u2.openKey(OUString("/MergeKey1u2/MK2SubKey23/KeyWithStringValue"), mkey1u2), "testMerge error 65");
+    REG_ENSURE(!key1u2.openKey("/MergeKey1u2/MK2SubKey23/KeyWithStringValue", mkey1u2), "testMerge error 65");
     REG_ENSURE(!mkey1u2.closeKey(), "testMerge error 66");
 
-    REG_ENSURE(!key1u2.openKey(OUString("/MergeKey1u2/MK12SubKey1u2"), mkey1u2), "testMerge error 67");
+    REG_ENSURE(!key1u2.openKey("/MergeKey1u2/MK12SubKey1u2", mkey1u2), "testMerge error 67");
     REG_ENSURE(!mkey1u2.closeKey(), "testMerge error 68");
-    REG_ENSURE(!key1u2.openKey(OUString("/MergeKey1u2/MK12SubKey1u2/KeyWithLongValue"), mkey1u2), "testMerge error 69");
+    REG_ENSURE(!key1u2.openKey("/MergeKey1u2/MK12SubKey1u2/KeyWithLongValue", mkey1u2), "testMerge error 69");
     REG_ENSURE(!mkey1u2.closeKey(), "testMerge error 70");
 
     REG_ENSURE(!key1u2.closeKey(), "testMerge error 71");
@@ -295,7 +295,7 @@ void test_merge()
     sal_Int32           int32Value;
     sal_uInt8           *Value;
 
-    REG_ENSURE(!rootKey.openKey(OUString("/stardiv/IchbineinMergeKey"), key1), "testMerge error 72");
+    REG_ENSURE(!rootKey.openKey("/stardiv/IchbineinMergeKey", key1), "testMerge error 72");
 
     REG_ENSURE(!key1.getValueInfo(OUString("/MergeKey1/MK1SubKey1/KeyWithLongValue"), &valueType, &valueSize), "testMerge error 73");
     REG_ENSURE(valueType == RG_VALUETYPE_LONG && valueSize == sizeof(sal_Int32), "testMerge error 74");

@@ -72,26 +72,26 @@ void ScTabViewShell::InsertURLButton( const String& rName, const String& rURL,
     uno::Any aAny;
 
     aAny <<= OUString(rName);
-    xPropSet->setPropertyValue( OUString( "Label" ), aAny );
+    xPropSet->setPropertyValue("Label", aAny );
 
     OUString aTmp = INetURLObject::GetAbsURL( pDoc->GetDocumentShell()->GetMedium()->GetBaseURL(), rURL );
     aAny <<= aTmp;
-    xPropSet->setPropertyValue( OUString( "TargetURL" ), aAny );
+    xPropSet->setPropertyValue("TargetURL", aAny );
 
     if( rTarget.Len() )
     {
         aAny <<= OUString(rTarget);
-        xPropSet->setPropertyValue( OUString( "TargetFrame" ), aAny );
+        xPropSet->setPropertyValue("TargetFrame", aAny );
     }
 
     form::FormButtonType eButtonType = form::FormButtonType_URL;
     aAny <<= eButtonType;
-    xPropSet->setPropertyValue( OUString( "ButtonType" ), aAny );
+    xPropSet->setPropertyValue("ButtonType", aAny );
 
         if ( ::avmedia::MediaWindow::isMediaURL( rURL ) )
     {
         aAny <<= sal_True;
-        xPropSet->setPropertyValue( OUString(  "DispatchURLInternal" ), aAny );
+        xPropSet->setPropertyValue("DispatchURLInternal", aAny );
     }
 
     Point aPos;

@@ -263,9 +263,9 @@ static bool has_states( const std::vector< XMLPropertyState >& xPropStates )
                 // get style
                 OUString sParentStyleName;
                 Reference< XPropertySetInfo > xPropertySetInfo( xCellSet->getPropertySetInfo() );
-                if( xPropertySetInfo.is() && xPropertySetInfo->hasPropertyByName( OUString("Style")) )
+                if( xPropertySetInfo.is() && xPropertySetInfo->hasPropertyByName("Style") )
                 {
-                    Reference< XStyle > xStyle( xCellSet->getPropertyValue(OUString("Style")), UNO_QUERY );
+                    Reference< XStyle > xStyle( xCellSet->getPropertyValue("Style"), UNO_QUERY );
                     if( xStyle.is() )
                         sParentStyleName = xStyle->getName();
                 }

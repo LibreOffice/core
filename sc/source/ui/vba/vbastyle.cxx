@@ -31,7 +31,7 @@ uno::Reference< container::XNameAccess >
 ScVbaStyle::getStylesNameContainer( const uno::Reference< frame::XModel >& xModel ) throw ( uno::RuntimeException )
 {
     uno::Reference< style::XStyleFamiliesSupplier > xStyleSupplier( xModel, uno::UNO_QUERY_THROW);
-    uno::Reference< container::XNameAccess > xStylesAccess( xStyleSupplier->getStyleFamilies()->getByName( OUString( "CellStyles" ) ), uno::UNO_QUERY_THROW );
+    uno::Reference< container::XNameAccess > xStylesAccess( xStyleSupplier->getStyleFamilies()->getByName("CellStyles"), uno::UNO_QUERY_THROW );
     return xStylesAccess;
 }
 
@@ -49,7 +49,7 @@ void ScVbaStyle::initialise() throw ( uno::RuntimeException )
     if (!mxModel.is() )
         DebugHelper::exception(SbERR_METHOD_FAILED, OUString( "XModel Interface could not be retrieved") );
     uno::Reference< lang::XServiceInfo > xServiceInfo( mxPropertySet, uno::UNO_QUERY_THROW );
-    if ( !xServiceInfo->supportsService( OUString( "com.sun.star.style.CellStyle" ) ) )
+    if ( !xServiceInfo->supportsService("com.sun.star.style.CellStyle") )
     {
             DebugHelper::exception(SbERR_METHOD_FAILED, OUString() );
     }

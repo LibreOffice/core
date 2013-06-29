@@ -923,7 +923,7 @@ void GtkPrintDialog::ExportAsPDF(const OUString &rFileURL, GtkPrintSettings *pSe
         xFrame = uno::Reference < XFrame >(xDesktop, UNO_QUERY);
 
     uno::Reference < XFilter > xFilter(
-        ::comphelper::getProcessServiceFactory()->createInstance(OUString("com.sun.star.document.PDFFilter")),
+        ::comphelper::getProcessServiceFactory()->createInstance("com.sun.star.document.PDFFilter"),
         UNO_QUERY);
 
     if (xFilter.is())

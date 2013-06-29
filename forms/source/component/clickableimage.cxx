@@ -680,7 +680,7 @@ namespace frm
         ImageProducer *pImgProd = GetImageProducer();
         // grab the ImageURL
         OUString sURL;
-        getPropertyValue( OUString("ImageURL") ) >>= sURL;
+        getPropertyValue("ImageURL") >>= sURL;
         if (!m_pMedium)
         {
             if ( ::svt::GraphicAccess::isSupportedURL( sURL )  )

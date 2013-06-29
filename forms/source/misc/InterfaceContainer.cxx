@@ -123,7 +123,7 @@ void OInterfaceContainer::impl_addVbEvents_nolck_nothrow(  const sal_Int32 i_nIn
                 break;
 
             Reference< XMultiServiceFactory > xDocFac( xDoc, UNO_QUERY_THROW );
-            Reference< XCodeNameQuery > xNameQuery( xDocFac->createInstance( OUString("ooo.vba.VBACodeNameProvider") ), UNO_QUERY );
+            Reference< XCodeNameQuery > xNameQuery( xDocFac->createInstance("ooo.vba.VBACodeNameProvider"), UNO_QUERY );
             if ( !xNameQuery.is() )
                 break;
 
@@ -146,7 +146,7 @@ void OInterfaceContainer::impl_addVbEvents_nolck_nothrow(  const sal_Int32 i_nIn
 
             Reference< XPropertySet > xProps( xElement, UNO_QUERY_THROW );
             OUString sServiceName;
-            xProps->getPropertyValue( OUString("DefaultControl") ) >>= sServiceName;
+            xProps->getPropertyValue("DefaultControl") >>= sServiceName;
 
             Reference< ooo::vba::XVBAToOOEventDescGen > xDescSupplier( m_xContext->getServiceManager()->createInstanceWithContext("ooo.vba.VBAToOOEventDesc", m_xContext), UNO_QUERY_THROW );
             Sequence< ScriptEventDescriptor > vbaEvents = xDescSupplier->getEventDescriptions( sServiceName , sCodeName );
@@ -870,7 +870,7 @@ void OInterfaceContainer::implInsert(sal_Int32 _nIndex, const Reference< XProper
     bool bHandleVbaEvents = false;
     try
     {
-        _rxElement->getPropertyValue(OUString("GenerateVbaEvents") ) >>= bHandleVbaEvents;
+        _rxElement->getPropertyValue("GenerateVbaEvents") >>= bHandleVbaEvents;
     }
     catch( const Exception& )
     {

@@ -190,7 +190,7 @@ bool utl::UCBContentHelper::GetTitle(
 {
     assert(title != 0);
     try {
-        return content(url).getPropertyValue(OUString("Title")) >>= *title;
+        return content(url).getPropertyValue("Title") >>= *title;
     } catch (css::uno::RuntimeException const &) {
         throw;
     } catch (css::ucb::CommandAbortedException const &) {
@@ -296,7 +296,7 @@ bool utl::UCBContentHelper::MakeFolder(
 sal_Int64 utl::UCBContentHelper::GetSize(OUString const & url) {
     try {
         sal_Int64 n = 0;
-        bool ok = (content(url).getPropertyValue(OUString("Size")) >>= n);
+        bool ok = (content(url).getPropertyValue("Size") >>= n);
         SAL_INFO_IF(
             !ok, "unotools.ucbhelper",
             "UCBContentHelper::GetSize(" << url

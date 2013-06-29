@@ -361,7 +361,7 @@ ScVbaWorksheets::setVisible( const uno::Any& _visible ) throw (uno::RuntimeExcep
         }
     }
     else
-        throw uno::RuntimeException( OUString( "Visible property doesn't support non boolean #FIXME" ), uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException("Visible property doesn't support non boolean #FIXME", uno::Reference< uno::XInterface >() );
 }
 
 void SAL_CALL
@@ -369,7 +369,7 @@ ScVbaWorksheets::Select( const uno::Any& Replace ) throw (uno::RuntimeException)
 {
     ScTabViewShell* pViewShell = excel::getBestViewShell( mxModel );
     if ( !pViewShell )
-        throw uno::RuntimeException( OUString( "Cannot obtain view shell" ), uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException("Cannot obtain view shell", uno::Reference< uno::XInterface >() );
 
     ScMarkData& rMarkData = pViewShell->GetViewData()->GetMarkData();
     sal_Bool bReplace = sal_True;

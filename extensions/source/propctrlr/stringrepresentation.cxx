@@ -240,7 +240,7 @@ void SAL_CALL StringRepresentation::initialize(const uno::Sequence< uno::Any > &
             if ( m_xContext.is() )
             {
                 uno::Reference< container::XHierarchicalNameAccess > xTypeDescProv(
-                    m_xContext->getValueByName( OUString( "/singletons/com.sun.star.reflection.theTypeDescriptionManager" ) ),
+                    m_xContext->getValueByName("/singletons/com.sun.star.reflection.theTypeDescriptionManager"),
                     uno::UNO_QUERY_THROW );
 
                 m_xTypeDescription.set( xTypeDescProv->getByHierarchicalName( sConstantName ), uno::UNO_QUERY_THROW );

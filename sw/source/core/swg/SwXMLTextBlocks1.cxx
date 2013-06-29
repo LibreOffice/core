@@ -359,7 +359,7 @@ sal_uLong SwXMLTextBlocks::PutBlockText( const String& rShort, const String& ,
     OUString aMime ( "text/xml" );
     Any aAny;
     aAny <<= aMime;
-    xSet->setPropertyValue( OUString("MediaType"), aAny );
+    xSet->setPropertyValue("MediaType", aAny );
     uno::Reference < io::XOutputStream > xOut = xDocStream->getOutputStream();
        uno::Reference<io::XActiveDataSource> xSrc(xWriter, uno::UNO_QUERY);
        xSrc->setOutputStream(xOut);
@@ -478,7 +478,7 @@ void SwXMLTextBlocks::WriteInfo( void )
         OUString aMime ( "text/xml" );
         Any aAny;
         aAny <<= aMime;
-        xSet->setPropertyValue( OUString("MediaType"), aAny );
+        xSet->setPropertyValue("MediaType", aAny );
         uno::Reference < io::XOutputStream > xOut = xDocStream->getOutputStream();
         uno::Reference<io::XActiveDataSource> xSrc(xWriter, uno::UNO_QUERY);
         xSrc->setOutputStream(xOut);
@@ -548,7 +548,7 @@ sal_uLong SwXMLTextBlocks::SetMacroTable(
             OUString aMime( "text/xml" );
             Any aAny;
             aAny <<= aMime;
-            xSet->setPropertyValue( OUString("MediaType"), aAny );
+            xSet->setPropertyValue("MediaType", aAny );
             uno::Reference < io::XOutputStream > xOutputStream = xDocStream->getOutputStream();
 
             // get XML writer

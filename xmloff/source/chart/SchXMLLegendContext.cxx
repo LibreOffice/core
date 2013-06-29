@@ -101,7 +101,7 @@ void SchXMLLegendContext::StartElement( const uno::Reference< xml::sax::XAttribu
     {
         try
         {
-            xDocProp->setPropertyValue( OUString( "HasLegend" ), uno::makeAny( sal_True ) );
+            xDocProp->setPropertyValue("HasLegend", uno::makeAny( sal_True ) );
         }
         catch(const beans::UnknownPropertyException&)
         {
@@ -147,7 +147,7 @@ void SchXMLLegendContext::StartElement( const uno::Reference< xml::sax::XAttribu
                     try
                     {
                         if( SchXMLEnumConverter::getLegendPositionConverter().importXML( aValue, aAny, GetImport().GetMM100UnitConverter() ) )
-                            xLegendProps->setPropertyValue( OUString( "Alignment" ), aAny );
+                            xLegendProps->setPropertyValue("Alignment", aAny );
                     }
                     catch(const beans::UnknownPropertyException&)
                     {
@@ -196,12 +196,12 @@ void SchXMLLegendContext::StartElement( const uno::Reference< xml::sax::XAttribu
         xLegendShape->setPosition( aLegendPos );
 
     if( bHasExpansion && nLegendExpansion!= chart::ChartLegendExpansion_CUSTOM )
-        xLegendProps->setPropertyValue( OUString( "Expansion" ), uno::makeAny(nLegendExpansion) );
+        xLegendProps->setPropertyValue("Expansion", uno::makeAny(nLegendExpansion) );
     else if( bHasHeight && bHasWidth )
         xLegendShape->setSize( aLegendSize );
 
     // the fill style has the default "none" in XML, but "solid" in the model.
-    xLegendProps->setPropertyValue( OUString( "FillStyle" ), uno::makeAny( drawing::FillStyle_NONE ));
+    xLegendProps->setPropertyValue("FillStyle", uno::makeAny( drawing::FillStyle_NONE ));
 
     // set auto-styles for Legend
     const SvXMLStylesContext* pStylesCtxt = mrImportHelper.GetAutoStylesContext();

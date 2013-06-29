@@ -880,7 +880,7 @@ bool OImageControlControl::impl_isEmptyGraphics_nothrow() const
     {
         Reference< XPropertySet > xModelProps( const_cast< OImageControlControl* >( this )->getModel(), UNO_QUERY_THROW );
         Reference< XGraphic > xGraphic;
-        OSL_VERIFY( xModelProps->getPropertyValue( OUString( "Graphic" ) ) >>= xGraphic );
+        OSL_VERIFY( xModelProps->getPropertyValue("Graphic") >>= xGraphic );
         bIsEmpty = !xGraphic.is();
     }
     catch( const Exception& )

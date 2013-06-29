@@ -481,7 +481,7 @@ sal_Bool SwWrtShell::InsertOleObject( const svt::EmbeddedObjectRef& xRef, SwFlyF
                 {
                     try
                     {
-                        xSet->setPropertyValue( OUString("Formula"), uno::makeAny( OUString( aMathData ) ) );
+                        xSet->setPropertyValue("Formula", uno::makeAny( OUString( aMathData ) ) );
                         bActivate = sal_False;
                     }
                     catch (const uno::Exception&)
@@ -534,12 +534,12 @@ sal_Bool SwWrtShell::InsertOleObject( const svt::EmbeddedObjectRef& xRef, SwFlyF
             svt::EmbeddedObjectRef::TryRunningState( xEmbeddedObj );
             uno::Reference< beans::XPropertySet > xProps( xEmbeddedObj->getComponent(), uno::UNO_QUERY );
             if ( xProps.is() &&
-                 ( xProps->getPropertyValue( OUString( "DisableDataTableDialog" ) ) >>= bDisableDataTableDialog ) &&
+                 ( xProps->getPropertyValue("DisableDataTableDialog") >>= bDisableDataTableDialog ) &&
                  bDisableDataTableDialog )
             {
-                xProps->setPropertyValue( OUString( "DisableDataTableDialog" ),
+                xProps->setPropertyValue("DisableDataTableDialog",
                     uno::makeAny( sal_False ) );
-                xProps->setPropertyValue( OUString( "DisableComplexChartTypes" ),
+                xProps->setPropertyValue("DisableComplexChartTypes",
                     uno::makeAny( sal_False ) );
                 uno::Reference< util::XModifiable > xModifiable( xProps, uno::UNO_QUERY );
                 if ( xModifiable.is() )

@@ -1330,7 +1330,7 @@ uno::Sequence< security::DocumentSignatureInformation > SfxObjectShell::ImplAnal
                 try
                 {
                     uno::Reference < beans::XPropertySet > xPropSet( GetStorage(), uno::UNO_QUERY_THROW );
-                    xPropSet->getPropertyValue( OUString( "Version"  ) ) >>= aVersion;
+                    xPropSet->getPropertyValue("Version") >>= aVersion;
                 }
                 catch( uno::Exception& )
                 {
@@ -1408,7 +1408,7 @@ void SfxObjectShell::ImplSign( sal_Bool bScriptingContent )
     {
         // check the version of the document
         uno::Reference < beans::XPropertySet > xPropSet( GetStorage(), uno::UNO_QUERY_THROW );
-        xPropSet->getPropertyValue( OUString( "Version" ) ) >>= aODFVersion;
+        xPropSet->getPropertyValue("Version") >>= aODFVersion;
     }
     catch( uno::Exception& )
     {}

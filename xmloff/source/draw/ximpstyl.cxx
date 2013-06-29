@@ -1243,8 +1243,8 @@ void SdXMLStylesContext::EndElement()
         {
             uno::Reference< beans::XPropertySetInfo > xInfoSetInfo( xInfoSet->getPropertySetInfo() );
 
-            if( xInfoSetInfo->hasPropertyByName( OUString( "PageLayouts" ) ) )
-                xInfoSet->setPropertyValue( OUString( "PageLayouts" ), uno::makeAny( getPageLayouts() ) );
+            if( xInfoSetInfo->hasPropertyByName("PageLayouts") )
+                xInfoSet->setPropertyValue("PageLayouts", uno::makeAny( getPageLayouts() ) );
         }
 
     }

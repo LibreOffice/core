@@ -278,7 +278,7 @@ SwInsertDBColAutoPilot::SwInsertDBColAutoPilot( SwView& rView,
             Any aCol = xCols->getByName(pColNames[n]);
             Reference <XPropertySet> xCol;
             aCol >>= xCol;
-            Any aType = xCol->getPropertyValue(OUString("Type"));
+            Any aType = xCol->getPropertyValue("Type");
             sal_Int32 eDataType = 0;
             aType >>= eDataType;
             switch(eDataType)

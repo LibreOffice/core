@@ -67,7 +67,7 @@ OUString SAL_CALL SwVbaFormField::getResult() throw ( uno::RuntimeException )
     }
     else
     {
-        throw uno::RuntimeException( OUString("Not implemented"), uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException("Not implemented", uno::Reference< uno::XInterface >() );
     }
     return sResult;
 }
@@ -87,7 +87,7 @@ void SAL_CALL SwVbaFormField::setResult( const OUString& result ) throw ( uno::R
     }
     else
     {
-        throw uno::RuntimeException( OUString("Not implemented"), uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException("Not implemented", uno::Reference< uno::XInterface >() );
     }
 }
 

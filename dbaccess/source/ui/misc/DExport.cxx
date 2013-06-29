@@ -823,7 +823,7 @@ void ODatabaseExport::ensureFormatter()
         SvNumberFormatsSupplierObj* pSupplierImpl = (SvNumberFormatsSupplierObj*)sal::static_int_cast< sal_IntPtr >(xTunnel->getSomething(SvNumberFormatsSupplierObj::getUnoTunnelId()));
         m_pFormatter = pSupplierImpl ? pSupplierImpl->GetNumberFormatter() : NULL;
         Reference<XPropertySet> xNumberFormatSettings = xSupplier->getNumberFormatSettings();
-        xNumberFormatSettings->getPropertyValue(OUString("NullDate")) >>= m_aNullDate;
+        xNumberFormatSettings->getPropertyValue("NullDate") >>= m_aNullDate;
     }
 }
 // -----------------------------------------------------------------------------

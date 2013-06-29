@@ -147,7 +147,7 @@ void SAL_CALL UNOMemoryStream::closeInput() throw (NotConnectedException, IOExce
 void SAL_CALL UNOMemoryStream::seek( sal_Int64 location ) throw (IllegalArgumentException, IOException, RuntimeException)
 {
     if( (location < 0) || (location > SAL_MAX_INT32) )
-        throw IllegalArgumentException( OUString("this implementation does not support more than 2GB!"), Reference< XInterface >(static_cast<OWeakObject*>(this)), 0 );
+        throw IllegalArgumentException("this implementation does not support more than 2GB!", Reference< XInterface >(static_cast<OWeakObject*>(this)), 0 );
 
     // seek operation should be able to resize the stream
     if ( location > static_cast< sal_Int64 >( maData.size() ) )
@@ -179,7 +179,7 @@ void SAL_CALL UNOMemoryStream::writeBytes( const Sequence< sal_Int8 >& aData ) t
         if( nNewSize > SAL_MAX_INT32 )
         {
             OSL_ASSERT(false);
-            throw IOException( OUString("this implementation does not support more than 2GB!"), Reference< XInterface >(static_cast<OWeakObject*>(this)) );
+            throw IOException("this implementation does not support more than 2GB!", Reference< XInterface >(static_cast<OWeakObject*>(this)) );
         }
 
         if( static_cast< sal_Int32 >( nNewSize ) > static_cast< sal_Int32 >( maData.size() ) )

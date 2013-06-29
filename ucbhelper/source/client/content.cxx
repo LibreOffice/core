@@ -1036,7 +1036,7 @@ sal_Bool Content::isFolder()
     throw( CommandAbortedException, RuntimeException, Exception )
 {
     sal_Bool bFolder = sal_False;
-    if ( getPropertyValue( OUString("IsFolder") )
+    if ( getPropertyValue("IsFolder")
         >>= bFolder )
         return bFolder;
 
@@ -1057,7 +1057,7 @@ sal_Bool Content::isDocument()
     throw( CommandAbortedException, RuntimeException, Exception )
 {
     sal_Bool bDoc = sal_False;
-    if ( getPropertyValue( OUString("IsDocument") )
+    if ( getPropertyValue("IsDocument")
         >>= bDoc )
         return bDoc;
 

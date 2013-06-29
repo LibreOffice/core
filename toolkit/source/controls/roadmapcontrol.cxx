@@ -187,7 +187,7 @@ static void lcl_throwIndexOutOfBoundsException( )
         if ( !xRoadmapItem.is() )
             lcl_throwIllegalArgumentException();
         Reference< XServiceInfo > xServiceInfo( xRoadmapItem, UNO_QUERY );
-        sal_Bool bIsRoadmapItem = xServiceInfo->supportsService( OUString("com.sun.star.awt.RoadmapItem") );
+        sal_Bool bIsRoadmapItem = xServiceInfo->supportsService("com.sun.star.awt.RoadmapItem");
         if ( !bIsRoadmapItem )
             lcl_throwIllegalArgumentException();
     }
@@ -201,12 +201,12 @@ static void lcl_throwIndexOutOfBoundsException( )
         if ( xProps.is() )
         {
             sal_Int32 LocID = 0;
-            Any aValue = xPropertySet->getPropertyValue( OUString("ID") );
+            Any aValue = xPropertySet->getPropertyValue("ID");
             aValue >>= LocID;
             if (LocID < 0)              // index may not be smaller than zero
             {
                 aAny <<= GetUniqueID();
-                xPropertySet->setPropertyValue( OUString("ID"), aAny );
+                xPropertySet->setPropertyValue("ID", aAny );
             }
         }
     }
@@ -229,7 +229,7 @@ static void lcl_throwIndexOutOfBoundsException( )
               {
                 CurRoadmapItem = *i;
                 Reference< XPropertySet > xPropertySet( CurRoadmapItem, UNO_QUERY );
-                aAny = xPropertySet->getPropertyValue( OUString("ID") );
+                aAny = xPropertySet->getPropertyValue("ID");
                 aAny >>= n_CurItemID;
                 if (n_CurItemID == CurID)
                 {

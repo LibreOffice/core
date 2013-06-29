@@ -240,7 +240,7 @@ protected:
     virtual css::uno::Any getItemByStringIndex( const OUString& sIndex ) throw (css::uno::RuntimeException)
     {
         if ( !m_xNameAccess.is() )
-            throw css::uno::RuntimeException( OUString( "ScVbaCollectionBase string index access not supported by this object" ), css::uno::Reference< css::uno::XInterface >() );
+            throw css::uno::RuntimeException("ScVbaCollectionBase string index access not supported by this object", css::uno::Reference< css::uno::XInterface >() );
 
         if( mbIgnoreCase )
         {
@@ -260,7 +260,7 @@ protected:
     virtual css::uno::Any getItemByIntIndex( const sal_Int32 nIndex ) throw (css::uno::RuntimeException)
     {
         if ( !m_xIndexAccess.is() )
-            throw css::uno::RuntimeException( OUString( "ScVbaCollectionBase numeric index access not supported by this object" ), css::uno::Reference< css::uno::XInterface >() );
+            throw css::uno::RuntimeException("ScVbaCollectionBase numeric index access not supported by this object", css::uno::Reference< css::uno::XInterface >() );
         if ( nIndex <= 0 )
         {
             throw  css::lang::IndexOutOfBoundsException(

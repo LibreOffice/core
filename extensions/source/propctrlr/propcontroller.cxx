@@ -360,7 +360,7 @@ namespace pcr
         ::osl::MutexGuard aGuard( m_aMutex );
 
         if (_rxFrame.is() && haveView())
-            throw RuntimeException(OUString("Unable to attach to a second frame."),*this);
+            throw RuntimeException("Unable to attach to a second frame.",*this);
 
         // revoke as focus listener from the old container window
         stopContainerWindowListening();
@@ -376,7 +376,7 @@ namespace pcr
         VCLXWindow* pContainerWindow = VCLXWindow::GetImplementation(xContainerWindow);
         Window* pParentWin = pContainerWindow ? pContainerWindow->GetWindow() : NULL;
         if (!pParentWin)
-            throw RuntimeException(OUString("The frame is invalid. Unable to extract the container window."),*this);
+            throw RuntimeException("The frame is invalid. Unable to extract the container window.",*this);
 
         if ( Construct( pParentWin ) )
         {

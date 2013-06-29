@@ -182,7 +182,7 @@ ScVbaWSFunction::invoke(const OUString& FunctionName, const uno::Sequence< uno::
             OUString( "com.sun.star.sheet.FunctionAccess" ), mxContext ),
             uno::UNO_QUERY_THROW );
         uno::Reference< beans::XPropertySet > xPropSet( xFunctionAccess, uno::UNO_QUERY_THROW );
-        xPropSet->setPropertyValue( OUString( "IsArrayFunction" ), uno::Any( bAsArray ) );
+        xPropSet->setPropertyValue("IsArrayFunction", uno::Any( bAsArray ) );
         aRet = xFunctionAccess->callFunction( FunctionName, aParamTemp );
     }
 

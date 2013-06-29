@@ -1501,7 +1501,7 @@ void ORptExport::exportShapes(const Reference< XSection>& _xSection,bool _bAddPa
             SAL_WNODEPRECATED_DECLARATIONS_PUSH
             ::std::auto_ptr<SvXMLElementExport> pSubDocument;
             SAL_WNODEPRECATED_DECLARATIONS_POP
-            uno::Reference< frame::XModel> xModel(xShape->getPropertyValue(OUString("Model")),uno::UNO_QUERY);
+            uno::Reference< frame::XModel> xModel(xShape->getPropertyValue("Model"),uno::UNO_QUERY);
             if ( xModel.is() ) // special handling for chart object
             {
                 pSubDocument.reset(new SvXMLElementExport(*this,XML_NAMESPACE_REPORT, XML_SUB_DOCUMENT, sal_False, sal_False));

@@ -144,7 +144,7 @@ Reference< XInterface > ResolverImpl::resolve( const OUString & rUnoUrl )
         UNO_QUERY );
 
     if (! xConnector.is())
-        throw RuntimeException( OUString("no connector!" ), Reference< XInterface >() );
+        throw RuntimeException("no connector!", Reference< XInterface >() );
 
     Reference< XConnection > xConnection( xConnector->connect( aConnectDescr ) );
 

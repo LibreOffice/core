@@ -108,7 +108,7 @@ MDatabaseMetaDataHelper::~MDatabaseMetaDataHelper()
         Reference<XMultiServiceFactory> xFactory = ::comphelper::getProcessServiceFactory();
         OSL_ENSURE( xFactory.is(), "can't get service factory" );
 
-        Reference<XInterface> xInstance = xFactory->createInstance(OUString("com.sun.star.mozilla.MozillaBootstrap") );
+        Reference<XInterface> xInstance = xFactory->createInstance("com.sun.star.mozilla.MozillaBootstrap");
         OSL_ENSURE( xInstance.is(), "failed to create instance" );
         xMozillaBootstrap = Reference<XMozillaBootstrap>(xInstance,UNO_QUERY);
         m_bProfileExists = xMozillaBootstrap->shutdownProfile() > 0;
@@ -550,7 +550,7 @@ sal_Bool MDatabaseMetaDataHelper::getTableStrings( OConnection*                 
         Reference<XMozillaBootstrap> xMozillaBootstrap;
         Reference<XMultiServiceFactory> xFactory = ::comphelper::getProcessServiceFactory();
         OSL_ENSURE( xFactory.is(), "can't get service factory" );
-         Reference<XInterface> xInstance = xFactory->createInstance(OUString("com.sun.star.mozilla.MozillaBootstrap") );
+         Reference<XInterface> xInstance = xFactory->createInstance("com.sun.star.mozilla.MozillaBootstrap");
         OSL_ENSURE( xInstance.is(), "failed to create instance" );
         xMozillaBootstrap = Reference<XMozillaBootstrap>(xInstance,UNO_QUERY);
         m_bProfileExists = sal_False;

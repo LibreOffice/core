@@ -1261,7 +1261,7 @@ SwXStyle::SwXStyle( SwDoc *pDoc, SfxStyleFamily eFam, sal_Bool bConditional) :
         case SFX_STYLE_FAMILY_CHAR:
         {
             nMapId = PROPERTY_MAP_CHAR_STYLE;
-            aAny = xFamilies->getByName ( OUString( "CharacterStyles" ) );
+            aAny = xFamilies->getByName ("CharacterStyles");
             // Get the Frame family (and keep it for later)
             aAny >>= mxStyleFamily;
         }
@@ -1269,20 +1269,20 @@ SwXStyle::SwXStyle( SwDoc *pDoc, SfxStyleFamily eFam, sal_Bool bConditional) :
         case SFX_STYLE_FAMILY_PARA:
         {
             nMapId = bIsConditional ? PROPERTY_MAP_CONDITIONAL_PARA_STYLE : PROPERTY_MAP_PARA_STYLE;
-            aAny = xFamilies->getByName ( OUString( "ParagraphStyles" ) );
+            aAny = xFamilies->getByName ("ParagraphStyles");
             // Get the Frame family (and keep it for later)
             aAny >>= mxStyleFamily;
-            aAny = mxStyleFamily->getByName ( OUString( "Standard" ) );
+            aAny = mxStyleFamily->getByName ("Standard");
             aAny >>= mxStyleData;
         }
         break;
         case SFX_STYLE_FAMILY_PAGE:
         {
             nMapId = PROPERTY_MAP_PAGE_STYLE;
-            aAny = xFamilies->getByName ( OUString( "PageStyles" ) );
+            aAny = xFamilies->getByName ("PageStyles");
             // Get the Frame family (and keep it for later)
             aAny >>= mxStyleFamily;
-            aAny = mxStyleFamily->getByName ( OUString( "Standard" ) );
+            aAny = mxStyleFamily->getByName ("Standard");
             aAny >>= mxStyleData;
         }
         break;
@@ -2111,7 +2111,7 @@ void SAL_CALL SwXStyle::SetPropertyValues_Impl(
            (!bIsConditional && pNames[nProp].equalsAsciiL(SW_PROP_NAME(UNO_NAME_PARA_STYLE_CONDITIONS))))
             throw beans::UnknownPropertyException(OUString( "Unknown property: " ) + pNames[nProp], static_cast < cppu::OWeakObject * > ( this ) );
         if ( pEntry->nFlags & beans::PropertyAttribute::READONLY)
-            throw beans::PropertyVetoException ( OUString( "Property is read-only: " ) + pNames[nProp], static_cast < cppu::OWeakObject * > ( this ) );
+            throw beans::PropertyVetoException ("Property is read-only: " + pNames[nProp], static_cast < cppu::OWeakObject * > ( this ) );
         if(aBaseImpl.mxNewBase.is())
         {
             lcl_SetStyleProperty(*pEntry, *pPropSet, pValues[nProp], aBaseImpl,
@@ -2456,11 +2456,11 @@ uno::Sequence< uno::Any > SwXStyle::getPropertyValues(
     }
     catch (beans::UnknownPropertyException &)
     {
-        throw uno::RuntimeException(OUString( "Unknown property exception caught" ), static_cast < cppu::OWeakObject * > ( this ) );
+        throw uno::RuntimeException("Unknown property exception caught", static_cast < cppu::OWeakObject * > ( this ) );
     }
     catch (lang::WrappedTargetException &)
     {
-        throw uno::RuntimeException(OUString( "WrappedTargetException caught" ), static_cast < cppu::OWeakObject * > ( this ) );
+        throw uno::RuntimeException("WrappedTargetException caught", static_cast < cppu::OWeakObject * > ( this ) );
     }
 
     return aValues;
@@ -2707,9 +2707,9 @@ void SAL_CALL SwXStyle::setPropertiesToDefault( const uno::Sequence< OUString >&
             if( !pEntry )
                 throw beans::UnknownPropertyException ( OUString( "Property is unknown: " ) + pNames[nProp], static_cast < cppu::OWeakObject * > ( this ) );
             if ( pEntry->nWID == FN_UNO_FOLLOW_STYLE || pEntry->nWID == FN_UNO_NUM_RULES )
-                throw uno::RuntimeException ( OUString( "Cannot reset: " ) + pNames[nProp], static_cast < cppu::OWeakObject * > ( this ) );
+                throw uno::RuntimeException ("Cannot reset: " + pNames[nProp], static_cast < cppu::OWeakObject * > ( this ) );
             if ( pEntry->nFlags & beans::PropertyAttribute::READONLY )
-                throw uno::RuntimeException( OUString( "setPropertiesToDefault: property is read-only: " ) + pNames[nProp], static_cast < cppu::OWeakObject * > ( this ) );
+                throw uno::RuntimeException("setPropertiesToDefault: property is read-only: " + pNames[nProp], static_cast < cppu::OWeakObject * > ( this ) );
 
             if( pEntry->nWID == RES_PARATR_OUTLINELEVEL )
                 static_cast<SwTxtFmtColl*>(pTargetFmt)->DeleteAssignmentToListLevelOfOutlineStyle();
@@ -3023,7 +3023,7 @@ void SAL_CALL SwXPageStyle::SetPropertyValues_Impl(
         if (!pEntry)
             throw beans::UnknownPropertyException(OUString( "Unknown property: " ) + pNames[nProp], static_cast < cppu::OWeakObject * > ( this ) );
         if ( pEntry->nFlags & beans::PropertyAttribute::READONLY)
-            throw beans::PropertyVetoException ( OUString( "Property is read-only: " ) + pNames[nProp], static_cast < cppu::OWeakObject * > ( this ) );
+            throw beans::PropertyVetoException ("Property is read-only: " + pNames[nProp], static_cast < cppu::OWeakObject * > ( this ) );
 
         if(GetBasePool())
         {
@@ -3466,11 +3466,11 @@ uno::Sequence< uno::Any > SwXPageStyle::getPropertyValues(
     }
     catch (beans::UnknownPropertyException &)
     {
-        throw uno::RuntimeException(OUString( "Unknown property exception caught" ), static_cast < cppu::OWeakObject * > ( this ) );
+        throw uno::RuntimeException("Unknown property exception caught", static_cast < cppu::OWeakObject * > ( this ) );
     }
     catch (lang::WrappedTargetException &)
     {
-        throw uno::RuntimeException(OUString( "WrappedTargetException caught" ), static_cast < cppu::OWeakObject * > ( this ) );
+        throw uno::RuntimeException("WrappedTargetException caught", static_cast < cppu::OWeakObject * > ( this ) );
     }
 
     return aValues;
@@ -3992,11 +3992,11 @@ uno::Sequence< uno::Any > SwXAutoStyle::getPropertyValues (
     }
     catch (beans::UnknownPropertyException &)
     {
-        throw uno::RuntimeException(OUString( "Unknown property exception caught" ), static_cast < cppu::OWeakObject * > ( this ) );
+        throw uno::RuntimeException("Unknown property exception caught", static_cast < cppu::OWeakObject * > ( this ) );
     }
     catch (lang::WrappedTargetException &)
     {
-        throw uno::RuntimeException(OUString( "WrappedTargetException caught" ), static_cast < cppu::OWeakObject * > ( this ) );
+        throw uno::RuntimeException("WrappedTargetException caught", static_cast < cppu::OWeakObject * > ( this ) );
     }
 
     return aValues;

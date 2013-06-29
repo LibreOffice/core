@@ -1633,9 +1633,9 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                                 {
                                     try
                                     {
-                                        xProp->getPropertyValue( OUString("IsDirectionToSimplified") ) >>= bToSimplified;
-                                        xProp->getPropertyValue( OUString("IsUseCharacterVariants") ) >>= bUseVariants;
-                                        xProp->getPropertyValue( OUString("IsTranslateCommonTerms") ) >>= bCommonTerms;
+                                        xProp->getPropertyValue("IsDirectionToSimplified") >>= bToSimplified;
+                                        xProp->getPropertyValue("IsUseCharacterVariants") >>= bUseVariants;
+                                        xProp->getPropertyValue("IsTranslateCommonTerms") >>= bCommonTerms;
                                     }
                                     catch( Exception& )
                                     {

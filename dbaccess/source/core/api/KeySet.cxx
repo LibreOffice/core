@@ -208,7 +208,7 @@ void OKeySet::findTableColumnsMatching_throw(   const Any& i_aTable,
 
     if ( o_pKeyColumnNames->empty() )
     {
-        ::dbtools::throwGenericSQLException( OUString( "Could not find any key column."  ), *this );
+        ::dbtools::throwGenericSQLException("Could not find any key column.", *this );
     }
 
     for (   SelectColumnsMetaData::const_iterator keyColumn = o_pKeyColumnNames->begin();

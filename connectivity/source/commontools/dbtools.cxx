@@ -133,10 +133,10 @@ sal_Int32 getDefaultNumberFormat(const Reference< XPropertySet >& _xColumn,
     try
     {
         // determine the datatype of the column
-        _xColumn->getPropertyValue(OUString("Type")) >>= nDataType;
+        _xColumn->getPropertyValue("Type") >>= nDataType;
 
         if (DataType::NUMERIC == nDataType || DataType::DECIMAL == nDataType)
-            _xColumn->getPropertyValue(OUString("Scale")) >>= nScale;
+            _xColumn->getPropertyValue("Scale") >>= nScale;
     }
     catch (Exception&)
     {
@@ -144,7 +144,7 @@ sal_Int32 getDefaultNumberFormat(const Reference< XPropertySet >& _xColumn,
     }
     return getDefaultNumberFormat(nDataType,
                     nScale,
-                    ::cppu::any2bool(_xColumn->getPropertyValue(OUString("IsCurrency"))),
+                    ::cppu::any2bool(_xColumn->getPropertyValue("IsCurrency")),
                     _xTypes,
                     _rLocale);
 }
@@ -295,8 +295,8 @@ Reference< XConnection > getConnection_allowException(
             try
             {
                 xProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PASSWORD)) >>= sPwd;
-                bPwdReq = ::cppu::any2bool(xProp->getPropertyValue(OUString("IsPasswordRequired")));
-                xProp->getPropertyValue(OUString("User")) >>= sUser;
+                bPwdReq = ::cppu::any2bool(xProp->getPropertyValue("IsPasswordRequired"));
+                xProp->getPropertyValue("User") >>= sUser;
             }
             catch(Exception&)
             {
@@ -349,7 +349,7 @@ Reference< XConnection> getConnection(const Reference< XRowSet>& _rxRowSet) thro
     Reference< XConnection> xReturn;
     Reference< XPropertySet> xRowSetProps(_rxRowSet, UNO_QUERY);
     if (xRowSetProps.is())
-        xRowSetProps->getPropertyValue(OUString("ActiveConnection")) >>= xReturn;
+        xRowSetProps->getPropertyValue("ActiveConnection") >>= xReturn;
     return xReturn;
 }
 
@@ -371,7 +371,7 @@ SharedConnection lcl_connectRowSet(const Reference< XRowSet>& _rxRowSet, const R
 
         // 1. already connected?
         Reference< XConnection > xExistingConn(
-            xRowSetProps->getPropertyValue( OUString( "ActiveConnection" ) ),
+            xRowSetProps->getPropertyValue("ActiveConnection"),
             UNO_QUERY );
 
         if  (   xExistingConn.is()
@@ -383,7 +383,7 @@ SharedConnection lcl_connectRowSet(const Reference< XRowSet>& _rxRowSet, const R
         {
             if ( _bSetAsActiveConnection )
             {
-                xRowSetProps->setPropertyValue( OUString( "ActiveConnection" ), makeAny( xExistingConn ) );
+                xRowSetProps->setPropertyValue("ActiveConnection", makeAny( xExistingConn ) );
                 // no auto disposer needed, since we did not create the connection
             }
 
@@ -395,9 +395,9 @@ SharedConnection lcl_connectRowSet(const Reference< XRowSet>& _rxRowSet, const R
 
         const OUString sUserProp( "User" );
         OUString sDataSourceName;
-        xRowSetProps->getPropertyValue(OUString("DataSourceName")) >>= sDataSourceName;
+        xRowSetProps->getPropertyValue("DataSourceName") >>= sDataSourceName;
         OUString sURL;
-        xRowSetProps->getPropertyValue(OUString("URL")) >>= sURL;
+        xRowSetProps->getPropertyValue("URL") >>= sURL;
 
         Reference< XConnection > xPureConnection;
         if (!sDataSourceName.isEmpty())
@@ -672,7 +672,7 @@ Reference< XNameAccess > getFieldsByCommandDescriptor( const Reference< XConnect
 
                         if ( xComposerFac.is() )
                         {
-                            Reference< XSingleSelectQueryComposer > xComposer(xComposerFac->createInstance( OUString("com.sun.star.sdb.SingleSelectQueryComposer")),UNO_QUERY);
+                            Reference< XSingleSelectQueryComposer > xComposer(xComposerFac->createInstance("com.sun.star.sdb.SingleSelectQueryComposer"),UNO_QUERY);
                             if ( xComposer.is() )
                             {
                                 xComposer->setQuery( sStatementToExecute );
@@ -1235,19 +1235,19 @@ catch(const Exception&)
 //------------------------------------------------------------------------------
 sal_Bool canInsert(const Reference< XPropertySet>& _rxCursorSet)
 {
-    return ((_rxCursorSet.is() && (getINT32(_rxCursorSet->getPropertyValue(OUString("Privileges"))) & Privilege::INSERT) != 0));
+    return ((_rxCursorSet.is() && (getINT32(_rxCursorSet->getPropertyValue("Privileges")) & Privilege::INSERT) != 0));
 }
 
 //------------------------------------------------------------------------------
 sal_Bool canUpdate(const Reference< XPropertySet>& _rxCursorSet)
 {
-    return ((_rxCursorSet.is() && (getINT32(_rxCursorSet->getPropertyValue(OUString("Privileges"))) & Privilege::UPDATE) != 0));
+    return ((_rxCursorSet.is() && (getINT32(_rxCursorSet->getPropertyValue("Privileges")) & Privilege::UPDATE) != 0));
 }
 
 //------------------------------------------------------------------------------
 sal_Bool canDelete(const Reference< XPropertySet>& _rxCursorSet)
 {
-    return ((_rxCursorSet.is() && (getINT32(_rxCursorSet->getPropertyValue(OUString("Privileges"))) & Privilege::DELETE) != 0));
+    return ((_rxCursorSet.is() && (getINT32(_rxCursorSet->getPropertyValue("Privileges")) & Privilege::DELETE) != 0));
 }
 // -----------------------------------------------------------------------------
 Reference< XDataSource> findDataSource(const Reference< XInterface >& _xParent)
@@ -1284,19 +1284,19 @@ Reference< XSingleSelectQueryComposer > getComposedRowSetStatement( const Refere
             OUString sCommand;
             sal_Bool bEscapeProcessing = sal_False;
 
-            OSL_VERIFY( _rxRowSet->getPropertyValue( OUString( "CommandType" )      ) >>= nCommandType      );
-            OSL_VERIFY( _rxRowSet->getPropertyValue( OUString( "Command" )          ) >>= sCommand          );
-            OSL_VERIFY( _rxRowSet->getPropertyValue( OUString( "EscapeProcessing" ) ) >>= bEscapeProcessing );
+            OSL_VERIFY( _rxRowSet->getPropertyValue("CommandType") >>= nCommandType      );
+            OSL_VERIFY( _rxRowSet->getPropertyValue("Command") >>= sCommand          );
+            OSL_VERIFY( _rxRowSet->getPropertyValue("EscapeProcessing") >>= bEscapeProcessing );
 
             StatementComposer aComposer( xConn, sCommand, nCommandType, bEscapeProcessing );
             // append sort
-            aComposer.setOrder( getString( _rxRowSet->getPropertyValue( OUString( "Order" ) ) ) );
+            aComposer.setOrder( getString( _rxRowSet->getPropertyValue("Order") ) );
 
             // append filter
             sal_Bool bApplyFilter = sal_True;
-            _rxRowSet->getPropertyValue( OUString( "ApplyFilter" ) ) >>= bApplyFilter;
+            _rxRowSet->getPropertyValue("ApplyFilter") >>= bApplyFilter;
             if ( bApplyFilter )
-                aComposer.setFilter( getString( _rxRowSet->getPropertyValue( OUString( "Filter" ) ) ) );
+                aComposer.setFilter( getString( _rxRowSet->getPropertyValue("Filter") ) );
 
             aComposer.getQuery();
 

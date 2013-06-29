@@ -195,7 +195,7 @@ void LayoutManager::impl_clearUpMenuBar()
                 {
                     try
                     {
-                        xPropSet->getPropertyValue( OUString( "XMenuBar" )) >>= xMenuBar;
+                        xPropSet->getPropertyValue("XMenuBar") >>= xMenuBar;
                     }
                     catch (const beans::UnknownPropertyException&)
                     {
@@ -640,7 +640,7 @@ void LayoutManager::implts_writeWindowStateData( const OUString& aName, const UI
         try
         {
             // Check persistent flag of the user interface element
-            xPropSet->getPropertyValue( OUString( "Persistent" )) >>= bPersistent;
+            xPropSet->getPropertyValue("Persistent") >>= bPersistent;
         }
         catch (const beans::UnknownPropertyException&)
         {
@@ -1495,7 +1495,7 @@ throw (RuntimeException)
                         {
                             try
                             {
-                                xPropSet->getPropertyValue( OUString( "XMenuBar" )) >>= xMenuBar;
+                                xPropSet->getPropertyValue("XMenuBar") >>= xMenuBar;
                             }
                             catch (const beans::UnknownPropertyException&)
                             {

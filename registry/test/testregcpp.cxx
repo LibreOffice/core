@@ -388,8 +388,8 @@ void test_registry_CppApi()
 
     REG_ENSURE(!key5.createKey(OUString("1"), key4), "test_registry_CppApi error 6b");
     REG_ENSURE(!key4.createKey(OUString("2"), key3), "test_registry_CppApi error 6c");
-    REG_ENSURE(!key5.openKey(OUString("1"), key4), "test_registry_CppApi error 6d");
-    REG_ENSURE(!rootKey.openKey(OUString("/myThirdKey/1"), key4), "test_registry_CppApi error 6e");
+    REG_ENSURE(!key5.openKey("1", key4), "test_registry_CppApi error 6d");
+    REG_ENSURE(!rootKey.openKey("/myThirdKey/1", key4), "test_registry_CppApi error 6e");
     REG_ENSURE(key4.getName() == "/myThirdKey/1", "test_registry_CppApi error 6f");
 
     REG_ENSURE(!rootKey.createKey(OUString("myFourthKey"), key6), "test_registry_CppApi error 7");
@@ -426,22 +426,22 @@ void test_registry_CppApi()
     REG_ENSURE(!key7.closeKey(), "test_registry_CppApi error 7k1");
     delete pSubKeyNames;
 
-    REG_ENSURE(!rootKey.openKey(OUString("/mySixthKey/myFirstLink"), key6), "test_registry_CppApi error 7l");
+    REG_ENSURE(!rootKey.openKey("/mySixthKey/myFirstLink", key6), "test_registry_CppApi error 7l");
 //    REG_ENSURE(key6.getName() == "/myFourthKey/X", "test_registry_CppApi error 7m");
 
-    REG_ENSURE(!rootKey.openKey(OUString("myFifthKey"), key6), "test_registry_CppApi error 7m1");
+    REG_ENSURE(!rootKey.openKey("myFifthKey", key6), "test_registry_CppApi error 7m1");
     REG_ENSURE(!key6.createLink(OUString("mySecondLink"),
                                  OUString("/mySixthKey/myFirstLink")), "test_registry_CppApi error 7m2");
 
-    REG_ENSURE(!rootKey.openKey(OUString("/myFifthKey/mySecondLink"), key6), "test_registry_CppApi error 7m3");
+    REG_ENSURE(!rootKey.openKey("/myFifthKey/mySecondLink", key6), "test_registry_CppApi error 7m3");
 //    REG_ENSURE(key6.getName() == "/myFourthKey/X", "test_registry_CppApi error 7m4");
 
     REG_ENSURE(!rootKey.createKey(OUString("/myFifthKey/mySecondLink/myFirstLinkSubKey"), key7), "test_registry_CppApi error 7m5");
     REG_ENSURE(key7.getName() == "/myFourthKey/X/myFirstLinkSubKey", "test_registry_CppApi error 7m6");
 
     REG_ENSURE(!key7.createLink(OUString("myThirdLink"), OUString("/myFifthKey/mySecondLink")), "test_registry_CppApi error 7m7");
-    REG_ENSURE(!rootKey.openKey(OUString("/myFourthKey/X/myFirstLinkSubKey/myThirdLink"), key7), "test_registry_CppApi error 7m8");
-//    REG_ENSURE(!key7.openKey(OUString("/myFirstLinkSubKey/myThirdLink/myFirstLinkSubKey/myThirdLink"), key6), "test_registry_CppApi error 7m9");
+    REG_ENSURE(!rootKey.openKey("/myFourthKey/X/myFirstLinkSubKey/myThirdLink", key7), "test_registry_CppApi error 7m8");
+//    REG_ENSURE(!key7.openKey("/myFirstLinkSubKey/myThirdLink/myFirstLinkSubKey/myThirdLink", key6), "test_registry_CppApi error 7m9");
 //    REG_ENSURE(key7.getName() == "/myFourthKey/X", "test_registry_CppApi error 7m10");
     REG_ENSURE(!key7.closeKey(), "test_registry_CppApi error 7m11");
 
@@ -451,7 +451,7 @@ void test_registry_CppApi()
                                     OUString("/myFourthKey/X/myFirstLinkSubKey/myThirdLink")),
                                     "test_registry_CppApi error 7m13");
 
-//    REG_ENSURE(rootKey.openKey(OUString("/myFourthKey/X/myFirstLinkSubKey/myThirdLink"), key7) == REG_DETECT_RECURSION,
+//    REG_ENSURE(rootKey.openKey("/myFourthKey/X/myFirstLinkSubKey/myThirdLink", key7) == REG_DETECT_RECURSION,
 //                "test_registry_CppApi error 7m14");
 
 //    REG_ENSURE(key7.closeKey() == REG_INVALID_KEY, "test_registry_CppApi error 7m11");
@@ -483,11 +483,11 @@ void test_registry_CppApi()
     REG_ENSURE(!rootKey.createKey(OUString("/TEST"), key8), "test_registry_CppApi error 8");
     REG_ENSURE(!rootKey.createKey(OUString("/TEST/Child1"), key8), "test_registry_CppApi error 8a");
     REG_ENSURE(!rootKey.createKey(OUString("/TEST/Child2"), key8), "test_registry_CppApi error 8a1");
-    REG_ENSURE(!rootKey.openKey(OUString("/TEST"), key9), "test_registry_CppApi error 8b");
+    REG_ENSURE(!rootKey.openKey("/TEST", key9), "test_registry_CppApi error 8b");
     REG_ENSURE(!key8.closeKey() && !key9.closeKey(),  "test_registry_CppApi error 8b1");
-    REG_ENSURE(!rootKey.openKey(OUString("/TEST"), key8), "test_registry_CppApi error 8b");
+    REG_ENSURE(!rootKey.openKey("/TEST", key8), "test_registry_CppApi error 8b");
     REG_ENSURE(!key8.closeKey(),  "test_registry_CppApi error 8c");
-    REG_ENSURE(!rootKey.openKey(OUString("TEST"), key8), "test_registry_CppApi error 8c");
+    REG_ENSURE(!rootKey.openKey("TEST", key8), "test_registry_CppApi error 8c");
     REG_ENSURE(!key8.closeKey(),  "test_registry_CppApi error 8d");
 
 
@@ -582,13 +582,13 @@ void test_registry_CppApi()
     REG_ENSURE(!rootKey.deleteKey(OUString("myFirstKey")), "test_registry_CppApi error 15");
 
     REG_ENSURE(!key2.closeKey(), "test_registry_CppApi error 16");
-    REG_ENSURE(!rootKey.openKey(OUString("mySecondKey"), key2), "test_registry_CppApi error 17");
+    REG_ENSURE(!rootKey.openKey("mySecondKey", key2), "test_registry_CppApi error 17");
 
     REG_ENSURE(!key5.closeKey(), "test_registry_CppApi error 18");
 
     REG_ENSURE(!rootKey.deleteKey(OUString("myThirdKey")), "test_registry_CppApi error 19");
 
-    REG_ENSURE(rootKey.openKey(OUString("myThirdKey"), key5), "test_registry_CppApi error 20");
+    REG_ENSURE(rootKey.openKey("myThirdKey", key5), "test_registry_CppApi error 20");
 
     REG_ENSURE(!key2.closeKey() &&
                 !rootKey.closeKey(),  "test_registry_CppApi error 21");
@@ -648,7 +648,7 @@ void test_registry_CppApi()
 
     REG_ENSURE(!key3.closeKey(), "test_registry_CppApi error 43");
 
-    REG_ENSURE(!rootKey.openKey(OUString("/allFromTest3/reg2FirstKey/reg2FirstSubKey"), key1),
+    REG_ENSURE(!rootKey.openKey("/allFromTest3/reg2FirstKey/reg2FirstSubKey", key1),
                 "test_registry_CppApi error 43.a)");
     REG_ENSURE(!rootKey.deleteKey(OUString("/allFromTest3/reg2FirstKey/reg2FirstSubKey")), "test_registry_CppApi error 44");
     REG_ENSURE(key1.getValueInfo(OUString(), &valueType, &valueSize) == REG_INVALID_KEY,

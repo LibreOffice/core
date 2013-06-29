@@ -715,7 +715,7 @@ void SAL_CALL AutoRecovery::addStatusListener(const css::uno::Reference< css::fr
     throw(css::uno::RuntimeException)
 {
     if (!xListener.is())
-        throw css::uno::RuntimeException(OUString("Invalid listener reference."), static_cast< css::frame::XDispatch* >(this));
+        throw css::uno::RuntimeException("Invalid listener reference.", static_cast< css::frame::XDispatch* >(this));
     // container is threadsafe by using a shared mutex!
     m_lListener.addInterface(aURL.Complete, xListener);
 
@@ -750,7 +750,7 @@ void SAL_CALL AutoRecovery::removeStatusListener(const css::uno::Reference< css:
     throw(css::uno::RuntimeException)
 {
     if (!xListener.is())
-        throw css::uno::RuntimeException(OUString("Invalid listener reference."), static_cast< css::frame::XDispatch* >(this));
+        throw css::uno::RuntimeException("Invalid listener reference.", static_cast< css::frame::XDispatch* >(this));
     // container is threadsafe by using a shared mutex!
     m_lListener.removeInterface(aURL.Complete, xListener);
 }

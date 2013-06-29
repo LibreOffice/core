@@ -119,7 +119,7 @@ namespace svx
             try
             {
                 Reference< XTablesSupplier > xSupTab;
-                _rxForm->getPropertyValue(OUString("SingleSelectQueryComposer")) >>= xSupTab;
+                _rxForm->getPropertyValue("SingleSelectQueryComposer") >>= xSupTab;
 
                 if(xSupTab.is())
                 {

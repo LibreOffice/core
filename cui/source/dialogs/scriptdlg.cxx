@@ -737,7 +737,7 @@ IMPL_LINK( SvxScriptOrgDialog, ButtonHdl, Button *, pButton )
                         mspNode.set( mspUserData->GetNode() , UNO_QUERY );
                         pParent = m_pScriptsBox->GetParent( pParent );
                     }
-                    xProp->getPropertyValue( OUString("URI" ) ) >>= tmpString;
+                    xProp->getPropertyValue("URI") >>= tmpString;
                     const String scriptURL( tmpString );
 
                     if ( mspNode.is() )

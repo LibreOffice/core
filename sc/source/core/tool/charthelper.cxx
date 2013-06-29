@@ -317,7 +317,7 @@ void ScChartHelper::AddRangesIfProtectedChart( ScRangeListVector& rRangesVector,
                 svt::EmbeddedObjectRef::TryRunningState( xEmbeddedObj );
                 uno::Reference< beans::XPropertySet > xProps( xEmbeddedObj->getComponent(), uno::UNO_QUERY );
                 if ( xProps.is() &&
-                     ( xProps->getPropertyValue( OUString( "DisableDataTableDialog" ) ) >>= bDisableDataTableDialog ) &&
+                     ( xProps->getPropertyValue("DisableDataTableDialog") >>= bDisableDataTableDialog ) &&
                      bDisableDataTableDialog )
                 {
                     ScChartListenerCollection* pCollection = pDocument->GetChartListenerCollection();
@@ -407,7 +407,7 @@ void ScChartHelper::CreateProtectedChartListenersAndNotify( ScDocument* pDoc, Sd
                             svt::EmbeddedObjectRef::TryRunningState( xEmbeddedObj );
                             uno::Reference< beans::XPropertySet > xProps( xEmbeddedObj->getComponent(), uno::UNO_QUERY );
                             if ( xProps.is() &&
-                                 ( xProps->getPropertyValue( OUString( "DisableDataTableDialog" ) ) >>= bDisableDataTableDialog ) &&
+                                 ( xProps->getPropertyValue("DisableDataTableDialog") >>= bDisableDataTableDialog ) &&
                                  bDisableDataTableDialog )
                             {
                                 if ( bSameDoc )
@@ -424,9 +424,9 @@ void ScChartHelper::CreateProtectedChartListenersAndNotify( ScDocument* pDoc, Sd
                                 }
                                 else
                                 {
-                                    xProps->setPropertyValue( OUString( "DisableDataTableDialog" ),
+                                    xProps->setPropertyValue("DisableDataTableDialog",
                                         uno::makeAny( sal_False ) );
-                                    xProps->setPropertyValue( OUString( "DisableComplexChartTypes" ),
+                                    xProps->setPropertyValue("DisableComplexChartTypes",
                                         uno::makeAny( sal_False ) );
                                 }
                             }

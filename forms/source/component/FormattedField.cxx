@@ -601,7 +601,7 @@ void OFormattedModel::updateFormatterNullDate()
     // calc the current NULL date
     Reference< XNumberFormatsSupplier > xSupplier( calcFormatsSupplier() );
     if ( xSupplier.is() )
-        xSupplier->getNumberFormatSettings()->getPropertyValue( OUString( "NullDate" ) ) >>= m_aNullDate;
+        xSupplier->getNumberFormatSettings()->getPropertyValue("NullDate") >>= m_aNullDate;
 }
 
 //------------------------------------------------------------------------------
@@ -774,7 +774,7 @@ void OFormattedModel::onConnectedDbColumn( const Reference< XInterface >& _rxFor
     Reference<XNumberFormatsSupplier>  xSupplier = calcFormatsSupplier();
     m_bNumeric = getBOOL( getPropertyValue( PROPERTY_TREATASNUMERIC ) );
     m_nKeyType  = getNumberFormatType( xSupplier->getNumberFormats(), nFormatKey );
-    xSupplier->getNumberFormatSettings()->getPropertyValue( OUString("NullDate") ) >>= m_aNullDate;
+    xSupplier->getNumberFormatSettings()->getPropertyValue("NullDate") >>= m_aNullDate;
 
     OEditBaseModel::onConnectedDbColumn( _rxForm );
 }

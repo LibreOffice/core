@@ -363,7 +363,7 @@ void SfxObjectShell::SetupStorage( const uno::Reference< embed::XStorage >& xSto
             {
                 try
                 {
-                    xProps->setPropertyValue( OUString("MediaType"), uno::makeAny( aDataFlavor.MimeType ) );
+                    xProps->setPropertyValue("MediaType", uno::makeAny( aDataFlavor.MimeType ) );
                 }
                 catch( uno::Exception& )
                 {
@@ -387,7 +387,7 @@ void SfxObjectShell::SetupStorage( const uno::Reference< embed::XStorage >& xSto
                     try
                     {
                         // older versions can not have this property set, it exists only starting from ODF1.2
-                        xProps->setPropertyValue( OUString("Version" ), uno::makeAny( ODFVER_012_TEXT ) );
+                        xProps->setPropertyValue("Version", uno::makeAny( ODFVER_012_TEXT ) );
                     }
                     catch( uno::Exception& )
                     {
@@ -444,7 +444,7 @@ sal_Bool SfxObjectShell::GeneralInit_Impl( const uno::Reference< embed::XStorage
 
         try {
             uno::Reference < beans::XPropertySet > xPropSet( xStorage, uno::UNO_QUERY_THROW );
-            Any a = xPropSet->getPropertyValue( OUString("MediaType"  ) );
+            Any a = xPropSet->getPropertyValue("MediaType");
             OUString aMediaType;
             if ( !(a>>=aMediaType) || aMediaType.isEmpty() )
             {
@@ -680,7 +680,7 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
 
                 // treat the package as broken if the mediatype was retrieved as a fallback
                 uno::Reference< beans::XPropertySet > xStorProps( xStorage, uno::UNO_QUERY_THROW );
-                xStorProps->getPropertyValue( OUString( "MediaTypeFallbackUsed"  ) )
+                xStorProps->getPropertyValue("MediaTypeFallbackUsed")
                                                                     >>= bWarnMediaTypeFallback;
 
                 if ( pRepairPackageItem && pRepairPackageItem->GetValue() )
@@ -876,7 +876,7 @@ sal_uInt32 SfxObjectShell::HandleFilter( SfxMedium* pMedium, SfxObjectShell* pDo
         if( xServiceManager.is() )
         {
             xFilterCFG = com::sun::star::uno::Reference< XNameAccess >(
-                xServiceManager->createInstance( OUString("com.sun.star.document.FilterFactory") ),
+                xServiceManager->createInstance("com.sun.star.document.FilterFactory"),
                 UNO_QUERY );
         }
 
@@ -1161,7 +1161,7 @@ sal_Bool SfxObjectShell::SaveTo_Impl
             try
             {
                 uno::Reference < beans::XPropertySet > xPropSet( GetStorage(), uno::UNO_QUERY_THROW );
-                xPropSet->getPropertyValue( OUString( "Version"  ) ) >>= aODFVersion;
+                xPropSet->getPropertyValue("Version") >>= aODFVersion;
             }
             catch( uno::Exception& )
             {}
@@ -1349,7 +1349,7 @@ sal_Bool SfxObjectShell::SaveTo_Impl
                     if ( !xProps.is() )
                         throw uno::RuntimeException();
 
-                    xProps->setPropertyValue( OUString("MediaType"),
+                    xProps->setPropertyValue("MediaType",
                                             uno::makeAny( aDataFlavor.MimeType ) );
                 }
                 catch( uno::Exception& )
@@ -1578,7 +1578,7 @@ sal_Bool SfxObjectShell::SaveTo_Impl
                 try
                 {
                     uno::Reference < beans::XPropertySet > xPropSet( rMedium.GetStorage(), uno::UNO_QUERY_THROW );
-                    xPropSet->getPropertyValue( OUString( "Version"  ) ) >>= aVersion;
+                    xPropSet->getPropertyValue("Version") >>= aVersion;
                 }
                 catch( uno::Exception& )
                 {
@@ -1895,7 +1895,7 @@ sal_Bool SfxObjectShell::DoSaveObjectAs( SfxMedium& rMedium, sal_Bool bCommit )
         uno::Reference < beans::XPropertySet > xPropSet( xNewStor, uno::UNO_QUERY );
         if ( xPropSet.is() )
         {
-            Any a = xPropSet->getPropertyValue( OUString("MediaType"  ) );
+            Any a = xPropSet->getPropertyValue("MediaType");
             OUString aMediaType;
             if ( !(a>>=aMediaType) || aMediaType.isEmpty() )
             {
@@ -3558,7 +3558,7 @@ sal_Bool SfxObjectShell::WriteThumbnail( sal_Bool bEncrypted,
 
             uno::Reference < beans::XPropertySet > xSet( xStream, uno::UNO_QUERY );
             if ( xSet.is() )
-                xSet->setPropertyValue( OUString("MediaType"),
+                xSet->setPropertyValue("MediaType",
                                         uno::makeAny( OUString("image/png") ) );
             if ( bEncrypted )
             {

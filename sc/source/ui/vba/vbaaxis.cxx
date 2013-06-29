@@ -38,7 +38,7 @@ ScVbaAxis::getChartPtr() throw( uno::RuntimeException )
 {
     ScVbaChart* pChart = static_cast< ScVbaChart* >( moChartParent.get() );
     if ( !pChart )
-        throw uno::RuntimeException( OUString("Can't access parent chart impl"), uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException("Can't access parent chart impl", uno::Reference< uno::XInterface >() );
     return pChart;
 }
 
@@ -232,13 +232,13 @@ ScVbaAxis::setHasTitle( ::sal_Bool _bHasTitle ) throw (script::BasicErrorExcepti
         switch(nType)
         {
             case xlCategory:
-                pChart->mxDiagramPropertySet->setPropertyValue( OUString("HasXAxisTitle"), uno::makeAny(_bHasTitle));
+                pChart->mxDiagramPropertySet->setPropertyValue("HasXAxisTitle", uno::makeAny(_bHasTitle));
                 break;
             case xlSeriesAxis:
-                pChart->mxDiagramPropertySet->setPropertyValue( OUString("HasZAxisTitle"), uno::makeAny(_bHasTitle));
+                pChart->mxDiagramPropertySet->setPropertyValue("HasZAxisTitle", uno::makeAny(_bHasTitle));
                 break;
             default: // xlValue:
-                pChart->mxDiagramPropertySet->setPropertyValue( OUString("HasYAxisTitle"), uno::makeAny(_bHasTitle));
+                pChart->mxDiagramPropertySet->setPropertyValue("HasYAxisTitle", uno::makeAny(_bHasTitle));
         }
 
     }
@@ -259,13 +259,13 @@ ScVbaAxis::getHasTitle(  ) throw (script::BasicErrorException, uno::RuntimeExcep
         switch(nType)
         {
             case xlCategory:
-                pChart->mxDiagramPropertySet->getPropertyValue( OUString("HasXAxisTitle") ) >>= bHasTitle;
+                pChart->mxDiagramPropertySet->getPropertyValue("HasXAxisTitle") >>= bHasTitle;
                 break;
             case xlSeriesAxis:
-                pChart->mxDiagramPropertySet->getPropertyValue( OUString("HasZAxisTitle") ) >>= bHasTitle;
+                pChart->mxDiagramPropertySet->getPropertyValue("HasZAxisTitle") >>= bHasTitle;
                 break;
             default: // xlValue:
-                pChart->mxDiagramPropertySet->getPropertyValue( OUString("HasYAxisTitle") ) >>= bHasTitle;
+                pChart->mxDiagramPropertySet->getPropertyValue("HasYAxisTitle") >>= bHasTitle;
         }
     }
     catch (const uno::Exception& e)
@@ -281,7 +281,7 @@ ScVbaAxis::setMinorUnit( double _fMinorUnit ) throw (script::BasicErrorException
     try
     {
         if (isValueAxis())
-            mxPropertySet->setPropertyValue( OUString("StepHelp"), uno::makeAny(_fMinorUnit));
+            mxPropertySet->setPropertyValue("StepHelp", uno::makeAny(_fMinorUnit));
     }
     catch (uno::Exception& )
     {
@@ -296,7 +296,7 @@ ScVbaAxis::getMinorUnit(  ) throw (script::BasicErrorException, uno::RuntimeExce
     try
     {
         if (isValueAxis())
-            mxPropertySet->getPropertyValue( OUString("StepHelp")) >>= fMinor;
+            mxPropertySet->getPropertyValue("StepHelp") >>= fMinor;
     }
     catch (uno::Exception& )
     {
@@ -311,7 +311,7 @@ ScVbaAxis::setMinorUnitIsAuto( ::sal_Bool _bMinorUnitIsAuto ) throw (script::Bas
     try
     {
         if (isValueAxis())
-            mxPropertySet->setPropertyValue( OUString( "AutoStepHelp" ), uno::makeAny(_bMinorUnitIsAuto));
+            mxPropertySet->setPropertyValue("AutoStepHelp", uno::makeAny(_bMinorUnitIsAuto));
     }
     catch (uno::Exception& )
     {
@@ -327,7 +327,7 @@ ScVbaAxis::getMinorUnitIsAuto(  ) throw (script::BasicErrorException, uno::Runti
     {
         if (isValueAxis())
         {
-            mxPropertySet->getPropertyValue( OUString( "AutoStepHelp") ) >>= bIsAuto;
+            mxPropertySet->getPropertyValue("AutoStepHelp") >>= bIsAuto;
         }
     }
     catch (uno::Exception& )
@@ -357,7 +357,7 @@ ScVbaAxis::setMajorUnit( double _fMajorUnit ) throw (script::BasicErrorException
     {
         if (isValueAxis())
         {
-            mxPropertySet->setPropertyValue( OUString("StepMain"), uno::makeAny(_fMajorUnit));
+            mxPropertySet->setPropertyValue("StepMain", uno::makeAny(_fMajorUnit));
         }
     }
     catch (uno::Exception& )
@@ -373,7 +373,7 @@ ScVbaAxis::getMajorUnit(  ) throw (script::BasicErrorException, uno::RuntimeExce
     try
     {
         if (isValueAxis())
-            mxPropertySet->getPropertyValue( OUString("StepMain")) >>= fMax;
+            mxPropertySet->getPropertyValue("StepMain") >>= fMax;
     }
     catch (uno::Exception& )
     {
@@ -389,7 +389,7 @@ ScVbaAxis::setMajorUnitIsAuto( ::sal_Bool _bMajorUnitIsAuto ) throw (script::Bas
     {
         if (isValueAxis())
         {
-            mxPropertySet->setPropertyValue( OUString( "AutoStepMain" ), uno::makeAny( _bMajorUnitIsAuto ));
+            mxPropertySet->setPropertyValue("AutoStepMain", uno::makeAny( _bMajorUnitIsAuto ));
         }
     }
     catch (uno::Exception& )
@@ -406,7 +406,7 @@ ScVbaAxis::getMajorUnitIsAuto(  ) throw (script::BasicErrorException, uno::Runti
     {
         if (isValueAxis())
         {
-            mxPropertySet->getPropertyValue( OUString( "AutoStepMain")) >>= bIsAuto;
+            mxPropertySet->getPropertyValue("AutoStepMain") >>= bIsAuto;
         }
     }
     catch (uno::Exception& )
@@ -423,7 +423,7 @@ ScVbaAxis::setMaximumScale( double _fMaximumScale ) throw (script::BasicErrorExc
     {
         if ( isValueAxis() )
         {
-            mxPropertySet->setPropertyValue( OUString( "Max" ), uno::makeAny(_fMaximumScale));
+            mxPropertySet->setPropertyValue("Max", uno::makeAny(_fMaximumScale));
         }
     }
     catch ( uno::Exception& )
@@ -440,7 +440,7 @@ ScVbaAxis::getMaximumScale(  ) throw (script::BasicErrorException, uno::RuntimeE
     {
         if (isValueAxis())
         {
-            mxPropertySet->getPropertyValue( OUString( "Max" )) >>= fMax;
+            mxPropertySet->getPropertyValue("Max") >>= fMax;
         }
     }
     catch (uno::Exception& )
@@ -457,7 +457,7 @@ ScVbaAxis::setMaximumScaleIsAuto( ::sal_Bool _bMaximumScaleIsAuto ) throw (scrip
     try
     {
         if ( isValueAxis() )
-            mxPropertySet->setPropertyValue( OUString( "AutoMax" ), uno::makeAny( _bMaximumScaleIsAuto ));
+            mxPropertySet->setPropertyValue("AutoMax", uno::makeAny( _bMaximumScaleIsAuto ));
 
     }
     catch ( uno::Exception& )
@@ -474,7 +474,7 @@ ScVbaAxis::getMaximumScaleIsAuto(  ) throw (script::BasicErrorException, uno::Ru
     try
     {
         if (isValueAxis())
-            mxPropertySet->getPropertyValue( OUString( "AutoMax" ) ) >>= bIsAuto;
+            mxPropertySet->getPropertyValue("AutoMax") >>= bIsAuto;
     }
     catch ( uno::Exception& )
     {
@@ -489,7 +489,7 @@ ScVbaAxis::setMinimumScale( double _fMinimumScale ) throw (script::BasicErrorExc
     try
     {
         if (isValueAxis())
-            mxPropertySet->setPropertyValue( OUString("Min"), uno::makeAny( _fMinimumScale )  );
+            mxPropertySet->setPropertyValue("Min", uno::makeAny( _fMinimumScale )  );
     }
     catch ( uno::Exception& )
     {
@@ -504,7 +504,7 @@ ScVbaAxis::getMinimumScale(  ) throw (script::BasicErrorException, uno::RuntimeE
     try
     {
         if (isValueAxis())
-            mxPropertySet->getPropertyValue( OUString( "Min")) >>= fMin;
+            mxPropertySet->getPropertyValue("Min") >>= fMin;
     }
     catch (const uno::Exception& e)
     {
@@ -520,7 +520,7 @@ ScVbaAxis::setMinimumScaleIsAuto( ::sal_Bool _bMinimumScaleIsAuto ) throw (scrip
     {
         if (isValueAxis())
         {
-            mxPropertySet->setPropertyValue( OUString("AutoMin"), uno::makeAny(_bMinimumScaleIsAuto));
+            mxPropertySet->setPropertyValue("AutoMin", uno::makeAny(_bMinimumScaleIsAuto));
         }
     }
     catch (uno::Exception& )
@@ -537,7 +537,7 @@ ScVbaAxis::getMinimumScaleIsAuto(  ) throw (script::BasicErrorException, uno::Ru
     {
         if (isValueAxis())
         {
-            mxPropertySet->getPropertyValue( OUString("AutoMin") ) >>= bIsAuto;
+            mxPropertySet->getPropertyValue("AutoMin") >>= bIsAuto;
         }
     }
     catch (uno::Exception& )
@@ -563,10 +563,10 @@ ScVbaAxis::setScaleType( ::sal_Int32 _nScaleType ) throw (script::BasicErrorExce
             switch (_nScaleType)
             {
                 case xlScaleLinear:
-                    mxPropertySet->setPropertyValue( OUString( "Logarithmic" ), uno::makeAny( sal_False ) );
+                    mxPropertySet->setPropertyValue("Logarithmic", uno::makeAny( sal_False ) );
                     break;
                 case xlScaleLogarithmic:
-                    mxPropertySet->setPropertyValue( OUString( "Logarithmic" ), uno::makeAny( sal_True ) );
+                    mxPropertySet->setPropertyValue("Logarithmic", uno::makeAny( sal_True ) );
                     break;
                 default:
                     // According to MS the paramenter is ignored and no Error is thrown

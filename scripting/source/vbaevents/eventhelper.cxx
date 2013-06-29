@@ -475,18 +475,18 @@ public:
 
     virtual void SAL_CALL insertByName( const OUString&, const Any& ) throw (lang::IllegalArgumentException, container::ElementExistException, lang::WrappedTargetException, RuntimeException)
     {
-        throw RuntimeException( OUString("ReadOnly container"), Reference< XInterface >() );
+        throw RuntimeException("ReadOnly container", Reference< XInterface >() );
 
     }
     virtual void SAL_CALL removeByName( const OUString& ) throw (::com::sun::star::container::NoSuchElementException, lang::WrappedTargetException, RuntimeException)
     {
-        throw RuntimeException( OUString("ReadOnly container"), Reference< XInterface >() );
+        throw RuntimeException("ReadOnly container", Reference< XInterface >() );
     }
 
     // XNameReplace
     virtual void SAL_CALL replaceByName( const OUString&, const Any& ) throw (lang::IllegalArgumentException, container::NoSuchElementException, lang::WrappedTargetException, RuntimeException)
     {
-        throw RuntimeException( OUString("ReadOnly container"), Reference< XInterface >() );
+        throw RuntimeException("ReadOnly container", Reference< XInterface >() );
 
     }
 
@@ -674,7 +674,7 @@ EventListener::setShellFromModel()
     try
     {
         uno::Reference< beans::XPropertySet > xProps( m_xModel, UNO_QUERY_THROW );
-        uno::Reference< script::vba::XVBACompatibility > xVBAMode( xProps->getPropertyValue( OUString( "BasicLibraries" ) ), uno::UNO_QUERY_THROW );
+        uno::Reference< script::vba::XVBACompatibility > xVBAMode( xProps->getPropertyValue("BasicLibraries"), uno::UNO_QUERY_THROW );
         msProject = xVBAMode->getProjectName();
     }
     catch ( uno::Exception& ) {}
@@ -902,7 +902,7 @@ EventListener::firing_Impl(const ScriptEvent& evt, Any* pRet ) throw(RuntimeExce
             uno::Reference< beans::XPropertySet > xProps;
             OSL_TRACE("Getting properties");
             xProps.set( xControl->getModel(), uno::UNO_QUERY_THROW );
-            xProps->getPropertyValue( OUString( "Name" ) ) >>= sName;
+            xProps->getPropertyValue("Name") >>= sName;
         }
     }
     //dumpEvent( evt );

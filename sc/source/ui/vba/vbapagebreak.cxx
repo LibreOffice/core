@@ -36,7 +36,7 @@ ScVbaPageBreak<Ifc1>::ScVbaPageBreak( const uno::Reference< XHelperInterface >& 
 template< typename Ifc1 >
 sal_Int32 ScVbaPageBreak<Ifc1>::getType() throw (uno::RuntimeException)
 {
-    uno::Any aValue = mxRowColPropertySet->getPropertyValue( OUString( "IsStartOfNewPage" ));
+    uno::Any aValue = mxRowColPropertySet->getPropertyValue("IsStartOfNewPage");
     sal_Bool hasPageBreak = false;
     aValue >>= hasPageBreak;
 
@@ -61,11 +61,11 @@ void ScVbaPageBreak<Ifc1>::setType(sal_Int32 type) throw (uno::RuntimeException)
 
     if( type == excel::XlPageBreak::xlPageBreakNone )
     {
-        mxRowColPropertySet->setPropertyValue( OUString( "IsStartOfNewPage" ), uno::makeAny(sal_False));
+        mxRowColPropertySet->setPropertyValue("IsStartOfNewPage", uno::makeAny(sal_False));
         return;
     }
 
-    mxRowColPropertySet->setPropertyValue( OUString( "IsStartOfNewPage" ), uno::makeAny(sal_True));
+    mxRowColPropertySet->setPropertyValue("IsStartOfNewPage", uno::makeAny(sal_True));
     if( type == excel::XlPageBreak::xlPageBreakManual )
         maTablePageBreakData.ManualBreak = sal_True;
     else
@@ -75,7 +75,7 @@ void ScVbaPageBreak<Ifc1>::setType(sal_Int32 type) throw (uno::RuntimeException)
 template< typename Ifc1 >
 void ScVbaPageBreak<Ifc1>::Delete() throw ( script::BasicErrorException, uno::RuntimeException)
 {
-    mxRowColPropertySet->setPropertyValue( OUString( "IsStartOfNewPage" ), uno::makeAny(sal_False));
+    mxRowColPropertySet->setPropertyValue("IsStartOfNewPage", uno::makeAny(sal_False));
 }
 
 template< typename Ifc1 >

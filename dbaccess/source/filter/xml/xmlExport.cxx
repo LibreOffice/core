@@ -864,7 +864,7 @@ void ODBExport::exportComponent(XPropertySet* _xProp)
     OUString sValue;
     _xProp->getPropertyValue(PROPERTY_PERSISTENT_NAME) >>= sValue;
     sal_Bool bIsForm = sal_True;
-    _xProp->getPropertyValue(OUString("IsForm")) >>= bIsForm;
+    _xProp->getPropertyValue("IsForm") >>= bIsForm;
     if ( bIsForm )
         sValue = OUString("forms/") + sValue;
     else

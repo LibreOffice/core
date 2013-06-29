@@ -167,7 +167,7 @@ public:
         table::BorderLine aBorderLine;
         if ( getBorderLine( aBorderLine ) )
             return uno::makeAny( OORGBToXLRGB( aBorderLine.Color ) );
-        throw uno::RuntimeException( OUString( "No Implementation available" ), uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException("No Implementation available", uno::Reference< uno::XInterface >() );
     }
     void SAL_CALL setColor( const uno::Any& _color ) throw (uno::RuntimeException)
     {
@@ -180,7 +180,7 @@ public:
             setBorderLine( aBorderLine );
         }
         else
-            throw uno::RuntimeException( OUString( "No Implementation available" ), uno::Reference< uno::XInterface >() );
+            throw uno::RuntimeException("No Implementation available", uno::Reference< uno::XInterface >() );
     }
 
     uno::Any SAL_CALL getColorIndex() throw (uno::RuntimeException)
@@ -231,7 +231,7 @@ public:
                     break;
             }
         }
-        throw uno::RuntimeException( OUString( "Method failed" ), uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException("Method failed", uno::Reference< uno::XInterface >() );
     }
     void SAL_CALL setWeight( const uno::Any& _weight ) throw (uno::RuntimeException)
     {
@@ -255,12 +255,12 @@ public:
                     aBorderLine.OuterLineWidth = OOLineHairline;
                     break;
                 default:
-                    throw uno::RuntimeException( OUString( "Bad param" ), uno::Reference< uno::XInterface >() );
+                    throw uno::RuntimeException("Bad param", uno::Reference< uno::XInterface >() );
             }
             setBorderLine( aBorderLine );
         }
         else
-                    throw uno::RuntimeException( OUString( "Method failed" ), uno::Reference< uno::XInterface >() );
+                    throw uno::RuntimeException("Method failed", uno::Reference< uno::XInterface >() );
     }
 
     uno::Any SAL_CALL getLineStyle() throw (uno::RuntimeException)
@@ -289,12 +289,12 @@ public:
                 case XlLineStyle::xlSlantDashDot:
                     break;
                 default:
-                    throw uno::RuntimeException( OUString( "Bad param" ), uno::Reference< uno::XInterface >() );
+                    throw uno::RuntimeException("Bad param", uno::Reference< uno::XInterface >() );
             }
             setBorderLine( aBorderLine );
         }
         else
-            throw uno::RuntimeException( OUString( "Method failed" ), uno::Reference< uno::XInterface >() );
+            throw uno::RuntimeException("Method failed", uno::Reference< uno::XInterface >() );
     }
 };
 

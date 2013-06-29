@@ -113,7 +113,7 @@ Reference< XLayoutManager > getLayoutManagerFromFrame( const Reference< XFrame >
 
     try
     {
-        xPropSet->getPropertyValue( OUString( "LayoutManager" )) >>= xLayoutManager;
+        xPropSet->getPropertyValue("LayoutManager") >>= xLayoutManager;
     }
     catch ( const UnknownPropertyException& )
     {
@@ -296,8 +296,8 @@ Sequence< Sequence< com::sun::star::beans::PropertyValue > > ToolbarsMenuControl
             {
                 OUString   aResName;
                 sal_Int16       nType( -1 );
-                xPropSet->getPropertyValue( OUString( "Type" )) >>= nType;
-                xPropSet->getPropertyValue( OUString( "ResourceURL" )) >>= aResName;
+                xPropSet->getPropertyValue("Type") >>= nType;
+                xPropSet->getPropertyValue("ResourceURL") >>= aResName;
 
                 if (( nType == ::com::sun::star::ui::UIElementType::TOOLBAR ) &&
                     !aResName.isEmpty() )
@@ -677,7 +677,7 @@ void SAL_CALL ToolbarsMenuController::itemSelected( const css::awt::MenuEvent& r
                                 {
                                     try
                                     {
-                                        xPropSet->setPropertyValue( OUString( "RefreshContextToolbarVisibility" ), makeAny( sal_True ));
+                                        xPropSet->setPropertyValue("RefreshContextToolbarVisibility", makeAny( sal_True ));
                                     }
                                     catch ( const RuntimeException& )
                                     {

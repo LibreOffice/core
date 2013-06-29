@@ -878,7 +878,7 @@ sal_Bool SAL_CALL ScannerManager::configureScannerAndScan( ScannerContext& rCont
     uno::Reference< XScannerManager >   xThis( this );
 
     if( rContext.InternalData != 0 || rContext.ScannerName != OUString( "TWAIN"  ) )
-        throw ScannerException( OUString( "Scanner does not exist"  ), xThis, ScanError_InvalidContext );
+        throw ScannerException("Scanner does not exist", xThis, ScanError_InvalidContext );
 
     ReleaseData();
 
@@ -892,7 +892,7 @@ void SAL_CALL ScannerManager::startScan( const ScannerContext& rContext, const u
     uno::Reference< XScannerManager >   xThis( this );
 
     if( rContext.InternalData != 0 || rContext.ScannerName != OUString( "TWAIN"  ) )
-        throw ScannerException( OUString( "Scanner does not exist"  ), xThis, ScanError_InvalidContext );
+        throw ScannerException("Scanner does not exist", xThis, ScanError_InvalidContext );
 
     ReleaseData();
     aTwain.PerformTransfer( *this, rxListener );
@@ -905,7 +905,7 @@ ScanError SAL_CALL ScannerManager::getError( const ScannerContext& rContext )
     uno::Reference< XScannerManager >   xThis( this );
 
     if( rContext.InternalData != 0 || rContext.ScannerName != OUString( "TWAIN"  ) )
-        throw ScannerException( OUString( "Scanner does not exist"  ), xThis, ScanError_InvalidContext );
+        throw ScannerException("Scanner does not exist", xThis, ScanError_InvalidContext );
 
     return( ( aTwain.GetState() == TWAIN_STATE_CANCELED ) ? ScanError_ScanCanceled : ScanError_ScanErrorNone );
 }

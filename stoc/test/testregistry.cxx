@@ -189,7 +189,7 @@ void test_SimpleRegistry(
     OSL_ENSURE( xServInfo.is(), "test_SimpleRegistry error2");
 
     OSL_ENSURE( xServInfo->getImplementationName() == "com.sun.star.comp.stoc.SimpleRegistry", "test_SimpleRegistry error3");
-    OSL_ENSURE( xServInfo->supportsService(OUString( "com.sun.star.registry.SimpleRegistry")), "test_SimpleRegistry error4");
+    OSL_ENSURE( xServInfo->supportsService("com.sun.star.registry.SimpleRegistry"), "test_SimpleRegistry error4");
     OSL_ENSURE( xServInfo->getSupportedServiceNames().getLength() == 1, "test_SimpleRegistry error5");
     xServInfo.clear();
 
@@ -336,7 +336,7 @@ void test_SimpleRegistry(
         }
 
         xRootKey = xReg->getRootKey();
-        xKey = xRootKey->openKey( OUString( "LinkTest" ) );
+        xKey = xRootKey->openKey("LinkTest");
         OSL_ENSURE( xKey.is() && xKey->isValid() && xKey->getKeyName() == "/ThirdKey/FirstSubKey/WithSubSubKey", "test_SimpleRegistry error 1213" );
         xKey->closeKey();
         OSL_ENSURE(
@@ -344,7 +344,7 @@ void test_SimpleRegistry(
             registry::RegistryKeyType_LINK,
             "test_SimpleRegistry error 1214" );
 
-        xKey = xRootKey->openKey(OUString( "FirstKey/SecondSubKey" ));
+        xKey = xRootKey->openKey("FirstKey/SecondSubKey");
         OSL_ENSURE( !xKey.is(), "test_SimpleRegistry error 27" );
 
         // Test Links
@@ -352,7 +352,7 @@ void test_SimpleRegistry(
         xKey->createLink(OUString( "MyFirstLink" ),
                          OUString( "/ThirdKey/FirstSubKey" ));
 
-        xKey = xRootKey->openKey(OUString( "/FifthKey/MyFirstLink" ));
+        xKey = xRootKey->openKey("/FifthKey/MyFirstLink");
         OSL_ENSURE( xKey->isValid(), "test_SimpleRegistry error 27" );
         OSL_ENSURE( xKey->getKeyName() == OUString( "/ThirdKey/FirstSubKey" ), "test_SimpleRegistry error 28" );
 
@@ -381,7 +381,7 @@ void test_SimpleRegistry(
 
         try
         {
-            xRootKey->openKey(OUString( "/FifthKey/MyFirstLink/WithSubSubKey/MyFourthLink" ));
+            xRootKey->openKey("/FifthKey/MyFirstLink/WithSubSubKey/MyFourthLink");
         }
         catch(InvalidRegistryException&)
         {
@@ -395,7 +395,7 @@ void test_SimpleRegistry(
         xRootKey->createLink(OUString( "/FourthKey/MySecondLink" ),
                              OUString( "/ThirdKey/FirstSubKey/WithSubSubKey" ));
 
-        xKey = xRootKey->openKey(OUString( "SixthKey" ));
+        xKey = xRootKey->openKey("SixthKey");
         seqNames = xKey->getKeyNames();
         seqKeys = xKey->openKeys();
 
@@ -446,7 +446,7 @@ void test_DefaultRegistry(
     Reference< XPropertySet > xPropSet( rSMgr, UNO_QUERY);
     OSL_ENSURE( xPropSet.is(), "test_DefaultRegistry error0");
 
-    Any aPropertyAny( xPropSet->getPropertyValue( OUString("Registry") ) );
+    Any aPropertyAny( xPropSet->getPropertyValue("Registry") );
     OSL_ENSURE( aPropertyAny.hasValue(), "test_DefaultRegistry error1");
 
     Reference<XSimpleRegistry> xReg;
@@ -458,7 +458,7 @@ void test_DefaultRegistry(
     OSL_ENSURE( xServInfo.is(), "test_DefaultRegistry error2");
 
     OSL_ENSURE( xServInfo->getImplementationName() == OUString( "com.sun.star.comp.stoc.NestedRegistry" ), "test_DefualtRegistry error3");
-    OSL_ENSURE( xServInfo->supportsService(OUString( "com.sun.star.registry.NestedRegistry" )), "test_DefaultRegistry error4");
+    OSL_ENSURE( xServInfo->supportsService("com.sun.star.registry.NestedRegistry"), "test_DefaultRegistry error4");
     OSL_ENSURE( xServInfo->getSupportedServiceNames().getLength() == 1, "test_DefaultRegistry error5");
     xServInfo.clear();
 
@@ -468,7 +468,7 @@ void test_DefaultRegistry(
     {
         Reference<XRegistryKey> xRootKey(xReg->getRootKey());
 
-        Reference<XRegistryKey> xKey = xRootKey->openKey(OUString( "/UCR/com/sun/star/registry/XSimpleRegistry" ));
+        Reference<XRegistryKey> xKey = xRootKey->openKey("/UCR/com/sun/star/registry/XSimpleRegistry");
 
         OSL_ENSURE( xKey->getKeyName() == OUString( "/UCR/com/sun/star/registry/XSimpleRegistry" ),
                      "test_DefaultRegistry error 7" );
@@ -485,11 +485,11 @@ void test_DefaultRegistry(
             xReg->mergeKey(OUString( "Test" ), testreg );
         }
 
-        xKey = xRootKey->openKey(OUString( "Test/ThirdKey/FirstSubKey/WithSubSubKey" ));
+        xKey = xRootKey->openKey("Test/ThirdKey/FirstSubKey/WithSubSubKey");
         if (xKey.is())
             xKey->setLongValue(123456789);
 
-        xKey = xRootKey->openKey(OUString( "Test/ThirdKey/FirstSubKey" ));
+        xKey = xRootKey->openKey("Test/ThirdKey/FirstSubKey");
         if (xKey.is())
         {
             xKey->createKey(OUString( "SecondSubSubKey" ));
@@ -499,7 +499,7 @@ void test_DefaultRegistry(
             OSL_ENSURE( seqNames.getLength() == 2, "test_DefaultRegistry error 8" );
         }
 
-        xKey = xRootKey->openKey(OUString( "/Test/ThirdKey" ));
+        xKey = xRootKey->openKey("/Test/ThirdKey");
         if (xKey.is())
         {
             RegistryValueType valueType = xKey->getValueType();
@@ -535,7 +535,7 @@ void test_DefaultRegistry(
         xKey->createLink(OUString( "MyFirstLink" ),
                          OUString( "/Test/ThirdKey/FirstSubKey" ));
 
-        xKey = xRootKey->openKey(OUString( "/Test/FifthKey/MyFirstLink" ));
+        xKey = xRootKey->openKey("/Test/FifthKey/MyFirstLink");
         OSL_ENSURE( xKey->isValid(), "test_DefaultRegistry error 18" );
         OSL_ENSURE( xKey->getKeyName() == OUString( "/Test/ThirdKey/FirstSubKey" ),
                       "test_DefaultRegistry error 19" );
@@ -565,7 +565,7 @@ void test_DefaultRegistry(
 
         try
         {
-            xRootKey->openKey(OUString( "/Test/FifthKey/MyFirstLink/WithSubSubKey/MyFourthLink" ));
+            xRootKey->openKey("/Test/FifthKey/MyFirstLink/WithSubSubKey/MyFourthLink");
         }
         catch(InvalidRegistryException&)
         {
@@ -578,7 +578,7 @@ void test_DefaultRegistry(
 
         xRootKey->deleteLink(OUString( "/Test/FifthKey/MyFirstLink/WithSubSubKey/MyFourthLink" ));
 
-        xKey = xRootKey->openKey(OUString( "/Test/DefaultLink/SecondSubSubKey" ));
+        xKey = xRootKey->openKey("/Test/DefaultLink/SecondSubSubKey");
         if (xKey.is())
         {
             OSL_ENSURE( xKey->getKeyName() == OUString( "/Test/ThirdKey/FirstSubKey/SecondSubSubKey" ), "test_DefaultRegistry error 23" );
@@ -590,7 +590,7 @@ void test_DefaultRegistry(
                           "test_DefaultRegistry error 24" );
         }
 
-        xKey = xRootKey->openKey(OUString( "Test" ));
+        xKey = xRootKey->openKey("Test");
         OSL_ENSURE( xKey->isValid(), "test_DefaultRegistry error 25" );
 
         xRootKey->deleteKey(OUString( "Test" ));
@@ -608,7 +608,7 @@ void test_DefaultRegistry(
                            testreg2);
         }
 
-        xKey = xRootKey->openKey(OUString( "/AllFromTestreg2/ThirdKey/FirstSubKey" ));
+        xKey = xRootKey->openKey("/AllFromTestreg2/ThirdKey/FirstSubKey");
         if (xKey.is())
         {
             xRootKey->deleteKey(OUString( "/AllFromTestreg2" ));

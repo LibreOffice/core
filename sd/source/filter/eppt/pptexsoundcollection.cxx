@@ -38,7 +38,7 @@ ExSoundEntry::ExSoundEntry(const OUString& rString)
             ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >(),
             comphelper::getProcessComponentContext() );
         sal_Int64 nVal = 0;
-        ::cppu::convertPropertyValue( nVal, aCnt.getPropertyValue( OUString( "Size" ) ) );
+        ::cppu::convertPropertyValue( nVal, aCnt.getPropertyValue("Size") );
         nFileSize = (sal_uInt32)nVal;
     }
     catch( ::com::sun::star::uno::Exception& )

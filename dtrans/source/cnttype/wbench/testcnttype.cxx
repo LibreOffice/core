@@ -184,7 +184,7 @@ int SAL_CALL main( int nArgc, char* argv[] )
     }
 
     Reference< XMimeContentTypeFactory >
-        xMCntTypeFactory( g_xFactory->createInstance( OUString("com.sun.star.datatransfer.MimeContentTypeFactory") ), UNO_QUERY );
+        xMCntTypeFactory( g_xFactory->createInstance("com.sun.star.datatransfer.MimeContentTypeFactory"), UNO_QUERY );
 
     if ( !xMCntTypeFactory.is( ) )
     {

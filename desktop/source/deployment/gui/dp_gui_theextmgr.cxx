@@ -80,7 +80,7 @@ TheExtensionManager::TheExtensionManager( Window *pParent,
                                               uno::Sequence< uno::Any >( args, 1 )), uno::UNO_QUERY_THROW);
     try
     {   //throws css::container::NoSuchElementException, css::lang::WrappedTargetException
-        uno::Any value = xNameAccessRepositories->getByName( OUString( "WebsiteLink" ) );
+        uno::Any value = xNameAccessRepositories->getByName("WebsiteLink");
         m_sGetExtensionsURL = value.get< OUString > ();
      }
     catch ( const uno::Exception& )
@@ -380,7 +380,7 @@ bool TheExtensionManager::supportsOptions( const uno::Reference< deployment::XPa
         uno::Reference< XInterface> xIntNode = anyNode.get< uno::Reference< XInterface > >();
         uno::Reference< container::XNameAccess > xNode( xIntNode, uno::UNO_QUERY_THROW );
 
-        uno::Any anyLeaves = xNode->getByName( OUString("Leaves") );
+        uno::Any anyLeaves = xNode->getByName("Leaves");
         uno::Reference< XInterface > xIntLeaves = anyLeaves.get< uno::Reference< XInterface > >();
         uno::Reference< container::XNameAccess > xLeaves( xIntLeaves, uno::UNO_QUERY_THROW );
 
@@ -393,7 +393,7 @@ bool TheExtensionManager::supportsOptions( const uno::Reference< deployment::XPa
             uno::Reference< beans::XPropertySet > xLeaf( xIntLeaf, uno::UNO_QUERY_THROW );
             //investigate the Id property if it matches the extension identifier which
             //has been passed in.
-            uno::Any anyValue = xLeaf->getPropertyValue( OUString("Id") );
+            uno::Any anyValue = xLeaf->getPropertyValue("Id");
 
             OUString sId = anyValue.get< OUString >();
             if ( sId == aId.Value )

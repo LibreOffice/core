@@ -391,7 +391,7 @@ void XMLTextColumnsContext::EndElement( )
     if( !xFactory.is() )
         return;
 
-    Reference<XInterface> xIfc = xFactory->createInstance(OUString("com.sun.star.text.TextColumns"));
+    Reference<XInterface> xIfc = xFactory->createInstance("com.sun.star.text.TextColumns");
     if( !xIfc.is() )
         return;
 

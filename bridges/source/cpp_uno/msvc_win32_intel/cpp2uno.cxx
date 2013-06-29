@@ -246,7 +246,7 @@ static typelib_TypeClass __cdecl cpp_mediate(
                  "### illegal vtable index!" );
     if (nFunctionIndex >= pTypeDescr->nMapFunctionIndexToMemberIndex)
     {
-        throw RuntimeException( OUString("illegal vtable index!"),
+        throw RuntimeException("illegal vtable index!",
                                 (XInterface *)pThis );
     }
 

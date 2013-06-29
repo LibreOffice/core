@@ -88,7 +88,7 @@ void setUpDocumentModules( const uno::Reference< sheet::XSpreadsheetDocument >& 
             {
                 uno::Reference< script::vba::XVBAModuleInfo > xVBAModuleInfo( xLib, uno::UNO_QUERY_THROW );
                 uno::Reference< lang::XMultiServiceFactory> xSF( pShell->GetModel(), uno::UNO_QUERY_THROW);
-                uno::Reference< container::XNameAccess > xVBACodeNamedObjectAccess( xSF->createInstance( OUString( "ooo.vba.VBAObjectModuleObjectProvider")), uno::UNO_QUERY_THROW );
+                uno::Reference< container::XNameAccess > xVBACodeNamedObjectAccess( xSF->createInstance("ooo.vba.VBAObjectModuleObjectProvider"), uno::UNO_QUERY_THROW );
                 // set up the module info for the workbook and sheets in the nealy created
                 // spreadsheet
                 ScDocument* pDoc = pShell->GetDocument();
@@ -266,7 +266,7 @@ ScVbaWorkbooks::isSpreadSheetFile( const OUString& sType )
 OUString
 ScVbaWorkbooks::getFileFilterType( const OUString& rFileName )
 {
-    uno::Reference< document::XTypeDetection > xTypeDetect( mxContext->getServiceManager()->createInstanceWithContext(OUString("com.sun.star.document.TypeDetection"), mxContext), uno::UNO_QUERY_THROW );
+    uno::Reference< document::XTypeDetection > xTypeDetect( mxContext->getServiceManager()->createInstanceWithContext("com.sun.star.document.TypeDetection", mxContext), uno::UNO_QUERY_THROW );
     uno::Sequence< beans::PropertyValue > aMediaDesc(1);
     aMediaDesc[ 0 ].Name = OUString("URL" );
     aMediaDesc[ 0 ].Value <<= rFileName;
@@ -317,7 +317,7 @@ ScVbaWorkbooks::Open( const OUString& rFileName, const uno::Any& /*UpdateLinks*/
             Format >>= nFormat; // val of nFormat overwritten if extracted
             // validate param
             if ( nFormat < 1 || nFormat > 6 )
-                throw uno::RuntimeException( OUString( "Illegal value for Format" ), uno::Reference< uno::XInterface >() );
+                throw uno::RuntimeException("Illegal value for Format", uno::Reference< uno::XInterface >() );
         }
 
         sal_Int16 nDelim = getCurrentDelim();
@@ -330,14 +330,14 @@ ScVbaWorkbooks::Open( const OUString& rFileName, const uno::Any& /*UpdateLinks*/
         {
             // Need to check Delimiter param
             if ( !Delimiter.hasValue() )
-                throw uno::RuntimeException( OUString( "Expected value for Delimiter" ), uno::Reference< uno::XInterface >() );
+                throw uno::RuntimeException("Expected value for Delimiter", uno::Reference< uno::XInterface >() );
             OUString sStr;
             Delimiter >>= sStr;
             String aUniStr( sStr );
             if ( aUniStr.Len() )
                 nDelim = aUniStr.GetChar(0);
             else
-                throw uno::RuntimeException( OUString( "Incorrect value for Delimiter" ), uno::Reference< uno::XInterface >() );
+                throw uno::RuntimeException("Incorrect value for Delimiter", uno::Reference< uno::XInterface >() );
         }
 
         getCurrentDelim() = nDelim; //set new current
@@ -352,7 +352,7 @@ ScVbaWorkbooks::Open( const OUString& rFileName, const uno::Any& /*UpdateLinks*/
         sProps[ nIndex ].Value <<= OUString("com.sun.star.sheet.SpreadsheetDocument");
     }
     else if ( !isSpreadSheetFile( sType ) )
-        throw uno::RuntimeException( OUString("Bad Format"), uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException("Bad Format", uno::Reference< uno::XInterface >() );
 
     uno::Reference <sheet::XSpreadsheetDocument> xSpreadDoc( openDocument( rFileName, ReadOnly, sProps ), uno::UNO_QUERY_THROW );
     uno::Any aRet = getWorkbook( mxContext, xSpreadDoc, mxParent );

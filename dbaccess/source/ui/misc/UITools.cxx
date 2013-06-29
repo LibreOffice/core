@@ -1134,7 +1134,7 @@ namespace
             ::ucbhelper::Content aCnt( INetURLObject( _rURL ).GetMainURL( INetURLObject::NO_DECODE ),
                                  Reference< ::com::sun::star::ucb::XCommandEnvironment >(),
                                  comphelper::getProcessComponentContext() );
-            if ( ( aCnt.getPropertyValue( OUString("AnchorName") ) >>= sAnchor ) )
+            if ( ( aCnt.getPropertyValue("AnchorName") >>= sAnchor ) )
             {
 
                 if ( !sAnchor.isEmpty() )

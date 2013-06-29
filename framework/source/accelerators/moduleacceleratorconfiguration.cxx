@@ -102,8 +102,8 @@ void SAL_CALL ModuleAcceleratorConfiguration::initialize(const css::uno::Sequenc
     } else
     {
         ::comphelper::SequenceAsHashMap lArgs(lArguments);
-        m_sModule = lArgs.getUnpackedValueOrDefault(OUString("ModuleIdentifier"), OUString());
-        m_sLocale = lArgs.getUnpackedValueOrDefault(OUString("Locale")          , OUString("x-default"));
+        m_sModule = lArgs.getUnpackedValueOrDefault("ModuleIdentifier", OUString());
+        m_sLocale = lArgs.getUnpackedValueOrDefault("Locale", OUString("x-default"));
     }
 
     if (m_sModule.isEmpty())

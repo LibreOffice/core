@@ -344,7 +344,7 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                         com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > xInfo;
                         xStyles->getByName( pNameItem->GetValue() ) >>= xInfo;
                         OUString aUIName;
-                        xInfo->getPropertyValue( OUString("DisplayName") ) >>= aUIName;
+                        xInfo->getPropertyValue("DisplayName") >>= aUIName;
                         if ( !aUIName.isEmpty() )
                             rReq.AppendItem( SfxStringItem( SID_STYLE_APPLY, aUIName ) );
                     }

@@ -289,7 +289,7 @@ bool lcl_isSeriesAttachedToFirstAxis(
         sal_Int32 nAxisIndex = 0;
         Reference< beans::XPropertySet > xProp( xDataSeries, uno::UNO_QUERY_THROW );
         if( xProp.is() )
-            xProp->getPropertyValue( OUString( "AttachedAxisIndex" ) ) >>= nAxisIndex;
+            xProp->getPropertyValue("AttachedAxisIndex") >>= nAxisIndex;
         bResult = (0==nAxisIndex);
     }
     catch( const uno::Exception & ex )
@@ -465,7 +465,7 @@ OUString ChartExport::parseFormula( const OUString& rRange )
     {
         try
         {
-            xParser.set( xSF->createInstance( OUString("com.sun.star.sheet.FormulaParser") ), UNO_QUERY );
+            xParser.set( xSF->createInstance("com.sun.star.sheet.FormulaParser"), UNO_QUERY );
         }
         catch( Exception& )
         {
@@ -477,12 +477,12 @@ OUString ChartExport::parseFormula( const OUString& rRange )
         Reference< XPropertySet > xParserProps( xParser, uno::UNO_QUERY );
         if( xParserProps.is() )
         {
-            xParserProps->setPropertyValue( OUString("FormulaConvention"), uno::makeAny(::com::sun::star::sheet::AddressConvention::OOO) );
+            xParserProps->setPropertyValue("FormulaConvention", uno::makeAny(::com::sun::star::sheet::AddressConvention::OOO) );
         }
         uno::Sequence<sheet::FormulaToken> aTokens = xParser->parseFormula( rRange, CellAddress( 0, 0, 0 ) );
         if( xParserProps.is() )
         {
-            xParserProps->setPropertyValue( OUString("FormulaConvention"), uno::makeAny(::com::sun::star::sheet::AddressConvention::XL_OOX) );
+            xParserProps->setPropertyValue("FormulaConvention", uno::makeAny(::com::sun::star::sheet::AddressConvention::XL_OOX) );
         }
         aResult = xParser->printFormula( aTokens, CellAddress( 0, 0, 0 ) );
     }
@@ -910,7 +910,7 @@ void ChartExport::exportTitle( Reference< XShape > xShape )
     Reference< beans::XPropertySet > xPropSet( xShape, uno::UNO_QUERY );
     if( xPropSet.is())
     {
-        xPropSet->getPropertyValue( OUString(  "String" )) >>= sText;
+        xPropSet->getPropertyValue("String") >>= sText;
     }
     if( sText.isEmpty() )
         return;
@@ -927,7 +927,7 @@ void ChartExport::exportTitle( Reference< XShape > xShape )
     // TODO: bodyPr
     const char* sWritingMode = NULL;
     sal_Bool bVertical = sal_False;
-    xPropSet->getPropertyValue( OUString(  "StackedText" )) >>= bVertical;
+    xPropSet->getPropertyValue("StackedText") >>= bVertical;
     if( bVertical )
         sWritingMode = "wordArtVert";
 
@@ -1416,7 +1416,7 @@ void ChartExport::exportSeries( Reference< chart2::XChartType > xChartType, sal_
         sal_Bool bJapaneseCandleSticks = sal_False;
         Reference< beans::XPropertySet > xCTProp( xChartType, uno::UNO_QUERY );
         if( xCTProp.is())
-            xCTProp->getPropertyValue( OUString("Japanese")) >>= bJapaneseCandleSticks;
+            xCTProp->getPropertyValue("Japanese") >>= bJapaneseCandleSticks;
         exportCandleStickSeries(
             xDSCnt->getDataSeries(), bJapaneseCandleSticks, nAttachedAxis );
         return;
@@ -1448,7 +1448,7 @@ void ChartExport::exportSeries( Reference< chart2::XChartType > xChartType, sal_
                     {
                         Reference< beans::XPropertySet > xSeqProp( xTempValueSeq, uno::UNO_QUERY );
                         if( xSeqProp.is())
-                            xSeqProp->getPropertyValue(OUString("Role")) >>= aRole;
+                            xSeqProp->getPropertyValue("Role") >>= aRole;
                         // "main" sequence
                         if( aRole.equals( aLabelRole ))
                         {

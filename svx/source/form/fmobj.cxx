@@ -556,7 +556,7 @@ Reference< XInterface >  FmFormObj::ensureModelEnv(const Reference< XInterface >
                 {
                     // create and insert (into the destination) a copy of the form
                     xCurrentDestForm.set(
-                        ::comphelper::getProcessServiceFactory()->createInstance(OUString( "com.sun.star.form.component.DataForm" ) ),
+                        ::comphelper::getProcessServiceFactory()->createInstance("com.sun.star.form.component.DataForm"),
                         UNO_QUERY_THROW );
                     ::comphelper::copyProperties( xCurrentSourceForm, xCurrentDestForm );
 

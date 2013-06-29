@@ -372,27 +372,27 @@ namespace comphelper
 
         Type aKeyType, aValueType;
         if ( !( _arguments[0] >>= aKeyType ) )
-            throw IllegalArgumentException( OUString("com.sun.star.uno.Type expected."), *this, 1 );
+            throw IllegalArgumentException("com.sun.star.uno.Type expected.", *this, 1 );
         if ( !( _arguments[1] >>= aValueType ) )
-            throw IllegalArgumentException( OUString("com.sun.star.uno.Type expected."), *this, 2 );
+            throw IllegalArgumentException("com.sun.star.uno.Type expected.", *this, 2 );
 
         Sequence< Pair< Any, Any > > aInitialValues;
         bool bMutable = true;
         if ( nArgumentCount == 3 )
         {
             if ( !( _arguments[2] >>= aInitialValues ) )
-                throw IllegalArgumentException( OUString("[]com.sun.star.beans.Pair<any,any> expected."), *this, 2 );
+                throw IllegalArgumentException("[]com.sun.star.beans.Pair<any,any> expected.", *this, 2 );
             bMutable = false;
         }
 
         // for the value, anything is allowed, except VOID
         if ( ( aValueType.getTypeClass() == TypeClass_VOID ) || ( aValueType.getTypeClass() == TypeClass_UNKNOWN ) )
-            throw IllegalTypeException( OUString( "Unsupported value type." ), *this );
+            throw IllegalTypeException("Unsupported value type.", *this );
 
         // create the comparator for the KeyType, and throw if the type is not supported
         ::std::auto_ptr< IKeyPredicateLess > pComparator( getStandardLessPredicate( aKeyType, NULL ) );
         if ( !pComparator.get() )
-            throw IllegalTypeException( OUString( "Unsupported key type." ), *this );
+            throw IllegalTypeException("Unsupported key type.", *this );
 
         // init members
         m_aData.m_aKeyType = aKeyType;
@@ -746,7 +746,7 @@ namespace comphelper
         if ( m_disposed )
             throw DisposedException( OUString(), m_rParent );
         if ( m_mapPos == m_rMapData.m_pValues->end() )
-            throw NoSuchElementException( OUString( "No more elements." ), m_rParent );
+            throw NoSuchElementException("No more elements.", m_rParent );
 
         Any aNextElement;
         switch ( m_eType )

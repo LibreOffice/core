@@ -402,7 +402,7 @@ uno::Sequence< util::RevisionTag > SAL_CALL XMLVersionListPersistence::load( con
             if ( xProps.is() )
             {
                 try {
-                    xProps->getPropertyValue( OUString("URL") ) >>= aParserInput.sSystemId;
+                    xProps->getPropertyValue("URL") >>= aParserInput.sSystemId;
                 }
                 catch( uno::Exception& )
                 {}

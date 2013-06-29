@@ -221,7 +221,7 @@ FmPropBrw::FmPropBrw( const Reference< XComponentContext >& _xORB, SfxBindings* 
         m_xFrameContainerWindow = VCLUnoHelper::GetInterface ( pContainerWindow );
 
         m_xMeAsFrame->initialize( m_xFrameContainerWindow );
-        m_xMeAsFrame->setName( OUString("form property browser") );
+        m_xMeAsFrame->setName("form property browser");
     }
     catch (Exception&)
     {

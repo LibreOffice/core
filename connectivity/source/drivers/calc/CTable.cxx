@@ -569,7 +569,7 @@ void OCalcTable::construct()
             Reference<XPropertySet> xDocProp( xDoc, UNO_QUERY );
             if ( xDocProp.is() )
             {
-                Reference<XDatabaseRanges> xRanges(xDocProp->getPropertyValue( OUString("DatabaseRanges") ),UNO_QUERY);
+                Reference<XDatabaseRanges> xRanges(xDocProp->getPropertyValue("DatabaseRanges"),UNO_QUERY);
 
                 if ( xRanges.is() && xRanges->hasByName( m_Name ) )
                 {
@@ -583,7 +583,7 @@ void OCalcTable::construct()
                         sal_Bool bRangeHeader = sal_True;
                         Reference<XPropertySet> xFiltProp( xDBRange->getFilterDescriptor(), UNO_QUERY );
                         if ( xFiltProp.is() )
-                            xFiltProp->getPropertyValue(OUString("ContainsHeader")) >>= bRangeHeader;
+                            xFiltProp->getPropertyValue("ContainsHeader") >>= bRangeHeader;
 
                         Reference<XSheetCellRange> xSheetRange( xRefer->getReferredCells(), UNO_QUERY );
                         Reference<XCellRangeAddressable> xAddr( xSheetRange, UNO_QUERY );
@@ -617,7 +617,7 @@ void OCalcTable::construct()
         if (xProp.is())
         {
             ::com::sun::star::util::Date aDateStruct;
-            if ( xProp->getPropertyValue( OUString("NullDate") ) >>= aDateStruct )
+            if ( xProp->getPropertyValue("NullDate") >>= aDateStruct )
                 m_aNullDate = ::Date( aDateStruct.Day, aDateStruct.Month, aDateStruct.Year );
         }
     }

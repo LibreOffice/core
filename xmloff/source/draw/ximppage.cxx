@@ -321,7 +321,7 @@ void SdXMLGenericPageContext::EndElement()
                     OUString aDateTimeFormat;
                     const OUString aText( GetSdImport().GetDateTimeDecl( maUseDateTimeDeclName, bFixed, aDateTimeFormat ) );
 
-                    xSet->setPropertyValue( OUString( "IsDateTimeFixed" ),
+                    xSet->setPropertyValue("IsDateTimeFixed",
                                         makeAny( bFixed ) );
 
                     if( bFixed )
@@ -341,7 +341,7 @@ void SdXMLGenericPageContext::EndElement()
 
                             if( pSdNumStyle )
                             {
-                                xSet->setPropertyValue( OUString( "DateTimeFormat" ),
+                                xSet->setPropertyValue("DateTimeFormat",
                                                                     makeAny( pSdNumStyle->GetDrawKey() ) );
                             }
                         }
@@ -518,25 +518,25 @@ void SdXMLGenericPageContext::SetPageMaster( OUString& rsPageMasterName )
                         uno::Any aAny;
 
                         aAny <<= pPageMasterContext->GetBorderBottom();
-                        xPropSet->setPropertyValue(OUString("BorderBottom"), aAny);
+                        xPropSet->setPropertyValue("BorderBottom", aAny);
 
                         aAny <<= pPageMasterContext->GetBorderLeft();
-                        xPropSet->setPropertyValue(OUString("BorderLeft"), aAny);
+                        xPropSet->setPropertyValue("BorderLeft", aAny);
 
                         aAny <<= pPageMasterContext->GetBorderRight();
-                        xPropSet->setPropertyValue(OUString("BorderRight"), aAny);
+                        xPropSet->setPropertyValue("BorderRight", aAny);
 
                         aAny <<= pPageMasterContext->GetBorderTop();
-                        xPropSet->setPropertyValue(OUString("BorderTop"), aAny);
+                        xPropSet->setPropertyValue("BorderTop", aAny);
 
                         aAny <<= pPageMasterContext->GetWidth();
-                        xPropSet->setPropertyValue(OUString("Width"), aAny);
+                        xPropSet->setPropertyValue("Width", aAny);
 
                         aAny <<= pPageMasterContext->GetHeight();
-                        xPropSet->setPropertyValue(OUString("Height"), aAny);
+                        xPropSet->setPropertyValue("Height", aAny);
 
                         aAny <<= pPageMasterContext->GetOrientation();
-                        xPropSet->setPropertyValue(OUString("Orientation"), aAny);
+                        xPropSet->setPropertyValue("Orientation", aAny);
                     }
                 }
             }
@@ -622,7 +622,7 @@ void SdXMLGenericPageContext::SetNavigationOrder()
         }
 
         Reference< XPropertySet > xSet( mxShapes, UNO_QUERY_THROW );
-        xSet->setPropertyValue( OUString( "NavigationOrder" ), Any( Reference< XIndexAccess >( new XoNavigationOrderAccess( aShapes ) ) ) );
+        xSet->setPropertyValue("NavigationOrder", Any( Reference< XIndexAccess >( new XoNavigationOrderAccess( aShapes ) ) ) );
     }
     catch(const uno::Exception&)
     {

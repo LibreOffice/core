@@ -306,8 +306,8 @@ void SAL_CALL ExportDocumentHandler::initialize( const uno::Sequence< uno::Any >
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     comphelper::SequenceAsHashMap aArgs(_aArguments);
-    m_xDelegatee = aArgs.getUnpackedValueOrDefault(OUString("DocumentHandler"),m_xDelegatee);
-    m_xModel = aArgs.getUnpackedValueOrDefault(OUString("Model"),m_xModel);
+    m_xDelegatee = aArgs.getUnpackedValueOrDefault("DocumentHandler",m_xDelegatee);
+    m_xModel = aArgs.getUnpackedValueOrDefault("Model",m_xModel);
 
     OSL_ENSURE(m_xDelegatee.is(),"No document handler avialable!");
     if ( !m_xDelegatee.is() || !m_xModel.is() )

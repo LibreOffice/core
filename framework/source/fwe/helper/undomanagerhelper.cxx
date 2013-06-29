@@ -673,7 +673,7 @@ namespace framework
                                 ?   rUndoManager.GetUndoActionCount( IUndoManager::TopLevel )
                                 :   rUndoManager.GetRedoActionCount( IUndoManager::TopLevel );
         if ( nElements == 0 )
-            throw EmptyUndoStackException( OUString( "stack is empty" ), getXUndoManager() );
+            throw EmptyUndoStackException("stack is empty", getXUndoManager() );
 
         aGuard.clear();
         // <--- SYNCHRONIZED

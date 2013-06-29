@@ -70,7 +70,7 @@ GConfClient* getGconfClient()
         mClient = gconf_client_get_default();
         if (!mClient)
         {
-            throw uno::RuntimeException(OUString("GconfBackend:GconfLayer: Cannot Initialize Gconf connection"),NULL);
+            throw uno::RuntimeException("GconfBackend:GconfLayer: Cannot Initialize Gconf connection",NULL);
         }
 
         static const char * const PreloadValuesList[] =

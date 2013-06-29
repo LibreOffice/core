@@ -331,7 +331,7 @@ void SwXFootnoteProperties::setPropertyValue(const OUString& rPropertyName, cons
         if(pEntry)
         {
             if ( pEntry->nFlags & PropertyAttribute::READONLY)
-                throw PropertyVetoException( OUString( "Property is read-only: " ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+                throw PropertyVetoException("Property is read-only: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
             SwFtnInfo aFtnInfo(pDoc->GetFtnInfo());
             switch(pEntry->nWID)
             {
@@ -642,7 +642,7 @@ void SwXEndnoteProperties::setPropertyValue(const OUString& rPropertyName, const
         if(pEntry)
         {
             if ( pEntry->nFlags & PropertyAttribute::READONLY)
-                throw PropertyVetoException( OUString( "Property is read-only: " ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+                throw PropertyVetoException("Property is read-only: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
             SwEndNoteInfo aEndInfo(pDoc->GetEndNoteInfo());
             switch(pEntry->nWID)
             {
@@ -874,7 +874,7 @@ void SwXLineNumberingProperties::setPropertyValue(
         if(pEntry)
         {
             if ( pEntry->nFlags & PropertyAttribute::READONLY)
-                throw PropertyVetoException( OUString( "Property is read-only: " ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+                throw PropertyVetoException("Property is read-only: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
             SwLineNumberInfo  aInfo(pDoc->GetLineNumberInfo());
             switch(pEntry->nWID)
             {
@@ -2512,7 +2512,7 @@ void SwXTextColumns::setPropertyValue( const OUString& rPropertyName, const Any&
     if (!pEntry)
         throw UnknownPropertyException(OUString( "Unknown property: " ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
     if ( pEntry->nFlags & PropertyAttribute::READONLY)
-        throw PropertyVetoException( OUString( "Property is read-only: " ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+        throw PropertyVetoException("Property is read-only: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
 
     switch(pEntry->nWID)
     {

@@ -42,7 +42,7 @@ sal_Int16 getNumberFormatType(const staruno::Reference<starutil::XNumberFormats>
         {
             staruno::Reference<starbeans::XPropertySet> xFormat(xFormats->getByKey(nKey));
             if (xFormat.is())
-                xFormat->getPropertyValue(OUString( "Type" )) >>= nReturn;
+                xFormat->getPropertyValue("Type") >>= nReturn;
         }
         catch(...)
         {

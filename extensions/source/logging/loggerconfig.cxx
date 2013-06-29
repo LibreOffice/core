@@ -272,7 +272,7 @@ namespace logging
 
             // the log level
             sal_Int32 nLogLevel( LogLevel::OFF );
-            OSL_VERIFY( xLoggerSettings->getByName( OUString( "LogLevel" ) ) >>= nLogLevel );
+            OSL_VERIFY( xLoggerSettings->getByName("LogLevel") >>= nLogLevel );
             _rxLogger->setLevel( nLogLevel );
 
             // the default handler, if any

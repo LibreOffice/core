@@ -163,7 +163,7 @@ static ::com::sun::star::uno::Reference< ::com::sun::star::frame::XLayoutManager
     {
         try
         {
-            xPropSet->getPropertyValue( OUString( "LayoutManager" )) >>= xLayoutManager;
+            xPropSet->getPropertyValue("LayoutManager") >>= xLayoutManager;
         }
         catch (const RuntimeException&)
         {
@@ -443,7 +443,7 @@ void ToolBarManager::UpdateControllers()
         Reference< XLayoutManager > xLayoutManager;
         Reference< XPropertySet > xFramePropSet( m_xFrame, UNO_QUERY );
         if ( xFramePropSet.is() )
-            a = xFramePropSet->getPropertyValue( OUString( "LayoutManager" ));
+            a = xFramePropSet->getPropertyValue("LayoutManager");
         a >>= xLayoutManager;
         Reference< XDockableWindow > xDockable( VCLUnoHelper::GetInterface( m_pToolBar ), UNO_QUERY );
         if ( xLayoutManager.is() && xDockable.is() )
@@ -1095,7 +1095,7 @@ void ToolBarManager::CreateControllers()
             try
             {
                 sal_Bool bSupportVisible = sal_True;
-                Any a( xPropSet->getPropertyValue( OUString( "SupportsVisible" )) );
+                Any a( xPropSet->getPropertyValue("SupportsVisible") );
                 a >>= bSupportVisible;
                 if (bSupportVisible)
                 {
@@ -1463,7 +1463,7 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
         try
         {
             OUString aUIName;
-            xPropSet->getPropertyValue( OUString( "UIName" )) >>= aUIName;
+            xPropSet->getPropertyValue("UIName") >>= aUIName;
             if ( !aUIName.isEmpty() )
                 m_pToolBar->SetText( aUIName );
         }
@@ -1987,7 +1987,7 @@ IMPL_LINK( ToolBarManager, MenuSelect, Menu*, pMenu )
                                             if ( xPropSet.is() )
                                             {
                                                 Reference< XUIConfigurationPersistence > xUICfgMgr;
-                                                if (( xPropSet->getPropertyValue( OUString( "ConfigurationSource" )) >>= xUICfgMgr ) && ( xUICfgMgr.is() ))
+                                                if (( xPropSet->getPropertyValue("ConfigurationSource") >>= xUICfgMgr ) && ( xUICfgMgr.is() ))
                                                     xUICfgMgr->store();
                                             }
                                         }

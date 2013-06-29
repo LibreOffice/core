@@ -241,7 +241,7 @@ void SfxObjectFactory::SetSystemTemplate( const String& rServiceName, const Stri
                     aActuralFilterData[nInd].Value >>= aActualFilterTypeName;
             ::comphelper::SequenceAsHashMap aProps1( xTypeDetection->getByName( aActualFilterTypeName ) );
             uno::Sequence< OUString > aAllExt =
-                aProps1.getUnpackedValueOrDefault( OUString("Extensions"), uno::Sequence< OUString >() );
+                aProps1.getUnpackedValueOrDefault("Extensions", uno::Sequence< OUString >() );
             //To-do: check if aAllExt is empty first
             OUString aExt = aAllExt[0];
 
@@ -269,7 +269,7 @@ void SfxObjectFactory::SetSystemTemplate( const String& rServiceName, const Stri
                 uno::Reference< document::XTypeDetection > xTypeDetector( xTypeDetection, uno::UNO_QUERY );
                 ::comphelper::SequenceAsHashMap aProps2( xTypeDetection->getByName( xTypeDetector->queryTypeByURL( rTemplateName ) ) );
                 OUString aFilterName =
-                    aProps2.getUnpackedValueOrDefault( OUString("PreferredFilter"), OUString() );
+                    aProps2.getUnpackedValueOrDefault("PreferredFilter", OUString() );
 
                 uno::Sequence< beans::PropertyValue > aArgs( 3 );
                 aArgs[0].Name = OUString("FilterName");

@@ -150,7 +150,7 @@ void SAL_CALL DataProviderHandler::inspect(const uno::Reference< uno::XInterface
             }
         }
         m_xDataProvider.set(m_xFormComponent,uno::UNO_QUERY);
-        m_xReportComponent.set( xNameCont->getByName( OUString( "ReportComponent" ) ), uno::UNO_QUERY );
+        m_xReportComponent.set( xNameCont->getByName("ReportComponent"), uno::UNO_QUERY );
         if ( m_xDataProvider.is() )
         {
             ::boost::shared_ptr<AnyConverter> aNoConverter(new AnyConverter());
@@ -242,7 +242,7 @@ void DataProviderHandler::impl_updateChartTitle_throw(const uno::Any& _aValue)
         uno::Reference<chart2::XTitle> xTitle = xTitled->getTitleObject();
         if ( !xTitle.is() )
         {
-            xTitle.set(m_xContext->getServiceManager()->createInstanceWithContext(OUString("com.sun.star.chart2.Title"),m_xContext),uno::UNO_QUERY);
+            xTitle.set(m_xContext->getServiceManager()->createInstanceWithContext("com.sun.star.chart2.Title",m_xContext),uno::UNO_QUERY);
             xTitled->setTitleObject(xTitle);
         }
         if ( xTitle.is() )
@@ -496,7 +496,7 @@ bool DataProviderHandler::impl_dialogLinkedFields_nothrow( ::osl::ClearableMutex
     uno::Sequence<uno::Any> aSeq(6);
     beans::PropertyValue aParam;
     aParam.Name = OUString("ParentWindow");
-    aParam.Value <<= m_xContext->getValueByName( OUString("DialogParentWindow"));
+    aParam.Value <<= m_xContext->getValueByName("DialogParentWindow");
     aSeq[0] <<= aParam;
     aParam.Name = OUString("Detail");
     aParam.Value <<= m_xDataProvider;
@@ -529,7 +529,7 @@ bool DataProviderHandler::impl_dialogChartType_nothrow( ::osl::ClearableMutexGua
     uno::Sequence<uno::Any> aSeq(2);
     beans::PropertyValue aParam;
     aParam.Name = OUString("ParentWindow");
-    aParam.Value <<= m_xContext->getValueByName( OUString("DialogParentWindow"));
+    aParam.Value <<= m_xContext->getValueByName("DialogParentWindow");
     aSeq[0] <<= aParam;
     aParam.Name = OUString("ChartModel");
     aParam.Value <<= m_xChartModel;

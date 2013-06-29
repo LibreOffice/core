@@ -137,7 +137,7 @@ OString lclGetVBAGlobalConstName( const Reference< XInterface >& rxComponent )
     if( xProps.is() ) try
     {
         OUString aConstName;
-        xProps->getPropertyValue( OUString( "ThisVBADocObj"  ) ) >>= aConstName;
+        xProps->getPropertyValue("ThisVBADocObj") >>= aConstName;
         return OUStringToOString( aConstName, RTL_TEXTENCODING_ASCII_US );
     }
     catch (const uno::Exception&) // not supported

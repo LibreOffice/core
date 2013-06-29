@@ -210,7 +210,7 @@ Reference< XConnection > SAL_CALL MysqlCDriver::connect(const OUString& url, con
         impl_initCppConn_lck_throw();
         OSL_POSTCOND( cppDriver, "MySQLCDriver::connect: internal error." );
         if ( !cppDriver )
-            throw RuntimeException( OUString( "MySQLCDriver::connect: internal error."  ), *this );
+            throw RuntimeException("MySQLCDriver::connect: internal error.", *this );
     }
 
     Reference< XConnection > xConn;

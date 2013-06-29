@@ -458,7 +458,7 @@ namespace toolkitform
             {
                 ::vcl::PDFWriter::PushButtonWidget* pButtonWidget = static_cast< ::vcl::PDFWriter::PushButtonWidget* >( _rpDescriptor.get() );
                 FormButtonType eButtonType = FormButtonType_PUSH;
-                OSL_VERIFY( xModelProps->getPropertyValue( OUString( "ButtonType" ) ) >>= eButtonType );
+                OSL_VERIFY( xModelProps->getPropertyValue("ButtonType") >>= eButtonType );
                 static const OUString FM_PROP_TARGET_URL("TargetURL");
                 if ( eButtonType == FormButtonType_SUBMIT )
                 {
@@ -470,12 +470,12 @@ namespace toolkitform
                     if ( xParentProps.is() )
                     {
                         Reference< XServiceInfo > xParentSI( xParentProps, UNO_QUERY );
-                        if ( xParentSI.is() && xParentSI->supportsService( OUString( "com.sun.star.form.component.HTMLForm" ) ) )
+                        if ( xParentSI.is() && xParentSI->supportsService("com.sun.star.form.component.HTMLForm") )
                         {
                             OSL_VERIFY( xParentProps->getPropertyValue( FM_PROP_TARGET_URL ) >>= pButtonWidget->URL );
                             pButtonWidget->Submit = true;
                             FormSubmitMethod eMethod = FormSubmitMethod_POST;
-                            OSL_VERIFY( xParentProps->getPropertyValue( OUString( "SubmitMethod" ) ) >>= eMethod );
+                            OSL_VERIFY( xParentProps->getPropertyValue("SubmitMethod") >>= eMethod );
                             pButtonWidget->SubmitGet = (eMethod == FormSubmitMethod_GET);
                         }
                     }
@@ -558,7 +558,7 @@ namespace toolkitform
                 OSL_VERIFY( xModelProps->getPropertyValue( FM_PROP_DROPDOWN ) >>= pListWidget->DropDown );
                 // ............................
                 // multi selection
-                OSL_VERIFY( xModelProps->getPropertyValue( OUString( "MultiSelection" ) ) >>= pListWidget->MultiSelect );
+                OSL_VERIFY( xModelProps->getPropertyValue("MultiSelection") >>= pListWidget->MultiSelect );
                 // ............................
                 // entries
                 getStringItemVector( xModelProps, pListWidget->Entries );
@@ -568,7 +568,7 @@ namespace toolkitform
 
                 // get selected items
                 Sequence< sal_Int16 > aSelectIndices;
-                OSL_VERIFY( xModelProps->getPropertyValue( OUString( "SelectedItems" ) ) >>= aSelectIndices );
+                OSL_VERIFY( xModelProps->getPropertyValue("SelectedItems") >>= aSelectIndices );
                 if( aSelectIndices.getLength() > 0 )
                 {
                     pListWidget->SelectedEntries.resize( 0 );

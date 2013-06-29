@@ -428,10 +428,10 @@ css::uno::Reference< css::xml::crypto::XDigestContext > SAL_CALL ONSSInitializer
         b1KData = ( nDigestID == css::xml::crypto::DigestID::SHA1_1K );
     }
     else
-        throw css::lang::IllegalArgumentException( OUString( "Unexpected digest requested." ), css::uno::Reference< css::uno::XInterface >(), 1 );
+        throw css::lang::IllegalArgumentException("Unexpected digest requested.", css::uno::Reference< css::uno::XInterface >(), 1 );
 
     if ( aParams.getLength() )
-        throw css::lang::IllegalArgumentException( OUString( "Unexpected arguments provided for digest creation." ), css::uno::Reference< css::uno::XInterface >(), 2 );
+        throw css::lang::IllegalArgumentException("Unexpected arguments provided for digest creation.", css::uno::Reference< css::uno::XInterface >(), 2 );
 
     css::uno::Reference< css::xml::crypto::XDigestContext > xResult;
     if( initNSS( m_xContext ) )
@@ -455,19 +455,19 @@ css::uno::Reference< css::xml::crypto::XCipherContext > SAL_CALL ONSSInitializer
         bW3CPadding = true;
 
         if ( aKey.getLength() != 16 && aKey.getLength() != 24 && aKey.getLength() != 32 )
-            throw css::lang::IllegalArgumentException( OUString( "Unexpected key length." ), css::uno::Reference< css::uno::XInterface >(), 2 );
+            throw css::lang::IllegalArgumentException("Unexpected key length.", css::uno::Reference< css::uno::XInterface >(), 2 );
 
         if ( aParams.getLength() )
-            throw css::lang::IllegalArgumentException( OUString( "Unexpected arguments provided for cipher creation." ), css::uno::Reference< css::uno::XInterface >(), 5 );
+            throw css::lang::IllegalArgumentException("Unexpected arguments provided for cipher creation.", css::uno::Reference< css::uno::XInterface >(), 5 );
     }
     else
-        throw css::lang::IllegalArgumentException( OUString( "Unexpected cipher requested." ), css::uno::Reference< css::uno::XInterface >(), 1 );
+        throw css::lang::IllegalArgumentException("Unexpected cipher requested.", css::uno::Reference< css::uno::XInterface >(), 1 );
 
     css::uno::Reference< css::xml::crypto::XCipherContext > xResult;
     if( initNSS( m_xContext ) )
     {
         if ( aInitializationVector.getLength() != PK11_GetIVLength( nNSSCipherID ) )
-            throw css::lang::IllegalArgumentException( OUString( "Unexpected length of initialization vector." ), css::uno::Reference< css::uno::XInterface >(), 3 );
+            throw css::lang::IllegalArgumentException("Unexpected length of initialization vector.", css::uno::Reference< css::uno::XInterface >(), 3 );
 
         xResult = OCipherContext::Create( nNSSCipherID, aKey, aInitializationVector, bEncryption, bW3CPadding );
     }

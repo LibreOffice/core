@@ -95,12 +95,12 @@ void SAL_CALL SwVbaListLevel::setAlignment( ::sal_Int32 _alignment ) throw (uno:
 
 uno::Reference< ::ooo::vba::word::XFont > SAL_CALL SwVbaListLevel::getFont() throw (uno::RuntimeException)
 {
-    throw uno::RuntimeException( OUString("Not implemented"), uno::Reference< uno::XInterface >() );
+    throw uno::RuntimeException("Not implemented", uno::Reference< uno::XInterface >() );
 }
 
 void SAL_CALL SwVbaListLevel::setFont( const uno::Reference< ::ooo::vba::word::XFont >& /*_font*/ ) throw (uno::RuntimeException)
 {
-    throw uno::RuntimeException( OUString("Not implemented"), uno::Reference< uno::XInterface >() );
+    throw uno::RuntimeException("Not implemented", uno::Reference< uno::XInterface >() );
 }
 
 ::sal_Int32 SAL_CALL SwVbaListLevel::getIndex() throw (uno::RuntimeException)
@@ -212,7 +212,7 @@ void SAL_CALL SwVbaListLevel::setNumberPosition( float _numberposition ) throw (
         }
         default:
         {
-            throw uno::RuntimeException( OUString("Not implemented"), uno::Reference< uno::XInterface >() );
+            throw uno::RuntimeException("Not implemented", uno::Reference< uno::XInterface >() );
         }
     }
     return nNumberingType;
@@ -285,7 +285,7 @@ void SAL_CALL SwVbaListLevel::setNumberStyle( ::sal_Int32 _numberstyle ) throw (
         }
         default:
         {
-            throw uno::RuntimeException( OUString("Not implemented"), uno::Reference< uno::XInterface >() );
+            throw uno::RuntimeException("Not implemented", uno::Reference< uno::XInterface >() );
         }
     }
 

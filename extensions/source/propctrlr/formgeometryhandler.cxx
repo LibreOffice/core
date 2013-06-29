@@ -602,7 +602,7 @@ namespace pcr
             if ( !xPSI->hasPropertyByName( PROPERTY_ANCHOR ) )
                 return false;
             Reference< XServiceInfo > xSI( m_xAssociatedShape, UNO_QUERY_THROW );
-            if ( xSI->supportsService( OUString( "com.sun.star.sheet.Shape" ) ) )
+            if ( xSI->supportsService("com.sun.star.sheet.Shape") )
                 return true;
         }
         catch( const Exception& )

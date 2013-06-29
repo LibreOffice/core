@@ -1692,7 +1692,7 @@ void OReportController::impl_initialize( )
 
             ::comphelper::MediaDescriptor aDescriptor( m_xReportDefinition->getArgs() );
             OUString sHierarchicalDocumentName;
-            sHierarchicalDocumentName = aDescriptor.getUnpackedValueOrDefault(OUString("HierarchicalDocumentName"),sHierarchicalDocumentName);
+            sHierarchicalDocumentName = aDescriptor.getUnpackedValueOrDefault("HierarchicalDocumentName",sHierarchicalDocumentName);
 
             if ( sHierarchicalDocumentName.isEmpty() && getConnection().is() )
             {
@@ -3331,7 +3331,7 @@ void OReportController::addPairControls(const Sequence< PropertyValue >& aArgs)
             }
             ::svx::ODataAccessDescriptor aDescriptor(aValue);
             SequenceAsHashMap aMap(aValue);
-            uno::Reference<report::XSection> xSection = aMap.getUnpackedValueOrDefault(OUString("Section"),xCurrentSection);
+            uno::Reference<report::XSection> xSection = aMap.getUnpackedValueOrDefault("Section",xCurrentSection);
             uno::Reference<report::XReportDefinition> xReportDefinition = xSection->getReportDefinition();
 
             getDesignView()->setMarked(xSection,sal_True);
@@ -3343,7 +3343,7 @@ void OReportController::addPairControls(const Sequence< PropertyValue >& aArgs)
                 aPos.X = nLeftMargin;
 
             // LLA: new feature, add the Label in dependency of the given DND_ACTION one section up, normal or one section down
-            sal_Int8 nDNDAction = aMap.getUnpackedValueOrDefault(OUString("DNDAction"), sal_Int8(0));
+            sal_Int8 nDNDAction = aMap.getUnpackedValueOrDefault("DNDAction", sal_Int8(0));
             pSectionWindow[1] = pSectionWindow[0];
             sal_Bool bLabelAboveTextField = nDNDAction == DND_ACTION_COPY;
             if ( bLabelAboveTextField || nDNDAction == DND_ACTION_LINK )
@@ -3416,7 +3416,7 @@ void OReportController::addPairControls(const Sequence< PropertyValue >& aArgs)
                     {
                         uno::Reference< beans::XPropertySet > xParamCol( xParams->getByIndex(i), uno::UNO_QUERY_THROW );
                         OUString sParamName;
-                        OSL_VERIFY( xParamCol->getPropertyValue( OUString( "Name" ) ) >>= sParamName );
+                        OSL_VERIFY( xParamCol->getPropertyValue("Name") >>= sParamName );
                         if ( sParamName == sColumnName )
                         {
                             xField = xParamCol;

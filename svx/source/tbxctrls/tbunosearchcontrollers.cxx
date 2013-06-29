@@ -198,7 +198,7 @@ long FindTextFieldControl::PreNotify( NotifyEvent& rNEvt )
                 if (xPropSet.is())
                 {
                     css::uno::Reference< css::frame::XLayoutManager > xLayoutManager;
-                    css::uno::Any aValue = xPropSet->getPropertyValue( OUString( "LayoutManager" ) );
+                    css::uno::Any aValue = xPropSet->getPropertyValue("LayoutManager");
                     aValue >>= xLayoutManager;
                     if (xLayoutManager.is())
                     {
@@ -934,7 +934,7 @@ void SAL_CALL ExitSearchToolboxController::execute( sal_Int16 /*KeyModifier*/ ) 
     if (xPropSet.is())
     {
         css::uno::Reference< css::frame::XLayoutManager > xLayoutManager;
-        css::uno::Any aValue = xPropSet->getPropertyValue( OUString( "LayoutManager" ) );
+        css::uno::Any aValue = xPropSet->getPropertyValue("LayoutManager");
         aValue >>= xLayoutManager;
         if (xLayoutManager.is())
         {
@@ -1057,7 +1057,7 @@ void SAL_CALL FindbarDispatcher::dispatch( const css::util::URL& aURL, const css
             return;
 
         css::uno::Reference< css::frame::XLayoutManager > xLayoutManager;
-        css::uno::Any aValue = xPropSet->getPropertyValue( OUString( "LayoutManager" ) );
+        css::uno::Any aValue = xPropSet->getPropertyValue("LayoutManager");
         aValue >>= xLayoutManager;
         if (!xLayoutManager.is())
             return;

@@ -252,10 +252,10 @@ Reference< XMultiServiceFactory > InitializeFac( void )
 
 //  Create unconfigured Ucb:
     Reference< XUniversalContentBroker > xUcb
-        ( xSMgr->createInstance( OUString("com.sun.star.ucb.UniversalContentBroker") ), UNO_QUERY_THROW );
+        ( xSMgr->createInstance("com.sun.star.ucb.UniversalContentBroker"), UNO_QUERY_THROW );
 
     Reference< XContentProvider > xFileProvider
-        ( xSMgr->createInstance( OUString("com.sun.star.ucb.FileContentProvider") ), UNO_QUERY_THROW );
+        ( xSMgr->createInstance("com.sun.star.ucb.FileContentProvider"), UNO_QUERY_THROW );
     xUcb->registerContentProvider( xFileProvider, OUString("file"), sal_True );
 
     return xSMgr;

@@ -177,7 +177,7 @@ SwVbaTables::Add( const uno::Reference< word::XRange >& Range, const uno::Any& N
     uno::Reference< text::XTextRange > xTextRange = pVbaRange->getXTextRange();
 
     uno::Reference< text::XTextTable > xTable;
-    xTable.set( xMsf->createInstance( OUString("com.sun.star.text.TextTable") ), uno::UNO_QUERY_THROW );
+    xTable.set( xMsf->createInstance("com.sun.star.text.TextTable"), uno::UNO_QUERY_THROW );
 
     xTable->initialize( nRows, nCols );
     uno::Reference< text::XText > xText = xTextRange->getText();

@@ -475,7 +475,7 @@ util::DateTime SfxMedium::GetInitFileDate( sal_Bool bIgnoreOldValue )
             uno::Reference< ::com::sun::star::ucb::XCommandEnvironment > xDummyEnv;
             ::ucbhelper::Content aContent( GetURLObject().GetMainURL( INetURLObject::NO_DECODE ), xDummyEnv, comphelper::getProcessComponentContext() );
 
-            aContent.getPropertyValue( OUString("DateModified" ) ) >>= pImp->m_aDateTime;
+            aContent.getPropertyValue("DateModified") >>= pImp->m_aDateTime;
             pImp->m_bGotDateTime = true;
         }
         catch ( const ::com::sun::star::uno::Exception& )
@@ -535,7 +535,7 @@ OUString SfxMedium::GetBaseURL( bool bForSaving )
     {
         try
         {
-            Any aAny = pImp->aContent.getPropertyValue( OUString("BaseURI" ) );
+            Any aAny = pImp->aContent.getPropertyValue("BaseURI");
             aAny >>= aBaseURL;
         }
         catch ( const ::com::sun::star::uno::Exception& )
@@ -1050,7 +1050,7 @@ bool SfxMedium::LockOrigFileOnDemand( sal_Bool bLoading, sal_Bool bNoUI )
                     // MediaDescriptor does this check also, the duplication should be avoided in future
                     Reference< ::com::sun::star::ucb::XCommandEnvironment > xDummyEnv;
                     ::ucbhelper::Content aContent( GetURLObject().GetMainURL( INetURLObject::NO_DECODE ), xDummyEnv, comphelper::getProcessComponentContext() );
-                    aContent.getPropertyValue( OUString( "IsReadOnly"  ) ) >>= bContentReadonly;
+                    aContent.getPropertyValue("IsReadOnly") >>= bContentReadonly;
                 }
                 catch( const uno::Exception& ) {}
 
@@ -1895,7 +1895,7 @@ void SfxMedium::Transfer_Impl()
                 aAny <<= pSegmentSize->GetValue();
 
                 uno::Reference < beans::XPropertySet > xSet( pImp->xStorage, uno::UNO_QUERY );
-                xSet->setPropertyValue( OUString("SegmentSize"), aAny );
+                xSet->setPropertyValue("SegmentSize", aAny );
 
                 // copy the temporary storage into the disk spanned package
                 GetStorage()->copyToStorage( xStor );
@@ -1974,7 +1974,7 @@ void SfxMedium::Transfer_Impl()
             // LongName wasn't defined anywhere, only used here... get the Title instead
             // as it's less probably empty
             OUString aFileName;
-            Any aAny = aDestContent.getPropertyValue( OUString("Title" ) );
+            Any aAny = aDestContent.getPropertyValue("Title");
             aAny >>= aFileName;
             if ( aFileName.isEmpty() )
                 aFileName = GetURLObject().getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
@@ -3098,7 +3098,7 @@ SvKeyValueIterator* SfxMedium::GetHeaderAttributes_Impl()
         {
             try
             {
-                Any aAny = pImp->aContent.getPropertyValue( OUString("MediaType") );
+                Any aAny = pImp->aContent.getPropertyValue("MediaType");
                 OUString aContentType;
                 aAny >>= aContentType;
 

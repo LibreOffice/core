@@ -111,7 +111,7 @@ public:
             try
             {
                 uno::Reference< beans::XPropertySet > xProps( mpDocShell->GetModel(), uno::UNO_QUERY_THROW );
-                uno::Reference< container::XNameAccess > xLibContainer( xProps->getPropertyValue( OUString("BasicLibraries") ), uno::UNO_QUERY_THROW );
+                uno::Reference< container::XNameAccess > xLibContainer( xProps->getPropertyValue("BasicLibraries"), uno::UNO_QUERY_THROW );
                 OUString sProjectName( "Standard");
                 if ( !mpDocShell->GetBasicManager()->GetName().isEmpty() )
                 {

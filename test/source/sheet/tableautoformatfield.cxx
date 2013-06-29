@@ -18,7 +18,7 @@ namespace apitest {
 
 uno::Reference< beans::XPropertySet > TableAutoFormatField::initTest()
 {
-    uno::Reference< container::XIndexAccess > xAutoFormatFields( getServiceFactory()->createInstance(OUString("com.sun.star.sheet.TableAutoFormats")), UNO_QUERY_THROW );
+    uno::Reference< container::XIndexAccess > xAutoFormatFields( getServiceFactory()->createInstance("com.sun.star.sheet.TableAutoFormats"), UNO_QUERY_THROW );
     CPPUNIT_ASSERT(xAutoFormatFields.is());
     uno::Reference< container::XIndexAccess > xIndex( xAutoFormatFields->getByIndex(0), UNO_QUERY_THROW );
     CPPUNIT_ASSERT(xIndex.is());

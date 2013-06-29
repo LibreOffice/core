@@ -46,7 +46,7 @@ SwVbaBookmark::~SwVbaBookmark()
 void SwVbaBookmark::checkVality() throw ( uno::RuntimeException )
 {
     if( !mbValid )
-        throw uno::RuntimeException( OUString("The bookmark is not valid" ), uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException("The bookmark is not valid", uno::Reference< uno::XInterface >() );
 }
 
 void SAL_CALL SwVbaBookmark::Delete() throw ( uno::RuntimeException )

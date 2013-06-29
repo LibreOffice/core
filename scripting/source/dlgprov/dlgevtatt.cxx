@@ -118,9 +118,9 @@ namespace dlgprov
             try
             {
                 Reference< XPropertySet > xProps( rxControl->getModel(), UNO_QUERY_THROW );
-                xProps->getPropertyValue( OUString("Name" ) ) >>= msDialogCodeName;
+                xProps->getPropertyValue("Name") >>= msDialogCodeName;
                 xProps.set( mxListener, UNO_QUERY_THROW );
-                xProps->setPropertyValue( OUString("Model" ), args[ 0 ] );
+                xProps->setPropertyValue("Model", args[ 0 ] );
             }
             catch( const Exception& )
             {
@@ -171,7 +171,7 @@ namespace dlgprov
         {
             uno::Reference< beans::XPropertySet > xModelProps( rxModel, uno::UNO_QUERY_THROW );
             uno::Reference< script::vba::XVBACompatibility > xVBACompat(
-                xModelProps->getPropertyValue( OUString( "BasicLibraries"  ) ), uno::UNO_QUERY_THROW );
+                xModelProps->getPropertyValue("BasicLibraries"), uno::UNO_QUERY_THROW );
             mbUseFakeVBAEvents = xVBACompat->getVBACompatibilityMode();
         }
         catch( uno::Exception& )
@@ -202,7 +202,7 @@ namespace dlgprov
         Reference< XMultiComponentFactory > xSMgr( m_xContext->getServiceManager() );
         if ( xSMgr.is() )
         {
-            Reference< ooo::vba::XVBAToOOEventDescGen > xVBAToOOEvtDesc( xSMgr->createInstanceWithContext( OUString( "ooo.vba.VBAToOOEventDesc"  ), m_xContext ), UNO_QUERY );
+            Reference< ooo::vba::XVBAToOOEventDescGen > xVBAToOOEvtDesc( xSMgr->createInstanceWithContext("ooo.vba.VBAToOOEventDesc", m_xContext ), UNO_QUERY );
             if ( xVBAToOOEvtDesc.is() )
                 xEventsSupplier.set( xVBAToOOEvtDesc->getEventSupplier( xControl, sControlName ), UNO_QUERY );
 
@@ -220,7 +220,7 @@ namespace dlgprov
             Reference< XControlModel > xControlModel = xControl->getModel();
             Reference< XPropertySet > xProps( xControlModel, uno::UNO_QUERY );
             OUString sName;
-            xProps->getPropertyValue( OUString("Name") ) >>= sName;
+            xProps->getPropertyValue("Name") >>= sName;
             if ( xEventCont.is() )
             {
                 Sequence< OUString > aNames = xEventCont->getElementNames();
@@ -362,7 +362,7 @@ namespace dlgprov
             Reference< XPropertySet > xProps( xDlgControl->getModel(), UNO_QUERY );
             try
             {
-                xProps->getPropertyValue( OUString("Name" ) ) >>= sDialogCodeName;
+                xProps->getPropertyValue("Name") >>= sDialogCodeName;
             }
             catch( Exception& ){}
         }

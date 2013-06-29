@@ -125,10 +125,10 @@ namespace connectivity
                     Reference< XPropertySet > xDriverNode = createDriverConfigNode( xFactory );
                     Reference< XPropertySet > xMozPrefsNode;
                     if ( xDriverNode.is() )
-                        xDriverNode->getPropertyValue( OUString("MozillaPreferences" ) ) >>= xMozPrefsNode;
+                        xDriverNode->getPropertyValue("MozillaPreferences") >>= xMozPrefsNode;
                     OSL_ENSURE( xMozPrefsNode.is(), "getPreferredProfileName: could not access the node for the mozilla preferences!" );
                     if ( xMozPrefsNode.is() )
-                        xMozPrefsNode->getPropertyValue( OUString("ProfileName" ) ) >>= sPreferredName;
+                        xMozPrefsNode->getPropertyValue("ProfileName") >>= sPreferredName;
                     if ( xMozPrefsNode.is() )
                         xMozPrefsNode->getPropertyValue( OUString::createFromAscii(sNode) ) >>= sDescription;
                     if (sDescription.getLength() == 0)
@@ -157,10 +157,10 @@ namespace connectivity
                     Reference< XPropertySet > xDriverNode = createDriverConfigNode( xFactory );
                     Reference< XPropertySet > xMozPrefsNode;
                     if ( xDriverNode.is() )
-                        xDriverNode->getPropertyValue( OUString("MozillaPreferences" ) ) >>= xMozPrefsNode;
+                        xDriverNode->getPropertyValue("MozillaPreferences") >>= xMozPrefsNode;
                     OSL_ENSURE( xMozPrefsNode.is(), "getPreferredProfileName: could not access the node for the mozilla preferences!" );
                     if ( xMozPrefsNode.is() )
-                        xMozPrefsNode->getPropertyValue( OUString("ProfileName" ) ) >>= sPreferredName;
+                        xMozPrefsNode->getPropertyValue("ProfileName") >>= sPreferredName;
                 }
                 catch( const Exception& )
                 {

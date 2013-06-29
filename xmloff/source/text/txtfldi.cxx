@@ -3959,7 +3959,7 @@ void XMLMeasureFieldImportContext::PrepareField(
 {
     Any aAny;
     aAny <<= mnKind;
-    xPropertySet->setPropertyValue(OUString("Kind"), aAny);
+    xPropertySet->setPropertyValue("Kind", aAny);
 }
 
 

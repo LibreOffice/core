@@ -136,9 +136,9 @@ throw( uno::RuntimeException )
                     uno::Reference< beans::XPropertySet > xProp( xModel, ::uno::UNO_QUERY );
                     if( xProp.is() )
                     {
-                        uno::Any aValue = xProp->getPropertyValue( OUString( "URL"  ) );
+                        uno::Any aValue = xProp->getPropertyValue("URL");
                         aValue >>= maURL;
-                        aValue = xProp->getPropertyValue( OUString( "TYPE"  ) );
+                        aValue = xProp->getPropertyValue("TYPE");
                         aValue >>= maMimeType;
                     }
                 }

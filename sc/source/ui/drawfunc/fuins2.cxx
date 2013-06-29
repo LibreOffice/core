@@ -289,7 +289,7 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pVie
                             uno::Reference < beans::XPropertySet > xSet( xObj->getComponent(), uno::UNO_QUERY );
                             if ( xSet.is() )
                             {
-                                xSet->setPropertyValue( OUString("PluginURL"),
+                                xSet->setPropertyValue("PluginURL",
                                         uno::makeAny( OUString( aURL.GetMainURL( INetURLObject::NO_DECODE ) ) ) );
                             }
                         }
@@ -685,7 +685,7 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* 
                             {
                                 //get dialog size:
                                 awt::Size aDialogAWTSize;
-                                if( xDialogProps->getPropertyValue( OUString("Size") )
+                                if( xDialogProps->getPropertyValue("Size")
                                     >>= aDialogAWTSize )
                                 {
                                     Size aDialogSize( aDialogAWTSize.Width, aDialogAWTSize.Height );
@@ -693,12 +693,12 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* 
                                     {
                                         //calculate and set new position
                                         Point aDialogPos = pViewShell->GetChartDialogPos( aDialogSize, aRect );
-                                        xDialogProps->setPropertyValue( OUString("Position"),
+                                        xDialogProps->setPropertyValue("Position",
                                             uno::makeAny( awt::Point(aDialogPos.getX(),aDialogPos.getY()) ) );
                                     }
                                 }
                                 //tell the dialog to unlock controller
-                                xDialogProps->setPropertyValue( OUString("UnlockControllersOnExecute"),
+                                xDialogProps->setPropertyValue("UnlockControllersOnExecute",
                                             uno::makeAny( sal_True ) );
 
                             }

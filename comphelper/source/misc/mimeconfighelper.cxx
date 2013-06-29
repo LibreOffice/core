@@ -273,10 +273,10 @@ sal_Bool MimeConfigurationHelper::GetVerbByShortcut( const OUString& aVerbShortc
         if ( xVerbsConfig.is() && ( xVerbsConfig->getByName( aVerbShortcut ) >>= xVerbsProps ) && xVerbsProps.is() )
         {
             embed::VerbDescriptor aTempDescr;
-            if ( ( xVerbsProps->getByName( OUString( "VerbID" ) ) >>= aTempDescr.VerbID )
-              && ( xVerbsProps->getByName( OUString( "VerbUIName" ) ) >>= aTempDescr.VerbName )
-              && ( xVerbsProps->getByName( OUString( "VerbFlags" ) ) >>= aTempDescr.VerbFlags )
-              && ( xVerbsProps->getByName( OUString( "VerbAttributes" ) ) >>= aTempDescr.VerbAttributes ) )
+            if ( ( xVerbsProps->getByName("VerbID") >>= aTempDescr.VerbID )
+              && ( xVerbsProps->getByName("VerbUIName") >>= aTempDescr.VerbName )
+              && ( xVerbsProps->getByName("VerbFlags") >>= aTempDescr.VerbFlags )
+              && ( xVerbsProps->getByName("VerbAttributes") >>= aTempDescr.VerbAttributes ) )
             {
                 aDescriptor = aTempDescr;
                 bResult = sal_True;
@@ -467,7 +467,7 @@ uno::Sequence< beans::NamedValue > MimeConfigurationHelper::GetObjectPropsByDocu
                     OUString aEntryDocName;
 
                     if ( ( xObjConfig->getByName( aClassIDs[nInd] ) >>= xObjectProps ) && xObjectProps.is()
-                      && ( xObjectProps->getByName( OUString( "ObjectDocumentServiceName" ) ) >>= aEntryDocName )
+                      && ( xObjectProps->getByName("ObjectDocumentServiceName") >>= aEntryDocName )
                       && aEntryDocName == aDocName )
                     {
                         return GetObjPropsFromConfigEntry( GetSequenceClassIDRepresentation( aClassIDs[nInd] ),
@@ -501,7 +501,7 @@ OUString MimeConfigurationHelper::GetFactoryNameByStringClassID( const OUString&
         try
         {
             if ( xObjConfig.is() && ( xObjConfig->getByName( aStringClassID.toAsciiUpperCase() ) >>= xObjectProps ) && xObjectProps.is() )
-                xObjectProps->getByName( OUString( "ObjectFactory" ) ) >>= aResult;
+                xObjectProps->getByName("ObjectFactory") >>= aResult;
         }
         catch( uno::Exception& )
         {
@@ -537,7 +537,7 @@ OUString MimeConfigurationHelper::GetFactoryNameByDocumentName( const OUString& 
                                   OUString( "ObjectDocumentServiceName" ) ) >>= aEntryDocName )
                       && aEntryDocName == aDocName )
                     {
-                        xObjectProps->getByName( OUString( "ObjectFactory" ) ) >>= aResult;
+                        xObjectProps->getByName("ObjectFactory") >>= aResult;
                         break;
                     }
                 }
@@ -851,7 +851,7 @@ uno::Sequence< beans::PropertyValue > MimeConfigurationHelper::SearchForFilter(
             if ( xFilterEnum->nextElement() >>= aProps )
             {
                 SequenceAsHashMap aPropsHM( aProps );
-                sal_Int32 nFlags = aPropsHM.getUnpackedValueOrDefault( OUString("Flags"),
+                sal_Int32 nFlags = aPropsHM.getUnpackedValueOrDefault("Flags",
                                                                         (sal_Int32)0 );
                 if ( ( ( nFlags & nMustFlags ) == nMustFlags ) && !( nFlags & nDontFlags ) )
                 {

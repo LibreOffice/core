@@ -803,7 +803,7 @@ ScVbaFormat<Ifc1>::getCurrentDataSet( ) throw ( uno::RuntimeException )
 {
     SfxItemSet* pDataSet = excel::ScVbaCellRangeAccess::GetDataSet( getCellRangesBase() );
     if ( !pDataSet )
-        throw uno::RuntimeException( OUString( "Can't access Itemset for XPropertySet" ), uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException("Can't access Itemset for XPropertySet", uno::Reference< uno::XInterface >() );
     return pDataSet;
 }
 

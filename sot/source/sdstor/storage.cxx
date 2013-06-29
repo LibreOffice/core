@@ -1106,7 +1106,7 @@ sal_Int32 SotStorage::GetFormatID( const com::sun::star::uno::Reference < com::s
         return 0;
 
     OUString aMediaType;
-    xProps->getPropertyValue( OUString("MediaType") ) >>= aMediaType;
+    xProps->getPropertyValue("MediaType") >>= aMediaType;
     if ( !aMediaType.isEmpty() )
     {
         ::com::sun::star::datatransfer::DataFlavor aDataFlavor;

@@ -50,7 +50,7 @@ Reference < XStyle > XMLTextMasterPageContext::Create()
     if( xFactory.is() )
     {
         Reference < XInterface > xIfc =
-            xFactory->createInstance(OUString("com.sun.star.style.PageStyle"));
+            xFactory->createInstance("com.sun.star.style.PageStyle");
         if( xIfc.is() )
             xNewStyle = Reference < XStyle >( xIfc, UNO_QUERY );
     }

@@ -623,25 +623,25 @@ static void lcl_html_setFixedFontProperty(
                                     DEFAULTFONT_FLAGS_ONLYONE )  );
     Any aTmp;
     aTmp <<= OUString( aFixedFont.GetName() );
-    rPropSet->setPropertyValue( OUString("FontName"), aTmp );
+    rPropSet->setPropertyValue("FontName", aTmp );
 
     aTmp <<= OUString( aFixedFont.GetStyleName() );
-    rPropSet->setPropertyValue( OUString("FontStyleName"),
+    rPropSet->setPropertyValue("FontStyleName",
                                 aTmp );
 
     aTmp <<= (sal_Int16) aFixedFont.GetFamily();
-    rPropSet->setPropertyValue( OUString("FontFamily"), aTmp );
+    rPropSet->setPropertyValue("FontFamily", aTmp );
 
     aTmp <<= (sal_Int16) aFixedFont.GetCharSet();
-    rPropSet->setPropertyValue( OUString("FontCharset"),
+    rPropSet->setPropertyValue("FontCharset",
                                 aTmp );
 
     aTmp <<= (sal_Int16) aFixedFont.GetPitch();
-    rPropSet->setPropertyValue( OUString("FontPitch"), aTmp );
+    rPropSet->setPropertyValue("FontPitch", aTmp );
 
     float fVal(10.);
     aTmp.setValue( &fVal, ::getCppuType(&fVal ));
-    rPropSet->setPropertyValue( OUString("FontHeight"), aTmp );
+    rPropSet->setPropertyValue("FontHeight", aTmp );
 }
 
 class SwHTMLFormPendingStackData_Impl: public SwPendingStackData
@@ -1408,7 +1408,7 @@ void SwHTMLParser::NewForm( sal_Bool bAppend )
 
     Any aTmp;
     aTmp <<= OUString(sName);
-    xFormPropSet->setPropertyValue( OUString("Name"), aTmp );
+    xFormPropSet->setPropertyValue("Name", aTmp );
 
     if( aAction.Len() )
     {
@@ -1421,12 +1421,12 @@ void SwHTMLParser::NewForm( sal_Bool bAppend )
         aAction = aURLObj.GetPartBeforeLastName();
     }
     aTmp <<= OUString(aAction);
-    xFormPropSet->setPropertyValue( OUString("TargetURL"),
+    xFormPropSet->setPropertyValue("TargetURL",
                                     aTmp );
 
     FormSubmitMethod eMethod = (FormSubmitMethod)nMethod;
     aTmp.setValue( &eMethod, ::getCppuType((const FormSubmitMethod*)0) );
-    xFormPropSet->setPropertyValue( OUString("SubmitMethod"),
+    xFormPropSet->setPropertyValue("SubmitMethod",
                                     aTmp );
 
      FormSubmitEncoding eEncType = (FormSubmitEncoding)nEncType;
@@ -1705,21 +1705,21 @@ void SwHTMLParser::InsertInput()
 
     Any aTmp;
     aTmp <<= OUString(sName);
-    xPropSet->setPropertyValue( OUString("Name"), aTmp );
+    xPropSet->setPropertyValue("Name", aTmp );
 
     if( HTML_IT_HIDDEN != eType  )
     {
         if( nTabIndex >= TABINDEX_MIN && nTabIndex <= TABINDEX_MAX  )
         {
             aTmp <<= (sal_Int16) (sal_Int16)nTabIndex ;
-            xPropSet->setPropertyValue( OUString("TabIndex"), aTmp );
+            xPropSet->setPropertyValue("TabIndex", aTmp );
         }
 
         if( bDisabled )
         {
             sal_Bool bFalse = sal_False;
             aTmp.setValue(&bFalse, ::getBooleanCppuType()  );
-            xPropSet->setPropertyValue( OUString("Enabled"), aTmp );
+            xPropSet->setPropertyValue("Enabled", aTmp );
         }
     }
 
@@ -1736,10 +1736,10 @@ void SwHTMLParser::InsertInput()
         {
             if( !bValue )
                 aTmp <<= OUString( OOO_STRING_SVTOOLS_HTML_on );
-            xPropSet->setPropertyValue( OUString("RefValue"),
+            xPropSet->setPropertyValue("RefValue",
                                         aTmp );
             aTmp <<= OUString();
-            xPropSet->setPropertyValue( OUString("Label"),
+            xPropSet->setPropertyValue("Label",
                                         aTmp );
             // Beim RadioButton darf die DefaultChecked-Property
             // erst gesetzt werden, wenn das Control angelegt und ein
@@ -1781,7 +1781,7 @@ void SwHTMLParser::InsertInput()
                 OUString("ButtonType"), aTmp );
 
             aTmp <<= (sal_Int16) 0  ;
-            xPropSet->setPropertyValue( OUString("Border"),
+            xPropSet->setPropertyValue("Border",
                                         aTmp );
         }
         break;
@@ -1810,7 +1810,7 @@ void SwHTMLParser::InsertInput()
                 ;
             }
             aTmp <<= OUString(sText);
-            xPropSet->setPropertyValue( OUString("Label"),
+            xPropSet->setPropertyValue("Label",
                                         aTmp );
 
             aTmp.setValue( &eButtonType,
@@ -1842,7 +1842,7 @@ void SwHTMLParser::InsertInput()
         if( HTML_IT_PASSWORD == eType )
         {
             aTmp <<= (sal_Int16)'*' ;
-            xPropSet->setPropertyValue( OUString("EchoChar"),
+            xPropSet->setPropertyValue("EchoChar",
                                         aTmp );
         }
 
@@ -1855,7 +1855,7 @@ void SwHTMLParser::InsertInput()
         break;
 
     case HTML_IT_HIDDEN:
-        xPropSet->setPropertyValue( OUString("HiddenValue"),
+        xPropSet->setPropertyValue("HiddenValue",
                                     aTmp );
         bHidden = sal_True;
         break;
@@ -1936,7 +1936,7 @@ void SwHTMLParser::InsertInput()
     if( HTML_IT_RADIO == eType )
     {
         aTmp <<= (sal_Int16) nChecked ;
-        xPropSet->setPropertyValue( OUString("DefaultState"), aTmp );
+        xPropSet->setPropertyValue("DefaultState", aTmp );
     }
 
     if( HTML_IT_IMAGE == eType )
@@ -1945,7 +1945,7 @@ void SwHTMLParser::InsertInput()
         // Download der Grafik erst dann am XModel anmelden kann,
         // wenn das Control eingefuegt ist.
         aTmp <<= OUString( URIHelper::SmartRel2Abs(INetURLObject(sBaseURL), sImgSrc, Link(), false));
-        xPropSet->setPropertyValue( OUString("ImageURL"),
+        xPropSet->setPropertyValue("ImageURL",
                                     aTmp );
     }
 
@@ -2107,15 +2107,15 @@ void SwHTMLParser::NewTextArea()
 
     Any aTmp;
     aTmp <<= OUString(sName);
-    xPropSet->setPropertyValue( OUString("Name"), aTmp );
+    xPropSet->setPropertyValue("Name", aTmp );
 
     sal_Bool bTrue = sal_True;
     aTmp.setValue( &bTrue, ::getBooleanCppuType() );
-    xPropSet->setPropertyValue( OUString("MultiLine"),
+    xPropSet->setPropertyValue("MultiLine",
                                 aTmp );
-    xPropSet->setPropertyValue( OUString("VScroll"), aTmp );
+    xPropSet->setPropertyValue("VScroll", aTmp );
     if( HTML_WM_OFF == nWrap )
-        xPropSet->setPropertyValue( OUString("HScroll"),
+        xPropSet->setPropertyValue("HScroll",
                                     aTmp );
     if( HTML_WM_HARD == nWrap )
         xPropSet->setPropertyValue(
@@ -2124,7 +2124,7 @@ void SwHTMLParser::NewTextArea()
     if( nTabIndex >= TABINDEX_MIN && nTabIndex <= TABINDEX_MAX  )
     {
         aTmp <<= (sal_Int16)nTabIndex ;
-        xPropSet->setPropertyValue( OUString("TabIndex"),
+        xPropSet->setPropertyValue("TabIndex",
                                     aTmp );
     }
 
@@ -2134,7 +2134,7 @@ void SwHTMLParser::NewTextArea()
     {
         sal_Bool bFalse = sal_False;
         aTmp.setValue( &bFalse, ::getBooleanCppuType() );
-        xPropSet->setPropertyValue( OUString("Enabled"),
+        xPropSet->setPropertyValue("Enabled",
                                     aTmp );
     }
 
@@ -2202,7 +2202,7 @@ void SwHTMLParser::EndTextArea()
 
     Any aTmp;
     aTmp <<= OUString(pFormImpl->GetText());
-    rPropSet->setPropertyValue( OUString("DefaultText"),
+    rPropSet->setPropertyValue("DefaultText",
                                 aTmp );
     pFormImpl->EraseText();
 
@@ -2385,12 +2385,12 @@ void SwHTMLParser::NewSelect()
 
     Any aTmp;
     aTmp <<= OUString(sName);
-    xPropSet->setPropertyValue( OUString("Name"), aTmp );
+    xPropSet->setPropertyValue("Name", aTmp );
 
     if( nTabIndex >= TABINDEX_MIN && nTabIndex <= TABINDEX_MAX  )
     {
         aTmp <<= (sal_Int16)nTabIndex ;
-        xPropSet->setPropertyValue( OUString("TabIndex"),
+        xPropSet->setPropertyValue("TabIndex",
                                     aTmp );
     }
 
@@ -2398,7 +2398,7 @@ void SwHTMLParser::NewSelect()
     {
         sal_Bool bFalse = sal_False;
         aTmp.setValue( &bFalse, ::getBooleanCppuType() );
-        xPropSet->setPropertyValue( OUString("Enabled"),
+        xPropSet->setPropertyValue("Enabled",
                                     aTmp );
     }
 
@@ -2408,7 +2408,7 @@ void SwHTMLParser::NewSelect()
     {
         sal_Bool bTrue = sal_True;
         aTmp.setValue( &bTrue, ::getBooleanCppuType() );
-        xPropSet->setPropertyValue( OUString("Dropdown"),
+        xPropSet->setPropertyValue("Dropdown",
                                     aTmp );
     }
     else
@@ -2519,7 +2519,7 @@ void SwHTMLParser::EndSelect()
 
         aAny.setValue( &aValueList, ::getCppuType((uno::Sequence<OUString>*)0) );
 
-        rPropSet->setPropertyValue( OUString("ListSource"),
+        rPropSet->setPropertyValue("ListSource",
                                     aAny );
 
         size_t nSelCnt = pFormImpl->GetSelectedList().size();

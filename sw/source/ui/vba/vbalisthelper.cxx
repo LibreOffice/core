@@ -82,25 +82,25 @@ void SwVbaListHelper::Init() throw( css::uno::RuntimeException )
 
     // get the numbering style
     uno::Reference< style::XStyleFamiliesSupplier > xStyleSupplier( mxTextDocument, uno::UNO_QUERY_THROW );
-    mxStyleFamily.set( xStyleSupplier->getStyleFamilies()->getByName(OUString( "NumberingStyles" ) ), uno::UNO_QUERY_THROW );
+    mxStyleFamily.set( xStyleSupplier->getStyleFamilies()->getByName("NumberingStyles"), uno::UNO_QUERY_THROW );
     OSL_TRACE("SwVbaListHelper::Init: numbering style name: %s", OUStringToOString( msStyleName, RTL_TEXTENCODING_UTF8 ).getStr() );
     if( mxStyleFamily->hasByName( msStyleName ) )
     {
         mxStyleProps.set( mxStyleFamily->getByName( msStyleName ), uno::UNO_QUERY_THROW );
-        mxNumberingRules.set( mxStyleProps->getPropertyValue( OUString( "NumberingRules" ) ), uno::UNO_QUERY_THROW );
+        mxNumberingRules.set( mxStyleProps->getPropertyValue("NumberingRules"), uno::UNO_QUERY_THROW );
     }
     else
     {
         // create new numbering style
         uno::Reference< lang::XMultiServiceFactory > xDocMSF( mxTextDocument, uno::UNO_QUERY_THROW );
-        mxStyleProps.set( xDocMSF->createInstance(  OUString( "com.sun.star.style.NumberingStyle" ) ), uno::UNO_QUERY_THROW );
+        mxStyleProps.set( xDocMSF->createInstance("com.sun.star.style.NumberingStyle"), uno::UNO_QUERY_THROW );
         // insert this style into style family, or the property NumberingRules doesn't exist.
         mxStyleFamily->insertByName( msStyleName, uno::makeAny( mxStyleProps ) );
-        mxStyleProps->getPropertyValue( OUString( "NumberingRules" ) ) >>= mxNumberingRules;
+        mxStyleProps->getPropertyValue("NumberingRules") >>= mxNumberingRules;
 
         CreateListTemplate();
 
-        mxStyleProps->setPropertyValue( OUString( "NumberingRules" ) , uno::makeAny( mxNumberingRules ) );
+        mxStyleProps->setPropertyValue("NumberingRules", uno::makeAny( mxNumberingRules ) );
     }
 }
 
@@ -680,7 +680,7 @@ void SwVbaListHelper::setPropertyValueWithNameAndLevel( sal_Int32 nLevel, const 
     mxNumberingRules->getByIndex( nLevel ) >>= aPropertyValues;
     setOrAppendPropertyValue( aPropertyValues, sName, aValue );
     mxNumberingRules->replaceByIndex( nLevel, uno::makeAny( aPropertyValues ) );
-    mxStyleProps->setPropertyValue( OUString( "NumberingRules" ) , uno::makeAny( mxNumberingRules ) );
+    mxStyleProps->setPropertyValue("NumberingRules", uno::makeAny( mxNumberingRules ) );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

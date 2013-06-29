@@ -108,7 +108,7 @@ void SwBaseShell::InsertURLButton(const String& rURL, const String& rTarget, con
             {
                 // #105638# OJ
                 aTmp <<= sal_True;
-                xPropSet->setPropertyValue( OUString( "DispatchURLInternal" ), aTmp );
+                xPropSet->setPropertyValue("DispatchURLInternal", aTmp );
             }
         }
 

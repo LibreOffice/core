@@ -110,7 +110,7 @@ PropBrw::PropBrw(const Reference< XComponentContext >& _xORB, Window* pParent, O
         // create a frame wrapper for myself
         m_xMeAsFrame = Frame::create( m_xORB );
         m_xMeAsFrame->initialize( VCLUnoHelper::GetInterface ( this ) );
-        m_xMeAsFrame->setName( OUString("report property browser") );  // change name!
+        m_xMeAsFrame->setName("report property browser");  // change name!
     }
     catch (Exception&)
     {
@@ -344,7 +344,7 @@ OUString PropBrw::GetHeadlineName( const uno::Sequence< Reference<uno::XInterfac
         aName = String(ModuleRes(RID_STR_BRWTITLE_PROPERTIES));
 
         uno::Reference< container::XNameContainer > xNameCont(_aObjects[0],uno::UNO_QUERY);
-        Reference< lang::XServiceInfo > xServiceInfo( xNameCont->getByName(OUString("ReportComponent")), UNO_QUERY );
+        Reference< lang::XServiceInfo > xServiceInfo( xNameCont->getByName("ReportComponent"), UNO_QUERY );
         if ( xServiceInfo.is() )
         {
             sal_uInt16 nResId = 0;

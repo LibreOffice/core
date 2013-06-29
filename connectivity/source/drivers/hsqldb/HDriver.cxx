@@ -323,7 +323,7 @@ namespace connectivity
                 if ( xProp.is() )
                 {
                     sal_Int32 nMode = 0;
-                    xProp->getPropertyValue(OUString("OpenMode")) >>= nMode;
+                    xProp->getPropertyValue("OpenMode") >>= nMode;
                     if ( (nMode & ElementModes::WRITE) != ElementModes::WRITE )
                     {
                         aProperties.put( "readonly", OUString(  "true"  ) );
@@ -853,7 +853,7 @@ namespace connectivity
                 //.........................................................
                 // ask for the system locale setting
                 if ( xNode.is() )
-                    xNode->getPropertyValue( OUString(  "ooSetupSystemLocale"  ) ) >>= sLocaleString;
+                    xNode->getPropertyValue("ooSetupSystemLocale") >>= sLocaleString;
             }
             catch( const Exception& )
             {

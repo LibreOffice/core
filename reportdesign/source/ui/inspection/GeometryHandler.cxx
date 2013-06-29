@@ -336,7 +336,7 @@ void SAL_CALL GeometryHandler::inspect( const uno::Reference< uno::XInterface > 
             m_xReportComponent->removePropertyChangeListener(PROPERTY_DATAFIELD,static_cast< beans::XPropertyChangeListener* >( this ));
 
         const uno::Reference< container::XNameContainer > xObjectAsContainer( _rxInspectee, uno::UNO_QUERY );
-        m_xReportComponent.set( xObjectAsContainer->getByName( OUString( "ReportComponent" ) ), uno::UNO_QUERY );
+        m_xReportComponent.set( xObjectAsContainer->getByName("ReportComponent"), uno::UNO_QUERY );
 
         const OUString sRowSet("RowSet");
         if ( xObjectAsContainer->hasByName( sRowSet ) )
@@ -1408,7 +1408,7 @@ inspection::InteractiveSelectionResult SAL_CALL GeometryHandler::onInteractivePr
         ::osl::ClearableMutexGuard aGuard( m_aMutex );
 
         inspection::InteractiveSelectionResult eResult = inspection::InteractiveSelectionResult_Cancelled;
-        const uno::Reference< awt::XWindow> xInspectorWindow(m_xContext->getValueByName( OUString("DialogParentWindow")) ,uno::UNO_QUERY);
+        const uno::Reference< awt::XWindow> xInspectorWindow(m_xContext->getValueByName("DialogParentWindow") ,uno::UNO_QUERY);
         const uno::Reference< report::XReportControlFormat> xReportControlFormat(m_xReportComponent,uno::UNO_QUERY);
         aGuard.clear();
 
@@ -1430,7 +1430,7 @@ inspection::InteractiveSelectionResult SAL_CALL GeometryHandler::onInteractivePr
 
         OUString sFormula;
         m_xReportComponent->getPropertyValue(PropertyName) >>= sFormula;
-        const uno::Reference< awt::XWindow> xInspectorWindow(m_xContext->getValueByName( OUString("DialogParentWindow")) ,uno::UNO_QUERY);
+        const uno::Reference< awt::XWindow> xInspectorWindow(m_xContext->getValueByName("DialogParentWindow") ,uno::UNO_QUERY);
         uno::Reference< uno::XComponentContext > xContext = m_xContext;
         uno::Reference< beans::XPropertySet > xRowSet( m_xRowSet,uno::UNO_QUERY);
         aGuard.clear();
@@ -1448,7 +1448,7 @@ inspection::InteractiveSelectionResult SAL_CALL GeometryHandler::onInteractivePr
         ::osl::ClearableMutexGuard aGuard( m_aMutex );
 
         inspection::InteractiveSelectionResult eResult = inspection::InteractiveSelectionResult_Cancelled;
-        const uno::Reference< awt::XWindow> xInspectorWindow(m_xContext->getValueByName( OUString("DialogParentWindow")) ,uno::UNO_QUERY);
+        const uno::Reference< awt::XWindow> xInspectorWindow(m_xContext->getValueByName("DialogParentWindow") ,uno::UNO_QUERY);
         const uno::Reference< report::XShape> xShape(m_xReportComponent,uno::UNO_QUERY);
         aGuard.clear();
 
@@ -1565,15 +1565,15 @@ bool GeometryHandler::impl_dialogFilter_nothrow( OUString& _out_rSelectedClause,
     try
     {
         xFactory = m_xContext->getServiceManager();
-        xInspectorWindow.set(m_xContext->getValueByName( OUString("DialogParentWindow")) ,uno::UNO_QUERY);
-        uno::Reference<sdbc::XConnection> xCon(m_xContext->getValueByName( OUString("ActiveConnection")) ,uno::UNO_QUERY);
+        xInspectorWindow.set(m_xContext->getValueByName("DialogParentWindow") ,uno::UNO_QUERY);
+        uno::Reference<sdbc::XConnection> xCon(m_xContext->getValueByName("ActiveConnection") ,uno::UNO_QUERY);
         if ( !xCon.is() )
             return false;
 
         uno::Reference< beans::XPropertySet> xRowSetProp(m_xRowSet,uno::UNO_QUERY);
         if ( !m_xRowSet.is() )
         {
-            m_xRowSet.set(xFactory->createInstanceWithContext(OUString("com.sun.star.sdb.RowSet"),m_xContext),uno::UNO_QUERY);
+            m_xRowSet.set(xFactory->createInstanceWithContext("com.sun.star.sdb.RowSet",m_xContext),uno::UNO_QUERY);
             xRowSetProp.set(m_xRowSet,uno::UNO_QUERY);
             xRowSetProp->setPropertyValue(PROPERTY_ACTIVECONNECTION,uno::makeAny(xCon));
             ::comphelper::copyProperties(m_xReportComponent,xRowSetProp);
@@ -2045,7 +2045,7 @@ void GeometryHandler::impl_initFieldList_nothrow( uno::Sequence< OUString >& _rF
     _rFieldNames.realloc(0);
     try
     {
-        uno::Reference< awt::XWindow> xInspectorWindow(m_xContext->getValueByName( OUString("DialogParentWindow")) ,uno::UNO_QUERY);
+        uno::Reference< awt::XWindow> xInspectorWindow(m_xContext->getValueByName("DialogParentWindow") ,uno::UNO_QUERY);
         Window* pInspectorWindow = VCLUnoHelper::GetWindow( xInspectorWindow );
         WaitObject aWaitCursor( pInspectorWindow );
 
@@ -2059,7 +2059,7 @@ void GeometryHandler::impl_initFieldList_nothrow( uno::Sequence< OUString >& _rF
         OUString sObjectName;
         OSL_VERIFY( xFormSet->getPropertyValue( PROPERTY_COMMAND ) >>= sObjectName );
         // when there is no command we don't need to ask for columns
-        uno::Reference<sdbc::XConnection> xCon(m_xContext->getValueByName( OUString("ActiveConnection")) ,uno::UNO_QUERY);
+        uno::Reference<sdbc::XConnection> xCon(m_xContext->getValueByName("ActiveConnection") ,uno::UNO_QUERY);
         if ( !sObjectName.isEmpty() && xCon.is() )
         {
             sal_Int32 nObjectType = sdb::CommandType::COMMAND;

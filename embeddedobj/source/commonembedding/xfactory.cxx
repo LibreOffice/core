@@ -102,7 +102,7 @@ uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInsta
 
         OUString aMediaType;
         try {
-            uno::Any aAny = xPropSet->getPropertyValue( OUString( "MediaType" ) );
+            uno::Any aAny = xPropSet->getPropertyValue("MediaType");
             aAny >>= aMediaType;
         }
         catch ( const uno::Exception& )

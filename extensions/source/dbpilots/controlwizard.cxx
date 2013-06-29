@@ -232,9 +232,9 @@ namespace dbp
             sal_Int32 nCommandType = CommandType::COMMAND;
             try
             {
-                rContext.xForm->getPropertyValue(OUString("DataSourceName")) >>= sDataSource;
-                rContext.xForm->getPropertyValue(OUString("Command")) >>= sCommand;
-                rContext.xForm->getPropertyValue(OUString("CommandType")) >>= nCommandType;
+                rContext.xForm->getPropertyValue("DataSourceName") >>= sDataSource;
+                rContext.xForm->getPropertyValue("Command") >>= sCommand;
+                rContext.xForm->getPropertyValue("CommandType") >>= nCommandType;
             }
             catch(const Exception&)
             {
@@ -298,7 +298,7 @@ namespace dbp
         sal_Int16 nClassId = FormComponentType::CONTROL;
         try
         {
-            getContext().xObjectModel->getPropertyValue(OUString("ClassId")) >>= nClassId;
+            getContext().xObjectModel->getPropertyValue("ClassId") >>= nClassId;
         }
         catch(const Exception&)
         {
@@ -457,7 +457,7 @@ namespace dbp
         try
         {
             if ( !::dbtools::isEmbeddedInDatabase(m_aContext.xForm,xConn) )
-                m_aContext.xForm->getPropertyValue(OUString("ActiveConnection")) >>= xConn;
+                m_aContext.xForm->getPropertyValue("ActiveConnection") >>= xConn;
         }
         catch(const Exception&)
         {
@@ -487,7 +487,7 @@ namespace dbp
             }
             else
             {
-                m_aContext.xForm->setPropertyValue( OUString("ActiveConnection"), makeAny( _rxConn ) );
+                m_aContext.xForm->setPropertyValue("ActiveConnection", makeAny( _rxConn ) );
             }
         }
         catch(const Exception&)
@@ -558,8 +558,8 @@ namespace dbp
             if (m_aContext.xForm.is())
             {
                 // collect some properties of the form
-                OUString sObjectName = ::comphelper::getString(m_aContext.xForm->getPropertyValue(OUString("Command")));
-                sal_Int32 nObjectType = ::comphelper::getINT32(m_aContext.xForm->getPropertyValue(OUString("CommandType")));
+                OUString sObjectName = ::comphelper::getString(m_aContext.xForm->getPropertyValue("Command"));
+                sal_Int32 nObjectType = ::comphelper::getINT32(m_aContext.xForm->getPropertyValue("CommandType"));
 
                 // calculate the connection the rowset is working with
                 Reference< XConnection > xConnection;
@@ -604,7 +604,7 @@ namespace dbp
 
                             // not interested in any results, only in the fields
                             Reference< XPropertySet > xStatementProps(xStatement, UNO_QUERY);
-                            xStatementProps->setPropertyValue(OUString("MaxRows"), makeAny(sal_Int32(0)));
+                            xStatementProps->setPropertyValue("MaxRows", makeAny(sal_Int32(0)));
 
                             // TODO: think about handling local SQLExceptions here ...
                             Reference< XColumnsSupplier >  xSupplyCols(xStatement->executeQuery(), UNO_QUERY);

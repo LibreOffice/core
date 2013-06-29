@@ -3071,7 +3071,7 @@ void DbFilterField::Update()
 
         Reference<XPropertySet> xFormProp(xForm,UNO_QUERY);
         Reference< XTablesSupplier > xSupTab;
-        xFormProp->getPropertyValue(OUString("SingleSelectQueryComposer")) >>= xSupTab;
+        xFormProp->getPropertyValue("SingleSelectQueryComposer") >>= xSupTab;
 
         Reference< XConnection >  xConnection(getRowSetConnection(xForm));
         if (!xSupTab.is())

@@ -99,7 +99,7 @@ sal_uInt16 OObjectBase::getObjectType(const uno::Reference< report::XReportCompo
             return OBJ_DLG_IMAGECONTROL;
         if ( xServiceInfo->supportsService( SERVICE_FORMATTEDFIELD ))
             return OBJ_DLG_FORMATTEDFIELD;
-        if ( xServiceInfo->supportsService( OUString("com.sun.star.drawing.OLE2Shape") ) )
+        if ( xServiceInfo->supportsService("com.sun.star.drawing.OLE2Shape") )
             return OBJ_OLE2;
         if ( xServiceInfo->supportsService( SERVICE_SHAPE ))
             return OBJ_CUSTOMSHAPE;
@@ -1215,7 +1215,7 @@ void OOle2Obj::impl_createDataProvider_nothrow(const uno::Reference< frame::XMod
         if( xReceiver.is() )
         {
             uno::Reference< lang::XMultiServiceFactory> xFac(_xModel,uno::UNO_QUERY);
-            uno::Reference< chart2::data::XDatabaseDataProvider > xDataProvider( xFac->createInstance(OUString("com.sun.star.chart2.data.DataProvider")),uno::UNO_QUERY);
+            uno::Reference< chart2::data::XDatabaseDataProvider > xDataProvider( xFac->createInstance("com.sun.star.chart2.data.DataProvider"),uno::UNO_QUERY);
             xReceiver->attachDataProvider( xDataProvider.get() );
         }
     }
@@ -1238,7 +1238,7 @@ void OOle2Obj::initializeOle()
         {
             uno::Reference< beans::XPropertySet > xChartProps( xCompSupp->getComponent(), uno::UNO_QUERY );
             if ( xChartProps.is() )
-                xChartProps->setPropertyValue(OUString("NullDate"),uno::makeAny(util::DateTime(0,0,0,0,1,1,1900)));
+                xChartProps->setPropertyValue("NullDate",uno::makeAny(util::DateTime(0,0,0,0,1,1,1900)));
         }
     }
 }
@@ -1279,7 +1279,7 @@ void OOle2Obj::initializeChart( const uno::Reference< frame::XModel>& _xModel)
 uno::Reference< style::XStyle> getUsedStyle(const uno::Reference< report::XReportDefinition>& _xReport)
 {
     uno::Reference<container::XNameAccess> xStyles = _xReport->getStyleFamilies();
-    uno::Reference<container::XNameAccess> xPageStyles(xStyles->getByName(OUString("PageStyles")),uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xPageStyles(xStyles->getByName("PageStyles"),uno::UNO_QUERY);
 
     uno::Reference< style::XStyle> xReturn;
     uno::Sequence< OUString> aSeq = xPageStyles->getElementNames();

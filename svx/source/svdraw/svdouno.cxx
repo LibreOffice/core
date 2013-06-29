@@ -310,7 +310,7 @@ SdrUnoObj& SdrUnoObj::operator= (const SdrUnoObj& rObj)
     uno::Reference< beans::XPropertySet > xSet(xUnoControlModel, uno::UNO_QUERY);
     if (xSet.is())
     {
-        uno::Any aValue( xSet->getPropertyValue( OUString("DefaultControl")) );
+        uno::Any aValue( xSet->getPropertyValue("DefaultControl") );
         OUString aStr;
 
         if( aValue >>= aStr )

@@ -110,7 +110,7 @@ void ShareControlFile::OpenStream()
 
                 // try to let the file be hidden if possible
                 try {
-                    aContent.setPropertyValue( OUString( "IsHidden"  ), uno::makeAny( sal_True ) );
+                    aContent.setPropertyValue("IsHidden", uno::makeAny( sal_True ) );
                 } catch( uno::Exception& ) {}
 
                 // Try to open one more time

@@ -137,14 +137,14 @@ void SwApplet_Impl::CreateApplet( const OUString& rCode, const OUString& rName,
     uno::Reference < beans::XPropertySet > xSet( xApplet->getComponent(), uno::UNO_QUERY );
     if ( xSet.is() )
     {
-        xSet->setPropertyValue( OUString("AppletCode"), uno::makeAny( rCode ) );
-        xSet->setPropertyValue( OUString("AppletName"), uno::makeAny( rName ) );
-        xSet->setPropertyValue( OUString("AppletIsScript"), uno::makeAny( sal_Bool(bMayScript) ) );
-        xSet->setPropertyValue( OUString("AppletDocBase"), uno::makeAny( sDocBase ) );
+        xSet->setPropertyValue("AppletCode", uno::makeAny( rCode ) );
+        xSet->setPropertyValue("AppletName", uno::makeAny( rName ) );
+        xSet->setPropertyValue("AppletIsScript", uno::makeAny( sal_Bool(bMayScript) ) );
+        xSet->setPropertyValue("AppletDocBase", uno::makeAny( sDocBase ) );
         if ( !rCodeBase.isEmpty() )
-            xSet->setPropertyValue( OUString("AppletCodeBase"), uno::makeAny( rCodeBase ) );
+            xSet->setPropertyValue("AppletCodeBase", uno::makeAny( rCodeBase ) );
         else
-            xSet->setPropertyValue( OUString("AppletCodeBase"), uno::makeAny( sDocBase ) );
+            xSet->setPropertyValue("AppletCodeBase", uno::makeAny( sDocBase ) );
     }
 }
 #ifdef SOLAR_JAVA
@@ -185,7 +185,7 @@ void SwApplet_Impl::FinishApplet()
     {
         uno::Sequence < beans::PropertyValue > aProps;
         aCommandList.FillSequence( aProps );
-        xSet->setPropertyValue( OUString("AppletCommands"), uno::makeAny( aProps ) );
+        xSet->setPropertyValue("AppletCommands", uno::makeAny( aProps ) );
     }
 }
 

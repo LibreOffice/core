@@ -464,7 +464,7 @@ bool lcl_isSeriesAttachedToFirstAxis(
         sal_Int32 nAxisIndex = 0;
         Reference< beans::XPropertySet > xProp( xDataSeries, uno::UNO_QUERY_THROW );
         if( xProp.is() )
-            xProp->getPropertyValue( OUString( "AttachedAxisIndex" ) ) >>= nAxisIndex;
+            xProp->getPropertyValue("AttachedAxisIndex") >>= nAxisIndex;
         bResult = (0==nAxisIndex);
     }
     catch( const uno::Exception & ex )
@@ -630,7 +630,7 @@ uno::Sequence< OUString > lcl_DataSequenceToStringSequence(
     if( xProp.is() )
     {
         OUString aRole;
-        xProp->getPropertyValue( OUString(  "Role" ) ) >>= aRole;
+        xProp->getPropertyValue("Role") >>= aRole;
         if( aRole.match( OUString(  "values-x" ) ) )
         {
             //lcl_clearIfNoValuesButTextIsContained - replace by indices if the values are not appropriate
@@ -683,7 +683,7 @@ bool lcl_SequenceHasUnhiddenData( const uno::Reference< chart2::data::XDataSeque
         uno::Sequence< sal_Int32 > aHiddenValues;
         try
         {
-            xProp->getPropertyValue( OUString(  "HiddenValues"  ) ) >>= aHiddenValues;
+            xProp->getPropertyValue("HiddenValues") >>= aHiddenValues;
             if( !aHiddenValues.getLength() )
                 return true;
         }
@@ -1411,7 +1411,7 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument >&
                 // export legend anchor position
                 try
                 {
-                    Any aAny( xProp->getPropertyValue( OUString(  "Alignment" )));
+                    Any aAny( xProp->getPropertyValue("Alignment"));
                     if( SchXMLEnumConverter::getLegendPositionConverter().exportXML( msString, aAny, mrExport.GetMM100UnitConverter() ) )
                         mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_LEGEND_POSITION, msString );
                 }
@@ -1432,7 +1432,7 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument >&
                     {
                         chart::ChartLegendExpansion nLegendExpansion = chart::ChartLegendExpansion_HIGH;
                         OUString aExpansionString;
-                        Any aAny( xProp->getPropertyValue( OUString(  "Expansion" )));
+                        Any aAny( xProp->getPropertyValue("Expansion"));
                         bool bHasExpansion = (aAny >>= nLegendExpansion);
                         if( bHasExpansion && SchXMLEnumConverter::getLegendExpansionConverter().exportXML( aExpansionString, aAny, mrExport.GetMM100UnitConverter() ) )
                         {
@@ -1508,7 +1508,7 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument >&
             // get a sequence of non-chart shapes (inserted via clipboard)
             try
             {
-                Any aShapesAny = xDocPropSet->getPropertyValue( OUString( "AdditionalShapes" ));
+                Any aShapesAny = xDocPropSet->getPropertyValue("AdditionalShapes");
                 aShapesAny >>= mxAdditionalShapes;
             }
             catch( const uno::Exception & rEx )
@@ -1594,7 +1594,7 @@ void SchXMLExportHelper_Impl::exportTable()
     {
         bool bProtected = false;
         Reference< beans::XPropertySet > xProps( mrExport.GetModel(), uno::UNO_QUERY_THROW );
-        if ( ( xProps->getPropertyValue( OUString(  "DisableDataTableDialog"  ) ) >>= bProtected ) &&
+        if ( ( xProps->getPropertyValue("DisableDataTableDialog") >>= bProtected ) &&
              bProtected )
         {
             mrExport.AddAttribute( XML_NAMESPACE_TABLE, XML_PROTECTED, XML_TRUE );
@@ -1985,7 +1985,7 @@ void SchXMLExportHelper_Impl::exportPlotArea(
             // 3d attributes
             try
             {
-                aAny = xPropSet->getPropertyValue( OUString(  "Dim3D" ));
+                aAny = xPropSet->getPropertyValue("Dim3D");
                 aAny >>= bIs3DChart;
 
                 if( bIs3DChart )
@@ -2213,7 +2213,7 @@ void SchXMLExportHelper_Impl::exportDateScale( const Reference< beans::XProperty
         return;
 
     chart::TimeIncrement aIncrement;
-    if( (xAxisProps->getPropertyValue( OUString( "TimeIncrement" )) >>= aIncrement) )
+    if( (xAxisProps->getPropertyValue("TimeIncrement") >>= aIncrement) )
     {
         sal_Int32 nTimeResolution = ::com::sun::star::chart::TimeUnit::DAY;
         if( aIncrement.TimeResolution >>= nTimeResolution )
@@ -2647,7 +2647,7 @@ void SchXMLExportHelper_Impl::exportSeries(
                 sal_Bool bJapaneseCandleSticks = sal_False;
                 Reference< beans::XPropertySet > xCTProp( aCTSeq[nCTIdx], uno::UNO_QUERY );
                 if( xCTProp.is())
-                    xCTProp->getPropertyValue( OUString( "Japanese" )) >>= bJapaneseCandleSticks;
+                    xCTProp->getPropertyValue("Japanese") >>= bJapaneseCandleSticks;
                 exportCandleStickSeries(
                     xDSCnt->getDataSeries(), xNewDiagram, bJapaneseCandleSticks, bExportContent );
                 continue;
@@ -2685,7 +2685,7 @@ void SchXMLExportHelper_Impl::exportSeries(
                             {
                                 Reference< beans::XPropertySet > xSeqProp( xTempValueSeq, uno::UNO_QUERY );
                                 if( xSeqProp.is())
-                                    xSeqProp->getPropertyValue(OUString( "Role" )) >>= aRole;
+                                    xSeqProp->getPropertyValue("Role") >>= aRole;
                                 // "main" sequence
                                 if( aRole.equals( aLabelRole ))
                                 {
@@ -2948,9 +2948,9 @@ void SchXMLExportHelper_Impl::exportRegressionCurve(
         aPropertyStates = mxExpPropMapper->Filter( xStatProp );
         if( xEquationProperties.is())
         {
-            xEquationProperties->getPropertyValue( OUString(  "ShowEquation" ))
+            xEquationProperties->getPropertyValue("ShowEquation")
                 >>= bShowEquation;
-            xEquationProperties->getPropertyValue( OUString(  "ShowCorrelationCoefficient" ))
+            xEquationProperties->getPropertyValue("ShowCorrelationCoefficient")
                 >>= bShowRSquared;
             bExportEquation = ( bShowEquation || bShowRSquared );
             const SvtSaveOptions::ODFDefaultVersion nCurrentVersion( SvtSaveOptions().GetODFDefaultVersion() );

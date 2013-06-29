@@ -35,7 +35,7 @@ namespace connectivity
         ::osl::MutexGuard aGuard(m_aMutex);
         comphelper::SequenceAsHashMap aArgs(_aArguments);
         uno::Reference< sdbc::XConnection > xConnection;
-        xConnection = aArgs.getUnpackedValueOrDefault(OUString("ActiveConnection"),xConnection);
+        xConnection = aArgs.getUnpackedValueOrDefault("ActiveConnection",xConnection);
         m_xConnection = xConnection;
     }
     //------------------------------------------------------------------------------

@@ -1450,13 +1450,13 @@ void SlideShowImpl::registerUserPaintPolygons( const uno::Reference< lang::XMult
     uno::Any aPropLayer;
 
     aPropLayer <<= layerName;
-    xLayerPropSet->setPropertyValue(OUString("Name"), aPropLayer);
+    xLayerPropSet->setPropertyValue("Name", aPropLayer);
 
     aPropLayer <<= true;
-    xLayerPropSet->setPropertyValue(OUString("IsVisible"), aPropLayer);
+    xLayerPropSet->setPropertyValue("IsVisible", aPropLayer);
 
     aPropLayer <<= false;
-    xLayerPropSet->setPropertyValue(OUString("IsLocked"), aPropLayer);
+    xLayerPropSet->setPropertyValue("IsLocked", aPropLayer);
 
     PolygonMap::iterator aIter=maPolygons.begin();
 
@@ -1518,27 +1518,27 @@ void SlideShowImpl::registerUserPaintPolygons( const uno::Reference< lang::XMult
                     //Give the built PointSequenceSequence.
                     uno::Any aParam;
                     aParam <<= aRetval;
-                    aXPropSet->setPropertyValue( OUString("PolyPolygon"), aParam );
+                    aXPropSet->setPropertyValue("PolyPolygon", aParam );
 
                     //LineStyle : SOLID by default
                     uno::Any            aAny;
                     drawing::LineStyle  eLS;
                     eLS = drawing::LineStyle_SOLID;
                     aAny <<= eLS;
-                    aXPropSet->setPropertyValue( OUString("LineStyle"), aAny );
+                    aXPropSet->setPropertyValue("LineStyle", aAny );
 
                     //LineColor
                     sal_uInt32          nLineColor;
                     nLineColor = pPolyPoly->getRGBALineColor();
                     //Transform polygon color from RRGGBBAA to AARRGGBB
                     aAny <<= RGBAColor2UnoColor(nLineColor);
-                    aXPropSet->setPropertyValue( OUString("LineColor"), aAny );
+                    aXPropSet->setPropertyValue("LineColor", aAny );
 
                     //LineWidth
                     double              fLineWidth;
                     fLineWidth = pPolyPoly->getStrokeWidth();
                     aAny <<= (sal_Int32)fLineWidth;
-                    aXPropSet->setPropertyValue( OUString("LineWidth"), aAny );
+                    aXPropSet->setPropertyValue("LineWidth", aAny );
 
                     // make polygons special
                     xLayerManager->attachShapeToLayer(rPolyShape, xDrawnInSlideshow);

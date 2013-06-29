@@ -2143,10 +2143,10 @@ void SAL_CALL VCLXListBox::itemListChanged( const EventObject& i_rEvent ) throw 
     uno::Reference< beans::XPropertySet > xPropSet( i_rEvent.Source, uno::UNO_QUERY_THROW );
     uno::Reference< beans::XPropertySetInfo > xPSI( xPropSet->getPropertySetInfo(), uno::UNO_QUERY_THROW );
     uno::Reference< resource::XStringResourceResolver > xStringResourceResolver;
-    if ( xPSI->hasPropertyByName( OUString( "ResourceResolver" ) ) )
+    if ( xPSI->hasPropertyByName("ResourceResolver") )
     {
         xStringResourceResolver.set(
-            xPropSet->getPropertyValue( OUString( "ResourceResolver" ) ),
+            xPropSet->getPropertyValue("ResourceResolver"),
             uno::UNO_QUERY
         );
     }
@@ -4614,12 +4614,12 @@ void SAL_CALL VCLXComboBox::itemListChanged( const EventObject& i_rEvent ) throw
 
     uno::Reference< beans::XPropertySet > xPropSet( i_rEvent.Source, uno::UNO_QUERY_THROW );
     uno::Reference< beans::XPropertySetInfo > xPSI( xPropSet->getPropertySetInfo(), uno::UNO_QUERY_THROW );
-    // bool localize = xPSI->hasPropertyByName( OUString( "ResourceResolver" ) );
+    // bool localize = xPSI->hasPropertyByName("ResourceResolver");
     uno::Reference< resource::XStringResourceResolver > xStringResourceResolver;
-    if ( xPSI->hasPropertyByName( OUString( "ResourceResolver" ) ) )
+    if ( xPSI->hasPropertyByName("ResourceResolver") )
     {
         xStringResourceResolver.set(
-            xPropSet->getPropertyValue( OUString( "ResourceResolver" ) ),
+            xPropSet->getPropertyValue("ResourceResolver"),
             uno::UNO_QUERY
         );
     }

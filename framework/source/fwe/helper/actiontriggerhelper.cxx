@@ -74,13 +74,13 @@ void GetMenuItemAttributes( Reference< XPropertySet > xActionTriggerPropertySet,
     try
     {
         // mandatory properties
-        a = xActionTriggerPropertySet->getPropertyValue( OUString( "Text" ) );
+        a = xActionTriggerPropertySet->getPropertyValue("Text");
         a >>= aMenuLabel;
-        a = xActionTriggerPropertySet->getPropertyValue( OUString( "CommandURL" ) );
+        a = xActionTriggerPropertySet->getPropertyValue("CommandURL");
         a >>= aCommandURL;
-        a = xActionTriggerPropertySet->getPropertyValue( OUString( "Image" ) );
+        a = xActionTriggerPropertySet->getPropertyValue("Image");
         a >>= xBitmap;
-        a = xActionTriggerPropertySet->getPropertyValue( OUString( "SubContainer" ) );
+        a = xActionTriggerPropertySet->getPropertyValue("SubContainer");
         a >>= xSubContainer;
     }
     catch (const Exception&)
@@ -90,7 +90,7 @@ void GetMenuItemAttributes( Reference< XPropertySet > xActionTriggerPropertySet,
     // optional properties
     try
     {
-        a = xActionTriggerPropertySet->getPropertyValue( OUString( "HelpURL" ) );
+        a = xActionTriggerPropertySet->getPropertyValue("HelpURL");
         a >>= aHelpURL;
     }
     catch (const Exception&)
@@ -260,7 +260,7 @@ Reference< XPropertySet > CreateActionTrigger( sal_uInt16 nItemId, const Menu* p
             // Retrieve the menu attributes and set them in our PropertySet
             OUString aLabel = pMenu->GetItemText( nItemId );
             a <<= aLabel;
-            xPropSet->setPropertyValue( OUString( "Text" ), a );
+            xPropSet->setPropertyValue("Text", a );
 
             OUString aCommandURL = pMenu->GetItemCommand( nItemId );
 
@@ -271,7 +271,7 @@ Reference< XPropertySet > CreateActionTrigger( sal_uInt16 nItemId, const Menu* p
             }
 
             a <<= aCommandURL;
-            xPropSet->setPropertyValue( OUString( "CommandURL" ), a );
+            xPropSet->setPropertyValue("CommandURL", a );
 
             Image aImage = pMenu->GetItemImage( nItemId );
             if ( !!aImage )
@@ -279,7 +279,7 @@ Reference< XPropertySet > CreateActionTrigger( sal_uInt16 nItemId, const Menu* p
                 // We use our own optimized XBitmap implementation
                 Reference< XBitmap > xBitmap( static_cast< cppu::OWeakObject* >( new ImageWrapper( aImage )), UNO_QUERY );
                 a <<= xBitmap;
-                xPropSet->setPropertyValue( OUString( "Image" ), a );
+                xPropSet->setPropertyValue("Image", a );
             }
         }
         catch (const Exception&)
@@ -351,7 +351,7 @@ void FillActionTriggerContainerWithMenu( const Menu* pMenu, Reference< XIndexCon
                     Reference< XIndexContainer > xSubContainer = CreateActionTriggerContainer( rActionTriggerContainer );
 
                     a <<= xSubContainer;
-                    xPropSet->setPropertyValue( OUString( "SubContainer" ), a );
+                    xPropSet->setPropertyValue("SubContainer", a );
                     FillActionTriggerContainerWithMenu( pPopupMenu, xSubContainer );
                 }
             }

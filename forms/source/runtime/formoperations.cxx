@@ -1251,7 +1251,7 @@ namespace frm
                 Reference< XMultiServiceFactory > xFactory( ::dbtools::getConnection( m_xCursor ), UNO_QUERY );
                 if ( xFactory.is() )
                 {
-                    m_xParser.set( xFactory->createInstance( OUString( "com.sun.star.sdb.SingleSelectQueryComposer" ) ), UNO_QUERY );
+                    m_xParser.set( xFactory->createInstance("com.sun.star.sdb.SingleSelectQueryComposer"), UNO_QUERY );
                     OSL_ENSURE( m_xParser.is(), "FormOperations::impl_ensureInitializedParser_nothrow: factory did not create a parser for us!" );
                 }
             }

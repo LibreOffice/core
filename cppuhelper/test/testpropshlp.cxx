@@ -220,7 +220,7 @@ void test_PropertyArrayHelper()
             OSL_ENSURE( aP.Type == getPropertyTable1()[i].Type, "Type not correct" );
         }
 
-        OSL_ENSURE( !a1.hasPropertyByName( OUString("never exist") ), "hasPropertyByName not correct" );
+        OSL_ENSURE( !a1.hasPropertyByName("never exist"), "hasPropertyByName not correct" );
         try
         {
             a1.getPropertyByName( OUString("never exist") );
@@ -873,7 +873,7 @@ void test_PropertySetHelper()
                 sal_Bool b = sal_True;
                 Any aBool;
                 aBool.setValue( &b , getCppuBooleanType() );
-                xPS->setPropertyValue( OUString("BOOL"), aBool );
+                xPS->setPropertyValue("BOOL", aBool );
                 OSL_FAIL( "PropertySetHelper: exeption not thrown" );
             }
             catch( PropertyVetoException & /*e*/ )
@@ -900,7 +900,7 @@ void test_PropertySetHelper()
                 sal_Bool b = sal_True;
                 Any aBool;
                 aBool.setValue( &b , getCppuBooleanType() );
-                xPS->setPropertyValue( OUString("Does not exist"), aBool );
+                xPS->setPropertyValue("Does not exist", aBool );
                 OSL_FAIL( "PropertySetHelper: exeption not thrown" );
             }
             catch( UnknownPropertyException & /*e*/ )
@@ -923,7 +923,7 @@ void test_PropertySetHelper()
             try
             {
                 Any aBool;
-                aBool = xPS->getPropertyValue( OUString("Does not exist") );
+                aBool = xPS->getPropertyValue("Does not exist");
                 OSL_FAIL( "PropertySetHelper: exeption not thrown" );
             }
             catch( UnknownPropertyException & /*e*/ )
@@ -944,7 +944,7 @@ void test_PropertySetHelper()
             try
             {
                 Any aBool;
-                xPS->setPropertyValue( OUString("INT32"), aBool );
+                xPS->setPropertyValue("INT32", aBool );
                 OSL_FAIL( "PropertySetHelper: exeption not thrown" );
             }
             catch( IllegalArgumentException & /*e*/ )
@@ -966,7 +966,7 @@ void test_PropertySetHelper()
             {
                 Any aINT32;
                 aINT32 <<= (sal_Int32 ) 16;
-                xPS->setPropertyValue( OUString("INT16"), aINT32 );
+                xPS->setPropertyValue("INT16", aINT32 );
                 OSL_FAIL( "PropertySetHelper: exeption not thrown" );
             }
             catch( IllegalArgumentException & /*e*/ )
@@ -987,7 +987,7 @@ void test_PropertySetHelper()
 
 
             Any aValue;
-            aValue = xPS->getPropertyValue( OUString("BOOL") );
+            aValue = xPS->getPropertyValue("BOOL");
             sal_Bool b = *( (sal_Bool*)aValue.getValue());
             OSL_ENSURE( ! b, "PropertySetHelper: wrong BOOL value" );
             aValue = ((XFastPropertySet *)pPS)->getFastPropertyValue( PROPERTY_BOOL );
@@ -997,8 +997,8 @@ void test_PropertySetHelper()
 
             sal_Int16 n16(0);
             aValue <<=(sal_Int16)22;
-            xPS->setPropertyValue( OUString("INT16"), aValue );
-            aValue = xPS->getPropertyValue( OUString("INT16") );
+            xPS->setPropertyValue("INT16", aValue );
+            aValue = xPS->getPropertyValue("INT16");
             aValue >>= n16;
             OSL_ENSURE( 22 == n16 , "PropertySetHelper: wrong INT16 value" );
             aValue <<= (sal_Int16)44;
@@ -1010,8 +1010,8 @@ void test_PropertySetHelper()
 
             // widening conversion
             aValue <<= (sal_Int16)55;
-            xPS->setPropertyValue( OUString("INT32"), aValue );
-            aValue = xPS->getPropertyValue( OUString("INT32") );
+            xPS->setPropertyValue("INT32", aValue );
+            aValue = xPS->getPropertyValue("INT32");
             sal_Int32 n32(0);
             aValue >>= n32;
             OSL_ENSURE( 55 == n32 , "PropertySetHelper: wrong INT32 value" );
@@ -1064,7 +1064,7 @@ void test_PropertySetHelper()
 
             Any aValue;
             aValue <<= (sal_Int16)22;
-            xPS->setPropertyValue( OUString("INT16"), aValue );
+            xPS->setPropertyValue("INT16", aValue );
             aValue <<= (sal_Int16) 44;
             ((XFastPropertySet *)pPS)->setFastPropertyValue( PROPERTY_INT16, aValue );
             aValue <<= (sal_Int16)100;// exception

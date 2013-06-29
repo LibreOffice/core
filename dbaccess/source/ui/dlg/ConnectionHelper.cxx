@@ -594,7 +594,7 @@ DBG_NAME(OConnectionHelper)
             }
             else
             {
-                Any aContentType = aParent.getPropertyValue( OUString("ContentType") );
+                Any aContentType = aParent.getPropertyValue("ContentType");
                 aContentType >>= sContentType;
             }
 

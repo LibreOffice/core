@@ -147,7 +147,7 @@ ScVbaShape::getType( const css::uno::Reference< drawing::XShape > xShape ) throw
     else if( sShapeType == "com.sun.star.drawing.TextShape" )
         return office::MsoShapeType::msoTextBox;
     else
-        throw uno::RuntimeException( OUString("the shape type do not be supported: ") + sShapeType, uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException("the shape type do not be supported: " + sShapeType, uno::Reference< uno::XInterface >() );
 }
 
 // Attributes
@@ -172,7 +172,7 @@ ScVbaShape::getAlternativeText() throw (uno::RuntimeException)
 {
     OUString sAltText;
     uno::Reference< beans::XPropertySet > xProps( m_xShape, uno::UNO_QUERY_THROW );
-    xProps->getPropertyValue( OUString( "Title" ) ) >>= sAltText;
+    xProps->getPropertyValue("Title") >>= sAltText;
     return sAltText;
 }
 
@@ -180,7 +180,7 @@ void SAL_CALL
 ScVbaShape::setAlternativeText( const OUString& sAltText ) throw (uno::RuntimeException)
 {
     uno::Reference< beans::XPropertySet > xProps( m_xShape, uno::UNO_QUERY_THROW );
-    xProps->setPropertyValue( OUString( "Title" ), uno::Any( sAltText ) );
+    xProps->setPropertyValue("Title", uno::Any( sAltText ) );
 }
 
 double SAL_CALL

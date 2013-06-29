@@ -537,7 +537,7 @@ namespace ucb { namespace ucp { namespace ext
         for ( sal_Int32 n = 0; n < nCount; ++n, ++pValues )
         {
             // all our properties are read-only ...
-            aRet[ n ] <<= IllegalAccessException( OUString("property is read-only."), *this );
+            aRet[ n ] <<= IllegalAccessException("property is read-only.", *this );
         }
 
         return aRet;

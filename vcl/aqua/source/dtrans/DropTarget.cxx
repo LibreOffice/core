@@ -383,7 +383,7 @@ void DropTarget::concludeDragOperation(id /*sender*/)
   {
     if (aArguments.getLength() < 2)
       {
-        throw RuntimeException(OUString("DropTarget::initialize: Cannot install window event handler"),
+        throw RuntimeException("DropTarget::initialize: Cannot install window event handler",
                                static_cast<OWeakObject*>(this));
       }
 
