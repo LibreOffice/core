@@ -2179,7 +2179,10 @@ bool ServerFont::GetGlyphOutline( int nGlyphIndex,
         return false;
 
     if( pGlyphFT->format != FT_GLYPH_FORMAT_OUTLINE )
+    {
+        FT_Done_Glyph( pGlyphFT );
         return false;
+    }
 
     if( mbArtItalic )
     {
@@ -2191,7 +2194,10 @@ bool ServerFont::GetGlyphOutline( int nGlyphIndex,
 
     FT_Outline& rOutline = reinterpret_cast<FT_OutlineGlyphRec*>(pGlyphFT)->outline;
     if( !rOutline.n_points )    // blank glyphs are ok
+    {
+        FT_Done_Glyph( pGlyphFT );
         return true;
+    }
 
     long nMaxPoints = 1 + rOutline.n_points * 3;
     PolyPolygon aToolPolyPolygon;
