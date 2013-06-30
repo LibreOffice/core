@@ -873,9 +873,9 @@ void SmXMLExport::ExportMath(const SmNode *pNode, int /*nLevel*/)
     const SmMathSymbolNode *pTemp = static_cast<const SmMathSymbolNode *>(pNode);
     SvXMLElementExport *pMath = 0;
 
-    if (pNode->GetType() == NMATH)
+    if (pNode->GetType() == NMATH || pNode->GetType() == NGLYPH_SPECIAL)
     {
-        // Export NMATH symbols as <mo> elements
+        // Export NMATH and NGLYPH_SPECIAL symbols as <mo> elements
         pMath = new SvXMLElementExport(*this, XML_NAMESPACE_MATH, XML_MO, sal_True, sal_False);
     }
     else
@@ -1499,7 +1499,6 @@ void SmXMLExport::ExportNodes(const SmNode *pNode, int nLevel)
         case NTEXT:
             ExportText(pNode, nLevel);
             break;
-        case NSPECIAL: //NSPECIAL requires some sort of Entity preservation in the XML engine.
         case NGLYPH_SPECIAL:
         case NMATH:
             {
@@ -1541,6 +1540,7 @@ void SmXMLExport::ExportNodes(const SmNode *pNode, int nLevel)
                 }
             }
             break;
+        case NSPECIAL: //NSPECIAL requires some sort of Entity preservation in the XML engine.
         case NMATHIDENT :
         case NPLACE:
             ExportMath(pNode, nLevel);
