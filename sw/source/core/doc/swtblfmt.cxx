@@ -427,6 +427,21 @@ void SwTableBoxFormat::SetValueFormat( const OUString& rFormat, LanguageType eLn
     eSysLanguage = eSys;
 }
 
+const SvxFontHeightItem& SwTableBoxFormat::GetHeight() const
+{
+    return SwFormat::GetSize();
+}
+
+const SvxFontHeightItem& SwTableBoxFormat::GetCJKHeight() const
+{
+    return SwFormat::GetCJKSize();
+}
+
+const SvxFontHeightItem& SwTableBoxFormat::GetCTLHeight() const
+{
+    return SwFormat::GetCTLSize();
+}
+
 const SvxFrameDirectionItem& SwTableBoxFormat::GetTextOrientation() const
 {
     return SwFormat::GetFrmDir();

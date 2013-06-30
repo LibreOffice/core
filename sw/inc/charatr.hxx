@@ -122,18 +122,42 @@ inline const SvxCharHiddenItem   &SwAttrSet::GetCharHidden( bool bInP ) const
 
 // implementation of the character attribute methods of SwFormat
 
-inline const SvxUnderlineItem        &SwFormat::GetUnderline(bool bInP) const
+inline const SvxPostureItem      &SwFormat::GetPosture(bool bInP) const
+    {   return m_aSet.GetPosture(bInP); }
+inline const SvxWeightItem       &SwFormat::GetWeight(bool bInP) const
+    {   return m_aSet.GetWeight(bInP); }
+inline const SvxShadowedItem     &SwFormat::GetShadowed(bool bInP) const
+    {   return m_aSet.GetShadowed(bInP); }
+inline const SvxContourItem      &SwFormat::GetContour(bool bInP) const
+    {   return m_aSet.GetContour(bInP); }
+inline const SvxUnderlineItem    &SwFormat::GetUnderline(bool bInP) const
     {   return m_aSet.GetUnderline(bInP); }
-inline const SvxFontHeightItem             &SwFormat::GetSize(bool bInP) const
+inline const SvxOverlineItem     &SwFormat::GetOverline(bool bInP) const
+    {   return m_aSet.GetOverline(bInP); }
+inline const SvxCrossedOutItem   &SwFormat::GetCrossedOut(bool bInP) const
+    {   return m_aSet.GetCrossedOut(bInP); }
+inline const SvxFontHeightItem   &SwFormat::GetSize(bool bInP) const
     {   return m_aSet.GetSize(bInP); }
-inline const SvxFontItem             &SwFormat::GetFont(bool bInP) const
+inline const SvxFontItem         &SwFormat::GetFont(bool bInP) const
     {   return m_aSet.GetFont(bInP); }
+inline const SvxColorItem        &SwFormat::GetColor(bool bInP) const
+    {   return m_aSet.GetColor(bInP); }
 inline const SvxFontItem         &SwFormat::GetCJKFont(bool bInP) const
     {   return m_aSet.GetCJKFont(bInP); }
+inline const SvxFontHeightItem   &SwFormat::GetCJKSize(bool bInP) const
+    {   return m_aSet.GetCJKSize(bInP); }
+inline const SvxPostureItem      &SwFormat::GetCJKPosture(bool bInP) const
+    {   return m_aSet.GetCJKPosture(bInP); }
+inline const SvxWeightItem       &SwFormat::GetCJKWeight(bool bInP) const
+    {   return m_aSet.GetCJKWeight(bInP); }
 inline const SvxFontItem         &SwFormat::GetCTLFont(bool bInP) const
     {   return m_aSet.GetCTLFont(bInP); }
-inline const SvxColorItem            &SwFormat::GetColor(bool bInP) const
-    {   return m_aSet.GetColor(bInP); }
+inline const SvxFontHeightItem   &SwFormat::GetCTLSize(bool bInP) const
+    {   return m_aSet.GetCTLSize(bInP); }
+inline const SvxPostureItem      &SwFormat::GetCTLPosture(bool bInP) const
+    {   return m_aSet.GetCTLPosture(bInP); }
+inline const SvxWeightItem       &SwFormat::GetCTLWeight(bool bInP) const
+    {   return m_aSet.GetCTLWeight(bInP); }
 
 #endif
 

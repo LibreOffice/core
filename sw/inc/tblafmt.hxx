@@ -176,10 +176,6 @@ public:
     void SetBackground( const SvxBrushItem& rNew )      { aBackground = rNew; }
     void SetValueFormat( const OUString& rFormat, LanguageType eLng, LanguageType eSys )
         { sNumFormatString = rFormat; eNumFormatLanguage = eLng; eSysLanguage = eSys; }
-
-    bool Load( SvStream& rStream, const SwAfVersions& rVersions, sal_uInt16 nVer );
-    bool Save( SvStream& rStream, sal_uInt16 fileVersion ) const;
-    bool SaveVersionNo( SvStream& rStream, sal_uInt16 fileVersion ) const;
 };
 
 /*

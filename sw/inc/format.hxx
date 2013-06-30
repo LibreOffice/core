@@ -182,12 +182,24 @@ public:
      If nothing is found the defaulted attribute is returned. */
 
     /// Character-attributes - implemented in charatr.hxx
+    inline const SvxPostureItem      &GetPosture( bool = true ) const;
+    inline const SvxWeightItem       &GetWeight( bool = true ) const;
+    inline const SvxShadowedItem     &GetShadowed( bool = true ) const;
+    inline const SvxContourItem      &GetContour( bool = true ) const;
     inline const SvxUnderlineItem    &GetUnderline( bool = true ) const;
+    inline const SvxOverlineItem     &GetOverline( bool = true ) const;
+    inline const SvxCrossedOutItem   &GetCrossedOut( bool = true ) const;
     inline const SvxFontHeightItem   &GetSize( bool = true ) const;
     inline const SvxFontItem         &GetFont( bool = true ) const;
     inline const SvxColorItem        &GetColor( bool = true ) const;
     inline const SvxFontItem         &GetCJKFont( bool = true ) const;
+    inline const SvxFontHeightItem   &GetCJKSize( bool = true ) const;
+    inline const SvxPostureItem      &GetCJKPosture( bool = true ) const;
+    inline const SvxWeightItem       &GetCJKWeight( bool = true ) const;
     inline const SvxFontItem         &GetCTLFont( bool = true ) const;
+    inline const SvxFontHeightItem   &GetCTLSize( bool = true ) const;
+    inline const SvxPostureItem      &GetCTLPosture( bool = true ) const;
+    inline const SvxWeightItem       &GetCTLWeight( bool = true ) const;
 
     /// Frame-attributes - implemented in frmatr.hxx.
     inline const SwFormatFillOrder           &GetFillOrder( bool = true ) const;
