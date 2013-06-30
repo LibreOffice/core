@@ -59,6 +59,7 @@ using ::com::sun::star::uno::Reference;
 
 #if DEBUG_CHART_FILTER
 #include <iostream>
+#endif
 
 namespace {
 
@@ -858,9 +859,35 @@ static void lcl_ApplyCellToComplexLabel( const SchXMLCell& rCell, Sequence< uno:
     }
 }
 
+namespace {
+
+void transposeTable(SchXMLTable& rTable)
+{
+    std::vector<std::vector<SchXMLCell> > aNewData;
+    sal_Int32 nRows = rTable.aData.size();
+    aNewData.resize(rTable.nMaxColumnIndex+1);
+    for(sal_Int32 i = 0; i < nRows; ++i)
+    {
+        sal_Int32 nCols = rTable.aData[i].size();
+        for(sal_Int32 j = 0; j < nCols; ++j)
+        {
+            SchXMLCell& rCell = rTable.aData[i][j];
+            aNewData[j].push_back(rCell);
+        }
+    }
+    bool bHasRowHeader = rTable.bHasHeaderRow;
+    bool bHasColHeader = rTable.bHasHeaderColumn;
+    rTable.bHasHeaderColumn = bHasRowHeader;
+    rTable.bHasHeaderRow = bHasColHeader;
+    rTable.nMaxColumnIndex = nRows;
+    rTable.aData = aNewData;
+}
+
+}
+
 void SchXMLTableHelper::applyTableToInternalDataProvider(
-    const SchXMLTable& rTable,
-    uno::Reference< chart2::XChartDocument > xChartDoc )
+    SchXMLTable rTable,
+    uno::Reference< chart2::XChartDocument > xChartDoc, chart::ChartDataRowSource eDataRowSource )
 {
     // apply all data read from the local table to the internal data provider
     if( !xChartDoc.is() || !xChartDoc->hasInternalDataProvider() )
@@ -868,6 +895,9 @@ void SchXMLTableHelper::applyTableToInternalDataProvider(
     Reference< chart2::data::XDataProvider >  xDataProv( xChartDoc->getDataProvider() );
     if( !xDataProv.is() )
         return;
+
+    if(eDataRowSource == chart::ChartDataRowSource_ROWS)
+        transposeTable(rTable);
 
     //prepare the read local table data
     sal_Int32 nNumRows( static_cast< sal_Int32 >( rTable.aData.size()));
