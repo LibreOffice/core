@@ -104,8 +104,16 @@ inline const SvxCharHiddenItem  &SwAttrSet::GetCharHidden( sal_Bool bInP ) const
 
 inline const SvxPostureItem          &SwFmt::GetPosture(sal_Bool bInP) const
     {   return aSet.GetPosture(bInP); }
+inline const SvxPostureItem          &SwFmt::GetCJKPosture(sal_Bool bInP) const
+    {   return aSet.GetCJKPosture(bInP); }
+inline const SvxPostureItem          &SwFmt::GetCTLPosture(sal_Bool bInP) const
+    {   return aSet.GetCTLPosture(bInP); }
 inline const SvxWeightItem           &SwFmt::GetWeight(sal_Bool bInP) const
     {   return aSet.GetWeight(bInP); }
+inline const SvxWeightItem           &SwFmt::GetCJKWeight(sal_Bool bInP) const
+    {   return aSet.GetCJKWeight(bInP); }
+inline const SvxWeightItem           &SwFmt::GetCTLWeight(sal_Bool bInP) const
+    {   return aSet.GetCTLWeight(bInP); }
 inline const SvxShadowedItem         &SwFmt::GetShadowed(sal_Bool bInP) const
     {   return aSet.GetShadowed(bInP); }
 inline const SvxAutoKernItem         &SwFmt::GetAutoKern(sal_Bool bInP) const
@@ -124,6 +132,10 @@ inline const SvxCrossedOutItem       &SwFmt::GetCrossedOut(sal_Bool bInP) const
     {   return aSet.GetCrossedOut(bInP); }
 inline const SvxFontHeightItem             &SwFmt::GetSize(sal_Bool bInP) const
     {   return aSet.GetSize(bInP); }
+inline const SvxFontHeightItem             &SwFmt::GetCJKSize(sal_Bool bInP) const
+    {   return aSet.GetCJKSize(bInP); }
+inline const SvxFontHeightItem             &SwFmt::GetCTLSize(sal_Bool bInP) const
+    {   return aSet.GetCTLSize(bInP); }
 inline const SvxPropSizeItem         &SwFmt::GetPropSize(sal_Bool bInP) const
     {   return aSet.GetPropSize(bInP); }
 inline const SvxFontItem             &SwFmt::GetFont(sal_Bool bInP) const

@@ -50,6 +50,8 @@
 #include <frmfmt.hxx>
 #include <paratr.hxx>
 
+struct SwAfVersions;
+
 class SwDoc;
 class SwTableLineFmt;
 class SwTableBoxFmt;
@@ -204,10 +206,18 @@ public:
 
     void SetValueFormat( const String& rFmt, LanguageType eLng, LanguageType eSys );
 
+    const SvxFontHeightItem& GetHeight() const;
+    const SvxFontHeightItem& GetCJKHeight() const;
+    const SvxFontHeightItem& GetCTLHeight() const;
+
     const SvxFrameDirectionItem& GetTextOrientation() const;
     const SwFmtVertOrient& GetVerticalAlignment() const;
 
     void GetValueFormat( String& rFmt, LanguageType& rLng, LanguageType& rSys ) const;
+
+    sal_Bool Load( SvStream& rStream, const SwAfVersions& rVersions, sal_uInt16 nVer );
+    sal_Bool Save( SvStream& rStream, sal_uInt16 fileVersion ) const;
+    sal_Bool SaveVersionNo( SvStream& rStream, sal_uInt16 fileVersion ) const;
 
     TYPEINFO();     // Already in base class Content.
 

@@ -178,10 +178,6 @@ public:
     void SetBackground( const SvxBrushItem& rNew )      { aBackground = rNew; }
     void SetValueFormat( const String& rFmt, LanguageType eLng, LanguageType eSys )
         { sNumFmtString = rFmt; eNumFmtLanguage = eLng; eSysLanguage = eSys; }
-
-    sal_Bool Load( SvStream& rStream, const SwAfVersions& rVersions, sal_uInt16 nVer );
-    sal_Bool Save( SvStream& rStream, sal_uInt16 fileVersion ) const;
-    sal_Bool SaveVersionNo( SvStream& rStream, sal_uInt16 fileVersion ) const;
 };
 
 /*

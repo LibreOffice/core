@@ -400,80 +400,114 @@ SwBoxAutoFmt& SwBoxAutoFmt::operator=( const SwBoxAutoFmt& rNew )
     aItem = *(aItemType*)pNew; \
     delete pNew;
 
-sal_Bool SwBoxAutoFmt::Load( SvStream& rStream, const SwAfVersions& rVersions, sal_uInt16 nVer )
+sal_Bool SwTableBoxFmt::Load( SvStream& rStream, const SwAfVersions& rVersions, sal_uInt16 nVer )
 {
     SfxPoolItem* pNew;
-    SvxOrientationItem aOrientation( SVX_ORIENTATION_STANDARD, 0);
 
-    READ( aFont,        SvxFontItem            , rVersions.nFontVersion)
-
+    SvxFontItem aFont = SvxFontItem( *(SvxFontItem*)GetDfltAttr( RES_CHRATR_FONT ) );
+    READ( aFont, SvxFontItem, rVersions.nFontVersion )
     if( rStream.GetStreamCharSet() == aFont.GetCharSet() )
-        aFont.SetCharSet(::osl_getThreadTextEncoding());
+        aFont.SetCharSet( ::osl_getThreadTextEncoding() );
+    SetFont( aFont );
 
-    READ( aHeight,      SvxFontHeightItem  , rVersions.nFontHeightVersion)
-    READ( aWeight,      SvxWeightItem      , rVersions.nWeightVersion)
-    READ( aPosture,     SvxPostureItem     , rVersions.nPostureVersion)
+    SvxFontHeightItem aHeight = SvxFontHeightItem( 240, 100, RES_CHRATR_FONTSIZE );
+    READ( aHeight, SvxFontHeightItem, rVersions.nFontHeightVersion )
+    SetHeight( aHeight );
+
+    SvxWeightItem aWeight = SvxWeightItem( WEIGHT_NORMAL, RES_CHRATR_WEIGHT );
+    READ( aWeight, SvxWeightItem, rVersions.nWeightVersion )
+    SetWeight( aWeight );
+
+    SvxPostureItem aPosture = SvxPostureItem( ITALIC_NONE, RES_CHRATR_POSTURE );
+    READ( aPosture, SvxPostureItem, rVersions.nPostureVersion )
+    SetPosture( aPosture );
+
     // --- from 641 on: CJK and CTL font settings
     if( AUTOFORMAT_DATA_ID_641 <= nVer )
     {
-        READ( aCJKFont,                        SvxFontItem         , rVersions.nFontVersion)
-        READ( aCJKHeight,       SvxFontHeightItem   , rVersions.nFontHeightVersion)
-        READ( aCJKWeight,     SvxWeightItem       , rVersions.nWeightVersion)
-        READ( aCJKPosture,   SvxPostureItem      , rVersions.nPostureVersion)
-        READ( aCTLFont,                        SvxFontItem         , rVersions.nFontVersion)
-        READ( aCTLHeight,        SvxFontHeightItem   , rVersions.nFontHeightVersion)
-        READ( aCTLWeight,       SvxWeightItem       , rVersions.nWeightVersion)
-        READ( aCTLPosture,   SvxPostureItem      , rVersions.nPostureVersion)
+        SvxFontItem aCJKFont = SvxFontItem( *(SvxFontItem*)GetDfltAttr( RES_CHRATR_FONT ) );
+        READ( aCJKFont, SvxFontItem, rVersions.nFontVersion )
+        SetCJKFont( aCJKFont );
+
+        SvxFontHeightItem aCJKHeight = SvxFontHeightItem( 240, 100, RES_CHRATR_FONTSIZE );
+        READ( aCJKHeight, SvxFontHeightItem, rVersions.nFontHeightVersion )
+        SetCJKHeight( aCJKHeight );
+
+        SvxWeightItem aCJKWeight = SvxWeightItem( WEIGHT_NORMAL, RES_CHRATR_WEIGHT );
+        READ( aCJKWeight, SvxWeightItem, rVersions.nWeightVersion )
+        SetCJKWeight( aCJKWeight );
+
+        SvxPostureItem aCJKPosture = SvxPostureItem( ITALIC_NONE, RES_CHRATR_POSTURE );
+        READ( aCJKPosture, SvxPostureItem, rVersions.nPostureVersion )
+        SetCJKPosture( aCJKPosture );
+
+
+        SvxFontItem aCTLFont = SvxFontItem( *(SvxFontItem*)GetDfltAttr( RES_CHRATR_FONT ) );
+        READ( aCTLFont, SvxFontItem, rVersions.nFontVersion )
+        SetCTLFont( aCTLFont );
+
+        SvxFontHeightItem aCTLHeight = SvxFontHeightItem( 240, 100, RES_CHRATR_FONTSIZE );
+        READ( aCTLHeight, SvxFontHeightItem, rVersions.nFontHeightVersion )
+        SetCTLHeight( aCTLHeight );
+
+        SvxWeightItem aCTLWeight = SvxWeightItem( WEIGHT_NORMAL, RES_CHRATR_WEIGHT );
+        READ( aCTLWeight, SvxWeightItem, rVersions.nWeightVersion )
+        SetCTLWeight( aCTLWeight );
+
+        SvxPostureItem aCTLPosture = SvxPostureItem( ITALIC_NONE, RES_CHRATR_POSTURE );
+        READ( aCTLPosture, SvxPostureItem, rVersions.nPostureVersion )
+        SetCTLPosture( aCTLPosture );
     }
-    READ( aUnderline,   SvxUnderlineItem   , rVersions.nUnderlineVersion)
+
+    SvxUnderlineItem aUnderline = SvxUnderlineItem( UNDERLINE_NONE, RES_CHRATR_UNDERLINE );
+    READ( aUnderline, SvxUnderlineItem, rVersions.nUnderlineVersion )
+    SetUnderline( aUnderline );
+
     if( nVer >= AUTOFORMAT_DATA_ID_300OVRLN )
     {
-        READ( aOverline,       SvxOverlineItem     , rVersions.nOverlineVersion)
-    }
-    READ( aCrossedOut,  SvxCrossedOutItem  , rVersions.nCrossedOutVersion)
-    READ( aContour,     SvxContourItem     , rVersions.nContourVersion)
-    READ( aShadowed,    SvxShadowedItem       , rVersions.nShadowedVersion)
-    READ( aColor,       SvxColorItem       , rVersions.nColorVersion)
-
-    READ( aBox,         SvxBoxItem         , rVersions.nBoxVersion)
-
-    // --- from 680/dr14 on: diagonal frame lines
-    if( nVer >= AUTOFORMAT_DATA_ID_680DR14 )
-    {
-        READ( aTLBR, SvxLineItem, rVersions.nLineVersion)
-        READ( aBLTR, SvxLineItem, rVersions.nLineVersion)
+        SvxOverlineItem aOverline = SvxOverlineItem( UNDERLINE_NONE, RES_CHRATR_OVERLINE );
+        READ( aOverline, SvxOverlineItem, rVersions.nOverlineVersion )
+        SetOverline( aOverline );
     }
 
-    READ( aBackground,  SvxBrushItem        , rVersions.nBrushVersion)
+    SvxCrossedOutItem aCrossedOut = SvxCrossedOutItem( STRIKEOUT_NONE, RES_CHRATR_CROSSEDOUT );
+    READ( aCrossedOut, SvxCrossedOutItem, rVersions.nCrossedOutVersion )
+    SetCrossedOut( aCrossedOut );
 
-    pNew = aAdjust.Create(rStream, rVersions.nAdjustVersion );
+    SvxContourItem aContour = SvxContourItem( sal_False, RES_CHRATR_CONTOUR );
+    READ( aContour, SvxContourItem, rVersions.nContourVersion )
+    SetContour( aContour );
+
+    SvxShadowedItem aShadowed = SvxShadowedItem( sal_False, RES_CHRATR_SHADOWED );
+    READ( aShadowed, SvxShadowedItem, rVersions.nShadowedVersion )
+    SetShadowed( aShadowed );
+
+    SvxColorItem aColor = SvxColorItem( RES_CHRATR_COLOR );
+    READ( aColor, SvxColorItem, rVersions.nColorVersion )
+    SetColor( aColor );
+
+    SvxBoxItem aBox = SvxBoxItem( RES_BOX );
+    READ( aBox, SvxBoxItem, rVersions.nBoxVersion )
+    SetBox( aBox );
+
+    SvxBrushItem aBackground = SvxBrushItem( RES_BACKGROUND );
+    READ( aBackground, SvxBrushItem, rVersions.nBrushVersion )
+    SetBackground( aBackground );
+
+    SvxAdjustItem aAdjust = SvxAdjustItem( SVX_ADJUST_LEFT, RES_PARATR_ADJUST );
+    pNew = aAdjust.Create( rStream, rVersions.nAdjustVersion );
     SetAdjust( *(SvxAdjustItem*)pNew );
     delete pNew;
 
     if (nVer >= AUTOFORMAT_DATA_ID_31005 && WriterSpecificBlockExists(rStream))
     {
-        READ(m_aTextOrientation, SvxFrameDirectionItem, rVersions.m_nTextOrientationVersion);
-        READ(m_aVerticalAlignment, SwFmtVertOrient, rVersions.m_nVerticalAlignmentVersion);
-    }
+        SvxFrameDirectionItem aTextOrientation = SvxFrameDirectionItem( FRMDIR_ENVIRONMENT, RES_FRAMEDIR );
+        READ( aTextOrientation, SvxFrameDirectionItem, rVersions.m_nTextOrientationVersion )
+        SetTextOrientation( aTextOrientation );
 
-    READ( aHorJustify,  SvxHorJustifyItem , rVersions.nHorJustifyVersion)
-    READ( aVerJustify,  SvxVerJustifyItem   , rVersions.nVerJustifyVersion)
-
-    READ( aOrientation, SvxOrientationItem  , rVersions.nOrientationVersion)
-    READ( aMargin, SvxMarginItem       , rVersions.nMarginVersion)
-
-    pNew = aLinebreak.Create(rStream, rVersions.nBoolVersion );
-    aLinebreak.SetValue( ((SfxBoolItem*)pNew)->GetValue() );
-    delete pNew;
-
-    if ( nVer >= AUTOFORMAT_DATA_ID_504 )
-    {
-        pNew = aRotateAngle.Create( rStream, rVersions.nInt32Version );
-        aRotateAngle.SetValue( ((SfxInt32Item*)pNew)->GetValue() );
-        delete pNew;
-        pNew = aRotateMode.Create( rStream, rVersions.nRotateModeVersion );
-        aRotateMode.SetValue( ((SvxRotateModeItem*)pNew)->GetValue() );
-        delete pNew;
+        SwFmtVertOrient aVerticalAlignment = SwFmtVertOrient( 0, com::sun::star::text::VertOrientation::NONE, com::sun::star::text::RelOrientation::FRAME );
+        READ( aVerticalAlignment, SwFmtVertOrient, rVersions.m_nVerticalAlignmentVersion );
+        SetVerticalAlignment( aVerticalAlignment );
     }
 
     if( 0 == rVersions.nNumFmtVersion )
@@ -489,56 +523,84 @@ sal_Bool SwBoxAutoFmt::Load( SvStream& rStream, const SwAfVersions& rVersions, s
             eSysLanguage = ::GetAppLanguage();
     }
 
-    aStacked.SetValue( aOrientation.IsStacked() );
-    aRotateAngle.SetValue( aOrientation.GetRotation( aRotateAngle.GetValue() ) );
-
     return 0 == rStream.GetError();
 }
 
-sal_Bool SwBoxAutoFmt::Save( SvStream& rStream, sal_uInt16 fileVersion ) const
+sal_Bool SwTableBoxFmt::Save( SvStream& rStream, sal_uInt16 fileVersion ) const
 {
-    SvxOrientationItem aOrientation( aRotateAngle.GetValue(), aStacked.GetValue(), 0 );
+    SvxFontItem aFont = GetFont();
+    aFont.Store( rStream, aFont.GetVersion(fileVersion) );
 
-    aFont.Store( rStream, aFont.GetVersion(fileVersion)  );
+    SvxFontHeightItem aHeight = GetHeight();
     aHeight.Store( rStream, aHeight.GetVersion(fileVersion) );
+
+    SvxWeightItem aWeight = GetWeight();
     aWeight.Store( rStream, aWeight.GetVersion(fileVersion) );
+
+    SvxPostureItem aPosture = GetPosture();
     aPosture.Store( rStream, aPosture.GetVersion(fileVersion) );
-    aCJKFont.Store( rStream, aCJKFont.GetVersion(fileVersion)  );
+
+    SvxFontItem aCJKFont = GetCJKFont();
+    aCJKFont.Store( rStream, aCJKFont.GetVersion(fileVersion) );
+
+    SvxFontHeightItem aCJKHeight = GetCJKHeight();
     aCJKHeight.Store( rStream, aCJKHeight.GetVersion(fileVersion) );
+
+    SvxWeightItem aCJKWeight = GetCJKWeight();
     aCJKWeight.Store( rStream, aCJKWeight.GetVersion(fileVersion) );
+
+    SvxPostureItem aCJKPosture = GetCJKPosture();
     aCJKPosture.Store( rStream, aCJKPosture.GetVersion(fileVersion) );
-    aCTLFont.Store( rStream, aCTLFont.GetVersion(fileVersion)  );
+
+    SvxFontItem aCTLFont = GetCTLFont();
+    aCTLFont.Store( rStream, aCTLFont.GetVersion(fileVersion) );
+
+    SvxFontHeightItem aCTLHeight = GetCTLHeight();
     aCTLHeight.Store( rStream, aCTLHeight.GetVersion(fileVersion) );
+
+    SvxWeightItem aCTLWeight = GetCTLWeight();
     aCTLWeight.Store( rStream, aCTLWeight.GetVersion(fileVersion) );
+
+    SvxPostureItem aCTLPosture = GetCTLPosture();
     aCTLPosture.Store( rStream, aCTLPosture.GetVersion(fileVersion) );
+
+    SvxUnderlineItem aUnderline = GetUnderline();
     aUnderline.Store( rStream, aUnderline.GetVersion(fileVersion) );
+
+    SvxOverlineItem aOverline = GetOverline();
     aOverline.Store( rStream, aOverline.GetVersion(fileVersion) );
+
+    SvxCrossedOutItem aCrossedOut = GetCrossedOut();
     aCrossedOut.Store( rStream, aCrossedOut.GetVersion(fileVersion) );
+
+    SvxContourItem aContour = GetContour();
     aContour.Store( rStream, aContour.GetVersion(fileVersion) );
+
+    SvxShadowedItem aShadowed = GetShadowed();
     aShadowed.Store( rStream, aShadowed.GetVersion(fileVersion) );
+
+    SvxColorItem aColor = GetColor();
     aColor.Store( rStream, aColor.GetVersion(fileVersion) );
+
+    SvxBoxItem aBox = GetBox();
     aBox.Store( rStream, aBox.GetVersion(fileVersion) );
-    aTLBR.Store( rStream, aTLBR.GetVersion(fileVersion) );
-    aBLTR.Store( rStream, aBLTR.GetVersion(fileVersion) );
+
+    SvxBrushItem aBackground = GetBackground();
     aBackground.Store( rStream, aBackground.GetVersion(fileVersion) );
 
+    SvxAdjustItem aAdjust = GetAdjust();
     aAdjust.Store( rStream, aAdjust.GetVersion(fileVersion) );
+
     if (fileVersion >= SOFFICE_FILEFORMAT_50)
     {
         WriterSpecificAutoFormatBlock block(rStream);
 
-        m_aTextOrientation.Store(rStream, m_aTextOrientation.GetVersion(fileVersion));
-        m_aVerticalAlignment.Store(rStream, m_aVerticalAlignment.GetVersion(fileVersion));
-    }
+        SvxFrameDirectionItem aTextOrientation = GetTextOrientation();
+        aTextOrientation.Store(rStream, aTextOrientation.GetVersion(fileVersion));
 
-    aHorJustify.Store( rStream, aHorJustify.GetVersion(fileVersion) );
-    aVerJustify.Store( rStream, aVerJustify.GetVersion(fileVersion) );
-    aOrientation.Store( rStream, aOrientation.GetVersion(fileVersion) );
-    aMargin.Store( rStream, aMargin.GetVersion(fileVersion) );
-    aLinebreak.Store( rStream, aLinebreak.GetVersion(fileVersion) );
-    // Calc Rotation from SO5
-    aRotateAngle.Store( rStream, aRotateAngle.GetVersion(fileVersion) );
-    aRotateMode.Store( rStream, aRotateMode.GetVersion(fileVersion) );
+        SwFmtVertOrient aVerticalAlignment = GetVerticalAlignment();
+        aVerticalAlignment.Store(rStream, aVerticalAlignment.GetVersion(fileVersion));
+    }
 
     // --- from 680/dr25 on: store strings as UTF-8
     write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(rStream, sNumFmtString,
@@ -549,39 +611,29 @@ sal_Bool SwBoxAutoFmt::Save( SvStream& rStream, sal_uInt16 fileVersion ) const
 }
 
 
-sal_Bool SwBoxAutoFmt::SaveVersionNo( SvStream& rStream, sal_uInt16 fileVersion ) const
+sal_Bool SwTableBoxFmt::SaveVersionNo( SvStream& rStream, sal_uInt16 fileVersion ) const
 {
-    rStream << aFont.GetVersion( fileVersion );
-    rStream << aHeight.GetVersion( fileVersion );
-    rStream << aWeight.GetVersion( fileVersion );
-    rStream << aPosture.GetVersion( fileVersion );
-    rStream << aUnderline.GetVersion( fileVersion );
-    rStream << aOverline.GetVersion( fileVersion );
-    rStream << aCrossedOut.GetVersion( fileVersion );
-    rStream << aContour.GetVersion( fileVersion );
-    rStream << aShadowed.GetVersion( fileVersion );
-    rStream << aColor.GetVersion( fileVersion );
-    rStream << aBox.GetVersion( fileVersion );
-    rStream << aTLBR.GetVersion( fileVersion );
-    rStream << aBackground.GetVersion( fileVersion );
-
-    rStream << aAdjust.GetVersion( fileVersion );
+    rStream << GetFont().GetVersion( fileVersion );
+    rStream << GetHeight().GetVersion( fileVersion );
+    rStream << GetWeight().GetVersion( fileVersion );
+    rStream << GetPosture().GetVersion( fileVersion );
+    rStream << GetUnderline().GetVersion( fileVersion );
+    rStream << GetOverline().GetVersion( fileVersion );
+    rStream << GetCrossedOut().GetVersion( fileVersion );
+    rStream << GetContour().GetVersion( fileVersion );
+    rStream << GetShadowed().GetVersion( fileVersion );
+    rStream << GetColor().GetVersion( fileVersion );
+    rStream << GetBox().GetVersion( fileVersion );
+    rStream << GetBackground().GetVersion( fileVersion );
+    rStream << GetAdjust().GetVersion( fileVersion );
 
     if (fileVersion >= SOFFICE_FILEFORMAT_50)
     {
         WriterSpecificAutoFormatBlock block(rStream);
 
-        rStream << m_aTextOrientation.GetVersion(fileVersion);
-        rStream << m_aVerticalAlignment.GetVersion(fileVersion);
+        rStream << GetTextOrientation().GetVersion(fileVersion);
+        rStream << GetVerticalAlignment().GetVersion(fileVersion);
     }
-
-    rStream << aHorJustify.GetVersion( fileVersion );
-    rStream << aVerJustify.GetVersion( fileVersion );
-    rStream << SvxOrientationItem(SVX_ORIENTATION_STANDARD, 0).GetVersion( fileVersion );
-    rStream << aMargin.GetVersion( fileVersion );
-    rStream << aLinebreak.GetVersion( fileVersion );
-    rStream << aRotateAngle.GetVersion( fileVersion );
-    rStream << aRotateMode.GetVersion( fileVersion );
 
     rStream << (sal_uInt16)0;       // NumberFormat
 
@@ -960,7 +1012,8 @@ SwTableAutoFmt* SwTableAutoFmt::Load( SvStream& rStream, const SwAfVersions& rVe
         for( sal_uInt8 i = 0; bRet && i < 16; ++i )
         {
             SwBoxAutoFmt* pFmt = new SwBoxAutoFmt;
-            bRet = pFmt->Load( rStream, rVersions, nVal );
+            // TODO Remove members in SwTableAutoFmt and adapt this
+            // bRet = pFmt->Load( rStream, rVersions, nVal );
             if( bRet )
                 pRet->aBoxAutoFmt[ i ] = pFmt;
             else
@@ -1027,7 +1080,8 @@ sal_Bool SwTableAutoFmt::Save( SvStream& rStream, sal_uInt16 fileVersion ) const
                 pDfltBoxAutoFmt = new SwBoxAutoFmt;
             pFmt = pDfltBoxAutoFmt;
         }
-        bRet = pFmt->Save( rStream, fileVersion );
+        // TODO Remove members in SwTableAutoFmt and adapt this
+        // bRet = pFmt->Save( rStream, fileVersion );
     }
     return bRet;
 }
@@ -1248,8 +1302,9 @@ sal_Bool SwTableAutoFmtTbl::Save( SvStream& rStream ) const
         bRet = 0 == rStream.GetError();
 
         // Write this version number for all attributes
-        m_pImpl->m_AutoFormats[0].GetBoxFmt(0).SaveVersionNo(
-                rStream, AUTOFORMAT_FILE_VERSION);
+        // TODO Remove members in SwTableAutoFmt and adapt this
+        // m_pImpl->m_AutoFormats[0].GetBoxFmt(0).SaveVersionNo(
+        //        rStream, AUTOFORMAT_FILE_VERSION);
 
         rStream << static_cast<sal_uInt16>(m_pImpl->m_AutoFormats.size() - 1);
         bRet = 0 == rStream.GetError();
