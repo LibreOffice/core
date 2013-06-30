@@ -2785,7 +2785,7 @@ void SmAttributNode::CreateTextFromNode(String &rText)
             nLast = aStr.GetChar(0);
             switch (nLast)
             {
-            case 0xAF: // MACRON
+            case MS_BAR: // MACRON
                 rText += "overline ";
                 break;
             case MS_DOT: // DOT ABOVE
@@ -2803,21 +2803,27 @@ void SmAttributNode::CreateTextFromNode(String &rText)
             case MS_DDDOT: // COMBINING THREE DOTS ABOVE
                 rText += "dddot ";
                 break;
-            case MS_ACUTE: // COMBINING ACUTE ACCENT
+            case MS_ACUTE: // ACUTE ACCENT
+            case MS_COMBACUTE: // COMBINING ACUTE ACCENT
                 rText += "acute ";
                 break;
-            case MS_GRAVE: // COMBINING GRAVE ACCENT
+            case MS_GRAVE: // GRAVE ACCENT
+            case MS_COMBGRAVE: // COMBINING GRAVE ACCENT
                 rText += "grave ";
                 break;
-            case MS_CHECK: // COMBINING CARON
+            case MS_CHECK: // CARON
+            case MS_COMBCHECK: // COMBINING CARON
                 rText += "check ";
                 break;
-            case MS_BREVE: // COMBINING BREVE
+            case MS_BREVE: // BREVE
+            case MS_COMBBREVE: // COMBINING BREVE
                 rText += "breve ";
                 break;
-            case MS_CIRCLE: // COMBINING RING ABOVE
+            case MS_CIRCLE: // RING ABOVE
+            case MS_COMBCIRCLE: // COMBINING RING ABOVE
                 rText += "circle ";
                 break;
+            case MS_RIGHTARROW: // RIGHTWARDS ARROW
             case MS_VEC: // COMBINING RIGHT ARROW ABOVE
                 rText += "vec ";
                 break;
@@ -2829,7 +2835,7 @@ void SmAttributNode::CreateTextFromNode(String &rText)
             case MS_COMBHAT: // COMBINING CIRCUMFLEX ACCENT
                 rText += "hat ";
                 break;
-            case MS_BAR: // COMBINING MACRON
+            case MS_COMBBAR: // COMBINING MACRON
                 rText += "bar ";
                 break;
             default:
