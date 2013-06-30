@@ -112,7 +112,7 @@ inline static void SwapDouble( double& r )
     {
         if( sizeof(double) != 8 )
         {
-          DBG_ASSERT( sal_False, "Can only swap 8-Byte-doubles\n" );
+          DBG_ASSERT( false, "Can only swap 8-Byte-doubles\n" );
         }
         else
         {
@@ -136,37 +136,36 @@ inline static void SwapDouble( double& r )
 //SDO
 
 #define READNUMBER_WITHOUT_SWAP(datatype,value) \
-{\
-int tmp = eIOMode; \
-if( (tmp == STREAM_IO_READ) && sizeof(datatype)<=nBufFree) \
-{\
-    for (std::size_t i = 0; i < sizeof(datatype); i++)\
-        ((char *)&value)[i] = pBufPos[i];\
-    nBufActualPos += sizeof(datatype);\
-    pBufPos += sizeof(datatype);\
-    nBufFree -= sizeof(datatype);\
-}\
-else\
-    Read( (char*)&value, sizeof(datatype) );\
-}
+    if( bIoRead && sizeof(datatype)<=nBufFree)             \
+    {                                                       \
+        for (std::size_t i = 0; i < sizeof(datatype); i++)  \
+            ((char *)&value)[i] = pBufPos[i];              \
+        nBufActualPos += sizeof(datatype);                  \
+        pBufPos += sizeof(datatype);                        \
+        nBufFree -= sizeof(datatype);                       \
+    }                                                       \
+    else                                                    \
+    {                                                       \
+        Read( (char*)&value, sizeof(datatype) );            \
+    }                                                       \
+
 
 #define WRITENUMBER_WITHOUT_SWAP(datatype,value) \
-{\
-int tmp = eIOMode; \
-if( (tmp==STREAM_IO_WRITE) && sizeof(datatype) <= nBufFree)\
-{\
-    for (std::size_t i = 0; i < sizeof(datatype); i++)\
-        pBufPos[i] = ((char *)&value)[i];\
-    nBufFree -= sizeof(datatype);\
-    nBufActualPos += sizeof(datatype);\
-    if( nBufActualPos > nBufActualLen )\
-        nBufActualLen = nBufActualPos;\
-    pBufPos += sizeof(datatype);\
-    bIsDirty = sal_True;\
-}\
-else\
-    Write( (char*)&value, sizeof(datatype) );\
-}
+    if( bIoWrite && sizeof(datatype) <= nBufFree)    \
+    {                                                   \
+        for (std::size_t i = 0; i < sizeof(datatype); i++)  \
+            pBufPos[i] = ((char *)&value)[i];               \
+        nBufFree -= sizeof(datatype);                       \
+        nBufActualPos += sizeof(datatype);                  \
+        if( nBufActualPos > nBufActualLen )                 \
+            nBufActualLen = nBufActualPos;                  \
+        pBufPos += sizeof(datatype);                        \
+        bIsDirty = true;                                    \
+    }                                                       \
+    else                                                    \
+    {                                                       \
+        Write( (char*)&value, sizeof(datatype) );           \
+    }                                                       \
 
 //  class SvLockBytes
 
@@ -381,7 +380,7 @@ void SvStream::ImpInit()
     nCompressMode       = COMPRESSMODE_NONE;
     eStreamCharSet      = osl_getThreadTextEncoding();
     nCryptMask          = 0;
-    bIsEof              = sal_False;
+    bIsEof              = false;
 #if defined UNX
     eLineDelimiter      = LINEEND_LF;   // UNIX-Format
 #else
@@ -392,15 +391,16 @@ void SvStream::ImpInit()
 
     nBufFilePos         = 0;
     nBufActualPos       = 0;
-    bIsDirty            = sal_False;
-    bIsConsistent       = sal_True;
-    bIsWritable         = sal_True;
+    bIsDirty            = false;
+    bIsConsistent       = true;
+    bIsWritable         = true;
 
     pRWBuf              = 0;
     pBufPos             = 0;
     nBufSize            = 0;
     nBufActualLen       = 0;
-    eIOMode             = STREAM_IO_DONTKNOW;
+    bIoRead             = false;
+    bIoWrite            = false;
     nBufFree            = 0;
 
     eStreamMode         = 0;
@@ -450,7 +450,7 @@ sal_uInt16 SvStream::IsA() const
 
 void SvStream::ClearError()
 {
-    bIsEof = sal_False;
+    bIsEof = false;
     nError = SVSTREAM_OK;
 }
 
@@ -463,20 +463,20 @@ void SvStream::SetError( sal_uInt32 nErrorCode )
 void SvStream::SetNumberFormatInt( sal_uInt16 nNewFormat )
 {
     nNumberFormatInt = nNewFormat;
-    bSwap = sal_False;
+    bSwap = false;
 #ifdef OSL_BIGENDIAN
     if( nNumberFormatInt == NUMBERFORMAT_INT_LITTLEENDIAN )
-        bSwap = sal_True;
+        bSwap = true;
 #else
     if( nNumberFormatInt == NUMBERFORMAT_INT_BIGENDIAN )
-        bSwap = sal_True;
+        bSwap = true;
 #endif
 }
 
 void SvStream::SetBufferSize( sal_uInt16 nBufferSize )
 {
     sal_Size nActualFilePos = Tell();
-    sal_Bool bDontSeek = (sal_Bool)(pRWBuf == 0);
+    bool bDontSeek = (pRWBuf == 0);
 
     if( bIsDirty && bIsConsistent && bIsWritable )  // due to Windows NT: Access denied
         Flush();
@@ -493,9 +493,9 @@ void SvStream::SetBufferSize( sal_uInt16 nBufferSize )
     nBufSize        = nBufferSize;
     if( nBufSize )
         pRWBuf = new sal_uInt8[ nBufSize ];
-    bIsConsistent   = sal_True;
+    bIsConsistent   = true;
     pBufPos         = pRWBuf;
-    eIOMode = STREAM_IO_DONTKNOW;
+    bIoRead = bIoWrite = false;
     if( !bDontSeek )
         SeekPos( nActualFilePos );
 }
@@ -506,11 +506,11 @@ void SvStream::ClearBuffer()
     nBufActualPos   = 0;
     nBufFilePos     = 0;
     pBufPos         = pRWBuf;
-    bIsDirty        = sal_False;
-    bIsConsistent   = sal_True;
-    eIOMode         = STREAM_IO_DONTKNOW;
+    bIsDirty        = false;
+    bIsConsistent   = true;
+    bIoRead = bIoWrite = false;
 
-    bIsEof          = sal_False;
+    bIsEof          = false;
 }
 
 void SvStream::ResetError()
@@ -518,27 +518,19 @@ void SvStream::ResetError()
     ClearError();
 }
 
-sal_Bool SvStream::ReadByteStringLine( OUString& rStr, rtl_TextEncoding eSrcCharSet,
+bool SvStream::ReadByteStringLine( OUString& rStr, rtl_TextEncoding eSrcCharSet,
                                        sal_Int32 nMaxBytesToRead )
 {
     OString aStr;
-    sal_Bool bRet = ReadLine( aStr, nMaxBytesToRead);
+    bool bRet = ReadLine( aStr, nMaxBytesToRead);
     rStr = OStringToOUString(aStr, eSrcCharSet);
     return bRet;
 }
 
-sal_Bool SvStream::ReadByteStringLine( String& rStr, rtl_TextEncoding eSrcCharSet )
-{
-    OString aStr;
-    sal_Bool bRet = ReadLine(aStr);
-    rStr = OStringToOUString(aStr, eSrcCharSet);
-    return bRet;
-}
-
-sal_Bool SvStream::ReadLine( OString& rStr, sal_Int32 nMaxBytesToRead )
+bool SvStream::ReadLine( OString& rStr, sal_Int32 nMaxBytesToRead )
 {
     sal_Char    buf[256+1];
-    sal_Bool        bEnd        = sal_False;
+    bool        bEnd        = false;
     sal_Size       nOldFilePos = Tell();
     sal_Char    c           = 0;
     sal_Size       nTotalLen   = 0;
@@ -553,9 +545,9 @@ sal_Bool SvStream::ReadLine( OString& rStr, sal_Int32 nMaxBytesToRead )
             if ( aBuf.isEmpty() )
             {
                 // Exit on first block-read error
-                bIsEof = sal_True;
+                bIsEof = true;
                 rStr = OString();
-                return sal_False;
+                return false;
             }
             else
                 break;
@@ -567,7 +559,7 @@ sal_Bool SvStream::ReadLine( OString& rStr, sal_Int32 nMaxBytesToRead )
             c = buf[j];
             if ( c == '\n' || c == '\r' )
             {
-                bEnd = sal_True;
+                bEnd = true;
                 break;
             }
             if ( n < j )
@@ -579,14 +571,14 @@ sal_Bool SvStream::ReadLine( OString& rStr, sal_Int32 nMaxBytesToRead )
         {
             n -= nTotalLen - nMaxBytesToRead;
             nTotalLen = nMaxBytesToRead;
-            bEnd = sal_True;
+            bEnd = true;
         }
         if ( n )
             aBuf.append(buf, n);
     }
 
     if ( !bEnd && !GetError() && !aBuf.isEmpty() )
-        bEnd = sal_True;
+        bEnd = true;
 
     nOldFilePos += nTotalLen;
     if( Tell() > nOldFilePos )
@@ -604,15 +596,15 @@ sal_Bool SvStream::ReadLine( OString& rStr, sal_Int32 nMaxBytesToRead )
     }
 
     if ( bEnd )
-        bIsEof = sal_False;
+        bIsEof = false;
     rStr = aBuf.makeStringAndClear();
     return bEnd;
 }
 
-sal_Bool SvStream::ReadUniStringLine( OUString& rStr, sal_Int32 nMaxCodepointsToRead )
+bool SvStream::ReadUniStringLine( OUString& rStr, sal_Int32 nMaxCodepointsToRead )
 {
     sal_Unicode buf[256+1];
-    sal_Bool        bEnd        = sal_False;
+    bool        bEnd        = false;
     sal_Size       nOldFilePos = Tell();
     sal_Unicode c           = 0;
     sal_Size       nTotalLen   = 0;
@@ -630,9 +622,9 @@ sal_Bool SvStream::ReadUniStringLine( OUString& rStr, sal_Int32 nMaxCodepointsTo
             if ( aBuf.isEmpty() )
             {
                 // exit on first BlockRead error
-                bIsEof = sal_True;
+                bIsEof = true;
                 rStr = OUString();
-                return sal_False;
+                return false;
             }
             else
                 break;
@@ -646,7 +638,7 @@ sal_Bool SvStream::ReadUniStringLine( OUString& rStr, sal_Int32 nMaxCodepointsTo
             c = buf[j];
             if ( c == '\n' || c == '\r' )
             {
-                bEnd = sal_True;
+                bEnd = true;
                 break;
             }
             // erAck 26.02.01: Old behavior was no special treatment of '\0'
@@ -665,14 +657,14 @@ sal_Bool SvStream::ReadUniStringLine( OUString& rStr, sal_Int32 nMaxCodepointsTo
         {
             n -= nTotalLen - nMaxCodepointsToRead;
             nTotalLen = nMaxCodepointsToRead;
-            bEnd = sal_True;
+            bEnd = true;
         }
         if ( n )
             aBuf.append( buf, n );
     }
 
     if ( !bEnd && !GetError() && !aBuf.isEmpty() )
-        bEnd = sal_True;
+        bEnd = true;
 
     nOldFilePos += nTotalLen * sizeof(sal_Unicode);
     if( Tell() > nOldFilePos )
@@ -690,12 +682,12 @@ sal_Bool SvStream::ReadUniStringLine( OUString& rStr, sal_Int32 nMaxCodepointsTo
     }
 
     if ( bEnd )
-        bIsEof = sal_False;
+        bIsEof = false;
     rStr = aBuf.makeStringAndClear();
     return bEnd;
 }
 
-sal_Bool SvStream::ReadUniOrByteStringLine( OUString& rStr, rtl_TextEncoding eSrcCharSet,
+bool SvStream::ReadUniOrByteStringLine( OUString& rStr, rtl_TextEncoding eSrcCharSet,
                                             sal_Int32 nMaxCodepointsToRead )
 {
     if ( eSrcCharSet == RTL_TEXTENCODING_UNICODE )
@@ -709,7 +701,7 @@ OString read_zeroTerminated_uInt8s_ToOString(SvStream& rStream)
     OStringBuffer aOutput(256);
 
     sal_Char buf[ 256 + 1 ];
-    sal_Bool bEnd = sal_False;
+    bool bEnd = false;
     sal_Size nFilePos = rStream.Tell();
 
     while( !bEnd && !rStream.GetError() )
@@ -772,11 +764,11 @@ sal_Size write_uInt16s_FromOUString(SvStream& rStrm, const OUString& rStr,
     return nWritten;
 }
 
-sal_Bool SvStream::WriteUnicodeOrByteText( const String& rStr, rtl_TextEncoding eDestCharSet )
+bool SvStream::WriteUnicodeOrByteText( const OUString& rStr, rtl_TextEncoding eDestCharSet )
 {
     if ( eDestCharSet == RTL_TEXTENCODING_UNICODE )
     {
-        write_uInt16s_FromOUString(*this, rStr, rStr.Len());
+        write_uInt16s_FromOUString(*this, rStr, rStr.getLength());
         return nError == SVSTREAM_OK;
     }
     else
@@ -787,19 +779,19 @@ sal_Bool SvStream::WriteUnicodeOrByteText( const String& rStr, rtl_TextEncoding 
     }
 }
 
-sal_Bool SvStream::WriteByteStringLine( const String& rStr, rtl_TextEncoding eDestCharSet )
+bool SvStream::WriteByteStringLine( const OUString& rStr, rtl_TextEncoding eDestCharSet )
 {
     return WriteLine(OUStringToOString(rStr, eDestCharSet));
 }
 
-sal_Bool SvStream::WriteLine(const OString& rStr)
+bool SvStream::WriteLine(const OString& rStr)
 {
     Write(rStr.getStr(), rStr.getLength());
     endl(*this);
     return nError == SVSTREAM_OK;
 }
 
-sal_Bool SvStream::WriteUniOrByteChar( sal_Unicode ch, rtl_TextEncoding eDestCharSet )
+bool SvStream::WriteUniOrByteChar( sal_Unicode ch, rtl_TextEncoding eDestCharSet )
 {
     if ( eDestCharSet == RTL_TEXTENCODING_UNICODE )
         *this << ch;
@@ -811,9 +803,9 @@ sal_Bool SvStream::WriteUniOrByteChar( sal_Unicode ch, rtl_TextEncoding eDestCha
     return nError == SVSTREAM_OK;
 }
 
-sal_Bool SvStream::StartWritingUnicodeText()
+bool SvStream::StartWritingUnicodeText()
 {
-    SetEndianSwap( sal_False );     // write native format
+    SetEndianSwap( false );     // write native format
     // BOM, Byte Order Mark, U+FEFF, see
     // http://www.unicode.org/faq/utf_bom.html#BOM
     // Upon read: 0xfeff(-257) => no swap; 0xfffe(-2) => swap
@@ -821,12 +813,12 @@ sal_Bool SvStream::StartWritingUnicodeText()
     return nError == SVSTREAM_OK;
 }
 
-sal_Bool SvStream::StartReadingUnicodeText( rtl_TextEncoding eReadBomCharSet )
+bool SvStream::StartReadingUnicodeText( rtl_TextEncoding eReadBomCharSet )
 {
     if (!(  eReadBomCharSet == RTL_TEXTENCODING_DONTKNOW ||
             eReadBomCharSet == RTL_TEXTENCODING_UNICODE ||
             eReadBomCharSet == RTL_TEXTENCODING_UTF8))
-        return sal_True;    // nothing to read
+        return true;    // nothing to read
 
     bool bTryUtf8 = false;
     sal_uInt16 nFlag;
@@ -977,7 +969,7 @@ SvStream& SvStream::operator>>(sal_Int64& r)
 
 SvStream& SvStream::operator>>( signed char& r )
 {
-    if( (eIOMode == STREAM_IO_READ || !bIsConsistent) &&
+    if( (bIoRead || !bIsConsistent) &&
         sizeof(signed char) <= nBufFree )
     {
         r = *pBufPos;
@@ -994,7 +986,7 @@ SvStream& SvStream::operator>>( signed char& r )
 
 SvStream& SvStream::operator>>( char& r )
 {
-    if( (eIOMode == STREAM_IO_READ || !bIsConsistent) &&
+    if( (bIoRead || !bIsConsistent) &&
         sizeof(char) <= nBufFree )
     {
         r = *pBufPos;
@@ -1009,7 +1001,7 @@ SvStream& SvStream::operator>>( char& r )
 
 SvStream& SvStream::operator>>( unsigned char& r )
 {
-    if( (eIOMode == STREAM_IO_READ || !bIsConsistent) &&
+    if( (bIoRead || !bIsConsistent) &&
         sizeof(char) <= nBufFree )
     {
         r = *pBufPos;
@@ -1118,8 +1110,7 @@ SvStream& SvStream::operator<<  ( sal_Int64 v )
 SvStream& SvStream::operator<<  ( signed char v )
 {
     //SDO
-    int tmp = eIOMode;
-    if(tmp == STREAM_IO_WRITE && sizeof(signed char) <= nBufFree )
+    if(bIoWrite && sizeof(signed char) <= nBufFree )
     {
         *pBufPos = v;
         pBufPos++; // sizeof(char);
@@ -1127,7 +1118,7 @@ SvStream& SvStream::operator<<  ( signed char v )
         if( nBufActualPos > nBufActualLen )  // Append ?
             nBufActualLen = nBufActualPos;
         nBufFree--; // = sizeof(char);
-        bIsDirty = sal_True;
+        bIsDirty = true;
     }
     else
         Write( (char*)&v, sizeof(signed char) );
@@ -1139,8 +1130,7 @@ SvStream& SvStream::operator<<  ( signed char v )
 SvStream& SvStream::operator<<  ( char v )
 {
     //SDO
-    int tmp = eIOMode;
-    if(tmp == STREAM_IO_WRITE && sizeof(char) <= nBufFree )
+    if(bIoWrite && sizeof(char) <= nBufFree )
     {
         *pBufPos = v;
         pBufPos++; // sizeof(char);
@@ -1148,7 +1138,7 @@ SvStream& SvStream::operator<<  ( char v )
         if( nBufActualPos > nBufActualLen )  // Append ?
             nBufActualLen = nBufActualPos;
         nBufFree--; // = sizeof(char);
-        bIsDirty = sal_True;
+        bIsDirty = true;
     }
     else
         Write( (char*)&v, sizeof(char) );
@@ -1158,8 +1148,7 @@ SvStream& SvStream::operator<<  ( char v )
 SvStream& SvStream::operator<<  ( unsigned char v )
 {
 //SDO
-    int tmp = eIOMode;
-    if(tmp == STREAM_IO_WRITE && sizeof(char) <= nBufFree )
+    if(bIoWrite && sizeof(char) <= nBufFree )
     {
         *(unsigned char*)pBufPos = v;
         pBufPos++; // = sizeof(char);
@@ -1167,7 +1156,7 @@ SvStream& SvStream::operator<<  ( unsigned char v )
         if( nBufActualPos > nBufActualLen )  // Append ?
             nBufActualLen = nBufActualPos;
         nBufFree--;
-        bIsDirty = sal_True;
+        bIsDirty = true;
     }
     else
         Write( (char*)&v, sizeof(char) );
@@ -1261,7 +1250,8 @@ sal_Size SvStream::Read( void* pData, sal_Size nCount )
     else
     {
         // check if block is completely within buffer
-        eIOMode = STREAM_IO_READ;
+        bIoRead = true;
+        bIoWrite = false;
         if( nCount <= (sal_Size)(nBufActualLen - nBufActualPos ) )
         {
             // => yes
@@ -1279,7 +1269,7 @@ sal_Size SvStream::Read( void* pData, sal_Size nCount )
                     CryptAndWriteBuffer(pRWBuf, nBufActualLen);
                 else
                     PutData( pRWBuf, nBufActualLen );
-                bIsDirty = sal_False;
+                bIsDirty = false;
             }
 
             // Does data block fit into buffer?
@@ -1288,7 +1278,7 @@ sal_Size SvStream::Read( void* pData, sal_Size nCount )
                 // => No! Thus read directly
                 // into target area without using the buffer
 
-                eIOMode = STREAM_IO_DONTKNOW;
+                bIoRead = false;
 
                 SeekPos( nBufFilePos + nBufActualPos );
                 nBufActualLen = 0;
@@ -1322,10 +1312,10 @@ sal_Size SvStream::Read( void* pData, sal_Size nCount )
             }
         }
     }
-    bIsEof = sal_False;
+    bIsEof = false;
     nBufFree = nBufActualLen - nBufActualPos;
     if( nCount != nSaveCount && nError != ERRCODE_IO_PENDING )
-        bIsEof = sal_True;
+        bIsEof = true;
     if( nCount == nSaveCount && nError == ERRCODE_IO_PENDING )
         nError = ERRCODE_NONE;
     return nCount;
@@ -1353,7 +1343,8 @@ sal_Size SvStream::Write( const void* pData, sal_Size nCount )
         return nCount;
     }
 
-    eIOMode = STREAM_IO_WRITE;
+    bIoRead = false;
+    bIoWrite = true;
     if( nCount <= (sal_Size)(nBufSize - nBufActualPos) )
     {
         memcpy( pBufPos, pData, (size_t)nCount );
@@ -1363,7 +1354,7 @@ sal_Size SvStream::Write( const void* pData, sal_Size nCount )
             nBufActualLen = nBufActualPos;
 
         pBufPos += nCount;
-        bIsDirty = sal_True;
+        bIsDirty = true;
     }
     else
     {
@@ -1375,13 +1366,13 @@ sal_Size SvStream::Write( const void* pData, sal_Size nCount )
                 CryptAndWriteBuffer( pRWBuf, (sal_Size)nBufActualLen );
             else
                 PutData( pRWBuf, nBufActualLen );
-            bIsDirty = sal_False;
+            bIsDirty = false;
         }
 
         // Does data block fit into buffer?
         if( nCount > nBufSize )
         {
-            eIOMode = STREAM_IO_DONTKNOW;
+            bIoWrite = false;
             nBufFilePos += nBufActualPos;
             nBufActualLen = 0;
             nBufActualPos = 0;
@@ -1403,7 +1394,7 @@ sal_Size SvStream::Write( const void* pData, sal_Size nCount )
             nBufActualPos = (sal_uInt16)nCount;
             pBufPos = pRWBuf + nCount;
             nBufActualLen = (sal_uInt16)nCount;
-            bIsDirty = sal_True;
+            bIsDirty = true;
         }
     }
     nBufFree = nBufSize - nBufActualPos;
@@ -1412,9 +1403,8 @@ sal_Size SvStream::Write( const void* pData, sal_Size nCount )
 
 sal_Size SvStream::Seek( sal_Size nFilePos )
 {
-    eIOMode = STREAM_IO_DONTKNOW;
-
-    bIsEof = sal_False;
+    bIoRead = bIoWrite = false;
+    bIsEof = false;
     if( !pRWBuf )
     {
         nBufFilePos = SeekPos( nFilePos );
@@ -1439,7 +1429,7 @@ sal_Size SvStream::Seek( sal_Size nFilePos )
                 CryptAndWriteBuffer( pRWBuf, nBufActualLen );
             else
                 PutData( pRWBuf, nBufActualLen );
-            bIsDirty = sal_False;
+            bIsDirty = false;
         }
         nBufActualLen = 0;
         nBufActualPos = 0;
@@ -1477,7 +1467,7 @@ void SvStream::Flush()
         else
             if( PutData( pRWBuf, nBufActualLen ) != nBufActualLen )
                 SetError( SVSTREAM_WRITE_ERROR );
-        bIsDirty = sal_False;
+        bIsDirty = false;
     }
     if( bIsWritable )
         FlushData();
@@ -1492,7 +1482,7 @@ void SvStream::RefreshBuffer()
             CryptAndWriteBuffer( pRWBuf, (sal_Size)nBufActualLen );
         else
             PutData( pRWBuf, nBufActualLen );
-        bIsDirty = sal_False;
+        bIsDirty = false;
     }
     SeekPos( nBufFilePos );
     nBufActualLen = (sal_uInt16)GetData( pRWBuf, nBufSize );
@@ -1500,8 +1490,8 @@ void SvStream::RefreshBuffer()
         nError = ERRCODE_NONE;
     if( nCryptMask )
         EncryptBuffer(pRWBuf, (sal_Size)nBufActualLen);
-    bIsConsistent = sal_True;
-    eIOMode = STREAM_IO_DONTKNOW;
+    bIsConsistent = true;
+    bIoRead = bIoWrite = false;
 }
 
 SvStream& SvStream::WriteNumber(sal_Int32 nInt32)
@@ -1554,7 +1544,7 @@ sal_Size SvStream::CryptAndWriteBuffer( const void* pStart, sal_Size nLen)
     return nCount;
 }
 
-sal_Bool SvStream::EncryptBuffer(void* pStart, sal_Size nLen)
+bool SvStream::EncryptBuffer(void* pStart, sal_Size nLen)
 {
     unsigned char* pTemp = (unsigned char*)pStart;
     unsigned char nMask = nCryptMask;
@@ -1566,7 +1556,7 @@ sal_Bool SvStream::EncryptBuffer(void* pStart, sal_Size nLen)
         aCh ^= nMask;
         *pTemp = aCh;
     }
-    return sal_True;
+    return true;
 }
 
 static unsigned char implGetCryptMask(const sal_Char* pStr, sal_Int32 nLen, long nVersion)
@@ -1623,7 +1613,7 @@ void SvStream::SyncSysStream()
     SeekPos( Tell() );
 }
 
-sal_Bool SvStream::SetStreamSize( sal_Size nSize )
+bool SvStream::SetStreamSize( sal_Size nSize )
 {
 #ifdef DBG_UTIL
     sal_Size nFPos = Tell();
@@ -1633,7 +1623,7 @@ sal_Bool SvStream::SetStreamSize( sal_Size nSize )
     SetSize( nSize );
     SetBufferSize( nBuf );
     DBG_ASSERT(Tell()==nFPos,"SetStreamSize failed");
-    return (sal_Bool)(nError == 0);
+    return (nError == 0);
 }
 
 SvStream& endl( SvStream& rStr )
@@ -1676,11 +1666,11 @@ SvMemoryStream::SvMemoryStream( void* pBuffer, sal_Size bufSize,
                                 StreamMode eMode )
 {
     if( eMode & STREAM_WRITE )
-        bIsWritable = sal_True;
+        bIsWritable = true;
     else
-        bIsWritable = sal_False;
+        bIsWritable = false;
     nEndOfData  = bufSize;
-    bOwnsData   = sal_False;
+    bOwnsData   = false;
     pBuf        = (sal_uInt8 *) pBuffer;
     nResize     = 0L;
     nSize       = bufSize;
@@ -1690,8 +1680,8 @@ SvMemoryStream::SvMemoryStream( void* pBuffer, sal_Size bufSize,
 
 SvMemoryStream::SvMemoryStream( sal_Size nInitSize, sal_Size nResizeOffset )
 {
-    bIsWritable = sal_True;
-    bOwnsData   = sal_True;
+    bIsWritable = true;
+    bOwnsData   = true;
     nEndOfData  = 0L;
     nResize     = nResizeOffset;
     nPos        = 0;
@@ -1725,7 +1715,7 @@ sal_uInt16 SvMemoryStream::IsA() const
 }
 
 void* SvMemoryStream::SetBuffer( void* pNewBuf, sal_Size nCount,
-                                 sal_Bool bOwnsDat, sal_Size nEOF )
+                                 bool bOwnsDat, sal_Size nEOF )
 {
     void* pResult;
     SetBufferSize( 0 ); // Buffering in der Basisklasse initialisieren
@@ -1865,16 +1855,16 @@ void SvMemoryStream::ResetError()
     SvStream::ClearError();
 }
 
-sal_Bool SvMemoryStream::AllocateMemory( sal_Size nNewSize )
+bool SvMemoryStream::AllocateMemory( sal_Size nNewSize )
 {
     pBuf = new sal_uInt8[nNewSize];
     return( pBuf != 0 );
 }
 
 // (using Bozo algorithm)
-sal_Bool SvMemoryStream::ReAllocateMemory( long nDiff )
+bool SvMemoryStream::ReAllocateMemory( long nDiff )
 {
-    sal_Bool bRetVal    = sal_False;
+    bool bRetVal    = false;
     long nTemp      = (long)nSize;
     nTemp           += nDiff;
     sal_Size nNewSize  = (sal_Size)nTemp;
@@ -1885,7 +1875,7 @@ sal_Bool SvMemoryStream::ReAllocateMemory( long nDiff )
 
         if( pNewBuf )
         {
-            bRetVal = sal_True; // Success!
+            bRetVal = true; // Success!
             if( nNewSize < nSize )      // Are we shrinking?
             {
                 memcpy( pNewBuf, pBuf, (size_t)nNewSize );
@@ -1907,7 +1897,7 @@ sal_Bool SvMemoryStream::ReAllocateMemory( long nDiff )
     }
     else
     {
-        bRetVal = sal_True;
+        bRetVal = true;
         FreeMemory();
         pBuf = 0;
         nSize = 0;

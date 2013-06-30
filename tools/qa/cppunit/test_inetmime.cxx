@@ -18,6 +18,7 @@
  */
 
 #include <sal/types.h>
+#include <rtl/ustring.hxx>
 #include "cppunit/TestAssert.h"
 #include "cppunit/TestFixture.h"
 #include "cppunit/extensions/HelperMacros.h"

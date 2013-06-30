@@ -40,7 +40,7 @@ ImpSvGlobalName::ImpSvGlobalName( Empty )
     memset( szData, 0, sizeof( szData ) );
 }
 
-sal_Bool ImpSvGlobalName::operator == ( const ImpSvGlobalName & rObj ) const
+bool ImpSvGlobalName::operator == ( const ImpSvGlobalName & rObj ) const
 {
     return !memcmp( szData, rObj.szData, sizeof( szData ) );
 }
@@ -157,14 +157,14 @@ SvStream& operator >> ( SvStream& rStr, SvGlobalName & rObj )
 }
 
 
-sal_Bool SvGlobalName::operator < ( const SvGlobalName & rObj ) const
+bool SvGlobalName::operator < ( const SvGlobalName & rObj ) const
 {
     int n = memcmp( pImp->szData +6, rObj.pImp->szData +6,
                     sizeof( pImp->szData ) -6);
     if( n < 0 )
-        return sal_True;
+        return true;
     else if( n > 0 )
-        return sal_False;
+        return false;
 
     sal_uInt16 Data2_a;
     memcpy(&Data2_a, pImp->szData+4, sizeof(sal_uInt16));
@@ -173,7 +173,7 @@ sal_Bool SvGlobalName::operator < ( const SvGlobalName & rObj ) const
     memcpy(&Data2_b, rObj.pImp->szData+4, sizeof(sal_uInt16));
 
     if( Data2_a < Data2_b )
-        return sal_True;
+        return true;
     else if( Data2_a == Data2_b )
     {
         sal_uInt32 Data1_a;
@@ -185,7 +185,7 @@ sal_Bool SvGlobalName::operator < ( const SvGlobalName & rObj ) const
         return Data1_a  < Data1_b;
     }
     else
-        return sal_False;
+        return false;
 
 }
 
@@ -209,7 +209,7 @@ SvGlobalName & SvGlobalName::operator += ( sal_uInt32 n )
     return *this;
 }
 
-sal_Bool SvGlobalName::operator == ( const SvGlobalName & rObj ) const
+bool SvGlobalName::operator == ( const SvGlobalName & rObj ) const
 {
     return *pImp == *rObj.pImp;
 }
@@ -220,12 +220,12 @@ void SvGlobalName::MakeFromMemory( void * pData )
     memcpy( pImp->szData, pData, sizeof( pImp->szData ) );
 }
 
-sal_Bool SvGlobalName::MakeId( const String & rIdStr )
+bool SvGlobalName::MakeId( const OUString & rIdStr )
 {
     OString aStr(OUStringToOString(rIdStr,
         RTL_TEXTENCODING_ASCII_US));
     const sal_Char *pStr = aStr.getStr();
-    if( rIdStr.Len() == 36
+    if( rIdStr.getLength() == 36
       && '-' == pStr[ 8 ]  && '-' == pStr[ 13 ]
       && '-' == pStr[ 18 ] && '-' == pStr[ 23 ] )
     {
@@ -239,7 +239,7 @@ sal_Bool SvGlobalName::MakeId( const String & rIdStr )
                 else
                     nFirst = nFirst * 16 + (toupper( *pStr ) - 'A' + 10 );
             else
-                return sal_False;
+                return false;
             pStr++;
         }
 
@@ -253,7 +253,7 @@ sal_Bool SvGlobalName::MakeId( const String & rIdStr )
                 else
                     nSec = nSec * 16 + (sal_uInt16)(toupper( *pStr ) - 'A' + 10 );
             else
-                return sal_False;
+                return false;
             pStr++;
         }
 
@@ -267,7 +267,7 @@ sal_Bool SvGlobalName::MakeId( const String & rIdStr )
                 else
                     nThird = nThird * 16 + (sal_uInt16)(toupper( *pStr ) - 'A' + 10 );
             else
-                return sal_False;
+                return false;
             pStr++;
         }
 
@@ -282,7 +282,7 @@ sal_Bool SvGlobalName::MakeId( const String & rIdStr )
                 else
                     szRemain[i/2] = szRemain[i/2] * 16 + (sal_Int8)(toupper( *pStr ) - 'A' + 10 );
             else
-                return sal_False;
+                return false;
             pStr++;
             if( i == 3 )
                 pStr++;
@@ -293,12 +293,12 @@ sal_Bool SvGlobalName::MakeId( const String & rIdStr )
         memcpy(&pImp->szData[4], &nSec, sizeof(nSec));
         memcpy(&pImp->szData[6], &nThird, sizeof(nThird));
         memcpy(&pImp->szData[ 8 ], szRemain, 8);
-        return sal_True;
+        return true;
     }
-    return sal_False;
+    return false;
 }
 
-String SvGlobalName::GetHexName() const
+OUString SvGlobalName::GetHexName() const
 {
     OStringBuffer aHexBuffer;
 

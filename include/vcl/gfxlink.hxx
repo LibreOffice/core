@@ -23,6 +23,7 @@
 #include <vcl/dllapi.h>
 #include <tools/solar.h>
 #include <vcl/mapmod.hxx>
+#include <tools/string.hxx>
 #include <tools/stream.hxx>
 
 // -------------

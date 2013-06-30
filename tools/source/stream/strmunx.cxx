@@ -54,7 +54,7 @@ class InternalStreamLock
     InternalStreamLock( sal_Size, sal_Size, SvFileStream* );
     ~InternalStreamLock();
 public:
-    static sal_Bool LockFile( sal_Size nStart, sal_Size nEnd, SvFileStream* );
+    static bool LockFile( sal_Size nStart, sal_Size nEnd, SvFileStream* );
     static void UnlockFile( sal_Size nStart, sal_Size nEnd, SvFileStream* );
 };
 
@@ -103,24 +103,24 @@ InternalStreamLock::~InternalStreamLock()
 #endif
 }
 
-sal_Bool InternalStreamLock::LockFile( sal_Size nStart, sal_Size nEnd, SvFileStream* pStream )
+bool InternalStreamLock::LockFile( sal_Size nStart, sal_Size nEnd, SvFileStream* pStream )
 {
     osl::MutexGuard aGuard( LockMutex::get() );
     osl::DirectoryItem aItem;
     if (osl::DirectoryItem::get( pStream->GetFileName(), aItem) != osl::FileBase::E_None )
     {
         SAL_INFO("tools.stream", "Failed to lookup stream for locking");
-        return sal_True;
+        return true;
     }
 
     osl::FileStatus aStatus( osl_FileStatus_Mask_Type );
     if ( aItem.getFileStatus( aStatus ) != osl::FileBase::E_None )
     {
         SAL_INFO("tools.stream", "Failed to stat stream for locking");
-        return sal_True;
+        return true;
     }
     if( aStatus.getFileType() == osl::FileStatus::Directory )
-        return sal_True;
+        return true;
 
     InternalStreamLock* pLock = NULL;
     InternalStreamLockList &rLockList = LockList::get();
@@ -129,35 +129,35 @@ sal_Bool InternalStreamLock::LockFile( sal_Size nStart, sal_Size nEnd, SvFileStr
         pLock = rLockList[ i ];
         if( aItem.isIdenticalTo( pLock->m_aItem ) )
         {
-            sal_Bool bDenyByOptions = sal_False;
+            bool bDenyByOptions = false;
             StreamMode nLockMode = pLock->m_pStream->GetStreamMode();
             StreamMode nNewMode = pStream->GetStreamMode();
 
             if( nLockMode & STREAM_SHARE_DENYALL )
-                bDenyByOptions = sal_True;
+                bDenyByOptions = true;
             else if( ( nLockMode & STREAM_SHARE_DENYWRITE ) &&
                      ( nNewMode & STREAM_WRITE ) )
-                bDenyByOptions = sal_True;
+                bDenyByOptions = true;
             else if( ( nLockMode & STREAM_SHARE_DENYREAD ) &&
                      ( nNewMode & STREAM_READ ) )
-                bDenyByOptions = sal_True;
+                bDenyByOptions = true;
 
             if( bDenyByOptions )
             {
                 if( pLock->m_nStartPos == 0 && pLock->m_nEndPos == 0 ) // whole file is already locked
-                    return sal_False;
+                    return false;
                 if( nStart == 0 && nEnd == 0) // cannot lock whole file
-                    return sal_False;
+                    return false;
 
                 if( ( nStart < pLock->m_nStartPos && nEnd > pLock->m_nStartPos ) ||
                     ( nStart < pLock->m_nEndPos && nEnd > pLock->m_nEndPos ) )
-                    return sal_False;
+                    return false;
             }
         }
     }
     // hint: new InternalStreamLock() adds the entry to the global list
     pLock  = new InternalStreamLock( nStart, nEnd, pStream );
-    return sal_True;
+    return true;
 }
 
 void InternalStreamLock::UnlockFile( sal_Size nStart, sal_Size nEnd, SvFileStream* pStream )
@@ -294,11 +294,11 @@ static sal_uInt32 GetSvError( oslFileError nErrno )
     return nRetVal;
 }
 
-SvFileStream::SvFileStream( const String& rFileName, StreamMode nOpenMode )
+SvFileStream::SvFileStream( const OUString& rFileName, StreamMode nOpenMode )
 {
-    bIsOpen             = sal_False;
+    bIsOpen             = false;
     nLockCounter        = 0;
-    bIsWritable         = sal_False;
+    bIsWritable         = false;
     pInstanceData       = new StreamData;
 
     SetBufferSize( 1024 );
@@ -314,9 +314,9 @@ SvFileStream::SvFileStream( const String& rFileName, StreamMode nOpenMode )
 
 SvFileStream::SvFileStream()
 {
-    bIsOpen             = sal_False;
+    bIsOpen             = false;
     nLockCounter        = 0;
-    bIsWritable         = sal_False;
+    bIsWritable         = false;
     pInstanceData       = new StreamData;
     SetBufferSize( 1024 );
 }
@@ -423,12 +423,12 @@ void SvFileStream::FlushData()
     // does not exist locally
 }
 
-sal_Bool SvFileStream::LockRange( sal_Size nByteOffset, sal_Size nBytes )
+bool SvFileStream::LockRange( sal_Size nByteOffset, sal_Size nBytes )
 {
     int nLockMode = 0;
 
     if ( ! IsOpen() )
-        return sal_False;
+        return false;
 
     if ( eStreamMode & STREAM_SHARE_DENYALL )
         {
@@ -445,7 +445,7 @@ sal_Bool SvFileStream::LockRange( sal_Size nByteOffset, sal_Size nBytes )
         else
         {
             SetError(SVSTREAM_LOCKING_VIOLATION);
-            return sal_False;
+            return false;
         }
         }
 
@@ -458,7 +458,7 @@ sal_Bool SvFileStream::LockRange( sal_Size nByteOffset, sal_Size nBytes )
         }
 
     if (!nLockMode)
-        return sal_True;
+        return true;
 
     if( ! InternalStreamLock::LockFile( nByteOffset, nByteOffset+nBytes, this ) )
     {
@@ -466,33 +466,33 @@ sal_Bool SvFileStream::LockRange( sal_Size nByteOffset, sal_Size nBytes )
         fprintf( stderr, "InternalLock on %s [ %ld ... %ld ] failed\n",
                  OUStringToOString(aFilename, osl_getThreadTextEncoding()).getStr(), nByteOffset, nByteOffset+nBytes );
 #endif
-        return sal_False;
+        return false;
     }
 
-    return sal_True;
+    return true;
 }
 
-sal_Bool SvFileStream::UnlockRange( sal_Size nByteOffset, sal_Size nBytes )
+bool SvFileStream::UnlockRange( sal_Size nByteOffset, sal_Size nBytes )
 {
     if ( ! IsOpen() )
-        return sal_False;
+        return false;
 
     InternalStreamLock::UnlockFile( nByteOffset, nByteOffset+nBytes, this );
 
-    return sal_True;
+    return true;
 }
 
-sal_Bool SvFileStream::LockFile()
+bool SvFileStream::LockFile()
 {
   return LockRange( 0UL, 0UL );
 }
 
-sal_Bool SvFileStream::UnlockFile()
+bool SvFileStream::UnlockFile()
 {
     return UnlockRange( 0UL, 0UL );
 }
 
-void SvFileStream::Open( const String& rFilename, StreamMode nOpenMode )
+void SvFileStream::Open( const OUString& rFilename, StreamMode nOpenMode )
 {
     sal_uInt32 uFlags;
     oslFileHandle nHandleTmp;
@@ -581,15 +581,15 @@ void SvFileStream::Open( const String& rFilename, StreamMode nOpenMode )
     if ( rc == osl_File_E_None )
     {
         pInstanceData->rHandle = nHandleTmp;
-        bIsOpen = sal_True;
+        bIsOpen = true;
         if ( uFlags & osl_File_OpenFlag_Write )
-            bIsWritable = sal_True;
+            bIsWritable = true;
 
         if ( !LockFile() ) // whole file
         {
             rc = osl_closeFile( nHandleTmp );
-            bIsOpen = sal_False;
-            bIsWritable = sal_False;
+            bIsOpen = false;
+            bIsWritable = false;
             pInstanceData->rHandle = 0;
         }
     }
@@ -615,8 +615,8 @@ void SvFileStream::Close()
         pInstanceData->rHandle = 0;
     }
 
-    bIsOpen     = sal_False;
-    bIsWritable = sal_False;
+    bIsOpen     = false;
+    bIsWritable = false;
     SvStream::ClearBuffer();
     SvStream::ClearError();
 }

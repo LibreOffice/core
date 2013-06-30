@@ -26,6 +26,7 @@
 #include <windows.h>
 #endif
 
+#include <osl/thread.h>
 #include <tools/stream.hxx>
 
 // class FileBase
@@ -99,11 +100,11 @@ static sal_uIntPtr GetSvError( DWORD nWntError )
     return nRetVal;
 }
 
-SvFileStream::SvFileStream( const String& rFileName, StreamMode nMode )
+SvFileStream::SvFileStream( const OUString& rFileName, StreamMode nMode )
 {
-    bIsOpen             = sal_False;
+    bIsOpen             = false;
     nLockCounter        = 0;
-    bIsWritable         = sal_False;
+    bIsWritable         = false;
     pInstanceData       = new StreamData;
 
     SetBufferSize( 8192 );
@@ -117,9 +118,9 @@ SvFileStream::SvFileStream( const String& rFileName, StreamMode nMode )
 
 SvFileStream::SvFileStream()
 {
-    bIsOpen             = sal_False;
+    bIsOpen             = false;
     nLockCounter        = 0;
-    bIsWritable         = sal_False;
+    bIsWritable         = false;
     pInstanceData       = new StreamData;
 
     SetBufferSize( 8192 );
@@ -195,7 +196,7 @@ void SvFileStream::FlushData()
     }
 }
 
-sal_Bool SvFileStream::LockRange( sal_uIntPtr nByteOffset, sal_uIntPtr nBytes )
+bool SvFileStream::LockRange( sal_uIntPtr nByteOffset, sal_uIntPtr nBytes )
 {
     bool bRetVal = false;
     if( IsOpen() )
@@ -207,7 +208,7 @@ sal_Bool SvFileStream::LockRange( sal_uIntPtr nByteOffset, sal_uIntPtr nBytes )
     return bRetVal;
 }
 
-sal_Bool SvFileStream::UnlockRange( sal_uIntPtr nByteOffset, sal_uIntPtr nBytes )
+bool SvFileStream::UnlockRange( sal_uIntPtr nByteOffset, sal_uIntPtr nBytes )
 {
     bool bRetVal = false;
     if( IsOpen() )
@@ -219,28 +220,28 @@ sal_Bool SvFileStream::UnlockRange( sal_uIntPtr nByteOffset, sal_uIntPtr nBytes 
     return bRetVal;
 }
 
-sal_Bool SvFileStream::LockFile()
+bool SvFileStream::LockFile()
 {
-    sal_Bool bRetVal = sal_False;
+    bool bRetVal = false;
     if( !nLockCounter )
     {
         if( LockRange( 0L, LONG_MAX ) )
         {
             nLockCounter = 1;
-            bRetVal = sal_True;
+            bRetVal = true;
         }
     }
     else
     {
         nLockCounter++;
-        bRetVal = sal_True;
+        bRetVal = true;
     }
     return bRetVal;
 }
 
-sal_Bool SvFileStream::UnlockFile()
+bool SvFileStream::UnlockFile()
 {
-    sal_Bool bRetVal = sal_False;
+    bool bRetVal = false;
     if( nLockCounter > 0)
     {
         if( nLockCounter == 1)
@@ -248,13 +249,13 @@ sal_Bool SvFileStream::UnlockFile()
             if( UnlockRange( 0L, LONG_MAX ) )
             {
                 nLockCounter = 0;
-                bRetVal = sal_True;
+                bRetVal = true;
             }
         }
         else
         {
             nLockCounter--;
-            bRetVal = sal_True;
+            bRetVal = true;
         }
     }
     return bRetVal;
@@ -268,9 +269,9 @@ sal_Bool SvFileStream::UnlockFile()
          1             0     OPEN_EXISTING
          1             1     TRUNCATE_EXISTING
 */
-void SvFileStream::Open( const String& rFilename, StreamMode nMode )
+void SvFileStream::Open( const OUString& rFilename, StreamMode nMode )
 {
-    String aParsedFilename(rFilename);
+    OUString aParsedFilename(rFilename);
 
     SetLastError( ERROR_SUCCESS );
     Close();
@@ -371,15 +372,15 @@ void SvFileStream::Open( const String& rFilename, StreamMode nMode )
 
     if( GetLastError() != ERROR_SUCCESS )
     {
-        bIsOpen = sal_False;
+        bIsOpen = false;
         SetError(::GetSvError( GetLastError() ) );
     }
     else
     {
-        bIsOpen     = sal_True;
-        // pInstanceData->bIsEof = sal_False;
+        bIsOpen     = true;
+        // pInstanceData->bIsEof = false;
         if( nAccessMode & GENERIC_WRITE )
-            bIsWritable = sal_True;
+            bIsWritable = true;
     }
     SetErrorMode( nOldErrorMode );
 }
@@ -396,9 +397,9 @@ void SvFileStream::Close()
         Flush();
         CloseHandle( pInstanceData->hFile );
     }
-    bIsOpen     = sal_False;
+    bIsOpen     = false;
     nLockCounter= 0;
-    bIsWritable = sal_False;
+    bIsWritable = false;
     SvStream::ClearBuffer();
     SvStream::ClearError();
 }
@@ -414,7 +415,7 @@ void SvFileStream::SetSize( sal_uIntPtr nSize )
 
     if( IsOpen() )
     {
-        int bError = sal_False;
+        int bError = false;
         HANDLE hFile = pInstanceData->hFile;
         sal_uIntPtr nOld = SetFilePointer( hFile, 0L, NULL, FILE_CURRENT );
         if( nOld != 0xffffffff )
@@ -423,10 +424,10 @@ void SvFileStream::SetSize( sal_uIntPtr nSize )
             {
                 bool bSucc = SetEndOfFile( hFile );
                 if( !bSucc )
-                    bError = sal_True;
+                    bError = true;
             }
             if( SetFilePointer( hFile,nOld,NULL,FILE_BEGIN ) == 0xffffffff)
-                bError = sal_True;
+                bError = true;
         }
         if( bError )
             SetError(::GetSvError( GetLastError() ) );

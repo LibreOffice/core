@@ -24,6 +24,7 @@
 #include <typeinfo>
 #include <cppuhelper/weakref.hxx>
 #include <vcl/mapmod.hxx>
+#include <tools/string.hxx>
 #include <tools/weakbase.hxx>
 #include <svl/lstner.hxx>
 #include <vcl/timer.hxx>

@@ -49,13 +49,13 @@ private:
     TOOLS_DLLPRIVATE void Normalize();
     TOOLS_DLLPRIVATE void Mult(BigInt const &, sal_uInt16);
     TOOLS_DLLPRIVATE void Div(sal_uInt16, sal_uInt16 &);
-    TOOLS_DLLPRIVATE sal_Bool IsLess(BigInt const &) const;
+    TOOLS_DLLPRIVATE bool IsLess(BigInt const &) const;
     TOOLS_DLLPRIVATE void AddLong(BigInt &, BigInt &);
     TOOLS_DLLPRIVATE void SubLong(BigInt &, BigInt &);
     TOOLS_DLLPRIVATE void MultLong(BigInt const &, BigInt &) const;
     TOOLS_DLLPRIVATE void DivLong(BigInt const &, BigInt &) const;
     TOOLS_DLLPRIVATE void ModLong(BigInt const &, BigInt &) const;
-    TOOLS_DLLPRIVATE sal_Bool ABS_IsLess(BigInt const &) const;
+    TOOLS_DLLPRIVATE bool ABS_IsLess(BigInt const &) const;
 
 public:
                     BigInt();
@@ -79,18 +79,18 @@ public:
     operator        sal_uInt16() const;
     operator        sal_uIntPtr() const;
 
-    void            Set( sal_Bool bSet ) { bIsSet = bSet; }
-    OUString   GetString() const;
+    void            Set( bool bSet ) { bIsSet = bSet ? sal_True : sal_False; }
+    OUString        GetString() const;
 
-    sal_Bool        IsSet() const { return bIsSet; }
-    sal_Bool        IsNeg() const;
-    sal_Bool        IsZero() const;
-    sal_Bool        IsOne() const;
-    sal_Bool        IsLong() const { return !bIsBig; }
+    bool        IsSet() const { return (bool)bIsSet; }
+    bool        IsNeg() const;
+    bool        IsZero() const;
+    bool        IsOne() const;
+    bool        IsLong() const { return !((bool)bIsBig); }
     void            Abs();
 #ifdef _TLBIGINT_INT64
-    sal_Bool        INT64 ( SbxINT64  *p ) const;
-    sal_Bool        UINT64( SbxUINT64 *p ) const;
+    bool        INT64 ( SbxINT64  *p ) const;
+    bool        UINT64( SbxUINT64 *p ) const;
 #endif
 
     BigInt&         operator  =( const BigInt& rVal );
@@ -111,12 +111,12 @@ public:
     friend inline   BigInt operator /( const BigInt& rVal1, const BigInt& rVal2 );
     friend inline   BigInt operator %( const BigInt& rVal1, const BigInt& rVal2 );
 
-    TOOLS_DLLPUBLIC friend          sal_Bool operator==( const BigInt& rVal1, const BigInt& rVal2 );
-    friend inline   sal_Bool operator!=( const BigInt& rVal1, const BigInt& rVal2 );
-    TOOLS_DLLPUBLIC friend          sal_Bool operator< ( const BigInt& rVal1, const BigInt& rVal2 );
-    TOOLS_DLLPUBLIC friend          sal_Bool operator> ( const BigInt& rVal1, const BigInt& rVal2 );
-    friend inline   sal_Bool operator<=( const BigInt& rVal1, const BigInt& rVal2 );
-    friend inline   sal_Bool operator>=( const BigInt& rVal1, const BigInt& rVal2 );
+    TOOLS_DLLPUBLIC friend          bool operator==( const BigInt& rVal1, const BigInt& rVal2 );
+    friend inline   bool operator!=( const BigInt& rVal1, const BigInt& rVal2 );
+    TOOLS_DLLPUBLIC friend          bool operator< ( const BigInt& rVal1, const BigInt& rVal2 );
+    TOOLS_DLLPUBLIC friend          bool operator> ( const BigInt& rVal1, const BigInt& rVal2 );
+    friend inline   bool operator<=( const BigInt& rVal1, const BigInt& rVal2 );
+    friend inline   bool operator>=( const BigInt& rVal1, const BigInt& rVal2 );
 
     friend class Fraction;
 };
@@ -224,15 +224,15 @@ inline BigInt& BigInt::operator =( const sal_uInt16 nValue )
     return *this;
 }
 
-inline sal_Bool BigInt::IsNeg() const
+inline bool BigInt::IsNeg() const
 {
     if ( !bIsBig )
         return (nVal < 0);
     else
-        return (sal_Bool)bIsNeg;
+        return (bool)bIsNeg;
 }
 
-inline sal_Bool BigInt::IsZero() const
+inline bool BigInt::IsZero() const
 {
     if ( bIsBig )
         return sal_False;
@@ -240,7 +240,7 @@ inline sal_Bool BigInt::IsZero() const
         return (nVal == 0);
 }
 
-inline sal_Bool BigInt::IsOne() const
+inline bool BigInt::IsOne() const
 {
     if ( bIsBig )
         return sal_False;
@@ -291,17 +291,17 @@ inline BigInt operator%( const BigInt &rVal1, const BigInt &rVal2 )
     return aErg;
 }
 
-inline sal_Bool operator!=( const BigInt& rVal1, const BigInt& rVal2 )
+inline bool operator!=( const BigInt& rVal1, const BigInt& rVal2 )
 {
     return !(rVal1 == rVal2);
 }
 
-inline sal_Bool operator<=( const BigInt& rVal1, const BigInt& rVal2 )
+inline bool operator<=( const BigInt& rVal1, const BigInt& rVal2 )
 {
     return !( rVal1 > rVal2);
 }
 
-inline sal_Bool operator>=( const BigInt& rVal1, const BigInt& rVal2 )
+inline bool operator>=( const BigInt& rVal1, const BigInt& rVal2 )
 {
     return !(rVal1 < rVal2);
 }

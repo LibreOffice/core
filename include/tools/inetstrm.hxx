@@ -21,7 +21,7 @@
 
 #include "tools/toolsdllapi.h"
 #include <sal/types.h>
-#include <tools/string.hxx>
+#include <rtl/ustring.hxx>
 
 class INetMessage;
 class INetMIMEMessage;
@@ -84,7 +84,7 @@ enum INetMessageStreamState
 class INetMessageIStream : public INetIStream
 {
     INetMessage    *pSourceMsg;
-    sal_Bool            bHeaderGenerated;
+    bool            bHeaderGenerated;
 
     sal_uIntPtr           nBufSiz;
     sal_Char       *pBuffer;
@@ -112,15 +112,15 @@ public:
     INetMessage *GetSourceMessage (void) const { return pSourceMsg; }
     void SetSourceMessage (INetMessage *pMsg) { pSourceMsg = pMsg; }
 
-    void GenerateHeader (sal_Bool bGen = sal_True) { bHeaderGenerated = !bGen; }
-    sal_Bool IsHeaderGenerated (void) const { return bHeaderGenerated; }
+    void GenerateHeader (bool bGen = true) { bHeaderGenerated = !bGen; }
+    bool IsHeaderGenerated (void) const { return bHeaderGenerated; }
 };
 
 /// Message Parser Interface.
 class INetMessageOStream : public INetOStream
 {
     INetMessage            *pTargetMsg;
-    sal_Bool                    bHeaderParsed;
+    bool                    bHeaderParsed;
 
     INetMessageStreamState  eOState;
 
@@ -142,8 +142,8 @@ public:
     INetMessage *GetTargetMessage (void) const { return pTargetMsg; }
     void SetTargetMessage (INetMessage *pMsg) { pTargetMsg = pMsg; }
 
-    void ParseHeader (sal_Bool bParse = sal_True) { bHeaderParsed = !bParse; }
-    sal_Bool IsHeaderParsed (void) const { return bHeaderParsed; }
+    void ParseHeader (bool bParse = true) { bHeaderParsed = !bParse; }
+    bool IsHeaderParsed (void) const { return bHeaderParsed; }
 };
 
 class INetMessageIOStream
@@ -182,7 +182,7 @@ class TOOLS_DLLPUBLIC INetMIMEMessageStream : public INetMessageIOStream
     SvMemoryStream        *pMsgBuffer;
 
     static INetMessageEncoding GetMsgEncoding (
-        const String& rContentType);
+        const OUString& rContentType);
 
     // Not implemented.
     INetMIMEMessageStream (const INetMIMEMessageStream& rStrm);

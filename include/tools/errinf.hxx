@@ -23,9 +23,9 @@
 #define _EINF_HXX
 
 #include <limits.h>
+#include <rtl/ustring.hxx>
 #include <tools/rtti.hxx>
 #include <tools/errcode.hxx>
-#include <tools/string.hxx>
 #include "tools/toolsdllapi.h"
 
 class EDcr_Impl;
@@ -127,7 +127,7 @@ public:
                             ErrorContext(Window *pWin=0);
     virtual                 ~ErrorContext();
 
-    virtual sal_Bool        GetString( sal_uIntPtr nErrId, OUString& rCtxStr ) = 0;
+    virtual bool            GetString( sal_uIntPtr nErrId, OUString& rCtxStr ) = 0;
     Window*                 GetParent() { return pWin; }
 
     static ErrorContext*    GetContext();
@@ -148,10 +148,10 @@ private:
 
     static sal_uInt16   HandleError_Impl( sal_uIntPtr lId,
                               sal_uInt16 nFlags,
-                              sal_Bool bJustCreateString,
+                              bool bJustCreateString,
                               OUString & rError);
 protected:
-    virtual sal_Bool    CreateString( const ErrorInfo *,
+    virtual bool        CreateString( const ErrorInfo *,
                               OUString &, sal_uInt16& nMask ) const = 0;
 
 public:
@@ -159,7 +159,7 @@ public:
     virtual             ~ErrorHandler();
 
     static sal_uInt16   HandleError ( sal_uIntPtr lId, sal_uInt16 nMask = USHRT_MAX );
-    static sal_Bool     GetErrorString( sal_uIntPtr lId, OUString& rStr );
+    static bool         GetErrorString( sal_uIntPtr lId, OUString& rStr );
 
     static void         RegisterDisplay( BasicDisplayErrorFunc* );
     static void         RegisterDisplay( WindowDisplayErrorFunc* );
@@ -168,7 +168,7 @@ public:
 class TOOLS_DLLPUBLIC SimpleErrorHandler : private ErrorHandler
 {
 protected:
-    virtual sal_Bool    CreateString( const ErrorInfo*, OUString &,
+    virtual bool        CreateString( const ErrorInfo*, OUString &,
                                       sal_uInt16 &nMask ) const;
 
 public:

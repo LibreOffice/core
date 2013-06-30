@@ -37,7 +37,7 @@ static sal_uInt16 aDaysInMonth[12] = { 31, 28, 31, 30, 31, 30,
 
 #define MAX_DAYS    3636532
 
-inline sal_Bool ImpIsLeapYear( sal_uInt16 nYear )
+inline bool ImpIsLeapYear( sal_uInt16 nYear )
 {
     return ( ( ((nYear % 4) == 0) && ((nYear % 100) != 0) ) ||
              ( (nYear % 400) == 0 ) );
@@ -87,7 +87,7 @@ static void DaysToDate( long nDays,
 {
     long    nTempDays;
     long    i = 0;
-    sal_Bool    bCalc;
+    bool    bCalc;
 
     do
     {
@@ -95,11 +95,11 @@ static void DaysToDate( long nDays,
         rYear = (sal_uInt16)((nTempDays / 365) - i);
         nTempDays -= ((sal_uIntPtr)rYear-1) * 365;
         nTempDays -= ((rYear-1) / 4) - ((rYear-1) / 100) + ((rYear-1) / 400);
-        bCalc = sal_False;
+        bCalc = false;
         if ( nTempDays < 1 )
         {
             i++;
-            bCalc = sal_True;
+            bCalc = true;
         }
         else
         {
@@ -108,7 +108,7 @@ static void DaysToDate( long nDays,
                 if ( (nTempDays != 366) || !ImpIsLeapYear( rYear ) )
                 {
                     i--;
-                    bCalc = sal_True;
+                    bCalc = true;
                 }
             }
         }
@@ -293,33 +293,33 @@ sal_uInt16 Date::GetDaysInMonth() const
     return ImplDaysInMonth( nMonth, nYear );
 }
 
-sal_Bool Date::IsLeapYear() const
+bool Date::IsLeapYear() const
 {
     sal_uInt16 nYear = GetYear();
     return ImpIsLeapYear( nYear );
 }
 
-sal_Bool Date::IsValidAndGregorian() const
+bool Date::IsValidAndGregorian() const
 {
     sal_uInt16 nDay   = GetDay();
     sal_uInt16 nMonth = GetMonth();
     sal_uInt16 nYear  = GetYear();
 
     if ( !nMonth || (nMonth > 12) )
-        return sal_False;
+        return false;
     if ( !nDay || (nDay > ImplDaysInMonth( nMonth, nYear )) )
-        return sal_False;
+        return false;
     else if ( nYear <= 1582 )
     {
         if ( nYear < 1582 )
-            return sal_False;
+            return false;
         else if ( nMonth < 10 )
-            return sal_False;
+            return false;
         else if ( (nMonth == 10) && (nDay < 15) )
-            return sal_False;
+            return false;
     }
 
-    return sal_True;
+    return true;
 }
 
 bool Date::IsValidDate() const

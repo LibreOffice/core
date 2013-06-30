@@ -96,13 +96,13 @@ public:
 
     sal_IntPtr      Call( void* pCaller ) const;
 
-    sal_Bool        IsSet() const;
-    sal_Bool        operator !() const;
+    bool            IsSet() const;
+    bool            operator !() const;
 
-    sal_Bool        operator==( const Link& rLink ) const;
-    sal_Bool        operator!=( const Link& rLink ) const
+    bool            operator==( const Link& rLink ) const;
+    bool            operator!=( const Link& rLink ) const
                     { return !(Link::operator==( rLink )); }
-    sal_Bool        operator<( const Link& rLink ) const
+    bool            operator<( const Link& rLink ) const
                     { return ((sal_uIntPtr)rLink.pFunc < (sal_uIntPtr)pFunc); }
 };
 
@@ -123,20 +123,20 @@ inline sal_IntPtr Link::Call(void *pCaller) const
     return pFunc ? (*pFunc)(pInst, pCaller) : 0;
 }
 
-inline sal_Bool Link::IsSet() const
+inline bool Link::IsSet() const
 {
     if ( pFunc )
-        return sal_True;
+        return true;
     else
-        return sal_False;
+        return false;
 }
 
-inline sal_Bool Link::operator !() const
+inline bool Link::operator !() const
 {
     if ( !pFunc )
-        return sal_True;
+        return true;
     else
-        return sal_False;
+        return false;
 }
 
 #endif

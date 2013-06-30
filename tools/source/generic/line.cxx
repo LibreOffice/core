@@ -30,48 +30,48 @@ double Line::GetLength() const
     return hypot( maStart.X() - maEnd.X(), maStart.Y() - maEnd.Y() );
 }
 
-sal_Bool Line::Intersection( const Line& rLine, Point& rIntersection ) const
+bool Line::Intersection( const Line& rLine, Point& rIntersection ) const
 {
     double  fX, fY;
-    sal_Bool    bRet;
+    bool    bRet;
 
     if( Intersection( rLine, fX, fY ) )
     {
         rIntersection.X() = FRound( fX );
         rIntersection.Y() = FRound( fY );
-        bRet = sal_True;
+        bRet = true;
     }
     else
-        bRet = sal_False;
+        bRet = false;
 
     return bRet;
 }
 
-sal_Bool Line::Intersection( const Line& rLine, double& rIntersectionX, double& rIntersectionY ) const
+bool Line::Intersection( const Line& rLine, double& rIntersectionX, double& rIntersectionY ) const
 {
     const double    fAx = maEnd.X() - maStart.X();
     const double    fAy = maEnd.Y() - maStart.Y();
     const double    fBx = rLine.maStart.X() - rLine.maEnd.X();
     const double    fBy = rLine.maStart.Y() - rLine.maEnd.Y();
     const double    fDen = fAy * fBx - fAx * fBy;
-    sal_Bool            bOk = sal_False;
+    bool            bOk = false;
 
     if( fDen != 0. )
     {
         const double    fCx = maStart.X() - rLine.maStart.X();
         const double    fCy = maStart.Y() - rLine.maStart.Y();
         const double    fA = fBy * fCx - fBx * fCy;
-        const sal_Bool      bGreater = ( fDen > 0. );
+        const bool      bGreater = ( fDen > 0. );
 
-        bOk = sal_True;
+        bOk = true;
 
         if ( bGreater )
         {
             if ( ( fA < 0. ) || ( fA > fDen ) )
-                bOk = sal_False;
+                bOk = false;
         }
         else if ( ( fA > 0. ) || ( fA < fDen ) )
-            bOk = sal_False;
+            bOk = false;
 
         if ( bOk )
         {
@@ -80,10 +80,10 @@ sal_Bool Line::Intersection( const Line& rLine, double& rIntersectionX, double& 
             if ( bGreater )
             {
                 if ( ( fB < 0. ) || ( fB > fDen ) )
-                    bOk = sal_False;
+                    bOk = false;
             }
             else if ( ( fB > 0. ) || ( fB < fDen ) )
-                bOk = sal_False;
+                bOk = false;
 
             if( bOk )
             {

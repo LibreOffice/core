@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <tools/string.hxx>
 #include <sot/object.hxx>
 #include <sot/factory.hxx>
 

@@ -20,6 +20,7 @@
 #include <cstddef>
 #include <limits>
 
+#include <rtl/ustring.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/tencinfo.h>
 #include <tools/inetmime.hxx>

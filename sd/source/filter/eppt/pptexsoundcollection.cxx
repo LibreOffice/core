@@ -20,6 +20,7 @@
 #include <pptexsoundcollection.hxx>
 #include "epptdef.hxx"
 #include <tools/urlobj.hxx>
+#include <tools/string.hxx>
 #include <ucbhelper/content.hxx>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/proptypehlp.hxx>
@@ -56,9 +57,11 @@ OUString ExSoundEntry::ImplGetName() const
 OUString ExSoundEntry::ImplGetExtension() const
 {
     INetURLObject aTmp( aSoundURL );
-    String aExtension( aTmp.GetExtension() );
-    if ( aExtension.Len() )
-        aExtension.Insert( (sal_Unicode)'.', 0 );
+    OUString aExtension( aTmp.GetExtension() );
+    if ( !aExtension.isEmpty() )
+    {
+        aExtension = "." + aExtension;
+    }
     return aExtension;
 }
 

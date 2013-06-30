@@ -18,6 +18,7 @@
  */
 
 #include <sal/types.h>
+#include <osl/thread.h>
 #include <tools/datetime.hxx>
 #include <tools/inetmime.hxx>
 #include <tools/inetmsg.hxx>
@@ -84,7 +85,7 @@ void INetMessage::SetHeaderField_Impl (
     const OUString &rValue,
     sal_uIntPtr &rnIndex)
 {
-    INetMIMEStringOutputSink aSink (0, STRING_MAXLEN);
+    INetMIMEStringOutputSink aSink (0, 32767); /* weird the mime standard says that aline MUST not be longeur that 998 */
     INetMIME::writeHeaderFieldBody (
         aSink, eType, rValue, osl_getThreadTextEncoding(), false);
     SetHeaderField_Impl (

@@ -138,11 +138,11 @@ public:
 
     void                Merge( const Color& rMergeColor, sal_uInt8 cTransparency );
 
-    sal_Bool            IsRGBEqual( const Color& rColor ) const;
+    bool                IsRGBEqual( const Color& rColor ) const;
 
     // comparison with luminance thresholds
-    sal_Bool            IsDark()    const;
-    sal_Bool            IsBright()  const;
+    bool                IsDark()    const;
+    bool                IsBright()  const;
 
     // color space conversion tools
     // the range for h/s/b is:
@@ -152,13 +152,13 @@ public:
     static ColorData    HSBtoRGB( sal_uInt16 nHue, sal_uInt16 nSat, sal_uInt16 nBri );
     void                RGBtoHSB( sal_uInt16& nHue, sal_uInt16& nSat, sal_uInt16& nBri ) const;
 
-    sal_Bool            operator==( const Color& rColor ) const
-                        { return (mnColor == rColor.mnColor); }
-    sal_Bool            operator!=( const Color& rColor ) const
-                        { return !(Color::operator==( rColor )); }
+    bool                operator==( const Color& rColor ) const
+                            { return (mnColor == rColor.mnColor); }
+    bool                operator!=( const Color& rColor ) const
+                            { return !(Color::operator==( rColor )); }
 
-    SvStream&           Read( SvStream& rIStm, sal_Bool bNewFormat = sal_True );
-    SvStream&           Write( SvStream& rOStm, sal_Bool bNewFormat = sal_True );
+    SvStream&           Read( SvStream& rIStm, bool bNewFormat = true );
+    SvStream&           Write( SvStream& rOStm, bool bNewFormat = true );
 
     TOOLS_DLLPUBLIC friend SvStream&    operator>>( SvStream& rIStream, Color& rColor );
     TOOLS_DLLPUBLIC friend SvStream&    operator<<( SvStream& rOStream, const Color& rColor );
@@ -191,7 +191,7 @@ inline void Color::SetTransparency( sal_uInt8 nTransparency )
     mnColor |= ((sal_uInt32)nTransparency)<<24;
 }
 
-inline sal_Bool Color::IsRGBEqual( const Color& rColor ) const
+inline bool Color::IsRGBEqual( const Color& rColor ) const
 {
     return (COLORDATA_RGB( mnColor ) == COLORDATA_RGB( rColor.mnColor ));
 }

@@ -21,6 +21,7 @@
 #define _SOT_FACTORY_HXX
 
 #include <tools/globname.hxx>
+#include <tools/string.hxx>
 #include <tools/rtti.hxx>
 #include "sot/sotdllapi.h"
 #include <vector>
