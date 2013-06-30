@@ -506,7 +506,13 @@ void RTFDocumentImpl::sectBreak(bool bFinal = false)
     bool bNeedSect = m_bNeedSect;
     // If there is no paragraph in this section, then insert a dummy one, as required by Writer
     if (m_bNeedPar)
+    {
+        // sometimes the rtf file has \sect at the end (see fdo#39001)
+        // in this case, there shouldn't be a new page
+        if (bFinal)
+            return;
         dispatchSymbol(RTF_PAR);
+    }
     // It's allowed to not have a non-table paragraph at the end of an RTF doc, add it now if required.
     if (m_bNeedFinalPar && bFinal)
     {
