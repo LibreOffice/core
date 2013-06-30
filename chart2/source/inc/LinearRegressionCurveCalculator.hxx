@@ -20,44 +20,33 @@
 #define CHART2_LINEARREGRESSIONCURVECALCULATOR_HXX
 
 #include "RegressionCurveCalculator.hxx"
+#include "PolynomialRegressionCurveCalculator.hxx"
 
 namespace chart
 {
 
-class LinearRegressionCurveCalculator :
-        public RegressionCurveCalculator
+class LinearRegressionCurveCalculator : public PolynomialRegressionCurveCalculator
 {
 public:
     LinearRegressionCurveCalculator();
     virtual ~LinearRegressionCurveCalculator();
 
-protected:
-    virtual OUString ImplGetRepresentation(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xNumFormatter,
-        ::sal_Int32 nNumberFormatKey ) const;
-
 private:
-    // ____ XRegressionCurveCalculator ____
-    virtual void SAL_CALL recalculateRegression(
-        const ::com::sun::star::uno::Sequence< double >& aXValues,
-        const ::com::sun::star::uno::Sequence< double >& aYValues )
-        throw (::com::sun::star::uno::RuntimeException);
-    virtual double SAL_CALL getCurveValue( double x )
-        throw (::com::sun::star::lang::IllegalArgumentException,
-               ::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::geometry::RealPoint2D > SAL_CALL getCurveValues(
+    virtual void SAL_CALL setRegressionProperties(
+        sal_Int32 aDegree,
+        sal_Bool  aForceIntercept,
+        double    aInterceptValue,
+        sal_Int32 aPeriod);
+
+    virtual com::sun::star::uno::Sequence< com::sun::star::geometry::RealPoint2D > SAL_CALL getCurveValues(
         double min,
         double max,
-        ::sal_Int32 nPointCount,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XScaling >& xScalingX,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XScaling >& xScalingY,
-        ::sal_Bool bMaySkipPointsInCalculation )
-        throw (::com::sun::star::lang::IllegalArgumentException,
-               ::com::sun::star::uno::RuntimeException);
-
-    // formula is: f(x) = m_fSlope * x + m_fIntercept
-    double m_fSlope;
-    double m_fIntercept;
+        sal_Int32 nPointCount,
+        const com::sun::star::uno::Reference< com::sun::star::chart2::XScaling >& xScalingX,
+        const com::sun::star::uno::Reference< com::sun::star::chart2::XScaling >& xScalingY,
+        sal_Bool bMaySkipPointsInCalculation )
+        throw (com::sun::star::lang::IllegalArgumentException,
+               com::sun::star::uno::RuntimeException);
 };
 
 } //  namespace chart

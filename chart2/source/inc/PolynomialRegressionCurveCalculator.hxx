@@ -36,6 +36,10 @@ protected:
         const com::sun::star::uno::Reference< com::sun::star::util::XNumberFormatter >& xNumFormatter,
         sal_Int32 nNumberFormatKey ) const;
 
+    virtual double SAL_CALL getCurveValue( double x )
+        throw (com::sun::star::lang::IllegalArgumentException,
+               com::sun::star::uno::RuntimeException);
+
 private:
     // ____ XRegressionCurveCalculator ____
     virtual void SAL_CALL recalculateRegression(
@@ -43,11 +47,7 @@ private:
         const com::sun::star::uno::Sequence< double >& aYValues )
         throw (com::sun::star::uno::RuntimeException);
 
-    virtual double SAL_CALL getCurveValue( double x )
-        throw (com::sun::star::lang::IllegalArgumentException,
-               com::sun::star::uno::RuntimeException);
-
-    virtual ::com::sun::star::uno::Sequence< com::sun::star::geometry::RealPoint2D > SAL_CALL getCurveValues(
+    virtual com::sun::star::uno::Sequence< com::sun::star::geometry::RealPoint2D > SAL_CALL getCurveValues(
         double min,
         double max,
         sal_Int32 nPointCount,
