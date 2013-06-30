@@ -26,7 +26,7 @@ class HelpEvent;
 class KeyEvent;
 class DataChangedEvent;
 class ScrollBar;
-typedef ::std::vector< ThumbnailViewItem* > ValueItemList;
+typedef ::std::vector< ThumbnailViewItem* > ThumbnailValueItemList;
 
 struct ThumbnailItemAttributes;
 class ThumbnailViewAcc;
@@ -299,9 +299,9 @@ protected:
 
 protected:
 
-    ValueItemList mItemList;
-    ValueItemList mFilteredItemList; ///< Cache to store the filtered items
-    ValueItemList::iterator mpStartSelRange;
+    ThumbnailValueItemList mItemList;
+    ThumbnailValueItemList mFilteredItemList; ///< Cache to store the filtered items
+    ThumbnailValueItemList::iterator mpStartSelRange;
     ScrollBar* mpScrBar;
     Rectangle maItemListRect;
     long mnHeaderHeight;
