@@ -780,13 +780,15 @@ void SmXMLExport::ExportUnaryHorizontal(const SmNode *pNode, int nLevel)
     ExportExpression(pNode, nLevel);
 }
 
-void SmXMLExport::ExportExpression(const SmNode *pNode, int nLevel)
+void SmXMLExport::ExportExpression(const SmNode *pNode, int nLevel,
+                                   bool bNoMrowContainer /*=false*/)
 {
     SvXMLElementExport *pRow=0;
     sal_uLong  nSize = pNode->GetNumSubNodes();
 
     // #i115443: nodes of type expression always need to be grouped with mrow statement
-    if (nSize > 1 || (pNode && pNode->GetType() == NEXPRESSION))
+    if (!bNoMrowContainer &&
+        (nSize > 1 || (pNode && pNode->GetType() == NEXPRESSION)))
         pRow = new SvXMLElementExport(*this, XML_NAMESPACE_MATH, XML_MROW, sal_True, sal_True);
 
     for (sal_uInt16 i = 0; i < nSize; i++)
@@ -1290,8 +1292,6 @@ static bool lcl_HasEffectOnMathvariant( const SmTokenType eType )
 
 void SmXMLExport::ExportFont(const SmNode *pNode, int nLevel)
 {
-    SvXMLElementExport *pElement = 0;
-
     //
     // gather the mathvariant attribut relevant data from all
     // successively following SmFontNodes...
@@ -1328,10 +1328,8 @@ void SmXMLExport::ExportFont(const SmNode *pNode, int nLevel)
 
     switch (pNode->GetToken().eType)
     {
-        //wrap a phantom element around everything*/
         case TPHANTOM:
-            pElement = new SvXMLElementExport(*this, XML_NAMESPACE_MATH,
-                XML_MPHANTOM, sal_True,sal_True);
+            // No attribute needed. An <mphantom> element will be used below.
             break;
         case TBLACK:
             AddAttribute(XML_NAMESPACE_MATH, XML_COLOR, XML_BLACK);
@@ -1455,15 +1453,15 @@ void SmXMLExport::ExportFont(const SmNode *pNode, int nLevel)
             break;
 
     }
-    //for now we will just always export with a style and not worry about
-    //anyone else for the moment.
     {
-        //wrap a style around it
-        SvXMLElementExport aStyle(*this, XML_NAMESPACE_MATH, XML_MSTYLE, sal_True,sal_True);
-        ExportExpression(pNode, nLevel);
+        // Wrap everything in an <mphantom> or <mstyle> element. These elements
+        // are mrow-like, so ExportExpression doesn't need to add an explicit
+        // <mrow> element. See #fdo 66283.
+        SvXMLElementExport aElement(*this, XML_NAMESPACE_MATH,
+            pNode->GetToken().eType == TPHANTOM ? XML_MPHANTOM : XML_MSTYLE,
+            sal_True, sal_True);
+        ExportExpression(pNode, nLevel, true);
     }
-
-    delete pElement;
 }
 
 
