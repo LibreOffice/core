@@ -102,7 +102,7 @@ SvStream& SfxDateTimeItem::Store( SvStream& rStream, sal_uInt16 ) const
 {
     DBG_CHKTHIS(SfxDateTimeItem, 0);
     rStream << aDateTime.GetDate();
-    rStream << aDateTime.GetTime();
+    rStream << static_cast<sal_Int32>(aDateTime.GetTime());
     return rStream;
 }
 

@@ -1170,16 +1170,30 @@ bool SwFmtSurround::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 
 SvStream& SwFmtVertOrient::Store(SvStream &rStream, sal_uInt16 /*version*/) const
 {
-    rStream << nYPos << eOrient << eRelation;
+#if SAL_TYPES_SIZEOFLONG == 8
+    rStream.WriteInt64(nYPos);
+#else
+    rStream << static_cast<sal_Int32>(nYPos);
+#endif
+    rStream << eOrient << eRelation;
     return rStream;
 }
 
 SfxPoolItem* SwFmtVertOrient::Create(SvStream &rStream, sal_uInt16 /*itemVersion*/) const
 {
-    SwTwips yPos;
-    sal_Int16 orient;
-    sal_Int16 relation;
-    rStream >> yPos >> orient >> relation;
+    SwTwips yPos(0);
+    sal_Int16 orient(0);
+    sal_Int16 relation(0);
+    // compatibility hack for Table Auto Format: SwTwips is "long" :(
+    // (this means that the file format is platform dependent)
+#if SAL_TYPES_SIZEOFLONG == 8
+    rStream.ReadInt64(yPos);
+#else
+    sal_Int32 n;
+    rStream >> n;
+    yPos = n;
+#endif
+    rStream >> orient >> relation;
 
     return new SwFmtVertOrient(yPos, orient, relation);
 }

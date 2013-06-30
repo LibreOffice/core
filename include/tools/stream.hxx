@@ -307,7 +307,8 @@ public:
     SvStream&       operator>>( sal_uInt64& rUInt64 );
     SvStream&       operator>>( sal_Int16& rInt16 );
     SvStream&       operator>>( sal_Int32& rInt32 );
-    SvStream&       operator>>( sal_Int64& rInt64 );
+    SvStream&       operator>>( sal_Int64& rInt64 ); // DO NOT USE: not impl.
+    SvStream&       ReadInt64(sal_Int64 & rInt64);
 
     SvStream&       operator>>( signed char& rChar );
     SvStream&       operator>>( char& rChar );
@@ -321,7 +322,8 @@ public:
     SvStream&       operator<<( sal_uInt64 nuInt64 );
     SvStream&       operator<<( sal_Int16 nInt16 );
     SvStream&       operator<<( sal_Int32 nInt32 );
-    SvStream&       operator<<( sal_Int64 nInt64 );
+    SvStream&       operator<<( sal_Int64 nInt64 ); // DO NOT USE: not impl.
+    SvStream&       WriteInt64(sal_Int64 nInt64);
 
     SvStream&       operator<<( bool b )
     { return operator<<(static_cast< sal_Bool >(b)); }

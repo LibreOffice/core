@@ -1449,9 +1449,8 @@ sal_Bool SbxValue::LoadData( SvStream& r, sal_uInt16 )
             break;
         }
         //#fdo39428 SvStream no longer supports operator>>(long&)
-        //SvStream now has operator>>(sal_Int64&)
         case SbxSALINT64:
-            r >> aData.nInt64;
+            r.ReadInt64(aData.nInt64);
             break;
         case SbxSALUINT64:
             r >> aData.uInt64;
