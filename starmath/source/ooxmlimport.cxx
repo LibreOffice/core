@@ -168,23 +168,30 @@ OUString SmOoxmlImport::handleAcc()
     switch( accChr )
     {
         case MS_BAR:
+        case MS_COMBBAR:
             acc = "bar";
             break;
         case MS_CHECK:
+        case MS_COMBCHECK:
             acc = "check";
             break;
         case MS_ACUTE:
+        case MS_COMBACUTE:
             acc = "acute";
             break;
         case MS_GRAVE:
+        case MS_COMBGRAVE:
             acc = "grave";
             break;
         case MS_BREVE:
+        case MS_COMBBREVE:
             acc = "breve";
             break;
         case MS_CIRCLE:
+        case MS_COMBCIRCLE:
             acc = "circle";
             break;
+        case MS_RIGHTARROW:
         case MS_VEC:
             // prefer wide variants for these 3, .docx can't seem to differentiate
             // between e.g. 'vec' and 'widevec', if whatever the accent is above is short, this

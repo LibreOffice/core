@@ -4,7 +4,7 @@ FullName: OpenSymbol
 FamilyName: OpenSymbol
 Weight: Book
 Copyright: (c) 2009 Sun Microsystems Inc.\nTHERE DOES NOT EXIST (c) 2011 Julien Nabet\nPRECEDES <-> DOES NOT SUCCEED (c) 2011 Olivier Hallot\nPRIME <-> TRIPLE PRIME (c) 2013 Mathias Hasselmann
-Version: 102.3
+Version: 102.4
 ItalicAngle: 0
 UnderlinePosition: -143
 UnderlineWidth: 20
@@ -19,7 +19,7 @@ OS2Version: 0
 OS2_WeightWidthSlopeOnly: 0
 OS2_UseTypoMetrics: 1
 CreationTime: 1144938807
-ModificationTime: 1358186116
+ModificationTime: 1372588273
 PfmFamily: 81
 TTFWeight: 400
 TTFWidth: 5
@@ -773,18 +773,18 @@ ShortTable: maxp 16
   0
   0
 EndShort
-LangName: 1033 "" "" "Regular" "OpenSymbol" "" "Version 102.3" 
-GaspTable: 1 65535 2
+LangName: 1033 "" "" "Regular" "OpenSymbol" "" "Version 102.4" 
+GaspTable: 1 65535 2 0
 Encoding: Custom
 UnicodeInterp: none
 NameList: Adobe Glyph List
 DisplaySize: -24
 AntiAlias: 1
 FitToEm: 1
-WinInfo: 0 45 15
+WinInfo: 675 45 15
 BeginPrivate: 0
 EndPrivate
-BeginChars: 8834 1004
+BeginChars: 8834 1007
 
 StartChar: Alpha
 Encoding: 909 913 0
@@ -107379,7 +107379,7 @@ Validated: 1
 EndChar
 
 StartChar: uni227A
-Encoding: 8826 8826 995
+Encoding: 8826 8826 993
 Width: 1628
 GlyphClass: 2
 Flags: W
@@ -107402,7 +107402,7 @@ EndSplineSet
 EndChar
 
 StartChar: uni227B
-Encoding: 8827 8827 996
+Encoding: 8827 8827 994
 Width: 1628
 GlyphClass: 2
 Flags: W
@@ -107425,10 +107425,10 @@ EndSplineSet
 EndChar
 
 StartChar: uni227C
-Encoding: 8828 8828 997
+Encoding: 8828 8828 995
 Width: 1628
 GlyphClass: 2
-Flags: HWO
+Flags: W
 LayerCount: 2
 Fore
 SplineSet
@@ -107457,10 +107457,10 @@ EndSplineSet
 EndChar
 
 StartChar: uni227D
-Encoding: 8829 8829 998
+Encoding: 8829 8829 996
 Width: 1628
 GlyphClass: 2
-Flags: HWO
+Flags: W
 LayerCount: 2
 Fore
 SplineSet
@@ -107489,10 +107489,10 @@ EndSplineSet
 EndChar
 
 StartChar: uni227E
-Encoding: 8830 8830 999
+Encoding: 8830 8830 997
 Width: 1628
 GlyphClass: 2
-Flags: HWO
+Flags: W
 LayerCount: 2
 Fore
 SplineSet
@@ -107528,10 +107528,10 @@ EndSplineSet
 EndChar
 
 StartChar: uni227F
-Encoding: 8831 8831 1000
+Encoding: 8831 8831 998
 Width: 1628
 GlyphClass: 2
-Flags: HWO
+Flags: W
 LayerCount: 2
 Fore
 SplineSet
@@ -107567,10 +107567,10 @@ EndSplineSet
 EndChar
 
 StartChar: uni2280
-Encoding: 8832 8832 1001
+Encoding: 8832 8832 999
 Width: 1628
 GlyphClass: 2
-Flags: WO
+Flags: W
 LayerCount: 2
 Fore
 SplineSet
@@ -107599,7 +107599,7 @@ EndSplineSet
 EndChar
 
 StartChar: uni2281
-Encoding: 8833 8833 1002
+Encoding: 8833 8833 1000
 Width: 1628
 GlyphClass: 2
 Flags: W
@@ -107630,45 +107630,8 @@ SplineSet
 EndSplineSet
 EndChar
 
-StartChar: prime
-Encoding: 2032 8242 1001
-Width: 681
-Flags: WO
-HStem: 1110 346
-VStem: 236 329
-LayerCount: 2
-Fore
-SplineSet
-565 1456 m 5,0,-1
- 270 1110 l 5,1,-1
- 236 1110 l 5,2,-1
- 342 1456 l 5,3,-1
- 565 1456 l 5,0,-1
-EndSplineSet
-EndChar
-
-StartChar: primedbl
-Encoding: 2033 8243 1002
-Width: 957
-Flags: W
-LayerCount: 2
-Fore
-SplineSet
-565 1456 m 1,0,-1
- 270 1110 l 1,1,-1
- 236 1110 l 1,2,-1
- 342 1456 l 1,3,-1
- 565 1456 l 1,0,-1
-841 1456 m 1,4,-1
- 546 1110 l 1,5,-1
- 512 1110 l 1,6,-1
- 618 1456 l 1,7,-1
- 841 1456 l 1,4,-1
-EndSplineSet
-EndChar
-
 StartChar: primetriple
-Encoding: 2034 8244 1003
+Encoding: 2034 8244 1001
 Width: 1233
 Flags: W
 LayerCount: 2
@@ -107689,6 +107652,93 @@ SplineSet
  788 1110 l 1,10,-1
  894 1456 l 1,11,-1
  1117 1456 l 1,8,-1
+EndSplineSet
+EndChar
+
+StartChar: prime
+Encoding: 2032 8242 1002
+Width: 681
+Flags: W
+HStem: 1110 346
+VStem: 236 329
+LayerCount: 2
+Fore
+SplineSet
+565 1456 m 5,0,-1
+ 270 1110 l 5,1,-1
+ 236 1110 l 5,2,-1
+ 342 1456 l 5,3,-1
+ 565 1456 l 5,0,-1
+EndSplineSet
+EndChar
+
+StartChar: primedbl
+Encoding: 2033 8243 1003
+Width: 957
+Flags: W
+LayerCount: 2
+Fore
+SplineSet
+565 1456 m 1,0,-1
+ 270 1110 l 1,1,-1
+ 236 1110 l 1,2,-1
+ 342 1456 l 1,3,-1
+ 565 1456 l 1,0,-1
+841 1456 m 1,4,-1
+ 546 1110 l 1,5,-1
+ 512 1110 l 1,6,-1
+ 618 1456 l 1,7,-1
+ 841 1456 l 1,4,-1
+EndSplineSet
+EndChar
+
+StartChar: graveaccent
+Encoding: 993 96 1004
+Width: 681
+Flags: W
+HStem: 1130 347
+VStem: 117 329
+LayerCount: 2
+Fore
+SplineSet
+117 1477 m 1,0,-1
+ 342 1477 l 1,1,-1
+ 446 1130 l 1,2,-1
+ 412 1130 l 1,3,-1
+ 117 1477 l 1,0,-1
+EndSplineSet
+EndChar
+
+StartChar: acuteaccent
+Encoding: 994 180 1005
+Width: 681
+Flags: W
+HStem: 1110 346
+VStem: 236 329
+LayerCount: 2
+Fore
+SplineSet
+565 1456 m 1,0,-1
+ 270 1110 l 1,1,-1
+ 236 1110 l 1,2,-1
+ 342 1456 l 1,3,-1
+ 565 1456 l 1,0,-1
+EndSplineSet
+EndChar
+
+StartChar: macron
+Encoding: 995 175 1006
+Width: 1024
+Flags: W
+HStem: 1331 76<102 934>
+LayerCount: 2
+Fore
+SplineSet
+102 1407 m 1,0,-1
+ 934 1407 l 1,1,-1
+ 934 1331 l 1,2,-1
+ 102 1331 l 1,3,-1
+ 102 1407 l 1,0,-1
 EndSplineSet
 EndChar
 EndChars
