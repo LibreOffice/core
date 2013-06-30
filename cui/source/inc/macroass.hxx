@@ -63,7 +63,6 @@ public:
 
     const SvxMacroTableDtor&    GetMacroTbl() const;
     void                        SetMacroTbl( const SvxMacroTableDtor& rTbl );
-    void                        ClearMacroTbl();
 
     virtual void                ScriptChanged();
     virtual void                PageCreated (SfxAllItemSet aSet);
@@ -86,11 +85,6 @@ inline const SvxMacroTableDtor& _SfxMacroTabPage::GetMacroTbl() const
 inline void _SfxMacroTabPage::SetMacroTbl( const SvxMacroTableDtor& rTbl )
 {
     aTbl = rTbl;
-}
-
-inline void _SfxMacroTabPage::ClearMacroTbl()
-{
-    aTbl.clear();
 }
 
 class SfxMacroTabPage : public _SfxMacroTabPage

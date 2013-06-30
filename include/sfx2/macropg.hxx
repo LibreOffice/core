@@ -72,13 +72,8 @@ public:
 
     const SvxMacroTableDtor&    GetMacroTbl() const;
     void                        SetMacroTbl( const SvxMacroTableDtor& rTbl );
-    void                        ClearMacroTbl();
 
     virtual void                ScriptChanged( const String& rLanguage );
-
-    // zum setzen / abfragen der Links
-    void                        SetGetMacrosOfRangeLink( FNGetMacrosOfRangeHdl pFn );
-    FNGetMacrosOfRangeHdl       GetGetMacrosOfRangeLink() const;
 
     // --------- Erben aus der Basis -------------
     virtual sal_Bool                FillItemSet( SfxItemSet& rSet );
@@ -97,11 +92,6 @@ inline const SvxMacroTableDtor& _SfxMacroTabPage::GetMacroTbl() const
 inline void _SfxMacroTabPage::SetMacroTbl( const SvxMacroTableDtor& rTbl )
 {
     aTbl = rTbl;
-}
-
-inline void _SfxMacroTabPage::ClearMacroTbl()
-{
-    aTbl.DelDtor();
 }
 
 class SFX2_DLLPUBLIC SfxMacroTabPage : public _SfxMacroTabPage
