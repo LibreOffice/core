@@ -8,7 +8,6 @@
  */
 package org.libreoffice.impressremote.communication;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -26,9 +25,8 @@ import android.preference.PreferenceManager;
 import android.support.v4.content.LocalBroadcastManager;
 
 import org.libreoffice.impressremote.Preferences;
-import org.libreoffice.impressremote.communication.Server.Protocol;
 
-public class CommunicationService extends Service implements Runnable {
+public class CommunicationService extends Service implements Runnable, MessagesListener {
     public static enum State {
         DISCONNECTED, SEARCHING, CONNECTING, CONNECTED
     }
@@ -62,14 +60,9 @@ public class CommunicationService extends Service implements Runnable {
 
     private final IBinder mBinder = new CBinder();
 
-    private Transmitter mTransmitter;
-
-    private Client mClient;
-
-    private final Receiver mReceiver = new Receiver(this);
-
     private final ServersFinder mTcpServersFinder = new TcpServersFinder(this);
-    private final ServersFinder mBluetoothServersFinder = new BluetoothServersFinder(this);
+    private final ServersFinder mBluetoothServersFinder = new BluetoothServersFinder(
+        this);
 
     private Thread mThread = null;
 
@@ -98,7 +91,7 @@ public class CommunicationService extends Service implements Runnable {
     }
 
     public String getPairingDeviceName() {
-        return Client.getName();
+        return getDeviceName();
     }
 
     @Override
@@ -133,42 +126,76 @@ public class CommunicationService extends Service implements Runnable {
         }
     }
 
+    private ServerConnection mServerConnection;
+
+    private MessagesReceiver mMessagesReceiver;
+    private CommandsTransmitter mCommandsTransmitter;
+
     private void closeConnection() {
-        mClient.closeConnection();
-        mClient = null;
+        mServerConnection.close();
 
         mState = State.DISCONNECTED;
     }
 
     private void openConnection() {
-        try {
-            mClient = buildClient();
-            mClient.validating();
+        mServerConnection = buildServerConnection();
 
-            mTransmitter = new Transmitter(mClient);
+        mMessagesReceiver = new MessagesReceiver(mServerConnection, this);
+        mCommandsTransmitter = new CommandsTransmitter(mServerConnection);
 
-            mState = State.CONNECTED;
-        } catch (IOException e) {
-            connectionFailed();
-        }
+        pairWithServer();
+
+        mState = State.CONNECTED;
     }
 
-    private Client buildClient() {
+    private ServerConnection buildServerConnection() {
         switch (mServerDesired.getProtocol()) {
-            case NETWORK:
-                return new NetworkClient(mServerDesired, this, mReceiver);
+            case TCP:
+                return new TcpServerConnection(mServerDesired);
 
             case BLUETOOTH:
-                return new BluetoothClient(mServerDesired, this, mReceiver,
-                    mBluetoothPreviouslyEnabled);
+                return new BluetoothServerConnection(mServerDesired);
 
             default:
                 throw new RuntimeException("Unknown desired protocol.");
         }
     }
 
+    private void pairWithServer() {
+        if (mServerDesired.getProtocol() == Server.Protocol.BLUETOOTH) {
+            return;
+        }
+
+        mCommandsTransmitter.pair(getDeviceName(), loadPin());
+
+        startPairingActivity();
+    }
+
+    private void startPairingActivity() {
+        Intent aPairingIntent = new Intent(MSG_PAIRING_STARTED);
+        aPairingIntent.putExtra("PIN", loadPin());
+
+        LocalBroadcastManager.getInstance(this).sendBroadcast(aPairingIntent);
+    }
+
+    private String loadPin() {
+        if (Preferences.doContain(this,
+            Preferences.Locations.AUTHORIZED_REMOTES,
+            mServerDesired.getAddress())) {
+            return Preferences
+                .getString(this, Preferences.Locations.AUTHORIZED_REMOTES,
+                    mServerDesired.getAddress());
+        }
+
+        String aPin = Protocol.Pin.generate();
+
+        Preferences.set(this, Preferences.Locations.AUTHORIZED_REMOTES,
+            mServerDesired.getAddress(), aPin);
+
+        return aPin;
+    }
+
     private void connectionFailed() {
-        mClient = null;
         mState = State.DISCONNECTED;
         Intent aIntent = new Intent(
             CommunicationService.STATUS_CONNECTION_FAILED);
@@ -254,8 +281,8 @@ public class CommunicationService extends Service implements Runnable {
         mThread = null;
     }
 
-    public Transmitter getTransmitter() {
-        return mTransmitter;
+    public CommandsTransmitter getTransmitter() {
+        return mCommandsTransmitter;
     }
 
     public List<Server> getServers() {
@@ -269,7 +296,7 @@ public class CommunicationService extends Service implements Runnable {
     }
 
     public SlideShow getSlideShow() {
-        return mReceiver.getSlideShow();
+        return mSlideShow;
     }
 
     void loadServersFromPreferences() {
@@ -282,7 +309,7 @@ public class CommunicationService extends Service implements Runnable {
 
         for (Entry<String, String> aServerEntry : aStoredMap.entrySet()) {
             mManualServers.put(aServerEntry.getKey(), new Server(
-                Protocol.NETWORK, aServerEntry.getKey(),
+                Server.Protocol.TCP, aServerEntry.getKey(),
                 aServerEntry.getValue(), 0));
         }
     }
@@ -295,8 +322,9 @@ public class CommunicationService extends Service implements Runnable {
             if (aServer.equals(aAddress))
                 return;
         }
-        mManualServers.put(aAddress, new Server(Protocol.NETWORK, aAddress,
-            aName, 0));
+        mManualServers
+            .put(aAddress, new Server(Server.Protocol.TCP, aAddress,
+                aName, 0));
         if (aRemember) {
 
             Preferences
@@ -312,8 +340,92 @@ public class CommunicationService extends Service implements Runnable {
             aServer.getAddress());
     }
 
-    public Client getClient() {
-        return mClient;
+    @Override
+    public void onPinValidation() {
+        startPinValidation();
+    }
+
+    private void startPinValidation() {
+        Intent aPairingIntent = new Intent(STATUS_PAIRING_PINVALIDATION);
+        aPairingIntent.putExtra("PIN", loadPin());
+        aPairingIntent.putExtra("SERVERNAME", mServerDesired.getName());
+
+        LocalBroadcastManager.getInstance(this).sendBroadcast(aPairingIntent);
+    }
+
+    @Override
+    public void onSuccessfulPairing() {
+        callSuccessfulPairing();
+    }
+
+    private void callSuccessfulPairing() {
+        Intent aSuccessfulPairingIntent = new Intent(MSG_PAIRING_SUCCESSFUL);
+
+        LocalBroadcastManager.getInstance(this).sendBroadcast(
+            aSuccessfulPairingIntent);
+    }
+
+    private SlideShow mSlideShow;
+
+    @Override
+    public void onSlideShowStart(int aSlidesCount, int aCurrentSlideIndex) {
+        mSlideShow = new SlideShow();
+        mSlideShow.setSlidesCount(aSlidesCount);
+        mSlideShow.setCurrentSlideIndex(aCurrentSlideIndex);
+
+        Intent aStatusConnectedSlideShowRunningIntent = new Intent(
+            STATUS_CONNECTED_SLIDESHOW_RUNNING);
+        Intent aSlideChangedIntent = new Intent(MSG_SLIDE_CHANGED);
+        aSlideChangedIntent.putExtra("slide_number", aCurrentSlideIndex);
+
+        LocalBroadcastManager.getInstance(this)
+            .sendBroadcast(aStatusConnectedSlideShowRunningIntent);
+        LocalBroadcastManager.getInstance(this)
+            .sendBroadcast(aSlideChangedIntent);
+    }
+
+    @Override
+    public void onSlideShowFinish() {
+        mSlideShow = new SlideShow();
+
+        Intent aStatusConnectedNoSlideShowIntent = new Intent(
+            STATUS_CONNECTED_NOSLIDESHOW);
+
+        LocalBroadcastManager.getInstance(this)
+            .sendBroadcast(aStatusConnectedNoSlideShowIntent);
+    }
+
+    @Override
+    public void onSlideChanged(int aCurrentSlideIndex) {
+        mSlideShow.setCurrentSlideIndex(aCurrentSlideIndex);
+
+        Intent aSlideChangedIntent = new Intent(MSG_SLIDE_CHANGED);
+        aSlideChangedIntent.putExtra("slide_number", aCurrentSlideIndex);
+
+        LocalBroadcastManager.getInstance(this)
+            .sendBroadcast(aSlideChangedIntent);
+    }
+
+    @Override
+    public void onSlidePreview(int aSlideIndex, byte[] aPreview) {
+        mSlideShow.setSlidePreview(aSlideIndex, aPreview);
+
+        Intent aSlidePreviewChangedIntent = new Intent(MSG_SLIDE_PREVIEW);
+        aSlidePreviewChangedIntent.putExtra("slide_number", aSlideIndex);
+
+        LocalBroadcastManager.getInstance(this)
+            .sendBroadcast(aSlidePreviewChangedIntent);
+    }
+
+    @Override
+    public void onSlideNotes(int aSlideIndex, String aNotes) {
+        mSlideShow.setSlideNotes(aSlideIndex, aNotes);
+
+        Intent aSlideNotesChangedIntent = new Intent(MSG_SLIDE_NOTES);
+        aSlideNotesChangedIntent.putExtra("slide_number", aSlideIndex);
+
+        LocalBroadcastManager.getInstance(this)
+            .sendBroadcast(aSlideNotesChangedIntent);
     }
 }
 

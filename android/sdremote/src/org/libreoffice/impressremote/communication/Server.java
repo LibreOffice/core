@@ -15,7 +15,7 @@ public class Server implements Parcelable {
     private static final int SPECIAL_PARCELABLE_OBJECTS_BITMASK = 0;
 
     public static enum Protocol {
-        NETWORK, BLUETOOTH
+        TCP, BLUETOOTH
     }
 
     private final Protocol mProtocol;

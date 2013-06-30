@@ -70,8 +70,6 @@ public class PairingActivity extends SherlockActivity {
 
     @Override
     public void onBackPressed() {
-        mCommunicationService.getClient().closeConnection();
-
         Intent aIntent = new Intent(this, SelectorActivity.class);
         aIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(aIntent);

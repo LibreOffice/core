@@ -8,6 +8,8 @@
  */
 package org.libreoffice.impressremote.communication;
 
+import java.util.Random;
+
 import android.text.TextUtils;
 
 final class Protocol {
@@ -16,7 +18,20 @@ final class Protocol {
 
     public static final String CHARSET = "UTF-8";
 
-    public static final int PIN_NUMBERS_COUNT = 4;
+    public static final class Pin {
+        private Pin() {
+        }
+
+        private static final int NUMBERS_COUNT = 4;
+
+        public static String generate() {
+            Random aRandomGenerator = new Random();
+            int aMaximumPin = (int) Math.pow(10, NUMBERS_COUNT) - 1;
+            int aPinNumber = aRandomGenerator.nextInt(aMaximumPin);
+
+            return String.format("%04d", aPinNumber);
+        }
+    }
 
     public static final class Ports {
         private Ports() {
@@ -31,7 +46,6 @@ final class Protocol {
         }
 
         public static final String SERVER_SEARCH = "239.0.0.1";
-        public static final String SERVER_LOCAL_FOR_EMULATOR = "10.0.2.2";
     }
 
     public static final class Messages {

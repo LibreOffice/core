@@ -126,7 +126,7 @@ public class TcpServersFinder implements ServersFinder, Runnable {
 
         String aFoundServerHostname = aSearchResultScanner.nextLine();
 
-        Server aFoundServer = new Server(Server.Protocol.NETWORK,
+        Server aFoundServer = new Server(Server.Protocol.TCP,
             aSearchResultPacket.getAddress().getHostAddress(),
             aFoundServerHostname);
 
