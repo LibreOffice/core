@@ -121,8 +121,8 @@ void CTTextStyle::GetFontMetric( float fPixelSize, ImplFontMetricData& rMetric )
 
     rMetric.mnAscent       = lrint( CTFontGetAscent( aCTFontRef ) * fPixelSize);
     rMetric.mnDescent      = lrint( CTFontGetDescent( aCTFontRef ) * fPixelSize);
-    rMetric.mnIntLeading   = lrint( CTFontGetLeading( aCTFontRef ) * fPixelSize);
-    rMetric.mnExtLeading   = 0;
+    rMetric.mnExtLeading   = lrint( CTFontGetLeading( aCTFontRef ) * fPixelSize);
+    rMetric.mnIntLeading   = 0;
     // since ImplFontMetricData::mnWidth is only used for stretching/squeezing fonts
     // setting this width to the pixel height of the fontsize is good enough
     // it also makes the calculation of the stretch factor simple
