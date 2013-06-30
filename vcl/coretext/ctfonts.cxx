@@ -72,14 +72,20 @@ CTTextStyle::CTTextStyle( const FontSelectPattern& rFSD )
     mfFontRotation = pReqFont->mnOrientation * (M_PI / 1800.0);
 
     // handle font stretching if any
-    const CGAffineTransform* pMatrix = NULL;
-    CGAffineTransform aMatrix;
+    CGAffineTransform aMatrix = CGAffineTransformMakeScale(1.0, 1.0);
     if( (pReqFont->mnWidth != 0) && (pReqFont->mnWidth != pReqFont->mnHeight) )
     {
         mfFontStretch = (float)pReqFont->mnWidth / pReqFont->mnHeight;
-        aMatrix = CGAffineTransformMakeScale( mfFontStretch, 1.0F );
-        pMatrix = &aMatrix;
+        aMatrix = CGAffineTransformConcat(aMatrix, CGAffineTransformMakeScale(mfFontStretch, 1.0F));
     }
+
+    // fake bold
+    if ((pReqFont->GetWeight() >= WEIGHT_BOLD) && (mpFontData->GetWeight() < WEIGHT_SEMIBOLD))
+        /* XXX */;
+    // fake italic
+    if (((pReqFont->GetSlant() == ITALIC_NORMAL) || (pReqFont->GetSlant() == ITALIC_OBLIQUE))
+    && !((mpFontData->GetSlant() == ITALIC_NORMAL) || (mpFontData->GetSlant() == ITALIC_OBLIQUE)))
+        aMatrix = CGAffineTransformConcat(aMatrix, CGAffineTransformMake(1, 0, tanf(14 * acosf(0) / 90), 1, 0, 0));
 
     // create the style object for CoreText font attributes
     static const CFIndex nMaxDictSize = 16; // TODO: does this really suffice?
@@ -90,7 +96,7 @@ CTTextStyle::CTTextStyle( const FontSelectPattern& rFSD )
     CFDictionarySetValue( mpStyleDict, kCTVerticalFormsAttributeName, pCFVertBool );
 
     CTFontDescriptorRef pFontDesc = (CTFontDescriptorRef)mpFontData->GetFontId();
-    CTFontRef pNewCTFont = CTFontCreateWithFontDescriptor( pFontDesc, fScaledFontHeight, pMatrix );
+    CTFontRef pNewCTFont = CTFontCreateWithFontDescriptor( pFontDesc, fScaledFontHeight, &aMatrix );
     CFDictionarySetValue( mpStyleDict, kCTFontAttributeName, pNewCTFont );
     CFRelease( pNewCTFont);
 
