@@ -90,6 +90,16 @@ public class FieldColumn
         m_sDisplayFieldName = m_sFieldName;
         ColIndex = JavaTools.FieldInList(_xColumns.getElementNames(), m_sFieldName) + 1;
         initializeFormatKeys(oCommandMetaData, _xColumns);
+        try
+        {
+            m_sCommandName = (String)m_xColPropertySet.getPropertyValue("TableName");
+        }
+        catch (com.sun.star.beans.UnknownPropertyException e)
+        {
+        }
+        catch (com.sun.star.lang.WrappedTargetException e)
+        {
+        }
     }
 
     public int getFieldType()
