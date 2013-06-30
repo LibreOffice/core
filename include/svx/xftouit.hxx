@@ -20,6 +20,7 @@
 #ifndef _SVX_XFTOUIT_HXX
 #define _SVX_XFTOUIT_HXX
 
+#include <svl/intitem.hxx>
 #include "svx/svxdllapi.h"
 
 /*************************************************************************

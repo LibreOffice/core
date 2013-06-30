@@ -24,6 +24,8 @@
 #include "oox/vml/vmltextbox.hxx"
 
 namespace oox {
+    class GraphicHelper;
+
 namespace vml {
 
 // ============================================================================

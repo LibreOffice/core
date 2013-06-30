@@ -22,6 +22,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <comphelper/solarmutex.hxx>
 #include <cppuhelper/implbase3.hxx>
 
 namespace comphelper

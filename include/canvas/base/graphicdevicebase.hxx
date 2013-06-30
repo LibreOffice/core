@@ -30,6 +30,7 @@
 
 #include <canvas/parametricpolypolygon.hxx>
 #include <canvas/propertysethelper.hxx>
+#include <canvas/verifyinput.hxx>
 
 
 /* Definition of GraphicDeviceBase class */
