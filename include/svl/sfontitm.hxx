@@ -22,6 +22,7 @@
 
 #include <tools/color.hxx>
 #include <tools/gen.hxx>
+#include <tools/string.hxx>
 #include <i18nlangtag/lang.h>
 #include <svl/poolitem.hxx>
 

@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <rtl/ustring.hxx>
 #include <tools/stream.hxx>
 #include <tools/cachestr.hxx>
 #include <tools/tempfile.hxx>
@@ -25,9 +26,9 @@ SvCacheStream::SvCacheStream( sal_uIntPtr nMaxMemSize )
 {
     if( !nMaxMemSize )
         nMaxMemSize = 20480;
-    SvStream::bIsWritable = sal_True;
+    SvStream::bIsWritable = true;
     nMaxSize        = nMaxMemSize;
-    bPersistent     = sal_False;
+    bPersistent     = false;
     pSwapStream     = 0;
     pCurrentStream  = new SvMemoryStream( nMaxMemSize );
     pTempFile       = 0;
@@ -42,7 +43,7 @@ SvCacheStream::~SvCacheStream()
     if( pSwapStream && !bPersistent && pTempFile )
     {
         // temporaeres File loeschen
-        pTempFile->EnableKillingFile( sal_True );
+        pTempFile->EnableKillingFile( true );
     }
 
     delete pTempFile;
@@ -52,7 +53,7 @@ void SvCacheStream::SwapOut()
 {
     if( pCurrentStream != pSwapStream )
     {
-        if( !pSwapStream && !aFileName.Len() )
+        if( !pSwapStream && aFileName.isEmpty() )
         {
             pTempFile = new TempFile;
             aFileName = pTempFile->GetName();

@@ -95,19 +95,19 @@ public:
     inline reference_type * operator->() const;
 
     /** returns true if this instance references pReferenceObject */
-    inline sal_Bool operator== (const reference_type * pReferenceObject) const;
+    inline bool operator== (const reference_type * pReferenceObject) const;
 
     /** returns true if this instance and the given weakref reference the same object */
-    inline sal_Bool operator== (const WeakReference<reference_type> & handle) const;
+    inline bool operator== (const WeakReference<reference_type> & handle) const;
 
     /** only needed for using this class with stl containers */
-    inline sal_Bool operator!= (const WeakReference<reference_type> & handle) const;
+    inline bool operator!= (const WeakReference<reference_type> & handle) const;
 
     /** only needed for using this class with stl containers */
-    inline sal_Bool operator< (const WeakReference<reference_type> & handle) const;
+    inline bool operator< (const WeakReference<reference_type> & handle) const;
 
     /** only needed for using this class with stl containers */
-    inline sal_Bool operator> (const WeakReference<reference_type> & handle) const;
+    inline bool operator> (const WeakReference<reference_type> & handle) const;
 
     /** the assignment operator */
     inline WeakReference<reference_type>& operator= (const WeakReference<reference_type> & handle);

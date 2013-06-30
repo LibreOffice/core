@@ -19,6 +19,7 @@
 
 #include "wordbookmigration.hxx"
 #include <cppuhelper/supportsservice.hxx>
+#include <tools/string.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/bootstrap.hxx>
 #include <unotools/ucbstreamhelper.hxx>

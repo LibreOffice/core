@@ -21,6 +21,7 @@
 #define _SOT_STORINFO_HXX
 
 #include <tools/globname.hxx>
+#include <tools/string.hxx>
 #include <vector>
 #include "sot/sotdllapi.h"
 

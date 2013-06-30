@@ -98,22 +98,22 @@ public:
                     /// 12 hours == 0.5 days
     double          GetTimeInDays() const;
 
-    sal_Bool        IsBetween( const Time& rFrom, const Time& rTo ) const
+    bool            IsBetween( const Time& rFrom, const Time& rTo ) const
                     { return ((nTime >= rFrom.nTime) && (nTime <= rTo.nTime)); }
 
-    sal_Bool        IsEqualIgnoreNanoSec( const Time& rTime ) const;
+    bool            IsEqualIgnoreNanoSec( const Time& rTime ) const;
 
-    sal_Bool        operator ==( const Time& rTime ) const
+    bool            operator ==( const Time& rTime ) const
                     { return (nTime == rTime.nTime); }
-    sal_Bool        operator !=( const Time& rTime ) const
+    bool            operator !=( const Time& rTime ) const
                     { return (nTime != rTime.nTime); }
-    sal_Bool        operator  >( const Time& rTime ) const
+    bool            operator  >( const Time& rTime ) const
                     { return (nTime > rTime.nTime); }
-    sal_Bool        operator  <( const Time& rTime ) const
+    bool            operator  <( const Time& rTime ) const
                     { return (nTime < rTime.nTime); }
-    sal_Bool        operator >=( const Time& rTime ) const
+    bool            operator >=( const Time& rTime ) const
                     { return (nTime >= rTime.nTime); }
-    sal_Bool        operator <=( const Time& rTime ) const
+    bool            operator <=( const Time& rTime ) const
                     { return (nTime <= rTime.nTime); }
 
     static Time     GetUTCOffset();

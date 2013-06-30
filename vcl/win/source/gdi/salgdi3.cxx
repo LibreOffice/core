@@ -145,7 +145,7 @@ ImplFontAttrCache::ImplFontAttrCache( const String& rFileNameURL, const String& 
         aCacheFile >> n; aDFA.SetFamilyType(static_cast<FontFamily>(n));
         aCacheFile >> n; aDFA.SetSymbolFlag(n != 0);
 
-        String styleName;
+        OUString styleName;
         aCacheFile.ReadByteStringLine( styleName, RTL_TEXTENCODING_UTF8 );
         aDFA.SetStyleName( styleName );
 

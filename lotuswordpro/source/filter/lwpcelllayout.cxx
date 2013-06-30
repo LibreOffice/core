@@ -57,10 +57,9 @@
  * @file
  *  For LWP filter architecture prototype - cell layouts
  */
-/*************************************************************************
- * Change History
- April 2005         Created
- ************************************************************************/
+
+#include <tools/string.hxx>
+
 #include "lwpcelllayout.hxx"
 #include "lwpfoundry.hxx"
 #include "lwpobjfactory.hxx"

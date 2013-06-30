@@ -409,17 +409,17 @@ SwCreateAddressListDialog::SwCreateAddressListDialog(
             String sTempMiddle(sQuote);
             sTempMiddle += sal_Unicode(9);
 
-            String sLine;
-            sal_Bool bRead = pStream->ReadByteStringLine( sLine, RTL_TEXTENCODING_UTF8 );
+            OUString sLine;
+            bool bRead = pStream->ReadByteStringLine( sLine, RTL_TEXTENCODING_UTF8 );
 
             if(bRead)
             {
                 //header line
-                xub_StrLen nHeaders = comphelper::string::getTokenCount(sLine, '\t');
+                sal_Int32 nHeaders = comphelper::string::getTokenCount(sLine, '\t');
                 sal_Int32 nIndex = 0;
-                for( xub_StrLen nToken = 0; nToken < nHeaders; ++nToken)
+                for( sal_Int32 nToken = 0; nToken < nHeaders; ++nToken)
                 {
-                    String sHeader = sLine.GetToken( 0, '\t', nIndex );
+                    String sHeader = sLine.getToken( 0, '\t', nIndex );
                     OSL_ENSURE(sHeader.Len() > 2 &&
                             sHeader.GetChar(0) == '\"' && sHeader.GetChar(sHeader.Len() - 1) == '\"',
                             "Wrong format of header");
@@ -433,11 +433,11 @@ SwCreateAddressListDialog::SwCreateAddressListDialog(
             {
                 ::std::vector<OUString> aNewData;
                 //analyze data line
-                xub_StrLen nDataCount = comphelper::string::getTokenCount(sLine, '\t');
+                sal_Int32 nDataCount = comphelper::string::getTokenCount(sLine, '\t');
                 sal_Int32 nIndex = 0;
-                for( xub_StrLen nToken = 0; nToken < nDataCount; ++nToken)
+                for( sal_Int32 nToken = 0; nToken < nDataCount; ++nToken)
                 {
-                    String sData = sLine.GetToken( 0, '\t', nIndex );
+                    String sData = sLine.getToken( 0, '\t', nIndex );
                     OSL_ENSURE(sData.Len() >= 2 &&
                                 sData.GetChar(0) == '\"' && sData.GetChar(sData.Len() - 1) == '\"',
                             "Wrong format of line");

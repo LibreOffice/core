@@ -36,7 +36,7 @@ public:
     ErrorHandler               *pFirstHdl;
     ErrorContext               *pFirstCtx;
     DisplayFnPtr               pDsp;
-    sal_Bool                   bIsWindowDsp;
+    bool                   bIsWindowDsp;
 
     DynamicErrorInfo            *ppDcr[ERRCODE_DYNAMIC_COUNT];
     sal_uInt16                  nNextDcr;
@@ -171,7 +171,7 @@ class ErrHdl_Impl
 {
 public:
     ErrorHandler        *pNext;
-    static sal_Bool         CreateString(const ErrorHandler *pStart,
+    static bool         CreateString(const ErrorHandler *pStart,
                                      const ErrorInfo*, OUString&, sal_uInt16&);
 };
 
@@ -231,14 +231,14 @@ ErrorHandler::~ErrorHandler()
 void ErrorHandler::RegisterDisplay(WindowDisplayErrorFunc *aDsp)
 {
     EDcrData *pData=EDcrData::GetData();
-    pData->bIsWindowDsp=sal_True;
+    pData->bIsWindowDsp=true;
     pData->pDsp = reinterpret_cast< DisplayFnPtr >(aDsp);
 }
 
 void ErrorHandler::RegisterDisplay(BasicDisplayErrorFunc *aDsp)
 {
     EDcrData *pData=EDcrData::GetData();
-    pData->bIsWindowDsp=sal_False;
+    pData->bIsWindowDsp=false;
     pData->pDsp = reinterpret_cast< DisplayFnPtr >(aDsp);
 }
 
@@ -261,7 +261,7 @@ void ErrorHandler::RegisterDisplay(BasicDisplayErrorFunc *aDsp)
     @return ???
 */
 sal_uInt16 ErrorHandler::HandleError_Impl(
-    sal_uIntPtr lId, sal_uInt16 nFlags, sal_Bool bJustCreateString, OUString & rError)
+    sal_uIntPtr lId, sal_uInt16 nFlags, bool bJustCreateString, OUString & rError)
 {
     OUString aErr;
     OUString aAction;
@@ -281,7 +281,7 @@ sal_uInt16 ErrorHandler::HandleError_Impl(
             break;
         }
 
-    sal_Bool bWarning = ((lId & ERRCODE_WARNING_MASK) == ERRCODE_WARNING_MASK);
+    bool bWarning = ((lId & ERRCODE_WARNING_MASK) == ERRCODE_WARNING_MASK);
     sal_uInt16 nErrFlags = ERRCODE_BUTTON_DEF_OK | ERRCODE_BUTTON_OK;
     if (bWarning)
         nErrFlags |= ERRCODE_MSG_WARNING;
@@ -346,9 +346,9 @@ sal_uInt16 ErrorHandler::HandleError_Impl(
 }
 
 // static
-sal_Bool ErrorHandler::GetErrorString(sal_uIntPtr lId, OUString& rStr)
+bool ErrorHandler::GetErrorString(sal_uIntPtr lId, OUString& rStr)
 {
-    return (sal_Bool)HandleError_Impl( lId, USHRT_MAX, sal_True, rStr );
+    return (bool)HandleError_Impl( lId, USHRT_MAX, true, rStr );
 }
 
 /** Handles an error.
@@ -358,22 +358,22 @@ sal_Bool ErrorHandler::GetErrorString(sal_uIntPtr lId, OUString& rStr)
 sal_uInt16 ErrorHandler::HandleError(sal_uIntPtr lId, sal_uInt16 nFlags)
 {
     OUString aDummy;
-    return HandleError_Impl( lId, nFlags, sal_False, aDummy );
+    return HandleError_Impl( lId, nFlags, false, aDummy );
 }
 
-sal_Bool ErrHdl_Impl::CreateString( const ErrorHandler *pStart,
+bool ErrHdl_Impl::CreateString( const ErrorHandler *pStart,
                                     const ErrorInfo* pInfo, OUString& pStr,
                                     sal_uInt16 &rFlags)
 {
     for(const ErrorHandler *pHdl=pStart;pHdl;pHdl=pHdl->pImpl->pNext)
     {
         if(pHdl->CreateString( pInfo, pStr, rFlags))
-            return sal_True;
+            return true;
     }
-    return sal_False;
+    return false;
 }
 
-sal_Bool SimpleErrorHandler::CreateString(
+bool SimpleErrorHandler::CreateString(
     const ErrorInfo *pInfo, OUString &rStr, sal_uInt16 &) const
 {
     sal_uIntPtr nId = pInfo->GetErrorCode();
@@ -397,7 +397,7 @@ sal_Bool SimpleErrorHandler::CreateString(
     }
     rStr = OStringToOUString(aStr.makeStringAndClear(),
         RTL_TEXTENCODING_ASCII_US);
-    return sal_True;
+    return true;
 }
 
 SimpleErrorHandler::SimpleErrorHandler()

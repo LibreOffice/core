@@ -56,8 +56,8 @@ class TOOLS_DLLPUBLIC ZCodec
 {
 private:
     sal_uIntPtr     mbInit;
-    sal_Bool        mbStatus;
-    sal_Bool        mbFinish;
+    bool            mbStatus;
+    bool            mbFinish;
     sal_uIntPtr     mnMemUsage;
     SvStream*       mpIStm;
     sal_uInt8*      mpInBuf;
@@ -71,7 +71,7 @@ private:
     sal_uIntPtr     mnCompressMethod;
     void*           mpsC_Stream;
 
-    void            ImplInitBuf( sal_Bool nIOFlag );
+    void            ImplInitBuf( bool nIOFlag );
     void            ImplWriteBack( void );
 
 public:
@@ -81,7 +81,7 @@ public:
 
     virtual void    BeginCompression( sal_uIntPtr nCompressMethod = ZCODEC_DEFAULT );
     virtual long    EndCompression();
-    sal_Bool        IsFinished () const { return mbFinish; }
+    bool            IsFinished () const { return mbFinish; }
 
     long            Compress( SvStream& rIStm, SvStream& rOStm );
     long            Decompress( SvStream& rIStm, SvStream& rOStm );

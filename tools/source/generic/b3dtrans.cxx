@@ -149,11 +149,11 @@ void B3dTransformationSet::Reset()
     maViewportRectangle = Rectangle(-1, -1, 2, 2);
     maVisibleRectangle = maViewportRectangle;
 
-    mbPerspective = sal_True;
+    mbPerspective = true;
 
-    mbProjectionValid = sal_False;
-    mbObjectToDeviceValid = sal_False;
-    mbWorldToViewValid = sal_False;
+    mbProjectionValid = false;
+    mbObjectToDeviceValid = false;
+    mbWorldToViewValid = false;
 
     CalcViewport();
 }
@@ -171,9 +171,9 @@ void B3dTransformationSet::SetOrientation( basegfx::B3DPoint aVRP, basegfx::B3DV
     maOrientation.identity();
     Orientation(maOrientation, aVRP, aVPN, aVUP);
 
-    mbInvTransObjectToEyeValid = sal_False;
-    mbObjectToDeviceValid = sal_False;
-    mbWorldToViewValid = sal_False;
+    mbInvTransObjectToEyeValid = false;
+    mbObjectToDeviceValid = false;
+    mbWorldToViewValid = false;
 
     PostSetOrientation();
 }
@@ -206,8 +206,8 @@ void B3dTransformationSet::PostSetProjection()
     maInvProjection.invert();
 
     // invalidate dependent matrices
-    mbObjectToDeviceValid = sal_False;
-    mbWorldToViewValid = sal_False;
+    mbObjectToDeviceValid = false;
+    mbWorldToViewValid = false;
 }
 
 /// Transformations for viewport
@@ -309,7 +309,7 @@ void B3dTransformationSet::CalcViewport()
     }
 
     // Set to true to guarantee loop termination
-    mbProjectionValid = sal_True;
+    mbProjectionValid = true;
 
     // set new projection
     SetProjection(aNewProjection);
@@ -334,14 +334,14 @@ void B3dTransformationSet::SetRatio(double fNew)
     if(mfRatio != fNew)
     {
         mfRatio = fNew;
-        mbProjectionValid = sal_False;
-        mbObjectToDeviceValid = sal_False;
-        mbWorldToViewValid = sal_False;
+        mbProjectionValid = false;
+        mbObjectToDeviceValid = false;
+        mbWorldToViewValid = false;
     }
 }
 
 void B3dTransformationSet::SetDeviceRectangle(double fL, double fR, double fB, double fT,
-    sal_Bool bBroadCastChange)
+                                              bool bBroadCastChange)
 {
     if(fL != mfLeftBound || fR != mfRightBound || fB != mfBottomBound || fT != mfTopBound)
     {
@@ -350,9 +350,9 @@ void B3dTransformationSet::SetDeviceRectangle(double fL, double fR, double fB, d
         mfBottomBound = fB;
         mfTopBound = fT;
 
-        mbProjectionValid = sal_False;
-        mbObjectToDeviceValid = sal_False;
-        mbWorldToViewValid = sal_False;
+        mbProjectionValid = false;
+        mbObjectToDeviceValid = false;
+        mbWorldToViewValid = false;
 
         // Broadcast changes
         if(bBroadCastChange)
@@ -364,14 +364,14 @@ void B3dTransformationSet::DeviceRectangleChange()
 {
 }
 
-void B3dTransformationSet::SetPerspective(sal_Bool bNew)
+void B3dTransformationSet::SetPerspective(bool bNew)
 {
     if(mbPerspective != bNew)
     {
         mbPerspective = bNew;
-        mbProjectionValid = sal_False;
-        mbObjectToDeviceValid = sal_False;
-        mbWorldToViewValid = sal_False;
+        mbProjectionValid = false;
+        mbObjectToDeviceValid = false;
+        mbWorldToViewValid = false;
     }
 }
 
@@ -382,9 +382,9 @@ void B3dTransformationSet::SetViewportRectangle(Rectangle& rRect, Rectangle& rVi
         maViewportRectangle = rRect;
         maVisibleRectangle = rVisible;
 
-        mbProjectionValid = sal_False;
-        mbObjectToDeviceValid = sal_False;
-        mbWorldToViewValid = sal_False;
+        mbProjectionValid = false;
+        mbObjectToDeviceValid = false;
+        mbWorldToViewValid = false;
     }
 }
 
@@ -449,7 +449,7 @@ void B3dViewport::CalcOrientation()
 
 B3dCamera::B3dCamera(
     const basegfx::B3DPoint& rPos, const basegfx::B3DVector& rLkAt,
-    double fFocLen, double fBnkAng, sal_Bool bUseFocLen)
+    double fFocLen, double fBnkAng, bool bUseFocLen)
 :   B3dViewport(),
     aPosition(rPos),
     aCorrectedPosition(rPos),
@@ -508,17 +508,17 @@ void B3dCamera::CalcNewViewportValues()
     }
 }
 
-sal_Bool B3dCamera::CalcFocalLength()
+bool B3dCamera::CalcFocalLength()
 {
     double fWidth = GetDeviceRectangleWidth();
-    sal_Bool bRetval = sal_False;
+    bool bRetval = false;
 
     if(bUseFocalLength)
     {
         // Update position if focal length changes
         aCorrectedPosition = basegfx::B3DPoint(0.0, 0.0, fFocalLength * fWidth / 35.0);
         aCorrectedPosition = EyeToWorldCoor(aCorrectedPosition);
-        bRetval = sal_True;
+        bRetval = true;
     }
     else
     {

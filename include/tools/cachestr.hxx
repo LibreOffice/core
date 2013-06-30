@@ -20,7 +20,6 @@
 #define _CACHESTR_HXX
 
 #include <tools/stream.hxx>
-#include <tools/string.hxx>
 #include "tools/toolsdllapi.h"
 
 class TempFile;
@@ -28,9 +27,9 @@ class TempFile;
 class TOOLS_DLLPUBLIC SvCacheStream : public SvStream
 {
 private:
-    String          aFileName;
+    OUString        aFileName;
     sal_uIntPtr     nMaxSize;
-    int             bPersistent;
+    bool            bPersistent;
 
     SvStream*       pSwapStream;
     SvStream*       pCurrentStream;
@@ -48,18 +47,16 @@ public:
                     SvCacheStream( sal_uIntPtr nMaxMemSize = 0 );
                     ~SvCacheStream();
 
-    void            SetFilename( const String& rFN )
-                 { aFileName = rFN; } // call only from FilenameHdl
-    const String&   GetFilename() const { return aFileName; }
+    void            SetFilename( const OUString& rFN ) { aFileName = rFN; } // call only from FilenameHdl
+    const OUString& GetFilename() const { return aFileName; }
 
     void            SwapOut();
     const void*     GetBuffer();
     sal_uIntPtr     GetSize();
 
-    sal_Bool        IsPersistent() { return bPersistent != 0; }
-    void            SetPersistence( sal_Bool b = sal_True ) { bPersistent = b; }
-    void            SetSwapStream( SvStream *p )
-                 { pSwapStream = p; } // call only from FilenameHdl
+    bool            IsPersistent() { return bPersistent; }
+    void            SetPersistence( bool b = true ) { bPersistent = b; }
+    void            SetSwapStream( SvStream *p ) { pSwapStream = p; } // call only from FilenameHdl
 };
 
 #endif

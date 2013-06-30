@@ -19,48 +19,48 @@
 #include <tools/datetime.hxx>
 #include <rtl/math.hxx>
 
-sal_Bool DateTime::IsBetween( const DateTime& rFrom, const DateTime& rTo ) const
+bool DateTime::IsBetween( const DateTime& rFrom, const DateTime& rTo ) const
 {
     if ( (*this >= rFrom) && (*this <= rTo) )
-        return sal_True;
+        return true;
     else
-        return sal_False;
+        return false;
 }
 
-sal_Bool DateTime::operator >( const DateTime& rDateTime ) const
+bool DateTime::operator >( const DateTime& rDateTime ) const
 {
     if ( (Date::operator>( rDateTime )) ||
          (Date::operator==( rDateTime ) && Time::operator>( rDateTime )) )
-        return sal_True;
+        return true;
     else
-        return sal_False;
+        return false;
 }
 
-sal_Bool DateTime::operator <( const DateTime& rDateTime ) const
+bool DateTime::operator <( const DateTime& rDateTime ) const
 {
     if ( (Date::operator<( rDateTime )) ||
          (Date::operator==( rDateTime ) && Time::operator<( rDateTime )) )
-        return sal_True;
+        return true;
     else
-        return sal_False;
+        return false;
 }
 
-sal_Bool DateTime::operator >=( const DateTime& rDateTime ) const
+bool DateTime::operator >=( const DateTime& rDateTime ) const
 {
     if ( (Date::operator>( rDateTime )) ||
          (Date::operator==( rDateTime ) && Time::operator>=( rDateTime )) )
-        return sal_True;
+        return true;
     else
-        return sal_False;
+        return false;
 }
 
-sal_Bool DateTime::operator <=( const DateTime& rDateTime ) const
+bool DateTime::operator <=( const DateTime& rDateTime ) const
 {
     if ( (Date::operator<( rDateTime )) ||
          (Date::operator==( rDateTime ) && Time::operator<=( rDateTime )) )
-        return sal_True;
+        return true;
     else
-        return sal_False;
+        return false;
 }
 
 long DateTime::GetSecFromDateTime( const Date& rDate ) const
