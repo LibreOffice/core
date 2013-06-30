@@ -228,10 +228,13 @@ const short HITPIX=2; //hit-tolerance in pixel
 //-----------------------------------------------------------------
 // awt::XWindow
 //-----------------------------------------------------------------
-    void SAL_CALL ChartController
-::setPosSize( sal_Int32 X, sal_Int32 Y
-            , sal_Int32 Width, sal_Int32 Height, sal_Int16 Flags )
-            throw (uno::RuntimeException)
+void SAL_CALL ChartController::setPosSize(
+    sal_Int32 X,
+    sal_Int32 Y,
+    sal_Int32 Width,
+    sal_Int32 Height,
+    sal_Int16 Flags )
+        throw (uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
     uno::Reference<awt::XWindow> xWindow = m_xViewWindow;
@@ -250,9 +253,11 @@ const short HITPIX=2; //hit-tolerance in pixel
             sal_Int32 nScaleXDenominator = aModelPageSize.Width;
             sal_Int32 nScaleYNumerator = aLogicSize.Height();
             sal_Int32 nScaleYDenominator = aModelPageSize.Height;
-            MapMode aNewMapMode( MAP_100TH_MM, Point(0,0)
-            , Fraction(nScaleXNumerator,nScaleXDenominator)
-            , Fraction(nScaleYNumerator,nScaleYDenominator) );
+            MapMode aNewMapMode(
+                        MAP_100TH_MM,
+                        Point(0,0),
+                        Fraction(nScaleXNumerator, nScaleXDenominator),
+                        Fraction(nScaleYNumerator, nScaleYDenominator) );
             m_pChartWindow->SetMapMode(aNewMapMode);
             m_pChartWindow->setPosSizePixel( X, Y, Width, Height, Flags );
 
@@ -289,12 +294,11 @@ const short HITPIX=2; //hit-tolerance in pixel
     }
 }
 
-    awt::Rectangle SAL_CALL ChartController
-::getPosSize()
-            throw (uno::RuntimeException)
+awt::Rectangle SAL_CALL ChartController::getPosSize()
+    throw (uno::RuntimeException)
 {
     //@todo
-    awt::Rectangle aRet(0,0,0,0);
+    awt::Rectangle aRet(0, 0, 0, 0);
 
     uno::Reference<awt::XWindow> xWindow = m_xViewWindow;
     if(xWindow.is())
@@ -303,9 +307,8 @@ const short HITPIX=2; //hit-tolerance in pixel
     return aRet;
 }
 
-    void SAL_CALL ChartController
-::setVisible( sal_Bool Visible )
-            throw (uno::RuntimeException)
+void SAL_CALL ChartController::setVisible( sal_Bool Visible )
+    throw (uno::RuntimeException)
 {
     //@todo
     uno::Reference<awt::XWindow> xWindow = m_xViewWindow;
@@ -314,9 +317,8 @@ const short HITPIX=2; //hit-tolerance in pixel
         xWindow->setVisible( Visible );
 }
 
-    void SAL_CALL ChartController
-::setEnable( sal_Bool Enable )
-            throw (uno::RuntimeException)
+void SAL_CALL ChartController::setEnable( sal_Bool Enable )
+    throw (uno::RuntimeException)
 {
     //@todo
     uno::Reference<awt::XWindow> xWindow = m_xViewWindow;
@@ -325,8 +327,8 @@ const short HITPIX=2; //hit-tolerance in pixel
         xWindow->setEnable( Enable );
 }
 
-    void SAL_CALL ChartController
-::setFocus()    throw (uno::RuntimeException)
+void SAL_CALL ChartController::setFocus()
+    throw (uno::RuntimeException)
 {
     //@todo
     uno::Reference<awt::XWindow> xWindow = m_xViewWindow;
@@ -335,10 +337,9 @@ const short HITPIX=2; //hit-tolerance in pixel
         xWindow->setFocus();
 }
 
-    void SAL_CALL ChartController
-::addWindowListener( const uno::Reference<
-            awt::XWindowListener >& xListener )
-            throw (uno::RuntimeException)
+void SAL_CALL ChartController::addWindowListener(
+    const uno::Reference< awt::XWindowListener >& xListener )
+        throw (uno::RuntimeException)
 {
     //@todo
     uno::Reference<awt::XWindow> xWindow = m_xViewWindow;
@@ -347,10 +348,9 @@ const short HITPIX=2; //hit-tolerance in pixel
         xWindow->addWindowListener( xListener );
 }
 
-    void SAL_CALL ChartController
-::removeWindowListener( const uno::Reference<
-            awt::XWindowListener >& xListener )
-            throw (uno::RuntimeException)
+void SAL_CALL ChartController::removeWindowListener(
+    const uno::Reference< awt::XWindowListener >& xListener )
+        throw (uno::RuntimeException)
 {
     //@todo
     uno::Reference<awt::XWindow> xWindow = m_xViewWindow;
@@ -359,10 +359,9 @@ const short HITPIX=2; //hit-tolerance in pixel
         xWindow->removeWindowListener( xListener );
 }
 
-    void SAL_CALL ChartController
-::addFocusListener( const uno::Reference<
-            awt::XFocusListener >& xListener )
-            throw (uno::RuntimeException)
+void SAL_CALL ChartController::addFocusListener(
+    const uno::Reference< awt::XFocusListener >& xListener )
+        throw (uno::RuntimeException)
 {
     //@todo
     uno::Reference<awt::XWindow> xWindow = m_xViewWindow;
@@ -371,10 +370,9 @@ const short HITPIX=2; //hit-tolerance in pixel
         xWindow->addFocusListener( xListener );
 }
 
-    void SAL_CALL ChartController
-::removeFocusListener( const uno::Reference<
-            awt::XFocusListener >& xListener )
-            throw (uno::RuntimeException)
+void SAL_CALL ChartController::removeFocusListener(
+    const uno::Reference< awt::XFocusListener >& xListener )
+        throw (uno::RuntimeException)
 {
     //@todo
     uno::Reference<awt::XWindow> xWindow = m_xViewWindow;
@@ -383,10 +381,9 @@ const short HITPIX=2; //hit-tolerance in pixel
         xWindow->removeFocusListener( xListener );
 }
 
-    void SAL_CALL ChartController
-::addKeyListener( const uno::Reference<
-            awt::XKeyListener >& xListener )
-            throw (uno::RuntimeException)
+void SAL_CALL ChartController::addKeyListener(
+    const uno::Reference< awt::XKeyListener >& xListener )
+        throw (uno::RuntimeException)
 {
     //@todo
     uno::Reference<awt::XWindow> xWindow = m_xViewWindow;
@@ -395,10 +392,9 @@ const short HITPIX=2; //hit-tolerance in pixel
         xWindow->addKeyListener( xListener );
 }
 
-    void SAL_CALL ChartController
-::removeKeyListener( const uno::Reference<
-            awt::XKeyListener >& xListener )
-            throw (uno::RuntimeException)
+void SAL_CALL ChartController::removeKeyListener(
+    const uno::Reference< awt::XKeyListener >& xListener )
+        throw (uno::RuntimeException)
 {
     //@todo
     uno::Reference<awt::XWindow> xWindow = m_xViewWindow;
@@ -407,10 +403,9 @@ const short HITPIX=2; //hit-tolerance in pixel
         xWindow->removeKeyListener( xListener );
 }
 
-    void SAL_CALL ChartController
-::addMouseListener( const uno::Reference<
-            awt::XMouseListener >& xListener )
-            throw (uno::RuntimeException)
+void SAL_CALL ChartController::addMouseListener(
+    const uno::Reference< awt::XMouseListener >& xListener )
+        throw (uno::RuntimeException)
 {
     //@todo
     uno::Reference<awt::XWindow> xWindow = m_xViewWindow;
@@ -419,10 +414,9 @@ const short HITPIX=2; //hit-tolerance in pixel
         xWindow->addMouseListener( xListener );
 }
 
-    void SAL_CALL ChartController
-::removeMouseListener( const uno::Reference<
-            awt::XMouseListener >& xListener )
-            throw (uno::RuntimeException)
+void SAL_CALL ChartController::removeMouseListener(
+    const uno::Reference< awt::XMouseListener >& xListener )
+        throw (uno::RuntimeException)
 {
     //@todo
     uno::Reference<awt::XWindow> xWindow = m_xViewWindow;
@@ -431,10 +425,9 @@ const short HITPIX=2; //hit-tolerance in pixel
         xWindow->removeMouseListener( xListener );
 }
 
-    void SAL_CALL ChartController
-::addMouseMotionListener( const uno::Reference<
-            awt::XMouseMotionListener >& xListener )
-            throw (uno::RuntimeException)
+void SAL_CALL ChartController::addMouseMotionListener(
+    const uno::Reference< awt::XMouseMotionListener >& xListener )
+        throw (uno::RuntimeException)
 {
     //@todo
     uno::Reference<awt::XWindow> xWindow = m_xViewWindow;
@@ -443,10 +436,9 @@ const short HITPIX=2; //hit-tolerance in pixel
         xWindow->addMouseMotionListener( xListener );
 }
 
-    void SAL_CALL ChartController
-::removeMouseMotionListener( const uno::Reference<
-            awt::XMouseMotionListener >& xListener )
-            throw (uno::RuntimeException)
+void SAL_CALL ChartController::removeMouseMotionListener(
+    const uno::Reference< awt::XMouseMotionListener >& xListener )
+        throw (uno::RuntimeException)
 {
     //@todo
     uno::Reference<awt::XWindow> xWindow = m_xViewWindow;
@@ -455,10 +447,9 @@ const short HITPIX=2; //hit-tolerance in pixel
         xWindow->removeMouseMotionListener( xListener );
 }
 
-    void SAL_CALL ChartController
-::addPaintListener( const uno::Reference<
-            awt::XPaintListener >& xListener )
-            throw (uno::RuntimeException)
+void SAL_CALL ChartController::addPaintListener(
+    const uno::Reference< awt::XPaintListener >& xListener )
+        throw (uno::RuntimeException)
 {
     //@todo
     uno::Reference<awt::XWindow> xWindow = m_xViewWindow;
@@ -467,10 +458,9 @@ const short HITPIX=2; //hit-tolerance in pixel
         xWindow->addPaintListener( xListener );
 }
 
-    void SAL_CALL ChartController
-::removePaintListener( const uno::Reference<
-            awt::XPaintListener >& xListener )
-            throw (uno::RuntimeException)
+void SAL_CALL ChartController::removePaintListener(
+    const uno::Reference< awt::XPaintListener >& xListener )
+        throw (uno::RuntimeException)
 {
     //@todo
     uno::Reference<awt::XWindow> xWindow = m_xViewWindow;
@@ -506,7 +496,7 @@ void ChartController::execute_Paint( const Rectangle& rRect )
         uno::Reference< beans::XPropertySet > xProp( m_xChartView, uno::UNO_QUERY );
         if( xProp.is() )
         {
-            awt::Size aResolution(1000,1000);
+            awt::Size aResolution(1000, 1000);
             {
                 SolarMutexGuard aGuard;
                 if( m_pChartWindow )
@@ -582,9 +572,12 @@ IMPL_LINK_NOARG(ChartController, DoubleClickWaitingHdl)
         if( m_pChartWindow )
         {
             Window::PointerState aPointerState( m_pChartWindow->GetPointerState() );
-            MouseEvent aMouseEvent( aPointerState.maPos,1/*nClicks*/,
-                                    0/*nMode*/, static_cast< sal_uInt16 >( aPointerState.mnState )/*nButtons*/,
-                                    0/*nModifier*/ );
+            MouseEvent aMouseEvent(
+                            aPointerState.maPos,
+                            1/*nClicks*/,
+                            0/*nMode*/,
+                            static_cast< sal_uInt16 >( aPointerState.mnState )/*nButtons*/,
+                            0/*nModifier*/ );
             impl_SetMousePointer( aMouseEvent );
         }
     }
@@ -686,8 +679,11 @@ void ChartController::execute_MouseButtonDown( const MouseEvent& rMEvt )
             return;
         }
 
-        m_aSelection.adaptSelectionToNewPos( aMPos, pDrawViewWrapper
-            , rMEvt.IsRight(), m_bWaitingForDoubleClick );
+        m_aSelection.adaptSelectionToNewPos(
+                        aMPos,
+                        pDrawViewWrapper,
+                        rMEvt.IsRight(),
+                        m_bWaitingForDoubleClick );
 
         if( !m_aSelection.isRotateableObjectSelected( getModel() ) )
         {
@@ -698,7 +694,7 @@ void ChartController::execute_MouseButtonDown( const MouseEvent& rMEvt )
         m_aSelection.applySelection(pDrawViewWrapper);
     }
     if( m_aSelection.isDragableObjectSelected()
-         && !rMEvt.IsRight() )
+        && !rMEvt.IsRight() )
     {
         //start drag
         sal_uInt16  nDrgLog = (sal_uInt16)m_pChartWindow->PixelToLogic(Size(DRGPIX,0)).Width();
@@ -758,11 +754,10 @@ void ChartController::execute_MouseMove( const MouseEvent& rMEvt )
 
     impl_SetMousePointer( rMEvt );
 }
+
 void ChartController::execute_Tracking( const TrackingEvent& /* rTEvt */ )
 {
 }
-
-//-----------------
 
 void ChartController::execute_MouseButtonUp( const MouseEvent& rMEvt )
 {
@@ -970,10 +965,12 @@ void ChartController::execute_Resize()
     if(m_pChartWindow)
         m_pChartWindow->Invalidate();
 }
+
 void ChartController::execute_Activate()
 {
     ///// pDrawViewWrapper->SetEditMode(sal_True);
 }
+
 void ChartController::execute_Deactivate()
 {
     /*
@@ -981,9 +978,11 @@ void ChartController::execute_Deactivate()
     this->ReleaseMouse();
     */
 }
+
 void ChartController::execute_GetFocus()
 {
 }
+
 void ChartController::execute_LoseFocus()
 {
     //this->ReleaseMouse();
@@ -1130,9 +1129,9 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
                     }
 
                     if( bHasDataLabelsAtSeries )
-                        lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:FormatDataLabels" );
-                    if( xTrendline.is() )
-                        lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:FormatTrendline" );
+                        lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:FormatDataLabels" );
+                    //if( xTrendline.is() )
+                    //    lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:FormatTrendline" );
                     if( bHasEquation )
                         lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:FormatTrendlineEquation" );
                     if( xMeanValue.is() )
@@ -1145,11 +1144,13 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
                     xPopupMenu->insertSeparator( -1 );
 
                     if( !bHasDataLabelsAtSeries )
-                        lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:InsertDataLabels" );
-                    if( !xTrendline.is() )
-                        lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:InsertTrendline" );
-                    else if( !bHasEquation )
-                        lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:InsertTrendlineEquation" );
+                        lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:InsertDataLabels" );
+
+                    //if( !xTrendline.is() )
+                    lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:InsertTrendline" );
+                    //else if( !bHasEquation )
+                    //lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:InsertTrendlineEquation" );
+
                     if( !xMeanValue.is() )
                         lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:InsertMeanValue" );
                     if( !bHasXErrorBars )
@@ -1159,9 +1160,9 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
 
 
                     if( bHasDataLabelsAtSeries || ( bHasDataLabelsAtPoints && bHasFormattedDataPointsOtherThanSelected ) )
-                        lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:DeleteDataLabels" );
-                    if( xTrendline.is() )
-                        lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:DeleteTrendline" );
+                        lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:DeleteDataLabels" );
+                    //if( xTrendline.is() )
+                    //    lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:DeleteTrendline" );
                     if( bHasEquation )
                         lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:DeleteTrendlineEquation" );
                     if( xMeanValue.is() )
@@ -1192,12 +1193,13 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
                 }
                 else if( OBJECTTYPE_DATA_CURVE == eObjectType )
                 {
-                    lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:FormatTrendlineEquation" );
-                    lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:InsertTrendlineEquation" );
-                    lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:InsertTrendlineEquationAndR2" );
-                    lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:InsertR2Value" );
-                    lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:DeleteTrendlineEquation" );
-                    lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:DeleteR2Value" );
+                    lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:DeleteTrendline" );
+                    lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:FormatTrendlineEquation" );
+                    lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:InsertTrendlineEquation" );
+                    lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:InsertTrendlineEquationAndR2" );
+                    lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:InsertR2Value" );
+                    lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:DeleteTrendlineEquation" );
+                    lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:DeleteR2Value" );
                 }
                 else if( OBJECTTYPE_DATA_CURVE_EQUATION == eObjectType )
                 {

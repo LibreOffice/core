@@ -242,12 +242,12 @@ void ControllerState::update(
                     if( xRegCurveCnt.is())
                     {
                         uno::Reference< chart2::XRegressionCurve > xRegCurve( RegressionCurveHelper::getFirstCurveNotMeanValueLine( xRegCurveCnt ) );
-                        bMayFormatTrendline = bMayDeleteTrendline = xRegCurve.is();
+                        // Trendline
+                        bMayAddTrendline = true;
+
+                        // Mean Value
                         bMayFormatMeanValue = bMayDeleteMeanValue = RegressionCurveHelper::hasMeanValueLine( xRegCurveCnt );
-                        bMayAddTrendline = ! bMayDeleteTrendline;
                         bMayAddMeanValue = ! bMayDeleteMeanValue;
-                        bMayFormatTrendlineEquation = bMayDeleteTrendlineEquation = RegressionCurveHelper::hasEquation( xRegCurve );
-                        bMayAddTrendlineEquation = !bMayDeleteTrendlineEquation;
                     }
                 }
 
@@ -275,8 +275,11 @@ void ControllerState::update(
             if( aObjectType == OBJECTTYPE_DATA_CURVE )
             {
                 bMayFormatTrendline = true;
+                bMayDeleteTrendline = true;
                 uno::Reference< chart2::XRegressionCurve > xRegCurve(
                     ObjectIdentifier::getObjectPropertySet( aSelObjCID, xModel ), uno::UNO_QUERY );
+
+                // Trendline Equation
                 bMayFormatTrendlineEquation = bMayDeleteTrendlineEquation = RegressionCurveHelper::hasEquation( xRegCurve );
                 bMayAddTrendlineEquation = !bMayDeleteTrendlineEquation;
             }
@@ -286,10 +289,10 @@ void ControllerState::update(
                 bool bHasR2Value = false;
                 try
                 {
-                    uno::Reference< beans::XPropertySet > xEqProp(
+                    uno::Reference< beans::XPropertySet > xEquationProperties(
                         ObjectIdentifier::getObjectPropertySet( aSelObjCID, xModel ), uno::UNO_QUERY );
-                    if( xEqProp.is())
-                        xEqProp->getPropertyValue( "ShowCorrelationCoefficient" ) >>= bHasR2Value;
+                    if( xEquationProperties.is() )
+                        xEquationProperties->getPropertyValue( "ShowCorrelationCoefficient" ) >>= bHasR2Value;
                 }
                 catch(const uno::RuntimeException& e)
                 {
