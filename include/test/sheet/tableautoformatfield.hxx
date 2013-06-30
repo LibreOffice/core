@@ -15,7 +15,7 @@ class TableAutoFormatField
 {
 public:
     //don't use virtual init() here
-    css::uno::Reference< beans::XPropertySet > initTest();
+    css::uno::Reference< css::beans::XPropertySet > initTest();
 
     virtual css::uno::Reference< > getServiceFactory() = 0;
 
