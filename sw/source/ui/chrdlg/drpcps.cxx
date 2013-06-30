@@ -544,11 +544,15 @@ SwDropCapsPage::SwDropCapsPage(Window *pParent, const SfxItemSet &rSet)
     get(m_pDropCapsField,"spinFLD_DROPCAPS");
     get(m_pLinesField,"spinFLD_LINES");
     get(m_pDistanceField,"spinFLD_DISTANCE");
-    get(m_pContentFL,"frameFL_CONTENT");
+    get(m_pSwitchText,"labelFT_DROPCAPS");
+    get(m_pLinesText,"labelTXT_LINES");
+    get(m_pDistanceText,"labelTXT_DISTANCE");
+    get(m_pTemplateText,"labelTXT_TEMPLATE");
     get(m_pTextText,"labelTXT_TEXT");
     get(m_pTextEdit,"entryEDT_TEXT");
     get(m_pTemplateBox,"comboBOX_TEMPLATE");
     get(m_pPict,"drawingareaWN_EXAMPLE");
+
     m_pPict->SetDropCapsPage(this);
 
     SetExchangeSupport();
@@ -562,7 +566,6 @@ SwDropCapsPage::SwDropCapsPage(Window *pParent, const SfxItemSet &rSet)
 
     // Metrics
     SetMetric( *m_pDistanceField, GetDfltMetric(bHtmlMode) );
-
 
     m_pPict->SetBorderStyle( WINDOW_BORDER_MONO );
 
@@ -675,16 +678,16 @@ IMPL_LINK_NOARG(SwDropCapsPage, ClickHdl)
 
     m_pWholeWordCB->Enable( bChecked && !bHtmlMode );
 
-    //aSwitchText.Enable( bChecked && !m_pWholeWordCB->IsChecked() );
+    m_pSwitchText->Enable( bChecked && !m_pWholeWordCB->IsChecked() );
     m_pDropCapsField->Enable( bChecked && !m_pWholeWordCB->IsChecked() );
-    //aLinesText   .Enable( bChecked );
+    m_pLinesText->Enable( bChecked );
     m_pLinesField->Enable( bChecked );
-    //aDistanceText.Enable( bChecked );
+    m_pDistanceText->Enable( bChecked );
     m_pDistanceField->Enable( bChecked );
-    //aTemplateText .Enable( bChecked );
+    m_pTemplateText->Enable( bChecked );
     m_pTemplateBox->Enable( bChecked );
     m_pTextEdit->Enable( bChecked && !bFormat );
-    //aTextText     .Enable( bChecked && !bFormat );
+    m_pTextText->Enable( bChecked && !bFormat );
 
     if ( bChecked )
     {
@@ -692,7 +695,7 @@ IMPL_LINK_NOARG(SwDropCapsPage, ClickHdl)
         m_pDropCapsField->GrabFocus();
     }
     else
-        m_pPict->SetText(OUString());
+        m_pPict->SetText("");
 
     bModified = sal_True;
 
@@ -707,6 +710,7 @@ Page: CheckBox's Click-Handler
 IMPL_LINK_NOARG(SwDropCapsPage, WholeWordHdl)
 {
     m_pDropCapsField->Enable( !m_pWholeWordCB->IsChecked() );
+    m_pSwitchText->Enable(!m_pWholeWordCB->IsChecked());
 
     ModifyHdl(m_pDropCapsField);
 
