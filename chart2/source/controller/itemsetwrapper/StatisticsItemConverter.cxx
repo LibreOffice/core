@@ -415,33 +415,35 @@ bool StatisticsItemConverter::ApplySpecialItem(
                 static_cast< const SvxChartRegressItem& >(
                     rItemSet.Get( nWhichId )).GetValue();
 
-            uno::Reference< chart2::XRegressionCurve > xRegressionCurve( GetPropertySet(), uno::UNO_QUERY );
-            uno::Reference< chart2::XRegressionCurveContainer > xRegressionCurveContainer( GetPropertySet(), uno::UNO_QUERY );
+            uno::Reference< chart2::XRegressionCurve > xCurve( GetPropertySet(), uno::UNO_QUERY );
+            uno::Reference< chart2::XRegressionCurveContainer > xContainer( GetPropertySet(), uno::UNO_QUERY );
 
             if( eRegress == CHREGRESS_NONE )
             {
-                if ( xRegressionCurve.is() )
+                if ( xContainer.is() )
                 {
-                    xRegressionCurveContainer->removeRegressionCurve( xRegressionCurve );
+                    xContainer->removeRegressionCurve( xCurve );
                     bChanged = true;
                 }
             }
             else
             {
-                if ( xRegressionCurve.is() )
+                if ( xCurve.is() )
                 {
                     SvxChartRegress eOldRegress(
                         static_cast< SvxChartRegress >(
                             static_cast< sal_Int32 >(
-                                RegressionCurveHelper::getRegressionType( xRegressionCurve ))));
+                                RegressionCurveHelper::getRegressionType( xCurve ))));
 
                     if( eOldRegress != eRegress )
                     {
-                        RegressionCurveHelper::changeRegressionCurveType(
-                            lcl_convertRegressionType( eRegress ),
-                            xRegressionCurveContainer,
-                            xRegressionCurve,
-                            uno::Reference< uno::XComponentContext >());
+                        xCurve = RegressionCurveHelper::changeRegressionCurveType(
+                                                lcl_convertRegressionType( eRegress ),
+                                                xContainer,
+                                                xCurve,
+                                                uno::Reference< uno::XComponentContext >());
+                        uno::Reference< beans::XPropertySet > xProperties( xCurve, uno::UNO_QUERY );
+                        resetPropertySet( xProperties );
                         bChanged = true;
                     }
                 }

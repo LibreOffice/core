@@ -101,73 +101,64 @@ public:
     /** Returns the first regression curve found that is not of type
         mean-value line
      */
-    static ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XRegressionCurve >
+    static com::sun::star::uno::Reference<com::sun::star::chart2::XRegressionCurve >
         getFirstCurveNotMeanValueLine(
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::chart2::XRegressionCurveContainer > & xRegCnt );
+            const com::sun::star::uno::Reference<
+                com::sun::star::chart2::XRegressionCurveContainer >& xCurveContainer );
 
     /** Returns the type of the first regression curve found that is not of type
         mean-value line
      */
     static tRegressionType getFirstRegressTypeNotMeanValueLine(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XRegressionCurveContainer > & xRegCnt );
+        const com::sun::star::uno::Reference<
+            com::sun::star::chart2::XRegressionCurveContainer >& xCurveContainer );
 
     static tRegressionType getRegressionType(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XRegressionCurve > & xCurve );
+        const com::sun::star::uno::Reference<
+            com::sun::star::chart2::XRegressionCurve >& xCurve );
 
     /** @param xPropertySource is taken as source to copy all properties from if
                not null
         @param xEquationProperties is set at the new regression curve as
                equation properties if not null
     */
-    static void addRegressionCurve( tRegressionType eType,
-            ::com::sun::star::uno::Reference<
-                ::com::sun::star::chart2::XRegressionCurveContainer > & xRegCnt,
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::uno::XComponentContext > & xContext,
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::beans::XPropertySet >& xPropertySource =
-                                ::com::sun::star::uno::Reference<
-                                    ::com::sun::star::beans::XPropertySet >(),
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::beans::XPropertySet >& xEquationProperties =
-                                ::com::sun::star::uno::Reference<
-                                    ::com::sun::star::beans::XPropertySet >()
-        );
+    static com::sun::star::uno::Reference< com::sun::star::chart2::XRegressionCurve >
+        addRegressionCurve(
+            tRegressionType eType,
+            com::sun::star::uno::Reference<
+                com::sun::star::chart2::XRegressionCurveContainer >& xCurveContainer,
+            const com::sun::star::uno::Reference<
+                com::sun::star::uno::XComponentContext >& xContext,
+            const com::sun::star::uno::Reference<
+                com::sun::star::beans::XPropertySet >& xPropertySource =
+                    com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet >(),
+            const com::sun::star::uno::Reference<
+                com::sun::star::beans::XPropertySet >& xEquationProperties =
+                    com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet >() );
 
     static bool removeAllExceptMeanValueLine(
-        ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XRegressionCurveContainer > & xRegCnt );
+        com::sun::star::uno::Reference<
+            com::sun::star::chart2::XRegressionCurveContainer >& xCurveContainer );
 
     static void removeEquations(
-        ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XRegressionCurveContainer > & xRegCnt );
-
-    /** adds the given regression curve if there was none before. If there are
-        regression curves, the first one is replaced by the one given by the
-        type. All remaining curves are remnoved.
-
-        <p>This function ignores mean-value lines.</p>
-     */
-    static void changeRegressionCurveType(
-        tRegressionType eType,
         com::sun::star::uno::Reference<
-            com::sun::star::chart2::XRegressionCurveContainer > & xRegressionCurveContainer,
-        com::sun::star::uno::Reference<
-            com::sun::star::chart2::XRegressionCurve > & xRegressionCurve,
-        const com::sun::star::uno::Reference<
-            com::sun::star::uno::XComponentContext > & xContext );
+            com::sun::star::chart2::XRegressionCurveContainer >& xCurveContainer );
+
+    static com::sun::star::uno::Reference< com::sun::star::chart2::XRegressionCurve >
+        changeRegressionCurveType(
+            tRegressionType eType,
+            com::sun::star::uno::Reference<
+                com::sun::star::chart2::XRegressionCurveContainer > & xRegressionCurveContainer,
+            com::sun::star::uno::Reference<
+                com::sun::star::chart2::XRegressionCurve > & xRegressionCurve,
+            const com::sun::star::uno::Reference<
+                com::sun::star::uno::XComponentContext > & xContext );
 
     // ------------------------------------------------------------
 
     /// returns a calculator object for regression curves (used by the view)
-    static ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XRegressionCurveCalculator >
-        createRegressionCurveCalculatorByServiceName(
-            OUString aServiceName );
+    static com::sun::star::uno::Reference< com::sun::star::chart2::XRegressionCurveCalculator >
+        createRegressionCurveCalculatorByServiceName( OUString aServiceName );
 
     /** recalculates the regression parameters according to the data given in
         the data source.

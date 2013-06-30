@@ -355,23 +355,24 @@ void RegressionCurveHelper::removeMeanValueLine(
     }
 }
 
-void RegressionCurveHelper::addRegressionCurve(
+uno::Reference< chart2::XRegressionCurve > RegressionCurveHelper::addRegressionCurve(
     tRegressionType eType,
-    uno::Reference< XRegressionCurveContainer > & xRegCnt,
-    const uno::Reference< XComponentContext > & /* xContext */,
+    uno::Reference< XRegressionCurveContainer >& xRegressionCurveContainer,
+    const uno::Reference< XComponentContext >& /* xContext */,
     const uno::Reference< beans::XPropertySet >& xPropertySource,
     const uno::Reference< beans::XPropertySet >& xEquationProperties )
 {
-    if( !xRegCnt.is() )
-        return;
+    uno::Reference< chart2::XRegressionCurve > xCurve;
+
+    if( !xRegressionCurveContainer.is() )
+        return xCurve;
 
     if( eType == REGRESSION_TYPE_NONE )
     {
         OSL_FAIL("don't create a regression curve of type none");
-        return;
+        return xCurve;
     }
 
-    uno::Reference< chart2::XRegressionCurve > xCurve;
     OUString aServiceName( lcl_getServiceNameForType( eType ));
     if( !aServiceName.isEmpty())
     {
@@ -389,17 +390,18 @@ void RegressionCurveHelper::addRegressionCurve(
                 comphelper::copyProperties( xPropertySource, xProperties );
             else
             {
-                uno::Reference< XPropertySet > xSeriesProp( xRegCnt, uno::UNO_QUERY );
+                uno::Reference< XPropertySet > xSeriesProp( xRegressionCurveContainer, uno::UNO_QUERY );
                 if( xSeriesProp.is())
                 {
                     xProperties->setPropertyValue( "LineColor",
                                              xSeriesProp->getPropertyValue( "Color"));
                 }
-//                 xProp->setPropertyValue( "LineWidth", uno::makeAny( sal_Int32( 100 )));
             }
         }
     }
-    xRegCnt->addRegressionCurve( xCurve );
+    xRegressionCurveContainer->addRegressionCurve( xCurve );
+
+    return xCurve;
 }
 
 /** removes all regression curves that are not of type mean value
@@ -472,14 +474,14 @@ void RegressionCurveHelper::removeEquations(
     }
 }
 
-void RegressionCurveHelper::changeRegressionCurveType(
+uno::Reference< XRegressionCurve > RegressionCurveHelper::changeRegressionCurveType(
     tRegressionType eType,
     uno::Reference< XRegressionCurveContainer > & xRegressionCurveContainer,
     uno::Reference< XRegressionCurve > & xRegressionCurve,
     const uno::Reference< XComponentContext > & xContext )
 {
     xRegressionCurveContainer->removeRegressionCurve( xRegressionCurve );
-    RegressionCurveHelper::addRegressionCurve(
+    return RegressionCurveHelper::addRegressionCurve(
             eType,
             xRegressionCurveContainer,
             xContext,
@@ -672,13 +674,14 @@ void RegressionCurveHelper::resetEquationPosition(
 }
 
 sal_Int32 RegressionCurveHelper::getRegressionCurveIndex(
-    const Reference< chart2::XRegressionCurveContainer > & xContainer,
-    const Reference< chart2::XRegressionCurve > & xCurve )
+    const Reference< chart2::XRegressionCurveContainer >& xContainer,
+    const Reference< chart2::XRegressionCurve >& xCurve )
 {
     if( xContainer.is())
     {
         uno::Sequence< uno::Reference< XRegressionCurve > > aCurves(
             xContainer->getRegressionCurves());
+
         for( sal_Int32 i = 0; i < aCurves.getLength(); ++i )
         {
             if( xCurve == aCurves[i] )

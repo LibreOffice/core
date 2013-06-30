@@ -409,55 +409,59 @@ void ChartController::executeDispatch_InsertMenu_Trendlines()
 
 void ChartController::executeDispatch_InsertTrendline()
 {
-    uno::Reference< chart2::XRegressionCurveContainer > xRegCurveCnt(
+    uno::Reference< chart2::XRegressionCurveContainer > xRegressionCurveContainer(
         ObjectIdentifier::getDataSeriesForCID( m_aSelection.getSelectedCID(), getModel()), uno::UNO_QUERY );
-    if( xRegCurveCnt.is())
-    {
-        UndoLiveUpdateGuard aUndoGuard(
-            ActionDescriptionProvider::createDescription(
-                ActionDescriptionProvider::INSERT, String( SchResId( STR_OBJECT_CURVE ))),
-            m_xUndoManager );
 
-        // add a linear curve
+    if( !xRegressionCurveContainer.is() )
+        return;
+
+    UndoLiveUpdateGuard aUndoGuard(
+        ActionDescriptionProvider::createDescription(
+            ActionDescriptionProvider::INSERT, String( SchResId( STR_OBJECT_CURVE ))),
+        m_xUndoManager );
+
+    // add a linear curve
+    uno::Reference< chart2::XRegressionCurve > xCurve =
         RegressionCurveHelper::addRegressionCurve(
-            RegressionCurveHelper::REGRESSION_TYPE_LINEAR, xRegCurveCnt, m_xCC );
+            RegressionCurveHelper::REGRESSION_TYPE_LINEAR,
+            xRegressionCurveContainer,
+            m_xCC );
 
-        // get an appropriate item converter
-        uno::Reference< chart2::XRegressionCurve > xCurve(
-            RegressionCurveHelper::getFirstCurveNotMeanValueLine( xRegCurveCnt ));
-        uno::Reference< beans::XPropertySet > xCurveProp( xCurve, uno::UNO_QUERY );
-        if( !xCurveProp.is())
-            return;
-        wrapper::RegressionCurveItemConverter aItemConverter(
-            xCurveProp, xRegCurveCnt, m_pDrawModelWrapper->getSdrModel().GetItemPool(),
-            m_pDrawModelWrapper->getSdrModel(),
-            uno::Reference< lang::XMultiServiceFactory >( getModel(), uno::UNO_QUERY ));
+    // get an appropriate item converter
+    uno::Reference< beans::XPropertySet > xProperties( xCurve, uno::UNO_QUERY );
 
-        // open dialog
-        SfxItemSet aItemSet = aItemConverter.CreateEmptyItemSet();
-        aItemConverter.FillItemSet( aItemSet );
-        ObjectPropertiesDialogParameter aDialogParameter = ObjectPropertiesDialogParameter(
-            ObjectIdentifier::createDataCurveCID(
-                ObjectIdentifier::getSeriesParticleFromCID( m_aSelection.getSelectedCID()),
-                RegressionCurveHelper::getRegressionCurveIndex( xRegCurveCnt, xCurve ), false ));
-        aDialogParameter.init( getModel() );
-        ViewElementListProvider aViewElementListProvider( m_pDrawModelWrapper.get());
-        SolarMutexGuard aGuard;
-        SchAttribTabDlg aDialog( m_pChartWindow, &aItemSet, &aDialogParameter, &aViewElementListProvider,
-                              uno::Reference< util::XNumberFormatsSupplier >( getModel(), uno::UNO_QUERY ));
+    if( !xProperties.is())
+        return;
 
-        // note: when a user pressed "OK" but didn't change any settings in the
-        // dialog, the SfxTabDialog returns "Cancel"
-        if( aDialog.Execute() == RET_OK || aDialog.DialogWasClosedWithOK())
+    wrapper::RegressionCurveItemConverter aItemConverter(
+        xProperties, xRegressionCurveContainer, m_pDrawModelWrapper->getSdrModel().GetItemPool(),
+        m_pDrawModelWrapper->getSdrModel(),
+        uno::Reference< lang::XMultiServiceFactory >( getModel(), uno::UNO_QUERY ));
+
+    // open dialog
+    SfxItemSet aItemSet = aItemConverter.CreateEmptyItemSet();
+    aItemConverter.FillItemSet( aItemSet );
+    ObjectPropertiesDialogParameter aDialogParameter = ObjectPropertiesDialogParameter(
+        ObjectIdentifier::createDataCurveCID(
+            ObjectIdentifier::getSeriesParticleFromCID( m_aSelection.getSelectedCID()),
+            RegressionCurveHelper::getRegressionCurveIndex( xRegressionCurveContainer, xCurve ), false ));
+    aDialogParameter.init( getModel() );
+    ViewElementListProvider aViewElementListProvider( m_pDrawModelWrapper.get());
+    SolarMutexGuard aGuard;
+    SchAttribTabDlg aDialog( m_pChartWindow, &aItemSet, &aDialogParameter, &aViewElementListProvider,
+                          uno::Reference< util::XNumberFormatsSupplier >( getModel(), uno::UNO_QUERY ));
+
+    // note: when a user pressed "OK" but didn't change any settings in the
+    // dialog, the SfxTabDialog returns "Cancel"
+    if( aDialog.Execute() == RET_OK || aDialog.DialogWasClosedWithOK())
+    {
+        const SfxItemSet* pOutItemSet = aDialog.GetOutputItemSet();
+        if( pOutItemSet )
         {
-            const SfxItemSet* pOutItemSet = aDialog.GetOutputItemSet();
-            if( pOutItemSet )
-            {
-                ControllerLockGuard aCLGuard( getModel() );
-                aItemConverter.ApplyItemSet( *pOutItemSet );
-            }
-            aUndoGuard.commit();
+            ControllerLockGuard aCLGuard( getModel() );
+            aItemConverter.ApplyItemSet( *pOutItemSet );
         }
+        aUndoGuard.commit();
     }
 }
 

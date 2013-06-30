@@ -76,8 +76,8 @@ namespace wrapper
 {
 
 RegressionCurveItemConverter::RegressionCurveItemConverter(
-    const uno::Reference< beans::XPropertySet > & rPropertySet,
-    const uno::Reference< chart2::XRegressionCurveContainer > & xRegCurveCnt,
+    const uno::Reference< beans::XPropertySet >& rPropertySet,
+    const uno::Reference< chart2::XRegressionCurveContainer >& xContainer,
     SfxItemPool& rItemPool,
     SdrModel& rDrawModel,
     const uno::Reference< lang::XMultiServiceFactory > & xNamedPropertyContainerFactory ) :
@@ -86,7 +86,7 @@ RegressionCurveItemConverter::RegressionCurveItemConverter(
                                   rPropertySet, rItemPool, rDrawModel,
                                   xNamedPropertyContainerFactory,
                                   GraphicPropertyItemConverter::LINE_PROPERTIES )),
-        m_xCurveContainer( xRegCurveCnt )
+        m_xCurveContainer( xContainer )
 {}
 
 RegressionCurveItemConverter::~RegressionCurveItemConverter()
@@ -146,11 +146,13 @@ bool RegressionCurveItemConverter::ApplySpecialItem(
                     // for which this converter was created. Not optimal, but
                     // currently the only way to handle the type in the
                     // regression curve properties dialog
-                    RegressionCurveHelper::changeRegressionCurveType(
-                        lcl_convertRegressionType( eNewRegress ),
-                        m_xCurveContainer,
-                        xCurve,
-                        uno::Reference< uno::XComponentContext >());
+                    xCurve = RegressionCurveHelper::changeRegressionCurveType(
+                                lcl_convertRegressionType( eNewRegress ),
+                                m_xCurveContainer,
+                                xCurve,
+                                uno::Reference< uno::XComponentContext >());
+                    uno::Reference< beans::XPropertySet > xProperties( xCurve, uno::UNO_QUERY );
+                    resetPropertySet( xProperties );
                     bChanged = true;
                 }
             }
@@ -167,9 +169,9 @@ bool RegressionCurveItemConverter::ApplySpecialItem(
 
                 uno::Reference< beans::XPropertySet > xProperties( xCurve, uno::UNO_QUERY );
                 OSL_ASSERT( xProperties.is());
-                sal_Int32 aOldDegree = 1;
                 if( xProperties.is() )
                 {
+                    sal_Int32 aOldDegree = 2;
                     xProperties->getPropertyValue( "PolynomialDegree" ) >>= aOldDegree;
                     if (aOldDegree != aDegree)
                     {
@@ -191,9 +193,9 @@ bool RegressionCurveItemConverter::ApplySpecialItem(
 
                 uno::Reference< beans::XPropertySet > xProperties( xCurve, uno::UNO_QUERY );
                 OSL_ASSERT( xProperties.is());
-                sal_Int32 aOldPeriod = 2;
                 if( xProperties.is() )
                 {
+                    sal_Int32 aOldPeriod = 2;
                     xProperties->getPropertyValue( "MovingAveragePeriod" ) >>= aOldPeriod;
                     if (aOldPeriod != aPeriod)
                     {
@@ -215,9 +217,9 @@ bool RegressionCurveItemConverter::ApplySpecialItem(
 
                 uno::Reference< beans::XPropertySet > xProperties( xCurve, uno::UNO_QUERY );
                 OSL_ASSERT( xProperties.is());
-                double aOldValue = 0.0;
                 if( xProperties.is() )
                 {
+                    double aOldValue = 0.0;
                     xProperties->getPropertyValue( "ExtrapolateForward" ) >>= aOldValue;
                     if (aOldValue != aValue)
                     {
@@ -239,9 +241,9 @@ bool RegressionCurveItemConverter::ApplySpecialItem(
 
                 uno::Reference< beans::XPropertySet > xProperties( xCurve, uno::UNO_QUERY );
                 OSL_ASSERT( xProperties.is());
-                double aOldValue = 0.0;
                 if( xProperties.is() )
                 {
+                    double aOldValue = 0.0;
                     xProperties->getPropertyValue( "ExtrapolateBackward" ) >>= aOldValue;
                     if (aOldValue != aValue)
                     {
@@ -263,9 +265,9 @@ bool RegressionCurveItemConverter::ApplySpecialItem(
 
                 uno::Reference< beans::XPropertySet > xProperties( xCurve, uno::UNO_QUERY );
                 OSL_ASSERT( xProperties.is());
-                sal_Bool bOldValue = false;
                 if( xProperties.is() )
                 {
+                    sal_Bool bOldValue = false;
                     xProperties->getPropertyValue( "ForceIntercept" ) >>= bOldValue;
                     if (bOldValue != bNewValue)
                     {
@@ -287,9 +289,9 @@ bool RegressionCurveItemConverter::ApplySpecialItem(
 
                 uno::Reference< beans::XPropertySet > xProperties( xCurve, uno::UNO_QUERY );
                 OSL_ASSERT( xProperties.is());
-                double aOldValue = 0.0;
                 if( xProperties.is() )
                 {
+                    double aOldValue = 0.0;
                     xProperties->getPropertyValue( "InterceptValue" ) >>= aOldValue;
                     if (aOldValue != aValue)
                     {
