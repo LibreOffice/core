@@ -2176,7 +2176,7 @@ void WW8FormulaControl::FormulaRead(SwWw8ControlType nWhich,
 {
     sal_uInt8 nField;
     // nHeaderBype == version
-    sal_uInt32 nHeaderByte;
+    sal_uInt32 nHeaderByte = 0;
 
     // The following is a FFData structure as described in
     // Microsoft's DOC specification (chapter 2.9.78)
@@ -2185,9 +2185,9 @@ void WW8FormulaControl::FormulaRead(SwWw8ControlType nWhich,
 
     // might be better to read the bits as a 16 bit word
     // ( like it is in the spec. )
-    sal_uInt8 bits1;
+    sal_uInt8 bits1 = 0;
     *pDataStream >> bits1;
-    sal_uInt8 bits2;
+    sal_uInt8 bits2 = 0;
     *pDataStream >> bits2;
 
     sal_uInt8 iType = ( bits1 & 0x3 );
@@ -2199,10 +2199,10 @@ void WW8FormulaControl::FormulaRead(SwWw8ControlType nWhich,
 
     sal_uInt8 iRes = (bits1 & 0x7C) >> 2;
 
-    sal_uInt16 cch;
+    sal_uInt16 cch = 0;
     *pDataStream >> cch;
 
-    sal_uInt16 hps;
+    sal_uInt16 hps = 0;
     *pDataStream >> hps;
 
     // xstzName
@@ -2241,9 +2241,9 @@ void WW8FormulaControl::FormulaRead(SwWw8ControlType nWhich,
     {
         bool bAllOk = true;
         // SSTB (see Spec. 2.2.4)
-        sal_uInt16 fExtend;
+        sal_uInt16 fExtend = 0;
         *pDataStream >> fExtend;
-        sal_uInt16 nNoStrings;
+        sal_uInt16 nNoStrings = 0;
 
         // Isn't it that if fExtend isn't 0xFFFF then fExtend actually
         // doesn't exist and we really have just read nNoStrings ( or cData )?
@@ -2252,7 +2252,7 @@ void WW8FormulaControl::FormulaRead(SwWw8ControlType nWhich,
         *pDataStream >> nNoStrings;
 
         // I guess this should be zero ( and we should ensure that )
-        sal_uInt16 cbExtra;
+        sal_uInt16 cbExtra = 0;
         *pDataStream >> cbExtra;
 
         OSL_ENSURE(bAllOk,
