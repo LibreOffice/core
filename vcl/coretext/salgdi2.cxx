@@ -485,19 +485,18 @@ sal_uInt16 AquaSalGraphics::SetFont( FontSelectPattern* pReqFont, int /*nFallbac
     mpMacTextStyle = mpMacFontData->CreateMacTextStyle( *pReqFont );
     mpMacTextStyle->SetTextColor( maTextColor );
 
-#if OSL_DEBUG_LEVEL > 3
-    fprintf( stderr, "SetFont to (\"%s\", \"%s\", fontid=%d) for (\"%s\" \"%s\" weight=%d, slant=%d size=%dx%d orientation=%d)\n",
-             OUStringToOString( mpMacFontData->GetFamilyName(), RTL_TEXTENCODING_UTF8 ).getStr(),
-             OUStringToOString( mpMacFontData->GetStyleName(), RTL_TEXTENCODING_UTF8 ).getStr(),
-             (int)nFontID,
-             OUStringToOString( pReqFont->GetFamilyName(), RTL_TEXTENCODING_UTF8 ).getStr(),
-             OUStringToOString( pReqFont->GetStyleName(), RTL_TEXTENCODING_UTF8 ).getStr(),
-             pReqFont->GetWeight(),
-             pReqFont->GetSlant(),
-             pReqFont->mnHeight,
-             pReqFont->mnWidth,
-             pReqFont->mnOrientation);
-#endif
+    SAL_INFO("vcl.coretext",
+            "SetFont"
+            << " to "     << mpMacFontData->GetFamilyName()
+            << ", "       << mpMacFontData->GetStyleName()
+            << " fontid=" << mpMacFontData->GetFontId()
+            << " for "    << pReqFont->GetFamilyName()
+            << ", "       << pReqFont->GetStyleName()
+            << " weight=" << pReqFont->GetWeight()
+            << " slant="  << pReqFont->GetSlant()
+            << " size="   << pReqFont->mnHeight << "x" << pReqFont->mnWidth
+            << " orientation=" << pReqFont->mnOrientation
+            );
 
     return 0;
 }
