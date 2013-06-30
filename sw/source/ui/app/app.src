@@ -776,13 +776,6 @@ ToolBox RID_MODULE_TOOLBOX
     Scroll = TRUE ;
 };
 
-WarningBox MSG_DISABLE_READLINE_QUESTION
-{
-    BUTTONS = WB_YES_NO;
-    DEFBUTTON = WB_DEF_YES ;
-    Message [ en-US ] = "In the current document, changes are being recorded but not shown as such. In large documents, delays can occur when the document is edited. Do you want to show the changes to avoid delays?";
-};
-
 String STR_ROTATE_TO_STANDARD_ORIENTATION
 {
     Text [ en-US ] = "This image is rotated. Would you like to rotate it into standard orientation?";

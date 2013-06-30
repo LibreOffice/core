@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <!-- interface-requires gtk+ 3.0 -->
-  <object class="GtkMessageDialog" id="SaveAsHTMLDialog">
+  <object class="GtkMessageDialog" id="QueryShowChangesDialog">
     <property name="can_focus">False</property>
     <property name="border_width">12</property>
-    <property name="title" translatable="yes">Save as HTML?</property>
+    <property name="title" translatable="yes">Show changes?</property>
     <property name="type_hint">dialog</property>
     <property name="skip_taskbar_hint">True</property>
     <property name="message_type">question</property>
     <property name="buttons">yes-no</property>
-    <property name="text" translatable="yes">Would you like to save the document as HTML?</property>
-    <property name="secondary_text" translatable="yes">The source code can only be displayed if the document is saved in HTML format.</property>
+    <property name="text" translatable="yes">Do you want to show changes to avoid delays?</property>
+    <property name="secondary_text" translatable="yes">In the current document, changes are being recorded but not shown as such. In large documents, delays can occur when the document is edited. Showing changes will avoid delays.</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="messagedialog-vbox">
         <property name="can_focus">False</property>

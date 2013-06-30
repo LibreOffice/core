@@ -39,7 +39,7 @@
 #include <UndoInsert.hxx>
 #include <UndoDelete.hxx>
 #include <breakit.hxx>
-#include <vcl/msgbox.hxx>
+#include <vcl/layout.hxx>
 #include "comcore.hrc"
 #include "editsh.hxx"
 #include <fmtfld.hxx>
@@ -2700,8 +2700,8 @@ void SwDoc::checkRedlining(RedlineMode_t& _rReadlineMode)
     if ( pParent && !mbReadlineChecked && rRedlineTbl.size() > MAX_REDLINE_COUNT
         && !((_rReadlineMode & nsRedlineMode_t::REDLINE_SHOW_DELETE) == nsRedlineMode_t::REDLINE_SHOW_DELETE) )
     {
-        WarningBox aWarning( pParent,SW_RES(MSG_DISABLE_READLINE_QUESTION));
-        sal_uInt16 nResult = aWarning.Execute();
+        MessageDialog aQuery(pParent, "QueryShowChangesDialog", "modules/swriter/ui/queryshowchangesdialog.ui");
+        sal_uInt16 nResult = aQuery.Execute();
         mbReadlineChecked = sal_True;
         if ( nResult == RET_YES )
         {
