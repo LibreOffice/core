@@ -32,6 +32,7 @@
 #include <tools/link.hxx>
 #include <tools/errcode.hxx>
 #include <tools/datetime.hxx>
+#include <tools/string.hxx>
 
 namespace com
 {
@@ -130,7 +131,7 @@ public:
     static UcbLockBytesRef  CreateLockBytes( const ::com::sun::star::uno::Reference < ::com::sun::star::io::XStream >& xContent );
 
     // SvLockBytes
-    virtual void            SetSynchronMode (sal_Bool bSynchron);
+    virtual void            SetSynchronMode (bool bSynchron);
     virtual ErrCode         ReadAt ( sal_uLong nPos, void *pBuffer, sal_uLong nCount, sal_uLong *pRead) const;
     virtual ErrCode         WriteAt ( sal_uLong, const void*, sal_uLong, sal_uLong *pWritten);
     virtual ErrCode         Flush (void) const;

@@ -41,7 +41,7 @@ class TOOLS_DLLPUBLIC VersionCompat
                     VersionCompat() {}
                     VersionCompat( const VersionCompat& ) {}
     VersionCompat&  operator=( const VersionCompat& ) { return *this; }
-    sal_Bool        operator==( const VersionCompat& ) { return sal_False; }
+    bool            operator==( const VersionCompat& ) { return false; }
 
 public:
 

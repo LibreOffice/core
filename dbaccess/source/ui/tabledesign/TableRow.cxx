@@ -22,6 +22,7 @@
 #include "FieldDescriptions.hxx"
 #include <algorithm>
 #include <comphelper/types.hxx>
+#include <tools/string.hxx>
 
 using namespace dbaui;
 using namespace ::com::sun::star::sdbc;

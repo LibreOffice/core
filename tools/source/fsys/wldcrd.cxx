@@ -86,7 +86,7 @@ sal_uInt16 WildCard::ImpMatch( const char *pWild, const char *pStr ) const
     return ( *pStr == '\0' ) && ( *pWild == '\0' );
 }
 
-sal_Bool WildCard::Matches( const String& rString ) const
+bool WildCard::Matches( const OUString& rString ) const
 {
     OString aTmpWild = aWildString;
     OString aString(OUStringToOString(rString, osl_getThreadTextEncoding()));
@@ -99,15 +99,15 @@ sal_Bool WildCard::Matches( const String& rString ) const
         {
             // Check all splitted wildcards
             if ( ImpMatch( aTmpWild.copy( 0, nSepPos ).getStr(), aString.getStr() ) )
-                return sal_True;
+                return true;
             aTmpWild = aTmpWild.copy(nSepPos + 1); // remove separator
         }
     }
 
     if ( ImpMatch( aTmpWild.getStr(), aString.getStr() ) )
-        return sal_True;
+        return true;
     else
-        return sal_False;
+        return false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

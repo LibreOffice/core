@@ -25,6 +25,7 @@
 #include "svtools/svtdllapi.h"
 
 #include <tools/errinf.hxx>
+#include <tools/string.hxx>
 
 class Window;
 class ResMgr;
@@ -38,7 +39,7 @@ public:
     SfxErrorContext(
             sal_uInt16 nCtxIdP, const String &aArg1, Window *pWin=0,
             sal_uInt16 nResIdP=USHRT_MAX, ResMgr *pMgrP=0);
-    virtual sal_Bool GetString(sal_uLong nErrId, OUString &rStr);
+    virtual bool GetString(sal_uLong nErrId, OUString &rStr);
 
 private:
     sal_uInt16 nCtxId;
@@ -66,8 +67,7 @@ private:
     ResMgr          *pFreeMgr;
 
     SVT_DLLPRIVATE sal_Bool             GetClassString(sal_uLong lErrId, String &) const;
-    virtual sal_Bool     CreateString(
-                         const ErrorInfo *, OUString &, sal_uInt16 &) const;
+    virtual bool     CreateString( const ErrorInfo *, OUString &, sal_uInt16 &) const;
 };
 
 #endif

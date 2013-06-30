@@ -47,26 +47,26 @@ public:
                     DateTime( const Date& rDate, const Time& rTime ) :
                         Date( rDate ), Time( rTime ) {}
 
-    sal_Bool        IsBetween( const DateTime& rFrom,
+    bool            IsBetween( const DateTime& rFrom,
                                const DateTime& rTo ) const;
 
-    sal_Bool        IsEqualIgnoreNanoSec( const DateTime& rDateTime ) const
+    bool            IsEqualIgnoreNanoSec( const DateTime& rDateTime ) const
                     {
                         if ( Date::operator!=( rDateTime ) )
-                            return sal_False;
+                            return false;
                         return Time::IsEqualIgnoreNanoSec( rDateTime );
                     }
 
-    sal_Bool        operator ==( const DateTime& rDateTime ) const
+    bool            operator ==( const DateTime& rDateTime ) const
                         { return (Date::operator==( rDateTime ) &&
                                   Time::operator==( rDateTime )); }
-    sal_Bool        operator !=( const DateTime& rDateTime ) const
+    bool            operator !=( const DateTime& rDateTime ) const
                         { return (Date::operator!=( rDateTime ) ||
                                   Time::operator!=( rDateTime )); }
-    sal_Bool        operator  >( const DateTime& rDateTime ) const;
-    sal_Bool        operator  <( const DateTime& rDateTime ) const;
-    sal_Bool        operator >=( const DateTime& rDateTime ) const;
-    sal_Bool        operator <=( const DateTime& rDateTime ) const;
+    bool            operator  >( const DateTime& rDateTime ) const;
+    bool            operator  <( const DateTime& rDateTime ) const;
+    bool            operator >=( const DateTime& rDateTime ) const;
+    bool            operator <=( const DateTime& rDateTime ) const;
 
     long            GetSecFromDateTime( const Date& rDate ) const;
 

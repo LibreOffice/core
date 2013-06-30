@@ -47,8 +47,8 @@ public:
 
     double          GetLength() const;
 
-    sal_Bool        Intersection( const Line& rLine, double& rIntersectionX, double& rIntersectionY ) const;
-    sal_Bool        Intersection( const Line& rLine, Point& rIntersection ) const;
+    bool            Intersection( const Line& rLine, double& rIntersectionX, double& rIntersectionY ) const;
+    bool            Intersection( const Line& rLine, Point& rIntersection ) const;
 
     double          GetDistance( const double& rPtX, const double& rPtY ) const;
     double          GetDistance( const Point& rPoint ) const { return( GetDistance( rPoint.X(), rPoint.Y() ) ); }

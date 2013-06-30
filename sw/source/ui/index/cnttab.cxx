@@ -4104,32 +4104,32 @@ void    SwEntryBrowseBox::ReadEntries(SvStream& rInStr)
     rtl_TextEncoding  eTEnc = osl_getThreadTextEncoding();
     while( !rInStr.GetError() && !rInStr.IsEof() )
     {
-        String sLine;
+        OUString sLine;
         rInStr.ReadByteStringLine( sLine, eTEnc );
 
         // # -> comment
         // ; -> delimiter between entries ->
         // Format: TextToSearchFor;AlternativeString;PrimaryKey;SecondaryKey
         // Leading and trailing blanks are ignored
-        if( sLine.Len() )
+        if( !sLine.isEmpty() )
         {
             //comments are contained in separate lines but are put into the struct of the following data
             //line (if available)
-            if( '#' != sLine.GetChar(0) )
+            if( '#' != sLine[0] )
             {
                 if( !pToInsert )
                     pToInsert = new AutoMarkEntry;
 
                 sal_Int32 nSttPos = 0;
-                pToInsert->sSearch      = sLine.GetToken(0, ';', nSttPos );
-                pToInsert->sAlternative = sLine.GetToken(0, ';', nSttPos );
-                pToInsert->sPrimKey     = sLine.GetToken(0, ';', nSttPos );
-                pToInsert->sSecKey      = sLine.GetToken(0, ';', nSttPos );
+                pToInsert->sSearch      = sLine.getToken(0, ';', nSttPos );
+                pToInsert->sAlternative = sLine.getToken(0, ';', nSttPos );
+                pToInsert->sPrimKey     = sLine.getToken(0, ';', nSttPos );
+                pToInsert->sSecKey      = sLine.getToken(0, ';', nSttPos );
 
-                String sStr = sLine.GetToken(0, ';', nSttPos );
+                String sStr = sLine.getToken(0, ';', nSttPos );
                 pToInsert->bCase = sStr.Len() && !comphelper::string::equals(sStr, '0');
 
-                sStr = sLine.GetToken(0, ';', nSttPos );
+                sStr = sLine.getToken(0, ';', nSttPos );
                 pToInsert->bWord = sStr.Len() && !comphelper::string::equals(sStr, '0');
 
                 aEntryArr.push_back( pToInsert );

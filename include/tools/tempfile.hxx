@@ -19,14 +19,14 @@
 #ifndef _TOOLS_TEMPFILE_HXX
 #define _TOOLS_TEMPFILE_HXX
 
-#include <tools/string.hxx>
+#include <rtl/ustring.hxx>
 #include "tools/toolsdllapi.h"
 
 struct TempFile_Impl;
 class TOOLS_DLLPUBLIC TempFile
 {
     TempFile_Impl*  pImp;
-    sal_Bool        bKillingFileEnabled;
+    bool        bKillingFileEnabled;
 
 public:
     /** Create a temporary file in the default tempfile folder. */
@@ -40,25 +40,25 @@ public:
         The extension string may be f.e. ".txt" or "", if no extension string is
         given, ".tmp" is used.
     */
-    TempFile( const String& rLeadingChars, const String* pExtension=NULL );
+    TempFile( const OUString& rLeadingChars, const OUString* pExtension=NULL );
 
     /** TempFile will be removed from disk in dtor if EnableKillingTempFile was
         called before. TempDirs will be removed recursively in that case. */
     ~TempFile();
 
-    sal_Bool IsValid() const;
+    bool IsValid() const;
 
     /** Returns the real name of the tempfile in file URL scheme. */
-    String GetName() const;
+    OUString GetName() const;
 
     /** If enabled the file will be removed from disk when the dtor is called
         (default is not enabled) */
-    void EnableKillingFile( sal_Bool bEnable=sal_True ) { bKillingFileEnabled = bEnable; }
+    void EnableKillingFile( bool bEnable=true ) { bKillingFileEnabled = bEnable; }
 
-    sal_Bool IsKillingFileEnabled() const { return bKillingFileEnabled; }
+    bool IsKillingFileEnabled() const { return bKillingFileEnabled; }
 
     /** Only create a name for a temporary file that would be valid at that moment. */
-    static String   CreateTempName();
+    static OUString   CreateTempName();
 };
 
 #endif

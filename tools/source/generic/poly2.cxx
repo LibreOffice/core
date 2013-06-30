@@ -205,9 +205,9 @@ const Polygon& PolyPolygon::GetObject( sal_uInt16 nPos ) const
     return *(mpImplPolyPolygon->mpPolyAry[nPos]);
 }
 
-sal_Bool PolyPolygon::IsRect() const
+bool PolyPolygon::IsRect() const
 {
-    sal_Bool bIsRect = sal_False;
+    bool bIsRect = false;
     if ( Count() == 1 )
         bIsRect = mpImplPolyPolygon->mpPolyAry[ 0 ]->IsRect();
     return bIsRect;
@@ -266,7 +266,7 @@ void PolyPolygon::Optimize( sal_uIntPtr nOptimizeFlags, const PolyOptimizeData* 
         else
         {
             double      fArea;
-            const sal_Bool  bEdges = ( nOptimizeFlags & POLY_OPTIMIZE_EDGES ) == POLY_OPTIMIZE_EDGES;
+            const bool  bEdges = ( nOptimizeFlags & POLY_OPTIMIZE_EDGES ) == POLY_OPTIMIZE_EDGES;
             sal_uInt16      nPercent = 0;
 
             if( bEdges )
@@ -489,7 +489,7 @@ Rectangle PolyPolygon::GetBoundRect() const
     DBG_CHKTHIS( PolyPolygon, NULL );
 
     long    nXMin=0, nXMax=0, nYMin=0, nYMax=0;
-    sal_Bool    bFirst = sal_True;
+    bool    bFirst = true;
     sal_uInt16  nPolyCount = mpImplPolyPolygon->mnCount;
 
     for ( sal_uInt16 n = 0; n < nPolyCount; n++ )
@@ -506,7 +506,7 @@ Rectangle PolyPolygon::GetBoundRect() const
             {
                 nXMin = nXMax = pPt->X();
                 nYMin = nYMax = pPt->Y();
-                bFirst = sal_False;
+                bFirst = false;
             }
             else
             {
@@ -559,22 +559,22 @@ PolyPolygon& PolyPolygon::operator=( const PolyPolygon& rPolyPoly )
     return *this;
 }
 
-sal_Bool PolyPolygon::operator==( const PolyPolygon& rPolyPoly ) const
+bool PolyPolygon::operator==( const PolyPolygon& rPolyPoly ) const
 {
     DBG_CHKTHIS( PolyPolygon, NULL );
     DBG_CHKOBJ( &rPolyPoly, PolyPolygon, NULL );
 
     if ( rPolyPoly.mpImplPolyPolygon == mpImplPolyPolygon )
-        return sal_True;
+        return true;
     else
-        return sal_False;
+        return false;
 }
 
-sal_Bool PolyPolygon::IsEqual( const PolyPolygon& rPolyPoly ) const
+bool PolyPolygon::IsEqual( const PolyPolygon& rPolyPoly ) const
 {
-    sal_Bool bIsEqual = sal_True;
+    bool bIsEqual = true;
     if ( Count() != rPolyPoly.Count() )
-        bIsEqual = sal_False;
+        bIsEqual = false;
     else
     {
         sal_uInt16 i;
@@ -582,7 +582,7 @@ sal_Bool PolyPolygon::IsEqual( const PolyPolygon& rPolyPoly ) const
         {
             if (!GetObject( i ).IsEqual( rPolyPoly.GetObject( i ) ) )
             {
-                bIsEqual = sal_False;
+                bIsEqual = false;
                 break;
             }
         }

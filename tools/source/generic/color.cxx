@@ -100,12 +100,12 @@ void Color::Invert()
     SetBlue( ~COLORDATA_BLUE( mnColor ) );
 }
 
-sal_Bool Color::IsDark() const
+bool Color::IsDark() const
 {
     return GetLuminance() <= 60;
 }
 
-sal_Bool Color::IsBright() const
+bool Color::IsBright() const
 {
     return GetLuminance() >= 245;
 }
@@ -212,7 +212,7 @@ ColorData Color::HSBtoRGB( sal_uInt16 nHue, sal_uInt16 nSat, sal_uInt16 nBri )
     return RGB_COLORDATA( cR, cG, cB );
 }
 
-SvStream& Color::Read( SvStream& rIStm, sal_Bool bNewFormat )
+SvStream& Color::Read( SvStream& rIStm, bool bNewFormat )
 {
     if ( bNewFormat )
         rIStm >> mnColor;
@@ -222,7 +222,7 @@ SvStream& Color::Read( SvStream& rIStm, sal_Bool bNewFormat )
     return rIStm;
 }
 
-SvStream& Color::Write( SvStream& rOStm, sal_Bool bNewFormat )
+SvStream& Color::Write( SvStream& rOStm, bool bNewFormat )
 {
     if ( bNewFormat )
         rOStm << mnColor;

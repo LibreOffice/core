@@ -145,13 +145,13 @@ public:
     // Parameters of ViewportTransformation
     void SetDeviceRectangle(double fL=-1.0, double fR=1.0,
                             double fB=-1.0, double fT=1.0,
-                            sal_Bool bBroadCastChange=sal_True);
+                            bool bBroadCastChange=true);
     double GetDeviceRectangleWidth() const { return mfRightBound - mfLeftBound; }
     double GetDeviceRectangleHeight() const { return mfTopBound - mfBottomBound; }
     double GetFrontClippingPlane() { return mfNearBound; }
     double GetBackClippingPlane() { return mfFarBound; }
-    void SetPerspective(sal_Bool bNew);
-    sal_Bool GetPerspective() { return mbPerspective; }
+    void SetPerspective(bool bNew);
+    bool GetPerspective() { return mbPerspective; }
     void SetViewportRectangle(Rectangle& rRect, Rectangle& rVisible);
     void SetViewportRectangle(Rectangle& rRect) { SetViewportRectangle(rRect, rRect); }
     const Rectangle& GetViewportRectangle() { return maViewportRectangle; }
@@ -234,7 +234,7 @@ public:
         const basegfx::B3DPoint& rPos = basegfx::B3DPoint(0.0, 0.0, 1.0),
         const basegfx::B3DVector& rLkAt = basegfx::B3DVector(0.0, 0.0, 0.0),
         double fFocLen = 35.0, double fBnkAng = 0.0,
-        sal_Bool bUseFocLen = sal_False);
+        bool bUseFocLen = false);
     virtual ~B3dCamera();
 
     const basegfx::B3DPoint& GetPosition() const { return aPosition; }
@@ -245,11 +245,11 @@ public:
 
     double GetBankAngle() const { return fBankAngle; }
 
-    sal_Bool GetUseFocalLength() const { return (sal_Bool)bUseFocalLength; }
+    bool GetUseFocalLength() const { return (bool)bUseFocalLength; }
 
 protected:
     void CalcNewViewportValues();
-    sal_Bool CalcFocalLength();
+    bool CalcFocalLength();
 
     virtual void DeviceRectangleChange();
 };

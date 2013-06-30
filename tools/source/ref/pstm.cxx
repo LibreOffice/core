@@ -141,7 +141,7 @@ SvPersistStream::SvPersistStream( SvClassManager & rMgr, SvStream * pStream, sal
     , nFlags( 0 )
 {
     DBG_ASSERT( nStartIdx != 0, "zero index not allowed" );
-    bIsWritable = sal_True;
+    bIsWritable = true;
     if( pStm )
     {
         SetVersion( pStm->GetVersion() );
@@ -555,7 +555,7 @@ SvPersistStream& SvPersistStream::WritePointer
 sal_uInt32 SvPersistStream::ReadObj
 (
     SvPersistBase * &   rpObj,
-    sal_Bool                bRegister
+    bool                bRegister
 )
 {
     sal_uInt8   nHdr;
@@ -638,7 +638,7 @@ SvPersistStream& SvPersistStream::ReadPointer
     SvPersistBase * & rpObj
 )
 {
-    ReadObj( rpObj, sal_True );
+    ReadObj( rpObj, true );
     return *this;
 }
 
@@ -705,7 +705,7 @@ SvStream& operator >>
         {
             SvPersistBase * pEle;
             // read, but don't insert into table
-            sal_uIntPtr nId = rThis.ReadObj( pEle, sal_False );
+            sal_uIntPtr nId = rThis.ReadObj( pEle, false );
             if( rThis.GetError() )
                 break;
 

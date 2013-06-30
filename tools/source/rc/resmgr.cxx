@@ -80,7 +80,7 @@ class InternalResMgr
     sal_uInt32                      nOffCorrection;
     sal_uInt8 *                     pStringBlock;
     SvStream *                      pStm;
-    sal_Bool                        bEqual2Content;
+    bool                            bEqual2Content;
     sal_uInt32                      nEntries;
     OUString                        aFileName;
     OUString                        aPrefix;
@@ -94,9 +94,9 @@ class InternalResMgr
                                             const OUString& aResName,
                                             const LanguageTag& rLocale );
                             ~InternalResMgr();
-    sal_Bool                Create();
+    bool                    Create();
 
-    sal_Bool                IsGlobalAvailable( RESOURCE_TYPE nRT, sal_uInt32 nId ) const;
+    bool                    IsGlobalAvailable( RESOURCE_TYPE nRT, sal_uInt32 nId ) const;
     void *                  LoadGlobalRes( RESOURCE_TYPE nRT, sal_uInt32 nId,
                                            void **pResHandle );
 public:
@@ -421,7 +421,7 @@ InternalResMgr::InternalResMgr( const OUString& rFileURL,
     : pContent( NULL )
     , pStringBlock( NULL )
     , pStm( NULL )
-    , bEqual2Content( sal_True )
+    , bEqual2Content( true )
     , nEntries( 0 )
     , aFileName( rFileURL )
     , aPrefix( rPrefix )
@@ -468,10 +468,10 @@ InternalResMgr::~InternalResMgr()
     delete pResUseDump;
 }
 
-sal_Bool InternalResMgr::Create()
+bool InternalResMgr::Create()
 {
     ResMgrContainer::get();
-    sal_Bool bDone = sal_False;
+    bool bDone = false;
 
     pStm = new SvFileStream( aFileName, (STREAM_READ | STREAM_SHARE_DENYWRITE | STREAM_NOCREATE) );
     if( pStm->GetError() == 0 )
@@ -496,8 +496,8 @@ sal_Bool InternalResMgr::Create()
         pContent = (ImpContent *)rtl_allocateMemory( sizeof(ImpContent)*lContLen/12 );
         // Shorten to number of ImpContent
         nEntries = (sal_uInt32)lContLen / 12;
-        bEqual2Content = sal_True;
-        sal_Bool bSorted = sal_True;
+        bEqual2Content = true;
+        bool bSorted = true;
         if( nEntries )
         {
 #ifdef DBG_UTIL
@@ -519,10 +519,10 @@ sal_Bool InternalResMgr::Create()
                 pContent[j].nTypeAndId = ResMgr::GetUInt64( pContentBuf + (12*j) );
                 pContent[j].nOffset = ResMgr::GetLong( pContentBuf + (12*j+8) );
                 if( pContent[i].nTypeAndId >= pContent[j].nTypeAndId )
-                    bSorted = sal_False;
+                    bSorted = false;
                 if( (pContent[i].nTypeAndId & 0xFFFFFFFF00000000LL) == (pContent[j].nTypeAndId & 0xFFFFFFFF00000000LL)
                     && pContent[i].nOffset >= pContent[j].nOffset )
-                    bEqual2Content = sal_False;
+                    bEqual2Content = false;
             }
         }
         rtl_freeMemory( pContentBuf );
@@ -532,14 +532,14 @@ sal_Bool InternalResMgr::Create()
             ::std::sort(pContent,pContent+nEntries,ImpContentLessCompare());
             //  qsort( pContent, nEntries, sizeof( ImpContent ), Compare );
 
-        bDone = sal_True;
+        bDone = true;
     }
 
     return bDone;
 }
 
 
-sal_Bool InternalResMgr::IsGlobalAvailable( RESOURCE_TYPE nRT, sal_uInt32 nId ) const
+bool InternalResMgr::IsGlobalAvailable( RESOURCE_TYPE nRT, sal_uInt32 nId ) const
 {
     // Anfang der Strings suchen
     ImpContent aValue;
@@ -624,12 +624,12 @@ void InternalResMgr::FreeGlobalRes( void * pResHandle, void * pResource )
 OUString GetTypeRes_Impl( const ResId& rTypeId )
 {
     // Return on resource errors
-    static int bInUse = sal_False;
+    static int bInUse = false;
     OUString aTypStr(OUString::number(rTypeId.GetId()));
 
     if ( !bInUse )
     {
-        bInUse = sal_True;
+        bInUse = true;
 
         ResId aResId( sal_uInt32(RSCVERSION_ID), *rTypeId.GetResMgr() );
         aResId.SetRT( RSC_VERSIONCONTROL );
@@ -644,7 +644,7 @@ OUString GetTypeRes_Impl( const ResId& rTypeId )
                 rTypeId.GetResMgr()->Increment( sizeof( RSHEADER_TYPE ) );
             }
         }
-        bInUse = sal_False;
+        bInUse = false;
     }
 
     return aTypStr;
@@ -925,11 +925,11 @@ void ResMgr::TestStack( const Resource* )
 
 #endif
 
-sal_Bool ResMgr::IsAvailable( const ResId& rId, const Resource* pResObj ) const
+bool ResMgr::IsAvailable( const ResId& rId, const Resource* pResObj ) const
 {
     osl::Guard<osl::Mutex> aGuard( getResMgrMutex() );
 
-    sal_Bool            bAvailable = sal_False;
+    bool            bAvailable = false;
     RSHEADER_TYPE*  pClassRes = rId.GetpResource();
     RESOURCE_TYPE   nRT = rId.GetRT2();
     sal_uInt32      nId = rId.GetId();
@@ -952,7 +952,7 @@ sal_Bool ResMgr::IsAvailable( const ResId& rId, const Resource* pResObj ) const
         if ( pClassRes )
         {
             if ( pClassRes->GetRT() == nRT )
-                bAvailable = sal_True;
+                bAvailable = true;
         }
     }
 
@@ -972,7 +972,7 @@ void* ResMgr::GetClass()
     return aStack[nCurStack].pClassRes;
 }
 
-sal_Bool ResMgr::GetResource( const ResId& rId, const Resource* pResObj )
+bool ResMgr::GetResource( const ResId& rId, const Resource* pResObj )
 {
     osl::Guard<osl::Mutex> aGuard( getResMgrMutex() );
 
@@ -1017,7 +1017,7 @@ sal_Bool ResMgr::GetResource( const ResId& rId, const Resource* pResObj )
             pTop->Flags |= RC_NOTFOUND;
             pTop->pClassRes = getEmptyBuffer();
             pTop->pResource = (RSHEADER_TYPE*)pTop->pClassRes;
-            return sal_False;
+            return false;
         }
     }
     else
@@ -1065,12 +1065,12 @@ sal_Bool ResMgr::GetResource( const ResId& rId, const Resource* pResObj )
                 pTop->Flags |= RC_NOTFOUND;
                 pTop->pClassRes = getEmptyBuffer();
                 pTop->pResource = (RSHEADER_TYPE*)pTop->pClassRes;
-                return sal_False;
+                return false;
             }
         }
     }
 
-    return sal_True;
+    return true;
 }
 
 void * ResMgr::GetResourceSkipHeader( const ResId& rResId, ResMgr ** ppResMgr )
