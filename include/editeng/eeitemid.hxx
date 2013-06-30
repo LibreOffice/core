@@ -115,7 +115,6 @@
 #define ITEMID_PROTECT          0
 #define ITEMID_BACKGROUND       0
 #define ITEMID_SHADOW           0
-#define ITEMID_MACRO            0
 #define ITEMID_BOX              0
 #define ITEMID_BOXINFO          0
 #define ITEMID_BRUSH            0

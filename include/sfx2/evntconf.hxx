@@ -25,14 +25,8 @@
 #include <tools/rtti.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/button.hxx>
-
 #include <sfx2/event.hxx>
-
 #include <sfx2/sfxsids.hrc>
-#ifdef ITEMID_MACRO
-#undef ITEMID_MACRO
-#endif
-#define ITEMID_MACRO SID_ATTR_MACROITEM
 #include <svl/macitem.hxx>
 #include <vector>
 

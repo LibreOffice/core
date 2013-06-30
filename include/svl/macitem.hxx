@@ -160,7 +160,7 @@ class SVL_DLLPUBLIC SvxMacroItem: public SfxPoolItem
 public:
     TYPEINFO();
 
-    explicit inline SvxMacroItem ( const sal_uInt16 nId /*= ITEMID_MACRO*/ );
+    explicit inline SvxMacroItem ( const sal_uInt16 nId );
 
     // "pure virtual Methoden" vom SfxPoolItem
     virtual int             operator==( const SfxPoolItem& ) const;
