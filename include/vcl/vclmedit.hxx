@@ -116,7 +116,7 @@ public:
     virtual void    Resize();
     virtual void    GetFocus();
 
-    Size            CalcMinimumSize() const;
+    virtual Size    CalcMinimumSize() const;
     Size            CalcAdjustedSize( const Size& rPrefSize ) const;
     using Edit::CalcSize;
     Size            CalcSize( sal_uInt16 nColumns, sal_uInt16 nLines ) const;
