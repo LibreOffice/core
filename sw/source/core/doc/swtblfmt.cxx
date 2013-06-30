@@ -33,15 +33,15 @@ SwTableFmt::SwTableFmt( SwAttrPool& rPool, const sal_Char* pFmtNm,
 
         SwDoc* pDoc = GetDoc();
 
-        m_pFstLineFmt = pDoc->MakeTableLineFmt();
-        m_pLstLineFmt = pDoc->MakeTableLineFmt();
-        m_pOddLineFmt = pDoc->MakeTableLineFmt();
-        m_pEvnLineFmt = pDoc->MakeTableLineFmt();
+        m_pFstLineFmt.reset( pDoc->MakeTableLineFmt() );
+        m_pLstLineFmt.reset( pDoc->MakeTableLineFmt() );
+        m_pOddLineFmt.reset( pDoc->MakeTableLineFmt() );
+        m_pEvnLineFmt.reset( pDoc->MakeTableLineFmt() );
 
-        m_pFstColFmt = pDoc->MakeTableLineFmt();
-        m_pLstColFmt = pDoc->MakeTableLineFmt();
-        m_pOddColFmt = pDoc->MakeTableLineFmt();
-        m_pEvnColFmt = pDoc->MakeTableLineFmt();
+        m_pFstColFmt.reset( pDoc->MakeTableLineFmt() );
+        m_pLstColFmt.reset( pDoc->MakeTableLineFmt() );
+        m_pOddColFmt.reset( pDoc->MakeTableLineFmt() );
+        m_pEvnColFmt.reset( pDoc->MakeTableLineFmt() );
     }
 
 SwTableFmt::SwTableFmt( SwAttrPool& rPool, const String &rFmtNm,
@@ -58,29 +58,29 @@ SwTableFmt::SwTableFmt( SwAttrPool& rPool, const String &rFmtNm,
 
         SwDoc* pDoc = GetDoc();
 
-        m_pFstLineFmt = pDoc->MakeTableLineFmt();
-        m_pLstLineFmt = pDoc->MakeTableLineFmt();
-        m_pOddLineFmt = pDoc->MakeTableLineFmt();
-        m_pEvnLineFmt = pDoc->MakeTableLineFmt();
+        m_pFstLineFmt.reset( pDoc->MakeTableLineFmt() );
+        m_pLstLineFmt.reset( pDoc->MakeTableLineFmt() );
+        m_pOddLineFmt.reset( pDoc->MakeTableLineFmt() );
+        m_pEvnLineFmt.reset( pDoc->MakeTableLineFmt() );
 
-        m_pFstColFmt = pDoc->MakeTableLineFmt();
-        m_pLstColFmt = pDoc->MakeTableLineFmt();
-        m_pOddColFmt = pDoc->MakeTableLineFmt();
-        m_pEvnColFmt = pDoc->MakeTableLineFmt();
+        m_pFstColFmt.reset( pDoc->MakeTableLineFmt() );
+        m_pLstColFmt.reset( pDoc->MakeTableLineFmt() );
+        m_pOddColFmt.reset( pDoc->MakeTableLineFmt() );
+        m_pEvnColFmt.reset( pDoc->MakeTableLineFmt() );
     }
 
-SwTableFmt::SwTableFmt( SwTableFmt& rNew )
+SwTableFmt::SwTableFmt( const SwTableFmt& rNew )
     : SwFrmFmt( (SwFrmFmt)rNew )
     {
-        *m_pFstLineFmt = SwTableLineFmt( *rNew.GetFirstLineFmt() );
-        *m_pLstLineFmt = SwTableLineFmt( *rNew.GetLastLineFmt() );
-        *m_pOddLineFmt = SwTableLineFmt( *rNew.GetOddLineFmt() );
-        *m_pEvnLineFmt = SwTableLineFmt( *rNew.GetEvenLineFmt() );
+        m_pFstLineFmt.reset( new SwTableLineFmt( *rNew.m_pFstLineFmt.get() ) );
+        m_pLstLineFmt.reset( new SwTableLineFmt( *rNew.m_pLstLineFmt.get() ) );
+        m_pOddLineFmt.reset( new SwTableLineFmt( *rNew.m_pOddLineFmt.get() ) );
+        m_pEvnLineFmt.reset( new SwTableLineFmt( *rNew.m_pEvnLineFmt.get() ) );
 
-        *m_pFstColFmt = SwTableLineFmt( *rNew.GetFirstColFmt() );
-        *m_pLstColFmt = SwTableLineFmt( *rNew.GetLastColFmt() );
-        *m_pOddColFmt = SwTableLineFmt( *rNew.GetOddColFmt() );
-        *m_pEvnColFmt = SwTableLineFmt( *rNew.GetEvenColFmt() );
+        m_pFstColFmt.reset( new SwTableLineFmt( *rNew.m_pFstColFmt.get() ) );
+        m_pLstColFmt.reset( new SwTableLineFmt( *rNew.m_pLstColFmt.get() ) );
+        m_pOddColFmt.reset( new SwTableLineFmt( *rNew.m_pOddColFmt.get() ) );
+        m_pEvnColFmt.reset( new SwTableLineFmt( *rNew.m_pEvnColFmt.get() ) );
     }
 
 SwTableFmt& SwTableFmt::operator=( const SwTableFmt& rNew )
@@ -88,15 +88,17 @@ SwTableFmt& SwTableFmt::operator=( const SwTableFmt& rNew )
         if (&rNew == this)
             return *this;
 
-        m_pFstLineFmt = rNew.m_pFstLineFmt;
-        m_pLstLineFmt = rNew.m_pLstLineFmt;
-        m_pOddLineFmt = rNew.m_pOddLineFmt;
-        m_pEvnLineFmt = rNew.m_pEvnLineFmt;
+        SwFrmFmt::operator=( rNew );
 
-        m_pFstColFmt = rNew.m_pFstColFmt;
-        m_pLstColFmt = rNew.m_pLstColFmt;
-        m_pOddColFmt = rNew.m_pOddColFmt;
-        m_pEvnColFmt = rNew.m_pEvnColFmt;
+        m_pFstLineFmt.reset( new SwTableLineFmt( *rNew.m_pFstLineFmt.get() ) );
+        m_pLstLineFmt.reset( new SwTableLineFmt( *rNew.m_pLstLineFmt.get() ) );
+        m_pOddLineFmt.reset( new SwTableLineFmt( *rNew.m_pOddLineFmt.get() ) );
+        m_pEvnLineFmt.reset( new SwTableLineFmt( *rNew.m_pEvnLineFmt.get() ) );
+
+        m_pFstColFmt.reset( new SwTableLineFmt( *rNew.m_pFstColFmt.get() ) );
+        m_pLstColFmt.reset( new SwTableLineFmt( *rNew.m_pLstColFmt.get() ) );
+        m_pOddColFmt.reset( new SwTableLineFmt( *rNew.m_pOddColFmt.get() ) );
+        m_pEvnColFmt.reset( new SwTableLineFmt( *rNew.m_pEvnColFmt.get() ) );
 
         return *this;
     }
@@ -168,15 +170,15 @@ sal_uInt16 SwTableFmt::GetRepeatHeading() const
 
 void SwTableFmt::CopyTableFormatInfo( SwTableFmt* pTableFormat )
 {
-    *m_pFstLineFmt = SwTableLineFmt ( *pTableFormat->GetFirstLineFmt() );
-    *m_pLstLineFmt = SwTableLineFmt ( *pTableFormat->GetLastLineFmt() );
-    *m_pOddLineFmt = SwTableLineFmt ( *pTableFormat->GetOddLineFmt() );
-    *m_pEvnLineFmt = SwTableLineFmt ( *pTableFormat->GetEvenLineFmt() );
+    m_pFstLineFmt.reset( new SwTableLineFmt ( *pTableFormat->GetFirstLineFmt() ) );
+    m_pLstLineFmt.reset( new SwTableLineFmt ( *pTableFormat->GetLastLineFmt() ) );
+    m_pOddLineFmt.reset( new SwTableLineFmt ( *pTableFormat->GetOddLineFmt() ) );
+    m_pEvnLineFmt.reset( new SwTableLineFmt ( *pTableFormat->GetEvenLineFmt() ) );
 
-    *m_pFstColFmt = SwTableLineFmt ( *pTableFormat->GetFirstColFmt() );
-    *m_pLstColFmt = SwTableLineFmt ( *pTableFormat->GetLastColFmt() );
-    *m_pOddColFmt = SwTableLineFmt ( *pTableFormat->GetOddColFmt() );
-    *m_pEvnColFmt = SwTableLineFmt ( *pTableFormat->GetEvenColFmt() );
+    m_pFstColFmt.reset( new SwTableLineFmt ( *pTableFormat->GetFirstColFmt() ) );
+    m_pLstColFmt.reset( new SwTableLineFmt ( *pTableFormat->GetLastColFmt() ) );
+    m_pOddColFmt.reset( new SwTableLineFmt ( *pTableFormat->GetOddColFmt() ) );
+    m_pEvnColFmt.reset( new SwTableLineFmt ( *pTableFormat->GetEvenColFmt() ) );
 }
 
 SwTableLineFmt::SwTableLineFmt( SwAttrPool& rPool, const sal_Char* pFmtNm,
@@ -185,10 +187,10 @@ SwTableLineFmt::SwTableLineFmt( SwAttrPool& rPool, const sal_Char* pFmtNm,
     {
         SwDoc* pDoc = GetDoc();
 
-        m_pFstBoxFmt = pDoc->MakeTableBoxFmt();
-        m_pLstBoxFmt = pDoc->MakeTableBoxFmt();
-        m_pOddBoxFmt = pDoc->MakeTableBoxFmt();
-        m_pEvnBoxFmt = pDoc->MakeTableBoxFmt();
+        m_pFstBoxFmt.reset( pDoc->MakeTableBoxFmt() );
+        m_pLstBoxFmt.reset( pDoc->MakeTableBoxFmt() );
+        m_pOddBoxFmt.reset( pDoc->MakeTableBoxFmt() );
+        m_pEvnBoxFmt.reset( pDoc->MakeTableBoxFmt() );
     }
 
 SwTableLineFmt::SwTableLineFmt( SwAttrPool& rPool, const String &rFmtNm,
@@ -197,19 +199,19 @@ SwTableLineFmt::SwTableLineFmt( SwAttrPool& rPool, const String &rFmtNm,
     {
         SwDoc* pDoc = GetDoc();
 
-        m_pFstBoxFmt = pDoc->MakeTableBoxFmt();
-        m_pLstBoxFmt = pDoc->MakeTableBoxFmt();
-        m_pOddBoxFmt = pDoc->MakeTableBoxFmt();
-        m_pEvnBoxFmt = pDoc->MakeTableBoxFmt();
+        m_pFstBoxFmt.reset( pDoc->MakeTableBoxFmt() );
+        m_pLstBoxFmt.reset( pDoc->MakeTableBoxFmt() );
+        m_pOddBoxFmt.reset( pDoc->MakeTableBoxFmt() );
+        m_pEvnBoxFmt.reset( pDoc->MakeTableBoxFmt() );
     }
 
-SwTableLineFmt::SwTableLineFmt( SwTableLineFmt& rNew )
+SwTableLineFmt::SwTableLineFmt( const SwTableLineFmt& rNew )
     : SwFrmFmt( (SwFrmFmt)rNew )
     {
-        *m_pFstBoxFmt = SwTableBoxFmt( *rNew.GetFirstBoxFmt() );
-        *m_pLstBoxFmt = SwTableBoxFmt( *rNew.GetLastBoxFmt() );
-        *m_pOddBoxFmt = SwTableBoxFmt( *rNew.GetOddBoxFmt() );
-        *m_pEvnBoxFmt = SwTableBoxFmt( *rNew.GetEvenBoxFmt() );
+        m_pFstBoxFmt.reset( new SwTableBoxFmt( *rNew.m_pFstBoxFmt.get() ) );
+        m_pLstBoxFmt.reset( new SwTableBoxFmt( *rNew.m_pLstBoxFmt.get() ) );
+        m_pOddBoxFmt.reset( new SwTableBoxFmt( *rNew.m_pOddBoxFmt.get() ) );
+        m_pEvnBoxFmt.reset( new SwTableBoxFmt( *rNew.m_pEvnBoxFmt.get() ) );
     }
 
 SwTableLineFmt& SwTableLineFmt::operator=( const SwTableLineFmt& rNew )
@@ -217,10 +219,12 @@ SwTableLineFmt& SwTableLineFmt::operator=( const SwTableLineFmt& rNew )
         if (&rNew == this)
                 return *this;
 
-        m_pFstBoxFmt = rNew.m_pFstBoxFmt;
-        m_pLstBoxFmt = rNew.m_pLstBoxFmt;
-        m_pOddBoxFmt = rNew.m_pOddBoxFmt;
-        m_pEvnBoxFmt = rNew.m_pEvnBoxFmt;
+        SwFrmFmt::operator=( rNew );
+
+        m_pFstBoxFmt.reset( new SwTableBoxFmt( *rNew.m_pFstBoxFmt.get() ) );
+        m_pLstBoxFmt.reset( new SwTableBoxFmt( *rNew.m_pLstBoxFmt.get() ) );
+        m_pOddBoxFmt.reset( new SwTableBoxFmt( *rNew.m_pOddBoxFmt.get() ) );
+        m_pEvnBoxFmt.reset( new SwTableBoxFmt( *rNew.m_pEvnBoxFmt.get() ) );
 
         return *this;
     }

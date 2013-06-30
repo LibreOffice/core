@@ -20,6 +20,7 @@
 #define _SWTBLFMT_HXX
 
 #include "hintids.hxx"
+#include <boost/scoped_ptr.hpp>
 #include <charatr.hxx>
 #include <cmdid.h>
 #include <doc.hxx>
@@ -64,39 +65,39 @@ protected:
     SwTableFmt( SwAttrPool& rPool, const String &rFmtNm,
                     SwFrmFmt *pDrvdFrm );
 
-    SwTableLineFmt* m_pFstLineFmt;
-    SwTableLineFmt* m_pLstLineFmt;
-    SwTableLineFmt* m_pOddLineFmt;
-    SwTableLineFmt* m_pEvnLineFmt;
+    boost::scoped_ptr<SwTableLineFmt> m_pFstLineFmt;
+    boost::scoped_ptr<SwTableLineFmt> m_pLstLineFmt;
+    boost::scoped_ptr<SwTableLineFmt> m_pOddLineFmt;
+    boost::scoped_ptr<SwTableLineFmt> m_pEvnLineFmt;
 
-    SwTableLineFmt* m_pFstColFmt;
-    SwTableLineFmt* m_pLstColFmt;
-    SwTableLineFmt* m_pOddColFmt;
-    SwTableLineFmt* m_pEvnColFmt;
+    boost::scoped_ptr<SwTableLineFmt> m_pFstColFmt;
+    boost::scoped_ptr<SwTableLineFmt> m_pLstColFmt;
+    boost::scoped_ptr<SwTableLineFmt> m_pOddColFmt;
+    boost::scoped_ptr<SwTableLineFmt> m_pEvnColFmt;
 
 public:
-    SwTableFmt( SwTableFmt& rNew );
+    SwTableFmt( const SwTableFmt& rNew );
     SwTableFmt& operator=( const SwTableFmt& rNew );
 
-    void SetFirstLineFmt( SwTableLineFmt* pNew ) { m_pFstLineFmt = pNew; }
-    void SetLastLineFmt( SwTableLineFmt* pNew ) { m_pLstLineFmt = pNew; }
-    void SetOddLineFmt( SwTableLineFmt* pNew ) { m_pOddLineFmt = pNew; }
-    void SetEvenLineFmt( SwTableLineFmt* pNew ) { m_pEvnLineFmt = pNew; }
+    void SetFirstLineFmt( SwTableLineFmt* pNew ) { m_pFstLineFmt.reset( pNew ); }
+    void SetLastLineFmt( SwTableLineFmt* pNew ) { m_pLstLineFmt.reset( pNew ); }
+    void SetOddLineFmt( SwTableLineFmt* pNew ) { m_pOddLineFmt.reset( pNew ); }
+    void SetEvenLineFmt( SwTableLineFmt* pNew ) { m_pEvnLineFmt.reset( pNew ); }
 
-    void SetFirstColFmt( SwTableLineFmt* pNew ) { m_pFstColFmt = pNew; }
-    void SetLastColFmt( SwTableLineFmt* pNew ) { m_pLstColFmt = pNew; }
-    void SetOddColFmt( SwTableLineFmt* pNew ) { m_pOddColFmt = pNew; }
-    void SetEvenColFmt( SwTableLineFmt* pNew ) { m_pEvnColFmt = pNew; }
+    void SetFirstColFmt( SwTableLineFmt* pNew ) { m_pFstColFmt.reset( pNew ); }
+    void SetLastColFmt( SwTableLineFmt* pNew ) { m_pLstColFmt.reset( pNew ); }
+    void SetOddColFmt( SwTableLineFmt* pNew ) { m_pOddColFmt.reset( pNew ); }
+    void SetEvenColFmt( SwTableLineFmt* pNew ) { m_pEvnColFmt.reset( pNew ); }
 
-    SwTableLineFmt* GetFirstLineFmt() { return m_pFstLineFmt; }
-    SwTableLineFmt* GetLastLineFmt() { return m_pLstLineFmt; }
-    SwTableLineFmt* GetOddLineFmt() { return m_pOddLineFmt; }
-    SwTableLineFmt* GetEvenLineFmt() { return m_pEvnLineFmt; }
+    SwTableLineFmt* GetFirstLineFmt() { return m_pFstLineFmt.get(); }
+    SwTableLineFmt* GetLastLineFmt() { return m_pLstLineFmt.get(); }
+    SwTableLineFmt* GetOddLineFmt() { return m_pOddLineFmt.get(); }
+    SwTableLineFmt* GetEvenLineFmt() { return m_pEvnLineFmt.get(); }
 
-    SwTableLineFmt* GetFirstColFmt() { return m_pFstColFmt; }
-    SwTableLineFmt* GetLastColFmt() { return m_pLstColFmt; }
-    SwTableLineFmt* GetOddColFmt() { return m_pOddColFmt; }
-    SwTableLineFmt* GetEvenColFmt() { return m_pEvnColFmt; }
+    SwTableLineFmt* GetFirstColFmt() { return m_pFstColFmt.get(); }
+    SwTableLineFmt* GetLastColFmt() { return m_pLstColFmt.get(); }
+    SwTableLineFmt* GetOddColFmt() { return m_pOddColFmt.get(); }
+    SwTableLineFmt* GetEvenColFmt() { return m_pEvnColFmt.get(); }
 
     void SetBreak( const SvxFmtBreakItem& rNew );
     void SetPageDesc( const SwFmtPageDesc& rNew );
@@ -132,24 +133,24 @@ protected:
                     SwFrmFmt *pDrvdFrm );
 
     // Odd and Even Box formats will be used to handle alternating columns
-    SwTableBoxFmt* m_pFstBoxFmt;
-    SwTableBoxFmt* m_pLstBoxFmt;
-    SwTableBoxFmt* m_pOddBoxFmt;
-    SwTableBoxFmt* m_pEvnBoxFmt;
+    boost::scoped_ptr<SwTableBoxFmt> m_pFstBoxFmt;
+    boost::scoped_ptr<SwTableBoxFmt> m_pLstBoxFmt;
+    boost::scoped_ptr<SwTableBoxFmt> m_pOddBoxFmt;
+    boost::scoped_ptr<SwTableBoxFmt> m_pEvnBoxFmt;
 
 public:
-    SwTableLineFmt( SwTableLineFmt& rNew );
+    SwTableLineFmt( const SwTableLineFmt& rNew );
     SwTableLineFmt& operator=( const SwTableLineFmt& rNew );
 
-    void SetFirstBoxFmt( SwTableBoxFmt* pNew ) { m_pFstBoxFmt = pNew; }
-    void SetLastBoxFmt( SwTableBoxFmt* pNew ) { m_pLstBoxFmt = pNew; }
-    void SetOddBoxFmt( SwTableBoxFmt* pNew ) { m_pOddBoxFmt = pNew; }
-    void SetEvenBoxFmt( SwTableBoxFmt* pNew ) { m_pEvnBoxFmt = pNew; }
+    void SetFirstBoxFmt( SwTableBoxFmt* pNew ) { m_pFstBoxFmt.reset( pNew ); }
+    void SetLastBoxFmt( SwTableBoxFmt* pNew ) { m_pLstBoxFmt.reset( pNew ); }
+    void SetOddBoxFmt( SwTableBoxFmt* pNew ) { m_pOddBoxFmt.reset( pNew ); }
+    void SetEvenBoxFmt( SwTableBoxFmt* pNew ) { m_pEvnBoxFmt.reset( pNew ); }
 
-    SwTableBoxFmt* GetFirstBoxFmt() { return m_pFstBoxFmt; }
-    SwTableBoxFmt* GetLastBoxFmt() { return m_pLstBoxFmt; }
-    SwTableBoxFmt* GetOddBoxFmt() { return m_pOddBoxFmt; }
-    SwTableBoxFmt* GetEvenBoxFmt() { return m_pEvnBoxFmt; }
+    SwTableBoxFmt* GetFirstBoxFmt() { return m_pFstBoxFmt.get(); }
+    SwTableBoxFmt* GetLastBoxFmt() { return m_pLstBoxFmt.get(); }
+    SwTableBoxFmt* GetOddBoxFmt() { return m_pOddBoxFmt.get(); }
+    SwTableBoxFmt* GetEvenBoxFmt() { return m_pEvnBoxFmt.get(); }
 
     TYPEINFO();     // Already in base class Content.
 
