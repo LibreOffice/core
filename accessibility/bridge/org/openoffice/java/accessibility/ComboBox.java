@@ -99,4 +99,16 @@ public class ComboBox extends Container {
             return 1;
         }
     }
+
+    /**
+     * Returns whether this Component can be focused.
+     *
+     * @return <code>true</code> if this Component is focusable;
+     *         <code>false</code> otherwise.
+     * @see #setFocusable
+     * @since 1.4
+     */
+    public boolean isFocusable() {
+        return true;
+    }
 }
