@@ -37,8 +37,6 @@ using ::xmloff::token::XML_CHART_PROPERTIES;
 
 TYPEINIT1( XMLChartStyleContext, XMLPropStyleContext );
 
-// protected
-
 void XMLChartStyleContext::SetAttribute(
     sal_uInt16 nPrefixKey,
     const OUString& rLocalName,
@@ -58,9 +56,6 @@ void XMLChartStyleContext::SetAttribute(
     }
 }
 
-//public
-
-// CTOR
 XMLChartStyleContext::XMLChartStyleContext(
     SvXMLImport& rImport, sal_uInt16 nPrfx,
     const OUString& rLName,
@@ -71,7 +66,6 @@ XMLChartStyleContext::XMLChartStyleContext(
         mrStyles( rStyles )
 {}
 
-// DTOR
 XMLChartStyleContext::~XMLChartStyleContext()
 {}
 
@@ -96,7 +90,7 @@ void lcl_NumberFormatStyleToProperty( const OUString& rStyleName, const OUString
     }
 }
 
-}// anonymous namespace
+}
 
 void XMLChartStyleContext::FillPropertySet(
     const uno::Reference< beans::XPropertySet > & rPropSet )
