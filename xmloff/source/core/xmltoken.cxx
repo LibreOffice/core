@@ -741,6 +741,7 @@ namespace xmloff { namespace token {
         TOKEN( "false",                           XML_FALSE ),
         TOKEN( "family",                          XML_FAMILY ),
         TOKEN( "fast",                            XML_FAST ),
+        TOKEN( "fence",                           XML_FENCE ),
         TOKEN( "field-number",                    XML_FIELD_NUMBER ),
         TOKEN( "file-name",                       XML_FILE_NAME ),
         TOKEN( "fill",                            XML_FILL ),

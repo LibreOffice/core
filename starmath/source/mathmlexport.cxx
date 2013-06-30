@@ -1144,51 +1144,53 @@ void SmXMLExport::ExportBrace(const SmNode *pNode, int nLevel)
     const SmNode *pTemp;
     const SmNode *pLeft=pNode->GetSubNode(0);
     const SmNode *pRight=pNode->GetSubNode(2);
-    SvXMLElementExport *pFences=0,*pRow=0;
-    if ( ((pLeft) && (pLeft->GetToken().eType != TNONE)) &&
-        ((pRight) && (pRight->GetToken().eType != TNONE)) &&
-        (pNode->GetScaleMode() == SCALE_HEIGHT))
+    SvXMLElementExport *pRow=0;
+
+    // This used to generate <mfenced> or <mrow>+<mo> elements according to
+    // the stretchiness of fences. The MathML recommendation defines an
+    // <mrow>+<mo> construction that is equivalent to the <mfenced> element:
+    // http://www.w3.org/TR/MathML3/chapter3.html#presm.mfenced
+    // To simplify our code and avoid issues with mfenced implementations in
+    // MathML rendering engines, we now always generate <mrow>+<mo> elements.
+    // See #fdo 66282.
+
+    // <mrow>
+    pRow = new SvXMLElementExport(*this, XML_NAMESPACE_MATH, XML_MROW,
+        sal_True, sal_True);
+
+    //   <mo fence="true"> opening-fence </mo>
+    if (pLeft && (pLeft->GetToken().eType != TNONE))
     {
-        sal_Unicode nArse[2];
-        nArse[1] = 0;
-        nArse[0] = static_cast<
-            const SmMathSymbolNode* >(pLeft)->GetText()[0];
-        OSL_ENSURE(nArse[0] != 0xffff,"Non existent symbol");
-        AddAttribute(XML_NAMESPACE_MATH, XML_OPEN,nArse);
-        nArse[0] = static_cast<
-            const SmMathSymbolNode* >(pRight)->GetText()[0];
-        OSL_ENSURE(nArse[0] != 0xffff,"Non existent symbol");
-        AddAttribute(XML_NAMESPACE_MATH, XML_CLOSE,nArse);
-        pFences = new SvXMLElementExport(*this, XML_NAMESPACE_MATH, XML_MFENCED,
-            sal_True,sal_True);
-    }
-    else if (pLeft && (pLeft->GetToken().eType != TNONE))
-    {
-        pRow = new SvXMLElementExport(*this, XML_NAMESPACE_MATH, XML_MROW,
-            sal_True, sal_True);
+        AddAttribute(XML_NAMESPACE_MATH, XML_FENCE, XML_TRUE);
         if (pNode->GetScaleMode() == SCALE_HEIGHT)
             AddAttribute(XML_NAMESPACE_MATH, XML_STRETCHY, XML_TRUE);
         else
             AddAttribute(XML_NAMESPACE_MATH, XML_STRETCHY, XML_FALSE);
         ExportNodes(pLeft, nLevel+1);
     }
-    else
-        pRow = new SvXMLElementExport(*this, XML_NAMESPACE_MATH, XML_MROW,
-            sal_True, sal_True);
 
     if (NULL != (pTemp = pNode->GetSubNode(1)))
-        ExportNodes(pTemp, nLevel+1);
-    if (pFences)
-        delete pFences;
-    else if (pRight && (pRight->GetToken().eType != TNONE))
     {
+        // <mrow>
+        SvXMLElementExport aRow(*this, XML_NAMESPACE_MATH, XML_MROW,
+            sal_True, sal_True);
+        ExportNodes(pTemp, nLevel+1);
+        // </mrow>
+    }
+
+    //   <mo fence="true"> closing-fence </mo>
+    if (pRight && (pRight->GetToken().eType != TNONE))
+    {
+        AddAttribute(XML_NAMESPACE_MATH, XML_FENCE, XML_TRUE);
         if (pNode->GetScaleMode() == SCALE_HEIGHT)
             AddAttribute(XML_NAMESPACE_MATH, XML_STRETCHY, XML_TRUE);
         else
             AddAttribute(XML_NAMESPACE_MATH, XML_STRETCHY, XML_FALSE);
         ExportNodes(pRight, nLevel+1);
     }
+
     delete pRow;
+    // </mrow>
 }
 
 void SmXMLExport::ExportRoot(const SmNode *pNode, int nLevel)
