@@ -26,6 +26,7 @@
 #include <rtl/character.hxx>
 #include <rtl/string.hxx>
 #include <rtl/strbuf.hxx>
+#include <rtl/ustring.hxx>
 #include <rtl/tencinfo.h>
 #include <tools/debug.hxx>
 #include <tools/errcode.hxx>

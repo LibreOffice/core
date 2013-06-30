@@ -44,12 +44,12 @@ public:
         nRight = nRightP;
         nBottom = nBottomP;
     }
-    sal_Bool    operator == ( const SvBorder & rObj ) const
+    bool    operator == ( const SvBorder & rObj ) const
             {
                 return nTop == rObj.nTop && nRight == rObj.nRight &&
                        nBottom == rObj.nBottom && nLeft == rObj.nLeft;
             }
-    sal_Bool    operator != ( const SvBorder & rObj ) const
+    bool    operator != ( const SvBorder & rObj ) const
             { return !(*this == rObj); }
     SvBorder & operator = ( const SvBorder & rBorder )
             {
@@ -75,7 +75,7 @@ public:
                 Bottom() -= rBorder.Bottom();
                 return *this;
             }
-    sal_Bool    IsInside( const SvBorder & rInside )
+    bool    IsInside( const SvBorder & rInside )
             {
                 return nTop >= rInside.nTop && nRight >= rInside.nRight &&
                        nBottom >= rInside.nBottom && nLeft >= rInside.nLeft;

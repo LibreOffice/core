@@ -22,7 +22,7 @@
 #include <limits>
 #include "tools/toolsdllapi.h"
 #include <tools/solar.h>
-#include <tools/string.hxx>
+#include <tools/lineend.hxx>
 #include <tools/errinf.hxx>
 #include <tools/ref.hxx>
 #include <tools/rtti.hxx>
@@ -79,10 +79,6 @@ typedef sal_uInt16 StreamMode;
 #define COMPRESSMODE_ZBITMAP            (sal_uInt16)0x0001
 #define COMPRESSMODE_NATIVE             (sal_uInt16)0x0010
 
-#define STREAM_IO_DONTKNOW              0
-#define STREAM_IO_READ                  1
-#define STREAM_IO_WRITE                 2
-
 #define ID_STREAM                       1
 #define ID_FILESTREAM                   2
 #define ID_MEMORYSTREAM                 3
@@ -112,8 +108,8 @@ enum SvLockBytesStatFlag { SVSTATFLAG_DEFAULT };
 class TOOLS_DLLPUBLIC SvLockBytes: public virtual SvRefBase
 {
     SvStream * m_pStream;
-    sal_Bool m_bOwner;
-    sal_Bool m_bSync;
+    bool m_bOwner;
+    bool m_bSync;
 
 protected:
     void close();
@@ -121,17 +117,17 @@ protected:
 public:
     TYPEINFO();
 
-    SvLockBytes() : m_pStream(0), m_bOwner(sal_False), m_bSync(sal_False) {}
+    SvLockBytes() : m_pStream(0), m_bOwner(false), m_bSync(false) {}
 
-    SvLockBytes(SvStream * pTheStream, sal_Bool bTheOwner = sal_False) :
-        m_pStream(pTheStream), m_bOwner(bTheOwner), m_bSync(sal_False) {}
+    SvLockBytes(SvStream * pTheStream, bool bTheOwner = false) :
+        m_pStream(pTheStream), m_bOwner(bTheOwner), m_bSync(false) {}
 
     virtual ~SvLockBytes() { close(); }
 
     virtual const SvStream * GetStream() const { return m_pStream; }
 
-    virtual void SetSynchronMode(sal_Bool bTheSync = sal_True) { m_bSync = bTheSync; }
-    virtual sal_Bool IsSynchronMode() const { return m_bSync; }
+    virtual void    SetSynchronMode(bool bTheSync = true) { m_bSync = bTheSync; }
+    virtual bool    IsSynchronMode() const { return m_bSync; }
 
     virtual ErrCode ReadAt(sal_Size nPos, void * pBuffer, sal_Size nCount,
                            sal_Size * pRead) const;
@@ -154,8 +150,8 @@ class TOOLS_DLLPUBLIC SvOpenLockBytes: public SvLockBytes
 public:
     TYPEINFO();
 
-    SvOpenLockBytes() : SvLockBytes(0, sal_False) {}
-    SvOpenLockBytes(SvStream * pStream, sal_Bool bOwner):
+    SvOpenLockBytes() : SvLockBytes(0, false) {}
+    SvOpenLockBytes(SvStream * pStream, bool bOwner):
         SvLockBytes(pStream, bOwner) {}
 
     virtual ErrCode FillAppend(const void * pBuffer, sal_Size nCount,
@@ -165,7 +161,7 @@ public:
 
     virtual sal_Size Seek(sal_Size nPos) = 0;
 
-    virtual void Terminate() = 0;
+    virtual void    Terminate() = 0;
 };
 
 SV_DECL_IMPL_REF(SvOpenLockBytes);
@@ -175,13 +171,13 @@ SV_DECL_IMPL_REF(SvOpenLockBytes);
 class SvAsyncLockBytes: public SvOpenLockBytes
 {
     sal_Size m_nSize;
-    sal_Bool m_bTerminated;
+    bool m_bTerminated;
 
 public:
     TYPEINFO();
 
-    SvAsyncLockBytes(SvStream * pStream, sal_Bool bOwner):
-        SvOpenLockBytes(pStream, bOwner), m_nSize(0), m_bTerminated(sal_False) {}
+    SvAsyncLockBytes(SvStream * pStream, bool bOwner):
+        SvOpenLockBytes(pStream, bOwner), m_nSize(0), m_bTerminated(false) {}
 
     virtual ErrCode ReadAt(sal_Size nPos, void * pBuffer, sal_Size nCount,
                            sal_Size * pRead) const;
@@ -195,7 +191,7 @@ public:
 
     virtual sal_Size Seek(sal_Size nPos);
 
-    virtual void Terminate() { m_bTerminated = sal_True; }
+    virtual void    Terminate() { m_bTerminated = true; }
 };
 
 SV_DECL_IMPL_REF(SvAsyncLockBytes);
@@ -206,32 +202,33 @@ class TOOLS_DLLPUBLIC SvStream
 {
 private:
     // LockBytes Interface
-    void*       pImp;           // unused
-    SvLockBytesRef xLockBytes;  // Default implementation
-    sal_Size    nActPos;
+    void*           pImp;           // unused
+    SvLockBytesRef  xLockBytes;  // Default implementation
+    sal_Size        nActPos;
 
     // Puffer-Verwaltung
-    sal_uInt8*  pRWBuf;         // Points to read/write buffer
-    sal_uInt8*  pBufPos;        // pRWBuf + nBufActualPos
-    sal_uInt16  nBufSize;       // Allocated size of buffer
-    sal_uInt16  nBufActualLen;  // Length of used segment of puffer
+    sal_uInt8*      pRWBuf;         // Points to read/write buffer
+    sal_uInt8*      pBufPos;        // pRWBuf + nBufActualPos
+    sal_uInt16      nBufSize;       // Allocated size of buffer
+    sal_uInt16      nBufActualLen;  // Length of used segment of puffer
                                 // = nBufSize, if EOF did not occur
-    sal_uInt16  nBufActualPos;  // current position in buffer (0..nBufSize-1)
-    sal_uInt16  nBufFree;       // number of free slots in buffer to IO of type eIOMode
-    unsigned int    eIOMode : 2;// STREAM_IO_*
+    sal_uInt16      nBufActualPos;  // current position in buffer (0..nBufSize-1)
+    sal_uInt16      nBufFree;       // number of free slots in buffer to IO of type eIOMode
+    bool            bIoRead;
+    bool            bIoWrite;
 
     // Error codes, conversion, compression, ...
-    int             bIsDirty : 1; // sal_True: Stream != buffer content
-    int             bIsConsistent : 1;// sal_False: Buffer contains data, which were
+    bool            bIsDirty; // true: Stream != buffer content
+    bool            bIsConsistent;// false: Buffer contains data, which were
                                 // NOT allowed to be written by PutData
                                 // into the derived stream (cf. PutBack)
-    int             bSwap  : 1;
-    int             bIsEof : 1;
-    sal_uInt32  nError;
-    sal_uInt16  nNumberFormatInt;
-    sal_uInt16  nCompressMode;
-    LineEnd     eLineDelimiter;
-    CharSet     eStreamCharSet;
+    bool            bSwap;
+    bool            bIsEof;
+    sal_uInt32      nError;
+    sal_uInt16      nNumberFormatInt;
+    sal_uInt16      nCompressMode;
+    LineEnd         eLineDelimiter;
+    rtl_TextEncoding eStreamCharSet;
 
     // Encryption
     OString m_aCryptMaskKey;// aCryptMaskKey.getLength != 0  -> Encryption used
@@ -249,7 +246,7 @@ private:
 protected:
     sal_Size        nBufFilePos;///< File position of pBuf[0]
     sal_uInt16      eStreamMode;
-    sal_Bool        bIsWritable;
+    bool            bIsWritable;
 
     virtual sal_Size GetData( void* pData, sal_Size nSize );
     virtual sal_Size PutData( const void* pData, sal_Size nSize );
@@ -262,7 +259,7 @@ protected:
 
     // encrypt and write in blocks
     sal_Size        CryptAndWriteBuffer( const void* pStart, sal_Size nLen );
-    sal_Bool        EncryptBuffer( void* pStart, sal_Size nLen );
+    bool            EncryptBuffer( void* pStart, sal_Size nLen );
 
     void            SyncSvStream( sal_Size nNewStreamPos ); ///< SvStream <- Medium
     void            SyncSysStream(); ///< SvStream -> Medium
@@ -274,8 +271,8 @@ public:
 
     SvLockBytes*    GetLockBytes() const { return xLockBytes; }
 
-    sal_uInt32  GetError() const { return ERRCODE_TOERROR(nError); }
-    sal_uInt32  GetErrorCode() const { return nError; }
+    sal_uInt32      GetError() const { return ERRCODE_TOERROR(nError); }
+    sal_uInt32      GetErrorCode() const { return nError; }
 
     void            SetError( sal_uInt32 nErrorCode );
     virtual void    ResetError();
@@ -283,9 +280,9 @@ public:
     void            SetNumberFormatInt( sal_uInt16 nNewFormat );
     sal_uInt16      GetNumberFormatInt() const { return nNumberFormatInt; }
     /// Enable/disable swapping of endians, may be needed for Unicode import/export
-    inline void     SetEndianSwap( sal_Bool bVal );
+    inline void     SetEndianSwap( bool bVal );
     /// returns status of endian swap flag
-    sal_Bool        IsEndianSwap() const { return 0 != bSwap; }
+    bool            IsEndianSwap() const { return 0 != bSwap; }
 
     void            SetCompressMode( sal_uInt16 nNewMode )
                         { nCompressMode = nNewMode; }
@@ -294,9 +291,9 @@ public:
     void SetCryptMaskKey(const OString& rCryptMaskKey);
     const OString& GetCryptMaskKey() const { return m_aCryptMaskKey; }
 
-    void            SetStreamCharSet( CharSet eCharSet )
+    void            SetStreamCharSet( rtl_TextEncoding eCharSet )
                         { eStreamCharSet = eCharSet; }
-    CharSet         GetStreamCharSet() const { return eStreamCharSet; }
+    rtl_TextEncoding GetStreamCharSet() const { return eStreamCharSet; }
 
     void            SetLineDelimiter( LineEnd eLineEnd )
                         { eLineDelimiter = eLineEnd; }
@@ -324,7 +321,7 @@ public:
     SvStream&       operator<<( sal_Int64 nInt64 );
 
     SvStream&       operator<<( bool b )
-    { return operator<<(static_cast< sal_Bool >(b)); }
+                        { return operator<<(static_cast< sal_Bool >(b)); }
     SvStream&       operator<<( signed char nChar );
     SvStream&       operator<<( char nChar );
     SvStream&       operator<<( unsigned char nChar );
@@ -345,9 +342,9 @@ public:
     // length between current (Tell()) pos and end of stream
     virtual sal_Size remainingSize();
     void            Flush();
-    sal_Bool        IsEof() const { return bIsEof; }
+    bool            IsEof() const { return bIsEof; }
     // next Tell() <= nSize
-    sal_Bool        SetStreamSize( sal_Size nSize );
+    bool            SetStreamSize( sal_Size nSize );
 
     /** Read a line of bytes.
 
@@ -363,8 +360,8 @@ public:
               @endcode
               causing endless loops ...
     */
-    sal_Bool        ReadLine( OString& rStr, sal_Int32 nMaxBytesToRead = 0xFFFE );
-    sal_Bool        WriteLine( const OString& rStr );
+    bool            ReadLine( OString& rStr, sal_Int32 nMaxBytesToRead = 0xFFFE );
+    bool            WriteLine( const OString& rStr );
 
     /** Read a line of bytes.
 
@@ -380,13 +377,12 @@ public:
               @endcode
               causing endless loops ...
     */
-    sal_Bool        ReadByteStringLine( OUString& rStr, rtl_TextEncoding eSrcCharSet,
+    bool            ReadByteStringLine( OUString& rStr, rtl_TextEncoding eSrcCharSet,
                                         sal_Int32 nMaxBytesToRead = 0xFFFE );
-    sal_Bool        ReadByteStringLine( String& rStr, rtl_TextEncoding eSrcCharSet );
-    sal_Bool        WriteByteStringLine( const String& rStr, rtl_TextEncoding eDestCharSet );
+    bool            WriteByteStringLine( const OUString& rStr, rtl_TextEncoding eDestCharSet );
 
     /// Switch to no endian swapping and write 0xfeff
-    sal_Bool        StartWritingUnicodeText();
+    bool        StartWritingUnicodeText();
 
     /** If eReadBomCharSet==RTL_TEXTENCODING_DONTKNOW: read 16bit, if 0xfeff do
         nothing (UTF-16), if 0xfffe switch endian swapping (UTF-16), if 0xefbb
@@ -397,7 +393,7 @@ public:
 
         If eReadBomCharSet!=RTL_TEXTENCODING_DONTKNOW: only read a BOM of that
         encoding and switch endian swapping if UTF-16 and 0xfffe. */
-    sal_Bool        StartReadingUnicodeText( rtl_TextEncoding eReadBomCharSet );
+    bool        StartReadingUnicodeText( rtl_TextEncoding eReadBomCharSet );
 
     /** Read a line of Unicode.
 
@@ -413,11 +409,11 @@ public:
               @endcode
               causing endless loops ...
     */
-    sal_Bool        ReadUniStringLine( OUString& rStr, sal_Int32 nMaxCodepointsToRead = 0xFFFE );
+    bool            ReadUniStringLine( OUString& rStr, sal_Int32 nMaxCodepointsToRead = 0xFFFE );
     /** Read a 32bit length prefixed sequence of utf-16 if
         eSrcCharSet==RTL_TEXTENCODING_UNICODE, otherwise read a 16bit length
         prefixed sequence of bytes and convert from eSrcCharSet */
-    OUString   ReadUniOrByteString(rtl_TextEncoding eSrcCharSet);
+    OUString        ReadUniOrByteString(rtl_TextEncoding eSrcCharSet);
     /** Write a 32bit length prefixed sequence of utf-16 if
         eSrcCharSet==RTL_TEXTENCODING_UNICODE, otherwise convert to eSrcCharSet
         and write a 16bit length prefixed sequence of bytes */
@@ -438,13 +434,13 @@ public:
               @endcode
               causing endless loops ...
     */
-    sal_Bool        ReadUniOrByteStringLine( OUString& rStr, rtl_TextEncoding eSrcCharSet,
+    bool            ReadUniOrByteStringLine( OUString& rStr, rtl_TextEncoding eSrcCharSet,
                                              sal_Int32 nMaxCodepointsToRead = 0xFFFE );
     /** Write a sequence of Unicode characters if
         eDestCharSet==RTL_TEXTENCODING_UNICODE, otherwise write a sequence of
         Bytecodes converted to eDestCharSet */
-    sal_Bool        WriteUnicodeOrByteText( const String& rStr, rtl_TextEncoding eDestCharSet );
-    sal_Bool        WriteUnicodeOrByteText( const String& rStr )
+    bool            WriteUnicodeOrByteText( const OUString& rStr, rtl_TextEncoding eDestCharSet );
+    bool            WriteUnicodeOrByteText( const OUString& rStr )
                     { return WriteUnicodeOrByteText( rStr, GetStreamCharSet() ); }
 
     /** Write a Unicode character if eDestCharSet==RTL_TEXTENCODING_UNICODE,
@@ -452,19 +448,19 @@ public:
 
         This may result in more than one byte being written if a multi byte
         encoding (e.g. UTF7, UTF8) is chosen. */
-    sal_Bool        WriteUniOrByteChar( sal_Unicode ch, rtl_TextEncoding eDestCharSet );
-    sal_Bool        WriteUniOrByteChar( sal_Unicode ch )
+    bool            WriteUniOrByteChar( sal_Unicode ch, rtl_TextEncoding eDestCharSet );
+    bool            WriteUniOrByteChar( sal_Unicode ch )
                     { return WriteUniOrByteChar( ch, GetStreamCharSet() ); }
 
     void            SetBufferSize( sal_uInt16 nBufSize );
-    sal_uInt16  GetBufferSize() const { return nBufSize; }
+    sal_uInt16      GetBufferSize() const { return nBufSize; }
 
     void            RefreshBuffer();
     SvStream&       PutBack( char aCh );
 
-    sal_Bool            IsWritable() const { return bIsWritable; }
+    bool            IsWritable() const { return bIsWritable; }
     StreamMode      GetStreamMode() const { return eStreamMode; }
-    virtual sal_uInt16  IsA() const;
+    virtual sal_uInt16 IsA() const;
 
     long            GetVersion() { return nVersion; }
     void            SetVersion( long n ) { nVersion = n; }
@@ -472,10 +468,10 @@ public:
     friend SvStream& operator<<( SvStream& rStr, SvStrPtr f ); // for Manips
 
     /// end of input seen during previous i/o operation
-    bool eof() const { return bIsEof; }
+    bool            eof() const { return bIsEof; }
 
     /// stream is broken
-    bool bad() const { return GetError() != 0; }
+    bool            bad() const { return GetError() != 0; }
 
     /** Get state
 
@@ -499,7 +495,7 @@ inline SvStream& operator<<( SvStream& rStr, SvStrPtr f )
     return rStr;
 }
 
-inline void SvStream::SetEndianSwap( sal_Bool bVal )
+inline void SvStream::SetEndianSwap( bool bVal )
 {
 #ifdef OSL_BIGENDIAN
     SetNumberFormatInt( bVal ? NUMBERFORMAT_INT_LITTLEENDIAN : NUMBERFORMAT_INT_BIGENDIAN );
@@ -579,8 +575,9 @@ namespace streamdetail
 /// Attempt to write a pascal-style length (of type prefix) prefixed sequence
 /// of 16bit units from an OUString, returned value is number of bytes written
 /// (including byte-count of prefix)
-template<typename prefix> sal_Size write_lenPrefixed_uInt16s_FromOUString(SvStream& rStrm,
-    const OUString &rStr)
+template<typename prefix>
+sal_Size write_lenPrefixed_uInt16s_FromOUString(SvStream& rStrm,
+                                                const OUString &rStr)
 {
     return streamdetail::write_lenPrefixed_seq_From_str<prefix, OUString, write_uInt16s_FromOUString>(rStrm, rStr);
 }
@@ -611,7 +608,7 @@ OString read_lenPrefixed_uInt8s_ToOString(SvStream& rStrm)
 /// 8bit units to an OUString
 template<typename prefix>
 OUString read_lenPrefixed_uInt8s_ToOUString(SvStream& rStrm,
-    rtl_TextEncoding eEnc)
+                                            rtl_TextEncoding eEnc)
 {
     return OStringToOUString(read_lenPrefixed_uInt8s_ToOString<prefix>(rStrm), eEnc);
 }
@@ -619,7 +616,7 @@ OUString read_lenPrefixed_uInt8s_ToOUString(SvStream& rStrm,
 /// Attempt to write a prefixed sequence of nUnits 8bit units from an OString,
 /// returned value is number of bytes written
 TOOLS_DLLPUBLIC inline sal_Size write_uInt8s_FromOString(SvStream& rStrm, const OString& rStr,
-    sal_Size nUnits)
+                                                         sal_Size nUnits)
 {
     return rStrm.Write(rStr.getStr(), nUnits);
 }
@@ -632,8 +629,9 @@ TOOLS_DLLPUBLIC inline sal_Size write_uInt8s_FromOString(SvStream& rStrm, const 
 /// Attempt to write a pascal-style length (of type prefix) prefixed sequence
 /// of 8bit units from an OString, returned value is number of bytes written
 /// (including byte-count of prefix)
-template<typename prefix> sal_Size write_lenPrefixed_uInt8s_FromOString(SvStream& rStrm,
-    const OString &rStr)
+template<typename prefix>
+sal_Size write_lenPrefixed_uInt8s_FromOString(SvStream& rStrm,
+                                              const OString &rStr)
 {
     return streamdetail::write_lenPrefixed_seq_From_str<prefix, OString, write_uInt8s_FromOString>(rStrm, rStr);
 }
@@ -641,8 +639,10 @@ template<typename prefix> sal_Size write_lenPrefixed_uInt8s_FromOString(SvStream
 /// Attempt to write a pascal-style length (of type prefix) prefixed sequence
 /// of 8bit units from an OUString, returned value is number of bytes written
 /// (including byte-count of prefix)
-template<typename prefix> sal_Size write_lenPrefixed_uInt8s_FromOUString(SvStream& rStrm,
-    const OUString &rStr, rtl_TextEncoding eEnc)
+template<typename prefix>
+sal_Size write_lenPrefixed_uInt8s_FromOUString(SvStream& rStrm,
+                                               const OUString &rStr,
+                                               rtl_TextEncoding eEnc)
 {
     return write_lenPrefixed_uInt8s_FromOString<prefix>(rStrm, OUStringToOString(rStr, eEnc));
 }
@@ -653,9 +653,9 @@ class TOOLS_DLLPUBLIC SvFileStream : public SvStream
 {
 private:
     StreamData*     pInstanceData;
-    String          aFilename;
+    OUString        aFilename;
     sal_uInt16      nLockCounter;
-    sal_Bool        bIsOpen;
+    bool            bIsOpen;
 #ifdef UNX
     sal_uInt32      GetFileHandle() const;
 #endif
@@ -663,10 +663,10 @@ private:
     SvFileStream (const SvFileStream&);
     SvFileStream & operator= (const SvFileStream&);
 
-    sal_Bool LockRange( sal_Size nByteOffset, sal_Size nBytes );
-    sal_Bool UnlockRange( sal_Size nByteOffset, sal_Size nBytes );
-    sal_Bool LockFile();
-    sal_Bool UnlockFile();
+    bool LockRange( sal_Size nByteOffset, sal_Size nBytes );
+    bool UnlockRange( sal_Size nByteOffset, sal_Size nBytes );
+    bool LockFile();
+    bool UnlockFile();
 
 protected:
     virtual sal_Size GetData( void* pData, sal_Size nSize );
@@ -677,19 +677,19 @@ protected:
 
 public:
                     // Switches to Read StreamMode on failed attempt of Write opening
-                    SvFileStream( const String& rFileName, StreamMode eOpenMode );
+                    SvFileStream( const OUString& rFileName, StreamMode eOpenMode );
                     SvFileStream();
                     ~SvFileStream();
 
     virtual void    ResetError();
 
-    void            Open( const String& rFileName, StreamMode eOpenMode );
+    void            Open( const OUString& rFileName, StreamMode eOpenMode );
     void            Close();
-    sal_Bool        IsOpen() const { return bIsOpen; }
-    sal_Bool        IsLocked() const { return ( nLockCounter!=0 ); }
+    bool            IsOpen() const { return bIsOpen; }
+    bool            IsLocked() const { return ( nLockCounter!=0 ); }
     virtual sal_uInt16 IsA() const;
 
-    const String&   GetFileName() const { return aFilename; }
+    const OUString& GetFileName() const { return aFilename; }
 };
 
 // MemoryStream
@@ -709,7 +709,7 @@ protected:
     sal_Size        nPos;
     sal_Size        nEndOfData;
     sal_uInt8*      pBuf;
-    sal_Bool        bOwnsData;
+    bool            bOwnsData;
 
     virtual sal_Size GetData( void* pData, sal_Size nSize );
     virtual sal_Size PutData( const void* pData, sal_Size nSize );
@@ -719,7 +719,7 @@ protected:
 
     /// AllocateMemory must update pBuf accordingly
     /// - pBuf: Address of new block
-    virtual sal_Bool AllocateMemory( sal_Size nSize );
+    virtual bool    AllocateMemory( sal_Size nSize );
 
     /// ReAllocateMemory must update the following variables:
     /// - pBuf: Address of new block
@@ -727,7 +727,7 @@ protected:
     ///               Set to 0 , if new block size is 0 bytes
     /// - nSize: New block size
     /// - nPos: Set to 0 if position outside of block
-    virtual sal_Bool ReAllocateMemory( long nDiff );
+    virtual bool    ReAllocateMemory( long nDiff );
 
     /// Is called when this stream allocated the buffer or the buffer is
     /// resized. FreeMemory may need to NULLify handles in derived classes.
@@ -749,10 +749,10 @@ public:
 
     void*           SwitchBuffer( sal_Size nInitSize=512, sal_Size nResize=64 );
     void*           SetBuffer( void* pBuf, sal_Size nSize,
-                               sal_Bool bOwnsData=sal_True, sal_Size nEOF=0 );
+                               bool bOwnsData=true, sal_Size nEOF=0 );
 
-    void            ObjectOwnsMemory( sal_Bool bOwn ) { bOwnsData = bOwn; }
-    sal_Bool        IsObjectMemoryOwner() { return bOwnsData; }
+    void            ObjectOwnsMemory( bool bOwn ) { bOwnsData = bOwn; }
+    bool            IsObjectMemoryOwner() { return bOwnsData; }
     void            SetResizeOffset( sal_Size nNewResize ) { nResize = nNewResize; }
     sal_Size        GetResizeOffset() const { return nResize; }
     virtual sal_Size remainingSize() { return GetSize() - Tell(); }

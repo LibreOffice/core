@@ -107,7 +107,7 @@ public:
                         Polygon( const Rectangle& rBound,
                                  const Point& rStart, const Point& rEnd,
                                  PolyStyle ePolyStyle = POLY_ARC,
-                                 sal_Bool bWholeCircle = sal_False );
+                                 bool bWholeCircle = false );
                         Polygon( const Point& rBezPt1, const Point& rCtrlPt1,
                                  const Point& rBezPt2, const Point& rCtrlPt2,
                                  sal_uInt16 nPoints = 0 );
@@ -120,9 +120,9 @@ public:
 
     void                SetFlags( sal_uInt16 nPos, PolyFlags eFlags );
     PolyFlags           GetFlags( sal_uInt16 nPos ) const;
-    sal_Bool            HasFlags() const;
+    bool                HasFlags() const;
 
-    sal_Bool            IsRect() const;
+    bool                IsRect() const;
 
     void                SetSize( sal_uInt16 nNewSize );
     sal_uInt16          GetSize() const;
@@ -131,10 +131,10 @@ public:
 
     Rectangle           GetBoundRect() const;
     double              GetSignedArea() const;
-    sal_Bool            IsInside( const Point& rPt ) const;
-    sal_Bool            IsRightOrientated() const;
+    bool                IsInside( const Point& rPt ) const;
+    bool                IsRightOrientated() const;
     double              CalcDistance( sal_uInt16 nPt1, sal_uInt16 nPt2 );
-    void                Clip( const Rectangle& rRect, sal_Bool bPolygon = sal_True );
+    void                Clip( const Rectangle& rRect, bool bPolygon = true );
     void                Optimize( sal_uIntPtr nOptimizeFlags, const PolyOptimizeData* pData = NULL );
 
     /** Adaptive subdivision of polygons with curves
@@ -170,10 +170,10 @@ public:
     Point&              operator[]( sal_uInt16 nPos );
 
     Polygon&            operator=( const Polygon& rPoly );
-    sal_Bool            operator==( const Polygon& rPoly ) const;
-    sal_Bool            operator!=( const Polygon& rPoly ) const
+    bool                operator==( const Polygon& rPoly ) const;
+    bool                operator!=( const Polygon& rPoly ) const
                             { return !(Polygon::operator==( rPoly )); }
-    sal_Bool            IsEqual( const Polygon& rPoly ) const;
+    bool                IsEqual( const Polygon& rPoly ) const;
 
     // streaming a Polygon does ignore PolyFlags, so use the Write Or Read
     // method to take care of PolyFlags
@@ -214,7 +214,7 @@ public:
     void                Replace( const Polygon& rPoly, sal_uInt16 nPos );
     const Polygon&      GetObject( sal_uInt16 nPos ) const;
 
-    sal_Bool            IsRect() const;
+    bool                IsRect() const;
 
     void                Clear();
 
@@ -256,11 +256,11 @@ public:
     Polygon&            operator[]( sal_uInt16 nPos );
 
     PolyPolygon&        operator=( const PolyPolygon& rPolyPoly );
-    sal_Bool                operator==( const PolyPolygon& rPolyPoly ) const;
-    sal_Bool                operator!=( const PolyPolygon& rPolyPoly ) const
+    bool                operator==( const PolyPolygon& rPolyPoly ) const;
+    bool                operator!=( const PolyPolygon& rPolyPoly ) const
                             { return !(PolyPolygon::operator==( rPolyPoly )); }
 
-    sal_Bool            IsEqual( const PolyPolygon& rPolyPoly ) const;
+    bool                IsEqual( const PolyPolygon& rPolyPoly ) const;
 
     TOOLS_DLLPUBLIC friend SvStream&    operator>>( SvStream& rIStream, PolyPolygon& rPolyPoly );
     TOOLS_DLLPUBLIC friend SvStream&    operator<<( SvStream& rOStream, const PolyPolygon& rPolyPoly );

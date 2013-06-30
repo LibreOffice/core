@@ -57,7 +57,7 @@ static ImplPolygonData aStaticImplPolygon =
     NULL, NULL, 0, 0
 };
 
-ImplPolygon::ImplPolygon( sal_uInt16 nInitSize, sal_Bool bFlags  )
+ImplPolygon::ImplPolygon( sal_uInt16 nInitSize, bool bFlags  )
 {
     if ( nInitSize )
     {
@@ -140,7 +140,7 @@ ImplPolygon::~ImplPolygon()
         delete[] mpFlagAry;
 }
 
-void ImplPolygon::ImplSetSize( sal_uInt16 nNewSize, sal_Bool bResize )
+void ImplPolygon::ImplSetSize( sal_uInt16 nNewSize, bool bResize )
 {
     if( mnPoints == nNewSize )
         return;
@@ -221,7 +221,7 @@ void ImplPolygon::ImplSplit( sal_uInt16 nPos, sal_uInt16 nSpace, ImplPolygon* pI
     {
         // Append at the back
         nPos = mnPoints;
-        ImplSetSize( nNewSize, sal_True );
+        ImplSetSize( nNewSize, true );
 
         if( pInitPoly )
         {
@@ -459,7 +459,7 @@ Polygon::Polygon( const Point& rCenter, long nRadX, long nRadY, sal_uInt16 nPoin
 }
 
 Polygon::Polygon( const Rectangle& rBound, const Point& rStart, const Point& rEnd,
-                  PolyStyle eStyle, sal_Bool bFullCircle )
+                  PolyStyle eStyle, bool bFullCircle )
 {
     DBG_CTOR( Polygon, NULL );
 
@@ -641,14 +641,14 @@ PolyFlags Polygon::GetFlags( sal_uInt16 nPos ) const
             POLY_NORMAL );
 }
 
-sal_Bool Polygon::HasFlags() const
+bool Polygon::HasFlags() const
 {
     return mpImplPolygon->mpFlagAry != NULL;
 }
 
-sal_Bool Polygon::IsRect() const
+bool Polygon::IsRect() const
 {
-    sal_Bool bIsRect = sal_False;
+    bool bIsRect = false;
     if ( mpImplPolygon->mpFlagAry == NULL )
     {
         if ( ( ( mpImplPolygon->mnPoints == 5 ) && ( mpImplPolygon->mpPointAry[ 0 ] == mpImplPolygon->mpPointAry[ 4 ] ) ) ||
@@ -658,7 +658,7 @@ sal_Bool Polygon::IsRect() const
                  ( mpImplPolygon->mpPointAry[ 0 ].Y() == mpImplPolygon->mpPointAry[ 1 ].Y() ) &&
                  ( mpImplPolygon->mpPointAry[ 1 ].X() == mpImplPolygon->mpPointAry[ 2 ].X() ) &&
                  ( mpImplPolygon->mpPointAry[ 2 ].Y() == mpImplPolygon->mpPointAry[ 3 ].Y() ) )
-                bIsRect = sal_True;
+                bIsRect = true;
         }
     }
     return bIsRect;
@@ -929,11 +929,11 @@ void Polygon::ImplReduceEdges( Polygon& rPoly, const double& rArea, sal_uInt16 n
     {
         sal_uInt16  nPntCnt = rPoly.GetSize(), nNewPos = 0;
         Polygon aNewPoly( nPntCnt );
-        sal_Bool    bChangeInThisRun = sal_False;
+        bool    bChangeInThisRun = false;
 
         for( sal_uInt16 n = 0; n < nPntCnt; n++ )
         {
-            sal_Bool bDeletePoint = sal_False;
+            bool bDeletePoint = false;
 
             if( ( n + nNumRuns ) % 2 )
             {
@@ -950,7 +950,7 @@ void Polygon::ImplReduceEdges( Polygon& rPoly, const double& rArea, sal_uInt16 n
                 double      fTurnB = aVec2.Normalize().Scalar( aVec3.Normalize() );
 
                 if( fabs( fTurnB ) < ( 1.0 + SMALL_DVALUE ) && fabs( fTurnB ) > ( 1.0 - SMALL_DVALUE ) )
-                    bDeletePoint = sal_True;
+                    bDeletePoint = true;
                 else
                 {
                     Vector2D    aVecB( rPoly[ nIndNext ] );
@@ -979,7 +979,7 @@ void Polygon::ImplReduceEdges( Polygon& rPoly, const double& rArea, sal_uInt16 n
                         if( ( fLenFact < ( FSQRT2 + SMALL_DVALUE ) ) &&
                             ( ( ( fDist1 + fDist4 ) / ( fDist2 + fDist3 ) ) * 2000.0 ) > fBound )
                         {
-                            bDeletePoint = sal_True;
+                            bDeletePoint = true;
                         }
                     }
                     else
@@ -994,7 +994,7 @@ void Polygon::ImplReduceEdges( Polygon& rPoly, const double& rArea, sal_uInt16 n
                         if( ( (sal_uInt32) ( ( ( fLenFact - 1.0 ) * 1000000.0 ) + 0.5 ) < fBound ) &&
                             ( fabs( fGradB ) <= ( fRelLen * fBound * 0.01 ) ) )
                         {
-                            bDeletePoint = sal_True;
+                            bDeletePoint = true;
                         }
                     }
                 }
@@ -1003,7 +1003,7 @@ void Polygon::ImplReduceEdges( Polygon& rPoly, const double& rArea, sal_uInt16 n
             if( !bDeletePoint )
                 aNewPoly[ nNewPos++ ] = rPoly[ n ];
             else
-                bChangeInThisRun = sal_True;
+                bChangeInThisRun = true;
         }
 
         if( bChangeInThisRun && nNewPos )
@@ -1147,7 +1147,7 @@ class ImplEdgePointFilter : public ImplPointFilter
     const long          mnHigh;
     const int           mnEdge;
     int                 mnLastOutside;
-    sal_Bool                mbFirst;
+    bool                mbFirst;
 
 public:
                         ImplEdgePointFilter( int nEdge, long nLow, long nHigh,
@@ -1156,7 +1156,7 @@ public:
                             mnLow( nLow ),
                             mnHigh( nHigh ),
                             mnEdge( nEdge ),
-                            mbFirst( sal_True )
+                            mbFirst( true )
                         {
                         }
 
@@ -1257,7 +1257,7 @@ void ImplEdgePointFilter::Input( const Point& rPoint )
     if ( mbFirst )
     {
         maFirstPoint = rPoint;
-        mbFirst      = sal_False;
+        mbFirst      = false;
         if ( !nOutside )
             mrNextFilter.Input( rPoint );
     }
@@ -1293,7 +1293,7 @@ void ImplEdgePointFilter::LastPoint()
     }
 }
 
-void Polygon::Clip( const Rectangle& rRect, sal_Bool bPolygon )
+void Polygon::Clip( const Rectangle& rRect, bool bPolygon )
 {
     // #105251# Justify rect befor edge filtering
     Rectangle               aJustifiedRect( rRect );
@@ -1391,7 +1391,7 @@ double Polygon::GetSignedArea() const
     return fArea;
 }
 
-sal_Bool Polygon::IsInside( const Point& rPoint ) const
+bool Polygon::IsInside( const Point& rPoint ) const
 {
     DBG_CHKTHIS( Polygon, NULL );
     DBG_ASSERT( !mpImplPolygon->mpFlagAry, "IsInside could fail with beziers!" );
@@ -1440,7 +1440,7 @@ sal_Bool Polygon::IsInside( const Point& rPoint ) const
     return ( ( nPCounter & 1 ) == 1 );
 }
 
-sal_Bool Polygon::IsRightOrientated() const
+bool Polygon::IsRightOrientated() const
 {
     DBG_CHKTHIS( Polygon, NULL );
     return GetSignedArea() >= 0.0;
@@ -1516,23 +1516,23 @@ Polygon& Polygon::operator=( const Polygon& rPoly )
     return *this;
 }
 
-sal_Bool Polygon::operator==( const Polygon& rPoly ) const
+bool Polygon::operator==( const Polygon& rPoly ) const
 {
     DBG_CHKTHIS( Polygon, NULL );
     DBG_CHKOBJ( &rPoly, Polygon, NULL );
 
     if ( (rPoly.mpImplPolygon == mpImplPolygon) )
-        return sal_True;
+        return true;
     else
-        return sal_False;
+        return false;
 }
 
-sal_Bool Polygon::IsEqual( const Polygon& rPoly ) const
+bool Polygon::IsEqual( const Polygon& rPoly ) const
 {
-    sal_Bool bIsEqual = sal_True;
+    bool bIsEqual = true;
     sal_uInt16 i;
     if ( GetSize() != rPoly.GetSize() )
-        bIsEqual = sal_False;
+        bIsEqual = false;
     else
     {
         for ( i = 0; i < GetSize(); i++ )
@@ -1540,7 +1540,7 @@ sal_Bool Polygon::IsEqual( const Polygon& rPoly ) const
             if ( ( GetPoint( i ) != rPoly.GetPoint( i ) ) ||
                 ( GetFlags( i ) != rPoly.GetFlags( i ) ) )
             {
-                bIsEqual = sal_False;
+                bIsEqual = false;
                 break;
             }
         }
@@ -1565,7 +1565,7 @@ SvStream& operator>>( SvStream& rIStream, Polygon& rPoly )
         rPoly.mpImplPolygon = new ImplPolygon( nPoints );
     }
     else
-        rPoly.mpImplPolygon->ImplSetSize( nPoints, sal_False );
+        rPoly.mpImplPolygon->ImplSetSize( nPoints, false );
 
     {
         // Determine whether we need to write through operators

@@ -1368,7 +1368,7 @@ void UcbLockBytes::terminate_Impl()
 }
 
 //----------------------------------------------------------------------------
-void UcbLockBytes::SetSynchronMode (sal_Bool bSynchron)
+void UcbLockBytes::SetSynchronMode (bool bSynchron)
 {
     SvLockBytes::SetSynchronMode (bSynchron);
 }

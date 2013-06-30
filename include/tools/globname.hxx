@@ -23,7 +23,6 @@
 
 #include "tools/toolsdllapi.h"
 #include <com/sun/star/uno/Sequence.hxx>
-#include <tools/string.hxx>
 
 struct ImpSvGlobalName
 {
@@ -39,7 +38,7 @@ struct ImpSvGlobalName
                 ImpSvGlobalName( const ImpSvGlobalName & rObj );
                 ImpSvGlobalName( Empty );
 
-    sal_Bool    operator == ( const ImpSvGlobalName & rObj ) const;
+    bool        operator == ( const ImpSvGlobalName & rObj ) const;
 };
 
 #ifdef WNT
@@ -82,17 +81,17 @@ public:
     TOOLS_DLLPUBLIC friend SvStream & operator >> ( SvStream &, SvGlobalName & );
     TOOLS_DLLPUBLIC friend SvStream & operator << ( SvStream &, const SvGlobalName & );
 
-    sal_Bool            operator < ( const SvGlobalName & rObj ) const;
-    SvGlobalName &  operator += ( sal_uInt32 );
-    SvGlobalName &  operator ++ () { return operator += ( 1 ); }
+    bool          operator < ( const SvGlobalName & rObj ) const;
+    SvGlobalName& operator += ( sal_uInt32 );
+    SvGlobalName& operator ++ () { return operator += ( 1 ); }
 
-    sal_Bool    operator == ( const SvGlobalName & rObj ) const;
-    sal_Bool    operator != ( const SvGlobalName & rObj ) const
-            { return !(*this == rObj); }
+    bool          operator == ( const SvGlobalName & rObj ) const;
+    bool          operator != ( const SvGlobalName & rObj ) const
+                      { return !(*this == rObj); }
 
-    void    MakeFromMemory( void * pData );
-    sal_Bool    MakeId( const String & rId );
-    String  GetHexName() const;
+    void          MakeFromMemory( void * pData );
+    bool          MakeId( const OUString & rId );
+    OUString      GetHexName() const;
 
                   SvGlobalName( const CLSID & rId );
     const CLSID & GetCLSID() const { return *(CLSID *)pImp->szData; }

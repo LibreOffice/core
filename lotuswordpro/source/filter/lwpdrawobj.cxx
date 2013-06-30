@@ -58,6 +58,7 @@
  * Implementation file of LwpDrawObjcts and associated class like LwpDrawGroup, LwpDrawRectange
  *  and so on.
  */
+#include <osl/thread.h>
 #include "lwpglobalmgr.hxx"
 #include "lwpdrawobj.hxx"
 #include "lwptools.hxx"

@@ -3283,7 +3283,7 @@ HtmlErrorContext::HtmlErrorContext(Window *_pWin)
 
 // =====================================================================
 
-sal_Bool HtmlErrorContext::GetString( sal_uLong, OUString& rCtxStr )
+bool HtmlErrorContext::GetString( sal_uLong, OUString& rCtxStr )
 {
     DBG_ASSERT( mnResId != 0, "No error context set" );
     if( mnResId == 0 )

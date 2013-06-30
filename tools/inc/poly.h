@@ -35,12 +35,12 @@ public:
 class SAL_WARN_UNUSED ImplPolygon  : public ImplPolygonData
 {
 public:
-                    ImplPolygon( sal_uInt16 nInitSize, sal_Bool bFlags = sal_False );
+                    ImplPolygon( sal_uInt16 nInitSize, bool bFlags = false );
                     ImplPolygon( sal_uInt16 nPoints, const Point* pPtAry, const sal_uInt8* pInitFlags = NULL );
                     ImplPolygon( const ImplPolygon& rImplPoly );
                     ~ImplPolygon();
 
-    void            ImplSetSize( sal_uInt16 nSize, sal_Bool bResize = sal_True );
+    void            ImplSetSize( sal_uInt16 nSize, bool bResize = true );
     void            ImplCreateFlagArray();
     void            ImplSplit( sal_uInt16 nPos, sal_uInt16 nSpace, ImplPolygon* pInitPoly = NULL );
 };

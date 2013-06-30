@@ -19,9 +19,10 @@
 
 #include <math.h>
 
+#include <rtl/ustrbuf.hxx>
 #include <tools/tools.h>
 #include <tools/bigint.hxx>
-#include <tools/string.hxx>
+
 
 #include <string.h>
 #include <ctype.h>
@@ -137,12 +138,12 @@ void BigInt::Div( sal_uInt16 nDiv, sal_uInt16& rRem )
         nLen -= 1;
 }
 
-sal_Bool BigInt::IsLess( const BigInt& rVal ) const
+bool BigInt::IsLess( const BigInt& rVal ) const
 {
     if ( rVal.nLen < nLen)
-        return sal_True;
+        return true;
     if ( rVal.nLen > nLen )
-        return sal_False;
+        return false;
 
     int i;
     for ( i = nLen - 1; i > 0 && nNum[i] == rVal.nNum[i]; i-- )
@@ -441,7 +442,7 @@ void BigInt::ModLong( const BigInt& rB, BigInt& rErg ) const
     rErg.Div( nMult, nQ );
 }
 
-sal_Bool BigInt::ABS_IsLess( const BigInt& rB ) const
+bool BigInt::ABS_IsLess( const BigInt& rB ) const
 {
     if (bIsBig || rB.bIsBig)
     {
@@ -490,11 +491,11 @@ BigInt::BigInt( const OUString& rString )
     bIsBig = sal_False;
     nVal   = 0;
 
-    sal_Bool bNeg = sal_False;
+    bool bNeg = false;
     const sal_Unicode* p = rString.getStr();
     if ( *p == '-' )
     {
-        bNeg = sal_True;
+        bNeg = true;
         p++;
     }
     while( *p >= '0' && *p <= '9' )
@@ -504,7 +505,7 @@ BigInt::BigInt( const OUString& rString )
         p++;
     }
     if ( bIsBig )
-        bIsNeg = bNeg;
+        bIsNeg = bNeg ? sal_True : sal_False;
     else if( bNeg )
         nVal = -nVal;
 }
@@ -608,43 +609,45 @@ BigInt::operator double() const
 
 OUString BigInt::GetString() const
 {
-    String aString;
 
     if ( !bIsBig )
-        aString = OUString::number( nVal );
+    {
+        return OUString::number( nVal );
+    }
     else
     {
         BigInt aTmp( *this );
         BigInt a1000000000( 1000000000L );
         aTmp.Abs();
-
+        OUStringBuffer sBuff(30);
         do
         {
             BigInt a = aTmp;
             a    %= a1000000000;
             aTmp /= a1000000000;
-
-            String aStr = aString;
             if ( a.nVal < 100000000L )
-            { // leading 0s
-                aString = OUString::number( a.nVal + 1000000000L );
-                aString.Erase(0,1);
+            {
+                // to get leading 0s
+                OUString aStr(OUString::number( a.nVal + 1000000000L ));
+                sBuff.insert(0, aStr.getStr() + 1);
             }
             else
-                aString = OUString::number( a.nVal );
-            aString += aStr;
+            {
+                sBuff.insert(0, OUString::number( a.nVal ));
+            }
         }
         while( aTmp.bIsBig );
 
-        String aStr = aString;
         if ( bIsNeg )
-            aString = OUString::number( -aTmp.nVal );
+        {
+            sBuff.insert(0, OUString::number( -aTmp.nVal ));
+        }
         else
-            aString = OUString::number( aTmp.nVal );
-        aString += aStr;
+        {
+            sBuff.insert(0, OUString::number( aTmp.nVal ));
+        }
+        return sBuff.makeStringAndClear();
     }
-
-    return aString;
 }
 
 BigInt& BigInt::operator=( const BigInt& rBigInt )
@@ -838,7 +841,7 @@ BigInt& BigInt::operator%=( const BigInt& rVal )
     return *this;
 }
 
-sal_Bool operator==( const BigInt& rVal1, const BigInt& rVal2 )
+bool operator==( const BigInt& rVal1, const BigInt& rVal2 )
 {
     if ( rVal1.bIsBig || rVal2.bIsBig )
     {
@@ -856,14 +859,14 @@ sal_Bool operator==( const BigInt& rVal1, const BigInt& rVal2 )
 
                 return nA.nNum[i] == nB.nNum[i];
             }
-            return sal_False;
+            return false;
         }
-        return sal_False;
+        return false;
     }
     return rVal1.nVal == rVal2.nVal;
 }
 
-sal_Bool operator<( const BigInt& rVal1, const BigInt& rVal2 )
+bool operator<( const BigInt& rVal1, const BigInt& rVal2 )
 {
     if ( rVal1.bIsBig || rVal2.bIsBig )
     {
@@ -894,7 +897,7 @@ sal_Bool operator<( const BigInt& rVal1, const BigInt& rVal2 )
     return rVal1.nVal < rVal2.nVal;
 }
 
-sal_Bool operator >(const BigInt& rVal1, const BigInt& rVal2 )
+bool operator >(const BigInt& rVal1, const BigInt& rVal2 )
 {
     if ( rVal1.bIsBig || rVal2.bIsBig )
     {

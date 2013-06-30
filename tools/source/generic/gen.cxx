@@ -126,44 +126,44 @@ void Rectangle::Justify()
     }
 }
 
-sal_Bool Rectangle::IsInside( const Point& rPoint ) const
+bool Rectangle::IsInside( const Point& rPoint ) const
 {
     if ( IsEmpty() )
-        return sal_False;
+        return false;
 
-    sal_Bool bRet = sal_True;
+    bool bRet = true;
     if ( nLeft <= nRight )
     {
         if ( (rPoint.X() < nLeft) || (rPoint.X() > nRight) )
-            bRet = sal_False;
+            bRet = false;
     }
     else
     {
         if ( (rPoint.X() > nLeft) || (rPoint.X() < nRight) )
-            bRet = sal_False;
+            bRet = false;
     }
     if ( nTop <= nBottom )
     {
         if ( (rPoint.Y() < nTop) || (rPoint.Y() > nBottom) )
-            bRet = sal_False;
+            bRet = false;
     }
     else
     {
         if ( (rPoint.Y() > nTop) || (rPoint.Y() < nBottom) )
-            bRet = sal_False;
+            bRet = false;
     }
     return bRet;
 }
 
-sal_Bool Rectangle::IsInside( const Rectangle& rRect ) const
+bool Rectangle::IsInside( const Rectangle& rRect ) const
 {
     if ( IsInside( rRect.TopLeft() ) && IsInside( rRect.BottomRight() ) )
-        return sal_True;
+        return true;
     else
-        return sal_False;
+        return false;
 }
 
-sal_Bool Rectangle::IsOver( const Rectangle& rRect ) const
+bool Rectangle::IsOver( const Rectangle& rRect ) const
 {
     // If there's no intersection, they don't overlap
     return !GetIntersection( rRect ).IsEmpty();

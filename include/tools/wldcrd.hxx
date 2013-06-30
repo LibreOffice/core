@@ -20,8 +20,8 @@
 #define _WLDCRD_HXX
 
 #include "tools/toolsdllapi.h"
-#include <tools/string.hxx>
 #include <osl/thread.h>
+#include <rtl/ustring.hxx>
 
 class TOOLS_DLLPUBLIC WildCard
 {
@@ -54,7 +54,7 @@ public:
         aWildString = OUStringToOString(rString, osl_getThreadTextEncoding());
     }
 
-    sal_Bool Matches( const String& rStr ) const;
+    bool Matches( const OUString& rStr ) const;
 };
 
 #endif

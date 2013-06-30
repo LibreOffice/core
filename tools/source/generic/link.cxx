@@ -19,22 +19,22 @@
 
 #include <tools/link.hxx>
 
-sal_Bool Link::operator==( const Link& rLink ) const
+bool Link::operator==( const Link& rLink ) const
 {
     if ( pFunc == rLink.pFunc )
     {
         if ( pFunc )
         {
             if ( pInst == rLink.pInst )
-                return sal_True;
+                return true;
             else
-                return sal_False;
+                return false;
         }
         else
-            return sal_True;
+            return true;
     }
     else
-        return sal_False;
+        return false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

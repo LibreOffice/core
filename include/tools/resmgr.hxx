@@ -143,11 +143,11 @@ public:
     void                TestStack( const Resource * );
 
     /// Check whether resource is available
-    sal_Bool            IsAvailable( const ResId& rId,
+    bool                IsAvailable( const ResId& rId,
                                      const Resource* = NULL) const;
 
     /// Search and load resource, given its ID
-    sal_Bool            GetResource( const ResId& rId, const Resource * = NULL );
+    bool                GetResource( const ResId& rId, const Resource * = NULL );
     static void *       GetResourceSkipHeader( const ResId& rResId, ResMgr ** ppResMgr );
     /// Free resource context
     void                PopContext( const Resource* = NULL );

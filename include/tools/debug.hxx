@@ -182,9 +182,9 @@ typedef sal_uInt16 DbgChannelId;
 */
 TOOLS_DLLPUBLIC DbgChannelId DbgRegisterUserChannel( DbgPrintLine pProc );
 
-inline sal_Bool DbgFilterMessage( const char* pMsg )
+inline bool DbgFilterMessage( const char* pMsg )
 {
-    return (sal_Bool)(long) DbgFunc( DBG_FUNC_FILTERMESSAGE, (void*)pMsg );
+    return (bool)(long) DbgFunc( DBG_FUNC_FILTERMESSAGE, (void*)pMsg );
 }
 
 inline int DbgIsAllErrorOut()

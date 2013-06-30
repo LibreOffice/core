@@ -164,7 +164,7 @@ SfxErrorHandler::~SfxErrorHandler()
 
 //-------------------------------------------------------------------------
 
-sal_Bool SfxErrorHandler::CreateString(
+bool SfxErrorHandler::CreateString(
     const ErrorInfo *pErr, OUString &rStr, sal_uInt16& nFlags) const
 
 /*  [Beschreibung]
@@ -176,14 +176,14 @@ sal_Bool SfxErrorHandler::CreateString(
 {
     sal_uLong nErrCode = pErr->GetErrorCode() & ERRCODE_ERROR_MASK;
     if( nErrCode>=lEnd || nErrCode<=lStart )
-        return sal_False;
+        return false;
     MessageInfo *pMsgInfo=PTR_CAST(MessageInfo,pErr);
     if(pMsgInfo)
     {
         if(GetMessageString(nErrCode, rStr, nFlags))
         {
             rStr = rStr.replaceAll("$(ARG1)", pMsgInfo->GetMessageArg());
-            return sal_True;
+            return true;
         }
     }
     else if(GetErrorString(nErrCode, rStr, nFlags))
@@ -204,9 +204,9 @@ sal_Bool SfxErrorHandler::CreateString(
                 rStr = rStr.replaceAll("$(ARG2)", pTwoStringInfo->GetArg2());
             }
         }
-        return sal_True;
+        return true;
     }
-    return sal_False;
+    return false;
 }
 
 //-------------------------------------------------------------------------
@@ -393,7 +393,7 @@ SfxErrorContext::SfxErrorContext(
 
 //-------------------------------------------------------------------------
 
-sal_Bool SfxErrorContext::GetString(sal_uLong nErrId, OUString &rStr)
+bool SfxErrorContext::GetString(sal_uLong nErrId, OUString &rStr)
 
 /*  [Beschreibung]
 

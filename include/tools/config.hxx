@@ -28,17 +28,17 @@ struct ImplGroupData;
 class TOOLS_DLLPUBLIC Config
 {
 private:
-    OUString       maFileName;
-    OString        maGroupName;
+    OUString            maFileName;
+    OString             maGroupName;
     ImplConfigData*     mpData;
     ImplGroupData*      mpActGroup;
     sal_uIntPtr         mnDataUpdateId;
     sal_uInt16          mnLockCount;
-    sal_Bool            mbPersistence;
-    sal_Bool            mbDummy1;
+    bool                mbPersistence;
+    bool                mbDummy1;
 
-    TOOLS_DLLPRIVATE sal_Bool           ImplUpdateConfig() const;
-    TOOLS_DLLPRIVATE ImplGroupData*     ImplGetGroup() const;
+    TOOLS_DLLPRIVATE bool           ImplUpdateConfig() const;
+    TOOLS_DLLPRIVATE ImplGroupData* ImplGetGroup() const;
 
 public:
                         Config( const OUString& rFileName );
@@ -51,7 +51,7 @@ public:
     void DeleteGroup(const OString& rGroup);
     OString GetGroupName(sal_uInt16 nGroup) const;
     sal_uInt16 GetGroupCount() const;
-    sal_Bool HasGroup(const OString& rGroup) const;
+    bool HasGroup(const OString& rGroup) const;
 
     OString ReadKey(const OString& rKey) const;
     OUString ReadKey(const OString& rKey, rtl_TextEncoding eEncoding) const;
@@ -62,12 +62,12 @@ public:
     OString ReadKey(sal_uInt16 nKey) const;
     sal_uInt16              GetKeyCount() const;
 
-    sal_Bool            IsLocked() const { return (mnLockCount != 0); }
+    bool                IsLocked() const { return (mnLockCount != 0); }
     void                Flush();
 
-    void                EnablePersistence( sal_Bool bPersistence = sal_True )
+    void                EnablePersistence( bool bPersistence = true )
                             { mbPersistence = bPersistence; }
-    sal_Bool                IsPersistenceEnabled() const { return mbPersistence; }
+    bool                IsPersistenceEnabled() const { return mbPersistence; }
 
 private:
     TOOLS_DLLPRIVATE    Config( const Config& rConfig );

@@ -18,6 +18,7 @@
  */
 
 #include "file/quotedstring.hxx"
+#include <rtl/ustrbuf.hxx>
 
 namespace connectivity
 {
@@ -25,28 +26,28 @@ namespace connectivity
     //= QuotedTokenizedString
     //==================================================================
     //------------------------------------------------------------------
-    xub_StrLen QuotedTokenizedString::GetTokenCount( sal_Unicode cTok, sal_Unicode cStrDel ) const
+    sal_Int32 QuotedTokenizedString::GetTokenCount( sal_Unicode cTok, sal_Unicode cStrDel ) const
     {
         SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com QuotedTokenizedString::GetTokenCount" );
-        const xub_StrLen nLen = m_sString.Len();
+        const sal_Int32 nLen = m_sString.getLength();
         if ( !nLen )
             return 0;
 
-        xub_StrLen nTokCount = 1;
-        sal_Bool bStart = sal_True;     // Are we on the first character in the Token?
-        sal_Bool bInString = sal_False; // Are we WITHIN a (cStrDel delimited) String?
+        sal_Int32 nTokCount = 1;
+        bool bStart = true;     // Are we on the first character in the Token?
+        bool bInString = false; // Are we WITHIN a (cStrDel delimited) String?
 
         // Search for String-end after the first not matching character
-        for( xub_StrLen i = 0; i < nLen; ++i )
+        for( sal_Int32 i = 0; i < nLen; ++i )
         {
-            const sal_Unicode cChar = m_sString.GetChar(i);
+            const sal_Unicode cChar = m_sString[i];
             if (bStart)
             {
-                bStart = sal_False;
+                bStart = false;
                 // First character a String-Delimiter?
                 if ( cChar == cStrDel )
                 {
-                    bInString = sal_True;   // then we are now WITHIN the string!
+                    bInString = true;   // then we are now WITHIN the string!
                     continue;           // skip this character!
                 }
             }
@@ -56,7 +57,7 @@ namespace connectivity
                 // when now the String-Delimiter-character occurs ...
                 if ( cChar == cStrDel )
                 {
-                    if ((i+1 < nLen) && (m_sString.GetChar(i+1) == cStrDel))
+                    if ((i+1 < nLen) && (m_sString[i+1] == cStrDel))
                     {
                         // double String-Delimter-character:
                         ++i;    // no string-end, skip next character.
@@ -64,7 +65,7 @@ namespace connectivity
                     else
                     {
                         // String-End
-                        bInString = sal_False;
+                        bInString = false;
                     }
                 }
             } // if (bInString)
@@ -74,7 +75,7 @@ namespace connectivity
                 if ( cChar == cTok )
                 {
                     ++nTokCount;
-                    bStart = sal_True;
+                    bStart = true;
                 }
             }
         }
@@ -84,51 +85,48 @@ namespace connectivity
     }
 
     //------------------------------------------------------------------
-    String QuotedTokenizedString::GetTokenSpecial(xub_StrLen& nStartPos, sal_Unicode cTok, sal_Unicode cStrDel) const
+    OUString QuotedTokenizedString::GetTokenSpecial(sal_Int32& nStartPos, sal_Unicode cTok, sal_Unicode cStrDel) const
     {
         SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com QuotedTokenizedString::GetTokenCount" );
-        String aStr;
-        const xub_StrLen nLen = m_sString.Len();
+        const sal_Int32 nLen = m_sString.getLength();
         if ( nLen )
         {
-            sal_Bool bInString = (nStartPos < nLen) && (m_sString.GetChar(nStartPos) == cStrDel);   // are we WITHIN a (cStrDel delimited) String?
+            bool bInString = (nStartPos < nLen) && (m_sString[nStartPos] == cStrDel);   // are we WITHIN a (cStrDel delimited) String?
 
             // First character a String-Delimiter?
             if (bInString )
                 ++nStartPos;            // skip this character!
             if ( nStartPos >= nLen )
-                return aStr;
+                return OUString();
 
-            sal_Unicode* pData = aStr.AllocBuffer( nLen - nStartPos + 1 );
-            const sal_Unicode* pStart = pData;
+            OUStringBuffer sBuff( nLen - nStartPos + 1 );
+
             // Search until end of string for the first not matching character
-            for( xub_StrLen i = nStartPos; i < nLen; ++i )
+            for( sal_Int32 i = nStartPos; i < nLen; ++i )
             {
-                const sal_Unicode cChar = m_sString.GetChar(i);
+                const sal_Unicode cChar = m_sString[i];
                 if (bInString)
                 {
                     // when now the String-Delimiter-character occurs ...
                     if ( cChar == cStrDel )
                     {
-                        if ((i+1 < nLen) && (m_sString.GetChar(i+1) == cStrDel))
+                        if ((i+1 < nLen) && (m_sString[i+1] == cStrDel))
                         {
                             // double String Delimiter-character
                             // no end of string, skip next character.
                             ++i;
-                            *pData++ = m_sString.GetChar(i);    // character belongs to Result-String
+                            sBuff.append(m_sString[i]);    // character belongs to Result-String
                         }
                         else
                         {
                             //end of String
-                            bInString = sal_False;
-                            *pData = 0;
+                            bInString = false;
                         }
                     }
                     else
                     {
-                        *pData++ = cChar;   // character belongs to Result-String
+                        sBuff.append(cChar);
                     }
-
                 }
                 else
                 {
@@ -141,14 +139,13 @@ namespace connectivity
                     }
                     else
                     {
-                        *pData++ = cChar;   // character belongs to Result-String
+                        sBuff.append(cChar);
                     }
                 }
             } // for( xub_StrLen i = nStartPos; i < nLen; ++i )
-            *pData = 0;
-            aStr.ReleaseBufferAccess(xub_StrLen(pData - pStart));
+            return sBuff.makeStringAndClear();
         }
-        return aStr;
+        return OUString();
     }
 }
 

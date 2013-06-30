@@ -78,11 +78,11 @@ size_t MultiSelection::ImplFindSubSelection( long nIndex ) const
     return n;
 }
 
-sal_Bool MultiSelection::ImplMergeSubSelections( size_t nPos1, size_t nPos2 )
+bool MultiSelection::ImplMergeSubSelections( size_t nPos1, size_t nPos2 )
 {
     // didn't a sub selection at nPos2 exist?
     if ( nPos2 >= aSels.size() )
-        return sal_False;
+        return false;
 
     // did the sub selections touch each other?
     if ( (aSels[ nPos1 ]->Max() + 1) == aSels[ nPos2 ]->Min() )
@@ -93,18 +93,18 @@ sal_Bool MultiSelection::ImplMergeSubSelections( size_t nPos1, size_t nPos2 )
         ::std::advance( it, nPos2 );
         delete *it;
         aSels.erase( it );
-        return sal_True;
+        return true;
     }
 
-    return sal_False;
+    return false;
 }
 
 MultiSelection::MultiSelection():
     aTotRange( 0, -1 ),
     nCurSubSel(0),
     nSelCount(0),
-    bCurValid(sal_False),
-    bSelectNew(sal_False)
+    bCurValid(false),
+    bSelectNew(false)
 {
 }
 
@@ -112,7 +112,7 @@ MultiSelection::MultiSelection( const MultiSelection& rOrig ) :
     aTotRange(rOrig.aTotRange),
     nSelCount(rOrig.nSelCount),
     bCurValid(rOrig.bCurValid),
-    bSelectNew(sal_False)
+    bSelectNew(false)
 {
     if ( bCurValid )
     {
@@ -129,8 +129,8 @@ MultiSelection::MultiSelection( const Range& rRange ):
     aTotRange(rRange),
     nCurSubSel(0),
     nSelCount(0),
-    bCurValid(sal_False),
-    bSelectNew(sal_False)
+    bCurValid(false),
+    bSelectNew(false)
 {
 }
 
@@ -160,20 +160,20 @@ MultiSelection& MultiSelection::operator= ( const MultiSelection& rOrig )
     return *this;
 }
 
-sal_Bool MultiSelection::operator== ( MultiSelection& rWith )
+bool MultiSelection::operator== ( MultiSelection& rWith )
 {
     if ( aTotRange != rWith.aTotRange || nSelCount != rWith.nSelCount ||
          aSels.size() != rWith.aSels.size() )
-        return sal_False;
+        return false;
 
     // compare the sub seletions
     for ( size_t n = 0; n < aSels.size(); ++n )
         if ( *aSels[ n ] != *rWith.aSels[ n ] )
-            return sal_False;
-    return sal_True;
+            return false;
+    return true;
 }
 
-void MultiSelection::SelectAll( sal_Bool bSelect )
+void MultiSelection::SelectAll( bool bSelect )
 {
     DBG(DbgOutf( "::SelectAll(%s)\n", bSelect ? "sal_True" : "sal_False" ));
 
@@ -187,13 +187,13 @@ void MultiSelection::SelectAll( sal_Bool bSelect )
     DBG(Print( this ));
 }
 
-sal_Bool MultiSelection::Select( long nIndex, sal_Bool bSelect )
+bool MultiSelection::Select( long nIndex, bool bSelect )
 {
     DBG_ASSERT( aTotRange.IsInside(nIndex), "selected index out of range" );
 
     // out of range?
     if ( !aTotRange.IsInside(nIndex) )
-        return sal_False;
+        return false;
 
     // find the virtual target position
     size_t nSubSelPos = ImplFindSubSelection( nIndex );
@@ -203,7 +203,7 @@ sal_Bool MultiSelection::Select( long nIndex, sal_Bool bSelect )
         // is it included in the found sub selection?
         if ( nSubSelPos < aSels.size() && aSels[ nSubSelPos ]->IsInside( nIndex ) )
             // already selected, nothing to do
-            return sal_False;
+            return false;
 
         // it will become selected
         ++nSelCount;
@@ -246,7 +246,7 @@ sal_Bool MultiSelection::Select( long nIndex, sal_Bool bSelect )
         ) {
             // not selected, nothing to do
             DBG(Print( this ));
-            return sal_False;
+            return false;
         }
 
         // it will become deselected
@@ -261,7 +261,7 @@ sal_Bool MultiSelection::Select( long nIndex, sal_Bool bSelect )
             delete *it;
             aSels.erase( it );
             DBG(Print( this ));
-            return sal_True;
+            return true;
         }
 
         // is it at the beginning of the found sub selection?
@@ -287,10 +287,10 @@ sal_Bool MultiSelection::Select( long nIndex, sal_Bool bSelect )
 
     DBG(Print( this ));
 
-    return sal_True;
+    return true;
 }
 
-void MultiSelection::Select( const Range& rIndexRange, sal_Bool bSelect )
+void MultiSelection::Select( const Range& rIndexRange, bool bSelect )
 {
     Range* pRange;
     long nOld;
@@ -332,7 +332,7 @@ void MultiSelection::Select( const Range& rIndexRange, sal_Bool bSelect )
                 pRange->Min() = (long)nTmpMin;
                 nSelCount += ( nOld - nTmpMin );
             }
-            bCurValid = sal_False;
+            bCurValid = false;
         }
         return;
     }
@@ -355,7 +355,7 @@ void MultiSelection::Select( const Range& rIndexRange, sal_Bool bSelect )
                 pRange->Max() = (long)nTmpMax;
                 nSelCount += ( nTmpMax - nOld );
             }
-            bCurValid = sal_False;
+            bCurValid = false;
         }
         return;
     }
@@ -368,7 +368,7 @@ void MultiSelection::Select( const Range& rIndexRange, sal_Bool bSelect )
     }
 }
 
-sal_Bool MultiSelection::IsSelected( long nIndex ) const
+bool MultiSelection::IsSelected( long nIndex ) const
 {
     // find the virtual target position
     size_t nSubSelPos = ImplFindSubSelection( nIndex );
@@ -424,7 +424,7 @@ void MultiSelection::Insert( long nIndex, long nCount )
         }
     }
 
-    bCurValid = sal_False;
+    bCurValid = false;
     aTotRange.Max() += nCount;
     if ( bSelectNew )
         nSelCount += nCount;
@@ -466,7 +466,7 @@ void MultiSelection::Remove( long nIndex )
         --( aSels[ nPos ]->Max() );
     }
 
-    bCurValid = sal_False;
+    bCurValid = false;
     aTotRange.Max() -= 1;
 
     DBG(Print( this ));
@@ -488,7 +488,7 @@ long MultiSelection::ImplFwdUnselected()
         return SFX_ENDOFSELECTION;
 }
 
-long MultiSelection::FirstSelected( sal_Bool bInverse )
+long MultiSelection::FirstSelected( bool bInverse )
 {
     bInverseCur = bInverse;
     nCurSubSel = 0;
@@ -598,7 +598,7 @@ void MultiSelection::SetTotalRange( const Range& rTotRange )
     for ( size_t i = 0, n = aSels.size(); i < n; ++ i )
         nSelCount += aSels[i]->Len();
 
-    bCurValid = sal_False;
+    bCurValid = false;
     nCurIndex = 0;
 }
 
