@@ -623,20 +623,28 @@ void InternalResMgr::FreeGlobalRes( void * pResHandle, void * pResource )
 
 OUString GetTypeRes_Impl( const ResId& rTypeId )
 {
+    // Return on resource errors
+    static int bInUse = false;
     OUString aTypStr(OUString::number(rTypeId.GetId()));
 
-    ResId aResId( sal_uInt32(RSCVERSION_ID), *rTypeId.GetResMgr() );
-    aResId.SetRT( RSC_VERSIONCONTROL );
-
-    if ( rTypeId.GetResMgr()->GetResource( aResId ) )
+    if ( !bInUse )
     {
-        rTypeId.SetRT( RSC_STRING );
-        if ( rTypeId.GetResMgr()->IsAvailable( rTypeId ) )
+        bInUse = true;
+
+        ResId aResId( sal_uInt32(RSCVERSION_ID), *rTypeId.GetResMgr() );
+        aResId.SetRT( RSC_VERSIONCONTROL );
+
+        if ( rTypeId.GetResMgr()->GetResource( aResId ) )
         {
-            aTypStr = rTypeId.toString();
-            // Set class pointer to the end
-            rTypeId.GetResMgr()->Increment( sizeof( RSHEADER_TYPE ) );
+            rTypeId.SetRT( RSC_STRING );
+            if ( rTypeId.GetResMgr()->IsAvailable( rTypeId ) )
+            {
+                aTypStr = rTypeId.toString();
+                // Set class pointer to the end
+                rTypeId.GetResMgr()->Increment( sizeof( RSHEADER_TYPE ) );
+            }
         }
+        bInUse = false;
     }
 
     return aTypStr;
