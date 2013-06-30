@@ -55,90 +55,6 @@ using namespace ::xmloff::token;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Reference;
 
-#define DEBUG_CHART_FILTER 1
-
-#if DEBUG_CHART_FILTER
-#include <iostream>
-#endif
-
-namespace {
-
-std::ostream& operator<<(std::ostream& str, const uno::Any& aAny)
-{
-    OUString aString;
-    double aValue;
-    bool bVal;
-    if(aAny >>= aString)
-    {
-        str << aString;
-    }
-    else if(aAny >>= aValue)
-    {
-        str << aValue;
-    }
-    else if(aAny >>= bVal)
-    {
-        str << bVal;
-    }
-    else
-    {
-        str << "Unknown data in Any";
-    }
-
-    return str;
-}
-
-template<typename T>
-std::ostream& operator<<(std::ostream& str, const Sequence<T>& seq)
-{
-    for(sal_Int32 i = 0; i < seq.getLength(); ++i)
-    {
-        str << seq[i] << " ";
-    }
-
-    return str;
-}
-
-std::ostream& operator<<(std::ostream& str, const SchXMLCell& rCell )
-{
-    switch(rCell.eType)
-    {
-        case SCH_CELL_TYPE_FLOAT:
-            str << rCell.fValue;
-            break;
-        case SCH_CELL_TYPE_STRING:
-            str << rCell.aString;
-            break;
-        case SCH_CELL_TYPE_COMPLEX_STRING:
-            str << "Complex String";
-            break;
-        default:
-            str << "Unknown Type";
-            break;
-    }
-
-    return str;
-}
-
-std::ostream& operator<<(std::ostream& str, const SchXMLTable& rTable )
-{
-    for(size_t i = 0; i < rTable.aData.size(); ++i)
-    {
-        str << "Row " << i << std::endl;
-        for(size_t j = 0; j < rTable.aData[i].size(); ++j)
-        {
-            str << rTable.aData[i][j] << " ";
-        }
-        str << std::endl;
-    }
-
-    return str;
-}
-
-}
-
-#endif
-
 namespace
 {
 
@@ -999,30 +915,10 @@ void SchXMLTableHelper::switchRangesFromOuterToInternalIfNecessary(
 
     Reference< chart2::data::XDataProvider >  xDataProv( xChartDoc->getDataProvider());
 
-#if DEBUG_CHART_FILTER
-
-    if( eDataRowSource == chart::ChartDataRowSource_COLUMNS )
-    {
-        std::cout << "data in Columns" << std::endl;
-    }
-    else
-    {
-        std::cout << "data in rows" << std::endl;
-    }
-
-#endif
-
     // create a mapping from original ranges to new ranges
     lcl_tOriginalRangeToInternalRangeMap aRangeMap;
 
     lcl_fillRangeMapping( rTable, aRangeMap, eDataRowSource );
-
-#if DEBUG_CHART_FILTER
-    std::cout << "Start Table" << std::endl;
-    std::cout << rTable << std::endl;
-    std::cout << "EndTable" << std::endl;
-
-#endif
 
     const OUString lcl_aCategoriesRange(aCategoriesRange);
 
@@ -1039,13 +935,6 @@ void SchXMLTableHelper::switchRangesFromOuterToInternalIfNecessary(
             {
                 Reference< chart2::data::XDataSequence > xSeq( aLSeqIt->second->getValues());
 
-#if DEBUG_CHART_FILTER
-                        std::cout << "Old Data Sequence" << std::endl;
-                        std::cout << "Source Range Representation: " << xSeq->getSourceRangeRepresentation() <<std::endl;
-                        std::cout << "Data: " << xSeq->getData() << std::endl;
-                        std::cout << "Old Data Sequence End" << std::endl;
-#endif
-
                 OUString aRange;
                 if( xSeq.is() &&
                     SchXMLTools::getXMLRangePropertyFromDataSequence( xSeq, aRange, /* bClearProp = */ true ) &&
@@ -1058,13 +947,6 @@ void SchXMLTableHelper::switchRangesFromOuterToInternalIfNecessary(
                         SchXMLTools::copyProperties( Reference< beans::XPropertySet >( xSeq, uno::UNO_QUERY ),
                                             Reference< beans::XPropertySet >( xNewSeq, uno::UNO_QUERY ));
                         aLSeqIt->second->setValues( xNewSeq );
-
-#if DEBUG_CHART_FILTER
-                        std::cout << "Data Sequence" << std::endl;
-                        std::cout << "Source Range Representation: " << xNewSeq->getSourceRangeRepresentation() <<std::endl;
-                        std::cout << "Data: " << xNewSeq->getData() << std::endl;
-                        std::cout << "Data Sequence End" << std::endl;
-#endif
                     }
                 }
                 else
