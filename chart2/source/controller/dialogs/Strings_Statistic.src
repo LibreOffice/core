@@ -57,6 +57,14 @@ String STR_REGRESSION_POWER
 {
     Text [ en-US ] = "Power (%SERIESNAME)" ;
 };
+String STR_REGRESSION_POLYNOMIAL
+{
+    Text [ en-US ] = "Polynomial (%SERIESNAME)" ;
+};
+String STR_REGRESSION_MOVING_AVERAGE
+{
+    Text [ en-US ] = "Moving average (%SERIESNAME)" ;
+};
 
 String STR_REGRESSION_MEAN
 {

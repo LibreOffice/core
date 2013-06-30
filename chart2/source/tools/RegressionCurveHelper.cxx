@@ -593,7 +593,7 @@ OUString RegressionCurveHelper::getUINameForRegressionCurve( const Reference< XR
 {
     OUString aResult;
     Reference< lang::XServiceName > xServiceName( xRegressionCurve, uno::UNO_QUERY );
-    if( ! xServiceName.is())
+    if(!xServiceName.is())
         return aResult;
 
     OUString aServiceName( xServiceName->getServiceName());
@@ -629,20 +629,19 @@ OUString RegressionCurveHelper::getUINameForRegressionCurve( const Reference< XR
     return aResult;
 }
 
-::std::vector< Reference< chart2::XRegressionCurve > >
+std::vector< Reference< chart2::XRegressionCurve > >
     RegressionCurveHelper::getAllRegressionCurvesNotMeanValueLine(
         const Reference< chart2::XDiagram > & xDiagram )
 {
-    ::std::vector< Reference< chart2::XRegressionCurve > > aResult;
-    ::std::vector< Reference< chart2::XDataSeries > > aSeries( DiagramHelper::getDataSeriesFromDiagram( xDiagram ));
-    for( ::std::vector< Reference< chart2::XDataSeries > >::iterator aIt( aSeries.begin());
+    std::vector< Reference< chart2::XRegressionCurve > > aResult;
+    std::vector< Reference< chart2::XDataSeries > > aSeries( DiagramHelper::getDataSeriesFromDiagram( xDiagram ));
+    for( std::vector< Reference< chart2::XDataSeries > >::iterator aIt( aSeries.begin());
          aIt != aSeries.end(); ++aIt )
     {
-        Reference< chart2::XRegressionCurveContainer > xCurveCnt( *aIt, uno::UNO_QUERY );
-        if( xCurveCnt.is())
+        Reference< chart2::XRegressionCurveContainer > xContainer( *aIt, uno::UNO_QUERY );
+        if(xContainer.is())
         {
-            uno::Sequence< uno::Reference< chart2::XRegressionCurve > > aCurves(
-                xCurveCnt->getRegressionCurves());
+            uno::Sequence< uno::Reference< chart2::XRegressionCurve > > aCurves(xContainer->getRegressionCurves());
             for( sal_Int32 i = 0; i < aCurves.getLength(); ++i )
             {
                 if( ! isMeanValueLine( aCurves[i] ))
