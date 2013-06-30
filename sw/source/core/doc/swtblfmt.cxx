@@ -33,15 +33,15 @@ SwTableFormat::SwTableFormat( SwAttrPool& rPool, const sal_Char* pFormatNm,
 
         SwDoc* pDoc = GetDoc();
 
-        m_pFstLineFormat = pDoc->MakeTableLineFormat();
-        m_pLstLineFormat = pDoc->MakeTableLineFormat();
-        m_pOddLineFormat = pDoc->MakeTableLineFormat();
-        m_pEvnLineFormat = pDoc->MakeTableLineFormat();
+        m_pFstLineFormat.reset( pDoc->MakeTableLineFormat() );
+        m_pLstLineFormat.reset( pDoc->MakeTableLineFormat() );
+        m_pOddLineFormat.reset( pDoc->MakeTableLineFormat() );
+        m_pEvnLineFormat.reset( pDoc->MakeTableLineFormat() );
 
-        m_pFstColFormat = pDoc->MakeTableLineFormat();
-        m_pLstColFormat = pDoc->MakeTableLineFormat();
-        m_pOddColFormat = pDoc->MakeTableLineFormat();
-        m_pEvnColFormat = pDoc->MakeTableLineFormat();
+        m_pFstColFormat.reset( pDoc->MakeTableLineFormat() );
+        m_pLstColFormat.reset( pDoc->MakeTableLineFormat() );
+        m_pOddColFormat.reset( pDoc->MakeTableLineFormat() );
+        m_pEvnColFormat.reset( pDoc->MakeTableLineFormat() );
     }
 
 SwTableFormat::SwTableFormat( SwAttrPool& rPool, const OUString &rFormatNm,
@@ -58,29 +58,29 @@ SwTableFormat::SwTableFormat( SwAttrPool& rPool, const OUString &rFormatNm,
 
         SwDoc* pDoc = GetDoc();
 
-        m_pFstLineFormat = pDoc->MakeTableLineFormat();
-        m_pLstLineFormat = pDoc->MakeTableLineFormat();
-        m_pOddLineFormat = pDoc->MakeTableLineFormat();
-        m_pEvnLineFormat = pDoc->MakeTableLineFormat();
+        m_pFstLineFormat.reset( pDoc->MakeTableLineFormat() );
+        m_pLstLineFormat.reset( pDoc->MakeTableLineFormat() );
+        m_pOddLineFormat.reset( pDoc->MakeTableLineFormat() );
+        m_pEvnLineFormat.reset( pDoc->MakeTableLineFormat() );
 
-        m_pFstColFormat = pDoc->MakeTableLineFormat();
-        m_pLstColFormat = pDoc->MakeTableLineFormat();
-        m_pOddColFormat = pDoc->MakeTableLineFormat();
-        m_pEvnColFormat = pDoc->MakeTableLineFormat();
+        m_pFstColFormat.reset( pDoc->MakeTableLineFormat() );
+        m_pLstColFormat.reset( pDoc->MakeTableLineFormat() );
+        m_pOddColFormat.reset( pDoc->MakeTableLineFormat() );
+        m_pEvnColFormat.reset( pDoc->MakeTableLineFormat() );
     }
 
-SwTableFormat::SwTableFormat( SwTableFormat& rNew )
+SwTableFormat::SwTableFormat( const SwTableFormat& rNew )
     : SwFrameFormat( (SwFrameFormat)rNew )
     {
-        *m_pFstLineFormat = SwTableLineFormat( *rNew.GetFirstLineFormat() );
-        *m_pLstLineFormat = SwTableLineFormat( *rNew.GetLastLineFormat() );
-        *m_pOddLineFormat = SwTableLineFormat( *rNew.GetOddLineFormat() );
-        *m_pEvnLineFormat = SwTableLineFormat( *rNew.GetEvenLineFormat() );
+        m_pFstLineFormat.reset( new SwTableLineFormat( *rNew.m_pFstLineFormat.get() ) );
+        m_pLstLineFormat.reset( new SwTableLineFormat( *rNew.m_pLstLineFormat.get() ) );
+        m_pOddLineFormat.reset( new SwTableLineFormat( *rNew.m_pOddLineFormat.get() ) );
+        m_pEvnLineFormat.reset( new SwTableLineFormat( *rNew.m_pEvnLineFormat.get() ) );
 
-        *m_pFstColFormat = SwTableLineFormat( *rNew.GetFirstColFormat() );
-        *m_pLstColFormat = SwTableLineFormat( *rNew.GetLastColFormat() );
-        *m_pOddColFormat = SwTableLineFormat( *rNew.GetOddColFormat() );
-        *m_pEvnColFormat = SwTableLineFormat( *rNew.GetEvenColFormat() );
+        m_pFstColFormat.reset( new SwTableLineFormat( *rNew.m_pFstColFormat.get() ) );
+        m_pLstColFormat.reset( new SwTableLineFormat( *rNew.m_pLstColFormat.get() ) );
+        m_pOddColFormat.reset( new SwTableLineFormat( *rNew.m_pOddColFormat.get() ) );
+        m_pEvnColFormat.reset( new SwTableLineFormat( *rNew.m_pEvnColFormat.get() ) );
     }
 
 SwTableFormat& SwTableFormat::operator=( const SwTableFormat& rNew )
@@ -88,15 +88,17 @@ SwTableFormat& SwTableFormat::operator=( const SwTableFormat& rNew )
         if (&rNew == this)
             return *this;
 
-        m_pFstLineFormat = rNew.m_pFstLineFormat;
-        m_pLstLineFormat = rNew.m_pLstLineFormat;
-        m_pOddLineFormat = rNew.m_pOddLineFormat;
-        m_pEvnLineFormat = rNew.m_pEvnLineFormat;
+        SwFrameFormat::operator=( rNew );
 
-        m_pFstColFormat = rNew.m_pFstColFormat;
-        m_pLstColFormat = rNew.m_pLstColFormat;
-        m_pOddColFormat = rNew.m_pOddColFormat;
-        m_pEvnColFormat = rNew.m_pEvnColFormat;
+        m_pFstLineFormat.reset( new SwTableLineFormat( *rNew.m_pFstLineFormat.get() ) );
+        m_pLstLineFormat.reset( new SwTableLineFormat( *rNew.m_pLstLineFormat.get() ) );
+        m_pOddLineFormat.reset( new SwTableLineFormat( *rNew.m_pOddLineFormat.get() ) );
+        m_pEvnLineFormat.reset( new SwTableLineFormat( *rNew.m_pEvnLineFormat.get() ) );
+
+        m_pFstColFormat.reset( new SwTableLineFormat( *rNew.m_pFstColFormat.get() ) );
+        m_pLstColFormat.reset( new SwTableLineFormat( *rNew.m_pLstColFormat.get() ) );
+        m_pOddColFormat.reset( new SwTableLineFormat( *rNew.m_pOddColFormat.get() ) );
+        m_pEvnColFormat.reset( new SwTableLineFormat( *rNew.m_pEvnColFormat.get() ) );
 
         return *this;
     }
@@ -168,15 +170,15 @@ sal_uInt16 SwTableFormat::GetRepeatHeading() const
 
 void SwTableFormat::CopyTableFormatInfo( SwTableFormat* pTableFormat )
 {
-    *m_pFstLineFormat = SwTableLineFormat ( *pTableFormat->GetFirstLineFormat() );
-    *m_pLstLineFormat = SwTableLineFormat ( *pTableFormat->GetLastLineFormat() );
-    *m_pOddLineFormat = SwTableLineFormat ( *pTableFormat->GetOddLineFormat() );
-    *m_pEvnLineFormat = SwTableLineFormat ( *pTableFormat->GetEvenLineFormat() );
+    m_pFstLineFormat.reset( new SwTableLineFormat ( *pTableFormat->GetFirstLineFormat() ) );
+    m_pLstLineFormat.reset( new SwTableLineFormat ( *pTableFormat->GetLastLineFormat() ) );
+    m_pOddLineFormat.reset( new SwTableLineFormat ( *pTableFormat->GetOddLineFormat() ) );
+    m_pEvnLineFormat.reset( new SwTableLineFormat ( *pTableFormat->GetEvenLineFormat() ) );
 
-    *m_pFstColFormat = SwTableLineFormat ( *pTableFormat->GetFirstColFormat() );
-    *m_pLstColFormat = SwTableLineFormat ( *pTableFormat->GetLastColFormat() );
-    *m_pOddColFormat = SwTableLineFormat ( *pTableFormat->GetOddColFormat() );
-    *m_pEvnColFormat = SwTableLineFormat ( *pTableFormat->GetEvenColFormat() );
+    m_pFstColFormat.reset( new SwTableLineFormat ( *pTableFormat->GetFirstColFormat() ) );
+    m_pLstColFormat.reset( new SwTableLineFormat ( *pTableFormat->GetLastColFormat() ) );
+    m_pOddColFormat.reset( new SwTableLineFormat ( *pTableFormat->GetOddColFormat() ) );
+    m_pEvnColFormat.reset( new SwTableLineFormat ( *pTableFormat->GetEvenColFormat() ) );
 }
 
 SwTableLineFormat::SwTableLineFormat( SwAttrPool& rPool, const sal_Char* pFormatNm,
@@ -185,10 +187,10 @@ SwTableLineFormat::SwTableLineFormat( SwAttrPool& rPool, const sal_Char* pFormat
     {
         SwDoc* pDoc = GetDoc();
 
-        m_pFstBoxFormat = pDoc->MakeTableBoxFormat();
-        m_pLstBoxFormat = pDoc->MakeTableBoxFormat();
-        m_pOddBoxFormat = pDoc->MakeTableBoxFormat();
-        m_pEvnBoxFormat = pDoc->MakeTableBoxFormat();
+        m_pFstBoxFormat.reset( pDoc->MakeTableBoxFormat() );
+        m_pLstBoxFormat.reset( pDoc->MakeTableBoxFormat() );
+        m_pOddBoxFormat.reset( pDoc->MakeTableBoxFormat() );
+        m_pEvnBoxFormat.reset( pDoc->MakeTableBoxFormat() );
     }
 
 SwTableLineFormat::SwTableLineFormat( SwAttrPool& rPool, const OUString &rFormatNm,
@@ -197,19 +199,19 @@ SwTableLineFormat::SwTableLineFormat( SwAttrPool& rPool, const OUString &rFormat
     {
         SwDoc* pDoc = GetDoc();
 
-        m_pFstBoxFormat = pDoc->MakeTableBoxFormat();
-        m_pLstBoxFormat = pDoc->MakeTableBoxFormat();
-        m_pOddBoxFormat = pDoc->MakeTableBoxFormat();
-        m_pEvnBoxFormat = pDoc->MakeTableBoxFormat();
+        m_pFstBoxFormat.reset( pDoc->MakeTableBoxFormat() );
+        m_pLstBoxFormat.reset( pDoc->MakeTableBoxFormat() );
+        m_pOddBoxFormat.reset( pDoc->MakeTableBoxFormat() );
+        m_pEvnBoxFormat.reset( pDoc->MakeTableBoxFormat() );
     }
 
-SwTableLineFormat::SwTableLineFormat( SwTableLineFormat& rNew )
+SwTableLineFormat::SwTableLineFormat( const SwTableLineFormat& rNew )
     : SwFrameFormat( (SwFrameFormat)rNew )
     {
-        *m_pFstBoxFormat = SwTableBoxFormat( *rNew.GetFirstBoxFormat() );
-        *m_pLstBoxFormat = SwTableBoxFormat( *rNew.GetLastBoxFormat() );
-        *m_pOddBoxFormat = SwTableBoxFormat( *rNew.GetOddBoxFormat() );
-        *m_pEvnBoxFormat = SwTableBoxFormat( *rNew.GetEvenBoxFormat() );
+        m_pFstBoxFormat.reset( new SwTableBoxFormat( *rNew.m_pFstBoxFormat.get() ) );
+        m_pLstBoxFormat.reset( new SwTableBoxFormat( *rNew.m_pLstBoxFormat.get() ) );
+        m_pOddBoxFormat.reset( new SwTableBoxFormat( *rNew.m_pOddBoxFormat.get() ) );
+        m_pEvnBoxFormat.reset( new SwTableBoxFormat( *rNew.m_pEvnBoxFormat.get() ) );
     }
 
 SwTableLineFormat& SwTableLineFormat::operator=( const SwTableLineFormat& rNew )
@@ -217,10 +219,12 @@ SwTableLineFormat& SwTableLineFormat::operator=( const SwTableLineFormat& rNew )
         if (&rNew == this)
                 return *this;
 
-        m_pFstBoxFormat = rNew.m_pFstBoxFormat;
-        m_pLstBoxFormat = rNew.m_pLstBoxFormat;
-        m_pOddBoxFormat = rNew.m_pOddBoxFormat;
-        m_pEvnBoxFormat = rNew.m_pEvnBoxFormat;
+        SwFrameFormat::operator=( rNew );
+
+        m_pFstBoxFormat.reset( new SwTableBoxFormat( *rNew.m_pFstBoxFormat.get() ) );
+        m_pLstBoxFormat.reset( new SwTableBoxFormat( *rNew.m_pLstBoxFormat.get() ) );
+        m_pOddBoxFormat.reset( new SwTableBoxFormat( *rNew.m_pOddBoxFormat.get() ) );
+        m_pEvnBoxFormat.reset( new SwTableBoxFormat( *rNew.m_pEvnBoxFormat.get() ) );
 
         return *this;
     }

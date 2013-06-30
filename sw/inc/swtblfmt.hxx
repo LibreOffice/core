@@ -20,6 +20,7 @@
 #define INCLUDED_SW_INC_SWTBLFMT_HXX
 
 #include "hintids.hxx"
+#include <boost/scoped_ptr.hpp>
 #include <charatr.hxx>
 #include <cmdid.h>
 #include <doc.hxx>
@@ -66,39 +67,39 @@ protected:
     SwTableLineFormat* pOddLineFormat;
     SwTableLineFormat* pEvnLineFormat;
 
-    SwTableLineFormat* m_pFstLineFormat;
-    SwTableLineFormat* m_pLstLineFormat;
-    SwTableLineFormat* m_pOddLineFormat;
-    SwTableLineFormat* m_pEvnLineFormat;
+    boost::scoped_ptr<SwTableLineFormat> m_pFstLineFormat;
+    boost::scoped_ptr<SwTableLineFormat> m_pLstLineFormat;
+    boost::scoped_ptr<SwTableLineFormat> m_pOddLineFormat;
+    boost::scoped_ptr<SwTableLineFormat> m_pEvnLineFormat;
 
-    SwTableLineFormat* m_pFstColFormat;
-    SwTableLineFormat* m_pLstColFormat;
-    SwTableLineFormat* m_pOddColFormat;
-    SwTableLineFormat* m_pEvnColFormat;
+    boost::scoped_ptr<SwTableLineFormat> m_pFstColFormat;
+    boost::scoped_ptr<SwTableLineFormat> m_pLstColFormat;
+    boost::scoped_ptr<SwTableLineFormat> m_pOddColFormat;
+    boost::scoped_ptr<SwTableLineFormat> m_pEvnColFormat;
 
 public:
-    SwTableFormat( SwTableFormat& rNew );
+    SwTableFormat( const SwTableFormat& rNew );
     SwTableFormat& operator=( const SwTableFormat& rNew );
 
-    void SetFirstLineFormat( SwTableLineFormat* pNew ) { m_pFstLineFormat = pNew; }
-    void SetLastLineFormat( SwTableLineFormat* pNew ) { m_pLstLineFormat = pNew; }
-    void SetOddLineFormat( SwTableLineFormat* pNew ) { m_pOddLineFormat = pNew; }
-    void SetEvenLineFormat( SwTableLineFormat* pNew ) { m_pEvnLineFormat = pNew; }
+    void SetFirstLineFormat( SwTableLineFormat* pNew ) { m_pFstLineFormat.reset( pNew ); }
+    void SetLastLineFormat( SwTableLineFormat* pNew ) { m_pLstLineFormat.reset( pNew ); }
+    void SetOddLineFormat( SwTableLineFormat* pNew ) { m_pOddLineFormat.reset( pNew ); }
+    void SetEvenLineFormat( SwTableLineFormat* pNew ) { m_pEvnLineFormat.reset( pNew ); }
 
-    void SetFirstColFormat( SwTableLineFormat* pNew ) { m_pFstColFormat = pNew; }
-    void SetLastColFormat( SwTableLineFormat* pNew ) { m_pLstColFormat = pNew; }
-    void SetOddColFormat( SwTableLineFormat* pNew ) { m_pOddColFormat = pNew; }
-    void SetEvenColFormat( SwTableLineFormat* pNew ) { m_pEvnColFormat = pNew; }
+    void SetFirstColFormat( SwTableLineFormat* pNew ) { m_pFstColFormat.reset( pNew ); }
+    void SetLastColFormat( SwTableLineFormat* pNew ) { m_pLstColFormat.reset( pNew ); }
+    void SetOddColFormat( SwTableLineFormat* pNew ) { m_pOddColFormat.reset( pNew ); }
+    void SetEvenColFormat( SwTableLineFormat* pNew ) { m_pEvnColFormat.reset( pNew ); }
 
-    SwTableLineFormat* GetFirstLineFormat() { return m_pFstLineFormat; }
-    SwTableLineFormat* GetLastLineFormat() { return m_pLstLineFormat; }
-    SwTableLineFormat* GetOddLineFormat() { return m_pOddLineFormat; }
-    SwTableLineFormat* GetEvenLineFormat() { return m_pEvnLineFormat; }
+    SwTableLineFormat* GetFirstLineFormat() { return m_pFstLineFormat.get(); }
+    SwTableLineFormat* GetLastLineFormat() { return m_pLstLineFormat.get(); }
+    SwTableLineFormat* GetOddLineFormat() { return m_pOddLineFormat.get(); }
+    SwTableLineFormat* GetEvenLineFormat() { return m_pEvnLineFormat.get(); }
 
-    SwTableLineFormat* GetFirstColFormat() { return m_pFstColFormat; }
-    SwTableLineFormat* GetLastColFormat() { return m_pLstColFormat; }
-    SwTableLineFormat* GetOddColFormat() { return m_pOddColFormat; }
-    SwTableLineFormat* GetEvenColFormat() { return m_pEvnColFormat; }
+    SwTableLineFormat* GetFirstColFormat() { return m_pFstColFormat.get(); }
+    SwTableLineFormat* GetLastColFormat() { return m_pLstColFormat.get(); }
+    SwTableLineFormat* GetOddColFormat() { return m_pOddColFormat.get(); }
+    SwTableLineFormat* GetEvenColFormat() { return m_pEvnColFormat.get(); }
 
     void SetBreak( const SvxFormatBreakItem& rNew );
     void SetPageDesc( const SwFormatPageDesc& rNew );
@@ -133,24 +134,24 @@ protected:
     SwTableLineFormat(SwAttrPool& rPool, const OUString &rFormatNm, SwFrameFormat *pDrvdFrm);
 
     // Odd and Even Box formats will be used to handle alternating columns
-    SwTableBoxFormat* m_pFstBoxFormat;
-    SwTableBoxFormat* m_pLstBoxFormat;
-    SwTableBoxFormat* m_pOddBoxFormat;
-    SwTableBoxFormat* m_pEvnBoxFormat;
+    boost::scoped_ptr<SwTableBoxFormat> m_pFstBoxFormat;
+    boost::scoped_ptr<SwTableBoxFormat> m_pLstBoxFormat;
+    boost::scoped_ptr<SwTableBoxFormat> m_pOddBoxFormat;
+    boost::scoped_ptr<SwTableBoxFormat> m_pEvnBoxFormat;
 
 public:
-    SwTableLineFormat( SwTableLineFormat& rNew );
+    SwTableLineFormat( const SwTableLineFormat& rNew );
     SwTableLineFormat& operator=( const SwTableLineFormat& rNew );
 
-    void SetFirstBoxFormat( SwTableBoxFormat* pNew ) { m_pFstBoxFormat = pNew; }
-    void SetLastBoxFormat( SwTableBoxFormat* pNew ) { m_pLstBoxFormat = pNew; }
-    void SetOddBoxFormat( SwTableBoxFormat* pNew ) { m_pOddBoxFormat = pNew; }
-    void SetEvenBoxFormat( SwTableBoxFormat* pNew ) { m_pEvnBoxFormat = pNew; }
+    void SetFirstBoxFormat( SwTableBoxFormat* pNew ) { m_pFstBoxFormat.reset( pNew ); }
+    void SetLastBoxFormat( SwTableBoxFormat* pNew ) { m_pLstBoxFormat.reset( pNew ); }
+    void SetOddBoxFormat( SwTableBoxFormat* pNew ) { m_pOddBoxFormat.reset( pNew ); }
+    void SetEvenBoxFormat( SwTableBoxFormat* pNew ) { m_pEvnBoxFormat.reset( pNew ); }
 
-    SwTableBoxFormat* GetFirstBoxFormat() { return m_pFstBoxFormat; }
-    SwTableBoxFormat* GetLastBoxFormat() { return m_pLstBoxFormat; }
-    SwTableBoxFormat* GetOddBoxFormat() { return m_pOddBoxFormat; }
-    SwTableBoxFormat* GetEvenBoxFormat() { return m_pEvnBoxFormat; }
+    SwTableBoxFormat* GetFirstBoxFormat() { return m_pFstBoxFormat.get(); }
+    SwTableBoxFormat* GetLastBoxFormat() { return m_pLstBoxFormat.get(); }
+    SwTableBoxFormat* GetOddBoxFormat() { return m_pOddBoxFormat.get(); }
+    SwTableBoxFormat* GetEvenBoxFormat() { return m_pEvnBoxFormat.get(); }
 
     TYPEINFO_OVERRIDE();     // Already in base class Content.
 
