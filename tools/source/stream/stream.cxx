@@ -962,7 +962,7 @@ SvStream& SvStream::operator>>(sal_Int32& r)
     return *this;
 }
 
-SvStream& SvStream::operator>>(sal_Int64& r)
+SvStream& SvStream::ReadInt64(sal_Int64& r)
 {
     sal_Int64 n = 0;
     READNUMBER_WITHOUT_SWAP(sal_Int64, n)
@@ -1107,7 +1107,7 @@ SvStream& SvStream::operator<<  ( sal_Int32 v )
     return *this;
 }
 
-SvStream& SvStream::operator<<  ( sal_Int64 v )
+SvStream& SvStream::WriteInt64  (sal_Int64 v)
 {
     if( bSwap )
         SwapInt64(v);
