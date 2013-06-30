@@ -181,8 +181,12 @@ public class SQLQueryComposer
         String sSortValue = CurDBMetaData.getSortFieldNames()[_SortIndex][0];
         XPropertySet xColumn = CurDBMetaData.getColumnObjectByFieldName(sSortValue, _baddAliasFieldNames);
 
-        String sSort = CurDBMetaData.getSortFieldNames()[_SortIndex][1];
-        boolean bascend = (sSort.equals("ASC"));
+        String sSort = "ASC";
+        if(CurDBMetaData.getSortFieldNames()[_SortIndex].length > 1)
+        {
+            sSort = CurDBMetaData.getSortFieldNames()[_SortIndex][1];
+        }
+        boolean bascend = !(sSort.equals("DESC"));
         m_queryComposer.appendOrderByColumn(xColumn, bascend);
     }
 
