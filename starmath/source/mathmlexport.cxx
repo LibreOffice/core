@@ -1469,10 +1469,9 @@ void SmXMLExport::ExportFont(const SmNode *pNode, int nLevel)
 
 void SmXMLExport::ExportVerticalBrace(const SmNode *pNode, int nLevel)
 {
-    //Place the overbrace value OVER a vertical brace and then place that
-    //expression OVER the overbrace value, If someone can find a
-    //dedicated term in MathML to handle this overbrace/underbrace concept
-    //let me know. C.
+    // Place the overbrace value OVER a horizontal brace and then place that
+    // expression OVER the overbrace value. Similarly for the underbrace
+    // construction.
     XMLTokenEnum which;
 
     switch (pNode->GetToken().eType)
@@ -1494,6 +1493,7 @@ void SmXMLExport::ExportVerticalBrace(const SmNode *pNode, int nLevel)
         // also XML_ACCENT is illegal with XML_MUNDER. Thus no XML_ACCENT attribut here!
         SvXMLElementExport aOver2(*this, XML_NAMESPACE_MATH,which, sal_True, sal_True);
         ExportNodes(pNode->GetSubNode(0), nLevel);
+        AddAttribute(XML_NAMESPACE_MATH, XML_STRETCHY, XML_TRUE);
         ExportNodes(pNode->GetSubNode(1), nLevel);
     }
     ExportNodes(pNode->GetSubNode(2), nLevel);
