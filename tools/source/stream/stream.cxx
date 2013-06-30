@@ -1185,8 +1185,9 @@ SvStream& SvStream::operator<< ( const double& r )
     }
     else
 #endif
-    WRITENUMBER_WITHOUT_SWAP(double,r)
-
+    {
+        WRITENUMBER_WITHOUT_SWAP(double,r);
+    }
     return *this;
 }
 
