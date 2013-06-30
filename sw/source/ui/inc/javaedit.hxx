@@ -70,7 +70,7 @@ private:
     void            CheckTravel();
     void            SetFld();
 
-    using Window::GetText;
+    using Dialog::GetText;
     using Window::GetType;
 
 public:
