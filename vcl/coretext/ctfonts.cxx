@@ -58,6 +58,11 @@ private:
 
 // =======================================================================
 
+inline double toRadian(int nDegree)
+{
+    return nDegree * (M_PI / 1800.0);
+}
+
 CTTextStyle::CTTextStyle( const FontSelectPattern& rFSD )
 :   ImplMacTextStyle( rFSD )
 ,   mpStyleDict( NULL )
@@ -68,16 +73,16 @@ CTTextStyle::CTTextStyle( const FontSelectPattern& rFSD )
     double fScaledFontHeight = pReqFont->mfExactHeight;
 
     // convert font rotation to radian
-    mfFontRotation = pReqFont->mnOrientation * (M_PI / 1800.0);
+    mfFontRotation = toRadian(pReqFont->mnOrientation);
+
+    // dummy matrix so we can use CGAffineTransformConcat() below
+    CGAffineTransform aMatrix = CGAffineTransformMakeTranslation(0, 0);
 
     // handle font stretching if any
-    const CGAffineTransform* pMatrix = NULL;
-    CGAffineTransform aMatrix;
     if( (pReqFont->mnWidth != 0) && (pReqFont->mnWidth != pReqFont->mnHeight) )
     {
         mfFontStretch = (float)pReqFont->mnWidth / pReqFont->mnHeight;
-        aMatrix = CGAffineTransformMakeScale( mfFontStretch, 1.0F );
-        pMatrix = &aMatrix;
+        aMatrix = CGAffineTransformConcat(aMatrix, CGAffineTransformMakeScale(mfFontStretch, 1.0F));
     }
 
     // create the style object for CoreText font attributes
@@ -88,8 +93,23 @@ CTTextStyle::CTTextStyle( const FontSelectPattern& rFSD )
     CFBooleanRef pCFVertBool = pReqFont->mbVertical ? kCFBooleanTrue : kCFBooleanFalse;
     CFDictionarySetValue( mpStyleDict, kCTVerticalFormsAttributeName, pCFVertBool );
 
+    // fake bold
+    if ((pReqFont->GetWeight() >= WEIGHT_BOLD) && (mpFontData->GetWeight() < WEIGHT_SEMIBOLD))
+    {
+        int nStroke = -10.0;
+        CFNumberRef rStroke = CFNumberCreate(NULL, kCFNumberSInt32Type, &nStroke);
+        CFDictionarySetValue(mpStyleDict, kCTStrokeWidthAttributeName, rStroke);
+    }
+
+    // fake italic
+    if (((pReqFont->GetSlant() == ITALIC_NORMAL) || (pReqFont->GetSlant() == ITALIC_OBLIQUE))
+    && !((mpFontData->GetSlant() == ITALIC_NORMAL) || (mpFontData->GetSlant() == ITALIC_OBLIQUE)))
+    {
+        aMatrix = CGAffineTransformConcat(aMatrix, CGAffineTransformMake(1, 0, toRadian(120), 1, 0, 0));
+    }
+
     CTFontDescriptorRef pFontDesc = (CTFontDescriptorRef)mpFontData->GetFontId();
-    CTFontRef pNewCTFont = CTFontCreateWithFontDescriptor( pFontDesc, fScaledFontHeight, pMatrix );
+    CTFontRef pNewCTFont = CTFontCreateWithFontDescriptor( pFontDesc, fScaledFontHeight, &aMatrix );
     CFDictionarySetValue( mpStyleDict, kCTFontAttributeName, pNewCTFont );
     CFRelease( pNewCTFont);
 
