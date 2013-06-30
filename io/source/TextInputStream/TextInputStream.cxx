@@ -128,6 +128,8 @@ OTextInputStream::~OTextInputStream()
         rtl_destroyUnicodeToTextContext( mConvText2Unicode, mContextText2Unicode );
         rtl_destroyUnicodeToTextConverter( mConvText2Unicode );
     }
+
+    delete[] mpBuffer;
 }
 
 void OTextInputStream::implResizeBuffer( void )
@@ -135,6 +137,7 @@ void OTextInputStream::implResizeBuffer( void )
     sal_Int32 mnNewBufferSize = mnBufferSize * 2;
     sal_Unicode* pNewBuffer = new sal_Unicode[ mnNewBufferSize ];
     memcpy( pNewBuffer, mpBuffer, mnCharsInBuffer * sizeof( sal_Unicode ) );
+    delete[] mpBuffer;
     mpBuffer = pNewBuffer;
     mnBufferSize = mnNewBufferSize;
 }
