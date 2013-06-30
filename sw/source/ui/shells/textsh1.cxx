@@ -279,7 +279,7 @@ static short lcl_AskRedlineMode(Window *pWin)
     aQBox.GetPushButton( RET_CANCEL )->SetHelpId(HID_AUTOFORMAT_REJECT  );
     aQBox.AddButton(String(SW_RES(STR_REDLINE_EDIT)), 2, 0);
     aQBox.GetPushButton( 2 )->SetHelpId(HID_AUTOFORMAT_EDIT_CHG);
-    aQBox.SetButtonHelpText( RET_OK, aEmptyStr );
+    aQBox.SetButtonHelpText( RET_OK, OUString() );
 
     return aQBox.Execute();
 }

@@ -287,7 +287,7 @@ sal_uInt16 Application::GetCommandLineParamCount()
 
 // -----------------------------------------------------------------------
 
-XubString Application::GetCommandLineParam( sal_uInt16 nParam )
+OUString Application::GetCommandLineParam( sal_uInt16 nParam )
 {
     OUString aParam;
     osl_getCommandArg( nParam, &aParam.pData );
@@ -296,7 +296,7 @@ XubString Application::GetCommandLineParam( sal_uInt16 nParam )
 
 // -----------------------------------------------------------------------
 
-const XubString& Application::GetAppFileName()
+OUString Application::GetAppFileName()
 {
     ImplSVData* pSVData = ImplGetSVData();
     DBG_ASSERT( pSVData->maAppData.mpAppFileName, "AppFileName should be set to something after SVMain!" );
@@ -304,20 +304,15 @@ const XubString& Application::GetAppFileName()
         return *pSVData->maAppData.mpAppFileName;
 
     /*
-     *  #91147# provide a fallback for people without initialized
-     *  vcl here (like setup in responsefile mode)
+     *  provide a fallback for people without initialized vcl here (like setup
+     *  in responsefile mode)
      */
-    static String aAppFileName;
-    if( !aAppFileName.Len() )
-    {
-        OUString aExeFileName;
-        osl_getExecutableFile( &aExeFileName.pData );
+    OUString aAppFileName;
+    OUString aExeFileName;
+    osl_getExecutableFile(&aExeFileName.pData);
 
-        // convert path to native file format
-        OUString aNativeFileName;
-        osl::FileBase::getSystemPathFromFileURL( aExeFileName, aNativeFileName );
-        aAppFileName = aNativeFileName;
-    }
+    // convert path to native file format
+    osl::FileBase::getSystemPathFromFileURL(aExeFileName, aAppFileName);
 
     return aAppFileName;
 }
@@ -358,7 +353,7 @@ sal_uInt16 Application::Exception( sal_uInt16 nError )
 
 // -----------------------------------------------------------------------
 
-void Application::Abort( const XubString& rErrorText )
+void Application::Abort( const OUString& rErrorText )
 {
     //HACK: Dump core iff --norestore command line argument is given (assuming
     // this process is run by developers who are interested in cores, vs. end
@@ -366,7 +361,7 @@ void Application::Abort( const XubString& rErrorText )
     bool dumpCore = false;
     sal_uInt16 n = GetCommandLineParamCount();
     for (sal_uInt16 i = 0; i != n; ++i) {
-        if (GetCommandLineParam(i).EqualsAscii("--norestore")) {
+        if (GetCommandLineParam(i).equals("--norestore")) {
             dumpCore = true;
             break;
         }

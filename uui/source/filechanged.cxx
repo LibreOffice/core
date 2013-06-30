@@ -31,7 +31,7 @@ FileChangedQueryBox::FileChangedQueryBox( Window* pParent, ResMgr* pResMgr ) :
             BUTTONDIALOG_DEFBUTTON | BUTTONDIALOG_OKBUTTON | BUTTONDIALOG_FOCUSBUTTON);
     AddButton( BUTTON_CANCEL, RET_CANCEL, BUTTONDIALOG_CANCELBUTTON );
 
-    SetButtonHelpText( RET_YES, String::EmptyString() );
+    SetButtonHelpText( RET_YES, OUString() );
     SetMessText(ResId(STR_FILECHANGED_MSG, *pResMgr).toString());
 }
 

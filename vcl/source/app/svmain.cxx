@@ -289,7 +289,7 @@ bool InitVCL()
     // convert path to native file format
     OUString aNativeFileName;
     osl::FileBase::getSystemPathFromFileURL( aExeFileName, aNativeFileName );
-    pSVData->maAppData.mpAppFileName = new String( aNativeFileName );
+    pSVData->maAppData.mpAppFileName = new OUString( aNativeFileName );
 
     // Initialize global data
     pSVData->maGDIData.mpScreenFontList     = new ImplDevFontList;

@@ -143,12 +143,12 @@ public:
     virtual void                InitFinished();
     virtual void                DeInit();
 
-    static sal_uInt16               GetCommandLineParamCount();
-    static XubString            GetCommandLineParam( sal_uInt16 nParam );
-    static const XubString&     GetAppFileName();
+    static sal_uInt16           GetCommandLineParamCount();
+    static OUString             GetCommandLineParam( sal_uInt16 nParam );
+    static OUString             GetAppFileName();
 
-    virtual sal_uInt16              Exception( sal_uInt16 nError );
-    static void                 Abort( const XubString& rErrorText );
+    virtual sal_uInt16          Exception( sal_uInt16 nError );
+    static void                 Abort( const OUString& rErrorText );
 
     static void                 Execute();
     static void                 Quit();

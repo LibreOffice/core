@@ -117,7 +117,7 @@ struct ImplSVAppData
     VclEventListeners*      mpKeyListeners;     // listeners for key events only (eg, extended toolkit)
     ImplAccelManager*       mpAccelMgr;         // Accelerator Manager
     XubString*              mpAppName;          // Application name
-    XubString*              mpAppFileName;      // Abs. Application FileName
+    OUString*               mpAppFileName;      // Abs. Application FileName
     OUString*               mpDisplayName;      // Application Display Name
     String*                 mpFontPath;         // Additional Fontpath
     Help*                   mpHelp;             // Application help

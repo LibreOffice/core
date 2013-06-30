@@ -32,8 +32,8 @@ TryLaterQueryBox::TryLaterQueryBox( Window* pParent, ResMgr* pResMgr, const Stri
     AddButton(ResId(STR_TRYLATER_SAVEAS_BTN, *pResMgr).toString(), RET_NO, 0);
     AddButton( BUTTON_CANCEL, RET_CANCEL, BUTTONDIALOG_CANCELBUTTON );
 
-    SetButtonHelpText( RET_YES, String::EmptyString() );
-    SetButtonHelpText( RET_NO, String::EmptyString() );
+    SetButtonHelpText( RET_YES, OUString() );
+    SetButtonHelpText( RET_NO, OUString() );
 }
 
 TryLaterQueryBox::~TryLaterQueryBox()

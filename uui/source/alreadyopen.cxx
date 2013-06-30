@@ -42,8 +42,8 @@ AlreadyOpenQueryBox::AlreadyOpenQueryBox( Window* pParent, ResMgr* pResMgr, cons
         AddButton( BUTTON_CANCEL, RET_CANCEL, BUTTONDIALOG_CANCELBUTTON );
     }
 
-    SetButtonHelpText( RET_YES, String::EmptyString() );
-    SetButtonHelpText( RET_NO, String::EmptyString() );
+    SetButtonHelpText( RET_YES, OUString() );
+    SetButtonHelpText( RET_NO, OUString() );
 }
 
 AlreadyOpenQueryBox::~AlreadyOpenQueryBox()

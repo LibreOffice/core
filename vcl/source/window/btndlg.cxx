@@ -262,7 +262,7 @@ void ButtonDialog::Click()
         maClickHdl.Call( this );
 }
 
-void ButtonDialog::AddButton( const XubString& rText, sal_uInt16 nId,
+void ButtonDialog::AddButton( const OUString& rText, sal_uInt16 nId,
                               sal_uInt16 nBtnFlags, long nSepPixel )
 {
     // PageItem anlegen
@@ -272,7 +272,7 @@ void ButtonDialog::AddButton( const XubString& rText, sal_uInt16 nId,
     pItem->mnSepSize        = nSepPixel;
     pItem->mpPushButton     = ImplCreatePushButton( nBtnFlags );
 
-    if ( rText.Len() )
+    if (!rText.isEmpty())
         pItem->mpPushButton->SetText( rText );
 
     maItemList.push_back(pItem);
@@ -370,7 +370,7 @@ PushButton* ButtonDialog::GetPushButton( sal_uInt16 nId ) const
         return NULL;
 }
 
-void ButtonDialog::SetButtonText( sal_uInt16 nId, const XubString& rText )
+void ButtonDialog::SetButtonText( sal_uInt16 nId, const OUString& rText )
 {
     ImplBtnDlgItem* pItem = ImplGetItem( nId );
 
@@ -381,7 +381,7 @@ void ButtonDialog::SetButtonText( sal_uInt16 nId, const XubString& rText )
     }
 }
 
-void ButtonDialog::SetButtonHelpText( sal_uInt16 nId, const XubString& rText )
+void ButtonDialog::SetButtonHelpText( sal_uInt16 nId, const OUString& rText )
 {
     ImplBtnDlgItem* pItem = ImplGetItem( nId );
 

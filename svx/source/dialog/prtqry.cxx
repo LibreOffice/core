@@ -35,7 +35,7 @@ SvxPrtQryBox::SvxPrtQryBox(Window* pParent) :
 
     AddButton(String(SVX_RES(RID_SVXSTR_QRY_PRINT_ALL)), 2, 0);
     AddButton(BUTTON_CANCEL, RET_CANCEL, BUTTONDIALOG_CANCELBUTTON);
-    SetButtonHelpText( RET_OK, String() );
+    SetButtonHelpText( RET_OK, OUString() );
 }
 
 SvxPrtQryBox::~SvxPrtQryBox()

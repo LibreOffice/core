@@ -33,8 +33,8 @@ OpenLockedQueryBox::OpenLockedQueryBox( Window* pParent, ResMgr* pResMgr, const 
     AddButton(ResId(STR_OPENLOCKED_OPENCOPY_BTN, *pResMgr).toString(), RET_NO, 0);
 
     AddButton( BUTTON_CANCEL, RET_CANCEL, BUTTONDIALOG_CANCELBUTTON );
-    SetButtonHelpText( RET_YES, String() );
-    SetButtonHelpText( RET_NO, String() );
+    SetButtonHelpText( RET_YES, OUString() );
+    SetButtonHelpText( RET_NO, OUString() );
 
 #ifdef WNT
     // bnc#656566
