@@ -78,9 +78,9 @@ XMLChartStyleContext::~XMLChartStyleContext()
 namespace
 {
 
-    void lcl_NumberFormatStyleToProperty( const OUString& rStyleName, const OUString& rPropertyName,
-                                      const SvXMLStylesContext& rStylesContext,
-                                      const uno::Reference< beans::XPropertySet >& rPropSet )
+void lcl_NumberFormatStyleToProperty( const OUString& rStyleName, const OUString& rPropertyName,
+        const SvXMLStylesContext& rStylesContext,
+        const uno::Reference< beans::XPropertySet >& rPropSet )
 {
     if( !rStyleName.isEmpty())
     {
