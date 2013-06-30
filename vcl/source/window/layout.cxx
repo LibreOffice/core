@@ -1793,7 +1793,7 @@ short MessageDialog::Execute()
         m_pSecondaryMessage->set_hexpand(true);
         m_pSecondaryMessage->SetText(m_sSecondaryString);
         m_pSecondaryMessage->Show(!m_sSecondaryString.isEmpty());
-        m_pSecondaryMessage->SetMaxTextWidth(m_pPrimaryMessage->approximate_char_width() * 80);
+        m_pSecondaryMessage->SetMaxTextWidth(m_pSecondaryMessage->approximate_char_width() * 80);
 
         m_pGrid->Show();
 
