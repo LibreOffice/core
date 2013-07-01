@@ -1195,7 +1195,7 @@ void FormulaCompiler::Factor()
                     pFacToken->GetJump()[ 0 ] = 3;  // if, else, behind
                     break;
                 case ocChose:
-                    pFacToken->GetJump()[ 0 ] = MAXJUMPCOUNT+1;
+                    pFacToken->GetJump()[ 0 ] = FORMULA_MAXJUMPCOUNT + 1;
                     break;
                 case ocIfError:
                 case ocIfNA:
@@ -1225,7 +1225,7 @@ void FormulaCompiler::Factor()
                     nJumpMax = 3;
                     break;
                 case ocChose:
-                    nJumpMax = MAXJUMPCOUNT;
+                    nJumpMax = FORMULA_MAXJUMPCOUNT;
                     break;
                 case ocIfError:
                 case ocIfNA:
@@ -1236,7 +1236,7 @@ void FormulaCompiler::Factor()
                     SAL_WARN( "formula.core", "FormulaCompiler::Factor: forgot to add a jump max case?");
             }
             short nJumpCount = 0;
-            while ( (nJumpCount < (MAXJUMPCOUNT - 1)) && (eOp == ocSep)
+            while ( (nJumpCount < (FORMULA_MAXJUMPCOUNT - 1)) && (eOp == ocSep)
                     && (!pArr->GetCodeError() || bIgnoreErrors) )
             {
                 if ( ++nJumpCount <= nJumpMax )
@@ -1262,7 +1262,7 @@ void FormulaCompiler::Factor()
                         bLimitOk = (nJumpCount <= 3);
                         break;
                     case ocChose:
-                        bLimitOk = (nJumpCount < MAXJUMPCOUNT); /* TODO: check, really <, not <=? */
+                        bLimitOk = (nJumpCount < FORMULA_MAXJUMPCOUNT); /* TODO: check, really <, not <=? */
                         break;
                     case ocIfError:
                     case ocIfNA:
@@ -1546,7 +1546,7 @@ bool FormulaCompiler::CompileTokenArray()
         pArr->nRefs = 0;    // count from start
         pArr->DelRPN();
         pStack = NULL;
-        FormulaToken* pData[ MAXCODE ];
+        FormulaToken* pData[ FORMULA_MAXTOKENS ];
         pCode = pData;
         bool bWasForced = pArr->IsRecalcModeForced();
         if ( bWasForced )
@@ -1951,9 +1951,9 @@ OpCode FormulaCompiler::NextToken()
 }
 void FormulaCompiler::PutCode( FormulaTokenRef& p )
 {
-    if( pc >= MAXCODE-1 )
+    if( pc >= FORMULA_MAXTOKENS - 1 )
     {
-        if ( pc == MAXCODE-1 )
+        if ( pc == FORMULA_MAXTOKENS - 1 )
         {
             p = new FormulaByteToken( ocStop );
             p->IncRef();
