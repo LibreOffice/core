@@ -24,10 +24,9 @@ enum DesktopType {
     DESKTOP_NONE, // headless, i.e. no X connection at all
     DESKTOP_UNKNOWN, // unknown desktop, simple WM, etc.
     DESKTOP_GNOME,
-    DESKTOP_TDE,
     DESKTOP_KDE,
     DESKTOP_KDE4,
-    DESKTOP_CDE
+    DESKTOP_TDE
 }; // keep in sync with desktop_strings[] in salplug.cxx
 
 #endif // INCLUDED_VCL_DESKTOPS_HXX

@@ -11,8 +11,10 @@ $(eval $(call gb_Package_Package,shell_scripts,$(SRCDIR)/shell/source/unix/misc)
 
 $(eval $(call gb_Package_set_outdir,shell_scripts,$(INSTDIR)))
 
-$(eval $(call gb_Package_add_file,shell_scripts,$(gb_PROGRAMDIRNAME)/cde-open-url,cde-open-url.sh))
 $(eval $(call gb_Package_add_file,shell_scripts,$(gb_PROGRAMDIRNAME)/open-url,open-url.sh))
+
+ifeq ($(ENABLE_TDE),TRUE)
 $(eval $(call gb_Package_add_file,shell_scripts,$(gb_PROGRAMDIRNAME)/tde-open-url,tde-open-url.sh))
+endif
 
 # vim: set shiftwidth=4 tabstop=4 noexpandtab:
