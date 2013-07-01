@@ -55,6 +55,7 @@ import com.sun.star.wizards.report.IReportDocument;
 import com.sun.star.wizards.report.ReportImplementationHelper;
 import com.sun.star.wizards.report.ReportLayouter;
 import com.sun.star.wizards.report.ReportWizard;
+import com.sun.star.wizards.ui.UIConsts;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -684,7 +685,20 @@ public class ReportBuilderImplementation extends ReportImplementationHelper
                 break;
             }
         }
+        exchangeLayoutTitlesWithLocalisedOnes(LayoutFiles);
         return LayoutFiles;
+    }
+
+    private void exchangeLayoutTitlesWithLocalisedOnes(String[][] LayoutFiles)
+    {
+        for(int i = 0; i < LayoutFiles[0].length; ++i)
+        {
+            if( LayoutFiles[0][i] == null) { break;}
+            if( LayoutFiles[0][i].equals("default") )
+            {
+                LayoutFiles[0][i] = m_resource.getResText(UIConsts.RID_REPORT + 100);
+            }
+        }
     }
 
     public XReportDefinition getReportDefinition()
