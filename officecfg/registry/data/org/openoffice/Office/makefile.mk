@@ -109,7 +109,9 @@ LOCALIZEDFILES= \
     Embedding.xcu \
     WebWizard.xcu \
     FormWizard.xcu \
-    Writer.xcu
+    Writer.xcu \
+    Impress.xcu \
+    PresenterScreen.xcu
 
 
 .INCLUDE :  target.mk
