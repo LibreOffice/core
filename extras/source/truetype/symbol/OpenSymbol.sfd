@@ -4,7 +4,7 @@ FullName: OpenSymbol
 FamilyName: OpenSymbol
 Weight: Book
 Copyright: (c) 2009 Sun Microsystems Inc.\nTHERE DOES NOT EXIST (c) 2011 Julien Nabet\nPRECEDES <-> DOES NOT SUCCEED (c) 2011 Olivier Hallot\nPRIME <-> TRIPLE PRIME (c) 2013 Mathias Hasselmann
-Version: 102.4
+Version: 102.5
 ItalicAngle: 0
 UnderlinePosition: -143
 UnderlineWidth: 20
@@ -19,7 +19,7 @@ OS2Version: 0
 OS2_WeightWidthSlopeOnly: 0
 OS2_UseTypoMetrics: 1
 CreationTime: 1144938807
-ModificationTime: 1372588273
+ModificationTime: 1372703526
 PfmFamily: 81
 TTFWeight: 400
 TTFWidth: 5
@@ -773,7 +773,7 @@ ShortTable: maxp 16
   0
   0
 EndShort
-LangName: 1033 "" "" "Regular" "OpenSymbol" "" "Version 102.4" 
+LangName: 1033 "" "" "Regular" "OpenSymbol" "" "Version 102.5" 
 GaspTable: 1 65535 2 0
 Encoding: Custom
 UnicodeInterp: none
@@ -784,7 +784,7 @@ FitToEm: 1
 WinInfo: 675 45 15
 BeginPrivate: 0
 EndPrivate
-BeginChars: 8834 1007
+BeginChars: 8834 1009
 
 StartChar: Alpha
 Encoding: 909 913 0
@@ -107739,6 +107739,43 @@ SplineSet
  934 1331 l 1,2,-1
  102 1331 l 1,3,-1
  102 1407 l 1,0,-1
+EndSplineSet
+EndChar
+
+StartChar: verticalline
+Encoding: 996 124 1007
+Width: 813
+Flags: W
+VStem: 358 99<-440 1620>
+LayerCount: 2
+Fore
+SplineSet
+358 -440 m 1,0,-1
+ 358 1620 l 1,1,-1
+ 457 1620 l 1,2,-1
+ 457 -440 l 1,3,-1
+ 358 -440 l 1,0,-1
+EndSplineSet
+EndChar
+
+StartChar: doubleverticalline
+Encoding: 997 8214 1008
+Width: 1183
+Flags: W
+VStem: 334 98<-430 1620> 752 98<-430 1620>
+LayerCount: 2
+Fore
+SplineSet
+334 -430 m 1,0,-1
+ 334 1620 l 1,1,-1
+ 432 1620 l 1,2,-1
+ 432 -430 l 1,3,-1
+ 334 -430 l 1,0,-1
+752 -430 m 1,4,-1
+ 752 1620 l 1,5,-1
+ 850 1620 l 1,6,-1
+ 850 -430 l 1,7,-1
+ 752 -430 l 1,4,-1
 EndSplineSet
 EndChar
 EndChars

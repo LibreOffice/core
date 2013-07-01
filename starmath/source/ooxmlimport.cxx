@@ -319,13 +319,13 @@ OUString SmOoxmlImport::handleD()
         opening = "left lline ";
     if( closing == "|" )
         closing = " right rline";
-    if( opening == OUString( sal_Unicode( 0x2225 )))
+    if (opening == OUString(MS_DLINE) || opening == OUString(MS_DVERTLINE))
         opening = "left ldline ";
-    if( closing == OUString( sal_Unicode( 0x2225 )))
+    if (closing == OUString(MS_DLINE) || closing == OUString(MS_DVERTLINE))
         closing = " right rdline";
-    if( opening == OUString( sal_Unicode( 0x2329 )))
+    if (opening == OUString(MS_LANGLE) || opening == OUString(MS_LMATHANGLE))
         opening = "left langle ";
-    if( closing == OUString( sal_Unicode( 0x232a )))
+    if (closing == OUString(MS_RANGLE) || closing == OUString(MS_RMATHANGLE))
         closing = " right rangle";
     // use scalable brackets (the explicit "left" or "right")
     if( opening == "(" || opening == "[" )

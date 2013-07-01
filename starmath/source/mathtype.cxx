@@ -463,10 +463,12 @@ sal_Bool MathType::LookupChar(sal_Unicode nChar,String &rRet,sal_uInt8 nVersion,
         case 0x22f1:
             pC = " dotsdown ";
             break;
-        case 0x2329:
+        case MS_LANGLE:
+        case MS_LMATHANGLE:
             pC = " langle ";
             break;
-        case 0x232a:
+        case MS_RANGLE:
+        case MS_RMATHANGLE:
             pC = " rangle ";
             break;
         case 0x301a:
