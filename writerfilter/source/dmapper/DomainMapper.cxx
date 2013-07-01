@@ -1342,8 +1342,6 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
             }
         }
         break;
-        case NS_ooxml::LN_CT_LineNumber_start:
-        case NS_ooxml::LN_CT_LineNumber_distance:
         case NS_ooxml::LN_CT_TrackChange_author:
             m_pImpl->SetCurrentRedlineAuthor( sStringValue );
         break;
@@ -1365,6 +1363,8 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
         case NS_ooxml::LN_token:
             m_pImpl->SetCurrentRedlineToken( nIntValue );
         break;
+        case NS_ooxml::LN_CT_LineNumber_start:
+        case NS_ooxml::LN_CT_LineNumber_distance:
         case NS_ooxml::LN_CT_LineNumber_countBy:
         case NS_ooxml::LN_CT_LineNumber_restart:
         {
