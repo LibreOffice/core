@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXn///xI\u003d",
+        "filename": "include/tools/stream.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 310,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2013-07-01T06:43:31Z",
+      "side": 1,
+      "message": "Why not using SAL_DELETED_FUNCTION instead of a comment?",
+      "revId": "bf41e75cc02b2f65b117f4b146512ee9550db660",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
