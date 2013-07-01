@@ -34,6 +34,7 @@ public:
     explicit            TextPortionContext(
                             ::oox::core::ContextHandler2Helper& rParent,
                             TextBox& rTextBox,
+                            TextParagraphModel& rParagraph,
                             const TextFontModel& rParentFont,
                             sal_Int32 nElement,
                             const AttributeList& rAttribs );
@@ -46,6 +47,7 @@ public:
 
 private:
     TextBox&            mrTextBox;
+    TextParagraphModel  maParagraph;
     TextFontModel       maFont;
     size_t              mnInitialPortions;
 };
@@ -63,9 +65,12 @@ public:
 
     virtual ::oox::core::ContextHandlerRef
                         onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
+    virtual void        onStartElement(const AttributeList& rAttribs) SAL_OVERRIDE;
+    virtual void        onEndElement();
 
 private:
     TextBox&            mrTextBox;
+    TextParagraphModel  maParagraph;
 };
 
 // ============================================================================

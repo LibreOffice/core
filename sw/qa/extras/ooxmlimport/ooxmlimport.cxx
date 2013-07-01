@@ -11,6 +11,7 @@
 #include <com/sun/star/document/XEmbeddedObjectSupplier2.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>
+#include <com/sun/star/drawing/TextVerticalAdjust.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/text/HoriOrientation.hpp>
@@ -122,6 +123,7 @@ public:
     void testN820788();
     void testN820504();
     void testFdo43641();
+    void testFdo46361();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -210,6 +212,7 @@ void Test::run()
         {"n820788.docx", &Test::testN820788},
         {"n820504.docx", &Test::testN820504},
         {"fdo43641.docx", &Test::testFdo43641},
+        {"fdo46361.docx", &Test::testFdo46361},
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -365,7 +368,7 @@ xray ThisComponent.DrawPage(1).getByIndex(0).Anchor.PageStyleName
     uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
     uno::Reference<drawing::XShapes> xShapes(xDrawPage->getByIndex(1), uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xShape(xShapes->getByIndex(0), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString("TEXT1"), xShape->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString("TEXT1\n"), xShape->getString());
     // we want to test the textbox is on the first page (it was put onto another page without the fix),
     // use a small trick and instead of checking the page layout, check the page style
     uno::Reference<text::XTextContent> xTextContent(xShape, uno::UNO_QUERY);
@@ -1480,6 +1483,26 @@ void Test::testFdo43641()
     uno::Reference<drawing::XShape> xLine(xGroupShape->getByIndex(1), uno::UNO_QUERY);
     // This was 2200, not 2579 in mm100, i.e. the size of the line shape was incorrect.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(EMU_TO_MM100(928694)), xLine->getSize().Width);
+}
+
+void Test::testFdo46361()
+{
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xGroupShape(xDraws->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape(xGroupShape->getByIndex(0), uno::UNO_QUERY);
+    // This was CENTER.
+    CPPUNIT_ASSERT_EQUAL(drawing::TextVerticalAdjust_TOP, getProperty<drawing::TextVerticalAdjust>(xShape, "TextVerticalAdjust"));
+    uno::Reference<text::XText> xText = uno::Reference<text::XTextRange>(xShape, uno::UNO_QUERY)->getText();
+    uno::Reference<text::XTextRange> xParagraph = getParagraphOfText(1, xText);
+    // This was LEFT.
+    CPPUNIT_ASSERT_EQUAL(style::ParagraphAdjust_CENTER, static_cast<style::ParagraphAdjust>(getProperty<sal_Int16>(xParagraph, "ParaAdjust")));
+    // This was black, not green.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x008000), getProperty<sal_Int32>(getRun(xParagraph, 1), "CharColor"));
+    // \n char was missing due to unhandled w:br.
+    CPPUNIT_ASSERT_EQUAL(OUString("text\ntext"), uno::Reference<text::XTextRange>(xGroupShape->getByIndex(1), uno::UNO_QUERY)->getString());
+    // \n chars were missing, due to unhandled multiple w:p tags.
+    CPPUNIT_ASSERT_EQUAL(OUString("text\ntext\n"), uno::Reference<text::XTextRange>(xGroupShape->getByIndex(2), uno::UNO_QUERY)->getString());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

@@ -24,6 +24,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/text/XTextAppend.hpp>
 #include <com/sun/star/text/WritingMode.hpp>
+#include <com/sun/star/style/ParagraphAdjust.hpp>
 
 namespace oox {
 namespace vml {
@@ -34,7 +35,8 @@ TextFontModel::TextFontModel()
 {
 }
 
-TextPortionModel::TextPortionModel( const TextFontModel& rFont, const OUString& rText ) :
+TextPortionModel::TextPortionModel( const TextParagraphModel& rParagraph, const TextFontModel& rFont, const OUString& rText ) :
+    maParagraph( rParagraph ),
     maFont( rFont ),
     maText( rText )
 {
@@ -50,9 +52,9 @@ TextBox::TextBox(ShapeTypeModel& rTypeModel)
 {
 }
 
-void TextBox::appendPortion( const TextFontModel& rFont, const OUString& rText )
+void TextBox::appendPortion( const TextParagraphModel& rParagraph, const TextFontModel& rFont, const OUString& rText )
 {
-    maPortions.push_back( TextPortionModel( rFont, rText ) );
+    maPortions.push_back( TextPortionModel( rParagraph, rFont, rText ) );
 }
 
 const TextFontModel* TextBox::getFirstFont() const
@@ -75,6 +77,7 @@ void TextBox::convert(uno::Reference<drawing::XShape> xShape) const
     {
         beans::PropertyValue aPropertyValue;
         std::vector<beans::PropertyValue> aPropVec;
+        const TextParagraphModel& rParagraph = aIt->maParagraph;
         const TextFontModel& rFont = aIt->maFont;
         if (rFont.mobBold.has())
         {
@@ -88,12 +91,37 @@ void TextBox::convert(uno::Reference<drawing::XShape> xShape) const
             aPropertyValue.Value = uno::makeAny(double(rFont.monSize.get()) / 2.);
             aPropVec.push_back(aPropertyValue);
         }
+        if (rParagraph.moParaAdjust.has())
+        {
+            style::ParagraphAdjust eAdjust = style::ParagraphAdjust_LEFT;
+            if (rParagraph.moParaAdjust.get() == "center")
+                eAdjust = style::ParagraphAdjust_CENTER;
+            else if (rParagraph.moParaAdjust.get() == "right")
+                eAdjust = style::ParagraphAdjust_RIGHT;
+
+            aPropertyValue.Name = "ParaAdjust";
+            aPropertyValue.Value = uno::makeAny(eAdjust);
+            aPropVec.push_back(aPropertyValue);
+        }
+        if (rFont.moColor.has())
+        {
+            aPropertyValue.Name = "CharColor";
+            aPropertyValue.Value = uno::makeAny(rFont.moColor.get().toInt32(16));
+            aPropVec.push_back(aPropertyValue);
+        }
         uno::Sequence<beans::PropertyValue> aPropSeq(aPropVec.size());
         beans::PropertyValue* pValues = aPropSeq.getArray();
         for (std::vector<beans::PropertyValue>::iterator i = aPropVec.begin(); i != aPropVec.end(); ++i)
             *pValues++ = *i;
         xTextAppend->appendTextPortion(aIt->maText, aPropSeq);
     }
+
+    // Remove the last character of the shape text, if it would be a newline.
+    uno::Reference< text::XTextCursor > xCursor = xTextAppend->createTextCursor();
+    xCursor->gotoEnd(false);
+    xCursor->goLeft(1, true);
+    if (xCursor->getString() == "\n")
+        xCursor->setString("");
 
     if ( maLayoutFlow == "vertical" )
     {

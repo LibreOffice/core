@@ -96,6 +96,7 @@ struct OOX_DLLPUBLIC ShapeTypeModel
     OptValue< OUString > moWrapAnchorY;  ///< The base object from which our vertical positioning should be calculated.
     OptValue< ::rtl::OUString > moWrapType;     ///< How to wrap the text around the object
     OptValue< ::rtl::OUString > moWrapSide;     ///< On which side to wrap the text around the object
+    OUString maVTextAnchor; ///< How the text inside the shape is anchored vertically.
 
     explicit            ShapeTypeModel();
 
