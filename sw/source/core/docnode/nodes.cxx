@@ -522,6 +522,30 @@ sal_Bool SwNodes::_MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
     sal_uInt16 nSectNdCnt = 0;
     sal_Bool bSaveNewFrms = bNewFrms;
 
+    // Check that the range of nodes to move is valid.
+    // This is a very specific test that only checks that table nodes
+    // are completely covered by the range.  Issue 121479 has a
+    // document for which this test fails.
+    SwNodeIndex aNodeIndex (aRg.aEnd);
+    while (aNodeIndex > aRg.aStart)
+    {
+        SwNode* pNode = rNodes[aNodeIndex.GetIndex()];
+        if (pNode->GetNodeType() != ND_ENDNODE)
+            break;
+        SwStartNode* pStartNode = pNode->pStartOfSection;
+        if (pStartNode==NULL)
+            break;
+        if ( ! pStartNode->IsTableNode())
+            break;
+        aNodeIndex = *pStartNode;
+        if (aNodeIndex < aRg.aStart.GetIndex())
+        {
+            return sal_False;
+        }
+        --aNodeIndex;
+    }
+
+
     // bis alles verschoben ist
     while( aRg.aStart < aRg.aEnd )
         switch( (pAktNode = &aRg.aEnd.GetNode())->GetNodeType() )
