@@ -733,16 +733,16 @@ SmNode *SmCursor::CreateBracket(SmBracketType eBracketType, bool bIsLeft) {
                 aTok = SmToken(TLDBRACKET, MS_LDBRACKET, "ldbracket", TGLBRACES, 5);
                 break;
             case LineBrackets:
-                aTok = SmToken(TLLINE, MS_LINE, "lline", TGLBRACES, 5);
+                aTok = SmToken(TLLINE, MS_VERTLINE, "lline", TGLBRACES, 5);
                 break;
             case DoubleLineBrackets:
-                aTok = SmToken(TLDLINE, MS_DLINE, "ldline", TGLBRACES, 5);
+                aTok = SmToken(TLDLINE, MS_DVERTLINE, "ldline", TGLBRACES, 5);
                 break;
             case CurlyBrackets:
                 aTok = SmToken(TLBRACE, MS_LBRACE, "lbrace", TGLBRACES, 5);
                 break;
             case AngleBrackets:
-                aTok = SmToken(TLANGLE, MS_LANGLE, "langle", TGLBRACES, 5);
+                aTok = SmToken(TLANGLE, MS_LMATHANGLE, "langle", TGLBRACES, 5);
                 break;
             case CeilBrackets:
                 aTok = SmToken(TLCEIL, MS_LCEIL, "lceil", TGLBRACES, 5);
@@ -766,16 +766,16 @@ SmNode *SmCursor::CreateBracket(SmBracketType eBracketType, bool bIsLeft) {
                 aTok = SmToken(TRDBRACKET, MS_RDBRACKET, "rdbracket", TGRBRACES, 5);
                 break;
             case LineBrackets:
-                aTok = SmToken(TRLINE, MS_LINE, "rline", TGRBRACES, 5);
+                aTok = SmToken(TRLINE, MS_VERTLINE, "rline", TGRBRACES, 5);
                 break;
             case DoubleLineBrackets:
-                aTok = SmToken(TRDLINE, MS_DLINE, "rdline", TGRBRACES, 5);
+                aTok = SmToken(TRDLINE, MS_DVERTLINE, "rdline", TGRBRACES, 5);
                 break;
             case CurlyBrackets:
                 aTok = SmToken(TRBRACE, MS_RBRACE, "rbrace", TGRBRACES, 5);
                 break;
             case AngleBrackets:
-                aTok = SmToken(TRANGLE, MS_RANGLE, "rangle", TGRBRACES, 5);
+                aTok = SmToken(TRANGLE, MS_RMATHANGLE, "rangle", TGRBRACES, 5);
                 break;
             case CeilBrackets:
                 aTok = SmToken(TRCEIL, MS_RCEIL, "rceil", TGRBRACES, 5);

@@ -112,7 +112,9 @@ enum MathSymbol
     MS_WP           = (sal_Unicode) 0x2118,
 
     MS_LINE         = (sal_Unicode) 0x2223,
+    MS_VERTLINE     = (sal_Unicode) 0x007C,
     MS_DLINE        = (sal_Unicode) 0x2225,
+    MS_DVERTLINE    = (sal_Unicode) 0x2016,
     MS_ORTHO        = (sal_Unicode) 0x22A5,
     MS_DOTSLOW      = (sal_Unicode) 0x2026,
     MS_DOTSAXIS     = (sal_Unicode) 0x22EF,
@@ -176,6 +178,8 @@ enum MathSymbol
     MS_RANGLE       = (sal_Unicode) 0x232A,
     MS_LDBRACKET    = (sal_Unicode) 0x27E6,
     MS_RDBRACKET    = (sal_Unicode) 0x27E7,
+    MS_LMATHANGLE   = (sal_Unicode) 0x27E8,
+    MS_RMATHANGLE   = (sal_Unicode) 0x27E9,
 
     MS_PLACE        = (sal_Unicode) 0x2751,
 

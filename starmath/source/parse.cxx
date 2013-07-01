@@ -172,11 +172,11 @@ static const SmTokenTableEntry aTokenTable[] =
     { "ital", TITALIC, '\0', TGFONTATTR, 5},
     { "italic", TITALIC, '\0', TGFONTATTR, 5},
     { "lambdabar" , TLAMBDABAR, MS_LAMBDABAR, TGSTANDALONE, 5},
-    { "langle", TLANGLE, MS_LANGLE, TGLBRACES, 5},
+    { "langle", TLANGLE, MS_LMATHANGLE, TGLBRACES, 5},
     { "lbrace", TLBRACE, MS_LBRACE, TGLBRACES, 5},
     { "lceil", TLCEIL, MS_LCEIL, TGLBRACES, 5},
     { "ldbracket", TLDBRACKET, MS_LDBRACKET, TGLBRACES, 5},
-    { "ldline", TLDLINE, MS_DLINE, TGLBRACES, 5},
+    { "ldline", TLDLINE, MS_DVERTLINE, TGLBRACES, 5},
     { "le", TLE, MS_LE, TGRELATION, 0},
     { "left", TLEFT, '\0', 0, 5},
     { "leftarrow" , TLEFTARROW, MS_LEFTARROW, TGSTANDALONE, 5},
@@ -187,7 +187,7 @@ static const SmTokenTableEntry aTokenTable[] =
     { "limsup", TLIMSUP, '\0', TGOPER, 5},
     { "lint", TLINT, MS_LINT, TGOPER, 5},
     { "ll", TLL, MS_LL, TGRELATION, 0},
-    { "lline", TLLINE, MS_LINE, TGLBRACES, 5},
+    { "lline", TLLINE, MS_VERTLINE, TGLBRACES, 5},
     { "llint", TLLINT, MS_LLINT, TGOPER, 5},
     { "lllint", TLLLINT, MS_LLLINT, TGOPER, 5},
     { "ln", TLN, '\0', TGFUNCTION, 5},
@@ -198,7 +198,7 @@ static const SmTokenTableEntry aTokenTable[] =
     { "magenta", TMAGENTA, '\0', TGCOLOR, 0},
     { "matrix", TMATRIX, '\0', 0, 5},
     { "minusplus", TMINUSPLUS, MS_MINUSPLUS, TGUNOPER | TGSUM, 5},
-    { "mline", TMLINE, MS_LINE, 0, 0},      //! nicht in TGRBRACES, Level 0
+    { "mline", TMLINE, MS_VERTLINE, 0, 0},      //! not in TGRBRACES, Level 0
     { "nabla", TNABLA, MS_NABLA, TGSTANDALONE, 5},
     { "nbold", TNBOLD, '\0', TGFONTATTR, 5},
     { "ndivides", TNDIVIDES, MS_NDIVIDES, TGRELATION, 0},
@@ -238,16 +238,16 @@ static const SmTokenTableEntry aTokenTable[] =
     { "nprec", TNOTPRECEDES, MS_NOTPRECEDES, TGRELATION, 0 },
     { "prod", TPROD, MS_PROD, TGOPER, 5},
     { "prop", TPROP, MS_PROP, TGRELATION, 0},
-    { "rangle", TRANGLE, MS_RANGLE, TGRBRACES, 0},  //! 0 to terminate expression
+    { "rangle", TRANGLE, MS_RMATHANGLE, TGRBRACES, 0},  //! 0 to terminate expression
     { "rbrace", TRBRACE, MS_RBRACE, TGRBRACES, 0},  //
     { "rceil", TRCEIL, MS_RCEIL, TGRBRACES, 0}, //
     { "rdbracket", TRDBRACKET, MS_RDBRACKET, TGRBRACES, 0}, //
-    { "rdline", TRDLINE, MS_DLINE, TGRBRACES, 0},   //
+    { "rdline", TRDLINE, MS_DVERTLINE, TGRBRACES, 0},   //
     { "red", TRED, '\0', TGCOLOR, 0},
     { "rfloor", TRFLOOR, MS_RFLOOR, TGRBRACES, 0},  //! 0 to terminate expression
     { "right", TRIGHT, '\0', 0, 0},
     { "rightarrow" , TRIGHTARROW, MS_RIGHTARROW, TGSTANDALONE, 5},
-    { "rline", TRLINE, MS_LINE, TGRBRACES, 0},  //! 0 to terminate expression
+    { "rline", TRLINE, MS_VERTLINE, TGRBRACES, 0},  //! 0 to terminate expression
     { "rsub", TRSUB, '\0', TGPOWER, 0},
     { "rsup", TRSUP, '\0', TGPOWER, 0},
     { "sans", TSANS, '\0', TGFONT, 0},
@@ -1805,10 +1805,10 @@ void SmParser::UnOper()
         // we'll use row & column of the keyword for abs
         aNodeToken.eType = TABS;
         //
-        aNodeToken.cMathChar = MS_LINE;
+        aNodeToken.cMathChar = MS_VERTLINE;
         SmNode* pLeft = new SmMathSymbolNode(aNodeToken);
         //
-        aNodeToken.cMathChar = MS_LINE;
+        aNodeToken.cMathChar = MS_VERTLINE;
         SmNode* pRight = new SmMathSymbolNode(aNodeToken);
 
         pSNode->SetSubNodes(pLeft, pArg, pRight);

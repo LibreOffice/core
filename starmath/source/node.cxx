@@ -1744,11 +1744,13 @@ void SmBraceNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
         aTmpSize.Width() /= 267;
 
         sal_Unicode cChar = pLeft->GetToken().cMathChar;
-        if (cChar != MS_LINE  &&  cChar != MS_DLINE)
+        if (cChar != MS_LINE  &&  cChar != MS_DLINE &&
+            cChar != MS_VERTLINE  &&  cChar != MS_DVERTLINE)
             pLeft ->GetFont().SetSize(aTmpSize);
 
         cChar = pRight->GetToken().cMathChar;
-        if (cChar != MS_LINE  &&  cChar != MS_DLINE)
+        if (cChar != MS_LINE  &&  cChar != MS_DLINE &&
+            cChar != MS_VERTLINE  &&  cChar != MS_DVERTLINE)
             pRight->GetFont().SetSize(aTmpSize);
 
         pLeft ->AdaptToY(rDev, nBraceHeight);
