@@ -176,7 +176,7 @@ void GetSelectableFromAny(uno::Reference<uno::XInterface> const& xIfc,
     if (pRanges)
     {
         SwUnoCrsr const* pUnoCrsr = pRanges->GetCursor();
-        if (pUnoCrsr->GetDoc() == &rTargetDoc)
+        if (pUnoCrsr && pUnoCrsr->GetDoc() == &rTargetDoc)
         {
             o_rpPaM = lcl_createPamCopy(*pUnoCrsr);
         }
