@@ -129,6 +129,9 @@ void TextPortionContext::onStartElement(const AttributeList& rAttribs)
         case OOX_TOKEN(doc, br):
             mrTextBox.appendPortion( maParagraph, maFont, "\n" );
         break;
+        case OOX_TOKEN(doc, color):
+            maFont.moColor = rAttribs.getString( OOX_TOKEN(doc, val) );
+        break;
     }
 }
 

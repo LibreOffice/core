@@ -103,6 +103,12 @@ void TextBox::convert(uno::Reference<drawing::XShape> xShape) const
             aPropertyValue.Value = uno::makeAny(eAdjust);
             aPropVec.push_back(aPropertyValue);
         }
+        if (rFont.moColor.has())
+        {
+            aPropertyValue.Name = "CharColor";
+            aPropertyValue.Value = uno::makeAny(rFont.moColor.get().toUInt32(16));
+            aPropVec.push_back(aPropertyValue);
+        }
         uno::Sequence<beans::PropertyValue> aPropSeq(aPropVec.size());
         beans::PropertyValue* pValues = aPropSeq.getArray();
         for (std::vector<beans::PropertyValue>::iterator i = aPropVec.begin(); i != aPropVec.end(); ++i)
