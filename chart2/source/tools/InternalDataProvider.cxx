@@ -315,8 +315,11 @@ InternalDataProvider::InternalDataProvider( const Reference< uno::XComponentCont
     : m_bDataInColumns( true )
 {}
 
-InternalDataProvider::InternalDataProvider( const Reference< chart2::XChartDocument > & xChartDoc, bool bConnectToModel )
-    : m_bDataInColumns( true )
+InternalDataProvider::InternalDataProvider(
+    const Reference< chart2::XChartDocument > & xChartDoc,
+    bool bConnectToModel,
+    bool bDefaultDataInColumns)
+:   m_bDataInColumns( bDefaultDataInColumns )
 {
     try
     {
@@ -331,7 +334,15 @@ InternalDataProvider::InternalDataProvider( const Reference< chart2::XChartDocum
                 bool bFirstCellAsLabel = true;
                 bool bHasCategories = true;
                 uno::Sequence< sal_Int32 > aSequenceMapping;
-                DataSourceHelper::detectRangeSegmentation( xChartModel, aRangeString, aSequenceMapping, m_bDataInColumns, bFirstCellAsLabel, bHasCategories );
+                const bool bSomethingDetected(
+                    DataSourceHelper::detectRangeSegmentation(
+                        xChartModel, aRangeString, aSequenceMapping, m_bDataInColumns, bFirstCellAsLabel, bHasCategories ));
+
+                // #i120559# if no data was available, restore default
+                if(!bSomethingDetected && m_bDataInColumns != bDefaultDataInColumns)
+                {
+                    m_bDataInColumns = bDefaultDataInColumns;
+                }
             }
 
             // categories
