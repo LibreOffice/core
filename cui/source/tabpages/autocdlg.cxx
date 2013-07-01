@@ -1445,7 +1445,7 @@ sal_Bool OfaAutocorrExceptPage::FillItemSet( SfxItemSet&  )
                     }
                 }
 
-                for(std::vector<rtl::OUString>::iterator it = rArrays.aDoubleCapsStrings.begin(); it != rArrays.aDoubleCapsStrings.end(); ++i)
+                for(std::vector<rtl::OUString>::iterator it = rArrays.aDoubleCapsStrings.begin(); it != rArrays.aDoubleCapsStrings.end(); ++it)
                 {
                     String* s = new String(*it);
                     if(!pWrdList->insert(s).second)
