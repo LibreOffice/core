@@ -534,9 +534,8 @@ Reference< XShape > Shape::createAndInsert(
 
         // group fill inherits from parent
         if ( getFillProperties().moFillType.has() && getFillProperties().moFillType.get() == XML_grpFill )
-            aFillProperties.assignUsed( rShapeOrParentShapeFillProps );
-        else
-            aFillProperties.assignUsed( getFillProperties() );
+            getFillProperties().assignUsed( rShapeOrParentShapeFillProps );
+        aFillProperties.assignUsed( getFillProperties() );
         aEffectProperties.assignUsed ( getEffectProperties() );
 
         ShapePropertyMap aShapeProps( rFilterBase.getModelObjectHelper() );
