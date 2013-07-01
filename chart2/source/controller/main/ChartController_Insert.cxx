@@ -363,48 +363,15 @@ void ChartController::executeDispatch_InsertMenu_MeanValues()
 
 void ChartController::executeDispatch_InsertMenu_Trendlines()
 {
-    //if a series is selected insert only for that series:
+    OUString aCID = m_aSelection.getSelectedCID();
+
     uno::Reference< chart2::XDataSeries > xSeries(
-        ObjectIdentifier::getDataSeriesForCID( m_aSelection.getSelectedCID(), getModel() ), uno::UNO_QUERY );
-    if( xSeries.is())
-    {
-        executeDispatch_InsertTrendline();
+        ObjectIdentifier::getDataSeriesForCID( aCID, getModel() ), uno::UNO_QUERY );
+
+    if( !xSeries.is() )
         return;
-    }
 
-    UndoGuard aUndoGuard(
-        ActionDescriptionProvider::createDescription(
-            ActionDescriptionProvider::INSERT, ObjectNameProvider::getName_ObjectForAllSeries( OBJECTTYPE_DATA_CURVE ) ),
-        m_xUndoManager );
-
-    try
-    {
-        wrapper::AllSeriesStatisticsConverter aItemConverter(
-            getModel(), m_pDrawModelWrapper->GetItemPool() );
-        SfxItemSet aItemSet = aItemConverter.CreateEmptyItemSet();
-        aItemConverter.FillItemSet( aItemSet );
-
-        //prepare and open dialog
-        SolarMutexGuard aGuard;
-        InsertTrendlineDialog aDialog( m_pChartWindow, aItemSet );
-        aDialog.adjustSize();
-
-        if( aDialog.Execute() == RET_OK )
-        {
-            SfxItemSet aOutItemSet = aItemConverter.CreateEmptyItemSet();
-            aDialog.FillItemSet( aOutItemSet );
-
-            // lock controllers till end of block
-            ControllerLockGuard aCLGuard( getModel() );
-            bool bChanged = aItemConverter.ApplyItemSet( aOutItemSet );//model should be changed now
-            if( bChanged )
-                aUndoGuard.commit();
-        }
-    }
-    catch(const uno::RuntimeException& e)
-    {
-        ASSERT_EXCEPTION( e );
-    }
+    executeDispatch_InsertTrendline();
 }
 
 void ChartController::executeDispatch_InsertTrendline()
@@ -420,14 +387,12 @@ void ChartController::executeDispatch_InsertTrendline()
             ActionDescriptionProvider::INSERT, String( SchResId( STR_OBJECT_CURVE ))),
         m_xUndoManager );
 
-    // add a linear curve
     uno::Reference< chart2::XRegressionCurve > xCurve =
         RegressionCurveHelper::addRegressionCurve(
             RegressionCurveHelper::REGRESSION_TYPE_LINEAR,
             xRegressionCurveContainer,
             m_xCC );
 
-    // get an appropriate item converter
     uno::Reference< beans::XPropertySet > xProperties( xCurve, uno::UNO_QUERY );
 
     if( !xProperties.is())

@@ -117,6 +117,7 @@ struct ControllerState
     bool bMayMoveSeriesBackward;
 
     // trendlines
+    bool bMayAddMenuTrendline;
     bool bMayAddTrendline;
     bool bMayAddTrendlineEquation;
     bool bMayAddR2Value;
@@ -147,6 +148,7 @@ ControllerState::ControllerState() :
         bIsFormateableObjectSelected(false),
         bMayMoveSeriesForward( false ),
         bMayMoveSeriesBackward( false ),
+        bMayAddMenuTrendline( false ),
         bMayAddTrendline( false ),
         bMayAddTrendlineEquation( false ),
         bMayAddR2Value( false ),
@@ -208,6 +210,7 @@ void ControllerState::update(
             xGivenDataSeries,
             MOVE_SERIES_BACKWARD );
 
+        bMayAddMenuTrendline = false;
         bMayAddTrendline = false;
         bMayAddTrendlineEquation = false;
         bMayAddR2Value = false;
@@ -229,6 +232,7 @@ void ControllerState::update(
         {
             if( xGivenDataSeries.is())
             {
+                bMayAddMenuTrendline = true;
                 sal_Int32 nDimensionCount = DiagramHelper::getDimension( xDiagram );
                 uno::Reference< chart2::XChartType > xFirstChartType(
                     DataSeriesHelper::getChartTypeOfSeries( xGivenDataSeries, xDiagram ));
@@ -237,11 +241,9 @@ void ControllerState::update(
                 if( (OBJECTTYPE_DATA_SERIES == aObjectType || OBJECTTYPE_DATA_POINT == aObjectType)
                     && ChartTypeHelper::isSupportingRegressionProperties( xFirstChartType, nDimensionCount ))
                 {
-                    uno::Reference< chart2::XRegressionCurveContainer > xRegCurveCnt(
-                        xGivenDataSeries, uno::UNO_QUERY );
+                    uno::Reference< chart2::XRegressionCurveContainer > xRegCurveCnt( xGivenDataSeries, uno::UNO_QUERY );
                     if( xRegCurveCnt.is())
                     {
-                        uno::Reference< chart2::XRegressionCurve > xRegCurve( RegressionCurveHelper::getFirstCurveNotMeanValueLine( xRegCurveCnt ) );
                         // Trendline
                         bMayAddTrendline = true;
 
@@ -578,7 +580,7 @@ void ControllerCommandDispatch::updateCommandAvailability()
     m_aCommandAvailability[ ".uno:InsertMenuDataLabels" ] = bIsWritable;
     m_aCommandAvailability[ ".uno:InsertRemoveAxes" ] = m_aCommandAvailability[ ".uno:InsertMenuAxes" ] = bIsWritable && m_apModelState->bSupportsAxes;
     m_aCommandAvailability[ ".uno:InsertMenuGrids" ] = bIsWritable && m_apModelState->bSupportsAxes;
-    m_aCommandAvailability[ ".uno:InsertMenuTrendlines" ] = bIsWritable && m_apModelState->bSupportsStatistics;
+    m_aCommandAvailability[ ".uno:InsertMenuTrendlines" ] = bIsWritable && m_apModelState->bSupportsStatistics && m_apControllerState->bMayAddMenuTrendline;
     m_aCommandAvailability[ ".uno:InsertMenuMeanValues" ] = bIsWritable && m_apModelState->bSupportsStatistics;
     m_aCommandAvailability[ ".uno:InsertMenuXErrorBars" ] = bIsWritable && m_apModelState->bSupportsStatistics;
     m_aCommandAvailability[ ".uno:InsertMenuYErrorBars" ] = bIsWritable && m_apModelState->bSupportsStatistics;
