@@ -417,6 +417,7 @@ void ShapeTypeContext::setStyle( const OUString& rStyle )
             else if( aName.equalsAscii( "visibility" ) )
                 mrTypeModel.mbVisible = !aValue.equalsAscii( "hidden" );
             else if( aName == "mso-wrap-style" ) mrTypeModel.maWrapStyle = aValue;
+            else if ( aName == "v-text-anchor" ) mrTypeModel.maVTextAnchor = aValue;
         }
     }
 }
