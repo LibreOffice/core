@@ -446,6 +446,8 @@ void SvxStdParagraphTabPage::Reset( const SfxItemSet& rSet )
         SetFieldUnit( *m_pLineDistAtMetricBox, eFUnit );
     }
 
+    ELRLoseFocusHdl( NULL ); // reset min/max values
+
     sal_uInt16 _nWhich = GetWhich( SID_ATTR_LRSPACE );
     SfxItemState eItemState = rSet.GetItemState( _nWhich );
 
@@ -604,7 +606,6 @@ void SvxStdParagraphTabPage::Reset( const SfxItemSet& rSet )
         }
     }
 
-    ELRLoseFocusHdl( NULL );
     m_pAutoCB->SaveValue();
     m_pContextualCB->SaveValue();
     m_pLineDist->SaveValue();
