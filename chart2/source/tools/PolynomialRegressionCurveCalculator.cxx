@@ -48,14 +48,14 @@ void SAL_CALL PolynomialRegressionCurveCalculator::recalculateRegression(
     RegressionCalculationHelper::tDoubleVectorPair aValues(
         RegressionCalculationHelper::cleanup( aXValues, aYValues, RegressionCalculationHelper::isValid()));
 
-    int aNoElements = mForceIntercept ? mDegree : mDegree + 1;
-    int aNumberOfPowers = 2 * aNoElements - 1;
+    sal_Int32 aNoElements = mForceIntercept ? mDegree : mDegree + 1;
+    sal_Int32 aNumberOfPowers = 2 * aNoElements - 1;
 
     std::vector<double> aPowers;
     aPowers.resize(aNumberOfPowers, 0.0);
 
-    int aNoColumns = aNoElements;
-    int aNoRows    = aNoElements + 1;
+    sal_Int32 aNoColumns = aNoElements;
+    sal_Int32 aNoRows    = aNoElements + 1;
 
     std::vector<double> aMatrix;
     aMatrix.resize(aNoColumns * aNoRows, 0.0);
@@ -69,7 +69,7 @@ void SAL_CALL PolynomialRegressionCurveCalculator::recalculateRegression(
         double x = aValues.first[i];
         double y = aValues.second[i];
 
-        for (int j = 0; j < aNumberOfPowers; j++)
+        for (sal_Int32 j = 0; j < aNumberOfPowers; j++)
         {
             if (mForceIntercept)
                 aPowers[j] += std::pow(x, j + 2);
@@ -77,7 +77,7 @@ void SAL_CALL PolynomialRegressionCurveCalculator::recalculateRegression(
                 aPowers[j] += std::pow(x, j);
         }
 
-        for (int j = 0; j < aNoElements; j++)
+        for (sal_Int32 j = 0; j < aNoElements; j++)
         {
             if (mForceIntercept)
                 aMatrix[j * aNoRows + aNoElements] += std::pow(x, j + 1) * ( y - mInterceptValue );
@@ -90,9 +90,9 @@ void SAL_CALL PolynomialRegressionCurveCalculator::recalculateRegression(
 
     yAverage = yAverage / aNoValues;
 
-    for (int y = 0; y < aNoElements; y++)
+    for (sal_Int32 y = 0; y < aNoElements; y++)
     {
-        for (int x = 0; x < aNoElements; x++)
+        for (sal_Int32 x = 0; x < aNoElements; x++)
         {
             aMatrix[y * aNoRows + x] = aPowers[y + x];
         }
@@ -166,8 +166,8 @@ OUString PolynomialRegressionCurveCalculator::ImplGetRepresentation(
 {
     OUStringBuffer aBuf( "f(x) = ");
 
-    int aLastIndex = mResult.size() - 1;
-    for (int i = aLastIndex; i >= 0; i--)
+    sal_Int32 aLastIndex = mResult.size() - 1;
+    for (sal_Int32 i = aLastIndex; i >= 0; i--)
     {
         double aValue = mResult[i];
         if (aValue == 0.0)
