@@ -225,6 +225,7 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
 	sc/source/core/tool/interpr5 \
 	sc/source/core/tool/interpr6 \
 	sc/source/core/tool/interpr7 \
+	sc/source/core/tool/jumpmatrix \
 	sc/source/core/tool/lookupcache \
 	sc/source/core/tool/navicfg \
 	sc/source/core/tool/odffmap \

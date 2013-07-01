@@ -20,6 +20,14 @@ typedef ::boost::intrusive_ptr<const ScMatrix>  ScConstMatrixRef;
 class ScToken;
 typedef ::boost::intrusive_ptr<ScToken> ScTokenRef;
 
+typedef sal_uInt8 ScMatValType;
+const ScMatValType SC_MATVAL_VALUE     = 0x00;
+const ScMatValType SC_MATVAL_BOOLEAN   = 0x01;
+const ScMatValType SC_MATVAL_STRING    = 0x02;
+const ScMatValType SC_MATVAL_EMPTY     = SC_MATVAL_STRING | 0x04; // STRING plus flag
+const ScMatValType SC_MATVAL_EMPTYPATH = SC_MATVAL_EMPTY | 0x08;  // EMPTY plus flag
+const ScMatValType SC_MATVAL_NONVALUE  = SC_MATVAL_EMPTYPATH;     // mask of all non-value bits
+
 struct ScFormulaCellGroup;
 typedef ::boost::intrusive_ptr<ScFormulaCellGroup> ScFormulaCellGroupRef;
 

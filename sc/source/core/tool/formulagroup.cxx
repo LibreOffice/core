@@ -14,6 +14,8 @@
 #include "tokenarray.hxx"
 #include "compiler.hxx"
 #include "interpre.hxx"
+#include "scmatrix.hxx"
+
 #include "formula/vectortoken.hxx"
 
 namespace sc {

@@ -24,6 +24,7 @@
 #include "queryparam.hxx"
 #include "queryentry.hxx"
 #include "globstr.hrc"
+#include "scmatrix.hxx"
 
 #include <memory>
 #include <vector>

@@ -22,7 +22,7 @@
 
 #include <tools/solar.h>
 #include <com/sun/star/uno/Any.h>
-#include "scmatrix.hxx"
+#include "types.hxx"
 
 class SvNumberFormatter;
 class ScDocument;

@@ -24,6 +24,8 @@
 #include "document.hxx"
 #include "rangenam.hxx"
 #include "global.hxx"
+#include "scmatrix.hxx"
+
 #include "formula/errorcodes.hxx"
 
 #include "imp_op.hxx"

@@ -24,7 +24,7 @@
 #include <boost/noncopyable.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>
-#include "scmatrix.hxx"
+#include "types.hxx"
 #include "xladdress.hxx"
 #include "xiroot.hxx"
 #include "xistring.hxx"
@@ -301,7 +301,7 @@ public:
     /** Returns the type of the cached value (EXC_CACHEDVAL_*). */
     inline sal_uInt8    GetType() const     { return mnType; }
     /** Returns the cached string value, if this value is a string, else an empty string. */
-    inline const String& GetString() const  { return mxStr.get() ? *mxStr : EMPTY_STRING; }
+    const OUString& GetString() const;
     /** Returns the cached number, if this value has number type, else 0.0. */
     inline double       GetValue() const    { return mfValue; }
     /** Returns the cached Boolean value, if this value has Boolean type, else false. */
@@ -312,10 +312,9 @@ public:
     sal_uInt16              GetScError() const;
 
 protected:
-    typedef ::std::auto_ptr< String >               StringPtr;
     typedef ::std::auto_ptr< const ScTokenArray >   ScTokenArrayPtr;
 
-    StringPtr           mxStr;      /// Cached value is a string.
+    OUString            maStr;      /// Cached value is a string.
     double              mfValue;    /// Cached value is a double.
     ScTokenArrayPtr     mxTokArr;   /// Cached value is a formula or error code or Boolean.
     sal_uInt8           mnBoolErr;  /// Boolean value or Excel error code.

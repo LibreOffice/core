@@ -63,6 +63,7 @@
 #include "tokenuno.hxx"
 #include "formulaparserpool.hxx"
 #include "tokenarray.hxx"
+#include "scmatrix.hxx"
 
 using namespace formula;
 using namespace ::com::sun::star;

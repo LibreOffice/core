@@ -26,7 +26,7 @@
 #include "formula/errorcodes.hxx"
 #include "formula/tokenarray.hxx"
 #include "scdll.hxx"
-#include "scmatrix.hxx"
+#include "types.hxx"
 #include "externalrefmgr.hxx"
 #include "calcconfig.hxx"
 #include "token.hxx"

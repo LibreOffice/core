@@ -23,7 +23,7 @@
 #include <map>
 #include "xllink.hxx"
 #include "xiroot.hxx"
-#include "scmatrix.hxx"
+#include "types.hxx"
 
 /* ============================================================================
 Classes for import of different kinds of internal/external references.

@@ -37,6 +37,7 @@
 #include "rangeseq.hxx"
 #include "externalrefmgr.hxx"
 #include "document.hxx"
+#include "scmatrix.hxx"
 
 using ::std::vector;
 
@@ -795,6 +796,11 @@ bool ScRefListToken::operator==( const FormulaToken& r ) const
     return FormulaToken::operator==( r ) && &aRefList == static_cast<const ScToken&>(r).GetRefList();
 }
 
+ScMatrixToken::ScMatrixToken( const ScMatrixRef& p ) :
+    ScToken(formula::svMatrix), pMatrix(p) {}
+
+ScMatrixToken::ScMatrixToken( const ScMatrixToken& r ) :
+    ScToken(r), pMatrix(r.pMatrix) {}
 
 const ScMatrix* ScMatrixToken::GetMatrix() const        { return pMatrix.get(); }
 ScMatrix*       ScMatrixToken::GetMatrix()              { return pMatrix.get(); }
@@ -1031,6 +1037,11 @@ bool ScEmptyCellToken::operator==( const FormulaToken& r ) const
         bDisplayedAsString == static_cast< const ScEmptyCellToken & >(r).IsDisplayedAsString();
 }
 
+ScMatrixCellResultToken::ScMatrixCellResultToken( const ScConstMatrixRef& pMat, formula::FormulaToken* pUL ) :
+    ScToken(formula::svMatrixCell), xMatrix(pMat), xUpperLeft(pUL) {}
+
+ScMatrixCellResultToken::ScMatrixCellResultToken( const ScMatrixCellResultToken& r ) :
+    ScToken(r), xMatrix(r.xMatrix), xUpperLeft(r.xUpperLeft) {}
 
 double          ScMatrixCellResultToken::GetDouble() const  { return xUpperLeft->GetDouble(); }
 const String &  ScMatrixCellResultToken::GetString() const  { return xUpperLeft->GetString(); }
@@ -1041,6 +1052,7 @@ ScMatrix* ScMatrixCellResultToken::GetMatrix()
 {
     return const_cast<ScMatrix*>(xMatrix.get());
 }
+
 bool ScMatrixCellResultToken::operator==( const FormulaToken& r ) const
 {
     return FormulaToken::operator==( r ) &&
@@ -1048,6 +1060,27 @@ bool ScMatrixCellResultToken::operator==( const FormulaToken& r ) const
         xMatrix == static_cast<const ScMatrixCellResultToken &>(r).xMatrix;
 }
 
+void ScMatrixCellResultToken::Assign( const ScMatrixCellResultToken & r )
+{
+    xMatrix = r.xMatrix;
+    xUpperLeft = r.xUpperLeft;
+}
+
+ScMatrixFormulaCellToken::ScMatrixFormulaCellToken(
+    SCCOL nC, SCROW nR, const ScConstMatrixRef& pMat, formula::FormulaToken* pUL ) :
+    ScMatrixCellResultToken(pMat, pUL), nRows(nR), nCols(nC) {}
+
+ScMatrixFormulaCellToken::ScMatrixFormulaCellToken( SCCOL nC, SCROW nR ) :
+    ScMatrixCellResultToken(NULL, NULL), nRows(nR), nCols(nC) {}
+
+ScMatrixFormulaCellToken::ScMatrixFormulaCellToken( const ScMatrixFormulaCellToken& r ) :
+    ScMatrixCellResultToken(r), nRows(r.nRows), nCols(r.nCols)
+{
+    // xUpperLeft is modifiable through
+    // SetUpperLeftDouble(), so clone it.
+    if (xUpperLeft)
+        xUpperLeft = xUpperLeft->Clone();
+}
 
 bool ScMatrixFormulaCellToken::operator==( const FormulaToken& r ) const
 {
@@ -1077,6 +1110,7 @@ void ScMatrixFormulaCellToken::Assign( const formula::FormulaToken& r )
         }
     }
 }
+
 void ScMatrixFormulaCellToken::SetUpperLeftDouble( double f )
 {
     switch (GetUpperLeftType())
@@ -1096,6 +1130,12 @@ void ScMatrixFormulaCellToken::SetUpperLeftDouble( double f )
                 OSL_FAIL("ScMatrixFormulaCellToken::SetUpperLeftDouble: not modifying unhandled token type");
             }
     }
+}
+
+void ScMatrixFormulaCellToken::ResetResult()
+{
+    xMatrix = NULL;
+    xUpperLeft = NULL;
 }
 
 

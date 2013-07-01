@@ -239,6 +239,21 @@ void ScDdeLink::ListenersGone()
     bIsInUpdate = bWas;
 }
 
+const ScMatrix* ScDdeLink::GetResult() const
+{
+    return pResult.get();
+}
+
+void ScDdeLink::SetResult( const ScMatrixRef& pRes )
+{
+    pResult = pRes;
+}
+
+ScMatrixRef ScDdeLink::GetModifiableResult()
+{
+    return pResult;
+}
+
 void ScDdeLink::TryUpdate()
 {
     if (bIsInUpdate)

@@ -51,6 +51,7 @@
 #include "unotools/localfilehelper.hxx"
 #include "vcl/msgbox.hxx"
 #include "stringutil.hxx"
+#include "scmatrix.hxx"
 
 #include <memory>
 #include <algorithm>

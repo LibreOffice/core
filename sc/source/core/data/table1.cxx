@@ -46,6 +46,7 @@
 #include "conditio.hxx"
 #include "globalnames.hxx"
 #include "cellvalue.hxx"
+#include "scmatrix.hxx"
 
 #include <vector>
 

@@ -32,7 +32,7 @@
 #include "scdllapi.h"
 #include <rtl/ustring.hxx>
 
-#include "scmatrix.hxx"
+#include "types.hxx"
 
 #include <boost/unordered_map.hpp>
 
@@ -233,7 +233,7 @@ public:
     bool                HasVarRes() const       { return ( xVarRes.is() ); }
     double              GetValue() const        { return fValue; }
     const OUString&     GetString() const       { return aString; }
-    ScMatrixRef         GetMatrix() const       { return xMatrix; }
+    ScMatrixRef         GetMatrix() const;
     com::sun::star::uno::Reference<com::sun::star::sheet::XVolatileResult>
                         GetVarRes() const       { return xVarRes; }
 };

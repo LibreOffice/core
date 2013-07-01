@@ -19,6 +19,7 @@
 
 #include "queryparam.hxx"
 #include "queryentry.hxx"
+#include "scmatrix.hxx"
 
 namespace {
 

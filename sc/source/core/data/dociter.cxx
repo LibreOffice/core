@@ -37,6 +37,7 @@
 #include "globstr.hrc"
 #include "editutil.hxx"
 #include "cellvalue.hxx"
+#include "scmatrix.hxx"
 
 #include "tools/fract.hxx"
 #include "editeng/editobj.hxx"

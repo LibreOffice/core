@@ -40,6 +40,7 @@
 #include "formulacell.hxx"
 #include "editutil.hxx"
 #include "patattr.hxx"
+#include "scmatrix.hxx"
 #include "xestyle.hxx"
 #include "fprogressbar.hxx"
 #include "xltracer.hxx"

@@ -34,14 +34,6 @@ class ScInterpreter;
 class SvNumberFormatter;
 class ScMatrixImpl;
 
-typedef sal_uInt8 ScMatValType;
-const ScMatValType SC_MATVAL_VALUE     = 0x00;
-const ScMatValType SC_MATVAL_BOOLEAN   = 0x01;
-const ScMatValType SC_MATVAL_STRING    = 0x02;
-const ScMatValType SC_MATVAL_EMPTY     = SC_MATVAL_STRING | 0x04; // STRING plus flag
-const ScMatValType SC_MATVAL_EMPTYPATH = SC_MATVAL_EMPTY | 0x08;  // EMPTY plus flag
-const ScMatValType SC_MATVAL_NONVALUE  = SC_MATVAL_EMPTYPATH;     // mask of all non-value bits
-
 /**
  * Try NOT to use this struct.  This struct should go away in a hopefully
  * not so distant futture.

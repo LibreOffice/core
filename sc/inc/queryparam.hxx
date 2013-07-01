@@ -21,7 +21,7 @@
 #define SC_QUERYPARAM_HXX
 
 #include "global.hxx"
-#include "scmatrix.hxx"
+#include "types.hxx"
 
 #include <boost/ptr_container/ptr_vector.hpp>
 

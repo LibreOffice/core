@@ -26,7 +26,6 @@
 
 #include "formula/opcode.hxx"
 #include "refdata.hxx"
-#include "scmatrix.hxx"
 #include <tools/mempool.hxx>
 #include "scdllapi.h"
 #include "formula/IFunctionDescription.hxx"
@@ -163,10 +162,9 @@ class ScMatrixToken : public ScToken
 private:
             ScMatrixRef         pMatrix;
 public:
-                                ScMatrixToken( ScMatrixRef p ) :
-                                    ScToken( formula::svMatrix ), pMatrix( p ) {}
-                                ScMatrixToken( const ScMatrixToken& r ) :
-                                    ScToken( r ), pMatrix( r.pMatrix ) {}
+    ScMatrixToken( const ScMatrixRef& p );
+    ScMatrixToken( const ScMatrixToken& r );
+
     virtual const ScMatrix*     GetMatrix() const;
     virtual ScMatrix*           GetMatrix();
     virtual bool                operator==( const formula::FormulaToken& rToken ) const;
@@ -311,15 +309,11 @@ class SC_DLLPUBLIC ScMatrixCellResultToken : public ScToken
     virtual ScMatrix*           GetMatrix();
 
 protected:
-            ScConstMatrixRef    xMatrix;
-            formula::FormulaConstTokenRef     xUpperLeft;
+    ScConstMatrixRef xMatrix;
+    formula::FormulaConstTokenRef     xUpperLeft;
 public:
-                                ScMatrixCellResultToken( const ScConstMatrixRef& pMat, formula::FormulaToken* pUL ) :
-                                    ScToken( formula::svMatrixCell ),
-                                    xMatrix( pMat), xUpperLeft( pUL) {}
-                                ScMatrixCellResultToken( const ScMatrixCellResultToken& r ) :
-                                    ScToken( r ), xMatrix( r.xMatrix ),
-                                    xUpperLeft( r.xUpperLeft ) {}
+    ScMatrixCellResultToken( const ScConstMatrixRef& pMat, formula::FormulaToken* pUL );
+    ScMatrixCellResultToken( const ScMatrixCellResultToken& r );
     virtual double              GetDouble() const;
     virtual const String &      GetString() const;
     virtual const ScMatrix*     GetMatrix() const;
@@ -332,11 +326,7 @@ public:
                                             static_cast<formula::StackVar>(formula::svUnknown);
                                     }
     inline formula::FormulaConstTokenRef     GetUpperLeftToken() const   { return xUpperLeft; }
-            void                Assign( const ScMatrixCellResultToken & r )
-                                    {
-                                        xMatrix = r.xMatrix;
-                                        xUpperLeft = r.xUpperLeft;
-                                    }
+    void Assign( const ScMatrixCellResultToken & r );
 };
 
 
@@ -348,22 +338,10 @@ private:
             SCROW               nRows;
             SCCOL               nCols;
 public:
-    ScMatrixFormulaCellToken( SCCOL nC, SCROW nR, const ScConstMatrixRef& pMat, formula::FormulaToken* pUL ) :
-        ScMatrixCellResultToken(pMat, pUL),
-        nRows(nR), nCols(nC) {}
+    ScMatrixFormulaCellToken( SCCOL nC, SCROW nR, const ScConstMatrixRef& pMat, formula::FormulaToken* pUL );
+    ScMatrixFormulaCellToken( SCCOL nC, SCROW nR );
+    ScMatrixFormulaCellToken( const ScMatrixFormulaCellToken& r );
 
-                                ScMatrixFormulaCellToken( SCCOL nC, SCROW nR ) :
-                                    ScMatrixCellResultToken( NULL, NULL ),
-                                    nRows( nR ), nCols( nC ) {}
-                                ScMatrixFormulaCellToken( const ScMatrixFormulaCellToken& r ) :
-                                    ScMatrixCellResultToken( r ),
-                                    nRows( r.nRows ), nCols( r.nCols )
-                                    {
-                                        // xUpperLeft is modifiable through
-                                        // SetUpperLeftDouble(), so clone it.
-                                        if (xUpperLeft)
-                                            xUpperLeft = xUpperLeft->Clone();
-                                    }
     virtual bool                operator==( const formula::FormulaToken& rToken ) const;
     virtual FormulaToken*       Clone() const { return new ScMatrixFormulaCellToken(*this); }
             void                SetMatColsRows( SCCOL nC, SCROW nR )
@@ -399,13 +377,9 @@ public:
                                     nothing if xUpperLeft is of different type! */
             void                SetUpperLeftDouble( double f);
 
-                                /** Reset matrix and upper left, keep matrix
-                                    formula dimension. */
-            void                ResetResult()
-                                    {
-                                        xMatrix = NULL;
-                                        xUpperLeft = NULL;
-                                    }
+    /** Reset matrix and upper left, keep matrix
+        formula dimension. */
+    void ResetResult();
 };
 
 

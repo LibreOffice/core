@@ -23,7 +23,7 @@
 #include "address.hxx"
 #include <sfx2/lnkbase.hxx>
 #include <svl/broadcast.hxx>
-#include "scmatrix.hxx"
+#include "types.hxx"
 
 class ScDocument;
 class ScMultipleReadHeader;
@@ -67,11 +67,11 @@ public:
 
                     // for interpreter:
 
-    const ScMatrix* GetResult() const           { return pResult.get(); }
-    void            SetResult( ScMatrixRef pRes ) { pResult = pRes; }
+    const ScMatrix* GetResult() const;
+    void            SetResult( const ScMatrixRef& pRes );
 
                     // XML and Excel import after NewData()
-    ScMatrixRef     GetModifiableResult()   { return pResult; }
+    ScMatrixRef     GetModifiableResult();
 
     const String&   GetAppl() const     { return aAppl; }
     const String&   GetTopic() const    { return aTopic; }

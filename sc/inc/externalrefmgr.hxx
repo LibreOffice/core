@@ -29,7 +29,7 @@
 #include "vcl/timer.hxx"
 #include "svl/zforlist.hxx"
 #include "svl/lstner.hxx"
-#include "scmatrix.hxx"
+#include "types.hxx"
 #include "rangelst.hxx"
 #include "formula/token.hxx"
 

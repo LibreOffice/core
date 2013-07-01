@@ -1700,9 +1700,9 @@ void ScUnoAddInCall::SetResult( const uno::Any& rNewRes )
     }
 }
 
-
-
-//------------------------------------------------------------------------
-
+ScMatrixRef ScUnoAddInCall::GetMatrix() const
+{
+    return xMatrix;
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

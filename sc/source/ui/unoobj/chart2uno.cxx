@@ -37,6 +37,7 @@
 #include "docsh.hxx"
 #include "cellvalue.hxx"
 #include "tokenarray.hxx"
+#include "scmatrix.hxx"
 
 #include "formula/opcode.hxx"
 

@@ -32,6 +32,7 @@
 #include "unonames.hxx"
 #include "rangeseq.hxx"
 #include "token.hxx"
+#include "scmatrix.hxx"
 
 #include <vector>
 #include <climits>

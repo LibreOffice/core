@@ -27,6 +27,7 @@
 #include "rangelst.hxx"
 #include "token.hxx"
 #include "tokenarray.hxx"
+#include "scmatrix.hxx"
 #include "xeformula.hxx"
 #include "xehelper.hxx"
 #include "xelink.hxx"

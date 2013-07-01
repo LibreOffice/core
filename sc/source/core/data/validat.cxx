@@ -17,7 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "scitems.hxx"
+#include "validat.hxx"
+
 #include <sfx2/app.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/objsh.hxx>
@@ -31,7 +32,7 @@
 #include <vcl/msgbox.hxx>
 #include <rtl/math.hxx>
 
-#include "validat.hxx"
+#include "scitems.hxx"
 #include "document.hxx"
 #include "formulacell.hxx"
 #include "patattr.hxx"
@@ -43,6 +44,7 @@
 #include "dociter.hxx"
 #include "editutil.hxx"
 #include "tokenarray.hxx"
+#include "scmatrix.hxx"
 
 #include <math.h>
 #include <memory>

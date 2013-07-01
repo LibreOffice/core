@@ -43,6 +43,7 @@
 #include "attrib.hxx"
 #include "formulacell.hxx"
 #include "tokenarray.hxx"
+#include "scmatrix.hxx"
 
 using namespace formula;
 

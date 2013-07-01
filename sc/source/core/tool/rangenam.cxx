@@ -34,6 +34,8 @@
 #include "refupdat.hxx"
 #include "document.hxx"
 
+#include "formula/errorcodes.hxx"
+
 using namespace formula;
 using ::std::pair;
 using ::std::unary_function;

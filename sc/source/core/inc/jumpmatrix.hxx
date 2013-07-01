@@ -24,7 +24,8 @@
 #include "formula/errorcodes.hxx"
 #include <tools/solar.h>
 #include <vector>
-#include "scmatrix.hxx"
+#include "types.hxx"
+#include "address.hxx"
 
 typedef ::std::vector< formula::FormulaToken*> ScTokenVec;
 
@@ -55,159 +56,35 @@ struct ScJumpMatrixEntry
 
 class ScJumpMatrix
 {
-            ScJumpMatrixEntry*  pJump;      // the jumps
-            ScMatrixRef         pMat;       // the results
-            ScTokenVec*         pParams;    // parameter stack
-            SCSIZE              nCols;
-            SCSIZE              nRows;
-            SCSIZE              nCurCol;
-            SCSIZE              nCurRow;
-            SCSIZE              nResMatCols;
-            SCSIZE              nResMatRows;
-            bool                bStarted;
+    ScJumpMatrixEntry*  pJump;      // the jumps
+    ScMatrixRef         pMat;       // the results
+    ScTokenVec*         pParams;    // parameter stack
+    SCSIZE              nCols;
+    SCSIZE              nRows;
+    SCSIZE              nCurCol;
+    SCSIZE              nCurRow;
+    SCSIZE              nResMatCols;
+    SCSIZE              nResMatRows;
+    bool                bStarted;
 
-                                // not implemented, prevent usage
-                                ScJumpMatrix( const ScJumpMatrix& );
-            ScJumpMatrix&       operator=( const ScJumpMatrix& );
+    // not implemented, prevent usage
+    ScJumpMatrix( const ScJumpMatrix& );
+    ScJumpMatrix& operator=( const ScJumpMatrix& );
 
 public:
-                                ScJumpMatrix( SCSIZE nColsP, SCSIZE nRowsP )
-                                        : pJump( new ScJumpMatrixEntry[ nColsP * nRowsP ] )
-                                        , pMat( new ScMatrix( nColsP, nRowsP) )
-                                        , pParams( NULL )
-                                        , nCols( nColsP )
-                                        , nRows( nRowsP )
-                                        , nCurCol( 0 )
-                                        , nCurRow( 0 )
-                                        , nResMatCols( nColsP )
-                                        , nResMatRows( nRowsP )
-                                        , bStarted( false )
-                                    {
-                                        // Initialize result matrix in case of
-                                        // a premature end of the interpreter
-                                        // due to errors.
-                                        pMat->FillDouble( CreateDoubleError(
-                                                NOTAVAILABLE), 0, 0, nCols-1,
-                                                nRows-1);
-                                        /*! pJump not initialized */
-                                    }
-                                ~ScJumpMatrix()
-                                    {
-                                        if ( pParams )
-                                        {
-                                            for ( ScTokenVec::iterator i =
-                                                    pParams->begin(); i !=
-                                                    pParams->end(); ++i )
-                                            {
-                                                (*i)->DecRef();
-                                            }
-                                            delete pParams;
-                                        }
-                                        delete [] pJump;
-                                    }
-            void                GetDimensions( SCSIZE& rCols, SCSIZE& rRows ) const
-                                    {
-                                        rCols = nCols;
-                                        rRows = nRows;
-                                    }
-            void                SetJump( SCSIZE nCol, SCSIZE nRow, double fBool,
-                                            short nStart, short nNext,
-                                            short nStop = SHRT_MAX )
-                                    {
-                                        pJump[ (sal_uLong)nCol * nRows + nRow ].
-                                            SetJump( fBool, nStart, nNext, nStop);
-                                    }
-            void                GetJump( SCSIZE nCol, SCSIZE nRow, double& rBool,
-                                            short& rStart, short& rNext,
-                                            short& rStop ) const
-                                    {
-                                        if (nCols == 1 && nRows == 1)
-                                        {
-                                            nCol = 0;
-                                            nRow = 0;
-                                        }
-                                        else if (nCols == 1 && nRow < nRows)
-                                            nCol = 0;
-                                        else if (nRows == 1 && nCol < nCols)
-                                            nRow = 0;
-                                        else if (nCols <= nCol || nRows <= nRow)
-                                        {
-                                            OSL_FAIL("ScJumpMatrix::GetJump: dimension error");
-                                            nCol = 0;
-                                            nRow = 0;
-                                        }
-                                        pJump[ (sal_uLong)nCol * nRows + nRow ].
-                                            GetJump( rBool, rStart, rNext, rStop);
-                                    }
-            void                SetAllJumps( double fBool,
-                                            short nStart, short nNext,
-                                            short nStop = SHRT_MAX )
-                                    {
-                                        sal_uLong n = (sal_uLong)nCols * nRows;
-                                        for ( sal_uLong j=0; j<n; ++j )
-                                        {
-                                            pJump[ j ].SetJump( fBool, nStart,
-                                                    nNext, nStop);
-                                        }
-                                    }
-            void                SetJumpParameters( ScTokenVec* p )
-                                    { pParams = p; }
-            const ScTokenVec*   GetJumpParameters() const { return pParams; }
-            ScMatrix*           GetResultMatrix() const { return pMat.get(); }
-            void                GetPos( SCSIZE& rCol, SCSIZE& rRow ) const
-                                    {
-                                        rCol = nCurCol;
-                                        rRow = nCurRow;
-                                    }
-            bool                Next( SCSIZE& rCol, SCSIZE& rRow )
-                                    {
-                                        if ( !bStarted )
-                                        {
-                                            bStarted = true;
-                                            nCurCol = nCurRow = 0;
-                                        }
-                                        else
-                                        {
-                                            if ( ++nCurRow >= nResMatRows )
-                                            {
-                                                nCurRow = 0;
-                                                ++nCurCol;
-                                            }
-                                        }
-                                        GetPos( rCol, rRow );
-                                        return nCurCol < nResMatCols;
-                                    }
-            void                GetResMatDimensions( SCSIZE& rCols, SCSIZE& rRows )
-                                    {
-                                        rCols = nResMatCols;
-                                        rRows = nResMatRows;
-                                    }
-            void                SetNewResMat( SCSIZE nNewCols, SCSIZE nNewRows )
-                                    {
-                                        if ( nNewCols > nResMatCols || nNewRows > nResMatRows )
-                                        {
-                                            pMat = pMat->CloneAndExtend(nNewCols, nNewRows);
-                                            if ( nResMatCols < nNewCols )
-                                            {
-                                                pMat->FillDouble( CreateDoubleError(
-                                                    NOTAVAILABLE), nResMatCols, 0, nNewCols-1,
-                                                    nResMatRows-1);
-                                            }
-                                            if ( nResMatRows < nNewRows )
-                                            {
-                                                pMat->FillDouble( CreateDoubleError(
-                                                    NOTAVAILABLE), 0, nResMatRows, nNewCols-1,
-                                                    nNewRows-1);
-                                            }
-                                            if ( nRows == 1 && nCurCol != 0 )
-                                            {
-                                                nCurCol = 0;
-                                                nCurRow = nResMatRows - 1;
-                                            }
-                                            nResMatCols = nNewCols;
-                                            nResMatRows = nNewRows;
-                                        }
-                                    }
+    ScJumpMatrix( SCSIZE nColsP, SCSIZE nRowsP );
+    ~ScJumpMatrix();
+    void GetDimensions( SCSIZE& rCols, SCSIZE& rRows ) const;
+    void SetJump( SCSIZE nCol, SCSIZE nRow, double fBool, short nStart, short nNext, short nStop = SHRT_MAX );
+    void GetJump( SCSIZE nCol, SCSIZE nRow, double& rBool, short& rStart, short& rNext, short& rStop ) const;
+    void SetAllJumps( double fBool, short nStart, short nNext, short nStop = SHRT_MAX );
+    void SetJumpParameters( ScTokenVec* p );
+    const ScTokenVec* GetJumpParameters() const;
+    ScMatrix* GetResultMatrix() const;
+    void GetPos( SCSIZE& rCol, SCSIZE& rRow ) const;
+    bool Next( SCSIZE& rCol, SCSIZE& rRow );
+    void GetResMatDimensions( SCSIZE& rCols, SCSIZE& rRows );
+    void SetNewResMat( SCSIZE nNewCols, SCSIZE nNewRows );
 };
 
 #endif // SC_JUMPMATRIX_HXX

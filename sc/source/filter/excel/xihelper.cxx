@@ -33,6 +33,7 @@
 #include "xistyle.hxx"
 #include "excform.hxx"
 #include "stringutil.hxx"
+#include "scmatrix.hxx"
 
 // Excel->Calc cell address/range conversion ==================================
 
@@ -798,7 +799,7 @@ XclImpCachedValue::XclImpCachedValue( XclImpStream& rStrm ) :
             rStrm >> mfValue;
         break;
         case EXC_CACHEDVAL_STRING:
-            mxStr.reset( new String( rStrm.ReadUniString() ) );
+            maStr = rStrm.ReadUniString();
         break;
         case EXC_CACHEDVAL_BOOL:
         case EXC_CACHEDVAL_ERROR:
@@ -820,6 +821,11 @@ XclImpCachedValue::XclImpCachedValue( XclImpStream& rStrm ) :
 
 XclImpCachedValue::~XclImpCachedValue()
 {
+}
+
+const OUString& XclImpCachedValue::GetString() const
+{
+    return maStr;
 }
 
 sal_uInt16 XclImpCachedValue::GetScError() const

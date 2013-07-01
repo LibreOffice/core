@@ -11,6 +11,7 @@
  */
 
 #include "formularesult.hxx"
+#include "scmatrix.hxx"
 
 ScFormulaResult::ScFormulaResult() :
     mpToken(NULL), mnError(0), mbToken(true),

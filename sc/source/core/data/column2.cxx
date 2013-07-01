@@ -42,6 +42,7 @@
 #include "formulagroup.hxx"
 #include "listenercontext.hxx"
 #include "mtvcellfunc.hxx"
+#include "scmatrix.hxx"
 
 #include <math.h>
 

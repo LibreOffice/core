@@ -28,6 +28,7 @@
 #include "excform.hxx"
 #include "tokenarray.hxx"
 #include "externalrefmgr.hxx"
+#include "scmatrix.hxx"
 
 #include <vector>
 #include <boost/ptr_container/ptr_vector.hpp>
@@ -599,7 +600,7 @@ void XclImpSupbookTab::LoadCachedValues(ScExternalRefCache::TableTypeRef pCacheT
             break;
             case EXC_CACHEDVAL_STRING:
             {
-                const String& rStr = pCrn->GetString();
+                const OUString& rStr = pCrn->GetString();
                 ScExternalRefCache::TokenRef pToken(new formula::FormulaStringToken(rStr));
                 pCacheTable->setCell(rAddr.mnCol, rAddr.mnRow, pToken, 0, false);
             }

@@ -50,6 +50,7 @@
 #include "editattributemap.hxx"
 #include "stringutil.hxx"
 #include "tokenarray.hxx"
+#include "scmatrix.hxx"
 
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/xmltoken.hxx>

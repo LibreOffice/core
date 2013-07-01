@@ -21,7 +21,7 @@
 #define SC_DOUBLEREF_HXX
 
 #include "address.hxx"
-#include "scmatrix.hxx"
+#include "types.hxx"
 
 class ScDocument;
 struct ScDBQueryParamBase;
