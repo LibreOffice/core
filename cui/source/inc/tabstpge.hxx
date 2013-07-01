@@ -68,44 +68,38 @@ private:
     SvxTabulatorTabPage( Window* pParent, const SfxItemSet& rSet );
 
     // tabulators and positions
-    FixedLine       aTabLabel;
-    MetricBox       aTabBox;
-    FixedLine       aTabLabelVert;
-
-    FixedLine       aTabTypeLabel;
+    MetricBox*      m_pTabBox;
     // TabType
-    RadioButton     aLeftTab;
-    RadioButton     aRightTab;
-    RadioButton     aCenterTab;
-    RadioButton     aDezTab;
+    RadioButton*    m_pLeftTab;
+    RadioButton*    m_pRightTab;
+    RadioButton*    m_pCenterTab;
+    RadioButton*    m_pDezTab;
 
-    TabWin_Impl*    pLeftWin;
-    TabWin_Impl*    pRightWin;
-    TabWin_Impl*    pCenterWin;
-    TabWin_Impl*    pDezWin;
+    TabWin_Impl*    m_pLeftWin;
+    TabWin_Impl*    m_pRightWin;
+    TabWin_Impl*    m_pCenterWin;
+    TabWin_Impl*    m_pDezWin;
 
-    FixedText       aDezCharLabel;
-    Edit            aDezChar;
+    FixedText*      m_pDezCharLabel;
+    Edit*           m_pDezChar;
 
-    FixedLine       aFillLabel;
+    RadioButton*    m_pNoFillChar;
+    RadioButton*    m_pFillPoints;
+    RadioButton*    m_pFillDashLine ;
+    RadioButton*    m_pFillSolidLine;
+    RadioButton*    m_pFillSpecial;
+    Edit*           m_pFillChar;
 
-    RadioButton     aNoFillChar;
-    RadioButton     aFillPoints;
-    RadioButton     aFillDashLine ;
-    RadioButton     aFillSolidLine;
-    RadioButton     aFillSpecial;
-    Edit            aFillChar;
-
-    PushButton      aNewBtn;
-    PushButton      aDelAllBtn;
-    PushButton      aDelBtn;
+    PushButton*     m_pNewBtn;
+    PushButton*     m_pDelAllBtn;
+    PushButton*     m_pDelBtn;
 
     // local variables, internal functions
     SvxTabStop      aAktTab;
     SvxTabStopItem  aNewTabs;
     long            nDefDist;
     FieldUnit       eDefUnit;
-    sal_Bool            bCheck;
+    sal_Bool        bCheck;
 
     void            InitTabPos_Impl( sal_uInt16 nPos = 0 );
     void            SetFillAndTabType_Impl();

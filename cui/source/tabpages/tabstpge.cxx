@@ -23,7 +23,6 @@
 #include <svx/dialogs.hrc>
 
 #include <cuires.hrc>
-#include "tabstpge.hrc"
 #include <editeng/lrspitem.hxx>
 #include "tabstpge.hxx"
 #include <dialmgr.hxx>
@@ -39,17 +38,25 @@
 
 class TabWin_Impl : public Window
 {
+    SvxTabulatorTabPage* mpPage;
 private:
     sal_uInt16  nTabStyle;
 
 public:
-    TabWin_Impl( Window* pParent, const ResId& rId, sal_uInt16 nStyle ) :
-        Window( pParent, rId ),
-        nTabStyle( nStyle ) {}
+
+    TabWin_Impl( Window* pParent, WinBits nBits) :
+        Window( pParent, nBits ){}
 
     virtual void    Paint( const Rectangle& rRect );
+
+    void SetTabulatorTabPage(SvxTabulatorTabPage* pPage) { mpPage = pPage; }
+    void SetTabStyle(sal_uInt16 nStyle) {nTabStyle = nStyle; }
 };
 
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeTabWin_Impl(Window *pParent, VclBuilder::stringmap &)
+{
+    return new TabWin_Impl(pParent, WB_BORDER);
+}
 // static ----------------------------------------------------------------
 
 static sal_uInt16 pRanges[] =
@@ -85,118 +92,98 @@ void TabWin_Impl::Paint( const Rectangle& )
 
 // class SvxTabulatorTabPage ---------------------------------------------
 
-SvxTabulatorTabPage::SvxTabulatorTabPage( Window* pParent,
-                                          const SfxItemSet& rAttr ):
+SvxTabulatorTabPage::SvxTabulatorTabPage( Window* pParent, const SfxItemSet& rAttr ):
 
-    SfxTabPage( pParent, CUI_RES( RID_SVXPAGE_TABULATOR ), rAttr ),
-
-    aTabLabel       ( this, CUI_RES( FL_TABPOS ) ),
-    aTabBox         ( this, CUI_RES( ED_TABPOS ) ),
-    aTabLabelVert   ( this, CUI_RES( FL_TABPOS_VERT ) ),
-    aTabTypeLabel   ( this, CUI_RES( FL_TABTYPE ) ),
-    aLeftTab        ( this, CUI_RES( BTN_TABTYPE_LEFT ) ),
-    aRightTab       ( this, CUI_RES( BTN_TABTYPE_RIGHT ) ),
-    aCenterTab      ( this, CUI_RES( BTN_TABTYPE_CENTER ) ),
-    aDezTab         ( this, CUI_RES( BTN_TABTYPE_DECIMAL ) ),
-    pLeftWin        ( new TabWin_Impl( this, CUI_RES( WIN_TABLEFT ), (sal_uInt16)(RULER_TAB_LEFT|WB_HORZ) ) ),
-    pRightWin       ( new TabWin_Impl( this, CUI_RES( WIN_TABRIGHT ), (sal_uInt16)(RULER_TAB_RIGHT|WB_HORZ) ) ),
-    pCenterWin      ( new TabWin_Impl( this, CUI_RES( WIN_TABCENTER ), (sal_uInt16)(RULER_TAB_CENTER|WB_HORZ) ) ),
-    pDezWin         ( new TabWin_Impl( this, CUI_RES( WIN_TABDECIMAL ), (sal_uInt16)(RULER_TAB_DECIMAL|WB_HORZ) ) ),
-    aDezCharLabel   ( this, CUI_RES( FT_TABTYPE_DECCHAR ) ),
-    aDezChar        ( this, CUI_RES( ED_TABTYPE_DECCHAR ) ),
-    aFillLabel      ( this, CUI_RES( FL_FILLCHAR ) ),
-    aNoFillChar     ( this, CUI_RES( BTN_FILLCHAR_NO ) ),
-    aFillPoints     ( this, CUI_RES( BTN_FILLCHAR_POINTS ) ),
-    aFillDashLine   ( this, CUI_RES( BTN_FILLCHAR_DASHLINE ) ),
-    aFillSolidLine  ( this, CUI_RES( BTN_FILLCHAR_UNDERSCORE ) ),
-    aFillSpecial    ( this, CUI_RES( BTN_FILLCHAR_OTHER ) ),
-    aFillChar       ( this, CUI_RES( ED_FILLCHAR_OTHER ) ),
-    aNewBtn         ( this, CUI_RES( BTN_NEW ) ),
-    aDelAllBtn      ( this, CUI_RES( BTN_DELALL ) ),
-    aDelBtn         ( this, CUI_RES( BTN_DEL ) ),
+    SfxTabPage( pParent, "ParagraphTabsPage","cui/ui/paratabspage.ui", rAttr ),
 
     aAktTab     ( 0 ),
     aNewTabs    ( 0, 0, SVX_TAB_ADJUST_LEFT, GetWhich( SID_ATTR_TABSTOP ) ),
     nDefDist    ( 0 ),
-    eDefUnit( FUNIT_100TH_MM ),
+    eDefUnit    ( FUNIT_100TH_MM ),
     bCheck      ( sal_False )
 
 {
+    get(m_pTabBox,"ED_TABPOS");
+    //the tab images
+    get(m_pLeftWin,"drawingareaWIN_TABLEFT");
+    get(m_pRightWin,"drawingareaWIN_TABRIGHT");
+    get(m_pCenterWin,"drawingareaWIN_TABCENTER");
+    get(m_pDezWin,"drawingareaWIN_TABDECIMAL");
+    m_pLeftWin->SetTabulatorTabPage(this);
+    m_pRightWin->SetTabulatorTabPage(this);
+    m_pCenterWin->SetTabulatorTabPage(this);
+    m_pDezWin->SetTabulatorTabPage(this);
+    m_pLeftWin->SetTabStyle((sal_uInt16)(RULER_TAB_LEFT|WB_HORZ));
+    m_pRightWin->SetTabStyle((sal_uInt16)(RULER_TAB_RIGHT|WB_HORZ));
+    m_pCenterWin->SetTabStyle((sal_uInt16)(RULER_TAB_CENTER|WB_HORZ));
+    m_pDezWin->SetTabStyle((sal_uInt16)(RULER_TAB_DECIMAL|WB_HORZ));
+    //upper radiobuttons
     SvtCJKOptions aCJKOptions;
-    if(aCJKOptions.IsAsianTypographyEnabled())
-    {
-        aLeftTab  .SetText(String(CUI_RES(   ST_LEFTTAB_ASIAN )));
-        aRightTab .SetText(String(CUI_RES(   ST_RIGHTTAB_ASIAN )));
-    }
+    get(m_pLeftTab,  aCJKOptions.IsAsianTypographyEnabled() ? "radiobuttonST_LEFTTAB_ASIAN" : "radiobuttonBTN_TABTYPE_LEFT");
+    get(m_pRightTab, aCJKOptions.IsAsianTypographyEnabled() ? "radiobuttonST_RIGHTTAB_ASIAN" : "radiobuttonBTN_TABTYPE_RIGHT");
+    m_pLeftTab->Show(true);
+    m_pRightTab->Show(true);
+    get(m_pCenterTab,"radiobuttonBTN_TABTYPE_CENTER");
+    get(m_pDezTab,"radiobuttonBTN_TABTYPE_DECIMAL");
+    get(m_pDezChar,"entryED_TABTYPE_DECCHAR");
+    get(m_pDezCharLabel,"labelFT_TABTYPE_DECCHAR");
+    //lower radio buttons
+    get(m_pNoFillChar,"radiobuttonBTN_FILLCHAR_NO");
+    get(m_pFillPoints,"radiobuttonBTN_FILLCHAR_POINTS");
+    get(m_pFillDashLine,"radiobuttonBTN_FILLCHAR_DASHLINE");
+    get(m_pFillSolidLine,"radiobuttonBTN_FILLCHAR_UNDERSCORE");
+    get(m_pFillSpecial,"radiobuttonBTN_FILLCHAR_OTHER");
+    get(m_pFillChar,"entryED_FILLCHAR_OTHER");
+    //button bar
+    get(m_pNewBtn,"buttonBTN_NEW");
+    get(m_pDelAllBtn,"buttonBTN_DELALL");
+    get(m_pDelBtn,"buttonBTN_DEL");
 
-    aFillChar.SetAccessibleName(String(CUI_RES(   ST_FILLCHAR_OTHER )));
     // This page needs ExchangeSupport
     SetExchangeSupport();
 
-
     // Set metric
     FieldUnit eFUnit = GetModuleFieldUnit( rAttr );
-    SetFieldUnit( aTabBox, eFUnit );
+    SetFieldUnit( *m_pTabBox, eFUnit );
 
     // Initialize buttons
-    aNewBtn.SetClickHdl( LINK( this,SvxTabulatorTabPage, NewHdl_Impl ) );
-    aDelBtn.SetClickHdl( LINK( this,SvxTabulatorTabPage, DelHdl_Impl ) );
-    aDelAllBtn.SetClickHdl( LINK( this,SvxTabulatorTabPage, DelAllHdl_Impl ) );
+    m_pNewBtn->SetClickHdl( LINK( this,SvxTabulatorTabPage, NewHdl_Impl ) );
+    m_pDelBtn->SetClickHdl( LINK( this,SvxTabulatorTabPage, DelHdl_Impl ) );
+    m_pDelAllBtn->SetClickHdl( LINK( this,SvxTabulatorTabPage, DelAllHdl_Impl ) );
 
     Link aLink = LINK( this, SvxTabulatorTabPage, TabTypeCheckHdl_Impl );
-    aLeftTab.SetClickHdl( aLink );
-    aRightTab.SetClickHdl( aLink );
-    aDezTab.SetClickHdl( aLink );
-    aCenterTab.SetClickHdl( aLink );
+    m_pLeftTab->SetClickHdl( aLink );
+    m_pRightTab->SetClickHdl( aLink );
+    m_pDezTab->SetClickHdl( aLink );
+    m_pCenterTab->SetClickHdl( aLink );
 
-    aDezChar.SetLoseFocusHdl( LINK( this,  SvxTabulatorTabPage, GetDezCharHdl_Impl ) );
-    aDezChar.SetMaxTextLen(1);
-    aDezChar.Disable();
-    aDezCharLabel.Disable();
+    m_pDezChar->SetLoseFocusHdl( LINK( this,  SvxTabulatorTabPage, GetDezCharHdl_Impl ) );
+    //m_pDezChar->SetMaxTextLen(1);
+    m_pDezChar->Disable();
+    m_pDezCharLabel->Disable();
 
     aLink = LINK( this, SvxTabulatorTabPage, FillTypeCheckHdl_Impl );
-    aNoFillChar.SetClickHdl( aLink );
-    aFillPoints.SetClickHdl( aLink );
-    aFillDashLine.SetClickHdl( aLink );
-    aFillSolidLine.SetClickHdl( aLink );
-    aFillSpecial.SetClickHdl( aLink );
-    aFillChar.SetLoseFocusHdl( LINK( this,  SvxTabulatorTabPage, GetFillCharHdl_Impl ) );
-    aFillChar.SetMaxTextLen(1);
-    aFillChar.Disable();
+    m_pNoFillChar->SetClickHdl( aLink );
+    m_pFillPoints->SetClickHdl( aLink );
+    m_pFillDashLine->SetClickHdl( aLink );
+    m_pFillSolidLine->SetClickHdl( aLink );
+    m_pFillSpecial->SetClickHdl( aLink );
+    m_pFillChar->SetLoseFocusHdl( LINK( this,  SvxTabulatorTabPage, GetFillCharHdl_Impl ) );
+    //m_pFillChar->SetMaxTextLen(1);
+    m_pFillChar->Disable();
 
-    aTabBox.SetDoubleClickHdl( LINK( this, SvxTabulatorTabPage, SelectHdl_Impl ) );
-    aTabBox.SetModifyHdl( LINK( this, SvxTabulatorTabPage, ModifyHdl_Impl ) );
-
-    aLeftTab.SetAccessibleRelationMemberOf( &aTabTypeLabel );
-    aRightTab.SetAccessibleRelationMemberOf( &aTabTypeLabel );
-    aCenterTab.SetAccessibleRelationMemberOf( &aTabTypeLabel );
-    aDezTab.SetAccessibleRelationMemberOf( &aTabTypeLabel );
-    aDezCharLabel.SetAccessibleRelationMemberOf( &aTabTypeLabel );
-    aDezChar.SetAccessibleRelationMemberOf( &aTabTypeLabel );
-
-    aNoFillChar.SetAccessibleRelationMemberOf( &aFillLabel );
-    aFillPoints.SetAccessibleRelationMemberOf( &aFillLabel );
-    aFillDashLine.SetAccessibleRelationMemberOf( &aFillLabel );
-    aFillSolidLine.SetAccessibleRelationMemberOf( &aFillLabel );
-    aFillSpecial.SetAccessibleRelationMemberOf( &aFillLabel );
-    aFillChar.SetAccessibleRelationMemberOf( &aFillLabel );
-
-    aFillChar.SetAccessibleRelationLabeledBy(&aFillSpecial);
+    m_pTabBox->SetDoubleClickHdl( LINK( this, SvxTabulatorTabPage, SelectHdl_Impl ) );
+    m_pTabBox->SetModifyHdl( LINK( this, SvxTabulatorTabPage, ModifyHdl_Impl ) );
 
     // Get the default decimal char from the system
     const LocaleDataWrapper& rLocaleWrapper( Application::GetSettings().GetLocaleDataWrapper() );
     aAktTab.GetDecimal() = rLocaleWrapper.getNumDecimalSep()[0];
-    FreeResource();
 }
 
 // -----------------------------------------------------------------------
 
 SvxTabulatorTabPage::~SvxTabulatorTabPage()
 {
-    delete pLeftWin;
-    delete pRightWin;
-    delete pCenterWin;
-    delete pDezWin;
 }
 
 // -----------------------------------------------------------------------
@@ -213,12 +200,12 @@ sal_Bool SvxTabulatorTabPage::FillItemSet( SfxItemSet& rSet )
     sal_Bool bModified = sal_False;
 
     // Put the controls' values in here
-    if ( aNewBtn.IsEnabled() )
+    if ( m_pNewBtn->IsEnabled() )
         NewHdl_Impl( 0 );
 
     // Call the LoseFocus-Handler first
-    GetDezCharHdl_Impl( &aDezChar );
-    GetFillCharHdl_Impl( &aFillChar );
+    GetDezCharHdl_Impl( m_pDezChar );
+    GetFillCharHdl_Impl( m_pFillChar );
 
     FillUpWithDefTabs_Impl( nDefDist, aNewTabs );
     SfxItemPool* pPool = rSet.GetPool();
@@ -231,8 +218,7 @@ sal_Bool SvxTabulatorTabPage::FillItemSet( SfxItemSet& rSet )
         // the TabStopItem needs to have a DefTab at position 0.
         const SfxPoolItem* pLRSpace;
         // If not in the new set, then maybe in the old one
-        if ( SFX_ITEM_SET !=
-             rSet.GetItemState( GetWhich( SID_ATTR_LRSPACE ), sal_True, &pLRSpace ) )
+        if ( SFX_ITEM_SET != rSet.GetItemState( GetWhich( SID_ATTR_LRSPACE ), sal_True, &pLRSpace ) )
             pLRSpace = GetOldItem( rSet, SID_ATTR_LRSPACE );
 
         if ( pLRSpace && ( (SvxLRSpaceItem*)pLRSpace )->GetTxtFirstLineOfst() < 0 )
@@ -294,8 +280,7 @@ void SvxTabulatorTabPage::Reset( const SfxItemSet& rSet )
             for ( sal_uInt16 i = 0; i < aTmp.Count(); ++i )
             {
                 SvxTabStop aTmpStop = aTmp[i];
-                aTmpStop.GetTabPos() =
-                    LogicToLogic( aTmpStop.GetTabPos(), eUnit, MAP_100TH_MM );
+                aTmpStop.GetTabPos() = LogicToLogic( aTmpStop.GetTabPos(), eUnit, MAP_100TH_MM );
                 aNewTabs.Insert( aTmpStop );
             }
         }
@@ -329,43 +314,43 @@ void SvxTabulatorTabPage::DisableControls( const sal_uInt16 nFlag )
 {
     if ( ( TABTYPE_LEFT & nFlag ) == TABTYPE_LEFT )
     {
-        aLeftTab.Disable();
-        pLeftWin->Disable();
+        m_pLeftTab->Disable();
+        m_pLeftWin->Disable();
     }
     if ( ( TABTYPE_RIGHT & nFlag ) == TABTYPE_RIGHT )
     {
-        aRightTab.Disable();
-        pRightWin->Disable();
+        m_pRightTab->Disable();
+        m_pRightWin->Disable();
     }
     if ( ( TABTYPE_CENTER & nFlag ) == TABTYPE_CENTER )
     {
-        aCenterTab.Disable();
-        pCenterWin->Disable();
+        m_pCenterTab->Disable();
+        m_pCenterWin->Disable();
     }
     if ( ( TABTYPE_DEZIMAL & nFlag ) == TABTYPE_DEZIMAL )
     {
-        aDezTab.Disable();
-        pDezWin->Disable();
-        aDezCharLabel.Disable();
-        aDezChar.Disable();
+        m_pDezTab->Disable();
+        m_pDezWin->Disable();
+        m_pDezCharLabel->Disable();
+        m_pDezChar->Disable();
     }
-    if ( ( TABTYPE_ALL & nFlag ) == TABTYPE_ALL )
-        aTabTypeLabel.Disable();
+//     if ( ( TABTYPE_ALL & nFlag ) == TABTYPE_ALL )
+//         m_pTabTypeLabel->Disable();
     if ( ( TABFILL_NONE & nFlag ) == TABFILL_NONE )
-        aNoFillChar.Disable();
+        m_pNoFillChar->Disable();
     if ( ( TABFILL_POINT & nFlag ) == TABFILL_POINT )
-        aFillPoints.Disable();
+        m_pFillPoints->Disable();
     if ( ( TABFILL_DASHLINE & nFlag ) == TABFILL_DASHLINE )
-        aFillDashLine.Disable();
+        m_pFillDashLine->Disable();
     if ( ( TABFILL_SOLIDLINE & nFlag ) == TABFILL_SOLIDLINE )
-        aFillSolidLine.Disable();
+        m_pFillSolidLine->Disable();
     if ( ( TABFILL_SPECIAL & nFlag ) == TABFILL_SPECIAL )
     {
-        aFillSpecial.Disable();
-        aFillChar.Disable();
+        m_pFillSpecial->Disable();
+        m_pFillChar->Disable();
     }
-    if ( ( TABFILL_ALL & nFlag ) == TABFILL_ALL )
-        aFillLabel.Disable();
+//     if ( ( TABFILL_ALL & nFlag ) == TABFILL_ALL )
+//         m_pFillLabel->Disable();
 }
 
 // -----------------------------------------------------------------------
@@ -381,7 +366,7 @@ int SvxTabulatorTabPage::DeactivatePage( SfxItemSet* _pSet )
 
 void SvxTabulatorTabPage::InitTabPos_Impl( sal_uInt16 nTabPos )
 {
-    aTabBox.Clear();
+    m_pTabBox->Clear();
 
     long nOffset = 0;
     const SfxPoolItem* pItem = 0;
@@ -398,7 +383,7 @@ void SvxTabulatorTabPage::InitTabPos_Impl( sal_uInt16 nTabPos )
     {
         if ( aNewTabs[i].GetAdjustment() != SVX_TAB_ADJUST_DEFAULT )
         {
-            aTabBox.InsertValue( aTabBox.Normalize(
+            m_pTabBox->InsertValue( m_pTabBox->Normalize(
                 aNewTabs[i].GetTabPos() + nOffset ), eDefUnit );
         }
         else
@@ -412,24 +397,24 @@ void SvxTabulatorTabPage::InitTabPos_Impl( sal_uInt16 nTabPos )
         nTabPos = 0;
 
     // Switch off all RadioButtons for a start
-    aLeftTab.Check( sal_True );
-    aNoFillChar.Check( sal_True );
+    m_pLeftTab->Check( sal_True );
+    m_pNoFillChar->Check( sal_True );
 
-    if( aTabBox.GetEntryCount() > 0 )
+    if( m_pTabBox->GetEntryCount() > 0 )
     {
-        aTabBox.SetText( aTabBox.GetEntry( nTabPos ) );
+        m_pTabBox->SetText( m_pTabBox->GetEntry( nTabPos ) );
         aAktTab = aNewTabs[nTabPos];
 
         SetFillAndTabType_Impl();
-        aNewBtn.Disable();
-        aDelBtn.Enable();
+        m_pNewBtn->Disable();
+        m_pDelBtn->Enable();
     }
     else
     {   // If no entry, 0 is the default value
-        aTabBox.SetValue( 0, eDefUnit );
+        m_pTabBox->SetValue( 0, eDefUnit );
 
-        aNewBtn.Enable();
-        aDelBtn.Disable();
+        m_pNewBtn->Enable();
+        m_pDelBtn->Disable();
     }
 }
 
@@ -440,42 +425,42 @@ void SvxTabulatorTabPage::SetFillAndTabType_Impl()
     RadioButton* pTypeBtn = 0;
     RadioButton* pFillBtn = 0;
 
-    aDezChar.Disable();
-    aDezCharLabel.Disable();
+    m_pDezChar->Disable();
+    m_pDezCharLabel->Disable();
 
     if ( aAktTab.GetAdjustment() == SVX_TAB_ADJUST_LEFT )
-        pTypeBtn = &aLeftTab;
+        pTypeBtn = m_pLeftTab;
     else if ( aAktTab.GetAdjustment() == SVX_TAB_ADJUST_RIGHT )
-        pTypeBtn = &aRightTab;
+        pTypeBtn = m_pRightTab;
     else if ( aAktTab.GetAdjustment() == SVX_TAB_ADJUST_DECIMAL )
     {
-        pTypeBtn = &aDezTab;
-        aDezChar.Enable();
-        aDezCharLabel.Enable();
-        aDezChar.SetText( OUString( (sal_Unicode)aAktTab.GetDecimal() ) );
+        pTypeBtn = m_pDezTab;
+        m_pDezChar->Enable();
+        m_pDezCharLabel->Enable();
+        m_pDezChar->SetText( OUString( (sal_Unicode)aAktTab.GetDecimal() ) );
     }
     else if ( aAktTab.GetAdjustment() == SVX_TAB_ADJUST_CENTER )
-        pTypeBtn = &aCenterTab;
+        pTypeBtn = m_pCenterTab;
 
     if ( pTypeBtn )
         pTypeBtn->Check();
 
-    aFillChar.Disable();
-    aFillChar.SetText( String() );
+    m_pFillChar->Disable();
+    m_pFillChar->SetText( "" );
 
     if ( aAktTab.GetFill() == ' ' )
-        pFillBtn = &aNoFillChar;
+        pFillBtn = m_pNoFillChar;
     else if ( aAktTab.GetFill() == '-' )
-        pFillBtn = &aFillDashLine;
+        pFillBtn = m_pFillDashLine;
     else if ( aAktTab.GetFill() == '_' )
-        pFillBtn = &aFillSolidLine;
+        pFillBtn = m_pFillSolidLine;
     else if ( aAktTab.GetFill() == '.' )
-        pFillBtn = &aFillPoints;
+        pFillBtn = m_pFillPoints;
     else
     {
-        pFillBtn = &aFillSpecial;
-        aFillChar.Enable();
-        aFillChar.SetText( OUString( (sal_Unicode)aAktTab.GetFill() ) );
+        pFillBtn = m_pFillSpecial;
+        m_pFillChar->Enable();
+        m_pFillChar->SetText( OUString( (sal_Unicode)aAktTab.GetFill() ) );
     }
     pFillBtn->Check();
 }
@@ -486,7 +471,7 @@ IMPL_LINK( SvxTabulatorTabPage, NewHdl_Impl, Button *, pBtn )
 {
     // Add a new one and select it
     // Get the value from the display
-    long nVal = static_cast<long>(aTabBox.Denormalize( aTabBox.GetValue( eDefUnit ) ));
+    long nVal = static_cast<long>(m_pTabBox->Denormalize( m_pTabBox->GetValue( eDefUnit ) ));
 
     // If the pBtn == 0 && the value == 0 then do not create a tab, because we create via OK
     if ( nVal == 0 && pBtn == 0 )
@@ -503,7 +488,7 @@ IMPL_LINK( SvxTabulatorTabPage, NewHdl_Impl, Button *, pBtn )
         nOffset = OutputDevice::LogicToLogic( nOffset, eUnit, MAP_100TH_MM  );
     }
     const long nReal = nVal - nOffset;
-    sal_uInt16 nSize = aTabBox.GetEntryCount();
+    sal_uInt16 nSize = m_pTabBox->GetEntryCount();
 
     sal_uInt16 i;
     for( i = 0; i < nSize; i++ )
@@ -513,28 +498,28 @@ IMPL_LINK( SvxTabulatorTabPage, NewHdl_Impl, Button *, pBtn )
     }
 
     // Make ListBox entry
-    aTabBox.InsertValue( aTabBox.Normalize( nVal ), eDefUnit, i );
+    m_pTabBox->InsertValue( m_pTabBox->Normalize( nVal ), eDefUnit, i );
     aAktTab.GetTabPos() = nReal;
     SvxTabAdjust eAdj = SVX_TAB_ADJUST_LEFT;
 
-    if ( aRightTab.IsChecked() )
+    if ( m_pRightTab->IsChecked() )
         eAdj = SVX_TAB_ADJUST_RIGHT;
-    else if ( aCenterTab.IsChecked() )
+    else if ( m_pCenterTab->IsChecked() )
         eAdj = SVX_TAB_ADJUST_CENTER;
-    else if ( aDezTab.IsChecked() )
+    else if ( m_pDezTab->IsChecked() )
         eAdj = SVX_TAB_ADJUST_DECIMAL;
 
     aAktTab.GetAdjustment() = eAdj;
     aNewTabs.Insert( aAktTab );
 
-    aNewBtn.Disable();
-    aDelBtn.Enable();
-    aTabBox.GrabFocus();
+    m_pNewBtn->Disable();
+    m_pDelBtn->Enable();
+    m_pTabBox->GrabFocus();
 
     // If no RadioButton was clicked, we need to put anyway
     bCheck |= sal_True;
     // Set the selection into the position Edit
-    aTabBox.SetSelection(Selection(0, aTabBox.GetText().getLength()));
+    m_pTabBox->SetSelection(Selection(0, m_pTabBox->GetText().getLength()));
     return 0;
 }
 
@@ -542,19 +527,19 @@ IMPL_LINK( SvxTabulatorTabPage, NewHdl_Impl, Button *, pBtn )
 
 IMPL_LINK_NOARG(SvxTabulatorTabPage, DelHdl_Impl)
 {
-    sal_uInt16 nPos = aTabBox.GetValuePos( aTabBox.GetValue() );
+    sal_uInt16 nPos = m_pTabBox->GetValuePos( m_pTabBox->GetValue() );
 
     if ( nPos == COMBOBOX_ENTRY_NOTFOUND )
         return 0;
 
-    if ( aTabBox.GetEntryCount() == 1 )
+    if ( m_pTabBox->GetEntryCount() == 1 )
     {
         DelAllHdl_Impl( 0 );
         return 0;
     }
 
     // Delete Tab
-    aTabBox.RemoveEntry( nPos );
+    m_pTabBox->RemoveEntry( nPos );
     aNewTabs.Remove( nPos );
 
     // Reset aAktTab
@@ -564,16 +549,16 @@ IMPL_LINK_NOARG(SvxTabulatorTabPage, DelHdl_Impl)
     {
         // Correct Pos
         nPos = ( ( nSize - 1 ) >= nPos) ? nPos : nPos - 1;
-        aTabBox.SetValue( aTabBox.GetValue( nPos ) );
+        m_pTabBox->SetValue( m_pTabBox->GetValue( nPos ) );
         aAktTab = aNewTabs[nPos];
     }
 
     // If no Tabs Enable Disable Controls
-    if ( aTabBox.GetEntryCount() == 0 )
+    if ( m_pTabBox->GetEntryCount() == 0 )
     {
-        aDelBtn.Disable();
-        aNewBtn.Enable();
-        aTabBox.GrabFocus();
+        m_pDelBtn->Disable();
+        m_pNewBtn->Enable();
+        m_pTabBox->GrabFocus();
     }
 
     // If no RadioButton was clicked, we need to put anyway
@@ -602,26 +587,26 @@ IMPL_LINK( SvxTabulatorTabPage, TabTypeCheckHdl_Impl, RadioButton *, pBox )
 {
     bCheck |= sal_True;
     SvxTabAdjust eAdj;
-    aDezChar.Disable();
-    aDezCharLabel.Disable();
-    aDezChar.SetText( String() );
+    m_pDezChar->Disable();
+    m_pDezCharLabel->Disable();
+    m_pDezChar->SetText( "" );
 
-    if ( pBox == &aLeftTab )
+    if ( pBox == m_pLeftTab )
         eAdj = SVX_TAB_ADJUST_LEFT;
-    else if ( pBox == &aRightTab )
+    else if ( pBox == m_pRightTab )
         eAdj = SVX_TAB_ADJUST_RIGHT;
-    else if ( pBox == &aCenterTab )
+    else if ( pBox == m_pCenterTab )
         eAdj = SVX_TAB_ADJUST_CENTER;
     else
     {
         eAdj = SVX_TAB_ADJUST_DECIMAL;
-        aDezChar.Enable();
-        aDezCharLabel.Enable();
-        aDezChar.SetText( OUString( (sal_Unicode)aAktTab.GetDecimal() ) );
+        m_pDezChar->Enable();
+        m_pDezCharLabel->Enable();
+        m_pDezChar->SetText( OUString( (sal_Unicode)aAktTab.GetDecimal() ) );
     }
 
     aAktTab.GetAdjustment() = eAdj;
-    sal_uInt16 nPos = aTabBox.GetValuePos( aTabBox.GetValue( eDefUnit ), eDefUnit );
+    sal_uInt16 nPos = m_pTabBox->GetValuePos( m_pTabBox->GetValue( eDefUnit ), eDefUnit );
 
     if ( nPos != COMBOBOX_ENTRY_NOTFOUND )
     {
@@ -637,22 +622,22 @@ IMPL_LINK( SvxTabulatorTabPage, FillTypeCheckHdl_Impl, RadioButton *, pBox )
 {
     bCheck |= sal_True;
     sal_uInt8 cFill = ' ';
-    aFillChar.SetText( String() );
-    aFillChar.Disable();
+    m_pFillChar->SetText( "" );
+    m_pFillChar->Disable();
 
-    if( pBox == &aFillSpecial )
-        aFillChar.Enable();
-    else if ( pBox == &aNoFillChar )
+    if( pBox == m_pFillSpecial )
+        m_pFillChar->Enable();
+    else if ( pBox == m_pNoFillChar )
         cFill = ' ';
-    else if ( pBox == &aFillSolidLine )
+    else if ( pBox == m_pFillSolidLine )
         cFill = '_';
-    else if ( pBox == &aFillPoints )
+    else if ( pBox == m_pFillPoints )
         cFill = '.';
-    else if ( pBox == &aFillDashLine )
+    else if ( pBox == m_pFillDashLine )
         cFill = '-';
 
     aAktTab.GetFill() = cFill;
-    sal_uInt16 nPos = aTabBox.GetValuePos( aTabBox.GetValue( eDefUnit ), eDefUnit );
+    sal_uInt16 nPos = m_pTabBox->GetValuePos( m_pTabBox->GetValue( eDefUnit ), eDefUnit );
 
     if ( nPos != COMBOBOX_ENTRY_NOTFOUND )
     {
@@ -668,10 +653,10 @@ IMPL_LINK( SvxTabulatorTabPage, GetFillCharHdl_Impl, Edit *, pEdit )
 {
     String aChar( pEdit->GetText() );
 
-    if ( aChar.Len() > 0 )
+    if ( aChar.Len() > 0)
         aAktTab.GetFill() = aChar.GetChar( 0 );
 
-    const sal_uInt16 nPos = aTabBox.GetValuePos( aTabBox.GetValue( eDefUnit ), eDefUnit);
+    const sal_uInt16 nPos = m_pTabBox->GetValuePos( m_pTabBox->GetValue( eDefUnit ), eDefUnit);
     if ( nPos != COMBOBOX_ENTRY_NOTFOUND )
     {
         aNewTabs.Remove( nPos );
@@ -688,7 +673,7 @@ IMPL_LINK( SvxTabulatorTabPage, GetDezCharHdl_Impl, Edit *, pEdit )
     if ( aChar.Len() > 0 && ( aChar.GetChar( 0 ) >= ' '))
         aAktTab.GetDecimal() = aChar.GetChar( 0 );
 
-    sal_uInt16 nPos = aTabBox.GetValuePos( aTabBox.GetValue( eDefUnit ), eDefUnit );
+    sal_uInt16 nPos = m_pTabBox->GetValuePos( m_pTabBox->GetValue( eDefUnit ), eDefUnit );
     if ( nPos != COMBOBOX_ENTRY_NOTFOUND )
     {
         aNewTabs.Remove( nPos );
@@ -701,11 +686,11 @@ IMPL_LINK( SvxTabulatorTabPage, GetDezCharHdl_Impl, Edit *, pEdit )
 
 IMPL_LINK_NOARG(SvxTabulatorTabPage, SelectHdl_Impl)
 {
-    sal_uInt16 nPos = aTabBox.GetValuePos( aTabBox.GetValue( eDefUnit ), eDefUnit );
+    sal_uInt16 nPos = m_pTabBox->GetValuePos( m_pTabBox->GetValue( eDefUnit ), eDefUnit );
     if ( nPos != COMBOBOX_ENTRY_NOTFOUND )
     {
         aAktTab = aNewTabs[nPos];
-        aNewBtn.Disable();
+        m_pNewBtn->Disable();
         SetFillAndTabType_Impl();
     }
     return 0;
@@ -715,21 +700,21 @@ IMPL_LINK_NOARG(SvxTabulatorTabPage, SelectHdl_Impl)
 
 IMPL_LINK_NOARG(SvxTabulatorTabPage, ModifyHdl_Impl)
 {
-    sal_uInt16 nPos = aTabBox.GetValuePos( aTabBox.GetValue( eDefUnit ), eDefUnit );
+    sal_uInt16 nPos = m_pTabBox->GetValuePos( m_pTabBox->GetValue( eDefUnit ), eDefUnit );
     if ( nPos != COMBOBOX_ENTRY_NOTFOUND )
     {
         aAktTab = aNewTabs[nPos];
         SetFillAndTabType_Impl();
 
         aAktTab.GetTabPos() =
-            static_cast<long>(aTabBox.Denormalize( aTabBox.GetValue( eDefUnit ) ));
+            static_cast<long>(m_pTabBox->Denormalize( m_pTabBox->GetValue( eDefUnit ) ));
 
-        aNewBtn.Disable();
-        aDelBtn.Enable();
+        m_pNewBtn->Disable();
+        m_pDelBtn->Enable();
         return 0;
     }
-    aNewBtn.Enable();
-    aDelBtn.Disable();
+    m_pNewBtn->Enable();
+    m_pDelBtn->Disable();
     return 0;
 }
 
