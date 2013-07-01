@@ -502,13 +502,6 @@ String STR_REDLINE_UNKNOWN_AUTHOR
     Text [ en-US ] = "Unknown Author";
 };
 
-WarningBox MSG_DISABLE_UNDO_QUESTION
-{
-    BUTTONS = WB_YES_NO_CANCEL;
-    DEFBUTTON = WB_DEF_YES ;
-    Message [ en-US ] = "This action deletes the list of actions that can be undone. Previous changes made to the document are still valid, but cannot be undone. Do you want to continue formatting?";
-};
-
 QueryBox MSG_PRINT_AS_MERGE
 {
     HelpId = HID_PRINT_AS_MERGE;
