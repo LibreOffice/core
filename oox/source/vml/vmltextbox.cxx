@@ -25,6 +25,7 @@
 #include <com/sun/star/drawing/TextHorizontalAdjust.hpp>
 #include <com/sun/star/text/XTextAppend.hpp>
 #include <com/sun/star/text/WritingMode.hpp>
+#include <com/sun/star/style/ParagraphAdjust.hpp>
 
 namespace oox {
 namespace vml {
@@ -37,7 +38,8 @@ TextFontModel::TextFontModel()
 {
 }
 
-TextPortionModel::TextPortionModel( const TextFontModel& rFont, const OUString& rText ) :
+TextPortionModel::TextPortionModel( const TextParagraphModel& rParagraph, const TextFontModel& rFont, const OUString& rText ) :
+    maParagraph( rParagraph ),
     maFont( rFont ),
     maText( rText )
 {
@@ -49,9 +51,9 @@ TextBox::TextBox(ShapeTypeModel& rTypeModel)
 {
 }
 
-void TextBox::appendPortion( const TextFontModel& rFont, const OUString& rText )
+void TextBox::appendPortion( const TextParagraphModel& rParagraph, const TextFontModel& rFont, const OUString& rText )
 {
-    maPortions.push_back( TextPortionModel( rFont, rText ) );
+    maPortions.push_back( TextPortionModel( rParagraph, rFont, rText ) );
 }
 
 const TextFontModel* TextBox::getFirstFont() const
@@ -74,6 +76,7 @@ void TextBox::convert(uno::Reference<drawing::XShape> xShape) const
     {
         beans::PropertyValue aPropertyValue;
         std::vector<beans::PropertyValue> aPropVec;
+        const TextParagraphModel& rParagraph = aIt->maParagraph;
         const TextFontModel& rFont = aIt->maFont;
         if (rFont.mobBold.has())
         {
@@ -85,6 +88,18 @@ void TextBox::convert(uno::Reference<drawing::XShape> xShape) const
         {
             aPropertyValue.Name = "CharHeight";
             aPropertyValue.Value = uno::makeAny(double(rFont.monSize.get()) / 2.);
+            aPropVec.push_back(aPropertyValue);
+        }
+        if (rParagraph.moParaAdjust.has())
+        {
+            style::ParagraphAdjust eAdjust = style::ParagraphAdjust_LEFT;
+            if (rParagraph.moParaAdjust.get() == "center")
+                eAdjust = style::ParagraphAdjust_CENTER;
+            else if (rParagraph.moParaAdjust.get() == "right")
+                eAdjust = style::ParagraphAdjust_RIGHT;
+
+            aPropertyValue.Name = "ParaAdjust";
+            aPropertyValue.Value = uno::makeAny(eAdjust);
             aPropVec.push_back(aPropertyValue);
         }
         uno::Sequence<beans::PropertyValue> aPropSeq(aPropVec.size());
