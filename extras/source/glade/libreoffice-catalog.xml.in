@@ -320,6 +320,8 @@
     <glade-widget-class title="Sidebar ToolBox" name="sfxlo-SidebarToolBox"
                         generic-name="Sidebar ToolBox" parent="GtkToolbar"
                         icon-name="widget-gtk-toolbar"/>
-
+    <glade-widget-class title="Tab Stop Images" name="cuilo-TabWin_Impl"
+                        generic-name="TabWin_Impl" parent="GtkDrawingArea"
+                        icon-name="widget-gtk-drawingarea"/>
   </glade-widget-classes>
 </glade-catalog>
