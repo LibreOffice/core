@@ -241,8 +241,6 @@ class SW_DLLPUBLIC SwTableAutoFormat
     // Calc specific flags.
     bool bInclWidthHeight : 1;
 
-    SwBoxAutoFormat* aBoxAutoFormat[ 16 ];
-
 public:
     SwTableAutoFormat( const OUString& rName, SwTableFormat* pTableStyle );
     SwTableAutoFormat( const SwTableAutoFormat& rNew );
@@ -252,8 +250,8 @@ public:
 
     SwTableFormat* GetTableStyle() { return m_pTableStyle; }
 
-    void SetBoxFormat( const SwBoxAutoFormat& rNew, sal_uInt8 nPos );
-    const SwBoxAutoFormat& GetBoxFormat( sal_uInt8 nPos ) const;
+    void SetBoxFormat( const SwTableBoxFormat& rNew, sal_uInt8 nPos );
+    SwTableBoxFormat* GetBoxFormat( sal_uInt8 nPos ) const;
 
     void SetName( const OUString& rNew ) { m_aName = rNew; nStrResId = USHRT_MAX; }
     OUString GetName() const { return m_aName; }

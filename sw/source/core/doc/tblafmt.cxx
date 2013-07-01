@@ -647,14 +647,10 @@ SwTableAutoFormat::SwTableAutoFormat( const OUString& rName, SwTableFormat* pTab
     bInclBackground = true;
     bInclValueFormat = true;
     bInclWidthHeight = true;
-
-    memset( aBoxAutoFormat, 0, sizeof( aBoxAutoFormat ) );
 }
 
 SwTableAutoFormat::SwTableAutoFormat( const SwTableAutoFormat& rNew )
 {
-    for( sal_uInt8 n = 0; n < 16; ++n )
-        aBoxAutoFormat[ n ] = 0;
     *this = rNew;
 }
 
@@ -662,18 +658,6 @@ SwTableAutoFormat& SwTableAutoFormat::operator=( const SwTableAutoFormat& rNew )
 {
     if (&rNew == this)
         return *this;
-
-    for( sal_uInt8 n = 0; n < 16; ++n )
-    {
-        if( aBoxAutoFormat[ n ] )
-            delete aBoxAutoFormat[ n ];
-
-        SwBoxAutoFormat* pFormat = rNew.aBoxAutoFormat[ n ];
-        if( pFormat )      // if is set -> copy
-            aBoxAutoFormat[ n ] = new SwBoxAutoFormat( *pFormat );
-        else            // else default
-            aBoxAutoFormat[ n ] = 0;
-    }
 
     m_pTableStyle = rNew.m_pTableStyle;
     m_aName = rNew.m_aName;
@@ -688,40 +672,80 @@ SwTableAutoFormat& SwTableAutoFormat::operator=( const SwTableAutoFormat& rNew )
     return *this;
 }
 
-SwTableAutoFormat::~SwTableAutoFormat()
-{
-    SwBoxAutoFormat** ppFormat = aBoxAutoFormat;
-    for( sal_uInt8 n = 0; n < 16; ++n, ++ppFormat )
-        if( *ppFormat )
-            delete *ppFormat;
-}
-
-void SwTableAutoFormat::SetBoxFormat( const SwBoxAutoFormat& rNew, sal_uInt8 nPos )
+void SwTableAutoFormat::SetBoxFormat( const SwTableBoxFormat& rNew, sal_uInt8 nPos )
 {
     OSL_ENSURE( nPos < 16, "wrong area" );
 
-    SwBoxAutoFormat* pFormat = aBoxAutoFormat[ nPos ];
-    if( pFormat )      // if is set -> copy
-        *aBoxAutoFormat[ nPos ] = rNew;
-    else            // else set anew
-        aBoxAutoFormat[ nPos ] = new SwBoxAutoFormat( rNew );
-}
+    sal_uInt8 nLine = nPos / 4;
+    sal_uInt8 nBox = nPos % 4;
 
-const SwBoxAutoFormat& SwTableAutoFormat::GetBoxFormat( sal_uInt8 nPos ) const
-{
-    OSL_ENSURE( nPos < 16, "wrong area" );
+    SwTableLineFormat* pLine;
 
-    SwBoxAutoFormat* pFormat = aBoxAutoFormat[ nPos ];
-    if( pFormat )      // if is set -> copy
-        return *pFormat;
-    else            // else return the default
+    switch( nLine )
     {
-        // If it doesn't exist yet:
-        if( !pDfltBoxAutoFormat )
-            pDfltBoxAutoFormat = new SwBoxAutoFormat;
-        return *pDfltBoxAutoFormat;
+        case 0:
+            pLine = m_pTableStyle->GetFirstLineFormat(); break;
+        case 1:
+            pLine = m_pTableStyle->GetOddLineFormat(); break;
+        case 2:
+            pLine = m_pTableStyle->GetEvenLineFormat(); break;
+        case 3:
+            pLine = m_pTableStyle->GetLastLineFormat(); break;
+        // TODO Extend for columns
+    }
+
+    switch( nBox )
+    {
+        case 0:
+            pLine->SetFirstBoxFormat( new SwTableBoxFormat( rNew ) ); break;
+        case 1:
+            pLine->SetOddBoxFormat( new SwTableBoxFormat( rNew ) ); break;
+        case 2:
+            pLine->SetEvenBoxFormat( new SwTableBoxFormat( rNew ) ); break;
+        case 3:
+            pLine->SetLastBoxFormat( new SwTableBoxFormat( rNew ) ); break;
     }
 }
+
+
+SwTableBoxFormat* SwTableAutoFormat::GetBoxFormat( sal_uInt8 nPos ) const
+{
+    OSL_ENSURE( nPos < 16, "wrong area" );
+
+    sal_uInt8 nLine = nPos / 4;
+    sal_uInt8 nBox = nPos % 4;
+
+    SwTableLineFormat* pLine;
+    SwTableBoxFormat* pRet;
+
+    switch( nLine )
+    {
+        case 0:
+            pLine = m_pTableStyle->GetFirstLineFormat(); break;
+        case 1:
+            pLine = m_pTableStyle->GetOddLineFormat(); break;
+        case 2:
+            pLine = m_pTableStyle->GetEvenLineFormat(); break;
+        case 3:
+            pLine = m_pTableStyle->GetLastLineFormat(); break;
+        // TODO Extend for columns
+    }
+
+    switch( nBox )
+    {
+        case 0:
+            pRet = pLine->GetFirstBoxFormat();
+        case 1:
+            pRet = pLine->GetOddBoxFormat();
+        case 2:
+            pRet = pLine->GetEvenBoxFormat();
+        case 3:
+            pRet = pLine->GetLastBoxFormat();
+    }
+
+    return pRet;
+}
+
 
 void SwTableAutoFormat::UpdateFromSet( sal_uInt8 nPos,
                                     const SfxItemSet& rSet,
@@ -999,11 +1023,11 @@ SwTableAutoFormat* SwTableAutoFormat::Load( SvStream& rStream, const SwAfVersion
 
         for( sal_uInt8 i = 0; bRet && i < 16; ++i )
         {
-            SwBoxAutoFormat* pFormat = new SwBoxAutoFormat;
-            // TODO Remove members in SwTableAutoFormat and adapt this
-            // bRet = pFormat->Load( rStream, rVersions, nVal );
+            SwTableBoxFormat* pFormat = pDoc->MakeTableBoxFormat();
+
+            bRet = pFormat->Load( rStream, rVersions, nVal );
             if( bRet )
-                pRet->aBoxAutoFormat[ i ] = pFormat;
+                pRet->SetBoxFormat( *pFormat, i );
             else
             {
                 delete pFormat;
@@ -1059,16 +1083,9 @@ bool SwTableAutoFormat::Save( SvStream& rStream, sal_uInt16 fileVersion ) const
 
     for( int i = 0; bRet && i < 16; ++i )
     {
-        SwBoxAutoFormat* pFormat = aBoxAutoFormat[ i ];
-        if( !pFormat )     // if not set -> write default
-        {
-            // If it doesn't exist yet:
-            if( !pDfltBoxAutoFormat )
-                pDfltBoxAutoFormat = new SwBoxAutoFormat;
-            pFormat = pDfltBoxAutoFormat;
-        }
-        // TODO Remove members in SwTableAutoFormat and adapt this
-        // bRet = pFormat->Save( rStream, fileVersion );
+        SwTableBoxFormat* pFormat = GetBoxFormat( i );
+
+        bRet = pFormat->Save( rStream, fileVersion );
     }
     return bRet;
 }
@@ -1126,42 +1143,43 @@ SwTableAutoFormatTable::SwTableAutoFormatTable(SwDoc* pDoc)
     SwTableFormat* pStyle = pDoc->FindTableFormatByName(sNm);
     if ( !pStyle )
         pStyle = pDoc->MakeTableFrameFormat(sNm, NULL);
-    std::unique_ptr<SwTableAutoFormat> pNew(new SwTableAutoFormat(sNm, pStyle));
+    SwTableAutoFormat* pNewTableAutoFormat = new SwTableAutoFormat( sNm, pStyle );
 
-    SwBoxAutoFormat aNew;
+    SwTableBoxFormat* pNewBoxFormat = pDoc->MakeTableBoxFormat();
 
     sal_uInt8 i;
 
     Color aColor( COL_BLUE );
     SvxBrushItem aBrushItem( aColor, RES_BACKGROUND );
-    aNew.SetBackground( aBrushItem );
-    aNew.SetColor( SvxColorItem(Color( COL_WHITE ), RES_CHRATR_COLOR) );
+    pNewBoxFormat->SetBackground( aBrushItem );
+    pNewBoxFormat->SetColor( SvxColorItem(Color( COL_WHITE ), RES_CHRATR_COLOR) );
 
     for( i = 0; i < 4; ++i )
-        pNew->SetBoxFormat( aNew, i );
+        pNewTableAutoFormat->SetBoxFormat( *pNewBoxFormat, i );
 
     // 70% gray
     aBrushItem.SetColor( RGB_COLORDATA( 0x4d, 0x4d, 0x4d ) );
-    aNew.SetBackground( aBrushItem );
+    pNewBoxFormat->SetBackground( aBrushItem );
     for( i = 4; i <= 12; i += 4 )
-        pNew->SetBoxFormat( aNew, i );
+        pNewTableAutoFormat->SetBoxFormat( *pNewBoxFormat, i );
 
     // 20% gray
     aBrushItem.SetColor( RGB_COLORDATA( 0xcc, 0xcc, 0xcc ) );
-    aNew.SetBackground( aBrushItem );
+    pNewBoxFormat->SetBackground( aBrushItem );
     aColor.SetColor( COL_BLACK );
-    aNew.SetColor( SvxColorItem( aColor, RES_CHRATR_COLOR) );
+    pNewBoxFormat->SetColor( SvxColorItem( aColor, RES_CHRATR_COLOR) );
     for( i = 7; i <= 15; i += 4 )
-        pNew->SetBoxFormat( aNew, i );
+        pNewTableAutoFormat->SetBoxFormat( *pNewBoxFormat, i );
     for( i = 13; i <= 14; ++i )
-        pNew->SetBoxFormat( aNew, i );
+        pNewTableAutoFormat->SetBoxFormat( *pNewBoxFormat, i );
 
     aBrushItem.SetColor( Color( COL_WHITE ) );
-    aNew.SetBackground( aBrushItem );
+    pNewBoxFormat->SetBackground( aBrushItem );
     for( i = 5; i <= 6; ++i )
-        pNew->SetBoxFormat( aNew, i );
+        pNewTableAutoFormat->SetBoxFormat( *pNewBoxFormat, i );
     for( i = 9; i <= 10; ++i )
-        pNew->SetBoxFormat( aNew, i );
+        pNewTableAutoFormat->SetBoxFormat( *pNewBoxFormat, i );
+
 
     SvxBoxItem aBox( RES_BOX );
     aBox.SetDistance( 55 );
@@ -1171,12 +1189,12 @@ SwTableAutoFormatTable::SwTableAutoFormatTable(SwDoc* pDoc)
 
     for( i = 0; i <= 15; ++i )
     {
-        aBox.SetLine( i <= 3 ? &aLn : 0, SvxBoxItemLine::TOP );
-        aBox.SetLine( (3 == ( i & 3 )) ? &aLn : 0, SvxBoxItemLine::RIGHT );
-        const_cast<SwBoxAutoFormat&>(pNew->GetBoxFormat( i )).SetBox( aBox );
+        aBox.SetLine( i <= 3 ? &aLn : 0, BOX_LINE_TOP );
+        aBox.SetLine( (3 == ( i & 3 )) ? &aLn : 0, BOX_LINE_RIGHT );
+        pNewTableAutoFormat->GetBoxFormat( i )->SetBox( aBox );
     }
 
-    m_pImpl->m_AutoFormats.push_back(std::move(pNew));
+    m_pImpl->m_AutoFormats.push_back(pNewTableAutoFormat);
 }
 
 bool SwTableAutoFormatTable::Load()
