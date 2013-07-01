@@ -81,7 +81,7 @@ ErrObject::getNumber() throw (uno::RuntimeException)
 void SAL_CALL
 ErrObject::setNumber( ::sal_Int32 _number ) throw (uno::RuntimeException)
 {
-    GetSbData()->pInst->setErrorVB( _number, String() );
+    GetSbData()->pInst->setErrorVB( _number, OUString() );
     OUString _description = GetSbData()->pInst->GetErrorMsg();
     setData( uno::makeAny( _number ), uno::Any(), uno::makeAny( _description ), uno::Any(), uno::Any() );
 }

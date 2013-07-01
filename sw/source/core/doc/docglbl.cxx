@@ -214,16 +214,23 @@ bool SwDoc::SplitDoc( sal_uInt16 eDocType, const String& rPath, bool bOutline, c
     GetIDocumentUndoRedo().DoUndo(false);
     SetRedlineMode_intern( (RedlineMode_t)(GetRedlineMode() & ~nsRedlineMode_t::REDLINE_ON));
 
-    String sExt = pFilter->GetSuffixes().getToken(0, ',');
-    if( !sExt.Len() )
-        sExt.AssignAscii( "sxw" );
-    if( '.' != sExt.GetChar( 0 ) )
-        sExt.Insert( '.', 0 );
+    OUString sExt = pFilter->GetSuffixes().getToken(0, ',');
+    if( sExt.isEmpty() )
+    {
+        sExt = ".sxw";
+    }
+    else
+    {
+        if( '.' != sExt[ 0 ] )
+        {
+            sExt = OUString(".") + sExt;
+        }
+    }
 
     INetURLObject aEntry(rPath);
     String sLeading(aEntry.GetBase());
     aEntry.removeSegment();
-    String sPath = aEntry.GetMainURL( INetURLObject::NO_DECODE );
+    OUString sPath = aEntry.GetMainURL( INetURLObject::NO_DECODE );
     utl::TempFile aTemp(sLeading,&sExt,&sPath );
     aTemp.EnableKillingFile();
 

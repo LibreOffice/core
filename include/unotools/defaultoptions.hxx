@@ -20,10 +20,10 @@
 #define INCLUDED_unotools_DEFAULTOPTIONS_HXX
 
 #include "unotools/unotoolsdllapi.h"
+#include <rtl/ustring.hxx>
 #include "tools/solar.h"
 #include <unotools/options.hxx>
 
-class String;
 class SvtDefaultOptions_Impl;
 
 // class SvtDefaultOptions -----------------------------------------------
@@ -39,7 +39,7 @@ public:
     SvtDefaultOptions();
     virtual ~SvtDefaultOptions();
 
-    String  GetDefaultPath( sal_uInt16 nId ) const;
+    OUString  GetDefaultPath( sal_uInt16 nId ) const;
 };
 
 #endif // #ifndef INCLUDED_unotools_DEFAULTOPTIONS_HXX

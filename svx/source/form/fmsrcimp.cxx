@@ -603,8 +603,8 @@ FmSearchEngine::SEARCH_RESULT FmSearchEngine::SearchRegularApprox(const OUString
 
         // (don't care about case here, this is done by the TextSearch object, 'cause we passed our case parameter to it)
 
-        xub_StrLen nStart = 0, nEnd = (xub_StrLen)sCurrentCheck.getLength();
-        bFound = aLocalEngine.SearchFrwrd(sCurrentCheck, &nStart, &nEnd);
+        sal_Int32 nStart = 0, nEnd = sCurrentCheck.getLength();
+        bFound = aLocalEngine.SearchForward(sCurrentCheck, &nStart, &nEnd);
             // das heisst hier 'forward' aber das bezieht sich nur auf die Suche innerhalb von sCurrentCheck, hat also mit
             // der Richtung meines Datensatz-Durchwanderns nix zu tun (darum kuemmert sich MoveField)
 

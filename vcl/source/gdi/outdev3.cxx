@@ -1071,10 +1071,12 @@ bool ImplDevFontListData::AddFontFace( PhysicalFontFace* pNewData )
 void ImplDevFontListData::InitMatchData( const utl::FontSubstConfiguration& rFontSubst,
     const String& rSearchName )
 {
-    String aShortName;
+    OUString aShortName;
+    OUString aMatchFamilyName(maMatchFamilyName);
     // get font attributes from the decorated font name
-    rFontSubst.getMapName( rSearchName, aShortName, maMatchFamilyName,
+    rFontSubst.getMapName( rSearchName, aShortName, aMatchFamilyName,
                             meMatchWeight, meMatchWidth, mnMatchType );
+    maMatchFamilyName = aMatchFamilyName;
     const FontNameAttr* pFontAttr = rFontSubst.getSubstInfo( rSearchName );
     // eventually use the stripped name
     if( !pFontAttr )
@@ -1483,7 +1485,7 @@ ImplDevFontListData* ImplDevFontList::ImplFindBySubstFontAttr( const utl::FontNa
     ImplDevFontListData* pFoundData = NULL;
 
     // use the font substitutions suggested by the FontNameAttr to find the font
-    ::std::vector< String >::const_iterator it = rFontAttr.Substitutions.begin();
+    ::std::vector< OUString >::const_iterator it = rFontAttr.Substitutions.begin();
     for(; it != rFontAttr.Substitutions.end(); ++it )
     {
         OUString aSearchName( *it );
@@ -2501,8 +2503,8 @@ ImplDevFontListData* ImplDevFontList::ImplFindByFont( FontSelectPattern& rFSD,
         GetEnglishSearchFontName( aSearchName );
     }
 
-    String      aSearchShortName;
-    String      aSearchFamilyName;
+    OUString      aSearchShortName;
+    OUString      aSearchFamilyName;
     FontWeight  eSearchWeight   = rFSD.GetWeight();
     FontWidth   eSearchWidth    = rFSD.GetWidthType();
     sal_uLong   nSearchType     = 0;
@@ -2521,8 +2523,8 @@ ImplDevFontListData* ImplDevFontList::ImplFindByFont( FontSelectPattern& rFSD,
             a korean bitmap font that is not suitable here. Use the font replacement table,
             that automatically leads to the desired "HG Mincho Light J". Same story for
             MS Gothic, there are thai and korean "Gothic" fonts, so we even prefer Andale */
-            static String aMS_Mincho( "msmincho" );
-            static String aMS_Gothic( "msgothic" );
+            static OUString aMS_Mincho( "msmincho" );
+            static OUString aMS_Gothic( "msgothic" );
             if ((aSearchName != aMS_Mincho) && (aSearchName != aMS_Gothic))
                 // TODO: add heuristic to only throw out the fake ms* fonts
 #endif
@@ -2574,8 +2576,8 @@ ImplDevFontListData* ImplDevFontList::ImplFindByFont( FontSelectPattern& rFSD,
         aSearchName = rFSD.maTargetName;
         GetEnglishSearchFontName( aSearchName );
 
-        String      aTempShortName;
-        String      aTempFamilyName;
+        OUString      aTempShortName;
+        OUString      aTempFamilyName;
         sal_uLong   nTempType   = 0;
         FontWeight  eTempWeight = rFSD.GetWeight();
         FontWidth   eTempWidth  = WIDTH_DONTKNOW;

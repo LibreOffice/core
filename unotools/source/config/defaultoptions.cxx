@@ -67,32 +67,32 @@ using namespace com::sun::star::uno;
 class SvtDefaultOptions_Impl : public utl::ConfigItem
 {
 public:
-    String          m_aAddinPath;
-    String          m_aAutoCorrectPath;
-    String          m_aAutoTextPath;
-    String          m_aBackupPath;
-    String          m_aBasicPath;
-    String          m_aBitmapPath;
-    String          m_aConfigPath;
-    String          m_aDictionaryPath;
-    String          m_aFavoritesPath;
-    String          m_aFilterPath;
-    String          m_aGalleryPath;
-    String          m_aGraphicPath;
-    String          m_aHelpPath;
-    String          m_aLinguisticPath;
-    String          m_aModulePath;
-    String          m_aPalettePath;
-    String          m_aPluginPath;
-    String          m_aTempPath;
-    String          m_aTemplatePath;
-    String          m_aUserConfigPath;
-    String          m_aWorkPath;
-    String          m_aUserDictionaryPath;
+    OUString         m_aAddinPath;
+    OUString         m_aAutoCorrectPath;
+    OUString         m_aAutoTextPath;
+    OUString         m_aBackupPath;
+    OUString         m_aBasicPath;
+    OUString         m_aBitmapPath;
+    OUString         m_aConfigPath;
+    OUString         m_aDictionaryPath;
+    OUString         m_aFavoritesPath;
+    OUString         m_aFilterPath;
+    OUString         m_aGalleryPath;
+    OUString         m_aGraphicPath;
+    OUString         m_aHelpPath;
+    OUString         m_aLinguisticPath;
+    OUString         m_aModulePath;
+    OUString         m_aPalettePath;
+    OUString         m_aPluginPath;
+    OUString         m_aTempPath;
+    OUString         m_aTemplatePath;
+    OUString         m_aUserConfigPath;
+    OUString         m_aWorkPath;
+    OUString         m_aUserDictionaryPath;
 
                     SvtDefaultOptions_Impl();
 
-    String          GetDefaultPath( sal_uInt16 nId ) const;
+    OUString         GetDefaultPath( sal_uInt16 nId ) const;
     virtual void    Commit();
     virtual void    Notify( const com::sun::star::uno::Sequence<OUString>& aPropertyNames);
 };
@@ -102,7 +102,7 @@ public:
 static SvtDefaultOptions_Impl*  pOptions = NULL;
 static sal_Int32                nRefCount = 0;
 
-typedef String SvtDefaultOptions_Impl:: *PathStrPtr;
+typedef OUString SvtDefaultOptions_Impl:: *PathStrPtr;
 
 struct PathToDefaultMapping_Impl
 {
@@ -185,7 +185,7 @@ void SvtDefaultOptions_Impl::Commit()
 
 // class SvtDefaultOptions_Impl ------------------------------------------
 
-String SvtDefaultOptions_Impl::GetDefaultPath( sal_uInt16 nId ) const
+OUString SvtDefaultOptions_Impl::GetDefaultPath( sal_uInt16 nId ) const
 {
     OUString aRet;
     sal_uInt16 nIdx = 0;
@@ -277,28 +277,28 @@ SvtDefaultOptions_Impl::SvtDefaultOptions_Impl() : ConfigItem( "Office.Common/Pa
 
                 switch ( nProp )
                 {
-                    case DEFAULTPATH__ADDIN:            m_aAddinPath = String( aFullPath );         break;
-                    case DEFAULTPATH__AUTOCORRECT:      m_aAutoCorrectPath = String( aFullPath );   break;
-                    case DEFAULTPATH__AUTOTEXT:         m_aAutoTextPath = String( aFullPath );      break;
-                    case DEFAULTPATH__BACKUP:           m_aBackupPath = String( aFullPath );        break;
-                    case DEFAULTPATH__BASIC:            m_aBasicPath = String( aFullPath );         break;
-                    case DEFAULTPATH__BITMAP:           m_aBitmapPath = String( aFullPath );        break;
-                    case DEFAULTPATH__CONFIG:           m_aConfigPath = String( aFullPath );        break;
-                    case DEFAULTPATH__DICTIONARY:       m_aDictionaryPath = String( aFullPath );    break;
-                    case DEFAULTPATH__FAVORITES:        m_aFavoritesPath = String( aFullPath );     break;
-                    case DEFAULTPATH__FILTER:           m_aFilterPath = String( aFullPath );        break;
-                    case DEFAULTPATH__GALLERY:          m_aGalleryPath = String( aFullPath );       break;
-                    case DEFAULTPATH__GRAPHIC:          m_aGraphicPath = String( aFullPath );       break;
-                    case DEFAULTPATH__HELP:             m_aHelpPath = String( aFullPath );          break;
-                    case DEFAULTPATH__LINGUISTIC:       m_aLinguisticPath = String( aFullPath );    break;
-                    case DEFAULTPATH__MODULE:           m_aModulePath = String( aFullPath );        break;
-                    case DEFAULTPATH__PALETTE:          m_aPalettePath = String( aFullPath );       break;
-                    case DEFAULTPATH__PLUGIN:           m_aPluginPath = String( aFullPath );        break;
-                    case DEFAULTPATH__TEMP:             m_aTempPath = String( aFullPath );          break;
-                    case DEFAULTPATH__TEMPLATE:         m_aTemplatePath = String( aFullPath );      break;
-                    case DEFAULTPATH__USERCONFIG:       m_aUserConfigPath = String( aFullPath );    break;
-                    case DEFAULTPATH__WORK:             m_aWorkPath = String( aFullPath );          break;
-                    case DEFAULTPATH__USERDICTIONARY:   m_aUserDictionaryPath = String( aFullPath );break;
+                    case DEFAULTPATH__ADDIN:            m_aAddinPath = aFullPath;         break;
+                    case DEFAULTPATH__AUTOCORRECT:      m_aAutoCorrectPath = aFullPath;   break;
+                    case DEFAULTPATH__AUTOTEXT:         m_aAutoTextPath = aFullPath;      break;
+                    case DEFAULTPATH__BACKUP:           m_aBackupPath = aFullPath;        break;
+                    case DEFAULTPATH__BASIC:            m_aBasicPath = aFullPath;         break;
+                    case DEFAULTPATH__BITMAP:           m_aBitmapPath = aFullPath;        break;
+                    case DEFAULTPATH__CONFIG:           m_aConfigPath = aFullPath;        break;
+                    case DEFAULTPATH__DICTIONARY:       m_aDictionaryPath = aFullPath;    break;
+                    case DEFAULTPATH__FAVORITES:        m_aFavoritesPath = aFullPath;     break;
+                    case DEFAULTPATH__FILTER:           m_aFilterPath = aFullPath;        break;
+                    case DEFAULTPATH__GALLERY:          m_aGalleryPath = aFullPath;       break;
+                    case DEFAULTPATH__GRAPHIC:          m_aGraphicPath = aFullPath;       break;
+                    case DEFAULTPATH__HELP:             m_aHelpPath = aFullPath;          break;
+                    case DEFAULTPATH__LINGUISTIC:       m_aLinguisticPath = aFullPath;    break;
+                    case DEFAULTPATH__MODULE:           m_aModulePath = aFullPath;        break;
+                    case DEFAULTPATH__PALETTE:          m_aPalettePath = aFullPath;       break;
+                    case DEFAULTPATH__PLUGIN:           m_aPluginPath = aFullPath;        break;
+                    case DEFAULTPATH__TEMP:             m_aTempPath = aFullPath;          break;
+                    case DEFAULTPATH__TEMPLATE:         m_aTemplatePath = aFullPath;      break;
+                    case DEFAULTPATH__USERCONFIG:       m_aUserConfigPath = aFullPath;    break;
+                    case DEFAULTPATH__WORK:             m_aWorkPath = aFullPath;          break;
+                    case DEFAULTPATH__USERDICTIONARY:   m_aUserDictionaryPath = aFullPath;break;
 
                     default:
                         SAL_WARN( "unotools.config", "invalid index to load a default path" );
@@ -340,7 +340,7 @@ SvtDefaultOptions::~SvtDefaultOptions()
 
 // -----------------------------------------------------------------------
 
-String SvtDefaultOptions::GetDefaultPath( sal_uInt16 nId ) const
+OUString SvtDefaultOptions::GetDefaultPath( sal_uInt16 nId ) const
 {
     return pImp->GetDefaultPath( nId );
 }

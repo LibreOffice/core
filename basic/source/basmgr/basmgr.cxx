@@ -883,7 +883,7 @@ void BasicManager::LoadBasicManager( SotStorage& rStorage, const OUString& rBase
             {
                 // Search lib in path
                 OUString aSearchFile = pInfo->GetRelStorageName();
-                String aSearchFileOldFormat(aSearchFile);
+                OUString aSearchFileOldFormat(aSearchFile);
                 SvtPathOptions aPathCFG;
                 if( aPathCFG.SearchFile( aSearchFileOldFormat, SvtPathOptions::PATH_BASIC ) )
                 {

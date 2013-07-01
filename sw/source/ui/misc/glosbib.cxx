@@ -77,7 +77,7 @@ SwGlossaryGroupDlg::SwGlossaryGroupDlg(Window * pParent,
 
     for (size_t i = 0; i < rPathArr.size(); ++i)
     {
-        String sPath(rPathArr[i]);
+        OUString sPath(rPathArr[i]);
         INetURLObject aTempURL(sPath);
         sPath = aTempURL.GetMainURL(INetURLObject::DECODE_WITH_CHARSET );
         m_pPathLB->InsertEntry(sPath);

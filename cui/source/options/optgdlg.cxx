@@ -1446,7 +1446,7 @@ void OfaLanguagesTabPage::Reset( const SfxItemSet& rSet )
     LocaleSettingHdl(m_pLocaleSettingLB);
 
     // configured currency, for example, USD-en-US or EUR-de-DE, or empty for locale default
-    String aAbbrev;
+    OUString aAbbrev;
     LanguageType eLang;
     const NfCurrencyEntry* pCurr = NULL;
     sLang = pLangConfig->aSysLocaleOptions.GetCurrencyConfigString();

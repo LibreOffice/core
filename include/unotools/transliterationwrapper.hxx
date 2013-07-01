@@ -20,7 +20,7 @@
 
 #ifndef _UNOTOOLS_TRANSLITERATIONWRAPPER_HXX
 #define _UNOTOOLS_TRANSLITERATIONWRAPPER_HXX
-#include <tools/string.hxx>
+#include <rtl/ustring.hxx>
 #include <tools/solar.h>
 #include <i18nlangtag/languagetag.hxx>
 #include <com/sun/star/i18n/XExtendedTransliteration.hpp>
@@ -40,7 +40,7 @@ class UNOTOOLS_DLLPUBLIC TransliterationWrapper
         ::com::sun::star::i18n::XExtendedTransliteration > xTrans;
     LanguageTag aLanguageTag;
     sal_uInt32 nType;
-    mutable sal_Bool bFirstCall;
+    mutable bool bFirstCall;
 
                                 // not implemented, prevent usage
     TransliterationWrapper( const TransliterationWrapper& );
@@ -62,7 +62,7 @@ public:
 
     sal_uInt32 getType() const { return nType; }
 
-    sal_Bool needLanguageForTheMode() const;
+    bool needLanguageForTheMode() const;
 
     /** set a new language and load the corresponding transliteration module if
         needed for the mode set with nType in the ctor */
@@ -80,19 +80,19 @@ public:
         those may load a different module and overwrite this setting. Only the
         transliterate() method that takes no LanguageType parameter may be used
         for a specific module loaded with this method.  */
-    void loadModuleByImplName( const String& rModuleName, sal_uInt16 nLang );
+    void loadModuleByImplName( const OUString& rModuleName, sal_uInt16 nLang );
 
     /** This transliteration method corresponds with the loadModuleByImplName()
         method. It relies on a module being loaded and does not try load one.
         If for any reason the string can't be transliterated the original
         string is returned.  */
-    String transliterate( const String& rStr,
-                        xub_StrLen nStart, xub_StrLen nLen,
+    OUString transliterate( const OUString& rStr,
+                        sal_Int32 nStart, sal_Int32 nLen,
                         ::com::sun::star::uno::Sequence <sal_Int32>* pOffset ) const;
 
     // Wrapper implementations of class Transliteration
-    String transliterate( const String& rStr, sal_uInt16 nLanguage,
-                        xub_StrLen nStart, xub_StrLen nLen,
+    OUString transliterate( const OUString& rStr, sal_uInt16 nLanguage,
+                        sal_Int32 nStart, sal_Int32 nLen,
                         ::com::sun::star::uno::Sequence <sal_Int32>* pOffset );
 
     /** If two strings are equal per this transliteration.
@@ -103,11 +103,11 @@ public:
         equals( "aab", 0, 3, nMatch1, "aaa", 0, 3, nMatch2 )
         returns false and nMatch:=2 and nMatch2:=2
      */
-    sal_Bool equals(
-        const String& rStr1, sal_Int32 nPos1, sal_Int32 nCount1, sal_Int32& nMatch1,
-        const String& rStr2, sal_Int32 nPos2, sal_Int32 nCount2, sal_Int32& nMatch2 ) const;
+    bool equals(
+        const OUString& rStr1, sal_Int32 nPos1, sal_Int32 nCount1, sal_Int32& nMatch1,
+        const OUString& rStr2, sal_Int32 nPos2, sal_Int32 nCount2, sal_Int32& nMatch2 ) const;
 
-    sal_Int32 compareString( const String& rStr1, const String& rStr2 ) const;
+    sal_Int32 compareString( const OUString& rStr1, const OUString& rStr2 ) const;
 
 
     // helpers
@@ -116,11 +116,11 @@ public:
         one string is matching the start of the other. Use this method instead
         of compareString()==0 because it is much faster.
      */
-    sal_Bool isEqual( const String& rStr1, const String& rStr2 ) const;
+    bool isEqual( const OUString& rStr1, const OUString& rStr2 ) const;
 
     /** If string rStr1 matches the start of string rStr2, i.e. "a" in "aaa"
      */
-    sal_Bool isMatch( const String& rStr1, const String& rStr2 ) const;
+    bool isMatch( const OUString& rStr1, const OUString& rStr2 ) const;
 
 };
 

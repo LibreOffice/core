@@ -166,9 +166,9 @@ sal_Bool ExtTextEngine::Search( TextSelection& rSel, const util::SearchOptions& 
             bForward ?  ( nNode <= nEndNode) : ( nNode >= nEndNode );
             bForward ? nNode++ : nNode-- )
     {
-        String aText = GetText( nNode );
-        sal_uInt16 nStartPos = 0;
-        sal_uInt16 nEndPos = aText.Len();
+        OUString aText = GetText( nNode );
+        sal_Int32 nStartPos = 0;
+        sal_Int32 nEndPos = aText.getLength();
         if ( nNode == nStartNode )
         {
             if ( bForward )
@@ -185,9 +185,9 @@ sal_Bool ExtTextEngine::Search( TextSelection& rSel, const util::SearchOptions& 
         }
 
         if ( bForward )
-            bFound = aSearcher.SearchFrwrd( aText, &nStartPos, &nEndPos );
+            bFound = aSearcher.SearchForward( aText, &nStartPos, &nEndPos );
         else
-            bFound = aSearcher.SearchBkwrd( aText, &nEndPos, &nStartPos );
+            bFound = aSearcher.SearchBackward( aText, &nEndPos, &nStartPos );
 
         if ( bFound )
         {
@@ -197,7 +197,7 @@ sal_Bool ExtTextEngine::Search( TextSelection& rSel, const util::SearchOptions& 
             rSel.GetEnd().GetIndex() = nEndPos;
             // Select over the paragraph?
             // FIXME  This should be max long...
-            if( nEndPos == sal::static_int_cast<sal_uInt16>(-1) ) // sal_uInt16 for 0 and -1 !
+            if( nEndPos == -1)
             {
                 if ( (rSel.GetEnd().GetPara()+1) < GetParagraphCount() )
                 {

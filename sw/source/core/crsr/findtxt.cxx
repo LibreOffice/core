@@ -478,11 +478,14 @@ bool SwPaM::DoSearch( const SearchOptions& rSearchOpt, utl::TextSearch& rSTxt,
             }
             pScriptIter->Next();
         }
-
+        sal_Int32 nProxyStart = nStart;
+        sal_Int32 nProxyEnd = nEnd;
         if( nSearchScript == nCurrScript &&
-                (rSTxt.*fnMove->fnSearch)( sCleanStr, &nStart, &nEnd, 0 ) &&
-                !(bZeroMatch = (nStart == nEnd)))
+                (rSTxt.*fnMove->fnSearch)( sCleanStr, &nProxyStart, &nProxyEnd, 0 ) &&
+                !(bZeroMatch = (nProxyStart == nProxyEnd)))
         {
+            nStart = (sal_uInt16)nProxyStart;
+            nEnd = (sal_uInt16)nProxyEnd;
             // set section correctly
             *GetPoint() = *pPam->GetPoint();
             SetMark();
@@ -516,6 +519,11 @@ bool SwPaM::DoSearch( const SearchOptions& rSearchOpt, utl::TextSearch& rSTxt,
                 Exchange();
             bFound = true;
             break;
+        }
+        else
+        {
+            nStart = (sal_uInt16)nProxyStart;
+            nEnd = (sal_uInt16)nProxyEnd;
         }
         nStart = nEnd;
     }
@@ -664,12 +672,12 @@ String *ReplaceBackReferences( const SearchOptions& rSearchOpt, SwPaM* pPam )
         {
             utl::TextSearch aSTxt( rSearchOpt );
             const String& rStr = static_cast<const SwTxtNode*>(pTxtNode)->GetTxt();
-            xub_StrLen nStart = pPam->Start()->nContent.GetIndex();
-            xub_StrLen nEnd = pPam->End()->nContent.GetIndex();
+            sal_Int32 nStart = pPam->Start()->nContent.GetIndex();
+            sal_Int32 nEnd = pPam->End()->nContent.GetIndex();
             SearchResult aResult;
-            if( aSTxt.SearchFrwrd( rStr, &nStart, &nEnd, &aResult ) )
+            if( aSTxt.SearchForward( rStr, &nStart, &nEnd, &aResult ) )
             {
-                String aReplaceStr( rSearchOpt.replaceString );
+                OUString aReplaceStr( rSearchOpt.replaceString );
                 aSTxt.ReplaceBackReferences( aReplaceStr, rStr, aResult );
                 pRet = new String( aReplaceStr );
             }

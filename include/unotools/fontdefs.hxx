@@ -21,7 +21,7 @@
 
 #include <unotools/unotoolsdllapi.h>
 #include <sal/types.h>
-#include <tools/string.hxx>
+#include <tools/solar.h>
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
 
@@ -43,7 +43,7 @@ UNOTOOLS_DLLPUBLIC OUString GetSubsFontName( const OUString& rName, sal_uLong nF
 
 UNOTOOLS_DLLPUBLIC void AddTokenFontName( OUString& rName, const OUString& rNewToken );
 
-struct UNOTOOLS_DLLPUBLIC FontNameHash { int operator()(const String&) const; };
+struct UNOTOOLS_DLLPUBLIC FontNameHash { int operator()(const OUString&) const; };
 
 // ---------------
 // - ConvertChar -
@@ -57,7 +57,7 @@ public:
     sal_Unicode         (*mpCvtFunc)( sal_Unicode );
     sal_Unicode         RecodeChar( sal_Unicode c ) const;
     void                RecodeString( OUString& rStra, sal_Int32 nIndex, sal_Int32 nLen ) const;
-    static const ConvertChar* GetRecodeData( const String& rOrgFontName, const String& rMapFontName );
+    static const ConvertChar* GetRecodeData( const OUString& rOrgFontName, const OUString& rMapFontName );
 };
 
 

@@ -28,11 +28,11 @@
 #include <osl/thread.hxx>
 #include <osl/conditn.hxx>
 #include <osl/mutex.hxx>
+#include <rtl/ustring.hxx>
 #include <tools/stream.hxx>
 #include <tools/link.hxx>
 #include <tools/errcode.hxx>
 #include <tools/datetime.hxx>
-#include <tools/string.hxx>
 
 namespace com
 {
@@ -69,7 +69,7 @@ SV_DECL_REF( UcbLockBytes )
 
 class UcbLockBytesHandler : public SvRefBase
 {
-    sal_Bool        m_bActive;
+    bool            m_bActive;
 public:
     enum LoadHandlerItem
     {
@@ -83,8 +83,8 @@ public:
                     {}
 
     virtual void    Handle( LoadHandlerItem nWhich, UcbLockBytesRef xLockBytes ) = 0;
-    void            Activate( sal_Bool bActivate = sal_True ) { m_bActive = bActivate; }
-    sal_Bool        IsActive() const { return m_bActive; }
+    void            Activate( bool bActivate = true ) { m_bActive = bActivate; }
+    bool            IsActive() const { return m_bActive; }
 };
 
 SV_DECL_IMPL_REF( UcbLockBytesHandler )
@@ -95,8 +95,8 @@ class UNOTOOLS_DLLPUBLIC UcbLockBytes : public virtual SvLockBytes
     osl::Condition          m_aTerminated;
     osl::Mutex              m_aMutex;
 
-    String                  m_aContentType;
-    String                  m_aRealURL;
+    OUString                m_aContentType;
+    OUString                m_aRealURL;
     DateTime                m_aExpireDate;
 
     ::com::sun::star::uno::Reference < ::com::sun::star::io::XInputStream >  m_xInputStream;
@@ -109,9 +109,9 @@ class UNOTOOLS_DLLPUBLIC UcbLockBytes : public virtual SvLockBytes
     sal_uInt32              m_nSize;
     ErrCode                 m_nError;
 
-    sal_Bool                m_bTerminated : 1;
-    sal_Bool                m_bDontClose : 1;
-    sal_Bool                m_bStreamValid : 1;
+    bool                    m_bTerminated;
+    bool                    m_bDontClose;
+    bool                    m_bStreamValid;
 
     DECL_LINK(              DataAvailHdl, void * );
 
@@ -145,16 +145,16 @@ public:
                             { return m_nError; }
 
     // the following properties are available when and after the first DataAvailable callback has been executed
-    String                  GetContentType() const;
-    String                  GetRealURL() const;
+    OUString                GetContentType() const;
+    OUString                GetRealURL() const;
     DateTime                GetExpireDate() const;
 
     // calling this method delegates the responsibility to call closeinput to the caller!
     ::com::sun::star::uno::Reference < ::com::sun::star::io::XInputStream > getInputStream();
 
-    sal_Bool                setInputStream_Impl( const ::com::sun::star::uno::Reference < ::com::sun::star::io::XInputStream > &rxInputStream,
-                                                 sal_Bool bSetXSeekable = sal_True );
-    sal_Bool                setStream_Impl( const ::com::sun::star::uno::Reference < ::com::sun::star::io::XStream > &rxStream );
+    bool                    setInputStream_Impl( const ::com::sun::star::uno::Reference < ::com::sun::star::io::XInputStream > &rxInputStream,
+                                                 bool bSetXSeekable = true );
+    bool                    setStream_Impl( const ::com::sun::star::uno::Reference < ::com::sun::star::io::XStream > &rxStream );
     void                    terminate_Impl (void);
 
     ::com::sun::star::uno::Reference < ::com::sun::star::io::XInputStream > getInputStream_Impl() const
@@ -175,7 +175,7 @@ public:
                                 return m_xSeekable;
                             }
 
-    sal_Bool                hasInputStream_Impl() const
+    bool                    hasInputStream_Impl() const
                             {
                                 osl::MutexGuard aGuard( (const_cast< UcbLockBytes* >(this))->m_aMutex );
                                 return m_xInputStream.is();
@@ -184,8 +184,8 @@ public:
     void                    setDontClose_Impl()
                             { m_bDontClose = sal_True; }
 
-    void                    SetContentType_Impl( const String& rType ) { m_aContentType = rType; }
-    void                    SetRealURL_Impl( const String& rURL )  { m_aRealURL = rURL; }
+    void                    SetContentType_Impl( const OUString& rType ) { m_aContentType = rType; }
+    void                    SetRealURL_Impl( const OUString& rURL )  { m_aRealURL = rURL; }
     void                    SetExpireDate_Impl( const DateTime& rDateTime )  { m_aExpireDate = rDateTime; }
     void                    SetStreamValid_Impl();
 };

@@ -1049,8 +1049,8 @@ private:
     ::std::multimap<sal_Unicode, SymbolEntry> maMagicMap;
 public:
     StarSymbolToMSMultiFontImpl(bool bPerfectOnly);
-    String ConvertChar(sal_Unicode &rChar);
-    String ConvertString(String &rString, xub_StrLen& rIndex);
+    OUString ConvertChar(sal_Unicode &rChar);
+    OUString ConvertString(OUString &rString, sal_Int32& rIndex);
 };
 
 struct ExtraTable { sal_Unicode cStar; sal_uInt8 cMS;};
@@ -1237,9 +1237,9 @@ const char *SymbolFontToString(int nResult)
     return *ppName;
 }
 
-String StarSymbolToMSMultiFontImpl::ConvertChar(sal_Unicode &rChar)
+OUString StarSymbolToMSMultiFontImpl::ConvertChar(sal_Unicode &rChar)
 {
-    String sRet;
+    OUString sRet;
 
     ::std::multimap<sal_Unicode, SymbolEntry>::const_iterator aResult =
         maMagicMap.find(rChar);
@@ -1247,32 +1247,33 @@ String StarSymbolToMSMultiFontImpl::ConvertChar(sal_Unicode &rChar)
     if (aResult != maMagicMap.end())
     {
         const SymbolEntry &rEntry = (*aResult).second;
-        sRet.AssignAscii(SymbolFontToString(rEntry.eFont));
+        const char* pc = SymbolFontToString(rEntry.eFont);
+        sRet = OUString(pc, strlen(pc), RTL_TEXTENCODING_ASCII_US);
         rChar = rEntry.cIndex;
     }
 
     return sRet;
 }
 
-String StarSymbolToMSMultiFontImpl::ConvertString(String &rString,
-    xub_StrLen& rIndex)
+OUString StarSymbolToMSMultiFontImpl::ConvertString(OUString &rString,
+                                                    sal_Int32& rIndex)
 {
     typedef ::std::multimap<sal_Unicode, SymbolEntry>::iterator MI;
     typedef ::std::pair<MI, MI> Result;
 
-    String sRet;
+    OUString sRet;
 
-    xub_StrLen nLen = rString.Len();
+    sal_Int32 nLen = rString.getLength();
     if (rIndex >= nLen)
         return sRet;
 
     int nTotal = 0, nResult = 0;
     ::std::vector<Result> aPossibilities;
     aPossibilities.reserve(nLen - rIndex);
-    xub_StrLen nStart = rIndex;
+    sal_Int32 nStart = rIndex;
     do
     {
-        Result aResult = maMagicMap.equal_range(rString.GetChar(rIndex));
+        Result aResult = maMagicMap.equal_range(rString[rIndex]);
         int nBitfield = 0;
         for (MI aIndex = aResult.first; aIndex != aResult.second; ++aIndex)
             nBitfield |= aIndex->second.eFont;
@@ -1304,10 +1305,12 @@ String StarSymbolToMSMultiFontImpl::ConvertString(String &rString,
             else
                 break;
         }
-        sRet.AssignAscii(SymbolFontToString(nI));
+        const char* pc = SymbolFontToString(nI);
+        sRet = OUString(pc, strlen(pc), RTL_TEXTENCODING_ASCII_US);
 
-        xub_StrLen nSize = sal::static_int_cast<xub_StrLen>(aPossibilities.size());
-        for(xub_StrLen nPos = 0; nPos < nSize; ++nPos)
+        sal_Int32 nSize = aPossibilities.size();
+        OUStringBuffer sBuff(rString);
+        for(sal_Int32 nPos = 0; nPos < nSize; ++nPos)
         {
             const Result &rResult = aPossibilities[nPos];
 
@@ -1315,11 +1318,12 @@ String StarSymbolToMSMultiFontImpl::ConvertString(String &rString,
             {
                 if (aIndex->second.eFont == nI)
                 {
-                    rString.SetChar(nPos+nStart, aIndex->second.cIndex);
+                    sBuff[nPos + nStart] = aIndex->second.cIndex;
                     break;
                 }
             }
         }
+        rString = sBuff.makeStringAndClear();
     }
 
     return sRet;
@@ -1432,7 +1436,7 @@ static ConvertChar aImplStarSymbolCvt = { NULL, "StarBats", ImplStarSymbolToStar
 
 // -----------------------------------------------------------------------
 
-const ConvertChar* ConvertChar::GetRecodeData( const String& rOrgFontName, const String& rMapFontName )
+const ConvertChar* ConvertChar::GetRecodeData( const OUString& rOrgFontName, const OUString& rMapFontName )
 {
     const ConvertChar* pCvt = NULL;
     OUString aOrgName( rOrgFontName );
@@ -1478,8 +1482,7 @@ const ConvertChar* ConvertChar::GetRecodeData( const String& rOrgFontName, const
 
 //=======================================================================
 
-FontToSubsFontConverter CreateFontToSubsFontConverter(
-    const String& rOrgName, sal_uLong nFlags )
+FontToSubsFontConverter CreateFontToSubsFontConverter( const OUString& rOrgName, sal_uLong nFlags )
 {
     const ConvertChar* pCvt = NULL;
 
@@ -1529,10 +1532,10 @@ sal_Unicode ConvertFontToSubsFontChar(
 
 // -----------------------------------------------------------------------
 
-String GetFontToSubsFontName( FontToSubsFontConverter hConverter )
+OUString GetFontToSubsFontName( FontToSubsFontConverter hConverter )
 {
     if ( !hConverter )
-        return String();
+        return OUString();
 
     const char* pName = ((ConvertChar*)hConverter)->mpSubsFontName;
     return OUString::createFromAscii( pName );

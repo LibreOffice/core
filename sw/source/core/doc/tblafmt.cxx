@@ -1122,7 +1122,7 @@ SwTableAutoFmtTbl::SwTableAutoFmtTbl()
 sal_Bool SwTableAutoFmtTbl::Load()
 {
     sal_Bool bRet = sal_False;
-    String sNm(OUString(sAutoTblFmtName));
+    OUString sNm(OUString(sAutoTblFmtName));
     SvtPathOptions aOpt;
     if( aOpt.SearchFile( sNm, SvtPathOptions::PATH_USERCONFIG ))
     {

@@ -26,6 +26,7 @@
 #include <comphelper/processfactory.hxx>
 #include <unotools/textsearch.hxx>
 #include <rtl/instance.hxx>
+#include <rtl/ustrbuf.hxx>
 
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::uno;
@@ -38,21 +39,21 @@ namespace utl
 
 SearchParam::SearchParam( const OUString &rText,
                                 SearchType eType,
-                                sal_Bool bCaseSensitive,
-                                sal_Bool bWrdOnly,
-                                sal_Bool bSearchInSel )
+                                bool bCaseSensitive,
+                                bool bWrdOnly,
+                                bool bSearchInSel )
 {
     sSrchStr        = rText;
-    m_eSrchType       = eType;
+    m_eSrchType     = eType;
 
-    m_bWordOnly       = bWrdOnly;
-    m_bSrchInSel      = bSearchInSel;
-    m_bCaseSense      = bCaseSensitive;
+    m_bWordOnly     = bWrdOnly;
+    m_bSrchInSel    = bSearchInSel;
+    m_bCaseSense    = bCaseSensitive;
 
     nTransliterationFlags = 0;
 
     // Parameters for weighted Levenshtein distance
-    bLEV_Relaxed    = sal_True;
+    bLEV_Relaxed    = true;
     nLEV_OtherX     = 2;
     nLEV_ShorterY   = 1;
     nLEV_LongerZ    = 3;
@@ -62,11 +63,11 @@ SearchParam::SearchParam( const SearchParam& rParam )
 {
     sSrchStr        = rParam.sSrchStr;
     sReplaceStr     = rParam.sReplaceStr;
-    m_eSrchType       = rParam.m_eSrchType;
+    m_eSrchType     = rParam.m_eSrchType;
 
-    m_bWordOnly       = rParam.m_bWordOnly;
-    m_bSrchInSel      = rParam.m_bSrchInSel;
-    m_bCaseSense      = rParam.m_bCaseSense;
+    m_bWordOnly     = rParam.m_bWordOnly;
+    m_bSrchInSel    = rParam.m_bSrchInSel;
+    m_bCaseSense    = rParam.m_bCaseSense;
 
     bLEV_Relaxed    = rParam.bLEV_Relaxed;
     nLEV_OtherX     = rParam.nLEV_OtherX;
@@ -206,51 +207,19 @@ TextSearch::~TextSearch()
  * methods, such as ordinary string searching or regular expression
  * matching, using the method pointer.
  */
-int TextSearch::SearchFrwrd( const String & rStr, xub_StrLen* pStart,
-                            xub_StrLen* pEnde, SearchResult* pRes )
-{
-    int nRet = 0;
-    try
-    {
-        if( xTextSearch.is() )
-        {
-            SearchResult aRet( xTextSearch->searchForward(
-                                                    rStr, *pStart, *pEnde ));
-            if( aRet.subRegExpressions > 0 )
-            {
-                nRet = 1;
-                // the XTextsearch returns in startOffset the higher position
-                // and the endposition is always exclusive.
-                // The caller of this function will have in startPos the
-                // lower pos. and end
-                *pStart = (xub_StrLen)aRet.startOffset[ 0 ];
-                *pEnde = (xub_StrLen)aRet.endOffset[ 0 ];
-                if( pRes )
-                    *pRes = aRet;
-            }
-        }
-    }
-    catch ( Exception& )
-    {
-        SAL_WARN( "unotools.i18n", "SearchForward: Exception caught!" );
-    }
-    return nRet;
-}
-
-sal_Bool TextSearch::SearchForward( const OUString &rStr,
+bool TextSearch::SearchForward( const OUString &rStr,
                     sal_Int32* pStart, sal_Int32* pEnd,
                     ::com::sun::star::util::SearchResult* pRes)
 {
-    sal_Bool nRet = sal_False;
+    bool nRet = false;
     try
     {
         if( xTextSearch.is() )
         {
-            SearchResult aRet( xTextSearch->searchForward(
-                                                    rStr, *pStart, *pEnd ));
+            SearchResult aRet( xTextSearch->searchForward( rStr, *pStart, *pEnd ));
             if( aRet.subRegExpressions > 0 )
             {
-                nRet = sal_True;
+                nRet = true;
                 // the XTextsearch returns in startOffset the higher position
                 // and the endposition is always exclusive.
                 // The caller of this function will have in startPos the
@@ -270,25 +239,24 @@ sal_Bool TextSearch::SearchForward( const OUString &rStr,
 }
 
 
-int TextSearch::SearchBkwrd( const String & rStr, xub_StrLen* pStart,
-                            xub_StrLen* pEnde, SearchResult* pRes )
+bool TextSearch::SearchBackward( const OUString & rStr, sal_Int32* pStart,
+                                sal_Int32* pEnde, SearchResult* pRes )
 {
-    int nRet = 0;
+    bool nRet = false;
     try
     {
         if( xTextSearch.is() )
         {
-            SearchResult aRet( xTextSearch->searchBackward(
-                                                    rStr, *pStart, *pEnde ));
+            SearchResult aRet( xTextSearch->searchBackward( rStr, *pStart, *pEnde ));
             if( aRet.subRegExpressions )
             {
-                nRet = 1;
+                nRet = true;
                 // the XTextsearch returns in startOffset the higher position
                 // and the endposition is always exclusive.
                 // The caller of this function will have in startPos the
                 // lower pos. and end
-                *pEnde = (xub_StrLen)aRet.startOffset[ 0 ];
-                *pStart = (xub_StrLen)aRet.endOffset[ 0 ];
+                *pEnde = aRet.startOffset[ 0 ];
+                *pStart = aRet.endOffset[ 0 ];
                 if( pRes )
                     *pRes = aRet;
             }
@@ -301,103 +269,92 @@ int TextSearch::SearchBkwrd( const String & rStr, xub_StrLen* pStart,
     return nRet;
 }
 
-void TextSearch::ReplaceBackReferences( String& rReplaceStr, const String &rStr, const SearchResult& rResult )
+void TextSearch::ReplaceBackReferences( OUString& rReplaceStr, const OUString &rStr, const SearchResult& rResult )
 {
     if( rResult.subRegExpressions > 0 )
     {
-        OUString sTab( '\t' );
-        sal_Unicode sSrchChrs[] = {'\\', '&', '$', 0};
-        String sTmp;
-        xub_StrLen nPos = 0;
         sal_Unicode sFndChar;
-        while( STRING_NOTFOUND != ( nPos = rReplaceStr.SearchChar( sSrchChrs, nPos )) )
+        sal_Int32 i;
+        OUStringBuffer sBuff(rReplaceStr.getLength()*4);
+        for(i = 0; i < rReplaceStr.getLength(); i++)
         {
-            if( rReplaceStr.GetChar( nPos ) == '&')
+            if( rReplaceStr[i] == '&')
             {
-                sal_uInt16 nStart = (sal_uInt16)(rResult.startOffset[0]);
-                sal_uInt16 nLength = (sal_uInt16)(rResult.endOffset[0] - rResult.startOffset[0]);
-                rReplaceStr.Erase( nPos, 1 );   // delete ampersand
-                // replace by found string
-                rReplaceStr.Insert( rStr, nStart, nLength, nPos );
-                // jump over
-                nPos = nPos + nLength;
+                sal_Int32 nStart = rResult.startOffset[0];
+                sal_Int32 nLength = rResult.endOffset[0] - rResult.startOffset[0];
+                sBuff.append(rStr.getStr() + nStart, nLength);
             }
-            else if( rReplaceStr.GetChar( nPos ) == '$')
+            else if( rReplaceStr[i] == '$' && i < rReplaceStr.getLength() - 1)
             {
-                if( nPos + 1 < rReplaceStr.Len())
-                {
-                    sFndChar = rReplaceStr.GetChar( nPos + 1 );
-                    switch(sFndChar)
-                    {   // placeholder for a backward reference?
-                        case '0':
-                        case '1':
-                        case '2':
-                        case '3':
-                        case '4':
-                        case '5':
-                        case '6':
-                        case '7':
-                        case '8':
-                        case '9':
+                sFndChar = rReplaceStr[ i + 1 ];
+                switch(sFndChar)
+                {   // placeholder for a backward reference?
+                case '0':
+                case '1':
+                case '2':
+                case '3':
+                case '4':
+                case '5':
+                case '6':
+                case '7':
+                case '8':
+                case '9':
+                    {
+                        int j = sFndChar - '0'; // index
+                        if(j < rResult.subRegExpressions)
                         {
-                            rReplaceStr.Erase( nPos, 2 );   // delete both
-                            int i = sFndChar - '0'; // index
-                            if(i < rResult.subRegExpressions)
+                            sal_Int32 nSttReg = rResult.startOffset[j];
+                            sal_Int32 nRegLen = rResult.endOffset[j];
+                            if( nRegLen > nSttReg )
                             {
-                                sal_uInt16 nSttReg = (sal_uInt16)(rResult.startOffset[i]);
-                                sal_uInt16 nRegLen = (sal_uInt16)(rResult.endOffset[i]);
-                                if( nRegLen > nSttReg )
-                                    nRegLen = nRegLen - nSttReg;
-                                else
-                                {
-                                    nRegLen = nSttReg - nRegLen;
-                                    nSttReg = (sal_uInt16)(rResult.endOffset[i]);
-                                }
-                                // Copy reference from found string
-                                sTmp = rStr.Copy((sal_uInt16)nSttReg, (sal_uInt16)nRegLen);
-                                // insert
-                                rReplaceStr.Insert( sTmp, nPos );
-                                // and step over
-                                nPos = nPos + sTmp.Len();
+                                nRegLen = nRegLen - nSttReg;
                             }
+                            else
+                            {
+                                nRegLen = nSttReg - nRegLen;
+                                nSttReg = rResult.endOffset[j];
+                            }
+                            // Copy reference from found string
+                            sBuff.append(rStr.getStr() + nSttReg, nRegLen);
                         }
-                        break;
-                        default:
-                            nPos += 2; // leave both chars unchanged
-                            break;
+                        i += 1;
                     }
+                    break;
+                default:
+                    sBuff.append(rReplaceStr[i]);
+                    sBuff.append(rReplaceStr[i+1]);
+                    i += 1;
+                    break;
                 }
-                else
-                    ++nPos;
+            }
+            else if( rReplaceStr[i] == '\\' && i < rReplaceStr.getLength() - 1)
+            {
+                sFndChar = rReplaceStr[ i+1 ];
+                switch(sFndChar)
+                {
+                case '\\':
+                case '&':
+                case '$':
+                    sBuff.append(sFndChar);
+                    i+=1;
+                    break;
+                case 't':
+                    sBuff.append('\t');
+                    i += 1;
+                    break;
+                default:
+                    sBuff.append(rReplaceStr[i]);
+                    sBuff.append(rReplaceStr[i+1]);
+                    i += 1;
+                    break;
+                }
             }
             else
             {
-                // at least another character?
-                if( nPos + 1 < rReplaceStr.Len())
-                {
-                    sFndChar = rReplaceStr.GetChar( nPos + 1 );
-                    switch(sFndChar)
-                    {
-                        case '\\':
-                        case '&':
-                        case '$':
-                            rReplaceStr.Erase( nPos, 1 );
-                            nPos++;
-                        break;
-                        case 't':
-                            rReplaceStr.Erase( nPos, 2 ); // delete both
-                            rReplaceStr.Insert( sTab, nPos ); // insert tabulator
-                            nPos++; // step over
-                        break;
-                        default:
-                            nPos += 2; // ignore both characters
-                        break;
-                    }
-                }
-                else
-                    ++nPos;
+                sBuff.append(rReplaceStr[i]);
             }
         }
+        rReplaceStr = sBuff.makeStringAndClear();
     }
 }
 

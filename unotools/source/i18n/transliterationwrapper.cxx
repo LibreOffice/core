@@ -44,12 +44,11 @@ TransliterationWrapper::~TransliterationWrapper()
 }
 
 
-String TransliterationWrapper::transliterate(
-                                const String& rStr, sal_uInt16 nLang,
-                                xub_StrLen nStart, xub_StrLen nLen,
-                                Sequence <sal_Int32>* pOffset )
+OUString TransliterationWrapper::transliterate(const OUString& rStr, sal_uInt16 nLang,
+                                               sal_Int32 nStart, sal_Int32 nLen,
+                                               Sequence <sal_Int32>* pOffset )
 {
-    String sRet;
+    OUString sRet;
     if( xTrans.is() )
     {
         try
@@ -70,12 +69,11 @@ String TransliterationWrapper::transliterate(
 }
 
 
-String TransliterationWrapper::transliterate(
-                                const String& rStr,
-                                xub_StrLen nStart, xub_StrLen nLen,
-                                Sequence <sal_Int32>* pOffset ) const
+OUString TransliterationWrapper::transliterate( const OUString& rStr,
+                                                sal_Int32 nStart, sal_Int32 nLen,
+                                                Sequence <sal_Int32>* pOffset ) const
 {
-    String sRet( rStr );
+    OUString sRet( rStr );
     if( xTrans.is() )
     {
         try
@@ -93,7 +91,7 @@ String TransliterationWrapper::transliterate(
     return sRet;
 }
 
-sal_Bool TransliterationWrapper::needLanguageForTheMode() const
+bool TransliterationWrapper::needLanguageForTheMode() const
 {
     return TransliterationModules_UPPERCASE_LOWERCASE == nType ||
            TransliterationModules_LOWERCASE_UPPERCASE == nType ||
@@ -114,8 +112,8 @@ void TransliterationWrapper::setLanguageLocaleImpl( sal_uInt16 nLang )
 
 void TransliterationWrapper::loadModuleIfNeeded( sal_uInt16 nLang )
 {
-    sal_Bool bLoad = bFirstCall;
-    bFirstCall = sal_False;
+    bool bLoad = bFirstCall;
+    bFirstCall = false;
 
     if( static_cast< sal_Int32 >(nType) == TransliterationModulesExtra::SENTENCE_CASE )
     {
@@ -161,12 +159,12 @@ void TransliterationWrapper::loadModuleImpl() const
         SAL_WARN( "unotools.i18n", "loadModuleImpl: Exception caught " << e.Message );
     }
 
-    bFirstCall = sal_False;
+    bFirstCall = false;
 }
 
 
-void TransliterationWrapper::loadModuleByImplName(
-        const String& rModuleName, sal_uInt16 nLang )
+void TransliterationWrapper::loadModuleByImplName(const OUString& rModuleName,
+                                                  sal_uInt16 nLang )
 {
     try
     {
@@ -183,13 +181,13 @@ void TransliterationWrapper::loadModuleByImplName(
         SAL_WARN( "unotools.i18n", "loadModuleByImplName: Exception caught " << e.Message );
     }
 
-    bFirstCall = sal_False;
+    bFirstCall = false;
 }
 
 
-sal_Bool TransliterationWrapper::equals(
-    const String& rStr1, sal_Int32 nPos1, sal_Int32 nCount1, sal_Int32& nMatch1,
-    const String& rStr2, sal_Int32 nPos2, sal_Int32 nCount2, sal_Int32& nMatch2 ) const
+bool TransliterationWrapper::equals(
+    const OUString& rStr1, sal_Int32 nPos1, sal_Int32 nCount1, sal_Int32& nMatch1,
+    const OUString& rStr2, sal_Int32 nPos2, sal_Int32 nCount2, sal_Int32& nMatch2 ) const
 {
     try
     {
@@ -202,10 +200,10 @@ sal_Bool TransliterationWrapper::equals(
     {
         SAL_WARN( "unotools.i18n", "equals: Exception caught " << e.Message );
     }
-    return sal_False;
+    return false;
 }
 
-sal_Int32 TransliterationWrapper::compareString( const String& rStr1, const String& rStr2 ) const
+sal_Int32 TransliterationWrapper::compareString( const OUString& rStr1, const OUString& rStr2 ) const
 {
     try
     {
@@ -224,23 +222,23 @@ sal_Int32 TransliterationWrapper::compareString( const String& rStr1, const Stri
 
 // --- helpers --------------------------------------------------------
 
-sal_Bool TransliterationWrapper::isEqual( const String& rStr1, const String& rStr2 ) const
+bool TransliterationWrapper::isEqual( const OUString& rStr1, const OUString& rStr2 ) const
 {
     sal_Int32 nMatch1, nMatch2;
-    sal_Bool bMatch = equals(
-        rStr1, 0, rStr1.Len(), nMatch1,
-        rStr2, 0, rStr2.Len(), nMatch2 );
+    bool bMatch = equals(
+        rStr1, 0, rStr1.getLength(), nMatch1,
+        rStr2, 0, rStr2.getLength(), nMatch2 );
     return bMatch;
 }
 
 
-sal_Bool TransliterationWrapper::isMatch( const String& rStr1, const String& rStr2 ) const
+bool TransliterationWrapper::isMatch( const OUString& rStr1, const OUString& rStr2 ) const
 {
     sal_Int32 nMatch1, nMatch2;
     equals(
-        rStr1, 0, rStr1.Len(), nMatch1,
-        rStr2, 0, rStr2.Len(), nMatch2 );
-    return (nMatch1 <= nMatch2) && (nMatch1 == rStr1.Len());
+        rStr1, 0, rStr1.getLength(), nMatch1,
+        rStr2, 0, rStr2.getLength(), nMatch2 );
+    return (nMatch1 <= nMatch2) && (nMatch1 == rStr1.getLength());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

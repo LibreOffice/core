@@ -194,10 +194,10 @@ void SAL_CALL UcbPropertiesChangeListener_Impl::propertiesChange ( const Sequenc
                 sal_Int32 k, m = aHead.getLength();
                 for (k = 0; k < m; k++)
                 {
-                    String aName( aHead[k].Name );
-                    String aValue( aHead[k].Value );
+                    OUString aName( aHead[k].Name );
+                    OUString aValue( aHead[k].Value );
 
-                    if (aName.CompareIgnoreCaseToAscii("Expires") == COMPARE_EQUAL)
+                    if (aName.compareToIgnoreAsciiCaseAscii("Expires") == 0)
                     {
                         DateTime aExpires (0, 0);
                         if (INetRFC822Message::ParseDateField (aValue, aExpires))
@@ -878,7 +878,7 @@ void SAL_CALL Moderator::onTerminated()
    Function for opening UCB contents synchronously,
    but with handled timeout;
 */
-static sal_Bool _UCBOpenContentSync(
+static bool _UCBOpenContentSync(
     UcbLockBytesRef xLockBytes,
     Reference < XContent > xContent,
     const Command& rArg,
@@ -888,7 +888,7 @@ static sal_Bool _UCBOpenContentSync(
     UcbLockBytesHandlerRef xHandler );
 
 
-static sal_Bool UCBOpenContentSync(
+static bool UCBOpenContentSync(
     UcbLockBytesRef xLockBytes,
     Reference < XContent > xContent,
     const Command& rArg,
@@ -917,8 +917,8 @@ static sal_Bool UCBOpenContentSync(
         return _UCBOpenContentSync(
             xLockBytes,xContent,rArg,xSink,xInteract,xProgress,xHandler);
 
-    if ( (aScheme.compareToAscii( "http" ) != COMPARE_EQUAL) ||
-         (aScheme.compareToAscii( "https" ) != COMPARE_EQUAL) )
+    if ( (aScheme.compareToAscii( "http" ) != 0) ||
+         (aScheme.compareToAscii( "https" ) != 0) )
         xLockBytes->SetStreamValid_Impl();
 
     Reference< XPropertiesChangeListener > xListener;
@@ -1137,7 +1137,7 @@ static sal_Bool UCBOpenContentSync(
 /**
     Function for opening UCB contents synchronously
  */
-static sal_Bool _UCBOpenContentSync(
+static bool _UCBOpenContentSync(
     UcbLockBytesRef xLockBytes,
     Reference < XContent > xContent,
     const Command& rArg,
@@ -1154,7 +1154,7 @@ static sal_Bool _UCBOpenContentSync(
 
     // http protocol must be handled in a special way: during the opening process the input stream may change
     // only the last inputstream after notifying the document headers is valid
-    if ( aScheme.compareToAscii("http") != COMPARE_EQUAL )
+    if ( aScheme.compareToAscii("http") != 0 )
         xLockBytes->SetStreamValid_Impl();
 
     Reference< XPropertiesChangeListener > xListener = new UcbPropertiesChangeListener_Impl( xLockBytes );
@@ -1235,11 +1235,11 @@ UcbLockBytes::UcbLockBytes( UcbLockBytesHandler* pHandler )
     , m_pCommandThread( NULL )
     , m_xHandler( pHandler )
     , m_nError( ERRCODE_NONE )
-    , m_bTerminated  (sal_False)
-    , m_bDontClose( sal_False )
-    , m_bStreamValid  (sal_False)
+    , m_bTerminated  (false)
+    , m_bDontClose( false )
+    , m_bStreamValid  (false)
 {
-    SetSynchronMode( sal_True );
+    SetSynchronMode( true );
 }
 
 //----------------------------------------------------------------------------
@@ -1280,19 +1280,19 @@ UcbLockBytes::~UcbLockBytes()
 Reference < XInputStream > UcbLockBytes::getInputStream()
 {
     osl::MutexGuard aGuard( m_aMutex );
-    m_bDontClose = sal_True;
+    m_bDontClose = true;
     return m_xInputStream;
 }
 
 //----------------------------------------------------------------------------
 
-sal_Bool UcbLockBytes::setStream_Impl( const Reference<XStream>& aStream )
+bool UcbLockBytes::setStream_Impl( const Reference<XStream>& aStream )
 {
     osl::MutexGuard aGuard( m_aMutex );
     if ( aStream.is() )
     {
         m_xOutputStream = aStream->getOutputStream();
-        setInputStream_Impl( aStream->getInputStream(), sal_False );
+        setInputStream_Impl( aStream->getInputStream(), false );
         m_xSeekable = Reference < XSeekable > ( aStream, UNO_QUERY );
     }
     else
@@ -1304,9 +1304,9 @@ sal_Bool UcbLockBytes::setStream_Impl( const Reference<XStream>& aStream )
     return m_xInputStream.is();
 }
 
-sal_Bool UcbLockBytes::setInputStream_Impl( const Reference<XInputStream> &rxInputStream, sal_Bool bSetXSeekable )
+bool UcbLockBytes::setInputStream_Impl( const Reference<XInputStream> &rxInputStream, bool bSetXSeekable )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
 
     try
     {
@@ -1345,7 +1345,7 @@ sal_Bool UcbLockBytes::setInputStream_Impl( const Reference<XInputStream> &rxInp
 
 void UcbLockBytes::SetStreamValid_Impl()
 {
-    m_bStreamValid = sal_True;
+    m_bStreamValid = true;
     if ( m_xInputStream.is() )
         m_aInitialized.set();
 }
@@ -1353,7 +1353,7 @@ void UcbLockBytes::SetStreamValid_Impl()
 //----------------------------------------------------------------------------
 void UcbLockBytes::terminate_Impl()
 {
-    m_bTerminated = sal_True;
+    m_bTerminated = true;
     m_aInitialized.set();
     m_aTerminated.set();
 
@@ -1637,13 +1637,13 @@ UcbLockBytesRef UcbLockBytes::CreateLockBytes( const Reference < XContent >& xCo
 
     Reference< XProgressHandler > xProgressHdl = new ProgressHandler_Impl( LINK( &xLockBytes, UcbLockBytes, DataAvailHdl ) );
 
-    sal_Bool bError = UCBOpenContentSync( xLockBytes,
-                                          xContent,
-                                          aCommand,
-                                          xSink,
-                                          xInteractionHandler,
-                                          xProgressHdl,
-                                          pHandler );
+    bool bError = UCBOpenContentSync( xLockBytes,
+                                      xContent,
+                                      aCommand,
+                                      xSink,
+                                      xInteractionHandler,
+                                      xProgressHdl,
+                                      pHandler );
 
     if ( xLockBytes->GetError() == ERRCODE_NONE && ( bError || !xLockBytes->getInputStream().is() ) )
     {

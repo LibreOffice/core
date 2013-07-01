@@ -324,10 +324,10 @@ sal_Bool SvxRedlinTable::IsValidEntry(const String* pAuthorStr,
     }
     if(bComment && nTheFlag)
     {
-        xub_StrLen nStartPos = 0;
-        xub_StrLen nEndPos = pCommentStr->Len();
+        sal_Int32 nStartPos = 0;
+        sal_Int32 nEndPos = pCommentStr->Len();
 
-        nTheFlag=pCommentSearcher->SearchFrwrd( *pCommentStr, &nStartPos, &nEndPos);
+        nTheFlag=pCommentSearcher->SearchForward( *pCommentStr, &nStartPos, &nEndPos);
     }
     return nTheFlag;
 }
@@ -362,10 +362,10 @@ sal_Bool SvxRedlinTable::IsValidComment(const String* pCommentStr)
 
     if(bComment)
     {
-        xub_StrLen nStartPos = 0;
-        xub_StrLen nEndPos = pCommentStr->Len();
+        sal_Int32 nStartPos = 0;
+        sal_Int32 nEndPos = pCommentStr->Len();
 
-        nTheFlag=pCommentSearcher->SearchFrwrd( *pCommentStr, &nStartPos, &nEndPos);
+        nTheFlag=pCommentSearcher->SearchForward( *pCommentStr, &nStartPos, &nEndPos);
     }
     return nTheFlag;
 }

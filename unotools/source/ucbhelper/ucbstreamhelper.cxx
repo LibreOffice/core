@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <tools/string.hxx>
+#include <rtl/ustring.hxx>
 #include <unotools/ucblockbytes.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <comphelper/processfactory.hxx>
@@ -40,9 +40,9 @@ using namespace ::com::sun::star::beans;
 namespace utl
 {
 
-static SvStream* lcl_CreateStream( const String& rFileName, StreamMode eOpenMode,
-        Reference < XInteractionHandler > xInteractionHandler,
-        UcbLockBytesHandler* pHandler, sal_Bool bEnsureFileExists )
+static SvStream* lcl_CreateStream( const OUString& rFileName, StreamMode eOpenMode,
+                                   Reference < XInteractionHandler > xInteractionHandler,
+                                   UcbLockBytesHandler* pHandler, bool bEnsureFileExists )
 {
     SvStream* pStream = NULL;
     Reference< XUniversalContentBroker > ucb(
@@ -140,22 +140,22 @@ static SvStream* lcl_CreateStream( const String& rFileName, StreamMode eOpenMode
 
 //============================================================================
 
-SvStream* UcbStreamHelper::CreateStream( const String& rFileName, StreamMode eOpenMode,
-        UcbLockBytesHandler* pHandler )
+SvStream* UcbStreamHelper::CreateStream( const OUString& rFileName, StreamMode eOpenMode,
+                                         UcbLockBytesHandler* pHandler )
 {
     return lcl_CreateStream( rFileName, eOpenMode, Reference < XInteractionHandler >(), pHandler, sal_True /* bEnsureFileExists */ );
 }
 
-SvStream* UcbStreamHelper::CreateStream( const String& rFileName, StreamMode eOpenMode,
-        Reference < XInteractionHandler > xInteractionHandler,
-        UcbLockBytesHandler* pHandler )
+SvStream* UcbStreamHelper::CreateStream( const OUString& rFileName, StreamMode eOpenMode,
+                                         Reference < XInteractionHandler > xInteractionHandler,
+                                         UcbLockBytesHandler* pHandler )
 {
     return lcl_CreateStream( rFileName, eOpenMode, xInteractionHandler, pHandler, sal_True /* bEnsureFileExists */ );
 }
 
-SvStream* UcbStreamHelper::CreateStream( const String& rFileName, StreamMode eOpenMode,
-        sal_Bool bFileExists,
-        UcbLockBytesHandler* pHandler )
+SvStream* UcbStreamHelper::CreateStream( const OUString& rFileName, StreamMode eOpenMode,
+                                         bool bFileExists,
+                                         UcbLockBytesHandler* pHandler )
 {
     return lcl_CreateStream( rFileName, eOpenMode, Reference < XInteractionHandler >(), pHandler, !bFileExists );
 }

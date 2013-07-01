@@ -704,9 +704,8 @@ void SvtSecurityOptions_Impl::Commit()
                     sal_Int32   nCnt = m_seqTrustedAuthors.getLength();
                     if( nCnt )
                     {
-                        String  s;
-                        s.AppendAscii( CSTR_MACRO_TRUSTEDAUTHORS );
-                        s.AppendAscii( "/a" );
+                        OUString  s(CSTR_MACRO_TRUSTEDAUTHORS);
+                        s += "/a";
 
                         Sequence< Sequence< com::sun::star::beans::PropertyValue > > lPropertyValuesSeq( nCnt );
                         for( sal_Int32 i = 0 ; i < nCnt ; ++i )
@@ -908,7 +907,7 @@ sal_Bool SvtSecurityOptions_Impl::IsSecureURL(  const   OUString&   sURL    ,
             }
 
             if ( !bState )
-                bState = sRef.compareToAscii("private:user") == COMPARE_EQUAL;
+                bState = sRef.compareToAscii("private:user") == 0;
         }
     }
 

@@ -23,6 +23,7 @@
 #include <comphelper/processfactory.hxx>
 #include <rtl/tencinfo.h>
 #include <rtl/locale.h>
+#include <osl/thread.h>
 #include <osl/nlsupport.h>
 #include <vector>
 
@@ -41,14 +42,14 @@ public:
         LocaleDataWrapper*      pLocaleData;
         CharClass*              pCharClass;
 
-                                    SvtSysLocale_Impl();
-    virtual                         ~SvtSysLocale_Impl();
+                                SvtSysLocale_Impl();
+    virtual                     ~SvtSysLocale_Impl();
 
-    CharClass*                      GetCharClass();
-    virtual void                    ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uInt32 );
+    CharClass*                  GetCharClass();
+    virtual void                ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uInt32 );
 
 private:
-    void                            setDateAcceptancePatternsConfig();
+    void                        setDateAcceptancePatternsConfig();
 };
 
 // -----------------------------------------------------------------------

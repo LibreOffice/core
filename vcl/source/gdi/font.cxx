@@ -153,8 +153,8 @@ void Impl_Font::AskConfig()
     // prepare the FontSubst configuration lookup
     const utl::FontSubstConfiguration& rFontSubst = utl::FontSubstConfiguration::get();
 
-    String      aShortName;
-    String      aFamilyName;
+    OUString      aShortName;
+    OUString      aFamilyName;
     sal_uLong       nType = 0;
     FontWeight  eWeight = WEIGHT_DONTKNOW;
     FontWidth   eWidthType = WIDTH_DONTKNOW;

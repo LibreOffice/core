@@ -27,7 +27,6 @@
 #include <tools/link.hxx>
 #include <i18nlangtag/lang.h>
 #include <i18nlangtag/languagetag.hxx>
-#include <tools/string.hxx>
 #include <unotools/options.hxx>
 
 // bits for broadcasting hints of changes in a SfxSimpleHint, may be combined
@@ -64,7 +63,7 @@ public:
 
     // ConfigItem methods
 
-            sal_Bool            IsModified();
+            bool                IsModified();
             void                Commit();
 
                                 /** Add a listener to react on config changes
@@ -88,16 +87,16 @@ public:
         @ATTENTION
         All SvtSysLocaleOptions instances point to exactly one refcounted
         internal representation instance and broadcast blocks are counted.
-        Thus if you issue a BlockBroadcasts(sal_True) you MUST issue a matching
-        BlockBroadcasts(sal_False) or otherwise pending hints would never be
+        Thus if you issue a BlockBroadcasts(true) you MUST issue a matching
+        BlockBroadcasts(false) or otherwise pending hints would never be
         broadcasted again.
      */
-       virtual void                BlockBroadcasts( bool bBlock );
+       virtual void             BlockBroadcasts( bool bBlock );
 
     // config value access methods
 
     /// The config string may be empty to denote the SYSTEM locale
-            const OUString&  GetLocaleConfigString() const;
+            const OUString&     GetLocaleConfigString() const;
             void                SetLocaleConfigString( const OUString& rStr );
             /** Get locale set, if empty denotes SYSTEM locale, not resolved
                 to the real locale. */
@@ -111,39 +110,39 @@ public:
             const LanguageTag&  GetRealUILanguageTag() const;
 
     /// The config string may be empty to denote the default currency of the locale
-            const OUString&  GetCurrencyConfigString() const;
+            const OUString&     GetCurrencyConfigString() const;
             void                SetCurrencyConfigString( const OUString& rStr );
 
     /** The config string may be empty to denote the default
         DateAcceptancePatterns of the locale */
-            const OUString&  GetDatePatternsConfigString() const;
+            const OUString&     GetDatePatternsConfigString() const;
             void                SetDatePatternsConfigString( const OUString& rStr );
 
     // determine whether the decimal separator defined in the keyboard layout is used
     // or the one approriate to the locale
-            sal_Bool            IsDecimalSeparatorAsLocale() const;
-            void                SetDecimalSeparatorAsLocale( sal_Bool bSet);
+            bool                IsDecimalSeparatorAsLocale() const;
+            void                SetDecimalSeparatorAsLocale( bool bSet);
 
     // determine whether to ignore changes to the system keyboard/locale/language when
     // determining the language for newly entered text
-            sal_Bool            IsIgnoreLanguageChange() const;
-            void                SetIgnoreLanguageChange( sal_Bool bSet);
+            bool                IsIgnoreLanguageChange() const;
+            void                SetIgnoreLanguageChange( bool bSet);
 
     // convenience methods
 
     /// Get currency abbreviation and locale from an USD-en-US or EUR-de-DE string
     static  void                GetCurrencyAbbrevAndLanguage(
-                                    String& rAbbrev,
+                                    OUString& rAbbrev,
                                     LanguageType& eLang,
                                     const OUString& rConfigString );
 
     /// Create an USD-en-US or EUR-de-DE string
-    static  OUString     CreateCurrencyConfigString(
-                                    const String& rAbbrev,
+    static  OUString            CreateCurrencyConfigString(
+                                    const OUString& rAbbrev,
                                     LanguageType eLang );
 
             void                GetCurrencyAbbrevAndLanguage(
-                                        String& rAbbrev,
+                                        OUString& rAbbrev,
                                         LanguageType& eLang ) const
                                     {
                                         GetCurrencyAbbrevAndLanguage( rAbbrev,
@@ -151,7 +150,7 @@ public:
                                     }
 
             void                SetCurrencyAbbrevAndLanguage(
-                                        const String& rAbbrev,
+                                        const OUString& rAbbrev,
                                         LanguageType eLang )
                                     {
                                         SetCurrencyConfigString(
@@ -169,7 +168,7 @@ public:
     static  const Link&         GetCurrencyChangeLink();
 
     /** return the readonly state of the queried option. */
-            sal_Bool            IsReadOnly( EOption eOption ) const;
+            bool                IsReadOnly( EOption eOption ) const;
 };
 
 #endif  // INCLUDED_SVTOOLS_SYSLOCALEOPTIONS_HXX

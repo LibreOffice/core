@@ -32,7 +32,7 @@
 
 #include "itemholder1.hxx"
 
-#define CFG_READONLY_DEFAULT    sal_False
+#define CFG_READONLY_DEFAULT    false
 
 using namespace osl;
 using namespace utl;
@@ -56,15 +56,15 @@ class SvtSysLocaleOptions_Impl : public utl::ConfigItem
         OUString                m_aUILocaleString;    // en-US or de-DE or empty for SYSTEM
         OUString                m_aCurrencyString;  // USD-en-US or EUR-de-DE
         OUString                m_aDatePatternsString;  // "Y-M-D;M-D"
-        sal_Bool                m_bDecimalSeparator; //use decimal separator same as locale
-        sal_Bool                m_bIgnoreLanguageChange; //OS language change doesn't affect LO document language
+        bool                    m_bDecimalSeparator; //use decimal separator same as locale
+        bool                    m_bIgnoreLanguageChange; //OS language change doesn't affect LO document language
 
-        sal_Bool                m_bROLocale;
-        sal_Bool                m_bROUILocale;
-        sal_Bool                m_bROCurrency;
-        sal_Bool                m_bRODatePatterns;
-        sal_Bool                m_bRODecimalSeparator;
-        sal_Bool                m_bROIgnoreLanguageChange;
+        bool                    m_bROLocale;
+        bool                    m_bROUILocale;
+        bool                    m_bROCurrency;
+        bool                    m_bRODatePatterns;
+        bool                    m_bRODecimalSeparator;
+        bool                    m_bROIgnoreLanguageChange;
 
         static  const Sequence< /* const */ OUString >  GetPropertyNames();
         void                    MakeRealLocale();
@@ -93,13 +93,13 @@ public:
                                     { return m_aDatePatternsString; }
             void                SetDatePatternsString( const OUString& rStr );
 
-            sal_Bool            IsDecimalSeparatorAsLocale() const { return m_bDecimalSeparator;}
-            void                SetDecimalSeparatorAsLocale( sal_Bool bSet);
+            bool                IsDecimalSeparatorAsLocale() const { return m_bDecimalSeparator;}
+            void                SetDecimalSeparatorAsLocale( bool bSet);
 
-            sal_Bool            IsIgnoreLanguageChange() const { return m_bIgnoreLanguageChange;}
-            void                SetIgnoreLanguageChange( sal_Bool bSet);
+            bool                IsIgnoreLanguageChange() const { return m_bIgnoreLanguageChange;}
+            void                SetIgnoreLanguageChange( bool bSet);
 
-            sal_Bool            IsReadOnly( SvtSysLocaleOptions::EOption eOption ) const;
+            bool                IsReadOnly( SvtSysLocaleOptions::EOption eOption ) const;
             const LanguageTag&  GetRealLocale() { return m_aRealLocale; }
             const LanguageTag&  GetRealUILocale() { return m_aRealUILocale; }
 };
@@ -145,13 +145,13 @@ SvtSysLocaleOptions_Impl::SvtSysLocaleOptions_Impl()
     : ConfigItem( ROOTNODE_SYSLOCALE )
     , m_aRealLocale( LANGUAGE_SYSTEM)
     , m_aRealUILocale( LANGUAGE_SYSTEM)
-    , m_bDecimalSeparator( sal_True )
+    , m_bDecimalSeparator( true )
     , m_bROLocale(CFG_READONLY_DEFAULT)
     , m_bROUILocale(CFG_READONLY_DEFAULT)
     , m_bROCurrency(CFG_READONLY_DEFAULT)
     , m_bRODatePatterns(CFG_READONLY_DEFAULT)
-    , m_bRODecimalSeparator(sal_False)
-    , m_bROIgnoreLanguageChange(sal_False)
+    , m_bRODecimalSeparator(false)
+    , m_bROIgnoreLanguageChange(false)
 
 {
     if ( IsValidConfigMgr() )
@@ -209,7 +209,7 @@ SvtSysLocaleOptions_Impl::SvtSysLocaleOptions_Impl()
                         break;
                         case  PROPERTYHANDLE_DECIMALSEPARATOR:
                         {
-                                    sal_Bool bValue = sal_Bool();
+                            bool bValue = false;
                             if ( pValues[nProp] >>= bValue )
                                 m_bDecimalSeparator = bValue;
                             else
@@ -233,7 +233,7 @@ SvtSysLocaleOptions_Impl::SvtSysLocaleOptions_Impl()
                         break;
                         case PROPERTYHANDLE_IGNORELANGCHANGE :
                             {
-                                sal_Bool bValue = sal_Bool();
+                                bool bValue = false;
                                 if ( pValues[nProp] >>= bValue )
                                     m_bIgnoreLanguageChange = bValue;
                                 else
@@ -289,9 +289,9 @@ void SvtSysLocaleOptions_Impl::MakeRealUILocale()
     }
 }
 
-sal_Bool SvtSysLocaleOptions_Impl::IsReadOnly( SvtSysLocaleOptions::EOption eOption ) const
+bool SvtSysLocaleOptions_Impl::IsReadOnly( SvtSysLocaleOptions::EOption eOption ) const
 {
-    sal_Bool bReadOnly = CFG_READONLY_DEFAULT;
+    bool bReadOnly = CFG_READONLY_DEFAULT;
     switch(eOption)
     {
         case SvtSysLocaleOptions::E_LOCALE :
@@ -449,7 +449,7 @@ void SvtSysLocaleOptions_Impl::SetDatePatternsString( const OUString& rStr )
     }
 }
 
-void SvtSysLocaleOptions_Impl::SetDecimalSeparatorAsLocale( sal_Bool bSet)
+void SvtSysLocaleOptions_Impl::SetDecimalSeparatorAsLocale( bool bSet)
 {
     if(bSet != m_bDecimalSeparator)
     {
@@ -459,7 +459,7 @@ void SvtSysLocaleOptions_Impl::SetDecimalSeparatorAsLocale( sal_Bool bSet)
     }
 }
 
-void SvtSysLocaleOptions_Impl::SetIgnoreLanguageChange( sal_Bool bSet)
+void SvtSysLocaleOptions_Impl::SetIgnoreLanguageChange( bool bSet)
 {
     if(bSet != m_bIgnoreLanguageChange)
     {
@@ -572,7 +572,7 @@ Mutex& SvtSysLocaleOptions::GetMutex()
 }
 
 
-sal_Bool SvtSysLocaleOptions::IsModified()
+bool SvtSysLocaleOptions::IsModified()
 {
     MutexGuard aGuard( GetMutex() );
     return pOptions->IsModified();
@@ -636,63 +636,64 @@ void SvtSysLocaleOptions::SetDatePatternsConfigString( const OUString& rStr )
     pOptions->SetDatePatternsString( rStr );
 }
 
-sal_Bool SvtSysLocaleOptions::IsDecimalSeparatorAsLocale() const
+bool SvtSysLocaleOptions::IsDecimalSeparatorAsLocale() const
 {
     MutexGuard aGuard( GetMutex() );
     return pOptions->IsDecimalSeparatorAsLocale();
 }
 
-void SvtSysLocaleOptions::SetDecimalSeparatorAsLocale( sal_Bool bSet)
+void SvtSysLocaleOptions::SetDecimalSeparatorAsLocale( bool bSet)
 {
     MutexGuard aGuard( GetMutex() );
     pOptions->SetDecimalSeparatorAsLocale(bSet);
 }
 
-sal_Bool SvtSysLocaleOptions::IsIgnoreLanguageChange() const
+bool SvtSysLocaleOptions::IsIgnoreLanguageChange() const
 {
     MutexGuard aGuard( GetMutex() );
     return pOptions->IsIgnoreLanguageChange();
 }
 
-void SvtSysLocaleOptions::SetIgnoreLanguageChange( sal_Bool bSet)
+void SvtSysLocaleOptions::SetIgnoreLanguageChange( bool bSet)
 {
     MutexGuard aGuard( GetMutex() );
     pOptions->SetIgnoreLanguageChange(bSet);
 }
 
-sal_Bool SvtSysLocaleOptions::IsReadOnly( EOption eOption ) const
+bool SvtSysLocaleOptions::IsReadOnly( EOption eOption ) const
 {
     MutexGuard aGuard( GetMutex() );
     return pOptions->IsReadOnly( eOption );
 }
 
 // static
-void SvtSysLocaleOptions::GetCurrencyAbbrevAndLanguage( String& rAbbrev,
-        LanguageType& eLang, const OUString& rConfigString )
+void SvtSysLocaleOptions::GetCurrencyAbbrevAndLanguage( OUString& rAbbrev,
+                                                        LanguageType& eLang,
+                                                        const OUString& rConfigString )
 {
     sal_Int32 nDelim = rConfigString.indexOf( '-' );
     if ( nDelim >= 0 )
     {
         rAbbrev = rConfigString.copy( 0, nDelim );
-        String aIsoStr( rConfigString.copy( nDelim+1 ) );
+        OUString aIsoStr( rConfigString.copy( nDelim+1 ) );
         eLang = LanguageTag( aIsoStr ).getLanguageType();
     }
     else
     {
         rAbbrev = rConfigString;
-        eLang = (rAbbrev.Len() ? LANGUAGE_NONE : LANGUAGE_SYSTEM);
+        eLang = (rAbbrev.isEmpty() ? LANGUAGE_SYSTEM : LANGUAGE_NONE);
     }
 }
 
 
 // static
 OUString SvtSysLocaleOptions::CreateCurrencyConfigString(
-        const String& rAbbrev, LanguageType eLang )
+        const OUString& rAbbrev, LanguageType eLang )
 {
-    String aIsoStr( LanguageTag( eLang ).getBcp47() );
-    if ( aIsoStr.Len() )
+    OUString aIsoStr( LanguageTag( eLang ).getBcp47() );
+    if ( !aIsoStr.isEmpty() )
     {
-        OUStringBuffer aStr( rAbbrev.Len() + 1 + aIsoStr.Len() );
+        OUStringBuffer aStr( rAbbrev.getLength() + 1 + aIsoStr.getLength() );
         aStr.append( rAbbrev );
         aStr.append( sal_Unicode('-') );
         aStr.append( aIsoStr );
