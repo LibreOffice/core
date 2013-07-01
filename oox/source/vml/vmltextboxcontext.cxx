@@ -125,6 +125,9 @@ void TextPortionContext::onStartElement(const AttributeList& rAttribs)
         case OOX_TOKEN(doc, sz):
             maFont.monSize = rAttribs.getInteger( OOX_TOKEN(doc, val) );
         break;
+        case OOX_TOKEN(doc, br):
+            mrTextBox.appendPortion( maFont, "\n" );
+        break;
     }
 }
 
