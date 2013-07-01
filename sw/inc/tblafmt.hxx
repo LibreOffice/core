@@ -243,8 +243,6 @@ class SW_DLLPUBLIC SwTableAutoFmt
     // Calc specific flags.
     sal_Bool bInclWidthHeight : 1;
 
-    SwBoxAutoFmt* aBoxAutoFmt[ 16 ];
-
 public:
     SwTableAutoFmt( const String& rName, SwTableFmt* pTableStyle );
     SwTableAutoFmt( const SwTableAutoFmt& rNew );
@@ -254,8 +252,8 @@ public:
 
     SwTableFmt* GetTableStyle() { return m_pTableStyle; }
 
-    void SetBoxFmt( const SwBoxAutoFmt& rNew, sal_uInt8 nPos );
-    const SwBoxAutoFmt& GetBoxFmt( sal_uInt8 nPos ) const;
+    void SetBoxFmt( const SwTableBoxFmt& rNew, sal_uInt8 nPos );
+    SwTableBoxFmt* GetBoxFmt( sal_uInt8 nPos ) const;
 
     void SetName( const String& rNew ) { aName = rNew; nStrResId = USHRT_MAX; }
     const String& GetName() const { return aName; }

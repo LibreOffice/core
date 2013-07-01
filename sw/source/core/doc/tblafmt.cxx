@@ -653,15 +653,11 @@ SwTableAutoFmt::SwTableAutoFmt( const String& rName, SwTableFmt* pTableStyle )
     bInclBackground = sal_True;
     bInclValueFormat = sal_True;
     bInclWidthHeight = sal_True;
-
-    memset( aBoxAutoFmt, 0, sizeof( aBoxAutoFmt ) );
 }
 
 
 SwTableAutoFmt::SwTableAutoFmt( const SwTableAutoFmt& rNew )
 {
-    for( sal_uInt8 n = 0; n < 16; ++n )
-        aBoxAutoFmt[ n ] = 0;
     *this = rNew;
 }
 
@@ -669,18 +665,6 @@ SwTableAutoFmt& SwTableAutoFmt::operator=( const SwTableAutoFmt& rNew )
 {
     if (&rNew == this)
         return *this;
-
-    for( sal_uInt8 n = 0; n < 16; ++n )
-    {
-        if( aBoxAutoFmt[ n ] )
-            delete aBoxAutoFmt[ n ];
-
-        SwBoxAutoFmt* pFmt = rNew.aBoxAutoFmt[ n ];
-        if( pFmt )      // if is set -> copy
-            aBoxAutoFmt[ n ] = new SwBoxAutoFmt( *pFmt );
-        else            // else default
-            aBoxAutoFmt[ n ] = 0;
-    }
 
     m_pTableStyle = rNew.m_pTableStyle;
     aName = rNew.aName;
@@ -695,44 +679,79 @@ SwTableAutoFmt& SwTableAutoFmt::operator=( const SwTableAutoFmt& rNew )
     return *this;
 }
 
-
-SwTableAutoFmt::~SwTableAutoFmt()
-{
-    SwBoxAutoFmt** ppFmt = aBoxAutoFmt;
-    for( sal_uInt8 n = 0; n < 16; ++n, ++ppFmt )
-        if( *ppFmt )
-            delete *ppFmt;
-}
-
-
-void SwTableAutoFmt::SetBoxFmt( const SwBoxAutoFmt& rNew, sal_uInt8 nPos )
+void SwTableAutoFmt::SetBoxFmt( const SwTableBoxFmt& rNew, sal_uInt8 nPos )
 {
     OSL_ENSURE( nPos < 16, "wrong area" );
 
-    SwBoxAutoFmt* pFmt = aBoxAutoFmt[ nPos ];
-    if( pFmt )      // if is set -> copy
-        *aBoxAutoFmt[ nPos ] = rNew;
-    else            // else set anew
-        aBoxAutoFmt[ nPos ] = new SwBoxAutoFmt( rNew );
-}
+    sal_uInt8 nLine = nPos / 4;
+    sal_uInt8 nBox = nPos % 4;
 
+    SwTableLineFmt* pLine;
 
-const SwBoxAutoFmt& SwTableAutoFmt::GetBoxFmt( sal_uInt8 nPos ) const
-{
-    OSL_ENSURE( nPos < 16, "wrong area" );
-
-    SwBoxAutoFmt* pFmt = aBoxAutoFmt[ nPos ];
-    if( pFmt )      // if is set -> copy
-        return *pFmt;
-    else            // else return the default
+    switch( nLine )
     {
-        // If it doesn't exist yet:
-        if( !pDfltBoxAutoFmt )
-            pDfltBoxAutoFmt = new SwBoxAutoFmt;
-        return *pDfltBoxAutoFmt;
+        case 0:
+            pLine = m_pTableStyle->GetFirstLineFmt(); break;
+        case 1:
+            pLine = m_pTableStyle->GetOddLineFmt(); break;
+        case 2:
+            pLine = m_pTableStyle->GetEvenLineFmt(); break;
+        case 3:
+            pLine = m_pTableStyle->GetLastLineFmt(); break;
+        // TODO Extend for columns
+    }
+
+    switch( nBox )
+    {
+        case 0:
+            pLine->SetFirstBoxFmt( new SwTableBoxFmt( rNew ) ); break;
+        case 1:
+            pLine->SetOddBoxFmt( new SwTableBoxFmt( rNew ) ); break;
+        case 2:
+            pLine->SetEvenBoxFmt( new SwTableBoxFmt( rNew ) ); break;
+        case 3:
+            pLine->SetLastBoxFmt( new SwTableBoxFmt( rNew ) ); break;
     }
 }
 
+
+SwTableBoxFmt* SwTableAutoFmt::GetBoxFmt( sal_uInt8 nPos ) const
+{
+    OSL_ENSURE( nPos < 16, "wrong area" );
+
+    sal_uInt8 nLine = nPos / 4;
+    sal_uInt8 nBox = nPos % 4;
+
+    SwTableLineFmt* pLine;
+    SwTableBoxFmt* pRet;
+
+    switch( nLine )
+    {
+        case 0:
+            pLine = m_pTableStyle->GetFirstLineFmt(); break;
+        case 1:
+            pLine = m_pTableStyle->GetOddLineFmt(); break;
+        case 2:
+            pLine = m_pTableStyle->GetEvenLineFmt(); break;
+        case 3:
+            pLine = m_pTableStyle->GetLastLineFmt(); break;
+        // TODO Extend for columns
+    }
+
+    switch( nBox )
+    {
+        case 0:
+            pRet = pLine->GetFirstBoxFmt();
+        case 1:
+            pRet = pLine->GetOddBoxFmt();
+        case 2:
+            pRet = pLine->GetEvenBoxFmt();
+        case 3:
+            pRet = pLine->GetLastBoxFmt();
+    }
+
+    return pRet;
+}
 
 
 void SwTableAutoFmt::UpdateFromSet( sal_uInt8 nPos,
@@ -1011,11 +1030,11 @@ SwTableAutoFmt* SwTableAutoFmt::Load( SvStream& rStream, const SwAfVersions& rVe
 
         for( sal_uInt8 i = 0; bRet && i < 16; ++i )
         {
-            SwBoxAutoFmt* pFmt = new SwBoxAutoFmt;
-            // TODO Remove members in SwTableAutoFmt and adapt this
-            // bRet = pFmt->Load( rStream, rVersions, nVal );
+            SwTableBoxFmt* pFmt = pDoc->MakeTableBoxFmt();
+
+            bRet = pFmt->Load( rStream, rVersions, nVal );
             if( bRet )
-                pRet->aBoxAutoFmt[ i ] = pFmt;
+                pRet->SetBoxFmt( *pFmt, i );
             else
             {
                 delete pFmt;
@@ -1072,16 +1091,9 @@ sal_Bool SwTableAutoFmt::Save( SvStream& rStream, sal_uInt16 fileVersion ) const
 
     for( int i = 0; bRet && i < 16; ++i )
     {
-        SwBoxAutoFmt* pFmt = aBoxAutoFmt[ i ];
-        if( !pFmt )     // if not set -> write default
-        {
-            // If it doesn't exist yet:
-            if( !pDfltBoxAutoFmt )
-                pDfltBoxAutoFmt = new SwBoxAutoFmt;
-            pFmt = pDfltBoxAutoFmt;
-        }
-        // TODO Remove members in SwTableAutoFmt and adapt this
-        // bRet = pFmt->Save( rStream, fileVersion );
+        SwTableBoxFmt* pFmt = GetBoxFmt( i );
+
+        bRet = pFmt->Save( rStream, fileVersion );
     }
     return bRet;
 }
@@ -1138,42 +1150,42 @@ SwTableAutoFmtTbl::SwTableAutoFmtTbl(SwDoc* pDoc)
     SwTableFmt* pStyle = pDoc->FindTblFmtByName(sNm);
     if ( !pStyle )
         pStyle = pDoc->MakeTblFrmFmt(sNm, NULL);
-    SwTableAutoFmt* pNew = new SwTableAutoFmt( sNm, pStyle );
+    SwTableAutoFmt* pNewTableAutoFmt = new SwTableAutoFmt( sNm, pStyle );
 
-    SwBoxAutoFmt aNew;
+    SwTableBoxFmt* pNewBoxFmt = pDoc->MakeTableBoxFmt();
 
     sal_uInt8 i;
 
     Color aColor( COL_BLUE );
     SvxBrushItem aBrushItem( aColor, RES_BACKGROUND );
-    aNew.SetBackground( aBrushItem );
-    aNew.SetColor( SvxColorItem(Color( COL_WHITE ), RES_CHRATR_COLOR) );
+    pNewBoxFmt->SetBackground( aBrushItem );
+    pNewBoxFmt->SetColor( SvxColorItem(Color( COL_WHITE ), RES_CHRATR_COLOR) );
 
     for( i = 0; i < 4; ++i )
-        pNew->SetBoxFmt( aNew, i );
+        pNewTableAutoFmt->SetBoxFmt( *pNewBoxFmt, i );
 
     // 70% gray
     aBrushItem.SetColor( RGB_COLORDATA( 0x4d, 0x4d, 0x4d ) );
-    aNew.SetBackground( aBrushItem );
+    pNewBoxFmt->SetBackground( aBrushItem );
     for( i = 4; i <= 12; i += 4 )
-        pNew->SetBoxFmt( aNew, i );
+        pNewTableAutoFmt->SetBoxFmt( *pNewBoxFmt, i );
 
     // 20% gray
     aBrushItem.SetColor( RGB_COLORDATA( 0xcc, 0xcc, 0xcc ) );
-    aNew.SetBackground( aBrushItem );
+    pNewBoxFmt->SetBackground( aBrushItem );
     aColor.SetColor( COL_BLACK );
-    aNew.SetColor( SvxColorItem( aColor, RES_CHRATR_COLOR) );
+    pNewBoxFmt->SetColor( SvxColorItem( aColor, RES_CHRATR_COLOR) );
     for( i = 7; i <= 15; i += 4 )
-        pNew->SetBoxFmt( aNew, i );
+        pNewTableAutoFmt->SetBoxFmt( *pNewBoxFmt, i );
     for( i = 13; i <= 14; ++i )
-        pNew->SetBoxFmt( aNew, i );
+        pNewTableAutoFmt->SetBoxFmt( *pNewBoxFmt, i );
 
     aBrushItem.SetColor( Color( COL_WHITE ) );
-    aNew.SetBackground( aBrushItem );
+    pNewBoxFmt->SetBackground( aBrushItem );
     for( i = 5; i <= 6; ++i )
-        pNew->SetBoxFmt( aNew, i );
+        pNewTableAutoFmt->SetBoxFmt( *pNewBoxFmt, i );
     for( i = 9; i <= 10; ++i )
-        pNew->SetBoxFmt( aNew, i );
+        pNewTableAutoFmt->SetBoxFmt( *pNewBoxFmt, i );
 
 
     SvxBoxItem aBox( RES_BOX );
@@ -1186,10 +1198,10 @@ SwTableAutoFmtTbl::SwTableAutoFmtTbl(SwDoc* pDoc)
     {
         aBox.SetLine( i <= 3 ? &aLn : 0, BOX_LINE_TOP );
         aBox.SetLine( (3 == ( i & 3 )) ? &aLn : 0, BOX_LINE_RIGHT );
-        ((SwBoxAutoFmt&)pNew->GetBoxFmt( i )).SetBox( aBox );
+        pNewTableAutoFmt->GetBoxFmt( i )->SetBox( aBox );
     }
 
-    m_pImpl->m_AutoFormats.push_back(pNew);
+    m_pImpl->m_AutoFormats.push_back(pNewTableAutoFmt);
 }
 
 sal_Bool SwTableAutoFmtTbl::Load()
