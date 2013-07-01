@@ -81,7 +81,6 @@ $(eval $(call gb_SrsTarget_add_files,cui/res,\
     cui/source/tabpages/swpossizetabpage.src \
     cui/source/tabpages/tabarea.src \
     cui/source/tabpages/tabline.src \
-    cui/source/tabpages/tabstpge.src \
     cui/source/tabpages/textanim.src \
     cui/source/tabpages/textattr.src \
     cui/source/tabpages/transfrm.src \
