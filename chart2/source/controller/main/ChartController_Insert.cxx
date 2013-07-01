@@ -22,7 +22,6 @@
 #include "dlg_InsertAxis_Grid.hxx"
 #include "dlg_InsertDataLabel.hxx"
 #include "dlg_InsertLegend.hxx"
-#include "dlg_InsertTrendline.hxx"
 #include "dlg_InsertErrorBars.hxx"
 #include "dlg_InsertTitle.hxx"
 #include "dlg_ObjectProperties.hxx"

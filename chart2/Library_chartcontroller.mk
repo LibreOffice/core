@@ -98,7 +98,6 @@ $(eval $(call gb_Library_add_exception_objects,chartcontroller,\
     chart2/source/controller/dialogs/dlg_InsertErrorBars \
     chart2/source/controller/dialogs/dlg_InsertLegend \
     chart2/source/controller/dialogs/dlg_InsertTitle \
-    chart2/source/controller/dialogs/dlg_InsertTrendline \
     chart2/source/controller/dialogs/dlg_NumberFormat \
     chart2/source/controller/dialogs/dlg_ObjectProperties \
     chart2/source/controller/dialogs/dlg_ShapeFont \

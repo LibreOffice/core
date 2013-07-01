@@ -18,7 +18,6 @@
  */
 
 
-#include "dlg_InsertTrendline.hrc"
 #include "res_Trendline.hxx"
 #include "res_Trendline_IDs.hrc"
 #include "ResId.hxx"
