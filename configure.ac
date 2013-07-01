@@ -9838,7 +9838,7 @@ if test \( -z "$with_opencl_sdk" -o "$with_opencl_sdk" = yes \) -a $_os = Darwin
 elif test "z$with_opencl_sdk" = "z"; then
     AC_MSG_RESULT([no])
 else
-    if test -d $with_opencl_sdk/include; then
+    if test -d "$with_opencl_sdk/include"; then
         ENABLE_OPENCL=TRUE
         OPENCL_CFLAGS="-I$with_opencl_sdk/include"
         OPENCL_LIBS="-L$with_opencl_sdk/lib/x86 -lOpenCL"
