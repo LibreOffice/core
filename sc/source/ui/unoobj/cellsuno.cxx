@@ -7503,7 +7503,7 @@ void SAL_CALL ScTableSheetObj::setPrintAreas(
                                                 throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    ScPrintRangeSaver* pOldRanges;
+    ScPrintRangeSaver* pOldRanges = NULL;
     ScDocShell* pDocSh = GetDocShell();
     if ( pDocSh )
     {
