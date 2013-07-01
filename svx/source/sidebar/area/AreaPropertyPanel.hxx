@@ -31,6 +31,7 @@
 #include <svx/xflhtit.hxx>
 #include <svx/xbtmpit.hxx>
 #include <svx/drawitem.hxx>
+#include <svx/sidebar/PanelLayout.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/field.hxx>
 #include <vcl/fixed.hxx>
@@ -50,7 +51,7 @@ class PopupContainer;
 class AreaTransparencyGradientControl;
 
 class AreaPropertyPanel
-:   public Control,
+:   public PanelLayout,
     public ::sfx2::sidebar::ControllerItem::ItemUpdateReceiverInterface
 {
 public:
@@ -98,16 +99,14 @@ private:
     XGradient                                           maGradientRect;
 
     //ui controls
-    ::boost::scoped_ptr< FixedText >                    mpColorTextFT;
-    ::boost::scoped_ptr< SvxFillTypeBox >               mpLbFillType;
-    ::boost::scoped_ptr< SvxFillAttrBox >               mpLbFillAttr;
-    ::boost::scoped_ptr< Window >                       mpToolBoxColorBackground;
-    ::boost::scoped_ptr< ToolBox >                      mpToolBoxColor; // for new color picker
-    ::boost::scoped_ptr< FixedText >                    mpTrspTextFT;
-    ::boost::scoped_ptr< ListBox >                      mpLBTransType;
-    ::boost::scoped_ptr< MetricField >                  mpMTRTransparent;
-    ::boost::scoped_ptr< Window >                       mpBTNGradientBackground;
-    ::boost::scoped_ptr< ToolBox >                      mpBTNGradient;
+    FixedText*                              mpColorTextFT;
+    ::boost::scoped_ptr< SvxFillTypeBox >   mpLbFillType;
+    ::boost::scoped_ptr< SvxFillAttrBox >   mpLbFillAttr;
+    ToolBox*                                mpToolBoxColor; // for new color picker
+    FixedText*                              mpTrspTextFT;
+    ListBox*                                mpLBTransType;
+    MetricField*                            mpMTRTransparent;
+    ToolBox*                                mpBTNGradient;
 
     ::boost::scoped_ptr< ::svx::ToolboxButtonColorUpdater > mpColorUpdater;
 

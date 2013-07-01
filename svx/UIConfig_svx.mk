@@ -22,6 +22,7 @@ $(eval $(call gb_UIConfig_add_uifiles,svx,\
 	svx/uiconfig/ui/redlinecontrol \
 	svx/uiconfig/ui/redlinefilterpage \
 	svx/uiconfig/ui/redlineviewpage \
+	svx/uiconfig/ui/sidebararea \
 	svx/uiconfig/ui/sidebarline \
 	svx/uiconfig/ui/sidebarparagraph \
 	svx/uiconfig/ui/sidebartextpanel \

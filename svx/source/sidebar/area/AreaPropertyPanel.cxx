@@ -45,10 +45,10 @@ using namespace css;
 using namespace cssu;
 using ::sfx2::sidebar::Theme;
 
+const char UNO_SIDEBARCOLOR[]    = ".uno:sidebarcolor";
+const char UNO_SIDEBARGRADIENT[] = ".uno:sidebargradient";
+
 #define A2S(pString) (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(pString)))
-
-
-
 
 namespace svx { namespace sidebar {
 
@@ -64,7 +64,7 @@ AreaPropertyPanel::AreaPropertyPanel(
     Window* pParent,
     const cssu::Reference<css::frame::XFrame>& rxFrame,
     SfxBindings* pBindings)
-    : Control(pParent, SVX_RES(RID_SIDEBAR_AREA_PANEL)),
+    : PanelLayout(pParent, "AreaPropertyPanel", "svx/ui/sidebararea.ui", rxFrame),
       meLastXFS(-1),
       maLastColor(Color(COL_DEFAULT_SHAPE_FILLING)),
       mnLastPosGradient(0),
@@ -77,17 +77,8 @@ AreaPropertyPanel::AreaPropertyPanel(
       maGradientElliptical(),
       maGradientSquare(),
       maGradientRect(),
-      mpColorTextFT(new FixedText(this, SVX_RES(FT_COLOR_LIST))),
       mpLbFillType(new SvxFillTypeBox(this)),
       mpLbFillAttr(new SvxFillAttrBox(this)),
-      mpToolBoxColorBackground(sfx2::sidebar::ControlFactory::CreateToolBoxBackground(this)),
-      mpToolBoxColor(sfx2::sidebar::ControlFactory::CreateToolBox(mpToolBoxColorBackground.get(), SVX_RES(TB_COLOR))),
-      mpTrspTextFT(new FixedText(this, SVX_RES(FL_TRSP_TEXT))),
-      mpLBTransType(new ListBox(this, SVX_RES(LB_TRGR_TYPES))),
-      mpMTRTransparent(new MetricField(this, SVX_RES(MTR_TRANSPARENT))),
-      mpBTNGradientBackground(sfx2::sidebar::ControlFactory::CreateToolBoxBackground(this)),
-      mpBTNGradient(sfx2::sidebar::ControlFactory::CreateToolBox(mpBTNGradientBackground.get(), SVX_RES(BTN_GRADIENT))),
-      mpColorUpdater(new ::svx::ToolboxButtonColorUpdater(SID_ATTR_FILL_COLOR, TBI_COLOR, mpToolBoxColor.get())),
       mpStyleItem(),
       mpColorItem(),
       mpFillGradientItem(),
@@ -121,28 +112,29 @@ AreaPropertyPanel::AreaPropertyPanel(
       mpBindings(pBindings),
       mbColorAvail(true)
 {
+    get(mpColorTextFT,    "filllabel");
+    get(mpTrspTextFT,     "transparencylabel");
+    get(mpToolBoxColor,   "selectcolor");
+    get(mpLBTransType,    "transtype");
+    get(mpMTRTransparent, "settransparency");   // GtkSpinButton
+    get(mpBTNGradient,    "selectgradient");    // GtkToolbar
+
+    const sal_uInt16 nIdColor = mpToolBoxColor->GetItemId(UNO_SIDEBARCOLOR);
+    mpColorUpdater.reset(new ::svx::ToolboxButtonColorUpdater(SID_ATTR_FILL_COLOR, nIdColor, mpToolBoxColor)),
+
     Initialize();
-    FreeResource();
 }
 
 
 
 AreaPropertyPanel::~AreaPropertyPanel()
 {
-    // Destroy the toolboxes, then their background windows.
-    mpToolBoxColor.reset();
-    mpBTNGradient.reset();
-    mpToolBoxColorBackground.reset();
-    mpBTNGradientBackground.reset();
 }
 
 
 
 void AreaPropertyPanel::Initialize()
 {
-    mpColorTextFT->SetBackground(Wallpaper());
-    mpTrspTextFT->SetBackground(Wallpaper());
-
     maGradientLinear.SetXOffset(DEFAULT_CENTERX);
     maGradientLinear.SetYOffset(DEFAULT_CENTERY);
     maGradientLinear.SetAngle(DEFAULT_ANGLE);
@@ -198,21 +190,16 @@ void AreaPropertyPanel::Initialize()
 
     //add  for new color picker
     mpLbFillAttr->Hide();
-    mpToolBoxColor->SetItemImage(TBI_COLOR, maImgColor);
-    Size aTbxSize( mpToolBoxColor->CalcWindowSizePixel() );
-    mpToolBoxColor->SetOutputSizePixel( aTbxSize );
-    mpToolBoxColor->SetItemBits( TBI_COLOR, mpToolBoxColor->GetItemBits( TBI_COLOR ) | TIB_DROPDOWNONLY );
-    mpToolBoxColor->SetBackground(Wallpaper());
-    mpToolBoxColor->SetPaintTransparent(true);
-    mpToolBoxColor->SetQuickHelpText(TBI_COLOR, String(SVX_RES(STR_HELP_COLOR)));    //wj acc
-    //mpToolBoxColor->SetItemText(TBI_COLOR, msHelpFillAttr);
+    const sal_uInt16 nIdColor = mpToolBoxColor->GetItemId(UNO_SIDEBARCOLOR);
+    mpToolBoxColor->SetItemImage(nIdColor, maImgColor);
+    mpToolBoxColor->SetItemBits( nIdColor, mpToolBoxColor->GetItemBits( nIdColor ) | TIB_DROPDOWNONLY );
+    mpToolBoxColor->SetItemText(nIdColor, msHelpFillAttr);
 
     long aHeightLBStyle = mpLbFillType->GetSizePixel().getHeight();
     long aLBPosY = mpLbFillType->GetPosPixel().getY();
     long aHeightTBAttr = mpToolBoxColor->GetSizePixel().getHeight();
     Point aPointTBAttr = mpToolBoxColor->GetPosPixel();
     aPointTBAttr.setY( aLBPosY + aHeightLBStyle / 2 - aHeightTBAttr / 2);
-    mpToolBoxColor->SetPosPixel(aPointTBAttr);
 
     aLink = LINK(this, AreaPropertyPanel, ToolBoxColorDropHdl);
     mpToolBoxColor->SetDropdownClickHdl ( aLink );
@@ -226,14 +213,12 @@ void AreaPropertyPanel::Initialize()
     mpMTRTransparent->SetModifyHdl(LINK(this, AreaPropertyPanel, ModifyTransparentHdl_Impl));
     mpMTRTransparent->SetAccessibleName(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Transparency")));    //wj acc
 
-    mpBTNGradient->SetItemBits( TBI_BTX_GRADIENT, mpBTNGradient->GetItemBits( TBI_BTX_GRADIENT ) | TIB_DROPDOWNONLY );
+    const sal_uInt16 nIdGradient = mpBTNGradient->GetItemId(UNO_SIDEBARGRADIENT);
+    mpBTNGradient->SetItemBits( nIdGradient, mpBTNGradient->GetItemBits( nIdGradient ) | TIB_DROPDOWNONLY );
     aLink = LINK( this, AreaPropertyPanel, ClickTrGrHdl_Impl );
     mpBTNGradient->SetDropdownClickHdl( aLink );
     mpBTNGradient->SetSelectHdl( aLink );
-    aTbxSize = mpBTNGradient->CalcWindowSizePixel();
-    mpBTNGradient->SetOutputSizePixel( aTbxSize );
-    mpBTNGradient->SetItemImage(TBI_BTX_GRADIENT,maImgLinear);
-    mpBTNGradient->SetQuickHelpText(TBI_BTX_GRADIENT, String(SVX_RES(STR_HELP_GRADIENT)));    //wj acc
+    mpBTNGradient->SetItemImage(nIdGradient,maImgLinear);
     mpBTNGradient->Hide();
 
     long aHeightLBTrans = mpLBTransType->GetSizePixel().getHeight();
@@ -247,15 +232,12 @@ void AreaPropertyPanel::Initialize()
     aPointMetric.setY(aPosY+aHeightLBTrans/2-aHeightMetric/2);
     aPointTB.setY(aPosY+aHeightLBTrans/2-aHeightTool/2);
     aPointTB.setX(aPointTB.getX()+3);
-    mpMTRTransparent->SetPosPixel(aPointMetric);
-    mpBTNGradient->SetPosPixel(aPointTB);
-
-    mpLbFillType->SetAccessibleRelationLabeledBy(mpColorTextFT.get());
+    mpLbFillType->SetAccessibleRelationLabeledBy(mpColorTextFT);
     mpLbFillAttr->SetAccessibleRelationLabeledBy(mpLbFillAttr.get());
-    mpToolBoxColor->SetAccessibleRelationLabeledBy(mpToolBoxColor.get());
-    mpLBTransType->SetAccessibleRelationLabeledBy(mpTrspTextFT.get());
-    mpMTRTransparent->SetAccessibleRelationLabeledBy(mpMTRTransparent.get());
-    mpBTNGradient->SetAccessibleRelationLabeledBy(mpBTNGradient.get());
+    mpToolBoxColor->SetAccessibleRelationLabeledBy(mpToolBoxColor);
+    mpLBTransType->SetAccessibleRelationLabeledBy(mpTrspTextFT);
+    mpMTRTransparent->SetAccessibleRelationLabeledBy(mpMTRTransparent);
+    mpBTNGradient->SetAccessibleRelationLabeledBy(mpBTNGradient);
 
     SetupIcons();
 }
@@ -564,9 +546,9 @@ IMPL_LINK( AreaPropertyPanel, SelectFillAttrHdl, ListBox*, pToolBox )
 
 IMPL_LINK(AreaPropertyPanel, ToolBoxColorDropHdl, ToolBox*, pToolBox)
 {
-    const sal_uInt16 nId = pToolBox->GetCurItemId();
+    const OUString aCommand(pToolBox->GetItemCommand(pToolBox->GetCurItemId()));
 
-    if(TBI_COLOR == nId)
+    if(UNO_SIDEBARCOLOR == aCommand)
     {
         maColorPopup.Show(*pToolBox);
 
@@ -750,8 +732,9 @@ void AreaPropertyPanel::ImpUpdateTransparencies()
                     }
                 }
 
+                const sal_uInt16 nIdGradient = mpBTNGradient->GetItemId(UNO_SIDEBARGRADIENT);
                 mpLBTransType->SelectEntryPos(nEntryPos);
-                mpBTNGradient->SetItemImage(TBI_BTX_GRADIENT, *pImage);
+                mpBTNGradient->SetItemImage(nIdGradient, *pImage);
                 bZeroValue = false;
             }
             else
@@ -1269,7 +1252,7 @@ IMPL_LINK( AreaPropertyPanel, ImplPopupModeEndHdl, FloatingWindow*, EMPTYARG )
 IMPL_LINK( AreaPropertyPanel, ClickTrGrHdl_Impl, ToolBox*, pToolBox )
 {
     maTrGrPopup.Rearrange(mpFloatTransparenceItem.get());
-    OSL_ASSERT(pToolBox->GetCurItemId() == TBI_BTX_GRADIENT);
+    OSL_ASSERT( pToolBox->GetItemCommand(pToolBox->GetCurItemId()) == UNO_SIDEBARGRADIENT);
     maTrGrPopup.Show(*pToolBox);
 
     return (0L);
@@ -1303,25 +1286,26 @@ IMPL_LINK(AreaPropertyPanel, ChangeTrgrTypeHdl_Impl, void *, EMPTYARG)
     {
         mpBTNGradient->Show();
 
+        const sal_uInt16 nIdGradient = mpBTNGradient->GetItemId(UNO_SIDEBARGRADIENT);
         switch (nSelectType)
         {
             case 2:
-                mpBTNGradient->SetItemImage(TBI_BTX_GRADIENT, maImgLinear);
+                mpBTNGradient->SetItemImage(nIdGradient, maImgLinear);
                 break;
             case 3:
-                mpBTNGradient->SetItemImage(TBI_BTX_GRADIENT, maImgAxial);
+                mpBTNGradient->SetItemImage(nIdGradient, maImgAxial);
                 break;
             case 4:
-                mpBTNGradient->SetItemImage(TBI_BTX_GRADIENT, maImgRadial);
+                mpBTNGradient->SetItemImage(nIdGradient, maImgRadial);
                 break;
             case 5:
-                mpBTNGradient->SetItemImage(TBI_BTX_GRADIENT, maImgElli );
+                mpBTNGradient->SetItemImage(nIdGradient, maImgElli );
                 break;
             case 6:
-                mpBTNGradient->SetItemImage(TBI_BTX_GRADIENT, maImgQuad );
+                mpBTNGradient->SetItemImage(nIdGradient, maImgQuad );
                 break;
             case 7:
-                mpBTNGradient->SetItemImage(TBI_BTX_GRADIENT, maImgSquare);
+                mpBTNGradient->SetItemImage(nIdGradient, maImgSquare);
                 break;
         }
 

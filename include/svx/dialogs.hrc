@@ -1004,6 +1004,9 @@
 // sidebar-related resources (defined in the appropriate .hrc's)
 #define RID_SVX_SIDEBAR_BEGIN            (RID_SVX_START + 1240)
 
+// sidebar-related resources (defined in the appropriate .hrc's)
+#define RID_SVX_SIDEBAR_BEGIN            (RID_SVX_START + 1240)
+
 // !!! IMPORTANT: consider and update RID_SVXSTR_NEXTFREE when introducing new RIDs for Strings !!!
 #define RID_SVXSTR_NEXTFREE              (RID_SVX_START + 1270)
 
