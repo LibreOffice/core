@@ -2432,10 +2432,10 @@ void ScXMLExport::_ExportAutoStyles()
             if (xCellRangesQuery.is())
             {
                 Reference<sheet::XSheetCellRanges> xSheetCellRanges(xCellRangesQuery->queryContentCells(sheet::CellFlags::FORMATTED));
-                Reference<sheet::XSheetOperation> xSheetOperation(xSheetCellRanges, uno::UNO_QUERY);
-                if (xSheetCellRanges.is() && xSheetOperation.is())
+                if (xSheetCellRanges.is())
                 {
-                    sal_uInt32 nCount(sal_uInt32(xSheetOperation->computeFunction(sheet::GeneralFunction_COUNT)));
+                    uno::Sequence< table::CellRangeAddress > aCellRangeAddresses (xSheetCellRanges->getRangeAddresses());
+                    sal_uInt32 nCount(aCellRangeAddresses.getLength());
                     Reference<container::XEnumerationAccess> xCellsAccess(xSheetCellRanges->getCells());
                     if (xCellsAccess.is())
                     {
