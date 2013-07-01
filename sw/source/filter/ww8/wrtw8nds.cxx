@@ -2023,7 +2023,6 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
                 aAttrIter.OutFlys( nEnd );
                 // insert final bookmarks if any before CR and after flys
                 AppendBookmarks( rNode, nEnd, 1 );
-                WriteCR( pTextNodeInfoInner );
                 // #i120928 - position of the bullet's graphic is at end of doc
                 if (bLastCR && (!bExported))
                 {
