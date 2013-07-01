@@ -136,11 +136,6 @@ void OptimisticSet::construct(const Reference< XResultSet>& _xDriverSet,const OU
     OKeySetValue keySetValue((ORowSetValueVector *)NULL,::std::pair<sal_Int32,Reference<XRow> >(0,(Reference<XRow>)NULL));
     m_aKeyMap.insert(OKeySetMatrix::value_type(0,keySetValue));
     m_aKeyIter = m_aKeyMap.begin();
-}
-
-void OptimisticSet::makeNewStatement( )
-{
-    OUStringBuffer aFilter = createKeyFilter();
 
     Reference< XSingleSelectQueryComposer> xSourceComposer(m_xComposer,UNO_QUERY);
     Reference< XMultiServiceFactory >  xFactory(m_xConnection, UNO_QUERY_THROW);
@@ -155,6 +150,17 @@ void OptimisticSet::makeNewStatement( )
     m_aSqlIterator.setParseTree( pStatementNode.get() );
     m_aSqlIterator.traverseAll();
     fillJoinedColumns_throw(m_aSqlIterator.getJoinConditions());
+
+}
+
+void OptimisticSet::makeNewStatement( )
+{
+    OUStringBuffer aFilter = createKeyFilter();
+
+    Reference< XSingleSelectQueryComposer> xSourceComposer(m_xComposer,UNO_QUERY);
+    Reference< XMultiServiceFactory >  xFactory(m_xConnection, UNO_QUERY_THROW);
+    Reference<XSingleSelectQueryComposer> xAnalyzer(xFactory->createInstance(SERVICE_NAME_SINGLESELECTQUERYCOMPOSER),UNO_QUERY);
+    xAnalyzer->setElementaryQuery(xSourceComposer->getElementaryQuery());
 
     const OUString sComposerFilter = m_xComposer->getFilter();
     if ( !m_sRowSetFilter.isEmpty() || !sComposerFilter.isEmpty() )
