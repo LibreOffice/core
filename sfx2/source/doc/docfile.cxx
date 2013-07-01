@@ -585,7 +585,9 @@ Reference < XContent > SfxMedium::GetContent() const
 SvStream* SfxMedium::GetInStream()
 {
     if ( pInStream )
+    {
         return pInStream;
+    }
 
     if ( pImp->pTempFile )
     {
@@ -601,13 +603,17 @@ SvStream* SfxMedium::GetInStream()
             pInStream = NULL;
         }
         else
+        {
             return pInStream;
+        }
     }
 
     GetMedium_Impl();
 
     if ( GetError() )
+    {
         return NULL;
+    }
 
     return pInStream;
 }
@@ -2330,14 +2336,20 @@ void SfxMedium::GetMedium_Impl()
 
         //TODO/MBA: ErrorHandling - how to transport error from MediaDescriptor
         if ( !GetError() && !pImp->xStream.is() && !pImp->xInputStream.is() )
+        {
             SetError( ERRCODE_IO_ACCESSDENIED, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
+        }
 
         if ( !GetError() )
         {
             if ( pImp->xStream.is() )
+            {
                 pInStream = utl::UcbStreamHelper::CreateStream( pImp->xStream );
+            }
             else if ( pImp->xInputStream.is() )
+            {
                 pInStream = utl::UcbStreamHelper::CreateStream( pImp->xInputStream );
+            }
         }
 
         pImp->bDownloadDone = sal_True;
@@ -3455,7 +3467,15 @@ void SfxMedium::CreateTempFile( sal_Bool bReplace )
         aName = String();
     }
 
-    pImp->pTempFile = new ::utl::TempFile();
+    do
+    {
+        pImp->pTempFile = new ::utl::TempFile();
+        if ( GetName().Equals( pImp->pTempFile->GetURL() ) )
+        {
+            delete pImp->pTempFile;
+            pImp->pTempFile = NULL;
+        }
+    } while ( pImp->pTempFile == NULL );
     pImp->pTempFile->EnableKillingFile( sal_True );
     aName = pImp->pTempFile->GetFileName();
     ::rtl::OUString aTmpURL = pImp->pTempFile->GetURL();
@@ -3551,9 +3571,20 @@ void SfxMedium::CreateTempFileNoCopy()
 {
     // this call always replaces the existing temporary file
     if ( pImp->pTempFile )
+    {
         delete pImp->pTempFile;
+        pImp->pTempFile = NULL;
+    }
 
-    pImp->pTempFile = new ::utl::TempFile();
+    do
+    {
+        pImp->pTempFile = new ::utl::TempFile();
+        if ( GetName().Equals( pImp->pTempFile->GetURL() ) )
+        {
+            delete pImp->pTempFile;
+            pImp->pTempFile = NULL;
+        }
+    } while ( pImp->pTempFile == NULL );
     pImp->pTempFile->EnableKillingFile( sal_True );
     aName = pImp->pTempFile->GetFileName();
     if ( !aName.Len() )
