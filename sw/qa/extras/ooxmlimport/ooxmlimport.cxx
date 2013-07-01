@@ -365,7 +365,7 @@ xray ThisComponent.DrawPage(1).getByIndex(0).Anchor.PageStyleName
     uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
     uno::Reference<drawing::XShapes> xShapes(xDrawPage->getByIndex(1), uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xShape(xShapes->getByIndex(0), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString("TEXT1"), xShape->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString("TEXT1\n"), xShape->getString());
     // we want to test the textbox is on the first page (it was put onto another page without the fix),
     // use a small trick and instead of checking the page layout, check the page style
     uno::Reference<text::XTextContent> xTextContent(xShape, uno::UNO_QUERY);

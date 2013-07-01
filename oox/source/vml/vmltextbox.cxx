@@ -95,6 +95,13 @@ void TextBox::convert(uno::Reference<drawing::XShape> xShape) const
         xTextAppend->appendTextPortion(aIt->maText, aPropSeq);
     }
 
+    // Remove the last character of the shape text, if it would be a newline.
+    uno::Reference< text::XTextCursor > xCursor = xTextAppend->createTextCursor();
+    xCursor->gotoEnd(false);
+    xCursor->goLeft(1, true);
+    if (xCursor->getString() == "\n")
+        xCursor->setString("");
+
     if ( maLayoutFlow == "vertical" )
     {
         uno::Reference<beans::XPropertySet> xProperties(xShape, uno::UNO_QUERY);

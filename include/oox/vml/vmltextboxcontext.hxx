@@ -65,6 +65,7 @@ public:
 
     virtual ::oox::core::ContextHandlerRef
                         onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
+    virtual void        onEndElement();
 
 private:
     TextBox&            mrTextBox;

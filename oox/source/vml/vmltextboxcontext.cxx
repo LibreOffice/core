@@ -219,6 +219,12 @@ ContextHandlerRef TextBoxContext::onCreateContext( sal_Int32 nElement, const Att
     return 0;
 }
 
+void TextBoxContext::onEndElement()
+{
+    if (getCurrentElement() == OOX_TOKEN(doc, p))
+        mrTextBox.appendPortion( TextFontModel(), "\n" );
+}
+
 // ============================================================================
 
 } // namespace vml
