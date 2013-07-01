@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXn///xA\u003d",
+        "filename": "svgio/source/svgreader/svgsvgnode.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2013-07-01T08:21:16Z",
+      "side": 1,
+      "message": "Is that redundant?",
+      "revId": "5323681dde92eee48e45d463350600b962476edc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
