@@ -3994,7 +3994,7 @@ void wwSectionManager::InsertSegments()
         bool bThisAndPreviousAreCompatible = ((aIter->GetPageWidth() == aPrev->GetPageWidth()) &&
             (aIter->GetPageHeight() == aPrev->GetPageHeight()) && (aIter->IsLandScape() == aPrev->IsLandScape()));
 
-        bool bInsertSection = (aIter != aStart) ? (aIter->IsContinous() &&  bThisAndPreviousAreCompatible): false;
+        bool bInsertSection = (aIter != aStart) ? (aIter->IsContinuous() &&  bThisAndPreviousAreCompatible): false;
         bool bInsertPageDesc = !bInsertSection;
         bool bProtected = SectionIsProtected(*aIter); // do we really  need this ?? I guess I have a different logic in editshell which disables this...
         if (bUseEnhFields && mrReader.pWDop->fProtEnabled && aIter->IsNotProtected())
@@ -4020,7 +4020,7 @@ void wwSectionManager::InsertSegments()
             bool bThisAndNextAreCompatible = (aNext != aEnd) ? ((aIter->GetPageWidth() == aNext->GetPageWidth()) &&
                 (aIter->GetPageHeight() == aNext->GetPageHeight()) && (aIter->IsLandScape() == aNext->IsLandScape())) : true;
 
-            if (((aNext != aEnd && aNext->IsContinous() && bThisAndNextAreCompatible) || bProtected))
+            if (((aNext != aEnd && aNext->IsContinuous() && bThisAndNextAreCompatible) || bProtected))
             {
                 bIgnoreCols = true;
                 if ((aIter->NoCols() > 1) || bProtected)
@@ -4109,7 +4109,7 @@ void wwSectionManager::InsertSegments()
                     // Otherwise set to unbalanced if the following section is
                     // not continuous, (which also means that the last section
                     // is unbalanced)
-                    if (aNext == aEnd || !aNext->IsContinous())
+                    if (aNext == aEnd || !aNext->IsContinuous())
                         pRet->SetFmtAttr(SwFmtNoBalancedColumns(true));
                 }
             }

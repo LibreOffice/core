@@ -2967,7 +2967,7 @@ bool wwSectionManager::WillHavePageDescHere(SwNodeIndex aIdx) const
     bool bRet = false;
     if (!maSegments.empty())
     {
-        if (!maSegments.back().IsContinous() &&
+        if (!maSegments.back().IsContinuous() &&
             maSegments.back().maStart == aIdx)
         {
             bRet = true;

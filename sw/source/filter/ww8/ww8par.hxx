@@ -715,7 +715,7 @@ public:
     void SetDirection();
     void SetLinkId(short sLinkId) { mLinkId = sLinkId; }
     bool DoesContainFootnote() const { return mbHasFootnote; }
-    bool IsContinous() const { return maSep.bkc == 0; }
+    bool IsContinuous() const { return maSep.bkc == 0; }
     bool IsLinked() const { return mLinkId != 0; }
     bool IsNotProtected() const { return maSep.fUnlocked != 0; }
     bool IsVertical() const;
