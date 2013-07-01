@@ -1658,8 +1658,6 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
     const sal_uInt16 NotInChapterLast = 23;
     const sal_uInt16 InChapterFirst = 24;
     const sal_uInt16 InChapterLast = 24;
-    const sal_uInt16 IgnoredFirst = 25;
-    const sal_uInt16 IgnoredLast = 26;
 
     const beans::PropertyValue* pPropArray = rProperties.getConstArray();
     PropValDataArr aPropertyValues;
@@ -1670,8 +1668,6 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
         bExcept = true;
         for(sal_uInt16 j = 0; j < SAL_N_ELEMENTS( aNumPropertyNames ); j++)
         {
-            if( j >= IgnoredFirst && j <= IgnoredLast )
-                continue;
             if( pDocShell && j >= NotInChapterFirst && j <= NotInChapterLast )
                 continue;
             if( !pDocShell && j >= InChapterFirst && j <= InChapterLast )
@@ -2090,7 +2086,7 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
                 break;
                 case 25: // BulletRelSize - unsupported - only available in Impress
                 break;
-                case 26: // ignored too
+                case 26: // BulletColor - ignored too
                 break;
             }
         }
