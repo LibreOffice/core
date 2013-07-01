@@ -149,6 +149,7 @@ public:
     void testN823655();
     void testFdo66040();
     void testN823675();
+    void testFdo47802();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -283,6 +284,7 @@ void Test::run()
         {"n823655.rtf", &Test::testN823655},
         {"fdo66040.rtf", &Test::testFdo66040},
         {"n823675.rtf", &Test::testN823675},
+        {"fdo47802.rtf", &Test::testFdo47802},
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -1375,6 +1377,14 @@ void Test::testN823675()
     }
     // This was empty, i.e. no font name was set for the bullet numbering.
     CPPUNIT_ASSERT_EQUAL(OUString("Symbol"), aFont.Name);
+}
+
+void Test::testFdo47802()
+{
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
+    // Shape inside table was ignored.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xDraws->getCount());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
