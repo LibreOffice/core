@@ -123,6 +123,7 @@
 #define SID_NUMBER_DECDEC       (SC_VIEW_START + 58)
 
 // misc:
+#define SID_COLLABORATION       (SC_VIEW_START + 59)
 #define SID_LINKS               (SC_VIEW_START + 60)
 #define SID_INSERT_SIMAGE       (SC_VIEW_START + 61)
 #define SID_INSERT_SMATH        (SC_VIEW_START + 63)
@@ -153,7 +154,7 @@
 
 #define SID_CHOOSE_DESIGN       (SC_VIEW_START + 82)
 #define SID_EURO_CONVERTER      (SC_VIEW_START + 83)
-#define SID_COLLABORATION       (SC_VIEW_START + 84)
+//See include/sfx2/sfxsids.hrc for reserved usage of (SC_VIEW_START + 84)
 #define SID_EXTERNAL_SOURCE     (SC_VIEW_START + 85)
 
 #define SID_SC_INPUT_TEXTWYSIWYG        (SC_VIEW_START + 86)
