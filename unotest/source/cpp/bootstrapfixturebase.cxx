@@ -76,6 +76,21 @@ OUString test::BootstrapFixtureBase::getPathFromSrc( const char *pPath )
     return m_aSrcRootPath + OUString::createFromAscii( pPath );
 }
 
+// just temporarily ifdef this out as it's currently unused (callcatcher)
+// if you start using it on linux just remove the ifdef
+#ifndef LINUX
+OUString test::BootstrapFixtureBase::getURLFromWorkdir( const char *pPath )
+{
+    return m_aWorkdirRootURL + OUString::createFromAscii( pPath );
+}
+
+OUString test::BootstrapFixtureBase::getPathFromWorkdir( const char *pPath )
+{
+    return m_aWorkdirRootPath + OUString::createFromAscii( pPath );
+
+}
+#endif
+
 void test::BootstrapFixtureBase::setUp()
 {
     // set UserInstallation to user profile dir in test/user-template
