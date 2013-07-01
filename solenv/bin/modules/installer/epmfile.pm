@@ -538,23 +538,13 @@ sub create_epm_header
                 if ( $installer::globals::debian ) { $onereplaces =~ s/_/-/g; } # Debian allows no underline in package name
                 $line = "%replaces" . " " . $onereplaces . "\n";
                 push(@epmheader, $line);
-
-                # Force the openofficeorg packages to get removed,
-                # see http://www.debian.org/doc/debian-policy/ch-relationships.html
-                # 7.5.2 Replacing whole packages, forcing their removal
-
-                if ( $installer::globals::debian )
-                {
-                    $line = "%incompat" . " " . $onereplaces . "\n";
-                    push(@epmheader, $line);
-                }
             }
 
             if ( $installer::globals::debian && $variableshashref->{'UNIXPRODUCTNAME'} eq 'openoffice' )
             {
                 $line = "%provides" . " openoffice.org-unbundled\n";
                 push(@epmheader, $line);
-                $line = "%incompat" . " openoffice.org-bundled\n";
+                $line = "%replaces" . " openoffice.org-bundled\n";
                 push(@epmheader, $line);
             }
         }
