@@ -15,6 +15,7 @@
 #include "compiler.hxx"
 #include "interpre.hxx"
 #include "formula/vectortoken.hxx"
+#include "scmatrix.hxx"
 
 #include "openclwrapper.hxx"
 
