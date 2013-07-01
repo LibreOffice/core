@@ -853,7 +853,9 @@ sal_Bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart
         break;
     case CTRL_CHECKBOX:
         flags = (GtkStateFlags)(flags |
-                ( (aValue.getTristateVal() == BUTTONVALUE_ON) ? GTK_STATE_FLAG_ACTIVE : GTK_STATE_FLAG_NORMAL));
+                ( (aValue.getTristateVal() == BUTTONVALUE_ON) ? GTK_STATE_FLAG_ACTIVE :
+                  (aValue.getTristateVal() == BUTTONVALUE_MIXED) ? GTK_STATE_FLAG_INCONSISTENT :
+                  GTK_STATE_FLAG_NORMAL));
         context = mpCheckButtonStyle;
         styleClass = GTK_STYLE_CLASS_CHECK;
         renderType = RENDER_CHECK;
