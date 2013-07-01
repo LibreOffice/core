@@ -420,6 +420,11 @@ void incomingCallback( void *userRefCon,
     pCommunicator->launch();
 }
 
+void BluetoothServer::addCommunicator( Communicator* pCommunicator )
+{
+    mpCommunicators->push_back( pCommunicator );
+}
+
 #endif // MACOSX
 
 #ifdef LINUX_BLUETOOTH
