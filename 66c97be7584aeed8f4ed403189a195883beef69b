@@ -1,0 +1,667 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXn///tQ\u003d",
+        "filename": "dbaccess/source/core/api/BookmarkSet.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000039
+      },
+      "writtenOn": "2013-07-01T14:37:42Z",
+      "side": 1,
+      "message": "Why duplicating the dbaccess and keeping that old email address?",
+      "revId": "66c97be7584aeed8f4ed403189a195883beef69b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn///tM\u003d",
+        "filename": "dbaccess/source/core/api/CacheSet.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1000039
+      },
+      "writtenOn": "2013-07-01T14:37:42Z",
+      "side": 1,
+      "message": "Why duplicating the dbaccess and keeping that old email address?",
+      "revId": "66c97be7584aeed8f4ed403189a195883beef69b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn///tI\u003d",
+        "filename": "dbaccess/source/core/api/FilteredContainer.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1000039
+      },
+      "writtenOn": "2013-07-01T14:37:42Z",
+      "side": 1,
+      "message": "Dropping the email address would be much better",
+      "revId": "66c97be7584aeed8f4ed403189a195883beef69b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn///tE\u003d",
+        "filename": "dbaccess/source/core/api/KeySet.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1000039
+      },
+      "writtenOn": "2013-07-01T14:37:42Z",
+      "side": 1,
+      "message": "Why duplicating dbaccess and keeping that old email address?",
+      "revId": "66c97be7584aeed8f4ed403189a195883beef69b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn///tA\u003d",
+        "filename": "dbaccess/source/core/api/KeySet.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 933,
+      "author": {
+        "id": 1000039
+      },
+      "writtenOn": "2013-07-01T14:37:42Z",
+      "side": 1,
+      "message": "bad indentation: missing one space",
+      "revId": "66c97be7584aeed8f4ed403189a195883beef69b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn///s8\u003d",
+        "filename": "dbaccess/source/core/api/OptimisticSet.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1000039
+      },
+      "writtenOn": "2013-07-01T14:37:42Z",
+      "side": 1,
+      "message": "Why duplicating dbaccess and keeping this old email address?",
+      "revId": "66c97be7584aeed8f4ed403189a195883beef69b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn///s4\u003d",
+        "filename": "dbaccess/source/core/api/RowSet.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1775,
+      "author": {
+        "id": 1000039
+      },
+      "writtenOn": "2013-07-01T14:37:42Z",
+      "side": 1,
+      "message": "Why duplicating dbaccess and keeping that old email address?",
+      "revId": "66c97be7584aeed8f4ed403189a195883beef69b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn///sw\u003d",
+        "filename": "dbaccess/source/core/api/RowSetBase.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1000039
+      },
+      "writtenOn": "2013-07-01T14:37:42Z",
+      "side": 1,
+      "message": "dropping dbaccess and the old email address in the message would be better.",
+      "revId": "66c97be7584aeed8f4ed403189a195883beef69b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn///s0\u003d",
+        "filename": "dbaccess/source/core/api/RowSetBase.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1000039
+      },
+      "writtenOn": "2013-07-01T14:37:42Z",
+      "side": 1,
+      "message": "Dropping the commenting code would be much better ;)",
+      "revId": "66c97be7584aeed8f4ed403189a195883beef69b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn///ss\u003d",
+        "filename": "dbaccess/source/core/api/RowSetCacheIterator.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000039
+      },
+      "writtenOn": "2013-07-01T14:37:42Z",
+      "side": 1,
+      "message": "dropping dbaccess and the old email address in the message would be better.",
+      "revId": "66c97be7584aeed8f4ed403189a195883beef69b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn///so\u003d",
+        "filename": "dbaccess/source/core/api/SingleSelectQueryComposer.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1000039
+      },
+      "writtenOn": "2013-07-01T14:37:42Z",
+      "side": 1,
+      "message": "dropping dbaccess and the old email address in the message would be better.",
+      "revId": "66c97be7584aeed8f4ed403189a195883beef69b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn///sk\u003d",
+        "filename": "dbaccess/source/core/api/StaticSet.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1000039
+      },
+      "writtenOn": "2013-07-01T14:37:42Z",
+      "side": 1,
+      "message": "dropping dbaccess and the old email address in the message would be better.",
+      "revId": "66c97be7584aeed8f4ed403189a195883beef69b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn///sg\u003d",
+        "filename": "dbaccess/source/core/api/TableDeco.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1000039
+      },
+      "writtenOn": "2013-07-01T14:37:42Z",
+      "side": 1,
+      "message": "dropping dbaccess and the old email address in the message would be better.",
+      "revId": "66c97be7584aeed8f4ed403189a195883beef69b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn///sc\u003d",
+        "filename": "dbaccess/source/core/api/WrappedResultSet.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000039
+      },
+      "writtenOn": "2013-07-01T14:37:42Z",
+      "side": 1,
+      "message": "dropping dbaccess and the old email address in the message would be better.",
+      "revId": "66c97be7584aeed8f4ed403189a195883beef69b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn///sU\u003d",
+        "filename": "dbaccess/source/core/api/callablestatement.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1000039
+      },
+      "writtenOn": "2013-07-01T14:37:42Z",
+      "side": 1,
+      "message": "Dropping those comments would be much more useful",
+      "revId": "66c97be7584aeed8f4ed403189a195883beef69b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn///sY\u003d",
+        "filename": "dbaccess/source/core/api/querycomposer.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1000039
+      },
+      "writtenOn": "2013-07-01T14:37:42Z",
+      "side": 1,
+      "message": "dropping dbaccess and the old email address in the message would be better.",
+      "revId": "66c97be7584aeed8f4ed403189a195883beef69b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn///sQ\u003d",
+        "filename": "dbaccess/source/core/api/resultset.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1000039
+      },
+      "writtenOn": "2013-07-01T14:37:42Z",
+      "side": 1,
+      "message": "dropping dbaccess and the old email address in the message would be better.",
+      "revId": "66c97be7584aeed8f4ed403189a195883beef69b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn///sM\u003d",
+        "filename": "dbaccess/source/core/api/resultset.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1000039
+      },
+      "writtenOn": "2013-07-01T14:37:42Z",
+      "side": 1,
+      "message": "Dropping this commented code would be much more useful",
+      "revId": "66c97be7584aeed8f4ed403189a195883beef69b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn///sI\u003d",
+        "filename": "dbaccess/source/core/api/statement.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1000039
+      },
+      "writtenOn": "2013-07-01T14:37:42Z",
+      "side": 1,
+      "message": "dropping dbaccess and the old email address in the message would be better.",
+      "revId": "66c97be7584aeed8f4ed403189a195883beef69b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn///sE\u003d",
+        "filename": "dbaccess/source/core/api/statement.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1000039
+      },
+      "writtenOn": "2013-07-01T14:37:42Z",
+      "side": 1,
+      "message": "Dropping this commented code would be much more useful",
+      "revId": "66c97be7584aeed8f4ed403189a195883beef69b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn///sA\u003d",
+        "filename": "dbaccess/source/core/api/table.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1000039
+      },
+      "writtenOn": "2013-07-01T14:37:42Z",
+      "side": 1,
+      "message": "dropping dbaccess and the old email address in the message would be better.",
+      "revId": "66c97be7584aeed8f4ed403189a195883beef69b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn///r8\u003d",
+        "filename": "dbaccess/source/core/dataaccess/connection.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1000039
+      },
+      "writtenOn": "2013-07-01T14:37:42Z",
+      "side": 1,
+      "message": "dropping dbaccess and the old email address in the message would be better.",
+      "revId": "66c97be7584aeed8f4ed403189a195883beef69b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn///r4\u003d",
+        "filename": "dbaccess/source/core/dataaccess/datasource.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 521,
+      "author": {
+        "id": 1000039
+      },
+      "writtenOn": "2013-07-01T14:37:42Z",
+      "side": 1,
+      "message": "dropping dbaccess and the old email address in the message would be better.",
+      "revId": "66c97be7584aeed8f4ed403189a195883beef69b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn///r0\u003d",
+        "filename": "dbaccess/source/core/dataaccess/datasource.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 975,
+      "author": {
+        "id": 1000039
+      },
+      "writtenOn": "2013-07-01T14:37:42Z",
+      "side": 1,
+      "message": "Dropping this commented code would be much better",
+      "revId": "66c97be7584aeed8f4ed403189a195883beef69b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn///rw\u003d",
+        "filename": "dbaccess/source/filter/xml/xmlfilter.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 229,
+      "author": {
+        "id": 1000039
+      },
+      "writtenOn": "2013-07-01T14:37:42Z",
+      "side": 1,
+      "message": "oj can be dropped here: there are the initials of the original developer",
+      "revId": "66c97be7584aeed8f4ed403189a195883beef69b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn///rs\u003d",
+        "filename": "dbaccess/source/filter/xml/xmlfilter.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 338,
+      "author": {
+        "id": 1000039
+      },
+      "writtenOn": "2013-07-01T14:37:42Z",
+      "side": 1,
+      "message": "oj can be removed here too",
+      "revId": "66c97be7584aeed8f4ed403189a195883beef69b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn///ro\u003d",
+        "filename": "dbaccess/source/ui/browser/brwctrlr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1000039
+      },
+      "writtenOn": "2013-07-01T14:37:42Z",
+      "side": 1,
+      "message": "dbaccess.ui should be used here: it\u0027s already used in other similar places",
+      "revId": "66c97be7584aeed8f4ed403189a195883beef69b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn///rk\u003d",
+        "filename": "dbaccess/source/ui/browser/brwctrlr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 571,
+      "author": {
+        "id": 1000039
+      },
+      "writtenOn": "2013-07-01T14:37:42Z",
+      "side": 1,
+      "message": "drop dbaui, but use dbaccess.ui as the first param.\nDropping the email address would also be better",
+      "revId": "66c97be7584aeed8f4ed403189a195883beef69b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn///rg\u003d",
+        "filename": "dbaccess/source/ui/browser/genericcontroller.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1000039
+      },
+      "writtenOn": "2013-07-01T14:37:42Z",
+      "side": 1,
+      "message": "Better use dbaccess.ui in this file",
+      "revId": "66c97be7584aeed8f4ed403189a195883beef69b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn///rc\u003d",
+        "filename": "dbaccess/source/ui/browser/unodatbr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 243,
+      "author": {
+        "id": 1000039
+      },
+      "writtenOn": "2013-07-01T14:37:42Z",
+      "side": 1,
+      "message": "use dbaccess.ui in this file",
+      "revId": "66c97be7584aeed8f4ed403189a195883beef69b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn///rY\u003d",
+        "filename": "dbaccess/source/ui/misc/DExport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1000039
+      },
+      "writtenOn": "2013-07-01T14:37:42Z",
+      "side": 1,
+      "message": "Use dbaccess.ui in this file\nRemove Misc and the email address",
+      "revId": "66c97be7584aeed8f4ed403189a195883beef69b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn///rU\u003d",
+        "filename": "dbaccess/source/ui/misc/HtmlReader.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1000039
+      },
+      "writtenOn": "2013-07-01T14:37:42Z",
+      "side": 1,
+      "message": "Use dbaccess.ui, remove misc and the email address",
+      "revId": "66c97be7584aeed8f4ed403189a195883beef69b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn///rQ\u003d",
+        "filename": "dbaccess/source/ui/misc/RowSetDrop.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1000039
+      },
+      "writtenOn": "2013-07-01T14:37:42Z",
+      "side": 1,
+      "message": "use dbaccess.ui, remove misc and the email address",
+      "revId": "66c97be7584aeed8f4ed403189a195883beef69b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn///rM\u003d",
+        "filename": "dbaccess/source/ui/misc/RtfReader.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1000039
+      },
+      "writtenOn": "2013-07-01T14:37:42Z",
+      "side": 1,
+      "message": "use dbaccess.ui, remove misc and the email address",
+      "revId": "66c97be7584aeed8f4ed403189a195883beef69b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn///rI\u003d",
+        "filename": "dbaccess/source/ui/misc/TableCopyHelper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1000039
+      },
+      "writtenOn": "2013-07-01T14:37:42Z",
+      "side": 1,
+      "message": "better use dbaccess.ui instead of dbaccess in this file",
+      "revId": "66c97be7584aeed8f4ed403189a195883beef69b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn///rE\u003d",
+        "filename": "dbaccess/source/ui/misc/TokenWriter.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1000039
+      },
+      "writtenOn": "2013-07-01T14:37:42Z",
+      "side": 1,
+      "message": "use dbaccess.ui, remove misc and the email address",
+      "revId": "66c97be7584aeed8f4ed403189a195883beef69b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn///rA\u003d",
+        "filename": "dbaccess/source/ui/misc/WCopyTable.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 471,
+      "author": {
+        "id": 1000039
+      },
+      "writtenOn": "2013-07-01T14:37:42Z",
+      "side": 1,
+      "message": "use dbaccess.ui in this file instead of dbaccess",
+      "revId": "66c97be7584aeed8f4ed403189a195883beef69b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn///q8\u003d",
+        "filename": "dbaccess/source/ui/misc/WCopyTable.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 573,
+      "author": {
+        "id": 1000039
+      },
+      "writtenOn": "2013-07-01T14:37:42Z",
+      "side": 1,
+      "message": "use dbaccess.ui, remove misc and the email address",
+      "revId": "66c97be7584aeed8f4ed403189a195883beef69b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn///q4\u003d",
+        "filename": "dbaccess/source/ui/uno/copytablewizard.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1094,
+      "author": {
+        "id": 1000039
+      },
+      "writtenOn": "2013-07-01T14:37:42Z",
+      "side": 1,
+      "message": "use dbaccess.ui instead of dbaccess in this file",
+      "revId": "66c97be7584aeed8f4ed403189a195883beef69b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
