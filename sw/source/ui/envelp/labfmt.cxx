@@ -18,6 +18,7 @@
  */
 
 #include <tools/poly.hxx>
+#include <vcl/layout.hxx>
 #include <viewopt.hxx>
 
 #include "swtypes.hxx"
@@ -631,7 +632,7 @@ IMPL_LINK_NOARG(SwSaveLabelDlg, OkHdl)
         if ( rCfg.IsPredefinedLabel(sMake, sType) )
         {
             SAL_WARN( "sw.envelp", "label is predefined and cannot be overwritten" );
-            WarningBox( this, SW_RES( WB_PREDEFINED_LABEL ) ).Execute();
+            MessageDialog(this, "CannotSaveLabelDialog", "modules/swriter/ui/cannotsavelabeldialog.ui").Execute();
             return 0;
         }
         String sTmp(aQueryMB.GetMessText());
