@@ -43,6 +43,9 @@
 // header for define DBG_ASSERT
 #include <tools/debug.hxx>
 
+#include <com/sun/star/chart/XChartDocument.hpp>
+#include <com/sun/star/chart/ChartDataRowSource.hpp>
+
 //.............................................................................
 namespace chart
 {
@@ -59,7 +62,35 @@ uno::Reference< chart2::data::XRangeHighlighter > ChartModelHelper::createRangeH
 uno::Reference< chart2::data::XDataProvider > ChartModelHelper::createInternalDataProvider(
     const uno::Reference< ::com::sun::star::chart2::XChartDocument >& xChartDoc, bool bConnectToModel )
 {
-    return new InternalDataProvider( xChartDoc, bConnectToModel );
+    bool bDefaultDataInColumns(true);
+
+    // #120559# Try to access the current state of "DataRowSource" fo rthe chart data and
+    // use it as default for creating a new InternalDataProvider
+    if(xChartDoc.is())
+    {
+        ::com::sun::star::uno::Reference< ::com::sun::star::chart::XChartDocument > xDoc(xChartDoc, uno::UNO_QUERY);
+
+        if(xDoc.is())
+        {
+            ::com::sun::star::uno::Reference< ::com::sun::star::chart::XDiagram > aDiagram = xDoc->getDiagram();
+
+            if(aDiagram.is())
+            {
+                ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > xProp(aDiagram, uno::UNO_QUERY);
+
+                if(xProp.is())
+                {
+                    ::com::sun::star::chart::ChartDataRowSource aDataRowSource(::com::sun::star::chart::ChartDataRowSource_COLUMNS);
+
+                    xProp->getPropertyValue( ::rtl::OUString::createFromAscii("DataRowSource")) >>= aDataRowSource;
+
+                    bDefaultDataInColumns = (::com::sun::star::chart::ChartDataRowSource_COLUMNS == aDataRowSource);
+                }
+            }
+        }
+    }
+
+    return new InternalDataProvider( xChartDoc, bConnectToModel, bDefaultDataInColumns );
 }
 
 uno::Reference< XDiagram > ChartModelHelper::findDiagram( const uno::Reference< frame::XModel >& xModel )
