@@ -16,17 +16,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 //  RID_SIDEBAR_AREA_PANEL--------------------------------------------------------------
-#define FT_COLOR_LIST                        1
-#define TB_COLOR            2
-#define TBI_COLOR           3
-#define IMG_COLOR           5
 
-#define VS_COLOR            1
+#include "svx/dialogs.hrc"
 
 #define TBI_LEFT                            1
 #define TBI_RIGHT                           1
 #define TBI_BTX_GRADIENT                    51
-#define FL_TRSP_TEXT                         4
 
 #define LB_TRGR_TYPES   6
 #define MTR_TRANSPARENT 7
@@ -50,18 +45,23 @@
 #define BTN_LEFT_SECOND         22
 #define BTN_RIGHT_FIRST         23
 
-#define IMG_AXIAL              24
-#define IMG_ELLI               25
-#define IMG_QUAD               26
-#define IMG_RADIAL              27
-#define IMG_SQUARE              28
-#define IMG_LINEAR              29
-#define IMG_ROT_LEFT            30
-#define IMG_ROT_RIGHT           31
-#define STR_HELP_TYPE           32
-#define STR_HELP_ATTR           33
+// global definitions
+#define IMG_AXIAL       (RID_SVX_SIDEBAR_BEGIN +  30)
+#define IMG_ELLI        (RID_SVX_SIDEBAR_BEGIN +  31)
+#define IMG_QUAD        (RID_SVX_SIDEBAR_BEGIN +  32)
+#define IMG_RADIAL      (RID_SVX_SIDEBAR_BEGIN +  33)
+#define IMG_SQUARE      (RID_SVX_SIDEBAR_BEGIN +  34)
+#define IMG_LINEAR      (RID_SVX_SIDEBAR_BEGIN +  35)
+#define IMG_COLOR       (RID_SVX_SIDEBAR_BEGIN +  36)
+
+#define IMG_ROT_LEFT    (RID_SVX_SIDEBAR_BEGIN +  37)
+#define IMG_ROT_RIGHT   (RID_SVX_SIDEBAR_BEGIN +  38)
+
+#define STR_HELP_TYPE   (RID_SVX_SIDEBAR_BEGIN +  39)
+#define STR_HELP_ATTR   (RID_SVX_SIDEBAR_BEGIN +  40)
+#define VS_COLOR        (RID_SVX_SIDEBAR_BEGIN +  41)
+
 #define STR_HELP_COLOR          41
-#define STR_HELP_GRADIENT       42
 
 #define FIXED_TEXT_HEIGHT   9
 #define FIXED_TEXT_WIDTH   40
