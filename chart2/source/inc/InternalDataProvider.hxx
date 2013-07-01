@@ -71,8 +71,13 @@ class InternalDataProvider :
 {
 public:
     explicit InternalDataProvider(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > & _xContext);
-    explicit InternalDataProvider( const ::com::sun::star::uno::Reference<
-                                       ::com::sun::star::chart2::XChartDocument > & xChartDoc, bool bConnectToModel );
+
+    // #i120559# allow handing over a default for data orientation
+    // (DataInColumns) that will be used when no data is available
+    explicit InternalDataProvider(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument > & xChartDoc,
+        bool bConnectToModel,
+        bool bDefaultDataInColumns );
     explicit InternalDataProvider( const InternalDataProvider & rOther );
     virtual ~InternalDataProvider();
 
