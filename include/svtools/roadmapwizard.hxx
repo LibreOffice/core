@@ -42,7 +42,7 @@ namespace svt
     //====================================================================
     //= RoadmapWizard
     //====================================================================
-    /** is - no, not a wizard for a raodmap, but the base class for wizards
+    /** is - no, not a wizard for a roadmap, but the base class for wizards
         <em>supporting</em> a roadmap.
 
         The basic new concept introduced is a <em>path</em>:<br/>
