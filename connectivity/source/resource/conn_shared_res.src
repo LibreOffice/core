@@ -395,7 +395,7 @@ String STR_COULD_NOT_CREATE_INDEX_NAME
 };
 String STR_COULD_NOT_CREATE_INDEX_KEYSIZE
 {
-    Text [ en-US ] = "The index could not be created. The size of the chosen column is to big.";
+    Text [ en-US ] = "The index could not be created. The size of the chosen column is too big.";
 };
 
 String STR_SQL_NAME_ERROR
