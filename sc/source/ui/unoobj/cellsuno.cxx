@@ -7502,13 +7502,15 @@ void SAL_CALL ScTableSheetObj::setPrintAreas(
                                                 throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
+    ScPrintRangeSaver* pOldRanges;
     ScDocShell* pDocSh = GetDocShell();
     if ( pDocSh )
     {
         ScDocument* pDoc = pDocSh->GetDocument();
         SCTAB nTab = GetTab_Impl();
 
-        ScPrintRangeSaver* pOldRanges = pDoc->CreatePrintRangeSaver();
+        if ( pDoc->IsUndoEnabled() )
+            pOldRanges = pDoc->CreatePrintRangeSaver();
 
         sal_uInt16 nCount = (sal_uInt16) aPrintAreas.getLength();
         pDoc->ClearPrintRanges( nTab );
@@ -7523,7 +7525,8 @@ void SAL_CALL ScTableSheetObj::setPrintAreas(
             }
         }
 
-        PrintAreaUndo_Impl( pOldRanges );   // Undo, Umbrueche, Modified etc.
+        if ( pDoc->IsUndoEnabled() )
+            PrintAreaUndo_Impl( pOldRanges );   // Undo, Umbrueche, Modified etc.
     }
 }
 

@@ -359,6 +359,15 @@ void ScXMLTableContext::EndElement()
     SCTAB nCurTab = rTables.GetCurrentSheet();
     if (!sPrintRanges.isEmpty())
     {
+         ScRangeList aRangeList;
+        ScRangeStringConverter::GetRangeListFromString( aRangeList, sPrintRanges, pDoc, ::formula::FormulaGrammar::CONV_OOO );
+        size_t nCount = aRangeList.size();
+        for (size_t i=0; i< nCount; i++ )
+        {
+            pDoc->AddPrintRange( nCurTab, *aRangeList[i] );
+        }
+
+/*
         Reference< sheet::XPrintAreas > xPrintAreas(
             rTables.GetCurrentXSheet(), UNO_QUERY);
 
@@ -368,6 +377,7 @@ void ScXMLTableContext::EndElement()
             ScRangeStringConverter::GetRangeListFromString( aRangeList, sPrintRanges, pDoc, ::formula::FormulaGrammar::CONV_OOO );
             xPrintAreas->setPrintAreas( aRangeList );
         }
+*/
     }
     else if (!bPrintEntireSheet)
         // Sheet has "print entire sheet" option by default.  Remove it.
