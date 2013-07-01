@@ -27,6 +27,7 @@
 #include <com/sun/star/awt/XControlModel.hpp>
 #include <com/sun/star/drawing/PointSequenceSequence.hpp>
 #include <com/sun/star/drawing/PolyPolygonBezierCoords.hpp>
+#include <com/sun/star/drawing/TextVerticalAdjust.hpp>
 #include <com/sun/star/drawing/XEnhancedCustomShapeDefaulter.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>
@@ -559,6 +560,14 @@ Reference< XShape > SimpleShape::implConvertAndInsert( const Reference< XShapes 
                     PropertySet( xShape ).setAnyProperty(PROP_RelativeHeight, makeAny( nHeight ) );
             }
         }
+
+        // drawinglayer default is center, MSO default is top.
+        drawing::TextVerticalAdjust eTextVerticalAdjust = drawing::TextVerticalAdjust_TOP;
+        if (maTypeModel.maVTextAnchor == "middle")
+            eTextVerticalAdjust = drawing::TextVerticalAdjust_CENTER;
+        else if (maTypeModel.maVTextAnchor == "bottom")
+            eTextVerticalAdjust = drawing::TextVerticalAdjust_BOTTOM;
+        PropertySet(xShape).setAnyProperty(PROP_TextVerticalAdjust, makeAny(eTextVerticalAdjust));
 
         if (getTextBox())
             getTextBox()->convert(xShape);
