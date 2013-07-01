@@ -119,6 +119,8 @@ class SC_DLLPUBLIC ScMatrix
     ScMatrix& operator=( const ScMatrix&);
 
 public:
+    enum Op { Add, Sub, Mul, Div };
+
     /**
      * When adding all numerical matrix elements for a scalar result such as
      * summation, the interpreter wants to separate the first non-zero value
@@ -352,8 +354,8 @@ public:
     double GetMaxValue( bool bTextAsZero ) const;
     double GetMinValue( bool bTextAsZero ) const;
 
-    // All other matrix functions  MatMult, MInv, ...  are in ScInterpreter
-    // to be numerically safe.
+    void GetDoubleArray( std::vector<double>& rArray ) const;
+    void MergeDoubleArray( std::vector<double>& rArray, Op eOp ) const;
 
 #if DEBUG_MATRIX
     void Dump() const;

@@ -225,6 +225,8 @@ public:
 
     double GetMaxValue( bool bTextAsZero ) const;
     double GetMinValue( bool bTextAsZero ) const;
+    void GetDoubleArray( std::vector<double>& rArray ) const;
+    void MergeDoubleArray( std::vector<double>& rArray, ScMatrix::Op eOp ) const;
 
 #if DEBUG_MATRIX
     void Dump() const;
@@ -1022,6 +1024,121 @@ public:
     }
 };
 
+class ToDoubleArray : std::unary_function<MatrixImplType::element_block_type, void>
+{
+    std::vector<double> maArray;
+    std::vector<double>::iterator miPos;
+    double mfNaN;
+public:
+    ToDoubleArray(size_t nSize) : maArray(nSize, 0.0), miPos(maArray.begin())
+    {
+        rtl::math::setNan(&mfNaN);
+    }
+
+    void operator() (const MatrixImplType::element_block_node_type& node)
+    {
+        using namespace mdds::mtv;
+
+        switch (node.type)
+        {
+            case mdds::mtm::element_numeric:
+            {
+                numeric_element_block::const_iterator it = numeric_element_block::begin(*node.data);
+                numeric_element_block::const_iterator itEnd = numeric_element_block::end(*node.data);
+                for (; it != itEnd; ++it, ++miPos)
+                    *miPos = *it;
+            }
+            break;
+            case mdds::mtm::element_boolean:
+            {
+                boolean_element_block::const_iterator it = boolean_element_block::begin(*node.data);
+                boolean_element_block::const_iterator itEnd = boolean_element_block::end(*node.data);
+                for (; it != itEnd; ++it, ++miPos)
+                    *miPos = *it ? 1.0 : 0.0;
+            }
+            break;
+            case mdds::mtm::element_string:
+            {
+                for (size_t i = 0; i < node.size; ++i, ++miPos)
+                    *miPos = mfNaN;
+            }
+            break;
+            default:
+                ;
+        }
+    }
+
+    void swap(std::vector<double>& rOther)
+    {
+        maArray.swap(rOther);
+    }
+};
+
+struct ArrayMul : public std::binary_function<double, double, double>
+{
+    double operator() (const double& lhs, const double& rhs) const
+    {
+        return lhs * rhs;
+    }
+};
+
+template<typename _Op>
+class MergeDoubleArrayFunc : std::unary_function<MatrixImplType::element_block_type, void>
+{
+    std::vector<double>& mrArray;
+    std::vector<double>::iterator miPos;
+    double mfNaN;
+public:
+    MergeDoubleArrayFunc(std::vector<double>& rArray) : mrArray(rArray), miPos(mrArray.begin())
+    {
+        rtl::math::setNan(&mfNaN);
+    }
+
+    void operator() (const MatrixImplType::element_block_node_type& node)
+    {
+        using namespace mdds::mtv;
+        static _Op op;
+
+        switch (node.type)
+        {
+            case mdds::mtm::element_numeric:
+            {
+                numeric_element_block::const_iterator it = numeric_element_block::begin(*node.data);
+                numeric_element_block::const_iterator itEnd = numeric_element_block::end(*node.data);
+                for (; it != itEnd; ++it, ++miPos)
+                {
+                    if (rtl::math::isNan(*miPos))
+                        continue;
+
+                    *miPos = op(*miPos, *it);
+                }
+            }
+            break;
+            case mdds::mtm::element_boolean:
+            {
+                boolean_element_block::const_iterator it = boolean_element_block::begin(*node.data);
+                boolean_element_block::const_iterator itEnd = boolean_element_block::end(*node.data);
+                for (; it != itEnd; ++it, ++miPos)
+                {
+                    if (rtl::math::isNan(*miPos))
+                        continue;
+
+                    *miPos = op(*miPos, *it ? 1.0 : 0.0);
+                }
+            }
+            break;
+            case mdds::mtm::element_string:
+            {
+                for (size_t i = 0; i < node.size; ++i, ++miPos)
+                    *miPos = mfNaN;
+            }
+            break;
+            default:
+                ;
+        }
+    }
+};
+
 }
 
 ScMatrix::IterateResult ScMatrixImpl::Sum(bool bTextAsZero) const
@@ -1065,6 +1182,34 @@ double ScMatrixImpl::GetMinValue( bool bTextAsZero ) const
     CalcMaxMinValue<MinOp> aFunc(bTextAsZero);
     maMat.walk(aFunc);
     return aFunc.getValue();
+}
+
+void ScMatrixImpl::GetDoubleArray( std::vector<double>& rArray ) const
+{
+    MatrixImplType::size_pair_type aSize = maMat.size();
+    ToDoubleArray aFunc(aSize.row*aSize.column);
+    maMat.walk(aFunc);
+    aFunc.swap(rArray);
+}
+
+void ScMatrixImpl::MergeDoubleArray( std::vector<double>& rArray, ScMatrix::Op eOp ) const
+{
+    MatrixImplType::size_pair_type aSize = maMat.size();
+    size_t nSize = aSize.row*aSize.column;
+    if (nSize != rArray.size())
+        return;
+
+    switch (eOp)
+    {
+        case ScMatrix::Mul:
+        {
+            MergeDoubleArrayFunc<ArrayMul> aFunc(rArray);
+            maMat.walk(aFunc);
+        }
+        break;
+        default:
+            ;
+    }
 }
 
 #if DEBUG_MATRIX
@@ -1419,6 +1564,16 @@ double ScMatrix::GetMinValue( bool bTextAsZero ) const
     return pImpl->GetMinValue(bTextAsZero);
 }
 
+void ScMatrix::GetDoubleArray( std::vector<double>& rArray ) const
+{
+    pImpl->GetDoubleArray(rArray);
+}
+
+void ScMatrix::MergeDoubleArray( std::vector<double>& rArray, Op eOp ) const
+{
+    pImpl->MergeDoubleArray(rArray, eOp);
+}
+
 #if DEBUG_MATRIX
 void ScMatrix::Dump() const
 {
@@ -1427,3 +1582,4 @@ void ScMatrix::Dump() const
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+

@@ -1595,6 +1595,49 @@ void ScInterpreter::ScPow()
         PushDouble(pow(fVal1,fVal2));
 }
 
+namespace {
+
+bool mergeArray( std::vector<double>& rRes, const std::vector<double>& rOther )
+{
+    if (rRes.size() != rOther.size())
+        return false;
+
+    double fNan;
+    rtl::math::setNan(&fNan);
+
+    std::vector<double>::iterator it = rRes.begin(), itEnd = rRes.end();
+    std::vector<double>::const_iterator itOther = rOther.begin();
+    for (; it != itEnd; ++it, ++itOther)
+    {
+        if (rtl::math::isNan(*it) || rtl::math::isNan(*itOther))
+        {
+            *it = fNan;
+            continue;
+        }
+
+        *it *= *itOther;
+    }
+
+    return true;
+}
+
+class SumValues : std::unary_function<double, void>
+{
+    double mfSum;
+public:
+    SumValues() : mfSum(0.0) {}
+
+    void operator() (double f)
+    {
+        if (!rtl::math::isNan(f))
+            mfSum += f;
+    }
+
+    double getValue() const { return mfSum; }
+};
+
+}
+
 void ScInterpreter::ScSumProduct()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScSumProduct" );
@@ -1602,49 +1645,40 @@ void ScInterpreter::ScSumProduct()
     if ( !MustHaveParamCount( nParamCount, 1, 30 ) )
         return;
 
-    ScMatrixRef pMat1 = NULL;
-    ScMatrixRef pMat2 = NULL;
-    ScMatrixRef pMat  = NULL;
-    pMat2 = GetMatrix();
-    if (!pMat2)
+    ScMatrixRef pMatLast;
+    ScMatrixRef pMat;
+
+    pMatLast = GetMatrix();
+    if (!pMatLast)
     {
         PushIllegalParameter();
         return;
     }
-    SCSIZE nC, nC1;
-    SCSIZE nR, nR1;
-    pMat2->GetDimensions(nC, nR);
-    pMat = pMat2;
-    for (sal_uInt16 i = 1; i < nParamCount; i++)
+
+    SCSIZE nC, nCLast, nR, nRLast;
+    pMatLast->GetDimensions(nCLast, nRLast);
+    std::vector<double> aResArray;
+    pMatLast->GetDoubleArray(aResArray);
+
+    for (sal_uInt16 i = 1; i < nParamCount; ++i)
     {
-        pMat1 = GetMatrix();
-        if (!pMat1)
+        pMat = GetMatrix();
+        if (!pMat)
         {
             PushIllegalParameter();
             return;
         }
-        pMat1->GetDimensions(nC1, nR1);
-        if (nC1 != nC || nR1 != nR)
+        pMat->GetDimensions(nC, nR);
+        if (nC != nCLast || nR != nRLast)
         {
             PushNoValue();
             return;
         }
-        ScMatrixRef pResMat = lcl_MatrixCalculation<MatrixMul>(*pMat1, *pMat, this);
-        if (!pResMat)
-        {
-            PushNoValue();
-            return;
-        }
-        else
-            pMat = pResMat;
+
+        pMat->MergeDoubleArray(aResArray, ScMatrix::Mul);
     }
-    double fSum = 0.0;
-    SCSIZE nCount = pMat->GetElementCount();
-    for (SCSIZE j = 0; j < nCount; j++)
-    {
-        if (!pMat->IsString(j))
-            fSum += pMat->GetDouble(j);
-    }
+
+    double fSum = std::for_each(aResArray.begin(), aResArray.end(), SumValues()).getValue();
     PushDouble(fSum);
 }
 
