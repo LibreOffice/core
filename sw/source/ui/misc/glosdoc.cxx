@@ -49,7 +49,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
 // PUBLIC METHODES -------------------------------------------------------
-static String lcl_CheckFileName( const String& rNewFilePath,
+static String lcl_CheckFileName( const OUString& rNewFilePath,
                           const String& rNewGroupName )
 {
     String sRet;
@@ -77,7 +77,7 @@ static String lcl_CheckFileName( const String& rNewFilePath,
 
     if( !bOk )
     {
-        String rSG = SwGlossaries::GetExtension();
+        OUString rSG = SwGlossaries::GetExtension();
         //generate generic name
         utl::TempFile aTemp(OUString("group"),
             &rSG, &rNewFilePath );

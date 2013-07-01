@@ -220,8 +220,8 @@ OUString PackageRegistryBackend::createFolder(
     ucbhelper::Content dataContent;
     ::dp_misc::create_folder(&dataContent, sDataFolder, xCmdEnv);
 
-    const String baseDir(sDataFolder);
-    const ::utl::TempFile aTemp(&baseDir, sal_True);
+    const OUString baseDir(sDataFolder);
+    const ::utl::TempFile aTemp(&baseDir, true);
     const OUString url = aTemp.GetURL();
     return sDataFolder + url.copy(url.lastIndexOf('/'));
 }

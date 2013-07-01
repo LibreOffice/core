@@ -20,7 +20,7 @@
 #define _UNOTOOLS_FONTCFG_HXX
 
 #include <unotools/unotoolsdllapi.h>
-#include <tools/string.hxx>
+#include <tools/solar.h>
 #include <tools/fontenum.hxx>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -154,11 +154,11 @@ class UNOTOOLS_DLLPUBLIC DefaultFontConfiguration
 
 struct UNOTOOLS_DLLPUBLIC FontNameAttr
 {
-    String                              Name;
-    ::std::vector< String >             Substitutions;
-    ::std::vector< String >             MSSubstitutions;
-    ::std::vector< String >             PSSubstitutions;
-    ::std::vector< String >             HTMLSubstitutions;
+    OUString                            Name;
+    ::std::vector< OUString >             Substitutions;
+    ::std::vector< OUString >             MSSubstitutions;
+    ::std::vector< OUString >             PSSubstitutions;
+    ::std::vector< OUString >             HTMLSubstitutions;
     FontWeight                          Weight;
     FontWidth                           Width;
     unsigned long                       Type; // bitfield of IMPL_FONT_ATTR_*
@@ -190,7 +190,7 @@ private:
 
     void fillSubstVector( const com::sun::star::uno::Reference< com::sun::star::container::XNameAccess > xFont,
                           const OUString& rType,
-                          std::vector< String >& rSubstVector ) const;
+                          std::vector< OUString >& rSubstVector ) const;
     FontWeight getSubstWeight( const com::sun::star::uno::Reference< com::sun::star::container::XNameAccess > xFont,
                           const OUString& rType ) const;
     FontWidth getSubstWidth( const com::sun::star::uno::Reference< com::sun::star::container::XNameAccess > xFont,
@@ -205,13 +205,13 @@ public:
     static FontSubstConfiguration& get();
 
     const FontNameAttr* getSubstInfo(
-                                     const String& rFontName,
+                                     const OUString& rFontName,
                                      const com::sun::star::lang::Locale& rLocale =
                                      com::sun::star::lang::Locale( OUString( "en" ),
                                                                    OUString(),
                                                                    OUString() )
                                      ) const;
-    static void getMapName( const String& rOrgName, String& rShortName, String& rFamilyName, FontWeight& rWeight, FontWidth& rWidth, sal_uLong& rType );
+    static void getMapName( const OUString& rOrgName, OUString& rShortName, OUString& rFamilyName, FontWeight& rWeight, FontWidth& rWidth, sal_uLong& rType );
 };
 
 } // namespace utl

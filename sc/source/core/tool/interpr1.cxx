@@ -930,10 +930,10 @@ double ScInterpreter::CompareFunc( const ScCompare& rComp, ScCompareOptions* pOp
             OSL_ENSURE(rEntry.GetQueryItem().maString.equals(*rComp.pVal[1]), "ScInterpreter::CompareFunc: broken options");
             if (pOptions->bRegEx)
             {
-                xub_StrLen nStart = 0;
-                xub_StrLen nStop  = rComp.pVal[0]->Len();
+                sal_Int32 nStart = 0;
+                sal_Int32 nStop  = rComp.pVal[0]->Len();
                 bool bMatch = rEntry.GetSearchTextPtr(
-                        !pOptions->bIgnoreCase)->SearchFrwrd( *rComp.pVal[0],
+                        !pOptions->bIgnoreCase)->SearchForward( *rComp.pVal[0],
                             &nStart, &nStop);
                 if (bMatch && pOptions->bMatchWholeCell && (nStart != 0 || nStop != rComp.pVal[0]->Len()))
                     bMatch = false;     // RegEx must match entire string.
@@ -8782,10 +8782,10 @@ void ScInterpreter::ScSearch()
         }
         else
             fAnz = 1.0;
-        String sStr = GetString();
+        OUString sStr = GetString();
         OUString SearchStr = GetString();
-        xub_StrLen nPos = (xub_StrLen) fAnz - 1;
-        xub_StrLen nEndPos = sStr.Len();
+        sal_Int32 nPos = fAnz - 1;
+        sal_Int32 nEndPos = sStr.getLength();
         if( nPos >= nEndPos )
             PushNoValue();
         else
@@ -8795,7 +8795,7 @@ void ScInterpreter::ScSearch()
                 utl::SearchParam::SRCH_REGEXP : utl::SearchParam::SRCH_NORMAL);
             utl::SearchParam sPar(SearchStr, eSearchType, false, false, false);
             utl::TextSearch sT( sPar, *ScGlobal::pCharClass );
-            int nBool = sT.SearchFrwrd(sStr, &nPos, &nEndPos);
+            int nBool = sT.SearchForward(sStr, &nPos, &nEndPos);
             if (!nBool)
                 PushNoValue();
             else

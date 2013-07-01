@@ -247,9 +247,9 @@ public:
     SAL_DLLPRIVATE void DoBackup_Impl();
     SAL_DLLPRIVATE void DoInternalBackup_Impl( const ::ucbhelper::Content& aOriginalContent );
     SAL_DLLPRIVATE void DoInternalBackup_Impl( const ::ucbhelper::Content& aOriginalContent,
-                                                const String& aPrefix,
-                                                const String& aExtension,
-                                                const String& aDestDir );
+                                                const OUString& aPrefix,
+                                                const OUString& aExtension,
+                                                const OUString& aDestDir );
 
     SAL_DLLPRIVATE sal_Bool UseBackupToRestore_Impl( ::ucbhelper::Content& aOriginalContent,
                              const css::uno::Reference< css::ucb::XCommandEnvironment >& xComEnv );

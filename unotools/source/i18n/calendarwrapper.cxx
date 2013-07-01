@@ -19,7 +19,6 @@
 
 
 #include <rtl/strbuf.hxx>
-#include <tools/string.hxx>
 #include <tools/debug.hxx>
 #include <unotools/calendarwrapper.hxx>
 #include <com/sun/star/i18n/CalendarFieldIndex.hpp>
@@ -260,7 +259,7 @@ void CalendarWrapper::setValue( sal_Int16 nFieldIndex, sal_Int16 nValue )
 }
 
 
-sal_Bool CalendarWrapper::isValid() const
+bool CalendarWrapper::isValid() const
 {
     try
     {
@@ -271,7 +270,7 @@ sal_Bool CalendarWrapper::isValid() const
     {
         SAL_WARN( "unotools.i18n",  "isValue: Exception caught " << e.Message );
     }
-    return sal_False;
+    return false;
 }
 
 
@@ -379,7 +378,7 @@ sal_Int16 CalendarWrapper::getNumberOfDaysInWeek() const
 }
 
 
-String CalendarWrapper::getDisplayName( sal_Int16 nCalendarDisplayIndex, sal_Int16 nIdx, sal_Int16 nNameType ) const
+OUString CalendarWrapper::getDisplayName( sal_Int16 nCalendarDisplayIndex, sal_Int16 nIdx, sal_Int16 nNameType ) const
 {
     try
     {
@@ -390,13 +389,13 @@ String CalendarWrapper::getDisplayName( sal_Int16 nCalendarDisplayIndex, sal_Int
     {
         SAL_WARN( "unotools.i18n", "getDisplayName: Exception caught " << e.Message );
     }
-    return String();
+    return OUString();
 }
 
 
 // --- XExtendedCalendar -----------------------------------------------------
 
-String CalendarWrapper::getDisplayString( sal_Int32 nCalendarDisplayCode, sal_Int16 nNativeNumberMode ) const
+OUString CalendarWrapper::getDisplayString( sal_Int32 nCalendarDisplayCode, sal_Int16 nNativeNumberMode ) const
 {
     try
     {
@@ -407,7 +406,7 @@ String CalendarWrapper::getDisplayString( sal_Int32 nCalendarDisplayCode, sal_In
     {
         SAL_WARN( "unotools.i18n", "getDisplayString: Exception caught " << e.Message );
     }
-    return String();
+    return OUString();
 }
 
 

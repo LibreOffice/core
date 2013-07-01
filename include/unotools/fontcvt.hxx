@@ -21,7 +21,8 @@
 #define _UNOTOOLS_FONTCVT_HXX
 
 #include <unotools/unotoolsdllapi.h>
-#include <tools/string.hxx>
+#include <rtl/ustring.hxx>
+#include <tools/solar.h>
 
 // ------------------
 // - FontToSubsFont -
@@ -32,10 +33,10 @@
 #define FONTTOSUBSFONT_ONLYOLDSOSYMBOLFONTS     ((sal_uLong)0x00000004)
 
 typedef void* FontToSubsFontConverter;
-UNOTOOLS_DLLPUBLIC FontToSubsFontConverter     CreateFontToSubsFontConverter( const String& rFontName, sal_uLong nFlags );
+UNOTOOLS_DLLPUBLIC FontToSubsFontConverter     CreateFontToSubsFontConverter( const OUString& rFontName, sal_uLong nFlags );
 UNOTOOLS_DLLPUBLIC void                        DestroyFontToSubsFontConverter( FontToSubsFontConverter hConverter );
 UNOTOOLS_DLLPUBLIC sal_Unicode                 ConvertFontToSubsFontChar( FontToSubsFontConverter hConverter, sal_Unicode c );
-UNOTOOLS_DLLPUBLIC String                      GetFontToSubsFontName( FontToSubsFontConverter hConverter );
+UNOTOOLS_DLLPUBLIC OUString                    GetFontToSubsFontName( FontToSubsFontConverter hConverter );
 
 // ---------------------------
 // - StarSymbolToMSMultiFont -
@@ -48,7 +49,7 @@ public:
     //mapped to. Sets rChar to the correct position for that font. If no
     //match found, then no name is returned, and rChar is unchanged. If you
     //want to convert a string, you don't want to use this.
-    virtual String ConvertChar(sal_Unicode &rChar) = 0;
+    virtual OUString ConvertChar(sal_Unicode &rChar) = 0;
 
     //Starts converting the string at position rIndex. It converts as much of
     //the string that can be converted to the same symbol font and returns the
@@ -57,7 +58,7 @@ public:
     //rString.Len() and handle each section as separate 8bit strings using
     //separate fonts. Will return an empty string for a continous section
     //that has no possible mapping.
-    virtual String ConvertString(String &rString, xub_StrLen &rIndex) = 0;
+    virtual OUString ConvertString(OUString &rString, sal_Int32 &rIndex) = 0;
     virtual ~StarSymbolToMSMultiFont() {}
 };
 

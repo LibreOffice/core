@@ -24,6 +24,7 @@
 #include <svl/itemset.hxx>
 #include <unotools/fontcvt.hxx>
 #include <editeng/svxenum.hxx>
+#include <tools/string.hxx>
 #include "scdllapi.h"
 
 class Font;

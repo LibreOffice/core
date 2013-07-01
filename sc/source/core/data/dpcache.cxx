@@ -534,10 +534,11 @@ bool ScDPCache::ValidQuery( SCROW nRow, const ScQueryParam &rParam) const
             bool bTestRegExp = false;
             if (bRealRegExp || bTestRegExp)
             {
-                xub_StrLen nStart = 0;
-                xub_StrLen nEnd   = aCellStr.Len();
+                sal_Int32 nStart = 0;
+                sal_Int32 nEnd   = aCellStr.Len();
+
                 bool bMatch = (bool) rEntry.GetSearchTextPtr( rParam.bCaseSens )
-                              ->SearchFrwrd( aCellStr, &nStart, &nEnd );
+                              ->SearchForward( aCellStr, &nStart, &nEnd );
                 // from 614 on, nEnd is behind the found text
                 if (bMatch && bMatchWholeCell
                     && (nStart != 0 || nEnd != aCellStr.Len()))

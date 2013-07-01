@@ -1871,13 +1871,13 @@ sal_Bool GeometryHandler::impl_isDefaultFunction_nothrow( const uno::Reference< 
         {
             aSearchOptions.searchString = aIter->m_sSearchString;
             utl::TextSearch aTextSearch(aSearchOptions);
-            xub_StrLen start = 0;
-            xub_StrLen end = sFormula.Len();
-            if ( aTextSearch.SearchFrwrd(sFormula,&start,&end) && start == 0 && end == sFormula.Len()) // default function found
+            sal_Int32 start = 0;
+            sal_Int32 end = sFormula.Len();
+            if ( aTextSearch.SearchForward(sFormula,&start,&end) && start == 0 && end == sFormula.Len()) // default function found
             {
                 aSearchOptions.searchString = OUString("\\[[:alpha:]+([:space:]*[:alnum:]*)*\\]");
                 utl::TextSearch aDataSearch(aSearchOptions);
-                aDataSearch.SearchFrwrd(sFormula,&start,&end );
+                aDataSearch.SearchForward(sFormula,&start,&end );
                 ++start;
                 _rDataField = sFormula.Copy(start,end-start-1);
                 _rsDefaultFunctionName = aIter->m_sName;
@@ -2088,9 +2088,9 @@ bool GeometryHandler::impl_isCounterFunction_throw(const OUString& _sQuotedFunct
             aSearchOptions.searchFlag = 0x00000100;
             aSearchOptions.searchString = m_aCounterFunction.m_sSearchString;
             utl::TextSearch aTextSearch(aSearchOptions);
-            xub_StrLen start = 0;
-            xub_StrLen end = sFormula.Len();
-            if ( aTextSearch.SearchFrwrd(sFormula,&start,&end) && start == 0 && end == sFormula.Len()) // counter function found
+            sal_Int32 start = 0;
+            sal_Int32 end = sFormula.Len();
+            if ( aTextSearch.SearchForward(sFormula,&start,&end) && start == 0 && end == sFormula.Len()) // counter function found
             {
                 const uno::Reference< report::XGroup > xGroup(aFind.first->second.second,uno::UNO_QUERY);
                 if ( xGroup.is() )

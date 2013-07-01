@@ -399,7 +399,7 @@ IMPL_LINK(SwAddressListDialog, CreateHdl_Impl, PushButton*, pButton)
             String sExt = OUString(".odb");
             String sTmpName;
             {
-                String sHomePath(SvtPathOptions().GetWorkPath());
+                OUString sHomePath(SvtPathOptions().GetWorkPath());
                 utl::TempFile aTempFile(sFind , &sExt, &sHomePath);
                 aTempFile.EnableKillingFile(sal_True);
                 sTmpName = aTempFile.GetURL();

@@ -487,29 +487,28 @@ IMPL_LINK( SwMultiTOXTabDialog, ShowPreviewHdl, CheckBox *, pBox )
         if(!pExampleFrame && !bExampleCreated)
         {
             bExampleCreated = sal_True;
-            String sTemplate(OUString("internal"));
-            sTemplate += INET_PATH_TOKEN;
-            sTemplate.AppendAscii( RTL_CONSTASCII_STRINGPARAM("idxexample") );
-            String sTemplateWithoutExt( sTemplate );
-            sTemplate.AppendAscii( RTL_CONSTASCII_STRINGPARAM(".odt") );
+            OUString sTemplate("internal/idxexample");
+
+            OUString sTemplateWithoutExt( sTemplate );
+            sTemplate += ".odt";
 
             SvtPathOptions aOpt;
             aOpt.SetTemplatePath(String("share/template/common"));
             // 6.0 (extension .sxw)
-            sal_Bool bExist = aOpt.SearchFile( sTemplate, SvtPathOptions::PATH_TEMPLATE );
+            bool bExist = aOpt.SearchFile( sTemplate, SvtPathOptions::PATH_TEMPLATE );
 
             if( !bExist )
             {
                 // 6.0 (extension .sxw)
                 sTemplate = sTemplateWithoutExt;
-                sTemplate.AppendAscii( RTL_CONSTASCII_STRINGPARAM(".sxw") );
+                sTemplate += ".sxw";
                 bExist = aOpt.SearchFile( sTemplate, SvtPathOptions::PATH_TEMPLATE );
             }
             if( !bExist )
             {
                 // 5.0 (extension .vor)
                 sTemplate = sTemplateWithoutExt;
-                sTemplate.AppendAscii( RTL_CONSTASCII_STRINGPARAM(".sdw") );
+                sTemplate += ".sdw";
                 bExist = aOpt.SearchFile( sTemplate, SvtPathOptions::PATH_TEMPLATE );
             }
 
@@ -524,8 +523,9 @@ IMPL_LINK( SwMultiTOXTabDialog, ShowPreviewHdl, CheckBox *, pBox )
             else
             {
                 Link aLink(LINK(this, SwMultiTOXTabDialog, CreateExample_Hdl));
+                String sTemp(sTemplate);
                 pExampleFrame = new SwOneExampleFrame(
-                        aExampleContainerWIN, EX_SHOW_ONLINE_LAYOUT, &aLink, &sTemplate);
+                        aExampleContainerWIN, EX_SHOW_ONLINE_LAYOUT, &aLink, &sTemp);
 
                 if(!pExampleFrame->IsServiceAvailable())
                 {

@@ -2085,9 +2085,9 @@ void SfxMedium::Transfer_Impl()
 
 //------------------------------------------------------------------
 void SfxMedium::DoInternalBackup_Impl( const ::ucbhelper::Content& aOriginalContent,
-                                       const String& aPrefix,
-                                       const String& aExtension,
-                                       const String& aDestDir )
+                                       const OUString& aPrefix,
+                                       const OUString& aExtension,
+                                       const OUString& aDestDir )
 {
     SAL_INFO( "sfx2.doc", "sfx2 (mv76033) SfxMedium::DoInternalBackup_Impl( with destdir )" );
 
@@ -2155,9 +2155,9 @@ void SfxMedium::DoInternalBackup_Impl( const ::ucbhelper::Content& aOriginalCont
                                                         INetURLObject::NO_DECODE );
 
     sal_Int32 nPrefixLen = aFileName.lastIndexOf( '.' );
-    String aPrefix = ( nPrefixLen == -1 ) ? aFileName : aFileName.copy( 0, nPrefixLen );
-    String aExtension = ( nPrefixLen == -1 ) ? String() : String(aFileName.copy( nPrefixLen ));
-    String aBakDir = SvtPathOptions().GetBackupPath();
+    OUString aPrefix = ( nPrefixLen == -1 ) ? aFileName : aFileName.copy( 0, nPrefixLen );
+    OUString aExtension = ( nPrefixLen == -1 ) ? OUString() : aFileName.copy( nPrefixLen );
+    OUString aBakDir = SvtPathOptions().GetBackupPath();
 
     // create content for the parent folder ( = backup folder )
     ::ucbhelper::Content  aContent;
@@ -3565,9 +3565,9 @@ OUString SfxMedium::CreateTempCopyWithExt( const OUString& aURL )
     if ( !aURL.isEmpty() )
     {
         sal_Int32 nPrefixLen = aURL.lastIndexOf( '.' );
-        String aExt = ( nPrefixLen == -1 ) ? String() : String( aURL.copy( nPrefixLen ) );
+        OUString aExt = ( nPrefixLen == -1 ) ? OUString() :  aURL.copy( nPrefixLen );
 
-        OUString aNewTempFileURL = ::utl::TempFile( String(), &aExt ).GetURL();
+        OUString aNewTempFileURL = ::utl::TempFile( OUString(), &aExt ).GetURL();
         if ( !aNewTempFileURL.isEmpty() )
         {
             INetURLObject aSource( aURL );

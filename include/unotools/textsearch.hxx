@@ -22,7 +22,6 @@
 #define _UNOTOOLS_TEXTSEARCH_HXX
 #include <i18nlangtag/lang.h>
 #include <rtl/ustring.hxx>
-#include <tools/string.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/util/XTextSearch.hpp>
@@ -52,8 +51,8 @@ public:
     enum SearchType{ SRCH_NORMAL, SRCH_REGEXP, SRCH_LEVDIST };
 
 private:
-    String sSrchStr;            // the search string
-    String sReplaceStr;         // the replace string
+    OUString sSrchStr;            // the search string
+    OUString sReplaceStr;         // the replace string
 
     SearchType m_eSrchType;       // search normal/regular/LevDist
 
@@ -73,16 +72,16 @@ private:
 public:
     SearchParam( const OUString &rText,
                     SearchType eSrchType = SearchParam::SRCH_NORMAL,
-                    sal_Bool bCaseSensitive = sal_True,
-                    sal_Bool bWordOnly = sal_False,
-                    sal_Bool bSearchInSelection = sal_False );
+                    bool bCaseSensitive = true,
+                    bool bWordOnly = false,
+                    bool bSearchInSelection = false );
 
     SearchParam( const SearchParam& );
 
     ~SearchParam();
 
-    const String&   GetSrchStr() const          { return sSrchStr; }
-    const String&   GetReplaceStr() const       { return sReplaceStr; }
+    const OUString& GetSrchStr() const          { return sSrchStr; }
+    const OUString& GetReplaceStr() const       { return sReplaceStr; }
     SearchType      GetSrchType() const         { return m_eSrchType; }
 
     int             IsCaseSensitive() const     { return m_bCaseSense; }
@@ -90,8 +89,8 @@ public:
     int             IsSrchWordOnly() const      { return m_bWordOnly; }
 
 
-    void SetSrchStr( const String& rStr )       { sSrchStr = rStr; }
-    void SetReplaceStr( const String& rStr )    { sReplaceStr = rStr; }
+    void SetSrchStr( const OUString& rStr )     { sSrchStr = rStr; }
+    void SetReplaceStr( const OUString& rStr )  { sReplaceStr = rStr; }
     void SetSrchType( SearchType eType )        { m_eSrchType = eType; }
 
     void SetCaseSensitive( int bFlag )          { m_bCaseSense = bFlag; }
@@ -145,35 +144,32 @@ public:
         pStart  - start position for the search
         pEnde   - end position for the search
 
-        RETURN values   ==  sal_True: something is found
+        RETURN values   ==  true: something is found
                         - pStart start pos of the found text,
                         - pStart end pos of the found text,
                         - pSrchResult - the search result with all found
                              positions. Is only filled with more positions
                              if the regular expression handles groups.
 
-                        == sal_False: nothing found, pStart,pEnde unchanged.
+                        == false: nothing found, pStart,pEnde unchanged.
 
         Definitions: start pos always inclusive, end pos always exclusive!
                      The position must always in the right direction!
                     search forward: start <= end
                     search backward: end <= start
     */
-    int SearchFrwrd( const String &rStr,
-                    xub_StrLen* pStart, xub_StrLen* pEnde,
-                    ::com::sun::star::util::SearchResult* pSrchResult = 0 );
-    sal_Bool SearchForward( const OUString &rStr,
-                    sal_Int32* pStart, sal_Int32* pEnd,
-                    ::com::sun::star::util::SearchResult* pRes = 0 );
-    int SearchBkwrd( const String &rStr,
-                    xub_StrLen* pStart, xub_StrLen* pEnde,
-                    ::com::sun::star::util::SearchResult* pSrchResult = 0 );
+    bool SearchForward( const OUString &rStr,
+                        sal_Int32* pStart, sal_Int32* pEnd,
+                        ::com::sun::star::util::SearchResult* pRes = 0 );
+    bool SearchBackward( const OUString &rStr,
+                        sal_Int32* pStart, sal_Int32* pEnd,
+                        ::com::sun::star::util::SearchResult* pRes = 0 );
 
     void SetLocale( const ::com::sun::star::util::SearchOptions& rOpt,
                     const ::com::sun::star::lang::Locale& rLocale );
 
     /* replace back references in the replace string by the sub expressions from the search result */
-    void ReplaceBackReferences( String& rReplaceStr, const String &rStr, const ::com::sun::star::util::SearchResult& rResult );
+    void ReplaceBackReferences( OUString& rReplaceStr, const OUString &rStr, const ::com::sun::star::util::SearchResult& rResult );
 
 };
 

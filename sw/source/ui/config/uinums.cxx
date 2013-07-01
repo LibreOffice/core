@@ -91,7 +91,7 @@ void  SwBaseNumRules::Init()
     for(sal_uInt16 i = 0; i < nMaxRules; ++i )
         pNumRules[i] = 0;
 
-    String sNm( sFileName );
+    OUString sNm( sFileName );
     SvtPathOptions aOpt;
     if( aOpt.SearchFile( sNm, SvtPathOptions::PATH_USERCONFIG ))
     {

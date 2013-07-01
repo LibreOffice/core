@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
+#include <osl/thread.h>
 #include "buffer.hxx"
 #include "sbcomp.hxx"
 

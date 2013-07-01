@@ -1398,8 +1398,8 @@ public:
 
         if ( bRealRegExp || bTestRegExp )
         {
-            xub_StrLen nStart = 0;
-            xub_StrLen nEnd   = aCellStr.getLength();
+            sal_Int32 nStart = 0;
+            sal_Int32 nEnd   = aCellStr.getLength();
 
             // from 614 on, nEnd is behind the found text
             bool bMatch = false;
@@ -1407,13 +1407,13 @@ public:
             {
                 nEnd = 0;
                 nStart = aCellStr.getLength();
-                bMatch = (bool) rEntry.GetSearchTextPtr( mrParam.bCaseSens )
-                    ->SearchBkwrd( aCellStr, &nStart, &nEnd );
+                bMatch = rEntry.GetSearchTextPtr( mrParam.bCaseSens )
+                    ->SearchBackward( aCellStr, &nStart, &nEnd );
             }
             else
             {
-                bMatch = (bool) rEntry.GetSearchTextPtr( mrParam.bCaseSens )
-                    ->SearchFrwrd( aCellStr, &nStart, &nEnd );
+                bMatch = rEntry.GetSearchTextPtr( mrParam.bCaseSens )
+                    ->SearchForward( aCellStr, &nStart, &nEnd );
             }
             if ( bMatch && bMatchWholeCell
                     && (nStart != 0 || nEnd != aCellStr.getLength()) )

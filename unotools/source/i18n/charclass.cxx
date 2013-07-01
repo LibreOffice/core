@@ -20,7 +20,6 @@
 
 #include <comphelper/processfactory.hxx>
 #include <unotools/charclass.hxx>
-#include <tools/string.hxx>
 #include <tools/debug.hxx>
 
 #include <com/sun/star/i18n/CharacterClassification.hpp>
@@ -77,41 +76,47 @@ const ::com::sun::star::lang::Locale& CharClass::getMyLocale() const
 
 
 // static
-sal_Bool CharClass::isAsciiNumeric( const String& rStr )
+bool CharClass::isAsciiNumeric( const OUString& rStr )
 {
-    if ( !rStr.Len() )
-        return sal_False;
-    const sal_Unicode* p = rStr.GetBuffer();
-    const sal_Unicode* const pStop = p + rStr.Len();
+    if ( rStr.isEmpty() )
+        return false;
+    const sal_Unicode* p = rStr.getStr();
+    const sal_Unicode* const pStop = p + rStr.getLength();
+
     do
     {
         if ( !isAsciiDigit( *p ) )
-            return sal_False;
-    } while ( ++p < pStop );
-    return sal_True;
+            return false;
+    }
+    while ( ++p < pStop );
+
+    return true;
 }
 
 
 // static
-sal_Bool CharClass::isAsciiAlpha( const String& rStr )
+bool CharClass::isAsciiAlpha( const OUString& rStr )
 {
-    if ( !rStr.Len() )
-        return sal_False;
-    const sal_Unicode* p = rStr.GetBuffer();
-    const sal_Unicode* const pStop = p + rStr.Len();
+    if ( rStr.isEmpty() )
+        return false;
+    const sal_Unicode* p = rStr.getStr();
+    const sal_Unicode* const pStop = p + rStr.getLength();
+
     do
     {
         if ( !isAsciiAlpha( *p ) )
-            return sal_False;
-    } while ( ++p < pStop );
-    return sal_True;
+            return false;
+    }
+    while ( ++p < pStop );
+
+    return true;
 }
 
 
 
-sal_Bool CharClass::isAlpha( const String& rStr, xub_StrLen nPos ) const
+bool CharClass::isAlpha( const OUString& rStr, sal_Int32 nPos ) const
 {
-    sal_Unicode c = rStr.GetChar( nPos );
+    sal_Unicode c = rStr[nPos];
     if ( c < 128 )
         return isAsciiAlpha( c );
 
@@ -119,22 +124,22 @@ sal_Bool CharClass::isAlpha( const String& rStr, xub_StrLen nPos ) const
     {
         if ( xCC.is() )
             return  (xCC->getCharacterType( rStr, nPos, getMyLocale() ) &
-                nCharClassAlphaType) != 0;
+                     nCharClassAlphaType) != 0;
         else
-            return sal_False;
+            return false;
     }
     catch ( const Exception& )
     {
         SAL_WARN( "unotools.i18n", "isAlpha: Exception caught!" );
-        return sal_False;
+        return false;
     }
 }
 
 
 
-sal_Bool CharClass::isLetter( const String& rStr, xub_StrLen nPos ) const
+bool CharClass::isLetter( const OUString& rStr, sal_Int32 nPos ) const
 {
-    sal_Unicode c = rStr.GetChar( nPos );
+    sal_Unicode c = rStr[nPos];
     if ( c < 128 )
         return isAsciiAlpha( c );
 
@@ -142,38 +147,38 @@ sal_Bool CharClass::isLetter( const String& rStr, xub_StrLen nPos ) const
     {
         if ( xCC.is() )
             return  (xCC->getCharacterType( rStr, nPos, getMyLocale() ) &
-                nCharClassLetterType) != 0;
+                     nCharClassLetterType) != 0;
         else
-            return sal_False;
+            return false;
     }
     catch ( const Exception& )
     {
         SAL_WARN( "unotools.i18n", "isLetter: Exception caught!" );
-        return sal_False;
+        return false;
     }
 }
 
 
-sal_Bool CharClass::isLetter( const String& rStr ) const
+bool CharClass::isLetter( const OUString& rStr ) const
 {
     try
     {
         if ( xCC.is() )
-            return isLetterType( xCC->getStringType( rStr, 0, rStr.Len(), getMyLocale() ) );
+            return isLetterType( xCC->getStringType( rStr, 0, rStr.getLength(), getMyLocale() ) );
         else
-            return sal_False;
+            return false;
     }
     catch ( const Exception& )
     {
         SAL_WARN( "unotools.i18n", "isLetter: Exception caught!" );
-        return sal_False;
+        return false;
     }
 }
 
 
-sal_Bool CharClass::isDigit( const String& rStr, xub_StrLen nPos ) const
+bool CharClass::isDigit( const OUString& rStr, sal_Int32 nPos ) const
 {
-    sal_Unicode c = rStr.GetChar( nPos );
+    sal_Unicode c = rStr[ nPos ];
     if ( c < 128 )
         return isAsciiDigit( c );
 
@@ -181,38 +186,38 @@ sal_Bool CharClass::isDigit( const String& rStr, xub_StrLen nPos ) const
     {
         if ( xCC.is() )
             return  (xCC->getCharacterType( rStr, nPos, getMyLocale() ) &
-                KCharacterType::DIGIT) != 0;
+                     KCharacterType::DIGIT) != 0;
         else
-            return sal_False;
+            return false;
     }
     catch ( const Exception& )
     {
         SAL_WARN( "unotools.i18n", "isDigit: Exception caught!" );
-        return sal_False;
+        return false;
     }
 }
 
 
-sal_Bool CharClass::isNumeric( const String& rStr ) const
+bool CharClass::isNumeric( const OUString& rStr ) const
 {
     try
     {
         if ( xCC.is() )
-            return isNumericType( xCC->getStringType( rStr, 0, rStr.Len(), getMyLocale() ) );
+            return isNumericType( xCC->getStringType( rStr, 0, rStr.getLength(), getMyLocale() ) );
         else
-            return sal_False;
+            return false;
     }
     catch ( const Exception& )
     {
         SAL_WARN( "unotools.i18n", "isNumeric: Exception caught!" );
-        return sal_False;
+        return false;
     }
 }
 
 
-sal_Bool CharClass::isAlphaNumeric( const String& rStr, xub_StrLen nPos ) const
+bool CharClass::isAlphaNumeric( const OUString& rStr, sal_Int32 nPos ) const
 {
-    sal_Unicode c = rStr.GetChar( nPos );
+    sal_Unicode c = rStr[nPos];
     if ( c < 128 )
         return isAsciiAlphaNumeric( c );
 
@@ -222,19 +227,19 @@ sal_Bool CharClass::isAlphaNumeric( const String& rStr, xub_StrLen nPos ) const
             return  (xCC->getCharacterType( rStr, nPos, getMyLocale() ) &
                 (nCharClassAlphaType | KCharacterType::DIGIT)) != 0;
         else
-            return sal_False;
+            return false;
     }
     catch ( const Exception& )
     {
         SAL_WARN( "unotools.i18n", "isAlphaNumeric: Exception caught!" );
-        return sal_False;
+        return false;
     }
 }
 
 
-sal_Bool CharClass::isLetterNumeric( const String& rStr, xub_StrLen nPos ) const
+bool CharClass::isLetterNumeric( const OUString& rStr, sal_Int32 nPos ) const
 {
-    sal_Unicode c = rStr.GetChar( nPos );
+    sal_Unicode c = rStr[nPos];
     if ( c < 128 )
         return isAsciiAlphaNumeric( c );
 
@@ -242,31 +247,31 @@ sal_Bool CharClass::isLetterNumeric( const String& rStr, xub_StrLen nPos ) const
     {
         if ( xCC.is() )
             return  (xCC->getCharacterType( rStr, nPos, getMyLocale() ) &
-                (nCharClassLetterType | KCharacterType::DIGIT)) != 0;
+                     (nCharClassLetterType | KCharacterType::DIGIT)) != 0;
         else
-            return sal_False;
+            return false;
     }
     catch ( const Exception& )
     {
         SAL_WARN( "unotools.i18n", "isLetterNumeric: Exception caught!" );
-        return sal_False;
+        return false;
     }
 }
 
 
-sal_Bool CharClass::isLetterNumeric( const String& rStr ) const
+bool CharClass::isLetterNumeric( const OUString& rStr ) const
 {
     try
     {
         if ( xCC.is() )
-            return isLetterNumericType( xCC->getStringType( rStr, 0, rStr.Len(), getMyLocale() ) );
+            return isLetterNumericType( xCC->getStringType( rStr, 0, rStr.getLength(), getMyLocale() ) );
         else
-            return sal_False;
+            return false;
     }
     catch ( const Exception& )
     {
         SAL_WARN( "unotools.i18n", "isLetterNumeric: Exception caught!" );
-        return sal_False;
+        return false;
     }
 }
 
@@ -318,7 +323,7 @@ OUString CharClass::lowercase( const OUString& rStr, sal_Int32 nPos, sal_Int32 n
     }
 }
 
-sal_Int16 CharClass::getType( const String& rStr, xub_StrLen nPos ) const
+sal_Int16 CharClass::getType( const OUString& rStr, sal_Int32 nPos ) const
 {
     try
     {
@@ -335,7 +340,7 @@ sal_Int16 CharClass::getType( const String& rStr, xub_StrLen nPos ) const
 }
 
 
-sal_Int16 CharClass::getCharacterDirection( const String& rStr, xub_StrLen nPos ) const
+sal_Int16 CharClass::getCharacterDirection( const OUString& rStr, sal_Int32 nPos ) const
 {
     try
     {
@@ -352,7 +357,7 @@ sal_Int16 CharClass::getCharacterDirection( const String& rStr, xub_StrLen nPos 
 }
 
 
-sal_Int16 CharClass::getScript( const String& rStr, xub_StrLen nPos ) const
+sal_Int16 CharClass::getScript( const OUString& rStr, sal_Int32 nPos ) const
 {
     try
     {
@@ -369,7 +374,7 @@ sal_Int16 CharClass::getScript( const String& rStr, xub_StrLen nPos ) const
 }
 
 
-sal_Int32 CharClass::getCharacterType( const String& rStr, xub_StrLen nPos ) const
+sal_Int32 CharClass::getCharacterType( const OUString& rStr, sal_Int32 nPos ) const
 {
     try
     {
@@ -386,7 +391,7 @@ sal_Int32 CharClass::getCharacterType( const String& rStr, xub_StrLen nPos ) con
 }
 
 
-sal_Int32 CharClass::getStringType( const String& rStr, xub_StrLen nPos, xub_StrLen nCount ) const
+sal_Int32 CharClass::getStringType( const OUString& rStr, sal_Int32 nPos, sal_Int32 nCount ) const
 {
     try
     {
@@ -404,12 +409,12 @@ sal_Int32 CharClass::getStringType( const String& rStr, xub_StrLen nPos, xub_Str
 
 
 ::com::sun::star::i18n::ParseResult CharClass::parseAnyToken(
-            const String& rStr,
+            const OUString& rStr,
             sal_Int32 nPos,
             sal_Int32 nStartCharFlags,
-            const String& userDefinedCharactersStart,
+            const OUString& userDefinedCharactersStart,
             sal_Int32 nContCharFlags,
-            const String& userDefinedCharactersCont ) const
+            const OUString& userDefinedCharactersCont ) const
 {
     try
     {
@@ -430,12 +435,12 @@ sal_Int32 CharClass::getStringType( const String& rStr, xub_StrLen nPos, xub_Str
 
 ::com::sun::star::i18n::ParseResult CharClass::parsePredefinedToken(
             sal_Int32 nTokenType,
-            const String& rStr,
+            const OUString& rStr,
             sal_Int32 nPos,
             sal_Int32 nStartCharFlags,
-            const String& userDefinedCharactersStart,
+            const OUString& userDefinedCharactersStart,
             sal_Int32 nContCharFlags,
-            const String& userDefinedCharactersCont ) const
+            const OUString& userDefinedCharactersCont ) const
 {
     try
     {

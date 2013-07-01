@@ -100,21 +100,21 @@ bool ScTable::SearchCell(const SvxSearchItem& rSearchItem, SCCOL nCol, SCROW nRo
         default:
             break;
     }
-    xub_StrLen nStart = 0;
-    xub_StrLen nEnd = aString.getLength();
+    sal_Int32 nStart = 0;
+    sal_Int32 nEnd = aString.getLength();
     ::com::sun::star::util::SearchResult aSearchResult;
     if (pSearchText)
     {
         if ( bDoBack )
         {
-            xub_StrLen nTemp=nStart; nStart=nEnd; nEnd=nTemp;
-            bFound = (bool)(pSearchText->SearchBkwrd(aString, &nStart, &nEnd, &aSearchResult));
+           sal_Int32 nTemp=nStart; nStart=nEnd; nEnd=nTemp;
+            bFound = pSearchText->SearchBackward(aString, &nStart, &nEnd, &aSearchResult);
             // change results to definition before 614:
             --nEnd;
         }
         else
         {
-            bFound = (bool)(pSearchText->SearchFrwrd(aString, &nStart, &nEnd, &aSearchResult));
+            bFound = pSearchText->SearchForward(aString, &nStart, &nEnd, &aSearchResult);
             // change results to definition before 614:
             --nEnd;
         }
@@ -152,10 +152,10 @@ bool ScTable::SearchCell(const SvxSearchItem& rSearchItem, SCCOL nCol, SCROW nRo
         {
             //  wenn der gefundene Text leer ist, nicht weitersuchen,
             //  sonst wuerde man nie mehr aufhoeren (#35410#)
-            if ( nEnd < nStart || nEnd == STRING_MAXLEN )
+            if ( nEnd < nStart )
                 bRepeat = false;
 
-            String sReplStr = rSearchItem.GetReplaceString();
+            OUString sReplStr = rSearchItem.GetReplaceString();
             if (rSearchItem.GetRegExp())
             {
                 pSearchText->ReplaceBackReferences( sReplStr, aString, aSearchResult );
@@ -180,7 +180,7 @@ bool ScTable::SearchCell(const SvxSearchItem& rSearchItem, SCCOL nCol, SCROW nRo
             }
             else
             {
-                nStart = sal::static_int_cast<xub_StrLen>( nStart + sReplStr.Len() );
+                nStart = nStart + sReplStr.getLength();
                 nEnd = aString.getLength();
             }
 
@@ -191,14 +191,14 @@ bool ScTable::SearchCell(const SvxSearchItem& rSearchItem, SCCOL nCol, SCROW nRo
                     bRepeat = false;
                 else if (bDoBack)
                 {
-                    xub_StrLen nTemp=nStart; nStart=nEnd; nEnd=nTemp;
-                    bRepeat = ((bool)(pSearchText->SearchBkwrd(aString, &nStart, &nEnd, &aSearchResult)));
+                    sal_Int32 nTemp=nStart; nStart=nEnd; nEnd=nTemp;
+                    bRepeat = pSearchText->SearchBackward(aString, &nStart, &nEnd, &aSearchResult);
                     // change results to definition before 614:
                     --nEnd;
                 }
                 else
                 {
-                    bRepeat = ((bool)(pSearchText->SearchFrwrd(aString, &nStart, &nEnd, &aSearchResult)));
+                    bRepeat = pSearchText->SearchForward(aString, &nStart, &nEnd, &aSearchResult);
                     // change results to definition before 614:
                     --nEnd;
                 }

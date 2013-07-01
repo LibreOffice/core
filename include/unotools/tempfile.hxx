@@ -48,7 +48,7 @@ struct TempFile_Impl;
 class UNOTOOLS_DLLPUBLIC TempFile
 {
     TempFile_Impl*  pImp;
-    sal_Bool        bKillingFileEnabled;
+    bool            bKillingFileEnabled;
 
 protected:
 
@@ -59,15 +59,15 @@ public:
                     The temporary object is created in the local file system, even if there is no UCB that can access it.
                     If the given folder is part of the local file system, the TempFile is created in this folder.
                     */
-                    TempFile( const String* pParent=NULL, sal_Bool bDirectory=sal_False );
+                    TempFile( const OUString* pParent=NULL, bool bDirectory=false );
 
                     /**
                     Same as above; additionally the name starts with some given characters followed by a counter ( example:
                     rLeadingChars="abc" means "abc0","abc1" and so on, depending on existing files in the folder ).
                     The extension string may be f.e. ".txt" or "", if no extension string is given, ".tmp" is used
                     */
-                    TempFile( const String& rLeadingChars, const String* pExtension=NULL, const String* pParent=NULL,
-                                sal_Bool bDirectory=sal_False);
+                    TempFile( const OUString& rLeadingChars, const OUString* pExtension=NULL, const OUString* pParent=NULL,
+                                bool bDirectory=false);
 
                     /**
                     Same as above; additionally the name starts with some given characters followed by a counter ( example:
@@ -75,7 +75,7 @@ public:
                     The extension string may be f.e. ".txt" or "", if no extension string is given, ".tmp" is used
                         @param  _bStartWithZero If set to false names will be generated like "abc","abc0","abc1"
                     */
-                    TempFile( const String& rLeadingChars,sal_Bool _bStartWithZero, const String* pExtension=NULL, const String* pParent=NULL,sal_Bool bDirectory=sal_False);
+                    TempFile( const OUString& rLeadingChars, bool _bStartWithZero, const OUString* pExtension=NULL, const OUString* pParent=NULL, bool bDirectory=false);
 
                     /**
                     TempFile will be removed from disk in dtor if EnableKillingTempFile was called before.
@@ -86,7 +86,7 @@ public:
                     /**
                     Returns sal_True if it has a valid file name.
                     */
-    sal_Bool        IsValid() const;
+    bool            IsValid() const;
 
                     /**
                     Returns the "UCB compatible" URL of the tempfile object.
@@ -96,7 +96,7 @@ public:
                     If no UCP is available for the local file system, an empty URL is returned. In this case you can't access
                     the file as a UCB content !
                     */
-    String          GetURL() const;
+    OUString        GetURL() const;
 
                     /**
                     Returns the "physical" name of the tempfile in host notation ( should only be used for 3rd party code
@@ -104,7 +104,7 @@ public:
                     If you want to have the URL, use the GetURL() method of this object, but never use any external
                     conversion functions for "physical" names into URLs.
                     */
-    String          GetFileName() const;
+    OUString        GetFileName() const;
 
                     /**
                     Returns a stream to the tempfiles data; the stream is owned by the tempfile object, so you have to keep this
@@ -121,10 +121,10 @@ public:
                     /**
                     If enabled the file will be removed from disk when the dtor is called ( default is not enabled )
                     */
-    void            EnableKillingFile( sal_Bool bEnable=sal_True )
+    void            EnableKillingFile( bool bEnable=true )
                     { bKillingFileEnabled = bEnable; }
 
-    sal_Bool        IsKillingFileEnabled() const
+    bool            IsKillingFileEnabled() const
                     { return bKillingFileEnabled; }
 
                     /**
@@ -133,7 +133,7 @@ public:
                     If you want to convert file name into a URL, always use class LocalFileHelper, but never use any
                     conversion functions of osl.
                     */
-    static String   CreateTempName( const String* pParent=NULL );
+    static OUString CreateTempName( const OUString* pParent=NULL );
 
                     /**
                     The TempNameBaseDirectory is a subfolder in the folder that is passed as a "physical" file name in the
@@ -144,7 +144,7 @@ public:
                     The return value of both methods is the complete "physical" name of the tempname base folder.
                     It is not a URL because alle URLs must be "UCB compatible", so there may be no suitable URL at all.
                     */
-    static String   SetTempNameBaseDirectory( const String &rBaseName );
+    static OUString SetTempNameBaseDirectory( const OUString &rBaseName );
 };
 
 }

@@ -21,7 +21,6 @@
 #define _UNOTOOLS_CALENDARWRAPPER_HXX
 
 #include <tools/datetime.hxx>
-#include <tools/string.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/i18n/Calendar2.hpp>
@@ -73,13 +72,13 @@ public:
     // wrapper implementations of XCalendar
 
     void setValue( sal_Int16 nFieldIndex, sal_Int16 nValue );
-    sal_Bool isValid() const;
+    bool isValid() const;
     sal_Int16 getValue( sal_Int16 nFieldIndex ) const;
     void addValue( sal_Int16 nFieldIndex, sal_Int32 nAmount );
     sal_Int16 getFirstDayOfWeek() const;
     sal_Int16 getNumberOfMonthsInYear() const;
     sal_Int16 getNumberOfDaysInWeek() const;
-    String getDisplayName( sal_Int16 nCalendarDisplayIndex, sal_Int16 nIdx, sal_Int16 nNameType ) const;
+    OUString getDisplayName( sal_Int16 nCalendarDisplayIndex, sal_Int16 nIdx, sal_Int16 nNameType ) const;
 
     /** Convenience method to get timezone offset in milliseconds, taking both
         fields ZONE_OFFSET and ZONE_OFFSET_SECOND_MILLIS into account. */
@@ -91,7 +90,7 @@ public:
 
     // wrapper implementations of XExtendedCalendar
 
-    String getDisplayString( sal_Int32 nCalendarDisplayCode, sal_Int16 nNativeNumberMode ) const;
+    OUString getDisplayString( sal_Int32 nCalendarDisplayCode, sal_Int16 nNativeNumberMode ) const;
 
 
     // wrapper implementations of XCalendar3

@@ -19,6 +19,7 @@
 
 #include <tools/stream.hxx>
 #include <tools/tenccvt.hxx>
+#include <osl/thread.h>
 #include <basic/sbx.hxx>
 #include "sb.hxx"
 #include <string.h>     // memset() etc
@@ -120,7 +121,7 @@ bool SbiImage::Load( SvStream& r, sal_uInt32& nVersion )
     {
         r >> nVersion >> nCharSet >> lDimBase
           >> nFlags >> nReserved1 >> nReserved2 >> nReserved3;
-        eCharSet = (CharSet) nCharSet;
+        eCharSet = nCharSet;
         eCharSet = GetSOLoadTextEncoding( eCharSet );
         bBadVer  = ( nVersion > B_CURVERSION );
         nDimBase = (sal_uInt16) lDimBase;
@@ -286,34 +287,8 @@ bool SbiImage::Save( SvStream& r, sal_uInt32 nVer )
     if( !aOUSource.isEmpty() && SbiGood( r ) )
     {
         nPos = SbiOpenRecord( r, B_SOURCE, 1 );
-        OUString aTmp;
-        sal_Int32 nLen = aOUSource.getLength();
-        const sal_Int32 nMaxUnitSize = STRING_MAXLEN - 1;
-        if( nLen > STRING_MAXLEN )
-        {
-            aTmp = aOUSource.copy( 0, nMaxUnitSize );
-        }
-        else
-        {
-            aTmp = aOUSource;
-        }
-        r.WriteUniOrByteString( aTmp, eCharSet );
+        r.WriteUniOrByteString( aOUSource, eCharSet );
         SbiCloseRecord( r, nPos );
-
-        if( nLen > STRING_MAXLEN )
-        {
-            sal_Int32 nRemainingLen = nLen - nMaxUnitSize;
-            sal_uInt16 nUnitCount = sal_uInt16( (nRemainingLen + nMaxUnitSize - 1) / nMaxUnitSize );
-            nPos = SbiOpenRecord( r, B_EXTSOURCE, nUnitCount );
-            for( sal_uInt16 i = 0 ; i < nUnitCount ; i++ )
-            {
-                sal_Int32 nCopyLen = (nRemainingLen > nMaxUnitSize) ? nMaxUnitSize : nRemainingLen;
-                OUString aTmp2 = aOUSource.copy( (i+1) * nMaxUnitSize, nCopyLen );
-                nRemainingLen -= nCopyLen;
-                r.WriteUniOrByteString( aTmp2, eCharSet );
-            }
-            SbiCloseRecord( r, nPos );
-        }
     }
     // Binary data?
     if( pCode && SbiGood( r ) )

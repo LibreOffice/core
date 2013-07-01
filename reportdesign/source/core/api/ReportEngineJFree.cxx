@@ -172,11 +172,9 @@ OUString OReportEngineJFree::getNewOutputName()
             MimeConfigurationHelper aConfighelper(m_xContext);
             const OUString sMimeType = m_xReport->getMimeType();
             const SfxFilter* pFilter = SfxFilter::GetDefaultFilter( aConfighelper.GetDocServiceNameFromMediaType(sMimeType) );
-            String sExt;
+            OUString sExt(".rpt");
             if ( pFilter )
                 sExt = ::comphelper::string::stripStart(pFilter->GetDefaultExtension(), '*');
-            else
-                sExt = OUString(".rpt");
 
             uno::Reference< embed::XStorage > xTemp = OStorageHelper::GetTemporaryStorage(/*sFileTemp,embed::ElementModes::WRITE | embed::ElementModes::TRUNCATE,*/ m_xContext);
             utl::DisposableComponent aTemp(xTemp);
@@ -199,11 +197,11 @@ OUString OReportEngineJFree::getNewOutputName()
             if ( !sName.Len() )
                 sName = m_xReport->getName();
             {
-                ::utl::TempFile aTestFile(sName,sal_False,&sExt);
+                ::utl::TempFile aTestFile(sName, false, &sExt);
                 if ( !aTestFile.IsValid() )
                 {
                     sName = RPT_RESSTRING(RID_STR_REPORT,m_xContext->getServiceManager());
-                    ::utl::TempFile aFile(sName,sal_False,&sExt);
+                    ::utl::TempFile aFile(sName, false, &sExt);
                     sFileURL = aFile.GetURL();
                 }
                 else
