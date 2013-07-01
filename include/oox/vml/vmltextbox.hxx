@@ -37,6 +37,12 @@ struct ShapeTypeModel;
 
 // ============================================================================
 
+/// A text paragraph in a textbox.
+struct TextParagraphModel
+{
+    OptValue<OUString> moParaAdjust; ///< Paragraph adjust (left, center, right, etc.)
+};
+
 /** Font settings for a text portion in a textbox. */
 struct OOX_DLLPUBLIC TextFontModel
 {
@@ -57,10 +63,11 @@ struct OOX_DLLPUBLIC TextFontModel
 /** A text portion in a textbox with the same formatting for all characters. */
 struct TextPortionModel
 {
+    TextParagraphModel  maParagraph;
     TextFontModel       maFont;
     OUString     maText;
 
-    explicit            TextPortionModel( const TextFontModel& rFont, const OUString& rText );
+    explicit            TextPortionModel( const TextParagraphModel& rParagraph, const TextFontModel& rFont, const OUString& rText );
 };
 
 // ============================================================================
@@ -72,7 +79,7 @@ public:
     explicit            TextBox(ShapeTypeModel& rTypeModel);
 
     /** Appends a new text portion to the textbox. */
-    void                appendPortion( const TextFontModel& rFont, const OUString& rText );
+    void                appendPortion( const TextParagraphModel& rParagraph, const TextFontModel& rFont, const OUString& rText );
 
     /** Returns the current number of text portions. */
     inline size_t       getPortionCount() const { return maPortions.size(); }

@@ -34,10 +34,11 @@ using ::oox::core::ContextHandlerRef;
 // ============================================================================
 
 TextPortionContext::TextPortionContext( ContextHandler2Helper& rParent,
-        TextBox& rTextBox, const TextFontModel& rParentFont,
+        TextBox& rTextBox, TextParagraphModel& rParagraph, const TextFontModel& rParentFont,
         sal_Int32 nElement, const AttributeList& rAttribs ) :
     ContextHandler2( rParent ),
     mrTextBox( rTextBox ),
+    maParagraph( rParagraph ),
     maFont( rParentFont ),
     mnInitialPortions( rTextBox.getPortionCount() )
 {
@@ -96,7 +97,7 @@ ContextHandlerRef TextPortionContext::onCreateContext( sal_Int32 nElement, const
     OSL_ENSURE( nElement != XML_font, "TextPortionContext::onCreateContext - nested <font> elements" );
     if (getNamespace(getCurrentElement()) == NMSP_doc)
         return this;
-    return new TextPortionContext( *this, mrTextBox, maFont, nElement, rAttribs );
+    return new TextPortionContext( *this, mrTextBox, maParagraph, maFont, nElement, rAttribs );
 }
 
 void TextPortionContext::onCharacters( const OUString& rChars )
@@ -108,10 +109,10 @@ void TextPortionContext::onCharacters( const OUString& rChars )
     {
         case XML_span:
             // replace all NBSP characters with SP
-            mrTextBox.appendPortion( maFont, rChars.replace( 0xA0, ' ' ) );
+            mrTextBox.appendPortion( maParagraph, maFont, rChars.replace( 0xA0, ' ' ) );
         break;
         default:
-            mrTextBox.appendPortion( maFont, rChars );
+            mrTextBox.appendPortion( maParagraph, maFont, rChars );
     }
 }
 
@@ -126,7 +127,7 @@ void TextPortionContext::onStartElement(const AttributeList& rAttribs)
             maFont.monSize = rAttribs.getInteger( OOX_TOKEN(doc, val) );
         break;
         case OOX_TOKEN(doc, br):
-            mrTextBox.appendPortion( maFont, "\n" );
+            mrTextBox.appendPortion( maParagraph, maFont, "\n" );
         break;
     }
 }
@@ -153,7 +154,7 @@ void TextPortionContext::onEndElement()
         meantime, the space character has to be added manually.
      */
     if( mrTextBox.getPortionCount() == mnInitialPortions )
-        mrTextBox.appendPortion( maFont, OUString( sal_Unicode( ' ' ) ) );
+        mrTextBox.appendPortion( maParagraph, maFont, OUString( sal_Unicode( ' ' ) ) );
 }
 
 // ============================================================================
@@ -207,22 +208,41 @@ ContextHandlerRef TextBoxContext::onCreateContext( sal_Int32 nElement, const Att
             else if (nElement == OOX_TOKEN(doc, txbxContent)) return this;
         break;
         case XML_div:
-            if( nElement == XML_font ) return new TextPortionContext( *this, mrTextBox, TextFontModel(), nElement, rAttribs );
+            if( nElement == XML_font ) return new TextPortionContext( *this, mrTextBox, maParagraph, TextFontModel(), nElement, rAttribs );
         break;
         case OOX_TOKEN(doc, txbxContent):
             if (nElement == OOX_TOKEN(doc, p)) return this;
         break;
         case OOX_TOKEN(doc, p):
-            if (nElement == OOX_TOKEN(doc, r)) return new TextPortionContext( *this, mrTextBox, TextFontModel(), nElement, rAttribs );
+            if (nElement == OOX_TOKEN(doc, r))
+                return new TextPortionContext( *this, mrTextBox, maParagraph, TextFontModel(), nElement, rAttribs );
+            else
+                return this;
+        break;
+        case OOX_TOKEN(doc, pPr):
+            return this;
         break;
     }
     return 0;
 }
 
+void TextBoxContext::onStartElement(const AttributeList& rAttribs)
+{
+    switch (getCurrentElement())
+    {
+        case OOX_TOKEN(doc, jc):
+            maParagraph.moParaAdjust = rAttribs.getString( OOX_TOKEN(doc, val) );
+        break;
+    }
+}
+
 void TextBoxContext::onEndElement()
 {
     if (getCurrentElement() == OOX_TOKEN(doc, p))
-        mrTextBox.appendPortion( TextFontModel(), "\n" );
+    {
+        mrTextBox.appendPortion( maParagraph, TextFontModel(), "\n" );
+        maParagraph = TextParagraphModel();
+    }
 }
 
 // ============================================================================
