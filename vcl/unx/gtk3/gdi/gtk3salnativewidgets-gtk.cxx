@@ -751,6 +751,24 @@ void GtkSalGraphics::PaintCombobox( GtkStyleContext *context,
                      arrowRect.GetWidth() );
 }
 
+void GtkSalGraphics::PaintCheckOrRadio(GtkStyleContext *context,
+                                       cairo_t *cr,
+                                       const Rectangle& rControlRectangle,
+                                       ControlType nType)
+{
+    gint x, y, indicator_size;
+    gtk_style_context_get_style(mpCheckButtonStyle,
+                                "indicator-size", &indicator_size,
+                                NULL );
+
+    x = (rControlRectangle.GetWidth() - indicator_size) / 2;
+    y = (rControlRectangle.GetHeight() - indicator_size) / 2;
+    if (nType == CTRL_CHECKBOX)
+        gtk_render_check(context, cr, x, y, indicator_size, indicator_size);
+    else if (nType == CTRL_RADIOBUTTON)
+        gtk_render_option(context, cr, x, y, indicator_size, indicator_size);
+}
+
 sal_Bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion,
                                             ControlState nState, const ImplControlValue& aValue,
                                             const OUString& )
@@ -891,14 +909,8 @@ sal_Bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart
                              rControlRegion.GetWidth(), rControlRegion.GetHeight());
         break;
     case RENDER_CHECK:
-        gtk_render_check(context, cr,
-                         0, 0,
-                         rControlRegion.GetWidth(), rControlRegion.GetHeight());
-        break;
     case RENDER_RADIO:
-        gtk_render_option(context, cr,
-                          0, 0,
-                          rControlRegion.GetWidth(), rControlRegion.GetHeight());
+        PaintCheckOrRadio(context, cr, rControlRegion, nType);
         break;
     case RENDER_LINE:
         gtk_render_line(context, cr,
@@ -982,18 +994,21 @@ sal_Bool GtkSalGraphics::getNativeControlRegion( ControlType nType, ControlPart 
 {
     /* TODO: all this funcions needs improvements */
     Rectangle aEditRect = rControlRegion;
-    gint indicator_size, point;
+    gint indicator_size, indicator_spacing, point;
 
     if(((nType == CTRL_CHECKBOX) || (nType == CTRL_RADIOBUTTON)) &&
        nPart == PART_ENTIRE_CONTROL)
     {
         gtk_style_context_get_style( mpCheckButtonStyle,
                                      "indicator-size", &indicator_size,
+                                     "indicator-spacing", &indicator_spacing,
                                      (char *)NULL );
 
-        point = MAX(0, rControlRegion.GetHeight() - indicator_size);
+        gint size = indicator_size + indicator_spacing*2;
+
+        point = MAX(0, rControlRegion.GetHeight() - size);
         aEditRect = Rectangle( Point( 0, point / 2),
-                               Size( indicator_size, indicator_size ) );
+                               Size( size, size ) );
     }
     else if( nType == CTRL_MENU_POPUP)
     {

@@ -103,6 +103,10 @@ private:
                         ControlType nType,
                         ControlPart nPart,
                         const ImplControlValue& aValue );
+    void PaintCheckOrRadio(GtkStyleContext *context,
+                           cairo_t *cr,
+                           const Rectangle& rControlRectangle,
+                           ControlType nType);
 
     static bool style_loaded;
 };
