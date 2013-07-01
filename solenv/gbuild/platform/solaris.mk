@@ -171,7 +171,9 @@ $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) && \
 	$(if $(CXXOBJECTS)$(GENCXXOBJECTS)$(EXTRAOBJECTLISTS),$(gb_CXX),$(gb_CC)) \
 		$(if $(filter Library CppunitTest,$(TARGETTYPE)),$(gb_Library_TARGETTYPEFLAGS)) \
-		$(if $(filter Library,$(TARGETTYPE)),$(gb_Library_LTOFLAGS)) \
+		$(if $(filter-out $(foreach lib,frm scfilt wpftdraw,$(call gb_Library_get_linktargetname,$(lib))),$*),$(gb_LTOFLAGS)) \
+		$(if $(SOVERSION),-Wl$(COMMA)--soname=$(notdir $(1)).$(SOVERSION)) \
+		$(if $(SOVERSIONSCRIPT),-Wl$(COMMA)--version-script=$(SOVERSIONSCRIPT))\
 		$(subst \d,$$,$(RPATH)) \
 		$(T_LDFLAGS) \
 		$(foreach object,$(COBJECTS),$(call gb_CObject_get_target,$(object))) \
@@ -181,13 +183,16 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(foreach object,$(GENCXXOBJECTS),$(call gb_GenCxxObject_get_target,$(object))) \
 		$(foreach extraobjectlist,$(EXTRAOBJECTLISTS),`cat $(extraobjectlist)`) \
 		-Wl$(COMMA)--start-group $(foreach lib,$(LINKED_STATIC_LIBS),$(call gb_StaticLibrary_get_target,$(lib))) -Wl$(COMMA)--end-group \
+		-Wl$(COMMA)--no-as-needed \
 		$(LIBS) \
 		$(patsubst lib%.a,-l%,$(patsubst lib%.so,-l%,$(foreach lib,$(LINKED_LIBS),$(call gb_Library_get_filename,$(lib))))) \
-		-o $(1))
+		-o $(if $(SOVERSION),$(1).$(SOVERSION),$(1)))
+	$(if $(SOVERSION),ln -sf $(notdir $(1)).$(SOVERSION) $(1))
 	$(if $(filter Library,$(TARGETTYPE)),\
-		$(NM) --extern-only --dynamic --format=posix $(1) \
-			| cut -d' ' -f1-2 | grep -v U$$ \
-			> $(1).exports.tmp && \
+		readelf -d $(1) | grep SONAME > $(1).exports.tmp ; \
+		$(NM) --dynamic --extern-only --defined-only --format=posix $(1) \
+			| cut -d' ' -f1-2 \
+			>> $(1).exports.tmp && \
 		if cmp -s $(1).exports.tmp $(1).exports; \
 			then rm $(1).exports.tmp; \
 			else mv $(1).exports.tmp $(1).exports; touch -r $(1) $(1).exports; \
