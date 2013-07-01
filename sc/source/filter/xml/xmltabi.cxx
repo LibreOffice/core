@@ -359,14 +359,12 @@ void ScXMLTableContext::EndElement()
     SCTAB nCurTab = rTables.GetCurrentSheet();
     if (!sPrintRanges.isEmpty())
     {
-        Reference< sheet::XPrintAreas > xPrintAreas(
-            rTables.GetCurrentXSheet(), UNO_QUERY);
-
-        if( xPrintAreas.is() )
+         ScRangeList aRangeList;
+        ScRangeStringConverter::GetRangeListFromString( aRangeList, sPrintRanges, pDoc, ::formula::FormulaGrammar::CONV_OOO );
+        size_t nCount = aRangeList.size();
+        for (size_t i=0; i< nCount; i++ )
         {
-            Sequence< table::CellRangeAddress > aRangeList;
-            ScRangeStringConverter::GetRangeListFromString( aRangeList, sPrintRanges, pDoc, ::formula::FormulaGrammar::CONV_OOO );
-            xPrintAreas->setPrintAreas( aRangeList );
+            pDoc->AddPrintRange( nCurTab, *aRangeList[i] );
         }
     }
     else if (!bPrintEntireSheet)
