@@ -1276,7 +1276,7 @@ public:
 
     void operator() (const sc::CellStoreType::value_type& aNode, size_t nOffset, size_t nDataSize)
     {
-        size_t nTopRow = aNode.position - nOffset;
+        size_t nTopRow = aNode.position + nOffset;
 
         switch (aNode.type)
         {
