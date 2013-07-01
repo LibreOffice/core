@@ -30,7 +30,7 @@
 #include "svx/svxdllapi.h"
 
 //************************************************************
-//   Vorausdeklarationen
+//   Initial Declarations
 //************************************************************
 
 class SdrObjList;

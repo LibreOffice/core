@@ -29,7 +29,7 @@
 #include "svx/svxdllapi.h"
 
 //************************************************************
-//   Vorausdeklarationen
+//   Initial Declarations
 //************************************************************
 
 class SfxPoolItem;
@@ -53,10 +53,10 @@ protected:
     Rectangle                   maSnapRect;
 
 protected:
-    // Strichstaerke ermitteln. Keine Linie -> 0.
+    /// Detects the width of the line. No line ->0.
     sal_Int32 ImpGetLineWdt() const;
 
-    // Zuhoeren, ob sich ein StyleSheet aendert
+    /// Detects when a stylesheet is changed
     virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint);
 
     SdrAttrObj();
@@ -65,10 +65,10 @@ protected:
 public:
     TYPEINFO();
 
-    // Feststellen, ob bFilledObj && Fuellung!=FillNone
+    // Detects if bFilledObj && Fill != FillNone
     sal_Bool HasFill() const;
 
-    // Feststellen, ob Linie!=LineNone
+    // Detects if Line != LineNone
     sal_Bool HasLine() const;
 
     virtual const Rectangle& GetSnapRect() const;

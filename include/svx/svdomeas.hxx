@@ -25,7 +25,7 @@
 #include <editeng/measfld.hxx>
 
 //************************************************************
-//   Vorausdeklarationen
+//  Initial Declarations
 //************************************************************
 
 class SdrOutliner;
@@ -37,7 +37,7 @@ namespace sdr { namespace properties {
 }}
 
 //************************************************************
-//   Hilfsklasse SdrMeasureObjGeoData
+//   Auxiliary Class SdrMeasureObjGeoData
 //************************************************************
 
 class SdrMeasureObjGeoData : public SdrTextObjGeoData
@@ -156,52 +156,52 @@ public:
 //
 // Creating:
 // ~~~~~~~~~
-// Dragging von Bezugspunkt 1 zu Bezugspunkt 2 -> Bezugskante
+// dragging reference point 1 to reference point 2 -> reference edge
 //
-// Die Defaults:
+// Defaults:
 // ~~~~~~~~~~~~~
-// Masslinie und Masshilfslinien: Haarlinien solid schwarz
-// Pfeile:     2mm x 4mm
-// Textgroesse
+// dimension line and auxiliary dimension lines:  solid black hairlines
+// arrows :     2mm x 4mm
+// text size
 //                              ___
-//     |        Masszahl       | 2mm
+//     |        dimension      | 2mm
 //     |<--------------------->|---
 //     |                       | 8mm
 //     |                       |
-//    Pt1============#        Pt2-- <----Bezugskante (von Pt1 nach Pt2)
-//     #             #         |___ <- Ueberstand der Masshilfslinie(n)
+//    Pt1============#        Pt2-- <----reference edge (from Pt1 to Pt2)
+//     #             #         |___ <-excess length of the auxiliary dimention line(s)
 //     #             #=========#
-//     # Zu bemassendes Objekt #
+//     # objected to be dimensioned #
 //     #=======================#
 //
-// Attribute:
+// Attributes:
 // ~~~~~~~~~~
-// 1. Wo steht der Text: mitte, rechts oder links (def=automatik)
-// 2. Text oberhalb der Linie oder unterhalb oder Linie unterbrochen durch Text (def=automatik)
-// 3. Den Abstand der Masslinie zur Bezugskante (=zum bemassten Objekt).
+// 1. Where is the text: middle, right or left (default=automatic)
+// 2. Text above or below the line or line broken by text (default=automatic)
 //    Default=8mm
-// 4. Masslinie unterhalb der Bezugskante (default=nein)
-// 5. Die Ueberlaenge(n) der Masshilfslinien ueber die Bezugskante (2x, default=0)
-// 6. Den Ueberhang der Masshilfslinien ueber die Masslinie (default=2mm)
-// 7. Den Abstand der Masshilfslinien zur Bezugskante
+// 3. The distance from the dimension line to the reference edge (= to the dimesnioned object)
+// 4. dimension line below the reference edge (default=no))
+// 5. excess lenth of the auxiliary dimension lines beyond the reference edge (2x, default=0)
+// 6. excess lenth of the auxiliary dimension lines past the dimesion line (default=2mm)
+// 7. distance between the auxiliary dimension line and the reference edge
 //
 // Dragging:                    Handle          Shift
 // ~~~~~~~~~
-// -  Die Bezugspunkte        SolidQuadHdl   nur die Laenge
+// -  reference points        SolidQuadHdl   only the length
 // 1.+2. Anpacken des Textes
-// 3.+4. Hdl am Pfeil (2x)    SolidQuadHdl   nur den Bool
-// 5.    Hdl am Endpunkt      CircHdl        beide Laengen?
-// 6.+7. Kein Dragging
+// 3.+4. Hdl on arrow (2x)    SolidQuadHdl   only the  Bool
+// 5.    Hdl one end point      CircHdl        both lengths ?
+// 6.+7. no dragging
 //
-// Offen:
+// Open:
 // ~~~~~~
-// - Radien (gleich als Typ verankern
+// - radiuses  (anchor as type immediately)
 //
 // Special:
 // ~~~~~~~~
-// Connecting an max. 2 Objekte
-// -> Bei Copy, etc. den entspr. Code der Verbinder verwenden?!?
-// wird wohl recht kompliziert werden ...
+// Connecting to a maximum of two objects
+// -> during Copy, etc. use the respective code of the connectors?!?
+// this probably will be pretty complicated ...
 //
 /////////////////////////////////////////////////////////////////////////////////////////////////
 
