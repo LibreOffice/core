@@ -294,32 +294,32 @@ rtl_TextEncoding SAL_CALL rtl_getTextEncodingFromUnixCharset( const char* pUnixC
         { NULL, RTL_TEXTENCODING_DONTKNOW }
     };
 
-    static ImplStrCharsetDef aUnixCharsetJISX0208Tab[] =
+    static ImplStrCharsetDef const aUnixCharsetJISX0208Tab[] =
     {
         { NULL, RTL_TEXTENCODING_JIS_X_0208 }
     };
 
-    static ImplStrCharsetDef aUnixCharsetJISX0201Tab[] =
+    static ImplStrCharsetDef const aUnixCharsetJISX0201Tab[] =
     {
         { NULL, RTL_TEXTENCODING_JIS_X_0201 }
     };
 
-    static ImplStrCharsetDef aUnixCharsetJISX0212Tab[] =
+    static ImplStrCharsetDef const aUnixCharsetJISX0212Tab[] =
     {
         { NULL, RTL_TEXTENCODING_JIS_X_0212 }
     };
 
-    static ImplStrCharsetDef aUnixCharsetGBTab[] =
+    static ImplStrCharsetDef const aUnixCharsetGBTab[] =
     {
         { NULL, RTL_TEXTENCODING_GB_2312 }
     };
 
-    static ImplStrCharsetDef aUnixCharsetGBKTab[] =
+    static ImplStrCharsetDef const aUnixCharsetGBKTab[] =
     {
         { NULL, RTL_TEXTENCODING_GBK }
     };
 
-    static ImplStrCharsetDef aUnixCharsetBIG5Tab[] =
+    static ImplStrCharsetDef const aUnixCharsetBIG5Tab[] =
     {
         { NULL, RTL_TEXTENCODING_BIG5 }
     };

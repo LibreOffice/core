@@ -147,7 +147,7 @@ namespace svt { namespace table
             sal_uInt16              nKeyModifier;
             TableControlAction  eAction;
         }
-        static aKnownActions[] = {
+        static const aKnownActions[] = {
             { KEY_DOWN,     0,          cursorDown },
             { KEY_UP,       0,          cursorUp },
             { KEY_LEFT,     0,          cursorLeft },
