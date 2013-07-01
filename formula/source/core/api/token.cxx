@@ -29,7 +29,6 @@
 #include "formula/tokenarray.hxx"
 #include "formula/FormulaCompiler.hxx"
 #include <formula/compiler.hrc>
-#define MAXJUMPCOUNT 32     /* maximum number of jumps (ocChose) */
 
 namespace formula
 {
@@ -726,8 +725,8 @@ FormulaToken* FormulaTokenArray::MergeArray( )
 FormulaToken* FormulaTokenArray::Add( FormulaToken* t )
 {
     if( !pCode )
-        pCode = new FormulaToken*[ MAXCODE ];
-    if( nLen < MAXCODE-1 )
+        pCode = new FormulaToken*[ FORMULA_MAXTOKENS ];
+    if( nLen < FORMULA_MAXTOKENS - 1 )
     {
         CheckToken(*t);
         pCode[ nLen++ ] = t;
@@ -742,7 +741,7 @@ FormulaToken* FormulaTokenArray::Add( FormulaToken* t )
     else
     {
         t->Delete();
-        if ( nLen == MAXCODE-1 )
+        if ( nLen == FORMULA_MAXTOKENS - 1 )
         {
             t = new FormulaByteToken( ocStop );
             pCode[ nLen++ ] = t;
@@ -1194,11 +1193,11 @@ FormulaToken* FormulaTokenArray::AddOpCode( OpCode eOp )
         case ocIfNA:
         case ocChose:
             {
-                short nJump[MAXJUMPCOUNT + 1];
+                short nJump[FORMULA_MAXJUMPCOUNT + 1];
                 if ( eOp == ocIf )
                     nJump[ 0 ] = 3;
                 else if ( eOp == ocChose )
-                    nJump[ 0 ] = MAXJUMPCOUNT + 1;
+                    nJump[ 0 ] = FORMULA_MAXJUMPCOUNT + 1;
                 else
                     nJump[ 0 ] = 2;
                 pRet = new FormulaJumpToken( eOp, (short*)nJump );
