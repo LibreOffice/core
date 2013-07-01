@@ -200,6 +200,7 @@ static void lcl_DestinationToMath(OUStringBuffer& rDestinationText, oox::formula
         if (rMathNor)
         {
             rMathBuffer.appendOpeningTag(M_TOKEN(rPr));
+            // Same as M_TOKEN(lit)
             rMathBuffer.appendOpeningTag(M_TOKEN(nor));
             rMathBuffer.appendClosingTag(M_TOKEN(nor));
             rMathBuffer.appendClosingTag(M_TOKEN(rPr));
