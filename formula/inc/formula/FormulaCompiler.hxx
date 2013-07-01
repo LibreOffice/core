@@ -36,8 +36,8 @@
 #include "formula/ExternalReferenceHelper.hxx"
 
 
-#define MAXJUMPCOUNT 32     /* maximum number of jumps (ocChose) */
-#define MAXCODE      512    /* maximum number of tokens in formula */
+#define FORMULA_MAXJUMPCOUNT    32  /* maximum number of jumps (ocChose) */
+#define FORMULA_MAXTOKENS     8192  /* maximum number of tokens in formula */
 
 
 namespace com { namespace sun { namespace star {

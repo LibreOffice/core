@@ -42,9 +42,7 @@
 
 // constants and data types also for external modules (ScInterpreter et al)
 
-#define MAXCODE      512    /* maximum number of tokens in formula */
 #define MAXSTRLEN    1024   /* maximum length of input string of one symbol */
-#define MAXJUMPCOUNT 32     /* maximum number of jumps (ocChose) */
 
 // flag values of CharTable
 #define SC_COMPILER_C_ILLEGAL         0x00000000
@@ -146,7 +144,7 @@ public:
         ScMatrix*    pMat;
         sal_uInt16   nError;
         sal_Unicode  cStr[ MAXSTRLEN+1 ];   // string (up to 255 characters + 0)
-        short        nJump[MAXJUMPCOUNT+1]; // If/Chose token
+        short        nJump[ FORMULA_MAXJUMPCOUNT + 1 ];     // If/Chose token
     };
 
                 //! other members not initialized
