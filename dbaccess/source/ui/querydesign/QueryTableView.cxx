@@ -835,42 +835,65 @@ sal_Bool OQueryTableView::FindTableFromField(const String& rFieldName, OTableFie
 }
 
 //------------------------------------------------------------------------------
+bool OQueryTableView::ContainsTabWin(const OTableWindow& rTabWin)
+{
+    OTableWindowMap* pTabWins = GetTabWinMap();
+    DBG_ASSERT(pTabWins != NULL, "OQueryTableView::HideTabWin : habe keine TabWins !");
+
+    OTableWindowMap::iterator aIter = pTabWins->begin();
+    OTableWindowMap::iterator aEnd  = pTabWins->end();
+
+    for ( ;aIter != aEnd ; ++aIter )
+    {
+        if ( aIter->second == &rTabWin )
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+//------------------------------------------------------------------------------
 void OQueryTableView::RemoveTabWin(OTableWindow* pTabWin)
 {
     DBG_CHKTHIS(OQueryTableView,NULL);
     DBG_ASSERT(pTabWin != NULL, "OQueryTableView::RemoveTabWin : Fenster sollte ungleich NULL sein !");
 
-    // mein Parent brauche ich, da es vom Loeschen erfahren soll
-    OQueryDesignView* pParent = static_cast<OQueryDesignView*>(getDesignView());
-
-    SfxUndoManager& rUndoMgr = m_pView->getController().GetUndoManager();
-    rUndoMgr.EnterListAction( String( ModuleRes(STR_QUERY_UNDO_TABWINDELETE) ), String() );
-
-    // Undo-Action anlegen
-    OQueryTabWinDelUndoAct* pUndoAction = new OQueryTabWinDelUndoAct(this);
-    pUndoAction->SetTabWin(static_cast< OQueryTableWindow*>(pTabWin));
-
-    // und Fenster verstecken
-    HideTabWin(static_cast< OQueryTableWindow*>(pTabWin), pUndoAction);
-
-    // Undo Actions und Loeschen der Felder in SelectionBrowseBox
-    pParent->TableDeleted( static_cast< OQueryTableWindowData*>(pTabWin->GetData().get())->GetAliasName() );
-
-    m_pView->getController().addUndoActionAndInvalidate( pUndoAction );
-    rUndoMgr.LeaveListAction();
-
-    if (m_lnkTabWinsChangeHandler.IsSet())
+    if(pTabWin && ContainsTabWin(*pTabWin)) // #122589# check if registered before deleting
     {
-        TabWinsChangeNotification aHint(TabWinsChangeNotification::AT_REMOVED_WIN, static_cast< OQueryTableWindow*>(pTabWin)->GetAliasName());
-        m_lnkTabWinsChangeHandler.Call(&aHint);
-    }
+        // mein Parent brauche ich, da es vom Loeschen erfahren soll
+        OQueryDesignView* pParent = static_cast<OQueryDesignView*>(getDesignView());
 
-    modified();
-    if ( m_pAccessible )
-        m_pAccessible->notifyAccessibleEvent(   AccessibleEventId::CHILD,
-                                                makeAny(pTabWin->GetAccessible()),
-                                                Any()
-                                                );
+        SfxUndoManager& rUndoMgr = m_pView->getController().GetUndoManager();
+        rUndoMgr.EnterListAction( String( ModuleRes(STR_QUERY_UNDO_TABWINDELETE) ), String() );
+
+        // Undo-Action anlegen
+        OQueryTabWinDelUndoAct* pUndoAction = new OQueryTabWinDelUndoAct(this);
+        pUndoAction->SetTabWin(static_cast< OQueryTableWindow*>(pTabWin));
+
+        // und Fenster verstecken
+        HideTabWin(static_cast< OQueryTableWindow*>(pTabWin), pUndoAction);
+
+        // Undo Actions und Loeschen der Felder in SelectionBrowseBox
+        pParent->TableDeleted( static_cast< OQueryTableWindowData*>(pTabWin->GetData().get())->GetAliasName() );
+
+        m_pView->getController().addUndoActionAndInvalidate( pUndoAction );
+        rUndoMgr.LeaveListAction();
+
+        if (m_lnkTabWinsChangeHandler.IsSet())
+        {
+            TabWinsChangeNotification aHint(TabWinsChangeNotification::AT_REMOVED_WIN, static_cast< OQueryTableWindow*>(pTabWin)->GetAliasName());
+            m_lnkTabWinsChangeHandler.Call(&aHint);
+        }
+
+        modified();
+        if ( m_pAccessible )
+            m_pAccessible->notifyAccessibleEvent(   AccessibleEventId::CHILD,
+                                                    makeAny(pTabWin->GetAccessible()),
+                                                    Any()
+                                                    );
+    }
 }
 
 //------------------------------------------------------------------------

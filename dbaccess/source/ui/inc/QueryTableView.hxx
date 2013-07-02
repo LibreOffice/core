@@ -73,6 +73,7 @@ namespace dbaui
 
         // Basisklasse ueberschrieben : Fenster kreieren und loeschen
         // (eigentlich nicht wirklich LOESCHEN, es geht in die Verantwortung einer UNDO-Action ueber)
+        bool ContainsTabWin(const OTableWindow& rTabWin); // #122589# Allow to check if OTableWindow is registered
         virtual void AddTabWin( const ::rtl::OUString& _rTableName, const ::rtl::OUString& _rAliasName, sal_Bool bNewTable = sal_False );
         virtual void RemoveTabWin(OTableWindow* pTabWin);
 
