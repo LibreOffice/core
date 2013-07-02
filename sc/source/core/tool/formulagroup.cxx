@@ -18,6 +18,8 @@
 
 #include "formula/vectortoken.hxx"
 
+#include <vector>
+
 namespace sc {
 
 ScMatrixRef FormulaGroupInterpreterSoftware::inverseMatrix(const ScMatrix& /*rMat*/)
@@ -29,12 +31,16 @@ bool FormulaGroupInterpreterSoftware::interpret(ScDocument& rDoc, const ScAddres
                                                 const ScFormulaCellGroupRef& xGroup,
                                                 ScTokenArray& rCode)
 {
-    // Until we implement group calculation for real, decompose the group into
-    // individual formula token arrays for individual calculation.
+    // Decompose the group into individual cells and calculate them individually.
+
     ScAddress aTmpPos = rTopPos;
-    for (sal_Int32 i = 0; i < xGroup->mnLength; ++i)
+    SCROW nOffset = rTopPos.Row() - xGroup->mnStart;
+    SCROW nLength = xGroup->mnLength - nOffset;
+    std::vector<double> aResults;
+    aResults.reserve(nLength);
+    for (SCROW i = 0; i < nLength; ++i)
     {
-        aTmpPos.SetRow(xGroup->mnStart + i);
+        aTmpPos.SetRow(rTopPos.Row() + i);
         ScTokenArray aCode2;
         for (const formula::FormulaToken* p = rCode.First(); p; p = rCode.Next())
         {
@@ -89,10 +95,11 @@ bool FormulaGroupInterpreterSoftware::interpret(ScDocument& rDoc, const ScAddres
         aComp.CompileTokenArray(); // Create RPN token array.
         ScInterpreter aInterpreter(pDest, &rDoc, aTmpPos, aCode2);
         aInterpreter.Interpret();
-        pDest->SetResultToken(aInterpreter.GetResultToken().get());
-        pDest->ResetDirty();
-        pDest->SetChanged(true);
+        aResults.push_back(aInterpreter.GetResultToken()->GetDouble());
     } // for loop end (xGroup->mnLength)
+
+    if (!aResults.empty())
+        rDoc.SetFormulaResults(rTopPos, &aResults[0], aResults.size());
 
     return true;
 }
