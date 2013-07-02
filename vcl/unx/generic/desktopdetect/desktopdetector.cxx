@@ -42,11 +42,8 @@ static bool is_gnome_desktop( Display* pDisplay )
 
     // warning: these checks are coincidental, GNOME does not
     // explicitly advertise itself
-
-    if ( "gnome" == getenv( "DESKTOP_SESSION" ) || NULL != getenv( "GNOME_DESKTOP_SESSION_ID" ) )
-    {
+    if ( NULL != getenv( "GNOME_DESKTOP_SESSION_ID" ) )
         ret = true;
-    }
 
     if( ! ret )
     {
@@ -119,24 +116,6 @@ static bool is_gnome_desktop( Display* pDisplay )
     }
 
     return ret;
-}
-
-static bool is_xfce_desktop( Display* pDisplay )
-{
-    if ( "xfce" == getenv( "DESKTOP_SESSION" ) )
-    {
-        return true;
-    }
-    return false;
-}
-
-static bool is_mate_desktop( Display* pDisplay )
-{
-    if ( "mate" == getenv( "DESKTOP_SESSION" ) )
-    {
-        return true;
-    }
-    return false;
 }
 
 static bool bWasXError = false;
@@ -369,18 +348,30 @@ DESKTOP_DETECTOR_PUBLIC DesktopType get_desktop_environment()
 
     XErrorHandler pOldHdl = XSetErrorHandler( autodect_error_handler );
 
-    if ( is_tde_desktop( pDisplay ) )
-        ret = DESKTOP_TDE;
+    const char *pSession;
+    OString aDesktopSession;
+
+    if ( ( pSession = getenv( "DESKTOP_SESSION" ) ) )
+        aDesktopSession = OString( pSession, strlen( pSession ) );
+
+    // fast environment variable checks
+    if ( aDesktopSession.equalsIgnoreAsciiCase( "gnome" ) )
+        ret = DESKTOP_GNOME;
+    else if ( aDesktopSession.equalsIgnoreAsciiCase( "mate" ) )
+        ret = DESKTOP_MATE;
+    else if ( aDesktopSession.equalsIgnoreAsciiCase( "xfce" ) )
+        ret = DESKTOP_XFCE;
+
+    // these guys can be slower, with X property fetches,
+    // round-trips etc. and so are done later.
     else if ( is_kde4_desktop( pDisplay ) )
         ret = DESKTOP_KDE4;
     else if ( is_gnome_desktop( pDisplay ) )
         ret = DESKTOP_GNOME;
-    else if ( is_xfce_desktop( pDisplay ) )
-        ret = DESKTOP_XFCE;
-    else if ( is_mate_desktop( pDisplay ) )
-        ret = DESKTOP_MATE;
     else if ( is_kde_desktop( pDisplay ) )
         ret = DESKTOP_KDE;
+    else if ( is_tde_desktop( pDisplay ) )
+        ret = DESKTOP_TDE;
     else
         ret = DESKTOP_UNKNOWN;
 
