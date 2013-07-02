@@ -88,35 +88,6 @@ using namespace ::com::sun::star::container;
 #define SfxApplication
 #include "sfxslots.hxx"
 
-class SfxSpecialConfigError_Impl
-{
-    String aError;
-
-public:
-
-    SfxSpecialConfigError_Impl( const String& rStr );
-    DECL_LINK( TimerHdl, Timer*);
-};
-
-
-SfxSpecialConfigError_Impl::SfxSpecialConfigError_Impl( const String& rStr ) :
-    aError( rStr )
-{
-    Timer *pTimer = new Timer;
-    pTimer->SetTimeoutHdl( LINK(this, SfxSpecialConfigError_Impl, TimerHdl) );
-    pTimer->SetTimeout( 0 );
-    pTimer->Start();
-}
-
-IMPL_LINK( SfxSpecialConfigError_Impl, TimerHdl, Timer*, pTimer )
-{
-    delete pTimer;
-    ErrorBox( 0, WinBits( WB_OK ) , aError ).Execute();
-    delete this;
-    SFX_APP()->GetAppDispatcher_Impl()->Execute( SID_QUITAPP );
-    return 0L;
-}
-
 //====================================================================
 
 #define SFX_ITEMTYPE_STATBAR             4
