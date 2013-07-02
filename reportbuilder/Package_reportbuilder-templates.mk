@@ -17,7 +17,7 @@ $(eval $(call gb_Package_Package,reportbuilder-templates,$(SRCDIR)/reportbuilder
 $(eval $(call gb_Package_set_outdir,reportbuilder-templates,$(INSTDIR)))
 
 $(eval $(call gb_Package_add_files_with_dir,reportbuilder-templates,share/template, \
-    en-US/wizard/report/default.otr \
+    common/wizard/report/default.otr \
 ))
 
 # vim: set noet sw=4 ts=4:
