@@ -71,52 +71,13 @@ public:
     //  construct/destruct
     //__________________________________________________________________________________________________________
 
-    /**_________________________________________________________________________________________________________
-        @short
-        @descr
-
-        @seealso
-
-        @param
-
-        @return
-
-        @onerror
-    */
-
     FrameControl( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext );
-
-    /**_________________________________________________________________________________________________________
-        @short
-        @descr
-
-        @seealso
-
-        @param
-
-        @return
-
-        @onerror
-    */
 
     virtual ~FrameControl();
 
     //__________________________________________________________________________________________________________
     //  XInterface
     //__________________________________________________________________________________________________________
-
-    /**_________________________________________________________________________________________________________
-        @short
-        @descr
-
-        @seealso
-
-        @param
-
-        @return
-
-        @onerror
-    */
 
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface(
         const ::com::sun::star::uno::Type& aType
@@ -158,38 +119,12 @@ public:
     //  XTypeProvider
     //__________________________________________________________________________________________________________
 
-    /**_________________________________________________________________________________________________________
-        @short
-        @descr
-
-        @seealso
-
-        @param
-
-        @return
-
-        @onerror
-    */
-
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes()
         throw( ::com::sun::star::uno::RuntimeException );
 
     //__________________________________________________________________________________________________________
     //  XAggregation
     //__________________________________________________________________________________________________________
-
-    /**_________________________________________________________________________________________________________
-        @short
-        @descr
-
-        @seealso
-
-        @param
-
-        @return
-
-        @onerror
-    */
 
     ::com::sun::star::uno::Any SAL_CALL queryAggregation(
         const ::com::sun::star::uno::Type& aType
@@ -199,53 +134,14 @@ public:
     //  XControl
     //__________________________________________________________________________________________________________
 
-    /**_________________________________________________________________________________________________________
-        @short
-        @descr
-
-        @seealso
-
-        @param
-
-        @return
-
-        @onerror
-    */
-
     virtual void SAL_CALL createPeer(
         const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit >&      xToolkit ,
         const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >&   xParent
     ) throw ( ::com::sun::star::uno::RuntimeException );
 
-    /**_________________________________________________________________________________________________________
-        @short
-        @descr
-
-        @seealso
-
-        @param
-
-        @return
-
-        @onerror
-    */
-
     virtual sal_Bool SAL_CALL setModel(
         const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >& xModel
     ) throw( ::com::sun::star::uno::RuntimeException );
-
-    /**_________________________________________________________________________________________________________
-        @short
-        @descr
-
-        @seealso
-
-        @param
-
-        @return
-
-        @onerror
-    */
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > SAL_CALL getModel()
         throw( ::com::sun::star::uno::RuntimeException );
@@ -254,54 +150,15 @@ public:
     //  XComponent
     //__________________________________________________________________________________________________________
 
-    /**_________________________________________________________________________________________________________
-        @short
-        @descr
-
-        @seealso
-
-        @param
-
-        @return
-
-        @onerror
-    */
-
     virtual void SAL_CALL dispose() throw( ::com::sun::star::uno::RuntimeException );
 
     //__________________________________________________________________________________________________________
     //  XView
     //__________________________________________________________________________________________________________
 
-    /**_________________________________________________________________________________________________________
-        @short
-        @descr
-
-        @seealso
-
-        @param
-
-        @return
-
-        @onerror
-    */
-
     virtual sal_Bool SAL_CALL setGraphics(
         const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XGraphics >& xDevice
     ) throw( ::com::sun::star::uno::RuntimeException );
-
-    /**_________________________________________________________________________________________________________
-        @short
-        @descr
-
-        @seealso
-
-        @param
-
-        @return
-
-        @onerror
-    */
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XGraphics > SAL_CALL getGraphics()
         throw( ::com::sun::star::uno::RuntimeException );
@@ -310,69 +167,17 @@ public:
     //  XConnectionPointContainer
     //__________________________________________________________________________________________________________
 
-    /**_________________________________________________________________________________________________________
-        @short
-        @descr
-
-        @seealso
-
-        @param
-
-        @return
-
-        @onerror
-    */
-
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getConnectionPointTypes()
         throw( ::com::sun::star::uno::RuntimeException );
-
-    /**_________________________________________________________________________________________________________
-        @short
-        @descr
-
-        @seealso
-
-        @param
-
-        @return
-
-        @onerror
-    */
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::lang::XConnectionPoint > SAL_CALL queryConnectionPoint(
         const ::com::sun::star::uno::Type& aType
     ) throw ( ::com::sun::star::uno::RuntimeException );
 
-    /**_________________________________________________________________________________________________________
-        @short
-        @descr
-
-        @seealso
-
-        @param
-
-        @return
-
-        @onerror
-    */
-
     virtual void SAL_CALL advise(
         const ::com::sun::star::uno::Type&                                aType       ,
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >&    xListener
     ) throw( ::com::sun::star::uno::RuntimeException );
-
-    /**_________________________________________________________________________________________________________
-        @short
-        @descr
-
-        @seealso
-
-        @param
-
-        @return
-
-        @onerror
-    */
 
     virtual void SAL_CALL unadvise(
         const ::com::sun::star::uno::Type&                                aType ,
@@ -383,33 +188,7 @@ public:
     //  impl but public methods to register service!
     //__________________________________________________________________________________________________________
 
-    /**_________________________________________________________________________________________________________
-        @short
-        @descr
-
-        @seealso
-
-        @param
-
-        @return
-
-        @onerror
-    */
-
     static const ::com::sun::star::uno::Sequence< OUString > impl_getStaticSupportedServiceNames();
-
-    /**_________________________________________________________________________________________________________
-        @short
-        @descr
-
-        @seealso
-
-        @param
-
-        @return
-
-        @onerror
-    */
 
     static const OUString impl_getStaticImplementationName();
 
@@ -423,19 +202,6 @@ protected:
     //  OPropertySetHelper
     //__________________________________________________________________________________________________________
 
-    /**_________________________________________________________________________________________________________
-        @short
-        @descr
-
-        @seealso
-
-        @param
-
-        @return
-
-        @onerror
-    */
-
     virtual sal_Bool SAL_CALL convertFastPropertyValue(
         ::com::sun::star::uno::Any&       rConvertedValue   ,
         ::com::sun::star::uno::Any&       rOldValue         ,
@@ -443,52 +209,13 @@ protected:
         const ::com::sun::star::uno::Any& rValue
     ) throw( ::com::sun::star::lang::IllegalArgumentException );
 
-    /**_________________________________________________________________________________________________________
-        @short
-        @descr
-
-        @seealso
-
-        @param
-
-        @return
-
-        @onerror
-    */
-
     virtual void SAL_CALL setFastPropertyValue_NoBroadcast(
         sal_Int32 nHandle ,
         const ::com::sun::star::uno::Any& rValue
     ) throw ( ::com::sun::star::uno::Exception );
 
-    /**_________________________________________________________________________________________________________
-        @short
-        @descr
-
-        @seealso
-
-        @param
-
-        @return
-
-        @onerror
-    */
-
     virtual void SAL_CALL getFastPropertyValue( ::com::sun::star::uno::Any&   rValue  ,
                                                 sal_Int32       nHandle ) const ;
-
-    /**_________________________________________________________________________________________________________
-        @short
-        @descr
-
-        @seealso
-
-        @param
-
-        @return
-
-        @onerror
-    */
 
     virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
 
@@ -496,38 +223,12 @@ protected:
     //  XPropertySet
     //__________________________________________________________________________________________________________
 
-    /**_________________________________________________________________________________________________________
-        @short
-        @descr
-
-        @seealso
-
-        @param
-
-        @return
-
-        @onerror
-    */
-
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo()
         throw( ::com::sun::star::uno::RuntimeException );
 
     //__________________________________________________________________________________________________________
     //  BaseControl
     //__________________________________________________________________________________________________________
-
-    /**_________________________________________________________________________________________________________
-        @short
-        @descr
-
-        @seealso
-
-        @param
-
-        @return
-
-        @onerror
-    */
 
     virtual ::com::sun::star::awt::WindowDescriptor* impl_getWindowDescriptor(
         const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >& xParentPeer
@@ -539,50 +240,11 @@ protected:
 
 private:
 
-    /**_________________________________________________________________________________________________________
-        @short
-        @descr
-
-        @seealso
-
-        @param
-
-        @return
-
-        @onerror
-    */
-
     void impl_createFrame(  const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >&       xPeer           ,
                             const OUString&                                         sURL            ,
                             const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >&    seqArguments    );
 
-    /**_________________________________________________________________________________________________________
-        @short
-        @descr
-
-        @seealso
-
-        @param
-
-        @return
-
-        @onerror
-    */
-
     void impl_deleteFrame();
-
-    /**_________________________________________________________________________________________________________
-        @short
-        @descr
-
-        @seealso
-
-        @param
-
-        @return
-
-        @onerror
-    */
 
     static const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property > impl_getStaticPropertyDescriptor();
 
