@@ -1244,7 +1244,21 @@ SvTreeListEntry* SbaTableQueryBrowser::getObjectEntry(const OUString& _rDataSour
                 sal_Int32 nIndex = 0;
                 do
                 {
-                    OUString sPath = sCommand.getToken( 0, '/', nIndex );
+                    OUString sPath;
+                    switch (_nCommandType)
+                    {
+                    case CommandType::TABLE:
+                        sPath = sCommand;
+                        nIndex = -1;
+                        break;
+
+                    default:
+                        assert(false);
+                        // in non-debug builds, fall through.
+                    case CommandType::QUERY:
+                        sPath = sCommand.getToken( 0, '/', nIndex );
+                        break;
+                    }
                     pObject = m_pTreeView->getListBox().GetEntryPosByName(sPath, pCommandType);
                     pCommandType = pObject;
                     if ( nIndex >= 0 )
