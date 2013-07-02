@@ -705,6 +705,9 @@ void Dialog::StateChanged( StateChangedType nType )
 
     if ( nType == STATE_CHANGE_INITSHOW )
     {
+        if ( GetSettings().GetStyleSettings().GetAutoMnemonic() )
+            ImplWindowAutoMnemonic( this );
+
         if (isLayoutEnabled())
         {
             mbIsCalculatingInitialLayoutSize = true;
@@ -712,9 +715,6 @@ void Dialog::StateChanged( StateChangedType nType )
             setOptimalLayoutSize();
             mbIsCalculatingInitialLayoutSize = false;
         }
-
-        if ( GetSettings().GetStyleSettings().GetAutoMnemonic() )
-            ImplWindowAutoMnemonic( this );
 
         if ( !HasChildPathFocus() || HasFocus() )
             GrabFocusToFirstControl();
