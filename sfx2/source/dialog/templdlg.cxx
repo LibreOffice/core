@@ -958,14 +958,17 @@ void SfxCommonTemplateDialog_Impl::Initialize()
     ReadResource();
     pBindings->Invalidate( SID_STYLE_FAMILY );
     pBindings->Update( SID_STYLE_FAMILY );
+
     Update_Impl();
 
     aFilterLb.SetSelectHdl( LINK( this, SfxCommonTemplateDialog_Impl, FilterSelectHdl ) );
     aFmtLb.SetDoubleClickHdl( LINK( this, SfxCommonTemplateDialog_Impl, ApplyHdl ) );
     aFmtLb.SetSelectHdl( LINK( this, SfxCommonTemplateDialog_Impl, FmtSelectHdl ) );
 
+
     aFilterLb.Show();
-    aFmtLb.Show();
+    if (!bHierarchical)
+        aFmtLb.Show();
 }
 
 //-------------------------------------------------------------------------
@@ -1282,6 +1285,7 @@ void SfxCommonTemplateDialog_Impl::UpdateStyles_Impl(sal_uInt16 nFlags)
             if (pTreeBox || m_bWantHierarchical)
             {
                 aFilterLb.SelectEntry(SfxResId(STR_STYLE_FILTER_HIERARCHICAL).toString());
+                EnableHierarchical(true);
             }
 
             // show maximum 14 entries
@@ -1290,21 +1294,12 @@ void SfxCommonTemplateDialog_Impl::UpdateStyles_Impl(sal_uInt16 nFlags)
         }
         else
         {
-            if (m_bWantHierarchical)
-            {
-                nActFilter = 0;
-                aFilterLb.SelectEntry(SfxResId(
-                            STR_STYLE_FILTER_HIERARCHICAL).toString());
-            }
+            if (nActFilter < aFilterLb.GetEntryCount() - 1)
+                aFilterLb.SelectEntryPos(nActFilter + 1);
             else
             {
-                if (nActFilter < aFilterLb.GetEntryCount() - 1)
-                    aFilterLb.SelectEntryPos(nActFilter + 1);
-                else
-                {
-                    nActFilter = 0;
-                    aFilterLb.SelectEntryPos(1);
-                }
+                nActFilter = 0;
+                aFilterLb.SelectEntryPos(1);
             }
         }
 
@@ -1740,11 +1735,11 @@ sal_Bool SfxCommonTemplateDialog_Impl::Execute_Impl(
 //-------------------------------------------------------------------------
 
 // Handler der Listbox der Filter
-IMPL_LINK( SfxCommonTemplateDialog_Impl, FilterSelectHdl, ListBox *, pBox )
+void SfxCommonTemplateDialog_Impl::EnableHierarchical(bool const bEnable)
 {
-    if ( SfxResId(STR_STYLE_FILTER_HIERARCHICAL).toString().equals(pBox->GetSelectEntry()) )
+    if (bEnable)
     {
-        if ( !bHierarchical )
+        if (!bHierarchical)
         {
             // Turn on treeView
             bHierarchical=sal_True;
@@ -1775,7 +1770,6 @@ IMPL_LINK( SfxCommonTemplateDialog_Impl, FilterSelectHdl, ListBox *, pBox )
             pTreeBox->Show();
         }
     }
-
     else
     {
         DELETEZ(pTreeBox);
@@ -1783,8 +1777,20 @@ IMPL_LINK( SfxCommonTemplateDialog_Impl, FilterSelectHdl, ListBox *, pBox )
         // If bHierarchical, then the family can have changed
         // minus one since hierarchical is inserted at the start
         m_bWantHierarchical = sal_False; // before FilterSelect
-        FilterSelect(pBox->GetSelectEntryPos() - 1, bHierarchical );
+        FilterSelect(aFilterLb.GetSelectEntryPos() - 1, bHierarchical );
         bHierarchical=sal_False;
+    }
+}
+
+IMPL_LINK( SfxCommonTemplateDialog_Impl, FilterSelectHdl, ListBox *, pBox )
+{
+    if (SfxResId(STR_STYLE_FILTER_HIERARCHICAL).toString().equals(pBox->GetSelectEntry()))
+    {
+        EnableHierarchical(true);
+    }
+    else
+    {
+        EnableHierarchical(false);
     }
 
     return 0;
