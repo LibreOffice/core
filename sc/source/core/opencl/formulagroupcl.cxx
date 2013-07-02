@@ -57,7 +57,7 @@ public:
                            const ScFormulaCellGroupRef& xGroup, ScTokenArray& rCode);
 };
 
-ScMatrixRef FormulaGroupInterpreterSoftware::inverseMatrix(const ScMatrix& rMat)
+ScMatrixRef FormulaGroupInterpreterOpenCL::inverseMatrix(const ScMatrix& rMat)
 {
     return ScMatrixRef();
 }
