@@ -409,6 +409,7 @@ public:
     void        ClearSelectionItems( const sal_uInt16* pWhich, const ScMarkData& rMark );
     void        ChangeSelectionIndent( bool bIncrement, const ScMarkData& rMark );
 
+    double SumNumericCells( sc::ColumnBlockConstPosition& rPos, SCROW nRow1, SCROW nRow2 ) const;
     size_t CountNumericCells( sc::ColumnBlockConstPosition& rPos, SCROW nRow1, SCROW nRow2 ) const;
 
     long GetNeededSize(

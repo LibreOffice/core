@@ -3854,6 +3854,64 @@ void ScInterpreter::ScMax( bool bTextAsZero )
 
 namespace {
 
+class FuncCount : public sc::ColumnSpanSet::ColumnAction
+{
+    sc::ColumnBlockConstPosition maPos;
+    ScColumn* mpCol;
+    size_t mnCount;
+    sal_uInt32 mnNumFmt;
+
+public:
+    FuncCount() : mnCount(0), mnNumFmt(0) {}
+
+    virtual void startColumn(ScColumn* pCol)
+    {
+        mpCol = pCol;
+        mpCol->InitBlockPosition(maPos);
+    }
+
+    virtual void execute(SCROW nRow1, SCROW nRow2, bool bVal)
+    {
+        if (!bVal)
+            return;
+
+        mnCount += mpCol->CountNumericCells(maPos, nRow1, nRow2);
+        mnNumFmt = mpCol->GetNumberFormat(nRow2);
+    };
+
+    size_t getCount() const { return mnCount; }
+    sal_uInt32 getNumberFormat() const { return mnNumFmt; }
+};
+
+class FuncSum : public sc::ColumnSpanSet::ColumnAction
+{
+    sc::ColumnBlockConstPosition maPos;
+    ScColumn* mpCol;
+    double mfSum;
+    sal_uInt32 mnNumFmt;
+
+public:
+    FuncSum() : mfSum(0.0), mnNumFmt(0) {}
+
+    virtual void startColumn(ScColumn* pCol)
+    {
+        mpCol = pCol;
+        mpCol->InitBlockPosition(maPos);
+    }
+
+    virtual void execute(SCROW nRow1, SCROW nRow2, bool bVal)
+    {
+        if (!bVal)
+            return;
+
+        mfSum += mpCol->SumNumericCells(maPos, nRow1, nRow2);
+        mnNumFmt = mpCol->GetNumberFormat(nRow2);
+    };
+
+    double getSum() const { return mfSum; }
+    sal_uInt32 getNumberFormat() const { return mnNumFmt; }
+};
+
 void IterateMatrix(
     const ScMatrixRef& pMat, ScIterFunc eFunc, bool bTextAsZero,
     sal_uLong& rCount, short& rFuncFmtType, double& fRes, double& fMem, bool& bNull)
@@ -4258,8 +4316,132 @@ void ScInterpreter::ScSumSQ()
 
 void ScInterpreter::ScSum()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScSum" );
-    PushDouble( IterateParameters( ifSUM ) );
+    short nParamCount = GetByte();
+    double fRes = 0.0;
+    double fVal = 0.0;
+    ScAddress aAdr;
+    ScRange aRange;
+    size_t nRefInList = 0;
+    while (nParamCount-- > 0)
+    {
+        switch (GetStackType())
+        {
+            case svString:
+            {
+                while (nParamCount-- > 0)
+                    Pop();
+                SetError( errNoValue );
+            }
+            break;
+            case svDouble    :
+                fVal = GetDouble();
+                fRes += fVal;
+                nFuncFmtType = NUMBERFORMAT_NUMBER;
+                break;
+            case svExternalSingleRef:
+            {
+                ScExternalRefCache::TokenRef pToken;
+                ScExternalRefCache::CellFormat aFmt;
+                PopExternalSingleRef(pToken, &aFmt);
+
+                if (!pToken)
+                    break;
+
+                StackVar eType = pToken->GetType();
+                if (eType == formula::svDouble)
+                {
+                    fVal = pToken->GetDouble();
+                    if (aFmt.mbIsSet)
+                    {
+                        nFuncFmtType = aFmt.mnType;
+                        nFuncFmtIndex = aFmt.mnIndex;
+                    }
+
+                    fRes += fVal;
+                }
+            }
+            break;
+            case svSingleRef :
+            {
+                PopSingleRef( aAdr );
+
+                if (glSubTotal && pDok->RowFiltered( aAdr.Row(), aAdr.Tab()))
+                {
+                    break;
+                }
+                ScRefCellValue aCell;
+                aCell.assign(*pDok, aAdr);
+                if (!aCell.isEmpty())
+                {
+                    if (aCell.hasNumeric())
+                    {
+                        fVal = GetCellValue(aAdr, aCell);
+                        CurFmtToFuncFmt();
+                        fRes += fVal;
+                    }
+                }
+            }
+            break;
+            case svDoubleRef :
+            case svRefList :
+            {
+                PopDoubleRef( aRange, nParamCount, nRefInList);
+
+                sc::ColumnSpanSet aSet(false);
+                aSet.set(aRange, true);
+                if (glSubTotal)
+                    // Skip all filtered rows and subtotal formula cells.
+                    pDok->MarkSubTotalCells(aSet, aRange, false);
+
+                FuncSum aAction;
+                aSet.executeColumnAction(*pDok, aAction);
+                fRes = aAction.getSum();
+
+                // Get the number format of the last iterated cell.
+                nFuncFmtIndex = aAction.getNumberFormat();
+                nFuncFmtType = pDok->GetFormatTable()->GetType(nFuncFmtIndex);
+            }
+            break;
+            case svExternalDoubleRef:
+            {
+                ScMatrixRef pMat;
+                PopExternalDoubleRef(pMat);
+                if (nGlobalError)
+                    break;
+
+                sal_uLong nCount = 0;
+                double fMem = 0.0;
+                bool bNull = true;
+                IterateMatrix(pMat, ifSUM, false, nCount, nFuncFmtType, fRes, fMem, bNull);
+                fRes += fMem;
+            }
+            break;
+            case svMatrix :
+            {
+                ScMatrixRef pMat = PopMatrix();
+                sal_uLong nCount = 0;
+                double fMem = 0.0;
+                bool bNull = true;
+                IterateMatrix(pMat, ifSUM, false, nCount, nFuncFmtType, fRes, fMem, bNull);
+                fRes += fMem;
+            }
+            break;
+            case svError:
+            {
+                PopError();
+            }
+            break;
+            default :
+                while (nParamCount-- > 0)
+                    PopError();
+                SetError(errIllegalParameter);
+        }
+    }
+
+    if (nFuncFmtType == NUMBERFORMAT_LOGICAL)
+        nFuncFmtType = NUMBERFORMAT_NUMBER;
+
+    PushDouble(fRes);
 }
 
 
@@ -4274,39 +4456,6 @@ void ScInterpreter::ScAverage( bool bTextAsZero )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScAverage" );
     PushDouble( IterateParameters( ifAVERAGE, bTextAsZero ) );
-}
-
-namespace {
-
-class FuncCount : public sc::ColumnSpanSet::ColumnAction
-{
-    sc::ColumnBlockConstPosition maPos;
-    ScColumn* mpCol;
-    size_t mnCount;
-    sal_uInt32 mnNumFmt;
-
-public:
-    FuncCount() : mnCount(0), mnNumFmt(0) {}
-
-    virtual void startColumn(ScColumn* pCol)
-    {
-        mpCol = pCol;
-        mpCol->InitBlockPosition(maPos);
-    }
-
-    virtual void execute(SCROW nRow1, SCROW nRow2, bool bVal)
-    {
-        if (!bVal)
-            return;
-
-        mnCount += mpCol->CountNumericCells(maPos, nRow1, nRow2);
-        mnNumFmt = mpCol->GetNumberFormat(nRow2);
-    };
-
-    size_t getCount() const { return mnCount; }
-    sal_uInt32 getNumberFormat() const { return mnNumFmt; }
-};
-
 }
 
 void ScInterpreter::ScCount()
