@@ -61,7 +61,8 @@ private:
     GtkWidget       *mpWindow;
     static GtkStyleContext *mpButtonStyle;
     static GtkStyleContext *mpEntryStyle;
-    static GtkStyleContext *mpScrollbarStyle;
+    static GtkStyleContext *mpVScrollbarStyle;
+    static GtkStyleContext *mpHScrollbarStyle;
     static GtkStyleContext *mpToolbarStyle;
     static GtkStyleContext *mpToolButtonStyle;
     static GtkStyleContext *mpCheckButtonStyle;

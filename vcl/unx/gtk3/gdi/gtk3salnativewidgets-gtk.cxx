@@ -18,7 +18,8 @@
 
 GtkStyleContext* GtkSalGraphics::mpButtonStyle = NULL;
 GtkStyleContext* GtkSalGraphics::mpEntryStyle = NULL;
-GtkStyleContext* GtkSalGraphics::mpScrollbarStyle = NULL;
+GtkStyleContext* GtkSalGraphics::mpVScrollbarStyle = NULL;
+GtkStyleContext* GtkSalGraphics::mpHScrollbarStyle = NULL;
 GtkStyleContext* GtkSalGraphics::mpToolbarStyle = NULL;
 GtkStyleContext* GtkSalGraphics::mpToolButtonStyle = NULL;
 GtkStyleContext* GtkSalGraphics::mpCheckButtonStyle = NULL;
@@ -160,13 +161,19 @@ Rectangle GtkSalGraphics::NWGetSpinButtonRect( ControlPart nPart, Rectangle aAre
 
 Rectangle GtkSalGraphics::NWGetScrollButtonRect( ControlPart nPart, Rectangle aAreaRect )
 {
+    GtkStyleContext* pScrollbarStyle = NULL;
+    if ((nPart == PART_BUTTON_LEFT) || (nPart == PART_BUTTON_RIGHT))
+        pScrollbarStyle = mpHScrollbarStyle;
+    else // (nPart == PART_BUTTON_UP) || (nPart == PART_BUTTON_DOWN)
+        pScrollbarStyle = mpVScrollbarStyle;
+
     gint slider_width;
     gint stepper_size;
     gint stepper_spacing;
     gint trough_border;
 
     // Grab some button style attributes
-    gtk_style_context_get_style( mpScrollbarStyle,
+    gtk_style_context_get_style( pScrollbarStyle,
                                  "slider-width", &slider_width,
                                  "stepper-size", &stepper_size,
                                  "trough-border", &trough_border,
@@ -177,7 +184,7 @@ Rectangle GtkSalGraphics::NWGetScrollButtonRect( ControlPart nPart, Rectangle aA
     gboolean has_backward;
     gboolean has_backward2;
 
-    gtk_style_context_get_style( mpScrollbarStyle,
+    gtk_style_context_get_style( pScrollbarStyle,
                                  "has-forward-stepper", &has_forward,
                                  "has-secondary-forward-stepper", &has_forward2,
                                  "has-backward-stepper", &has_backward,
@@ -281,7 +288,7 @@ void GtkSalGraphics::PaintScrollbar(GtkStyleContext *context,
         return;
 
     // Grab some button style attributes
-    gtk_style_context_get_style( mpScrollbarStyle,
+    gtk_style_context_get_style( context,
                                  "slider_width", &slider_width,
                                  "stepper_size", &stepper_size,
                                  "trough_border", &trough_border,
@@ -292,7 +299,7 @@ void GtkSalGraphics::PaintScrollbar(GtkStyleContext *context,
     gboolean has_backward;
     gboolean has_backward2;
 
-    gtk_style_context_get_style( mpScrollbarStyle,
+    gtk_style_context_get_style( context,
                                  "has-forward-stepper", &has_forward,
                                  "has-secondary-forward-stepper", &has_forward2,
                                  "has-backward-stepper", &has_backward,
@@ -875,7 +882,8 @@ sal_Bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart
         {
         case PART_DRAW_BACKGROUND_VERT:
         case PART_DRAW_BACKGROUND_HORZ:
-            context = mpScrollbarStyle;
+            context = (nPart == PART_DRAW_BACKGROUND_VERT)
+                ? mpVScrollbarStyle : mpHScrollbarStyle;
             renderType = RENDER_SCROLLBAR;
             break;
         }
@@ -1388,7 +1396,7 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     gint min_slider_length = 21;
 
     // Grab some button style attributes
-    gtk_style_context_get_style( mpScrollbarStyle,
+    gtk_style_context_get_style( mpVScrollbarStyle,
                                  "slider-width", &slider_width,
                                  "trough-border", &trough_border,
                                  "min-slider-length", &min_slider_length,
@@ -1499,8 +1507,10 @@ GtkSalGraphics::GtkSalGraphics( GtkSalFrame *pFrame, GtkWidget *pWindow )
     gtk_style_context_set_path(mpToolButtonStyle, path);
     gtk_widget_path_free (path);
 
-    getStyleContext(&mpScrollbarStyle, gtk_vscrollbar_new(NULL));
-    gtk_style_context_add_class(mpScrollbarStyle, GTK_STYLE_CLASS_SCROLLBAR);
+    getStyleContext(&mpVScrollbarStyle, gtk_scrollbar_new(GTK_ORIENTATION_VERTICAL, NULL));
+    gtk_style_context_add_class(mpVScrollbarStyle, GTK_STYLE_CLASS_SCROLLBAR);
+    getStyleContext(&mpHScrollbarStyle, gtk_scrollbar_new(GTK_ORIENTATION_HORIZONTAL, NULL));
+    gtk_style_context_add_class(mpHScrollbarStyle, GTK_STYLE_CLASS_SCROLLBAR);
 
     getStyleContext(&mpCheckButtonStyle, gtk_check_button_new());
 
