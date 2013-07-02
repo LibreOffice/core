@@ -3642,7 +3642,7 @@ OUString SfxMedium::SwitchDocumentToTempFile()
         OUString const aExt = (nPrefixLen == -1)
                                 ? OUString()
                                 : aOrigURL.copy(nPrefixLen);
-        OUString aNewURL = ::utl::TempFile( String(), &aExt ).GetURL();
+        OUString aNewURL = ::utl::TempFile( OUString(), &aExt ).GetURL();
 
         // TODO/LATER: In future the aLogicName should be set to shared folder URL
         //             and a temporary file should be created. Transport_Impl should be impossible then.
