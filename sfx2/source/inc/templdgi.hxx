@@ -201,6 +201,7 @@ protected:
     void                        ResetFocus();
     void                        EnableDelete();
     void                        Initialize();
+    void                        EnableHierarchical(bool);
 
     void                FilterSelect( sal_uInt16 nFilterIdx, sal_Bool bForce = sal_False );
     void                SetFamilyState( sal_uInt16 nSlotId, const SfxTemplateItem* );
