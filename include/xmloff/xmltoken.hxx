@@ -3203,6 +3203,11 @@ namespace xmloff { namespace token {
 
         XML_ERROR_STANDARD_WEIGHT, // errorbar standard deviation error weight
 
+        // erAck: 2013-07-02  BCP 47 language tags
+        XML_RFC_LANGUAGE_TAG,
+        XML_RFC_LANGUAGE_TAG_ASIAN,
+        XML_RFC_LANGUAGE_TAG_COMPLEX,
+
         XML_TOKEN_END
     };
 

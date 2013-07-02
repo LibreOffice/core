@@ -3204,6 +3204,11 @@ namespace xmloff { namespace token {
 
         TOKEN( "std-weight", XML_ERROR_STANDARD_WEIGHT ),
 
+        // erAck: 2013-07-02  BCP 47 language tags
+        TOKEN( "rfc-language-tag",          XML_RFC_LANGUAGE_TAG ),
+        TOKEN( "rfc-language-tag-asian",    XML_RFC_LANGUAGE_TAG_ASIAN ),
+        TOKEN( "rfc-language-tag-complex",  XML_RFC_LANGUAGE_TAG_COMPLEX ),
+
 #if OSL_DEBUG_LEVEL > 0
         { 0, NULL, NULL,                       XML_TOKEN_END }
 #else
