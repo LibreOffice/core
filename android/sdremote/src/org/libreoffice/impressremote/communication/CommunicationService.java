@@ -203,16 +203,16 @@ public class CommunicationService extends Service implements Runnable, MessagesL
     }
 
     public void startSearch() {
-        SharedPreferences aPref = PreferenceManager
-            .getDefaultSharedPreferences(this);
-        boolean bEnableWifi = aPref.getBoolean("option_enablewifi", false);
-        if (bEnableWifi)
-            mTcpServersFinder.startSearch();
+        mTcpServersFinder.startSearch();
+
         BluetoothAdapter aAdapter = BluetoothAdapter.getDefaultAdapter();
         if (aAdapter != null) {
             mBluetoothPreviouslyEnabled = aAdapter.isEnabled();
-            if (!mBluetoothPreviouslyEnabled)
+
+            if (!mBluetoothPreviouslyEnabled) {
                 aAdapter.enable();
+            }
+
             mBluetoothServersFinder.startSearch();
         }
     }
