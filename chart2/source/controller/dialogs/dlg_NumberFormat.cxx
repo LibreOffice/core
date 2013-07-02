@@ -40,15 +40,15 @@ namespace chart
 using namespace ::com::sun::star;
 
 NumberFormatDialog::NumberFormatDialog(Window* pParent, SfxItemSet& rSet)
-    : SfxNoLayoutSingleTabDialog( pParent, rSet, 0 )
+    : SfxSingleTabDialog(pParent, rSet)
 {
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
     ::CreateTabPage fnCreatePage = pFact->GetTabPageCreatorFunc( RID_SVXPAGE_NUMBERFORMAT );
     if ( fnCreatePage )
     {
-        SfxTabPage* pTabPage = (*fnCreatePage)( this, rSet );
+        SfxTabPage* pTabPage = (*fnCreatePage)( get_content_area(), rSet );
         pTabPage->PageCreated(rSet);
-        SetTabPage(pTabPage);
+        setTabPage(pTabPage);
     }
 }
 
