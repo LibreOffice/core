@@ -694,11 +694,11 @@ void Dialog::StateChanged( StateChangedType nType )
 
     if ( nType == STATE_CHANGE_INITSHOW )
     {
-        if (isLayoutEnabled())
-            setInitialLayoutSize();
-
         if ( GetSettings().GetStyleSettings().GetAutoMnemonic() )
             ImplWindowAutoMnemonic( this );
+
+        if (isLayoutEnabled())
+            setInitialLayoutSize();
 
         if ( !HasChildPathFocus() || HasFocus() )
             GrabFocusToFirstControl();
