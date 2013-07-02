@@ -43,8 +43,10 @@ static bool is_gnome_desktop( Display* pDisplay )
     // warning: these checks are coincidental, GNOME does not
     // explicitly advertise itself
 
-    if ( NULL != getenv( "GNOME_DESKTOP_SESSION_ID" ) )
+    if ( "gnome" == getenv( "DESKTOP_SESSION" ) || NULL != getenv( "GNOME_DESKTOP_SESSION_ID" ) )
+    {
         ret = true;
+    }
 
     if( ! ret )
     {
@@ -117,6 +119,24 @@ static bool is_gnome_desktop( Display* pDisplay )
     }
 
     return ret;
+}
+
+static bool is_xfce_desktop( Display* pDisplay )
+{
+    if ( "xfce" == getenv( "DESKTOP_SESSION" ) )
+    {
+        return true;
+    }
+    return false;
+}
+
+static bool is_mate_desktop( Display* pDisplay )
+{
+    if ( "mate" == getenv( "DESKTOP_SESSION" ) )
+    {
+        return true;
+    }
+    return false;
 }
 
 static bool bWasXError = false;
@@ -291,6 +311,10 @@ DESKTOP_DETECTOR_PUBLIC DesktopType get_desktop_environment()
             return DESKTOP_KDE4;
         if ( aOver.equalsIgnoreAsciiCase( "gnome" ) )
             return DESKTOP_GNOME;
+        if ( aOver.equalsIgnoreAsciiCase( "xfce" ) )
+            return DESKTOP_XFCE;
+        if ( aOver.equalsIgnoreAsciiCase( "mate" ) )
+            return DESKTOP_MATE;
         if ( aOver.equalsIgnoreAsciiCase( "kde" ) )
             return DESKTOP_KDE;
         if ( aOver.equalsIgnoreAsciiCase( "none" ) )
@@ -351,6 +375,10 @@ DESKTOP_DETECTOR_PUBLIC DesktopType get_desktop_environment()
         ret = DESKTOP_KDE4;
     else if ( is_gnome_desktop( pDisplay ) )
         ret = DESKTOP_GNOME;
+    else if ( is_xfce_desktop( pDisplay ) )
+        ret = DESKTOP_XFCE;
+    else if ( is_mate_desktop( pDisplay ) )
+        ret = DESKTOP_MATE;
     else if ( is_kde_desktop( pDisplay ) )
         ret = DESKTOP_KDE;
     else
