@@ -29,7 +29,7 @@ namespace chart
 {
 //.............................................................................
 
-class NumberFormatDialog : public SfxNoLayoutSingleTabDialog
+class NumberFormatDialog : public SfxSingleTabDialog
 {
 public:
      NumberFormatDialog(Window* pParent, SfxItemSet& rSet);
