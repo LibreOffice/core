@@ -27,26 +27,26 @@
 #include <stdtypes.h>
 #include <uielement/commandinfo.hxx>
 
-#include <com/sun/star/frame/XFrame.hpp>
-#include <com/sun/star/frame/XStatusListener.hpp>
-#include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
+#include <com/sun/star/frame/XFrame.hpp>
+#include <com/sun/star/frame/XStatusListener.hpp>
 #include <com/sun/star/frame/XModuleManager.hpp>
 #include <com/sun/star/frame/XUIControllerFactory.hpp>
-#include <com/sun/star/ui/XImageManager.hpp>
-#include <com/sun/star/ui/XUIConfigurationManager.hpp>
 #include <com/sun/star/frame/XSubToolbarController.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/frame/XToolbarController.hpp>
+#include <com/sun/star/lang/XComponent.hpp>
+#include <com/sun/star/ui/XImageManager.hpp>
+#include <com/sun/star/ui/XUIConfigurationManager.hpp>
 #include <com/sun/star/ui/ItemStyle.hpp>
-#include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/ui/XAcceleratorConfiguration.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/util/XURLTransformer.hpp>
 
 #include <rtl/ustring.hxx>
-#include <cppuhelper/weak.hxx>
+#include <cppuhelper/implbase4.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 
 #include <tools/link.hxx>
@@ -59,13 +59,15 @@ class ToolBox;
 namespace framework
 {
 
-class ToolBarManager : public ::com::sun::star::frame::XFrameActionListener         ,
-                       public ::com::sun::star::frame::XStatusListener              ,
-                       public ::com::sun::star::lang::XComponent                    ,
-                       public ::com::sun::star::lang::XTypeProvider                 ,
-                       public ::com::sun::star::ui::XUIConfigurationListener,
-                       public ThreadHelpBase                                        ,
-                       public ::cppu::OWeakObject
+typedef ::cppu::WeakImplHelper4<
+           ::com::sun::star::frame::XFrameActionListener,
+           ::com::sun::star::frame::XStatusListener,
+           ::com::sun::star::lang::XComponent,
+           ::com::sun::star::ui::XUIConfigurationListener
+        > ToolbarManager_Base;
+
+class ToolBarManager : public ToolbarManager_Base,
+                       public ThreadHelpBase
 {
     public:
         ToolBarManager( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext,
@@ -73,10 +75,6 @@ class ToolBarManager : public ::com::sun::star::frame::XFrameActionListener     
                         const OUString& rResourceName,
                         ToolBox* pToolBar );
         virtual ~ToolBarManager();
-
-        //  XInterface, XTypeProvider, XServiceInfo
-        FWK_DECLARE_XINTERFACE
-        FWK_DECLARE_XTYPEPROVIDER
 
         ToolBox* GetToolBar() const;
 

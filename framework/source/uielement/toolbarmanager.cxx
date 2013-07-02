@@ -180,31 +180,12 @@ static ::com::sun::star::uno::Reference< ::com::sun::star::frame::XLayoutManager
 //*****************************************************************************************************************
 //  XInterface, XTypeProvider, XServiceInfo
 //*****************************************************************************************************************
-DEFINE_XINTERFACE_6                     (   ToolBarManager                                                                                              ,
-                                            OWeakObject                                                                                                 ,
-                                            DIRECT_INTERFACE( ::com::sun::star::lang::XTypeProvider                                                     ),
-                                            DIRECT_INTERFACE( ::com::sun::star::lang::XComponent                                                        ),
-                                            DIRECT_INTERFACE( ::com::sun::star::frame::XFrameActionListener                                             ),
-                                            DIRECT_INTERFACE( ::com::sun::star::ui::XUIConfigurationListener                                    ),
-                                            DIRECT_INTERFACE( ::com::sun::star::frame::XStatusListener                                                  ),
-                                            DERIVED_INTERFACE( ::com::sun::star::lang::XEventListener, ::com::sun::star::frame::XFrameActionListener    )
-                                        )
-
-DEFINE_XTYPEPROVIDER_6                  (   ToolBarManager                                          ,
-                                            ::com::sun::star::lang::XTypeProvider                   ,
-                                            ::com::sun::star::lang::XComponent                      ,
-                                            ::com::sun::star::ui::XUIConfigurationListener  ,
-                                            ::com::sun::star::frame::XFrameActionListener           ,
-                                            ::com::sun::star::frame::XStatusListener                ,
-                                            ::com::sun::star::lang::XEventListener
-                                        )
 
 ToolBarManager::ToolBarManager( const Reference< XComponentContext >& rxContext,
                                 const Reference< XFrame >& rFrame,
                                 const OUString& rResourceName,
                                 ToolBox* pToolBar ) :
     ThreadHelpBase( &Application::GetSolarMutex() ),
-    OWeakObject(),
     m_bDisposed( false ),
     m_bSmallSymbols( !SvtMiscOptions().AreCurrentSymbolsLarge() ),
     m_bModuleIdentified( false ),
