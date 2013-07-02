@@ -51,9 +51,16 @@ public:
     {
         OclCalc::ReleaseOpenclRunEnv();
     }
+
+    virtual ScMatrixRef inverseMatrix(const ScMatrix& rMat);
     virtual bool interpret(ScDocument& rDoc, const ScAddress& rTopPos,
                            const ScFormulaCellGroupRef& xGroup, ScTokenArray& rCode);
 };
+
+ScMatrixRef FormulaGroupInterpreterSoftware::inverseMatrix(const ScMatrix& rMat)
+{
+    return ScMatrixRef();
+}
 
 bool FormulaGroupInterpreterOpenCL::interpret(ScDocument& rDoc, const ScAddress& rTopPos,
                                               const ScFormulaCellGroupRef& xGroup, ScTokenArray& rCode)

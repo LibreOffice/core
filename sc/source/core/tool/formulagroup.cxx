@@ -20,6 +20,11 @@
 
 namespace sc {
 
+ScMatrixRef FormulaGroupInterpreterSoftware::inverseMatrix(const ScMatrix& /*rMat*/)
+{
+    return ScMatrixRef();
+}
+
 bool FormulaGroupInterpreterSoftware::interpret(ScDocument& rDoc, const ScAddress& rTopPos,
                                                 const ScFormulaCellGroupRef& xGroup,
                                                 ScTokenArray& rCode)

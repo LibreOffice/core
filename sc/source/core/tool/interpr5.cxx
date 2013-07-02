@@ -35,6 +35,7 @@
 #include "scmatrix.hxx"
 #include "globstr.hrc"
 #include "cellkeytranslator.hxx"
+#include "formulagroup.hxx"
 
 #include <vector>
 
@@ -850,6 +851,17 @@ void ScInterpreter::ScMatInv()
         }
         SCSIZE nC, nR;
         pMat->GetDimensions(nC, nR);
+
+        if (ScInterpreter::GetGlobalConfig().mbOpenCLEnabled)
+        {
+            ScMatrixRef xResMat = sc::FormulaGroupInterpreter::getStatic()->inverseMatrix(*pMat);
+            if (xResMat)
+            {
+                PushMatrix(xResMat);
+                return;
+            }
+        }
+
         if ( nC != nR || nC == 0 || (sal_uLong) nC * nC > ScMatrix::GetElementsMax() )
             PushIllegalArgument();
         else
