@@ -832,7 +832,7 @@ void FontSubstConfiguration::getMapName( const OUString& rOrgName, OUString& rSh
 struct StrictStringSort : public ::std::binary_function< const FontNameAttr&, const FontNameAttr&, bool >
 {
     bool operator()( const FontNameAttr& rLeft, const FontNameAttr& rRight )
-    { return rLeft.Name.compareTo( rRight.Name ) == -1 ; }
+    { return rLeft.Name.compareTo( rRight.Name ) < 0; }
 };
 
 static const char* const pAttribNames[] =
