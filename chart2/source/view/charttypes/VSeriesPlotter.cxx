@@ -966,21 +966,25 @@ void VSeriesPlotter::createErrorBar_Y( const drawing::Position3D& rUnscaledLogic
 void VSeriesPlotter::createRegressionCurvesShapes( VDataSeries& rVDataSeries,
                             const uno::Reference< drawing::XShapes >& xTarget,
                             const uno::Reference< drawing::XShapes >& xEquationTarget,
-                            bool bMaySkipPointsInRegressionCalculation )
+                            bool bMaySkipPoints )
 {
     if(m_nDimension!=2)
         return;
-    uno::Reference< XRegressionCurveContainer > xRegressionContainer(
-                rVDataSeries.getModel(), uno::UNO_QUERY );
-    if(!xRegressionContainer.is())
+    uno::Reference< XRegressionCurveContainer > xContainer( rVDataSeries.getModel(), uno::UNO_QUERY );
+    if(!xContainer.is())
         return;
 
-    uno::Sequence< uno::Reference< XRegressionCurve > > aCurveList =
-        xRegressionContainer->getRegressionCurves();
+    uno::Sequence< uno::Reference< XRegressionCurve > > aCurveList = xContainer->getRegressionCurves();
 
     for(sal_Int32 nN=0; nN<aCurveList.getLength(); nN++)
     {
+        uno::Reference< XRegressionCurveCalculator > xCalculator( aCurveList[nN]->getCalculator() );
+        if( !xCalculator.is())
+            continue;
+
         uno::Reference< beans::XPropertySet > xProperties( aCurveList[nN], uno::UNO_QUERY );
+
+        bool bAverageLine = RegressionCurveHelper::isMeanValueLine( aCurveList[nN] );
 
         sal_Int32 aDegree = 2;
         sal_Int32 aPeriod = 2;
@@ -989,7 +993,7 @@ void VSeriesPlotter::createRegressionCurvesShapes( VDataSeries& rVDataSeries,
         sal_Bool aForceIntercept = false;
         double aInterceptValue = 0.0;
 
-        if ( xProperties.is() )
+        if ( xProperties.is() && !bAverageLine )
         {
             xProperties->getPropertyValue( "PolynomialDegree") >>= aDegree;
             xProperties->getPropertyValue( "MovingAveragePeriod") >>= aPeriod;
@@ -1000,29 +1004,40 @@ void VSeriesPlotter::createRegressionCurvesShapes( VDataSeries& rVDataSeries,
                 xProperties->getPropertyValue( "InterceptValue") >>= aInterceptValue;
         }
 
-        uno::Reference< XRegressionCurveCalculator > xRegressionCurveCalculator( aCurveList[nN]->getCalculator() );
-
-        if( ! xRegressionCurveCalculator.is())
-            continue;
-
         double fMinX;
         double fMaxX;
 
-        rVDataSeries.getMinMaxXValue(fMinX, fMaxX);
-        fMaxX += aExtrapolateForward;
-        fMinX -= aExtrapolateBackward;
+        double fChartMinX = m_pPosHelper->getLogicMinX();
+        double fChartMaxX = m_pPosHelper->getLogicMaxX();
 
-        xRegressionCurveCalculator->setRegressionProperties(aDegree, aForceIntercept, aInterceptValue, aPeriod);
-        xRegressionCurveCalculator->recalculateRegression( rVDataSeries.getAllX(), rVDataSeries.getAllY() );
+        double fPointScale = 1.0;
 
-        sal_Int32 nRegressionPointCount = 100; //@todo find a more optimal solution if more complicated curve types are introduced
+        if( bAverageLine )
+        {
+            fMinX = fChartMinX;
+            fMaxX = fChartMaxX;
+        }
+        else
+        {
+            rVDataSeries.getMinMaxXValue(fMinX, fMaxX);
+            fMaxX += aExtrapolateForward;
+            fMinX -= aExtrapolateBackward;
+
+            fPointScale = (fMaxX - fMinX) / (fChartMaxX - fChartMinX);
+        }
+
+        xCalculator->setRegressionProperties(aDegree, aForceIntercept, aInterceptValue, aPeriod);
+        xCalculator->recalculateRegression( rVDataSeries.getAllX(), rVDataSeries.getAllY() );
+
+        sal_Int32 nPointCount = 100 * fPointScale;
+
         drawing::PolyPolygonShape3D aRegressionPoly;
         aRegressionPoly.SequenceX.realloc(1);
         aRegressionPoly.SequenceY.realloc(1);
         aRegressionPoly.SequenceZ.realloc(1);
-        aRegressionPoly.SequenceX[0].realloc(nRegressionPointCount);
-        aRegressionPoly.SequenceY[0].realloc(nRegressionPointCount);
-        aRegressionPoly.SequenceZ[0].realloc(nRegressionPointCount);
+        aRegressionPoly.SequenceX[0].realloc(nPointCount);
+        aRegressionPoly.SequenceY[0].realloc(nPointCount);
+        aRegressionPoly.SequenceZ[0].realloc(nPointCount);
         sal_Int32 nRealPointCount=0;
 
         std::vector< ExplicitScaleData > aScales( m_pPosHelper->getScales());
@@ -1035,16 +1050,15 @@ void VSeriesPlotter::createRegressionCurvesShapes( VDataSeries& rVDataSeries,
         }
 
         uno::Sequence< geometry::RealPoint2D > aCalculatedPoints(
-            xRegressionCurveCalculator->getCurveValues(
-                fMinX, fMaxX, nRegressionPointCount, xScalingX, xScalingY, bMaySkipPointsInRegressionCalculation ));
-        nRegressionPointCount = aCalculatedPoints.getLength();
-        bool bAverageLine = RegressionCurveHelper::isMeanValueLine( aCurveList[nN] );
+            xCalculator->getCurveValues(
+                            fMinX, fMaxX, nPointCount,
+                            xScalingX, xScalingY, bMaySkipPoints ));
 
-        for(sal_Int32 nP=0; nP<nRegressionPointCount; nP++)
+        for(sal_Int32 nP=0; nP<aCalculatedPoints.getLength(); nP++)
         {
             double fLogicX = aCalculatedPoints[nP].X;
             double fLogicY = aCalculatedPoints[nP].Y;
-            double fLogicZ = 0.0;//dummy
+            double fLogicZ = 0.0; //dummy
 
             // fdo#51656: don't scale mean value lines
             if(!bAverageLine)
@@ -1089,7 +1103,7 @@ void VSeriesPlotter::createRegressionCurvesShapes( VDataSeries& rVDataSeries,
         {
             createRegressionCurveEquationShapes(
                 rVDataSeries.getDataCurveEquationCID( nN ),
-                xEquationProperties, xEquationTarget, xRegressionCurveCalculator,
+                xEquationProperties, xEquationTarget, xCalculator,
                 aDefaultPos );
         }
     }
