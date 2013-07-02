@@ -470,28 +470,6 @@ Convert::Any_t Convert::toAny( const OUString& rValue,
 }
 
 //------------------------------------------------------------------------
-OUString Convert::convertWhitespace( const OUString& _rString, sal_Int16 _nWhitespaceTreatment )
-{
-    OUString sConverted;
-    switch( _nWhitespaceTreatment )
-    {
-    default:
-        OSL_FAIL( "Convert::convertWhitespace: invalid whitespace treatment constant!" );
-        // NO break
-    case com::sun::star::xsd::WhiteSpaceTreatment::Preserve:
-        sConverted = _rString;
-        break;
-    case com::sun::star::xsd::WhiteSpaceTreatment::Replace:
-        sConverted = replaceWhitespace( _rString );
-        break;
-    case com::sun::star::xsd::WhiteSpaceTreatment::Collapse:
-        sConverted = collapseWhitespace( _rString );
-        break;
-    }
-    return sConverted;
-}
-
-//------------------------------------------------------------------------
 OUString Convert::replaceWhitespace( const OUString& _rString )
 {
     OUStringBuffer aBuffer( _rString );

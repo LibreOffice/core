@@ -72,22 +72,6 @@ public:
     /// convert XML representation to Any of given type
     Any_t toAny( const OUString&, const Type_t& );
 
-    /** translates the whitespaces in a given string, according
-        to a given <type scope="com::sun::star::xsd">WhiteSpaceTreatment</type>.
-
-        @param _rString
-            the string to convert
-        @param _nWhitespaceTreatment
-            a constant from the <type scope="com::sun::star::xsd">WhiteSpaceTreatment</type> group, specifying
-            how to handle whitespaces
-        @return
-            the converted string
-    */
-    static OUString convertWhitespace(
-            const OUString& _rString,
-            sal_Int16   _nWhitespaceTreatment
-    );
-
     /** replace all occurrences 0x08, 0x0A, 0x0D with 0x20
     */
     static OUString replaceWhitespace( const OUString& _rString );
