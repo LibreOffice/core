@@ -65,6 +65,7 @@
 #include <comphelper/servicehelper.hxx>
 
 #include <memory>
+#include <unordered_map>
 
 #include "mathmlexport.hxx"
 #include <starmath.hrc>
@@ -86,6 +87,37 @@ using namespace ::xmloff::token;
 
 #undef WANTEXCEPT
 
+// The MathML recommendation contains an Operator Dictionary:
+//
+// http://www.w3.org/TR/MathML/appendixc.html
+//
+// Our Operator Dictionary is generated from the "XML Entity Definitions for
+// Characters" recommendation via the generateOperatorDictionary.sh script. It
+// is relatively big (more than one thousand entries) and so we fill it in the
+// separate operatorDictionary.txt file and we use a hash table for fast access.
+//
+// Currently, we only use a restricted subset to
+//
+// - know whether a character is an operator. This is used for NSPECIAL %xxxx
+//   commands.
+// - know whether an operator has a stretchy form (prefix, infix, postfix).
+//   This is used to attach an explicit stretchy="false" attribute if we don't
+//   want it to stretch.
+//
+// Hence the keys of the hash table are the Unicode values of the operators and
+// the values are booleans indicating whether operators have at least one
+// stretchy form.
+//
+// See also fdo#66279.
+static ::std::unordered_map< sal_Unicode, bool > opDict;
+void initOperatorDictionary()
+{
+    static bool bInitialized = false;
+    if (bInitialized)
+        return;
+    bInitialized = true;
+#include "operatorDictionary.txt"
+}
 
 ////////////////////////////////////////////////////////////
 
@@ -588,6 +620,9 @@ sal_uInt32 SmXMLExport::exportDoc(enum XMLTokenEnum eClass)
         rList.AddAttribute(GetNamespaceMap().GetAttrNameByKey(XML_NAMESPACE_MATH_IDX),
                 GetNamespaceMap().GetNameByKey( XML_NAMESPACE_MATH_IDX));
 
+        // Initialize the Operator Dictionary
+        initOperatorDictionary();
+
         //I think we need something like ImplExportEntities();
         _ExportContent();
         GetDocHandler()->endDocument();
@@ -873,24 +908,7 @@ void SmXMLExport::ExportMath(const SmNode *pNode, int /*nLevel*/)
     const SmMathSymbolNode *pTemp = static_cast<const SmMathSymbolNode *>(pNode);
     SvXMLElementExport *pMath = 0;
 
-    if (pNode->GetType() == NMATH || pNode->GetType() == NGLYPH_SPECIAL)
-    {
-        // Export NMATH and NGLYPH_SPECIAL symbols as <mo> elements
-        pMath = new SvXMLElementExport(*this, XML_NAMESPACE_MATH, XML_MO, sal_True, sal_False);
-    }
-    else
-    {
-        // Export NMATHIDENT and NPLACE symbols as <mi> elements:
-        // - These math symbols should not be drawn slanted. Hence we should
-        // attach a mathvariant="normal" attribute to single-char <mi> elements
-        // that are not mathematical alphanumeric symbol. For simplicity and to
-        // work around browser limitations, we always attach such an attribute.
-        // - The MathML specification suggests to use empty <mi> elements as
-        // placeholders but they won't be visible in most MathML rendering
-        // engines so let's use an empty square for NPLACE instead.
-        AddAttribute(XML_NAMESPACE_MATH, XML_MATHVARIANT, XML_NORMAL);
-        pMath = new SvXMLElementExport(*this, XML_NAMESPACE_MATH, XML_MI, sal_True, sal_False);
-    }
+    pMath = new SvXMLElementExport(*this, XML_NAMESPACE_MATH, XML_MO, sal_True, sal_False);
     sal_Unicode nArse[2];
     nArse[0] = pTemp->GetText()[0];
     sal_Unicode cTmp = ConvertMathToMathML( nArse[0] );
@@ -1499,6 +1517,7 @@ void SmXMLExport::ExportNodes(const SmNode *pNode, int nLevel)
         case NTEXT:
             ExportText(pNode, nLevel);
             break;
+        case NSPECIAL: //NSPECIAL requires some sort of Entity preservation in the XML engine.
         case NGLYPH_SPECIAL:
         case NMATH:
             {
@@ -1506,17 +1525,15 @@ void SmXMLExport::ExportNodes(const SmNode *pNode, int nLevel)
                 const SmTextNode *pTemp = static_cast< const SmTextNode * >(pNode);
                 if (!pTemp->GetText().isEmpty())
                     cTmp = ConvertMathToMathML( pTemp->GetText()[0] );
-                if (cTmp == 0)
+                if (cTmp == 0 ||
+                    (pNode->GetType() == NSPECIAL && opDict.count(cTmp) == 0))
                 {
-                    // no conversion to MathML implemented -> export it as text
-                    // thus at least it will not vanish into nothing
+                    // No conversion to MathML implemented or not an operator.
+                    // Export this as an <mi> element.
                     ExportText(pNode, nLevel);
                 }
                 else
                 {
-                    //To fully handle generic MathML we need to implement the full
-                    //operator dictionary, we will generate MathML with explicit
-                    //stretchiness for now.
                     sal_Int16 nLength = GetAttrList().getLength();
                     sal_Bool bAddStretch=sal_True;
                     for ( sal_Int16 i = 0; i < nLength; i++ )
@@ -1534,16 +1551,32 @@ void SmXMLExport::ExportNodes(const SmNode *pNode, int nLevel)
                     }
                     if (bAddStretch)
                     {
-                        AddAttribute(XML_NAMESPACE_MATH, XML_STRETCHY, XML_FALSE);
+                        // There is not any explicit stretchy attribute
+                        // specified so we will just consider the operator
+                        // non-stretchy.
+                        if (opDict.count(cTmp) == 1 && opDict[cTmp])
+                        {
+                            // The operator has at least one stretchy form.
+                            // Let's attach an explicit stretchy="false" to
+                            // prevent it from stretching.
+                            AddAttribute(XML_NAMESPACE_MATH, XML_STRETCHY,
+                                XML_FALSE);
+                        }
                     }
                     ExportMath(pNode, nLevel);
                 }
             }
             break;
-        case NSPECIAL: //NSPECIAL requires some sort of Entity preservation in the XML engine.
         case NMATHIDENT :
         case NPLACE:
-            ExportMath(pNode, nLevel);
+            // Export NMATHIDENT and NPLACE symbols as <mi> elements:
+            // - These math symbols should not be drawn slanted. Hence we should
+            // attach a mathvariant="normal" attribute to single-char <mi>
+            // elements that are not mathematical alphanumeric symbol.
+            // - The MathML specification suggests to use empty <mi> elements as
+            // placeholders but they won't be visible in most MathML rendering
+            // engines so let's use an empty square for NPLACE instead.
+            ExportText(pNode, nLevel);
             break;
         case NBINHOR:
             ExportBinaryHorizontal(pNode, nLevel);
