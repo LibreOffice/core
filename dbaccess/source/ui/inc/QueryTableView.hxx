@@ -62,6 +62,7 @@ namespace dbaui
 
         /// base class overwritten: create and delete windows
         /// (not really delete, as it becomes an UndoAction)
+        bool ContainsTabWin(const OTableWindow& rTabWin); // #i122589# Allow to check if OTableWindow is registered
         virtual void AddTabWin( const OUString& _rTableName, const OUString& _rAliasName, sal_Bool bNewTable = sal_False );
         virtual void RemoveTabWin(OTableWindow* pTabWin);
 
