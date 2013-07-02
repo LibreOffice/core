@@ -168,6 +168,64 @@ namespace svgio
             {
                 if(getParent())
                 {
+                    const bool bWidthIsRelative(!getWidth().isSet() || Unit_percent == getWidth().getUnit());
+                    const bool bHeightIsRelative(!getWidth().isSet() || Unit_percent == getWidth().getUnit());
+                    const SvgSvgNode* pParentSvgSvgNode = 0;
+                    double fW(0.0);
+                    double fH(0.0);
+
+                    // #i122594# if width/height is not given, it's 100% (see 5.1.2 The ‘svg’ element in SVG1.1 spec).
+                    // If it is relative, the question is to what. The previous implementatin assumed relative to the
+                    // local ViewBox which is implied by (4.2 Basic data types):
+                    //
+                    // "Note that the non-property <length> definition also allows a percentage unit identifier.
+                    // The meaning of a percentage length value depends on the attribute for which the percentage
+                    // length value has been specified. Two common cases are: (a) when a percentage length value
+                    // represents a percentage of the viewport width or height (refer to the section that discusses
+                    // units in general), and (b) when a percentage length value represents a percentage of the
+                    // bounding box width or height on a given object (refer to the section that describes object
+                    // bounding box units)."
+                    //
+                    // This is not closer specified for the SVG element itself as non-outmost element, but comparisons
+                    // with common browsers shows that it's mostly interpreted relative to the viewBox of the parent.
+                    // Adding code to search the parent SVG element and calculating width/height relative to it's
+                    // viewBox width/height (and no longer to the local viewBox).
+                    if(bWidthIsRelative || bHeightIsRelative)
+                    {
+                        for(const SvgNode* pParent = getParent(); pParent && !pParentSvgSvgNode; pParent = pParent->getParent())
+                        {
+                            pParentSvgSvgNode = dynamic_cast< const SvgSvgNode* >(pParent);
+                        }
+                    }
+
+                    if(bWidthIsRelative)
+                    {
+                        fW = getWidth().isSet() ? getWidth().getNumber() * 0.01 : 1.0;
+
+                        if(pParentSvgSvgNode)
+                        {
+                            fW *= pParentSvgSvgNode->getViewBox()->getWidth();
+                        }
+                    }
+                    else
+                    {
+                        fW = getWidth().solve(*this, xcoordinate);
+                    }
+
+                    if(bHeightIsRelative)
+                    {
+                        fH = getHeight().isSet() ? getHeight().getNumber() * 0.01 : 1.0;
+
+                        if(pParentSvgSvgNode)
+                        {
+                            fH *= pParentSvgSvgNode->getViewBox()->getHeight();
+                        }
+                    }
+                    else
+                    {
+                        fH = getHeight().solve(*this, ycoordinate);
+                    }
+
                     if(getViewBox())
                     {
                         // Svg defines that with no width or no height the viewBox content is empty,
@@ -177,64 +235,6 @@ namespace svgio
                             // create target range homing x,y, width and height as given
                             const double fX(getX().isSet() ? getX().solve(*this, xcoordinate) : 0.0);
                             const double fY(getY().isSet() ? getY().solve(*this, ycoordinate) : 0.0);
-                            const bool bWidthIsRelative(!getWidth().isSet() || Unit_percent == getWidth().getUnit());
-                            const bool bHeightIsRelative(!getWidth().isSet() || Unit_percent == getWidth().getUnit());
-                            const SvgSvgNode* pParentSvgSvgNode = 0;
-                            double fW(0.0);
-                            double fH(0.0);
-
-                            // #i122594# if width/height is not given, it's 100% (see 5.1.2 The ‘svg’ element in SVG1.1 spec).
-                            // If it is relative, the question is to what. The previous implementatin assumed relative to the
-                            // local ViewBox which is implied by (4.2 Basic data types):
-                            //
-                            // "Note that the non-property <length> definition also allows a percentage unit identifier.
-                            // The meaning of a percentage length value depends on the attribute for which the percentage
-                            // length value has been specified. Two common cases are: (a) when a percentage length value
-                            // represents a percentage of the viewport width or height (refer to the section that discusses
-                            // units in general), and (b) when a percentage length value represents a percentage of the
-                            // bounding box width or height on a given object (refer to the section that describes object
-                            // bounding box units)."
-                            //
-                            // This is not closer specified for the SVG element itself as non-outmost element, but comparisons
-                            // with common browsers shows that it's mostly interpreted relative to the viewBox of the parent.
-                            // Adding code to search the parent SVG element and calculating width/height relative to it's
-                            // viewBox width/height (and no longer to the local viewBox).
-                            if(bWidthIsRelative || bHeightIsRelative)
-                            {
-                                for(const SvgNode* pParent = getParent(); pParent && !pParentSvgSvgNode; pParent = pParent->getParent())
-                                {
-                                    pParentSvgSvgNode = dynamic_cast< const SvgSvgNode* >(pParent);
-                                }
-                            }
-
-                            if(bWidthIsRelative)
-                            {
-                                fW = getWidth().isSet() ? getWidth().getNumber() * 0.01 : 1.0;
-
-                                if(pParentSvgSvgNode)
-                                {
-                                    fW *= pParentSvgSvgNode->getViewBox()->getWidth();
-                                }
-                            }
-                            else
-                            {
-                                fW = getWidth().solve(*this, xcoordinate);
-                            }
-
-                            if(bHeightIsRelative)
-                            {
-                                fH = getHeight().isSet() ? getHeight().getNumber() * 0.01 : 1.0;
-
-                                if(pParentSvgSvgNode)
-                                {
-                                    fH *= pParentSvgSvgNode->getViewBox()->getHeight();
-                                }
-                            }
-                            else
-                            {
-                                fH = getHeight().solve(*this, ycoordinate);
-                            }
-
                             const basegfx::B2DRange aTarget(fX, fY, fX + fW, fY + fH);
 
                             if(aTarget.equal(*getViewBox()))
@@ -295,10 +295,6 @@ namespace svgio
                     }
                     else
                     {
-                        // check if we have a size
-                        const double fW(getWidth().isSet() ? getWidth().solve(*this, xcoordinate) : 0.0);
-                        const double fH(getHeight().isSet() ? getHeight().solve(*this, ycoordinate) : 0.0);
-
                         // Svg defines that a negative value is an error and that 0.0 disables rendering
                         if(basegfx::fTools::more(fW, 0.0) && basegfx::fTools::more(fH, 0.0))
                         {
