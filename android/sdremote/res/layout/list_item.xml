@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+          android:singleLine="true"
+          android:textSize="@dimen/text_size_list_item"
+          android:gravity="center_vertical"
+          android:padding="@dimen/padding_horizontal_list_item"
+          android:layout_width="fill_parent"
+          android:layout_height="?android:attr/listPreferredItemHeight" />

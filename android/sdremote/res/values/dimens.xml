@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="padding_horizontal_list_item">8dp</dimen>
+
+    <dimen name="text_size_list_item">18sp</dimen>
+
+</resources>

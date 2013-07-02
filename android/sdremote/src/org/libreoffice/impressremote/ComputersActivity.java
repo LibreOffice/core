@@ -30,7 +30,8 @@ public class ComputersActivity extends SherlockFragmentActivity {
     }
 
     private ActionBar.Tab buildBluetoothServersTab() {
-        ComputersFragment aFragment = ComputersFragment.newInstance();
+        ComputersFragment aFragment = ComputersFragment.newInstance(
+            ComputersFragment.Type.BLUETOOTH);
 
         return buildActionBarTab(aFragment, R.string.title_bluetooth);
     }
@@ -45,7 +46,8 @@ public class ComputersActivity extends SherlockFragmentActivity {
     }
 
     private ActionBar.Tab buildWiFiServersTab() {
-        ComputersFragment aFragment = ComputersFragment.newInstance();
+        ComputersFragment aFragment = ComputersFragment.newInstance(
+            ComputersFragment.Type.WIFI);
 
         return buildActionBarTab(aFragment, R.string.title_wifi);
     }

@@ -36,7 +36,7 @@ public class Server implements Parcelable {
         this.mTimeDiscovered = aTimeDiscovered;
     }
 
-    protected Server(Protocol aProtocol, String aAddress, String aName) {
+    public Server(Protocol aProtocol, String aAddress, String aName) {
         this.mProtocol = aProtocol;
         this.mAddress = aAddress;
         this.mName = aName;
