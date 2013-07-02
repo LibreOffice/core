@@ -11,6 +11,7 @@
 #include <com/sun/star/document/XEmbeddedObjectSupplier2.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>
+#include <com/sun/star/drawing/TextVerticalAdjust.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/text/HoriOrientation.hpp>
@@ -122,6 +123,7 @@ public:
     void testN820504();
     void testFdo43641();
     void testTableAutoColumnFixedSize();
+    void testFdo46361();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -210,6 +212,7 @@ void Test::run()
         {"n820504.docx", &Test::testN820504},
         {"fdo43641.docx", &Test::testFdo43641},
         {"table-auto-column-fixed-size.docx", &Test::testTableAutoColumnFixedSize},
+        {"fdo46361.docx", &Test::testFdo46361},
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -1472,6 +1475,26 @@ void Test::testTableAutoColumnFixedSize()
 
     // Width was not recognized during import when table size was 'auto'
     CPPUNIT_ASSERT_EQUAL(sal_Int32(TWIP_TO_MM100(3996)), getProperty<sal_Int32>(xTextTable, "Width"));
+}
+
+void Test::testFdo46361()
+{
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xGroupShape(xDraws->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape(xGroupShape->getByIndex(0), uno::UNO_QUERY);
+    // This was CENTER.
+    CPPUNIT_ASSERT_EQUAL(drawing::TextVerticalAdjust_TOP, getProperty<drawing::TextVerticalAdjust>(xShape, "TextVerticalAdjust"));
+    uno::Reference<text::XText> xText = uno::Reference<text::XTextRange>(xShape, uno::UNO_QUERY)->getText();
+    uno::Reference<text::XTextRange> xParagraph = getParagraphOfText(1, xText);
+    // This was LEFT.
+    CPPUNIT_ASSERT_EQUAL(style::ParagraphAdjust_CENTER, static_cast<style::ParagraphAdjust>(getProperty<sal_Int16>(xParagraph, "ParaAdjust")));
+    // This was black, not green.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x008000), getProperty<sal_Int32>(getRun(xParagraph, 1), "CharColor"));
+    // \n char was missing due to unhandled w:br.
+    CPPUNIT_ASSERT_EQUAL(OUString("text\ntext"), uno::Reference<text::XTextRange>(xGroupShape->getByIndex(1), uno::UNO_QUERY)->getString());
+    // \n chars were missing, due to unhandled multiple w:p tags.
+    CPPUNIT_ASSERT_EQUAL(OUString("text\ntext\n"), uno::Reference<text::XTextRange>(xGroupShape->getByIndex(2), uno::UNO_QUERY)->getString());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
