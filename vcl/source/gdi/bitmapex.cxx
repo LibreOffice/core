@@ -1244,20 +1244,20 @@ BitmapEx VCL_DLLPUBLIC createBlendFrame(
 
     if(aLastSize == rSize
         && nLastAlpha == nAlpha
-        && aLastColorTopLeft == aLastColorTopLeft
-        && aLastColorTopRight == aLastColorTopRight
-        && aLastColorBottomRight == aLastColorBottomRight
-        && aLastColorBottomLeft == aLastColorBottomLeft)
+        && aLastColorTopLeft == aColorTopLeft
+        && aLastColorTopRight == aColorTopRight
+        && aLastColorBottomRight == aColorBottomRight
+        && aLastColorBottomLeft == aColorBottomLeft)
     {
         return aLastResult;
     }
 
     aLastSize = rSize;
     nLastAlpha = nAlpha;
-    aLastColorTopLeft = aLastColorTopLeft;
-    aLastColorTopRight = aLastColorTopRight;
-    aLastColorBottomRight = aLastColorBottomRight;
-    aLastColorBottomLeft = aLastColorBottomLeft;
+    aLastColorTopLeft = aColorTopLeft;
+    aLastColorTopRight = aColorTopRight;
+    aLastColorBottomRight = aColorBottomRight;
+    aLastColorBottomLeft = aColorBottomLeft;
     aLastResult.Clear();
 
     const long nW(rSize.Width());
