@@ -8,11 +8,14 @@
  */
 package org.libreoffice.impressremote;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuItem;
 
 public class ComputersActivity extends SherlockFragmentActivity {
     @Override
@@ -50,6 +53,30 @@ public class ComputersActivity extends SherlockFragmentActivity {
             ComputersFragment.Type.WIFI);
 
         return buildActionBarTab(aFragment, R.string.title_wifi);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu aMenu) {
+        getSupportMenuInflater().inflate(R.menu.menu_action_bar_computers, aMenu);
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem aMenuItem) {
+        switch (aMenuItem.getItemId()) {
+            case R.id.menu_licenses:
+                callLicensesActivity();
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(aMenuItem);
+        }
+    }
+
+    private void callLicensesActivity() {
+        Intent aIntent = new Intent(this, LicensesActivity.class);
+        startActivity(aIntent);
     }
 }
 

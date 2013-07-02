@@ -68,5 +68,8 @@
     <string name="title_computers">Computers</string>
     <string name="title_bluetooth" translatable="false">Bluetooth</string>
     <string name="title_wifi" translatable="false">WiFi</string>
+    <string name="title_licenses">Open source licenses</string>
+
+    <string name="menu_licenses">Open source licenses</string>
 
 </resources>

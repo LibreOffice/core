@@ -63,6 +63,11 @@
             android:label="@string/reconnect">
         </activity>
 
+        <activity
+            android:name=".LicensesActivity"
+            android:label="@string/title_licenses">
+        </activity>
+
         <service
             android:name=".communication.CommunicationService"
             android:label="@string/startpresentation_title">
