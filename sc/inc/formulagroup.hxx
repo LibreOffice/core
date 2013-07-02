@@ -30,9 +30,8 @@ struct FormulaGroupContext : boost::noncopyable
 };
 
 /**
- * All the vectorized formula calculation code should be collected here.
- *
- * Abstract base class for formula group interpreters, and a factory.
+ * Abstract base class for vectorised formula group interpreters,
+ * plus a global instance factory.
  */
 class SC_DLLPUBLIC FormulaGroupInterpreter
 {

@@ -20,6 +20,8 @@
 
 #include <vector>
 
+#define USE_DUMMY_INTERPRETER 1
+
 namespace sc {
 
 ScMatrixRef FormulaGroupInterpreterSoftware::inverseMatrix(const ScMatrix& /*rMat*/)
@@ -108,13 +110,60 @@ bool FormulaGroupInterpreterSoftware::interpret(ScDocument& rDoc, const ScAddres
 namespace opencl {
     extern sc::FormulaGroupInterpreter *createFormulaGroupInterpreter();
 }
-
 FormulaGroupInterpreter *FormulaGroupInterpreter::msInstance = NULL;
+
+#if USE_DUMMY_INTERPRETER
+class FormulaGroupInterpreterDummy : public FormulaGroupInterpreter
+{
+    enum Mode {
+        WRITE_OUTPUT = 0
+    };
+    Mode meMode;
+public:
+    FormulaGroupInterpreterDummy()
+    {
+        const char *pValue = getenv("FORMULA_GROUP_DUMMY");
+        meMode = static_cast<Mode>(OString(pValue, strlen(pValue)).toInt32());
+        fprintf(stderr, "Using Dummy Formula Group interpreter mode %d\n", (int)meMode);
+    }
+
+    virtual ScMatrixRef inverseMatrix(const ScMatrix& /*rMat*/)
+    {
+        return ScMatrixRef();
+    }
+
+    virtual bool interpret(ScDocument& rDoc, const ScAddress& rTopPos,
+                           const ScFormulaCellGroupRef& xGroup,
+                           ScTokenArray& rCode)
+    {
+        (void)rCode;
+
+        // Write simple data back into the sheet
+        if (meMode == WRITE_OUTPUT)
+        {
+            double *pDoubles = new double[xGroup->mnLength];
+            for (sal_Int32 i = 0; i < xGroup->mnLength; i++)
+                pDoubles[i] = 42.0 + i;
+            rDoc.SetFormulaResults(rTopPos, pDoubles, xGroup->mnLength);
+            delete [] pDoubles;
+        }
+        return true;
+    }
+};
+#endif
 
 /// load and/or configure the correct formula group interpreter
 FormulaGroupInterpreter *FormulaGroupInterpreter::getStatic()
 {
     static bool bOpenCLEnabled = false;
+
+#if USE_DUMMY_INTERPRETER
+    if (getenv("FORMULA_GROUP_DUMMY"))
+    {
+        delete msInstance;
+        return msInstance = new sc::FormulaGroupInterpreterDummy();
+    }
+#endif
 
     if ( msInstance &&
          bOpenCLEnabled != ScInterpreter::GetGlobalConfig().mbOpenCLEnabled )
