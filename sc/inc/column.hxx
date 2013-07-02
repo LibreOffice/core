@@ -44,6 +44,7 @@ namespace sc {
     class CopyToClipContext;
     class CopyToDocContext;
     class MixDocContext;
+    class ColumnSpanSet;
     struct ColumnBlockPosition;
     class SingleColumnSpanSet;
 }
@@ -116,7 +117,6 @@ class ScColumn
 
 friend class ScDocument;                    // for FillInfo
 friend class ScTable;
-friend class ScDocumentIterator;
 friend class ScValueIterator;
 friend class ScHorizontalValueIterator;
 friend class ScDBQueryDataIterator;
@@ -127,6 +127,7 @@ friend class ScHorizontalAttrIterator;
 friend class ScColumnTextWidthIterator;
 friend class ScDocumentImport;
 friend class sc::SingleColumnSpanSet;
+friend class sc::ColumnSpanSet;
 
     ScColumn(const ScColumn&); // disabled
     ScColumn& operator= (const ScColumn&); // disabled
@@ -242,6 +243,7 @@ public:
     void        SwapCol(ScColumn& rCol);
     void        MoveTo(SCROW nStartRow, SCROW nEndRow, ScColumn& rCol);
 
+    void MarkSubTotalCells( sc::ColumnSpanSet& rSet, SCROW nRow1, SCROW nRow2, bool bVal ) const;
 
     bool HasEditCells(SCROW nStartRow, SCROW nEndRow, SCROW& rFirst);
 
@@ -406,6 +408,8 @@ public:
 
     void        ClearSelectionItems( const sal_uInt16* pWhich, const ScMarkData& rMark );
     void        ChangeSelectionIndent( bool bIncrement, const ScMarkData& rMark );
+
+    size_t CountNumericCells( sc::ColumnBlockConstPosition& rPos, SCROW nRow1, SCROW nRow2 ) const;
 
     long GetNeededSize(
         SCROW nRow, OutputDevice* pDev, double nPPTX, double nPPTY,

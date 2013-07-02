@@ -194,7 +194,7 @@ sal_uInt8 ScDocument::GetRangeScriptType(
 
 sal_uInt8 ScDocument::GetRangeScriptType( const ScRangeList& rRanges )
 {
-    sc::ColumnSpanSet aSet;
+    sc::ColumnSpanSet aSet(false);
     for (size_t i = 0, n = rRanges.size(); i < n; ++i)
     {
         const ScRange& rRange = *rRanges[i];
@@ -206,7 +206,7 @@ sal_uInt8 ScDocument::GetRangeScriptType( const ScRangeList& rRanges )
     }
 
     ScriptTypeAggregator aAction(*this);
-    aSet.executeFromTop(aAction);
+    aSet.executeAction(aAction);
     return aAction.getScriptType();
 }
 

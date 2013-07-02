@@ -466,6 +466,33 @@ void ScColumn::ChangeSelectionIndent( bool bIncrement, const ScMarkData& rMark )
     }
 }
 
+namespace {
+
+class NumericCellCounter
+{
+    size_t mnCount;
+public:
+    NumericCellCounter() : mnCount(0) {}
+
+    void operator() (const sc::CellStoreType::value_type& rNode, size_t nOffset, size_t nDataSize)
+    {
+        if (rNode.type != sc::element_type_numeric)
+            return;
+
+        mnCount += nDataSize;
+    }
+
+    size_t getCount() const { return mnCount; }
+};
+
+}
+
+size_t ScColumn::CountNumericCells( sc::ColumnBlockConstPosition& rPos, SCROW nRow1, SCROW nRow2 ) const
+{
+    NumericCellCounter aFunc;
+    rPos.miCellPos = sc::ParseBlock(rPos.miCellPos, maCells, aFunc, nRow1, nRow2);
+    return aFunc.getCount();
+}
 
 void ScColumn::ClearSelectionItems( const sal_uInt16* pWhich,const ScMarkData& rMark )
 {
@@ -2151,6 +2178,33 @@ void ScColumn::MoveTo(SCROW nStartRow, SCROW nEndRow, ScColumn& rCol)
             pDocument->AreaBroadcast(aHint);
         }
     }
+}
+
+namespace {
+
+class SubTotalCellPicker
+{
+    sc::ColumnSpanSet& mrSet;
+    SCTAB mnTab;
+    SCCOL mnCol;
+    bool mbVal;
+public:
+    SubTotalCellPicker(sc::ColumnSpanSet& rSet, SCTAB nTab, SCCOL nCol, bool bVal) :
+        mrSet(rSet), mnTab(nTab), mnCol(nCol), mbVal(bVal) {}
+
+    void operator() (size_t nRow, const ScFormulaCell* pCell)
+    {
+        if (pCell->IsSubTotal())
+            mrSet.set(mnTab, mnCol, nRow, mbVal);
+    }
+};
+
+}
+
+void ScColumn::MarkSubTotalCells( sc::ColumnSpanSet& rSet, SCROW nRow1, SCROW nRow2, bool bVal ) const
+{
+    SubTotalCellPicker aFunc(rSet, nTab, nCol, bVal);
+    sc::ParseFormula(maCells.begin(), maCells, nRow1, nRow2, aFunc);
 }
 
 namespace {

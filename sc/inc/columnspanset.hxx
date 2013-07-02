@@ -16,8 +16,10 @@
 #include <mdds/flat_segment_tree.hpp>
 #include <boost/noncopyable.hpp>
 
+class ScDocument;
 class ScColumn;
 class ScMarkData;
+class ScRange;
 
 namespace sc {
 
@@ -30,12 +32,22 @@ struct ColumnBlockConstPosition;
 class ColumnSpanSet : boost::noncopyable
 {
     typedef mdds::flat_segment_tree<SCROW, bool> ColumnSpansType;
-    typedef std::vector<ColumnSpansType*> TableType;
+
+    struct ColumnType
+    {
+        ColumnSpansType maSpans;
+        ColumnSpansType::const_iterator miPos;
+
+        ColumnType(SCROW nStart, SCROW nEnd, bool bInit);
+    };
+
+    typedef std::vector<ColumnType*> TableType;
     typedef std::vector<TableType*> DocType;
 
     DocType maDoc;
+    bool mbInit;
 
-    ColumnSpansType& getColumnSpans(SCTAB nTab, SCCOL nCol);
+    ColumnType& getColumn(SCTAB nTab, SCCOL nCol);
 
 public:
     class Action
@@ -46,12 +58,23 @@ public:
         virtual void execute(const ScAddress& rPos, SCROW nLength, bool bVal) = 0;
     };
 
+    class ColumnAction
+    {
+    public:
+        virtual ~ColumnAction() = 0;
+        virtual void startColumn(ScColumn* pCol) = 0;
+        virtual void execute(SCROW nRow1, SCROW nRow2, bool bVal) = 0;
+    };
+
+    ColumnSpanSet(bool bInit);
     ~ColumnSpanSet();
 
     void set(SCTAB nTab, SCCOL nCol, SCROW nRow, bool bVal);
     void set(SCTAB nTab, SCCOL nCol, SCROW nRow1, SCROW nRow2, bool bVal);
+    void set(const ScRange& rRange, bool bVal);
 
-    void executeFromTop(Action& ac) const;
+    void executeAction(Action& ac) const;
+    void executeColumnAction(ScDocument& rDoc, ColumnAction& ac) const;
 };
 
 /**

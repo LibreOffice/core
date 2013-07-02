@@ -3538,8 +3538,7 @@ void ScDocument::AddTableOpFormulaCell( ScFormulaCell* pCell )
 void ScDocument::CalcAll()
 {
     ClearLookupCaches();    // Ensure we don't deliver zombie data.
-    bool bOldAutoCalc = GetAutoCalc();
-    SetAutoCalc( true );
+    sc::AutoCalcSwitch aSwitch(*this, true);
     TableContainer::iterator it = maTabs.begin();
     for (; it != maTabs.end(); ++it)
         if (*it)
@@ -3548,7 +3547,6 @@ void ScDocument::CalcAll()
         if (*it)
             (*it)->CalcAll();
     ClearFormulaTree();
-    SetAutoCalc( bOldAutoCalc );
 }
 
 
@@ -5923,6 +5921,19 @@ void ScDocument::SetSubTotalCellsDirty(const ScRange& rDirtyRange)
 
     SetAutoCalc(bOldRecalc);
     maSubTotalCells.swap(aNewSet); // update the list.
+}
+
+void ScDocument::MarkSubTotalCells( sc::ColumnSpanSet& rSet, const ScRange& rRange, bool bVal ) const
+{
+    for (SCTAB nTab = rRange.aStart.Tab(); nTab <= rRange.aEnd.Tab(); ++nTab)
+    {
+        const ScTable* pTab = FetchTable(nTab);
+        if (!pTab)
+            continue;
+
+        pTab->MarkSubTotalCells(
+            rSet, rRange.aStart.Col(), rRange.aStart.Row(), rRange.aEnd.Col(), rRange.aEnd.Row(), bVal);
+    }
 }
 
 sal_uInt16 ScDocument::GetTextWidth( const ScAddress& rPos ) const

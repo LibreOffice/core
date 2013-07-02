@@ -53,7 +53,7 @@ ColumnBlockPosition* StartListeningContext::getBlockPosition(SCTAB nTab, SCCOL n
 }
 
 EndListeningContext::EndListeningContext(ScDocument& rDoc) :
-    mrDoc(rDoc), mpPosSet(new ColumnBlockPositionSet(rDoc)) {}
+    mrDoc(rDoc), maSet(false), mpPosSet(new ColumnBlockPositionSet(rDoc)) {}
 
 ScDocument& EndListeningContext::getDoc()
 {
@@ -73,7 +73,7 @@ void EndListeningContext::addEmptyBroadcasterPosition(SCTAB nTab, SCCOL nCol, SC
 void EndListeningContext::purgeEmptyBroadcasters()
 {
     PurgeAction aAction(mrDoc);
-    maSet.executeFromTop(aAction);
+    maSet.executeAction(aAction);
 }
 
 }

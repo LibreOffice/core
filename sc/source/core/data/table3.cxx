@@ -55,6 +55,7 @@
 #include "cellvalue.hxx"
 #include "tokenarray.hxx"
 #include "mtvcellfunc.hxx"
+#include "columnspanset.hxx"
 
 #include <vector>
 #include <boost/unordered_set.hpp>
@@ -1157,6 +1158,36 @@ bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
 
     rParam.nRow2 = nEndRow;                 // neues Ende
     return bSpaceLeft;
+}
+
+void ScTable::MarkSubTotalCells(
+    sc::ColumnSpanSet& rSet, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, bool bVal ) const
+{
+    if (!ValidCol(nCol1) || !ValidCol(nCol2))
+        return;
+
+    // Pick up all subtotal formula cells.
+    for (SCCOL nCol = nCol1; nCol <= nCol2; ++nCol)
+        aCol[nCol].MarkSubTotalCells(rSet, nRow1, nRow2, bVal);
+
+    // Pick up all filtered rows.
+    ScFlatBoolRowSegments::RangeData aFilteredSpan;
+    SCROW nRow = nRow1;
+    while (nRow <= nRow2)
+    {
+        if (!mpFilteredRows->getRangeData(nRow, aFilteredSpan))
+            // Failed for whatever reason.
+            return;
+
+        if (aFilteredSpan.mbValue)
+        {
+            // Filtered span found.
+            for (SCCOL nCol = nCol1; nCol <= nCol2; ++nCol)
+                rSet.set(nTab, nCol, nRow, aFilteredSpan.mnRow2, bVal);
+        }
+
+        nRow = aFilteredSpan.mnRow2 + 1;
+    }
 }
 
 namespace {

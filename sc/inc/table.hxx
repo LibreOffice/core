@@ -57,6 +57,7 @@ namespace sc {
     class CopyToClipContext;
     class CopyToDocContext;
     class MixDocContext;
+    class ColumnSpanSet;
     struct ColumnBlockPosition;
 }
 
@@ -203,6 +204,7 @@ friend class ScDocAttrIterator;
 friend class ScAttrRectIterator;
 friend class ScColumnTextWidthIterator;
 friend class ScDocumentImport;
+friend class sc::ColumnSpanSet;
 
 public:
                 ScTable( ScDocument* pDoc, SCTAB nNewTab, const OUString& rNewName,
@@ -230,6 +232,8 @@ public:
     bool        TestRemoveSubTotals( const ScSubTotalParam& rParam );
     void        RemoveSubTotals( ScSubTotalParam& rParam );
     bool        DoSubTotals( ScSubTotalParam& rParam );
+
+    void MarkSubTotalCells( sc::ColumnSpanSet& rSet, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, bool bVal ) const;
 
     const ScSheetEvents* GetSheetEvents() const              { return pSheetEvents; }
     void        SetSheetEvents( const ScSheetEvents* pNew );
