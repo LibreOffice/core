@@ -266,6 +266,8 @@ void GtkSalGraphics::PaintScrollbar(GtkStyleContext *context,
     gdouble          arrow1Angle;                                        // backward
     gdouble          arrow2Angle;                                        // forward
     Rectangle        arrowRect;
+    const gchar*     button1StyleClass = NULL;
+    const gchar*     button2StyleClass = NULL;
     gint            slider_width = 0;
     gint            stepper_size = 0;
     gint            stepper_spacing = 0;
@@ -319,6 +321,8 @@ void GtkSalGraphics::PaintScrollbar(GtkStyleContext *context,
         scrollbarOrientation = GTK_ORIENTATION_HORIZONTAL;
         arrow1Angle = G_PI * 3 / 2;
         arrow2Angle = G_PI / 2;
+        button1StyleClass = GTK_STYLE_CLASS_LEFT;
+        button2StyleClass = GTK_STYLE_CLASS_RIGHT;
 
         if ( has_backward )
         {
@@ -359,6 +363,8 @@ void GtkSalGraphics::PaintScrollbar(GtkStyleContext *context,
         scrollbarOrientation = GTK_ORIENTATION_VERTICAL;
         arrow1Angle = 0;
         arrow2Angle = G_PI;
+        button1StyleClass = GTK_STYLE_CLASS_TOP;
+        button2StyleClass = GTK_STYLE_CLASS_BOTTOM;
 
         if ( has_backward )
         {
@@ -434,6 +440,7 @@ void GtkSalGraphics::PaintScrollbar(GtkStyleContext *context,
         gtk_style_context_save(context);
         gtk_style_context_set_state(context, stateFlags);
         gtk_style_context_add_class(context, GTK_STYLE_CLASS_BUTTON);
+        gtk_style_context_add_class(context, button1StyleClass);
 
         gtk_render_background(context, cr,
                               button11BoundRect.Left(), button11BoundRect.Top(),
@@ -460,6 +467,7 @@ void GtkSalGraphics::PaintScrollbar(GtkStyleContext *context,
         gtk_style_context_save(context);
         gtk_style_context_set_state(context, stateFlags);
         gtk_style_context_add_class(context, GTK_STYLE_CLASS_BUTTON);
+        gtk_style_context_add_class(context, button1StyleClass);
 
         gtk_render_background(context, cr,
                               button12BoundRect.Left(), button12BoundRect.Top(),
@@ -487,6 +495,7 @@ void GtkSalGraphics::PaintScrollbar(GtkStyleContext *context,
         gtk_style_context_save(context);
         gtk_style_context_set_state(context, stateFlags);
         gtk_style_context_add_class(context, GTK_STYLE_CLASS_BUTTON);
+        gtk_style_context_add_class(context, button2StyleClass);
 
         gtk_render_background(context, cr,
                               button21BoundRect.Left(), button21BoundRect.Top(),
@@ -513,6 +522,7 @@ void GtkSalGraphics::PaintScrollbar(GtkStyleContext *context,
         gtk_style_context_save(context);
         gtk_style_context_set_state(context, stateFlags);
         gtk_style_context_add_class(context, GTK_STYLE_CLASS_BUTTON);
+        gtk_style_context_add_class(context, button2StyleClass);
 
         gtk_render_background(context, cr,
                        button22BoundRect.Left(), button22BoundRect.Top(),
