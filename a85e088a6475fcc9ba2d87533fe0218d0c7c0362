@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXn///mc\u003d",
+        "filename": "starmath/source/mathmlexport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1435,
+      "author": {
+        "id": 1000039
+      },
+      "writtenOn": "2013-07-02T09:04:13Z",
+      "side": 1,
+      "message": "This comment change is confusing... is it a horizontal or vertical brace? If that is really a horizontal one, then changing the method name would be good.",
+      "revId": "a85e088a6475fcc9ba2d87533fe0218d0c7c0362",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
