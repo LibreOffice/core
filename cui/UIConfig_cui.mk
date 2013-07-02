@@ -21,6 +21,7 @@ $(eval $(call gb_UIConfig_add_uifiles,cui,\
 	cui/uiconfig/ui/charnamepage \
 	cui/uiconfig/ui/colorpage \
 	cui/uiconfig/ui/comment \
+	cui/uiconfig/ui/formatnumberdialog \
 	cui/uiconfig/ui/gradientpage \
 	cui/uiconfig/ui/colorconfigwin \
 	cui/uiconfig/ui/effectspage \
@@ -59,8 +60,8 @@ $(eval $(call gb_UIConfig_add_uifiles,cui,\
 	cui/uiconfig/ui/optuserpage \
 	cui/uiconfig/ui/optviewpage \
 	cui/uiconfig/ui/pageformatpage \
-        cui/uiconfig/ui/paragalignpage \
-        cui/uiconfig/ui/paraindentspacing \
+	cui/uiconfig/ui/paragalignpage \
+	cui/uiconfig/ui/paraindentspacing \
 	cui/uiconfig/ui/pastespecial \
 	cui/uiconfig/ui/personalization_tab \
 	cui/uiconfig/ui/pickbulletpage \

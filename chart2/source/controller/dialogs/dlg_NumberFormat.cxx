@@ -40,7 +40,8 @@ namespace chart
 using namespace ::com::sun::star;
 
 NumberFormatDialog::NumberFormatDialog(Window* pParent, SfxItemSet& rSet)
-    : SfxSingleTabDialog(pParent, rSet)
+    : SfxSingleTabDialog(pParent, rSet, "FormatNumberDialog",
+        "cui/ui/formatnumberdialog.ui")
 {
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
     ::CreateTabPage fnCreatePage = pFact->GetTabPageCreatorFunc( RID_SVXPAGE_NUMBERFORMAT );

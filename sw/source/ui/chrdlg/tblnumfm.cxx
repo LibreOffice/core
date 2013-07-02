@@ -30,7 +30,8 @@
 #include <sfx2/tabdlg.hxx>
 
 SwNumFmtDlg::SwNumFmtDlg(Window* pParent, const SfxItemSet& rSet)
-    : SfxSingleTabDialog(pParent, rSet)
+    : SfxSingleTabDialog(pParent, rSet, "FormatNumberDialog",
+        "cui/ui/formatnumberdialog.ui")
 {
     // Create TabPage
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();

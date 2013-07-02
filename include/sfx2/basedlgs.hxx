@@ -182,7 +182,8 @@ class SFX2_DLLPUBLIC SfxSingleTabDialogBase : public SfxModalDialog
 {
 public:
     //layout ctor
-    SfxSingleTabDialogBase(Window* pParent, const SfxItemSet& rOptionsSet);
+    SfxSingleTabDialogBase(Window *pParent, const SfxItemSet& rOptionsSet,
+        const OString& rID, const OUString& rUIXMLDescription);
 
     //non-layout ctors
     SfxSingleTabDialogBase( Window* pParent, const SfxItemSet& rOptionsSet, sal_uInt16 nUniqueId );
@@ -210,8 +211,10 @@ protected:
 class SFX2_DLLPUBLIC SfxSingleTabDialog : public SfxSingleTabDialogBase
 {
 public:
-    SfxSingleTabDialog(Window* pParent, const SfxItemSet& rOptionsSet)
-        : SfxSingleTabDialogBase(pParent, rOptionsSet)
+    SfxSingleTabDialog(Window *pParent, const SfxItemSet& rOptionsSet,
+        const OString& rID = OString("SingleTabDialog"),
+        const OUString& rUIXMLDescription = OUString("sfx/ui/singletabdialog.ui"))
+        : SfxSingleTabDialogBase(pParent, rOptionsSet, rID, rUIXMLDescription)
     {
     }
     void setTabPage(SfxTabPage* pTabPage, GetTabPageRanges pRangesFunc = 0, sal_uInt32 nSettingsId = 0);

@@ -749,8 +749,9 @@ SfxSingleTabDialogBase::SfxSingleTabDialogBase
     SetInputSet( pInSet );
 }
 
-SfxSingleTabDialogBase::SfxSingleTabDialogBase(Window *pParent, const SfxItemSet& rSet)
-    : SfxModalDialog(pParent, "SingleTabDialog", "sfx/ui/singletabdialog.ui")
+SfxSingleTabDialogBase::SfxSingleTabDialogBase(Window *pParent, const SfxItemSet& rSet,
+    const OString& rID, const OUString& rUIXMLDescription)
+    : SfxModalDialog(pParent, rID, rUIXMLDescription)
     , pImpl(new SingleTabDlgImpl)
 {
     get(pOKBtn, "ok");
@@ -788,23 +789,27 @@ void SfxSingleTabDialog::setTabPage(SfxTabPage* pTabPage,
     {
         // First obtain the user data, only then Reset()
         SvtViewOptions aPageOpt( E_TABPAGE, OUString::number( GetUniqId() ) );
-        String sUserData;
         Any aUserItem = aPageOpt.GetUserItem( USERITEM_NAME );
-        OUString aTemp;
-        if ( aUserItem >>= aTemp )
-            sUserData = String( aTemp );
-        pImpl->m_pSfxPage->SetUserData( sUserData );
+        OUString sUserData;
+        aUserItem >>= sUserData;
+        pImpl->m_pSfxPage->SetUserData(sUserData);
         pImpl->m_pSfxPage->Reset( *GetInputItemSet() );
         pImpl->m_pSfxPage->Show();
 
         pHelpBtn->Show(Help::IsContextHelpEnabled());
 
-        // Set TabPage text in the Dialog
-        SetText( pImpl->m_pSfxPage->GetText() );
+        // Set TabPage text in the Dialog if there is any
+        OUString sTitle(pImpl->m_pSfxPage->GetText());
+        if (!sTitle.isEmpty())
+            SetText(sTitle);
 
-        // Dialog recieves the HelpId of TabPage
-        SetHelpId( pImpl->m_pSfxPage->GetHelpId() );
-        SetUniqueId( pImpl->m_pSfxPage->GetUniqueId() );
+        // Dialog recieves the HelpId of TabPage if there is any
+        OString sHelpId(pImpl->m_pSfxPage->GetHelpId());
+        if (!sHelpId.isEmpty())
+            SetHelpId(sHelpId);
+        OString sUniqueId(pImpl->m_pSfxPage->GetUniqueId());
+        if (!sUniqueId.isEmpty())
+            SetUniqueId(sUniqueId);
     }
 }
 
