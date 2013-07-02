@@ -2716,20 +2716,20 @@ namespace pcr
             aCoreSet.Put( aFormatter );
 
             // a tab dialog with a single page
-            ::std::auto_ptr< SfxNoLayoutSingleTabDialog > pDialog( new SfxNoLayoutSingleTabDialog( impl_getDefaultDialogParent_nothrow(), aCoreSet, 0 ) );
+            boost::scoped_ptr< SfxSingleTabDialog > xDialog(new SfxSingleTabDialog(impl_getDefaultDialogParent_nothrow(), aCoreSet));
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
             DBG_ASSERT( pFact, "CreateFactory fail!" );
             ::CreateTabPage fnCreatePage = pFact->GetTabPageCreatorFunc( RID_SVXPAGE_NUMBERFORMAT );
             if ( !fnCreatePage )
                 throw RuntimeException();   // caught below
 
-            SfxTabPage* pPage = (*fnCreatePage)( pDialog.get(), aCoreSet );
-            pDialog->SetTabPage( pPage );
+            SfxTabPage* pPage = (*fnCreatePage)( xDialog->get_content_area(), aCoreSet );
+            xDialog->setTabPage( pPage );
 
             _rClearBeforeDialog.clear();
-            if ( RET_OK == pDialog->Execute() )
+            if ( RET_OK == xDialog->Execute() )
             {
-                const SfxItemSet* pResult = pDialog->GetOutputItemSet();
+                const SfxItemSet* pResult = xDialog->GetOutputItemSet();
 
                 const SfxPoolItem* pItem = pResult->GetItem( SID_ATTR_NUMBERFORMAT_INFO );
                 const SvxNumberInfoItem* pInfoItem = dynamic_cast< const SvxNumberInfoItem* >( pItem );
