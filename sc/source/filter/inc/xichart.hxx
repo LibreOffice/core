@@ -28,7 +28,7 @@
 #include <svl/itemset.hxx>
 
 #include "rangelst.hxx"
-#include "token.hxx"
+#include "types.hxx"
 #include "xlchart.hxx"
 #include "xlstyle.hxx"
 #include "xiescher.hxx"

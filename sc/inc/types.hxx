@@ -10,6 +10,8 @@
 #ifndef SC_TYPES_HXX
 #define SC_TYPES_HXX
 
+#include "sal/types.h"
+
 #include <boost/intrusive_ptr.hpp>
 
 class ScMatrix;

@@ -23,7 +23,7 @@
 #include "cellsuno.hxx"     // for XModifyListenerArr_Impl / ScLinkListener
 #include "rangelst.hxx"
 #include "externalrefmgr.hxx"
-#include "token.hxx"
+#include "types.hxx"
 #include "chartlis.hxx"
 
 #include <svl/lstner.hxx>
