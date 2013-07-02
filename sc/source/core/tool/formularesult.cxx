@@ -273,8 +273,9 @@ bool ScFormulaResult::IsValueNoError() const
         case formula::svEmptyCell:
         case formula::svHybridValueCell:
             return true;
+        default:
+            return false;
     }
-    return false;
 }
 
 bool ScFormulaResult::IsMultiline() const
