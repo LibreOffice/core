@@ -51,7 +51,7 @@
 #define STR_WESTERN_FONT                (RC_APP_BEGIN + 77)
 #define STR_CJK_FONT                    (RC_APP_BEGIN + 78)
 #define MSG_PRINT_AS_MERGE              (RC_APP_BEGIN + 80)
-#define MSG_DATA_SOURCES_UNAVAILABLE    (RC_APP_BEGIN + 82)
+
 #define DLG_MERGE_SOURCE_UNAVAILABLE    (RC_APP_BEGIN + 83)
 
 #define ST_MERGE_SOURCE_UNAVAILABLE     1

@@ -543,13 +543,6 @@ ModalDialog DLG_MERGE_SOURCE_UNAVAILABLE
     };
 };
 
-WarningBox MSG_DATA_SOURCES_UNAVAILABLE
-{
-    HelpId = HID_DATA_SOURCES_UNAVAILABLE;
-    Buttons = WB_OK_CANCEL;
-    Message [ en-US ] = "No data source has been set up yet. You need a data source, such as a database, to supply data (for example, names and addresses) for the fields.";
-};
-
 String RID_MODULE_TOOLBOX
 {
     Text [ en-US ] = "Function Bar (viewing mode)" ;

@@ -439,7 +439,6 @@
 #define HID_MAIL_MERGE_INSERT_FIELDS                            "SW_HID_MAIL_MERGE_INSERT_FIELDS"
 #define HID_PRINT_AS_MERGE                                      "SW_HID_PRINT_AS_MERGE"
 #define HID_MERGE_SOURCE_UNAVAILABLE                            "SW_HID_MERGE_SOURCE_UNAVAILABLE"
-#define HID_DATA_SOURCES_UNAVAILABLE                            "SW_HID_DATA_SOURCES_UNAVAILABLE"
 #define HID_MODULE_TOOLBOX                                      "SW_HID_MODULE_TOOLBOX"
 #define HID_SECTION_INDENTS_PAGE                                "SW_HID_SECTION_INDENTS_PAGE"
 

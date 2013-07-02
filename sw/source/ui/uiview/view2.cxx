@@ -2281,11 +2281,11 @@ void SwView::GenerateFormLetter(sal_Bool bUseCurrentDocument)
             if ( lcl_NeedAdditionalDataSource( xDBContext ) )
             {
                 // no data sources are available - create a new one
-                WarningBox aWarning(
-                            &GetViewFrame()->GetWindow(),
-                            SW_RES(MSG_DATA_SOURCES_UNAVAILABLE));
+                MessageDialog aQuery(&GetViewFrame()->GetWindow(),
+                    "DataSourcesUnavailableDialog",
+                    "modules/swriter/ui/datasourcesunavailabledialog.ui");
                 // no cancel allowed
-                if ( RET_OK != aWarning.Execute() )
+                if (RET_OK != aQuery.Execute())
                     return;
                 bCallAddressPilot = sal_True;
             }
