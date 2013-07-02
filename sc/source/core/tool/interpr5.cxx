@@ -1597,30 +1597,6 @@ void ScInterpreter::ScPow()
 
 namespace {
 
-bool mergeArray( std::vector<double>& rRes, const std::vector<double>& rOther )
-{
-    if (rRes.size() != rOther.size())
-        return false;
-
-    double fNan;
-    rtl::math::setNan(&fNan);
-
-    std::vector<double>::iterator it = rRes.begin(), itEnd = rRes.end();
-    std::vector<double>::const_iterator itOther = rOther.begin();
-    for (; it != itEnd; ++it, ++itOther)
-    {
-        if (rtl::math::isNan(*it) || rtl::math::isNan(*itOther))
-        {
-            *it = fNan;
-            continue;
-        }
-
-        *it *= *itOther;
-    }
-
-    return true;
-}
-
 class SumValues : std::unary_function<double, void>
 {
     double mfSum;
