@@ -18,6 +18,15 @@
  */
 
 
+#ifdef extents
+#undef extents
+#endif
+#define extents dummy2_extents
+#ifdef indices
+#undef indices
+#endif
+#define indices dummy2_indices
+
 #include "scitems.hxx"
 #include <editeng/eeitem.hxx>
 

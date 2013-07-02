@@ -17,6 +17,15 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#ifdef extents
+#undef extents
+#endif
+#define extents dummy1_extents
+#ifdef indices
+#undef indices
+#endif
+#define indices dummy1_indices
+
 #include "AccessibleCsvControl.hxx"
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleRelationType.hpp>
