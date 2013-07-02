@@ -21,6 +21,7 @@ complex expression, operator precedence may mean the result is actually differen
 This can be easily adjusted for different modifications to a function:
 - replace CallExpr with CXXOperatorCallExpr or CXXMemberCallExpr
 - check different names or arguments
+- change getDirectCallee() to getCallee()
 - etc.
 */
 
@@ -53,6 +54,10 @@ bool ChangeFunctionCalls::VisitCallExpr( const CallExpr* call )
     {
     if( ignoreLocation( call ))
         return true;
+    // Using getDirectCallee() here means that we find only calls
+    // that call the function directly (i.e. not using a pointer, for example).
+    // Use getCallee() to include also those :
+    //    if( const FunctionDecl* func = dyn_cast_or_null< FunctionDecl >( call->getCalleeDecl()))
     if( const FunctionDecl* func = call->getDirectCallee())
         {
         // Optimize, getQualifiedNameAsString() is reportedly expensive,
