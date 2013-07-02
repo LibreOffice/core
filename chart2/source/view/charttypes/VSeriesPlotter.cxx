@@ -987,8 +987,7 @@ void VSeriesPlotter::createRegressionCurvesShapes( VDataSeries& rVDataSeries,
         double aExtrapolateForward = 0.0;
         double aExtrapolateBackward = 0.0;
         sal_Bool aForceIntercept = false;
-        double aInterceptValue;
-        rtl::math::setNan(&aInterceptValue);
+        double aInterceptValue = 0.0;
 
         if ( xProperties.is() )
         {
