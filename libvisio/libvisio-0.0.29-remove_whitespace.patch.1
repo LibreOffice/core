@@ -1,0 +1,20 @@
+--- a/src/lib/libvisio_utils.cpp
++++ b/src/lib/libvisio_utils.cpp
+@@ -33,7 +33,6 @@
+ #include "libvisio_utils.h"
+ 
+ #include <boost/archive/iterators/binary_from_base64.hpp>
+-#include <boost/archive/iterators/remove_whitespace.hpp>
+ #include <boost/archive/iterators/transform_width.hpp>
+ 
+ uint8_t libvisio::readU8(WPXInputStream *input)
+@@ -126,8 +125,7 @@ double libvisio::readDouble(WPXInputStream *input)
+ void libvisio::appendFromBase64(WPXBinaryData &data, const unsigned char *base64String, size_t base64StringLength)
+ {
+   typedef boost::archive::iterators::transform_width<
+-  boost::archive::iterators::binary_from_base64<
+-  boost::archive::iterators::remove_whitespace< const char * > >, 8, 6 > base64_decoder;
++  boost::archive::iterators::binary_from_base64< const char * >, 8, 6 > base64_decoder;
+ 
+   std::vector<unsigned char> buffer;
+   std::copy(base64_decoder(base64String), base64_decoder(base64String + base64StringLength), std::back_inserter(buffer));
