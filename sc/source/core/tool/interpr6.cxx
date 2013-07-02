@@ -18,8 +18,17 @@
  */
 
 
-#include <rtl/logfile.hxx>
 #include "interpre.hxx"
+#include "columnspanset.hxx"
+#include "column.hxx"
+#include "document.hxx"
+#include "cellvalue.hxx"
+#include "dociter.hxx"
+
+#include "formula/token.hxx"
+#include <rtl/logfile.hxx>
+
+using namespace formula;
 
 double const fHalfMachEps = 0.5 * ::std::numeric_limits<double>::epsilon();
 
@@ -200,6 +209,770 @@ double ScInterpreter::GetGammaDist( double fX, double fAlpha, double fLambda )
         return 0.0;
     else
         return GetLowRegIGamma( fAlpha, fX / fLambda);
+}
+
+namespace {
+
+class FuncCount : public sc::ColumnSpanSet::ColumnAction
+{
+    sc::ColumnBlockConstPosition maPos;
+    ScColumn* mpCol;
+    size_t mnCount;
+    sal_uInt32 mnNumFmt;
+
+public:
+    FuncCount() : mnCount(0), mnNumFmt(0) {}
+
+    virtual void startColumn(ScColumn* pCol)
+    {
+        mpCol = pCol;
+        mpCol->InitBlockPosition(maPos);
+    }
+
+    virtual void execute(SCROW nRow1, SCROW nRow2, bool bVal)
+    {
+        if (!bVal)
+            return;
+
+        mnCount += mpCol->CountNumericCells(maPos, nRow1, nRow2);
+        mnNumFmt = mpCol->GetNumberFormat(nRow2);
+    };
+
+    size_t getCount() const { return mnCount; }
+    sal_uInt32 getNumberFormat() const { return mnNumFmt; }
+};
+
+class FuncSum : public sc::ColumnSpanSet::ColumnAction
+{
+    sc::ColumnBlockConstPosition maPos;
+    ScColumn* mpCol;
+    double mfSum;
+    sal_uInt32 mnNumFmt;
+
+public:
+    FuncSum() : mfSum(0.0), mnNumFmt(0) {}
+
+    virtual void startColumn(ScColumn* pCol)
+    {
+        mpCol = pCol;
+        mpCol->InitBlockPosition(maPos);
+    }
+
+    virtual void execute(SCROW nRow1, SCROW nRow2, bool bVal)
+    {
+        if (!bVal)
+            return;
+
+        mfSum += mpCol->SumNumericCells(maPos, nRow1, nRow2);
+        mnNumFmt = mpCol->GetNumberFormat(nRow2);
+    };
+
+    double getSum() const { return mfSum; }
+    sal_uInt32 getNumberFormat() const { return mnNumFmt; }
+};
+
+void IterateMatrix(
+    const ScMatrixRef& pMat, ScIterFunc eFunc, bool bTextAsZero,
+    sal_uLong& rCount, short& rFuncFmtType, double& fRes, double& fMem, bool& bNull)
+{
+    if (!pMat)
+        return;
+
+    rFuncFmtType = NUMBERFORMAT_NUMBER;
+    switch (eFunc)
+    {
+        case ifAVERAGE:
+        case ifSUM:
+        {
+            ScMatrix::IterateResult aRes = pMat->Sum(bTextAsZero);
+            if (bNull)
+            {
+                bNull = false;
+                fMem = aRes.mfFirst;
+                fRes += aRes.mfRest;
+            }
+            else
+                fRes += aRes.mfFirst + aRes.mfRest;
+            rCount += aRes.mnCount;
+        }
+        break;
+        case ifCOUNT:
+            rCount += pMat->Count(bTextAsZero);
+        break;
+        case ifCOUNT2:
+            rCount += pMat->Count(true);
+        break;
+        case ifPRODUCT:
+        {
+            ScMatrix::IterateResult aRes = pMat->Product(bTextAsZero);
+            fRes *= aRes.mfRest;
+            rCount += aRes.mnCount;
+        }
+        break;
+        case ifSUMSQ:
+        {
+            ScMatrix::IterateResult aRes = pMat->SumSquare(bTextAsZero);
+            fRes += aRes.mfRest;
+            rCount += aRes.mnCount;
+        }
+        break;
+        default:
+            ;
+    }
+}
+
+}
+
+double ScInterpreter::IterateParameters( ScIterFunc eFunc, bool bTextAsZero )
+{
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::IterateParameters" );
+    short nParamCount = GetByte();
+    double fRes = ( eFunc == ifPRODUCT ) ? 1.0 : 0.0;
+    double fVal = 0.0;
+    double fMem = 0.0; // first numeric value.
+    bool bNull = true;
+    sal_uLong nCount = 0;
+    ScAddress aAdr;
+    ScRange aRange;
+    size_t nRefInList = 0;
+    if ( nGlobalError && ( eFunc == ifCOUNT2 || eFunc == ifCOUNT ) )
+        nGlobalError = 0;
+    while (nParamCount-- > 0)
+    {
+        switch (GetStackType())
+        {
+            case svString:
+            {
+                if( eFunc == ifCOUNT )
+                {
+                    String aStr( PopString() );
+                    sal_uInt32 nFIndex = 0;                 // damit default Land/Spr.
+                    if ( bTextAsZero || pFormatter->IsNumberFormat(aStr, nFIndex, fVal))
+                        nCount++;
+                }
+                else
+                {
+                    switch ( eFunc )
+                    {
+                        case ifAVERAGE:
+                        case ifSUM:
+                        case ifSUMSQ:
+                        case ifPRODUCT:
+                        {
+                            if ( bTextAsZero )
+                            {
+                                Pop();
+                                nCount++;
+                                if ( eFunc == ifPRODUCT )
+                                    fRes = 0.0;
+                            }
+                            else
+                            {
+                                while (nParamCount-- > 0)
+                                    Pop();
+                                SetError( errNoValue );
+                            }
+                        }
+                        break;
+                        default:
+                            Pop();
+                            nCount++;
+                    }
+                }
+            }
+            break;
+            case svDouble    :
+                fVal = GetDouble();
+                nCount++;
+                switch( eFunc )
+                {
+                    case ifAVERAGE:
+                    case ifSUM:
+                        if ( bNull && fVal != 0.0 )
+                        {
+                            bNull = false;
+                            fMem = fVal;
+                        }
+                        else
+                            fRes += fVal;
+                        break;
+                    case ifSUMSQ:   fRes += fVal * fVal; break;
+                    case ifPRODUCT: fRes *= fVal; break;
+                    default: ; // nothing
+                }
+                nFuncFmtType = NUMBERFORMAT_NUMBER;
+                break;
+            case svExternalSingleRef:
+            {
+                ScExternalRefCache::TokenRef pToken;
+                ScExternalRefCache::CellFormat aFmt;
+                PopExternalSingleRef(pToken, &aFmt);
+                if (nGlobalError && (eFunc == ifCOUNT2 || eFunc == ifCOUNT))
+                {
+                    nGlobalError = 0;
+                    if ( eFunc == ifCOUNT2 )
+                        ++nCount;
+                    break;
+                }
+
+                if (!pToken)
+                    break;
+
+                StackVar eType = pToken->GetType();
+                if (eFunc == ifCOUNT2)
+                {
+                    if (eType != formula::svEmptyCell)
+                        nCount++;
+                    if (nGlobalError)
+                        nGlobalError = 0;
+                }
+                else if (eType == formula::svDouble)
+                {
+                    nCount++;
+                    fVal = pToken->GetDouble();
+                    if (aFmt.mbIsSet)
+                    {
+                        nFuncFmtType = aFmt.mnType;
+                        nFuncFmtIndex = aFmt.mnIndex;
+                    }
+                    switch( eFunc )
+                    {
+                        case ifAVERAGE:
+                        case ifSUM:
+                            if ( bNull && fVal != 0.0 )
+                            {
+                                bNull = false;
+                                fMem = fVal;
+                            }
+                            else
+                                fRes += fVal;
+                            break;
+                        case ifSUMSQ:   fRes += fVal * fVal; break;
+                        case ifPRODUCT: fRes *= fVal; break;
+                        case ifCOUNT:
+                            if ( nGlobalError )
+                            {
+                                nGlobalError = 0;
+                                nCount--;
+                            }
+                            break;
+                        default: ; // nothing
+                    }
+                }
+                else if (bTextAsZero && eType == formula::svString)
+                {
+                    nCount++;
+                    if ( eFunc == ifPRODUCT )
+                        fRes = 0.0;
+                }
+            }
+            break;
+            case svSingleRef :
+            {
+                PopSingleRef( aAdr );
+                if ( nGlobalError && ( eFunc == ifCOUNT2 || eFunc == ifCOUNT ) )
+                {
+                    nGlobalError = 0;
+                    if ( eFunc == ifCOUNT2 )
+                        ++nCount;
+                    break;
+                }
+                if (glSubTotal && pDok->RowFiltered( aAdr.Row(), aAdr.Tab()))
+                {
+                    break;
+                }
+                ScRefCellValue aCell;
+                aCell.assign(*pDok, aAdr);
+                if (!aCell.isEmpty())
+                {
+                    if( eFunc == ifCOUNT2 )
+                    {
+                        CellType eCellType = aCell.meType;
+                        if (eCellType != CELLTYPE_NONE)
+                            nCount++;
+                        if ( nGlobalError )
+                            nGlobalError = 0;
+                    }
+                    else if (aCell.hasNumeric())
+                    {
+                        nCount++;
+                        fVal = GetCellValue(aAdr, aCell);
+                        CurFmtToFuncFmt();
+                        switch( eFunc )
+                        {
+                            case ifAVERAGE:
+                            case ifSUM:
+                                if ( bNull && fVal != 0.0 )
+                                {
+                                    bNull = false;
+                                    fMem = fVal;
+                                }
+                                else
+                                    fRes += fVal;
+                                break;
+                            case ifSUMSQ:   fRes += fVal * fVal; break;
+                            case ifPRODUCT: fRes *= fVal; break;
+                            case ifCOUNT:
+                                if ( nGlobalError )
+                                {
+                                    nGlobalError = 0;
+                                    nCount--;
+                                }
+                                break;
+                            default: ; // nothing
+                        }
+                    }
+                    else if (bTextAsZero && aCell.hasString())
+                    {
+                        nCount++;
+                        if ( eFunc == ifPRODUCT )
+                            fRes = 0.0;
+                    }
+                }
+            }
+            break;
+            case svDoubleRef :
+            case svRefList :
+            {
+                PopDoubleRef( aRange, nParamCount, nRefInList);
+                if ( nGlobalError && ( eFunc == ifCOUNT2 || eFunc == ifCOUNT ) )
+                {
+                    nGlobalError = 0;
+                    if ( eFunc == ifCOUNT2 )
+                        ++nCount;
+                    break;
+                }
+                if( eFunc == ifCOUNT2 )
+                {
+                    ScCellIterator aIter( pDok, aRange, glSubTotal );
+                    for (bool bHas = aIter.first(); bHas; bHas = aIter.next())
+                    {
+                        if (!aIter.hasEmptyData())
+                            ++nCount;
+                    }
+
+                    if ( nGlobalError )
+                        nGlobalError = 0;
+                }
+                else
+                {
+                    ScValueIterator aValIter( pDok, aRange, glSubTotal, bTextAsZero );
+                    sal_uInt16 nErr = 0;
+                    if (aValIter.GetFirst(fVal, nErr))
+                    {
+                        // placed the loop on the inside for performance reasons:
+                        aValIter.GetCurNumFmtInfo( nFuncFmtType, nFuncFmtIndex );
+                        switch( eFunc )
+                        {
+                            case ifAVERAGE:
+                            case ifSUM:
+                                    do
+                                    {
+                                        SetError(nErr);
+                                        if ( bNull && fVal != 0.0 )
+                                        {
+                                            bNull = false;
+                                            fMem = fVal;
+                                        }
+                                        else
+                                            fRes += fVal;
+                                        nCount++;
+                                    }
+                                    while (aValIter.GetNext(fVal, nErr));
+                                    break;
+                            case ifSUMSQ:
+                                    do
+                                    {
+                                        SetError(nErr);
+                                        fRes += fVal * fVal;
+                                        nCount++;
+                                    }
+                                    while (aValIter.GetNext(fVal, nErr));
+                                    break;
+                            case ifPRODUCT:
+                                    do
+                                    {
+                                        SetError(nErr);
+                                        fRes *= fVal;
+                                        nCount++;
+                                    }
+                                    while (aValIter.GetNext(fVal, nErr));
+                                    break;
+                            case ifCOUNT:
+                                    do
+                                    {
+                                        if ( !nErr )
+                                            nCount++;
+                                    }
+                                    while (aValIter.GetNext(fVal, nErr));
+                                    break;
+                            default: ;  // nothing
+                        }
+                        SetError( nErr );
+                    }
+                }
+            }
+            break;
+            case svExternalDoubleRef:
+            {
+                ScMatrixRef pMat;
+                PopExternalDoubleRef(pMat);
+                if (nGlobalError)
+                    break;
+
+                IterateMatrix(pMat, eFunc, bTextAsZero, nCount, nFuncFmtType, fRes, fMem, bNull);
+            }
+            break;
+            case svMatrix :
+            {
+                ScMatrixRef pMat = PopMatrix();
+                IterateMatrix(pMat, eFunc, bTextAsZero, nCount, nFuncFmtType, fRes, fMem, bNull);
+            }
+            break;
+            case svError:
+            {
+                PopError();
+                if ( eFunc == ifCOUNT )
+                {
+                    nGlobalError = 0;
+                }
+                else if ( eFunc == ifCOUNT2 )
+                {
+                    nCount++;
+                    nGlobalError = 0;
+                }
+            }
+            break;
+            default :
+                while (nParamCount-- > 0)
+                    PopError();
+                SetError(errIllegalParameter);
+        }
+    }
+    switch( eFunc )
+    {
+        case ifSUM:     fRes = ::rtl::math::approxAdd( fRes, fMem ); break;
+        case ifAVERAGE: fRes = div(::rtl::math::approxAdd( fRes, fMem ), nCount); break;
+        case ifCOUNT2:
+        case ifCOUNT:   fRes  = nCount; break;
+        case ifPRODUCT: if ( !nCount ) fRes = 0.0; break;
+        default: ; // nothing
+    }
+    // Bei Summen etc. macht ein bool-Ergebnis keinen Sinn
+    // und Anzahl ist immer Number (#38345#)
+    if( eFunc == ifCOUNT || nFuncFmtType == NUMBERFORMAT_LOGICAL )
+        nFuncFmtType = NUMBERFORMAT_NUMBER;
+    return fRes;
+}
+
+
+void ScInterpreter::ScSumSQ()
+{
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScSumSQ" );
+    PushDouble( IterateParameters( ifSUMSQ ) );
+}
+
+
+void ScInterpreter::ScSum()
+{
+    short nParamCount = GetByte();
+    double fRes = 0.0;
+    double fVal = 0.0;
+    ScAddress aAdr;
+    ScRange aRange;
+    size_t nRefInList = 0;
+    while (nParamCount-- > 0)
+    {
+        switch (GetStackType())
+        {
+            case svString:
+            {
+                while (nParamCount-- > 0)
+                    Pop();
+                SetError( errNoValue );
+            }
+            break;
+            case svDouble    :
+                fVal = GetDouble();
+                fRes += fVal;
+                nFuncFmtType = NUMBERFORMAT_NUMBER;
+                break;
+            case svExternalSingleRef:
+            {
+                ScExternalRefCache::TokenRef pToken;
+                ScExternalRefCache::CellFormat aFmt;
+                PopExternalSingleRef(pToken, &aFmt);
+
+                if (!pToken)
+                    break;
+
+                StackVar eType = pToken->GetType();
+                if (eType == formula::svDouble)
+                {
+                    fVal = pToken->GetDouble();
+                    if (aFmt.mbIsSet)
+                    {
+                        nFuncFmtType = aFmt.mnType;
+                        nFuncFmtIndex = aFmt.mnIndex;
+                    }
+
+                    fRes += fVal;
+                }
+            }
+            break;
+            case svSingleRef :
+            {
+                PopSingleRef( aAdr );
+
+                if (glSubTotal && pDok->RowFiltered( aAdr.Row(), aAdr.Tab()))
+                {
+                    break;
+                }
+                ScRefCellValue aCell;
+                aCell.assign(*pDok, aAdr);
+                if (!aCell.isEmpty())
+                {
+                    if (aCell.hasNumeric())
+                    {
+                        fVal = GetCellValue(aAdr, aCell);
+                        CurFmtToFuncFmt();
+                        fRes += fVal;
+                    }
+                }
+            }
+            break;
+            case svDoubleRef :
+            case svRefList :
+            {
+                PopDoubleRef( aRange, nParamCount, nRefInList);
+
+                sc::ColumnSpanSet aSet(false);
+                aSet.set(aRange, true);
+                if (glSubTotal)
+                    // Skip all filtered rows and subtotal formula cells.
+                    pDok->MarkSubTotalCells(aSet, aRange, false);
+
+                FuncSum aAction;
+                aSet.executeColumnAction(*pDok, aAction);
+                fRes = aAction.getSum();
+
+                // Get the number format of the last iterated cell.
+                nFuncFmtIndex = aAction.getNumberFormat();
+                nFuncFmtType = pDok->GetFormatTable()->GetType(nFuncFmtIndex);
+            }
+            break;
+            case svExternalDoubleRef:
+            {
+                ScMatrixRef pMat;
+                PopExternalDoubleRef(pMat);
+                if (nGlobalError)
+                    break;
+
+                sal_uLong nCount = 0;
+                double fMem = 0.0;
+                bool bNull = true;
+                IterateMatrix(pMat, ifSUM, false, nCount, nFuncFmtType, fRes, fMem, bNull);
+                fRes += fMem;
+            }
+            break;
+            case svMatrix :
+            {
+                ScMatrixRef pMat = PopMatrix();
+                sal_uLong nCount = 0;
+                double fMem = 0.0;
+                bool bNull = true;
+                IterateMatrix(pMat, ifSUM, false, nCount, nFuncFmtType, fRes, fMem, bNull);
+                fRes += fMem;
+            }
+            break;
+            case svError:
+            {
+                PopError();
+            }
+            break;
+            default :
+                while (nParamCount-- > 0)
+                    PopError();
+                SetError(errIllegalParameter);
+        }
+    }
+
+    if (nFuncFmtType == NUMBERFORMAT_LOGICAL)
+        nFuncFmtType = NUMBERFORMAT_NUMBER;
+
+    PushDouble(fRes);
+}
+
+
+void ScInterpreter::ScProduct()
+{
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScProduct" );
+    PushDouble( IterateParameters( ifPRODUCT ) );
+}
+
+
+void ScInterpreter::ScAverage( bool bTextAsZero )
+{
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScAverage" );
+    PushDouble( IterateParameters( ifAVERAGE, bTextAsZero ) );
+}
+
+void ScInterpreter::ScCount()
+{
+    short nParamCount = GetByte();
+    double fVal = 0.0;
+    sal_uLong nCount = 0;
+    ScAddress aAdr;
+    ScRange aRange;
+    size_t nRefInList = 0;
+    if (nGlobalError)
+        nGlobalError = 0;
+
+    while (nParamCount-- > 0)
+    {
+        switch (GetStackType())
+        {
+            case svString:
+            {
+                String aStr( PopString() );
+                sal_uInt32 nFIndex = 0;                 // damit default Land/Spr.
+                if (pFormatter->IsNumberFormat(aStr, nFIndex, fVal))
+                    nCount++;
+            }
+            break;
+            case svDouble    :
+                nCount++;
+                nFuncFmtType = NUMBERFORMAT_NUMBER;
+                break;
+            case svExternalSingleRef:
+            {
+                ScExternalRefCache::TokenRef pToken;
+                ScExternalRefCache::CellFormat aFmt;
+                PopExternalSingleRef(pToken, &aFmt);
+                if (nGlobalError)
+                {
+                    nGlobalError = 0;
+                    break;
+                }
+
+                if (!pToken)
+                    break;
+
+                StackVar eType = pToken->GetType();
+                if (eType == formula::svDouble)
+                {
+                    nCount++;
+                    if (aFmt.mbIsSet)
+                    {
+                        nFuncFmtType = aFmt.mnType;
+                        nFuncFmtIndex = aFmt.mnIndex;
+                    }
+
+                    if (nGlobalError)
+                    {
+                        nGlobalError = 0;
+                        nCount--;
+                    }
+                }
+            }
+            break;
+            case svSingleRef :
+            {
+                PopSingleRef( aAdr );
+                if (nGlobalError)
+                {
+                    nGlobalError = 0;
+                    break;
+                }
+                if (glSubTotal && pDok->RowFiltered( aAdr.Row(), aAdr.Tab()))
+                {
+                    break;
+                }
+                ScRefCellValue aCell;
+                aCell.assign(*pDok, aAdr);
+                if (!aCell.isEmpty())
+                {
+                    if (aCell.hasNumeric())
+                    {
+                        nCount++;
+                        CurFmtToFuncFmt();
+                        if (nGlobalError)
+                        {
+                            nGlobalError = 0;
+                            nCount--;
+                        }
+                    }
+                }
+            }
+            break;
+            case svDoubleRef :
+            case svRefList :
+            {
+                PopDoubleRef( aRange, nParamCount, nRefInList);
+                if (nGlobalError)
+                {
+                    nGlobalError = 0;
+                    break;
+                }
+
+                sc::ColumnSpanSet aSet(false);
+                aSet.set(aRange, true);
+                if (glSubTotal)
+                    // Skip all filtered rows and subtotal formula cells.
+                    pDok->MarkSubTotalCells(aSet, aRange, false);
+
+                FuncCount aAction;
+                aSet.executeColumnAction(*pDok, aAction);
+                nCount = aAction.getCount();
+
+                // Get the number format of the last iterated cell.
+                nFuncFmtIndex = aAction.getNumberFormat();
+                nFuncFmtType = pDok->GetFormatTable()->GetType(nFuncFmtIndex);
+            }
+            break;
+            case svExternalDoubleRef:
+            {
+                ScMatrixRef pMat;
+                PopExternalDoubleRef(pMat);
+                if (nGlobalError)
+                    break;
+
+                double fMem = 0.0, fRes = 0.0;
+                bool bNull = true;
+                IterateMatrix(pMat, ifCOUNT, false, nCount, nFuncFmtType, fRes, fMem, bNull);
+            }
+            break;
+            case svMatrix :
+            {
+                ScMatrixRef pMat = PopMatrix();
+                double fMem = 0.0, fRes = 0.0;
+                bool bNull = true;
+                IterateMatrix(pMat, ifCOUNT, false, nCount, nFuncFmtType, fRes, fMem, bNull);
+            }
+            break;
+            case svError:
+            {
+                PopError();
+                nGlobalError = 0;
+            }
+            break;
+            default :
+                while (nParamCount-- > 0)
+                    PopError();
+                SetError(errIllegalParameter);
+        }
+    }
+
+    nFuncFmtType = NUMBERFORMAT_NUMBER;
+
+    PushDouble(nCount);
+}
+
+
+void ScInterpreter::ScCount2()
+{
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScCount2" );
+    PushDouble( IterateParameters( ifCOUNT2 ) );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
