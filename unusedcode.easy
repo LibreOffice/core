@@ -1,12 +1,98 @@
-Application::PostZoomEvent(unsigned long, Window*, ZoomEvent*)
-EditTextObjectImpl::SetParaAttribs(unsigned long, SfxItemSet const&)
+(anonymous namespace)::Coverage::test_start(rtl::OUString)
+(anonymous namespace)::StringToken::toInt32(int&) const
+(anonymous namespace)::StringTokenizer::StringTokenizer(rtl::OUString const&, unsigned short)
+(anonymous namespace)::StringTokenizer::getNextToken()
+(anonymous namespace)::VBATest::testMiscOLEStuff()
+AffineMatrixItem::GetAffineMatrix2D() const
+BitmapWriteAccess::DrawPolyPolygon(PolyPolygon const&)
+BitmapWriteAccess::DrawPolygon(Polygon const&)
+DbgRegisterNamedUserChannel(rtl::OUString const&, void (*)(char const*))
+EditTextObjectImpl::SetParaAttribs(int, SfxItemSet const&)
 FontSelectPatternAttributes::FontSelectPatternAttributes(PhysicalFontFace const&, Size const&, float, int, bool)
+GalleryTheme::GetStrURL() const
+ImplRegionBand::IsInside(long, long)
+ImplRegionBand::IsOver(long, long)
 LanguageTag::reset(_rtl_Locale const&)
-ScConditionalFormat::dumpInfo(rtl::OUStringBuffer&) const
-ScDocument::GetEditText(ScAddress const&) const
+LineEndLB::LineEndLB(Window*, long)
+Menu::GetItemImageAngle(unsigned short) const
+Menu::GetItemImageMirrorMode(unsigned short) const
+Menu::GetLogo() const
+Menu::SetLogo()
+Menu::SetLogo(MenuLogo const&)
+OWriteAccelatorDocumentHandler::OWriteAccelatorDocumentHandler(std::__debug::list<SvtAcceleratorConfigItem, std::allocator<SvtAcceleratorConfigItem> > const&, com::sun::star::uno::Reference<com::sun::star::xml::sax::XDocumentHandler>)
+OWriteAccelatorDocumentHandler::WriteAcceleratorDocument()
+OutputDevice::GetCanvas() const
+OutputDevice::LogicToLogic(basegfx::B2DPolyPolygon const&, MapMode const&, MapMode const&)
+OutputDevice::LogicToPixel(Region const&, MapMode const&) const
+OutputDevice::LogicToPixel(basegfx::B2DPolygon const&) const
+OutputDevice::LogicToPixel(basegfx::B2DPolygon const&, MapMode const&) const
+OutputDevice::PixelToLogic(Region const&, MapMode const&) const
+RawBitmap::RawBitmap()
+RawBitmap::~RawBitmap()
+RscCompiler::Append(rtl::OString const&, rtl::OString const&)
+Ruler::GetPageWidth() const
+SalGraphics::drawTransformedBitmap(basegfx::B2DPoint const&, basegfx::B2DPoint const&, basegfx::B2DPoint const&, SalBitmap const&, SalBitmap const*)
+ScCellIterator::getValue()
+ScCellIterator::hasNumeric() const
+ScCellValue::ScCellValue(EditTextObject const&)
+ScCellValue::ScCellValue(ScFormulaCell const&)
+ScCellValue::hasNumeric() const
+ScCellValue::hasString() const
+ScCellValue::set(EditTextObject const&)
+ScCellValue::set(ScFormulaCell const&)
+ScColumn::InitBlockPosition(sc::ColumnBlockConstPosition&) const
+ScColumn::MoveListeners(SvtBroadcaster&, int)
+ScColumn::SplitFormulaCellGroup(std::pair<mdds::__mtv::iterator_base<mdds::multi_type_vector<mdds::mtv::custom_block_func3<mdds::mtv::default_element_block<52, rtl::OUString>, mdds::mtv::noncopyable_managed_element_block<53, EditTextObject>, mdds::mtv::noncopyable_managed_element_block<54, ScFormulaCell> > >::iterator_trait, mdds::__mtv::private_data_forward_update<mdds::__mtv::iterator_value_node<unsigned long, mdds::mtv::base_element_block> > >, unsigned long> const&) const
+ScDBQueryDataIterator::DataAccessInternal::setPos(unsigned long)
+ScDPObject::ParseFilters(ScDPGetPivotDataField&, std::__debug::vector<ScDPGetPivotDataField, std::allocator<ScDPGetPivotDataField> >&, rtl::OUString const&)
+ScDocument::GetCellCount(short, short) const
+ScDocument::GetFormulaTokens(ScAddress const&) const
+ScDocument::GetStringCell(ScAddress const&) const
+ScDocument::IsEmptyData(short, short) const
+ScDocument::SetFormulaResults(ScAddress const&, double const*, unsigned long)
+ScExtIButton::GetSelected() const
+ScFormulaCell::HasColRowName() const
+ScFormulaCell::IsSharedInvariant() const
+ScGlobal::GetStandardFormat(double, SvNumberFormatter&, unsigned long, short)
+ScRefCellValue::commit(ScColumn&, int) const
+ScUndoSetCell::ScUndoSetCell(ScDocShell*, ScAddress const&, ScCellValue const&)
 ScVbaFormat<ooo::vba::excel::XStyle>::getAddIndent()
 ScVbaFormat<ooo::vba::excel::XStyle>::setAddIndent(com::sun::star::uno::Any const&)
+ServerFont::GetGlyphBitmap1(int, RawBitmap&) const
+ServerFont::GetGlyphBitmap8(int, RawBitmap&) const
+SfxAppMenuControl_Impl::RegisterControl(unsigned short, SfxModule*)
+SfxSpecialConfigError_Impl::SfxSpecialConfigError_Impl(String const&)
+SfxTemplatePanelControl::GetISfxTemplateCommon()
+SfxTemplatePanelControl::SetParagraphFamily()
+SmFontPickList::Contains(Font const&) const
+StatusBar::CopyItems(StatusBar const&)
+StatusBar::HideItems()
+StatusBar::ShowItems()
+SvFileStream::GetFileHandle() const
+SvdProgressInfo::ReportError()
+SvpSalGraphics::SvpSalGraphics()
+SvpSalGraphics::setDevice(boost::shared_ptr<basebmp::BitmapDevice>&)
+SvpSalInstance::PostEvent(SalFrame const*, void*, unsigned short)
+SvpSalInstance::PostedEventsInQueue()
+SvpSalInstance::deregisterFrame(SalFrame*)
+SvtAccessibilityOptions::GetColorValueSetColumnCount() const
+SvtAccessibilityOptions::GetEdgeBlending() const
+SvtAccessibilityOptions::GetListBoxMaximumLineCount() const
+SvtAccessibilityOptions::GetPreviewUsesCheckeredBackground() const
+SvtAccessibilityOptions::SetColorValueSetColumnCount(short)
+SvtAccessibilityOptions::SetEdgeBlending(short)
+SvtAccessibilityOptions::SetListBoxMaximumLineCount(short)
+SvtAccessibilityOptions::SetPreviewUsesCheckeredBackground(unsigned char)
+SvxGalleryItem::SvxGalleryItem(unsigned short)
+SvxNumRule::Create(SvStream&)
+SvxNumberFormat::Create(SvStream&)
+Test::test1Table1Page()
 TextEngine::GetLeftMargin() const
+ThumbnailView::DeselectItem(unsigned short)
+ThumbnailView::GetItemText(unsigned short) const
+ThumbnailView::SetColor(Color const&)
+VclMultiLineEdit::SetTextSelectable(bool)
+XclExpXFBuffer::InsertWithNumFmt(ScPatternAttr const*, short, unsigned long, bool)
 apitest::XCellRangesQuery::testQueryFormulaCells()
 apitest::XDataPilotDescriptor::testGetHiddenFields()
 apitest::XDataPilotFieldGrouping::testCreateDateGroup()
@@ -27,19 +113,114 @@ apitest::XPropertySet::testRemoveVetoableChangeListener()
 apitest::XSheetOutline::testAutoOutline()
 apitest::XSpreadsheetDocument::testGetSheets()
 apitest::XText::testInsertRemoveTextContent()
+basebmp::BitmapDevice::getBufferSize() const
+basebmp::BitmapDevice::setDamageTracker(boost::shared_ptr<basebmp::IBitmapDeviceDamageTracker> const&)
+basebmp::createBitmapDevice(basegfx::B2IVector const&, bool, int, boost::shared_array<unsigned char> const&, boost::shared_ptr<std::__debug::vector<basebmp::Color, std::allocator<basebmp::Color> > const> const&)
+basebmp::createBitmapDevice(basegfx::B2IVector const&, bool, int, boost::shared_ptr<std::__debug::vector<basebmp::Color, std::allocator<basebmp::Color> > const> const&)
+basegfx::BPixel::getEmptyBPixel()
+basegfx::snapToNearestMultiple(double, double)
+basegfx::snapToRange(double, double, double)
+basegfx::unotools::homMatrixFromMatrix(basegfx::B2DHomMatrix&, com::sun::star::geometry::Matrix2D const&)
 canvas::createSurfaceProxyManager(boost::shared_ptr<canvas::IRenderModule> const&)
+comphelper::ComponentContext::ComponentContext(com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> const&)
+comphelper::ComponentContext::createComponentWithArguments(rtl::OUString const&, com::sun::star::uno::Sequence<com::sun::star::uno::Any> const&) const
+comphelper::ComponentContext::getLegacyServiceFactory() const
+comphelper::ComponentContext::getSingleton(rtl::OUString const&) const
+comphelper::MediaDescriptor::PROP_DEEPDETECTION()
 comphelper::detail::ConfigurationWrapper::getGroupReadWrite(boost::shared_ptr<comphelper::ConfigurationChanges> const&, rtl::OUString const&) const
 comphelper::detail::ConfigurationWrapper::getLocalizedPropertyValue(rtl::OUString const&) const
 comphelper::detail::ConfigurationWrapper::setLocalizedPropertyValue(boost::shared_ptr<comphelper::ConfigurationChanges> const&, rtl::OUString const&, com::sun::star::uno::Any const&) const
 connectivity::file::OStatement_Base::reset()
 connectivity::sdbcx::OGroup::OGroup(rtl::OUString const&, unsigned char)
 connectivity::sdbcx::OGroup::OGroup(unsigned char)
+dbaccess::ORowSet_CreateInstance(com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> const&)
+dbtools::DBTypeConversion::getMsFromTime(com::sun::star::util::Time const&)
+drawinglayer::attribute::FontAttribute::isDefault() const
+drawinglayer::attribute::MaterialAttribute3D::isDefault() const
+drawinglayer::attribute::Sdr3DLightAttribute::isDefault() const
+drawinglayer::attribute::Sdr3DObjectAttribute::isDefault() const
+drawinglayer::attribute::SdrFillGraphicAttribute::getLogSize() const
+drawinglayer::geometry::ViewInformation2D::isDefault() const
+formula::FormulaDlg::CheckMatrix()
+formula::FormulaDlg::isUserMatrix() const
+framework::MenuBarManager::getComponentContext()
 framework::MenuManager::getContext()
 jfw_plugin::VendorBase::createInstance()
+oox::core::FilterBaseImpl::finalizeFilter()
 oox::drawingml::TextListStyle::dump() const
 oox::xls::BiffDrawingObjectBase::BiffDrawingObjectBase(oox::xls::WorksheetHelper const&)
+oox::xls::SheetDataBuffer::writeXfIdRangeListProperties(int, int, oox::xls::ApiCellRangeList const&) const
+oox::xls::StylesBuffer::writeStyleXfToPropertySet(oox::PropertySet&, int) const
+oox::xls::WorksheetGlobals::getColumns(oox::ValueRange const&) const
+oox::xls::WorksheetGlobals::getRows(oox::ValueRange const&) const
+sc::CellTextAttr::CellTextAttr(unsigned short, unsigned char)
+sc::sidebar::CellLineStyleValueSet::GetSelItem()
+sc::sidebar::CellLineStyleValueSet::SetCusEnable(bool)
+sc::sidebar::CellLineStyleValueSet::SetImage(Image)
 sc_apitest::main()
-sd::BluetoothServer::addCommunicator(sd::Communicator*)
 sd::LeftDrawPaneShell::RegisterInterface(SfxModule*)
 sd::LeftImpressPaneShell::RegisterInterface(SfxModule*)
+sd::SdPhotoAlbumDialog::createXShapeFromUrl(rtl::OUString const&, com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory>, com::sun::star::uno::Reference<com::sun::star::graphic::XGraphicProvider>)
 sd::ToolPanelPaneShell::RegisterInterface(SfxModule*)
+sd::framework::FrameworkHelper::GetPaneWindow(com::sun::star::uno::Reference<com::sun::star::drawing::framework::XResourceId> const&)
+sd::framework::FrameworkHelper::GetResource(com::sun::star::uno::Reference<com::sun::star::drawing::framework::XResourceId> const&)
+sd::framework::FrameworkHelper::RequestResourceDeactivation(com::sun::star::uno::Reference<com::sun::star::drawing::framework::XResourceId> const&)
+sd::framework::FrameworkHelper::RunOnResourceDeactivation(com::sun::star::uno::Reference<com::sun::star::drawing::framework::XResourceId> const&, boost::function<void (bool)> const&, bool)
+sd::framework::Pane::SetWindow(Window*)
+sd::sidebar::CurrentMasterPagesSelector::NotifyHint(SfxBroadcaster&, SfxHint const&)
+sd::sidebar::LayoutMenu::GetMinimumWidth()
+sd::sidebar::LayoutMenu::GetPreferredSize()
+sd::sidebar::LayoutMenu::GetPreferredWidth(int)
+sdr::overlay::OverlayRectangle::setBlinkTime(unsigned int)
+sdr::overlay::OverlayRectangle::setSecondPosition(basegfx::B2DPoint const&)
+sdr::table::SdrTableObj::getRowCount() const
+sfx2::sidebar::AsynchronousCall::RequestCall(boost::function<void ()> const&)
+sfx2::sidebar::Context::EvaluateMatch(std::__debug::vector<sfx2::sidebar::Context, std::allocator<sfx2::sidebar::Context> > const&) const
+sfx2::sidebar::ContextList::IsEmpty()
+sfx2::sidebar::Deck::GetIconURL(bool) const
+sfx2::sidebar::Deck::PrintWindowTree(std::__debug::vector<sfx2::sidebar::Panel*, std::allocator<sfx2::sidebar::Panel*> > const&)
+sfx2::sidebar::EnumContext::EvaluateMatch(std::__debug::vector<sfx2::sidebar::EnumContext, std::allocator<sfx2::sidebar::EnumContext> > const&) const
+sfx2::sidebar::EnumContext::GetApplication() const
+sfx2::sidebar::EnumContext::GetCombinedContext() const
+sfx2::sidebar::FocusManager::IsAnyButtonFocused() const
+sfx2::sidebar::FocusManager::IsAnyPanelFocused() const
+sfx2::sidebar::Paint::Set(sfx2::sidebar::Paint const&)
+sfx2::sidebar::Panel::PrintWindowTree()
+sfx2::sidebar::SidebarController::ShowDetailMenu(rtl::OUString const&) const
+sfx2::sidebar::SidebarDockingWindow::GetChildWindow()
+sfx2::sidebar::SidebarPanelBase::GetControl() const
+sfx2::sidebar::SidebarPanelBase::SetControl(Window*)
+std::_Rb_tree<rtl::OUString, std::pair<rtl::OUString const, (anonymous namespace)::TemplateId>, std::_Select1st<std::pair<rtl::OUString const, (anonymous namespace)::TemplateId> >, std::less<rtl::OUString>, std::allocator<std::pair<rtl::OUString const, (anonymous namespace)::TemplateId> > >::_Rb_tree(std::_Rb_tree<rtl::OUString, std::pair<rtl::OUString const, (anonymous namespace)::TemplateId>, std::_Select1st<std::pair<rtl::OUString const, (anonymous namespace)::TemplateId> >, std::less<rtl::OUString>, std::allocator<std::pair<rtl::OUString const, (anonymous namespace)::TemplateId> > >&&)
+std::auto_ptr<formula::FormulaTokenArray>::auto_ptr(std::auto_ptr<formula::FormulaTokenArray>&)
+std::auto_ptr<formula::FormulaTokenArray>::auto_ptr(std::auto_ptr_ref<formula::FormulaTokenArray>)
+svx::DialControl::GetLinkedField() const
+svx::DialControl::GetModifyHdl() const
+svx::sidebar::AreaPropertyPanel::LinkStubImplPopupModeEndHdl(void*, void*)
+svx::sidebar::AreaTransparencyGradientControl::ToGetFocus()
+svx::sidebar::BulletsTypeMgr::BulletsTypeMgr(unsigned short, SfxItemSet const*)
+svx::sidebar::ColorPanel::GetPreferredHeight(int)
+svx::sidebar::ContextPanel::GetPreferredHeight(int)
+svx::sidebar::GraphyicBulletsTypeMgr::GraphyicBulletsTypeMgr(unsigned short, SfxItemSet const*)
+svx::sidebar::LinePropertyPanel::LinkStubImplPopupModeEndHdl(void*, void*)
+svx::sidebar::LineStyleValueSet::LineStyleValueSet(Window*, ResId const&)
+svx::sidebar::LineStyleValueSet::SetFirstSelect(bool)
+svx::sidebar::LineStyleValueSet::SetFirstString(String)
+svx::sidebar::LineWidthControl::GetValueSet()
+svx::sidebar::MixBulletsTypeMgr::MixBulletsTypeMgr(unsigned short, SfxItemSet const*)
+svx::sidebar::NBOutlineTypeMgrFact::NBOutlineTypeMgrFact()
+svx::sidebar::NumberingTypeMgr::GetNumCount() const
+svx::sidebar::NumberingTypeMgr::GetNumSettingByIndex(unsigned short) const
+svx::sidebar::NumberingTypeMgr::NumberingTypeMgr(unsigned short, SfxItemSet const*)
+svx::sidebar::OutlineTypeMgr::OutlineTypeMgr(unsigned short, SfxItemSet const*)
+svx::sidebar::ParaPropertyPanel::InitImageList(boost::scoped_ptr<ToolBox>&, ImageList&, ImageList&)
+svx::sidebar::ParaPropertyPanel::LinkStubImplPopupModeEndHdl(void*, void*)
+svx::sidebar::ParaPropertyPanel::ShowMenu()
+svx::sidebar::PosSizePropertyPanel::ShowMenu()
+svx::sidebar::SvxSBFontNameBox::SvxSBFontNameBox(Window*, ResId const&)
+svx::sidebar::TextCharacterSpacingControl::ToGetFocus()
+unoidl::UnoidlProvider::getConstant(unsigned int) const
+utl::ConfigItem::getUniqueSetElementName(rtl::OUString const&, rtl::OUString&)
+utl::toISO8601(com::sun::star::util::Time const&)
+vcl::unohelper::getNaturalStringSorterForAppLocale()
+vclmain::createApplication()
+writerfilter::dmapper::DomainMapperTableManager::CopyTextProperties(boost::shared_ptr<writerfilter::dmapper::PropertyMap>, boost::shared_ptr<writerfilter::dmapper::StyleSheetTable>)
