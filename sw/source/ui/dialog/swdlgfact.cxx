@@ -1109,21 +1109,10 @@ AbstractMailMergeDlg * SwAbstractDialogFactory_Impl::CreateMailMergeDlg( int nRe
     return 0;
 }
 
-AbstractMailMergeCreateFromDlg * SwAbstractDialogFactory_Impl::CreateMailMergeCreateFromDlg( int nResId,
-                                                                    Window* pParent ) //add for SwMailMergeCreateFromDlg
+AbstractMailMergeCreateFromDlg * SwAbstractDialogFactory_Impl::CreateMailMergeCreateFromDlg(Window* pParent)
 {
-    SwMailMergeCreateFromDlg* pDlg=NULL;
-    switch ( nResId )
-    {
-        case DLG_MERGE_CREATE :
-            pDlg = new SwMailMergeCreateFromDlg( pParent );
-            break;
-        default:
-            break;
-    }
-    if ( pDlg )
-        return new AbstractMailMergeCreateFromDlg_Impl( pDlg );
-    return 0;
+    SwMailMergeCreateFromDlg* pDlg = new SwMailMergeCreateFromDlg(pParent);
+    return new AbstractMailMergeCreateFromDlg_Impl(pDlg);
 }
 
 AbstractMailMergeFieldConnectionsDlg * SwAbstractDialogFactory_Impl::CreateMailMergeFieldConnectionsDlg( int nResId,

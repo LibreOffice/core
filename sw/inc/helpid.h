@@ -436,7 +436,6 @@
 
 #define HID_PVIEW_ZOOM_LB                                       "SW_HID_PVIEW_ZOOM_LB"
 #define HID_MAIL_MERGE_SELECT                                   "SW_HID_MAIL_MERGE_SELECT"
-#define HID_MAIL_MERGE_CREATE_FROM                              "SW_HID_MAIL_MERGE_CREATE_FROM"
 #define HID_MAIL_MERGE_INSERT_FIELDS                            "SW_HID_MAIL_MERGE_INSERT_FIELDS"
 #define HID_PRINT_AS_MERGE                                      "SW_HID_PRINT_AS_MERGE"
 #define HID_MERGE_SOURCE_UNAVAILABLE                            "SW_HID_MERGE_SOURCE_UNAVAILABLE"

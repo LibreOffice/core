@@ -94,6 +94,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/swriter,\
 	sw/uiconfig/swriter/ui/insertscript \
 	sw/uiconfig/swriter/ui/inserttable \
 	sw/uiconfig/swriter/ui/linenumbering \
+	sw/uiconfig/swriter/ui/mailmergedialog \
 	sw/uiconfig/swriter/ui/mergetabledialog \
 	sw/uiconfig/swriter/ui/newuserindexdialog \
 	sw/uiconfig/swriter/ui/numparapage \

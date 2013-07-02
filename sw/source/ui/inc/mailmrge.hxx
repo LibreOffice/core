@@ -152,18 +152,14 @@ public:
 
 class SwMailMergeCreateFromDlg : public ModalDialog
 {
-    FixedLine       aCreateFromFL;
-    RadioButton     aThisDocRB;
-    RadioButton     aUseTemplateRB;
-
-    OKButton        aOK;
-    CancelButton    aCancel;
-    HelpButton      aHelp;
+    RadioButton* m_pThisDocRB;
+    RadioButton* m_pUseTemplateRB;
 public:
     SwMailMergeCreateFromDlg(Window* pParent);
-    ~SwMailMergeCreateFromDlg();
-
-    sal_Bool    IsThisDocument() const {return aThisDocRB.IsChecked();}
+    bool IsThisDocument() const
+    {
+        return m_pThisDocRB->IsChecked();
+    }
 };
 
 class SwMailMergeFieldConnectionsDlg : public ModalDialog

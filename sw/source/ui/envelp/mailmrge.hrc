@@ -65,9 +65,6 @@
 #define FT_FILTER                       43
 #define LB_FILTER                       44
 
-#define FL_CREATEFROM   1
-#define RB_THISDOC      2
-#define RB_TEMPLATE     3
 #define BT_OK           4
 #define BT_CANCEL       5
 #define BT_HELP         6

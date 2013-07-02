@@ -812,20 +812,12 @@ uno::Reference<XResultSet> SwMailMergeDlg::GetResultSet() const
     return xResSetClone;
 }
 
-SwMailMergeCreateFromDlg::SwMailMergeCreateFromDlg(Window* pParent) :
-    ModalDialog(pParent, SW_RES(DLG_MERGE_CREATE)),
-    aCreateFromFL(  this, SW_RES( FL_CREATEFROM  )),
-    aThisDocRB(     this, SW_RES( RB_THISDOC     )),
-    aUseTemplateRB( this, SW_RES( RB_TEMPLATE    )),
-    aOK(            this, SW_RES( BT_OK          )),
-    aCancel(        this, SW_RES( BT_CANCEL      )),
-    aHelp(          this, SW_RES( BT_HELP        ))
+SwMailMergeCreateFromDlg::SwMailMergeCreateFromDlg(Window* pParent)
+    : ModalDialog(pParent, "MailMergeDialog",
+        "modules/swriter/ui/mailmergedialog.ui")
 {
-    FreeResource();
-}
-
-SwMailMergeCreateFromDlg::~SwMailMergeCreateFromDlg()
-{
+    get(m_pThisDocRB, "document");
+    get(m_pUseTemplateRB, "template");
 }
 
 SwMailMergeFieldConnectionsDlg::SwMailMergeFieldConnectionsDlg(Window* pParent) :

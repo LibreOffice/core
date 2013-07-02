@@ -430,8 +430,7 @@ public:
                                                 sal_Int32 nCommandType,
                                                 const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& xConnection,
                                                 ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >* pSelection = 0 ) = 0; //add for SwMailMergeDlg
-    virtual AbstractMailMergeCreateFromDlg*     CreateMailMergeCreateFromDlg( int nResId,
-                                                    Window* pParent ) = 0; //add for SwMailMergeCreateFromDlg
+    virtual AbstractMailMergeCreateFromDlg*     CreateMailMergeCreateFromDlg(Window* pParent) = 0;
     virtual AbstractMailMergeFieldConnectionsDlg*       CreateMailMergeFieldConnectionsDlg( int nResId,
                                                             Window* pParent ) = 0; //add for SwMailMergeFieldConnectionsDlg
     virtual VclAbstractDialog*          CreateMultiTOXMarkDlg( int nResId,
