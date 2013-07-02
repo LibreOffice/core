@@ -19,14 +19,11 @@
  *
  *************************************************************/
 
-
-
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
 #include <crsskip.hxx>
 #include <hintids.hxx>  //_immer_ vor den solar-Items
-
 #include <sfx2/lnkbase.hxx>
 #include <fmtfld.hxx>
 #include <tools/urlobj.hxx>
@@ -40,7 +37,6 @@
 #include <sfx2/request.hxx>
 #include <svx/postattr.hxx>
 #include <svx/hlnkitem.hxx>
-
 #include <svx/svxdlg.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <unotools/localedatawrapper.hxx>
@@ -62,10 +58,8 @@
 #include <expfld.hxx>
 #include <fldmgr.hxx>
 #include <uitool.hxx>
-
 #include <cmdid.h>
 #include <shells.hrc>
-
 #include <sfx2/app.hxx>
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
@@ -73,14 +67,12 @@
 #include "dialog.hrc"
 #include <fldui.hrc>
 #include <doc.hxx>
-
 #include <app.hrc>
-
+#include <edtwin.hxx>
 #include <PostItMgr.hxx>
 #include <switerator.hxx>
 
 using namespace nsSwDocInfoSubType;
-
 
 extern sal_Bool bNoInterrupt;       // in mainwn.cxx
 
@@ -363,6 +355,11 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                         rSh.KillPams();
                         rSh.ClearMark();
                     }
+
+                    // #120513# Inserting a comment into an autocompletion crashes
+                    // --> suggestion has to be removed before
+                    GetView().GetEditWin().StopQuickHelp();
+
                     SwInsertFld_Data aData(TYP_POSTITFLD, 0, sAuthor, aEmptyStr, 0);
                     aFldMgr.InsertFld(aData);
                     rSh.Push();
