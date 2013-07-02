@@ -474,7 +474,7 @@ class NumericCellCounter
 public:
     NumericCellCounter() : mnCount(0) {}
 
-    void operator() (const sc::CellStoreType::value_type& rNode, size_t nOffset, size_t nDataSize)
+    void operator() (const sc::CellStoreType::value_type& rNode, size_t /*nOffset*/, size_t nDataSize)
     {
         if (rNode.type != sc::element_type_numeric)
             return;
