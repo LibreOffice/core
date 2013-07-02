@@ -73,8 +73,6 @@ public:
 
     void                SetMoreText( const OUString& rNewText );
     void                SetLessText( const OUString& rNewText );
-    OUString            GetMoreText() const;
-    OUString            GetLessText() const;
 };
 
 inline void MoreButton::SetState( sal_Bool bNewState )
