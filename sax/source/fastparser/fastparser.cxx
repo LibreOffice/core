@@ -812,7 +812,7 @@ void FastSaxParser::callbackStartElement( const XML_Char* pwName, const XML_Char
                 rEntity.maContextStack.top()->maNamespace = GetNamespaceURL( pPrefix, nPrefixLen );
 
             const OUString aNamespace( rEntity.maContextStack.top()->maNamespace );
-            const OUString aElementName( pPrefix, nPrefixLen, RTL_TEXTENCODING_UTF8 );
+            const OUString aElementName( pName, nNameLen, RTL_TEXTENCODING_UTF8 );
             rEntity.maContextStack.top()->maElementName = aElementName;
 
             if( xParentContext.is() )
