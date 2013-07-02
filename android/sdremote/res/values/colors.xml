@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="background_action_bar">#e46f1f</color>
+
+    <color name="orange">#EE4400</color>
+    <color name="grey">#303030</color>
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+    <color name="light_grey">#E8E9E8</color>
+    <color name="medium_grey">#C1C2C1</color>
+    <color name="text_grey">#5E5F5F</color>
+
+    <color name="thumbnail_border">#B4B4B4</color>
+    <color name="thumbnail_border_selected">#EE4400</color>
+
+</resources>

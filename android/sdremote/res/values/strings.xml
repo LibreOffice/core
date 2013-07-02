@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Impress Remote</string>
     <string name="menu_settings">Settings</string>
     <string name="title_activity_presentation">PresentationActivity</string>
     <string name="presentation_ui_resizehandle">Handle to resize view.</string>
@@ -63,4 +62,11 @@
         <item >45:00</item>
     </string-array>
     <string name="wrong_time_format">You have entered wrong time format</string>
+
+    <string name="application_name">Impress Remote</string>
+
+    <string name="title_computers">Computers</string>
+    <string name="title_bluetooth" translatable="false">Bluetooth</string>
+    <string name="title_wifi" translatable="false">WiFi</string>
+
 </resources>

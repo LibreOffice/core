@@ -1,67 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="org.libreoffice.impressremote"
-    android:versionCode="8"
-    android:versionName="1.0.6+ Impress Remote"
-    android:installLocation="auto" >
+          package="org.libreoffice.impressremote"
+          android:versionCode="8"
+          android:versionName="1.0.6+ Impress Remote"
+          android:installLocation="auto">
 
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.BLUETOOTH" />
-    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.BLUETOOTH"/>
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
 
     <uses-sdk
         android:minSdkVersion="10"
-        android:targetSdkVersion="14" />
+        android:targetSdkVersion="14"/>
 
     <application
+        android:label="@string/application_name"
         android:icon="@drawable/ic_launcher"
-        android:label="@string/app_name"
-        android:theme="@style/Theme.ImpressRemote"
-        android:title="@string/app_name" >
+        android:logo="@drawable/ic_logo"
+        android:theme="@style/Theme.ImpressRemote">
+
+        <activity
+            android:name=".ComputersActivity"
+            android:label="@string/title_computers"
+            android:theme="@style/Theme.ImpressRemote.Computers">
+
+            <intent-filter android:label="@string/application_name">
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+
+        </activity>
+
         <activity
             android:name=".SelectorActivity"
             android:label="@string/selector_choose_a_computer"
-            android:logo="@drawable/actionbar_icon_computer"
-            android:title="@string/app_name"
-            android:uiOptions="splitActionBarWhenNarrow" >
-            <intent-filter android:label="@string/app_name" >
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            android:uiOptions="splitActionBarWhenNarrow">
         </activity>
+
         <activity
             android:name=".PairingActivity"
-            android:icon="@drawable/actionbar_icon_computer"
-            android:logo="@drawable/actionbar_icon_computer"
-            android:noHistory="true" >
+            android:noHistory="true">
+        </activity>
+
+        <activity
+            android:name=".StartPresentationActivity"
+            android:label="@string/startpresentation_title">
+        </activity>
+
+        <activity
+            android:name=".PresentationActivity"
+            android:label="@string/title_activity_presentation">
+        </activity>
+
+        <activity
+            android:name=".SettingsActivity"
+            android:icon="@drawable/icon_options"
+            android:label="@string/options">
+        </activity>
+
+        <activity
+            android:name=".communication.ReconnectionActivity"
+            android:label="@string/reconnect">
         </activity>
 
         <service
             android:name=".communication.CommunicationService"
-            android:label="@string/startpresentation_title"
-            android:logo="@drawable/actionbar_icon_computer" >
+            android:label="@string/startpresentation_title">
         </service>
 
-        <activity
-            android:name=".StartPresentationActivity"
-            android:logo="@drawable/actionbar_icon_computer"
-            android:label="@string/startpresentation_title" >
-        </activity>
-        <activity
-            android:name=".PresentationActivity"
-            android:label="@string/title_activity_presentation" >
-        </activity>
-        <activity
-            android:name=".SettingsActivity"
-            android:icon="@drawable/icon_options"
-            android:label="@string/options" >
-        </activity>
-        <activity
-            android:name=".communication.ReconnectionActivity"
-            android:logo="@drawable/actionbar_icon_computer"
-            android:label="@string/reconnect" >
-        </activity>
     </application>
 
 </manifest>
