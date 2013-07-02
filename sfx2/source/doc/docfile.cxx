@@ -3639,7 +3639,9 @@ OUString SfxMedium::SwitchDocumentToTempFile()
     if ( !aOrigURL.isEmpty() )
     {
         sal_Int32 nPrefixLen = aOrigURL.lastIndexOf( '.' );
-        String aExt = ( nPrefixLen == -1 ) ? String() : String( aOrigURL.copy( nPrefixLen ) );
+        OUString const aExt = (nPrefixLen == -1)
+                                ? OUString()
+                                : aOrigURL.copy(nPrefixLen);
         OUString aNewURL = ::utl::TempFile( String(), &aExt ).GetURL();
 
         // TODO/LATER: In future the aLogicName should be set to shared folder URL
