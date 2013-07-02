@@ -33,14 +33,18 @@ bool FormulaGroupInterpreterSoftware::interpret(ScDocument& rDoc, const ScAddres
 {
     // Decompose the group into individual cells and calculate them individually.
 
-    ScAddress aTmpPos = rTopPos;
-    SCROW nOffset = rTopPos.Row() - xGroup->mnStart;
-    SCROW nLength = xGroup->mnLength - nOffset;
+    // Always set the top row to be the top of the group.  Grouped formula
+    // cells are to be calculated for its full segment at all times.
+
+    ScAddress aTopPos = rTopPos;
+    aTopPos.SetRow(xGroup->mnStart);
+    ScAddress aTmpPos = aTopPos;
+
     std::vector<double> aResults;
-    aResults.reserve(nLength);
-    for (SCROW i = 0; i < nLength; ++i)
+    aResults.reserve(xGroup->mnLength);
+    for (SCROW i = 0; i < xGroup->mnLength; ++i)
     {
-        aTmpPos.SetRow(rTopPos.Row() + i);
+        aTmpPos.SetRow(aTopPos.Row() + i);
         ScTokenArray aCode2;
         for (const formula::FormulaToken* p = rCode.First(); p; p = rCode.Next())
         {
@@ -99,7 +103,7 @@ bool FormulaGroupInterpreterSoftware::interpret(ScDocument& rDoc, const ScAddres
     } // for loop end (xGroup->mnLength)
 
     if (!aResults.empty())
-        rDoc.SetFormulaResults(rTopPos, &aResults[0], aResults.size());
+        rDoc.SetFormulaResults(aTopPos, &aResults[0], aResults.size());
 
     return true;
 }
