@@ -31,14 +31,13 @@
 #include <com/sun/star/xml/sax/XLocator.hpp>
 
 #include <salhelper/singletonref.hxx>
-#include <cppuhelper/weak.hxx>
+#include <cppuhelper/implbase1.hxx>
 #include <rtl/ustring.hxx>
 
 namespace framework{
 
-class AcceleratorConfigurationReader : public  css::xml::sax::XDocumentHandler
-                                     , private ThreadHelpBase
-                                     , public  ::cppu::OWeakObject
+class AcceleratorConfigurationReader : private ThreadHelpBase
+                                     , public ::cppu::WeakImplHelper1< css::xml::sax::XDocumentHandler >
 {
     //-------------------------------------------
     // const, types
@@ -133,10 +132,6 @@ class AcceleratorConfigurationReader : public  css::xml::sax::XDocumentHandler
         //---------------------------------------
         /** @short  does nothing real ... */
         virtual ~AcceleratorConfigurationReader();
-
-        //---------------------------------------
-        // XInterface
-        FWK_DECLARE_XINTERFACE
 
         //---------------------------------------
         // XDocumentHandler

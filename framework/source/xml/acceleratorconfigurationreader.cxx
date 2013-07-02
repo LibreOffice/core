@@ -57,15 +57,8 @@ namespace framework{
     }
 
 //-----------------------------------------------
-// XInterface
-DEFINE_XINTERFACE_1(AcceleratorConfigurationReader                   ,
-                    OWeakObject                                      ,
-                    DIRECT_INTERFACE(css::xml::sax::XDocumentHandler))
-
-//-----------------------------------------------
 AcceleratorConfigurationReader::AcceleratorConfigurationReader(AcceleratorCache& rContainer)
     : ThreadHelpBase          (&Application::GetSolarMutex())
-    , OWeakObject             (                             )
     , m_rContainer            (rContainer                   )
     , m_bInsideAcceleratorList(sal_False                    )
     , m_bInsideAcceleratorItem(sal_False                    )
