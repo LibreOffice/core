@@ -42,7 +42,6 @@ class ScCursorRefEdit : public formula::RefEdit
     Link    maCursorDownLink;
 
 public:
-            ScCursorRefEdit( ScAnyRefDlg* pParent, Window *pLabel, const ResId& rResId );
             ScCursorRefEdit( Window* pParent, Window *pLabel );
     void    SetCursorLinks( const Link& rUp, const Link& rDown );
 

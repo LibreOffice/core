@@ -55,7 +55,6 @@ enum ScEditWindowLocation
 class SC_DLLPUBLIC ScEditWindow : public Control
 {
 public:
-            ScEditWindow( Window* pParent, const ResId& rResId, ScEditWindowLocation eLoc );
             ScEditWindow( Window* pParent,  WinBits nBits , ScEditWindowLocation eLoc );
             ~ScEditWindow();
 
@@ -119,7 +118,6 @@ protected:
 
 public:
 
-    ScExtIButton(Window* pParent, const ResId& rResId );
     ScExtIButton(Window* pParent, WinBits nBits );
 
     void            SetPopupMenu(PopupMenu* pPopUp);

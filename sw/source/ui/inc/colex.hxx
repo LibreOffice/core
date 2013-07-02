@@ -31,12 +31,6 @@ class SfxItemSet;
 class SW_DLLPUBLIC SwPageExample : public SvxPageWindow
 {
 public:
-    SwPageExample(Window* pPar, const ResId& rResId)
-        : SvxPageWindow(pPar, rResId)
-    {
-        SetSize(SvxPaperInfo::GetPaperSize(PAPER_A4));
-    }
-
     SwPageExample(Window* pPar)
         : SvxPageWindow(pPar)
     {
@@ -57,10 +51,6 @@ protected:
                            const sal_Bool bSecond,
                            const sal_Bool bEnabled );
 public:
-    SwPageGridExample(Window* pPar, const ResId& rResId ) :
-                                SwPageExample(pPar, rResId ),
-                                pGridItem(0),
-                                m_bVertical(false){}
     SwPageGridExample(Window* pPar) :
                                 SwPageExample(pPar),
                                 pGridItem(0),
@@ -82,12 +72,6 @@ protected:
                            const sal_Bool bEnabled );
 
 public:
-    SwColExample(Window* pPar, const ResId& rResId)
-        : SwPageExample(pPar, rResId)
-        , pColMgr(0)
-    {
-    }
-
     SwColExample(Window* pPar)
         : SwPageExample(pPar)
         , pColMgr(0)

@@ -117,11 +117,6 @@ ScSolverSuccessDialog::~ScSolverSuccessDialog()
 
 //----------------------------------------------------------------------------
 
-ScCursorRefEdit::ScCursorRefEdit( ScAnyRefDlg* pParent, Window *pLabel, const ResId& rResId ) :
-    formula::RefEdit( pParent, pParent, pLabel, rResId )
-{
-}
-
 ScCursorRefEdit::ScCursorRefEdit( Window* pParent, Window *pLabel )
     : formula::RefEdit( pParent, pLabel )
 {

@@ -39,7 +39,6 @@ protected:
     void            Modify();
 
 public:
-    SvxRelativeField( Window* pParent, const ResId& rResId );
     SvxRelativeField( Window* pParent, WinBits nBits);
 
     void            EnableRelativeMode( sal_uInt16 nMin = 50, sal_uInt16 nMax = 150,

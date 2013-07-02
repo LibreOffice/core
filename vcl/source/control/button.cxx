@@ -4093,11 +4093,6 @@ DisclosureButton::DisclosureButton( Window* pParent, WinBits nStyle ) :
 {
 }
 
-DisclosureButton::DisclosureButton( Window* pParent, const ResId& rResId ) :
-    CheckBox( pParent, rResId.SetRT( RSC_CHECKBOX ) )
-{
-}
-
 // -----------------------------------------------------------------------
 
 void DisclosureButton::ImplDrawCheckBoxState()

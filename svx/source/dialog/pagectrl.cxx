@@ -57,47 +57,6 @@ struct PageWindow_Impl
 
 // class SvxPageWindow ---------------------------------------------------
 
-SvxPageWindow::SvxPageWindow( Window* pParent, const ResId& rId ) :
-
-    Window( pParent, rId ),
-
-    nTop        ( 0 ),
-    nBottom     ( 0 ),
-    nLeft       ( 0 ),
-    nRight      ( 0 ),
-    aColor      ( COL_TRANSPARENT ),
-    nHdLeft     ( 0 ),
-    nHdRight    ( 0 ),
-    nHdDist     ( 0 ),
-    nHdHeight   ( 0 ),
-    aHdColor    ( COL_TRANSPARENT ),
-    pHdBorder   ( 0 ),
-    nFtLeft     ( 0 ),
-    nFtRight    ( 0 ),
-    nFtDist     ( 0 ),
-    nFtHeight   ( 0 ),
-    aFtColor    ( COL_TRANSPARENT ),
-    pFtBorder   ( 0 ),
-    bFooter     ( sal_False ),
-    bHeader     ( sal_False ),
-    bTable      ( sal_False ),
-    bHorz       ( sal_False ),
-    bVert       ( sal_False ),
-    eUsage      ( SVX_PAGE_ALL )
-
-{
-    pImpl = new PageWindow_Impl;
-
-    // Count in Twips by default
-    SetMapMode( MapMode( MAP_TWIP ) );
-    aWinSize = GetOutputSizePixel();
-    aWinSize.Height() -= 4;
-    aWinSize.Width() -= 4;
-
-    aWinSize = PixelToLogic( aWinSize );
-    SetBackground();
-}
-
 SvxPageWindow::SvxPageWindow( Window* pParent ) :
 
     Window( pParent ),

@@ -809,18 +809,6 @@ extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeLineListBox(Window *pParent
 
 // -----------------------------------------------------------------------
 
-LineListBox::LineListBox( Window* pParent, const ResId& rResId ) :
-    ListBox( pParent, rResId ),
-    m_nWidth( 5 ),
-    m_sNone( ),
-    aColor( COL_BLACK ),
-    maPaintCol( COL_BLACK )
-{
-    ImplInit();
-}
-
-// -----------------------------------------------------------------------
-
 LineListBox::~LineListBox()
 {
     for ( size_t i = 0, n = pLineList->size(); i < n; ++i ) {

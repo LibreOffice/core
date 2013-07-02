@@ -321,7 +321,6 @@ class SVT_DLLPUBLIC LineListBox : public ListBox
 
 public:
                     LineListBox( Window* pParent, WinBits nWinStyle = WB_BORDER );
-                    LineListBox( Window* pParent, const ResId& rResId );
     virtual         ~LineListBox();
 
     /** Set the width in Twips */

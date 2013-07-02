@@ -562,7 +562,6 @@ protected:
     SAL_DLLPRIVATE virtual void ImplDrawCheckBoxState();
 public:
     explicit DisclosureButton( Window* pParent, WinBits nStyle = 0 );
-    explicit DisclosureButton( Window* pParent, const ResId& rResId );
 
     virtual void    KeyInput( const KeyEvent& rKEvt );
 };

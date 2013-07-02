@@ -52,7 +52,6 @@ protected:
     virtual void        Modify();
 
 public:
-    NoSpaceEdit( Window* pParent, const ResId& rResId);
     NoSpaceEdit( Window* pParent );
     virtual ~NoSpaceEdit();
     void            SetForbiddenChars(const String& rSet){sForbiddenChars = rSet;}
@@ -65,11 +64,6 @@ public:
 class TableNameEdit : public NoSpaceEdit
 {
 public:
-    TableNameEdit(Window* pWin, const ResId& rResId)
-        : NoSpaceEdit(pWin, rResId)
-    {
-        SetForbiddenChars(OUString(" .<>"));
-    }
     TableNameEdit(Window* pWin)
         : NoSpaceEdit(pWin)
     {

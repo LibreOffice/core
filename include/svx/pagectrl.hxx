@@ -78,7 +78,6 @@ protected:
                            const sal_Bool bEnabled );
 
 public:
-    SvxPageWindow( Window* pParent, const ResId& rId );
     SvxPageWindow( Window* pParent );
     ~SvxPageWindow();
 
