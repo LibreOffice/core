@@ -39,16 +39,6 @@ namespace xml { namespace crypto {
 
 class MacroSecurityTP;
 
-class XmlReadOnlyImage : public FixedImage
-{
-public:
-    XmlReadOnlyImage(Window* pParent, const ResId rResId);
-    ~XmlReadOnlyImage();
-
-    virtual void        RequestHelp( const HelpEvent& rHEvt );
-    static const OUString& GetHelpTip();
-};
-
 class MacroSecurity : public TabDialog
 {
 private:

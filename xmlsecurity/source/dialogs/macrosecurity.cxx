@@ -433,39 +433,4 @@ void MacroSecurityTrustedSourcesTP::ClosePage( void )
     mpDlg->maSecOptions.SetTrustedAuthors( maTrustedAuthors );
 }
 
-XmlReadOnlyImage::XmlReadOnlyImage(Window* pParent, const ResId rResId) :
-            FixedImage(pParent, rResId)
-{
-    SetImage( Image(XMLSEC_RES( RID_XMLSECTP_LOCK )));
-}
-
-XmlReadOnlyImage::~XmlReadOnlyImage()
-{
-}
-
-void XmlReadOnlyImage::RequestHelp( const HelpEvent& rHEvt )
-{
-    if( Help::IsBalloonHelpEnabled() || Help::IsQuickHelpEnabled() )
-    {
-        Rectangle   aLogicPix( LogicToPixel( Rectangle( Point(), GetOutputSize() ) ) );
-        Rectangle   aScreenRect( OutputToScreenPixel( aLogicPix.TopLeft() ),
-                                     OutputToScreenPixel( aLogicPix.BottomRight() ) );
-
-        OUString aStr(XmlReadOnlyImage::GetHelpTip());
-        if ( Help::IsBalloonHelpEnabled() )
-            Help::ShowBalloon( this, rHEvt.GetMousePosPixel(), aScreenRect,
-            aStr );
-        else if ( Help::IsQuickHelpEnabled() )
-            Help::ShowQuickHelp( this, aScreenRect, aStr );
-    }
-    else
-        Window::RequestHelp( rHEvt );
-}
-
-const OUString& XmlReadOnlyImage::GetHelpTip()
-{
-     static OUString aStr(XMLSEC_RES( RID_XMLSECTP_READONLY_CONFIG_TIP));
-     return aStr;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

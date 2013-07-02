@@ -25,7 +25,6 @@ $(eval $(call gb_SrsTarget_set_include,xmlsec/res,\
 
 $(eval $(call gb_SrsTarget_add_files,xmlsec/res,\
 	xmlsecurity/source/dialogs/certificateviewer.src \
-	xmlsecurity/source/dialogs/macrosecurity.src \
 	xmlsecurity/source/dialogs/digitalsignaturesdialog.src \
 	xmlsecurity/source/component/warnbox.src \
 ))
