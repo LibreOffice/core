@@ -511,7 +511,7 @@ public:
                 for (; it != itEnd; ++it)
                 {
                     ScFormulaCell& rCell = const_cast<ScFormulaCell&>(**it);
-                    if (rCell.IsValue())
+                    if (rCell.IsValueNoError())
                         ++mnCount;
                 }
             }

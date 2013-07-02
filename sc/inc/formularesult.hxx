@@ -128,6 +128,8 @@ public:
         details instead. */
     bool IsValue() const;
 
+    bool IsValueNoError() const;
+
     /** Determines whether or not the result is a string containing more than
         one paragraph */
     bool IsMultiline() const;

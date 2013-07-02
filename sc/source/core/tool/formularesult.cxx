@@ -265,6 +265,18 @@ bool ScFormulaResult::IsValue() const
     return isValue(GetCellResultType());
 }
 
+bool ScFormulaResult::IsValueNoError() const
+{
+    switch (GetCellResultType())
+    {
+        case formula::svDouble:
+        case formula::svEmptyCell:
+        case formula::svHybridValueCell:
+            return true;
+    }
+    return false;
+}
+
 bool ScFormulaResult::IsMultiline() const
 {
     if (meMultiline == MULTILINE_UNKNOWN)

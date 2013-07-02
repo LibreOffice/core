@@ -202,6 +202,7 @@ public:
                     // display as empty string if formula::svEmptyCell result
     bool            IsEmptyDisplayedAsString();
     bool            IsValue();      // also true if formula::svEmptyCell
+    bool IsValueNoError();
     bool            IsHybridValueCell(); // for cells after import to deal with inherited number formats
     double          GetValue();
     double          GetValueAlways();   // ignore errors

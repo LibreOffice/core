@@ -1711,6 +1711,15 @@ bool ScFormulaCell::IsValue()
     return aResult.IsValue();
 }
 
+bool ScFormulaCell::IsValueNoError()
+{
+    MaybeInterpret();
+    if (pCode->GetCodeError())
+        return false;
+
+    return aResult.IsValueNoError();
+}
+
 bool ScFormulaCell::IsHybridValueCell()
 {
     return aResult.GetType() == formula::svHybridValueCell;
