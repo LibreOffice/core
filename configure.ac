@@ -9840,8 +9840,14 @@ elif test "z$with_opencl_sdk" = "z"; then
 else
     if test -d "$with_opencl_sdk/include"; then
         ENABLE_OPENCL=TRUE
-        OPENCL_CFLAGS="-I$with_opencl_sdk/include"
-        OPENCL_LIBS="-L$with_opencl_sdk/lib/x86 -lOpenCL"
+        if test "$_os" = "WINNT"; then
+            PathFormat "$with_opencl_sdk"
+            OPENCL_CFLAGS="-I$formatted_path/include"
+            OPENCL_LIBS="-LIBPATH:$formatted_path/lib/x86 OpenCL.lib"
+        else
+            OPENCL_CFLAGS="-I$with_opencl_sdk/include"
+            OPENCL_LIBS="-L$with_opencl_sdk/lib/x86 -lOpenCL"
+        fi
         AC_MSG_RESULT([found at path $with_opencl_sdk])
         AC_DEFINE(HAVE_FEATURE_OPENCL)
     else
