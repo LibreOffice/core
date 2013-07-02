@@ -30,7 +30,7 @@
 #include "scdllapi.h"
 #include "formula/IFunctionDescription.hxx"
 #include "formula/token.hxx"
-#include "types.hxx"
+#include "scmatrix.hxx"
 
 class ScJumpMatrix;
 
@@ -318,7 +318,7 @@ public:
     virtual const String &      GetString() const;
     virtual const ScMatrix*     GetMatrix() const;
     virtual bool                operator==( const formula::FormulaToken& rToken ) const;
-    virtual FormulaToken*       Clone() const { return new ScMatrixCellResultToken(*this); }
+    virtual FormulaToken*       Clone() const;
     formula::StackVar           GetUpperLeftType() const
                                     {
                                         return xUpperLeft ?
@@ -357,12 +357,9 @@ public:
             SCCOL               GetMatCols() const  { return nCols; }
             SCROW               GetMatRows() const  { return nRows; }
 
-                                /** Assign matrix result, keep matrix formula
-                                    dimension. */
-            void                Assign( const ScMatrixCellResultToken & r )
-                                    {
-                                        ScMatrixCellResultToken::Assign( r);
-                                    }
+    /** Assign matrix result, keep matrix formula
+        dimension. */
+    void Assign( const ScMatrixCellResultToken & r );
 
                                 /** Assign any result, keep matrix formula
                                     dimension. If token is of type

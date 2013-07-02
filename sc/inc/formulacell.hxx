@@ -259,10 +259,7 @@ public:
                                     const formula::FormulaGrammar::Grammar eGrammar )
                         { aResult.SetHybridFormula( r); eTempGrammar = eGrammar; }
 
-    void SetResultMatrix( SCCOL nCols, SCROW nRows, const ScConstMatrixRef& pMat, formula::FormulaToken* pUL )
-    {
-        aResult.SetMatrix(nCols, nRows, pMat, pUL);
-    }
+    void SetResultMatrix( SCCOL nCols, SCROW nRows, const ScConstMatrixRef& pMat, formula::FormulaToken* pUL );
 
     /** For import only: set a double result.
         Use this instead of SetHybridDouble() if there is no (temporary)

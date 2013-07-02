@@ -1591,6 +1591,11 @@ void ScFormulaCell::SetResultToken( const formula::FormulaToken* pToken )
     aResult.SetToken(pToken);
 }
 
+void ScFormulaCell::SetResultMatrix( SCCOL nCols, SCROW nRows, const ScConstMatrixRef& pMat, formula::FormulaToken* pUL )
+{
+    aResult.SetMatrix(nCols, nRows, pMat, pUL);
+}
+
 void ScFormulaCell::SetErrCode( sal_uInt16 n )
 {
     /* FIXME: check the numerous places where ScTokenArray::GetCodeError() is

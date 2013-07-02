@@ -37,7 +37,6 @@
 #include "rangeseq.hxx"
 #include "externalrefmgr.hxx"
 #include "document.hxx"
-#include "scmatrix.hxx"
 
 using ::std::vector;
 
@@ -1060,6 +1059,11 @@ bool ScMatrixCellResultToken::operator==( const FormulaToken& r ) const
         xMatrix == static_cast<const ScMatrixCellResultToken &>(r).xMatrix;
 }
 
+FormulaToken* ScMatrixCellResultToken::Clone() const
+{
+    return new ScMatrixCellResultToken(*this);
+}
+
 void ScMatrixCellResultToken::Assign( const ScMatrixCellResultToken & r )
 {
     xMatrix = r.xMatrix;
@@ -1088,6 +1092,12 @@ bool ScMatrixFormulaCellToken::operator==( const FormulaToken& r ) const
     return p && ScMatrixCellResultToken::operator==( r ) &&
         nCols == p->nCols && nRows == p->nRows;
 }
+
+void ScMatrixFormulaCellToken::Assign( const ScMatrixCellResultToken & r )
+{
+    ScMatrixCellResultToken::Assign( r);
+}
+
 void ScMatrixFormulaCellToken::Assign( const formula::FormulaToken& r )
 {
     if (this == &r)
