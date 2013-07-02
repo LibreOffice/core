@@ -1,0 +1,90 @@
+--- misc/Python-2.7.5/setup.py	2013-07-01 17:51:46.237674580 +0200
++++ misc/build/Python-2.7.5/setup.py	2013-07-01 17:51:24.230453108 +0200
+@@ -80,61 +80,62 @@
+         # system, but with only header files and libraries.
+         sysroot = macosx_sdk_root()
+ 
+-    # Check the standard locations
+-    for dir in std_dirs:
++    # Check the additional directories
++    for dir in paths:
+         f = os.path.join(dir, filename)
+ 
+         if host_platform == 'darwin' and is_macosx_sdk_path(dir):
+             f = os.path.join(sysroot, dir[1:], filename)
+ 
+-        if os.path.exists(f): return []
++        if os.path.exists(f):
++            return [dir]
+ 
+-    # Check the additional directories
+-    for dir in paths:
++    # Check the standard locations
++    for dir in std_dirs:
+         f = os.path.join(dir, filename)
+ 
+         if host_platform == 'darwin' and is_macosx_sdk_path(dir):
+             f = os.path.join(sysroot, dir[1:], filename)
+ 
+         if os.path.exists(f):
+-            return [dir]
++            return []
+ 
+     # Not found anywhere
+     return None
+ 
+ def find_library_file(compiler, libname, std_dirs, paths):
+-    result = compiler.find_library_file(std_dirs + paths, libname)
++    result = compiler.find_library_file(paths+std_dirs, libname)
+     if result is None:
+         return None
+ 
+     if host_platform == 'darwin':
+         sysroot = macosx_sdk_root()
+ 
+-    # Check whether the found file is in one of the standard directories
+     dirname = os.path.dirname(result)
+-    for p in std_dirs:
++    # Otherwise, it must have been in one of the additional directories,
++    # so we have to figure out which one.
++    for p in paths:
+         # Ensure path doesn't end with path separator
+         p = p.rstrip(os.sep)
+ 
+         if host_platform == 'darwin' and is_macosx_sdk_path(p):
+             if os.path.join(sysroot, p[1:]) == dirname:
+-                return [ ]
++                return [ p ]
+ 
+         if p == dirname:
+-            return [ ]
++            return [p]
+ 
+-    # Otherwise, it must have been in one of the additional directories,
+-    # so we have to figure out which one.
+-    for p in paths:
++    # Check whether the found file is in one of the standard directories
++    for p in std_dirs:
+         # Ensure path doesn't end with path separator
+         p = p.rstrip(os.sep)
+ 
+         if host_platform == 'darwin' and is_macosx_sdk_path(p):
+             if os.path.join(sysroot, p[1:]) == dirname:
+-                return [ p ]
++                return [ ]
+ 
+         if p == dirname:
+-            return [p]
++            return [ ]
+     else:
+         assert False, "Internal error: Path not found in std_dirs or paths"
+ 
+@@ -851,6 +852,8 @@
+         have_usable_openssl = (have_any_openssl and
+                                openssl_ver >= min_openssl_ver)
+ 
++        print( "ssl_incs="+str(ssl_incs))
++        print( "ssl_libs="+str(ssl_libs))
+         if have_any_openssl:
+             if have_usable_openssl:
+                 # The _hashlib module wraps optimized implementations

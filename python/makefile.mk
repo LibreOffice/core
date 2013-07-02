@@ -48,6 +48,7 @@ PATCH_FILES=\
     python-freebsd.patch \
     python-md5.patch \
     python-ssl.patch \
+    python-solver-before-std.patch \
     python-$(PYVERSION)-sysbase.patch \
     python-$(PYVERSION)-nohardlink.patch \
     python-$(PYVERSION)-pcbuild.patch
