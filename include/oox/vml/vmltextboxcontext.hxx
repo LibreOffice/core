@@ -42,10 +42,10 @@ public:
                             const AttributeList& rAttribs );
 
     virtual ::oox::core::ContextHandlerRef
-                        onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
-    virtual void        onCharacters( const OUString& rChars );
-    virtual void        onStartElement(const AttributeList& rAttribs);
-    virtual void        onEndElement();
+                        onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) SAL_OVERRIDE;
+    virtual void        onCharacters( const OUString& rChars ) SAL_OVERRIDE;
+    virtual void        onStartElement(const AttributeList& rAttribs) SAL_OVERRIDE;
+    virtual void        onEndElement() SAL_OVERRIDE;
 
 private:
     TextBox&            mrTextBox;
@@ -66,9 +66,9 @@ public:
                             const GraphicHelper& graphicHelper );
 
     virtual ::oox::core::ContextHandlerRef
-                        onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
+                        onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) SAL_OVERRIDE;
     virtual void        onStartElement(const AttributeList& rAttribs) SAL_OVERRIDE;
-    virtual void        onEndElement();
+    virtual void        onEndElement() SAL_OVERRIDE;
 
 private:
     TextBox&            mrTextBox;
