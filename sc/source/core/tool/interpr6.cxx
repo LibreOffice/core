@@ -24,6 +24,7 @@
 #include "document.hxx"
 #include "cellvalue.hxx"
 #include "dociter.hxx"
+#include "mtvcellfunc.hxx"
 
 #include "formula/token.hxx"
 #include <rtl/logfile.hxx>
@@ -213,6 +214,62 @@ double ScInterpreter::GetGammaDist( double fX, double fAlpha, double fLambda )
 
 namespace {
 
+class NumericCellAccumulator
+{
+    double mfSum;
+public:
+    NumericCellAccumulator() : mfSum(0.0) {}
+
+    void operator() (size_t, double fVal)
+    {
+        mfSum += fVal;
+    }
+
+    void operator() (size_t, const ScFormulaCell* pCell)
+    {
+        ScFormulaCell& rCell = const_cast<ScFormulaCell&>(*pCell);
+        if (rCell.IsValue())
+            mfSum += rCell.GetValue();
+    }
+
+    double getSum() const { return mfSum; }
+};
+
+class NumericCellCounter
+{
+    size_t mnCount;
+public:
+    NumericCellCounter() : mnCount(0) {}
+
+    void operator() (const sc::CellStoreType::value_type& rNode, size_t nOffset, size_t nDataSize)
+    {
+        switch (rNode.type)
+        {
+            case sc::element_type_numeric:
+                mnCount += nDataSize;
+            break;
+            case sc::element_type_formula:
+            {
+                sc::formula_block::const_iterator it = sc::formula_block::begin(*rNode.data);
+                std::advance(it, nOffset);
+                sc::formula_block::const_iterator itEnd = it;
+                std::advance(itEnd, nDataSize);
+                for (; it != itEnd; ++it)
+                {
+                    ScFormulaCell& rCell = const_cast<ScFormulaCell&>(**it);
+                    if (rCell.IsValueNoError())
+                        ++mnCount;
+                }
+            }
+            break;
+            default:
+                ;
+        }
+    }
+
+    size_t getCount() const { return mnCount; }
+};
+
 class FuncCount : public sc::ColumnSpanSet::ColumnAction
 {
     sc::ColumnBlockConstPosition maPos;
@@ -234,7 +291,9 @@ public:
         if (!bVal)
             return;
 
-        mnCount += mpCol->CountNumericCells(maPos, nRow1, nRow2);
+        NumericCellCounter aFunc;
+        maPos.miCellPos = sc::ParseBlock(maPos.miCellPos, mpCol->GetCellStore(), aFunc, nRow1, nRow2);
+        mnCount += aFunc.getCount();
         mnNumFmt = mpCol->GetNumberFormat(nRow2);
     };
 
@@ -263,7 +322,9 @@ public:
         if (!bVal)
             return;
 
-        mfSum += mpCol->SumNumericCells(maPos, nRow1, nRow2);
+        NumericCellAccumulator aFunc;
+        maPos.miCellPos = sc::ParseFormulaNumeric(maPos.miCellPos, mpCol->GetCellStore(), nRow1, nRow2, aFunc);
+        mfSum += aFunc.getSum();
         mnNumFmt = mpCol->GetNumberFormat(nRow2);
     };
 
