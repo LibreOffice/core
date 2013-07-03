@@ -54,6 +54,7 @@
 #include "tokenarray.hxx"
 #include "scopetools.hxx"
 #include "dociter.hxx"
+#include "editutil.hxx"
 
 #include "formula/IFunctionDescription.hxx"
 
@@ -6433,6 +6434,38 @@ void Test::testSharedFormulas()
     pFC = m_pDoc->GetFormulaCell(aPos);
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(14), pFC->GetSharedTopRow());
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(4), pFC->GetSharedLength());
+
+    // Set numeric value to B15, to make B16:B18 shared.
+    aPos.SetRow(14);
+    m_pDoc->SetValue(aPos, 1.2);
+    aPos.SetRow(15);
+    pFC = m_pDoc->GetFormulaCell(aPos);
+    // B16:B18 should be shared.
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(15), pFC->GetSharedTopRow());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(3), pFC->GetSharedLength());
+
+    // Set string value to B16 to make B17:B18 shared.
+    aPos.SetRow(15);
+    ScCellValue aCell("Test");
+    CPPUNIT_ASSERT_MESSAGE("This should be a string value.", aCell.meType == CELLTYPE_STRING);
+    aCell.commit(*m_pDoc, aPos);
+    CPPUNIT_ASSERT_EQUAL(*aCell.mpString, m_pDoc->GetString(aPos));
+    aPos.SetRow(16);
+    pFC = m_pDoc->GetFormulaCell(aPos);
+    // B17:B18 should be shared.
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(16), pFC->GetSharedTopRow());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(2), pFC->GetSharedLength());
+
+    // Set edit text to B17. Now B18 should be non-shared.
+    ScFieldEditEngine& rEditEngine = m_pDoc->GetEditEngine();
+    rEditEngine.SetText("Edit Text");
+    aPos.SetRow(16);
+    m_pDoc->SetEditText(aPos, rEditEngine.CreateTextObject());
+    CPPUNIT_ASSERT_EQUAL(CELLTYPE_EDIT, m_pDoc->GetCellType(aPos));
+    aPos.SetRow(17);
+    pFC = m_pDoc->GetFormulaCell(aPos);
+    CPPUNIT_ASSERT_MESSAGE("B18 should be a formula cell.", pFC);
+    CPPUNIT_ASSERT_MESSAGE("B18 should be non-shared.", !pFC->IsShared());
 
     m_pDoc->DeleteTab(0);
 }
