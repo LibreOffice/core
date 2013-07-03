@@ -21,6 +21,7 @@
 #include "macros.hxx"
 #include "RegressionCalculationHelper.hxx"
 
+#include <cmath>
 #include <rtl/math.hxx>
 #include <rtl/ustrbuf.hxx>
 #include "gauss.hxx"
@@ -72,17 +73,17 @@ void SAL_CALL PolynomialRegressionCurveCalculator::recalculateRegression(
         for (sal_Int32 j = 0; j < aNumberOfPowers; j++)
         {
             if (mForceIntercept)
-                aPowers[j] += std::pow(x, j + 2);
+                aPowers[j] += std::pow(x, (int) j + 2);
             else
-                aPowers[j] += std::pow(x, j);
+                aPowers[j] += std::pow(x, (int) j);
         }
 
         for (sal_Int32 j = 0; j < aNoElements; j++)
         {
             if (mForceIntercept)
-                aMatrix[j * aNoRows + aNoElements] += std::pow(x, j + 1) * ( y - mInterceptValue );
+                aMatrix[j * aNoRows + aNoElements] += std::pow(x, (int) j + 1) * ( y - mInterceptValue );
             else
-                aMatrix[j * aNoRows + aNoElements] += std::pow(x, j) * y;
+                aMatrix[j * aNoRows + aNoElements] += std::pow(x, (int) j) * y;
         }
 
         yAverage += y;
@@ -143,7 +144,7 @@ double SAL_CALL PolynomialRegressionCurveCalculator::getCurveValue( double x )
     fResult = 0.0;
     for (size_t i = 0; i<mResult.size(); i++)
     {
-        fResult += mResult[i] * std::pow(x, i);
+        fResult += mResult[i] * std::pow(x, (int) i);
     }
     return fResult;
 }
