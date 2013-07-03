@@ -56,6 +56,8 @@
 
 #include <comphelper/embeddedobjectcontainer.hxx>
 #include <comphelper/classids.hxx>
+#include <vcl/cvtgrf.hxx>
+#include <sax/tools/converter.hxx>
 
 using namespace com::sun::star;
 
@@ -1258,27 +1260,32 @@ Writer& OutHTML_FrmFmtOLENodeGrf( Writer& rWrt, const SwFrmFmt& rFrmFmt,
         return rWrt;
 
     {
-        Graphic aGrf( *pOLENd->GetGraphic() );
-        String aGrfNm;
-        const String* pTempFileName = rHTMLWrt.GetOrigFileName();
-        if(pTempFileName)
-            aGrfNm = *pTempFileName;
-
-        sal_uInt16 nErr = XOutBitmap::WriteGraphic( aGrf, aGrfNm,
-                                    OUString("JPG"),
-                                    (XOUTBMP_USE_GIF_IF_POSSIBLE |
-                                     XOUTBMP_USE_NATIVE_IF_POSSIBLE) );
-        if( nErr )              // fehlerhaft, da ist nichts auszugeben
+        Graphic aGraphic( *pOLENd->GetGraphic() );
+        sal_uLong nErr;
+        SvMemoryStream aOStm;
+        GfxLink aLink = aGraphic.GetLink();
+        sal_uLong aCvtType;
+        switch(  aLink.GetType() )
+        {
+            case( GFX_LINK_TYPE_NATIVE_GIF ): aCvtType = CVT_GIF; break;
+            case( GFX_LINK_TYPE_NATIVE_JPG ): aCvtType = CVT_JPG; break;
+            case( GFX_LINK_TYPE_NATIVE_PNG ): aCvtType = CVT_PNG; break;
+            case( GFX_LINK_TYPE_NATIVE_SVG ): aCvtType = CVT_SVG; break;
+            default: aCvtType = CVT_UNKNOWN; break;
+        }
+        nErr = GraphicConverter::Export(aOStm,aGraphic,aCvtType);
+        if( nErr )
         {
             rHTMLWrt.nWarn = WARN_SWG_POOR_LOAD | WARN_SW_WRITE_BASE;
-            return rWrt;
         }
-        aGrfNm = URIHelper::SmartRel2Abs(
-            INetURLObject(rWrt.GetBaseURL()), aGrfNm,
-            URIHelper::GetMaybeFileHdl() );
+        aOStm.Seek(STREAM_SEEK_TO_END);
+        uno::Sequence<sal_Int8> aOStmSeq( (sal_Int8*) aOStm.GetData(),aOStm.Tell() );
+        OUStringBuffer aStrBuffer;
+        ::sax::Converter::encodeBase64(aStrBuffer,aOStmSeq);
+        OUString aOUString = aStrBuffer.makeStringAndClear();
         sal_uLong nFlags = bInCntnr ? HTML_FRMOPTS_GENIMG_CNTNR
                                   : HTML_FRMOPTS_GENIMG;
-        OutHTML_Image( rWrt, rFrmFmt, aGrfNm,
+        OutHTML_Image( rWrt, rFrmFmt, aOUString,
                        pOLENd->GetTitle(), pOLENd->GetTwipSize(),
                        nFlags, pMarkToOLE );
     }
