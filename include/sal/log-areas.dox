@@ -133,6 +133,7 @@ certain functionality.
 @section forms
 
 @li @c forms.component
+@li @c forms.misc
 @li @c forms.runtime
 
 @section formula
