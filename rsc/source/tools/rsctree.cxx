@@ -26,14 +26,17 @@
 #include <rsctree.hxx>
 
 
-BiNode::BiNode(){
+BiNode::BiNode()
+{
     pLeft = pRight = NULL;
 }
 
-BiNode::~BiNode(){
+BiNode::~BiNode()
+{
 }
 
-void BiNode::EnumNodes( Link aLink ) const{
+void BiNode::EnumNodes( Link aLink ) const
+{
     if( Left() )
         Left()->EnumNodes( aLink );
     aLink.Call( (BiNode *)this );
@@ -41,24 +44,33 @@ void BiNode::EnumNodes( Link aLink ) const{
         Right()->EnumNodes( aLink );
 }
 
-BiNode * BiNode::ChangeDLListBTree( BiNode * pList ){
+BiNode * BiNode::ChangeDLListBTree( BiNode * pList )
+{
     BiNode * pMiddle;
     BiNode * pTmp;
     sal_uInt32 nEle, i;
 
-    if( pList ){
+    if( pList )
+{
         while( pList->Left() )
             pList = pList->Left();
         pTmp = pList;
+
         for( nEle = 0; pTmp->Right(); nEle++ )
             pTmp = pTmp->Right();
+
         pMiddle = pList;
         if( nEle / 2 )
+        {
             for( i = 0; i < (nEle / 2); i++ )
+            {
                 pMiddle = pMiddle->Right();
+            }
+        }
         else
+        {
             pList = (BiNode *)0;
-
+        }
         if( NULL != (pTmp = pMiddle->Left()) )  // rechten Zeiger auf Null
             pTmp->pRight = (BiNode *)0;
 
@@ -70,56 +82,68 @@ BiNode * BiNode::ChangeDLListBTree( BiNode * pList ){
         pMiddle->pLeft = ChangeDLListBTree( pList );
         pMiddle->pRight = ChangeDLListBTree( pRightNode );
 
-        return( pMiddle );
+        return pMiddle;
     }
-    return( pList );
+    return pList;
 }
 
-BiNode * BiNode::ChangeBTreeDLList(){
+BiNode * BiNode::ChangeBTreeDLList()
+{
     BiNode * pList;
     BiNode * pLL_RN;    // linke Liste rechter Knoten
 
-    if( Right() ){
+    if( Right() )
+    {
         pList = Right()->ChangeBTreeDLList();
         pRight = pList;
         pList->pLeft = this;
     }
     pList = this;
-    if( Left() ){
+    if( Left() )
+    {
         pLL_RN = pList = Left()->ChangeBTreeDLList();
+
         while( pLL_RN->Right() )
             pLL_RN = pLL_RN->Right();
+
         pLeft = pLL_RN;
         pLL_RN->pRight = this;
     }
-    return( pList );
+    return pList;
 }
 
-NameNode * NameNode::Remove( NameNode * pRemove ){
+NameNode * NameNode::Remove( NameNode * pRemove )
+{
     NameNode * pRoot = this;
     NameNode * pParent = SearchParent( pRemove );
 
-    if( pParent ){
-        if( pParent->Left()
-          && (EQUAL == pRemove->Compare( pParent->Left() ) ) ){
+    if( pParent )
+    {
+        if( pParent->Left() &&
+            (EQUAL == pRemove->Compare( pParent->Left() ) ) )
+        {
             pParent->pLeft = pRemove->Left();
             if( pRemove->Right() )
                 pParent->Insert( pRemove->Right() );
         }
-        else if( pParent->Right()
-          && (EQUAL == pRemove->Compare( pParent->Right() ) ) ){
+        else if( pParent->Right() &&
+                 (EQUAL == pRemove->Compare( pParent->Right() ) ) )
+        {
             pParent->pRight = pRemove->Right();
             if( pRemove->Left() )
                 pParent->Insert( pRemove->Left() );
         }
     }
-    else if( EQUAL == this->Compare( pRemove ) ){
-        if( Right() ){
+    else if( EQUAL == this->Compare( pRemove ) )
+    {
+        if( Right() )
+        {
             pRoot = Right();
             if( Left() )
                 Right()->Insert( Left() );
         }
-        else{
+        else
+        {
             pRoot = Left();
         }
     }
@@ -129,7 +153,8 @@ NameNode * NameNode::Remove( NameNode * pRemove ){
 }
 
 
-COMPARE NameNode::Compare( const NameNode * pCompare ) const{
+COMPARE NameNode::Compare( const NameNode * pCompare ) const
+{
     if( (long)this < (long)pCompare )
         return LESS;
     else if( (long)this > (long)pCompare )
@@ -138,7 +163,8 @@ COMPARE NameNode::Compare( const NameNode * pCompare ) const{
         return EQUAL;
 }
 
-COMPARE NameNode::Compare( const void * pCompare ) const{
+COMPARE NameNode::Compare( const void * pCompare ) const
+{
     if( (long)this < (long)pCompare )
         return LESS;
     else if( (long)this > (long)pCompare )
@@ -147,105 +173,123 @@ COMPARE NameNode::Compare( const void * pCompare ) const{
         return EQUAL;
 }
 
-NameNode* NameNode::SearchParent( const NameNode * pSearch ) const{
 // search for a parent node.
 // return a pointer to the parent node if found.
 // otherwise return 0.
+NameNode* NameNode::SearchParent( const NameNode * pSearch ) const
+{
     int nCmp = Compare( pSearch );
 
-    if( nCmp == GREATER ){
-        if( Left() ){
+    if( nCmp == GREATER )
+    {
+        if( Left() )
+        {
             if( ((NameNode *)Left())->Compare( pSearch ) == EQUAL )
                 return (NameNode *)this;
             return ((NameNode *)Left())->SearchParent( pSearch );
         };
     }
-    else if( nCmp == LESS ){
-        if( Right() ){
+    else if( nCmp == LESS )
+    {
+        if( Right() )
+        {
             if( ((NameNode *)Right())->Compare( pSearch ) == EQUAL )
                 return (NameNode *)this;
             return ((NameNode *)Right())->SearchParent( pSearch );
         }
-    };
-    return( (NameNode *)NULL );
+    }
+    return (NameNode *)NULL;
 }
 
-NameNode* NameNode::Search( const NameNode * pSearch ) const{
 // search for a node.
 // return a pointer to the node if found.
 // otherwise return 0.
+NameNode* NameNode::Search( const NameNode * pSearch ) const
+{
     int nCmp = Compare( pSearch );
 
-    if( nCmp == GREATER ){
+    if( nCmp == GREATER )
+    {
         if( Left() )
             return ((NameNode *)Left())->Search( pSearch );
     }
-    else if( nCmp == LESS ){
+    else if( nCmp == LESS )
+    {
         if( Right() )
             return ((NameNode *)Right())->Search( pSearch );
     }
     else
-        return( (NameNode *)this );
+        return (NameNode *)this;
 
-    return( NULL );
+    return NULL;
 }
 
-NameNode* NameNode::Search( const void * pSearch ) const{
 // search for a node.
 // return a pointer to the node if found.
 // otherwise return 0.
+NameNode* NameNode::Search( const void * pSearch ) const
+{
     int nCmp = Compare( pSearch );
 
-    if( nCmp == GREATER ){
+    if( nCmp == GREATER )
+    {
         if( Left() )
             return ((NameNode *)Left())->Search( pSearch );
     }
-    else if( nCmp == LESS ){
+    else if( nCmp == LESS )
+    {
         if( Right() )
             return ((NameNode *)Right())->Search( pSearch );
     }
     else
-        return( (NameNode *)this );
+        return (NameNode *)this;
 
-    return( NULL );
+    return NULL;
 }
 
-sal_Bool NameNode::Insert( NameNode * pTN, sal_uInt32* pnDepth ){
 // Ein Knoten wird in den Baum eingefuegt
-// Gibt es einen Knoten mit dem gleichen Namen, dann return sal_False
-// sonst return sal_True. Der Knoten wird auf jeden Fall eingefuegt.
+// Gibt es einen Knoten mit dem gleichen Namen, dann return false
+// sonst return true. Der Knoten wird auf jeden Fall eingefuegt.
 
-    sal_Bool bRet = sal_True;
+bool NameNode::Insert( NameNode * pTN, sal_uInt32* pnDepth )
+{
+    bool bRet = true;
     int nCmp = Compare( pTN );
 
     *pnDepth += 1;
-    if( nCmp == GREATER ){
+    if( nCmp == GREATER )
+    {
         if( Left() )
             bRet =  ((NameNode *)Left())->Insert( pTN, pnDepth );
         else
             pLeft = pTN;
     }
-    else{
+    else
+    {
         if( Right() )
             bRet = ((NameNode *)Right())->Insert( pTN, pnDepth );
         else
             pRight = pTN;
+
         if( nCmp == EQUAL )
-            bRet = sal_False;
-    };
-    return( bRet );
+            bRet = false;
+    }
+    return bRet;
 }
 
-sal_Bool NameNode::Insert( NameNode * pTN ){
 // insert a node in the tree.
-// if the node with the same name is in, return sal_False and no insert.
+// if the node with the same name is in, return false and no insert.
 // if not return true.
+bool NameNode::Insert( NameNode * pTN )
+{
     sal_uInt32  nDepth = 0;
-    sal_Bool        bRet;
+    bool        bRet;
 
     bRet = Insert( pTN, &nDepth );
-    if( bRet ){
-        if( nDepth > 20 ){
+    if( bRet )
+    {
+        if( nDepth > 20 )
+        {
             if( Left() )
                 pLeft =  ChangeDLListBTree(  Left()->ChangeBTreeDLList() );
             if( Right() )
@@ -253,10 +297,11 @@ sal_Bool NameNode::Insert( NameNode * pTN ){
         }
     }
 
-    return( bRet );
+    return bRet;
 }
 
-void NameNode::OrderTree(){
+void NameNode::OrderTree()
+{
     NameNode * pTmpLeft = (NameNode *)Left();
     NameNode * pTmpRight = (NameNode *)Right();
 
@@ -266,8 +311,10 @@ void NameNode::OrderTree(){
     SubOrderTree( pTmpRight );
 }
 
-void NameNode::SubOrderTree( NameNode * pOrderNode ){
-    if( pOrderNode ){
+void NameNode::SubOrderTree( NameNode * pOrderNode )
+{
+    if( pOrderNode )
+    {
         NameNode * pTmpLeft = (NameNode *)pOrderNode->Left();
         NameNode * pTmpRight = (NameNode *)pOrderNode->Right();
         pOrderNode->pLeft = NULL;
@@ -278,8 +325,9 @@ void NameNode::SubOrderTree( NameNode * pOrderNode ){
     }
 }
 
-IdNode * IdNode::Search( sal_uInt32 nTypeName ) const{
-    return( (IdNode *)NameNode::Search( (const void *)&nTypeName ) );
+IdNode * IdNode::Search( sal_uInt32 nTypeName ) const
+{
+    return (IdNode *)NameNode::Search( (const void *)&nTypeName );
 }
 
 COMPARE IdNode::Compare( const NameNode * pSearch ) const
@@ -292,9 +340,9 @@ COMPARE IdNode::Compare( const NameNode * pSearch ) const
         return EQUAL;
 }
 
-COMPARE IdNode::Compare( const void * pSearch ) const{
 // pSearch ist ein Zeiger auf sal_uInt32
-
+COMPARE IdNode::Compare( const void * pSearch ) const
+{
     if( GetId() < *((const sal_uInt32 *)pSearch) )
         return LESS;
     else if( GetId() > *((const sal_uInt32 *)pSearch) )
@@ -305,10 +353,11 @@ COMPARE IdNode::Compare( const void * pSearch ) const{
 
 sal_uInt32 IdNode::GetId() const
 {
-    return( 0xFFFFFFFF );
+    return 0xFFFFFFFF;
 }
 
-StringNode * StringNode::Search( const char * pSearch ) const{
+StringNode * StringNode::Search( const char * pSearch ) const
+{
     return (StringNode *)NameNode::Search( (const void *)pSearch );
 }
 
@@ -324,9 +373,9 @@ COMPARE StringNode::Compare( const NameNode * pSearch ) const
         return EQUAL;
 }
 
+// pSearch ist ein Zeiger auf const char *
 COMPARE StringNode::Compare( const void * pSearch ) const
 {
-// pSearch ist ein Zeiger auf const char *
     int nCmp = strcmp( m_aName.getStr(), (const char *)pSearch );
 
     if( nCmp < 0 )

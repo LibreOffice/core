@@ -45,9 +45,9 @@ protected:
                             RscTop * pSuperCl = NULL );
 
 public:
-    OString    aCallPar1;      // Klassenaufruf ohne Typen bis ResId
-    OString    aCallPar2;      // Klassenaufruf ohne Typen ab ResId
-    OString    aCallParType;   // Klassenaufruf mit Typen
+         OString    aCallPar1;      // Klassenaufruf ohne Typen bis ResId
+         OString    aCallPar2;      // Klassenaufruf ohne Typen ab ResId
+         OString    aCallParType;   // Klassenaufruf mit Typen
 
             void    SetSuperClass( RscTop * pClass )
                     {
@@ -59,8 +59,8 @@ public:
             sal_uInt32  GetTypId() const
                     { return nTypId; };
                     // Gibt die Oberklasse zurueck
-            sal_Bool    InHierarchy( RscTop * pClass );
-            sal_Bool    IsCodeWriteable() const
+            bool    InHierarchy( RscTop * pClass );
+            bool    IsCodeWriteable() const
                     {
                         return( 0 != aCallParType.getLength() );
                     }
@@ -79,7 +79,7 @@ public:
 
     virtual Atom    GetConstant( sal_uInt32 );
 
-    virtual RscTop *    GetTypeClass() const;
+    virtual RscTop* GetTypeClass() const;
 
                     // Gibt die Groesse der Klasse in Bytes
     virtual sal_uInt32  Size();
@@ -103,7 +103,7 @@ public:
                     // pData, pClass im return koennen NULL sein
     virtual RSCINST GetVariable( const RSCINST & rInst, Atom nVarName,
                                  const RSCINST & rInitInst,
-                                 sal_Bool nInitDflt = sal_False,
+                                 bool nInitDflt = false,
                                  RscTop * pCreateClass = NULL );
     virtual RSCINST GetCopyVar( const RSCINST & rInst, Atom nVarName );
 
@@ -153,7 +153,7 @@ public:
     virtual ERRTYPE SetNumber( const RSCINST & rInst, sal_Int32 lValue );
 
                     // Eine Zuweisung an eine Variable
-    virtual ERRTYPE SetBool( const RSCINST & rInst, sal_Bool bValue );
+    virtual ERRTYPE SetBool( const RSCINST & rInst, bool bValue );
 
                     // Eine Zuweisung an eine Variable
     virtual ERRTYPE SetConst( const RSCINST & rInst, Atom nValueId,
@@ -166,29 +166,29 @@ public:
 
     virtual ERRTYPE GetNumber( const RSCINST & rInst, sal_Int32 * pN );
 
-    virtual ERRTYPE GetBool( const RSCINST & rInst, sal_Bool * pB );
+    virtual ERRTYPE GetBool( const RSCINST & rInst, bool * pB );
 
     virtual ERRTYPE GetConst( const RSCINST & rInst, Atom * pH );
 
     virtual ERRTYPE GetString( const RSCINST & rInst, char ** ppStr );
 
     virtual RSCINST Create( RSCINST * pInst,
-                            const RSCINST & rDefInst, sal_Bool bOwnClass = sal_False );
+                            const RSCINST & rDefInst, bool bOwnClass = false );
 
                     // Instanz zerstoeren
     virtual void    Destroy( const RSCINST & rInst );
 
                     // prueft auf konsistenz
-    virtual sal_Bool    IsConsistent( const RSCINST & rInst );
+    virtual bool    IsConsistent( const RSCINST & rInst );
 
                     // Alles auf Default setzen
     virtual void    SetToDefault( const RSCINST & rInst );
 
                     // Ist Eingabe = Default
-    virtual sal_Bool    IsDefault( const RSCINST & rInst );
+    virtual bool    IsDefault( const RSCINST & rInst );
 
                     // Gleiche Werte auf Default setzen
-    virtual sal_Bool    IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef );
+    virtual bool    IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef );
 
                     // Instanz auf Default setzen
     virtual void    SetDefault( const RSCINST & rInst, Atom nVarId );
@@ -210,9 +210,9 @@ public:
                               RscTypCont * pTC, sal_uInt32 nTab,const char * );
     virtual ERRTYPE WriteRcHeader( const RSCINST & rInst, RscWriteRc & aMem,
                                    RscTypCont * pTC, const RscId & aId,
-                                    sal_uInt32 nDeep, sal_Bool bExtra );
+                                    sal_uInt32 nDeep, bool bExtra );
     virtual ERRTYPE WriteRc( const RSCINST & rInst, RscWriteRc & aMem,
-                             RscTypCont * pTC, sal_uInt32 nDeep, sal_Bool bExtra );
+                             RscTypCont * pTC, sal_uInt32 nDeep, bool bExtra );
 };
 
 #endif //_RSCTOP_HXX

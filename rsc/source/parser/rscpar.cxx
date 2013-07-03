@@ -29,8 +29,8 @@ void RscFileInst::Init()
     *pLine = '\0';
     nScanPos = 0;
     cLastChar = '\0';
-    bEof = sal_False;
-};
+    bEof = false;
+}
 
 RscFileInst::RscFileInst( RscTypCont * pTC, sal_uLong lIndexSrc,
                           sal_uLong lFIndex, FILE * fFile )
@@ -47,7 +47,8 @@ RscFileInst::RscFileInst( RscTypCont * pTC, sal_uLong lIndexSrc,
     pInput    = (char *)rtl_allocateMemory( nInputBufLen );
 }
 
-RscFileInst::~RscFileInst(){
+RscFileInst::~RscFileInst()
+{
     if( pInput )
         rtl_freeMemory( pInput );
     if( pLine )
@@ -57,17 +58,17 @@ RscFileInst::~RscFileInst(){
 int RscFileInst::GetChar()
 {
     if( pLine[ nScanPos ] )
-        return( pLine[ nScanPos++ ] );
+        return pLine[ nScanPos++ ];
     else if( nInputPos >= nInputEndPos && nInputEndPos != nInputBufLen )
     {
         // Dateiende
-        bEof = sal_True;
+        bEof = true;
         return 0;
     }
     else
     {
         GetNewLine();
-        return( '\n' );
+        return '\n';
     }
 }
 
@@ -97,17 +98,21 @@ void RscFileInst::GetNewLine()
             }
 
             // cr lf, lf cr, lf oder cr wird '\0'
-            if( pInput[ nInputPos ] == '\n' ){
+            if( pInput[ nInputPos ] == '\n' )
+            {
                 nInputPos++;
-                if( cLastChar != '\r' ){
+                if( cLastChar != '\r' )
+                {
                     cLastChar = '\n';
                     pLine[ nLen++ ] = '\0';
                     goto END;
                 }
             }
-            else if( pInput[ nInputPos ] == '\r' ){
+            else if( pInput[ nInputPos ] == '\r' )
+            {
                 nInputPos++;
-                if( cLastChar != '\n' ){
+                if( cLastChar != '\n' )
+                {
                     cLastChar = '\r';
                     pLine[ nLen++ ] = '\0';
                     goto END;
@@ -133,7 +138,8 @@ void RscFileInst::GetNewLine()
     pLine[ nLen ] = '\0';
 
 END:
-    if( pTypCont->pEH->GetListFile() ){
+    if( pTypCont->pEH->GetListFile() )
+    {
         char buf[ 10 ];
 
         sprintf( buf, "%5d ", (int)GetLineNo() );

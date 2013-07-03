@@ -24,27 +24,29 @@ class RscTop;
 
 #include <rscall.h>
 
-typedef struct {
-    Atom          nName;
-    sal_uInt32          nTyp;
+typedef struct
+{
+    Atom            nName;
+    sal_uInt32      nTyp;
     long            yylval;
 } KEY_STRUCT;
 
-class RscNameTable {
-    sal_Bool            bSort;      //soll bei jedem einfuegen sortiert werden?
-    sal_uInt32          nEntries;   //Anzahl der Eintr�ge
+class RscNameTable
+{
+    bool            bSort;      //soll bei jedem einfuegen sortiert werden?
+    sal_uInt32      nEntries;   //Anzahl der Eintr�ge
     KEY_STRUCT *    pTable;
 public:
             RscNameTable();
             ~RscNameTable();
-    void    SetSort( sal_Bool bSorted = sal_True );
-    Atom  Put( Atom nName, sal_uInt32 nTyp, long nValue );
-    Atom  Put( const char * pName, sal_uInt32 nTyp, long nValue );
-    Atom  Put( const char * pName, sal_uInt32 nTyp );
-    Atom  Put( Atom nName, sal_uInt32 nTyp, RscTop * pClass );
+    void    SetSort( bool bSorted = true );
+    Atom    Put( Atom nName, sal_uInt32 nTyp, long nValue );
+    Atom    Put( const char * pName, sal_uInt32 nTyp, long nValue );
+    Atom    Put( const char * pName, sal_uInt32 nTyp );
+    Atom    Put( Atom nName, sal_uInt32 nTyp, RscTop * pClass );
 
-            // sal_True, wurde gefunden
-    sal_Bool    Get( Atom nName, KEY_STRUCT * pEle );
+            // true, wurde gefunden
+    bool    Get( Atom nName, KEY_STRUCT * pEle );
 };
 
 

@@ -38,37 +38,41 @@ class RscDefine;
 class RscExpType
 {
 public:
-    union {
+    union
+    {
         RscExpression * pExp;
         RscDefine     * pDef;
-        struct {
+        struct
+        {
              short           nHi;
              unsigned short  nLo;
         } aLong;
     } aExp;
     char cType;
     char cUnused;
-    sal_Bool IsNumber()    const { return( RSCEXP_LONG     == cType ); }
-    sal_Bool IsExpression()const { return( RSCEXP_EXP      == cType ); }
-    sal_Bool IsDefinition()const { return( RSCEXP_DEF      == cType ); }
-    sal_Bool IsNothing()   const { return( RSCEXP_NOTHING  == cType ); }
-    void SetLong( sal_Int32 lValue ){
-            aExp.aLong.nHi = (short)(lValue >> 16);
-            aExp.aLong.nLo = (unsigned short)lValue;
-            cType = RSCEXP_LONG;
-         }
-    sal_Int32 GetLong() const{
-             return aExp.aLong.nLo |
-                    ((sal_Int32)aExp.aLong.nHi << 16);
-         }
-    sal_Bool Evaluate( sal_Int32 * pValue ) const;
+    bool IsNumber()    const { return( RSCEXP_LONG     == cType ); }
+    bool IsExpression()const { return( RSCEXP_EXP      == cType ); }
+    bool IsDefinition()const { return( RSCEXP_DEF      == cType ); }
+    bool IsNothing()   const { return( RSCEXP_NOTHING  == cType ); }
+    void SetLong( sal_Int32 lValue )
+             {
+                 aExp.aLong.nHi = (short)(lValue >> 16);
+                 aExp.aLong.nLo = (unsigned short)lValue;
+                 cType = RSCEXP_LONG;
+             }
+    sal_Int32 GetLong() const
+                  {
+                      return aExp.aLong.nLo |
+                          ((sal_Int32)aExp.aLong.nHi << 16);
+                  }
+    bool Evaluate( sal_Int32 * pValue ) const;
     void AppendMacro( OStringBuffer & ) const;
 };
 
 /*********** R s c I d ***************************************************/
 class RscId
 {
-    static      sal_Bool bNames;// sal_False, bei den Namenoperation nur Zahlen
+    static      bool bNames;// false, bei den Namenoperation nur Zahlen
 public:
     RscExpType  aExp;       // Zahl, Define oder Ausdruck
     sal_Int32   GetNumber() const;
@@ -86,25 +90,23 @@ public:
 
             void Destroy();
 
-            ~RscId(){
-                Destroy();
-            }
+            ~RscId() { Destroy(); }
 
             RscId( const RscId& rRscId );
 
             RscId& operator = ( const RscId& rRscId );
 
-    static void    SetNames( sal_Bool bSet = sal_True );
-    operator         sal_Int32() const;   // Gibt Nummer zurueck
+    static void SetNames( bool bSet = true );
+    operator sal_Int32() const;   // Gibt Nummer zurueck
     OString GetName()  const;   // Gibt den Namen des Defines zurueck
-    sal_Bool    operator <  ( const RscId& rRscId ) const;
-    sal_Bool    operator >  ( const RscId& rRscId ) const;
-    sal_Bool    operator == ( const RscId& rRscId ) const;
-    sal_Bool    operator <=  ( const RscId& rRscId ) const
-            { return !(operator > ( rRscId )); }
-    sal_Bool    operator >= ( const RscId& rRscId ) const
-            { return !(operator < ( rRscId )); }
-    sal_Bool    IsId() const { return !aExp.IsNothing(); }
+    bool    operator <  ( const RscId& rRscId ) const;
+    bool    operator >  ( const RscId& rRscId ) const;
+    bool    operator == ( const RscId& rRscId ) const;
+    bool    operator <=  ( const RscId& rRscId ) const
+                { return !(operator > ( rRscId )); }
+    bool    operator >= ( const RscId& rRscId ) const
+                { return !(operator < ( rRscId )); }
+    bool    IsId() const { return !aExp.IsNothing(); }
 };
 
 /*********** R s c D e f i n e *******************************************/
@@ -115,35 +117,36 @@ friend class RscDefineList;
 friend class RscDefTree;
 friend class RscExpression;
 friend class RscId;
-    sal_uLong           lFileKey;   // zu welcher Datei gehoert das Define
-    sal_uInt32          nRefCount;  // Wieviele Referenzen auf dieses Objekt
-    sal_Int32           lId;        // Identifier
+    sal_uLong   lFileKey;   // zu welcher Datei gehoert das Define
+    sal_uInt32  nRefCount;  // Wieviele Referenzen auf dieses Objekt
+    sal_Int32   lId;        // Identifier
     RscExpression * pExp;       // Ausdruck
 protected:
 
-            RscDefine( sal_uLong lFileKey, const OString& rDefName,
-                       sal_Int32 lDefId );
-            RscDefine( sal_uLong lFileKey, const OString& rDefName,
-                       RscExpression * pExpression );
-            ~RscDefine();
-    void    IncRef(){ nRefCount++; }
+                RscDefine( sal_uLong lFileKey, const OString& rDefName,
+                           sal_Int32 lDefId );
+                RscDefine( sal_uLong lFileKey, const OString& rDefName,
+                           RscExpression * pExpression );
+                ~RscDefine();
+    void        IncRef(){ nRefCount++; }
     sal_uInt32  GetRefCount() const    { return nRefCount; }
-    void    DecRef();
-    void    DefineToNumber();
-    void    SetName(const OString& rNewName) { m_aName = rNewName; }
+    void        DecRef();
+    void        DefineToNumber();
+    void        SetName(const OString& rNewName) { m_aName = rNewName; }
 
     using StringNode::Search;
 public:
     RscDefine * Search( const char * );
-    sal_uLong       GetFileKey() const { return lFileKey; }
-    sal_Bool        Evaluate();
-    sal_Int32       GetNumber() const  { return lId;      }
-    OString    GetMacro();
+    sal_uLong   GetFileKey() const { return lFileKey; }
+    bool        Evaluate();
+    sal_Int32   GetNumber() const  { return lId;      }
+    OString     GetMacro();
 };
 
 typedef ::std::vector< RscDefine* > RscSubDefList;
 
-class RscDefineList {
+class RscDefineList
+{
 friend class RscFile;
 friend class RscFileTab;
 private:
@@ -153,19 +156,21 @@ private:
                      sal_Int32 lDefId, size_t lPos );
     RscDefine * New( sal_uLong lFileKey, const OString& rDefName,
                      RscExpression * pExpression, size_t lPos );
-    sal_Bool        Remove();
-    size_t      GetPos( RscDefine* item ) {
-                    for ( size_t i = 0, n = maList.size(); i < n; ++i )
-                        if ( maList[ i ] == item )
-                            return i;
-                    return size_t(-1);
-                }
+    bool        Remove();
+    size_t      GetPos( RscDefine* item )
+                    {
+                        for ( size_t i = 0, n = maList.size(); i < n; ++i )
+                            if ( maList[ i ] == item )
+                                return i;
+                        return size_t(-1);
+                    }
 public:
     void        WriteAll( FILE * fOutput );
 };
 
 /*********** R s c E x p r e s s i o n ***********************************/
-class RscExpression {
+class RscExpression
+{
 friend class RscFileTab;
     char        cOperation;
     RscExpType  aLeftExp;
@@ -174,15 +179,16 @@ public:
                 RscExpression( RscExpType aLE, char cOp,
                                RscExpType aRE );
                 ~RscExpression();
-    sal_Bool        Evaluate( sal_Int32 * pValue );
-    OString GetMacro();
+    bool        Evaluate( sal_Int32 * pValue );
+    OString     GetMacro();
 };
 
 /********************** R S C F I L E ************************************/
-class RscDepend {
-    sal_uLong            lKey;
+class RscDepend
+{
+    sal_uLong   lKey;
 public:
-            RscDepend( sal_uLong lIncKey ){ lKey = lIncKey; };
+                RscDepend( sal_uLong lIncKey ){ lKey = lIncKey; };
     sal_uLong   GetFileKey(){ return lKey; }
 };
 
@@ -192,31 +198,32 @@ typedef ::std::vector< RscDepend* > RscDependList;
 class RscFile
 {
 friend class RscFileTab;
-    sal_Bool            bIncFile;   // Ist es eine Include-Datei
+    bool            bIncFile;   // Ist es eine Include-Datei
 public:
-    sal_Bool            bLoaded;    // Ist die Datei geladen
-    sal_Bool            bScanned;   // Wurde Datei nach Inclide abgesucht
-    sal_Bool            bDirty;     // Dirty-Flag
-    OString aFileName;  // Name der Datei
-    OString aPathName;  // Pfad und Name der Datei
+    bool            bLoaded;    // Ist die Datei geladen
+    bool            bScanned;   // Wurde Datei nach Inclide abgesucht
+    bool            bDirty;     // Dirty-Flag
+    OString         aFileName;  // Name der Datei
+    OString         aPathName;  // Pfad und Name der Datei
     RscDefineList   aDefLst;    // Liste der Defines
     RscDependList   aDepLst;    // List of Depend
 
                     RscFile();
                     ~RscFile();
-    sal_Bool            InsertDependFile( sal_uLong lDepFile, size_t lPos );
-    sal_Bool            Depend( sal_uLong lDepend, sal_uLong lFree );
-    void            SetIncFlag(){ bIncFile = sal_True; };
-    sal_Bool            IsIncFile(){  return bIncFile; };
+    bool            InsertDependFile( sal_uLong lDepFile, size_t lPos );
+    bool            Depend( sal_uLong lDepend, sal_uLong lFree );
+    void            SetIncFlag(){ bIncFile = true; };
+    bool            IsIncFile(){  return bIncFile; };
 };
 
 typedef UniqueIndex<RscFile> RscSubFileTab;
 #define NOFILE_INDEX UNIQUEINDEX_ENTRY_NOTFOUND
 
-class RscDefTree {
+class RscDefTree
+{
     RscDefine * pDefRoot;
 public:
-    static sal_Bool Evaluate( RscDefine * pDef );
+    static bool Evaluate( RscDefine * pDef );
                 RscDefTree(){ pDefRoot = NULL; }
                 ~RscDefTree();
     void        Remove();
@@ -235,14 +242,14 @@ public:
 
     RscDefine * FindDef( const char * );
     RscDefine * FindDef(const OString& rStr)
-    {
-        return FindDef(rStr.getStr());
-    }
+                {
+                    return FindDef(rStr.getStr());
+                }
 
-    sal_Bool        Depend( sal_uLong lDepend, sal_uLong lFree );
-    sal_Bool        TestDef( sal_uLong lFileKey, size_t lPos,
+    bool        Depend( sal_uLong lDepend, sal_uLong lFree );
+    bool        TestDef( sal_uLong lFileKey, size_t lPos,
                          const RscDefine * pDefDec );
-    sal_Bool        TestDef( sal_uLong lFileKey, size_t lPos,
+    bool        TestDef( sal_uLong lFileKey, size_t lPos,
                          const RscExpression * pExpDec );
 
     RscDefine * NewDef( sal_uLong lKey, const OString& rDefName,
@@ -251,10 +258,10 @@ public:
                         RscExpression *, sal_uLong lPos );
 
            // Alle Defines die in dieser Datei Definiert sind loeschen
-    void   DeleteFileContext( sal_uLong lKey );
-    sal_uLong  NewCodeFile(const OString& rName);
-    sal_uLong  NewIncFile(const OString& rName, const OString& rPath);
-    RscFile * GetFile( sal_uLong lFileKey ){ return Get( lFileKey ); }
+    void        DeleteFileContext( sal_uLong lKey );
+    sal_uLong   NewCodeFile(const OString& rName);
+    sal_uLong   NewIncFile(const OString& rName, const OString& rPath);
+    RscFile *   GetFile( sal_uLong lFileKey ){ return Get( lFileKey ); }
 };
 
 #endif // _RSCDEF_HXX

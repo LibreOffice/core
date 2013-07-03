@@ -40,34 +40,35 @@ int rsc_strnicmp( const char *string1, const char *string2, size_t count )
     for( i = 0; ( i < count ) && string1[ i ] && string2[ i ] ; i++ )
     {
         if( tolower( string1[ i ] ) < tolower( string2[ i ] ) )
-            return( -1 );
+            return -1;
         else if( tolower( string1[ i ] ) > tolower( string2[ i ] ) )
-            return( 1 );
+            return 1;
     }
     if( i == count )
-        return( 0 );
+        return 0;
     else if( tolower( string1[ i ] ) < tolower( string2[ i ] ) )
-        return( -1 );
+        return -1;
     else if( tolower( string1[ i ] ) > tolower( string2[ i ] ) )
-        return( 1 );
-    return( 0 );
+        return 1;
+    return 0;
 }
 
 /* case insensitive compare of two strings */
 int rsc_stricmp( const char *string1, const char *string2 ){
     int i;
 
-    for( i = 0; string1[ i ] && string2[ i ]; i++ ){
+    for( i = 0; string1[ i ] && string2[ i ]; i++ )
+    {
         if( tolower( string1[ i ] ) < tolower( string2[ i ] ) )
-            return( -1 );
+            return -1;
         else if( tolower( string1[ i ] ) > tolower( string2[ i ] ) )
-            return( 1 );
+            return 1;
     }
     if( tolower( string1[ i ] ) < tolower( string2[ i ] ) )
-        return( -1 );
+        return -1;
     else if( tolower( string1[ i ] ) > tolower( string2[ i ] ) )
-        return( 1 );
-    return( 0 );
+        return 1;
+    return 0;
 }
 
 char* rsc_strdup( const char* pStr )
@@ -86,7 +87,7 @@ OString GetTmpFileName()
     return OUStringToOString( aTmpFile, RTL_TEXTENCODING_MS_1252 );
 }
 
-sal_Bool Append(FILE * fDest, const OString &rTmpFile)
+bool Append(FILE * fDest, const OString &rTmpFile)
 {
 #define MAX_BUF 4096
     FILE *fSource = fopen(rTmpFile.getStr(), "rb");
@@ -94,7 +95,7 @@ sal_Bool Append(FILE * fDest, const OString &rTmpFile)
     {
         if( fSource )
             fclose( fSource );
-        return sal_False;
+        return false;
     }
 
     bool bSuccess = true;
@@ -106,17 +107,18 @@ sal_Bool Append(FILE * fDest, const OString &rTmpFile)
         nItems = fread( szBuf, 1, MAX_BUF, fSource );
         bSuccess = (nItems == fwrite(szBuf, 1, nItems, fDest));
         SAL_WARN_IF(!bSuccess, "rsc", "short write");
-    } while (MAX_BUF == nItems && bSuccess);
+    }
+    while (MAX_BUF == nItems && bSuccess);
 
     fclose( fSource );
     return bSuccess;
 }
 
-sal_Bool Append(const OString &rOutputSrs, const OString &rTmpFile)
+bool Append(const OString &rOutputSrs, const OString &rTmpFile)
 {
     FILE * fDest = fopen(rOutputSrs.getStr(), "ab");
 
-    sal_Bool bRet = Append(fDest, rTmpFile);
+    bool bRet = Append(fDest, rTmpFile);
 
     if( fDest )
         fclose( fDest );
@@ -185,24 +187,29 @@ char * ResponseFile( RscPtrPtr * ppCmd, char ** ppArgv, sal_uInt32 nArgc )
             ppCmd->Append( rsc_strdup( *(ppArgv +i) ) );
     };
     ppCmd->Append( (void *)0 );
-    return( NULL );
+    return NULL;
 }
 
 
-RscPtrPtr :: RscPtrPtr(){
+RscPtrPtr :: RscPtrPtr()
+{
     nCount = 0;
     pMem = NULL;
 }
 
-RscPtrPtr :: ~RscPtrPtr(){
+RscPtrPtr :: ~RscPtrPtr()
+{
     Reset();
 }
 
-void RscPtrPtr :: Reset(){
+void RscPtrPtr :: Reset()
+{
     sal_uInt32 i;
 
-    if( pMem ){
-        for( i = 0; i < nCount; i++ ){
+    if( pMem )
+    {
+        for( i = 0; i < nCount; i++ )
+        {
             if( pMem[ i ] )
                rtl_freeMemory( pMem[ i ] );
         }
@@ -212,7 +219,8 @@ void RscPtrPtr :: Reset(){
     pMem = NULL;
 }
 
-sal_uInt32 RscPtrPtr :: Append( void * pBuffer ){
+sal_uInt32 RscPtrPtr :: Append( void * pBuffer )
+{
     if( !pMem )
         pMem = (void **)rtl_allocateMemory( (nCount +1) * sizeof( void * ) );
     else
@@ -220,13 +228,14 @@ sal_uInt32 RscPtrPtr :: Append( void * pBuffer ){
                          ((nCount +1) * sizeof( void * )
                        ) );
     pMem[ nCount ] = pBuffer;
-    return( nCount++ );
+    return nCount++;
 }
 
-void * RscPtrPtr :: GetEntry( sal_uInt32 nEntry ){
+void * RscPtrPtr :: GetEntry( sal_uInt32 nEntry )
+{
     if( nEntry < nCount )
-        return( pMem[ nEntry ] );
-    return( NULL );
+        return pMem[ nEntry ];
+    return NULL;
 }
 
 RscWriteRc::RscWriteRc( RSCBYTEORDER_TYPE nOrder )
@@ -234,7 +243,7 @@ RscWriteRc::RscWriteRc( RSCBYTEORDER_TYPE nOrder )
     short               nSwapTest = 1;
     RSCBYTEORDER_TYPE   nMachineOrder;
 
-    bSwap = sal_False;
+    bSwap = false;
     if( nOrder != RSC_SYSTEMENDIAN )
     {
         if( (sal_uInt8)*(sal_uInt8 *)&nSwapTest )
@@ -272,7 +281,7 @@ char * RscWriteRc :: GetPointer( sal_uInt32 nSize )
         pMem = (char *)rtl_allocateMemory( nLen );
         memset( pMem, 0, nLen );
     }
-    return( pMem + nSize );
+    return pMem + nSize;
 }
 
 

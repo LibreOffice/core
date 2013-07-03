@@ -27,9 +27,10 @@
 class RscString : public RscTop
 {
     RscTop * pRefClass;
-    struct RscStringInst {
+    struct RscStringInst
+    {
         char *  pStr;   // Zeiger auf String
-        sal_Bool    bDflt;  // Ist Default
+        bool    bDflt;  // Ist Default
         RscId   aRefId; // ReferenzName
     };
     sal_uInt32  nSize;
@@ -37,24 +38,21 @@ public:
                     RscString( Atom nId, sal_uInt32 nTypId );
     virtual RSCCLASS_TYPE   GetClassType() const;
 
-    void            SetRefClass( RscTop * pClass )
-    {
-                        pRefClass = pClass;
-                    };
-    RSCINST         Create( RSCINST * pInst, const RSCINST & rDfltInst, sal_Bool );
+    void            SetRefClass( RscTop * pClass ) { pRefClass = pClass; }
+    RSCINST         Create( RSCINST * pInst, const RSCINST & rDfltInst, bool );
                     // Der zulaessige Bereich wird gesetzt
     void            Destroy( const RSCINST & rInst );
-    sal_uInt32          Size(){ return nSize; }
+    sal_uInt32      Size(){ return nSize; }
     void            SetToDefault( const RSCINST & rInst )
-                    {
-                        ((RscStringInst*)rInst.pData)->bDflt = sal_True;
-                    }
-    sal_Bool            IsDefault( const RSCINST & rInst)
-                    {
-                        return( ((RscStringInst*)rInst.pData)->bDflt );
-                    };
+                        {
+                            ((RscStringInst*)rInst.pData)->bDflt = true;
+                        }
+    bool            IsDefault( const RSCINST & rInst)
+                        {
+                            return ((RscStringInst*)rInst.pData)->bDflt;
+                        }
                     // Als Default setzen
-    sal_Bool            IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef );
+    bool            IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef );
     ERRTYPE         SetString( const RSCINST &, const char * pStr );
     ERRTYPE         GetString( const RSCINST &, char ** ppStr );
     ERRTYPE         GetRef( const RSCINST & rInst, RscId * );
@@ -62,7 +60,7 @@ public:
     void            WriteSrc( const RSCINST &, FILE * fOutput,
                               RscTypCont * pTC, sal_uInt32 nTab, const char * );
     ERRTYPE         WriteRc( const RSCINST &, RscWriteRc & aMem,
-                             RscTypCont * pTC, sal_uInt32, sal_Bool bExtra );
+                             RscTypCont * pTC, sal_uInt32, bool bExtra );
 };
 
 #endif // _RSCSTR_HXX

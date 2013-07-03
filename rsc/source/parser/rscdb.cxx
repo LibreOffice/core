@@ -39,33 +39,32 @@ RscTypCont :: RscTypCont( RscError * pErrHdl,
                           RSCBYTEORDER_TYPE nOrder,
                           const OString& rSearchPath,
                           sal_uInt32 nFlagsP )
-    :
-      nSourceCharSet( RTL_TEXTENCODING_UTF8 ),
-      nByteOrder( nOrder ),
-      aSearchPath( rSearchPath ),
-      aBool( pHS->getID( "sal_Bool" ), RSC_NOTYPE ),
-      aShort( pHS->getID( "short" ), RSC_NOTYPE ),
-      aUShort( pHS->getID( "sal_uInt16" ), RSC_NOTYPE ),
-      aLong( pHS->getID( "long" ), RSC_NOTYPE ),
-      aEnumLong( pHS->getID( "enum_long" ), RSC_NOTYPE ),
-      aIdUShort( pHS->getID( "IDUSHORT" ), RSC_NOTYPE ),
-      aIdNoZeroUShort( pHS->getID( "IDUSHORT" ), RSC_NOTYPE ),
-      aNoZeroShort( pHS->getID( "NoZeroShort" ), RSC_NOTYPE ),
-      a1to12Short( pHS->getID( "MonthShort" ), RSC_NOTYPE ),
-      a0to23Short( pHS->getID( "HourShort" ), RSC_NOTYPE ),
-      a1to31Short( pHS->getID( "DayShort" ), RSC_NOTYPE ),
-      a0to59Short( pHS->getID( "MinuteShort" ), RSC_NOTYPE ),
-      a0to99Short( pHS->getID( "_0to59Short" ), RSC_NOTYPE ),
-      a0to9999Short( pHS->getID( "YearShort" ), RSC_NOTYPE ),
-      aIdLong( pHS->getID( "IDLONG" ), RSC_NOTYPE ),
-      aString( pHS->getID( "Chars" ), RSC_NOTYPE ),
-      aStringLiteral( pHS->getID( "Chars" ), RSC_NOTYPE ),
-      aWinBits( pHS->getID( "WinBits" ), RSC_NOTYPE ),
-      aLangType(),
-      aLangString( pHS->getID( "Lang_Chars" ), RSC_NOTYPE, &aString, &aLangType ),
-      aLangShort( pHS->getID( "Lang_short" ), RSC_NOTYPE, &aShort, &aLangType ),
-      nAcceleratorType( 0 ),
-      nFlags( nFlagsP )
+    : nSourceCharSet( RTL_TEXTENCODING_UTF8 )
+    , nByteOrder( nOrder )
+    , aSearchPath( rSearchPath )
+    , aBool( pHS->getID( "sal_Bool" ), RSC_NOTYPE )
+    , aShort( pHS->getID( "short" ), RSC_NOTYPE )
+    , aUShort( pHS->getID( "sal_uInt16" ), RSC_NOTYPE )
+    , aLong( pHS->getID( "long" ), RSC_NOTYPE )
+    , aEnumLong( pHS->getID( "enum_long" ), RSC_NOTYPE )
+    , aIdUShort( pHS->getID( "IDUSHORT" ), RSC_NOTYPE )
+    , aIdNoZeroUShort( pHS->getID( "IDUSHORT" ), RSC_NOTYPE )
+    , aNoZeroShort( pHS->getID( "NoZeroShort" ), RSC_NOTYPE )
+    , a1to12Short( pHS->getID( "MonthShort" ), RSC_NOTYPE )
+    , a0to23Short( pHS->getID( "HourShort" ), RSC_NOTYPE )
+    , a1to31Short( pHS->getID( "DayShort" ), RSC_NOTYPE )
+    , a0to59Short( pHS->getID( "MinuteShort" ), RSC_NOTYPE )
+    , a0to99Short( pHS->getID( "_0to59Short" ), RSC_NOTYPE )
+    , a0to9999Short( pHS->getID( "YearShort" ), RSC_NOTYPE )
+    , aIdLong( pHS->getID( "IDLONG" ), RSC_NOTYPE )
+    , aString( pHS->getID( "Chars" ), RSC_NOTYPE )
+    , aStringLiteral( pHS->getID( "Chars" ), RSC_NOTYPE )
+    , aWinBits( pHS->getID( "WinBits" ), RSC_NOTYPE )
+    , aLangType()
+    , aLangString( pHS->getID( "Lang_Chars" ), RSC_NOTYPE, &aString, &aLangType )
+    , aLangShort( pHS->getID( "Lang_short" ), RSC_NOTYPE, &aShort, &aLangType )
+    , nAcceleratorType( 0 )
+    , nFlags( nFlagsP )
 {
     nUniqueId = 256;
     nPMId = RSC_VERSIONCONTROL +1; //mindestens einen groesser
@@ -79,13 +78,14 @@ OString RscTypCont::ChangeLanguage(const OString& rNewLang)
     aLanguage = rNewLang;
 
     ::std::vector< OUString > aFallbacks;
+
     if (rNewLang.isEmpty())
         aFallbacks.push_back( "" );     // do not resolve to SYSTEM (en-US)
     else
         aFallbacks = LanguageTag( OStringToOUString( rNewLang, RTL_TEXTENCODING_ASCII_US)).getFallbackStrings();
-    bool bAppendEnUsFallback =
-        ! (rNewLang.equalsIgnoreAsciiCase( "en-US" ) ||
-           rNewLang.equalsIgnoreAsciiCase( "x-no-translate" ) );
+
+    bool bAppendEnUsFallback = ! (rNewLang.equalsIgnoreAsciiCase( "en-US" ) ||
+                                  rNewLang.equalsIgnoreAsciiCase( "x-no-translate" ) );
     if (bAppendEnUsFallback)
         aFallbacks.push_back( "en-US");
 
@@ -124,12 +124,15 @@ Atom RscTypCont::AddLanguage( const char* pLang )
 }
 
 
-void DestroyNode( RscTop * pRscTop, ObjNode * pObjNode ){
-    if( pObjNode ){
+void DestroyNode( RscTop * pRscTop, ObjNode * pObjNode )
+{
+    if( pObjNode )
+    {
         DestroyNode( pRscTop, (ObjNode*)pObjNode->Left() );
         DestroyNode( pRscTop, (ObjNode*)pObjNode->Right() );
 
-        if( pObjNode->GetRscObj() ){
+        if( pObjNode->GetRscObj() )
+        {
             pRscTop->Destroy( RSCINST( pRscTop, pObjNode->GetRscObj() ) );
             rtl_freeMemory( pObjNode->GetRscObj() );
         }
@@ -137,18 +140,20 @@ void DestroyNode( RscTop * pRscTop, ObjNode * pObjNode ){
     };
 }
 
-void DestroySubTrees( RscTop * pRscTop ){
-    if( pRscTop ){
+void DestroySubTrees( RscTop * pRscTop )
+{
+    if( pRscTop )
+    {
         DestroySubTrees( (RscTop*)pRscTop->Left() );
-
         DestroyNode( pRscTop, pRscTop->GetObjNode() );
-
         DestroySubTrees( (RscTop*)pRscTop->Right() );
     };
 }
 
-void DestroyTree( RscTop * pRscTop ){
-    if( pRscTop ){
+void DestroyTree( RscTop * pRscTop )
+{
+    if( pRscTop )
+    {
         DestroyTree( (RscTop*)pRscTop->Left() );
         DestroyTree( (RscTop*)pRscTop->Right() );
 
@@ -156,8 +161,10 @@ void DestroyTree( RscTop * pRscTop ){
     };
 }
 
-void Pre_dtorTree( RscTop * pRscTop ){
-    if( pRscTop ){
+void Pre_dtorTree( RscTop * pRscTop )
+{
+    if( pRscTop )
+    {
         Pre_dtorTree( (RscTop*)pRscTop->Left() );
         Pre_dtorTree( (RscTop*)pRscTop->Right() );
 
@@ -165,7 +172,8 @@ void Pre_dtorTree( RscTop * pRscTop ){
     };
 }
 
-RscTypCont :: ~RscTypCont(){
+RscTypCont :: ~RscTypCont()
+{
     // Alle Unterbaeume loeschen
     aVersion.pClass->Destroy( aVersion );
     rtl_freeMemory( aVersion.pData );
@@ -175,6 +183,7 @@ RscTypCont :: ~RscTypCont(){
     // BasisTypen
     for ( size_t i = 0, n = aBaseLst.size(); i < n; ++i )
         aBaseLst[ i ]->Pre_dtor();
+
     aBool.Pre_dtor();
     aShort.Pre_dtor();
     aUShort.Pre_dtor();
@@ -194,10 +203,12 @@ RscTypCont :: ~RscTypCont(){
 
     for ( size_t i = 0, n = aBaseLst.size(); i < n; ++i )
         delete aBaseLst[ i ];
+
     aBaseLst.clear();
 
     for ( size_t i = 0, n = aSysLst.size(); i < n; ++i )
         delete aSysLst[ i ];
+
     aSysLst.clear();
 }
 
@@ -205,15 +216,16 @@ void RscTypCont::ClearSysNames()
 {
     for ( size_t i = 0, n = aSysLst.size(); i < n; ++i )
         delete aSysLst[ i ];
+
     aSysLst.clear();
 }
 
 RscTop * RscTypCont::SearchType( Atom nId )
-/*  [Beschreibung]
-
-    Sucht eine Basistyp nId;
-*/
 {
+    /*  [Beschreibung]
+
+        Sucht eine Basistyp nId;
+    */
     if( nId == InvalidAtom )
         return NULL;
 
@@ -242,6 +254,8 @@ RscTop * RscTypCont::SearchType( Atom nId )
     ELSE_IF( aLangType )
     ELSE_IF( aLangString )
     ELSE_IF( aLangShort )
+// al least to not pollute
+#undef ELSE_IF
 
     for ( size_t i = 0, n = aBaseLst.size(); i < n; ++i )
     {
@@ -253,22 +267,22 @@ RscTop * RscTypCont::SearchType( Atom nId )
 }
 
 sal_uInt32 RscTypCont :: PutSysName( sal_uInt32 nRscTyp, char * pFileName,
-                                 sal_uInt32 nConst, sal_uInt32 nId, sal_Bool bFirst )
+                                     sal_uInt32 nConst, sal_uInt32 nId, bool bFirst )
 {
     RscSysEntry *pSysEntry;
     RscSysEntry *pFoundEntry = NULL;
-    sal_Bool            bId1 = sal_False;
+    bool            bId1 = false;
 
     for ( size_t i = 0, n = aSysLst.size(); i < n; ++i )
     {
         pSysEntry = aSysLst[ i ];
         if( pSysEntry->nKey == 1 )
-            bId1 = sal_True;
+            bId1 = true;
         if( !strcmp( pSysEntry->aFileName.getStr(), pFileName ) )
-            if(  pSysEntry->nRscTyp == nRscTyp
-              && pSysEntry->nTyp    == nConst
-              && pSysEntry->nRefId  == nId
-                 ) {
+            if(  pSysEntry->nRscTyp == nRscTyp &&
+                 pSysEntry->nTyp    == nConst &&
+                 pSysEntry->nRefId  == nId)
+            {
                 pFoundEntry = pSysEntry;
                 break;
             }
@@ -334,9 +348,9 @@ void RscTypCont :: WriteInc( FILE * fOutput, sal_uLong lFileKey )
                                  pFile->aFileName.getStr() );
                     }
                 }
-            };
-        };
-    };
+            }
+        }
+    }
 }
 
 
@@ -347,7 +361,7 @@ private:
     ERRTYPE     aError;     // Enthaelt den ersten Fehler
     RscTypCont* pTypCont;
     FILE *      fOutput;    // AusgabeDatei
-    sal_uLong       lFileKey;   // Welche src-Datei
+    sal_uLong   lFileKey;   // Welche src-Datei
     RscTop *    pClass;
 
     DECL_LINK( CallBackWriteRc, ObjNode * );
@@ -376,7 +390,7 @@ IMPL_LINK( RscEnumerateObj, CallBackWriteRc, ObjNode *, pObjNode )
 
     aError = pClass->WriteRcHeader( RSCINST( pClass, pObjNode->GetRscObj() ),
                                      aMem, pTypCont,
-                                     pObjNode->GetRscId(), 0, sal_True );
+                                     pObjNode->GetRscId(), 0, true );
     if( aError.IsError() || aError.IsWarning() )
         pTypCont->pEH->Error( aError, pClass, pObjNode->GetRscId() );
 
@@ -386,7 +400,8 @@ IMPL_LINK( RscEnumerateObj, CallBackWriteRc, ObjNode *, pObjNode )
 
 IMPL_LINK_INLINE_START( RscEnumerateObj, CallBackWriteSrc, ObjNode *, pObjNode )
 {
-    if( pObjNode->GetFileKey() == lFileKey ){
+    if( pObjNode->GetFileKey() == lFileKey )
+    {
         pClass->WriteSrcHeader( RSCINST( pClass, pObjNode->GetRscObj() ),
                                 fOutput, pTypCont, 0,
                                 pObjNode->GetRscId(), "" );
@@ -451,28 +466,27 @@ private:
 public:
     RscEnumerateObj aEnumObj;
 
-            RscEnumerateRef( RscTypCont * pTC, RscTop * pR,
-                             FILE * fOutput )
-            {
-                aEnumObj.pTypCont = pTC;
-                aEnumObj.fOutput  = fOutput;
-                pRoot             = pR;
-            }
+    RscEnumerateRef( RscTypCont * pTC, RscTop * pR,
+                     FILE * fOutput )
+        {
+            aEnumObj.pTypCont = pTC;
+            aEnumObj.fOutput  = fOutput;
+            pRoot             = pR;
+        }
     ERRTYPE WriteRc()
-    {
-        aEnumObj.aError.Clear();
-        pRoot->EnumNodes( LINK( this, RscEnumerateRef, CallBackWriteRc ) );
-        return aEnumObj.aError;
-    };
-
+        {
+            aEnumObj.aError.Clear();
+            pRoot->EnumNodes( LINK( this, RscEnumerateRef, CallBackWriteRc ) );
+            return aEnumObj.aError;
+        }
     ERRTYPE WriteSrc( sal_uLong lFileKey )
-    {
-        aEnumObj.lFileKey = lFileKey;
+        {
+            aEnumObj.lFileKey = lFileKey;
 
-        aEnumObj.aError.Clear();
-        pRoot->EnumNodes( LINK( this, RscEnumerateRef, CallBackWriteSrc ) );
-        return aEnumObj.aError;
-    }
+            aEnumObj.aError.Clear();
+            pRoot->EnumNodes( LINK( this, RscEnumerateRef, CallBackWriteSrc ) );
+            return aEnumObj.aError;
+        }
 };
 
 IMPL_LINK_INLINE_START( RscEnumerateRef, CallBackWriteRc, RscTop *, pRef )
@@ -502,14 +516,14 @@ ERRTYPE RscTypCont::WriteRc( WriteRcContext& rContext )
 
     // version control
     RscWriteRc aMem( nByteOrder );
-    aVersion.pClass->WriteRcHeader( aVersion, aMem, this, RscId( RSCVERSION_ID ), 0, sal_True );
+    aVersion.pClass->WriteRcHeader( aVersion, aMem, this, RscId( RSCVERSION_ID ), 0, true );
     aEnumRef.aEnumObj.WriteRcFile( aMem, rContext.fOutput );
 
     return aError;
 }
 
 void RscTypCont :: WriteSrc( FILE * fOutput, sal_uLong nFileKey,
-                             sal_Bool bName )
+                             bool bName )
 {
     RscFile     *   pFName;
     RscEnumerateRef aEnumRef( this, pRoot, fOutput );
@@ -525,7 +539,8 @@ void RscTypCont :: WriteSrc( FILE * fOutput, sal_uLong nFileKey,
         if( NOFILE_INDEX == nFileKey )
         {
             sal_uIntPtr aIndex = aFileTab.FirstIndex();
-            while( aIndex != UNIQUEINDEX_ENTRY_NOTFOUND ) {
+            while( aIndex != UNIQUEINDEX_ENTRY_NOTFOUND )
+            {
                 pFName = aFileTab.Get( aIndex );
                 if( !pFName->IsIncFile() )
                     pFName->aDefLst.WriteAll( fOutput );
@@ -536,7 +551,8 @@ void RscTypCont :: WriteSrc( FILE * fOutput, sal_uLong nFileKey,
         else
         {
             pFName = aFileTab.Get( nFileKey );
-            if( pFName ){
+            if( pFName )
+            {
                 pFName->aDefLst.WriteAll( fOutput );
                 aEnumRef.WriteSrc( nFileKey );
             }
@@ -544,7 +560,7 @@ void RscTypCont :: WriteSrc( FILE * fOutput, sal_uLong nFileKey,
     }
     else
     {
-        RscId::SetNames( sal_False );
+        RscId::SetNames( false );
         if( NOFILE_INDEX == nFileKey )
         {
             sal_uIntPtr aIndex = aFileTab.FirstIndex();
@@ -583,55 +599,60 @@ IMPL_LINK_INLINE_START( RscDel, Delete, RscTop *, pNode )
 }
 IMPL_LINK_INLINE_END( RscDel, Delete, RscTop *, pNode )
 
-void RscTypCont :: Delete( sal_uLong lFileKey ){
+void RscTypCont :: Delete( sal_uLong lFileKey )
+{
     // Resourceinstanzen loeschen
     RscDel aDel( pRoot, lFileKey );
     // Defines loeschen
     aFileTab.DeleteFileContext( lFileKey );
 }
 
-sal_Bool IsInstConsistent( ObjNode * pObjNode, RscTop * pRscTop )
+bool IsInstConsistent( ObjNode * pObjNode, RscTop * pRscTop )
 {
-    sal_Bool bRet = sal_True;
+    bool bRet = true;
 
-    if( pObjNode ){
+    if( pObjNode )
+    {
         RSCINST aTmpI;
 
         if( ! IsInstConsistent( (ObjNode*)pObjNode->Left(), pRscTop ) )
-            bRet = sal_False;
+            bRet = false;
 
         aTmpI.pClass = pRscTop;
         aTmpI.pData = pObjNode->GetRscObj();
         if( ! aTmpI.pClass->IsConsistent( aTmpI ) )
-            bRet = sal_False;
+            bRet = false;
 
         if( ! IsInstConsistent( (ObjNode*)pObjNode->Right(), pRscTop ) )
-            bRet = sal_False;
+            bRet = false;
     };
 
-    return( bRet );
+    return bRet;
 }
 
-sal_Bool MakeConsistent( RscTop * pRscTop )
+bool MakeConsistent( RscTop * pRscTop )
 {
-    sal_Bool bRet = sal_True;
+    bool bRet = true;
 
-    if( pRscTop ){
+    if( pRscTop )
+    {
         if( ! ::MakeConsistent( (RscTop*)pRscTop->Left() ) )
-            bRet = sal_False;
+            bRet = false;
 
-        if( pRscTop->GetObjNode() ){
-            if( ! pRscTop->GetObjNode()->IsConsistent() ){
+        if( pRscTop->GetObjNode() )
+        {
+            if( ! pRscTop->GetObjNode()->IsConsistent() )
+            {
                 pRscTop->GetObjNode()->OrderTree();
                 if( ! pRscTop->GetObjNode()->IsConsistent() )
-                    bRet = sal_False;
+                    bRet = false;
             }
             if( ! IsInstConsistent( pRscTop->GetObjNode(), pRscTop ) )
-                bRet = sal_False;
+                bRet = false;
         }
 
         if( ! ::MakeConsistent( (RscTop*)pRscTop->Right() ) )
-            bRet = sal_False;
+            bRet = false;
     };
 
     return bRet;

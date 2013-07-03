@@ -22,46 +22,50 @@
 #include <rsctop.hxx>
 
 
-RefNode::RefNode( Atom nTyp ){
+RefNode::RefNode( Atom nTyp )
+{
     pObjBiTree = 0;
     nTypNameId = nTyp;
 }
 
 sal_uInt32 RefNode::GetId() const
 {
-    return( nTypNameId );
+    return nTypNameId;
 }
 
-sal_Bool RefNode::PutObjNode( ObjNode * pPutObject ){
 // insert a node in the b-tree pObjBiTree
 // if the node with the same name is in pObjBiTree,
 // return sal_False and no insert,
 
+bool RefNode::PutObjNode( ObjNode * pPutObject )
+{
     if( pObjBiTree )
-        return( pObjBiTree->Insert( pPutObject ) );
+        return pObjBiTree->Insert( pPutObject );
 
     pObjBiTree = pPutObject;
-    return( sal_True );
+    return true;
 }
 
-ObjNode * RefNode :: GetObjNode( const RscId & rRscId ){
 // insert a node in the b-tree pObjBiTree
 // if the node with the same name is in pObjBiTree,
 // return NULL and no insert,
 // if not return the pointer to the Object
-
+ObjNode * RefNode :: GetObjNode( const RscId & rRscId )
+{
     if( pObjBiTree )
-        return( pObjBiTree->Search( rRscId ) );
-    return( NULL );
+        return pObjBiTree->Search( rRscId );
+    return NULL;
 }
 
-ObjNode::ObjNode( const RscId & rId, CLASS_DATA pData, sal_uLong lKey ){
+ObjNode::ObjNode( const RscId & rId, CLASS_DATA pData, sal_uLong lKey )
+{
     pRscObj  = pData;
     aRscId   = rId;
     lFileKey = lKey;
 }
 
-ObjNode * ObjNode::DelObjNode( RscTop * pClass, sal_uLong nFileKey ){
+ObjNode * ObjNode::DelObjNode( RscTop * pClass, sal_uLong nFileKey )
+{
     ObjNode * pRetNode = this;
 
     if( Right() )
@@ -69,18 +73,22 @@ ObjNode * ObjNode::DelObjNode( RscTop * pClass, sal_uLong nFileKey ){
     if( Left() )
         pLeft = ((ObjNode *)Left())->DelObjNode( pClass, nFileKey );
 
-    if( GetFileKey() == nFileKey ){
-        if( GetRscObj() ){
+    if( GetFileKey() == nFileKey )
+    {
+        if( GetRscObj() )
+        {
             pClass->Destroy( RSCINST( pClass, GetRscObj() ) );
             rtl_freeMemory( GetRscObj() );
         }
         pRetNode = (ObjNode *)Right();
-        if( pRetNode ){
+        if( pRetNode )
+        {
             if( Left() )
                 pRetNode->Insert( (ObjNode *)Left() );
         }
         else
             pRetNode = (ObjNode *)Left();
+
         delete this;
     }
     return pRetNode;
@@ -88,40 +96,44 @@ ObjNode * ObjNode::DelObjNode( RscTop * pClass, sal_uLong nFileKey ){
 
 sal_uInt32 ObjNode::GetId() const
 {
-    return( (sal_uInt32)(long)aRscId );
+    return (sal_uInt32)(long)aRscId;
 }
 
-sal_Bool ObjNode::IsConsistent()
+bool ObjNode::IsConsistent()
 {
-    sal_Bool bRet = sal_True;
+    bool bRet = true;
 
     if( (long)aRscId > 0x7FFF || (long)aRscId < 1 )
     {
-        bRet = sal_False;
+        bRet = false;
     }
     else
     {
         if( Left() )
         {
             if( !((ObjNode *)Left())->IsConsistent() )
-                bRet = sal_False;
+            {
+                bRet = false;
+            }
             if( ((ObjNode *)Left())->aRscId >= aRscId )
             {
-                bRet = sal_False;
+                bRet = false;
             }
         };
         if( Right() )
         {
             if( ((ObjNode *)Right())->aRscId <= aRscId )
             {
-                bRet = sal_False;
+                bRet = false;
             }
             if( !((ObjNode *)Right())->IsConsistent() )
-                bRet = sal_False;
+            {
+                bRet = false;
+            }
         };
     };
 
-    return( bRet );
+    return bRet;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

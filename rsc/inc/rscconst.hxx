@@ -27,46 +27,49 @@
 class RscConst : public RscTop
 {
 protected:
-    struct VarEle {
+    struct VarEle
+    {
         Atom    nId;    // Name der Konstante
         sal_Int32   lValue; // Wert der Konstante
     };
-    VarEle *    pVarArray;  // Zeiger auf das Feld mit Konstanten
+    VarEle *        pVarArray;  // Zeiger auf das Feld mit Konstanten
     sal_uInt32      nEntries;   // Anzahle der Eintraege im Feld
 public:
                     RscConst( Atom nId, sal_uInt32 nTypId );
                     ~RscConst();
     virtual RSCCLASS_TYPE   GetClassType() const;
-    sal_uInt32          GetEntryCount() const { return nEntries; }
+    sal_uInt32      GetEntryCount() const { return nEntries; }
                     // Die erlaubten Werte werden gesetzt
     ERRTYPE         SetConstant( Atom nVarName, sal_Int32 lValue );
     Atom            GetConstant( sal_uInt32 nPos );
-    sal_Bool            GetConstValue( Atom nConstId, sal_Int32 * pVal ) const;
-    sal_Bool            GetValueConst( sal_Int32 nValue, Atom  * pConstId ) const;
+    bool            GetConstValue( Atom nConstId, sal_Int32 * pVal ) const;
+    bool            GetValueConst( sal_Int32 nValue, Atom  * pConstId ) const;
     sal_uInt32          GetConstPos( Atom nConstId );
 };
 
-class RscEnum : public RscConst {
-    struct RscEnumInst {
+class RscEnum : public RscConst
+{
+    struct RscEnumInst
+    {
         sal_uInt32  nValue; // Position der Konstanten im Array
-        sal_Bool    bDflt;  // Ist Default
+        bool        bDflt;  // Ist Default
     };
-    sal_uInt32          nSize;
+    sal_uInt32      nSize;
 public:
                     RscEnum( Atom nId, sal_uInt32 nTypId );
-    RSCINST         Create( RSCINST * pInst, const RSCINST & rDfltInst, sal_Bool );
-    sal_uInt32          Size(){ return nSize; }
+    RSCINST         Create( RSCINST * pInst, const RSCINST & rDfltInst, bool );
+    sal_uInt32      Size(){ return nSize; }
 
     virtual void    SetToDefault( const RSCINST & rInst )
                     {
-                        ((RscEnumInst*)rInst.pData)->bDflt = sal_True;
+                        ((RscEnumInst*)rInst.pData)->bDflt = true;
                     }
-    sal_Bool            IsDefault( const RSCINST & rInst )
+    bool            IsDefault( const RSCINST & rInst )
                     {
                         return( ((RscEnumInst*)rInst.pData)->bDflt );
                     };
                     // Als Default setzen
-    sal_Bool            IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef );
+    bool            IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef );
 
     ERRTYPE         SetConst( const RSCINST & rInst, Atom nValueId,
                               sal_Int32 nValue );
@@ -76,7 +79,7 @@ public:
     void            WriteSrc( const RSCINST &rInst, FILE * fOutput,
                               RscTypCont * pTC, sal_uInt32 nTab, const char * );
     ERRTYPE         WriteRc( const RSCINST & rInst, RscWriteRc & aMem,
-                             RscTypCont * pTC, sal_uInt32, sal_Bool bExtra );
+                             RscTypCont * pTC, sal_uInt32, bool bExtra );
 };
 
 class RscNameTable;

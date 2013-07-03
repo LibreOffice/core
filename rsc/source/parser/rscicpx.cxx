@@ -56,7 +56,7 @@ RscTop * RscTypCont::InitClassMgr()
     RscBaseCont *   pClass;
     Atom            nId;
 
-    aBaseLst.push_back( pClass = new RscBaseCont( InvalidAtom, RSC_NOTYPE, NULL, sal_False ) );
+    aBaseLst.push_back( pClass = new RscBaseCont( InvalidAtom, RSC_NOTYPE, NULL, false ) );
 
     nId = pHS->getID( "Resource" );
     pClassMgr = new RscMgr( nId, RSC_RESOURCE, pClass );
@@ -81,7 +81,8 @@ RscTop * RscTypCont::InitClassMgr()
     return pClassMgr;
 }
 
-RscTop * RscTypCont::InitClassString( RscTop * pSuper ){
+RscTop * RscTypCont::InitClassString( RscTop * pSuper )
+{
     Atom        nId;
     RscTop *    pClassString;
 
@@ -93,10 +94,11 @@ RscTop * RscTypCont::InitClassString( RscTop * pSuper ){
     // Variablen anlegen
     nId = aNmTb.Put( "Text", VARNAME );
     pClassString->SetVariable( nId, &aLangString );
-    return( pClassString );
+    return pClassString;
 }
 
-RscTop * RscTypCont::InitClassBitmap( RscTop * pSuper ){
+RscTop * RscTypCont::InitClassBitmap( RscTop * pSuper )
+{
     Atom        nId;
     RscTop *    pClassBitmap;
 
@@ -110,10 +112,11 @@ RscTop * RscTypCont::InitClassBitmap( RscTop * pSuper ){
     nId = aNmTb.Put( "File", VARNAME );
     pClassBitmap->SetVariable( nId, &aLangString, NULL, VAR_NORC );
 
-    return( pClassBitmap );
+    return pClassBitmap;
 }
 
-RscTop * RscTypCont::InitClassColor( RscTop * pSuper, RscEnum * pColor ){
+RscTop * RscTypCont::InitClassColor( RscTop * pSuper, RscEnum * pColor )
+{
     Atom        nId;
     RscTop *    pClassColor;
 
@@ -133,7 +136,7 @@ RscTop * RscTypCont::InitClassColor( RscTop * pSuper, RscEnum * pColor ){
     nId = aNmTb.Put( "Predefine", VARNAME );
     pClassColor->SetVariable( nId, pColor );
 
-    return( pClassColor );
+    return pClassColor;
 }
 
 RscTop * RscTypCont::InitClassImage( RscTop * pSuper, RscTop * pClassBitmap,
@@ -157,7 +160,7 @@ RscTop * RscTypCont::InitClassImage( RscTop * pSuper, RscTop * pClassBitmap,
     pClassImage->SetVariable( nId, pClassColor, NULL,
                               VAR_SVDYNAMIC, RSC_IMAGE_MASKCOLOR );
 
-    return( pClassImage );
+    return pClassImage;
 }
 
 RscTop * RscTypCont::InitClassImageList( RscTop * pSuper,
@@ -192,11 +195,11 @@ RscTop * RscTypCont::InitClassImageList( RscTop * pSuper,
     nId = aNmTb.Put( "IdCount", VARNAME );
     pClassImageList->SetVariable( nId, &aUShort, NULL, 0,
                                   RSC_IMAGELIST_IDCOUNT );
-    return( pClassImageList );
+    return pClassImageList;
 }
 
 RscTop * RscTypCont::InitClassWindow( RscTop * pSuper, RscEnum * pMapUnit,
-                                 RscArray * pLangGeo )
+                                      RscArray * pLangGeo )
 {
     Atom        nId;
     RscTop *    pClassWindow;
@@ -297,7 +300,7 @@ RscTop * RscTypCont::InitClassWindow( RscTop * pSuper, RscEnum * pMapUnit,
                                     0,
                                     WINDOW_BORDER_STYLE );
 
-    return( pClassWindow );
+    return pClassWindow;
 }
 
 RscTop * RscTypCont::InitClassSystemWindow( RscTop * pSuper )
@@ -460,11 +463,11 @@ RscTop * RscTypCont::InitClassTriStateBox( RscTop * pSuper,
     nId = aNmTb.Put( "TriStateDisable", VARNAME );
     pClassTriStateBox->SetVariable( nId, &aBool );
 
-    return( pClassTriStateBox );
+    return pClassTriStateBox;
 }
 
 RscTop * RscTypCont::InitClassMenuButton( RscTop * pSuper,
-                                           RscTop * pClassMenu )
+                                          RscTop * pClassMenu )
 {
     Atom        nId;
     RscTop *    pClassMenuButton;
@@ -479,7 +482,7 @@ RscTop * RscTypCont::InitClassMenuButton( RscTop * pSuper,
     pClassMenuButton->SetVariable( nId, pClassMenu, NULL, 0,
                                                                         RSCMENUBUTTON_MENU );
 
-    return( pClassMenuButton );
+    return pClassMenuButton;
 }
 
 
@@ -610,7 +613,7 @@ RscTop * RscTypCont::InitClassScrollBar( RscTop * pSuper )
     {
         RSCINST     aDfltI;
 
-        aDfltI = aShort.Create( NULL, RSCINST(), sal_False );
+        aDfltI = aShort.Create( NULL, RSCINST(), false );
         aDfltI.pClass->SetNumber( aDfltI, 100 );
 //      aDfltI.pClass->MakeDefault( aDfltI );
 
@@ -622,7 +625,7 @@ RscTop * RscTypCont::InitClassScrollBar( RscTop * pSuper )
     {
         RSCINST     aDfltI;
 
-        aDfltI = aShort.Create( NULL, RSCINST(), sal_False );
+        aDfltI = aShort.Create( NULL, RSCINST(), false );
         aDfltI.pClass->SetNumber( aDfltI, 1 );
 //      aDfltI.pClass->MakeDefault( aDfltI );
 
@@ -632,7 +635,7 @@ RscTop * RscTypCont::InitClassScrollBar( RscTop * pSuper )
     {
         RSCINST     aDfltI;
 
-        aDfltI = aShort.Create( NULL, RSCINST(), sal_False );
+        aDfltI = aShort.Create( NULL, RSCINST(), false );
         aDfltI.pClass->SetNumber( aDfltI, 1 );
 //      aDfltI.pClass->MakeDefault( aDfltI );
         nId = aNmTb.Put( "LineSize", VARNAME );
@@ -669,7 +672,7 @@ RscTop * RscTypCont::InitClassListBox( RscTop * pSuper, RscArray * pStrLst )
     INS_WINBIT(pClassListBox,DDExtraWidth)
 
     {
-        RSCINST aDflt = aUShort.Create( NULL, RSCINST(), sal_False );
+        RSCINST aDflt = aUShort.Create( NULL, RSCINST(), false );
         aDflt.pClass->SetNumber( aDflt, (sal_uInt16)0xFFFF );
         nId = aNmTb.Put( "CurPos", VARNAME );
         pClassListBox->SetVariable( nId, &aUShort, &aDflt );
@@ -918,7 +921,7 @@ RscTop * RscTypCont::InitClassKeyCode( RscTop * pSuper, RscEnum * pKey )
 }
 
 RscTop * RscTypCont::InitClassAccelItem( RscTop * pSuper,
-                                                                                RscTop * pClassKeyCode )
+                                         RscTop * pClassKeyCode )
 {
     Atom        nId;
     RscTop *    pClassAccelItem;

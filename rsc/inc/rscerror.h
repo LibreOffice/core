@@ -85,20 +85,19 @@
 
 #define ERR_WARNINGEND      0x2000
 
-class ERRTYPE {
+class ERRTYPE
+{
     sal_uInt32  nError;
 public:
     ERRTYPE()                { nError = ERR_OK; }
     ERRTYPE( sal_uInt32 nErr )   { nError = nErr; }
-    ERRTYPE( const ERRTYPE & rErr ) { nError = rErr.nError; };
+    ERRTYPE( const ERRTYPE & rErr ) { nError = rErr.nError; }
     ERRTYPE& operator = ( const ERRTYPE & rError );
-    operator  sal_uInt32() const { return( nError ); }
-    sal_Bool IsError() const     { return( nError <= ERR_ERROREND ); }
-    sal_Bool IsOk() const        { return( !IsError() ); }
-    sal_Bool IsWarning() const   {
-        return( nError >= ERR_WARNINGSTART && nError <= ERR_WARNINGEND );
-    };
-    void    Clear(){ nError = ERR_OK; }
+    operator sal_uInt32() const { return( nError ); }
+    bool IsError() const     { return nError <= ERR_ERROREND; }
+    bool IsOk() const        { return !IsError(); }
+    bool IsWarning() const   { return nError >= ERR_WARNINGSTART && nError <= ERR_WARNINGEND;}
+    void Clear(){ nError = ERR_OK; }
 };
 
 /****************** R s c E r r o r **************************************/
@@ -126,17 +125,14 @@ public:
     virtual ~RscError() {}
 
     sal_uInt32  nErrors;// Anzahl der Fehler
-                    RscError( RscVerbosity _verbosity ) {
-                        fListing = NULL;
-                        nErrors = 0;
-                        m_verbosity = _verbosity;
-                    };
-    void            SetListFile( FILE * fList ){
-                        fListing = fList;
-                    };
-    FILE *          GetListFile(){
-                        return fListing;
-                    };
+                    RscError( RscVerbosity _verbosity )
+                        {
+                            fListing = NULL;
+                            nErrors = 0;
+                            m_verbosity = _verbosity;
+                        }
+    void            SetListFile( FILE * fList ){ fListing = fList; }
+    FILE *          GetListFile(){ return fListing; }
     RscVerbosity    GetVerbosity() const { return m_verbosity; }
     virtual void    StdOut( const char *, const RscVerbosity _verbosityLevel = RscVerbosityNormal );
     virtual void    StdErr( const char * );
