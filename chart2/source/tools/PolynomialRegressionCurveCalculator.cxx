@@ -189,8 +189,15 @@ OUString PolynomialRegressionCurveCalculator::ImplGetRepresentation(
 
         if(i > 0)
         {
-            aBuf.appendAscii( "x^" );
-            aBuf.append(i);
+            if (i == 1)
+            {
+                aBuf.appendAscii( "x" );
+            }
+            else
+            {
+                aBuf.appendAscii( "x^" );
+                aBuf.append(i);
+            }
         }
     }
 
