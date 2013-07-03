@@ -22,6 +22,10 @@
 
 #define USE_DUMMY_INTERPRETER 1
 
+#if USE_DUMMY_INTERPRETER
+#include <cstdio>
+#endif
+
 namespace sc {
 
 ScMatrixRef FormulaGroupInterpreterSoftware::inverseMatrix(const ScMatrix& /*rMat*/)
