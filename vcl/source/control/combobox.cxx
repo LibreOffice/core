@@ -1069,26 +1069,29 @@ Size ComboBox::CalcMinimumSize() const
     if (!mpImplLB)
         return aSz;
 
-    if ( !IsDropDownBox() )
+    if (!IsDropDownBox())
     {
         aSz = mpImplLB->CalcSize( mpImplLB->GetEntryList()->GetEntryCount() );
         aSz.Height() += mnDDHeight;
+        aSz.Width() = std::max(aSz.Width(), Edit::CalcMinimumSizeForText(GetText()).Width());
     }
     else
     {
-        aSz.Height() = Edit::CalcMinimumSizeForText(GetText()).Height();
-
-        aSz.Width() = mpImplLB->GetMaxEntryWidth();
-        if (m_nMaxWidthChars != -1)
-        {
-            long nMaxWidth = m_nMaxWidthChars * approximate_char_width();
-            aSz.Width() = std::min(aSz.Width(), nMaxWidth);
-        }
-        aSz.Width() += getMaxWidthScrollBarAndDownButton();
-        ComboBoxBounds aBounds(calcComboBoxDropDownComponentBounds(
-            Size(0xFFFF, 0xFFFF), Size(0xFFFF, 0xFFFF)));
-        aSz.Width() += aBounds.aSubEditPos.X()*2;
+        aSz = Edit::CalcMinimumSizeForText(GetText());
     }
+
+    if (m_nMaxWidthChars != -1)
+    {
+        long nMaxWidth = m_nMaxWidthChars * approximate_char_width();
+        aSz.Width() = std::min(aSz.Width(), nMaxWidth);
+    }
+
+    if (IsDropDownBox())
+        aSz.Width() += getMaxWidthScrollBarAndDownButton();
+
+    ComboBoxBounds aBounds(calcComboBoxDropDownComponentBounds(
+        Size(0xFFFF, 0xFFFF), Size(0xFFFF, 0xFFFF)));
+    aSz.Width() += aBounds.aSubEditPos.X()*2;
 
     aSz.Width() += ImplGetExtraOffset() * 2;
 
