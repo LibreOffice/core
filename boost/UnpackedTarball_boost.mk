@@ -40,6 +40,7 @@ boost_patches += boost.auto_link.patch
 boost_patches += boost.endian.patch
 boost_patches += boost.loplugin.patch
 boost_patches += boost.std.move.patch
+boost_patches += boost.transform_width.patch
 boost_patches += boost.wundef.patch
 boost_patches += boost.wunused.patch
 boost_patches += boost.wshadow.patch

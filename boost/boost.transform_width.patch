@@ -1,0 +1,11 @@
+--- foo/foo/foo/boost/archive/iterators/transform_width.hpp
++++ foo/foo/foo/boost/archive/iterators/transform_width.hpp
+@@ -23,6 +23,8 @@
+ // stream length is some common multiple of x and y.  E.G. Base64 6 bit
+ // character and 8 bit bytes. Lowest common multiple is 24 => 4 6 bit characters
+ // or 3 8 bit characters
++
++#include <algorithm>
+ 
+ #include <boost/config.hpp> // for BOOST_DEDUCED_TYPENAME & PTFO
+ #include <boost/serialization/pfto.hpp>
