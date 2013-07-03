@@ -20,7 +20,6 @@
 #define STARMATH_HELPIDS_H
 
 #define HID_SMA_FONTDIALOG                                "STARMATH_HID_SMA_FONTDIALOG"
-#define HID_SMA_FONTTYPEDIALOG                            "STARMATH_HID_SMA_FONTTYPEDIALOG"
 #define HID_SMA_DISTANCEDIALOG                            "STARMATH_HID_SMA_DISTANCEDIALOG"
 #define HID_SMA_SYMDEFINEDIALOG                           "STARMATH_HID_SMA_SYMDEFINEDIALOG"
 #define HID_SMA_WIN_DOCUMENT                              "STARMATH_HID_SMA_WIN_DOCUMENT"

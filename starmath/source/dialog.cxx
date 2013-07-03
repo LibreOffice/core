@@ -533,17 +533,6 @@ IMPL_LINK_INLINE_START( SmFontTypeDialog, DefaultButtonClickHdl, Button *, EMPTY
 }
 IMPL_LINK_INLINE_END( SmFontTypeDialog, DefaultButtonClickHdl, Button *, pButton )
 
-IMPL_LINK( SmFontTypeDialog, HelpButtonClickHdl, Button *, EMPTYARG /*pButton*/ )
-{
-    // start help system
-    Help* pHelp = Application::GetHelp();
-    if( pHelp )
-    {
-        pHelp->Start( OUString( "HID_SMA_FONTTYPEDIALOG" ), m_pHelpButton1 );
-    }
-    return 0;
-}
-
 SmFontTypeDialog::SmFontTypeDialog(Window * pParent, OutputDevice *pFntListDevice)
     : ModalDialog(pParent, "FontsDialog", "modules/smath/ui/fonttypedialog.ui"),
     pFontListDev    (pFntListDevice)
@@ -555,12 +544,10 @@ SmFontTypeDialog::SmFontTypeDialog(Window * pParent, OutputDevice *pFntListDevic
     get(m_pSerifFont, "serifCB");
     get(m_pSansFont, "sansCB");
     get(m_pFixedFont, "fixedCB");
-    get(m_pHelpButton1, "help");
     get(m_pMenuButton, "modify");
     get(m_pDefaultButton, "default");
 
     m_pDefaultButton->SetClickHdl(LINK(this, SmFontTypeDialog, DefaultButtonClickHdl));
-    m_pHelpButton1->SetClickHdl(LINK(this, SmFontTypeDialog, HelpButtonClickHdl));
 
     m_pMenuButton->GetPopupMenu()->SetSelectHdl(LINK(this, SmFontTypeDialog, MenuSelectHdl));
 }

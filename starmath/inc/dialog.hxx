@@ -149,7 +149,6 @@ class SmFontTypeDialog : public ModalDialog
     SmFontPickListBox* m_pSerifFont;
     SmFontPickListBox* m_pSansFont;
     SmFontPickListBox* m_pFixedFont;
-    HelpButton* m_pHelpButton1;
     MenuButton* m_pMenuButton;
     PushButton* m_pDefaultButton;
 

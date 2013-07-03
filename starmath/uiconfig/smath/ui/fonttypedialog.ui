@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <!-- interface-requires gtk+ 3.0 -->
+  <!-- interface-requires LibreOffice 1.0 -->
   <object class="GtkDialog" id="FontsDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
@@ -23,7 +24,6 @@
                 <property name="can_default">True</property>
                 <property name="has_default">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_action_appearance">False</property>
                 <property name="use_stock">True</property>
               </object>
               <packing>
@@ -38,7 +38,6 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_action_appearance">False</property>
                 <property name="use_stock">True</property>
               </object>
               <packing>
@@ -53,7 +52,6 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_action_appearance">False</property>
                 <property name="use_underline">True</property>
               </object>
               <packing>
@@ -68,7 +66,6 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_action_appearance">False</property>
                 <property name="use_stock">True</property>
               </object>
               <packing>
@@ -83,7 +80,6 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_action_appearance">False</property>
                 <property name="use_underline">True</property>
               </object>
               <packing>
@@ -126,8 +122,8 @@
                       <object class="GtkGrid" id="grid1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="n_rows">4</property>
-                        <property name="n_columns">2</property>
+                        <property name="row_spacing">6</property>
+                        <property name="column_spacing">12</property>
                         <child>
                           <object class="GtkLabel" id="label1">
                             <property name="visible">True</property>
@@ -135,6 +131,7 @@
                             <property name="xalign">0</property>
                             <property name="label" translatable="yes">_Variables</property>
                             <property name="use_underline">True</property>
+                            <property name="mnemonic_widget">variableCB</property>
                             <attributes>
                               <attribute name="weight" value="normal"/>
                             </attributes>
@@ -153,6 +150,7 @@
                             <property name="xalign">0</property>
                             <property name="label" translatable="yes">_Functions</property>
                             <property name="use_underline">True</property>
+                            <property name="mnemonic_widget">functionCB</property>
                             <attributes>
                               <attribute name="weight" value="normal"/>
                             </attributes>
@@ -171,6 +169,7 @@
                             <property name="xalign">0</property>
                             <property name="label" translatable="yes">_Numbers</property>
                             <property name="use_underline">True</property>
+                            <property name="mnemonic_widget">numberCB</property>
                             <attributes>
                               <attribute name="weight" value="normal"/>
                             </attributes>
@@ -189,6 +188,7 @@
                             <property name="xalign">0</property>
                             <property name="label" translatable="yes">_Text</property>
                             <property name="use_underline">True</property>
+                            <property name="mnemonic_widget">textCB</property>
                             <attributes>
                               <attribute name="weight" value="normal"/>
                             </attributes>
@@ -291,7 +291,8 @@
                       <object class="GtkGrid" id="grid2">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="n_columns">2</property>
+                        <property name="row_spacing">6</property>
+                        <property name="column_spacing">12</property>
                         <child>
                           <object class="GtkLabel" id="label5">
                             <property name="visible">True</property>
@@ -299,6 +300,7 @@
                             <property name="xalign">0</property>
                             <property name="label" translatable="yes">_Serif</property>
                             <property name="use_underline">True</property>
+                            <property name="mnemonic_widget">serifCB</property>
                             <attributes>
                               <attribute name="weight" value="normal"/>
                             </attributes>
@@ -317,6 +319,7 @@
                             <property name="xalign">0</property>
                             <property name="label" translatable="yes">S_ans</property>
                             <property name="use_underline">True</property>
+                            <property name="mnemonic_widget">sansCB</property>
                             <attributes>
                               <attribute name="weight" value="normal"/>
                             </attributes>
@@ -335,6 +338,7 @@
                             <property name="xalign">0</property>
                             <property name="label" translatable="yes">F_ixed</property>
                             <property name="use_underline">True</property>
+                            <property name="mnemonic_widget">fixedCB</property>
                             <attributes>
                               <attribute name="weight" value="normal"/>
                             </attributes>
@@ -430,7 +434,6 @@
       <object class="GtkMenuItem" id="menuitem1">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="use_action_appearance">False</property>
         <property name="label" translatable="yes">_Variables</property>
         <property name="use_underline">True</property>
       </object>
@@ -439,7 +442,6 @@
       <object class="GtkMenuItem" id="menuitem2">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="use_action_appearance">False</property>
         <property name="label" translatable="yes">_Functions</property>
         <property name="use_underline">True</property>
       </object>
@@ -448,7 +450,6 @@
       <object class="GtkMenuItem" id="menuitem3">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="use_action_appearance">False</property>
         <property name="label" translatable="yes">_Numbers</property>
         <property name="use_underline">True</property>
       </object>
@@ -457,7 +458,6 @@
       <object class="GtkMenuItem" id="menuitem4">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="use_action_appearance">False</property>
         <property name="label" translatable="yes">_Text</property>
         <property name="use_underline">True</property>
       </object>
@@ -466,7 +466,6 @@
       <object class="GtkMenuItem" id="menuitem5">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="use_action_appearance">False</property>
         <property name="label" translatable="yes">_Serif</property>
         <property name="use_underline">True</property>
       </object>
@@ -475,7 +474,6 @@
       <object class="GtkMenuItem" id="menuitem6">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="use_action_appearance">False</property>
         <property name="label" translatable="yes">S_ans</property>
         <property name="use_underline">True</property>
       </object>
@@ -484,7 +482,6 @@
       <object class="GtkMenuItem" id="menuitem7">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="use_action_appearance">False</property>
         <property name="label" translatable="yes">Fixe_d</property>
         <property name="use_underline">True</property>
       </object>
