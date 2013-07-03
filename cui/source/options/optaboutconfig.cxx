@@ -15,7 +15,8 @@ using namespace svx;
 CuiAboutConfigTabPage::CuiAboutConfigTabPage( Window* pParent, const SfxItemSet& rItemSet )
     :SfxTabPage( pParent, "AboutConfig", "cui/ui/aboutconfigdialog.ui", rItemSet)
 {
-//    get(m_pEditBtn, "");
+    get(m_pDefaultBtn,"default");
+    get(m_pEditBtn, "edit");
 
     m_pPrefCtrl = get<SvxSimpleTableContainer>("preferences");
 
@@ -25,6 +26,17 @@ CuiAboutConfigTabPage::CuiAboutConfigTabPage( Window* pParent, const SfxItemSet&
 
     WinBits nBits = WB_SCROLL | WB_SORT;
     pPrefBox = new svx::OptHeaderTabListBox( *m_pPrefCtrl, nBits );
+    //FIXME use define's for ItemID's, InsertItem(itemID, text, nsize, winbits)
+    HeaderBar &rBar = pPrefBox->GetTheHeaderBar();
+    rBar.InsertItem( 1, get<FixedText>("preference")->GetText(), 0, HIB_LEFT | HIB_VCENTER );
+    rBar.InsertItem( 2, get<FixedText>("status")->GetText(), 0,  HIB_LEFT | HIB_VCENTER );
+    rBar.InsertItem( 3, get<FixedText>("type")->GetText(), 0,  HIB_LEFT | HIB_VCENTER );
+    rBar.InsertItem( 4, get<FixedText>("value")->GetText(), 0,  HIB_LEFT | HIB_VCENTER );
+    //FIXME this numbers are just for testing purposes implement this better and more dynamic way.
+    long aTabs[] = {12,12,12,12};
+
+    pPrefBox->SetTabs(aTabs, MAP_PIXEL);
+
 }
 
 CuiAboutConfigTabPage::~CuiAboutConfigTabPage()

@@ -24,8 +24,7 @@ class CuiAboutConfigTabPage : public SfxTabPage
 {
 private:
     SvxSimpleTableContainer* m_pPrefCtrl;
-    //In case of tab page we can think a revert button
-    //PushButton* m_pDefaultBtn
+    PushButton* m_pDefaultBtn;
     PushButton* m_pEditBtn;
 
     ::svx::OptHeaderTabListBox* pPrefBox;
