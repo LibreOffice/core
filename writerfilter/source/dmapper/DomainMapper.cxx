@@ -1376,16 +1376,28 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
             {
                 case NS_ooxml::LN_CT_LineNumber_countBy:
                     aSettings.nInterval = nIntValue;
+                    OSL_ENSURE(pSectionContext, "SectionContext unavailable!");
+                    if( pSectionContext )
+                        pSectionContext->SetLnnMod( nIntValue );
                 break;
                 case NS_ooxml::LN_CT_LineNumber_start:
                     aSettings.nStartValue = nIntValue; // todo: has to be set at (each) first paragraph
+                    OSL_ENSURE(pSectionContext, "SectionContext unavailable!");
+                    if( pSectionContext )
+                        pSectionContext->SetLnnMin( nIntValue );
                 break;
                 case NS_ooxml::LN_CT_LineNumber_distance:
                     aSettings.nDistance = ConversionHelper::convertTwipToMM100( nIntValue );
+                    OSL_ENSURE(pSectionContext, "SectionContext unavailable!");
+                    if( pSectionContext )
+                        pSectionContext->SetdxaLnn( nIntValue );
                 break;
                 case NS_ooxml::LN_CT_LineNumber_restart:
                     //page:empty, probably 0,section:1,continuous:2;
                     aSettings.bRestartAtEachPage = nIntValue < 1;
+                    OSL_ENSURE(pSectionContext, "SectionContext unavailable!");
+                    if( pSectionContext )
+                        pSectionContext->SetLnc( nIntValue );
                 break;
                 default:;
             }
@@ -2537,7 +2549,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
     case NS_sprm::LN_SLnnMin: // sprmSLnnMin
         OSL_ENSURE(pSectionContext, "SectionContext unavailable!");
         if( pSectionContext )
-            pSectionContext->SetLnnMin( nIntValue );
+            pSectionContext->SetLnnMin( nIntValue + 1 ); // Sending '+1' because the value of 'sprmSLnnMin' is one less than the starting value for line numbers.
     break;
 
     case NS_sprm::LN_SGprfIhdt:
