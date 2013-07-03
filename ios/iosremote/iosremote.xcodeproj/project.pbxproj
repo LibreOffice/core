@@ -38,10 +38,6 @@
 		5753DD8F1781EA0300DB71BB /* server_list_vc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = server_list_vc.m; sourceTree = "<group>"; };
 		5753DD9717834D7100DB71BB /* newServer_vc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = newServer_vc.h; sourceTree = "<group>"; };
 		5753DD9817834D7100DB71BB /* newServer_vc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = newServer_vc.m; sourceTree = "<group>"; };
-		5753DD9A1783851700DB71BB /* TPKeyboardAvoidingScrollView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = TPKeyboardAvoidingScrollView.h; path = iosremote/TPKeyboardAvoidingScrollView.h; sourceTree = "<group>"; };
-		5753DD9B1783851700DB71BB /* TPKeyboardAvoidingScrollView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = TPKeyboardAvoidingScrollView.m; path = iosremote/TPKeyboardAvoidingScrollView.m; sourceTree = "<group>"; };
-		5753DD9C1783851700DB71BB /* TPKeyboardAvoidingTableView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = TPKeyboardAvoidingTableView.h; path = iosremote/TPKeyboardAvoidingTableView.h; sourceTree = "<group>"; };
-		5753DD9D1783851700DB71BB /* TPKeyboardAvoidingTableView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = TPKeyboardAvoidingTableView.m; path = iosremote/TPKeyboardAvoidingTableView.m; sourceTree = "<group>"; };
 		57B152971764703500EECC67 /* Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Base64.h; path = iosremote/Base64.h; sourceTree = "<group>"; };
 		57B152981764703500EECC67 /* Base64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Base64.m; path = iosremote/Base64.m; sourceTree = "<group>"; };
 		57B1529A1764714900EECC67 /* slideShowViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = slideShowViewController.h; sourceTree = "<group>"; };
@@ -101,10 +97,6 @@
 				BE9EBD061765BF0800283FD2 /* CoreImage.framework */,
 				57B152971764703500EECC67 /* Base64.h */,
 				57B152981764703500EECC67 /* Base64.m */,
-				5753DD9A1783851700DB71BB /* TPKeyboardAvoidingScrollView.h */,
-				5753DD9B1783851700DB71BB /* TPKeyboardAvoidingScrollView.m */,
-				5753DD9C1783851700DB71BB /* TPKeyboardAvoidingTableView.h */,
-				5753DD9D1783851700DB71BB /* TPKeyboardAvoidingTableView.m */,
 				57C6E425175E076900E8BC5F /* Communication */,
 				57C6E3F8175E06E800E8BC5F /* iosremote */,
 				57C6E3F1175E06E800E8BC5F /* Frameworks */,
