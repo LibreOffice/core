@@ -767,7 +767,7 @@ public:
     sal_uInt16              GetTabCount() const;
     const RulerTab*     GetTabs() const;
 
-    static void         DrawTab( OutputDevice* pDevice,
+    static void         DrawTab( OutputDevice* pDevice, const Color &rFillColor,
                                  const Point& rPos, sal_uInt16 nStyle );
 
     void                SetStyle( WinBits nStyle );

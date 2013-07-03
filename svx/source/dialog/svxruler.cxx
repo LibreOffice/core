@@ -3571,13 +3571,14 @@ void SvxRuler::Command( const CommandEvent& rCEvt )
             const Size aSz(RULER_TAB_WIDTH+2, RULER_TAB_HEIGHT+2);
             aDev.SetOutputSize(aSz);
             aDev.SetBackground(Wallpaper(Color(COL_WHITE)));
+            Color aFillColor(aDev.GetSettings().GetStyleSettings().GetShadowColor());
             const Point aPt(aSz.Width() / 2, aSz.Height() / 2);
 
             for ( sal_uInt16 i = RULER_TAB_LEFT; i < RULER_TAB_DEFAULT; ++i )
             {
                 sal_uInt16 nStyle = bRTL ? i|RULER_TAB_RTL : i;
                 nStyle |= (sal_uInt16)(bHorz ? WB_HORZ : WB_VERT);
-                DrawTab(&aDev, aPt, nStyle);
+                DrawTab(&aDev, aFillColor, aPt, nStyle);
                 aMenu.InsertItem(i+1,
                                  String(ResId(RID_SVXSTR_RULER_START+i, DIALOG_MGR())),
                                  Image(aDev.GetBitmap(Point(), aSz), Color(COL_WHITE)));

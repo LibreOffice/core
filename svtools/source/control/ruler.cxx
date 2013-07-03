@@ -2746,15 +2746,14 @@ void Ruler::SetStyle( WinBits nStyle )
 
 // -----------------------------------------------------------------------
 
-void Ruler::DrawTab( OutputDevice* pDevice, const Point& rPos, sal_uInt16 nStyle )
+void Ruler::DrawTab( OutputDevice* pDevice, const Color &rFillColor, const Point& rPos, sal_uInt16 nStyle )
 {
-    /*const StyleSettings&    rStyleSettings =*/ pDevice->GetSettings().GetStyleSettings();
     Point                   aPos( rPos );
-    sal_uInt16                  nTabStyle = nStyle & (RULER_TAB_STYLE | RULER_TAB_RTL);
+    sal_uInt16              nTabStyle = nStyle & (RULER_TAB_STYLE | RULER_TAB_RTL);
 
     pDevice->Push( PUSH_LINECOLOR | PUSH_FILLCOLOR );
     pDevice->SetLineColor();
-    pDevice->SetFillColor( pDevice->GetSettings().GetStyleSettings().GetShadowColor() );
+    pDevice->SetFillColor(rFillColor);
     ImplCenterTabPos( aPos, nTabStyle );
     ImplDrawRulerTab( pDevice, aPos, nTabStyle, nStyle  );
     pDevice->Pop();

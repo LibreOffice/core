@@ -45,7 +45,9 @@ private:
 public:
 
     TabWin_Impl( Window* pParent, WinBits nBits) :
-        Window( pParent, nBits ){}
+        Window( pParent, nBits )
+    {
+    }
 
     virtual void    Paint( const Rectangle& rRect );
 
@@ -55,7 +57,7 @@ public:
 
 extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeTabWin_Impl(Window *pParent, VclBuilder::stringmap &)
 {
-    return new TabWin_Impl(pParent, WB_BORDER);
+    return new TabWin_Impl(pParent, 0);
 }
 // static ----------------------------------------------------------------
 
@@ -87,7 +89,7 @@ void TabWin_Impl::Paint( const Rectangle& )
     Size aSize = GetOutputSizePixel();
     aPnt.X() = aSize.Width() / 2;
     aPnt.Y() = aSize.Height() / 2;
-    Ruler::DrawTab( this, aPnt, nTabStyle );
+    Ruler::DrawTab( this, GetSettings().GetStyleSettings().GetFontColor(), aPnt, nTabStyle );
 }
 
 // class SvxTabulatorTabPage ---------------------------------------------
