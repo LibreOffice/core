@@ -155,7 +155,6 @@ public:
     const INetURLObject&        GetThmURL() const;
     SVX_DLLPUBLIC const INetURLObject&      GetSdgURL() const;
     const INetURLObject&        GetSdvURL() const;
-    const INetURLObject&        GetStrURL() const;
 
     SVX_DLLPUBLIC sal_uInt32        GetId() const;
     void                        SetId( sal_uInt32 nNewId, sal_Bool bResetThemeName );

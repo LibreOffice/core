@@ -9,7 +9,6 @@ BitmapWriteAccess::DrawPolygon(Polygon const&)
 DbgRegisterNamedUserChannel(rtl::OUString const&, void (*)(char const*))
 EditTextObjectImpl::SetParaAttribs(int, SfxItemSet const&)
 FontSelectPatternAttributes::FontSelectPatternAttributes(PhysicalFontFace const&, Size const&, float, int, bool)
-GalleryTheme::GetStrURL() const
 ImplRegionBand::IsInside(long, long)
 ImplRegionBand::IsOver(long, long)
 LanguageTag::reset(_rtl_Locale const&)
