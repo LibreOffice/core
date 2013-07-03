@@ -3116,7 +3116,37 @@ void DomainMapper_Impl::CloseFieldCommand()
                     break;
                     case FIELD_SECTION      : break;
                     case FIELD_SECTIONPAGES : break;
-                    case FIELD_SEQ          : break;
+                    case FIELD_SEQ          :
+                    {
+                        OUString sIdentifier = lcl_ExtractParameter(pContext->GetCommand(), sizeof(" SEQ") );
+                        if (xFieldProperties.is() && !sIdentifier.isEmpty())
+                        {
+                            uno::Reference< beans::XPropertySet >xMaster = FindOrCreateFieldMaster(
+                                    "com.sun.star.text.fieldmaster.SetExpression", sIdentifier);
+
+                            // SubType 1 makes the difference between range and normal SetExpression
+                            xMaster->setPropertyValue(
+                                    rPropNameSupplier.GetName(PROP_SUB_TYPE),
+                                    uno::makeAny(sal_Int8(1)));
+
+                            uno::Reference< text::XDependentTextField > xDependentField(
+                                    xFieldInterface, uno::UNO_QUERY_THROW );
+                            xDependentField->attachTextFieldMaster( xMaster );
+
+                            // TODO This formula may change with the flags of the SEQ field
+                            rtl::OUString sFormula = sIdentifier + "+1";
+                            xFieldProperties->setPropertyValue(
+                                    rPropNameSupplier.GetName(PROP_CONTENT),
+                                    uno::makeAny(sFormula));
+
+                            // TODO Take care of the numeric formatting definition, default is Arabic
+                            xFieldProperties->setPropertyValue(
+                                    rPropNameSupplier.GetName(PROP_NUMBERING_TYPE),
+                                    uno::makeAny(style::NumberingType::ARABIC));
+                        }
+
+                    }
+                    break;
                     case FIELD_SET          : break;
                     case FIELD_SKIPIF       : break;
                     case FIELD_STYLEREF     : break;
@@ -3192,15 +3222,14 @@ void DomainMapper_Impl::CloseFieldCommand()
                             rPropNameSupplier.GetName(PROP_NUMBERING_TYPE),
                             uno::makeAny( lcl_ParseNumberingType(pContext->GetCommand()) ));
                     break;
-
                 }
             }
             //set the text field if there is any
             pContext->SetTextField( uno::Reference< text::XTextField >( xFieldInterface, uno::UNO_QUERY ) );
         }
-        catch( const uno::Exception& )
+        catch( const uno::Exception& e )
         {
-            OSL_FAIL( "Exception in CloseFieldCommand()" );
+            SAL_WARN( "writerfilter", "Exception in CloseFieldCommand(): " << e.Message );
         }
         pContext->SetCommandCompleted();
     }
