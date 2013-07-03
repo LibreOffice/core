@@ -4,7 +4,7 @@ FullName: OpenSymbol
 FamilyName: OpenSymbol
 Weight: Book
 Copyright: (c) 2009 Sun Microsystems Inc.\nTHERE DOES NOT EXIST (c) 2011 Julien Nabet\nPRECEDES <-> DOES NOT SUCCEED (c) 2011 Olivier Hallot\nPRIME <-> TRIPLE PRIME (c) 2013 Mathias Hasselmann
-Version: 102.5
+Version: 102.6
 ItalicAngle: 0
 UnderlinePosition: -143
 UnderlineWidth: 20
@@ -773,7 +773,7 @@ ShortTable: maxp 16
   0
   0
 EndShort
-LangName: 1033 "" "" "Regular" "OpenSymbol" "" "Version 102.5" 
+LangName: 1033 "" "" "Regular" "OpenSymbol" "" "Version 102.6" 
 GaspTable: 1 65535 2 0
 Encoding: Custom
 UnicodeInterp: none
@@ -107692,7 +107692,7 @@ SplineSet
 EndSplineSet
 EndChar
 
-StartChar: graveaccent
+StartChar: grave
 Encoding: 993 96 1004
 Width: 681
 Flags: W
@@ -107709,7 +107709,7 @@ SplineSet
 EndSplineSet
 EndChar
 
-StartChar: acuteaccent
+StartChar: acute
 Encoding: 994 180 1005
 Width: 681
 Flags: W
@@ -107742,7 +107742,7 @@ SplineSet
 EndSplineSet
 EndChar
 
-StartChar: verticalline
+StartChar: bar
 Encoding: 996 124 1007
 Width: 813
 Flags: W
@@ -107758,7 +107758,7 @@ SplineSet
 EndSplineSet
 EndChar
 
-StartChar: doubleverticalline
+StartChar: uni2016
 Encoding: 997 8214 1008
 Width: 1183
 Flags: W
