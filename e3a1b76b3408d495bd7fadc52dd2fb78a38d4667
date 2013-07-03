@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXn///iU\u003d",
+        "filename": "dbaccess/source/core/api/RowSetBase.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1254,
+      "author": {
+        "id": 1000039
+      },
+      "writtenOn": "2013-07-03T07:59:32Z",
+      "side": 1,
+      "message": "DBACCESS could be removed too",
+      "revId": "e3a1b76b3408d495bd7fadc52dd2fb78a38d4667",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn///iQ\u003d",
+        "filename": "dbaccess/source/core/api/RowSetBase.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1313,
+      "author": {
+        "id": 1000039
+      },
+      "writtenOn": "2013-07-03T07:59:32Z",
+      "side": 1,
+      "message": "yet another DBACCESS",
+      "revId": "e3a1b76b3408d495bd7fadc52dd2fb78a38d4667",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn///iM\u003d",
+        "filename": "dbaccess/source/core/api/resultset.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1000039
+      },
+      "writtenOn": "2013-07-03T07:59:32Z",
+      "side": 1,
+      "message": "Still some commented SAL_INFO\u0027s that could be removed",
+      "revId": "e3a1b76b3408d495bd7fadc52dd2fb78a38d4667",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn///iI\u003d",
+        "filename": "dbaccess/source/core/api/statement.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1000039
+      },
+      "writtenOn": "2013-07-03T07:59:32Z",
+      "side": 1,
+      "message": "Still some commented SAL_INFOs",
+      "revId": "e3a1b76b3408d495bd7fadc52dd2fb78a38d4667",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
