@@ -1829,7 +1829,7 @@ void ScColumn::SetFormula( SCROW nRow, const ScTokenArray& rArray, formula::Form
     sc::CellStoreType::iterator it = GetPositionToInsert(nRow);
     ScFormulaCell* pCell = new ScFormulaCell(pDocument, aPos, &rArray, eGram);
     sal_uInt32 nCellFormat = GetNumberFormat(nRow);
-    if( (nCellFormat % SV_COUNTRY_LANGUAGE_OFFSET) != 0)
+    if( (nCellFormat % SV_COUNTRY_LANGUAGE_OFFSET) == 0)
         pCell->SetNeedNumberFormat(true);
     it = maCells.set(it, nRow, pCell);
     maCellTextAttrs.set(nRow, sc::CellTextAttr());
@@ -1845,7 +1845,7 @@ void ScColumn::SetFormula( SCROW nRow, const OUString& rFormula, formula::Formul
     sc::CellStoreType::iterator it = GetPositionToInsert(nRow);
     ScFormulaCell* pCell = new ScFormulaCell(pDocument, aPos, rFormula, eGram);
     sal_uInt32 nCellFormat = GetNumberFormat(nRow);
-    if( (nCellFormat % SV_COUNTRY_LANGUAGE_OFFSET) != 0)
+    if( (nCellFormat % SV_COUNTRY_LANGUAGE_OFFSET) == 0)
         pCell->SetNeedNumberFormat(true);
     it = maCells.set(it, nRow, pCell);
     maCellTextAttrs.set(nRow, sc::CellTextAttr());
@@ -1857,6 +1857,9 @@ void ScColumn::SetFormula( SCROW nRow, const OUString& rFormula, formula::Formul
 ScFormulaCell* ScColumn::SetFormulaCell( SCROW nRow, ScFormulaCell* pCell )
 {
     sc::CellStoreType::iterator it = GetPositionToInsert(nRow);
+    sal_uInt32 nCellFormat = GetNumberFormat(nRow);
+    if( (nCellFormat % SV_COUNTRY_LANGUAGE_OFFSET) == 0)
+        pCell->SetNeedNumberFormat(true);
     it = maCells.set(it, nRow, pCell);
     maCellTextAttrs.set(nRow, sc::CellTextAttr());
     CellStorageModified();
@@ -1868,6 +1871,9 @@ ScFormulaCell* ScColumn::SetFormulaCell( SCROW nRow, ScFormulaCell* pCell )
 ScFormulaCell* ScColumn::SetFormulaCell( sc::ColumnBlockPosition& rBlockPos, SCROW nRow, ScFormulaCell* pCell )
 {
     rBlockPos.miCellPos = GetPositionToInsert(rBlockPos.miCellPos, nRow);
+    sal_uInt32 nCellFormat = GetNumberFormat(nRow);
+    if( (nCellFormat % SV_COUNTRY_LANGUAGE_OFFSET) == 0)
+        pCell->SetNeedNumberFormat(true);
     rBlockPos.miCellPos = maCells.set(rBlockPos.miCellPos, nRow, pCell);
     rBlockPos.miCellTextAttrPos = maCellTextAttrs.set(
         rBlockPos.miCellTextAttrPos, nRow, sc::CellTextAttr());

@@ -146,7 +146,7 @@ public:
     CPPUNIT_TEST(testRangeNameXLSX);
     CPPUNIT_TEST(testHardRecalcODS);
     CPPUNIT_TEST(testFunctionsODS);
-//  CPPUNIT_TEST(testCachedFormulaResultsODS); TODO: Fix this
+    CPPUNIT_TEST(testCachedFormulaResultsODS);
     CPPUNIT_TEST(testCachedMatrixFormulaResultsODS);
     CPPUNIT_TEST(testDatabaseRangesODS);
     CPPUNIT_TEST(testDatabaseRangesXLS);

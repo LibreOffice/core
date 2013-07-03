@@ -2628,11 +2628,20 @@ struct CompileAllHandler
 class CompileXMLHandler
 {
     ScProgress& mrProgress;
+    const ScColumn& mrCol;
 public:
-    CompileXMLHandler(ScProgress& rProgress) : mrProgress(rProgress) {}
+    CompileXMLHandler(ScProgress& rProgress, const ScColumn& rCol) :
+        mrProgress(rProgress),
+        mrCol(rCol) {}
 
-    void operator() (size_t /*nRow*/, ScFormulaCell* pCell)
+    void operator() (size_t nRow, ScFormulaCell* pCell)
     {
+        sal_uInt32 nFormat = mrCol.GetNumberFormat(nRow);
+        if( (nFormat % SV_COUNTRY_LANGUAGE_OFFSET) != 0)
+            pCell->SetNeedNumberFormat(false);
+        else
+            pCell->SetDirty(true);
+
         pCell->CompileXML(mrProgress);
     }
 };
@@ -2914,7 +2923,7 @@ void ScColumn::CompileAll()
 
 void ScColumn::CompileXML( ScProgress& rProgress )
 {
-    CompileXMLHandler aFunc(rProgress);
+    CompileXMLHandler aFunc(rProgress, *this);
     sc::ProcessFormula(maCells, aFunc);
     RegroupFormulaCells();
 }
