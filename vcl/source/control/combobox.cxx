@@ -1073,11 +1073,11 @@ Size ComboBox::CalcMinimumSize() const
     {
         aSz = mpImplLB->CalcSize( mpImplLB->GetEntryList()->GetEntryCount() );
         aSz.Height() += mnDDHeight;
-        aSz.Width() = std::max(aSz.Width(), Edit::CalcMinimumSizeForText(GetText()).Width());
     }
     else
     {
-        aSz = Edit::CalcMinimumSizeForText(GetText());
+        aSz.Height() = Edit::CalcMinimumSizeForText(GetText()).Height();
+        aSz.Width() = mpImplLB->GetMaxEntryWidth();
     }
 
     if (m_nMaxWidthChars != -1)
