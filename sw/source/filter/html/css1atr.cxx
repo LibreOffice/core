@@ -3349,6 +3349,7 @@ static Writer& OutCSS1_SvxBrush( Writer& rWrt, const SfxPoolItem& rHt,
 
     // und jetzt eine Grafik
     String sGrfNm;
+    OUString aOUString;
 
     if( !pLink )
     {
@@ -3356,31 +3357,16 @@ static Writer& OutCSS1_SvxBrush( Writer& rWrt, const SfxPoolItem& rHt,
         const Graphic* pGrf = ((const SvxBrushItem &)rHt).GetGraphic();
         if( pGrf )
         {
-            // Grafik als (JPG-)File speichern
-            const String* pTempFileName = rHTMLWrt.GetOrigFileName();
-            if( pTempFileName )
-                sGrfNm = *pTempFileName;
-            sal_uInt16 nErr = XOutBitmap::WriteGraphic( *pGrf, sGrfNm,
-                        OUString("JPG"),
-                        XOUTBMP_USE_NATIVE_IF_POSSIBLE );
-            if( !nErr )     // fehlerhaft, da ist nichts auszugeben
-            {
-                sGrfNm = URIHelper::SmartRel2Abs(
-                    INetURLObject(rWrt.GetBaseURL()), sGrfNm,
-                    URIHelper::GetMaybeFileHdl() );
-                pLink = &sGrfNm;
-            }
-            else
+            sal_uLong nErr = XOutBitmap::GraphicToBase64(*pGrf,aOUString);
+            if( nErr )
             {
                 rHTMLWrt.nWarn = WARN_SWG_POOR_LOAD | WARN_SW_WRITE_BASE;
             }
+            sGrfNm = URIHelper::SmartRel2Abs(
+                    INetURLObject(rWrt.GetBaseURL()), sGrfNm,
+                    URIHelper::GetMaybeFileHdl() );
+                pLink = &sGrfNm;
         }
-    }
-    else if( !pGrfName && rHTMLWrt.bCfgCpyLinkedGrfs )
-    {
-        sGrfNm = *pLink;
-        rWrt.CopyLocalFileToINet( sGrfNm );
-        pLink = &sGrfNm;
     }
 
     // In Tabellen wird nur dann etwas exportiert, wenn eine Grafik
@@ -3452,12 +3438,13 @@ static Writer& OutCSS1_SvxBrush( Writer& rWrt, const SfxPoolItem& rHt,
     }
 
     // jetzt den String zusammen bauen
-    String sOut;
+    OUString sOut;
     if( !pLink && !bColor )
     {
         // keine Farbe und kein Link, aber ein transparenter Brush
         if( bTransparent && CSS1_BACKGROUND_FLY != nMode )
-            sOut.AssignAscii( sCSS1_PV_transparent );
+            sOut += String(OStringToOUString(sCSS1_PV_transparent,
+                RTL_TEXTENCODING_ASCII_US));
     }
     else
     {
@@ -3471,38 +3458,44 @@ static Writer& OutCSS1_SvxBrush( Writer& rWrt, const SfxPoolItem& rHt,
         if( pLink )
         {
             if( bColor )
-                sOut += ' ';
+                sOut += " ";
 
-            sOut.AppendAscii( sCSS1_url );
-            sOut.Append( '(' );
-            sOut.Append( String(URIHelper::simpleNormalizedMakeRelative(rWrt.GetBaseURL(),
-              *pLink)));
-
-            sOut.Append( ')' );
+            sOut += String(OStringToOUString(sCSS1_url,
+                RTL_TEXTENCODING_ASCII_US));
+            sOut += "(\'";
+            sOut += OOO_STRING_SVTOOLS_HTML_O_data;
+            sOut += ":";
+            sOut += aOUString;
+            sOut += "\')";
 
             if( pRepeat )
             {
-                sOut.Append( ' ' );
-                sOut.AppendAscii( pRepeat );
+                sOut += " ";
+                sOut += String(OStringToOUString(pRepeat,
+                    RTL_TEXTENCODING_ASCII_US));
             }
 
             if( pHori )
             {
-                sOut.Append( ' ' );
-                sOut.AppendAscii( pHori );
+                sOut += " ";
+                sOut += String(OStringToOUString(pHori,
+                    RTL_TEXTENCODING_ASCII_US));
             }
             if( pVert )
             {
-                sOut.Append( ' ' );
-                sOut.AppendAscii( pVert );
+                sOut += " ";
+                sOut += String(OStringToOUString(pVert,
+                    RTL_TEXTENCODING_ASCII_US));
             }
 
-            sOut.Append( ' ' );
-            sOut.AppendAscii( sCSS1_PV_scroll );
+            sOut += " ";
+            sOut += String(OStringToOUString(sCSS1_PV_scroll,
+                RTL_TEXTENCODING_ASCII_US));
+            sOut += " ";
         }
     }
 
-    if( sOut.Len() )
+    if( sOut.getLength() )
         rHTMLWrt.OutCSS1_Property( sCSS1_P_background, sOut );
 
     return rWrt;
