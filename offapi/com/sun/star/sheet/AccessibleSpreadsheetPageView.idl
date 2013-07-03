@@ -44,7 +44,7 @@ service AccessibleSpreadsheetPageView
         <li>The children returned by
             ::com::sun::star::accessibility::XAccessibleContext::getAccessibleChild()
             all support the interface XAccessible. Calling
-            ::com::sun::star::accessibility::XAccessibleContext::getAccessibleContext()
+            ::com::sun::star::accessibility::XAccessible::getAccessibleContext()
             for these children returns
             an object that supports one of the following services.</li>
         <ul>

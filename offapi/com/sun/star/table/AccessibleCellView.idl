@@ -48,7 +48,7 @@ service AccessibleCellView
         <li>The children returned by
             ::com::sun::star::accessibility::XAccessibleContext::getAccessibleChild()
             all support the interface XAccessible. Calling
-            ::com::sun::star::accessibility::XAccessibleContext::getAccessibleContext()
+            ::com::sun::star::accessibility::XAccessible::getAccessibleContext()
             for these children returns an object that supports the service
             ::com::sun::star::text::AccessibleParagraphView:
             A child of this kind is returned for every paragraph
