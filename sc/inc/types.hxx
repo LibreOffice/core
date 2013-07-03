@@ -56,6 +56,13 @@ const sal_uInt16 MatrixEdgeTop     = 8;
 const sal_uInt16 MatrixEdgeRight   = 16;
 const sal_uInt16 MatrixEdgeOpen    = 32;
 
+enum GroupCalcState
+{
+    GroupCalcEnabled,
+    GroupCalcRunning,
+    GroupCalcDisabled
+};
+
 }
 
 #endif

@@ -33,18 +33,14 @@ bool FormulaGroupInterpreterSoftware::interpret(ScDocument& rDoc, const ScAddres
 {
     // Decompose the group into individual cells and calculate them individually.
 
-    // Always set the top row to be the top of the group.  Grouped formula
-    // cells are to be calculated for its full segment at all times.
+    // The caller must ensure that the top position is the start position of
+    // the group.
 
-    ScAddress aTopPos = rTopPos;
-    aTopPos.SetRow(xGroup->mnStart);
-    ScAddress aTmpPos = aTopPos;
-
+    ScAddress aTmpPos = rTopPos;
     std::vector<double> aResults;
     aResults.reserve(xGroup->mnLength);
-    for (SCROW i = 0; i < xGroup->mnLength; ++i)
+    for (SCROW i = 0; i < xGroup->mnLength; ++i, aTmpPos.IncRow())
     {
-        aTmpPos.SetRow(aTopPos.Row() + i);
         ScTokenArray aCode2;
         for (const formula::FormulaToken* p = rCode.First(); p; p = rCode.Next())
         {
@@ -103,7 +99,7 @@ bool FormulaGroupInterpreterSoftware::interpret(ScDocument& rDoc, const ScAddres
     } // for loop end (xGroup->mnLength)
 
     if (!aResults.empty())
-        rDoc.SetFormulaResults(aTopPos, &aResults[0], aResults.size());
+        rDoc.SetFormulaResults(rTopPos, &aResults[0], aResults.size());
 
     return true;
 }

@@ -382,7 +382,11 @@ void adjustDBRange(ScToken* pToken, ScDocument& rNewDoc, const ScDocument* pOldD
 }
 
 ScFormulaCellGroup::ScFormulaCellGroup() :
-    mnRefCount(0), mnStart(0), mnLength(0), mbInvariant(false)
+    mnRefCount(0),
+    mnStart(0),
+    mnLength(0),
+    mbInvariant(false),
+    meCalcState(sc::GroupCalcEnabled)
 {
 }
 
@@ -1547,6 +1551,9 @@ void ScFormulaCell::SetDirty( bool bDirtyFlag )
 void ScFormulaCell::SetDirtyVar()
 {
     bDirty = true;
+    if (xGroup)
+        xGroup->meCalcState = sc::GroupCalcEnabled;
+
     // mark the sheet of this cell to be calculated
     //#FIXME do we need to revert this remnant of old fake vba events? pDocument->AddCalculateTable( aPos.Tab() );
 }
@@ -1611,7 +1618,7 @@ void ScFormulaCell::SetErrCode( sal_uInt16 n )
 void ScFormulaCell::AddRecalcMode( ScRecalcMode nBits )
 {
     if ( (nBits & RECALCMODE_EMASK) != RECALCMODE_NORMAL )
-        bDirty = true;
+        SetDirtyVar();
     if ( nBits & RECALCMODE_ONLOAD_ONCE )
     {   // OnLoadOnce nur zum Dirty setzen nach Filter-Import
         nBits = (nBits & ~RECALCMODE_EMASK) | RECALCMODE_NORMAL;
@@ -2959,9 +2966,10 @@ class GroupTokenConverter
     ScTokenArray& mrGroupTokens;
     ScDocument& mrDoc;
     ScFormulaCell& mrCell;
+    const ScAddress& mrPos;
 public:
-    GroupTokenConverter(sc::FormulaGroupContext& rCxt, ScTokenArray& rGroupTokens, ScDocument& rDoc, ScFormulaCell& rCell) :
-        mrCxt(rCxt), mrGroupTokens(rGroupTokens), mrDoc(rDoc), mrCell(rCell) {}
+    GroupTokenConverter(sc::FormulaGroupContext& rCxt, ScTokenArray& rGroupTokens, ScDocument& rDoc, ScFormulaCell& rCell, const ScAddress& rPos) :
+        mrCxt(rCxt), mrGroupTokens(rGroupTokens), mrDoc(rDoc), mrCell(rCell), mrPos(rPos) {}
 
     bool convert(ScTokenArray& rCode)
     {
@@ -2979,8 +2987,7 @@ public:
                 case svSingleRef:
                 {
                     ScSingleRefData aRef = pToken->GetSingleRef();
-                    aRef.CalcAbsIfRel(mrCell.aPos);
-                    ScAddress aRefPos(aRef.nCol, aRef.nRow, aRef.nTab);
+                    ScAddress aRefPos = aRef.toAbs(mrPos);
                     if (aRef.IsRowRel())
                     {
                         // Fetch double array guarantees that the length of the
@@ -3108,6 +3115,13 @@ bool ScFormulaCell::InterpretFormulaGroup()
     if (!xGroup || !pCode)
         return false;
 
+    fprintf(stdout, "ScFormulaCell::InterpretFormulaGroup:   calc state = %d\n", xGroup->meCalcState);
+    if (xGroup->meCalcState == sc::GroupCalcDisabled)
+    {
+        fprintf(stdout, "ScFormulaCell::InterpretFormulaGroup:   group calc disabled.\n");
+        return false;
+    }
+
     switch (pCode->GetVectorState())
     {
         case FormulaVectorEnabled:
@@ -3126,10 +3140,26 @@ bool ScFormulaCell::InterpretFormulaGroup()
 
     sc::FormulaGroupContext aCxt;
     ScTokenArray aCode;
-    GroupTokenConverter aConverter(aCxt, aCode, *pDocument, *this);
+    ScAddress aTopPos = aPos;
+    aTopPos.SetRow(xGroup->mnStart);
+    GroupTokenConverter aConverter(aCxt, aCode, *pDocument, *this, aTopPos);
     if (!aConverter.convert(*pCode))
+    {
+        fprintf(stdout, "ScFormulaCell::InterpretFormulaGroup:   disabling group calc due to failed conversion\n");
+        xGroup->meCalcState = sc::GroupCalcDisabled;
         return false;
-    return sc::FormulaGroupInterpreter::getStatic()->interpret(*pDocument, aPos, xGroup, aCode);
+    }
+
+    xGroup->meCalcState = sc::GroupCalcRunning;
+    if (!sc::FormulaGroupInterpreter::getStatic()->interpret(*pDocument, aTopPos, xGroup, aCode))
+    {
+        fprintf(stdout, "ScFormulaCell::InterpretFormulaGroup:   disabling group calc due to failed calculation\n");
+        xGroup->meCalcState = sc::GroupCalcDisabled;
+        return false;
+    }
+
+    xGroup->meCalcState = sc::GroupCalcEnabled;
+    return true;
 }
 
 bool ScFormulaCell::InterpretInvariantFormulaGroup()

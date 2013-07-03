@@ -24,6 +24,7 @@
 
 #include "formula/tokenarray.hxx"
 #include "svl/listener.hxx"
+#include "types.hxx"
 
 #include <set>
 
@@ -40,19 +41,23 @@ struct ScSimilarFormulaDelta;
 
 struct SC_DLLPUBLIC ScFormulaCellGroup
 {
-    sal_Int32 mnRefCount;
+    mutable size_t mnRefCount;
+
     SCROW mnStart;  // Start offset of that cell
     SCROW mnLength; // How many of these do we have ?
     bool mbInvariant;
+    sc::GroupCalcState meCalcState;
 
     ScFormulaCellGroup();
     ~ScFormulaCellGroup();
 };
-inline void intrusive_ptr_add_ref(ScFormulaCellGroup *p)
+
+inline void intrusive_ptr_add_ref(const ScFormulaCellGroup *p)
 {
     p->mnRefCount++;
 }
-inline void intrusive_ptr_release(ScFormulaCellGroup *p)
+
+inline void intrusive_ptr_release(const ScFormulaCellGroup *p)
 {
     if( --p->mnRefCount == 0 )
         delete p;

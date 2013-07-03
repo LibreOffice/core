@@ -2166,10 +2166,15 @@ bool appendDouble(
                     nLenRemain = 0;
                 }
 
+                sal_uInt16 nErr;
+                double fVal;
                 for (; itData != itDataEnd; ++itData)
                 {
                     ScFormulaCell& rFC = **itData;
-                    rArray.push_back(rFC.GetValue());
+                    if (!rFC.GetErrorOrValue(nErr, fVal) || nErr)
+                        return false;
+
+                    rArray.push_back(fVal);
                 }
             }
             break;
@@ -2238,6 +2243,9 @@ const double* ScColumn::FetchDoubleArray( sc::FormulaGroupContext& rCxt, SCROW n
         break;
         case sc::element_type_formula:
         {
+            sal_uInt16 nErr;
+            double fVal;
+
             rCxt.maArrays.push_back(new sc::FormulaGroupContext::DoubleArrayType);
             sc::FormulaGroupContext::DoubleArrayType& rArray = rCxt.maArrays.back();
             rArray.reserve(nLenRequested);
@@ -2252,7 +2260,10 @@ const double* ScColumn::FetchDoubleArray( sc::FormulaGroupContext& rCxt, SCROW n
                 for (; it != itEnd; ++it)
                 {
                     ScFormulaCell& rCell = **it;
-                    rArray.push_back(rCell.GetValue()); // the cell may be interpreted.
+                    if (!rCell.GetErrorOrValue(nErr, fVal) || nErr)
+                        return NULL;
+
+                    rArray.push_back(fVal);
                 }
 
                 return &rArray[0];
@@ -2264,7 +2275,10 @@ const double* ScColumn::FetchDoubleArray( sc::FormulaGroupContext& rCxt, SCROW n
             for (; it != itEnd; ++it)
             {
                 ScFormulaCell& rCell = **it;
-                rArray.push_back(rCell.GetValue()); // the cell may be interpreted.
+                if (!rCell.GetErrorOrValue(nErr, fVal) || nErr)
+                    return NULL;
+
+                rArray.push_back(fVal);
             }
 
             // Fill the remaining array with values from the following blocks.
