@@ -940,7 +940,7 @@ void NumericField::Last()
 
 namespace
 {
-    Size calcMinimumSize(const SpinField &rSpinField, const NumericFormatter &rFormatter)
+    Size calcMinimumSize(const Edit &rSpinField, const NumericFormatter &rFormatter)
     {
         OUStringBuffer aBuf;
         sal_Int32 nTextLen;
@@ -1001,6 +1001,11 @@ NumericBox::NumericBox( Window* pParent, const ResId& rResId ) :
 
     if ( !(nStyle & WB_HIDE ) )
         Show();
+}
+
+Size NumericBox::CalcMinimumSize() const
+{
+    return calcMinimumSize(*this, *this);
 }
 
 // -----------------------------------------------------------------------
@@ -1933,6 +1938,11 @@ MetricBox::MetricBox( Window* pParent, const ResId& rResId ) :
 
     if ( !(nStyle & WB_HIDE ) )
         Show();
+}
+
+Size MetricBox::CalcMinimumSize() const
+{
+    return calcMinimumSize(*this, *this);
 }
 
 // -----------------------------------------------------------------------

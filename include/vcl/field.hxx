@@ -722,6 +722,8 @@ public:
     explicit                NumericBox( Window* pParent, const ResId& );
     virtual                 ~NumericBox();
 
+    virtual Size            CalcMinimumSize() const;
+
     virtual long            PreNotify( NotifyEvent& rNEvt );
     virtual long            Notify( NotifyEvent& rNEvt );
     virtual void            DataChanged( const DataChangedEvent& rDCEvt );
@@ -748,6 +750,8 @@ public:
     virtual long            PreNotify( NotifyEvent& rNEvt );
     virtual long            Notify( NotifyEvent& rNEvt );
     virtual void            DataChanged( const DataChangedEvent& rDCEvt );
+
+    virtual Size            CalcMinimumSize() const;
 
     virtual void            Modify();
 
