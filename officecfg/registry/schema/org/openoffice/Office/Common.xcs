@@ -3473,7 +3473,7 @@
 						<desc>Specifies whether the HelpAgent is enabled.</desc>
 						<label>enable HelpAgent</label>
 					</info>
-					<value>true</value>
+					<value>false</value>
 				</prop>
 				<prop oor:name="Timeout" oor:type="xs:int">
 					<info>
