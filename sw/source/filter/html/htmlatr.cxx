@@ -977,8 +977,7 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
         OSL_ENSURE( aNumInfo.GetNumRule(), "Wo ist die Numerierung geblieben???" );
         OSL_ENSURE( nBulletGrfLvl < MAXLEVEL, "So viele Ebenen gibt's nicht" );
         const SwNumFmt& rNumFmt = aNumInfo.GetNumRule()->Get(nBulletGrfLvl);
-
-        OutHTML_BulletImage( rWrt, OOO_STRING_SVTOOLS_HTML_image, 0,
+        OutHTML_BulletImage( rWrt, OOO_STRING_SVTOOLS_HTML_image, rNumFmt.GetBrush(),
                              rHWrt.aBulletGrfs[nBulletGrfLvl],
                              rNumFmt.GetGraphicSize(), rNumFmt.GetGraphicOrientation() );
     }
@@ -2592,7 +2591,7 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
         else
             pStr = OOO_STRING_SVTOOLS_HTML_AL_right;
 
-        OStringBuffer sOut(RTL_CONSTASCII_STRINGPARAM(OOO_STRING_SVTOOLS_HTML_linebreak));
+        OStringBuffer sOut(OOO_STRING_SVTOOLS_HTML_linebreak);
         sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_clear).append('=').append(pStr);
         HTMLOutFuncs::Out_AsciiTag( rHTMLWrt.Strm(), sOut.getStr() );
 

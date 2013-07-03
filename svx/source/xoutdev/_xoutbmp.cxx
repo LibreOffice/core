@@ -29,11 +29,16 @@
 #include "svx/xoutbmp.hxx"
 #include <vcl/FilterConfigItem.hxx>
 #include <vcl/graphicfilter.hxx>
+#include <vcl/cvtgrf.hxx>
+#include <sax/tools/converter.hxx>
+#include <svtools/htmlkywd.hxx>
 
 #define FORMAT_BMP  OUString("bmp")
 #define FORMAT_GIF  OUString("gif")
 #define FORMAT_JPG  OUString("jpg")
 #define FORMAT_PNG  OUString("png")
+
+using namespace ::com::sun::star;
 
 GraphicFilter* XOutBitmap::pGrfFilter = NULL;
 
@@ -312,6 +317,34 @@ sal_uInt16 XOutBitmap::WriteGraphic( const Graphic& rGraphic, String& rFileName,
     {
         return GRFILTER_OK;
     }
+}
+
+sal_uLong XOutBitmap::GraphicToBase64(const Graphic& rGraphic,OUString& rOUString)
+{
+    sal_uLong nErr;
+    SvMemoryStream aOStm;
+    rOUString = OOO_STRING_SVTOOLS_HTML_IT_image;
+    rOUString += "/";
+    GfxLink aLink = rGraphic.GetLink();
+    sal_uLong aCvtType;
+    switch(  aLink.GetType() )
+    {
+        case( GFX_LINK_TYPE_NATIVE_JPG ): aCvtType = CVT_JPG; rOUString += OOO_STRING_SVTOOLS_HTML_O_jpg; break;
+        case( GFX_LINK_TYPE_NATIVE_PNG ): aCvtType = CVT_PNG; rOUString += OOO_STRING_SVTOOLS_HTML_O_png; break;
+        case( GFX_LINK_TYPE_NATIVE_SVG ): aCvtType = CVT_SVG; rOUString += OOO_STRING_SVTOOLS_HTML_O_svg; break;
+        default: aCvtType = CVT_PNG; break;
+    }
+    // save everything else (including gif) into png
+    nErr = GraphicConverter::Export(aOStm,rGraphic,aCvtType);
+    aOStm.Seek(STREAM_SEEK_TO_END);
+    uno::Sequence<sal_Int8> aOStmSeq( (sal_Int8*) aOStm.GetData(),aOStm.Tell() );
+    OUStringBuffer aStrBuffer;
+    ::sax::Converter::encodeBase64(aStrBuffer,aOStmSeq);
+    rOUString += ";";
+    rOUString += OOO_STRING_SVTOOLS_HTML_O_base64;
+    rOUString += ",";
+    rOUString += aStrBuffer.makeStringAndClear();
+    return nErr;
 }
 
 sal_uInt16 XOutBitmap::ExportGraphic( const Graphic& rGraphic, const INetURLObject& rURL,
