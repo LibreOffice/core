@@ -1256,17 +1256,17 @@ static SotDestinationEntry_Impl const aDestinationArray[] =     \
 // - new style GetExchange methods -
 // ---------------------------------
 
-sal_Bool IsFormatSupported( const DataFlavorExVector& rDataFlavorExVector, sal_uLong nId )
+bool IsFormatSupported( const DataFlavorExVector& rDataFlavorExVector, sal_uLong nId )
 {
     DataFlavorExVector::iterator    aIter( ( (DataFlavorExVector&) rDataFlavorExVector ).begin() );
     DataFlavorExVector::iterator    aEnd( ( (DataFlavorExVector&) rDataFlavorExVector ).end() );
-    sal_Bool                        bRet = sal_False;
+    bool bRet = false;
 
     while( aIter != aEnd )
     {
         if( nId == (*aIter++).mnSotId )
         {
-            bRet = sal_True;
+            bRet = true;
             aIter = aEnd;
         }
     }
@@ -1276,10 +1276,10 @@ sal_Bool IsFormatSupported( const DataFlavorExVector& rDataFlavorExVector, sal_u
 
 // -----------------------------------------------------------------------------
 
-static sal_Bool CheckTransferableContext_Impl( const Reference< XTransferable >* pxTransferable, const SotAction_Impl& rEntry )
+static bool CheckTransferableContext_Impl( const Reference< XTransferable >* pxTransferable, const SotAction_Impl& rEntry )
 {
     DataFlavor  aFlavor;
-    sal_Bool        bRet = sal_True;
+    bool bRet = true;
 
     try
     {
@@ -1292,7 +1292,7 @@ static sal_Bool CheckTransferableContext_Impl( const Reference< XTransferable >*
             {
                 case FILEGRPDSC_ONLY_URL:
                 {
-                    bRet = sal_False;
+                    bRet = false;
 
                     if( SotExchange::GetFormatDataFlavor( SOT_FORMATSTR_ID_FILECONTENT, aFlavor ) &&
                         (*pxTransferable)->isDataFlavorSupported( aFlavor ) &&

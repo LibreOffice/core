@@ -21,7 +21,6 @@
 #include <sot/storinfo.hxx>
 #include <osl/file.hxx>
 #include <tools/tempfile.hxx>
-#include <tools/string.hxx>
 #include <tools/stream.hxx>
 #include <tools/debug.hxx>
 
@@ -49,7 +48,7 @@ TYPEINIT1( BaseStorageStream, StorageBase );
 TYPEINIT1( BaseStorage, StorageBase );
 
 StorageBase::StorageBase()
-    : m_bAutoCommit( sal_False )
+    : m_bAutoCommit( false )
 {
     m_nMode  = STREAM_READ;
     m_nError = SVSTREAM_OK;
@@ -122,21 +121,21 @@ OLEStorageBase::~OLEStorageBase()
 
 // Validate the instance for I/O
 
-sal_Bool OLEStorageBase::Validate_Impl( sal_Bool bWrite ) const
+bool OLEStorageBase::Validate_Impl( bool bWrite ) const
 {
     if( pIo
         && pIo->pTOC
         && pEntry
         && !pEntry->bInvalid
         &&  ( !bWrite || !pEntry->bDirect || ( nStreamMode & STREAM_WRITE ) ) )
-            return sal_True;
-    return sal_False;
+            return true;
+    return false;
 }
 
-sal_Bool OLEStorageBase::ValidateMode_Impl( StreamMode m, StgDirEntry* p ) const
+bool OLEStorageBase::ValidateMode_Impl( StreamMode m, StgDirEntry* p ) const
 {
     if( m == INTERNAL_MODE )
-        return sal_True;
+        return true;
     sal_uInt16 nCurMode = ( p && p->nRefCnt ) ? p->nMode : 0xFFFF;
     if( ( m & 3 ) == STREAM_READ )
     {
@@ -145,7 +144,7 @@ sal_Bool OLEStorageBase::ValidateMode_Impl( StreamMode m, StgDirEntry* p ) const
            && ( nCurMode & STREAM_SHARE_DENYWRITE ) )
          || ( ( m & STREAM_SHARE_DENYALL )
            && ( nCurMode & STREAM_SHARE_DENYALL ) ) )
-            return sal_True;
+            return true;
     }
     else
     {
@@ -154,9 +153,9 @@ sal_Bool OLEStorageBase::ValidateMode_Impl( StreamMode m, StgDirEntry* p ) const
         // the commit may fail
         if( ( m & STREAM_SHARE_DENYALL )
          && ( nCurMode & STREAM_SHARE_DENYALL ) )
-            return sal_True;
+            return true;
     }
-    return sal_False;
+    return false;
 }
 
 
@@ -190,7 +189,7 @@ StorageStream::~StorageStream()
         pEntry->Commit();
 }
 
-sal_Bool StorageStream::Equals( const BaseStorageStream& rStream ) const
+bool StorageStream::Equals( const BaseStorageStream& rStream ) const
 {
     const StorageStream* pOther = PTR_CAST( StorageStream, &rStream );
     return pOther && ( pOther->pEntry == pEntry );
@@ -212,7 +211,7 @@ sal_uLong StorageStream::Read( void* pData, sal_uLong nSize )
 
 sal_uLong StorageStream::Write( const void* pData, sal_uLong nSize )
 {
-    if( Validate( sal_True ) )
+    if( Validate( true ) )
     {
         pEntry->Seek( nPos );
         nSize = pEntry->Write( pData, (sal_Int32) nSize );
@@ -238,16 +237,16 @@ void StorageStream::Flush()
     Commit();
 }
 
-sal_Bool StorageStream::SetSize( sal_uLong nNewSize )
+bool StorageStream::SetSize( sal_uLong nNewSize )
 {
-    if( Validate( sal_True ) )
+    if( Validate( true ) )
     {
-        sal_Bool b = pEntry->SetSize( (sal_Int32) nNewSize );
+        bool b = pEntry->SetSize( (sal_Int32) nNewSize );
         pIo->MoveError( *this );
         return b;
     }
     else
-        return sal_False;
+        return false;
 }
 
 sal_uLong StorageStream::GetSize() const
@@ -257,14 +256,14 @@ sal_uLong StorageStream::GetSize() const
     return 0;
 }
 
-sal_Bool StorageStream::Commit()
+bool StorageStream::Commit()
 {
     if( !Validate() )
-        return sal_False;
+        return false;
     if( !( m_nMode & STREAM_WRITE ) )
     {
         SetError( SVSTREAM_ACCESS_DENIED );
-        return sal_False;
+        return false;
     }
     else
     {
@@ -274,9 +273,9 @@ sal_Bool StorageStream::Commit()
     }
 }
 
-sal_Bool StorageStream::Revert()
+bool StorageStream::Revert()
 {
-    sal_Bool bResult = sal_False;
+    bool bResult = false;
 
     if ( Validate() )
     {
@@ -288,15 +287,15 @@ sal_Bool StorageStream::Revert()
     return bResult;
 }
 
-sal_Bool StorageStream::CopyTo( BaseStorageStream* pDest )
+bool StorageStream::CopyTo( BaseStorageStream* pDest )
 {
-    if( !Validate() || !pDest || !pDest->Validate( sal_True ) || Equals( *pDest ) )
-        return sal_False;
+    if( !Validate() || !pDest || !pDest->Validate( true ) || Equals( *pDest ) )
+        return false;
     pEntry->Copy( *pDest );
     pDest->Commit();
     pIo->MoveError( *this );
     SetError( pDest->GetError() );
-    return sal_Bool( Good() && pDest->Good() );
+    return Good() && pDest->Good();
 }
 
 const SvStream* StorageStream::GetSvStream() const
@@ -304,17 +303,17 @@ const SvStream* StorageStream::GetSvStream() const
     return GetSvStream_Impl();
 }
 
-sal_Bool StorageStream::Validate( sal_Bool bValidate ) const
+bool StorageStream::Validate( bool bValidate ) const
 {
-    sal_Bool bRet = Validate_Impl( bValidate );
+    bool bRet = Validate_Impl( bValidate );
     if ( !bRet )
         SetError( SVSTREAM_ACCESS_DENIED );
     return bRet;
 }
 
-sal_Bool StorageStream::ValidateMode( StreamMode nMode ) const
+bool StorageStream::ValidateMode( StreamMode nMode ) const
 {
-    sal_Bool bRet = ValidateMode_Impl( nMode, NULL );
+    bool bRet = ValidateMode_Impl( nMode, NULL );
     if ( !bRet )
         SetError( SVSTREAM_ACCESS_DENIED );
     return bRet;
@@ -325,24 +324,24 @@ sal_Bool StorageStream::ValidateMode( StreamMode nMode ) const
 SvStorageInfo::SvStorageInfo( const StgDirEntry& rE )
 {
     rE.aEntry.GetName( aName );
-    bStorage = sal_Bool( rE.aEntry.GetType() == STG_STORAGE );
-    bStream  = sal_Bool( rE.aEntry.GetType() == STG_STREAM );
+    bStorage = rE.aEntry.GetType() == STG_STORAGE;
+    bStream  = rE.aEntry.GetType() == STG_STREAM;
     nSize    = bStorage ? 0 : rE.aEntry.GetSize();
 }
 
 /////////////////////////// class Storage ////////////////////////////////
 
-sal_Bool Storage::IsStorageFile( const String & rFileName )
+bool Storage::IsStorageFile( const OUString & rFileName )
 {
     StgIo aIo;
     if( aIo.Open( rFileName, STREAM_STD_READ ) )
         return aIo.Load();
-    return sal_False;
+    return false;
 }
 
-sal_Bool Storage::IsStorageFile( SvStream* pStream )
+bool Storage::IsStorageFile( SvStream* pStream )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
 
     if ( pStream )
     {
@@ -364,21 +363,22 @@ sal_Bool Storage::IsStorageFile( SvStream* pStream )
 
 TYPEINIT1( Storage, BaseStorage );
 
-Storage::Storage( const String& rFile, StreamMode m, sal_Bool bDirect )
-       : OLEStorageBase( new StgIo, NULL, m_nMode ), aName( rFile ), bIsRoot( sal_False )
+Storage::Storage( const OUString& rFile, StreamMode m, bool bDirect )
+    : OLEStorageBase( new StgIo, NULL, m_nMode )
+    , aName( rFile ), bIsRoot( false )
 {
-    sal_Bool bTemp = sal_False;
-    if( !aName.Len() )
+    bool bTemp = false;
+    if( aName.isEmpty() )
     {
         // no name = temporary name!
         aName = TempFile::CreateTempName();
-        bTemp = sal_True;
+        bTemp = true;
     }
     // the root storage creates the I/O system
     m_nMode = m;
     if( pIo->Open( aName, m ) )
     {
-        Init( sal_Bool( ( m & ( STREAM_TRUNC | STREAM_NOCREATE ) ) == STREAM_TRUNC ) );
+        Init( ( m & ( STREAM_TRUNC | STREAM_NOCREATE ) ) == STREAM_TRUNC );
         if( pEntry )
         {
             pEntry->bDirect = bDirect;
@@ -395,19 +395,20 @@ Storage::Storage( const String& rFile, StreamMode m, sal_Bool bDirect )
 
 // Create a storage on a given stream.
 
-Storage::Storage( SvStream& r, sal_Bool bDirect )
-       : OLEStorageBase( new StgIo, NULL, m_nMode ), bIsRoot( sal_False )
+Storage::Storage( SvStream& r, bool bDirect )
+    : OLEStorageBase( new StgIo, NULL, m_nMode )
+    , bIsRoot( false )
 {
     m_nMode = STREAM_READ;
     if( r.IsWritable() )
         m_nMode = STREAM_READ | STREAM_WRITE;
     if( r.GetError() == SVSTREAM_OK )
     {
-        pIo->SetStrm( &r, sal_False );
+        pIo->SetStrm( &r, false );
         sal_uLong nSize = r.Seek( STREAM_SEEK_TO_END );
         r.Seek( 0L );
         // Initializing is OK if the stream is empty
-        Init( sal_Bool( nSize == 0 ) );
+        Init( nSize == 0 );
         if( pEntry )
         {
             pEntry->bDirect = bDirect;
@@ -423,8 +424,8 @@ Storage::Storage( SvStream& r, sal_Bool bDirect )
 }
 
 
-Storage::Storage( UCBStorageStream& rStrm, sal_Bool bDirect )
-       : OLEStorageBase( new StgIo, NULL, m_nMode ), bIsRoot( sal_False )
+Storage::Storage( UCBStorageStream& rStrm, bool bDirect )
+       : OLEStorageBase( new StgIo, NULL, m_nMode ), bIsRoot( false )
 {
     m_nMode = STREAM_READ;
 
@@ -452,7 +453,7 @@ Storage::Storage( UCBStorageStream& rStrm, sal_Bool bDirect )
     sal_uLong nSize = pStream->Seek( STREAM_SEEK_TO_END );
     pStream->Seek( 0L );
     // Initializing is OK if the stream is empty
-    Init( sal_Bool( nSize == 0 ) );
+    Init( nSize == 0 );
     if( pEntry )
     {
         pEntry->bDirect = bDirect;
@@ -465,11 +466,11 @@ Storage::Storage( UCBStorageStream& rStrm, sal_Bool bDirect )
 
 // Perform common code for both ctors above.
 
-void Storage::Init( sal_Bool bCreate )
+void Storage::Init( bool bCreate )
 {
     pEntry = NULL;
-    sal_Bool bHdrLoaded = sal_False;
-    bIsRoot = sal_True;
+    bool bHdrLoaded = false;
+    bIsRoot = true;
 
     OSL_ENSURE( pIo, "The pointer may not be empty at this point!" );
     if( pIo->Good() && pIo->GetStrm() )
@@ -503,7 +504,7 @@ void Storage::Init( sal_Bool bCreate )
 // Internal ctor
 
 Storage::Storage( StgIo* p, StgDirEntry* q, StreamMode m )
-       : OLEStorageBase( p, q, m_nMode ), bIsRoot( sal_False )
+       : OLEStorageBase( p, q, m_nMode ), bIsRoot( false )
 {
     if( q )
         q->aEntry.GetName( aName );
@@ -537,7 +538,7 @@ Storage::~Storage()
     }
 }
 
-const String& Storage::GetName() const
+const OUString& Storage::GetName() const
 {
     if( !bIsRoot && Validate() )
         pEntry->aEntry.GetName( ((Storage*) this)->aName );
@@ -566,18 +567,18 @@ void Storage::FillInfoList( SvStorageInfoList* pList ) const
 
 // Open or create a substorage
 
-BaseStorage* Storage::OpenUCBStorage( const String& rName, StreamMode m, sal_Bool bDirect )
+BaseStorage* Storage::OpenUCBStorage( const OUString& rName, StreamMode m, bool bDirect )
 {
     OSL_FAIL("Not supported!");
     return OpenStorage( rName, m, bDirect );
 }
 
-BaseStorage* Storage::OpenOLEStorage( const String& rName, StreamMode m, sal_Bool bDirect )
+BaseStorage* Storage::OpenOLEStorage( const OUString& rName, StreamMode m, bool bDirect )
 {
     return OpenStorage( rName, m, bDirect );
 }
 
-BaseStorage* Storage::OpenStorage( const String& rName, StreamMode m, bool bDirect )
+BaseStorage* Storage::OpenStorage( const OUString& rName, StreamMode m, bool bDirect )
 {
     if( !Validate() || !ValidateMode( m ) )
         return new Storage( pIo, NULL, m );
@@ -589,14 +590,13 @@ BaseStorage* Storage::OpenStorage( const String& rName, StreamMode m, bool bDire
     {
         if( !( m & STREAM_NOCREATE ) )
         {
-            sal_Bool bTemp = sal_False;
+            bool bTemp = false;
             // create a new storage
-            String aNewName = rName;
-            if( !aNewName.Len() )
+            OUString aNewName = rName;
+            if( aNewName.isEmpty() )
             {
-                aNewName.AssignAscii( "Temp Stg " );
-                aNewName.Append( OUString::number( ++nTmpCount ) );
-                bTemp = sal_True;
+                aNewName = OUString( "Temp Stg " ) + OUString::number( ++nTmpCount );
+                bTemp = true;
             }
             p = pIo->pTOC->Create( *pEntry, aNewName, STG_STORAGE );
             if( p )
@@ -626,16 +626,16 @@ BaseStorage* Storage::OpenStorage( const String& rName, StreamMode m, bool bDire
     }
     Storage* pStg = new Storage( pIo, p, m );
     pIo->MoveError( *pStg );
-    if( m & STREAM_WRITE ) pStg->m_bAutoCommit = sal_True;
+    if( m & STREAM_WRITE ) pStg->m_bAutoCommit = true;
     return pStg;
 }
 
 // Open a stream
 
-BaseStorageStream* Storage::OpenStream( const String& rName, StreamMode m, sal_Bool,
-const OString*
+BaseStorageStream* Storage::OpenStream( const OUString& rName, StreamMode m, bool,
+                                        const OString*
 #ifdef DBG_UTIL
-pB
+                                        pB
 #endif
 )
 {
@@ -644,19 +644,18 @@ pB
     if( !Validate() || !ValidateMode( m ) )
         return new StorageStream( pIo, NULL, m );
     StgDirEntry* p = pIo->pTOC->Find( *pEntry, rName );
-    sal_Bool bTemp = sal_False;
+    bool bTemp = false;
     if( !p )
     {
         if( !( m & STREAM_NOCREATE ) )
         {
             // create a new stream
             // make a name if the stream is temporary (has no name)
-            String aNewName( rName );
-            if( !aNewName.Len() )
+            OUString aNewName( rName );
+            if( aNewName.isEmpty() )
             {
-                aNewName.AssignAscii( "Temp Strm " );
-                aNewName.Append( OUString::number( ++nTmpCount ) );
-                bTemp = sal_True;
+                aNewName = OUString( "Temp Strm " ) + OUString::number( ++nTmpCount );
+                bTemp = true;
             }
             p = pIo->pTOC->Create( *pEntry, aNewName, STG_STREAM );
         }
@@ -678,50 +677,50 @@ pB
     }
     StorageStream* pStm = new StorageStream( pIo, p, m );
     if( p && !p->bDirect )
-        pStm->SetAutoCommit( sal_True );
+        pStm->SetAutoCommit( true );
     pIo->MoveError( *pStm );
     return pStm;
 }
 
 // Delete a stream or substorage by setting the temp bit.
 
-sal_Bool Storage::Remove( const String& rName )
+bool Storage::Remove( const OUString& rName )
 {
-    if( !Validate( sal_True ) )
-        return sal_False;
+    if( !Validate( true ) )
+        return false;
     StgDirEntry* p = pIo->pTOC->Find( *pEntry, rName );
     if( p )
     {
-        p->Invalidate( sal_True );
-        return sal_True;
+        p->Invalidate( true );
+        return true;
     }
     else
     {
         SetError( SVSTREAM_FILE_NOT_FOUND );
-        return sal_False;
+        return false;
     }
 }
 
 // Rename a storage element
 
-sal_Bool Storage::Rename( const String& rOld, const String& rNew )
+bool Storage::Rename( const OUString& rOld, const OUString& rNew )
 {
-    if( Validate( sal_True ) )
+    if( Validate( true ) )
     {
-        sal_Bool b = pIo->pTOC->Rename( *pEntry, rOld, rNew );
+        bool b = pIo->pTOC->Rename( *pEntry, rOld, rNew );
         pIo->MoveError( *this );
         return b;
     }
     else
-        return sal_False;
+        return false;
 }
 
 // Copy one element
 
-sal_Bool Storage::CopyTo( const String& rElem, BaseStorage* pDest, const String& rNew )
+bool Storage::CopyTo( const OUString& rElem, BaseStorage* pDest, const OUString& rNew )
 {
-    if( !Validate() || !pDest || !pDest->Validate( sal_True ) )
-        return sal_False;
+    if( !Validate() || !pDest || !pDest->Validate( true ) )
+        return false;
     StgDirEntry* pElem = pIo->pTOC->Find( *pEntry, rElem );
     if( pElem )
     {
@@ -752,7 +751,7 @@ sal_Bool Storage::CopyTo( const String& rElem, BaseStorage* pDest, const String&
 
             delete p1;
             delete p2;
-            return sal_Bool( Good() && pDest->Good() );
+            return Good() && pDest->Good();
         }
         else
         {
@@ -780,26 +779,26 @@ sal_Bool Storage::CopyTo( const String& rElem, BaseStorage* pDest, const String&
 
             delete p1;
             delete p2;
-            return sal_Bool( Good() && pDest->Good() );
+            return Good() && pDest->Good();
         }
     }
     SetError( SVSTREAM_FILE_NOT_FOUND );
-    return sal_False;
+    return false;
 }
 
-sal_Bool Storage::CopyTo( BaseStorage* pDest ) const
+bool Storage::CopyTo( BaseStorage* pDest ) const
 {
-    if( !Validate() || !pDest || !pDest->Validate( sal_True ) || Equals( *pDest ) )
+    if( !Validate() || !pDest || !pDest->Validate( true ) || Equals( *pDest ) )
     {
         SetError( SVSTREAM_ACCESS_DENIED );
-        return sal_False;
+        return false;
     }
     Storage* pThis = (Storage*) this;
     pDest->SetClassId( GetClassId() );
     pDest->SetDirty();
     SvStorageInfoList aList;
     FillInfoList( &aList );
-    sal_Bool bRes = sal_True;
+    bool bRes = true;
     for( size_t i = 0; i < aList.size() && bRes; i++ )
     {
         SvStorageInfo& rInfo = aList[ i ];
@@ -807,24 +806,24 @@ sal_Bool Storage::CopyTo( BaseStorage* pDest ) const
     }
     if( !bRes )
         SetError( pDest->GetError() );
-    return sal_Bool( Good() && pDest->Good() );
+    return Good() && pDest->Good();
 }
 
 // Move one element
 
-sal_Bool Storage::MoveTo( const String& rElem, BaseStorage* pODest, const String& rNew )
+bool Storage::MoveTo( const OUString& rElem, BaseStorage* pODest, const OUString& rNew )
 {
-    if( !Validate() || !pODest || !pODest->Validate( sal_True ) || Equals( *pODest ) )
+    if( !Validate() || !pODest || !pODest->Validate( true ) || Equals( *pODest ) )
     {
         SetError( SVSTREAM_ACCESS_DENIED );
-        return sal_False;
+        return false;
     }
 
     StgDirEntry* pElem = pIo->pTOC->Find( *pEntry, rElem );
     if( pElem )
     {
         // Simplest case: both storages share the same file
-        sal_Bool bRes;
+        bool bRes;
         Storage *pOther = PTR_CAST( Storage, pODest );
         if( pOther && pIo == pOther->pIo && rElem == rNew )
         {
@@ -835,7 +834,7 @@ sal_Bool Storage::MoveTo( const String& rElem, BaseStorage* pODest, const String
             {
                 // cyclic move
                 SetError( SVSTREAM_ACCESS_DENIED );
-                return sal_False;
+                return false;
             }
             bRes = pIo->pTOC->Move( *pEntry, *pDest->pEntry, rNew );
             if( !bRes )
@@ -860,51 +859,51 @@ sal_Bool Storage::MoveTo( const String& rElem, BaseStorage* pODest, const String
         return bRes;
     }
     SetError( SVSTREAM_FILE_NOT_FOUND );
-    return sal_False;
+    return false;
 }
 
-sal_Bool Storage::IsStorage( const String& rName ) const
+bool Storage::IsStorage( const OUString& rName ) const
 {
     if( Validate() )
     {
         StgDirEntry* p = pIo->pTOC->Find( *pEntry, rName );
         if( p )
-            return sal_Bool( p->aEntry.GetType() == STG_STORAGE );
+            return p->aEntry.GetType() == STG_STORAGE;
     }
-    return sal_False;
+    return false;
 }
 
-sal_Bool Storage::IsStream( const String& rName ) const
+bool Storage::IsStream( const OUString& rName ) const
 {
     if( Validate() )
     {
         StgDirEntry* p = pIo->pTOC->Find( *pEntry, rName );
         if( p )
-            return sal_Bool( p->aEntry.GetType() == STG_STREAM );
+            return p->aEntry.GetType() == STG_STREAM;
     }
-    return sal_False;
+    return false;
 }
 
-sal_Bool Storage::IsContained( const String& rName ) const
+bool Storage::IsContained( const OUString& rName ) const
 {
     if( Validate() )
-        return sal_Bool( pIo->pTOC->Find( *pEntry, rName ) != NULL );
+        return pIo->pTOC->Find( *pEntry, rName ) != NULL;
     else
-        return sal_False;
+        return false;
 }
 
 // Commit all sub-elements within this storage. If this is
 // the root, commit the FAT, the TOC and the header as well.
 
-sal_Bool Storage::Commit()
+bool Storage::Commit()
 {
-    sal_Bool bRes = sal_True;
+    bool bRes = true;
     if( !Validate() )
-        return sal_False;
+        return false;
     if( !( m_nMode & STREAM_WRITE ) )
     {
         SetError( SVSTREAM_ACCESS_DENIED );
-        return sal_False;
+        return false;
     }
     else
     {
@@ -923,9 +922,9 @@ sal_Bool Storage::Commit()
     return bRes;
 }
 
-sal_Bool Storage::Revert()
+bool Storage::Revert()
 {
-    return sal_True;
+    return true;
 }
 
 ///////////////////////////// OLE Support ////////////////////////////////
@@ -933,16 +932,16 @@ sal_Bool Storage::Revert()
 // Set the storage type
 
 void Storage::SetClass( const SvGlobalName & rClass,
-                                sal_uLong nOriginalClipFormat,
-                                const String & rUserTypeName )
+                        sal_uLong nOriginalClipFormat,
+                        const OUString & rUserTypeName )
 {
-    if( Validate( sal_True ) )
+    if( Validate( true ) )
     {
         // set the class name in the root entry
         pEntry->aEntry.SetClassId( (const ClsId&) rClass.GetCLSID() );
         pEntry->SetDirty();
         // then create the streams
-        StgCompObjStream aCompObj( *this, sal_True );
+        StgCompObjStream aCompObj( *this, true );
         aCompObj.GetClsId() = (const ClsId&) rClass.GetCLSID();
         aCompObj.GetCbFormat() = nOriginalClipFormat;
         aCompObj.GetUserName() = rUserTypeName;
@@ -960,14 +959,14 @@ void Storage::SetClass( const SvGlobalName & rClass,
 }
 
 void Storage::SetConvertClass( const SvGlobalName & rConvertClass,
-                                       sal_uLong nOriginalClipFormat,
-                                       const String & rUserTypeName )
+                               sal_uLong nOriginalClipFormat,
+                               const OUString & rUserTypeName )
 {
-    if( Validate( sal_True ) )
+    if( Validate( true ) )
     {
         SetClass( rConvertClass, nOriginalClipFormat, rUserTypeName );
         // plus the convert flag:
-        StgOleStream aOle( *this, sal_True );
+        StgOleStream aOle( *this, true );
         aOle.GetFlags() |= 4;
         if( !aOle.Store() )
             SetError( aOle.GetError() );
@@ -976,7 +975,7 @@ void Storage::SetConvertClass( const SvGlobalName & rConvertClass,
 
 SvGlobalName Storage::GetClassName()
 {
-    StgCompObjStream aCompObj( *this, sal_False );
+    StgCompObjStream aCompObj( *this, false );
     if( aCompObj.Load() )
         return SvGlobalName( (const CLSID&) aCompObj.GetClsId() );
     pIo->ResetError();
@@ -989,35 +988,35 @@ SvGlobalName Storage::GetClassName()
 
 sal_uLong Storage::GetFormat()
 {
-    StgCompObjStream aCompObj( *this, sal_False );
+    StgCompObjStream aCompObj( *this, false );
     if( aCompObj.Load() )
         return aCompObj.GetCbFormat();
     pIo->ResetError();
     return 0;
 }
 
-String Storage::GetUserName()
+OUString Storage::GetUserName()
 {
-    StgCompObjStream aCompObj( *this, sal_False );
+    StgCompObjStream aCompObj( *this, false );
     if( aCompObj.Load() )
         return aCompObj.GetUserName();
     pIo->ResetError();
-    return String();
+    return OUString();
 }
 
-sal_Bool Storage::ShouldConvert()
+bool Storage::ShouldConvert()
 {
-    StgOleStream aOle( *this, sal_False );
+    StgOleStream aOle( *this, false );
     if( aOle.Load() )
-        return sal_Bool( ( aOle.GetFlags() & 4 ) != 0 );
+        return ( aOle.GetFlags() & 4 ) != 0;
     else
     {
         pIo->ResetError();
-        return sal_False;
+        return false;
     }
 }
 
-sal_Bool Storage::ValidateFAT()
+bool Storage::ValidateFAT()
 {
     Link aLink = StgIo::GetErrorLink();
     ErrCode nErr = pIo->ValidateFATs();
@@ -1051,31 +1050,31 @@ const SvStream* Storage::GetSvStream() const
     return GetSvStream_Impl();
 }
 
-sal_Bool Storage::Validate( sal_Bool bValidate ) const
+bool Storage::Validate( bool bValidate ) const
 {
-    sal_Bool bRet = Validate_Impl( bValidate );
+    bool bRet = Validate_Impl( bValidate );
     if ( !bRet )
         SetError( SVSTREAM_ACCESS_DENIED );
     return bRet;
 }
 
-sal_Bool Storage::ValidateMode( StreamMode nMode ) const
+bool Storage::ValidateMode( StreamMode nMode ) const
 {
-    sal_Bool bRet = ValidateMode_Impl( nMode );
+    bool bRet = ValidateMode_Impl( nMode );
     if ( !bRet )
         SetError( SVSTREAM_ACCESS_DENIED );
     return bRet;
 }
 
-sal_Bool Storage::ValidateMode( StreamMode nMode, StgDirEntry* p ) const
+bool Storage::ValidateMode( StreamMode nMode, StgDirEntry* p ) const
 {
-    sal_Bool bRet = ValidateMode_Impl( nMode, p );
+    bool bRet = ValidateMode_Impl( nMode, p );
     if ( !bRet )
         SetError( SVSTREAM_ACCESS_DENIED );
     return bRet;
 }
 
-sal_Bool Storage::Equals( const BaseStorage& rStorage ) const
+bool Storage::Equals( const BaseStorage& rStorage ) const
 {
     const Storage* pOther = PTR_CAST( Storage, &rStorage );
     return pOther && ( pOther->pEntry == pEntry );

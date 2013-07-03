@@ -60,9 +60,9 @@ protected:
     virtual void        FlushData();
                         ~SotStorageStream();
 public:
-                        SotStorageStream( const String &,
-                                     StreamMode = STREAM_STD_READWRITE,
-                                     StorageMode = 0 );
+                        SotStorageStream( const OUString &,
+                                          StreamMode = STREAM_STD_READWRITE,
+                                          StorageMode = 0 );
                         SotStorageStream( BaseStorageStream *pStm );
                         SotStorageStream();
                         SO2_DECL_BASIC_CLASS_DLL(SotStorageStream,SOTDATA())
@@ -71,10 +71,10 @@ public:
 
     virtual void        SetSize( sal_uLong nNewSize );
     sal_uInt32              GetSize() const;
-    sal_Bool                CopyTo( SotStorageStream * pDestStm );
-    virtual sal_Bool        Commit();
-    virtual sal_Bool        Revert();
-    sal_Bool                SetProperty( const String& rName, const ::com::sun::star::uno::Any& rValue );
+    bool                CopyTo( SotStorageStream * pDestStm );
+    virtual bool        Commit();
+    virtual bool        Revert();
+    bool                SetProperty( const OUString& rName, const ::com::sun::star::uno::Any& rValue );
     virtual sal_Size remainingSize();
 };
 
@@ -98,41 +98,41 @@ friend class SvStorage;
 
     BaseStorage *   m_pTmpStg;   // Temp-Storage fuer Transacted, nur auf diesem schreiben!        ??? Useless ???
     BaseStorage *   m_pOwnStg;   // Zielstorage
-    SvStream *  m_pStorStm;  // nur fuer SDSTORAGES
+    SvStream *      m_pStorStm;  // nur fuer SDSTORAGES
     sal_uLong       m_nError;
-    String      m_aName;      // Name des Storage
-    sal_Bool        m_bIsRoot:1,  // z.B.: File-Storage
-                m_bDelStm:1;
-    OString m_aKey;           // aKey.Len != 0  -> Verschluesselung
-    long        m_nVersion;
+    OUString        m_aName;     // Name des Storage
+    bool            m_bIsRoot;   // z.B.: File-Storage
+    bool            m_bDelStm;
+    OString         m_aKey;      // aKey.Len != 0  -> Verschluesselung
+    long            m_nVersion;
 
 protected:
                         ~SotStorage();
-   void                 CreateStorage( sal_Bool bUCBStorage, StreamMode, StorageMode );
+   void                 CreateStorage( bool bUCBStorage, StreamMode, StorageMode );
 public:
-                        SotStorage( const String &,
-                                   StreamMode = STREAM_STD_READWRITE,
-                                   StorageMode = 0 );
-                        SotStorage( sal_Bool bUCBStorage, const String &,
-                                   StreamMode = STREAM_STD_READWRITE,
-                                   StorageMode = 0 );
+                        SotStorage( const OUString &,
+                                    StreamMode = STREAM_STD_READWRITE,
+                                    StorageMode = 0 );
+                        SotStorage( bool bUCBStorage, const OUString &,
+                                    StreamMode = STREAM_STD_READWRITE,
+                                    StorageMode = 0 );
                         SotStorage( BaseStorage * );
                         SotStorage( SvStream & rStm );
-                        SotStorage( sal_Bool bUCBStorage, SvStream & rStm );
-                        SotStorage( SvStream * pStm, sal_Bool bDelete );
+                        SotStorage( bool bUCBStorage, SvStream & rStm );
+                        SotStorage( SvStream * pStm, bool bDelete );
                         SotStorage();
                         SO2_DECL_BASIC_CLASS_DLL(SotStorage,SOTDATA())
 
     SvMemoryStream *    CreateMemoryStream();
 
-    static sal_Bool         IsStorageFile( const String & rFileName );
-    static sal_Bool         IsStorageFile( SvStream* pStream );
+    static bool         IsStorageFile( const OUString & rFileName );
+    static bool         IsStorageFile( SvStream* pStream );
 
-    virtual const String & GetName() const;
+    virtual const OUString& GetName() const;
 
-    virtual sal_Bool        Validate();
+    virtual bool        Validate();
 
-    const OString& GetKey() const;
+    const OString&      GetKey() const;
 
     void                SetVersion( long nVers )
                         {
@@ -152,57 +152,57 @@ public:
                         }
     virtual void        ResetError();
 
-    sal_Bool                IsRoot() const              { return m_bIsRoot; }
-    void                SignAsRoot( sal_Bool b = sal_True ) { m_bIsRoot = b; }
-    void                SetDeleteStream( sal_Bool bDelete ) { m_bDelStm = bDelete; }
+    bool                IsRoot() const              { return m_bIsRoot; }
+    void                SignAsRoot( bool b = true ) { m_bIsRoot = b; }
+    void                SetDeleteStream( bool bDelete ) { m_bDelStm = bDelete; }
 
                         // eigener Datenbereich
     virtual void        SetClass( const SvGlobalName & rClass,
                                   sal_uLong bOriginalClipFormat,
-                                  const String & rUserTypeName );
+                                  const OUString & rUserTypeName );
     virtual void        SetConvertClass( const SvGlobalName & rConvertClass,
                                          sal_uLong bOriginalClipFormat,
-                                         const String & rUserTypeName );
+                                         const OUString & rUserTypeName );
     virtual SvGlobalName GetClassName();// Typ der Daten im Storage
-    virtual sal_uLong       GetFormat();
-    virtual String      GetUserName();
-    virtual sal_Bool        ShouldConvert();
+    virtual sal_uLong   GetFormat();
+    virtual OUString    GetUserName();
+    virtual bool        ShouldConvert();
 
                         // Liste aller Elemente
     virtual void        FillInfoList( SvStorageInfoList * ) const;
-    virtual sal_Bool        CopyTo( SotStorage * pDestStg );
-    virtual sal_Bool        Commit();
-    virtual sal_Bool        Revert();
+    virtual bool        CopyTo( SotStorage * pDestStg );
+    virtual bool        Commit();
+    virtual bool        Revert();
 
                         /* Element Methoden     */
                         // Stream mit Verbindung zu Storage erzeugen,
                         // in etwa eine Parent-Child Beziehung
-    SotStorageStream *  OpenSotStream( const String & rEleName,
-                                    StreamMode = STREAM_STD_READWRITE,
-                                    StorageMode = 0 );
-    SotStorage *        OpenSotStorage( const String & rEleName,
-                                    StreamMode = STREAM_STD_READWRITE,
-                                    StorageMode = STORAGE_TRANSACTED );
+    SotStorageStream *  OpenSotStream( const OUString & rEleName,
+                                       StreamMode = STREAM_STD_READWRITE,
+                                       StorageMode = 0 );
+    SotStorage *        OpenSotStorage( const OUString & rEleName,
+                                        StreamMode = STREAM_STD_READWRITE,
+                                        StorageMode = STORAGE_TRANSACTED );
                         // Abfrage auf Storage oder Stream
-    virtual sal_Bool        IsStream( const String & rEleName ) const;
-    virtual sal_Bool        IsStorage( const String & rEleName ) const;
-    virtual sal_Bool        IsContained( const String & rEleName ) const;
+    virtual bool        IsStream( const OUString & rEleName ) const;
+    virtual bool        IsStorage( const OUString & rEleName ) const;
+    virtual bool        IsContained( const OUString & rEleName ) const;
                         // Element loeschen
-    virtual sal_Bool        Remove( const String & rEleName );
+    virtual bool        Remove( const OUString & rEleName );
                         // Elementnamen aendern
-    virtual sal_Bool        Rename( const String & rEleName,
-                                const String & rNewName );
-    virtual sal_Bool        CopyTo( const String & rEleName, SotStorage * pDest,
-                                const String & rNewName );
-    virtual sal_Bool        MoveTo( const String & rEleName, SotStorage * pDest,
-                                const String & rNewName );
+    virtual bool        Rename( const OUString & rEleName,
+                                const OUString & rNewName );
+    virtual bool        CopyTo( const OUString & rEleName, SotStorage * pDest,
+                                const OUString & rNewName );
+    virtual bool        MoveTo( const OUString & rEleName, SotStorage * pDest,
+                                const OUString & rNewName );
 
-    sal_Bool                IsOLEStorage() const;
-    static sal_Bool         IsOLEStorage( const String & rFileName );
-    static sal_Bool         IsOLEStorage( SvStream* pStream );
+    bool                IsOLEStorage() const;
+    static bool         IsOLEStorage( const OUString & rFileName );
+    static bool         IsOLEStorage( SvStream* pStream );
 
     static SotStorage*  OpenOLEStorage( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& xStorage,
-                                    const String& rEleName, StreamMode = STREAM_STD_READWRITE );
+                                        const OUString& rEleName, StreamMode = STREAM_STD_READWRITE );
     static sal_Int32    GetFormatID( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& xStorage );
     static sal_Int32    GetVersion( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& xStorage );
 };

@@ -17,12 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
+#include <rtl/ustrbuf.hxx>
 #include <tools/stream.hxx>
-#include <tools/string.hxx>
 #include <tools/rtti.hxx>
 #include <sot/exchange.hxx>
-#include<sot/filelist.hxx>
+#include <sot/filelist.hxx>
 #include <osl/thread.h>
 
 TYPEINIT1_AUTOFACTORY( FileList, SvDataCopyStream );
@@ -54,7 +53,7 @@ void FileList::ClearAll( void )
 FileList& FileList::operator=( const FileList& rFileList )
 {
     for ( size_t i = 0, n = rFileList.aStrList.size(); i < n; ++i )
-        aStrList.push_back( new String( *rFileList.aStrList[ i ] ) );
+        aStrList.push_back( new OUString( *rFileList.aStrList[ i ] ) );
     return *this;
 }
 
@@ -106,13 +105,11 @@ SvStream& operator>>( SvStream& rIStm, FileList& rFileList )
 {
     rFileList.ClearAll();
 
-    String aStr;
+    OUStringBuffer sBuf(512);
     sal_uInt16 c;
 
     while (!rIStm.IsEof())
     {
-        aStr.Erase();
-
         // read first character of filepath; c==0 > reach end of stream
         rIStm >> c;
         if (!c)
@@ -121,12 +118,13 @@ SvStream& operator>>( SvStream& rIStm, FileList& rFileList )
         // read string till c==0
         while (c && !rIStm.IsEof())
         {
-            aStr += (sal_Unicode)c;
+            sBuf.append((sal_Unicode)c);
             rIStm >> c;
         }
 
         // append the filepath
-        rFileList.AppendFile(aStr);
+        rFileList.AppendFile(sBuf.toString());
+        sBuf.truncate();
     }
     return rIStm;
 }
@@ -137,14 +135,14 @@ SvStream& operator>>( SvStream& rIStm, FileList& rFileList )
 |*
 \******************************************************************************/
 
-void FileList::AppendFile( const String& rStr )
+void FileList::AppendFile( const OUString& rStr )
 {
-    aStrList.push_back( new String( rStr ) );
+    aStrList.push_back( new OUString( rStr ) );
 }
 
-String FileList::GetFile( size_t i ) const
+OUString FileList::GetFile( size_t i ) const
 {
-    String aStr;
+    OUString aStr;
     if( i < aStrList.size() )
         aStr = *aStrList[ i ];
     return aStr;

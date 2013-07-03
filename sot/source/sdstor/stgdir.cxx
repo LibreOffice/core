@@ -977,7 +977,7 @@ void* StgDirStrm::GetEntry( sal_Int32 n, bool bDirty )
 
 // Find a dir entry.
 
-StgDirEntry* StgDirStrm::Find( StgDirEntry& rStg, const String& rName )
+StgDirEntry* StgDirStrm::Find( StgDirEntry& rStg, const OUString& rName )
 {
     if( rStg.pDown )
     {
@@ -998,8 +998,7 @@ StgDirEntry* StgDirStrm::Find( StgDirEntry& rStg, const String& rName )
 
 // Create a new entry.
 
-StgDirEntry* StgDirStrm::Create
-    ( StgDirEntry& rStg, const String& rName, StgEntryType eType )
+StgDirEntry* StgDirStrm::Create( StgDirEntry& rStg, const OUString& rName, StgEntryType eType )
 {
     StgEntry aEntry;
     aEntry.Init();
@@ -1044,7 +1043,7 @@ StgDirEntry* StgDirStrm::Create
 
 // Rename the given entry.
 
-bool StgDirStrm::Rename( StgDirEntry& rStg, const String& rOld, const String& rNew )
+bool StgDirStrm::Rename( StgDirEntry& rStg, const OUString& rOld, const OUString& rNew )
 {
     StgDirEntry* p = Find( rStg, rOld );
     if( p )
@@ -1067,7 +1066,7 @@ bool StgDirStrm::Rename( StgDirEntry& rStg, const String& rOld, const String& rN
 
 // Move the given entry to a different storage.
 
-bool StgDirStrm::Move( StgDirEntry& rStg1, StgDirEntry& rStg2, const String& rName )
+bool StgDirStrm::Move( StgDirEntry& rStg1, StgDirEntry& rStg2, const OUString& rName )
 {
     StgDirEntry* p = Find( rStg1, rName );
     if( p )

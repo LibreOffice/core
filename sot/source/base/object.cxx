@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <tools/string.hxx>
 #include <sot/object.hxx>
 #include <sot/factory.hxx>
 
@@ -27,8 +26,8 @@ class SotObjectFactory : public SotFactory
 public:
          TYPEINFO();
         SotObjectFactory( const SvGlobalName & rName,
-                              const String & rClassName,
-                              CreateInstanceType pCreateFuncP )
+                          const OUString & rClassName,
+                          CreateInstanceType pCreateFuncP )
             : SotFactory( rName, rClassName, pCreateFuncP )
         {}
 };
@@ -46,9 +45,9 @@ SO2_IMPL_BASIC_CLASS_DLL(SotObject,SotObjectFactory,
 *************************************************************************/
 SotObject::SotObject()
     : nOwnerLockCount( 0 )
-    , bOwner      ( sal_True )
-    , bSVObject   ( sal_False )
-    , bInClose    ( sal_False )
+    , bOwner      ( true )
+    , bSVObject   ( false )
+    , bInClose    ( false )
 {
     SotFactory::IncSvObjectCount( this );
 }
@@ -76,7 +75,7 @@ IUnknown * SotObject::GetInterface( const SvGlobalName & )
 //=========================================================================
 void SotObject::OwnerLock
 (
-    sal_Bool bLock      /* sal_True, lock. sal_False, unlock. */
+    bool bLock      /* true, lock. false, unlock. */
 )
 /*  [Beschreibung]
 
@@ -100,23 +99,23 @@ void SotObject::OwnerLock
 }
 
 //=========================================================================
-sal_Bool SotObject::DoClose()
+bool SotObject::DoClose()
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     if( !bInClose )
     {
         SotObjectRef xHoldAlive( this );
-        bInClose = sal_True;
+        bInClose = true;
         bRet = Close();
-        bInClose = sal_False;
+        bInClose = false;
     }
     return bRet;
 }
 
 //=========================================================================
-sal_Bool SotObject::Close()
+bool SotObject::Close()
 {
-    return sal_True;
+    return true;
 }
 
 

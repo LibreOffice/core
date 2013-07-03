@@ -22,11 +22,11 @@
 
 #include <list>
 #include <vector>
-#include <tools/string.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/datatransfer/DataFlavor.hpp>
 #include <com/sun/star/datatransfer/dnd/DNDConstants.hpp>
 #include "sot/sotdllapi.h"
+#include <tools/solar.h>
 
 class SotDataObject;
 
@@ -62,8 +62,8 @@ struct DataFlavorExVector : public _DataFlavorExVector
 typedef ::std::list< ::com::sun::star::datatransfer::DataFlavor >   DataFlavorList;
 typedef ::std::list< DataFlavorEx >                                 DataFlavorExList;
 
-SOT_DLLPUBLIC sal_Bool IsFormatSupported( const DataFlavorExVector& rDataFlavorExVector,
-                            sal_uLong nId );
+SOT_DLLPUBLIC bool IsFormatSupported( const DataFlavorExVector& rDataFlavorExVector,
+                                      sal_uLong nId );
 
 // -------------------------
 // - Vordefinierte Formate -
@@ -175,15 +175,15 @@ class SOT_DLLPUBLIC SotExchange
 {
 public:
     static sal_uLong    RegisterFormat( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
-    static sal_uLong    RegisterFormatName( const String& rName );
-    static sal_uLong    RegisterFormatMimeType( const String& rMimeType );
+    static sal_uLong    RegisterFormatName( const OUString& rName );
+    static sal_uLong    RegisterFormatMimeType( const OUString& rMimeType );
 
     static sal_uLong    GetFormat( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
-    static String   GetFormatName( sal_uLong nFormat );
-    static sal_Bool GetFormatDataFlavor( sal_uLong nFormat, ::com::sun::star::datatransfer::DataFlavor& rFlavor );
-    static String   GetFormatMimeType( sal_uLong nFormat );
-    static sal_Bool     IsInternal( const SvGlobalName& );
-    static sal_uLong    GetFormatIdFromMimeType( const String& rMimeType );
+    static OUString     GetFormatName( sal_uLong nFormat );
+    static bool         GetFormatDataFlavor( sal_uLong nFormat, ::com::sun::star::datatransfer::DataFlavor& rFlavor );
+    static OUString     GetFormatMimeType( sal_uLong nFormat );
+    static bool         IsInternal( const SvGlobalName& );
+    static sal_uLong    GetFormatIdFromMimeType( const OUString& rMimeType );
 
     // bestimme die SotFormatStringId von dem registrierten Format
     //JP 12.11.98: diese 3 Methoden sind ab sofort ueberfluessig, da
@@ -191,7 +191,7 @@ public:
     //              SotFormatStringId ist!
     static SotFormatStringId GetFormatStringId( sal_uLong nFormat )
         { return nFormat; }
-    static SotFormatStringId GetFormatStringId( const String& rName )
+    static SotFormatStringId GetFormatStringId( const OUString& rName )
         { return SotExchange::RegisterFormatMimeType( rName ); }
     static sal_uLong RegisterSotFormatName( SotFormatStringId nId )
         { return nId; }

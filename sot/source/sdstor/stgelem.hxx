@@ -29,7 +29,6 @@
 
 class StgIo;
 class SvStream;
-class String;
 
 SvStream& operator>>( SvStream&, ClsId& );
 SvStream& operator<<( SvStream&, const ClsId& );
@@ -59,30 +58,30 @@ public:
     StgHeader();
 
     void  Init();                       // initialize the header
-    sal_Bool  Load( StgIo& );
-    sal_Bool  Load( SvStream& );
-    sal_Bool  Store( StgIo& );
-    sal_Bool  Check();                      // check the signature and version
-    short GetByteOrder() const          { return nByteOrder; }
+    bool      Load( StgIo& );
+    bool      Load( SvStream& );
+    bool      Store( StgIo& );
+    bool      Check();                      // check the signature and version
+    short     GetByteOrder() const          { return nByteOrder; }
     sal_Int32 GetTOCStart() const           { return nTOCstrm; }
-    void  SetTOCStart( sal_Int32 n );
+    void      SetTOCStart( sal_Int32 n );
     sal_Int32 GetDataFATStart() const       { return nDataFAT; }
-    void  SetDataFATStart( sal_Int32 n );
+    void      SetDataFATStart( sal_Int32 n );
     sal_Int32 GetDataFATSize() const        { return nDataFATSize; }
-    void  SetDataFATSize( sal_Int32 n );
+    void      SetDataFATSize( sal_Int32 n );
     sal_Int32 GetThreshold() const          { return nThreshold; }
-    short GetPageSize() const           { return nPageSize; }
-    short GetDataPageSize() const       { return nDataPageSize; }
+    short     GetPageSize() const           { return nPageSize; }
+    short     GetDataPageSize() const       { return nDataPageSize; }
     sal_Int32 GetFATSize() const            { return nFATSize; }
-    void  SetFATSize( sal_Int32 n );
+    void      SetFATSize( sal_Int32 n );
     sal_Int32 GetFATChain() const           { return nMasterChain; }
-    void  SetFATChain( sal_Int32 n );
+    void      SetFATChain( sal_Int32 n );
     sal_Int32 GetMasters() const            { return nMaster; }
-    void  SetMasters( sal_Int32 n );
-    short GetFAT1Size() const           { return cFATPagesInHeader; }
-    const ClsId& GetClassId() const     { return aClsId;        }
+    void      SetMasters( sal_Int32 n );
+    short     GetFAT1Size() const           { return cFATPagesInHeader; }
+    const ClsId& GetClassId() const         { return aClsId;        }
     sal_Int32 GetFATPage( short ) const;
-    void  SetFATPage( short, sal_Int32 );
+    void      SetFATPage( short, sal_Int32 );
 };
 
 enum StgEntryType {                     // dir entry types:
@@ -109,7 +108,8 @@ enum StgEntryTime {                     // time codes:
 #define STGENTRY_SIZE 128
 
 //StructuredStorageDirectoryEntry
-class StgEntry {                        // directory enty
+class StgEntry
+{                        // directory enty
     sal_uInt16  nName[ 32 ];                // 00 name as WCHAR
     sal_uInt16  nNameLen;                   // 40 size of name in bytes including 00H
     sal_uInt8   cType;                      // 42 entry type
@@ -117,33 +117,33 @@ class StgEntry {                        // directory enty
     sal_Int32   nLeft;                      // 44 left node entry
     sal_Int32   nRight;                     // 48 right node entry
     sal_Int32   nChild;                     // 4C 1st child entry if storage
-    ClsId   aClsId;                     // 50 class ID (optional)
+    ClsId       aClsId;                     // 50 class ID (optional)
     sal_Int32   nFlags;                     // 60 state flags(?)
     sal_Int32   nMtime[ 2 ];                // 64 modification time
     sal_Int32   nAtime[ 2 ];                // 6C creation and access time
     sal_Int32   nPage1;                     // 74 starting block (either direct or translated)
     sal_Int32   nSize;                      // 78 file size
     sal_Int32   nUnknown;                   // 7C unknown
-    String  aName;                      // Name as Compare String (ascii, upper)
+    OUString    aName;                      // Name as Compare String (ascii, upper)
 public:
-    sal_Bool    Init();                     // initialize the data
-    sal_Bool    SetName( const String& );   // store a name (ASCII, up to 32 chars)
-    void    GetName( String& rName ) const;
+    bool        Init();                     // initialize the data
+    bool        SetName( const OUString& );   // store a name (ASCII, up to 32 chars)
+    void        GetName( OUString& rName ) const;
                                         // fill in the name
-    short   Compare( const StgEntry& ) const;   // compare two entries
-    sal_Bool    Load( const void* pBuffer, sal_uInt32 nBufSize );
-    void    Store( void* );
-    StgEntryType GetType() const        { return (StgEntryType) cType;  }
+    short       Compare( const StgEntry& ) const;   // compare two entries
+    bool        Load( const void* pBuffer, sal_uInt32 nBufSize );
+    void        Store( void* );
+    StgEntryType GetType() const            { return (StgEntryType) cType;  }
     sal_Int32   GetStartPage() const        { return nPage1; }
-    void    SetType( StgEntryType t )   { cType = (sal_uInt8) t;                }
-    sal_uInt8   GetFlags() const            { return cFlags;                }
-    void    SetFlags( sal_uInt8 c )         { cFlags = c;                   }
-    sal_Int32   GetSize() const             { return nSize;                 }
-    void    SetSize( sal_Int32 n )          { nSize = n;                    }
-    const   ClsId& GetClassId() const   { return aClsId;                }
-    void    SetClassId( const ClsId& );
+    void        SetType( StgEntryType t )   { cType = (sal_uInt8) t; }
+    sal_uInt8   GetFlags() const            { return cFlags; }
+    void        SetFlags( sal_uInt8 c )     { cFlags = c; }
+    sal_Int32   GetSize() const             { return nSize; }
+    void        SetSize( sal_Int32 n )      { nSize = n; }
+    const ClsId& GetClassId() const         { return aClsId; }
+    void        SetClassId( const ClsId& );
     sal_Int32   GetLeaf( StgEntryRef ) const;
-    void    SetLeaf( StgEntryRef, sal_Int32 );
+    void        SetLeaf( StgEntryRef, sal_Int32 );
 };
 
 
