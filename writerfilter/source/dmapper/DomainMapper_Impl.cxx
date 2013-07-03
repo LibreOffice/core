@@ -3220,6 +3220,30 @@ void DomainMapper_Impl::CloseFieldCommand()
                         // attach the master to the field
                         uno::Reference< text::XDependentTextField > xDependentField( xFieldInterface, uno::UNO_QUERY_THROW );
                         xDependentField->attachTextFieldMaster( xMaster );
+
+                        rtl::OUString sFormula = sIdentifier + "+1";
+                        rtl::OUString sValue;
+                        if( lcl_FindInCommand( pContext->GetCommand(), 'c', sValue ))
+                        {
+                            sFormula = sIdentifier;
+                        }
+                        else if( lcl_FindInCommand( pContext->GetCommand(), 'r', sValue ))
+                        {
+                            sFormula = sValue;
+                        }
+                        // TODO \s isn't handled, but the spec isn't easy to understand without
+                        // an example for this one.
+                        xFieldProperties->setPropertyValue(
+                                rPropNameSupplier.GetName(PROP_CONTENT),
+                                uno::makeAny(sFormula));
+
+                        // Take care of the numeric formatting definition, default is Arabic
+                        sal_Int16 nNumberingType = lcl_ParseNumberingType(pContext->GetCommand());
+                        if (nNumberingType == style::NumberingType::PAGE_DESCRIPTOR)
+                            nNumberingType == style::NumberingType::ARABIC;
+                        xFieldProperties->setPropertyValue(
+                                rPropNameSupplier.GetName(PROP_NUMBERING_TYPE),
+                                uno::makeAny(nNumberingType));
                     }
                     break;
                     case FIELD_SET          : break;
@@ -3297,15 +3321,14 @@ void DomainMapper_Impl::CloseFieldCommand()
                             rPropNameSupplier.GetName(PROP_NUMBERING_TYPE),
                             uno::makeAny( lcl_ParseNumberingType(pContext->GetCommand()) ));
                     break;
-
                 }
             }
             //set the text field if there is any
             pContext->SetTextField( uno::Reference< text::XTextField >( xFieldInterface, uno::UNO_QUERY ) );
         }
-        catch( const uno::Exception& )
+        catch( const uno::Exception& e )
         {
-            OSL_FAIL( "Exception in CloseFieldCommand()" );
+            SAL_WARN( "writerfilter", "Exception in CloseFieldCommand(): " << e.Message );
         }
         pContext->SetCommandCompleted();
     }
