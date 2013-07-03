@@ -305,6 +305,8 @@ namespace
 //-----------------------------------------------------------------------
 void OAddFieldWindow::Update()
 {
+    SolarMutexGuard aSolarGuard;
+
     if ( m_pContainerListener.is() )
         m_pContainerListener->dispose();
     m_pContainerListener = NULL;

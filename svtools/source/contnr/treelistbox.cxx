@@ -3692,6 +3692,8 @@ IMPL_LINK( SvTreeListBox, DefaultCompare, SvSortData*, pData )
 void SvTreeListBox::ModelNotification( sal_uInt16 nActionId, SvTreeListEntry* pEntry1,
                         SvTreeListEntry* pEntry2, sal_uLong nPos )
 {
+    SolarMutexGuard aSolarGuard;
+
     if( nActionId == LISTACTION_CLEARING )
         CancelTextEditing();
 

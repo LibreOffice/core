@@ -22,6 +22,7 @@
 #include <dbaccess/dbsubcomponentcontroller.hxx>
 #include <tools/debug.hxx>
 #include <unotools/pathoptions.hxx>
+#include <vcl/svapp.hxx>
 
 #include "UndoActions.hxx"
 #include "UndoEnv.hxx"
@@ -111,6 +112,7 @@ SdrPage* OReportModel::RemovePage(sal_uInt16 nPgNum)
 // -----------------------------------------------------------------------------
 OReportPage* OReportModel::createNewPage(const uno::Reference< report::XSection >& _xSection)
 {
+    SolarMutexGuard aSolarGuard;
     OReportPage* pPage = new OReportPage( *this ,_xSection);
     InsertPage(pPage);
     m_pUndoEnv->AddSection(_xSection);
