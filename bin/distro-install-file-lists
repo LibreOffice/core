@@ -219,7 +219,7 @@ if test "z$OOO_VENDOR" != "zDebian" ; then
     # tde subpackage
     test -f $DESTDIR/gid_Module_Optional_Tde && cp $DESTDIR/gid_Module_Optional_Tde tde_list.txt || :
     mv_file_between_flists tde_list.txt common_list.txt $INSTALLDIR/program/tdefilepicker
-    mv_file_between_flists tde_list.txt common_list.txt $INSTALLDIR/program/fps_tde.uno.so
+    mv_file_between_flists tde_list.txt common_list.txt $INSTALLDIR/program/fps_tdelo.so
     mv_file_between_flists tde_list.txt common_list.txt $INSTALLDIR/program/libvclplug_tdel..so
     mv_file_between_flists tde_list.txt common_list.txt $INSTALLDIR/program/libtdeab1l..so
     mv_file_between_flists tde_list.txt common_list.txt $INSTALLDIR/program/libtdeabdrv1l..so
@@ -228,23 +228,23 @@ if test "z$OOO_VENDOR" != "zDebian" ; then
     # kde subpackage
     test -f $DESTDIR/gid_Module_Optional_Kde && cp $DESTDIR/gid_Module_Optional_Kde kde_list.txt || :
     mv_file_between_flists kde_list.txt common_list.txt $INSTALLDIR/program/kdefilepicker
-    mv_file_between_flists kde_list.txt common_list.txt $INSTALLDIR/program/fps_kde.uno.so
+    mv_file_between_flists kde_list.txt common_list.txt $INSTALLDIR/program/fps_kdelo.so
     mv_file_between_flists kde_list.txt common_list.txt $INSTALLDIR/program/libvclplug_kdel..so
     mv_file_between_flists kde_list.txt common_list.txt $INSTALLDIR/program/libkab1l..so
     mv_file_between_flists kde_list.txt common_list.txt $INSTALLDIR/program/libkabdrv1l..so
     add_used_directories kde_list.txt common_list.txt
 
     # create kde4 subpackage
-    mv_file_between_flists kde4_list.txt kde_list.txt    $INSTALLDIR/program/kde4be1.uno.so
+    mv_file_between_flists kde4_list.txt kde_list.txt    $INSTALLDIR/program/kde4be1lo.so
     mv_file_between_flists kde4_list.txt common_list.txt $INSTALLDIR/program/libvclplug_kde4l..so
-    mv_file_between_flists kde4_list.txt common_list.txt $INSTALLDIR/program/fps_kde4.uno.so
+    mv_file_between_flists kde4_list.txt common_list.txt $INSTALLDIR/program/fps_kde4lo.so
     add_used_directories kde4_list.txt common_list.txt
 
     # gnome subpackage
     test -f $DESTDIR/gid_Module_Optional_Gnome && cp $DESTDIR/gid_Module_Optional_Gnome gnome_list.txt || :
     mv_file_between_flists gnome_list.txt common_list.txt $INSTALLDIR/program/libevoab2.so
     mv_file_between_flists gnome_list.txt common_list.txt $INSTALLDIR/program/libvclplug_gtk[0-9]*l..so
-    mv_file_between_flists common_list.txt gnome_list.txt $INSTALLDIR/program/ucpgvfs1.uno.so
+    mv_file_between_flists common_list.txt gnome_list.txt $INSTALLDIR/program/ucpgvfs1lo.so
     add_used_directories gnome_list.txt common_list.txt
 
     # mono subpackage
