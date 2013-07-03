@@ -68,7 +68,7 @@ struct HTMLOutFuncs
     SVT_DLLPUBLIC static SvStream& Out_Char( SvStream&, sal_Unicode cChar,
                         HTMLOutContext& rContext,
                         String *pNonConvertableChars = 0 );
-    SVT_DLLPUBLIC static SvStream& Out_String( SvStream&, const String&,
+    SVT_DLLPUBLIC static SvStream& Out_String( SvStream&, const OUString&,
                         rtl_TextEncoding eDestEnc = RTL_TEXTENCODING_MS_1252,
                         String *pNonConvertableChars = 0 );
     SVT_DLLPUBLIC static SvStream& Out_Hex( SvStream&, sal_uLong nHex, sal_uInt8 nLen,
