@@ -940,15 +940,17 @@ namespace {
     {
         bool bIsValid = true;
 
-        WW8_CP nValue = 0;
+        //WW8_CP nValue = 0;
         for ( sal_Int32 i = 0; i <= nMaxIndex; ++i )
         {
-            if ( pPLCFPosArray[i] != 0 && pPLCFPosArray[i] < nValue )
+            if ( pPLCFPosArray[i] < 0
+                 && !( i == nMaxIndex-1 && pPLCFPosArray[i] == -63488 )   // pPLCFPosArray[nMaxIndex-1]==-63488 seems to be allowed
+                 && !( i == nMaxIndex-1 && pPLCFPosArray[i] == -65536 ) ) // pPLCFPosArray[nMaxIndex-1]==-65536 seems to be allowed
             {
                 bIsValid = false;
                 break;
             }
-            nValue = pPLCFPosArray[i];
+            //nValue = pPLCFPosArray[i];
         }
 
         return bIsValid;
