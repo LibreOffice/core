@@ -116,7 +116,7 @@ OUString SAL_CALL SwFilterDetect::detect( Sequence< PropertyValue >& lDescriptor
             lDescriptor[nProperty].Value >>= sTemp;
             aURL = sTemp;
         }
-        else if( !aURL.Len() && lDescriptor[nProperty].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("FileName")) )
+        else if( !aURL.Len() && lDescriptor[nProperty].Name == "FileName" )
         {
             lDescriptor[nProperty].Value >>= sTemp;
             aURL = sTemp;
@@ -241,7 +241,11 @@ OUString SAL_CALL SwFilterDetect::detect( Sequence< PropertyValue >& lDescriptor
                     }
                     catch (const WrappedTargetException& aWrap)
                     {
-                        if (!bDeepDetection)
+                        /* Cater for non-compliant sxw files created once upon a time by old libwpd/wpd2sxw combo
+                           Don't bail-out early if the document is considered as corrupted. This allows us not to
+                           reach the -- apparently -- catch-all SmFilterDetect::detect.
+                         */
+                        if (!bDeepDetection && aTypeName != "writer_StarOffice_XML_Writer")
                             // Bail out early unless it's a deep detection.
                             return OUString();
 
