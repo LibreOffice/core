@@ -29,35 +29,25 @@
 
 class OfaHtmlTabPage : public SfxTabPage
 {
-    FixedLine       aFontSizeGB;
-    FixedText       aSize1FT;
-    NumericField    aSize1NF;
-    FixedText       aSize2FT;
-    NumericField    aSize2NF;
-    FixedText       aSize3FT;
-    NumericField    aSize3NF;
-    FixedText       aSize4FT;
-    NumericField    aSize4NF;
-    FixedText       aSize5FT;
-    NumericField    aSize5NF;
-    FixedText       aSize6FT;
-    NumericField    aSize6NF;
-    FixedText       aSize7FT;
-    NumericField    aSize7NF;
 
-    FixedLine       aImportGB;
-    CheckBox        aNumbersEnglishUSCB;
-    CheckBox        aUnknownTagCB;
-    CheckBox        aIgnoreFontNamesCB;
+    NumericField*    aSize1NF;
+    NumericField*    aSize2NF;
+    NumericField*    aSize3NF;
+    NumericField*    aSize4NF;
+    NumericField*    aSize5NF;
+    NumericField*    aSize6NF;
+    NumericField*    aSize7NF;
 
-    FixedLine       aExportGB;
-    ListBox         aExportLB;
-    CheckBox        aStarBasicCB;
-    CheckBox        aStarBasicWarningCB;
-    CheckBox        aPrintExtensionCB;
-    CheckBox        aSaveGrfLocalCB;
-    FixedText       aCharSetFT;
-    SvxTextEncodingBox aCharSetLB;
+    CheckBox*        aNumbersEnglishUSCB;
+    CheckBox*        aUnknownTagCB;
+    CheckBox*        aIgnoreFontNamesCB;
+
+    ListBox*         aExportLB;
+    CheckBox*        aStarBasicCB;
+    CheckBox*        aStarBasicWarningCB;
+    CheckBox*        aPrintExtensionCB;
+    CheckBox*        aSaveGrfLocalCB;
+    SvxTextEncodingBox* aCharSetLB;
 
     DECL_LINK(ExportHdl_Impl, ListBox*);
     DECL_LINK(CheckBoxHdl_Impl, CheckBox*);
