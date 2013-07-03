@@ -95,6 +95,7 @@ OUString SAL_CALL SmFilterDetect::detect( Sequence< PropertyValue >& lDescriptor
 
     sal_Bool bRepairPackage = sal_False;
     sal_Bool bRepairAllowed = sal_False;
+    bool bDeepDetection = false;
 
     // now some parameters that can already be in the array, but may be overwritten or new inserted here
     // remember their indices in the case new values must be added to the array
@@ -145,6 +146,8 @@ OUString SAL_CALL SmFilterDetect::detect( Sequence< PropertyValue >& lDescriptor
             lDescriptor[nProperty].Value >>= bRepairPackage;
         else if( lDescriptor[nProperty].Name == "DocumentTitle" )
             nIndexOfDocumentTitle = nProperty;
+        else if (lDescriptor[nProperty].Name == "DeepDetection")
+            bDeepDetection = lDescriptor[nProperty].Value.get<sal_Bool>();
     }
 
     // can't check the type for external filters, so set the "dont" flag accordingly
@@ -230,6 +233,10 @@ OUString SAL_CALL SmFilterDetect::detect( Sequence< PropertyValue >& lDescriptor
                     }
                     catch( const WrappedTargetException& aWrap )
                     {
+                        if (!bDeepDetection)
+                            // Bail out early unless it's a deep detection.
+                            return OUString();
+
                         packages::zip::ZipIOException aZipException;
 
                         // repairing is done only if this type is requested from outside
