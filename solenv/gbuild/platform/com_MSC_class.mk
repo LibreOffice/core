@@ -236,6 +236,7 @@ gb_Windows_PE_TARGETTYPEFLAGS := \
 	-opt:noref \
 	-incremental:no \
 	-debug \
+	-safeseh \
 	-nxcompat \
 	-dynamicbase \
 	-manifest
