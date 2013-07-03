@@ -19,6 +19,7 @@
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/text/XTextFramesSupplier.hpp>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
+#include <com/sun/star/text/XTextSection.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
@@ -85,6 +86,7 @@ public:
     void testFdo64238_b();
     void testFdo56679();
     void testFdo65400();
+    void testFdo66543();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -144,6 +146,7 @@ void Test::run()
         {"fdo64238_b.docx", &Test::testFdo64238_b},
         {"fdo56679.docx", &Test::testFdo56679},
         {"fdo65400.docx", &Test::testFdo65400},
+        {"fdo66543.docx", &Test::testFdo66543},
     };
     // Don't test the first import of these, for some reason those tests fail
     const char* aBlacklist[] = {
@@ -876,6 +879,15 @@ void Test::testFdo65400()
     uno::Reference< text::XTextRange > shaded = getRun( paragraph1, 2, "normal" );
     CPPUNIT_ASSERT_EQUAL( sal_Int32( 0x0026 ), getProperty< sal_Int32 >( shaded, "CharShadingValue" ));
     CPPUNIT_ASSERT_EQUAL( sal_Int32( 0xd8d8d8 ), getProperty< sal_Int32 >( shaded, "CharBackColor" ));
+}
+
+void Test::testFdo66543()
+{
+    // The problem was that when importing DOCX with 'line numbers' - the 'start value' was imported
+    // but nothing was done with it.
+
+    uno::Reference< text::XTextRange > paragraph1 = getParagraph( 1 );
+    CPPUNIT_ASSERT_EQUAL( sal_Int32( 1 ), getProperty< sal_Int32 >( paragraph1, "ParaLineNumberStartValue" ));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
