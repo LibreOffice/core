@@ -176,7 +176,7 @@
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="FixedFormatskey1" default="true" type="medium" usage="FIXED_NUMBER"  formatindex="0">
-<FormatCode>Estandar</FormatCode>
+<FormatCode>Padrão</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="FixedFormatskey2" default="true" type="short" usage="FIXED_NUMBER"  formatindex="1">
