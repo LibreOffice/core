@@ -51,12 +51,16 @@ enum ConnectionState : NSInteger {
     CONNECTED
 };
 
-@interface CommunicationManager : NSObject
+@interface CommunicationManager : NSObject <UITableViewDataSource>
 
+- (id) initWithExistingServers;
 - (void) connectToServer:(Server*)server;
+- (void) addServersWithName:(NSString*)name
+                  AtAddress:(NSString*)addr;
 
 @property ConnectionState state;
 @property (nonatomic, strong) id delegate;
+@property (atomic, strong) NSMutableArray* servers;
 @property (nonatomic, strong) CommandInterpreter* interpreter;
 @property (nonatomic, strong) CommandTransmitter* transmitter;
 

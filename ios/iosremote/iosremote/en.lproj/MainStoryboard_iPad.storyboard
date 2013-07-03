@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="2.0" toolsVersion="3084" systemVersion="12E55" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none" initialViewController="KFV-Ae-zm8">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="2.0" toolsVersion="3084" systemVersion="13A497d" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none" initialViewController="KFV-Ae-zm8">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="2083"/>
     </dependencies>
@@ -174,26 +174,6 @@
             <point key="canvasLocation" x="3804" y="-569"/>
         </scene>
     </scenes>
-    <classes>
-        <class className="libreoffice_sdremoteViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/libreoffice_sdremoteViewController.h"/>
-            <relationships>
-                <relationship kind="action" name="connectToServer:"/>
-                <relationship kind="action" name="startPresentation:"/>
-                <relationship kind="outlet" name="ipAddressTextEdit" candidateClass="UITextField"/>
-                <relationship kind="outlet" name="pinLabel" candidateClass="UILabel"/>
-            </relationships>
-        </class>
-        <class className="slideShowViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/slideShowViewController.h"/>
-            <relationships>
-                <relationship kind="action" name="nextSlide:"/>
-                <relationship kind="action" name="previousSlide:"/>
-                <relationship kind="outlet" name="image" candidateClass="UIImageView"/>
-                <relationship kind="outlet" name="lecturer_notes" candidateClass="UIWebView"/>
-            </relationships>
-        </class>
-    </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar" statusBarStyle="blackTranslucent"/>
         <simulatedOrientationMetrics key="orientation"/>

@@ -19,7 +19,6 @@
 @interface CommunicationManager()
 
 @property (nonatomic, strong) Client* client;
-@property (atomic, strong) NSMutableSet* servers;
 @property (nonatomic, strong) id connectionConnectedObserver;
 @property (nonatomic, strong) id connectionDisconnectedObserver;
 
@@ -40,7 +39,6 @@
 + (CommunicationManager *)sharedComManager
 {
     static CommunicationManager *sharedComManager = nil;
-    
     static dispatch_once_t _singletonPredicate;
     
     dispatch_once(&_singletonPredicate, ^{
@@ -74,6 +72,7 @@
     self = [super init];
     self.state = DISCONNECTED;
     self.interpreter = [[CommandInterpreter alloc] init];
+    self.servers = [[NSMutableArray alloc] init];
     
     [[NSNotificationCenter defaultCenter]addObserver: self
                                             selector: @selector(connectionStatusHandler:)
@@ -103,10 +102,10 @@
     {
         NSArray *oldSavedArray = [NSKeyedUnarchiver unarchiveObjectWithData:dataRepresentingExistingServers];
         if (oldSavedArray != nil)
-            self.servers = [[NSMutableSet alloc] initWithArray:oldSavedArray];
+            self.servers = [[NSMutableArray alloc] initWithArray:oldSavedArray];
         else
-            self.servers = [[NSMutableSet alloc] init];
-    }
+            self.servers = [[NSMutableArray alloc] init];
+    } 
     return self;
 }
 
@@ -141,7 +140,29 @@
 }
 
 
+-(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return [self.servers count];
+}
 
+-(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    static NSString *cellIdentifier = @"server_item_cell";
+    
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    
+    Server *s = [self.servers objectAtIndex:indexPath.row];
 
+    [cell.textLabel setText:[s serverName]];
+    [cell.detailTextLabel setText:[s serverAddress]];
+    return cell;
+}
+
+- (void) addServersWithName:(NSString*)name
+                  AtAddress:(NSString*)addr
+{
+    Server * s = [[Server alloc] initWithProtocol:NETWORK atAddress:addr ofName:name];
+    [self.servers addObject:s];
+    NSLog(@"Having %lu servers now", (unsigned long)[self.servers count]);
+}
 
 @end

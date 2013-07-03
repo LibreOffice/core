@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5753DD901781EA0300DB71BB /* server_list_vc.m in Sources */ = {isa = PBXBuildFile; fileRef = 5753DD8F1781EA0300DB71BB /* server_list_vc.m */; };
+		5753DD9917834D7100DB71BB /* newServer_vc.m in Sources */ = {isa = PBXBuildFile; fileRef = 5753DD9817834D7100DB71BB /* newServer_vc.m */; };
 		57B152991764703500EECC67 /* Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 57B152981764703500EECC67 /* Base64.m */; };
 		57B1529C1764714900EECC67 /* slideShowViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 57B1529B1764714900EECC67 /* slideShowViewController.m */; };
 		57B1529F176486C300EECC67 /* CommandTransmitter.m in Sources */ = {isa = PBXBuildFile; fileRef = 57B1529E176486C300EECC67 /* CommandTransmitter.m */; };
@@ -27,10 +29,19 @@
 		57C6E42F175E076900E8BC5F /* CommunicationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 57C6E429175E076900E8BC5F /* CommunicationManager.m */; };
 		57C6E430175E076900E8BC5F /* CommandInterpreter.m in Sources */ = {isa = PBXBuildFile; fileRef = 57C6E42B175E076900E8BC5F /* CommandInterpreter.m */; };
 		57C6E431175E076900E8BC5F /* Server.m in Sources */ = {isa = PBXBuildFile; fileRef = 57C6E42D175E076900E8BC5F /* Server.m */; };
+		57CFED9917838FDC00E82E05 /* EditableTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 57CFED9817838FDC00E82E05 /* EditableTableViewCell.m */; };
 		BE9EBD071765BF0800283FD2 /* CoreImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BE9EBD061765BF0800283FD2 /* CoreImage.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		5753DD8E1781EA0300DB71BB /* server_list_vc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = server_list_vc.h; sourceTree = "<group>"; };
+		5753DD8F1781EA0300DB71BB /* server_list_vc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = server_list_vc.m; sourceTree = "<group>"; };
+		5753DD9717834D7100DB71BB /* newServer_vc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = newServer_vc.h; sourceTree = "<group>"; };
+		5753DD9817834D7100DB71BB /* newServer_vc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = newServer_vc.m; sourceTree = "<group>"; };
+		5753DD9A1783851700DB71BB /* TPKeyboardAvoidingScrollView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = TPKeyboardAvoidingScrollView.h; path = iosremote/TPKeyboardAvoidingScrollView.h; sourceTree = "<group>"; };
+		5753DD9B1783851700DB71BB /* TPKeyboardAvoidingScrollView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = TPKeyboardAvoidingScrollView.m; path = iosremote/TPKeyboardAvoidingScrollView.m; sourceTree = "<group>"; };
+		5753DD9C1783851700DB71BB /* TPKeyboardAvoidingTableView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = TPKeyboardAvoidingTableView.h; path = iosremote/TPKeyboardAvoidingTableView.h; sourceTree = "<group>"; };
+		5753DD9D1783851700DB71BB /* TPKeyboardAvoidingTableView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = TPKeyboardAvoidingTableView.m; path = iosremote/TPKeyboardAvoidingTableView.m; sourceTree = "<group>"; };
 		57B152971764703500EECC67 /* Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Base64.h; path = iosremote/Base64.h; sourceTree = "<group>"; };
 		57B152981764703500EECC67 /* Base64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Base64.m; path = iosremote/Base64.m; sourceTree = "<group>"; };
 		57B1529A1764714900EECC67 /* slideShowViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = slideShowViewController.h; sourceTree = "<group>"; };
@@ -64,6 +75,8 @@
 		57C6E42B175E076900E8BC5F /* CommandInterpreter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommandInterpreter.m; sourceTree = "<group>"; };
 		57C6E42C175E076900E8BC5F /* Server.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Server.h; sourceTree = "<group>"; };
 		57C6E42D175E076900E8BC5F /* Server.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Server.m; sourceTree = "<group>"; };
+		57CFED9717838FDC00E82E05 /* EditableTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditableTableViewCell.h; sourceTree = "<group>"; };
+		57CFED9817838FDC00E82E05 /* EditableTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditableTableViewCell.m; sourceTree = "<group>"; };
 		BE9EBD061765BF0800283FD2 /* CoreImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreImage.framework; path = System/Library/Frameworks/CoreImage.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -88,6 +101,10 @@
 				BE9EBD061765BF0800283FD2 /* CoreImage.framework */,
 				57B152971764703500EECC67 /* Base64.h */,
 				57B152981764703500EECC67 /* Base64.m */,
+				5753DD9A1783851700DB71BB /* TPKeyboardAvoidingScrollView.h */,
+				5753DD9B1783851700DB71BB /* TPKeyboardAvoidingScrollView.m */,
+				5753DD9C1783851700DB71BB /* TPKeyboardAvoidingTableView.h */,
+				5753DD9D1783851700DB71BB /* TPKeyboardAvoidingTableView.m */,
 				57C6E425175E076900E8BC5F /* Communication */,
 				57C6E3F8175E06E800E8BC5F /* iosremote */,
 				57C6E3F1175E06E800E8BC5F /* Frameworks */,
@@ -119,12 +136,18 @@
 				57C6E401175E06E800E8BC5F /* libreoffice_sdremoteAppDelegate.h */,
 				57C6E402175E06E800E8BC5F /* libreoffice_sdremoteAppDelegate.m */,
 				57C6E40A175E06E800E8BC5F /* MainStoryboard_iPhone.storyboard */,
+				5753DD9717834D7100DB71BB /* newServer_vc.h */,
+				5753DD9817834D7100DB71BB /* newServer_vc.m */,
+				5753DD8E1781EA0300DB71BB /* server_list_vc.h */,
+				5753DD8F1781EA0300DB71BB /* server_list_vc.m */,
 				57C6E40D175E06E800E8BC5F /* MainStoryboard_iPad.storyboard */,
 				57C6E410175E06E800E8BC5F /* libreoffice_sdremoteViewController.h */,
 				57C6E411175E06E800E8BC5F /* libreoffice_sdremoteViewController.m */,
 				57C6E3F9175E06E800E8BC5F /* Supporting Files */,
 				57B1529A1764714900EECC67 /* slideShowViewController.h */,
 				57B1529B1764714900EECC67 /* slideShowViewController.m */,
+				57CFED9717838FDC00E82E05 /* EditableTableViewCell.h */,
+				57CFED9817838FDC00E82E05 /* EditableTableViewCell.m */,
 			);
 			path = iosremote;
 			sourceTree = "<group>";
@@ -242,6 +265,9 @@
 				57B152991764703500EECC67 /* Base64.m in Sources */,
 				57B1529C1764714900EECC67 /* slideShowViewController.m in Sources */,
 				57B1529F176486C300EECC67 /* CommandTransmitter.m in Sources */,
+				5753DD901781EA0300DB71BB /* server_list_vc.m in Sources */,
+				5753DD9917834D7100DB71BB /* newServer_vc.m in Sources */,
+				57CFED9917838FDC00E82E05 /* EditableTableViewCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
