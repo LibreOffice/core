@@ -419,6 +419,10 @@ namespace sdbtools
             else
                 sBaseName = OUString( SdbtRes( STR_BASENAME_QUERY ) );
         }
+        else if( _CommandType == CommandType::QUERY )
+        {
+            sBaseName=sBaseName.replace('/', '_');
+        }
 
         OUString sName( sBaseName );
         sal_Int32 i = 1;
