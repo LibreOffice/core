@@ -856,11 +856,12 @@ public class DBMetaData
                 callSQLErrorMessageDialog(sqlError, null);
                 return false;
             }
-            exception.printStackTrace(System.err);
+            Logger.getLogger( DBMetaData.class.getName() ).log( Level.SEVERE, null, exception );
         }
         catch (SQLException e)
         {
-            Logger.getLogger( DBMetaData.class.getName() ).log( Level.SEVERE, null, e );
+            callSQLErrorMessageDialog(e, null);
+            return false;
         }
         catch (Exception e)
         {
