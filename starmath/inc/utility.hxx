@@ -159,6 +159,7 @@ protected:
 
 public:
     SmFontPickListBox(Window* pParent, const ResId& rResId);
+    SmFontPickListBox (Window* pParent, WinBits nBits);
 
     SmFontPickListBox& operator = (const SmFontPickList& rList);
 

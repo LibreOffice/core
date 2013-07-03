@@ -142,27 +142,16 @@ public:
 
 class SmFontTypeDialog : public ModalDialog
 {
-    FixedText           aFixedText1;
-    SmFontPickListBox   aVariableFont;
-    FixedText           aFixedText2;
-    SmFontPickListBox   aFunctionFont;
-    FixedText           aFixedText3;
-    SmFontPickListBox   aNumberFont;
-    FixedText           aFixedText4;
-    SmFontPickListBox   aTextFont;
-    FixedText           aFixedText5;
-    SmFontPickListBox   aSerifFont;
-    FixedText           aFixedText6;
-    SmFontPickListBox   aSansFont;
-    FixedText           aFixedText7;
-    SmFontPickListBox   aFixedFont;
-    FixedLine           aFixedLine1;
-    FixedLine           aFixedLine2;
-    OKButton            aOKButton1;
-    HelpButton          aHelpButton1;
-    CancelButton        aCancelButton1;
-    MenuButton          aMenuButton;
-    PushButton          aDefaultButton;
+    SmFontPickListBox* m_pVariableFont;
+    SmFontPickListBox* m_pFunctionFont;
+    SmFontPickListBox* m_pNumberFont;
+    SmFontPickListBox* m_pTextFont;
+    SmFontPickListBox* m_pSerifFont;
+    SmFontPickListBox* m_pSansFont;
+    SmFontPickListBox* m_pFixedFont;
+    HelpButton* m_pHelpButton1;
+    MenuButton* m_pMenuButton;
+    PushButton* m_pDefaultButton;
 
     OutputDevice       *pFontListDev;
 
@@ -171,7 +160,7 @@ class SmFontTypeDialog : public ModalDialog
     DECL_LINK(HelpButtonClickHdl, Button *);
 
 public:
-    SmFontTypeDialog(Window *pParent, OutputDevice *pFntListDevice, bool bFreeRes = true);
+    SmFontTypeDialog(Window *pParent, OutputDevice *pFntListDevice);
 
     void ReadFrom(const SmFormat &rFormat);
     void WriteTo (SmFormat &rFormat) const;
