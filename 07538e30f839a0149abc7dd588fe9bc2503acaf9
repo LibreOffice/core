@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXn///e4\u003d",
+        "filename": "include/svtools/htmlout.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1000039
+      },
+      "writtenOn": "2013-07-03T14:16:34Z",
+      "side": 1,
+      "message": "We don\u0027t really want to add those sort of comments to have to clean them up later ;)",
+      "revId": "07538e30f839a0149abc7dd588fe9bc2503acaf9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn///e0\u003d",
+        "filename": "include/svtools/htmlout.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1000039
+      },
+      "writtenOn": "2013-07-03T14:16:34Z",
+      "side": 1,
+      "message": "Same for this one",
+      "revId": "07538e30f839a0149abc7dd588fe9bc2503acaf9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn///ew\u003d",
+        "filename": "sw/source/filter/html/htmlplug.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1276,
+      "author": {
+        "id": 1000039
+      },
+      "writtenOn": "2013-07-03T14:16:34Z",
+      "side": 1,
+      "message": "aGrfNm is now unused it seems.",
+      "revId": "07538e30f839a0149abc7dd588fe9bc2503acaf9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn///es\u003d",
+        "filename": "sw/source/filter/html/htmlplug.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1282,
+      "author": {
+        "id": 1000039
+      },
+      "writtenOn": "2013-07-03T14:16:34Z",
+      "side": 1,
+      "message": "instead of providing aOUString, providing \"\" should work",
+      "revId": "07538e30f839a0149abc7dd588fe9bc2503acaf9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
