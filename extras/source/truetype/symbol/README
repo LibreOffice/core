@@ -14,3 +14,8 @@ the .sfd where the version is mentioned, e.g.
 
 -LangName: 1033 "" "" "Regular" "OpenSymbol" "" "Version 102.3"
 +LangName: 1033 "" "" "Regular" "OpenSymbol" "" "Version 102.4"
+
+The glyph names in the font should follow Adobe Glyph list for new fonts
+(http://partners.adobe.com/public/developer/en/opentype/aglfn13.txt) or just the
+uniXXXX scheme (see http://www.adobe.com/devnet/opentype/archives/glyph.html for
+the rationale).
