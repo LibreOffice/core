@@ -26,11 +26,12 @@ $(call gb_CustomTarget_get_workdir,postprocess/signing)/signing.done : \
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),PRL,2)
 ifeq ($(COM),MSC)
 ifneq ($(ENABLE_DBGUTIL),TRUE)
-	$(PERL) $< -e $(SRCDIR)/postprocess/signing/no_signing.txt
+	$(PERL) $(SRCDIR)/postprocess/signing/signing.pl \
+			-e $(SRCDIR)/postprocess/signing/no_signing.txt
 			-l $(subst .done,_log.txt,$@) \
-			-f $(PFXFILE) \
-			-p $(PFXPASSWORD) \
-			-t $(TIMESTAMPURL) \
+			$(if $(PFXFILE),-f $(PFXFILE)) \
+			$(if $(PFXPASSWORD),-p $(PFXPASSWORD)) \
+			$(if $($(TIMESTAMPURL),-t $(TIMESTAMPURL)) \
 			$(OUTDIR)/bin/*.dll $(OUTDIR)/bin/*.exe \
 	&& touch $@
 else
