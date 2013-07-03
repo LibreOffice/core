@@ -1469,9 +1469,17 @@ void SmXMLExport::ExportFont(const SmNode *pNode, int nLevel)
 
 void SmXMLExport::ExportVerticalBrace(const SmNode *pNode, int nLevel)
 {
-    // Place the overbrace value OVER a horizontal brace and then place that
-    // expression OVER the overbrace value. Similarly for the underbrace
-    // construction.
+    // "[body] overbrace [script]"
+    //
+    // Position body, overbrace and script vertically. First place the overbrace
+    // OVER the body and then the script OVER this expression.
+    //
+    //      [script]
+    //   --[overbrace]--
+    // XXXXXX[body]XXXXXXX
+    //
+    // Similarly for the underbrace construction.
+
     XMLTokenEnum which;
 
     switch (pNode->GetToken().eType)
