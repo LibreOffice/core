@@ -31,7 +31,7 @@ ifneq ($(ENABLE_DBGUTIL),TRUE)
 			-l $(subst .done,_log.txt,$@) \
 			$(if $(PFXFILE),-f $(PFXFILE)) \
 			$(if $(PFXPASSWORD),-p $(PFXPASSWORD)) \
-			$(if $($(TIMESTAMPURL),-t $(TIMESTAMPURL)) \
+			$(if $(TIMESTAMPURL),-t $(TIMESTAMPURL)) \
 			$(OUTDIR)/bin/*.dll $(OUTDIR)/bin/*.exe \
 	&& touch $@
 else
