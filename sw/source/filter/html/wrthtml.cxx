@@ -1001,14 +1001,13 @@ const SwPageDesc *SwHTMLWriter::MakeHeader( sal_uInt16 &rHeaderAttrs )
 
     const SfxItemSet& rItemSet = pPageDesc->GetMaster().GetAttrSet();
 
-    String aEmbGrfName;
-    OutBackground( rItemSet, aEmbGrfName, sal_True );
+    OutBackground( rItemSet, sal_True );
 
     nDirection = GetHTMLDirection( rItemSet );
     OutDirection( nDirection );
 
     if( bCfgOutStyles )
-        OutCSS1_BodyTagStyleOpt( *this, rItemSet, aEmbGrfName );
+        OutCSS1_BodyTagStyleOpt( *this, rItemSet );
 
     // Events anhaengen
     if( pDoc->GetDocShell() )   // nur mit DocShell ist Basic moeglich
@@ -1114,8 +1113,7 @@ void SwHTMLWriter::OutHyperlinkHRefValue( const String& rURL )
                               &aNonConvertableCharacters );
 }
 
-void SwHTMLWriter::OutBackground( const SvxBrushItem *pBrushItem,
-                                  String& rEmbGrfNm, sal_Bool bGraphic )
+void SwHTMLWriter::OutBackground( const SvxBrushItem *pBrushItem, sal_Bool bGraphic )
 {
     const Color &rBackColor = pBrushItem->GetColor();
     /// check, if background color is not "no fill"/"auto fill", instead of
@@ -1131,60 +1129,28 @@ void SwHTMLWriter::OutBackground( const SvxBrushItem *pBrushItem,
     if( !bGraphic )
         return;
 
-    const String *pLink = pBrushItem->GetGraphicLink();
-
-    // embeddete Grafik -> WriteEmbedded schreiben
-    if( !pLink )
+    OUString aGraphicInBase64;
+    const Graphic* pGrf = pBrushItem->GetGraphic();
+    if( pGrf )
     {
-        const Graphic* pGrf = pBrushItem->GetGraphic();
-        if( pGrf )
+        sal_uLong nErr = XOutBitmap::GraphicToBase64(*pGrf, aGraphicInBase64);
+        if( nErr )
         {
-            // Grafik als (JPG-)File speichern
-            const String* pTempFileName = GetOrigFileName();
-            if(pTempFileName)
-                rEmbGrfNm = *pTempFileName;
-            sal_uInt16 nErr = XOutBitmap::WriteGraphic( *pGrf, rEmbGrfNm,
-                    OUString("JPG"),
-                    XOUTBMP_USE_NATIVE_IF_POSSIBLE );
-            if( !nErr )     // fehlerhaft, da ist nichts auszugeben
-            {
-                rEmbGrfNm = URIHelper::SmartRel2Abs(
-                    INetURLObject( GetBaseURL() ), rEmbGrfNm,
-                    URIHelper::GetMaybeFileHdl() );
-                pLink = &rEmbGrfNm;
-            }
-            else
-            {
-                nWarn = WARN_SWG_POOR_LOAD | WARN_SW_WRITE_BASE;
-            }
+            nWarn = WARN_SWG_POOR_LOAD | WARN_SW_WRITE_BASE;
         }
-    }
-    else
-    {
-        rEmbGrfNm = *pLink;
-        if( bCfgCpyLinkedGrfs )
-        {
-            CopyLocalFileToINet( rEmbGrfNm  );
-            pLink = &rEmbGrfNm;
-        }
-    }
-
-    if( pLink )
-    {
-        String s( URIHelper::simpleNormalizedMakeRelative( GetBaseURL(), *pLink));
         Strm() << " " OOO_STRING_SVTOOLS_HTML_O_background "=\"";
-        HTMLOutFuncs::Out_String( Strm(), s, eDestEnc, &aNonConvertableCharacters ) << '\"';
+        Strm() << OOO_STRING_SVTOOLS_HTML_O_data ":";
+        HTMLOutFuncs::Out_String( Strm(), aGraphicInBase64, eDestEnc, &aNonConvertableCharacters ) << '\"';
     }
 }
 
-void SwHTMLWriter::OutBackground( const SfxItemSet& rItemSet,
-                                  String& rEmbGrfNm, sal_Bool bGraphic )
+void SwHTMLWriter::OutBackground( const SfxItemSet& rItemSet, sal_Bool bGraphic )
 {
     const SfxPoolItem* pItem;
     if( SFX_ITEM_SET == rItemSet.GetItemState( RES_BACKGROUND, sal_False,
                                                &pItem ))
     {
-        OutBackground( ((const SvxBrushItem*)pItem), rEmbGrfNm, bGraphic );
+        OutBackground( ((const SvxBrushItem*)pItem), bGraphic );
     }
 }
 

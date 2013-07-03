@@ -39,7 +39,6 @@
 #include <editeng/ulspitem.hxx>
 #include <editeng/brushitem.hxx>
 
-
 #include <fmtanchr.hxx>
 #include <fmtornt.hxx>
 #include <fmturl.hxx>
@@ -54,6 +53,8 @@
 #include <flypos.hxx>
 #include <docary.hxx>
 #include <ndgrf.hxx>
+#include <vcl/cvtgrf.hxx>
+#include <sax/tools/converter.hxx>
 
 #include "doc.hxx"
 #include "ndtxt.hxx"
@@ -65,7 +66,6 @@
 #include "htmlfly.hxx"
 
 using namespace ::com::sun::star;
-
 ////////////////////////////////////////////////////////////
 
 const sal_uLong HTML_FRMOPTS_IMG_ALL        =
@@ -144,6 +144,7 @@ static Writer& OutHTML_FrmFmtGrfNode( Writer& rWrt, const SwFrmFmt& rFmt,
 
 static Writer& OutHTML_FrmFmtAsMarquee( Writer& rWrt, const SwFrmFmt& rFrmFmt,
                                         const SdrObject& rSdrObj    );
+
 //-----------------------------------------------------------------------
 
 extern HTMLOutEvent aAnchorEventTable[];
@@ -544,7 +545,7 @@ OString SwHTMLWriter::OutFrmFmtOptions( const SwFrmFmt &rFrmFmt,
         const sal_Char *pStr =
             (nFrmOpts & HTML_FRMOPT_ID) ? OOO_STRING_SVTOOLS_HTML_O_id : OOO_STRING_SVTOOLS_HTML_O_name;
         sOut.append(' ').append(pStr).
-            append(RTL_CONSTASCII_STRINGPARAM("=\""));
+            append("=\"");
         Strm() << sOut.makeStringAndClear().getStr();
         HTMLOutFuncs::Out_String( Strm(), rFrmFmt.GetName(), eDestEnc, &aNonConvertableCharacters );
         sOut.append('\"');
@@ -563,7 +564,7 @@ OString SwHTMLWriter::OutFrmFmtOptions( const SwFrmFmt &rFrmFmt,
     if( (nFrmOpts & HTML_FRMOPT_ALT) && rAlternateTxt.Len() )
     {
         sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_alt).
-            append(RTL_CONSTASCII_STRINGPARAM("=\""));
+            append("=\"");
         Strm() << sOut.makeStringAndClear().getStr();
         HTMLOutFuncs::Out_String( Strm(), rAlternateTxt, eDestEnc, &aNonConvertableCharacters );
         sOut.append('\"');
@@ -813,9 +814,8 @@ OString SwHTMLWriter::OutFrmFmtOptions( const SwFrmFmt &rFrmFmt,
     return sRetEndTags;
 }
 
-
 Writer& OutHTML_Image( Writer& rWrt, const SwFrmFmt &rFrmFmt,
-                       const String &rGrfName, const String& rAlternateTxt,
+                       Graphic& rGraphic, const String& rAlternateTxt,
                        const Size &rRealSize, sal_uInt32 nFrmOpts,
                        const sal_Char *pMarkType,
                        const ImageMap *pAltImgMap )
@@ -828,10 +828,6 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrmFmt &rFrmFmt,
         SwFmtINetFmt *pINetFmt = rHTMLWrt.aINetFmts.back();
         OutHTML_INetFmt( rWrt, *pINetFmt, sal_False );
     }
-
-    String aGrfNm( rGrfName );
-    if( !HTMLOutFuncs::PrivateURLToInternalImg(aGrfNm) )
-        aGrfNm = URIHelper::simpleNormalizedMakeRelative( rWrt.GetBaseURL(), aGrfNm);
 
     const SfxPoolItem* pItem;
     const SfxItemSet& rItemSet = rFrmFmt.GetAttrSet();
@@ -1022,7 +1018,7 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrmFmt &rFrmFmt,
             if( aName.Len() )
             {
                 sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_name).
-                    append(RTL_CONSTASCII_STRINGPARAM("=\""));
+                    append("=\"");
                 rWrt.Strm() << sOut.makeStringAndClear().getStr();
                 HTMLOutFuncs::Out_String( rWrt.Strm(), aName,
                                           rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
@@ -1032,7 +1028,7 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrmFmt &rFrmFmt,
             if( aTarget.Len() )
             {
                 sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_target).
-                    append(RTL_CONSTASCII_STRINGPARAM("=\""));
+                    append("=\"");
                 rWrt.Strm() << sOut.makeStringAndClear().getStr();
                 HTMLOutFuncs::Out_String( rWrt.Strm(), aTarget,
                                           rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
@@ -1056,7 +1052,7 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrmFmt &rFrmFmt,
             rWrt.Strm() << ">";
             aEndTags = OStringBuffer().append("</").
                 append(OOO_STRING_SVTOOLS_HTML_anchor).
-                append(RTL_CONSTASCII_STRINGPARAM(">")).append(aEndTags).
+                append(">").append(aEndTags).
                 makeStringAndClear();
         }
     }
@@ -1129,7 +1125,7 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrmFmt &rFrmFmt,
                                      pColBorderLine->GetColor(), rHTMLWrt.eDestEnc ) << '>';
 
             aEndTags = OStringBuffer().
-                append(RTL_CONSTASCII_STRINGPARAM("</")).
+                append("</").
                 append(OOO_STRING_SVTOOLS_HTML_font).
                 append('>').append(aEndTags).makeStringAndClear();
         }
@@ -1138,9 +1134,16 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrmFmt &rFrmFmt,
     sOut.append('<');
     sOut.append(OOO_STRING_SVTOOLS_HTML_image).append(' ').
         append(OOO_STRING_SVTOOLS_HTML_O_src).
-        append(RTL_CONSTASCII_STRINGPARAM("=\""));
+        append("=\"").append(OOO_STRING_SVTOOLS_HTML_O_data).append(":");
     rWrt.Strm() << sOut.makeStringAndClear().getStr();
-    HTMLOutFuncs::Out_String( rWrt.Strm(), aGrfNm, rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters ) << '\"';
+
+    OUString aGraphicInBase64;
+    sal_uLong nErr = XOutBitmap::GraphicToBase64(rGraphic, aGraphicInBase64);
+    if( nErr )
+    {
+        rHTMLWrt.nWarn = WARN_SWG_POOR_LOAD | WARN_SW_WRITE_BASE;
+    }
+    HTMLOutFuncs::Out_String( rWrt.Strm(), aGraphicInBase64, rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters ) << '\"';
 
     // Events
     if( SFX_ITEM_SET == rItemSet.GetItemState( RES_FRMMACRO, sal_True, &pItem ))
@@ -1174,7 +1177,7 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrmFmt &rFrmFmt,
     if( aIMapName.Len() )
     {
         sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_usemap).
-            append(RTL_CONSTASCII_STRINGPARAM("=\"#"));
+            append("=\"#");
         rWrt.Strm() << sOut.makeStringAndClear().getStr();
         HTMLOutFuncs::Out_String( rWrt.Strm(), aIMapName, rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters ) << '\"';
     }
@@ -1204,51 +1207,31 @@ Writer& OutHTML_BulletImage( Writer& rWrt,
 {
     SwHTMLWriter & rHTMLWrt = (SwHTMLWriter&)rWrt;
 
-    // Wenn es ein BrushItem gibt, muss die Grafiknoch exportiert werden
+    //Wenn es ein BrushItem gibt, muss die Grafiknoch exportiert werden
     const String *pLink = 0;
+    OUString aGraphicInBase64;
     if( pBrush )
     {
         pLink = pBrush->GetGraphicLink();
 
-        // embeddete Grafik -> WriteEmbedded schreiben
+        //embeddete Grafik -> WriteEmbedded schreiben
         if( !pLink )
         {
             const Graphic* pGrf = pBrush->GetGraphic();
             if( pGrf )
             {
-                // Grafik als (JPG-)File speichern
-                if( rHTMLWrt.GetOrigFileName() )
-                    rGrfName = *rHTMLWrt.GetOrigFileName();
-                sal_uInt16 nErr = XOutBitmap::WriteGraphic( *pGrf,  rGrfName,
-                        OUString("JPG"),
-                        (XOUTBMP_USE_GIF_IF_SENSIBLE |
-                         XOUTBMP_USE_NATIVE_IF_POSSIBLE));
-                if( !nErr )
-                {
-                    rGrfName = URIHelper::SmartRel2Abs(
-                        INetURLObject( rWrt.GetBaseURL() ), rGrfName,
-                        URIHelper::GetMaybeFileHdl() );
-                    pLink = &rGrfName;
-                }
-                else
+                const Graphic* aGraphic = pBrush->GetGraphic();
+                sal_uLong nErr = XOutBitmap::GraphicToBase64(*aGraphic, aGraphicInBase64);
+                if( nErr )
                 {
                     rHTMLWrt.nWarn = WARN_SWG_POOR_LOAD | WARN_SW_WRITE_BASE;
                 }
+                // Grafik als (JPG-)File speichern
+                if( rHTMLWrt.GetOrigFileName() )
+                    rGrfName = *rHTMLWrt.GetOrigFileName();
+                    pLink = &rGrfName;
             }
         }
-        else
-        {
-            rGrfName = *pLink;
-            if( rHTMLWrt.bCfgCpyLinkedGrfs )
-            {
-                rHTMLWrt.CopyLocalFileToINet( rGrfName );
-                pLink = &rGrfName;
-            }
-        }
-    }
-    else
-    {
-        pLink = &rGrfName;
     }
 
     OStringBuffer sOut;
@@ -1258,13 +1241,10 @@ Writer& OutHTML_BulletImage( Writer& rWrt,
     if( pLink )
     {
         sOut.append(' ');
-        String s( *pLink );
-        if( !HTMLOutFuncs::PrivateURLToInternalImg(s) )
-            s = URIHelper::simpleNormalizedMakeRelative( rWrt.GetBaseURL(), s);
-        sOut.append(OOO_STRING_SVTOOLS_HTML_O_src).
-            append(RTL_CONSTASCII_STRINGPARAM("=\""));
+        sOut.append(OOO_STRING_SVTOOLS_HTML_O_src).append("=\"").
+        append(OOO_STRING_SVTOOLS_HTML_O_data).append(":");
         rWrt.Strm() << sOut.makeStringAndClear().getStr();
-        HTMLOutFuncs::Out_String( rWrt.Strm(), s, rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
+        HTMLOutFuncs::Out_String( rWrt.Strm(), aGraphicInBase64, rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
         sOut.append('\"');
 
         // Groesse des Objekts Twips ohne Raender
@@ -1547,32 +1527,13 @@ static Writer& OutHTML_FrmFmtAsDivOrSpan( Writer& rWrt,
 static Writer & OutHTML_FrmFmtAsImage( Writer& rWrt, const SwFrmFmt& rFrmFmt,
                                        sal_Bool /*bInCntnr*/ )
 {
-    SwHTMLWriter & rHTMLWrt = (SwHTMLWriter&)rWrt;
-
     ImageMap aIMap;
-    Graphic aGrf( ((SwFrmFmt &)rFrmFmt).MakeGraphic( &aIMap ) );
-
-    String aGrfNm;
-    if( rHTMLWrt.GetOrigFileName() )
-        aGrfNm = *rHTMLWrt.GetOrigFileName();
-    if( aGrf.GetType() == GRAPHIC_NONE ||
-        XOutBitmap::WriteGraphic( aGrf, aGrfNm,
-                                  OUString("JPG"),
-                                  (XOUTBMP_USE_GIF_IF_POSSIBLE|
-                                   XOUTBMP_USE_NATIVE_IF_POSSIBLE) ) != 0 )
-    {
-        // leer oder fehlerhaft, da ist nichts auszugeben
-        rHTMLWrt.nWarn = WARN_SWG_POOR_LOAD | WARN_SW_WRITE_BASE;
-        return rWrt;
-    }
-
-    aGrfNm = URIHelper::SmartRel2Abs(
-        INetURLObject(rWrt.GetBaseURL()), aGrfNm,
-        URIHelper::GetMaybeFileHdl() );
+    Graphic aGraphic( ((SwFrmFmt &)rFrmFmt).MakeGraphic( &aIMap ) );
     Size aSz( 0, 0 );
-    OutHTML_Image( rWrt, rFrmFmt, aGrfNm, rFrmFmt.GetName(), aSz,
+    OutHTML_Image( rWrt, rFrmFmt, aGraphic, rFrmFmt.GetName(), aSz,
                     HTML_FRMOPTS_GENIMG, pMarkToFrame,
                     aIMap.GetIMapObjectCount() ? &aIMap : 0 );
+
     return rWrt;
 }
 
@@ -1589,55 +1550,13 @@ static Writer& OutHTML_FrmFmtGrfNode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
     if( !pGrfNd )
         return rWrt;
 
-    const SwMirrorGrf& rMirror = pGrfNd->GetSwAttrSet().GetMirrorGrf();
-
-    String aGrfNm;
-    if( !pGrfNd->IsLinkedFile() || RES_MIRROR_GRAPH_DONT != rMirror.GetValue() )
-    {
-        // Grafik als File-Referenz speichern (als JPEG-Grafik speichern)
-        if( rHTMLWrt.GetOrigFileName() )
-            aGrfNm = *rHTMLWrt.GetOrigFileName();
-        pGrfNd->SwapIn( sal_True );
-
-        sal_uLong nFlags = XOUTBMP_USE_GIF_IF_SENSIBLE |
-                       XOUTBMP_USE_NATIVE_IF_POSSIBLE;
-        switch( rMirror.GetValue() )
-        {
-        case RES_MIRROR_GRAPH_VERT: nFlags = XOUTBMP_MIRROR_HORZ; break;
-        case RES_MIRROR_GRAPH_HOR:    nFlags = XOUTBMP_MIRROR_VERT; break;
-        case RES_MIRROR_GRAPH_BOTH:
-            nFlags = XOUTBMP_MIRROR_VERT | XOUTBMP_MIRROR_HORZ;
-            break;
-        }
-
-        Size aMM100Size;
-        const SwFmtFrmSize& rSize = rFrmFmt.GetFrmSize();
-        aMM100Size = OutputDevice::LogicToLogic( rSize.GetSize(),
-                        MapMode( MAP_TWIP ), MapMode( MAP_100TH_MM ));
-
-        sal_uInt16 nErr = XOutBitmap::WriteGraphic( pGrfNd->GetGrf(), aGrfNm,
-                OUString("JPG"), nFlags, &aMM100Size );
-        if( nErr )              // fehlerhaft, da ist nichts auszugeben
-        {
-            rHTMLWrt.nWarn = WARN_SWG_POOR_LOAD | WARN_SW_WRITE_BASE;
-            return rWrt;
-        }
-        aGrfNm = URIHelper::SmartRel2Abs(
-            INetURLObject(rWrt.GetBaseURL()), aGrfNm,
-            URIHelper::GetMaybeFileHdl() );
-    }
-    else
-    {
-        pGrfNd->GetFileFilterNms( &aGrfNm, 0 );
-        if( rHTMLWrt.bCfgCpyLinkedGrfs )
-            rWrt.CopyLocalFileToINet( aGrfNm );
-    }
-
     sal_uLong nFrmFlags = bInCntnr ? HTML_FRMOPTS_IMG_CNTNR : HTML_FRMOPTS_IMG;
     if( rHTMLWrt.IsHTMLMode( HTMLMODE_ABS_POS_FLY ) && !bInCntnr )
-        nFrmFlags |= HTML_FRMOPTS_IMG_CSS1;
-    OutHTML_Image( rWrt, rFrmFmt, aGrfNm, pGrfNd->GetTitle(),
-                   pGrfNd->GetTwipSize(), nFrmFlags, pMarkToGraphic );
+         nFrmFlags |= HTML_FRMOPTS_IMG_CSS1;
+
+    Graphic aGraphic = pGrfNd->GetGraphic();
+    OutHTML_Image( rWrt, rFrmFmt, aGraphic, pGrfNd->GetTitle(),
+                  pGrfNd->GetTwipSize(), nFrmFlags, pMarkToGraphic );
 
     return rWrt;
 }

@@ -456,10 +456,8 @@ public:
     void OutBasicBodyEvents();
 
     // BACKGROUND/BGCOLOR-Option
-    void OutBackground( const SvxBrushItem *pBrushItem, String& rEmbGrfNm,
-                        sal_Bool bGraphic );
-    void OutBackground( const SfxItemSet& rItemSet, String &rEmbGrfName,
-                        sal_Bool bGraphic );
+    void OutBackground( const SvxBrushItem *pBrushItem, sal_Bool bGraphic );
+    void OutBackground( const SfxItemSet& rItemSet, sal_Bool bGraphic );
 
     void OutLanguage( LanguageType eLang );
     sal_uInt16 GetHTMLDirection( sal_uInt16 nDir ) const;
@@ -632,10 +630,11 @@ Writer& OutHTML_HeaderFooter( Writer& rWrt, const SwFrmFmt& rFrmFmt,
                               sal_Bool bHeader );
 
 Writer& OutHTML_Image( Writer&, const SwFrmFmt& rFmt,
-                       const String& rGrfName, const String& rAlternateTxt,
+                       Graphic& rGraphic, const String& rAlternateTxt,
                        const Size& rRealSize, sal_uInt32 nFrmOpts,
                        const sal_Char *pMarkType = 0,
                        const ImageMap *pGenImgMap = 0 );
+
 Writer& OutHTML_BulletImage( Writer& rWrt, const sal_Char *pTag,
                              const SvxBrushItem* pBrush, String &rGrfName,
                              const Size &rSize,
@@ -645,8 +644,7 @@ Writer& OutHTML_SwFmtFld( Writer& rWrt, const SfxPoolItem& rHt );
 Writer& OutHTML_SwFmtFtn( Writer& rWrt, const SfxPoolItem& rHt );
 Writer& OutHTML_INetFmt( Writer&, const SwFmtINetFmt& rINetFmt, sal_Bool bOn );
 
-Writer& OutCSS1_BodyTagStyleOpt( Writer& rWrt, const SfxItemSet& rItemSet,
-                                 String aEmbBGGrfName );
+Writer& OutCSS1_BodyTagStyleOpt( Writer& rWrt, const SfxItemSet& rItemSet );
 Writer& OutCSS1_ParaTagStyleOpt( Writer& rWrt, const SfxItemSet& rItemSet );
 
 Writer& OutCSS1_HintSpanTag( Writer& rWrt, const SfxPoolItem& rHt );

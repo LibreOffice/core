@@ -29,6 +29,9 @@
 #include <vcl/dibtools.hxx>
 #include <vcl/FilterConfigItem.hxx>
 #include <vcl/graphicfilter.hxx>
+#include <vcl/cvtgrf.hxx>
+#include <sax/tools/converter.hxx>
+#include <svtools/htmlkywd.hxx>
 
 #define FORMAT_BMP  OUString("bmp")
 #define FORMAT_GIF  OUString("gif")
@@ -312,6 +315,46 @@ sal_uInt16 XOutBitmap::WriteGraphic( const Graphic& rGraphic, String& rFileName,
     {
         return GRFILTER_OK;
     }
+}
+
+sal_uLong XOutBitmap::GraphicToBase64(const Graphic& rGraphic, OUString& rOUString)
+{
+    SvMemoryStream aOStm;
+    OUString aMimeType;
+    GfxLink aLink = rGraphic.GetLink();
+    sal_uLong aCvtType;
+    switch(  aLink.GetType() )
+    {
+        case( GFX_LINK_TYPE_NATIVE_JPG ):
+            aCvtType = CVT_JPG;
+            aMimeType = "image/jpeg";
+            break;
+        case( GFX_LINK_TYPE_NATIVE_PNG ):
+            aCvtType = CVT_PNG;
+            aMimeType = "image/png";
+            break;
+        case( GFX_LINK_TYPE_NATIVE_SVG ):
+            aCvtType = CVT_SVG;
+            aMimeType = "image/svg+xml";
+            break;
+        default:
+            // save everything else (including gif) into png
+            aCvtType = CVT_PNG;
+            aMimeType = "image/png";
+            break;
+    }
+    sal_uLong nErr = GraphicConverter::Export(aOStm,rGraphic,aCvtType);
+    if ( nErr )
+    {
+        SAL_WARN("svx", "XOutBitmap::GraphicToBase64() invalid Graphic? error: " << nErr );
+        return nErr;
+    }
+    aOStm.Seek(STREAM_SEEK_TO_END);
+    css::uno::Sequence<sal_Int8> aOStmSeq( (sal_Int8*) aOStm.GetData(),aOStm.Tell() );
+    OUStringBuffer aStrBuffer;
+    ::sax::Converter::encodeBase64(aStrBuffer,aOStmSeq);
+    rOUString = aMimeType + ";base64," + aStrBuffer.makeStringAndClear();
+    return 0;
 }
 
 sal_uInt16 XOutBitmap::ExportGraphic( const Graphic& rGraphic, const INetURLObject& rURL,

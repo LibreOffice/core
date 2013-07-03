@@ -532,14 +532,14 @@ SvStream& HTMLOutFuncs::Out_Char( SvStream& rStream, sal_Unicode c,
     return rStream;
 }
 
-SvStream& HTMLOutFuncs::Out_String( SvStream& rStream, const String& rStr,
+SvStream& HTMLOutFuncs::Out_String( SvStream& rStream, const OUString& rOUStr,
                                     rtl_TextEncoding eDestEnc,
                                     String *pNonConvertableChars )
 {
     HTMLOutContext aContext( eDestEnc );
-    xub_StrLen nLen = rStr.Len();
-    for( xub_StrLen n = 0; n < nLen; n++ )
-        HTMLOutFuncs::Out_Char( rStream, rStr.GetChar( (xub_StrLen)n ),
+    sal_Int32 nLen = rOUStr.getLength();
+    for( sal_Int32 n = 0; n < nLen; n++ )
+        HTMLOutFuncs::Out_Char( rStream, rOUStr[n],
                                 aContext, pNonConvertableChars );
     HTMLOutFuncs::FlushToAscii( rStream, aContext );
     return rStream;

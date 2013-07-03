@@ -147,7 +147,7 @@ static Writer& OutCSS1_SvxULSpace_SvxLRSpace( Writer& rWrt,
                                         const SfxItemSet& rItemSet,
                                         sal_Bool bDeep );
 static Writer& OutCSS1_SvxBrush( Writer& rWrt, const SfxPoolItem& rHt,
-                                 sal_uInt16 nMode, const String *pGrfName );
+                                 sal_uInt16 nMode );
 static Writer& OutCSS1_SvxBrush( Writer& rWrt, const SfxPoolItem& rHt );
 static Writer& OutCSS1_SwFmtFrmSize( Writer& rWrt, const SfxPoolItem& rHt,
                                      sal_uInt16 nMode );
@@ -1909,8 +1909,7 @@ static Writer& OutCSS1_SwFtnInfo( Writer& rWrt, const SwEndNoteInfo& rInfo,
     return rWrt;
 }
 
-Writer& OutCSS1_BodyTagStyleOpt( Writer& rWrt, const SfxItemSet& rItemSet,
-                                 String aEmbBGGrfName )
+Writer& OutCSS1_BodyTagStyleOpt( Writer& rWrt, const SfxItemSet& rItemSet )
 {
     SwHTMLWriter& rHTMLWrt = (SwHTMLWriter&)rWrt;
 
@@ -1926,8 +1925,7 @@ Writer& OutCSS1_BodyTagStyleOpt( Writer& rWrt, const SfxItemSet& rItemSet,
     if( SFX_ITEM_SET == rItemSet.GetItemState( RES_BACKGROUND, sal_False,
                                                &pItem ) )
     {
-        OutCSS1_SvxBrush( rWrt, *pItem, CSS1_BACKGROUND_PAGE,
-                          &aEmbBGGrfName );
+        OutCSS1_SvxBrush( rWrt, *pItem, CSS1_BACKGROUND_PAGE );
     }
 
     if( SFX_ITEM_SET == rItemSet.GetItemState( RES_BOX, sal_False,
@@ -1996,7 +1994,7 @@ Writer& OutCSS1_TableBGStyleOpt( Writer& rWrt, const SfxPoolItem& rHt )
     SwCSS1OutMode aMode( rHTMLWrt, CSS1_OUTMODE_STYLE_OPT_ON |
                                    CSS1_OUTMODE_ENCODE|
                                    CSS1_OUTMODE_TABLEBOX );
-    OutCSS1_SvxBrush( rWrt, rHt, CSS1_BACKGROUND_TABLE, 0 );
+    OutCSS1_SvxBrush( rWrt, rHt, CSS1_BACKGROUND_TABLE );
 
     if( !rHTMLWrt.bFirstCSS1Property )
         rWrt.Strm() << '\"';
@@ -2248,7 +2246,7 @@ void SwHTMLWriter::OutCSS1_TableFrmFmtOptions( const SwFrmFmt& rFrmFmt )
     const SfxPoolItem *pItem;
     const SfxItemSet& rItemSet = rFrmFmt.GetAttrSet();
     if( SFX_ITEM_SET==rItemSet.GetItemState( RES_BACKGROUND, sal_False, &pItem ) )
-        OutCSS1_SvxBrush( *this, *pItem, CSS1_BACKGROUND_TABLE, 0 );
+        OutCSS1_SvxBrush( *this, *pItem, CSS1_BACKGROUND_TABLE );
 
     if( IsHTMLMode( HTMLMODE_PRINT_EXT ) )
         OutCSS1_SvxFmtBreak_SwFmtPDesc_SvxFmtKeep( *this, rItemSet, sal_False );
@@ -2281,7 +2279,7 @@ void SwHTMLWriter::OutCSS1_SectionFmtOptions( const SwFrmFmt& rFrmFmt, const SwF
     const SfxPoolItem *pItem;
     const SfxItemSet& rItemSet = rFrmFmt.GetAttrSet();
     if( SFX_ITEM_SET==rItemSet.GetItemState( RES_BACKGROUND, sal_False, &pItem ) )
-        OutCSS1_SvxBrush( *this, *pItem, CSS1_BACKGROUND_SECTION, 0 );
+        OutCSS1_SvxBrush( *this, *pItem, CSS1_BACKGROUND_SECTION );
 
     if (pCol)
     {
@@ -2303,7 +2301,7 @@ static bool OutCSS1_FrmFmtBrush( SwHTMLWriter& rWrt,
         0 != rBrushItem.GetGraphicLink() ||
         0 != rBrushItem.GetGraphicPos() )
     {
-        OutCSS1_SvxBrush( rWrt, rBrushItem, CSS1_BACKGROUND_FLY, 0 );
+        OutCSS1_SvxBrush( rWrt, rBrushItem, CSS1_BACKGROUND_FLY );
         bWritten = true;
     }
     return bWritten;
@@ -3304,13 +3302,12 @@ static Writer& OutCSS1_SvxFmtBreak_SwFmtPDesc_SvxFmtKeep( Writer& rWrt,
 // Wrapper fuer OutCSS1_SfxItemSet etc.
 static Writer& OutCSS1_SvxBrush( Writer& rWrt, const SfxPoolItem& rHt )
 {
-    OutCSS1_SvxBrush( rWrt, rHt, CSS1_BACKGROUND_ATTR, 0 );
+    OutCSS1_SvxBrush( rWrt, rHt, CSS1_BACKGROUND_ATTR );
     return rWrt;
 }
 
-
 static Writer& OutCSS1_SvxBrush( Writer& rWrt, const SfxPoolItem& rHt,
-                                 sal_uInt16 nMode, const String *pGrfName )
+                                 sal_uInt16 nMode)
 {
     SwHTMLWriter& rHTMLWrt = (SwHTMLWriter&)rWrt;
 
@@ -3323,18 +3320,7 @@ static Writer& OutCSS1_SvxBrush( Writer& rWrt, const SfxPoolItem& rHt,
     // Erstmal ein par Werte holen
 //  const Brush &rBrush = ((const SvxBrushItem &)rHt).GetBrush();
     const Color & rColor = ((const SvxBrushItem &)rHt).GetColor();
-    const String *pLink = pGrfName ? pGrfName
-                            : ((const SvxBrushItem &)rHt).GetGraphicLink();
     SvxGraphicPosition ePos = ((const SvxBrushItem &)rHt).GetGraphicPos();
-
-    if( CSS1_BACKGROUND_PAGE==nMode )
-    {
-        // Fuer Seitenvorlagen wurde der Grafik-Name uebergeben. Es wird
-        // nur ein Attribut ausgegeben, wenn die Grafik nicht gekachelt ist.
-        OSL_ENSURE( pLink, "Wo ist der Grafik-Name der Seitenvorlage?" );
-        if( !pLink || !pLink->Len() || GPOS_TILED==ePos )
-            return rWrt;
-    }
 
     // Erstmal die Farbe holen
     bool bColor = false;
@@ -3348,49 +3334,27 @@ static Writer& OutCSS1_SvxBrush( Writer& rWrt, const SfxPoolItem& rHt,
     }
 
     // und jetzt eine Grafik
-    String sGrfNm;
+    OUString aGraphicInBase64;
 
-    if( !pLink )
+    // embeddete Grafik -> WriteEmbedded schreiben
+    const Graphic* pGrf = ((const SvxBrushItem &)rHt).GetGraphic();
+    if( pGrf )
     {
-        // embeddete Grafik -> WriteEmbedded schreiben
-        const Graphic* pGrf = ((const SvxBrushItem &)rHt).GetGraphic();
-        if( pGrf )
+        sal_uLong nErr = XOutBitmap::GraphicToBase64(*pGrf, aGraphicInBase64);
+        if( nErr )
         {
-            // Grafik als (JPG-)File speichern
-            const String* pTempFileName = rHTMLWrt.GetOrigFileName();
-            if( pTempFileName )
-                sGrfNm = *pTempFileName;
-            sal_uInt16 nErr = XOutBitmap::WriteGraphic( *pGrf, sGrfNm,
-                        OUString("JPG"),
-                        XOUTBMP_USE_NATIVE_IF_POSSIBLE );
-            if( !nErr )     // fehlerhaft, da ist nichts auszugeben
-            {
-                sGrfNm = URIHelper::SmartRel2Abs(
-                    INetURLObject(rWrt.GetBaseURL()), sGrfNm,
-                    URIHelper::GetMaybeFileHdl() );
-                pLink = &sGrfNm;
-            }
-            else
-            {
-                rHTMLWrt.nWarn = WARN_SWG_POOR_LOAD | WARN_SW_WRITE_BASE;
-            }
+            rHTMLWrt.nWarn = WARN_SWG_POOR_LOAD | WARN_SW_WRITE_BASE;
         }
-    }
-    else if( !pGrfName && rHTMLWrt.bCfgCpyLinkedGrfs )
-    {
-        sGrfNm = *pLink;
-        rWrt.CopyLocalFileToINet( sGrfNm );
-        pLink = &sGrfNm;
     }
 
     // In Tabellen wird nur dann etwas exportiert, wenn eine Grafik
     // existiert.
-    if( CSS1_BACKGROUND_TABLE==nMode && !pLink )
+    if( CSS1_BACKGROUND_TABLE==nMode && !pGrf )
         return rWrt;
 
     // ggf. noch die Ausrichtung der Grafik
     const sal_Char *pRepeat = 0, *pHori = 0, *pVert = 0;
-    if( pLink )
+    if( pGrf )
     {
         if( GPOS_TILED==ePos )
         {
@@ -3452,57 +3416,48 @@ static Writer& OutCSS1_SvxBrush( Writer& rWrt, const SfxPoolItem& rHt,
     }
 
     // jetzt den String zusammen bauen
-    String sOut;
-    if( !pLink && !bColor )
+    OUString sOut;
+    if( !pGrf && !bColor )
     {
         // keine Farbe und kein Link, aber ein transparenter Brush
         if( bTransparent && CSS1_BACKGROUND_FLY != nMode )
-            sOut.AssignAscii( sCSS1_PV_transparent );
+            sOut += OStringToOUString(sCSS1_PV_transparent, RTL_TEXTENCODING_ASCII_US);
     }
     else
     {
         if( bColor )
         {
             OString sTmp(GetCSS1Color(aColor));
-            sOut += String(OStringToOUString(sTmp,
-                RTL_TEXTENCODING_ASCII_US));
+            sOut += OStringToOUString(sTmp, RTL_TEXTENCODING_ASCII_US);
         }
 
-        if( pLink )
+        if( pGrf )
         {
             if( bColor )
-                sOut += ' ';
+                sOut += " ";
 
-            sOut.AppendAscii( sCSS1_url );
-            sOut.Append( '(' );
-            sOut.Append( String(URIHelper::simpleNormalizedMakeRelative(rWrt.GetBaseURL(),
-              *pLink)));
-
-            sOut.Append( ')' );
+            sOut += OStringToOUString(sCSS1_url, RTL_TEXTENCODING_ASCII_US) +
+                "(\'" + OOO_STRING_SVTOOLS_HTML_O_data +  ":" + aGraphicInBase64 + "\')";
 
             if( pRepeat )
             {
-                sOut.Append( ' ' );
-                sOut.AppendAscii( pRepeat );
+                sOut += " " + OStringToOUString(pRepeat, RTL_TEXTENCODING_ASCII_US);
             }
 
             if( pHori )
             {
-                sOut.Append( ' ' );
-                sOut.AppendAscii( pHori );
+                sOut += " " + OStringToOUString(pHori, RTL_TEXTENCODING_ASCII_US);
             }
             if( pVert )
             {
-                sOut.Append( ' ' );
-                sOut.AppendAscii( pVert );
+                sOut += " " + OStringToOUString(pVert, RTL_TEXTENCODING_ASCII_US);
             }
 
-            sOut.Append( ' ' );
-            sOut.AppendAscii( sCSS1_PV_scroll );
+            sOut += " " + OStringToOUString(sCSS1_PV_scroll, RTL_TEXTENCODING_ASCII_US) + " ";
         }
     }
 
-    if( sOut.Len() )
+    if( !sOut.isEmpty() )
         rHTMLWrt.OutCSS1_Property( sCSS1_P_background, sOut );
 
     return rWrt;

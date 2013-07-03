@@ -821,10 +821,9 @@ Writer& OutHTML_NumBulListStart( SwHTMLWriter& rWrt,
         }
         else if( SVX_NUM_BITMAP == eType )
         {
-            // Aufzaehlungs-Liste: <OL>
+            // Unordered list: <UL>
             sOut.append(OOO_STRING_SVTOOLS_HTML_unorderlist);
             rWrt.Strm() << sOut.makeStringAndClear().getStr();
-
             OutHTML_BulletImage( rWrt,
                                     0,
                                     rNumFmt.GetBrush(),
@@ -834,7 +833,7 @@ Writer& OutHTML_NumBulListStart( SwHTMLWriter& rWrt,
         }
         else
         {
-            // Numerierungs-Liste: <UL>
+            // Ordered list: <OL>
             sOut.append(OOO_STRING_SVTOOLS_HTML_orderlist);
 
             // den Typ ueber das Format bestimmen
