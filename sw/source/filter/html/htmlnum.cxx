@@ -824,7 +824,6 @@ Writer& OutHTML_NumBulListStart( SwHTMLWriter& rWrt,
             // Aufzaehlungs-Liste: <OL>
             sOut.append(OOO_STRING_SVTOOLS_HTML_unorderlist);
             rWrt.Strm() << sOut.makeStringAndClear().getStr();
-
             OutHTML_BulletImage( rWrt,
                                     0,
                                     rNumFmt.GetBrush(),
