@@ -62,6 +62,7 @@
 #include <svl/broadcast.hxx>
 #include <svl/listeneriter.hxx>
 #include <vcl/outdev.hxx>
+#include "formula/errorcodes.hxx"
 
 #include <boost/scoped_ptr.hpp>
 
@@ -2172,7 +2173,15 @@ bool appendDouble(
                 {
                     ScFormulaCell& rFC = **itData;
                     if (!rFC.GetErrorOrValue(nErr, fVal) || nErr)
+                    {
+                        if (nErr == ScErrorCodes::errCircularReference)
+                        {
+                            // This cell needs to be recalculated on next visit.
+                            rFC.SetErrCode(0);
+                            rFC.SetDirtyVar();
+                        }
                         return false;
+                    }
 
                     rArray.push_back(fVal);
                 }
@@ -2261,7 +2270,15 @@ const double* ScColumn::FetchDoubleArray( sc::FormulaGroupContext& rCxt, SCROW n
                 {
                     ScFormulaCell& rCell = **it;
                     if (!rCell.GetErrorOrValue(nErr, fVal) || nErr)
+                    {
+                        if (nErr == ScErrorCodes::errCircularReference)
+                        {
+                            // This cell needs to be recalculated on next visit.
+                            rCell.SetErrCode(0);
+                            rCell.SetDirtyVar();
+                        }
                         return NULL;
+                    }
 
                     rArray.push_back(fVal);
                 }
@@ -2276,7 +2293,15 @@ const double* ScColumn::FetchDoubleArray( sc::FormulaGroupContext& rCxt, SCROW n
             {
                 ScFormulaCell& rCell = **it;
                 if (!rCell.GetErrorOrValue(nErr, fVal) || nErr)
+                {
+                    if (nErr == ScErrorCodes::errCircularReference)
+                    {
+                        // This cell needs to be recalculated on next visit.
+                        rCell.SetErrCode(0);
+                        rCell.SetDirtyVar();
+                    }
                     return NULL;
+                }
 
                 rArray.push_back(fVal);
             }
