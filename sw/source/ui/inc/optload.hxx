@@ -38,42 +38,33 @@ class SwWrtShell;
 class SwLoadOptPage : public SfxTabPage
 {
 private:
-    FixedLine   aUpdateFL;
-    FixedText   aLinkFT;
-    RadioButton aAlwaysRB;
-    RadioButton aRequestRB;
-    RadioButton aNeverRB;
+    RadioButton* m_pAlwaysRB;
+    RadioButton* m_pRequestRB;
+    RadioButton* m_pNeverRB;
 
-    FixedText   aFieldFT;
-    CheckBox    aAutoUpdateFields;
-    CheckBox    aAutoUpdateCharts;
+    CheckBox*    m_pAutoUpdateFields;
+    CheckBox*    m_pAutoUpdateCharts;
 
-    FixedLine   aSettingsFL;
-    FixedText   aMetricFT;
-    ListBox     aMetricLB;
-    FixedText   aTabFT;
-    MetricField aTabMF;
-    CheckBox    aUseSquaredPageMode;
-    CheckBox    aUseCharUnit;
-    FixedLine   aWordCountFL;
-    FixedText   aWordCountFT;
-    Edit        aWordCountED;
+    ListBox*     m_pMetricLB;
+    FixedText*   m_pTabFT;
+    MetricField* m_pTabMF;
+    CheckBox*    m_pUseSquaredPageMode;
+    CheckBox*    m_pUseCharUnit;
+    Edit*        m_pWordCountED;
 
-    SwWrtShell* pWrtShell;
-    sal_Bool    bHTMLMode;
-    sal_uInt16      nLastTab;
-    sal_Int32   nOldLinkMode;
+    SwWrtShell*  m_pWrtShell;
+    sal_uInt16   m_nLastTab;
+    sal_Int32    m_nOldLinkMode;
 
     DECL_LINK(MetricHdl, void *);
 
 public:
-    SwLoadOptPage( Window* pParent, const SfxItemSet& rSet );
-    ~SwLoadOptPage();
+    SwLoadOptPage(Window* pParent, const SfxItemSet& rSet);
 
     static SfxTabPage*  Create( Window* pParent,
                                 const SfxItemSet& rAttrSet);
 
-    virtual sal_Bool        FillItemSet( SfxItemSet& rSet );
+    virtual sal_Bool    FillItemSet( SfxItemSet& rSet );
     virtual void        Reset( const SfxItemSet& rSet );
 };
 
@@ -161,7 +152,7 @@ private:
     String          sNone;
 
     SwFldMgr        *pMgr;
-    sal_Bool            bHTMLMode;
+    bool            bHTMLMode;
 
     DECL_LINK(SelectHdl, void *);
     DECL_LINK(ModifyHdl, void * = 0);

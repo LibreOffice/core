@@ -1284,7 +1284,6 @@ CreateTabPage SwAbstractDialogFactory_Impl::GetTabPageCreatorFunc( sal_uInt16 nI
         case RID_SW_TP_OPTCOMPATIBILITY_PAGE :
             pRet = SwCompatibilityOptPage::Create;
             break;
-        case TP_OPTLOAD_PAGE :
         case RID_SW_TP_OPTLOAD_PAGE :
             pRet = SwLoadOptPage::Create;
             break;

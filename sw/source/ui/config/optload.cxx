@@ -61,38 +61,24 @@ using namespace ::com::sun::star;
 
 #include <svl/eitem.hxx>
 
-SwLoadOptPage::SwLoadOptPage( Window* pParent, const SfxItemSet& rSet ) :
-
-    SfxTabPage( pParent, SW_RES( TP_OPTLOAD_PAGE ), rSet ),
-
-    aUpdateFL           ( this, SW_RES( FL_UPDATE ) ),
-    aLinkFT             ( this, SW_RES( FT_LINK ) ),
-    aAlwaysRB           ( this, SW_RES( RB_ALWAYS ) ),
-    aRequestRB          ( this, SW_RES( RB_REQUEST ) ),
-    aNeverRB            ( this, SW_RES( RB_NEVER  ) ),
-
-    aFieldFT            ( this, SW_RES( FT_FIELD ) ),
-    aAutoUpdateFields   ( this, SW_RES( CB_AUTO_UPDATE_FIELDS ) ),
-    aAutoUpdateCharts   ( this, SW_RES( CB_AUTO_UPDATE_CHARTS ) ),
-
-    aSettingsFL         ( this, SW_RES( FL_SETTINGS ) ),
-    aMetricFT           ( this, SW_RES( FT_METRIC ) ),
-    aMetricLB           ( this, SW_RES( LB_METRIC ) ),
-    aTabFT              ( this, SW_RES( FT_TAB ) ),
-    aTabMF              ( this, SW_RES( MF_TAB ) ),
-    aUseSquaredPageMode ( this, SW_RES( CB_USE_SQUARE_PAGE_MODE ) ),
-    aUseCharUnit        ( this , SW_RES( CB_USE_CHAR_UNIT ) ),
-    aWordCountFL        ( this , SW_RES( FL_WORDCOUNT ) ),
-    aWordCountFT        ( this , SW_RES( FT_WORDCOUNT ) ),
-    aWordCountED        ( this , SW_RES( ED_WORDCOUNT ) ),
-
-    pWrtShell   ( NULL ),
-    bHTMLMode   ( sal_False ),
-    nLastTab    ( 0 ),
-    nOldLinkMode( MANUAL )
-
+SwLoadOptPage::SwLoadOptPage(Window* pParent, const SfxItemSet& rSet)
+    : SfxTabPage(pParent, "OptGeneralPage",
+        "modules/swriter/ui/optgeneralpage.ui", rSet)
+    , m_pWrtShell(NULL)
+    , m_nLastTab(0)
+    , m_nOldLinkMode(MANUAL)
 {
-    FreeResource();
+    get(m_pAlwaysRB, "always");
+    get(m_pRequestRB, "onrequest");
+    get(m_pNeverRB, "never");
+    get(m_pAutoUpdateFields, "updatefields");
+    get(m_pAutoUpdateCharts, "updatecharts");
+    get(m_pMetricLB, "metric");
+    get(m_pTabFT, "tablabel");
+    get(m_pTabMF, "tab");
+    get(m_pUseSquaredPageMode, "squaremode");
+    get(m_pUseCharUnit, "usecharunit");
+    get(m_pWordCountED, "wordcount");
 
     SvxStringArray aMetricArr( SW_RES( STR_ARR_METRIC ) );
     for ( sal_uInt16 i = 0; i < aMetricArr.Count(); ++i )
@@ -109,32 +95,28 @@ SwLoadOptPage::SwLoadOptPage( Window* pParent, const SfxItemSet& rSet ) :
             case FUNIT_INCH:
             {
                 // use only these metrics
-                sal_uInt16 nPos = aMetricLB.InsertEntry( sMetric );
-                aMetricLB.SetEntryData( nPos, (void*)(sal_IntPtr)eFUnit );
+                sal_uInt16 nPos = m_pMetricLB->InsertEntry( sMetric );
+                m_pMetricLB->SetEntryData( nPos, (void*)(sal_IntPtr)eFUnit );
             }
             default:; //prevent warning
         }
     }
-    aMetricLB.SetSelectHdl(LINK(this, SwLoadOptPage, MetricHdl));
+    m_pMetricLB->SetSelectHdl(LINK(this, SwLoadOptPage, MetricHdl));
 
     const SfxPoolItem* pItem;
     if(SFX_ITEM_SET == rSet.GetItemState(SID_HTML_MODE, sal_False, &pItem )
         && ((SfxUInt16Item*)pItem)->GetValue() & HTMLMODE_ON)
     {
-        aTabFT.Hide();
-        aTabMF.Hide();
+        m_pTabFT->Hide();
+        m_pTabMF->Hide();
     }
 
     SvtCJKOptions aCJKOptions;
     if(!aCJKOptions.IsAsianTypographyEnabled())
     {
-        aUseSquaredPageMode.Hide();
-        aUseCharUnit.Hide();
+        m_pUseSquaredPageMode->Hide();
+        m_pUseCharUnit->Hide();
     }
-}
-
-SwLoadOptPage::~SwLoadOptPage()
-{
 }
 
 SfxTabPage* SwLoadOptPage::Create( Window* pParent,
@@ -149,80 +131,80 @@ sal_Bool SwLoadOptPage::FillItemSet( SfxItemSet& rSet )
     SwModule* pMod = SW_MOD();
 
     sal_uInt16 nNewLinkMode = AUTOMATIC;
-    if (aNeverRB.IsChecked())
+    if (m_pNeverRB->IsChecked())
         nNewLinkMode = NEVER;
-    else if (aRequestRB.IsChecked())
+    else if (m_pRequestRB->IsChecked())
         nNewLinkMode = MANUAL;
 
-    SwFldUpdateFlags eFldFlags = aAutoUpdateFields.IsChecked() ?
-        aAutoUpdateCharts.IsChecked() ? AUTOUPD_FIELD_AND_CHARTS : AUTOUPD_FIELD_ONLY : AUTOUPD_OFF;
+    SwFldUpdateFlags eFldFlags = m_pAutoUpdateFields->IsChecked() ?
+        m_pAutoUpdateCharts->IsChecked() ? AUTOUPD_FIELD_AND_CHARTS : AUTOUPD_FIELD_ONLY : AUTOUPD_OFF;
 
-    if(aAutoUpdateFields.IsChecked() != aAutoUpdateFields.GetSavedValue() ||
-            aAutoUpdateCharts.IsChecked() != aAutoUpdateCharts.GetSavedValue())
+    if(m_pAutoUpdateFields->IsChecked() != m_pAutoUpdateFields->GetSavedValue() ||
+            m_pAutoUpdateCharts->IsChecked() != m_pAutoUpdateCharts->GetSavedValue())
     {
         pMod->ApplyFldUpdateFlags(eFldFlags);
-        if(pWrtShell)
+        if(m_pWrtShell)
         {
-            pWrtShell->SetFldUpdateFlags(eFldFlags);
-            pWrtShell->SetModified();
+            m_pWrtShell->SetFldUpdateFlags(eFldFlags);
+            m_pWrtShell->SetModified();
         }
     }
 
-    if (nNewLinkMode != nOldLinkMode)
+    if (nNewLinkMode != m_nOldLinkMode)
     {
         pMod->ApplyLinkMode(nNewLinkMode);
-        if (pWrtShell)
+        if (m_pWrtShell)
         {
-            pWrtShell->SetLinkUpdMode( nNewLinkMode );
-            pWrtShell->SetModified();
+            m_pWrtShell->SetLinkUpdMode( nNewLinkMode );
+            m_pWrtShell->SetModified();
         }
 
         bRet = sal_True;
     }
 
-    const sal_uInt16 nMPos = aMetricLB.GetSelectEntryPos();
-    if ( nMPos != aMetricLB.GetSavedValue() )
+    const sal_uInt16 nMPos = m_pMetricLB->GetSelectEntryPos();
+    if ( nMPos != m_pMetricLB->GetSavedValue() )
     {
         // Double-Cast for VA3.0
-        sal_uInt16 nFieldUnit = (sal_uInt16)(sal_IntPtr)aMetricLB.GetEntryData( nMPos );
+        sal_uInt16 nFieldUnit = (sal_uInt16)(sal_IntPtr)m_pMetricLB->GetEntryData( nMPos );
         rSet.Put( SfxUInt16Item( SID_ATTR_METRIC, (sal_uInt16)nFieldUnit ) );
         bRet = sal_True;
     }
 
-    if(aTabMF.IsVisible() && aTabMF.GetText() != aTabMF.GetSavedValue())
+    if(m_pTabMF->IsVisible() && m_pTabMF->GetText() != m_pTabMF->GetSavedValue())
     {
         rSet.Put(SfxUInt16Item(SID_ATTR_DEFTABSTOP,
-                    (sal_uInt16)aTabMF.Denormalize(aTabMF.GetValue(FUNIT_TWIP))));
+                    (sal_uInt16)m_pTabMF->Denormalize(m_pTabMF->GetValue(FUNIT_TWIP))));
         bRet = sal_True;
     }
 
-    sal_Bool bIsUseCharUnitFlag = aUseCharUnit.IsChecked();
+    sal_Bool bIsUseCharUnitFlag = m_pUseCharUnit->IsChecked();
     SvtCJKOptions aCJKOptions;
         bIsUseCharUnitFlag = bIsUseCharUnitFlag && aCJKOptions.IsAsianTypographyEnabled();
-    if( bIsUseCharUnitFlag != aUseCharUnit.GetSavedValue())
+    if( bIsUseCharUnitFlag != m_pUseCharUnit->GetSavedValue())
     {
         rSet.Put(SfxBoolItem(SID_ATTR_APPLYCHARUNIT, bIsUseCharUnitFlag ));
         bRet = sal_True;
     }
 
-    if (aWordCountED.GetText() != aWordCountED.GetSavedValue())
+    if (m_pWordCountED->GetText() != m_pWordCountED->GetSavedValue())
     {
         boost::shared_ptr< comphelper::ConfigurationChanges > batch(
             comphelper::ConfigurationChanges::create());
-        officecfg::Office::Writer::WordCount::AdditionalSeparators::set(aWordCountED.GetText(), batch);
+        officecfg::Office::Writer::WordCount::AdditionalSeparators::set(m_pWordCountED->GetText(), batch);
         batch->commit();
         bRet = sal_True;
     }
 
-    sal_Bool bIsSquaredPageModeFlag = aUseSquaredPageMode.IsChecked();
-    if ( bIsSquaredPageModeFlag != aUseSquaredPageMode.GetSavedValue() )
+    sal_Bool bIsSquaredPageModeFlag = m_pUseSquaredPageMode->IsChecked();
+    if ( bIsSquaredPageModeFlag != m_pUseSquaredPageMode->GetSavedValue() )
     {
         pMod->ApplyDefaultPageMode( bIsSquaredPageModeFlag );
-        if ( pWrtShell )
+        if ( m_pWrtShell )
         {
-            SwDoc* pDoc = pWrtShell->GetDoc();
+            SwDoc* pDoc = m_pWrtShell->GetDoc();
             pDoc->SetDefaultPageMode( bIsSquaredPageModeFlag );
-            pWrtShell->SetModified();
+            m_pWrtShell->SetModified();
         }
         bRet = sal_True;
     }
@@ -236,99 +218,94 @@ void SwLoadOptPage::Reset( const SfxItemSet& rSet)
     const SfxPoolItem* pItem;
 
     if(SFX_ITEM_SET == rSet.GetItemState(FN_PARAM_WRTSHELL, sal_False, &pItem))
-        pWrtShell = (SwWrtShell*)((const SwPtrItem*)pItem)->GetValue();
+        m_pWrtShell = (SwWrtShell*)((const SwPtrItem*)pItem)->GetValue();
 
     SwFldUpdateFlags eFldFlags = AUTOUPD_GLOBALSETTING;
-    nOldLinkMode = GLOBALSETTING;
-    if (pWrtShell)
+    m_nOldLinkMode = GLOBALSETTING;
+    if (m_pWrtShell)
     {
-        eFldFlags = pWrtShell->GetFldUpdateFlags(sal_True);
-        nOldLinkMode = pWrtShell->GetLinkUpdMode(sal_True);
+        eFldFlags = m_pWrtShell->GetFldUpdateFlags(sal_True);
+        m_nOldLinkMode = m_pWrtShell->GetLinkUpdMode(sal_True);
     }
-    if(GLOBALSETTING == nOldLinkMode)
-        nOldLinkMode = pUsrPref->GetUpdateLinkMode();
+    if(GLOBALSETTING == m_nOldLinkMode)
+        m_nOldLinkMode = pUsrPref->GetUpdateLinkMode();
     if(AUTOUPD_GLOBALSETTING == eFldFlags)
         eFldFlags = pUsrPref->GetFldUpdateFlags();
 
-    aAutoUpdateFields.Check(eFldFlags != AUTOUPD_OFF);
-    aAutoUpdateCharts.Check(eFldFlags == AUTOUPD_FIELD_AND_CHARTS);
+    m_pAutoUpdateFields->Check(eFldFlags != AUTOUPD_OFF);
+    m_pAutoUpdateCharts->Check(eFldFlags == AUTOUPD_FIELD_AND_CHARTS);
 
-    switch (nOldLinkMode)
+    switch (m_nOldLinkMode)
     {
-        case NEVER:     aNeverRB.Check();   break;
-        case MANUAL:    aRequestRB.Check(); break;
-        case AUTOMATIC: aAlwaysRB.Check();  break;
+        case NEVER:     m_pNeverRB->Check();   break;
+        case MANUAL:    m_pRequestRB->Check(); break;
+        case AUTOMATIC: m_pAlwaysRB->Check();  break;
     }
 
-    aAutoUpdateFields.SaveValue();
-    aAutoUpdateCharts.SaveValue();
-    aMetricLB.SetNoSelection();
+    m_pAutoUpdateFields->SaveValue();
+    m_pAutoUpdateCharts->SaveValue();
+    m_pMetricLB->SetNoSelection();
     if ( rSet.GetItemState( SID_ATTR_METRIC ) >= SFX_ITEM_AVAILABLE )
     {
         const SfxUInt16Item& rItem = (SfxUInt16Item&)rSet.Get( SID_ATTR_METRIC );
         FieldUnit eFieldUnit = (FieldUnit)rItem.GetValue();
 
-        for ( sal_uInt16 i = 0; i < aMetricLB.GetEntryCount(); ++i )
+        for ( sal_uInt16 i = 0; i < m_pMetricLB->GetEntryCount(); ++i )
         {
-            if ( (int)(sal_IntPtr)aMetricLB.GetEntryData( i ) == (int)eFieldUnit )
+            if ( (int)(sal_IntPtr)m_pMetricLB->GetEntryData( i ) == (int)eFieldUnit )
             {
-                aMetricLB.SelectEntryPos( i );
+                m_pMetricLB->SelectEntryPos( i );
                 break;
             }
         }
-        ::SetFieldUnit(aTabMF, eFieldUnit);
+        ::SetFieldUnit(*m_pTabMF, eFieldUnit);
     }
-    aMetricLB.SaveValue();
+    m_pMetricLB->SaveValue();
     if(SFX_ITEM_SET == rSet.GetItemState(SID_ATTR_DEFTABSTOP, sal_False, &pItem))
     {
-        nLastTab = ((SfxUInt16Item*)pItem)->GetValue();
-        aTabMF.SetValue(aTabMF.Normalize(nLastTab), FUNIT_TWIP);
+        m_nLastTab = ((SfxUInt16Item*)pItem)->GetValue();
+        m_pTabMF->SetValue(m_pTabMF->Normalize(m_nLastTab), FUNIT_TWIP);
     }
-    aTabMF.SaveValue();
-
-    if(SFX_ITEM_SET == rSet.GetItemState(SID_HTML_MODE, sal_False, &pItem))
-    {
-        bHTMLMode = 0 != (((const SfxUInt16Item*)pItem)->GetValue() & HTMLMODE_ON);
-    }
+    m_pTabMF->SaveValue();
 
     //default page mode loading
-    if(pWrtShell)
+    if(m_pWrtShell)
     {
-        sal_Bool bSquaredPageMode = pWrtShell->GetDoc()->IsSquaredPageMode();
-        aUseSquaredPageMode.Check( bSquaredPageMode );
-            aUseSquaredPageMode.SaveValue();
+        bool bSquaredPageMode = m_pWrtShell->GetDoc()->IsSquaredPageMode();
+        m_pUseSquaredPageMode->Check( bSquaredPageMode );
+        m_pUseSquaredPageMode->SaveValue();
     }
 
     if(SFX_ITEM_SET == rSet.GetItemState(SID_ATTR_APPLYCHARUNIT, sal_False, &pItem))
     {
-        sal_Bool bUseCharUnit = ((const SfxBoolItem*)pItem)->GetValue();
-        aUseCharUnit.Check(bUseCharUnit);
+        bool bUseCharUnit = ((const SfxBoolItem*)pItem)->GetValue();
+        m_pUseCharUnit->Check(bUseCharUnit);
     }
     else
     {
-        aUseCharUnit.Check(pUsrPref->IsApplyCharUnit());
+        m_pUseCharUnit->Check(pUsrPref->IsApplyCharUnit());
     }
-    aUseCharUnit.SaveValue();
+    m_pUseCharUnit->SaveValue();
 
-    aWordCountED.SetText(officecfg::Office::Writer::WordCount::AdditionalSeparators::get());
-    aWordCountED.SaveValue();
+    m_pWordCountED->SetText(officecfg::Office::Writer::WordCount::AdditionalSeparators::get());
+    m_pWordCountED->SaveValue();
 }
 
 IMPL_LINK_NOARG(SwLoadOptPage, MetricHdl)
 {
-    const sal_uInt16 nMPos = aMetricLB.GetSelectEntryPos();
+    const sal_uInt16 nMPos = m_pMetricLB->GetSelectEntryPos();
     if(nMPos != USHRT_MAX)
     {
         // Double-Cast for VA3.0
-        FieldUnit eFieldUnit = (FieldUnit)(sal_IntPtr)aMetricLB.GetEntryData( nMPos );
-        sal_Bool bModified = aTabMF.IsModified();
+        FieldUnit eFieldUnit = (FieldUnit)(sal_IntPtr)m_pMetricLB->GetEntryData( nMPos );
+        sal_Bool bModified = m_pTabMF->IsModified();
         long nVal = bModified ?
-            sal::static_int_cast<sal_Int32, sal_Int64 >( aTabMF.Denormalize( aTabMF.GetValue( FUNIT_TWIP ) )) :
-                nLastTab;
-        ::SetFieldUnit( aTabMF, eFieldUnit );
-        aTabMF.SetValue( aTabMF.Normalize( nVal ), FUNIT_TWIP );
+            sal::static_int_cast<sal_Int32, sal_Int64 >( m_pTabMF->Denormalize( m_pTabMF->GetValue( FUNIT_TWIP ) )) :
+                m_nLastTab;
+        ::SetFieldUnit( *m_pTabMF, eFieldUnit );
+        m_pTabMF->SetValue( m_pTabMF->Normalize( nVal ), FUNIT_TWIP );
         if(!bModified)
-            aTabMF.ClearModifyFlag();
+            m_pTabMF->ClearModifyFlag();
     }
 
     return 0;

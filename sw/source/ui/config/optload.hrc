@@ -17,27 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-// SwLoadOptPage --------------------------------
-
-#define FL_UPDATE               10
-#define FT_LINK                 11
-#define RB_ALWAYS               12
-#define RB_REQUEST              13
-#define RB_NEVER                14
-#define FT_FIELD                15
-#define CB_AUTO_UPDATE_FIELDS   16
-#define CB_AUTO_UPDATE_CHARTS   17
-#define FL_SETTINGS             18
-#define LB_METRIC               19
-#define FT_METRIC               20
-#define FT_TAB                  21
-#define MF_TAB                  22
-#define CB_USE_SQUARE_PAGE_MODE 23
-#define CB_USE_CHAR_UNIT        24
-#define FL_WORDCOUNT            25
-#define FT_WORDCOUNT            26
-#define ED_WORDCOUNT            27
-
 // SwCaptionOptPage -----------------------------
 
 #define FT_OBJECTS              10
