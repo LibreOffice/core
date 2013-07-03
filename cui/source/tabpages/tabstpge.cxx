@@ -141,6 +141,9 @@ SvxTabulatorTabPage::SvxTabulatorTabPage( Window* pParent, const SfxItemSet& rAt
     get(m_pDelAllBtn,"buttonBTN_DELALL");
     get(m_pDelBtn,"buttonBTN_DEL");
 
+    get(m_pTypeFrame, "frameFL_TABTYPE");
+    get(m_pFillFrame, "frameFL_FILLCHAR");
+
     // This page needs ExchangeSupport
     SetExchangeSupport();
 
@@ -160,7 +163,6 @@ SvxTabulatorTabPage::SvxTabulatorTabPage( Window* pParent, const SfxItemSet& rAt
     m_pCenterTab->SetClickHdl( aLink );
 
     m_pDezChar->SetLoseFocusHdl( LINK( this,  SvxTabulatorTabPage, GetDezCharHdl_Impl ) );
-    //m_pDezChar->SetMaxTextLen(1);
     m_pDezChar->Disable();
     m_pDezCharLabel->Disable();
 
@@ -171,7 +173,6 @@ SvxTabulatorTabPage::SvxTabulatorTabPage( Window* pParent, const SfxItemSet& rAt
     m_pFillSolidLine->SetClickHdl( aLink );
     m_pFillSpecial->SetClickHdl( aLink );
     m_pFillChar->SetLoseFocusHdl( LINK( this,  SvxTabulatorTabPage, GetFillCharHdl_Impl ) );
-    //m_pFillChar->SetMaxTextLen(1);
     m_pFillChar->Disable();
 
     m_pTabBox->SetDoubleClickHdl( LINK( this, SvxTabulatorTabPage, SelectHdl_Impl ) );
@@ -336,8 +337,8 @@ void SvxTabulatorTabPage::DisableControls( const sal_uInt16 nFlag )
         m_pDezCharLabel->Disable();
         m_pDezChar->Disable();
     }
-//     if ( ( TABTYPE_ALL & nFlag ) == TABTYPE_ALL )
-//         m_pTabTypeLabel->Disable();
+     if ( ( TABTYPE_ALL & nFlag ) == TABTYPE_ALL )
+         m_pTypeFrame->Disable();
     if ( ( TABFILL_NONE & nFlag ) == TABFILL_NONE )
         m_pNoFillChar->Disable();
     if ( ( TABFILL_POINT & nFlag ) == TABFILL_POINT )
@@ -351,8 +352,8 @@ void SvxTabulatorTabPage::DisableControls( const sal_uInt16 nFlag )
         m_pFillSpecial->Disable();
         m_pFillChar->Disable();
     }
-//     if ( ( TABFILL_ALL & nFlag ) == TABFILL_ALL )
-//         m_pFillLabel->Disable();
+     if ( ( TABFILL_ALL & nFlag ) == TABFILL_ALL )
+         m_pFillFrame->Disable();
 }
 
 // -----------------------------------------------------------------------

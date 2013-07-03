@@ -23,6 +23,7 @@
 #include <vcl/edit.hxx>
 #include <vcl/field.hxx>
 #include <vcl/fixed.hxx>
+#include <vcl/layout.hxx>
 #include <sfx2/tabdlg.hxx>
 
 #include <editeng/tstpitem.hxx>
@@ -93,6 +94,9 @@ private:
     PushButton*     m_pNewBtn;
     PushButton*     m_pDelAllBtn;
     PushButton*     m_pDelBtn;
+
+    VclContainer*   m_pTypeFrame;
+    VclContainer*   m_pFillFrame;
 
     // local variables, internal functions
     SvxTabStop      aAktTab;
