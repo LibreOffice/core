@@ -289,6 +289,7 @@ private:
     void operator =(OOXMLFastContextHandler &); // not defined
 
     uno::Reference< uno::XComponentContext > m_xContext;
+    bool m_bDiscardChildren;
 
     static sal_uInt32 mnInstanceCount;
 
