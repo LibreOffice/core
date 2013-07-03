@@ -2345,9 +2345,4 @@ std::set<SwRootFrm*> SwDoc::GetAllLayouts()
     return aAllLayouts;
 } //swmod 070825
 
-void SwDoc::ShareLayout(boost::shared_ptr<SwRootFrm>& rPtr)
-{
-    pLayoutPtr = rPtr;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
