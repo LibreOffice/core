@@ -88,7 +88,6 @@ $(eval $(call gb_Library_add_exception_objects,svl,\
     svl/source/items/ptitem \
     svl/source/items/rectitem \
     svl/source/items/rngitem \
-    svl/source/items/sfontitm \
     svl/source/items/sitem \
     svl/source/items/slstitm \
     svl/source/items/srchitem \

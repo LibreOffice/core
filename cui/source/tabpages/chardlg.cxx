@@ -21,7 +21,6 @@
 #include <vcl/svapp.hxx>
 #include <unotools/pathoptions.hxx>
 #include <svtools/ctrltool.hxx>
-#include <svl/sfontitm.hxx>
 #include <sfx2/printer.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/viewsh.hxx>
