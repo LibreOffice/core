@@ -221,5 +221,4 @@ svx::sidebar::TextCharacterSpacingControl::ToGetFocus()
 unoidl::UnoidlProvider::getConstant(unsigned int) const
 utl::ConfigItem::getUniqueSetElementName(rtl::OUString const&, rtl::OUString&)
 utl::toISO8601(com::sun::star::util::Time const&)
-vcl::unohelper::getNaturalStringSorterForAppLocale()
 vclmain::createApplication()

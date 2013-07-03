@@ -151,17 +151,6 @@ namespace
     };
 }
 
-namespace vcl
-{
-    namespace unohelper
-    {
-        const comphelper::string::NaturalStringSorter& getNaturalStringSorterForAppLocale()
-        {
-            return theSorter::get();
-        }
-    }
-}
-
 sal_uInt16 ImplEntryList::InsertEntry( sal_uInt16 nPos, ImplEntryType* pNewEntry, sal_Bool bSort )
 {
     if ( !!pNewEntry->maImage )
