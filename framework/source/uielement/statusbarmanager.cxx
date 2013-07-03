@@ -130,25 +130,6 @@ static sal_uInt16 impl_convertItemStyleToItemBits( sal_Int16 nStyle )
 }
 
 }
-//*****************************************************************************************************************
-//  XInterface, XTypeProvider, XServiceInfo
-//*****************************************************************************************************************
-DEFINE_XINTERFACE_5                     (   StatusBarManager                                                        ,
-                                            ::cppu::OWeakObject                                                     ,
-                                            DIRECT_INTERFACE( lang::XTypeProvider                                   ),
-                                            DIRECT_INTERFACE( lang::XComponent                                      ),
-                                            DIRECT_INTERFACE( frame::XFrameActionListener                           ),
-                                            DIRECT_INTERFACE( css::ui::XUIConfigurationListener                    ),
-                                            DERIVED_INTERFACE( lang::XEventListener, frame::XFrameActionListener    )
-                                        )
-
-DEFINE_XTYPEPROVIDER_5                  (   StatusBarManager                    ,
-                                            lang::XTypeProvider                 ,
-                                            lang::XComponent                    ,
-                                            css::ui::XUIConfigurationListener  ,
-                                            frame::XFrameActionListener         ,
-                                            lang::XEventListener
-                                        )
 
 StatusBarManager::StatusBarManager(
     const uno::Reference< uno::XComponentContext >& rxContext,
@@ -156,7 +137,6 @@ StatusBarManager::StatusBarManager(
     const OUString& rResourceName,
     StatusBar* pStatusBar ) :
     ThreadHelpBase( &Application::GetSolarMutex() ),
-    OWeakObject(),
     m_bDisposed( sal_False ),
     m_bFrameActionRegistered( sal_False ),
     m_bUpdateControllers( sal_False ),

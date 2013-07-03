@@ -35,7 +35,7 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 
 #include <rtl/ustring.hxx>
-#include <cppuhelper/weak.hxx>
+#include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <vcl/status.hxx>
 #include <map>
@@ -44,12 +44,12 @@ namespace framework
 {
 
 class FrameworkStatusBar;
-class StatusBarManager : public ::com::sun::star::frame::XFrameActionListener         ,
-                         public ::com::sun::star::lang::XComponent                    ,
-                         public ::com::sun::star::lang::XTypeProvider                 ,
-                         public ::com::sun::star::ui::XUIConfigurationListener,
-                         public ThreadHelpBase                                        ,
-                         public ::cppu::OWeakObject
+class StatusBarManager : public ThreadHelpBase,
+                         public ::cppu::WeakImplHelper3<
+                                   css::frame::XFrameActionListener,
+                                   css::lang::XComponent,
+                                   css::ui::XUIConfigurationListener >
+
 {
     friend class FrameworkStatusBar;
 
@@ -59,10 +59,6 @@ class StatusBarManager : public ::com::sun::star::frame::XFrameActionListener   
                           const OUString& rResourceName,
                           StatusBar* pStatusBar );
         virtual ~StatusBarManager();
-
-        //  XInterface, XTypeProvider, XServiceInfo
-        FWK_DECLARE_XINTERFACE
-        FWK_DECLARE_XTYPEPROVIDER
 
         StatusBar* GetStatusBar() const;
 
