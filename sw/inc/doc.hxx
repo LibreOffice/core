@@ -79,7 +79,6 @@ class SwList;
 #include <memory>
 
 #include <boost/scoped_ptr.hpp>
-#include <boost/shared_ptr.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>
 
 namespace editeng { class SvxBorderLine; }
@@ -317,7 +316,6 @@ class SW_DLLPUBLIC SwDoc :
     SwDefTOXBase_Impl * mpDefTOXBases;   ///< defaults of SwTOXBase's
 
     ViewShell       *mpCurrentView;  ///< SwDoc should get a new member mpCurrentView//swmod 071225
-    boost::shared_ptr<SwRootFrm> mpLayoutPtr;
     SdrModel        *mpDrawModel;        ///< StarView Drawing
 
     SwDocUpdtFld    *mpUpdtFlds;         ///< Struct for updating fields
@@ -1769,8 +1767,6 @@ public:
           SwDocShell* GetDocShell()         { return mpDocShell; }
     const SwDocShell* GetDocShell() const   { return mpDocShell; }
     void SetDocShell( SwDocShell* pDSh );
-
-    void ShareLayout( boost::shared_ptr<SwRootFrm>& rPtr);
 
     /** in case during copying of embedded object a new shell is created,
      it should be set here and cleaned later */

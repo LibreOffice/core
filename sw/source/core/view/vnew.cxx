@@ -128,17 +128,6 @@ void ViewShell::Init( const SwViewOption *pNewOpt )
             // switched to two step construction because creating the layout in SwRootFrm needs a valid pLayout set
             mpLayout = SwRootFrmPtr(new SwRootFrm( mpDoc->GetDfltFrmFmt(), this ));
             mpLayout->Init( mpDoc->GetDfltFrmFmt() );
-
-            // mba: the layout refactoring overlooked an important detail
-            // prior to that change, the layout always was destroyed in the dtor of swdoc
-            // it is necessary to suppress notifications in the layout when the layout is discarded in its dtor
-            // unfortunately this was done by asking whether the doc is in dtor - though the correct question should
-            // have been if the rootfrm is in dtor (or even better: discard the layout before the SwRootFrm is destroyed!)
-            // SwDoc::IsInDtor() is used at several places all over the code that need to be checked whether
-            // "pDoc->IsInDtor()" means what is says or in fact should check for "pRootFrm->IsInDtor()". As this will take some time, I decided
-            // to postpone that investigations and the changes it will bring to the 3.5 release and for 3.4 make sure
-            // that the layout still gets destroyed in the doc dtor. This is done by sharing "the" layout (that we still have) with the doc.
-            GetDoc()->ShareLayout( mpLayout );
         }
     }
     SizeChgNotify();    //swmod 071108
