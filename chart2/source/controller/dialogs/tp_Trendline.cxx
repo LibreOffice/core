@@ -29,7 +29,7 @@ namespace chart
 
 TrendlineTabPage::TrendlineTabPage( Window* pParent, const SfxItemSet& rInAttrs ) :
         SfxTabPage( pParent, SchResId( TP_TRENDLINE ), rInAttrs ),
-        m_aTrendlineResources( this, rInAttrs, false )
+        m_aTrendlineResources( this, rInAttrs )
 {
     FreeResource();
 }

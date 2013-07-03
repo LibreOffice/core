@@ -18,7 +18,7 @@
  */
 #include "HelpIds.hrc"
 #include "TabPages.hrc"
-#include "res_Trendline.hrc"
+#include "tp_Trendline.hrc"
 
 TabPage TP_TRENDLINE
 {
@@ -26,7 +26,201 @@ TabPage TP_TRENDLINE
     Hide = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( TP_WIDTH , TP_HEIGHT ) ;
-    RESOURCE_TRENDLINE( 260 - 12, 0 )
+
+    FixedLine FL_TYPE
+    {
+        Pos = MAP_APPFONT( 6 ,6  );
+        Size = MAP_APPFONT( 248 - 12 ,8 );
+        Text[ en-US ] = "Regression Type";
+    };
+    RadioButton RB_LINEAR
+    {
+        HelpId = HID_SCH_TRENDLINE_RB_LINEAR;
+        Pos = MAP_APPFONT( 29, 22 );
+        Size = MAP_APPFONT( 100, 10 );
+        Text[ en-US ] = "~Linear";
+    };
+    RadioButton RB_LOGARITHMIC
+    {
+        HelpId = HID_SCH_TRENDLINE_RB_LOGARITHMIC;
+        Pos = MAP_APPFONT( 29, 44 );
+        Size = MAP_APPFONT( 100, 10 );
+        Text[ en-US ] = "L~ogarithmic";
+    };
+    RadioButton RB_EXPONENTIAL
+    {
+        HelpId = HID_SCH_TRENDLINE_RB_EXPONENTIAL;
+        Pos = MAP_APPFONT( 29, 66 );
+        Size = MAP_APPFONT( 100, 10 );
+        Text[ en-US ] = "E~xponential";
+    };
+    RadioButton RB_POWER
+    {
+        HelpId = HID_SCH_TRENDLINE_RB_POWER;
+        Pos = MAP_APPFONT( 29, 88 );
+        Size = MAP_APPFONT( 100, 10 );
+        Text[ en-US ] = "~Power";
+    };
+    RadioButton RB_POLYNOMIAL
+    {
+        Pos = MAP_APPFONT( 130, 22 );
+        Size = MAP_APPFONT( 70, 10 );
+        Text[ en-US ] = "~Polynomial";
+    };
+    RadioButton RB_MOVING_AVERAGE
+    {
+        Pos = MAP_APPFONT( 130, 66 );
+        Size = MAP_APPFONT( 70, 10 );
+        Text[ en-US ] = "~Moving Average";
+    };
+    FixedImage FI_LINEAR
+    {
+        Pos = MAP_APPFONT( 10, 18 );
+        Size = MAP_APPFONT( 18, 18 );
+    };
+    FixedImage FI_LOGARITHMIC
+    {
+        Pos = MAP_APPFONT( 10, 40 );
+        Size = MAP_APPFONT( 18, 18 );
+    };
+    FixedImage FI_EXPONENTIAL
+    {
+        Pos = MAP_APPFONT( 10, 62 );
+        Size = MAP_APPFONT( 18, 18 );
+    };
+    FixedImage FI_POWER
+    {
+        Pos = MAP_APPFONT( 10, 84 );
+        Size = MAP_APPFONT( 18, 18 );
+    };
+    FixedImage FI_POLYNOMIAL
+    {
+        Pos = MAP_APPFONT( 110, 18 );
+        Size = MAP_APPFONT( 18, 18 );
+    };
+    FixedImage FI_MOVING_AVERAGE
+    {
+        Pos = MAP_APPFONT( 110, 62 );
+        Size = MAP_APPFONT( 18, 18 );
+    };
+    FixedText FT_DEGREE
+    {
+        Pos = MAP_APPFONT ( 110, 44 ) ;
+        Size = MAP_APPFONT ( 20 , 12 ) ;
+        Text [ en-US ] = "Degree";
+    };
+    NumericField NF_DEGREE
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 132, 42 ) ;
+        Size = MAP_APPFONT ( 28 , 12 ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        StrictFormat = TRUE ;
+        SpinSize = 1 ;
+        Minimum = 2 ;
+        Maximum = 100 ;
+    };
+    FixedText FT_PERIOD
+    {
+        Pos = MAP_APPFONT ( 110, 88 ) ;
+        Size = MAP_APPFONT ( 20 , 12 ) ;
+        Text [ en-US ] = "Period";
+    };
+    NumericField NF_PERIOD
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 132, 86 ) ;
+        Size = MAP_APPFONT ( 28 , 12 ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        StrictFormat = TRUE ;
+        SpinSize = 1 ;
+        Minimum = 2 ;
+        Maximum = 100 ;
+    };
+    FixedLine FL_EQUATION
+    {
+        Pos = MAP_APPFONT( 6, 108 );
+        Size = MAP_APPFONT( 248 - 12, 8 );
+        Text[ en-US ] = "Options";
+    };
+    FixedText FT_EXTRAPOLATE_FORWARD
+    {
+        Pos = MAP_APPFONT ( 10, 120 ) ;
+        Size = MAP_APPFONT ( 70 , 12 ) ;
+        Text [ en-US ] = "Extrapolate ~forward";
+    };
+    NumericField NF_EXTRAPOLATE_FORWARD
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 80, 118 ) ;
+        Size = MAP_APPFONT ( 40 , 12 ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        StrictFormat = TRUE ;
+        SpinSize = 50 ;
+        Minimum = 0 ;
+        Maximum = 10000 ;
+        DecimalDigits = 2 ;
+    };
+    FixedText FT_EXTRAPOLATE_BACKWARD
+    {
+        Pos = MAP_APPFONT ( 10, 134 ) ;
+        Size = MAP_APPFONT ( 70 , 12 ) ;
+        Text [ en-US ] = "Extrapolate ~backward";
+    };
+    NumericField NF_EXTRAPOLATE_BACKWARD
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 80, 132 ) ;
+        Size = MAP_APPFONT ( 40 , 12 ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        StrictFormat = TRUE ;
+        SpinSize = 50 ;
+        Minimum = 0 ;
+        Maximum = 10000 ;
+        DecimalDigits = 2 ;
+    };
+    CheckBox CB_SET_INTERCEPT
+    {
+        HelpId = HID_SCH_TRENDLINE_SHOW_EQUATION;
+        Pos = MAP_APPFONT( 10, 148 );
+        Size = MAP_APPFONT( 60, 12 );
+        TabStop = TRUE;
+        Text[ en-US ] = "Force ~intercept";
+    };
+    NumericField NF_INTERCEPT_VALUE
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 80, 146 ) ;
+        Size = MAP_APPFONT ( 40 , 12 ) ;
+        TabStop = TRUE ;
+        Spin = TRUE ;
+        SpinSize = 1000 ;
+        DecimalDigits = 4 ;
+    };
+    CheckBox CB_SHOW_EQUATION
+    {
+        HelpId = HID_SCH_TRENDLINE_SHOW_EQUATION;
+        Pos = MAP_APPFONT( 10, 162 );
+        Size = MAP_APPFONT( 248 - 20, 10 );
+        TabStop = TRUE;
+        Text[ en-US ] = "Show ~equation";
+    };
+    CheckBox CB_SHOW_CORRELATION_COEFF
+    {
+        HelpId = HID_SCH_TRENDLINE_SHOW_R_SQUARED;
+        Pos = MAP_APPFONT( 10, 176 );
+        Size = MAP_APPFONT( 248 - 20, 10 );
+        TabStop = TRUE;
+        Text[ en-US ] = "Show ~coefficient of determination (R²)";
+    };
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

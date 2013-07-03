@@ -19,7 +19,7 @@
 
 
 #include "res_Trendline.hxx"
-#include "res_Trendline_IDs.hrc"
+#include "tp_Trendline.hrc"
 #include "ResId.hxx"
 #include "Strings.hrc"
 #include "Bitmaps.hrc"
@@ -58,10 +58,9 @@ namespace
 namespace chart
 {
 
-TrendlineResources::TrendlineResources( Window * pParent, const SfxItemSet& rInAttrs, bool bNoneAvailable ) :
+TrendlineResources::TrendlineResources( Window * pParent, const SfxItemSet& rInAttrs ) :
         m_aFLType( pParent, SchResId( FL_TYPE )),
 
-        m_aRBNone(          pParent, SchResId( RB_NONE              )),
         m_aRBLinear(        pParent, SchResId( RB_LINEAR            )),
         m_aRBLogarithmic(   pParent, SchResId( RB_LOGARITHMIC       )),
         m_aRBExponential(   pParent, SchResId( RB_EXPONENTIAL       )),
@@ -69,7 +68,6 @@ TrendlineResources::TrendlineResources( Window * pParent, const SfxItemSet& rInA
         m_aRBPolynomial(    pParent, SchResId( RB_POLYNOMIAL        )),
         m_aRBMovingAverage( pParent, SchResId( RB_MOVING_AVERAGE    )),
 
-        m_aFINone(          pParent, SchResId( FI_NONE              )),
         m_aFILinear(        pParent, SchResId( FI_LINEAR            )),
         m_aFILogarithmic(   pParent, SchResId( FI_LOGARITHMIC       )),
         m_aFIExponential(   pParent, SchResId( FI_EXPONENTIAL       )),
@@ -93,16 +91,10 @@ TrendlineResources::TrendlineResources( Window * pParent, const SfxItemSet& rInA
         m_aCBShowEquation(         pParent, SchResId( CB_SHOW_EQUATION          )),
         m_aCBShowCorrelationCoeff( pParent, SchResId( CB_SHOW_CORRELATION_COEFF )),
 
-        m_eTrendLineType( CHREGRESS_NONE ),
-        m_bNoneAvailable( bNoneAvailable ),
+        m_eTrendLineType( CHREGRESS_LINEAR ),
         m_bTrendLineUnique( true )
 {
     FillValueSets();
-
-    if( m_bNoneAvailable )
-        m_aRBNone.SetClickHdl( LINK(this, TrendlineResources, SelectTrendLine ));
-    else
-        m_aRBNone.Hide();
 
     m_aRBLinear.SetClickHdl( LINK(this, TrendlineResources, SelectTrendLine ));
     m_aRBLogarithmic.SetClickHdl( LINK(this, TrendlineResources, SelectTrendLine ));
@@ -125,7 +117,6 @@ long TrendlineResources::adjustControlSizes()
 {
     // calculate right edge
     std::vector< long > aControlRightEdges;
-    aControlRightEdges.push_back( lcl_getRightEdge( m_aRBNone ));
     aControlRightEdges.push_back( lcl_getRightEdge( m_aRBLinear ));
     aControlRightEdges.push_back( lcl_getRightEdge( m_aRBLogarithmic ));
     aControlRightEdges.push_back( lcl_getRightEdge( m_aRBExponential ));
@@ -143,8 +134,6 @@ long TrendlineResources::adjustControlSizes()
     aControlRightEdges.push_back( lcl_getRightEdge( m_aCBShowEquation ));
     aControlRightEdges.push_back( lcl_getRightEdge( m_aCBShowCorrelationCoeff ));
 
-
-    lcl_AdjustControlSize( m_aRBNone );
     lcl_AdjustControlSize( m_aRBLinear );
     lcl_AdjustControlSize( m_aRBLogarithmic );
     lcl_AdjustControlSize( m_aRBExponential );
@@ -193,11 +182,6 @@ IMPL_LINK( TrendlineResources, SelectTrendLine, RadioButton *, pRadioButton )
         m_eTrendLineType = CHREGRESS_POLYNOMIAL;
     else if( pRadioButton == &m_aRBMovingAverage )
         m_eTrendLineType = CHREGRESS_MOVING_AVERAGE;
-    else if( pRadioButton == &m_aRBNone )
-    {
-        OSL_ASSERT( m_bNoneAvailable );
-        m_eTrendLineType = CHREGRESS_NONE;
-    }
     m_bTrendLineUnique = true;
 
     UpdateControlStates();
@@ -331,9 +315,7 @@ void TrendlineResources::Reset( const SfxItemSet& rInAttrs )
             case CHREGRESS_MOVING_AVERAGE :
                 m_aRBMovingAverage.Check();
                 break;
-            case CHREGRESS_NONE:
-                OSL_ASSERT( m_bNoneAvailable );
-                m_aRBNone.Check();
+            default:
                 break;
         }
     }
@@ -373,8 +355,6 @@ sal_Bool TrendlineResources::FillItemSet(SfxItemSet& rOutAttrs) const
 
 void TrendlineResources::FillValueSets()
 {
-    if( m_bNoneAvailable )
-        m_aFINone.SetImage(     Image( SchResId( BMP_REGRESSION_NONE            ) ) );
     m_aFILinear.SetImage(       Image( SchResId( BMP_REGRESSION_LINEAR          ) ) );
     m_aFILogarithmic.SetImage(  Image( SchResId( BMP_REGRESSION_LOG             ) ) );
     m_aFIExponential.SetImage(  Image( SchResId( BMP_REGRESSION_EXP             ) ) );
@@ -385,12 +365,6 @@ void TrendlineResources::FillValueSets()
 
 void TrendlineResources::UpdateControlStates()
 {
-    if( m_bNoneAvailable )
-    {
-        bool bEnableEquationControls = !m_bTrendLineUnique || (m_eTrendLineType != CHREGRESS_NONE);
-        m_aCBShowEquation.Enable( bEnableEquationControls );
-        m_aCBShowCorrelationCoeff.Enable( bEnableEquationControls );
-    }
 }
 
 } //  namespace chart

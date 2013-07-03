@@ -32,7 +32,7 @@ namespace chart
 class TrendlineResources
 {
 public:
-    TrendlineResources( Window* pParent, const SfxItemSet& rInAttrs, bool bNoneAvailable );
+    TrendlineResources( Window* pParent, const SfxItemSet& rInAttrs );
     virtual ~TrendlineResources();
 
     void Reset(const SfxItemSet& rInAttrs);
@@ -44,7 +44,7 @@ public:
 
 private:
     FixedLine m_aFLType;
-    RadioButton m_aRBNone;
+
     RadioButton m_aRBLinear;
     RadioButton m_aRBLogarithmic;
     RadioButton m_aRBExponential;
@@ -52,7 +52,6 @@ private:
     RadioButton m_aRBPolynomial;
     RadioButton m_aRBMovingAverage;
 
-    FixedImage  m_aFINone;
     FixedImage  m_aFILinear;
     FixedImage  m_aFILogarithmic;
     FixedImage  m_aFIExponential;
@@ -81,7 +80,6 @@ private:
 
     SvxChartRegress     m_eTrendLineType;
 
-    bool                m_bNoneAvailable;
     bool                m_bTrendLineUnique;
 
     void UpdateControlStates();

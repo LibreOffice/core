@@ -20,7 +20,6 @@
 #define FL_TYPE 1
 #define FL_EQUATION 2
 
-#define FI_NONE 1
 #define FI_LINEAR 2
 #define FI_LOGARITHMIC 3
 #define FI_EXPONENTIAL 4
@@ -39,7 +38,6 @@
 #define FT_EXTRAPOLATE_FORWARD 3
 #define FT_EXTRAPOLATE_BACKWARD 4
 
-#define RB_NONE 1
 #define RB_LINEAR 2
 #define RB_LOGARITHMIC 3
 #define RB_EXPONENTIAL 4
