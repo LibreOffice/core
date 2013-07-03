@@ -877,6 +877,18 @@ bool VclBuilder::extractModel(const OString &id, stringmap &rMap)
     return false;
 }
 
+bool VclBuilder::extractDropdown(VclBuilder::stringmap &rMap)
+{
+    bool bDropdown = true;
+    VclBuilder::stringmap::iterator aFind = rMap.find(OString("dropdown"));
+    if (aFind != rMap.end())
+    {
+        bDropdown = toBool(aFind->second);
+        rMap.erase(aFind);
+    }
+    return bDropdown;
+}
+
 bool VclBuilder::extractBuffer(const OString &id, stringmap &rMap)
 {
     VclBuilder::stringmap::iterator aFind = rMap.find(OString("buffer"));
@@ -1146,12 +1158,17 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
         OString sPattern = extractCustomProperty(rMap);
         extractModel(id, rMap);
 
+        WinBits nBits = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_DROPDOWN;
+
         if (!sPattern.isEmpty())
         {
+            OString sAdjustment = extractAdjustment(rMap);
             OString sUnit = extractUnit(sPattern);
             FieldUnit eUnit = detectMetricUnit(sUnit);
-            SAL_INFO("vcl.layout", "making metric box for " << name.getStr() << " " << sUnit.getStr());
-            MetricBox *pBox = new MetricBox(pParent, WB_LEFT|WB_DROPDOWN|WB_VCENTER|WB_3DLOOK);
+            SAL_WARN("vcl.layout", "making metric box for " << name.getStr() << " " << sUnit.getStr()
+                << " use a VclComboBoxNumeric instead");
+            MetricBox *pBox = new MetricBox(pParent, nBits);
+            pBox->EnableAutoSize(true);
             pBox->SetUnit(eUnit);
             if (eUnit == FUNIT_CUSTOM)
                 pBox->SetCustomUnitText(OStringToOUString(sUnit, RTL_TEXTENCODING_UTF8));
@@ -1159,7 +1176,7 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
         }
         else if (extractEntry(rMap))
         {
-            ComboBox* pComboBox = new ComboBox(pParent, WB_LEFT|WB_DROPDOWN|WB_VCENTER|WB_3DLOOK);
+            ComboBox* pComboBox = new ComboBox(pParent, nBits);
             pComboBox->EnableAutoSize(true);
             if (!rItems.empty())
             {
@@ -1173,7 +1190,7 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
         }
         else
         {
-            ListBox *pListBox = new ListBox(pParent, WB_LEFT|WB_DROPDOWN|WB_VCENTER|WB_3DLOOK|WB_SIMPLEMODE);
+            ListBox *pListBox = new ListBox(pParent, nBits|WB_SIMPLEMODE);
             pListBox->EnableAutoSize(true);
             if (!rItems.empty())
             {
@@ -1188,9 +1205,40 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
     }
     else if (name == "VclComboBoxNumeric")
     {
-        NumericBox* pComboBox = new NumericBox(pParent, WB_LEFT|WB_DROPDOWN|WB_VCENTER|WB_3DLOOK);
-        pComboBox->EnableAutoSize(true);
-        pWindow = pComboBox;
+        OString sPattern = extractCustomProperty(rMap);
+        OString sAdjustment = extractAdjustment(rMap);
+        extractModel(id, rMap);
+
+        WinBits nBits = WB_LEFT|WB_VCENTER|WB_3DLOOK;
+
+        bool bDropdown = VclBuilder::extractDropdown(rMap);
+
+        if (bDropdown)
+            nBits |= WB_DROPDOWN;
+
+        if (!sPattern.isEmpty())
+        {
+            OString sUnit = extractUnit(sPattern);
+            FieldUnit eUnit = detectMetricUnit(sUnit);
+            SAL_INFO("vcl.layout", "making metric box for " << name.getStr() << " " << sUnit.getStr());
+            connectNumericFormatterAdjustment(id, sAdjustment);
+            MetricBox *pBox = new MetricBox(pParent, nBits|WB_BORDER);
+            if (bDropdown)
+                pBox->EnableAutoSize(true);
+            pBox->SetUnit(eUnit);
+            if (eUnit == FUNIT_CUSTOM)
+                pBox->SetCustomUnitText(OStringToOUString(sUnit, RTL_TEXTENCODING_UTF8));
+            pWindow = pBox;
+        }
+        else
+        {
+            SAL_INFO("vcl.layout", "making numeric box for " << name.getStr());
+            connectNumericFormatterAdjustment(id, sAdjustment);
+            NumericBox* pBox = new NumericBox(pParent, nBits);
+            if (bDropdown)
+                pBox->EnableAutoSize(true);
+            pWindow = pBox;
+        }
     }
     else if (name == "GtkTreeView")
     {

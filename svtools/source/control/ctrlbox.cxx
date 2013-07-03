@@ -114,24 +114,9 @@ ColorListBox::ColorListBox( Window* pParent, const ResId& rResId ) :
     SetEdgeBlending(true);
 }
 
-namespace
-{
-    bool extractDropdown(VclBuilder::stringmap &rMap)
-    {
-        bool bDropdown = true;
-        VclBuilder::stringmap::iterator aFind = rMap.find(OString(RTL_CONSTASCII_STRINGPARAM("dropdown")));
-        if (aFind != rMap.end())
-        {
-            bDropdown = toBool(aFind->second);
-            rMap.erase(aFind);
-        }
-        return bDropdown;
-    }
-}
-
 extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeColorListBox(Window *pParent, VclBuilder::stringmap &rMap)
 {
-    bool bDropdown = extractDropdown(rMap);
+    bool bDropdown = VclBuilder::extractDropdown(rMap);
     WinBits nWinBits = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_TABSTOP;
     if (bDropdown)
         nWinBits |= WB_DROPDOWN;
@@ -797,7 +782,7 @@ LineListBox::LineListBox( Window* pParent, WinBits nWinStyle ) :
 
 extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeLineListBox(Window *pParent, VclBuilder::stringmap &rMap)
 {
-    bool bDropdown = extractDropdown(rMap);
+    bool bDropdown = VclBuilder::extractDropdown(rMap);
     WinBits nWinBits = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_TABSTOP;
     if (bDropdown)
         nWinBits |= WB_DROPDOWN;
@@ -1073,7 +1058,7 @@ FontNameBox::FontNameBox( Window* pParent, const ResId& rResId ) :
 
 extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeFontNameBox(Window *pParent, VclBuilder::stringmap &rMap)
 {
-    bool bDropdown = extractDropdown(rMap);
+    bool bDropdown = VclBuilder::extractDropdown(rMap);
     WinBits nWinBits = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_TABSTOP;
     if (bDropdown)
         nWinBits |= WB_DROPDOWN;
@@ -1461,7 +1446,7 @@ FontStyleBox::FontStyleBox( Window* pParent, WinBits nBits ) :
 
 extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeFontStyleBox(Window *pParent, VclBuilder::stringmap &rMap)
 {
-    bool bDropdown = extractDropdown(rMap);
+    bool bDropdown = VclBuilder::extractDropdown(rMap);
     WinBits nWinBits = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_TABSTOP;
     if (bDropdown)
         nWinBits |= WB_DROPDOWN;
@@ -1681,7 +1666,7 @@ FontSizeBox::FontSizeBox( Window* pParent, const ResId& rResId ) :
 
 extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeFontSizeBox(Window *pParent, VclBuilder::stringmap &rMap)
 {
-    bool bDropdown = extractDropdown(rMap);
+    bool bDropdown = VclBuilder::extractDropdown(rMap);
     WinBits nWinBits = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_TABSTOP;
     if (bDropdown)
         nWinBits |= WB_DROPDOWN;

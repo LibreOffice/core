@@ -290,6 +290,8 @@ public:
 
     static OString extractCustomProperty(stringmap &rMap);
 
+    static bool extractDropdown(stringmap &rMap);
+
     //add a default value of 25 width-chars to a map if width-chars not set
     static void ensureDefaultWidthChars(VclBuilder::stringmap &rMap);
 

@@ -30,30 +30,92 @@
     <glade-widget-class title="Hyphen Edit" name="cuilo-HyphenEdit"
                         generic-name="ReplaceEdit" parent="GtkEntry"
                         icon-name="widget-gtk-textentry"/>
+
+    <glade-widget-class title="VclComboBoxText" name="VclComboBoxText"
+                        generic-name="ComboBoxText" parent="GtkComboBoxText"
+                        icon-name="widget-gtk-comboboxtext">
+      <properties>
+        <property save="True" query="False" id="dropdown" default="True" name="Use DropDown">
+          <parameter-spec>
+            <type>GParamBoolean</type>
+          </parameter-spec>
+        </property>
+        <property save="True" query="False" id="max-width-chars" default="-1" name="Maximum Width in Characters">
+          <parameter-spec>
+            <type>GParamInt</type>
+            <min>-1</min>
+          </parameter-spec>
+          <tooltip>The desired maximum width of the ComboBox, in characters</tooltip>
+        </property>
+      </properties>
+    </glade-widget-class>
+
+    <glade-widget-class title="VclComboBoxNumeric" name="VclComboBoxNumeric"
+                        generic-name="ComboBoxNumeric" parent="VclComboBoxText"
+                        icon-name="widget-gtk-comboboxtext">
+      <properties>
+        <property save="True" query="False" id="adjustment" name="Adjustment">
+          <parameter-spec>
+            <type>GParamObject</type>
+            <value-type>GtkAdjustment</value-type>
+          </parameter-spec>
+          <tooltip>List of widgets in this group</tooltip>
+        </property>
+      </properties>
+    </glade-widget-class>
+
     <glade-widget-class title="Color ListBox" name="svtlo-ColorListBox"
                         generic-name="Color ListBox" parent="GtkComboBox"
-                        icon-name="widget-gtk-combobox"/>
+                        icon-name="widget-gtk-combobox">
+      <properties>
+        <property id="dropdown" default="True" common="True"/>
+      </properties>
+    </glade-widget-class>
+
     <glade-widget-class title="Other Color ListBox" name="svxlo-ColorLB"
                         generic-name="Other Color ListBox" parent="GtkComboBox"
                         icon-name="widget-gtk-combobox"/>
+
     <glade-widget-class title="Font Name ListBox" name="svtlo-FontNameBox"
                         generic-name="Font name ListBox" parent="GtkComboBox"
-                        icon-name="widget-gtk-combobox"/>
+                        icon-name="widget-gtk-combobox">
+      <properties>
+        <property id="dropdown" default="True" common="True"/>
+      </properties>
+    </glade-widget-class>
+
     <glade-widget-class title="Sidebar Font Name ListBox" name="svxlo-SvxSBFontNameBox"
                         generic-name="Sidebar Font name ListBox" parent="GtkComboBox"
                         icon-name="widget-gtk-combobox"/>
+
     <glade-widget-class title="Font Size ListBox" name="svtlo-FontSizeBox"
                         generic-name="Font Size ListBox" parent="GtkComboBox"
-                        icon-name="widget-gtk-combobox"/>
+                        icon-name="widget-gtk-combobox">
+      <properties>
+        <property id="dropdown" default="True" common="True"/>
+      </properties>
+    </glade-widget-class>
+
     <glade-widget-class title="Line ListBox" name="svtlo-LineListBox"
                         generic-name="Line ListBox" parent="GtkComboBox"
-                        icon-name="widget-gtk-combobox"/>
+                        icon-name="widget-gtk-combobox">
+      <properties>
+        <property id="dropdown" default="True" common="True"/>
+      </properties>
+    </glade-widget-class>
+
     <glade-widget-class title="Language ListBox" name="svxcorelo-SvxLanguageBox"
                         generic-name="LanguageBox" parent="GtkComboBox"
                         icon-name="widget-gtk-combobox"/>
+
     <glade-widget-class title="Font ListBox" name="svtlo-FontStyleBox"
                         generic-name="FontStyleBox" parent="GtkComboBox"
-                        icon-name="widget-gtk-combobox"/>
+                        icon-name="widget-gtk-combobox">
+      <properties>
+        <property id="dropdown" default="True" common="True"/>
+      </properties>
+    </glade-widget-class>
+
     <glade-widget-class title="Text Encoding ListBox" name="svxlo-SvxTextEncodingBox"
                         generic-name="TextEncodingBox" parent="GtkComboBox"
                         icon-name="widget-gtk-combobox"/>
@@ -198,23 +260,6 @@
     <glade-widget-class title="Relative Numeric Field" name="svxlo-SvxRelativeField"
                         generic-name="Relative Numeric Field" parent="GtkSpinButton"
                         icon-name="widget-gtk-spinbutton"/>                        
-    <glade-widget-class title="VclComboBoxText" name="VclComboBoxText"
-                        generic-name="ComboBoxText" parent="GtkComboBoxText"
-                        icon-name="widget-gtk-comboboxtext">
-      <properties>
-        <property save="True" query="False" id="max-width-chars" default="-1" name="Maximum Width in Characters">
-          <parameter-spec>
-            <type>GParamInt</type>
-            <min>-1</min>
-          </parameter-spec>
-          <tooltip>The desired maximum width of the ComboBox, in characters</tooltip>
-        </property>
-      </properties>
-    </glade-widget-class>
-
-    <glade-widget-class title="VclComboBoxNumeric" name="VclComboBoxNumeric"
-                        generic-name="ComboBoxNumeric" parent="VclComboBoxText"
-                        icon-name="widget-gtk-comboboxtext"/>
 
     <glade-widget-class title="SvtURLBox" name="svtlo-SvtURLBox"
                         generic-name="URLBox" parent="VclComboBoxText"
