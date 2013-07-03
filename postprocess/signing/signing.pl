@@ -147,9 +147,9 @@ sub sign_files      #09.07.2007 10:36
     }
     $signtool .= " -v" if ($opt_verbose);
     $commandline_base = $signtool;
-    $commandline_base .= " -f $opt_pfxfile" if ($opt_pfxfile != "");
-    $commandline_base .= " -p $opt_pass" if ($opt_pass != "");
-    $commandline_base .= " -t $opt_timestamp_url" if ($opt_timestamp_url != "");
+    $commandline_base .= " -f $opt_pfxfile" if ($opt_pfxfile ne "");
+    $commandline_base .= " -p $opt_pass" if ($opt_pass ne "");
+    $commandline_base .= " -t $opt_timestamp_url" if ($opt_timestamp_url ne "");
 
     # Here switch between:
     # one command line for muliple files (all doesn't work, too much) / for each file one command line
