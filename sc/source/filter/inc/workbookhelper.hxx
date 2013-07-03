@@ -26,6 +26,7 @@
 #include "oox/drawingml/chart/chartconverter.hxx"
 #include "biffhelper.hxx"
 #include "rangenam.hxx"
+#include "dbdataformatting.hxx"
 
 namespace com { namespace sun { namespace star {
     namespace container { class XNameAccess; }
@@ -198,6 +199,9 @@ public:
                         createDatabaseRangeObject(
                             OUString& orName,
                             const ::com::sun::star::table::CellRangeAddress& rRangeAddr ) const;
+
+    /** Allows setting the table(database range) formatting attribute of ScDBData instances*/
+    void addDatabaseFormatting( const OUString& rName, const ScDBDataFormatting& rDBDataFormatting );
 
     /** Creates and returns an unnamed database range on-the-fly in the Calc document.
         The range will not be buffered in the global table buffer. */

@@ -111,8 +111,11 @@ void Table::finalizeImport()
 
         //Setting the ScDBDataFormatting (Table style) attribute.
         ScDBDataFormatting aTableFormatting = getStyles().getTableStyle( maModel.maTableStyleName )->getTableFormatting(); //May fail in cases of malformed corrupt table/table#.xml where the maTableStyleName is messed up
+
+        //can mess up if aTableFormatting is nothing. Need to handle that
         aTableFormatting.SetBandedRows( maModel.mbShowRowStripes );
         aTableFormatting.SetBandedColumns( maModel.mbShowColumnStripes );
+        addDatabaseFormatting( maDBRangeName, aTableFormatting );
         //Add this table formatting information to the ScDBData instance.
         //xDatabaseRange->SetTableFormatting( aTableFormatting );
         //Still figuring how to have an ScDBData object out of this

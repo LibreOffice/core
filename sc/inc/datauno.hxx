@@ -23,6 +23,7 @@
 #include "global.hxx"
 #include "queryparam.hxx"
 #include "subtotalparam.hxx"
+#include "dbdataformatting.hxx"
 
 #include <com/sun/star/sheet/TableFilterField.hpp>
 #include <com/sun/star/sheet/GeneralFunction.hpp>
@@ -624,6 +625,7 @@ public:
     virtual void SAL_CALL   addNewByName( const OUString& aName,
                                 const ::com::sun::star::table::CellRangeAddress& aRange )
                                     throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL   addDatabaseRangeFormatting( const OUString& aName, const ScDBDataFormatting& rTableFormatData ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL   removeByName( const OUString& aName )
                                 throw(::com::sun::star::uno::RuntimeException);
 

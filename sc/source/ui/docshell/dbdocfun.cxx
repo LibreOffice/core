@@ -57,7 +57,6 @@ using namespace ::com::sun::star;
 
 bool ScDBDocFunc::AddDBRange( const OUString& rName, const ScRange& rRange, sal_Bool /* bApi */ )
 {
-
     ScDocShellModificator aModificator( rDocShell );
 
     ScDocument* pDoc = rDocShell.GetDocument();
@@ -189,6 +188,20 @@ bool ScDBDocFunc::RenameDBRange( const String& rOld, const String& rNew )
     }
 
     return bDone;
+}
+
+bool ScDBDocFunc::AddDBFormatting( const OUString& rName, const ScDBDataFormatting& rDBFormatting )
+{
+    ScDocument* pDoc = rDocShell.GetDocument();
+    ScDBCollection* pDocColl = pDoc->GetDBCollection();
+    ScDBCollection::NamedDBs& rDBs = pDocColl->getNamedDBs();
+    ScDBData* pDBData = rDBs.findByUpperName(ScGlobal::pCharClass->uppercase(rName));
+    if( pDBData )
+    {
+        pDBData->SetTableFormatting( rDBFormatting );
+        return true;
+    }
+    return false;
 }
 
 bool ScDBDocFunc::ModifyDBData( const ScDBData& rNewData )

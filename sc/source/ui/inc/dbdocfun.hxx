@@ -21,6 +21,7 @@
 #define SC_DBDOCFUN_HXX
 
 #include "address.hxx"
+#include "dbdataformatting.hxx"
 #include <tools/solar.h>
 #include <com/sun/star/uno/Sequence.hxx>
 
@@ -85,6 +86,7 @@ public:
     bool AddDBRange( const OUString& rName, const ScRange& rRange, sal_Bool bApi );
     bool DeleteDBRange( const OUString& rName );
     bool RenameDBRange( const String& rOld, const String& rNew );
+    bool AddDBFormatting( const OUString& rName, const ScDBDataFormatting& rDBFormatting );
     bool ModifyDBData( const ScDBData& rNewData );  // Name unveraendert
 
     bool RepeatDB( const OUString& rDBName, bool bRecord, bool bApi, bool bIsUnnamed=false, SCTAB aTab = 0);

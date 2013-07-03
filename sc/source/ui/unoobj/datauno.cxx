@@ -2285,6 +2285,18 @@ void SAL_CALL ScDatabaseRangesObj::addNewByName( const OUString& aName,
         throw uno::RuntimeException();      // no other exceptions specified
 }
 
+void SAL_CALL ScDatabaseRangesObj::addDatabaseRangeFormatting( const OUString& rName, const ScDBDataFormatting& rTableFormatData ) throw (uno::RuntimeException)
+{
+    bool bDone = false;
+    if( pDocShell )
+    {
+        ScDBDocFunc aFunc( *pDocShell );
+        bDone = (aFunc.AddDBFormatting( rName, rTableFormatData ));
+    }
+    if( !bDone )
+        throw uno::RuntimeException();
+}
+
 void SAL_CALL ScDatabaseRangesObj::removeByName( const OUString& aName )
                                         throw(uno::RuntimeException)
 {

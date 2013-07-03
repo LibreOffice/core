@@ -174,6 +174,8 @@ public:
     ScRangeData* createLocalNamedRangeObject( OUString& orName, const Sequence< FormulaToken>& rTokens, sal_Int32 nIndex, sal_Int32 nNameFlags, sal_Int32 nTab ) const;
     /** Creates and returns a database range on-the-fly in the Calc document. */
     Reference< XDatabaseRange > createDatabaseRangeObject( OUString& orName, const CellRangeAddress& rRangeAddr ) const;
+    /** Adds a DBData formatting object to a DB Range's formatting attribute*/
+    void addDatabaseFormatting( const OUString& rName, const ScDBDataFormatting& rDBDataFormatting );
     /** Creates and returns an unnamed database range on-the-fly in the Calc document. */
     Reference< XDatabaseRange > createUnnamedDatabaseRangeObject( const CellRangeAddress& rRangeAddr ) const;
     /** Creates and returns a com.sun.star.style.Style object for cells or pages. */
@@ -461,6 +463,14 @@ Reference< XDatabaseRange > WorkbookGlobals::createDatabaseRangeObject( OUString
     }
     OSL_ENSURE( xDatabaseRange.is(), "WorkbookGlobals::createDatabaseRangeObject - cannot create database range" );
     return xDatabaseRange;
+}
+
+void WorkbookGlobals::addDatabaseFormatting( const OUString& rName, const ScDBDataFormatting& rDBDataFormatting )
+{
+    PropertySet aDocProps( mxDoc );
+    Reference< XDatabaseRanges > xDatabaseRanges( aDocProps.getAnyProperty( PROP_DatabaseRanges ), UNO_QUERY_THROW );
+    //xDatabaseRanges->addDatabaseRangeFormatting( rName, rDBDataFormatting );
+    //Need some way to add the formatting information. Stuck here major.
 }
 
 Reference< XDatabaseRange > WorkbookGlobals::createUnnamedDatabaseRangeObject( const CellRangeAddress& rRangeAddr ) const
@@ -805,6 +815,11 @@ ScRangeData* WorkbookHelper::createLocalNamedRangeObject( OUString& orName, cons
 Reference< XDatabaseRange > WorkbookHelper::createDatabaseRangeObject( OUString& orName, const CellRangeAddress& rRangeAddr ) const
 {
     return mrBookGlob.createDatabaseRangeObject( orName, rRangeAddr );
+}
+
+void WorkbookHelper::addDatabaseFormatting( const OUString& rName, const ScDBDataFormatting& rDBDataFormatting )
+{
+    mrBookGlob.addDatabaseFormatting( rName, rDBDataFormatting );
 }
 
 Reference< XDatabaseRange > WorkbookHelper::createUnnamedDatabaseRangeObject( const CellRangeAddress& rRangeAddr ) const
