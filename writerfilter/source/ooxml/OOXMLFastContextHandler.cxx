@@ -127,7 +127,8 @@ OOXMLFastContextHandler::OOXMLFastContextHandler
   mnInstanceNumber(mnInstanceCount),
   mnRefCount(0),
   inPositionV(false),
-  m_xContext(context)
+  m_xContext(context),
+  m_bDiscardChildren(false)
 {
     mnInstanceCount++;
     aSetContexts.insert(this);
@@ -150,7 +151,8 @@ OOXMLFastContextHandler::OOXMLFastContextHandler
   mnInstanceNumber(mnInstanceCount),
   mnRefCount(0),
   inPositionV(pContext->inPositionV),
-  m_xContext(pContext->m_xContext)
+  m_xContext(pContext->m_xContext),
+  m_bDiscardChildren(pContext->m_bDiscardChildren)
 {
     if (pContext != NULL)
     {
@@ -190,8 +192,14 @@ void SAL_CALL OOXMLFastContextHandler::startFastElement
     dumpXml( debug_logger );
     debug_logger->endElement();
 #endif
-    attributes(Attribs);
-    lcl_startFastElement(Element, Attribs);
+    if ((Element & 0xffff0000) == NS_mce && (Element & 0xffff) == OOXML_Choice)
+        m_bDiscardChildren = true;
+
+    if (!m_bDiscardChildren)
+    {
+        attributes(Attribs);
+        lcl_startFastElement(Element, Attribs);
+    }
 }
 
 void SAL_CALL OOXMLFastContextHandler::startUnknownElement
@@ -218,7 +226,11 @@ throw (uno::RuntimeException, xml::sax::SAXException)
     (void) sToken;
 #endif
 
-    lcl_endFastElement(Element);
+    if ((Element & 0xffff0000) == NS_mce && (Element & 0xffff) == OOXML_Choice)
+        m_bDiscardChildren = false;
+
+    if (!m_bDiscardChildren)
+        lcl_endFastElement(Element);
 
 #ifdef DEBUG_CONTEXT_HANDLER
     debug_logger->startElement("at-end");
@@ -269,10 +281,14 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
     debug_logger->startElement("contexthandler.createFastChildContext");
     debug_logger->attribute("token", fastTokenToId(Element));
     debug_logger->attribute("type", getType());
+    debug_logger->attribute("discard-children", OUString::valueOf(m_bDiscardChildren));
 #endif
 
-    uno::Reference< xml::sax::XFastContextHandler > xResult
-        (lcl_createFastChildContext(Element, Attribs));
+    uno::Reference< xml::sax::XFastContextHandler > xResult;
+    if ((Element & 0xffff0000) != NS_mce && !m_bDiscardChildren)
+        xResult.set(lcl_createFastChildContext(Element, Attribs));
+    else if ((Element & 0xffff0000) == NS_mce)
+        xResult = this;
 
 #ifdef DEBUG_CONTEXT_HANDLER
     debug_logger->endElement();
@@ -322,7 +338,8 @@ void OOXMLFastContextHandler::lcl_characters
 (const OUString & rString)
 throw (uno::RuntimeException, xml::sax::SAXException)
 {
-    OOXMLFactory::getInstance()->characters(this, rString);
+    if (!m_bDiscardChildren)
+        OOXMLFactory::getInstance()->characters(this, rString);
 }
 
 namespace
