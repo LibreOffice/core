@@ -31,6 +31,7 @@
   <namespace-alias name="http://schemas.openxmlformats.org/wordprocessingml/2006/main" alias="wordprocessingml" id="doc"/>
   <namespace-alias name="http://schemas.openxmlformats.org/officeDocument/2006/math" alias="math" id="officeMath"/>
   <namespace-alias name="http://schemas.openxmlformats.org/schemaLibrary/2006/main" alias="schemaLibrary" id="schema"/>
+  <namespace-alias name="http://schemas.openxmlformats.org/markup-compatibility/2006" alias="mce" id="mce"/>
   <namespace-alias name="http://sprm" alias="sprm" id="sprm"/>
   <token tokenid="ooxml:shape"/>
   <token tokenid="ooxml:token"/>
@@ -12157,6 +12158,45 @@
       <value name="gradientRadial" tokenid="ooxml:Value_office_ST_FillType_gradientRadial">gradientRadial</value>
       <value name="gradient" tokenid="ooxml:Value_office_ST_FillType_gradient">gradient</value>
       <value name="background" tokenid="ooxml:Value_office_ST_FillType_background">background</value>
+    </resource>
+  </namespace>
+  <namespace name="mce">
+    <start name="AlternateContent"/>
+    <grammar xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.openxmlformats.org/markup-compatibility/2006" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+      <define name="nsList">
+        <list>
+          <zeroOrMore>
+            <data type="NCName"/>
+          </zeroOrMore>
+        </list>
+      </define>
+      <define name="AlternateContent">
+        <element name="AlternateContent">
+          <oneOrMore>
+            <ref name="choice"/>
+          </oneOrMore>
+          <optional>
+            <ref name="fallback"/>
+          </optional>
+        </element>
+      </define>
+      <define name="Choice">
+        <element name="Choice">
+          <attribute name="Requires">
+            <ref name="nsList"/>
+          </attribute>
+          <text/>
+        </element>
+      </define>
+      <define name="Fallback">
+        <element name="Fallback">
+          <text/>
+        </element>
+      </define>
+    </grammar>
+    <resource name="AlternateContent" resource="Value"/>
+    <resource name="Choice" resource="Value">
+      <attribute name="Requires" tokenid="ooxml:mc_Requires"/>
     </resource>
   </namespace>
   <namespace name="vml-wordprocessingDrawing" file="vml-wordprocessingDrawing.rng">
