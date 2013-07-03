@@ -46,7 +46,7 @@ sal_uInt32 RscInstNode::GetId() const
 }
 
 RscArray::RscArray( Atom nId, sal_uInt32 nTypeId, RscTop * pSuper, RscEnum * pTypeCl )
-        : RscTop( nId, nTypeId, pSuper )
+    : RscTop( nId, nTypeId, pSuper )
 {
     pTypeClass = pTypeCl;
     nOffInstData = RscTop::Size();
@@ -86,7 +86,7 @@ static RscInstNode * Create( RscInstNode * pNode )
 }
 
 RSCINST RscArray::Create( RSCINST * pInst, const RSCINST & rDflt,
-                          sal_Bool bOwnClass )
+                          bool bOwnClass )
 {
     RSCINST aInst;
     RscArrayInst *  pClassData;
@@ -98,13 +98,14 @@ RSCINST RscArray::Create( RSCINST * pInst, const RSCINST & rDflt,
     }
     else
         aInst = *pInst;
+
     if( !bOwnClass && rDflt.IsInst() )
         bOwnClass = rDflt.pClass->InHierarchy( this );
 
     RscTop::Create( &aInst, rDflt, bOwnClass );
 
-    pClassData          = (RscArrayInst *)(aInst.pData + nOffInstData);
-    pClassData->pNode   = NULL;
+    pClassData = (RscArrayInst *)(aInst.pData + nOffInstData);
+    pClassData->pNode = NULL;
     if( bOwnClass )
     {
         RscArrayInst *   pDfltClassData;
@@ -113,7 +114,7 @@ RSCINST RscArray::Create( RSCINST * pInst, const RSCINST & rDflt,
 
         pClassData->pNode = ::Create( pDfltClassData->pNode );
     }
-    return( aInst );
+    return aInst;
 }
 
 static void Destroy( RscInstNode * pNode )
@@ -138,13 +139,10 @@ void RscArray::Destroy( const RSCINST & rInst )
     ::Destroy( pClassData->pNode );
 }
 
-ERRTYPE RscArray::GetValueEle
-(
-    const RSCINST & rInst,
-    sal_Int32 lValue,
-    RscTop * pCreateClass,
-    RSCINST * pGetInst
-)
+ERRTYPE RscArray::GetValueEle( const RSCINST & rInst,
+                               sal_Int32 lValue,
+                               RscTop * pCreateClass,
+                               RSCINST * pGetInst)
 {
     RscArrayInst *  pClassData;
     RscInstNode *   pNode;
@@ -171,6 +169,7 @@ ERRTYPE RscArray::GetValueEle
             pNode->aInst = pCreateClass->Create( NULL, rInst );
         else
             pNode->aInst = GetSuperClass()->Create( NULL, rInst );
+
         pNode->aInst.pClass->SetToDefault( pNode->aInst );
         if( pClassData->pNode )
             pClassData->pNode->Insert( pNode );
@@ -182,13 +181,10 @@ ERRTYPE RscArray::GetValueEle
     return aError;
 }
 
-ERRTYPE RscArray::GetArrayEle
-(
-    const RSCINST & rInst,
-    Atom nId,
-    RscTop * pCreateClass,
-    RSCINST * pGetInst
-)
+ERRTYPE RscArray::GetArrayEle( const RSCINST & rInst,
+                               Atom nId,
+                               RscTop * pCreateClass,
+                               RSCINST * pGetInst)
 {
     sal_Int32  lValue;
     if( !pTypeClass->GetConstValue( nId, &lValue ) )
@@ -199,33 +195,33 @@ ERRTYPE RscArray::GetArrayEle
     return GetValueEle( rInst, lValue, pCreateClass, pGetInst );
 }
 
-static sal_Bool IsConsistent( RscInstNode * pNode )
+static bool IsConsistent( RscInstNode * pNode )
 {
-    sal_Bool bRet = sal_True;
+    bool bRet = true;
 
     if( pNode )
     {
         bRet = pNode->aInst.pClass->IsConsistent( pNode->aInst );
         if( !IsConsistent( pNode->Left() ) )
-            bRet = sal_False;
+            bRet = false;
         if( !IsConsistent( pNode->Right() ) )
-            bRet = sal_False;
+            bRet = false;
     }
     return bRet;
 }
 
-sal_Bool RscArray::IsConsistent( const RSCINST & rInst )
+bool RscArray::IsConsistent( const RSCINST & rInst )
 {
     RscArrayInst * pClassData;
-    sal_Bool    bRet;
+    bool    bRet;
 
     bRet = RscTop::IsConsistent( rInst );
 
     pClassData = (RscArrayInst *)(rInst.pData + nOffInstData);
     if( !::IsConsistent( pClassData->pNode ) )
-        bRet = sal_False;
+        bRet = false;
 
-    return( bRet );
+    return bRet;
 }
 
 static void SetToDefault( RscInstNode * pNode )
@@ -249,9 +245,9 @@ void RscArray::SetToDefault( const RSCINST & rInst )
     RscTop::SetToDefault( rInst );
 }
 
-static sal_Bool IsDefault( RscInstNode * pNode )
+static bool IsDefault( RscInstNode * pNode )
 {
-    sal_Bool bRet = sal_True;
+    bool bRet = true;
 
     if( pNode )
     {
@@ -264,22 +260,22 @@ static sal_Bool IsDefault( RscInstNode * pNode )
     return bRet;
 }
 
-sal_Bool RscArray::IsDefault( const RSCINST & rInst )
+bool RscArray::IsDefault( const RSCINST & rInst )
 {
     RscArrayInst * pClassData;
 
     pClassData = (RscArrayInst *)(rInst.pData + nOffInstData);
 
-    sal_Bool bRet = ::IsDefault( pClassData->pNode );
+    bool bRet = ::IsDefault( pClassData->pNode );
 
     if( bRet )
         bRet = RscTop::IsDefault( rInst );
     return bRet;
 }
 
-static sal_Bool IsValueDefault( RscInstNode * pNode, CLASS_DATA pDef )
+static bool IsValueDefault( RscInstNode * pNode, CLASS_DATA pDef )
 {
-    sal_Bool bRet = sal_True;
+    bool bRet = true;
 
     if( pNode )
     {
@@ -292,9 +288,9 @@ static sal_Bool IsValueDefault( RscInstNode * pNode, CLASS_DATA pDef )
     return bRet;
 }
 
-sal_Bool RscArray::IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef )
+bool RscArray::IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef )
 {
-    sal_Bool bRet = RscTop::IsValueDefault( rInst, pDef );
+    bool bRet = RscTop::IsValueDefault( rInst, pDef );
 
     if( bRet )
     {
@@ -348,8 +344,8 @@ void RscArray::WriteSrcHeader( const RSCINST & rInst, FILE * fOutput,
 }
 
 static void WriteSrc( RscInstNode * pNode, FILE * fOutput, RscTypCont * pTC,
-                         sal_uInt32 nTab, const char * pVarName,
-                         CLASS_DATA pDfltData, RscConst * pTypeClass )
+                      sal_uInt32 nTab, const char * pVarName,
+                      CLASS_DATA pDfltData, RscConst * pTypeClass )
 {
     if( pNode )
     {
@@ -373,8 +369,8 @@ static void WriteSrc( RscInstNode * pNode, FILE * fOutput, RscTypCont * pTC,
 }
 
 void RscArray::WriteSrcArray( const RSCINST & rInst, FILE * fOutput,
-                             RscTypCont * pTC, sal_uInt32 nTab,
-                             const char * pVarName )
+                              RscTypCont * pTC, sal_uInt32 nTab,
+                              const char * pVarName )
 {
     RscArrayInst * pClassData;
 
@@ -392,7 +388,7 @@ void RscArray::WriteSrc( const RSCINST & rInst, FILE * fOutput,
 }
 
 ERRTYPE RscArray::WriteRc( const RSCINST & rInst, RscWriteRc & rMem,
-                            RscTypCont * pTC, sal_uInt32 nDeep, sal_Bool bExtra )
+                           RscTypCont * pTC, sal_uInt32 nDeep, bool bExtra )
 {
     ERRTYPE aError;
     RscArrayInst * pClassData;
@@ -452,12 +448,12 @@ void RscClassArray::WriteSrc( const RSCINST & rInst, FILE * fOutput,
 }
 
 ERRTYPE RscClassArray::WriteRcHeader( const RSCINST & rInst, RscWriteRc & aMem,
-                                       RscTypCont * pTC, const RscId & aId,
-                                       sal_uInt32 nDeep, sal_Bool bExtra )
+                                      RscTypCont * pTC, const RscId & aId,
+                                      sal_uInt32 nDeep, bool bExtra )
 {
     // Eigenen Typ schreiben
     return GetSuperClass()->WriteRcHeader( rInst, aMem, pTC, aId,
-                                        nDeep, bExtra );
+                                           nDeep, bExtra );
 }
 
 RscLangArray::RscLangArray( Atom nId, sal_uInt32 nTypeId, RscTop * pSuper,

@@ -44,28 +44,33 @@ int SAL_CALL KeyCompare( const void * pFirst, const void * pSecond )
         return( 0 );
 }
 
-RscNameTable::RscNameTable() {
-    bSort    = sal_True;
+RscNameTable::RscNameTable()
+{
+    bSort    = true;
     nEntries = 0;
     pTable   = NULL;
 };
 
-RscNameTable::~RscNameTable() {
+RscNameTable::~RscNameTable()
+{
     if( pTable )
         rtl_freeMemory( pTable );
 };
 
 
-void RscNameTable::SetSort( sal_Bool bSorted ){
+void RscNameTable::SetSort( bool bSorted )
+{
     bSort = bSorted;
-    if( bSort && pTable){
+    if( bSort && pTable)
+    {
         // Schluesselwort Feld sortieren
         qsort( (void *)pTable, nEntries,
                sizeof( KEY_STRUCT ), KeyCompare );
     };
 };
 
-Atom RscNameTable::Put( Atom nName, sal_uInt32 nTyp, long nValue ){
+Atom RscNameTable::Put( Atom nName, sal_uInt32 nTyp, long nValue )
+{
     if( pTable )
         pTable = (KEY_STRUCT *)
                  rtl_reallocateMemory( (void *)pTable,
@@ -74,18 +79,20 @@ Atom RscNameTable::Put( Atom nName, sal_uInt32 nTyp, long nValue ){
         pTable = (KEY_STRUCT *)
                  rtl_allocateMemory( ((nEntries +1)
                                  * sizeof( KEY_STRUCT )) );
+
     pTable[ nEntries ].nName  = nName;
     pTable[ nEntries ].nTyp   = nTyp;
     pTable[ nEntries ].yylval = nValue;
     nEntries++;
     if( bSort )
         SetSort();
-    return( nName );
+
+    return nName;
 };
 
 Atom RscNameTable::Put( const char * pName, sal_uInt32 nTyp, long nValue )
 {
-    return( Put( pHS->getID( pName ), nTyp, nValue ) );
+    return Put( pHS->getID( pName ), nTyp, nValue );
 };
 
 Atom RscNameTable::Put( const char * pName, sal_uInt32 nTyp )
@@ -93,44 +100,50 @@ Atom RscNameTable::Put( const char * pName, sal_uInt32 nTyp )
     Atom  nId;
 
     nId = pHS->getID( pName );
-    return( Put( nId, nTyp, (long)nId ) );
+    return Put( nId, nTyp, (long)nId );
 };
 
 Atom RscNameTable::Put( Atom nName, sal_uInt32 nTyp, RscTop * pClass )
 {
-    return( Put( nName, nTyp, (long)pClass ) );
+    return Put( nName, nTyp, (long)pClass );
 };
 
-sal_Bool RscNameTable::Get( Atom nName, KEY_STRUCT * pEle ){
+bool RscNameTable::Get( Atom nName, KEY_STRUCT * pEle )
+{
     KEY_STRUCT * pKey = NULL;
     KEY_STRUCT  aSearchName;
     sal_uInt32  i;
 
-    if( bSort ){
+    if( bSort )
+    {
         // Suche nach dem Schluesselwort
         aSearchName.nName = nName;
         pKey = (KEY_STRUCT *)bsearch(
 #ifdef UNX
-                   (const char *) &aSearchName, (char *)pTable,
+                (const char *) &aSearchName, (char *)pTable,
 #else
-                   (const void *) &aSearchName, (const void *)pTable,
+                (const void *) &aSearchName, (const void *)pTable,
 #endif
-                   nEntries, sizeof( KEY_STRUCT ), KeyCompare );
+                nEntries, sizeof( KEY_STRUCT ), KeyCompare );
     }
-    else{
+    else
+    {
         i = 0;
-        while( i < nEntries && !pKey ){
+        while( i < nEntries && !pKey )
+        {
             if( pTable[ i ].nName == nName )
                 pKey = &pTable[ i ];
             i++;
         };
     };
 
-    if( pKey ){ // Schluesselwort gefunden
+    if( pKey )
+    {
+        // Schluesselwort gefunden
         *pEle = *pKey;
-        return( sal_True );
+        return true;
     };
-    return( sal_False );
+    return false;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

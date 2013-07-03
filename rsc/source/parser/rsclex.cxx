@@ -52,42 +52,51 @@ const char* StringContainer::putString( const char* pString )
 }
 
 int             c;
-sal_Bool            bLastInclude;// War letztes Symbol INCLUDE
+bool            bLastInclude;// War letztes Symbol INCLUDE
 RscFileInst*    pFI;
 RscTypCont*     pTC;
 RscExpression * pExp;
-struct KeyVal {
+struct KeyVal
+{
     int     nKeyWord;
     YYSTYPE aYYSType;
 } aKeyVal[ 1 ];
-sal_Bool bTargetDefined;
+bool bTargetDefined;
 
 StringContainer* pStringContainer = NULL;
 
 
-sal_uInt32 GetNumber(){
+sal_uInt32 GetNumber()
+{
     sal_uInt32  l = 0;
     sal_uInt32  nLog = 10;
 
-    if( '0' == c ){
+    if( '0' == c )
+    {
         c = pFI->GetFastChar();
-        if( 'x' == c ){
+        if( 'x' == c )
+        {
             nLog = 16;
             c = pFI->GetFastChar();
         }
     };
 
-    if( nLog == 16 ){
-        while( isxdigit( c ) ){
+    if( nLog == 16 )
+    {
+        while( isxdigit( c ) )
+        {
             if( isdigit( c ) )
                 l = l * nLog + (c - '0');
             else
                 l = l * nLog + (toupper( c ) - 'A' + 10 );
+
             c = pFI->GetFastChar();
         }
     }
-    else{
-        while( isdigit( c ) || 'x' == c ){
+    else
+    {
+        while( isdigit( c ) || 'x' == c )
+        {
             l = l * nLog + (c - '0');
             c = pFI->GetFastChar();
         }
@@ -99,30 +108,40 @@ sal_uInt32 GetNumber(){
     if( l > 0x7fffffff ) //Oberstes bit gegebenenfalls abschneiden;
         l &= 0x7fffffff;
 
-    return( l );
+    return l;
 }
 
-int MakeToken( YYSTYPE * pTokenVal ){
+int MakeToken( YYSTYPE * pTokenVal )
+{
     int             c1;
 
-    while( true ){  // Kommentare und Leerzeichen ueberlesen
+    while( true ) // Kommentare und Leerzeichen ueberlesen
+    {
         while( isspace( c ) )
             c = pFI->GetFastChar();
-        if( '/' == c ){
+
+        if( '/' == c )
+        {
             c1 = c;
             c = pFI->GetFastChar();
-            if( '/' == c ){
+            if( '/' == c )
+            {
                 while( '\n' != c && !pFI->IsEof() )
                     c = pFI->GetFastChar();
+
                 c = pFI->GetFastChar();
             }
-            else if( '*' == c ){
+            else if( '*' == c )
+            {
                 c = pFI->GetFastChar();
-                do {
+                do
+                {
                     while( '*' != c && !pFI->IsEof() )
                         c = pFI->GetFastChar();
+
                     c = pFI->GetFastChar();
-                } while( '/' != c && !pFI->IsEof() );
+                }
+                while( '/' != c && !pFI->IsEof() );
                 c = pFI->GetFastChar();
             }
             else
@@ -132,13 +151,16 @@ int MakeToken( YYSTYPE * pTokenVal ){
             break;
     };
 
-    if( c == pFI->IsEof() ){
+    if( c == pFI->IsEof() )
+    {
         return( 0 );
     }
 
-    if( bLastInclude ){
-        bLastInclude = sal_False; //Zuruecksetzten
-        if( '<' == c ){
+    if( bLastInclude )
+    {
+        bLastInclude = false; //Zuruecksetzten
+        if( '<' == c )
+        {
             OStringBuffer aBuf( 256 );
             c = pFI->GetFastChar();
             while( '>' != c && !pFI->IsEof() )
@@ -155,7 +177,7 @@ int MakeToken( YYSTYPE * pTokenVal ){
     if( c == '"' )
     {
         OStringBuffer aBuf( 256 );
-        sal_Bool bDone = sal_False;
+        bool bDone = false;
         while( !bDone && !pFI->IsEof() && c )
         {
             c = pFI->GetFastChar();
@@ -166,6 +188,7 @@ int MakeToken( YYSTYPE * pTokenVal ){
                     c = pFI->GetFastChar();
                 }
                 while(  c == ' ' || c == '\t' );
+
                 if( c == '"' )
                 {
                     // this is a continued string
@@ -173,7 +196,7 @@ int MakeToken( YYSTYPE * pTokenVal ){
                     // see rscyacc.y
                 }
                 else
-                    bDone = sal_True;
+                    bDone = true;
             }
             else if( c == '\\' )
             {
@@ -186,14 +209,16 @@ int MakeToken( YYSTYPE * pTokenVal ){
                 aBuf.append( sal_Char(c) );
         }
         pTokenVal->string = const_cast<char*>(pStringContainer->putString( aBuf.getStr() ));
-        return( STRING );
+        return STRING;
     }
-    if (isdigit (c)){
+    if (isdigit (c))
+    {
         pTokenVal->value = GetNumber();
         return( NUMBER );
     }
 
-    if( isalpha (c) || (c == '_') ){
+    if( isalpha (c) || (c == '_') )
+    {
         Atom        nHashId;
         OStringBuffer aBuf( 256 );
 
@@ -215,45 +240,48 @@ int MakeToken( YYSTYPE * pTokenVal ){
                 // Schluesselwort gefunden
                 switch( aKey.nTyp )
                 {
-                    case CLASSNAME:
-                        pTokenVal->pClass = (RscTop *)aKey.yylval;
-                        break;
-                    case VARNAME:
-                        pTokenVal->varid = aKey.nName;
-                        break;
-                    case CONSTNAME:
-                        pTokenVal->constname.hashid = aKey.nName;
-                        pTokenVal->constname.nValue = aKey.yylval;
-                        break;
-                    case BOOLEAN:
-                        pTokenVal->svbool = (sal_Bool)aKey.yylval;
-                        break;
-                    case INCLUDE:
-                        bLastInclude = sal_True;
-                    default:
-                        pTokenVal->value = aKey.yylval;
+                case CLASSNAME:
+                    pTokenVal->pClass = (RscTop *)aKey.yylval;
+                    break;
+                case VARNAME:
+                    pTokenVal->varid = aKey.nName;
+                    break;
+                case CONSTNAME:
+                    pTokenVal->constname.hashid = aKey.nName;
+                    pTokenVal->constname.nValue = aKey.yylval;
+                    break;
+                case BOOLEAN:
+                    pTokenVal->svbool = (bool)aKey.yylval;
+                    break;
+                case INCLUDE:
+                    bLastInclude = true;
+                default:
+                    pTokenVal->value = aKey.yylval;
                 };
 
-                return( aKey.nTyp );
+                return aKey.nTyp;
             }
             else
             {
                 pTokenVal->string = const_cast<char*>(pStringContainer->putString( aBuf.getStr() ));
-                return( SYMBOL );
+                return SYMBOL;
             }
         }
-        else{       // Symbol
+        else
+        {
+            // Symbol
             RscDefine  * pDef;
 
             pDef = pTC->aFileTab.FindDef( aBuf.getStr() );
-            if( pDef ){
+            if( pDef )
+            {
                 pTokenVal->defineele = pDef;
 
-                return( RSCDEFINE );
+                return RSCDEFINE;
             }
 
             pTokenVal->string = const_cast<char*>(pStringContainer->putString( aBuf.getStr() ));
-            return( SYMBOL );
+            return SYMBOL;
         }
     }
 
@@ -283,7 +311,7 @@ int MakeToken( YYSTYPE * pTokenVal ){
 
     c1 = c;
     c = pFI->GetFastChar();
-    return( c1 );
+    return c1;
 }
 
 #if defined( RS6000 )
@@ -293,13 +321,12 @@ int yylex()
 #endif
 {
     if( bTargetDefined )
-        bTargetDefined = sal_False;
+        bTargetDefined = false;
     else
-        aKeyVal[ 0 ].nKeyWord =
-                     MakeToken( &aKeyVal[ 0 ].aYYSType );
+        aKeyVal[ 0 ].nKeyWord = MakeToken( &aKeyVal[ 0 ].aYYSType );
 
     yylval = aKeyVal[ 0 ].aYYSType;
-    return( aKeyVal[ 0 ].nKeyWord );
+    return aKeyVal[ 0 ].nKeyWord;
 }
 
 #ifdef RS6000
@@ -319,14 +346,15 @@ void InitParser( RscFileInst * pFileInst )
     pFI = pFileInst;
     pStringContainer = new StringContainer();
     pExp = NULL;                //fuer MacroParser
-    bTargetDefined = sal_False;
+    bTargetDefined = false;
 
     // Anfangszeichen initialisieren
-    bLastInclude = sal_False;
+    bLastInclude = false;
     c = pFI->GetFastChar();
 }
 
-void EndParser(){
+void EndParser()
+{
     // Stack abraeumen
     while( ! S.IsEmpty() )
         S.Pop();
@@ -355,15 +383,20 @@ void IncludeParser( RscFileInst * pFileInst )
     InitParser( pFileInst );
 
     nToken = MakeToken( &aYYSType );
-    while( 0 != nToken && CLASSNAME != nToken ){
-        if( '#' == nToken ){
-            if( INCLUDE == (nToken = MakeToken( &aYYSType )) ){
-                if( STRING == (nToken = MakeToken( &aYYSType )) ){
+    while( 0 != nToken && CLASSNAME != nToken )
+    {
+        if( '#' == nToken )
+        {
+            if( INCLUDE == (nToken = MakeToken( &aYYSType )) )
+            {
+                if( STRING == (nToken = MakeToken( &aYYSType )) )
+                {
                     lKey = pTypCon->aFileTab.NewIncFile( aYYSType.string,
                                                          aYYSType.string );
                     pFName->InsertDependFile( lKey, ULONG_MAX );
                 }
-                else if( INCLUDE_STRING == nToken ){
+                else if( INCLUDE_STRING == nToken )
+                {
                     lKey = pTypCon->aFileTab.NewIncFile( aYYSType.string,
                                                          OString() );
                     pFName->InsertDependFile( lKey, ULONG_MAX );

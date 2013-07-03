@@ -41,8 +41,8 @@ enum RSCBYTEORDER_TYPE { RSC_BIGENDIAN, RSC_LITTLEENDIAN, RSC_SYSTEMENDIAN };
             (nSize + sizeof( void * ) -1) / sizeof( void * ) * sizeof( void * )
 /******************* F u n c t i o n   F o r w a r d s *******************/
 OString GetTmpFileName();
-sal_Bool Append(const OString &rDestFile, const OString &rSourceFile);
-sal_Bool Append(FILE * fDest, OString &raSourceFile);
+bool Append(const OString &rDestFile, const OString &rSourceFile);
+bool Append(FILE * fDest, OString &raSourceFile);
 OString OutputFile(const OString &rInput, const char * ext);
 char * ResponseFile( RscPtrPtr * ppCmd, char ** ppArgv,
                      sal_uInt32 nArgc );
@@ -85,8 +85,8 @@ public:
 /****************** R s c W r i t e R c **********************************/
 class RscWriteRc
 {
-    sal_uInt32              nLen;
-    sal_Bool                bSwap;
+    sal_uInt32          nLen;
+    bool                bSwap;
     RSCBYTEORDER_TYPE   nByteOrder;
     char *              pMem;
     char *              GetPointer( sal_uInt32 nSize );

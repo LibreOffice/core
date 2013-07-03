@@ -38,9 +38,9 @@ public:
     RscInstNode *   Left() const { return (RscInstNode *)pLeft  ; };
     RscInstNode *   Right() const{ return (RscInstNode *)pRight ; };
     RscInstNode *   Search( sal_uInt32 nId ) const
-                    {
-                        return (RscInstNode *)IdNode::Search( nId );
-                    }
+                        {
+                            return (RscInstNode *)IdNode::Search( nId );
+                        }
 };
 
 struct RscArrayInst
@@ -55,38 +55,35 @@ class RscArray : public RscTop
 {
 protected:
     RscEnum *       pTypeClass; // Typ der Eintraege
-    sal_uInt32          nSize;      // Groesse der Instanzdaten dieser Klasse
+    sal_uInt32      nSize;      // Groesse der Instanzdaten dieser Klasse
                                 // mit Superklassen
-    sal_uInt32          nOffInstData;// Offset auf eigen Instanzdaten
+    sal_uInt32      nOffInstData;// Offset auf eigen Instanzdaten
     void            WriteSrcArray( const RSCINST & rInst, FILE * fOutput,
-                                  RscTypCont * pTC, sal_uInt32 nTab, const char * );
+                                   RscTypCont * pTC, sal_uInt32 nTab, const char * );
 public:
                     RscArray( Atom nId, sal_uInt32 nTypId,
-                                RscTop * pSuper, RscEnum * pTypeClass );
+                              RscTop * pSuper, RscEnum * pTypeClass );
                     ~RscArray();
     virtual RSCCLASS_TYPE   GetClassType() const;
 
-    void            SetTypeClass( RscEnum * pClass )
-                    {
-                        pTypeClass = pClass;
-                    }
+    void            SetTypeClass( RscEnum * pClass ) { pTypeClass = pClass; }
     virtual RscTop *    GetTypeClass() const;
-    RSCINST         Create( RSCINST * pInst, const RSCINST & rDflt, sal_Bool );
+    RSCINST         Create( RSCINST * pInst, const RSCINST & rDflt, bool );
     void            Destroy( const RSCINST & rInst );
     virtual ERRTYPE GetValueEle( const RSCINST & rInst, sal_Int32 lValue,
-                                RscTop * pCreateClass,
-                                RSCINST * pGetInst );
+                                 RscTop * pCreateClass,
+                                 RSCINST * pGetInst );
     virtual ERRTYPE GetArrayEle( const RSCINST & rInst, Atom nId,
-                                RscTop * pCreateClass,
-                                RSCINST * pGetInst );
+                                 RscTop * pCreateClass,
+                                 RSCINST * pGetInst );
 
                     // Gibt die Groesse der Klasse in Bytes
-    sal_uInt32          Size(){ return( nSize ); };
+    sal_uInt32      Size(){ return nSize; }
 
-    sal_Bool            IsConsistent( const RSCINST & rInst );
+    bool            IsConsistent( const RSCINST & rInst );
     virtual void    SetToDefault( const RSCINST & rInst );
-    sal_Bool            IsDefault( const RSCINST & rInst );
-    sal_Bool            IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef );
+    bool            IsDefault( const RSCINST & rInst );
+    bool            IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef );
 
     virtual void    WriteSrcHeader( const RSCINST & rInst, FILE * fOutput,
                                     RscTypCont * pTC, sal_uInt32 nTab,
@@ -94,14 +91,14 @@ public:
     void            WriteSrc( const RSCINST & rInst, FILE * fOutput,
                               RscTypCont * pTC, sal_uInt32 nTab, const char * );
     ERRTYPE         WriteRc( const RSCINST & rInst, RscWriteRc & aMem,
-                             RscTypCont * pTC, sal_uInt32, sal_Bool bExtra );
+                             RscTypCont * pTC, sal_uInt32, bool bExtra );
 };
 
 class RscClassArray : public RscArray
 {
 public:
                     RscClassArray( Atom nId, sal_uInt32 nTypId,
-                                RscTop * pSuper, RscEnum * pTypeClass );
+                                   RscTop * pSuper, RscEnum * pTypeClass );
                     ~RscClassArray();
     virtual void    WriteSrcHeader( const RSCINST & rInst, FILE * fOutput,
                                     RscTypCont * pTC, sal_uInt32 nTab,
@@ -110,7 +107,7 @@ public:
                               RscTypCont * pTC, sal_uInt32 nTab, const char * );
     virtual ERRTYPE WriteRcHeader( const RSCINST & rInst, RscWriteRc & aMem,
                                    RscTypCont * pTC, const RscId & aId,
-                                    sal_uInt32 nDeep, sal_Bool bExtra );
+                                   sal_uInt32 nDeep, bool bExtra );
 };
 
 
@@ -118,7 +115,7 @@ class RscLangArray : public RscArray
 {
 public:
                     RscLangArray( Atom nId, sal_uInt32 nTypId,
-                                RscTop * pSuper, RscEnum * pTypeClass );
+                                  RscTop * pSuper, RscEnum * pTypeClass );
     virtual RSCCLASS_TYPE   GetClassType() const;
 };
 

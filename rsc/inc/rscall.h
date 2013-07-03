@@ -70,25 +70,28 @@ extern AtomContainer*   pHS;
 
 /******************* T y p e s *******************************************/
 enum RSCCLASS_TYPE  { RSCCLASS_BOOL, RSCCLASS_STRING, RSCCLASS_NUMBER,
-                        RSCCLASS_CONST, RSCCLASS_COMPLEX, RSCCLASS_ENUMARRAY };
+                      RSCCLASS_CONST, RSCCLASS_COMPLEX, RSCCLASS_ENUMARRAY };
 
 typedef void (* VarEnumCallbackProc)( void * pData, RSCCLASS_TYPE, Atom );
 
 /******************* S t r u c t s ***************************************/
-struct RSCINST {
+struct RSCINST
+{
     RscTop *    pClass;
     CLASS_DATA  pData;
 
                 RSCINST(){ pClass = NULL; pData = NULL; }
-                RSCINST( RscTop * pCl, CLASS_DATA pClassData ){
-                    pClass = pCl;
-                    pData = pClassData;
-                }
-    sal_Bool        IsInst() const { return( pData != NULL ); }
+                RSCINST( RscTop * pCl, CLASS_DATA pClassData )
+                    {
+                        pClass = pCl;
+                        pData = pClassData;
+                    }
+    bool        IsInst() const { return( pData != NULL ); }
 };
 
 /********************** S U B I N F O S T R U C T ************************/
-struct SUBINFO_STRUCT {
+struct SUBINFO_STRUCT
+{
     SUBINFO_STRUCT(){ nPos = 0; pClass = NULL; };
     RscId        aId;    // Identifier der Resource
     sal_uInt32   nPos;   // Position der Resource

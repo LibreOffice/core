@@ -83,7 +83,7 @@ RscCmdLine::RscCmdLine( int argc, char ** argv, RscError * pEH )
     char **         ppStr;
     RscPtrPtr       aCmdLine;
     sal_uInt32      i;
-    sal_Bool        bOutputSrsIsSet = sal_False;
+    bool            bOutputSrsIsSet = false;
 
     Init();
 
@@ -187,7 +187,7 @@ RscCmdLine::RscCmdLine( int argc, char ** argv, RscError * pEH )
             else if( !rsc_strnicmp( (*ppStr) + 1, "fp=", 3 ) )
             { // define name of .srs file
                 aOutputSrs = (*ppStr) + 4;
-                bOutputSrsIsSet = sal_True;
+                bOutputSrsIsSet = true;
             }
             else if( !rsc_strnicmp( (*ppStr) + 1, "oil=", 4 ) )
             {
@@ -273,6 +273,7 @@ OString RscCmdLine::substitutePaths( const OString& rIn )
         aRet.append( "%" );
         nIndex = last_match->second.getLength();
     }
+
     if( rIn.match( "/", nIndex ) )
         aRet.append( rIn.copy( nIndex ) );
     else
@@ -360,7 +361,7 @@ ERRTYPE RscCompiler::Start()
     if( aError.IsError() )
         pTC->pEH->Error( ERR_ERROR, NULL, RscId() );
 
-    return( aError );
+    return aError;
 }
 
 void RscCompiler::EndCompile()
@@ -389,7 +390,7 @@ void RscCompiler::EndCompile()
                     pFN = pTC->aFileTab.Get( aIndex );
                     if( !pFN->IsIncFile() )
                     {
-                        pTC->WriteSrc( foutput, NOFILE_INDEX, sal_False );
+                        pTC->WriteSrc( foutput, NOFILE_INDEX, false );
                         break; // ?T 281091MM nur eine Src-Datei
                     }
                 };
@@ -424,7 +425,7 @@ ERRTYPE RscCompiler :: IncludeParser( sal_uLong lFileKey )
             RscDepend       * pDep;
             RscFileInst       aFileInst( pTC, lFileKey, lFileKey, finput );
 
-            pFName->bScanned = sal_True;
+            pFName->bScanned = true;
             ::IncludeParser( &aFileInst );
             fclose( finput );
 
@@ -455,19 +456,19 @@ ERRTYPE RscCompiler :: ParseOneFile( sal_uLong lFileKey,
                                      const RscCmdLine::OutputFile* pOutputFile,
                                      const WriteRcContext* pContext )
 {
-    FILE *              finput = NULL;
-    ERRTYPE             aError;
-    RscFile           * pFName;
+    FILE *     finput = NULL;
+    ERRTYPE    aError;
+    RscFile *  pFName;
 
     pFName = pTC->aFileTab.Get( lFileKey );
     if( !pFName )
         aError = ERR_ERROR;
     else if( !pFName->bLoaded )
     {
-        RscDepend  * pDep;
+        RscDepend * pDep;
 
         //Include-Dateien vorher lesen
-        pFName->bLoaded = sal_True; //Endlos Rekursion vermeiden
+        pFName->bLoaded = true; //Endlos Rekursion vermeiden
 
         for ( size_t i = 0; i < pFName->aDepLst.size() && aError.IsOk(); ++i )
         {
@@ -476,7 +477,7 @@ ERRTYPE RscCompiler :: ParseOneFile( sal_uLong lFileKey,
         }
 
         if( aError.IsError() )
-            pFName->bLoaded = sal_False; //bei Fehler nicht geladenen
+            pFName->bLoaded = false; //bei Fehler nicht geladenen
         else
         {
             OUString aTmpPath;
@@ -518,13 +519,14 @@ ERRTYPE RscCompiler :: ParseOneFile( sal_uLong lFileKey,
         };
     };
 
-    return( aError );
+    return aError;
 }
 
 namespace
 {
     using namespace ::osl;
     class RscIoError { };
+
     static inline OUString lcl_getAbsoluteUrl(const OUString& i_sBaseUrl, const OString& i_sPath)
     {
         OUString sRelUrl, sAbsUrl;
@@ -534,6 +536,7 @@ namespace
             throw RscIoError();
         return sAbsUrl;
     };
+
     static inline OString lcl_getSystemPath(const OUString& i_sUrl)
     {
         OUString sSys;
@@ -542,6 +545,7 @@ namespace
         OSL_TRACE("temporary file: %s", OUStringToOString(sSys, RTL_TEXTENCODING_UTF8).getStr());
         return OUStringToOString(sSys, RTL_TEXTENCODING_MS_1252);
     };
+
     static inline OString lcl_getTempFile(OUString& sTempDirUrl)
     {
         // get a temp file name for the rc file
@@ -575,7 +579,7 @@ ERRTYPE RscCompiler::Link()
                 {
                     pTC->Delete( aIndex );
                     aIndex = pTC->aFileTab.GetIndexOf( pFName );
-                    pFName->bLoaded = sal_False;
+                    pFName->bLoaded = false;
                 }
             }
 
@@ -732,7 +736,7 @@ ERRTYPE RscCompiler::Link()
         };
     }
 
-    return( aError );
+    return aError;
 }
 
 void RscCompiler::Append( const OString& rOutputSrs,

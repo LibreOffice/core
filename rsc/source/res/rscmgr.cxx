@@ -27,7 +27,7 @@
 #include <rscdb.hxx>
 
 RscMgr::RscMgr( Atom nId, sal_uInt32 nTypeId, RscTop * pSuperCl )
-            : RscClass( nId, nTypeId, pSuperCl )
+    : RscClass( nId, nTypeId, pSuperCl )
 {
 }
 
@@ -36,16 +36,19 @@ sal_uInt32 RscMgr::Size()
     return RscClass::Size() + ALIGNED_SIZE( sizeof( RscMgrInst ) );
 }
 
-RSCINST RscMgr::Create( RSCINST * pInst, const RSCINST & rDflt, sal_Bool bOwnClass ){
+RSCINST RscMgr::Create( RSCINST * pInst, const RSCINST & rDflt, bool bOwnClass )
+{
     RSCINST aInst;
     RscMgrInst * pClassData;
 
-    if( !pInst ){
+    if( !pInst )
+    {
         aInst.pClass = this;
         aInst.pData = (CLASS_DATA) rtl_allocateMemory( Size() );
     }
     else
         aInst = *pInst;
+
     if( !bOwnClass && rDflt.IsInst() )
         bOwnClass = rDflt.pClass->InHierarchy( this );
 
@@ -54,15 +57,17 @@ RSCINST RscMgr::Create( RSCINST * pInst, const RSCINST & rDflt, sal_Bool bOwnCla
     pClassData = (RscMgrInst *)(aInst.pData + RscClass::Size() );
     pClassData->Create();
 
-    if( bOwnClass ){
+    if( bOwnClass )
+    {
         RscMgrInst * pDfltData = (RscMgrInst *)(rDflt.pData + RscClass::Size());
         *pClassData = *pDfltData;
     };
 
-    return( aInst );
+    return aInst;
 }
 
-void RscMgr::Destroy( const RSCINST & rInst ){
+void RscMgr::Destroy( const RSCINST & rInst )
+{
     RscMgrInst * pClassData;
 
     RscClass::Destroy( rInst );
@@ -76,35 +81,39 @@ void RscMgr::SetToDefault( const RSCINST & rInst )
     RscMgrInst * pClassData;
 
     pClassData = (RscMgrInst *)(rInst.pData + RscClass::Size());
-    pClassData->bDflt = sal_True;
+    pClassData->bDflt = true;
 
     RscClass::SetToDefault( rInst );
 }
 
-sal_Bool RscMgr::IsDefault( const RSCINST & rInst ){
+bool RscMgr::IsDefault( const RSCINST & rInst )
+{
     RscMgrInst * pClassData;
 
     pClassData = (RscMgrInst *)(rInst.pData + RscClass::Size());
     if( !pClassData->bDflt )
-        return( sal_False );
+        return false;
 
-    return( RscClass::IsDefault( rInst ) );
+    return RscClass::IsDefault( rInst );
 }
 
-sal_Bool RscMgr::IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef ){
+bool RscMgr::IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef )
+{
     if( !RscClass::IsValueDefault( rInst, pDef ) )
-        return sal_False;
+        return false;
 
-    if( pDef ){
+    if( pDef )
+    {
         RscMgrInst * pClassData = (RscMgrInst *)(rInst.pData + RscClass::Size());
         RscMgrInst * pDfltData  = (RscMgrInst *)(pDef + RscClass::Size());
 
-        if( !pClassData->aRefId.IsId() && !pDfltData->aRefId.IsId() ){
-            return sal_True;
+        if( !pClassData->aRefId.IsId() && !pDfltData->aRefId.IsId() )
+        {
+            return true;
         }
     }
 
-    return sal_False;
+    return false;
 }
 
 
@@ -120,6 +129,7 @@ void RscMgr::WriteSrcHeader( const RSCINST & rInst, FILE * fOutput,
     fprintf( fOutput, "%s %s",
              pHS->getString( rInst.pClass->GetId() ).getStr(),
              (rId.GetName()).getStr() );
+
     if( pClassData->aRefId.IsId() )
         fprintf( fOutput, ",%s", pClassData->aRefId.GetName().getStr() );
     else
@@ -127,6 +137,7 @@ void RscMgr::WriteSrcHeader( const RSCINST & rInst, FILE * fOutput,
         fprintf( fOutput, "\n" );
         for( i = 0; i < nTab; i++ )
             fputc( '\t', fOutput );
+
         fprintf( fOutput, "{\n" );
 
         rInst.pClass->WriteSrc( rInst, fOutput, pTC, nTab +1, pVarName );
@@ -135,18 +146,19 @@ void RscMgr::WriteSrcHeader( const RSCINST & rInst, FILE * fOutput,
 
         for( i = 0; i < nTab; i++ )
             fputc( '\t', fOutput );
+
         fprintf( fOutput, "}" );
     }
 }
 
 void RscMgr::WriteSrc( const RSCINST &, FILE *, RscTypCont *, sal_uInt32,
-                        const char * )
+                       const char * )
 {
 }
 
 ERRTYPE RscMgr::WriteRcHeader( const RSCINST & rInst, RscWriteRc & rMem,
                                RscTypCont * pTC, const RscId &rId,
-                               sal_uInt32 nDeep, sal_Bool bExtra )
+                               sal_uInt32 nDeep, bool bExtra )
 {
     RscMgrInst *    pClassData;
     ERRTYPE         aError;
@@ -163,6 +175,7 @@ ERRTYPE RscMgr::WriteRcHeader( const RSCINST & rInst, RscWriteRc & rMem,
         else
             pObjNode = rInst.pClass->GetRefClass()->
                                         GetObjNode( pClassData->aRefId );
+
         if( !pObjNode && pTC )
         {
             OStringBuffer aMsg(pHS->getString(rInst.pClass->GetId()));
@@ -228,36 +241,37 @@ ERRTYPE RscMgr::WriteRcHeader( const RSCINST & rInst, RscWriteRc & rMem,
         };
     };
 
-    return( aError );
+    return aError;
 }
 
 ERRTYPE RscMgr::WriteRc( const RSCINST &, RscWriteRc &,
-                         RscTypCont *, sal_uInt32, sal_Bool )
+                         RscTypCont *, sal_uInt32, bool )
 
 {
-    return( ERR_OK );
+    return ERR_OK;
 }
 
-sal_Bool RscMgr::IsConsistent( const RSCINST & rInst )
+bool RscMgr::IsConsistent( const RSCINST & rInst )
 {
-    sal_Bool    bRet;
+    bool    bRet;
     RscMgrInst * pClassData;
 
     bRet = RscClass::IsConsistent( rInst );
 
     pClassData = (RscMgrInst *)(rInst.pData + RscClass::Size());
     if( pClassData->aRefId.IsId() &&
-      ((pClassData->aRefId.GetNumber() < 1)
-        || (pClassData->aRefId.GetNumber() > 0x7FFF)
-        || IsToDeep( rInst ).IsError()) )
+        ((pClassData->aRefId.GetNumber() < 1) ||
+         (pClassData->aRefId.GetNumber() > 0x7FFF) ||
+         IsToDeep( rInst ).IsError()) )
     {
-        bRet = sal_False;
+        bRet = false;
     }
 
-    return( bRet );
+    return bRet;
 }
 
-ERRTYPE RscMgr::GetRef( const RSCINST & rInst, RscId * pRscId ){
+ERRTYPE RscMgr::GetRef( const RSCINST & rInst, RscId * pRscId )
+{
     RscMgrInst * pClassData;
 
     pClassData = (RscMgrInst *)(rInst.pData + RscClass::Size());
@@ -287,7 +301,7 @@ ERRTYPE RscMgr::IsToDeep( const RSCINST & rInst, sal_uInt32 nDeep )
             aTmpI.pData = pObjNode->GetRscObj();
             nDeep++;
         }
-        else //aTmpI.IsInst() wird sal_False, Schleife beenden
+        else //aTmpI.IsInst() wird false, Schleife beenden
             aTmpI.pData = NULL;
     }
 
@@ -297,7 +311,7 @@ ERRTYPE RscMgr::IsToDeep( const RSCINST & rInst, sal_uInt32 nDeep )
         aError             = ERR_REFTODEEP;
     }
 
-    return( aError );
+    return aError;
 }
 
 ERRTYPE RscMgr::SetRef( const RSCINST & rInst, const RscId & rRefId )
@@ -307,7 +321,8 @@ ERRTYPE RscMgr::SetRef( const RSCINST & rInst, const RscId & rRefId )
     ERRTYPE         aError;
 
     if( rRefId.IsId() &&
-      ((rRefId.GetNumber() < 1) || (rRefId.GetNumber() > 0x7FFF)) )
+        ((rRefId.GetNumber() < 1) ||
+         (rRefId.GetNumber() > 0x7FFF)) )
     {
         aError = ERR_IDRANGE;
     }
@@ -321,12 +336,12 @@ ERRTYPE RscMgr::SetRef( const RSCINST & rInst, const RscId & rRefId )
 
         aError = IsToDeep( rInst );
         if( aError.IsOk() )
-            pClassData->bDflt  = sal_False;
+            pClassData->bDflt  = false;
         else
             pClassData->aRefId = aOldId;
     }
 
-    return( aError );
+    return aError;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

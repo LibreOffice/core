@@ -30,44 +30,46 @@ class RscTypCont;
 class RscFileInst
 {
     ERRTYPE             aFirstError;// Erster Fehler
-    sal_uInt32              nErrorLine; // Zeile des ersten Fehlers
-    sal_uInt32              nErrorPos;  // Position des ersten Fehlers
-    sal_uInt32              nLineNo;    // Zeile in der Eingabedatei
-    sal_uLong               lFileIndex; // Index auf Eingabedatei
-    sal_uLong               lSrcIndex;  // Index auf Basisdatei
+    sal_uInt32          nErrorLine; // Zeile des ersten Fehlers
+    sal_uInt32          nErrorPos;  // Position des ersten Fehlers
+    sal_uInt32          nLineNo;    // Zeile in der Eingabedatei
+    sal_uLong           lFileIndex; // Index auf Eingabedatei
+    sal_uLong           lSrcIndex;  // Index auf Basisdatei
     FILE *              fInputFile; // Eingabedatei
     char *              pInput;     // Lesepuffer
-    sal_uInt32              nInputBufLen; // Laenge des Lesepuffers
-    sal_uInt32              nInputPos;  // Position im Lesepuffer
-    sal_uInt32              nInputEndPos;// Ende im Lesepuffer
+    sal_uInt32          nInputBufLen; // Laenge des Lesepuffers
+    sal_uInt32          nInputPos;  // Position im Lesepuffer
+    sal_uInt32          nInputEndPos;// Ende im Lesepuffer
     char *              pLine;      // Zeile
-    sal_uInt32              nLineBufLen;//Lange des Zeilenpuffres
-    sal_uInt32              nScanPos;   // Position in der Zeile
+    sal_uInt32          nLineBufLen;//Lange des Zeilenpuffres
+    sal_uInt32          nScanPos;   // Position in der Zeile
     int                 cLastChar;
-    sal_Bool                bEof;
+    bool                bEof;
 
 public:
     RscTypCont *        pTypCont;
-    void    Init();  // ctor initialisieren
-            RscFileInst( RscTypCont * pTC, sal_uLong lIndexSrc,
+    void        Init();  // ctor initialisieren
+                RscFileInst( RscTypCont * pTC, sal_uLong lIndexSrc,
                          sal_uLong lFileIndex, FILE * fFile );
-            ~RscFileInst();
-    sal_Bool    IsEof() const { return bEof; }
-    void    SetFileIndex( sal_uLong lFIndex ) { lFileIndex = lFIndex;  }
+                ~RscFileInst();
+    bool        IsEof() const { return bEof; }
+    void        SetFileIndex( sal_uLong lFIndex ) { lFileIndex = lFIndex;  }
     sal_uLong   GetFileIndex()                { return( lFileIndex );  }
     sal_uLong   GetSrcIndex()                 { return( lSrcIndex );   }
-    void    SetLineNo( sal_uInt32 nLine )     { nLineNo = nLine;       }
+    void        SetLineNo( sal_uInt32 nLine )     { nLineNo = nLine;       }
     sal_uInt32  GetLineNo()                   { return( nLineNo );     }
     sal_uInt32  GetScanPos()                  { return( nScanPos );    }
-    char *  GetLine()                     { return( pLine );       }
-    int     GetChar();
-    int     GetFastChar() { return pLine[ nScanPos ] ?
-                                pLine[ nScanPos++ ] : GetChar();
-                          }
-    void    GetNewLine();
-            // Fehlerbehandlung
-    void    SetError( ERRTYPE aError );
-    ERRTYPE GetError()                    { return aFirstError;    }
+    char *      GetLine()                     { return( pLine );       }
+    int         GetChar();
+    int         GetFastChar()
+                    {
+                        return pLine[ nScanPos ] ?
+                            pLine[ nScanPos++ ] : GetChar();
+                    }
+    void        GetNewLine();
+                // Fehlerbehandlung
+    void        SetError( ERRTYPE aError );
+    ERRTYPE     GetError()                    { return aFirstError;    }
     sal_uInt32  GetErrorLine()                { return nErrorLine;     }
     sal_uInt32  GetErrorPos()                 { return nErrorPos;      }
 };

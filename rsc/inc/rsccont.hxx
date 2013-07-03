@@ -23,16 +23,18 @@
 #include <rscerror.h>
 #include <rsctop.hxx>
 
-struct ENTRY_STRUCT {
+struct ENTRY_STRUCT
+{
     RscId   aName;
     RSCINST aInst;
     void Create(){ aName.Create(); aInst = RSCINST(); }
     void Destroy();
 };
-struct RscBaseContInst {
+struct RscBaseContInst
+{
     sal_uInt32          nEntries;
     ENTRY_STRUCT *  pEntries;
-    sal_Bool            bDflt;
+    bool            bDflt;
 };
 
 class RscBaseCont : public RscTop
@@ -40,10 +42,10 @@ class RscBaseCont : public RscTop
 protected:
     RscTop *        pTypeClass; // Typ der Eintraege
     RscTop *        pTypeClass1;// Zwei verschiedene Typen moeglich
-    sal_Bool            bNoId;      // Keine Identifier
-    sal_uInt32          nSize;      // Groesse der Instanzdaten dieser Klasse
+    bool            bNoId;      // Keine Identifier
+    sal_uInt32      nSize;      // Groesse der Instanzdaten dieser Klasse
                                 // mit Superklassen
-    sal_uInt32          nOffInstData;// Offset auf eigen Instanzdaten
+    sal_uInt32      nOffInstData;// Offset auf eigen Instanzdaten
     void            DestroyElements( RscBaseContInst * pClassData );
     RSCINST         SearchElePos( const RSCINST & rInst, const RscId & rEleName,
                                   RscTop * pClass, sal_uInt32 nPos );
@@ -51,19 +53,19 @@ protected:
     void            ContWriteSrc( const RSCINST & rInst, FILE * fOutput,
                                   RscTypCont * pTC, sal_uInt32 nTab, const char * );
     ERRTYPE         ContWriteRc( const RSCINST & rInst, RscWriteRc & aMem,
-                                 RscTypCont * pTC, sal_uInt32, sal_Bool bExtra );
+                                 RscTypCont * pTC, sal_uInt32, bool bExtra );
 public:
                     RscBaseCont( Atom nId, sal_uInt32 nTypId,
                                  RscTop * pSuper = NULL,
-                                 sal_Bool bNoId = sal_True );
+                                 bool bNoId = true );
                     ~RscBaseCont();
     virtual RSCCLASS_TYPE   GetClassType() const;
     void            SetTypeClass( RscTop * pClass, RscTop * pClass1 = NULL )
-                    {
-                        pTypeClass = pClass;
-                        pTypeClass1 = pClass1;
-                    };
-    RSCINST         Create( RSCINST * pInst, const RSCINST & rDflt, sal_Bool );
+                        {
+                            pTypeClass = pClass;
+                            pTypeClass1 = pClass1;
+                        }
+    RSCINST         Create( RSCINST * pInst, const RSCINST & rDflt, bool );
     void            Destroy( const RSCINST & rInst );
     ERRTYPE         GetElement( const RSCINST & rInst, const RscId & rEleName,
                                 RscTop * pCreateClass, const RSCINST & rCreateInst,
@@ -79,18 +81,18 @@ public:
     SUBINFO_STRUCT  GetInfoEle( const RSCINST & rInst, sal_uInt32 nPos );
     ERRTYPE         SetString( const RSCINST &, const char * pStr );
     ERRTYPE         SetNumber( const RSCINST &, sal_Int32 lValue );
-    ERRTYPE         SetBool( const RSCINST & rInst, sal_Bool bValue );
+    ERRTYPE         SetBool( const RSCINST & rInst, bool bValue );
     ERRTYPE         SetConst( const RSCINST & rInst, Atom nValueId,
                               sal_Int32 nValue );
     ERRTYPE         SetRef( const RSCINST & rInst, const RscId & rRefId );
 
                     // Gibt die Groesse der Klasse in Bytes
-    sal_uInt32          Size(){ return( nSize ); };
+    sal_uInt32      Size(){ return nSize; }
 
-    sal_Bool            IsConsistent( const RSCINST & rInst );
+    bool            IsConsistent( const RSCINST & rInst );
     void            SetToDefault( const RSCINST & rInst );
-    sal_Bool            IsDefault( const RSCINST & rInst );
-    sal_Bool            IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef );
+    bool            IsDefault( const RSCINST & rInst );
+    bool            IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef );
 
     void            Delete( const RSCINST & rInst, RscTop * pClass,
                             const RscId & rId );
@@ -99,7 +101,7 @@ public:
     void            WriteSrc( const RSCINST & rInst, FILE * fOutput,
                               RscTypCont * pTC, sal_uInt32 nTab, const char * );
     ERRTYPE         WriteRc( const RSCINST & rInst, RscWriteRc & aMem,
-                             RscTypCont * pTC, sal_uInt32 , sal_Bool bExtra);
+                             RscTypCont * pTC, sal_uInt32 , bool bExtra);
 };
 
 class RscContWriteSrc : public RscBaseCont
@@ -107,27 +109,29 @@ class RscContWriteSrc : public RscBaseCont
 public:
                     RscContWriteSrc( Atom nId, sal_uInt32 nTypId,
                                      RscTop * pSuper = NULL,
-                                     sal_Bool bNoId = sal_True );
+                                     bool bNoId = true );
     void            WriteSrc( const RSCINST & rInst, FILE * fOutput,
                               RscTypCont * pTC, sal_uInt32 nTab, const char * );
 };
 
-class RscCont : public RscContWriteSrc {
+class RscCont : public RscContWriteSrc
+{
 public:
                     RscCont( Atom nId, sal_uInt32 nTypId,
                              RscTop * pSuper = NULL,
-                             sal_Bool bNoId = sal_True );
+                             bool bNoId = true );
     ERRTYPE         WriteRc( const RSCINST & rInst, RscWriteRc & aMem,
-                             RscTypCont * pTC, sal_uInt32, sal_Bool bExtra );
+                             RscTypCont * pTC, sal_uInt32, bool bExtra );
 };
 
-class RscContExtraData : public RscContWriteSrc {
+class RscContExtraData : public RscContWriteSrc
+{
 public:
                     RscContExtraData( Atom nId, sal_uInt32 nTypId,
-                             RscTop * pSuper = NULL,
-                             sal_Bool bNoId = sal_True );
+                                      RscTop * pSuper = NULL,
+                                      bool bNoId = true );
     ERRTYPE         WriteRc( const RSCINST & rInst, RscWriteRc & aMem,
-                             RscTypCont * pTC, sal_uInt32, sal_Bool bExtra );
+                             RscTypCont * pTC, sal_uInt32, bool bExtra );
 };
 
 #endif //_RSCCONT_HXX

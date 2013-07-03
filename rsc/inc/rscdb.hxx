@@ -28,7 +28,6 @@
 #include <rscstr.hxx>
 #include <rscarray.hxx>
 #include <rscdef.hxx>
-#include <tools/string.hxx>
 
 #include <vector>
 #include <map>
@@ -63,13 +62,13 @@ typedef ::std::vector< RscSysEntry* > RscSysList;
 
 class RscTypCont
 {
-    CharSet             nSourceCharSet;
+    rtl_TextEncoding    nSourceCharSet;
     sal_uInt32          nMachineId;         // Globaler Maschinentyp
     RSCBYTEORDER_TYPE   nByteOrder;         // Intel oder
-    OString        aLanguage;          // output language
+    OString             aLanguage;          // output language
     std::vector< sal_uInt32 > aLangFallbacks;   // language fallback list (entry 0 is language itself)
-    OString        aSearchPath;        // Suchen der Bitmap, Icon, Pointer
-    OString        aSysSearchPath;     // aSearchPath plus language specific paths
+    OString             aSearchPath;        // Suchen der Bitmap, Icon, Pointer
+    OString             aSysSearchPath;     // aSearchPath plus language specific paths
     sal_uInt32          nUniqueId;          // eindeutiger Id fuer Systemresourcen
     sal_uLong           nFilePos;           // Position in der Datei ( MTF )
     sal_uInt32          nPMId;              // eindeutiger Id fuer PM-Rseourcefile
@@ -286,7 +285,7 @@ public:
     RscError*           pEH;        // Fehlerhandler
     RscNameTable        aNmTb;      // Tabelle fuer Namen
     RscFileTab          aFileTab;   // Tabelle der Dateinamen
-    sal_uInt32              nFlags;
+    sal_uInt32          nFlags;
     std::map<sal_uInt64, sal_uLong> aIdTranslator; //Ordnet Resourcetypen und Id's einen Id zu
                                        //(unter PM), oder eine Dateiposition (MTF)
 
@@ -295,43 +294,43 @@ public:
 
     Atom AddLanguage( const char* );
 
-    sal_Bool            IsPreload() const
-                    { return (nFlags & PRELOAD_FLAG) ? sal_True : sal_False; }
-    sal_Bool            IsSysResTest() const
-                    { return (nFlags & NOSYSRESTEST_FLAG) ? sal_False : sal_True; }
-    sal_Bool            IsSrsDefault() const
-                    { return (nFlags & SRSDEFAULT_FLAG) ? sal_True : sal_False; }
-    OString ChangeLanguage(const OString & rNewLang);
+    bool              IsPreload() const
+                          { return (nFlags & PRELOAD_FLAG) ? true : false; }
+    bool              IsSysResTest() const
+                          { return (nFlags & NOSYSRESTEST_FLAG) ? false : true; }
+    bool              IsSrsDefault() const
+                          { return (nFlags & SRSDEFAULT_FLAG) ? true : false; }
+    OString           ChangeLanguage(const OString & rNewLang);
     const std::vector< sal_uInt32 >& GetFallbacks() const
-    { return aLangFallbacks; }
+                          { return aLangFallbacks; }
 
     RSCBYTEORDER_TYPE GetByteOrder() const { return nByteOrder; }
-    CharSet         GetSourceCharSet() const { return nSourceCharSet; }
-    CharSet         SetSourceCharSet( CharSet aCharSet )
-    {
-        CharSet aOld = nSourceCharSet;
-        nSourceCharSet = aCharSet;
-        return aOld;
-    }
-    void            SetSearchPath( const OString& rStr) { aSearchPath = rStr; }
-    OString    GetSearchPath() const { return aSearchPath; }
-    void            SetSysSearchPath( const OString& rStr ) { aSysSearchPath = rStr; }
-    void        InsertType( RscTop * pType )
-                {
-                    aBaseLst.push_back( pType );
-                }
-    RscTop  *   SearchType( Atom nTypId );
-                // loescht alle Resourceobjekte diese Datei
-    void        Delete( sal_uLong lFileKey );
-    RscTop  *   GetRoot()         { return( pRoot ); };
-    sal_uInt32      PutSysName( sal_uInt32 nRscTyp, char * pName, sal_uInt32 nConst,
-                            sal_uInt32 nId, sal_Bool bFirst );
-    void        ClearSysNames();
-    ERRTYPE     WriteRc( WriteRcContext& rContext );
-    void        WriteSrc( FILE * fOutput, sal_uLong nFileIndex,
-                          sal_Bool bName = sal_True );
-    sal_uInt32      PutTranslatorKey( sal_uInt64 nKey );
-    void        IncFilePos( sal_uLong nOffset ){ nFilePos += nOffset; }
+    rtl_TextEncoding  GetSourceCharSet() const { return nSourceCharSet; }
+    rtl_TextEncoding  SetSourceCharSet( rtl_TextEncoding aCharSet )
+                          {
+                              rtl_TextEncoding aOld = nSourceCharSet;
+                              nSourceCharSet = aCharSet;
+                              return aOld;
+                          }
+    void              SetSearchPath( const OString& rStr) { aSearchPath = rStr; }
+    OString           GetSearchPath() const { return aSearchPath; }
+    void              SetSysSearchPath( const OString& rStr ) { aSysSearchPath = rStr; }
+    void              InsertType( RscTop * pType )
+                          {
+                              aBaseLst.push_back( pType );
+                          }
+    RscTop  *         SearchType( Atom nTypId );
+                      // loescht alle Resourceobjekte diese Datei
+    void              Delete( sal_uLong lFileKey );
+    RscTop  *         GetRoot()         { return pRoot; }
+    sal_uInt32        PutSysName( sal_uInt32 nRscTyp, char * pName, sal_uInt32 nConst,
+                                  sal_uInt32 nId, bool bFirst );
+    void              ClearSysNames();
+    ERRTYPE           WriteRc( WriteRcContext& rContext );
+    void              WriteSrc( FILE * fOutput, sal_uLong nFileIndex,
+                                bool bName = true );
+    sal_uInt32        PutTranslatorKey( sal_uInt64 nKey );
+    void              IncFilePos( sal_uLong nOffset ){ nFilePos += nOffset; }
 };
 
 #endif

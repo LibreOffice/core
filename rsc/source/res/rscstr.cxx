@@ -29,7 +29,7 @@
 #include <rtl/textenc.h>
 
 RscString::RscString( Atom nId, sal_uInt32 nTypeId )
-                : RscTop( nId, nTypeId )
+    : RscTop( nId, nTypeId )
 {
     nSize = ALIGNED_SIZE( sizeof( RscStringInst ) );
     pRefClass = NULL;
@@ -40,20 +40,24 @@ RSCCLASS_TYPE RscString::GetClassType() const
     return RSCCLASS_STRING;
 }
 
-ERRTYPE RscString::SetString( const RSCINST & rInst, const char * pStr ){
+ERRTYPE RscString::SetString( const RSCINST & rInst, const char * pStr )
+{
     char    * pTmp;
     ERRTYPE aError;
 
-    if( aError.IsOk() ){
-        ((RscStringInst *)rInst.pData)->bDflt = sal_False;
+    if( aError.IsOk() )
+    {
+        ((RscStringInst *)rInst.pData)->bDflt = false;
 
         pTmp = ((RscStringInst *)rInst.pData)->pStr;
-        if( pTmp ){
+        if( pTmp )
+        {
             rtl_freeMemory( pTmp );
             pTmp = NULL;
         }
 
-        if( pStr ){
+        if( pStr )
+        {
             sal_uInt32  nLen = strlen( pStr ) +1;
             pTmp = (char *)rtl_allocateMemory( nLen );
             memcpy( pTmp, pStr, nLen );
@@ -62,23 +66,27 @@ ERRTYPE RscString::SetString( const RSCINST & rInst, const char * pStr ){
         ((RscStringInst *)rInst.pData)->pStr = pTmp;
     }
 
-    return( aError );
+    return aError;
 }
 
-ERRTYPE RscString::GetString( const RSCINST & rInst, char ** ppStr ){
+ERRTYPE RscString::GetString( const RSCINST & rInst, char ** ppStr )
+{
     *ppStr = ((RscStringInst *)rInst.pData)->pStr;
-    return( ERR_OK );
+    return ERR_OK;
 }
 
-ERRTYPE RscString::GetRef( const RSCINST & rInst, RscId * pRscId ){
+ERRTYPE RscString::GetRef( const RSCINST & rInst, RscId * pRscId )
+{
     *pRscId = ((RscStringInst *)rInst.pData)->aRefId;
-    return( ERR_OK );
+    return ERR_OK;
 }
 
-ERRTYPE RscString::SetRef( const RSCINST & rInst, const RscId & rRefId ){
-    if( pRefClass ){
+ERRTYPE RscString::SetRef( const RSCINST & rInst, const RscId & rRefId )
+{
+    if( pRefClass )
+    {
         ((RscStringInst *)rInst.pData)->aRefId = rRefId;
-        ((RscStringInst *)rInst.pData)->bDflt  = sal_False;
+        ((RscStringInst *)rInst.pData)->bDflt  = false;
     }
     else
         return( ERR_REFNOTALLOWED );
@@ -87,82 +95,92 @@ ERRTYPE RscString::SetRef( const RSCINST & rInst, const RscId & rRefId ){
 }
 
 RSCINST RscString::Create( RSCINST * pInst, const RSCINST & rDflt,
-                           sal_Bool bOwnClass )
+                           bool bOwnClass )
 {
     RSCINST aInst;
 
-    if( !pInst ){
+    if( !pInst )
+    {
         aInst.pClass = this;
         aInst.pData = (CLASS_DATA)
                       rtl_allocateMemory( sizeof( RscStringInst ) );
     }
     else
         aInst = *pInst;
+
     if( !bOwnClass && rDflt.IsInst() )
         bOwnClass = rDflt.pClass->InHierarchy( this );
 
     ((RscStringInst *)aInst.pData)->aRefId.Create();
     ((RscStringInst *)aInst.pData)->pStr = NULL;
-    ((RscStringInst *)aInst.pData)->bDflt = sal_True;
+    ((RscStringInst *)aInst.pData)->bDflt = true;
 
-    if( bOwnClass ){
+    if( bOwnClass )
+    {
         ((RscStringInst *)aInst.pData)->aRefId =
-                          ((RscStringInst *)rDflt.pData)->aRefId;
+            ((RscStringInst *)rDflt.pData)->aRefId;
         SetString( aInst, ((RscStringInst *)rDflt.pData)->pStr );
         ((RscStringInst *)aInst.pData)->bDflt =
-                            ((RscStringInst *)rDflt.pData)->bDflt ;
+            ((RscStringInst *)rDflt.pData)->bDflt ;
     }
 
-    return( aInst );
+    return aInst;
 }
 
-void RscString::Destroy( const RSCINST & rInst ){
+void RscString::Destroy( const RSCINST & rInst )
+{
     if( ((RscStringInst *)rInst.pData)->pStr )
         rtl_freeMemory( ((RscStringInst *)rInst.pData)->pStr );
     ((RscStringInst *)rInst.pData)->aRefId.Destroy();
 }
 
-sal_Bool RscString::IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef ){
+bool RscString::IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef )
+{
     RscStringInst * pData    = (RscStringInst*)rInst.pData;
     RscStringInst * pDefData = (RscStringInst*)pDef;
 
-    if( pDef ){
+    if( pDef )
+    {
         if( pData->aRefId.IsId() || pDefData->aRefId.IsId() )
         {
-            if( pData->aRefId.aExp.IsNumber()
-              && pDefData->aRefId.aExp.IsNumber() )
+            if( pData->aRefId.aExp.IsNumber() &&
+                pDefData->aRefId.aExp.IsNumber() )
             {
                 // Sind die Referenzidentifier gleich
                 if( pData->aRefId.GetNumber() == pDefData->aRefId.GetNumber() )
                 {
-                    return sal_True;
+                    return true;
                 }
             }
         }
-        else {
-            sal_Bool bStrEmpty = sal_False;
-            sal_Bool bDefStrEmpty = sal_False;
+        else
+        {
+            bool bStrEmpty = false;
+            bool bDefStrEmpty = false;
 
-            if( pData->pStr ){
+            if( pData->pStr )
+            {
                 bStrEmpty = ('\0' == *pData->pStr);
             }
             else
-                bStrEmpty = sal_True;
+                bStrEmpty = true;
 
-            if( pDefData->pStr ){
+            if( pDefData->pStr )
+            {
                 bDefStrEmpty = ('\0' == *pDefData->pStr);
             }
             else
-                bDefStrEmpty = sal_True;
+                bDefStrEmpty = true;
 
-            if( !bStrEmpty || !bDefStrEmpty ){
-                return sal_False;
+            if( !bStrEmpty || !bDefStrEmpty )
+            {
+                return false;
             }
-            return sal_True;
+            return true;
         }
     }
 
-    return sal_False;
+    return false;
 }
 
 void RscString::WriteSrc( const RSCINST & rInst, FILE * fOutput,
@@ -181,11 +199,12 @@ void RscString::WriteSrc( const RSCINST & rInst, FILE * fOutput,
             sal_uInt32  n = 0;
             sal_uInt32  nPos, nSlashPos;
 
-            do {
+            do
+            {
                 fputc( '\"', fOutput );
                 nSlashPos = nPos = 0;
-                while( pStrI->pStr[ n ]
-                  && (nPos < 72 || nPos - nSlashPos <= 3) )
+
+                while( pStrI->pStr[ n ] && (nPos < 72 || nPos - nSlashPos <= 3) )
                 { // nach \ mindesten 3 Zeichen wegeb \xa7
                     fputc( pStrI->pStr[ n ], fOutput );
                     if( pStrI->pStr[ n ] == '\\' )
@@ -196,8 +215,11 @@ void RscString::WriteSrc( const RSCINST & rInst, FILE * fOutput,
 
                 fputc( '\"', fOutput );
                 if( pStrI->pStr[ n ] ) //nocht nicht zu ende
+                {
                     fputc( '\n', fOutput );
-            } while( pStrI->pStr[ n ] );
+                }
+            }
+            while( pStrI->pStr[ n ] );
         }
         else
             fprintf( fOutput, "\"\"" );
@@ -205,19 +227,21 @@ void RscString::WriteSrc( const RSCINST & rInst, FILE * fOutput,
 }
 
 ERRTYPE RscString::WriteRc( const RSCINST & rInst, RscWriteRc & rMem,
-                            RscTypCont * pTC, sal_uInt32 nDeep, sal_Bool bExtra )
+                            RscTypCont * pTC, sal_uInt32 nDeep, bool bExtra )
 {
     ERRTYPE aError;
     ObjNode *       pObjNode = NULL;
 
 
-    if( ((RscStringInst *)rInst.pData)->aRefId.IsId() ){
+    if( ((RscStringInst *)rInst.pData)->aRefId.IsId() )
+    {
         RscId   aId( ((RscStringInst *)rInst.pData)->aRefId );
         RSCINST aTmpI;
 
         aTmpI.pClass = pRefClass;
 
-        while( aError.IsOk() && aId.IsId() ){
+        while( aError.IsOk() && aId.IsId() )
+        {
             //Erhoehen und abfragen um Endlosrekusion zu vermeiden
             nDeep++;
             if( nDeep > nRefDeep )
@@ -269,7 +293,7 @@ ERRTYPE RscString::WriteRc( const RSCINST & rInst, RscWriteRc & rMem,
                 rMem.PutUTF8( ((RscStringInst *)rInst.pData)->pStr );
         };
     };
-    return( aError );
+    return aError;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -146,7 +146,7 @@ void RscTypCont::Init()
 
     Atom        nId;
 
-    aNmTb.SetSort( sal_False );
+    aNmTb.SetSort( false );
 {
     aNmTb.Put( "LINE",               LINE,           (long)0 );
     aNmTb.Put( "NOT",                NOT,            (long)0 );

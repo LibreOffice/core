@@ -122,7 +122,7 @@ void RscLangEnum::Init( RscNameTable& rNames )
     {
         OString aIsoToken;
         sal_uInt16 nTokenCounter = 0;
-        sal_Bool bOneMore = 1;
+        bool bOneMore = 1;
         while ( bOneMore )
         {
             aIsoToken = comphelper::string::getToken(aEnvIsoTokens, nTokenCounter, ' ');
@@ -140,6 +140,7 @@ void RscLangEnum::Init( RscNameTable& rNames )
             }
             else
                 bOneMore = 0;
+
             nTokenCounter++;
         }
     }
@@ -170,7 +171,7 @@ Atom RscLangEnum::AddLanguage( const char* pLang, RscNameTable& rNames )
 RscEnum * RscTypCont::InitLangType()
 {
     aLangType.Init( aNmTb );
-    return( &aLangType );
+    return &aLangType;
 }
 
 RscEnum * RscTypCont::InitFieldUnitsType()
@@ -210,7 +211,8 @@ RscEnum * RscTypCont::InitTimeFieldFormat()
     return pTimeFieldFormat;
 }
 
-RscEnum * RscTypCont::InitColor(){
+RscEnum * RscTypCont::InitColor()
+{
     RscEnum * pColor;
     pColor = new RscEnum( pHS->getID( "EnumColor" ), RSC_NOTYPE );
 
@@ -231,10 +233,11 @@ RscEnum * RscTypCont::InitColor(){
     SETCONST( pColor, "COL_YELLOW",                 COL_YELLOW );
     SETCONST( pColor, "COL_WHITE",                  COL_WHITE );
 
-    return( pColor );
+    return pColor;
 }
 
-RscEnum * RscTypCont::InitMapUnit(){
+RscEnum * RscTypCont::InitMapUnit()
+{
     RscEnum * pMapUnit;
     pMapUnit = new RscEnum( pHS->getID( "EnumMapUnit" ), RSC_NOTYPE );
 
@@ -252,10 +255,11 @@ RscEnum * RscTypCont::InitMapUnit(){
     SETCONST( pMapUnit, "MAP_TWIP",                   MAP_TWIP );
     SETCONST( pMapUnit, "MAP_APPFONT",                MAP_APPFONT );
     SETCONST( pMapUnit, "MAP_SV",                     RSC_EXTRAMAPUNIT );
-    return( pMapUnit );
+    return pMapUnit;
 }
 
-RscEnum * RscTypCont::InitKey(){
+RscEnum * RscTypCont::InitKey()
+{
     RscEnum * pKey;
     pKey = new RscEnum( pHS->getID( "EnumKey" ), RSC_NOTYPE );
 
@@ -367,10 +371,11 @@ RscEnum * RscTypCont::InitKey(){
     SETCONST( pKey, "KEY_TILDE",                com::sun::star::awt::Key::TILDE );
     SETCONST( pKey, "KEY_QUOTELEFT",            com::sun::star::awt::Key::QUOTELEFT );
 
-    return( pKey );
+    return pKey;
 }
 
-RscEnum * RscTypCont::InitTriState(){
+RscEnum * RscTypCont::InitTriState()
+{
     RscEnum * pTriState;
     pTriState = new RscEnum( pHS->getID( "EnumTriState" ), RSC_NOTYPE );
 
@@ -378,7 +383,7 @@ RscEnum * RscTypCont::InitTriState(){
     SETCONST( pTriState, "STATE_CHECK",        STATE_CHECK    );
     SETCONST( pTriState, "STATE_DONTKNOW",     STATE_DONTKNOW );
 
-    return( pTriState );
+    return pTriState;
 }
 
 RscEnum * RscTypCont::InitMessButtons()
@@ -391,10 +396,11 @@ RscEnum * RscTypCont::InitMessButtons()
     SETCONST( pMessButtons, "WB_YES_NO_CANCEL",           sal::static_int_cast<sal_uInt32>(WB_YES_NO_CANCEL) );
     SETCONST( pMessButtons, "WB_RETRY_CANCEL",            sal::static_int_cast<sal_uInt32>(WB_RETRY_CANCEL) );
     SETCONST( pMessButtons, "WB_ABORT_RETRY_IGNORE",      sal::static_int_cast<sal_uInt32>(WB_ABORT_RETRY_IGNORE) );
-    return( pMessButtons );
+    return pMessButtons;
 }
 
-RscEnum * RscTypCont::InitMessDefButton(){
+RscEnum * RscTypCont::InitMessDefButton()
+{
     RscEnum * pMessDefButton;
     pMessDefButton = new RscEnum( pHS->getID( "EnumMessDefButton" ),
                                   RSC_NOTYPE );
@@ -405,7 +411,7 @@ RscEnum * RscTypCont::InitMessDefButton(){
     SETCONST( pMessDefButton, "WB_DEF_YES",                 sal::static_int_cast<sal_uInt32>(WB_DEF_YES) );
     SETCONST( pMessDefButton, "WB_DEF_NO",                  sal::static_int_cast<sal_uInt32>(WB_DEF_NO) );
     SETCONST( pMessDefButton, "WB_DEF_IGNORE",              sal::static_int_cast<sal_uInt32>(WB_DEF_IGNORE) );
-    return( pMessDefButton );
+    return pMessDefButton;
 }
 
 RscTupel * RscTypCont::InitGeometry()
@@ -502,7 +508,7 @@ RscCont * RscTypCont::InitStringLongTupelList( RscTupel * pStringLong )
 RscArray * RscTypCont::InitLangStringTupelList( RscCont * pStrTupelLst )
 {
     return new RscArray( pHS->getID( "Lang_CharsCharsTupel" ),
-                    RSC_NOTYPE, pStrTupelLst, &aLangType );
+                         RSC_NOTYPE, pStrTupelLst, &aLangType );
 }
 
 RscArray * RscTypCont::InitLangStringLongTupelList( RscCont * pStrLongTupelLst )

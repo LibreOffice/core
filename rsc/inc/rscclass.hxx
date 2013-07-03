@@ -27,10 +27,12 @@
 class RscClass : public RscTop
 {
 protected:
-    struct RscClassInst{
-        sal_uLong   nVarDflt;
+    struct RscClassInst
+    {
+        sal_uLong       nVarDflt;
     };
-    struct VARTYPE_STRUCT {
+    struct VARTYPE_STRUCT
+    {
         Atom            nVarName;   // Variablenname
         RSCVAR          nVarType;   // Variablentyp
         sal_uInt32      nMask;      // Maskierungsbit
@@ -39,20 +41,20 @@ protected:
         CLASS_DATA      pDefault;   // Zeiger auf DefaultDaten
         Atom            nDataBaseName;//Name fuer Fremddatenbereich
     };
-    sal_uInt32              nSuperSize; // Groesse der Instanzdaten der SuperKl.
-    sal_uInt32              nSize;      // Groesse der Instanzdaten dieser Klasse
+    sal_uInt32          nSuperSize; // Groesse der Instanzdaten der SuperKl.
+    sal_uInt32          nSize;      // Groesse der Instanzdaten dieser Klasse
                                     // mit Superklassen
-    sal_uInt32              nEntries;   // Eintraege in pVarTypeList
+    sal_uInt32          nEntries;   // Eintraege in pVarTypeList
     VARTYPE_STRUCT *    pVarTypeList;   // Variablenliste
     RSCINST             GetInstData( CLASS_DATA pData, sal_uInt32 nEle,
-                                     sal_Bool bGetCopy = sal_False );
+                                     bool bGetCopy = false );
     CLASS_DATA          GetDfltData( sal_uInt32 nEle );
-    sal_Bool                IsDflt( CLASS_DATA pData, sal_uInt32 nEle );
-    sal_Bool                IsValueDflt( CLASS_DATA pData, sal_uInt32 nEle );
+    bool                IsDflt( CLASS_DATA pData, sal_uInt32 nEle );
+    bool                IsValueDflt( CLASS_DATA pData, sal_uInt32 nEle );
     void                SetVarDflt( CLASS_DATA pData, sal_uInt32 nEle,
-                                    sal_Bool bSet );
-    sal_Int32               GetCorrectValues( const RSCINST & rInst, sal_uInt32 nVarPos,
-                                        sal_uInt32 nTupelIdx, RscTypCont * pTC );
+                                    bool bSet );
+    sal_Int32           GetCorrectValues( const RSCINST & rInst, sal_uInt32 nVarPos,
+                                          sal_uInt32 nTupelIdx, RscTypCont * pTC );
 public:
                     RscClass( Atom nId, sal_uInt32 nTypId, RscTop * pSuperCl );
                     ~RscClass();
@@ -67,29 +69,29 @@ public:
     virtual void    EnumVariables( void * pData, VarEnumCallbackProc );
     RSCINST         GetVariable( const RSCINST & rInst, Atom nVarName,
                                  const RSCINST & rInitInst,
-                                 sal_Bool nInitDflt = sal_False,
+                                 bool nInitDflt = false,
                                  RscTop * pCreateClass = NULL );
     RSCINST         GetCopyVar( const RSCINST & rInst, Atom nVarName );
 
                     // Gibt die Groesse der Klasse in Bytes
-    sal_uInt32          Size(){ return( nSize ); };
+    sal_uInt32      Size(){ return nSize; }
 
-    sal_Bool            IsConsistent( const RSCINST & rInst );
+    bool            IsConsistent( const RSCINST & rInst );
     void            SetToDefault( const RSCINST & rInst );
-    sal_Bool            IsDefault( const RSCINST & rInst );
-    sal_Bool            IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef );
+    bool            IsDefault( const RSCINST & rInst );
+    bool            IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef );
     void            SetDefault( const RSCINST & rData, Atom nVarId );
     using RscTop::GetDefault;
     RSCINST         GetDefault( Atom nVarId );
 
-    RSCINST         Create( RSCINST * pInst, const RSCINST & rDflt, sal_Bool );
+    RSCINST         Create( RSCINST * pInst, const RSCINST & rDflt, bool );
     void            Destroy( const RSCINST & rInst );
     void            WriteSrc( const RSCINST & rInst, FILE * fOutput,
                               RscTypCont * pTC, sal_uInt32 nTab, const char * );
     ERRTYPE         WriteInstRc( const RSCINST & rInst, RscWriteRc & aMem,
-                                 RscTypCont * pTC, sal_uInt32, sal_Bool bExtra );
+                                 RscTypCont * pTC, sal_uInt32, bool bExtra );
     ERRTYPE         WriteRc( const RSCINST & rInst, RscWriteRc & aMem,
-                             RscTypCont * pTC, sal_uInt32, sal_Bool bExtra );
+                             RscTypCont * pTC, sal_uInt32, bool bExtra );
 };
 
 class RscSysDepend : public RscClass
@@ -97,10 +99,10 @@ class RscSysDepend : public RscClass
 public:
                     RscSysDepend( Atom nId, sal_uInt32 nTypId, RscTop * pSuper );
     ERRTYPE         WriteSysDependRc( const RSCINST &, RscWriteRc & aMem,
-                                    RscTypCont * pTC, sal_uInt32, sal_Bool bExtra,
-                                    sal_Bool bFirst = sal_False );
+                                      RscTypCont * pTC, sal_uInt32, bool bExtra,
+                                      bool bFirst = false );
     ERRTYPE         WriteRc( const RSCINST &, RscWriteRc & aMem,
-                             RscTypCont * pTC, sal_uInt32, sal_Bool bExtra );
+                             RscTypCont * pTC, sal_uInt32, bool bExtra );
 };
 
 class RscTupel : public RscClass
@@ -108,7 +110,7 @@ class RscTupel : public RscClass
 public:
     RscTupel( Atom nId, sal_uInt32 nTypId, RscTop * pSuper );
     RSCINST         GetTupelVar( const RSCINST & rInst, sal_uInt32 nPos,
-                                const RSCINST & rInitInst );
+                                 const RSCINST & rInitInst );
     void            WriteSrc( const RSCINST & rInst, FILE * fOutput,
                               RscTypCont * pTC, sal_uInt32 nTab, const char * );
 };

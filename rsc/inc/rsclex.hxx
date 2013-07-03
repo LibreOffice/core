@@ -52,14 +52,16 @@ struct RSCHEADER {
 };
 
 /************** O b j e c t s t a c k ************************************/
-struct Node {
+struct Node
+{
     Node*   pPrev;
     RSCINST aInst;
     sal_uInt32  nTupelRec;  // Rekursionstiefe fuer Tupel
-    Node() { pPrev = NULL; nTupelRec = 0; };
+    Node() { pPrev = NULL; nTupelRec = 0; }
 };
 
-class ObjectStack {
+class ObjectStack
+{
     private :
         Node* pRoot;
     public :
@@ -67,7 +69,7 @@ class ObjectStack {
         ObjectStack ()   { pRoot = NULL; }
 
         const RSCINST & Top  ()     { return pRoot->aInst; }
-        sal_Bool        IsEmpty()   { return( pRoot == NULL ); }
+        bool        IsEmpty()   { return( pRoot == NULL ); }
         void        IncTupelRec() { pRoot->nTupelRec++; }
         void        DecTupelRec() { pRoot->nTupelRec--; }
         sal_uInt32  TupelRecCount() const { return pRoot->nTupelRec; }

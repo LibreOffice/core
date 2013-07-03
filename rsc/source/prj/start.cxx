@@ -46,9 +46,9 @@ extern "C"
 }
 int rsc2_main(int, char**);
 
-static sal_Bool CallPrePro( const OString& rInput,
-    const OString& rOutput, RscPtrPtr * pCmdLine,
-    sal_Bool bResponse )
+static bool CallPrePro( const OString& rInput,
+                        const OString& rOutput, RscPtrPtr * pCmdLine,
+                        bool bResponse )
 {
     RscPtrPtr       aNewCmdL;   // Kommandozeile
     RscPtrPtr       aRespCmdL;   // Kommandozeile
@@ -74,10 +74,9 @@ static sal_Bool CallPrePro( const OString& rInput,
             bVerbose = true;
             continue;
         }
-        if  (   !rsc_strnicmp( (char *)pCmdLine->GetEntry( i ), "-u", 2 )
-            ||  !rsc_strnicmp( (char *)pCmdLine->GetEntry( i ), "-i", 2 )
-            ||  !rsc_strnicmp( (char *)pCmdLine->GetEntry( i ), "-d", 2 )
-            )
+        if ( !rsc_strnicmp( (char *)pCmdLine->GetEntry( i ), "-u", 2 ) ||
+             !rsc_strnicmp( (char *)pCmdLine->GetEntry( i ), "-i", 2 ) ||
+             !rsc_strnicmp( (char *)pCmdLine->GetEntry( i ), "-d", 2 ))
         {
             aNewCmdL.Append( rsc_strdup( (char *)pCmdLine->GetEntry( i ) ) );
         }
@@ -136,14 +135,14 @@ static sal_Bool CallPrePro( const OString& rInput,
         #endif
     }
     if ( nRet )
-        return sal_False;
+        return false;
 
-    return sal_True;
+    return true;
 }
 
 
-static sal_Bool CallRsc2( RscStrList * pInputList,
-    const OString &rSrsName, RscPtrPtr * pCmdLine )
+static bool CallRsc2( RscStrList * pInputList,
+                      const OString &rSrsName, RscPtrPtr * pCmdLine )
 {
     int nRet;
     OString*  pString;
@@ -164,19 +163,21 @@ static sal_Bool CallRsc2( RscStrList * pInputList,
             eVerbosity = RscVerbositySilent;
             continue;
         }
-        if( !rsc_strnicmp( (char *)pCmdLine->GetEntry( i ),  "-fp=", 4 )
-          || !rsc_strnicmp( (char *)pCmdLine->GetEntry( i ), "-fo=", 4 )
-          || !rsc_strnicmp( (char *)pCmdLine->GetEntry( i ), "-presponse", 9 )
-          || !rsc_strnicmp( (char *)pCmdLine->GetEntry( i ), "-rc", 3 )
-          || !rsc_stricmp( (char *)pCmdLine->GetEntry( i ), "-+" )
-          || !rsc_stricmp( (char *)pCmdLine->GetEntry( i ), "-br" )
-          || !rsc_stricmp( (char *)pCmdLine->GetEntry( i ), "-bz" )
-          || !rsc_stricmp( (char *)pCmdLine->GetEntry( i ), "-r" )
-          || ( '-' != *(char *)pCmdLine->GetEntry( i ) ) )
+        if( !rsc_strnicmp( (char *)pCmdLine->GetEntry( i ),  "-fp=", 4 ) ||
+            !rsc_strnicmp( (char *)pCmdLine->GetEntry( i ), "-fo=", 4 ) ||
+            !rsc_strnicmp( (char *)pCmdLine->GetEntry( i ), "-presponse", 9 ) ||
+            !rsc_strnicmp( (char *)pCmdLine->GetEntry( i ), "-rc", 3 ) ||
+            !rsc_stricmp( (char *)pCmdLine->GetEntry( i ), "-+" ) ||
+            !rsc_stricmp( (char *)pCmdLine->GetEntry( i ), "-br" ) ||
+            !rsc_stricmp( (char *)pCmdLine->GetEntry( i ), "-bz" ) ||
+            !rsc_stricmp( (char *)pCmdLine->GetEntry( i ), "-r" ) ||
+            ( '-' != *(char *)pCmdLine->GetEntry( i ) ) )
         {
         }
         else
+        {
             aNewCmdL.Append( rsc_strdup( (char *)pCmdLine->GetEntry( i ) ) );
+        }
     };
 
     aNewCmdL.Append( rsc_strdup( rSrsName.getStr() ) );
@@ -200,25 +201,25 @@ static sal_Bool CallRsc2( RscStrList * pInputList,
     nRet = rsc2_main( aNewCmdL.GetCount(), (char**)aNewCmdL.GetBlock() );
 
     if( nRet )
-        return( sal_False );
-    return( sal_True );
+        return false;
+    return true;
 }
 
 SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 {
-    sal_Bool        bPrePro  = sal_True;
-    sal_Bool        bHelp    = sal_False;
-    sal_Bool        bError   = sal_False;
-    sal_Bool        bResponse = sal_False;
-    OString    aSrsName;
-    OString    aResName;
-    RscStrList      aInputList;
-    RscStrList      aTmpList;
-    char *          pStr;
-    char **         ppStr;
-    RscPtrPtr       aCmdLine;       // Kommandozeile
-    sal_uInt32      i;
-    OString*   pString;
+    bool        bPrePro  = true;
+    bool        bHelp    = false;
+    bool        bError   = false;
+    bool        bResponse = false;
+    OString     aSrsName;
+    OString     aResName;
+    RscStrList  aInputList;
+    RscStrList  aTmpList;
+    char *      pStr;
+    char **     ppStr;
+    RscPtrPtr   aCmdLine;       // Kommandozeile
+    sal_uInt32  i;
+    OString*    pString;
 
     pStr = ::ResponseFile( &aCmdLine, argv, argc );
     if( pStr )
@@ -230,7 +231,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     ppStr  = (char **)aCmdLine.GetBlock();
     ppStr++;
     i = 1;
-    sal_Bool bSetSrs = sal_False;
+    bool bSetSrs = false;
     while( ppStr && i < (aCmdLine.GetCount() -1) )
     {
         if( '-' == **ppStr )
@@ -238,15 +239,15 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
             if( !rsc_stricmp( (*ppStr) + 1, "p" )
               || !rsc_stricmp( (*ppStr) + 1, "l" ) )
             { // kein Preprozessor
-                bPrePro = sal_False;
+                bPrePro = false;
             }
             else if( !rsc_stricmp( (*ppStr) + 1, "h" ) )
             { // Hilfe anzeigen
-                bHelp = sal_True;
+                bHelp = true;
             }
             else if( !rsc_strnicmp( (*ppStr) + 1, "presponse", 9 ) )
             { // whether to use response file when parameterising preprocessor
-                bResponse = sal_True;
+                bResponse = true;
             }
             else if( !rsc_strnicmp( (*ppStr) + 1, "fo=", 3 ) )
             { // anderer Name fuer .res-file
@@ -254,7 +255,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
             }
             else if( !rsc_strnicmp( (*ppStr) + 1, "fp=", 3 ) )
             { // anderer Name fuer .srs-file
-                bSetSrs  = sal_True;
+                bSetSrs  = true;
                 aSrsName = (*ppStr);
             }
         }
@@ -280,7 +281,8 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     };
 
     if( bHelp )
-        bPrePro = sal_False;
+        bPrePro = false;
+
     if( bPrePro && !aInputList.empty() )
     {
         OString aTmpName;
@@ -292,7 +294,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
             if( !CallPrePro( *pString, aTmpName, &aCmdLine, bResponse ) )
             {
                 printf( "Error starting preprocessor\n" );
-                bError = sal_True;
+                bError = true;
                 break;
             }
             aTmpList.push_back( new OString(aTmpName) );
@@ -306,7 +308,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
             if( !bHelp )
             {
                 printf( "Error starting rsc2 compiler\n" );
-                bError = sal_True;
+                bError = true;
             }
         };
     };
@@ -314,7 +316,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     for ( size_t k = 0, n = aTmpList.size(); k < n; ++k )
         unlink( aTmpList[ k ]->getStr() );
 
-    return( bError );
+    return bError;
 }
 
 void RscExit( sal_uInt32 nExit )
