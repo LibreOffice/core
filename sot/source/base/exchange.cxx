@@ -21,7 +21,6 @@
 #include <tools/debug.hxx>
 #include <tools/solar.h>
 #include <tools/globname.hxx>
-#include <tools/string.hxx>
 #include <sot/sotdata.hxx>
 #include <sot/exchange.hxx>
 #include <sot/formats.hxx>
@@ -229,13 +228,13 @@ static tDataFlavorList& InitFormats_Impl()
 |*
 |*    Beschreibung      CLIP.SDW
 *************************************************************************/
-sal_uLong SotExchange::RegisterFormatName( const String& rName )
+sal_uLong SotExchange::RegisterFormatName( const OUString& rName )
 {
     const DataFlavorRepresentation *pFormatArray_Impl = FormatArray_Impl::get();
     // teste zuerst die Standard - Name
     sal_uLong i, nMax = SOT_FORMAT_FILE_LIST;
     for( i = SOT_FORMAT_STRING; i <= nMax;  ++i )
-        if( COMPARE_EQUAL == rName.CompareToAscii( pFormatArray_Impl[ i ].pName ) )
+        if( rName.equalsAscii( pFormatArray_Impl[ i ].pName ) )
             return i;
 
     // BM: the chart format 105 ("StarChartDocument 5.0") was written
@@ -243,7 +242,7 @@ sal_uLong SotExchange::RegisterFormatName( const String& rName )
     // The registry only contains the entry for the 42 format id.
     nMax = SOT_FORMATSTR_ID_USER_END;
     for( i = SOT_FORMAT_RTF; i <= nMax;  ++i )
-        if( rName.EqualsAscii( pFormatArray_Impl[ i ].pName ) )
+        if( rName.equalsAscii( pFormatArray_Impl[ i ].pName ) )
             return ( (i == SOT_FORMATSTR_ID_STARCHARTDOCUMENT_50)
                      ? SOT_FORMATSTR_ID_STARCHART_50
                      : i );
@@ -253,7 +252,7 @@ sal_uLong SotExchange::RegisterFormatName( const String& rName )
     for( i = 0, nMax = rL.size(); i < nMax; i++ )
     {
         DataFlavor* pFlavor = rL[ i ];
-        if( pFlavor && rName == String( pFlavor->HumanPresentableName ) )
+        if( pFlavor && rName == OUString( pFlavor->HumanPresentableName ) )
             return i + SOT_FORMATSTR_ID_USER_END + 1;
     }
 
@@ -269,18 +268,18 @@ sal_uLong SotExchange::RegisterFormatName( const String& rName )
     return nMax + SOT_FORMATSTR_ID_USER_END + 1;
 }
 
-sal_uLong SotExchange::RegisterFormatMimeType( const String& rMimeType )
+sal_uLong SotExchange::RegisterFormatMimeType( const OUString& rMimeType )
 {
     const DataFlavorRepresentation *pFormatArray_Impl = FormatArray_Impl::get();
     // teste zuerst die Standard - Name
     sal_uLong i, nMax = SOT_FORMAT_FILE_LIST;
     for( i = SOT_FORMAT_STRING; i <= nMax;  ++i )
-        if( rMimeType.EqualsAscii( pFormatArray_Impl[ i ].pMimeType ) )
+        if( rMimeType.equalsAscii( pFormatArray_Impl[ i ].pMimeType ) )
             return i;
 
     nMax = SOT_FORMATSTR_ID_USER_END;
     for( i = SOT_FORMAT_RTF; i <= nMax;  ++i )
-        if( rMimeType.EqualsAscii( pFormatArray_Impl[ i ].pMimeType ) )
+        if( rMimeType.equalsAscii( pFormatArray_Impl[ i ].pMimeType ) )
             return i;
 
     // dann in der dynamischen Liste
@@ -288,7 +287,7 @@ sal_uLong SotExchange::RegisterFormatMimeType( const String& rMimeType )
     for( i = 0, nMax = rL.size(); i < nMax; i++ )
     {
         DataFlavor* pFlavor = rL[ i ];
-        if( pFlavor && rMimeType == String( pFlavor->MimeType ) )
+        if( pFlavor && rMimeType == OUString( pFlavor->MimeType ) )
             return i + SOT_FORMATSTR_ID_USER_END + 1;
     }
 
@@ -330,9 +329,9 @@ sal_uLong SotExchange::RegisterFormat( const DataFlavor& rFlavor )
 |*
 *************************************************************************/
 
-sal_Bool SotExchange::GetFormatDataFlavor( sal_uLong nFormat, DataFlavor& rFlavor )
+bool SotExchange::GetFormatDataFlavor( sal_uLong nFormat, DataFlavor& rFlavor )
 {
-    sal_Bool bRet;
+    bool bRet;
 
     if( SOT_FORMATSTR_ID_USER_END >= nFormat )
     {
@@ -341,7 +340,7 @@ sal_Bool SotExchange::GetFormatDataFlavor( sal_uLong nFormat, DataFlavor& rFlavo
         rFlavor.HumanPresentableName = OUString::createFromAscii( rData.pName );
         rFlavor.DataType = *rData.pType;
 
-        bRet = sal_True;
+        bRet = true;
     }
     else
     {
@@ -352,12 +351,12 @@ sal_Bool SotExchange::GetFormatDataFlavor( sal_uLong nFormat, DataFlavor& rFlavo
         if( rL.size() > nFormat )
         {
             rFlavor = *rL[ nFormat ];
-            bRet = sal_True;
+            bRet = true;
         }
         else
         {
             rFlavor = DataFlavor();
-            bRet = sal_False;
+            bRet = false;
         }
     }
 
@@ -372,11 +371,11 @@ sal_Bool SotExchange::GetFormatDataFlavor( sal_uLong nFormat, DataFlavor& rFlavo
 |*
 *************************************************************************/
 
-String SotExchange::GetFormatMimeType( sal_uLong nFormat )
+OUString SotExchange::GetFormatMimeType( sal_uLong nFormat )
 {
-    String sMimeType;
+    OUString sMimeType;
     if( SOT_FORMATSTR_ID_USER_END >= nFormat )
-        sMimeType.AssignAscii( FormatArray_Impl::get()[nFormat].pMimeType );
+        sMimeType = OUString::createFromAscii( FormatArray_Impl::get()[nFormat].pMimeType );
     else
     {
         tDataFlavorList& rL = InitFormats_Impl();
@@ -398,12 +397,12 @@ String SotExchange::GetFormatMimeType( sal_uLong nFormat )
 |*
 *************************************************************************/
 
-sal_uLong SotExchange::GetFormatIdFromMimeType( const String& rMimeType )
+sal_uLong SotExchange::GetFormatIdFromMimeType( const OUString& rMimeType )
 {
     const DataFlavorRepresentation *pFormatArray_Impl = FormatArray_Impl::get();
     sal_uLong i, nMax = SOT_FORMAT_FILE_LIST;
     for( i = SOT_FORMAT_STRING; i <= nMax;  ++i )
-        if( rMimeType.EqualsAscii( pFormatArray_Impl[ i ].pMimeType ) )
+        if( rMimeType.equalsAscii( pFormatArray_Impl[ i ].pMimeType ) )
             return i;
 
     // BM: the chart format 105 ("StarChartDocument 5.0") was written
@@ -411,18 +410,18 @@ sal_uLong SotExchange::GetFormatIdFromMimeType( const String& rMimeType )
     // The registry only contains the entry for the 42 format id.
     nMax = SOT_FORMATSTR_ID_USER_END;
     for( i = SOT_FORMAT_RTF; i <= nMax;  ++i )
-        if( rMimeType.EqualsAscii( pFormatArray_Impl[ i ].pMimeType ) )
+        if( rMimeType.equalsAscii( pFormatArray_Impl[ i ].pMimeType ) )
             return ( (i == SOT_FORMATSTR_ID_STARCHARTDOCUMENT_50)
                      ? SOT_FORMATSTR_ID_STARCHART_50
                      : i );
 
     // dann in der dynamischen Liste
     tDataFlavorList& rL = InitFormats_Impl();
-    OUString aMimeType( rMimeType );
+
     for( i = 0, nMax = rL.size(); i < nMax; i++ )
     {
         DataFlavor* pFlavor = rL[ i ];
-        if( pFlavor && aMimeType == pFlavor->MimeType )
+        if( pFlavor && rMimeType == pFlavor->MimeType )
             return i + SOT_FORMATSTR_ID_USER_END + 1;
     }
 
@@ -439,11 +438,11 @@ sal_uLong SotExchange::GetFormat( const DataFlavor& rFlavor )
 {
     // teste zuerst die Standard - Name
     const OUString& rMimeType = rFlavor.MimeType;
-    const String aMimeType( rMimeType );
+
     sal_uLong i, nMax = SOT_FORMAT_FILE_LIST;
     const DataFlavorRepresentation *pFormatArray_Impl = FormatArray_Impl::get();
     for( i = SOT_FORMAT_STRING; i <= nMax;  ++i )
-        if( aMimeType.EqualsAscii( pFormatArray_Impl[ i ].pMimeType ) )
+        if( rMimeType.equalsAscii( pFormatArray_Impl[ i ].pMimeType ) )
             return i;
 
     // BM: the chart format 105 ("StarChartDocument 5.0") was written
@@ -451,7 +450,7 @@ sal_uLong SotExchange::GetFormat( const DataFlavor& rFlavor )
     // The registry only contains the entry for the 42 format id.
     nMax = SOT_FORMATSTR_ID_USER_END;
     for( i = SOT_FORMAT_RTF; i <= nMax;  ++i )
-        if( aMimeType.EqualsAscii( pFormatArray_Impl[ i ].pMimeType ) )
+        if( rMimeType.equalsAscii( pFormatArray_Impl[ i ].pMimeType ) )
             return ( (i == SOT_FORMATSTR_ID_STARCHARTDOCUMENT_50)
                      ? SOT_FORMATSTR_ID_STARCHART_50
                      : i );
@@ -474,10 +473,10 @@ sal_uLong SotExchange::GetFormat( const DataFlavor& rFlavor )
 |*
 |*    Beschreibung      CLIP.SDW
 *************************************************************************/
-String SotExchange::GetFormatName( sal_uLong nFormat )
+OUString SotExchange::GetFormatName( sal_uLong nFormat )
 {
     DataFlavor  aFlavor;
-    String      aRet;
+    OUString      aRet;
 
     if( GetFormatDataFlavor( nFormat, aFlavor ) )
         aRet = aFlavor.HumanPresentableName;
@@ -485,7 +484,7 @@ String SotExchange::GetFormatName( sal_uLong nFormat )
     return aRet;
 }
 
-sal_Bool SotExchange::IsInternal( const SvGlobalName& rName )
+bool SotExchange::IsInternal( const SvGlobalName& rName )
 {
     if ( rName == SvGlobalName(SO3_SW_CLASSID_60) ||
          rName == SvGlobalName(SO3_SC_CLASSID_60) ||
@@ -495,8 +494,8 @@ sal_Bool SotExchange::IsInternal( const SvGlobalName& rName )
          rName == SvGlobalName(SO3_SM_CLASSID_60) ||
          rName == SvGlobalName(SO3_SWWEB_CLASSID_60) ||
          rName == SvGlobalName(SO3_SWGLOB_CLASSID_60) )
-        return sal_True;
-    return sal_False;
+        return true;
+    return false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

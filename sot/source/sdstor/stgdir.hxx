@@ -41,8 +41,8 @@ class StgDirEntry : public StgAvlNode
     StgStrm*     pStgStrm;                  // storage stream
     StgTmpStrm*  pTmpStrm;                  // temporary stream
     StgTmpStrm*  pCurStrm;                  // temp stream after commit
-    sal_Int32        nEntry;                    // entry # in TOC stream (temp)
-    sal_Int32        nPos;                      // current position
+    sal_Int32    nEntry;                    // entry # in TOC stream (temp)
+    sal_Int32    nPos;                      // current position
     bool         bDirty;                    // dirty directory entry
     bool         bCreated;                  // newly created entry
     bool         bRemoved;                  // removed per Invalidate()
@@ -103,11 +103,11 @@ public:
     bool         Store();
     void*        GetEntry( sal_Int32 n, bool=false );// get an entry
     StgDirEntry* GetRoot() { return pRoot; }
-    StgDirEntry* Find( StgDirEntry&, const String& );
-    StgDirEntry* Create( StgDirEntry&, const String&, StgEntryType );
-    bool         Remove( StgDirEntry&, const String& );
-    bool         Rename( StgDirEntry&, const String&, const String& );
-    bool         Move( StgDirEntry&, StgDirEntry&, const String& );
+    StgDirEntry* Find( StgDirEntry&, const OUString& );
+    StgDirEntry* Create( StgDirEntry&, const OUString&, StgEntryType );
+    bool         Remove( StgDirEntry&, const OUString& );
+    bool         Rename( StgDirEntry&, const OUString&, const OUString& );
+    bool         Move( StgDirEntry&, StgDirEntry&, const OUString& );
 };
 
 class StgIterator : public StgAvlIterator

@@ -441,7 +441,7 @@ void SfxObjectShell::ViewAssigned()
 //--------------------------------------------------------------------
 // closes the Object and all its views
 
-sal_Bool SfxObjectShell::Close()
+bool SfxObjectShell::Close()
 {
     {DBG_CHKTHIS(SfxObjectShell, 0);}
     SfxObjectShellRef aRef(this);
@@ -449,7 +449,7 @@ sal_Bool SfxObjectShell::Close()
     {
         // Do not close if a progress is still running
         if ( !pImp->bDisposing && GetProgress() )
-            return sal_False;
+            return false;
 
         pImp->bClosing = sal_True;
         Reference< util::XCloseable > xCloseable( GetBaseModel(), UNO_QUERY );
@@ -478,7 +478,7 @@ sal_Bool SfxObjectShell::Close()
         }
     }
 
-    return sal_True;
+    return true;
 }
 
 //--------------------------------------------------------------------

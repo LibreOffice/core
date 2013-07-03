@@ -19,7 +19,6 @@
 
 #include <sot/factory.hxx>
 #include <tools/debug.hxx>
-#include <tools/string.hxx>
 #include <sot/object.hxx>
 #include <sot/sotdata.hxx>
 #include <comphelper/classids.hxx>
@@ -76,8 +75,8 @@ SotData_Impl * SOTDATA()
 TYPEINIT0(SotFactory);
 
 SotFactory::SotFactory( const SvGlobalName & rName,
-                      const String & rClassName,
-                      CreateInstanceType pCreateFuncP )
+                        const OUString & rClassName,
+                        CreateInstanceType pCreateFuncP )
     : SvGlobalName  ( rName )
     , nSuperCount   ( 0 )
     , pSuperClasses ( NULL )
@@ -200,17 +199,17 @@ void * SotFactory::CreateInstance( SotObject ** ppObj ) const
 |*
 |*    Beschreibung
 *************************************************************************/
-sal_Bool SotFactory::Is( const SotFactory * pSuperCl ) const
+bool SotFactory::Is( const SotFactory * pSuperCl ) const
 {
     if( this == pSuperCl )
-        return sal_True;
+        return true;
 
     for( sal_uInt16 i = 0; i < nSuperCount; i++ )
     {
         if( pSuperClasses[ i ]->Is( pSuperCl ) )
-            return sal_True;
+            return true;
     }
-    return sal_False;
+    return false;
 }
 
 

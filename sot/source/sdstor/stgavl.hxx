@@ -36,7 +36,7 @@ private:
     StgAvlNode* RotRR();
     StgAvlNode* RotRL();
     void   StgEnum( short& );
-    static StgAvlNode* Rem( StgAvlNode**, StgAvlNode*, sal_Bool );
+    static StgAvlNode* Rem( StgAvlNode**, StgAvlNode*, bool );
 protected:
     short nId;                          // iterator ID
     short nBalance;                     // indicates tree balance
@@ -45,9 +45,9 @@ protected:
 public:
     virtual ~StgAvlNode();
     StgAvlNode* Find( StgAvlNode* );
-    static sal_Bool Insert( StgAvlNode**, StgAvlNode* );
-    static sal_Bool Remove( StgAvlNode**, StgAvlNode*, sal_Bool bDel = sal_True );
-    static sal_Bool Move( StgAvlNode**, StgAvlNode**, StgAvlNode* );
+    static bool Insert( StgAvlNode**, StgAvlNode* );
+    static bool Remove( StgAvlNode**, StgAvlNode*, bool bDel = true );
+    static bool Move( StgAvlNode**, StgAvlNode**, StgAvlNode* );
     virtual short Compare( const StgAvlNode* ) const = 0;
 };
 

@@ -270,14 +270,14 @@ class SOT_DLLPUBLIC SotObject : virtual public SvRefBase
 friend class SotFactory;
 friend class SvObject;
     sal_uInt16  nOwnerLockCount;
-    sal_Bool    bOwner:1,
-                bSVObject:1,        // Ist Proxy, dann TRUE wenn andere Seite SV ist
-                bInClose:1;         // TRUE, im DoClose
+    bool        bOwner;
+    bool        bSVObject;        // Ist Proxy, dann TRUE wenn andere Seite SV ist
+    bool        bInClose;         // TRUE, im DoClose
 
 protected:
     virtual             ~SotObject();
-    void                SetExtern() { bOwner = sal_False; }
-    virtual sal_Bool        Close();
+    void                SetExtern() { bOwner = false; }
+    virtual bool        Close();
 public:
                         SotObject();
                         SO2_DECL_BASIC_CLASS_DLL(SotObject,SOTDATA())
@@ -285,13 +285,13 @@ public:
                         // Nur damit die Makros in So3 nicht ganz ausufern
     virtual IUnknown *  GetInterface( const SvGlobalName & );
 
-    sal_Bool                Owner() const { return bOwner; }
+    bool                Owner() const { return bOwner; }
 
-    sal_uInt16              GetOwnerLockCount() const { return nOwnerLockCount; }
+    sal_uInt16          GetOwnerLockCount() const { return nOwnerLockCount; }
 
-    void                OwnerLock( sal_Bool bLock );
-    sal_Bool                DoClose();
-    sal_Bool                IsInClose() const { return bInClose; }
+    void                OwnerLock( bool bLock );
+    bool                DoClose();
+    bool                IsInClose() const { return bInClose; }
 
 private:
     // Kopieren und Zuweisen dieses Objekttyps ist nicht erlaubt

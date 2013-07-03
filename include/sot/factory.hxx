@@ -21,7 +21,6 @@
 #define _SOT_FACTORY_HXX
 
 #include <tools/globname.hxx>
-#include <tools/string.hxx>
 #include <tools/rtti.hxx>
 #include "sot/sotdllapi.h"
 #include <vector>
@@ -41,9 +40,9 @@ class SOT_DLLPUBLIC SotFactory : public SvGlobalName
     const SotFactory ** pSuperClasses;  // Superklassen
     CreateInstanceType  pCreateFunc;
 
-    String              aClassName;
+    OUString            aClassName;
 
-    static  sal_Bool        ExistTest( const SvGlobalName & );
+    static  bool        ExistTest( const SvGlobalName & );
 protected:
     virtual             ~SotFactory();
 public:
@@ -54,12 +53,12 @@ public:
     static  const SotFactory *      Find( const SvGlobalName & );
 
             SotFactory( const SvGlobalName &,
-                       const String & rClassName, CreateInstanceType );
+                        const OUString & rClassName, CreateInstanceType );
 
     void                PutSuperClass( const SotFactory * );
     virtual void *      CreateInstance( SotObject ** ppObj = NULL ) const;
 
-    sal_Bool                Is( const SotFactory * pSuperClass ) const;
+    bool                Is( const SotFactory * pSuperClass ) const;
     const SotFactory *  GetSuper( sal_uInt16 nPos ) const
                         {
                             return nPos < nSuperCount ?

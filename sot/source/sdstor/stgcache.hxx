@@ -33,7 +33,8 @@ class StgPage;
 class StgDirEntry;
 class StorageBase;
 
-class StgCache {
+class StgCache
+{
     typedef boost::unordered_map
     <
         sal_Int32, rtl::Reference< StgPage >,
@@ -55,8 +56,8 @@ class StgCache {
     rtl::Reference< StgPage > Create( sal_Int32  ); // create a cached page
 protected:
     SvStream* pStrm;                        // physical stream
-    sal_Bool  bMyStream;                    // sal_True: delete stream in dtor
-    sal_Bool  bFile;                        // sal_True: file stream
+    bool  bMyStream;                        // true: delete stream in dtor
+    bool  bFile;                            // true: file stream
     sal_Int32 Page2Pos( sal_Int32 );        // page address --> file position
 public:
     StgCache();
@@ -67,30 +68,30 @@ public:
     sal_Int32 GetPhysPages()                { return nPages;    }
     short GetPhysPageSize()                 { return nPageSize; }
     SvStream* GetStrm()                     { return pStrm;     }
-    void  SetStrm( SvStream*, sal_Bool );
+    void  SetStrm( SvStream*, bool );
     void  SetStrm( UCBStorageStream* );
-    sal_Bool  IsWritable()                  { return ( pStrm && pStrm->IsWritable() ); }
-    sal_Bool  Good()                        { return sal_Bool( nError == SVSTREAM_OK ); }
-    sal_Bool  Bad()                         { return sal_Bool( nError != SVSTREAM_OK ); }
+    bool  IsWritable()                      { return ( pStrm && pStrm->IsWritable() ); }
+    bool  Good()                            { return nError == SVSTREAM_OK; }
+    bool  Bad()                             { return nError != SVSTREAM_OK; }
     sal_uLong GetError()                    { return nError;    }
     void  MoveError( StorageBase& );
     void  SetError( sal_uLong );
     void  ResetError();
-    sal_Bool  Open( const String& rName, StreamMode );
+    bool  Open( const OUString& rName, StreamMode );
     void  Close();
-    sal_Bool  Read        ( sal_Int32 nPage, void* pBuf, sal_Int32 nPages );
-    sal_Bool  Write       ( sal_Int32 nPage, void* pBuf, sal_Int32 nPages );
+    bool  Read( sal_Int32 nPage, void* pBuf, sal_Int32 nPages );
+    bool  Write( sal_Int32 nPage, void* pBuf, sal_Int32 nPages );
 
     // two routines for accessing FAT pages
     // Assume that the data is a FAT page and get/put FAT data.
-    void             SetToPage   ( const rtl::Reference< StgPage > xPage, short nOff, sal_Int32 nVal );
+    void  SetToPage   ( const rtl::Reference< StgPage > xPage, short nOff, sal_Int32 nVal );
     inline sal_Int32 GetFromPage ( const rtl::Reference< StgPage > xPage, short nOff );
-    void      SetDirty    ( const rtl::Reference< StgPage > &xPage );
-    sal_Bool  SetSize( sal_Int32 nPages );
+    void  SetDirty    ( const rtl::Reference< StgPage > &xPage );
+    bool  SetSize( sal_Int32 nPages );
     rtl::Reference< StgPage > Find( sal_Int32 );                 // find a cached page
-    rtl::Reference< StgPage > Get( sal_Int32, sal_Bool );            // get a cached page
+    rtl::Reference< StgPage > Get( sal_Int32, bool );            // get a cached page
     rtl::Reference< StgPage > Copy( sal_Int32, sal_Int32=STG_FREE ); // copy a page
-    sal_Bool Commit(); // flush all pages
+    bool Commit(); // flush all pages
     void Clear();                           // clear the cache
 };
 

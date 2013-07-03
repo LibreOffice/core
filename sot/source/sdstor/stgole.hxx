@@ -31,9 +31,9 @@ class StgInternalStream : public SvStream
     virtual sal_uLong GetData( void* pData, sal_uLong nSize );
     virtual sal_uLong PutData( const void* pData, sal_uLong nSize );
     virtual sal_uLong SeekPos( sal_uLong nPos );
-    virtual void  FlushData();
+    virtual void      FlushData();
 public:
-    StgInternalStream( BaseStorage&, const String&, sal_Bool );
+    StgInternalStream( BaseStorage&, const OUString&, bool );
    ~StgInternalStream();
     void Commit();
 };
@@ -42,16 +42,16 @@ public:
 
 class StgCompObjStream : public StgInternalStream
 {
-    ClsId  aClsId;
-    String aUserName;
+    ClsId      aClsId;
+    OUString   aUserName;
     sal_uLong  nCbFormat;
 public:
-    StgCompObjStream( BaseStorage&, sal_Bool );
-    ClsId&  GetClsId()    { return aClsId;    }
-    String& GetUserName() { return aUserName; }
-    sal_uLong&  GetCbFormat() { return nCbFormat; }
-    sal_Bool    Load();
-    sal_Bool    Store();
+    StgCompObjStream( BaseStorage&, bool );
+    ClsId&     GetClsId()    { return aClsId;    }
+    OUString&  GetUserName() { return aUserName; }
+    sal_uLong& GetCbFormat() { return nCbFormat; }
+    bool       Load();
+    bool       Store();
 };
 
 // standard stream "\1Ole"
@@ -60,10 +60,10 @@ class StgOleStream : public StgInternalStream
 {
     sal_uInt32 nFlags;
 public:
-    StgOleStream( BaseStorage&, sal_Bool );
+    StgOleStream( BaseStorage&, bool );
     sal_uInt32& GetFlags() { return nFlags; }
-    sal_Bool Load();
-    sal_Bool Store();
+    bool Load();
+    bool Store();
 };
 
 #endif

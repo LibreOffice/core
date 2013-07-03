@@ -29,6 +29,7 @@
 #include <cppuhelper/implbase1.hxx>
 
 #include <sot/exchange.hxx>
+#include <tools/string.hxx>
 
 namespace framework
 {

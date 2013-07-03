@@ -19,7 +19,7 @@
 
 #include <string.h>
 #include <osl/endian.h>
-#include <tools/string.hxx>
+#include <tools/solar.h>
 
 #include "sot/stg.hxx"
 #include "stgelem.hxx"
@@ -96,15 +96,15 @@ StgCache::StgCache()
    , nPageSize( 512 )
    , pStorageStream( NULL )
    , pStrm( NULL )
-   , bMyStream( sal_False )
-   , bFile( sal_False )
+   , bMyStream( false )
+   , bFile( false )
 {
 }
 
 StgCache::~StgCache()
 {
     Clear();
-    SetStrm( NULL, sal_False );
+    SetStrm( NULL, false );
 }
 
 void StgCache::SetPhysPageSize( short n )
@@ -168,7 +168,7 @@ rtl::Reference< StgPage > StgCache::Find( sal_Int32 nPage )
 
 // Load a page into the cache
 
-rtl::Reference< StgPage > StgCache::Get( sal_Int32 nPage, sal_Bool bForce )
+rtl::Reference< StgPage > StgCache::Get( sal_Int32 nPage, bool bForce )
 {
     rtl::Reference< StgPage > p = Find( nPage );
     if( !p.is() )
@@ -196,7 +196,7 @@ rtl::Reference< StgPage > StgCache::Copy( sal_Int32 nNew, sal_Int32 nOld )
     if( nOld >= 0 )
     {
         // old page: we must have this data!
-        rtl::Reference< StgPage > q = Get( nOld, sal_True );
+        rtl::Reference< StgPage > q = Get( nOld, true );
         if( q.is() )
         {
             OSL_ENSURE( p->GetSize() == q->GetSize(), "Unexpected page size!" );
@@ -210,7 +210,7 @@ rtl::Reference< StgPage > StgCache::Copy( sal_Int32 nNew, sal_Int32 nOld )
 
 // Historically this wrote pages in a sorted, ascending order;
 // continue that tradition.
-sal_Bool StgCache::Commit()
+bool StgCache::Commit()
 {
     if ( Good() ) // otherwise Write does nothing
     {
@@ -225,7 +225,7 @@ sal_Bool StgCache::Commit()
         {
             const rtl::Reference< StgPage > &pPage = *aWr;
             if ( !Write( pPage->GetPage(), pPage->GetData(), 1 ) )
-                return sal_False;
+                return false;
         }
     }
 
@@ -234,12 +234,12 @@ sal_Bool StgCache::Commit()
     pStrm->Flush();
     SetError( pStrm->GetError() );
 
-    return sal_True;
+    return true;
 }
 
 // Set a stream
 
-void StgCache::SetStrm( SvStream* p, sal_Bool bMy )
+void StgCache::SetStrm( SvStream* p, bool bMy )
 {
     if( pStorageStream )
     {
@@ -270,7 +270,7 @@ void StgCache::SetStrm( UCBStorageStream* pStgStream )
         pStrm = pStorageStream->GetModifySvStream();
     }
 
-    bMyStream = sal_False;
+    bMyStream = false;
 }
 
 void StgCache::SetDirty( const rtl::Reference< StgPage > &xPage )
@@ -281,20 +281,20 @@ void StgCache::SetDirty( const rtl::Reference< StgPage > &xPage )
 
 // Open/close the disk file
 
-sal_Bool StgCache::Open( const String& rName, StreamMode nMode )
+bool StgCache::Open( const OUString& rName, StreamMode nMode )
 {
     // do not open in exclusive mode!
     if( nMode & STREAM_SHARE_DENYALL )
         nMode = ( ( nMode & ~STREAM_SHARE_DENYALL ) | STREAM_SHARE_DENYWRITE );
     SvFileStream* pFileStrm = new SvFileStream( rName, nMode );
     // SvStream "Feature" Write Open auch erfolgreich, wenns nicht klappt
-    sal_Bool bAccessDenied = sal_False;
+    bool bAccessDenied = false;
     if( ( nMode & STREAM_WRITE ) && !pFileStrm->IsWritable() )
     {
         pFileStrm->Close();
-        bAccessDenied = sal_True;
+        bAccessDenied = true;
     }
-    SetStrm( pFileStrm, sal_True );
+    SetStrm( pFileStrm, true );
     if( pFileStrm->IsOpen() )
     {
         sal_uLong nFileSize = pStrm->Seek( STREAM_SEEK_TO_END );
@@ -303,7 +303,7 @@ sal_Bool StgCache::Open( const String& rName, StreamMode nMode )
     }
     else
         nPages = 0;
-    bFile = sal_True;
+    bFile = true;
     SetError( bAccessDenied ? ERRCODE_IO_ACCESSDENIED : pStrm->GetError() );
     return Good();
 }
@@ -319,7 +319,7 @@ void StgCache::Close()
 
 // low level I/O
 
-sal_Bool StgCache::Read( sal_Int32 nPage, void* pBuf, sal_Int32 nPg )
+bool StgCache::Read( sal_Int32 nPage, void* pBuf, sal_Int32 nPg )
 {
     if( Good() )
     {
@@ -344,7 +344,7 @@ sal_Bool StgCache::Read( sal_Int32 nPage, void* pBuf, sal_Int32 nPg )
             {
                 if( pStrm->Seek( nPos ) != nPos ) {
     #ifdef CHECK_DIRTY
-                    ErrorBox( NULL, WB_OK, String("SO2: Seek failed") ).Execute();
+                    ErrorBox( NULL, WB_OK, OUString("SO2: Seek failed") ).Execute();
     #endif
                 }
             }
@@ -358,7 +358,7 @@ sal_Bool StgCache::Read( sal_Int32 nPage, void* pBuf, sal_Int32 nPg )
     return Good();
 }
 
-sal_Bool StgCache::Write( sal_Int32 nPage, void* pBuf, sal_Int32 nPg )
+bool StgCache::Write( sal_Int32 nPage, void* pBuf, sal_Int32 nPg )
 {
     if( Good() )
     {
@@ -375,7 +375,7 @@ sal_Bool StgCache::Write( sal_Int32 nPage, void* pBuf, sal_Int32 nPg )
         {
             if( pStrm->Seek( nPos ) != nPos ) {
 #ifdef CHECK_DIRTY
-                ErrorBox( NULL, WB_OK, String("SO2: Seek failed") ).Execute();
+                ErrorBox( NULL, WB_OK, OUString("SO2: Seek failed") ).Execute();
 #endif
             }
         }
@@ -388,12 +388,12 @@ sal_Bool StgCache::Write( sal_Int32 nPage, void* pBuf, sal_Int32 nPg )
         sal_uInt8 cBuf[ 512 ];
         pStrm->Flush();
         pStrm->Seek( nPos );
-        sal_Bool bRes = ( pStrm->Read( cBuf, 512 ) == 512 );
+        bool bRes = ( pStrm->Read( cBuf, 512 ) == 512 );
         if( bRes )
             bRes = !memcmp( cBuf, pBuf, 512 );
         if( !bRes )
         {
-            ErrorBox( NULL, WB_OK, String("SO2: Read after Write failed") ).Execute();
+            ErrorBox( NULL, WB_OK, OUString("SO2: Read after Write failed") ).Execute();
             pStrm->SetError( SVSTREAM_WRITE_ERROR );
         }
 #endif
@@ -403,7 +403,7 @@ sal_Bool StgCache::Write( sal_Int32 nPage, void* pBuf, sal_Int32 nPg )
 
 // set the file size in pages
 
-sal_Bool StgCache::SetSize( sal_Int32 n )
+bool StgCache::SetSize( sal_Int32 n )
 {
     // Add the file header
     sal_Int32 nSize = n * nPageSize + 512;

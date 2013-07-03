@@ -23,12 +23,11 @@
 #include <stgcache.hxx>
 #include <stgelem.hxx>
 #include <tools/link.hxx>
-#include <tools/string.hxx>
+#include <tools/solar.h>
 
 class StgFATStrm;
 class StgDataStrm;
 class StgDirStrm;
-class String;
 
 enum FAT_ERROR
 {
@@ -45,13 +44,13 @@ enum FAT_ERROR
 
 struct StgLinkArg
 {
-    String aFile;
+    OUString aFile;
     sal_uLong nErr;
 };
 
 class StgIo : public StgCache {
     void SetupStreams();            // load all internal streams
-    sal_Bool         bCopied;
+    bool         bCopied;
 public:
     StgIo();
    ~StgIo();
@@ -61,9 +60,9 @@ public:
     StgDataStrm* pDataFAT;          // small data FAT stream
     StgDataStrm* pDataStrm;         // small data stream
     short        GetDataPageSize(); // get the logical data page size
-    sal_Bool Load();                    // load a storage file
-    sal_Bool Init();                    // set up an empty file
-    sal_Bool CommitAll();               // commit everything (root commit)
+    bool Load();                    // load a storage file
+    bool Init();                    // set up an empty file
+    bool CommitAll();               // commit everything (root commit)
 
     static void SetErrorLink( const Link& );
     static const Link& GetErrorLink();

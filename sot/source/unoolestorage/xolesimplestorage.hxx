@@ -45,7 +45,7 @@ class OLESimpleStorage  : public ::cppu::WeakImplHelper3
 {
     ::osl::Mutex m_aMutex;
 
-    sal_Bool m_bDisposed;
+    bool m_bDisposed;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream > m_xStream;
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream > m_xTempStream;
@@ -55,7 +55,7 @@ class OLESimpleStorage  : public ::cppu::WeakImplHelper3
     ::cppu::OInterfaceContainerHelper* m_pListenersContainer; // list of listeners
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xFactory;
 
-    sal_Bool m_bNoTemporaryCopy;
+    bool m_bNoTemporaryCopy;
 
     void UpdateOriginal_Impl();
 
