@@ -1129,9 +1129,7 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
                     }
 
                     if( bHasDataLabelsAtSeries )
-                        lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:FormatDataLabels" );
-                    //if( xTrendline.is() )
-                    //    lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:FormatTrendline" );
+                        lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:FormatDataLabels" );
                     if( bHasEquation )
                         lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:FormatTrendlineEquation" );
                     if( xMeanValue.is() )
@@ -1144,12 +1142,9 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
                     xPopupMenu->insertSeparator( -1 );
 
                     if( !bHasDataLabelsAtSeries )
-                        lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:InsertDataLabels" );
+                        lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:InsertDataLabels" );
 
-                    //if( !xTrendline.is() )
-                    lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:InsertTrendline" );
-                    //else if( !bHasEquation )
-                    //lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:InsertTrendlineEquation" );
+                    lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:InsertTrendline" );
 
                     if( !xMeanValue.is() )
                         lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:InsertMeanValue" );
@@ -1157,12 +1152,8 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
                         lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:InsertXErrorBars" );
                     if( !bHasYErrorBars )
                         lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:InsertYErrorBars" );
-
-
                     if( bHasDataLabelsAtSeries || ( bHasDataLabelsAtPoints && bHasFormattedDataPointsOtherThanSelected ) )
-                        lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:DeleteDataLabels" );
-                    //if( xTrendline.is() )
-                    //    lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:DeleteTrendline" );
+                        lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:DeleteDataLabels" );
                     if( bHasEquation )
                         lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:DeleteTrendlineEquation" );
                     if( xMeanValue.is() )
@@ -1193,13 +1184,13 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
                 }
                 else if( OBJECTTYPE_DATA_CURVE == eObjectType )
                 {
-                    lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:DeleteTrendline" );
-                    lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:FormatTrendlineEquation" );
-                    lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:InsertTrendlineEquation" );
-                    lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:InsertTrendlineEquationAndR2" );
-                    lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:InsertR2Value" );
-                    lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:DeleteTrendlineEquation" );
-                    lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:DeleteR2Value" );
+                    lcl_insertMenuCommand( xPopupMenu,  nUniqueId++, ".uno:DeleteTrendline" );
+                    lcl_insertMenuCommand( xPopupMenu,  nUniqueId++, ".uno:FormatTrendlineEquation" );
+                    lcl_insertMenuCommand( xPopupMenu,  nUniqueId++, ".uno:InsertTrendlineEquation" );
+                    lcl_insertMenuCommand( xPopupMenu,  nUniqueId++, ".uno:InsertTrendlineEquationAndR2" );
+                    lcl_insertMenuCommand( xPopupMenu,  nUniqueId++, ".uno:InsertR2Value" );
+                    lcl_insertMenuCommand( xPopupMenu,  nUniqueId++, ".uno:DeleteTrendlineEquation" );
+                    lcl_insertMenuCommand( xPopupMenu,  nUniqueId++, ".uno:DeleteR2Value" );
                 }
                 else if( OBJECTTYPE_DATA_CURVE_EQUATION == eObjectType )
                 {
