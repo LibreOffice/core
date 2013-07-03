@@ -36,7 +36,8 @@ private:
         sal_Int32 aDegree,
         sal_Bool  aForceIntercept,
         double    aInterceptValue,
-        sal_Int32 aPeriod);
+        sal_Int32 aPeriod)
+        throw (com::sun::star::uno::RuntimeException);
 
     virtual com::sun::star::uno::Sequence< com::sun::star::geometry::RealPoint2D > SAL_CALL getCurveValues(
         double min,

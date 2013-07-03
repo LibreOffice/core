@@ -62,7 +62,8 @@ protected:
         sal_Int32 aDegree,
         sal_Bool  aForceIntercept,
         double    aInterceptValue,
-        sal_Int32 aPeriod);
+        sal_Int32 aPeriod)
+            throw (com::sun::star::uno::RuntimeException);
 
     virtual void SAL_CALL recalculateRegression(
         const com::sun::star::uno::Sequence< double >& aXValues,

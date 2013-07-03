@@ -36,7 +36,23 @@ module chart2
 
 interface XRegressionCurveCalculator : com::sun::star::uno::XInterface
 {
+    /** set calculation properties for curve calculation.
 
+        @param degree
+            Degree of polynomial regression curve, value should be greater than zero
+            If the curve is not polynomial, this property has no effect.
+
+        @param period
+            Period of a moving average regression curve, value should greater or equal to 2
+            If the curve is not moving average regression curve, this property has no effect.
+
+        @param forceIntercept
+            Should force the intercept value.
+
+        @param interceptValue
+            Intercept value.
+
+    */
     void setRegressionProperties( [in] long degree,
                                   [in] boolean forceIntercept,
                                   [in] double interceptValue,

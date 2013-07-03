@@ -73,7 +73,8 @@ void RegressionCurveCalculator::setRegressionProperties(
     sal_Int32   aDegree,
     sal_Bool    aForceIntercept,
     double      aInterceptValue,
-    sal_Int32   aPeriod)
+    sal_Int32   aPeriod )
+        throw (uno::RuntimeException)
 {
     mDegree = aDegree;
     mForceIntercept = aForceIntercept;

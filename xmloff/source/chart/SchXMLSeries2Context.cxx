@@ -871,7 +871,7 @@ void SchXMLSeries2Context::setStylesToRegressionCurves(
         try
         {
             OUString aServiceName;
-            XMLPropStyleContext* pPropStyleContext;
+            XMLPropStyleContext* pPropStyleContext = NULL;
 
             if (!rCurrentStyleName.isEmpty())
             {
@@ -910,7 +910,8 @@ void SchXMLSeries2Context::setStylesToRegressionCurves(
                 if( xRegCurve.is())
                 {
                     Reference< beans::XPropertySet > xCurveProperties( xRegCurve, uno::UNO_QUERY );
-                    pPropStyleContext->FillPropertySet( xCurveProperties );
+                    if( pPropStyleContext != NULL)
+                        pPropStyleContext->FillPropertySet( xCurveProperties );
 
                     xRegCurve->setEquationProperties( iStyle->m_xEquationProperties );
                 }

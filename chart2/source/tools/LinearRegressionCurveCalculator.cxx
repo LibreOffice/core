@@ -26,7 +26,6 @@
 
 using namespace ::com::sun::star;
 
-
 namespace chart
 {
 
@@ -38,10 +37,11 @@ LinearRegressionCurveCalculator::~LinearRegressionCurveCalculator()
 {}
 
 void LinearRegressionCurveCalculator::setRegressionProperties(
-        sal_Int32 /*aDegree*/,
-        sal_Bool  aForceIntercept,
-        double    aInterceptValue,
-        sal_Int32 aPeriod)
+    sal_Int32 /*aDegree*/,
+    sal_Bool  aForceIntercept,
+    double    aInterceptValue,
+    sal_Int32 aPeriod )
+        throw (uno::RuntimeException)
 {
     PolynomialRegressionCurveCalculator::setRegressionProperties(
                                             1,
