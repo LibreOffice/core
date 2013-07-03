@@ -19,7 +19,7 @@
 #
 # *************************************************************
 RSCVERSION=400
-RSCREVISION=400m2(Build:9701)
-BUILD=9701
-LAST_MINOR=m2
+RSCREVISION=400m3(Build:9702)
+BUILD=9702
+LAST_MINOR=m3
 SOURCEVERSION=AOO400
