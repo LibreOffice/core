@@ -93,9 +93,6 @@ public:
     const OUString& getTableStyleName() const { return m_sTableStyleName; }
     const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue> getCurrentTablePosition();
 
-    /// copy the text properties of the table style and its parent into pContext
-    void    CopyTextProperties(PropertyMapPtr pContext, StyleSheetTablePtr pStyleSheetTable);
-
     inline virtual void cellProps(TablePropertyMapPtr pProps)
     {
         if ( m_pStyleProps.get( ) )

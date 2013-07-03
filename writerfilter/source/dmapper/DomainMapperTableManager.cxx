@@ -724,43 +724,6 @@ void DomainMapperTableManager::clearData()
 }
 
 
-void lcl_CopyTextProperties(PropertyMapPtr pToFill,
-            const StyleSheetEntry* pStyleSheetEntry, StyleSheetTablePtr pStyleSheetTable)
-{
-    if( !pStyleSheetEntry )
-        return;
-    //fill base style properties first, recursively
-    if( !pStyleSheetEntry->sBaseStyleIdentifier.isEmpty())
-    {
-        const StyleSheetEntryPtr pParentStyleSheet =
-            pStyleSheetTable->FindStyleSheetByISTD(pStyleSheetEntry->sBaseStyleIdentifier);
-        OSL_ENSURE( pParentStyleSheet, "table style not found" );
-        lcl_CopyTextProperties( pToFill, pParentStyleSheet.get( ), pStyleSheetTable);
-    }
-
-    PropertyMap::const_iterator aPropIter = pStyleSheetEntry->pProperties->begin();
-    while(aPropIter != pStyleSheetEntry->pProperties->end())
-    {
-        //copy all text properties form the table style to the current run attributes
-        if( aPropIter->first.bIsTextProperty )
-            pToFill->insert(*aPropIter);
-        ++aPropIter;
-    }
-}
-void DomainMapperTableManager::CopyTextProperties(PropertyMapPtr pContext, StyleSheetTablePtr pStyleSheetTable)
-{
-    if( !m_pTableStyleTextProperies.get())
-    {
-        m_pTableStyleTextProperies.reset( new PropertyMap );
-        const StyleSheetEntryPtr pStyleSheetEntry = pStyleSheetTable->FindStyleSheetByISTD(
-                                                        m_sTableStyleName);
-        OSL_ENSURE( pStyleSheetEntry, "table style not found" );
-        lcl_CopyTextProperties(m_pTableStyleTextProperies, pStyleSheetEntry.get( ), pStyleSheetTable);
-    }
-    pContext->InsertProps(m_pTableStyleTextProperies);
-}
-
-
 }}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
