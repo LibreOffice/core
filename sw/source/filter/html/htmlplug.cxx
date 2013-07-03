@@ -56,6 +56,8 @@
 
 #include <comphelper/embeddedobjectcontainer.hxx>
 #include <comphelper/classids.hxx>
+#include <vcl/cvtgrf.hxx>
+#include <sax/tools/converter.hxx>
 
 using namespace com::sun::star;
 
@@ -1258,27 +1260,10 @@ Writer& OutHTML_FrmFmtOLENodeGrf( Writer& rWrt, const SwFrmFmt& rFrmFmt,
         return rWrt;
 
     {
-        Graphic aGrf( *pOLENd->GetGraphic() );
-        String aGrfNm;
-        const String* pTempFileName = rHTMLWrt.GetOrigFileName();
-        if(pTempFileName)
-            aGrfNm = *pTempFileName;
-
-        sal_uInt16 nErr = XOutBitmap::WriteGraphic( aGrf, aGrfNm,
-                                    OUString("JPG"),
-                                    (XOUTBMP_USE_GIF_IF_POSSIBLE |
-                                     XOUTBMP_USE_NATIVE_IF_POSSIBLE) );
-        if( nErr )              // fehlerhaft, da ist nichts auszugeben
-        {
-            rHTMLWrt.nWarn = WARN_SWG_POOR_LOAD | WARN_SW_WRITE_BASE;
-            return rWrt;
-        }
-        aGrfNm = URIHelper::SmartRel2Abs(
-            INetURLObject(rWrt.GetBaseURL()), aGrfNm,
-            URIHelper::GetMaybeFileHdl() );
+        Graphic aGraphic( *pOLENd->GetGraphic() );
         sal_uLong nFlags = bInCntnr ? HTML_FRMOPTS_GENIMG_CNTNR
                                   : HTML_FRMOPTS_GENIMG;
-        OutHTML_Image( rWrt, rFrmFmt, aGrfNm,
+        OutHTML_Image( rWrt, rFrmFmt, aGraphic,
                        pOLENd->GetTitle(), pOLENd->GetTwipSize(),
                        nFlags, pMarkToOLE );
     }

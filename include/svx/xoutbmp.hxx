@@ -54,6 +54,7 @@ public:
     static sal_uInt16       WriteGraphic( const Graphic& rGraphic, String& rFileName,
                                       const String& rFilterName, const sal_uIntPtr nFlags = 0L,
                                       const Size* pMtfSize_100TH_MM = NULL );
+    static sal_uLong    GraphicToBase64(const Graphic& rGraphic,OUString& rOUString);
 
     static sal_uInt16       ExportGraphic( const Graphic& rGraphic, const INetURLObject& rURL,
                                        GraphicFilter& rFilter, const sal_uInt16 nFormat,
