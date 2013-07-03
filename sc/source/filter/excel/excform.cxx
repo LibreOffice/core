@@ -141,6 +141,7 @@ void ImportExcel::Formula(
 
         if (pCell)
         {
+            pCell->SetNeedNumberFormat(false);
             if( eErr != ConvOK )
                 ExcelToSc::SetError( *pCell, eErr );
 
