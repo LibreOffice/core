@@ -155,6 +155,17 @@ void SmFontPickList::WriteTo(SmFontDialog& rDialog) const
 
 /**************************************************************************/
 
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSmFontPickListBox(Window* pParent, VclBuilder::stringmap &)
+{
+    return new SmFontPickListBox(pParent, WB_DROPDOWN);
+}
+
+SmFontPickListBox::SmFontPickListBox (Window* pParent, WinBits nBits) :
+    SmFontPickList(4),
+    ListBox(pParent, nBits)
+{
+    SetSelectHdl(LINK(this, SmFontPickListBox, SelectHdl));
+}
 
 IMPL_LINK( SmFontPickListBox, SelectHdl, ListBox *, /*pListBox*/ )
 {
