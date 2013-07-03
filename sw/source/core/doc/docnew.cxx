@@ -520,7 +520,6 @@ SwDoc::~SwDoc()
     delete mpPgPViewPrtData;
 
     mbDtor = true;
-    mpLayoutPtr.reset();
 
     delete mpRedlineTbl;
     delete mpUnoCrsrTbl;
