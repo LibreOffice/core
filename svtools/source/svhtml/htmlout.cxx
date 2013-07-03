@@ -545,6 +545,19 @@ SvStream& HTMLOutFuncs::Out_String( SvStream& rStream, const String& rStr,
     return rStream;
 }
 
+SvStream& HTMLOutFuncs::Out_OUString( SvStream& rStream, OUString rOUStr,
+                                    rtl_TextEncoding eDestEnc,
+                                    String *pNonConvertableChars )
+{
+    HTMLOutContext aContext( eDestEnc );
+    sal_Int32 nLen = rOUStr.getLength();
+    for( sal_Int32 n = 0; n < nLen; n++ )
+        HTMLOutFuncs::Out_Char( rStream, rOUStr[(sal_Int32)n],
+                                aContext, pNonConvertableChars );
+    HTMLOutFuncs::FlushToAscii( rStream, aContext );
+    return rStream;
+}
+
 SvStream& HTMLOutFuncs::FlushToAscii( SvStream& rStream,
                                        HTMLOutContext& rContext )
 {

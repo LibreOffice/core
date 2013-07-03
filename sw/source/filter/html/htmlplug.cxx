@@ -1278,7 +1278,8 @@ Writer& OutHTML_FrmFmtOLENodeGrf( Writer& rWrt, const SwFrmFmt& rFrmFmt,
             URIHelper::GetMaybeFileHdl() );
         sal_uLong nFlags = bInCntnr ? HTML_FRMOPTS_GENIMG_CNTNR
                                   : HTML_FRMOPTS_GENIMG;
-        OutHTML_Image( rWrt, rFrmFmt, aGrfNm,
+        OUString aOUString;
+        OutHTML_Image( rWrt, rFrmFmt, aOUString,
                        pOLENd->GetTitle(), pOLENd->GetTwipSize(),
                        nFlags, pMarkToOLE );
     }

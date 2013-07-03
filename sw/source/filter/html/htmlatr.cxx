@@ -977,8 +977,7 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
         OSL_ENSURE( aNumInfo.GetNumRule(), "Wo ist die Numerierung geblieben???" );
         OSL_ENSURE( nBulletGrfLvl < MAXLEVEL, "So viele Ebenen gibt's nicht" );
         const SwNumFmt& rNumFmt = aNumInfo.GetNumRule()->Get(nBulletGrfLvl);
-
-        OutHTML_BulletImage( rWrt, OOO_STRING_SVTOOLS_HTML_image, 0,
+        OutHTML_BulletImage( rWrt, OOO_STRING_SVTOOLS_HTML_image, rNumFmt.GetBrush(),
                              rHWrt.aBulletGrfs[nBulletGrfLvl],
                              rNumFmt.GetGraphicSize(), rNumFmt.GetGraphicOrientation() );
     }
