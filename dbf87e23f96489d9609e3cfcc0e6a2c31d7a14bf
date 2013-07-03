@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXn///dU\u003d",
+        "filename": "sw/source/filter/html/htmlfly.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1606,
+      "author": {
+        "id": 1000028
+      },
+      "writtenOn": "2013-07-03T18:48:55Z",
+      "side": 0,
+      "message": "Original code handled mirroring. I wonder, if new code handles it, and there is also rotation that should be taken care of.",
+      "revId": "dbf87e23f96489d9609e3cfcc0e6a2c31d7a14bf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn///dw\u003d",
+        "filename": "sw/source/filter/html/htmlnum.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 827,
+      "author": {
+        "id": 1000028
+      },
+      "writtenOn": "2013-07-03T18:48:55Z",
+      "side": 0,
+      "message": "?",
+      "revId": "dbf87e23f96489d9609e3cfcc0e6a2c31d7a14bf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

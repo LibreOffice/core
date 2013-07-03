@@ -1,0 +1,208 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXn///d8\u003d",
+        "filename": "include/svtools/htmlout.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1000028
+      },
+      "writtenOn": "2013-07-03T18:48:55Z",
+      "side": 1,
+      "message": "You don\u0027t need this function declaration, you\u0027ve just removed its definition.",
+      "revId": "5efb01d033b6118fdca70012572eee76d6351ee2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn///eE\u003d",
+        "filename": "svtools/source/svhtml/htmlout.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 535,
+      "author": {
+        "id": 1000028
+      },
+      "writtenOn": "2013-07-03T18:48:55Z",
+      "side": 1,
+      "message": "It does not look right: const String\u0026 became OUString?",
+      "revId": "5efb01d033b6118fdca70012572eee76d6351ee2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn///eA\u003d",
+        "filename": "svtools/source/svhtml/htmlout.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 542,
+      "author": {
+        "id": 1000028
+      },
+      "writtenOn": "2013-07-03T18:48:55Z",
+      "side": 1,
+      "message": "you don\u0027t have to cast n, it is already sal_Int32",
+      "revId": "5efb01d033b6118fdca70012572eee76d6351ee2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn///ds\u003d",
+        "filename": "sw/source/filter/html/htmlfly.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 818,
+      "author": {
+        "id": 1000028
+      },
+      "writtenOn": "2013-07-03T18:48:55Z",
+      "side": 1,
+      "message": "rGrfConv is not a reference\nAnd you don\u0027t have to follow naming convention of the last century, when they wanted save a few characters. rGrfConv is on fact rImageDataInBase64 or something like that, isn\u0027t it?",
+      "revId": "5efb01d033b6118fdca70012572eee76d6351ee2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn///do\u003d",
+        "filename": "sw/source/filter/html/htmlfly.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1208,
+      "author": {
+        "id": 1000028
+      },
+      "writtenOn": "2013-07-03T18:48:55Z",
+      "side": 1,
+      "message": "Why did you touch German comments? :)",
+      "revId": "5efb01d033b6118fdca70012572eee76d6351ee2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn///dk\u003d",
+        "filename": "sw/source/filter/html/htmlfly.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1215,
+      "author": {
+        "id": 1000028
+      },
+      "writtenOn": "2013-07-03T18:48:55Z",
+      "side": 1,
+      "message": "Why did you touch German comments? :)",
+      "revId": "5efb01d033b6118fdca70012572eee76d6351ee2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn///dg\u003d",
+        "filename": "sw/source/filter/html/htmlfly.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1224,
+      "author": {
+        "id": 1000028
+      },
+      "writtenOn": "2013-07-03T18:48:55Z",
+      "side": 1,
+      "message": "Here we export to JPG unconmditionally, while the original code had XOUTBMP_USE_GIF_IF_SENSIBLE and XOUTBMP_USE_NATIVE_IF_POSSIBLE!",
+      "revId": "5efb01d033b6118fdca70012572eee76d6351ee2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn///dc\u003d",
+        "filename": "sw/source/filter/html/htmlfly.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1235,
+      "author": {
+        "id": 1000028
+      },
+      "writtenOn": "2013-07-03T18:48:55Z",
+      "side": 1,
+      "message": "???",
+      "revId": "5efb01d033b6118fdca70012572eee76d6351ee2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn///dM\u003d",
+        "filename": "sw/source/filter/html/htmlfly.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1574,
+      "author": {
+        "id": 1000028
+      },
+      "writtenOn": "2013-07-03T18:48:55Z",
+      "side": 1,
+      "message": "Here you write out classic \u003cIMG SRC\u003d\"filename\"\u003e, don\u0027t you?",
+      "revId": "5efb01d033b6118fdca70012572eee76d6351ee2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn///dY\u003d",
+        "filename": "sw/source/filter/html/htmlfly.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1608,
+      "author": {
+        "id": 1000028
+      },
+      "writtenOn": "2013-07-03T18:48:55Z",
+      "side": 1,
+      "message": "again, CVT_UNKNOWN as default",
+      "revId": "5efb01d033b6118fdca70012572eee76d6351ee2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn///d0\u003d",
+        "filename": "sw/source/filter/html/htmlplug.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1274,
+      "author": {
+        "id": 1000028
+      },
+      "writtenOn": "2013-07-03T18:48:55Z",
+      "side": 1,
+      "message": "I\u0027m not sure that CVT_UNKNOWN is a good default, what will it be at the end?",
+      "revId": "5efb01d033b6118fdca70012572eee76d6351ee2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn///d4\u003d",
+        "filename": "sw/source/filter/html/wrthtml.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 635,
+      "author": {
+        "id": 1000028
+      },
+      "writtenOn": "2013-07-03T18:48:55Z",
+      "side": 1,
+      "message": "Again, pass by value instead of pass by reference. Passing by reference is faster and consumes less memory.",
+      "revId": "5efb01d033b6118fdca70012572eee76d6351ee2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
