@@ -1162,7 +1162,7 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
 
         if (!sPattern.isEmpty())
         {
-            OString sAdjustment = extractAdjustment(rMap);
+            extractAdjustment(rMap);
             OString sUnit = extractUnit(sPattern);
             FieldUnit eUnit = detectMetricUnit(sUnit);
             SAL_WARN("vcl.layout", "making metric box for " << name.getStr() << " " << sUnit.getStr()
