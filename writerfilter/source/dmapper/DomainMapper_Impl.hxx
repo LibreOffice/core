@@ -388,6 +388,8 @@ private:
 
 public:
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > m_xInsertTextRange;
+    OUString m_olock_aspectratio;
+    OUString m_olock_v_ext;
 private:
     bool m_bIsNewDoc;
 

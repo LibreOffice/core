@@ -112,6 +112,10 @@ protected:
 
     virtual void        Commit( EscherPropertyContainer& rProps, const Rectangle& rRect );
 
+    virtual void AddHeightPercent( double rPercent );
+    virtual void AddWidthPercent( double rPercent );
+    virtual void AddStyle( OUString strStyle );
+
 private:
 
     virtual void OpenContainer( sal_uInt16 nEscherContainer, int nRecInstance = 0 );

@@ -930,6 +930,8 @@ enum ESCHER_LineCap
 #define ESCHER_Prop_fOneD                       957  /*  sal_Bool            1D adjustment                                                                                          */
 #define ESCHER_Prop_fHidden                     958  /*  sal_Bool            Do not display                                                                                         */
 #define ESCHER_Prop_fPrint                      959  /*  sal_Bool            Print this shape                                                                                       */
+#define ESCHER_Prop_OLockAspectRatio            960  /*  sal_Bool            o:lock -> aspectratio value                                                                            */
+#define ESCHER_Prop_OLockVExt                   961  /*  OUString            o:lock -> v:ext value                                                                                  */
 
 #define ESCHER_PERSISTENTRY_PREALLOCATE     64
 
@@ -1301,6 +1303,8 @@ public:
                     const sal_Bool bIsCustomShape = sal_False,
                     const sal_Bool bIsTextFrame = sal_True
                 );
+    void        CreateOLockProperties(
+                    const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & );
 
     sal_Bool    CreateConnectorProperties(
                     const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & rXShape,
@@ -1585,7 +1589,6 @@ class MSFILTER_DLLPUBLIC EscherEx : public EscherPersistTable
         sal_Bool                    mbEscherDg;
         sal_Bool                    mbOleEmf;                   // OLE is EMF instead of WMF
 
-
         virtual sal_Bool DoSeek( sal_uInt32 nKey );
 
 public:
@@ -1725,6 +1728,10 @@ public:
 
     void SetHellLayerId( sal_uInt16 nId )       { mnHellLayerId = nId; }
     sal_uInt16 GetHellLayerId() const           { return mnHellLayerId; }
+
+    virtual void AddHeightPercent( double rPercent );
+    virtual void AddWidthPercent( double rPercent );
+    virtual void AddStyle( OUString strStyle );
 
 private:
                         EscherEx( const EscherEx& );

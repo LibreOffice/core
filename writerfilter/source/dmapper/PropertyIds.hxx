@@ -297,6 +297,8 @@ enum PropertyIds
         ,PROP_GRAPHIC_URL
         ,PROP_GRAPHIC_BITMAP
         ,PROP_CHAR_SHADING_VALUE
+        ,PROP_OLOCK_ASPECTRATIO
+        ,PROP_OLOCK_V_EXT
     };
 struct PropertyNameSupplier_Impl;
 class PropertyNameSupplier

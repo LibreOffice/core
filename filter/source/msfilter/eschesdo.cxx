@@ -303,6 +303,7 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
                 aPropOpt.CreateTextProperties( rObj.mXPropSet,
                     mpEscherEx->QueryTextID( rObj.GetShapeRef(),
                         rObj.GetShapeId() ), sal_False, sal_False );
+            aPropOpt.CreateOLockProperties( rObj.mXPropSet );
         }
         else if ( rObj.GetType().EqualsAscii( "drawing.Ellipse" ))
         {
@@ -646,6 +647,99 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
 
         aPropOpt.CreateShapeProperties( rObj.GetShapeRef() );
         mpEscherEx->Commit( aPropOpt, rObj.GetRect() );
+
+        const SdrObject* pcSdrObj = rObj.GetSdrObject();
+        if (pcSdrObj)
+        {
+            if (pcSdrObj->GetRelativeHeight() > 0)    // "mso-height-percent"
+                mpEscherEx->AddHeightPercent(pcSdrObj->GetRelativeHeight().get());
+            if (pcSdrObj->GetRelativeWidth() > 0)    // "mso-width-percent"
+                mpEscherEx->AddWidthPercent(pcSdrObj->GetRelativeWidth().get());
+        }
+
+        OUString strStyle, strVal;
+        if( rObj.ImplGetPropertyValue( OUString( "MarginLeft" ) ) )
+        {
+            strVal = *((OUString*)rObj.GetUsrAny().getValue());
+            strStyle = OUString(";margin-left:") + strVal;
+        }
+        if( rObj.ImplGetPropertyValue( OUString( "MarginTop" ) ) )
+        {
+            strVal = *((OUString*)rObj.GetUsrAny().getValue());
+            strStyle += OUString(";margin-top:") + strVal;
+        }
+        if( rObj.ImplGetPropertyValue( OUString( "MsoWidth" ) ) )
+        {
+            strVal = *((OUString*)rObj.GetUsrAny().getValue());
+            strStyle += OUString(";width:") + strVal;
+        }
+        if( rObj.ImplGetPropertyValue( OUString( "MsoHeight" ) ) )
+        {
+            strVal = *((OUString*)rObj.GetUsrAny().getValue());
+            strStyle += OUString(";height:") + strVal;
+        }
+        if( rObj.ImplGetPropertyValue( OUString( "ZIndex" ) ) )
+        {
+            strVal = *((OUString*)rObj.GetUsrAny().getValue());
+            strStyle += OUString(";z-index:") + strVal;
+        }
+        if( rObj.ImplGetPropertyValue( OUString( "MsoWrapStyle" ) ) )
+        {
+            strVal = *((OUString*)rObj.GetUsrAny().getValue());
+            strStyle += OUString(";mso-wrap-style:") + strVal;
+        }
+        if( rObj.ImplGetPropertyValue( OUString( "MsoTopPercent" ) ) )
+        {
+            strVal = *((OUString*)rObj.GetUsrAny().getValue());
+            strStyle += OUString(";mso-top-percent:") + strVal;
+        }
+        if( rObj.ImplGetPropertyValue( OUString( "MsoWrapDistanceLeft" ) ) )
+        {
+            strVal = *((OUString*)rObj.GetUsrAny().getValue());
+            strStyle += OUString(";mso-wrap-distance-left:") + strVal;
+        }
+        if( rObj.ImplGetPropertyValue( OUString( "MsoWrapDistanceTop" ) ) )
+        {
+            strVal = *((OUString*)rObj.GetUsrAny().getValue());
+            strStyle += OUString(";mso-wrap-distance-top:") + strVal;
+        }
+        if( rObj.ImplGetPropertyValue( OUString( "MsoWrapDistanceRight" ) ) )
+        {
+            strVal = *((OUString*)rObj.GetUsrAny().getValue());
+            strStyle += OUString(";mso-wrap-distance-right:") + strVal;
+        }
+        if( rObj.ImplGetPropertyValue( OUString( "MsoWrapDistanceBottom" ) ) )
+        {
+            strVal = *((OUString*)rObj.GetUsrAny().getValue());
+            strStyle += OUString(";mso-wrap-distance-bottom:") + strVal;
+        }
+        if( rObj.ImplGetPropertyValue( OUString( "MsoPositionHorizontalRelative" ) ) )
+        {
+            strVal = *((OUString*)rObj.GetUsrAny().getValue());
+            strStyle += OUString(";mso-position-horizontal-relative:") + strVal;
+        }
+        if( rObj.ImplGetPropertyValue( OUString( "MsoPositionVerticalRelative" ) ) )
+        {
+            strVal = *((OUString*)rObj.GetUsrAny().getValue());
+            strStyle += OUString(";mso-position-vertical-relative:") + strVal;
+        }
+        if( rObj.ImplGetPropertyValue( OUString( "MsoWidthRelative" ) ) )
+        {
+            strVal = *((OUString*)rObj.GetUsrAny().getValue());
+            strStyle += OUString(";mso-width-relative:") + strVal;
+        }
+        if( rObj.ImplGetPropertyValue( OUString( "MsoHeightRelative" ) ) )
+        {
+            strVal = *((OUString*)rObj.GetUsrAny().getValue());
+            strStyle += OUString(";mso-height-relative:") + strVal;
+        }
+        if( rObj.ImplGetPropertyValue( OUString( "VTextAnchor" ) ) )
+        {
+            strVal = *((OUString*)rObj.GetUsrAny().getValue());
+            strStyle += OUString(";v-text-anchor:") + strVal;
+        }
+        mpEscherEx->AddStyle(strStyle);
+
         if( mpEscherEx->GetGroupLevel() > 1 )
             mpEscherEx->AddChildAnchor( rObj.GetRect() );
 
