@@ -506,9 +506,8 @@ writeElement( FSHelperPtr pDoc, sal_Int32 nXmlElement, Sequence< OUString > aIte
 static void
 writeElement( FSHelperPtr pDoc, sal_Int32 nXmlElement, const LanguageTag& rLanguageTag )
 {
-    // OOXML ISO 29500 22.9.2.6 ST_Lang (Language Reference) says this is a
-    // BCP 47 language tag.
-    writeElement( pDoc, nXmlElement, rLanguageTag.getBcp47() );
+    // TODO: what to do with .Country and .Variant
+    writeElement( pDoc, nXmlElement, rLanguageTag.getLanguage() );
 }
 
 static void
