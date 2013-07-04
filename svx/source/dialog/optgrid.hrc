@@ -20,23 +20,6 @@
 #define _SVX_OPTGRID_HRC
 
 //Grid-Page
-#define GRP_DRAWGRID             2
-#define CBX_USE_GRIDSNAP         4
-#define CBX_SYNCHRONIZE          5
-#define CBX_SNAPGRID             7
-#define CBX_GRID_VISIBLE         8
-#define MTR_FLD_DRAW_Y           9
-#define MTR_FLD_DRAW_X          12
-#define NUM_FLD_DIVISION_X      13
-#define NUM_FLD_DIVISION_Y      14
-#define FT_DRAW_X               17
-#define FT_DRAW_Y               18
-#define FL_RESOLUTION           19
-#define FL_DIVISION             20
-#define FT_VERT_POINTS          21
-#define FT_HORZ_POINTS          22
-#define FT_DIVISION_Y           23
-#define FT_DIVISION_X           24
 #define CBX_SNAP_HELPLINES      25
 #define CBX_SNAP_BORDER         26
 #define CBX_SNAP_FRAME          27
