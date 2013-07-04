@@ -973,17 +973,19 @@ void PPDParser::parse( ::std::list< OString >& rLines )
             aKey = aKey.copy(0, nPos);
         aKey = aKey.copy(1); // remove the '*'
 
-        if (aKey.equalsL(RTL_CONSTASCII_STRINGPARAM("CloseUI")) ||
-            aKey.equalsL(RTL_CONSTASCII_STRINGPARAM("OpenGroup")) ||
-            aKey.equalsL(RTL_CONSTASCII_STRINGPARAM("CloseGroup")) ||
-            aKey.equalsL(RTL_CONSTASCII_STRINGPARAM("End")) ||
-            aKey.equalsL(RTL_CONSTASCII_STRINGPARAM("OpenSubGroup")) ||
-            aKey.equalsL(RTL_CONSTASCII_STRINGPARAM("CloseSubGroup")))
+        if ((aKey == "CloseUI") ||
+            (aKey == "JCLCloseUI") ||
+            (aKey == "OpenGroup") ||
+            (aKey == "CloseGroup") ||
+            (aKey == "End") ||
+            (aKey == "JCLEnd") ||
+            (aKey == "OpenSubGroup") ||
+            (aKey == "CloseSubGroup"))
         {
             continue;
         }
 
-        if (aKey.equalsL(RTL_CONSTASCII_STRINGPARAM("OpenUI")))
+        if ((aKey == "OpenUI") || (aKey == "JCLOpenUI"))
         {
             parseOpenUI( aCurrentLine );
             continue;
