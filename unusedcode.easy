@@ -132,7 +132,6 @@ comphelper::detail::ConfigurationWrapper::setLocalizedPropertyValue(boost::share
 connectivity::file::OStatement_Base::reset()
 connectivity::sdbcx::OGroup::OGroup(rtl::OUString const&, unsigned char)
 connectivity::sdbcx::OGroup::OGroup(unsigned char)
-dbaccess::ORowSet_CreateInstance(com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> const&)
 dbtools::DBTypeConversion::getMsFromTime(com::sun::star::util::Time const&)
 drawinglayer::attribute::FontAttribute::isDefault() const
 drawinglayer::attribute::MaterialAttribute3D::isDefault() const

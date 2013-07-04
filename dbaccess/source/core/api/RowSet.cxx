@@ -126,12 +126,6 @@ extern "C" void SAL_CALL createRegistryInfo_ORowSet()
 
 namespace dbaccess
 {
-
-Reference< XInterface > ORowSet_CreateInstance(const Reference< XMultiServiceFactory >& _rxFactory)
-{
-    return *(new ORowSet( comphelper::getComponentContext(_rxFactory) ));
-}
-
 ORowSet::ORowSet( const Reference< ::com::sun::star::uno::XComponentContext >& _rxContext )
     :ORowSet_BASE1(m_aMutex)
     ,ORowSetBase( _rxContext, ORowSet_BASE1::rBHelper, &m_aMutex )
