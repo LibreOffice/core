@@ -19,8 +19,6 @@
 #endif
 
 #define MaxTextExtent  4096
-//support AMD opencl
-#define CL_MAP_WRITE_INVALIDATE_REGION (1 << 2)
 
 #if defined(_MSC_VER)
 #ifndef strcasecmp
