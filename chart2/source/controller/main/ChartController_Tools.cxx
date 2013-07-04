@@ -885,7 +885,6 @@ void ChartController::executeDispatch_ToggleGridHorizontal()
     {
         sal_Int32 nDimensionIndex = 1;
         sal_Int32 nCooSysIndex = 0;
-        bool bIsMainGrid = true;
 
         bool bHasMajorYGrid = AxisHelper::isGridShown( nDimensionIndex, nCooSysIndex, true,  xDiagram );
         bool bHasMinorYGrid = AxisHelper::isGridShown( nDimensionIndex, nCooSysIndex, false, xDiagram );
