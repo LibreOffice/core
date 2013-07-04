@@ -47,14 +47,6 @@
     self.comManager = [CommunicationManager sharedComManager];
     self.serverTable.dataSource = self;
     self.serverTable.delegate = self;
-    
-    NSOperationQueue *mainQueue = [NSOperationQueue mainQueue];
-    self.slideShowPreviewStartObserver = [[NSNotificationCenter defaultCenter] addObserverForName:STATUS_CONNECTED_SLIDESHOW_RUNNING
-                                                                                           object:nil
-                                                                                            queue:mainQueue
-                                                                                       usingBlock:^(NSNotification *note) {
-                                                                                           [self performSegueWithIdentifier:@"SlideShowPreview" sender:self ];
-                                                                                    }];
 }
 
 -(void)viewWillAppear:(BOOL)animated
@@ -69,12 +61,14 @@
     // Dispose of any resources that can be recreated.
 }
 
-#pragma mark - Table view delegate
+#pragma mark - Table view data source
 
-- (void)disableSpinner
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    [self.tableView cellForRowAtIndexPath:self.lastSpinningCellIndex].accessoryView = nil;
+    return 1;
 }
+
+#pragma mark - Table view delegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -101,21 +95,7 @@
     return cell;
 }
 
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return YES;
-}
 
-- (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath{
-    return UITableViewCellEditingStyleDelete;
-}
 
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath{
-    
-    if(editingStyle == UITableViewCellEditingStyleDelete){
-        [self.comManager removeServerAtIndex:indexPath.row];
-        [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    }
-}
 
 @end

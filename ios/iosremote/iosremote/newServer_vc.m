@@ -36,6 +36,9 @@
                                                 otherButtonTitles:nil];
         [message show];
     }
+    NSLog(@"New server name:%@ ip:%@", serverName, serverAddr);
+    [self.comManager addServersWithName:serverName AtAddress:serverAddr];
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (BOOL)isModal
@@ -283,7 +286,10 @@ titleForHeaderInSection:(NSInteger)section
     [cell.textField setPlaceholder:placeholder];
     [cell setTag:tag];
     [cell.textField setText:text];
+<<<<<<< HEAD
     [cell.textField setKeyboardType:keyboardType];
+=======
+>>>>>>> connect to server list implemented
     return cell;
 }
 
