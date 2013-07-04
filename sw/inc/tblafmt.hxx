@@ -56,6 +56,7 @@
 #include <fmtlsplt.hxx>
 #include <fmtrowsplt.hxx>
 #include <fmtornt.hxx>
+#include <swtblfmt.hxx>
 #include "swdllapi.h"
 
 struct SwAfVersions;
@@ -230,7 +231,6 @@ class SW_DLLPUBLIC SwTableAutoFmt
     static SwBoxAutoFmt* pDfltBoxAutoFmt;
 
     SwTableFmt* m_pTableStyle;
-    String aName;
     sal_uInt16 nStrResId;
 
     // Common flags of Calc and Writer.
@@ -246,7 +246,6 @@ class SW_DLLPUBLIC SwTableAutoFmt
 public:
     SwTableAutoFmt( const String& rName, SwTableFmt* pTableStyle );
     SwTableAutoFmt( const SwTableAutoFmt& rNew );
-    ~SwTableAutoFmt();
 
     SwTableAutoFmt& operator=( const SwTableAutoFmt& rNew );
 
@@ -255,8 +254,8 @@ public:
     void SetBoxFmt( const SwTableBoxFmt& rNew, sal_uInt8 nPos );
     SwTableBoxFmt* GetBoxFmt( sal_uInt8 nPos ) const;
 
-    void SetName( const String& rNew ) { aName = rNew; nStrResId = USHRT_MAX; }
-    const String& GetName() const { return aName; }
+    void SetName( const String& rNew ) { m_pTableStyle->SetName( rNew ); nStrResId = USHRT_MAX; }
+    const String& GetName() const { return m_pTableStyle->GetName(); }
 
     enum UpdateFlags { UPDATE_CHAR = 1, UPDATE_BOX = 2, UPDATE_ALL = 3 };
     void UpdateFromSet( sal_uInt8 nPos, const SfxItemSet& rSet,

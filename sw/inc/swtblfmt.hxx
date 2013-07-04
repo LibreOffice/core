@@ -42,6 +42,7 @@
 #include <editeng/lineitem.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <editeng/shaditem.hxx>
+#include <editsh.hxx>
 #include <fmtpdsc.hxx>
 #include <fmtlsplt.hxx>
 #include <fmtornt.hxx>
@@ -49,6 +50,7 @@
 #include <frmatr.hxx>
 #include <frmfmt.hxx>
 #include <paratr.hxx>
+#include <swtable.hxx>
 
 struct SwAfVersions;
 
@@ -91,15 +93,18 @@ public:
     void SetOddColFmt( SwTableLineFmt* pNew ) { m_pOddColFmt.reset( pNew ); }
     void SetEvenColFmt( SwTableLineFmt* pNew ) { m_pEvnColFmt.reset( pNew ); }
 
-    SwTableLineFmt* GetFirstLineFmt() { return m_pFstLineFmt.get(); }
-    SwTableLineFmt* GetLastLineFmt() { return m_pLstLineFmt.get(); }
-    SwTableLineFmt* GetOddLineFmt() { return m_pOddLineFmt.get(); }
-    SwTableLineFmt* GetEvenLineFmt() { return m_pEvnLineFmt.get(); }
+    SwTableLineFmt* GetFirstLineFmt() const { return m_pFstLineFmt.get(); }
+    SwTableLineFmt* GetLastLineFmt() const { return m_pLstLineFmt.get(); }
+    SwTableLineFmt* GetOddLineFmt() const { return m_pOddLineFmt.get(); }
+    SwTableLineFmt* GetEvenLineFmt() const { return m_pEvnLineFmt.get(); }
 
-    SwTableLineFmt* GetFirstColFmt() { return m_pFstColFmt.get(); }
-    SwTableLineFmt* GetLastColFmt() { return m_pLstColFmt.get(); }
-    SwTableLineFmt* GetOddColFmt() { return m_pOddColFmt.get(); }
-    SwTableLineFmt* GetEvenColFmt() { return m_pEvnColFmt.get(); }
+    SwTableLineFmt* GetFirstColFmt() const { return m_pFstColFmt.get(); }
+    SwTableLineFmt* GetLastColFmt() const { return m_pLstColFmt.get(); }
+    SwTableLineFmt* GetOddColFmt() const { return m_pOddColFmt.get(); }
+    SwTableLineFmt* GetEvenColFmt() const { return m_pEvnColFmt.get(); }
+
+    void SetBoxFmt( const SwTableBoxFmt& rNew, sal_uInt8 nPos );
+    SwTableBoxFmt* GetBoxFmt( sal_uInt8 nPos ) const;
 
     void SetBreak( const SvxFmtBreakItem& rNew );
     void SetPageDesc( const SwFmtPageDesc& rNew );
@@ -116,7 +121,10 @@ public:
     sal_Bool GetRowSplit() const;
     sal_uInt16 GetRepeatHeading() const;
 
-    void CopyTableFormatInfo( SwTableFmt* pTableFormat );
+    void RestoreTableProperties( SwTable &table ) const;
+    void StoreTableProperties( const SwTable &table );
+
+    void CopyTableFormatInfo( const SwTableFmt* pTableFormat );
 
     TYPEINFO();     // Already in base class Content.
 

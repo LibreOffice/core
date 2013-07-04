@@ -644,7 +644,6 @@ sal_Bool SwTableBoxFmt::SaveVersionNo( SvStream& rStream, sal_uInt16 fileVersion
 
 SwTableAutoFmt::SwTableAutoFmt( const String& rName, SwTableFmt* pTableStyle )
     : m_pTableStyle( pTableStyle )
-    , aName( rName )
     , nStrResId( USHRT_MAX )
 {
     bInclFont = sal_True;
@@ -653,6 +652,8 @@ SwTableAutoFmt::SwTableAutoFmt( const String& rName, SwTableFmt* pTableStyle )
     bInclBackground = sal_True;
     bInclValueFormat = sal_True;
     bInclWidthHeight = sal_True;
+
+    m_pTableStyle->SetName( rName );
 }
 
 
@@ -667,7 +668,6 @@ SwTableAutoFmt& SwTableAutoFmt::operator=( const SwTableAutoFmt& rNew )
         return *this;
 
     m_pTableStyle = rNew.m_pTableStyle;
-    aName = rNew.aName;
     nStrResId = rNew.nStrResId;
     bInclFont = rNew.bInclFont;
     bInclJustify = rNew.bInclJustify;
@@ -681,76 +681,13 @@ SwTableAutoFmt& SwTableAutoFmt::operator=( const SwTableAutoFmt& rNew )
 
 void SwTableAutoFmt::SetBoxFmt( const SwTableBoxFmt& rNew, sal_uInt8 nPos )
 {
-    OSL_ENSURE( nPos < 16, "wrong area" );
-
-    sal_uInt8 nLine = nPos / 4;
-    sal_uInt8 nBox = nPos % 4;
-
-    SwTableLineFmt* pLine;
-
-    switch( nLine )
-    {
-        case 0:
-            pLine = m_pTableStyle->GetFirstLineFmt(); break;
-        case 1:
-            pLine = m_pTableStyle->GetOddLineFmt(); break;
-        case 2:
-            pLine = m_pTableStyle->GetEvenLineFmt(); break;
-        case 3:
-            pLine = m_pTableStyle->GetLastLineFmt(); break;
-        // TODO Extend for columns
-    }
-
-    switch( nBox )
-    {
-        case 0:
-            pLine->SetFirstBoxFmt( new SwTableBoxFmt( rNew ) ); break;
-        case 1:
-            pLine->SetOddBoxFmt( new SwTableBoxFmt( rNew ) ); break;
-        case 2:
-            pLine->SetEvenBoxFmt( new SwTableBoxFmt( rNew ) ); break;
-        case 3:
-            pLine->SetLastBoxFmt( new SwTableBoxFmt( rNew ) ); break;
-    }
+    m_pTableStyle->SetBoxFmt( rNew, nPos );
 }
 
 
 SwTableBoxFmt* SwTableAutoFmt::GetBoxFmt( sal_uInt8 nPos ) const
 {
-    OSL_ENSURE( nPos < 16, "wrong area" );
-
-    sal_uInt8 nLine = nPos / 4;
-    sal_uInt8 nBox = nPos % 4;
-
-    SwTableLineFmt* pLine;
-    SwTableBoxFmt* pRet;
-
-    switch( nLine )
-    {
-        case 0:
-            pLine = m_pTableStyle->GetFirstLineFmt(); break;
-        case 1:
-            pLine = m_pTableStyle->GetOddLineFmt(); break;
-        case 2:
-            pLine = m_pTableStyle->GetEvenLineFmt(); break;
-        case 3:
-            pLine = m_pTableStyle->GetLastLineFmt(); break;
-        // TODO Extend for columns
-    }
-
-    switch( nBox )
-    {
-        case 0:
-            pRet = pLine->GetFirstBoxFmt();
-        case 1:
-            pRet = pLine->GetOddBoxFmt();
-        case 2:
-            pRet = pLine->GetEvenBoxFmt();
-        case 3:
-            pRet = pLine->GetLastBoxFmt();
-    }
-
-    return pRet;
+    return m_pTableStyle->GetBoxFmt( nPos );
 }
 
 
@@ -761,12 +698,7 @@ void SwTableAutoFmt::UpdateFromSet( sal_uInt8 nPos,
 {
     OSL_ENSURE( nPos < 16, "wrong area" );
 
-    SwBoxAutoFmt* pFmt = aBoxAutoFmt[ nPos ];
-    if( !pFmt )     // if is set -> copy
-    {
-        pFmt = new SwBoxAutoFmt;
-        aBoxAutoFmt[ nPos ] = pFmt;
-    }
+    SwTableBoxFmt* pFmt = GetBoxFmt( nPos );
 
     if( UPDATE_CHAR & eFlags )
     {
@@ -823,7 +755,7 @@ void SwTableAutoFmt::UpdateFromSet( sal_uInt8 nPos,
 void SwTableAutoFmt::UpdateToSet(sal_uInt8 nPos, SfxItemSet& rSet,
                                  UpdateFlags eFlags, SvNumberFormatter* pNFmtr) const
 {
-    const SwBoxAutoFmt& rChg = GetBoxFmt( nPos );
+    const SwTableBoxFmt& rChg = *GetBoxFmt( nPos );
 
     if( UPDATE_CHAR & eFlags )
     {
@@ -912,42 +844,12 @@ void SwTableAutoFmt::UpdateToSet(sal_uInt8 nPos, SfxItemSet& rSet,
 
 void SwTableAutoFmt::RestoreTableProperties(SwTable &table) const
 {
-    SwTableFmt *pFormat = table.GetTableFmt();
-    if (!pFormat)
-        return;
-
-    SwDoc *pDoc = pFormat->GetDoc();
-    if (!pDoc)
-        return;
-
-    pFormat->SetFmtAttr( m_pTableStyle->GetAttrSet() );
-    pFormat->CopyTableFormatInfo( m_pTableStyle );
-
-    SwEditShell *pShell = pDoc->GetEditShell();
-    pDoc->SetRowSplit(*pShell->getShellCrsr(false), SwFmtRowSplit(m_pTableStyle->GetRowSplit()));
-
-    table.SetRowsToRepeat(m_pTableStyle->GetRepeatHeading());
+    m_pTableStyle->RestoreTableProperties( table );
 }
 
 void SwTableAutoFmt::StoreTableProperties(const SwTable &table)
 {
-    SwTableFmt *pFormat = table.GetTableFmt();
-    if (!pFormat)
-        return;
-
-    SwDoc *pDoc = pFormat->GetDoc();
-    if (!pDoc)
-        return;
-
-    SwEditShell *pShell = pDoc->GetEditShell();
-    SwFmtRowSplit *pRowSplit = 0;
-    pDoc->GetRowSplit(*pShell->getShellCrsr(false), pRowSplit);
-    m_pTableStyle->SetRowSplit( pRowSplit ? pRowSplit->GetValue() : sal_False );
-    delete pRowSplit;
-    pRowSplit = 0;
-
-    m_pTableStyle->SetFmtAttr( pFormat->GetAttrSet() );
-    m_pTableStyle->CopyTableFormatInfo( pFormat );
+    m_pTableStyle->StoreTableProperties( table );
 }
 
 SwTableAutoFmt* SwTableAutoFmt::Load( SvStream& rStream, const SwAfVersions& rVersions, SwDoc* pDoc )
@@ -1056,7 +958,7 @@ sal_Bool SwTableAutoFmt::Save( SvStream& rStream, sal_uInt16 fileVersion ) const
     sal_Bool b;
     rStream << nVal;
     // --- from 680/dr25 on: store strings as UTF-8
-    write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(rStream, aName,
+    write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(rStream, GetName(),
         RTL_TEXTENCODING_UTF8 );
     rStream << nStrResId;
     rStream << ( b = bInclFont );
@@ -1314,9 +1216,8 @@ sal_Bool SwTableAutoFmtTbl::Save( SvStream& rStream ) const
         bRet = 0 == rStream.GetError();
 
         // Write this version number for all attributes
-        // TODO Remove members in SwTableAutoFmt and adapt this
-        // m_pImpl->m_AutoFormats[0].GetBoxFmt(0).SaveVersionNo(
-        //        rStream, AUTOFORMAT_FILE_VERSION);
+        m_pImpl->m_AutoFormats[0].GetBoxFmt(0)->SaveVersionNo(
+               rStream, AUTOFORMAT_FILE_VERSION);
 
         rStream << static_cast<sal_uInt16>(m_pImpl->m_AutoFormats.size() - 1);
         bRet = 0 == rStream.GetError();

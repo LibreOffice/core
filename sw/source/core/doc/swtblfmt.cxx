@@ -103,6 +103,79 @@ SwTableFmt& SwTableFmt::operator=( const SwTableFmt& rNew )
         return *this;
     }
 
+void SwTableFmt::SetBoxFmt( const SwTableBoxFmt& rNew, sal_uInt8 nPos )
+{
+    OSL_ENSURE( nPos < 16, "wrong area" );
+
+    sal_uInt8 nLine = nPos / 4;
+    sal_uInt8 nBox = nPos % 4;
+
+    SwTableLineFmt* pLine;
+
+    switch( nLine )
+    {
+        case 0:
+            pLine = m_pFstLineFmt.get(); break;
+        case 1:
+            pLine = m_pOddLineFmt.get(); break;
+        case 2:
+            pLine = m_pEvnLineFmt.get(); break;
+        case 3:
+            pLine = m_pLstLineFmt.get(); break;
+        // TODO Extend for columns
+    }
+
+    switch( nBox )
+    {
+        case 0:
+            pLine->SetFirstBoxFmt( new SwTableBoxFmt( rNew ) ); break;
+        case 1:
+            pLine->SetOddBoxFmt( new SwTableBoxFmt( rNew ) ); break;
+        case 2:
+            pLine->SetEvenBoxFmt( new SwTableBoxFmt( rNew ) ); break;
+        case 3:
+            pLine->SetLastBoxFmt( new SwTableBoxFmt( rNew ) ); break;
+    }
+}
+
+SwTableBoxFmt* SwTableFmt::GetBoxFmt( sal_uInt8 nPos ) const
+{
+    OSL_ENSURE( nPos < 16, "wrong area" );
+
+    sal_uInt8 nLine = nPos / 4;
+    sal_uInt8 nBox = nPos % 4;
+
+    SwTableLineFmt* pLine;
+    SwTableBoxFmt* pRet;
+
+    switch( nLine )
+    {
+        case 0:
+            pLine = m_pFstLineFmt.get(); break;
+        case 1:
+            pLine = m_pOddLineFmt.get(); break;
+        case 2:
+            pLine = m_pEvnLineFmt.get(); break;
+        case 3:
+            pLine = m_pLstLineFmt.get(); break;
+        // TODO Extend for columns
+    }
+
+    switch( nBox )
+    {
+        case 0:
+            pRet = pLine->GetFirstBoxFmt(); break;
+        case 1:
+            pRet = pLine->GetOddBoxFmt(); break;
+        case 2:
+            pRet = pLine->GetEvenBoxFmt(); break;
+        case 3:
+            pRet = pLine->GetLastBoxFmt(); break;
+    }
+
+    return pRet;
+}
+
 void SwTableFmt::SetBreak( const SvxFmtBreakItem& rNew )
 {
     SetFmtAttr( rNew );
@@ -168,8 +241,48 @@ sal_uInt16 SwTableFmt::GetRepeatHeading() const
     return (static_cast<const SfxUInt16Item&>( GetFmtAttr( FN_PARAM_TABLE_HEADLINE ) )).GetValue();
 }
 
-void SwTableFmt::CopyTableFormatInfo( SwTableFmt* pTableFormat )
+void SwTableFmt::RestoreTableProperties(SwTable &table) const
 {
+    SwTableFmt *pFormat = table.GetTableFmt();
+    if (!pFormat)
+        return;
+
+    SwDoc *pDoc = pFormat->GetDoc();
+    if (!pDoc)
+        return;
+
+    pFormat->CopyTableFormatInfo( this );
+
+    SwEditShell *pShell = pDoc->GetEditShell();
+    pDoc->SetRowSplit( *pShell->getShellCrsr( false ), SwFmtRowSplit( GetRowSplit() ) );
+
+    table.SetRowsToRepeat( GetRepeatHeading() );
+}
+
+void SwTableFmt::StoreTableProperties(const SwTable &table)
+{
+    SwTableFmt *pFormat = table.GetTableFmt();
+    if (!pFormat)
+        return;
+
+    SwDoc *pDoc = pFormat->GetDoc();
+    if (!pDoc)
+        return;
+
+    SwEditShell *pShell = pDoc->GetEditShell();
+    SwFmtRowSplit *pRowSplit = 0;
+    pDoc->GetRowSplit( *pShell->getShellCrsr( false ), pRowSplit );
+    SetRowSplit( pRowSplit ? pRowSplit->GetValue() : sal_False );
+    delete pRowSplit;
+    pRowSplit = 0;
+
+    CopyTableFormatInfo( pFormat );
+}
+
+void SwTableFmt::CopyTableFormatInfo( const SwTableFmt* pTableFormat )
+{
+    SetFmtAttr( pTableFormat->GetAttrSet() );
+
     m_pFstLineFmt.reset( new SwTableLineFmt ( *pTableFormat->GetFirstLineFmt() ) );
     m_pLstLineFmt.reset( new SwTableLineFmt ( *pTableFormat->GetLastLineFmt() ) );
     m_pOddLineFmt.reset( new SwTableLineFmt ( *pTableFormat->GetOddLineFmt() ) );

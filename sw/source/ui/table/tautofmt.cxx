@@ -39,6 +39,7 @@
 #include "doc.hxx"
 #include "SwStyleNameMapper.hxx"
 #include "poolfmt.hxx"
+#include <swtblfmt.hxx>
 
 using namespace com::sun::star;
 
@@ -583,7 +584,7 @@ rCTLFont.MethodName( Value );
 
 void AutoFmtPreview::MakeFonts( sal_uInt8 nIndex, Font& rFont, Font& rCJKFont, Font& rCTLFont )
 {
-    const SwBoxAutoFmt& rBoxFmt = pCurData->GetBoxFmt( nIndex );
+    const SwTableBoxFmt& rBoxFmt = *pCurData->GetBoxFmt( nIndex );
 
     rFont = rCJKFont = rCTLFont = GetFont();
     Size aFontSize( rFont.GetSize().Width(), 10 );
@@ -617,7 +618,7 @@ sal_uInt8 AutoFmtPreview::GetFormatIndex( size_t nCol, size_t nRow ) const
 
 const SvxBoxItem& AutoFmtPreview::GetBoxItem( size_t nCol, size_t nRow ) const
 {
-    return pCurData->GetBoxFmt( GetFormatIndex( nCol, nRow ) ).GetBox();
+    return pCurData->GetBoxFmt( GetFormatIndex( nCol, nRow ) )->GetBox();
 }
 
 void AutoFmtPreview::DrawString( size_t nCol, size_t nRow )
@@ -666,7 +667,7 @@ MAKENUMSTR:
             if( pCurData->IsValueFormat() )
             {
                 String sFmt; LanguageType eLng, eSys;
-                pCurData->GetBoxFmt( (sal_uInt8)nNum ).GetValueFormat( sFmt, eLng, eSys );
+                pCurData->GetBoxFmt( (sal_uInt8)nNum )->GetValueFormat( sFmt, eLng, eSys );
 
                 short nType;
                 bool bNew;
@@ -736,7 +737,7 @@ MAKENUMSTR:
         {
             sal_uInt16 nHorPos = (sal_uInt16)
                     ((cellRect.GetWidth()-aStrSize.Width())/2);
-            const SvxAdjustItem& rAdj = pCurData->GetBoxFmt(nFmtIndex).GetAdjust();
+            const SvxAdjustItem& rAdj = pCurData->GetBoxFmt(nFmtIndex)->GetAdjust();
             switch ( rAdj.GetAdjust() )
             {
                 case SVX_ADJUST_LEFT:
@@ -784,7 +785,7 @@ void AutoFmtPreview::DrawBackground()
     {
         for( size_t nCol = 0; nCol < 5; ++nCol )
         {
-            SvxBrushItem aBrushItem( pCurData->GetBoxFmt( GetFormatIndex( nCol, nRow ) ).GetBackground() );
+            SvxBrushItem aBrushItem( pCurData->GetBoxFmt( GetFormatIndex( nCol, nRow ) )->GetBackground() );
 
             aVD.Push( PUSH_LINECOLOR | PUSH_FILLCOLOR );
             aVD.SetLineColor();
