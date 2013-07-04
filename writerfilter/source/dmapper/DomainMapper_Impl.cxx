@@ -1749,7 +1749,7 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
             if (nAnchorType == text::TextContentAnchorType_AT_PAGE)
                 bIsGraphic = false;
 
-            if (nAnchorType != text::TextContentAnchorType_AT_PAGE)
+            if (!m_bInHeaderFooterImport)
                 xProps->setPropertyValue(
                         rPropNameSupplier.GetName( PROP_OPAQUE ),
                         uno::makeAny( true ) );

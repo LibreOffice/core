@@ -532,7 +532,7 @@ void Test::testN764005()
     CPPUNIT_ASSERT(eValue != text::TextContentAnchorType_AS_CHARACTER);
     sal_Bool bValue = sal_True;
     xPropertySet->getPropertyValue("Opaque") >>= bValue;
-    CPPUNIT_ASSERT_EQUAL(sal_False, bValue);
+    CPPUNIT_ASSERT_EQUAL(false, bool(bValue));
 }
 
 void Test::testSmartart()
@@ -1455,6 +1455,12 @@ void Test::testN820504()
     uno::Reference<beans::XPropertySet> xStyle(xStylesAccess->getByName("Default Style"), uno::UNO_QUERY);
     // The problem was that the CharColor was set to AUTO (-1) even if we have some default char color set
     CPPUNIT_ASSERT_EQUAL(sal_Int32(4040635), getProperty<sal_Int32>(xStyle, "CharColor"));
+
+    // Also, the groupshape was anchored at-page instead of at-character
+    // (that's incorrect as Word only supports at-character and as-character).
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AT_CHARACTER, getProperty<text::TextContentAnchorType>(xDraws->getByIndex(0), "AnchorType"));
 }
 
 void Test::testFdo43641()
