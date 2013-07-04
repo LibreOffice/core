@@ -89,61 +89,6 @@
 #define CB_VIEWPDF                  35
 
 
-//controls for open options tab page
-#define FL_INITVIEW               80
-#define RB_OPNMODE_PAGEONLY       81
-#define RB_OPNMODE_OUTLINE        82
-#define RB_OPNMODE_THUMBS         83
-
-#define FL_MAGNIFICATION          84
-#define RB_MAGNF_DEFAULT          85
-#define RB_MAGNF_WIND             86
-#define RB_MAGNF_WIDTH            87
-#define RB_MAGNF_VISIBLE          88
-#define RB_MAGNF_ZOOM             89
-#define NUM_MAGNF_ZOOM            90
-#define FT_MAGNF_INITIAL_PAGE     91
-#define NUM_MAGNF_INITIAL_PAGE    92
-
-#define FL_PAGE_LAYOUT            93
-#define RB_PGLY_DEFAULT           94
-#define RB_PGLY_SINGPG            95
-#define RB_PGLY_CONT              96
-#define RB_PGLY_CONTFAC           97
-#define CB_PGLY_FIRSTLEFT         98
-
-//controls for security preferences tab page
-#define FL_PWD_GROUP            119
-#define BTN_SET_PWD             120
-#define FT_USER_PWD             121
-#define STR_USER_PWD_SET        122
-#define STR_USER_PWD_ENC        123
-#define STR_USER_PWD_UNSET      124
-#define STR_USER_PWD_UNENC      125
-#define STR_SET_PWD             126
-#define STR_USER_PWD_PDFA       127
-
-#define FT_OWNER_PWD            128
-#define STR_OWNER_PWD_SET       129
-#define STR_OWNER_PWD_REST      130
-#define STR_OWNER_PWD_UNSET     131
-#define STR_OWNER_PWD_UNREST    132
-#define STR_OWNER_PWD_PDFA      133
-
-#define FL_PRINT_PERMISSIONS    133
-#define RB_PRINT_NONE           134
-#define RB_PRINT_LOWRES         135
-#define RB_PRINT_HIGHRES        136
-
-#define FL_CHANGES_ALLOWED      137
-#define RB_CHANGES_NONE         138
-#define RB_CHANGES_INSDEL       139
-#define RB_CHANGES_FILLFORM     140
-#define RB_CHANGES_COMMENT      141
-#define RB_CHANGES_ANY_NOCOPY   142
-#define CB_ENDAB_COPY           143
-#define CB_ENAB_ACCESS          144
-
 #define FL_GENERAL_VERTICAL  157
 #define FL_INITVIEW_VERTICAL 158
 #define FL_VPREFER_VERTICAL  158

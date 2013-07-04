@@ -822,47 +822,33 @@ IMPL_LINK_NOARG(ImpPDFTabGeneralPage, ToggleExportPDFAHdl)
     return 0;
 }
 
-/////////////////////////////////////////////////////////////////
 // the option features tab page
-// -----------------------------------------------------------------------------
-ImpPDFTabOpnFtrPage::ImpPDFTabOpnFtrPage( Window* pParent,
-                                          const SfxItemSet& rCoreSet ) :
-    SfxTabPage( pParent, PDFFilterResId( RID_PDF_TAB_OPNFTR ), rCoreSet ),
-
-    maFlInitialView( this, PDFFilterResId( FL_INITVIEW ) ),
-    maRbOpnPageOnly( this, PDFFilterResId( RB_OPNMODE_PAGEONLY ) ),
-    maRbOpnOutline( this, PDFFilterResId( RB_OPNMODE_OUTLINE ) ),
-    maRbOpnThumbs( this, PDFFilterResId( RB_OPNMODE_THUMBS ) ),
-    maFtInitialPage( this, PDFFilterResId( FT_MAGNF_INITIAL_PAGE ) ),
-    maNumInitialPage( this, PDFFilterResId( NUM_MAGNF_INITIAL_PAGE ) ),
-
-    maFlMagnification( this, PDFFilterResId( FL_MAGNIFICATION ) ),
-    maRbMagnDefault( this, PDFFilterResId( RB_MAGNF_DEFAULT ) ),
-    maRbMagnFitWin( this, PDFFilterResId( RB_MAGNF_WIND ) ),
-    maRbMagnFitWidth( this, PDFFilterResId( RB_MAGNF_WIDTH ) ),
-    maRbMagnFitVisible( this, PDFFilterResId( RB_MAGNF_VISIBLE ) ),
-    maRbMagnZoom( this, PDFFilterResId( RB_MAGNF_ZOOM ) ),
-    maNumZoom( this, PDFFilterResId( NUM_MAGNF_ZOOM ) ),
-
-    m_aVerticalLine(this, PDFFilterResId(FL_INITVIEW_VERTICAL)),
-
-    maFlPageLayout( this, PDFFilterResId( FL_PAGE_LAYOUT ) ),
-    maRbPgLyDefault( this, PDFFilterResId( RB_PGLY_DEFAULT ) ),
-    maRbPgLySinglePage( this, PDFFilterResId( RB_PGLY_SINGPG ) ),
-    maRbPgLyContinue( this, PDFFilterResId( RB_PGLY_CONT ) ),
-    maRbPgLyContinueFacing( this, PDFFilterResId( RB_PGLY_CONTFAC ) ),
-    maCbPgLyFirstOnLeft( this, PDFFilterResId( CB_PGLY_FIRSTLEFT ) ),
-    mbUseCTLFont( sal_False )
+ImpPDFTabOpnFtrPage::ImpPDFTabOpnFtrPage(Window* pParent, const SfxItemSet& rCoreSet)
+    : SfxTabPage(pParent, "PdfViewPage","filter/ui/pdfviewpage.ui", rCoreSet)
+    , mbUseCTLFont(false)
 {
-    FreeResource();
+    get(mpRbOpnPageOnly, "pageonly");
+    get(mpRbOpnOutline, "outline");
+    get(mpRbOpnThumbs, "thumbs");
+    get(mpNumInitialPage, "page");
+    get(mpRbMagnDefault, "fitdefault");
+    get(mpRbMagnFitWin, "fitwin");
+    get(mpRbMagnFitWidth, "fitwidth");
+    get(mpRbMagnFitVisible, "fitvis");
+    get(mpRbMagnZoom, "fitzoom");
+    get(mpNumZoom, "zoom");
+    get(mpRbPgLyDefault, "defaultlayout");
+    get(mpRbPgLySinglePage, "singlelayout");
+    get(mpRbPgLyContinue, "contlayout");
+    get(mpRbPgLyContinueFacing, "contfacinglayout");
+    get(mpCbPgLyFirstOnLeft, "firstonleft");
 
-    maRbMagnDefault.SetToggleHdl( LINK( this, ImpPDFTabOpnFtrPage, ToggleRbMagnHdl ) );
-    maRbMagnFitWin.SetToggleHdl( LINK( this, ImpPDFTabOpnFtrPage, ToggleRbMagnHdl ) );
-    maRbMagnFitWidth.SetToggleHdl( LINK( this, ImpPDFTabOpnFtrPage, ToggleRbMagnHdl ) );
-    maRbMagnFitVisible.SetToggleHdl( LINK( this, ImpPDFTabOpnFtrPage, ToggleRbMagnHdl ) );
-    maRbMagnZoom.SetToggleHdl( LINK( this, ImpPDFTabOpnFtrPage, ToggleRbMagnHdl ) );
-    maNumZoom.SetAccessibleName(maRbMagnZoom.GetText());
-    maNumZoom.SetAccessibleRelationLabeledBy(&maRbMagnZoom);
+    mpRbMagnDefault->SetToggleHdl( LINK( this, ImpPDFTabOpnFtrPage, ToggleRbMagnHdl ) );
+    mpRbMagnFitWin->SetToggleHdl( LINK( this, ImpPDFTabOpnFtrPage, ToggleRbMagnHdl ) );
+    mpRbMagnFitWidth->SetToggleHdl( LINK( this, ImpPDFTabOpnFtrPage, ToggleRbMagnHdl ) );
+    mpRbMagnFitVisible->SetToggleHdl( LINK( this, ImpPDFTabOpnFtrPage, ToggleRbMagnHdl ) );
+    mpRbMagnZoom->SetToggleHdl( LINK( this, ImpPDFTabOpnFtrPage, ToggleRbMagnHdl ) );
+    mpNumZoom->SetAccessibleName(mpRbMagnZoom->GetText());
 }
 
 // -----------------------------------------------------------------------------
@@ -881,35 +867,35 @@ SfxTabPage*  ImpPDFTabOpnFtrPage::Create( Window* pParent,
 void ImpPDFTabOpnFtrPage::GetFilterConfigItem( ImpPDFTabDialog* paParent  )
 {
     paParent->mnInitialView = 0;
-    if( maRbOpnOutline.IsChecked() )
+    if( mpRbOpnOutline->IsChecked() )
         paParent->mnInitialView = 1;
-    else if( maRbOpnThumbs.IsChecked() )
+    else if( mpRbOpnThumbs->IsChecked() )
         paParent->mnInitialView = 2;
 
     paParent->mnMagnification = 0;
-    if( maRbMagnFitWin.IsChecked() )
+    if( mpRbMagnFitWin->IsChecked() )
         paParent->mnMagnification = 1;
-    else if( maRbMagnFitWidth.IsChecked() )
+    else if( mpRbMagnFitWidth->IsChecked() )
         paParent->mnMagnification = 2;
-    else if( maRbMagnFitVisible.IsChecked() )
+    else if( mpRbMagnFitVisible->IsChecked() )
         paParent->mnMagnification = 3;
-    else if( maRbMagnZoom.IsChecked() )
+    else if( mpRbMagnZoom->IsChecked() )
     {
         paParent->mnMagnification = 4;
-        paParent->mnZoom = static_cast<sal_Int32>(maNumZoom.GetValue());
+        paParent->mnZoom = static_cast<sal_Int32>(mpNumZoom->GetValue());
     }
 
-    paParent->mnInitialPage = static_cast<sal_Int32>(maNumInitialPage.GetValue());
+    paParent->mnInitialPage = static_cast<sal_Int32>(mpNumInitialPage->GetValue());
 
     paParent->mnPageLayout = 0;
-    if( maRbPgLySinglePage.IsChecked() )
+    if( mpRbPgLySinglePage->IsChecked() )
         paParent->mnPageLayout = 1;
-    else if( maRbPgLyContinue.IsChecked() )
+    else if( mpRbPgLyContinue->IsChecked() )
         paParent->mnPageLayout = 2;
-    else if( maRbPgLyContinueFacing.IsChecked() )
+    else if( mpRbPgLyContinueFacing->IsChecked() )
         paParent->mnPageLayout = 3;
 
-    paParent->mbFirstPageLeft = ( mbUseCTLFont ) ? maCbPgLyFirstOnLeft.IsChecked() : sal_False;
+    paParent->mbFirstPageLeft = ( mbUseCTLFont ) ? mpCbPgLyFirstOnLeft->IsChecked() : sal_False;
 }
 
 // -----------------------------------------------------------------------------
@@ -920,16 +906,16 @@ void ImpPDFTabOpnFtrPage::SetFilterConfigItem( const  ImpPDFTabDialog* paParent 
     {
     default:
     case 0:
-        maRbPgLyDefault.Check();
+        mpRbPgLyDefault->Check();
         break;
     case 1:
-        maRbPgLySinglePage.Check();
+        mpRbPgLySinglePage->Check();
         break;
     case 2:
-        maRbPgLyContinue.Check();
+        mpRbPgLyContinue->Check();
         break;
     case 3:
-        maRbPgLyContinueFacing.Check();
+        mpRbPgLyContinueFacing->Check();
         break;
     };
 
@@ -937,13 +923,13 @@ void ImpPDFTabOpnFtrPage::SetFilterConfigItem( const  ImpPDFTabDialog* paParent 
     {
     default:
     case 0:
-        maRbOpnPageOnly.Check();
+        mpRbOpnPageOnly->Check();
         break;
     case 1:
-        maRbOpnOutline.Check();
+        mpRbOpnOutline->Check();
         break;
     case 2:
-        maRbOpnThumbs.Check();
+        mpRbOpnThumbs->Check();
         break;
     };
 
@@ -951,49 +937,49 @@ void ImpPDFTabOpnFtrPage::SetFilterConfigItem( const  ImpPDFTabDialog* paParent 
     {
     default:
     case 0:
-        maRbMagnDefault.Check();
-        maNumZoom.Enable( sal_False );
+        mpRbMagnDefault->Check();
+        mpNumZoom->Enable( sal_False );
         break;
     case 1:
-        maRbMagnFitWin.Check();
-        maNumZoom.Enable( sal_False );
+        mpRbMagnFitWin->Check();
+        mpNumZoom->Enable( sal_False );
         break;
     case 2:
-        maRbMagnFitWidth.Check();
-        maNumZoom.Enable( sal_False );
+        mpRbMagnFitWidth->Check();
+        mpNumZoom->Enable( sal_False );
         break;
     case 3:
-        maRbMagnFitVisible.Check();
-        maNumZoom.Enable( sal_False );
+        mpRbMagnFitVisible->Check();
+        mpNumZoom->Enable( sal_False );
         break;
     case 4:
-        maRbMagnZoom.Check();
-        maNumZoom.Enable( sal_True );
+        mpRbMagnZoom->Check();
+        mpNumZoom->Enable( sal_True );
         break;
     };
 
-    maNumZoom.SetValue( paParent->mnZoom );
-    maNumInitialPage.SetValue( paParent->mnInitialPage );
+    mpNumZoom->SetValue( paParent->mnZoom );
+    mpNumInitialPage->SetValue( paParent->mnInitialPage );
 
     if( !mbUseCTLFont )
-        maCbPgLyFirstOnLeft.Hide( );
+        mpCbPgLyFirstOnLeft->Hide( );
     else
     {
-        maRbPgLyContinueFacing.SetToggleHdl( LINK( this, ImpPDFTabOpnFtrPage, ToggleRbPgLyContinueFacingHdl ) );
-        maCbPgLyFirstOnLeft.Check( paParent->mbFirstPageLeft );
+        mpRbPgLyContinueFacing->SetToggleHdl( LINK( this, ImpPDFTabOpnFtrPage, ToggleRbPgLyContinueFacingHdl ) );
+        mpCbPgLyFirstOnLeft->Check( paParent->mbFirstPageLeft );
         ToggleRbPgLyContinueFacingHdl( NULL );
     }
 }
 
 IMPL_LINK_NOARG(ImpPDFTabOpnFtrPage, ToggleRbPgLyContinueFacingHdl)
 {
-    maCbPgLyFirstOnLeft.Enable( maRbPgLyContinueFacing.IsChecked() );
+    mpCbPgLyFirstOnLeft->Enable( mpRbPgLyContinueFacing->IsChecked() );
     return 0;
 }
 
 IMPL_LINK( ImpPDFTabOpnFtrPage, ToggleRbMagnHdl, void*, )
 {
-    maNumZoom.Enable( maRbMagnZoom.IsChecked() );
+    mpNumZoom->Enable( mpRbMagnZoom->IsChecked() );
     return 0;
 }
 

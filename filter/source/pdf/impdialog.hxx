@@ -250,29 +250,23 @@ public:
 //class tab page viewer
 class ImpPDFTabOpnFtrPage : public SfxTabPage
 {
-    FixedLine                   maFlInitialView;
-    RadioButton                 maRbOpnPageOnly;
-    RadioButton                 maRbOpnOutline;
-    RadioButton                 maRbOpnThumbs;
-    FixedText                   maFtInitialPage;
-    NumericField                maNumInitialPage;
+    RadioButton*                mpRbOpnPageOnly;
+    RadioButton*                mpRbOpnOutline;
+    RadioButton*                mpRbOpnThumbs;
+    NumericField*               mpNumInitialPage;
 
-    FixedLine                   maFlMagnification;
-    RadioButton                 maRbMagnDefault;
-    RadioButton                 maRbMagnFitWin;
-    RadioButton                 maRbMagnFitWidth;
-    RadioButton                 maRbMagnFitVisible;
-    RadioButton                 maRbMagnZoom;
-    MetricField                 maNumZoom;
+    RadioButton*                mpRbMagnDefault;
+    RadioButton*                mpRbMagnFitWin;
+    RadioButton*                mpRbMagnFitWidth;
+    RadioButton*                mpRbMagnFitVisible;
+    RadioButton*                mpRbMagnZoom;
+    NumericField*               mpNumZoom;
 
-    FixedLine m_aVerticalLine;
-
-    FixedLine                   maFlPageLayout;
-    RadioButton                 maRbPgLyDefault;
-    RadioButton                 maRbPgLySinglePage;
-    RadioButton                 maRbPgLyContinue;
-    RadioButton                 maRbPgLyContinueFacing;
-    CheckBox                    maCbPgLyFirstOnLeft;
+    RadioButton*                mpRbPgLyDefault;
+    RadioButton*                mpRbPgLySinglePage;
+    RadioButton*                mpRbPgLyContinue;
+    RadioButton*                mpRbPgLyContinueFacing;
+    CheckBox*                   mpCbPgLyFirstOnLeft;
 
     sal_Bool                    mbUseCTLFont;
 
