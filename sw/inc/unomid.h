@@ -84,6 +84,25 @@
 #define MID_FRMSIZE_IS_SYNC_WIDTH_TO_HEIGHT     12
 #define MID_FRMSIZE_IS_SYNC_HEIGHT_TO_WIDTH     13
 #define MID_FRMSIZE_WIDTH_TYPE                  14
+/* Style */
+#define MID_FRMSIZE_MARGIN_LEFT                         15
+#define MID_FRMSIZE_MARGIN_TOP                          16
+#define MID_FRMSIZE_MSO_WIDTH                           17
+#define MID_FRMSIZE_MSO_HEIGHT                          18
+#define MID_FRMSIZE_Z_INDEX                             19
+#define MID_FRMSIZE_MSO_WRAP_STYLE                      20
+#define MID_FRMSIZE_MSO_TOP_PERCENT                     21
+#define MID_FRMSIZE_MSO_WRAP_DISTANCE_LEFT              22
+#define MID_FRMSIZE_MSO_WRAP_DISTANCE_TOP               23
+#define MID_FRMSIZE_MSO_WRAP_DISTANCE_RIGHT             24
+#define MID_FRMSIZE_MSO_WRAP_DISTANCE_BOTTOM            25
+#define MID_FRMSIZE_MSO_POSITION_HORIZONTAL_RELATIVE    26
+#define MID_FRMSIZE_MSO_POSITION_VERTICAL_RELATIVE      27
+#define MID_FRMSIZE_MSO_WIDTH_RELATIVE                  28
+#define MID_FRMSIZE_MSO_HEIGHT_RELATIVE                 29
+#define MID_FRMSIZE_V_TEXT_ANCHOR                       30
+#define MID_FRMSIZE_OLOCK_ASPECTRATIO                   31
+#define MID_FRMSIZE_OLOCK_V_EXT                         32
 
 #define MID_COLUMNS                             0
 #define MID_COLUMN_SEPARATOR_LINE               1

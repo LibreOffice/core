@@ -383,8 +383,9 @@ SfxItemInfo aSlotTab[] =
     { 0, 0 },                                           // RES_AUTO_STYLE
     { 0, SFX_ITEM_POOLABLE },                           // RES_FRMATR_STYLE_NAME
     { 0, SFX_ITEM_POOLABLE },                           // RES_FRMATR_CONDITIONAL_STYLE_NAME
-    { SID_ATTR_FILL_STYLE, SFX_ITEM_POOLABLE },                           // RES_FILL_STYLE
-    { SID_ATTR_FILL_GRADIENT, SFX_ITEM_POOLABLE },                           // RES_FILL_GRADIENT
+    { SID_ATTR_FILL_STYLE, SFX_ITEM_POOLABLE },         // RES_FILL_STYLE
+    { SID_ATTR_FILL_GRADIENT, SFX_ITEM_POOLABLE },      // RES_FILL_GRADIENT
+    { 0, SFX_ITEM_POOLABLE },                           // RES_SHAPEATR_GRABBAG
 
     { 0, SFX_ITEM_POOLABLE },                           // RES_GRFATR_MIRRORGRF
     { SID_ATTR_GRAF_CROP, SFX_ITEM_POOLABLE },          // RES_GRFATR_CROPGRF
@@ -602,6 +603,7 @@ void _InitCore()
     aAttrTab[ RES_FRMATR_CONDITIONAL_STYLE_NAME - POOLATTR_BEGIN ] = new SfxStringItem( RES_FRMATR_CONDITIONAL_STYLE_NAME, aEmptyStr );
     aAttrTab[ RES_FILL_STYLE - POOLATTR_BEGIN ] = new XFillStyleItem(XFILL_SOLID, RES_FILL_STYLE);
     aAttrTab[ RES_FILL_GRADIENT - POOLATTR_BEGIN ] = new XFillGradientItem(RES_FILL_GRADIENT);
+    aAttrTab[ RES_SHAPEATR_GRABBAG - POOLATTR_BEGIN ] = new SfxGrabBagItem( RES_SHAPEATR_GRABBAG );
 
     aAttrTab[ RES_GRFATR_MIRRORGRF- POOLATTR_BEGIN ] =      new SwMirrorGrf;
     aAttrTab[ RES_GRFATR_CROPGRF- POOLATTR_BEGIN ] =        new SwCropGrf;

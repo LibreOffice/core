@@ -792,6 +792,25 @@ const SwPropNameTab aPropNameTab = {
 /* 0760 UNO_NAME_DEFAULT_PAGE_MODE */    {MAP_CHAR_LEN("DefaultPageMode")},
 /* 0761 UNO_NAME_CHAR_SHADING_VALUE */   {MAP_CHAR_LEN("CharShadingValue")},
 /* 0762 UNO_NAME_PARA_INTEROP_GRAB_BAG */   {MAP_CHAR_LEN("ParaInteropGrabBag")},
+/* 0763 UNO_NAME_SHAPE_INTEROP_GRAB_BAG */   {MAP_CHAR_LEN("ShapeInteropGrabBag")},
+/* 0764 UNO_NAME_MARGIN_LEFT */    {MAP_CHAR_LEN("MarginLeft")},
+/* 0765 UNO_NAME_MARGIN_TOP */    {MAP_CHAR_LEN("MarginTop")},
+/* 0766 UNO_NAME_MSO_WIDTH */    {MAP_CHAR_LEN("MsoWidth")},
+/* 0767 UNO_NAME_MSO_HEIGHT */    {MAP_CHAR_LEN("MsoHeight")},
+/* 0768 UNO_NAME_Z_INDEX */    {MAP_CHAR_LEN("ZIndex")},
+/* 0769 UNO_NAME_MSO_WRAP_STYLE */    {MAP_CHAR_LEN("MsoWrapStyle")},
+/* 0770 UNO_NAME_MSO_TOP_PERCENT */    {MAP_CHAR_LEN("MsoTopPercent")},
+/* 0771 UNO_NAME_MSO_WRAP_DISTANCE_LEFT */    {MAP_CHAR_LEN("MsoWrapDistanceLeft")},
+/* 0772 UNO_NAME_MSO_WRAP_DISTANCE_TOP */    {MAP_CHAR_LEN("MsoWrapDistanceTop")},
+/* 0773 UNO_NAME_MSO_WRAP_DISTANCE_RIGHT */    {MAP_CHAR_LEN("MsoWrapDistanceRight")},
+/* 0774 UNO_NAME_MSO_WRAP_DISTANCE_BOTTOM */    {MAP_CHAR_LEN("MsoWrapDistanceBottom")},
+/* 0775 UNO_NAME_MSO_POSITION_HORIZONTAL_RELATIVE */    {MAP_CHAR_LEN("MsoPositionHorizontalRelative")},
+/* 0776 UNO_NAME_MSO_POSITION_VERTICAL_RELATIVE */    {MAP_CHAR_LEN("MsoPositionVerticalRelative")},
+/* 0777 UNO_NAME_MSO_WIDTH_RELATIVE */    {MAP_CHAR_LEN("MsoWidthRelative")},
+/* 0778 UNO_NAME_MSO_HEIGHT_RELATIVE */    {MAP_CHAR_LEN("MsoHeightRelative")},
+/* 0779 UNO_NAME_V_TEXT_ANCHOR */    {MAP_CHAR_LEN("VTextAnchor")},
+/* 0780 UNO_NAME_OLOCK_ASPECTRATIO */    {MAP_CHAR_LEN("AspectRatio")},
+/* 0781 UNO_NAME_OLOCK_V_EXT */    {MAP_CHAR_LEN("oLockVExt")}
 
 // new items in this array must match enum SwPropNameIds
 };

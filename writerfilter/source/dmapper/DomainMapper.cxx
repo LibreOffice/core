@@ -1456,6 +1456,12 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
         case NS_ooxml::LN_CT_Background_color:
             m_pImpl->m_oBackgroundColor.reset(nIntValue);
         break;
+        case NS_ooxml::LN_CT_Lock_aspectratio:
+            m_pImpl->m_olock_aspectratio = sStringValue;
+        break;
+        case NS_ooxml::LN_CT_Lock_ext:
+            m_pImpl->m_olock_v_ext = sStringValue;
+        break;
         default:
             {
 #if OSL_DEBUG_LEVEL > 0

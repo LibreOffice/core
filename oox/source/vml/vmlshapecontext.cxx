@@ -335,6 +335,7 @@ ContextHandlerRef ShapeTypeContext::onCreateContext( sal_Int32 nElement, const A
             mrTypeModel.maStrokeModel.moJoinStyle = rAttribs.getToken( XML_joinstyle );
         break;
         case VML_TOKEN( fill ):
+        {
             mrTypeModel.maFillModel.moFilled.assignIfUsed( lclDecodeBool( rAttribs, XML_on ) );
             mrTypeModel.maFillModel.moColor.assignIfUsed( rAttribs.getString( XML_color ) );
             mrTypeModel.maFillModel.moOpacity = lclDecodeOpacity( rAttribs, XML_opacity, 1.0 );
@@ -345,8 +346,10 @@ ContextHandlerRef ShapeTypeContext::onCreateContext( sal_Int32 nElement, const A
             mrTypeModel.maFillModel.moFocus = lclDecodePercent( rAttribs, XML_focus, 0.0 );
             mrTypeModel.maFillModel.moFocusPos = lclDecodePercentPair( rAttribs, XML_focusposition );
             mrTypeModel.maFillModel.moFocusSize = lclDecodePercentPair( rAttribs, XML_focussize );
-            mrTypeModel.maFillModel.moBitmapPath = decodeFragmentPath( rAttribs, O_TOKEN( relid ) );
+            bool bHasORelId = rAttribs.hasAttribute( O_TOKEN( relid ) );
+            mrTypeModel.maFillModel.moBitmapPath = decodeFragmentPath( rAttribs, bHasORelId ? O_TOKEN( relid ) : R_TOKEN( id ) );
             mrTypeModel.maFillModel.moRotate = lclDecodeBool( rAttribs, XML_rotate );
+        }
         break;
         case VML_TOKEN( imagedata ):
         {
@@ -399,8 +402,8 @@ void ShapeTypeContext::setStyle( const OUString& rStyle )
                  if( aName == "position" )      mrTypeModel.maPosition = aValue;
             else if( aName == "left" )           mrTypeModel.maLeft = aValue;
             else if( aName == "top" )            mrTypeModel.maTop = aValue;
-            else if( aName == "width" )          mrTypeModel.maWidth = aValue;
-            else if( aName == "height" )         mrTypeModel.maHeight = aValue;
+            else if( aName == "width" )          mrTypeModel.maWidth = aValue, mrTypeModel.maMsoWidth = aValue;
+            else if( aName == "height" )         mrTypeModel.maHeight = aValue,  mrTypeModel.maMsoHeight = aValue;
             else if( aName == "margin-left" )    mrTypeModel.maMarginLeft = aValue;
             else if( aName == "margin-top" )     mrTypeModel.maMarginTop = aValue;
             else if( aName == "mso-position-vertical-relative" )  mrTypeModel.maPositionVerticalRelative = aValue;
@@ -418,6 +421,12 @@ void ShapeTypeContext::setStyle( const OUString& rStyle )
                 mrTypeModel.mbVisible = !aValue.equalsAscii( "hidden" );
             else if( aName == "mso-wrap-style" ) mrTypeModel.maWrapStyle = aValue;
             else if ( aName == "v-text-anchor" ) mrTypeModel.maVTextAnchor = aValue;
+            else if( aName == "mso-top-percent" )     mrTypeModel.maMarginTopPercent = aValue;
+            else if( aName == "mso-wrap-distance-left" ) mrTypeModel.maWrapDistanceLeft = aValue;
+            else if( aName == "mso-wrap-distance-top" ) mrTypeModel.maWrapDistanceTop = aValue;
+            else if( aName == "mso-wrap-distance-right" ) mrTypeModel.maWrapDistanceRight = aValue;
+            else if( aName == "mso-wrap-distance-bottom" ) mrTypeModel.maWrapDistanceBottom = aValue;
+            else if( aName == "z-index" ) mrTypeModel.maZIndex = aValue;
         }
     }
 }

@@ -9,6 +9,7 @@
 
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
+#include <com/sun/star/drawing/BitmapMode.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/awt/Gradient.hpp>
 #include <com/sun/star/style/TabStop.hpp>
@@ -20,6 +21,7 @@
 #include <com/sun/star/text/XTextFramesSupplier.hpp>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 #include <com/sun/star/text/XTextSection.hpp>
+#include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/style/LineSpacing.hpp>
 #include <com/sun/star/style/LineSpacingMode.hpp>
@@ -104,6 +106,7 @@ public:
     void testFdo66781();
     void testFdo60990();
     void testFdo65718();
+    void testFdo64817();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -184,6 +187,7 @@ void Test::run()
         {"fdo66781.docx", &Test::testFdo66781},
         {"fdo60990.odt", &Test::testFdo60990},
         {"fdo65718.docx", &Test::testFdo65718},
+        {"fdo64817.docx", &Test::testFdo64817},
     };
     // Don't test the first import of these, for some reason those tests fail
     const char* aBlacklist[] = {
@@ -1086,6 +1090,25 @@ void Test::testFdo65718()
     // So I had to add the hack of the '+1' to make the test-case pass
     CPPUNIT_ASSERT_EQUAL(sal_Int32( EMU_TO_MM100(114300) + 1 ), getProperty<sal_Int32>(xPropertySet, "LeftMargin") );
     CPPUNIT_ASSERT_EQUAL(sal_Int32( EMU_TO_MM100(114300) + 1), getProperty<sal_Int32>(xPropertySet, "RightMargin") );
+}
+
+void Test::testFdo64817()
+{
+    // Get image and check position-horizontal, FillStyle and FillBitmapMode in the document. (original cannot create image.)
+    // image = ThisComponent.DrawPage.getByIndex(0)
+
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPropertySet(xDraws->getByIndex(0), uno::UNO_QUERY);
+    sal_Int16 nValue;
+    xPropertySet->getPropertyValue("HoriOrient") >>= nValue;
+    CPPUNIT_ASSERT_EQUAL(text::HoriOrientation::CENTER, nValue);
+    ::com::sun::star::drawing::FillStyle eStyle = ::com::sun::star::drawing::FillStyle_NONE;
+    xPropertySet->getPropertyValue("FillStyle") >>= eStyle;
+    CPPUNIT_ASSERT_EQUAL(::com::sun::star::drawing::FillStyle_BITMAP, eStyle);
+    ::com::sun::star::drawing::BitmapMode eBmpMode = ::com::sun::star::drawing::BitmapMode_REPEAT;
+    xPropertySet->getPropertyValue("FillBitmapMode") >>= eBmpMode;
+    CPPUNIT_ASSERT_EQUAL(::com::sun::star::drawing::BitmapMode_STRETCH, eBmpMode);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

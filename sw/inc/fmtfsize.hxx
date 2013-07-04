@@ -45,6 +45,24 @@ class SW_DLLPUBLIC SwFmtFrmSize: public SfxPoolItem
     SwFrmSize eFrmWidthType;
     sal_uInt8     nWidthPercent;
     sal_uInt8     nHeightPercent;
+    OUString strMarginLeft;
+    OUString strMarginTop;
+    OUString strMsoWidth;
+    OUString strMsoHeight;
+    OUString strZIndex;
+    OUString strMsoWrapStyle;
+    OUString strMsoTopPercent;
+    OUString strMsoWrapDistanceLeft;
+    OUString strMsoWrapDistanceTop;
+    OUString strMsoWrapDistanceRight;
+    OUString strMsoWrapDistanceBottom;
+    OUString strMsoPositionHorizontalRelative;
+    OUString strMsoPositionVerticalRelative;
+    OUString strMsoWidthRelative;
+    OUString strMsoHeightRelative;
+    OUString strVTextAnchor;
+    sal_Bool bOLockAspectRatio;
+    OUString strOLockVExt;
 
     // For tables: width can be given in percent.
 
@@ -93,6 +111,25 @@ public:
     sal_uInt8   GetWidthPercent() const { return nWidthPercent;  }
     void    SetHeightPercent( sal_uInt8 n ) { nHeightPercent = n; }
     void    SetWidthPercent ( sal_uInt8 n ) { nWidthPercent  = n; }
+
+    OUString GetStrMarginLeft() const { return strMarginLeft; }
+    OUString GetStrMarginTop() const { return strMarginTop; }
+    OUString GetStrMsoWidth() const { return strMsoWidth; }
+    OUString GetStrMsoHeight() const { return strMsoHeight; }
+    OUString GetStrZIndex() const { return strZIndex; }
+    OUString GetStrMsoWrapStyle() const { return strMsoWrapStyle; }
+    OUString GetStrMsoTopPercent() const { return strMsoTopPercent; }
+    OUString GetStrMsoWrapDistanceLeft() const { return strMsoWrapDistanceLeft; }
+    OUString GetStrMsoWrapDistanceTop() const { return strMsoWrapDistanceTop; }
+    OUString GetStrMsoWrapDistanceRight() const { return strMsoWrapDistanceRight; }
+    OUString GetStrMsoWrapDistanceBottom() const { return strMsoWrapDistanceBottom; }
+    OUString GetStrMsoPositionHorizontalRelative() const { return strMsoPositionHorizontalRelative; }
+    OUString GetStrMsoPositionVerticalRelative() const { return strMsoPositionVerticalRelative; }
+    OUString GetStrMsoWidthRelative() const { return strMsoWidthRelative; }
+    OUString GetStrMsoHeightRelative() const { return strMsoHeightRelative; }
+    OUString GetStrVTextAnchor() const { return strVTextAnchor; }
+    sal_Bool GetOLockAspectRatio() const { return bOLockAspectRatio; }
+    OUString GetStrOLockVExt() const { return strOLockVExt; }
 };
 
 inline const SwFmtFrmSize &SwAttrSet::GetFrmSize(sal_Bool bInP) const

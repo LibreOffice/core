@@ -159,6 +159,8 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_bInAnyTableImport( false ),
         m_bInHeaderFooterImport( false ),
         m_bDiscardHeaderFooter( false ),
+        m_olock_aspectratio(),
+        m_olock_v_ext(),
         m_bLineNumberingSet( false ),
         m_bIsInFootnoteProperties( true ),
         m_bIsCustomFtnMark( false ),
@@ -1758,6 +1760,12 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
             {
                 xProps->setPropertyValue( rPropNameSupplier.GetName( PROP_ANCHOR_TYPE ), bIsGraphic  ?  uno::makeAny( text::TextContentAnchorType_AS_CHARACTER ) : uno::makeAny( text::TextContentAnchorType_AT_PARAGRAPH ) );
             }
+
+            if (!m_olock_aspectratio.isEmpty() &&
+                (m_olock_aspectratio == "t" || m_olock_aspectratio == "true" ) )
+                xProps->setPropertyValue(rPropNameSupplier.GetName( PROP_OLOCK_ASPECTRATIO ), uno::makeAny(true));
+            if (!m_olock_v_ext.isEmpty())
+                xProps->setPropertyValue(rPropNameSupplier.GetName( PROP_OLOCK_V_EXT ), uno::makeAny(m_olock_v_ext));
         }
     }
     catch ( const uno::Exception& e )
