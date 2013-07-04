@@ -18,8 +18,6 @@
 #include <CL/cl.h>
 #endif
 
-#define MaxTextExtent  4096
-
 #if defined(_MSC_VER)
 #ifndef strcasecmp
 #define strcasecmp strcmp
