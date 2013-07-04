@@ -12,6 +12,11 @@
 
 using namespace svx;
 
+#define ITEMID_PREF     1
+#define ITEMID_TYPE     2
+#define ITEMID_STATUS   3
+#define ITEMID_VALUE    4
+
 CuiAboutConfigTabPage::CuiAboutConfigTabPage( Window* pParent, const SfxItemSet& rItemSet )
     :SfxTabPage( pParent, "AboutConfig", "cui/ui/aboutconfigdialog.ui", rItemSet)
 {
@@ -24,16 +29,20 @@ CuiAboutConfigTabPage::CuiAboutConfigTabPage( Window* pParent, const SfxItemSet&
     m_pPrefCtrl->set_width_request(aControlSize.Width());
     m_pPrefCtrl->set_height_request(aControlSize.Height());
 
-    WinBits nBits = WB_SCROLL | WB_SORT;
+    WinBits nBits = WB_SCROLL | WB_SORT | WB_HSCROLL | WB_VSCROLL;
     pPrefBox = new svx::OptHeaderTabListBox( *m_pPrefCtrl, nBits );
-    //FIXME use define's for ItemID's, InsertItem(itemID, text, nsize, winbits)
+
     HeaderBar &rBar = pPrefBox->GetTheHeaderBar();
-    rBar.InsertItem( 1, get<FixedText>("preference")->GetText(), 0, HIB_LEFT | HIB_VCENTER );
-    rBar.InsertItem( 2, get<FixedText>("status")->GetText(), 0,  HIB_LEFT | HIB_VCENTER );
-    rBar.InsertItem( 3, get<FixedText>("type")->GetText(), 0,  HIB_LEFT | HIB_VCENTER );
-    rBar.InsertItem( 4, get<FixedText>("value")->GetText(), 0,  HIB_LEFT | HIB_VCENTER );
-    //FIXME this numbers are just for testing purposes implement this better and more dynamic way.
-    long aTabs[] = {12,12,12,12};
+    rBar.InsertItem( ITEMID_PREF, get<FixedText>("preference")->GetText(), 0, HIB_LEFT | HIB_VCENTER );
+    rBar.InsertItem( ITEMID_TYPE, get<FixedText>("status")->GetText(), 0,  HIB_LEFT | HIB_VCENTER );
+    rBar.InsertItem( ITEMID_STATUS, get<FixedText>("type")->GetText(), 0,  HIB_LEFT | HIB_VCENTER );
+    rBar.InsertItem( ITEMID_VALUE, get<FixedText>("value")->GetText(), 0,  HIB_LEFT | HIB_VCENTER );
+
+    long aTabs[] = {4,0,12,12,12};
+
+    aTabs[2] += aTabs[1] + rBar.GetTextWidth(rBar.GetItemText(1));
+    aTabs[3] += aTabs[2] + rBar.GetTextWidth(rBar.GetItemText(2));
+    aTabs[4] += aTabs[3] + rBar.GetTextWidth(rBar.GetItemText(3));
 
     pPrefBox->SetTabs(aTabs, MAP_PIXEL);
 
