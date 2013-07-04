@@ -20,7 +20,6 @@
 
 #define MaxTextExtent  4096
 //support AMD opencl
-#define CL_QUEUE_THREAD_HANDLE_AMD 0x403E
 #define CL_MAP_WRITE_INVALIDATE_REGION (1 << 2)
 
 #if defined(_MSC_VER)
