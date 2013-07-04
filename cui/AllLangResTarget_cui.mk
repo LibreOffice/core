@@ -57,7 +57,6 @@ $(eval $(call gb_SrsTarget_add_files,cui/res,\
     cui/source/options/optdict.src \
     cui/source/options/optfltr.src \
     cui/source/options/optgdlg.src \
-    cui/source/options/opthtml.src \
     cui/source/options/optinet2.src \
     cui/source/options/optjava.src \
     cui/source/options/optlingu.src \
