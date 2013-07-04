@@ -45,7 +45,7 @@ ModalDialog DLG_FILTER_SELECT
         Pos         = MAP_APPFONT (   6 ,  19 ) ;
         Size        = MAP_APPFONT ( 182 , 175 ) ;
         TabStop     = TRUE ;
-        Sort        = FALSE ;
+        Sort        = TRUE ;
         AutoHScroll = TRUE;
     };
 
