@@ -55,6 +55,7 @@ static const struct osl_file_error_entry errtable[] = {
   {  ERROR_NOT_SAME_DEVICE,        osl_File_E_XDEV     },  /* 17 */
   {  ERROR_NO_MORE_FILES,          osl_File_E_NOENT    },  /* 18 */
   {  ERROR_NOT_READY,              osl_File_E_NOTREADY },  /* 21 */
+  {  ERROR_SHARING_VIOLATION,      osl_File_E_ACCES    },  /* 32 */
   {  ERROR_LOCK_VIOLATION,         osl_File_E_ACCES    },  /* 33 */
   {  ERROR_BAD_NETPATH,            osl_File_E_NOENT    },  /* 53 */
   {  ERROR_NETWORK_ACCESS_DENIED,  osl_File_E_ACCES    },  /* 65 */
