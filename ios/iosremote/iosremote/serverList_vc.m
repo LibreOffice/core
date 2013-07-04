@@ -16,6 +16,7 @@
 @property (nonatomic, strong) CommunicationManager *comManager;
 @property (nonatomic, weak) NSNotificationCenter* center;
 @property (nonatomic, strong) id slideShowPreviewStartObserver;
+@property (nonatomic, strong) NSIndexPath *lastSpinningCellIndex;
 
 @end
 
@@ -23,6 +24,7 @@
 
 @synthesize center = _center;
 @synthesize comManager = _comManager;
+@synthesize lastSpinningCellIndex = _lastSpinningCellIndex;
 @synthesize slideShowPreviewStartObserver = _slideShowPreviewStartObserver;
 
 - (id)initWithStyle:(UITableViewStyle)style
@@ -39,14 +41,23 @@
     [super viewDidLoad];
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
- 
+    
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
     
+    self.lastSpinningCellIndex = [[NSIndexPath alloc] init];
     self.center = [NSNotificationCenter defaultCenter];
     self.comManager = [CommunicationManager sharedComManager];
     self.serverTable.dataSource = self;
     self.serverTable.delegate = self;
+    
+    NSOperationQueue *mainQueue = [NSOperationQueue mainQueue];
+    self.slideShowPreviewStartObserver = [[NSNotificationCenter defaultCenter] addObserverForName:STATUS_CONNECTED_SLIDESHOW_RUNNING
+                                                                                           object:nil
+                                                                                            queue:mainQueue
+                                                                                       usingBlock:^(NSNotification *note) {
+                                                                                           [self performSegueWithIdentifier:@"SlideShowPreview" sender:self ];
+                                                                                       }];
 }
 
 -(void)viewWillAppear:(BOOL)animated
@@ -63,8 +74,26 @@
 
 #pragma mark - Table view delegate
 
+- (void)disableSpinner
+{
+    [self.tableView cellForRowAtIndexPath:self.lastSpinningCellIndex].accessoryView = nil;
+}
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+    
+    if(self.comManager.state!=CONNECTING){
+        self.lastSpinningCellIndex = indexPath;
+        UIActivityIndicatorView *activityView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+        [activityView startAnimating];
+        [cell setAccessoryView:activityView];
+    }
+    
+    NSLog(@"Connecting to %@:%@", [[self.comManager.servers objectAtIndex:indexPath.row] serverName], [[self.comManager.servers objectAtIndex:indexPath.row] serverAddress]);
+    self.comManager.delegate = self;
+    [self.comManager connectToServer:[self.comManager.servers objectAtIndex:indexPath.row]];
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 - (void)viewDidUnload {
