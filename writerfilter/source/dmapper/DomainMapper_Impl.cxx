@@ -3231,11 +3231,11 @@ void DomainMapper_Impl::CloseFieldCommand()
                         uno::Reference< text::XDependentTextField > xDependentField( xFieldInterface, uno::UNO_QUERY_THROW );
                         xDependentField->attachTextFieldMaster( xMaster );
 
-                        rtl::OUString sFormula = sIdentifier + "+1";
+                        rtl::OUString sFormula = sSeqName + "+1";
                         rtl::OUString sValue;
                         if( lcl_FindInCommand( pContext->GetCommand(), 'c', sValue ))
                         {
-                            sFormula = sIdentifier;
+                            sFormula = sSeqName;
                         }
                         else if( lcl_FindInCommand( pContext->GetCommand(), 'r', sValue ))
                         {
