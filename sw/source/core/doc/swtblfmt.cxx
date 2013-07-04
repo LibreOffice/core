@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <editsh.hxx>
+#include <swtable.hxx>
 #include <swtblfmt.hxx>
 
 SwTableFormat::SwTableFormat( SwAttrPool& rPool, const sal_Char* pFormatNm,
@@ -103,6 +105,79 @@ SwTableFormat& SwTableFormat::operator=( const SwTableFormat& rNew )
         return *this;
     }
 
+void SwTableFormat::SetBoxFormat( const SwTableBoxFormat& rNew, sal_uInt8 nPos )
+{
+    OSL_ENSURE( nPos < 16, "wrong area" );
+
+    sal_uInt8 nLine = nPos / 4;
+    sal_uInt8 nBox = nPos % 4;
+
+    SwTableLineFormat* pLine;
+
+    switch( nLine )
+    {
+        case 0:
+            pLine = m_pFstLineFormat.get(); break;
+        case 1:
+            pLine = m_pOddLineFormat.get(); break;
+        case 2:
+            pLine = m_pEvnLineFormat.get(); break;
+        case 3:
+            pLine = m_pLstLineFormat.get(); break;
+        // TODO Extend for columns
+    }
+
+    switch( nBox )
+    {
+        case 0:
+            pLine->SetFirstBoxFormat( new SwTableBoxFormat( rNew ) ); break;
+        case 1:
+            pLine->SetOddBoxFormat( new SwTableBoxFormat( rNew ) ); break;
+        case 2:
+            pLine->SetEvenBoxFormat( new SwTableBoxFormat( rNew ) ); break;
+        case 3:
+            pLine->SetLastBoxFormat( new SwTableBoxFormat( rNew ) ); break;
+    }
+}
+
+SwTableBoxFormat* SwTableFormat::GetBoxFormat( sal_uInt8 nPos ) const
+{
+    OSL_ENSURE( nPos < 16, "wrong area" );
+
+    sal_uInt8 nLine = nPos / 4;
+    sal_uInt8 nBox = nPos % 4;
+
+    SwTableLineFormat* pLine;
+    SwTableBoxFormat* pRet;
+
+    switch( nLine )
+    {
+        case 0:
+            pLine = m_pFstLineFormat.get(); break;
+        case 1:
+            pLine = m_pOddLineFormat.get(); break;
+        case 2:
+            pLine = m_pEvnLineFormat.get(); break;
+        case 3:
+            pLine = m_pLstLineFormat.get(); break;
+        // TODO Extend for columns
+    }
+
+    switch( nBox )
+    {
+        case 0:
+            pRet = pLine->GetFirstBoxFormat(); break;
+        case 1:
+            pRet = pLine->GetOddBoxFormat(); break;
+        case 2:
+            pRet = pLine->GetEvenBoxFormat(); break;
+        case 3:
+            pRet = pLine->GetLastBoxFormat(); break;
+    }
+
+    return pRet;
+}
+
 void SwTableFormat::SetBreak( const SvxFormatBreakItem& rNew )
 {
     SetFormatAttr( rNew );
@@ -168,8 +243,48 @@ sal_uInt16 SwTableFormat::GetRepeatHeading() const
     return (static_cast<const SfxUInt16Item&>( GetFormatAttr( FN_PARAM_TABLE_HEADLINE ) )).GetValue();
 }
 
-void SwTableFormat::CopyTableFormatInfo( SwTableFormat* pTableFormat )
+void SwTableFormat::RestoreTableProperties(SwTable &table) const
 {
+    SwTableFormat *pFormat = table.GetFrameFormat();
+    if (!pFormat)
+        return;
+
+    SwDoc *pDoc = pFormat->GetDoc();
+    if (!pDoc)
+        return;
+
+    pFormat->CopyTableFormatInfo( this );
+
+    SwEditShell *pShell = pDoc->GetEditShell();
+    pDoc->SetRowSplit( *pShell->getShellCrsr( false ), SwFormatRowSplit( GetRowSplit() ) );
+
+    table.SetRowsToRepeat( GetRepeatHeading() );
+}
+
+void SwTableFormat::StoreTableProperties(const SwTable &table)
+{
+    SwTableFormat *pFormat = table.GetFrameFormat();
+    if (!pFormat)
+        return;
+
+    SwDoc *pDoc = pFormat->GetDoc();
+    if (!pDoc)
+        return;
+
+    SwEditShell *pShell = pDoc->GetEditShell();
+    SwFormatRowSplit *pRowSplit = 0;
+    pDoc->GetRowSplit( *pShell->getShellCrsr( false ), pRowSplit );
+    SetRowSplit( pRowSplit ? pRowSplit->GetValue() : sal_False );
+    delete pRowSplit;
+    pRowSplit = 0;
+
+    CopyTableFormatInfo( pFormat );
+}
+
+void SwTableFormat::CopyTableFormatInfo( const SwTableFormat* pTableFormat )
+{
+    SetFormatAttr( pTableFormat->GetAttrSet() );
+
     m_pFstLineFormat.reset( new SwTableLineFormat ( *pTableFormat->GetFirstLineFormat() ) );
     m_pLstLineFormat.reset( new SwTableLineFormat ( *pTableFormat->GetLastLineFormat() ) );
     m_pOddLineFormat.reset( new SwTableLineFormat ( *pTableFormat->GetOddLineFormat() ) );

@@ -93,15 +93,18 @@ public:
     void SetOddColFormat( SwTableLineFormat* pNew ) { m_pOddColFormat.reset( pNew ); }
     void SetEvenColFormat( SwTableLineFormat* pNew ) { m_pEvnColFormat.reset( pNew ); }
 
-    SwTableLineFormat* GetFirstLineFormat() { return m_pFstLineFormat.get(); }
-    SwTableLineFormat* GetLastLineFormat() { return m_pLstLineFormat.get(); }
-    SwTableLineFormat* GetOddLineFormat() { return m_pOddLineFormat.get(); }
-    SwTableLineFormat* GetEvenLineFormat() { return m_pEvnLineFormat.get(); }
+    SwTableLineFormat* GetFirstLineFormat() const { return m_pFstLineFormat.get(); }
+    SwTableLineFormat* GetLastLineFormat() const { return m_pLstLineFormat.get(); }
+    SwTableLineFormat* GetOddLineFormat() const { return m_pOddLineFormat.get(); }
+    SwTableLineFormat* GetEvenLineFormat() const { return m_pEvnLineFormat.get(); }
 
-    SwTableLineFormat* GetFirstColFormat() { return m_pFstColFormat.get(); }
-    SwTableLineFormat* GetLastColFormat() { return m_pLstColFormat.get(); }
-    SwTableLineFormat* GetOddColFormat() { return m_pOddColFormat.get(); }
-    SwTableLineFormat* GetEvenColFormat() { return m_pEvnColFormat.get(); }
+    SwTableLineFormat* GetFirstColFormat() const { return m_pFstColFormat.get(); }
+    SwTableLineFormat* GetLastColFormat() const { return m_pLstColFormat.get(); }
+    SwTableLineFormat* GetOddColFormat() const { return m_pOddColFormat.get(); }
+    SwTableLineFormat* GetEvenColFormat() const { return m_pEvnColFormat.get(); }
+
+    void SetBoxFormat( const SwTableBoxFormat& rNew, sal_uInt8 nPos );
+    SwTableBoxFormat* GetBoxFormat( sal_uInt8 nPos ) const;
 
     void SetBreak( const SvxFormatBreakItem& rNew );
     void SetPageDesc( const SwFormatPageDesc& rNew );
@@ -118,7 +121,10 @@ public:
     sal_Bool GetRowSplit() const;
     sal_uInt16 GetRepeatHeading() const;
 
-    void CopyTableFormatInfo( SwTableFormat* pTableFormat );
+    void RestoreTableProperties( SwTable &table ) const;
+    void StoreTableProperties( const SwTable &table );
+
+    void CopyTableFormatInfo( const SwTableFormat* pTableFormat );
 
     TYPEINFO_OVERRIDE();     // Already in base class Content.
 

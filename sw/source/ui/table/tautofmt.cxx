@@ -42,6 +42,8 @@
 #include "poolfmt.hxx"
 #include "shellres.hxx"
 #include "SwStyleNameMapper.hxx"
+#include "poolfmt.hxx"
+#include <swtblfmt.hxx>
 
 using namespace com::sun::star;
 
@@ -597,7 +599,7 @@ rCTLFont.MethodName( Value );
 
 void AutoFormatPreview::MakeFonts( sal_uInt8 nIndex, vcl::Font& rFont, vcl::Font& rCJKFont, vcl::Font& rCTLFont )
 {
-    const SwBoxAutoFormat& rBoxFormat = pCurData->GetBoxFormat( nIndex );
+    const SwTableBoxFormat& rBoxFormat = *pCurData->GetBoxFormat( nIndex );
 
     rFont = rCJKFont = rCTLFont = GetFont();
     Size aFontSize( rFont.GetSize().Width(), 10 * GetDPIScaleFactor() );
@@ -631,7 +633,7 @@ sal_uInt8 AutoFormatPreview::GetFormatIndex( size_t nCol, size_t nRow ) const
 
 const SvxBoxItem& AutoFormatPreview::GetBoxItem( size_t nCol, size_t nRow ) const
 {
-    return pCurData->GetBoxFormat( GetFormatIndex( nCol, nRow ) ).GetBox();
+    return pCurData->GetBoxFormat( GetFormatIndex( nCol, nRow ) )->GetBox();
 }
 
 void AutoFormatPreview::DrawString(vcl::RenderContext& rRenderContext, size_t nCol, size_t nRow)
@@ -707,22 +709,22 @@ void AutoFormatPreview::DrawString(vcl::RenderContext& rRenderContext, size_t nC
         goto MAKENUMSTR;
 
 MAKENUMSTR:
-        if (pCurData->IsValueFormat())
+        if( pCurData->IsValueFormat() )
         {
             OUString sFormat;
             LanguageType eLng, eSys;
-            pCurData->GetBoxFormat(sal_uInt8(nNum)).GetValueFormat(sFormat, eLng, eSys);
+            pCurData->GetBoxFormat( (sal_uInt8)nNum )->GetValueFormat( sFormat, eLng, eSys );
 
             short nType;
             bool bNew;
             sal_Int32 nCheckPos;
-            sal_uInt32 nKey = pNumFormat->GetIndexPuttingAndConverting(sFormat, eLng,
-                                                                    eSys, nType, bNew, nCheckPos);
+            sal_uInt32 nKey = pNumFormat->GetIndexPuttingAndConverting( sFormat, eLng,
+                    eSys, nType, bNew, nCheckPos);
             Color* pDummy;
-            pNumFormat->GetOutputString(nVal, nKey, cellString, &pDummy);
+            pNumFormat->GetOutputString( nVal, nKey, cellString, &pDummy );
         }
         else
-            cellString = OUString::number(sal_Int32(nVal));
+            cellString = OUString::number((sal_Int32)nVal);
         break;
 
     }
@@ -778,8 +780,10 @@ MAKENUMSTR:
             aPos.X() += nRightX;
         else if (pCurData->IsJustify())
         {
-            const SvxAdjustItem& rAdj = pCurData->GetBoxFormat(nFormatIndex).GetAdjust();
-            switch (rAdj.GetAdjust())
+            //sal_uInt16 nHorPos = (sal_uInt16)
+            //        ((cellRect.GetWidth()-aStrSize.Width())/2);
+            const SvxAdjustItem& rAdj = pCurData->GetBoxFormat(nFormatIndex)->GetAdjust();
+            switch ( rAdj.GetAdjust() )
             {
                 case SVX_ADJUST_LEFT:
                     aPos.X() += FRAME_OFFSET;
@@ -826,7 +830,7 @@ void AutoFormatPreview::DrawBackground(vcl::RenderContext& rRenderContext)
     {
         for (size_t nCol = 0; nCol < 5; ++nCol)
         {
-            SvxBrushItem aBrushItem(pCurData->GetBoxFormat(GetFormatIndex(nCol, nRow)).GetBackground());
+            SvxBrushItem aBrushItem( pCurData->GetBoxFormat( GetFormatIndex( nCol, nRow ) )->makeBackgroundBrushItem() );
 
             rRenderContext.Push(PushFlags::LINECOLOR | PushFlags::FILLCOLOR);
             rRenderContext.SetLineColor();
