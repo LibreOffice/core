@@ -393,7 +393,10 @@ struct TmpDictionary
     {
         try
         {
-            mxAccess->kill(maTmpURL);
+            if (mxAccess.is())
+            {
+                mxAccess->kill(maTmpURL);
+            }
         }
         catch (const uno::Exception &) { }
     }
@@ -492,6 +495,8 @@ sal_uLong DictionaryNeo::saveEntries(const OUString &rURL)
             break;
     }
 
+    pStream.reset(); // fdo#66420 close streams so Win32 can move the file
+    xStream.clear();
     nErr = aTmpDictionary.renameTmpToURL();
 
     //If we are migrating from an older version, then on first successful
