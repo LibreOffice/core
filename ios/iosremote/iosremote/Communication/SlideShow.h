@@ -9,13 +9,13 @@
 
 #import <Foundation/Foundation.h>
 
-@class slideShowViewController;
+@class slideShowPreview_vc;
 
 @interface SlideShow : NSObject
 
 @property uint size;
 @property uint currentSlide;
-@property (nonatomic, strong) slideShowViewController* delegate;
+@property (nonatomic, strong) slideShowPreview_vc* delegate;
 
 - (void) putImage: (NSString *)img AtIndex: (uint) index;
 - (void) putNotes: (NSString *)notes AtIndex: (uint) index;

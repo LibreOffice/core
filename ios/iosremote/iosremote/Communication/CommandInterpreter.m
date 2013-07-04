@@ -35,6 +35,7 @@
     if ([command count] == 0) {
         return;
     }
+    NSLog(@"Command:%@", command);
     NSString *instruction = [command objectAtIndex:0];
     
     if([instruction isEqualToString:@"slideshow_started"]){

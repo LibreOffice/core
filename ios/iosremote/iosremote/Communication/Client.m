@@ -88,13 +88,17 @@
         //Setup mInputStream
         self.inputStream = (__bridge NSInputStream *)readStream;
         [self.inputStream setDelegate:self];
-        [self.inputStream scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.inputStream scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
+        });
         [self.inputStream open];
         
         //Setup outputstream
         self.outputStream = (__bridge NSOutputStream *)writeStream;
         [self.outputStream setDelegate:self];
-        [self.outputStream scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.outputStream scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
+        });
         [self.outputStream open];
         
         NSArray *temp = [[NSArray alloc]initWithObjects:@"LO_SERVER_CLIENT_PAIR\n", self.name, @"\n", self.pin, @"\n\n", nil];
@@ -118,8 +122,7 @@ int count = 0;
 - (void)stream:(NSStream *)stream handleEvent:(NSStreamEvent)eventCode {
     switch(eventCode) {
         case NSStreamEventOpenCompleted:{
-            NSLog(@"Connection established");
-            if (count == 1) {
+                [self stopConnectionTimeoutTimer];
                 [[NSNotificationCenter defaultCenter]postNotificationName:@"connection.status.connected" object:nil];
             } else {
                 count++;

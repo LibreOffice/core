@@ -47,6 +47,14 @@
     self.comManager = [CommunicationManager sharedComManager];
     self.serverTable.dataSource = self;
     self.serverTable.delegate = self;
+    
+    NSOperationQueue *mainQueue = [NSOperationQueue mainQueue];
+    self.slideShowPreviewStartObserver = [[NSNotificationCenter defaultCenter] addObserverForName:STATUS_CONNECTED_SLIDESHOW_RUNNING
+                                                                                           object:nil
+                                                                                            queue:mainQueue
+                                                                                       usingBlock:^(NSNotification *note) {
+                                                                                           [self performSegueWithIdentifier:@"SlideShowPreview" sender:self ];
+                                                                                    }];
 }
 
 -(void)viewWillAppear:(BOOL)animated
@@ -62,6 +70,11 @@
 }
 
 #pragma mark - Table view delegate
+
+- (void)disableSpinner
+{
+    [self.tableView cellForRowAtIndexPath:self.lastSpinningCellIndex].accessoryView = nil;
+}
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
