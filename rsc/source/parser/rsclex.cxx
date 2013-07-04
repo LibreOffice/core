@@ -151,7 +151,8 @@ int MakeToken( YYSTYPE * pTokenVal )
             break;
     };
 
-    if( c == pFI->IsEof() )
+    // FIXME: wtf is this supposed to do?
+    if( (c != 0) == pFI->IsEof() )
     {
         return( 0 );
     }
