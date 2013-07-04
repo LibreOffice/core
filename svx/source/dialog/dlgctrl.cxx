@@ -264,8 +264,16 @@ void SvxRectCtl::MouseButtonDown( const MouseEvent& rMEvt )
 
             SetActualRP( eRP );
 
-            if( WINDOW_TABPAGE == GetParent()->GetType() )
-                ( (SvxTabPage*) GetParent() )->PointChanged( this, eRP );
+            Window* pParent = GetParent();
+            while (pParent)
+            {
+                if( WINDOW_TABPAGE == pParent->GetType() )
+                {
+                    ( (SvxTabPage*) pParent )->PointChanged( this, eRP );
+                    break;
+                }
+                pParent = pParent->GetParent();
+            }
         }
     }
 }
