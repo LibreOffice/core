@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXn///bs\u003d",
+        "filename": "writerfilter/source/dmapper/DomainMapper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1379,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2013-07-04T08:00:40Z",
+      "side": 1,
+      "message": "Nitpick: in new code, please use SAL_WARN_IF, not OSL_ENSURE.",
+      "revId": "c609df1ddd3a3b40a1fe47dca1c3268b3ba0afa4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
