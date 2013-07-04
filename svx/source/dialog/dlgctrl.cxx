@@ -975,6 +975,24 @@ HatchingLB::HatchingLB( Window* pParent, ResId Id)
     SetEdgeBlending(true);
 }
 
+HatchingLB::HatchingLB( Window* pParent, WinBits nWinStyle)
+: ListBox( pParent, nWinStyle ),
+  mpList ( NULL )
+{
+    SetEdgeBlending(true);
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeHatchingLB(Window *pParent, VclBuilder::stringmap& rMap)
+{
+    WinBits nWinStyle = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_SIMPLEMODE;
+    OString sBorder = VclBuilder::extractCustomProperty(rMap);
+    if (!sBorder.isEmpty())
+        nWinStyle |= WB_BORDER;
+    HatchingLB *pListBox = new HatchingLB(pParent, nWinStyle);
+    pListBox->EnableAutoSize(true);
+    return pListBox;
+}
+
 void HatchingLB::Fill( const XHatchListRef &pList )
 {
     if( !pList.is() )

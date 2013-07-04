@@ -220,6 +220,7 @@ class SVX_DLLPUBLIC HatchingLB : public ListBox
     XHatchListRef mpList;
 public:
     explicit HatchingLB(Window* pParent, ResId Id);
+    explicit HatchingLB(Window* pParent, WinBits aWB);
 
     virtual void Fill( const XHatchListRef &pList );
 

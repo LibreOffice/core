@@ -215,6 +215,9 @@
     <glade-widget-class title="Gradiant ListBox" name="svxlo-GradientLB"
                         generic-name="GradiantListBox" parent="GtkComboBox"
                         icon-name="widget-gtk-combobox"/>
+    <glade-widget-class title="Hatching ListBox" name="svxlo-HatchingLB"
+                        generic-name="HatchingListBox" parent="GtkComboBox"
+                        icon-name="widget-gtk-combobox"/>
     <glade-widget-class title="Category ComboBox" name="swuilo-CategoryBox"
                         generic-name="CategoryComboBox" parent="GtkComboBox"
                         icon-name="widget-gtk-combobox"/>
