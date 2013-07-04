@@ -67,11 +67,9 @@ enum BorderPosition
 struct PropertyDefinition
 {
     PropertyIds eId;
-    bool        bIsTextProperty;
 
-    PropertyDefinition( PropertyIds _eId, bool _bIsTextProperty ) :
-        eId( _eId ),
-        bIsTextProperty( _bIsTextProperty ){}
+    PropertyDefinition( PropertyIds _eId ) :
+        eId( _eId ){}
 
     bool    operator== (const PropertyDefinition& rDef) const
             {   return rDef.eId == eId; }

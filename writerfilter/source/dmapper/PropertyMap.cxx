@@ -70,7 +70,7 @@ uno::Sequence< beans::PropertyValue > PropertyMap::GetPropertyValues()
         //otherwise they will overwrite 'hard' attributes
         sal_Int32 nValue = 0;
         PropertyNameSupplier& rPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
-        PropertyMap::iterator aParaStyleIter = find(PropertyDefinition( PROP_PARA_STYLE_NAME, false ) );
+        PropertyMap::iterator aParaStyleIter = find(PropertyDefinition( PROP_PARA_STYLE_NAME ) );
         if( aParaStyleIter != end())
         {
             pValues[nValue].Name = rPropNameSupplier.GetName( aParaStyleIter->first.eId );
@@ -78,14 +78,14 @@ uno::Sequence< beans::PropertyValue > PropertyMap::GetPropertyValues()
             ++nValue;
         }
 
-        PropertyMap::iterator aCharStyleIter = find(PropertyDefinition( PROP_CHAR_STYLE_NAME, false ));
+        PropertyMap::iterator aCharStyleIter = find(PropertyDefinition( PROP_CHAR_STYLE_NAME ));
         if( aCharStyleIter != end())
         {
             pValues[nValue].Name = rPropNameSupplier.GetName( aCharStyleIter->first.eId );
             pValues[nValue].Value = aCharStyleIter->second;
             ++nValue;
         }
-        PropertyMap::iterator aNumRuleIter = find(PropertyDefinition( PROP_NUMBERING_RULES, false ) );
+        PropertyMap::iterator aNumRuleIter = find(PropertyDefinition( PROP_NUMBERING_RULES ) );
         if( aNumRuleIter != end())
         {
             pValues[nValue].Name = rPropNameSupplier.GetName( aNumRuleIter->first.eId );
@@ -131,7 +131,7 @@ static void lcl_AnyToTag(const uno::Any & rAny)
 }
 #endif
 
-void PropertyMap::Insert( PropertyIds eId, bool bIsTextProperty, const uno::Any& rAny, bool bOverwrite )
+void PropertyMap::Insert( PropertyIds eId, bool /*bIsTextProperty*/, const uno::Any& rAny, bool bOverwrite )
 {
 #ifdef DEBUG_DMAPPER_PROPERTY_MAP
     const OUString& rInsert = PropertyNameSupplier::
@@ -143,7 +143,7 @@ void PropertyMap::Insert( PropertyIds eId, bool bIsTextProperty, const uno::Any&
     dmapper_logger->endElement();
 #endif
 
-    PropertyMap::iterator aElement = find(PropertyDefinition( eId, bIsTextProperty ) );
+    PropertyMap::iterator aElement = find(PropertyDefinition( eId ) );
     if( aElement != end())
     {
         if(!bOverwrite)
@@ -151,7 +151,7 @@ void PropertyMap::Insert( PropertyIds eId, bool bIsTextProperty, const uno::Any&
         erase( aElement );
     }
     _PropertyMap::insert( PropertyMap::value_type
-                          (PropertyDefinition( eId, bIsTextProperty),
+                          (PropertyDefinition( eId ),
                            rAny ));
     Invalidate();
 }
@@ -750,20 +750,20 @@ void SectionPropertyMap::PrepareHeaderFooterProperties( bool bFirstPage )
 
     if( nTopMargin >= 0 ) //fixed height header -> see WW8Par6.hxx
     {
-        operator[]( PropertyDefinition( PROP_HEADER_IS_DYNAMIC_HEIGHT, false )) = uno::makeAny( true );
-        operator[]( PropertyDefinition( PROP_HEADER_DYNAMIC_SPACING, false )) = uno::makeAny( true );
-        operator[]( PropertyDefinition( PROP_HEADER_BODY_DISTANCE, false )) = uno::makeAny( m_nHeaderTop - MIN_HEAD_FOOT_HEIGHT );// ULSpace.Top()
-        operator[]( PropertyDefinition( PROP_HEADER_HEIGHT, false )) =  uno::makeAny( m_nHeaderTop );
+        operator[]( PropertyDefinition( PROP_HEADER_IS_DYNAMIC_HEIGHT )) = uno::makeAny( true );
+        operator[]( PropertyDefinition( PROP_HEADER_DYNAMIC_SPACING )) = uno::makeAny( true );
+        operator[]( PropertyDefinition( PROP_HEADER_BODY_DISTANCE )) = uno::makeAny( m_nHeaderTop - MIN_HEAD_FOOT_HEIGHT );// ULSpace.Top()
+        operator[]( PropertyDefinition( PROP_HEADER_HEIGHT )) =  uno::makeAny( m_nHeaderTop );
 
     }
     else
     {
         //todo: old filter fakes a frame into the header/footer to support overlapping
         //current setting is completely wrong!
-        operator[]( PropertyDefinition( PROP_HEADER_HEIGHT, false )) =  uno::makeAny( m_nHeaderTop );
-        operator[]( PropertyDefinition( PROP_HEADER_BODY_DISTANCE, false )) = uno::makeAny( nTopMargin - m_nHeaderTop );
-        operator[]( PropertyDefinition( PROP_HEADER_IS_DYNAMIC_HEIGHT, false)) = uno::makeAny( false );
-        operator[]( PropertyDefinition( PROP_HEADER_DYNAMIC_SPACING, false)) = uno::makeAny( false );
+        operator[]( PropertyDefinition( PROP_HEADER_HEIGHT )) =  uno::makeAny( m_nHeaderTop );
+        operator[]( PropertyDefinition( PROP_HEADER_BODY_DISTANCE )) = uno::makeAny( nTopMargin - m_nHeaderTop );
+        operator[]( PropertyDefinition( PROP_HEADER_IS_DYNAMIC_HEIGHT )) = uno::makeAny( false );
+        operator[]( PropertyDefinition( PROP_HEADER_DYNAMIC_SPACING )) = uno::makeAny( false );
     }
 
     sal_Int32 nBottomMargin = m_nBottomMargin;
@@ -781,24 +781,24 @@ void SectionPropertyMap::PrepareHeaderFooterProperties( bool bFirstPage )
 
     if( nBottomMargin >= 0 ) //fixed height footer -> see WW8Par6.hxx
     {
-        operator[]( PropertyDefinition( PROP_FOOTER_IS_DYNAMIC_HEIGHT, false )) = uno::makeAny( true );
-        operator[]( PropertyDefinition( PROP_FOOTER_DYNAMIC_SPACING, false )) = uno::makeAny( true );
-        operator[]( PropertyDefinition( PROP_FOOTER_BODY_DISTANCE, false )) = uno::makeAny( m_nHeaderBottom - MIN_HEAD_FOOT_HEIGHT);
-        operator[]( PropertyDefinition( PROP_FOOTER_HEIGHT, false )) =  uno::makeAny( m_nHeaderBottom );
+        operator[]( PropertyDefinition( PROP_FOOTER_IS_DYNAMIC_HEIGHT )) = uno::makeAny( true );
+        operator[]( PropertyDefinition( PROP_FOOTER_DYNAMIC_SPACING )) = uno::makeAny( true );
+        operator[]( PropertyDefinition( PROP_FOOTER_BODY_DISTANCE )) = uno::makeAny( m_nHeaderBottom - MIN_HEAD_FOOT_HEIGHT);
+        operator[]( PropertyDefinition( PROP_FOOTER_HEIGHT )) =  uno::makeAny( m_nHeaderBottom );
     }
     else
     {
         //todo: old filter fakes a frame into the header/footer to support overlapping
         //current setting is completely wrong!
-        operator[]( PropertyDefinition( PROP_FOOTER_IS_DYNAMIC_HEIGHT, false)) = uno::makeAny( false );
-        operator[]( PropertyDefinition( PROP_FOOTER_DYNAMIC_SPACING, false)) = uno::makeAny( false );
-        operator[]( PropertyDefinition( PROP_FOOTER_HEIGHT, false )) =  uno::makeAny( nBottomMargin - m_nHeaderBottom );
-        operator[]( PropertyDefinition( PROP_FOOTER_BODY_DISTANCE, false )) = uno::makeAny( m_nHeaderBottom );
+        operator[]( PropertyDefinition( PROP_FOOTER_IS_DYNAMIC_HEIGHT )) = uno::makeAny( false );
+        operator[]( PropertyDefinition( PROP_FOOTER_DYNAMIC_SPACING )) = uno::makeAny( false );
+        operator[]( PropertyDefinition( PROP_FOOTER_HEIGHT )) =  uno::makeAny( nBottomMargin - m_nHeaderBottom );
+        operator[]( PropertyDefinition( PROP_FOOTER_BODY_DISTANCE )) = uno::makeAny( m_nHeaderBottom );
     }
 
     //now set the top/bottom margin for the follow page style
-    operator[]( PropertyDefinition( PROP_TOP_MARGIN, false )) = uno::makeAny( m_nTopMargin );
-    operator[]( PropertyDefinition( PROP_BOTTOM_MARGIN, false )) = uno::makeAny( m_nBottomMargin );
+    operator[]( PropertyDefinition( PROP_TOP_MARGIN )) = uno::makeAny( m_nTopMargin );
+    operator[]( PropertyDefinition( PROP_BOTTOM_MARGIN )) = uno::makeAny( m_nBottomMargin );
 
     // Restore original top margin, so we don't end up with a smaller margin in case we have to produce two page styles from one Word section.
     m_nTopMargin = nTopMargin;
@@ -907,11 +907,11 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
             else
                 m_nLeftMargin += m_nDzaGutter;
         }
-        operator[]( PropertyDefinition( PROP_LEFT_MARGIN, false )) =  uno::makeAny( m_nLeftMargin  );
-        operator[]( PropertyDefinition( PROP_RIGHT_MARGIN, false )) = uno::makeAny( m_nRightMargin );
+        operator[]( PropertyDefinition( PROP_LEFT_MARGIN )) =  uno::makeAny( m_nLeftMargin  );
+        operator[]( PropertyDefinition( PROP_RIGHT_MARGIN )) = uno::makeAny( m_nRightMargin );
 
         if (rDM_Impl.m_oBackgroundColor)
-            operator[](PropertyDefinition(PROP_BACK_COLOR, false)) = uno::makeAny(*rDM_Impl.m_oBackgroundColor);
+            operator[](PropertyDefinition(PROP_BACK_COLOR )) = uno::makeAny(*rDM_Impl.m_oBackgroundColor);
 
         /*** if headers/footers are available then the top/bottom margins of the
             header/footer are copied to the top/bottom margin of the page
@@ -928,17 +928,17 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
 
         //prepare text grid properties
         sal_Int32 nHeight = 1;
-        PropertyMap::iterator aElement = find(PropertyDefinition( PROP_HEIGHT, false ));
+        PropertyMap::iterator aElement = find(PropertyDefinition( PROP_HEIGHT ));
         if( aElement != end())
             aElement->second >>= nHeight;
 
         sal_Int32 nWidth = 1;
-        aElement = find(PropertyDefinition( PROP_WIDTH, false ));
+        aElement = find(PropertyDefinition( PROP_WIDTH ));
         if( aElement != end())
             aElement->second >>= nWidth;
 
         text::WritingMode eWritingMode = text::WritingMode_LR_TB;
-        aElement = find(PropertyDefinition( PROP_WRITING_MODE, false ));
+        aElement = find(PropertyDefinition( PROP_WRITING_MODE ));
         if( aElement != end())
             aElement->second >>= eWritingMode;
 
@@ -954,7 +954,7 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
             nGridLinePitch = 1;
         }
 
-        operator[]( PropertyDefinition( PROP_GRID_LINES, false )) =
+        operator[]( PropertyDefinition( PROP_GRID_LINES )) =
                 uno::makeAny( static_cast<sal_Int16>(nTextAreaHeight/nGridLinePitch));
 
         sal_Int32 nCharWidth = 423; //240 twip/ 12 pt
@@ -962,7 +962,7 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
         const StyleSheetEntryPtr pEntry = rDM_Impl.GetStyleSheetTable()->FindStyleSheetByISTD(OUString::valueOf(static_cast<sal_Int32>(0), 16));
         if( pEntry.get( ) )
         {
-            PropertyMap::iterator aElement_ = pEntry->pProperties->find(PropertyDefinition( PROP_CHAR_HEIGHT_ASIAN, false ));
+            PropertyMap::iterator aElement_ = pEntry->pProperties->find(PropertyDefinition( PROP_CHAR_HEIGHT_ASIAN ));
             if( aElement_ != pEntry->pProperties->end())
             {
                 double fHeight = 0;
@@ -984,11 +984,11 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
             nFraction = (nFraction * 20)/0xFFF;
             nCharWidth += ConversionHelper::convertTwipToMM100( nFraction );
         }
-        operator[]( PropertyDefinition( PROP_GRID_BASE_HEIGHT, false )) = uno::makeAny( nCharWidth );
+        operator[]( PropertyDefinition( PROP_GRID_BASE_HEIGHT )) = uno::makeAny( nCharWidth );
         sal_Int32 nRubyHeight = nGridLinePitch - nCharWidth;
         if(nRubyHeight < 0 )
             nRubyHeight = 0;
-        operator[]( PropertyDefinition( PROP_GRID_RUBY_HEIGHT, false )) = uno::makeAny( nRubyHeight );
+        operator[]( PropertyDefinition( PROP_GRID_RUBY_HEIGHT )) = uno::makeAny( nRubyHeight );
 
         // #i119558#, force to set document as standard page mode,
         // refer to ww8 import process function "SwWW8ImplReader::SetDocumentGrid"
@@ -997,7 +997,7 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
             uno::Reference< beans::XPropertySet > xDocProperties;
             xDocProperties = uno::Reference< beans::XPropertySet >( rDM_Impl.GetTextDocument(), uno::UNO_QUERY_THROW );
             sal_Bool bSquaredPageMode = sal_False;
-            operator[]( PropertyDefinition( PROP_GRID_STANDARD_MODE, false )) = uno::makeAny( !bSquaredPageMode );
+            operator[]( PropertyDefinition( PROP_GRID_STANDARD_MODE )) = uno::makeAny( !bSquaredPageMode );
             xDocProperties->setPropertyValue("DefaultPageMode", uno::makeAny( bSquaredPageMode ));
         }
         catch (const uno::Exception& rEx)

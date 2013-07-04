@@ -988,7 +988,7 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
             PropertyMap::iterator aLineSpacingIter;
             if (pTopContext)
             {
-                aLineSpacingIter = pTopContext->find(PropertyDefinition( PROP_PARA_LINE_SPACING, true ) );
+                aLineSpacingIter = pTopContext->find(PropertyDefinition( PROP_PARA_LINE_SPACING ) );
                 bFound = aLineSpacingIter != pTopContext->end();
             }
             if (bFound)
@@ -1521,7 +1521,7 @@ sal_Int32 lcl_getCurrentNumberingProperty(uno::Reference<container::XIndexAccess
 static bool ExchangeLeftRight( const PropertyMapPtr rContext )
 {
     bool bExchangeLeftRight = false;
-    PropertyMap::const_iterator aPropParaIte = rContext->find( PropertyDefinition( PROP_WRITING_MODE, false ));
+    PropertyMap::const_iterator aPropParaIte = rContext->find( PropertyDefinition( PROP_WRITING_MODE ));
     if( aPropParaIte != rContext->end())
     {
         sal_Int32 aAdjust ;
@@ -1609,7 +1609,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
                     uno::Any aRules = uno::makeAny( pList->GetNumberingRules( ) );
                     rContext->Insert( PROP_NUMBERING_RULES, true, aRules );
                     // erase numbering from pStyle if already set
-                    rContext->erase( PropertyDefinition( PROP_NUMBERING_STYLE_NAME, true ));
+                    rContext->erase( PropertyDefinition( PROP_NUMBERING_STYLE_NAME ));
                 }
             }
             else
@@ -3089,7 +3089,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
             m_pImpl->GetTopContext()->Insert( PROP_PARA_STYLE_NAME, true, uno::makeAny( sConvertedStyleName ));
         //apply numbering to paragraph if it was set at the style, but only if the paragraph itself
         //does not specify the numbering
-        if( rContext->find( PropertyDefinition( PROP_NUMBERING_RULES, true )) == rContext->end()) // !contains
+        if( rContext->find( PropertyDefinition( PROP_NUMBERING_RULES )) == rContext->end()) // !contains
         {
             const StyleSheetEntryPtr pEntry = pStyleTable->FindStyleSheetByISTD(sStringValue);
             OSL_ENSURE( pEntry.get(), "no style sheet found" );
@@ -3106,8 +3106,8 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
                 {
                     const StyleSheetEntryPtr pParent = pStyleTable->FindStyleSheetByISTD(pEntry->sBaseStyleIdentifier);
                     const StyleSheetPropertyMap* pParentProperties = dynamic_cast<const StyleSheetPropertyMap*>(pParent ? pParent->pProperties.get() : 0);
-                    if (pParentProperties->find( PropertyDefinition( PROP_PARA_RIGHT_MARGIN, true )) != pParentProperties->end())
-                        nParaRightMargin = pParentProperties->find( PropertyDefinition( PROP_PARA_RIGHT_MARGIN, true ))->second.get<sal_Int32>();
+                    if (pParentProperties->find( PropertyDefinition( PROP_PARA_RIGHT_MARGIN )) != pParentProperties->end())
+                        nParaRightMargin = pParentProperties->find( PropertyDefinition( PROP_PARA_RIGHT_MARGIN ))->second.get<sal_Int32>();
                 }
                 if (nParaRightMargin != 0)
                 {
@@ -3426,7 +3426,7 @@ void DomainMapper::processDeferredCharacterProperties( const std::map< sal_Int32
             {
                 std::map< sal_Int32, uno::Any >::const_iterator font = deferredCharacterProperties.find( NS_sprm::LN_CHps );
                 PropertyMapPtr pDefaultCharProps = m_pImpl->GetStyleSheetTable()->GetDefaultCharProps();
-                PropertyMap::iterator aDefaultFont = pDefaultCharProps->find(PropertyDefinition( PROP_CHAR_HEIGHT, false ));
+                PropertyMap::iterator aDefaultFont = pDefaultCharProps->find(PropertyDefinition( PROP_CHAR_HEIGHT ));
                 if( font != deferredCharacterProperties.end())
                 {
                     double fontSize = 0;

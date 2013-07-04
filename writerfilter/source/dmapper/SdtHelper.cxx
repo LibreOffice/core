@@ -39,10 +39,10 @@ awt::Size lcl_getOptimalWidth(StyleSheetTablePtr pStyleSheet, OUString& rDefault
 
     PropertyMapPtr pDefaultCharProps = pStyleSheet->GetDefaultCharProps();
     Font aFont(pOut->GetFont());
-    PropertyMap::iterator aFontName = pDefaultCharProps->find(PropertyDefinition(PROP_CHAR_FONT_NAME, false));
+    PropertyMap::iterator aFontName = pDefaultCharProps->find(PropertyDefinition(PROP_CHAR_FONT_NAME));
     if (aFontName != pDefaultCharProps->end())
         aFont.SetName(aFontName->second.get<OUString>());
-    PropertyMap::iterator aHeight = pDefaultCharProps->find(PropertyDefinition(PROP_CHAR_HEIGHT, false));
+    PropertyMap::iterator aHeight = pDefaultCharProps->find(PropertyDefinition(PROP_CHAR_HEIGHT));
     if (aHeight != pDefaultCharProps->end())
     {
         nHeight = aHeight->second.get<double>() * 35; // points -> mm100

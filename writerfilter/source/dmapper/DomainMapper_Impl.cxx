@@ -593,7 +593,7 @@ uno::Any DomainMapper_Impl::GetPropertyFromStyleSheet(PropertyIds eId)
         if(pEntry->pProperties)
         {
             PropertyMap::const_iterator aPropertyIter =
-                    pEntry->pProperties->find(PropertyDefinition(eId, false ));
+                    pEntry->pProperties->find(PropertyDefinition(eId));
             if( aPropertyIter != pEntry->pProperties->end())
             {
                 return aPropertyIter->second;
@@ -734,7 +734,7 @@ void lcl_AddRangeAndStyle(
     pToBeSavedProperties->SetStartingRange(xParaCursor->getStart());
     if(pPropertyMap)
     {
-        PropertyMap::iterator aParaStyleIter = pPropertyMap->find(PropertyDefinition( PROP_PARA_STYLE_NAME, false ) );
+        PropertyMap::iterator aParaStyleIter = pPropertyMap->find(PropertyDefinition( PROP_PARA_STYLE_NAME ) );
         if( aParaStyleIter != pPropertyMap->end())
         {
             OUString sName;
@@ -2026,7 +2026,7 @@ bool lcl_FindInCommand(
 void DomainMapper_Impl::GetCurrentLocale(lang::Locale& rLocale)
 {
     PropertyMapPtr pTopContext = GetTopContext();
-    PropertyDefinition aCharLocale( PROP_CHAR_LOCALE, true );
+    PropertyDefinition aCharLocale( PROP_CHAR_LOCALE );
     PropertyMap::iterator aLocaleIter = pTopContext->find( aCharLocale );
     if( aLocaleIter != pTopContext->end())
         aLocaleIter->second >>= rLocale;
@@ -3963,11 +3963,11 @@ sal_Int32 DomainMapper_Impl::getCurrentNumberingProperty(OUString aProp)
 {
     sal_Int32 nRet = 0;
 
-    PropertyMap::iterator it = m_pTopContext->find(PropertyDefinition( PROP_NUMBERING_RULES, true ) );
+    PropertyMap::iterator it = m_pTopContext->find(PropertyDefinition( PROP_NUMBERING_RULES ) );
     uno::Reference<container::XIndexAccess> xNumberingRules;
     if (it != m_pTopContext->end())
         xNumberingRules.set(it->second, uno::UNO_QUERY);
-    it = m_pTopContext->find(PropertyDefinition( PROP_NUMBERING_LEVEL, true ) );
+    it = m_pTopContext->find(PropertyDefinition( PROP_NUMBERING_LEVEL ) );
     sal_Int32 nNumberingLevel = -1;
     if (it != m_pTopContext->end())
         it->second >>= nNumberingLevel;

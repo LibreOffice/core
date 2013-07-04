@@ -118,10 +118,10 @@ void TableStyleSheetEntry::AddTblStylePr( TblStyleType nType, PropertyMapPtr pPr
         if ( nType == pTypesToFix[i] )
         {
             PropertyIds nChecked = pPropsToCheck[i];
-            PropertyMap::iterator pCheckedIt = pProps->find( PropertyDefinition( nChecked, false )  );
+            PropertyMap::iterator pCheckedIt = pProps->find( PropertyDefinition( nChecked )  );
 
             PropertyIds nInsideProp = ( i < 2 ) ? META_PROP_HORIZONTAL_BORDER : META_PROP_VERTICAL_BORDER;
-            PropertyMap::iterator pInsideIt = pProps->find( PropertyDefinition( nInsideProp, false )  );
+            PropertyMap::iterator pInsideIt = pProps->find( PropertyDefinition( nInsideProp )  );
 
             bool bHasChecked = pCheckedIt != pProps->end( );
             bool bHasInside = pInsideIt != pProps->end( );
@@ -193,7 +193,7 @@ void lcl_mergeProps( PropertyMapPtr pToFill,  PropertyMapPtr pToAdd, TblStyleTyp
     for ( unsigned i = 0 ; i != sizeof(pPropsToCheck) / sizeof(PropertyIds); i++ )
     {
         PropertyIds nId = pPropsToCheck[i];
-        PropertyDefinition aProp( nId, false );
+        PropertyDefinition aProp( nId );
         PropertyMap::iterator pIt = pToAdd->find( aProp );
 
         if ( pIt != pToAdd->end( ) )
@@ -204,7 +204,7 @@ void lcl_mergeProps( PropertyMapPtr pToFill,  PropertyMapPtr pToAdd, TblStyleTyp
             {
                 // Remove the insideH and insideV depending on the cell pos
                 PropertyIds nInsideProp = ( i < 2 ) ? META_PROP_HORIZONTAL_BORDER : META_PROP_VERTICAL_BORDER;
-                pDestIt = pToFill->find( PropertyDefinition( nInsideProp, false ) );
+                pDestIt = pToFill->find( PropertyDefinition( nInsideProp ) );
                 if ( pDestIt != pToFill->end( ) )
                     pToFill->erase( pDestIt );
             }
