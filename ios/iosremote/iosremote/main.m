@@ -9,7 +9,6 @@
 #import <UIKit/UIKit.h>
 
 #import "libreoffice_sdremoteAppDelegate.h"
-#import "TPKeyboardAvoidingScrollView.h"
 
 int main(int argc, char *argv[])
 {

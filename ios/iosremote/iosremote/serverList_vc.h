@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface server_list_vc : UITableViewController
+@interface server_list_vc : UITableViewController <UITableViewDelegate, UITableViewDataSource>
 
 @property (weak, nonatomic) IBOutlet UITableView *serverTable;
 

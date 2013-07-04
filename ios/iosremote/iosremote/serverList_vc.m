@@ -6,9 +6,10 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-#import "server_list_vc.h"
+#import "serverList_vc.h"
 #import "CommunicationManager.h"
 #import "newServer_vc.h"
+#import "Server.h"
 
 @interface server_list_vc ()
 
@@ -43,11 +44,15 @@
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
     
     self.center = [NSNotificationCenter defaultCenter];
-    self.comManager = [[CommunicationManager alloc] initWithExistingServers];
-    self.serverTable.dataSource = self.comManager;
+    self.comManager = [CommunicationManager sharedComManager];
+    self.serverTable.dataSource = self;
+    self.serverTable.delegate = self;
 }
 
-- (void)viewDidAppear:(BOOL)animated {
+-(void)viewWillAppear:(BOOL)animated
+{
+    [self.serverTable reloadData];
+    [super viewWillAppear:animated];
 }
 
 - (void)didReceiveMemoryWarning
@@ -60,22 +65,7 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 0;
-}
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-    return 0;
-}
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    static NSString *CellIdentifier = @"Cell";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
-    
-    // Configure the cell...
-    
-    return cell;
+    return 1;
 }
 
 #pragma mark - Table view delegate
@@ -88,5 +78,24 @@
     [self setServerTable:nil];
     [super viewDidUnload];
 }
+
+-(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return [self.comManager.servers count];
+}
+
+-(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    static NSString *cellIdentifier = @"server_item_cell";
+    
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    
+    Server *s = [self.comManager.servers objectAtIndex:indexPath.row];
+    
+    [cell.textLabel setText:[s serverName]];
+    [cell.detailTextLabel setText:[s serverAddress]];
+    return cell;
+}
+
+
+
 
 @end

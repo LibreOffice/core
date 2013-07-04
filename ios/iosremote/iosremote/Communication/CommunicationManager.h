@@ -51,7 +51,7 @@ enum ConnectionState : NSInteger {
     CONNECTED
 };
 
-@interface CommunicationManager : NSObject <UITableViewDataSource>
+@interface CommunicationManager : NSObject
 
 - (id) initWithExistingServers;
 - (void) connectToServer:(Server*)server;

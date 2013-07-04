@@ -139,24 +139,6 @@
     return [self sharedComManager];
 }
 
-
--(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return [self.servers count];
-}
-
--(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    
-    static NSString *cellIdentifier = @"server_item_cell";
-    
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-    
-    Server *s = [self.servers objectAtIndex:indexPath.row];
-
-    [cell.textLabel setText:[s serverName]];
-    [cell.detailTextLabel setText:[s serverAddress]];
-    return cell;
-}
-
 - (void) addServersWithName:(NSString*)name
                   AtAddress:(NSString*)addr
 {

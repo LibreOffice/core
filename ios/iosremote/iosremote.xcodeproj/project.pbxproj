@@ -7,10 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		5753DD901781EA0300DB71BB /* server_list_vc.m in Sources */ = {isa = PBXBuildFile; fileRef = 5753DD8F1781EA0300DB71BB /* server_list_vc.m */; };
+		5753DD901781EA0300DB71BB /* serverList_vc.m in Sources */ = {isa = PBXBuildFile; fileRef = 5753DD8F1781EA0300DB71BB /* serverList_vc.m */; };
 		5753DD9917834D7100DB71BB /* newServer_vc.m in Sources */ = {isa = PBXBuildFile; fileRef = 5753DD9817834D7100DB71BB /* newServer_vc.m */; };
 		57B152991764703500EECC67 /* Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 57B152981764703500EECC67 /* Base64.m */; };
-		57B1529C1764714900EECC67 /* slideShowViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 57B1529B1764714900EECC67 /* slideShowViewController.m */; };
 		57B1529F176486C300EECC67 /* CommandTransmitter.m in Sources */ = {isa = PBXBuildFile; fileRef = 57B1529E176486C300EECC67 /* CommandTransmitter.m */; };
 		57B7625D17621E42007703F6 /* SlideShow.m in Sources */ = {isa = PBXBuildFile; fileRef = 57B7625C17621E42007703F6 /* SlideShow.m */; };
 		57C6E3F3175E06E800E8BC5F /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 57C6E3F2175E06E800E8BC5F /* UIKit.framework */; };
@@ -23,8 +22,6 @@
 		57C6E407175E06E800E8BC5F /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 57C6E406175E06E800E8BC5F /* Default@2x.png */; };
 		57C6E409175E06E800E8BC5F /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 57C6E408175E06E800E8BC5F /* Default-568h@2x.png */; };
 		57C6E40C175E06E800E8BC5F /* MainStoryboard_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 57C6E40A175E06E800E8BC5F /* MainStoryboard_iPhone.storyboard */; };
-		57C6E40F175E06E800E8BC5F /* MainStoryboard_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 57C6E40D175E06E800E8BC5F /* MainStoryboard_iPad.storyboard */; };
-		57C6E412175E06E800E8BC5F /* libreoffice_sdremoteViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 57C6E411175E06E800E8BC5F /* libreoffice_sdremoteViewController.m */; };
 		57C6E42E175E076900E8BC5F /* Client.m in Sources */ = {isa = PBXBuildFile; fileRef = 57C6E427175E076900E8BC5F /* Client.m */; };
 		57C6E42F175E076900E8BC5F /* CommunicationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 57C6E429175E076900E8BC5F /* CommunicationManager.m */; };
 		57C6E430175E076900E8BC5F /* CommandInterpreter.m in Sources */ = {isa = PBXBuildFile; fileRef = 57C6E42B175E076900E8BC5F /* CommandInterpreter.m */; };
@@ -34,14 +31,12 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		5753DD8E1781EA0300DB71BB /* server_list_vc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = server_list_vc.h; sourceTree = "<group>"; };
-		5753DD8F1781EA0300DB71BB /* server_list_vc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = server_list_vc.m; sourceTree = "<group>"; };
+		5753DD8E1781EA0300DB71BB /* serverList_vc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = serverList_vc.h; sourceTree = "<group>"; };
+		5753DD8F1781EA0300DB71BB /* serverList_vc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = serverList_vc.m; sourceTree = "<group>"; };
 		5753DD9717834D7100DB71BB /* newServer_vc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = newServer_vc.h; sourceTree = "<group>"; };
 		5753DD9817834D7100DB71BB /* newServer_vc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = newServer_vc.m; sourceTree = "<group>"; };
 		57B152971764703500EECC67 /* Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Base64.h; path = iosremote/Base64.h; sourceTree = "<group>"; };
 		57B152981764703500EECC67 /* Base64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Base64.m; path = iosremote/Base64.m; sourceTree = "<group>"; };
-		57B1529A1764714900EECC67 /* slideShowViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = slideShowViewController.h; sourceTree = "<group>"; };
-		57B1529B1764714900EECC67 /* slideShowViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = slideShowViewController.m; sourceTree = "<group>"; };
 		57B1529D176486C300EECC67 /* CommandTransmitter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommandTransmitter.h; sourceTree = "<group>"; };
 		57B1529E176486C300EECC67 /* CommandTransmitter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommandTransmitter.m; sourceTree = "<group>"; };
 		57B7625B17621E42007703F6 /* SlideShow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SlideShow.h; sourceTree = "<group>"; };
@@ -60,9 +55,6 @@
 		57C6E406175E06E800E8BC5F /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
 		57C6E408175E06E800E8BC5F /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		57C6E40B175E06E800E8BC5F /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard_iPhone.storyboard; sourceTree = "<group>"; };
-		57C6E40E175E06E800E8BC5F /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard_iPad.storyboard; sourceTree = "<group>"; };
-		57C6E410175E06E800E8BC5F /* libreoffice_sdremoteViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = libreoffice_sdremoteViewController.h; sourceTree = "<group>"; };
-		57C6E411175E06E800E8BC5F /* libreoffice_sdremoteViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = libreoffice_sdremoteViewController.m; sourceTree = "<group>"; };
 		57C6E426175E076900E8BC5F /* Client.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Client.h; sourceTree = "<group>"; };
 		57C6E427175E076900E8BC5F /* Client.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Client.m; sourceTree = "<group>"; };
 		57C6E428175E076900E8BC5F /* CommunicationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommunicationManager.h; sourceTree = "<group>"; };
@@ -130,14 +122,9 @@
 				57C6E40A175E06E800E8BC5F /* MainStoryboard_iPhone.storyboard */,
 				5753DD9717834D7100DB71BB /* newServer_vc.h */,
 				5753DD9817834D7100DB71BB /* newServer_vc.m */,
-				5753DD8E1781EA0300DB71BB /* server_list_vc.h */,
-				5753DD8F1781EA0300DB71BB /* server_list_vc.m */,
-				57C6E40D175E06E800E8BC5F /* MainStoryboard_iPad.storyboard */,
-				57C6E410175E06E800E8BC5F /* libreoffice_sdremoteViewController.h */,
-				57C6E411175E06E800E8BC5F /* libreoffice_sdremoteViewController.m */,
+				5753DD8E1781EA0300DB71BB /* serverList_vc.h */,
+				5753DD8F1781EA0300DB71BB /* serverList_vc.m */,
 				57C6E3F9175E06E800E8BC5F /* Supporting Files */,
-				57B1529A1764714900EECC67 /* slideShowViewController.h */,
-				57B1529B1764714900EECC67 /* slideShowViewController.m */,
 				57CFED9717838FDC00E82E05 /* EditableTableViewCell.h */,
 				57CFED9817838FDC00E82E05 /* EditableTableViewCell.m */,
 			);
@@ -235,7 +222,6 @@
 				57C6E407175E06E800E8BC5F /* Default@2x.png in Resources */,
 				57C6E409175E06E800E8BC5F /* Default-568h@2x.png in Resources */,
 				57C6E40C175E06E800E8BC5F /* MainStoryboard_iPhone.storyboard in Resources */,
-				57C6E40F175E06E800E8BC5F /* MainStoryboard_iPad.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -248,16 +234,14 @@
 			files = (
 				57C6E3FF175E06E800E8BC5F /* main.m in Sources */,
 				57C6E403175E06E800E8BC5F /* libreoffice_sdremoteAppDelegate.m in Sources */,
-				57C6E412175E06E800E8BC5F /* libreoffice_sdremoteViewController.m in Sources */,
 				57C6E42E175E076900E8BC5F /* Client.m in Sources */,
 				57C6E42F175E076900E8BC5F /* CommunicationManager.m in Sources */,
 				57C6E430175E076900E8BC5F /* CommandInterpreter.m in Sources */,
 				57C6E431175E076900E8BC5F /* Server.m in Sources */,
 				57B7625D17621E42007703F6 /* SlideShow.m in Sources */,
 				57B152991764703500EECC67 /* Base64.m in Sources */,
-				57B1529C1764714900EECC67 /* slideShowViewController.m in Sources */,
 				57B1529F176486C300EECC67 /* CommandTransmitter.m in Sources */,
-				5753DD901781EA0300DB71BB /* server_list_vc.m in Sources */,
+				5753DD901781EA0300DB71BB /* serverList_vc.m in Sources */,
 				5753DD9917834D7100DB71BB /* newServer_vc.m in Sources */,
 				57CFED9917838FDC00E82E05 /* EditableTableViewCell.m in Sources */,
 			);
@@ -280,14 +264,6 @@
 				57C6E40B175E06E800E8BC5F /* en */,
 			);
 			name = MainStoryboard_iPhone.storyboard;
-			sourceTree = "<group>";
-		};
-		57C6E40D175E06E800E8BC5F /* MainStoryboard_iPad.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				57C6E40E175E06E800E8BC5F /* en */,
-			);
-			name = MainStoryboard_iPad.storyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -359,6 +335,7 @@
 				INFOPLIST_FILE = "iosremote/iosremote-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -371,6 +348,7 @@
 				INFOPLIST_FILE = "iosremote/iosremote-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

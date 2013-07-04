@@ -36,6 +36,10 @@
                                 </view>
                             </tableViewCell>
                         </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="2" id="dcg-jo-7eE"/>
+                            <outlet property="delegate" destination="2" id="owZ-Ow-VEc"/>
+                        </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Connect" id="yR1-m8-JWN">
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="bHy-yX-SPg">

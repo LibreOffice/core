@@ -9,6 +9,7 @@
 #import "newServer_vc.h"
 #import "CommunicationManager.h"
 #import "EditableTableViewCell.h"
+#import "serverList_vc.h"
 #import "Server.h"
 
 @implementation newServerViewController
@@ -23,7 +24,6 @@
     NSString *serverAddr = [self.addrCell.textField text];
     NSLog(@"New server name:%@ ip:%@", serverName, serverAddr);
     [self.comManager addServersWithName:serverName AtAddress:serverAddr];
-    [self save];
     [self.navigationController popViewControllerAnimated:YES];
 }
 
@@ -266,6 +266,9 @@ titleForHeaderInSection:(NSInteger)section
             break;
         }
     }
+    [cell.textField setPlaceholder:placeholder];
+    [cell setTag:tag];
+    [cell.textField setText:text];
     return cell;
 }
 
