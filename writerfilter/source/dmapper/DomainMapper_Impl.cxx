@@ -2576,6 +2576,8 @@ void DomainMapper_Impl::handleToc
     sal_Int16 nMaxLevel = 10;
     OUString sTemplate;
     OUString sChapterNoSeparator;
+    OUString sFigureSequence;
+
 //                  \a Builds a table of figures but does not include the captions's label and number
     if( lcl_FindInCommand( pContext->GetCommand(), 'a', sValue ))
     { //make it a table of figures
@@ -2590,6 +2592,8 @@ void DomainMapper_Impl::handleToc
     {
                         //todo: sValue contains the label's name
         bTableOfFigures = true;
+        sFigureSequence = sValue.trim();
+        sFigureSequence = sFigureSequence.replaceAll("\"", "").replaceAll("'","");
     }
 //                  \d Defines the separator between sequence and page numbers
     if( lcl_FindInCommand( pContext->GetCommand(), 'd', sValue ))
@@ -2776,6 +2780,12 @@ void DomainMapper_Impl::handleToc
                 xLevelFormats->replaceByIndex( nLevel, uno::makeAny( aNewLevel ) );
             }
         }
+    }
+    else if (bTableOfFigures && xTOC.is())
+    {
+        if (!sFigureSequence.isEmpty())
+            xTOC->setPropertyValue(rPropNameSupplier.GetName(PROP_LABEL_CATEGORY),
+                                   uno::makeAny(sFigureSequence));
     }
     pContext->SetTOC( xTOC );
 }
@@ -3240,7 +3250,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                         // Take care of the numeric formatting definition, default is Arabic
                         sal_Int16 nNumberingType = lcl_ParseNumberingType(pContext->GetCommand());
                         if (nNumberingType == style::NumberingType::PAGE_DESCRIPTOR)
-                            nNumberingType == style::NumberingType::ARABIC;
+                            nNumberingType = style::NumberingType::ARABIC;
                         xFieldProperties->setPropertyValue(
                                 rPropNameSupplier.GetName(PROP_NUMBERING_TYPE),
                                 uno::makeAny(nNumberingType));
@@ -3387,8 +3397,13 @@ void DomainMapper_Impl::SetFieldResult( OUString& rResult )
                         // In case of SetExpression, the field result contains the content of the variable.
                         uno::Reference<lang::XServiceInfo> xServiceInfo(xTextField, uno::UNO_QUERY);
                         bool bIsSetExpression = xServiceInfo->supportsService("com.sun.star.text.TextField.SetExpression");
+                        // If we already have content set, then use the current presentation
+                        rtl::OUString sValue;
+                        uno::Any aValue = xFieldProperties->getPropertyValue(
+                                rPropNameSupplier.GetName(PROP_CONTENT));
+                        aValue >>= sValue;
                         xFieldProperties->setPropertyValue(
-                                rPropNameSupplier.GetName(bIsSetExpression ? PROP_CONTENT : PROP_CURRENT_PRESENTATION),
+                                rPropNameSupplier.GetName(bIsSetExpression && sValue.isEmpty()? PROP_CONTENT : PROP_CURRENT_PRESENTATION),
                              uno::makeAny( rResult ));
                     }
                 }
