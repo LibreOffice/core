@@ -58,8 +58,6 @@
             </objects>
             <point key="canvasLocation" x="528" y="118"/>
         </scene>
-<<<<<<< HEAD
-=======
         <!--Pin Validation vc-->
         <scene sceneID="aCW-l9-UDx">
             <objects>
@@ -103,7 +101,6 @@
             </objects>
             <point key="canvasLocation" x="528" y="872"/>
         </scene>
->>>>>>> threading fixes & preview screen
         <!--New Server View Controller - New Server-->
         <scene sceneID="tlJ-c5-Jp2">
             <objects>
@@ -151,9 +148,6 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="b5I-aN-vyr" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-<<<<<<< HEAD
-            <point key="canvasLocation" x="1133" y="-6"/>
-=======
             <point key="canvasLocation" x="1052" y="-63"/>
         </scene>
         <!--View Controller-->
@@ -323,8 +317,6 @@
             <point key="canvasLocation" x="1581" y="684"/>
         </scene>
     </scenes>
-<<<<<<< HEAD
-=======
     <resources>
         <image name="Default@2x.png" width="640" height="960"/>
     </resources>
@@ -358,16 +350,12 @@
             </relationships>
         </class>
     </classes>
->>>>>>> threading fixes & preview screen
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
-<<<<<<< HEAD
-=======
     <inferredMetricsTieBreakers>
         <segue reference="YBj-zE-J7L"/>
     </inferredMetricsTieBreakers>
->>>>>>> threading fixes & preview screen
 </document>
