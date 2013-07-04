@@ -590,7 +590,7 @@ namespace ucb { namespace ucp { namespace ext
     //------------------------------------------------------------------------------------------------------------------
     Sequence< Property > Content::getProperties( const Reference< XCommandEnvironment > & /*xEnv*/ )
     {
-        static Property aProperties[] =
+        static const Property aProperties[] =
         {
             Property(
                 OUString(  "ContentType"  ),

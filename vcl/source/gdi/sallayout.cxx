@@ -749,7 +749,7 @@ Point SalLayout::GetDrawPosition( const Point& rRelative ) const
 int SalLayout::CalcAsianKerning( sal_UCS4 c, bool bLeft, bool /*TODO:? bVertical*/ )
 {
     // http://www.asahi-net.or.jp/~sd5a-ucd/freetexts/jis/x4051/1995/appendix.html
-    static signed char nTable[0x30] =
+    static const signed char nTable[0x30] =
     {
          0, -2, -2,  0,   0,  0,  0,  0,  +2, -2, +2, -2,  +2, -2, +2, -2,
         +2, -2,  0,  0,  +2, -2, +2, -2,   0,  0,  0,  0,   0, +2, -2, -2,

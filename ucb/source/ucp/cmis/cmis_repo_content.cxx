@@ -208,7 +208,7 @@ namespace cmis
     uno::Sequence< ucb::CommandInfo > RepoContent::getCommands(
             const uno::Reference< ucb::XCommandEnvironment > & /*xEnv*/ )
     {
-        static ucb::CommandInfo aCommandInfoTable[] =
+        static const ucb::CommandInfo aCommandInfoTable[] =
         {
             // Required commands
             ucb::CommandInfo

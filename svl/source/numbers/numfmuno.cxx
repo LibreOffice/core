@@ -62,7 +62,7 @@ using namespace com::sun::star;
 
 static const SfxItemPropertyMapEntry* lcl_GetNumberFormatPropertyMap()
 {
-    static SfxItemPropertyMapEntry aNumberFormatPropertyMap_Impl[] =
+    static const SfxItemPropertyMapEntry aNumberFormatPropertyMap_Impl[] =
     {
         {MAP_CHAR_LEN(PROPERTYNAME_FMTSTR),   0, &getCppuType((OUString*)0),    beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY, 0},
         {MAP_CHAR_LEN(PROPERTYNAME_LOCALE),   0, &getCppuType((lang::Locale*)0),beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY, 0},
@@ -84,7 +84,7 @@ static const SfxItemPropertyMapEntry* lcl_GetNumberFormatPropertyMap()
 
 static const SfxItemPropertyMapEntry* lcl_GetNumberSettingsPropertyMap()
 {
-    static SfxItemPropertyMapEntry aNumberSettingsPropertyMap_Impl[] =
+    static const SfxItemPropertyMapEntry aNumberSettingsPropertyMap_Impl[] =
     {
         {MAP_CHAR_LEN(PROPERTYNAME_NOZERO),   0, &getBooleanCppuType(),         beans::PropertyAttribute::BOUND, 0},
         {MAP_CHAR_LEN(PROPERTYNAME_NULLDATE), 0, &getCppuType((util::Date*)0),  beans::PropertyAttribute::BOUND, 0},

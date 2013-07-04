@@ -96,7 +96,7 @@ uno::Sequence< beans::Property > HierarchyContent::getProperties(
 
         if ( isReadOnly() )
         {
-            static beans::Property aLinkPropertyInfoTable[] =
+            static const beans::Property aLinkPropertyInfoTable[] =
             {
                 ///////////////////////////////////////////////////////////
                 // Required properties
@@ -155,7 +155,7 @@ uno::Sequence< beans::Property > HierarchyContent::getProperties(
         }
         else
         {
-            static beans::Property aLinkPropertyInfoTable[] =
+            static const beans::Property aLinkPropertyInfoTable[] =
             {
                 ///////////////////////////////////////////////////////////
                 // Required properties

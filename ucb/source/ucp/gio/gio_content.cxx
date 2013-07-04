@@ -1261,7 +1261,7 @@ uno::Sequence< beans::Property > Content::getProperties(
 
 uno::Sequence< ucb::CommandInfo > Content::getCommands( const uno::Reference< ucb::XCommandEnvironment > & xEnv)
 {
-    static ucb::CommandInfo aCommandInfoTable[] =
+    static const ucb::CommandInfo aCommandInfoTable[] =
     {
         // Required commands
         ucb::CommandInfo
