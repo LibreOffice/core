@@ -712,6 +712,60 @@ void SwTableAutoFormat::StoreTableProperties(const SwTable &table)
     m_pTableStyle->StoreTableProperties( table );
 }
 
+bool SwTableFormat::Load( SvStream& rStream, const SwAfVersions& rVersions, SwDoc* pDoc, sal_uInt16 nVal )
+{
+    sal_Bool bRet = 0 == rStream.GetError();
+
+    if (nVal >= AUTOFORMAT_DATA_ID_31005 && WriterSpecificBlockExists(rStream))
+    {
+        SfxPoolItem* pNew = 0;
+
+        SvxFormatBreakItem aBreak = SvxFormatBreakItem( SVX_BREAK_NONE, RES_BREAK );
+        READ( aBreak, SvxFormatBreakItem, AUTOFORMAT_FILE_VERSION );
+        SetBreak( aBreak );
+
+        SwFormatPageDesc aPageDesc;
+        READ( aPageDesc, SwFormatPageDesc, AUTOFORMAT_FILE_VERSION );
+        SetPageDesc( aPageDesc );
+
+        SvxFormatKeepItem aKeepWithNextPara = SvxFormatKeepItem( sal_False, RES_KEEP );
+        READ( aKeepWithNextPara, SvxFormatKeepItem, AUTOFORMAT_FILE_VERSION );
+        SetKeepWithNextPara( aKeepWithNextPara );
+
+        sal_uInt16 aRepeatHeading;
+        bool bLayoutSplit;
+        bool bRowSplit;
+        bool bCollapsingBorders;
+        rStream.ReadUInt16(aRepeatHeading).ReadCharAsBool(bLayoutSplit).ReadCharAsBool(bRowSplit).ReadCharAsBool(bCollapsingBorders);
+        SetRepeatHeading( aRepeatHeading );
+        SetRowSplit( bRowSplit );
+        SetLayoutSplit( bLayoutSplit );
+        SetCollapsingBorders( bCollapsingBorders );
+
+        SvxShadowItem aShadow = SvxShadowItem( RES_SHADOW );
+        READ( aShadow, SvxShadowItem, AUTOFORMAT_FILE_VERSION );
+        SetShadow( aShadow );
+    }
+
+    bRet = 0 == rStream.GetError();
+
+    for( sal_uInt8 i = 0; bRet && i < 16; ++i )
+    {
+        SwTableBoxFormat* pFormat = pDoc->MakeTableBoxFormat();
+
+        bRet = pFormat->Load( rStream, rVersions, nVal );
+        if( bRet )
+            SetBoxFormat( *pFormat, i );
+        else
+        {
+            delete pFormat;
+            break;
+        }
+    }
+
+    return bRet;
+}
+
 SwTableAutoFormat* SwTableAutoFormat::Load( SvStream& rStream, const SwAfVersions& rVersions, SwDoc* pDoc )
 {
     SwTableAutoFormat* pRet = NULL;
@@ -757,52 +811,7 @@ SwTableAutoFormat* SwTableAutoFormat::Load( SvStream& rStream, const SwAfVersion
         rStream.ReadCharAsBool( b ); pRet->bInclValueFormat = b;
         rStream.ReadCharAsBool( b ); pRet->bInclWidthHeight = b;
 
-        if (nVal >= AUTOFORMAT_DATA_ID_31005 && WriterSpecificBlockExists(rStream))
-        {
-            SfxPoolItem* pNew = 0;
-
-            SvxFormatBreakItem m_aBreak = SvxFormatBreakItem( SVX_BREAK_NONE, RES_BREAK );
-            READ(m_aBreak, SvxFormatBreakItem, AUTOFORMAT_FILE_VERSION);
-            pStyle->SetBreak( m_aBreak );
-
-            SwFormatPageDesc m_aPageDesc;
-            READ(m_aPageDesc, SwFormatPageDesc, AUTOFORMAT_FILE_VERSION);
-            pStyle->SetPageDesc( m_aPageDesc );
-
-            SvxFormatKeepItem m_aKeepWithNextPara = SvxFormatKeepItem( sal_False, RES_KEEP );
-            READ(m_aKeepWithNextPara, SvxFormatKeepItem, AUTOFORMAT_FILE_VERSION);
-            pStyle->SetKeepWithNextPara( m_aKeepWithNextPara );
-
-            sal_uInt16 m_aRepeatHeading;
-            bool m_bLayoutSplit;
-            bool m_bRowSplit;
-            bool m_bCollapsingBorders;
-            rStream.ReadUInt16(m_aRepeatHeading).ReadCharAsBool(m_bLayoutSplit).ReadCharAsBool(m_bRowSplit).ReadCharAsBool(m_bCollapsingBorders);
-            pStyle->SetRepeatHeading( m_aRepeatHeading );
-            pStyle->SetRowSplit( m_bRowSplit );
-            pStyle->SetLayoutSplit( m_bLayoutSplit );
-            pStyle->SetCollapsingBorders( m_bCollapsingBorders );
-
-            SvxShadowItem m_aShadow = SvxShadowItem( RES_SHADOW );
-            READ(m_aShadow, SvxShadowItem, AUTOFORMAT_FILE_VERSION);
-            pStyle->SetShadow( m_aShadow );
-        }
-
-        bRet = 0 == rStream.GetError();
-
-        for( sal_uInt8 i = 0; bRet && i < 16; ++i )
-        {
-            SwTableBoxFormat* pFormat = pDoc->MakeTableBoxFormat();
-
-            bRet = pFormat->Load( rStream, rVersions, nVal );
-            if( bRet )
-                pRet->SetBoxFormat( *pFormat, i );
-            else
-            {
-                delete pFormat;
-                break;
-            }
-        }
+        bRet = pStyle->Load( rStream, rVersions, pDoc, nVal );
     }
     if ( !bRet )
     {

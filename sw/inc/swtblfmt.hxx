@@ -126,6 +126,8 @@ public:
 
     void CopyTableFormatInfo( const SwTableFormat* pTableFormat );
 
+    bool Load( SvStream& rStream, const SwAfVersions& rVersions, SwDoc* pDoc, sal_uInt16 nVal );
+
     TYPEINFO_OVERRIDE();     // Already in base class Content.
 
     DECL_FIXEDMEMPOOL_NEWDEL(SwTableFormat)
