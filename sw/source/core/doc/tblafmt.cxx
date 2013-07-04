@@ -716,6 +716,60 @@ void SwTableAutoFmt::StoreTableProperties(const SwTable &table)
     m_pTableStyle->StoreTableProperties( table );
 }
 
+sal_Bool SwTableFmt::Load( SvStream& rStream, const SwAfVersions& rVersions, SwDoc* pDoc, sal_uInt16 nVal )
+{
+    sal_Bool bRet = 0 == rStream.GetError();
+
+    if (nVal >= AUTOFORMAT_DATA_ID_31005 && WriterSpecificBlockExists(rStream))
+    {
+        SfxPoolItem* pNew = 0;
+
+        SvxFmtBreakItem aBreak = SvxFmtBreakItem( SVX_BREAK_NONE, RES_BREAK );
+        READ( aBreak, SvxFmtBreakItem, AUTOFORMAT_FILE_VERSION );
+        SetBreak( aBreak );
+
+        SwFmtPageDesc aPageDesc;
+        READ( aPageDesc, SwFmtPageDesc, AUTOFORMAT_FILE_VERSION );
+        SetPageDesc( aPageDesc );
+
+        SvxFmtKeepItem aKeepWithNextPara = SvxFmtKeepItem( sal_False, RES_KEEP );
+        READ( aKeepWithNextPara, SvxFmtKeepItem, AUTOFORMAT_FILE_VERSION );
+        SetKeepWithNextPara( aKeepWithNextPara );
+
+        sal_uInt16 aRepeatHeading;
+        sal_Bool bLayoutSplit;
+        sal_Bool bRowSplit;
+        sal_Bool bCollapsingBorders;
+        rStream >> aRepeatHeading >> bLayoutSplit >> bRowSplit >> bCollapsingBorders;
+        SetRepeatHeading( aRepeatHeading );
+        SetRowSplit( bRowSplit );
+        SetLayoutSplit( bLayoutSplit );
+        SetCollapsingBorders( bCollapsingBorders );
+
+        SvxShadowItem aShadow = SvxShadowItem( RES_SHADOW );
+        READ( aShadow, SvxShadowItem, AUTOFORMAT_FILE_VERSION );
+        SetShadow( aShadow );
+    }
+
+    bRet = 0 == rStream.GetError();
+
+    for( sal_uInt8 i = 0; bRet && i < 16; ++i )
+    {
+        SwTableBoxFmt* pFmt = pDoc->MakeTableBoxFmt();
+
+        bRet = pFmt->Load( rStream, rVersions, nVal );
+        if( bRet )
+            SetBoxFmt( *pFmt, i );
+        else
+        {
+            delete pFmt;
+            break;
+        }
+    }
+
+    return bRet;
+}
+
 SwTableAutoFmt* SwTableAutoFmt::Load( SvStream& rStream, const SwAfVersions& rVersions, SwDoc* pDoc )
 {
     SwTableAutoFmt* pRet = NULL;
@@ -761,52 +815,7 @@ SwTableAutoFmt* SwTableAutoFmt::Load( SvStream& rStream, const SwAfVersions& rVe
         rStream >> b; pRet->bInclValueFormat = b;
         rStream >> b; pRet->bInclWidthHeight = b;
 
-        if (nVal >= AUTOFORMAT_DATA_ID_31005 && WriterSpecificBlockExists(rStream))
-        {
-            SfxPoolItem* pNew = 0;
-
-            SvxFmtBreakItem m_aBreak = SvxFmtBreakItem( SVX_BREAK_NONE, RES_BREAK );
-            READ(m_aBreak, SvxFmtBreakItem, AUTOFORMAT_FILE_VERSION);
-            pStyle->SetBreak( m_aBreak );
-
-            SwFmtPageDesc m_aPageDesc;
-            READ(m_aPageDesc, SwFmtPageDesc, AUTOFORMAT_FILE_VERSION);
-            pStyle->SetPageDesc( m_aPageDesc );
-
-            SvxFmtKeepItem m_aKeepWithNextPara = SvxFmtKeepItem( sal_False, RES_KEEP );
-            READ(m_aKeepWithNextPara, SvxFmtKeepItem, AUTOFORMAT_FILE_VERSION);
-            pStyle->SetKeepWithNextPara( m_aKeepWithNextPara );
-
-            sal_uInt16 m_aRepeatHeading;
-            sal_Bool m_bLayoutSplit;
-            sal_Bool m_bRowSplit;
-            sal_Bool m_bCollapsingBorders;
-            rStream >> m_aRepeatHeading >> m_bLayoutSplit >> m_bRowSplit >> m_bCollapsingBorders;
-            pStyle->SetRepeatHeading( m_aRepeatHeading );
-            pStyle->SetRowSplit( m_bRowSplit );
-            pStyle->SetLayoutSplit( m_bLayoutSplit );
-            pStyle->SetCollapsingBorders( m_bCollapsingBorders );
-
-            SvxShadowItem m_aShadow = SvxShadowItem( RES_SHADOW );
-            READ(m_aShadow, SvxShadowItem, AUTOFORMAT_FILE_VERSION);
-            pStyle->SetShadow( m_aShadow );
-        }
-
-        bRet = 0 == rStream.GetError();
-
-        for( sal_uInt8 i = 0; bRet && i < 16; ++i )
-        {
-            SwTableBoxFmt* pFmt = pDoc->MakeTableBoxFmt();
-
-            bRet = pFmt->Load( rStream, rVersions, nVal );
-            if( bRet )
-                pRet->SetBoxFmt( *pFmt, i );
-            else
-            {
-                delete pFmt;
-                break;
-            }
-        }
+        bRet = pStyle->Load( rStream, rVersions, pDoc, nVal );
     }
     if ( !bRet )
     {
