@@ -435,7 +435,7 @@ namespace drawinglayer
                 }
                 case PRIMITIVE2D_ID_METAFILEPRIMITIVE2D :
                 {
-                       // #i98289#
+                    // #i98289#
                     const bool bForceLineSnap(getOptionsDrawinglayer().IsAntiAliasing() && getOptionsDrawinglayer().IsSnapHorVerLinesToDiscrete());
                     const sal_uInt16 nOldAntiAliase(mpOutputDevice->GetAntialiasing());
 
@@ -444,8 +444,20 @@ namespace drawinglayer
                         mpOutputDevice->SetAntialiasing(nOldAntiAliase | ANTIALIASING_PIXELSNAPHAIRLINE);
                     }
 
-                    // use new Metafile decomposition
-                    process(rCandidate.get2DDecomposition(getViewInformation2D()));
+                    const primitive2d::MetafilePrimitive2D& rMetafilePrimitive( static_cast< const primitive2d::MetafilePrimitive2D& >(rCandidate) );
+
+                    static bool bTestMetaFilePrimitiveDecomposition( true );
+                    if( bTestMetaFilePrimitiveDecomposition && !rMetafilePrimitive.getMetaFile().GetUseCanvas() )
+                    {
+                        // use new Metafile decomposition
+                        // TODO EMF+ stuffed into METACOMMENT support required
+                        process(rCandidate.get2DDecomposition(getViewInformation2D()));
+                    }
+                    else
+                    {
+                        // direct draw of MetaFile
+                        RenderMetafilePrimitive2D( rMetafilePrimitive );
+                    }
 
                     if(bForceLineSnap)
                     {

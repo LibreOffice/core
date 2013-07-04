@@ -28,6 +28,7 @@
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
 #include <drawinglayer/primitive2d/bitmapprimitive2d.hxx>
 #include <drawinglayer/primitive2d/maskprimitive2d.hxx>
+#include <drawinglayer/primitive2d/metafileprimitive2d.hxx>
 #include <basegfx/polygon/b2dpolygonclipper.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <drawinglayer/primitive2d/modifiedcolorprimitive2d.hxx>
@@ -1715,6 +1716,25 @@ namespace drawinglayer
                     if(bSupportSvtGraphicFill)
                     {
                         impEndSvtGraphicFill(pSvtGraphicFill);
+                    }
+
+                    break;
+                }
+                case PRIMITIVE2D_ID_METAFILEPRIMITIVE2D :
+                {
+                    static bool bUseMetaFilePrimitiveDecomposition(true);
+                    const primitive2d::MetafilePrimitive2D& aMetafile = static_cast< const primitive2d::MetafilePrimitive2D& >(rCandidate);
+
+                    if(bUseMetaFilePrimitiveDecomposition && !aMetafile.getMetaFile().GetUseCanvas())
+                    {
+                        // Use new Metafile decomposition.
+                        // TODO EMF+ stuffed into METACOMMENT support required
+                        process(rCandidate.get2DDecomposition(getViewInformation2D()));
+                    }
+                    else
+                    {
+                        // direct draw of MetaFile, use default processing
+                        RenderMetafilePrimitive2D(aMetafile);
                     }
 
                     break;
