@@ -739,17 +739,33 @@ class EmptyCells
     ScColumn& mrColumn;
     sc::ColumnBlockPosition& mrPos;
     sc::CellStoreType::iterator miPos;
-    sc::CellStoreType& mrCells;
-    sc::CellTextAttrStoreType& mrAttrs;
+
+    void splitFormulaGrouping(sc::CellStoreType& rCells, const sc::CellStoreType::position_type& rPos)
+    {
+        if (rPos.first->type == sc::element_type_formula)
+        {
+            ScFormulaCell& rCell = *sc::formula_block::at(*rPos.first->data, rPos.second);
+            mrColumn.UnshareFormulaCell(rPos, rCell);
+        }
+    }
+
 public:
-    EmptyCells(sc::ColumnBlockPosition& rPos, ScColumn& rColumn, sc::CellStoreType& rCells, sc::CellTextAttrStoreType& rAttrs) :
-        mrColumn(rColumn), mrPos(rPos), mrCells(rCells), mrAttrs(rAttrs) {}
+    EmptyCells(sc::ColumnBlockPosition& rPos, ScColumn& rColumn) :
+        mrColumn(rColumn), mrPos(rPos) {}
 
     void operator() (const sc::SingleColumnSpanSet::Span& rSpan)
     {
-        mrPos.miCellPos = mrCells.set_empty(mrPos.miCellPos, rSpan.mnRow1, rSpan.mnRow2);
-        mrPos.miCellTextAttrPos = mrAttrs.set_empty(mrPos.miCellTextAttrPos, rSpan.mnRow1, rSpan.mnRow2);
-        mrColumn.RegroupFormulaCells(rSpan.mnRow1, rSpan.mnRow2);
+        sc::CellStoreType& rCells = mrColumn.GetCellStore();
+
+        // First, split formula grouping at the top and bottom boundaries
+        // before emptying the cells.
+        sc::CellStoreType::position_type aPos = rCells.position(mrPos.miCellPos, rSpan.mnRow1);
+        splitFormulaGrouping(rCells, aPos);
+        aPos = rCells.position(aPos.first, rSpan.mnRow2);
+        splitFormulaGrouping(rCells, aPos);
+
+        mrPos.miCellPos = rCells.set_empty(mrPos.miCellPos, rSpan.mnRow1, rSpan.mnRow2);
+        mrPos.miCellTextAttrPos = mrColumn.GetCellAttrStore().set_empty(mrPos.miCellTextAttrPos, rSpan.mnRow1, rSpan.mnRow2);
     }
 };
 
@@ -783,7 +799,7 @@ void ScColumn::DeleteArea(SCROW nStartRow, SCROW nEndRow, sal_uInt16 nDelFlag)
         aBlockPos.miCellTextAttrPos = maCellTextAttrs.begin();
 
         // Delete the cells for real.
-        std::for_each(aSpans.begin(), aSpans.end(), EmptyCells(aBlockPos, *this, maCells, maCellTextAttrs));
+        std::for_each(aSpans.begin(), aSpans.end(), EmptyCells(aBlockPos, *this));
         CellStorageModified();
     }
 

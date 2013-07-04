@@ -6467,7 +6467,49 @@ void Test::testSharedFormulas()
     CPPUNIT_ASSERT_MESSAGE("B18 should be a formula cell.", pFC);
     CPPUNIT_ASSERT_MESSAGE("B18 should be non-shared.", !pFC->IsShared());
 
+    // Set up a new group for shared formulas in B2:B10.
+    clearRange(m_pDoc, ScRange(0,0,0,2,100,0));
+
+    aPos.SetRow(1);
+    m_pDoc->SetString(aPos, "=A2*10");
+    aPos.IncRow();
+    m_pDoc->SetString(aPos, "=A3*10");
+    aPos.IncRow();
+    m_pDoc->SetString(aPos, "=A4*10");
+    aPos.IncRow();
+    m_pDoc->SetString(aPos, "=A5*10");
+    aPos.IncRow();
+    m_pDoc->SetString(aPos, "=A6*10");
+    aPos.IncRow();
+    m_pDoc->SetString(aPos, "=A7*10");
+    aPos.IncRow();
+    m_pDoc->SetString(aPos, "=A8*10");
+    aPos.IncRow();
+    m_pDoc->SetString(aPos, "=A9*10");
+    aPos.IncRow();
+    m_pDoc->SetString(aPos, "=A10*10");
+
+    pFC = m_pDoc->GetFormulaCell(aPos);
+    CPPUNIT_ASSERT_MESSAGE("B10 should be a formula cell.", pFC);
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(1), pFC->GetSharedTopRow());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(9), pFC->GetSharedLength());
+
+    // Delete A4:B8. This should splite the grouping to B2:B3 and B9:B10.
+    clearRange(m_pDoc, ScRange(0,3,0,1,7,0));
+    aPos.SetRow(1);
+    pFC = m_pDoc->GetFormulaCell(aPos);
+    CPPUNIT_ASSERT_MESSAGE("B2 should be a formula cell.", pFC);
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(1), pFC->GetSharedTopRow());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(2), pFC->GetSharedLength());
+
+    aPos.SetRow(8);
+    pFC = m_pDoc->GetFormulaCell(aPos);
+    CPPUNIT_ASSERT_MESSAGE("B9 should be a formula cell.", pFC);
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(8), pFC->GetSharedTopRow());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(2), pFC->GetSharedLength());
+
     m_pDoc->DeleteTab(0);
+
 }
 
 namespace {
