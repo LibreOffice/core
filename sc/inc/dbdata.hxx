@@ -43,7 +43,7 @@ private:
     boost::scoped_ptr<ScSubTotalParam> mpSubTotal;
     boost::scoped_ptr<ScImportParam> mpImportParam;
 
-    // DBParam
+    /// DBParam
     const OUString aName;
     OUString aUpper;
     SCTAB           nTable;
@@ -57,15 +57,15 @@ private:
     bool            bKeepFmt;
     bool            bStripData;
 
-    // QueryParam
-    bool            bIsAdvanced;        // true if created by advanced filter
-    ScRange         aAdvSource;         // source range
+    /// QueryParam
+    bool            bIsAdvanced;        ///< true if created by advanced filter
+    ScRange         aAdvSource;         ///< source range
 
-    bool            bDBSelection;       // not in Param: if selection, block update
+    bool            bDBSelection;       ///< not in Param: if selection, block update
 
-    sal_uInt16      nIndex;             // unique index formulas
-    bool            bAutoFilter;        // AutoFilter? (not saved)
-    bool            bModified;          // is set/cleared for/by(?) UpdateReference
+    sal_uInt16      nIndex;             ///< unique index formulas
+    bool            bAutoFilter;        ///< AutoFilter? (not saved)
+    bool            bModified;          ///< is set/cleared for/by(?) UpdateReference
 
     using ScRefreshTimer::operator==;
 
@@ -211,7 +211,7 @@ public:
 private:
     Link        aRefreshHandler;
     ScDocument* pDoc;
-    sal_uInt16 nEntryIndex;         // counter for unique indices
+    sal_uInt16 nEntryIndex;         ///< counter for unique indices
     NamedDBs maNamedDBs;
     AnonDBs maAnonDBs;
 

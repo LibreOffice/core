@@ -15,24 +15,24 @@
 
 struct SC_DLLPUBLIC ScSubTotalParam
 {
-    SCCOL           nCol1;          // selected area
+    SCCOL           nCol1;                      ///< selected area
     SCROW           nRow1;
     SCCOL           nCol2;
     SCROW           nRow2;
-    sal_uInt16      nUserIndex;                 // index into list
+    sal_uInt16      nUserIndex;                 ///< index into list
     bool            bRemoveOnly:1;
-    bool            bReplace:1;                 // replace existing results
-    bool            bPagebreak:1;               // page break at change of group
+    bool            bReplace:1;                 ///< replace existing results
+    bool            bPagebreak:1;               ///< page break at change of group
     bool            bCaseSens:1;                //
-    bool            bDoSort:1;                  // presort
-    bool            bAscending:1;               // sort ascending
-    bool            bUserDef:1;                 // sort user defined
-    bool            bIncludePattern:1;          // sort formats
-    bool            bGroupActive[MAXSUBTOTAL];  // active groups
-    SCCOL           nField[MAXSUBTOTAL];        // associated field
-    SCCOL           nSubTotals[MAXSUBTOTAL];    // number of SubTotals
-    SCCOL*          pSubTotals[MAXSUBTOTAL];    // array of columns to be calculated
-    ScSubTotalFunc* pFunctions[MAXSUBTOTAL];    // array of associated functions
+    bool            bDoSort:1;                  ///< presort
+    bool            bAscending:1;               ///< sort ascending
+    bool            bUserDef:1;                 ///< sort user defined
+    bool            bIncludePattern:1;          ///< sort formats
+    bool            bGroupActive[MAXSUBTOTAL];  ///< active groups
+    SCCOL           nField[MAXSUBTOTAL];        ///< associated field
+    SCCOL           nSubTotals[MAXSUBTOTAL];    ///< number of SubTotals
+    SCCOL*          pSubTotals[MAXSUBTOTAL];    ///< array of columns to be calculated
+    ScSubTotalFunc* pFunctions[MAXSUBTOTAL];    ///< array of associated functions
 
     ScSubTotalParam();
     ScSubTotalParam( const ScSubTotalParam& r );
