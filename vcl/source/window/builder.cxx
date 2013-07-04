@@ -2034,6 +2034,12 @@ std::vector<OString> VclBuilder::handleItems(xmlreader::XmlReader &reader, const
                 if (!bTranslated)
                     sValue = OString(name.begin, name.length);
 
+                if (m_pStringReplace)
+                {
+                    OUString sTmp = (*m_pStringReplace)(OStringToOUString(sValue, RTL_TEXTENCODING_UTF8));
+                    sValue = OUStringToOString(sTmp, RTL_TEXTENCODING_UTF8);
+                }
+
                 aItems.push_back(sValue);
                 ++nItemIndex;
             }
