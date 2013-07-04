@@ -386,7 +386,7 @@ OUString SotExchange::GetFormatMimeType( sal_uLong nFormat )
             sMimeType = rL[ nFormat ]->MimeType;
     }
 
-    DBG_ASSERT( sMimeType.Len(), "SotExchange::GetFormatMimeType(): DataFlavor not initialized" );
+    DBG_ASSERT( !sMimeType.isEmpty(), "SotExchange::GetFormatMimeType(): DataFlavor not initialized" );
 
     return sMimeType;
 }
