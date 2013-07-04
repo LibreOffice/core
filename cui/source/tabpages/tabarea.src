@@ -881,9 +881,4 @@ TabDialog RID_SVXDLG_AREA
     };
 };
 
-String STR_LB_HATCHINGSTYLE
-{
-    Text [ en-US ] = "Hatching Style" ;
-};
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

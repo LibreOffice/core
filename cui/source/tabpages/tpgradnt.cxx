@@ -23,6 +23,7 @@
 #include <vcl/msgbox.hxx>
 #include <unotools/pathoptions.hxx>
 #include <sfx2/app.hxx>
+#include <sfx2/dialoghelper.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
 
@@ -93,8 +94,7 @@ SvxGradientTabPage::SvxGradientTabPage
     get(m_pBtnLoad,        "load");
     get(m_pBtnSave,        "save");
 
-    m_pCtlPreview->SetAccessibleName(String(CUI_RES(STR_EXAMPLE)));
-    m_pLbGradients->SetAccessibleName( GetText());
+    m_pLbGradients->SetAccessibleName(GetText());
 
 
     // this page needs ExchangeSupport
@@ -137,6 +137,8 @@ SvxGradientTabPage::SvxGradientTabPage
 
     // #i76307# always paint the preview in LTR, because this is what the document does
     m_pCtlPreview->EnableRTL( sal_False );
+
+    setPreviewsToSamePlace(pParent, this);
 }
 
 // -----------------------------------------------------------------------

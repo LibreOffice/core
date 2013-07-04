@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <!-- interface-requires gtk+ 3.0 -->
+  <!-- interface-requires LibreOffice 1.0 -->
   <object class="GtkAdjustment" id="angleadjustment">
     <property name="upper">359</property>
     <property name="step_increment">15</property>
@@ -36,12 +37,12 @@
                 <property name="vexpand">True</property>
                 <property name="spacing">12</property>
                 <child>
-                  <object class="GtkGrid" id="grid2">
+                  <object class="GtkGrid" id="maingrid">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="vexpand">True</property>
                     <property name="row_spacing">6</property>
-                    <property name="column_spacing">6</property>
+                    <property name="column_spacing">12</property>
                     <child>
                       <object class="GtkLabel" id="typeft">
                         <property name="visible">True</property>
@@ -361,6 +362,11 @@
                         <property name="can_focus">False</property>
                         <property name="hexpand">True</property>
                         <property name="vexpand">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="previewctl-atkobject">
+                            <property name="AtkObject::accessible-name" translatable="yes">Example</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>

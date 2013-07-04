@@ -22,8 +22,9 @@
 #include <vcl/msgbox.hxx>
 #include <unotools/pathoptions.hxx>
 #include <sfx2/app.hxx>
-#include <sfx2/module.hxx>
+#include <sfx2/dialoghelper.hxx>
 #include <sfx2/filedlghelper.hxx>
+#include <sfx2/module.hxx>
 #include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
 
 #include <cuires.hrc>
@@ -134,8 +135,7 @@ SvxHatchTabPage::SvxHatchTabPage
 
     m_pCtlPreview->SetDrawMode( GetSettings().GetStyleSettings().GetHighContrastMode() ? OUTPUT_DRAWMODE_CONTRAST : OUTPUT_DRAWMODE_COLOR );
 
-    m_pCtlPreview->SetAccessibleName(String(CUI_RES(STR_EXAMPLE)));
-    m_pLbHatchings->SetAccessibleName( String(CUI_RES(STR_LB_HATCHINGSTYLE)) );
+    setPreviewsToSamePlace(pParent, this);
 }
 
 // -----------------------------------------------------------------------

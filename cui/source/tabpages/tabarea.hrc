@@ -121,6 +121,4 @@
 #define CB_HATCHBCKGRD          21
 #define LB_HATCHBCKGRDCOLOR     22
 
-#define STR_LB_HATCHINGSTYLE 5031
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
