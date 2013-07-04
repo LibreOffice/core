@@ -150,7 +150,7 @@ int OpenclDevice::ConvertToString(const char *filename, char **source) {
 
         file_size = ftell(file);
         rewind(file);
-        *source = (char*) malloc(sizeof(char) * file_size + 1);
+        *source = (char*) malloc(file_size + 1);
         if (*source == (char*) NULL) {
             return 0;
         }
@@ -209,7 +209,7 @@ int OpenclDevice::WriteBinaryToFile(const char* fileName, const char* birary,
         return 0;
     }
 
-    fwrite(birary, sizeof(char), numBytes, output);
+    fwrite(birary, 1, numBytes, output);
     fclose(output);
 
     return 1;
@@ -252,7 +252,7 @@ int OpenclDevice::GeneratBinFromKernelSource(cl_program program,
 
     for (i = 0; i < numDevices; i++) {
         if (binarySizes[i] != 0) {
-            binaries[i] = (char*) malloc(sizeof(char) * binarySizes[i]);
+            binaries[i] = (char*) malloc(binarySizes[i]);
             if (binaries[i] == NULL) {
                 return 0;
             }
@@ -519,7 +519,7 @@ int OpenclDevice::CompileKernelFile(GPUEnv *gpuInfo, const char *buildOption) {
 
         fd1 = fopen("kernel-build.log", "w+");
         if (fd1 != NULL) {
-            fwrite(buildLog, sizeof(char), length, fd1);
+            fwrite(buildLog, 1, length, fd1);
             fclose(fd1);
         }
 
