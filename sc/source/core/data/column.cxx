@@ -2015,8 +2015,7 @@ void ScColumn::CopyScenarioTo( ScColumn& rDestCol ) const
         if ( ((ScMergeFlagAttr&)pPattern->GetItem( ATTR_MERGE_FLAG )).IsScenario() )
         {
             rDestCol.DeleteArea( nStart, nEnd, IDF_CONTENTS );
-            ((ScColumn*)this)->
-                CopyToColumn(aCxt, nStart, nEnd, IDF_CONTENTS, false, rDestCol);
+            CopyToColumn(aCxt, nStart, nEnd, IDF_CONTENTS, false, rDestCol);
 
             //  UpdateUsed not needed, is already done in TestCopyScenario (obsolete comment ?)
 
