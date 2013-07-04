@@ -463,7 +463,7 @@ String SvXMLGraphicHelper::ImplGetGraphicMimeType( const String& rFileName ) con
         const char* pMimeType;
     };
 
-    static XMLGraphicMimeTypeMapper aMapper[] =
+    static const XMLGraphicMimeTypeMapper aMapper[] =
     {
         { "gif", "image/gif" },
         { "png", "image/png" },

@@ -57,7 +57,7 @@ ZoomPopup_Impl::ZoomPopup_Impl( sal_uInt16 nZ, sal_uInt16 nValueSet )
 
     nZoom( nZ )
 {
-    static sal_uInt16 aTable[] =
+    static const sal_uInt16 aTable[] =
     {
         SVX_ZOOM_ENABLE_50,         ZOOM_50,
         SVX_ZOOM_ENABLE_100,        ZOOM_100,

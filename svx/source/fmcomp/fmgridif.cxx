@@ -1272,7 +1272,7 @@ void FmXGridPeer::removeModifyListener(const Reference< ::com::sun::star::util::
 Sequence< sal_Bool > SAL_CALL FmXGridPeer::queryFieldDataType( const Type& xType ) throw(RuntimeException)
 {
     // eine 'Konvertierungstabelle'
-    static sal_Bool bCanConvert[LAST_KNOWN_TYPE][4] =
+    static const sal_Bool bCanConvert[LAST_KNOWN_TYPE][4] =
     {
         { sal_False, sal_False, sal_False, sal_False }, //  FormComponentType::CONTROL
         { sal_False, sal_False, sal_False, sal_False }, //  FormComponentType::COMMANDBUTTON
@@ -2767,7 +2767,7 @@ Sequence< ::com::sun::star::util::URL>& FmXGridPeer::getSupportedURLs()
     static Sequence< ::com::sun::star::util::URL> aSupported;
     if (aSupported.getLength() == 0)
     {
-        static OUString sSupported[] = {
+        static const OUString sSupported[] = {
             FMURL_RECORD_MOVEFIRST,
             FMURL_RECORD_MOVEPREV,
             FMURL_RECORD_MOVENEXT,

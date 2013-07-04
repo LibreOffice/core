@@ -555,7 +555,7 @@ void SAL_CALL FmXUndoEnvironment::propertyChange(const PropertyChangeEvent& evt)
             return;
 
         // if it's a "default value" property of a control model, set the according "value" property
-        static OUString pDefaultValueProperties[] = {
+        static const OUString pDefaultValueProperties[] = {
             OUString(FM_PROP_DEFAULT_TEXT), OUString(FM_PROP_DEFAULTCHECKED), OUString(FM_PROP_DEFAULT_DATE), OUString(FM_PROP_DEFAULT_TIME),
             OUString(FM_PROP_DEFAULT_VALUE), OUString(FM_PROP_DEFAULT_SELECT_SEQ), OUString(FM_PROP_EFFECTIVE_DEFAULT)
         };

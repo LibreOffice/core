@@ -127,7 +127,7 @@ static void lcl_PaintLevel(OutputDevice* pVDev, sal_Int16 nNumberingType,
 }
 void  SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
 {
-    static sal_uInt16 aLinesArr[] =
+    static const sal_uInt16 aLinesArr[] =
     {
         15, 10,
         20, 30,

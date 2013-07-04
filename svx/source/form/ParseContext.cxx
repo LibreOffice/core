@@ -128,7 +128,7 @@ OString OSystemParseContext::getIntlKeywordAscii(InternationalKeyCode _eKey) con
 // -----------------------------------------------------------------------------
 IParseContext::InternationalKeyCode OSystemParseContext::getIntlKeyCode(const OString& rToken) const
 {
-    static IParseContext::InternationalKeyCode Intl_TokenID[] =
+    static const IParseContext::InternationalKeyCode Intl_TokenID[] =
     {
         KEY_LIKE, KEY_NOT, KEY_NULL, KEY_TRUE,
         KEY_FALSE, KEY_IS, KEY_BETWEEN, KEY_OR,
