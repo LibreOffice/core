@@ -21,6 +21,7 @@
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/awt/FontSlant.hpp>
 #include <com/sun/star/awt/FontWeight.hpp>
+#include <i18nlangtag/languagetag.hxx>
 #include "oox/helper/helper.hxx"
 #include "oox/helper/propertyset.hxx"
 #include "oox/core/xmlfilterbase.hxx"
@@ -93,17 +94,7 @@ void TextCharacterProperties::pushToPropMap( PropertyMap& rPropMap, const XmlFil
 
     if( moLang.has() && !moLang.get().isEmpty() )
     {
-        lang::Locale aLocale;
-        sal_Int32 nSepPos = moLang.get().indexOf( sal_Unicode( '-' ), 0 );
-        if ( nSepPos >= 0 )
-        {
-            aLocale.Language = moLang.get().copy( 0, nSepPos );
-            aLocale.Country = moLang.get().copy( nSepPos + 1 );
-        }
-        else
-        {
-            aLocale.Language = moLang.get();
-        }
+        lang::Locale aLocale( LanguageTag( moLang.get()).getLocale());
         rPropMap[ PROP_CharLocale ] <<= aLocale;
         rPropMap[ PROP_CharLocaleAsian ] <<= aLocale;
         rPropMap[ PROP_CharLocaleComplex ] <<= aLocale;
