@@ -437,6 +437,10 @@ void XMLSettingsExportHelper::exportForbiddenCharacters(
 
     const sal_Int32 nCount = aLocales.getLength();
 
+    /* FIXME-BCP47: this stupid and counterpart in
+     * xmloff/source/core/DocumentSettingsContext.cxx
+     * XMLConfigItemMapIndexedContext::EndElement() */
+
     const OUString sLanguage  ( "Language" );
     const OUString sCountry   ( "Country" );
     const OUString sVariant   ( "Variant" );

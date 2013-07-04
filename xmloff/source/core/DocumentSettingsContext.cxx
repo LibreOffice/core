@@ -786,6 +786,11 @@ void XMLConfigItemMapIndexedContext::EndElement()
                 {
                     if ((xIndex->getByIndex( i ) >>= aProps) && (aProps.getLength() == XML_FORBIDDEN_CHARACTER_MAX ) )
                     {
+                        /* FIXME-BCP47: this stupid and counterpart in
+                         * xmloff/source/core/SettingsExportHelper.cxx
+                         * XMLSettingsExportHelper::exportForbiddenCharacters()
+                         * */
+
                         beans::PropertyValue *pForChar = aProps.getArray();
                         i18n::ForbiddenCharacters aForbid;
                         lang::Locale aLocale;
