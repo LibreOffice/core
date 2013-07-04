@@ -1,0 +1,16 @@
+fix overlapped memcpy in heapextract
+
+--- a/src/fingerprint.c 2013-07-04 22:53:25.674741538 +0200
++++ b/src/fingerprint.c	2013-07-04 22:54:09.009741166 +0200
+@@ -254,7 +254,10 @@
+     p = &(t->heap[0]);
+ 
+     memcpy(item, p, sizeof(entry_t));
+-    memcpy(&(t->heap[0]), &(t->heap[t->size - 1]), sizeof(entry_t));
++    if (t->size > 1)
++    {
++        memcpy(&(t->heap[0]), &(t->heap[t->size - 1]), sizeof(entry_t));
++    }
+ 
+     siftdown(t, t->size, 0);
+     t->size--;
