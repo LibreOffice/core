@@ -52,6 +52,9 @@ void SAL_CALL MovingAverageRegressionCurveCalculator::recalculateRegression(
 
     const size_t aSize = aValues.first.size();
 
+    aYList.clear();
+    aXList.clear();
+
     for( size_t i = mPeriod - 1; i < aSize; ++i )
     {
         double yAvg;
