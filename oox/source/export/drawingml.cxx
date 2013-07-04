@@ -771,17 +771,11 @@ void DrawingML::WriteRunProperties( Reference< XPropertySet > rRun, sal_Bool bIs
         }
 
     if( GETA( CharLocale ) ) {
-        com::sun::star::lang::Locale eLocale;
-        mAny >>= eLocale;
-
-        OUStringBuffer usLanguageBuffer = eLocale.Language;
-        if( !eLocale.Country.isEmpty() ) {
-            usLanguageBuffer.appendAscii( "-" );
-            usLanguageBuffer.append( eLocale.Country );
-        }
-
-        if( !usLanguageBuffer.isEmpty() )
-            usLanguage = usLanguageBuffer.makeStringAndClear();
+        com::sun::star::lang::Locale aLocale;
+        mAny >>= aLocale;
+        LanguageTag aLanguageTag( aLocale);
+        if (!aLanguageTag.isSystemLocale())
+            usLanguage = aLanguageTag.getBcp47();
     }
 
     mpFS->startElementNS( XML_a, XML_rPr,
