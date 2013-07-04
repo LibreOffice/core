@@ -148,4 +148,11 @@
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
+- (void) removeServerAtIndex:(NSUInteger)index
+{
+    [self.servers removeObjectAtIndex:index];
+    [[NSUserDefaults standardUserDefaults] setObject:[NSKeyedArchiver archivedDataWithRootObject:self.servers] forKey:ExistingServersKey];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
 @end

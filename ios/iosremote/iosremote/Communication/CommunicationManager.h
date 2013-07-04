@@ -57,6 +57,7 @@ enum ConnectionState : NSInteger {
 - (void) connectToServer:(Server*)server;
 - (void) addServersWithName:(NSString*)name
                   AtAddress:(NSString*)addr;
+- (void) removeServerAtIndex:(NSUInteger)index;
 
 @property ConnectionState state;
 @property (nonatomic, strong) id delegate;
