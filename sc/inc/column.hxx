@@ -505,6 +505,8 @@ public:
      */
     void SplitFormulaCellGroup( const sc::CellStoreType::position_type& aPos ) const;
 
+    void JoinFormulaCellAbove( const sc::CellStoreType::position_type& aPos ) const;
+
     /**
      * Regroup formula cells for the entire column.
      */

@@ -2127,13 +2127,29 @@ void ScColumn::MoveTo(SCROW nStartRow, SCROW nEndRow, ScColumn& rCol)
     sc::SingleColumnSpanSet::SpansType aRanges;
     aNonEmpties.getSpans(aRanges);
 
+    // Split the formula grouping at the top and bottom boundaries.
+    sc::CellStoreType::position_type aPos = maCells.position(nStartRow);
+    SplitFormulaCellGroup(aPos);
+    aPos = maCells.position(aPos.first, nEndRow+1);
+    SplitFormulaCellGroup(aPos);
+
+    // Do the same with the destination column.
+    aPos = rCol.maCells.position(nStartRow);
+    rCol.SplitFormulaCellGroup(aPos);
+    aPos = rCol.maCells.position(aPos.first, nEndRow+1);
+    rCol.SplitFormulaCellGroup(aPos);
+
     // Move the broadcasters to the destination column.
     maBroadcasters.transfer(nStartRow, nEndRow, rCol.maBroadcasters, nStartRow);
     maCells.transfer(nStartRow, nEndRow, rCol.maCells, nStartRow);
     maCellTextAttrs.transfer(nStartRow, nEndRow, rCol.maCellTextAttrs, nStartRow);
 
-    RegroupFormulaCells(nStartRow, nEndRow);
-    rCol.RegroupFormulaCells(nStartRow, nEndRow);
+    // Re-group transferred formula cells.
+    aPos = rCol.maCells.position(nStartRow);
+    rCol.JoinFormulaCellAbove(aPos);
+    aPos = rCol.maCells.position(aPos.first, nEndRow+1);
+    rCol.JoinFormulaCellAbove(aPos);
+
     CellStorageModified();
     rCol.CellStorageModified();
 
@@ -2267,31 +2283,47 @@ namespace {
 
 class UpdateTransHandler
 {
+    ScColumn& mrColumn;
+    sc::CellStoreType::iterator miPos;
     ScRange maSource;
     ScAddress maDest;
     ScDocument* mpUndoDoc;
 public:
-    UpdateTransHandler(const ScRange& rSource, const ScAddress& rDest, ScDocument* pUndoDoc) :
+    UpdateTransHandler(ScColumn& rColumn, const ScRange& rSource, const ScAddress& rDest, ScDocument* pUndoDoc) :
+        mrColumn(rColumn),
+        miPos(rColumn.GetCellStore().begin()),
         maSource(rSource), maDest(rDest), mpUndoDoc(pUndoDoc) {}
 
-    void operator() (size_t, ScFormulaCell* pCell)
+    void operator() (size_t nRow, ScFormulaCell* pCell)
     {
+        sc::CellStoreType::position_type aPos = mrColumn.GetCellStore().position(miPos, nRow);
+        miPos = aPos.first;
+        mrColumn.UnshareFormulaCell(aPos, *pCell);
         pCell->UpdateTranspose(maSource, maDest, mpUndoDoc);
+        mrColumn.JoinNewFormulaCell(aPos, *pCell);
     }
 };
 
 class UpdateGrowHandler
 {
+    ScColumn& mrColumn;
+    sc::CellStoreType::iterator miPos;
     ScRange maArea;
     SCCOL mnGrowX;
     SCROW mnGrowY;
 public:
-    UpdateGrowHandler(const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY) :
+    UpdateGrowHandler(ScColumn& rColumn, const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY) :
+        mrColumn(rColumn),
+        miPos(rColumn.GetCellStore().begin()),
         maArea(rArea), mnGrowX(nGrowX), mnGrowY(nGrowY) {}
 
-    void operator() (size_t, ScFormulaCell* pCell)
+    void operator() (size_t nRow, ScFormulaCell* pCell)
     {
+        sc::CellStoreType::position_type aPos = mrColumn.GetCellStore().position(miPos, nRow);
+        miPos = aPos.first;
+        mrColumn.UnshareFormulaCell(aPos, *pCell);
         pCell->UpdateGrow(maArea, mnGrowX, mnGrowY);
+        mrColumn.JoinNewFormulaCell(aPos, *pCell);
     }
 };
 
@@ -2647,14 +2679,22 @@ public:
 
 class CompileErrorCellsHandler
 {
+    ScColumn& mrColumn;
+    sc::CellStoreType::iterator miPos;
     sal_uInt16 mnErrCode;
     FormulaGrammar::Grammar meGram;
     bool mbCompiled;
 public:
-    CompileErrorCellsHandler(sal_uInt16 nErrCode, FormulaGrammar::Grammar eGram) :
-        mnErrCode(nErrCode), meGram(eGram), mbCompiled(false) {}
+    CompileErrorCellsHandler(ScColumn& rColumn, sal_uInt16 nErrCode, FormulaGrammar::Grammar eGram) :
+        mrColumn(rColumn),
+        miPos(mrColumn.GetCellStore().begin()),
+        mnErrCode(nErrCode),
+        meGram(eGram),
+        mbCompiled(false)
+    {
+    }
 
-    void operator() (size_t /*nRow*/, ScFormulaCell* pCell)
+    void operator() (size_t nRow, ScFormulaCell* pCell)
     {
         sal_uInt16 nCurError = pCell->GetRawError();
         if (!nCurError)
@@ -2665,10 +2705,14 @@ public:
             // Error code is specified, and it doesn't match. Skip it.
             return;
 
+        sc::CellStoreType::position_type aPos = mrColumn.GetCellStore().position(miPos, nRow);
+        miPos = aPos.first;
+        mrColumn.UnshareFormulaCell(aPos, *pCell);
         pCell->GetCode()->SetCodeError(0);
         OUStringBuffer aBuf;
         pCell->GetFormula(aBuf, meGram);
         pCell->Compile(aBuf.makeStringAndClear(), false, meGram);
+        mrColumn.JoinNewFormulaCell(aPos, *pCell);
 
         mbCompiled = true;
     }
@@ -2743,17 +2787,15 @@ public:
 void ScColumn::UpdateTranspose( const ScRange& rSource, const ScAddress& rDest,
                                     ScDocument* pUndoDoc )
 {
-    UpdateTransHandler aFunc(rSource, rDest, pUndoDoc);
+    UpdateTransHandler aFunc(*this, rSource, rDest, pUndoDoc);
     sc::ProcessFormula(maCells, aFunc);
-    RegroupFormulaCells();
 }
 
 
 void ScColumn::UpdateGrow( const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY )
 {
-    UpdateGrowHandler aFunc(rArea, nGrowX, nGrowY);
+    UpdateGrowHandler aFunc(*this, rArea, nGrowX, nGrowY);
     sc::ProcessFormula(maCells, aFunc);
-    RegroupFormulaCells();
 }
 
 
@@ -2773,10 +2815,7 @@ void ScColumn::UpdateInsertTabOnlyCells(SCTAB nInsPos, SCTAB nNewSheets)
     InsertTabUpdater aFunc(maCellTextAttrs, nTab, nInsPos, nNewSheets);
     sc::ProcessFormulaEditText(maCells, aFunc);
     if (aFunc.isModified())
-    {
-        RegroupFormulaCells();
         CellStorageModified();
-    }
 }
 
 void ScColumn::UpdateDeleteTab(SCTAB nDelPos, bool bIsMove, ScColumn* /*pRefUndo*/, SCTAB nSheets)
@@ -2919,12 +2958,8 @@ void ScColumn::CompileXML( ScProgress& rProgress )
 
 bool ScColumn::CompileErrorCells(sal_uInt16 nErrCode)
 {
-    CompileErrorCellsHandler aHdl(nErrCode, pDocument->GetGrammar());
+    CompileErrorCellsHandler aHdl(*this, nErrCode, pDocument->GetGrammar());
     sc::ProcessFormula(maCells, aHdl);
-    if (aHdl.isCompiled())
-        // TODO: Probably more efficient to do this individually rather than the whole column.
-        RegroupFormulaCells();
-
     return aHdl.isCompiled();
 }
 

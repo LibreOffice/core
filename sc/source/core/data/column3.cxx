@@ -326,11 +326,13 @@ sc::CellStoreType::iterator ScColumn::GetPositionToInsert( SCROW nRow )
 
 namespace {
 
-void joinFormulaCells(SCROW nRow, ScFormulaCell& rCell1, ScFormulaCell& rCell2)
+void joinFormulaCells(const sc::CellStoreType::position_type& rPos, ScFormulaCell& rCell1, ScFormulaCell& rCell2)
 {
     ScFormulaCell::CompareState eState = rCell1.CompareByTokenArray(rCell2);
     if (eState == ScFormulaCell::NotEqual)
         return;
+
+    SCROW nRow = rPos.first->position + rPos.second;
 
     // Formula tokens equal those of the previous formula cell.
     ScFormulaCellGroupRef xGroup1 = rCell1.GetCellGroup();
@@ -339,13 +341,23 @@ void joinFormulaCells(SCROW nRow, ScFormulaCell& rCell1, ScFormulaCell& rCell2)
     {
         if (xGroup2)
         {
-            // Both cell1 and cell2 are shared. Merge them together.
+            // Both cell 1 and cell 2 are shared. Merge them together.
+            if (xGroup1.get() == xGroup2.get())
+                // They belong to the same group.
+                return;
+
+            // Set the group object from cell 1 to all cells in group 2.
             xGroup1->mnLength += xGroup2->mnLength;
-            rCell2.SetCellGroup(xGroup1);
+            size_t nOffset = rPos.second + 1; // position of cell 2
+            for (size_t i = 0, n = xGroup2->mnLength; i < n; ++i)
+            {
+                ScFormulaCell& rCell = *sc::formula_block::at(*rPos.first->data, nOffset+i);
+                rCell.SetCellGroup(xGroup1);
+            }
         }
         else
         {
-            // cell1 is shared but cell2 is not.
+            // cell 1 is shared but cell 2 is not.
             rCell2.SetCellGroup(xGroup1);
             ++xGroup1->mnLength;
         }
@@ -354,7 +366,7 @@ void joinFormulaCells(SCROW nRow, ScFormulaCell& rCell1, ScFormulaCell& rCell2)
     {
         if (xGroup2)
         {
-            // cell1 is not shared, but cell2 is already shared.
+            // cell 1 is not shared, but cell 2 is already shared.
             rCell1.SetCellGroup(xGroup2);
             xGroup2->mnStart = nRow;
             ++xGroup2->mnLength;
@@ -378,20 +390,20 @@ void joinFormulaCells(SCROW nRow, ScFormulaCell& rCell1, ScFormulaCell& rCell2)
 void ScColumn::JoinNewFormulaCell(
     const sc::CellStoreType::position_type& aPos, ScFormulaCell& rCell ) const
 {
-    SCROW nRow = aPos.first->position + aPos.second;
-
     // Check the previous row position for possible grouping.
     if (aPos.first->type == sc::element_type_formula && aPos.second > 0)
     {
         ScFormulaCell& rPrev = *sc::formula_block::at(*aPos.first->data, aPos.second-1);
-        joinFormulaCells(nRow-1, rPrev, rCell);
+        sc::CellStoreType::position_type aPosPrev = aPos;
+        --aPosPrev.second;
+        joinFormulaCells(aPosPrev, rPrev, rCell);
     }
 
     // Check the next row position for possible grouping.
     if (aPos.first->type == sc::element_type_formula && aPos.second+1 < aPos.first->size)
     {
         ScFormulaCell& rNext = *sc::formula_block::at(*aPos.first->data, aPos.second+1);
-        joinFormulaCells(nRow, rCell, rNext);
+        joinFormulaCells(aPos, rCell, rNext);
     }
 }
 
@@ -575,6 +587,26 @@ void ScColumn::SplitFormulaCellGroup( const sc::CellStoreType::position_type& aP
     }
 }
 
+void ScColumn::JoinFormulaCellAbove( const sc::CellStoreType::position_type& aPos ) const
+{
+    if (aPos.first->type != sc::element_type_formula)
+        // This is not a formula cell.
+        return;
+
+    if (aPos.second == 0)
+        // This cell is already the top cell in a formula block; the previous
+        // cell is not a formula cell.
+        return;
+
+    SCROW nRow = aPos.first->position + aPos.second;
+
+    ScFormulaCell& rPrev = *sc::formula_block::at(*aPos.first->data, aPos.second-1);
+    ScFormulaCell& rCell = *sc::formula_block::at(*aPos.first->data, aPos.second);
+    sc::CellStoreType::position_type aPosPrev = aPos;
+    --aPosPrev.second;
+    joinFormulaCells(aPosPrev, rPrev, rCell);
+}
+
 sc::CellStoreType::iterator ScColumn::GetPositionToInsert( const sc::CellStoreType::iterator& it, SCROW nRow )
 {
     // See if we are overwriting an existing formula cell.
@@ -740,7 +772,7 @@ class EmptyCells
     sc::ColumnBlockPosition& mrPos;
     sc::CellStoreType::iterator miPos;
 
-    void splitFormulaGrouping(sc::CellStoreType& rCells, const sc::CellStoreType::position_type& rPos)
+    void splitFormulaGrouping(const sc::CellStoreType::position_type& rPos)
     {
         if (rPos.first->type == sc::element_type_formula)
         {
@@ -760,9 +792,9 @@ public:
         // First, split formula grouping at the top and bottom boundaries
         // before emptying the cells.
         sc::CellStoreType::position_type aPos = rCells.position(mrPos.miCellPos, rSpan.mnRow1);
-        splitFormulaGrouping(rCells, aPos);
+        splitFormulaGrouping(aPos);
         aPos = rCells.position(aPos.first, rSpan.mnRow2);
-        splitFormulaGrouping(rCells, aPos);
+        splitFormulaGrouping(aPos);
 
         mrPos.miCellPos = rCells.set_empty(mrPos.miCellPos, rSpan.mnRow1, rSpan.mnRow2);
         mrPos.miCellTextAttrPos = mrColumn.GetCellAttrStore().set_empty(mrPos.miCellTextAttrPos, rSpan.mnRow1, rSpan.mnRow2);
@@ -2880,15 +2912,19 @@ void ScColumn::RebuildFormulaGroups()
     if (!mbDirtyGroups)
         return;
 
-    // clear previous formula groups.
+    RegroupFormulaCells();
+    mbDirtyGroups = false;
+}
+
+void ScColumn::RegroupFormulaCells()
+{
+    // clear previous formula groups (if any)
     ScFormulaCellGroupRef xNone;
     CellGroupSetter aFunc(xNone);
     sc::ProcessFormula(maCells, aFunc);
 
     // re-build formula groups.
     std::for_each(maCells.begin(), maCells.end(), GroupFormulaCells());
-
-    mbDirtyGroups = false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
