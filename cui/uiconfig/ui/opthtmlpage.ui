@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <!-- interface-requires gtk+ 3.0 -->
+  <!-- interface-requires LibreOffice 1.0 -->
   <object class="GtkAdjustment" id="adjustsize1">
     <property name="lower">1</property>
     <property name="upper">50</property>
@@ -53,13 +54,13 @@
   <object class="GtkBox" id="OptHtmlPage">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="border_width">12</property>
+    <property name="border_width">6</property>
     <property name="spacing">12</property>
     <child>
       <object class="GtkBox" id="box1">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="border_width">6</property>
+        <property name="hexpand">True</property>
         <property name="orientation">vertical</property>
         <property name="spacing">12</property>
         <child>
@@ -90,6 +91,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="label" translatable="yes">Size _7</property>
+                        <property name="use_underline">True</property>
                         <property name="mnemonic_widget">size7</property>
                       </object>
                       <packing>
@@ -119,6 +121,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="label" translatable="yes">Size _6</property>
+                        <property name="use_underline">True</property>
                         <property name="mnemonic_widget">size6</property>
                       </object>
                       <packing>
@@ -148,6 +151,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="label" translatable="yes">Size _5</property>
+                        <property name="use_underline">True</property>
                         <property name="mnemonic_widget">size5</property>
                       </object>
                       <packing>
@@ -177,6 +181,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="label" translatable="yes">Size _4</property>
+                        <property name="use_underline">True</property>
                         <property name="mnemonic_widget">size4</property>
                       </object>
                       <packing>
@@ -206,6 +211,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="label" translatable="yes">Size _3</property>
+                        <property name="use_underline">True</property>
                         <property name="mnemonic_widget">size3</property>
                       </object>
                       <packing>
@@ -235,6 +241,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="label" translatable="yes">Size _2</property>
+                        <property name="use_underline">True</property>
                         <property name="mnemonic_widget">size2</property>
                       </object>
                       <packing>
@@ -264,6 +271,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="label" translatable="yes">Size _1</property>
+                        <property name="use_underline">True</property>
                         <property name="mnemonic_widget">size1</property>
                       </object>
                       <packing>
@@ -298,7 +306,7 @@
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes">Font sizes</property>
                 <attributes>
-                  <attribute name="weight" value="semibold"/>
+                  <attribute name="weight" value="bold"/>
                 </attributes>
               </object>
             </child>
@@ -310,12 +318,17 @@
           </packing>
         </child>
       </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+        <property name="position">0</property>
+      </packing>
     </child>
     <child>
       <object class="GtkBox" id="box2">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="border_width">12</property>
+        <property name="hexpand">True</property>
         <property name="orientation">vertical</property>
         <property name="spacing">12</property>
         <child>
@@ -323,7 +336,6 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="hexpand">True</property>
-            <property name="vexpand">True</property>
             <property name="label_xalign">0</property>
             <property name="shadow_type">none</property>
             <child>
@@ -361,60 +373,64 @@
                     <child>
                       <object class="GtkCheckButton" id="unknowntag">
                         <property name="label" translatable="yes">_Import unknown HTML tags as fields</property>
-                         <property name="visible">True</property>
-                         <property name="can_focus">True</property>
-                         <property name="receives_default">False</property>
-                         <property name="hexpand">True</property>
-                         <property name="use_underline">True</property>
-                         <property name="xalign">0</property>
-                         <property name="draw_indicator">True</property>
-                       </object>
-                       <packing>
-                         <property name="left_attach">0</property>
-                         <property name="top_attach">1</property>
-                         <property name="width">1</property>
-                         <property name="height">1</property>
-                       </packing>
-                     </child>
-                     <child>
-                       <object class="GtkCheckButton" id="numbersenglishus">
-                         <property name="label" translatable="yes">_Use 'English (USA)' locale for numbers</property>
-                         <property name="visible">True</property>
-                         <property name="can_focus">True</property>
-                         <property name="receives_default">False</property>
-                         <property name="hexpand">True</property>
-                         <property name="use_underline">True</property>
-                         <property name="xalign">0</property>
-                         <property name="draw_indicator">True</property>
-                       </object>
-                       <packing>
-                         <property name="left_attach">0</property>
-                         <property name="top_attach">0</property>
-                         <property name="width">1</property>
-                         <property name="height">1</property>
-                       </packing>
-                     </child>
-                   </object>
-                 </child>
-               </object>
-             </child>
-             <child type="label">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">False</property>
+                        <property name="hexpand">True</property>
+                        <property name="use_underline">True</property>
+                        <property name="xalign">0</property>
+                        <property name="draw_indicator">True</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">1</property>
+                        <property name="width">1</property>
+                        <property name="height">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkCheckButton" id="numbersenglishus">
+                        <property name="label" translatable="yes">_Use '%ENGLISHUSLOCALE' locale for numbers</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">False</property>
+                        <property name="hexpand">True</property>
+                        <property name="use_underline">True</property>
+                        <property name="xalign">0</property>
+                        <property name="draw_indicator">True</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">0</property>
+                        <property name="width">1</property>
+                        <property name="height">1</property>
+                      </packing>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child type="label">
               <object class="GtkLabel" id="label2">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes">Import</property>
                 <attributes>
-                  <attribute name="weight" value="semibold"/>
+                  <attribute name="weight" value="bold"/>
                 </attributes>
               </object>
             </child>
           </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">0</property>
+          </packing>
         </child>
         <child>
           <object class="GtkFrame" id="frame3">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="hexpand">True</property>
             <property name="vexpand">True</property>
             <property name="label_xalign">0</property>
             <property name="shadow_type">none</property>
@@ -422,7 +438,6 @@
               <object class="GtkAlignment" id="alignment3">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="hexpand">True</property>
                 <property name="vexpand">True</property>
                 <property name="top_padding">6</property>
                 <property name="left_padding">12</property>
@@ -430,7 +445,6 @@
                   <object class="GtkGrid" id="grid3">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="hexpand">True</property>
                     <property name="row_spacing">6</property>
                     <child>
                       <object class="GtkGrid" id="grid4">
@@ -444,7 +458,6 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="xalign">0</property>
-                            <property name="hexpand">True</property>
                             <property name="label" translatable="yes">Character _set:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">charset</property>
@@ -460,62 +473,6 @@
                           <object class="svxlo-SvxTextEncodingBox" id="charset">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="hexpand">True</property>
-                            <!--<property name="entry_text_column">0</property>
-                            <property name="id_column">1</property>
-                            <items>
-                              <item translatable="no">Arabic (DOS/OS2-864)</item>
-                              <item translatable="no">Arabic (ISO-8859-6)</item>
-                              <item translatable="no">Arabic (Windows-1256)</item>
-                              <item translatable="no">Baltic (ISO-8859-4)</item>
-                              <item translatable="no">Baltic (Windows-1257)</item>
-                              <item translatable="no">Chinese simplified (GB-2312)</item>
-                              <item translatable="no">Chinese simplified (GB-18030)</item>
-                              <item translatable="no">Chinese simplified (GBK/GB-2312-80)</item>
-                              <item translatable="no">Chinese simplified (ISO-2022/CN)</item>
-                              <item translatable="no">Chinese traditional (Big5)</item>
-                              <item translatable="no">Chinese traditional (BIG5-HKSCS)</item>
-                              <item translatable="no">Chinese traditional (GBT-12345)</item>
-                              <item translatable="no">Cyrillic (DOS/OS2-866/Russian)</item>
-                              <item translatable="no">Cyrillic (KOI8-R)</item>
-                              <item translatable="no">Cyrillic (PT154)</item>
-                              <item translatable="no">Cyrillic (KOI8-U)</item>
-                              <item translatable="no">Cyrillic (Windows-1251)</item>
-                              <item translatable="no">Eastern Europe (DOS/OS2-852)</item>
-                              <item translatable="no">Eartern Europe (ISO-8859-2)</item>
-                              <item translatable="no">Eartern Europe (ISO-8859-13)</item>
-                              <item translatable="no">Eartern Europe (Windows-1250/WinLatin 2)</item>
-                              <item translatable="no">Greek (ISO-8859-7)</item>
-                              <item translatable="no">Greek (Windows-1253)</item>
-                              <item translatable="no">Hebrew (DOS/OS2-862)</item>
-                              <item translatable="no">Hebrew (ISO-8859-8)</item>
-                              <item translatable="no">Greek (ISO-8859-7)</item>
-                              <item translatable="no">Japanese (EUC-JP)</item>
-                              <item translatable="no">Japanese (ISO-2022-JP)</item>
-                              <item translatable="no">Japanese (Shtif-JIS)</item>
-                              <item translatable="no">Korean (EUC-KR)</item>
-                              <item translatable="no">Korean (ICO-2022-KR)</item>
-                              <item translatable="no">Korean (Windows-Johab-1361)</item>
-                              <item translatable="no">Latin 3 (ISO-8859-3)</item>
-                              <item translatable="no">Thai (ISO-8859-11/TIS-620)</item>
-                              <item translatable="no">Thai (Windows-874)</item>
-                              <item translatable="no">Turkish (ISO-8859-9)</item>
-                              <item translatable="no">Turkish (Windows-1254)</item>
-                              <item translatable="no">Unicode (UTF-7)</item>
-                              <item translatable="no">Unicode (UTF-8)</item>
-                              <item translatable="no">Western Europe (Apple Macintosh)</item>
-                              <item translatable="no">Western Europe (ASCII/US)</item>
-                              <item translatable="no">Western Europe (DOS/OS2-437/US)</item>
-                              <item translatable="no">Western Europe (DOS/OS2-850/International)</item>
-                              <item translatable="no">Western Europe (DOS/OS2-860/Portuguese)</item>
-                              <item translatable="no">Western Europe (DOS/OS2-861/Icelandic)</item>
-                              <item translatable="no">Western Europe (DOS/OS2-863/French (Can.))</item>
-                              <item translatable="no">Western Europe (DOS/OS2-865/Nordic)</item>
-                              <item translatable="no">Western Europe (ISO-8859-1)</item>
-                              <item translatable="no">Western Europe (ISO-8859-14)</item>
-                              <item translatable="no">Western Europe (ISO-8859-15/EURO)</item>
-                              <item translatable="no">Western Europe (Windows-1252/WinLatin-1)</item>
-                            </items>-->
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -571,51 +528,51 @@
                     <child>
                       <object class="GtkCheckButton" id="starbasicwarning">
                         <property name="label" translatable="yes">Display _warning</property>
-                         <property name="visible">True</property>
-                         <property name="can_focus">True</property>
-                         <property name="receives_default">False</property>
-                         <property name="hexpand">True</property>
-                         <property name="margin_left">12</property>
-                         <property name="use_underline">True</property>
-                         <property name="xalign">0</property>
-                         <property name="draw_indicator">True</property>
-                       </object>
-                       <packing>
-                         <property name="left_attach">0</property>
-                         <property name="top_attach">2</property>
-                         <property name="width">1</property>
-                         <property name="height">1</property>
-                       </packing>
-                     </child>
-                     <child>
-                       <object class="GtkCheckButton" id="starbasic">
-                         <property name="label" translatable="yes">LibreOffice _Basic</property>
-                         <property name="visible">True</property>
-                         <property name="can_focus">True</property>
-                         <property name="receives_default">False</property>
-                         <property name="hexpand">True</property>
-                         <property name="use_underline">True</property>
-                         <property name="xalign">0</property>
-                         <property name="draw_indicator">True</property>
-                       </object>
-                       <packing>
-                         <property name="left_attach">0</property>
-                         <property name="top_attach">1</property>
-                         <property name="width">1</property>
-                         <property name="height">1</property>
-                       </packing>
-                     </child>
-                     <child>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">False</property>
+                        <property name="margin_left">12</property>
+                        <property name="hexpand">True</property>
+                        <property name="use_underline">True</property>
+                        <property name="xalign">0</property>
+                        <property name="draw_indicator">True</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">2</property>
+                        <property name="width">1</property>
+                        <property name="height">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkCheckButton" id="starbasic">
+                        <property name="label" translatable="yes">LibreOffice _Basic</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">False</property>
+                        <property name="hexpand">True</property>
+                        <property name="use_underline">True</property>
+                        <property name="xalign">0</property>
+                        <property name="draw_indicator">True</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">1</property>
+                        <property name="width">1</property>
+                        <property name="height">1</property>
+                      </packing>
+                    </child>
+                    <child>
                       <object class="GtkComboBoxText" id="export">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="halign">start</property>
                         <property name="entry_text_column">0</property>
                         <property name="id_column">1</property>
-                        <property name="hexpand">True</property>
                         <items>
-                          <item translatable="no">Microsoft Internet Explorer</item>
-                          <item translatable="no">Mozilla Firefox</item>
-                          <item translatable="no">LibreOffice Writer</item>
+                          <item>Microsoft Internet Explorer</item>
+                          <item>Mozilla Firefox</item>
+                          <item>%PRODUCTNAME Writer</item>
                         </items>
                       </object>
                       <packing>
@@ -625,23 +582,39 @@
                         <property name="height">1</property>
                       </packing>
                     </child>
-                   </object>
-                 </child>
-               </object>
-             </child>
-             <child type="label">
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child type="label">
               <object class="GtkLabel" id="label3">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes">Export</property>
                 <attributes>
-                  <attribute name="weight" value="semibold"/>
+                  <attribute name="weight" value="bold"/>
                 </attributes>
               </object>
             </child>
           </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">1</property>
+          </packing>
         </child>
       </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+        <property name="position">1</property>
+      </packing>
     </child>
+  </object>
+  <object class="GtkSizeGroup" id="sizegroup1">
+    <widgets>
+      <widget name="grid4"/>
+      <widget name="export"/>
+    </widgets>
   </object>
 </interface>

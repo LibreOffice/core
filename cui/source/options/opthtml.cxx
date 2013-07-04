@@ -61,9 +61,10 @@ SfxTabPage( pParent, "OptHtmlPage" , "cui/ui/opthtmlpage.ui", rSet )
     get(aPrintExtensionCB,"printextension");
     get(aSaveGrfLocalCB,"savegrflocal");
     get(aCharSetLB,"charset");
+    aCharSetLB->SetStyle(aCharSetLB->GetStyle() | WB_SORT);
 
     // replace placeholder with UI string from language list
-    /*String aText( aNumbersEnglishUSCB->GetText());
+    String aText( aNumbersEnglishUSCB->GetText());
     String aPlaceholder( RTL_CONSTASCII_USTRINGPARAM( "%ENGLISHUSLOCALE"));
     xub_StrLen nPos;
     if ((nPos = aText.Search( aPlaceholder)) != STRING_NOTFOUND)
@@ -75,7 +76,7 @@ SfxTabPage( pParent, "OptHtmlPage" , "cui/ui/opthtmlpage.ui", rSet )
             aText.Replace( nPos, aPlaceholder.Len(), rStr);
             aNumbersEnglishUSCB->SetText( aText);
         }
-    }*/
+    }
 
     aExportLB->SetSelectHdl(LINK(this, OfaHtmlTabPage, ExportHdl_Impl));
     aStarBasicCB->SetClickHdl(LINK(this, OfaHtmlTabPage, CheckBoxHdl_Impl));
