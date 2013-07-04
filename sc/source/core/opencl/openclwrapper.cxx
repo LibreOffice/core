@@ -441,16 +441,13 @@ int OpenclDevice::CompileKernelFile(GPUEnv *gpuInfo, const char *buildOption) {
             return 0;
         }
 
-        binary = (char*) malloc(length + 2);
+        binary = (char*) malloc(length);
         if (!binary) {
             return 0;
         }
 
-        memset(binary, 0, length + 2);
+        memset(binary, 0, length);
         b_error |= fread(binary, 1, length, fd) != length;
-        if (binary[length - 1] != '\n') {
-            binary[length++] = '\n';
-        }
 
         fclose(fd);
         fd = NULL;
