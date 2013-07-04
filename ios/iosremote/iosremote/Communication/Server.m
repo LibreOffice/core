@@ -7,12 +7,11 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 #import "Server.h"
+#import <arpa/inet.h>
 
 @interface Server()
 
 @end
-
-
 
 @implementation Server
 
@@ -51,6 +50,26 @@
 
 - (NSString *)description{
     return [NSString stringWithFormat:@"Server: Name:%@ Addr:%@", self.serverName, self.serverAddress];
+}
+
+@end
+
+
+@implementation NSString (IPValidation)
+
+- (BOOL)isValidIPAddress
+{
+    const char *utf8 = [self UTF8String];
+    int success;
+    
+    struct in_addr dst;
+    success = inet_pton(AF_INET, utf8, &dst);
+    if (success != 1) {
+        struct in6_addr dst6;
+        success = inet_pton(AF_INET6, utf8, &dst6);
+    }
+    
+    return success;
 }
 
 @end

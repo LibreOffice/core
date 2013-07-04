@@ -22,12 +22,20 @@
 - (IBAction)save:(id)sender {
     NSString *serverName = [self.nameCell.textField text];
     NSString *serverAddr = [self.addrCell.textField text];
-    if (!serverName) {
-        serverName = @"Computer";
+    if ([serverAddr isValidIPAddress]) {
+        if (!serverName)
+            serverName = @"Computer";
+        NSLog(@"New server name:%@ ip:%@", serverName, serverAddr);
+        [self.comManager addServersWithName:serverName AtAddress:serverAddr];
+        [self.navigationController popViewControllerAnimated:YES];
+    } else {
+        UIAlertView *message = [[UIAlertView alloc] initWithTitle:@"Invalid IP Address"
+                                                          message:@"A valid IP address should be like this: \"192.168.1.1\""
+                                                         delegate:nil
+                                                cancelButtonTitle:@"OK"
+                                                otherButtonTitles:nil];
+        [message show];
     }
-    NSLog(@"New server name:%@ ip:%@", serverName, serverAddr);
-    [self.comManager addServersWithName:serverName AtAddress:serverAddr];
-    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (BOOL)isModal

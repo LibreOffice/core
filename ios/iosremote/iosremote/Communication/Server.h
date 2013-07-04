@@ -21,3 +21,9 @@ typedef enum protocol {NETWORK} Protocol_t;
                 ofName:(NSString*) name;
 
 @end
+
+@interface NSString (IPValidation)
+
+- (BOOL)isValidIPAddress;
+
+@end
