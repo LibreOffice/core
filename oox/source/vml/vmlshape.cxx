@@ -25,6 +25,7 @@
 #include <com/sun/star/beans/PropertyValues.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/awt/XControlModel.hpp>
+#include <com/sun/star/awt/DeviceInfo.hpp>
 #include <com/sun/star/drawing/PointSequenceSequence.hpp>
 #include <com/sun/star/drawing/PolyPolygonBezierCoords.hpp>
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
@@ -186,9 +187,23 @@ awt::Rectangle ShapeType::getAbsRectangle() const
     if (nLeft == 0 && maTypeModel.maPosition == "absolute")
         nLeft = 1;
 
+    // Calculate "mso-top-percent"
+    // http://msdn.microsoft.com/en-us/library/ff532078%28v=office.12%29.aspx
+    // r. The standard places no restrictions on the relationship between the top, margin-top, mso-position-vertical, or mso-top-percent properties on the style attribute.
+    // Office ignores the top and margin-top properties when either the mso-position-vertical or mso-top-percent property on the style attribute is set, or when an anchor element is present.
+    // At this, check marginTop, marginTopPercent values.
+    OUString marginTop = maTypeModel.maMarginTop;
+    if ((marginTop.isEmpty() || marginTop.toInt32() == 0) && !maTypeModel.maMarginTopPercent.isEmpty())
+    {
+        awt::DeviceInfo devInfo = rGraphicHelper.getDeviceInfo();
+        sal_Int16 nHeight = devInfo.Height;
+        sal_Int16 nPercent = maTypeModel.maMarginTopPercent.toInt32() / 10;
+        marginTop = OUString::valueOf((sal_Int32)(nHeight*nPercent/100));
+    }
+
     return awt::Rectangle(
         nLeft,
-        ConversionHelper::decodeMeasureToHmm( rGraphicHelper, maTypeModel.maTop, 0, false, true ) + ConversionHelper::decodeMeasureToHmm( rGraphicHelper, maTypeModel.maMarginTop, 0, false, true ),
+        ConversionHelper::decodeMeasureToHmm( rGraphicHelper, maTypeModel.maTop, 0, false, true ) + ConversionHelper::decodeMeasureToHmm( rGraphicHelper, marginTop, 0, false, true ),
         nWidth, nHeight );
 }
 
@@ -587,6 +602,39 @@ Reference< XShape > SimpleShape::implConvertAndInsert( const Reference< XShapes 
         aPropertySet.setAnyProperty(PROP_HoriOrientPosition, makeAny( aShapeRect.X ) );
         aPropertySet.setAnyProperty(PROP_VertOrientPosition, makeAny( aShapeRect.Y ) );
     }
+
+    if ( !maTypeModel.maMarginLeft.isEmpty() )
+        PropertySet( xShape ).setAnyProperty(PROP_MarginLeft, makeAny( maTypeModel.maMarginLeft ) );
+    if ( !maTypeModel.maMarginTop.isEmpty() )
+        PropertySet( xShape ).setAnyProperty(PROP_MarginTop, makeAny( maTypeModel.maMarginTop ) );
+    if ( !maTypeModel.maMsoWidth.isEmpty() )
+        PropertySet( xShape ).setAnyProperty(PROP_MsoWidth, makeAny( maTypeModel.maMsoWidth ) );
+    if ( !maTypeModel.maMsoHeight.isEmpty() )
+        PropertySet( xShape ).setAnyProperty(PROP_MsoHeight, makeAny( maTypeModel.maMsoHeight ) );
+    if ( !maTypeModel.maZIndex.isEmpty() )
+        PropertySet( xShape ).setAnyProperty(PROP_ZIndex, makeAny( maTypeModel.maZIndex ) );
+    if ( !maTypeModel.maWrapStyle.isEmpty() )
+        PropertySet( xShape ).setAnyProperty(PROP_MsoWrapStyle, makeAny( maTypeModel.maWrapStyle ) );
+    if ( !maTypeModel.maMarginTopPercent.isEmpty() )
+        PropertySet( xShape ).setAnyProperty(PROP_MsoTopPercent, makeAny( maTypeModel.maMarginTopPercent ) );
+    if ( !maTypeModel.maWrapDistanceLeft.isEmpty() )
+        PropertySet( xShape ).setAnyProperty(PROP_MsoWrapDistanceLeft, makeAny( maTypeModel.maWrapDistanceLeft ) );
+    if ( !maTypeModel.maWrapDistanceTop.isEmpty() )
+        PropertySet( xShape ).setAnyProperty(PROP_MsoWrapDistanceTop, makeAny( maTypeModel.maWrapDistanceTop ) );
+    if ( !maTypeModel.maWrapDistanceRight.isEmpty() )
+        PropertySet( xShape ).setAnyProperty(PROP_MsoWrapDistanceRight, makeAny( maTypeModel.maWrapDistanceRight ) );
+    if ( !maTypeModel.maWrapDistanceBottom.isEmpty() )
+        PropertySet( xShape ).setAnyProperty(PROP_MsoWrapDistanceBottom, makeAny( maTypeModel.maWrapDistanceBottom ) );
+    if ( !maTypeModel.maPositionHorizontalRelative.isEmpty() )
+        PropertySet( xShape ).setAnyProperty(PROP_MsoPositionHorizontalRelative, makeAny( maTypeModel.maPositionHorizontalRelative ) );
+    if ( !maTypeModel.maPositionVerticalRelative.isEmpty() )
+        PropertySet( xShape ).setAnyProperty(PROP_MsoPositionVerticalRelative, makeAny( maTypeModel.maPositionVerticalRelative ) );
+    if ( !maTypeModel.maWidthRelative.isEmpty() )
+        PropertySet( xShape ).setAnyProperty(PROP_MsoWidthRelative, makeAny( maTypeModel.maWidthRelative ) );
+    if ( !maTypeModel.maHeightRelative.isEmpty() )
+        PropertySet( xShape ).setAnyProperty(PROP_MsoHeightRelative, makeAny( maTypeModel.maHeightRelative ) );
+    if ( !maTypeModel.maVTextAnchor.isEmpty() )
+        PropertySet( xShape ).setAnyProperty(PROP_VTextAnchor, makeAny( maTypeModel.maVTextAnchor ) );
 
     lcl_SetAnchorType(aPropertySet, maTypeModel);
 

@@ -9021,7 +9021,7 @@
             <ref name="BUILT_IN_ANY_TYPE"/>
           </element>
           <element name="o:lock">
-            <ref name="BUILT_IN_ANY_TYPE"/>
+            <ref name="CT_Lock"/>
           </element>
           <element name="o:clippath">
             <ref name="BUILT_IN_ANY_TYPE"/>
@@ -11408,6 +11408,12 @@
             <xs:documentation>AutoShape Type Lock</xs:documentation>
           </attribute>
         </optional>
+        <optional>
+          <attribute name="v:ext">
+            <text/>
+            <xs:documentation>AutoShape Type Lock</xs:documentation>
+          </attribute>
+        </optional>
       </define>
       <define name="CT_OLEObject">
         <group>
@@ -12158,6 +12164,21 @@
       <value name="gradientRadial" tokenid="ooxml:Value_office_ST_FillType_gradientRadial">gradientRadial</value>
       <value name="gradient" tokenid="ooxml:Value_office_ST_FillType_gradient">gradient</value>
       <value name="background" tokenid="ooxml:Value_office_ST_FillType_background">background</value>
+    </resource>
+    <resource name="CT_Lock" resource="Stream" tag="shape">
+      <attribute name="position" tokenid="ooxml:CT_Lock_position"/>
+      <attribute name="selection" tokenid="ooxml:CT_Lock_selection"/>
+      <attribute name="grouping" tokenid="ooxml:CT_Lock_grouping"/>
+      <attribute name="ungrouping" tokenid="ooxml:CT_Lock_ungrouping"/>
+      <attribute name="rotation" tokenid="ooxml:CT_Lock_rotation"/>
+      <attribute name="cropping" tokenid="ooxml:CT_Lock_cropping"/>
+      <attribute name="verticies" tokenid="ooxml:CT_Lock_verticies"/>
+      <attribute name="adjusthandles" tokenid="ooxml:CT_Lock_adjusthandles"/>
+      <attribute name="text" tokenid="ooxml:CT_Lock_text"/>
+      <attribute name="aspectratio" tokenid="ooxml:CT_Lock_aspectratio"/>
+      <attribute name="shapetype" tokenid="ooxml:CT_Lock_shapetype"/>
+      <attribute  xmlns:v="urn:schemas-microsoft-com:vml" name="v:ext" tokenid="ooxml:CT_Lock_ext"/>
+      <action name="end" action="oLock"/>
     </resource>
   </namespace>
   <namespace name="mce">

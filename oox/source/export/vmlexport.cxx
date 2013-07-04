@@ -312,6 +312,25 @@ inline sal_Int32 impl_GetPointComponent( const sal_uInt8* &pVal, sal_uInt16 nPoi
     return nRet;
 }
 
+void VMLExport::AddHeightPercent( double rPercent )
+{
+    sal_Int32 savePercent = rPercent * 1000;
+    m_pShapeStyle->append( ";mso-height-percent:" );
+    m_pShapeStyle->append( savePercent );
+}
+
+void VMLExport::AddWidthPercent( double rPercent )
+{
+    sal_Int32 savePercent = rPercent * 1000;
+    m_pShapeStyle->append( ";mso-width-percent:" );
+    m_pShapeStyle->append( savePercent );
+}
+
+void VMLExport::AddStyle( OUString strStyle )
+{
+    m_pShapeStyle->append( OUStringToOString(strStyle, RTL_TEXTENCODING_UTF8) );
+}
+
 void VMLExport::Commit( EscherPropertyContainer& rProps, const Rectangle& rRect )
 {
     if ( m_nShapeType == ESCHER_ShpInst_Nil )
@@ -529,7 +548,7 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const Rectangle& rRect 
                             case ESCHER_FillSolid:       pFillType = "solid"; break;
                             // TODO case ESCHER_FillPattern:     pFillType = ""; break;
                             case ESCHER_FillTexture:     pFillType = "tile"; break;
-                            // TODO case ESCHER_FillPicture:     pFillType = ""; break;
+                            case ESCHER_FillPicture:     pFillType = "frame"; break;
                             // TODO case ESCHER_FillShade:       pFillType = ""; break;
                             // TODO case ESCHER_FillShadeCenter: pFillType = ""; break;
                             // TODO case ESCHER_FillShadeShape:  pFillType = ""; break;
@@ -562,7 +581,23 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const Rectangle& rRect 
                         aStream.Write(aStruct.pBuf + nHeaderSize, aStruct.nPropSize - nHeaderSize);
                         aStream.Seek(0);
                         Graphic aGraphic;
-                        GraphicConverter::Import(aStream, aGraphic, CVT_PNG);
+
+                        // Check every picture type, get correct picture type.
+                        bool foundType = false;
+                        for(int nFormat = 1; nFormat <= 0x0B; nFormat++)    // CVT_BMP ~ CVT_SVG (salctype.hxx)
+                        {
+                            if(GraphicConverter::Import(aStream, aGraphic, nFormat) == ERRCODE_NONE)
+                            {
+                                foundType = true;
+                                break;
+                            }
+                        }
+
+                        if(foundType == false)
+                        {
+                            GraphicConverter::Import(aStream, aGraphic, CVT_PNG);
+                        }
+
                         OUString aImageId = m_pTextExport->GetDrawingML().WriteImage( aGraphic );
                         pAttrList->add(FSNS(XML_r, XML_id), OUStringToOString(aImageId, RTL_TEXTENCODING_UTF8));
                     }
@@ -765,6 +800,43 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const Rectangle& rRect 
                     // See DffPropertyReader::ApplyLineAttributes().
                     impl_AddBool( m_pShapeAttrList, XML_stroked, it->nPropValue & 8 );
                     bAlreadyWritten[ESCHER_Prop_fNoLineDrawDash] = true;
+                }
+                break;
+            case ESCHER_Prop_OLockAspectRatio:
+            case ESCHER_Prop_OLockVExt:
+                {
+                    bool bExistValue = false;
+                    EscherPropSortStruct aStr;
+                    OUString strExt;
+                    sal_uInt32 nAspectRatio;
+                    sal_uInt32 i;
+                    sax_fastparser::FastAttributeList *pAttrList = m_pSerializer->createAttrList();
+                    if ( rProps.GetOpt( ESCHER_Prop_OLockAspectRatio, nAspectRatio ) )
+                    {
+                        if (nAspectRatio > 0)
+                        {
+                            bExistValue = true;
+                            // http://msdn.microsoft.com/en-us/library/documentformat.openxml.vml.office.lock.aspx
+                            pAttrList->add( XML_aspectratio, "t" ); // "t" = "true"
+                        }
+                    }
+                    if ( rProps.GetOpt( ESCHER_Prop_OLockVExt, aStr ) )
+                    {
+                        for (i = 0; i < aStr.nPropSize; i += 2)
+                        {
+                            strExt += OUString::createFromAscii((sal_Char*)&(aStr.pBuf[i]));
+                        }
+                        if (!strExt.isEmpty())
+                        {
+                            bExistValue = true;
+                            pAttrList->add(FSNS(XML_v, XML_ext), OUStringToOString(strExt, RTL_TEXTENCODING_UTF8));
+                        }
+                    }
+
+                    if (bExistValue)
+                        m_pSerializer->singleElementNS( XML_o, XML_lock, XFastAttributeListRef( pAttrList ) );
+                    bAlreadyWritten[ESCHER_Prop_OLockAspectRatio] = true;
+                    bAlreadyWritten[ESCHER_Prop_OLockVExt] = true;
                 }
                 break;
             default:

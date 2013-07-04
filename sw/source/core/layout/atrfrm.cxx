@@ -177,6 +177,24 @@ SwFmtFrmSize::SwFmtFrmSize( SwFrmSize eSize, SwTwips nWidth, SwTwips nHeight )
     eFrmWidthType( ATT_FIX_SIZE )
 {
     nWidthPercent = nHeightPercent = 0;
+    strMarginLeft = OUString();
+    strMarginTop = OUString();
+    strMsoWidth = OUString();
+    strMsoHeight = OUString();
+    strZIndex = OUString();
+    strMsoWrapStyle = OUString();
+    strMsoTopPercent = OUString();
+    strMsoWrapDistanceLeft = OUString();
+    strMsoWrapDistanceTop = OUString();
+    strMsoWrapDistanceRight = OUString();
+    strMsoWrapDistanceBottom = OUString();
+    strMsoPositionHorizontalRelative = OUString();
+    strMsoPositionVerticalRelative = OUString();
+    strMsoWidthRelative = OUString();
+    strMsoHeightRelative = OUString();
+    strVTextAnchor = OUString();
+    bOLockAspectRatio = sal_False;
+    strOLockVExt = OUString();
 }
 
 SwFmtFrmSize& SwFmtFrmSize::operator=( const SwFmtFrmSize& rCpy )
@@ -186,6 +204,24 @@ SwFmtFrmSize& SwFmtFrmSize::operator=( const SwFmtFrmSize& rCpy )
     eFrmWidthType = rCpy.GetWidthSizeType();
     nHeightPercent = rCpy.GetHeightPercent();
     nWidthPercent  = rCpy.GetWidthPercent();
+    strMarginLeft = rCpy.GetStrMarginLeft();
+    strMarginTop = rCpy.GetStrMarginTop();
+    strMsoWidth = rCpy.GetStrMsoWidth();
+    strMsoHeight = rCpy.GetStrMsoHeight();
+    strZIndex = rCpy.GetStrZIndex();
+    strMsoWrapStyle = rCpy.GetStrMsoWrapStyle();
+    strMsoTopPercent = rCpy.GetStrMsoTopPercent();
+    strMsoWrapDistanceLeft = rCpy.GetStrMsoWrapDistanceLeft();
+    strMsoWrapDistanceTop = rCpy.GetStrMsoWrapDistanceTop();
+    strMsoWrapDistanceRight = rCpy.GetStrMsoWrapDistanceRight();
+    strMsoWrapDistanceBottom = rCpy.GetStrMsoWrapDistanceBottom();
+    strMsoPositionHorizontalRelative = rCpy.GetStrMsoPositionHorizontalRelative();
+    strMsoPositionVerticalRelative = rCpy.GetStrMsoPositionVerticalRelative();
+    strMsoWidthRelative = rCpy.GetStrMsoWidthRelative();
+    strMsoHeightRelative = rCpy.GetStrMsoHeightRelative();
+    strVTextAnchor = rCpy.GetStrVTextAnchor();
+    bOLockAspectRatio = rCpy.GetOLockAspectRatio();
+    strOLockVExt = rCpy.GetStrOLockVExt();
     return *this;
 }
 
@@ -196,7 +232,26 @@ int  SwFmtFrmSize::operator==( const SfxPoolItem& rAttr ) const
             eFrmWidthType  == ((SwFmtFrmSize&)rAttr).eFrmWidthType &&
             aSize           == ((SwFmtFrmSize&)rAttr).GetSize()&&
             nWidthPercent   == ((SwFmtFrmSize&)rAttr).GetWidthPercent() &&
-            nHeightPercent  == ((SwFmtFrmSize&)rAttr).GetHeightPercent() );
+            nHeightPercent  == ((SwFmtFrmSize&)rAttr).GetHeightPercent() &&
+            strMarginLeft  == ((SwFmtFrmSize&)rAttr).GetStrMarginLeft() &&
+            strMarginTop  == ((SwFmtFrmSize&)rAttr).GetStrMarginTop() &&
+            strMsoWidth  == ((SwFmtFrmSize&)rAttr).GetStrMsoWidth() &&
+            strMsoHeight  == ((SwFmtFrmSize&)rAttr).GetStrMsoHeight() &&
+            strZIndex  == ((SwFmtFrmSize&)rAttr).GetStrZIndex() &&
+            strMsoWrapStyle  == ((SwFmtFrmSize&)rAttr).GetStrMsoWrapStyle() &&
+            strMsoTopPercent  == ((SwFmtFrmSize&)rAttr).GetStrMsoTopPercent() &&
+            strMsoWrapDistanceLeft  == ((SwFmtFrmSize&)rAttr).GetStrMsoWrapDistanceLeft() &&
+            strMsoWrapDistanceTop  == ((SwFmtFrmSize&)rAttr).GetStrMsoWrapDistanceTop() &&
+            strMsoWrapDistanceRight  == ((SwFmtFrmSize&)rAttr).GetStrMsoWrapDistanceRight() &&
+            strMsoWrapDistanceBottom  == ((SwFmtFrmSize&)rAttr).GetStrMsoWrapDistanceBottom() &&
+            strMsoPositionHorizontalRelative  == ((SwFmtFrmSize&)rAttr).GetStrMsoPositionHorizontalRelative() &&
+            strMsoPositionVerticalRelative  == ((SwFmtFrmSize&)rAttr).GetStrMsoPositionVerticalRelative() &&
+            strMsoWidthRelative  == ((SwFmtFrmSize&)rAttr).GetStrMsoWidthRelative() &&
+            strMsoHeightRelative  == ((SwFmtFrmSize&)rAttr).GetStrMsoHeightRelative() &&
+            strVTextAnchor  == ((SwFmtFrmSize&)rAttr).GetStrVTextAnchor() &&
+            bOLockAspectRatio  == ((SwFmtFrmSize&)rAttr).GetOLockAspectRatio() &&
+            strOLockVExt  == ((SwFmtFrmSize&)rAttr).GetStrOLockVExt()
+        );
 }
 
 SfxPoolItem*  SwFmtFrmSize::Clone( SfxItemPool* ) const
@@ -257,6 +312,60 @@ bool SwFmtFrmSize::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         break;
         case MID_FRMSIZE_WIDTH_TYPE:
             rVal <<= (sal_Int16)GetWidthSizeType();
+        break;
+        case MID_FRMSIZE_MARGIN_LEFT:
+            rVal <<= strMarginLeft;
+        break;
+        case MID_FRMSIZE_MARGIN_TOP:
+            rVal <<= strMarginTop;
+        break;
+        case MID_FRMSIZE_MSO_WIDTH:
+            rVal <<= strMsoWidth;
+        break;
+        case MID_FRMSIZE_MSO_HEIGHT:
+            rVal <<= strMsoHeight;
+        break;
+        case MID_FRMSIZE_Z_INDEX:
+            rVal <<= strZIndex;
+        break;
+        case MID_FRMSIZE_MSO_WRAP_STYLE:
+            rVal <<= strMsoWrapStyle;
+        break;
+        case MID_FRMSIZE_MSO_TOP_PERCENT:
+            rVal <<= strMsoTopPercent;
+        break;
+        case MID_FRMSIZE_MSO_WRAP_DISTANCE_LEFT:
+            rVal <<= strMsoWrapDistanceLeft;
+        break;
+        case MID_FRMSIZE_MSO_WRAP_DISTANCE_TOP:
+            rVal <<= strMsoWrapDistanceTop;
+        break;
+        case MID_FRMSIZE_MSO_WRAP_DISTANCE_RIGHT:
+            rVal <<= strMsoWrapDistanceRight;
+        break;
+        case MID_FRMSIZE_MSO_WRAP_DISTANCE_BOTTOM:
+            rVal <<= strMsoWrapDistanceBottom;
+        break;
+        case MID_FRMSIZE_MSO_POSITION_HORIZONTAL_RELATIVE:
+            rVal <<= strMsoPositionHorizontalRelative;
+        break;
+        case MID_FRMSIZE_MSO_POSITION_VERTICAL_RELATIVE:
+            rVal <<= strMsoPositionVerticalRelative;
+        break;
+        case MID_FRMSIZE_MSO_WIDTH_RELATIVE:
+            rVal <<= strMsoWidthRelative;
+        break;
+        case MID_FRMSIZE_MSO_HEIGHT_RELATIVE:
+            rVal <<= strMsoHeightRelative;
+        break;
+        case MID_FRMSIZE_V_TEXT_ANCHOR:
+            rVal <<= strVTextAnchor;
+        break;
+        case MID_FRMSIZE_OLOCK_ASPECTRATIO:
+            rVal <<= bOLockAspectRatio;
+        break;
+        case MID_FRMSIZE_OLOCK_V_EXT:
+            rVal <<= strOLockVExt;
         break;
     }
     return true;
@@ -384,6 +493,60 @@ bool SwFmtFrmSize::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             else
                 bRet = false;
         }
+        break;
+        case MID_FRMSIZE_MARGIN_LEFT:
+        rVal >>= strMarginLeft;
+        break;
+        case MID_FRMSIZE_MARGIN_TOP:
+        rVal >>= strMarginTop;
+        break;
+        case MID_FRMSIZE_MSO_WIDTH:
+        rVal >>= strMsoWidth;
+        break;
+        case MID_FRMSIZE_MSO_HEIGHT:
+        rVal >>= strMsoHeight;
+        break;
+        case MID_FRMSIZE_Z_INDEX:
+        rVal >>= strZIndex;
+        break;
+        case MID_FRMSIZE_MSO_WRAP_STYLE:
+        rVal >>= strMsoWrapStyle;
+        break;
+        case MID_FRMSIZE_MSO_TOP_PERCENT:
+        rVal >>= strMsoTopPercent;
+        break;
+        case MID_FRMSIZE_MSO_WRAP_DISTANCE_LEFT:
+        rVal >>= strMsoWrapDistanceLeft;
+        break;
+        case MID_FRMSIZE_MSO_WRAP_DISTANCE_TOP:
+        rVal >>= strMsoWrapDistanceTop;
+        break;
+        case MID_FRMSIZE_MSO_WRAP_DISTANCE_RIGHT:
+        rVal >>= strMsoWrapDistanceRight;
+        break;
+        case MID_FRMSIZE_MSO_WRAP_DISTANCE_BOTTOM:
+        rVal >>= strMsoWrapDistanceBottom;
+        break;
+        case MID_FRMSIZE_MSO_POSITION_HORIZONTAL_RELATIVE:
+        rVal >>= strMsoPositionHorizontalRelative;
+        break;
+        case MID_FRMSIZE_MSO_POSITION_VERTICAL_RELATIVE:
+        rVal >>= strMsoPositionVerticalRelative;
+        break;
+        case MID_FRMSIZE_MSO_WIDTH_RELATIVE:
+        rVal >>= strMsoWidthRelative;
+        break;
+        case MID_FRMSIZE_MSO_HEIGHT_RELATIVE:
+        rVal >>= strMsoHeightRelative;
+        break;
+        case MID_FRMSIZE_V_TEXT_ANCHOR:
+        rVal >>= strVTextAnchor;
+        break;
+        case MID_FRMSIZE_OLOCK_ASPECTRATIO:
+        rVal >>= bOLockAspectRatio;
+        break;
+        case MID_FRMSIZE_OLOCK_V_EXT:
+        rVal >>= strOLockVExt;
         break;
         default:
             bRet = false;

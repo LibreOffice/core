@@ -206,6 +206,7 @@ public:
     void alignV(const OUString & sText);
     void startTxbxContent();
     void endTxbxContent();
+    void oLock();
     virtual void propagateCharacterProperties();
     virtual void propagateCharacterPropertiesAsSet(const Id & rId);
     virtual void propagateTableProperties();

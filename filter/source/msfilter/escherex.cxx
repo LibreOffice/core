@@ -651,6 +651,27 @@ void EscherPropertyContainer::CreateFillProperties(
     CreateLineProperties( rXPropSet, bEdge );
 }
 
+void EscherPropertyContainer::CreateOLockProperties(
+    const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSet)
+{
+    ::com::sun::star::uno::Any aAny;
+    OUString sVal;
+    sal_uInt32 nVal = 0;
+
+    if ( EscherPropertyValueHelper::GetPropertyValue(
+            aAny, rXPropSet, "AspectRatio", sal_False ) )
+    {
+        if ( aAny >>= nVal )
+            AddOpt( ESCHER_Prop_OLockAspectRatio, nVal );
+    }
+    if ( EscherPropertyValueHelper::GetPropertyValue(
+            aAny, rXPropSet, "oLockVExt", sal_False ) )
+    {
+        if ( aAny >>= sVal )
+            AddOpt( ESCHER_Prop_OLockVExt, sVal );
+    }
+}
+
 void EscherPropertyContainer::CreateTextProperties(
     const uno::Reference< beans::XPropertySet > & rXPropSet, sal_uInt32 nTextId,
         const sal_Bool bIsCustomShape, const sal_Bool bIsTextFrame )
@@ -5213,6 +5234,12 @@ void EscherEx::AddAtom( sal_uInt32 nAtomSize, sal_uInt16 nRecType, int nRecVersi
 {
     *mpOutStrm << (sal_uInt16)( ( nRecInstance << 4 ) | ( nRecVersion & 0xf ) ) << nRecType << nAtomSize;
 }
+
+void EscherEx::AddHeightPercent( double /*rPercent*/ )  {  }    // Virtual function
+
+void EscherEx::AddWidthPercent( double /*rPercent*/ )   {  }    // Virtual function
+
+void EscherEx::AddStyle( OUString /*strStyle*/ )        {  }    // Virtual function
 
 void EscherEx::AddChildAnchor( const Rectangle& rRect )
 {

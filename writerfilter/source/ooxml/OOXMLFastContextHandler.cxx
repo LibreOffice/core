@@ -797,6 +797,17 @@ void OOXMLFastContextHandler::tab()
         mpStream->utext((const sal_uInt8*)&uTab, 1);
 }
 
+void OOXMLFastContextHandler::oLock()
+{
+#ifdef DEBUG_CONTEXT_HANDLER
+    debug_logger->element("contexthandler.oLock");
+#endif
+    if (isForwardEvents())
+    {
+        mpStream->props(getPropertySet());
+    }
+}
+
 void OOXMLFastContextHandler::cr()
 {
 #ifdef DEBUG_CONTEXT_HANDLER

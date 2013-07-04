@@ -84,6 +84,15 @@ struct OOX_DLLPUBLIC ShapeTypeModel
     sal_Bool            mbVisible;              ///< Visible or Hidden
     OUString     maWrapStyle;            ///< Wrapping mode for text.
     OUString     maArcsize;              ///< round rectangles arc size
+    OUString     maMarginTopPercent;     ///< Margin top percent value.
+    OUString     maMsoWidth;             ///< Width of the shape bounding box (number with unit).
+    OUString     maMsoHeight;            ///< Height of the shape bounding box (number with unit).
+    OUString     maWrapDistanceLeft;     ///< Wrap Distance Left.
+    OUString     maWrapDistanceTop;      ///< Wrap Distance Top.
+    OUString     maWrapDistanceRight;    ///< Wrap Distance Right.
+    OUString     maWrapDistanceBottom;   ///< Wrap Distance Bottom.
+    OUString     maZIndex;               ///< Z-Index value
+    OUString     maVTextAnchor;          ///< v-text-anchor value
 
     StrokeModel         maStrokeModel;          ///< Border line formatting.
     FillModel           maFillModel;            ///< Shape fill formatting.
