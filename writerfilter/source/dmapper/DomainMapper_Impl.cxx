@@ -3159,16 +3159,29 @@ void DomainMapper_Impl::CloseFieldCommand()
                                     xFieldInterface, uno::UNO_QUERY_THROW );
                             xDependentField->attachTextFieldMaster( xMaster );
 
-                            // TODO This formula may change with the flags of the SEQ field
                             rtl::OUString sFormula = sIdentifier + "+1";
+                            rtl::OUString sValue;
+                            if( lcl_FindInCommand( pContext->GetCommand(), 'c', sValue ))
+                            {
+                                sFormula = sIdentifier;
+                            }
+                            else if( lcl_FindInCommand( pContext->GetCommand(), 'r', sValue ))
+                            {
+                                sFormula = sValue;
+                            }
+                            // TODO \s isn't handled, but the spec isn't easy to understand without
+                            // an example for this one.
                             xFieldProperties->setPropertyValue(
                                     rPropNameSupplier.GetName(PROP_CONTENT),
                                     uno::makeAny(sFormula));
 
-                            // TODO Take care of the numeric formatting definition, default is Arabic
+                            // Take care of the numeric formatting definition, default is Arabic
+                            sal_Int16 nNumberingType = lcl_ParseNumberingType(pContext->GetCommand());
+                            if (nNumberingType == style::NumberingType::PAGE_DESCRIPTOR)
+                                nNumberingType == style::NumberingType::ARABIC;
                             xFieldProperties->setPropertyValue(
                                     rPropNameSupplier.GetName(PROP_NUMBERING_TYPE),
-                                    uno::makeAny(style::NumberingType::ARABIC));
+                                    uno::makeAny(nNumberingType));
                         }
 
                     }
