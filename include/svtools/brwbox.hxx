@@ -262,7 +262,7 @@ private:
     sal_uInt16          nResizeCol;     // resize this column in MouseMove
     sal_Bool            bResizing;      // mouse captured for column resizing
 
-    sal_Bool            bSelect;        // select or deselect
+    bool                bSelect;        /// select or deselect
     sal_Bool            bSelectionIsVisible; // depending on focus
     sal_Bool            bScrolling;     // hidden cursor while scrolling
     sal_Bool            bNotToggleSel;  // set while in ToggleSelection() etc.
