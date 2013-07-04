@@ -1915,7 +1915,7 @@ void Menu::SetItemImageAngle( sal_uInt16 nItemId, long nAngle10 )
             nDeltaAngle += 3600;
 
         pData->nItemImageAngle = nAngle10;
-        if( nDeltaAngle && !!pData->aImage )
+        if( nDeltaAngle && pData->aImage )
             pData->aImage = ImplRotImage( pData->aImage, nDeltaAngle );
     }
 }
@@ -1942,7 +1942,7 @@ void Menu::SetItemImageMirrorMode( sal_uInt16 nItemId, sal_Bool bMirror )
             )
         {
             pData->bMirrorMode = bMirror ? true : false;
-            if( !!pData->aImage )
+            if( pData->aImage )
                 pData->aImage = ImplMirrorImage( pData->aImage );
         }
     }
