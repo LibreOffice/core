@@ -493,7 +493,7 @@
       </node>
       <node oor:name=".uno:ToggleGridHorizontal" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Horizontal Grid On/Off</value>
+          <value xml:lang="en-US">Horizontal Grid Major/Major&amp;Minor/Off</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -547,7 +547,7 @@
       </node>
       <node oor:name=".uno:ToggleGridVertical" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Vertical Grid On/Off</value>
+          <value xml:lang="en-US">Vertical Grid Major/Major&amp;Minor/Off</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>

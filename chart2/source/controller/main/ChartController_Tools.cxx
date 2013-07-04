@@ -887,16 +887,63 @@ void ChartController::executeDispatch_ToggleGridHorizontal()
         sal_Int32 nCooSysIndex = 0;
         bool bIsMainGrid = true;
 
-        bool bHasMainYGrid = AxisHelper::isGridShown( nDimensionIndex, nCooSysIndex, bIsMainGrid, xDiagram );
+        bool bHasMajorYGrid = AxisHelper::isGridShown( nDimensionIndex, nCooSysIndex, true,  xDiagram );
+        bool bHasMinorYGrid = AxisHelper::isGridShown( nDimensionIndex, nCooSysIndex, false, xDiagram );
 
-        if( bHasMainYGrid )
-            AxisHelper::hideGrid( nDimensionIndex, nCooSysIndex, bIsMainGrid, xDiagram );
+        if( bHasMajorYGrid )
+        {
+            if ( bHasMinorYGrid )
+            {
+                AxisHelper::hideGrid( nDimensionIndex, nCooSysIndex, true,  xDiagram );
+                AxisHelper::hideGrid( nDimensionIndex, nCooSysIndex, false, xDiagram );
+            }
+            else
+            {
+                AxisHelper::showGrid( nDimensionIndex, nCooSysIndex, false, xDiagram, m_xCC );
+            }
+        }
         else
-            AxisHelper::showGrid( nDimensionIndex, nCooSysIndex, bIsMainGrid, xDiagram, m_xCC );
+        {
+            AxisHelper::showGrid( nDimensionIndex, nCooSysIndex, true, xDiagram, m_xCC );
+        }
+        aUndoGuard.commit();
+    }
+}
+
+void ChartController::executeDispatch_ToggleGridVertical()
+{
+    Reference< frame::XModel > xModel( getModel() );
+    UndoGuard aUndoGuard = UndoGuard(
+        String( SchResId( STR_ACTION_TOGGLE_GRID_VERTICAL )), m_xUndoManager );
+    Reference< chart2::XDiagram > xDiagram( ChartModelHelper::findDiagram( getModel() ));
+    if( xDiagram.is())
+    {
+        sal_Int32 nDimensionIndex = 0;
+        sal_Int32 nCooSysIndex = 0;
+
+        bool bHasMajorXGrid = AxisHelper::isGridShown( nDimensionIndex, nCooSysIndex, true,  xDiagram );
+        bool bHasMinorXGrid = AxisHelper::isGridShown( nDimensionIndex, nCooSysIndex, false, xDiagram );
+        if( bHasMajorXGrid )
+        {
+            if (bHasMinorXGrid)
+            {
+                AxisHelper::hideGrid( nDimensionIndex, nCooSysIndex, true,  xDiagram );
+                AxisHelper::hideGrid( nDimensionIndex, nCooSysIndex, false, xDiagram );
+            }
+            else
+            {
+                AxisHelper::showGrid( nDimensionIndex, nCooSysIndex, false, xDiagram, m_xCC );
+            }
+        }
+        else
+        {
+            AxisHelper::showGrid( nDimensionIndex, nCooSysIndex, true, xDiagram, m_xCC );
+        }
 
         aUndoGuard.commit();
     }
 }
+
 
 void ChartController::impl_ShapeControllerDispatch( const util::URL& rURL, const Sequence< beans::PropertyValue >& rArgs )
 {

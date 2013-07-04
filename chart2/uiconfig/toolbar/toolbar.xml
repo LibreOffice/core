@@ -25,6 +25,7 @@
  <toolbar:toolbaritem xlink:href=".uno:DiagramData" toolbar:text=""/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:ToggleGridHorizontal" toolbar:text=""/>
+ <toolbar:toolbaritem xlink:href=".uno:ToggleGridVertical" toolbar:text=""/>
  <toolbar:toolbaritem xlink:href=".uno:ToggleLegend" toolbar:text=""/>
  <toolbar:toolbaritem xlink:href=".uno:ScaleText" toolbar:text=""/>
  <toolbar:toolbarseparator/>

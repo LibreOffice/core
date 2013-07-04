@@ -1214,6 +1214,8 @@ void SAL_CALL ChartController::dispatch(
         this->executeDispatch_ToggleLegend();
     else if( aCommand == "ToggleGridHorizontal" )
         this->executeDispatch_ToggleGridHorizontal();
+    else if( aCommand == "ToggleGridVertical" )
+        this->executeDispatch_ToggleGridVertical();
     else if( aCommand == "ScaleText" )
         this->executeDispatch_ScaleText();
     else if( aCommand == "StatusBarVisible" )
@@ -1546,7 +1548,7 @@ void ChartController::impl_initializeAccessible( const uno::Reference< lang::XIn
         ( "InsertAxis" )           ( "DeleteAxis" )           ( "InsertAxisTitle" )
 
         // toolbar commands
-        ( "ToggleGridHorizontal" )( "ToggleLegend" )         ( "ScaleText" )
+        ( "ToggleGridHorizontal" ) ( "ToggleGridVertical" ) ( "ToggleLegend" )         ( "ScaleText" )
         ( "NewArrangement" )     ( "Update" )
         ( "DefaultColors" )      ( "BarWidth" )             ( "NumberOfLines" )
         ( "ArrangeRow" )

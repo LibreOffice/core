@@ -561,6 +561,8 @@ void ControllerCommandDispatch::updateCommandAvailability()
     // toolbar commands
     m_aCommandAvailability[ ".uno:ToggleGridHorizontal" ] = bIsWritable;
     m_aCommandArguments[ ".uno:ToggleGridHorizontal" ] = uno::makeAny( m_apModelState->bHasMainYGrid );
+    m_aCommandAvailability[ ".uno:ToggleGridVertical" ] = bIsWritable;
+    m_aCommandArguments[ ".uno:ToggleGridVertical" ] = uno::makeAny( m_apModelState->bHasMainXGrid );
 
     m_aCommandAvailability[ ".uno:ToggleLegend" ] = bIsWritable;
     m_aCommandArguments[ ".uno:ToggleLegend" ] = uno::makeAny( m_apModelState->bHasLegend );

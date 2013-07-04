@@ -23,7 +23,6 @@
 #include <svl/solar.hrc>
 
 //next free is 297
-//single free: 139
 
 //-----------------------------------------------------------------------------
 //chart types
@@ -256,6 +255,7 @@
 #define STR_ACTION_EDIT_3D_VIEW             (RID_APP_START + 80)
 #define STR_ACTION_TOGGLE_LEGEND            (RID_APP_START + 83)
 #define STR_ACTION_TOGGLE_GRID_HORZ         (RID_APP_START + 86)
+#define STR_ACTION_TOGGLE_GRID_VERTICAL     (RID_APP_START + 139)
 #define STR_ACTION_SCALE_TEXT               (RID_APP_START + 93)
 #define STR_ACTION_REARRANGE_CHART          (RID_APP_START + 94)
 #define STR_ACTION_EDIT_TEXT                (RID_APP_START + 95)

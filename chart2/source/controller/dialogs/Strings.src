@@ -465,7 +465,11 @@ String STR_ACTION_TOGGLE_LEGEND
 };
 String STR_ACTION_TOGGLE_GRID_HORZ
 {
-    Text [ en-US ] = "Horizontal grid on/off" ;
+    Text [ en-US ] = "Horizontal grid major/major&minor/off" ;
+};
+String STR_ACTION_TOGGLE_GRID_VERTICAL
+{
+    Text [ en-US ] = "Vertical grid major/major&minor/off" ;
 };
 String STR_ACTION_SCALE_TEXT
 {

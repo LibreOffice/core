@@ -667,6 +667,7 @@ private:
     bool                executeDispatch_Delete();
     void                executeDispatch_ToggleLegend();
     void                executeDispatch_ToggleGridHorizontal();
+    void                executeDispatch_ToggleGridVertical();
 
     void impl_ShapeControllerDispatch( const ::com::sun::star::util::URL& rURL,
         const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rArgs );
