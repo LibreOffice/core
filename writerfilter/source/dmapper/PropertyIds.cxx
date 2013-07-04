@@ -320,6 +320,7 @@ const OUString& PropertyNameSupplier::GetName( PropertyIds eId ) const
             case PROP_EMBED_FONTS: sName = "EmbedFonts"; break;
             case PROP_EMBED_SYSTEM_FONTS: sName = "EmbedSystemFonts"; break;
             case PROP_SHADOW_FORMAT: sName = "ShadowFormat"; break;
+            case PROP_LABEL_CATEGORY: sName = "LabelCategory"; break;
         }
         ::std::pair<PropertyNameMap_t::iterator,bool> aInsertIt =
                 m_pImpl->aNameMap.insert( PropertyNameMap_t::value_type( eId, sName ));
