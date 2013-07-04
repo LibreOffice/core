@@ -731,6 +731,11 @@ void SvxRectCtl::DoCompletelyDisable(sal_Bool bNew)
     Invalidate();
 }
 
+void SvxRectCtl::SetCS(CTL_STYLE eNew)
+{
+    eCS = eNew;
+}
+
 // Control for editing bitmaps
 
 SvxPixelCtl::SvxPixelCtl( Window* pParent, const ResId& rResId, sal_uInt16 nNumber ) :

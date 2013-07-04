@@ -128,6 +128,7 @@ public:
 
     sal_Bool IsCompletelyDisabled() const { return mbCompleteDisable; }
     void DoCompletelyDisable(sal_Bool bNew);
+    void SetCS(CTL_STYLE eNew);
 };
 
 /*************************************************************************
