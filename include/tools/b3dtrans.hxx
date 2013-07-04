@@ -106,11 +106,11 @@ private:
     Base3DRatio           meRatio;
 
     // Flags
-    unsigned              mbPerspective              : 1;
-    unsigned              mbWorldToViewValid         : 1;
-    unsigned              mbInvTransObjectToEyeValid : 1;
-    unsigned              mbObjectToDeviceValid      : 1;
-    unsigned              mbProjectionValid          : 1;
+    bool mbPerspective              : 1;
+    bool mbWorldToViewValid         : 1;
+    bool mbInvTransObjectToEyeValid : 1;
+    bool mbObjectToDeviceValid      : 1;
+    bool mbProjectionValid          : 1;
 
 public:
     B3dTransformationSet();
