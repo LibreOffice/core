@@ -31,6 +31,7 @@
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/instance.hxx>
+#include <i18nlangtag/languagetag.hxx>
 #include "oox/core/fastparser.hxx"
 #include "oox/core/filterdetect.hxx"
 #include "oox/core/fragmenthandler.hxx"
@@ -503,10 +504,10 @@ writeElement( FSHelperPtr pDoc, sal_Int32 nXmlElement, Sequence< OUString > aIte
 }
 
 static void
-writeElement( FSHelperPtr pDoc, sal_Int32 nXmlElement, const Locale& rLocale )
+writeElement( FSHelperPtr pDoc, sal_Int32 nXmlElement, const LanguageTag& rLanguageTag )
 {
     // TODO: what to do with .Country and .Variant
-    writeElement( pDoc, nXmlElement, rLocale.Language );
+    writeElement( pDoc, nXmlElement, rLanguageTag.getLanguage() );
 }
 
 static void
@@ -542,7 +543,7 @@ writeCoreProperties( XmlFilterBase& rSelf, Reference< XDocumentProperties > xPro
     writeElement( pCoreProps, FSNS( XML_dc, XML_identifier ),       "ident" );
 #endif  /* def OOXTODO */
     writeElement( pCoreProps, FSNS( XML_cp, XML_keywords ),         xProperties->getKeywords() );
-    writeElement( pCoreProps, FSNS( XML_dc, XML_language ),         xProperties->getLanguage() );
+    writeElement( pCoreProps, FSNS( XML_dc, XML_language ),         LanguageTag( xProperties->getLanguage()) );
     writeElement( pCoreProps, FSNS( XML_cp, XML_lastModifiedBy ),   xProperties->getModifiedBy() );
     writeElement( pCoreProps, FSNS( XML_cp, XML_lastPrinted ),      xProperties->getPrintDate() );
     writeElement( pCoreProps, FSNS( XML_dcterms, XML_modified ),    xProperties->getModificationDate() );
