@@ -63,124 +63,6 @@ struct SwAfVersions;
 
 class SvNumberFormatter;
 
-class SwBoxAutoFmt
-{
-    // common attributes of Calc and Writer
-    // --- from 641 on: CJK and CTL font settings
-    SvxFontItem         aFont;
-    SvxFontHeightItem   aHeight;
-    SvxWeightItem       aWeight;
-    SvxPostureItem      aPosture;
-
-    SvxFontItem         aCJKFont;
-    SvxFontHeightItem   aCJKHeight;
-    SvxWeightItem       aCJKWeight;
-    SvxPostureItem      aCJKPosture;
-
-    SvxFontItem         aCTLFont;
-    SvxFontHeightItem   aCTLHeight;
-    SvxWeightItem       aCTLWeight;
-    SvxPostureItem      aCTLPosture;
-
-    SvxUnderlineItem    aUnderline;
-    SvxOverlineItem     aOverline;
-    SvxCrossedOutItem   aCrossedOut;
-    SvxContourItem      aContour;
-    SvxShadowedItem     aShadowed;
-    SvxColorItem        aColor;
-    SvxBoxItem          aBox;
-    SvxLineItem         aTLBR;
-    SvxLineItem         aBLTR;
-    SvxBrushItem        aBackground;
-
-    // Writer specific
-    SvxAdjustItem       aAdjust;
-    SvxFrameDirectionItem m_aTextOrientation;
-    SwFmtVertOrient m_aVerticalAlignment;
-
-    // Calc specific
-    SvxHorJustifyItem   aHorJustify;
-    SvxVerJustifyItem   aVerJustify;
-    SfxBoolItem         aStacked;
-    SvxMarginItem       aMargin;
-    SfxBoolItem         aLinebreak;
-    SfxInt32Item        aRotateAngle;
-    SvxRotateModeItem   aRotateMode;
-
-    // number format
-    String              sNumFmtString;
-    LanguageType        eSysLanguage, eNumFmtLanguage;
-
-public:
-    SwBoxAutoFmt();
-    SwBoxAutoFmt( const SwBoxAutoFmt& rNew );
-    ~SwBoxAutoFmt();
-
-    int operator==( const SwBoxAutoFmt& rCmp ) const;
-    SwBoxAutoFmt& operator=( const SwBoxAutoFmt& rNew );
-
-    // The get-methods.
-    const SvxFontItem       &GetFont() const        { return aFont; }
-    const SvxFontHeightItem &GetHeight() const      { return aHeight; }
-    const SvxWeightItem     &GetWeight() const      { return aWeight; }
-    const SvxPostureItem    &GetPosture() const     { return aPosture; }
-    const SvxFontItem       &GetCJKFont() const     { return aCJKFont; }
-    const SvxFontHeightItem &GetCJKHeight() const   { return aCJKHeight; }
-    const SvxWeightItem     &GetCJKWeight() const   { return aCJKWeight; }
-    const SvxPostureItem    &GetCJKPosture() const  { return aCJKPosture; }
-    const SvxFontItem       &GetCTLFont() const     { return aCTLFont; }
-    const SvxFontHeightItem &GetCTLHeight() const   { return aCTLHeight; }
-    const SvxWeightItem     &GetCTLWeight() const   { return aCTLWeight; }
-    const SvxPostureItem    &GetCTLPosture() const  { return aCTLPosture; }
-    const SvxUnderlineItem  &GetUnderline() const   { return aUnderline; }
-    const SvxOverlineItem   &GetOverline() const    { return aOverline; }
-    const SvxCrossedOutItem &GetCrossedOut() const  { return aCrossedOut; }
-    const SvxContourItem    &GetContour() const     { return aContour; }
-    const SvxShadowedItem   &GetShadowed() const    { return aShadowed; }
-    const SvxColorItem      &GetColor() const       { return aColor; }
-    const SvxAdjustItem     &GetAdjust() const      { return aAdjust; }
-    const SvxFrameDirectionItem& GetTextOrientation() const { return m_aTextOrientation; }
-    const SwFmtVertOrient& GetVerticalAlignment() const { return m_aVerticalAlignment; }
-    const SvxBoxItem        &GetBox() const         { return aBox; }
-    const SvxLineItem       &GetTLBR() const        { return aTLBR; }
-    const SvxLineItem       &GetBLTR() const        { return aBLTR; }
-    const SvxBrushItem      &GetBackground() const  { return aBackground; }
-    void GetValueFormat( String& rFmt, LanguageType& rLng, LanguageType& rSys ) const
-        { rFmt = sNumFmtString; rLng = eNumFmtLanguage; rSys = eSysLanguage; }
-
-    // The set-methods.
-    void SetFont( const SvxFontItem& rNew )             { aFont = rNew; }
-    void SetHeight( const SvxFontHeightItem& rNew )     { aHeight = rNew; }
-    void SetWeight( const SvxWeightItem& rNew )         { aWeight = rNew; }
-    void SetPosture( const SvxPostureItem& rNew )       { aPosture = rNew; }
-    void SetCJKFont( const SvxFontItem& rNew )          { aCJKFont = rNew; }
-    void SetCJKHeight( const SvxFontHeightItem& rNew )  { aCJKHeight = rNew; }
-    void SetCJKWeight( const SvxWeightItem& rNew )      { aCJKWeight = rNew; }
-    void SetCJKPosture( const SvxPostureItem& rNew )    { aCJKPosture = rNew; }
-    void SetCTLFont( const SvxFontItem& rNew )          { aCTLFont = rNew; }
-    void SetCTLHeight( const SvxFontHeightItem& rNew )  { aCTLHeight = rNew; }
-    void SetCTLWeight( const SvxWeightItem& rNew )      { aCTLWeight = rNew; }
-    void SetCTLPosture( const SvxPostureItem& rNew )    { aCTLPosture = rNew; }
-    void SetUnderline( const SvxUnderlineItem& rNew )   { aUnderline = rNew; }
-    void SetOverline( const SvxOverlineItem& rNew )     { aOverline = rNew; }
-    void SetCrossedOut( const SvxCrossedOutItem& rNew ) { aCrossedOut = rNew; }
-    void SetContour( const SvxContourItem& rNew )       { aContour = rNew; }
-    void SetShadowed( const SvxShadowedItem& rNew )     { aShadowed = rNew; }
-    void SetColor( const SvxColorItem& rNew )           { aColor = rNew; }
-    void SetAdjust( const SvxAdjustItem& rNew )
-        {
-            aAdjust.SetAdjust( rNew.GetAdjust() );
-            aAdjust.SetOneWord( rNew.GetOneWord() );
-            aAdjust.SetLastBlock( rNew.GetLastBlock() );
-        }
-    void SetTextOrientation(const SvxFrameDirectionItem& rNew) { m_aTextOrientation = rNew; }
-    void SetVerticalAlignment(const SwFmtVertOrient& rNew) { m_aVerticalAlignment = rNew; }
-    void SetBox( const SvxBoxItem& rNew )               { aBox = rNew; }
-    void SetBackground( const SvxBrushItem& rNew )      { aBackground = rNew; }
-    void SetValueFormat( const String& rFmt, LanguageType eLng, LanguageType eSys )
-        { sNumFmtString = rFmt; eNumFmtLanguage = eLng; eSysLanguage = eSys; }
-};
-
 /*
 @remarks
 A table has a number of lines. These lines seem to correspond with rows, except in the case of
@@ -227,9 +109,6 @@ properties are stored per-table, and are lossless.
 */
 class SW_DLLPUBLIC SwTableAutoFmt
 {
-    friend void _FinitCore();       // To destroy dflt. pointer.
-    static SwBoxAutoFmt* pDfltBoxAutoFmt;
-
     SwTableFmt* m_pTableStyle;
     sal_uInt16 nStrResId;
 
