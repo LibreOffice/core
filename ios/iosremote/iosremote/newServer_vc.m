@@ -22,6 +22,9 @@
 - (IBAction)save:(id)sender {
     NSString *serverName = [self.nameCell.textField text];
     NSString *serverAddr = [self.addrCell.textField text];
+    if (!serverName) {
+        serverName = @"Computer";
+    }
     NSLog(@"New server name:%@ ip:%@", serverName, serverAddr);
     [self.comManager addServersWithName:serverName AtAddress:serverAddr];
     [self.navigationController popViewControllerAnimated:YES];
@@ -241,6 +244,7 @@ titleForHeaderInSection:(NSInteger)section
     NSInteger tag = INT_MIN;
     NSString *text = nil;
     NSString *placeholder = nil;
+    UIKeyboardType keyboardType;
     
     //  Pick the editable cell and the values for its textField
     //
@@ -255,6 +259,7 @@ titleForHeaderInSection:(NSInteger)section
                 text = [self.server serverName];
                 tag = ServerName;
                 placeholder = @"Server Name (optional)";
+                keyboardType = UIKeyboardTypeDefault;
             }
             else
             {
@@ -262,6 +267,7 @@ titleForHeaderInSection:(NSInteger)section
                 text = [self.server serverAddress];
                 tag = ServerAddr;
                 placeholder = @"IP Address";
+                keyboardType = UIKeyboardTypeNumbersAndPunctuation;
             }
             break;
         }
@@ -269,6 +275,7 @@ titleForHeaderInSection:(NSInteger)section
     [cell.textField setPlaceholder:placeholder];
     [cell setTag:tag];
     [cell.textField setText:text];
+    [cell.textField setKeyboardType:keyboardType];
     return cell;
 }
 

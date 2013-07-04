@@ -13,8 +13,9 @@
 #import "SlideShow.h"
 #import "CommandTransmitter.h"
 #import "CommandInterpreter.h"
-#import "libreoffice_sdremoteViewController.h"
 #import <dispatch/dispatch.h>
+
+#define ExistingServersKey @"CommunicationManager.ExistingServers"
 
 @interface CommunicationManager()
 
@@ -42,7 +43,7 @@
     static dispatch_once_t _singletonPredicate;
     
     dispatch_once(&_singletonPredicate, ^{
-        sharedComManager = [[super allocWithZone:nil] init];
+        sharedComManager = [[super allocWithZone:nil] initWithExistingServers];
     });
     
     return sharedComManager;
@@ -56,7 +57,7 @@
             NSLog(@"Connected");
             self.transmitter = [[CommandTransmitter alloc] initWithClient:self.client];
             self.state = CONNECTED;
-            [self.delegate setPinLabelText:[NSString stringWithFormat:@"%@", [self getPairingPin]]];
+//            [self.delegate setPinLabelText:[NSString stringWithFormat:@"%@", [self getPairingPin]]];
         }
     } else if ([[note name] isEqualToString:@"connection.status.disconnected"]){
         if (self.state != DISCONNECTED) {
@@ -91,13 +92,12 @@
 - (id) initWithExistingServers
 {
     self = [self init];
-    
     NSUserDefaults * userDefaluts = [NSUserDefaults standardUserDefaults];
     
     if(!userDefaluts)
         NSLog(@"userDefaults nil");
     
-    NSData *dataRepresentingExistingServers = [userDefaluts objectForKey:@"ExistingServers"];
+    NSData *dataRepresentingExistingServers = [userDefaluts objectForKey:ExistingServersKey];
     if (dataRepresentingExistingServers != nil)
     {
         NSArray *oldSavedArray = [NSKeyedUnarchiver unarchiveObjectWithData:dataRepresentingExistingServers];
@@ -144,7 +144,8 @@
 {
     Server * s = [[Server alloc] initWithProtocol:NETWORK atAddress:addr ofName:name];
     [self.servers addObject:s];
-    NSLog(@"Having %lu servers now", (unsigned long)[self.servers count]);
+    [[NSUserDefaults standardUserDefaults] setObject:[NSKeyedArchiver archivedDataWithRootObject:self.servers] forKey:ExistingServersKey];
+    [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
 @end

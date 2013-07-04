@@ -12,7 +12,7 @@
                         <rect key="frame" x="0.0" y="64" width="320" height="504"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="server_item_cell" textLabel="Rg3-PU-OuS" detailTextLabel="9Mc-gD-acc" style="IBUITableViewCellStyleValue1" id="Pvl-Uw-Ghs">
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="server_item_cell" editingAccessoryType="disclosureIndicator" textLabel="Rg3-PU-OuS" detailTextLabel="9Mc-gD-acc" style="IBUITableViewCellStyleValue1" id="Pvl-Uw-Ghs">
                                 <rect key="frame" x="0.0" y="22" width="320" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
