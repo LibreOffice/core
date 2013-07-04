@@ -24,6 +24,7 @@
 #include <com/sun/star/lang/Locale.hpp>
 
 #include <osl/time.h>
+#include <i18nlangtag/languagetag.hxx>
 
 #include <vector>
 #include <boost/algorithm/string.hpp>
@@ -177,21 +178,6 @@ uno::Sequence< OUString > OOXMLDocPropHandler::GetKeywordsSet( const OUString& a
         }
     }
     return uno::Sequence< OUString >();
-}
-// ------------------------------------------------
-lang::Locale OOXMLDocPropHandler::GetLanguage( const OUString& aChars )
-{
-    lang::Locale aResult;
-    if ( aChars.getLength() >= 2 )
-    {
-        aResult.Language = aChars.copy( 0, 2 );
-        if ( aChars.getLength() >= 5 && aChars.getStr()[2] == (sal_Unicode)'-' )
-            aResult.Country = aChars.copy( 3, 2 );
-
-        // TODO/LATER: the variant could be also detected
-    }
-
-    return aResult;
 }
 
 // ------------------------------------------------
@@ -423,7 +409,7 @@ void SAL_CALL OOXMLDocPropHandler::characters( const OUString& aChars )
 
                 case DC_TOKEN( language ):
                     if ( aChars.getLength() >= 2 )
-                        m_xDocProp->setLanguage( GetLanguage( aChars ) );
+                        m_xDocProp->setLanguage( LanguageTag( aChars).getLocale() );
                     break;
 
                 case COREPR_TOKEN( lastModifiedBy ):
