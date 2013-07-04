@@ -868,8 +868,13 @@ void SmXMLExport::ExportTable(const SmNode *pNode, int nLevel)
     //no subnodes, the newline is superfulous so we just drop
     //the last node, inclusion would create a bad MathML
     //table
-    if (nSize >= 1 && pNode->GetSubNode(nSize-1)->GetNumSubNodes() == 0)
-        --nSize;
+    if (nSize >= 1)
+    {
+        const SmNode *pLine = pNode->GetSubNode(nSize-1);
+        if (pLine->GetType() == NLINE && pLine->GetNumSubNodes() > 0 &&
+            pLine->GetSubNode(0)->GetToken().eType == TEND)
+            --nSize;
+    }
 
     // try to avoid creating a mtable element when the formula consists only
     // of a single output line
