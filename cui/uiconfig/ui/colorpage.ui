@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <!-- interface-requires gtk+ 3.0 -->
+  <!-- interface-requires LibreOffice 1.0 -->
   <object class="GtkAdjustment" id="adjustment1">
     <property name="upper">100</property>
     <property name="step_increment">1</property>
@@ -204,15 +205,15 @@
                         <property name="halign">end</property>
                         <property name="entry_text_column">0</property>
                         <property name="id_column">1</property>
-                        <items>
-                          <item translatable="yes">RGB</item>
-                          <item translatable="yes">CMYK</item>
-                        </items>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="modellb-atkobject">
                             <property name="AtkObject::accessible-name" translatable="yes">Color Mode</property>
                           </object>
                         </child>
+                        <items>
+                          <item translatable="yes">RGB</item>
+                          <item translatable="yes">CMYK</item>
+                        </items>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -559,6 +560,7 @@
                             <property name="tooltip_markup" translatable="yes">Load Color List</property>
                             <property name="tooltip_text" translatable="yes">Load Color List</property>
                             <property name="halign">center</property>
+                            <property name="valign">end</property>
                             <property name="hexpand">True</property>
                             <property name="image">image1</property>
                           </object>
@@ -578,6 +580,7 @@
                             <property name="tooltip_markup" translatable="yes">Save Color List</property>
                             <property name="tooltip_text" translatable="yes">Save Color List</property>
                             <property name="halign">center</property>
+                            <property name="valign">end</property>
                             <property name="hexpand">True</property>
                             <property name="image">image2</property>
                           </object>
@@ -588,19 +591,32 @@
                             <property name="height">1</property>
                           </packing>
                         </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">4</property>
+                        <property name="secondary">True</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkGrid" id="grid5">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
                         <child>
                           <object class="GtkCheckButton" id="embed">
                             <property name="label" translatable="yes">Embed</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
+                            <property name="valign">start</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
-                            <property name="top_attach">1</property>
-                            <property name="width">2</property>
+                            <property name="top_attach">0</property>
+                            <property name="width">1</property>
                             <property name="height">1</property>
                           </packing>
                         </child>
