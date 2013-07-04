@@ -60,20 +60,20 @@ class SC_DLLPUBLIC ScDetectiveFunc
 
     enum DrawPosMode
     {
-        DRAWPOS_TOPLEFT,        /// Top-left edge of the cell.
-        DRAWPOS_BOTTOMRIGHT,    /// Bottom-right edge of the cell.
-        DRAWPOS_DETARROW,       /// Position inside cell for detective arrows.
-        DRAWPOS_CAPTIONLEFT,    /// Top-left edge of the cell for captions.
-        DRAWPOS_CAPTIONRIGHT    /// Top-right edge of the cell for captions (incl. merged cells).
+        DRAWPOS_TOPLEFT,        ///< Top-left edge of the cell.
+        DRAWPOS_BOTTOMRIGHT,    ///< Bottom-right edge of the cell.
+        DRAWPOS_DETARROW,       ///< Position inside cell for detective arrows.
+        DRAWPOS_CAPTIONLEFT,    ///< Top-left edge of the cell for captions.
+        DRAWPOS_CAPTIONRIGHT    ///< Top-right edge of the cell for captions (incl. merged cells).
     };
 
-    /** Returns a drawing layer position for the passed cell address. */
+    /** @return a drawing layer position for the passed cell address. */
     Point       GetDrawPos( SCCOL nCol, SCROW nRow, DrawPosMode eMode ) const;
 
-    /** Returns the drawing layer rectangle for the passed cell range. */
+    /** @return the drawing layer rectangle for the passed cell range. */
     Rectangle   GetDrawRect( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 ) const;
 
-    /** Returns the drawing layer rectangle for the passed cell address. */
+    /** @return the drawing layer rectangle for the passed cell address. */
     Rectangle   GetDrawRect( SCCOL nCol, SCROW nRow ) const;
 
     sal_Bool        HasArrow( const ScAddress& rStart,
@@ -86,7 +86,7 @@ class SC_DLLPUBLIC ScDetectiveFunc
 
     void        FillAttributes( ScDetectiveData& rData );
 
-                // called from DrawEntry/DrawAlienEntry and InsertObject
+                /// called from DrawEntry/DrawAlienEntry and InsertObject
     sal_Bool        InsertArrow( SCCOL nCol, SCROW nRow,
                                 SCCOL nRefStartCol, SCROW nRefStartRow,
                                 SCCOL nRefEndCol, SCROW nRefEndRow,
@@ -96,7 +96,7 @@ class SC_DLLPUBLIC ScDetectiveFunc
                                 SCCOL nEndCol, SCROW nEndRow, sal_Bool bRed,
                                 ScDetectiveData& rData );
 
-                // DrawEntry / DrawAlienEntry check for existing arrows and errors
+                /// DrawEntry / DrawAlienEntry check for existing arrows and errors
     sal_Bool        DrawEntry( SCCOL nCol, SCROW nRow, const ScRange& rRef,
                                 ScDetectiveData& rData );
     sal_Bool        DrawAlienEntry( const ScRange& rRef,
@@ -138,8 +138,8 @@ public:
     void        GetAllPreds(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, ::std::vector<ScTokenRef>& rRefTokens);
     void        GetAllSuccs(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, ::std::vector<ScTokenRef>& rRefTokens);
 
-    static void UpdateAllComments( ScDocument& rDoc );        // on all tables
-    void        UpdateAllArrowColors();     // on all tables
+    static void UpdateAllComments( ScDocument& rDoc );        ///< on all tables
+    void        UpdateAllArrowColors();     ///< on all tables
 
     static sal_Bool IsNonAlienArrow( SdrObject* pObject );
 

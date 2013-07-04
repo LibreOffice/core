@@ -23,7 +23,7 @@
 #include <vector>
 #include <map>
 #include <tools/string.hxx>
-#include "dpgroup.hxx"      // for ScDPNumGroupInfo
+#include "dpgroup.hxx"      ///< for ScDPNumGroupInfo
 #include "scdllapi.h"
 #include "dptypes.hxx"
 
@@ -35,16 +35,16 @@ class SvNumberFormatter;
 
 class ScDPSaveGroupDimension;
 
-//
-//  Classes to save Data Pilot settings that create new dimensions (fields).
-//  These have to be applied before the other ScDPSaveData settings.
-//
+/**
+ * Classes to save Data Pilot settings that create new dimensions (fields).
+ * These have to be applied before the other ScDPSaveData settings.
+ */
 
 class SC_DLLPUBLIC ScDPSaveGroupItem
 {
-    OUString aGroupName;     // name of group
-    std::vector<OUString> aElements;      // names of items in original dimension
-    mutable std::vector<ScDPItemData> maItems; // items converted from the strings.
+    OUString aGroupName;                        ///< name of group
+    std::vector<OUString> aElements;            ///< names of items in original dimension
+    mutable std::vector<ScDPItemData> maItems;  ///< items converted from the strings.
 
 public:
     ScDPSaveGroupItem( const OUString& rName );
@@ -55,7 +55,9 @@ public:
     void    AddElement( const OUString& rName );
     void    AddElementsFromGroup( const ScDPSaveGroupItem& rGroup );
     const OUString& GetGroupName() const { return aGroupName; }
-    bool    RemoveElement( const OUString& rName );   // returns true if found (removed)
+
+    /// @return true if found (removed)
+    bool    RemoveElement( const OUString& rName );
 
     bool    IsEmpty() const;
     size_t  GetElementCount() const;
@@ -63,8 +65,8 @@ public:
 
     void Rename( const OUString& rNewName );
 
-    // remove this group's elements from their groups in rDimension
-    // (rDimension must be a different dimension from the one which contains this)
+    /** remove this group's elements from their groups in rDimension
+     (rDimension must be a different dimension from the one which contains this)*/
     void    RemoveElementsFromGroups( ScDPSaveGroupDimension& rDimension ) const;
 
     void ConvertElementsToItems(SvNumberFormatter* pFormatter) const;
@@ -79,7 +81,7 @@ typedef ::std::vector<ScDPSaveGroupItem> ScDPSaveGroupItemVec;
  */
 class SC_DLLPUBLIC ScDPSaveGroupDimension
 {
-    OUString           aSourceDim;     // always the real source from the original data
+    OUString           aSourceDim;     ///< always the real source from the original data
     OUString           aGroupDimName;
     ScDPSaveGroupItemVec    aGroups;
     mutable ScDPNumGroupInfo aDateInfo;

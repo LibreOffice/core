@@ -40,9 +40,9 @@ class ScPassHashHelper
 {
 public:
     /** Check for the compatibility of all password hashes.  If there is at
-        least one hash that needs to be regenerated, it returns true.  If all
-        hash values are compatible with the specified hash type, then it
-        returns false. */
+     * least one hash that needs to be regenerated, it returns true.  If all
+     * hash values are compatible with the specified hash type, then it
+     * returns false. */
     static bool needsPassHashRegen(const ScDocument& rDoc, ScPasswordHash eHash1, ScPasswordHash eHash2 = PASSHASH_UNSPECIFIED);
 
     static OUString getHashURI(ScPasswordHash eHash);
@@ -86,7 +86,7 @@ public:
         STRUCTURE = 0,
         WINDOWS,
         CONTENT,
-        NONE        // last item - used to resize the vector
+        NONE        ///< last item - used to resize the vector
     };
 
     explicit ScDocProtection();
@@ -117,13 +117,13 @@ private:
 // ============================================================================
 
 /** sheet protection state container
-
-    This class stores sheet's protection state: 1) whether the protection
-    is on, 2) password and/or password hash, and 3) any associated
-    protection options.  This class is also used as a protection state
-    container for the undo/redo stack, in which case the password, hash and
-    the options need to be preserved even when the protection flag is
-    off. */
+ *
+ * This class stores sheet's protection state: 1) whether the protection
+ * is on, 2) password and/or password hash, and 3) any associated
+ * protection options.  This class is also used as a protection state
+ * container for the undo/redo stack, in which case the password, hash and
+ * the options need to be preserved even when the protection flag is
+ * off. */
 class SC_DLLPUBLIC ScTableProtection : public ScPassHashProtectable
 {
 public:
@@ -145,7 +145,7 @@ public:
         SELECT_UNLOCKED_CELLS,
         SHEET,
         SORT,
-        NONE        // last item - used to resize the vector
+        NONE        ///< last item - used to resize the vector
     };
 
     explicit ScTableProtection();
