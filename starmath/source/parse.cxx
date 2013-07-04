@@ -1072,7 +1072,11 @@ void SmParser::Line()
     //this is to avoid a formula tree without any caret
     //positions, in visual formula editor.
     if(ExpressionArray.empty())
-        ExpressionArray.push_back(new SmExpressionNode(m_aCurToken));
+    {
+        SmToken aTok = SmToken();
+        aTok.eType = TNEWLINE;
+        ExpressionArray.push_back(new SmExpressionNode(aTok));
+    }
 
     SmStructureNode *pSNode = new SmLineNode(m_aCurToken);
     pSNode->SetSubNodes(ExpressionArray);
