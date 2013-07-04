@@ -111,48 +111,17 @@ public:
     virtual int         DeactivatePage( SfxItemSet* pSet );
 
 private:
-    CheckBox            aCbxUseGridsnap;
-    CheckBox            aCbxGridVisible;
+    CheckBox*            pCbxUseGridsnap;
+    CheckBox*            pCbxGridVisible;
 
-    FixedLine           aFlResolution;
-    FixedText           aFtDrawX;
-    MetricField         aMtrFldDrawX;
-    FixedText           aFtDrawY;
-    MetricField         aMtrFldDrawY;
+    MetricField*         pMtrFldDrawX;
+    MetricField*         pMtrFldDrawY;
 
-    FixedLine           aFlDivision;
-    FixedText           aFtDivisionX;
-    NumericField        aNumFldDivisionX;
-    FixedText           aDivisionPointX;
+    NumericField*        pNumFldDivisionX;
+    NumericField*        pNumFldDivisionY;
 
-    FixedText           aFtDivisionY;
-    NumericField        aNumFldDivisionY;
-    FixedText           aDivisionPointY;
+    CheckBox*            pCbxSynchronize;
 
-    CheckBox            aCbxSynchronize;
-    FixedLine           aGrpDrawGrid;
-
-protected:
-    //these controls are used in draw and impress
-    FixedLine       aGrpSnap;
-    CheckBox        aCbxSnapHelplines;
-    CheckBox        aCbxSnapBorder;
-    CheckBox        aCbxSnapFrame;
-    CheckBox        aCbxSnapPoints;
-    FixedText       aFtSnapArea;
-    MetricField     aMtrFldSnapArea;
-
-    FixedLine       aSeparatorFL;
-
-    FixedLine       aGrpOrtho;
-    CheckBox        aCbxOrtho;
-    CheckBox        aCbxBigOrtho;
-    CheckBox        aCbxRotate;
-    MetricField     aMtrFldAngle;
-    FixedText       aFtBezAngle;
-    MetricField     aMtrFldBezAngle;
-
-private:
     sal_Bool                bAttrModified;
 
     DECL_LINK( ClickRotateHdl_Impl, void * );
