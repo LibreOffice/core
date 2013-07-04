@@ -1407,19 +1407,19 @@ void    SvxNumOptionsTabPage::Reset( const SfxItemSet& rSet )
 
 void SvxNumOptionsTabPage::InitControls()
 {
-    sal_Bool bShowBullet    = sal_True;
-    sal_Bool bShowBitmap    = sal_True;
-    sal_Bool bSameType      = sal_True;
-    sal_Bool bSameStart     = sal_True;
-    sal_Bool bSamePrefix    = sal_True;
-    sal_Bool bSameSuffix    = sal_True;
-    sal_Bool bAllLevel      = sal_True;
-    sal_Bool bSameCharFmt   = sal_True;
-    sal_Bool bSameVOrient   = sal_True;
-    sal_Bool bSameSize      = sal_True;
-    sal_Bool bSameBulColor  = sal_True;
-    sal_Bool bSameBulRelSize= sal_True;
-    sal_Bool bSameAdjust    = sal_True;
+    bool bShowBullet    = true;
+    bool bShowBitmap    = true;
+    bool bSameType      = true;
+    bool bSameStart     = true;
+    bool bSamePrefix    = true;
+    bool bSameSuffix    = true;
+    bool bAllLevel      = true;
+    sal_Bool bSameCharFmt   = true;
+    sal_Bool bSameVOrient   = true;
+    bool bSameSize      = true;
+    bool bSameBulColor  = true;
+    bool bSameBulRelSize= true;
+    bool bSameAdjust    = true;
 
     const SvxNumberFormat* aNumFmtArr[SVX_MAX_NUM];
     String sFirstCharFmt;
