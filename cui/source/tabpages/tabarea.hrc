@@ -47,15 +47,8 @@
 #define FT_BACKGROUND_COLOR 2
 #define FT_POSITION 2
 #define FT_DISTANCE 1
-#define FT_LINE_COLOR 2
-#define FT_LINE_TYPE 1
-#define FT_LINE_DISTANCE 3
-#define FT_LINE_ANGLE 4
 #define MTR_FLD_ANGLE 3
 #define CTL_ANGLE 2
-#define LB_HATCHINGS 4
-#define LB_LINE_TYPE 1
-#define LB_LINE_COLOR 3
 #define NUM_FLD_STEPCOUNT 1
 #define FT_PIXEL_EDIT 4
 #define CTL_PIXEL 2

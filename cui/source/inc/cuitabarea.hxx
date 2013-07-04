@@ -446,23 +446,19 @@ class SvxHatchTabPage : public SvxTabPage
     using TabPage::DeactivatePage;
 
 private:
-    FixedText           aFtDistance;
-    MetricField         aMtrDistance;
-    FixedText           aFtAngle;
-    MetricField         aMtrAngle;
-    SvxRectCtl          aCtlAngle;
-    FixedLine           aFlProp;
-    FixedText           aFtLineType;
-    ListBox             aLbLineType;
-    FixedText           aFtLineColor;
-    ColorLB             aLbLineColor;
-    HatchingLB          aLbHatchings;
-    SvxXRectPreview     aCtlPreview;
-    PushButton          aBtnAdd;
-    PushButton          aBtnModify;
-    PushButton          aBtnDelete;
-    ImageButton         aBtnLoad;
-    ImageButton         aBtnSave;
+    MetricField*        m_pMtrDistance;
+    MetricField*        m_pMtrAngle;
+    FixedText*          m_pFtAngleDegrees;
+    SvxRectCtl*         m_pCtlAngle;
+    ListBox*            m_pLbLineType;
+    ColorLB*            m_pLbLineColor;
+    HatchingLB*         m_pLbHatchings;
+    SvxXRectPreview*    m_pCtlPreview;
+    PushButton*         m_pBtnAdd;
+    PushButton*         m_pBtnModify;
+    PushButton*         m_pBtnDelete;
+    PushButton*         m_pBtnLoad;
+    PushButton*         m_pBtnSave;
 
     const SfxItemSet&   rOutAttrs;
 
