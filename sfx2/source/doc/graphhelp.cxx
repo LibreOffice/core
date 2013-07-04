@@ -108,7 +108,7 @@ void* GraphicHelper::getEnhMetaFileFromGDI_Impl( const GDIMetaFile* pGDIMeta )
 #ifdef WNT
     if ( pGDIMeta )
     {
-        String aStr = OUString(".emf");
+        OUString const aStr(".emf");
         ::utl::TempFile aTempFile( OUString(),
                                    &aStr,
                                    NULL,
