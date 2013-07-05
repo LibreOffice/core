@@ -27,7 +27,7 @@ $(call gb_CustomTarget_get_workdir,postprocess/signing)/signing.done : \
 ifeq ($(COM),MSC)
 ifneq ($(ENABLE_DBGUTIL),TRUE)
 	$(PERL) $(SRCDIR)/postprocess/signing/signing.pl \
-			-e $(SRCDIR)/postprocess/signing/no_signing.txt
+			-e $(SRCDIR)/postprocess/signing/no_signing.txt \
 			-l $(subst .done,_log.txt,$@) \
 			$(if $(PFXFILE),-f $(PFXFILE)) \
 			$(if $(PFXPASSWORD),-p $(PFXPASSWORD)) \
