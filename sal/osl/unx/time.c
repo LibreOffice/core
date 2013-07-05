@@ -143,10 +143,7 @@ sal_Bool SAL_CALL osl_getTimeValueFromDateTime( oslDateTime* pDateTime, TimeValu
     else
         return sal_False;
 
-    if ( pDateTime->Year >= 1900 )
-        aTime.tm_year = pDateTime->Year - 1900;
-    else
-        return sal_False;
+    aTime.tm_year = pDateTime->Year - 1900;
 
     aTime.tm_isdst = -1;
     aTime.tm_wday  = 0;

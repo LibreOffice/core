@@ -98,7 +98,7 @@ util::DateTime OOXMLDocPropHandler::GetDateTimeFromW3CDTF( const OUString& aChar
     sal_Int32 nLen = aChars.getLength();
     if ( nLen >= 4 )
     {
-        aOslDTime.Year = (sal_uInt16)aChars.copy( 0, 4 ).toInt32();
+        aOslDTime.Year = (sal_Int16)aChars.copy( 0, 4 ).toInt32();
 
         if ( nLen >= 7 && aChars.getStr()[4] == (sal_Unicode)'-' )
         {
