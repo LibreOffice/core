@@ -3094,7 +3094,7 @@ RTLFUNC(FileDateTime)
             oslDateTime aDT;
             osl_getDateTimeFromTimeValue( &aTimeVal, &aDT );
 
-            aTime = Time( aDT.Hours, aDT.Minutes, aDT.Seconds, 10000000*aDT.NanoSeconds );
+            aTime = Time( aDT.Hours, aDT.Minutes, aDT.Seconds, aDT.NanoSeconds );
             aDate = Date( aDT.Day, aDT.Month, aDT.Year );
         }
 
