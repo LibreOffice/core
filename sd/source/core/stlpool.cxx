@@ -106,7 +106,7 @@ SdStyleSheetPool::~SdStyleSheetPool()
 
 // ----------------------------------------------------------
 
-SfxStyleSheetBase* SdStyleSheetPool::Create(const String& rName, SfxStyleFamily eFamily, sal_uInt16 _nMask )
+SfxStyleSheetBase* SdStyleSheetPool::Create(const OUString& rName, SfxStyleFamily eFamily, sal_uInt16 _nMask )
 {
     return new SdStyleSheet(rName, *this, eFamily, _nMask);
 }
@@ -695,7 +695,7 @@ void SdStyleSheetPool::CopyLayoutSheets(const String& rLayoutName, SdStyleSheetP
             if (!pSheet)
                 break;
 
-            if (pSheet->GetParent().Len() == 0)
+            if (pSheet->GetParent().isEmpty())
                 pSheet->SetParent(pParent->GetName());
 
             pParent = pSheet;
@@ -760,16 +760,14 @@ void SdStyleSheetPool::CreateLayoutSheetNames(const String& rLayoutName, std::ve
 
 void SdStyleSheetPool::CreateLayoutSheetList(const String& rLayoutName, SdStyleSheetVector& rLayoutSheets )
 {
-    String aLayoutNameWithSep(rLayoutName);
-    aLayoutNameWithSep.AppendAscii( SD_LT_SEPARATOR );
-    sal_uInt16 nLen = aLayoutNameWithSep.Len();
+    OUString aLayoutNameWithSep(rLayoutName + OUString(SD_LT_SEPARATOR ));
 
     SfxStyleSheetIterator aIter(this, SD_STYLE_FAMILY_MASTERPAGE);
     SfxStyleSheetBase* pSheet = aIter.First();
 
     while (pSheet)
     {
-        if (pSheet->GetName().Match(aLayoutNameWithSep) == nLen)
+        if (pSheet->GetName().startsWith(aLayoutNameWithSep))
             rLayoutSheets.push_back( SdStyleSheetRef( static_cast< SdStyleSheet* >( pSheet ) ) );
         pSheet = aIter.Next();
     }

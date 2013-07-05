@@ -2707,7 +2707,7 @@ sal_Int32 ScChart2DataSequence::FillCacheFromExternalRef(const ScTokenRef& pToke
                     SvNumberFormatter* pFormatter = m_pDocument->GetFormatTable();
                     if (pFormatter)
                     {
-                        String aStr;
+                        OUString aStr;
                         const double fVal = rItem.mfValue;
                         Color* pColor = NULL;
                         sal_uInt32 nFmt = 0;

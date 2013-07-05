@@ -929,7 +929,7 @@ void SvxSearchDialog::Init_Impl( int bSearchPattern )
         bool bSetSearch = ( ( nModifyFlag & MODIFY_SEARCH ) == 0 );
         bool bSetReplace = ( ( nModifyFlag & MODIFY_REPLACE ) == 0 );
 
-        if ( pSearchItem->GetSearchString().Len() && bSetSearch )
+        if ( !(pSearchItem->GetSearchString().isEmpty()) && bSetSearch )
             m_pSearchLB->SetText( pSearchItem->GetSearchString() );
         else if (!aSearchStrings.empty())
         {

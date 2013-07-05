@@ -39,7 +39,7 @@ struct ScMyCellInfo
     ScCellValue maCell;
     OUString      sFormulaAddress;
     OUString      sFormula;
-    String             sInputString;
+    OUString          sInputString;
     double             fValue;
     sal_Int32          nMatrixCols;
     sal_Int32          nMatrixRows;

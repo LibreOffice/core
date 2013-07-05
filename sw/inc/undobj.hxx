@@ -89,7 +89,7 @@ private:
     virtual void UndoWithContext(SfxUndoContext &);
     virtual void RedoWithContext(SfxUndoContext &);
     virtual void Repeat(SfxRepeatTarget &);
-    virtual sal_Bool CanRepeat(SfxRepeatTarget &) const;
+    virtual bool CanRepeat(SfxRepeatTarget &) const;
 
 public:
     SwUndo(SwUndoId const nId);

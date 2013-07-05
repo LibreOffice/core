@@ -64,7 +64,7 @@ bool ScSimpleUndo::SetViewMarkData( const ScMarkData& rMarkData )
     return true;
 }
 
-sal_Bool ScSimpleUndo::Merge( SfxUndoAction *pNextAction )
+bool ScSimpleUndo::Merge( SfxUndoAction *pNextAction )
 {
     // A SdrUndoGroup for updating detective arrows can belong
     // to each Undo-Action.
@@ -569,7 +569,7 @@ void ScUndoWrapper::SetLinkToSfxLinkUndoAction(SfxLinkUndoAction* pSfxLinkUndoAc
         SetLinkToSfxLinkUndoAction(pSfxLinkUndoAction);
 }
 
-sal_Bool ScUndoWrapper::Merge( SfxUndoAction* pNextAction )
+bool ScUndoWrapper::Merge( SfxUndoAction* pNextAction )
 {
     if (pWrappedUndo)
         return pWrappedUndo->Merge(pNextAction);
@@ -595,7 +595,7 @@ void ScUndoWrapper::Repeat(SfxRepeatTarget& rTarget)
         pWrappedUndo->Repeat(rTarget);
 }
 
-sal_Bool ScUndoWrapper::CanRepeat(SfxRepeatTarget& rTarget) const
+bool ScUndoWrapper::CanRepeat(SfxRepeatTarget& rTarget) const
 {
     if (pWrappedUndo)
         return pWrappedUndo->CanRepeat(rTarget);

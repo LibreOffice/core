@@ -151,9 +151,9 @@ sal_uLong DdeData::GetExternalFormat( sal_uLong nFmt )
     default:
         {
 #if defined(WNT)
-            String aName( SotExchange::GetFormatName( nFmt ) );
-            if( aName.Len() )
-                nFmt = RegisterClipboardFormat( reinterpret_cast<LPCWSTR>(aName.GetBuffer()) );
+            OUString aName( SotExchange::GetFormatName( nFmt ) );
+            if( !aName.isEmpty() )
+                nFmt = RegisterClipboardFormat( reinterpret_cast<LPCWSTR>(aName.getStr()) );
 #endif
         }
     }

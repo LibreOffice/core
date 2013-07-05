@@ -30,7 +30,7 @@ class SvNumberFormatter;
 
 class ScNumFormatAbbrev
 {
-    String sFormatstring;
+    OUString sFormatstring;
     LanguageType eLnge;
     LanguageType eSysLnge;
 public:

@@ -963,7 +963,7 @@ OUString ScDPCache::GetFormattedString(long nDim, const ScDPItemData& rItem) con
         if (pFormatter)
         {
             Color* pColor = NULL;
-            String aStr;
+            OUString aStr;
             pFormatter->GetOutputString(rItem.GetValue(), nNumFormat, aStr, &pColor);
             return aStr;
         }

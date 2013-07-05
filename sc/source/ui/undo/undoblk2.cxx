@@ -168,9 +168,9 @@ void ScUndoWidthOrHeight::Repeat(SfxRepeatTarget& rTarget)
         ((ScTabViewTarget&)rTarget).GetViewShell()->SetMarkedWidthOrHeight( bWidth, eMode, nNewSize, sal_True );
 }
 
-sal_Bool ScUndoWidthOrHeight::CanRepeat(SfxRepeatTarget& rTarget) const
+bool ScUndoWidthOrHeight::CanRepeat(SfxRepeatTarget& rTarget) const
 {
-    return (rTarget.ISA(ScTabViewTarget));
+    return rTarget.ISA(ScTabViewTarget);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -71,7 +71,7 @@ void ScUndoDraw::SetLinkToSfxLinkUndoAction(SfxLinkUndoAction* pSfxLinkUndoActio
         SetLinkToSfxLinkUndoAction(pSfxLinkUndoAction);
 }
 
-sal_Bool  ScUndoDraw::Merge( SfxUndoAction* pNextAction )
+bool  ScUndoDraw::Merge( SfxUndoAction* pNextAction )
 {
     if (pDrawUndo)
         return pDrawUndo->Merge(pNextAction);
@@ -113,7 +113,7 @@ void ScUndoDraw::Repeat(SfxRepeatTarget& rTarget)
         pDrawUndo->Repeat(rTarget);
 }
 
-sal_Bool ScUndoDraw::CanRepeat(SfxRepeatTarget& rTarget) const
+bool ScUndoDraw::CanRepeat(SfxRepeatTarget& rTarget) const
 {
     if (pDrawUndo)
         return pDrawUndo->CanRepeat(rTarget);

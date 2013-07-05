@@ -1631,7 +1631,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
                                                  *pNumFormatter->GetNullDate() );
                             const sal_uLong nFormat =
                                 pNumFormatter->GetStandardFormat( NUMBERFORMAT_DATE, pField->GetLanguage() );
-                            String sDate;
+                            OUString sDate;
                             Color* pColor;
                             pNumFormatter->GetOutputString( aDateDiff.GetDate(), nFormat, sDate, &pColor );
 

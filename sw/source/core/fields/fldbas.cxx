@@ -682,7 +682,7 @@ String SwFormulaField::GetExpandedFormula() const
 
     if (nFmt && nFmt != SAL_MAX_UINT32 && ((SwValueFieldType *)GetTyp())->UseFormat())
     {
-        String sFormattedValue;
+        OUString sFormattedValue;
         Color* pCol = 0;
 
         SvNumberFormatter* pFormatter = GetDoc()->GetNumberFormatter();
@@ -691,10 +691,8 @@ String SwFormulaField::GetExpandedFormula() const
         {
             String sValue;
             ((SwValueFieldType *)GetTyp())->DoubleToString(sValue, GetValue(), nFmt);
-            OUString sTempOut(sFormattedValue);
             OUString sTempIn(sValue);
-            pFormatter->GetOutputString(sTempIn, nFmt, sTempOut, &pCol);
-            sFormattedValue = sTempOut;
+            pFormatter->GetOutputString(sTempIn, nFmt, sFormattedValue, &pCol);
         }
         else
         {
@@ -715,13 +713,13 @@ bool SwField::IsClickable() const
 {
     switch (Which())
     {
-        case RES_JUMPEDITFLD:
-        case RES_MACROFLD:
-        case RES_GETREFFLD:
-        case RES_INPUTFLD:
-        case RES_SETEXPFLD:
-        case RES_DROPDOWN:
-            return true;
+    case RES_JUMPEDITFLD:
+    case RES_MACROFLD:
+    case RES_GETREFFLD:
+    case RES_INPUTFLD:
+    case RES_SETEXPFLD:
+    case RES_DROPDOWN:
+        return true;
     }
     return false;
 }

@@ -76,10 +76,10 @@ namespace framework
                             );
         virtual             ~UndoActionWrapper();
 
-        virtual OUString GetComment() const;
+        virtual OUString    GetComment() const;
         virtual void        Undo();
         virtual void        Redo();
-        virtual sal_Bool    CanRepeat(SfxRepeatTarget&) const;
+        virtual bool        CanRepeat(SfxRepeatTarget&) const;
 
     private:
         const Reference< XUndoAction >  m_xUndoAction;
@@ -136,7 +136,7 @@ namespace framework
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    sal_Bool UndoActionWrapper::CanRepeat(SfxRepeatTarget&) const
+    bool UndoActionWrapper::CanRepeat(SfxRepeatTarget&) const
     {
         return sal_False;
     }
@@ -254,14 +254,14 @@ namespace framework
         }
 
         // SfxUndoListener
-        virtual void actionUndone( const String& i_actionComment );
-        virtual void actionRedone( const String& i_actionComment );
-        virtual void undoActionAdded( const String& i_actionComment );
+        virtual void actionUndone( const OUString& i_actionComment );
+        virtual void actionRedone( const OUString& i_actionComment );
+        virtual void undoActionAdded( const OUString& i_actionComment );
         virtual void cleared();
         virtual void clearedRedo();
         virtual void resetAll();
-        virtual void listActionEntered( const String& i_comment );
-        virtual void listActionLeft( const String& i_comment );
+        virtual void listActionEntered( const OUString& i_comment );
+        virtual void listActionLeft( const OUString& i_comment );
         virtual void listActionLeftAndMerged();
         virtual void listActionCancelled();
         virtual void undoManagerDying();
@@ -800,7 +800,7 @@ namespace framework
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    void UndoManagerHelper_Impl::actionUndone( const String& i_actionComment )
+    void UndoManagerHelper_Impl::actionUndone( const OUString& i_actionComment )
     {
         UndoManagerEvent aEvent;
         aEvent.Source = getXUndoManager();
@@ -811,7 +811,7 @@ namespace framework
     }
 
      //------------------------------------------------------------------------------------------------------------------
-    void UndoManagerHelper_Impl::actionRedone( const String& i_actionComment )
+    void UndoManagerHelper_Impl::actionRedone( const OUString& i_actionComment )
     {
         UndoManagerEvent aEvent;
         aEvent.Source = getXUndoManager();
@@ -822,7 +822,7 @@ namespace framework
     }
 
      //------------------------------------------------------------------------------------------------------------------
-    void UndoManagerHelper_Impl::undoActionAdded( const String& i_actionComment )
+    void UndoManagerHelper_Impl::undoActionAdded( const OUString& i_actionComment )
     {
         if ( m_bAPIActionRunning )
             return;
@@ -858,7 +858,7 @@ namespace framework
     }
 
      //------------------------------------------------------------------------------------------------------------------
-    void UndoManagerHelper_Impl::listActionEntered( const String& i_comment )
+    void UndoManagerHelper_Impl::listActionEntered( const OUString& i_comment )
     {
 #if OSL_DEBUG_LEVEL > 0
         m_aContextAPIFlags.push( m_bAPIActionRunning );
@@ -871,7 +871,7 @@ namespace framework
     }
 
      //------------------------------------------------------------------------------------------------------------------
-    void UndoManagerHelper_Impl::listActionLeft( const String& i_comment )
+    void UndoManagerHelper_Impl::listActionLeft( const OUString& i_comment )
     {
 #if OSL_DEBUG_LEVEL > 0
         const bool bCurrentContextIsAPIContext = m_aContextAPIFlags.top();

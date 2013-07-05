@@ -27,7 +27,6 @@
 #include <com/sun/star/i18n/TransliterationModules.hpp>
 #include <unotools/configitem.hxx>
 #include <rsc/rscsfx.hxx>
-#include <tools/string.hxx>
 #include <svl/poolitem.hxx>
 #include <svl/srchdefs.hxx>
 
@@ -98,11 +97,11 @@ public:
             sal_uInt16      GetCommand() const { return nCommand; }
             void            SetCommand(sal_uInt16 nNewCommand) { nCommand = nNewCommand; }
 
-    inline  const String    GetSearchString() const;
-    inline  void            SetSearchString(const String& rNewString);
+    inline  const OUString  GetSearchString() const;
+    inline  void            SetSearchString(const OUString& rNewString);
 
-    inline  const String    GetReplaceString() const;
-    inline  void            SetReplaceString(const String& rNewString);
+    inline  const OUString  GetReplaceString() const;
+    inline  void            SetReplaceString(const OUString& rNewString);
 
     inline  bool            GetWordOnly() const;
             void            SetWordOnly(bool bNewWordOnly);
@@ -176,22 +175,22 @@ public:
     inline  void            SetUseAsianOptions( bool bVal ) { bAsianOptions = bVal; }
 };
 
-const String SvxSearchItem::GetSearchString() const
+const OUString SvxSearchItem::GetSearchString() const
 {
     return aSearchOpt.searchString;
 }
 
-void SvxSearchItem::SetSearchString(const String& rNewString)
+void SvxSearchItem::SetSearchString(const OUString& rNewString)
 {
     aSearchOpt.searchString = rNewString;
 }
 
-const String SvxSearchItem::GetReplaceString() const
+const OUString SvxSearchItem::GetReplaceString() const
 {
     return aSearchOpt.replaceString;
 }
 
-void SvxSearchItem::SetReplaceString(const String& rNewString)
+void SvxSearchItem::SetReplaceString(const OUString& rNewString)
 {
     aSearchOpt.replaceString = rNewString;
 }
