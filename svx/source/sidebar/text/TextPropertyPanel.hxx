@@ -23,7 +23,6 @@
 #include <sfx2/sidebar/ControllerItem.hxx>
 #include <sfx2/sidebar/IContextChangeReceiver.hxx>
 #include <sfx2/sidebar/EnumContext.hxx>
-#include <sfx2/sidebar/GridLayouter.hxx>
 
 #include <svtools/ctrlbox.hxx>
 #include <svx/tbxcolorupdate.hxx>
@@ -83,9 +82,6 @@ public:
         const SfxPoolItem* pState,
         const bool bIsEnabled);
 
-    // Inherited from vcl Window.
-    virtual void Resize (void);
-
 private:
     //ui controls
     SvxSBFontNameBox* mpFontNameBox;
@@ -135,7 +131,6 @@ private:
 
     ::sfx2::sidebar::EnumContext maContext;
     SfxBindings* mpBindings;
-    ::sfx2::sidebar::GridLayouter maLayouter;
 
     TextPropertyPanel (
         Window* pParent,

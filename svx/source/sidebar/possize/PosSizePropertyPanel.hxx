@@ -22,7 +22,6 @@
 #include <sfx2/sidebar/SidebarPanelBase.hxx>
 #include <sfx2/sidebar/ControllerItem.hxx>
 #include <sfx2/sidebar/IContextChangeReceiver.hxx>
-#include <sfx2/sidebar/GridLayouter.hxx>
 #include <boost/scoped_ptr.hpp>
 #include <svx/rectenum.hxx>
 #include <svl/poolitem.hxx>
@@ -67,8 +66,6 @@ public:
 
     SfxBindings* GetBindings();
     void ShowMenu (void);
-
-    virtual void Resize (void);
 
 private:
     //Position
@@ -150,7 +147,6 @@ private:
     bool                                    mbIsFlip : 1;
 
     cssu::Reference<css::ui::XSidebar> mxSidebar;
-    ::sfx2::sidebar::GridLayouter maLayouter;
 
     DECL_LINK( ChangePosXHdl, void * );
     DECL_LINK( ChangePosYHdl, void * );

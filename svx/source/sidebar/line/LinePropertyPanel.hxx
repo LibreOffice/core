@@ -22,7 +22,6 @@
 #include <vcl/ctrl.hxx>
 #include <sfx2/sidebar/SidebarPanelBase.hxx>
 #include <sfx2/sidebar/ControllerItem.hxx>
-#include <sfx2/sidebar/GridLayouter.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/field.hxx>
 #include <boost/scoped_ptr.hpp>
@@ -88,8 +87,6 @@ public:
 
     void EndLineWidthPopupMode (void);
 
-    virtual void Resize (void);
-
 private:
     //ui controls
     ::boost::scoped_ptr< FixedText >                        mpFTWidth;
@@ -152,8 +149,6 @@ private:
     /// bitfield
     bool                mbColorAvailable : 1;
     bool                mbWidthValuable : 1;
-
-    ::sfx2::sidebar::GridLayouter maLayouter;
 
     void SetupIcons(void);
     void Initialize();

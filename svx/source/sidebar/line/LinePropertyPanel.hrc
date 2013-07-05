@@ -21,10 +21,6 @@
 #define CUSTOM_W    74
 #define CUSTOM_H    POPUPPANEL_MARGIN_LARGE * 2 +  TEXT_HEIGHT + 12 +  TEXT_CONTROL_SPACING_VERTICAL
 
-#define TOOLBOX_WIDTH       50
-#define TOOLBOX_HEIGHT      14
-#define LISTBOX_HEIGHT      99
-
 #define FT_COLOR            1
 #define TB_COLOR            2
 #define FT_WIDTH            3

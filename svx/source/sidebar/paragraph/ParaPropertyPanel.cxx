@@ -29,7 +29,6 @@
 #include <sfx2/sidebar/Theme.hxx>
 #include <sfx2/sidebar/ResourceDefinitions.hrc>
 #include <sfx2/sidebar/ControlFactory.hxx>
-#include <sfx2/sidebar/Layouter.hxx>
 #include <sfx2/sidebar/Tools.hxx>
 #include <svx/sidebar/PopupContainer.hxx>
 #include <sfx2/dispatch.hxx>
@@ -46,10 +45,8 @@
 #include <sfx2/objsh.hxx>
 #include <svtools/unitconv.hxx>
 #include <boost/bind.hpp>
-
 using namespace css;
 using namespace cssu;
-using namespace ::sfx2::sidebar;
 using ::sfx2::sidebar::Theme;
 using ::sfx2::sidebar::ControlFactory;
 
@@ -246,28 +243,6 @@ void ParaPropertyPanel::ReSize(bool /* bSize */)
     if (mxSidebar.is())
         mxSidebar->requestLayout();
 }
-
-
-
-
-void ParaPropertyPanel::Resize (void)
-{
-    switch (maContext.GetCombinedContext_DI())
-    {
-        case CombinedEnumContext(Application_Calc, Context_DrawText):
-        case CombinedEnumContext(Application_WriterVariants, Context_DrawText):
-        case CombinedEnumContext(Application_WriterVariants, Context_Annotation):
-            ReSize(false);
-            break;
-
-        default:
-            ReSize(true);
-            break;
-    }
-}
-
-
-
 
 void ParaPropertyPanel::EndSpacingPopupMode (void)
 {
@@ -1538,8 +1513,7 @@ ParaPropertyPanel::ParaPropertyPanel(Window* pParent,
       maBulletsPopup(this, ::boost::bind(&ParaPropertyPanel::CreateBulletsPopupControl, this, _1)),
       maNumberingPopup(this, ::boost::bind(&ParaPropertyPanel::CreateNumberingPopupControl, this, _1)),
       maBGColorPopup(this, ::boost::bind(&ParaPropertyPanel::CreateBGColorPopupControl, this, _1)),
-      mxSidebar(rxSidebar),
-      maLayouter(*this)
+      mxSidebar(rxSidebar)
 {
     //Alignment
     get(mpAlignToolBox, "horizontalalignment");

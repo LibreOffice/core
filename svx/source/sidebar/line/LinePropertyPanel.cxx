@@ -18,7 +18,6 @@
 #include <sfx2/sidebar/ResourceDefinitions.hrc>
 #include <sfx2/sidebar/Theme.hxx>
 #include <sfx2/sidebar/ControlFactory.hxx>
-#include <sfx2/sidebar/Layouter.hxx>
 #include <LinePropertyPanel.hxx>
 #include <LinePropertyPanel.hrc>
 #include <svx/dialogs.hrc>
@@ -56,9 +55,7 @@
 
 using namespace css;
 using namespace cssu;
-using ::sfx2::sidebar::Layouter;
 using ::sfx2::sidebar::Theme;
-
 
 #define A2S(pString) (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(pString)))
 
@@ -204,58 +201,10 @@ LinePropertyPanel::LinePropertyPanel(
     mxFrame(rxFrame),
     mpBindings(pBindings),
     mbColorAvailable(true),
-    mbWidthValuable(true),
-    maLayouter(*this)
+    mbWidthValuable(true)
 {
     Initialize();
     FreeResource();
-
-    // Setup the grid layouter.
-    const sal_Int32 nMappedToolBoxWidth (Layouter::MapWidth(*this, TOOLBOX_WIDTH));
-
-    maLayouter.GetCell(0,0).SetControl(*mpFTWidth);
-    maLayouter.GetCell(1,0).SetControl(*mpTBWidthBackground).SetFixedWidth();
-
-    maLayouter.GetCell(0,2).SetControl(*mpFTColor);
-    maLayouter.GetCell(1,2).SetControl(*mpTBColorBackground).SetFixedWidth();
-
-    maLayouter.GetCell(2,0).SetControl(*mpFTStyle);
-    maLayouter.GetCell(3,0).SetControl(*mpLBStyle);
-
-    maLayouter.GetCell(2,2).SetControl(*mpFTTrancparency);
-    maLayouter.GetCell(3,2).SetControl(*mpMFTransparent);
-
-    maLayouter.GetCell(4,0).SetControl(*mpFTArrow).SetGridWidth(3);
-    maLayouter.GetCell(5,0).SetControl(*mpLBStart);
-    maLayouter.GetCell(5,2).SetControl(*mpLBEnd);
-
-    maLayouter.GetCell(6,0).SetControl(*mpFTEdgeStyle);
-    maLayouter.GetCell(7,0).SetControl(*mpLBEdgeStyle);
-
-    maLayouter.GetCell(6,2).SetControl(*mpFTCapStyle);
-    maLayouter.GetCell(7,2).SetControl(*mpLBCapStyle);
-
-    maLayouter.GetColumn(0)
-        .SetWeight(1)
-        .SetLeftPadding(Layouter::MapWidth(*this,SECTIONPAGE_MARGIN_HORIZONTAL))
-        .SetMinimumWidth(nMappedToolBoxWidth);
-    maLayouter.GetColumn(1)
-        .SetWeight(0)
-        .SetMinimumWidth(Layouter::MapWidth(*this, CONTROL_SPACING_HORIZONTAL));
-    maLayouter.GetColumn(2)
-        .SetWeight(1)
-        .SetRightPadding(Layouter::MapWidth(*this,SECTIONPAGE_MARGIN_HORIZONTAL))
-        .SetMinimumWidth(nMappedToolBoxWidth);
-
-    // Make controls that display text handle short widths more
-    // graceful.
-    Layouter::PrepareForLayouting(*mpFTWidth);
-    Layouter::PrepareForLayouting(*mpFTColor);
-    Layouter::PrepareForLayouting(*mpFTStyle);
-    Layouter::PrepareForLayouting(*mpFTTrancparency);
-    Layouter::PrepareForLayouting(*mpFTArrow);
-    Layouter::PrepareForLayouting(*mpFTEdgeStyle);
-    Layouter::PrepareForLayouting(*mpFTCapStyle);
 }
 
 
@@ -987,14 +936,6 @@ PopupControl* LinePropertyPanel::CreateLineWidthPopupControl (PopupContainer* pP
 void LinePropertyPanel::EndLineWidthPopupMode (void)
 {
     maLineWidthPopup.Hide();
-}
-
-
-
-
-void LinePropertyPanel::Resize (void)
-{
-    maLayouter.Layout();
 }
 
 

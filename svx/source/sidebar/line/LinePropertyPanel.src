@@ -20,6 +20,10 @@
 #include <svx/dialogs.hrc>
 #include "helpid.hrc"
 
+#define TOOLBOX_WIDTH       50
+#define TOOLBOX_HEIGHT      14
+#define LISTBOX_HEIGHT      99
+
 Control RID_SIDEBAR_LINE_PANEL
 {
     OutputSize = TRUE;
