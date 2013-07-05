@@ -4717,7 +4717,7 @@ AC_MSG_CHECKING([for required Perl modules])
 if `$PERL -e 'use Archive::Zip; use Cwd; use Digest::MD5'>/dev/null 2>&1`; then
     AC_MSG_RESULT([all modules found])
 else
-    AC_MSG_ERROR([Failed to find some modules])
+    AC_MSG_RESULT([failed to find some modules])
     # Find out which modules are missing.
     missing_perl_modules=
     if ! `$PERL -e 'use Archive::Zip;'>/dev/null 2>&1`; then
