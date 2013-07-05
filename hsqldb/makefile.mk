@@ -49,10 +49,7 @@ CONVERTFILES=build$/build.xml \
             src$/org$/hsqldb$/persist$/HsqlDatabaseProperties.java \
             src$/org$/hsqldb$/Library.java
 
-PATCH_FILES=patches$/i96823.patch \
-            patches$/i97032.patch \
-            patches$/i103528.patch \
-            patches$/i104901.patch
+PATCH_FILES=patches$/i121754.patch
 
 .IF "$(JAVACISGCJ)"=="yes"
 JAVA_HOME=

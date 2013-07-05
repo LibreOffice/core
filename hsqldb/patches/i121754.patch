@@ -1,0 +1,493 @@
+diff -urbwB ext_sources/hsqldb/build/build.xml ext_sources/hsqldb_1_8_0_11/build/build.xml
+--- misc/hsqldb/build/build.xml	2008-06-01 23:56:57.000000000 +0200
++++ misc/build/hsqldb/build/build.xml	2013-07-05 23:25:40.000000000 +0200
+@@ -1,6 +1,6 @@
+ <?xml version="1.0"?>
+-<!-- author fredt@users.sourceforge.net 2001 - 2008 -->
+-<!-- additional targets by unsaved@users.sourceforge.net 2004 - 2008 -->
++<!-- author fredt@users.sourceforge.net 2001 - 2009 -->
++<!-- additional targets by unsaved@users.sourceforge.net 2004 - 2009 -->
+
+ <project name="hsqldb" default="help" basedir="../">
+    <!-- This loads properties in the same exact way as if you ran
+@@ -14,10 +14,10 @@
+         Do not address questions about property file(s) to the
+         hsqldb community. -->
+    <property file='build/build.properties'/>
+-   <property name="hsqldb.version" value="1.8.0.10"/>
++   <property name="hsqldb.version" value="1.8.0.11"/>
+
+    <tstamp>
+-       <format property="_tmpstamp" pattern="yyyy/MM/dd-hh:mm:ss"
++       <format property="_tmpstamp" pattern="yyyy/MM/dd-HH:mm:ss"
+                locale="en"/>
+    </tstamp>
+
+@@ -26,7 +26,7 @@
+    <property name="hsqldb.title" value="HSQLDB"/>
+    <property name="hsqldb.vendor" value="The HSQLDB Development Group"/>
+    <property name="src" value="${basedir}/src"/>
+-   <property name="build.debug" value="off"/>
++   <property name="build.debug" value="false"/>
+
+    <target name="init">
+    </target>
+@@ -213,10 +213,11 @@
+        </java>
+     </target>
+
+-    <target name="switchtojdk14" depends="switches"
++    <target name="switchtojdk14" depends="switchtojdk13"
+             description="self explanatory" if="ant.java.iscjava14">
+       <java classname="org.hsqldb.util.CodeSwitcher" classpath="classes" >
+         <arg file="${src}/org/hsqldb/lib/java/JavaSystem.java"/>
++        <arg file="${src}/org/hsqldb/jdbcDriver.java"/>
+         <arg file="${src}/org/hsqldb/lib/HsqlTimer.java"/>
+         <arg file="${src}/org/hsqldb/jdbc/jdbcBlob.java"/>
+         <arg file="${src}/org/hsqldb/jdbc/jdbcDatabaseMetaData.java"/>
+@@ -251,6 +252,7 @@
+     <target name="switchtojdk16" depends="switchtojdk14"
+             description="self explanatory" if="ant.java.iscjava16">
+       <java classname="org.hsqldb.util.CodeSwitcher" classpath="classes" >
++        <arg file="${src}/org/hsqldb/jdbcDriver.java"/>
+         <arg file="${src}/org/hsqldb/lib/java/JavaSystem.java"/>
+         <arg file="${src}/org/hsqldb/lib/HsqlTimer.java"/>
+         <arg file="${src}/org/hsqldb/jdbc/jdbcBlob.java"/>
+diff -urbwB ext_sources/hsqldb/index.html ext_sources/hsqldb_1_8_0_11/index.html
+--- misc/hsqldb/index.html	2008-06-01 15:32:15.000000000 +0200
++++ misc/build/hsqldb/index.html	2013-07-05 23:37:19.000000000 +0200
+@@ -14,7 +14,7 @@
+   new features and improvements. There are quite a large number of changes and 
+   new features compared to 1.7.1. Please read the documentation for details. Please 
+   also check the web site at <a href="http://hsqldb.org/" target="_top">http://hsqldb.org</a>&nbsp;periodically 
+-  for any release updates. This point release 1.8.0.10 features many bug fixes 
++  for any release updates. This point release 1.8.0.11 features many bug fixes
+   introduced since the original release of 1.8.0 in June 2005.</p>
+ <p>This download contains the following files and directories: </p>
+ 
+diff -urbwB ext_sources/hsqldb/readme.txt ext_sources/hsqldb_1_8_0_11/readme.txt
+--- misc/hsqldb/readme.txt	2008-06-01 15:32:31.000000000 +0200
++++ misc/build/hsqldb/readme.txt	2013-07-05 23:37:49.000000000 +0200
+@@ -1,5 +1,6 @@
+ Readme File
+-June 2008
+-This package contains HSQLDB 1.8.0.10
++June 2013
++This package contains HSQLDB 1.8.0.11 
++Thie version is based on version 1.8.0.10 and includes minor patches added by OpenOffice. It compiles with Java 7
+ 
+ HSQLDB is a relational database engine and a set of tools written in Java.The file index.html in this directory contains the list of directories with their contents.Documentation and license information can be found in the /doc directory.Project home page: http://hsqldb.orgPlease check the site periodically for updated versions.
+diff -urbwB ext_sources/hsqldb/src/org/hsqldb/Expression.java ext_sources/hsqldb_1_8_0_11/src/org/hsqldb/Expression.java
+--- misc/hsqldb/src/org/hsqldb/Expression.java	2008-05-27 17:15:05.000000000 +0200
++++ misc/build/hsqldb/src/org/hsqldb/Expression.java	2013-07-05 23:40:51.000000000 +0200
+@@ -807,6 +807,14 @@
+ 
+             case COUNT :
+                 buf.append(' ').append(Token.T_COUNT).append('(');
++
++                if ("(*)".equals(left)) {
++                    buf.append('*');
++                } else {
++                    buf.append(left);
++                }
++
++                buf.append(')');
+                 break;
+ 
+             case SUM :
+@@ -858,11 +866,15 @@
+                 buf.append(' ').append(Token.T_VAR_SAMP).append('(');
+                 buf.append(left).append(')');
+                 break;
+-        }
+ 
++            default :
+         throw Trace.error(Trace.EXPRESSION_NOT_SUPPORTED);
+     }
+ 
++        // changes used in OpenOffice 3.4 have been incorporated
++        return buf.toString();
++    }
++
+     private String describe(Session session, int blanks) {
+ 
+         int          lIType;
+@@ -1523,6 +1535,12 @@
+             return columnName;
+         }
+ 
++        if (isAggregate(exprType)) {
++            try {
++                return getDDL();
++            } catch (Exception e) {}
++        }
++
+         return "";
+     }
+ 
+diff -urbwB ext_sources/hsqldb/src/org/hsqldb/jdbc/jdbcCallableStatement.java ext_sources/hsqldb_1_8_0_11/src/org/hsqldb/jdbc/jdbcCallableStatement.java
+--- misc/hsqldb/src/org/hsqldb/jdbc/jdbcCallableStatement.java	2008-03-20 02:44:28.000000000 +0100
++++ misc/build/hsqldb/src/org/hsqldb/jdbc/jdbcCallableStatement.java	2013-07-05 23:45:50.000000000 +0200
+@@ -3376,7 +3376,26 @@
+     {
+         throw new UnsupportedOperationException("Not supported yet.");
+     }
+-*/
+ 
++    public <T>T getObject(int parameterIndex,
++                          Class<T> type) throws SQLException {
++        return (T) this.getObject(parameterIndex);
++    }
++
++    public <T>T getObject(String parameterName,
++                          Class<T> type) throws SQLException {
++        return getObject(this.findParameterIndex(parameterName), type);
++    }
++
++    public void closeOnCompletion() throws SQLException {
++        throw new UnsupportedOperationException("Not supported yet.");
++    }
++    
++    public boolean isCloseOnCompletion() throws SQLException {
++        throw new UnsupportedOperationException("Not supported yet.");
++    }
++    
++*/
+ //#endif JAVA6
++
+ }
+diff -urbwB ext_sources/hsqldb/src/org/hsqldb/jdbc/jdbcConnection.java ext_sources/hsqldb_1_8_0_11/src/org/hsqldb/jdbc/jdbcConnection.java
+--- misc/hsqldb/src/org/hsqldb/jdbc/jdbcConnection.java	2008-03-20 02:44:28.000000000 +0100
++++ misc/build/hsqldb/src/org/hsqldb/jdbc/jdbcConnection.java	2013-07-05 23:46:02.000000000 +0200
+@@ -2794,6 +2794,36 @@
+     {
+         throw new UnsupportedOperationException("Not supported yet.");
+     }
++
++    public int getNetworkTimeout() throws SQLException {
++        return 0;
++    }
++
++    public void setNetworkTimeout(java.util.concurrent.Executor executor,
++                                  int milliseconds) throws SQLException {
++
++        checkClosed();
++
++        throw Util.notSupported();
++    }
++
++    public void setSchema(String schema) throws SQLException {
++        checkClosed();
++
++        throw Util.notSupported();
++    }
++
++    public String getSchema() throws SQLException {
++        checkClosed();
++
++        throw Util.notSupported();
++    }
++    public void abort(
++            java.util.concurrent.Executor executor) throws SQLException {
++        checkClosed();
++
++        throw Util.notSupported();
++    }
+ */
+ 
+ //#endif JAVA6
+diff -urbwB ext_sources/hsqldb/src/org/hsqldb/jdbc/jdbcDatabaseMetaData.java ext_sources/hsqldb_1_8_0_11/src/org/hsqldb/jdbc/jdbcDatabaseMetaData.java
+--- misc/hsqldb/src/org/hsqldb/jdbc/jdbcDatabaseMetaData.java	2008-03-20 02:44:28.000000000 +0100
++++ misc/build/hsqldb/src/org/hsqldb/jdbc/jdbcDatabaseMetaData.java	2013-07-05 23:46:18.000000000 +0200
+@@ -5694,7 +5694,17 @@
+     {
+         throw new UnsupportedOperationException("Not supported yet.");
+     }
+-*/
+ 
++    public ResultSet getPseudoColumns(
++            String catalog, String schemaPattern, String tableNamePattern,
++            String columnNamePattern) throws SQLException {
++        throw Util.notSupported();
++    }
++
++    public boolean generatedKeyAlwaysReturned() throws SQLException {
++        return true;
++    }
++
++*/
+ //#endif JAVA6
+ }
+diff -urbwB ext_sources/hsqldb/src/org/hsqldb/jdbc/jdbcDataSource.java ext_sources/hsqldb_1_8_0_11/src/org/hsqldb/jdbc/jdbcDataSource.java
+--- misc/hsqldb/src/org/hsqldb/jdbc/jdbcDataSource.java	2008-05-28 22:23:02.000000000 +0200
++++ misc/build/hsqldb/src/org/hsqldb/jdbc/jdbcDataSource.java	2013-07-05 23:46:39.000000000 +0200
+@@ -322,6 +322,11 @@
+     {
+         throw new UnsupportedOperationException("Not supported yet.");
+     }
++    
++    public java.util.logging.Logger getParentLogger()
++    throws java.sql.SQLFeatureNotSupportedException {
++        throw (java.sql.SQLFeatureNotSupportedException) Util.notSupported();
++    }
+ */
+ 
+ //#endif JAVA6
+diff -urbwB ext_sources/hsqldb/src/org/hsqldb/jdbc/jdbcPreparedStatement.java ext_sources/hsqldb_1_8_0_11/src/org/hsqldb/jdbc/jdbcPreparedStatement.java
+--- misc/hsqldb/src/org/hsqldb/jdbc/jdbcPreparedStatement.java	2008-03-20 02:44:28.000000000 +0100
++++ misc/build/hsqldb/src/org/hsqldb/jdbc/jdbcPreparedStatement.java	2013-07-05 23:46:54.000000000 +0200
+@@ -2403,6 +2403,15 @@
+     {
+         throw new UnsupportedOperationException("Not supported yet.");
+     }
++
++    public void closeOnCompletion() throws SQLException {
++        checkClosed();
++    }
++
++    public boolean isCloseOnCompletion() throws SQLException {
++        checkClosed();
++        return false;
++    }
+ */
+ 
+ //#endif JAVA6
+diff -urbwB ext_sources/hsqldb/src/org/hsqldb/jdbc/jdbcResultSet.java ext_sources/hsqldb_1_8_0_11/src/org/hsqldb/jdbc/jdbcResultSet.java
+--- misc/hsqldb/src/org/hsqldb/jdbc/jdbcResultSet.java	2008-03-20 02:44:28.000000000 +0100
++++ misc/build/hsqldb/src/org/hsqldb/jdbc/jdbcResultSet.java	2013-07-05 23:47:15.000000000 +0200
+@@ -5325,7 +5325,16 @@
+     {
+         throw new UnsupportedOperationException("Not supported yet.");
+     }
+-*/
+ 
++    public <T>T getObject(int columnIndex, Class<T> type) throws SQLException {
++        return (T) getObject(columnIndex);
++    }
++
++    public <T>T getObject(String columnLabel,
++                          Class<T> type) throws SQLException {
++        return getObject(findColumn(columnLabel), type);
++    }
++    
++*/
+ //#endif JAVA6
+ }
+diff -urbwB ext_sources/hsqldb/src/org/hsqldb/jdbc/jdbcStatement.java ext_sources/hsqldb_1_8_0_11/src/org/hsqldb/jdbc/jdbcStatement.java
+--- misc/hsqldb/src/org/hsqldb/jdbc/jdbcStatement.java	2008-03-20 02:44:28.000000000 +0100
++++ misc/build/hsqldb/src/org/hsqldb/jdbc/jdbcStatement.java	2013-07-05 23:47:29.000000000 +0200
+@@ -1608,6 +1608,16 @@
+     {
+         throw new UnsupportedOperationException("Not supported yet.");
+     }
++    
++    public void closeOnCompletion() throws SQLException {
++        checkClosed();
++    }
++
++    public boolean isCloseOnCompletion() throws SQLException {
++        checkClosed();
++        return false;
++    }
++    
+ */
+ //#endif JAVA6
+ }
+diff -urbwB ext_sources/hsqldb/src/org/hsqldb/jdbcDriver.java ext_sources/hsqldb_1_8_0_11/src/org/hsqldb/jdbcDriver.java
+--- misc/hsqldb/src/org/hsqldb/jdbcDriver.java	2006-04-11 17:03:24.000000000 +0200
++++ misc/build/hsqldb/src/org/hsqldb/jdbcDriver.java	2013-07-05 23:48:06.000000000 +0200
+@@ -321,4 +321,16 @@
+             DriverManager.registerDriver(new jdbcDriver());
+         } catch (Exception e) {}
+     }
++
++//#ifdef JAVA6
++/*
++    public java.util.logging
++            .Logger getParentLogger() throws java.sql
++                .SQLFeatureNotSupportedException {
++        throw new UnsupportedOperationException("Not supported yet.");
++    }
++*/
++
++//#endif
++
+ }
+diff -urbwB ext_sources/hsqldb/src/org/hsqldb/lib/StringComparator.java ext_sources/hsqldb_1_8_0_11/src/org/hsqldb/lib/StringComparator.java
+--- misc/hsqldb/src/org/hsqldb/lib/StringComparator.java	2013-07-06 00:32:59.000000000 +0200
++++ misc/build/hsqldb/src/org/hsqldb/lib/StringComparator.java	2013-07-06 00:09:04.000000000 +0200
+@@ -0,0 +1,53 @@
++/* Copyright (c) 2001-2008, The HSQL Development Group
++ * All rights reserved.
++ *
++ * Redistribution and use in source and binary forms, with or without
++ * modification, are permitted provided that the following conditions are met:
++ *
++ * Redistributions of source code must retain the above copyright notice, this
++ * list of conditions and the following disclaimer.
++ *
++ * Redistributions in binary form must reproduce the above copyright notice,
++ * this list of conditions and the following disclaimer in the documentation
++ * and/or other materials provided with the distribution.
++ *
++ * Neither the name of the HSQL Development Group nor the names of its
++ * contributors may be used to endorse or promote products derived from this
++ * software without specific prior written permission.
++ *
++ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
++ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
++ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
++ * ARE DISCLAIMED. IN NO EVENT SHALL HSQL DEVELOPMENT GROUP, HSQLDB.ORG,
++ * OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
++ * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
++ * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
++ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
++ * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
++ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
++ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
++ */
++
++
++package org.hsqldb.lib;
++
++public class StringComparator implements ObjectComparator {
++
++    public int compare(Object a, Object b) {
++
++        // handle nulls
++        if (a == b) {
++            return 0;
++        }
++
++        if (a == null) {
++            return -1;
++        }
++
++        if (b == null) {
++            return 1;
++        }
++
++        return ((String) a).compareTo((String) b);
++    }
++}
+diff -urbwB ext_sources/hsqldb/src/org/hsqldb/Library.java ext_sources/hsqldb_1_8_0_11/src/org/hsqldb/Library.java
+--- misc/hsqldb/src/org/hsqldb/Library.java	2006-07-17 00:29:33.000000000 +0200
++++ misc/build/hsqldb/src/org/hsqldb/Library.java	2013-07-05 23:51:13.000000000 +0200
+@@ -1957,7 +1957,7 @@
+         functionMap.put("bitand", bitand);
+         functionMap.put("bitlength", bitLength);
+         functionMap.put("bitor", bitor);
+-        functionMap.put("bitxor", bitor);
++        functionMap.put("bitxor", bitxor);
+         functionMap.put("character", character);
+         functionMap.put("concat", concat);
+         functionMap.put("cot", cot);
+diff -urbwB ext_sources/hsqldb/src/org/hsqldb/persist/HsqlDatabaseProperties.java ext_sources/hsqldb_1_8_0_11/src/org/hsqldb/persist/HsqlDatabaseProperties.java
+--- misc/hsqldb/src/org/hsqldb/persist/HsqlDatabaseProperties.java	2008-03-17 17:05:41.000000000 +0100
++++ misc/build/hsqldb/src/org/hsqldb/persist/HsqlDatabaseProperties.java	2013-07-05 23:52:14.000000000 +0200
+@@ -429,6 +429,7 @@
+             setProperty(hsqldb_log_size, 10);
+             setProperty(sql_enforce_strict_size, true);
+             setProperty(hsqldb_nio_data_file, false);
++            setProperty(hsqldb_lock_file, true);
+         }
+ 
+         // OOo end
+diff -urbwB ext_sources/hsqldb/src/org/hsqldb/Select.java ext_sources/hsqldb_1_8_0_11/src/org/hsqldb/Select.java
+--- misc/hsqldb/src/org/hsqldb/Select.java	2007-07-17 18:14:09.000000000 +0200
++++ misc/build/hsqldb/src/org/hsqldb/Select.java	2013-07-05 23:57:48.000000000 +0200
+@@ -33,7 +33,7 @@
+  *
+  * For work added by the HSQL Development Group:
+  *
+- * Copyright (c) 2001-2008, The HSQL Development Group
++ * Copyright (c) 2001-2005, The HSQL Development Group
+  * All rights reserved.
+  *
+  * Redistribution and use in source and binary forms, with or without
+@@ -1255,6 +1255,7 @@
+         for (int i = 0; i < iResultLen; i++) {
+             e                    = exprColumns[i];
+             rmd.colTypes[i]      = e.getDataType();
++            rmd.classNames[i]    = e.getValueClassName();
+             rmd.colSizes[i]      = e.getColumnSize();
+             rmd.colScales[i]     = e.getColumnScale();
+             rmd.colLabels[i]     = e.getAlias();
+@@ -1263,6 +1264,7 @@
+             rmd.colNames[i]      = e.getColumnName();
+ 
+             if (rmd.isTableColumn(i)) {
++                rmd.schemaNames[i]   = e.getTableSchemaName();
+                 rmd.colNullable[i] = e.nullability;
+                 rmd.isIdentity[i]  = e.isIdentity;
+                 rmd.isWritable[i]  = e.isWritable;
+diff -urbwB ext_sources/hsqldb/src/org/hsqldb/Table.java ext_sources/hsqldb_1_8_0_11/src/org/hsqldb/Table.java
+--- misc/hsqldb/src/org/hsqldb/Table.java	2007-10-19 23:59:07.000000000 +0200
++++ misc/build/hsqldb/src/org/hsqldb/Table.java	2013-07-05 23:58:46.000000000 +0200
+@@ -149,10 +149,10 @@
+     Constraint[]      constraintList;                 // constrainst for the table
+     HsqlArrayList[]   triggerLists;                   // array of trigger lists
+     private int[]     colTypes;                       // fredt - types of columns
+-    private int[]     colSizes;                       // fredt - copy of SIZE values for columns
++    int[]             colSizes;                       // fredt - copy of SIZE values for columns
+     private int[]     colScales;                      // fredt - copy of SCALE values for columns
+     private boolean[] colNullable;                    // fredt - modified copy of isNullable() values
+-    private Expression[] colDefaults;                 // fredt - expressions of DEFAULT values
++    Expression[]      colDefaults;                    // fredt - expressions of DEFAULT values
+     private int[]        defaultColumnMap;            // fred - holding 0,1,2,3,...
+     private boolean      hasDefaultValues;            //fredt - shortcut for above
+     boolean              sqlEnforceSize;              // inherited from the database -
+diff -urbwB ext_sources/hsqldb/src/org/hsqldb/TableWorks.java ext_sources/hsqldb_1_8_0_11/src/org/hsqldb/TableWorks.java
+--- misc/hsqldb/src/org/hsqldb/TableWorks.java	2007-01-14 06:48:16.000000000 +0100
++++ misc/build/hsqldb/src/org/hsqldb/TableWorks.java	2013-07-05 23:59:03.000000000 +0200
+@@ -670,7 +670,10 @@
+             // default expressions can change
+             oldCol.setType(newCol);
+             oldCol.setDefaultExpression(newCol.getDefaultExpression());
+-            table.setColumnTypeVars(colIndex);
++
++            table.colSizes[colIndex]    = oldCol.getSize();
++            table.colDefaults[colIndex] = oldCol.getDefaultExpression();
++
+             table.resetDefaultsFlag();
+ 
+             return;
+diff -urbwB ext_sources/hsqldb/src/org/hsqldb/util/DatabaseManager.java ext_sources/hsqldb_1_8_0_11/src/org/hsqldb/util/DatabaseManager.java
+--- misc/hsqldb/src/org/hsqldb/util/DatabaseManager.java	2008-03-17 17:26:48.000000000 +0100
++++ misc/build/hsqldb/src/org/hsqldb/util/DatabaseManager.java	2013-07-06 00:01:06.000000000 +0200
+@@ -124,13 +124,13 @@
+         "See the forums, mailing lists, and HSQLDB User Guide\n"
+         + "at http://hsqldb.org.\n\n"
+         + "Please paste the following version identifier with any\n"
+-        + "problem reports or help requests:  $Revision: 1.37 $"
++        + "problem reports or help requests:  $Revision: 1.33 $"
+         + (TT_AVAILABLE ? ""
+                         : ("\n\nTransferTool classes are not in CLASSPATH.\n"
+                            + "To enable the Tools menu, add 'transfer.jar' to your class path."));
+     ;
+     private static final String ABOUT_TEXT =
+-        "$Revision: 1.37 $ of DatabaseManagerSwing\n\n"
++        "$Revision: 1.33 $ of DatabaseManagerSwing\n\n"
+         + "Copyright (c) 1995-2000, The Hypersonic SQL Group.\n"
+         + "Copyright (c) 2001-2007, The HSQL Development Group.\n"
+         + "http://hsqldb.org  (User Guide available at this site).\n\n\n"
+diff -urbwB ext_sources/hsqldb/src/org/hsqldb/util/DatabaseManagerSwing.java ext_sources/hsqldb_1_8_0_11/src/org/hsqldb/util/DatabaseManagerSwing.java
+--- misc/hsqldb/src/org/hsqldb/util/DatabaseManagerSwing.java	2008-03-19 12:52:12.000000000 +0100
++++ misc/build/hsqldb/src/org/hsqldb/util/DatabaseManagerSwing.java	2013-07-06 00:01:34.000000000 +0200
+@@ -265,14 +265,14 @@
+         "See the forums, mailing lists, and HSQLDB User Guide\n"
+         + "at http://hsqldb.org.\n\n"
+         + "Please paste the following version identifier with any\n"
+-        + "problem reports or help requests:  $Revision: 1.80 $"
++        + "problem reports or help requests:  $Revision: 1.79 $"
+         + (TT_AVAILABLE ? ""
+                         : ("\n\nTransferTool classes are not in CLASSPATH.\n"
+                            + "To enable the Tools menu, add 'transfer.jar' "
+                            + "to your class path."));
+     ;
+     private static final String ABOUT_TEXT =
+-        "$Revision: 1.80 $ of DatabaseManagerSwing\n\n"
++        "$Revision: 1.79 $ of DatabaseManagerSwing\n\n"
+         + "Copyright (c) 1995-2000, The Hypersonic SQL Group.\n"
+         + "Copyright (c) 2001-2007, The HSQL Development Group.\n"
+         + "http://hsqldb.org  (User Guide available at this site).\n\n\n"
