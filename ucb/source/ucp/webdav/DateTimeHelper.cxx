@@ -79,7 +79,7 @@ bool DateTimeHelper::ISO8601_To_DateTime (const OUString& s,
     aDateTime.Day         = sal::static_int_cast< sal_uInt16 >(day); // 1-31
     aDateTime.DayOfWeek   = 0;          // 0-6, 0 = Sunday
     aDateTime.Month       = sal::static_int_cast< sal_uInt16 >(month); // 1-12
-    aDateTime.Year        = sal::static_int_cast< sal_uInt16 >(year);
+    aDateTime.Year        = sal::static_int_cast< sal_Int16  >(year);
 
     TimeValue aTimeValue;
     if ( osl_getTimeValueFromDateTime( &aDateTime, &aTimeValue ) )
@@ -218,7 +218,7 @@ bool DateTimeHelper::RFC2068_To_DateTime (const OUString& s,
             aDateTime.DayOfWeek   = 0; //dayofweek;  // 0-6, 0 = Sunday
             aDateTime.Month       = sal::static_int_cast< sal_uInt16 >(month);
                 // 1-12
-            aDateTime.Year        = sal::static_int_cast< sal_uInt16 >(year);
+            aDateTime.Year        = sal::static_int_cast< sal_Int16  >(year);
 
             TimeValue aTimeValue;
             if ( osl_getTimeValueFromDateTime( &aDateTime,

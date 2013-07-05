@@ -92,7 +92,7 @@ typedef struct _oslDateTime
     /*----------------------------------------------------------------------*/
     /** is the year.
     */
-    sal_uInt16 Year;
+    sal_Int16 Year;
 
 } oslDateTime;
 
