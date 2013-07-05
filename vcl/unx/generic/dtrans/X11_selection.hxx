@@ -250,6 +250,7 @@ namespace x11 {
         // internal data
         Display*                    m_pDisplay;
         oslThread                   m_aThread;
+        int                         m_EndThreadPipe[2];
         oslThread                   m_aDragExecuteThread;
         ::osl::Condition            m_aDragRunning;
         XLIB_Window                 m_aWindow;
