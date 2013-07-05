@@ -205,13 +205,13 @@ sal_Bool SAL_CALL osl_getLocalTimeFromSystemTime( const TimeValue* pSystemTimeVa
 
 #if defined(STRUCT_TM_HAS_GMTOFF)
     /* members of struct tm are corrected by mktime */
-    bias = 0 - pLocalTime->tm_gmtoff;
+    bias = -pLocalTime->tm_gmtoff;
 
 #elif defined(HAS_ALTZONE)
     /* check if daylight saving time is in effect */
     bias = pLocalTime->tm_isdst > 0 ? altzone : timezone;
 #else
-    /* exspect daylight saving time to be one hour */
+    /* expect daylight saving time to be one hour */
     bias = pLocalTime->tm_isdst > 0 ? timezone - 3600 : timezone;
 #endif
 
