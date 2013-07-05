@@ -11,10 +11,13 @@
 #include <tools/resmgr.hxx>
 #include <svx/dialogs.hrc>
 #include <vcl/svapp.hxx>
+#include <rtl/strbuf.hxx>
 
 #include <rtftokenizer.hxx>
 #include <rtfskipdestination.hxx>
+#include <com/sun/star/io/BufferSizeExceededException.hpp>
 
+using namespace com::sun::star;
 
 namespace writerfilter {
 namespace rtftok {
@@ -22,7 +25,7 @@ namespace rtftok {
 std::vector<RTFSymbol> RTFTokenizer::m_aRTFControlWords;
 bool RTFTokenizer::m_bControlWordsSorted;
 
-RTFTokenizer::RTFTokenizer(RTFDocumentImpl& rImport, SvStream* pInStream, uno::Reference<task::XStatusIndicator> const& xStatusIndicator)
+RTFTokenizer::RTFTokenizer(RTFListener& rImport, SvStream* pInStream, uno::Reference<task::XStatusIndicator> const& xStatusIndicator)
     : m_rImport(rImport),
     m_pInStream(pInStream),
     m_xStatusIndicator(xStatusIndicator),

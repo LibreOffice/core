@@ -10,7 +10,7 @@
 #ifndef _RTFSKIPDESTINATION_HXX_
 #define _RTFSKIPDESTINATION_HXX_
 
-#include <rtfdocumentimpl.hxx>
+#include <rtflistener.hxx>
 
 namespace writerfilter {
     namespace rtftok {
@@ -18,12 +18,12 @@ namespace writerfilter {
         class RTFSkipDestination
         {
             public:
-                RTFSkipDestination(RTFDocumentImpl& rImport);
+                RTFSkipDestination(RTFListener& rImport);
                 virtual ~RTFSkipDestination();
                 void setParsed(bool bParsed);
                 void setReset(bool bReset);
             private:
-                RTFDocumentImpl& m_rImport;
+                RTFListener& m_rImport;
                 bool m_bParsed;
                 /// If false, the destructor is a noop, required by the \* symbol itself.
                 bool m_bReset;

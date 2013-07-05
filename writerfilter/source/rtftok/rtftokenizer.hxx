@@ -10,7 +10,8 @@
 #ifndef _RTFTOKENIZER_HXX_
 #define _RTFTOKENIZER_HXX_
 
-#include <rtfdocumentimpl.hxx>
+#include <rtflistener.hxx>
+#include <com/sun/star/task/XStatusIndicator.hpp>
 
 class SvStream;
 
@@ -20,7 +21,7 @@ namespace writerfilter {
         class RTFTokenizer
         {
             public:
-                RTFTokenizer(RTFDocumentImpl& rImport, SvStream* pInStream, uno::Reference<task::XStatusIndicator> const& xStatusIndicator);
+                RTFTokenizer(RTFListener& rImport, SvStream* pInStream, com::sun::star::uno::Reference<com::sun::star::task::XStatusIndicator> const& xStatusIndicator);
                 virtual ~RTFTokenizer();
 
                 int resolveParse();
@@ -37,9 +38,9 @@ namespace writerfilter {
                 int resolveKeyword();
                 int dispatchKeyword(OString& rKeyword, bool bParam, int nParam);
 
-                RTFDocumentImpl& m_rImport;
+                RTFListener& m_rImport;
                 SvStream* m_pInStream;
-                uno::Reference<task::XStatusIndicator> const& m_xStatusIndicator;
+                com::sun::star::uno::Reference<com::sun::star::task::XStatusIndicator> const& m_xStatusIndicator;
                 // This is the same as aRTFControlWords, but sorted
                 static std::vector<RTFSymbol> m_aRTFControlWords;
                 static bool m_bControlWordsSorted;

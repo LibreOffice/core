@@ -8,11 +8,13 @@
  */
 
 #include <rtfskipdestination.hxx>
+#include <osl/diagnose.h>
+#include <sal/log.hxx>
 
 namespace writerfilter {
 namespace rtftok {
 
-RTFSkipDestination::RTFSkipDestination(RTFDocumentImpl& rImport)
+RTFSkipDestination::RTFSkipDestination(RTFListener& rImport)
     : m_rImport(rImport),
     m_bParsed(true),
     m_bReset(true)
