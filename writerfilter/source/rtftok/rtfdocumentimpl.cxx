@@ -49,6 +49,7 @@
 
 #include <rtfsdrimport.hxx>
 #include <rtftokenizer.hxx>
+#include <rtflookahead.hxx>
 #include <rtfcharsets.hxx>
 #include <rtfreferenceproperties.hxx>
 #include <rtfskipdestination.hxx>
@@ -1679,8 +1680,12 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
             m_aStates.top().bInBackground = true;
             break;
         case RTF_SHPGRP:
-            m_aStates.top().nDestinationState = DESTINATION_SHAPEGROUP;
-            m_aStates.top().bInShapeGroup = true;
+            {
+                RTFLookahead aLookahead(Strm(), m_pTokenizer->getGroupStart());
+                SAL_WARN_IF(!aLookahead.hasTable(), "writerfilter", "no table in groupshape, should create it!");
+                m_aStates.top().nDestinationState = DESTINATION_SHAPEGROUP;
+                m_aStates.top().bInShapeGroup = true;
+            }
             break;
         default:
             SAL_INFO("writerfilter", "TODO handle destination '" << lcl_RtfToString(nKeyword) << "'");
