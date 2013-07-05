@@ -505,8 +505,11 @@ void RTFDocumentImpl::sectBreak(bool bFinal = false)
 {
     SAL_INFO("writerfilter", OSL_THIS_FUNC << ": final? " << bFinal << ", needed? " << m_bNeedSect);
     bool bNeedSect = m_bNeedSect;
-    // If there is no paragraph in this section, then insert a dummy one, as required by Writer
-    if (m_bNeedPar)
+    RTFValue::Pointer_t pBreak = m_aStates.top().aSectionSprms.find(NS_sprm::LN_SBkc);
+    bool bContinuous = pBreak.get() && pBreak->getInt() == 0;
+    // If there is no paragraph in this section, then insert a dummy one, as required by Writer,
+    // unless this is the end of the doc, we had nothing since the last section break and this is not a continuous one.
+    if (m_bNeedPar && !(bFinal && !m_bNeedSect && !bContinuous))
         dispatchSymbol(RTF_PAR);
     // It's allowed to not have a non-table paragraph at the end of an RTF doc, add it now if required.
     if (m_bNeedFinalPar && bFinal)
@@ -525,9 +528,8 @@ void RTFDocumentImpl::sectBreak(bool bFinal = false)
     // last control word in the document is a section break itself.
     if (!bNeedSect || !m_bHadSect)
     {
-        RTFValue::Pointer_t pBreak = m_aStates.top().aSectionSprms.find(NS_sprm::LN_SBkc);
-        // In case the last section is a continous one, we don't need to output a section break.
-        if (bFinal && pBreak.get() && !pBreak->getInt())
+        // In case the last section is a continuous one, we don't need to output a section break.
+        if (bFinal && bContinuous)
             m_aStates.top().aSectionSprms.erase(NS_sprm::LN_SBkc);
     }
 
