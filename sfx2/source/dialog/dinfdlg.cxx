@@ -1719,7 +1719,7 @@ void CustomPropertiesWindow::AddLine( const OUString& sName, Any& rAny )
     const LocaleDataWrapper& rLocaleWrapper = aSysLocale.GetLocaleData();
     pNewLine->m_aNameBox.SetText( sName );
     sal_IntPtr nType = CUSTOM_TYPE_UNKNOWN;
-    String sValue;
+    OUString sValue;
 
     if ( rAny >>= nTmpValue )
     {

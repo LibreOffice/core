@@ -824,7 +824,7 @@ bool lcl_maybeReplaceCellString(
         rCol = nCol;
         rRow = nRow;
         if (rSearchItem.GetCommand() == SVX_SEARCHCMD_REPLACE &&
-            rSearchItem.GetReplaceString().Len())
+            !rSearchItem.GetReplaceString().isEmpty())
         {
             rColObj.SetRawString(nRow, rSearchItem.GetReplaceString());
             rUndoStr = OUString();
@@ -952,7 +952,7 @@ bool ScTable::SearchRangeForAllEmptyCells(
 {
     bool bFound = false;
     bool bReplace = (rSearchItem.GetCommand() == SVX_SEARCHCMD_REPLACE_ALL) &&
-                    (rSearchItem.GetReplaceString().Len() > 0);
+                    !rSearchItem.GetReplaceString().isEmpty();
     bool bSkipFiltered = rSearchItem.IsSearchFiltered();
 
     for (SCCOL nCol = rRange.aStart.Col(); nCol <= rRange.aEnd.Col(); ++nCol)

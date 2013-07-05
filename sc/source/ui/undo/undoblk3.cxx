@@ -214,9 +214,9 @@ void ScUndoDeleteContents::Repeat(SfxRepeatTarget& rTarget)
         ((ScTabViewTarget&)rTarget).GetViewShell()->DeleteContents( nFlags, sal_True );
 }
 
-sal_Bool ScUndoDeleteContents::CanRepeat(SfxRepeatTarget& rTarget) const
+bool ScUndoDeleteContents::CanRepeat(SfxRepeatTarget& rTarget) const
 {
-    return (rTarget.ISA(ScTabViewTarget));
+    return rTarget.ISA(ScTabViewTarget);
 }
 
 ScUndoFillTable::ScUndoFillTable( ScDocShell* pNewDocShell,
@@ -347,9 +347,9 @@ void ScUndoFillTable::Repeat(SfxRepeatTarget& rTarget)
         ((ScTabViewTarget&)rTarget).GetViewShell()->FillTab( nFlags, nFunction, bSkipEmpty, bAsLink );
 }
 
-sal_Bool ScUndoFillTable::CanRepeat(SfxRepeatTarget& rTarget) const
+bool ScUndoFillTable::CanRepeat(SfxRepeatTarget& rTarget) const
 {
-    return (rTarget.ISA(ScTabViewTarget));
+    return rTarget.ISA(ScTabViewTarget);
 }
 
 ScUndoSelectionAttr::ScUndoSelectionAttr( ScDocShell* pNewDocShell,
@@ -487,9 +487,9 @@ void ScUndoSelectionAttr::Repeat(SfxRepeatTarget& rTarget)
     }
 }
 
-sal_Bool ScUndoSelectionAttr::CanRepeat(SfxRepeatTarget& rTarget) const
+bool ScUndoSelectionAttr::CanRepeat(SfxRepeatTarget& rTarget) const
 {
-    return (rTarget.ISA(ScTabViewTarget));
+    return rTarget.ISA(ScTabViewTarget);
 }
 
 ScUndoAutoFill::ScUndoAutoFill( ScDocShell* pNewDocShell,
@@ -635,9 +635,9 @@ void ScUndoAutoFill::Repeat(SfxRepeatTarget& rTarget)
     }
 }
 
-sal_Bool ScUndoAutoFill::CanRepeat(SfxRepeatTarget& rTarget) const
+bool ScUndoAutoFill::CanRepeat(SfxRepeatTarget& rTarget) const
 {
-    return (rTarget.ISA(ScTabViewTarget));
+    return rTarget.ISA(ScTabViewTarget);
 }
 
 ScUndoMerge::ScUndoMerge( ScDocShell* pNewDocShell, const ScCellMergeOption& rOption,
@@ -760,9 +760,9 @@ void ScUndoMerge::Repeat(SfxRepeatTarget& rTarget)
     }
 }
 
-sal_Bool ScUndoMerge::CanRepeat(SfxRepeatTarget& rTarget) const
+bool ScUndoMerge::CanRepeat(SfxRepeatTarget& rTarget) const
 {
-    return (rTarget.ISA(ScTabViewTarget));
+    return rTarget.ISA(ScTabViewTarget);
 }
 
 ScUndoAutoFormat::ScUndoAutoFormat( ScDocShell* pNewDocShell,
@@ -908,9 +908,9 @@ void ScUndoAutoFormat::Repeat(SfxRepeatTarget& rTarget)
         ((ScTabViewTarget&)rTarget).GetViewShell()->AutoFormat( nFormatNo, sal_True );
 }
 
-sal_Bool ScUndoAutoFormat::CanRepeat(SfxRepeatTarget& rTarget) const
+bool ScUndoAutoFormat::CanRepeat(SfxRepeatTarget& rTarget) const
 {
-    return (rTarget.ISA(ScTabViewTarget));
+    return rTarget.ISA(ScTabViewTarget);
 }
 
 ScUndoReplace::ScUndoReplace( ScDocShell* pNewDocShell, const ScMarkData& rMark,
@@ -1087,9 +1087,9 @@ void ScUndoReplace::Repeat(SfxRepeatTarget& rTarget)
         ((ScTabViewTarget&)rTarget).GetViewShell()->SearchAndReplace( pSearchItem, sal_True, false );
 }
 
-sal_Bool ScUndoReplace::CanRepeat(SfxRepeatTarget& rTarget) const
+bool ScUndoReplace::CanRepeat(SfxRepeatTarget& rTarget) const
 {
-    return (rTarget.ISA(ScTabViewTarget));
+    return rTarget.ISA(ScTabViewTarget);
 }
 
 // multi-operation (only simple blocks)
@@ -1164,7 +1164,7 @@ void ScUndoTabOp::Repeat(SfxRepeatTarget& /* rTarget */)
 {
 }
 
-sal_Bool ScUndoTabOp::CanRepeat(SfxRepeatTarget& /* rTarget */) const
+bool ScUndoTabOp::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 {
     return false;
 }
@@ -1271,7 +1271,7 @@ void ScUndoConversion::Repeat( SfxRepeatTarget& rTarget )
         ((ScTabViewTarget&)rTarget).GetViewShell()->DoSheetConversion( maConvParam, sal_True );
 }
 
-sal_Bool ScUndoConversion::CanRepeat(SfxRepeatTarget& rTarget) const
+bool ScUndoConversion::CanRepeat(SfxRepeatTarget& rTarget) const
 {
     return rTarget.ISA( ScTabViewTarget );
 }
@@ -1357,9 +1357,9 @@ void ScUndoRefConversion::Repeat(SfxRepeatTarget& rTarget)
         ((ScTabViewTarget&)rTarget).GetViewShell()->DoRefConversion();
 }
 
-sal_Bool ScUndoRefConversion::CanRepeat(SfxRepeatTarget& rTarget) const
+bool ScUndoRefConversion::CanRepeat(SfxRepeatTarget& rTarget) const
 {
-    return (rTarget.ISA(ScTabViewTarget));
+    return rTarget.ISA(ScTabViewTarget);
 }
 
 ScUndoRefreshLink::ScUndoRefreshLink( ScDocShell* pNewDocShell,
@@ -1465,7 +1465,7 @@ void ScUndoRefreshLink::Repeat(SfxRepeatTarget& /* rTarget */)
     // makes no sense
 }
 
-sal_Bool ScUndoRefreshLink::CanRepeat(SfxRepeatTarget& /* rTarget */) const
+bool ScUndoRefreshLink::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 {
     return false;
 }
@@ -1546,7 +1546,7 @@ void ScUndoInsertAreaLink::Repeat(SfxRepeatTarget& /* rTarget */)
     // makes no sense
 }
 
-sal_Bool ScUndoInsertAreaLink::CanRepeat(SfxRepeatTarget& /* rTarget */) const
+bool ScUndoInsertAreaLink::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 {
     return false;
 }
@@ -1608,7 +1608,7 @@ void ScUndoRemoveAreaLink::Repeat(SfxRepeatTarget& /* rTarget */)
     // makes no sense
 }
 
-sal_Bool ScUndoRemoveAreaLink::CanRepeat(SfxRepeatTarget& /* rTarget */) const
+bool ScUndoRemoveAreaLink::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 {
     return false;
 }
@@ -1745,7 +1745,7 @@ void ScUndoUpdateAreaLink::Repeat(SfxRepeatTarget& /* rTarget */)
     // makes no sense
 }
 
-sal_Bool ScUndoUpdateAreaLink::CanRepeat(SfxRepeatTarget& /* rTarget */) const
+bool ScUndoUpdateAreaLink::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 {
     return false;
 }

@@ -50,12 +50,12 @@ TYPEINIT1(ScStyleSheet, SfxStyleSheet);
 
 //========================================================================
 
-ScStyleSheet::ScStyleSheet( const String&       rName,
+ScStyleSheet::ScStyleSheet( const OUString&     rName,
                             ScStyleSheetPool&   rPoolP,
                             SfxStyleFamily      eFamily,
-                            sal_uInt16              nMaskP )
+                            sal_uInt16          nMaskP )
 
-    :   SfxStyleSheet   ( rName, rPoolP, eFamily, nMaskP )
+    : SfxStyleSheet   ( rName, rPoolP, eFamily, nMaskP )
     , eUsage( UNKNOWN )
 {
 }
@@ -89,9 +89,9 @@ bool ScStyleSheet::HasParentSupport () const
 
     switch ( GetFamily() )
     {
-        case SFX_STYLE_FAMILY_PARA: bHasParentSupport = true;   break;
-        case SFX_STYLE_FAMILY_PAGE: bHasParentSupport = false;  break;
-        default:
+    case SFX_STYLE_FAMILY_PARA: bHasParentSupport = true;   break;
+    case SFX_STYLE_FAMILY_PAGE: bHasParentSupport = false;  break;
+    default:
         {
             // added to avoid warnings
         }
@@ -102,10 +102,10 @@ bool ScStyleSheet::HasParentSupport () const
 
 //------------------------------------------------------------------------
 
-bool ScStyleSheet::SetParent( const String& rParentName )
+bool ScStyleSheet::SetParent( const OUString& rParentName )
 {
     bool bResult = false;
-    String aEffName = rParentName;
+    OUString aEffName = rParentName;
     SfxStyleSheetBase* pStyle = pPool->Find( aEffName, nFamily );
     if (!pStyle)
     {
@@ -285,30 +285,30 @@ void ScStyleSheet::Notify( SfxBroadcaster&, const SfxHint& rHint )
 //  schmutzige Tricks, um die Standard-Vorlage immer als "Standard" zu speichern,
 //  obwohl der fuer den Benutzer sichtbare Name uebersetzt ist:
 
-const String& ScStyleSheet::GetName() const
+const OUString& ScStyleSheet::GetName() const
 {
-    const String& rBase = SfxStyleSheet::GetName();
-    const String* pForceStdName = ((ScStyleSheetPool*)pPool)->GetForceStdName();
+    const OUString& rBase = SfxStyleSheet::GetName();
+    const OUString* pForceStdName = ((ScStyleSheetPool*)pPool)->GetForceStdName();
     if ( pForceStdName && rBase == ScGlobal::GetRscString(STR_STYLENAME_STANDARD) )
         return *pForceStdName;
     else
         return rBase;
 }
 
-const String& ScStyleSheet::GetParent() const
+const OUString& ScStyleSheet::GetParent() const
 {
-    const String& rBase = SfxStyleSheet::GetParent();
-    const String* pForceStdName = ((ScStyleSheetPool*)pPool)->GetForceStdName();
+    const OUString& rBase = SfxStyleSheet::GetParent();
+    const OUString* pForceStdName = ((ScStyleSheetPool*)pPool)->GetForceStdName();
     if ( pForceStdName && rBase == ScGlobal::GetRscString(STR_STYLENAME_STANDARD) )
         return *pForceStdName;
     else
         return rBase;
 }
 
-const String& ScStyleSheet::GetFollow() const
+const OUString& ScStyleSheet::GetFollow() const
 {
-    const String& rBase = SfxStyleSheet::GetFollow();
-    const String* pForceStdName = ((ScStyleSheetPool*)pPool)->GetForceStdName();
+    const OUString& rBase = SfxStyleSheet::GetFollow();
+    const OUString* pForceStdName = ((ScStyleSheetPool*)pPool)->GetForceStdName();
     if ( pForceStdName && rBase == ScGlobal::GetRscString(STR_STYLENAME_STANDARD) )
         return *pForceStdName;
     else
@@ -323,9 +323,9 @@ const String& ScStyleSheet::GetFollow() const
 //! Flag gesetzt und abgefragt werden.
 //! Die ganze Abfrage muss raus, wenn fuer eine neue Datei-Version die Namens-Umsetzung wegfaellt.
 
-bool ScStyleSheet::SetName( const String& rNew )
+bool ScStyleSheet::SetName( const OUString& rNew )
 {
-    String aFileStdName = OUString(STRING_STANDARD);
+    OUString aFileStdName = OUString(STRING_STANDARD);
     if ( rNew == aFileStdName && aFileStdName != ScGlobal::GetRscString(STR_STYLENAME_STANDARD) )
         return false;
     else

@@ -144,7 +144,7 @@ public:
     const SvxLineItem       &GetTLBR() const        { return aTLBR; }
     const SvxLineItem       &GetBLTR() const        { return aBLTR; }
     const SvxBrushItem      &GetBackground() const  { return aBackground; }
-    void GetValueFormat( String& rFmt, LanguageType& rLng, LanguageType& rSys ) const
+    void GetValueFormat( OUString& rFmt, LanguageType& rLng, LanguageType& rSys ) const
         { rFmt = sNumFmtString; rLng = eNumFmtLanguage; rSys = eSysLanguage; }
 
     // The set-methods.

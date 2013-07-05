@@ -178,17 +178,23 @@ static String& lcl_TabToBlankAtSttEnd( String& rTxt )
     return rTxt;
 }
 
-static String& lcl_DelTabsAtSttEnd( String& rTxt )
+static OUString& lcl_DelTabsAtSttEnd( OUString& rTxt )
 {
     sal_Unicode c;
-    xub_StrLen n;
+    sal_Int32 n;
+    OUStringBuffer sBuff(rTxt);
 
-    for( n = 0; n < rTxt.Len() && ' ' >= ( c = rTxt.GetChar( n )); ++n )
+    for( n = 0; n < sBuff.getLength() && ' ' >= ( c = sBuff[ n ]); ++n )
+    {
         if( '\x9' == c )
-            rTxt.Erase( n--, 1 );
-    for( n = rTxt.Len(); n && ' ' >= ( c = rTxt.GetChar( --n )); )
+            sBuff.remove( n--, 1 );
+    }
+    for( n = sBuff.getLength(); n && ' ' >= ( c = sBuff[ --n ]); )
+    {
         if( '\x9' == c )
-            rTxt.Erase( n, 1 );
+            sBuff.remove( n, 1 );
+    }
+    rTxt = sBuff.makeStringAndClear();
     return rTxt;
 }
 
@@ -2378,15 +2384,19 @@ void SwTableBoxFmt::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
 
                         // format contents with the new value assigned and write to paragraph
                         Color* pCol = 0;
-                        String sNewTxt;
+                        OUString sNewTxt;
                         if( DBL_MAX == fVal )
+                        {
                             sNewTxt = ViewShell::GetShellRes()->aCalc_Error;
+                        }
                         else
                         {
                             pNumFmtr->GetOutputString( fVal, nNewFmt, sNewTxt, &pCol );
 
                             if( !bChgTxt )
-                                sNewTxt.Erase();
+                            {
+                                sNewTxt = "";
+                            }
                         }
 
                         // across all boxes
@@ -2465,7 +2475,7 @@ sal_Bool SwTableBox::IsNumberChanged() const
         if( pNumFmt && pValue &&
             ULONG_MAX != ( nNdPos = IsValidNumTxtNd( sal_True ) ) )
         {
-            String sNewTxt, sOldTxt( pSttNd->GetNodes()[ nNdPos ]->
+            OUString sNewTxt, sOldTxt( pSttNd->GetNodes()[ nNdPos ]->
                                     GetTxtNode()->GetRedlineTxt() );
             lcl_DelTabsAtSttEnd( sOldTxt );
 
@@ -2595,7 +2605,7 @@ void SwTableBox::ActualiseValueBox()
         {
             double fVal = ((SwTblBoxValue*)pValItem)->GetValue();
             Color* pCol = 0;
-            String sNewTxt;
+            OUString sNewTxt;
             pNumFmtr->GetOutputString( fVal, nFmtId, sNewTxt, &pCol );
 
             const String& rTxt = pSttNd->GetNodes()[ nNdPos ]->GetTxtNode()->GetTxt();

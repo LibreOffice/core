@@ -110,7 +110,7 @@ public:
     virtual void    Undo();
     virtual void    Redo();
 
-    virtual sal_Bool    Merge( SfxUndoAction *pNextAction );
+    virtual bool    Merge( SfxUndoAction *pNextAction );
 };
 
 // -----------------------------------------------------------------------

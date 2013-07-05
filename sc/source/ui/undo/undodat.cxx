@@ -152,7 +152,7 @@ void ScUndoDoOutline::Repeat(SfxRepeatTarget& /* rTarget */)
 {
 }
 
-sal_Bool ScUndoDoOutline::CanRepeat(SfxRepeatTarget& /* rTarget */) const
+bool ScUndoDoOutline::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 {
     return false;                       // is not possible
 }
@@ -235,9 +235,9 @@ void ScUndoMakeOutline::Repeat(SfxRepeatTarget& rTarget)
     }
 }
 
-sal_Bool ScUndoMakeOutline::CanRepeat(SfxRepeatTarget& rTarget) const
+bool ScUndoMakeOutline::CanRepeat(SfxRepeatTarget& rTarget) const
 {
-    return (rTarget.ISA(ScTabViewTarget));
+    return rTarget.ISA(ScTabViewTarget);
 }
 
 ScUndoOutlineLevel::ScUndoOutlineLevel( ScDocShell* pNewDocShell,
@@ -321,9 +321,9 @@ void ScUndoOutlineLevel::Repeat(SfxRepeatTarget& rTarget)
         ((ScTabViewTarget&)rTarget).GetViewShell()->SelectLevel( bColumns, nLevel, sal_True );
 }
 
-sal_Bool ScUndoOutlineLevel::CanRepeat(SfxRepeatTarget& rTarget) const
+bool ScUndoOutlineLevel::CanRepeat(SfxRepeatTarget& rTarget) const
 {
-    return (rTarget.ISA(ScTabViewTarget));
+    return rTarget.ISA(ScTabViewTarget);
 }
 
 /** show/hide outline over block marks */
@@ -424,9 +424,9 @@ void ScUndoOutlineBlock::Repeat(SfxRepeatTarget& rTarget)
     }
 }
 
-sal_Bool ScUndoOutlineBlock::CanRepeat(SfxRepeatTarget& rTarget) const
+bool ScUndoOutlineBlock::CanRepeat(SfxRepeatTarget& rTarget) const
 {
-    return (rTarget.ISA(ScTabViewTarget));
+    return rTarget.ISA(ScTabViewTarget);
 }
 
 ScUndoRemoveAllOutlines::ScUndoRemoveAllOutlines( ScDocShell* pNewDocShell,
@@ -509,9 +509,9 @@ void ScUndoRemoveAllOutlines::Repeat(SfxRepeatTarget& rTarget)
         ((ScTabViewTarget&)rTarget).GetViewShell()->RemoveAllOutlines( sal_True );
 }
 
-sal_Bool ScUndoRemoveAllOutlines::CanRepeat(SfxRepeatTarget& rTarget) const
+bool ScUndoRemoveAllOutlines::CanRepeat(SfxRepeatTarget& rTarget) const
 {
-    return (rTarget.ISA(ScTabViewTarget));
+    return rTarget.ISA(ScTabViewTarget);
 }
 
 ScUndoAutoOutline::ScUndoAutoOutline( ScDocShell* pNewDocShell,
@@ -612,9 +612,9 @@ void ScUndoAutoOutline::Repeat(SfxRepeatTarget& rTarget)
         ((ScTabViewTarget&)rTarget).GetViewShell()->AutoOutline( sal_True );
 }
 
-sal_Bool ScUndoAutoOutline::CanRepeat(SfxRepeatTarget& rTarget) const
+bool ScUndoAutoOutline::CanRepeat(SfxRepeatTarget& rTarget) const
 {
-    return (rTarget.ISA(ScTabViewTarget));
+    return rTarget.ISA(ScTabViewTarget);
 }
 
 ScUndoSubTotals::ScUndoSubTotals( ScDocShell* pNewDocShell, SCTAB nNewTab,
@@ -735,7 +735,7 @@ void ScUndoSubTotals::Repeat(SfxRepeatTarget& /* rTarget */)
 {
 }
 
-sal_Bool ScUndoSubTotals::CanRepeat(SfxRepeatTarget& /* rTarget */) const
+bool ScUndoSubTotals::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 {
     return false;     // is not possible due to column numbers
 }
@@ -851,7 +851,7 @@ void ScUndoSort::Repeat(SfxRepeatTarget& /* rTarget */)
 {
 }
 
-sal_Bool ScUndoSort::CanRepeat(SfxRepeatTarget& /* rTarget */) const
+bool ScUndoSort::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 {
     return false;    // does not work due to column numbers
 }
@@ -1021,7 +1021,7 @@ void ScUndoQuery::Repeat(SfxRepeatTarget& /* rTarget */)
 {
 }
 
-sal_Bool ScUndoQuery::CanRepeat(SfxRepeatTarget& /* rTarget */) const
+bool ScUndoQuery::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 {
     return false;    // does not work due to column numbers
 }
@@ -1100,7 +1100,7 @@ void ScUndoAutoFilter::Repeat(SfxRepeatTarget& /* rTarget */)
 {
 }
 
-sal_Bool ScUndoAutoFilter::CanRepeat(SfxRepeatTarget& /* rTarget */) const
+bool ScUndoAutoFilter::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 {
     return false;
 }
@@ -1165,7 +1165,7 @@ void ScUndoDBData::Repeat(SfxRepeatTarget& /* rTarget */)
 {
 }
 
-sal_Bool ScUndoDBData::CanRepeat(SfxRepeatTarget& /* rTarget */) const
+bool ScUndoDBData::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 {
     return false;    // is not possible
 }
@@ -1372,12 +1372,12 @@ void ScUndoImportData::Repeat(SfxRepeatTarget& rTarget)
     }
 }
 
-sal_Bool ScUndoImportData::CanRepeat(SfxRepeatTarget& rTarget) const
+bool ScUndoImportData::CanRepeat(SfxRepeatTarget& rTarget) const
 {
     //  Repeat only for import using a database range, then pUndoDBData is set
 
     if (pUndoDBData)
-        return (rTarget.ISA(ScTabViewTarget));
+        return rTarget.ISA(ScTabViewTarget);
     else
         return false;       // Address book
 }
@@ -1541,9 +1541,9 @@ void ScUndoRepeatDB::Repeat(SfxRepeatTarget& rTarget)
         ((ScTabViewTarget&)rTarget).GetViewShell()->RepeatDB( sal_True );
 }
 
-sal_Bool ScUndoRepeatDB::CanRepeat(SfxRepeatTarget& rTarget) const
+bool ScUndoRepeatDB::CanRepeat(SfxRepeatTarget& rTarget) const
 {
-    return (rTarget.ISA(ScTabViewTarget));
+    return rTarget.ISA(ScTabViewTarget);
 }
 
 ScUndoDataPilot::ScUndoDataPilot( ScDocShell* pNewDocShell,
@@ -1699,7 +1699,7 @@ void ScUndoDataPilot::Repeat(SfxRepeatTarget& /* rTarget */)
     //! allow deletion
 }
 
-sal_Bool ScUndoDataPilot::CanRepeat(SfxRepeatTarget& /* rTarget */) const
+bool ScUndoDataPilot::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 {
     //! allow deletion
     return false;
@@ -1839,7 +1839,7 @@ void ScUndoConsolidate::Repeat(SfxRepeatTarget& /* rTarget */)
 {
 }
 
-sal_Bool ScUndoConsolidate::CanRepeat(SfxRepeatTarget& /* rTarget */) const
+bool ScUndoConsolidate::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 {
     return false;
 }
@@ -1913,7 +1913,7 @@ void ScUndoChartData::Repeat(SfxRepeatTarget& /* rTarget */)
 {
 }
 
-sal_Bool ScUndoChartData::CanRepeat(SfxRepeatTarget& /* rTarget */) const
+bool ScUndoChartData::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 {
     return false;
 }
@@ -1996,7 +1996,7 @@ void ScUndoDataForm::Repeat(SfxRepeatTarget& /*rTarget*/)
 {
 }
 
-sal_Bool ScUndoDataForm::CanRepeat(SfxRepeatTarget& rTarget) const
+bool ScUndoDataForm::CanRepeat(SfxRepeatTarget& rTarget) const
 {
         return (rTarget.ISA(ScTabViewTarget));
 }

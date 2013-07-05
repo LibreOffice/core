@@ -373,11 +373,11 @@ public:
                                                bool&             rbHeader,
                                                bool&             rbFooter );
 
-    virtual long DdeGetData( const String& rItem, const String& rMimeType,
+    virtual long DdeGetData( const OUString& rItem, const OUString& rMimeType,
                                 ::com::sun::star::uno::Any & rValue );
-    virtual long DdeSetData( const String& rItem, const String& rMimeType,
+    virtual long DdeSetData( const OUString& rItem, const OUString& rMimeType,
                                 const ::com::sun::star::uno::Any & rValue );
-    virtual ::sfx2::SvLinkSource* DdeCreateLinkSource( const String& rItem );
+    virtual ::sfx2::SvLinkSource* DdeCreateLinkSource( const OUString& rItem );
 
     const String& GetDdeTextFmt() const { return aDdeTextFmt; }
 

@@ -59,11 +59,11 @@ TYPEINIT1(SdrUndoAction,SfxUndoAction);
 
 SdrUndoAction::~SdrUndoAction() {}
 
-sal_Bool SdrUndoAction::CanRepeat(SfxRepeatTarget& rView) const
+bool SdrUndoAction::CanRepeat(SfxRepeatTarget& rView) const
 {
     SdrView* pV=PTR_CAST(SdrView,&rView);
     if (pV!=NULL) return CanSdrRepeat(*pV);
-    return sal_False;
+    return false;
 }
 
 void SdrUndoAction::Repeat(SfxRepeatTarget& rView)
@@ -145,48 +145,50 @@ OUString SdrUndoGroup::GetComment() const
 
 bool SdrUndoGroup::CanSdrRepeat(SdrView& rView) const
 {
-    switch (eFunction) {
-        case SDRREPFUNC_OBJ_NONE            :  return sal_False;
-        case SDRREPFUNC_OBJ_DELETE          :  return rView.AreObjectsMarked();
-        case SDRREPFUNC_OBJ_COMBINE_POLYPOLY:  return rView.IsCombinePossible(sal_False);
-        case SDRREPFUNC_OBJ_COMBINE_ONEPOLY :  return rView.IsCombinePossible(sal_True);
-        case SDRREPFUNC_OBJ_DISMANTLE_POLYS :  return rView.IsDismantlePossible(sal_False);
-        case SDRREPFUNC_OBJ_DISMANTLE_LINES :  return rView.IsDismantlePossible(sal_True);
-        case SDRREPFUNC_OBJ_CONVERTTOPOLY   :  return rView.IsConvertToPolyObjPossible(sal_False);
-        case SDRREPFUNC_OBJ_CONVERTTOPATH   :  return rView.IsConvertToPathObjPossible(sal_False);
-        case SDRREPFUNC_OBJ_GROUP           :  return rView.IsGroupPossible();
-        case SDRREPFUNC_OBJ_UNGROUP         :  return rView.IsUnGroupPossible();
-        case SDRREPFUNC_OBJ_PUTTOTOP        :  return rView.IsToTopPossible();
-        case SDRREPFUNC_OBJ_PUTTOBTM        :  return rView.IsToBtmPossible();
-        case SDRREPFUNC_OBJ_MOVTOTOP        :  return rView.IsToTopPossible();
-        case SDRREPFUNC_OBJ_MOVTOBTM        :  return rView.IsToBtmPossible();
-        case SDRREPFUNC_OBJ_REVORDER        :  return rView.IsReverseOrderPossible();
-        case SDRREPFUNC_OBJ_IMPORTMTF       :  return rView.IsImportMtfPossible();
-        default: break;
+    switch (eFunction)
+    {
+    case SDRREPFUNC_OBJ_NONE            :  return false;
+    case SDRREPFUNC_OBJ_DELETE          :  return rView.AreObjectsMarked();
+    case SDRREPFUNC_OBJ_COMBINE_POLYPOLY:  return rView.IsCombinePossible(sal_False);
+    case SDRREPFUNC_OBJ_COMBINE_ONEPOLY :  return rView.IsCombinePossible(sal_True);
+    case SDRREPFUNC_OBJ_DISMANTLE_POLYS :  return rView.IsDismantlePossible(sal_False);
+    case SDRREPFUNC_OBJ_DISMANTLE_LINES :  return rView.IsDismantlePossible(sal_True);
+    case SDRREPFUNC_OBJ_CONVERTTOPOLY   :  return rView.IsConvertToPolyObjPossible(sal_False);
+    case SDRREPFUNC_OBJ_CONVERTTOPATH   :  return rView.IsConvertToPathObjPossible(sal_False);
+    case SDRREPFUNC_OBJ_GROUP           :  return rView.IsGroupPossible();
+    case SDRREPFUNC_OBJ_UNGROUP         :  return rView.IsUnGroupPossible();
+    case SDRREPFUNC_OBJ_PUTTOTOP        :  return rView.IsToTopPossible();
+    case SDRREPFUNC_OBJ_PUTTOBTM        :  return rView.IsToBtmPossible();
+    case SDRREPFUNC_OBJ_MOVTOTOP        :  return rView.IsToTopPossible();
+    case SDRREPFUNC_OBJ_MOVTOBTM        :  return rView.IsToBtmPossible();
+    case SDRREPFUNC_OBJ_REVORDER        :  return rView.IsReverseOrderPossible();
+    case SDRREPFUNC_OBJ_IMPORTMTF       :  return rView.IsImportMtfPossible();
+    default: break;
     } // switch
-    return sal_False;
+    return false;
 }
 
 void SdrUndoGroup::SdrRepeat(SdrView& rView)
 {
-    switch (eFunction) {
-        case SDRREPFUNC_OBJ_NONE            :  break;
-        case SDRREPFUNC_OBJ_DELETE          :  rView.DeleteMarked();                break;
-        case SDRREPFUNC_OBJ_COMBINE_POLYPOLY:  rView.CombineMarkedObjects(sal_False);   break;
-        case SDRREPFUNC_OBJ_COMBINE_ONEPOLY :  rView.CombineMarkedObjects(sal_True);    break;
-        case SDRREPFUNC_OBJ_DISMANTLE_POLYS :  rView.DismantleMarkedObjects(sal_False); break;
-        case SDRREPFUNC_OBJ_DISMANTLE_LINES :  rView.DismantleMarkedObjects(sal_True);  break;
-        case SDRREPFUNC_OBJ_CONVERTTOPOLY   :  rView.ConvertMarkedToPolyObj(sal_False); break;
-        case SDRREPFUNC_OBJ_CONVERTTOPATH   :  rView.ConvertMarkedToPathObj(sal_False); break;
-        case SDRREPFUNC_OBJ_GROUP           :  rView.GroupMarked();                 break;
-        case SDRREPFUNC_OBJ_UNGROUP         :  rView.UnGroupMarked();               break;
-        case SDRREPFUNC_OBJ_PUTTOTOP        :  rView.PutMarkedToTop();              break;
-        case SDRREPFUNC_OBJ_PUTTOBTM        :  rView.PutMarkedToBtm();              break;
-        case SDRREPFUNC_OBJ_MOVTOTOP        :  rView.MovMarkedToTop();              break;
-        case SDRREPFUNC_OBJ_MOVTOBTM        :  rView.MovMarkedToBtm();              break;
-        case SDRREPFUNC_OBJ_REVORDER        :  rView.ReverseOrderOfMarked();        break;
-        case SDRREPFUNC_OBJ_IMPORTMTF       :  rView.DoImportMarkedMtf();           break;
-        default: break;
+    switch (eFunction)
+    {
+    case SDRREPFUNC_OBJ_NONE            :  break;
+    case SDRREPFUNC_OBJ_DELETE          :  rView.DeleteMarked();                break;
+    case SDRREPFUNC_OBJ_COMBINE_POLYPOLY:  rView.CombineMarkedObjects(sal_False);   break;
+    case SDRREPFUNC_OBJ_COMBINE_ONEPOLY :  rView.CombineMarkedObjects(sal_True);    break;
+    case SDRREPFUNC_OBJ_DISMANTLE_POLYS :  rView.DismantleMarkedObjects(sal_False); break;
+    case SDRREPFUNC_OBJ_DISMANTLE_LINES :  rView.DismantleMarkedObjects(sal_True);  break;
+    case SDRREPFUNC_OBJ_CONVERTTOPOLY   :  rView.ConvertMarkedToPolyObj(sal_False); break;
+    case SDRREPFUNC_OBJ_CONVERTTOPATH   :  rView.ConvertMarkedToPathObj(sal_False); break;
+    case SDRREPFUNC_OBJ_GROUP           :  rView.GroupMarked();                 break;
+    case SDRREPFUNC_OBJ_UNGROUP         :  rView.UnGroupMarked();               break;
+    case SDRREPFUNC_OBJ_PUTTOTOP        :  rView.PutMarkedToTop();              break;
+    case SDRREPFUNC_OBJ_PUTTOBTM        :  rView.PutMarkedToBtm();              break;
+    case SDRREPFUNC_OBJ_MOVTOTOP        :  rView.MovMarkedToTop();              break;
+    case SDRREPFUNC_OBJ_MOVTOBTM        :  rView.MovMarkedToBtm();              break;
+    case SDRREPFUNC_OBJ_REVORDER        :  rView.ReverseOrderOfMarked();        break;
+    case SDRREPFUNC_OBJ_IMPORTMTF       :  rView.DoImportMarkedMtf();           break;
+    default: break;
     } // switch
 }
 
@@ -195,9 +197,9 @@ OUString SdrUndoGroup::GetSdrRepeatComment(SdrView& /*rView*/) const
     return aComment.replaceAll("%1", ImpGetResStr(STR_ObjNameSingulPlural));
 }
 
-SdrUndoObj::SdrUndoObj(SdrObject& rNewObj):
-    SdrUndoAction(*rNewObj.GetModel()),
-    pObj(&rNewObj)
+SdrUndoObj::SdrUndoObj(SdrObject& rNewObj)
+    : SdrUndoAction(*rNewObj.GetModel())
+    , pObj(&rNewObj)
 {
 }
 
@@ -263,19 +265,16 @@ void SdrUndoAttrObj::ensureStyleSheetInStyleSheetPool(SfxStyleSheetBasePool& rSt
 }
 
 SdrUndoAttrObj::SdrUndoAttrObj(SdrObject& rNewObj, bool bStyleSheet1, bool bSaveText)
-:   SdrUndoObj(rNewObj),
-    pUndoSet(NULL),
-    pRedoSet(NULL),
-    pRepeatSet(NULL),
-    mxUndoStyleSheet(),
-    mxRedoStyleSheet(),
-    bHaveToTakeRedoSet(sal_True),
-    pTextUndo(NULL),
-
-    // #i8508#
-    pTextRedo(NULL),
-
-    pUndoGroup(NULL)
+    : SdrUndoObj(rNewObj)
+    , pUndoSet(NULL)
+    , pRedoSet(NULL)
+    , pRepeatSet(NULL)
+    , mxUndoStyleSheet()
+    , mxRedoStyleSheet()
+    , bHaveToTakeRedoSet(sal_True)
+    , pTextUndo(NULL)
+    , pTextRedo(NULL)
+    , pUndoGroup(NULL)
 {
     bStyleSheet = bStyleSheet1;
 
@@ -319,8 +318,6 @@ SdrUndoAttrObj::~SdrUndoAttrObj()
     delete pRepeatSet;
     delete pUndoGroup;
     delete pTextUndo;
-
-    // #i8508#
     delete pTextRedo;
 }
 
@@ -603,11 +600,11 @@ OUString SdrUndoMoveObj::GetSdrRepeatComment(SdrView& /*rView*/) const
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-SdrUndoGeoObj::SdrUndoGeoObj(SdrObject& rNewObj):
-    SdrUndoObj(rNewObj),
-    pUndoGeo(NULL),
-    pRedoGeo(NULL),
-    pUndoGroup(NULL)
+SdrUndoGeoObj::SdrUndoGeoObj(SdrObject& rNewObj)
+     : SdrUndoObj(rNewObj)
+     , pUndoGeo(NULL)
+     , pRedoGeo(NULL)
+     , pUndoGroup(NULL)
 {
     SdrObjList* pOL=rNewObj.GetSubList();
     if (pOL!=NULL && pOL->GetObjCount() && !rNewObj.ISA(E3dScene))
@@ -620,7 +617,9 @@ SdrUndoGeoObj::SdrUndoGeoObj(SdrObject& rNewObj):
         for (sal_uIntPtr nObjNum=0; nObjNum<nObjAnz; nObjNum++) {
             pUndoGroup->AddAction(new SdrUndoGeoObj(*pOL->GetObj(nObjNum)));
         }
-    } else {
+    }
+    else
+    {
         pUndoGeo=pObj->GetGeoData();
     }
 }
@@ -719,40 +718,43 @@ void SdrUndoObjList::ObjListListener::Notify(SfxBroadcaster&, const SfxHint& rHi
         {
             switch (pSdrHint->GetKind())
             {
-                case HINT_OBJCHG :
-                    if (IsListening(*m_pBroadcaster))
-                    {
-                        const sal_uInt32 nNewOrdNum(m_rObject.GetOrdNum());
-                        if (nNewOrdNum != m_rThat.GetOrdNum())
-                            m_rThat.SetOrdNum(nNewOrdNum);
-                    }
-                    break;
-                case HINT_OBJREMOVED :
-                    SAL_WARN_IF(!IsListening(*m_pBroadcaster), "svx.sdr", "Object is not in any list");
-                    EndListening(*m_pBroadcaster);
-                    break;
-                case HINT_OBJINSERTED :
-                    SAL_WARN_IF(IsListening(*m_pBroadcaster), "svx.sdr", "Object is already in a list");
-                    StartListening(*m_pBroadcaster);
-                    break;
-                default :
-                    break;
+            case HINT_OBJCHG :
+                if (IsListening(*m_pBroadcaster))
+                {
+                    const sal_uInt32 nNewOrdNum(m_rObject.GetOrdNum());
+                    if (nNewOrdNum != m_rThat.GetOrdNum())
+                        m_rThat.SetOrdNum(nNewOrdNum);
+                }
+                break;
+            case HINT_OBJREMOVED :
+                SAL_WARN_IF(!IsListening(*m_pBroadcaster), "svx.sdr", "Object is not in any list");
+                EndListening(*m_pBroadcaster);
+                break;
+            case HINT_OBJINSERTED :
+                SAL_WARN_IF(IsListening(*m_pBroadcaster), "svx.sdr", "Object is already in a list");
+                StartListening(*m_pBroadcaster);
+                break;
+            default :
+                break;
             }
         }
     }
 }
 
 SdrUndoObjList::SdrUndoObjList(SdrObject& rNewObj, bool bOrdNumDirect)
-:   SdrUndoObj(rNewObj),
-    bOwner(sal_False),
-    pView(NULL),
-    pPageView(NULL),
-    m_pListener(NULL)
+    : SdrUndoObj(rNewObj)
+    , bOwner(sal_False)
+    , pView(NULL)
+    , pPageView(NULL)
+    , m_pListener(NULL)
 {
     pObjList=pObj->GetObjList();
-    if (bOrdNumDirect) {
+    if (bOrdNumDirect)
+    {
         nOrdNum=pObj->GetOrdNumDirect();
-    } else {
+    }
+    else
+    {
         nOrdNum=pObj->GetOrdNum();
     }
 
@@ -803,9 +805,9 @@ void SdrUndoRemoveObj::Undo()
         // position of the target object.
         Point aOwnerAnchorPos(0, 0);
 
-        if(pObjList
-            && pObjList->GetOwnerObj()
-            && pObjList->GetOwnerObj()->ISA(SdrObjGroup))
+        if(pObjList &&
+           pObjList->GetOwnerObj() &&
+           pObjList->GetOwnerObj()->ISA(SdrObjGroup))
         {
             aOwnerAnchorPos = pObjList->GetOwnerObj()->GetAnchorPos();
         }
@@ -957,17 +959,20 @@ OUString SdrUndoNewObj::GetComment() const
 }
 
 SdrUndoReplaceObj::SdrUndoReplaceObj(SdrObject& rOldObj1, SdrObject& rNewObj1, bool bOrdNumDirect)
-:   SdrUndoObj(rOldObj1),
-    bOldOwner(sal_False),
-    bNewOwner(sal_False),
-    pNewObj(&rNewObj1)
+    : SdrUndoObj(rOldObj1)
+    , bOldOwner(sal_False)
+    , bNewOwner(sal_False)
+    , pNewObj(&rNewObj1)
 {
     SetOldOwner(sal_True);
 
     pObjList=pObj->GetObjList();
-    if (bOrdNumDirect) {
+    if (bOrdNumDirect)
+    {
         nOrdNum=pObj->GetOrdNumDirect();
-    } else {
+    }
+    else
+    {
         nOrdNum=pObj->GetOrdNum();
     }
 }
@@ -1058,9 +1063,9 @@ OUString SdrUndoCopyObj::GetComment() const
 // #i11702#
 
 SdrUndoObjectLayerChange::SdrUndoObjectLayerChange(SdrObject& rObj, SdrLayerID aOldLayer, SdrLayerID aNewLayer)
-:   SdrUndoObj(rObj),
-    maOldLayer(aOldLayer),
-    maNewLayer(aNewLayer)
+  : SdrUndoObj(rObj)
+  , maOldLayer(aOldLayer)
+  , maNewLayer(aNewLayer)
 {
 }
 
@@ -1078,10 +1083,10 @@ void SdrUndoObjectLayerChange::Redo()
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-SdrUndoObjOrdNum::SdrUndoObjOrdNum(SdrObject& rNewObj, sal_uInt32 nOldOrdNum1, sal_uInt32 nNewOrdNum1):
-    SdrUndoObj(rNewObj),
-    nOldOrdNum(nOldOrdNum1),
-    nNewOrdNum(nNewOrdNum1)
+SdrUndoObjOrdNum::SdrUndoObjOrdNum(SdrObject& rNewObj, sal_uInt32 nOldOrdNum1, sal_uInt32 nNewOrdNum1)
+    : SdrUndoObj(rNewObj)
+    , nOldOrdNum(nOldOrdNum1)
+    , nNewOrdNum(nNewOrdNum1)
 {
 }
 
@@ -1091,7 +1096,8 @@ void SdrUndoObjOrdNum::Undo()
     ImpShowPageOfThisObject();
 
     SdrObjList* pOL=pObj->GetObjList();
-    if (pOL==NULL) {
+    if (pOL==NULL)
+    {
         OSL_FAIL("UndoObjOrdNum: pObj does not have an ObjList.");
         return;
     }
@@ -1101,7 +1107,8 @@ void SdrUndoObjOrdNum::Undo()
 void SdrUndoObjOrdNum::Redo()
 {
     SdrObjList* pOL=pObj->GetObjList();
-    if (pOL==NULL) {
+    if (pOL==NULL)
+    {
         OSL_FAIL("RedoObjOrdNum: pObj does not have an ObjList.");
         return;
     }
@@ -1121,12 +1128,12 @@ OUString SdrUndoObjOrdNum::GetComment() const
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 SdrUndoObjSetText::SdrUndoObjSetText(SdrObject& rNewObj, sal_Int32 nText)
-: SdrUndoObj(rNewObj)
-, pOldText(NULL)
-, pNewText(NULL)
-, bNewTextAvailable(sal_False)
-, bEmptyPresObj(sal_False)
-, mnText(nText)
+    : SdrUndoObj(rNewObj)
+    , pOldText(NULL)
+    , pNewText(NULL)
+    , bNewTextAvailable(sal_False)
+    , bEmptyPresObj(sal_False)
+    , mnText(nText)
 {
     SdrText* pText = static_cast< SdrTextObj*>( &rNewObj )->getText(mnText);
     if( pText && pText->GetOutlinerParaObject() )
@@ -1263,10 +1270,10 @@ SdrUndoObjStrAttr::SdrUndoObjStrAttr( SdrObject& rNewObj,
                                       const ObjStrAttrType eObjStrAttr,
                                       const String& sOldStr,
                                       const String& sNewStr)
-    : SdrUndoObj( rNewObj ),
-      meObjStrAttr( eObjStrAttr ),
-      msOldStr( sOldStr ),
-      msNewStr( sNewStr )
+    : SdrUndoObj( rNewObj )
+    , meObjStrAttr( eObjStrAttr )
+    , msOldStr( sOldStr )
+    , msNewStr( sNewStr )
 {
 }
 
@@ -1276,20 +1283,14 @@ void SdrUndoObjStrAttr::Undo()
 
     switch ( meObjStrAttr )
     {
-        case OBJ_NAME:
-        {
-            pObj->SetName( msOldStr );
-        }
+    case OBJ_NAME:
+        pObj->SetName( msOldStr );
         break;
-        case OBJ_TITLE:
-        {
-            pObj->SetTitle( msOldStr );
-        }
+    case OBJ_TITLE:
+        pObj->SetTitle( msOldStr );
         break;
-        case OBJ_DESCRIPTION:
-        {
-            pObj->SetDescription( msOldStr );
-        }
+    case OBJ_DESCRIPTION:
+        pObj->SetDescription( msOldStr );
         break;
     }
 }
@@ -1298,20 +1299,14 @@ void SdrUndoObjStrAttr::Redo()
 {
     switch ( meObjStrAttr )
     {
-        case OBJ_NAME:
-        {
-            pObj->SetName( msNewStr );
-        }
+    case OBJ_NAME:
+        pObj->SetName( msNewStr );
         break;
-        case OBJ_TITLE:
-        {
-            pObj->SetTitle( msNewStr );
-        }
+    case OBJ_TITLE:
+        pObj->SetTitle( msNewStr );
         break;
-        case OBJ_DESCRIPTION:
-        {
-            pObj->SetDescription( msNewStr );
-        }
+    case OBJ_DESCRIPTION:
+        pObj->SetDescription( msNewStr );
         break;
     }
 
@@ -1323,24 +1318,18 @@ OUString SdrUndoObjStrAttr::GetComment() const
     String aStr;
     switch ( meObjStrAttr )
     {
-        case OBJ_NAME:
-        {
-            ImpTakeDescriptionStr( STR_UndoObjName, aStr );
-            aStr += sal_Unicode(' ');
-            aStr += sal_Unicode('\'');
-            aStr += msNewStr;
-            aStr += sal_Unicode('\'');
-        }
+    case OBJ_NAME:
+        ImpTakeDescriptionStr( STR_UndoObjName, aStr );
+        aStr += sal_Unicode(' ');
+        aStr += sal_Unicode('\'');
+        aStr += msNewStr;
+        aStr += sal_Unicode('\'');
         break;
-        case OBJ_TITLE:
-        {
-            ImpTakeDescriptionStr( STR_UndoObjTitle, aStr );
-        }
+    case OBJ_TITLE:
+        ImpTakeDescriptionStr( STR_UndoObjTitle, aStr );
         break;
-        case OBJ_DESCRIPTION:
-        {
-            ImpTakeDescriptionStr( STR_UndoObjDescription, aStr );
-        }
+    case OBJ_DESCRIPTION:
+        ImpTakeDescriptionStr( STR_UndoObjDescription, aStr );
         break;
     }
 
@@ -1348,18 +1337,19 @@ OUString SdrUndoObjStrAttr::GetComment() const
 }
 
 
-SdrUndoLayer::SdrUndoLayer(sal_uInt16 nLayerNum, SdrLayerAdmin& rNewLayerAdmin, SdrModel& rNewModel):
-    SdrUndoAction(rNewModel),
-    pLayer(rNewLayerAdmin.GetLayer(nLayerNum)),
-    pLayerAdmin(&rNewLayerAdmin),
-    nNum(nLayerNum),
-    bItsMine(sal_False)
+SdrUndoLayer::SdrUndoLayer(sal_uInt16 nLayerNum, SdrLayerAdmin& rNewLayerAdmin, SdrModel& rNewModel)
+    : SdrUndoAction(rNewModel)
+    , pLayer(rNewLayerAdmin.GetLayer(nLayerNum))
+    , pLayerAdmin(&rNewLayerAdmin)
+    , nNum(nLayerNum)
+    , bItsMine(sal_False)
 {
 }
 
 SdrUndoLayer::~SdrUndoLayer()
 {
-    if (bItsMine) {
+    if (bItsMine)
+    {
         delete pLayer;
     }
 }
@@ -1443,18 +1433,22 @@ OUString SdrUndoMoveLayer::GetComment() const
 
 
 SdrUndoPage::SdrUndoPage(SdrPage& rNewPg)
-:   SdrUndoAction(*rNewPg.GetModel()),
-    mrPage(rNewPg)
+    : SdrUndoAction(*rNewPg.GetModel())
+    , mrPage(rNewPg)
 {
 }
 
 void SdrUndoPage::ImpInsertPage(sal_uInt16 nNum)
 {
     DBG_ASSERT(!mrPage.IsInserted(),"SdrUndoPage::ImpInsertPage(): mrPage is already inserted.");
-    if (!mrPage.IsInserted()) {
-        if (mrPage.IsMasterPage()) {
+    if (!mrPage.IsInserted())
+    {
+        if (mrPage.IsMasterPage())
+        {
             rMod.InsertMasterPage(&mrPage,nNum);
-        } else {
+        }
+        else
+        {
             rMod.InsertPage(&mrPage,nNum);
         }
     }
@@ -1463,11 +1457,15 @@ void SdrUndoPage::ImpInsertPage(sal_uInt16 nNum)
 void SdrUndoPage::ImpRemovePage(sal_uInt16 nNum)
 {
     DBG_ASSERT(mrPage.IsInserted(),"SdrUndoPage::ImpRemovePage(): mrPage is not inserted.");
-    if (mrPage.IsInserted()) {
+    if (mrPage.IsInserted())
+    {
         SdrPage* pChkPg=NULL;
-        if (mrPage.IsMasterPage()) {
+        if (mrPage.IsMasterPage())
+        {
             pChkPg=rMod.RemoveMasterPage(nNum);
-        } else {
+        }
+        else
+        {
             pChkPg=rMod.RemovePage(nNum);
         }
         DBG_ASSERT(pChkPg==&mrPage,"SdrUndoPage::ImpRemovePage(): RemovePage!=&mrPage");
@@ -1478,10 +1476,14 @@ void SdrUndoPage::ImpRemovePage(sal_uInt16 nNum)
 void SdrUndoPage::ImpMovePage(sal_uInt16 nOldNum, sal_uInt16 nNewNum)
 {
     DBG_ASSERT(mrPage.IsInserted(),"SdrUndoPage::ImpMovePage(): mrPage is not inserted.");
-    if (mrPage.IsInserted()) {
-        if (mrPage.IsMasterPage()) {
+    if (mrPage.IsInserted())
+    {
+        if (mrPage.IsMasterPage())
+        {
             rMod.MoveMasterPage(nOldNum,nNewNum);
-        } else {
+        }
+        else
+        {
             rMod.MovePage(nOldNum,nNewNum);
         }
     }
@@ -1494,9 +1496,9 @@ void SdrUndoPage::ImpTakeDescriptionStr(sal_uInt16 nStrCacheID, XubString& rStr,
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-SdrUndoPageList::SdrUndoPageList(SdrPage& rNewPg):
-    SdrUndoPage(rNewPg),
-    bItsMine(sal_False)
+SdrUndoPageList::SdrUndoPageList(SdrPage& rNewPg)
+    : SdrUndoPage(rNewPg)
+    , bItsMine(sal_False)
 {
     nPageNum=rNewPg.GetPageNum();
 }
@@ -1511,9 +1513,9 @@ SdrUndoPageList::~SdrUndoPageList()
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-SdrUndoDelPage::SdrUndoDelPage(SdrPage& rNewPg):
-    SdrUndoPageList(rNewPg),
-    pUndoGroup(NULL)
+SdrUndoDelPage::SdrUndoDelPage(SdrPage& rNewPg)
+    : SdrUndoPageList(rNewPg)
+    , pUndoGroup(NULL)
 {
     bItsMine = sal_True;
 
@@ -1552,7 +1554,9 @@ SdrUndoDelPage::~SdrUndoDelPage()
 void SdrUndoDelPage::Undo()
 {
     ImpInsertPage(nPageNum);
-    if (pUndoGroup!=NULL) { // recover master page relationships
+    if (pUndoGroup!=NULL)
+    {
+        // recover master page relationships
         pUndoGroup->Undo();
     }
     DBG_ASSERT(bItsMine,"UndoDeletePage: mrPage does not belong to UndoAction.");

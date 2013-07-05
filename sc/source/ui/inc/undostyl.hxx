@@ -70,7 +70,7 @@ public:
     virtual void    Undo();
     virtual void    Redo();
     virtual void    Repeat(SfxRepeatTarget& rTarget);
-    virtual sal_Bool    CanRepeat(SfxRepeatTarget& rTarget) const;
+    virtual bool    CanRepeat(SfxRepeatTarget& rTarget) const;
 
     virtual OUString GetComment() const;
 };
@@ -87,7 +87,7 @@ public:
     virtual void    Undo();
     virtual void    Redo();
     virtual void    Repeat(SfxRepeatTarget& rTarget);
-    virtual sal_Bool    CanRepeat(SfxRepeatTarget& rTarget) const;
+    virtual bool    CanRepeat(SfxRepeatTarget& rTarget) const;
 
     virtual OUString GetComment() const;
 

@@ -22,7 +22,7 @@
 #include "svl/svldllapi.h"
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
-#include <tools/string.hxx>
+#include <tools/solar.h>
 #include <i18nlangtag/lang.h>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/lang/Locale.hpp>
@@ -447,11 +447,6 @@ public:
             rNewInserted==false and rCheckPos>0 the format code has errors
             and/or could not be converted.
      */
-    sal_uInt32 GetIndexPuttingAndConverting( String & rString, LanguageType eLnge,
-                                             LanguageType eSysLnge, short & rType,
-                                             bool & rNewInserted,
-                                             xub_StrLen & rCheckPos );
-
     sal_uInt32 GetIndexPuttingAndConverting( OUString & rString, LanguageType eLnge,
                                              LanguageType eSysLnge, short & rType,
                                              bool & rNewInserted, sal_Int32 & rCheckPos );
@@ -474,10 +469,6 @@ public:
 
     /// Format a number according to a format index, return string and color
     void GetOutputString( const double& fOutNumber, sal_uInt32 nFIndex,
-                          String& sOutString, Color** ppColor, bool bUseStarFormat = false );
-
-    /// Format a number according to a format index, return string and color
-    void GetOutputString( const double& fOutNumber, sal_uInt32 nFIndex,
                           OUString& sOutString, Color** ppColor, bool bUseStarFormat = false );
 
     /** Format a string according to a format index, return string and color.
@@ -488,9 +479,6 @@ public:
 
     /** Format a number according to the standard default format matching
         the given format index */
-    void GetInputLineString( const double& fOutNumber,
-                             sal_uInt32 nFIndex, String& sOutString );
-
     void GetInputLineString( const double& fOutNumber,
                              sal_uInt32 nFIndex, OUString& rOutString );
 
@@ -724,7 +712,7 @@ public:
         If ppEntry is not NULL and exactly one entry is found, a [$xxx-nnn] is
         returned, even if the format code only contains [$xxx] !
      */
-    bool    GetNewCurrencySymbolString( sal_uInt32 nFormat, String& rSymbol,
+    bool    GetNewCurrencySymbolString( sal_uInt32 nFormat, OUString& rSymbol,
                                         const NfCurrencyEntry** ppEntry = NULL,
                                         bool* pBank = NULL ) const;
 

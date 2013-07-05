@@ -64,7 +64,7 @@ const ScCellValue& ScMyCellInfo::CreateCell( ScDocument* pDoc )
         maCell.mpFormula->SetMatColsRows(static_cast<SCCOL>(nMatrixCols), static_cast<SCROW>(nMatrixRows));
     }
 
-    if ((nType == NUMBERFORMAT_DATE || nType == NUMBERFORMAT_TIME) && sInputString.Len() == 0)
+    if ((nType == NUMBERFORMAT_DATE || nType == NUMBERFORMAT_TIME) && sInputString.isEmpty())
     {
         sal_uInt32 nFormat(0);
         if (nType == NUMBERFORMAT_DATE)

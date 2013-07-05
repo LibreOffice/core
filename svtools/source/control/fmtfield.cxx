@@ -958,18 +958,15 @@ void FormattedField::ImplSetValue(double dVal, sal_Bool bForce)
     m_bValueDirty = sal_False;
     m_dCurrentValue = dVal;
 
-    String sNewText;
+    OUString sNewText;
     if (ImplGetFormatter()->IsTextFormat(m_nFormatKey))
     {
         // zuerst die Zahl als String im Standard-Format
-        String sTemp;
+        OUString sTemp;
         ImplGetFormatter()->GetOutputString(dVal, 0, sTemp, &m_pLastOutputColor);
         // dann den String entsprechend dem Text-Format
         {
-            OUString sTempIn(sTemp);
-            OUString sTempOut;
-            ImplGetFormatter()->GetOutputString(sTempIn, m_nFormatKey, sTempOut, &m_pLastOutputColor);
-            sNewText = sTempOut;
+            ImplGetFormatter()->GetOutputString(sTemp, m_nFormatKey, sNewText, &m_pLastOutputColor);
         }
     }
     else

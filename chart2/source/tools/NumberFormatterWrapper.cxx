@@ -99,10 +99,10 @@ Date NumberFormatterWrapper::getNullDate() const
     return aRet;
 }
 
-OUString NumberFormatterWrapper::getFormattedString(
-    sal_Int32 nNumberFormatKey, double fValue, sal_Int32& rLabelColor, bool& rbColorChanged ) const
+OUString NumberFormatterWrapper::getFormattedString( sal_Int32 nNumberFormatKey, double fValue,
+                                                     sal_Int32& rLabelColor, bool& rbColorChanged ) const
 {
-    String aText;
+    OUString aText;
     Color* pTextColor = NULL;
     if( !m_pNumberFormatter )
     {
@@ -124,13 +124,11 @@ OUString NumberFormatterWrapper::getFormattedString(
         m_aNullDate >>= aNewNullDate;
         m_pNumberFormatter->ChangeNullDate(aNewNullDate.Day,aNewNullDate.Month,aNewNullDate.Year);
     }
-    m_pNumberFormatter->GetOutputString(
-        fValue, nNumberFormatKey, aText, &pTextColor);
+    m_pNumberFormatter->GetOutputString(fValue, nNumberFormatKey, aText, &pTextColor);
     if ( m_aNullDate.hasValue() )
     {
         m_pNumberFormatter->ChangeNullDate(nDay,nMonth,nYear);
     }
-    OUString aRet( aText );
 
     if(pTextColor)
     {
@@ -140,7 +138,7 @@ OUString NumberFormatterWrapper::getFormattedString(
     else
         rbColorChanged = false;
 
-    return aRet;
+    return aText;
 }
 
 //.............................................................................

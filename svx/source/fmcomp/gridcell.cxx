@@ -1442,7 +1442,7 @@ void DbFormattedField::Init( Window& rParent, const Reference< XRowSet >& xCurso
                 }
                 else
                 {
-                    String sConverted;
+                    OUString sConverted;
                     Color* pDummy;
                     pFormatterUsed->GetOutputString(::comphelper::getDouble(aDefault), 0, sConverted, &pDummy);
                     ((FormattedField*)m_pWindow)->SetDefaultText(sConverted);

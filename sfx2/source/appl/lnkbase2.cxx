@@ -109,8 +109,8 @@ public:
     virtual ~ImplDdeItem();
 
     virtual DdeData* Get( sal_uIntPtr );
-    virtual sal_Bool Put( const DdeData* );
-    virtual void AdviseLoop( sal_Bool );
+    virtual bool     Put( const DdeData* );
+    virtual void     AdviseLoop( bool );
 
     void Notify()
     {
@@ -564,14 +564,14 @@ DdeData* ImplDdeItem::Get( sal_uIntPtr nFormat )
 }
 
 
-sal_Bool ImplDdeItem::Put( const DdeData*  )
+bool ImplDdeItem::Put( const DdeData*  )
 {
     OSL_FAIL( "ImplDdeItem::Put not implemented" );
-    return sal_False;
+    return false;
 }
 
 
-void ImplDdeItem::AdviseLoop( sal_Bool bOpen )
+void ImplDdeItem::AdviseLoop( bool bOpen )
 {
     // Connection is closed, so also unsubscribe link
     if( pLink->GetObj() )
