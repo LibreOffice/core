@@ -205,7 +205,7 @@ void AddonsToolBarManager::FillToolbar( const Sequence< Sequence< PropertyValue 
     if ( m_bDisposed )
         return;
 
-    sal_uInt16    nId( 1 );
+    sal_uInt16 nId( 1 );
 
     RemoveControllers();
 
@@ -262,9 +262,7 @@ void AddonsToolBarManager::FillToolbar( const Sequence< Sequence< PropertyValue 
 
                 m_pToolBar->InsertItem( nId, aTitle );
 
-                Image aImage = RetrieveImage( m_xFrame, aImageId, aURL, !m_bSmallSymbols );
-                if ( !!aImage )
-                    m_pToolBar->SetItemImage( nId, aImage );
+                // don't setup images yet, AddonsToolbarWrapper::populateImages does that.
 
                 // Create TbRuntimeItemData to hold additional information we will need in the future
                 AddonsParams* pRuntimeItemData = new AddonsParams;

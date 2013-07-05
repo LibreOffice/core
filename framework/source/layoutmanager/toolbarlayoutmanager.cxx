@@ -18,6 +18,7 @@
  */
 
 #include <toolbarlayoutmanager.hxx>
+#include <uielement/addonstoolbarwrapper.hxx>
 #include <helpers.hxx>
 #include <services.h>
 #include <services/layoutmanager.hxx>
@@ -442,6 +443,7 @@ bool ToolbarLayoutManager::requestToolbar( const OUString& rResourceURL )
         bMustCallCreate = true;
 
     bool bCreateOrShowToolbar( aRequestedToolbar.m_bVisible & !aRequestedToolbar.m_bMasterHide );
+
     uno::Reference< awt::XWindow2 > xContainerWindow( m_xContainerWindow, uno::UNO_QUERY );
     if ( xContainerWindow.is() && aRequestedToolbar.m_bFloating )
         bCreateOrShowToolbar &= bool( xContainerWindow->isActive());
@@ -569,6 +571,14 @@ bool ToolbarLayoutManager::showToolbar( const OUString& rResourceURL )
 
     SolarMutexGuard aGuard;
     Window* pWindow = getWindowFromXUIElement( aUIElement.m_xUIElement );
+
+    // Addons appear to need to be populated at start, but we don't
+    // want to populate them with (scaled) images until later.
+    AddonsToolBarWrapper *pAddOns;
+    pAddOns = dynamic_cast<AddonsToolBarWrapper *>( aUIElement.m_xUIElement.get());
+    if (pAddOns)
+        pAddOns->populateImages();
+
     if ( pWindow )
     {
         if ( !aUIElement.m_bFloating )
