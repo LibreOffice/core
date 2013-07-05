@@ -209,7 +209,7 @@ void SwUndoTxtFmtCollCreate::Delete()
     pDoc->DelTxtFmtColl((SwTxtFmtColl *) pNew, true);
 }
 
-SwFmt * SwUndoTxtFmtCollCreate::Find(const String & rName) const
+SwFmt * SwUndoTxtFmtCollCreate::Find(const OUString & rName) const
 {
     return pDoc->FindTxtFmtCollByName(rName);
 }
@@ -230,7 +230,7 @@ void SwUndoTxtFmtCollDelete::Delete(SwFmt * pOld)
     pDoc->DelTxtFmtColl((SwTxtFmtColl *) pOld, true);
 }
 
-SwFmt * SwUndoTxtFmtCollDelete::Find(const String & rName) const
+SwFmt * SwUndoTxtFmtCollDelete::Find(const OUString & rName) const
 {
     return pDoc->FindTxtFmtCollByName(rName);
 }
@@ -242,7 +242,7 @@ SwUndoRenameFmtColl::SwUndoRenameFmtColl(const String & sInitOldName,
 {
 }
 
-SwFmt * SwUndoRenameFmtColl::Find(const String & rName) const
+SwFmt * SwUndoRenameFmtColl::Find(const OUString & rName) const
 {
     return pDoc->FindTxtFmtCollByName(rName);
 }
@@ -264,7 +264,7 @@ void SwUndoCharFmtCreate::Delete()
     pDoc->DelCharFmt((SwCharFmt *) pNew, true);
 }
 
-SwFmt * SwUndoCharFmtCreate::Find(const String & rName) const
+SwFmt * SwUndoCharFmtCreate::Find(const OUString & rName) const
 {
     return pDoc->FindCharFmtByName(rName);
 }
@@ -284,7 +284,7 @@ void SwUndoCharFmtDelete::Delete(SwFmt * pFmt)
     pDoc->DelCharFmt((SwCharFmt *) pFmt, true);
 }
 
-SwFmt * SwUndoCharFmtDelete::Find(const String & rName) const
+SwFmt * SwUndoCharFmtDelete::Find(const OUString & rName) const
 {
     return pDoc->FindCharFmtByName(rName);
 }
@@ -296,7 +296,7 @@ SwUndoRenameCharFmt::SwUndoRenameCharFmt(const String & sInitOldName,
 {
 }
 
-SwFmt * SwUndoRenameCharFmt::Find(const String & rName) const
+SwFmt * SwUndoRenameCharFmt::Find(const OUString & rName) const
 {
     return pDoc->FindCharFmtByName(rName);
 }
@@ -319,7 +319,7 @@ void SwUndoFrmFmtCreate::Delete()
     pDoc->DelFrmFmt((SwFrmFmt *) pNew, true);
 }
 
-SwFmt * SwUndoFrmFmtCreate::Find(const String & rName) const
+SwFmt * SwUndoFrmFmtCreate::Find(const OUString & rName) const
 {
     return pDoc->FindFrmFmtByName(rName);
 }
@@ -339,7 +339,7 @@ void SwUndoFrmFmtDelete::Delete(SwFmt * pFmt)
     pDoc->DelFrmFmt((SwFrmFmt *) pFmt, true);
 }
 
-SwFmt * SwUndoFrmFmtDelete::Find(const String & rName) const
+SwFmt * SwUndoFrmFmtDelete::Find(const OUString & rName) const
 {
     return pDoc->FindFrmFmtByName(rName);
 }
@@ -351,7 +351,7 @@ SwUndoRenameFrmFmt::SwUndoRenameFrmFmt(const String & sInitOldName,
 {
 }
 
-SwFmt * SwUndoRenameFrmFmt::Find(const String & rName) const
+SwFmt * SwUndoRenameFrmFmt::Find(const OUString & rName) const
 {
     return pDoc->FindFrmFmtByName(rName);
 }

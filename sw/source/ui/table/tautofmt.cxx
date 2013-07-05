@@ -611,70 +611,71 @@ void AutoFmtPreview::DrawString( size_t nCol, size_t nRow )
     // Output of the cell text:
     sal_uLong   nNum;
     double  nVal;
-    String cellString;
+    OUString cellString;
     sal_uInt8    nIndex = static_cast< sal_uInt8 >( maArray.GetCellIndex( nCol, nRow, mbRTL ) );
 
     switch( nIndex )
     {
-        case  1: cellString = aStrJan;          break;
-        case  2: cellString = aStrFeb;          break;
-        case  3: cellString = aStrMar;          break;
-        case  5: cellString = aStrNorth;        break;
-        case 10: cellString = aStrMid;          break;
-        case 15: cellString = aStrSouth;        break;
-        case  4:
-        case 20: cellString = aStrSum;          break;
+    case  1: cellString = aStrJan;          break;
+    case  2: cellString = aStrFeb;          break;
+    case  3: cellString = aStrMar;          break;
+    case  5: cellString = aStrNorth;        break;
+    case 10: cellString = aStrMid;          break;
+    case 15: cellString = aStrSouth;        break;
+    case  4:
+    case 20: cellString = aStrSum;          break;
 
-        case  6:
-        case  8:
-        case 16:
-        case 18:    nVal = nIndex;
-                    nNum = 5;
-                    goto MAKENUMSTR;
-        case 17:
-        case  7:    nVal = nIndex;
-                    nNum = 6;
-                    goto MAKENUMSTR;
-        case 11:
-        case 12:
-        case 13:    nVal = nIndex;
-                    nNum = 12 == nIndex ? 10 : 9;
-                    goto MAKENUMSTR;
+    case  6:
+    case  8:
+    case 16:
+    case 18:    nVal = nIndex;
+        nNum = 5;
+        goto MAKENUMSTR;
+    case 17:
+    case  7:    nVal = nIndex;
+        nNum = 6;
+        goto MAKENUMSTR;
+    case 11:
+    case 12:
+    case 13:    nVal = nIndex;
+        nNum = 12 == nIndex ? 10 : 9;
+        goto MAKENUMSTR;
 
-        case  9:    nVal = 21; nNum = 7;    goto MAKENUMSTR;
-        case 14:    nVal = 36; nNum = 11;   goto MAKENUMSTR;
-        case 19:    nVal = 51; nNum = 7;    goto MAKENUMSTR;
-        case 21:    nVal = 33; nNum = 13;   goto MAKENUMSTR;
-        case 22:    nVal = 36; nNum = 14;   goto MAKENUMSTR;
-        case 23:    nVal = 39; nNum = 13;   goto MAKENUMSTR;
-        case 24:    nVal = 108; nNum = 15;  goto MAKENUMSTR;
+    case  9:    nVal = 21; nNum = 7;    goto MAKENUMSTR;
+    case 14:    nVal = 36; nNum = 11;   goto MAKENUMSTR;
+    case 19:    nVal = 51; nNum = 7;    goto MAKENUMSTR;
+    case 21:    nVal = 33; nNum = 13;   goto MAKENUMSTR;
+    case 22:    nVal = 36; nNum = 14;   goto MAKENUMSTR;
+    case 23:    nVal = 39; nNum = 13;   goto MAKENUMSTR;
+    case 24:    nVal = 108; nNum = 15;  goto MAKENUMSTR;
 MAKENUMSTR:
-            if( aCurData.IsValueFormat() )
-            {
-                String sFmt; LanguageType eLng, eSys;
-                aCurData.GetBoxFmt( (sal_uInt8)nNum ).GetValueFormat( sFmt, eLng, eSys );
+        if( aCurData.IsValueFormat() )
+        {
+            OUString sFmt;
+            LanguageType eLng, eSys;
+            aCurData.GetBoxFmt( (sal_uInt8)nNum ).GetValueFormat( sFmt, eLng, eSys );
 
-                short nType;
-                bool bNew;
-                xub_StrLen nCheckPos;
-                sal_uInt32 nKey = pNumFmt->GetIndexPuttingAndConverting( sFmt, eLng,
-                        eSys, nType, bNew, nCheckPos);
-                Color* pDummy;
-                pNumFmt->GetOutputString( nVal, nKey, cellString, &pDummy );
-            }
-            else
-                cellString = OUString::number((sal_Int32)nVal);
-            break;
+            short nType;
+            bool bNew;
+            sal_Int32 nCheckPos;
+            sal_uInt32 nKey = pNumFmt->GetIndexPuttingAndConverting( sFmt, eLng,
+                                                                     eSys, nType, bNew, nCheckPos);
+            Color* pDummy;
+            pNumFmt->GetOutputString( nVal, nKey, cellString, &pDummy );
+        }
+        else
+            cellString = OUString::number((sal_Int32)nVal);
+        break;
 
     }
 
-    if( cellString.Len() )
+    if( !cellString.isEmpty() )
     {
         Size                aStrSize;
-        sal_uInt8                nFmtIndex       = GetFormatIndex( nCol, nRow );
+        sal_uInt8           nFmtIndex       = GetFormatIndex( nCol, nRow );
         Rectangle           cellRect        = maArray.GetCellRect( nCol, nRow );
         Point               aPos            = cellRect.TopLeft();
-        sal_uInt16              nRightX         = 0;
+        sal_uInt16          nRightX         = 0;
 
         Size theMaxStrSize( cellRect.GetWidth() - FRAME_OFFSET,
                             cellRect.GetHeight() - FRAME_OFFSET );
@@ -701,9 +702,9 @@ MAKENUMSTR:
         }
 
         while( theMaxStrSize.Width() <= aStrSize.Width() &&
-                cellString.Len() > 1 )
+                cellString.getLength() > 1 )
         {
-            cellString.Erase( cellString.Len() - 1 );
+            cellString = cellString.copy(0, cellString.getLength() - 1 );
             aScriptedText.SetText( cellString, m_xBreak );
             aStrSize = aScriptedText.GetTextSize();
         }

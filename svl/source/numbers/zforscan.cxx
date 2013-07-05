@@ -742,7 +742,7 @@ short ImpSvNumberformatScan::Next_Symbol( const OUString& rStr,
                         bool bCurrency = false;
                         // "Automatic" currency may start with keyword,
                         // like "R" (Rand) and 'R' (era)
-                        if ( nCurrPos != STRING_NOTFOUND &&
+                        if ( nCurrPos >= 0 &&
                              nPos-1 + sCurString.getLength() <= rStr.getLength() &&
                              sCurString.indexOf( sKeyword[nTmpType] ) == 0 )
                         {
@@ -1314,7 +1314,7 @@ sal_Int32 ImpSvNumberformatScan::ScanType()
                 case NUMBERFORMAT_FRACTION:         // MM/SS
                     break;
                 default:
-                    if (nCurrPos != STRING_NOTFOUND)
+                    if (nCurrPos >= 0)
                     {
                         eScannedType = NUMBERFORMAT_UNDEFINED;
                     }
@@ -1373,7 +1373,7 @@ sal_Int32 ImpSvNumberformatScan::ScanType()
                     eScannedType = eNewType;
                     break;
                 default:
-                    if (nCurrPos != STRING_NOTFOUND)
+                    if (nCurrPos >= 0)
                     {
                         eScannedType = NUMBERFORMAT_UNDEFINED;
                     }

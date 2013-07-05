@@ -115,14 +115,13 @@ getLocalizedDatTimeStr(
 
     LanguageType eUILang = Application::GetSettings().GetUILanguageTag().getLanguageType();
     SvNumberFormatter *pNumberFormatter = new SvNumberFormatter( xContext, eUILang );
-    String      aTmpStr;
+    OUString      aTmpStr;
     Color*      pColor = NULL;
     Date*       pNullDate = pNumberFormatter->GetNullDate();
     sal_uInt32  nFormat
         = pNumberFormatter->GetStandardFormat( NUMBERFORMAT_DATE, eUILang );
 
-    pNumberFormatter->GetOutputString(
-        aDate - *pNullDate, nFormat, aTmpStr, &pColor );
+    pNumberFormatter->GetOutputString( aDate - *pNullDate, nFormat, aTmpStr, &pColor );
     aDateTimeStr = aTmpStr + OUString(" ");
 
     nFormat = pNumberFormatter->GetStandardFormat( NUMBERFORMAT_TIME, eUILang );

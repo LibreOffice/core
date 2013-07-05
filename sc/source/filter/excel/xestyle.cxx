@@ -2722,7 +2722,7 @@ sal_uInt32 XclExpXFBuffer::InsertStyleXF( const SfxStyleSheetBase& rStyleSheet )
         {
             maXFList.AppendNewRecord( new XclExpXF( GetRoot(), rStyleSheet ) );
             // create the STYLE record
-            if( rStyleSheet.GetName().Len() )
+            if( !rStyleSheet.GetName().isEmpty() )
                 maStyleList.AppendNewRecord( new XclExpStyle( nXFId, rStyleSheet.GetName() ) );
         }
         else

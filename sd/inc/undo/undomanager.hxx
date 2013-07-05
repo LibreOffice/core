@@ -33,7 +33,7 @@ public:
 
     virtual void            EnterListAction(const OUString &rComment, const OUString& rRepeatComment, sal_uInt16 nId=0);
 
-    virtual void            AddUndoAction( SfxUndoAction *pAction, sal_Bool bTryMerg=sal_False );
+    virtual void            AddUndoAction( SfxUndoAction *pAction, bool bTryMerg=false );
 
     /** Set or reset the undo manager linked with the called undo manager.
     */

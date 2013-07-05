@@ -456,8 +456,10 @@ void SvxNumberFormatShell::MakePreviewString( const String& rFormatStr,
         }
         else
         {
+            OUString sTemp(rPreviewStr);
             pFormatter->GetOutputString( nValNum, nExistingFormat,
-                                         rPreviewStr, &rpFontColor, bUseStarFormat );
+                                         sTemp, &rpFontColor, bUseStarFormat );
+            rPreviewStr = sTemp;
         }
     }
 }
@@ -768,14 +770,14 @@ short SvxNumberFormatShell::FillEListWithCurrency_Impl( std::vector<String*>& rL
 
     const NfCurrencyEntry* pTmpCurrencyEntry;
     bool             bTmpBanking;
-    XubString        rSymbol;
+    OUString        rSymbol;
 
     bool bFlag=pFormatter->GetNewCurrencySymbolString(nCurFormatKey,rSymbol,
-                &pTmpCurrencyEntry,&bTmpBanking);
+                                                      &pTmpCurrencyEntry,&bTmpBanking);
 
-    if((!bFlag && pCurCurrencyEntry==NULL)  ||
-        (bFlag && pTmpCurrencyEntry==NULL && !rSymbol.Len())    ||
-        nCurCategory==NUMBERFORMAT_ALL)
+    if( (!bFlag && pCurCurrencyEntry==NULL) ||
+        (bFlag && pTmpCurrencyEntry==NULL && rSymbol.isEmpty()) ||
+        (nCurCategory==NUMBERFORMAT_ALL))
     {
         if ( nCurCategory == NUMBERFORMAT_ALL )
             FillEListWithUserCurrencys(rList,nSelPos);
@@ -855,10 +857,11 @@ short SvxNumberFormatShell::FillEListWithSysCurrencys( std::vector<String*>& rLi
                 {
                     const NfCurrencyEntry* pTmpCurrencyEntry;
                     bool            bTmpBanking;
-                    XubString       rSymbol;
+                    OUString       rSymbol;
 
                     pFormatter->GetNewCurrencySymbolString(nKey,rSymbol,
-                        &pTmpCurrencyEntry,&bTmpBanking);
+                                                           &pTmpCurrencyEntry,
+                                                           &bTmpBanking);
 
                     bUserNewCurrency=(pTmpCurrencyEntry!=NULL);
                 }
@@ -896,19 +899,20 @@ short SvxNumberFormatShell::FillEListWithUserCurrencys( std::vector<String*>& rL
     DBG_ASSERT( pCurFmtTable != NULL, "Unbekanntes Zahlenformat!" );
 
     String          aStrComment;
-    String          aNewFormNInfo;
+    OUString        aNewFormNInfo;
     short           nMyCat = SELPOS_NONE;
 
     const NfCurrencyEntry* pTmpCurrencyEntry;
     bool            bTmpBanking, bAdaptSelPos;
-    XubString       rSymbol;
-    XubString       rBankSymbol;
+    OUString        rSymbol;
+    OUString       rBankSymbol;
 
     std::vector<String*>    aList;
     std::vector<sal_uInt32> aKeyList;
 
     pFormatter->GetNewCurrencySymbolString(nCurFormatKey,rSymbol,
-                &pTmpCurrencyEntry,&bTmpBanking);
+                                           &pTmpCurrencyEntry,
+                                           &bTmpBanking);
 
     XubString rShortSymbol;
 
@@ -919,9 +923,9 @@ short SvxNumberFormatShell::FillEListWithUserCurrencys( std::vector<String*>& rL
         // format (nCurFormatKey) that was set in FormatChanged() after
         // matching the format string entered in the dialog.
         bAdaptSelPos = true;
-        pCurCurrencyEntry=(NfCurrencyEntry*)pTmpCurrencyEntry;
-        bBankingSymbol=bTmpBanking;
-        nCurCurrencyEntryPos=FindCurrencyFormat(pTmpCurrencyEntry,bTmpBanking);
+        pCurCurrencyEntry = (NfCurrencyEntry*)pTmpCurrencyEntry;
+        bBankingSymbol = bTmpBanking;
+        nCurCurrencyEntryPos = FindCurrencyFormat(pTmpCurrencyEntry,bTmpBanking);
     }
     else
     {
@@ -951,33 +955,35 @@ short SvxNumberFormatShell::FillEListWithUserCurrencys( std::vector<String*>& rL
         if ( !IsRemoved_Impl( nKey ) )
         {
             if( pNumEntry->GetType() & NUMBERFORMAT_DEFINED ||
-                    pNumEntry->IsAdditionalStandardDefined() )
+                pNumEntry->IsAdditionalStandardDefined() )
             {
                 nMyCat=pNumEntry->GetType() & ~NUMBERFORMAT_DEFINED;
-                aStrComment=pNumEntry->GetComment();
+                aStrComment = pNumEntry->GetComment();
                 CategoryToPos_Impl(nMyCat,nMyType);
-                aNewFormNInfo=  pNumEntry->GetFormatstring();
+                aNewFormNInfo =  pNumEntry->GetFormatstring();
 
                 bool bInsFlag = false;
                 if ( pNumEntry->HasNewCurrency() )
                 {
                     bInsFlag = true;    // merge locale formats into currency selection
                 }
-                else if( (!bTmpBanking && aNewFormNInfo.Search(rSymbol)!=STRING_NOTFOUND) ||
-                   (bTmpBanking && aNewFormNInfo.Search(rBankSymbol)!=STRING_NOTFOUND) )
+                else if( (!bTmpBanking && aNewFormNInfo.indexOf(rSymbol) >= 0) ||
+                         (bTmpBanking && aNewFormNInfo.indexOf(rBankSymbol) >= 0) )
                 {
                     bInsFlag = true;
                 }
-                else if(aNewFormNInfo.Search(rShortSymbol)!=STRING_NOTFOUND)
+                else if(aNewFormNInfo.indexOf(rShortSymbol) >= 0)
                 {
-                    XubString rTstSymbol;
+                    OUString rTstSymbol;
                     const NfCurrencyEntry* pTstCurrencyEntry;
                     bool bTstBanking;
 
                     pFormatter->GetNewCurrencySymbolString(nKey,rTstSymbol,
-                                &pTstCurrencyEntry,&bTstBanking);
+                                                           &pTstCurrencyEntry,
+                                                           &bTstBanking);
 
-                    if(pTmpCurrencyEntry==pTstCurrencyEntry && bTstBanking==bTmpBanking)
+                    if(pTmpCurrencyEntry == pTstCurrencyEntry &&
+                       bTstBanking == bTmpBanking)
                     {
                         bInsFlag = true;
                     }
@@ -1154,7 +1160,9 @@ void SvxNumberFormatShell::GetPreviewString_Impl( String& rString, Color*& rpCol
     }
     else
     {
-        pFormatter->GetOutputString( nValNum, nCurFormatKey, rString, &rpColor, bUseStarFormat );
+        OUString sTemp(rString);
+        pFormatter->GetOutputString( nValNum, nCurFormatKey, sTemp, &rpColor, bUseStarFormat );
+        rString = sTemp;
     }
 }
 

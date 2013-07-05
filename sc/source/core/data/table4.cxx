@@ -1068,8 +1068,9 @@ String ScTable::GetAutoFillPreview( const ScRange& rSource, SCCOL nEndX, SCROW n
 
                         Color* pColor;
                         sal_uLong nNumFmt = GetNumberFormat( nSrcX, nSrcY );
-                        pDocument->GetFormatTable()->
-                            GetOutputString( nVal, nNumFmt, aValue, &pColor );
+                        OUString sTmp(aValue);
+                        pDocument->GetFormatTable()->GetOutputString( nVal, nNumFmt, sTmp, &pColor );
+                        aValue = sTmp;
                     }
                     break;
                     //  not for formulas
@@ -1153,8 +1154,9 @@ String ScTable::GetAutoFillPreview( const ScRange& rSource, SCCOL nEndX, SCROW n
                     //! Zahlformat je nach Index holen?
                     Color* pColor;
                     sal_uLong nNumFmt = GetNumberFormat( nCol1, nRow1 );
-                    pDocument->GetFormatTable()->
-                        GetOutputString( nStart, nNumFmt, aValue, &pColor );
+                    OUString sTmp(aValue);
+                    pDocument->GetFormatTable()->GetOutputString( nStart, nNumFmt, sTmp, &pColor );
+                    aValue = sTmp;
                 }
             }
         }

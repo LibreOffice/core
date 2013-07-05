@@ -53,7 +53,7 @@ public:
 
     virtual SwFmt * Create(SwFmt * pDerivedFrom) = 0;
     virtual void Delete() = 0;
-    virtual SwFmt * Find(const String & rName) const = 0;
+    virtual SwFmt * Find(const OUString & rName) const = 0;
 };
 
 class SwUndoFmtDelete : public SwUndo
@@ -77,7 +77,7 @@ public:
 
     virtual SwFmt * Create(SwFmt * pDerivedFrom) = 0;
     virtual void Delete(SwFmt * pFmt) = 0;
-    virtual SwFmt * Find(const String & rName) const = 0;
+    virtual SwFmt * Find(const OUString & rName) const = 0;
 };
 
 class SwUndoRenameFmt : public SwUndo
@@ -97,7 +97,7 @@ public:
 
     SwRewriter GetRewriter() const;
 
-    virtual SwFmt * Find(const String & rName) const = 0;
+    virtual SwFmt * Find(const OUString & rName) const = 0;
 };
 
 class SwUndoTxtFmtCollCreate : public SwUndoFmtCreate
@@ -108,7 +108,7 @@ public:
 
     virtual SwFmt * Create(SwFmt * pDerivedFrom);
     virtual void Delete();
-    virtual SwFmt * Find(const String & rName) const;
+    virtual SwFmt * Find(const OUString & rName) const;
 };
 
 class SwUndoTxtFmtCollDelete : public SwUndoFmtDelete
@@ -118,7 +118,7 @@ public:
 
     virtual SwFmt * Create(SwFmt * pDerivedFrom);
     virtual void Delete(SwFmt * pFmt);
-    virtual SwFmt * Find(const String & rName) const;
+    virtual SwFmt * Find(const OUString & rName) const;
 };
 
 class SwUndoRenameFmtColl : public SwUndoRenameFmt
@@ -128,7 +128,7 @@ public:
                         const String & sNewName,
                         SwDoc * pDoc);
 
-    virtual SwFmt * Find(const String & rName) const;
+    virtual SwFmt * Find(const OUString & rName) const;
 };
 
 class SwUndoCharFmtCreate : public SwUndoFmtCreate
@@ -139,7 +139,7 @@ public:
 
     virtual SwFmt * Create(SwFmt * pDerivedFrom);
     virtual void Delete();
-    virtual SwFmt * Find(const String & rName) const;
+    virtual SwFmt * Find(const OUString & rName) const;
 };
 
 class SwUndoCharFmtDelete : public SwUndoFmtDelete
@@ -149,7 +149,7 @@ public:
 
     virtual SwFmt * Create(SwFmt * pDerivedFrom);
     virtual void Delete(SwFmt * pFmt);
-    virtual SwFmt * Find(const String & rName) const;
+    virtual SwFmt * Find(const OUString & rName) const;
 };
 
 class SwUndoRenameCharFmt : public SwUndoRenameFmt
@@ -159,7 +159,7 @@ public:
                         const String & sNewName,
                         SwDoc * pDoc);
 
-    virtual SwFmt * Find(const String & rName) const;
+    virtual SwFmt * Find(const OUString & rName) const;
 };
 
 class SwUndoFrmFmtCreate : public SwUndoFmtCreate
@@ -172,7 +172,7 @@ public:
 
     virtual SwFmt * Create(SwFmt * pDerivedFrom);
     virtual void Delete();
-    virtual SwFmt * Find(const String & rName) const;
+    virtual SwFmt * Find(const OUString & rName) const;
 };
 
 class SwUndoFrmFmtDelete : public SwUndoFmtDelete
@@ -182,7 +182,7 @@ public:
 
     virtual SwFmt * Create(SwFmt * pDerivedFrom);
     virtual void Delete(SwFmt * pFmt);
-    virtual SwFmt * Find(const String & rName) const;
+    virtual SwFmt * Find(const OUString & rName) const;
 };
 
 class SwUndoRenameFrmFmt : public SwUndoRenameFmt
@@ -192,7 +192,7 @@ public:
                        const String & sNewName,
                        SwDoc * pDoc);
 
-    virtual SwFmt * Find(const String & rName) const;
+    virtual SwFmt * Find(const OUString & rName) const;
 };
 
 class SwUndoNumruleCreate : public SwUndo

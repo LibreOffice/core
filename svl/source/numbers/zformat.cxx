@@ -1919,7 +1919,7 @@ void SvNumberformat::ConvertLanguage( SvNumberFormatter& rConverter,
 // static
 OUString SvNumberformat::LoadString( SvStream& rStream )
 {
-    CharSet eStream = rStream.GetStreamCharSet();
+    rtl_TextEncoding eStream = rStream.GetStreamCharSet();
     OString aStr = read_lenPrefixed_uInt8s_ToOString<sal_uInt16>(rStream);
     sal_Char cStream = NfCurrencyEntry::GetEuroSymbol( eStream );
     if (aStr.indexOf(cStream) < 0)
@@ -5024,7 +5024,7 @@ Color* SvNumberformat::GetColor( sal_uInt16 nNumFor ) const
 
 static void lcl_SvNumberformat_AddLimitStringImpl( OUString& rStr,
                                                    SvNumberformatLimitOps eOp,
-                                                   double fLimit, const String& rDecSep )
+                                                   double fLimit, const OUString& rDecSep )
 {
     if ( eOp != NUMBERFORMAT_OP_NO )
     {
@@ -5054,7 +5054,7 @@ static void lcl_SvNumberformat_AddLimitStringImpl( OUString& rStr,
         }
         rStr +=  ::rtl::math::doubleToUString( fLimit,
                                                rtl_math_StringFormat_Automatic, rtl_math_DecimalPlaces_Max,
-                                               rDecSep.GetChar(0), true);
+                                               rDecSep[0], true);
         rStr += "]";
     }
 }

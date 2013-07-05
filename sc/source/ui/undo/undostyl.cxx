@@ -225,7 +225,7 @@ void ScUndoModifyStyle::Repeat(SfxRepeatTarget& /* rTarget */)
 {
 }
 
-sal_Bool ScUndoModifyStyle::CanRepeat(SfxRepeatTarget& /* rTarget */) const
+bool ScUndoModifyStyle::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 {
     return false;       // no repeat possible
 }
@@ -287,7 +287,7 @@ void ScUndoApplyPageStyle::Repeat(SfxRepeatTarget& /* rTarget */)
     //! set same page style to current tab
 }
 
-sal_Bool ScUndoApplyPageStyle::CanRepeat(SfxRepeatTarget& /* rTarget */) const
+bool ScUndoApplyPageStyle::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 {
     return false;
 }

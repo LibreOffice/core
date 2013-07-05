@@ -115,7 +115,7 @@ OUString ScUndoInsertCells::GetComment() const
     return ScGlobal::GetRscString( pPasteUndo ? STR_UNDO_PASTE : STR_UNDO_INSERTCELLS );
 }
 
-sal_Bool ScUndoInsertCells::Merge( SfxUndoAction* pNextAction )
+bool ScUndoInsertCells::Merge( SfxUndoAction* pNextAction )
 {
     //  If a paste undo action has already been added, append (detective) action there.
     if ( pPasteUndo )
@@ -132,7 +132,7 @@ sal_Bool ScUndoInsertCells::Merge( SfxUndoAction* pNextAction )
 
             pPasteUndo = pWrappedAction;
             pWrapper->ForgetWrappedUndo();      // pWrapper is deleted by UndoManager
-            return sal_True;
+            return true;
         }
     }
 
@@ -312,9 +312,9 @@ void ScUndoInsertCells::Repeat(SfxRepeatTarget& rTarget)
     }
 }
 
-sal_Bool ScUndoInsertCells::CanRepeat(SfxRepeatTarget& rTarget) const
+bool ScUndoInsertCells::CanRepeat(SfxRepeatTarget& rTarget) const
 {
-    return (rTarget.ISA(ScTabViewTarget));
+    return rTarget.ISA(ScTabViewTarget);
 }
 
 
@@ -547,9 +547,9 @@ void ScUndoDeleteCells::Repeat(SfxRepeatTarget& rTarget)
         ((ScTabViewTarget&)rTarget).GetViewShell()->DeleteCells( eCmd, sal_True );
 }
 
-sal_Bool ScUndoDeleteCells::CanRepeat(SfxRepeatTarget& rTarget) const
+bool ScUndoDeleteCells::CanRepeat(SfxRepeatTarget& rTarget) const
 {
-    return (rTarget.ISA(ScTabViewTarget));
+    return rTarget.ISA(ScTabViewTarget);
 }
 
 // delete cells in multiselection
@@ -730,9 +730,9 @@ void ScUndoDeleteMulti::Repeat(SfxRepeatTarget& rTarget)
         ((ScTabViewTarget&)rTarget).GetViewShell()->DeleteCells( DEL_DELROWS, sal_True );
 }
 
-sal_Bool ScUndoDeleteMulti::CanRepeat(SfxRepeatTarget& rTarget) const
+bool ScUndoDeleteMulti::CanRepeat(SfxRepeatTarget& rTarget) const
 {
-    return (rTarget.ISA(ScTabViewTarget));
+    return rTarget.ISA(ScTabViewTarget);
 }
 
 
@@ -830,9 +830,9 @@ void ScUndoCut::Repeat(SfxRepeatTarget& rTarget)
         ((ScTabViewTarget&)rTarget).GetViewShell()->CutToClip( NULL, sal_True );
 }
 
-sal_Bool ScUndoCut::CanRepeat(SfxRepeatTarget& rTarget) const
+bool ScUndoCut::CanRepeat(SfxRepeatTarget& rTarget) const
 {
-    return (rTarget.ISA(ScTabViewTarget));
+    return rTarget.ISA(ScTabViewTarget);
 }
 
 ScUndoPaste::ScUndoPaste( ScDocShell* pNewDocShell, const ScRangeList& rRanges,
@@ -1098,9 +1098,9 @@ void ScUndoPaste::Repeat(SfxRepeatTarget& rTarget)
     }
 }
 
-sal_Bool ScUndoPaste::CanRepeat(SfxRepeatTarget& rTarget) const
+bool ScUndoPaste::CanRepeat(SfxRepeatTarget& rTarget) const
 {
-    return (rTarget.ISA(ScTabViewTarget));
+    return rTarget.ISA(ScTabViewTarget);
 }
 
 ScUndoDragDrop::ScUndoDragDrop( ScDocShell* pNewDocShell,
@@ -1340,7 +1340,7 @@ void ScUndoDragDrop::Repeat(SfxRepeatTarget& /* rTarget */)
 {
 }
 
-sal_Bool ScUndoDragDrop::CanRepeat(SfxRepeatTarget& /* rTarget */) const
+bool ScUndoDragDrop::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 {
     return false;           // not possible
 }
@@ -1399,9 +1399,9 @@ void ScUndoListNames::Repeat(SfxRepeatTarget& rTarget)
         ((ScTabViewTarget&)rTarget).GetViewShell()->InsertNameList();
 }
 
-sal_Bool ScUndoListNames::CanRepeat(SfxRepeatTarget& rTarget) const
+bool ScUndoListNames::CanRepeat(SfxRepeatTarget& rTarget) const
 {
-    return (rTarget.ISA(ScTabViewTarget));
+    return rTarget.ISA(ScTabViewTarget);
 }
 
 ScUndoUseScenario::ScUndoUseScenario( ScDocShell* pNewDocShell,
@@ -1514,7 +1514,7 @@ void ScUndoUseScenario::Repeat(SfxRepeatTarget& rTarget)
     }
 }
 
-sal_Bool ScUndoUseScenario::CanRepeat(SfxRepeatTarget& rTarget) const
+bool ScUndoUseScenario::CanRepeat(SfxRepeatTarget& rTarget) const
 {
     if (rTarget.ISA(ScTabViewTarget))
     {
@@ -1624,9 +1624,9 @@ void ScUndoSelectionStyle::Repeat(SfxRepeatTarget& rTarget)
     }
 }
 
-sal_Bool ScUndoSelectionStyle::CanRepeat(SfxRepeatTarget& rTarget) const
+bool ScUndoSelectionStyle::CanRepeat(SfxRepeatTarget& rTarget) const
 {
-    return (rTarget.ISA(ScTabViewTarget));
+    return rTarget.ISA(ScTabViewTarget);
 }
 
 sal_uInt16 ScUndoSelectionStyle::GetId() const
@@ -1714,9 +1714,9 @@ void ScUndoEnterMatrix::Repeat(SfxRepeatTarget& rTarget)
     }
 }
 
-sal_Bool ScUndoEnterMatrix::CanRepeat(SfxRepeatTarget& rTarget) const
+bool ScUndoEnterMatrix::CanRepeat(SfxRepeatTarget& rTarget) const
 {
-    return (rTarget.ISA(ScTabViewTarget));
+    return rTarget.ISA(ScTabViewTarget);
 }
 
 static ScRange lcl_GetMultiMarkRange( const ScMarkData& rMark )
@@ -1780,9 +1780,9 @@ void ScUndoIndent::Repeat(SfxRepeatTarget& rTarget)
         ((ScTabViewTarget&)rTarget).GetViewShell()->ChangeIndent( bIsIncrement );
 }
 
-sal_Bool ScUndoIndent::CanRepeat(SfxRepeatTarget& rTarget) const
+bool ScUndoIndent::CanRepeat(SfxRepeatTarget& rTarget) const
 {
-    return (rTarget.ISA(ScTabViewTarget));
+    return rTarget.ISA(ScTabViewTarget);
 }
 
 ScUndoTransliterate::ScUndoTransliterate( ScDocShell* pNewDocShell, const ScMarkData& rMark,
@@ -1836,9 +1836,9 @@ void ScUndoTransliterate::Repeat(SfxRepeatTarget& rTarget)
         ((ScTabViewTarget&)rTarget).GetViewShell()->TransliterateText( nTransliterationType );
 }
 
-sal_Bool ScUndoTransliterate::CanRepeat(SfxRepeatTarget& rTarget) const
+bool ScUndoTransliterate::CanRepeat(SfxRepeatTarget& rTarget) const
 {
-    return (rTarget.ISA(ScTabViewTarget));
+    return rTarget.ISA(ScTabViewTarget);
 }
 
 ScUndoClearItems::ScUndoClearItems( ScDocShell* pNewDocShell, const ScMarkData& rMark,
@@ -1900,9 +1900,9 @@ void ScUndoClearItems::Repeat(SfxRepeatTarget& rTarget)
     }
 }
 
-sal_Bool ScUndoClearItems::CanRepeat(SfxRepeatTarget& rTarget) const
+bool ScUndoClearItems::CanRepeat(SfxRepeatTarget& rTarget) const
 {
-    return (rTarget.ISA(ScTabViewTarget));
+    return rTarget.ISA(ScTabViewTarget);
 }
 
 // remove all line breaks of a table
@@ -1964,9 +1964,9 @@ void ScUndoRemoveBreaks::Repeat(SfxRepeatTarget& rTarget)
     }
 }
 
-sal_Bool ScUndoRemoveBreaks::CanRepeat(SfxRepeatTarget& rTarget) const
+bool ScUndoRemoveBreaks::CanRepeat(SfxRepeatTarget& rTarget) const
 {
-    return (rTarget.ISA(ScTabViewTarget));
+    return rTarget.ISA(ScTabViewTarget);
 }
 
 ScUndoRemoveMerge::ScUndoRemoveMerge( ScDocShell* pNewDocShell,
@@ -2072,9 +2072,9 @@ void ScUndoRemoveMerge::Repeat(SfxRepeatTarget& rTarget)
         ((ScTabViewTarget&)rTarget).GetViewShell()->RemoveMerge();
 }
 
-sal_Bool ScUndoRemoveMerge::CanRepeat(SfxRepeatTarget& rTarget) const
+bool ScUndoRemoveMerge::CanRepeat(SfxRepeatTarget& rTarget) const
 {
-    return (rTarget.ISA(ScTabViewTarget));
+    return rTarget.ISA(ScTabViewTarget);
 }
 
 void ScUndoRemoveMerge::SetCurTab()
@@ -2170,7 +2170,7 @@ void ScUndoBorder::Repeat(SfxRepeatTarget& /* rTarget */)
     //TODO later (when the function has moved from cellsuno to docfunc)
 }
 
-sal_Bool ScUndoBorder::CanRepeat(SfxRepeatTarget& /* rTarget */) const
+bool ScUndoBorder::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 {
     return false;   // See above
 }

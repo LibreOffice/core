@@ -237,7 +237,7 @@ String SwUserFieldType::GetContent( sal_uInt32 nFmt )
 {
     if (nFmt && nFmt != SAL_MAX_UINT32)
     {
-        String sFormattedValue;
+        OUString sFormattedValue;
         Color* pCol = 0;
 
         SvNumberFormatter* pFormatter = GetDoc()->GetNumberFormatter();

@@ -1178,7 +1178,7 @@ void SmDocShell::Execute(SfxRequest& rReq)
                 if( pArgs && SFX_ITEM_SET == pArgs->GetItemState( nId, false, &pItem ))
                     nCnt = ((SfxUInt16Item*)pItem)->GetValue();
 
-                sal_Bool (::svl::IUndoManager:: *fnDo)();
+                bool (::svl::IUndoManager:: *fnDo)();
 
                 sal_uInt16 nCount;
                 if( SID_UNDO == rReq.GetSlot() )

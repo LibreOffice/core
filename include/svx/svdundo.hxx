@@ -62,7 +62,7 @@ public:
     TYPEINFO();
     virtual ~SdrUndoAction();
 
-    virtual sal_Bool CanRepeat(SfxRepeatTarget& rView) const;
+    virtual bool CanRepeat(SfxRepeatTarget& rView) const;
     virtual void Repeat(SfxRepeatTarget& rView);
 
     virtual OUString GetRepeatComment(SfxRepeatTarget& rView) const;

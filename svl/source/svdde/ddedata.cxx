@@ -55,12 +55,12 @@ DdeData::DdeData( const void* p, long n, sal_uLong f )
 
 // --- DdeData::DdeData() ------------------------------------------
 
-DdeData::DdeData( const String& s )
+DdeData::DdeData( const OUString& s )
 {
     pImp = new DdeDataImp;
     pImp->hData = NULL;
-    pImp->pData = (LPBYTE)s.GetBuffer();
-    pImp->nData = s.Len()+1;
+    pImp->pData = (LPBYTE)s.getStr();
+    pImp->nData = s.getLength()+1;
     pImp->nFmt  = CF_TEXT;
 }
 
@@ -151,9 +151,9 @@ sal_uLong DdeData::GetExternalFormat( sal_uLong nFmt )
     default:
         {
 #if defined(WNT)
-            String aName( SotExchange::GetFormatName( nFmt ) );
-            if( aName.Len() )
-                nFmt = RegisterClipboardFormat( reinterpret_cast<LPCWSTR>(aName.GetBuffer()) );
+            OUString aName( SotExchange::GetFormatName( nFmt ) );
+            if( !aName.isEmpty() )
+                nFmt = RegisterClipboardFormat( reinterpret_cast<LPCWSTR>(aName.getStr()) );
 #endif
         }
     }

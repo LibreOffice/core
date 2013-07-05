@@ -46,32 +46,32 @@
 
 //========================================================================
 
-String SfxDdeServiceName_Impl( const String& sIn )
+OUString SfxDdeServiceName_Impl( const OUString& sIn )
 {
-    String sReturn;
+    OUStringBuffer sReturn(sIn.getLength());
 
-    for ( sal_uInt16 n = sIn.Len(); n; --n )
+    for ( sal_uInt16 n = sIn.getLength(); n; --n )
     {
-        sal_Unicode cChar = sIn.GetChar(n-1);
+        sal_Unicode cChar = sIn[n-1];
         if (comphelper::string::isalnumAscii(cChar))
-            sReturn += cChar;
+            sReturn.append(cChar);
     }
 
-    return sReturn;
+    return sReturn.makeStringAndClear();
 }
 
 #if defined( WNT )
 class ImplDdeService : public DdeService
 {
 public:
-    ImplDdeService( const String& rNm )
+    ImplDdeService( const OUString& rNm )
         : DdeService( rNm )
     {}
-    virtual sal_Bool MakeTopic( const OUString& );
+    virtual bool MakeTopic( const OUString& );
 
-    virtual String  Topics();
+    virtual OUString  Topics();
 
-    virtual sal_Bool SysTopicExecute( const String* pStr );
+    virtual bool SysTopicExecute( const OUString* pStr );
 };
 
 //--------------------------------------------------------------------
@@ -111,12 +111,12 @@ namespace
     }
 }
 
-sal_Bool ImplDdeService::MakeTopic( const OUString& rNm )
+bool ImplDdeService::MakeTopic( const OUString& rNm )
 {
     // Workaround for Event after Main() under OS/2
     // happens when exiting starts the App again
     if ( !Application::IsInExecute() )
-        return sal_False;
+        return false;
 
     // The Topic rNm is sought, do we have it?
     // First only loop over the ObjectShells to find those
@@ -133,7 +133,7 @@ sal_Bool ImplDdeService::MakeTopic( const OUString& rNm )
         if( sTmp == sNm )
         {
             SFX_APP()->AddDdeTopic( pShell );
-            bRet = sal_True;
+            bRet = true;
             break;
         }
         pShell = SfxObjectShell::GetNext( *pShell, &aType );
@@ -163,16 +163,16 @@ sal_Bool ImplDdeService::MakeTopic( const OUString& rNm )
                     ->GetFrame()->GetObjectShell() ) )
             {
                 SFX_APP()->AddDdeTopic( pShell );
-                bRet = sal_True;
+                bRet = true;
             }
         }
     }
     return bRet;
 }
 
-String ImplDdeService::Topics()
+OUString ImplDdeService::Topics()
 {
-    String sRet;
+    OUString sRet;
     if( GetSysTopic() )
         sRet += GetSysTopic()->GetName();
 
@@ -182,20 +182,20 @@ String ImplDdeService::Topics()
     {
         if( SfxViewFrame::GetFirst( pShell ) )
         {
-            if( sRet.Len() )
-                sRet += '\t';
+            if( !sRet.isEmpty() )
+                sRet += "\t";
             sRet += pShell->GetTitle(SFX_TITLE_FULLNAME);
         }
         pShell = SfxObjectShell::GetNext( *pShell, &aType );
     }
-    if( sRet.Len() )
+    if( !sRet.isEmpty() )
         sRet += "\r\n";
     return sRet;
 }
 
-sal_Bool ImplDdeService::SysTopicExecute( const String* pStr )
+bool ImplDdeService::SysTopicExecute( const OUString* pStr )
 {
-    return (sal_Bool)SFX_APP()->DdeExecute( *pStr );
+    return SFX_APP()->DdeExecute( *pStr );
 }
 #endif
 
@@ -203,10 +203,10 @@ class SfxDdeTriggerTopic_Impl : public DdeTopic
 {
 public:
     SfxDdeTriggerTopic_Impl()
-    : DdeTopic( "TRIGGER" )
-    {}
+        : DdeTopic( "TRIGGER" )
+        {}
 
-    virtual sal_Bool Execute( const String* );
+    virtual bool Execute( const OUString* );
 };
 
 class SfxDdeDocTopic_Impl : public DdeTopic
@@ -221,20 +221,14 @@ public:
     {}
 
     virtual DdeData* Get( sal_uIntPtr );
-    virtual sal_Bool Put( const DdeData* );
-    virtual sal_Bool Execute( const String* );
-    virtual sal_Bool StartAdviseLoop();
-    virtual sal_Bool MakeItem( const OUString& rItem );
+    virtual bool Put( const DdeData* );
+    virtual bool Execute( const OUString* );
+    virtual bool StartAdviseLoop();
+    virtual bool MakeItem( const OUString& rItem );
 };
 
 
 class SfxDdeDocTopics_Impl : public std::vector<SfxDdeDocTopic_Impl*> {};
-
-//========================================================================
-
-sal_Bool SfxAppEvent_Impl( ApplicationEvent &rAppEvent,
-                           const OUString& rCmd, const OUString& rEvent,
-                           ApplicationEvent::Type eType )
 
 /*  [Description]
 
@@ -248,7 +242,9 @@ sal_Bool SfxAppEvent_Impl( ApplicationEvent &rAppEvent,
     rCmd = "Open(\"d:\doc\doc.sdw\")"
     rEvent = "Open"
 */
-
+sal_Bool SfxAppEvent_Impl( ApplicationEvent &rAppEvent,
+                           const OUString& rCmd, const OUString& rEvent,
+                           ApplicationEvent::Type eType )
 {
     OUString sEvent(rEvent);
     sEvent += "(";
@@ -289,11 +285,6 @@ sal_Bool SfxAppEvent_Impl( ApplicationEvent &rAppEvent,
 }
 
 #if defined( WNT )
-long SfxApplication::DdeExecute
-(
-    const String&   rCmd  // Expressed in our BASIC-Syntax
-)
-
 /*  Description]
 
     This method can be overloaded by application developers, to receive
@@ -303,7 +294,7 @@ long SfxApplication::DdeExecute
     relevant SfxApplication subclass in BASIC syntax. Return values can
     not be transferred, unfortunately.
 */
-
+long SfxApplication::DdeExecute( const OUString&   rCmd )  // Expressed in our BASIC-Syntax
 {
     // Print or Open-Event?
     ApplicationEvent aAppEvent;
@@ -326,11 +317,6 @@ long SfxApplication::DdeExecute
 }
 #endif
 
-long SfxObjectShell::DdeExecute
-(
-    const String&   rCmd  // Expressed in our BASIC-Syntax
-)
-
 /*  [Description]
 
     This method can be overloaded by application developers, to receive
@@ -338,7 +324,7 @@ long SfxObjectShell::DdeExecute
 
     The base implementation does nothing and returns 0.
 */
-
+long SfxObjectShell::DdeExecute( const OUString&   rCmd )  // Expressed in our BASIC-Syntax
 {
 #ifdef DISABLE_SCRIPTING
     (void) rCmd;
@@ -357,13 +343,6 @@ long SfxObjectShell::DdeExecute
 
 //--------------------------------------------------------------------
 
-long SfxObjectShell::DdeGetData
-(
-    const String&,              // the Item to be addressed
-    const String&,              // in: Format
-    ::com::sun::star::uno::Any& // out: requested data
-)
-
 /*  [Description]
 
     This method can be overloaded by application developers, to receive
@@ -371,19 +350,14 @@ long SfxObjectShell::DdeGetData
 
     The base implementation provides no data and returns 0.
 */
-
+long SfxObjectShell::DdeGetData( const OUString&,              // the Item to be addressed
+                                 const OUString&,              // in: Format
+                                 ::com::sun::star::uno::Any& )// out: requested data
 {
     return 0;
 }
 
 //--------------------------------------------------------------------
-
-long SfxObjectShell::DdeSetData
-(
-    const String&,                    // the Item to be addressed
-    const String&,                    // in: Format
-    const ::com::sun::star::uno::Any& // out: requested data
-)
 
 /*  [Description]
 
@@ -392,16 +366,12 @@ long SfxObjectShell::DdeSetData
 
     The base implementation is not receiving any data and returns 0.
 */
-
+long SfxObjectShell::DdeSetData( const OUString&,                    // the Item to be addressed
+                                 const OUString&,                    // in: Format
+                                 const ::com::sun::star::uno::Any& )// out: requested data
 {
     return 0;
 }
-
-//--------------------------------------------------------------------
-::sfx2::SvLinkSource* SfxObjectShell::DdeCreateLinkSource
-(
-    const String&  // the Item to be addressed
-)
 
 /*  [Description]
 
@@ -410,7 +380,7 @@ long SfxObjectShell::DdeSetData
 
     The base implementation is not generate a link and returns 0.
 */
-
+::sfx2::SvLinkSource* SfxObjectShell::DdeCreateLinkSource( const OUString& ) // the Item to be addressed
 {
     return 0;
 }
@@ -432,13 +402,6 @@ void SfxObjectShell::ReconnectDdeLinks(SfxObjectShell& rServer)
     }
 }
 
-//========================================================================
-
-long SfxViewFrame::DdeExecute
-(
-    const String&   rCmd  // Expressed in our BASIC-Syntax
-)
-
 /*  [Description]
 
     This method can be overloaded by application developers, to receive
@@ -449,22 +412,13 @@ long SfxViewFrame::DdeExecute
     and the relevant SfxApplication subclass in BASIC syntax. Return
     values can not be transferred, unfortunately.
 */
-
+long SfxViewFrame::DdeExecute( const OUString&   rCmd ) // Expressed in our BASIC-Syntax
 {
     if ( GetObjectShell() )
         return GetObjectShell()->DdeExecute( rCmd );
 
     return 0;
 }
-
-//--------------------------------------------------------------------
-
-long SfxViewFrame::DdeGetData
-(
-    const String&,              // the Item to be addressed
-    const String&,              // in: Format
-    ::com::sun::star::uno::Any& // out: requested data
-)
 
 /*  [Description]
 
@@ -473,19 +427,12 @@ long SfxViewFrame::DdeGetData
 
     The base implementation provides no data and returns 0.
 */
-
+long SfxViewFrame::DdeGetData( const OUString&,            // the Item to be addressed
+                               const OUString&,            // in: Format
+                               ::com::sun::star::uno::Any& )// out: requested data
 {
     return 0;
 }
-
-//--------------------------------------------------------------------
-
-long SfxViewFrame::DdeSetData
-(
-    const String&,                    // the Item to be addressed
-    const String&,                    // in: Format
-    const ::com::sun::star::uno::Any& // out: requested data
-)
 
 /*  [Description]
 
@@ -494,17 +441,12 @@ long SfxViewFrame::DdeSetData
 
     The base implementation is not receiving any data and returns 0.
 */
-
+long SfxViewFrame::DdeSetData( const OUString&,                  // the Item to be addressed
+                               const OUString&,                  // in: Format
+                               const ::com::sun::star::uno::Any& )// out: requested data
 {
     return 0;
 }
-
-//--------------------------------------------------------------------
-
-::sfx2::SvLinkSource* SfxViewFrame::DdeCreateLinkSource
-(
-    const String&  // the Item to be addressed
-)
 
 /*  [Description]
 
@@ -513,12 +455,10 @@ long SfxViewFrame::DdeSetData
 
     The base implementation is not generate a link and returns 0.
 */
-
+::sfx2::SvLinkSource* SfxViewFrame::DdeCreateLinkSource( const OUString&  )// the Item to be addressed
 {
     return 0;
 }
-
-//========================================================================
 
 sal_Bool SfxApplication::InitializeDde()
 {
@@ -622,9 +562,9 @@ DdeService* SfxApplication::GetDdeService()
 
 //--------------------------------------------------------------------
 
-sal_Bool SfxDdeTriggerTopic_Impl::Execute( const String* )
+bool SfxDdeTriggerTopic_Impl::Execute( const OUString* )
 {
-    return sal_True;
+    return true;
 }
 
 //--------------------------------------------------------------------
@@ -642,11 +582,11 @@ DdeData* SfxDdeDocTopic_Impl::Get( sal_uIntPtr nFormat )
     return 0;
 }
 
-sal_Bool SfxDdeDocTopic_Impl::Put( const DdeData* pData )
+bool SfxDdeDocTopic_Impl::Put( const DdeData* pData )
 {
     aSeq = ::com::sun::star::uno::Sequence< sal_Int8 >(
                             (sal_Int8*)(const void*)*pData, (long)*pData );
-    sal_Bool bRet;
+    bool bRet;
     if( aSeq.getLength() )
     {
         ::com::sun::star::uno::Any aValue;
@@ -655,25 +595,25 @@ sal_Bool SfxDdeDocTopic_Impl::Put( const DdeData* pData )
         bRet = 0 != pSh->DdeSetData( GetCurItem(), sMimeType, aValue );
     }
     else
-        bRet = sal_False;
+        bRet = false;
     return bRet;
 }
 
-sal_Bool SfxDdeDocTopic_Impl::Execute( const String* pStr )
+bool SfxDdeDocTopic_Impl::Execute( const OUString* pStr )
 {
     long nRet = pStr ? pSh->DdeExecute( *pStr ) : 0;
     return 0 != nRet;
 }
 
-sal_Bool SfxDdeDocTopic_Impl::MakeItem( const OUString& rItem )
+bool SfxDdeDocTopic_Impl::MakeItem( const OUString& rItem )
 {
     AddItem( DdeItem( rItem ) );
-    return sal_True;
+    return true;
 }
 
-sal_Bool SfxDdeDocTopic_Impl::StartAdviseLoop()
+bool SfxDdeDocTopic_Impl::StartAdviseLoop()
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     ::sfx2::SvLinkSource* pNewObj = pSh->DdeCreateLinkSource( GetCurItem() );
     if( pNewObj )
     {
@@ -681,7 +621,7 @@ sal_Bool SfxDdeDocTopic_Impl::StartAdviseLoop()
         String sNm, sTmp( Application::GetAppName() );
         ::sfx2::MakeLnkName( sNm, &sTmp, pSh->GetTitle(SFX_TITLE_FULLNAME), GetCurItem() );
         new ::sfx2::SvBaseLink( sNm, OBJECT_DDE_EXTERN, pNewObj );
-        bRet = sal_True;
+        bRet = true;
     }
     return bRet;
 }

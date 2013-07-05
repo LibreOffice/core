@@ -86,7 +86,7 @@ SfxManageStyleSheetPage::SfxManageStyleSheetPage(Window* pParent, const SfxItemS
         pPool->First();     // for SW - update internal list
     }
 
-    if ( !pStyle->GetName().Len() && pPool )
+    if ( pStyle->GetName().isEmpty() && pPool )
     {
         // NullString as Name -> generate Name
         String aNoName( SfxResId(STR_NONAME).toString() );

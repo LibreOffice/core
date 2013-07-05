@@ -67,11 +67,11 @@ PresStyleMap& SdStyleFamilyImpl::getStyleSheets()
     {
         maLayoutName = mxMasterPage->GetLayoutName();
 
-        String aLayoutName( maLayoutName );
-        const sal_uInt16 nLen = aLayoutName.Search(String( SD_LT_SEPARATOR ))+4;
-        aLayoutName.Erase( nLen );
+        OUString aLayoutName( maLayoutName );
+        const sal_uInt16 nLen = aLayoutName.indexOf(SD_LT_SEPARATOR ) + 4;
+        aLayoutName = aLayoutName.copy(0, nLen );
 
-        if( (maStyleSheets.empty()) || !((*maStyleSheets.begin()).second->GetName().Equals( aLayoutName, 0, nLen )) )
+        if( (maStyleSheets.empty()) || !(*maStyleSheets.begin()).second->GetName().startsWith( aLayoutName) )
         {
             maStyleSheets.clear();
 
@@ -79,7 +79,7 @@ PresStyleMap& SdStyleFamilyImpl::getStyleSheets()
             for( SfxStyles::const_iterator iter( rStyles.begin() ); iter != rStyles.end(); ++iter )
             {
                 SdStyleSheet* pStyle = static_cast< SdStyleSheet* >( (*iter).get() );
-                if( pStyle && (pStyle->GetFamily() == SD_STYLE_FAMILY_MASTERPAGE) && (pStyle->GetName().Equals( aLayoutName, 0, nLen )) )
+                if( pStyle && (pStyle->GetFamily() == SD_STYLE_FAMILY_MASTERPAGE) && pStyle->GetName().startsWith(aLayoutName) )
                     maStyleSheets[ pStyle->GetApiName() ] = rtl::Reference< SdStyleSheet >( pStyle );
             }
         }

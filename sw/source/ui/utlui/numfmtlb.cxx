@@ -303,15 +303,13 @@ void NumFormatListBox::SetDefFormat(const sal_uLong nDefFmt)
 
     // No entry found:
     double fValue = GetDefValue(nType);
-    String sValue;
+    OUString sValue;
     Color* pCol = 0;
 
     if (nType == NUMBERFORMAT_TEXT)
     {
         OUString sTxt("\"ABC\"");
-        OUString sTempOut(sValue);
-        pFormatter->GetOutputString(sTxt, nDefFmt, sTempOut, &pCol);
-        sValue = sTempOut;
+        pFormatter->GetOutputString(sTxt, nDefFmt, sValue, &pCol);
     }
     else
         pFormatter->GetOutputString(fValue, nDefFmt, sValue, &pCol);

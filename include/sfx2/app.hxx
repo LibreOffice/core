@@ -152,7 +152,7 @@ public:
 
     // DDE
 #if defined( WNT )
-    long                        DdeExecute( const String& rCmd );
+    long                        DdeExecute( const OUString& rCmd );
 #endif
     sal_Bool                    InitializeDde();
     const DdeService*           GetDdeService() const;

@@ -185,16 +185,16 @@ void SdStyleSheet::Store(SvStream& rOut)
 }
 
 
-bool SdStyleSheet::SetParent(const String& rParentName)
+bool SdStyleSheet::SetParent(const OUString& rParentName)
 {
-    bool bResult = sal_False;
+    bool bResult = false;
 
     if (SfxStyleSheet::SetParent(rParentName))
     {
         // PseudoStyleSheets do not have their own ItemSets
         if (nFamily != SD_STYLE_FAMILY_PSEUDO)
         {
-            if( rParentName.Len() )
+            if( !rParentName.isEmpty() )
             {
                 SfxStyleSheetBase* pStyle = pPool->Find(rParentName, nFamily);
                 if (pStyle)
@@ -422,36 +422,37 @@ SdStyleSheet* SdStyleSheet::GetRealStyleSheet() const
 
     /* now map from the name (specified for country language) to the internal
        name (independent of the country language)  */
-    String aInternalName;
+    OUString aInternalName;
+    OUString aStyleName(aName);
 
-    if (aName == String(SdResId(STR_PSEUDOSHEET_TITLE)))
+    if (aStyleName == OUString(SdResId(STR_PSEUDOSHEET_TITLE)))
     {
-        aInternalName = String(SdResId(STR_LAYOUT_TITLE));
+        aInternalName = OUString(SdResId(STR_LAYOUT_TITLE));
     }
-    else if (aName == String(SdResId(STR_PSEUDOSHEET_SUBTITLE)))
+    else if (aStyleName == OUString(SdResId(STR_PSEUDOSHEET_SUBTITLE)))
     {
-        aInternalName = String(SdResId(STR_LAYOUT_SUBTITLE));
+        aInternalName = OUString(SdResId(STR_LAYOUT_SUBTITLE));
     }
-    else if (aName == String(SdResId(STR_PSEUDOSHEET_BACKGROUND)))
+    else if (aStyleName == OUString(SdResId(STR_PSEUDOSHEET_BACKGROUND)))
     {
-        aInternalName = String(SdResId(STR_LAYOUT_BACKGROUND));
+        aInternalName = OUString(SdResId(STR_LAYOUT_BACKGROUND));
     }
-    else if (aName == String(SdResId(STR_PSEUDOSHEET_BACKGROUNDOBJECTS)))
+        else if (aStyleName == OUString(SdResId(STR_PSEUDOSHEET_BACKGROUNDOBJECTS)))
     {
-        aInternalName = String(SdResId(STR_LAYOUT_BACKGROUNDOBJECTS));
+        aInternalName = OUString(SdResId(STR_LAYOUT_BACKGROUNDOBJECTS));
     }
-    else if (aName == String(SdResId(STR_PSEUDOSHEET_NOTES)))
+        else if (aStyleName == OUString(SdResId(STR_PSEUDOSHEET_NOTES)))
     {
-        aInternalName = String(SdResId(STR_LAYOUT_NOTES));
+        aInternalName = OUString(SdResId(STR_LAYOUT_NOTES));
     }
     else
     {
-        String aOutlineStr(SdResId(STR_PSEUDOSHEET_OUTLINE));
-        sal_uInt16 nPos = aName.Search(aOutlineStr);
-        if (nPos != STRING_NOTFOUND)
+        OUString aOutlineStr(SdResId(STR_PSEUDOSHEET_OUTLINE));
+        sal_Int32 nPos = aStyleName.indexOf(aOutlineStr);
+        if (nPos >= 0)
         {
-            String aNumStr(aName.Copy(aOutlineStr.Len()));
-            aInternalName = String(SdResId(STR_LAYOUT_OUTLINE));
+            String aNumStr(aStyleName.copy(aOutlineStr.getLength()));
+            aInternalName = OUString(SdResId(STR_LAYOUT_OUTLINE));
             aInternalName += aNumStr;
         }
     }
@@ -628,7 +629,7 @@ bool SdStyleSheet::HasClearParentSupport() const
 
 // --------------------------------------------------------------------
 
-bool SdStyleSheet::SetName( const UniString& rName )
+bool SdStyleSheet::SetName( const OUString& rName )
 {
     return SfxStyleSheet::SetName( rName );
 }
@@ -962,7 +963,7 @@ OUString SAL_CALL SdStyleSheet::getParentStyle() throw(RuntimeException)
     SolarMutexGuard aGuard;
     throwIfDisposed();
 
-    if( GetParent().Len() )
+    if( !GetParent().isEmpty() )
     {
         SdStyleSheet* pParentStyle = static_cast< SdStyleSheet* >( mxPool->Find( GetParent(), nFamily ) );
         if( pParentStyle )

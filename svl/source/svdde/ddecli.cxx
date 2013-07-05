@@ -54,9 +54,9 @@ struct DdeImp
 
 // --- DdeInternat::CliCallback() ----------------------------------
 
-HDDEDATA CALLBACK DdeInternal::CliCallback(
-            WORD nCode, WORD nCbType, HCONV hConv, HSZ, HSZ hText2,
-            HDDEDATA hData, DWORD nInfo1, DWORD )
+HDDEDATA CALLBACK DdeInternal::CliCallback( WORD nCode, WORD nCbType,
+                                            HCONV hConv, HSZ, HSZ hText2,
+                                            HDDEDATA hData, DWORD nInfo1, DWORD )
 {
     HDDEDATA nRet = DDE_FNOTPROCESSED;
     const std::vector<DdeConnection*> &rAll = DdeConnection::GetConnections();
@@ -75,35 +75,35 @@ HDDEDATA CALLBACK DdeInternal::CliCallback(
 
     if( self )
     {
-        sal_Bool bFound = sal_False;
+        bool bFound = false;
         std::vector<DdeTransaction*>::iterator iter;
         for( iter = self->aTransactions.begin(); iter != self->aTransactions.end(); ++iter )
         {
             switch( nCode )
             {
-                case XTYP_XACT_COMPLETE:
-                    if( (DWORD)(*iter)->nId == nInfo1 )
-                    {
-                        nCode = (*iter)->nType & (XCLASS_MASK | XTYP_MASK);
-                        (*iter)->bBusy = false;
-                        (*iter)->Done( 0 != hData );
-                        bFound = sal_True;
-                    }
-                    break;
+            case XTYP_XACT_COMPLETE:
+                if( (DWORD)(*iter)->nId == nInfo1 )
+                {
+                    nCode = (*iter)->nType & (XCLASS_MASK | XTYP_MASK);
+                    (*iter)->bBusy = false;
+                    (*iter)->Done( 0 != hData );
+                    bFound = true;
+                }
+                break;
 
-                case XTYP_DISCONNECT:
-                    self->pImp->hConv = DdeReconnect( hConv );
-                    self->pImp->nStatus = self->pImp->hConv
-                                    ? DMLERR_NO_ERROR
-                                    : DdeGetLastError( pInst->hDdeInstCli );
-                    iter = self->aTransactions.end();
-                    nRet = 0;
-                    bFound = sal_True;
-                    break;
+            case XTYP_DISCONNECT:
+                self->pImp->hConv = DdeReconnect( hConv );
+                self->pImp->nStatus = self->pImp->hConv
+                    ? DMLERR_NO_ERROR
+                    : DdeGetLastError( pInst->hDdeInstCli );
+                iter = self->aTransactions.end();
+                nRet = 0;
+                bFound = true;
+                break;
 
-                case XTYP_ADVDATA:
-                    bFound = sal_Bool( *(*iter)->pName == hText2 );
-                    break;
+            case XTYP_ADVDATA:
+                bFound = *(*iter)->pName == hText2;
+                break;
             }
             if( bFound )
                 break;
@@ -143,7 +143,7 @@ HDDEDATA CALLBACK DdeInternal::CliCallback(
 
 // --- DdeConnection::DdeConnection() ------------------------------
 
-DdeConnection::DdeConnection( const String& rService, const String& rTopic )
+DdeConnection::DdeConnection( const OUString& rService, const OUString& rTopic )
 {
     pImp = new DdeImp;
     pImp->nStatus  = DMLERR_NO_ERROR;
@@ -212,33 +212,33 @@ DdeConnection::~DdeConnection()
 
 // --- DdeConnection::IsConnected() --------------------------------
 
-sal_Bool DdeConnection::IsConnected()
+bool DdeConnection::IsConnected()
 {
     CONVINFO c;
     c.cb = sizeof( c );
     if ( DdeQueryConvInfo( pImp->hConv, QID_SYNC, &c ) )
-        return sal_True;
+        return true;
     else
     {
         DdeInstData* pInst = ImpGetInstData();
         pImp->hConv = DdeReconnect( pImp->hConv );
         pImp->nStatus = pImp->hConv ? DMLERR_NO_ERROR : DdeGetLastError( pInst->hDdeInstCli );
-        return sal_Bool( pImp->nStatus == DMLERR_NO_ERROR );
+        return pImp->nStatus == DMLERR_NO_ERROR;
     }
 }
 
 // --- DdeConnection::GetServiceName() -----------------------------
 
-const String& DdeConnection::GetServiceName()
+const OUString DdeConnection::GetServiceName()
 {
-    return (const String&)*pService;
+    return pService->toOUString();
 }
 
 // --- DdeConnection::GetTopicName() -------------------------------
 
-const String& DdeConnection::GetTopicName()
+const OUString DdeConnection::GetTopicName()
 {
-    return (const String&)*pTopic;
+    return pTopic->toOUString();
 }
 
 // --- DdeConnection::GetConvId() ----------------------------------
@@ -257,9 +257,9 @@ const std::vector<DdeConnection*>& DdeConnection::GetConnections()
 
 // --- DdeTransaction::DdeTransaction() ----------------------------
 
-DdeTransaction::DdeTransaction( DdeConnection& d, const String& rItemName,
-                                long n ) :
-                    rDde( d )
+DdeTransaction::DdeTransaction( DdeConnection& d, const OUString& rItemName,
+                                long n )
+    : rDde( d )
 {
     DdeInstData* pInst = ImpGetInstData();
     pName = new DdeString( pInst->hDdeInstCli, rItemName );
@@ -360,7 +360,7 @@ void DdeTransaction::Data( const DdeData* p )
 
 // --- DdeTransaction::Done() --------------------------------------
 
-void DdeTransaction::Done( sal_Bool bDataValid )
+void DdeTransaction::Done( bool bDataValid )
 {
     const sal_uIntPtr nDataValid(bDataValid);
     aDone.Call( reinterpret_cast<void*>(nDataValid) );
@@ -368,8 +368,8 @@ void DdeTransaction::Done( sal_Bool bDataValid )
 
 // --- DdeLink::DdeLink() ------------------------------------------
 
-DdeLink::DdeLink( DdeConnection& d, const String& aItemName, long n ) :
-            DdeTransaction (d, aItemName, n)
+DdeLink::DdeLink( DdeConnection& d, const OUString& aItemName, long n )
+    : DdeTransaction (d, aItemName, n)
 {
 }
 
@@ -390,33 +390,33 @@ void DdeLink::Notify()
 
 // --- DdeRequest::DdeRequest() ------------------------------------
 
-DdeRequest::DdeRequest( DdeConnection& d, const String& i, long n ) :
-                DdeTransaction( d, i, n )
+DdeRequest::DdeRequest( DdeConnection& d, const OUString& i, long n )
+    : DdeTransaction( d, i, n )
 {
     nType = XTYP_REQUEST;
 }
 
 // --- DdeWarmLink::DdeWarmLink() ----------------------------------
 
-DdeWarmLink::DdeWarmLink( DdeConnection& d, const String& i, long n ) :
-                DdeLink( d, i, n )
+DdeWarmLink::DdeWarmLink( DdeConnection& d, const OUString& i, long n )
+    : DdeLink( d, i, n )
 {
     nType = XTYP_ADVSTART | XTYPF_NODATA;
 }
 
 // --- DdeHotLink::DdeHotLink() ------------------------------------
 
-DdeHotLink::DdeHotLink( DdeConnection& d, const String& i, long n ) :
-                DdeLink( d, i, n )
+DdeHotLink::DdeHotLink( DdeConnection& d, const OUString& i, long n )
+    : DdeLink( d, i, n )
 {
     nType = XTYP_ADVSTART;
 }
 
 // --- DdePoke::DdePoke() ------------------------------------------
 
-DdePoke::DdePoke( DdeConnection& d, const String& i, const char* p,
-                  long l, sal_uLong f, long n ) :
-            DdeTransaction( d, i, n )
+DdePoke::DdePoke( DdeConnection& d, const OUString& i, const char* p,
+                  long l, sal_uLong f, long n )
+    : DdeTransaction( d, i, n )
 {
     aDdeData = DdeData( p, l, f );
     nType = XTYP_POKE;
@@ -424,19 +424,19 @@ DdePoke::DdePoke( DdeConnection& d, const String& i, const char* p,
 
 // --- DdePoke::DdePoke() ------------------------------------------
 
-DdePoke::DdePoke( DdeConnection& d, const String& i, const String& rData,
-                  long n ) :
-            DdeTransaction( d, i, n )
+DdePoke::DdePoke( DdeConnection& d, const OUString& i, const OUString& rData,
+                  long n )
+    : DdeTransaction( d, i, n )
 {
-    aDdeData = DdeData( (void*) rData.GetBuffer(), sizeof(sal_Unicode) * (rData.Len()), CF_TEXT );
+    aDdeData = DdeData( (void*) rData.getStr(), sizeof(sal_Unicode) * (rData.getLength()), CF_TEXT );
     nType = XTYP_POKE;
 }
 
 // --- DdePoke::DdePoke() ------------------------------------------
 
-DdePoke::DdePoke( DdeConnection& d, const String& i, const DdeData& rData,
-                  long n ) :
-            DdeTransaction( d, i, n )
+DdePoke::DdePoke( DdeConnection& d, const OUString& i, const DdeData& rData,
+                  long n )
+    : DdeTransaction( d, i, n )
 {
     aDdeData = rData;
     nType = XTYP_POKE;
@@ -444,10 +444,10 @@ DdePoke::DdePoke( DdeConnection& d, const String& i, const DdeData& rData,
 
 // --- DdeExecute::DdeExecute() ------------------------------------
 
-DdeExecute::DdeExecute( DdeConnection& d, const String& rData, long n ) :
-                DdeTransaction( d, String(), n )
+DdeExecute::DdeExecute( DdeConnection& d, const OUString& rData, long n )
+    : DdeTransaction( d, OUString(), n )
 {
-    aDdeData = DdeData( (void*)rData.GetBuffer(), sizeof(sal_Unicode) * (rData.Len() + 1), CF_TEXT );
+    aDdeData = DdeData( (void*)rData.getStr(), sizeof(sal_Unicode) * (rData.getLength() + 1), CF_TEXT );
     nType = XTYP_EXECUTE;
 }
 

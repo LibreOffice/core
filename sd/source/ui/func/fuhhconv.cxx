@@ -168,7 +168,7 @@ void FuHangulHanjaConversion::ConvertStyles( sal_Int16 nTargetLanguage, const Fo
     {
         SfxItemSet& rSet = pStyle->GetItemSet();
 
-        const bool bHasParent = pStyle->GetParent().Len() != 0;
+        const bool bHasParent = !pStyle->GetParent().isEmpty();
 
         if( !bHasParent || rSet.GetItemState( EE_CHAR_LANGUAGE_CJK, sal_False ) == SFX_ITEM_SET )
             rSet.Put( SvxLanguageItem( nTargetLanguage, EE_CHAR_LANGUAGE_CJK ) );
