@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXn///UQ\u003d",
+        "filename": "starmath/source/smdetect.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 310,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2013-07-05T21:10:51Z",
+      "side": 0,
+      "message": "This check used to test if there were 5 characters read (\"\u003c?xml\"). Now it tests if exactly 200 chars read, thus filtering out any file \u003c200 bytes long. I suppose it\u0027s better to test for \u003e\u003d6 \"\u003cmath\u003e\" or so",
+      "revId": "db377e02c309c20419aef1360409be09fe50fc42",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
