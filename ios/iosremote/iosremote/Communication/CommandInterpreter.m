@@ -37,8 +37,15 @@
     }
     NSLog(@"Command:%@", command);
     NSString *instruction = [command objectAtIndex:0];
-    
-    if([instruction isEqualToString:@"slideshow_started"]){
+    if ([instruction isEqualToString:STATUS_PAIRING_PINVALIDATION]) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:STATUS_PAIRING_PINVALIDATION
+                                                            object:nil];
+    }
+    else if ([instruction isEqualToString:STATUS_PAIRING_PAIRED]){
+        [[NSNotificationCenter defaultCenter] postNotificationName:STATUS_PAIRING_PAIRED
+                                                            object:nil];
+    }
+    else if([instruction isEqualToString:@"slideshow_started"]){
         NSLog(@"Interpreter: slideshow_started");
         uint slideLength = [[command objectAtIndex:1] integerValue];
         uint currentSlide = [[command objectAtIndex:2] integerValue];
@@ -83,7 +90,6 @@
                               AtIndex:slideNumber];
             [[NSNotificationCenter defaultCenter] postNotificationName:MSG_SLIDE_NOTES object: [NSNumber numberWithUnsignedInt:slideNumber]];
         }
-        
     }
     
 }

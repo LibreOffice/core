@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
-@interface slideShowPreviewTable_vc : UITableViewController
+@interface slideShowPreviewTable_vc : UITableViewController <UITableViewDataSource, UITableViewDelegate>
+
+@property (strong, nonatomic) IBOutlet UITableView *optionsTable;
 
 @end

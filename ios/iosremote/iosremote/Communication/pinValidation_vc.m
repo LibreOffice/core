@@ -40,21 +40,21 @@
     self.comManager = [CommunicationManager sharedComManager];
     [self.pinLabel setText:[NSString stringWithFormat:@"%@", [self.comManager getPairingPin]]];
     NSOperationQueue *mainQueue = [NSOperationQueue mainQueue];
-    self.slideShowPreviewStartObserver = [[NSNotificationCenter defaultCenter] addObserverForName:STATUS_CONNECTED_SLIDESHOW_RUNNING
+    self.slideShowPreviewStartObserver = [[NSNotificationCenter defaultCenter] addObserverForName:STATUS_PAIRING_PAIRED
                                                                                            object:nil
                                                                                             queue:mainQueue
                                                                                        usingBlock:^(NSNotification *note) {
-                                                                       [self performSegueWithIdentifier:@"pinValidated" sender:self ];
-                                                                   }];
+                                                                                           [self performSegueWithIdentifier:@"pinValidated" sender:self ];
+                                                                                       }];
 }
-
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender{
-    if ([segue.identifier isEqualToString:@"pinValidated"]) {
-        slideShowPreview_vc *destViewController = segue.destinationViewController;
-        destViewController.slideshow = [self.comManager.interpreter slideShow];
-        [destViewController.slideshow setDelegate:destViewController];
-    }
-}
+//
+//- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender{
+//    if ([segue.identifier isEqualToString:@"pinValidated"]) {
+//        slideShowPreview_vc *destViewController = segue.destinationViewController;
+//        destViewController.slideshow = [self.comManager.interpreter slideShow];
+//        [destViewController.slideshow setDelegate:destViewController];
+//    }
+//}
 
 - (void)didReceiveMemoryWarning
 {

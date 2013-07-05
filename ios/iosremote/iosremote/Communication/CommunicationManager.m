@@ -21,8 +21,6 @@
 @interface CommunicationManager()
 
 @property (nonatomic, strong) Client* client;
-@property (nonatomic, strong) id connectionConnectedObserver;
-@property (nonatomic, strong) id connectionDisconnectedObserver;
 
 @end
 
@@ -35,8 +33,6 @@
 @synthesize transmitter = _transmitter;
 @synthesize servers = _servers;
 @synthesize delegate = _delegate;
-@synthesize connectionConnectedObserver = _connectionConnectedObserver;
-@synthesize connectionDisconnectedObserver = _connectionDisconnectedObserver;
 
 + (CommunicationManager *)sharedComManager
 {
@@ -59,9 +55,6 @@
             NSLog(@"Connected");
             self.transmitter = [[CommandTransmitter alloc] initWithClient:self.client];
             self.state = CONNECTED;
-            [self.delegate performSegueWithIdentifier:@"pinValidation" sender:nil];
-        } else {
-            NSLog(@"Already connected");
         }
     } else if ([[note name] isEqualToString:@"connection.status.disconnected"]){
         if (self.state != DISCONNECTED) {

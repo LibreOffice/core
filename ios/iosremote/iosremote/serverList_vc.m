@@ -16,6 +16,7 @@
 @property (nonatomic, strong) CommunicationManager *comManager;
 @property (nonatomic, weak) NSNotificationCenter* center;
 @property (nonatomic, strong) id slideShowPreviewStartObserver;
+@property (nonatomic, strong) id pinValidationObserver;
 @property (nonatomic, strong) NSIndexPath *lastSpinningCellIndex;
 
 @end
@@ -26,6 +27,7 @@
 @synthesize comManager = _comManager;
 @synthesize lastSpinningCellIndex = _lastSpinningCellIndex;
 @synthesize slideShowPreviewStartObserver = _slideShowPreviewStartObserver;
+@synthesize pinValidationObserver = _pinValidationObserver;
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
@@ -52,12 +54,18 @@
     self.serverTable.delegate = self;
     
     NSOperationQueue *mainQueue = [NSOperationQueue mainQueue];
-    self.slideShowPreviewStartObserver = [[NSNotificationCenter defaultCenter] addObserverForName:STATUS_CONNECTED_SLIDESHOW_RUNNING
+    self.pinValidationObserver = [[NSNotificationCenter defaultCenter] addObserverForName:STATUS_PAIRING_PINVALIDATION
+                                                                                           object:nil
+                                                                                            queue:mainQueue
+                                                                                       usingBlock:^(NSNotification *note) {
+                                                                                           [self performSegueWithIdentifier:@"pinValidation" sender:self ];
+                                                                                    }];
+    self.slideShowPreviewStartObserver = [[NSNotificationCenter defaultCenter] addObserverForName:STATUS_PAIRING_PAIRED
                                                                                            object:nil
                                                                                             queue:mainQueue
                                                                                        usingBlock:^(NSNotification *note) {
                                                                                            [self performSegueWithIdentifier:@"SlideShowPreview" sender:self ];
-                                                                                    }];
+                                                                                       }];
 }
 
 -(void)viewWillAppear:(BOOL)animated

@@ -7,16 +7,21 @@
 //
 
 #import "slideShowPreviewTable_vc.h"
+#import "CommunicationManager.h"
+#import "CommandTransmitter.h"
 
 @interface slideShowPreviewTable_vc ()
 
-@property (nonatomic, strong) UIButton * startButton;
-
+@property (nonatomic, weak) UIButton * startButton;
+@property (nonatomic, strong) NSArray * optionsArray;
+@property (nonatomic, strong) CommunicationManager * comManager;
 @end
 
 @implementation slideShowPreviewTable_vc
 
 @synthesize startButton = _startButton;
+@synthesize optionsTable = _optionsTable;
+@synthesize optionsArray = _optionsArray;
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
@@ -36,6 +41,9 @@
  
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    self.optionsArray = [NSArray arrayWithObjects:@"Lecturer's Notes", @"Timer", @"Pointer", nil];
+    self.comManager = [CommunicationManager sharedComManager];
+    self.comManager.delegate = self;
 }
 
 - (void)didReceiveMemoryWarning
@@ -46,26 +54,25 @@
 
 #pragma mark - Table view data source
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-{
-#warning Potentially incomplete method implementation.
-    // Return the number of sections.
-    return 0;
-}
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-#warning Incomplete method implementation.
-    // Return the number of rows in the section.
-    return 0;
+    return [self.optionsArray count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *CellIdentifier = @"Cell";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
+    static NSString *CellIdentifier = @"optionCell";
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     
-    // Configure the cell...
+    if (cell == nil) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+        UISwitch *toggleSwitch = [[UISwitch alloc] init];
+        cell.accessoryView = [[UIView alloc] initWithFrame:toggleSwitch.frame];
+        [toggleSwitch setOn:YES];
+        [cell.accessoryView addSubview:toggleSwitch];
+    }
+    cell.textLabel.text = [self.optionsArray objectAtIndex:indexPath.row];
     
     return cell;
 }
@@ -110,28 +117,21 @@
 */
 
 -(IBAction)startPresentationAction:(id)sender {
-    
-    UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Reset"
-                                                 message:@"You just pressed the Reset button"
-                                                delegate:self
-                                       cancelButtonTitle:@"Acknowledged"
-                                       otherButtonTitles:nil];
-    [alert show];
+    [[self.comManager transmitter] startPresentation];
+    [self performSegueWithIdentifier:@"slideShowSegue" sender:self];
 }
 
 - (UIButton *)startButton{
-    if (self.startButton == nil)
-    {
+    if (_startButton == nil) {
+        _startButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+        _startButton.frame = CGRectMake(10.0, 10.0, 300.0, 50.0);
+        [_startButton setTitle:@"Start Presentation" forState:UIControlStateNormal];
+        _startButton.backgroundColor = [UIColor clearColor];
+        [_startButton addTarget:self action:@selector(startPresentationAction:) forControlEvents:UIControlEventTouchDown];
         
-        self.startButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-        self.startButton.frame = CGRectMake(20.0, 40 , 95.0, 37.0);
-        [self.startButton setTitle:@"Start Presentation" forState:UIControlStateNormal];
-        self.startButton.backgroundColor = [UIColor clearColor];
-        [self.startButton addTarget:self action:@selector(startPresentationAction:) forControlEvents:UIControlEventTouchDown];
-        
-        self.startButton.tag = 1;    
+        _startButton.tag = 1;
     }
-    return self.startButton;
+    return _startButton;
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
@@ -146,23 +146,20 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
-    return 100.0;
+    return 50.0;
 }
 
 #pragma mark - Table view delegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    // Navigation logic may go here. Create and push another view controller.
-    /*
-     <#DetailViewController#> *detailViewController = [[<#DetailViewController#> alloc] initWithNibName:@"<#Nib name#>" bundle:nil];
-     // ...
-     // Pass the selected object to the new view controller.
-     [self.navigationController pushViewController:detailViewController animated:YES];
-     */
+    UITableViewCell * cell = [tableView cellForRowAtIndexPath:indexPath];
+    UISwitch * toggle = [[[cell accessoryView] subviews] objectAtIndex:0];
+    [toggle setOn:![toggle isOn] animated:YES];
 }
 
 - (void)viewDidUnload {
+    [self setOptionsTable:nil];
     [super viewDidUnload];
 }
 @end
