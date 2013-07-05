@@ -111,7 +111,7 @@ SAL_DLLPUBLIC sal_Bool SAL_CALL osl_getSystemTime(
     @return sal_False if any error occurs else sal_True.
 */
 SAL_DLLPUBLIC sal_Bool SAL_CALL osl_getDateTimeFromTimeValue(
-        TimeValue* pTimeVal, oslDateTime* pDateTime );
+        const TimeValue* pTimeVal, oslDateTime* pDateTime );
 
 
 /** Get the GMT from a oslDateTime and fill a TimeValue
@@ -121,7 +121,7 @@ SAL_DLLPUBLIC sal_Bool SAL_CALL osl_getDateTimeFromTimeValue(
     @return sal_False if any error occurs else sal_True.
 */
 SAL_DLLPUBLIC sal_Bool SAL_CALL osl_getTimeValueFromDateTime(
-        oslDateTime* pDateTime, TimeValue* pTimeVal );
+        const oslDateTime* pDateTime, TimeValue* pTimeVal );
 
 
 /** Convert GMT to local time
@@ -131,7 +131,7 @@ SAL_DLLPUBLIC sal_Bool SAL_CALL osl_getTimeValueFromDateTime(
     @return sal_False if any error occurs else sal_True.
 */
 SAL_DLLPUBLIC sal_Bool SAL_CALL osl_getLocalTimeFromSystemTime(
-        TimeValue* pSystemTimeVal, TimeValue* pLocalTimeVal );
+        const TimeValue* pSystemTimeVal, TimeValue* pLocalTimeVal );
 
 
 /** Convert local time to GMT
@@ -141,7 +141,7 @@ SAL_DLLPUBLIC sal_Bool SAL_CALL osl_getLocalTimeFromSystemTime(
     @return sal_False if any error occurs else sal_True.
 */
 SAL_DLLPUBLIC sal_Bool SAL_CALL osl_getSystemTimeFromLocalTime(
-        TimeValue* pLocalTimeVal, TimeValue* pSystemTimeVal );
+        const TimeValue* pLocalTimeVal, TimeValue* pSystemTimeVal );
 
 
 /** Get the value of the global timer
