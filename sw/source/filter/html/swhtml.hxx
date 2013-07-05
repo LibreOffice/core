@@ -894,7 +894,7 @@ protected:
 
 public:
 
-    SwHTMLParser( SwDoc* pD, const SwPaM& rCrsr, SvStream& rIn,
+    SwHTMLParser( SwDoc* pD, SwPaM & rCrsr, SvStream& rIn,
                     const String& rFileName,
                     const String& rBaseURL,
                     int bReadNewDoc = sal_True,

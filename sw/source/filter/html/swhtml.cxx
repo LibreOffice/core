@@ -237,7 +237,7 @@ sal_uLong HTMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPam, co
 
 
 
-SwHTMLParser::SwHTMLParser( SwDoc* pD, const SwPaM& rCrsr, SvStream& rIn,
+SwHTMLParser::SwHTMLParser( SwDoc* pD, SwPaM& rCrsr, SvStream& rIn,
                             const String& rPath,
                             const String& rBaseURL,
                             int bReadNewDoc,
@@ -305,7 +305,8 @@ SwHTMLParser::SwHTMLParser( SwDoc* pD, const SwPaM& rCrsr, SvStream& rIn,
     eScriptLang = HTML_SL_UNKNOWN;
     bAnyStarBasic = sal_True;
 
-    pPam = new SwPaM( *rCrsr.GetPoint() );
+    rCrsr.DeleteMark();
+    pPam = &rCrsr; // re-use existing cursor: avoids spurious ~SwIndexReg assert
     memset( &aAttrTab, 0, sizeof( _HTMLAttrTable ));
 
     // Die Font-Groessen 1-7 aus der INI-Datei lesen
@@ -453,7 +454,6 @@ SwHTMLParser::~SwHTMLParser()
         aSetAttrTab.clear();
     }
 
-    delete pPam;
     delete pCSS1Parser;
     delete pNumRuleInfo;
     DeleteFormImpl();
