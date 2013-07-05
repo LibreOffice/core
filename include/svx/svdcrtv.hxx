@@ -89,8 +89,7 @@ public:
     void SetMeasureLayer(const String& rName) { aMeasureLayer=rName; }
     const String& GetMeasureLayer() const { return aMeasureLayer; }
 
-    // If the MeasureLayer is not set (empty string), then
-    // use the active layer for measuring.
+    // If the MeasureLayer is not set (empty string), then use the active layer for measuring.
     void SetEditMode(SdrViewEditMode eMode) { SdrDragView::SetEditMode(eMode); CheckEdgeMode(); }
     void SetEditMode(sal_Bool bOn=sal_True) { SdrDragView::SetEditMode(bOn); CheckEdgeMode(); }
     void SetCreateMode(sal_Bool bOn=sal_True) { SdrDragView::SetCreateMode(bOn); CheckEdgeMode(); }
@@ -110,7 +109,7 @@ public:
     sal_uInt32 GetCurrentObjInventor() const { return nAktInvent; }
     sal_uInt16 GetCurrentObjIdentifier() const { return nAktIdent; }
 
-    // Starten des normalen Create
+    // Beginning the regular Create
     sal_Bool BegCreateObj(const Point& rPnt, OutputDevice* pOut=NULL, short nMinMov=-3, SdrPageView* pPV=NULL);
     sal_Bool BegCreatePreparedObject(const Point& rPnt, sal_Int16 nMinMov, SdrObject* pPreparedFactoryObject);
     void MovCreateObj(const Point& rPnt);
@@ -122,7 +121,7 @@ public:
 
     // BegCreateCaptionObj() creates a SdrCaptionObj (legend item).
     // rObjSiz is the initial size of the legend text frame.
-    // only the length of the tip is dragged
+    // Only the length of the tip is dragged
     sal_Bool BegCreateCaptionObj(const Point& rPnt, const Size& rObjSiz, OutputDevice* pOut=NULL, short nMinMov=-3, SdrPageView* pPV=NULL);
 
     // If TextEditAfterCreate is sal_True (the default),
@@ -132,7 +131,7 @@ public:
     sal_Bool IsTextEditAfterCreate() const { return bAutoTextEdit; }
     void SetTextEditAfterCreate(sal_Bool bOn) { bAutoTextEdit = bOn; }
 
-    // Create a circle / rectangle / text frame with the first Point being
+    // Create a circle/rectangle/text frame with the first Point being
     // the center of the object instead of the upper-left corner.
     // Persistent flag. Default = FALSE.
     sal_Bool IsCreate1stPointAsCenter() const { return b1stPointAsCenter; }
@@ -143,33 +142,34 @@ public:
     // converted to Polygon (OBJ_POLY) or freehand fill (OBJ_FREEFILL) if
     // the distance between the start point and end point of the
     // Object <= nAutoCloseDistPix pixels.
-    // Default is TRUE.
+    // Default = TRUE.
     sal_Bool IsAutoClosePolys() const { return bAutoClosePolys; }
     void SetAutoClosePolys(sal_Bool bOn) { bAutoClosePolys=bOn; }
 
-    // Default=5 Pixel.
+    // Default = 5 Pixel
     sal_uInt16 GetAutoCloseDistPix() const { return sal_uInt16(nAutoCloseDistPix); }
     void SetAutoCloseDistPix(sal_uInt16 nVal) { nAutoCloseDistPix=nVal; }
 
-    // Vorgabe des minimalen Pixelabstands zwischen 2 Bezierpunkten bei der
-    // Erzeugung einer Freihandlinie.
-    // Default=10 Pixel.
+    // Setting for the minimum distantce in pixels between 2 bezier points when
+    // creating a freehand line.
+    // Default = 10 Pixel
     sal_uInt16 GetFreeHandMinDistPix() const { return sal_uInt16(nFreeHandMinDistPix); }
     void SetFreeHandMinDistPix(sal_uInt16 nVal) { nFreeHandMinDistPix=nVal; }
 
-    // Wer das (zur restlichen Create-Funktionalitaet von SvDraw) inkompatible
-    // Create-Interface am PathObj beibehalten moechte muss das nachfolgende
-    // Flag setzen. Dieses wirkt sich aus bei den Objekttypen:
-    //     OBJ_POLY, OBJ_PLIN, OBJ_PATHLINE, OBJ_PATHFILL
-    // Dieses Flag hat nur voruebergehenden Character. Die betroffenen
-    // Applikationen sollten alsbald umgestellt werden.
-    // Default=sal_False;
+    // FIXME: Whoever wants to keep the Create Interface for the PathObj which is
+    // incompatible with the rest of the Create functionality of SvDraw, needs
+    // to set the following flag. It affects the following object types:
+    // OBJ_POLY, OBJ_PLIN, OBJ_PATHLINE, OBJ_PATHFILL
+    //
+    // This flag should be regarded as temporary. The affected applications should
+    // be changed soon.
+    // Default = sal_False;
     sal_Bool IsUseIncompatiblePathCreateInterface() const { return bUseIncompatiblePathCreateInterface; }
     void SetUseIncompatiblePathCreateInterface(sal_Bool bOn) { bUseIncompatiblePathCreateInterface = bOn; }
     void SetConnectMarker(const SdrObjConnection& rCon, const SdrPageView& rPV);
     void HideConnectMarker();
 
-    // Attribute des ggf. gerade in der Erzeugung befindlichen Objekts
+    // Attributes of the object that is in the process of being created
     /* new interface src537 */
     sal_Bool GetAttributes(SfxItemSet& rTargetSet, sal_Bool bOnlyHardAttr=sal_False) const;
 

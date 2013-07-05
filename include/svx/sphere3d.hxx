@@ -23,13 +23,10 @@
 #include <svx/obj3d.hxx>
 #include "svx/svxdllapi.h"
 
-/*************************************************************************
-|*
-|* Kugelobjekt mit Durchmesser r3DSize; Anzahl der Flaechen wird durch
-|* die horizontale und vertikale Segmentanzahl vorgegeben
-|*
-\************************************************************************/
-
+/**
+ * SphereObject with diameter r3DSize.
+ * The count of planes depends on the horizontal and vertical segment count.
+ */
 class SVX_DLLPUBLIC E3dSphereObj : public E3dCompoundObject
 {
 private:
@@ -75,6 +72,6 @@ public:
     virtual void TakeObjNamePlural(String& rName) const;
 };
 
-#endif          // _E3D_SPHERE3D_HXX
+#endif // _E3D_SPHERE3D_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

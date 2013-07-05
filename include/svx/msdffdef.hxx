@@ -781,7 +781,7 @@ typedef enum
    mso_sptActionButtonMovie = 200,
    mso_sptHostControl = 201,
    mso_sptTextBox = 202,
-   //for pptx shape which not exist in ppt
+   //for pptx shape which doesn't exist in ppt
    mso_sptTearDrop = 203,
    mso_sptMax = 0x0FFF,
    mso_sptNil = mso_sptMax
@@ -858,14 +858,14 @@ enum MSO_TextFlow {
    mso_txflBtoT,            // Bottom to Top non-@
    mso_txflTtoBN,           // Top to Bottom non-@
    mso_txflHorzA,           // Horizontal @-font
-   mso_txflVertN           // Vertical, non-@
+   mso_txflVertN            // Vertical, non-@
 };
 
 // MSO_TXDIR - text direction (needed for Bi-Di support)
 enum MSO_TextDir {
    mso_txdirLTR,            // left-to-right text direction
    mso_txdirRTL,            // right-to-left text direction
-   mso_txdirContext        // context text direction
+   mso_txdirContext         // context text direction
 };
 
 // MSO_SPCOT -- Callout Type
@@ -914,10 +914,10 @@ enum MSO_BlipFlags {
    mso_blipflagType = 3,      // Mask to extract type
    /* Or the following flags with any of the above. */
    mso_blipflagDontSave = 4,  // A "dont" is the depression in the metal
-                             // body work of an automobile caused when a
-                             // cyclist violently thrusts his or her nose
-                             // at it, thus a DontSave is another name for
-                             // a cycle lane.
+                              // body work of an automobile caused when a
+                              // cyclist violently thrusts his or her nose
+                              // at it, thus a DontSave is another name for
+                              // a cycle lane.
    mso_blipflagDoNotSave = 4, // For those who prefer English
    mso_blipflagLinkToFile = 8
 };
@@ -925,7 +925,7 @@ enum MSO_BlipFlags {
 enum MSO_3DRenderMode {
    mso_FullRender,      // Generate a full rendering
    mso_Wireframe,       // Generate a wireframe
-   mso_BoundingCube    // Generate a bounding cube
+   mso_BoundingCube     // Generate a bounding cube
 };
 
 enum MSO_XFormType {
@@ -955,7 +955,7 @@ enum MSO_DZType {
    mso_dztypeVFixed       = 6,  // Pixels, fixed aspect ratio
    mso_dztypeShapeFixed   = 7,  // Proportion of shape, fixed aspect ratio
    mso_dztypeFixedAspectEnlarge
-                         = 8,  // Aspect ratio is fixed, favor larger size
+                         = 8,   // Aspect ratio is fixed, favor larger size
    mso_dztypeAFixedBig    = 9,  // EMUs, fixed aspect ratio
    mso_dztypeVFixedBig    = 10, // Pixels, fixed aspect ratio
    mso_dztypeShapeFixedBig= 11, // Proportion of shape, fixed aspect ratio
@@ -971,9 +971,9 @@ enum MSO_FillType {
    mso_fillShadeCenter,       // Shade from bounding rectangle to end point
    mso_fillShadeShape,        // Shade from shape outline to end point
    mso_fillShadeScale,        // Similar to mso_fillShade, but the fillAngle
-                             // is additionally scaled by the aspect ratio of
-                             // the shape. If shape is square, it is the
-                             // same as mso_fillShade.
+                              // is additionally scaled by the aspect ratio of
+                              // the shape. If shape is square, it is the
+                              // same as mso_fillShade.
    mso_fillShadeTitle,        // special type - shade to title ---  for PP
    mso_fillBackground         // Use the background fill color/pattern
 };
@@ -1068,7 +1068,7 @@ enum MSO_LineCap {
    mso_lineEndCapSquare,  // Square protrudes by half line width
    mso_lineEndCapFlat     // Line ends at end point
 };
-// verschiedene enums aus der OfficeDraw-Doku, Appendix D - Ende
+// Various enums from the OfficeDraw documentation Appendix D - End
 
 // BStore-Container
 // FBSE - File Blip Store Entry
@@ -1076,9 +1076,9 @@ typedef struct _MSOF_BSE {
    sal_uInt8      btWin32;    // Required type on Win32
    sal_uInt8      btMacOS;    // Required type on Mac
    sal_uInt8      rgbUid[16]; // Identifier of blip
-   sal_uInt16    tag;        // currently unused
-   sal_uIntPtr     size;       // Blip size in stream
-   sal_uIntPtr     cRef;       // Reference count on the blip
+   sal_uInt16      tag;       // currently unused
+   sal_uIntPtr     size;      // Blip size in stream
+   sal_uIntPtr     cRef;      // Reference count on the blip
    sal_uIntPtr /*MSOFO*/ foDelay;    // File offset in the delay stream
    sal_uInt8      usage;      // How this blip is used (MSOBLIPUSAGE)
    sal_uInt8      cbName;     // length of the blip name
@@ -1092,7 +1092,7 @@ typedef enum {
    mso_blipUsageMax = 255 // Since this is stored in a byte
 } MSO_BLIPUSAGE;
 
-typedef enum {                          // GEL provided types...
+typedef enum {                 // GEL provided types...
    mso_blipERROR = 0,          // An error occurred during loading
    mso_blipUNKNOWN,            // An unknown blip type
    mso_blipEMF,                // Windows Enhanced Metafile
@@ -1171,7 +1171,7 @@ typedef enum {
     mso_colorSubtract         =0x0400,  // Subtract grey level RGB(p,p,p)
     mso_colorReverseSubtract  =0x0500,  // Subtract from grey level RGB(p,p,p)
     /* In the following "black" means maximum component value, white minimum.
-        The operation is per component, to guarantee white combine with
+       The operation is per component, to guarantee white combine with
     mso_colorGray */
     mso_colorBlackWhite       =0x0600,  // Black if < uParam, else white (>=)
     mso_colorInvert           =0x2000,  // Invert color (at the *end*)

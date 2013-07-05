@@ -22,9 +22,9 @@
 #include <svx/svddef.hxx>
 #include <svx/sxsiitm.hxx>
 
-// Massstabsvorgabe. Wenn bereits am Model ein Massstab (UIScale) gesetzt
-// ist wird dieser nicht ueberschrieben. Stattdessen werden beide Massstaebe
-// miteinander multipliziert.
+// Measure scale setting
+// We do not overwrite a measure scale (UIScale), If the model already has one set.
+// Instead, we multiply them with each other.
 class SdrMeasureScaleItem: public SdrScaleItem {
 public:
     SdrMeasureScaleItem()                   : SdrScaleItem(SDRATTR_MEASURESCALE,Fraction(1,1)) {}

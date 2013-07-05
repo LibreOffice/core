@@ -22,7 +22,7 @@
 #include <svx/svddef.hxx>
 #include <svx/sdynitm.hxx>
 
-// Die Masseinheit mit anzeigen
+// Include the unit of measure when displaying
 class SdrMeasureShowUnitItem: public SdrYesNoItem {
 public:
     SdrMeasureShowUnitItem(bool bOn=false): SdrYesNoItem(SDRATTR_MEASURESHOWUNIT,bOn) {}

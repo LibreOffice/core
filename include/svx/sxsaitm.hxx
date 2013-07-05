@@ -22,9 +22,9 @@
 #include <svx/svddef.hxx>
 #include <svx/sdangitm.hxx>
 
-//------------------------------
-// class SdrShearAngleItem
-//------------------------------
+/**
+ * class SdrShearAngleItem
+ */
 class SdrShearAngleItem: public SdrAngleItem {
 public:
     SdrShearAngleItem(long nAngle=0): SdrAngleItem(SDRATTR_SHEARANGLE,nAngle) {}

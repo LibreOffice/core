@@ -22,9 +22,9 @@
 #include <svx/svddef.hxx>
 #include <svx/sdangitm.hxx>
 
-//------------------------------
-// class SdrRotateAngleItem
-//------------------------------
+/**
+ * class SdrRotateAngleItem
+ */
 class SdrRotateAngleItem: public SdrAngleItem {
 public:
     SdrRotateAngleItem(long nAngle=0): SdrAngleItem(SDRATTR_ROTATEANGLE,nAngle) {}

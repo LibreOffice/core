@@ -21,12 +21,9 @@
 #include <sfx2/childwin.hxx>
 #include "svx/svxdllapi.h"
 
-/*************************************************************************
-|*
-|* Ableitung vom SfxChildWindow als "Behaelter" fuer Controller
-|*
-\************************************************************************/
-
+/**
+ * Child of SfxChildWindow as a "container" for Controller
+ */
 class SVX_DLLPUBLIC SvxColorChildWindow : public SfxChildWindow
 {
  public:

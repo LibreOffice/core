@@ -22,10 +22,9 @@
 #include <svx/svddef.hxx>
 #include <svl/stritem.hxx>
 
-//------------------------------
-// class SdrObjectNameItem
-//------------------------------
-
+/**
+ * class SdrObjectNameItem
+ */
 class SdrObjectNameItem: public SfxStringItem {
 public:
     SdrObjectNameItem()                   : SfxStringItem() { SetWhich(SDRATTR_OBJECTNAME); }

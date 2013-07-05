@@ -22,9 +22,9 @@
 #include <svx/sdooitm.hxx>
 #include <svx/svddef.hxx>
 
-//------------------------------
-// class SdrShadowItem
-//------------------------------
+/*
+ * class SdrShadowItem
+ */
 class SdrShadowItem: public SdrOnOffItem {
 public:
     SdrShadowItem(sal_Bool bShadow=sal_False): SdrOnOffItem(SDRATTR_SHADOW, bShadow) {}

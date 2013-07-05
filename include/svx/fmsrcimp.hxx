@@ -38,10 +38,9 @@
 
 #include <deque>
 
-// ===================================================================================================
-// = class FmSearchThread
-// ===================================================================================================
-
+/**
+ * class FmSearchThread
+ */
 class FmSearchEngine;
 class FmSearchThread : public ::osl::Thread
 {
@@ -56,16 +55,15 @@ public:
     void setTerminationHandler(Link aHdl) { m_aTerminationHdl = aHdl; }
 };
 
-// ===================================================================================================
-// = struct FmSearchProgress - the owner of SearchEngine receives this structure for status updates
-// = (at the end of the search)
-// ===================================================================================================
-
+/**
+ * struct FmSearchProgress - the owner of SearchEngine receives this structure for status updates
+ * (at the end of the search)
+ */
 struct FmSearchProgress
 {
     enum STATE { STATE_PROGRESS, STATE_PROGRESS_COUNTING, STATE_CANCELED, STATE_SUCCESSFULL, STATE_NOTHINGFOUND, STATE_ERROR };
-        // (move to new record; progress during counting of records; cancelled; record found; nothing found;
-        // any non-processable error)
+    // (move to new record; progress during counting of records; cancelled; record found; nothing found;
+    // any non-processable error)
     STATE   aSearchState;
 
     // current record - always valid (e.g. of interest for continuing search in case of cancellation)
@@ -79,11 +77,10 @@ struct FmSearchProgress
     sal_Int32   nFieldIndex;
 };
 
-// ===================================================================================================
-// = class FmRecordCountListener - utility class for FmSearchEngine, listens at a certain cursor and provides
-// =                                the differences in RecordCount
-// ===================================================================================================
-
+/**
+ * class FmRecordCountListener - utility class for FmSearchEngine, listens at a certain cursor and provides
+ *                               the differences in RecordCount
+ */
 class FmRecordCountListener : public ::cppu::WeakImplHelper1< ::com::sun::star::beans::XPropertyChangeListener>
 {
 // attribute
@@ -97,16 +94,16 @@ public:
 // methods
 public:
     FmRecordCountListener(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >& dbcCursor);
-        // the set has to support the sdb::ResultSet service
+    // the set has to support the sdb::ResultSet service
     virtual ~FmRecordCountListener();
 
     //  DECLARE_UNO3_AGG_DEFAULTS(FmPropertyListener, UsrObject);
     //  virtual sal_Bool queryInterface(::com::sun::star::uno::Uik aUik, ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rOut);
 
-// ::com::sun::star::lang::XEventListener
+    // ::com::sun::star::lang::XEventListener
     virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& Source) throw(::com::sun::star::uno::RuntimeException);
 
-// ::com::sun::star::beans::XPropertyChangeListener
+    // ::com::sun::star::beans::XPropertyChangeListener
     virtual void SAL_CALL propertyChange(const ::com::sun::star::beans::PropertyChangeEvent& evt) throw(::com::sun::star::uno::RuntimeException);
 
     void DisConnect();
@@ -116,12 +113,12 @@ private:
 
 };
 
-// ===================================================================================================
-// = class FmSearchEngine - Impl class for FmSearchDialog
-// ===================================================================================================
-
+/**
+ * class FmSearchEngine - Impl class for FmSearchDialog
+ */
 namespace svxform {
-    // We have three possible control types we may search in, determined by the supported interfaces : ::com::sun::star::awt::XTextComponent, ::com::sun::star::awt::XListBox, ::com::sun::star::awt::XCheckBox.
+    // We have three possible control types we may search in, determined by the supported interfaces : ::com::sun::star::awt::XTextComponent,
+    // ::com::sun::star::awt::XListBox, ::com::sun::star::awt::XCheckBox.
     // While searching we don't want to do this distinction for every control in every round. So we need some helpers.
     class ControlTextWrapper
     {
@@ -172,8 +169,8 @@ class SVX_DLLPUBLIC FmSearchEngine
 
     CursorWrapper                   m_xSearchCursor;
     std::deque<sal_Int32>           m_arrFieldMapping;
-        // since the iterator could have more columns, as managed here (in this field listbox),
-        // a mapping of this ::com::sun::star::form keys on the indices of the respective columns is kept in the iterator
+    // Since the iterator could have more columns, as managed here (in this field listbox),
+    // a mapping of this ::com::sun::star::form keys on the indices of the respective columns is kept in the iterator
 
     // the formatter
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >  m_xFormatSupplier;
@@ -201,19 +198,19 @@ class SVX_DLLPUBLIC FmSearchEngine
     CursorWrapper           m_xOriginalIterator;
     CursorWrapper           m_xClonedIterator;
 
-    // data for the decision in which field a "Found" is accepted
-    ::com::sun::star::uno::Any  m_aPreviousLocBookmark;             // position of the last finding
-    FieldCollectionIterator     m_iterPreviousLocField;             // field of the last finding
+    // Data for the decision in which field a "Found" is accepted
+    ::com::sun::star::uno::Any  m_aPreviousLocBookmark;     // position of the last finding
+    FieldCollectionIterator     m_iterPreviousLocField;     // field of the last finding
 
-    // Kommunikation mit dem Thread, der die eigentliche Suche durchfuehrt
-    OUString             m_strSearchExpression;              // forward direction
+    // Communication with the thread that does the actual searching
+    OUString            m_strSearchExpression;              // forward direction
     SEARCHFOR_TYPE      m_eSearchForType;                   // ditto
     SEARCH_RESULT       m_srResult;                         // backward direction
 
-    // der Link, dem ich Fortschritte und Ergebnisse mitteile
+    // The link we broadcast the progress and the result to
     Link                m_aProgressHandler;
     sal_Bool            m_bSearchingCurrently : 1;      // is an (asynchronous) search running?
-    sal_Bool            m_bCancelAsynchRequest : 1;     // should be cancelled ?
+    sal_Bool            m_bCancelAsynchRequest : 1;     // should be cancelled?
     ::osl::Mutex        m_aCancelAsynchAccess;          // access to_bCancelAsynchRequest (technically only
                                                         // relevant for m_eMode == SM_USETHREAD)
     FMSEARCH_MODE   m_eMode;                            // current mode
@@ -273,14 +270,14 @@ public:
     sal_uInt16  GetLevShorter() const               { return m_nLevShorter; }
     void        SetLevLonger(sal_uInt16 nHowMuch)   { m_nLevLonger = nHowMuch; }
     sal_uInt16  GetLevLonger() const                { return m_nLevLonger; }
-        // all Lev. values will only be considered in case of m_bLevenshtein==sal_True
+    // all Lev. values will only be considered in case of m_bLevenshtein==sal_True
 
     void        SetTransliterationFlags(sal_Int32 _nFlags)  { m_nTransliterationFlags = _nFlags; }
     sal_Int32   GetTransliterationFlags() const             { return m_nTransliterationFlags; }
 
     void    SetPosition(sal_uInt16 nValue)      { m_nPosition = nValue; }
     sal_uInt16  GetPosition() const             { return m_nPosition; }
-        // position will be ignored in case of m_bWildCard==sal_True
+    // position will be ignored in case of m_bWildCard==sal_True
 
     FMSEARCH_MODE GetSearchMode() const { return m_eMode; }
 
@@ -345,7 +342,7 @@ protected:
     void Init(const OUString& strVisibleFields);
 
     void SearchNextImpl();
-        // this Impl method is running in SearchThread
+    // this Impl method is running in SearchThread
 
     // start a thread-search (or call SearchNextImpl directly, depending on the search mode)
     void ImplStartNextSearch();
@@ -365,23 +362,23 @@ private:
         const FieldCollectionIterator& iterBegin, const FieldCollectionIterator& iterEnd);
 
     SVX_DLLPRIVATE void PropagateProgress(sal_Bool _bDontPropagateOverflow);
-        // call the ProgressHandler with STATE_PROGRESS and the current position of the search iterator
+    // call the ProgressHandler with STATE_PROGRESS and the current position of the search iterator
 
     // helpers, that are needed several times
     SVX_DLLPRIVATE sal_Bool MoveCursor();
-        // moves m_xSearchIterator with respect to direction/overflow cursor
+    // moves m_xSearchIterator with respect to direction/overflow cursor
     SVX_DLLPRIVATE sal_Bool MoveField(sal_Int32& nPos, FieldCollectionIterator& iter, const FieldCollectionIterator& iterBegin, const FieldCollectionIterator& iterEnd);
-        // moves the iterator with respect to the direction/overflow iterator/overflow cursor
+    // moves the iterator with respect to the direction/overflow iterator/overflow cursor
     SVX_DLLPRIVATE void BuildAndInsertFieldInfo(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& xAllFields, sal_Int32 nField);
-        // builds a FieldInfo in relation to field number nField (in xAllFields) and adds it to m_arrUsedFields
-        // xAllFields needs to support the DatabaseRecord service
+    // builds a FieldInfo in relation to field number nField (in xAllFields) and adds it to m_arrUsedFields
+    // xAllFields needs to support the DatabaseRecord service
     SVX_DLLPRIVATE OUString FormatField(const FieldInfo& rField);
-        // formats the field with the NumberFormatter
+    // formats the field with the NumberFormatter
 
     SVX_DLLPRIVATE sal_Bool HasPreviousLoc() { return m_aPreviousLocBookmark.hasValue(); }
 
     DECL_LINK(OnSearchTerminated, FmSearchThread*);
-        // is used by SearchThread, after the return from this handler the thread removes itself
+    // is used by SearchThread, after the return from this handler the thread removes itself
     DECL_LINK(OnNewRecordCount, void*);
 };
 
