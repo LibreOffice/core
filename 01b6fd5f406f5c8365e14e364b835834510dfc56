@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXn///YI\u003d",
+        "filename": "qadevOOo/tests/java/ifc/sheet/_SpreadsheetDocumentSettings.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2013-07-05T08:06:17Z",
+      "side": 1,
+      "message": "Space noise",
+      "revId": "01b6fd5f406f5c8365e14e364b835834510dfc56",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
