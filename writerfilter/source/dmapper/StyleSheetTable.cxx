@@ -293,9 +293,9 @@ StyleSheetTable_Impl::StyleSheetTable_Impl(DomainMapper& rDMapper, uno::Referenc
 {
     //set font height default to 10pt
     uno::Any aVal = uno::makeAny( double(10.) );
-    m_pDefaultCharProps->Insert( PROP_CHAR_HEIGHT, true, aVal );
-    m_pDefaultCharProps->Insert( PROP_CHAR_HEIGHT_ASIAN, true, aVal );
-    m_pDefaultCharProps->Insert( PROP_CHAR_HEIGHT_COMPLEX, true, aVal );
+    m_pDefaultCharProps->Insert( PROP_CHAR_HEIGHT, aVal );
+    m_pDefaultCharProps->Insert( PROP_CHAR_HEIGHT_ASIAN, aVal );
+    m_pDefaultCharProps->Insert( PROP_CHAR_HEIGHT_COMPLEX, aVal );
 }
 
 
@@ -552,7 +552,7 @@ void StyleSheetTable::lcl_sprm(Sprm & rSprm)
             applyDefaults( false );
         break;
         case NS_ooxml::LN_CT_TblPrBase_jc:     //table alignment - row properties!
-             m_pImpl->m_pCurrentEntry->pProperties->Insert( PROP_HORI_ORIENT, false,
+             m_pImpl->m_pCurrentEntry->pProperties->Insert( PROP_HORI_ORIENT,
                 uno::makeAny( ConversionHelper::convertTableJustification( nIntValue )));
         break;
         case NS_ooxml::LN_CT_TrPrBase_jc:     //table alignment - row properties!
@@ -762,30 +762,30 @@ void StyleSheetTable::ApplyStyleSheets( FontTablePtr rFontTable )
                         {
                             uno::Any aTwoHundredFortyTwip = uno::makeAny(12.);
     //                      font size to 240 twip (12 pts) for all if not set
-                            pEntry->pProperties->Insert(PROP_CHAR_HEIGHT, true, aTwoHundredFortyTwip, false);
+                            pEntry->pProperties->Insert(PROP_CHAR_HEIGHT, aTwoHundredFortyTwip, false);
     //                      western font not already set -> apply first font
                             const FontEntry::Pointer_t pWesternFontEntry(rFontTable->getFontEntry( 0 ));
                             OUString sWesternFontName = pWesternFontEntry->sFontName;
-                            pEntry->pProperties->Insert(PROP_CHAR_FONT_NAME, true, uno::makeAny( sWesternFontName ), false);
+                            pEntry->pProperties->Insert(PROP_CHAR_FONT_NAME, uno::makeAny( sWesternFontName ), false);
 
     //                      CJK  ... apply second font
                             const FontEntry::Pointer_t pCJKFontEntry(rFontTable->getFontEntry( 2 ));
-                            pEntry->pProperties->Insert(PROP_CHAR_FONT_NAME_ASIAN, true, uno::makeAny( pCJKFontEntry->sFontName ), false);
-                            pEntry->pProperties->Insert(PROP_CHAR_HEIGHT_ASIAN, true, aTwoHundredFortyTwip, false);
+                            pEntry->pProperties->Insert(PROP_CHAR_FONT_NAME_ASIAN, uno::makeAny( pCJKFontEntry->sFontName ), false);
+                            pEntry->pProperties->Insert(PROP_CHAR_HEIGHT_ASIAN, aTwoHundredFortyTwip, false);
     //                      CTL  ... apply third font, if available
                             if( nFontCount > 3 )
                             {
                                 const FontEntry::Pointer_t pCTLFontEntry(rFontTable->getFontEntry( 3 ));
-                                pEntry->pProperties->Insert(PROP_CHAR_FONT_NAME_COMPLEX, true, uno::makeAny( pCTLFontEntry->sFontName ), false);
-                                pEntry->pProperties->Insert(PROP_CHAR_HEIGHT_COMPLEX, true, aTwoHundredFortyTwip, false);
+                                pEntry->pProperties->Insert(PROP_CHAR_FONT_NAME_COMPLEX, uno::makeAny( pCTLFontEntry->sFontName ), false);
+                                pEntry->pProperties->Insert(PROP_CHAR_HEIGHT_COMPLEX, aTwoHundredFortyTwip, false);
                             }
                         }
     //                  Widow/Orphan -> set both to two if not already set
                         uno::Any aTwo = uno::makeAny(sal_Int8(2));
-                        pEntry->pProperties->Insert(PROP_PARA_WIDOWS, true, aTwo, false);
-                        pEntry->pProperties->Insert(PROP_PARA_ORPHANS, true, aTwo, false);
+                        pEntry->pProperties->Insert(PROP_PARA_WIDOWS, aTwo, false);
+                        pEntry->pProperties->Insert(PROP_PARA_ORPHANS, aTwo, false);
     //                  Left-to-right direction if not already set
-                        pEntry->pProperties->Insert(PROP_WRITING_MODE, true, uno::makeAny( sal_Int16(text::WritingMode_LR_TB) ), false);
+                        pEntry->pProperties->Insert(PROP_WRITING_MODE, uno::makeAny( sal_Int16(text::WritingMode_LR_TB) ), false);
                         // Don't set font color to Auto if not already set: this could hide the default font color setting
                     }
 

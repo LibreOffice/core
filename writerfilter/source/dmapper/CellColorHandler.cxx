@@ -263,12 +263,12 @@ TablePropertyMapPtr  CellColorHandler::getProperties()
         };
 
         // Write the shading pattern property
-        pPropertyMap->Insert(PROP_CHAR_SHADING_VALUE, false, uno::makeAny( aWWShadingPatterns[m_nShadingPattern] ));
+        pPropertyMap->Insert(PROP_CHAR_SHADING_VALUE, uno::makeAny( aWWShadingPatterns[m_nShadingPattern] ));
     }
 
     pPropertyMap->Insert( m_OutputFormat == Form ? PROP_BACK_COLOR
                         : m_OutputFormat == Paragraph ? PROP_PARA_BACK_COLOR
-                        : PROP_CHAR_BACK_COLOR, false, uno::makeAny( nApplyColor ));
+                        : PROP_CHAR_BACK_COLOR, uno::makeAny( nApplyColor ));
     return pPropertyMap;
 }
 } //namespace dmapper

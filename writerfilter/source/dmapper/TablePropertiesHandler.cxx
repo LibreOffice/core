@@ -97,9 +97,9 @@ namespace dmapper {
                     // In case a cell already wanted fixed size, we should not overwrite it here.
                     DomainMapperTableManager* pManager = dynamic_cast<DomainMapperTableManager*>(m_pTableManager);
                     if (!pManager || !pManager->IsRowSizeTypeInserted())
-                        pPropMap->Insert( PROP_SIZE_TYPE, false, uno::makeAny( pMeasureHandler->GetRowHeightSizeType() ), false);
+                        pPropMap->Insert( PROP_SIZE_TYPE, uno::makeAny( pMeasureHandler->GetRowHeightSizeType() ), false);
 
-                    pPropMap->Insert( PROP_HEIGHT, false, uno::makeAny(pMeasureHandler->getMeasureValue() ));
+                    pPropMap->Insert( PROP_HEIGHT, uno::makeAny(pMeasureHandler->getMeasureValue() ));
                     insertRowProps(pPropMap);
                 }
             }
@@ -109,7 +109,7 @@ namespace dmapper {
             {
                 //row can't break across pages if nIntValue == 1
                 TablePropertyMapPtr pPropMap( new TablePropertyMap );
-                pPropMap->Insert( PROP_IS_SPLIT_ALLOWED, false, uno::makeAny(sal_Bool( nIntValue == 1 ? sal_False : sal_True ) ));
+                pPropMap->Insert( PROP_IS_SPLIT_ALLOWED, uno::makeAny(sal_Bool( nIntValue == 1 ? sal_False : sal_True ) ));
                 insertRowProps(pPropMap);
             }
             break;
@@ -124,8 +124,8 @@ namespace dmapper {
                     bMinHeight = false;
                     nHeight *= -1;
                 }
-                pPropMap->Insert( PROP_SIZE_TYPE, false, uno::makeAny(bMinHeight ? text::SizeType::MIN : text::SizeType::FIX ));
-                pPropMap->Insert( PROP_HEIGHT, false, uno::makeAny(ConversionHelper::convertTwipToMM100( nHeight )));
+                pPropMap->Insert( PROP_SIZE_TYPE, uno::makeAny(bMinHeight ? text::SizeType::MIN : text::SizeType::FIX ));
+                pPropMap->Insert( PROP_HEIGHT, uno::makeAny(ConversionHelper::convertTwipToMM100( nHeight )));
                 insertRowProps(pPropMap);
             }
             break;
@@ -139,7 +139,7 @@ namespace dmapper {
                     default:;
                 };
                 TablePropertyMapPtr pCellPropMap( new TablePropertyMap() );
-                pCellPropMap->Insert( PROP_VERT_ORIENT, false, uno::makeAny( nVertOrient ) );
+                pCellPropMap->Insert( PROP_VERT_ORIENT, uno::makeAny( nVertOrient ) );
                 //todo: in ooxml import the value of m_ncell is wrong
                 cellProps( pCellPropMap );
             }
@@ -192,13 +192,13 @@ namespace dmapper {
                         pProperties->resolve(*pCellMarginHandler);
                         TablePropertyMapPtr pCellProperties(new TablePropertyMap);
                         if (pCellMarginHandler->m_bTopMarginValid)
-                            pCellProperties->Insert(PROP_TOP_BORDER_DISTANCE, false, uno::makeAny(pCellMarginHandler->m_nTopMargin));
+                            pCellProperties->Insert(PROP_TOP_BORDER_DISTANCE, uno::makeAny(pCellMarginHandler->m_nTopMargin));
                         if (pCellMarginHandler->m_bLeftMarginValid)
-                            pCellProperties->Insert(PROP_LEFT_BORDER_DISTANCE, false, uno::makeAny(pCellMarginHandler->m_nLeftMargin));
+                            pCellProperties->Insert(PROP_LEFT_BORDER_DISTANCE, uno::makeAny(pCellMarginHandler->m_nLeftMargin));
                         if (pCellMarginHandler->m_bBottomMarginValid)
-                            pCellProperties->Insert(PROP_BOTTOM_BORDER_DISTANCE, false, uno::makeAny(pCellMarginHandler->m_nBottomMargin));
+                            pCellProperties->Insert(PROP_BOTTOM_BORDER_DISTANCE, uno::makeAny(pCellMarginHandler->m_nBottomMargin));
                         if (pCellMarginHandler->m_bRightMarginValid)
-                            pCellProperties->Insert(PROP_RIGHT_BORDER_DISTANCE, false, uno::makeAny(pCellMarginHandler->m_nRightMargin));
+                            pCellProperties->Insert(PROP_RIGHT_BORDER_DISTANCE, uno::makeAny(pCellMarginHandler->m_nRightMargin));
                         cellProps(pCellProperties);
                     }
                 }

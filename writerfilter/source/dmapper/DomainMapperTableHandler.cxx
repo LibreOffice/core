@@ -133,7 +133,7 @@ void lcl_mergeBorder( PropertyIds nId, PropertyMapPtr pOrig, PropertyMapPtr pDes
 
     if ( pOrigIt != pOrig->end( ) )
     {
-        pDest->Insert( nId, false, pOrigIt->second, false );
+        pDest->Insert( nId, pOrigIt->second, false );
     }
 }
 
@@ -181,22 +181,22 @@ void lcl_computeCellBorders( PropertyMapPtr pTableBorders, PropertyMapPtr pCellP
     {
         lcl_mergeBorder( PROP_LEFT_BORDER, pTableBorders, pCellProps );
         if ( bHasVert )
-            pCellProps->Insert( PROP_RIGHT_BORDER, false, aVertProp, false );
+            pCellProps->Insert( PROP_RIGHT_BORDER, aVertProp, false );
     }
 
     if ( bIsEndCol )
     {
         lcl_mergeBorder( PROP_RIGHT_BORDER, pTableBorders, pCellProps );
         if ( bHasVert )
-            pCellProps->Insert( PROP_LEFT_BORDER, false, aVertProp, false );
+            pCellProps->Insert( PROP_LEFT_BORDER, aVertProp, false );
     }
 
     if ( nCell > 0 && !bIsEndCol )
     {
         if ( bHasVert )
         {
-            pCellProps->Insert( PROP_RIGHT_BORDER, false, aVertProp, false );
-            pCellProps->Insert( PROP_LEFT_BORDER, false, aVertProp, false );
+            pCellProps->Insert( PROP_RIGHT_BORDER, aVertProp, false );
+            pCellProps->Insert( PROP_LEFT_BORDER, aVertProp, false );
         }
     }
 
@@ -204,22 +204,22 @@ void lcl_computeCellBorders( PropertyMapPtr pTableBorders, PropertyMapPtr pCellP
     {
         lcl_mergeBorder( PROP_TOP_BORDER, pTableBorders, pCellProps );
         if ( bHasHoriz )
-            pCellProps->Insert( PROP_BOTTOM_BORDER, false, aHorizProp, false );
+            pCellProps->Insert( PROP_BOTTOM_BORDER, aHorizProp, false );
     }
 
     if ( bIsEndRow )
     {
         lcl_mergeBorder( PROP_BOTTOM_BORDER, pTableBorders, pCellProps );
         if ( bHasHoriz )
-            pCellProps->Insert( PROP_TOP_BORDER, false, aHorizProp, false );
+            pCellProps->Insert( PROP_TOP_BORDER, aHorizProp, false );
     }
 
     if ( nRow > 0 && !bIsEndRow )
     {
         if ( bHasHoriz )
         {
-            pCellProps->Insert( PROP_TOP_BORDER, false, aHorizProp, false );
-            pCellProps->Insert( PROP_BOTTOM_BORDER, false, aHorizProp, false );
+            pCellProps->Insert( PROP_TOP_BORDER, aHorizProp, false );
+            pCellProps->Insert( PROP_BOTTOM_BORDER, aHorizProp, false );
         }
     }
 }
@@ -295,7 +295,7 @@ bool lcl_extractTableBorderProperty(PropertyMapPtr pTableProperties, const Prope
     {
         OSL_VERIFY(aTblBorderIter->second >>= rLine);
 
-        rInfo.pTableBorders->Insert( nId, false, uno::makeAny( rLine ) );
+        rInfo.pTableBorders->Insert( nId, uno::makeAny( rLine ) );
         PropertyMap::iterator pIt = rInfo.pTableDefaults->find( PropertyDefinition( nId ) );
         if ( pIt != rInfo.pTableDefaults->end( ) )
             rInfo.pTableDefaults->erase( pIt );
@@ -316,8 +316,8 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
     if( m_aTableProperties.get() )
     {
         //create properties from the table attributes
-        //...pPropMap->Insert( PROP_LEFT_MARGIN, false, uno::makeAny( m_nLeftMargin - m_nGapHalf ));
-        //pPropMap->Insert( PROP_HORI_ORIENT, false, uno::makeAny( text::HoriOrientation::RIGHT ));
+        //...pPropMap->Insert( PROP_LEFT_MARGIN, uno::makeAny( m_nLeftMargin - m_nGapHalf ));
+        //pPropMap->Insert( PROP_HORI_ORIENT, uno::makeAny( text::HoriOrientation::RIGHT ));
         sal_Int32 nGapHalf = 0;
         sal_Int32 nLeftMargin = 0;
         sal_Int32 nTableWidth = 0;
@@ -401,12 +401,12 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
         aDistances.LeftDistance = static_cast<sal_Int16>( rInfo.nLeftBorderDistance );
         aDistances.RightDistance = static_cast<sal_Int16>( rInfo.nRightBorderDistance );
 
-        m_aTableProperties->Insert( PROP_TABLE_BORDER_DISTANCES, false, uno::makeAny( aDistances ) );
+        m_aTableProperties->Insert( PROP_TABLE_BORDER_DISTANCES, uno::makeAny( aDistances ) );
 
         // Set table above/bottom spacing to 0.
         // TODO: handle 'Around' text wrapping mode
-        m_aTableProperties->Insert( PROP_TOP_MARGIN, true, uno::makeAny( sal_Int32( 0 ) ) );
-        m_aTableProperties->Insert( PROP_BOTTOM_MARGIN, true, uno::makeAny( sal_Int32( 0 ) ) );
+        m_aTableProperties->Insert( PROP_TOP_MARGIN, uno::makeAny( sal_Int32( 0 ) ) );
+        m_aTableProperties->Insert( PROP_BOTTOM_MARGIN, uno::makeAny( sal_Int32( 0 ) ) );
 
         //table border settings
         table::TableBorder aTableBorder;
@@ -449,7 +449,7 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
         aTableBorder.Distance = 0;
         aTableBorder.IsDistanceValid = sal_False;
 
-        m_aTableProperties->Insert( PROP_TABLE_BORDER, false, uno::makeAny( aTableBorder ) );
+        m_aTableProperties->Insert( PROP_TABLE_BORDER, uno::makeAny( aTableBorder ) );
 
 #ifdef DEBUG_DMAPPER_TABLE_HANDLER
         lcl_debug_TableBorder(aTableBorder);
@@ -461,11 +461,11 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
         // - nested tables: the goal is to have left-most border starting at table_indent pos
         if (rInfo.nNestLevel > 1)
         {
-            m_aTableProperties->Insert( PROP_LEFT_MARGIN, false, uno::makeAny( nLeftMargin - nGapHalf ));
+            m_aTableProperties->Insert( PROP_LEFT_MARGIN, uno::makeAny( nLeftMargin - nGapHalf ));
         }
         else
         {
-            m_aTableProperties->Insert( PROP_LEFT_MARGIN, false, uno::makeAny( nLeftMargin - nGapHalf - rInfo.nLeftBorderDistance ));
+            m_aTableProperties->Insert( PROP_LEFT_MARGIN, uno::makeAny( nLeftMargin - nGapHalf - rInfo.nLeftBorderDistance ));
         }
 
         m_aTableProperties->getValue( TablePropertyMap::TABLE_WIDTH, nTableWidth );
@@ -473,23 +473,23 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
         if( nTableWidthType == text::SizeType::FIX )
         {
             if( nTableWidth > 0 )
-                m_aTableProperties->Insert( PROP_WIDTH, false, uno::makeAny( nTableWidth ));
+                m_aTableProperties->Insert( PROP_WIDTH, uno::makeAny( nTableWidth ));
         }
         else
         {
-            m_aTableProperties->Insert( PROP_RELATIVE_WIDTH, false, uno::makeAny( sal_Int16( nTableWidth ) ) );
-            m_aTableProperties->Insert( PROP_IS_WIDTH_RELATIVE, false, uno::makeAny( sal_Bool( sal_True ) ) );
+            m_aTableProperties->Insert( PROP_RELATIVE_WIDTH, uno::makeAny( sal_Int16( nTableWidth ) ) );
+            m_aTableProperties->Insert( PROP_IS_WIDTH_RELATIVE, uno::makeAny( sal_Bool( sal_True ) ) );
         }
 
         sal_Int32 nHoriOrient = text::HoriOrientation::LEFT_AND_WIDTH;
         m_aTableProperties->getValue( TablePropertyMap::HORI_ORIENT, nHoriOrient ) ;
-        m_aTableProperties->Insert( PROP_HORI_ORIENT, false, uno::makeAny( sal_Int16(nHoriOrient) ) );
+        m_aTableProperties->Insert( PROP_HORI_ORIENT, uno::makeAny( sal_Int16(nHoriOrient) ) );
 
         //fill default value - if not available
         const PropertyMap::const_iterator aRepeatIter =
         m_aTableProperties->find( PropertyDefinition( PROP_HEADER_ROW_COUNT ) );
         if( aRepeatIter == m_aTableProperties->end() )
-            m_aTableProperties->Insert( PROP_HEADER_ROW_COUNT, false, uno::makeAny( (sal_Int32)0 ));
+            m_aTableProperties->Insert( PROP_HEADER_ROW_COUNT, uno::makeAny( (sal_Int32)0 ));
 
         rInfo.aTableProperties = m_aTableProperties->GetPropertyValues();
 
@@ -653,24 +653,24 @@ CellPropertyValuesSeq_t DomainMapperTableHandler::endTableGetCellProperties(Tabl
                 const PropertyMap::const_iterator aLeftDistanceIter =
                 aCellIterator->get()->find( PropertyDefinition(PROP_LEFT_BORDER_DISTANCE) );
                 if( aLeftDistanceIter == aCellIterator->get()->end() )
-                    aCellIterator->get()->Insert( PROP_LEFT_BORDER_DISTANCE, false,
+                    aCellIterator->get()->Insert( PROP_LEFT_BORDER_DISTANCE,
                                                  uno::makeAny(rInfo.nLeftBorderDistance ) );
                 const PropertyMap::const_iterator aRightDistanceIter =
                 aCellIterator->get()->find( PropertyDefinition(PROP_RIGHT_BORDER_DISTANCE) );
                 if( aRightDistanceIter == aCellIterator->get()->end() )
-                    aCellIterator->get()->Insert( PROP_RIGHT_BORDER_DISTANCE, false,
+                    aCellIterator->get()->Insert( PROP_RIGHT_BORDER_DISTANCE,
                                                  uno::makeAny((sal_Int32) rInfo.nRightBorderDistance ) );
 
                 const PropertyMap::const_iterator aTopDistanceIter =
                 aCellIterator->get()->find( PropertyDefinition(PROP_TOP_BORDER_DISTANCE) );
                 if( aTopDistanceIter == aCellIterator->get()->end() )
-                    aCellIterator->get()->Insert( PROP_TOP_BORDER_DISTANCE, false,
+                    aCellIterator->get()->Insert( PROP_TOP_BORDER_DISTANCE,
                                                  uno::makeAny((sal_Int32) rInfo.nTopBorderDistance ) );
 
                 const PropertyMap::const_iterator aBottomDistanceIter =
                 aCellIterator->get()->find( PropertyDefinition(PROP_BOTTOM_BORDER_DISTANCE) );
                 if( aBottomDistanceIter == aCellIterator->get()->end() )
-                    aCellIterator->get()->Insert( PROP_BOTTOM_BORDER_DISTANCE, false,
+                    aCellIterator->get()->Insert( PROP_BOTTOM_BORDER_DISTANCE,
                                                  uno::makeAny((sal_Int32) rInfo.nBottomBorderDistance ) );
 
                 pSingleCellProperties[nCell] = aCellIterator->get()->GetPropertyValues();
@@ -734,7 +734,7 @@ RowPropertyValuesSeq_t DomainMapperTableHandler::endTableGetRowProperties()
         {
             //set default to 'break across pages"
             if( aRowIter->get()->find( PropertyDefinition( PROP_IS_SPLIT_ALLOWED )) == aRowIter->get()->end())
-                aRowIter->get()->Insert( PROP_IS_SPLIT_ALLOWED, false, uno::makeAny(sal_True ) );
+                aRowIter->get()->Insert( PROP_IS_SPLIT_ALLOWED, uno::makeAny(sal_True ) );
 
             aRowProperties[nRow] = (*aRowIter)->GetPropertyValues();
 #ifdef DEBUG_DMAPPER_TABLE_HANDLER

@@ -1501,15 +1501,15 @@ void DomainMapper_Impl::PushFootOrEndnote( bool bIsFootnote )
         {
             const FontEntry::Pointer_t pFontEntry(pFontTable->getFontEntry(sal_uInt32(pTopContext->GetFootnoteFontId())));
             PropertyMapPtr aFontProps( new PropertyMap );
-            aFontProps->Insert(PROP_CHAR_FONT_NAME, true, uno::makeAny( pFontEntry->sFontName  ));
-            aFontProps->Insert(PROP_CHAR_FONT_CHAR_SET, true, uno::makeAny( (sal_Int16)pFontEntry->nTextEncoding  ));
-            aFontProps->Insert(PROP_CHAR_FONT_PITCH, true, uno::makeAny( pFontEntry->nPitchRequest  ));
+            aFontProps->Insert(PROP_CHAR_FONT_NAME, uno::makeAny( pFontEntry->sFontName  ));
+            aFontProps->Insert(PROP_CHAR_FONT_CHAR_SET, uno::makeAny( (sal_Int16)pFontEntry->nTextEncoding  ));
+            aFontProps->Insert(PROP_CHAR_FONT_PITCH, uno::makeAny( pFontEntry->nPitchRequest  ));
             aFontProperties = aFontProps->GetPropertyValues();
         }
         else if(!pTopContext->GetFootnoteFontName().isEmpty())
         {
             PropertyMapPtr aFontProps( new PropertyMap );
-            aFontProps->Insert(PROP_CHAR_FONT_NAME, true, uno::makeAny( pTopContext->GetFootnoteFontName()  ));
+            aFontProps->Insert(PROP_CHAR_FONT_NAME, uno::makeAny( pTopContext->GetFootnoteFontName()  ));
             aFontProperties = aFontProps->GetPropertyValues();
         }
         appendTextContent( uno::Reference< text::XTextContent >( xFootnoteText, uno::UNO_QUERY_THROW ), aFontProperties );
@@ -2976,7 +2976,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                                     double dHeight = 0;
                                     if (GetPropertyFromStyleSheet(PROP_CHAR_HEIGHT) >>= dHeight)
                                         // Character escapement should be given in negative percents for subscripts.
-                                        pCharContext->Insert(PROP_CHAR_ESCAPEMENT, true, uno::makeAny( sal_Int16(- 100 * nDown / dHeight) ) );
+                                        pCharContext->Insert(PROP_CHAR_ESCAPEMENT, uno::makeAny( sal_Int16(- 100 * nDown / dHeight) ) );
                                     appendTextPortion(aContent, pCharContext);
                                 }
                             }

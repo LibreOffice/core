@@ -808,15 +808,15 @@ void ListsManager::lcl_attribute( Id nName, Value& rVal )
         break;
         case NS_ooxml::LN_CT_Ind_left:
             pCurrentLvl->Insert(
-                PROP_INDENT_AT, true, uno::makeAny( ConversionHelper::convertTwipToMM100( nIntValue ) ));
+                PROP_INDENT_AT, uno::makeAny( ConversionHelper::convertTwipToMM100( nIntValue ) ));
             break;
         case NS_ooxml::LN_CT_Ind_hanging:
             pCurrentLvl->Insert(
-                PROP_FIRST_LINE_INDENT, true, uno::makeAny( - ConversionHelper::convertTwipToMM100( nIntValue ) ));
+                PROP_FIRST_LINE_INDENT, uno::makeAny( - ConversionHelper::convertTwipToMM100( nIntValue ) ));
         break;
         case NS_ooxml::LN_CT_Ind_firstLine:
             pCurrentLvl->Insert(
-                PROP_FIRST_LINE_INDENT, true, uno::makeAny( ConversionHelper::convertTwipToMM100( nIntValue ) ));
+                PROP_FIRST_LINE_INDENT, uno::makeAny( ConversionHelper::convertTwipToMM100( nIntValue ) ));
         break;
         case NS_ooxml::LN_CT_Lvl_ilvl: //overrides previous level - unsupported
         case NS_ooxml::LN_CT_Lvl_tplc: //template code - unsupported
@@ -1036,7 +1036,7 @@ void ListsManager::lcl_sprm( Sprm& rSprm )
                     text::HoriOrientation::RIGHT
                 };
                 m_pCurrentDefinition->GetCurrentLevel( )->Insert(
-                    PROP_ADJUST, true, uno::makeAny( aWWAlignments[ nIntValue ] ) );
+                    PROP_ADJUST, uno::makeAny( aWWAlignments[ nIntValue ] ) );
                     writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
             }
             break;

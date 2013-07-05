@@ -102,7 +102,7 @@ public:
     bool hasEmptyPropertyValues() const {return !m_aValues.getLength();}
     /** Add property, usually overwrites already available attributes. It shouldn't overwrite in case of default attributes
      */
-    void Insert( PropertyIds eId, bool bIsTextProperty, const ::com::sun::star::uno::Any& rAny, bool bOverwrite = true );
+    void Insert( PropertyIds eId, const ::com::sun::star::uno::Any& rAny, bool bOverwrite = true );
     void InsertProps(const boost::shared_ptr<PropertyMap> pMap);
 
     const ::com::sun::star::uno::Reference< ::com::sun::star::text::XFootnote>&  GetFootnote() const;

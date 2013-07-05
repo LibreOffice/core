@@ -159,7 +159,7 @@ PropertyMapPtr  BorderHandler::getProperties()
         for( sal_Int32 nProp = 0; nProp < BORDER_COUNT; ++nProp)
         {
             if ( m_aFilledLines[nProp] ) {
-                pPropertyMap->Insert( aPropNames[nProp], false, uno::makeAny( m_aBorderLines[nProp] ) );
+                pPropertyMap->Insert( aPropNames[nProp], uno::makeAny( m_aBorderLines[nProp] ) );
             }
         }
     }

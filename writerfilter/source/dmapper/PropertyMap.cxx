@@ -131,7 +131,7 @@ static void lcl_AnyToTag(const uno::Any & rAny)
 }
 #endif
 
-void PropertyMap::Insert( PropertyIds eId, bool /*bIsTextProperty*/, const uno::Any& rAny, bool bOverwrite )
+void PropertyMap::Insert( PropertyIds eId, const uno::Any& rAny, bool bOverwrite )
 {
 #ifdef DEBUG_DMAPPER_PROPERTY_MAP
     const OUString& rInsert = PropertyNameSupplier::
@@ -294,23 +294,23 @@ SectionPropertyMap::SectionPropertyMap(bool bIsFirstSection) :
     //initialize defaults
     PaperInfo aLetter(PAPER_LETTER);
     //page height, 1/100mm
-    Insert( PROP_HEIGHT, false, uno::makeAny( (sal_Int32) aLetter.getHeight() ) );
+    Insert( PROP_HEIGHT, uno::makeAny( (sal_Int32) aLetter.getHeight() ) );
     //page width, 1/100mm
-    Insert( PROP_WIDTH, false, uno::makeAny( (sal_Int32) aLetter.getWidth() ) );
+    Insert( PROP_WIDTH, uno::makeAny( (sal_Int32) aLetter.getWidth() ) );
     //page left margin, default 0x708 (1800) twip -> 3175 1/100 mm
-    Insert( PROP_LEFT_MARGIN, false, uno::makeAny( (sal_Int32) 3175 ) );
+    Insert( PROP_LEFT_MARGIN, uno::makeAny( (sal_Int32) 3175 ) );
     //page right margin, default 0x708 (1800) twip -> 3175 1/100 mm
-    Insert( PROP_RIGHT_MARGIN, false, uno::makeAny( (sal_Int32) 3175 ) );
+    Insert( PROP_RIGHT_MARGIN, uno::makeAny( (sal_Int32) 3175 ) );
     //page top margin, default 0x5a0 (1440) twip -> 2540 1/100 mm
-    Insert( PROP_TOP_MARGIN, false, uno::makeAny( (sal_Int32)2540 ) );
+    Insert( PROP_TOP_MARGIN, uno::makeAny( (sal_Int32)2540 ) );
     //page bottom margin, default 0x5a0 (1440) twip -> 2540 1/100 mm
-    Insert( PROP_BOTTOM_MARGIN, false, uno::makeAny( (sal_Int32) 2540 ) );
+    Insert( PROP_BOTTOM_MARGIN, uno::makeAny( (sal_Int32) 2540 ) );
     //page style layout
-    Insert(PROP_PAGE_STYLE_LAYOUT, false, uno::makeAny(style::PageStyleLayout_ALL));
+    Insert(PROP_PAGE_STYLE_LAYOUT, uno::makeAny(style::PageStyleLayout_ALL));
     uno::Any aFalse( ::uno::makeAny( false ) );
-    Insert( PROP_GRID_DISPLAY, false, aFalse);
-    Insert( PROP_GRID_PRINT, false, aFalse);
-    Insert( PROP_GRID_MODE, false, uno::makeAny(text::TextGridMode::NONE));
+    Insert( PROP_GRID_DISPLAY, aFalse);
+    Insert( PROP_GRID_PRINT, aFalse);
+    Insert( PROP_GRID_MODE, uno::makeAny(text::TextGridMode::NONE));
 
 
     if( m_bIsFirstSection )

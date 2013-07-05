@@ -227,7 +227,7 @@ PropertyMapPtr  TDefTableHandler::getRowProperties() const
             pSeparators[nBorder - 1].Position =  nRelPos;
             pSeparators[nBorder - 1].IsVisible = sal_True;
         }
-        pPropertyMap->Insert( PROP_TABLE_COLUMN_SEPARATORS, false, uno::makeAny( aSeparators ) );
+        pPropertyMap->Insert( PROP_TABLE_COLUMN_SEPARATORS, uno::makeAny( aSeparators ) );
     }
 
     return pPropertyMap;
@@ -246,20 +246,20 @@ void TDefTableHandler::fillCellProperties(
             case 2: nVertOrient = text::VertOrientation::BOTTOM; break;
             default:;
         }
-        pCellProperties->Insert( PROP_VERT_ORIENT, false, uno::makeAny( nVertOrient ) );
+        pCellProperties->Insert( PROP_VERT_ORIENT, uno::makeAny( nVertOrient ) );
     }
     if( m_aTopBorderLines.size() > nCell )
-        pCellProperties->Insert( PROP_TOP_BORDER, false, uno::makeAny( m_aTopBorderLines[nCell] ) );
+        pCellProperties->Insert( PROP_TOP_BORDER, uno::makeAny( m_aTopBorderLines[nCell] ) );
     if( m_aLeftBorderLines.size() > nCell )
-        pCellProperties->Insert( PROP_LEFT_BORDER, false, uno::makeAny( m_aLeftBorderLines[nCell] ) );
+        pCellProperties->Insert( PROP_LEFT_BORDER, uno::makeAny( m_aLeftBorderLines[nCell] ) );
     if( m_aBottomBorderLines.size() > nCell )
-        pCellProperties->Insert( PROP_BOTTOM_BORDER, false, uno::makeAny( m_aBottomBorderLines[nCell] ) );
+        pCellProperties->Insert( PROP_BOTTOM_BORDER, uno::makeAny( m_aBottomBorderLines[nCell] ) );
     if( m_aRightBorderLines.size() > nCell )
-        pCellProperties->Insert( PROP_RIGHT_BORDER, false, uno::makeAny( m_aRightBorderLines[nCell] ) );
+        pCellProperties->Insert( PROP_RIGHT_BORDER, uno::makeAny( m_aRightBorderLines[nCell] ) );
     if( m_aInsideHBorderLines.size() > nCell )
-        pCellProperties->Insert( META_PROP_HORIZONTAL_BORDER, false, uno::makeAny( m_aInsideHBorderLines[nCell] ) );
+        pCellProperties->Insert( META_PROP_HORIZONTAL_BORDER, uno::makeAny( m_aInsideHBorderLines[nCell] ) );
     if( m_aInsideVBorderLines.size() > nCell )
-        pCellProperties->Insert( META_PROP_VERTICAL_BORDER, false, uno::makeAny( m_aInsideVBorderLines[nCell] ) );
+        pCellProperties->Insert( META_PROP_VERTICAL_BORDER, uno::makeAny( m_aInsideVBorderLines[nCell] ) );
 }
 
 
