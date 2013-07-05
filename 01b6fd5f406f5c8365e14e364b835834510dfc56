@@ -16,6 +16,57 @@
       "revId": "01b6fd5f406f5c8365e14e364b835834510dfc56",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn///X8\u003d",
+        "filename": "reportdesign/source/core/sdr/RptObject.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1241,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2013-07-05T10:32:03Z",
+      "side": 1,
+      "message": "Why add back OUString() around \"NullDate\"?",
+      "revId": "01b6fd5f406f5c8365e14e364b835834510dfc56",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn///Xw\u003d",
+        "filename": "sfx2/source/dialog/dinfdlg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2013-07-05T10:32:03Z",
+      "side": 1,
+      "message": "In sfx2/source/doc/oleprops.cxx, you added\n \u0026\u0026 i_rLeft.IsTimeZoned      \u003d\u003d i_rRight.IsTimeZoned\nand in other places (like here) you added a FIXME comment.\nPlease be consistent. I think adding\n \u0026\u0026 i_rLeft.IsTimeZoned      \u003d\u003d i_rRight.IsTimeZoned\neverywhere would be alright.\n\n(Why we have several ~identical implementations of that operator\u003d\u003d\nis another issue altogether...)",
+      "revId": "01b6fd5f406f5c8365e14e364b835834510dfc56",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn///Xs\u003d",
+        "filename": "svl/source/numbers/numfmuno.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1036,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2013-07-05T10:32:03Z",
+      "side": 1,
+      "message": "Unrelated change. Please separate in different commit (and just push it to master).",
+      "revId": "01b6fd5f406f5c8365e14e364b835834510dfc56",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
