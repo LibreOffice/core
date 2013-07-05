@@ -79,12 +79,19 @@
      else:
          assert False, "Internal error: Path not found in std_dirs or paths"
  
-@@ -851,6 +852,8 @@
-         have_usable_openssl = (have_any_openssl and
-                                openssl_ver >= min_openssl_ver)
- 
-+        print( "ssl_incs="+str(ssl_incs))
-+        print( "ssl_libs="+str(ssl_libs))
-         if have_any_openssl:
-             if have_usable_openssl:
-                 # The _hashlib module wraps optimized implementations
+@@ -819,6 +820,7 @@
+             exts.append( Extension('_ssl', ['_ssl.c'],
+                                    include_dirs = ssl_incs,
+                                    library_dirs = ssl_libs,
++                                   extra_link_args = ['-Wl,--exclude-libs,ALL'],
+                                    libraries = ['ssl', 'crypto'],
+                                    depends = ['socketmodule.h']), )
+         else:
+@@ -858,6 +860,7 @@
+                 exts.append( Extension('_hashlib', ['_hashopenssl.c'],
+                                        include_dirs = ssl_incs,
+                                        library_dirs = ssl_libs,
++                                       extra_link_args = ['-Wl,--exclude-libs,ALL'],
+                                        libraries = ['ssl', 'crypto']) )
+             else:
+                 print ("warning: openssl 0x%08x is too old for _hashlib" %
