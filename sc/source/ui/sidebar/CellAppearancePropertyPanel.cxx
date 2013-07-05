@@ -19,6 +19,7 @@
 #include <sfx2/sidebar/ResourceDefinitions.hrc>
 #include <sfx2/sidebar/Theme.hxx>
 #include <sfx2/sidebar/ControlFactory.hxx>
+#include <sfx2/sidebar/Layouter.hxx>
 #include <CellAppearancePropertyPanel.hxx>
 #include <CellAppearancePropertyPanel.hrc>
 #include "sc.hrc"
@@ -44,6 +45,8 @@
 
 using namespace css;
 using namespace cssu;
+using ::sfx2::sidebar::Layouter;
+
 
 const char UNO_BACKGROUNDCOLOR[] = ".uno:BackgroundColor";
 const char UNO_SETBORDERSTYLE[] = ".uno:SetBorderStyle";
@@ -829,8 +832,18 @@ void CellAppearancePropertyPanel::UpdateControlState()
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// namespace close
+
+
+
+void CellAppearancePropertyPanel::Resize (void)
+{
+    const sal_Int32 nRight (GetSizePixel().Width() - Layouter::MapWidth(*this, TB_BORDER));
+    Layouter::SetRight(*mpFTFillColor, nRight);
+    Layouter::SetRight(*mpFTCellBorder, nRight);
+    Layouter::SetRight(*mpCBXShowGrid, nRight);
+}
+
+
 
 }} // end of namespace ::sc::sidebar
 

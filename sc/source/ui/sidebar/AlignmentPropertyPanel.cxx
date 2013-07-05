@@ -19,6 +19,7 @@
 #include <sfx2/sidebar/ResourceDefinitions.hrc>
 #include <sfx2/sidebar/Theme.hxx>
 #include <sfx2/sidebar/ControlFactory.hxx>
+#include <sfx2/sidebar/Layouter.hxx>
 #include <AlignmentPropertyPanel.hxx>
 #include <editeng/justifyitem.hxx>
 #include <svx/dialmgr.hxx>
@@ -33,6 +34,7 @@
 
 using namespace css;
 using namespace cssu;
+using ::sfx2::sidebar::Layouter;
 using ::sfx2::sidebar::ControlFactory;
 
 const char UNO_ALIGNBLOCK[]            = ".uno:AlignBlock";
@@ -86,6 +88,13 @@ AlignmentPropertyPanel::AlignmentPropertyPanel(
 
     mpFTLeftIndent->SetBackground(Wallpaper());
     mpFtRotate->SetBackground(Wallpaper());
+
+    Layouter::PrepareForLayouting(*mpFTLeftIndent);
+    Layouter::PrepareForLayouting(*mpFtRotate);
+    Layouter::PrepareForLayouting(*mpCBXWrapText);
+    Layouter::PrepareForLayouting(*mpCBXMergeCell);
+    Layouter::PrepareForLayouting(*mpCbStacked);
+
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -611,10 +620,17 @@ void AlignmentPropertyPanel::UpdateVerAlign()
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// namespace close
+
+
+
+void AlignmentPropertyPanel::Resize (void)
+{
+    const sal_Int32 nRight (GetSizePixel().Width() - Layouter::MapWidth(*this, TB_BORDER));
+    Layouter::SetRight(*mpFtRotate, nRight);
+    Layouter::SetRight(*mpCBXWrapText, nRight);
+    Layouter::SetRight(*mpCBXMergeCell, nRight);
+    Layouter::SetRight(*mpCbStacked, nRight);
+}
+
 
 }} // end of namespace ::sc::sidebar
-
-//////////////////////////////////////////////////////////////////////////////
-// eof

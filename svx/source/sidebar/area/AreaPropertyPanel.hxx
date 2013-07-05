@@ -23,6 +23,7 @@
 #include <vcl/ctrl.hxx>
 #include <sfx2/sidebar/SidebarPanelBase.hxx>
 #include <sfx2/sidebar/ControllerItem.hxx>
+#include <sfx2/sidebar/GridLayouter.hxx>
 #include <svx/xgrad.hxx>
 #include <svx/itemwin.hxx>
 #include <svx/xfillit0.hxx>
@@ -80,6 +81,8 @@ public:
     XGradient GetGradient (const XGradientStyle eStyle) const;
     void SetGradient (const XGradient& rGradient);
     sal_Int32 GetSelectedTransparencyTypeIndex (void) const;
+
+    virtual void Resize (void);
 
 private:
     sal_uInt16                                          meLastXFS;
@@ -151,6 +154,8 @@ private:
 
     /// bitfield
     bool                                                mbColorAvail : 1;
+
+    ::sfx2::sidebar::GridLayouter maLayouter;
 
     DECL_LINK(SelectFillTypeHdl, ListBox* );
     DECL_LINK(SelectFillAttrHdl, ListBox* );

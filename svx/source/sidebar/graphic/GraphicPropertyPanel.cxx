@@ -18,6 +18,7 @@
 #include <sfx2/sidebar/ResourceDefinitions.hrc>
 #include <sfx2/sidebar/Theme.hxx>
 #include <sfx2/sidebar/ControlFactory.hxx>
+#include <sfx2/sidebar/Layouter.hxx>
 #include <GraphicPropertyPanel.hxx>
 #include <GraphicPropertyPanel.hrc>
 #include <svx/dialogs.hrc>
@@ -31,12 +32,13 @@
 
 using namespace css;
 using namespace cssu;
+using ::sfx2::sidebar::Layouter;
 using ::sfx2::sidebar::Theme;
 
 #define A2S(pString) (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(pString)))
 
 //////////////////////////////////////////////////////////////////////////////
-// namespace open
+
 
 namespace svx { namespace sidebar {
 
@@ -74,10 +76,58 @@ GraphicPropertyPanel::GraphicPropertyPanel(
     maImgBlue(this, SVX_RES(IMG_BLUE)),
     maImgGamma(this, SVX_RES(IMG_GAMMA)),
     mxFrame(rxFrame),
-    mpBindings(pBindings)
+    mpBindings(pBindings),
+    maLayouter(*this)
 {
     Initialize();
     FreeResource();
+
+    // Setup the grid layouter.
+    maLayouter.GetCell(0,0).SetControl(*mpFtBrightness).SetGridWidth(2);
+    maLayouter.GetCell(1,0).SetControl(*mpMtrBrightness).SetGridWidth(2);
+
+    maLayouter.GetCell(0,3).SetControl(*mpFtContrast).SetGridWidth(2);
+    maLayouter.GetCell(1,3).SetControl(*mpMtrContrast).SetGridWidth(2);
+
+    maLayouter.GetCell(2,0).SetControl(*mpFtColorMode).SetGridWidth(2);
+    maLayouter.GetCell(3,0).SetControl(*mpLBColorMode).SetGridWidth(2);
+
+    maLayouter.GetCell(2,3).SetControl(*mpFtTrans).SetGridWidth(2);
+    maLayouter.GetCell(3,3).SetControl(*mpMtrTrans).SetGridWidth(2);
+
+    maLayouter.GetCell(4,0).SetControl(maImgRed).SetFixedWidth();
+    maLayouter.GetCell(4,1).SetControl(*mpMtrRed);
+
+    maLayouter.GetCell(5,0).SetControl(maImgBlue).SetFixedWidth();
+    maLayouter.GetCell(5,1).SetControl(*mpMtrBlue);
+
+    maLayouter.GetCell(4,3).SetControl(maImgGreen).SetFixedWidth();
+    maLayouter.GetCell(4,4).SetControl(*mpMtrGreen);
+    maLayouter.GetCell(5,3).SetControl(maImgGamma).SetFixedWidth();
+    maLayouter.GetCell(5,4).SetControl(*mpMtrGamma);
+
+    maLayouter.GetColumn(0)
+        .SetWeight(0)
+        .SetLeftPadding(Layouter::MapWidth(*this,SECTIONPAGE_MARGIN_HORIZONTAL));
+    maLayouter.GetColumn(1)
+        .SetWeight(1)
+        .SetMinimumWidth(Layouter::MapWidth(*this, MBOX_WIDTH - 10));
+    maLayouter.GetColumn(2)
+        .SetWeight(0)
+        .SetMinimumWidth(Layouter::MapWidth(*this, CONTROL_SPACING_HORIZONTAL));
+    maLayouter.GetColumn(3)
+        .SetWeight(0);
+    maLayouter.GetColumn(4)
+        .SetWeight(1)
+        .SetMinimumWidth(Layouter::MapWidth(*this, MBOX_WIDTH - 10))
+        .SetRightPadding(Layouter::MapWidth(*this,SECTIONPAGE_MARGIN_HORIZONTAL));
+
+    // Make controls that display text handle short widths more
+    // graceful.
+    Layouter::PrepareForLayouting(*mpFtBrightness);
+    Layouter::PrepareForLayouting(*mpFtContrast);
+    Layouter::PrepareForLayouting(*mpFtColorMode);
+    Layouter::PrepareForLayouting(*mpFtTrans);
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -482,17 +532,19 @@ void GraphicPropertyPanel::NotifyItemUpdate(
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-
 SfxBindings* GraphicPropertyPanel::GetBindings()
 {
     return mpBindings;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// namespace close
+
+
+
+void GraphicPropertyPanel::Resize (void)
+{
+    maLayouter.Layout();
+}
+
+
 
 }} // end of namespace ::svx::sidebar
-
-//////////////////////////////////////////////////////////////////////////////
-// eof

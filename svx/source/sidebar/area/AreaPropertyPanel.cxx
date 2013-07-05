@@ -21,6 +21,7 @@
 #include <sfx2/sidebar/ResourceDefinitions.hrc>
 #include <sfx2/sidebar/Theme.hxx>
 #include <sfx2/sidebar/ControlFactory.hxx>
+#include <sfx2/sidebar/Layouter.hxx>
 #include <AreaPropertyPanel.hxx>
 #include <AreaPropertyPanel.hrc>
 #include <svx/dialogs.hrc>
@@ -43,6 +44,7 @@
 
 using namespace css;
 using namespace cssu;
+using ::sfx2::sidebar::Layouter;
 using ::sfx2::sidebar::Theme;
 
 #define A2S(pString) (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(pString)))
@@ -119,10 +121,41 @@ AreaPropertyPanel::AreaPropertyPanel(
       mpTransparanceItem(),
       mxFrame(rxFrame),
       mpBindings(pBindings),
-      mbColorAvail(true)
+      mbColorAvail(true),
+      maLayouter(*this)
 {
     Initialize();
     FreeResource();
+
+    // Setup the grid layouter.
+    const sal_Int32 nMappedMboxWidth (Layouter::MapWidth(*this, MBOX_WIDTH));
+
+    maLayouter.GetCell(0,0).SetControl(*mpColorTextFT).SetGridWidth(3);
+    maLayouter.GetCell(1,0).SetControl(*mpLbFillType);
+    maLayouter.GetCell(1,2,0).SetControl(*mpToolBoxColorBackground).SetFixedWidth();
+    maLayouter.GetCell(1,2,1).SetControl(*mpLbFillAttr);
+
+    maLayouter.GetCell(2,0).SetControl(*mpTrspTextFT).SetGridWidth(3);
+    maLayouter.GetCell(3,0).SetControl(*mpLBTransType);
+    maLayouter.GetCell(3,2,0).SetControl(*mpMTRTransparent);
+    maLayouter.GetCell(3,2,1).SetControl(*mpBTNGradient);
+
+    maLayouter.GetColumn(0)
+        .SetWeight(1)
+        .SetLeftPadding(Layouter::MapWidth(*this,SECTIONPAGE_MARGIN_HORIZONTAL))
+        .SetMinimumWidth(nMappedMboxWidth);
+    maLayouter.GetColumn(1)
+        .SetWeight(0)
+        .SetMinimumWidth(Layouter::MapWidth(*this, CONTROL_SPACING_HORIZONTAL));
+    maLayouter.GetColumn(2)
+        .SetWeight(1)
+        .SetMinimumWidth(nMappedMboxWidth)
+        .SetRightPadding(Layouter::MapWidth(*this,SECTIONPAGE_MARGIN_HORIZONTAL));
+
+    // Make controls that display text handle short widths more
+    // graceful.
+    Layouter::PrepareForLayouting(*mpColorTextFT);
+    Layouter::PrepareForLayouting(*mpTrspTextFT);
 }
 
 
@@ -412,6 +445,8 @@ IMPL_LINK( AreaPropertyPanel, SelectFillTypeHdl, ListBox *, pToolBox )
                 mpLbFillType->Selected();
             }
         }
+
+        maLayouter.Layout();
     }
 
     return 0;
@@ -1097,6 +1132,8 @@ void AreaPropertyPanel::NotifyItemUpdate(
             break;
         }
     }
+
+    maLayouter.Layout();
 }
 
 
@@ -1426,6 +1463,16 @@ sal_Int32 AreaPropertyPanel::GetSelectedTransparencyTypeIndex (void) const
 {
     return mpLBTransType->GetSelectEntryPos();
 }
+
+
+
+
+void AreaPropertyPanel::Resize (void)
+{
+    maLayouter.Layout();
+}
+
+
 
 } } // end of namespace svx::sidebar
 

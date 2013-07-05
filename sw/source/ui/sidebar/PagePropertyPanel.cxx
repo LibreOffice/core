@@ -38,6 +38,8 @@
 #include <svx/rulritem.hxx>
 
 #include <sfx2/sidebar/ControlFactory.hxx>
+#include <sfx2/sidebar/Layouter.hxx>
+#include <sfx2/sidebar/ResourceDefinitions.hrc>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/viewsh.hxx>
@@ -53,6 +55,8 @@ const char UNO_ORIENTATION[] = ".uno:Orientation";
 const char UNO_MARGIN[]      = ".uno:Margin";
 const char UNO_SIZE[]        = ".uno:Size";
 const char UNO_COLUMN[]      = ".uno:Column";
+
+using namespace ::sfx2::sidebar;
 
 #define A2S(pString) (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(pString)))
 
@@ -184,7 +188,8 @@ PagePropertyPanel::PagePropertyPanel(
 
     , mxUndoManager( getUndoManager( rxFrame ) )
 
-    , mbInvalidateSIDAttrPageOnSIDAttrPageSizeNotify( false )
+    , mbInvalidateSIDAttrPageOnSIDAttrPageSizeNotify( false ),
+      maLayouter(*this)
 {
     // visible controls
     get(mpToolBoxOrientation, "selectorientation");
@@ -195,6 +200,9 @@ PagePropertyPanel::PagePropertyPanel(
     Initialize();
     mbInvalidateSIDAttrPageOnSIDAttrPageSizeNotify = true;
 }
+
+
+
 
 PagePropertyPanel::~PagePropertyPanel()
 {
@@ -768,5 +776,17 @@ void PagePropertyPanel::EndUndo()
         mxUndoManager->leaveUndoContext();
     }
 }
+
+
+
+
+void PagePropertyPanel::Resize (void)
+{
+    maLayouter.Layout();
+}
+
+
+
+
 
 } } // end of namespace ::sw::sidebar

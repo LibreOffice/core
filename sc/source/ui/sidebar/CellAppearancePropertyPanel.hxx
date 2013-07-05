@@ -66,6 +66,8 @@ public:
 
     SfxBindings* GetBindings();
 
+    virtual void Resize (void);
+
 private:
     //ui controls
 

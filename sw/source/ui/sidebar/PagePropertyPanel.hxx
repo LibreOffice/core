@@ -25,6 +25,7 @@
 #include <svx/sidebar/PanelLayout.hxx>
 
 #include <sfx2/sidebar/ControllerItem.hxx>
+#include <sfx2/sidebar/GridLayouter.hxx>
 
 namespace svx { namespace sidebar {
     class PopupControl;
@@ -99,6 +100,9 @@ namespace sw { namespace sidebar {
 
         void StartUndo();
         void EndUndo();
+
+        // Inherited from vcl Window.
+        virtual void Resize (void);
 
     private:
         PagePropertyPanel(
@@ -200,6 +204,7 @@ namespace sw { namespace sidebar {
         const cssu::Reference< css::document::XUndoManager > mxUndoManager;
 
         bool mbInvalidateSIDAttrPageOnSIDAttrPageSizeNotify;
+        ::sfx2::sidebar::GridLayouter maLayouter;
 
         // handler for popup toolboxes to show the popups
         DECL_LINK(ClickOrientationHdl, ToolBox* );

@@ -18,6 +18,7 @@
 #include <sfx2/sidebar/ResourceDefinitions.hrc>
 #include <sfx2/sidebar/Theme.hxx>
 #include <sfx2/sidebar/ControlFactory.hxx>
+#include <sfx2/sidebar/Layouter.hxx>
 #include "PosSizePropertyPanel.hxx"
 #include "PosSizePropertyPanel.hrc"
 #include <svx/sidebar/SidebarDialControl.hxx>
@@ -40,6 +41,7 @@
 
 using namespace css;
 using namespace cssu;
+using ::sfx2::sidebar::Layouter;
 using ::sfx2::sidebar::Theme;
 
 #define A2S(pString) (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(pString)))
@@ -116,7 +118,8 @@ PosSizePropertyPanel::PosSizePropertyPanel(
     mbAutoHeight(false),
     mbAdjustEnabled(false),
     mbIsFlip(false),
-    mxSidebar(rxSidebar)
+    mxSidebar(rxSidebar),
+    maLayouter(*this)
 {
     Initialize();
     FreeResource();
@@ -125,6 +128,47 @@ PosSizePropertyPanel::PosSizePropertyPanel(
     mpBindings->Update( SID_ATTR_TRANSFORM_HEIGHT );
     mpBindings->Update( SID_ATTR_TRANSFORM_PROTECT_SIZE );
     mpBindings->Update( SID_ATTR_METRIC );
+
+    // Setup the grid layouter.
+    const sal_Int32 nMappedMboxWidth (Layouter::MapWidth(*this, MBOX_WIDTH));
+
+    maLayouter.GetCell(0,0).SetControl(*mpFtPosX);
+    maLayouter.GetCell(1,0).SetControl(*mpMtrPosX);
+
+    maLayouter.GetCell(0,2).SetControl(*mpFtPosY);
+    maLayouter.GetCell(1,2).SetControl(*mpMtrPosY);
+
+    maLayouter.GetCell(2,0).SetControl(*mpFtWidth);
+    maLayouter.GetCell(3,0).SetControl(*mpMtrWidth);
+
+    maLayouter.GetCell(2,2).SetControl(*mpFtHeight);
+    maLayouter.GetCell(3,2).SetControl(*mpMtrHeight);
+
+    maLayouter.GetCell(4,0).SetControl(*mpCbxScale).SetGridWidth(3);
+    maLayouter.GetCell(5,0).SetControl(*mpFtAngle).SetGridWidth(3);
+
+
+    maLayouter.GetColumn(0)
+        .SetWeight(1)
+        .SetLeftPadding(Layouter::MapWidth(*this,SECTIONPAGE_MARGIN_HORIZONTAL))
+        .SetMinimumWidth(nMappedMboxWidth);
+    maLayouter.GetColumn(1)
+        .SetWeight(0)
+        .SetMinimumWidth(Layouter::MapWidth(*this, CONTROL_SPACING_HORIZONTAL));
+    maLayouter.GetColumn(2)
+        .SetWeight(1)
+        .SetRightPadding(Layouter::MapWidth(*this,SECTIONPAGE_MARGIN_HORIZONTAL))
+        .SetMinimumWidth(nMappedMboxWidth);
+
+    // Make controls that display text handle short widths more
+    // graceful.
+    Layouter::PrepareForLayouting(*mpFtPosX);
+    Layouter::PrepareForLayouting(*mpFtPosY);
+    Layouter::PrepareForLayouting(*mpFtWidth);
+    Layouter::PrepareForLayouting(*mpFtHeight);
+    Layouter::PrepareForLayouting(*mpCbxScale);
+    Layouter::PrepareForLayouting(*mpFtAngle);
+
 }
 
 
@@ -175,6 +219,15 @@ namespace
         return false;
     }
 } // end of anonymous namespace
+
+
+
+
+void PosSizePropertyPanel::Resize (void)
+{
+    maLayouter.Layout();
+}
+
 
 
 
