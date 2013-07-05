@@ -49,7 +49,6 @@
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 
-#include <tools/string.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/ucbhelper.hxx>
 #include <unotools/ucbstreamhelper.hxx>
@@ -480,7 +479,7 @@ uno::Reference< io::XStream > SAL_CALL FSStorage::openStreamElement(
             else
             {
                 // TODO: test whether it really works for http and fwp
-                SvStream* pStream = ::utl::UcbStreamHelper::CreateStream( String(aFileURL.GetMainURL( INetURLObject::NO_DECODE )),
+                SvStream* pStream = ::utl::UcbStreamHelper::CreateStream( aFileURL.GetMainURL( INetURLObject::NO_DECODE ),
                                                                           STREAM_STD_WRITE );
                 if ( pStream )
                 {

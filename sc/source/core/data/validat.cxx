@@ -450,9 +450,9 @@ bool ScValidationData::IsDataValid(
             // determine length, otherwise a once accepted value maybe could
             // not be edited again, for example abbreviated dates or leading
             // zeros or trailing zeros after decimal separator change length.
-            String aStr;
+            OUString aStr;
             pFormatter->GetInputLineString( nVal, nFormat, aStr);
-            nLenVal = static_cast<double>( aStr.Len() );
+            nLenVal = static_cast<double>( aStr.getLength() );
         }
         ScRefCellValue aTmpCell(nLenVal);
         bRet = IsCellValid(aTmpCell, rPos);
@@ -758,7 +758,11 @@ bool ScValidationData::GetSelectionFromFormula(
                             (SCROW)(nRow+aRange.aStart.Row()), aRange.aStart.Tab() , aValStr);
                     }
                     else
-                        pFormatter->GetInputLineString( nMatVal.fVal, 0, aValStr );
+                    {
+                        OUString sTmp(aValStr);
+                        pFormatter->GetInputLineString( nMatVal.fVal, 0, sTmp );
+                        aValStr = sTmp;
+                    }
                 }
 
                 if (!rCell.isEmpty() && rMatch < 0)

@@ -1830,8 +1830,8 @@ void ScViewFunc::Solve( const ScSolveParam& rParam )
         if ( rParam.pStrTargetVal != NULL )
             aTargetValStr = *(rParam.pStrTargetVal);
 
-        String  aMsgStr;
-        String  aResStr;
+        OUString  aMsgStr;
+        OUString  aResStr;
         double  nSolveResult;
 
         GetFrameWin()->EnterWait();
@@ -1858,14 +1858,14 @@ void ScViewFunc::Solve( const ScSolveParam& rParam )
         if ( bExact )
         {
             aMsgStr += ScGlobal::GetRscString( STR_MSSG_SOLVE_0 );
-            aMsgStr += String( aResStr );
+            aMsgStr += aResStr;
             aMsgStr += ScGlobal::GetRscString( STR_MSSG_SOLVE_1 );
         }
         else
         {
             aMsgStr  = ScGlobal::GetRscString( STR_MSSG_SOLVE_2 );
             aMsgStr += ScGlobal::GetRscString( STR_MSSG_SOLVE_3 );
-            aMsgStr += String( aResStr );
+            aMsgStr += aResStr ;
             aMsgStr += ScGlobal::GetRscString( STR_MSSG_SOLVE_4 );
         }
 

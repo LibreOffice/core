@@ -46,7 +46,7 @@ class E3dUndoAction : public SdrUndoAction
 
         virtual ~E3dUndoAction ();
 
-        virtual sal_Bool CanRepeat(SfxRepeatTarget&) const;
+        virtual bool CanRepeat(SfxRepeatTarget&) const;
 };
 
 /************************************************************************\
@@ -101,7 +101,7 @@ class SVX_DLLPUBLIC E3dAttributesUndoAction : public SdrUndoAction
 
         virtual ~E3dAttributesUndoAction();
 
-        virtual sal_Bool CanRepeat(SfxRepeatTarget& rView) const;
+        virtual bool CanRepeat(SfxRepeatTarget& rView) const;
         virtual void Undo();
         virtual void Redo();
         virtual void Repeat();

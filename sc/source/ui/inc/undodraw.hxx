@@ -44,8 +44,8 @@ public:
     virtual void            Undo();
     virtual void            Redo();
     virtual void            Repeat(SfxRepeatTarget& rTarget);
-    virtual sal_Bool        CanRepeat(SfxRepeatTarget& rTarget) const;
-    virtual sal_Bool        Merge( SfxUndoAction *pNextAction );
+    virtual bool            CanRepeat(SfxRepeatTarget& rTarget) const;
+    virtual bool            Merge( SfxUndoAction *pNextAction );
     virtual OUString        GetComment() const;
     virtual OUString        GetRepeatComment(SfxRepeatTarget&) const;
     virtual sal_uInt16      GetId() const;

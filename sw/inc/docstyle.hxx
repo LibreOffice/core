@@ -82,10 +82,10 @@ protected:
 
 public:
     SwDocStyleSheet( SwDoc&                 rDoc,
-                     const String&          rName,
+                     const OUString&        rName,
                      SwDocStyleSheetPool*   pPool,
                      SfxStyleFamily         eFam,
-                     sal_uInt16                 nMask);
+                     sal_uInt16             nMask);
 
     SwDocStyleSheet( const SwDocStyleSheet& );
 
@@ -111,28 +111,28 @@ public:
     /** new method for paragraph styles to merge indent attributes of applied list
      style into the given item set, if the list style indent attributes are applicable. */
     void MergeIndentAttrsOfListStyle( SfxItemSet& rSet );
-    virtual const String&   GetParent() const;
-    virtual const String&   GetFollow() const;
+    virtual const OUString& GetParent() const;
+    virtual const OUString& GetFollow() const;
 
     virtual sal_uLong GetHelpId( OUString& rFile );
     virtual void SetHelpId( const OUString& r, sal_uLong nId );
 
     /** Preset the members without physical access.
      Used by StyleSheetPool. */
-    void                    PresetName(const String& rName)  { aName   = rName; }
-    void                    PresetNameAndFamily(const String& rName);
-    void                    PresetParent(const String& rName){ aParent = rName; }
-    void                    PresetFollow(const String& rName){ aFollow = rName; }
+    void                    PresetName(const OUString& rName)  { aName   = rName; }
+    void                    PresetNameAndFamily(const OUString& rName);
+    void                    PresetParent(const OUString& rName){ aParent = rName; }
+    void                    PresetFollow(const OUString& rName){ aFollow = rName; }
 
-    virtual bool            SetName( const String& rStr);
-    virtual bool            SetParent( const String& rStr);
-    virtual bool            SetFollow( const String& rStr);
+    virtual bool            SetName( const OUString& rStr);
+    virtual bool            SetParent( const OUString& rStr);
+    virtual bool            SetFollow( const OUString& rStr);
 
     virtual bool            HasFollowSupport() const;
     virtual bool            HasParentSupport() const;
     virtual bool            HasClearParentSupport() const;
-    virtual String          GetDescription();
-    virtual String          GetDescription(SfxMapUnit eUnit);
+    virtual OUString        GetDescription();
+    virtual OUString        GetDescription(SfxMapUnit eUnit);
 
     SwCharFmt*              GetCharFmt();
     SwTxtFmtColl*           GetCollection();
@@ -185,7 +185,7 @@ class SwDocStyleSheetPool : public SfxStyleSheetBasePool
     sal_Bool                bOrganizer : 1;     ///< Organizer
 
 
-    virtual SfxStyleSheetBase* Create( const String&, SfxStyleFamily, sal_uInt16 nMask);
+    virtual SfxStyleSheetBase* Create( const OUString&, SfxStyleFamily, sal_uInt16 nMask);
     virtual SfxStyleSheetBase* Create( const SfxStyleSheetBase& );
 
     using SfxStyleSheetBasePool::Find;
@@ -195,13 +195,13 @@ public:
 
     virtual void Replace( SfxStyleSheetBase& rSource,
                           SfxStyleSheetBase& rTarget );
-    virtual SfxStyleSheetBase& Make(const String&, SfxStyleFamily, sal_uInt16 nMask, sal_uInt16 nPos = 0xffff);
+    virtual SfxStyleSheetBase& Make(const OUString&, SfxStyleFamily, sal_uInt16 nMask, sal_uInt16 nPos = 0xffff);
 
-    virtual SfxStyleSheetBase* Find( const String&, SfxStyleFamily eFam,
+    virtual SfxStyleSheetBase* Find( const OUString&, SfxStyleFamily eFam,
                                     sal_uInt16 n=SFXSTYLEBIT_ALL );
 
-    virtual bool SetParent( SfxStyleFamily eFam, const String &rStyle,
-                            const String &rParent );
+    virtual bool SetParent( SfxStyleFamily eFam, const OUString &rStyle,
+                            const OUString &rParent );
 
     virtual void Remove( SfxStyleSheetBase* pStyle);
 

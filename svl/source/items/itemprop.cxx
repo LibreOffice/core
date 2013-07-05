@@ -130,7 +130,7 @@ beans::Property SfxItemPropertyMap::getPropertyByName( const OUString rName ) co
     return aProp;
 }
 
-sal_Bool SfxItemPropertyMap::hasPropertyByName( const OUString& rName ) const
+bool SfxItemPropertyMap::hasPropertyByName( const OUString& rName ) const
 {
     SfxItemPropertyHashMap_t::const_iterator aIter = m_pImpl->find(rName);
     return aIter != m_pImpl->end();
@@ -218,8 +218,8 @@ void SfxItemPropertySet::getPropertyValue( const SfxItemPropertySimpleEntry& rEn
 }
 
 void SfxItemPropertySet::getPropertyValue( const OUString &rName,
-            const SfxItemSet& rSet, Any& rAny ) const
-                        throw(RuntimeException, UnknownPropertyException)
+                                           const SfxItemSet& rSet, Any& rAny ) const
+    throw(RuntimeException, UnknownPropertyException)
 {
     // detect which-id
     const SfxItemPropertySimpleEntry* pEntry = m_aMap.getByName( rName );
@@ -229,8 +229,8 @@ void SfxItemPropertySet::getPropertyValue( const OUString &rName,
 }
 
 Any SfxItemPropertySet::getPropertyValue( const OUString &rName,
-            const SfxItemSet& rSet ) const
-                        throw(RuntimeException, UnknownPropertyException)
+                                          const SfxItemSet& rSet ) const
+    throw(RuntimeException, UnknownPropertyException)
 {
     Any aVal;
     getPropertyValue( rName,rSet, aVal );
@@ -238,10 +238,10 @@ Any SfxItemPropertySet::getPropertyValue( const OUString &rName,
 }
 
 void SfxItemPropertySet::setPropertyValue( const SfxItemPropertySimpleEntry& rEntry,
-                                            const Any& aVal,
-                                            SfxItemSet& rSet ) const
-                                            throw(RuntimeException,
-                                                    IllegalArgumentException)
+                                           const Any& aVal,
+                                           SfxItemSet& rSet ) const
+    throw(RuntimeException,
+          IllegalArgumentException)
 {
     // get the SfxPoolItem
     const SfxPoolItem* pItem = 0;
@@ -277,11 +277,11 @@ void SfxItemPropertySet::setPropertyValue( const SfxItemPropertySimpleEntry& rEn
 }
 
 void SfxItemPropertySet::setPropertyValue( const OUString &rName,
-                                            const Any& aVal,
-                                            SfxItemSet& rSet ) const
-                                            throw(RuntimeException,
-                                                    IllegalArgumentException,
-                                                    UnknownPropertyException)
+                                           const Any& aVal,
+                                           SfxItemSet& rSet ) const
+    throw(RuntimeException,
+          IllegalArgumentException,
+          UnknownPropertyException)
 {
     const SfxItemPropertySimpleEntry* pEntry = m_aMap.getByName( rName );
     if ( !pEntry )
@@ -292,7 +292,7 @@ void SfxItemPropertySet::setPropertyValue( const OUString &rName,
 }
 
 PropertyState SfxItemPropertySet::getPropertyState(const SfxItemPropertySimpleEntry& rEntry, const SfxItemSet& rSet) const
-                                    throw()
+    throw()
 {
     PropertyState eRet = PropertyState_DIRECT_VALUE;
     sal_uInt16 nWhich = rEntry.nWID;
@@ -306,9 +306,9 @@ PropertyState SfxItemPropertySet::getPropertyState(const SfxItemPropertySimpleEn
         eRet = PropertyState_AMBIGUOUS_VALUE;
     return eRet;
 }
-PropertyState   SfxItemPropertySet::getPropertyState(
-    const OUString& rName, const SfxItemSet& rSet) const
-                                    throw(UnknownPropertyException)
+
+PropertyState   SfxItemPropertySet::getPropertyState(const OUString& rName, const SfxItemSet& rSet) const
+    throw(UnknownPropertyException)
 {
     PropertyState eRet = PropertyState_DIRECT_VALUE;
 
@@ -333,8 +333,7 @@ PropertyState   SfxItemPropertySet::getPropertyState(
     return eRet;
 }
 
-Reference<XPropertySetInfo>
-    SfxItemPropertySet::getPropertySetInfo() const
+Reference<XPropertySetInfo> SfxItemPropertySet::getPropertySetInfo() const
 {
     if( !m_xInfo.is() )
         m_xInfo = new SfxItemPropertySetInfo( m_aMap );
@@ -346,21 +345,20 @@ struct SfxItemPropertySetInfo_Impl
     SfxItemPropertyMap*         m_pOwnMap;
 };
 
-SfxItemPropertySetInfo::SfxItemPropertySetInfo(const SfxItemPropertyMap &rMap ) :
-    m_pImpl( new SfxItemPropertySetInfo_Impl )
+SfxItemPropertySetInfo::SfxItemPropertySetInfo(const SfxItemPropertyMap &rMap )
+    :  m_pImpl( new SfxItemPropertySetInfo_Impl )
 {
     m_pImpl->m_pOwnMap = new SfxItemPropertyMap( rMap );
 }
 
-SfxItemPropertySetInfo::SfxItemPropertySetInfo(const SfxItemPropertyMapEntry *pEntries ) :
-    m_pImpl( new SfxItemPropertySetInfo_Impl )
+SfxItemPropertySetInfo::SfxItemPropertySetInfo(const SfxItemPropertyMapEntry *pEntries )
+    : m_pImpl( new SfxItemPropertySetInfo_Impl )
 {
     m_pImpl->m_pOwnMap = new SfxItemPropertyMap( pEntries );
 }
 
-Sequence< Property > SAL_CALL
-        SfxItemPropertySetInfo::getProperties(  )
-            throw(RuntimeException)
+Sequence< Property > SAL_CALL SfxItemPropertySetInfo::getProperties(  )
+    throw(RuntimeException)
 {
     return m_pImpl->m_pOwnMap->getProperties();
 }
@@ -371,24 +369,21 @@ SfxItemPropertySetInfo::~SfxItemPropertySetInfo()
     delete m_pImpl;
 }
 
-Property SAL_CALL
-        SfxItemPropertySetInfo::getPropertyByName( const OUString& rName )
-            throw(UnknownPropertyException, RuntimeException)
+Property SAL_CALL SfxItemPropertySetInfo::getPropertyByName( const OUString& rName )
+    throw(UnknownPropertyException, RuntimeException)
 {
     return m_pImpl->m_pOwnMap->getPropertyByName( rName );
 }
 
-sal_Bool SAL_CALL
-        SfxItemPropertySetInfo::hasPropertyByName( const OUString& rName )
-            throw(RuntimeException)
+sal_Bool SAL_CALL SfxItemPropertySetInfo::hasPropertyByName( const OUString& rName )
+    throw(RuntimeException)
 {
     return m_pImpl->m_pOwnMap->hasPropertyByName( rName );
 }
 
-SfxExtItemPropertySetInfo::SfxExtItemPropertySetInfo(
-                                const SfxItemPropertyMapEntry *pMap,
-                                const Sequence<Property>& rPropSeq ) :
-                aExtMap( pMap )
+SfxExtItemPropertySetInfo::SfxExtItemPropertySetInfo( const SfxItemPropertyMapEntry *pMap,
+                                                      const Sequence<Property>& rPropSeq )
+    : aExtMap( pMap )
 {
     aExtMap.mergeProperties( rPropSeq );
 }
@@ -397,22 +392,19 @@ SfxExtItemPropertySetInfo::~SfxExtItemPropertySetInfo()
 {
 }
 
-Sequence< Property > SAL_CALL
-        SfxExtItemPropertySetInfo::getProperties(  ) throw(RuntimeException)
+Sequence< Property > SAL_CALL SfxExtItemPropertySetInfo::getProperties(  ) throw(RuntimeException)
 {
     return aExtMap.getProperties();
 }
 
-Property SAL_CALL
-SfxExtItemPropertySetInfo::getPropertyByName( const OUString& rPropertyName )
-            throw(UnknownPropertyException, RuntimeException)
+Property SAL_CALL SfxExtItemPropertySetInfo::getPropertyByName( const OUString& rPropertyName )
+    throw(UnknownPropertyException, RuntimeException)
 {
     return aExtMap.getPropertyByName( rPropertyName );
 }
 
-sal_Bool SAL_CALL
-SfxExtItemPropertySetInfo::hasPropertyByName( const OUString& rPropertyName )
-            throw(RuntimeException)
+sal_Bool SAL_CALL SfxExtItemPropertySetInfo::hasPropertyByName( const OUString& rPropertyName )
+    throw(RuntimeException)
 {
     return aExtMap.hasPropertyByName( rPropertyName );
 }

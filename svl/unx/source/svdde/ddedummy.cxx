@@ -24,7 +24,7 @@ DdeData::DdeData()
 {
 }
 
-DdeData::DdeData( const String& )
+DdeData::DdeData( const OUString& )
 {
 }
 
@@ -46,17 +46,17 @@ void DdeData::SetFormat( SAL_UNUSED_PARAMETER sal_uLong )
 
 sal_uLong DdeData::GetFormat() const
 {
-  return 0L;
+    return 0L;
 }
 
 DdeData& DdeData::operator = ( const DdeData& )
 {
-  return *this;
+    return *this;
 }
 
 DdeData::operator long() const
 {
-  return 0L;
+    return 0L;
 }
 
 DdeData::operator const void*() const
@@ -66,10 +66,10 @@ DdeData::operator const void*() const
 
 long DdeConnection::GetError()
 {
-  return 0L;
+    return 0L;
 }
 
-DdeConnection::DdeConnection( const String&, const String& )
+DdeConnection::DdeConnection( const OUString&, const OUString& )
 {
 }
 
@@ -77,23 +77,23 @@ DdeConnection::~DdeConnection()
 {
 }
 
-const String& DdeConnection::GetServiceName()
+const OUString DdeConnection::GetServiceName()
 {
-  return String::EmptyString();
+    return OUString();
 }
 
-const String& DdeConnection::GetTopicName()
+const OUString DdeConnection::GetTopicName()
 {
-  return String::EmptyString();
+    return OUString();;
 }
 
-DdeTransaction::DdeTransaction( DdeConnection& rConnection, const String&, long ) :
-     rDde( rConnection )
+DdeTransaction::DdeTransaction( DdeConnection& rConnection, const OUString&, long )
+    : rDde( rConnection )
 {
 }
 
-DdeTransaction::DdeTransaction( const DdeTransaction& rTransaction ) :
-     rDde( rTransaction.rDde )
+DdeTransaction::DdeTransaction( const DdeTransaction& rTransaction )
+    : rDde( rTransaction.rDde )
 {
 }
 
@@ -101,7 +101,7 @@ void DdeTransaction::Execute()
 {
 }
 
-void DdeTransaction::Done( SAL_UNUSED_PARAMETER sal_Bool )
+void DdeTransaction::Done( SAL_UNUSED_PARAMETER bool )
 {
 }
 
@@ -113,18 +113,18 @@ DdeTransaction::~DdeTransaction()
 {
 }
 
-DdeRequest::DdeRequest( DdeConnection& rConnection, const String& rString, long lLong ) :
-     DdeTransaction( rConnection, rString, lLong )
+DdeRequest::DdeRequest( DdeConnection& rConnection, const OUString& rString, long lLong )
+    : DdeTransaction( rConnection, rString, lLong )
 {
 }
 
-DdeExecute::DdeExecute( DdeConnection& rConnection, const String& rString, long lLong ) :
-     DdeTransaction( rConnection, rString, lLong )
+DdeExecute::DdeExecute( DdeConnection& rConnection, const OUString& rString, long lLong )
+    : DdeTransaction( rConnection, rString, lLong )
 {
 }
 
-DdePoke::DdePoke( DdeConnection& rConnection, const String& rString, const DdeData&, long lLong ) :
-     DdeTransaction( rConnection, rString, lLong )
+DdePoke::DdePoke( DdeConnection& rConnection, const OUString& rString, const DdeData&, long lLong )
+    : DdeTransaction( rConnection, rString, lLong )
 {
 }
 
@@ -151,7 +151,7 @@ void DdeTopic::InsertItem( SAL_UNUSED_PARAMETER DdeItem* )
 
 DdeItem* DdeTopic::AddItem( const DdeItem& rDdeItem )
 {
-  return (DdeItem*) &rDdeItem;
+    return (DdeItem*) &rDdeItem;
 }
 
 void DdeTopic::RemoveItem( SAL_UNUSED_PARAMETER const DdeItem& )
@@ -160,80 +160,85 @@ void DdeTopic::RemoveItem( SAL_UNUSED_PARAMETER const DdeItem& )
 
 DdeData* DdeTopic::Get( SAL_UNUSED_PARAMETER sal_uLong )
 {
-  return NULL;
+    return NULL;
 }
 
-sal_Bool DdeTopic::MakeItem( SAL_UNUSED_PARAMETER const OUString& )
+bool DdeTopic::MakeItem( SAL_UNUSED_PARAMETER const OUString& )
 {
-  return sal_False;
+    return false;
 }
 
-sal_Bool DdeTopic::StartAdviseLoop()
+bool DdeTopic::StartAdviseLoop()
 {
-  return sal_False;
+    return false;
 }
 
-sal_Bool DdeTopic::StopAdviseLoop()
+bool DdeTopic::StopAdviseLoop()
 {
-  return sal_False;
+    return false;
 }
 
-sal_Bool DdeTopic::Execute( SAL_UNUSED_PARAMETER const String* )
+bool DdeTopic::Execute( SAL_UNUSED_PARAMETER const OUString* )
 {
-  return sal_False;
+    return false;
 }
 
-sal_Bool DdeTopic::Put( SAL_UNUSED_PARAMETER const DdeData* )
+bool DdeTopic::Put( SAL_UNUSED_PARAMETER const DdeData* )
 {
-  return sal_False;
+    return false;
 }
 
 const OUString DdeTopic::GetName() const
 {
-  return OUString();
+    return OUString();
 }
 
-DdeService::DdeService( const String& )
+DdeService::DdeService( const OUString& )
 {
-  nStatus = 0;
+    nStatus = 0;
 }
 
-String DdeService::Topics() {
-    return String();
+OUString DdeService::Topics()
+{
+    return OUString();
 }
 
-String DdeService::Formats() {
-    return String();
+OUString DdeService::Formats() {
+    return OUString();
 }
 
-String DdeService::SysItems() {
-    return String();
+OUString DdeService::SysItems()
+{
+    return OUString();
 }
 
-String DdeService::Status() {
-    return String();
+OUString DdeService::Status()
+{
+    return OUString();
 }
 
-String DdeService::SysTopicGet(const String& rString) {
+OUString DdeService::SysTopicGet(const OUString& rString)
+{
     return rString;
 }
 
-sal_Bool DdeService::SysTopicExecute(SAL_UNUSED_PARAMETER const String*) {
-    return sal_False;
+bool DdeService::SysTopicExecute(SAL_UNUSED_PARAMETER const OUString*)
+{
+    return false;
 }
 
 DdeService::~DdeService()
 {
 }
 
-sal_Bool DdeService::IsBusy()
+bool DdeService::IsBusy()
 {
-  return sal_False;
+  return false;
 }
 
-String DdeService::GetHelp()
+OUString DdeService::GetHelp()
 {
-  return String::EmptyString();
+    return OUString();
 }
 
 void DdeService::AddFormat( SAL_UNUSED_PARAMETER sal_uLong )
@@ -248,14 +253,14 @@ void DdeService::RemoveTopic( SAL_UNUSED_PARAMETER const DdeTopic& )
 {
 }
 
-sal_Bool DdeService::MakeTopic( SAL_UNUSED_PARAMETER const OUString& )
+bool DdeService::MakeTopic( SAL_UNUSED_PARAMETER const OUString& )
 {
-  return sal_False;
+    return false;
 }
 
 const OUString DdeService::GetName() const
 {
-  return OUString();
+    return OUString();
 }
 
 namespace
@@ -269,7 +274,7 @@ DdeServices& DdeService::GetServices()
   return theDdeServices::get();
 }
 
-DdeItem::DdeItem( const String& )
+DdeItem::DdeItem( const OUString& )
 {
 }
 
@@ -285,32 +290,32 @@ void DdeItem::NotifyClient()
 {
 }
 
-DdeGetPutItem::DdeGetPutItem( const String& rStr ) :
-DdeItem( rStr )
+DdeGetPutItem::DdeGetPutItem( const OUString& rStr )
+    : DdeItem( rStr )
 {
 }
 
-DdeGetPutItem::DdeGetPutItem( const DdeItem& rItem ) :
-DdeItem( rItem )
+DdeGetPutItem::DdeGetPutItem( const DdeItem& rItem )
+    : DdeItem( rItem )
 {
 }
 
 DdeData* DdeGetPutItem::Get( SAL_UNUSED_PARAMETER sal_uLong )
 {
-  return NULL;
+    return NULL;
 }
 
-sal_Bool DdeGetPutItem::Put( SAL_UNUSED_PARAMETER const DdeData* )
+bool DdeGetPutItem::Put( SAL_UNUSED_PARAMETER const DdeData* )
 {
-  return sal_False;
+    return false;
 }
 
-void DdeGetPutItem::AdviseLoop( SAL_UNUSED_PARAMETER sal_Bool )
+void DdeGetPutItem::AdviseLoop( SAL_UNUSED_PARAMETER bool )
 {
 }
 
-DdeLink::DdeLink( DdeConnection& rConnection, const String& rString, long l ) :
-DdeTransaction( rConnection, rString, l )
+DdeLink::DdeLink( DdeConnection& rConnection, const OUString& rString, long l )
+    : DdeTransaction( rConnection, rString, l )
 {
 }
 
@@ -322,8 +327,8 @@ void DdeLink::Notify()
 {
 }
 
-DdeHotLink::DdeHotLink( DdeConnection& rConnection, const String& rString, long l ) :
-DdeLink( rConnection, rString, l )
+DdeHotLink::DdeHotLink( DdeConnection& rConnection, const OUString& rString, long l )
+    : DdeLink( rConnection, rString, l )
 {
 }
 

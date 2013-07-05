@@ -66,9 +66,9 @@ void ScUndoAllRangeNames::Repeat(SfxRepeatTarget& /*rTarget*/)
 {
 }
 
-sal_Bool ScUndoAllRangeNames::CanRepeat(SfxRepeatTarget& /*rTarget*/) const
+bool ScUndoAllRangeNames::CanRepeat(SfxRepeatTarget& /*rTarget*/) const
 {
-    return sal_False;
+    return false;
 }
 
 OUString ScUndoAllRangeNames::GetComment() const
@@ -139,9 +139,9 @@ void ScUndoAddRangeData::Repeat(SfxRepeatTarget& /*rTarget*/)
 {
 }
 
-sal_Bool ScUndoAddRangeData::CanRepeat(SfxRepeatTarget& /*rTarget*/) const
+bool ScUndoAddRangeData::CanRepeat(SfxRepeatTarget& /*rTarget*/) const
 {
-    return sal_False;
+    return false;
 }
 
 OUString ScUndoAddRangeData::GetComment() const

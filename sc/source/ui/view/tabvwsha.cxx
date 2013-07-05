@@ -114,7 +114,7 @@ sal_Bool ScTabViewShell::GetFunction( String& rFuncStr, sal_uInt16 nErrCode )
                     pDoc->GetNumberFormat( nPosX, nPosY, nTab, nNumFmt );
                 }
 
-                String aValStr;
+                OUString aValStr;
                 Color* pDummy;
                 pFormatter->GetOutputString( nVal, nNumFmt, aValStr, &pDummy );
                 aStr += aValStr;

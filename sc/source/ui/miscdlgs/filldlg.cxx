@@ -198,11 +198,11 @@ void ScFillSeriesDlg::Init( sal_uInt16 nPossDir )
 
     aEdStartVal.SetText( aStartStrVal);
 
-    String aIncrTxt;
+    OUString aIncrTxt;
     rDoc.GetFormatTable()->GetInputLineString( fIncrement, 0, aIncrTxt );
     aEdIncrement.SetText( aIncrTxt );
 
-    String aEndTxt;
+    OUString aEndTxt;
     if ( fEndVal != MAXDOUBLE )
         rDoc.GetFormatTable()->GetInputLineString( fEndVal, 0, aEndTxt );
     aEdEndVal.SetText( aEndTxt );

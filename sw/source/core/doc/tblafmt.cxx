@@ -837,15 +837,16 @@ void SwTableAutoFmt::UpdateToSet(sal_uInt8 nPos, SfxItemSet& rSet,
 
         if( IsValueFormat() && pNFmtr )
         {
-            String sFmt; LanguageType eLng, eSys;
+            OUString sFmt;
+            LanguageType eLng, eSys;
             rChg.GetValueFormat( sFmt, eLng, eSys );
-            if( sFmt.Len() )
+            if( !sFmt.isEmpty() )
             {
                 short nType;
                 bool bNew;
-                xub_StrLen nCheckPos;
+                sal_Int32 nCheckPos;
                 sal_uInt32 nKey = pNFmtr->GetIndexPuttingAndConverting( sFmt, eLng,
-                        eSys, nType, bNew, nCheckPos);
+                                                                        eSys, nType, bNew, nCheckPos);
                 rSet.Put( SwTblBoxNumFormat( nKey ));
             }
             else

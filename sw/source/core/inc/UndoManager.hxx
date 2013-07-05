@@ -54,9 +54,9 @@ public:
     virtual bool IsUndoNoResetModified() const;
 
     virtual SwUndoId StartUndo(SwUndoId const eUndoId,
-                SwRewriter const*const pRewriter);
+                               SwRewriter const*const pRewriter);
     virtual SwUndoId EndUndo(SwUndoId const eUndoId,
-                SwRewriter const*const pRewriter);
+                             SwRewriter const*const pRewriter);
     virtual void DelAllUndoObj();
     virtual bool GetLastUndoInfo(OUString *const o_pStr,
                                  SwUndoId *const o_pId) const;
@@ -65,18 +65,18 @@ public:
                                   SwUndoId *const o_pId = 0) const;
     virtual SwUndoComments_t GetRedoComments() const;
     virtual bool Repeat(::sw::RepeatContext & rContext,
-                sal_uInt16 const nRepeatCnt);
+                        sal_uInt16 const nRepeatCnt);
     virtual SwUndoId GetRepeatInfo(OUString *const o_pStr) const;
     virtual void AppendUndo(SwUndo *const pUndo);
     virtual void ClearRedo();
     virtual bool IsUndoNodes(SwNodes const& rNodes) const;
 
     // ::svl::IUndoManager
-    virtual void     AddUndoAction(SfxUndoAction *pAction,
-                                   sal_Bool bTryMerg = sal_False);
-    virtual sal_Bool Undo();
-    virtual sal_Bool Redo();
-    virtual void     EnableUndo(bool bEnable);
+    virtual void AddUndoAction(SfxUndoAction *pAction,
+                                   bool bTryMerg = false);
+    virtual bool Undo();
+    virtual bool Redo();
+    virtual void EnableUndo(bool bEnable);
 
     SwUndo * RemoveLastUndo();
     SwUndo * GetLastUndo();

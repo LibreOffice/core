@@ -900,7 +900,7 @@ void ScXMLTableRowCellContext::SetAnnotation(const ScAddress& rPos)
         rXMLImport.GetMM100UnitConverter().convertDateTime( fDate, mxAnnotationData->maCreateDate );
         SvNumberFormatter* pNumForm = pDoc->GetFormatTable();
         sal_uInt32 nfIndex = pNumForm->GetFormatIndex( NF_DATE_SYS_DDMMYYYY, LANGUAGE_SYSTEM );
-        String aDate;
+        OUString aDate;
         Color* pColor = 0;
         Color** ppColor = &pColor;
         pNumForm->GetOutputString( fDate, nfIndex, aDate, ppColor );
