@@ -95,46 +95,76 @@ void OOXMLDocPropHandler::AddCustomProperty( const uno::Any& aAny )
 util::DateTime OOXMLDocPropHandler::GetDateTimeFromW3CDTF( const OUString& aChars )
 {
     oslDateTime aOslDTime = { 0, 0, 0, 0, 0, 0, 0, 0 };
-    sal_Int32 nLen = aChars.getLength();
+    const sal_Int32 nLen = aChars.getLength();
     if ( nLen >= 4 )
     {
         aOslDTime.Year = (sal_Int16)aChars.copy( 0, 4 ).toInt32();
 
-        if ( nLen >= 7 && aChars.getStr()[4] == (sal_Unicode)'-' )
+        if ( nLen >= 7 && aChars[4] == (sal_Unicode)'-' )
         {
             aOslDTime.Month = (sal_uInt16)aChars.copy( 5, 2 ).toInt32();
 
-            if ( nLen >= 10 && aChars.getStr()[7] == (sal_Unicode)'-' )
+            if ( nLen >= 10 && aChars[7] == (sal_Unicode)'-' )
             {
                 aOslDTime.Day = (sal_uInt16)aChars.copy( 8, 2 ).toInt32();
 
-                if ( nLen >= 16 && aChars.getStr()[10] == (sal_Unicode)'T' && aChars.getStr()[13] == (sal_Unicode)':' )
+                if ( nLen >= 16 && aChars[10] == (sal_Unicode)'T' && aChars[13] == (sal_Unicode)':' )
                 {
                     aOslDTime.Hours = (sal_uInt16)aChars.copy( 11, 2 ).toInt32();
                     aOslDTime.Minutes = (sal_uInt16)aChars.copy( 14, 2 ).toInt32();
 
                     sal_Int32 nOptTime = 0;
-                    if ( nLen >= 19 && aChars.getStr()[16] == (sal_Unicode)':' )
+                    if ( nLen >= 19 && aChars[16] == (sal_Unicode)':' )
                     {
                         aOslDTime.Seconds = (sal_uInt16)aChars.copy( 17, 2 ).toInt32();
                         nOptTime += 3;
-                        if ( nLen >= 21 && aChars.getStr()[19] == (sal_Unicode)'.' )
+                        if ( nLen >= 20 && aChars[19] == (sal_Unicode)'.' )
                         {
-                            aOslDTime.NanoSeconds = (sal_uInt32)(aChars.copy( 20, 1 ).toInt32() * 10e8);
-                            nOptTime += 2;
+                            nOptTime += 1;
+                            sal_Int32 digitPos = 20;
+                            while (nLen > digitPos && digitPos < 29)
+                            {
+                                sal_Unicode c = aChars[digitPos];
+                                if ( c < '0' || c > '9')
+                                    break;
+                                aOslDTime.NanoSeconds *= 10;
+                                aOslDTime.NanoSeconds += c - '0';
+                                ++digitPos;
+                            }
+                            if ( digitPos < 29 )
+                            {
+                                // read less digits than 9
+                                // add correct exponent of 10
+                                nOptTime += digitPos - 20;
+                                for(; digitPos<29; ++digitPos)
+                                {
+                                    aOslDTime.NanoSeconds *= 10;
+                                }
+                            }
+                            else
+                            {
+                                //skip digits with more precision than we can handle
+                                while(nLen > digitPos)
+                                {
+                                    sal_Unicode c = aChars[digitPos];
+                                    if ( c < '0' || c > '9')
+                                        break;
+                                    ++digitPos;
+                                }
+                                nOptTime += digitPos - 20;
+                            }
                         }
                     }
 
                     sal_Int32 nModif = 0;
                     if ( nLen >= 16 + nOptTime + 6 )
                     {
-                        if ( ( aChars.getStr()[16 + nOptTime] == (sal_Unicode)'+' || aChars.getStr()[16 + nOptTime] == (sal_Unicode)'-' )
-                          && aChars.getStr()[16 + nOptTime + 3] == (sal_Unicode)':' )
-
+                        if ( ( aChars[16 + nOptTime] == (sal_Unicode)'+' || aChars[16 + nOptTime] == (sal_Unicode)'-' )
+                          && aChars[16 + nOptTime + 3] == (sal_Unicode)':' )
                         {
                             nModif = aChars.copy( 16 + nOptTime + 1, 2 ).toInt32() * 3600;
                             nModif += aChars.copy( 16 + nOptTime + 4, 2 ).toInt32() * 60;
-                            if ( aChars.getStr()[16 + nOptTime] == (sal_Unicode)'-' )
+                            if ( aChars[16 + nOptTime] == (sal_Unicode)'-' )
                                 nModif *= -1;
                         }
                     }
@@ -145,7 +175,7 @@ util::DateTime OOXMLDocPropHandler::GetDateTimeFromW3CDTF( const OUString& aChar
                         TimeValue aTmp;
                         if ( osl_getTimeValueFromDateTime( &aOslDTime, &aTmp ) )
                         {
-                            aTmp.Seconds += nModif;
+                            aTmp.Seconds -= nModif;
                             osl_getDateTimeFromTimeValue( &aTmp, &aOslDTime );
                         }
                     }
