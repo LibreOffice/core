@@ -1202,16 +1202,30 @@ bool SvxUnoConvertResourceString( int nSourceResIds, int nDestResIds, int nCount
     return false;
 }
 
+//////////////////////////////////////////////////////////////////////////////
+// #i122649# Some comments on the below arrays:
+// - They need to have the same order and count of items
+// - They are used to translate between translated and non-translated color names
+// - To make longer names be found which start with the same basic string,
+//   these have to be in front of others
+//
+// It would be nice to:
+// - evtl. organize these in a single array with 2-dimensional inner to elliminate
+//   the possibility to define it wrong
+// - change the compare to also work when a shorter name is in front of a longer one
+
 static sal_uInt16 SvxUnoColorNameDefResId[] =
 {
     RID_SVXSTR_COLOR_BLUEGREY_DEF,
     RID_SVXSTR_COLOR_BLACK_DEF,
+    RID_SVXSTR_COLOR_BLUE_CLASSIC_DEF,
     RID_SVXSTR_COLOR_BLUE_DEF,
     RID_SVXSTR_COLOR_GREEN_DEF,
     RID_SVXSTR_COLOR_CYAN_DEF,
     RID_SVXSTR_COLOR_RED_DEF,
     RID_SVXSTR_COLOR_MAGENTA_DEF,
     RID_SVXSTR_COLOR_GREY_DEF,
+    RID_SVXSTR_COLOR_YELLOWGREEN_DEF,
     RID_SVXSTR_COLOR_YELLOW_DEF,
     RID_SVXSTR_COLOR_WHITE_DEF,
     RID_SVXSTR_COLOR_ORANGE_DEF,
@@ -1225,10 +1239,8 @@ static sal_uInt16 SvxUnoColorNameDefResId[] =
     RID_SVXSTR_COLOR_CHART_DEF,
     RID_SVXSTR_COLOR_PURPLE_DEF,
     RID_SVXSTR_COLOR_SKYBLUE_DEF,
-    RID_SVXSTR_COLOR_YELLOWGREEN_DEF,
     RID_SVXSTR_COLOR_PINK_DEF,
     RID_SVXSTR_COLOR_TURQUOISE_DEF,
-    RID_SVXSTR_COLOR_BLUE_CLASSIC_DEF,
     RID_SVXSTR_COLOR_LIBRE_GREEN_1_DEF,
     RID_SVXSTR_COLOR_LIBRE_GREEN_ACCENT_DEF,
     RID_SVXSTR_COLOR_LIBRE_BLUE_ACCENT_DEF,
@@ -1250,12 +1262,14 @@ static sal_uInt16 SvxUnoColorNameResId[] =
 {
     RID_SVXSTR_COLOR_BLUEGREY,
     RID_SVXSTR_COLOR_BLACK,
+    RID_SVXSTR_COLOR_BLUE_CLASSIC,
     RID_SVXSTR_COLOR_BLUE,
     RID_SVXSTR_COLOR_GREEN,
     RID_SVXSTR_COLOR_CYAN,
     RID_SVXSTR_COLOR_RED,
     RID_SVXSTR_COLOR_MAGENTA,
     RID_SVXSTR_COLOR_GREY,
+    RID_SVXSTR_COLOR_YELLOWGREEN,
     RID_SVXSTR_COLOR_YELLOW,
     RID_SVXSTR_COLOR_WHITE,
     RID_SVXSTR_COLOR_ORANGE,
@@ -1269,10 +1283,8 @@ static sal_uInt16 SvxUnoColorNameResId[] =
     RID_SVXSTR_COLOR_CHART,
     RID_SVXSTR_COLOR_PURPLE,
     RID_SVXSTR_COLOR_SKYBLUE,
-    RID_SVXSTR_COLOR_YELLOWGREEN,
     RID_SVXSTR_COLOR_PINK,
     RID_SVXSTR_COLOR_TURQUOISE,
-    RID_SVXSTR_COLOR_BLUE_CLASSIC,
     RID_SVXSTR_COLOR_LIBRE_GREEN_1,
     RID_SVXSTR_COLOR_LIBRE_GREEN_ACCENT,
     RID_SVXSTR_COLOR_LIBRE_BLUE_ACCENT,
@@ -1289,6 +1301,8 @@ static sal_uInt16 SvxUnoColorNameResId[] =
     RID_SVXSTR_COLOR_TANGO_SCARLET_RED,
     RID_SVXSTR_COLOR_TANGO_ALUMINIUM
 };
+
+//////////////////////////////////////////////////////////////////////////////
 
 bool SvxUnoConvertResourceString( sal_uInt16* pSourceResIds, sal_uInt16* pDestResIds, int nCount, String& rString ) throw()
 {
