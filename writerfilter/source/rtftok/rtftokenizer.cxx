@@ -31,7 +31,8 @@ RTFTokenizer::RTFTokenizer(RTFListener& rImport, SvStream* pInStream, uno::Refer
     m_xStatusIndicator(xStatusIndicator),
     m_nGroup(0),
     m_nLineNumber(0),
-    m_nLineStartPos(0)
+    m_nLineStartPos(0),
+    m_nGroupStart(0)
 {
     if (!RTFTokenizer::m_bControlWordsSorted)
     {
@@ -96,6 +97,7 @@ int RTFTokenizer::resolveParse()
             switch (ch)
             {
                 case '{':
+                    m_nGroupStart = Strm().Tell() - 1;
                     ret = m_rImport.pushState();
                     if (ret)
                         return ret;
@@ -334,6 +336,11 @@ OUString RTFTokenizer::getPosition()
     aRet.append(",");
     aRet.append(sal_Int32(Strm().Tell() - m_nLineStartPos + 1));
     return aRet.makeStringAndClear();
+}
+
+sal_Size RTFTokenizer::getGroupStart()
+{
+    return m_nGroupStart;
 }
 
 } // namespace rtftok
