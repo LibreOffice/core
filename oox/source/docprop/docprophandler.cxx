@@ -95,7 +95,7 @@ void OOXMLDocPropHandler::AddCustomProperty( const uno::Any& aAny )
 util::DateTime OOXMLDocPropHandler::GetDateTimeFromW3CDTF( const OUString& aChars )
 {
     oslDateTime aOslDTime = { 0, 0, 0, 0, 0, 0, 0, 0 };
-    sal_Int32 nLen = aChars.getLength();
+    const sal_Int32 nLen = aChars.getLength();
     if ( nLen >= 4 )
     {
         aOslDTime.Year = (sal_Int16)aChars.copy( 0, 4 ).toInt32();
@@ -118,10 +118,41 @@ util::DateTime OOXMLDocPropHandler::GetDateTimeFromW3CDTF( const OUString& aChar
                     {
                         aOslDTime.Seconds = (sal_uInt16)aChars.copy( 17, 2 ).toInt32();
                         nOptTime += 3;
-                        if ( nLen >= 21 && aChars.getStr()[19] == (sal_Unicode)'.' )
+                        if ( nLen >= 20 && aChars.getStr()[19] == (sal_Unicode)'.' )
                         {
-                            aOslDTime.NanoSeconds = (sal_uInt32)(aChars.copy( 20, 1 ).toInt32() * 10e8);
-                            nOptTime += 2;
+                            nOptTime += 1;
+                            sal_Int32 digitPos = 20;
+                            while (nLen > digitPos && digitPos < 29)
+                            {
+                                sal_Unicode c = aChars.getStr()[digitPos];
+                                if ( c < '0' || c > '9')
+                                    break;
+                                aOslDTime.NanoSeconds *= 10;
+                                aOslDTime.NanoSeconds += c - '0';
+                                ++digitPos;
+                            }
+                            if ( digitPos < 29 )
+                            {
+                                // read less digits than 9
+                                // add correct exponent of 10
+                                nOptTime += digitPos - 20;
+                                for(; digitPos<29; ++digitPos)
+                                {
+                                    aOslDTime.NanoSeconds *= 10;
+                                }
+                            }
+                            else
+                            {
+                                //skip digits with more precision than we can handle
+                                while(nLen > digitPos)
+                                {
+                                    sal_Unicode c = aChars.getStr()[digitPos];
+                                    if ( c < '0' || c > '9')
+                                        break;
+                                    ++digitPos;
+                                }
+                                nOptTime += digitPos - 20;
+                            }
                         }
                     }
 
@@ -130,7 +161,6 @@ util::DateTime OOXMLDocPropHandler::GetDateTimeFromW3CDTF( const OUString& aChar
                     {
                         if ( ( aChars.getStr()[16 + nOptTime] == (sal_Unicode)'+' || aChars.getStr()[16 + nOptTime] == (sal_Unicode)'-' )
                           && aChars.getStr()[16 + nOptTime + 3] == (sal_Unicode)':' )
-
                         {
                             nModif = aChars.copy( 16 + nOptTime + 1, 2 ).toInt32() * 3600;
                             nModif += aChars.copy( 16 + nOptTime + 4, 2 ).toInt32() * 60;
@@ -145,7 +175,7 @@ util::DateTime OOXMLDocPropHandler::GetDateTimeFromW3CDTF( const OUString& aChar
                         TimeValue aTmp;
                         if ( osl_getTimeValueFromDateTime( &aOslDTime, &aTmp ) )
                         {
-                            aTmp.Seconds += nModif;
+                            aTmp.Seconds -= nModif;
                             osl_getDateTimeFromTimeValue( &aTmp, &aOslDTime );
                         }
                     }
