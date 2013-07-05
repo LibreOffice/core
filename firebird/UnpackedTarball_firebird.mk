@@ -15,4 +15,9 @@ $(eval $(call gb_UnpackedTarball_add_patches,firebird,\
 	firebird/firebird-icu.patch.1 \
 ))
 
+ifeq ($(OS)-$(COM),WNT-MSC)
+$(eval $(call gb_UnpackedTarball_add_patches,firebird,\
+	firebird/firebird-cygwin-msvc.patch.1 \
+))
+endif
 # vim: set noet sw=4 ts=4:
