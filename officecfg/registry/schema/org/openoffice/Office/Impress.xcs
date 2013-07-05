@@ -468,15 +468,15 @@
           <label>List of files containing object effects</label>
         </info>
         <value oor:separator=";">vnd.sun.star.expand:$BRAND_BASE_DIR/$BRAND_SHARE_SUBDIR/config/soffice.cfg/simpress/effects.xml</value>
+      </prop>
       <prop oor:name="LayoutListFiles" oor:type="oor:string-list" oor:nillable="false">
-        <!-- OldPath: -->
-        <!-- OldLocation: -->
-        <!-- UIHints: List of files containing object effects -->
         <info>
           <desc>
             Contains a list of layout type.It contains
             properties of presobj like their Position,
-            Height and Width
+            Height and Width.Values are put through
+            macro expansion, so, vnd.sun.star.expand prefix
+            is allowed.
           </desc>
           <label>List of files containing list of layouts</label>
         </info>
