@@ -32,6 +32,7 @@
 #include <vcl/dibtools.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/graphicfilter.hxx>
+#include <vcl/toolbox.hxx>
 
 #include <boost/unordered_map.hpp>
 #include <algorithm>
@@ -200,9 +201,6 @@ using namespace ::com::sun::star;
 
 #define EXPAND_PROTOCOL                                 "vnd.sun.star.expand:"
 
-const Size  aImageSizeSmall( 16, 16 );
-const Size  aImageSizeBig( 26, 26 );
-
 //_________________________________________________________________________________________________________________
 //  private declarations!
 //_________________________________________________________________________________________________________________
@@ -288,7 +286,7 @@ class AddonsOptions_Impl : public ConfigItem
         const OUString                           GetAddonsToolbarResourceName( sal_uInt32 nIndex ) const;
         const OUString                           GetAddonsToolbarUIName( sal_uInt32 nIndex ) const;
         const Sequence< Sequence< PropertyValue > >&    GetAddonsHelpMenu    () const ;
-        Image                                           GetImageFromURL( const OUString& aURL, sal_Bool bBig, sal_Bool bNoScale ) const;
+        Image                                           GetImageFromURL( const OUString& aURL, sal_Bool bBig, sal_Bool bNoScale );
         const MergeMenuInstructionContainer&            GetMergeMenuInstructions() const;
         bool                                            GetMergeToolbarInstructions( const OUString& rToolbarName, MergeToolbarInstructionContainer& rToolbarInstructions ) const;
         const MergeStatusbarInstructionContainer&       GetMergeStatusbarInstructions() const;
@@ -299,14 +297,23 @@ class AddonsOptions_Impl : public ConfigItem
     //-------------------------------------------------------------------------------------------------------------
 
     private:
+        enum ImageSize
+        {
+            IMGSIZE_SMALL,
+            IMGSIZE_BIG
+        };
 
         struct ImageEntry
         {
-            Image   aImageSmall;
-            Image   aImageBig;
+            // if the image is set, it was embedded in some way,
+            // otherwise we use the associated URL to load on demand
 
-            Image   aImageSmallNoScale;
-            Image   aImageBigNoScale;
+            // accessed in this order
+            Image    aScaled[2];       // cached scaled images
+            Image    aImage[2];        // original un-scaled images
+            OUString aURL[2];         // URLs in case they are not loaded yet
+            ImageEntry() {}
+            void addImage(ImageSize eSize, const Image &rImage, const OUString &rURL);
         };
 
         typedef boost::unordered_map< OUString, ImageEntry, OUStringHash, ::std::equal_to< OUString > > ImageManager;
@@ -314,11 +321,6 @@ class AddonsOptions_Impl : public ConfigItem
         typedef std::vector< Sequence< Sequence< PropertyValue > > > AddonToolBars;
         typedef ::boost::unordered_map< OUString, MergeToolbarInstructionContainer, OUStringHash, ::std::equal_to< OUString > > ToolbarMergingInstructions;
 
-        enum ImageSize
-        {
-            IMGSIZE_SMALL,
-            IMGSIZE_BIG
-        };
 
         /*-****************************************************************************************************//**
             @short      return list of key names of our configuration management which represent oue module tree
@@ -340,7 +342,7 @@ class AddonsOptions_Impl : public ConfigItem
                                                    std::vector< OUString >& rAddonOfficeToolBarUINames );
         sal_Bool             ReadToolBarItemSet( const OUString rToolBarItemSetNodeName, Sequence< Sequence< PropertyValue > >& aAddonOfficeToolBarSeq );
         sal_Bool             ReadOfficeHelpSet( Sequence< Sequence< PropertyValue > >& aAddonOfficeHelpMenuSeq );
-        sal_Bool             ReadImages( ImageManager& aImageManager );
+        void                 ReadImages( ImageManager& aImageManager );
         sal_Bool             ReadMenuMergeInstructions( MergeMenuInstructionContainer& rContainer );
         sal_Bool             ReadToolbarMergeInstructions( ToolbarMergingInstructions& rToolbarMergeMap );
         sal_Bool             ReadStatusbarMergeInstructions( MergeStatusbarInstructionContainer& rContainer );
@@ -356,7 +358,7 @@ class AddonsOptions_Impl : public ConfigItem
         sal_Bool             ReadImagesItem( const OUString& aImagesItemNodeName, Sequence< PropertyValue >& aImagesItem );
         ImageEntry*          ReadImageData( const OUString& aImagesNodeName );
         void                 ReadAndAssociateImages( const OUString& aURL, const OUString& aImageId );
-        void                 ReadImageFromURL( ImageSize nImageSize, const OUString& aURL, Image& aImage, Image& aNoScaleImage );
+        Image                ReadImageFromURL( const OUString& aURL );
         sal_Bool             HasAssociatedImages( const OUString& aURL );
         void                 SubstituteVariables( OUString& aURL );
 
@@ -370,7 +372,7 @@ class AddonsOptions_Impl : public ConfigItem
         Sequence< OUString > GetPropertyNamesToolBarItem( const OUString& aPropertyRootNode ) const;
         Sequence< OUString > GetPropertyNamesStatusbarItem( const ::rtl::OUString& aPropertyRootNode ) const;
         Sequence< OUString > GetPropertyNamesImages( const OUString& aPropertyRootNode ) const;
-        sal_Bool             CreateImageFromSequence( Image& rImage, sal_Bool bBig, Sequence< sal_Int8 >& rBitmapDataSeq ) const;
+        sal_Bool             CreateImageFromSequence( Image& rImage, Sequence< sal_Int8 >& rBitmapDataSeq ) const;
 
     //-------------------------------------------------------------------------------------------------------------
     //  private member
@@ -403,6 +405,14 @@ class AddonsOptions_Impl : public ConfigItem
         ToolbarMergingInstructions                        m_aCachedToolbarMergingInstructions;
         MergeStatusbarInstructionContainer                m_aCachedStatusbarMergingInstructions;
 };
+
+void AddonsOptions_Impl::ImageEntry::addImage(ImageSize eSize,
+                                              const Image &rImage,
+                                              const OUString &rURL)
+{
+    aImage[(int)eSize] = rImage;
+    aURL[(int)eSize] = rURL;
+}
 
 //*****************************************************************************************************************
 //  constructor
@@ -637,17 +647,60 @@ const MergeStatusbarInstructionContainer& AddonsOptions_Impl::GetMergeStatusbarI
 //*****************************************************************************************************************
 //  public method
 //*****************************************************************************************************************
-Image AddonsOptions_Impl::GetImageFromURL( const OUString& aURL, sal_Bool bBig, sal_Bool bNoScale ) const
+static Image ScaleImage( const Image &rImage, bool bBig )
+{
+    Size aSize = ToolBox::GetDefaultImageSize(bBig);
+    BitmapEx aScaleBmp(rImage.GetBitmapEx());
+    SAL_INFO("framework", "Addons: expensive scale image from "
+             << aScaleBmp.GetSizePixel() << " to " << aSize);
+    aScaleBmp.Scale(aSize, BMP_SCALE_BESTQUALITY);
+    return Image(aScaleBmp);
+}
+
+Image AddonsOptions_Impl::GetImageFromURL( const OUString& aURL, sal_Bool bBig, sal_Bool bNoScale )
 {
     Image aImage;
+    ImageSize eSize = bBig ? IMGSIZE_BIG : IMGSIZE_SMALL;
+    int nIdx = (int)eSize;
+    int nOtherIdx = nIdx ? 0 : 1;
 
-    ImageManager::const_iterator pIter = m_aImageManager.find( aURL );
+    SAL_INFO("framework", "Expensive: Addons GetImageFromURL " << aURL <<
+             " big " << (bBig?"big":"litte") <<
+             " scale " << (bNoScale ? "noscale" : "scale"));
+
+    ImageManager::iterator pIter = m_aImageManager.find(aURL);
     if ( pIter != m_aImageManager.end() )
     {
-        if ( bNoScale )
-            aImage = ( bBig ? pIter->second.aImageBigNoScale : pIter->second.aImageSmallNoScale );
-        if ( !aImage )
-            aImage = ( bBig ? pIter->second.aImageBig : pIter->second.aImageSmall );
+        ImageEntry &rEntry = pIter->second;
+        // actually read the image ...
+        if (!rEntry.aImage[nIdx])
+            rEntry.aImage[nIdx] = ReadImageFromURL(rEntry.aURL[nIdx]);
+
+        if (!rEntry.aImage[nIdx])
+        { // try the other size and scale it
+            aImage = ScaleImage(ReadImageFromURL(rEntry.aURL[nOtherIdx]), bBig);
+            rEntry.aImage[nIdx] = aImage;
+            if (!rEntry.aImage[nIdx])
+                SAL_WARN("framework", "failed to load addons image " << aURL);
+        }
+
+        // FIXME: bNoScale is not terribly meaningful or useful
+
+        if (!aImage && bNoScale)
+            aImage = rEntry.aImage[nIdx];
+
+        if (!aImage && !!rEntry.aScaled[nIdx])
+            aImage = rEntry.aScaled[nIdx];
+
+        else // scale to the correct size for the theme / toolbox
+        {
+            aImage = rEntry.aImage[nIdx];
+            if (!aImage) // use and scale the other if one size is missing
+                aImage = rEntry.aImage[nOtherIdx];
+
+            aImage = ScaleImage(aImage, bBig);
+            rEntry.aScaled[nIdx] = aImage; // cache for next time
+        }
     }
 
     return aImage;
@@ -900,7 +953,7 @@ void AddonsOptions_Impl::InsertToolBarSeparator( Sequence< Sequence< PropertyVal
 //*****************************************************************************************************************
 //  private method
 //*****************************************************************************************************************
-sal_Bool AddonsOptions_Impl::ReadImages( ImageManager& aImageManager )
+void AddonsOptions_Impl::ReadImages( ImageManager& aImageManager )
 {
     // Read the user-defined Images set and fill image manager
     OUString                aAddonImagesNodeName( "AddonUI/Images" );
@@ -947,8 +1000,6 @@ sal_Bool AddonsOptions_Impl::ReadImages( ImageManager& aImageManager )
             }
         }
     }
-
-    return sal_True;
 }
 
 //*****************************************************************************************************************
@@ -1449,7 +1500,7 @@ sal_Bool AddonsOptions_Impl::ReadToolBarItem( const OUString& aToolBarItemNodeNa
 
             // Try to map a user-defined image URL to our internal private image URL
             aToolBarItemNodePropValues[ OFFSET_TOOLBARITEM_IMAGEIDENTIFIER ] >>= aImageId;
-             ReadAndAssociateImages( aURL, aImageId );
+            ReadAndAssociateImages( aURL, aImageId );
 
             aToolBarItem[ OFFSET_TOOLBARITEM_URL                ].Value <<= aURL;
             aToolBarItem[ OFFSET_TOOLBARITEM_TITLE              ].Value <<= aTitle;
@@ -1505,6 +1556,7 @@ sal_Bool AddonsOptions_Impl::ReadSubMenuEntries( const Sequence< OUString >& aSu
 //*****************************************************************************************************************
 sal_Bool AddonsOptions_Impl::HasAssociatedImages( const OUString& aURL )
 {
+    // FIXME: potentially this is not so useful in a world of delayed image loading
     ImageManager::const_iterator pIter = m_aImageManager.find( aURL );
     return ( pIter != m_aImageManager.end() );
 }
@@ -1529,8 +1581,10 @@ void AddonsOptions_Impl::SubstituteVariables( OUString& aURL )
 //*****************************************************************************************************************
 //  private method
 //*****************************************************************************************************************
-void AddonsOptions_Impl::ReadImageFromURL( ImageSize nImageSize, const OUString& aImageURL, Image& aImage, Image& aImageNoScale )
+Image AddonsOptions_Impl::ReadImageFromURL(const OUString& aImageURL)
 {
+    Image aImage;
+
     SvStream* pStream = UcbStreamHelper::CreateStream( aImageURL, STREAM_STD_READ );
     if ( pStream && ( pStream->GetErrorCode() == 0 ))
     {
@@ -1542,8 +1596,6 @@ void AddonsOptions_Impl::ReadImageFromURL( ImageSize nImageSize, const OUString&
 
         BitmapEx aBitmapEx = aGraphic.GetBitmapEx();
 
-        const Size aSize = ( nImageSize == IMGSIZE_SMALL ) ? aImageSizeSmall : aImageSizeBig; // Sizes used for menu/toolbox images
-
         Size aBmpSize = aBitmapEx.GetSizePixel();
         if ( aBmpSize.Width() > 0 && aBmpSize.Height() > 0 )
         {
@@ -1551,24 +1603,13 @@ void AddonsOptions_Impl::ReadImageFromURL( ImageSize nImageSize, const OUString&
             if( !aBitmapEx.IsTransparent() )
                 aBitmapEx = BitmapEx( aBitmapEx.GetBitmap(), COL_LIGHTMAGENTA );
 
-            // A non-scaled bitmap can have a flexible width, but must have a defined height!
-            Size aNoScaleSize( aBmpSize.Width(), aSize.Height() );
-            if ( aBmpSize != aNoScaleSize )
-            {
-                BitmapEx aNoScaleBmp( aBitmapEx );
-                aNoScaleBmp.Scale( aNoScaleSize, BMP_SCALE_BESTQUALITY );
-            }
-            else
-                aImageNoScale = Image( aBitmapEx );
-
-            if ( aBmpSize != aSize )
-                aBitmapEx.Scale( aSize, BMP_SCALE_BESTQUALITY );
-
-            aImage = Image( aBitmapEx );
+            aImage = Image(aBitmapEx);
         }
     }
 
     delete pStream;
+
+    return aImage;
 }
 
 //*****************************************************************************************************************
@@ -1576,48 +1617,27 @@ void AddonsOptions_Impl::ReadImageFromURL( ImageSize nImageSize, const OUString&
 //*****************************************************************************************************************
 void AddonsOptions_Impl::ReadAndAssociateImages( const OUString& aURL, const OUString& aImageId )
 {
-    const int   MAX_NUM_IMAGES = 2;
-    const char* aExtArray[MAX_NUM_IMAGES] = { "_16", "_26" };
-    const char* pBmpExt = ".bmp";
-
     if ( aImageId.isEmpty() )
         return;
 
-    bool        bImageFound = true;
     ImageEntry  aImageEntry;
     OUString    aImageURL( aImageId );
 
     SubstituteVariables( aImageURL );
 
-    // Loop to create the four possible image names and try to read the bitmap files
-    for ( int i = 0; i < MAX_NUM_IMAGES; i++ )
+    // Loop to create the two possible image names and try to read the bitmap files
+    static const char* aExtArray[] = { "_16", "_26" };
+    for ( size_t i = 0; i < SAL_N_ELEMENTS(aExtArray); i++ )
     {
         OUStringBuffer aFileURL( aImageURL );
         aFileURL.appendAscii( aExtArray[i] );
-        aFileURL.appendAscii( pBmpExt );
+        aFileURL.appendAscii( ".bmp" );
 
-        Image aImage;
-        Image aImageNoScale;
-        ReadImageFromURL( ((i==0)||(i==2)) ? IMGSIZE_SMALL : IMGSIZE_BIG, aFileURL.makeStringAndClear(), aImage, aImageNoScale );
-        if ( !!aImage )
-        {
-            bImageFound = true;
-            switch ( i )
-            {
-                case 0:
-                    aImageEntry.aImageSmall          = aImage;
-                    aImageEntry.aImageSmallNoScale   = aImageNoScale;
-                    break;
-                case 1:
-                    aImageEntry.aImageBig            = aImage;
-                    aImageEntry.aImageBigNoScale     = aImageNoScale;
-                    break;
-            }
-        }
+        aImageEntry.addImage( !i ? IMGSIZE_SMALL : IMGSIZE_BIG,
+                              Image(), aFileURL.makeStringAndClear() );
     }
 
-    if ( bImageFound )
-        m_aImageManager.insert( ImageManager::value_type( aURL, aImageEntry ));
+    m_aImageManager.insert( ImageManager::value_type( aURL, aImageEntry ));
 }
 
 //*****************************************************************************************************************
@@ -1643,50 +1663,26 @@ AddonsOptions_Impl::ImageEntry* AddonsOptions_Impl::ReadImageData( const OUStrin
             Image aImage;
             if (( aPropertyData[i] >>= aImageDataSeq ) &&
                 aImageDataSeq.getLength() > 0 &&
-                ( CreateImageFromSequence( aImage,
-                                        ( i == OFFSET_IMAGES_BIG ),
-                                        aImageDataSeq )) )
+                ( CreateImageFromSequence( aImage, aImageDataSeq ) ) )
             {
                 if ( !pEntry )
                     pEntry = new ImageEntry;
-
-                if ( i == OFFSET_IMAGES_SMALL )
-                    pEntry->aImageSmall = aImage;
-                else if ( i == OFFSET_IMAGES_BIG )
-                    pEntry->aImageBig = aImage;
+                pEntry->addImage(i == OFFSET_IMAGES_SMALL ? IMGSIZE_SMALL : IMGSIZE_BIG, aImage, "");
             }
         }
         else
         {
+            if(!pEntry)
+                pEntry = new ImageEntry();
+
             // Retrieve image data from a external bitmap file. Make sure that embedded image data
             // has a higher priority.
             aPropertyData[i] >>= aImageURL;
 
-            if ( !aImageURL.isEmpty() )
-            {
-                Image aImage;
-                Image aImageNoScale;
+            SubstituteVariables( aImageURL );
 
-                SubstituteVariables( aImageURL );
-                ReadImageFromURL( ((i==OFFSET_IMAGES_SMALL_URL)||(i==OFFSET_IMAGES_SMALLHC_URL)) ? IMGSIZE_SMALL : IMGSIZE_BIG,
-                                  aImageURL, aImage, aImageNoScale );
-                if ( !!aImage )
-                {
-                    if ( !pEntry )
-                        pEntry = new ImageEntry;
-
-                    if ( i == OFFSET_IMAGES_SMALL_URL && !pEntry->aImageSmall )
-                    {
-                        pEntry->aImageSmall = aImage;
-                        pEntry->aImageSmallNoScale = aImageNoScale;
-                    }
-                    else if ( !pEntry->aImageBig )
-                    {
-                        pEntry->aImageBig = aImage;
-                        pEntry->aImageBigNoScale = aImageNoScale;
-                    }
-                }
-            }
+            pEntry->addImage(i == OFFSET_IMAGES_SMALL ? IMGSIZE_SMALL : IMGSIZE_BIG,
+                             Image(), aImageURL);
         }
     }
 
@@ -1696,10 +1692,9 @@ AddonsOptions_Impl::ImageEntry* AddonsOptions_Impl::ReadImageData( const OUStrin
 //*****************************************************************************************************************
 //  private method
 //*****************************************************************************************************************
-sal_Bool AddonsOptions_Impl::CreateImageFromSequence( Image& rImage, sal_Bool bBig, Sequence< sal_Int8 >& rBitmapDataSeq ) const
+sal_Bool AddonsOptions_Impl::CreateImageFromSequence( Image& rImage, Sequence< sal_Int8 >& rBitmapDataSeq ) const
 {
-    sal_Bool    bResult = sal_False;
-    Size        aSize = bBig ? aImageSizeBig : aImageSizeSmall; // Sizes used for menu/toolbox images
+    sal_Bool bResult = sal_False;
 
     if ( rBitmapDataSeq.getLength() > 0 )
     {
@@ -1707,10 +1702,6 @@ sal_Bool AddonsOptions_Impl::CreateImageFromSequence( Image& rImage, sal_Bool bB
         BitmapEx        aBitmapEx;
 
         ReadDIBBitmapEx(aBitmapEx, aMemStream);
-
-        // Scale bitmap to fit the correct size for the menu/toolbar. Use best quality
-        if ( aBitmapEx.GetSizePixel() != aSize )
-            aBitmapEx.Scale( aSize, BMP_SCALE_BESTQUALITY );
 
         if( !aBitmapEx.IsTransparent() )
         {
