@@ -309,30 +309,36 @@ OUString SAL_CALL SmFilterDetect::detect( Sequence< PropertyValue >& lDescriptor
                     }
                     else
                     {
-                        const sal_uInt16 nSize = 5;
+                        // 200 should be enough for the XML
+                        // version, encoding and !DOCTYPE
+                        // stuff I hope?
+                        const sal_uInt16 nSize = 200;
                         sal_Char aBuffer[nSize+1];
                         aBuffer[nSize] = 0;
                         pStrm->Seek( STREAM_SEEK_TO_BEGIN );
+                        pStrm->StartReadingUnicodeText(RTL_TEXTENCODING_DONTKNOW); // avoid BOM marker
                         sal_uLong nBytesRead = pStrm->Read( aBuffer, nSize );
-                        if (nBytesRead == nSize)
+                        if (nBytesRead >= 6)
                         {
-                            if (0 == strncmp( "<?xml",aBuffer,nSize))
+                            bool bIsMathType = false;
+                            if (0 == strncmp( "<?xml", aBuffer, 5))
                             {
-                                // 200 should be enough for the XML
-                                // version, encoding and !DOCTYPE
-                                // stuff I hope?
-                                sal_Char aBuffer2[200];
-                                nBytesRead = pStrm->Read( aBuffer2, sizeof(aBuffer2) - 1);
-                                aBuffer2[nBytesRead] = 0;
-                                if (strstr( aBuffer2, "<math>" ) ||
-                                    strstr( aBuffer2, "<math " ) ||
-                                    strstr( aBuffer2, "<math:math " ))
-                                {
-                                    static const sal_Char sFltrNm_2[] = MATHML_XML;
-                                    static const sal_Char sTypeNm_2[] = "math_MathML_XML_Math";
-                                    aFilterName.AssignAscii( sFltrNm_2 );
-                                    aTypeName.AssignAscii( sTypeNm_2 );
-                                }
+                                if (strstr( aBuffer, "<math>" ) ||
+                                        strstr( aBuffer, "<math " ) ||
+                                        strstr( aBuffer, "<math:math " ))
+                                    bIsMathType = true;
+                            }
+                            // this is the old <math tag to MathML in the beginning of the XML file
+                            else if (0 == strncmp( "<math ", aBuffer, 6) ||
+                                         0 == strncmp( "<math> ", aBuffer, 7) ||
+                                         0 == strncmp( "<math:math> ", aBuffer, 12))
+                                bIsMathType = true;
+
+                            if (bIsMathType){
+                                static const sal_Char sFltrNm_2[] = MATHML_XML;
+                                static const sal_Char sTypeNm_2[] = "math_MathML_XML_Math";
+                                aFilterName.AssignAscii( sFltrNm_2 );
+                                aTypeName.AssignAscii( sTypeNm_2 );
                             }
                         }
                     }
