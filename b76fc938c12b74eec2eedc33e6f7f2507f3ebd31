@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXn///V4\u003d",
+        "filename": "sal/osl/unx/time.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-07-05T13:58:09Z",
+      "side": 1,
+      "message": "I\u0027 not convinced of this change, even if tm_tm_year is int (for historical reasons) it respectively the functions using it and converting to time_t can\u0027t all take a negative year, at least not guaranteed on all systems, can they? It is always documented as \"years since 1900\".\n\nSummary of the following: if we allow tm_year to become negative, should we forbid values \u003c -1899 ?\n\nhttp://www.open-std.org/jtc1/sc22/wg21/docs/papers/2006/n2058.html suggests that negative values may be valid in general but also states\n\n\"\nNote\n\nMost implementations of date input/output in current standard libraries accept and correctly handle tm_year with negative values. For example, tm_year \u003d\u003d -1 logically corresponds to 1899. Recently one implementation made a recent change by that prohibited negative tm_year values. The author has not been able to find anything in the standard or otherwise that specifies how negative values of tm_year should be handled. This may need to change to support portable implementations going forward.\n\"\n\nhttps://lists.gnu.org/archive/html/bug-gnulib/2011-06/msg00193.html says \"POSIX documents that tm_year \u003c -1899 produces unspecified results, since year 0 does not exist in the Gregorian or Julian calendar.\"\n\nhttp://pubs.opengroup.org/onlinepubs/9699919799/functions/strftime.html says \"The ISO C standard allows tm_year to assume values corresponding to years before year 1, but the use of such years provided unspecified results.)\"\n\nhttp://pubs.opengroup.org/onlinepubs/9699919799/basedefs/time.h.html in the informative section says \"tm_year is a signed value; therefore, years before 1900 may be represented.\"",
+      "revId": "b76fc938c12b74eec2eedc33e6f7f2507f3ebd31",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
