@@ -1928,7 +1928,7 @@ PresentationTimeLabel::PresentationTimeLabel (
 void PresentationTimeLabel::TimeHasChanged (const oslDateTime& rCurrentTime)
 {
     TimeValue aCurrentTimeValue;
-    if (osl_getTimeValueFromDateTime(const_cast<oslDateTime*>(&rCurrentTime), &aCurrentTimeValue))
+    if (osl_getTimeValueFromDateTime(&rCurrentTime, &aCurrentTimeValue))
     {
         if (maStartTimeValue.Seconds==0 && maStartTimeValue.Nanosec==0)
         {

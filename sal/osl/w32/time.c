@@ -65,7 +65,7 @@ sal_Bool SAL_CALL osl_getSystemTime(TimeValue* pTimeVal)
 // osl_getDateTimeFromTimeValue
 //--------------------------------------------------
 
-sal_Bool SAL_CALL osl_getDateTimeFromTimeValue( TimeValue* pTimeVal, oslDateTime* pDateTime )
+sal_Bool SAL_CALL osl_getDateTimeFromTimeValue( const TimeValue* pTimeVal, oslDateTime* pDateTime )
 {
     FILETIME    aFileTime;
     SYSTEMTIME  aSystemTime;
@@ -95,7 +95,7 @@ sal_Bool SAL_CALL osl_getDateTimeFromTimeValue( TimeValue* pTimeVal, oslDateTime
 // osl_getTimeValueFromDateTime
 //--------------------------------------------------
 
-sal_Bool SAL_CALL osl_getTimeValueFromDateTime( oslDateTime* pDateTime, TimeValue* pTimeVal )
+sal_Bool SAL_CALL osl_getTimeValueFromDateTime( const oslDateTime* pDateTime, TimeValue* pTimeVal )
 {
     FILETIME    aFileTime;
     SYSTEMTIME  aSystemTime;
@@ -126,7 +126,7 @@ sal_Bool SAL_CALL osl_getTimeValueFromDateTime( oslDateTime* pDateTime, TimeValu
 // osl_getLocalTimeFromSystemTime
 //--------------------------------------------------
 
-sal_Bool SAL_CALL osl_getLocalTimeFromSystemTime( TimeValue* pSystemTimeVal, TimeValue* pLocalTimeVal )
+sal_Bool SAL_CALL osl_getLocalTimeFromSystemTime( const TimeValue* pSystemTimeVal, TimeValue* pLocalTimeVal )
 {
     TIME_ZONE_INFORMATION aTimeZoneInformation;
     DWORD Success;
@@ -157,7 +157,7 @@ sal_Bool SAL_CALL osl_getLocalTimeFromSystemTime( TimeValue* pSystemTimeVal, Tim
 // osl_getSystemTimeFromLocalTime
 //--------------------------------------------------
 
-sal_Bool SAL_CALL osl_getSystemTimeFromLocalTime( TimeValue* pLocalTimeVal, TimeValue* pSystemTimeVal )
+sal_Bool SAL_CALL osl_getSystemTimeFromLocalTime( const TimeValue* pLocalTimeVal, TimeValue* pSystemTimeVal )
 {
     TIME_ZONE_INFORMATION aTimeZoneInformation;
     DWORD Success;

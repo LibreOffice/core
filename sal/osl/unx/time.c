@@ -92,7 +92,7 @@ sal_Bool SAL_CALL osl_getSystemTime(TimeValue* tv)
  * osl_getDateTimeFromTimeValue
  *-------------------------------------------------*/
 
-sal_Bool SAL_CALL osl_getDateTimeFromTimeValue( TimeValue* pTimeVal, oslDateTime* pDateTime )
+sal_Bool SAL_CALL osl_getDateTimeFromTimeValue( const TimeValue* pTimeVal, oslDateTime* pDateTime )
 {
     struct tm *pSystemTime;
     struct tm tmBuf;
@@ -126,7 +126,7 @@ sal_Bool SAL_CALL osl_getDateTimeFromTimeValue( TimeValue* pTimeVal, oslDateTime
  * osl_getTimeValueFromDateTime
  *--------------------------------------------------*/
 
-sal_Bool SAL_CALL osl_getTimeValueFromDateTime( oslDateTime* pDateTime, TimeValue* pTimeVal )
+sal_Bool SAL_CALL osl_getTimeValueFromDateTime( const oslDateTime* pDateTime, TimeValue* pTimeVal )
 {
     struct tm   aTime;
     time_t      nSeconds;
@@ -193,7 +193,7 @@ sal_Bool SAL_CALL osl_getTimeValueFromDateTime( oslDateTime* pDateTime, TimeValu
  * osl_getLocalTimeFromSystemTime
  *--------------------------------------------------*/
 
-sal_Bool SAL_CALL osl_getLocalTimeFromSystemTime( TimeValue* pSystemTimeVal, TimeValue* pLocalTimeVal )
+sal_Bool SAL_CALL osl_getLocalTimeFromSystemTime( const TimeValue* pSystemTimeVal, TimeValue* pLocalTimeVal )
 {
     struct tm *pLocalTime;
     struct tm tmBuf;
@@ -230,7 +230,7 @@ sal_Bool SAL_CALL osl_getLocalTimeFromSystemTime( TimeValue* pSystemTimeVal, Tim
  * osl_getSystemTimeFromLocalTime
  *--------------------------------------------------*/
 
-sal_Bool SAL_CALL osl_getSystemTimeFromLocalTime( TimeValue* pLocalTimeVal, TimeValue* pSystemTimeVal )
+sal_Bool SAL_CALL osl_getSystemTimeFromLocalTime( const TimeValue* pLocalTimeVal, TimeValue* pSystemTimeVal )
 {
     struct tm *pLocalTime;
     struct tm tmBuf;
