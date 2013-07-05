@@ -66,6 +66,7 @@
 #include <unotools/streamwrap.hxx>
 #include <rtl/uri.hxx>
 #include <unotools/ucbstreamhelper.hxx>
+#include <osl/file.h>
 
 #include "../ui/inc/DrawDocShell.hxx"
 #include "Outliner.hxx"
@@ -1192,12 +1193,11 @@ static const LayoutDescriptor& GetLayoutDescriptor( AutoLayout eLayout )
 //to get the root element of the xml file
 Reference<XElement> getRootElement()
 {
-    rtl::OUString filepath="/home/vishv/layoutlist.xml";
     const Reference<css::uno::XComponentContext> xContext(comphelper_getProcessComponentContext());
     Reference< XMultiServiceFactory > xServiceFactory(xContext->getServiceManager(), UNO_QUERY_THROW );
     Reference< util::XMacroExpander > xMacroExpander =util::theMacroExpander::get(xContext);
     Reference< XMultiServiceFactory > xConfigProvider =configuration::theDefaultProvider::get( xContext );
-       // read path to transition effects files from config
+
     Any propValue = uno::makeAny(
         beans::PropertyValue(
             "nodepath", -1,
@@ -1208,31 +1208,32 @@ Reference<XElement> getRootElement()
         xConfigProvider->createInstanceWithArguments(
             "com.sun.star.configuration.ConfigurationAccess",
             Sequence<Any>( &propValue, 1 ) ), UNO_QUERY_THROW );
-    uno::Sequence< OUString > aFiles;
+    Sequence< rtl::OUString > aFiles;
     xNameAccess->getByName( "LayoutListFiles" ) >>= aFiles;
-
+    rtl::OUString aURL;
     for( sal_Int32 i=0; i<aFiles.getLength(); ++i )
     {
-        OUString aURL = aFiles[i];
+        aURL = aFiles[i];
         if( aURL.startsWith( EXPAND_PROTOCOL ) )
         {
             // cut protocol
-            OUString aMacro( aURL.copy( sizeof ( EXPAND_PROTOCOL ) -1 ) );
+            rtl::OUString aMacro( aURL.copy( sizeof ( EXPAND_PROTOCOL ) -1 ) );
             // decode uric class chars
             aMacro = rtl::Uri::decode( aMacro, rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8 );
             // expand macro string
             aURL = xMacroExpander->expandMacros( aMacro );
         }
-        SvStream*   pIStm = ::utl::UcbStreamHelper::CreateStream( aURL, STREAM_READ );
-        ::utl::OInputStreamWrapper* isw=new ::utl::OInputStreamWrapper( pIStm);
-        Reference<XInputStream> xIs(isw);
-
-        rtl::OUString sServName = rtl::OUString::createFromAscii("com.sun.star.xml.dom.DocumentBuilder");
-        Reference<XDocumentBuilder> xDb( xServiceFactory->createInstance(sServName), UNO_QUERY);
-        const Reference<XDocument> xDom(xDb->parse(xIs), UNO_QUERY_THROW );
-        const Reference<XElement> xRoot( xDom->getDocumentElement(),UNO_QUERY_THROW );
-        return xRoot;//this loops seems to work only once,so temporary returning the root element
     }
+    if( aURL.startsWith( "file://" ) )
+    {
+        rtl::OUString aSysPath;
+        if( osl_getSystemPathFromFileURL( aURL.pData, &aSysPath.pData ) == osl_File_E_None )
+            aURL = aSysPath;
+    }
+    const Reference<XDocumentBuilder> xDocBuilder(css::xml::dom::DocumentBuilder::create(comphelper::getComponentContext(xServiceFactory)));
+    const Reference<XDocument> xDoc = xDocBuilder->parseURI(aURL);
+    const Reference<XElement> xRoot = xDoc->getDocumentElement();
+    return xRoot;//this loops seems to work only once,so temporary returning the root element
 }
 
 //read the information from XML file(traversing from layout node)
