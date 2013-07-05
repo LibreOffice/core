@@ -33,14 +33,17 @@ $(call gb_ExternalProject_get_state_target,firebird,build):
 	$(call gb_ExternalProject_run,build,\
 		unset MAKEFLAGS \
 		&& export PKG_CONFIG="" \
-		&& export CXXFLAGS="-L$(OUTDIR)/lib \
+		&& export CXXFLAGS=" \
 			$(if $(filter NO,$(SYSTEM_BOOST)),-I$(call gb_UnpackedTarball_get_dir,boost),$(BOOST_CPPFLAGS)) \
 			$(if $(filter NO,$(SYSTEM_ICU)), \
 				-I$(call gb_UnpackedTarball_get_dir,icu)/source \
 				-I$(call gb_UnpackedTarball_get_dir,icu)/source/i18n \
 				-I$(call gb_UnpackedTarball_get_dir,icu)/source/common \
-				,$(ICU_CPPFLAGS))" \
-		&& export LD_LIBRARY_PATH="$(OUTDIR)/lib" \
+				,$(ICU_CPPFLAGS)) \
+				-L$(OUTDIR)/lib \
+				-L$(call gb_UnpackedTarball_get_dir,boost)/source/lib" \
+		&& export LD_LIBRARY_PATH="$(OUTDIR)/lib:$(call gb_UnpackedTarball_get_dir,boost)/source/lib" \
+		&& export PATH="$(PATH):$(shell cygpath $(OUTDIR)/lib):$(shell cygpath $(call gb_UnpackedTarball_get_dir,icu)/source/lib)" \
 		&& ./configure \
 			--without-editline \
 			--disable-superserver \
@@ -50,5 +53,4 @@ $(call gb_ExternalProject_get_state_target,firebird,build):
 			$(if $(filter IOS ANDROID,$(OS)),--disable-shared,--disable-static) \
 		&& $(MAKE) firebird_embedded \
 	)
-
 # vim: set noet sw=4 ts=4:
