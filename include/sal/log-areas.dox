@@ -147,7 +147,8 @@ certain functionality.
 
 @section framework
 
-@li @c fwk - framework
+@li @c framework
+@li @c fwk - framework (abbreviation)
 @li @c fwk.desktop
 @li @c fwk.dispatch
 @li @c fwk.session
