@@ -23,6 +23,7 @@
 
 #include <sfx2/sidebar/ResourceDefinitions.hrc>
 #include <sfx2/sidebar/Theme.hxx>
+#include <sfx2/sidebar/Layouter.hxx>
 #include <sfx2/sidebar/ControlFactory.hxx>
 #include <NumberFormatPropertyPanel.hxx>
 #include <NumberFormatPropertyPanel.hrc>
@@ -40,6 +41,7 @@
 
 using namespace css;
 using namespace cssu;
+using ::sfx2::sidebar::Layouter;
 using ::sfx2::sidebar::Theme;
 
 #define A2S(pString) (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(pString)))
@@ -81,6 +83,10 @@ NumberFormatPropertyPanel::NumberFormatPropertyPanel(
 {
     Initialize();
     FreeResource();
+
+    Layouter::PrepareForLayouting(*mpFtCategory);
+    Layouter::PrepareForLayouting(*mpFtDecimals);
+    Layouter::PrepareForLayouting(*mpFtLeadZeroes);
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -393,8 +399,17 @@ SfxBindings* NumberFormatPropertyPanel::GetBindings()
     return mpBindings;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// namespace close
+
+
+
+void NumberFormatPropertyPanel::Resize (void)
+{
+    const sal_Int32 nRight (GetSizePixel().Width() - Layouter::MapWidth(*this, TB_BORDER));
+    Layouter::SetRight(*mpFtCategory, nRight);
+    Layouter::SetRight(*mpFtLeadZeroes, nRight);
+    Layouter::SetRight(*mpBtnNegRed, nRight);
+    Layouter::SetRight(*mpBtnThousand, nRight);
+}
 
 }} // end of namespace ::sc::sidebar
 

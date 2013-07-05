@@ -28,6 +28,32 @@
 #define CUSTOM_Y                OFFSET_Y + POPUPPANEL_MARGIN_SMALL * 3 + 15 * 6 + TEXT_HEIGHT
 #define VS_UNDERLINE_WIDTH  57
 #define VS_UNDERLINE_HEIGHT  12 * 10
+
+#define CONTROL_HEIGHT_FONT_NAME        250
+#define CONTROL_HEIGHT_FONT_SIZE        180
+#define FONTSIZE_WIDTH                  (TOOLBOX_ITEM_WIDTH * 2 - 1)
+#define FONTNAME_WIDTH                  (TOOLBOX_ITEM_WIDTH * 4)
+//PROPERTYPAGE_WIDTH - (FONTSIZE_WIDTH) - 6)
+
+#define TB_SPACE                18
+#define TB_SPACE_V              4
+#define TEXT_WIDTH              TOOLBOX_42_42_ITEM_DD_WIDTH + TB_SPACE - 3
+
+#define FT_TB_SPACE             1
+#define BK_IMG                  20
+
+#define X0                      SECTIONPAGE_MARGIN_HORIZONTAL
+#define X1                      SECTIONPAGE_MARGIN_HORIZONTAL + 1 + TOOLBOX_ITEM_WIDTH * 2  + 4
+#define X2                      (PROPERTYPAGE_WIDTH - (FONTSIZE_WIDTH))
+#define X3                      (X2 - (TOOLBOX_ITEM_DD_WIDTH) - 2)
+
+#define FIRST_LINE_Y            SECTIONPAGE_MARGIN_VERTICAL_TOP
+#define SECOND_LINE_Y           FIRST_LINE_Y + CBOX_HEIGHT + CONTROL_SPACING_VERTICAL  + 1
+#define THIRD_LINE_Y            SECOND_LINE_Y + CONTROL_SPACING_VERTICAL + (TOOLBOX_ITEM_HEIGHT + 2)
+
+
+
+
 //#define FT_TEST                   1
 #define CB_SBFONT_FONT          2
 #define MB_SBFONT_FONTSIZE      3

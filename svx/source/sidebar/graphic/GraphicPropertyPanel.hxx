@@ -25,6 +25,7 @@
 #include <vcl/ctrl.hxx>
 #include <sfx2/sidebar/SidebarPanelBase.hxx>
 #include <sfx2/sidebar/ControllerItem.hxx>
+#include <sfx2/sidebar/GridLayouter.hxx>
 #include <vcl/fixed.hxx>
 #include <boost/scoped_ptr.hpp>
 
@@ -56,6 +57,8 @@ public:
         const bool bIsEnabled);
 
     SfxBindings* GetBindings();
+
+    virtual void Resize (void);
 
 private:
     //ui controls
@@ -98,6 +101,7 @@ private:
 
     cssu::Reference<css::frame::XFrame>                 mxFrame;
     SfxBindings*                                        mpBindings;
+    ::sfx2::sidebar::GridLayouter maLayouter;
 
     DECL_LINK( ModifyBrightnessHdl, void * );
     DECL_LINK( ModifyContrastHdl, void * );

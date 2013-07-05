@@ -99,6 +99,10 @@ private:
     DECL_LINK(Activate, ToolBox*);
     DECL_LINK(Deactivate, ToolBox*);
 
+    using ToolBox::Activate;
+    using ToolBox::Deactivate;
+    using DockingWindow::SetPosSizePixel;
+
     void CreateController (
         const sal_uInt16 nItemId,
         const cssu::Reference<css::frame::XFrame>& rxFrame,

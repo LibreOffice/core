@@ -25,6 +25,7 @@
 #include <vcl/ctrl.hxx>
 #include <sfx2/sidebar/ControllerItem.hxx>
 #include <sfx2/sidebar/IContextChangeReceiver.hxx>
+#include <sfx2/sidebar/GridLayouter.hxx>
 #include <editeng/lspcitem.hxx>
 #include <svtools/ctrlbox.hxx>
 #include <svx/tbxcolorupdate.hxx>
@@ -210,7 +211,7 @@ private:
     ParaNumberingPopup maNumberingPopup;
     ColorPopup maBGColorPopup;
     cssu::Reference<css::ui::XSidebar> mxSidebar;
-
+    ::sfx2::sidebar::GridLayouter maLayouter;
 
     ParaPropertyPanel (
         Window* pParent,
@@ -248,6 +249,8 @@ private:
     void initial();
     void ReSize(bool bSize);
 
+    // Inherited from vcl Window.
+    virtual void Resize (void);
 
     PopupControl* CreateLineSpacingControl (PopupContainer* pParent);
     PopupControl* CreateBulletsPopupControl (PopupContainer* pParent);

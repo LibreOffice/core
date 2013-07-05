@@ -34,6 +34,7 @@
 #include <sfx2/sidebar/Theme.hxx>
 #include <sfx2/sidebar/ResourceDefinitions.hrc>
 #include <sfx2/sidebar/ControlFactory.hxx>
+#include <sfx2/sidebar/Layouter.hxx>
 #include <sfx2/sidebar/Tools.hxx>
 #include <svx/sidebar/PopupContainer.hxx>
 #include <sfx2/dispatch.hxx>
@@ -50,8 +51,10 @@
 #include <sfx2/objsh.hxx>
 #include <svtools/unitconv.hxx>
 #include <boost/bind.hpp>
+
 using namespace css;
 using namespace cssu;
+using namespace ::sfx2::sidebar;
 using ::sfx2::sidebar::Theme;
 using ::sfx2::sidebar::ControlFactory;
 
@@ -110,6 +113,7 @@ namespace svx {namespace sidebar {
 #define LINE_POINT2_WHITE                               Point(LogicToPixel(Point(LINE_X_WHITE,LINE_BOT_Y), MAP_APPFONT))
 #define LINE_POINT3_WHITE                               Point(LogicToPixel(Point(LINE_X_WHITE,LINE_TOP_Y2), MAP_APPFONT))
 #define LINE_POINT4_WHITE                               Point(LogicToPixel(Point(LINE_X_WHITE,LINE_BOT_Y2), MAP_APPFONT))
+
 
 ParaPropertyPanel* ParaPropertyPanel::Create (
     Window* pParent,
@@ -357,9 +361,33 @@ void ParaPropertyPanel::ReSize(bool bSize)
         SetSizePixel(aSize);
     }
 
+    maLayouter.Layout();
+
     if (mxSidebar.is())
         mxSidebar->requestLayout();
 }
+
+
+
+
+void ParaPropertyPanel::Resize (void)
+{
+    switch (maContext.GetCombinedContext_DI())
+    {
+        case CombinedEnumContext(Application_Calc, Context_DrawText):
+        case CombinedEnumContext(Application_WriterVariants, Context_DrawText):
+        case CombinedEnumContext(Application_WriterVariants, Context_Annotation):
+            ReSize(false);
+            break;
+
+        default:
+            ReSize(true);
+            break;
+    }
+}
+
+
+
 
 void ParaPropertyPanel::EndSpacingPopupMode (void)
 {
@@ -1648,10 +1676,67 @@ ParaPropertyPanel::ParaPropertyPanel(Window* pParent,
       maBulletsPopup(this, ::boost::bind(&ParaPropertyPanel::CreateBulletsPopupControl, this, _1)),
       maNumberingPopup(this, ::boost::bind(&ParaPropertyPanel::CreateNumberingPopupControl, this, _1)),
       maBGColorPopup(this, ::boost::bind(&ParaPropertyPanel::CreateBGColorPopupControl, this, _1)),
-      mxSidebar(rxSidebar)
+      mxSidebar(rxSidebar),
+      maLayouter(*this)
 {
     initial();
     FreeResource();
+
+    // Setup the grid layouter.
+    const sal_Int32 nMappedImageWidth (Layouter::MapWidth(*this, IMAGE_SIZE));
+    const sal_Int32 nMappedImageOffset (Layouter::MapWidth(*this, -3));
+    const sal_Int32 nMappedToolBoxItemWidth (Layouter::MapWidth(*this, TOOLBOX_ITEM_WIDTH));
+    const sal_Int32 nMappedControlWidth (Layouter::MapWidth(*this, CONTROL_WIDTH -10));
+
+    maLayouter.GetCell(0,0).SetControl(*mpFTUL).SetGridWidth(2);
+    maLayouter.GetCell(1,0).SetControl(*mpTbxUL_IncDecBackground).SetGridWidth(2).SetFixedWidth();
+
+    maLayouter.GetCell(0,3).SetControl(*mpFTIndent).SetGridWidth(2);
+    maLayouter.GetCell(1,3,0)
+        .SetControl(*mpTbxIndent_IncDecBackground)
+        .SetGridWidth(2).SetFixedWidth();
+    maLayouter.GetCell(1,3,1)
+        .SetControl(*mpTbxProDemoteBackground)
+        .SetGridWidth(2).SetFixedWidth();
+    maLayouter.GetCell(2,0).SetControl(maFISpace1).SetFixedWidth().SetOffset(nMappedImageOffset);
+    maLayouter.GetCell(2,1).SetControl(*mpTopDist);
+    maLayouter.GetCell(3,0).SetControl(maFISpace2).SetFixedWidth().SetOffset(nMappedImageOffset);
+    maLayouter.GetCell(3,1).SetControl(*mpBottomDist);
+    maLayouter.GetCell(4,0).SetControl(*mpLineSPTbxBackground).SetGridWidth(2).SetFixedWidth();
+
+    maLayouter.GetCell(2,3).SetControl(maFIndent1).SetFixedWidth().SetOffset(nMappedImageOffset);
+    maLayouter.GetCell(2,4).SetControl(*mpLeftIndent);
+    maLayouter.GetCell(3,3).SetControl(maFIndent2).SetFixedWidth().SetOffset(nMappedImageOffset);
+    maLayouter.GetCell(3,4).SetControl(*mpRightIndent);
+    maLayouter.GetCell(4,3).SetControl(maFIndent3).SetFixedWidth().SetOffset(nMappedImageOffset);
+    maLayouter.GetCell(4,4).SetControl(*mpFLineIndent);
+
+    maLayouter.GetColumn(0)
+        .SetWeight(0)
+        .SetLeftPadding(Layouter::MapWidth(*this,SECTIONPAGE_MARGIN_HORIZONTAL))
+        .SetFixedWidth(nMappedToolBoxItemWidth + nMappedImageOffset);
+    maLayouter.GetColumn(1)
+        .SetWeight(1)
+        .SetMinimumWidth(nMappedControlWidth);
+    maLayouter.GetColumn(2)
+        .SetWeight(0)
+        .SetMinimumWidth(Layouter::MapWidth(*this, CONTROL_SPACING_HORIZONTAL));
+    maLayouter.GetColumn(3)
+        .SetWeight(0)
+        .SetFixedWidth(nMappedToolBoxItemWidth + nMappedImageOffset);
+    maLayouter.GetColumn(4)
+        .SetWeight(1)
+        .SetRightPadding(Layouter::MapWidth(*this,SECTIONPAGE_MARGIN_HORIZONTAL))
+        .SetMinimumWidth(nMappedControlWidth);
+
+    // Make controls that display text handle short widths more
+    // graceful.
+    sfx2::sidebar::Layouter::PrepareForLayouting(*mpFTUL);
+    sfx2::sidebar::Layouter::PrepareForLayouting(*mpFTIndent);
+
+    if (mxSidebar.is())
+        mxSidebar->requestLayout();
+
 }
 
 } } // end of namespace svx::sidebar

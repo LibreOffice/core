@@ -45,6 +45,7 @@
 #include <sfx2/sidebar/ResourceDefinitions.hrc>
 #include <sfx2/sidebar/ControlFactory.hxx>
 #include <sfx2/sidebar/ControllerFactory.hxx>
+#include <sfx2/sidebar/Layouter.hxx>
 #include <sfx2/sidebar/Theme.hxx>
 #include <sfx2/sidebar/SidebarToolBox.hxx>
 #include "sfx2/imagemgr.hxx"
@@ -65,10 +66,15 @@
 
 using namespace css;
 using namespace cssu;
+using namespace ::sfx2::sidebar;
 using ::sfx2::sidebar::Theme;
 using ::sfx2::sidebar::ControlFactory;
+using ::sfx2::sidebar::Layouter;
 
 #define A2S(pString) (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(pString)))
+
+
+
 
 namespace svx { namespace sidebar {
 
@@ -197,13 +203,31 @@ TextPropertyPanel::TextPropertyPanel (
         maUnderlinePopup(this, ::boost::bind(&TextPropertyPanel::CreateUnderlinePopupControl, this, _1)),
         mxFrame(rxFrame),
         maContext(),
-        mpBindings(pBindings)
+        mpBindings(pBindings),
+        maLayouter(*this)
 {
     Initialize();
 
     FreeResource();
 
     UpdateFontColorToolbox(rContext);
+
+    // Setup the grid layouter.
+    maLayouter.GetCell(0,0).SetControl(*mpFontNameBox).SetMinimumWidth(Layouter::MapWidth(*this,FONTNAME_WIDTH));
+    maLayouter.GetCell(0,2).SetControl(maFontSizeBox).SetFixedWidth();
+
+    maLayouter.GetCell(1,0).SetControl(*mpToolBoxFontBackground).SetFixedWidth();
+    maLayouter.GetCell(1,2).SetControl(*mpToolBoxIncDecBackground).SetFixedWidth();
+
+    maLayouter.GetColumn(0)
+        .SetWeight(1)
+        .SetLeftPadding(Layouter::MapWidth(*this,SECTIONPAGE_MARGIN_HORIZONTAL));
+    maLayouter.GetColumn(1)
+        .SetWeight(0)
+        .SetMinimumWidth(Layouter::MapWidth(*this, CONTROL_SPACING_HORIZONTAL));
+    maLayouter.GetColumn(2)
+        .SetWeight(0)
+        .SetRightPadding(Layouter::MapWidth(*this,SECTIONPAGE_MARGIN_HORIZONTAL));
 }
 
 
@@ -1164,6 +1188,14 @@ void TextPropertyPanel::NotifyItemUpdate (
             }
             break;
     }
+}
+
+
+
+
+void TextPropertyPanel::Resize (void)
+{
+    maLayouter.Layout();
 }
 
 

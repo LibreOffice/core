@@ -61,6 +61,8 @@ public:
 
     SfxBindings* GetBindings();
 
+    virtual void Resize (void);
+
 private:
     //ui controls
     ::boost::scoped_ptr<Window>                 mpTBHorizontalBackground;

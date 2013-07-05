@@ -44,6 +44,8 @@
 #include <svx/rulritem.hxx>
 
 #include <sfx2/sidebar/ControlFactory.hxx>
+#include <sfx2/sidebar/Layouter.hxx>
+#include <sfx2/sidebar/ResourceDefinitions.hrc>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/viewsh.hxx>
@@ -54,6 +56,8 @@
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/document/XUndoManagerSupplier.hpp>
+
+using namespace ::sfx2::sidebar;
 
 #define A2S(pString) (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(pString)))
 
@@ -199,12 +203,52 @@ PagePropertyPanel::PagePropertyPanel(
 
     , mxUndoManager( getUndoManager( rxFrame ) )
 
-    , mbInvalidateSIDAttrPageOnSIDAttrPageSizeNotify( false )
+    , mbInvalidateSIDAttrPageOnSIDAttrPageSizeNotify( false ),
+      maLayouter(*this)
 {
     Initialize();
     mbInvalidateSIDAttrPageOnSIDAttrPageSizeNotify = true;
     FreeResource();
+
+    // Setup the grid layouter.
+    maLayouter.GetCell(0,0).SetControl(maFtOrientation).SetGridWidth(2);
+    maLayouter.GetCell(1,0).SetControl(*mpToolBoxOrientationBackground).SetFixedWidth();
+
+    maLayouter.GetCell(0,3).SetControl(maFtMargin).SetGridWidth(2);
+    maLayouter.GetCell(1,3).SetControl(*mpToolBoxMarginBackground).SetFixedWidth();
+
+    maLayouter.GetCell(2,0).SetControl(maFtSize).SetGridWidth(2);
+    maLayouter.GetCell(3,0).SetControl(*mpToolBoxSizeBackground).SetFixedWidth();
+
+    maLayouter.GetCell(2,3).SetControl(maFtColumn).SetGridWidth(2);
+    maLayouter.GetCell(3,3).SetControl(*mpToolBoxColumnBackground).SetFixedWidth();
+
+    maLayouter.GetColumn(0)
+        .SetWeight(0)
+        .SetLeftPadding(Layouter::MapWidth(*this,SECTIONPAGE_MARGIN_HORIZONTAL));
+    maLayouter.GetColumn(1)
+        .SetWeight(1)
+        .SetMinimumWidth(Layouter::MapWidth(*this,MBOX_WIDTH/2));
+    maLayouter.GetColumn(2)
+        .SetWeight(0)
+        .SetMinimumWidth(Layouter::MapWidth(*this, CONTROL_SPACING_HORIZONTAL));
+    maLayouter.GetColumn(3)
+        .SetWeight(0);
+    maLayouter.GetColumn(4)
+        .SetWeight(1)
+        .SetRightPadding(Layouter::MapWidth(*this,SECTIONPAGE_MARGIN_HORIZONTAL))
+        .SetMinimumWidth(Layouter::MapWidth(*this,MBOX_WIDTH/2));
+
+    // Make controls that display text handle short widths more
+    // graceful.
+    Layouter::PrepareForLayouting(maFtOrientation);
+    Layouter::PrepareForLayouting(maFtMargin);
+    Layouter::PrepareForLayouting(maFtSize);
+    Layouter::PrepareForLayouting(maFtColumn);
 }
+
+
+
 
 PagePropertyPanel::~PagePropertyPanel()
 {
@@ -802,5 +846,17 @@ void PagePropertyPanel::EndUndo()
         mxUndoManager->leaveUndoContext();
     }
 }
+
+
+
+
+void PagePropertyPanel::Resize (void)
+{
+    maLayouter.Layout();
+}
+
+
+
+
 
 } } // end of namespace ::sw::sidebar
