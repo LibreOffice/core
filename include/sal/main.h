@@ -43,7 +43,7 @@ SAL_DLLPUBLIC void SAL_CALL sal_detail_deinitialize();
 #else
 
 #define SAL_MAIN_WITH_ARGS_IMPL \
-int SAL_CALL main(int argc, char ** argv) \
+int SAL_DLLPUBLIC SAL_CALL main(int argc, char ** argv) \
 { \
     int ret; \
     sal_detail_initialize(argc, argv);   \
@@ -53,7 +53,7 @@ int SAL_CALL main(int argc, char ** argv) \
 }
 
 #define SAL_MAIN_IMPL \
-int SAL_CALL main(int argc, char ** argv) \
+int SAL_DLLPUBLIC SAL_CALL main(int argc, char ** argv) \
 { \
     int ret; \
     sal_detail_initialize(argc, argv); \
