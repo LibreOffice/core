@@ -18,9 +18,22 @@
  */
 
 #include "chinese_dictionarydialog.hrc"
-#include "chinese_direction.hrc"
 
 #include <svtools/controldims.hrc>
+
+#define DIRECTION_RADIOBUTTONS( D_XPOS, D_YPOS, D_FULLWIDTH ) \
+RadioButton RB_TO_SIMPLIFIED \
+{ \
+    Pos = MAP_APPFONT( D_XPOS, D_YPOS ); \
+    Size = MAP_APPFONT ( D_FULLWIDTH, RSC_CD_RADIOBUTTON_HEIGHT ) ; \
+    Text [ en-US ] = "~Traditional Chinese to simplified Chinese"; \
+}; \
+RadioButton RB_TO_TRADITIONAL \
+{ \
+    Pos = MAP_APPFONT( D_XPOS, D_YPOS + RSC_CD_RADIOBUTTON_HEIGHT+RSC_SP_CTRL_GROUP_Y ); \
+    Size = MAP_APPFONT ( D_FULLWIDTH, RSC_CD_RADIOBUTTON_HEIGHT ) ; \
+    Text [ en-US ] = "~Simplified Chinese to traditional Chinese"; \
+};
 
 //-----------------------------------------------------------------------------
 //defines for positions and sizes:
