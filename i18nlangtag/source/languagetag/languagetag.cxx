@@ -206,6 +206,44 @@ LanguageTag::LanguageTag( LanguageType nLanguage )
 }
 
 
+LanguageTag::LanguageTag( const OUString& rBcp47, const OUString& rLanguage,
+                          const OUString& rScript, const OUString& rCountry )
+    :
+        maBcp47( rBcp47),
+        mpImplLangtag( NULL),
+        mnLangID( LANGUAGE_DONTKNOW),
+        meIsValid( DECISION_DONTKNOW),
+        meIsIsoLocale( DECISION_DONTKNOW),
+        meIsIsoODF( DECISION_DONTKNOW),
+        meIsLiblangtagNeeded( DECISION_DONTKNOW),
+        mbSystemLocale( rBcp47.isEmpty() && rLanguage.isEmpty()),
+        mbInitializedBcp47( !rBcp47.isEmpty()),
+        mbInitializedLocale( false),
+        mbInitializedLangID( false),
+        mbCachedLanguage( false),
+        mbCachedScript( false),
+        mbCachedCountry( false),
+        mbIsFallback( false)
+{
+    if (!mbSystemLocale && !mbInitializedBcp47)
+    {
+        if (rScript.isEmpty())
+        {
+            maLocale = lang::Locale( rLanguage, rCountry, "");
+            mbInitializedLocale = true;
+        }
+        else
+        {
+            if (rCountry.isEmpty())
+                maBcp47 = rLanguage + "-" + rScript;
+            else
+                maBcp47 = rLanguage + "-" + rScript + "-" + rCountry;
+            mbInitializedBcp47 = true;
+        }
+    }
+}
+
+
 LanguageTag::LanguageTag( const OUString& rLanguage, const OUString& rCountry )
     :
         maLocale( rLanguage, rCountry, ""),

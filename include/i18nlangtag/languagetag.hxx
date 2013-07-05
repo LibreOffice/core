@@ -53,6 +53,15 @@ public:
     /** Init LanguageTag with LanguageType MS-LangID. */
     explicit LanguageTag( LanguageType nLanguage );
 
+    /** Init LanguageTag with either BCP 47 language tag (precedence if not
+        empty), or a combination of language, script and country.
+
+        This is a convenience ctor to be used in ODF import where these are
+        distinct attributes.
+     */
+    explicit LanguageTag( const OUString& rBcp47, const OUString& rLanguage,
+                          const OUString& rScript, const OUString& rCountry );
+
     /** Init LanguageTag with language and country strings.
 
         This is a convenience ctor for places that so far use only language and
