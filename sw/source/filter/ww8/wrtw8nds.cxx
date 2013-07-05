@@ -657,9 +657,10 @@ const SfxPoolItem* WW8SwAttrIter::HasTextItem( sal_uInt16 nWhich ) const
 {
     const SfxPoolItem* pRet = 0;
     const SwpHints* pTxtAttrs = rNd.GetpSwpHints();
-    xub_StrLen nTmpSwPos = m_rExport.m_aCurrentCharPropStarts.top();
     if (pTxtAttrs)
     {
+        xub_StrLen nTmpSwPos = m_rExport.m_aCurrentCharPropStarts.size() ?
+            m_rExport.m_aCurrentCharPropStarts.top() : 0;
         for (sal_uInt16 i = 0; i < pTxtAttrs->Count(); ++i)
         {
             const SwTxtAttr* pHt = (*pTxtAttrs)[i];

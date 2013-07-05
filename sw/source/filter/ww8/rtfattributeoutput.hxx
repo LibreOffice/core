@@ -42,6 +42,32 @@ class SwOLENode;
 class SdrObject;
 class SwFlyFrmFmt;
 
+//////////////////////////////////////////////////////////////////////////////
+class MultiBufferEntry;
+
+class MultiBuffer
+{
+private:
+    rtl::OStringBuffer                  maBuffer;
+    std::vector< MultiBufferEntry* >    maContent;
+
+    void clearContentVector();
+
+public:
+    MultiBuffer();
+    virtual ~MultiBuffer();
+
+    rtl::OStringBuffer& getOStringBuffer() { return maBuffer; }
+
+    bool empty() const;
+    void writeAndClear(SvStream& rTarget);
+    void appendAndClear(MultiBuffer& rSource);
+    void clear();
+    void appendHexData(const sal_uInt8 *pGraphicAry, sal_uInt32 nSize, sal_uInt32 nLimit = 64);
+};
+
+//////////////////////////////////////////////////////////////////////////////
+
 class RtfAttributeOutput : public AttributeOutputBase
 {
 public:
@@ -474,8 +500,8 @@ private:
      * This is needed because the call order is: run text, run properties, paragraph properties.
      * What we need is the opposite.
      */
-    rtl::OStringBuffer m_aRun;
-    rtl::OStringBuffer m_aRunText;
+    MultiBuffer     m_aRun;
+    MultiBuffer     m_aRunText;
     /*
      * This is written after runs.
      */
@@ -540,7 +566,7 @@ private:
      * m_aSectionHeaders.
      */
     bool m_bBufferSectionHeaders;
-    rtl::OStringBuffer m_aSectionHeaders;
+    MultiBuffer     m_aSectionHeaders;
 
     /*
      * Support for starting multiple tables at the same cell.
