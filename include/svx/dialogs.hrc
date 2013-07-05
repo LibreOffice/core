@@ -175,9 +175,6 @@
 #define RID_SVXFLOAT3D_FIX_G                (RID_SVX_START + 78)
 #define RID_SVXFLOAT3D_FIX_B                (RID_SVX_START + 84)
 
-// ResId's for the FontMenu controls
-#define RID_MN_FONTSIZE                     (RID_SVX_START +  80)
-
 // ResId for zoom popup menu
 #define RID_SVXMNU_ZOOM                     (RID_SVX_START +  82)
 

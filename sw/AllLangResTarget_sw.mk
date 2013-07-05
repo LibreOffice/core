@@ -68,9 +68,7 @@ $(eval $(call gb_SrsTarget_add_files,sw/res,\
     sw/source/ui/app/error.src \
     sw/source/ui/app/mn.src \
     sw/source/ui/chrdlg/ccoll.src \
-    sw/source/ui/chrdlg/chardlg.src \
     sw/source/ui/chrdlg/chrdlg.src \
-    sw/source/ui/chrdlg/drpcps.src \
     sw/source/ui/chrdlg/paradlg.src \
     sw/source/ui/config/mailconfigpage.src \
     sw/source/ui/config/optcomp.src \

@@ -69,12 +69,6 @@
 #define ED_COUNTRY      11
 #define ED_ZIP          12
 
-
-//Popup SectionControl
-#define PU_INSERT       1
-#define PU_REMOVE       2
-#define PU_CHG_NAME     3
-
 #define ST_TYPE_ARTICLE                 40
 #define ST_TYPE_BOOK                    41
 #define ST_TYPE_BOOKLET                 42

@@ -20,40 +20,6 @@
 #include "dbui.hrc"
 #include "helpid.h"
 
-ModalDialog DLG_DBSELECTION
-{
-    HelpID = "sw:ModalDialog:DLG_DBSELECTION";
-    OutputSize = TRUE ;
-    SVLook = TRUE ;
-    Size = MAP_APPFONT ( 168 , 132 ) ;
-    Moveable = TRUE ;
-    Control TLB_DBLIST
-    {
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 6 ) ;
-        Size = MAP_APPFONT ( 100 , 120 ) ;
-    };
-    OKButton BTN_OK
-    {
-        Pos = MAP_APPFONT ( 112 , 6 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        TabStop = TRUE ;
-        Disable = TRUE ;
-    };
-    CancelButton BTN_CANCEL
-    {
-        Pos = MAP_APPFONT ( 112 , 23 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        TabStop = TRUE ;
-    };
-    HelpButton BTN_HELP
-    {
-        Pos = MAP_APPFONT ( 112 , 43 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        TabStop = TRUE ;
-    };
-    Text [ en-US ] = "Database Selection" ;
-};
  // DLG_PRINTMONITOR ------------------------------------------------------
 ModelessDialog DLG_PRINTMONITOR
 {

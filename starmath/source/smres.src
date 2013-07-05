@@ -426,48 +426,6 @@ Menu RID_VIEWMENU
     };
 };
 
-Menu RID_FONTMENU
-{
-    ItemList =
-    {
-        MenuItem
-        {
-            Identifier = 1 ;
-            Text [ en-US ] = "Variables" ;
-        };
-        MenuItem
-        {
-            Identifier = 2 ;
-            Text [ en-US ] = "Functions" ;
-        };
-        MenuItem
-        {
-            Identifier = 3 ;
-            Text [ en-US ] = "Numbers" ;
-        };
-        MenuItem
-        {
-            Identifier = 4 ;
-            Text [ en-US ] = "Text" ;
-        };
-        MenuItem
-        {
-            Identifier = 5 ;
-            Text [ en-US ] = "Serif" ;
-        };
-        MenuItem
-        {
-            Identifier = 6 ;
-            Text [ en-US ] = "Sans" ;
-        };
-        MenuItem
-        {
-            Identifier = 7 ;
-            Text [ en-US ] = "Fixed" ;
-        };
-    };
-};
-
 #define CMDBOXWINDOW_TEXT           \
     Text [ en-US ] = "Commands" ;              \
 

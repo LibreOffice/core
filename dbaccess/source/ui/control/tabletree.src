@@ -18,25 +18,7 @@
  */
 
 #include "dbu_control.hrc"
-#include "tabletree.hrc"
 #include "browserids.hxx"
-
-Menu MENU_TABLETREE_POPUP
-{
-    ItemList =
-    {
-        MenuItem
-        {
-            Identifier = MID_SORT_ASCENDING;
-            Text [ en-US ] = "Sort Ascending";
-        };
-        MenuItem
-        {
-            Identifier = MID_SORT_DECENDING;
-            Text [ en-US ] = "Sort Descending";
-        };
-    };
-};
 
 String STR_COULDNOTCREATE_DRIVERMANAGER
 {

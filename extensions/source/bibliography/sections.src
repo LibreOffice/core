@@ -334,27 +334,6 @@ TabPage RID_TP_GENERAL
     };
     Text [ en-US ] = "General";
 };
-Menu RID_POPUP_ME_VIEW
-{
-    ItemList =
-    {
-        MenuItem
-        {
-            Identifier = PU_INSERT;
-            Text [ en-US ] = "Insert Section...";
-        };
-        MenuItem
-        {
-            Identifier = PU_REMOVE;
-            Text [ en-US ] = "Delete Section...";
-        };
-        MenuItem
-        {
-            Identifier = PU_CHG_NAME;
-            Text [ en-US ] = "Modify Name...";
-        };
-    };
-};
 
 String ST_IDENTIFIER
 {

@@ -275,11 +275,6 @@ String STR_QRY_NATIVE
     Text [ en-US ] = "The statement will not be applied when querying in the SQL dialect of the database." ;
 };
 
-ErrorBox ERR_QRY_AMB_FIELD
-{
-    Message [ en-US ] = "Field name not found or not unique" ;
-};
-
 String STR_QRY_ILLEGAL_JOIN
 {
     Text [ en-US ] = "Join could not be processed" ;
@@ -303,16 +298,6 @@ String STR_NO_ALTER_VIEW_SUPPORT
 String STR_QUERYDESIGN_NO_VIEW_ASK
 {
     Text [ en-US ] = "Do you want to create a query instead?";
-};
-
-ErrorBox ERR_QRY_NOSTATEMENT
-{
-    Message [ en-US ] = "No query could be created.";
-};
-
-ErrorBox ERR_QRY_NOCRITERIA
-{
-    Message [ en-US ] = "No query could be created because no fields were selected.";
 };
 
 /*

@@ -24,7 +24,6 @@
 
 // Dialoge --------------------------------------------------------------------
 
-#define DLG_DBSELECTION         (RC_DBUI_BEGIN)
 #define DLG_PRINTMONITOR        (RC_DBUI_BEGIN + 1)
 #define DLG_AP_INSERT_DB_SEL    (RC_DBUI_BEGIN + 2)
 

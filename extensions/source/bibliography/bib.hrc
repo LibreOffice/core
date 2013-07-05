@@ -40,7 +40,6 @@
 
 //Menu(100)
 #define RID_BIB_MENU                (RID_BIB_CONTROLS + 100)
-#define RID_POPUP_ME_VIEW           (RID_BIB_MENU +50)
 
 // Strings (500)
 #define RID_BIB_STRING              (RID_BIB_START + 200)

@@ -32,7 +32,6 @@
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <vcl/help.hxx>
-#include "tabletree.hrc"
 #include <dbaccess/IController.hxx>
 #include <framework/actiontriggerhelper.hxx>
 #include <toolkit/helper/vclunohelper.hxx>

@@ -75,12 +75,6 @@ Bitmap BMP_STYLES_FAMILY2 { File = "styfam2.bmp" ; };
 Bitmap BMP_STYLES_FAMILY3 { File = "styfam3.bmp" ; };
 Bitmap BMP_STYLES_FAMILY4 { File = "styfam4.bmp" ; };
 
-ErrorBox MSG_PRINT_ERROR
-{
-    BUTTONS = WB_OK ;
-    DEFBUTTON = WB_DEF_OK ;
-    Message [ en-US ] = "The print job could not be started." ;
-};
 String STR_BACKUP_COPY
 {
     Text [ en-US ] = "Copy" ;
@@ -115,12 +109,6 @@ String STR_ERROR_MOVE_TEMPLATE
 {
     Text [ en-US ] = "Error moving template \"$1\"." ;
 };
-ErrorBox MSG_ERROR_RESCAN
-{
-    BUTTONS = WB_OK ;
-    DEFBUTTON = WB_DEF_OK ;
-    Message [ en-US ] = "The update could not be saved." ;
-};
 String STR_ERROR_SAVE_TEMPLATE
 {
     Text [ en-US ] = "Error saving template " ;
@@ -130,24 +118,6 @@ ErrorBox MSG_ERROR_RENAME_TEMPLATE
     BUTTONS = WB_OK ;
     DEFBUTTON = WB_DEF_OK ;
     Message [ en-US ] = "Error renaming template." ;
-};
-ErrorBox MSG_ERROR_RENAME_TEMPLATE_REGION
-{
-    BUTTONS = WB_OK ;
-    DEFBUTTON = WB_DEF_OK ;
-    Message [ en-US ] = "Error renaming template category." ;
-};
-ErrorBox MSG_ERROR_EMPTY_NAME
-{
-    BUTTONS = WB_OK ;
-    DEFBUTTON = WB_DEF_OK ;
-    Message [ en-US ] = "Please specify a name." ;
-};
-ErrorBox MSG_ERROR_UNIQ_NAME
-{
-    BUTTONS = WB_OK ;
-    DEFBUTTON = WB_DEF_OK ;
-    Message [ en-US ] = "Please specify a unique name.\nEntries must not be case specific." ;
 };
 String STR_QUERY_DEFAULT_TEMPLATE
 {

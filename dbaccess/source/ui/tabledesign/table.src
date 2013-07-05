@@ -141,11 +141,6 @@ Control RID_DB_TAB_EDITOR
     HelpId = HID_TABDESIGN_BACKGROUND ;
 };
 
-ErrorBox ERR_INVALID_LISTBOX_ENTRY
-{
-    Message [ en-US ] = "The text you entered is not a list element. " ;
-};
-
 Menu RID_TABLEDESIGNROWPOPUPMENU
 {
     ItemList =

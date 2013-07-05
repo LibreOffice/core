@@ -207,20 +207,6 @@ Menu RID_DRAW_TABLEOBJ_INSIDE_POPUP
     };
 };
 
-Menu RID_DRAW_CONTROL_POPUP
-{
-    ItemList =
-    {
-        MN_TRANSFORM
-        MN_CONTROL_SHOW_BROWSER
-        SEPARATOR
-        MN_POSITION
-        MN_OBJECT_ALIGN
-        SEPARATOR
-        MN_LEAVE_GROUP
-        MN_DISMANTLE
-    };
-};
 Menu RID_FORM_CONTROL_POPUP
 {
     ItemList =
@@ -348,23 +334,6 @@ Menu RID_SLIDE_SORTER_MASTER_NOSEL_POPUP
     };
 };
 
-Menu RID_MASTERPAGE_POPUP
-{
-    ItemList =
-    {
-        MN_SET_DEFAULT
-        SEPARATOR
-        MN_LINE
-        MN_AREA
-        MN_TRANSFORM
-        SEPARATOR
-        MN_CHAR_PARAGRAPH
-         // MN_PRESENTATIONOBJECT
-        SEPARATOR
-        MN_POSITION
-    };
-};
-
 
 Menu RID_OUTLINE_POPUP
 {
@@ -391,21 +360,6 @@ Menu RID_BEZIER_POPUP
     ItemList =
     {
         MN_BEZIER
-    };
-};
-
-
-Menu RID_DRAW_BMP_CONVERT_POPUP
-{
-    ItemList =
-    {
-        MN_CONVERT_TO_1BIT_THRESHOLD
-        MN_CONVERT_TO_1BIT_MATRIX
-        MN_CONVERT_TO_4BIT_GRAYS
-        MN_CONVERT_TO_4BIT_COLORS
-        MN_CONVERT_TO_8BIT_GRAYS
-        MN_CONVERT_TO_8BIT_COLORS
-        MN_CONVERT_TO_24BIT
     };
 };
 

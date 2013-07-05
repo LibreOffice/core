@@ -25,9 +25,6 @@
 #define STR_UNKNOWN_SOURCE                      32027
 
 #define BMP_PLUGIN                      32000
-#define MB_PLUGIN                       32000
-#define MI_PLUGIN                       32000
-#define MI_PLUGIN_DEACTIVATE            1
 
 // Sot Format Strings
 #define STR_FORMAT_START                        32100

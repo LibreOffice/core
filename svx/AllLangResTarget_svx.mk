@@ -69,7 +69,6 @@ $(eval $(call gb_SrsTarget_add_files,svx/res,\
     svx/source/form/formshell.src \
     svx/source/items/svxerr.src \
     svx/source/items/svxitems.src \
-    svx/source/mnuctrls/mnuctrls.src \
     svx/source/sidebar/EmptyPanel.src \
     svx/source/sidebar/area/AreaPropertyPanel.src \
     svx/source/sidebar/graphic/GraphicPropertyPanel.src \
@@ -93,7 +92,6 @@ $(eval $(call gb_SrsTarget_add_files,svx/res,\
 ))
 
 $(eval $(call gb_SrsTarget_add_nonlocalized_files,svx/res,\
-    svx/source/mnuctrls/mnuctrls.src \
     svx/source/unodraw/unodraw.src \
 ))
 

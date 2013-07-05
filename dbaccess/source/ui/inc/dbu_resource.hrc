@@ -153,15 +153,7 @@
 
 #define ERR_QRY_CRITERIA_ON_ASTERISK    RID_ERRORBOX_START +  2
 #define ERR_QRY_ORDERBY_ON_ASTERISK     RID_ERRORBOX_START +  3
-#define ERR_QRY_AMB_FIELD               RID_ERRORBOX_START +  4
-    // FREE
-#define ERR_INVALID_LISTBOX_ENTRY       RID_ERRORBOX_START +  6
-// FREE
 #define ERR_NEED_INDEX_FIELDS           RID_ERRORBOX_START +  8
-#define ERR_QRY_NOSTATEMENT             RID_ERRORBOX_START +  9
-#define ERR_QRY_NOCRITERIA              RID_ERRORBOX_START + 10
-
-
 
 //========================================================================
 // query boxes
@@ -218,7 +210,6 @@
 //========================================================================
 // menus
 
-#define MENU_TABLETREE_POPUP            RID_MENU_START +  0
 #define RID_SBA_GRID_COLCTXMENU         RID_MENU_START +  2
 #define RID_SBA_GRID_ROWCTXMENU         RID_MENU_START +  3
 #define RID_QUERYCOLPOPUPMENU           RID_MENU_START +  5

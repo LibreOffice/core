@@ -19,7 +19,6 @@
 
 
 #include "tabletree.hxx"
-#include "tabletree.hrc"
 #include "imageprovider.hxx"
 #include "moduledbu.hxx"
 #include "dbu_control.hrc"

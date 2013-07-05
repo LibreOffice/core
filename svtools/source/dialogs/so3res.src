@@ -189,29 +189,6 @@ Bitmap BMP_PLUGIN
 {
     File = "plugin.png" ;
 };
-Menu MB_PLUGIN
-{
-    ItemList =
-    {
-        MenuItem MI_PLUGIN ;
-    };
-    ExtraData = { 1 ; 0 ; 0 ; };  //Um InPlace Menu zu bentzen
-};
-MenuItem MI_PLUGIN
-{
-    Identifier = MI_PLUGIN ;
-    SubMenu = Menu
-    {
-        ItemList =
-        {
-            MenuItem
-            {
-                Identifier = MI_PLUGIN_DEACTIVATE ;
-                Text [ en-US ] = "Deactivate" ;
-            };
-        };
-    };
-};
 String STR_UNKNOWN_SOURCE
 {
     Text [ en-US ] = "Unknown source" ;

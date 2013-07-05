@@ -89,7 +89,6 @@
 #define RID_UNDOFORMATNAME          (RID_APP_START + 504)
 #define RID_COMMANDMENU             (RID_APP_START + 701)
 #define RID_VIEWMENU                (RID_APP_START + 702)
-#define RID_FONTMENU                (RID_APP_START + 704)
 #define RID_TOOLBOXWINDOW           (RID_APP_START + 801)
 #define RID_CMDBOXWINDOW            (RID_APP_START + 802)
 #define RID_FONTREGULAR             (RID_APP_START + 804)

@@ -23,8 +23,6 @@
 #include "rcid.hrc"
 
 #define DLG_PARA                (RC_CHRDLG_BEGIN +  2)
-#define DLG_DROPCAPS            (RC_CHRDLG_BEGIN +  8)
-#define DLG_DRAWCHAR            (RC_CHRDLG_BEGIN +  9)
 #define DLG_DRAWPARA            (RC_CHRDLG_BEGIN + 10)
 
 // Tabpages -> now in globals.hrc

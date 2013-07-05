@@ -1140,14 +1140,6 @@ Menu MN_DRWTXT_POPUPMENU
     };
 };
 
-#define MN_REDCOMMENT \
-    MenuItem\
-    {\
-        Identifier = FN_DELETE_COMMENT ;\
-        HelpId = CMD_FN_DELETE_COMMENT ;\
-        Text [ en-US ] = "Delete ~Changes Note" ;\
-    };\
-
 Menu MN_ANNOTATION_POPUPMENU
 {
     ItemList =
@@ -1179,14 +1171,6 @@ Menu MN_ANNOTATION_BUTTON
     ItemList =
     {
         MN_ANNOTATIONS
-    };
-};
-
-Menu MN_REDCOMMENT_BUTTON
-{
-    ItemList =
-    {
-        MN_REDCOMMENT
     };
 };
 

@@ -55,7 +55,6 @@
 
 #define STR_PRINT_STYLES                    (RID_SFX_DOC_START+ 20)
 #define STR_PRINT_STYLES_HEADER             (RID_SFX_DOC_START+ 21)
-#define MSG_PRINT_ERROR                     (RID_SFX_DOC_START+ 22)
 #define STR_BACKUP_COPY                     (RID_SFX_DOC_START+ 23)
 #define MSG_CANT_OPEN_TEMPLATE              (RID_SFX_DOC_START+ 25)
 #define MSG_VIEW_OPEN_CANT_SAVE             (RID_SFX_DOC_START+ 26)
@@ -65,13 +64,9 @@
 
 #define STR_ERROR_DELETE_TEMPLATE           (RID_SFX_DOC_START+ 30)
 #define STR_ERROR_MOVE_TEMPLATE             (RID_SFX_DOC_START+ 32)
-#define MSG_ERROR_RESCAN                    (RID_SFX_DOC_START+ 33)
 #define STR_ERROR_SAVE_TEMPLATE             (RID_SFX_DOC_START+ 34)
 #define MSG_ERROR_RENAME_TEMPLATE           (RID_SFX_DOC_START+ 34)
-#define MSG_ERROR_RENAME_TEMPLATE_REGION    (RID_SFX_DOC_START+ 35)
 #define STR_CONFIG                          (RID_SFX_DOC_START+ 37)
-#define MSG_ERROR_EMPTY_NAME                (RID_SFX_DOC_START+ 37)
-#define MSG_ERROR_UNIQ_NAME                 (RID_SFX_DOC_START+ 38)
 #define STR_QUERY_DEFAULT_TEMPLATE          (RID_SFX_DOC_START+ 39)
 #define MSG_QUERY_RESET_DEFAULT_TEMPLATE    (RID_SFX_DOC_START+ 39)
 #define MSG_TEMPLATE_DIR_NOT_EXIST          (RID_SFX_DOC_START+ 40)
