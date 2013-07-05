@@ -16,6 +16,24 @@
       "revId": "db377e02c309c20419aef1360409be09fe50fc42",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn///T4\u003d",
+        "filename": "starmath/source/smdetect.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 310,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-07-05T21:28:50Z",
+      "side": 0,
+      "message": "Well, yes, a MathML document with less than 200 characters would be quite odd, but maybe some small fragment would fit into that. 6 is a tad too small limit though, it should be at least \"\u003cmath\u003e\u003c/math\u003e\" for an empty MathML document ;-)   so 13. Actually 7 for \"\u003cmath/\u003e\" would also be possible but then the \"\u003cmath/\u003e\" would have to be tested as well, I\u0027m pretty sure we can neglect that..",
+      "parentUuid": "AAAAXn///UQ\u003d",
+      "revId": "db377e02c309c20419aef1360409be09fe50fc42",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
