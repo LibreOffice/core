@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXn///U8\u003d",
+        "filename": "starmath/source/smdetect.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 321,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-07-05T18:41:28Z",
+      "side": 1,
+      "message": "Nitpick: for readability it helps to indent subsequent lines of an if() condition one level further, so the following statement is visually not on the same level. Either that, or add curly braces as well. So,\n\n if (foo ||\n         bar ||\n         baz)\n     statement;\n\nor even better\n\n if (foo ||\n         bar ||\n         baz)\n {\n     statement;\n }",
+      "revId": "862efa26d61f8a7c92db4c02e04ab075b67165fa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn///U4\u003d",
+        "filename": "starmath/source/smdetect.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 324,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-07-05T18:41:28Z",
+      "side": 1,
+      "message": "No one knows if the old documents can have it, but better also add checks for \"\u003cmath\u003e\" and \"\u003cmath:math\u003e\".",
+      "revId": "862efa26d61f8a7c92db4c02e04ab075b67165fa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
