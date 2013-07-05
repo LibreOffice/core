@@ -27,6 +27,7 @@ class ResId;
 enum DayOfWeek { MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY,
                  SATURDAY, SUNDAY };
 
+// TODO FIXME: make it handle signed year?
 class TOOLS_DLLPUBLIC SAL_WARN_UNUSED Date
 {
 private:
