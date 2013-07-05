@@ -453,6 +453,13 @@ void SelectionManager::initialize( const Sequence< Any >& arguments ) throw (::c
                 else
                     fprintf( stderr, "SelectionManager::initialize: creation of dispatch thread failed !\n" );
 #endif
+
+                if (pipe(m_EndThreadPipe) != 0) {
+                    #if OSL_DEBUG_LEVEL > 1
+                    fprintf(stderr, "Failed to create endThreadPipe\n");
+                    #endif
+                    m_EndThreadPipe[0] = m_EndThreadPipe[1] = 0;
+                }
             }
         }
     }
@@ -3711,14 +3718,26 @@ void SelectionManager::dispatchEvent( int millisec )
     osl::ResettableMutexGuard aGuard(m_aMutex);
 
     if( !XPending( m_pDisplay ))
-    { // wait for any events if none are already queued
-        pollfd aPollFD;
-        aPollFD.fd      = XConnectionNumber( m_pDisplay );
-        aPollFD.events  = POLLIN;
-        aPollFD.revents = 0;
+    {
+        int nfds = 1;
+        // wait for any events if none are already queued
+        pollfd aPollFD[2];
+        aPollFD[0].fd      = XConnectionNumber( m_pDisplay );
+        aPollFD[0].events  = POLLIN;
+        aPollFD[0].revents = 0;
+
+        // on infinite timeout we need endthreadpipe monitoring too
+        if (millisec < 0)
+        {
+            aPollFD[1].fd      = m_EndThreadPipe[0];
+            aPollFD[1].events  = POLLIN | POLLERR;
+            aPollFD[1].revents = 0;
+            nfds = 2;
+        }
+
         // release mutex for the time of waiting for possible data
         aGuard.clear();
-        if( poll( &aPollFD, 1, millisec ) <= 0 )
+        if( poll( aPollFD, nfds, millisec ) <= 0 )
             return;
         aGuard.reset();
     }
@@ -3750,9 +3769,13 @@ void SelectionManager::run( void* pThis )
     This->m_xDesktop.set( Desktop::create(xContext) );
     This->m_xDesktop->addTerminateListener(This);
 
+    // if end thread pipe properly initialized, allow infinite wait in poll
+    // otherwise, fallback on 1 sec timeout
+    const int timeout = (This->m_EndThreadPipe[0] != This->m_EndThreadPipe[1]) ? -1 : 1000;
+
     while( osl_scheduleThread(This->m_aThread) )
     {
-        This->dispatchEvent( 1000 );
+        This->dispatchEvent( timeout );
 
         timeval aNow;
         gettimeofday( &aNow, 0 );
@@ -3832,9 +3855,14 @@ void SelectionManager::shutdown() throw()
         {
             SolarMutexGuard guard2;
             Application::Reschedule();
+            // trigger poll()'s wait end by writing a dummy value
+            int dummy=0;
+            dummy = write(m_EndThreadPipe[1], &dummy, 1);
         }
         osl_joinWithThread( m_aThread );
         osl_destroyThread( m_aThread );
+        close(m_EndThreadPipe[0]);
+        close(m_EndThreadPipe[1]);
         m_aThread = NULL;
         aGuard.reset();
     }
