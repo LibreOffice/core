@@ -617,6 +617,21 @@ namespace
         return bIsStock;
     }
 
+    WinBits extractRelief(VclBuilder::stringmap &rMap)
+    {
+        WinBits nBits = WB_3DLOOK;
+        VclBuilder::stringmap::iterator aFind = rMap.find(OString("relief"));
+        if (aFind != rMap.end())
+        {
+            if (aFind->second == "half")
+                nBits = WB_FLATBUTTON | WB_BEVELBUTTON;
+            else if (aFind->second == "none")
+                nBits = WB_FLATBUTTON;
+            rMap.erase(aFind);
+        }
+        return nBits;
+    }
+
     OString extractLabel(VclBuilder::stringmap &rMap)
     {
         OString sType;
@@ -676,7 +691,9 @@ namespace
 
     Window * extractStockAndBuildPushButton(Window *pParent, VclBuilder::stringmap &rMap)
     {
-        WinBits nBits = WB_CENTER|WB_VCENTER|WB_3DLOOK;
+        WinBits nBits = WB_CENTER|WB_VCENTER;
+
+        nBits |= extractRelief(rMap);
 
         bool bIsStock = extractStock(rMap);
 
