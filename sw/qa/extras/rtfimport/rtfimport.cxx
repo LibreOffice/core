@@ -142,6 +142,7 @@ public:
     void testN825305();
     void testParaBottomMargin();
     void testN823655();
+    void testFdo39001();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -272,6 +273,7 @@ void Test::run()
         {"n825305.rtf", &Test::testN825305},
         {"para-bottom-margin.rtf", &Test::testParaBottomMargin},
         {"n823655.rtf", &Test::testN823655},
+        {"fdo39001.rtf", &Test::testFdo39001},
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -1308,6 +1310,12 @@ void Test::testN823655()
     }
     // The first coordinate pair of this freeform shape was 286,0 instead of 0,286.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(286), aCoordinates[0].Second.Value.get<sal_Int32>());
+}
+
+void Test::testFdo39001()
+{
+    // Document was of 4 pages, \sect at the end of the doc wasn't ignored.
+    CPPUNIT_ASSERT_EQUAL(3, getPages());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
