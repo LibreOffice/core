@@ -60,8 +60,8 @@ service AccessibleGraphicShape
         the time being this interface does not provide information that is
         not available through the AccessibleShape service:
         the size returned by the
-        ::com::sun::star::accessibility::XAccessibleImage::getWidth() and
-        ::com::sun::star::accessibility::XAccessibleImage::getHeight()
+        ::com::sun::star::accessibility::XAccessibleImage::getAccessibleImageWidth() and
+        ::com::sun::star::accessibility::XAccessibleImage::getAccessibleImageHeight()
         functions is the same as that returned by the
         ::com::sun::star::accessibility::XAccessibleComponent::getSize()
         function; the description returned by

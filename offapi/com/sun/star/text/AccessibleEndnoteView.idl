@@ -65,7 +65,7 @@ service AccessibleEndnoteView
                 <p>The logical order of paragraph and table fragments is never
                    changed.
             <li>The role is
-                ::com::sun::star::accessibility::AccessibleRole::ENDNOTE
+                ::com::sun::star::accessibility::AccessibleRole::END_NOTE
             <li>The name is "endnote" (or the equivalent term
                 in application's language) with a number appended.
             <li>The description is endnote" (or the equivalent term

@@ -85,7 +85,7 @@ interface XDocumentRecovery
         Instead, the implementation is responsible to do so, if required.</p>
 
         <p>A default implementation of this method could simply delegate this call to
-        ::com::sun::star::frame:::XLoadable::load(), followed by
+        ::com::sun::star::frame::XLoadable::load(), followed by
         com::sun::star::frame::XModel::attachResource().</p>
 
         @param SourceLocation
