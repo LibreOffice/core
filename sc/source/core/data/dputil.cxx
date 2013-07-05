@@ -110,7 +110,7 @@ OUString ScDPUtil::getDateGroupName(
 
             sal_uLong nFormat = pFormatter->GetFormatIndex(NF_DATE_SYS_DDMMM, ScGlobal::eLnge);
             Color* pColor;
-            String aStr;
+            OUString aStr;
             pFormatter->GetOutputString(nDays, nFormat, aStr, &pColor);
             return aStr;
         }

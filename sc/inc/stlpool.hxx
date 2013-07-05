@@ -47,13 +47,13 @@ public:
     void                CopyStdStylesFrom( ScStyleSheetPool* pSrcPool );
 
     void                CopyStyleFrom( ScStyleSheetPool* pSrcPool,
-                                        const String& rName, SfxStyleFamily eFamily );
+                                       const OUString& rName, SfxStyleFamily eFamily );
 
-    ScStyleSheet*       FindCaseIns( const String& rName, SfxStyleFamily eFam );
+    ScStyleSheet*       FindCaseIns( const OUString& rName, SfxStyleFamily eFam );
 
-    const String*       GetForceStdName() const { return pForceStdName; }
+    const OUString*     GetForceStdName() const { return pForceStdName; }
 
-    virtual SfxStyleSheetBase& Make( const String&, SfxStyleFamily eFam,
+    virtual SfxStyleSheetBase& Make( const OUString&, SfxStyleFamily eFam,
                                      sal_uInt16 nMask = SFXSTYLEBIT_ALL, sal_uInt16 nPos = 0xffff );
 
 protected:
@@ -61,15 +61,15 @@ protected:
 
     using SfxStyleSheetPool::Create;    // calcwarnings: Create(const SfxStyleSheet&) - ever used?
 
-    virtual SfxStyleSheetBase* Create( const String&    rName,
+    virtual SfxStyleSheetBase* Create( const OUString&  rName,
                                        SfxStyleFamily   eFamily,
-                                       sal_uInt16           nMask);
+                                       sal_uInt16       nMask);
     virtual SfxStyleSheetBase* Create( const SfxStyleSheetBase& rStyle );
 
 private:
     SfxStyleSheetBase*  pActualStyleSheet;
     ScDocument*         pDoc;
-    const String*       pForceStdName;
+    const OUString*       pForceStdName;
 };
 
 #endif     // SC_STLPOOL_HXX

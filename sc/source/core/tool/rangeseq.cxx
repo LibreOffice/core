@@ -221,7 +221,7 @@ sal_Bool ScRangeToSequence::FillStringArray( uno::Any& rAny, const ScMatrix* pMa
         OUString* pColAry = aColSeq.getArray();
         for (SCSIZE nCol = 0; nCol < nColCount; nCol++)
         {
-            String aStr;
+            OUString aStr;
             if ( pMatrix->IsString( nCol, nRow ) )
             {
                 if ( !pMatrix->IsEmpty( nCol, nRow ) )
@@ -233,7 +233,7 @@ sal_Bool ScRangeToSequence::FillStringArray( uno::Any& rAny, const ScMatrix* pMa
                 Color* pColor;
                 pFormatter->GetOutputString( fVal, 0, aStr, &pColor );
             }
-            pColAry[nCol] = OUString( aStr );
+            pColAry[nCol] = aStr;
         }
 
         pRowAry[nRow] = aColSeq;

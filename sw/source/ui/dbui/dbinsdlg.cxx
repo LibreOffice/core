@@ -1271,7 +1271,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
                 for( n = 0; n < nCols; ++n )
                 {
                     _DB_Column* pDBCol = &aColArr[ n ];
-                    String sIns;
+                    OUString sIns;
                     switch( pDBCol->eColType )
                     {
                     case _DB_Column::DB_FILLTEXT:
@@ -1351,24 +1351,26 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
                         break;
                     }
 
-                    if( sIns.Len() )
+                    if( !sIns.isEmpty() )
+                    {
                         rSh.Insert( sIns );
 
-                    if( bSetCrsr && sIns.Len() )
-                    {
-                        // to the beginning and set a mark, so that
-                        // the cursor can be set to the initial position
-                        // at the end.
+                        if( bSetCrsr)
+                        {
+                            // to the beginning and set a mark, so that
+                            // the cursor can be set to the initial position
+                            // at the end.
 
-                        rSh.SwCrsrShell::MovePara(
-                            GetfnParaCurr(), GetfnParaStart() );
-                        pMark = rSh.SetBookmark(
-                            KeyCode(),
-                            OUString(),
-                            OUString(), IDocumentMarkAccess::UNO_BOOKMARK );
-                        rSh.SwCrsrShell::MovePara(
-                            GetfnParaCurr(), GetfnParaEnd() );
-                        bSetCrsr = false;
+                            rSh.SwCrsrShell::MovePara(
+                                    GetfnParaCurr(), GetfnParaStart() );
+                            pMark = rSh.SetBookmark(
+                                    KeyCode(),
+                                    OUString(),
+                                    OUString(), IDocumentMarkAccess::UNO_BOOKMARK );
+                            rSh.SwCrsrShell::MovePara(
+                                    GetfnParaCurr(), GetfnParaEnd() );
+                            bSetCrsr = false;
+                        }
                     }
                 }
 

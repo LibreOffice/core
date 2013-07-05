@@ -1051,9 +1051,9 @@ void SVTXFormattedField::setProperty( const OUString& PropertyName, const ::com:
                 Color* pDum;
                 double d = 0.0;
                 rValue >>= d;
-                String sConverted;
+                OUString sConverted;
                 pFormatter->GetOutputString(d, 0, sConverted, &pDum);
-                aReturn <<= OUString( sConverted );
+                aReturn <<= sConverted;
             }
             break;
         case ::com::sun::star::uno::TypeClass_STRING:

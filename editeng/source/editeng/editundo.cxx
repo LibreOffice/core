@@ -48,10 +48,10 @@ void EditUndoManager::SetEditEngine(EditEngine* pNew)
     mpEditEngine = pNew;
 }
 
-sal_Bool EditUndoManager::Undo()
+bool EditUndoManager::Undo()
 {
     if ( !mpEditEngine || GetUndoActionCount() == 0 )
-        return sal_False;
+        return false;
 
     DBG_ASSERT( mpEditEngine->GetActiveView(), "Active View?" );
 
@@ -62,14 +62,14 @@ sal_Bool EditUndoManager::Undo()
         else
         {
             OSL_FAIL("Undo in engine is not possible without a View! ");
-            return sal_False;
+            return false;
         }
     }
 
     mpEditEngine->GetActiveView()->GetImpEditView()->DrawSelection(); // Remove the old selection
 
     mpEditEngine->SetUndoMode( sal_True );
-    sal_Bool bDone = SfxUndoManager::Undo();
+    bool bDone = SfxUndoManager::Undo();
     mpEditEngine->SetUndoMode( sal_False );
 
     EditSelection aNewSel( mpEditEngine->GetActiveView()->GetImpEditView()->GetEditSelection() );
@@ -83,10 +83,10 @@ sal_Bool EditUndoManager::Undo()
     return bDone;
 }
 
-sal_Bool EditUndoManager::Redo()
+bool EditUndoManager::Redo()
 {
     if ( !mpEditEngine || GetRedoActionCount() == 0 )
-        return sal_False;
+        return false;
 
     DBG_ASSERT( mpEditEngine->GetActiveView(), "Active View?" );
 
@@ -97,14 +97,14 @@ sal_Bool EditUndoManager::Redo()
         else
         {
             OSL_FAIL( "Redo in Engine ohne View nicht moeglich!" );
-            return sal_False;
+            return false;
         }
     }
 
     mpEditEngine->GetActiveView()->GetImpEditView()->DrawSelection(); // Remove the old selection
 
     mpEditEngine->SetUndoMode( sal_True );
-    sal_Bool bDone = SfxUndoManager::Redo();
+    bool bDone = SfxUndoManager::Redo();
     mpEditEngine->SetUndoMode( sal_False );
 
     EditSelection aNewSel( mpEditEngine->GetActiveView()->GetImpEditView()->GetEditSelection() );
@@ -138,9 +138,9 @@ sal_uInt16 EditUndo::GetId() const
     return nId;
 }
 
-sal_Bool EditUndo::CanRepeat(SfxRepeatTarget&) const
+bool EditUndo::CanRepeat(SfxRepeatTarget&) const
 {
-    return sal_False;
+    return false;
 }
 
 OUString EditUndo::GetComment() const
@@ -320,21 +320,21 @@ void EditUndoInsertChars::Redo()
     GetEditEngine()->GetActiveView()->GetImpEditView()->SetEditSelection( EditSelection( aPaM, aNewPaM ) );
 }
 
-sal_Bool EditUndoInsertChars::Merge( SfxUndoAction* pNextAction )
+bool EditUndoInsertChars::Merge( SfxUndoAction* pNextAction )
 {
     EditUndoInsertChars* pNext = dynamic_cast<EditUndoInsertChars*>(pNextAction);
     if (!pNext)
         return false;
 
     if ( aEPaM.nPara != pNext->aEPaM.nPara )
-        return sal_False;
+        return false;
 
     if ( ( aEPaM.nIndex + aText.Len() ) == pNext->aEPaM.nIndex )
     {
         aText += pNext->aText;
-        return sal_True;
+        return true;
     }
-    return sal_False;
+    return false;
 }
 
 EditUndoRemoveChars::EditUndoRemoveChars(

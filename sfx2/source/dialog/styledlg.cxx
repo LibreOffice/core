@@ -60,7 +60,7 @@ SfxStyleDialog::SfxStyleDialog
 
     // With new template always set the management page as the current page
 
-    if( !rStyle.GetName().Len() )
+    if( rStyle.GetName().isEmpty() )
         SetCurPageId( ID_TABPAGE_MANAGESTYLES );
     else
     {

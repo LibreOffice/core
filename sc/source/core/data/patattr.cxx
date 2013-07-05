@@ -72,9 +72,9 @@ using sc::TwipsToHMM;
 
 // -----------------------------------------------------------------------
 
-ScPatternAttr::ScPatternAttr( SfxItemSet* pItemSet, const String& rStyleName )
+ScPatternAttr::ScPatternAttr( SfxItemSet* pItemSet, const OUString& rStyleName )
     :   SfxSetItem  ( ATTR_PATTERN, pItemSet ),
-        pName       ( new String( rStyleName ) ),
+        pName       ( new OUString( rStyleName ) ),
         pStyle      ( NULL )
 {
 }
@@ -100,7 +100,7 @@ ScPatternAttr::ScPatternAttr( const ScPatternAttr& rPatternAttr )
         pStyle      ( rPatternAttr.pStyle )
 {
     if (rPatternAttr.pName)
-        pName = new String(*rPatternAttr.pName);
+        pName = new OUString(*rPatternAttr.pName);
     else
         pName = NULL;
 }
@@ -115,12 +115,12 @@ SfxPoolItem* ScPatternAttr::Clone( SfxItemPool *pPool ) const
     ScPatternAttr* pPattern = new ScPatternAttr( GetItemSet().Clone(true, pPool) );
 
     pPattern->pStyle = pStyle;
-    pPattern->pName  = pName ? new String(*pName) : NULL;
+    pPattern->pName  = pName ? new OUString(*pName) : NULL;
 
     return pPattern;
 }
 
-inline int StrCmp( const String* pStr1, const String* pStr2 )
+inline int StrCmp( const OUString* pStr1, const OUString* pStr2 )
 {
     return ( pStr1 ? ( pStr2 ? ( *pStr1 == *pStr2 ) : false ) : ( pStr2 ? false : true ) );
 }
@@ -150,7 +150,7 @@ int ScPatternAttr::operator==( const SfxPoolItem& rCmp ) const
 
 SfxPoolItem* ScPatternAttr::Create( SvStream& rStream, sal_uInt16 /* nVersion */ ) const
 {
-    String* pStr;
+    OUString* pStr;
     sal_Bool    bHasStyle;
 
     rStream >> bHasStyle;
@@ -158,12 +158,12 @@ SfxPoolItem* ScPatternAttr::Create( SvStream& rStream, sal_uInt16 /* nVersion */
     if ( bHasStyle )
     {
         short   eFamDummy;
-        pStr = new String;
+        pStr = new OUString;
         *pStr = rStream.ReadUniOrByteString( rStream.GetStreamCharSet() );
         rStream >> eFamDummy; // wg. altem Dateiformat
     }
     else
-        pStr = new String( ScGlobal::GetRscString(STR_STYLENAME_STANDARD) );
+        pStr = new OUString( ScGlobal::GetRscString(STR_STYLENAME_STANDARD) );
 
     SfxItemSet *pNewSet = new SfxItemSet( *GetItemSet().GetPool(),
                                        ATTR_PATTERN_START, ATTR_PATTERN_END );
@@ -1117,7 +1117,7 @@ bool ScPatternAttr::IsVisibleEqual( const ScPatternAttr& rOther ) const
     //!     auch hier nur wirklich sichtbare Werte testen !!!
 }
 
-const String* ScPatternAttr::GetStyleName() const
+const OUString* ScPatternAttr::GetStyleName() const
 {
     return pName ? pName : ( pStyle ? &pStyle->GetName() : NULL );
 }
@@ -1184,7 +1184,7 @@ void ScPatternAttr::StyleToName()
         if ( pName )
             *pName = pStyle->GetName();
         else
-            pName = new String( pStyle->GetName() );
+            pName = new OUString( pStyle->GetName() );
 
         pStyle = NULL;
         GetItemSet().SetParent( NULL );

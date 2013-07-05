@@ -125,7 +125,7 @@ protected:
     void CopySheets(SdStyleSheetPool& rSourcePool, SfxStyleFamily eFamily );
     void CopySheets(SdStyleSheetPool& rSourcePool, SfxStyleFamily eFamily, SdStyleSheetVector& rCreatedSheets );
 
-    virtual SfxStyleSheetBase* Create(const String& rName, SfxStyleFamily eFamily, sal_uInt16 nMask);
+    virtual SfxStyleSheetBase* Create(const OUString& rName, SfxStyleFamily eFamily, sal_uInt16 nMask);
     virtual SfxStyleSheetBase* Create(const SdStyleSheet& rStyle);
 
     using  SfxStyleSheetPool::Create;

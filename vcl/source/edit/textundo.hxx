@@ -44,9 +44,9 @@ public:
                     ~TextUndoManager();
 
     using SfxUndoManager::Undo;
-    virtual sal_Bool Undo();
+    virtual bool Undo();
     using SfxUndoManager::Redo;
-    virtual sal_Bool Redo();
+    virtual bool Redo();
 
 };
 

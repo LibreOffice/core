@@ -243,7 +243,7 @@ void SwView::ExecSearch(SfxRequest& rReq, sal_Bool bNoMessage)
 //      was ist, wenn man das gefundene nur attributieren will??
 
                     sal_uInt16 nCmd = SVX_SEARCHCMD_FIND;
-                    if( m_pSrchItem->GetReplaceString().Len() ||
+                    if( !m_pSrchItem->GetReplaceString().isEmpty() ||
                         !m_pReplList )
                     {
                         // Verhindern, dass - falls der Suchstring im
@@ -751,7 +751,7 @@ sal_uLong SwView::FUNC_Search( const SwSearchOptions& rOptions )
             rOptions.eStart,
             rOptions.eEnd,
             FindRanges(eRanges),
-            m_pSrchItem->GetSearchString().Len() ? &aSearchOpt : 0,
+            !m_pSrchItem->GetSearchString().isEmpty() ? &aSearchOpt : 0,
             pReplSet );
     }
     else if( m_pSrchItem->GetPattern() )

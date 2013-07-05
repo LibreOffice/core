@@ -307,7 +307,7 @@ public:
                                         return pPtr;
                                     }
 
-    const   ::utl::TransliterationWrapper*  getForModule( const String& rModule, LanguageType eLang ) const
+    const   ::utl::TransliterationWrapper*  getForModule( const OUString& rModule, LanguageType eLang ) const
                                     {
                                         if ( !pPtr )
                                             pPtr = new ::utl::TransliterationWrapper( m_xContext, nType );

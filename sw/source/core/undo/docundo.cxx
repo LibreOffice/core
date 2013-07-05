@@ -422,7 +422,7 @@ void UndoManager::EnableUndo(bool bEnable)
     SdrUndoManager::EnableUndo(bEnable);
 }
 
-void UndoManager::AddUndoAction(SfxUndoAction *pAction, sal_Bool bTryMerge)
+void UndoManager::AddUndoAction(SfxUndoAction *pAction, bool bTryMerge)
 {
     SwUndo *const pUndo( dynamic_cast<SwUndo *>(pAction) );
     if (pUndo)
@@ -522,7 +522,7 @@ bool UndoManager::impl_DoUndoRedo(UndoOrRedo_t const undoOrRedo)
     return bRet;
 }
 
-sal_Bool UndoManager::Undo()
+bool UndoManager::Undo()
 {
     if(isTextEditActive())
     {
@@ -534,7 +534,7 @@ sal_Bool UndoManager::Undo()
     }
 }
 
-sal_Bool UndoManager::Redo()
+bool UndoManager::Redo()
 {
     if(isTextEditActive())
     {
@@ -551,9 +551,8 @@ sal_Bool UndoManager::Redo()
           calling EnterListAction here will cause SdrUndoManager::Repeat
           to repeat the list action!
  */
-bool
-UndoManager::Repeat(::sw::RepeatContext & rContext,
-        sal_uInt16 const nRepeatCount)
+bool UndoManager::Repeat(::sw::RepeatContext & rContext,
+                         sal_uInt16 const nRepeatCount)
 {
     if (SdrUndoManager::IsInListAction())
     {

@@ -341,10 +341,13 @@ bool ScFormulaDlg::calculateValue( const String& rStrExp, String& rStrResult )
         if ( pFCell->IsValue() )
         {
             double n = pFCell->GetValue();
+            OUString sTempOut(rStrResult);
             sal_uLong nFormat = aFormatter.GetStandardFormat( n, 0,
                             pFCell->GetFormatType(), ScGlobal::eLnge );
+
             aFormatter.GetOutputString( n, nFormat,
-                                        rStrResult, &pColor );
+                                        sTempOut, &pColor );
+            rStrResult = sTempOut;
         }
         else
         {

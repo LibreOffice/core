@@ -679,7 +679,7 @@ void ScDocumentPool::CellStyleCreated( const String& rName )
                 static_cast<ScPatternAttr const*>(GetItem2(ATTR_PATTERN, i)));
         if ( pPattern && pPattern->GetStyleSheet() == NULL )
         {
-            const String* pStyleName = pPattern->GetStyleName();
+            const OUString* pStyleName = pPattern->GetStyleName();
             if ( pStyleName && *pStyleName == rName )
                 pPattern->UpdateStyleSheet();           // find and store style pointer
         }

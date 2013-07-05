@@ -75,15 +75,15 @@ TextUndoManager::~TextUndoManager()
 {
 }
 
-sal_Bool TextUndoManager::Undo()
+bool TextUndoManager::Undo()
 {
     if ( GetUndoActionCount() == 0 )
-        return sal_False;
+        return false;
 
     UndoRedoStart();
 
     mpTextEngine->SetIsInUndo( sal_True );
-    sal_Bool bDone = SfxUndoManager::Undo();
+    bool bDone = SfxUndoManager::Undo();
     mpTextEngine->SetIsInUndo( sal_False );
 
     UndoRedoEnd();
@@ -91,16 +91,16 @@ sal_Bool TextUndoManager::Undo()
     return bDone;
 }
 
-sal_Bool TextUndoManager::Redo()
+bool TextUndoManager::Redo()
 {
     if ( GetRedoActionCount() == 0 )
-        return sal_False;
+        return false;
 
 
     UndoRedoStart();
 
     mpTextEngine->SetIsInUndo( sal_True );
-    sal_Bool bDone = SfxUndoManager::Redo();
+    bool bDone = SfxUndoManager::Redo();
     mpTextEngine->SetIsInUndo( sal_False );
 
     UndoRedoEnd();
@@ -278,22 +278,22 @@ void TextUndoInsertChars::Redo()
     SetSelection( TextSelection( aSel.GetStart(), aNewPaM ) );
 }
 
-sal_Bool TextUndoInsertChars::Merge( SfxUndoAction* pNextAction )
+bool TextUndoInsertChars::Merge( SfxUndoAction* pNextAction )
 {
     if ( !pNextAction->ISA( TextUndoInsertChars ) )
-        return sal_False;
+        return false;
 
     TextUndoInsertChars* pNext = (TextUndoInsertChars*)pNextAction;
 
     if ( maTextPaM.GetPara() != pNext->maTextPaM.GetPara() )
-        return sal_False;
+        return false;
 
     if ( ( maTextPaM.GetIndex() + maText.Len() ) == pNext->maTextPaM.GetIndex() )
     {
         maText += pNext->maText;
-        return sal_True;
+        return true;
     }
-    return sal_False;
+    return false;
 }
 
 OUString TextUndoInsertChars::GetComment () const

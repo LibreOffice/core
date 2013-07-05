@@ -21,7 +21,6 @@
 
 #include "svl/svldllapi.h"
 #include <tools/solar.h>
-#include <tools/string.hxx>
 #include <svl/itemset.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
@@ -35,47 +34,55 @@
 struct SfxItemPropertyMapEntry
 {
     const char*                         pName;
-    sal_uInt16                              nNameLen;
-    sal_uInt16                              nWID;
+    sal_uInt16                          nNameLen;
+    sal_uInt16                          nWID;
     const com::sun::star::uno::Type*    pType;
     long                                nFlags;
-    sal_uInt8                                nMemberId;
+    sal_uInt8                           nMemberId;
 
 };
 
 struct SfxItemPropertySimpleEntry
 {
-    sal_uInt16                              nWID;
+    sal_uInt16                          nWID;
     const com::sun::star::uno::Type*    pType;
     long                                nFlags;
-    sal_uInt8                                nMemberId;
+    sal_uInt8                           nMemberId;
 
-    SfxItemPropertySimpleEntry() :
-        nWID( 0 ),
-        pType( 0 ),
-        nFlags( 0 ),
-        nMemberId( 0 ){}
+    SfxItemPropertySimpleEntry()
+        : nWID( 0 )
+        , pType( 0 )
+        , nFlags( 0 )
+        , nMemberId( 0 )
+        {
+        }
 
     SfxItemPropertySimpleEntry(sal_uInt16 _nWID, const com::sun::star::uno::Type* _pType,
-                               long _nFlags, sal_uInt8 _nMemberId) :
-        nWID(      _nWID ),
-        pType(     _pType ),
-        nFlags(    _nFlags ),
-        nMemberId( _nMemberId ){}
+                               long _nFlags, sal_uInt8 _nMemberId)
+        : nWID(      _nWID )
+        , pType(     _pType )
+        , nFlags(    _nFlags )
+        , nMemberId( _nMemberId )
+        {
+        }
 
-    SfxItemPropertySimpleEntry( const SfxItemPropertyMapEntry* pMapEntry ) :
-        nWID(      pMapEntry->nWID ),
-        pType(     pMapEntry->pType ),
-        nFlags(    pMapEntry->nFlags ),
-        nMemberId( pMapEntry->nMemberId ){}
+    SfxItemPropertySimpleEntry( const SfxItemPropertyMapEntry* pMapEntry )
+        : nWID( pMapEntry->nWID )
+        , pType( pMapEntry->pType )
+        , nFlags( pMapEntry->nFlags )
+        , nMemberId( pMapEntry->nMemberId )
+        {
+        }
 
 };
 struct SfxItemPropertyNamedEntry : public SfxItemPropertySimpleEntry
 {
     OUString sName;
-    SfxItemPropertyNamedEntry( const String& rName, const SfxItemPropertySimpleEntry& rSimpleEntry) :
-        SfxItemPropertySimpleEntry( rSimpleEntry ),
-        sName( rName ){}
+    SfxItemPropertyNamedEntry( const OUString& rName, const SfxItemPropertySimpleEntry& rSimpleEntry)
+        : SfxItemPropertySimpleEntry( rSimpleEntry )
+        , sName( rName )
+{
+}
 
 };
 typedef std::vector< SfxItemPropertyNamedEntry > PropertyEntryVector_t;
@@ -92,7 +99,7 @@ public:
     com::sun::star::uno::Sequence< com::sun::star::beans::Property > getProperties() const;
     com::sun::star::beans::Property getPropertyByName( const OUString rName ) const
         throw( ::com::sun::star::beans::UnknownPropertyException );
-    sal_Bool hasPropertyByName( const OUString& rName ) const;
+    bool hasPropertyByName( const OUString& rName ) const;
 
     void mergeProperties( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& rPropSeq );
     PropertyEntryVector_t getPropertyEntries() const;

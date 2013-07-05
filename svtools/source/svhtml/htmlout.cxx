@@ -940,7 +940,7 @@ OString HTMLOutFuncs::CreateTableDataOptionsValNum(
     if ( bValue )
     {
         // printf / scanf ist zu ungenau
-        String aValStr;
+        OUString aValStr;
         rFormatter.GetInputLineString( fVal, 0, aValStr );
         OString sTmp(OUStringToOString(aValStr, eDestEnc));
         aStrTD.append(' ').

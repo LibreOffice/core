@@ -162,9 +162,9 @@ void ScUndoInsertTab::Repeat(SfxRepeatTarget& rTarget)
             Execute(FID_INS_TABLE, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD);
 }
 
-sal_Bool ScUndoInsertTab::CanRepeat(SfxRepeatTarget& rTarget) const
+bool ScUndoInsertTab::CanRepeat(SfxRepeatTarget& rTarget) const
 {
-    return (rTarget.ISA(ScTabViewTarget));
+    return rTarget.ISA(ScTabViewTarget);
 }
 
 ScUndoInsertTables::ScUndoInsertTables( ScDocShell* pNewDocShell,
@@ -257,9 +257,9 @@ void ScUndoInsertTables::Repeat(SfxRepeatTarget& rTarget)
             Execute(FID_INS_TABLE, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD);
 }
 
-sal_Bool ScUndoInsertTables::CanRepeat(SfxRepeatTarget& rTarget) const
+bool ScUndoInsertTables::CanRepeat(SfxRepeatTarget& rTarget) const
 {
-    return (rTarget.ISA(ScTabViewTarget));
+    return rTarget.ISA(ScTabViewTarget);
 }
 
 ScUndoDeleteTab::ScUndoDeleteTab( ScDocShell* pNewDocShell, const vector<SCTAB> &aTab,
@@ -417,9 +417,9 @@ void ScUndoDeleteTab::Repeat(SfxRepeatTarget& rTarget)
     }
 }
 
-sal_Bool ScUndoDeleteTab::CanRepeat(SfxRepeatTarget& rTarget) const
+bool ScUndoDeleteTab::CanRepeat(SfxRepeatTarget& rTarget) const
 {
-    return (rTarget.ISA(ScTabViewTarget));
+    return rTarget.ISA(ScTabViewTarget);
 }
 
 ScUndoRenameTab::ScUndoRenameTab( ScDocShell* pNewDocShell,
@@ -474,7 +474,7 @@ void ScUndoRenameTab::Repeat(SfxRepeatTarget& /* rTarget */)
     // makes no sense
 }
 
-sal_Bool ScUndoRenameTab::CanRepeat(SfxRepeatTarget& /* rTarget */) const
+bool ScUndoRenameTab::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 {
     return false;
 }
@@ -579,7 +579,7 @@ void ScUndoMoveTab::Repeat(SfxRepeatTarget& /* rTarget */)
         // No Repeat ! ? !
 }
 
-sal_Bool ScUndoMoveTab::CanRepeat(SfxRepeatTarget& /* rTarget */) const
+bool ScUndoMoveTab::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 {
     return false;
 }
@@ -719,7 +719,7 @@ void ScUndoCopyTab::Repeat(SfxRepeatTarget& /* rTarget */)
         // no Repeat ! ? !
 }
 
-sal_Bool ScUndoCopyTab::CanRepeat(SfxRepeatTarget& /* rTarget */) const
+bool ScUndoCopyTab::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 {
     return false;
 }
@@ -788,7 +788,7 @@ void ScUndoTabColor::Repeat(SfxRepeatTarget& /* rTarget */)
     // makes no sense
 }
 
-sal_Bool ScUndoTabColor::CanRepeat(SfxRepeatTarget& /* rTarget */) const
+bool ScUndoTabColor::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 {
     return false;
 }
@@ -875,9 +875,9 @@ void ScUndoMakeScenario::Repeat(SfxRepeatTarget& rTarget)
     }
 }
 
-sal_Bool ScUndoMakeScenario::CanRepeat(SfxRepeatTarget& rTarget) const
+bool ScUndoMakeScenario::CanRepeat(SfxRepeatTarget& rTarget) const
 {
-    return (rTarget.ISA(ScTabViewTarget));
+    return rTarget.ISA(ScTabViewTarget);
 }
 
 ScUndoImportTab::ScUndoImportTab( ScDocShell* pShell,
@@ -1031,9 +1031,9 @@ void ScUndoImportTab::Repeat(SfxRepeatTarget& rTarget)
             Execute(FID_INS_TABLE, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD);
 }
 
-sal_Bool ScUndoImportTab::CanRepeat(SfxRepeatTarget& rTarget) const
+bool ScUndoImportTab::CanRepeat(SfxRepeatTarget& rTarget) const
 {
-    return (rTarget.ISA(ScTabViewTarget));
+    return rTarget.ISA(ScTabViewTarget);
 }
 
 ScUndoRemoveLink::ScUndoRemoveLink( ScDocShell* pShell, const String& rDoc ) :
@@ -1112,7 +1112,7 @@ void ScUndoRemoveLink::Repeat(SfxRepeatTarget& /* rTarget */)
     // makes no sense
 }
 
-sal_Bool ScUndoRemoveLink::CanRepeat(SfxRepeatTarget& /* rTarget */) const
+bool ScUndoRemoveLink::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 {
     return false;
 }
@@ -1165,9 +1165,9 @@ void ScUndoShowHideTab::Repeat(SfxRepeatTarget& rTarget)
                                 SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD);
 }
 
-sal_Bool ScUndoShowHideTab::CanRepeat(SfxRepeatTarget& rTarget) const
+bool ScUndoShowHideTab::CanRepeat(SfxRepeatTarget& rTarget) const
 {
-    return (rTarget.ISA(ScTabViewTarget));
+    return rTarget.ISA(ScTabViewTarget);
 }
 
 OUString ScUndoShowHideTab::GetComment() const
@@ -1245,7 +1245,7 @@ void ScUndoDocProtect::Repeat(SfxRepeatTarget& /* rTarget */)
     // makes no sense
 }
 
-sal_Bool ScUndoDocProtect::CanRepeat(SfxRepeatTarget& /* rTarget */) const
+bool ScUndoDocProtect::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 {
     return false;       // makes no sense
 }
@@ -1317,7 +1317,7 @@ void ScUndoTabProtect::Repeat(SfxRepeatTarget& /* rTarget */)
     // makes no sense
 }
 
-sal_Bool ScUndoTabProtect::CanRepeat(SfxRepeatTarget& /* rTarget */) const
+bool ScUndoTabProtect::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 {
     return false;       // makes no sense
 }
@@ -1379,7 +1379,7 @@ void ScUndoPrintRange::Repeat(SfxRepeatTarget& /* rTarget */)
     // makes no sense
 }
 
-sal_Bool ScUndoPrintRange::CanRepeat(SfxRepeatTarget& /* rTarget */) const
+bool ScUndoPrintRange::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 {
     return false;       // makes no sense
 }
@@ -1453,7 +1453,7 @@ void ScUndoScenarioFlags::Repeat(SfxRepeatTarget& /* rTarget */)
     //  Repeat makes no sense
 }
 
-sal_Bool ScUndoScenarioFlags::CanRepeat(SfxRepeatTarget& /* rTarget */) const
+bool ScUndoScenarioFlags::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 {
     return false;
 }
@@ -1530,7 +1530,7 @@ void ScUndoRenameObject::Repeat(SfxRepeatTarget& /* rTarget */)
 {
 }
 
-sal_Bool ScUndoRenameObject::CanRepeat(SfxRepeatTarget& /* rTarget */) const
+bool ScUndoRenameObject::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 {
     return false;
 }
@@ -1579,9 +1579,9 @@ void ScUndoLayoutRTL::Repeat(SfxRepeatTarget& rTarget)
             Execute( FID_TAB_RTL, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD);
 }
 
-sal_Bool ScUndoLayoutRTL::CanRepeat(SfxRepeatTarget& rTarget) const
+bool ScUndoLayoutRTL::CanRepeat(SfxRepeatTarget& rTarget) const
 {
-    return (rTarget.ISA(ScTabViewTarget));
+    return rTarget.ISA(ScTabViewTarget);
 }
 
 OUString ScUndoLayoutRTL::GetComment() const

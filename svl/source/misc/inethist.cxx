@@ -26,7 +26,6 @@
 #include "rtl/crc.h"
 #include <tools/solar.h>
 #include <tools/debug.hxx>
-#include <tools/string.hxx>
 #include <tools/urlobj.hxx>
 
 /*========================================================================
@@ -201,8 +200,8 @@ public:
 
     /** putUrl/queryUrl.
     */
-    void putUrl   (const String &rUrl);
-    sal_Bool queryUrl (const String &rUrl);
+    void putUrl   (const OUString &rUrl);
+    sal_Bool queryUrl (const OUString &rUrl);
 };
 
 /*========================================================================
@@ -292,7 +291,7 @@ void INetURLHistory_Impl::move (sal_uInt16 nSI, sal_uInt16 nDI)
 /*
  * putUrl.
  */
-void INetURLHistory_Impl::putUrl (const String &rUrl)
+void INetURLHistory_Impl::putUrl (const OUString &rUrl)
 {
     sal_uInt32 h = crc32 (rUrl);
     sal_uInt16 k = find (h);
@@ -349,7 +348,7 @@ void INetURLHistory_Impl::putUrl (const String &rUrl)
 /*
  * queryUrl.
  */
-sal_Bool INetURLHistory_Impl::queryUrl (const String &rUrl)
+sal_Bool INetURLHistory_Impl::queryUrl (const OUString &rUrl)
 {
     sal_uInt32 h = crc32 (rUrl);
     sal_uInt16 k = find (h);
@@ -417,8 +416,7 @@ void INetURLHistory::NormalizeUrl_Impl (INetURLObject &rUrl)
         case INET_PROT_FILE:
             if (!rUrl.IsCaseSensitive())
             {
-                String aPath (rUrl.GetURLPath(INetURLObject::NO_DECODE));
-                aPath.ToLowerAscii();
+                OUString aPath (rUrl.GetURLPath(INetURLObject::NO_DECODE).toAsciiLowerCase());
                 rUrl.SetURLPath (aPath, INetURLObject::NOT_CANONIC);
             }
             break;

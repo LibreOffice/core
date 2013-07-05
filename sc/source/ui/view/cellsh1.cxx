@@ -742,37 +742,37 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
                     if( ! rReq.IsAPI() )
                     {
-                        String  aPara;
+                        OUString  aPara;
                         Color*  pColor=0;
 
                         switch( eFillDir )
                         {
-                            case FILL_TO_BOTTOM:    aPara = 'B'; break;
-                            case FILL_TO_RIGHT:     aPara = 'R'; break;
-                            case FILL_TO_TOP:       aPara = 'T'; break;
-                            case FILL_TO_LEFT:      aPara = 'L'; break;
-                            default: aPara.Erase(); break;
+                        case FILL_TO_BOTTOM:    aPara = "B"; break;
+                        case FILL_TO_RIGHT:     aPara = "R"; break;
+                        case FILL_TO_TOP:       aPara = "T"; break;
+                        case FILL_TO_LEFT:      aPara = "L"; break;
+                        default: break;
                         }
                         rReq.AppendItem( SfxStringItem( FID_FILL_SERIES, aPara ) );
 
                         switch( eFillCmd )
                         {
-                            case FILL_SIMPLE:       aPara = 'S'; break;
-                            case FILL_LINEAR:       aPara = 'L'; break;
-                            case FILL_GROWTH:       aPara = 'G'; break;
-                            case FILL_DATE:         aPara = 'D'; break;
-                            case FILL_AUTO:         aPara = 'A'; break;
-                            default: aPara.Erase(); break;
+                        case FILL_SIMPLE:       aPara = "S"; break;
+                        case FILL_LINEAR:       aPara = "L"; break;
+                        case FILL_GROWTH:       aPara = "G"; break;
+                        case FILL_DATE:         aPara = "D"; break;
+                        case FILL_AUTO:         aPara = "A"; break;
+                        default: break;
                         }
                         rReq.AppendItem( SfxStringItem( FN_PARAM_1, aPara ) );
 
                         switch( eFillDateCmd )
                         {
-                            case FILL_DAY:          aPara = 'D'; break;
-                            case FILL_WEEKDAY:      aPara = 'W'; break;
-                            case FILL_MONTH:        aPara = 'M'; break;
-                            case FILL_YEAR:         aPara = 'Y'; break;
-                            default: aPara.Erase(); break;
+                        case FILL_DAY:          aPara = "D"; break;
+                        case FILL_WEEKDAY:      aPara = "W"; break;
+                        case FILL_MONTH:        aPara = "M"; break;
+                        case FILL_YEAR:         aPara = "Y"; break;
+                        default: break;
                         }
                         rReq.AppendItem( SfxStringItem( FN_PARAM_2, aPara ) );
 
