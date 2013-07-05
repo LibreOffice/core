@@ -22,8 +22,8 @@
 #include <svx/svddef.hxx>
 #include <svx/sdmetitm.hxx>
 
-// Ueberstand der Masslinie ueber die Masshilfslinien
-// Nur wenn die Masspfeile aussen sind (n.i.)
+// Overlap of the measure line over the measure helper lines
+// Only of the measure arrows are on the outside
 class SdrMeasureOverhangItem: public SdrMetricItem {
 public:
     SdrMeasureOverhangItem(long nVal=0): SdrMetricItem(SDRATTR_MEASUREOVERHANG,nVal)  {}

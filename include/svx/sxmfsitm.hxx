@@ -22,8 +22,8 @@
 #include <svx/svddef.hxx>
 #include <svl/stritem.hxx>
 
-// Formatstring (aehnl. Calc), z.B. "#.###,00km"
-// ueberschreibt SdrMeasureUnitItem und SdrMeasureShowUnitItem (n.i.)
+// Format string (similar to Calc), e.g. "#.###,00km"
+// overwrites SdrMeasureUnitItem and SdrMeasureShowUnitItem
 class SdrMeasureFormatStringItem: public SfxStringItem {
 public:
     SdrMeasureFormatStringItem()                   : SfxStringItem() { SetWhich(SDRATTR_MEASUREFORMATSTRING); }
