@@ -417,7 +417,7 @@ OUString SAL_CALL OConnection::getCatalog(  ) throw(SQLException, RuntimeExcepti
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
 
 
-    sal_Int32 nValueLen;
+    SQLINTEGER nValueLen;
     char pCat[1024];
     OTools::ThrowException(this,
         N3SQLGetConnectAttr(m_aConnectionHandle,SQL_ATTR_CURRENT_CATALOG,(SDB_ODBC_CHAR*)pCat,(sizeof pCat)-1,&nValueLen),
