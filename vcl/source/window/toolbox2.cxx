@@ -982,7 +982,7 @@ ToolBoxButtonSize ToolBox::GetToolboxButtonSize() const
 
 // -----------------------------------------------------------------------
 
-const Size& ToolBox::GetDefaultImageSize() const
+const Size& ToolBox::GetDefaultImageSize(bool bLarge)
 {
     static Size aSmallButtonSize( TB_SMALLIMAGESIZE, TB_SMALLIMAGESIZE );
 
@@ -995,6 +995,9 @@ const Size& ToolBox::GetDefaultImageSize() const
         s_nSymbolsStyle = nSymbolsStyle;
         switch ( nSymbolsStyle )
         {
+            case STYLE_SYMBOLS_TANGO:
+            case STYLE_SYMBOLS_TANGO_TESTING:
+            case STYLE_SYMBOLS_HUMAN:
             case STYLE_SYMBOLS_INDUSTRIAL:
                 aLargeButtonSize = Size( TB_LARGEIMAGESIZE_INDUSTRIAL, TB_LARGEIMAGESIZE_INDUSTRIAL );
                 break;
@@ -1004,12 +1007,18 @@ const Size& ToolBox::GetDefaultImageSize() const
             case STYLE_SYMBOLS_OXYGEN:
                 aLargeButtonSize = Size( TB_LARGEIMAGESIZE_OXYGEN, TB_LARGEIMAGESIZE_OXYGEN );
                 break;
+            case STYLE_SYMBOLS_DEFAULT: // galaxy
+            case STYLE_SYMBOLS_HICONTRAST:
             default:
                 aLargeButtonSize = Size( TB_LARGEIMAGESIZE, TB_LARGEIMAGESIZE );
         }
     }
+    return bLarge ? aLargeButtonSize : aSmallButtonSize;
+}
 
-    return GetToolboxButtonSize() == TOOLBOX_BUTTONSIZE_LARGE ? aLargeButtonSize : aSmallButtonSize;
+const Size& ToolBox::GetDefaultImageSize() const
+{
+    return GetDefaultImageSize( GetToolboxButtonSize() == TOOLBOX_BUTTONSIZE_LARGE );
 }
 
 // -----------------------------------------------------------------------
