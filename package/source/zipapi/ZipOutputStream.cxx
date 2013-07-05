@@ -450,12 +450,25 @@ sal_uInt32 ZipOutputStream::getCurrentDosTime( )
     osl_getSystemTime ( &aTimeValue );
     osl_getDateTimeFromTimeValue( &aTimeValue, &aDateTime);
 
+    // at year 2108, there is an overflow
+    // -> some decision needs to be made
+    // how to handle the ZIP file format (just overflow?)
+
+    // if the current system time is before 1980,
+    // then the time traveller will have to make a decision
+    // how to handle the ZIP file format before it is invented
+    // (just underflow?)
+
+    assert(aDateTime.Year > 1980 && aDateTime.Year < 2108);
+
     sal_uInt32 nYear = static_cast <sal_uInt32> (aDateTime.Year);
 
-    if (nYear>1980)
+    if (nYear>=1980)
         nYear-=1980;
-    else if (nYear>80)
+    else if (nYear>=80)
+    {
         nYear-=80;
+    }
     sal_uInt32 nResult = static_cast < sal_uInt32>( ( ( ( aDateTime.Day) +
                                           ( 32 * (aDateTime.Month)) +
                                           ( 512 * nYear ) ) << 16) |
