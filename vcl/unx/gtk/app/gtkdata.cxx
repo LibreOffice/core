@@ -571,12 +571,10 @@ void GtkData::Yield( bool bWait, bool bHandleAllCurrentEvents )
             gboolean wasOneEvent = TRUE;
             while( nMaxEvents-- && wasOneEvent )
             {
-                wasOneEvent = g_main_context_iteration( NULL, FALSE );
+                wasOneEvent = g_main_context_iteration( NULL, bWait & !bWasEvent );
                 if( wasOneEvent )
                     bWasEvent = true;
             }
-            if( bWait && ! bWasEvent )
-                bWasEvent = g_main_context_iteration( NULL, TRUE ) != 0;
         }
         else if( bWait )
         {
