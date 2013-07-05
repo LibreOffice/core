@@ -55,7 +55,8 @@ namespace framework
 
 AddonsToolBarWrapper::AddonsToolBarWrapper( const Reference< XComponentContext >& xContext ) :
     UIElementWrapperBase( UIElementType::TOOLBAR ),
-    m_xContext( xContext )
+    m_xContext( xContext ),
+    m_bCreatedImages( false )
 {
 }
 
@@ -159,6 +160,26 @@ Reference< XInterface > SAL_CALL AddonsToolBarWrapper::getRealInterface() throw 
 
     return Reference< XInterface >();
 }
+
+// allow late population of images for add-on toolbars
+void AddonsToolBarWrapper::populateImages()
+{
+    ResetableGuard aLock( m_aLock );
+
+    if (m_bCreatedImages)
+        return;
+
+    if ( m_xToolBarManager.is() )
+    {
+        AddonsToolBarManager* pToolBarManager = static_cast< AddonsToolBarManager *>( m_xToolBarManager.get() );
+        if (pToolBarManager)
+        {
+            pToolBarManager->RefreshImages();
+            m_bCreatedImages = true;
+        }
+    }
+}
+
 
 } // namespace framework
 

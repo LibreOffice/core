@@ -45,13 +45,14 @@ class AddonsToolBarWrapper : public UIElementWrapperBase
         // XUIElement
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL getRealInterface() throw (::com::sun::star::uno::RuntimeException);
 
-    //-------------------------------------------------------------------------------------------------------------
-    //  protected methods
-    //-------------------------------------------------------------------------------------------------------------
+        // cf. ToolbarLayoutManager
+        void populateImages();
+
     private:
         com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >                                 m_xContext;
         com::sun::star::uno::Reference< com::sun::star::lang::XComponent >                                       m_xToolBarManager;
         com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > > m_aConfigData;
+        bool           m_bCreatedImages;
 };
 
 }
