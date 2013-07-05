@@ -1441,19 +1441,19 @@ void lcl_processCompatibleSfxHint( const uno::Reference< document::XVbaEventsHel
 }
 #endif
 
-long SwDocShell::DdeGetData( const String& rItem, const String& rMimeType,
-                                uno::Any & rValue )
+long SwDocShell::DdeGetData( const OUString& rItem, const OUString& rMimeType,
+                             uno::Any & rValue )
 {
     return pDoc->GetData( rItem, rMimeType, rValue );
 }
 
-long SwDocShell::DdeSetData( const String& rItem, const String& rMimeType,
-                            const uno::Any & rValue )
+long SwDocShell::DdeSetData( const OUString& rItem, const OUString& rMimeType,
+                             const uno::Any & rValue )
 {
     return pDoc->SetData( rItem, rMimeType, rValue );
 }
 
-::sfx2::SvLinkSource* SwDocShell::DdeCreateLinkSource( const String& rItem )
+::sfx2::SvLinkSource* SwDocShell::DdeCreateLinkSource( const OUString& rItem )
 {
     return pDoc->CreateLinkSource( rItem );
 }

@@ -34,9 +34,9 @@ E3dUndoAction::~E3dUndoAction ()
 
 // Repeat does not exist
 
-sal_Bool E3dUndoAction::CanRepeat(SfxRepeatTarget&) const
+bool E3dUndoAction::CanRepeat(SfxRepeatTarget&) const
 {
-    return sal_False;
+    return false;
 }
 
 /************************************************************************/
@@ -74,13 +74,13 @@ void E3dRotateUndoAction::Redo ()
 TYPEINIT1(E3dAttributesUndoAction, SdrUndoAction);
 
 E3dAttributesUndoAction::E3dAttributesUndoAction( SdrModel &rModel,
-    E3dObject*  pInObject,
-    const SfxItemSet& rNewSet,
-    const SfxItemSet& rOldSet)
-:   SdrUndoAction( rModel ),
-    pObject      ( pInObject ),
-    aNewSet      ( rNewSet ),
-    aOldSet      ( rOldSet )
+                                                  E3dObject*  pInObject,
+                                                  const SfxItemSet& rNewSet,
+                                                  const SfxItemSet& rOldSet)
+    : SdrUndoAction( rModel )
+    , pObject      ( pInObject )
+    , aNewSet      ( rNewSet )
+    , aOldSet      ( rOldSet )
 {
 }
 
@@ -105,9 +105,9 @@ void E3dAttributesUndoAction::Redo()
 
 // Multiple Undo is not possible
 
-sal_Bool E3dAttributesUndoAction::CanRepeat(SfxRepeatTarget& /*rView*/) const
+bool E3dAttributesUndoAction::CanRepeat(SfxRepeatTarget& /*rView*/) const
 {
-    return sal_False;
+    return false;
 }
 
 // Multiple Undo is not possible

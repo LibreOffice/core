@@ -25,12 +25,10 @@
 #include "zforauto.hxx"
 #include "global.hxx"
 
-static const sal_Char pStandardName[] = "Standard";
-
 //------------------------------------------------------------------------
 
 ScNumFormatAbbrev::ScNumFormatAbbrev() :
-    sFormatstring   ( pStandardName ),
+    sFormatstring   ( "Standard" ),
     eLnge           (LANGUAGE_SYSTEM),
     eSysLnge        (LANGUAGE_GERMAN)       // sonst passt "Standard" nicht
 {
@@ -81,7 +79,7 @@ void ScNumFormatAbbrev::PutFormatIndex(sal_uLong nFormat,
         OSL_FAIL("SCNumFormatAbbrev:: unknown number format");
         eLnge = LANGUAGE_SYSTEM;
         eSysLnge = LANGUAGE_GERMAN;     // sonst passt "Standard" nicht
-        sFormatstring.AssignAscii( RTL_CONSTASCII_STRINGPARAM( pStandardName ) );
+        sFormatstring = "Standard";
     }
 }
 
@@ -89,9 +87,9 @@ sal_uLong ScNumFormatAbbrev::GetFormatIndex( SvNumberFormatter& rFormatter)
 {
     short nType;
     bool bNewInserted;
-    xub_StrLen nCheckPos;
+    sal_Int32 nCheckPos;
     return rFormatter.GetIndexPuttingAndConverting( sFormatstring, eLnge,
-            eSysLnge, nType, bNewInserted, nCheckPos);
+                                                    eSysLnge, nType, bNewInserted, nCheckPos);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

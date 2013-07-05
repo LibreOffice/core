@@ -471,14 +471,14 @@ public:
     void                        InvalidateName();  // Re-set to unnamed
 
     // DDE-Interface
-    virtual long                DdeExecute( const String& rCmd );
-    virtual long                DdeGetData( const String& rItem,
-                                            const String& rMimeType,
-                                        ::com::sun::star::uno::Any & rValue );
-    virtual long                DdeSetData( const String& rItem,
-                                            const String& rMimeType,
-                                const ::com::sun::star::uno::Any & rValue );
-    virtual ::sfx2::SvLinkSource*       DdeCreateLinkSource( const String& rItem );
+    virtual long                DdeExecute( const OUString& rCmd );
+    virtual long                DdeGetData( const OUString& rItem,
+                                            const OUString& rMimeType,
+                                            ::com::sun::star::uno::Any & rValue );
+    virtual long                DdeSetData( const OUString& rItem,
+                                            const OUString& rMimeType,
+                                            const ::com::sun::star::uno::Any & rValue );
+    virtual ::sfx2::SvLinkSource* DdeCreateLinkSource( const OUString& rItem );
     virtual void                ReconnectDdeLink(SfxObjectShell& rServer);
 
     static void                 ReconnectDdeLinks(SfxObjectShell& rServer);

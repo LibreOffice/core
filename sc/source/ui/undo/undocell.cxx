@@ -158,9 +158,9 @@ void ScUndoCursorAttr::Repeat(SfxRepeatTarget& rTarget)
         ((ScTabViewTarget&)rTarget).GetViewShell()->ApplySelectionPattern( *pApplyPattern );
 }
 
-sal_Bool ScUndoCursorAttr::CanRepeat(SfxRepeatTarget& rTarget) const
+bool ScUndoCursorAttr::CanRepeat(SfxRepeatTarget& rTarget) const
 {
-    return (rTarget.ISA(ScTabViewTarget));
+    return rTarget.ISA(ScTabViewTarget);
 }
 
 ScUndoEnterData::Value::Value() : mnTab(-1), mbHasFormat(false), mnFormat(0) {}
@@ -319,9 +319,9 @@ void ScUndoEnterData::Repeat(SfxRepeatTarget& rTarget)
     }
 }
 
-sal_Bool ScUndoEnterData::CanRepeat(SfxRepeatTarget& rTarget) const
+bool ScUndoEnterData::CanRepeat(SfxRepeatTarget& rTarget) const
 {
-    return (rTarget.ISA(ScTabViewTarget));
+    return rTarget.ISA(ScTabViewTarget);
 }
 
 
@@ -396,7 +396,7 @@ void ScUndoEnterValue::Repeat(SfxRepeatTarget& /* rTarget */)
     // makes no sense
 }
 
-sal_Bool ScUndoEnterValue::CanRepeat(SfxRepeatTarget& /* rTarget */) const
+bool ScUndoEnterValue::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 {
     return false;
 }
@@ -443,7 +443,7 @@ void ScUndoSetCell::Repeat( SfxRepeatTarget& /*rTarget*/ )
     // Makes no sense.
 }
 
-sal_Bool ScUndoSetCell::CanRepeat( SfxRepeatTarget& /*rTarget*/ ) const
+bool ScUndoSetCell::CanRepeat( SfxRepeatTarget& /*rTarget*/ ) const
 {
     return false;
 }
@@ -576,9 +576,9 @@ void ScUndoPageBreak::Repeat(SfxRepeatTarget& rTarget)
     }
 }
 
-sal_Bool ScUndoPageBreak::CanRepeat(SfxRepeatTarget& rTarget) const
+bool ScUndoPageBreak::CanRepeat(SfxRepeatTarget& rTarget) const
 {
-    return (rTarget.ISA(ScTabViewTarget));
+    return rTarget.ISA(ScTabViewTarget);
 }
 
 ScUndoPrintZoom::ScUndoPrintZoom( ScDocShell* pNewDocShell,
@@ -646,9 +646,9 @@ void ScUndoPrintZoom::Repeat(SfxRepeatTarget& rTarget)
     }
 }
 
-sal_Bool ScUndoPrintZoom::CanRepeat(SfxRepeatTarget& rTarget) const
+bool ScUndoPrintZoom::CanRepeat(SfxRepeatTarget& rTarget) const
 {
-    return (rTarget.ISA(ScTabViewTarget));
+    return rTarget.ISA(ScTabViewTarget);
 }
 
 ScUndoThesaurus::ScUndoThesaurus( ScDocShell* pNewDocShell,
@@ -777,9 +777,9 @@ void ScUndoThesaurus::Repeat(SfxRepeatTarget& rTarget)
         ((ScTabViewTarget&)rTarget).GetViewShell()->DoThesaurus( sal_True );
 }
 
-sal_Bool ScUndoThesaurus::CanRepeat(SfxRepeatTarget& rTarget) const
+bool ScUndoThesaurus::CanRepeat(SfxRepeatTarget& rTarget) const
 {
-    return (rTarget.ISA(ScTabViewTarget));
+    return rTarget.ISA(ScTabViewTarget);
 }
 
 ScUndoReplaceNote::ScUndoReplaceNote( ScDocShell& rDocShell, const ScAddress& rPos,
@@ -839,7 +839,7 @@ void ScUndoReplaceNote::Repeat( SfxRepeatTarget& /*rTarget*/ )
 {
 }
 
-sal_Bool ScUndoReplaceNote::CanRepeat( SfxRepeatTarget& /*rTarget*/ ) const
+bool ScUndoReplaceNote::CanRepeat( SfxRepeatTarget& /*rTarget*/ ) const
 {
     return false;
 }
@@ -909,7 +909,7 @@ void ScUndoShowHideNote::Repeat( SfxRepeatTarget& /*rTarget*/ )
 {
 }
 
-sal_Bool ScUndoShowHideNote::CanRepeat( SfxRepeatTarget& /*rTarget*/ ) const
+bool ScUndoShowHideNote::CanRepeat( SfxRepeatTarget& /*rTarget*/ ) const
 {
     return false;
 }
@@ -1019,7 +1019,7 @@ void ScUndoDetective::Repeat(SfxRepeatTarget& /* rTarget */)
     // makes no sense
 }
 
-sal_Bool ScUndoDetective::CanRepeat(SfxRepeatTarget& /* rTarget */) const
+bool ScUndoDetective::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 {
     return false;
 }
@@ -1088,7 +1088,7 @@ void ScUndoRangeNames::Repeat(SfxRepeatTarget& /* rTarget */)
     // makes no sense
 }
 
-sal_Bool ScUndoRangeNames::CanRepeat(SfxRepeatTarget& /* rTarget */) const
+bool ScUndoRangeNames::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 {
     return false;
 }

@@ -22,8 +22,8 @@
 using namespace sd;
 
 UndoManager::UndoManager( sal_uInt16 nMaxUndoActionCount /* = 20 */ )
-: SdrUndoManager( nMaxUndoActionCount )
-, mpLinkedUndoManager(NULL)
+  : SdrUndoManager( nMaxUndoActionCount )
+  , mpLinkedUndoManager(NULL)
 {
 }
 
@@ -36,7 +36,7 @@ void UndoManager::EnterListAction(const OUString &rComment, const OUString& rRep
     }
 }
 
-void UndoManager::AddUndoAction( SfxUndoAction *pAction, sal_Bool bTryMerg /* = sal_False */ )
+void UndoManager::AddUndoAction( SfxUndoAction *pAction, bool bTryMerg /* = sal_False */ )
 {
     if( !IsDoing() )
     {

@@ -32,9 +32,9 @@ SdUndoGroup::~SdUndoGroup()
     aCtn.clear();
 }
 
-sal_Bool SdUndoGroup::Merge( SfxUndoAction* pNextAction )
+bool SdUndoGroup::Merge( SfxUndoAction* pNextAction )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
 
     if( pNextAction && pNextAction->ISA( SdUndoAction ) )
     {
@@ -43,7 +43,7 @@ sal_Bool SdUndoGroup::Merge( SfxUndoAction* pNextAction )
         if( pClone )
         {
             AddAction( pClone );
-            bRet = sal_True;
+            bRet = true;
         }
     }
 

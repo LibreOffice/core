@@ -80,8 +80,8 @@ void ScStyleSheetPool::SetDocument( ScDocument* pDocument )
 
 //------------------------------------------------------------------------
 
-SfxStyleSheetBase& ScStyleSheetPool::Make( const String& rName,
-                            SfxStyleFamily eFam, sal_uInt16 mask, sal_uInt16 nPos )
+SfxStyleSheetBase& ScStyleSheetPool::Make( const OUString& rName,
+                                           SfxStyleFamily eFam, sal_uInt16 mask, sal_uInt16 nPos )
 {
     //  When updating styles from a template, Office 5.1 sometimes created
     //  files with multiple default styles.
@@ -89,13 +89,13 @@ SfxStyleSheetBase& ScStyleSheetPool::Make( const String& rName,
 
     //! only when loading?
 
-    if ( rName.EqualsAscii(STRING_STANDARD) && Find( rName, eFam ) != NULL )
+    if ( rName == STRING_STANDARD && Find( rName, eFam ) != NULL )
     {
         OSL_FAIL("renaming additional default style");
         sal_uInt32 nCount = aStyles.size();
         for ( sal_uInt32 nAdd = 1; nAdd <= nCount; nAdd++ )
         {
-            String aNewName = ScGlobal::GetRscString(STR_STYLENAME_STANDARD);
+            OUString aNewName = ScGlobal::GetRscString(STR_STYLENAME_STANDARD);
             aNewName += OUString::number( nAdd );
             if ( Find( aNewName, eFam ) == NULL )
                 return SfxStyleSheetPool::Make( aNewName, eFam, mask, nPos );
@@ -107,10 +107,9 @@ SfxStyleSheetBase& ScStyleSheetPool::Make( const String& rName,
 
 //------------------------------------------------------------------------
 
-SfxStyleSheetBase* ScStyleSheetPool::Create(
-                                            const String&   rName,
-                                            SfxStyleFamily  eFamily,
-                                            sal_uInt16          nMaskP )
+SfxStyleSheetBase* ScStyleSheetPool::Create( const OUString&   rName,
+                                             SfxStyleFamily  eFamily,
+                                             sal_uInt16          nMaskP )
 {
     ScStyleSheet* pSheet = new ScStyleSheet( rName, *this, eFamily, nMaskP );
     if ( eFamily == SFX_STYLE_FAMILY_PARA && ScGlobal::GetRscString(STR_STYLENAME_STANDARD) != rName )
@@ -144,7 +143,7 @@ void ScStyleSheetPool::Remove( SfxStyleSheetBase* pStyle )
 //------------------------------------------------------------------------
 
 void ScStyleSheetPool::CopyStyleFrom( ScStyleSheetPool* pSrcPool,
-                                        const String& rName, SfxStyleFamily eFamily )
+                                      const OUString& rName, SfxStyleFamily eFamily )
 {
     //  this ist Dest-Pool
 
@@ -483,9 +482,9 @@ void ScStyleSheetPool::CreateStandardStyles()
 //------------------------------------------------------------------------
 
 
-ScStyleSheet* ScStyleSheetPool::FindCaseIns( const String& rName, SfxStyleFamily eFam )
+ScStyleSheet* ScStyleSheetPool::FindCaseIns( const OUString& rName, SfxStyleFamily eFam )
 {
-    String aUpSearch = ScGlobal::pCharClass->uppercase(rName);
+    OUString aUpSearch = ScGlobal::pCharClass->uppercase(rName);
 
     sal_uInt32 nCount = aStyles.size();
     for (sal_uInt32 n=0; n<nCount; n++)

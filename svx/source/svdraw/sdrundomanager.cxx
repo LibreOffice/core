@@ -21,10 +21,10 @@
 //////////////////////////////////////////////////////////////////////////////
 
 SdrUndoManager::SdrUndoManager(sal_uInt16 nMaxUndoActionCount)
-:   EditUndoManager(nMaxUndoActionCount),
-    maEndTextEditHdl(),
-    mpLastUndoActionBeforeTextEdit(0),
-    mbEndTextEditTriggeredFromUndo(false)
+    : EditUndoManager(nMaxUndoActionCount)
+    , maEndTextEditHdl()
+    , mpLastUndoActionBeforeTextEdit(0)
+    , mbEndTextEditTriggeredFromUndo(false)
 {
 }
 
@@ -32,11 +32,11 @@ SdrUndoManager::~SdrUndoManager()
 {
 }
 
-sal_Bool SdrUndoManager::Undo()
+bool SdrUndoManager::Undo()
 {
     if(isTextEditActive())
     {
-        sal_Bool bRetval(sal_False);
+        bool bRetval(false);
 
         // we are in text edit mode
         if(GetUndoActionCount() && mpLastUndoActionBeforeTextEdit != GetUndoAction(0))
@@ -61,9 +61,9 @@ sal_Bool SdrUndoManager::Undo()
     }
 }
 
-sal_Bool SdrUndoManager::Redo()
+bool SdrUndoManager::Redo()
 {
-    sal_Bool bRetval(sal_False);
+    bool bRetval(false);
 
     if(isTextEditActive())
     {

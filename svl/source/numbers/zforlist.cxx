@@ -596,19 +596,6 @@ bool SvNumberFormatter::PutandConvertEntrySystem(OUString& rString,
     return bRes;
 }
 
-sal_uInt32 SvNumberFormatter::GetIndexPuttingAndConverting( String & rString, LanguageType eLnge,
-                                                            LanguageType eSysLnge, short & rType,
-                                                            bool & rNewInserted, xub_StrLen & rCheckPos )
-{
-    sal_uInt32 result;
-    OUString sTemp(rString);
-    sal_Int32 nCheckPos = (rCheckPos == (xub_StrLen)0xFFFF) ? -1 : (sal_Int32)rCheckPos;
-    result = GetIndexPuttingAndConverting(sTemp, eLnge, eSysLnge, rType, rNewInserted, nCheckPos);
-    rCheckPos = nCheckPos < 0 ? (xub_StrLen)0xFFFF : (xub_StrLen)nCheckPos;
-    rString = sTemp;
-    return result;
-}
-
 sal_uInt32 SvNumberFormatter::GetIndexPuttingAndConverting( OUString & rString, LanguageType eLnge,
                                                             LanguageType eSysLnge, short & rType,
                                                             bool & rNewInserted, sal_Int32 & rCheckPos )
@@ -1498,15 +1485,6 @@ void SvNumberFormatter::GetInputLineString(const double& fOutNumber,
     }
 }
 
-void SvNumberFormatter::GetInputLineString(const double& fOutNumber,
-                                           sal_uInt32 nFIndex,
-                                           String& rOutString)
-{
-    OUString aTmp;
-    GetInputLineString(fOutNumber, nFIndex, aTmp);
-    rOutString = aTmp;
-}
-
 void SvNumberFormatter::GetOutputString(const OUString& sString,
                                         sal_uInt32 nFIndex,
                                         OUString& sOutString,
@@ -1558,17 +1536,6 @@ void SvNumberFormatter::GetOutputString(const double& fOutNumber,
     pFormat->GetOutputString(fOutNumber, sOutString, ppColor);
     if ( bUseStarFormat )
         pFormat->SetStarFormatSupport( false );
-}
-
-void SvNumberFormatter::GetOutputString(const double& fOutNumber,
-                                        sal_uInt32 nFIndex,
-                                        String& sOutString,
-                                        Color** ppColor,
-                                        bool bUseStarFormat )
-{
-    OUString sTemp(sOutString);
-    GetOutputString(fOutNumber, nFIndex, sTemp, ppColor, bUseStarFormat);
-    sOutString = sTemp;
 }
 
 bool SvNumberFormatter::GetPreviewString(const OUString& sFormatString,
@@ -1824,22 +1791,22 @@ SvNumberformat* SvNumberFormatter::ImpInsertFormat( const ::com::sun::star::i18n
                                                     sal_uInt32 nPos, bool bAfterChangingSystemCL,
                                                     sal_Int16 nOrgIndex )
 {
-    String aCodeStr( rCode.Code );
+    OUString aCodeStr( rCode.Code );
     if ( rCode.Index < NF_INDEX_TABLE_LOCALE_DATA_DEFAULTS &&
             rCode.Usage == ::com::sun::star::i18n::KNumberFormatUsage::CURRENCY &&
             rCode.Index != NF_CURRENCY_1000DEC2_CCC )
     {   // strip surrounding [$...] on automatic currency
-        if ( aCodeStr.SearchAscii( "[$" ) != STRING_NOTFOUND )
+        if ( aCodeStr.indexOf( "[$" ) >= 0)
             aCodeStr = SvNumberformat::StripNewCurrencyDelimiters( aCodeStr, false );
         else
         {
             if (LocaleDataWrapper::areChecksEnabled() &&
                     rCode.Index != NF_CURRENCY_1000DEC2_CCC )
             {
-                OUString aMsg("SvNumberFormatter::ImpInsertFormat: no [$...] on currency format code, index ");
-                aMsg += OUString::valueOf( sal_Int32(rCode.Index) );
-                aMsg += ":\n";
-                aMsg += rCode.Code;
+                OUString aMsg(OUString("SvNumberFormatter::ImpInsertFormat: no [$...] on currency format code, index ") +
+                              OUString::valueOf( sal_Int32(rCode.Index)) +
+                              OUString(":\n") +
+                              rCode.Code);
                 LocaleDataWrapper::outputCheckMessage( xLocaleData->appendLocaleInfo( aMsg));
             }
         }
@@ -1856,10 +1823,10 @@ SvNumberformat* SvNumberFormatter::ImpInsertFormat( const ::com::sun::star::i18n
     {
         if (LocaleDataWrapper::areChecksEnabled())
         {
-            OUString aMsg( "SvNumberFormatter::ImpInsertFormat: bad format code, index " );
-            aMsg += OUString::valueOf( sal_Int32(rCode.Index) );
-            aMsg += "\n";
-            aMsg += rCode.Code;
+            OUString aMsg( OUString("SvNumberFormatter::ImpInsertFormat: bad format code, index " ) +
+                           OUString::valueOf( sal_Int32(rCode.Index) ) +
+                           OUString("\n") +
+                           rCode.Code);
             LocaleDataWrapper::outputCheckMessage( xLocaleData->appendLocaleInfo( aMsg));
         }
         delete pFormat;
@@ -2842,7 +2809,7 @@ OUString SvNumberFormatter::GenerateFormat(sal_uInt32 nIndex,
     else if (eType == NUMBERFORMAT_CURRENCY)
     {
         OUStringBuffer sNegStr(sString);
-        String aCurr;
+        OUString aCurr;
         const NfCurrencyEntry* pEntry;
         bool bBank;
         if ( GetNewCurrencySymbolString( nIndex, aCurr, &pEntry, &bBank ) )
@@ -3462,18 +3429,19 @@ inline
 }
 
 
-bool SvNumberFormatter::GetNewCurrencySymbolString( sal_uInt32 nFormat, String& rStr,
+bool SvNumberFormatter::GetNewCurrencySymbolString( sal_uInt32 nFormat, OUString& rStr,
                                                     const NfCurrencyEntry** ppEntry /* = NULL */,
                                                     bool* pBank /* = NULL */ ) const
 {
-    rStr.Erase();
     if ( ppEntry )
         *ppEntry = NULL;
     if ( pBank )
         *pBank = false;
+
     const SvNumberformat* pFormat = GetFormatEntry(nFormat);
     if ( pFormat )
     {
+        OUStringBuffer sBuff(128); // guess-estimate of a value that will pretty much garantee no re-alloc
         OUString aSymbol, aExtension;
         if ( pFormat->GetNewCurrencySymbol( aSymbol, aExtension ) )
         {
@@ -3492,26 +3460,31 @@ bool SvNumberFormatter::GetNewCurrencySymbolString( sal_uInt32 nFormat, String& 
                     rStr = pFoundEntry->BuildSymbolString(bFoundBank);
                 }
             }
-            if ( !rStr.Len() )
+            if ( rStr.isEmpty() )
             {   // analog to BuildSymbolString
-                rStr  = '[';
-                rStr += '$';
+                sBuff.append("[$");
                 if ( aSymbol.indexOf( '-' ) != -1 ||
                         aSymbol.indexOf( ']' ) != -1 )
                 {
-                    rStr += '"';
-                    rStr += aSymbol;
-                    rStr += '"';
+                    sBuff.append('"');
+                    sBuff.append( aSymbol);
+                    sBuff.append('"');
                 }
                 else
-                    rStr += aSymbol;
-                if ( aExtension.getLength() )
-                    rStr += aExtension;
-                rStr += ']';
+                {
+                    sBuff.append(aSymbol);
+                }
+                if ( !aExtension.isEmpty() )
+                {
+                    sBuff.append(aExtension);
+                }
+                sBuff.append(']');
             }
+            rStr = sBuff.toString();
             return true;
         }
     }
+    rStr = "";
     return false;
 }
 
@@ -4172,10 +4145,8 @@ void NfCurrencyEntry::CompleteNegativeFormatString(OUStringBuffer& rStr,
         break;
         case 11:                                        // $ -1
         {
-            String aTmp( rSymStr );
-            aTmp += ' ';
-            aTmp += '-';
-            rStr.insert(0, aTmp);
+            rStr.insert(0, " -");
+            rStr.insert(0, rSymStr);
         }
         break;
         case 12 :                                       // $ 1-

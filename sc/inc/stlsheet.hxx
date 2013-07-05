@@ -51,17 +51,17 @@ public:
 
                         ScStyleSheet( const ScStyleSheet& rStyle );
 
-    virtual bool        SetParent        ( const String& rParentName );
+    virtual bool        SetParent        ( const OUString& rParentName );
     virtual SfxItemSet& GetItemSet       ();
     virtual bool        IsUsed           () const;
     virtual bool        HasFollowSupport () const;
     virtual bool        HasParentSupport () const;
 
-    virtual const String& GetName() const;
-    virtual const String& GetParent() const;
-    virtual const String& GetFollow() const;
+    virtual const OUString& GetName() const;
+    virtual const OUString& GetParent() const;
+    virtual const OUString& GetFollow() const;
 
-    virtual bool SetName( const String& );
+    virtual bool SetName( const OUString& );
 
             void                SetUsage( ScStyleSheet::Usage eUse ) const
                                     { eUsage = eUse; }
@@ -71,10 +71,10 @@ public:
 protected:
     virtual             ~ScStyleSheet();
 
-                ScStyleSheet( const String&     rName,
+                ScStyleSheet( const OUString&   rName,
                               ScStyleSheetPool& rPool,
                               SfxStyleFamily    eFamily,
-                              sal_uInt16            nMask );
+                              sal_uInt16        nMask );
 
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 };

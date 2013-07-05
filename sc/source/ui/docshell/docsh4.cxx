@@ -2064,13 +2064,13 @@ void ScDocShell::GetPageOnFromPageStyleSet( const SfxItemSet* pStyleSet,
     rbFooter = ((const SfxBoolItem&)pSet->Get(ATTR_PAGE_ON)).GetValue();
 }
 
-long ScDocShell::DdeGetData( const String& rItem,
-                                      const String& rMimeType,
-                                      ::com::sun::star::uno::Any & rValue )
+long ScDocShell::DdeGetData( const OUString& rItem,
+                             const OUString& rMimeType,
+                             ::com::sun::star::uno::Any & rValue )
 {
     if( FORMAT_STRING == SotExchange::GetFormatIdFromMimeType( rMimeType ) )
     {
-        if( rItem.EqualsIgnoreCaseAscii( "Format" ) )
+        if( rItem.equalsIgnoreAsciiCase( "Format" ) )
         {
             OString aFmtByte(OUStringToOString(aDdeTextFmt,
                 osl_getThreadTextEncoding()));
@@ -2114,13 +2114,13 @@ long ScDocShell::DdeGetData( const String& rItem,
     return 0;
 }
 
-long ScDocShell::DdeSetData( const String& rItem,
-                                        const String& rMimeType,
-                                const ::com::sun::star::uno::Any & rValue )
+long ScDocShell::DdeSetData( const OUString& rItem,
+                             const OUString& rMimeType,
+                             const ::com::sun::star::uno::Any & rValue )
 {
     if( FORMAT_STRING == SotExchange::GetFormatIdFromMimeType( rMimeType ))
     {
-        if( rItem.EqualsIgnoreCaseAscii( "Format" ) )
+        if( rItem.equalsIgnoreAsciiCase( "Format" ) )
         {
             if ( ScByteSequenceToString::GetString( aDdeTextFmt, rValue, osl_getThreadTextEncoding() ) )
             {
@@ -2153,7 +2153,7 @@ long ScDocShell::DdeSetData( const String& rItem,
     return 0;
 }
 
-::sfx2::SvLinkSource* ScDocShell::DdeCreateLinkSource( const String& rItem )
+::sfx2::SvLinkSource* ScDocShell::DdeCreateLinkSource( const OUString& rItem )
 {
     //  only check for valid item string - range is parsed again in ScServerObject ctor
 

@@ -95,7 +95,7 @@ public:
 
         @return     true if executing the last Undo action was successful.
     */
-    virtual sal_Bool Undo() = 0;
+    virtual bool Undo() = 0;
 
     /** Opens undo block.
 
@@ -154,7 +154,7 @@ public:
 
         @return     true if executing the first Redo action was successful.
     */
-    virtual sal_Bool Redo() = 0;
+    virtual bool Redo() = 0;
 
     /** Get Id and comment of first Redo action.
         @param o_pStr       if not 0, receives comment of first Redo action.

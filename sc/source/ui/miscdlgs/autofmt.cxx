@@ -188,7 +188,7 @@ void ScAutoFmtPreview::DrawString( size_t nCol, size_t nRow )
         // Ausgabe des Zelltextes:
         //------------------------
 
-        String  cellString;
+        OUString  cellString;
         sal_Bool    bNumFormat  = pCurData->GetIncludeValueFormat();
         sal_uLong   nNum;
         double  nVal;
@@ -241,7 +241,7 @@ void ScAutoFmtPreview::DrawString( size_t nCol, size_t nRow )
                 break;
         }
 
-        if ( cellString.Len() > 0 )
+        if ( !cellString.isEmpty())
         {
             Size                aStrSize;
             sal_uInt16              nFmtIndex       = GetFormatIndex( nCol, nRow );
@@ -283,12 +283,12 @@ void ScAutoFmtPreview::DrawString( size_t nCol, size_t nRow )
                     aStrSize = aScriptedText.GetTextSize();
                 }
                 while ( ( theMaxStrSize.Width() <= aStrSize.Width() )
-                    && ( cellString.Len() > 1 ) )
+                    && ( cellString.getLength() > 1 ) )
                 {
                     if( eJustification == SVX_HOR_JUSTIFY_RIGHT )
-                        cellString.Erase( 0, 1 );
+                        cellString = cellString.copy(1);
                     else
-                        cellString.Erase( cellString.Len() - 1 );
+                        cellString = cellString.copy(0, cellString.getLength() - 1 );
 
                     aScriptedText.SetText( cellString, xBreakIter );
                     aStrSize = aScriptedText.GetTextSize();
