@@ -559,6 +559,7 @@ typedef unsigned short LanguageType;
 #define LANGUAGE_USER_TIBETAN_INDIA         0x8051  /* makeLangID( 0x20, getPrimaryLanguage( LANGUAGE_TIBETAN)) */
 #define LANGUAGE_USER_CORNISH               0x0688
 #define LANGUAGE_USER_SAMI_PITE_SWEDEN      0x843B  /* makeLangID( 0x21, getPrimaryLanguage( LANGUAGE_SAMI_NORTHERN_NORWAY)) */
+#define LANGUAGE_USER_NGAEBERE              0x0689
 
 #define LANGUAGE_USER_PRIV_JOKER            0xFFEB  /* privateuse "*" (sic! bad! nasty!), primary 0x3eb, sub 0x3f */
 #define LANGUAGE_USER_PRIV_COMMENT          0xFFEC  /* privateuse "x-comment", primary 0x3ec, sub 0x3f */

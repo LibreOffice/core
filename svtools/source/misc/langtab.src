@@ -365,6 +365,7 @@ StringArray STR_ARR_SVT_LANGUAGE_TABLE
         < "Tibetan (India)" ; LANGUAGE_USER_TIBETAN_INDIA ; > ;
         < "Cornish" ; LANGUAGE_USER_CORNISH ; > ;
         < "Sami, Pite (Sweden)" ; LANGUAGE_USER_SAMI_PITE_SWEDEN ; > ;
+        < "Ngäbere" ; LANGUAGE_USER_NGAEBERE ; > ;
     };
 };
 
