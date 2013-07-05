@@ -75,6 +75,7 @@ public:
     void testBinVerInUnary();
     void testBinHorInSubSup();
     void testUnaryInMixedNumberAsNumerator();
+    void testMiscEquivalent();
 
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(SimpleUnaryOp);
@@ -93,6 +94,7 @@ public:
     CPPUNIT_TEST(testBinVerInUnary);
     CPPUNIT_TEST(testBinHorInSubSup);
     CPPUNIT_TEST(testUnaryInMixedNumberAsNumerator);
+    CPPUNIT_TEST(testMiscEquivalent);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -100,6 +102,7 @@ private:
     SmDocShellRef xDocShRef;
     void parseandparseagain(const char *input, const char *test_name);
     void ParseAndCheck(const char *input, const char *expected, const char *test_name);
+    void ParseAndCompare(const char *formula1, const char *formula2, const char *test_name);
 };
 
 void Test::setUp()
@@ -490,6 +493,30 @@ void Test::ParseAndCheck(const char *formula, const char * expected, const char 
     delete pNode;
 }
 
+// Parse two formula commands and verify that they give the same output
+void Test::ParseAndCompare(const char *formula1, const char *formula2, const char *test_name)
+{
+    OUString sOutput1, sOutput2;
+    SmNode *pNode1, *pNode2;
+
+    // parse formula1
+    OUString sInput1 = OUString::createFromAscii(formula1);
+    pNode1 = SmParser().ParseExpression(sInput1);
+    pNode1->Prepare(xDocShRef->GetFormat(), *xDocShRef);
+    SmNodeToTextVisitor(pNode1, sOutput1);
+
+    // parse formula2
+    OUString sInput2 = OUString::createFromAscii(formula2);
+    pNode2 = SmParser().ParseExpression(sInput2);
+    pNode2->Prepare(xDocShRef->GetFormat(), *xDocShRef);
+    SmNodeToTextVisitor(pNode2, sOutput2);
+
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(test_name, sOutput1, sOutput2);
+
+    delete pNode1;
+    delete pNode2;
+}
+
 void Test::testBinomInBinHor()
 {
     String sInput, sExpected;
@@ -625,6 +652,21 @@ void Test::testUnaryInMixedNumberAsNumerator()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Unary in mixed number as Numerator", sExpected, String(xDocShRef->GetText()));
 
     delete pTree;
+}
+
+void Test::testMiscEquivalent()
+{
+    // fdo#55853
+    ParseAndCompare("2x", "2 x", "Number times variable");
+    ParseAndCompare("3x^2", "3 x^2", "Number times power");
+
+    // i#11752 and fdo#55853
+    ParseAndCompare("x_2n", "x_{2 n}", "Number times variable in subscript");
+    ParseAndCompare("x^2n", "x^{2 n}", "Number times variable in supscript");
+
+    // fdo#66081
+    ParseAndCompare("{x}", "x", "Variable in brace");
+    ParseAndCompare("{{x+{{y}}}}", "x+y", "Nested braces");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
