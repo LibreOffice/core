@@ -150,6 +150,7 @@ public:
     void testFdo66040();
     void testN823675();
     void testFdo47802();
+    void testFdo39001();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -285,6 +286,7 @@ void Test::run()
         {"fdo66040.rtf", &Test::testFdo66040},
         {"n823675.rtf", &Test::testN823675},
         {"fdo47802.rtf", &Test::testFdo47802},
+        {"fdo39001.rtf", &Test::testFdo39001},
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -1385,6 +1387,12 @@ void Test::testFdo47802()
     uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
     // Shape inside table was ignored.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xDraws->getCount());
+}
+
+void Test::testFdo39001()
+{
+    // Document was of 4 pages, \sect at the end of the doc wasn't ignored.
+    CPPUNIT_ASSERT_EQUAL(3, getPages());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
