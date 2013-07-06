@@ -13,4 +13,7 @@
 - (IBAction)nextSlideAction:(id)sender;
 - (IBAction)previousSlideAction:(id)sender;
 
+@property (weak, nonatomic) IBOutlet UIWebView *lecturer_notes;
+@property (weak, nonatomic) IBOutlet UIImageView *slideView;
+
 @end

@@ -20,10 +20,11 @@
 
 @synthesize slideShow = _slideShow;
 
-- (SlideShow*) slideshow{
-    if (!self.slideShow)
-        self.slideShow = [[SlideShow alloc] init];
-    return self.slideShow;
+- (CommandInterpreter *) init
+{
+    self = [super init];
+    self.slideShow = [[SlideShow alloc] init];
+    return self;
 }
 
 - (BOOL) isSlideRunning {
@@ -44,12 +45,12 @@
     else if ([instruction isEqualToString:STATUS_PAIRING_PAIRED]){
         [[NSNotificationCenter defaultCenter] postNotificationName:STATUS_PAIRING_PAIRED
                                                             object:nil];
+        // @TODO take care of the trailing slideshow_started&slideshow_finished
     }
     else if([instruction isEqualToString:@"slideshow_started"]){
-        NSLog(@"Interpreter: slideshow_started");
         uint slideLength = [[command objectAtIndex:1] integerValue];
         uint currentSlide = [[command objectAtIndex:2] integerValue];
-        self.slideShow = [[SlideShow alloc] init];
+        NSLog(@"Interpreter: slideshow_started with currentSlide: %u slideLength: %u", currentSlide, slideLength);
         
         [self.slideShow setSize:slideLength];
         [self.slideShow setCurrentSlide:currentSlide];
@@ -63,8 +64,6 @@
         self.slideShow = [[SlideShow alloc] init];
         [[NSNotificationCenter defaultCenter] postNotificationName:STATUS_CONNECTED_NOSLIDESHOW object:nil];
     } else {
-        if (self.slideShow == nil)
-            return;
         if ([instruction isEqualToString:@"slide_updated"]) {
             NSLog(@"Interpreter: slide_updated");
             uint newSlideNumber = [[command objectAtIndex:1] integerValue];
@@ -76,11 +75,18 @@
             NSLog(@"Interpreter: slide_preview");
             uint slideNumber = [[command objectAtIndex:1] integerValue];
             NSString * imageData = [command objectAtIndex:2];
-            
             [self.slideShow putImage:imageData
                               AtIndex:slideNumber];
             [[NSNotificationCenter defaultCenter] postNotificationName:MSG_SLIDE_PREVIEW object:[NSNumber numberWithUnsignedInt:slideNumber]];
+            if ([[command objectAtIndex:4] isEqualToString:@"slide_notes"])
+            {
+                NSRange range;
+                range.location = 4;
+                range.length = [command count] - 4;
+                [self parse:[command subarrayWithRange:range]];
+            }
         } else if ([instruction isEqualToString:@"slide_notes"]){
+            NSLog(@"Interpreter: slide_notes");
             uint slideNumber = [[command objectAtIndex:1] integerValue];
             NSMutableString *notes = [[NSMutableString alloc] init];
             for (int i = 2; i<command.count; ++i) {

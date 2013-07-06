@@ -175,7 +175,7 @@ int count = 0;
         case NSStreamEventHasBytesAvailable:
         {
             NSMutableData* data;
-            NSLog(@"NSStreamEventHasBytesAvailable");
+//            NSLog(@"NSStreamEventHasBytesAvailable");
             if(!data) {
                 data = [[NSMutableData alloc] init];
             }

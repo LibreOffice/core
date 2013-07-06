@@ -39,6 +39,10 @@
 	// Do any additional setup after loading the view.
     self.comManager = [CommunicationManager sharedComManager];
     [self.pinLabel setText:[NSString stringWithFormat:@"%@", [self.comManager getPairingPin]]];
+}
+
+- (void) viewDidAppear:(BOOL)animated
+{
     NSOperationQueue *mainQueue = [NSOperationQueue mainQueue];
     self.slideShowPreviewStartObserver = [[NSNotificationCenter defaultCenter] addObserverForName:STATUS_PAIRING_PAIRED
                                                                                            object:nil
@@ -46,15 +50,15 @@
                                                                                        usingBlock:^(NSNotification *note) {
                                                                                            [self performSegueWithIdentifier:@"pinValidated" sender:self ];
                                                                                        }];
+    [super viewDidAppear:animated];
 }
-//
-//- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender{
-//    if ([segue.identifier isEqualToString:@"pinValidated"]) {
-//        slideShowPreview_vc *destViewController = segue.destinationViewController;
-//        destViewController.slideshow = [self.comManager.interpreter slideShow];
-//        [destViewController.slideshow setDelegate:destViewController];
-//    }
-//}
+
+- (void) viewDidDisappear:(BOOL)animated
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self.slideShowPreviewStartObserver];
+    [super viewDidDisappear:animated];
+}
+
 
 - (void)didReceiveMemoryWarning
 {

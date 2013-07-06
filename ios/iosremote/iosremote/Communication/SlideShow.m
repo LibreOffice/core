@@ -9,7 +9,7 @@
 
 #import "SlideShow.h"
 #import "Base64.h"
-#import "slideShowPreview_vc.h"
+#import "slideShow_vc.h"
 #import <dispatch/dispatch.h>
 
 @interface SlideShow()
@@ -39,28 +39,30 @@ dispatch_queue_t backgroundQueue;
     _currentSlide = 0;
     
     backgroundQueue = dispatch_queue_create("org.libreoffice.iosremote.bgqueue", NULL);
-//    NSOperationQueue *mainQueue = [NSOperationQueue mainQueue];
+    NSOperationQueue *mainQueue = [NSOperationQueue mainQueue];
     
-//    self.slideShowImageReadyObserver =[[NSNotificationCenter defaultCenter]
-//                                              addObserverForName:@"storage_update_image_ready"
-//                                                          object:nil
-//                                                           queue:mainQueue
-//                                                      usingBlock:^(NSNotification *note) {
-//                                                          if ([[[note userInfo] objectForKey:@"index"] intValue] == self.lastRequestedImage) {
-//                                                              [self.delegate.image setImage:[self getImageAtIndex:self.lastRequestedImage]];
-//                                                              self.lastRequestedImage = -1;
-//                                                          }
-//                                                      }];
+    self.slideShowImageReadyObserver =[[NSNotificationCenter defaultCenter]
+                                              addObserverForName:@"storage_update_image_ready"
+                                                          object:nil
+                                                           queue:mainQueue
+                                                      usingBlock:^(NSNotification *note) {
+                                                          if ([[[note userInfo] objectForKey:@"index"] intValue] == self.lastRequestedImage) {
+//                                                              NSLog(@"Load last requsted image");
+                                                              [[self.delegate slideView] setImage:[self getImageAtIndex:self.lastRequestedImage]];
+                                                              self.lastRequestedImage = -1;
+                                                          }
+                                                      }];
     
-//    self.slideShowNoteReadyObserver = [[NSNotificationCenter defaultCenter] addObserverForName:@"storage_update_note_ready"
-//                                                          object:nil
-//                                                           queue:mainQueue
-//                                                      usingBlock:^(NSNotification *note) {
-//                                                          if ([[[note userInfo] objectForKey:@"index"] intValue] == self.lastRequestedNote) {
-//                                                              [self.delegate.lecturer_notes loadHTMLString:[self getNotesAtIndex:self.lastRequestedNote] baseURL:nil];
-//                                                              self.lastRequestedNote = -1;
-//                                                          }
-//                                                      }];
+    self.slideShowNoteReadyObserver = [[NSNotificationCenter defaultCenter] addObserverForName:@"storage_update_note_ready"
+                                                          object:nil
+                                                           queue:mainQueue
+                                                      usingBlock:^(NSNotification *note) {
+//                                                           NSLog(@"Load last requsted note");
+                                                          if ([[[note userInfo] objectForKey:@"index"] intValue] == self.lastRequestedNote) {
+                                                              [[self.delegate lecturer_notes] loadHTMLString:[self getNotesAtIndex:self.lastRequestedNote] baseURL:nil];
+                                                              self.lastRequestedNote = -1;
+                                                          }
+                                                      }];
     
     return self;
 }

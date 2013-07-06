@@ -12,8 +12,4 @@
 
 @interface slideShowPreview_vc : UITableViewController
 
-@property (nonatomic, strong) SlideShow* slideshow;
-@property (nonatomic, strong) id slideShowImageReadyObserver;
-@property (nonatomic, strong) id slideShowNoteReadyObserver;
-
 @end

@@ -15,6 +15,8 @@
 @property (nonatomic, weak) UIButton * startButton;
 @property (nonatomic, strong) NSArray * optionsArray;
 @property (nonatomic, strong) CommunicationManager * comManager;
+@property (nonatomic, strong) id slideShowStartObserver;
+
 @end
 
 @implementation slideShowPreviewTable_vc
@@ -44,6 +46,24 @@
     self.optionsArray = [NSArray arrayWithObjects:@"Lecturer's Notes", @"Timer", @"Pointer", nil];
     self.comManager = [CommunicationManager sharedComManager];
     self.comManager.delegate = self;
+    }
+
+- (void) viewDidAppear:(BOOL)animated
+{
+    NSOperationQueue *mainQueue = [NSOperationQueue mainQueue];
+    self.slideShowStartObserver = [[NSNotificationCenter defaultCenter] addObserverForName:STATUS_CONNECTED_SLIDESHOW_RUNNING
+                                                                                    object:nil
+                                                                                     queue:mainQueue
+                                                                                usingBlock:^(NSNotification *note) {
+                                                                                    [self.parentViewController performSegueWithIdentifier:@"slideShowSegue" sender:self];
+                                                                                }];
+    [super viewDidAppear:animated];
+}
+
+- (void) viewDidDisappear:(BOOL)animated
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self.slideShowStartObserver];
+    [super viewDidDisappear:animated];
 }
 
 - (void)didReceiveMemoryWarning
@@ -118,7 +138,6 @@
 
 -(IBAction)startPresentationAction:(id)sender {
     [[self.comManager transmitter] startPresentation];
-    [self performSegueWithIdentifier:@"slideShowSegue" sender:self];
 }
 
 - (UIButton *)startButton{

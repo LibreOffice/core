@@ -52,21 +52,34 @@
     self.comManager = [CommunicationManager sharedComManager];
     self.serverTable.dataSource = self;
     self.serverTable.delegate = self;
-    
+}
+
+
+- (void) viewDidAppear:(BOOL)animated
+{
     NSOperationQueue *mainQueue = [NSOperationQueue mainQueue];
     self.pinValidationObserver = [[NSNotificationCenter defaultCenter] addObserverForName:STATUS_PAIRING_PINVALIDATION
-                                                                                           object:nil
-                                                                                            queue:mainQueue
-                                                                                       usingBlock:^(NSNotification *note) {
-                                                                                           [self performSegueWithIdentifier:@"pinValidation" sender:self ];
-                                                                                    }];
+                                                                                   object:nil
+                                                                                    queue:mainQueue
+                                                                               usingBlock:^(NSNotification *note) {
+                                                                                   [self performSegueWithIdentifier:@"pinValidation" sender:self ];
+                                                                               }];
     self.slideShowPreviewStartObserver = [[NSNotificationCenter defaultCenter] addObserverForName:STATUS_PAIRING_PAIRED
                                                                                            object:nil
                                                                                             queue:mainQueue
                                                                                        usingBlock:^(NSNotification *note) {
                                                                                            [self performSegueWithIdentifier:@"SlideShowPreview" sender:self ];
                                                                                        }];
+    [super viewDidAppear:animated];
 }
+
+- (void) viewDidDisappear:(BOOL)animated
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self.slideShowPreviewStartObserver];
+    [[NSNotificationCenter defaultCenter] removeObserver:self.pinValidationObserver];
+    [super viewDidDisappear:animated];
+}
+
 
 -(void)viewWillAppear:(BOOL)animated
 {
