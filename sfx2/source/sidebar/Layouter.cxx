@@ -90,7 +90,7 @@ void Layouter::SetHorizontalPosition (
 
 
 void Layouter::PrepareForLayouting (
-    Window& rControl)
+    Window& /* rControl */)
 {
     //    rControl.SetStyle(rControl.GetStyle() | WB_PATHELLIPSIS | WB_INFO);
 }
