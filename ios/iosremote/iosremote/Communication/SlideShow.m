@@ -37,6 +37,8 @@ dispatch_queue_t backgroundQueue;
     self.notesDictionary = [[NSMutableDictionary alloc] init];
     _size = 0;
     _currentSlide = 0;
+    self.lastRequestedImage = -1;
+    self.lastRequestedNote = -1;
     
     backgroundQueue = dispatch_queue_create("org.libreoffice.iosremote.bgqueue", NULL);
     NSOperationQueue *mainQueue = [NSOperationQueue mainQueue];
@@ -47,7 +49,7 @@ dispatch_queue_t backgroundQueue;
                                                            queue:mainQueue
                                                       usingBlock:^(NSNotification *note) {
                                                           if ([[[note userInfo] objectForKey:@"index"] intValue] == self.lastRequestedImage) {
-//                                                              NSLog(@"Load last requsted image");
+                                                              NSLog(@"Load last requsted image: %u", self.lastRequestedImage);
                                                               [[self.delegate slideView] setImage:[self getImageAtIndex:self.lastRequestedImage]];
                                                               self.lastRequestedImage = -1;
                                                           }

@@ -116,6 +116,7 @@
                                                       cellForRowAtIndexPath:indexPath];
     
     [[cell textField] becomeFirstResponder];
+    [self.comManager setDelegate:self];
 }
 
 //  Force textfields to resign firstResponder so that our implementation of

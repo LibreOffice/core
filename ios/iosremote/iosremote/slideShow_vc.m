@@ -43,6 +43,11 @@
     self.comManager = [CommunicationManager sharedComManager];
     self.slideshow = [self.comManager.interpreter slideShow];
     self.slideshow.delegate = self;
+    
+    [self.slideView setImage:[self.slideshow getImageAtIndex:self.slideshow.currentSlide]];
+    [self.lecturer_notes loadHTMLString: [self.slideshow getNotesAtIndex:self.slideshow.currentSlide]baseURL:nil];
+    
+    [self.lecturer_notes setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"lines.png"]]];
 }
 
 

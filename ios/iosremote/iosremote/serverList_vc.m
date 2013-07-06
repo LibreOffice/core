@@ -70,6 +70,7 @@
                                                                                        usingBlock:^(NSNotification *note) {
                                                                                            [self performSegueWithIdentifier:@"SlideShowPreview" sender:self ];
                                                                                        }];
+    [self.comManager setDelegate:self];
     [super viewDidAppear:animated];
 }
 

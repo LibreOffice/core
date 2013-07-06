@@ -36,7 +36,7 @@
     if ([command count] == 0) {
         return;
     }
-    NSLog(@"Command:%@", command);
+//    NSLog(@"Command:%@", command);
     NSString *instruction = [command objectAtIndex:0];
     if ([instruction isEqualToString:STATUS_PAIRING_PINVALIDATION]) {
         [[NSNotificationCenter defaultCenter] postNotificationName:STATUS_PAIRING_PINVALIDATION
@@ -57,7 +57,7 @@
         
         [[NSNotificationCenter defaultCenter] postNotificationName:STATUS_CONNECTED_SLIDESHOW_RUNNING
                           object:nil];
-        [[NSNotificationCenter defaultCenter] postNotificationName:MSG_SLIDE_CHANGED object:[NSNumber numberWithUnsignedInt:currentSlide]];
+        [[NSNotificationCenter defaultCenter] postNotificationName:MSG_SLIDE_CHANGED object:nil];
         
     } else if ([instruction isEqualToString:@"slideshow_finished"]){
         NSLog(@"Interpreter: slideshow_finished");
@@ -91,6 +91,9 @@
             NSMutableString *notes = [[NSMutableString alloc] init];
             for (int i = 2; i<command.count; ++i) {
                 [notes appendString:[command objectAtIndex:i]];
+                if ([notes hasSuffix:@"</body>"]) {
+                    break;
+                }
             }
             [self.slideShow putNotes:notes
                               AtIndex:slideNumber];
