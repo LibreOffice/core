@@ -18,10 +18,21 @@ const char * const VLC_ARGS[] = {
     "--quiet"
 };
 
-VLCPlayer::VLCPlayer()
+namespace
+{
+    libvlc_media_t* initMedia( const rtl::OUString& url, boost::scoped_ptr<libvlc_instance_t>& instance)
+    {
+        rtl::OString dest;
+        url.convertToString(&dest, RTL_TEXTENCODING_UTF8, 0);
+        return libvlc_media_new_path(instance.get(), dest.getStr());
+    }
+}
+
+VLCPlayer::VLCPlayer( const rtl::OUString& url )
     : VLC_Base(m_aMutex)
     , mInstance( libvlc_new( sizeof( VLC_ARGS ) / sizeof( VLC_ARGS[0] ), VLC_ARGS ), libvlc_release )
     , mPlayer( libvlc_media_player_new(mInstance.get()), libvlc_media_player_release )
+    , mMedia( initMedia( url, mInstance), libvlc_media_release )
 {
 }
 
