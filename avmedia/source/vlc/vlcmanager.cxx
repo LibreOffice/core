@@ -20,7 +20,7 @@ Manager::~Manager()
 uno::Reference< media::XPlayer > SAL_CALL Manager::createPlayer( const rtl::OUString& rURL )
     throw (uno::RuntimeException)
 {
-    VLCPlayer* pPlayer( new VLCPlayer( /* mxMgr */ ) );
+    VLCPlayer* pPlayer( new VLCPlayer( rURL/*, mxMgr */ ) );
     uno::Reference< media::XPlayer > xRet( pPlayer );
 
     return xRet;
