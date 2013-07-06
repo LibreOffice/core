@@ -49,6 +49,9 @@ TARFILE_MD5=d1e9a7a7f532bb031a3c175d86688d95
 PATCH_FILES=\
     $(TARFILE_NAME).patch \
     boost_freebsd.patch
+.IF "$(GUI)"=="OS2"
+PATCH_FILES+=boost-os2.patch
+.ENDIF
 
 CONFIGURE_DIR=
 CONFIGURE_ACTION=
