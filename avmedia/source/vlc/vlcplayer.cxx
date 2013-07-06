@@ -20,7 +20,7 @@ const char * const VLC_ARGS[] = {
 
 namespace
 {
-    libvlc_media_t* initMedia( const rtl::OUString& url, boost::scoped_ptr<libvlc_instance_t>& instance)
+    libvlc_media_t* initMedia( const rtl::OUString& url, boost::shared_ptr<libvlc_instance_t>& instance )
     {
         rtl::OString dest;
         url.convertToString(&dest, RTL_TEXTENCODING_UTF8, 0);

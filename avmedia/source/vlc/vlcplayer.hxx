@@ -22,7 +22,7 @@
 
 #include "vlccommon.hxx"
 #include <vlc/vlc.h>
-#include <boost/scoped_ptr.hpp>
+#include <boost/shared_ptr.hpp>
 #include <cppuhelper/compbase2.hxx>
 #include <com/sun/star/media/XPlayer.hpp>
 #include <cppuhelper/basemutex.hxx>
@@ -37,9 +37,9 @@ typedef ::cppu::WeakComponentImplHelper2< ::com::sun::star::media::XPlayer,
 class VLCPlayer : public ::cppu::BaseMutex,
                   public VLC_Base
 {
-    boost::scoped_ptr<libvlc_instance_t> mInstance;
-    boost::scoped_ptr<libvlc_media_player_t> mPlayer;
-    boost::scoped_ptr<libvlc_media_t> mMedia;
+    boost::shared_ptr<libvlc_instance_t> mInstance;
+    boost::shared_ptr<libvlc_media_player_t> mPlayer;
+    boost::shared_ptr<libvlc_media_t> mMedia;
 public:
     VLCPlayer( const rtl::OUString& url );
 
