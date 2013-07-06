@@ -43,9 +43,15 @@
                                                             object:nil];
     }
     else if ([instruction isEqualToString:STATUS_PAIRING_PAIRED]){
+        NSLog(@"Paired command: %@", command);
         [[NSNotificationCenter defaultCenter] postNotificationName:STATUS_PAIRING_PAIRED
                                                             object:nil];
-        // @TODO take care of the trailing slideshow_started&slideshow_finished
+        if ([command objectAtIndex:2] && [[command objectAtIndex:2] isEqualToString:@"slideshow_started"]){
+            NSRange range;
+            range.location = 2;
+            range.length = [command count] - 2;
+            [self parse:[command subarrayWithRange:range]];
+        }
     }
     else if([instruction isEqualToString:@"slideshow_started"]){
         uint slideLength = [[command objectAtIndex:1] integerValue];

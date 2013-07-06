@@ -46,8 +46,19 @@
     
     [self.slideView setImage:[self.slideshow getImageAtIndex:self.slideshow.currentSlide]];
     [self.lecturer_notes loadHTMLString: [self.slideshow getNotesAtIndex:self.slideshow.currentSlide]baseURL:nil];
+    [self.slideNumber setText:[NSString stringWithFormat:@"%u/%u", [self.slideshow currentSlide]+1, [self.slideshow size]]];
     
-    [self.lecturer_notes setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"lines.png"]]];
+    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:@"End"
+                                                                   style:UIBarButtonItemStyleBordered
+                                                                  target:self
+                                                                  action:@selector(handleBack:)];
+    self.navigationItem.leftBarButtonItem = backButton;
+}
+
+- (void) handleBack:(id)sender
+{
+    [self.comManager.transmitter stopPresentation];   
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 
@@ -64,6 +75,9 @@
                                                               
                                                               [self.slideView setImage:[self.slideshow getImageAtIndex:self.slideshow.currentSlide]];
                                                               [self.lecturer_notes loadHTMLString: [self.slideshow getNotesAtIndex:self.slideshow.currentSlide]baseURL:nil];
+                                           
+                                                              [self.slideNumber setText:[NSString stringWithFormat:@"%u/%u", [self.slideshow currentSlide]+1, [self.slideshow size]]];
+                                                              
                                                           }];
     
     self.slideShowFinishedObserver = [center addObserverForName:STATUS_CONNECTED_NOSLIDESHOW
@@ -93,6 +107,7 @@
 - (void)viewDidUnload {
     [self setLecturer_notes:nil];
     [self setSlideView:nil];
+    [self setSlideNumber:nil];
     [super viewDidUnload];
 }
 

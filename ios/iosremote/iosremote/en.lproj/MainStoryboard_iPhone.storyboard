@@ -205,7 +205,7 @@
             </objects>
             <point key="canvasLocation" x="620" y="372"/>
         </scene>
-        <!--Slide Show vc-->
+        <!--Slide Show vc - Presentation-->
         <scene sceneID="eap-cb-uAt">
             <objects>
                 <viewController id="Ivv-3X-Nhr" customClass="slideShow_vc" sceneMemberID="viewController">
@@ -252,30 +252,57 @@
                                 </connections>
                             </button>
                             <webView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xGi-A7-hat">
-                                <color key="backgroundColor" patternImage="99D6BCFF-CD7B-46CE-AEAA-4C817A23EC3B" colorSpace="pattern"/>
+                                <color key="backgroundColor" patternImage="C3EAB918-B6EF-4237-BA62-38FB651AC6C0" colorSpace="pattern"/>
                                 <constraints>
+                                    <constraint firstAttribute="width" constant="280" id="lCo-8S-Rvo"/>
                                     <constraint firstAttribute="height" constant="151" id="ndz-J7-2XE"/>
                                 </constraints>
                             </webView>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.80000000000000004" contentMode="left" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3BV-KX-Qla">
+                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                <rect key="contentStretch" x="1.3877787807814457e-17" y="0.0" width="1" height="1"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="52" id="Qhb-gd-btj"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </label>
+                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="GQv-EU-3bu">
+                                <items>
+                                    <barButtonItem title="&lt;" width="80" id="buz-F8-kHg"/>
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="Aw2-gV-FRx"/>
+                                    <barButtonItem title="O" width="80" id="mD4-uo-cXW"/>
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="Bjb-U8-5of"/>
+                                    <barButtonItem title=">" width="80" id="ake-jX-ggk"/>
+                                </items>
+                            </toolbar>
                         </subviews>
-                        <color key="backgroundColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
+                        <color key="backgroundColor" red="0.90196079015731812" green="0.90196079015731812" blue="0.90196079015731812" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
+                            <constraint firstItem="xGi-A7-hat" firstAttribute="leading" secondItem="Xty-aF-WDv" secondAttribute="leading" constant="15" id="6lE-vb-eac"/>
                             <constraint firstItem="bZq-z2-OKU" firstAttribute="trailing" secondItem="Xty-aF-WDv" secondAttribute="trailing" type="default" id="8c7-S3-6e7"/>
-                            <constraint firstItem="vh9-Zy-DPu" firstAttribute="bottom" secondItem="XDZ-bs-OUM" secondAttribute="bottom" type="default" id="Il8-lY-nhX"/>
-                            <constraint firstItem="vh9-Zy-DPu" firstAttribute="top" secondItem="XDZ-bs-OUM" secondAttribute="top" type="default" id="Nsv-yX-97F"/>
+                            <constraint firstItem="vh9-Zy-DPu" firstAttribute="top" secondItem="XDZ-bs-OUM" secondAttribute="top" type="default" id="9Ok-Tn-XPY"/>
+                            <constraint firstAttribute="trailing" secondItem="3BV-KX-Qla" secondAttribute="trailing" constant="6" id="CYg-Mi-8Fm"/>
+                            <constraint firstItem="vh9-Zy-DPu" firstAttribute="top" secondItem="Xty-aF-WDv" secondAttribute="top" constant="227" id="Mc6-Iu-Llg"/>
+                            <constraint firstItem="vh9-Zy-DPu" firstAttribute="bottom" secondItem="XDZ-bs-OUM" secondAttribute="bottom" type="default" id="Osz-kd-tgN"/>
                             <constraint firstItem="bZq-z2-OKU" firstAttribute="leading" secondItem="Xty-aF-WDv" secondAttribute="leading" type="default" id="Qsg-3g-46W"/>
-                            <constraint firstAttribute="trailing" secondItem="xGi-A7-hat" secondAttribute="trailing" constant="20" symbolic="YES" type="default" id="ULM-bz-2bR"/>
+                            <constraint firstItem="3BV-KX-Qla" firstAttribute="top" secondItem="Xty-aF-WDv" secondAttribute="top" constant="184" id="XgZ-IP-Wsa"/>
+                            <constraint firstItem="GQv-EU-3bu" firstAttribute="leading" secondItem="Xty-aF-WDv" secondAttribute="leading" type="default" id="cKk-ZT-xc9"/>
+                            <constraint firstItem="GQv-EU-3bu" firstAttribute="bottom" secondItem="Xty-aF-WDv" secondAttribute="bottom" type="default" id="dgM-wJ-YtM"/>
                             <constraint firstItem="vh9-Zy-DPu" firstAttribute="leading" secondItem="Xty-aF-WDv" secondAttribute="leading" constant="25" id="g90-pp-FIm"/>
                             <constraint firstAttribute="trailing" secondItem="XDZ-bs-OUM" secondAttribute="trailing" constant="32" id="gQB-7f-3oC"/>
-                            <constraint firstItem="vh9-Zy-DPu" firstAttribute="top" secondItem="Xty-aF-WDv" secondAttribute="top" constant="241" id="prB-kI-7tF"/>
-                            <constraint firstItem="xGi-A7-hat" firstAttribute="leading" secondItem="Xty-aF-WDv" secondAttribute="leading" constant="20" symbolic="YES" type="default" id="qRg-YR-JvP"/>
-                            <constraint firstAttribute="bottom" secondItem="xGi-A7-hat" secondAttribute="bottom" constant="20" symbolic="YES" type="default" id="se0-oQ-Uny"/>
+                            <constraint firstItem="GQv-EU-3bu" firstAttribute="trailing" secondItem="Xty-aF-WDv" secondAttribute="trailing" type="default" id="plb-vM-pxW"/>
+                            <constraint firstAttribute="bottom" secondItem="xGi-A7-hat" secondAttribute="bottom" constant="50" id="tCj-cK-tgF"/>
                             <constraint firstItem="bZq-z2-OKU" firstAttribute="top" secondItem="Xty-aF-WDv" secondAttribute="top" type="default" id="uH1-AT-FKy"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="T79-lT-61m"/>
+                    <navigationItem key="navigationItem" title="Presentation" id="T79-lT-61m">
+                        <barButtonItem key="rightBarButtonItem" title="Slides" id="0Df-q1-4Ho"/>
+                    </navigationItem>
                     <connections>
                         <outlet property="lecturer_notes" destination="xGi-A7-hat" id="Cng-HM-0wW"/>
+                        <outlet property="slideNumber" destination="3BV-KX-Qla" id="681-YP-k0T"/>
                         <outlet property="slideView" destination="bZq-z2-OKU" id="yu0-P8-F3v"/>
                     </connections>
                 </viewController>
@@ -438,7 +465,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="99D6BCFF-CD7B-46CE-AEAA-4C817A23EC3B" width="256" height="256">
+        <image name="C3EAB918-B6EF-4237-BA62-38FB651AC6C0" width="256" height="256">
             <mutableData key="keyedArchiveRepresentation">
 YnBsaXN0MDDUAQIDBAUGPj9YJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGGoK4HCBMU
 GR4fIyQsLzI4O1UkbnVsbNUJCgsMDQ4PEBESVk5TU2l6ZVYkY2xhc3NcTlNJbWFnZUZsYWdzVk5TUmVw
@@ -4924,6 +4951,7 @@ AAAAAAAEAQAAAAAAAABCAAAAAAAAAAAAAAAAAAQO4w
                 <relationship kind="action" name="nextSlideAction:"/>
                 <relationship kind="action" name="previousSlideAction:"/>
                 <relationship kind="outlet" name="lecturer_notes" candidateClass="UIWebView"/>
+                <relationship kind="outlet" name="slideNumber" candidateClass="UILabel"/>
                 <relationship kind="outlet" name="slideView" candidateClass="UIImageView"/>
             </relationships>
         </class>

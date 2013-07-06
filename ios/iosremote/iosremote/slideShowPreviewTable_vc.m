@@ -25,6 +25,8 @@
 @synthesize optionsTable = _optionsTable;
 @synthesize optionsArray = _optionsArray;
 
+BOOL RUNNING = NO;
+
 - (id)initWithStyle:(UITableViewStyle)style
 {
     self = [super initWithStyle:style];
@@ -46,10 +48,23 @@
     self.optionsArray = [NSArray arrayWithObjects:@"Lecturer's Notes", @"Timer", @"Pointer", nil];
     self.comManager = [CommunicationManager sharedComManager];
     self.comManager.delegate = self;
+    NSOperationQueue *mainQueue = [NSOperationQueue mainQueue];
+    self.slideShowStartObserver = [[NSNotificationCenter defaultCenter] addObserverForName:STATUS_CONNECTED_SLIDESHOW_RUNNING
+                                                                                    object:nil
+                                                                                     queue:mainQueue
+                                                                                usingBlock:^(NSNotification *note) {
+                                                                                    RUNNING = YES;
+                                                                                }];
+
     }
 
 - (void) viewDidAppear:(BOOL)animated
 {
+    if (RUNNING){
+        NSLog(@"Running...");
+        RUNNING = NO;
+        [self.parentViewController performSegueWithIdentifier:@"slideShowSegue" sender:self];
+    }
     NSOperationQueue *mainQueue = [NSOperationQueue mainQueue];
     self.slideShowStartObserver = [[NSNotificationCenter defaultCenter] addObserverForName:STATUS_CONNECTED_SLIDESHOW_RUNNING
                                                                                     object:nil
@@ -63,6 +78,8 @@
 - (void) viewDidDisappear:(BOOL)animated
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self.slideShowStartObserver];
+    self.slideShowStartObserver = nil;
+    RUNNING = NO;
     [super viewDidDisappear:animated];
 }
 
@@ -179,6 +196,8 @@
 
 - (void)viewDidUnload {
     [self setOptionsTable:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self.slideShowStartObserver];
+    self.slideShowStartObserver = nil;
     [super viewDidUnload];
 }
 @end

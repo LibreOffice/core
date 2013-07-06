@@ -44,13 +44,13 @@
 		5753DD8F1781EA0300DB71BB /* serverList_vc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = serverList_vc.m; sourceTree = "<group>"; };
 		5753DD9717834D7100DB71BB /* newServer_vc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = newServer_vc.h; sourceTree = "<group>"; };
 		5753DD9817834D7100DB71BB /* newServer_vc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = newServer_vc.m; sourceTree = "<group>"; };
-		57867A531787172A00EBBE52 /* impress.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = impress.jpeg; sourceTree = "<group>"; };
+		57867A531787172A00EBBE52 /* impress.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = impress.jpeg; path = iosremote/impress.jpeg; sourceTree = "<group>"; };
 		57867A551787385800EBBE52 /* slideShow_vc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = slideShow_vc.h; sourceTree = "<group>"; };
 		57867A561787385800EBBE52 /* slideShow_vc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = slideShow_vc.m; sourceTree = "<group>"; };
-		57867A581787510700EBBE52 /* pushed_next_button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pushed_next_button.png; sourceTree = "<group>"; };
-		57867A591787510700EBBE52 /* released_next_button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = released_next_button.png; sourceTree = "<group>"; };
-		57867A5C178752CD00EBBE52 /* pushed_previous_button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pushed_previous_button.png; sourceTree = "<group>"; };
-		57867A5D178752CD00EBBE52 /* released_previous_button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = released_previous_button.png; sourceTree = "<group>"; };
+		57867A581787510700EBBE52 /* pushed_next_button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = pushed_next_button.png; path = iosremote/pushed_next_button.png; sourceTree = "<group>"; };
+		57867A591787510700EBBE52 /* released_next_button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = released_next_button.png; path = iosremote/released_next_button.png; sourceTree = "<group>"; };
+		57867A5C178752CD00EBBE52 /* pushed_previous_button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = pushed_previous_button.png; path = iosremote/pushed_previous_button.png; sourceTree = "<group>"; };
+		57867A5D178752CD00EBBE52 /* released_previous_button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = released_previous_button.png; path = iosremote/released_previous_button.png; sourceTree = "<group>"; };
 		57B152971764703500EECC67 /* Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Base64.h; path = iosremote/Base64.h; sourceTree = "<group>"; };
 		57B152981764703500EECC67 /* Base64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Base64.m; path = iosremote/Base64.m; sourceTree = "<group>"; };
 		57B1529D176486C300EECC67 /* CommandTransmitter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommandTransmitter.h; sourceTree = "<group>"; };
@@ -105,9 +105,22 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		57AEEDAA1788D7B2007F4F97 /* Assets */ = {
+			isa = PBXGroup;
+			children = (
+				57867A581787510700EBBE52 /* pushed_next_button.png */,
+				57867A591787510700EBBE52 /* released_next_button.png */,
+				57867A5C178752CD00EBBE52 /* pushed_previous_button.png */,
+				57867A5D178752CD00EBBE52 /* released_previous_button.png */,
+				57867A531787172A00EBBE52 /* impress.jpeg */,
+			);
+			name = Assets;
+			sourceTree = "<group>";
+		};
 		57C6E3E6175E06E800E8BC5F = {
 			isa = PBXGroup;
 			children = (
+				57AEEDAA1788D7B2007F4F97 /* Assets */,
 				BE9EBD061765BF0800283FD2 /* CoreImage.framework */,
 				57B152971764703500EECC67 /* Base64.h */,
 				57B152981764703500EECC67 /* Base64.m */,
@@ -164,11 +177,6 @@
 		57C6E3F9175E06E800E8BC5F /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				57867A581787510700EBBE52 /* pushed_next_button.png */,
-				57867A591787510700EBBE52 /* released_next_button.png */,
-				57867A5C178752CD00EBBE52 /* pushed_previous_button.png */,
-				57867A5D178752CD00EBBE52 /* released_previous_button.png */,
-				57867A531787172A00EBBE52 /* impress.jpeg */,
 				57C6E3FA175E06E800E8BC5F /* iosremote-Info.plist */,
 				57C6E3FB175E06E800E8BC5F /* InfoPlist.strings */,
 				57C6E3FE175E06E800E8BC5F /* main.m */,

@@ -49,7 +49,8 @@
 
 - (void) connectionStatusHandler:(NSNotification *)note
 {
-    [self.delegate disableSpinner];
+    if ([self.delegate respondsToSelector:@selector(disableSpinner)])
+        [self.delegate disableSpinner];
     if([[note name] isEqualToString:@"connection.status.connected"]){
         if (self.state!=CONNECTED){
             NSLog(@"Connected");
