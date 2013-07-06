@@ -297,8 +297,8 @@ NewToolbarController::execute( sal_Int16 /*KeyModifier*/ )
     {
         // TODO investigate how to wrap Get/SetUserValue in css::awt::XMenu
         MenuConfiguration::Attributes* pMenuAttributes( 0 );
-        VCLXPopupMenu*  pTkPopupMenu = dynamic_cast< VCLXPopupMenu * >(
-            VCLXMenu::GetImplementation( m_xPopupMenu ) );
+        VCLXPopupMenu*  pTkPopupMenu =
+            ( VCLXPopupMenu * ) VCLXMenu::GetImplementation( m_xPopupMenu );
 
         SolarMutexGuard aSolarMutexGuard;
         PopupMenu* pVCLPopupMenu = dynamic_cast< PopupMenu * >( pTkPopupMenu->GetMenu() );
