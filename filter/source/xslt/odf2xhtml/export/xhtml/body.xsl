@@ -1068,6 +1068,23 @@
 			<xsl:value-of select="$elem-name"/>' is a draw:frame.
 		</xsl:comment>
 		<xsl:element name="{$elem-name}">
+		  <xsl:choose>
+		    <xsl:when test="draw:object/math:math">
+		      <!-- draw:frame elements contain many data that are not
+			   relevant for mathematical formulas and that may
+			   cause incorrect rendering. Let's ignore the
+			   replacement image and keep only the id attribute.
+			   See fdo#66645 -->
+		      <xsl:apply-templates select="@draw:name"/>
+		      <xsl:text> </xsl:text>
+		      <xsl:apply-templates select="draw:object[1]"/>
+		      <!-- TODO: do not always add a space after the formula,
+			   for example when it is followed by a comma, period,
+			   dash etc This will probably require using regexp
+			   features like xsl:analyze-string -->
+		      <xsl:text> </xsl:text>
+		    </xsl:when>
+		    <xsl:otherwise>
 			<xsl:attribute name="style">
 				<xsl:call-template name="widthAndHeight"/>
 				<xsl:text> padding:0; </xsl:text>
@@ -1090,6 +1107,8 @@
 			<xsl:apply-templates select="node()">
 				<xsl:with-param name="globalData" select="$globalData"/>
 			</xsl:apply-templates>
+		    </xsl:otherwise>
+		  </xsl:choose>
 		</xsl:element>
 	</xsl:template>
 
@@ -2968,8 +2987,5 @@
 	<xsl:template match="math:semantics" mode="math">
 		<xsl:apply-templates select="*[1]" mode="math"/>
 	</xsl:template>
-
-	<!-- Ignore the replacement image -->
-	<xsl:template match="draw:frame/draw:image[preceding-sibling::*[1]/math:math]"/>
 
 </xsl:stylesheet>
