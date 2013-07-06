@@ -26,8 +26,9 @@
 #include <assert.h>
 #include <unistd.h>
 
-#if defined(MACOSX) || defined(IOS)
-#include <mach/mach_time.h>
+#ifdef __MACH__
+#include <mach/clock.h>
+#include <mach/mach.h>
 #endif
 
 /* FIXME: detection should be done in configure script */
@@ -39,9 +40,8 @@
 #define HAS_ALTZONE 1
 #endif
 
-#if defined(MACOSX) || defined(IOS)
-typedef sal_uInt64 osl_time_t;
-static double adjust_time_factor;
+#ifdef __MACH__
+typedef mach_timespec_t osl_time_t;
 #else
 #if defined(_POSIX_TIMERS)
 #define USE_CLOCK_GETTIME
@@ -59,10 +59,16 @@ static osl_time_t startTime;
 
 sal_Bool SAL_CALL osl_getSystemTime(TimeValue* tv)
 {
-#if defined(MACOSX) || defined(IOS)
-    double diff = (double)(mach_absolute_time() - startTime) * adjust_time_factor;
-    tv->Seconds = (sal_uInt32)diff;
-    tv->Nanosec = (sal_uInt32)((diff - tv->Seconds) * 1e9);
+#ifdef __MACH__
+    clock_serv_t cclock;
+    mach_timespec_t mts;
+
+    host_get_clock_service(mach_host_self(), CALENDAR_CLOCK, &cclock);
+    clock_get_time(cclock, &mts);
+    mach_port_deallocate(mach_task_self(), cclock);
+
+    tv->Seconds = mts.tv_sec;
+    tv->Nanosec = mts.tv_nsec;
 #else
     int res;
     osl_time_t tp;
@@ -274,11 +280,12 @@ sal_Bool SAL_CALL osl_getSystemTimeFromLocalTime( const TimeValue* pLocalTimeVal
 
 void sal_initGlobalTimer()
 {
-#if defined(MACOSX) || defined(IOS)
-  mach_timebase_info_data_t timebase;
-  mach_timebase_info(&timebase);
-  adjust_time_factor = 1e-9 * (double)timebase.numer / (double)(timebase.denom);
-  startTime = mach_absolute_time();
+#ifdef __MACH__
+  clock_serv_t cclock;
+
+  host_get_clock_service(mach_host_self(), CALENDAR_CLOCK, &cclock);
+  clock_get_time(cclock, &startTime);
+  mach_port_deallocate(mach_task_self(), cclock);
 #else /* ! (MACOSX || IOS) */
   int res;
 #if defined(USE_CLOCK_GETTIME)
@@ -295,9 +302,16 @@ sal_uInt32 SAL_CALL osl_getGlobalTimer()
 {
     sal_uInt32 nSeconds;
 
-#if defined(MACOSX) || defined(IOS)
-    double diff = (double)(mach_absolute_time() - startTime) * adjust_time_factor * 1000;
-    nSeconds = (sal_uInt32)diff;
+#ifdef __MACH__
+    clock_serv_t cclock;
+    mach_timespec_t currentTime;
+
+    host_get_clock_service(mach_host_self(), CALENDAR_CLOCK, &cclock);
+    clock_get_time(cclock, &currentTime);
+    mach_port_deallocate(mach_task_self(), cclock);
+
+    nSeconds = ( currentTime.tv_sec - startTime.tv_sec );
+    nSeconds = ( nSeconds * 1000 ) + (long) (( currentTime.tv_nsec - startTime.tv_nsec) / 1000000 );
 #else
     osl_time_t currentTime;
     int res;
