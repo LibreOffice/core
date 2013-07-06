@@ -21,6 +21,7 @@
 #define _VLCCOMMON_HXX
 
 #include <vlc/libvlc.h>
+#include <vlc/libvlc_media.h>
 
 #include <osl/mutex.hxx>
 #include <tools/stream.hxx>
