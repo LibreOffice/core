@@ -15,25 +15,15 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+
+#include <svx/dialogs.hrc>
+
 //  RID_SIDEBAR_LINE_PANEL--------------------------------------------------------------
 #define CUSTOM_X    POPUPPANEL_MARGIN_LARGE + OFFSET_X
 #define CUSTOM_Y    POPUPPANEL_MARGIN_SMALL + OFFSET_Y + 12 * 9 + POPUPPANEL_MARGIN_SMALL * 2 + TEXT_HEIGHT
 #define CUSTOM_W    74
 #define CUSTOM_H    POPUPPANEL_MARGIN_LARGE * 2 +  TEXT_HEIGHT + 12 +  TEXT_CONTROL_SPACING_VERTICAL
 
-#define FT_COLOR            1
-#define TB_COLOR            2
-#define FT_WIDTH            3
-#define TB_WIDTH            4
-#define FT_STYLE            5
-#define LB_STYLE            6
-#define FT_ARROW            7
-#define FT_TRANSPARENT      8
-#define MF_TRANSPARENT      9
-#define LB_START            10
-#define LB_END              11
-#define TBI_COLOR           12
-#define TBI_WIDTH           13
 #define TBI_STYLE           14
 #define STR_QH_TB_WIDTH     15
 #define STR_QH_TB_COLOR     16
@@ -43,21 +33,21 @@
 #define FT_CAPSTYLE         20
 #define LB_CAPSTYLE         21
 
-#define IMG_COLOR           23
-#define IMG_COLOR_NO        24
-#define IMG_NONE_ICON       36
-
-#define IMG_WIDTH1_ICON     41
-#define IMG_WIDTH2_ICON     42
-#define IMG_WIDTH3_ICON     43
-#define IMG_WIDTH4_ICON     44
-#define IMG_WIDTH5_ICON     45
-#define IMG_WIDTH6_ICON     46
-#define IMG_WIDTH7_ICON     47
-#define IMG_WIDTH8_ICON     48
+//global definitions
+#define IMG_COLOR           (RID_SVX_SIDEBAR_BEGIN +  50)
+#define IMG_NONE_ICON       (RID_SVX_SIDEBAR_BEGIN +  51)
+#define IMG_COLOR_NO        (RID_SVX_SIDEBAR_BEGIN +  52)
+#define IMG_WIDTH1_ICON     (RID_SVX_SIDEBAR_BEGIN +  53)
+#define IMG_WIDTH2_ICON     (RID_SVX_SIDEBAR_BEGIN +  54)
+#define IMG_WIDTH3_ICON     (RID_SVX_SIDEBAR_BEGIN +  55)
+#define IMG_WIDTH4_ICON     (RID_SVX_SIDEBAR_BEGIN +  56)
+#define IMG_WIDTH5_ICON     (RID_SVX_SIDEBAR_BEGIN +  57)
+#define IMG_WIDTH6_ICON     (RID_SVX_SIDEBAR_BEGIN +  58)
+#define IMG_WIDTH7_ICON     (RID_SVX_SIDEBAR_BEGIN +  59)
+#define IMG_WIDTH8_ICON     (RID_SVX_SIDEBAR_BEGIN +  60)
 
 //color popup page
-#define VS_COLOR        1
+#define VS_COLOR            (RID_SVX_SIDEBAR_BEGIN +  61)
 
 //style popup page
 #define VS_STYLE                1
@@ -68,8 +58,8 @@
 #define MF_WIDTH        2
 #define FT_CUSTOME      3
 #define FT_LINE_WIDTH   4
-#define IMG_WIDTH_CUSTOM            5
-#define IMG_WIDTH_CUSTOM_GRAY       6
+#define IMG_WIDTH_CUSTOM            (RID_SVX_SIDEBAR_BEGIN +  62)
+#define IMG_WIDTH_CUSTOM_GRAY       (RID_SVX_SIDEBAR_BEGIN +  63)
 #define CT_BORDER       7
 #define STR_WIDTH_LAST_CUSTOM       8
 #define STR_PT          9

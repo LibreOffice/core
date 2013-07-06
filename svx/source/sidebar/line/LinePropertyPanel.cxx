@@ -57,6 +57,9 @@ using namespace css;
 using namespace cssu;
 using ::sfx2::sidebar::Theme;
 
+const char UNO_SELECTWIDTH[] = ".uno:SelectWidth";
+const char UNO_SELECTCOLOR[] = ".uno:SelectColor";
+
 #define A2S(pString) (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(pString)))
 
 namespace {
@@ -153,26 +156,7 @@ LinePropertyPanel::LinePropertyPanel(
     Window* pParent,
     const cssu::Reference<css::frame::XFrame>& rxFrame,
     SfxBindings* pBindings)
-:   Control(
-        pParent,
-        SVX_RES(RID_SIDEBAR_LINE_PANEL)),
-    mpFTWidth(new FixedText(this, SVX_RES(FT_WIDTH))),
-    mpTBWidthBackground(sfx2::sidebar::ControlFactory::CreateToolBoxBackground(this)),
-    mpTBWidth(sfx2::sidebar::ControlFactory::CreateToolBox(mpTBWidthBackground.get(), SVX_RES(TB_WIDTH))),
-    mpFTColor(new FixedText(this, SVX_RES(FT_COLOR))),
-    mpTBColorBackground(sfx2::sidebar::ControlFactory::CreateToolBoxBackground(this)),
-    mpTBColor(sfx2::sidebar::ControlFactory::CreateToolBox(mpTBColorBackground.get(), SVX_RES(TB_COLOR))),
-    mpFTStyle(new FixedText(this, SVX_RES(FT_STYLE))),
-    mpLBStyle(new ListBox(this, SVX_RES(LB_STYLE))),
-    mpFTTrancparency(new FixedText(this, SVX_RES(FT_TRANSPARENT))),
-    mpMFTransparent(new MetricField(this, SVX_RES(MF_TRANSPARENT))),
-    mpFTArrow(new FixedText(this, SVX_RES(FT_ARROW))),
-    mpLBStart(new ListBox(this, SVX_RES(LB_START))),
-    mpLBEnd(new ListBox(this, SVX_RES(LB_END))),
-    mpFTEdgeStyle(new FixedText(this, SVX_RES(FT_EDGESTYLE))),
-    mpLBEdgeStyle(new ListBox(this, SVX_RES(LB_EDGESTYLE))),
-    mpFTCapStyle(new FixedText(this, SVX_RES(FT_CAPSTYLE))),
-    mpLBCapStyle(new ListBox(this, SVX_RES(LB_CAPSTYLE))),
+:   PanelLayout(pParent, "LinePropertyPanel", "svx/ui/sidebarline", rxFrame),
     maStyleControl(SID_ATTR_LINE_STYLE, *pBindings, *this),
     maDashControl (SID_ATTR_LINE_DASH, *pBindings, *this),
     maWidthControl(SID_ATTR_LINE_WIDTH, *pBindings, *this),
@@ -185,7 +169,6 @@ LinePropertyPanel::LinePropertyPanel(
     maEdgeStyle(SID_ATTR_LINE_JOINT, *pBindings, *this),
     maCapStyle(SID_ATTR_LINE_CAP, *pBindings, *this),
     maColor(COL_BLACK),
-    mpColorUpdater(new ::svx::ToolboxButtonColorUpdater(SID_ATTR_LINE_COLOR, TBI_COLOR, mpTBColor.get())),
     mpStyleItem(),
     mpDashItem(),
     mnTrans(0),
@@ -203,34 +186,37 @@ LinePropertyPanel::LinePropertyPanel(
     mbColorAvailable(true),
     mbWidthValuable(true)
 {
+    get(mpFTWidth, "widthlabel");
+    get(mpTBWidth, "width");
+    get(mpFTColor, "colorlabel");
+    get(mpTBColor, "color");
+    get(mpFTStyle, "stylelabel");
+    get(mpLBStyle, "linestyle");
+    get(mpFTTrancparency, "translabel");
+    get(mpMFTransparent, "linetransparency");
+    get(mpFTArrow, "arrowlabel");
+    get(mpLBStart, "beginarrowstyle");
+    get(mpLBEnd, "endarrowstyle");
+    get(mpFTEdgeStyle, "cornerlabel");
+    get(mpLBEdgeStyle, "edgestyle");
+    get(mpFTCapStyle, "caplabel");
+    get(mpLBCapStyle, "linecapstyle");
+
+    const sal_uInt16 nIdColor = mpTBColor->GetItemId(UNO_SELECTCOLOR);
+    mpColorUpdater.reset(new ::svx::ToolboxButtonColorUpdater(SID_ATTR_LINE_COLOR, nIdColor, mpTBColor)),
     Initialize();
-    FreeResource();
 }
 
 
 
 LinePropertyPanel::~LinePropertyPanel()
 {
-    // Destroy the toolboxes, then their background windows.
-    mpTBWidth.reset();
-    mpTBColor.reset();
-
-    mpTBWidthBackground.reset();
-    mpTBColorBackground.reset();
 }
 
 
 
 void LinePropertyPanel::Initialize()
 {
-    mpFTWidth->SetBackground(Wallpaper());
-    mpFTColor->SetBackground(Wallpaper());
-    mpFTStyle->SetBackground(Wallpaper());
-    mpFTTrancparency->SetBackground(Wallpaper());
-    mpFTArrow->SetBackground(Wallpaper());
-    mpFTEdgeStyle->SetBackground(Wallpaper());
-    mpFTCapStyle->SetBackground(Wallpaper());
-
     mpIMGWidthIcon.reset(new Image[8]);
     mpIMGWidthIcon[0] = Image(SVX_RES(IMG_WIDTH1_ICON));
     mpIMGWidthIcon[1] = Image(SVX_RES(IMG_WIDTH2_ICON));
@@ -242,14 +228,10 @@ void LinePropertyPanel::Initialize()
     mpIMGWidthIcon[7] = Image(SVX_RES(IMG_WIDTH8_ICON));
 
     meMapUnit = maWidthControl.GetCoreMetric();
+    const sal_uInt16 nIdColor = mpTBColor->GetItemId(UNO_SELECTCOLOR);
 
-    mpTBColor->SetItemImage(TBI_COLOR, maIMGColor);
-    Size aTbxSize( mpTBColor->CalcWindowSizePixel() );
-    mpTBColor->SetOutputSizePixel( aTbxSize );
-    mpTBColor->SetItemBits( TBI_COLOR, mpTBColor->GetItemBits( TBI_COLOR ) | TIB_DROPDOWNONLY );
-    mpTBColor->SetQuickHelpText(TBI_COLOR,String(SVX_RES(STR_QH_TB_COLOR))); //Add
-    mpTBColor->SetBackground(Wallpaper());
-    mpTBColor->SetPaintTransparent(true);
+    mpTBColor->SetItemImage(nIdColor, maIMGColor);
+    mpTBColor->SetItemBits( nIdColor, mpTBColor->GetItemBits( nIdColor ) | TIB_DROPDOWNONLY );
     Link aLink = LINK(this, LinePropertyPanel, ToolboxColorSelectHdl);
     mpTBColor->SetDropdownClickHdl ( aLink );
     mpTBColor->SetSelectHdl ( aLink );
@@ -261,13 +243,9 @@ void LinePropertyPanel::Initialize()
     mpLBStyle->SetAccessibleName(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Style")));
     mpLBStyle->AdaptDropDownLineCountToMaximum();
 
-    mpTBWidth->SetItemImage(TBI_WIDTH, mpIMGWidthIcon[0]);
-    aTbxSize = mpTBWidth->CalcWindowSizePixel() ;
-    mpTBWidth->SetOutputSizePixel( aTbxSize );
-    mpTBWidth->SetItemBits( TBI_WIDTH, mpTBWidth->GetItemBits( TBI_WIDTH ) | TIB_DROPDOWNONLY );
-    mpTBWidth->SetQuickHelpText(TBI_WIDTH,String(SVX_RES(STR_QH_TB_WIDTH))); //Add
-    mpTBWidth->SetBackground(Wallpaper());
-    mpTBWidth->SetPaintTransparent(true);
+    const sal_uInt16 nIdWidth = mpTBWidth->GetItemId(UNO_SELECTWIDTH);
+    mpTBWidth->SetItemImage(nIdWidth, mpIMGWidthIcon[0]);
+    mpTBWidth->SetItemBits( nIdWidth, mpTBWidth->GetItemBits( nIdWidth ) | TIB_DROPDOWNONLY );
     aLink = LINK(this, LinePropertyPanel, ToolboxWidthSelectHdl);
     mpTBWidth->SetDropdownClickHdl ( aLink );
     mpTBWidth->SetSelectHdl ( aLink );
@@ -288,12 +266,12 @@ void LinePropertyPanel::Initialize()
     mpMFTransparent->SetModifyHdl(aLink);
     mpMFTransparent->SetAccessibleName(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Transparency")));  //wj acc
 
-    mpTBWidth->SetAccessibleRelationLabeledBy(mpFTWidth.get());
-    mpTBColor->SetAccessibleRelationLabeledBy(mpFTColor.get());
-    mpLBStyle->SetAccessibleRelationLabeledBy(mpFTStyle.get());
-    mpMFTransparent->SetAccessibleRelationLabeledBy(mpFTTrancparency.get());
-    mpLBStart->SetAccessibleRelationLabeledBy(mpFTArrow.get());
-    mpLBEnd->SetAccessibleRelationLabeledBy(mpLBEnd.get());
+    mpTBWidth->SetAccessibleRelationLabeledBy(mpFTWidth);
+    mpTBColor->SetAccessibleRelationLabeledBy(mpFTColor);
+    mpLBStyle->SetAccessibleRelationLabeledBy(mpFTStyle);
+    mpMFTransparent->SetAccessibleRelationLabeledBy(mpFTTrancparency);
+    mpLBStart->SetAccessibleRelationLabeledBy(mpFTArrow);
+    mpLBEnd->SetAccessibleRelationLabeledBy(mpLBEnd);
 
     aLink = LINK( this, LinePropertyPanel, ChangeEdgeStyleHdl );
     mpLBEdgeStyle->SetSelectHdl( aLink );
@@ -709,8 +687,9 @@ IMPL_LINK( LinePropertyPanel, ImplPopupModeEndHdl, FloatingWindow*, EMPTYARG )
 
 IMPL_LINK(LinePropertyPanel, ToolboxColorSelectHdl,ToolBox*, pToolBox)
 {
-    sal_uInt16 nId = pToolBox->GetCurItemId();
-    if(nId == TBI_COLOR)
+    const OUString aCommand(pToolBox->GetItemCommand(pToolBox->GetCurItemId()));
+
+    if(aCommand == UNO_SELECTCOLOR)
     {
         maColorPopup.Show(*pToolBox);
         maColorPopup.SetCurrentColor(maColor, mbColorAvailable);
@@ -878,7 +857,7 @@ IMPL_LINK(LinePropertyPanel, ChangeCapStyleHdl, void*, EMPTYARG)
 
 IMPL_LINK(LinePropertyPanel, ToolboxWidthSelectHdl,ToolBox*, pToolBox)
 {
-    if (pToolBox->GetCurItemId() == TBI_WIDTH)
+    if (pToolBox->GetItemCommand(pToolBox->GetCurItemId()) == UNO_SELECTWIDTH)
     {
         maLineWidthPopup.SetWidthSelect(mnWidthCoreValue, mbWidthValuable, meMapUnit);
         maLineWidthPopup.Show(*pToolBox);
@@ -943,10 +922,11 @@ void LinePropertyPanel::EndLineWidthPopupMode (void)
 
 void LinePropertyPanel::SetWidthIcon(int n)
 {
+    const sal_uInt16 nIdWidth = mpTBWidth->GetItemId(UNO_SELECTWIDTH);
     if(n==0)
-        mpTBWidth->SetItemImage( TBI_WIDTH, maIMGNone);
+        mpTBWidth->SetItemImage( nIdWidth, maIMGNone);
     else
-        mpTBWidth->SetItemImage( TBI_WIDTH, mpIMGWidthIcon[n-1]);
+        mpTBWidth->SetItemImage( nIdWidth, mpIMGWidthIcon[n-1]);
 }
 
 
@@ -955,28 +935,30 @@ void LinePropertyPanel::SetWidthIcon()
 {
     if(!mbWidthValuable)
     {
-        mpTBWidth->SetItemImage( TBI_WIDTH, maIMGNone);
+        const sal_uInt16 nIdWidth = mpTBWidth->GetItemId(UNO_SELECTWIDTH);
+        mpTBWidth->SetItemImage(nIdWidth, maIMGNone);
         return;
     }
 
     long nVal = LogicToLogic(mnWidthCoreValue * 10,(MapUnit)meMapUnit , MAP_POINT);
+    const sal_uInt16 nIdWidth = mpTBWidth->GetItemId(UNO_SELECTWIDTH);
 
     if(nVal <= 6)
-        mpTBWidth->SetItemImage( TBI_WIDTH, mpIMGWidthIcon[0]);
+        mpTBWidth->SetItemImage( nIdWidth, mpIMGWidthIcon[0]);
     else if(nVal > 6 && nVal <= 9)
-        mpTBWidth->SetItemImage( TBI_WIDTH, mpIMGWidthIcon[1]);
+        mpTBWidth->SetItemImage( nIdWidth, mpIMGWidthIcon[1]);
     else if(nVal > 9 && nVal <= 12)
-        mpTBWidth->SetItemImage( TBI_WIDTH, mpIMGWidthIcon[2]);
+        mpTBWidth->SetItemImage( nIdWidth, mpIMGWidthIcon[2]);
     else if(nVal > 12 && nVal <= 19)
-        mpTBWidth->SetItemImage( TBI_WIDTH, mpIMGWidthIcon[3]);
+        mpTBWidth->SetItemImage( nIdWidth, mpIMGWidthIcon[3]);
     else if(nVal > 19 && nVal <= 26)
-        mpTBWidth->SetItemImage( TBI_WIDTH, mpIMGWidthIcon[4]);
+        mpTBWidth->SetItemImage( nIdWidth, mpIMGWidthIcon[4]);
     else if(nVal > 26 && nVal <= 37)
-        mpTBWidth->SetItemImage( TBI_WIDTH, mpIMGWidthIcon[5]);
+        mpTBWidth->SetItemImage( nIdWidth, mpIMGWidthIcon[5]);
     else if(nVal > 37 && nVal <=52)
-        mpTBWidth->SetItemImage( TBI_WIDTH, mpIMGWidthIcon[6]);
+        mpTBWidth->SetItemImage( nIdWidth, mpIMGWidthIcon[6]);
     else if(nVal > 52)
-        mpTBWidth->SetItemImage( TBI_WIDTH, mpIMGWidthIcon[7]);
+        mpTBWidth->SetItemImage( nIdWidth, mpIMGWidthIcon[7]);
 
 }
 
