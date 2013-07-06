@@ -1683,7 +1683,7 @@ ParaPropertyPanel::ParaPropertyPanel(Window* pParent,
     FreeResource();
 
     // Setup the grid layouter.
-    const sal_Int32 nMappedImageWidth (Layouter::MapWidth(*this, IMAGE_SIZE));
+    // const sal_Int32 nMappedImageWidth (Layouter::MapWidth(*this, IMAGE_SIZE));
     const sal_Int32 nMappedImageOffset (Layouter::MapWidth(*this, -3));
     const sal_Int32 nMappedToolBoxItemWidth (Layouter::MapWidth(*this, TOOLBOX_ITEM_WIDTH));
     const sal_Int32 nMappedControlWidth (Layouter::MapWidth(*this, CONTROL_WIDTH -10));
