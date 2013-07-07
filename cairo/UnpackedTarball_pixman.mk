@@ -9,7 +9,7 @@
 
 $(eval $(call gb_UnpackedTarball_UnpackedTarball,pixman))
 
-$(eval $(call gb_UnpackedTarball_set_tarball,pixman,$(PIXMAN_TARBALL)))
+$(eval $(call gb_UnpackedTarball_set_tarball,pixman,$(PIXMAN_TARBALL),,cairo))
 
 $(eval $(call gb_UnpackedTarball_add_patches,pixman,\
 	cairo/pixman/pixman-0.24.4.patch \

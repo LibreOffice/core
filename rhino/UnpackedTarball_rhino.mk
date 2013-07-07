@@ -9,7 +9,7 @@
 
 $(eval $(call gb_UnpackedTarball_UnpackedTarball,rhino))
 
-$(eval $(call gb_UnpackedTarball_set_tarball,rhino,$(RHINO_TARBALL)))
+$(eval $(call gb_UnpackedTarball_set_tarball,rhino,$(RHINO_TARBALL),,rhino))
 
 $(eval $(call gb_UnpackedTarball_set_patchlevel,rhino,2))
 

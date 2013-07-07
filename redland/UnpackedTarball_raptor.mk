@@ -9,7 +9,7 @@
 
 $(eval $(call gb_UnpackedTarball_UnpackedTarball,raptor))
 
-$(eval $(call gb_UnpackedTarball_set_tarball,raptor,$(RAPTOR_TARBALL)))
+$(eval $(call gb_UnpackedTarball_set_tarball,raptor,$(RAPTOR_TARBALL),,redland))
 
 # configure generated files for MSVC
 $(eval $(call gb_UnpackedTarball_add_file,raptor,src/raptor2.h,redland/raptor/raptor2.h))

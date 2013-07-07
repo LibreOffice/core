@@ -9,7 +9,7 @@
 
 $(eval $(call gb_UnpackedTarball_UnpackedTarball,poppler))
 
-$(eval $(call gb_UnpackedTarball_set_tarball,poppler,$(POPPLER_TARBALL)))
+$(eval $(call gb_UnpackedTarball_set_tarball,poppler,$(POPPLER_TARBALL),,poppler))
 
 $(eval $(call gb_UnpackedTarball_add_patches,poppler,\
 	poppler/poppler-notests.patch.1 \

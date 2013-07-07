@@ -9,7 +9,7 @@
 
 $(eval $(call gb_UnpackedTarball_UnpackedTarball,openldap))
 
-$(eval $(call gb_UnpackedTarball_set_tarball,openldap,$(OPENLDAP_TARBALL)))
+$(eval $(call gb_UnpackedTarball_set_tarball,openldap,$(OPENLDAP_TARBALL),,openldap))
 
 $(eval $(call gb_UnpackedTarball_add_patches,openldap,\
 	openldap/openldap-2.4.31.patch \

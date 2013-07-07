@@ -9,7 +9,7 @@
 
 $(eval $(call gb_UnpackedTarball_UnpackedTarball,freetype))
 
-$(eval $(call gb_UnpackedTarball_set_tarball,freetype,$(FREETYPE_TARBALL)))
+$(eval $(call gb_UnpackedTarball_set_tarball,freetype,$(FREETYPE_TARBALL),,freetype))
 
 $(eval $(call gb_UnpackedTarball_set_patchlevel,freetype,3))
 

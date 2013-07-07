@@ -9,7 +9,7 @@
 
 $(eval $(call gb_UnpackedTarball_UnpackedTarball,openssl))
 
-$(eval $(call gb_UnpackedTarball_set_tarball,openssl,$(OPENSSL_TARBALL)))
+$(eval $(call gb_UnpackedTarball_set_tarball,openssl,$(OPENSSL_TARBALL),,openssl))
 
 # hack to fix symlinks with MSVC
 $(eval $(call gb_UnpackedTarball_fix_end_of_line,openssl,\

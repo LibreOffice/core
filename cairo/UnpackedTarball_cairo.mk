@@ -9,7 +9,7 @@
 
 $(eval $(call gb_UnpackedTarball_UnpackedTarball,cairo))
 
-$(eval $(call gb_UnpackedTarball_set_tarball,cairo,$(CAIRO_TARBALL)))
+$(eval $(call gb_UnpackedTarball_set_tarball,cairo,$(CAIRO_TARBALL),,cairo))
 
 $(eval $(call gb_UnpackedTarball_add_patches,cairo,\
 	cairo/cairo/cairo-1.10.2.patch \

@@ -9,7 +9,7 @@
 
 $(eval $(call gb_UnpackedTarball_UnpackedTarball,python3))
 
-$(eval $(call gb_UnpackedTarball_set_tarball,python3,$(PYTHON_TARBALL)))
+$(eval $(call gb_UnpackedTarball_set_tarball,python3,$(PYTHON_TARBALL),,python3))
 
 $(eval $(call gb_UnpackedTarball_fix_end_of_line,python3,\
 	PCbuild/pcbuild.sln \
