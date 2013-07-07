@@ -32,20 +32,20 @@
 class SC_DLLPUBLIC ScDocOptions
 {
     double fIterEps;                    // epsilon value dazu
-    sal_uInt16 nIterCount;              // number
-    sal_uInt16 nPrecStandardFormat;     // precision for standard format
-    sal_uInt16 nDay;                    // Null date:
+    sal_uInt16 nIterCount;              ///< number
+    sal_uInt16 nPrecStandardFormat;     ///< precision for standard format
+    sal_uInt16 nDay;                    ///< Null date:
     sal_uInt16 nMonth;
     sal_uInt16 nYear;
-    sal_uInt16 nYear2000;               // earlier 19YY is assumed, 20YY otherwise (if only YY of year is given)
-    sal_uInt16 nTabDistance;            // distance of standard tabs
-    sal_Bool   bIsIgnoreCase;           // ignore case for comparisons?
-    sal_Bool   bIsIter;                 // iterations for circular refs
-    sal_Bool   bCalcAsShown;            // calculate as shown (wrt precision)
-    sal_Bool   bMatchWholeCell;         // search criteria must match the whole cell
-    sal_Bool   bDoAutoSpell;            // auto-spelling
-    sal_Bool   bLookUpColRowNames;      // determine column-/row titles automagically
-    sal_Bool   bFormulaRegexEnabled;    // regular expressions in formulas enabled
+    sal_uInt16 nYear2000;               ///< earlier 19YY is assumed, 20YY otherwise (if only YY of year is given)
+    sal_uInt16 nTabDistance;            ///< distance of standard tabs
+    sal_Bool   bIsIgnoreCase;           ///< ignore case for comparisons?
+    sal_Bool   bIsIter;                 ///< iterations for circular refs
+    sal_Bool   bCalcAsShown;            ///< calculate as shown (wrt precision)
+    sal_Bool   bMatchWholeCell;         ///< search criteria must match the whole cell
+    sal_Bool   bDoAutoSpell;            ///< auto-spelling
+    sal_Bool   bLookUpColRowNames;      ///< determine column-/row titles automagically
+    sal_Bool   bFormulaRegexEnabled;    ///< regular expressions in formulas enabled
 public:
                 ScDocOptions();
                 ScDocOptions( const ScDocOptions& rCpy );
