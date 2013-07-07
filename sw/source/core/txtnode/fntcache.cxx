@@ -2482,8 +2482,8 @@ xub_StrLen SwFont::GetTxtBreak( SwDrawTextInfo& rInf, long nTextWidth )
             nTxtBreak = rInf.GetOut().GetTextBreak( sTmpText, nTextWidth,
                              static_cast<sal_Unicode>('-'), nHyphPos,
                              nTmpIdx2, nTmpLen2, nKern );
-            xub_StrLen nTmpHyphPos = static_cast<xub_StrLen>(nHyphPos);
-            rInf.SetHyphPos(&nTmpHyphPos);
+            *rInf.GetHyphPos() = (nHyphPos == -1)
+                ? STRING_LEN : static_cast<xub_StrLen>(nHyphPos);
         }
         else
             nTxtBreak = rInf.GetOut().GetTextBreak( sTmpText, nTextWidth,

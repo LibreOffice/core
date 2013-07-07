@@ -6074,10 +6074,14 @@ xub_StrLen OutputDevice::GetTextBreak( const OUString& rStr, long nTextWidth,
         if( nExtraPixelWidth > 0 )
             nTextPixelWidth -= nExtraPixelWidth;
 
-        rHyphenatorPos = sal::static_int_cast<sal_Int32>(pSalLayout->GetTextBreak( nTextPixelWidth, nExtraPixelWidth, nSubPixelFactor ));
+        // why does this return "int" and use STRING_LEN for errors???
+        xub_StrLen nTmp = sal::static_int_cast<xub_StrLen>(
+            pSalLayout->GetTextBreak(nTextPixelWidth, nExtraPixelWidth, nSubPixelFactor));
 
-        if( rHyphenatorPos > nRetVal )
-            rHyphenatorPos = nRetVal;
+        nTmp = std::min(nTmp, nRetVal);
+
+        // TODO: remove nTmp when GetTextBreak sal_Int32
+        rHyphenatorPos = (nTmp == STRING_LEN) ? -1 : nTmp;
     }
 
     pSalLayout->Release();
