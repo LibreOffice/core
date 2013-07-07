@@ -73,37 +73,4 @@
 #define LB_LABEL_SIZE                  111
 #define LB_INDEX_SIZE                  112
 
-//Tabpage Table
-#define CB_HEADER           101
-#define CB_REPEAT_HEADER    102
-#define CB_DONT_SPLIT       103
-#define CB_BORDER           104
-#define CB_NUMFORMATTING    105
-#define CB_NUMALIGNMENT     106
-#define FL_TABLE            107
-#define FL_TABLE_INSERT     108
-#define CB_NUMFMT_FORMATTING    109
-#define FL_MOVE                 110
-#define FT_ROWMOVE                  111
-#define MF_ROWMOVE                  112
-#define FT_COLMOVE                  113
-#define MF_COLMOVE                  114
-#define FT_INSERT                   115
-#define FT_ROWINSERT                    116
-#define MF_ROWINSERT                    117
-#define FT_COLINSERT                    118
-#define MF_COLINSERT                    119
-#define FT_HANDLING                     120
-#define RB_FIX                      121
-#define RB_FIXPROP                  122
-#define RB_VAR                      123
-#define FT_FIX                      124
-#define FT_FIXPROP                  125
-#define FT_VAR                      126
-
-#define FT_MOVE                     128
-#define FT_COMMENT                  133
-#define FL_TABLE_SEPARATOR          139
-#define CB_PROSPECT_RTL        140
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
