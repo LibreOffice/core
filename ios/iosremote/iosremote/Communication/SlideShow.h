@@ -20,7 +20,6 @@
 - (void) putImage: (NSString *)img AtIndex: (uint) index;
 - (void) putNotes: (NSString *)notes AtIndex: (uint) index;
 
-- (UIImage *) getImageAtIndex: (uint) index;
-- (NSString *) getNotesAtIndex: (uint) index;
+- (void) getContentAtIndex: (uint) index forView: (UIView*) view;
 
 @end

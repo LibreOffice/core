@@ -18,6 +18,7 @@
 		57AEEDAD1789543D007F4F97 /* libO_toolBar_bg.png in Resources */ = {isa = PBXBuildFile; fileRef = 57AEEDAC1789543D007F4F97 /* libO_toolBar_bg.png */; };
 		57AEEDAF17895B67007F4F97 /* pointer.png in Resources */ = {isa = PBXBuildFile; fileRef = 57AEEDAE17895B67007F4F97 /* pointer.png */; };
 		57AEEDB117895BF5007F4F97 /* pointer_pushed.png in Resources */ = {isa = PBXBuildFile; fileRef = 57AEEDB017895BF5007F4F97 /* pointer_pushed.png */; };
+		57AEEDB517899BB4007F4F97 /* slide_finished.png in Resources */ = {isa = PBXBuildFile; fileRef = 57AEEDB417899BB4007F4F97 /* slide_finished.png */; };
 		57B152991764703500EECC67 /* Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 57B152981764703500EECC67 /* Base64.m */; };
 		57B1529F176486C300EECC67 /* CommandTransmitter.m in Sources */ = {isa = PBXBuildFile; fileRef = 57B1529E176486C300EECC67 /* CommandTransmitter.m */; };
 		57B7625D17621E42007703F6 /* SlideShow.m in Sources */ = {isa = PBXBuildFile; fileRef = 57B7625C17621E42007703F6 /* SlideShow.m */; };
@@ -57,6 +58,7 @@
 		57AEEDAC1789543D007F4F97 /* libO_toolBar_bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = libO_toolBar_bg.png; path = iosremote/libO_toolBar_bg.png; sourceTree = "<group>"; };
 		57AEEDAE17895B67007F4F97 /* pointer.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = pointer.png; path = iosremote/pointer.png; sourceTree = "<group>"; };
 		57AEEDB017895BF5007F4F97 /* pointer_pushed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = pointer_pushed.png; path = iosremote/pointer_pushed.png; sourceTree = "<group>"; };
+		57AEEDB417899BB4007F4F97 /* slide_finished.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = slide_finished.png; path = iosremote/slide_finished.png; sourceTree = "<group>"; };
 		57B152971764703500EECC67 /* Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Base64.h; sourceTree = "<group>"; };
 		57B152981764703500EECC67 /* Base64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Base64.m; sourceTree = "<group>"; };
 		57B1529D176486C300EECC67 /* CommandTransmitter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommandTransmitter.h; sourceTree = "<group>"; };
@@ -114,6 +116,7 @@
 		57AEEDAA1788D7B2007F4F97 /* Assets */ = {
 			isa = PBXGroup;
 			children = (
+				57AEEDB417899BB4007F4F97 /* slide_finished.png */,
 				57AEEDB017895BF5007F4F97 /* pointer_pushed.png */,
 				57AEEDAE17895B67007F4F97 /* pointer.png */,
 				57AEEDAC1789543D007F4F97 /* libO_toolBar_bg.png */,
@@ -290,6 +293,7 @@
 				57AEEDAD1789543D007F4F97 /* libO_toolBar_bg.png in Resources */,
 				57AEEDAF17895B67007F4F97 /* pointer.png in Resources */,
 				57AEEDB117895BF5007F4F97 /* pointer_pushed.png in Resources */,
+				57AEEDB517899BB4007F4F97 /* slide_finished.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

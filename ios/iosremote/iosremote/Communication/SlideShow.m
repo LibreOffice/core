@@ -17,7 +17,7 @@
 @property (nonatomic, strong) NSMutableDictionary* imagesDictionary;
 @property (nonatomic, strong) NSMutableDictionary* notesDictionary;
 
-@property int lastRequestedImage, lastRequestedNote;
+@property (nonatomic, strong) NSMutableDictionary* loadBuffer;
 @property (nonatomic, strong) id slideShowImageReadyObserver;
 @property (nonatomic, strong) id slideShowNoteReadyObserver;
 
@@ -35,84 +35,92 @@ dispatch_queue_t backgroundQueue;
     self = [super init];
     self.imagesDictionary = [[NSMutableDictionary alloc] init];
     self.notesDictionary = [[NSMutableDictionary alloc] init];
+    self.loadBuffer = [[NSMutableDictionary alloc] init];
     _size = 0;
     _currentSlide = 0;
-    self.lastRequestedImage = -1;
-    self.lastRequestedNote = -1;
     
     backgroundQueue = dispatch_queue_create("org.libreoffice.iosremote.bgqueue", NULL);
     NSOperationQueue *mainQueue = [NSOperationQueue mainQueue];
     
+    /**
+     This observer waits for storage updates like new image added or notes received. 
+     It then checks in the loadBuffer to see if there is a view waiting for this update in loadBuffer, if yes, it loads it up and remove the waiting entry.
+     loadBuffer stores key-value pair with viewTag as a key and slideIndex as value. 
+     For the same view, we only keep the last requested slide index on the waiting list.
+     It is thus indispensable to identify each view with an unique tag in its view controller. Here we use 0-10 to indentify central vc views and 11-N for swipe-in tableViewController which allows direct slide number change. 
+     We handle lecturer's notes at the same time as an entry in the load buffer via an instrospection.
+     */
     self.slideShowImageReadyObserver =[[NSNotificationCenter defaultCenter]
-                                              addObserverForName:@"storage_update_image_ready"
+                                              addObserverForName:@"storage_update_ready"
                                                           object:nil
                                                            queue:mainQueue
                                                       usingBlock:^(NSNotification *note) {
-                                                          if ([[[note userInfo] objectForKey:@"index"] intValue] == self.lastRequestedImage) {
-                                                              NSLog(@"Load last requsted image: %u", self.lastRequestedImage);
-                                                              [[self.delegate slideView] setImage:[self getImageAtIndex:self.lastRequestedImage]];
-                                                              self.lastRequestedImage = -1;
+                                                          if ([[self.loadBuffer allKeysForObject:[NSNumber numberWithInt:[[[note userInfo] objectForKey:@"index"] intValue]]] count]) {
+                                                              NSArray * tagArray = [self.loadBuffer allKeysForObject:[NSNumber numberWithInt:[[[note userInfo] objectForKey:@"index"] intValue]]];
+                                                              for (NSNumber *tag in tagArray) {
+                                                                  UIView * view = [[self.delegate view] viewWithTag:[tag integerValue]];
+                                                                  if ([view isKindOfClass:[UIImageView class]]){
+                                                                      UIImage *image = [self.imagesDictionary objectForKey:[self.loadBuffer objectForKey:tag]];
+                                                                      if (image) {
+                                                                          [(UIImageView *)view setImage:image];
+                                                                          [self.loadBuffer removeObjectForKey:tag];
+                                                                      }
+                                                                  }
+                                                                  else if ([view isKindOfClass:[UIWebView class]]){
+                                                                      NSLog(@"Async notes");
+                                                                      NSString *note = [self.notesDictionary objectForKey:[self.loadBuffer objectForKey:tag]];
+                                                                      if (note) {
+                                                                          [(UIWebView *)view loadHTMLString:note baseURL:nil];
+                                                                          [self.loadBuffer removeObjectForKey:tag];
+                                                                      }
+                                                                  }
+                                                              
+                                                              }
                                                           }
                                                       }];
-    
-    self.slideShowNoteReadyObserver = [[NSNotificationCenter defaultCenter] addObserverForName:@"storage_update_note_ready"
-                                                          object:nil
-                                                           queue:mainQueue
-                                                      usingBlock:^(NSNotification *note) {
-//                                                           NSLog(@"Load last requsted note");
-                                                          if ([[[note userInfo] objectForKey:@"index"] intValue] == self.lastRequestedNote) {
-                                                              [[self.delegate lecturer_notes] loadHTMLString:[self getNotesAtIndex:self.lastRequestedNote] baseURL:nil];
-                                                              self.lastRequestedNote = -1;
-                                                          }
-                                                      }];
-    
     return self;
 }
 
 - (void) putImage: (NSString *)img AtIndex: (uint) index{
 //    NSLog(@"Put Image into %u", index);
-    dispatch_async(backgroundQueue, ^(void) {
         NSData* data = [NSData dataWithBase64String:img];
         UIImage* image = [UIImage imageWithData:data];
+        NSLog(@"%@", image);
         [self.imagesDictionary setObject:image forKey:[NSNumber numberWithUnsignedInt:index]];
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"storage_update_image_ready"
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"storage_update_ready"
                                                             object:nil
                                                           userInfo:[NSDictionary dictionaryWithObject:[NSNumber numberWithInt:index] forKey:@"index"]];
-    });
+
 }
 
 - (void) putNotes: (NSString *)notes AtIndex: (uint) index{
 //    NSLog(@"Put note into %u", index);
     [self.notesDictionary setObject:notes forKey:[NSNumber numberWithUnsignedInt:index]];
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"storage_update_note_ready"
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"storage_update_ready"
                                                         object:nil
                                                       userInfo:[NSDictionary dictionaryWithObject:[NSNumber numberWithInt:index] forKey:@"index"]];
 }
 
-- (UIImage *) getImageAtIndex: (uint) index
+- (void) getContentAtIndex: (uint) index forView: (UIView*) view
 {
-    if (![self.imagesDictionary objectForKey:[NSNumber numberWithUnsignedInt:index]]) {
-        self.lastRequestedImage = index;
-        return nil;
+    if (index >= self.size)
+    {
+        if ([view isKindOfClass:[UIImageView class]])
+            [(UIImageView* )view setImage:[UIImage imageNamed:@"slide_finished.png"]];
+        else if ([view isKindOfClass:[UIWebView class]])
+            [(UIWebView* )view loadHTMLString: @"SlideShow finished" baseURL:nil];
+        return;
+    }
+    if (![self.imagesDictionary objectForKey:[NSNumber numberWithUnsignedInt:index]])
+    {
+        [self.loadBuffer setObject:[NSNumber numberWithInt:index ] forKey:[NSNumber numberWithInt:[view tag]]];
     }
     else{
-        self.lastRequestedImage = -1;
-        return [self.imagesDictionary objectForKey:[NSNumber numberWithUnsignedInt:index]];
+        if ([view isKindOfClass:[UIImageView class]])
+            [(UIImageView* )view setImage:[self.imagesDictionary objectForKey:[NSNumber numberWithUnsignedInt:index]]];
+        else if ([view isKindOfClass:[UIWebView class]])
+            [(UIWebView* )view loadHTMLString: [self.notesDictionary objectForKey:[NSNumber numberWithUnsignedInt:index]] baseURL:nil];
     }
 }
-
-- (NSString *) getNotesAtIndex: (uint) index
-{
-    if (![self.notesDictionary objectForKey:[NSNumber numberWithUnsignedInt:index]]) {
-        self.lastRequestedNote = index;
-        return nil;
-    }
-    else {
-        self.lastRequestedNote = -1;
-        return [self.notesDictionary objectForKey:[NSNumber numberWithUnsignedInt:index]];
-    }
-}
-
-
 
 @end

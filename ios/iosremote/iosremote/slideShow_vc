@@ -1,4 +1,4 @@
-//
+/
 //  slideShow_vc.m
 //  iosremote
 //
@@ -16,7 +16,7 @@
 
 #define CURRENT_SLIDE_IMAGEVIEW 1
 #define NEXT_SLIDE_IMAGEVIEW 2
-#define CURRENT_SLIDE_NOTES 3
+#define CURRENT_SLIDE_NOTES 2
 
 @interface slideShow_vc ()
 
@@ -46,21 +46,13 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-    // Unique tag assignment. Don't use 0 as it's default. 0-10 for central VC
-    [self.slideView setTag:CURRENT_SLIDE_IMAGEVIEW];
-    [self.secondarySlideView setTag:NEXT_SLIDE_IMAGEVIEW];
-    [self.lecturer_notes setTag:CURRENT_SLIDE_NOTES];
-    
     self.comManager = [CommunicationManager sharedComManager];
     self.slideshow = [self.comManager.interpreter slideShow];
     self.slideshow.delegate = self;
     
-    [self.slideshow getContentAtIndex:self.slideshow.currentSlide forView:self.slideView];
-    [self.slideshow getContentAtIndex:self.slideshow.currentSlide+1 forView:self.secondarySlideView];
-    [self.slideshow getContentAtIndex:self.slideshow.currentSlide forView:self.lecturer_notes];
+    [self.slideView setImage:[self.slideshow getImageAtIndex:self.slideshow.currentSlide]];
+    [self.lecturer_notes loadHTMLString: [self.slideshow getNotesAtIndex:self.slideshow.currentSlide]baseURL:nil];
     [self.slideNumber setText:[NSString stringWithFormat:@"%u/%u", [self.slideshow currentSlide]+1, [self.slideshow size]]];
-    
     
     UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:@"End"
                                                                    style:UIBarButtonItemStyleBordered
@@ -85,9 +77,11 @@
                                                               object:nil
                                                                queue:mainQueue
                                                           usingBlock:^(NSNotification *note) {
-                                                              [self.slideshow getContentAtIndex:self.slideshow.currentSlide forView:self.slideView];
-                                                              [self.slideshow getContentAtIndex:self.slideshow.currentSlide+1 forView:self.secondarySlideView];
+                                                              NSLog(@"Getting slide: %u image to display: %@", self.slideshow.currentSlide, [self.slideshow getImageAtIndex:self.slideshow.currentSlide]);
+                                                              
+                                                              [self.slideshow getContentAtIndex:self.slideshow.currentSlide forView:self.slideshow];
                                                               [self.slideshow getContentAtIndex:self.slideshow.currentSlide forView:self.lecturer_notes];
+                                           
                                                               [self.slideNumber setText:[NSString stringWithFormat:@"%u/%u", [self.slideshow currentSlide]+1, [self.slideshow size]]];
                                                               
                                                           }];

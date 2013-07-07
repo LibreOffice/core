@@ -55,7 +55,6 @@
                                                                                     object:nil
                                                                                      queue:mainQueue
                                                                                 usingBlock:^(NSNotification *note) {
-                                                                                    NSLog(@"Setting to true");
                                                                                     self.slidesRunning = YES;
                                                                                 }];
 
