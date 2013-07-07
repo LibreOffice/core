@@ -82,10 +82,14 @@ sal_Bool PropItem::Read( OUString& rString, sal_uInt32 nStringType, sal_Bool bAl
     nItemPos = Tell();
 
     if ( nStringType == VT_EMPTY )
+    {
+        nType = VT_NULL; // Initialize in case stream fails.
         *this >> nType;
+    }
     else
         nType = nStringType & VT_TYPEMASK;
 
+    nItemSize = 0; // Initialize in case stream fails.
     *this >> nItemSize;
 
     switch( nType )
