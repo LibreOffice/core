@@ -136,6 +136,7 @@
 #include <rtl/strbuf.hxx>
 #include <rtl/ustring.hxx>
 #include <boost/scoped_array.hpp>
+#include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star    ;
 using namespace ::com::sun::star::drawing;
@@ -6837,17 +6838,17 @@ com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject >  SvxMS
     {
         //TODO/MBA: check if (and when) storage and stream will be destroyed!
         const SfxFilter* pFilter = 0;
-        SvMemoryStream* pStream = new SvMemoryStream;
+        ::boost::scoped_ptr<SvMemoryStream> pStream (new SvMemoryStream);
         if ( pName )
         {
             // TODO/LATER: perhaps we need to retrieve VisArea and Metafile from the storage also
             SotStorageStreamRef xStr = rSrcStg.OpenSotStream( OUString( "package_stream" ), STREAM_STD_READ );
-            *xStr >> *pStream;
+            *xStr >> *pStream.get();
         }
         else
         {
             SfxFilterMatcher aMatch( sStarName );
-            SotStorageRef xStorage = new SotStorage( sal_False, *pStream );
+            SotStorageRef xStorage = new SotStorage( sal_False, *pStream.get() );
             rSrcStg.CopyTo( xStorage );
             xStorage->Commit();
             xStorage.Clear();
@@ -6863,8 +6864,8 @@ com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject >  SvxMS
         aTmpName += OUString::number(nOleCount++);
         aTmpName += ".bin";
         SvFileStream aTmpStream(aTmpName,STREAM_READ|STREAM_WRITE|STREAM_TRUNC);
-        pStream->Seek(0);
-        *pStream >> aTmpStream;
+        pStream.get()->Seek(0);
+        *pStream.get() >> aTmpStream;
         aTmpStream.Close();
 #endif
         if ( pName || pFilter )
@@ -6881,7 +6882,7 @@ com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject >  SvxMS
 
             uno::Sequence < beans::PropertyValue > aMedium( aFilterName.isEmpty() ? 2 : 3);
             aMedium[0].Name = OUString( "InputStream" );
-            uno::Reference < io::XInputStream > xStream = new ::utl::OSeekableInputStreamWrapper( *pStream );
+            uno::Reference < io::XInputStream > xStream = new ::utl::OSeekableInputStreamWrapper( *pStream.get() );
             aMedium[0].Value <<= xStream;
             aMedium[1].Name = OUString( "URL" );
             aMedium[1].Value <<= OUString( "private:stream" );
