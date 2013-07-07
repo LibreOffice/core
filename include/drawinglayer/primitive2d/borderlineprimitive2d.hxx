@@ -37,9 +37,9 @@ namespace drawinglayer
         /** BorderLinePrimitive2D class
 
             This is the basic primitive to build frames around objects, e.g. tables.
-            It defines a single or double line from Start to nd using the LeftWidth,
+            It defines a single or double line from Start to End using the LeftWidth,
             Distance and RightWidth definitions.
-            The LineStart/End overlap is defined by the Extend(Inner|Outer)(Start|End)
+            The LineStart/End overlap is defined by the Extend(Left|Right)(Start|End)
             definitions.
          */
         class DRAWINGLAYER_DLLPUBLIC BorderLinePrimitive2D : public BufferedDecompositionPrimitive2D
