@@ -50,6 +50,7 @@ CuiAboutConfigTabPage::CuiAboutConfigTabPage( Window* pParent, const SfxItemSet&
 
 CuiAboutConfigTabPage::~CuiAboutConfigTabPage()
 {
+    delete pPrefBox;
 }
 
 SfxTabPage* CuiAboutConfigTabPage::Create( Window* pParent, const SfxItemSet& rItemSet )
