@@ -168,7 +168,6 @@
 #define TP_FRM_ADD                  (RC_GLOBALS_BEGIN +  51)
 
 #define TP_PARA_ALIGN               (RC_GLOBALS_BEGIN +  55)
-#define TP_OPTTABLE_PAGE            (RC_GLOBALS_BEGIN +  56)
 
 #define TP_NUMBER                   (RC_GLOBALS_BEGIN +  57)
 

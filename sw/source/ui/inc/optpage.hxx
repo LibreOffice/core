@@ -221,39 +221,24 @@ public:
 
 class SwTableOptionsTabPage : public SfxTabPage
 {
-    FixedLine   aTableFL;
-    CheckBox    aHeaderCB;
-    CheckBox    aRepeatHeaderCB;
-    CheckBox    aDontSplitCB;
-    CheckBox    aBorderCB;
+    CheckBox*    pHeaderCB;
+    CheckBox*    pRepeatHeaderCB;
+    CheckBox*    pDontSplitCB;
+    CheckBox*    pBorderCB;
 
-    FixedLine   aSeparatorFL;
+    CheckBox*    pNumFormattingCB;
+    CheckBox*    pNumFmtFormattingCB;
+    CheckBox*    pNumAlignmentCB;
 
-    FixedLine   aTableInsertFL;
-    CheckBox    aNumFormattingCB;
-    CheckBox    aNumFmtFormattingCB;
-    CheckBox    aNumAlignmentCB;
+    MetricField* pRowMoveMF;
+    MetricField* pColMoveMF;
 
-    FixedLine   aMoveFL;
-    FixedText   aMoveFT;
-    FixedText   aRowMoveFT;
-    MetricField aRowMoveMF;
-    FixedText   aColMoveFT;
-    MetricField aColMoveMF;
+    MetricField* pRowInsertMF;
+    MetricField* pColInsertMF;
 
-    FixedText   aInsertFT;
-    FixedText   aRowInsertFT;
-    MetricField aRowInsertMF;
-    FixedText   aColInsertFT;
-    MetricField aColInsertMF;
-
-    FixedText   aHandlingFT;
-    RadioButton aFixRB;
-    RadioButton aFixPropRB;
-    RadioButton aVarRB;
-    FixedText   aFixFT;
-    FixedText   aFixPropFT;
-    FixedText   aVarFT;
+    RadioButton* pFixRB;
+    RadioButton* pFixPropRB;
+    RadioButton* pVarRB;
 
     SwWrtShell* pWrtShell;
     sal_Bool        bHTMLMode;
@@ -473,10 +458,10 @@ class SwCompareOptionsTabPage : public SfxTabPage
 
 public:
 
-    static SfxTabPage*	Create( Window* pParent, const SfxItemSet& rAttrSet );
+    static SfxTabPage* Create( Window* pParent, const SfxItemSet& rAttrSet );
 
-    virtual	sal_Bool    FillItemSet( SfxItemSet& rSet );
-    virtual	void 		Reset( const SfxItemSet& rSet );
+    virtual sal_Bool FillItemSet( SfxItemSet& rSet );
+    virtual void Reset( const SfxItemSet& rSet );
 };
 
 #endif

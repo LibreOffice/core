@@ -1321,7 +1321,6 @@ CreateTabPage SwAbstractDialogFactory_Impl::GetTabPageCreatorFunc( sal_uInt16 nI
         case RID_SW_TP_STD_FONT_CTL:
             pRet = SwStdFontTabPage::Create;
             break;
-        case TP_OPTTABLE_PAGE :
         case RID_SW_TP_HTML_OPTTABLE_PAGE:
         case RID_SW_TP_OPTTABLE_PAGE:
             pRet = SwTableOptionsTabPage::Create;
