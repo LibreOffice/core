@@ -670,6 +670,7 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
 
     do
     {
+        nTag = 0;
         *pS >> nTag;
         nRecord = nTag&0x0F;
 
