@@ -923,6 +923,11 @@ ScDBData* ScDBCollection::GetDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCO
     return NULL;
 }
 
+ScDBData* ScDBCollection::GetDBByName( const OUString& rName )
+{
+   return maNamedDBs.findByUpperName( rName );
+}
+
 void ScDBCollection::DeleteOnTab( SCTAB nTab )
 {
     FindByTable func(nTab);

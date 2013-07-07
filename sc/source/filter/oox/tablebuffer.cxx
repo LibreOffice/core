@@ -116,11 +116,6 @@ void Table::finalizeImport()
         aTableFormatting.SetBandedRows( maModel.mbShowRowStripes );
         aTableFormatting.SetBandedColumns( maModel.mbShowColumnStripes );
         addDatabaseFormatting( maDBRangeName, aTableFormatting );
-        //Add this table formatting information to the ScDBData instance.
-        //xDatabaseRange->SetTableFormatting( aTableFormatting );
-        //Still figuring how to have an ScDBData object out of this
-        //xDatabaseRange of type XDatabaseRange... all that needs to be
-        //done is call the SetTableFormatting on that ScDBData object
     }
     catch( Exception& )
     {

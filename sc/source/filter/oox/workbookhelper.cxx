@@ -467,10 +467,10 @@ Reference< XDatabaseRange > WorkbookGlobals::createDatabaseRangeObject( OUString
 
 void WorkbookGlobals::addDatabaseFormatting( const OUString& rName, const ScDBDataFormatting& rDBDataFormatting )
 {
-    PropertySet aDocProps( mxDoc );
-    Reference< XDatabaseRanges > xDatabaseRanges( aDocProps.getAnyProperty( PROP_DatabaseRanges ), UNO_QUERY_THROW );
-    //xDatabaseRanges->addDatabaseRangeFormatting( rName, rDBDataFormatting );
-    //Need some way to add the formatting information. Stuck here major.
+    //Is such smartness allowed? Or should catch objects and then call for each method call?
+    ScDBData* pDBRange = getScDocument().GetDBCollection()->GetDBByName( rName );
+    if( pDBRange != NULL )
+        pDBRange->SetTableFormatting( rDBDataFormatting );
 }
 
 Reference< XDatabaseRange > WorkbookGlobals::createUnnamedDatabaseRangeObject( const CellRangeAddress& rRangeAddr ) const
