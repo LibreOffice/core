@@ -11,6 +11,7 @@
 #import "CommunicationManager.h"
 #import "CommandInterpreter.h"
 #import "CommandTransmitter.h"
+#import <QuartzCore/QuartzCore.h>
 
 @interface slideShow_vc ()
 
@@ -86,6 +87,20 @@
                                                      usingBlock:^(NSNotification *note) {
                                                          [self.navigationController popViewControllerAnimated:YES];
                                                      }];
+    self.slideView.layer.shadowColor = [[UIColor blackColor] CGColor];
+    self.slideView.layer.shadowOpacity = 0.5;
+    self.slideView.layer.shadowRadius = 4.0;
+    self.slideView.layer.shadowOffset = CGSizeMake(3.0f, 3.0f);
+    self.slideView.layer.shadowPath = [UIBezierPath bezierPathWithRect:self.slideView.bounds].CGPath;
+    self.slideView.clipsToBounds = NO;
+    
+    self.secondarySlideView.layer.shadowColor = [[UIColor blackColor] CGColor];
+    self.secondarySlideView.layer.shadowOpacity = 0.5;
+    self.secondarySlideView.layer.shadowRadius = 4.0;
+    self.secondarySlideView.layer.shadowOffset = CGSizeMake(3.0f, 3.0f);
+    self.secondarySlideView.layer.shadowPath = [UIBezierPath bezierPathWithRect:self.secondarySlideView.bounds].CGPath;
+    self.secondarySlideView.clipsToBounds = NO;
+    
     [super viewDidAppear:animated];
 }
 
@@ -108,8 +123,8 @@
     [self setLecturer_notes:nil];
     [self setSlideView:nil];
     [self setSlideNumber:nil];
-    [self setToolBar:nil];
     [self setSecondarySlideView:nil];
+    [self setNotesView:nil];
     [super viewDidUnload];
 }
 
