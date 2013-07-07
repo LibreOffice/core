@@ -49,21 +49,16 @@ using namespace ::com::sun::star::uno;
 SdTpOptionsSnap::SdTpOptionsSnap( Window* pParent, const SfxItemSet& rInAttrs  ) :
         SvxGridTabPage(pParent, rInAttrs)
 {
-    aGrpSnap.Show();
-    aCbxSnapHelplines.Show();
-    aCbxSnapBorder.Show();
-    aCbxSnapFrame.Show();
-    aCbxSnapPoints.Show();
-    aFtSnapArea.Show();
-    aMtrFldSnapArea.Show();
-    aGrpOrtho.Show();
-    aCbxOrtho.Show();
-    aCbxBigOrtho.Show();
-    aCbxRotate.Show();
-    aMtrFldAngle.Show();
-    aFtBezAngle.Show();
-    aMtrFldBezAngle.Show();
-    aSeparatorFL.Show();
+    pCbxSnapHelplines->Show();
+    pCbxSnapBorder->Show();
+    pCbxSnapFrame->Show();
+    pCbxSnapPoints->Show();
+    pMtrFldSnapArea->Show();
+    pCbxOrtho->Show();
+    pCbxBigOrtho->Show();
+    pCbxRotate->Show();
+    pMtrFldAngle->Show();
+    pMtrFldBezAngle->Show();
 }
 
 // -----------------------------------------------------------------------
@@ -79,16 +74,16 @@ sal_Bool SdTpOptionsSnap::FillItemSet( SfxItemSet& rAttrs )
     SvxGridTabPage::FillItemSet(rAttrs);
     SdOptionsSnapItem aOptsItem( ATTR_OPTIONS_SNAP );
 
-    aOptsItem.GetOptionsSnap().SetSnapHelplines( aCbxSnapHelplines.IsChecked() );
-    aOptsItem.GetOptionsSnap().SetSnapBorder( aCbxSnapBorder.IsChecked() );
-    aOptsItem.GetOptionsSnap().SetSnapFrame( aCbxSnapFrame.IsChecked() );
-    aOptsItem.GetOptionsSnap().SetSnapPoints( aCbxSnapPoints.IsChecked() );
-    aOptsItem.GetOptionsSnap().SetOrtho( aCbxOrtho.IsChecked() );
-    aOptsItem.GetOptionsSnap().SetBigOrtho( aCbxBigOrtho.IsChecked() );
-    aOptsItem.GetOptionsSnap().SetRotate( aCbxRotate.IsChecked() );
-    aOptsItem.GetOptionsSnap().SetSnapArea( (sal_Int16) aMtrFldSnapArea.GetValue() );
-    aOptsItem.GetOptionsSnap().SetAngle( (sal_Int16) aMtrFldAngle.GetValue() );
-    aOptsItem.GetOptionsSnap().SetEliminatePolyPointLimitAngle( (sal_Int16) aMtrFldBezAngle.GetValue() );
+    aOptsItem.GetOptionsSnap().SetSnapHelplines( pCbxSnapHelplines->IsChecked() );
+    aOptsItem.GetOptionsSnap().SetSnapBorder( pCbxSnapBorder->IsChecked() );
+    aOptsItem.GetOptionsSnap().SetSnapFrame( pCbxSnapFrame->IsChecked() );
+    aOptsItem.GetOptionsSnap().SetSnapPoints( pCbxSnapPoints->IsChecked() );
+    aOptsItem.GetOptionsSnap().SetOrtho( pCbxOrtho->IsChecked() );
+    aOptsItem.GetOptionsSnap().SetBigOrtho( pCbxBigOrtho->IsChecked() );
+    aOptsItem.GetOptionsSnap().SetRotate( pCbxRotate->IsChecked() );
+    aOptsItem.GetOptionsSnap().SetSnapArea( (sal_Int16) pMtrFldSnapArea->GetValue() );
+    aOptsItem.GetOptionsSnap().SetAngle( (sal_Int16) pMtrFldAngle->GetValue() );
+    aOptsItem.GetOptionsSnap().SetEliminatePolyPointLimitAngle( (sal_Int16) pMtrFldBezAngle->GetValue() );
 
     rAttrs.Put( aOptsItem );
 
@@ -106,18 +101,18 @@ void SdTpOptionsSnap::Reset( const SfxItemSet& rAttrs )
     SdOptionsSnapItem aOptsItem( (const SdOptionsSnapItem&) rAttrs.
                         Get( ATTR_OPTIONS_SNAP ) );
 
-    aCbxSnapHelplines.Check( aOptsItem.GetOptionsSnap().IsSnapHelplines() );
-    aCbxSnapBorder.Check( aOptsItem.GetOptionsSnap().IsSnapBorder() );
-    aCbxSnapFrame.Check( aOptsItem.GetOptionsSnap().IsSnapFrame() );
-    aCbxSnapPoints.Check( aOptsItem.GetOptionsSnap().IsSnapPoints() );
-    aCbxOrtho.Check( aOptsItem.GetOptionsSnap().IsOrtho() );
-    aCbxBigOrtho.Check( aOptsItem.GetOptionsSnap().IsBigOrtho() );
-    aCbxRotate.Check( aOptsItem.GetOptionsSnap().IsRotate() );
-    aMtrFldSnapArea.SetValue( aOptsItem.GetOptionsSnap().GetSnapArea() );
-    aMtrFldAngle.SetValue( aOptsItem.GetOptionsSnap().GetAngle() );
-    aMtrFldBezAngle.SetValue( aOptsItem.GetOptionsSnap().GetEliminatePolyPointLimitAngle() );
+    pCbxSnapHelplines->Check( aOptsItem.GetOptionsSnap().IsSnapHelplines() );
+    pCbxSnapBorder->Check( aOptsItem.GetOptionsSnap().IsSnapBorder() );
+    pCbxSnapFrame->Check( aOptsItem.GetOptionsSnap().IsSnapFrame() );
+    pCbxSnapPoints->Check( aOptsItem.GetOptionsSnap().IsSnapPoints() );
+    pCbxOrtho->Check( aOptsItem.GetOptionsSnap().IsOrtho() );
+    pCbxBigOrtho->Check( aOptsItem.GetOptionsSnap().IsBigOrtho() );
+    pCbxRotate->Check( aOptsItem.GetOptionsSnap().IsRotate() );
+    pMtrFldSnapArea->SetValue( aOptsItem.GetOptionsSnap().GetSnapArea() );
+    pMtrFldAngle->SetValue( aOptsItem.GetOptionsSnap().GetAngle() );
+    pMtrFldBezAngle->SetValue( aOptsItem.GetOptionsSnap().GetEliminatePolyPointLimitAngle() );
 
-    aCbxRotate.GetClickHdl().Call(0);
+    pCbxRotate->GetClickHdl().Call(0);
 }
 
 // -----------------------------------------------------------------------
