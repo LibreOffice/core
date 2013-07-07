@@ -9,7 +9,7 @@
 
 $(eval $(call gb_UnpackedTarball_UnpackedTarball,apache_commons_httpclient))
 
-$(eval $(call gb_UnpackedTarball_set_tarball,apache_commons_httpclient,$(APACHE_COMMONS_HTTPCLIENT_TARBALL)))
+$(eval $(call gb_UnpackedTarball_set_tarball,apache_commons_httpclient,$(APACHE_COMMONS_HTTPCLIENT_TARBALL),,apache-commons))
 
 $(eval $(call gb_UnpackedTarball_add_patches,apache_commons_httpclient,\
 	apache-commons/patches/httpclient.patch \

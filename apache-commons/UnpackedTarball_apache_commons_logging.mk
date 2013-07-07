@@ -9,7 +9,7 @@
 
 $(eval $(call gb_UnpackedTarball_UnpackedTarball,apache_commons_logging))
 
-$(eval $(call gb_UnpackedTarball_set_tarball,apache_commons_logging,$(APACHE_COMMONS_LOGGING_TARBALL)))
+$(eval $(call gb_UnpackedTarball_set_tarball,apache_commons_logging,$(APACHE_COMMONS_LOGGING_TARBALL),,apache-commons))
 
 $(eval $(call gb_UnpackedTarball_fix_end_of_line,apache_commons_logging,\
 	build.xml \

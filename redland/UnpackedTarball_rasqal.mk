@@ -9,7 +9,7 @@
 
 $(eval $(call gb_UnpackedTarball_UnpackedTarball,rasqal))
 
-$(eval $(call gb_UnpackedTarball_set_tarball,rasqal,$(RASQAL_TARBALL)))
+$(eval $(call gb_UnpackedTarball_set_tarball,rasqal,$(RASQAL_TARBALL),,redland))
 
 # configure generated files for MSVC
 $(eval $(call gb_UnpackedTarball_add_file,rasqal,src/rasqal.h,redland/rasqal/rasqal.h))

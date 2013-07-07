@@ -7,11 +7,11 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Module_Module,apache_commons))
+$(eval $(call gb_Module_Module,apache-commons))
 
 ifneq ($(SOLAR_JAVA),)
 ifneq ($(filter APACHE_COMMONS,$(BUILD_TYPE)),)
-$(eval $(call gb_Module_add_targets,apache_commons,\
+$(eval $(call gb_Module_add_targets,apache-commons,\
 	ExternalPackage_apache_commons_logging \
 	ExternalProject_apache_commons_codec \
 	ExternalProject_apache_commons_httpclient \

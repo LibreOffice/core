@@ -9,7 +9,7 @@
 
 $(eval $(call gb_UnpackedTarball_UnpackedTarball,curl))
 
-$(eval $(call gb_UnpackedTarball_set_tarball,curl,$(CURL_TARBALL)))
+$(eval $(call gb_UnpackedTarball_set_tarball,curl,$(CURL_TARBALL),,curl))
 
 $(eval $(call gb_UnpackedTarball_set_patchlevel,curl,1))
 
