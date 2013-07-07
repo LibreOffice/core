@@ -46,6 +46,9 @@ sal_uInt32 SbiCodeGen::GetPC()
 
 void SbiCodeGen::Statement()
 {
+    if( aMiscOptions.IsExperimentalMode() && pParser->IsCodeCompleting() )
+        return;
+
     bStmnt = true;
 
     nLine = pParser->GetLine();
@@ -60,6 +63,9 @@ void SbiCodeGen::Statement()
 
 void SbiCodeGen::GenStmnt()
 {
+    if( aMiscOptions.IsExperimentalMode() && pParser->IsCodeCompleting() )
+        return;
+
     if( bStmnt )
     {
         bStmnt = false;
@@ -72,6 +78,9 @@ void SbiCodeGen::GenStmnt()
 
 sal_uInt32 SbiCodeGen::Gen( SbiOpcode eOpcode )
 {
+    if( aMiscOptions.IsExperimentalMode() && pParser->IsCodeCompleting() )
+        return 0;
+
 #ifdef DBG_UTIL
     if( eOpcode < SbOP0_START || eOpcode > SbOP0_END )
         pParser->Error( SbERR_INTERNAL_ERROR, "OPCODE1" );
@@ -83,6 +92,9 @@ sal_uInt32 SbiCodeGen::Gen( SbiOpcode eOpcode )
 
 sal_uInt32 SbiCodeGen::Gen( SbiOpcode eOpcode, sal_uInt32 nOpnd )
 {
+    if( aMiscOptions.IsExperimentalMode() && pParser->IsCodeCompleting() )
+        return 0;
+
 #ifdef DBG_UTIL
     if( eOpcode < SbOP1_START || eOpcode > SbOP1_END )
         pParser->Error( SbERR_INTERNAL_ERROR, "OPCODE2" );
@@ -96,6 +108,9 @@ sal_uInt32 SbiCodeGen::Gen( SbiOpcode eOpcode, sal_uInt32 nOpnd )
 
 sal_uInt32 SbiCodeGen::Gen( SbiOpcode eOpcode, sal_uInt32 nOpnd1, sal_uInt32 nOpnd2 )
 {
+    if( aMiscOptions.IsExperimentalMode() && pParser->IsCodeCompleting() )
+        return 0;
+
 #ifdef DBG_UTIL
     if( eOpcode < SbOP2_START || eOpcode > SbOP2_END )
         pParser->Error( SbERR_INTERNAL_ERROR, "OPCODE3" );
@@ -112,6 +127,9 @@ sal_uInt32 SbiCodeGen::Gen( SbiOpcode eOpcode, sal_uInt32 nOpnd1, sal_uInt32 nOp
 
 void SbiCodeGen::Save()
 {
+    if( aMiscOptions.IsExperimentalMode() && pParser->IsCodeCompleting() )
+        return;
+
     SbiImage* p = new SbiImage;
     rMod.StartDefinitions();
     // OPTION BASE-Value:

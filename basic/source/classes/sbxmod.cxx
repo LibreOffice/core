@@ -1781,12 +1781,10 @@ IMPL_LINK( ErrorHdlResetter, BasicErrorHdl, StarBASIC *, /*pBasic*/)
 std::vector< CodeCompleteData > SbModule::GetCodeCompleteDataFromParse()
 {
     ErrorHdlResetter aErrHdl;
-    StarBASIC* pBasic = PTR_CAST(StarBASIC,GetParent());
     SbxBase::ResetError();
-    SbModule* pOld = GetSbData()->pCompMod;
-    GetSbData()->pCompMod = this;
 
     SbiParser* pParser = new SbiParser( (StarBASIC*) GetParent(), this );
+    pParser->SetCodeCompleting(true);
 
     while( pParser->Parse() ) {}
     SbiSymPool* pPool = pParser->pPool;
@@ -1821,6 +1819,11 @@ std::vector< CodeCompleteData > SbModule::GetCodeCompleteDataFromParse()
     }
     delete pParser;
     return aRet;
+}
+
+SbxArrayRef SbModule::GetMethods()
+{
+    return pMethods;
 }
 
 bool SbModule::HasExeCode()
