@@ -889,18 +889,30 @@ void SmXMLExport::ExportTable(const SmNode *pNode, int nLevel)
             if (pTable)
             {
                 pRow  = new SvXMLElementExport(*this, XML_NAMESPACE_MATH, XML_MTR, sal_True, sal_True);
-                if (pTemp->GetNumSubNodes() > 0)
+                SmTokenType eAlign = TALIGNC;
+                if (pTemp->GetType() == NALIGN)
                 {
-                  const SmNode *pFirstChild = pTemp->GetSubNode(0);
-                  if (pFirstChild->GetType() == NALIGN &&
-                      pFirstChild->GetToken().eType != TALIGNC)
-                  {
-                      // If a left or right alignment is specified on this line,
-                      // attach the corresponding columnalign attribute.
-                      AddAttribute(XML_NAMESPACE_MATH, XML_COLUMNALIGN,
-                          pFirstChild->GetToken().eType == TALIGNL ?
-                          XML_LEFT : XML_RIGHT);
-                  }
+                    // For Binom() and Stack() constructions, the NALIGN nodes
+                    // are direct children.
+                    // binom{alignl ...}{alignr ...} and
+                    // stack{alignl ... ## alignr ... ## ...}
+                    eAlign = pTemp->GetToken().eType;
+                }
+                else if (pTemp->GetType() == NLINE &&
+                         pTemp->GetNumSubNodes() == 1 &&
+                         pTemp->GetSubNode(0)->GetType() == NALIGN)
+                {
+                    // For the Table() construction, the NALIGN node is a child
+                    // of an NLINE node.
+                    // alignl ... newline alignr ... newline ...
+                    eAlign = pTemp->GetSubNode(0)->GetToken().eType;
+                }
+                if (eAlign != TALIGNC)
+                {
+                    // If a left or right alignment is specified on this line,
+                    // attach the corresponding columnalign attribute.
+                    AddAttribute(XML_NAMESPACE_MATH, XML_COLUMNALIGN,
+                        eAlign == TALIGNL ? XML_LEFT : XML_RIGHT);
                 }
                 pCell = new SvXMLElementExport(*this, XML_NAMESPACE_MATH, XML_MTD, sal_True, sal_True);
             }
