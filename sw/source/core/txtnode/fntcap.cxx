@@ -209,26 +209,25 @@ void SwDoGetCapitalBreak::Do()
         {
             xub_StrLen nEnd = rInf.GetEnd();
             OUString sText(rInf.GetText()); // only needed until rInf.GetText() returns OUString
-            long nTxtWidth2 = nTxtWidth;    // only needed until variables are migrated to sal_Int32
             sal_Int32 nIdx2 = rInf.GetIdx(); // ditto
             sal_Int32 nLen2 = rInf.GetLen(); // ditto
             if( pExtraPos )
             {
                 sal_Int32 nExtraPos = *pExtraPos; // ditto
-                nBreak = GetOut().GetTextBreak( sText, nTxtWidth2, static_cast<sal_Unicode>('-'),
+                nBreak = GetOut().GetTextBreak( sText, nTxtWidth,
+                            static_cast<sal_Unicode>('-'),
                      nExtraPos, nIdx2, nLen2, rInf.GetKern() );
                 if( nExtraPos > nEnd )
                     nExtraPos = nEnd;
-                *pExtraPos = nExtraPos;
+                *pExtraPos = (nExtraPos == -1) ? STRING_LEN : nExtraPos;
             }
             else
-                nBreak = GetOut().GetTextBreak( sText, nTxtWidth2,
+                nBreak = GetOut().GetTextBreak( sText, nTxtWidth,
                                nIdx2, nLen2, rInf.GetKern() );
 
             rInf.SetText(sText); // ditto
             rInf.SetIdx(nIdx2);  // ditto
             rInf.SetLen(nLen2);  // ditto
-            nTxtWidth = nTxtWidth2; // ditto
 
             if( nBreak > nEnd )
                 nBreak = nEnd;
