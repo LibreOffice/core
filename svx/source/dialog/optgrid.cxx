@@ -26,7 +26,6 @@
 #include <svx/dialmgr.hxx>
 #include "svx/optgrid.hxx"
 #include <svx/dialogs.hrc>
-#include "optgrid.hrc"
 #include "svx/dlgutil.hxx"
 
 // local functions
@@ -129,92 +128,57 @@ SfxItemPresentation  SvxGridItem::GetPresentation
 // TabPage Screen Settings
 SvxGridTabPage::SvxGridTabPage( Window* pParent, const SfxItemSet& rCoreSet) :
 
-    SfxTabPage( pParent, SVX_RES( RID_SVXPAGE_GRID ), rCoreSet ),
-
-    aCbxUseGridsnap ( this, SVX_RES( CBX_USE_GRIDSNAP ) ),
-    aCbxGridVisible ( this, SVX_RES( CBX_GRID_VISIBLE ) ),
-
-    aFlResolution   ( this, SVX_RES( FL_RESOLUTION ) ),
-    aFtDrawX        ( this, SVX_RES( FT_DRAW_X ) ),
-    aMtrFldDrawX    ( this, SVX_RES( MTR_FLD_DRAW_X ) ),
-    aFtDrawY        ( this, SVX_RES( FT_DRAW_Y ) ),
-    aMtrFldDrawY    ( this, SVX_RES( MTR_FLD_DRAW_Y ) ),
-
-    aFlDivision     ( this, SVX_RES( FL_DIVISION ) ),
-    aFtDivisionX(     this, SVX_RES( FT_DIVISION_X) ),
-    aNumFldDivisionX( this, SVX_RES( NUM_FLD_DIVISION_X ) ),
-    aDivisionPointX(  this, SVX_RES( FT_HORZ_POINTS) ),
-
-    aFtDivisionY(     this, SVX_RES( FT_DIVISION_Y) ),
-    aNumFldDivisionY( this, SVX_RES( NUM_FLD_DIVISION_Y ) ),
-    aDivisionPointY(  this, SVX_RES( FT_VERT_POINTS) ),
-
-    aCbxSynchronize ( this, SVX_RES( CBX_SYNCHRONIZE ) ),
-    aGrpDrawGrid    ( this, SVX_RES( GRP_DRAWGRID ) ),
-
-    aGrpSnap            ( this, SVX_RES( GRP_SNAP ) ),
-    aCbxSnapHelplines   ( this, SVX_RES( CBX_SNAP_HELPLINES ) ),
-    aCbxSnapBorder      ( this, SVX_RES( CBX_SNAP_BORDER ) ),
-    aCbxSnapFrame       ( this, SVX_RES( CBX_SNAP_FRAME ) ),
-    aCbxSnapPoints      ( this, SVX_RES( CBX_SNAP_POINTS ) ),
-    aFtSnapArea         ( this, SVX_RES( FT_SNAP_AREA ) ),
-    aMtrFldSnapArea     ( this, SVX_RES( MTR_FLD_SNAP_AREA ) ),
-
-    aSeparatorFL        ( this, SVX_RES( FL_SEPARATOR ) ),
-
-    aGrpOrtho           ( this, SVX_RES( GRP_ORTHO ) ),
-    aCbxOrtho           ( this, SVX_RES( CBX_ORTHO ) ),
-    aCbxBigOrtho        ( this, SVX_RES( CBX_BIGORTHO ) ),
-    aCbxRotate          ( this, SVX_RES( CBX_ROTATE ) ),
-    aMtrFldAngle        ( this, SVX_RES( MTR_FLD_ANGLE ) ),
-    aFtBezAngle         ( this, SVX_RES( FT_BEZ_ANGLE ) ),
-    aMtrFldBezAngle     ( this, SVX_RES( MTR_FLD_BEZ_ANGLE ) ),
-
+    SfxTabPage( pParent, "OptGridPage" , "svx/ui/optgridpage.ui", rCoreSet ),
     bAttrModified( sal_False )
 {
+    get(pCbxUseGridsnap,"usegridsnap");
+    get(pCbxGridVisible,"gridvisible");
+    get(pMtrFldDrawX,"mtrflddrawx");
+    get(pMtrFldDrawY,"mtrflddrawy");
+    get(pNumFldDivisionX,"numflddivisionx");
+    get(pNumFldDivisionY,"numflddivisiony");
+    get(pCbxSynchronize,"synchronize");
+
+    get(pCbxSnapHelplines,"snaphelplines");
+    get(pCbxSnapBorder,"snapborder");
+    get(pCbxSnapFrame,"snapframe");
+    get(pCbxSnapPoints,"snappoints");
+    get(pMtrFldSnapArea,"mtrfldsnaparea");
+    get(pCbxOrtho,"ortho");
+    get(pCbxBigOrtho,"bigortho");
+    get(pCbxRotate,"rotate");
+    get(pMtrFldAngle,"mtrfldangle");
+    get(pMtrFldBezAngle,"mtrfldbezangle");
+
     // This page requires exchange Support
     SetExchangeSupport();
 
-    FreeResource();
-
-    aDivisionPointY.SetText(aDivisionPointX.GetText());
     // Set Metrics
     FieldUnit eFUnit = GetModuleFieldUnit( rCoreSet );
     long nFirst, nLast, nMin, nMax;
 
-    lcl_GetMinMax(aMtrFldDrawX, nFirst, nLast, nMin, nMax);
-    SetFieldUnit( aMtrFldDrawX, eFUnit, sal_True );
-    lcl_SetMinMax(aMtrFldDrawX, nFirst, nLast, nMin, nMax);
+    lcl_GetMinMax(*pMtrFldDrawX , nFirst, nLast, nMin, nMax);
+    SetFieldUnit( *pMtrFldDrawX , eFUnit, sal_True );
+    lcl_SetMinMax(*pMtrFldDrawX , nFirst, nLast, nMin, nMax);
 
-    lcl_GetMinMax(aMtrFldDrawY, nFirst, nLast, nMin, nMax);
-    SetFieldUnit( aMtrFldDrawY, eFUnit, sal_True );
-    lcl_SetMinMax(aMtrFldDrawY, nFirst, nLast, nMin, nMax);
+    lcl_GetMinMax(*pMtrFldDrawY, nFirst, nLast, nMin, nMax);
+    SetFieldUnit( *pMtrFldDrawY, eFUnit, sal_True );
+    lcl_SetMinMax(*pMtrFldDrawY, nFirst, nLast, nMin, nMax);
 
 
-    aCbxRotate.SetClickHdl( LINK( this, SvxGridTabPage, ClickRotateHdl_Impl ) );
+    pCbxRotate->SetClickHdl( LINK( this, SvxGridTabPage, ClickRotateHdl_Impl ) );
     Link aLink = LINK( this, SvxGridTabPage, ChangeGridsnapHdl_Impl );
-    aCbxUseGridsnap.SetClickHdl( aLink );
-    aCbxSynchronize.SetClickHdl( aLink );
-    aCbxGridVisible.SetClickHdl( aLink );
-    aMtrFldDrawX.SetModifyHdl(
+    pCbxUseGridsnap->SetClickHdl( aLink );
+    pCbxSynchronize->SetClickHdl( aLink );
+    pCbxGridVisible->SetClickHdl( aLink );
+    pMtrFldDrawX->SetModifyHdl(
         LINK( this, SvxGridTabPage, ChangeDrawHdl_Impl ) );
-    aMtrFldDrawY.SetModifyHdl(
+    pMtrFldDrawY->SetModifyHdl(
         LINK( this, SvxGridTabPage, ChangeDrawHdl_Impl ) );
-    aNumFldDivisionX.SetModifyHdl(
+    pNumFldDivisionX->SetModifyHdl(
         LINK( this, SvxGridTabPage, ChangeDivisionHdl_Impl ) );
-    aNumFldDivisionY.SetModifyHdl(
+    pNumFldDivisionY->SetModifyHdl(
         LINK( this, SvxGridTabPage, ChangeDivisionHdl_Impl ) );
-
-    OUString sFlResolution( aFlResolution.GetDisplayText() );
-    OUString sFtDrawX(aFtDrawX.GetDisplayText());
-    OUString sFtDrawY(aFtDrawY.GetDisplayText());
-    aMtrFldDrawX.SetAccessibleName( sFtDrawX + sFlResolution   );
-    aMtrFldDrawY.SetAccessibleName( sFtDrawY + sFlResolution   );
-    OUString sFlDivision( aFlDivision.GetDisplayText() );
-    OUString sFtDivisionX(aFtDivisionX.GetDisplayText());
-    OUString sFtDivisionY(aFtDivisionY.GetDisplayText());
-    aNumFldDivisionX.SetAccessibleName(  sFtDivisionX + sFlDivision );
-    aNumFldDivisionY.SetAccessibleName(  sFtDivisionY + sFlDivision );
 }
 
 //------------------------------------------------------------------------
@@ -232,19 +196,19 @@ sal_Bool SvxGridTabPage::FillItemSet( SfxItemSet& rCoreSet )
     {
         SvxGridItem aGridItem( SID_ATTR_GRID_OPTIONS );
 
-        aGridItem.bUseGridsnap  = aCbxUseGridsnap.IsChecked();
-        aGridItem.bSynchronize  = aCbxSynchronize.IsChecked();
-        aGridItem.bGridVisible  = aCbxGridVisible.IsChecked();
+        aGridItem.bUseGridsnap  = pCbxUseGridsnap->IsChecked();
+        aGridItem.bSynchronize  = pCbxSynchronize->IsChecked();
+        aGridItem.bGridVisible  = pCbxGridVisible->IsChecked();
 
         SfxMapUnit eUnit =
             rCoreSet.GetPool()->GetMetric( GetWhich( SID_ATTR_GRID_OPTIONS ) );
-        long nX =GetCoreValue(  aMtrFldDrawX, eUnit );
-        long nY = GetCoreValue( aMtrFldDrawY, eUnit );
+        long nX =GetCoreValue(  *pMtrFldDrawX, eUnit );
+        long nY = GetCoreValue( *pMtrFldDrawY, eUnit );
 
         aGridItem.nFldDrawX    = (sal_uInt32) nX;
         aGridItem.nFldDrawY    = (sal_uInt32) nY;
-        aGridItem.nFldDivisionX = static_cast<long>(aNumFldDivisionX.GetValue()-1);
-        aGridItem.nFldDivisionY = static_cast<long>(aNumFldDivisionY.GetValue()-1);
+        aGridItem.nFldDivisionX = static_cast<long>(pNumFldDivisionX->GetValue()-1);
+        aGridItem.nFldDivisionY = static_cast<long>(pNumFldDivisionY->GetValue()-1);
 
         rCoreSet.Put( aGridItem );
     }
@@ -261,20 +225,20 @@ void SvxGridTabPage::Reset( const SfxItemSet& rSet )
                                     (const SfxPoolItem**)&pAttr ))
     {
         const SvxGridItem* pGridAttr = (SvxGridItem*)pAttr;
-        aCbxUseGridsnap.Check( pGridAttr->bUseGridsnap == 1 );
-        aCbxSynchronize.Check( pGridAttr->bSynchronize == 1 );
-        aCbxGridVisible.Check( pGridAttr->bGridVisible == 1 );
+        pCbxUseGridsnap->Check( pGridAttr->bUseGridsnap == 1 );
+        pCbxSynchronize->Check( pGridAttr->bSynchronize == 1 );
+        pCbxGridVisible->Check( pGridAttr->bGridVisible == 1 );
 
         SfxMapUnit eUnit =
             rSet.GetPool()->GetMetric( GetWhich( SID_ATTR_GRID_OPTIONS ) );
-        SetMetricValue( aMtrFldDrawX , pGridAttr->nFldDrawX, eUnit );
-        SetMetricValue( aMtrFldDrawY , pGridAttr->nFldDrawY, eUnit );
+        SetMetricValue( *pMtrFldDrawX , pGridAttr->nFldDrawX, eUnit );
+        SetMetricValue( *pMtrFldDrawY , pGridAttr->nFldDrawY, eUnit );
 
-        aNumFldDivisionX.SetValue( pGridAttr->nFldDivisionX+1 );
-        aNumFldDivisionY.SetValue( pGridAttr->nFldDivisionY+1 );
+        pNumFldDivisionX->SetValue( pGridAttr->nFldDivisionX+1 );
+        pNumFldDivisionY->SetValue( pGridAttr->nFldDivisionY+1 );
     }
 
-    ChangeGridsnapHdl_Impl( &aCbxUseGridsnap );
+    ChangeGridsnapHdl_Impl( pCbxUseGridsnap );
     bAttrModified = sal_False;
 }
 
@@ -287,9 +251,9 @@ void SvxGridTabPage::ActivatePage( const SfxItemSet& rSet )
                                     (const SfxPoolItem**)&pAttr ))
     {
         const SvxGridItem* pGridAttr = (SvxGridItem*) pAttr;
-        aCbxUseGridsnap.Check( pGridAttr->bUseGridsnap == 1 );
+        pCbxUseGridsnap->Check( pGridAttr->bUseGridsnap == 1 );
 
-        ChangeGridsnapHdl_Impl( &aCbxUseGridsnap );
+        ChangeGridsnapHdl_Impl( pCbxUseGridsnap );
     }
 
     // Metric Change if necessary (as TabPage is in the dialog, where the
@@ -301,23 +265,23 @@ void SvxGridTabPage::ActivatePage( const SfxItemSet& rSet )
 
         FieldUnit eFUnit = (FieldUnit)(long)pItem->GetValue();
 
-        if( eFUnit != aMtrFldDrawX.GetUnit() )
+        if( eFUnit != pMtrFldDrawX->GetUnit() )
         {
             // Set Metrics
             long nFirst, nLast, nMin, nMax;
-            long nVal = static_cast<long>(aMtrFldDrawX.Denormalize( aMtrFldDrawX.GetValue( FUNIT_TWIP ) ));
+            long nVal = static_cast<long>(pMtrFldDrawX->Denormalize( pMtrFldDrawX->GetValue( FUNIT_TWIP ) ));
 
-            lcl_GetMinMax(aMtrFldDrawX, nFirst, nLast, nMin, nMax);
-            SetFieldUnit( aMtrFldDrawX, eFUnit, sal_True );
-            lcl_SetMinMax(aMtrFldDrawX, nFirst, nLast, nMin, nMax);
+            lcl_GetMinMax(*pMtrFldDrawX, nFirst, nLast, nMin, nMax);
+            SetFieldUnit( *pMtrFldDrawX, eFUnit, sal_True );
+            lcl_SetMinMax(*pMtrFldDrawX, nFirst, nLast, nMin, nMax);
 
-            aMtrFldDrawX.SetValue( aMtrFldDrawX.Normalize( nVal ), FUNIT_TWIP );
+            pMtrFldDrawX->SetValue( pMtrFldDrawX->Normalize( nVal ), FUNIT_TWIP );
 
-            nVal = static_cast<long>(aMtrFldDrawY.Denormalize( aMtrFldDrawY.GetValue( FUNIT_TWIP ) ));
-            lcl_GetMinMax(aMtrFldDrawY, nFirst, nLast, nMin, nMax);
-            SetFieldUnit( aMtrFldDrawY, eFUnit, sal_True );
-            lcl_SetMinMax(aMtrFldDrawY, nFirst, nLast, nMin, nMax);
-            aMtrFldDrawY.SetValue( aMtrFldDrawY.Normalize( nVal ), FUNIT_TWIP );
+            nVal = static_cast<long>(pMtrFldDrawY->Denormalize( pMtrFldDrawY->GetValue( FUNIT_TWIP ) ));
+            lcl_GetMinMax(*pMtrFldDrawY, nFirst, nLast, nMin, nMax);
+            SetFieldUnit(*pMtrFldDrawY, eFUnit, sal_True );
+            lcl_SetMinMax(*pMtrFldDrawY, nFirst, nLast, nMin, nMax);
+            pMtrFldDrawY->SetValue( pMtrFldDrawY->Normalize( nVal ), FUNIT_TWIP );
 
         }
     }
@@ -334,12 +298,12 @@ int SvxGridTabPage::DeactivatePage( SfxItemSet* _pSet )
 IMPL_LINK( SvxGridTabPage, ChangeDrawHdl_Impl, MetricField *, pField )
 {
     bAttrModified = sal_True;
-    if( aCbxSynchronize.IsChecked() )
+    if( pCbxSynchronize->IsChecked() )
     {
-        if(pField == &aMtrFldDrawX)
-            aMtrFldDrawY.SetValue( aMtrFldDrawX.GetValue() );
+        if(pField == pMtrFldDrawX)
+            pMtrFldDrawY->SetValue( pMtrFldDrawX->GetValue() );
         else
-            aMtrFldDrawX.SetValue( aMtrFldDrawY.GetValue() );
+            pMtrFldDrawX->SetValue( pMtrFldDrawY->GetValue() );
     }
     return 0;
 }
@@ -347,10 +311,10 @@ IMPL_LINK( SvxGridTabPage, ChangeDrawHdl_Impl, MetricField *, pField )
 
 IMPL_LINK_NOARG(SvxGridTabPage, ClickRotateHdl_Impl)
 {
-    if( aCbxRotate.IsChecked() )
-        aMtrFldAngle.Enable();
+    if( pCbxRotate->IsChecked() )
+        pMtrFldAngle->Enable();
     else
-        aMtrFldAngle.Disable();
+        pMtrFldAngle->Disable();
 
     return( 0L );
 }
@@ -360,12 +324,12 @@ IMPL_LINK_NOARG(SvxGridTabPage, ClickRotateHdl_Impl)
 IMPL_LINK( SvxGridTabPage, ChangeDivisionHdl_Impl, NumericField *, pField )
 {
     bAttrModified = sal_True;
-    if( aCbxSynchronize.IsChecked() )
+    if( pCbxSynchronize->IsChecked() )
     {
-        if(&aNumFldDivisionX == pField)
-            aNumFldDivisionY.SetValue( aNumFldDivisionX.GetValue() );
+        if(pNumFldDivisionX == pField)
+            pNumFldDivisionY->SetValue( pNumFldDivisionX->GetValue() );
         else
-            aNumFldDivisionX.SetValue( aNumFldDivisionY.GetValue() );
+            pNumFldDivisionX->SetValue( pNumFldDivisionY->GetValue() );
     }
     return 0;
 }
