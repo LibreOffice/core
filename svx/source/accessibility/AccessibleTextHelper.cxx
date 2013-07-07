@@ -509,7 +509,7 @@ namespace accessibility
             SetShapeFocus( bHaveFocus );
         }
 
-        OSL_TRACE("AccessibleTextHelper_Impl::SetFocus: focus changed, Object %d, state: %s", this, bHaveFocus ? "focused" : "not focused");
+        OSL_TRACE("AccessibleTextHelper_Impl::SetFocus: focus changed, Object %p, state: %s", this, bHaveFocus ? "focused" : "not focused");
     }
 
     sal_Bool AccessibleTextHelper_Impl::HaveFocus() SAL_THROW((::com::sun::star::uno::RuntimeException))
@@ -584,7 +584,7 @@ namespace accessibility
 
                             ChangeChildFocus( aSelection.nEndPara );
 
-                            OSL_TRACE("AccessibleTextHelper_Impl::UpdateSelection(): focus changed, Object: %d, Paragraph: %d, Last paragraph: %d",
+                            OSL_TRACE("AccessibleTextHelper_Impl::UpdateSelection(): focus changed, Object: %p, Paragraph: %d, Last paragraph: %d",
                                        this, aSelection.nEndPara, maLastSelection.nEndPara);
                         }
                     }
@@ -613,7 +613,7 @@ namespace accessibility
                                                  aOldCursor );
                     }
 
-                    OSL_TRACE("AccessibleTextHelper_Impl::UpdateSelection(): caret changed, Object: %d, New pos: %d, Old pos: %d, New para: %d, Old para: %d",
+                    OSL_TRACE("AccessibleTextHelper_Impl::UpdateSelection(): caret changed, Object: %p, New pos: %d, Old pos: %d, New para: %d, Old para: %d",
                                this, aSelection.nEndPos, maLastSelection.nEndPos, aSelection.nEndPara, maLastSelection.nEndPara);
 
                     // #108947# Sort new range before calling FireEvent

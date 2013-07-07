@@ -387,7 +387,7 @@ namespace slideshow
 
             ENSURE_OR_RETURN_FALSE( mpSprite, "ViewShape::renderSprite(): No sprite" );
 
-            VERBOSE_TRACE( "ViewShape::renderSprite(): Rendering sprite 0x%X",
+            VERBOSE_TRACE( "ViewShape::renderSprite(): Rendering sprite 0x%p",
                            mpSprite.get() );
 
 
@@ -532,7 +532,7 @@ namespace slideshow
 
             if( !bIsVisible )
             {
-                VERBOSE_TRACE( "ViewShape::render(): skipping shape %X", this );
+                VERBOSE_TRACE( "ViewShape::render(): skipping shape %p", this );
 
                 // shape is invisible, no need to update anything.
                 return true;
@@ -557,7 +557,7 @@ namespace slideshow
             if( !bRedrawRequired )
                 return true;
 
-            VERBOSE_TRACE( "ViewShape::render(): rendering shape %X at position (%f,%f)",
+            VERBOSE_TRACE( "ViewShape::render(): rendering shape %p at position (%f,%f)",
                            this,
                            rBounds.getMinX(),
                            rBounds.getMinY() );

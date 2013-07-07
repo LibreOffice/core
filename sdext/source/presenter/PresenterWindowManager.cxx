@@ -345,7 +345,7 @@ void SAL_CALL PresenterWindowManager::focusGained (const css::awt::FocusEvent& r
 {
     ThrowIfDisposed();
     (void)rEvent;
-    OSL_TRACE("PresenterWindowManager::focusGained window %x\n",
+    OSL_TRACE("PresenterWindowManager::focusGained window %p\n",
         rEvent.Source.get());
 }
 

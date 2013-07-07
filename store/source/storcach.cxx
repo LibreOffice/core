@@ -365,7 +365,7 @@ PageCache_Impl::~PageCache_Impl()
         m_hash_size  = theTableSize;
         m_hash_shift = highbit(m_hash_size) - 1;
     }
-    OSL_TRACE("Hits: %u, Misses: %u", m_nHit, m_nMissed);
+    OSL_TRACE("Hits: %zu, Misses: %zu", m_nHit, m_nMissed);
 }
 
 oslInterlockedCount PageCache_Impl::acquire()
@@ -388,7 +388,7 @@ void PageCache_Impl::rescale_Impl (sal_Size new_size)
         Entry ** old_table = m_hash_table;
         sal_Size old_size  = m_hash_size;
 
-        OSL_TRACE("ave chain length: %u, total entries: %u [old_size: %u, new_size: %u]",
+        OSL_TRACE("ave chain length: %zu, total entries: %zu [old_size: %zu new_size: %zu]",
                   m_hash_entries >> m_hash_shift, m_hash_entries, old_size, new_size);
 
         memset (new_table, 0, new_bytes);

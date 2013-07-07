@@ -282,7 +282,7 @@ void SAL_CALL ScVbaEventListener::windowActivated( const lang::EventObject& rEve
     {
         uno::Reference< awt::XWindow > xWindow( rEvent.Source, uno::UNO_QUERY );
         Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
-        OSL_TRACE( "ScVbaEventListener::windowActivated - pWindow = 0x%x, mpActiveWindow = 0x%x", pWindow, mpActiveWindow );
+        OSL_TRACE( "ScVbaEventListener::windowActivated - pWindow = 0x%p, mpActiveWindow = 0x%p", pWindow, mpActiveWindow );
         // do not fire activation event multiple time for the same window
         if( pWindow && (pWindow != mpActiveWindow) )
         {
@@ -304,7 +304,7 @@ void SAL_CALL ScVbaEventListener::windowDeactivated( const lang::EventObject& rE
     {
         uno::Reference< awt::XWindow > xWindow( rEvent.Source, uno::UNO_QUERY );
         Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
-        OSL_TRACE( "ScVbaEventListener::windowDeactivated - pWindow = 0x%x, mpActiveWindow = 0x%x", pWindow, mpActiveWindow );
+        OSL_TRACE( "ScVbaEventListener::windowDeactivated - pWindow = 0x%p, mpActiveWindow = 0x%p", pWindow, mpActiveWindow );
         // do not fire the deactivation event, if the window is not active (prevent multiple deactivation)
         if( pWindow && (pWindow == mpActiveWindow) )
             processWindowActivateEvent( pWindow, false );

@@ -31,7 +31,7 @@ PanelBase::PanelBase (
       mxSidebar(),
       mrViewShellBase(rViewShellBase)
 {
-    OSL_TRACE("created PanelBase at %x for parent %x", this, pParentWindow);
+    OSL_TRACE("created PanelBase at %p for parent %p", this, pParentWindow);
 
 #ifdef DEBUG
     SetText(OUString("sd:PanelBase"));
@@ -43,9 +43,9 @@ PanelBase::PanelBase (
 
 PanelBase::~PanelBase (void)
 {
-    OSL_TRACE("deleting wrapped control at %x", mpWrappedControl.get());
+    OSL_TRACE("deleting wrapped control at %p", mpWrappedControl.get());
     mpWrappedControl.reset();
-    OSL_TRACE("deleting PanelBase at %x from parent %x", this, GetParent());
+    OSL_TRACE("deleting PanelBase at %p from parent %p", this, GetParent());
 }
 
 
@@ -54,7 +54,7 @@ PanelBase::~PanelBase (void)
 
 void PanelBase::Dispose (void)
 {
-    OSL_TRACE("PanelBase::DisposeL: deleting wrapped control at %x", mpWrappedControl.get());
+    OSL_TRACE("PanelBase::DisposeL: deleting wrapped control at %p", mpWrappedControl.get());
     mpWrappedControl.reset();
 }
 
@@ -113,7 +113,7 @@ bool PanelBase::ProvideWrappedControl (void)
     if ( ! mpWrappedControl)
     {
         mpWrappedControl.reset(CreateWrappedControl(this, mrViewShellBase));
-        OSL_TRACE("created wrapped control at %x for parent PanelBase at %x", mpWrappedControl.get(), this);
+        OSL_TRACE("created wrapped control at %p for parent PanelBase at %p", mpWrappedControl.get(), this);
         if (mpWrappedControl)
             mpWrappedControl->Show();
         if (mxSidebar.is())

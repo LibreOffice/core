@@ -357,7 +357,7 @@ void GDIMetaFile::Play( OutputDevice* pOut, size_t nPos )
         pOut->SetLayoutMode( 0 );
         pOut->SetDigitLanguage( 0 );
 
-        OSL_TRACE("GDIMetaFile::Play on device of size: %d x %d", pOut->GetOutputSizePixel().Width(), pOut->GetOutputSizePixel().Height());
+        OSL_TRACE("GDIMetaFile::Play on device of size: %ld x %ld", pOut->GetOutputSizePixel().Width(), pOut->GetOutputSizePixel().Height());
 
         if( !ImplPlayWithRenderer( pOut, Point(0,0), pOut->GetOutputSize() ) ) {
             size_t  i  = 0;

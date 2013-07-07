@@ -297,7 +297,7 @@ const css::uno::Reference<XImplementationLoader> & JavaComponentLoader::getJavaL
                 reinterpret_cast<typelib_TypeDescription *>(pType_XImplementationLoader));
         throw;
     }
-    OSL_TRACE("javaloader.cxx: mapped javaloader - 0x%x", m_javaLoader.get());
+    OSL_TRACE("javaloader.cxx: mapped javaloader - 0x%p", m_javaLoader.get());
     return m_javaLoader;
 }
 

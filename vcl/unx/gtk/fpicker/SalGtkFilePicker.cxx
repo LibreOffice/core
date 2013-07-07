@@ -1054,7 +1054,7 @@ sal_Int16 SAL_CALL SalGtkFilePicker::execute() throw( uno::RuntimeException )
                 {
                     FilePickerEvent evt;
                     evt.ElementId = PUSHBUTTON_PLAY;
-                    OSL_TRACE( "filter_changed, isn't it great %x", this);
+                    OSL_TRACE( "filter_changed, isn't it great %p", this);
                     impl_controlStateChanged( evt );
                     btn = GTK_RESPONSE_NO;
                 }
@@ -1509,21 +1509,21 @@ void SalGtkFilePicker::filter_changed_cb( GtkFileChooser *, GParamSpec *,
 {
     FilePickerEvent evt;
     evt.ElementId = LISTBOX_FILTER;
-    OSL_TRACE( "filter_changed, isn't it great %x", pobjFP );
+    OSL_TRACE( "filter_changed, isn't it great %p", pobjFP );
     pobjFP->impl_controlStateChanged( evt );
 }
 
 void SalGtkFilePicker::folder_changed_cb( GtkFileChooser *, SalGtkFilePicker *pobjFP )
 {
     FilePickerEvent evt;
-    OSL_TRACE( "folder_changed, isn't it great %x", pobjFP );
+    OSL_TRACE( "folder_changed, isn't it great %p", pobjFP );
     pobjFP->impl_directoryChanged( evt );
 }
 
 void SalGtkFilePicker::selection_changed_cb( GtkFileChooser *, SalGtkFilePicker *pobjFP )
 {
     FilePickerEvent evt;
-    OSL_TRACE( "selection_changed, isn't it great %x", pobjFP );
+    OSL_TRACE( "selection_changed, isn't it great %p", pobjFP );
     pobjFP->impl_fileSelectionChanged( evt );
 }
 
