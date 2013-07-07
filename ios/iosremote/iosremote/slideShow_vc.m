@@ -108,6 +108,8 @@
     [self setLecturer_notes:nil];
     [self setSlideView:nil];
     [self setSlideNumber:nil];
+    [self setToolBar:nil];
+    [self setSecondarySlideView:nil];
     [super viewDidUnload];
 }
 
@@ -117,5 +119,8 @@
 
 - (IBAction)previousSlideAction:(id)sender {
     [[self.comManager transmitter] previousTransition];
+}
+
+- (IBAction)pointerAction:(id)sender {
 }
 @end

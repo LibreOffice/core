@@ -9,6 +9,8 @@
 #import "slideShowPreviewTable_vc.h"
 #import "CommunicationManager.h"
 #import "CommandTransmitter.h"
+#import "CommandInterpreter.h"
+#import "SlideShow.h"
 
 @interface slideShowPreviewTable_vc ()
 
@@ -16,6 +18,7 @@
 @property (nonatomic, strong) NSArray * optionsArray;
 @property (nonatomic, strong) CommunicationManager * comManager;
 @property (nonatomic, strong) id slideShowStartObserver;
+@property BOOL slidesRunning;
 
 @end
 
@@ -24,8 +27,6 @@
 @synthesize startButton = _startButton;
 @synthesize optionsTable = _optionsTable;
 @synthesize optionsArray = _optionsArray;
-
-BOOL RUNNING = NO;
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
@@ -48,21 +49,22 @@ BOOL RUNNING = NO;
     self.optionsArray = [NSArray arrayWithObjects:@"Lecturer's Notes", @"Timer", @"Pointer", nil];
     self.comManager = [CommunicationManager sharedComManager];
     self.comManager.delegate = self;
+    self.slidesRunning = NO;
     NSOperationQueue *mainQueue = [NSOperationQueue mainQueue];
     self.slideShowStartObserver = [[NSNotificationCenter defaultCenter] addObserverForName:STATUS_CONNECTED_SLIDESHOW_RUNNING
                                                                                     object:nil
                                                                                      queue:mainQueue
                                                                                 usingBlock:^(NSNotification *note) {
-                                                                                    RUNNING = YES;
+                                                                                    NSLog(@"Setting to true");
+                                                                                    self.slidesRunning = YES;
                                                                                 }];
 
     }
 
 - (void) viewDidAppear:(BOOL)animated
 {
-    if (RUNNING){
-        NSLog(@"Running...");
-        RUNNING = NO;
+    if (self.slidesRunning && [self.comManager.interpreter.slideShow size] > 0){
+        self.slidesRunning = NO;
         [self.parentViewController performSegueWithIdentifier:@"slideShowSegue" sender:self];
     }
     NSOperationQueue *mainQueue = [NSOperationQueue mainQueue];
@@ -79,7 +81,7 @@ BOOL RUNNING = NO;
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self.slideShowStartObserver];
     self.slideShowStartObserver = nil;
-    RUNNING = NO;
+    self.slidesRunning = NO;
     [super viewDidDisappear:animated];
 }
 
