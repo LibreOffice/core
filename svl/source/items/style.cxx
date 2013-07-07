@@ -765,7 +765,7 @@ void SfxStyleSheetBasePool::Insert( SfxStyleSheetBase* p )
     SfxStyleSheetIterator aIter(this, p->GetFamily(), p->GetMask());
     SfxStyleSheetBase* pOld = aIter.Find( p->GetName() );
     OSL_ENSURE( !pOld, "svl::SfxStyleSheetBasePool::Insert(), StyleSheet already inserted" );
-    if( p->GetParent().Len() )
+    if( !p->GetParent().isEmpty() )
     {
         pOld = aIter.Find( p->GetParent() );
         OSL_ENSURE( pOld, "svl::SfxStyleSheetBasePool::Insert(), Parent not found!" );
