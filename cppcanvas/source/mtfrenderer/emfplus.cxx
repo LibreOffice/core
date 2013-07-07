@@ -604,6 +604,18 @@ namespace cppcanvas
         public:
             EMFPPen () : EMFPBrush ()
             {
+                dashPattern = NULL;
+                compoundArray = NULL;
+                customStartCap = NULL;
+                customEndCap = NULL;
+            }
+
+            ~EMFPPen ()
+            {
+                delete[] dashPattern;
+                delete[] compoundArray;
+                delete[] customStartCap;
+                delete[] customEndCap;
             }
 
             void SetStrokeAttributes (rendering::StrokeAttributes& rStrokeAttributes, ImplRenderer& rR, const OutDevState& rState)
