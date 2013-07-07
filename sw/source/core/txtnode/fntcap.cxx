@@ -181,13 +181,13 @@ Size SwSubFont::GetCapitalSize( SwDrawTextInfo& rInf )
 class SwDoGetCapitalBreak : public SwDoCapitals
 {
 protected:
-    xub_StrLen *pExtraPos;
     long nTxtWidth;
     xub_StrLen nBreak;
 public:
-    SwDoGetCapitalBreak( SwDrawTextInfo &rInfo, long nWidth, xub_StrLen *pExtra)
-        :   SwDoCapitals ( rInfo ), pExtraPos( pExtra ), nTxtWidth( nWidth ),
-            nBreak( STRING_LEN )
+    SwDoGetCapitalBreak( SwDrawTextInfo &rInfo, long const nWidth)
+        :   SwDoCapitals ( rInfo )
+        ,   nTxtWidth( nWidth )
+        ,   nBreak( STRING_LEN )
         { }
     virtual ~SwDoGetCapitalBreak() {}
     virtual void Init( SwFntObj *pUpperFont, SwFntObj *pLowerFont );
@@ -211,18 +211,7 @@ void SwDoGetCapitalBreak::Do()
             OUString sText(rInf.GetText()); // only needed until rInf.GetText() returns OUString
             sal_Int32 nIdx2 = rInf.GetIdx(); // ditto
             sal_Int32 nLen2 = rInf.GetLen(); // ditto
-            if( pExtraPos )
-            {
-                sal_Int32 nExtraPos = *pExtraPos; // ditto
-                nBreak = GetOut().GetTextBreak( sText, nTxtWidth,
-                            static_cast<sal_Unicode>('-'),
-                     nExtraPos, nIdx2, nLen2, rInf.GetKern() );
-                if( nExtraPos > nEnd )
-                    nExtraPos = nEnd;
-                *pExtraPos = (nExtraPos == -1) ? STRING_LEN : nExtraPos;
-            }
-            else
-                nBreak = GetOut().GetTextBreak( sText, nTxtWidth,
+            nBreak = GetOut().GetTextBreak( sText, nTxtWidth,
                                nIdx2, nLen2, rInf.GetKern() );
 
             rInf.SetText(sText); // ditto
@@ -255,8 +244,8 @@ void SwDoGetCapitalBreak::Do()
  *************************************************************************/
 
 xub_StrLen SwFont::GetCapitalBreak( ViewShell* pSh, const OutputDevice* pOut,
-    const SwScriptInfo* pScript, const XubString& rTxt, long nTextWidth,
-    xub_StrLen *pExtra, const xub_StrLen nIdx, const xub_StrLen nLen )
+    const SwScriptInfo* pScript, const XubString& rTxt, long const nTextWidth,
+    const xub_StrLen nIdx, const xub_StrLen nLen )
 {
     // Start:
     Point aPos( 0, 0 );
@@ -272,7 +261,7 @@ xub_StrLen SwFont::GetCapitalBreak( ViewShell* pSh, const OutputDevice* pOut,
     aInfo.SetKanaComp( pScript ? 0 : 100 );
     aInfo.SetFont( this );
 
-    SwDoGetCapitalBreak aDo( aInfo, nTextWidth, pExtra );
+    SwDoGetCapitalBreak aDo(aInfo, nTextWidth);
     DoOnCapitals( aDo );
     return aDo.GetBreak();
 }

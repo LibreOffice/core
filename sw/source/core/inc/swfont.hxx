@@ -317,7 +317,7 @@ public:
 
     xub_StrLen GetCapitalBreak( ViewShell* pSh,  const OutputDevice* pOut,
         const SwScriptInfo* pScript, const XubString& rTxt,
-        long nTextWidth, xub_StrLen* pExtra, const xub_StrLen nIdx,
+        long nTextWidth, const xub_StrLen nIdx,
         const xub_StrLen nLen );
 
     xub_StrLen GetCapitalCrsrOfst( SwDrawTextInfo& rInf )

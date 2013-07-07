@@ -2427,8 +2427,11 @@ xub_StrLen SwFont::GetTxtBreak( SwDrawTextInfo& rInf, long nTextWidth )
     }
 
     if( aSub[nActual].IsCapital() && nLn )
+    {
         nTxtBreak = GetCapitalBreak( rInf.GetShell(), rInf.GetpOut(),
-        rInf.GetScriptInfo(), rInf.GetText(), nTextWidth,0, rInf.GetIdx(),nLn );
+            rInf.GetScriptInfo(), rInf.GetText(), nTextWidth, rInf.GetIdx(),
+            nLn );
+    }
     else
     {
         nKern = CheckKerning();
