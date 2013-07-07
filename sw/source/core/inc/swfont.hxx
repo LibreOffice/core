@@ -62,7 +62,6 @@ class SwSubFont : public SvxFont
     inline void CopyMagic( const SwSubFont& rFnt )
         { pMagic = rFnt.pMagic; nFntIndex = rFnt.nFntIndex; }
 
-    sal_Bool operator==( const SwFont &rFnt ) const;
     SwSubFont& operator=( const SwSubFont &rFont );
 
     short _CheckKerning( );
@@ -143,8 +142,6 @@ class SwFont
     sal_Bool bPaintWrong    :1;  // Flag fuer Rechtschreibfehler
     sal_Bool bGreyWave      :1;  // Fuers extended TextInput: Graue Wellenlinie
     sal_Bool bNoColReplace  :1;  // Replacement without colormanipulation
-
-    sal_Bool operator==( const SwFont &rFnt ) const;
 
 protected:
     inline SwFont() { pBackColor = NULL; nActual = SW_LATIN; }
