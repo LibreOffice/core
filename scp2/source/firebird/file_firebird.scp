@@ -22,7 +22,7 @@
 
 File gid_File_Firebird
     TXT_FILE_BODY;
-    Dir = gid_Brand_Dir_Program;
+    Dir = gid_Dir_Brand_Root;
     Name = "firebird.filelist";
     Styles = (FILELIST,USE_INTERNAL_RIGHTS);
 End
