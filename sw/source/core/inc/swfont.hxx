@@ -26,6 +26,7 @@
 #include <editeng/svxfont.hxx>
 #include <swtypes.hxx>
 #include <drawfont.hxx>     // SwDrawTextInfo
+#include <editeng/borderline.hxx> // SvxBorderLine
 
 class SfxItemSet;
 class SwAttrSet;
@@ -127,6 +128,13 @@ class SwFont
     Color*      pBackColor;     // background color (i.e. at character styles)
     Color       aUnderColor;    // color of the underlining
     Color       aOverColor;     // color of the overlining
+
+    // character borders
+    editeng::SvxBorderLine*     m_pTopBorder;
+    editeng::SvxBorderLine*     m_pBottomBorder;
+    editeng::SvxBorderLine*     m_pRightBorder;
+    editeng::SvxBorderLine*     m_pLeftBorder;
+
     sal_uInt8       nToxCnt;        // Zaehlt die Schachtelungstiefe der Tox
     sal_uInt8       nRefCnt;        // Zaehlt die Schachtelungstiefe der Refs
     sal_uInt8        m_nMetaCount;   // count META/METAFIELD
@@ -144,7 +152,7 @@ class SwFont
     sal_Bool bNoColReplace  :1;  // Replacement without colormanipulation
 
 protected:
-    inline SwFont() { pBackColor = NULL; nActual = SW_LATIN; }
+    SwFont();
 
 public:
     SwFont( const SwAttrSet* pSet, const IDocumentSettingAccess* pIDocumentSettingAccess );
@@ -153,7 +161,7 @@ public:
     inline void ChgFnt( ViewShell *pSh, OutputDevice& rOut )
         { bPaintBlank = aSub[nActual].ChgFnt( pSh, rOut ); }
 
-    ~SwFont(){ delete pBackColor; }
+    ~SwFont();
 
     SwFont& operator=( const SwFont &rFont );
 
@@ -166,6 +174,17 @@ public:
     // set background color
     void SetBackColor( Color* pNewColor );
     inline const Color* GetBackColor() const{ return pBackColor; }
+
+    // set/get borders
+    void SetTopBorder( const editeng::SvxBorderLine* pTopBorder );
+    void SetBottomBorder( const editeng::SvxBorderLine* pBottomBorder );
+    void SetRightBorder( const editeng::SvxBorderLine* pRightBorder );
+    void SetLeftBorder( const editeng::SvxBorderLine* pLeftBorder );
+
+    const editeng::SvxBorderLine* GetTopBorder() { return m_pTopBorder; }
+    const editeng::SvxBorderLine* GetBottomBorder() { return m_pBottomBorder; }
+    const editeng::SvxBorderLine* GetRightBorder() { return m_pRightBorder; }
+    const editeng::SvxBorderLine* GetLeftBorder() { return m_pLeftBorder; }
 
     inline void ChkMagic( ViewShell *pSh, sal_uInt8 nWhich )
         { if( !aSub[ nWhich ].pMagic ) GoMagic( pSh, nWhich ); }

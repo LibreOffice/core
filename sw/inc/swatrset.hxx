@@ -252,6 +252,7 @@ public:
     inline const SvxCharRotateItem        &GetCharRotate( sal_Bool = sal_True ) const;
     inline const SvxCharReliefItem        &GetCharRelief( sal_Bool = sal_True ) const;
     inline const SvxCharHiddenItem      &GetCharHidden( sal_Bool = sal_True ) const;
+    inline const SvxBoxItem      &GetCharBorder( sal_Bool = sal_True ) const;
 
     // Frame attributes. Implementation in frmatr.hxx.
     inline const SwFmtFillOrder       &GetFillOrder( sal_Bool = sal_True ) const;

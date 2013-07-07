@@ -48,6 +48,7 @@
 #include <editeng/charrotateitem.hxx>
 #include <editeng/twolinesitem.hxx>
 #include <editeng/charhiddenitem.hxx>
+#include <editeng/boxitem.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <vcl/window.hxx>
 #include <charatr.hxx>
@@ -74,6 +75,46 @@ void SwFont::SetBackColor( Color* pNewColor )
     pBackColor = pNewColor;
     bFntChg = sal_True;
     aSub[SW_LATIN].pMagic = aSub[SW_CJK].pMagic = aSub[SW_CTL].pMagic = 0;
+}
+
+void SwFont::SetTopBorder( const editeng::SvxBorderLine* pTopBorder )
+{
+    delete m_pTopBorder;
+    if( pTopBorder )
+        m_pTopBorder = new editeng::SvxBorderLine(*pTopBorder);
+    else
+        m_pTopBorder = 0;
+    bFntChg = sal_True;
+}
+
+void SwFont::SetBottomBorder( const editeng::SvxBorderLine* pBottomBorder )
+{
+    delete m_pBottomBorder;
+    if( pBottomBorder )
+        m_pBottomBorder = new editeng::SvxBorderLine(*pBottomBorder);
+    else
+        m_pBottomBorder = 0;
+    bFntChg = sal_True;
+}
+
+void SwFont::SetRightBorder( const editeng::SvxBorderLine* pRightBorder )
+{
+    delete m_pRightBorder;
+    if( pRightBorder )
+        m_pRightBorder = new editeng::SvxBorderLine(*pRightBorder);
+    else
+        m_pRightBorder = 0;
+    bFntChg = sal_True;
+}
+
+void SwFont::SetLeftBorder( const editeng::SvxBorderLine* pLeftBorder )
+{
+    delete m_pLeftBorder;
+    if( pLeftBorder )
+        m_pLeftBorder = new editeng::SvxBorderLine(*pLeftBorder);
+    else
+        m_pLeftBorder = 0;
+    bFntChg = sal_True;
 }
 
 // maps directions for vertical layout
@@ -203,6 +244,12 @@ void SwFont::SetDiffFnt( const SfxItemSet *pAttrSet,
 {
     delete pBackColor;
     pBackColor = NULL;
+
+    delete m_pTopBorder;
+    delete m_pBottomBorder;
+    delete m_pRightBorder;
+    delete m_pLeftBorder;
+    m_pTopBorder = m_pBottomBorder = m_pRightBorder = m_pLeftBorder = 0;
 
     if( pAttrSet )
     {
@@ -382,8 +429,14 @@ void SwFont::SetDiffFnt( const SfxItemSet *pAttrSet,
         if( SFX_ITEM_SET == pAttrSet->GetItemState( RES_CHRATR_BACKGROUND,
             sal_True, &pItem ))
             pBackColor = new Color( ((SvxBrushItem*)pItem)->GetColor() );
-        else
-            pBackColor = NULL;
+        if( SFX_ITEM_SET == pAttrSet->GetItemState( RES_CHRATR_BOX,
+            sal_True, &pItem ))
+        {
+            m_pTopBorder = new editeng::SvxBorderLine(*((SvxBoxItem*)pItem)->GetTop() );
+            m_pBottomBorder = new editeng::SvxBorderLine(*((SvxBoxItem*)pItem)->GetBottom() );
+            m_pRightBorder = new editeng::SvxBorderLine(*((SvxBoxItem*)pItem)->GetRight() );
+            m_pLeftBorder = new editeng::SvxBorderLine(*((SvxBoxItem*)pItem)->GetLeft() );
+        }
         const SfxPoolItem* pTwoLinesItem = 0;
         if( SFX_ITEM_SET ==
                 pAttrSet->GetItemState( RES_CHRATR_TWO_LINES, sal_True, &pTwoLinesItem ))
@@ -405,6 +458,16 @@ void SwFont::SetDiffFnt( const SfxItemSet *pAttrSet,
  *                      class SwFont
  *************************************************************************/
 
+SwFont::SwFont()
+    : pBackColor(0)
+    , m_pTopBorder(0)
+    , m_pBottomBorder(0)
+    , m_pRightBorder(0)
+    , m_pLeftBorder(0)
+    , nActual(SW_LATIN)
+{
+}
+
 SwFont::SwFont( const SwFont &rFont )
 {
     aSub[SW_LATIN] = rFont.aSub[SW_LATIN];
@@ -412,6 +475,10 @@ SwFont::SwFont( const SwFont &rFont )
     aSub[SW_CTL] = rFont.aSub[SW_CTL];
     nActual = rFont.nActual;
     pBackColor = rFont.pBackColor ? new Color( *rFont.pBackColor ) : NULL;
+    m_pTopBorder = rFont.m_pTopBorder ? new editeng::SvxBorderLine( *rFont.m_pTopBorder ) : 0;
+    m_pBottomBorder = rFont.m_pBottomBorder ? new editeng::SvxBorderLine( *rFont.m_pBottomBorder ) : 0;
+    m_pRightBorder = rFont.m_pRightBorder ? new editeng::SvxBorderLine( *rFont.m_pRightBorder ) : 0;
+    m_pLeftBorder = rFont.m_pLeftBorder ? new editeng::SvxBorderLine( *rFont.m_pLeftBorder ) : 0;
     aUnderColor = rFont.GetUnderColor();
     aOverColor  = rFont.GetOverColor();
     nToxCnt = 0;
@@ -534,6 +601,18 @@ SwFont::SwFont( const SwAttrSet* pAttrSet,
         pBackColor = new Color( ((SvxBrushItem*)pItem)->GetColor() );
     else
         pBackColor = NULL;
+
+    if( SFX_ITEM_SET == pAttrSet->GetItemState( RES_CHRATR_BOX,
+        sal_True, &pItem ))
+    {
+        m_pTopBorder = new editeng::SvxBorderLine(*((SvxBoxItem*)pItem)->GetTop() );
+        m_pBottomBorder = new editeng::SvxBorderLine(*((SvxBoxItem*)pItem)->GetBottom() );
+        m_pRightBorder = new editeng::SvxBorderLine(*((SvxBoxItem*)pItem)->GetRight() );
+        m_pLeftBorder = new editeng::SvxBorderLine(*((SvxBoxItem*)pItem)->GetLeft() );
+    }
+    else
+        m_pTopBorder = m_pBottomBorder = m_pRightBorder = m_pLeftBorder = 0;
+
     const SvxTwoLinesItem& rTwoLinesItem = pAttrSet->Get2Lines();
     if ( ! rTwoLinesItem.GetValue() )
         SetVertical( pAttrSet->GetCharRotate().GetValue() );
@@ -545,6 +624,15 @@ SwFont::SwFont( const SwAttrSet* pAttrSet,
         aSub[ SW_CJK ].smallCapsPercentage66 = true;
         aSub[ SW_CTL ].smallCapsPercentage66 = true;
     }
+}
+
+SwFont::~SwFont()
+{
+    delete pBackColor;
+    delete m_pTopBorder;
+    delete m_pBottomBorder;
+    delete m_pRightBorder;
+    delete m_pLeftBorder;
 }
 
 SwSubFont& SwSubFont::operator=( const SwSubFont &rFont )
@@ -568,6 +656,14 @@ SwFont& SwFont::operator=( const SwFont &rFont )
     nActual = rFont.nActual;
     delete pBackColor;
     pBackColor = rFont.pBackColor ? new Color( *rFont.pBackColor ) : NULL;
+    delete m_pTopBorder;
+    delete m_pBottomBorder;
+    delete m_pRightBorder;
+    delete m_pLeftBorder;
+    m_pTopBorder = rFont.m_pTopBorder ? new editeng::SvxBorderLine( *rFont.m_pTopBorder ) : 0;
+    m_pBottomBorder = rFont.m_pBottomBorder ? new editeng::SvxBorderLine( *rFont.m_pBottomBorder ) : 0;
+    m_pRightBorder = rFont.m_pRightBorder ? new editeng::SvxBorderLine( *rFont.m_pRightBorder ) : 0;
+    m_pLeftBorder = rFont.m_pLeftBorder ? new editeng::SvxBorderLine( *rFont.m_pLeftBorder ) : 0;
     aUnderColor = rFont.GetUnderColor();
     aOverColor  = rFont.GetOverColor();
     nToxCnt = 0;

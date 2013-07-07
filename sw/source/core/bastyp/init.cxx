@@ -288,7 +288,7 @@ SfxItemInfo aSlotTab[] =
     { SID_ATTR_CHAR_HIDDEN, SFX_ITEM_POOLABLE },        // RES_CHRATR_HIDDEN
     { SID_ATTR_CHAR_OVERLINE, SFX_ITEM_POOLABLE },      // RES_CHRATR_OVERLINE
     { 0, SFX_ITEM_POOLABLE },                           // RES_CHRATR_RSID
-    { 0, SFX_ITEM_POOLABLE },                           // RES_CHRATR_DUMMY1
+    { 0, SFX_ITEM_POOLABLE },                           // RES_CHRATR_BOX
 
     { 0, 0 },                                           // RES_TXTATR_REFMARK
     { 0, 0 },                                           // RES_TXTATR_TOXMARK
@@ -497,9 +497,7 @@ void _InitCore()
     aAttrTab[ RES_CHRATR_RELIEF - POOLATTR_BEGIN ] =        new SvxCharReliefItem( RELIEF_NONE, RES_CHRATR_RELIEF );
     aAttrTab[ RES_CHRATR_HIDDEN - POOLATTR_BEGIN ] =        new SvxCharHiddenItem( sal_False, RES_CHRATR_HIDDEN );
     aAttrTab[ RES_CHRATR_OVERLINE- POOLATTR_BEGIN ] =       new SvxOverlineItem( UNDERLINE_NONE, RES_CHRATR_OVERLINE );
-
-// CharakterAttr - Dummies
-    aAttrTab[ RES_CHRATR_DUMMY1 - POOLATTR_BEGIN ] =        new SfxBoolItem( RES_CHRATR_DUMMY1 );
+    aAttrTab[ RES_CHRATR_BOX - POOLATTR_BEGIN ] =           new SvxBoxItem( RES_CHRATR_BOX );
 
     aAttrTab[ RES_TXTATR_AUTOFMT- POOLATTR_BEGIN ] =        new SwFmtAutoFmt;
     aAttrTab[ RES_TXTATR_INETFMT - POOLATTR_BEGIN ] =       new SwFmtINetFmt( aEmptyStr, aEmptyStr );
@@ -695,7 +693,10 @@ void _InitCore()
         SwAttrPool::pVersionMap5[ i-1 ] = i + 6;
 
     // 6. version:
+    //      RES_CHARATR_OVERLINE
     //      new character attribute for overlining plus 2 dummies
+    //      1. dummy -> RES_CHRATR_RSID
+    //      2. dummy -> RES_CHRATR_BOX
     SwAttrPool::pVersionMap6 = new sal_uInt16[ 136 ];
     for( i = 1; i <= 37; i++ )
         SwAttrPool::pVersionMap6[ i-1 ] = i;

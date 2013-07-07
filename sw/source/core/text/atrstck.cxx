@@ -42,6 +42,7 @@
 #include <editeng/charscaleitem.hxx>
 #include <editeng/twolinesitem.hxx>
 #include <editeng/charhiddenitem.hxx>
+#include <editeng/boxitem.hxx>
 #include <viewopt.hxx>
 #include <charfmt.hxx>
 #include <fchrfmt.hxx>
@@ -62,7 +63,7 @@
  * stack, the top most attribute on the stack is valid. Because some
  * kinds of attributes have to be pushed to the same stacks we map their
  * ids to stack ids
- * Attention: The first NUM_DEFAULT_VALUES ( defined in swfntcch.hxx == 35 )
+ * Attention: The first NUM_DEFAULT_VALUES ( defined in swfntcch.hxx )
  * are stored in the defaultitem-cache, if you add one, you have to increase
  * NUM_DEFAULT_VALUES.
  * Also adjust NUM_ATTRIBUTE_STACKS in atrhndl.hxx.
@@ -111,15 +112,15 @@ const sal_uInt8 StackPos[ static_cast<sal_uInt16>(RES_TXTATR_WITHEND_END) -
     34, // RES_CHRATR_HIDDEN,                    // 37
     35, // RES_CHRATR_OVERLINE,                  // 38
      0, // RES_CHRATR_RSID,                      // 39
-     0, // RES_CHRATR_DUMMY1,                    // 40
-    36, // RES_TXTATR_REFMARK,                   // 41
-    37, // RES_TXTATR_TOXMARK,                   // 42
-    38, // RES_TXTATR_META,                      // 43
-    38, // RES_TXTATR_METAFIELD,                 // 44
+    36, // RES_CHRATR_BOX,                       // 40
+    37, // RES_TXTATR_REFMARK,                   // 41
+    38, // RES_TXTATR_TOXMARK,                   // 42
+    39, // RES_TXTATR_META,                      // 43
+    39, // RES_TXTATR_METAFIELD,                 // 44
      0, // RES_TXTATR_AUTOFMT,                   // 45
      0, // RES_TXTATR_INETFMT                    // 46
      0, // RES_TXTATR_CHARFMT,                   // 47
-    39, // RES_TXTATR_CJK_RUBY,                  // 48
+    40, // RES_TXTATR_CJK_RUBY,                  // 48
      0, // RES_TXTATR_UNKNOWN_CONTAINER,         // 49
      0, // RES_TXTATR_DUMMY5                     // 50
 };
@@ -743,6 +744,12 @@ void SwAttrHandler::FontChg(const SfxPoolItem& rItem, SwFont& rFnt, sal_Bool bPu
             }
             break;
         }
+        case RES_CHRATR_BOX:
+            rFnt.SetTopBorder( ((SvxBoxItem&)rItem).GetTop() );
+            rFnt.SetBottomBorder( ((SvxBoxItem&)rItem).GetBottom() );
+            rFnt.SetRightBorder( ((SvxBoxItem&)rItem).GetRight() );
+            rFnt.SetLeftBorder( ((SvxBoxItem&)rItem).GetLeft() );
+            break;
         case RES_CHRATR_OVERLINE :
             rFnt.SetOverline( ((SvxOverlineItem&)rItem).GetLineStyle() );
             rFnt.SetOverColor( ((SvxOverlineItem&)rItem).GetColor() );

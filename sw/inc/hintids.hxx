@@ -87,8 +87,8 @@ RES_CHRATR_BEGIN = HINT_BEGIN,
     RES_CHRATR_RELIEF,                      // 36
     RES_CHRATR_HIDDEN,                      // 37
     RES_CHRATR_OVERLINE,                    // 38
-    RES_CHRATR_RSID,						// 39
-    RES_CHRATR_DUMMY1,						// 40
+    RES_CHRATR_RSID,                        // 39
+    RES_CHRATR_BOX,                         // 40
 RES_CHRATR_END
 };
 

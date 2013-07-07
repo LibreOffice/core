@@ -35,6 +35,7 @@
 #include <sfx2/printer.hxx>
 #include <svl/macitem.hxx>
 #include <editeng/brushitem.hxx>
+#include <editeng/boxitem.hxx>
 #include <svl/stritem.hxx>
 #include <svl/languageoptions.hxx>
 #include <editeng/eeitem.hxx>
@@ -577,6 +578,15 @@ IMPL_LINK_NOARG(ApplyStyle, ApplyHdl)
                 aTmpSet.Put( aTmpBrush );
             }
             aTmpSet.ClearItem( RES_BACKGROUND );
+
+            const SfxPoolItem *pTmpBox;
+            if( SFX_ITEM_SET == aTmpSet.GetItemState( RES_BOX, sal_False, &pTmpBox ) )
+            {
+                SvxBoxItem aTmpBox( *((SvxBoxItem*)pTmpBox) );
+                aTmpBox.SetWhich( RES_CHRATR_BOX );
+                aTmpSet.Put( aTmpBox );
+            }
+            aTmpSet.ClearItem( RES_BOX );
         }
         m_xTmp->SetItemSet( aTmpSet );
 
@@ -743,6 +753,18 @@ sal_uInt16 SwDocShell::Edit(
             aTmpBrush.SetWhich( RES_BACKGROUND );
             rSet.Put( aTmpBrush );
         }
+        else
+            rSet.ClearItem(RES_BACKGROUND);
+
+        const SfxPoolItem *pTmpBox;
+        if( SFX_ITEM_SET == rSet.GetItemState( RES_CHRATR_BOX, sal_True, &pTmpBox ) )
+        {
+            SvxBoxItem aTmpBox( *((SvxBoxItem*)pTmpBox) );
+            aTmpBox.SetWhich( RES_BOX );
+            rSet.Put( aTmpBox );
+        }
+        else
+            rSet.ClearItem(RES_BOX);
     }
     if (!bBasic)
     {
@@ -822,6 +844,15 @@ sal_uInt16 SwDocShell::Edit(
                     aTmpSet.Put( aTmpBrush );
                 }
                 aTmpSet.ClearItem( RES_BACKGROUND );
+
+                const SfxPoolItem *pTmpBox;
+                if( SFX_ITEM_SET == aTmpSet.GetItemState( RES_BOX, sal_False, &pTmpBox ) )
+                {
+                    SvxBoxItem aTmpBox( *((SvxBoxItem*)pTmpBox) );
+                    aTmpBox.SetWhich( RES_CHRATR_BOX );
+                    aTmpSet.Put( aTmpBox );
+                }
+                aTmpSet.ClearItem( RES_BOX );
             }
             xTmp->SetItemSet( aTmpSet );
         }
