@@ -531,18 +531,6 @@ unchanged:
  firebird_super firebird_server: firebird_basic super_targets fbtrace
  
  
-@@ -201,7 +202,11 @@
- btyacc_binary: $(BTYACC)
- 
- $(BTYACC): 
-+ifeq ($(PLATFORM),win32)
-+	$(MAKE) -f $(ROOT)/extern/btyacc/makefile.dos
-+else
- 	$(MAKE) -C $(ROOT)/extern/btyacc
-+endif
- 
- #---------------------------------------------------------------------------
- # Phase1: make a gpre_static from scratch so we can parse .e and .epp files
 @@ -331,8 +336,9 @@
  .PHONY: libfbembed inet_server fb_smp_server embed_gfix embed_gbak embed_isql 
  .PHONY: embed_gpre embed_util
