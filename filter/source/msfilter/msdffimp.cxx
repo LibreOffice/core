@@ -6948,6 +6948,7 @@ com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject >  SvxMS
                 //xIPObj->OnDocumentPrinterChanged( NULL );
             }
         }
+        delete pStream;
     }
 
     return xObj;
