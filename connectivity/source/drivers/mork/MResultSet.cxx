@@ -906,7 +906,7 @@ void OResultSet::analyseWhereClause( const OSQLParseNode*                 parseT
               ( pAtom->getChild(0) && pAtom->getChild(0)->getNodeType() == SQL_NODE_STRING )
               ) )
         {
-            OSL_TRACE("analyseSQL : pAtom->count() = %d", pAtom->count() );
+            OSL_TRACE("analyseSQL : pAtom->count() = %zu", pAtom->count() );
 
             m_pStatement->getOwnConnection()->throwSQLException( STR_QUERY_INVALID_LIKE_STRING, *this );
         }
@@ -1262,7 +1262,7 @@ void SAL_CALL OResultSet::executeQuery() throw( ::com::sun::star::sdbc::SQLExcep
 
                     m_pSortIndex = new OSortIndex(eKeyType,m_aOrderbyAscending);
 
-                    OSL_TRACE("OrderbyColumnNumber->size() = %d",m_aOrderbyColumnNumber.size());
+                    OSL_TRACE("OrderbyColumnNumber->size() = %zu",m_aOrderbyColumnNumber.size());
 #if OSL_DEBUG_LEVEL > 0
                     for ( ::std::vector<sal_Int32>::size_type i = 0; i < m_aColMapping.size(); i++ )
                         OSL_TRACE("Mapped: %d -> %d", i, m_aColMapping[i] );

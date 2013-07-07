@@ -261,7 +261,7 @@ public:
         aArgs[0] = uno::Any( uno::Reference< uno::XInterface >() );
         aArgs[1] = uno::Any( mpDocShell->GetModel() );
         uno::Reference< uno::XInterface > xDocObj = ooo::vba::createVBAUnoAPIServiceWithArgs( mpDocShell, "ooo.vba.word.Document" , aArgs );
-        OSL_TRACE("Creating Object ( ooo.vba.word.Document ) 0x%x", xDocObj.get() );
+        OSL_TRACE("Creating Object ( ooo.vba.word.Document ) 0x%p", xDocObj.get() );
         return  uno::makeAny( xDocObj );
     }
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getElementNames(  ) throw (::com::sun::star::uno::RuntimeException)

@@ -61,7 +61,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL vbaswobj_component_getFactory(
     void* pRet = component_getFactoryHelper(pImplName, pServiceManager,
             pRegistryKey, globals::serviceDecl, document::serviceDecl,
             wrapformat::serviceDecl, vbaeventshelper::serviceDecl );
-    OSL_TRACE("Ret is 0x%x", pRet);
+    OSL_TRACE("Ret is 0x%p", pRet);
     return pRet;
 }
 

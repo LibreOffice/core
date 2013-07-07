@@ -67,7 +67,7 @@ namespace {
             SharedPageDescriptor pDescriptor (rModel.GetPageDescriptor(nIndex));
             if (pDescriptor)
             {
-                OSL_TRACE("%d %d %d %d %x",
+                OSL_TRACE("%d %d %d %d %p",
                     nIndex,
                     pDescriptor->GetPageIndex(),
                     pDescriptor->GetVisualState().mnPageId,
@@ -399,7 +399,7 @@ void SlideSorterModel::ClearDescriptorList (void)
         {
             if ( ! iDescriptor->unique())
             {
-                OSL_TRACE("SlideSorterModel::ClearDescriptorList: trying to delete page descriptor  that is still used with count %d", iDescriptor->use_count());
+                OSL_TRACE("SlideSorterModel::ClearDescriptorList: trying to delete page descriptor  that is still used with count %zu", iDescriptor->use_count());
                 // No assertion here because that can hang the office when
                 // opening a dialog from here.
             }

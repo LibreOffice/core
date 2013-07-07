@@ -77,10 +77,10 @@ DiagramData::DiagramData()
 
 void DiagramData::dump()
 {
-    OSL_TRACE("Dgm: DiagramData # of cnx: %d", maConnections.size() );
+    OSL_TRACE("Dgm: DiagramData # of cnx: %zu", maConnections.size() );
     std::for_each( maConnections.begin(), maConnections.end(),
                   boost::bind( &dgm::Connection::dump, _1 ) );
-    OSL_TRACE("Dgm: DiagramData # of pt: %d", maPoints.size() );
+    OSL_TRACE("Dgm: DiagramData # of pt: %zu", maPoints.size() );
     std::for_each( maPoints.begin(), maPoints.end(),
                   boost::bind( &dgm::Point::dump, _1 ) );
 }
