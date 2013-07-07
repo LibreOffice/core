@@ -64,7 +64,7 @@ using namespace com::sun::star::util;
  *    Print the status, the SQLCODE, and exit.
  *    Also, indicate which operation the error occured on.
  */
-static int pr_error (long* status, char* operation)
+static int pr_error (const ISC_STATUS* status, char* operation)
 {
     printf("[\n");
     printf("PROBLEM ON \"%s\".\n", operation);
