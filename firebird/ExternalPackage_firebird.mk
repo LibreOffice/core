@@ -39,15 +39,13 @@ $(eval $(call gb_ExternalPackage_use_external_project,firebird,firebird))
 # 	gen/firebird/security2.fdb \
 # ))
 
-$(eval $(call gb_ExternalPackage_set_outdir,firebird,$(INSTDIR)))
-
 ifeq ($(OS)-$(COM),WNT-MSC)
-$(eval $(call gb_ExternalPackage_add_file,firebird,ifbembed.dll,gen/firebird/bin/ifbembed.dll))
-$(eval $(call gb_ExternalPackage_add_file,firebird,ifbembed.lib,gen/firebird/bin/ifbembed.lib))
+$(eval $(call gb_ExternalPackage_add_file,firebird,bin/ifbembed.dll,gen/firebird/bin/ifbembed.dll))
+$(eval $(call gb_ExternalPackage_add_file,firebird,lib/ifbembed.lib,gen/firebird/bin/ifbembed.lib))
 else
-$(eval $(call gb_ExternalPackage_add_file,firebird,libfbembed.so.2.5.2,gen/firebird/lib/libfbembed.so.2.5.2))
-$(eval $(call gb_ExternalPackage_add_file,firebird,libfbembed.so.2.5,gen/firebird/lib/libfbembed.so.2.5))
-$(eval $(call gb_ExternalPackage_add_file,firebird,libfbembed.so,gen/firebird/lib/libfbembed.so))
+$(eval $(call gb_ExternalPackage_add_file,firebird,lib/libfbembed.so.2.5.2,gen/firebird/lib/libfbembed.so.2.5.2))
+$(eval $(call gb_ExternalPackage_add_file,firebird,lib/libfbembed.so.2.5,gen/firebird/lib/libfbembed.so.2.5))
+$(eval $(call gb_ExternalPackage_add_file,firebird,lib/libfbembed.so,gen/firebird/lib/libfbembed.so))
 endif
 
 # vim: set noet sw=4 ts=4:

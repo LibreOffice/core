@@ -114,9 +114,9 @@ namespace connectivity
                                     sal_Int32 nHandle
                                          ) const;
 
-            virtual void checkColumnIndex( sal_Int32 index )
+            virtual void SAL_CALL checkColumnIndex( sal_Int32 index )
                 throw ( com::sun::star::sdbc::SQLException, com::sun::star::uno::RuntimeException );
-            virtual void checkRowIndex( sal_Bool mustBeOnValidRow );
+            virtual void SAL_CALL checkRowIndex( sal_Bool mustBeOnValidRow );
 
             // you can't delete objects of this type
             virtual ~OResultSet();
