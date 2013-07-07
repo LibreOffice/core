@@ -53,12 +53,18 @@ gb_Module_CLEANTARGETSTACK :=
 # on $(MAKEFILE_LIST).
 gb_Module_CURRENTMAKEFILE :=
 
+$(call gb_Module_get_almost_target,%) :
+	$(call gb_Output_announce,$*,$(false),ALM,5)
+	-$(call gb_Helper_abbreviate_dirs,\
+		mkdir -p $(dir $@) && \
+		touch $@)
+
 .PHONY : $(call gb_Module_get_clean_target,%)
 $(call gb_Module_get_clean_target,%) :
 	$(call gb_Output_announce,$*,$(false),MOD,5)
 	$(call gb_Output_announce_title,module $* cleared.)
 	-$(call gb_Helper_abbreviate_dirs,\
-		rm -f $(call gb_Module_get_target,$*) $(call gb_Module_get_check_target,$*) $(call gb_Module_get_slowcheck_target,$*) $(call gb_Module_get_subsequentcheck_target,$*))
+		rm -f $(call gb_Module_get_target,$*) $(call gb_Module_get_almost_target,$*) $(call gb_Module_get_check_target,$*) $(call gb_Module_get_slowcheck_target,$*) $(call gb_Module_get_subsequentcheck_target,$*))
 
 $(call gb_Module_get_check_target,%) :
 	$(call gb_Output_announce,$*,$(true),CHK,5)
@@ -98,7 +104,7 @@ build-tools : $(gb_BUILD_TOOLS)
 	$(call gb_Output_announce_title,build-tools done.)
 	$(call gb_Output_announce_bell)
 
-build : 
+build :
 	$(call gb_Output_announce,top level modules: $(foreach module,$(filter-out deliverlog $(WORKDIR)/bootstrap,$^),$(notdir $(module))),$(true),ALL,6)
 	$(call gb_Output_announce,loaded modules: $(sort $(gb_Module_ALLMODULES)),$(true),ALL,6)
 	$(call gb_Output_announce_title,build done.)
@@ -115,13 +121,13 @@ slowcheck :
 	$(call gb_Output_announce_bell)
 
 # removing the dependency on build for now until we can make a full build with gbuild
-#subsequentcheck : all 
-subsequentcheck : 
+#subsequentcheck : all
+subsequentcheck :
 	$(call gb_Output_announce,loaded modules: $(sort $(gb_Module_ALLMODULES)),$(true),SCK,6)
 	$(call gb_Output_announce_title,all subsequent tests checked.)
 	$(call gb_Output_announce_bell)
 
-clean : 
+clean :
 	$(call gb_Output_announce,top level modules: $(foreach module,$^,$(notdir $(module))),$(false),ALL,6)
 	$(call gb_Output_announce,loaded modules: $(sort $(gb_Module_ALLMODULES)),$(false),ALL,6)
 	$(call gb_Output_announce_title,all cleared.)
@@ -139,7 +145,7 @@ help :
 
 showmodules :
 	$(info $(strip $(gb_Module_ALLMODULES)))
-	@true 
+	@true
 
 translations : $(WORKDIR)/pot.done
 
@@ -199,7 +205,7 @@ endef
 define gb_Module_add_target
 $(call gb_Module__read_targetfile,$(1),$(2),target)
 
-$(call gb_Module_get_target,$(1)) : $$(gb_Module_CURRENTTARGET)
+$(call gb_Module_get_almost_target,$(1)) : $$(gb_Module_CURRENTTARGET)
 $(call gb_Module_get_clean_target,$(1)) : $$(gb_Module_CURRENTCLEANTARGET)
 
 endef
@@ -244,6 +250,7 @@ gb_Module_CLEANTARGETSTACK := $$(wordlist 2,$$(words $$(gb_Module_CLEANTARGETSTA
 endef
 
 define gb_Module_add_targets
+$(call gb_Module_get_target,$(1)) : $(call gb_Module_get_almost_target,$(1))
 $(foreach target,$(2),$(call gb_Module_add_target,$(1),$(target)))
 
 endef
