@@ -133,6 +133,7 @@ SbiParser::SbiParser( StarBASIC* pb, SbModule* pm )
     bGblDefs =
     bNewGblDefs =
     bSingleLineIf =
+    bCodeCompleting =
     bExplicit = false;
     bClassModule = ( pm->GetModuleType() == com::sun::star::script::ModuleType::CLASS );
     OSL_TRACE("Parser - %s, bClassModule %d", OUStringToOString( pm->GetName(), RTL_TEXTENCODING_UTF8 ).getStr(), bClassModule );
@@ -314,7 +315,15 @@ void SbiParser::StmntBlock( SbiToken eEnd )
     }
 }
 
+void SbiParser::SetCodeCompleting( const bool& b )
+{
+    bCodeCompleting = b;
+}
 
+bool SbiParser::IsCodeCompleting() const
+{
+    return bCodeCompleting;
+}
 
 bool SbiParser::Parse()
 {

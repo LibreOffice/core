@@ -113,6 +113,8 @@ private:
     GetComponentInterface(sal_Bool bCreate = true);
     std::vector< CodeCompleteData > aCodeCompleteCache;
     CodeCompleteListBox* aListBox;
+    OUString GetActualSubName( sal_uLong nLine ); // gets the actual subroutine name according to line number
+    std::vector< OUString > Split( const OUString& sStr, const sal_Unicode& aChar );
 
 protected:
     virtual void    Paint( const Rectangle& );
@@ -471,11 +473,11 @@ class CodeCompleteListBox: public ListBox
 {
 private:
     EditorWindow* pParent; // parent window
-    DECL_LINK(ImplSelectHdl, void*);
 
 public:
     CodeCompleteListBox(EditorWindow* pPar);
     virtual ~CodeCompleteListBox();
+    DECL_LINK(ImplSelectHdl, void*);
 };
 
 } // namespace basctl

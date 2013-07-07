@@ -49,6 +49,16 @@ struct CodeCompleteData
     OUString sVarName;
     OUString sVarParent;
     OUString sVarType;
+
+    inline bool operator==( const CodeCompleteData& aOther )
+    {
+        return (sVarName == aOther.sVarName && sVarParent == aOther.sVarParent);
+    }
+
+    inline bool IsGlobal() const
+    {
+        return ( sVarParent == OUString("") );
+    }
 };
 
 class BASIC_DLLPUBLIC SbModule : public SbxObject, private ::boost::noncopyable
@@ -141,6 +151,7 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::script::XInvocation > GetUnoModule();
     bool createCOMWrapperForIface( ::com::sun::star::uno::Any& o_rRetAny, SbClassModuleObject* pProxyClassModuleObject );
     std::vector< CodeCompleteData > GetCodeCompleteDataFromParse();
+    SbxArrayRef GetMethods();
 };
 
 SV_DECL_IMPL_REF(SbModule)

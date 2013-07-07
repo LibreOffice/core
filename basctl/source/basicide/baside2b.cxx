@@ -486,6 +486,25 @@ bool EditorWindow::ImpCanModify()
     return bCanModify;
 }
 
+std::vector< OUString > EditorWindow::Split( const OUString& sStr, const sal_Unicode& aChar )
+{
+    std::vector< OUString > aRet;
+    OUString sTmp;
+    for( sal_Int32 i = 0; i < sStr.getLength(); ++i )
+    {
+        if( sStr[i] != aChar)
+            sTmp += OUString(sStr[i]);
+        else
+        {
+            aRet.push_back(sTmp);
+            sTmp = OUString("");
+        }
+    }
+    if(sTmp != OUString(""))
+        aRet.push_back(sTmp);
+    return aRet;
+}
+
 void EditorWindow::KeyInput( const KeyEvent& rKEvt )
 {
     SvtMiscOptions aMiscOptions;
@@ -502,44 +521,64 @@ void EditorWindow::KeyInput( const KeyEvent& rKEvt )
     bool const bWasModified = pEditEngine->IsModified();
     // see if there is an accelerator to be processed first
     bool bDone = SfxViewShell::Current()->KeyInput( rKEvt );
-    if( rKEvt.GetKeyCode().GetCode() == KEY_POINT && aMiscOptions.IsExperimentalMode())
+
+    if( rKEvt.GetKeyCode().GetCode() == KEY_POINT && aMiscOptions.IsExperimentalMode() )
     {
+        rModulWindow.UpdateModule();
         TextSelection aSel = GetEditView()->GetSelection();
         sal_uLong nLine =  aSel.GetStart().GetPara();
         OUString aLine( pEditEngine->GetText( nLine ) ); // the line being modified
-
-        OUString aStr = aLine.copy( std::max(aLine.lastIndexOf(" "), aLine.lastIndexOf("\t"))+1 );
-
-        for( unsigned int j = 0; j < aCodeCompleteCache.size(); ++j)
+        OUString aStr = aLine.copy( std::max(aLine.lastIndexOf(" "), aLine.lastIndexOf("\t"))+1 ); // variable name
+        OUString sActSub = GetActualSubName( nLine );
+        std::vector< OUString > aVect = Split( aStr, '.' );
+        OUString sBaseName = aVect[0];
+        for( unsigned int i = 0; i < aCodeCompleteCache.size(); ++i)
         {
-            if( aCodeCompleteCache[j].sVarName == aStr )
+            if( aCodeCompleteCache[i].sVarName.equalsIgnoreAsciiCase( sBaseName ) &&
+                ( aCodeCompleteCache[i].sVarParent == sActSub || aCodeCompleteCache[i].IsGlobal() ) )
             {
                 Reference< lang::XMultiServiceFactory > xFactory( comphelper::getProcessServiceFactory(), UNO_SET_THROW );
                 Reference< reflection::XIdlReflection > xRefl( xFactory->createInstance("com.sun.star.reflection.CoreReflection"), UNO_QUERY_THROW );
+
                 if( xRefl.is() )
                 {
-                    Reference< reflection::XIdlClass > xClass = xRefl->forName(aCodeCompleteCache[j].sVarType);
-                    if( xClass != NULL  )
+                    Reference< reflection::XIdlClass > xClass = xRefl->forName(aCodeCompleteCache[i].sVarType);//get the base class for reflection
+                    if( xClass != NULL )
                     {
-                        Sequence< Reference< reflection::XIdlMethod > > aMethods = xClass->getMethods();
-                        aListBox->Clear();
-
-                        Rectangle aRect = ( (TextEngine*) GetEditEngine() )->PaMtoEditCursor(aSel.GetEnd() , false);
-                        aListBox->SetPosPixel( aRect.TopLeft() );
-                        aListBox->SetSizePixel( Size(150,150) );
-
-                        for(sal_Int32 i = 0; i < aMethods.getLength(); ++i)
+                        unsigned int j = 1;
+                        OUString sMethName;
+                        while( j != aVect.size() )
                         {
-                            aListBox->InsertEntry( OUString(aMethods[i]->getName()) );
-                            SAL_WARN("method information", aMethods[i]->getName());
+                            sMethName = aVect[j];
+                            Reference< reflection::XIdlMethod> xMethod = xClass->getMethod( sMethName );
+                            if( xMethod != NULL ) //method OK
+                            {
+                                xClass = xMethod->getReturnType();
+                                if( xClass == NULL )
+                                    break;
+                            }
+                            else
+                            {
+                                break;
+                            }
+                            j++;
                         }
+                        Sequence< Reference< reflection::XIdlMethod > > aMethods = xClass->getMethods();
+                        if( aMethods.getLength() != 0 )
+                        {
+                            Rectangle aRect = ( (TextEngine*) GetEditEngine() )->PaMtoEditCursor( aSel.GetEnd() , false );
+                            aListBox->SetPosPixel( aRect.TopLeft() );
+                            aListBox->SetSizePixel( Size(150,150) );
 
-                        aListBox->GetFocus();
-                        aListBox->ToggleDropDown();
-                    }
-                    else
-                    {
-                        SAL_WARN("Type does not exist", aCodeCompleteCache[j].sVarType);
+                            for(sal_Int32 l = 0; l < aMethods.getLength(); ++l)
+                            {
+                                aListBox->InsertEntry( OUString(aMethods[l]->getName()) );
+                                std::cerr << aMethods[l]->getName() << std::endl;
+                            }
+
+                            aListBox->GetFocus();
+                            aListBox->ToggleDropDown();
+                        }
                     }
                 }
                 break;
@@ -805,26 +844,17 @@ void EditorWindow::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
         {
             ParagraphInsertedDeleted( rTextHint.GetValue(), true );
             DoDelayedSyntaxHighlight( rTextHint.GetValue() );
-            OUString sMod = rModulWindow.GetSbModule()->GetSource();
-            OUString sActLine = pEditEngine->GetText( rTextHint.GetValue() );
-            std::vector< CodeCompleteData > aData = rModulWindow.GetSbModule()->GetCodeCompleteDataFromParse();
-            aCodeCompleteCache = aData;
+            rModulWindow.UpdateModule();
+            aCodeCompleteCache = rModulWindow.GetSbModule()->GetCodeCompleteDataFromParse();
         }
         else if( rTextHint.GetId() == TEXT_HINT_PARAREMOVED )
         {
             ParagraphInsertedDeleted( rTextHint.GetValue(), false );
-            OUString sMod = rModulWindow.GetSbModule()->GetSource();
-            OUString sActLine = pEditEngine->GetText( rTextHint.GetValue() );
-            std::vector< CodeCompleteData > aData = rModulWindow.GetSbModule()->GetCodeCompleteDataFromParse();
-            aCodeCompleteCache = aData;
+            aCodeCompleteCache = rModulWindow.GetSbModule()->GetCodeCompleteDataFromParse();
         }
         else if( rTextHint.GetId() == TEXT_HINT_PARACONTENTCHANGED )
         {
             DoDelayedSyntaxHighlight( rTextHint.GetValue() );
-            OUString sMod = rModulWindow.GetSbModule()->GetSource();
-            OUString sActLine = pEditEngine->GetText( rTextHint.GetValue() );
-            std::vector< CodeCompleteData > aData = rModulWindow.GetSbModule()->GetCodeCompleteDataFromParse();
-            aCodeCompleteCache = aData;
         }
         else if( rTextHint.GetId() == TEXT_HINT_VIEWSELECTIONCHANGED )
         {
@@ -834,7 +864,32 @@ void EditorWindow::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                 pBindings->Invalidate( SID_COPY );
             }
         }
+        else if( rTextHint.GetId() == TEXT_HINT_MODIFIED )
+        {
+            aCodeCompleteCache = rModulWindow.GetSbModule()->GetCodeCompleteDataFromParse();
+        }
     }
+}
+
+OUString EditorWindow::GetActualSubName( sal_uLong nLine )
+{
+    SbxArrayRef pMethods = rModulWindow.GetSbModule()->GetMethods();
+    for( sal_uInt16 i=0; i < pMethods->Count(); i++ )
+    {
+        SbxVariable* p = PTR_CAST( SbMethod, pMethods->Get( i ) );
+        OUString sName = p->GetName();
+        SbMethod* pMeth = p ? PTR_CAST( SbMethod, p ) : NULL;
+        if( pMeth )
+        {
+            sal_uInt16 l1,l2;
+            pMeth->GetLineRange(l1,l2);
+            if( (l1 <= nLine+1) && (nLine+1 <= l2) )
+            {
+                return sName;
+            }
+        }
+    }
+    return OUString("");
 }
 
 void EditorWindow::SetScrollBarRanges()

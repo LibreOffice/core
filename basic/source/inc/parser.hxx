@@ -42,6 +42,7 @@ class SbiParser : public SbiTokenizer
     bool        bGblDefs;           // true: global definitions general
     bool        bNewGblDefs;        // true: globale definitions before sub
     bool        bSingleLineIf;
+    bool        bCodeCompleting;
 
     SbiSymDef*  VarDecl( SbiDimList**, bool, bool );
     SbiProcDef* ProcDecl(bool bDecl);
@@ -57,7 +58,7 @@ class SbiParser : public SbiTokenizer
     void DefEnum( bool bPrivate );  // Parse enum declaration
     void DefDeclare( bool bPrivate );
     void EnableCompatibility();
-    bool IsUnoInterface(const OUString& sTypeName);
+    bool IsUnoInterface( const OUString& sTypeName );
 public:
     SbxArrayRef   rTypeArray;
     SbxArrayRef   rEnumArray;
@@ -80,6 +81,8 @@ public:
 
     SbiParser( StarBASIC*, SbModule* );
     bool Parse();
+    void SetCodeCompleting( const bool& b );
+    bool IsCodeCompleting() const;
     SbiExprNode* GetWithVar();
 
     // from 31.3.1996, search symbol in the runtime-library
