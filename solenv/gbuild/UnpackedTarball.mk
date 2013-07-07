@@ -130,7 +130,8 @@ define gb_UnpackedTarball__command
 $(call gb_Output_announce,$(2),$(true),PAT,2)
 $(call gb_Helper_abbreviate_dirs,\
 	( \
-		cd $(3) && \
+		cd $(3) \
+		$(if $(UNPACKED_IS_BIN_TARBALL),,&& \
 		$(if $(UNPACKED_PRE_ACTION),\
 			$(UNPACKED_PRE_ACTION) && \
 		) \
@@ -156,6 +157,7 @@ $(call gb_Helper_abbreviate_dirs,\
 			cp -r $(call gb_UnpackedTarball_get_dir,$(2)) $(call gb_UnpackedTarball_get_pristine_dir,$(2)) && \
 		) \
 		touch $(1) \
+		)\
 	) || \
 	( \
 		touch $(call gb_UnpackedTarball_get_preparation_target,$(2)) && \
@@ -230,14 +232,38 @@ $(call gb_UnpackedTarball_get_target,$(1)) : UNPACKED_FIX_EOL += $(addprefix $(c
 
 endef
 
+
+# Internal version of set_tarbal, mostly to avoid repeated invocation of $(shel
+define gb_UnpackedTarball_set_tarball_internal
+$(call gb_UnpackedTarget_UnpackedTarget,$(2),$(call gb_UnpackedTarball_get_dir,$(1)),$(3),$(4))
+$(call gb_UnpackedTarball_get_target,$(1)) : $(call gb_UnpackedTarget_get_target,$(2))
+$(call gb_UnpackedTarball_get_clean_target,$(1)) : $(call gb_UnpackedTarget_get_clean_target,$(2))
+$(call gb_UnpackedTarget_get_target,$(2)) : $(call gb_UnpackedTarball_get_preparation_target,$(1))
+$(if $(findstring in,$(5)),
+$(call gb_UnpackedTarball_get_target,$(1)) : UNPACKED_IS_BIN_TARBALL := YES
+$(call gb_ExternalProject_get_state_target,$(1),%) : UNPACKED_IS_BIN_TARBALL := YES)
+$(if $(findstring out,$(5)),$(call gb_Module_get_target,$(4)) : $(gb_UnpackedTarget_TARFILE_LOCATION)/$(6)
+$(gb_UnpackedTarget_TARFILE_LOCATION)/$(6) : $(call gb_Module_get_almost_target,$(4))
+	$$(call gb_Output_announce,$(6),$(true),PKB,3)
+	if test ! -f "$$@" ; then cd $(call gb_UnpackedTarball_get_dir,) && $(GNUTAR) -czf "$$@" $(1)/ || $(GNUTAR) -czf "$$@" $(1)/ ; else touch "$$@" ; fi)
+
+endef
+
 # Set tarball name
 #
 # gb_UnpackedTarball_set_tarball unpacked tarball-name
 define gb_UnpackedTarball_set_tarball
-$(call gb_UnpackedTarget_UnpackedTarget,$(2),$(call gb_UnpackedTarball_get_dir,$(1)),$(3))
-$(call gb_UnpackedTarball_get_target,$(1)) : $(call gb_UnpackedTarget_get_target,$(2))
-$(call gb_UnpackedTarball_get_clean_target,$(1)) : $(call gb_UnpackedTarget_get_clean_target,$(2))
-$(call gb_UnpackedTarget_get_target,$(2)) : $(call gb_UnpackedTarball_get_preparation_target,$(1))
+$(if $(findstring YES,$(USE_LIBRARY_BIN_TAR)),
+$(if $(4),
+$(if $(shell "$(SRCDIR)/solenv/bin/bin_library_info.sh" -l "$(gb_UnpackedTarget_TARFILE_LOCATION)" -o "$(4)" -b "$(BUILDDIR)" -s "$(SRCDIR)" -t "$(2)" -m verify -p "$(INPATH)"),
+$(call gb_UnpackedTarball_set_tarball_internal,$(1),$(shell "$(SRCDIR)/solenv/bin/bin_library_info.sh" -l "$(gb_UnpackedTarget_TARFILE_LOCATION)" -o "$(4)" -b "$(BUILDDIR)" -s "$(SRCDIR)" -t "$(2)" -m verify -p "$(INPATH)"),$(3),$(4),in),\
+$(call gb_UnpackedTarball_set_tarball_internal,$(1),$(2),$(3),$(4),out,$(shell "$(SRCDIR)/solenv/bin/bin_library_info.sh" -l "$(gb_UnpackedTarget_TARFILE_LOCATION)" -o "$(4)" -b "$(BUILDDIR)" -s "$(SRCDIR)" -t "$(2)" -m name -p "$(INPATH)")))
+,
+$(call gb_UnpackedTarball_set_tarball_internal,$(1),$(2),$(3),$(4),)
+)
+,
+$(call gb_UnpackedTarball_set_tarball_internal,$(1),$(2),$(3),$(4),)
+)
 
 endef
 

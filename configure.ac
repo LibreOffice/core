@@ -256,7 +256,7 @@ if test -n "$with_android_ndk"; then
     if test $host_cpu = arm; then
         ANDROID_APP_ABI=armeabi-v7a
         if test -n "$ANDROID_USING_CLANG"; then
-            ANDROIDCFLAGS="-gcc-toolchain $ANDROID_BINUTILS_PREBUILT_ROOT" 
+            ANDROIDCFLAGS="-gcc-toolchain $ANDROID_BINUTILS_PREBUILT_ROOT"
             ANDROIDCFLAGS="$ANDROIDCFLAGS -target armv7-none-linux-androideabi"
             ANDROIDCFLAGS="$ANDROIDCFLAGS -no-canonical-prefixes"
         else
@@ -1204,6 +1204,22 @@ AC_ARG_ENABLE(openssl,
          use only if you are hacking on it.]),
 ,enable_openssl=yes)
 
+AC_ARG_ENABLE(library-bin-tar,
+    AS_HELP_STRING([--enable-library-bin-tar],
+        [Enable the building and reused of tarball of binary build for some 'external' libraries
+        Some libraries can save their build result in a tarball
+        stored in TARFILE_LOCATION. that binary tarball is
+        uniquely identified by the source tarbal,
+        the content of the config_host.mk file and the content
+        of the top-level directory in core for that library
+        If this option is enabled, then if such a tarfile exist, it will be untarred
+        isntead of the source tarfile, and the build step will be skipped for that
+        library.
+        If a proper tarfile does not exist, then the normal source-based
+        build is done for taht library and a proper binary tarfile is created
+        for the next time.]),
+)
+
 dnl ===================================================================
 dnl Optional Packages (--with/without-)
 dnl ===================================================================
@@ -1813,26 +1829,26 @@ AC_ARG_WITH(branding,
     AS_HELP_STRING([--with-branding],
         [Use given path to retrieve branding images set.])
     [
-                          Search for intro.png about.svg flat_logo.svg 
-                          backing_left.png backing_right.png 
-                          backing_rtl_left.png backing_rtl_right.png 
+                          Search for intro.png about.svg flat_logo.svg
+                          backing_left.png backing_right.png
+                          backing_rtl_left.png backing_rtl_right.png
                           backing_space.png. If any is missing, default
                           ones will be used instead.
 
-                          Search also progress.conf for progress 
+                          Search also progress.conf for progress
                           settings on intro screen :
 
-                          PROGRESSBARCOLOR="255,255,255" Set color of 
+                          PROGRESSBARCOLOR="255,255,255" Set color of
                           progress bar. Comma separated RGB decimal values.
-                          PROGRESSSIZE="407,6" Set size of progress bar. 
+                          PROGRESSSIZE="407,6" Set size of progress bar.
                           Comma separated decimal values (width, height).
                           PROGRESSPOSITION="61,317" Set position of progress
                           bar from left,top. Comma separated decimal values.
                           PROGRESSFRAMECOLOR="20,136,3" Set color of progress
                           bar frame. Comma separated RGB decimal values.
-                          PROGRESSTEXTCOLOR="255,255,255" Set color of progress 
+                          PROGRESSTEXTCOLOR="255,255,255" Set color of progress
                           bar text. Comma separated RGB decimal values.
-                          PROGRESSTEXTBASELINE="287" Set vertical position of 
+                          PROGRESSTEXTBASELINE="287" Set vertical position of
                           progress bar text from top. Decimal value.
 
                           Default values will be used if not found.
@@ -1933,6 +1949,17 @@ AC_ARG_WITH(check-jobs,
 AC_ARG_WITH(all-tarballs,
     AS_HELP_STRING([--with-all-tarballs],
         [Download all external tarballs unconditionally]))
+
+dnl ===================================================================
+dnl Do we want to use pre-build binary tarball for recompile
+dnl ===================================================================
+
+if test "$enable_library_bin_tar" = "yes" ; then
+   USE_LIBRARY_BIN_TAR=YES
+else
+   USE_LIBRARY_BIN_TAR=NO
+fi
+AC_SUBST(USE_LIBRARY_BIN_TAR)
 
 dnl ===================================================================
 dnl Test whether build target is Release Build
@@ -3922,7 +3949,7 @@ mingw*)
         AC_MSG_ERROR([Unsupported host_cpu $host_cpu for host_os $host_os])
         ;;
     esac
-    
+
     SOLARLIB="-L${SOLARVER}/${OUTPATH}${PROEXT}/lib"
     ;;
 

@@ -194,9 +194,12 @@ endef
 #
 
 define gb_ExternalProject_run
+$(if $(findstring YES,$(UNPACKED_IS_BIN_TARBALL)),\
+	touch $@,
 $(call gb_Helper_print_on_error,cd $(EXTERNAL_WORKDIR)/$(3) && \
 	$(if $(WRAPPERS),export $(WRAPPERS) &&) \
 	$(2) && touch $@,$(EXTERNAL_WORKDIR)/$(if $(3),$(3)/,)$(if $(4),$(4),$(1).log))
+)
 endef
 
 # vim: set noet sw=4 ts=4:
