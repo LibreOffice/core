@@ -9,7 +9,7 @@
 
 $(eval $(call gb_UnpackedTarball_UnpackedTarball,xml2))
 
-$(eval $(call gb_UnpackedTarball_set_tarball,xml2,$(LIBXML_TARBALL)))
+$(eval $(call gb_UnpackedTarball_set_tarball,xml2,$(LIBXML_TARBALL),,libxml2))
 
 $(eval $(call gb_UnpackedTarball_add_patches,xml2,\
 	libxml2/libxml2-configure.patch \

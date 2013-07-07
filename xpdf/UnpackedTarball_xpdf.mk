@@ -9,7 +9,7 @@
 
 $(eval $(call gb_UnpackedTarball_UnpackedTarball,xpdf))
 
-$(eval $(call gb_UnpackedTarball_set_tarball,xpdf,$(XPDF_TARBALL)))
+$(eval $(call gb_UnpackedTarball_set_tarball,xpdf,$(XPDF_TARBALL),,xpdf))
 
 $(eval $(call gb_UnpackedTarball_fix_end_of_line,xpdf,\
 	ms_make.bat \

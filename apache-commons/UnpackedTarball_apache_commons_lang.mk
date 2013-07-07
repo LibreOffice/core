@@ -9,6 +9,6 @@
 
 $(eval $(call gb_UnpackedTarball_UnpackedTarball,apache_commons_lang))
 
-$(eval $(call gb_UnpackedTarball_set_tarball,apache_commons_lang,$(APACHE_COMMONS_LANG_TARBALL)))
+$(eval $(call gb_UnpackedTarball_set_tarball,apache_commons_lang,$(APACHE_COMMONS_LANG_TARBALL),,apache-commons))
 
 # vim: set noet sw=4 ts=4:

@@ -9,7 +9,7 @@
 
 $(eval $(call gb_UnpackedTarball_UnpackedTarball,redland))
 
-$(eval $(call gb_UnpackedTarball_set_tarball,redland,$(REDLAND_TARBALL)))
+$(eval $(call gb_UnpackedTarball_set_tarball,redland,$(REDLAND_TARBALL),,redland))
 
 # configure generated files for MSVC
 $(eval $(call gb_UnpackedTarball_add_file,redland,src/librdf.h,redland/redland/librdf.h))

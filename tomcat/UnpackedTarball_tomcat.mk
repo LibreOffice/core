@@ -9,7 +9,7 @@
 
 $(eval $(call gb_UnpackedTarball_UnpackedTarball,tomcat))
 
-$(eval $(call gb_UnpackedTarball_set_tarball,tomcat,$(TOMCAT_TARBALL)))
+$(eval $(call gb_UnpackedTarball_set_tarball,tomcat,$(TOMCAT_TARBALL),,tomcat))
 
 
 $(eval $(call gb_UnpackedTarball_add_file,tomcat,servletapi/build.xml,tomcat/build.xml))

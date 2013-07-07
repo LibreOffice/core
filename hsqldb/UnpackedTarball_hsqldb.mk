@@ -9,7 +9,7 @@
 
 $(eval $(call gb_UnpackedTarball_UnpackedTarball,hsqldb))
 
-$(eval $(call gb_UnpackedTarball_set_tarball,hsqldb,$(HSQLDB_TARBALL)))
+$(eval $(call gb_UnpackedTarball_set_tarball,hsqldb,$(HSQLDB_TARBALL),,hsqldb))
 
 $(eval $(call gb_UnpackedTarball_fix_end_of_line,hsqldb,\
 	build/build.xml \

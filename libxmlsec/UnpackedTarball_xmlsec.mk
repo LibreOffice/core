@@ -9,7 +9,7 @@
 
 $(eval $(call gb_UnpackedTarball_UnpackedTarball,xmlsec))
 
-$(eval $(call gb_UnpackedTarball_set_tarball,xmlsec,$(LIBXMLSEC_TARBALL)))
+$(eval $(call gb_UnpackedTarball_set_tarball,xmlsec,$(LIBXMLSEC_TARBALL),,libxmlsec))
 
 $(eval $(call gb_UnpackedTarball_add_patches,xmlsec,\
 	libxmlsec/xmlsec1-configure.patch \
