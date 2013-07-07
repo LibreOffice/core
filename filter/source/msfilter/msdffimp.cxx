@@ -4141,6 +4141,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
     if ( aObjData.bOpt2 )
     {
         maShapeRecords.Current()->SeekToBegOfRecord( rSt );
+        delete pSecPropSet;
         pSecPropSet = new DffPropertyReader( *this );
         pSecPropSet->ReadPropSet( rSt, NULL );
     }
