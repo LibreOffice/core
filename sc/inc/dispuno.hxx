@@ -24,7 +24,7 @@
 #include <com/sun/star/view/XSelectionChangeListener.hpp>
 #include <cppuhelper/implbase2.hxx>
 #include <svl/lstner.hxx>
-#include "global.hxx"       // ScImportParam
+#include "global.hxx"       ///< ScImportParam
 #include <boost/ptr_container/ptr_vector.hpp>
 
 
@@ -47,17 +47,17 @@ class ScDispatchProviderInterceptor : public cppu::WeakImplHelper2<
 {
     ScTabViewShell*     pViewShell;
 
-    // the component which's dispatches we're intercepting
+    /// the component which's dispatches we're intercepting
     ::com::sun::star::uno::Reference<
         ::com::sun::star::frame::XDispatchProviderInterception> m_xIntercepted;
 
-    // chaining
+    /// chaining
     ::com::sun::star::uno::Reference<
         ::com::sun::star::frame::XDispatchProvider> m_xSlaveDispatcher;
     ::com::sun::star::uno::Reference<
         ::com::sun::star::frame::XDispatchProvider> m_xMasterDispatcher;
 
-    // own dispatch
+    /// own dispatch
     ::com::sun::star::uno::Reference<
         ::com::sun::star::frame::XDispatch> m_xMyDispatch;
 
@@ -68,7 +68,7 @@ public:
 
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
-                            // XDispatchProvider
+                            /// XDispatchProvider
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > SAL_CALL
                             queryDispatch( const ::com::sun::star::util::URL& aURL,
                                         const OUString& aTargetFrameName,
@@ -80,7 +80,7 @@ public:
                                         ::com::sun::star::frame::DispatchDescriptor >& aDescripts )
                                     throw(::com::sun::star::uno::RuntimeException);
 
-                            // XDispatchProviderInterceptor
+                            /// XDispatchProviderInterceptor
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider > SAL_CALL
                             getSlaveDispatchProvider() throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL   setSlaveDispatchProvider( const ::com::sun::star::uno::Reference<
@@ -92,7 +92,7 @@ public:
                                 ::com::sun::star::frame::XDispatchProvider >& xNewSupplier )
                                 throw(::com::sun::star::uno::RuntimeException);
 
-                            // XEventListener
+                            /// XEventListener
     virtual void SAL_CALL   disposing( const ::com::sun::star::lang::EventObject& Source )
                                 throw(::com::sun::star::uno::RuntimeException);
 };
@@ -115,7 +115,7 @@ public:
 
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
-                            // XDispatch
+                            /// XDispatch
     virtual void SAL_CALL   dispatch( const ::com::sun::star::util::URL& aURL,
                                 const ::com::sun::star::uno::Sequence<
                                     ::com::sun::star::beans::PropertyValue >& aArgs )
@@ -129,11 +129,11 @@ public:
                                 const ::com::sun::star::util::URL& aURL )
                                 throw(::com::sun::star::uno::RuntimeException);
 
-                            // XSelectionChangeListener
+                            /// XSelectionChangeListener
     virtual void SAL_CALL   selectionChanged( const ::com::sun::star::lang::EventObject& aEvent )
                                 throw (::com::sun::star::uno::RuntimeException);
 
-                            // XEventListener
+                            /// XEventListener
     virtual void SAL_CALL   disposing( const ::com::sun::star::lang::EventObject& Source )
                                 throw (::com::sun::star::uno::RuntimeException);
 };
