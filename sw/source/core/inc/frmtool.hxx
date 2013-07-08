@@ -70,7 +70,7 @@ SwFlyFrm *GetFlyFromMarked( const SdrMarkList *pLst, ViewShell *pSh );
 
 sal_uLong SqRt( BigInt nX );
 
-SwFrm *SaveCntnt( SwLayoutFrm *pLay, SwFrm *pStart );
+SwFrm *SaveCntnt( SwLayoutFrm *pLay, SwFrm *pStart = NULL );
 void RestoreCntnt( SwFrm *pSav, SwLayoutFrm *pParent, SwFrm *pSibling, bool bGrow );
 
 // Get CntntNodes, create CntntFrms, and add them to LayFrm.

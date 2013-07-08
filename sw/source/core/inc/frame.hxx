@@ -234,7 +234,7 @@ class SwFrm: public SwClient, public SfxBroadcaster
     friend class SwLooping;
 
     // voids lower during creation of a column
-    friend SwFrm *SaveCntnt( SwLayoutFrm *, SwFrm* pStart = NULL );
+    friend SwFrm *SaveCntnt( SwLayoutFrm *, SwFrm* pStart );
     friend void   RestoreCntnt( SwFrm *, SwLayoutFrm *, SwFrm *pSibling, bool bGrow );
 
 #ifdef DBG_UTIL

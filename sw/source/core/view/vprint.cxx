@@ -172,7 +172,7 @@ void SwPaintQueue::Remove( ViewShell *pSh )
     }
 }
 
-void SetSwVisArea( ViewShell *pSh, const SwRect &rRect, sal_Bool /*bPDFExport*/ )
+void SetSwVisArea( ViewShell *pSh, const SwRect &rRect )
 {
     OSL_ENSURE( !pSh->GetWin(), "Drucken mit Window?" );
     pSh->maVisArea = rRect;
