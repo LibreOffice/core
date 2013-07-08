@@ -68,7 +68,7 @@ friend class SfxTabDialogController;
     VclBox *m_pBox;
     TabControl *m_pTabCtrl;
 
-    OKButton *m_pOKBtn;
+    PushButton* m_pOKBtn;
     PushButton* m_pApplyBtn;
     PushButton* m_pUserBtn;
     CancelButton* m_pCancelBtn;
@@ -205,8 +205,8 @@ public:
     const SfxItemSet*   GetOutputItemSet() const { return pOutSet; }
     sal_Bool IsFormat() const { return bFmt; }
 
-    const OKButton&     GetOKButton() const { return *m_pOKBtn; }
-    OKButton&           GetOKButton() { return *m_pOKBtn; }
+    const PushButton&   GetOKButton() const { return *m_pOKBtn; }
+    PushButton&         GetOKButton() { return *m_pOKBtn; }
     const CancelButton& GetCancelButton() const { return *m_pCancelBtn; }
     CancelButton&       GetCancelButton() { return *m_pCancelBtn; }
     const HelpButton&   GetHelpButton() const { return *m_pHelpBtn; }

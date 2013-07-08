@@ -594,7 +594,7 @@ void SfxTabDialog::Init_Impl( sal_Bool bFmtFlag, const String* pUserButtonText, 
         set_action_area(m_pActionArea);
     }
 
-    m_pOKBtn = m_pUIBuilder ? m_pUIBuilder->get<OKButton>("ok") : NULL;
+    m_pOKBtn = m_pUIBuilder ? m_pUIBuilder->get<PushButton>("ok") : NULL;
     m_bOwnsOKBtn = m_pOKBtn == NULL;
     if (m_bOwnsOKBtn)
         m_pOKBtn = new OKButton(m_pActionArea);

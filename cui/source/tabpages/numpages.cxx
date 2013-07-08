@@ -363,7 +363,7 @@ IMPL_LINK_NOARG(SvxSingleNumPickTabPage, NumSelectHdl_Impl)
 IMPL_LINK_NOARG(SvxSingleNumPickTabPage, DoubleClickHdl_Impl)
 {
     NumSelectHdl_Impl(m_pExamplesVS);
-    OKButton& rOk = GetTabDialog()->GetOKButton();
+    PushButton& rOk = GetTabDialog()->GetOKButton();
     rOk.GetClickHdl().Call(&rOk);
     return 0;
 }
@@ -514,7 +514,7 @@ IMPL_LINK_NOARG(SvxBulletPickTabPage, NumSelectHdl_Impl)
 IMPL_LINK_NOARG(SvxBulletPickTabPage, DoubleClickHdl_Impl)
 {
     NumSelectHdl_Impl(m_pExamplesVS);
-    OKButton& rOk = GetTabDialog()->GetOKButton();
+    PushButton& rOk = GetTabDialog()->GetOKButton();
     rOk.GetClickHdl().Call(&rOk);
     return 0;
 }
@@ -765,7 +765,7 @@ IMPL_LINK_NOARG(SvxNumPickTabPage, NumSelectHdl_Impl)
 IMPL_LINK_NOARG(SvxNumPickTabPage, DoubleClickHdl_Impl)
 {
     NumSelectHdl_Impl(m_pExamplesVS);
-    OKButton& rOk = GetTabDialog()->GetOKButton();
+    PushButton& rOk = GetTabDialog()->GetOKButton();
     rOk.GetClickHdl().Call(&rOk);
     return 0;
 }
@@ -979,7 +979,7 @@ IMPL_LINK_NOARG(SvxBitmapPickTabPage, NumSelectHdl_Impl)
 IMPL_LINK_NOARG(SvxBitmapPickTabPage, DoubleClickHdl_Impl)
 {
     NumSelectHdl_Impl(m_pExamplesVS);
-    OKButton& rOk = GetTabDialog()->GetOKButton();
+    PushButton& rOk = GetTabDialog()->GetOKButton();
     rOk.GetClickHdl().Call(&rOk);
     return 0;
 }
