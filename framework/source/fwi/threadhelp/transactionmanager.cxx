@@ -177,7 +177,7 @@ EWorkingMode TransactionManager::getWorkingMode() const
 
     @seealso    method unregisterTransaction()
 
-    @param      "eMode"     ,used to enable/disable throwing exceptions automaticly for rejected calls
+    @param      "eMode"     ,used to enable/disable throwing exceptions automatically for rejected calls
     @param      "eReason"   ,reason for rejected calls if eMode=E_NOEXCEPTIONS
     @return     -
 
@@ -273,9 +273,9 @@ sal_Bool  TransactionManager::isCallRejected( ERejectReason& eReason ) const
 
 /*-****************************************************************************************************//**
     @short      throw any exceptions for rejected calls
-    @descr      If user whish to use our automaticly exception mode we use this impl-method.
-                We check all combinations of eReason and eExceptionMode and throw right exception with some
-                descriptions for recipient of it.
+    @descr      If a user wishes to use our automatic exception mode we use this impl-method.
+                We check all combinations of eReason and eExceptionMode and throw correct exception with some
+                descriptions for the recipient.
 
     @seealso    method registerTransaction()
     @seealso    enum ERejectReason
@@ -296,7 +296,7 @@ void TransactionManager::impl_throwExceptions( EExceptionMode eMode, ERejectReas
             case E_UNINITIALIZED   :    if( eMode == E_HARDEXCEPTIONS )
                                         {
                                             // Help programmer to find out, why this exception is thrown!
-                                            LOG_ERROR( "TransactionManager...", "Owner instance not right initialized yet. Call was rejected! Normaly it's an algorithm error ... wrong usin of class!" )
+                                            LOG_ERROR( "TransactionManager...", "Owner instance not correctly initialized yet. Call was rejected! Normally it's an algorithm error ... wrong use of class!" )
                                             //ATTENTION: temp. disabled - till all bad code positions are detected and changed! */
                                             // throw css::uno::RuntimeException( DECLARE_ASCII("TransactionManager...\nOwner instance not right initialized yet. Call was rejected! Normaly it's an algorithm error ... wrong usin of class!\n" ), css::uno::Reference< css::uno::XInterface >() );
                                         }
