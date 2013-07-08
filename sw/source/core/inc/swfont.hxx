@@ -27,6 +27,7 @@
 #include <swtypes.hxx>
 #include <drawfont.hxx>     // SwDrawTextInfo
 #include <editeng/borderline.hxx> // SvxBorderLine
+#include <boost/optional.hpp>
 
 class SfxItemSet;
 class SwAttrSet;
@@ -130,10 +131,10 @@ class SwFont
     Color       aOverColor;     // color of the overlining
 
     // character borders
-    editeng::SvxBorderLine*     m_pTopBorder;
-    editeng::SvxBorderLine*     m_pBottomBorder;
-    editeng::SvxBorderLine*     m_pRightBorder;
-    editeng::SvxBorderLine*     m_pLeftBorder;
+    boost::optional<editeng::SvxBorderLine>     m_aTopBorder;
+    boost::optional<editeng::SvxBorderLine>     m_aBottomBorder;
+    boost::optional<editeng::SvxBorderLine>     m_aRightBorder;
+    boost::optional<editeng::SvxBorderLine>     m_aLeftBorder;
 
     sal_uInt8       nToxCnt;        // Zaehlt die Schachtelungstiefe der Tox
     sal_uInt8       nRefCnt;        // Zaehlt die Schachtelungstiefe der Refs
@@ -181,10 +182,10 @@ public:
     void SetRightBorder( const editeng::SvxBorderLine* pRightBorder );
     void SetLeftBorder( const editeng::SvxBorderLine* pLeftBorder );
 
-    const editeng::SvxBorderLine* GetTopBorder() { return m_pTopBorder; }
-    const editeng::SvxBorderLine* GetBottomBorder() { return m_pBottomBorder; }
-    const editeng::SvxBorderLine* GetRightBorder() { return m_pRightBorder; }
-    const editeng::SvxBorderLine* GetLeftBorder() { return m_pLeftBorder; }
+    const boost::optional<editeng::SvxBorderLine>& GetTopBorder() { return m_aTopBorder; }
+    const boost::optional<editeng::SvxBorderLine>& GetBottomBorder() { return m_aBottomBorder; }
+    const boost::optional<editeng::SvxBorderLine>& GetRightBorder() { return m_aRightBorder; }
+    const boost::optional<editeng::SvxBorderLine>& GetLeftBorder() { return m_aLeftBorder; }
 
     inline void ChkMagic( ViewShell *pSh, sal_uInt8 nWhich )
         { if( !aSub[ nWhich ].pMagic ) GoMagic( pSh, nWhich ); }
