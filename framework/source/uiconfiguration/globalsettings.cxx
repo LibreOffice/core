@@ -32,7 +32,7 @@
 
 #include <rtl/ustrbuf.hxx>
 #include <rtl/instance.hxx>
-#include <cppuhelper/weak.hxx>
+#include <cppuhelper/implbase2.hxx>
 
 //_________________________________________________________________________________________________________________
 //  Defines
@@ -59,17 +59,14 @@ namespace framework
 //  Configuration access class for WindowState supplier implementation
 //*****************************************************************************************************************
 
-class GlobalSettings_Access : public ::com::sun::star::lang::XComponent      ,
-                              public ::com::sun::star::lang::XEventListener  ,
-                              private ThreadHelpBase                         ,  // Struct for right initalization of mutex member! Must be first of baseclasses.
-                              public ::cppu::OWeakObject
+class GlobalSettings_Access : private ThreadHelpBase                         ,  // Struct for right initalization of mutex member! Must be first of baseclasses.
+                              public ::cppu::WeakImplHelper2<
+                                  ::com::sun::star::lang::XComponent,
+                                  ::com::sun::star::lang::XEventListener>
 {
     public:
         GlobalSettings_Access( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext );
         virtual ~GlobalSettings_Access();
-
-        // XInterface, XTypeProvider, XServiceInfo
-        FWK_DECLARE_XINTERFACE
 
         // XComponent
         virtual void SAL_CALL dispose() throw (::com::sun::star::uno::RuntimeException);
@@ -99,13 +96,6 @@ class GlobalSettings_Access : public ::com::sun::star::lang::XComponent      ,
 
 
 //*****************************************************************************************************************
-//  XInterface
-//*****************************************************************************************************************
-DEFINE_XINTERFACE_2     (   GlobalSettings_Access                           ,
-                            OWeakObject                                     ,
-                            DIRECT_INTERFACE ( css::lang::XComponent        ),
-                            DIRECT_INTERFACE ( css::lang::XEventListener    )
-                        )
 
 GlobalSettings_Access::GlobalSettings_Access( const css::uno::Reference< css::uno::XComponentContext >& rxContext ) :
     ThreadHelpBase(),
