@@ -1538,10 +1538,6 @@ void ScColumn::RegroupFormulaCells( SCROW /*nRow1*/, SCROW /*nRow2*/ )
 {
 }
 
-void ScColumn::FormulaCellsUndecided( SCROW /*nRow1*/, SCROW /*nRow2*/ )
-{
-}
-
 #if DEBUG_COLUMN_STORAGE
 
 namespace {
