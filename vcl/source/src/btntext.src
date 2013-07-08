@@ -151,4 +151,9 @@ String SV_BUTTONTEXT_GO_DOWN
     Text [ en-US ] = "Do~wn" ;
 };
 
+String SV_BUTTONTEXT_CLEAR
+{
+    Text [ en-US ] = "~Clear" ;
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

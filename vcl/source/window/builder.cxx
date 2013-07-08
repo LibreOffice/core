@@ -601,6 +601,8 @@ namespace
             return (VclResId(SV_BUTTONTEXT_GO_UP).toString());
         else if (rType == "gtk-go-down")
             return (VclResId(SV_BUTTONTEXT_GO_DOWN).toString());
+        else if (rType == "gtk-clear")
+            return (VclResId(SV_BUTTONTEXT_CLEAR).toString());
         SAL_WARN("vcl.layout", "unknown stock type: " << rType.getStr());
         return OUString();
     }
