@@ -2267,9 +2267,23 @@ bool ScColumn::UpdateReference(
 {
     if (eUpdateRefMode == URM_COPY)
     {
+        // When copying, the range equals the destination range where cells
+        // are pasted, and the dx, dy, dz refer to the distance from the
+        // source range.
+
         UpdateRefOnCopy aHandler(rRange, nDx, nDy, nDz, pUndoDoc);
-        FormulaCellsUndecided(rRange.aStart.Row(), rRange.aEnd.Row());
-        sc::ProcessBlock(maCells.begin(), maCells, aHandler, rRange.aStart.Row(), rRange.aEnd.Row());
+        sc::CellStoreType::position_type aPos = maCells.position(rRange.aStart.Row());
+        sc::ProcessBlock(aPos.first, maCells, aHandler, rRange.aStart.Row(), rRange.aEnd.Row());
+
+        // The formula groups at the top and bottom boundaries are expected to
+        // have been split prior to this call. Here, we only do the joining.
+        JoinFormulaCellAbove(aPos);
+        if (rRange.aEnd.Row() < MAXROW)
+        {
+            aPos = maCells.position(aPos.first, rRange.aEnd.Row()+1);
+            JoinFormulaCellAbove(aPos);
+        }
+
         return aHandler.isUpdated();
     }
 
