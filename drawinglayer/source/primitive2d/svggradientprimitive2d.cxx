@@ -299,7 +299,11 @@ namespace drawinglayer
         {
         }
 
-        bool SvgGradientHelper::equalTo(const SvgGradientHelper& rSvgGradientHelper) const
+        SvgGradientHelper::~SvgGradientHelper()
+        {
+        }
+
+        bool SvgGradientHelper::operator==(const SvgGradientHelper& rSvgGradientHelper) const
         {
             const SvgGradientHelper& rCompare = static_cast< const SvgGradientHelper& >(rSvgGradientHelper);
 
@@ -578,7 +582,7 @@ namespace drawinglayer
         {
             const SvgGradientHelper* pSvgGradientHelper = dynamic_cast< const SvgGradientHelper* >(&rPrimitive);
 
-            if(pSvgGradientHelper && SvgGradientHelper::equalTo(*pSvgGradientHelper))
+            if(pSvgGradientHelper && SvgGradientHelper::operator==(*pSvgGradientHelper))
             {
                 const SvgLinearGradientPrimitive2D& rCompare = static_cast< const SvgLinearGradientPrimitive2D& >(rPrimitive);
 
@@ -878,7 +882,7 @@ namespace drawinglayer
         {
             const SvgGradientHelper* pSvgGradientHelper = dynamic_cast< const SvgGradientHelper* >(&rPrimitive);
 
-            if(pSvgGradientHelper && SvgGradientHelper::equalTo(*pSvgGradientHelper))
+            if(pSvgGradientHelper && SvgGradientHelper::operator==(*pSvgGradientHelper))
             {
                 const SvgRadialGradientPrimitive2D& rCompare = static_cast< const SvgRadialGradientPrimitive2D& >(rPrimitive);
 
