@@ -343,7 +343,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="justify">left</property>
-        <property name="selectable">True</property>
+        <property name="selectable">False</property>
         <property name="max_width_chars">56</property>
         <property name="wrap">True</property>
         <property name="hexpand">True</property>
