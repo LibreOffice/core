@@ -14,6 +14,16 @@
 
 #include <fstream>
 
+FileFormat aFileFormats[] = {
+    { "ods" , "calc8", "", ODS_FORMAT_TYPE },
+    { "xls" , "MS Excel 97", "calc_MS_EXCEL_97", XLS_FORMAT_TYPE },
+    { "xlsx", "Calc MS Excel 2007 XML" , "MS Excel 2007 XML", XLSX_FORMAT_TYPE },
+    { "csv" , "Text - txt - csv (StarCalc)", "generic_Text", CSV_FORMAT_TYPE },
+    { "html" , "calc_HTML_WebQuery", "generic_HTML", HTML_FORMAT_TYPE },
+    { "123" , "Lotus", "calc_Lotus", LOTUS123_FORMAT_TYPE },
+    { "dif", "DIF", "calc_DIF", DIF_FORMAT_TYPE },
+};
+
 bool testEqualsWithTolerance( long nVal1, long nVal2, long nTol )
 {
     return ( labs( nVal1 - nVal2 ) <= nTol );

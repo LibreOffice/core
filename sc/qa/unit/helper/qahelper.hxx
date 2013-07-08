@@ -71,15 +71,7 @@ struct FileFormat {
     const char* pName; const char* pFilterName; const char* pTypeName; unsigned int nFormatType;
 };
 
-FileFormat aFileFormats[] = {
-    { "ods" , "calc8", "", ODS_FORMAT_TYPE },
-    { "xls" , "MS Excel 97", "calc_MS_EXCEL_97", XLS_FORMAT_TYPE },
-    { "xlsx", "Calc MS Excel 2007 XML" , "MS Excel 2007 XML", XLSX_FORMAT_TYPE },
-    { "csv" , "Text - txt - csv (StarCalc)", "generic_Text", CSV_FORMAT_TYPE },
-    { "html" , "calc_HTML_WebQuery", "generic_HTML", HTML_FORMAT_TYPE },
-    { "123" , "Lotus", "calc_Lotus", LOTUS123_FORMAT_TYPE },
-    { "dif", "DIF", "calc_DIF", DIF_FORMAT_TYPE },
-};
+extern FileFormat aFileFormats[];
 
 // Why is this here and not in osl, and using the already existing file
 // handling APIs? Do we really want to add arbitrary new file handling
@@ -94,7 +86,9 @@ SC_DLLPUBLIC void testFile(OUString& aFileName, ScDocument* pDoc, SCTAB nTab, St
 //need own handler because conditional formatting strings must be generated
 SC_DLLPUBLIC void testCondFile(OUString& aFileName, ScDocument* pDoc, SCTAB nTab);
 
-std::string print(const ScAddress& rAddr)
+SC_DLLPUBLIC void clearRange(ScDocument* pDoc, const ScRange& rRange);
+
+inline std::string print(const ScAddress& rAddr)
 {
     std::ostringstream str;
     str << "Col: " << rAddr.Col();
