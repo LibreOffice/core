@@ -10,6 +10,8 @@
 #ifndef _RTFSDRIMPORT_HXX_
 #define _RTFSDRIMPORT_HXX_
 
+#include <stack>
+
 #include <rtfdocumentimpl.hxx>
 
 namespace writerfilter {
@@ -32,12 +34,16 @@ namespace writerfilter {
                  * @param bNew if the frame is new-style or old-style.
                  */
                 std::vector<beans::PropertyValue> getTextFrameDefaults(bool bNew);
+                /// Push a new group shape to the parent stack.
+                void pushParent(uno::Reference<drawing::XShapes> xParent);
+                /// Pop the current group shape from the parent stack.
+                void popParent();
             private:
                 void createShape(OUString aService, uno::Reference<drawing::XShape>& xShape, uno::Reference<beans::XPropertySet>& xPropertySet);
                 void applyProperty(uno::Reference<drawing::XShape> xShape, OUString aKey, OUString aValue);
 
                 RTFDocumentImpl& m_rImport;
-                uno::Reference<drawing::XDrawPage> m_xDrawPage;
+                std::stack< uno::Reference<drawing::XShapes> > m_aParents;
                 uno::Reference<drawing::XShape> m_xShape;
         };
     } // namespace rtftok

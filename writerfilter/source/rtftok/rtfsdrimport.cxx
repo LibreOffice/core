@@ -47,11 +47,13 @@ RTFSdrImport::RTFSdrImport(RTFDocumentImpl& rDocument,
 {
     uno::Reference<drawing::XDrawPageSupplier> xDrawings(xDstDoc, uno::UNO_QUERY);
     if (xDrawings.is())
-        m_xDrawPage.set(xDrawings->getDrawPage(), uno::UNO_QUERY);
+        m_aParents.push(xDrawings->getDrawPage());
 }
 
 RTFSdrImport::~RTFSdrImport()
 {
+    if (m_aParents.size())
+        m_aParents.pop();
 }
 
 void RTFSdrImport::createShape(OUString aStr, uno::Reference<drawing::XShape>& xShape, uno::Reference<beans::XPropertySet>& xPropertySet)
@@ -101,6 +103,16 @@ std::vector<beans::PropertyValue> RTFSdrImport::getTextFrameDefaults(bool bNew)
     aPropertyValue.Value <<= text::SizeType::FIX;
     aRet.push_back(aPropertyValue);
     return aRet;
+}
+
+void RTFSdrImport::pushParent(uno::Reference<drawing::XShapes> xParent)
+{
+    m_aParents.push(xParent);
+}
+
+void RTFSdrImport::popParent()
+{
+    m_aParents.pop();
 }
 
 void RTFSdrImport::resolveDhgt(uno::Reference<beans::XPropertySet> xPropertySet, sal_Int32 nZOrder)
@@ -544,8 +556,8 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose)
         return;
     }
 
-    if (m_xDrawPage.is() && !bTextFrame)
-        m_xDrawPage->add(xShape);
+    if (m_aParents.size() && m_aParents.top().is() && !bTextFrame)
+        m_aParents.top()->add(xShape);
     if (bCustom && xShape.is())
     {
         uno::Reference<drawing::XEnhancedCustomShapeDefaulter> xDefaulter(xShape, uno::UNO_QUERY);
