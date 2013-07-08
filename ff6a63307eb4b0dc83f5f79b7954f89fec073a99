@@ -1,0 +1,157 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXn///Ro\u003d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2013-07-08T05:21:30Z",
+      "side": 1,
+      "message": "s/auto-creationa nd/auto-creation and",
+      "revId": "ff6a63307eb4b0dc83f5f79b7954f89fec073a99",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn///Rk\u003d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2013-07-08T05:21:30Z",
+      "side": 1,
+      "message": "s/month/months ? ;-)",
+      "revId": "ff6a63307eb4b0dc83f5f79b7954f89fec073a99",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn///Rg\u003d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2013-07-08T05:21:30Z",
+      "side": 1,
+      "message": "s/buildbot/buildbots",
+      "revId": "ff6a63307eb4b0dc83f5f79b7954f89fec073a99",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn///Rc\u003d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2013-07-08T05:21:30Z",
+      "side": 1,
+      "message": "s/introduce/introduces",
+      "revId": "ff6a63307eb4b0dc83f5f79b7954f89fec073a99",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn///Rs\u003d",
+        "filename": "config_host.mk.in",
+        "patchSetId": 1
+      },
+      "lineNbr": 530,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2013-07-08T05:21:30Z",
+      "side": 1,
+      "message": "i find that \"pre built\" is better reflect what happens here:\n\n USE_PRE_BUILT_BIN_TAR",
+      "revId": "ff6a63307eb4b0dc83f5f79b7954f89fec073a99",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn///RY\u003d",
+        "filename": "configure.ac",
+        "patchSetId": 1
+      },
+      "lineNbr": 1208,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2013-07-08T05:21:30Z",
+      "side": 1,
+      "message": "Better?\n\n --enable-pre-built-libs\n\nor\n\n --with-pre-built-libs",
+      "revId": "ff6a63307eb4b0dc83f5f79b7954f89fec073a99",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn///RU\u003d",
+        "filename": "configure.ac",
+        "patchSetId": 1
+      },
+      "lineNbr": 1214,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2013-07-08T05:21:30Z",
+      "side": 1,
+      "message": "point at the end of the statement.",
+      "revId": "ff6a63307eb4b0dc83f5f79b7954f89fec073a99",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn///RQ\u003d",
+        "filename": "configure.ac",
+        "patchSetId": 1
+      },
+      "lineNbr": 1216,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2013-07-08T05:21:30Z",
+      "side": 1,
+      "message": "s/isntead/instead",
+      "revId": "ff6a63307eb4b0dc83f5f79b7954f89fec073a99",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn///RM\u003d",
+        "filename": "configure.ac",
+        "patchSetId": 1
+      },
+      "lineNbr": 1219,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2013-07-08T05:21:30Z",
+      "side": 1,
+      "message": "s/taht/that",
+      "revId": "ff6a63307eb4b0dc83f5f79b7954f89fec073a99",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
