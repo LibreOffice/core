@@ -11993,7 +11993,7 @@ if test "$enable_mpl_subset" = "yes"; then
    fi
    if test "x$ENABLE_PDFIMPORT" != "xFALSE"; then
         if test "x$SYSTEM_POPPLER" != "xNO"; then
-                AC_MSG_ERROR([need to disable PDF import via xpdf/poplar or use system library])
+                AC_MSG_ERROR([need to disable PDF import via poppler or use system library])
         fi
    fi
    # cf. m4/libo_check_extension.m4
