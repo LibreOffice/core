@@ -1682,7 +1682,18 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
         case RTF_SHPGRP:
             {
                 RTFLookahead aLookahead(Strm(), m_pTokenizer->getGroupStart());
-                SAL_WARN_IF(!aLookahead.hasTable(), "writerfilter", "no table in groupshape, should create it!");
+                if (!aLookahead.hasTable())
+                {
+                    uno::Reference<drawing::XShapes> xGroupShape(m_xModelFactory->createInstance("com.sun.star.drawing.GroupShape"), uno::UNO_QUERY);
+                    uno::Reference<drawing::XDrawPageSupplier> xDrawSupplier(m_xDstDoc, uno::UNO_QUERY);
+                    if (xDrawSupplier.is())
+                    {
+                        uno::Reference<drawing::XShape> xShape(xGroupShape, uno::UNO_QUERY);
+                        xDrawSupplier->getDrawPage()->add(xShape);
+                    }
+                    m_pSdrImport->pushParent(xGroupShape);
+                    m_aStates.top().bCreatedShapeGroup = true;
+                }
                 m_aStates.top().nDestinationState = DESTINATION_SHAPEGROUP;
                 m_aStates.top().bInShapeGroup = true;
             }
@@ -4404,6 +4415,10 @@ int RTFDocumentImpl::popState()
         case DESTINATION_MEQARR:
             m_aMathBuffer.appendClosingTag(M_TOKEN(eqArr));
             break;
+        case DESTINATION_SHAPEGROUP:
+            if (aState.bCreatedShapeGroup)
+                m_pSdrImport->popParent();
+            break;
         default:
             break;
     }
@@ -4764,7 +4779,8 @@ RTFParserState::RTFParserState(RTFDocumentImpl *pDocumentImpl)
     bInListpicture(false),
     bInBackground(false),
     bHadShapeText(false),
-    bInShapeGroup(false)
+    bInShapeGroup(false),
+    bCreatedShapeGroup(false)
 {
 }
 

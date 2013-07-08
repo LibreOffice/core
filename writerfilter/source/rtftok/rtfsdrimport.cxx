@@ -236,7 +236,8 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose)
                     break;
                 case ESCHER_ShpInst_Rectangle:
                 case ESCHER_ShpInst_TextBox:
-                    if (!bClose)
+                    // If we're inside a groupshape, can't use text frames.
+                    if (!bClose && m_aParents.size() == 1)
                     {
                         createShape("com.sun.star.text.TextFrame", xShape, xPropertySet);
                         bTextFrame = true;

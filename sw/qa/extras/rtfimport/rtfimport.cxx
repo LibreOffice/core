@@ -151,6 +151,7 @@ public:
     void testN823675();
     void testFdo47802();
     void testFdo39001();
+    void testGroupshape();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -287,6 +288,7 @@ void Test::run()
         {"n823675.rtf", &Test::testN823675},
         {"fdo47802.rtf", &Test::testFdo47802},
         {"fdo39001.rtf", &Test::testFdo39001},
+        {"groupshape.rtf", &Test::testGroupshape},
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -1393,6 +1395,16 @@ void Test::testFdo39001()
 {
     // Document was of 4 pages, \sect at the end of the doc wasn't ignored.
     CPPUNIT_ASSERT_EQUAL(3, getPages());
+}
+
+void Test::testGroupshape()
+{
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
+    // There should be a single groupshape with 2 children.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xDraws->getCount());
+    uno::Reference<drawing::XShapes> xGroupshape(xDraws->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xGroupshape->getCount());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
