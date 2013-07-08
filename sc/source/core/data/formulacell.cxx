@@ -3021,49 +3021,34 @@ public:
                 {
                     ScComplexRefData aRef = pToken->GetDoubleRef();
                     aRef.CalcAbsIfRel(mrCell.aPos);
-                    if (aRef.Ref1.IsRowRel() || aRef.Ref2.IsRowRel())
+
+                    // Row reference is relative.
+                    bool bAbsFirst = !aRef.Ref1.IsRowRel();
+                    bool bAbsLast = !aRef.Ref2.IsRowRel();
+                    ScAddress aRefPos(aRef.Ref1.nCol, aRef.Ref1.nRow, aRef.Ref1.nTab);
+                    size_t nCols = aRef.Ref2.nCol - aRef.Ref1.nCol + 1;
+                    std::vector<const double*> aArrays;
+                    aArrays.reserve(nCols);
+                    SCROW nArrayLength = mrCell.GetCellGroup()->mnLength;
+                    SCROW nRefRowSize = aRef.Ref2.nRow - aRef.Ref1.nRow + 1;
+                    if (!bAbsLast)
                     {
-                        // Row reference is relative.
-                        bool bAbsFirst = !aRef.Ref1.IsRowRel();
-                        bool bAbsLast = !aRef.Ref2.IsRowRel();
-                        ScAddress aRefPos(aRef.Ref1.nCol, aRef.Ref1.nRow, aRef.Ref1.nTab);
-                        size_t nCols = aRef.Ref2.nCol - aRef.Ref1.nCol + 1;
-                        std::vector<const double*> aArrays;
-                        aArrays.reserve(nCols);
-                        SCROW nArrayLength = mrCell.GetCellGroup()->mnLength;
-                        SCROW nRefRowSize = aRef.Ref2.nRow - aRef.Ref1.nRow + 1;
-                        if (!bAbsLast)
-                        {
-                            // range end position is relative. Extend the array length.
-                            nArrayLength += nRefRowSize - 1;
-                        }
-
-                        for (SCCOL i = aRef.Ref1.nCol; i <= aRef.Ref2.nCol; ++i)
-                        {
-                            aRefPos.SetCol(i);
-                            const double* pArray = mrDoc.FetchDoubleArray(mrCxt, aRefPos, nArrayLength);
-                            if (!pArray)
-                                return false;
-
-                            aArrays.push_back(pArray);
-                        }
-
-                        formula::DoubleVectorRefToken aTok(aArrays, nArrayLength, nRefRowSize, bAbsFirst, bAbsLast);
-                        mrGroupTokens.AddToken(aTok);
+                        // range end position is relative. Extend the array length.
+                        nArrayLength += nRefRowSize - 1;
                     }
-                    else
-                    {
-                        // Absolute row reference.
-                        ScRange aRefRange(
-                            aRef.Ref1.nCol, aRef.Ref1.nRow, aRef.Ref1.nTab,
-                            aRef.Ref2.nCol, aRef.Ref2.nRow, aRef.Ref2.nTab);
 
-                        formula::FormulaTokenRef pNewToken = mrDoc.ResolveStaticReference(aRefRange);
-                        if (!pNewToken)
+                    for (SCCOL i = aRef.Ref1.nCol; i <= aRef.Ref2.nCol; ++i)
+                    {
+                        aRefPos.SetCol(i);
+                        const double* pArray = mrDoc.FetchDoubleArray(mrCxt, aRefPos, nArrayLength);
+                        if (!pArray)
                             return false;
 
-                        mrGroupTokens.AddToken(*pNewToken);
+                        aArrays.push_back(pArray);
                     }
+
+                    formula::DoubleVectorRefToken aTok(aArrays, nArrayLength, nRefRowSize, bAbsFirst, bAbsLast);
+                    mrGroupTokens.AddToken(aTok);
                 }
                 break;
                 case svIndex:
