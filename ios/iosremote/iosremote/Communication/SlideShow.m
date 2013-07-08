@@ -28,6 +28,7 @@
 @synthesize size = _size;
 @synthesize currentSlide = _currentSlide;
 @synthesize delegate = _delegate;
+@synthesize secondaryDelegate = _secondaryDelegate;
 
 dispatch_queue_t backgroundQueue;
 
@@ -58,7 +59,11 @@ dispatch_queue_t backgroundQueue;
                                                           if ([[self.loadBuffer allKeysForObject:[NSNumber numberWithInt:[[[note userInfo] objectForKey:@"index"] intValue]]] count]) {
                                                               NSArray * tagArray = [self.loadBuffer allKeysForObject:[NSNumber numberWithInt:[[[note userInfo] objectForKey:@"index"] intValue]]];
                                                               for (NSNumber *tag in tagArray) {
-                                                                  UIView * view = [[self.delegate view] viewWithTag:[tag integerValue]];
+                                                                  UIView * view;
+                                                                  if ([tag integerValue] > 20)
+                                                                      view = [[self.secondaryDelegate view] viewWithTag: [tag integerValue]];
+                                                                  else
+                                                                      view = [[self.delegate view] viewWithTag:[tag integerValue]];
                                                                   if ([view isKindOfClass:[UIImageView class]]){
                                                                       UIImage *image = [self.imagesDictionary objectForKey:[self.loadBuffer objectForKey:tag]];
                                                                       if (image) {
@@ -67,14 +72,20 @@ dispatch_queue_t backgroundQueue;
                                                                       }
                                                                   }
                                                                   else if ([view isKindOfClass:[UIWebView class]]){
-                                                                      NSLog(@"Async notes");
+//                                                                      NSLog(@"Async notes");
                                                                       NSString *note = [self.notesDictionary objectForKey:[self.loadBuffer objectForKey:tag]];
                                                                       if (note) {
                                                                           [(UIWebView *)view loadHTMLString:note baseURL:nil];
                                                                           [self.loadBuffer removeObjectForKey:tag];
                                                                       }
+                                                                  } else if ([view isKindOfClass:[UITableViewCell class]]){
+                                                                      UIImage *image = [self.imagesDictionary objectForKey:[self.loadBuffer objectForKey:tag]];
+                                                                      if (image){
+                                                                          UIImageView *imageView = (UIImageView *)[view viewWithTag:1];
+                                                                          [imageView setImage:image];
+                                                                          [self.loadBuffer removeObjectForKey:tag];
+                                                                      }
                                                                   }
-                                                              
                                                               }
                                                           }
                                                       }];
@@ -107,6 +118,11 @@ dispatch_queue_t backgroundQueue;
     {
         if ([view isKindOfClass:[UIImageView class]])
             [(UIImageView* )view setImage:[UIImage imageNamed:@"slide_finished.png"]];
+        else if ([view isKindOfClass:[UITableViewCell class]])
+        {
+            UIImageView *image = (UIImageView *)[view viewWithTag:1];
+            [image setImage:[UIImage imageNamed:@"slide_finished.png"]];
+        }
         else if ([view isKindOfClass:[UIWebView class]])
             [(UIWebView* )view loadHTMLString: @"SlideShow finished" baseURL:nil];
         return;
@@ -118,6 +134,11 @@ dispatch_queue_t backgroundQueue;
     else{
         if ([view isKindOfClass:[UIImageView class]])
             [(UIImageView* )view setImage:[self.imagesDictionary objectForKey:[NSNumber numberWithUnsignedInt:index]]];
+        else if ([view isKindOfClass:[UITableViewCell class]])
+        {
+            UIImageView *image = (UIImageView *)[view viewWithTag:1];
+            [image setImage:[self.imagesDictionary objectForKey:[NSNumber numberWithUnsignedInt:index]]];
+        }
         else if ([view isKindOfClass:[UIWebView class]])
             [(UIWebView* )view loadHTMLString: [self.notesDictionary objectForKey:[NSNumber numberWithUnsignedInt:index]] baseURL:nil];
     }

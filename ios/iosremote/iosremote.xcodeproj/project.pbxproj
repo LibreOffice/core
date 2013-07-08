@@ -10,6 +10,9 @@
 		571BFAD1178AADA200EF1BDB /* more_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 571BFAD0178AADA200EF1BDB /* more_icon.png */; };
 		5753DD901781EA0300DB71BB /* serverList_vc.m in Sources */ = {isa = PBXBuildFile; fileRef = 5753DD8F1781EA0300DB71BB /* serverList_vc.m */; };
 		5753DD9917834D7100DB71BB /* newServer_vc.m in Sources */ = {isa = PBXBuildFile; fileRef = 5753DD9817834D7100DB71BB /* newServer_vc.m */; };
+		57701739178AC83E00B99793 /* SWRevealViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 57701738178AC83E00B99793 /* SWRevealViewController.m */; };
+		5770173F178B08A800B99793 /* SWReavealMainController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5770173E178B08A800B99793 /* SWReavealMainController.m */; };
+		57701742178B0A6900B99793 /* slideShowSwipeInList.m in Sources */ = {isa = PBXBuildFile; fileRef = 57701741178B0A6900B99793 /* slideShowSwipeInList.m */; };
 		57867A541787172A00EBBE52 /* impress.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 57867A531787172A00EBBE52 /* impress.jpeg */; };
 		57867A571787385800EBBE52 /* slideShow_vc.m in Sources */ = {isa = PBXBuildFile; fileRef = 57867A561787385800EBBE52 /* slideShow_vc.m */; };
 		57867A5A1787510700EBBE52 /* pushed_next_button.png in Resources */ = {isa = PBXBuildFile; fileRef = 57867A581787510700EBBE52 /* pushed_next_button.png */; };
@@ -49,6 +52,12 @@
 		5753DD8F1781EA0300DB71BB /* serverList_vc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = serverList_vc.m; sourceTree = "<group>"; };
 		5753DD9717834D7100DB71BB /* newServer_vc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = newServer_vc.h; sourceTree = "<group>"; };
 		5753DD9817834D7100DB71BB /* newServer_vc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = newServer_vc.m; sourceTree = "<group>"; };
+		57701737178AC83E00B99793 /* SWRevealViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWRevealViewController.h; sourceTree = "<group>"; };
+		57701738178AC83E00B99793 /* SWRevealViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWRevealViewController.m; sourceTree = "<group>"; };
+		5770173D178B08A800B99793 /* SWReavealMainController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWReavealMainController.h; sourceTree = "<group>"; };
+		5770173E178B08A800B99793 /* SWReavealMainController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWReavealMainController.m; sourceTree = "<group>"; };
+		57701740178B0A6800B99793 /* slideShowSwipeInList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = slideShowSwipeInList.h; sourceTree = "<group>"; };
+		57701741178B0A6900B99793 /* slideShowSwipeInList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = slideShowSwipeInList.m; sourceTree = "<group>"; };
 		57867A531787172A00EBBE52 /* impress.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = impress.jpeg; path = iosremote/impress.jpeg; sourceTree = "<group>"; };
 		57867A551787385800EBBE52 /* slideShow_vc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = slideShow_vc.h; sourceTree = "<group>"; };
 		57867A561787385800EBBE52 /* slideShow_vc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = slideShow_vc.m; sourceTree = "<group>"; };
@@ -113,6 +122,28 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		571BFAD2178AB7BA00EF1BDB /* slideShow */ = {
+			isa = PBXGroup;
+			children = (
+				57867A551787385800EBBE52 /* slideShow_vc.h */,
+				57867A561787385800EBBE52 /* slideShow_vc.m */,
+				5770173D178B08A800B99793 /* SWReavealMainController.h */,
+				5770173E178B08A800B99793 /* SWReavealMainController.m */,
+				57701740178B0A6800B99793 /* slideShowSwipeInList.h */,
+				57701741178B0A6900B99793 /* slideShowSwipeInList.m */,
+			);
+			name = slideShow;
+			sourceTree = "<group>";
+		};
+		57701736178AC83E00B99793 /* SWRevealViewController */ = {
+			isa = PBXGroup;
+			children = (
+				57701737178AC83E00B99793 /* SWRevealViewController.h */,
+				57701738178AC83E00B99793 /* SWRevealViewController.m */,
+			);
+			path = SWRevealViewController;
+			sourceTree = "<group>";
+		};
 		57AEEDAA1788D7B2007F4F97 /* Assets */ = {
 			isa = PBXGroup;
 			children = (
@@ -180,8 +211,7 @@
 				57AEEDAB1789443D007F4F97 /* slideShowPreview */,
 				57C6E401175E06E800E8BC5F /* libreoffice_sdremoteAppDelegate.h */,
 				57C6E402175E06E800E8BC5F /* libreoffice_sdremoteAppDelegate.m */,
-				57867A551787385800EBBE52 /* slideShow_vc.h */,
-				57867A561787385800EBBE52 /* slideShow_vc.m */,
+				571BFAD2178AB7BA00EF1BDB /* slideShow */,
 				5753DD9717834D7100DB71BB /* newServer_vc.h */,
 				5753DD9817834D7100DB71BB /* newServer_vc.m */,
 				5753DD8E1781EA0300DB71BB /* serverList_vc.h */,
@@ -193,6 +223,7 @@
 		57C6E3F9175E06E800E8BC5F /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				57701736178AC83E00B99793 /* SWRevealViewController */,
 				57B152971764703500EECC67 /* Base64.h */,
 				57B152981764703500EECC67 /* Base64.m */,
 				57CFED9717838FDC00E82E05 /* EditableTableViewCell.h */,
@@ -320,6 +351,9 @@
 				57FE71E61785D7FE00B50125 /* slideShowPreview_vc.m in Sources */,
 				57FE71E917861A9000B50125 /* slideShowPreviewTable_vc.m in Sources */,
 				57867A571787385800EBBE52 /* slideShow_vc.m in Sources */,
+				57701739178AC83E00B99793 /* SWRevealViewController.m in Sources */,
+				5770173F178B08A800B99793 /* SWReavealMainController.m in Sources */,
+				57701742178B0A6900B99793 /* slideShowSwipeInList.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

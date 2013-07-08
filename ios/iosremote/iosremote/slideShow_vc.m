@@ -9,6 +9,7 @@
 #import "slideShow_vc.h"
 #import "SlideShow.h"
 #import "CommunicationManager.h"
+#import "SWRevealViewController.h"
 #import "CommandInterpreter.h"
 #import "CommandTransmitter.h"
 #import <QuartzCore/QuartzCore.h>
@@ -24,6 +25,9 @@
 @property (nonatomic, strong) id slideShowImageNoteReadyObserver;
 @property (nonatomic, strong) id slideShowFinishedObserver;
 @property (nonatomic, strong) SlideShow* slideshow;
+
+// SWReveal Controller
+@property (readwrite) IBOutlet UIBarButtonItem* revealButtonItem;
 
 @end
 
@@ -66,7 +70,14 @@
                                                                    style:UIBarButtonItemStyleBordered
                                                                   target:self
                                                                   action:@selector(handleBack:)];
-    self.navigationItem.leftBarButtonItem = backButton;
+    self.revealViewController.navigationItem.leftBarButtonItem = backButton;
+    
+    self.revealButtonItem = [[UIBarButtonItem alloc] initWithImage: [UIImage imageNamed:@"more_icon.png"]
+                                                             style:UIBarButtonItemStyleBordered
+                                                            target:self.revealViewController
+                                                            action:@selector( revealToggle: )];
+    self.revealViewController.navigationItem.rightBarButtonItem = self.revealButtonItem;
+    [self.navigationController.navigationBar addGestureRecognizer: self.revealViewController.panGestureRecognizer];
 }
 
 - (void) handleBack:(id)sender
