@@ -31,6 +31,7 @@
   <object class="GtkBox" id="OptGridPage">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
+    <property name="border_width">6</property>
     <property name="orientation">vertical</property>
     <property name="spacing">12</property>
     <child>
@@ -404,14 +405,15 @@
       </packing>
     </child>
     <child>
-      <object class="GtkBox" id="box3">
-        <property name="sensitive">False</property>
+      <object class="GtkBox" id="snapframes">
         <property name="can_focus">False</property>
+        <property name="no_show_all">True</property>
         <property name="spacing">12</property>
         <child>
           <object class="GtkFrame" id="frame4">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="hexpand">True</property>
             <property name="label_xalign">0</property>
             <property name="shadow_type">none</property>
             <child>
@@ -560,6 +562,7 @@
           <object class="GtkFrame" id="frame5">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="hexpand">True</property>
             <property name="label_xalign">0</property>
             <property name="shadow_type">none</property>
             <child>
@@ -621,6 +624,9 @@
                             <property name="invisible_char">●</property>
                             <property name="adjustment">adjustment4</property>
                             <property name="digits">2</property>
+                            <accessibility>
+                              <relation type="labelled-by" target="rotate"/>
+                            </accessibility>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -638,6 +644,9 @@
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
+                            <accessibility>
+                              <relation type="label-for" target="mtrfldangle:0.00 degrees"/>
+                            </accessibility>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -713,5 +722,19 @@
         <property name="position">2</property>
       </packing>
     </child>
+  </object>
+  <object class="GtkSizeGroup" id="sizegroup1">
+    <property name="ignore_hidden">True</property>
+    <widgets>
+      <widget name="frame2"/>
+      <widget name="frame4"/>
+    </widgets>
+  </object>
+  <object class="GtkSizeGroup" id="sizegroup2">
+    <property name="ignore_hidden">True</property>
+    <widgets>
+      <widget name="frame3"/>
+      <widget name="frame5"/>
+    </widgets>
   </object>
 </interface>

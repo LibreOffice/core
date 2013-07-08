@@ -139,6 +139,7 @@ SvxGridTabPage::SvxGridTabPage( Window* pParent, const SfxItemSet& rCoreSet) :
     get(pNumFldDivisionY,"numflddivisiony");
     get(pCbxSynchronize,"synchronize");
 
+    get(pSnapFrames,"snapframes");
     get(pCbxSnapHelplines,"snaphelplines");
     get(pCbxSnapBorder,"snapborder");
     get(pCbxSnapFrame,"snapframe");

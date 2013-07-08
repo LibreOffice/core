@@ -122,18 +122,19 @@ private:
 
     CheckBox*            pCbxSynchronize;
 protected:
-     //these controls are used in draw and impress
-     CheckBox*        pCbxSnapHelplines;
-     CheckBox*        pCbxSnapBorder;
-     CheckBox*        pCbxSnapFrame;
-     CheckBox*        pCbxSnapPoints;
-     MetricField*     pMtrFldSnapArea;
+    //these controls are used in draw and impress
+    VclContainer*    pSnapFrames;
+    CheckBox*        pCbxSnapHelplines;
+    CheckBox*        pCbxSnapBorder;
+    CheckBox*        pCbxSnapFrame;
+    CheckBox*        pCbxSnapPoints;
+    MetricField*     pMtrFldSnapArea;
 
-     CheckBox*        pCbxOrtho;
-     CheckBox*        pCbxBigOrtho;
-     CheckBox*        pCbxRotate;
-     MetricField*     pMtrFldAngle;
-     MetricField*     pMtrFldBezAngle;
+    CheckBox*        pCbxOrtho;
+    CheckBox*        pCbxBigOrtho;
+    CheckBox*        pCbxRotate;
+    MetricField*     pMtrFldAngle;
+    MetricField*     pMtrFldBezAngle;
 
 private:
     sal_Bool                bAttrModified;

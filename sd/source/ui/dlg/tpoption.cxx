@@ -49,16 +49,7 @@ using namespace ::com::sun::star::uno;
 SdTpOptionsSnap::SdTpOptionsSnap( Window* pParent, const SfxItemSet& rInAttrs  ) :
         SvxGridTabPage(pParent, rInAttrs)
 {
-    pCbxSnapHelplines->Show();
-    pCbxSnapBorder->Show();
-    pCbxSnapFrame->Show();
-    pCbxSnapPoints->Show();
-    pMtrFldSnapArea->Show();
-    pCbxOrtho->Show();
-    pCbxBigOrtho->Show();
-    pCbxRotate->Show();
-    pMtrFldAngle->Show();
-    pMtrFldBezAngle->Show();
+    pSnapFrames->Show();
 }
 
 // -----------------------------------------------------------------------

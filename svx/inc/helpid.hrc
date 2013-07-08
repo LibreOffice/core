@@ -143,7 +143,6 @@
 #define HID_MNU_ZOOM_OPTIMAL                                  "SVX_HID_MNU_ZOOM_OPTIMAL"
 #define HID_MNU_ZOOM_PAGE_WIDTH                               "SVX_HID_MNU_ZOOM_PAGE_WIDTH"
 #define HID_MNU_ZOOM_WHOLE_PAGE                               "SVX_HID_MNU_ZOOM_WHOLE_PAGE"
-#define HID_OPTIONS_GRID                                      "SVX_HID_OPTIONS_GRID"
 #define HID_PASSWORD                                          "SVX_HID_PASSWORD"
 #define HID_POPUP_COLOR                                       "SVX_HID_POPUP_COLOR"
 #define HID_POPUP_COLOR_CTRL                                  "SVX_HID_POPUP_COLOR_CTRL"
