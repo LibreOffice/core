@@ -217,7 +217,6 @@
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vh9-Zy-DPu">
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="61" id="dEG-lN-O7v"/>
                                             <constraint firstAttribute="width" constant="93" id="tXD-cs-5jt"/>
                                         </constraints>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
@@ -249,6 +248,7 @@
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="59" id="Kjm-ct-oJ3"/>
+                                            <constraint firstAttribute="height" constant="60" id="xrc-bW-vTq"/>
                                         </constraints>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                                         <state key="normal" title="Button" image="pointer.png">
@@ -265,12 +265,12 @@
                                 </subviews>
                                 <color key="backgroundColor" red="0.93333333333333335" green="0.93333333333333335" blue="0.93333333333333335" alpha="1" colorSpace="deviceRGB"/>
                                 <constraints>
-                                    <constraint firstItem="kMb-xm-ope" firstAttribute="centerY" secondItem="3od-5c-yzI" secondAttribute="centerY" type="default" id="2gB-3Q-hYI"/>
+                                    <constraint firstItem="XDZ-bs-OUM" firstAttribute="centerY" secondItem="3od-5c-yzI" secondAttribute="centerY" type="default" id="992-ZE-DXX"/>
+                                    <constraint firstItem="kMb-xm-ope" firstAttribute="centerY" secondItem="vh9-Zy-DPu" secondAttribute="centerY" type="default" id="DAr-Sf-YhO"/>
                                     <constraint firstAttribute="trailing" secondItem="XDZ-bs-OUM" secondAttribute="trailing" constant="20" symbolic="YES" type="default" id="Eqp-Q3-L92"/>
                                     <constraint firstItem="kMb-xm-ope" firstAttribute="top" secondItem="XDZ-bs-OUM" secondAttribute="top" type="default" id="H9E-FR-J2C"/>
                                     <constraint firstItem="vh9-Zy-DPu" firstAttribute="leading" secondItem="3od-5c-yzI" secondAttribute="leading" constant="20" symbolic="YES" type="default" id="SQd-eE-VN0"/>
                                     <constraint firstAttribute="height" constant="88" type="user" id="dBc-X5-XIU"/>
-                                    <constraint firstItem="kMb-xm-ope" firstAttribute="height" secondItem="vh9-Zy-DPu" secondAttribute="height" type="user" id="jh8-H0-Qmm"/>
                                     <constraint firstItem="kMb-xm-ope" firstAttribute="top" secondItem="vh9-Zy-DPu" secondAttribute="top" type="default" id="r6I-Jb-2lm"/>
                                     <constraint firstItem="kMb-xm-ope" firstAttribute="leading" secondItem="3od-5c-yzI" secondAttribute="leading" constant="132" id="tY1-mj-gK5"/>
                                     <constraint firstItem="vh9-Zy-DPu" firstAttribute="width" secondItem="XDZ-bs-OUM" secondAttribute="width" type="user" id="x0P-o6-T4k"/>
@@ -326,7 +326,7 @@
                                     <constraint firstItem="3BV-KX-Qla" firstAttribute="bottom" secondItem="Y1f-iI-63a" secondAttribute="bottom" type="default" id="zbM-X7-LxP"/>
                                 </constraints>
                             </view>
-                            <view contentMode="scaleToFill" restorationIdentifier="" translatesAutoresizingMaskIntoConstraints="NO" id="evg-Ah-Kcw" userLabel="NotesView">
+                            <view contentMode="scaleToFill" verticalCompressionResistancePriority="547" restorationIdentifier="" translatesAutoresizingMaskIntoConstraints="NO" id="evg-Ah-Kcw" userLabel="NotesView">
                                 <subviews>
                                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Lecturer's Notes   " textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Y23-iV-GJx">
                                         <color key="backgroundColor" red="1" green="0.66274509803921566" blue="0.074509803921568626" alpha="1" colorSpace="calibratedRGB"/>
@@ -337,40 +337,44 @@
                                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <webView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xGi-A7-hat" userLabel="Notes">
+                                    <webView contentMode="scaleToFill" verticalCompressionResistancePriority="1" translatesAutoresizingMaskIntoConstraints="NO" id="xGi-A7-hat" userLabel="Notes">
+                                        <rect key="contentStretch" x="0.0" y="1" width="1" height="1"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="89" id="6C2-Dc-3ml"/>
-                                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="89" type="user" id="pq5-wY-sCH"/>
+                                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="40" type="user" id="9uC-Al-EZq"/>
+                                            <constraint firstAttribute="height" relation="lessThanOrEqual" priority="555" constant="200" type="user" id="MQe-aT-932"/>
                                         </constraints>
                                     </webView>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <constraints>
-                                    <constraint firstItem="Y23-iV-GJx" firstAttribute="top" secondItem="evg-Ah-Kcw" secondAttribute="top" constant="9" type="user" id="Fz6-GO-dSV"/>
+                                    <constraint firstItem="xGi-A7-hat" firstAttribute="top" secondItem="Y23-iV-GJx" secondAttribute="bottom" type="user" id="2Xd-eF-5sh"/>
+                                    <constraint firstAttribute="top" secondItem="Y23-iV-GJx" secondAttribute="top" type="user" id="Ln3-FY-psm"/>
                                     <constraint firstAttribute="trailing" secondItem="xGi-A7-hat" secondAttribute="trailing" constant="20" type="user" id="TqQ-Aw-nmd"/>
+                                    <constraint firstItem="xGi-A7-hat" firstAttribute="top" secondItem="Y23-iV-GJx" secondAttribute="bottom" type="user" id="Wk5-xM-tga"/>
+                                    <constraint firstAttribute="bottom" secondItem="xGi-A7-hat" secondAttribute="bottom" type="user" id="aDb-57-I0j"/>
                                     <constraint firstItem="xGi-A7-hat" firstAttribute="leading" secondItem="evg-Ah-Kcw" secondAttribute="leading" constant="20" type="user" id="sws-kC-lUY"/>
                                     <constraint firstItem="Y23-iV-GJx" firstAttribute="leading" secondItem="evg-Ah-Kcw" secondAttribute="leading" constant="20" symbolic="YES" type="default" id="t8M-o1-eXv"/>
                                     <constraint firstItem="Y23-iV-GJx" firstAttribute="width" secondItem="xGi-A7-hat" secondAttribute="width" type="user" id="uLC-ir-IGd"/>
-                                    <constraint firstItem="xGi-A7-hat" firstAttribute="top" secondItem="evg-Ah-Kcw" secondAttribute="top" constant="30" id="wQo-Ug-fV3"/>
                                 </constraints>
                             </view>
                         </subviews>
                         <color key="backgroundColor" red="0.90196079015731812" green="0.90196079015731812" blue="0.90196079015731812" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
-                            <constraint firstItem="evg-Ah-Kcw" firstAttribute="top" secondItem="Xty-aF-WDv" secondAttribute="top" constant="181" id="3bJ-aC-aPd"/>
                             <constraint firstItem="evg-Ah-Kcw" firstAttribute="leading" secondItem="Xty-aF-WDv" secondAttribute="leading" constant="-13" id="5Ku-go-4Y7"/>
                             <constraint firstItem="3od-5c-yzI" firstAttribute="leading" secondItem="Xty-aF-WDv" secondAttribute="leading" type="default" id="5et-XH-ZVD"/>
-                            <constraint firstItem="3od-5c-yzI" firstAttribute="bottom" secondItem="Xty-aF-WDv" secondAttribute="bottom" type="user" id="9UY-Go-jVU"/>
-                            <constraint firstItem="evg-Ah-Kcw" firstAttribute="centerX" secondItem="3od-5c-yzI" secondAttribute="centerX" type="default" id="Blx-4R-lt1"/>
+                            <constraint firstItem="3od-5c-yzI" firstAttribute="top" secondItem="evg-Ah-Kcw" secondAttribute="bottom" type="user" id="7vy-A8-l8f"/>
                             <constraint firstItem="YvB-Gp-Fvr" firstAttribute="top" secondItem="Xty-aF-WDv" secondAttribute="top" constant="5" type="user" id="DoA-5l-NFS"/>
-                            <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="evg-Ah-Kcw" secondAttribute="bottom" constant="20" symbolic="YES" type="user" id="FWl-QP-VvL"/>
+                            <constraint firstItem="evg-Ah-Kcw" firstAttribute="top" secondItem="YvB-Gp-Fvr" secondAttribute="bottom" constant="8" symbolic="YES" type="default" id="FDk-Bs-3cI"/>
                             <constraint firstItem="YvB-Gp-Fvr" firstAttribute="trailing" secondItem="Xty-aF-WDv" secondAttribute="trailing" type="default" id="FXg-Ij-nfl"/>
+                            <constraint firstItem="evg-Ah-Kcw" firstAttribute="centerX" secondItem="3od-5c-yzI" secondAttribute="centerX" type="default" id="HOg-6M-zJ9"/>
                             <constraint firstItem="YvB-Gp-Fvr" firstAttribute="leading" secondItem="Xty-aF-WDv" secondAttribute="leading" type="default" id="I4g-8o-Kbt"/>
-                            <constraint firstItem="3od-5c-yzI" firstAttribute="top" secondItem="evg-Ah-Kcw" secondAttribute="bottom" constant="43" type="user" id="cTg-UU-nIh"/>
                             <constraint firstItem="3od-5c-yzI" firstAttribute="trailing" secondItem="Xty-aF-WDv" secondAttribute="trailing" type="default" id="eJ5-5R-zZM"/>
+                            <constraint firstAttribute="bottom" secondItem="3od-5c-yzI" secondAttribute="bottom" type="user" id="sob-HW-K69"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="Presentation" id="T79-lT-61m"/>
+                    <navigationItem key="navigationItem" title="Presentation" id="T79-lT-61m">
+                        <barButtonItem key="rightBarButtonItem" image="more_icon.png" id="W5P-FE-oh8"/>
+                    </navigationItem>
                     <connections>
                         <outlet property="lecturer_notes" destination="xGi-A7-hat" id="Cng-HM-0wW"/>
                         <outlet property="notesView" destination="evg-Ah-Kcw" id="mlQ-Ez-ekQ"/>
@@ -541,6 +545,7 @@
         </scene>
     </scenes>
     <resources>
+        <image name="more_icon.png" width="16" height="26"/>
         <image name="pointer.png" width="143" height="147"/>
         <image name="pointer_pushed.png" width="143" height="147"/>
         <image name="pushed_next_button.png" width="315" height="220"/>
