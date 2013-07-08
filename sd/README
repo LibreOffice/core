@@ -22,3 +22,22 @@ pptx. their locations are listed bellow:
    oox/source/drawingml and oox/source/*)
  * pptx export is in sd/source/filter/eppt (mostly in pptx-* source
    files) and shared part is in oox/source/export
+
+== PPTX export/import filters ==
+
+PPTX export filter is split into 2 parts. Impress related part is in
+sd/source/filter/eppt/pptx-* and the other part is in
+oox/source/export/ because it contains mostly code related to
+DrawingML, which is shared with writer and calc ooxml export.
+
+The export filter was written in 2009 IIRC and was not much extended
+feature-wise lately.
+
+FUTURE work: add custom shapes export (see below). enhance text
+output, we don't write text style for indentation levels now, need to
+export a:lvl1pPr, a:lvl2pPr, ... elements.
+
+PPTX import was written by Sun/Oracle and then extended in LibreOffice
+a lot during bug fixing. It is located in oox/source/ppt and
+oox/source/drawingml. The areas with most bugs (at least until today)
+were shape placeholders and text style inheritance.

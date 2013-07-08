@@ -63,3 +63,68 @@ Note: references to "SV" in the code mean StarView, which was a
 portable C++ class library for GUIs, with very old roots, that was
 developed by StarDivision. Nowadays it is not used by anything except
 LibreOffice (and OpenOffice).
+
+== EMF+ ==
+
+emf+ is vector file format used by MSO and is successor of wmf and
+emf formats. see
+http://msdn.microsoft.com/en-us/library/cc230724.aspx for
+documentation. note that we didn't have this documentation from
+start, so part of the code predates to the time when we had guessed
+some parts and can be enhanced today. there also still many thing not
+complete
+
+emf+ is handled a bit differently compared to original emf/wmf files,
+because GDIMetafile is missing features we need (mostly related to
+transparency, argb colors, etc.)
+
+emf/wmf is translated to GDIMetafile in import filter
+vcl/source/filter/wmf and so special handling ends here
+
+emf+ is encapsulated into GDIMetafile inside comment records and
+parsed/rendered later, when it reaches cppcanvas. it is parsed and
+rendered in cppcanvas/source/mtfrenderer. also note that there are
+emf+-only and emf+-dual files. dual files contains both types of
+records (emf and emf+) for rendering the images. these can used also
+in applications which don't know emf+. in that case we must ignore
+emf records and use emf+ for rendering. for more details see
+documentation
+
+parsing:
+
+ wmf/emf filter --> GDI metafile with emf+ in commments --> cppcanvas metafile renderer
+
+lately the GDIMetafile rendering path changed which also influenced
+emf+ rendering. now many things happen in drawing layer, where
+GDIMetafile is translated into drawing layer primitives. for
+metafiles with emf+ we let the mtfrenderer render them into bitmap
+(with transparency) and use this bitmap in drawinlayer. cleaner
+solution for current state would be to extend the drawing layer for
+missing features and move parsing into drawing layer (might be quite
+a lot of work). intemediary enhancement would be to know better the
+needed size/resolution of the bitmap, before we render emf+ into
+bitmap in drawing layer. Thorsten is working on the same problem with
+svg rendering, so hopefully his approach could be extended for emf+ as
+well. the places in drawing layer where we use canvas mtfrenderer to
+render into bitmaps can be found when you grep for GetUseCanvas. also
+look at vcl/source/gdi/gdimetafile.cxx where you can look for
+UseCanvas again. moving the parsing into drawinglayer might also have
+nice side effect for emf+-dual metafiles. in case the emf+ records
+are broken, it would be easier to use the duplicit emf
+rendering. fortunatelly we didn't run into such a broken emf+ file
+yet. but there were already few cases where we first though that the
+problem might be because of broken emf+ part. so far it always turned
+out to be another problem.
+
+rendering:
+
+ before
+
+ vcl --> cppcanvas metafile renderer --> vcl
+
+ now
+
+ drawing layer --> vcl --> cppcanvas metafile renderer --> vcl --> drawing layer
+
+another interesting part is actual rendering into canvas bitmap and
+using that bitmap later in code using vcl API.
