@@ -310,6 +310,9 @@ public:
 
     void        ResetChanged( SCROW nStartRow, SCROW nEndRow );
 
+    bool UpdateReferenceOnCopy(
+        const ScRange& rRange, SCCOL nDx, SCROW nDy, SCTAB nDz, ScDocument* pUndoDoc = NULL );
+
     /**
      * Update reference addresses in formula cell in response to mass cell
      * movement.

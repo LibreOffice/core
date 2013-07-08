@@ -1991,8 +1991,7 @@ void ScColumn::CopyScenarioFrom( const ScColumn& rSrcCol )
             //  UpdateUsed not needed, already done in TestCopyScenario (obsolete comment ?)
 
             SCsTAB nDz = nTab - rSrcCol.nTab;
-            UpdateReference(
-                URM_COPY, ScRange(nCol, nStart, nTab, nCol, nEnd, nTab), 0, 0, nDz, NULL);
+            UpdateReferenceOnCopy(ScRange(nCol, nStart, nTab, nCol, nEnd, nTab), 0, 0, nDz, NULL);
             UpdateCompile();
         }
 
@@ -2020,8 +2019,8 @@ void ScColumn::CopyScenarioTo( ScColumn& rDestCol ) const
             //  UpdateUsed not needed, is already done in TestCopyScenario (obsolete comment ?)
 
             SCsTAB nDz = rDestCol.nTab - nTab;
-            rDestCol.UpdateReference(
-                URM_COPY, ScRange(rDestCol.nCol, nStart, rDestCol.nTab, rDestCol.nCol, nEnd, rDestCol.nTab),
+            rDestCol.UpdateReferenceOnCopy(
+                ScRange(rDestCol.nCol, nStart, rDestCol.nTab, rDestCol.nCol, nEnd, rDestCol.nTab),
                 0, 0, nDz, NULL);
             rDestCol.UpdateCompile();
         }
@@ -2261,31 +2260,35 @@ public:
 
 }
 
+bool ScColumn::UpdateReferenceOnCopy(
+    const ScRange& rRange, SCsCOL nDx, SCsROW nDy, SCsTAB nDz, ScDocument* pUndoDoc )
+{
+    // When copying, the range equals the destination range where cells
+    // are pasted, and the dx, dy, dz refer to the distance from the
+    // source range.
+
+    UpdateRefOnCopy aHandler(rRange, nDx, nDy, nDz, pUndoDoc);
+    sc::CellStoreType::position_type aPos = maCells.position(rRange.aStart.Row());
+    sc::ProcessBlock(aPos.first, maCells, aHandler, rRange.aStart.Row(), rRange.aEnd.Row());
+
+    // The formula groups at the top and bottom boundaries are expected to
+    // have been split prior to this call. Here, we only do the joining.
+    JoinFormulaCellAbove(aPos);
+    if (rRange.aEnd.Row() < MAXROW)
+    {
+        aPos = maCells.position(aPos.first, rRange.aEnd.Row()+1);
+        JoinFormulaCellAbove(aPos);
+    }
+
+    return aHandler.isUpdated();
+}
+
 bool ScColumn::UpdateReference(
     UpdateRefMode eUpdateRefMode, const ScRange& rRange, SCsCOL nDx, SCsROW nDy, SCsTAB nDz,
     ScDocument* pUndoDoc )
 {
     if (eUpdateRefMode == URM_COPY)
-    {
-        // When copying, the range equals the destination range where cells
-        // are pasted, and the dx, dy, dz refer to the distance from the
-        // source range.
-
-        UpdateRefOnCopy aHandler(rRange, nDx, nDy, nDz, pUndoDoc);
-        sc::CellStoreType::position_type aPos = maCells.position(rRange.aStart.Row());
-        sc::ProcessBlock(aPos.first, maCells, aHandler, rRange.aStart.Row(), rRange.aEnd.Row());
-
-        // The formula groups at the top and bottom boundaries are expected to
-        // have been split prior to this call. Here, we only do the joining.
-        JoinFormulaCellAbove(aPos);
-        if (rRange.aEnd.Row() < MAXROW)
-        {
-            aPos = maCells.position(aPos.first, rRange.aEnd.Row()+1);
-            JoinFormulaCellAbove(aPos);
-        }
-
-        return aHandler.isUpdated();
-    }
+        return UpdateReferenceOnCopy(rRange, nDx, nDy, nDz, pUndoDoc);
 
     bool bThisColShifted = (rRange.aStart.Tab() <= nTab && nTab <= rRange.aEnd.Tab() && rRange.aStart.Col() <= nCol && nCol <= rRange.aEnd.Col());
     if (bThisColShifted)
