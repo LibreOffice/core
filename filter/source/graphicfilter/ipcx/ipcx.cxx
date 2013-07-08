@@ -100,7 +100,7 @@ sal_Bool PCXReader::ReadPCX(Graphic & rGraphic)
     if ( nStatus )
     {
         aBmp = Bitmap( Size( nWidth, nHeight ), nDestBitsPerPixel );
-        if ( ( pAcc = aBmp.AcquireWriteAccess() ) == sal_False )
+        if ( ( pAcc = aBmp.AcquireWriteAccess() ) == 0 )
             return sal_False;
 
         if ( nDestBitsPerPixel <= 8 )
