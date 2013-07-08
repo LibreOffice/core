@@ -3194,8 +3194,8 @@ void ScInterpreter::ScTrim()
     // Doesn't only trim but also removes duplicated blanks within!
     String aVal = comphelper::string::strip(GetString(), ' ');
     String aStr;
-    register const sal_Unicode* p = aVal.GetBuffer();
-    register const sal_Unicode* const pEnd = p + aVal.Len();
+    const sal_Unicode* p = aVal.GetBuffer();
+    const sal_Unicode* const pEnd = p + aVal.Len();
     while ( p < pEnd )
     {
         if ( *p != ' ' || p[-1] != ' ' )    // first can't be ' ', so -1 is fine
@@ -3226,7 +3226,7 @@ void ScInterpreter::ScPropper()
     {
         String aUpr( ScGlobal::pCharClass->uppercase( aStr ) );
         String aLwr( ScGlobal::pCharClass->lowercase( aStr ) );
-        register sal_Unicode* pStr = aStr.GetBufferAccess();
+        sal_Unicode* pStr = aStr.GetBufferAccess();
         const sal_Unicode* pUpr = aUpr.GetBuffer();
         const sal_Unicode* pLwr = aLwr.GetBuffer();
         *pStr = *pUpr;

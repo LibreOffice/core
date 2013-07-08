@@ -113,7 +113,7 @@ xub_StrLen ScRawToken::GetStrLen( const sal_Unicode* pStr )
 {
     if ( !pStr )
         return 0;
-    register const sal_Unicode* p = pStr;
+    const sal_Unicode* p = pStr;
     while ( *p )
         p++;
     return sal::static_int_cast<xub_StrLen>( p - pStr );

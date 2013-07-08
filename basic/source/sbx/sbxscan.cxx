@@ -313,7 +313,7 @@ static void myftoa( double nNum, char * pBuf, short nPrec, short nExpWidth,
     short nExp = 0;
     short nDig = nPrec + 1;
     short nDec;                         // number of positions before decimal point
-    register int i;
+    int i;
 
     sal_Unicode cDecimalSep, cThousandSep;
     ImpGetIntntlSep( cDecimalSep, cThousandSep );
@@ -362,7 +362,7 @@ static void myftoa( double nNum, char * pBuf, short nPrec, short nExpWidth,
     // output number
     if( nDig > 0 )
     {
-        register int digit;
+        int digit;
         for( i = 0 ; ; ++i )
         {
             if( i < 16 )

@@ -287,8 +287,8 @@ int SvRTFParser::_GetNextToken()
 sal_Unicode SvRTFParser::GetHexValue()
 {
     // Hex-Wert sammeln
-    register int n;
-    register sal_Unicode nHexVal = 0;
+    int n;
+    sal_Unicode nHexVal = 0;
 
     for( n = 0; n < 2; ++n )
     {

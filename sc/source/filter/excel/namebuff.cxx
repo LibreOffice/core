@@ -35,9 +35,9 @@
 
 sal_uInt32 StringHashEntry::MakeHashCode( const String& r )
 {
-    register sal_uInt32                 n = 0;
+    sal_uInt32                 n = 0;
     const sal_Unicode*              pAkt = r.GetBuffer();
-    register sal_Unicode            cAkt = *pAkt;
+    sal_Unicode            cAkt = *pAkt;
 
     while( cAkt )
     {

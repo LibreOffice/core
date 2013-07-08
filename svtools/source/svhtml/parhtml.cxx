@@ -170,7 +170,7 @@ void HTMLOption::GetNumbers( std::vector<sal_uInt32> &rNumbers, bool bSpaceDelim
         sal_uLong nNum = 0;
         for( xub_StrLen i=0; i<aValue.Len(); i++ )
         {
-            register sal_Unicode c = aValue.GetChar( i );
+            sal_Unicode c = aValue.GetChar( i );
             if( c>='0' && c<='9' )
             {
                 nNum *= 10;
@@ -196,7 +196,7 @@ void HTMLOption::GetNumbers( std::vector<sal_uInt32> &rNumbers, bool bSpaceDelim
         xub_StrLen nPos = 0;
         while( nPos < aValue.Len() )
         {
-            register sal_Unicode c;
+            sal_Unicode c;
             while( nPos < aValue.Len() &&
                    ((c=aValue.GetChar(nPos)) == ' ' || c == '\t' ||
                    c == '\n' || c== '\r' ) )
@@ -244,7 +244,7 @@ void HTMLOption::GetColor( Color& rColor ) const
         {
             // Whatever Netscape does to get color values,
             // at maximum three characters < '0' are ignored.
-            register sal_Unicode c = nPos<aTmp.Len() ? aTmp.GetChar( nPos++ )
+            sal_Unicode c = nPos<aTmp.Len() ? aTmp.GetChar( nPos++ )
                                                      : '0';
             if( c < '0' )
             {

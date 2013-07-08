@@ -441,7 +441,7 @@ xub_StrLen lcl_MatchParenthesis( const String& rStr, xub_StrLen nPos )
         return STRING_NOTFOUND;
     xub_StrLen nLen = rStr.Len();
     const sal_Unicode* p0 = rStr.GetBuffer();
-    register const sal_Unicode* p;
+    const sal_Unicode* p;
     const sal_Unicode* p1;
     sal_uInt16 nQuotes = 0;
     if ( nPos < nLen / 2 )

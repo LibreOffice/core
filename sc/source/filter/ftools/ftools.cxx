@@ -64,8 +64,8 @@ SEEEEEEE EEEEEEEE IMMMMMMM MMMMMMMM MMMMMMMM MMMMMMMM MMMMMMMM MMMMMMMM MMMMMMMM
 14321098 76543210 02109876 54321098 76543210 98765432 10987654 32109876 54321098 76543210   Bit in Group
 */
 
-    register long double lfDouble = 0.0;
-    register long double lfFakt = 256.0;
+    long double lfDouble = 0.0;
+    long double lfFakt = 256.0;
     sal_uInt8 pDouble10[ 10 ];
 
     rStrm.Read( pDouble10, 10 );            // Intel-10 in pDouble10
@@ -90,7 +90,7 @@ SEEEEEEE EEEEEEEE IMMMMMMM MMMMMMMM MMMMMMMM MMMMMMMM MMMMMMMM MMMMMMMM MMMMMMMM
     if( lfDouble != 0.0 )
     {
         // exponent
-        register sal_Int32 nExp;
+        sal_Int32 nExp;
         nExp = pDouble10[ 9 ] & 0x7F;
         nExp <<= 8;
         nExp += pDouble10[ 8 ];

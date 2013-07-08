@@ -80,7 +80,7 @@
 {                                                   \
     if ( jj != ii )                                 \
     {                                               \
-        register sal_Int32 k;                       \
+        sal_Int32 k;                                \
         if ( jj > 0 )                               \
             for ( k=0; k < jj; k++ )                \
                 if ( cpPattern[k] == c )            \
@@ -223,7 +223,7 @@ int WLevDistance::WLD( const sal_Unicode* cString, sal_Int32 nStringLen )
         nSPMin = npDistance[0];
         int nReplacePos = -1;       // tristate Flag
         // fuer jede Patternspalte den String durchgehen
-        for ( register sal_Int32 i=1; i <= nStringLen; i++ )
+        for ( sal_Int32 i=1; i <= nStringLen; i++ )
         {
             d1 = d2;                // WLD( X(i-1), Y(j-1) )
             d2 = npDistance[i];     // WLD( X(i)  , Y(j-1) )

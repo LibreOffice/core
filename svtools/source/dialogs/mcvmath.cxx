@@ -68,9 +68,9 @@ Fix ImpMultBig2( const Fix& a, const Fix& b )
 
 sal_uInt16 ImpSqrt( sal_uLong nRadi )
 {
-    register sal_uLong  inf = 1;
-    register sal_uLong  sup = nRadi;
-    register sal_uLong sqr;
+    sal_uLong  inf = 1;
+    sal_uLong  sup = nRadi;
+    sal_uLong sqr;
 
     if ( !nRadi )
         return 0;

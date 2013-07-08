@@ -603,7 +603,7 @@ OUString SAL_CALL ScFilterDetect::detect( uno::Sequence<beans::PropertyValue>& l
                             bSync = sal_True;
                             while( !rStr.IsEof() && bSync )
                             {
-                                register sal_uInt16 nMuster = *pSearch;
+                                sal_uInt16 nMuster = *pSearch;
 
                                 if( nMuster < 0x0100 )
                                 { //                                direkter Byte-Vergleich
