@@ -296,9 +296,14 @@ void ScColumn::DeleteRow( SCROW nStartRow, SCSIZE nSize )
     maCells.erase(nStartRow, nEndRow);
     maCells.resize(MAXROWCOUNT);
 
+    // Get the position again after the container change.
+    aPos = maCells.position(nStartRow);
+
     // Shift the formula cell positions below the start row.
     ShiftFormulaPosHandler aShiftFormulaFunc;
-    sc::ProcessFormula(maCells.begin(), maCells, nStartRow, MAXROW, aShiftFormulaFunc);
+    sc::ProcessFormula(aPos.first, maCells, nStartRow, MAXROW, aShiftFormulaFunc);
+
+    JoinFormulaCellAbove(aPos);
 
     // Single cell broadcasts on deleted cells.
     BroadcastCells(aDeleteRowsFunc.getNonEmptyRows());
@@ -307,7 +312,6 @@ void ScColumn::DeleteRow( SCROW nStartRow, SCSIZE nSize )
     maCellTextAttrs.erase(nStartRow, nEndRow);
     maCellTextAttrs.resize(MAXROWCOUNT);
 
-    RegroupFormulaCells(nStartRow);
     CellStorageModified();
 
     if (!bShiftCells)
@@ -597,8 +601,6 @@ void ScColumn::JoinFormulaCellAbove( const sc::CellStoreType::position_type& aPo
         // This cell is already the top cell in a formula block; the previous
         // cell is not a formula cell.
         return;
-
-    SCROW nRow = aPos.first->position + aPos.second;
 
     ScFormulaCell& rPrev = *sc::formula_block::at(*aPos.first->data, aPos.second-1);
     ScFormulaCell& rCell = *sc::formula_block::at(*aPos.first->data, aPos.second);
