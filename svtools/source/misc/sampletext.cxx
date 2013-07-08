@@ -1160,7 +1160,7 @@ OUString makeShortRepresentativeTextForSelectedFont(OutputDevice &rDevice)
     //script and the font name is itself in Latin, then show a small
     //chunk of representative text for that script
     UScriptCode eScript = getScript(aFontCapabilities);
-    if (!eScript != USCRIPT_COMMON)
+    if (eScript == USCRIPT_COMMON)
         return OUString();
 
     eScript = attemptToDisambiguateHan(eScript, rDevice);
