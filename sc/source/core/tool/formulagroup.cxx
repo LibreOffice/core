@@ -172,6 +172,7 @@ FormulaGroupInterpreter *FormulaGroupInterpreter::getStatic()
     if ( msInstance &&
          bOpenCLEnabled != ScInterpreter::GetGlobalConfig().mbOpenCLEnabled )
     {
+        bOpenCLEnabled = ScInterpreter::GetGlobalConfig().mbOpenCLEnabled;
         delete msInstance;
         msInstance = NULL;
     }
