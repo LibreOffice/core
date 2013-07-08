@@ -159,7 +159,8 @@
      Note: The brackets and the leading $ character are mandatory, the
      hyphen-minus separates the currency symbol from the hexagesimal MS-LCID,
      letters contained in the LCID have to be in upper case, leading zeros are
-     to be omitted. LCIDs are defined in include/i18nlangtag/lang.h
+     to be omitted. LCIDs are defined in include/i18nlangtag/lang.h (
+     http://opengrok.libreoffice.org/xref/core/include/i18nlangtag/lang.h )
 -->
 
 <!ELEMENT DateAcceptancePattern (#PCDATA)>
@@ -204,7 +205,8 @@
     All:
         The format indices 0..49 are reserved and, for backwards compatibility,
         MUST be used as stated in
-        offapi/com/sun/star/i18n/NumberFormatIndex.idl.
+        offapi/com/sun/star/i18n/NumberFormatIndex.idl (
+        http://opengrok.libreoffice.org/xref/core/offapi/com/sun/star/i18n/NumberFormatIndex.idl )
         Note that indices 10 ("# ?/?"), 11 ("# ??/??"), 48 (BOOLEAN) and 49 (@
         Text) are generated internally, as they aren't locale dependent, and
         must not be used in locale data XML files. All other formats have to be
@@ -277,11 +279,12 @@
         formatindices 12, 13, 14, 15, 17 with [$xxx-yyy] notation must use the
         xxx currency symbol that has the attribute
         usedInCompatibleFormatCodes="true".  The hexadecimal yyy LANGID must be
-        properly set. It can be found in project util module tools file
-        tools/inc/lang.hxx.  You may verify the proper use of the xxx currency
-        symbol with the AWK script
-        i18npool/source/localedata/data/currency-check.awk, it mustn't display
-        any output. If it does, then there's something wrong.
+        properly set. It can be found in the file include/i18nlangtag/lang.h (
+        http://opengrok.libreoffice.org/xref/core/include/i18nlangtag/lang.h )
+        You may verify the proper use of the xxx currency symbol with the AWK
+        script i18npool/source/localedata/data/currency-check.awk, it mustn't
+        display any output. If it does, then there's something wrong.
+
 -->
 <!ELEMENT FormatCode      (#PCDATA)>
 
@@ -585,7 +588,9 @@
 
 <!--
     In numbering levels, the NumType attribute is a value of the constants
-    defined in offapi/com/sun/star/style/NumberingType.idl
+    defined in offapi/com/sun/star/style/NumberingType.idl (
+    http://opengrok.libreoffice.org/xref/core/offapi/com/sun/star/style/NumberingType.idl
+    )
 -->
 
 <!ELEMENT LC_NumberingLevel (NumberingLevel* )>
