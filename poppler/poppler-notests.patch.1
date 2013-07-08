@@ -1,0 +1,11 @@
+--- poppler-0.22.5/Makefile.in	2013-06-16 18:24:09.000000000 +0200
++++ poppler-0.22.5/Makefile.in	2013-07-08 17:10:53.382213184 +0200
+@@ -456,7 +456,7 @@
+ @BUILD_POPPLER_CPP_TRUE@cpp_subdir = cpp
+ @BUILD_POPPLER_CPP_TRUE@cpp_pc_file = poppler-cpp.pc
+ @BUILD_UTILS_TRUE@utils_subdir = utils
+-SUBDIRS = goo fofi $(splash_subdir) poppler $(utils_subdir) $(glib_subdir) test $(qt4_subdir) $(cpp_subdir)
++SUBDIRS = goo fofi $(splash_subdir) poppler $(utils_subdir) $(glib_subdir) $(qt4_subdir) $(cpp_subdir)
+ 
+ # Add CMake buildsystem files here so they get added on make dist
+ EXTRA_DIST = README-XPDF poppler.pc.in poppler-uninstalled.pc.in \

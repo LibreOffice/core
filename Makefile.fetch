@@ -148,6 +148,7 @@ $(WORKDIR)/download: $(BUILDDIR)/config_host.mk $(SRCDIR)/download.lst $(SRCDIR)
 		$(call fetch_Optional,ORCUS,$(ORCUS_TARBALL)) \
 		$(call fetch_Optional,CAIRO,$(PIXMAN_TARBALL)) \
 		$(call fetch_Optional,LIBPNG,$(PNG_TARBALL)) \
+		$(call fetch_Optional,POPPLER,$(POPPLER_TARBALL)) \
 		$(call fetch_Optional,POSTGRESQL,$(POSTGRESQL_TARBALL)) \
 		$(call fetch_Optional,PYTHON,$(PYTHON_TARBALL)) \
 		$(call fetch_Optional,REDLAND,$(RAPTOR_TARBALL)) \
@@ -161,7 +162,6 @@ $(WORKDIR)/download: $(BUILDDIR)/config_host.mk $(SRCDIR)/download.lst $(SRCDIR)
 		$(call fetch_Optional,WPD,$(WPD_TARBALL)) \
 		$(call fetch_Optional,WPG,$(WPG_TARBALL)) \
 		$(call fetch_Optional,WPS,$(WPS_TARBALL)) \
-		$(call fetch_Optional,XPDF,$(XPDF_TARBALL)) \
 		$(call fetch_Optional,XSLTML,$(XSLTML_TARBALL)) \
 		$(call fetch_Optional,ZLIB,$(ZLIB_TARBALL)) \
 	,$(call fetch_Download_item,http://dev-www.libreoffice.org/src,$(item)))
