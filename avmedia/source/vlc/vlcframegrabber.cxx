@@ -1,3 +1,4 @@
+#include <vcl/graph.hxx>
 #include "vlcframegrabber.hxx"
 
 using namespace ::com::sun::star;
@@ -14,6 +15,7 @@ SAL_CALL VLCFrameGrabber::VLCFrameGrabber()
 
 ::uno::Reference< css::graphic::XGraphic > SAL_CALL VLCFrameGrabber::grabFrame( double fMediaTime )
 {
+    return Graphic().GetXGraphic();
 }
 
 ::rtl::OUString SAL_CALL VLCFrameGrabber::getImplementationName()
