@@ -1568,7 +1568,9 @@ void SAL_CALL SfxBaseModel::storeSelf( const    uno::Sequence< beans::PropertyVa
             // check that only acceptable parameters are provided here
             if ( aSeqArgs[nInd].Name != "VersionComment" && aSeqArgs[nInd].Name != "Author"
               && aSeqArgs[nInd].Name != "InteractionHandler" && aSeqArgs[nInd].Name != "StatusIndicator"
-              && aSeqArgs[nInd].Name != "VersionMajor" && aSeqArgs[nInd].Name != "CheckIn" )
+              && aSeqArgs[nInd].Name != "VersionMajor"
+              && aSeqArgs[nInd].Name != "FailOnWarning"
+              && aSeqArgs[nInd].Name != "CheckIn" )
             {
                 m_pData->m_pObjectShell->AddLog( ::rtl::OUString( OSL_LOG_PREFIX "unexpected parameter for storeSelf, might be no problem if SaveAs is executed."  ) );
                 m_pData->m_pObjectShell->StoreLog();
