@@ -1720,6 +1720,19 @@ bool PushButton::set_property(const OString &rKey, const OString &rValue)
             nBits |= WB_DEFBUTTON;
         SetStyle(nBits);
     }
+    else if (rKey == "image-position")
+    {
+        ImageAlign eAlign = IMAGEALIGN_LEFT;
+        if (rValue == "left")
+            eAlign = IMAGEALIGN_LEFT;
+        else if (rValue == "right")
+            eAlign = IMAGEALIGN_RIGHT;
+        else if (rValue == "top")
+            eAlign = IMAGEALIGN_TOP;
+        else if (rValue == "bottom")
+            eAlign = IMAGEALIGN_BOTTOM;
+        SetImageAlign(eAlign);
+    }
     else
         return Control::set_property(rKey, rValue);
     return true;

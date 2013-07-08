@@ -689,7 +689,7 @@ namespace
         return sTooltipText;
     }
 
-    Window * extractStockAndBuildPushButton(Window *pParent, VclBuilder::stringmap &rMap)
+    Button* extractStockAndBuildPushButton(Window *pParent, VclBuilder::stringmap &rMap)
     {
         WinBits nBits = WB_CENTER|WB_VCENTER;
 
@@ -697,7 +697,7 @@ namespace
 
         bool bIsStock = extractStock(rMap);
 
-        Window *pWindow = NULL;
+        Button *pWindow = NULL;
 
         if (bIsStock)
         {
@@ -722,11 +722,11 @@ namespace
         return pWindow;
     }
 
-    Window * extractStockAndBuildMenuButton(Window *pParent, VclBuilder::stringmap &rMap)
+    Button * extractStockAndBuildMenuButton(Window *pParent, VclBuilder::stringmap &rMap)
     {
         WinBits nBits = WB_CENTER|WB_VCENTER|WB_3DLOOK;
 
-        Window *pWindow = new MenuButton(pParent, nBits);
+        Button *pWindow = new MenuButton(pParent, nBits);
 
         if (extractStock(rMap))
         {
@@ -1090,14 +1090,17 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
         pWindow = new VclAlignment(pParent);
     else if (name == "GtkButton")
     {
+        Button *pButton;
         OString sMenu = extractCustomProperty(rMap);
         if (sMenu.isEmpty())
-            pWindow = extractStockAndBuildPushButton(pParent, rMap);
+            pButton = extractStockAndBuildPushButton(pParent, rMap);
         else
         {
-            pWindow = extractStockAndBuildMenuButton(pParent, rMap);
+            pButton = extractStockAndBuildMenuButton(pParent, rMap);
             m_pParserState->m_aButtonMenuMaps.push_back(ButtonMenuMap(id, sMenu));
         }
+        pButton->SetImageAlign(IMAGEALIGN_LEFT); //default to left
+        pWindow = pButton;
     }
     else if (name == "GtkRadioButton")
     {
