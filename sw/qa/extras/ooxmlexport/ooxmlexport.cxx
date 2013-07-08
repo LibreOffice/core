@@ -24,6 +24,7 @@
 #include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/awt/FontUnderline.hpp>
 #include <com/sun/star/awt/FontSlant.hpp>
+#include <com/sun/star/text/WrapTextMode.hpp>
 
 #include <unotools/tempfile.hxx>
 #include <unotools/ucbstreamhelper.hxx>
@@ -69,6 +70,7 @@ public:
     void testMathLiteral();
     void testFdo48557();
     void testI120928();
+    void testN822175();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -116,6 +118,7 @@ void Test::run()
         {"math-literal.docx", &Test::testMathLiteral},
         {"fdo48557.odt", &Test::testFdo48557},
         {"i120928.docx", &Test::testI120928},
+        {"n822175.odt", &Test::testN822175},
     };
     // Don't test the first import of these, for some reason those tests fail
     const char* aBlacklist[] = {
@@ -670,6 +673,15 @@ void Test::testI120928()
             bIsGraphic = true;
     }
     CPPUNIT_ASSERT_EQUAL(true, bIsGraphic);
+}
+
+void Test::testN822175()
+{
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xFrame(xDraws->getByIndex(0), uno::UNO_QUERY);
+    // Was text::WrapTextMode_THROUGH, due to missing Surround handling in the exporter.
+    CPPUNIT_ASSERT_EQUAL(text::WrapTextMode_PARALLEL, getProperty<text::WrapTextMode>(xFrame, "Surround"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
