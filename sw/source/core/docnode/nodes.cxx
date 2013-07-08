@@ -529,10 +529,10 @@ sal_Bool SwNodes::_MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
     SwNodeIndex aNodeIndex (aRg.aEnd);
     while (aNodeIndex > aRg.aStart)
     {
-        SwNode* pNode = rNodes[aNodeIndex.GetIndex()];
-        if (pNode->GetNodeType() != ND_ENDNODE)
+        SwNode& rNode (aNodeIndex.GetNode());
+        if (rNode.GetNodeType() != ND_ENDNODE)
             break;
-        SwStartNode* pStartNode = pNode->pStartOfSection;
+        SwStartNode* pStartNode = rNode.pStartOfSection;
         if (pStartNode==NULL)
             break;
         if ( ! pStartNode->IsTableNode())
