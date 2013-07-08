@@ -1,0 +1,157 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXn///O0\u003d",
+        "filename": "editeng/source/editeng/editeng.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1000065
+      },
+      "writtenOn": "2013-07-08T11:33:20Z",
+      "side": 1,
+      "message": "so, this is still a pointer, I don\u0027t see why, also like mentioned in the previous patch version comments now you need to manage the memory ( and you don\u0027t ) so this also leaks",
+      "revId": "ae4ac1c49a5efbe2201f4272afb04b19979c391b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn///Ow\u003d",
+        "filename": "include/editeng/editeng.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1000065
+      },
+      "writtenOn": "2013-07-08T11:33:20Z",
+      "side": 1,
+      "message": "see editeng.cxx why is this a pointer, and if there is some drastic need to use a pointer it should be freed",
+      "revId": "ae4ac1c49a5efbe2201f4272afb04b19979c391b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn///Os\u003d",
+        "filename": "oox/source/vml/vmlshapecontext.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 259,
+      "author": {
+        "id": 1000065
+      },
+      "writtenOn": "2013-07-08T11:33:20Z",
+      "side": 1,
+      "message": "I think the whole loop testing each character in path could be replaced by if ( path.indexOf(\u0027c\u0027) !\u003d -1 )  or something similar",
+      "revId": "ae4ac1c49a5efbe2201f4272afb04b19979c391b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn///Og\u003d",
+        "filename": "oox/source/vml/vmltextbox.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1000065
+      },
+      "writtenOn": "2013-07-08T11:33:20Z",
+      "side": 1,
+      "message": "surely the magic hardcoded numbers here aren\u0027t SVX_ADJUST_XXX ? the value is used in an uno property so I would guess these numbers are some uno enum or some uno constant. In anycase the comment is misleading and no magic numbers should be used ( the constant name or enum value should be used ) I *think* the value here ( from grepping the source ) is css:style::ParagraphAdjust",
+      "revId": "ae4ac1c49a5efbe2201f4272afb04b19979c391b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn///Oc\u003d",
+        "filename": "oox/source/vml/vmltextbox.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1000065
+      },
+      "writtenOn": "2013-07-08T11:33:20Z",
+      "side": 1,
+      "message": "as above, magic number",
+      "revId": "ae4ac1c49a5efbe2201f4272afb04b19979c391b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn///OY\u003d",
+        "filename": "oox/source/vml/vmltextbox.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1000065
+      },
+      "writtenOn": "2013-07-08T11:33:20Z",
+      "side": 1,
+      "message": "magic number",
+      "revId": "ae4ac1c49a5efbe2201f4272afb04b19979c391b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn///OU\u003d",
+        "filename": "oox/source/vml/vmltextbox.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1000065
+      },
+      "writtenOn": "2013-07-08T11:33:20Z",
+      "side": 1,
+      "message": "magic number",
+      "revId": "ae4ac1c49a5efbe2201f4272afb04b19979c391b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn///OQ\u003d",
+        "filename": "oox/source/vml/vmltextbox.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1000065
+      },
+      "writtenOn": "2013-07-08T11:33:20Z",
+      "side": 1,
+      "message": "magic number",
+      "revId": "ae4ac1c49a5efbe2201f4272afb04b19979c391b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn///OM\u003d",
+        "filename": "svx/source/customshapes/EnhancedCustomShape2d.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1444,
+      "author": {
+        "id": 1000065
+      },
+      "writtenOn": "2013-07-08T11:33:20Z",
+      "side": 1,
+      "message": "well I have no idea about this code but the adjustment here looks strange, maybe a comment  more descriptive then \"Make twice - this is wrong\" might be helpful",
+      "revId": "ae4ac1c49a5efbe2201f4272afb04b19979c391b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
