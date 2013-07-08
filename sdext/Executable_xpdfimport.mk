@@ -16,7 +16,7 @@ $(eval $(call gb_Executable_use_externals,xpdfimport,\
     zlib \
 ))
 
-$(eval $(call gb_Executable_use_libraries,xpdimport,\
+$(eval $(call gb_Executable_use_libraries,xpdfimport,\
     sal \
     $(gb_UWINAPI) \
 ))
