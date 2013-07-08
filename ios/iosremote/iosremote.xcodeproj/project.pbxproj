@@ -41,6 +41,8 @@
 		57C6E42F175E076900E8BC5F /* CommunicationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 57C6E429175E076900E8BC5F /* CommunicationManager.m */; };
 		57C6E430175E076900E8BC5F /* CommandInterpreter.m in Sources */ = {isa = PBXBuildFile; fileRef = 57C6E42B175E076900E8BC5F /* CommandInterpreter.m */; };
 		57C6E431175E076900E8BC5F /* Server.m in Sources */ = {isa = PBXBuildFile; fileRef = 57C6E42D175E076900E8BC5F /* Server.m */; };
+		57CC48C6178B42A400075DE4 /* timer_pause_btn.png in Resources */ = {isa = PBXBuildFile; fileRef = 57CC48C4178B42A400075DE4 /* timer_pause_btn.png */; };
+		57CC48C7178B42A400075DE4 /* timer_resume_btn.png in Resources */ = {isa = PBXBuildFile; fileRef = 57CC48C5178B42A400075DE4 /* timer_resume_btn.png */; };
 		57CFED9917838FDC00E82E05 /* EditableTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 57CFED9817838FDC00E82E05 /* EditableTableViewCell.m */; };
 		57FE71E31785C61400B50125 /* pinValidation_vc.m in Sources */ = {isa = PBXBuildFile; fileRef = 57FE71E21785C61400B50125 /* pinValidation_vc.m */; };
 		57FE71E61785D7FE00B50125 /* slideShowPreview_vc.m in Sources */ = {isa = PBXBuildFile; fileRef = 57FE71E51785D7FE00B50125 /* slideShowPreview_vc.m */; };
@@ -94,12 +96,14 @@
 		57C6E40B175E06E800E8BC5F /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard_iPhone.storyboard; sourceTree = "<group>"; };
 		57C6E426175E076900E8BC5F /* Client.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Client.h; sourceTree = "<group>"; };
 		57C6E427175E076900E8BC5F /* Client.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Client.m; sourceTree = "<group>"; };
-		57C6E428175E076900E8BC5F /* CommunicationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommunicationManager.h; sourceTree = "<group>"; };
-		57C6E429175E076900E8BC5F /* CommunicationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommunicationManager.m; sourceTree = "<group>"; };
+		57C6E428175E076900E8BC5F /* CommunicationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = CommunicationManager.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		57C6E429175E076900E8BC5F /* CommunicationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = CommunicationManager.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		57C6E42A175E076900E8BC5F /* CommandInterpreter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommandInterpreter.h; sourceTree = "<group>"; };
 		57C6E42B175E076900E8BC5F /* CommandInterpreter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommandInterpreter.m; sourceTree = "<group>"; };
 		57C6E42C175E076900E8BC5F /* Server.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Server.h; sourceTree = "<group>"; };
 		57C6E42D175E076900E8BC5F /* Server.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Server.m; sourceTree = "<group>"; };
+		57CC48C4178B42A400075DE4 /* timer_pause_btn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = timer_pause_btn.png; path = iosremote/timer_pause_btn.png; sourceTree = "<group>"; };
+		57CC48C5178B42A400075DE4 /* timer_resume_btn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = timer_resume_btn.png; path = iosremote/timer_resume_btn.png; sourceTree = "<group>"; };
 		57CFED9717838FDC00E82E05 /* EditableTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditableTableViewCell.h; sourceTree = "<group>"; };
 		57CFED9817838FDC00E82E05 /* EditableTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditableTableViewCell.m; sourceTree = "<group>"; };
 		57FE71E11785C61300B50125 /* pinValidation_vc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = pinValidation_vc.h; path = Communication/pinValidation_vc.h; sourceTree = "<group>"; };
@@ -151,6 +155,8 @@
 		57AEEDAA1788D7B2007F4F97 /* Assets */ = {
 			isa = PBXGroup;
 			children = (
+				57CC48C4178B42A400075DE4 /* timer_pause_btn.png */,
+				57CC48C5178B42A400075DE4 /* timer_resume_btn.png */,
 				571BFAD0178AADA200EF1BDB /* more_icon.png */,
 				57AEEDB417899BB4007F4F97 /* slide_finished.png */,
 				57AEEDB017895BF5007F4F97 /* pointer_pushed.png */,
@@ -333,6 +339,8 @@
 				571BFAD1178AADA200EF1BDB /* more_icon.png in Resources */,
 				571D4807178B2F080063D93B /* timer_clear_btn.png in Resources */,
 				571D4808178B2F080063D93B /* timer_start_btn.png in Resources */,
+				57CC48C6178B42A400075DE4 /* timer_pause_btn.png in Resources */,
+				57CC48C7178B42A400075DE4 /* timer_resume_btn.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

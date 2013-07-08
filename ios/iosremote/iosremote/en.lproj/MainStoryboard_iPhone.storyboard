@@ -235,16 +235,16 @@
                                     <rect key="frame" x="0.0" y="0.0" width="320" height="131"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="00:00:00" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JsJ-ic-uyC">
+                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="1" contentMode="left" text="00:00:00" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JsJ-ic-uyC">
                                             <constraints>
-                                                <constraint firstAttribute="height" constant="56" id="7o1-Sm-4pn"/>
-                                                <constraint firstAttribute="width" constant="213" id="Yak-Oz-mwe"/>
+                                                <constraint firstAttribute="width" constant="220" type="user" id="8Gg-8f-cT7"/>
+                                                <constraint firstAttribute="height" constant="60" type="user" id="M2t-hC-QqV"/>
                                             </constraints>
-                                            <fontDescription key="fontDescription" type="system" pointSize="45"/>
+                                            <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="39"/>
                                             <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                             <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         </label>
-                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Fmn-lt-vBn">
+                                        <button opaque="NO" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Fmn-lt-vBn">
                                             <constraints>
                                                 <constraint firstAttribute="width" constant="44" id="7ff-i8-MnF"/>
                                                 <constraint firstAttribute="height" constant="44" id="Pef-te-m1Y"/>
@@ -257,6 +257,9 @@
                                             <state key="highlighted">
                                                 <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             </state>
+                                            <connections>
+                                                <action selector="stopWatchStart:" destination="5d0-J5-Cal" eventType="touchUpInside" id="887-jd-VmR"/>
+                                            </connections>
                                         </button>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EVu-he-FS4">
                                             <constraints>
@@ -270,19 +273,48 @@
                                             <state key="highlighted">
                                                 <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             </state>
+                                            <connections>
+                                                <action selector="stopWatchClear:" destination="5d0-J5-Cal" eventType="touchUpInside" id="uua-50-63G"/>
+                                            </connections>
                                         </button>
+                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Hours" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3UQ-XJ-SDP">
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="21" id="LwO-US-j6S"/>
+                                            </constraints>
+                                            <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        </label>
+                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Minutes" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TqG-sM-lAC">
+                                            <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        </label>
+                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Seconds" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6jG-LW-J7Q">
+                                            <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        </label>
                                     </subviews>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 </view>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
-                                    <constraint firstItem="JsJ-ic-uyC" firstAttribute="leading" secondItem="hig-YG-1Lg" secondAttribute="leading" constant="20" type="default" id="0YN-U0-8Pa"/>
-                                    <constraint firstItem="Fmn-lt-vBn" firstAttribute="leading" secondItem="hig-YG-1Lg" secondAttribute="leading" constant="70" id="DKO-d3-AHl"/>
-                                    <constraint firstAttribute="bottom" secondItem="Fmn-lt-vBn" secondAttribute="bottom" constant="14" id="LPb-LS-NNv"/>
-                                    <constraint firstItem="JsJ-ic-uyC" firstAttribute="top" secondItem="hig-YG-1Lg" secondAttribute="top" constant="14" id="MIv-bn-BMI"/>
+                                    <constraint firstItem="TqG-sM-lAC" firstAttribute="top" secondItem="6jG-LW-J7Q" secondAttribute="top" type="default" id="0fA-Dm-47U"/>
+                                    <constraint firstItem="EVu-he-FS4" firstAttribute="top" secondItem="Fmn-lt-vBn" secondAttribute="top" type="default" id="99Y-4S-1aN"/>
+                                    <constraint firstItem="3UQ-XJ-SDP" firstAttribute="top" secondItem="TqG-sM-lAC" secondAttribute="top" type="default" id="AtJ-JE-Pqz"/>
+                                    <constraint firstItem="Fmn-lt-vBn" firstAttribute="leading" secondItem="hig-YG-1Lg" secondAttribute="leading" constant="61" id="GVV-6L-l4W"/>
+                                    <constraint firstItem="EVu-he-FS4" firstAttribute="leading" secondItem="hig-YG-1Lg" secondAttribute="leading" constant="130" id="JEc-bR-rF8"/>
+                                    <constraint firstItem="TqG-sM-lAC" firstAttribute="baseline" secondItem="3UQ-XJ-SDP" secondAttribute="baseline" type="default" id="O8m-Cg-3ma"/>
+                                    <constraint firstItem="6jG-LW-J7Q" firstAttribute="leading" secondItem="JsJ-ic-uyC" secondAttribute="trailing" constant="-75" type="user" id="V4J-LN-DQ5"/>
+                                    <constraint firstItem="TqG-sM-lAC" firstAttribute="leading" secondItem="hig-YG-1Lg" secondAttribute="leading" constant="101" id="a80-Ly-6HQ"/>
+                                    <constraint firstItem="3UQ-XJ-SDP" firstAttribute="top" secondItem="hig-YG-1Lg" secondAttribute="top" constant="47" id="e4B-LI-KYX"/>
                                     <constraint firstItem="Fmn-lt-vBn" firstAttribute="bottom" secondItem="EVu-he-FS4" secondAttribute="bottom" type="default" id="fMf-BD-LAf"/>
-                                    <constraint firstItem="EVu-he-FS4" firstAttribute="top" secondItem="Fmn-lt-vBn" secondAttribute="top" type="default" id="nrz-wB-UvB"/>
-                                    <constraint firstItem="EVu-he-FS4" firstAttribute="leading" secondItem="hig-YG-1Lg" secondAttribute="leading" constant="139" id="o5t-v1-DIw"/>
+                                    <constraint firstItem="JsJ-ic-uyC" firstAttribute="leading" secondItem="hig-YG-1Lg" secondAttribute="leading" constant="11" id="g9d-KM-GbM"/>
+                                    <constraint firstAttribute="bottom" secondItem="Fmn-lt-vBn" secondAttribute="bottom" constant="11" id="hBN-Is-hCr"/>
+                                    <constraint firstItem="6jG-LW-J7Q" firstAttribute="baseline" secondItem="TqG-sM-lAC" secondAttribute="baseline" type="default" id="hcq-ha-5YG"/>
+                                    <constraint firstItem="JsJ-ic-uyC" firstAttribute="top" secondItem="hig-YG-1Lg" secondAttribute="top" type="default" id="hgW-2z-759"/>
+                                    <constraint firstItem="3UQ-XJ-SDP" firstAttribute="leading" secondItem="hig-YG-1Lg" secondAttribute="leading" constant="48" id="zV7-CU-RWk"/>
                                 </constraints>
                             </tableViewCell>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="slide" rowHeight="132" id="dDp-H3-HyL">
@@ -713,13 +745,14 @@
         <class className="slideShowPreviewTable_vc" superclassName="UITableViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/slideShowPreviewTable_vc.h"/>
             <relationships>
-                <relationship kind="action" name="startPresentationAction:"/>
                 <relationship kind="outlet" name="optionsTable" candidateClass="UITableView"/>
             </relationships>
         </class>
         <class className="slideShowSwipeInList" superclassName="UITableViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/slideShowSwipeInList.h"/>
             <relationships>
+                <relationship kind="action" name="stopWatchClear:"/>
+                <relationship kind="action" name="stopWatchStart:"/>
                 <relationship kind="outlet" name="slidesTable" candidateClass="UITableView"/>
             </relationships>
         </class>
