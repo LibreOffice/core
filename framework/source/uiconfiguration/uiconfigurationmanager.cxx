@@ -61,29 +61,6 @@ namespace framework
 //*****************************************************************************************************************
 //  XInterface, XTypeProvider, XServiceInfo
 //*****************************************************************************************************************
-DEFINE_XINTERFACE_8                    (    UIConfigurationManager                                                          ,
-                                            OWeakObject                                                                     ,
-                                            DIRECT_INTERFACE( css::lang::XTypeProvider                                      ),
-                                            DIRECT_INTERFACE( css::lang::XServiceInfo                                       ),
-                                            DIRECT_INTERFACE( css::lang::XComponent                                         ),
-                                            DIRECT_INTERFACE( css::ui::XUIConfiguration                  ),
-                                            DIRECT_INTERFACE( css::ui::XUIConfigurationManager           ),
-                                            DIRECT_INTERFACE( css::ui::XUIConfigurationManager2           ),
-                                            DIRECT_INTERFACE( css::ui::XUIConfigurationPersistence       ),
-                                            DIRECT_INTERFACE( css::ui::XUIConfigurationStorage           )
-                                        )
-
-DEFINE_XTYPEPROVIDER_8                  (   UIConfigurationManager                                  ,
-                                            css::lang::XTypeProvider                                ,
-                                            css::lang::XServiceInfo                                 ,
-                                            css::lang::XComponent                                   ,
-                                            css::ui::XUIConfiguration            ,
-                                            css::ui::XUIConfigurationManager     ,
-                                            css::ui::XUIConfigurationManager2     ,
-                                            css::ui::XUIConfigurationPersistence ,
-                                            css::ui::XUIConfigurationStorage
-                                        )
-
 DEFINE_XSERVICEINFO_MULTISERVICE_2        (   UIConfigurationManager                      ,
                                             ::cppu::OWeakObject                         ,
                                             OUString("com.sun.star.ui.UIConfigurationManager"),

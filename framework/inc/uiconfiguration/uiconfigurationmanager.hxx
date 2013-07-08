@@ -45,23 +45,19 @@
 #include <com/sun/star/ui/UIElementType.hpp>
 #include <com/sun/star/ui/XAcceleratorConfiguration.hpp>
 
-#include <cppuhelper/weak.hxx>
-#include <cppuhelper/interfacecontainer.hxx>
+#include <cppuhelper/implbase2.hxx>
 #include <rtl/ustring.hxx>
 
 
 namespace framework
 {
-    class UIConfigurationManager :   public com::sun::star::lang::XTypeProvider ,
-                                     public com::sun::star::lang::XServiceInfo  ,
-                                     public com::sun::star::ui::XUIConfigurationManager2      ,
-                                     private ThreadHelpBase                     ,   // Struct for right initalization of mutex member! Must be first of baseclasses.
-                                     public ::cppu::OWeakObject
+    class UIConfigurationManager :   private ThreadHelpBase                     ,   // Struct for right initalization of mutex member! Must be first of baseclasses.
+                                     public ::cppu::WeakImplHelper2<
+                                            com::sun::star::lang::XServiceInfo  ,
+                                            com::sun::star::ui::XUIConfigurationManager2 >
     {
         public:
             //  XInterface, XTypeProvider, XServiceInfo
-            FWK_DECLARE_XINTERFACE
-            FWK_DECLARE_XTYPEPROVIDER
             DECLARE_XSERVICEINFO
 
             UIConfigurationManager( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > & rxContext );
