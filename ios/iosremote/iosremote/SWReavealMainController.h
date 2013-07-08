@@ -1,5 +1,5 @@
 //
-//  SWRevealViewControllerContainer.h
+//  SWReavealMainController.h
 //  iosremote
 //
 //  Created by Liu Siqi on 7/8/13.
@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface SWRevealViewControllerContainer : UIViewController
+@interface SWReavealMainController : UIViewController
 
 @end

@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		571BFAD1178AADA200EF1BDB /* more_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 571BFAD0178AADA200EF1BDB /* more_icon.png */; };
+		571D4807178B2F080063D93B /* timer_clear_btn.png in Resources */ = {isa = PBXBuildFile; fileRef = 571D4805178B2F080063D93B /* timer_clear_btn.png */; };
+		571D4808178B2F080063D93B /* timer_start_btn.png in Resources */ = {isa = PBXBuildFile; fileRef = 571D4806178B2F080063D93B /* timer_start_btn.png */; };
 		5753DD901781EA0300DB71BB /* serverList_vc.m in Sources */ = {isa = PBXBuildFile; fileRef = 5753DD8F1781EA0300DB71BB /* serverList_vc.m */; };
 		5753DD9917834D7100DB71BB /* newServer_vc.m in Sources */ = {isa = PBXBuildFile; fileRef = 5753DD9817834D7100DB71BB /* newServer_vc.m */; };
 		57701739178AC83E00B99793 /* SWRevealViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 57701738178AC83E00B99793 /* SWRevealViewController.m */; };
@@ -48,6 +50,8 @@
 
 /* Begin PBXFileReference section */
 		571BFAD0178AADA200EF1BDB /* more_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = more_icon.png; path = iosremote/more_icon.png; sourceTree = "<group>"; };
+		571D4805178B2F080063D93B /* timer_clear_btn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = timer_clear_btn.png; path = iosremote/timer_clear_btn.png; sourceTree = "<group>"; };
+		571D4806178B2F080063D93B /* timer_start_btn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = timer_start_btn.png; path = iosremote/timer_start_btn.png; sourceTree = "<group>"; };
 		5753DD8E1781EA0300DB71BB /* serverList_vc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = serverList_vc.h; sourceTree = "<group>"; };
 		5753DD8F1781EA0300DB71BB /* serverList_vc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = serverList_vc.m; sourceTree = "<group>"; };
 		5753DD9717834D7100DB71BB /* newServer_vc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = newServer_vc.h; sourceTree = "<group>"; };
@@ -156,6 +160,8 @@
 				57867A5C178752CD00EBBE52 /* pushed_previous_button.png */,
 				57867A5D178752CD00EBBE52 /* released_previous_button.png */,
 				57867A531787172A00EBBE52 /* impress.jpeg */,
+				571D4805178B2F080063D93B /* timer_clear_btn.png */,
+				571D4806178B2F080063D93B /* timer_start_btn.png */,
 			);
 			name = Assets;
 			sourceTree = "<group>";
@@ -325,6 +331,8 @@
 				57AEEDB117895BF5007F4F97 /* pointer_pushed.png in Resources */,
 				57AEEDB517899BB4007F4F97 /* slide_finished.png in Resources */,
 				571BFAD1178AADA200EF1BDB /* more_icon.png in Resources */,
+				571D4807178B2F080063D93B /* timer_clear_btn.png in Resources */,
+				571D4808178B2F080063D93B /* timer_start_btn.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

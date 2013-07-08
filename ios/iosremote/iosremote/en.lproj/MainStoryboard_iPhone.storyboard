@@ -208,7 +208,6 @@
         <!--Reveal View Controller-->
         <scene sceneID="koC-gb-LIk">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="9lz-VN-PH6" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <viewController id="LZb-9n-W8N" customClass="SWRevealViewController" sceneMemberID="viewController">
                     <navigationItem key="navigationItem" id="vRB-Nd-PJ0"/>
                     <connections>
@@ -216,6 +215,7 @@
                         <segue destination="Ivv-3X-Nhr" kind="custom" identifier="sw_front" customClass="SWRevealViewControllerSegue" id="UPp-kY-X3T"/>
                     </connections>
                 </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="9lz-VN-PH6" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1167" y="1211"/>
         </scene>
@@ -234,9 +234,56 @@
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                     <rect key="frame" x="0.0" y="0.0" width="320" height="131"/>
                                     <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="00:00:00" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JsJ-ic-uyC">
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="56" id="7o1-Sm-4pn"/>
+                                                <constraint firstAttribute="width" constant="213" id="Yak-Oz-mwe"/>
+                                            </constraints>
+                                            <fontDescription key="fontDescription" type="system" pointSize="45"/>
+                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        </label>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Fmn-lt-vBn">
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="44" id="7ff-i8-MnF"/>
+                                                <constraint firstAttribute="height" constant="44" id="Pef-te-m1Y"/>
+                                            </constraints>
+                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                            <state key="normal" image="timer_start_btn.png">
+                                                <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
+                                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                            </state>
+                                            <state key="highlighted">
+                                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                            </state>
+                                        </button>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EVu-he-FS4">
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="44" id="bgD-kw-jaw"/>
+                                            </constraints>
+                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                            <state key="normal" image="timer_clear_btn.png">
+                                                <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
+                                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                            </state>
+                                            <state key="highlighted">
+                                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                            </state>
+                                        </button>
+                                    </subviews>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 </view>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstItem="JsJ-ic-uyC" firstAttribute="leading" secondItem="hig-YG-1Lg" secondAttribute="leading" constant="20" type="default" id="0YN-U0-8Pa"/>
+                                    <constraint firstItem="Fmn-lt-vBn" firstAttribute="leading" secondItem="hig-YG-1Lg" secondAttribute="leading" constant="70" id="DKO-d3-AHl"/>
+                                    <constraint firstAttribute="bottom" secondItem="Fmn-lt-vBn" secondAttribute="bottom" constant="14" id="LPb-LS-NNv"/>
+                                    <constraint firstItem="JsJ-ic-uyC" firstAttribute="top" secondItem="hig-YG-1Lg" secondAttribute="top" constant="14" id="MIv-bn-BMI"/>
+                                    <constraint firstItem="Fmn-lt-vBn" firstAttribute="bottom" secondItem="EVu-he-FS4" secondAttribute="bottom" type="default" id="fMf-BD-LAf"/>
+                                    <constraint firstItem="EVu-he-FS4" firstAttribute="top" secondItem="Fmn-lt-vBn" secondAttribute="top" type="default" id="nrz-wB-UvB"/>
+                                    <constraint firstItem="EVu-he-FS4" firstAttribute="leading" secondItem="hig-YG-1Lg" secondAttribute="leading" constant="139" id="o5t-v1-DIw"/>
+                                </constraints>
                             </tableViewCell>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="slide" rowHeight="132" id="dDp-H3-HyL">
                                 <rect key="frame" x="0.0" y="154" width="320" height="132"/>
@@ -631,6 +678,8 @@
         <image name="pushed_previous_button.png" width="315" height="220"/>
         <image name="released_next_button.png" width="315" height="220"/>
         <image name="released_previous_button.png" width="315" height="220"/>
+        <image name="timer_clear_btn.png" width="74" height="74"/>
+        <image name="timer_start_btn.png" width="74" height="74"/>
     </resources>
     <classes>
         <class className="EditableTableViewCell" superclassName="UITableViewCell">
@@ -664,6 +713,7 @@
         <class className="slideShowPreviewTable_vc" superclassName="UITableViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/slideShowPreviewTable_vc.h"/>
             <relationships>
+                <relationship kind="action" name="startPresentationAction:"/>
                 <relationship kind="outlet" name="optionsTable" candidateClass="UITableView"/>
             </relationships>
         </class>
