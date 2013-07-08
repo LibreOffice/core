@@ -586,6 +586,7 @@ private:
     ::sax_fastparser::FastAttributeList *m_pHyperlinkAttrList;
     ::sax_fastparser::FastAttributeList *m_pFlyAttrList;
     ::sax_fastparser::FastAttributeList *m_pFlyFillAttrList;
+    ::sax_fastparser::FastAttributeList *m_pFlyWrapAttrList;
     /// Attributes of the next v:textbox element.
     ::sax_fastparser::FastAttributeList *m_pTextboxAttrList;
     /// When exporting fly frames, this holds the real size of the frame.

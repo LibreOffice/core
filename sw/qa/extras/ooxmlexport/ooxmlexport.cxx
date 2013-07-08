@@ -29,6 +29,7 @@
 #include <com/sun/star/awt/FontUnderline.hpp>
 #include <com/sun/star/awt/FontSlant.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
+#include <com/sun/star/text/WrapTextMode.hpp>
 
 #include <unotools/tempfile.hxx>
 #include <unotools/ucbstreamhelper.hxx>
@@ -87,6 +88,7 @@ public:
     void testFdo56679();
     void testFdo65400();
     void testFdo66543();
+    void testN822175();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -147,6 +149,7 @@ void Test::run()
         {"fdo56679.docx", &Test::testFdo56679},
         {"fdo65400.docx", &Test::testFdo65400},
         {"fdo66543.docx", &Test::testFdo66543},
+        {"n822175.odt", &Test::testN822175},
     };
     // Don't test the first import of these, for some reason those tests fail
     const char* aBlacklist[] = {
@@ -888,6 +891,15 @@ void Test::testFdo66543()
 
     uno::Reference< text::XTextRange > paragraph1 = getParagraph( 1 );
     CPPUNIT_ASSERT_EQUAL( sal_Int32( 1 ), getProperty< sal_Int32 >( paragraph1, "ParaLineNumberStartValue" ));
+}
+
+void Test::testN822175()
+{
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xFrame(xDraws->getByIndex(0), uno::UNO_QUERY);
+    // Was text::WrapTextMode_THROUGH, due to missing Surround handling in the exporter.
+    CPPUNIT_ASSERT_EQUAL(text::WrapTextMode_PARALLEL, getProperty<text::WrapTextMode>(xFrame, "Surround"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
