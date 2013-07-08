@@ -77,6 +77,8 @@
 #include "globstr.hrc"
 #include "xlconst.hxx"
 
+#include <algorithm>
+
 using ::com::sun::star::table::BorderLine2;
 namespace oox {
 namespace xls {
@@ -3435,19 +3437,35 @@ void StylesBuffer::writeStyleXfToPropertySet( PropertySet& rPropSet, sal_Int32 n
         pXf->writeToPropertySet( rPropSet );
 }
 
+namespace {
+
+struct FindTableStyleByName
+{
+    FindTableStyleByName( const OUString& rName ):
+        mrName(rName) {}
+
+    bool operator()(const TableStyleRef& pStyle)
+    {
+        return mrName == pStyle->getTableStyleName();
+    }
+
+private:
+    const OUString& mrName;
+};
+
+}
+
 TableStyleRef StylesBuffer::getTableStyle( OUString& rTableStyleName )
 {
-    for( ::std::vector< TableStyleRef >::iterator i = maTableStyles.begin(); i < maTableStyles.end(); ++i)
-    {
-        if( ((*i)->getTableStyleName() ).equals(rTableStyleName) )
-        {
-            return(*i);
-        }
-    }
+    std::vector< TableStyleRef >::const_iterator itr = std::find_if(
+            maTableStyles.begin(), maTableStyles.end(), FindTableStyleByName(rTableStyleName));
+
+    if(itr != maTableStyles.end())
+        return *itr;
+
     return 0;
 }
 
-// ============================================================================
 
 } // namespace xls
 } // namespace oox
