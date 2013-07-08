@@ -6508,6 +6508,15 @@ void Test::testSharedFormulas()
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(8), pFC->GetSharedTopRow());
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(2), pFC->GetSharedLength());
 
+    // Delete rows 4:8 and shift row 9 and below up to row 4.  This should
+    // re-merge the two into a group of B2:B5.
+    m_pDoc->DeleteRow(ScRange(0,3,0,MAXCOL,7,0));
+    aPos.SetRow(1);
+    pFC = m_pDoc->GetFormulaCell(aPos);
+    CPPUNIT_ASSERT_MESSAGE("B2 should be a formula cell.", pFC);
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(1), pFC->GetSharedTopRow());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(4), pFC->GetSharedLength());
+
     m_pDoc->DeleteTab(0);
 
 }
