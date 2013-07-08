@@ -2084,6 +2084,9 @@ bool ScFormulaCell::UpdateReference(
         // This formula cell itself is being shifted during cell range
         // insertion or deletion. Update its position.
         aPos.Move(nDx, nDy, nDz);
+        if (xGroup && xGroup->mnStart == aOldPos.Row())
+            xGroup->mnStart += nDy;
+
         bCellStateChanged = aPos != aOldPos;
     }
     else if (rRange.In(aPos))

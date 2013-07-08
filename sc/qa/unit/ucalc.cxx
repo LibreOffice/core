@@ -6517,8 +6517,20 @@ void Test::testSharedFormulas()
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(1), pFC->GetSharedTopRow());
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(4), pFC->GetSharedLength());
 
-    m_pDoc->DeleteTab(0);
+    // Insert 2 rows at row 4, to split it into B2:B3 and B6:B7.
+    m_pDoc->InsertRow(ScRange(0,3,0,MAXCOL,4,0));
+    pFC = m_pDoc->GetFormulaCell(aPos);
+    CPPUNIT_ASSERT_MESSAGE("B2 should be a formula cell.", pFC);
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(1), pFC->GetSharedTopRow());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(2), pFC->GetSharedLength());
 
+    aPos.SetRow(5);
+    pFC = m_pDoc->GetFormulaCell(aPos);
+    CPPUNIT_ASSERT_MESSAGE("B6 should be a formula cell.", pFC);
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(5), pFC->GetSharedTopRow());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(2), pFC->GetSharedLength());
+
+    m_pDoc->DeleteTab(0);
 }
 
 namespace {

@@ -2273,6 +2273,25 @@ bool ScColumn::UpdateReference(
         return aHandler.isUpdated();
     }
 
+    bool bThisColShifted = (rRange.aStart.Tab() <= nTab && nTab <= rRange.aEnd.Tab() && rRange.aStart.Col() <= nCol && nCol <= rRange.aEnd.Col());
+    if (bThisColShifted)
+    {
+        // Cells in this column is being shifted.  Split formula grouping at
+        // the top and bottom boundaries before they get shifted.
+        SCROW nSplitPos = rRange.aStart.Row();
+        if (ValidRow(nSplitPos))
+        {
+            sc::CellStoreType::position_type aPos = maCells.position(nSplitPos);
+            SplitFormulaCellGroup(aPos);
+            nSplitPos = rRange.aEnd.Row() + 1;
+            if (ValidRow(nSplitPos))
+            {
+                aPos = maCells.position(aPos.first, nSplitPos);
+                SplitFormulaCellGroup(aPos);
+            }
+        }
+    }
+
     UpdateRefOnNonCopy aHandler(nCol, nTab, rRange, nDx, nDy, nDz, eUpdateRefMode, pUndoDoc);
     FormulaCellsUndecided(0, MAXROW);
     sc::ProcessFormula(maCells, aHandler);
