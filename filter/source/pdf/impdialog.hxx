@@ -176,54 +176,47 @@ protected:
 //class tab page general
 class ImpPDFTabGeneralPage : public SfxTabPage
 {
-    friend class                ImpPDFTabLinksPage;
+    friend class  ImpPDFTabLinksPage;
 
-    FixedLine                   maFlPages;
-    RadioButton                 maRbAll;
-    RadioButton                 maRbRange;
-    RadioButton                 maRbSelection;
-    Edit                        maEdPages;
+    RadioButton*  mpRbAll;
+    RadioButton*  mpRbRange;
+    RadioButton*  mpRbSelection;
+    Edit*         mpEdPages;
 
-    FixedLine                   maFlCompression;
-    RadioButton                 maRbLosslessCompression;
-    RadioButton                 maRbJPEGCompression;
-    FixedText                   maFtQuality;
-    MetricField                 maNfQuality;
-    CheckBox                    maCbReduceImageResolution;
-    ComboBox                    maCoReduceImageResolution;
+    RadioButton*  mpRbLosslessCompression;
+    RadioButton*  mpRbJPEGCompression;
+    VclContainer* mpQualityFrame;
+    MetricField*  mpNfQuality;
+    CheckBox*     mpCbReduceImageResolution;
+    ComboBox*     mpCoReduceImageResolution;
 
-    FixedLine m_aVerticalLine;
+    CheckBox*     mpCbPDFA1b;
+    CheckBox*     mpCbTaggedPDF;
+    bool          mbTaggedPDFUserSelection;
 
-    FixedLine                   maFlGeneral;
-    CheckBox                    maCbPDFA1b;
-    CheckBox                    maCbTaggedPDF;
-    sal_Bool                    mbTaggedPDFUserSelection;
+    CheckBox*     mpCbExportFormFields;
+    bool          mbExportFormFieldsUserSelection;
+    VclContainer* mpFormsFrame;
+    ListBox*      mpLbFormsFormat;
+    CheckBox*     mpCbAllowDuplicateFieldNames;
 
-    CheckBox                    maCbExportFormFields;
-    sal_Bool                    mbExportFormFieldsUserSelection;
-    FixedText                   maFtFormsFormat;
-    ListBox                     maLbFormsFormat;
-    CheckBox                    maCbAllowDuplicateFieldNames;
+    CheckBox*     mpCbExportBookmarks;
+    CheckBox*     mpCbExportHiddenSlides;
+    CheckBox*     mpCbExportNotes;
+    CheckBox*     mpCbViewPDF;
+    CheckBox*     mpCbExportNotesPages;
 
-    CheckBox                    maCbExportBookmarks;
-    CheckBox                    maCbExportHiddenSlides;
-    CheckBox                    maCbExportNotes;
-    CheckBox                    maCbViewPDF;
-    CheckBox                    maCbExportNotesPages;
+    CheckBox*     mpCbExportEmptyPages;
+    CheckBox*     mpCbAddStream;
 
-    CheckBox                    maCbExportEmptyPages;
-    CheckBox                    maCbAddStream;
-    FixedText                   maFtAddStreamDescription;
+    CheckBox*     mpCbWatermark;
+    FixedText*    mpFtWatermark;
+    Edit*         mpEdWatermark;
 
-    FixedLine                   maFlWatermark;
-    CheckBox                    maCbWatermark;
-    FixedText                   maFtWatermark;
-    Edit                        maEdWatermark;
+    bool          mbIsPresentation;
+    bool          mbIsWriter;
 
-    sal_Bool                    mbIsPresentation;
-    sal_Bool                    mbIsWriter;
-
-const ImpPDFTabDialog*          mpaParent;
+    const ImpPDFTabDialog* mpaParent;
 
     DECL_LINK( TogglePagesHdl, void* );
     DECL_LINK( ToggleCompressionHdl, void* );
@@ -242,9 +235,9 @@ public:
     static SfxTabPage*          Create( Window* pParent,
                                         const SfxItemSet& rAttrSet);
 
-    void                        GetFilterConfigItem( ImpPDFTabDialog* paParent );
-    void                        SetFilterConfigItem( const ImpPDFTabDialog* paParent );
-    sal_Bool                    IsPdfaSelected() { return maCbPDFA1b.IsChecked(); };
+    void    GetFilterConfigItem(ImpPDFTabDialog* paParent);
+    void    SetFilterConfigItem(const ImpPDFTabDialog* paParent);
+    bool    IsPdfaSelected() const { return mpCbPDFA1b->IsChecked(); }
 };
 
 //class tab page viewer

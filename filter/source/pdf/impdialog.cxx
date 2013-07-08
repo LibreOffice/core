@@ -471,71 +471,46 @@ Sequence< PropertyValue > ImpPDFTabDialog::GetFilterData()
 }
 
 // -----------------------------------------------------------------------------
-ImpPDFTabGeneralPage::ImpPDFTabGeneralPage( Window* pParent,
-                                            const SfxItemSet& rCoreSet
-                                            ) :
-    SfxTabPage( pParent, PDFFilterResId( RID_PDF_TAB_GENER ), rCoreSet ),
+ImpPDFTabGeneralPage::ImpPDFTabGeneralPage(Window* pParent, const SfxItemSet& rCoreSet)
+    : SfxTabPage(pParent, "PdfGeneralPage","filter/ui/pdfgeneralpage.ui", rCoreSet)
 
-    maFlPages( this, PDFFilterResId( FL_PAGES ) ),
-    maRbAll( this, PDFFilterResId( RB_ALL ) ),
-    maRbRange( this, PDFFilterResId( RB_RANGE ) ),
-    maRbSelection( this, PDFFilterResId( RB_SELECTION ) ),
-    maEdPages( this, PDFFilterResId( ED_PAGES ) ),
-
-    maFlCompression( this, PDFFilterResId( FL_IMAGES ) ),
-    maRbLosslessCompression( this, PDFFilterResId( RB_LOSSLESSCOMPRESSION ) ),
-    maRbJPEGCompression( this, PDFFilterResId( RB_JPEGCOMPRESSION ) ),
-    maFtQuality( this, PDFFilterResId( FT_QUALITY ) ),
-    maNfQuality( this, PDFFilterResId( NF_QUALITY ) ),
-    maCbReduceImageResolution( this, PDFFilterResId( CB_REDUCEIMAGERESOLUTION ) ),
-    maCoReduceImageResolution( this, PDFFilterResId( CO_REDUCEIMAGERESOLUTION ) ),
-
-    m_aVerticalLine(this, PDFFilterResId(FL_GENERAL_VERTICAL)),
-
-    maFlGeneral( this, PDFFilterResId( FL_GENERAL ) ),
-    maCbPDFA1b( this, PDFFilterResId( CB_PDFA_1B_SELECT ) ),
-
-    maCbTaggedPDF( this, PDFFilterResId( CB_TAGGEDPDF ) ),
-    mbTaggedPDFUserSelection( sal_False ),
-
-    maCbExportFormFields( this, PDFFilterResId( CB_EXPORTFORMFIELDS ) ),
-    mbExportFormFieldsUserSelection( sal_False ),
-    maFtFormsFormat( this, PDFFilterResId( FT_FORMSFORMAT ) ),
-    maLbFormsFormat( this, PDFFilterResId( LB_FORMSFORMAT ) ),
-    maCbAllowDuplicateFieldNames( this, PDFFilterResId( CB_ALLOWDUPLICATEFIELDNAMES ) ),
-
-    maCbExportBookmarks( this, PDFFilterResId( CB_EXPORTBOOKMARKS ) ),
-    maCbExportHiddenSlides( this, PDFFilterResId( CB_EXPORTHIDDENSLIDES ) ),
-    maCbExportNotes( this, PDFFilterResId( CB_EXPORTNOTES ) ),
-    maCbViewPDF( this, PDFFilterResId( CB_VIEWPDF ) ),
-    maCbExportNotesPages( this, PDFFilterResId( CB_EXPORTNOTESPAGES ) ),
-    maCbExportEmptyPages( this, PDFFilterResId( CB_EXPORTEMPTYPAGES ) ),
-    maCbAddStream( this, PDFFilterResId( CB_ADDSTREAM ) ),
-    maFtAddStreamDescription( this, PDFFilterResId( FT_ADDSTREAMDESCRIPTION ) ),
-
-    maFlWatermark( this, PDFFilterResId( FL_WATERMARK ) ),
-    maCbWatermark( this, PDFFilterResId( CB_WATERMARK ) ),
-    maFtWatermark( this, PDFFilterResId(FT_WATERMARK)),
-    maEdWatermark( this, PDFFilterResId(ED_WATERMARK)),
-    mbIsPresentation( sal_False ),
-    mbIsWriter( sal_False),
-    mpaParent( 0 )
+    , mbTaggedPDFUserSelection(false)
+    , mbExportFormFieldsUserSelection(false)
+    , mbIsPresentation(false)
+    , mbIsWriter(false)
+    , mpaParent(0)
 {
-    FreeResource();
+    get(mpRbAll, "all");
+    get(mpRbRange, "range");
+    get(mpRbSelection, "selection");
+    get(mpEdPages, "pages");
 
-    // pb: #i91991# maCbExportEmptyPages double-spaced if necessary
-    Size aSize = maCbExportEmptyPages.GetSizePixel();
-    Size aMinSize = maCbExportEmptyPages.CalcMinimumSize();
-    if ( aSize.Width() > aMinSize.Width() )
-    {
-        Size aNewSize = maCbExportNotes.GetSizePixel();
-        maCbExportEmptyPages.SetSizePixel( aNewSize );
-    }
+    get(mpRbLosslessCompression, "losslesscompress");
+    get(mpRbJPEGCompression, "jpegcompress");
+    get(mpQualityFrame, "qualityframe");
+    get(mpNfQuality, "quality");
+    get(mpCbReduceImageResolution, "reduceresolution");
+    get(mpCoReduceImageResolution, "resolution");
 
-    maEdPages.SetAccessibleName(maRbRange.GetText());
-    maEdPages.SetAccessibleRelationLabeledBy(&maRbRange);
+    get(mpCbAddStream, "embed");
+    get(mpCbPDFA1b, "pdfa");
+    get(mpCbTaggedPDF, "tagged");
+    get(mpCbExportFormFields, "forms");
 
-    maCbExportEmptyPages.SetStyle( maCbExportEmptyPages.GetStyle() | WB_VCENTER );
+    get(mpFormsFrame, "formsframe");
+    get(mpLbFormsFormat, "format");
+    get(mpCbAllowDuplicateFieldNames, "allowdups");
+
+    get(mpCbExportBookmarks, "bookmarks");
+    get(mpCbExportHiddenSlides, "hiddenpages");
+    get(mpCbExportNotes, "comments");
+    get(mpCbExportNotesPages, "notes");
+    get(mpCbExportEmptyPages, "emptypages");
+    get(mpCbViewPDF, "viewpdf");
+
+    get(mpCbWatermark, "watermark");
+    get(mpFtWatermark, "watermarklabel");
+    get(mpEdWatermark, "watermarkentry");
 }
 
 // -----------------------------------------------------------------------------
@@ -549,137 +524,125 @@ void ImpPDFTabGeneralPage::SetFilterConfigItem( const ImpPDFTabDialog* paParent 
     mpaParent = paParent;
 
 //init this class data
-    maRbRange.SetToggleHdl( LINK( this, ImpPDFTabGeneralPage, TogglePagesHdl ) );
+    mpRbRange->SetToggleHdl( LINK( this, ImpPDFTabGeneralPage, TogglePagesHdl ) );
 
-    maRbAll.Check();
+    mpRbAll->Check();
     TogglePagesHdl( NULL );
 
-    maNfQuality.SetUnit( FUNIT_PERCENT );
-    maNfQuality.SetMin( 1, FUNIT_PERCENT );
-    maNfQuality.SetMax( 100, FUNIT_PERCENT );
-
-    maRbSelection.Enable( paParent->mbSelectionPresent );
+    mpRbSelection->Enable( paParent->mbSelectionPresent );
     mbIsPresentation = paParent->mbIsPresentation;
     mbIsWriter = paParent->mbIsWriter;
 
-    maCbExportEmptyPages.Enable( mbIsWriter );
+    mpCbExportEmptyPages->Enable( mbIsWriter );
 
-    maRbLosslessCompression.SetToggleHdl( LINK( this, ImpPDFTabGeneralPage, ToggleCompressionHdl ) );
+    mpRbLosslessCompression->SetToggleHdl( LINK( this, ImpPDFTabGeneralPage, ToggleCompressionHdl ) );
     const sal_Bool bUseLosslessCompression = paParent->mbUseLosslessCompression;
     if ( bUseLosslessCompression )
-        maRbLosslessCompression.Check();
+        mpRbLosslessCompression->Check();
     else
-        maRbJPEGCompression.Check();
+        mpRbJPEGCompression->Check();
 
-    maNfQuality.SetValue( paParent->mnQuality, FUNIT_PERCENT );
-    maNfQuality.Enable( bUseLosslessCompression == sal_False );
+    mpNfQuality->SetValue( paParent->mnQuality, FUNIT_PERCENT );
+    mpQualityFrame->Enable(bUseLosslessCompression == false);
 
-    maCbReduceImageResolution.SetToggleHdl( LINK( this, ImpPDFTabGeneralPage, ToggleReduceImageResolutionHdl ) );
+    mpCbReduceImageResolution->SetToggleHdl( LINK( this, ImpPDFTabGeneralPage, ToggleReduceImageResolutionHdl ) );
     const sal_Bool  bReduceImageResolution = paParent->mbReduceImageResolution;
-    maCbReduceImageResolution.Check( bReduceImageResolution );
+    mpCbReduceImageResolution->Check( bReduceImageResolution );
     OUString aStrRes = OUString::number( paParent->mnMaxImageResolution ) + " DPI";
-    maCoReduceImageResolution.SetText( aStrRes );
-    maCoReduceImageResolution.Enable( bReduceImageResolution );
-    maCbWatermark.SetToggleHdl( LINK( this, ImpPDFTabGeneralPage, ToggleWatermarkHdl ) );
-    maFtWatermark.Enable(false );
-    maEdWatermark.Enable( false );
-    maCbPDFA1b.SetToggleHdl( LINK( this, ImpPDFTabGeneralPage, ToggleExportPDFAHdl) );
+    mpCoReduceImageResolution->SetText( aStrRes );
+    mpCoReduceImageResolution->Enable( bReduceImageResolution );
+    mpCbWatermark->SetToggleHdl( LINK( this, ImpPDFTabGeneralPage, ToggleWatermarkHdl ) );
+    mpFtWatermark->Enable(false );
+    mpEdWatermark->Enable( false );
+    mpCbPDFA1b->SetToggleHdl( LINK( this, ImpPDFTabGeneralPage, ToggleExportPDFAHdl) );
     switch( paParent->mnPDFTypeSelection )
     {
     default:
-    case 0: maCbPDFA1b.Check( sal_False ); // PDF 1.4
+    case 0: mpCbPDFA1b->Check( sal_False ); // PDF 1.4
         break;
-    case 1: maCbPDFA1b.Check(); // PDF/A-1a
+    case 1: mpCbPDFA1b->Check(); // PDF/A-1a
         break;
     }
     ToggleExportPDFAHdl( NULL );
 
-    maCbExportFormFields.SetToggleHdl( LINK( this, ImpPDFTabGeneralPage, ToggleExportFormFieldsHdl ) );
+    mpCbExportFormFields->SetToggleHdl( LINK( this, ImpPDFTabGeneralPage, ToggleExportFormFieldsHdl ) );
 
 // get the form values, for use with PDF/A-1 selection interface
     mbTaggedPDFUserSelection = paParent->mbUseTaggedPDF;
     mbExportFormFieldsUserSelection = paParent->mbExportFormFields;
 
-    if( !maCbPDFA1b.IsChecked() )
+    if( !mpCbPDFA1b->IsChecked() )
     {// the value for PDF/A set by the ToggleExportPDFAHdl method called before
-        maCbTaggedPDF.Check( mbTaggedPDFUserSelection  );
-        maCbExportFormFields.Check( mbExportFormFieldsUserSelection );
+        mpCbTaggedPDF->Check( mbTaggedPDFUserSelection  );
+        mpCbExportFormFields->Check( mbExportFormFieldsUserSelection );
     }
 
-    maLbFormsFormat.SelectEntryPos( (sal_uInt16)paParent->mnFormsType );
-    maLbFormsFormat.Enable( paParent->mbExportFormFields );
-    maCbAllowDuplicateFieldNames.Check( paParent->mbAllowDuplicateFieldNames );
-    maCbAllowDuplicateFieldNames.Enable( paParent->mbExportFormFields );
+    mpLbFormsFormat->SelectEntryPos( (sal_uInt16)paParent->mnFormsType );
+    mpCbAllowDuplicateFieldNames->Check( paParent->mbAllowDuplicateFieldNames );
+    mpFormsFrame->Enable( paParent->mbExportFormFields );
 
-    maCbExportBookmarks.Check( paParent->mbExportBookmarks );
+    mpCbExportBookmarks->Check( paParent->mbExportBookmarks );
 
-    maCbExportNotes.Check( paParent->mbExportNotes );
-    maCbViewPDF.Check( paParent->mbViewPDF);
+    mpCbExportNotes->Check( paParent->mbExportNotes );
+    mpCbViewPDF->Check( paParent->mbViewPDF);
 
     if ( mbIsPresentation )
     {
-        maCbExportNotesPages.Show( sal_True );
-        maCbExportNotesPages.Check( paParent->mbExportNotesPages );
-        maCbExportHiddenSlides.Show( sal_True);
-        maCbExportHiddenSlides.Check( paParent->mbExportHiddenSlides );
-
+        mpCbExportNotesPages->Show(true);
+        mpCbExportNotesPages->Check(paParent->mbExportNotesPages);
+        mpCbExportHiddenSlides->Show(true);
+        mpCbExportHiddenSlides->Check(paParent->mbExportHiddenSlides);
     }
     else
     {
-        long nCheckBoxHeight =
-            maCbExportNotesPages.LogicToPixel( Size( 13, 13 ), MAP_APPFONT ).Height();
-
-        Point aPos = maCbExportEmptyPages.GetPosPixel();
-        maCbExportEmptyPages.SetPosPixel( Point( aPos.X(), aPos.Y() - nCheckBoxHeight ) );
-        maCbExportNotesPages.Show( sal_False );
-        maCbExportNotesPages.Check( sal_False );
-        maCbExportHiddenSlides.Show( sal_False);
-        maCbExportHiddenSlides.Check( sal_False );
+        mpCbExportNotesPages->Show(false);
+        mpCbExportNotesPages->Check(false);
+        mpCbExportHiddenSlides->Show(false);
+        mpCbExportHiddenSlides->Check(false);
     }
 
-    maCbExportEmptyPages.Check( !paParent->mbIsSkipEmptyPages );
+    mpCbExportEmptyPages->Check(!paParent->mbIsSkipEmptyPages);
 
-    maCbAddStream.Show( sal_True );
-    maCbAddStream.Check( paParent->mbAddStream );
-    maFtAddStreamDescription.Show( sal_True );
+    mpCbAddStream->Show(true);
+    mpCbAddStream->Check(paParent->mbAddStream);
 
-    maCbAddStream.SetToggleHdl( LINK( this, ImpPDFTabGeneralPage, ToggleAddStreamHdl ) );
+    mpCbAddStream->SetToggleHdl( LINK( this, ImpPDFTabGeneralPage, ToggleAddStreamHdl ) );
     // init addstream dependencies
-    ToggleAddStreamHdl( NULL );
+    ToggleAddStreamHdl(NULL);
 }
 
 // -----------------------------------------------------------------------------
 void ImpPDFTabGeneralPage::GetFilterConfigItem( ImpPDFTabDialog* paParent )
 {
 // updating the FilterData sequence and storing FilterData to configuration
-    paParent->mbUseLosslessCompression = maRbLosslessCompression.IsChecked();
-    paParent->mnQuality = static_cast<sal_Int32>(maNfQuality.GetValue());
-    paParent->mbReduceImageResolution = maCbReduceImageResolution.IsChecked();
-    paParent->mnMaxImageResolution = maCoReduceImageResolution.GetText().toInt32();
-    paParent->mbExportNotes = maCbExportNotes.IsChecked();
-    paParent->mbViewPDF = maCbViewPDF.IsChecked();
+    paParent->mbUseLosslessCompression = mpRbLosslessCompression->IsChecked();
+    paParent->mnQuality = static_cast<sal_Int32>(mpNfQuality->GetValue());
+    paParent->mbReduceImageResolution = mpCbReduceImageResolution->IsChecked();
+    paParent->mnMaxImageResolution = mpCoReduceImageResolution->GetText().toInt32();
+    paParent->mbExportNotes = mpCbExportNotes->IsChecked();
+    paParent->mbViewPDF = mpCbViewPDF->IsChecked();
     if ( mbIsPresentation )
-        paParent->mbExportNotesPages = maCbExportNotesPages.IsChecked();
-    paParent->mbExportBookmarks = maCbExportBookmarks.IsChecked();
+        paParent->mbExportNotesPages = mpCbExportNotesPages->IsChecked();
+    paParent->mbExportBookmarks = mpCbExportBookmarks->IsChecked();
     if ( mbIsPresentation )
-        paParent->mbExportHiddenSlides = maCbExportHiddenSlides.IsChecked();
+        paParent->mbExportHiddenSlides = mpCbExportHiddenSlides->IsChecked();
 
-    paParent->mbIsSkipEmptyPages =  !maCbExportEmptyPages.IsChecked();
-    paParent->mbAddStream = maCbAddStream.IsVisible() && maCbAddStream.IsChecked();
+    paParent->mbIsSkipEmptyPages = !mpCbExportEmptyPages->IsChecked();
+    paParent->mbAddStream = mpCbAddStream->IsVisible() && mpCbAddStream->IsChecked();
 
     paParent->mbIsRangeChecked = sal_False;
-    if( maRbRange.IsChecked() )
+    if( mpRbRange->IsChecked() )
     {
         paParent->mbIsRangeChecked = sal_True;
-        paParent->msPageRange = maEdPages.GetText(); //FIXME all right on other languages ?
+        paParent->msPageRange = mpEdPages->GetText(); //FIXME all right on other languages ?
     }
-    else if( maRbSelection.IsChecked() )
+    else if( mpRbSelection->IsChecked() )
     {
-        paParent->mbSelectionIsChecked = maRbSelection.IsChecked();
+        paParent->mbSelectionIsChecked = mpRbSelection->IsChecked();
     }
 
     paParent->mnPDFTypeSelection = 0;
-    if( maCbPDFA1b.IsChecked() )
+    if( mpCbPDFA1b->IsChecked() )
     {
         paParent->mnPDFTypeSelection = 1;
         paParent->mbUseTaggedPDF =  mbTaggedPDFUserSelection;
@@ -687,18 +650,18 @@ void ImpPDFTabGeneralPage::GetFilterConfigItem( ImpPDFTabDialog* paParent )
     }
     else
     {
-        paParent->mbUseTaggedPDF =  maCbTaggedPDF.IsChecked();
-        paParent->mbExportFormFields = maCbExportFormFields.IsChecked();
+        paParent->mbUseTaggedPDF =  mpCbTaggedPDF->IsChecked();
+        paParent->mbExportFormFields = mpCbExportFormFields->IsChecked();
     }
 
-    paParent->maWatermarkText = maEdWatermark.GetText();
+    paParent->maWatermarkText = mpEdWatermark->GetText();
 
     /*
     * FIXME: the entries are only implicitly defined by the resource file. Should there
     * ever be an additional form submit format this could get invalid.
     */
-    paParent->mnFormsType = (sal_Int32) maLbFormsFormat.GetSelectEntryPos();
-    paParent->mbAllowDuplicateFieldNames = maCbAllowDuplicateFieldNames.IsChecked();
+    paParent->mnFormsType = (sal_Int32) mpLbFormsFormat->GetSelectEntryPos();
+    paParent->mbAllowDuplicateFieldNames = mpCbAllowDuplicateFieldNames->IsChecked();
 }
 
 // -----------------------------------------------------------------------------
@@ -711,41 +674,40 @@ SfxTabPage*  ImpPDFTabGeneralPage::Create( Window* pParent,
 // -----------------------------------------------------------------------------
 IMPL_LINK_NOARG(ImpPDFTabGeneralPage, TogglePagesHdl)
 {
-    maEdPages.Enable( maRbRange.IsChecked() );
-    if ( maRbRange.IsChecked() )
-        maEdPages.GrabFocus();
+    mpEdPages->Enable( mpRbRange->IsChecked() );
+    if ( mpRbRange->IsChecked() )
+        mpEdPages->GrabFocus();
     return 0;
 }
 
 // -----------------------------------------------------------------------------
 IMPL_LINK_NOARG(ImpPDFTabGeneralPage, ToggleExportFormFieldsHdl)
 {
-    maLbFormsFormat.Enable( maCbExportFormFields.IsChecked() );
-    maCbAllowDuplicateFieldNames.Enable( maCbExportFormFields.IsChecked() );
+    mpFormsFrame->Enable(mpCbExportFormFields->IsChecked());
     return 0;
 }
 
 // -----------------------------------------------------------------------------
 IMPL_LINK_NOARG(ImpPDFTabGeneralPage, ToggleCompressionHdl)
 {
-    maNfQuality.Enable( maRbJPEGCompression.IsChecked() );
+    mpQualityFrame->Enable(mpRbJPEGCompression->IsChecked());
     return 0;
 }
 
 // -----------------------------------------------------------------------------
 IMPL_LINK_NOARG(ImpPDFTabGeneralPage, ToggleReduceImageResolutionHdl)
 {
-    maCoReduceImageResolution.Enable( maCbReduceImageResolution.IsChecked() );
+    mpCoReduceImageResolution->Enable( mpCbReduceImageResolution->IsChecked() );
     return 0;
 }
 
 
 IMPL_LINK_NOARG(ImpPDFTabGeneralPage, ToggleWatermarkHdl)
 {
-    maEdWatermark.Enable( maCbWatermark.IsChecked() );
-    maFtWatermark.Enable (maCbWatermark.IsChecked() );
-    if ( maCbWatermark.IsChecked() )
-        maEdWatermark.GrabFocus();
+    mpEdWatermark->Enable( mpCbWatermark->IsChecked() );
+    mpFtWatermark->Enable (mpCbWatermark->IsChecked() );
+    if ( mpCbWatermark->IsChecked() )
+        mpEdWatermark->GrabFocus();
 
     return 0;
 }
@@ -753,21 +715,21 @@ IMPL_LINK_NOARG(ImpPDFTabGeneralPage, ToggleWatermarkHdl)
 // -----------------------------------------------------------------------------
 IMPL_LINK_NOARG(ImpPDFTabGeneralPage, ToggleAddStreamHdl)
 {
-    if( maCbAddStream.IsVisible() )
+    if( mpCbAddStream->IsVisible() )
     {
-        if( maCbAddStream.IsChecked() )
+        if( mpCbAddStream->IsChecked() )
         {
-            maRbAll.Check();
-            maRbRange.Enable( sal_False );
-            maRbSelection.Enable( sal_False );
-            maEdPages.Enable( sal_False );
-            maRbAll.Enable( sal_False );
+            mpRbAll->Check();
+            mpRbRange->Enable( sal_False );
+            mpRbSelection->Enable( sal_False );
+            mpEdPages->Enable( sal_False );
+            mpRbAll->Enable( sal_False );
         }
         else
         {
-            maRbAll.Enable( sal_True );
-            maRbRange.Enable( sal_True );
-            maRbSelection.Enable( sal_True );
+            mpRbAll->Enable( sal_True );
+            mpRbRange->Enable( sal_True );
+            mpRbSelection->Enable( sal_True );
         }
     }
     return 0;
@@ -781,39 +743,37 @@ IMPL_LINK_NOARG(ImpPDFTabGeneralPage, ToggleExportPDFAHdl)
     if( mpaParent && mpaParent->GetTabPage( RID_PDF_TAB_SECURITY ) )
     {
         pSecPage = static_cast<ImpPDFTabSecurityPage*>(mpaParent->GetTabPage( RID_PDF_TAB_SECURITY ));
-        pSecPage->ImplPDFASecurityControl( !maCbPDFA1b.IsChecked() );
+        pSecPage->ImplPDFASecurityControl( !mpCbPDFA1b->IsChecked() );
     }
 
 //PDF/A-1 needs tagged PDF, so  force disable the control, will be forced in pdfexport.
-    sal_Bool bPDFA1Sel = maCbPDFA1b.IsChecked();
-    maFtFormsFormat.Enable( !bPDFA1Sel );
-    maLbFormsFormat.Enable( !bPDFA1Sel );
-    maCbAllowDuplicateFieldNames.Enable( !bPDFA1Sel );
+    bool bPDFA1Sel = mpCbPDFA1b->IsChecked();
+    mpFormsFrame->Enable(bPDFA1Sel);
     if(bPDFA1Sel)
     {
 //store the values of subordinate controls
-        mbTaggedPDFUserSelection = maCbTaggedPDF.IsChecked();
-        maCbTaggedPDF.Check();
-        maCbTaggedPDF.Enable( sal_False );
-        mbExportFormFieldsUserSelection = maCbExportFormFields.IsChecked();
-        maCbExportFormFields.Check( sal_False );
-        maCbExportFormFields.Enable( sal_False );
+        mbTaggedPDFUserSelection = mpCbTaggedPDF->IsChecked();
+        mpCbTaggedPDF->Check();
+        mpCbTaggedPDF->Enable(false);
+        mbExportFormFieldsUserSelection = mpCbExportFormFields->IsChecked();
+        mpCbExportFormFields->Check(false);
+        mpCbExportFormFields->Enable(false);
     }
     else
     {
 //retrieve the values of subordinate controls
-        maCbTaggedPDF.Enable();
-        maCbTaggedPDF.Check( mbTaggedPDFUserSelection );
-        maCbExportFormFields.Check( mbExportFormFieldsUserSelection );
-        maCbExportFormFields.Enable();
+        mpCbTaggedPDF->Enable();
+        mpCbTaggedPDF->Check( mbTaggedPDFUserSelection );
+        mpCbExportFormFields->Check( mbExportFormFieldsUserSelection );
+        mpCbExportFormFields->Enable();
     }
 // PDF/A-1 doesn't allow launch action, so enable/disable the selection on
 // Link page
     if( mpaParent && mpaParent->GetTabPage( RID_PDF_TAB_LINKS ) )
-        ( ( ImpPDFTabLinksPage* )mpaParent->GetTabPage( RID_PDF_TAB_LINKS ) )->ImplPDFALinkControl( !maCbPDFA1b.IsChecked() );
+        ( ( ImpPDFTabLinksPage* )mpaParent->GetTabPage( RID_PDF_TAB_LINKS ) )->ImplPDFALinkControl( !mpCbPDFA1b->IsChecked() );
 
     // if a password was set, inform the user that this will not be used in PDF/A case
-    if( maCbPDFA1b.IsChecked() && pSecPage && pSecPage->hasPassword() )
+    if( mpCbPDFA1b->IsChecked() && pSecPage && pSecPage->hasPassword() )
     {
         WarningBox aBox( this, PDFFilterResId( RID_PDF_WARNPDFAPASSWORD ) );
         aBox.Execute();
@@ -1401,7 +1361,7 @@ void ImpPDFTabLinksPage::SetFilterConfigItem( const  ImpPDFTabDialog* paParent )
     if( paParent && paParent->GetTabPage( RID_PDF_TAB_GENER ) )
         ImplPDFALinkControl(
             !( ( ImpPDFTabGeneralPage* )paParent->
-               GetTabPage( RID_PDF_TAB_GENER ) )->maCbPDFA1b.IsChecked() );
+               GetTabPage( RID_PDF_TAB_GENER ) )->mpCbPDFA1b->IsChecked() );
 }
 
 // -----------------------------------------------------------------------------
