@@ -276,7 +276,8 @@ namespace dbaui
                 _inout_rDisplayName = String();
         }
 
-        if ( eType ==  ::dbaccess::DST_EMBEDDED_HSQLDB )
+        if ( eType ==  ::dbaccess::DST_EMBEDDED_HSQLDB
+                || eType ==  ::dbaccess::DST_EMBEDDED_FIREBIRD )
             _inout_rDisplayName = String();
 
         return _inout_rDisplayName.getLength() > 0;
