@@ -692,7 +692,7 @@ static inline OUString lcl_getString( SwXCell &rCell )
 
 /*  non UNO function call to set string in SwXCell */
 void sw_setString( SwXCell &rCell, const OUString &rTxt,
-        sal_Bool bKeepNumberFmt )
+        sal_Bool bKeepNumberFmt = sal_False )
 {
     if(rCell.IsValid())
     {
