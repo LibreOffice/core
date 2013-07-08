@@ -206,6 +206,7 @@ OUString ODsnTypeCollection::getDatasourcePrefixFromMediaType(const OUString& _s
 bool ODsnTypeCollection::isShowPropertiesEnabled( const OUString& _sURL ) const
 {
     return !(    _sURL.matchIgnoreAsciiCaseAsciiL("sdbc:embedded:hsqldb",sizeof("sdbc:embedded:hsqldb")-1)
+            ||  _sURL.matchIgnoreAsciiCaseAsciiL("sdbc:embedded:firebird",sizeof("sdbc:embedded:firebird")-1)
             ||  _sURL.matchIgnoreAsciiCaseAsciiL("sdbc:address:outlook",sizeof("sdbc:address:outlook")-1)
             ||  _sURL.matchIgnoreAsciiCaseAsciiL("sdbc:address:outlookexp",sizeof("sdbc:address:outlookexp")-1)
             ||  _sURL.matchIgnoreAsciiCaseAsciiL("sdbc:address:mozilla:",sizeof("sdbc:address:mozilla:")-1)
@@ -321,7 +322,11 @@ OUString ODsnTypeCollection::getEmbeddedDatabase() const
         }
     }
     if ( sEmbeddedDatabaseURL.isEmpty() )
+#ifdef ENABLE_FIREBIRD_SDBC
+        sEmbeddedDatabaseURL = "sdbc:embedded:firebird";
+#else
         sEmbeddedDatabaseURL = "sdbc:embedded:hsqldb";
+#endif
     return sEmbeddedDatabaseURL;
 }
 //-------------------------------------------------------------------------
@@ -360,6 +365,9 @@ DATASOURCE_TYPE ODsnTypeCollection::determineType(const OUString& _rDsn) const
 
     if (sDsn.equalsIgnoreAsciiCase("sdbc:embedded:hsqldb"))
         return DST_EMBEDDED_HSQLDB;
+
+    if (sDsn.equalsIgnoreAsciiCase("sdbc:embedded:firebird"))
+        return DST_EMBEDDED_FIREBIRD;
 
     // find second :
     nSeparator = sDsn.indexOf(static_cast<sal_Unicode>(':'), nSeparator + 1);
@@ -489,6 +497,7 @@ void ODsnTypeCollection::fillPageIds(const OUString& _sURL,::std::vector<sal_Int
         case DST_KAB:
         case DST_MACAB:
         case DST_EMBEDDED_HSQLDB:
+        case DST_EMBEDDED_FIREBIRD:
             break;
         default:
             _rOutPathIds.push_back(PAGE_DBSETUPWIZARD_USERDEFINED);

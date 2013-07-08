@@ -147,7 +147,10 @@ sal_Bool SAL_CALL FirebirdDriver::acceptsURL( const ::rtl::OUString& url )
 {
     // here we have to look if we support this url format
     // change the URL format to your needs, but please aware that the first on who accepts the URl wins.
-    return url.startsWith("sdbc:firebird:");
+    // This could be extended to allow for external dbs using e.g. sdbc:firebird:url
+    // in addition to embedded dbs.
+//     return url.startsWith("sdbc:firebird:");
+    return url.equals("sdbc:embedded:firebird");
 }
 // --------------------------------------------------------------------------------
 Sequence< DriverPropertyInfo > SAL_CALL FirebirdDriver::getPropertyInfo( const ::rtl::OUString& url, const Sequence< PropertyValue >& info ) throw(SQLException, RuntimeException)
