@@ -37,6 +37,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL avmediavlc_component_getFactory( 
     uno::Reference< lang::XSingleServiceFactory > xFactory;
     void*                                   pRet = 0;
 
+    fprintf (stderr, "Create VLC Media component: '%s'\n", pImplName);
     if( rtl_str_compare( pImplName, IMPL_NAME ) == 0 )
     {
         const OUString aServiceName( SERVICE_NAME );
