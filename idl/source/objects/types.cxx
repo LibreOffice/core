@@ -1980,7 +1980,7 @@ OString SvMetaAttribute::Compare( SvMetaAttribute* pAttr )
         if ( aType->GetType() == TYPE_METHOD )
         {
             // Test only when the attribute is a method not if it has one!
-            if ( !pAttr->GetType()->GetType() == TYPE_METHOD )
+            if ( pAttr->GetType()->GetType() != TYPE_METHOD )
                 aStr.append("    IsMethod\n");
             else if ( aType->GetReturnType() &&
                 aType->GetReturnType()->GetType() != pAttr->GetType()->GetReturnType()->GetType() )
