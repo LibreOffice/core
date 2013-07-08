@@ -34,6 +34,7 @@ VLCPlayer::VLCPlayer( const rtl::OUString& url )
     , mPlayer( libvlc_media_player_new(mInstance.get()), libvlc_media_player_release )
     , mMedia( initMedia( url, mInstance), libvlc_media_release )
 {
+    libvlc_media_player_set_media( mPlayer.get(), mMedia.get() );
 }
 
 void SAL_CALL VLCPlayer::start()
@@ -57,8 +58,7 @@ void SAL_CALL VLCPlayer::stop()
 double SAL_CALL VLCPlayer::getDuration()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-    libvlc_media_t* media = libvlc_media_player_get_media( mPlayer.get() );
-    return libvlc_media_get_duration( media );
+    return libvlc_media_get_duration( mMedia.get() );
 }
 
 void SAL_CALL VLCPlayer::setMediaTime( double fTime )
