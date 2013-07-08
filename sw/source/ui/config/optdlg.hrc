@@ -48,29 +48,4 @@
 #define RB_END             82
 #define RB_PAGEEND         83
 
-// Tabpage Basic Fonts
-#define FT_STANDARD         90
-#define LB_STANDARD                     91
-#define FT_TITLE                        92
-#define LB_TITLE                        93
-#define FT_LIST                         94
-#define LB_LIST                         95
-#define FT_LABEL                        96
-#define LB_LABEL                        97
-#define FT_IDX                          98
-#define LB_IDX                          99
-#define FL_STDCHR                      100
-#define PB_STANDARD                    101
-#define CB_DOCONLY                     102
-#define ST_SCRIPT_WESTERN              103
-#define ST_SCRIPT_ASIAN                104
-#define ST_SCRIPT_CTL                  105
-#define FT_TYPE                        106
-#define FT_SIZE                        107
-#define LB_STANDARD_SIZE               108
-#define LB_TITLE_SIZE                  109
-#define LB_LIST_SIZE                   110
-#define LB_LABEL_SIZE                  111
-#define LB_INDEX_SIZE                  112
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

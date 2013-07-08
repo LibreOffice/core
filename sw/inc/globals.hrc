@@ -35,6 +35,10 @@
 #define STR_PAGE                    (RC_GLOBALS_BEGIN + 14)
 #define STR_PRINTOPTUI              (RC_GLOBALS_BEGIN + 15)
 
+#define ST_SCRIPT_WESTERN           (RC_GLOBALS_BEGIN + 105)
+#define ST_SCRIPT_ASIAN             (RC_GLOBALS_BEGIN + 106)
+#define ST_SCRIPT_CTL               (RC_GLOBALS_BEGIN + 107)
+
 //EventStrings
 
 #define STR_EVENT_OBJECT_SELECT      ( RC_GLOBALS_BEGIN + 17 )
