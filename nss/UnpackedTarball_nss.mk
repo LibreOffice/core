@@ -20,6 +20,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,nss,\
 	$(if $(filter WNTGCC,$(OS)$(COM)),nss/nspr-4.9-build.patch.3 \
 	nss/nss-3.13.3-build.patch.3 \
 	nss/nss.mingw.patch.3) \
+	nss/nss.wheader-guard.patch.0 \
 ))
 
 # vim: set noet sw=4 ts=4:
