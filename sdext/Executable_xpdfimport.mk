@@ -17,7 +17,6 @@ $(eval $(call gb_Executable_use_externals,xpdfimport,\
 ))
 
 $(eval $(call gb_Executable_use_libraries,xpdfimport,\
-    sal \
     $(gb_UWINAPI) \
 ))
 
