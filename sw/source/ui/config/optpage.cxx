@@ -506,34 +506,7 @@ void SwAddPrinterTabPage::PageCreated (SfxAllItemSet aSet)
 --------------------------------------------------*/
 SwStdFontTabPage::SwStdFontTabPage( Window* pParent,
                                        const SfxItemSet& rSet ) :
-    SfxTabPage( pParent, SW_RES( TP_STD_FONT ), rSet),
-    aStdChrFL  (this, SW_RES(FL_STDCHR  )),
-    aTypeFT(        this, SW_RES( FT_TYPE          )),
-
-    aStandardLbl(this, SW_RES(FT_STANDARD)),
-    aStandardBox(this, SW_RES(LB_STANDARD)),
-
-    aHeightFT(        this, SW_RES( FT_SIZE          )),
-    aStandardHeightLB(this, SW_RES( LB_STANDARD_SIZE )),
-
-    aTitleLbl   (this, SW_RES(FT_TITLE   )),
-    aTitleBox   (this, SW_RES(LB_TITLE   )),
-    aTitleHeightLB(   this, SW_RES( LB_TITLE_SIZE    )),
-
-    aListLbl    (this, SW_RES(FT_LIST    )),
-    aListBox    (this, SW_RES(LB_LIST    )),
-    aListHeightLB(    this, SW_RES( LB_LIST_SIZE     )),
-
-    aLabelLbl   (this, SW_RES(FT_LABEL   )),
-    aLabelBox   (this, SW_RES(LB_LABEL   )),
-    aLabelHeightLB(   this, SW_RES( LB_LABEL_SIZE    )),
-
-    aIdxLbl     (this, SW_RES(FT_IDX     )),
-    aIdxBox     (this, SW_RES(LB_IDX     )),
-    aIndexHeightLB(   this, SW_RES( LB_INDEX_SIZE    )),
-
-    aDocOnlyCB  (this, SW_RES(CB_DOCONLY )),
-    aStandardPB (this, SW_RES(PB_STANDARD)),
+    SfxTabPage( pParent, "OptFontTabPage" , "modules/swriter/ui/optfonttabpage.ui" , rSet),
     pPrt(0),
     pFontList(0),
     pFontConfig(0),
@@ -561,27 +534,41 @@ SwStdFontTabPage::SwStdFontTabPage( Window* pParent,
     sScriptAsian(SW_RES(ST_SCRIPT_ASIAN)),
     sScriptComplex(SW_RES(ST_SCRIPT_CTL))
 {
-    FreeResource();
-    aStandardPB.SetClickHdl(LINK(this, SwStdFontTabPage, StandardHdl));
-    aStandardBox.SetModifyHdl( LINK(this, SwStdFontTabPage, ModifyHdl));
-    aListBox    .SetModifyHdl( LINK(this, SwStdFontTabPage, ModifyHdl));
-    aLabelBox   .SetModifyHdl( LINK(this, SwStdFontTabPage, ModifyHdl));
-    aIdxBox     .SetModifyHdl( LINK(this, SwStdFontTabPage, ModifyHdl));
+    get(pLabelFT,"label1");
+    get(pStandardBox,"standardbox");
+    get(pStandardHeightLB,"standardheight");
+    get(pTitleBox,"titlebox");
+    get(pTitleHeightLB,"titleheight");
+    get(pListBox,"listbox");
+    get(pListHeightLB,"listheight");
+    get(pLabelBox,"labelbox");
+    get(pLabelHeightLB,"labelheight");
+    get(pIdxBox,"idxbox");
+    get(pIndexHeightLB,"indexheight");
+
+    get(pDocOnlyCB,"doconly");
+    get(pStandardPB,"standard");
+
+    pStandardPB->SetClickHdl(LINK(this, SwStdFontTabPage, StandardHdl));
+    pStandardBox->SetModifyHdl( LINK(this, SwStdFontTabPage, ModifyHdl));
+    pListBox    ->SetModifyHdl( LINK(this, SwStdFontTabPage, ModifyHdl));
+    pLabelBox   ->SetModifyHdl( LINK(this, SwStdFontTabPage, ModifyHdl));
+    pIdxBox     ->SetModifyHdl( LINK(this, SwStdFontTabPage, ModifyHdl));
     Link aFocusLink = LINK( this, SwStdFontTabPage, LoseFocusHdl);
-    aStandardBox.SetLoseFocusHdl( aFocusLink );
-    aTitleBox   .SetLoseFocusHdl( aFocusLink );
-    aListBox    .SetLoseFocusHdl( aFocusLink );
-    aLabelBox   .SetLoseFocusHdl( aFocusLink );
-    aIdxBox     .SetLoseFocusHdl( aFocusLink );
+    pStandardBox->SetLoseFocusHdl( aFocusLink );
+    pTitleBox   ->SetLoseFocusHdl( aFocusLink );
+    pListBox    ->SetLoseFocusHdl( aFocusLink );
+    pLabelBox   ->SetLoseFocusHdl( aFocusLink );
+    pIdxBox     ->SetLoseFocusHdl( aFocusLink );
 
     Link aModifyHeightLink( LINK( this, SwStdFontTabPage, ModifyHeightHdl));
-    aStandardHeightLB.SetModifyHdl( aModifyHeightLink );
-    aTitleHeightLB.   SetModifyHdl( aModifyHeightLink );
-    aListHeightLB.    SetModifyHdl( aModifyHeightLink );
-    aLabelHeightLB.   SetModifyHdl( aModifyHeightLink );
-    aIndexHeightLB.   SetModifyHdl( aModifyHeightLink );
+    pStandardHeightLB->SetModifyHdl( aModifyHeightLink );
+    pTitleHeightLB->   SetModifyHdl( aModifyHeightLink );
+    pListHeightLB->    SetModifyHdl( aModifyHeightLink );
+    pLabelHeightLB->   SetModifyHdl( aModifyHeightLink );
+    pIndexHeightLB->   SetModifyHdl( aModifyHeightLink );
 
-    aDocOnlyCB.Check(SW_MOD()->GetModuleConfig()->IsDefaultFontInCurrDocOnly());
+    pDocOnlyCB->Check(SW_MOD()->GetModuleConfig()->IsDefaultFontInCurrDocOnly());
 }
 
 SwStdFontTabPage::~SwStdFontTabPage()
@@ -619,20 +606,20 @@ static void lcl_SetColl(SwWrtShell* pWrtShell, sal_uInt16 nType,
 
 sal_Bool SwStdFontTabPage::FillItemSet( SfxItemSet& )
 {
-    sal_Bool bNotDocOnly = !aDocOnlyCB.IsChecked();
+    sal_Bool bNotDocOnly = !pDocOnlyCB->IsChecked();
     SW_MOD()->GetModuleConfig()->SetDefaultFontInCurrDocOnly(!bNotDocOnly);
 
-    String sStandard    = aStandardBox.GetText();
-    String sTitle       =  aTitleBox   .GetText();
-    String sList        =  aListBox    .GetText();
-    String sLabel       =  aLabelBox   .GetText();
-    String sIdx         =  aIdxBox     .GetText();
+    String sStandard    = pStandardBox->GetText();
+    String sTitle       = pTitleBox->GetText();
+    String sList        = pListBox->GetText();
+    String sLabel       = pLabelBox->GetText();
+    String sIdx         = pIdxBox->GetText();
 
-    bool bStandardHeightChanged = aStandardHeightLB.GetSavedValue() != aStandardHeightLB.GetText();
-    bool bTitleHeightChanged = aTitleHeightLB.GetSavedValue() != aTitleHeightLB.GetText();
-    bool bListHeightChanged = aListHeightLB.GetSavedValue() != aListHeightLB.GetText() && (!bListHeightDefault || !bSetListHeightDefault );
-    bool bLabelHeightChanged = aLabelHeightLB.GetSavedValue() != aLabelHeightLB.GetText() && (!bLabelHeightDefault || !bSetLabelHeightDefault );
-    bool bIndexHeightChanged = aIndexHeightLB.GetSavedValue() != aIndexHeightLB.GetText() && (!bIndexHeightDefault || !bSetIndexHeightDefault );
+    bool bStandardHeightChanged = pStandardHeightLB->GetSavedValue() != pStandardHeightLB->GetText();
+    bool bTitleHeightChanged = pTitleHeightLB->GetSavedValue() != pTitleHeightLB->GetText();
+    bool bListHeightChanged = pListHeightLB->GetSavedValue() != pListHeightLB->GetText() && (!bListHeightDefault || !bSetListHeightDefault );
+    bool bLabelHeightChanged = pLabelHeightLB->GetSavedValue() != pLabelHeightLB->GetText() && (!bLabelHeightDefault || !bSetLabelHeightDefault );
+    bool bIndexHeightChanged = pIndexHeightLB->GetSavedValue() != pIndexHeightLB->GetText() && (!bIndexHeightDefault || !bSetIndexHeightDefault );
     if(bNotDocOnly)
     {
         pFontConfig->SetFontStandard(sStandard, nFontGroup);
@@ -642,27 +629,27 @@ sal_Bool SwStdFontTabPage::FillItemSet( SfxItemSet& )
         pFontConfig->SetFontIndex(sIdx, nFontGroup);
         if(bStandardHeightChanged)
         {
-            float fSize = (float)aStandardHeightLB.GetValue() / 10;
+            float fSize = (float)pStandardHeightLB->GetValue() / 10;
             pFontConfig->SetFontHeight( CalcToUnit( fSize, SFX_MAPUNIT_TWIP ), FONT_STANDARD, nFontGroup );
         }
         if(bTitleHeightChanged)
         {
-            float fSize = (float)aTitleHeightLB.GetValue() / 10;
+            float fSize = (float)pTitleHeightLB->GetValue() / 10;
             pFontConfig->SetFontHeight( CalcToUnit( fSize, SFX_MAPUNIT_TWIP ), FONT_OUTLINE, nFontGroup );
         }
         if(bListHeightChanged)
         {
-            float fSize = (float)aListHeightLB.GetValue() / 10;
+            float fSize = (float)pListHeightLB->GetValue() / 10;
             pFontConfig->SetFontHeight( CalcToUnit( fSize, SFX_MAPUNIT_TWIP ), FONT_LIST, nFontGroup );
         }
         if(bLabelHeightChanged)
         {
-            float fSize = (float)aLabelHeightLB.GetValue() / 10;
+            float fSize = (float)pLabelHeightLB->GetValue() / 10;
             pFontConfig->SetFontHeight( CalcToUnit( fSize, SFX_MAPUNIT_TWIP ), FONT_CAPTION, nFontGroup );
         }
         if(bIndexHeightChanged)
         {
-            float fSize = (float)aIndexHeightLB.GetValue() / 10;
+            float fSize = (float)pIndexHeightLB->GetValue() / 10;
             pFontConfig->SetFontHeight( CalcToUnit( fSize, SFX_MAPUNIT_TWIP ), FONT_INDEX, nFontGroup );
         }
     }
@@ -690,7 +677,7 @@ sal_Bool SwStdFontTabPage::FillItemSet( SfxItemSet& )
         }
         if(bStandardHeightChanged)
         {
-            float fSize = (float)aStandardHeightLB.GetValue() / 10;
+            float fSize = (float)pStandardHeightLB->GetValue() / 10;
             pWrtShell->SetDefault(SvxFontHeightItem( CalcToUnit( fSize, SFX_MAPUNIT_TWIP ), 100, nFontHeightWhich ) );
             SwTxtFmtColl *pColl = pWrtShell->GetTxtCollFromPool(RES_POOLCOLL_STANDARD);
             pColl->ResetFmtAttr(nFontHeightWhich);
@@ -705,7 +692,7 @@ sal_Bool SwStdFontTabPage::FillItemSet( SfxItemSet& )
         if(bTitleHeightChanged)
         {
             lcl_SetColl(pWrtShell, RES_POOLCOLL_HEADLINE_BASE,
-                sal::static_int_cast< sal_uInt16, sal_Int64 >(aTitleHeightLB.GetValue()), nFontHeightWhich);
+                sal::static_int_cast< sal_uInt16, sal_Int64 >(pTitleHeightLB->GetValue()), nFontHeightWhich);
             bMod = true;
         }
         if(sList != sShellList && (!bListDefault || !bSetListDefault ))
@@ -716,7 +703,7 @@ sal_Bool SwStdFontTabPage::FillItemSet( SfxItemSet& )
         if(bListHeightChanged)
         {
             lcl_SetColl(pWrtShell, RES_POOLCOLL_NUMBUL_BASE,
-                sal::static_int_cast< sal_uInt16, sal_Int64 >(aListHeightLB.GetValue()), nFontHeightWhich);
+                sal::static_int_cast< sal_uInt16, sal_Int64 >(pListHeightLB->GetValue()), nFontHeightWhich);
             bMod = true;
         }
         if(sLabel != sShellLabel && (!bLabelDefault || !bSetLabelDefault))
@@ -727,7 +714,7 @@ sal_Bool SwStdFontTabPage::FillItemSet( SfxItemSet& )
         if(bLabelHeightChanged)
         {
             lcl_SetColl(pWrtShell, RES_POOLCOLL_LABEL,
-                sal::static_int_cast< sal_uInt16, sal_Int64 >(aLabelHeightLB.GetValue()), nFontHeightWhich);
+                sal::static_int_cast< sal_uInt16, sal_Int64 >(pLabelHeightLB->GetValue()), nFontHeightWhich);
             bMod = true;
         }
         if(sIdx != sShellIndex && (!bIdxDefault || !bSetIdxDefault))
@@ -738,14 +725,13 @@ sal_Bool SwStdFontTabPage::FillItemSet( SfxItemSet& )
         if(bIndexHeightChanged)
         {
             lcl_SetColl(pWrtShell, RES_POOLCOLL_REGISTER_BASE,
-                sal::static_int_cast< sal_uInt16, sal_Int64 >(aIndexHeightLB.GetValue()), nFontHeightWhich);
+                sal::static_int_cast< sal_uInt16, sal_Int64 >(pIndexHeightLB->GetValue()), nFontHeightWhich);
             bMod = true;
         }
         if ( bMod )
             pWrtShell->SetModified();
         pWrtShell->EndAllAction();
     }
-
     return sal_False;
 }
 
@@ -755,19 +741,18 @@ void SwStdFontTabPage::Reset( const SfxItemSet& rSet)
     sal_uInt16 nLangSlot = nFontGroup == FONT_GROUP_DEFAULT  ? SID_ATTR_LANGUAGE :
         FONT_GROUP_CJK == nFontGroup ? SID_ATTR_CHAR_CJK_LANGUAGE : SID_ATTR_CHAR_CTL_LANGUAGE;
 
-
     if( SFX_ITEM_SET == rSet.GetItemState(nLangSlot, sal_False, &pLang))
         eLanguage = ((const SvxLanguageItem*)pLang)->GetValue();
 
-    String sTmp(aStdChrFL.GetText());
+    String sTmp = pLabelFT->GetText();
     String sToReplace = sScriptWestern;
     if(FONT_GROUP_CJK == nFontGroup )
         sToReplace = sScriptAsian;
     else if(FONT_GROUP_CTL == nFontGroup )
         sToReplace = sScriptComplex;
-
     sTmp.SearchAndReplaceAscii("%1", sToReplace);
-    aStdChrFL.SetText(sTmp);
+    pLabelFT->SetText(sTmp);
+
     const SfxPoolItem* pItem;
 
     if(SFX_ITEM_SET == rSet.GetItemState(FN_PARAM_PRINTER, sal_False, &pItem))
@@ -785,7 +770,7 @@ void SwStdFontTabPage::Reset( const SfxItemSet& rSet)
     }
     pFontList = new FontList( pPrt );
     // #i94536# prevent duplication of font entries when 'reset' button is pressed
-    if( !aStandardBox.GetEntryCount() )
+    if( !pStandardBox->GetEntryCount() )
     {
         // get the set of disctinct available family names
         std::set< String > aFontNames;
@@ -800,11 +785,11 @@ void SwStdFontTabPage::Reset( const SfxItemSet& rSet)
         for( std::set< String >::const_iterator it = aFontNames.begin();
              it != aFontNames.end(); ++it )
         {
-            aStandardBox.InsertEntry( *it );
-            aTitleBox   .InsertEntry( *it );
-            aListBox    .InsertEntry( *it );
-            aLabelBox   .InsertEntry( *it );
-            aIdxBox     .InsertEntry( *it );
+            pStandardBox->InsertEntry( *it );
+            pTitleBox->InsertEntry( *it );
+            pListBox->InsertEntry( *it );
+            pLabelBox->InsertEntry( *it );
+            pIdxBox->InsertEntry( *it );
         }
     }
     if(SFX_ITEM_SET == rSet.GetItemState(FN_PARAM_STDFONTS, sal_False, &pItem))
@@ -850,7 +835,7 @@ void SwStdFontTabPage::Reset( const SfxItemSet& rSet)
         if( nIndexHeight <= 0)
             nIndexHeight = pFontConfig->GetDefaultHeightFor( FONT_INDEX + nFontGroup * FONT_PER_GROUP, eLanguage);
 
-       aDocOnlyCB.Enable(sal_False);
+       pDocOnlyCB->Enable(sal_False);
     }
     else
     {
@@ -905,97 +890,96 @@ void SwStdFontTabPage::Reset( const SfxItemSet& rSet)
         nIndexHeight = (sal_Int32)rFontHeightIndex.GetHeight();
         bIndexHeightDefault = SFX_ITEM_DEFAULT == pColl->GetAttrSet().GetItemState(nFontWhich, sal_False);
     }
-    aStandardBox.SetText(sStdBackup );
-    aTitleBox   .SetText(sOutBackup );
-    aListBox    .SetText(sListBackup);
-    aLabelBox   .SetText(sCapBackup );
-    aIdxBox     .SetText(sIdxBackup );
+    pStandardBox->SetText(sStdBackup );
+    pTitleBox->SetText(sOutBackup );
+    pListBox->SetText(sListBackup);
+    pLabelBox->SetText(sCapBackup );
+    pIdxBox->SetText(sIdxBackup );
 
     FontInfo aFontInfo( pFontList->Get(sStdBackup, sStdBackup) );
-    aStandardHeightLB.Fill( &aFontInfo, pFontList );
+    pStandardHeightLB->Fill( &aFontInfo, pFontList );
     aFontInfo = pFontList->Get(sOutBackup, sOutBackup );
-    aTitleHeightLB.Fill( &aFontInfo, pFontList );
+    pTitleHeightLB->Fill( &aFontInfo, pFontList );
     aFontInfo = pFontList->Get(sListBackup,sListBackup);
-    aListHeightLB.Fill( &aFontInfo, pFontList );
+    pListHeightLB->Fill( &aFontInfo, pFontList );
     aFontInfo = pFontList->Get(sCapBackup, sCapBackup );
-    aLabelHeightLB.Fill( &aFontInfo, pFontList );
+    pLabelHeightLB->Fill( &aFontInfo, pFontList );
     aFontInfo = pFontList->Get(sIdxBackup, sIdxBackup );
-    aIndexHeightLB.Fill( &aFontInfo, pFontList );
+    pIndexHeightLB->Fill( &aFontInfo, pFontList );
 
-    aStandardHeightLB.SetValue( CalcToPoint( nStandardHeight, SFX_MAPUNIT_TWIP, 10 ) );
-    aTitleHeightLB.   SetValue( CalcToPoint( nTitleHeight   , SFX_MAPUNIT_TWIP, 10 ) );
-    aListHeightLB.    SetValue( CalcToPoint( nListHeight    , SFX_MAPUNIT_TWIP, 10 ) );
-    aLabelHeightLB.   SetValue( CalcToPoint( nLabelHeight   , SFX_MAPUNIT_TWIP, 10 ));
-    aIndexHeightLB.   SetValue( CalcToPoint( nIndexHeight   , SFX_MAPUNIT_TWIP, 10 ));
+    pStandardHeightLB->SetValue( CalcToPoint( nStandardHeight, SFX_MAPUNIT_TWIP, 10 ) );
+    pTitleHeightLB->   SetValue( CalcToPoint( nTitleHeight   , SFX_MAPUNIT_TWIP, 10 ) );
+    pListHeightLB->    SetValue( CalcToPoint( nListHeight    , SFX_MAPUNIT_TWIP, 10 ) );
+    pLabelHeightLB->   SetValue( CalcToPoint( nLabelHeight   , SFX_MAPUNIT_TWIP, 10 ));
+    pIndexHeightLB->   SetValue( CalcToPoint( nIndexHeight   , SFX_MAPUNIT_TWIP, 10 ));
 
-    aStandardBox.SaveValue();
-    aTitleBox   .SaveValue();
-    aListBox    .SaveValue();
-    aLabelBox   .SaveValue();
-    aIdxBox     .SaveValue();
+    pStandardBox->SaveValue();
+    pTitleBox->SaveValue();
+    pListBox->SaveValue();
+    pLabelBox->SaveValue();
+    pIdxBox->SaveValue();
 
-    aStandardHeightLB.SaveValue();
-    aTitleHeightLB.   SaveValue();
-    aListHeightLB.    SaveValue();
-    aLabelHeightLB.   SaveValue();
-    aIndexHeightLB.   SaveValue();
+    pStandardHeightLB->SaveValue();
+    pTitleHeightLB->SaveValue();
+    pListHeightLB->SaveValue();
+    pLabelHeightLB->SaveValue();
+    pIndexHeightLB->SaveValue();
 }
 
 IMPL_LINK_NOARG(SwStdFontTabPage, StandardHdl)
 {
     sal_uInt8 nFontOffset = nFontGroup * FONT_PER_GROUP;
-    aStandardBox.SetText(SwStdFontConfig::GetDefaultFor(FONT_STANDARD + nFontOffset, eLanguage));
-    aTitleBox   .SetText(SwStdFontConfig::GetDefaultFor(FONT_OUTLINE  + nFontOffset, eLanguage));
-    aListBox    .SetText(SwStdFontConfig::GetDefaultFor(FONT_LIST     + nFontOffset, eLanguage));
-    aLabelBox   .SetText(SwStdFontConfig::GetDefaultFor(FONT_CAPTION  + nFontOffset, eLanguage));
-    aIdxBox     .SetText(SwStdFontConfig::GetDefaultFor(FONT_INDEX    + nFontOffset, eLanguage));
+    pStandardBox->SetText(SwStdFontConfig::GetDefaultFor(FONT_STANDARD + nFontOffset, eLanguage));
+    pTitleBox   ->SetText(SwStdFontConfig::GetDefaultFor(FONT_OUTLINE  + nFontOffset, eLanguage));
+    pListBox    ->SetText(SwStdFontConfig::GetDefaultFor(FONT_LIST     + nFontOffset, eLanguage));
+    pLabelBox   ->SetText(SwStdFontConfig::GetDefaultFor(FONT_CAPTION  + nFontOffset, eLanguage));
+    pIdxBox     ->SetText(SwStdFontConfig::GetDefaultFor(FONT_INDEX    + nFontOffset, eLanguage));
 
-    aStandardBox.SaveValue();
-    aTitleBox   .SaveValue();
-    aListBox    .SaveValue();
-    aLabelBox   .SaveValue();
-    aIdxBox     .SaveValue();
+    pStandardBox->SaveValue();
+    pTitleBox->SaveValue();
+    pListBox->SaveValue();
+    pLabelBox->SaveValue();
+    pIdxBox->SaveValue();
 
-    aStandardHeightLB.SetValue( CalcToPoint(
+    pStandardHeightLB->SetValue( CalcToPoint(
         SwStdFontConfig::GetDefaultHeightFor(FONT_STANDARD + nFontOffset, eLanguage),
             SFX_MAPUNIT_TWIP, 10 ) );
-    aTitleHeightLB   .SetValue(CalcToPoint(
+    pTitleHeightLB   ->SetValue(CalcToPoint(
         SwStdFontConfig::GetDefaultHeightFor(FONT_OUTLINE  +
             nFontOffset, eLanguage), SFX_MAPUNIT_TWIP, 10 ));
-    aListHeightLB    .SetValue(CalcToPoint(
+    pListHeightLB    ->SetValue(CalcToPoint(
         SwStdFontConfig::GetDefaultHeightFor(FONT_LIST + nFontOffset, eLanguage),
             SFX_MAPUNIT_TWIP, 10 ));
-    aLabelHeightLB   .SetValue(CalcToPoint(
+    pLabelHeightLB   ->SetValue(CalcToPoint(
         SwStdFontConfig::GetDefaultHeightFor(FONT_CAPTION  + nFontOffset, eLanguage),
             SFX_MAPUNIT_TWIP, 10 ));
-    aIndexHeightLB   .SetValue(CalcToPoint(
+    pIndexHeightLB   ->SetValue(CalcToPoint(
         SwStdFontConfig::GetDefaultHeightFor(FONT_INDEX    + nFontOffset, eLanguage),
             SFX_MAPUNIT_TWIP, 10 ));
-
     return 0;
 }
 
 IMPL_LINK( SwStdFontTabPage, ModifyHdl, ComboBox*, pBox )
 {
-    if(pBox == &aStandardBox)
+    if(pBox == pStandardBox)
     {
         String sEntry = pBox->GetText();
         if(bSetListDefault && bListDefault)
-            aListBox.SetText(sEntry);
+            pListBox->SetText(sEntry);
         if(bSetLabelDefault && bLabelDefault)
-            aLabelBox.SetText(sEntry);
+            pLabelBox->SetText(sEntry);
         if(bSetIdxDefault && bIdxDefault)
-            aIdxBox.SetText(sEntry);
+            pIdxBox->SetText(sEntry);
     }
-    else if(pBox == &aListBox)
+    else if(pBox == pListBox)
     {
         bSetListDefault = sal_False;
     }
-    else if(pBox == &aLabelBox)
+    else if(pBox == pLabelBox)
     {
         bSetLabelDefault = sal_False;
     }
-    else if(pBox == &aIdxBox)
+    else if(pBox == pIdxBox)
     {
         bSetIdxDefault = sal_False;
     }
@@ -1004,25 +988,25 @@ IMPL_LINK( SwStdFontTabPage, ModifyHdl, ComboBox*, pBox )
 
 IMPL_LINK( SwStdFontTabPage, ModifyHeightHdl, FontSizeBox*, pBox )
 {
-    if(pBox == &aStandardHeightLB)
+    if(pBox == pStandardHeightLB)
     {
         sal_Int64 nValue = pBox->GetValue(FUNIT_TWIP);
         if(bSetListHeightDefault && bListHeightDefault)
-            aListHeightLB.SetValue(nValue, FUNIT_TWIP);
+            pListHeightLB->SetValue(nValue, FUNIT_TWIP);
         if(bSetLabelHeightDefault && bLabelHeightDefault)
-            aLabelHeightLB.SetValue(nValue, FUNIT_TWIP);
+            pLabelHeightLB->SetValue(nValue, FUNIT_TWIP);
         if(bSetIndexHeightDefault && bIndexHeightDefault)
-            aIndexHeightLB.SetValue(nValue, FUNIT_TWIP);
+            pIndexHeightLB->SetValue(nValue, FUNIT_TWIP);
     }
-    else if(pBox == &aListHeightLB)
+    else if(pBox == pListHeightLB)
     {
         bSetListHeightDefault = sal_False;
     }
-    else if(pBox == &aLabelHeightLB)
+    else if(pBox == pLabelHeightLB)
     {
         bSetLabelHeightDefault = sal_False;
     }
-    else if(pBox == &aIndexHeightLB)
+    else if(pBox == pIndexHeightLB)
     {
         bSetIndexHeightDefault = sal_False;
     }
@@ -1033,29 +1017,28 @@ IMPL_LINK( SwStdFontTabPage, LoseFocusHdl, ComboBox*, pBox )
 {
     FontSizeBox* pHeightLB = 0;
     String sEntry = pBox->GetText();
-    if(pBox == &aStandardBox)
+    if(pBox == pStandardBox)
     {
-        pHeightLB = &aStandardHeightLB;
+        pHeightLB = pStandardHeightLB;
     }
-    else if(pBox == &aTitleBox)
+    else if(pBox == pTitleBox)
     {
-        pHeightLB = &aTitleHeightLB;
+        pHeightLB = pTitleHeightLB;
     }
-    else if(pBox == &aListBox)
+    else if(pBox == pListBox)
     {
-        pHeightLB = &aListHeightLB;
+        pHeightLB = pListHeightLB;
     }
-    else if(pBox == &aLabelBox)
+    else if(pBox == pLabelBox)
     {
-        pHeightLB = &aLabelHeightLB;
+        pHeightLB = pLabelHeightLB;
     }
-    else /*if(pBox == &aIdxBox)*/
+    else /*if(pBox == pIdxBox)*/
     {
-        pHeightLB = &aIndexHeightLB;
+        pHeightLB = pIndexHeightLB;
     }
     FontInfo aFontInfo( pFontList->Get(sEntry, sEntry) );
     pHeightLB->Fill( &aFontInfo, pFontList );
-
     return 0;
 }
 

@@ -101,6 +101,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/swriter,\
 	sw/uiconfig/swriter/ui/numparapage \
 	sw/uiconfig/swriter/ui/numberingnamedialog \
 	sw/uiconfig/swriter/ui/optcomparison \
+	sw/uiconfig/swriter/ui/optfonttabpage \
 	sw/uiconfig/swriter/ui/optformataidspage \
 	sw/uiconfig/swriter/ui/optgeneralpage \
 	sw/uiconfig/swriter/ui/opttablepage \
