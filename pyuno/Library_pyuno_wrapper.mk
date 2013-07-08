@@ -28,9 +28,10 @@ $(eval $(call gb_Library_use_externals,pyuno_wrapper,\
 # libs (loaded though RTLD_GLOBAL libpyuno.so) may resolve that symbol to e.g.
 # cppu, because they happen to see that before libstdc++; so the requirement has
 # always been that RTLD_LOCAL-loaded pyuno.so wrapper implicitly load into the
-# process as little as possible:
-$(eval $(call gb_Library_add_ldflags,pyuno_wrapper,-nostdlib))
-$(eval $(call gb_Library_add_libs,pyuno_wrapper,-lc))
+# process as little as possible.
+# To ensure that pyuno.so does not link against libstdc++ the dynamic link
+# command invokes gcc and not g++ if there are only C objects, so
+# don't add any C++ objects here!
 
 ifeq ($(filter DRAGONFLY FREEBSD NETBSD OPENBSD MACOSX,$(OS)),)
 
