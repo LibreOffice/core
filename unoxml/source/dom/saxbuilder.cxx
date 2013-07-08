@@ -130,7 +130,7 @@ namespace DOM
 
         // start a new document fragment and push it onto the stack
         // we have to be in a clean state to do this
-        if (!m_aState == SAXDocumentBuilderState_READY)
+        if (m_aState != SAXDocumentBuilderState_READY)
             throw RuntimeException();
 
         m_aDocument = ownerDoc;
@@ -164,7 +164,7 @@ namespace DOM
 
         // start a new document and push it onto the stack
         // we have to be in a clean state to do this
-        if (!m_aState == SAXDocumentBuilderState_READY)
+        if (m_aState != SAXDocumentBuilderState_READY)
             throw SAXException();
 
         Reference< XDocumentBuilder > aBuilder(DocumentBuilder::create(comphelper::getComponentContext(m_aServiceManager)));
@@ -179,7 +179,7 @@ namespace DOM
         ::osl::MutexGuard g(m_Mutex);
 
         // there should only be the document left on the node stack
-        if (!m_aState == SAXDocumentBuilderState_BUILDING_DOCUMENT)
+        if (m_aState != SAXDocumentBuilderState_BUILDING_DOCUMENT)
             throw SAXException();
 
         Reference< XNode > aNode = m_aNodeStack.top();
