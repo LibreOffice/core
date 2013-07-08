@@ -135,6 +135,7 @@ $(eval $(call gb_Module_add_moduledirs,libreoffice,\
 	$(call gb_Helper_optional,OPENSSL,openssl) \
 	package \
 	padmin \
+	$(call gb_Helper_optional,POPPLER,poppler) \
 	$(call gb_Helper_optional,POSTGRESQL,postgresql) \
 	postprocess \
 	psprint_config \
@@ -207,7 +208,6 @@ $(eval $(call gb_Module_add_moduledirs,libreoffice,\
 	xmerge \
 	$(call gb_Helper_optional,DESKTOP,xmlhelp) \
 	xmloff \
-	$(call gb_Helper_optional,XPDF,xpdf) \
 	xmlreader \
 	xmlscript \
 	xmlsecurity \

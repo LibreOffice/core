@@ -7,14 +7,14 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Module_Module,xpdf))
+$(eval $(call gb_Module_Module,poppler))
 
-ifeq ($(SYSTEM_POPPLER),NO)
+ifeq ($(SYSTEM_WPD),NO)
 
-$(eval $(call gb_Module_add_targets,xpdf,\
-	UnpackedTarball_xpdf \
-	ExternalPackage_xpdf \
-	ExternalProject_xpdf \
+$(eval $(call gb_Module_add_targets,poppler,\
+	ExternalProject_poppler \
+	ExternalPackage_poppler \
+	UnpackedTarball_poppler \
 ))
 
 endif
