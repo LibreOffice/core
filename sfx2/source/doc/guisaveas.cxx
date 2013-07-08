@@ -1456,9 +1456,10 @@ sal_Bool SfxStoringHelper::GUIStoreModel( uno::Reference< frame::XModel > xModel
             {
                 aModelData.GetStorable2()->storeSelf( aModelData.GetMediaDescr().getAsConstPropertyValueList() );
             }
-            catch( const lang::IllegalArgumentException& )
+            catch (const lang::IllegalArgumentException& e)
             {
-                OSL_FAIL( "ModelData didn't handle illegal parameters, all the parameters are ignored!\n" );
+                SAL_WARN("sfx", "Ignoring parameters! "
+                    "ModelData considers this illegal:  " << e.Message);
                 aModelData.GetStorable()->store();
             }
         }
