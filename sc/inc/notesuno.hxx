@@ -48,7 +48,7 @@ public:
 
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
-                            // XChild
+                            /// XChild
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL
                             getParent() throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL   setParent( const ::com::sun::star::uno::Reference<
@@ -56,7 +56,7 @@ public:
                                     throw(::com::sun::star::lang::NoSupportException,
                                             ::com::sun::star::uno::RuntimeException);
 
-                            // XSimpleText
+                            /// XSimpleText
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextCursor > SAL_CALL
                             createTextCursor() throw(::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextCursor > SAL_CALL
@@ -73,7 +73,7 @@ public:
                                     throw(::com::sun::star::lang::IllegalArgumentException,
                                         ::com::sun::star::uno::RuntimeException);
 
-                            // XTextRange
+                            /// XTextRange
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::text::XText > SAL_CALL
                             getText() throw(::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > SAL_CALL
@@ -84,7 +84,7 @@ public:
     virtual void SAL_CALL   setString( const OUString& aString )
                                     throw(::com::sun::star::uno::RuntimeException);
 
-                            // XSheetAnnotation
+                            /// XSheetAnnotation
     virtual ::com::sun::star::table::CellAddress SAL_CALL getPosition()
                                     throw(::com::sun::star::uno::RuntimeException);
     virtual OUString SAL_CALL getAuthor() throw(::com::sun::star::uno::RuntimeException);
@@ -93,12 +93,12 @@ public:
     virtual void SAL_CALL setIsVisible( sal_Bool bIsVisible )
                                     throw(::com::sun::star::uno::RuntimeException);
 
-                            // XSheetAnnotationShapeSupplier
+                            /// XSheetAnnotationShapeSupplier
     virtual ::com::sun::star::uno::Reference < ::com::sun::star::drawing::XShape > SAL_CALL
                             getAnnotationShape()
                                 throw(::com::sun::star::uno::RuntimeException);
 
-                            // XServiceInfo
+                            /// XServiceInfo
     virtual OUString SAL_CALL getImplementationName()
                                 throw(::com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )

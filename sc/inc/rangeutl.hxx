@@ -102,7 +102,7 @@ class SC_DLLPUBLIC ScRangeStringConverter
 {
 public:
 
-// helper methods
+/// helper methods
     static void         AssignString(
                             OUString& rString,
                             const OUString& rNewStr,
@@ -137,7 +137,7 @@ public:
                             const OUString& rTabName,
                             sal_Unicode cQuote = '\'');
 
-// String to Range core
+/// String to Range core
     static sal_Bool     GetAddressFromString(
                             ScAddress& rAddress,
                             const OUString& rAddressStr,
@@ -171,7 +171,7 @@ public:
                             sal_Unicode cSeparator = ' ',
                             sal_Unicode cQuote = '\'');
 
-// String to Range API
+/// String to Range API
     static sal_Bool     GetAddressFromString(
                             ::com::sun::star::table::CellAddress& rAddress,
                             const OUString& rAddressStr,
@@ -196,7 +196,7 @@ public:
                             sal_Unicode cSeparator = ' ',
                             sal_Unicode cQuote = '\'');
 
-// Range to String core
+/// Range to String core
     static void         GetStringFromAddress(
                             OUString& rString,
                             const ScAddress& rAddress,
@@ -230,7 +230,7 @@ public:
                             sal_Bool bAppendStr = false,
                             sal_uInt16 nFormatFlags = (SCA_VALID | SCA_TAB_3D) );
 
-// Range to String API
+/// Range to String API
     static void         GetStringFromAddress(
                             OUString& rString,
                             const ::com::sun::star::table::CellAddress& rAddress,
@@ -255,13 +255,13 @@ public:
                             sal_Unicode cSeparator = ' ',
                             sal_uInt16 nFormatFlags = (SCA_VALID | SCA_TAB_3D) );
 
-// XML Range to Calc Range
+/// XML Range to Calc Range
     static void         GetStringFromXMLRangeString(
                             OUString& rString,
                             const OUString& rXMLRange,
                             ScDocument* pDoc );
 
-// String to RangeData core
+/// String to RangeData core
     static ScRangeData* GetRangeDataFromString(const OUString& rString, const SCTAB nTab, const ScDocument* pDoc);
 };
 
@@ -290,9 +290,9 @@ public:
     SCROW nRowEnd;
 };
 
-//
-//  returns areas with reference and all db-areas
-//
+///
+///  @return areas with reference and all db-areas
+///
 
 class SC_DLLPUBLIC ScAreaNameIterator
 {
