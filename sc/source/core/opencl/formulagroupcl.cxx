@@ -310,11 +310,8 @@ bool FormulaGroupInterpreterGroundwater::interpret(ScDocument& rDoc, const ScAdd
     OpCode eOp; // type of operation: ocAverage, ocMax, ocMin
     const double *pArrayToSubtractOneElementFrom;
     const double *pGroundWaterDataArray;
-    size_t        nGroundWaterDataArrayLen;
 
     // Output:
-    double *pResult = new double[xGroup->mnLength];
-    RETURN_IF_FAIL(pResult != NULL, "buffer alloc failed");
     std::vector<double> aMatrixContent;
 
     const formula::FormulaToken *p;
@@ -338,36 +335,13 @@ bool FormulaGroupInterpreterGroundwater::interpret(ScDocument& rDoc, const ScAdd
 
             p = rCode.NextNoSpaces();
             RETURN_IF_FAIL(p != NULL, "no function argument");
-            if (p->GetType() == formula::svDoubleVectorRef)
-            {
-                // FIXME: this is what I would expect; but table1.cxx's
-                // ScColumn::ResolveStaticReference as called from
-                // GroupTokenConverter::convert returns an ScMatrixToken un-conditionally
-                const formula::DoubleVectorRefToken* pDvr = static_cast<const formula::DoubleVectorRefToken*>(p);
-                const std::vector<const double*>& rArrays = pDvr->GetArrays();
-                RETURN_IF_FAIL(rArrays.size() == 1, "unexpectedly large double ref array");
-                RETURN_IF_FAIL(pDvr->GetArrayLength() == (size_t)xGroup->mnLength, "wrong double ref length");
-                RETURN_IF_FAIL(pDvr->IsStartFixed() && pDvr->IsEndFixed(), "non-fixed ranges )");
-                pGroundWaterDataArray = rArrays[0];
-                nGroundWaterDataArrayLen = xGroup->mnLength;
-            }
-            else
-            {
-                RETURN_IF_FAIL(p->GetType() == formula::svMatrix, "unexpected fn. param type");
-                const ScMatrixToken *pMatTok = static_cast<const ScMatrixToken *>(p);
-                pMatTok->GetMatrix()->GetDoubleArray( aMatrixContent );
-                // FIXME: horrible hackery: the legacy / excel shared formula oddness,
-                // such that the 1st entry is not truly shared, making these a different
-                // shape.
-                if (aMatrixContent.size() > (size_t)xGroup->mnLength + 1)
-                {
-                    fprintf(stderr, "Error size range mismatch: %ld vs %ld\n",
-                            (long)aMatrixContent.size(), (long)xGroup->mnLength);
-                    return false;
-                }
-                pGroundWaterDataArray = &aMatrixContent[0];
-                nGroundWaterDataArrayLen = aMatrixContent.size();
-            }
+            RETURN_IF_FAIL(p->GetType() == formula::svDoubleVectorRef, "wrong type of fn argument");
+            const formula::DoubleVectorRefToken* pDvr = static_cast<const formula::DoubleVectorRefToken*>(p);
+            const std::vector<const double*>& rArrays = pDvr->GetArrays();
+            RETURN_IF_FAIL(rArrays.size() == 1, "unexpectedly large double ref array");
+            RETURN_IF_FAIL(pDvr->GetArrayLength() == (size_t)xGroup->mnLength, "wrong double ref length");
+            RETURN_IF_FAIL(pDvr->IsStartFixed() && pDvr->IsEndFixed(), "non-fixed ranges )");
+            pGroundWaterDataArray = rArrays[0];
 
             p = rCode.NextNoSpaces();
             RETURN_IF_FAIL(p != NULL && p->GetOpCode() == ocClose, "missing closing )");
@@ -400,17 +374,22 @@ bool FormulaGroupInterpreterGroundwater::interpret(ScDocument& rDoc, const ScAdd
     //   =AVERAGE(L$6:L$7701) - L6
     // we would get:
     //   eOp => ocAverage
-    //   pGroundWaterDataArray => contains L$6:L$7701
-    //   pGroundWaterDataArrayLen => 7701 - 6 + 1
-    //   pArrayToSubtractOneElementFrom => contains L$5:L$7701 (overlapping)
+    //   pGroundWaterDataArray => contains L$5:L$7701
+    //   pArrayToSubtractOneElementFrom => contains L$5:L$7701 (ie. a copy)
     //   length of this array -> xGroup->mnLength
 
     fprintf (stderr, "Calculate !\n");
+
+    double *pResult = ocl_calc.OclSimpleDeltaOperation( eOp, pGroundWaterDataArray,
+                                                        pArrayToSubtractOneElementFrom,
+                                                        (size_t) xGroup->mnLength );
+    RETURN_IF_FAIL(pResult != NULL, "buffer alloc / calculaton failed");
 
     // Insert the double data, in rResult[i] back into the document
     rDoc.SetFormulaResults(rTopPos, pResult, xGroup->mnLength);
 
     delete [] pResult;
+
     SAL_DEBUG ("exit cleanly !");
     return true;
 }

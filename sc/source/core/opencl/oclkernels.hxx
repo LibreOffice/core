@@ -142,7 +142,6 @@ __kernel void oclFormulaAverage(__global float *input,__global int *start,__glob
     for(i = start[id];i<=end[id];i++)
         sum += input[i];
     output[id] = sum / (end[id]-start[id]+1);
-
 }
 
 //Sumproduct
@@ -160,6 +159,33 @@ __kernel void oclFormulaMinverse(__global float *data,
                        const uint type)
 {
 
+}
+
+// Double precision is a requirement of spreadsheets
+#if 0
+#if defined(cl_khr_fp64)  // Khronos extension
+#pragma OPENCL EXTENSION cl_khr_fp64 : enable
+#elif defined(cl_amd_fp64)  // AMD extension
+#pragma OPENCL EXTENSION cl_amd_fp64 : enable
+#endif
+typedef double fp_t;
+#else
+typedef float fp_t;
+#endif
+
+__kernel void oclAverageDelta(__global fp_t *values, __global fp_t *subtract, __global int start, __global int end, __global fp_t *output)
+{
+    const unsigned int id = get_global_id(0);
+
+    // Average
+    int i;
+    fp_t sum = 0.0;
+    for(i = start; i < end; i++)
+        sum += values[i];
+    fp_t val = sum/(end-start);
+
+    // Subtract & output
+    output[id] = val - subtract[id];
 }
 
 );
