@@ -69,6 +69,9 @@ class ImplErrorDialog : public ModalDialog
     ~ImplErrorDialog();
 };
 
+class ImpPDFTabSecurityPage;
+class ImpPDFTabLinksPage;
+
 ////////////////////////////////////////////////////////////////////////
 //class tabbed dialog
 class ImpPDFTabDialog : public SfxTabDialog
@@ -81,6 +84,13 @@ private:
     Any                         maSelection;
 
     DECL_LINK(CancelHdl, void *);
+
+    sal_uInt16 mnSigningPageId;
+    sal_uInt16 mnSecurityPageId;
+    sal_uInt16 mnLinksPage;
+    sal_uInt16 mnInterfacePageId;
+    sal_uInt16 mnViewPageId;
+    sal_uInt16 mnGeneralPageId;
 
 protected:
 //the following data are the configuration used throughout the dialog and pages
@@ -166,6 +176,10 @@ public:
     ~ImpPDFTabDialog();
 
     Sequence< PropertyValue >   GetFilterData();
+
+    ImpPDFTabSecurityPage* getSecurityPage() const;
+    ImpPDFTabLinksPage* getLinksPage() const;
+    ImpPDFTabGeneralPage* getGeneralPage() const;
 
 protected:
     virtual void                PageCreated( sal_uInt16 _nId,

@@ -19,7 +19,6 @@
 
 #include <filter.hrc>
 
-#define RID_PDF_EXPORT_DLG          (RID_PDF_DIALOG_START +   0)
 #define RID_PDF_TAB_GENER           (RID_PDF_DIALOG_START +   1)
 #define RID_PDF_TAB_VPREFER         (RID_PDF_DIALOG_START +   2)
 #define RID_PDF_TAB_OPNFTR          (RID_PDF_DIALOG_START +   3)

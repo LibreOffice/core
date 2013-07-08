@@ -145,55 +145,6 @@ TabPage  RID_PDF_TAB_SIGNING
 
 };
 
-//----------------------------------------------------------
-TabDialog  RID_PDF_EXPORT_DLG
-{
-    HelpId = HID_FILTER_PDF_OPTIONS ;
-    OutputSize = TRUE;
-    SVLook = TRUE;
-    Moveable = TRUE;
-    Text [ en-US ] = "PDF Options";
-
-    TabControl 1
-    {
-        HelpId = HID_FILTER_PDF_OPTIONS ;
-        OutputSize = TRUE;
-        PageList =
-        {
-            PageItem
-            {
-                Identifier = RID_PDF_TAB_GENER;
-                Text [ en-US ] = "General";
-            };
-            PageItem
-            {
-                Identifier = RID_PDF_TAB_OPNFTR;
-                Text [ en-US ] = "Initial View";
-            };
-            PageItem
-            {
-                Identifier = RID_PDF_TAB_VPREFER;
-                Text [ en-US ] = "User Interface";
-            };
-            PageItem
-            {
-                Identifier = RID_PDF_TAB_LINKS;
-                Text [ en-US ] = "Links";
-            };
-            PageItem
-            {
-                Identifier = RID_PDF_TAB_SECURITY;
-                Text [ en-US ] = "Security";
-            };
-            PageItem
-            {
-                Identifier = RID_PDF_TAB_SIGNING;
-                Text [ en-US ] = "Digital Signatures";
-            };
-        };
-    };
-};
-
 ModalDialog RID_PDF_ERROR_DLG
 {
     HelpID = "filter:ModalDialog:RID_PDF_ERROR_DLG";
