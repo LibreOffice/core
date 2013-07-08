@@ -74,6 +74,7 @@ export OPENSSL_TARBALL := 51a40a81b3b7abe8a5c33670bd3da0ce-openssl-0.9.8v.tar.gz
 export ORCUS_TARBALL := ea2acaf140ae40a87a952caa75184f4d-liborcus-0.5.1.tar.bz2
 export PIXMAN_TARBALL := c63f411b3ad147db2bcce1bf262a0e02-pixman-0.24.4.tar.bz2
 export PNG_TARBALL := 9e5d864bce8f06751bbd99962ecf4aad-libpng-1.5.10.tar.gz
+export POPPLER_TARBALL := 1cd27460f7e3379d1eb109cfd7bcdb39-poppler-0.22.5.tar.gz
 export POSTGRESQL_TARBALL := c0b4799ea9850eae3ead14f0a60e9418-postgresql-9.2.1.tar.bz2
 export PYTHON_TARBALL := b3b2524f72409d919a4137826a870a8f-Python-3.3.0.tar.bz2
 export RAPTOR_TARBALL := 4ceb9316488b0ea01acf011023cf7fff-raptor2-2.0.9.tar.gz
@@ -87,7 +88,6 @@ export VIGRA_TARBALL := d62650a6f908e85643e557a236ea989c-vigra1.6.0.tar.gz
 export WPD_TARBALL := 972afb8fdf02d9e7517e258b7fa7f0eb-libwpd-0.9.8.tar.bz2
 export WPG_TARBALL := b85436266b2ac91d351ab5684b181151-libwpg-0.2.2.tar.bz2
 export WPS_TARBALL := 46eb0e7f213ad61bd5dee0c494132cb0-libwps-0.2.9.tar.bz2
-export XPDF_TARBALL := 599dc4cc65a07ee868cf92a667a913d2-xpdf-3.02.tar.gz
 export XSLTML_TARBALL := a7983f859eafb2677d7ff386a023bc40-xsltml_2.1.2.zip
 export ZLIB_TARBALL := 2ab442d169156f34c379c968f3f482dd-zlib-1.2.7.tar.bz2
 

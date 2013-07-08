@@ -12,7 +12,13 @@ $(eval $(call gb_Executable_Executable,xpdfimport))
 $(eval $(call gb_Executable_use_externals,xpdfimport,\
     boost_headers \
     poppler \
+    $(if $(filter-out WNT,$(OS)),fontconfig) \
     zlib \
+))
+
+$(eval $(call gb_Executable_use_libraries,xpdimport,\
+	sal \
+	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_Executable_add_exception_objects,xpdfimport,\
