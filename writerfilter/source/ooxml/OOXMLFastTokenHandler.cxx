@@ -21,7 +21,19 @@
 #include <string.h>
 #include <ooxml/resourceids.hxx>
 #include "OOXMLFastTokenHandler.hxx"
+
+#if defined __clang__
+#if __has_warning("-Wdeprecated-register")
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-register"
+#endif
+#endif
 #include "gperffasttoken.hxx"
+#if defined __clang__
+#if __has_warning("-Wdeprecated-register")
+#pragma GCC diagnostic pop
+#endif
+#endif
 
 namespace writerfilter {
 namespace ooxml

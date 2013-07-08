@@ -329,7 +329,18 @@ static char *linetoken( FileInputStream* stream )
  *
  *  The algorithm is a standard Knuth binary search.
  */
+#if defined __clang__
+#if __has_warning("-Wdeprecated-register")
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-register"
+#endif
+#endif
 #include "afm_hash.hpp"
+#if defined __clang__
+#if __has_warning("-Wdeprecated-register")
+#pragma GCC diagnostic pop
+#endif
+#endif
 
 static inline enum parseKey recognize( char* ident, int len)
 {

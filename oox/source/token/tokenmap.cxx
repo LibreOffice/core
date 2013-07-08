@@ -32,7 +32,18 @@ using ::com::sun::star::uno::Sequence;
 
 namespace {
 // include auto-generated Perfect_Hash
+#if defined __clang__
+#if __has_warning("-Wdeprecated-register")
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-register"
+#endif
+#endif
 #include "tokenhash.inc"
+#if defined __clang__
+#if __has_warning("-Wdeprecated-register")
+#pragma GCC diagnostic pop
+#endif
+#endif
 } // namespace
 
 // ============================================================================

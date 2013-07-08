@@ -23,7 +23,18 @@
 namespace svgi
 {
 
+#if defined __clang__
+#if __has_warning("-Wdeprecated-register")
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-register"
+#endif
+#endif
 #include "tokens.cxx"
+#if defined __clang__
+#if __has_warning("-Wdeprecated-register")
+#pragma GCC diagnostic pop
+#endif
+#endif
 
 sal_Int32 getTokenId( const char* sIdent, sal_Int32 nLen )
 {
