@@ -21,14 +21,15 @@ class ResMgr;
 
 #define AVMEDIA_RESID( nId ) ResId( nId, * ::avmedia::GetResMgr() )
 
+#define AVMEDIA_MANAGER_SERVICE_PREFERRED "com.sun.star.comp.avmedia.Manager_VLC"
 #ifdef WNT
-#define AVMEDIA_MANAGER_SERVICE_NAME "com.sun.star.comp.avmedia.Manager_DirectX"
+#define AVMEDIA_MANAGER_SERVICE_NAME      "com.sun.star.comp.avmedia.Manager_DirectX"
 #else
 #ifdef MACOSX
-#define AVMEDIA_MANAGER_SERVICE_NAME "com.sun.star.comp.avmedia.Manager_QuickTime"
+#define AVMEDIA_MANAGER_SERVICE_NAME      "com.sun.star.comp.avmedia.Manager_QuickTime"
 #else
-#define AVMEDIA_MANAGER_SERVICE_NAME_OLD "com.sun.star.comp.avmedia.Manager_GStreamer_0_10"
-#define AVMEDIA_MANAGER_SERVICE_NAME "com.sun.star.comp.avmedia.Manager_GStreamer"
+#define AVMEDIA_MANAGER_SERVICE_NAME_OLD  "com.sun.star.comp.avmedia.Manager_GStreamer_0_10"
+#define AVMEDIA_MANAGER_SERVICE_NAME      "com.sun.star.comp.avmedia.Manager_GStreamer"
 #endif
 #endif
 

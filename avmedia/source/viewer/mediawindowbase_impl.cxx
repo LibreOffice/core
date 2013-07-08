@@ -56,6 +56,7 @@ uno::Reference< media::XPlayer > MediaWindowBaseImpl::createPlayer( const OUStri
     uno::Reference< uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
 
     static const char * aServiceManagers[] = {
+        AVMEDIA_MANAGER_SERVICE_PREFERRED,
         AVMEDIA_MANAGER_SERVICE_NAME,
 // a fallback path just for gstreamer which has
 // two significant versions deployed at once ...
