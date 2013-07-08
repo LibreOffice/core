@@ -65,35 +65,32 @@ ScMatrixRef FormulaGroupInterpreterOpenCL::inverseMatrix(const ScMatrix& /* rMat
 bool FormulaGroupInterpreterOpenCL::interpret(ScDocument& rDoc, const ScAddress& rTopPos,
                                               const ScFormulaCellGroupRef& xGroup, ScTokenArray& rCode)
 {
-    size_t rowSize = xGroup->mnLength; //, srcSize = 0;
+    size_t rowSize = xGroup->mnLength;
     fprintf(stderr,"rowSize at begin is ...%ld.\n",(long)rowSize);
-    int *rangeStart =NULL; // The first position for calculation,for example,the A1 in (=MAX(A1:A100))
-    int *rangeEnd = NULL; // The last position for calculation,for example, the A100 in (=MAX(A1:A100))
     // The row quantity can be gotten from p2->GetArrayLength()
-    int count1 =0,count2 =0,count3=0;
-    int oclOp=0;
-    double *srcData = NULL; // Point to the input data from CPU
-    double *rResult=NULL; // Point to the output data from GPU
-    double *leftData=NULL; // Left input for binary operator(+,-,*,/),for example,(=leftData+rightData)
-    double *rightData=NULL; // Right input for binary operator(+,-,*,/),for example,(=leftData/rightData)
-                            // The rightData can't be zero for "/"
-
-    leftData  = (double *)malloc(sizeof(double) * rowSize);
-    rightData = (double *)malloc(sizeof(double) * rowSize);
-    rResult   = (double *)malloc(sizeof(double) * rowSize*2);// For 2 columns(B,C)
-    srcData = (double *)calloc(rowSize,sizeof(double));
-
-    rangeStart =(int *)malloc(sizeof(int) * rowSize);
-    rangeEnd   =(int *)malloc(sizeof(int) * rowSize);
-
-    memset(rResult,0,rowSize);
-    if(NULL==leftData||NULL==rightData||
-           NULL==rResult||NULL==rangeStart||NULL==rangeEnd)
+    int nCount1 = 0, nCount2 = 0, nCount3 = 0;
+    int nOclOp = 0;
+    double *rResult = NULL; // Point to the output data from GPU
+    rResult = (double *)malloc(sizeof(double) * rowSize*2);// For 2 columns(B,C)
+    if(NULL==rResult)
     {
         printf("malloc err\n");
         return false;
     }
-    // printf("rowSize is %d.\n",rowsize);
+    memset(rResult,0,rowSize);
+    float * fpOclSrcData = NULL; // Point to the input data from CPU
+    uint * npOclStartPos = NULL; // The first position for calculation,for example,the A1 in (=MAX(A1:A100))
+    uint * npOclEndPos     = NULL; // The last position for calculation,for example, the A100 in (=MAX(A1:A100))
+    float * fpLeftData     = NULL; // Left input for binary operator(+,-,*,/),for example,(=leftData+rightData)
+    float * fpRightData  = NULL; // Right input for binary operator(+,-,*,/),for example,(=leftData/rightData)
+                                 // The rightData can't be zero for "/"
+    static OclCalc ocl_calc;
+    // Don't know how large the size will be applied previously, so create them as the rowSize or 65536
+    // Don't know which formulae will be used previously, so create buffers for different formulae used probably
+    ocl_calc.CreateBuffer(fpOclSrcData,npOclStartPos,npOclEndPos,rowSize);
+    ocl_calc.CreateBuffer(fpLeftData,fpRightData,rowSize);
+    //printf("pptrr is %d,%d,%d\n",fpOclSrcData,npOclStartPos,npOclEndPos);
+///////////////////////////////////////////////////////////////////////////////////////////
 
     // Until we implement group calculation for real, decompose the group into
     // individual formula token arrays for individual calculation.
@@ -125,26 +122,23 @@ bool FormulaGroupInterpreterOpenCL::interpret(ScDocument& rDoc, const ScAddress&
                     size_t nRowSize = nRowEnd - nRowStart + 1;
                     ScMatrixRef pMat(new ScMatrix(nColSize, nRowSize, 0.0));
 
-                    //srcSize = rowSize+nRowSize-rowSize%nRowSize;//align as nRowSize
-                    //srcData = (double *)calloc(srcSize,sizeof(double));
-                    rangeStart[i] = nRowStart;//record the start position
-                    rangeEnd[i] = nRowEnd;//record the end position
+                    npOclStartPos[i] = nRowStart; // record the start position
+                    npOclEndPos[i]     = nRowEnd;   // record the end position
 
                     for (size_t nCol = 0; nCol < nColSize; ++nCol)
                     {
                         const double* pArray = rArrays[nCol];
-
-                        //printf("pArray is %p.\n",pArray);
                         if( NULL==pArray )
                         {
                             fprintf(stderr,"Error: pArray is NULL!\n");
                             return false;
                         }
-                        //fprintf(stderr,"(rowSize+nRowSize-1) is %d.\n",rowSize+nRowSize-1);
+
                         for( size_t u=0; u<rowSize; u++ )
                         {
-                            srcData[u] = pArray[u];// note:rowSize<=srcSize
-                            //fprintf(stderr,"srcData[%d] is %f.\n",u,srcData[u]);
+                            // Many video cards can't support double type in kernel, so need transfer the double to float
+                            fpOclSrcData[u] = (float)pArray[u];
+                            //fprintf(stderr,"fpOclSrcData[%d] is %f.\n",u,fpOclSrcData[u]);
                         }
 
                         for (size_t nRow = 0; nRow < nRowSize; ++nRow)
@@ -177,26 +171,26 @@ bool FormulaGroupInterpreterOpenCL::interpret(ScDocument& rDoc, const ScAddress&
             OpCode eOp = pCur->GetOpCode();
             if(eOp==0)
             {
-                  if(count3%2==0)
-                    leftData[count1++] = pCur->GetDouble();
-                   else
-                    rightData[count2++] = pCur->GetDouble();
-                count3++;
-               }
-               else if( eOp!=ocOpen && eOp!=ocClose )
-                oclOp = eOp;
+                 if(nCount3%2==0)
+                     fpLeftData[nCount1++] = (float)pCur->GetDouble();
+                 else
+                     fpRightData[nCount2++] = (float)pCur->GetDouble();
+                 nCount3++;
+            }
+            else if( eOp!=ocOpen && eOp!=ocClose )
+                nOclOp = eOp;
 
-//            if(count1>0){//dbg
-//                fprintf(stderr,"leftData is %f.\n",leftData[count1-1]);
-//                count1--;
-//            }
-//            if(count2>0){//dbg
-//                fprintf(stderr,"rightData is %f.\n",rightData[count2-1]);
-//                count2--;
-//            }
+//              if(count1>0){//dbg
+//                  fprintf(stderr,"leftData is %f.\n",leftData[count1-1]);
+//                  count1--;
+//              }
+//              if(count2>0){//dbg
+//                  fprintf(stderr,"rightData is %f.\n",rightData[count2-1]);
+//                  count2--;
+//              }
         }
 
-        if(!getenv("SC_GPU"))
+        if(!getenv("SC_GPU")||!ocl_calc.GetOpenclState())
         {
             fprintf(stderr,"ccCPU flow...\n\n");
             ScCompiler aComp(&rDoc, aTmpPos, aCode2);
@@ -211,34 +205,42 @@ bool FormulaGroupInterpreterOpenCL::interpret(ScDocument& rDoc, const ScAddress&
     } // for loop end (xGroup->mnLength)
 
     // For GPU calculation
-    if(getenv("SC_GPU"))
+    if(getenv("SC_GPU")&&ocl_calc.GetOpenclState())
     {
             fprintf(stderr,"ggGPU flow...\n\n");
-            printf(" oclOp is... %d\n",oclOp);
+            printf(" oclOp is... %d\n",nOclOp);
             osl_getSystemTime(&aTimeBefore); //timer
-            static OclCalc ocl_calc;
-            switch(oclOp)
+            switch(nOclOp)
             {
                 case ocAdd:
-                       ocl_calc.OclHostSignedAdd(leftData,rightData,rResult,count1);
+                    ocl_calc.OclHostSignedAdd32Bits(fpLeftData,fpRightData,rResult,nCount1);
                     break;
                 case ocSub:
-                    ocl_calc.OclHostSignedSub(leftData,rightData,rResult,count1);
+                    ocl_calc.OclHostSignedSub32Bits(fpLeftData,fpRightData,rResult,nCount1);
                     break;
                 case ocMul:
-                    ocl_calc.OclHostSignedMul(leftData,rightData,rResult,count1);
+                    ocl_calc.OclHostSignedMul32Bits(fpLeftData,fpRightData,rResult,nCount1);
                     break;
                 case ocDiv:
-                    ocl_calc.OclHostSignedDiv(leftData,rightData,rResult,count1);
+                    ocl_calc.OclHostSignedDiv32Bits(fpLeftData,fpRightData,rResult,nCount1);
                     break;
                 case ocMax:
-                    ocl_calc.OclHostFormulaMax(srcData,rangeStart,rangeEnd,rResult,rowSize);
+                    ocl_calc.OclHostFormulaMax32Bits(fpOclSrcData,npOclStartPos,npOclEndPos,rResult,rowSize);
                     break;
                 case ocMin:
-                    ocl_calc.OclHostFormulaMin(srcData,rangeStart,rangeEnd,rResult,rowSize);
+                    ocl_calc.OclHostFormulaMin32Bits(fpOclSrcData,npOclStartPos,npOclEndPos,rResult,rowSize);
                     break;
                 case ocAverage:
-                    ocl_calc.OclHostFormulaAverage(srcData,rangeStart,rangeEnd,rResult,rowSize);
+                    ocl_calc.OclHostFormulaAverage32Bits(fpOclSrcData,npOclStartPos,npOclEndPos,rResult,rowSize);
+                    break;
+                case ocSum:
+                    //ocl_calc.OclHostFormulaSum(srcData,rangeStart,rangeEnd,rResult,rowSize);
+                    break;
+                case ocCount:
+                    //ocl_calc.OclHostFormulaCount(rangeStart,rangeEnd,rResult,rowSize);
+                    break;
+                case ocSumProduct:
+                    //ocl_calc.OclHostFormulaSumProduct(srcData,rangeStart,rangeEnd,rResult,rowSize);
                     break;
                 default:
                     fprintf(stderr,"No OpenCL function for this calculation.\n");
@@ -254,26 +256,16 @@ bool FormulaGroupInterpreterOpenCL::interpret(ScDocument& rDoc, const ScAddress&
 /////////////////////////////////////////////////////
 
 //rResult[i];
-//            for(sal_Int32 i = 0; i < rowSize; ++i){//dbg output results
-//                fprintf(stderr,"After GPU,rRsults[%d] is ...%f\n",i,rResult[i]);
-//            }
+//           for(sal_Int32 i = 0; i < rowSize; ++i){//dbg output results
+//               fprintf(stderr,"After GPU,rRsults[%d] is ...%f\n",i,rResult[i]);
+//           }
 
             // Insert the double data, in rResult[i] back into the document
             rDoc.SetFormulaResults(rTopPos, rResult, xGroup->mnLength);
         }
 
-        if(leftData)
-            free(leftData);
-        if(rightData)
-            free(rightData);
-        if(rangeStart)
-            free(rangeStart);
-        if(rangeEnd)
-            free(rangeEnd);
         if(rResult)
             free(rResult);
-        if(srcData)
-            free(srcData);
 
         if(getenv("SC_GPUSAMPLE")){
             //fprintf(stderr,"FormulaGroupInterpreter::interpret(),iniflag...%d\n",ocl_calc.GetOpenclState());
