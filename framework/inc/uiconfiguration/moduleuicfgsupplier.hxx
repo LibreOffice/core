@@ -45,24 +45,20 @@
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
 
-#include <cppuhelper/weak.hxx>
-#include <cppuhelper/interfacecontainer.hxx>
+#include <cppuhelper/implbase3.hxx>
 #include <rtl/ustring.hxx>
 
 
 namespace framework
 {
-    class ModuleUIConfigurationManagerSupplier : public com::sun::star::lang::XTypeProvider ,
-                                                 public com::sun::star::lang::XServiceInfo  ,
-                                                 public com::sun::star::lang::XComponent    ,
-                                                 public ::com::sun::star::ui::XModuleUIConfigurationManagerSupplier      ,
-                                                 private ThreadHelpBase                     ,   // Struct for right initalization of mutex member! Must be first of baseclasses.
-                                                 public ::cppu::OWeakObject
+    class ModuleUIConfigurationManagerSupplier : private ThreadHelpBase                     ,   // Struct for right initalization of mutex member! Must be first of baseclasses.
+                                                 public cppu::WeakImplHelper3<
+                                                     com::sun::star::lang::XServiceInfo  ,
+                                                     com::sun::star::lang::XComponent    ,
+                                                     com::sun::star::ui::XModuleUIConfigurationManagerSupplier >
     {
         public:
             //  XInterface, XTypeProvider, XServiceInfo
-            FWK_DECLARE_XINTERFACE
-            FWK_DECLARE_XTYPEPROVIDER
             DECLARE_XSERVICEINFO
 
             ModuleUIConfigurationManagerSupplier( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext );

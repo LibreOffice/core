@@ -73,20 +73,6 @@ class RootStorageWrapper :  public ::cppu::WeakImplHelper1< com::sun::star::embe
 //*****************************************************************************************************************
 //  XInterface, XTypeProvider, XServiceInfo
 //*****************************************************************************************************************
-DEFINE_XINTERFACE_4                    (    ModuleUIConfigurationManagerSupplier                    ,
-                                            OWeakObject                                             ,
-                                            DIRECT_INTERFACE( css::lang::XTypeProvider                                          ),
-                                            DIRECT_INTERFACE( css::lang::XServiceInfo                                           ),
-                                            DIRECT_INTERFACE( css::lang::XComponent                                             ),
-                                            DIRECT_INTERFACE( ::com::sun::star::ui::XModuleUIConfigurationManagerSupplier )
-                                        )
-
-DEFINE_XTYPEPROVIDER_4                  (   ModuleUIConfigurationManagerSupplier                                ,
-                                            css::lang::XTypeProvider                                            ,
-                                            css::lang::XServiceInfo                                             ,
-                                            css::lang::XComponent                                               ,
-                                            ::com::sun::star::ui::XModuleUIConfigurationManagerSupplier
-                                        )
 
 DEFINE_XSERVICEINFO_ONEINSTANCESERVICE_2(   ModuleUIConfigurationManagerSupplier                    ,
                                             ::cppu::OWeakObject                                     ,
