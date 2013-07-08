@@ -25,22 +25,23 @@
 #include "scdllapi.h"
 
 
-// Ref-Flags for old (until release 3.1) documents
+/// Ref-Flags for old (until release 3.1) documents
 
 struct OldSingleRefBools
 {
-    sal_uInt8    bRelCol;    // Flag values (see further down), 2 bits each in file format
+    sal_uInt8    bRelCol;    ///< Flag values (see further down), 2 bits each in file format
     sal_uInt8    bRelRow;
     sal_uInt8    bRelTab;
-    sal_uInt8    bOldFlag3D; // two sal_Bool flags (see further down)
+    sal_uInt8    bOldFlag3D; ///< two sal_Bool flags (see further down)
 };
 
-struct SC_DLLPUBLIC ScSingleRefData        // Single reference (one address) into the sheet
+/// Single reference (one address) into the sheet
+struct SC_DLLPUBLIC ScSingleRefData
 {
-    SCsCOL  nCol;       // Absolute values
+    SCsCOL  nCol;       ///< Absolute values
     SCsROW  nRow;
     SCsTAB  nTab;
-    SCsCOL  nRelCol;    // Values relative to the position
+    SCsCOL  nRelCol;    ///< Values relative to the position
     SCsROW  nRelRow;
     SCsTAB  nRelTab;
 
@@ -55,17 +56,17 @@ struct SC_DLLPUBLIC ScSingleRefData        // Single reference (one address) int
             sal_Bool    bRowDeleted :1;
             sal_Bool    bTabRel     :1;
             sal_Bool    bTabDeleted :1;
-            sal_Bool    bFlag3D     :1;     // 3D-Ref
-            sal_Bool    bRelName    :1;     // Reference derived from RangeName with relative values
+            sal_Bool    bFlag3D     :1;     ///< 3D-Ref
+            sal_Bool    bRelName    :1;     ///< Reference derived from RangeName with relative values
         }Flags;
     };
 
-    // No default ctor, because used in ScRawToken union, set InitFlags!
-    inline  void InitFlags() { bFlags = 0; }    // all FALSE
-    // InitAddress: InitFlags and set address
+    /// No default ctor, because used in ScRawToken union, set InitFlags!
+    inline  void InitFlags() { bFlags = 0; }    ///< all FALSE
+    /// InitAddress: InitFlags and set address
     inline  void InitAddress( const ScAddress& rAdr );
     inline  void InitAddress( SCCOL nCol, SCROW nRow, SCTAB nTab );
-    // InitAddressRel: InitFlags and set address, everything relative to rPos
+    /// InitAddressRel: InitFlags and set address, everything relative to rPos
     inline  void InitAddressRel( const ScAddress& rAdr, const ScAddress& rPos );
     inline  void SetColRel( sal_Bool bVal ) { Flags.bColRel = (bVal ? sal_True : false ); }
     inline  sal_Bool IsColRel() const       { return Flags.bColRel; }
@@ -137,8 +138,8 @@ inline bool ScSingleRefData::ValidExternal() const
             nTab == -1;
 }
 
-
-struct ScComplexRefData         // Complex reference (a range) into the sheet
+/// Complex reference (a range) into the sheet
+struct ScComplexRefData
 {
     ScSingleRefData Ref1;
     ScSingleRefData Ref2;
