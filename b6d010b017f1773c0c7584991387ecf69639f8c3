@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXn///Ns\u003d",
+        "filename": "filter/source/msfilter/msdffimp.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 6951,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2013-07-08T12:03:23Z",
+      "side": 1,
+      "message": "why not use e.g. boost::scoped_ptr instead of manual delete?",
+      "revId": "b6d010b017f1773c0c7584991387ecf69639f8c3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
