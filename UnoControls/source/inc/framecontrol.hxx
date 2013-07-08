@@ -21,6 +21,7 @@
 #define _UNOCONTROLS_FRAMECONTROL_CTRL_HXX
 
 #include <com/sun/star/frame/XFrameActionListener.hpp>
+#include <com/sun/star/frame/XFrameControl.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/frame/XFrame2.hpp>
 #include <com/sun/star/frame/FrameActionEvent.hpp>
@@ -39,23 +40,13 @@
 
 namespace unocontrols{
 
-#define SERVICENAME_FRAMECONTROL                        "com.sun.star.frame.FrameControl"
-#define IMPLEMENTATIONNAME_FRAMECONTROL                 "stardiv.UnoControls.FrameControl"
-#define PROPERTYNAME_LOADERARGUMENTS                    "LoaderArguments"
-#define PROPERTYNAME_COMPONENTURL                       "ComponentURL"
-#define PROPERTYNAME_FRAME                              "Frame"
-#define ERRORTEXT_VOSENSHURE                            "This is an invalid property handle."
-#define PROPERTY_COUNT                                  3                                                       // you must count the propertys
-#define PROPERTYHANDLE_COMPONENTURL                     0                                                       // Id must be the index into the array
-#define PROPERTYHANDLE_FRAME                            1
-#define PROPERTYHANDLE_LOADERARGUMENTS                  2
-
 //______________________________________________________________________________________________________________
 //  class
 //______________________________________________________________________________________________________________
 
 class FrameControl  : public ::com::sun::star::awt::XControlModel
                     , public ::com::sun::star::lang::XConnectionPointContainer
+                    , public ::com::sun::star::frame::XFrameControl
                     , public BaseControl                                // This order is necessary for right initialization of m_aMutex!
                     , public ::cppu::OBroadcastHelper
                     , public ::cppu::OPropertySetHelper
@@ -183,6 +174,104 @@ public:
         const ::com::sun::star::uno::Type&                                aType ,
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >&    xListener
     ) throw( ::com::sun::star::uno::RuntimeException );
+
+
+    //__________________________________________________________________________________________________________
+    //  XFrameControl
+    //__________________________________________________________________________________________________________
+
+    virtual rtl::OUString SAL_CALL getComponentURL()
+        throw( ::com::sun::star::uno::RuntimeException )
+    { return m_sComponentURL; }
+    virtual void SAL_CALL setComponentURL(const rtl::OUString& rVal)
+        throw( ::com::sun::star::uno::RuntimeException )
+    { m_sComponentURL = rVal; }
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame2 > SAL_CALL getFrame()
+        throw( ::com::sun::star::uno::RuntimeException )
+    { return m_xFrame; }
+    virtual void SAL_CALL setFrame(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame2 > & rxFrame)
+        throw( ::com::sun::star::uno::RuntimeException )
+    { m_xFrame = rxFrame; }
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > SAL_CALL getLoaderArguments()
+        throw( ::com::sun::star::uno::RuntimeException )
+    { return m_seqLoaderArguments; }
+    virtual void SAL_CALL setLoaderArguments(const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > & rVal)
+        throw( ::com::sun::star::uno::RuntimeException )
+    { m_seqLoaderArguments = rVal; }
+
+    //__________________________________________________________________________________________________________
+    //  overrides to remove inheritance ambiguity
+    //__________________________________________________________________________________________________________
+    virtual css::uno::Reference<css::awt::XWindowPeer> getPeer() throw (css::uno::RuntimeException)
+        { return BaseControl::getPeer(); }
+    virtual css::awt::Rectangle getPosSize() throw (css::uno::RuntimeException)
+        { return BaseControl::getPosSize(); }
+    virtual void setPosSize(sal_Int32 p1, sal_Int32 p2, sal_Int32 p3, sal_Int32 p4, sal_Int16 p5) throw (css::uno::RuntimeException)
+        { return BaseControl::setPosSize(p1, p2, p3, p4, p5); }
+    virtual void addEventListener(const css::uno::Reference<css::lang::XEventListener>& p1) throw (css::uno::RuntimeException)
+        { return BaseControl::addEventListener(p1); }
+    virtual void removeEventListener(const css::uno::Reference<css::lang::XEventListener>& p1) throw (css::uno::RuntimeException)
+        { return BaseControl::removeEventListener(p1); }
+    virtual void setVisible(sal_Bool p1) throw (css::uno::RuntimeException)
+       { return BaseControl::setVisible(p1); }
+    virtual void setEnable(sal_Bool p1) throw (css::uno::RuntimeException)
+        { return BaseControl::setEnable(p1); }
+    virtual void setFocus() throw (css::uno::RuntimeException)
+        { return BaseControl::setFocus(); }
+    virtual void addWindowListener(const css::uno::Reference<css::awt::XWindowListener>& p1) throw (css::uno::RuntimeException)
+        { return BaseControl::addWindowListener(p1); }
+    virtual void removeWindowListener(const css::uno::Reference<css::awt::XWindowListener>& p1) throw (css::uno::RuntimeException)
+        { return BaseControl::removeWindowListener(p1); }
+    virtual void addFocusListener(const css::uno::Reference<css::awt::XFocusListener>& p1) throw (css::uno::RuntimeException)
+        { return BaseControl::addFocusListener(p1); }
+    virtual void removeFocusListener(const css::uno::Reference<css::awt::XFocusListener>& p1) throw (css::uno::RuntimeException)
+        { return BaseControl::removeFocusListener(p1); }
+    virtual void addKeyListener(const css::uno::Reference<css::awt::XKeyListener>& p1) throw (css::uno::RuntimeException)
+        { return BaseControl::addKeyListener(p1); }
+    virtual void removeKeyListener(const css::uno::Reference<css::awt::XKeyListener>& p1) throw (css::uno::RuntimeException)
+        { return BaseControl::removeKeyListener(p1); }
+    virtual void addMouseListener(const css::uno::Reference<css::awt::XMouseListener>& p1) throw (css::uno::RuntimeException)
+        { return BaseControl::addMouseListener(p1); }
+    virtual void removeMouseListener(const css::uno::Reference<css::awt::XMouseListener>& p1) throw (css::uno::RuntimeException)
+        { return BaseControl::removeMouseListener(p1); }
+    virtual void addMouseMotionListener(const css::uno::Reference<css::awt::XMouseMotionListener>& p1) throw (css::uno::RuntimeException)
+        { return BaseControl::addMouseMotionListener(p1); }
+    virtual void removeMouseMotionListener(const css::uno::Reference<css::awt::XMouseMotionListener>& p1) throw (css::uno::RuntimeException)
+        { return BaseControl::removeMouseMotionListener(p1); }
+    virtual void addPaintListener(const css::uno::Reference<css::awt::XPaintListener>& p1) throw (css::uno::RuntimeException)
+        { return BaseControl::addPaintListener(p1); }
+    virtual void removePaintListener(const css::uno::Reference<css::awt::XPaintListener>& p1) throw (css::uno::RuntimeException)
+        { return BaseControl::removePaintListener(p1); }
+    virtual css::awt::Size getSize() throw (css::uno::RuntimeException)
+        { return BaseControl::getSize(); }
+    virtual void draw(sal_Int32 p1, sal_Int32 p2) throw (css::uno::RuntimeException)
+        { return BaseControl::draw(p1, p2); }
+    virtual void setZoom(float p1, float p2) throw (css::uno::RuntimeException)
+        { return BaseControl::setZoom(p1, p2); }
+    virtual void setPropertyValue(const rtl::OUString& p1, const css::uno::Any& p2) throw (css::uno::RuntimeException)
+        { return ::cppu::OPropertySetHelper::setPropertyValue(p1, p2); }
+    virtual css::uno::Any getPropertyValue(const rtl::OUString& p1) throw (css::uno::RuntimeException)
+        { return ::cppu::OPropertySetHelper::getPropertyValue(p1); }
+    virtual void addPropertyChangeListener(const rtl::OUString& p1, const css::uno::Reference<css::beans::XPropertyChangeListener>& p2) throw (css::uno::RuntimeException)
+        { return ::cppu::OPropertySetHelper::addPropertyChangeListener(p1, p2); }
+    virtual void removePropertyChangeListener(const rtl::OUString& p1, const css::uno::Reference<css::beans::XPropertyChangeListener>& p2) throw (css::uno::RuntimeException)
+        { return ::cppu::OPropertySetHelper::removePropertyChangeListener(p1, p2); }
+    virtual void addVetoableChangeListener(const rtl::OUString& p1, const css::uno::Reference<css::beans::XVetoableChangeListener>& p2) throw (css::uno::RuntimeException)
+        { return ::cppu::OPropertySetHelper::addVetoableChangeListener(p1, p2); }
+    virtual void removeVetoableChangeListener(const rtl::OUString& p1, const css::uno::Reference<css::beans::XVetoableChangeListener>& p2) throw (css::uno::RuntimeException)
+        { return ::cppu::OPropertySetHelper::removeVetoableChangeListener(p1, p2); }
+    virtual void setContext(const css::uno::Reference<css::uno::XInterface>& p1) throw (css::uno::RuntimeException)
+        { return BaseControl::setContext(p1); }
+    virtual css::uno::Reference<css::uno::XInterface> getContext() throw (css::uno::RuntimeException)
+        { return BaseControl::getContext(); }
+    virtual css::uno::Reference<css::awt::XView> getView() throw (css::uno::RuntimeException)
+        { return BaseControl::getView(); }
+    virtual void setDesignMode(sal_Bool p1) throw (css::uno::RuntimeException)
+        { return BaseControl::setDesignMode(p1); }
+    virtual sal_Bool isDesignMode() throw (css::uno::RuntimeException)
+        { return BaseControl::isDesignMode(); }
+    virtual sal_Bool isTransparent() throw (css::uno::RuntimeException)
+        { return BaseControl::isTransparent(); }
 
     //__________________________________________________________________________________________________________
     //  impl but public methods to register service!
