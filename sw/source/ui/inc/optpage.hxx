@@ -137,34 +137,23 @@ public:
 
 class SwStdFontTabPage : public SfxTabPage
 {
-    FixedLine       aStdChrFL  ;
+    ComboBox*        pStandardBox;
+    FontSizeBox*     pStandardHeightLB;
 
-    FixedText       aTypeFT;
+    ComboBox*        pTitleBox   ;
+    FontSizeBox*     pTitleHeightLB;
 
-    FixedText       aStandardLbl;
-    ComboBox        aStandardBox;
+    ComboBox*        pListBox    ;
+    FontSizeBox*     pListHeightLB;
 
-    FixedText       aHeightFT;
-    FontSizeBox     aStandardHeightLB;
+    ComboBox*        pLabelBox   ;
+    FontSizeBox*     pLabelHeightLB;
 
-    FixedText       aTitleLbl   ;
-    ComboBox        aTitleBox   ;
-    FontSizeBox     aTitleHeightLB;
+    ComboBox*        pIdxBox     ;
+    FontSizeBox*     pIndexHeightLB;
 
-    FixedText       aListLbl    ;
-    ComboBox        aListBox    ;
-    FontSizeBox     aListHeightLB;
-
-    FixedText       aLabelLbl   ;
-    ComboBox        aLabelBox   ;
-    FontSizeBox     aLabelHeightLB;
-
-    FixedText       aIdxLbl     ;
-    ComboBox        aIdxBox     ;
-    FontSizeBox     aIndexHeightLB;
-
-    CheckBox        aDocOnlyCB  ;
-    PushButton      aStandardPB;
+    CheckBox*        pDocOnlyCB  ;
+    PushButton*      pStandardPB;
 
     String          sShellStd;
     String          sShellTitle;
