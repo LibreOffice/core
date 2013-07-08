@@ -19,13 +19,6 @@
 
 #include "impdialog.hrc"
 
-#define TAB_PDF_SIZE Size = MAP_APPFONT ( 352, 180 )
-//string for TabDialog standard buttons
-String STR_PDF_EXPORT
-{
-        Text[ en-US ] = "E~xport";
-};
-
 //strings used in encryption UI
 
 //password dialog title
@@ -44,105 +37,6 @@ WarningBox RID_PDF_WARNPDFAPASSWORD
 {
     Title[en-US] = "PDF/A Export";
     Message[ en-US ] = "PDF/A does not allow encryption. The exported PDF file will not be password protected.";
-};
-
-//----------------------------------------------------------
-//tab page for PDF Export, digital signatures
-TabPage  RID_PDF_TAB_SIGNING
-{
-    HelpId = HID_FILTER_PDF_SIGNING ;
-    Text [ en-US ] = "Digital Signatures";
-    TAB_PDF_SIZE;
-    Hide = TRUE;
-
-    FixedText FT_SIGN_CERT_TEXT
-    {
-        Pos = MAP_APPFONT( 6, 3 );
-        Size = MAP_APPFONT( 250, 10 );
-        Text[ en-US ] = "Use this certificate to digitally sign PDF documents:";
-    };
-
-    Edit ED_SIGN_CERT
-    {
-        Border = TRUE ;
-        Disable = TRUE ;
-        Pos = MAP_APPFONT ( 6, 17 ) ;
-        Size = MAP_APPFONT ( 120 , 13 ) ;
-    };
-
-    PushButton BTN_SIGN_CERT_SELECT
-    {
-        TabStop = TRUE ;
-        Pos = MAP_APPFONT ( 130, 17 ) ;
-        Size = MAP_APPFONT ( 40 , 13 ) ;
-        Text[ en-US ] = "~Select...";
-    };
-
-    PushButton BTN_SIGN_CERT_CLEAR
-    {
-        TabStop = TRUE ;
-        Pos = MAP_APPFONT ( 175, 17 ) ;
-        Size = MAP_APPFONT ( 40 , 13 ) ;
-        Text[ en-US ] = "Clear";
-    };
-
-    FixedText FT_SIGN_PASSWORD
-    {
-        Pos = MAP_APPFONT( 6, 35 );
-        Size = MAP_APPFONT( 109, 10 );
-        Text[ en-US ] = "Certificate Password";
-    };
-
-    Edit ED_SIGN_PASSWORD
-    {
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 102, 35 ) ;
-        PassWord = TRUE;
-        Size = MAP_APPFONT ( 68 , 12 ) ;
-    };
-
-    FixedText FT_SIGN_LOCATION
-    {
-        Pos = MAP_APPFONT( 6, 48 );
-        Size = MAP_APPFONT( 109, 10 );
-        Text[ en-US ] = "Location";
-    };
-
-    Edit ED_SIGN_LOCATION
-    {
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 102, 48 ) ;
-        Size = MAP_APPFONT ( 68 , 12 ) ;
-    };
-
-    FixedText FT_SIGN_CONTACT
-    {
-        Pos = MAP_APPFONT( 6, 61 );
-        Size = MAP_APPFONT( 109, 10 );
-        Text[ en-US ] = "Contact Information";
-    };
-
-    Edit ED_SIGN_CONTACT
-    {
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 102, 61 ) ;
-        Size = MAP_APPFONT ( 68 , 12 ) ;
-    };
-
-    FixedText FT_SIGN_REASON
-    {
-        Pos = MAP_APPFONT( 6, 74 );
-        Size = MAP_APPFONT( 109, 10 );
-        Text[ en-US ] = "Reason";
-    };
-
-    Edit ED_SIGN_REASON
-    {
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 102, 74 ) ;
-        Size = MAP_APPFONT ( 68 , 12 ) ;
-    };
-
 };
 
 ModalDialog RID_PDF_ERROR_DLG

@@ -14,6 +14,7 @@ $(eval $(call gb_UIConfig_add_uifiles,filter,\
     filter/uiconfig/ui/pdflinkspage \
     filter/uiconfig/ui/pdfoptionsdialog \
     filter/uiconfig/ui/pdfsecuritypage \
+    filter/uiconfig/ui/pdfsignpage \
     filter/uiconfig/ui/pdfuserinterfacepage \
     filter/uiconfig/ui/pdfviewpage \
 	filter/uiconfig/ui/testxmlfilter \

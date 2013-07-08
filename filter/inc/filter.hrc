@@ -31,8 +31,6 @@
 
 // warning, next range is RID_FILTER_START + 100 !
 
-#define HID_FILTER_PDF_SIGNING        "HID_FILTER_PDF_SIGNING"
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

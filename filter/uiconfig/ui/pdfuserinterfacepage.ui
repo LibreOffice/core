@@ -329,6 +329,9 @@
                         <property name="active">True</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">allbookmarks</property>
+                        <accessibility>
+                          <relation type="label-for" target="visiblelevel"/>
+                        </accessibility>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -344,6 +347,9 @@
                         <property name="invisible_char">•</property>
                         <property name="invisible_char_set">True</property>
                         <property name="adjustment">adjustment1</property>
+                        <accessibility>
+                          <relation type="labelled-by" target="visiblebookmark"/>
+                        </accessibility>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>

@@ -420,18 +420,13 @@ public:
 //class to implement the digital signing
 class ImpPDFTabSigningPage : public SfxTabPage
 {
-    FixedText                   maFtSignCert;
-    Edit                        maEdSignCert;
-    PushButton                  maPbSignCertSelect;
-    PushButton                  maPbSignCertClear;
-    FixedText                   maFtSignPassword;
-    Edit                        maEdSignPassword;
-    FixedText                   maFtSignLocation;
-    Edit                        maEdSignLocation;
-    FixedText                   maFtSignContactInfo;
-    Edit                        maEdSignContactInfo;
-    FixedText                   maFtSignReason;
-    Edit                        maEdSignReason;
+    Edit*                       mpEdSignCert;
+    PushButton*                 mpPbSignCertSelect;
+    PushButton*                 mpPbSignCertClear;
+    Edit*                       mpEdSignPassword;
+    Edit*                       mpEdSignLocation;
+    Edit*                       mpEdSignContactInfo;
+    Edit*                       mpEdSignReason;
     com::sun::star::uno::Reference< com::sun::star::security::XCertificate > maSignCertificate;
 
     DECL_LINK( ClickmaPbSignCertSelect, void* );
