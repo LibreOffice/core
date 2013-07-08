@@ -98,7 +98,7 @@ sal_Bool RASReader::ReadRAS(Graphic & rGraphic)
         return sal_False;
 
     maBmp = Bitmap( Size( mnWidth, mnHeight ), mnDstBitsPerPix );
-    if ( ( mpAcc = maBmp.AcquireWriteAccess() ) == sal_False )
+    if ( ( mpAcc = maBmp.AcquireWriteAccess() ) == 0 )
         return sal_False;
 
     if ( mnDstBitsPerPix <= 8 )     // paletten bildchen
