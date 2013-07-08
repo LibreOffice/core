@@ -1898,10 +1898,6 @@ endif # ENABLE_VALGRIND
 ifeq ($(SYSTEM_POPPLER),YES)
 
 define gb_LinkTarget__use_poppler
-$(call gb_LinkTarget_add_defs,$(1),\
-	-DSYSTEM_POPPLER \
-)
-
 $(call gb_LinkTarget_set_include,$(1),\
 	$(POPPLER_CFLAGS) \
 	$$(INCLUDE) \
@@ -1916,19 +1912,19 @@ endef
 else # !SYSTEM_POPPLER
 
 define gb_LinkTarget__use_poppler
-$(call gb_LinkTarget_use_package,$(1),xpdf)
+$(call gb_LinkTarget_use_package,$(1),poppler)
 
 $(call gb_LinkTarget_set_include,$(1),\
-	-I$(call gb_UnpackedTarball_get_dir,xpdf) \
-	-I$(call gb_UnpackedTarball_get_dir,xpdf)/xpdf \
-	-I$(call gb_UnpackedTarball_get_dir,xpdf)/goo \
+	-I$(call gb_UnpackedTarball_get_dir,poppler) \
+	-I$(call gb_UnpackedTarball_get_dir,poppler)/poppler \
+	-I$(call gb_UnpackedTarball_get_dir,poppler)/goo \
 	$$(INCLUDE) \
 )
 
 $(call gb_LinkTarget_use_static_libraries,$(1),\
 	fofi \
-	Goo \
-	xpdf \
+	goo \
+	poppler \
 )
 
 ifeq ($(OS),MACOSX)
