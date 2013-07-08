@@ -467,9 +467,9 @@ Reference< XDatabaseRange > WorkbookGlobals::createDatabaseRangeObject( OUString
 
 void WorkbookGlobals::addDatabaseFormatting( const OUString& rName, const ScDBDataFormatting& rDBDataFormatting )
 {
-    //Is such smartness allowed? Or should catch objects and then call for each method call?
-    ScDBData* pDBRange = getScDocument().GetDBCollection()->GetDBByName( rName );
-    if( pDBRange != NULL )
+    ScDBData* pDBRange = getScDocument().GetDBCollection()->getNamedDBs().findByUpperName(
+            ScGlobal::pCharClass->uppercase(rName) );
+    if( pDBRange )
         pDBRange->SetTableFormatting( rDBDataFormatting );
 }
 
