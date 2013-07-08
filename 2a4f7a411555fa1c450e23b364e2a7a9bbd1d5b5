@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXn///MA\u003d",
+        "filename": "sw/source/filter/html/htmlfly.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1000028
+      },
+      "writtenOn": "2013-07-08T17:45:18Z",
+      "side": 1,
+      "message": "static",
+      "revId": "2a4f7a411555fa1c450e23b364e2a7a9bbd1d5b5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
