@@ -120,7 +120,7 @@ static OUString HelpLocaleString()
                 OUString::createFromAscii(szHelpPath) + aLocaleStr;
             osl::DirectoryItem aDirItem;
 
-            if (!osl::DirectoryItem::get(sHelpPath, aDirItem) == osl::FileBase::E_None)
+            if (osl::DirectoryItem::get(sHelpPath, aDirItem) != osl::FileBase::E_None)
             {
                 bOk = false;
                 OUString sLang(aLocaleStr);
@@ -131,7 +131,7 @@ static OUString HelpLocaleString()
                     sLang = sLang.copy( 0, nSepPos );
                     sHelpPath = aBaseInstallPath +
                         OUString::createFromAscii(szHelpPath) + sLang;
-                    if (!osl::DirectoryItem::get(sHelpPath, aDirItem) == osl::FileBase::E_None)
+                    if (osl::DirectoryItem::get(sHelpPath, aDirItem) != osl::FileBase::E_None)
                         bOk = false;
                 }
             }
