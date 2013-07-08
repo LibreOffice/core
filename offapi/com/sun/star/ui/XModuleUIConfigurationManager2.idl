@@ -1,0 +1,62 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+#ifndef __com_sun_star_ui_XModuleUIConfigurationManager2_idl__
+#define __com_sun_star_ui_XModuleUIConfigurationManager2_idl__
+
+#include <com/sun/star/ui/XUIConfigurationManager.idl>
+#include <com/sun/star/ui/XUIConfigurationPersistence.idl>
+#include <com/sun/star/ui/XModuleUIConfigurationManager.idl>
+#include <com/sun/star/ui/XUIConfiguration.idl>
+
+module com { module sun { module star { module ui {
+
+/**
+    Provides a unified interface for the ModuleUIConfigurationManager service.
+
+    @since LibreOffice 4.2
+*/
+interface XModuleUIConfigurationManager2
+{
+    /** provides access to persistence functions to load/store user interface element
+        settings from/to a module storage.
+    */
+    interface com::sun::star::ui::XUIConfigurationPersistence;
+
+    /** provides functions to change, insert and remove user interface element settings
+        from a module user interface configuration manager.
+    */
+    interface com::sun::star::ui::XUIConfigurationManager;
+
+    /** provides access to the default layer of a module based ui configuration
+        manager.
+    */
+    interface com::sun::star::ui::XModuleUIConfigurationManager;
+
+    /** provides functions to add and remove listeners for changes within a module user
+        interface configuration manager.
+    */
+    interface com::sun::star::ui::XUIConfiguration;
+};
+
+
+}; }; }; };
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

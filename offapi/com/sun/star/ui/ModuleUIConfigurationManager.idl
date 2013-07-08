@@ -19,11 +19,10 @@
 #ifndef __com_sun_star_ui_ModuleUIConfigurationManager_idl__
 #define __com_sun_star_ui_ModuleUIConfigurationManager_idl__
 
-#include <com/sun/star/lang/XInitialization.idl>
-#include <com/sun/star/ui/XUIConfigurationManager.idl>
-#include <com/sun/star/ui/XUIConfigurationPersistence.idl>
-#include <com/sun/star/ui/XModuleUIConfigurationManager.idl>
-#include <com/sun/star/ui/XUIConfiguration.idl>
+#include <com/sun/star/ui/XModuleUIConfigurationManager2.idl>
+#include <com/sun/star/configuration/CorruptedUIConfigurationException.idl>
+#include <com/sun/star/beans/UnknownPropertyException.idl>
+#include <com/sun/star/lang/WrappedTargetException.idl>
 
 module com { module sun { module star { module ui {
 
@@ -44,7 +43,7 @@ module com { module sun { module star { module ui {
     @since OOo 2.0
 */
 
-service ModuleUIConfigurationManager
+service ModuleUIConfigurationManager : XModuleUIConfigurationManager2
 {
     /** provides a function to initialize a module user interface configuration manager instance.
 
@@ -65,27 +64,12 @@ service ModuleUIConfigurationManager
         as a read-only container.
         </p>
     */
-    interface com::sun::star::lang::XInitialization;
+    createDefault([in] string ModuleShortName, [in] string ModuleIdentifier)
+        raises ( com::sun::star::configuration::CorruptedUIConfigurationException,
+               com::sun::star::beans::UnknownPropertyException,
+               com::sun::star::lang::WrappedTargetException );
 
-    /** provides access to persistence functions to load/store user interface element
-        settings from/to a module storage.
-    */
-    interface com::sun::star::ui::XUIConfigurationPersistence;
 
-    /** provides functions to change, insert and remove user interface element settings
-        from a module user interface configuration manager.
-    */
-    interface com::sun::star::ui::XUIConfigurationManager;
-
-    /** provides access to the default layer of a module based ui configuration
-        manager.
-    */
-    interface com::sun::star::ui::XModuleUIConfigurationManager;
-
-    /** provides functions to add and remove listeners for changes within a module user
-        interface configuration manager.
-    */
-    interface com::sun::star::ui::XUIConfiguration;
 };
 
 

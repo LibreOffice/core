@@ -56,31 +56,12 @@ using namespace ::com::sun::star::ui;
 namespace framework
 {
 
+#define SERVICENAME_MODULEUICONFIGURATIONMANAGER                DECLARE_ASCII("com.sun.star.ui.ModuleUIConfigurationManager" )
+#define IMPLEMENTATIONNAME_MODULEUICONFIGURATIONMANAGER         DECLARE_ASCII("com.sun.star.comp.framework.ModuleUIConfigurationManager" )
+
 //*****************************************************************************************************************
 //  XInterface, XTypeProvider, XServiceInfo
 //*****************************************************************************************************************
-DEFINE_XINTERFACE_8                    (    ModuleUIConfigurationManager                                                    ,
-                                            OWeakObject                                                                     ,
-                                            DIRECT_INTERFACE( css::lang::XTypeProvider                                      ),
-                                            DIRECT_INTERFACE( css::lang::XServiceInfo                                       ),
-                                            DIRECT_INTERFACE( css::lang::XComponent                                         ),
-                                            DIRECT_INTERFACE( css::lang::XInitialization                                    ),
-                                            DIRECT_INTERFACE( ::com::sun::star::ui::XUIConfiguration                  ),
-                                            DIRECT_INTERFACE( ::com::sun::star::ui::XUIConfigurationManager           ),
-                                            DIRECT_INTERFACE( ::com::sun::star::ui::XModuleUIConfigurationManager     ),
-                                            DIRECT_INTERFACE( ::com::sun::star::ui::XUIConfigurationPersistence       )
-                                        )
-
-DEFINE_XTYPEPROVIDER_8                  (   ModuleUIConfigurationManager                                ,
-                                            css::lang::XTypeProvider                                    ,
-                                            css::lang::XServiceInfo                                     ,
-                                            css::lang::XComponent                                       ,
-                                            css::lang::XInitialization                                  ,
-                                            ::com::sun::star::ui::XUIConfiguration                ,
-                                            ::com::sun::star::ui::XUIConfigurationManager         ,
-                                            ::com::sun::star::ui::XModuleUIConfigurationManager   ,
-                                            ::com::sun::star::ui::XUIConfigurationPersistence
-                                        )
 
 DEFINE_XSERVICEINFO_MULTISERVICE_2      (   ModuleUIConfigurationManager                    ,
                                             ::cppu::OWeakObject                             ,
@@ -807,56 +788,64 @@ void SAL_CALL ModuleUIConfigurationManager::initialize( const Sequence< Any >& a
 {
     ResetableGuard aLock( m_aLock );
 
-    if ( !m_bInitialized )
+    if( m_bInitialized )
+    {
+        return;
+    }
+
+    if( aArguments.getLength() == 2 && (aArguments[0] >>= m_aModuleShortName) && (aArguments[1] >>= m_aModuleIdentifier))
+    {
+    }
+    else
     {
         ::comphelper::SequenceAsHashMap lArgs(aArguments);
-        m_aModuleIdentifier = lArgs.getUnpackedValueOrDefault("ModuleIdentifier", OUString());
         m_aModuleShortName  = lArgs.getUnpackedValueOrDefault("ModuleShortName", OUString());
-
-        for ( int i = 1; i < ::com::sun::star::ui::UIElementType::COUNT; i++ )
-        {
-            OUString aResourceType;
-            if ( i == ::com::sun::star::ui::UIElementType::MENUBAR )
-                aResourceType = PresetHandler::RESOURCETYPE_MENUBAR();
-            else if ( i == ::com::sun::star::ui::UIElementType::TOOLBAR )
-                aResourceType = PresetHandler::RESOURCETYPE_TOOLBAR();
-            else if ( i == ::com::sun::star::ui::UIElementType::STATUSBAR )
-                aResourceType = PresetHandler::RESOURCETYPE_STATUSBAR();
-
-            if ( !aResourceType.isEmpty() )
-            {
-                m_pStorageHandler[i] = new PresetHandler( m_xContext );
-                m_pStorageHandler[i]->connectToResource( PresetHandler::E_MODULES,
-                                                         aResourceType, // this path wont be used later ... seee next lines!
-                                                         m_aModuleShortName,
-                                                         css::uno::Reference< css::embed::XStorage >()); // no document root used here!
-            }
-        }
-
-        // initialize root storages for all resource types
-        m_xUserRootCommit       = css::uno::Reference< css::embed::XTransactedObject >(
-                                    m_pStorageHandler[::com::sun::star::ui::UIElementType::MENUBAR]->getOrCreateRootStorageUser(), css::uno::UNO_QUERY); // can be empty
-        m_xDefaultConfigStorage = m_pStorageHandler[::com::sun::star::ui::UIElementType::MENUBAR]->getParentStorageShare(
-                                    m_pStorageHandler[::com::sun::star::ui::UIElementType::MENUBAR]->getWorkingStorageShare());
-        m_xUserConfigStorage    = m_pStorageHandler[::com::sun::star::ui::UIElementType::MENUBAR]->getParentStorageUser(
-                                    m_pStorageHandler[::com::sun::star::ui::UIElementType::MENUBAR]->getWorkingStorageUser());
-
-        if ( m_xUserConfigStorage.is() )
-        {
-            Reference< XPropertySet > xPropSet( m_xUserConfigStorage, UNO_QUERY );
-            if ( xPropSet.is() )
-            {
-                long nOpenMode = 0;
-                Any a = xPropSet->getPropertyValue("OpenMode");
-                if ( a >>= nOpenMode )
-                    m_bReadOnly = !( nOpenMode & ElementModes::WRITE );
-            }
-        }
-
-        impl_Initialize();
-
-        m_bInitialized = true;
+        m_aModuleIdentifier = lArgs.getUnpackedValueOrDefault("ModuleIdentifier", OUString());
     }
+
+    for ( int i = 1; i < ::com::sun::star::ui::UIElementType::COUNT; i++ )
+    {
+        OUString aResourceType;
+        if ( i == ::com::sun::star::ui::UIElementType::MENUBAR )
+            aResourceType = PresetHandler::RESOURCETYPE_MENUBAR();
+        else if ( i == ::com::sun::star::ui::UIElementType::TOOLBAR )
+            aResourceType = PresetHandler::RESOURCETYPE_TOOLBAR();
+        else if ( i == ::com::sun::star::ui::UIElementType::STATUSBAR )
+            aResourceType = PresetHandler::RESOURCETYPE_STATUSBAR();
+
+        if ( !aResourceType.isEmpty() )
+        {
+            m_pStorageHandler[i] = new PresetHandler( m_xContext );
+            m_pStorageHandler[i]->connectToResource( PresetHandler::E_MODULES,
+                                                     aResourceType, // this path wont be used later ... seee next lines!
+                                                     m_aModuleShortName,
+                                                     css::uno::Reference< css::embed::XStorage >()); // no document root used here!
+        }
+    }
+
+    // initialize root storages for all resource types
+    m_xUserRootCommit       = css::uno::Reference< css::embed::XTransactedObject >(
+                                m_pStorageHandler[::com::sun::star::ui::UIElementType::MENUBAR]->getOrCreateRootStorageUser(), css::uno::UNO_QUERY); // can be empty
+    m_xDefaultConfigStorage = m_pStorageHandler[::com::sun::star::ui::UIElementType::MENUBAR]->getParentStorageShare(
+                                m_pStorageHandler[::com::sun::star::ui::UIElementType::MENUBAR]->getWorkingStorageShare());
+    m_xUserConfigStorage    = m_pStorageHandler[::com::sun::star::ui::UIElementType::MENUBAR]->getParentStorageUser(
+                                m_pStorageHandler[::com::sun::star::ui::UIElementType::MENUBAR]->getWorkingStorageUser());
+
+    if ( m_xUserConfigStorage.is() )
+    {
+        Reference< XPropertySet > xPropSet( m_xUserConfigStorage, UNO_QUERY );
+        if ( xPropSet.is() )
+        {
+            long nOpenMode = 0;
+            Any a = xPropSet->getPropertyValue("OpenMode");
+            if ( a >>= nOpenMode )
+                m_bReadOnly = !( nOpenMode & ElementModes::WRITE );
+        }
+    }
+
+    impl_Initialize();
+
+    m_bInitialized = true;
 }
 
 // XUIConfiguration

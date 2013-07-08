@@ -30,6 +30,7 @@
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/embed/XPackageStructureCreator.hpp>
+#include <com/sun/star/ui/ModuleUIConfigurationManager.hpp>
 
 #include <rtl/logfile.hxx>
 #include <cppuhelper/implbase1.hxx>
@@ -113,7 +114,7 @@ ModuleUIConfigurationManagerSupplier::ModuleUIConfigurationManagerSupplier( cons
         const Sequence< OUString >     aNameSeq   = xNameAccess->getElementNames();
         const OUString*                pNameSeq   = aNameSeq.getConstArray();
         for ( sal_Int32 n = 0; n < aNameSeq.getLength(); n++ )
-            m_aModuleToModuleUICfgMgrMap.insert( ModuleToModuleCfgMgr::value_type(  pNameSeq[n], Reference< XUIConfigurationManager >() ));
+            m_aModuleToModuleUICfgMgrMap.insert( ModuleToModuleCfgMgr::value_type(  pNameSeq[n], Reference< XModuleUIConfigurationManager2 >() ));
     }
     catch(...)
     {
@@ -175,7 +176,7 @@ throw ( RuntimeException )
 }
 
 // XModuleUIConfigurationManagerSupplier
-Reference< XUIConfigurationManager > SAL_CALL ModuleUIConfigurationManagerSupplier::getUIConfigurationManager( const OUString& ModuleIdentifier )
+Reference< XUIConfigurationManager > SAL_CALL ModuleUIConfigurationManagerSupplier::getUIConfigurationManager( const OUString& sModuleIdentifier )
 throw ( NoSuchElementException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "ModuleUIConfigurationManagerSupplier::getUIConfigurationManager" );
@@ -185,7 +186,7 @@ throw ( NoSuchElementException, RuntimeException)
     if ( m_bDisposed )
         throw DisposedException();
 
-    ModuleToModuleCfgMgr::iterator pIter = m_aModuleToModuleUICfgMgrMap.find( ModuleIdentifier );
+    ModuleToModuleCfgMgr::iterator pIter = m_aModuleToModuleUICfgMgrMap.find( sModuleIdentifier );
     if ( pIter == m_aModuleToModuleUICfgMgrMap.end() )
         throw NoSuchElementException();
 //TODO_AS    impl_initStorages();
@@ -198,7 +199,7 @@ throw ( NoSuchElementException, RuntimeException)
         {
             Sequence< PropertyValue > lProps;
             Reference< XNameAccess > xCont(m_xModuleMgr, UNO_QUERY);
-            xCont->getByName(ModuleIdentifier) >>= lProps;
+            xCont->getByName(sModuleIdentifier) >>= lProps;
             for (sal_Int32 i=0; i<lProps.getLength(); ++i)
             {
                 if ( lProps[i].Name == "ooSetupFactoryShortName" )
@@ -215,16 +216,8 @@ throw ( NoSuchElementException, RuntimeException)
 
         if (sShort.isEmpty())
             throw NoSuchElementException();
-        PropertyValue   aArg;
-        Sequence< Any > aArgs( 2 );
-        aArg.Name = OUString( "ModuleShortName" );
-        aArg.Value <<= sShort;
-        aArgs[0] <<= aArg;
-        aArg.Name = OUString( "ModuleIdentifier" );
-        aArg.Value <<= ModuleIdentifier;
-        aArgs[1] <<= aArg;
 
-        pIter->second.set( m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext(SERVICENAME_MODULEUICONFIGURATIONMANAGER, aArgs, m_xContext ),UNO_QUERY );
+        pIter->second = css::ui::ModuleUIConfigurationManager::createDefault(m_xContext, sShort, sModuleIdentifier);
     }
 
     return pIter->second;

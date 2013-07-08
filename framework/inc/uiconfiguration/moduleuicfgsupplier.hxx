@@ -40,6 +40,7 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/ui/XModuleUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/XUIConfigurationManager.hpp>
+#include <com/sun/star/ui/XModuleUIConfigurationManager2.hpp>
 #include <com/sun/star/frame/XModuleManager2.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
@@ -80,7 +81,7 @@ namespace framework
                 throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::uno::RuntimeException);
 
         private:
-            typedef ::boost::unordered_map< OUString, com::sun::star::uno::Reference< ::com::sun::star::ui::XUIConfigurationManager >, OUStringHash, ::std::equal_to< OUString > > ModuleToModuleCfgMgr;
+            typedef ::boost::unordered_map< OUString, com::sun::star::uno::Reference< ::com::sun::star::ui::XModuleUIConfigurationManager2 >, OUStringHash, ::std::equal_to< OUString > > ModuleToModuleCfgMgr;
 
 //TODO_AS            void impl_initStorages();
 

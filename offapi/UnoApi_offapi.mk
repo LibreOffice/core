@@ -423,6 +423,7 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/ui,\
 	DocumentAcceleratorConfiguration \
 	GlobalAcceleratorConfiguration \
 	ModuleAcceleratorConfiguration \
+	ModuleUIConfigurationManager \
     ModuleUIConfigurationManagerSupplier \
 	UICategoryDescription \
 	UIConfigurationManager \
@@ -1538,7 +1539,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/ui,\
 	ItemDescriptor \
 	ModuleUICategoryDescription \
 	ModuleUICommandDescription \
-	ModuleUIConfigurationManager \
 	ModuleWindowStateConfiguration \
 	UIElement \
 	UIElementFactory \
@@ -3972,6 +3972,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/ui,\
 	XDockingAreaAcceptor \
 	XImageManager \
 	XModuleUIConfigurationManager \
+	XModuleUIConfigurationManager2 \
 	XModuleUIConfigurationManagerSupplier \
 	XSidebar \
 	XSidebarPanel \

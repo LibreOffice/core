@@ -41,37 +41,29 @@
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/ui/XUIConfigurationPersistence.hpp>
-#include <com/sun/star/ui/XUIConfiguration.hpp>
-#include <com/sun/star/ui/XUIConfigurationManager.hpp>
-#include <com/sun/star/ui/XModuleUIConfigurationManager.hpp>
+#include <com/sun/star/ui/XModuleUIConfigurationManager2.hpp>
 #include <com/sun/star/ui/UIElementType.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/ui/ConfigurationEvent.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
 
-#include <cppuhelper/weak.hxx>
+#include <cppuhelper/implbase4.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <rtl/ustring.hxx>
 
 
 namespace framework
 {
-    class ModuleUIConfigurationManager :   public com::sun::star::lang::XTypeProvider                       ,
-                                           public com::sun::star::lang::XServiceInfo                        ,
-                                           public com::sun::star::lang::XComponent                          ,
-                                           public com::sun::star::lang::XInitialization                     ,
-                                           public ::com::sun::star::ui::XUIConfiguration              ,
-                                           public ::com::sun::star::ui::XUIConfigurationManager       ,
-                                           public ::com::sun::star::ui::XModuleUIConfigurationManager ,
-                                           public ::com::sun::star::ui::XUIConfigurationPersistence   ,
-                                           private ThreadHelpBase                       ,   // Struct for right initalization of mutex member! Must be first of baseclasses.
-                                           public ::cppu::OWeakObject
+    class ModuleUIConfigurationManager : private ThreadHelpBase,   // Struct for right initalization of mutex member! Must be first of baseclasses.
+                                         cppu::WeakImplHelper4<
+                                           com::sun::star::lang::XServiceInfo,
+                                           com::sun::star::lang::XComponent,
+                                           com::sun::star::lang::XInitialization,
+                                           com::sun::star::ui::XModuleUIConfigurationManager2 >
     {
         public:
             //  XInterface, XTypeProvider, XServiceInfo
-            FWK_DECLARE_XINTERFACE
-            FWK_DECLARE_XTYPEPROVIDER
             DECLARE_XSERVICEINFO
 
             ModuleUIConfigurationManager( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& xServiceManager );
