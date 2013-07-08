@@ -63,15 +63,13 @@ namespace framework
 #define WINDOWSTATE_PROPERTY_CONTEXTACTIVE  "ContextActive"
 
 class WindowStateConfiguration :  private ThreadHelpBase                        ,   // Struct for right initalization of mutex member! Must be first of baseclasses.
-                                  public ::cppu::WeakImplHelper2< ::com::sun::star::container::XNameAccess, css::lang::XServiceInfo>
+                                  public ::cppu::WeakImplHelper2< css::container::XNameAccess, css::lang::XServiceInfo>
 {
     public:
         WindowStateConfiguration( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext );
         virtual ~WindowStateConfiguration();
 
         //  XInterface, XTypeProvider, XServiceInfo
-        FWK_DECLARE_XINTERFACE
-        FWK_DECLARE_XTYPEPROVIDER
         DECLARE_XSERVICEINFO
 
         // XNameAccess

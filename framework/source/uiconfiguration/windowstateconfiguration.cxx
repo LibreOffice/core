@@ -1330,21 +1330,6 @@ sal_Bool ConfigurationAccess_WindowState::impl_initializeConfigAccess()
 //*****************************************************************************************************************
 //  XInterface, XTypeProvider, XServiceInfo
 //*****************************************************************************************************************
-DEFINE_XINTERFACE_4                    (    WindowStateConfiguration                                                            ,
-                                            OWeakObject                                                                     ,
-                                            DIRECT_INTERFACE( css::lang::XTypeProvider                                      ),
-                                            DIRECT_INTERFACE( css::lang::XServiceInfo                                       ),
-                                            DIRECT_INTERFACE( css::container::XNameAccess                                   ),
-                                            DERIVED_INTERFACE( css::container::XElementAccess, css::container::XNameAccess  )
-                                        )
-
-DEFINE_XTYPEPROVIDER_4                  (   WindowStateConfiguration            ,
-                                            css::lang::XTypeProvider        ,
-                                            css::lang::XServiceInfo         ,
-                                            css::container::XNameAccess     ,
-                                            css::container::XElementAccess
-                                        )
-
 DEFINE_XSERVICEINFO_ONEINSTANCESERVICE_2(   WindowStateConfiguration                    ,
                                             ::cppu::OWeakObject                         ,
                                             DECLARE_ASCII("com.sun.star.ui.WindowStateConfiguration"),
