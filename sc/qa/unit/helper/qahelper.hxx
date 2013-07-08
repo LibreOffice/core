@@ -10,15 +10,11 @@
 #ifndef SC_QA_HELPER_HXX
 #define SC_QA_HELPER_HXX
 
-#include <test/bootstrapfixture.hxx>
-#define __ORCUS_STATIC_LIB
-#include "helper/csv_handler.hxx"
-#include "helper/debughelper.hxx"
-#include "orcus/csv_parser.hpp"
-#include <fstream>
-#include <string>
-#include <sstream>
+#include "scdllapi.h"
+#include "debughelper.hxx"
+#include "csv_handler.hxx"
 
+#include <test/bootstrapfixture.hxx>
 #include <comphelper/documentconstants.hxx>
 
 #include <osl/detail/android-bootstrap.h>
@@ -26,6 +22,11 @@
 #include <unotools/tempfile.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <sfx2/docfilt.hxx>
+#include "sfx2/docfile.hxx"
+#include "svl/stritem.hxx"
+
+#include <string>
+#include <sstream>
 
 #define ODS_FORMAT_TYPE 50331943
 #define XLS_FORMAT_TYPE 318767171
@@ -43,14 +44,7 @@
 #define LOTUS123 5
 #define DIF      6
 
-bool testEqualsWithTolerance( long nVal1, long nVal2, long nTol )
-{
-    return ( labs( nVal1 - nVal2 ) <= nTol );
-}
-
-struct FileFormat {
-    const char* pName; const char* pFilterName; const char* pTypeName; unsigned int nFormatType;
-};
+SC_DLLPUBLIC bool testEqualsWithTolerance( long nVal1, long nVal2, long nTol );
 
 #define CHECK_OPTIMAL 0x1
 
@@ -73,6 +67,10 @@ struct TestParam
     RowData* pData;
 };
 
+struct FileFormat {
+    const char* pName; const char* pFilterName; const char* pTypeName; unsigned int nFormatType;
+};
+
 FileFormat aFileFormats[] = {
     { "ods" , "calc8", "", ODS_FORMAT_TYPE },
     { "xls" , "MS Excel 97", "calc_MS_EXCEL_97", XLS_FORMAT_TYPE },
@@ -89,35 +87,16 @@ FileFormat aFileFormats[] = {
 // eventually perhaps iOS) special cases here, too)?  Please move this to osl,
 // it sure looks gemerally useful. Or am I missing something?
 
-void loadFile(const OUString& aFileName, std::string& aContent)
-{
-    OString aOFileName = OUStringToOString(aFileName, RTL_TEXTENCODING_UTF8);
+SC_DLLPUBLIC void loadFile(const OUString& aFileName, std::string& aContent);
 
-#ifdef ANDROID
-    size_t size;
-    if (strncmp(aOFileName.getStr(), "/assets/", sizeof("/assets/")-1) == 0) {
-        const char *contents = (const char *) lo_apkentry(aOFileName.getStr(), &size);
-        if (contents != 0) {
-            aContent = std::string(contents, size);
-            return;
-        }
-    }
-#endif
+SC_DLLPUBLIC void testFile(OUString& aFileName, ScDocument* pDoc, SCTAB nTab, StringType aStringFormat = StringValue);
 
-    std::ifstream aFile(aOFileName.getStr());
-
-    OStringBuffer aErrorMsg("Could not open csv file: ");
-    aErrorMsg.append(aOFileName);
-    CPPUNIT_ASSERT_MESSAGE(aErrorMsg.getStr(), aFile);
-    std::ostringstream aOStream;
-    aOStream << aFile.rdbuf();
-    aFile.close();
-    aContent = aOStream.str();
-}
+//need own handler because conditional formatting strings must be generated
+SC_DLLPUBLIC void testCondFile(OUString& aFileName, ScDocument* pDoc, SCTAB nTab);
 
 std::string print(const ScAddress& rAddr)
 {
-    std::stringstream str;
+    std::ostringstream str;
     str << "Col: " << rAddr.Col();
     str << " Row: " << rAddr.Row();
     str << " Tab: " << rAddr.Tab();
@@ -145,212 +124,37 @@ struct assertion_traits<ScRange>
 
 }
 
-class ScBootstrapFixture : public test::BootstrapFixture
+class SC_DLLPUBLIC ScBootstrapFixture : public test::BootstrapFixture
 {
 protected:
     OUString m_aBaseString;
-    ScDocShellRef load( bool bReadWrite,
-        const OUString& rURL, const OUString& rFilter, const OUString &rUserData,
-        const OUString& rTypeName, unsigned int nFilterFlags, unsigned int nClipboardID,  sal_uIntPtr nFilterVersion = SOFFICE_FILEFORMAT_CURRENT, const OUString* pPassword = NULL )
-    {
-        SfxFilter* pFilter = new SfxFilter(
-            rFilter,
-            OUString(), nFilterFlags, nClipboardID, rTypeName, 0, OUString(),
-            rUserData, OUString("private:factory/scalc*"));
-        pFilter->SetVersion(nFilterVersion);
 
-        ScDocShellRef xDocShRef = new ScDocShell;
-        xDocShRef->GetDocument()->EnableUserInteraction(false);
-        SfxMedium* pSrcMed = new SfxMedium(rURL, bReadWrite ? STREAM_STD_READWRITE : STREAM_STD_READ );
-        pSrcMed->SetFilter(pFilter);
-        pSrcMed->UseInteractionHandler(false);
-        if (pPassword)
-        {
-            SfxItemSet* pSet = pSrcMed->GetItemSet();
-            pSet->Put(SfxStringItem(SID_PASSWORD, *pPassword));
-        }
-        printf("about to load %s\n", OUStringToOString( rURL, RTL_TEXTENCODING_UTF8 ).getStr() );
-        if (!xDocShRef->DoLoad(pSrcMed))
-        {
-            xDocShRef->DoClose();
-            // load failed.
-            xDocShRef.Clear();
-        }
-
-        return xDocShRef;
-    }
+    ScDocShellRef load(
+        bool bReadWrite, const OUString& rURL, const OUString& rFilter, const OUString &rUserData,
+        const OUString& rTypeName, unsigned int nFilterFlags, unsigned int nClipboardID,
+        sal_uIntPtr nFilterVersion = SOFFICE_FILEFORMAT_CURRENT, const OUString* pPassword = NULL );
 
     ScDocShellRef load(
         const OUString& rURL, const OUString& rFilter, const OUString &rUserData,
-        const OUString& rTypeName, unsigned int nFilterFlags, unsigned int nClipboardID,  sal_uIntPtr nFilterVersion = SOFFICE_FILEFORMAT_CURRENT, const OUString* pPassword = NULL )
-    {
-        return load( false, rURL, rFilter, rUserData, rTypeName, nFilterFlags, nClipboardID,  nFilterVersion, pPassword );
-    }
+        const OUString& rTypeName, unsigned int nFilterFlags, unsigned int nClipboardID,
+        sal_uIntPtr nFilterVersion = SOFFICE_FILEFORMAT_CURRENT, const OUString* pPassword = NULL );
 
-    ScDocShellRef loadDoc(const OUString& rFileName, sal_Int32 nFormat, bool bReadWrite = false )
-    {
-        OUString aFileExtension(aFileFormats[nFormat].pName, strlen(aFileFormats[nFormat].pName), RTL_TEXTENCODING_UTF8 );
-        OUString aFilterName(aFileFormats[nFormat].pFilterName, strlen(aFileFormats[nFormat].pFilterName), RTL_TEXTENCODING_UTF8) ;
-        OUString aFileName;
-        createFileURL( rFileName, aFileExtension, aFileName );
-        OUString aFilterType(aFileFormats[nFormat].pTypeName, strlen(aFileFormats[nFormat].pTypeName), RTL_TEXTENCODING_UTF8);
-        unsigned int nFormatType = aFileFormats[nFormat].nFormatType;
-        unsigned int nClipboardId = nFormatType ? SFX_FILTER_IMPORT | SFX_FILTER_USESOPTIONS : 0;
-
-        return load(bReadWrite, aFileName, aFilterName, OUString(), aFilterType, nFormatType, nClipboardId, nFormatType);
-    }
-
+    ScDocShellRef loadDoc(const OUString& rFileName, sal_Int32 nFormat, bool bReadWrite = false );
 
 public:
     ScBootstrapFixture( const OUString& rsBaseString ) : m_aBaseString( rsBaseString ) {}
-    void createFileURL(const OUString& aFileBase, const OUString& aFileExtension, OUString& rFilePath)
-    {
-        OUString aSep("/");
-        OUStringBuffer aBuffer( getSrcRootURL() );
-        aBuffer.append(m_aBaseString).append(aSep).append(aFileExtension);
-        aBuffer.append(aSep).append(aFileBase).append(aFileExtension);
-        rFilePath = aBuffer.makeStringAndClear();
-    }
 
-    void createCSVPath(const OUString& aFileBase, OUString& rCSVPath)
-    {
-        OUStringBuffer aBuffer( getSrcRootPath());
-        aBuffer.append(m_aBaseString).append(OUString("/contentCSV/"));
-        aBuffer.append(aFileBase).append(OUString("csv"));
-        rCSVPath = aBuffer.makeStringAndClear();
-    }
+    void createFileURL(const OUString& aFileBase, const OUString& aFileExtension, OUString& rFilePath);
+
+    void createCSVPath(const OUString& aFileBase, OUString& rCSVPath);
 
     ScDocShellRef saveAndReload(ScDocShell* pShell, const OUString &rFilter,
-    const OUString &rUserData, const OUString& rTypeName, sal_uLong nFormatType)
-    {
+    const OUString &rUserData, const OUString& rTypeName, sal_uLong nFormatType);
 
-        utl::TempFile aTempFile;
-        aTempFile.EnableKillingFile();
-        SfxMedium aStoreMedium( aTempFile.GetURL(), STREAM_STD_WRITE );
-        sal_uInt32 nExportFormat = 0;
-        if (nFormatType == ODS_FORMAT_TYPE)
-            nExportFormat = SFX_FILTER_EXPORT | SFX_FILTER_USESOPTIONS;
-        SfxFilter* pExportFilter = new SfxFilter(
-            rFilter,
-            OUString(), nFormatType, nExportFormat, rTypeName, 0, OUString(),
-            rUserData, OUString("private:factory/scalc*") );
-        pExportFilter->SetVersion(SOFFICE_FILEFORMAT_CURRENT);
-        aStoreMedium.SetFilter(pExportFilter);
-        pShell->DoSaveAs( aStoreMedium );
-        pShell->DoClose();
+    ScDocShellRef saveAndReload( ScDocShell* pShell, sal_Int32 nFormat );
 
-        //std::cout << "File: " << aTempFile.GetURL() << std::endl;
-
-        sal_uInt32 nFormat = 0;
-        if (nFormatType == ODS_FORMAT_TYPE)
-            nFormat = SFX_FILTER_IMPORT | SFX_FILTER_USESOPTIONS;
-
-        return load(aTempFile.GetURL(), rFilter, rUserData, rTypeName, nFormatType, nFormat );
-    }
-    ScDocShellRef saveAndReload( ScDocShell* pShell, sal_Int32 nFormat )
-    {
-        OUString aFilterName(aFileFormats[nFormat].pFilterName, strlen(aFileFormats[nFormat].pFilterName), RTL_TEXTENCODING_UTF8) ;
-        OUString aFilterType(aFileFormats[nFormat].pTypeName, strlen(aFileFormats[nFormat].pTypeName), RTL_TEXTENCODING_UTF8);
-        ScDocShellRef xDocSh = saveAndReload(pShell, aFilterName, OUString(), aFilterType, aFileFormats[nFormat].nFormatType);
-
-        CPPUNIT_ASSERT(xDocSh.Is());
-        return xDocSh;
-    }
-
-    void miscRowHeightsTest( TestParam* aTestValues, unsigned int numElems )
-    {
-        for ( unsigned int index=0; index<numElems; ++index )
-        {
-            OUString sFileName = OUString::createFromAscii( aTestValues[ index ].sTestDoc );
-            printf("aTestValues[%u] %s\n", index, OUStringToOString( sFileName, RTL_TEXTENCODING_UTF8 ).getStr() );
-            int nImportType =  aTestValues[ index ].nImportType;
-            int nExportType =  aTestValues[ index ].nExportType;
-            ScDocShellRef xShell = loadDoc( sFileName, nImportType );
-            CPPUNIT_ASSERT(xShell.Is());
-
-            if ( nExportType != -1 )
-                xShell = saveAndReload(&(*xShell), nExportType );
-
-            CPPUNIT_ASSERT(xShell.Is());
-
-            ScDocument* pDoc = xShell->GetDocument();
-
-            for (int i=0; i<aTestValues[ index ].nRowData; ++i)
-            {
-                SCROW nRow = aTestValues[ index ].pData[ i].nStartRow;
-                SCROW nEndRow = aTestValues[ index ].pData[ i ].nEndRow;
-                SCTAB nTab = aTestValues[ index ].pData[ i ].nTab;
-                int nExpectedHeight = aTestValues[ index ].pData[ i ].nExpectedHeight;
-                if ( nExpectedHeight == -1 )
-                    nExpectedHeight =  sc::TwipsToHMM( ScGlobal::nStdRowHeight );
-                bool bCheckOpt = ( ( aTestValues[ index ].pData[ i ].nCheck & CHECK_OPTIMAL ) == CHECK_OPTIMAL );
-                for ( ; nRow <= nEndRow; ++nRow )
-                {
-                    printf("\t checking row %" SAL_PRIdINT32 " for height %d\n", nRow, nExpectedHeight );
-                    int nHeight = sc::TwipsToHMM( pDoc->GetRowHeight(nRow, nTab, false) );
-                    if ( bCheckOpt )
-                    {
-                        bool bOpt = !(pDoc->GetRowFlags( nRow, nTab ) & CR_MANUALSIZE);
-                        CPPUNIT_ASSERT_EQUAL(aTestValues[ index ].pData[ i ].bOptimal, bOpt);
-                    }
-                    CPPUNIT_ASSERT_EQUAL(nExpectedHeight, nHeight);
-                }
-            }
-            xShell->DoClose();
-        }
-    }
+    void miscRowHeightsTest( TestParam* aTestValues, unsigned int numElems );
 };
-
-void testFile(OUString& aFileName, ScDocument* pDoc, SCTAB nTab, StringType aStringFormat = StringValue)
-{
-    csv_handler aHandler(pDoc, nTab, aStringFormat);
-    orcus::csv_parser_config aConfig;
-    aConfig.delimiters.push_back(',');
-    aConfig.delimiters.push_back(';');
-    aConfig.text_qualifier = '"';
-    aConfig.trim_cell_value = false;
-
-
-    std::string aContent;
-    loadFile(aFileName, aContent);
-    orcus::csv_parser<csv_handler> parser ( &aContent[0], aContent.size() , aHandler, aConfig);
-    try
-    {
-        parser.parse();
-    }
-    catch (const orcus::csv_parse_error& e)
-    {
-        std::cout << "reading csv content file failed: " << e.what() << std::endl;
-        OStringBuffer aErrorMsg("csv parser error: ");
-        aErrorMsg.append(e.what());
-        CPPUNIT_ASSERT_MESSAGE(aErrorMsg.getStr(), false);
-    }
-}
-
-//need own handler because conditional formatting strings must be generated
-void testCondFile(OUString& aFileName, ScDocument* pDoc, SCTAB nTab)
-{
-    conditional_format_handler aHandler(pDoc, nTab);
-    orcus::csv_parser_config aConfig;
-    aConfig.delimiters.push_back(',');
-    aConfig.delimiters.push_back(';');
-    aConfig.text_qualifier = '"';
-    std::string aContent;
-    loadFile(aFileName, aContent);
-    orcus::csv_parser<conditional_format_handler> parser ( &aContent[0], aContent.size() , aHandler, aConfig);
-    try
-    {
-        parser.parse();
-    }
-    catch (const orcus::csv_parse_error& e)
-    {
-        std::cout << "reading csv content file failed: " << e.what() << std::endl;
-        OStringBuffer aErrorMsg("csv parser error: ");
-        aErrorMsg.append(e.what());
-        CPPUNIT_ASSERT_MESSAGE(aErrorMsg.getStr(), false);
-    }
-
-}
 
 #define ASSERT_DOUBLES_EQUAL( expected, result )    \
     CPPUNIT_ASSERT_DOUBLES_EQUAL( (expected), (result), 1e-14 )

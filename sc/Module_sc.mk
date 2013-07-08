@@ -16,6 +16,7 @@ $(eval $(call gb_Module_add_targets,sc,\
 	Library_scd \
 	Library_scfilt \
 	Library_scui \
+	Library_scqahelper \
 	UIConfig_scalc \
 ))
 

@@ -432,6 +432,7 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_NONE, \
 	unobootstrapprotector \
 	unoexceptionprotector \
 	unotest \
+	scqahelper \
 ))
 
 $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_URE,ure, \

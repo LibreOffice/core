@@ -44,6 +44,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sc_filters_test, \
     salhelper \
     sax \
     sc \
+    scqahelper \
     sfx \
     sot \
     svl \

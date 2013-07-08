@@ -53,7 +53,6 @@
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/data/XDataReceiver.hpp>
 
-#define CALC_DEBUG_OUTPUT 0
 #define TEST_BUG_FILES 0
 
 #include "helper/qahelper.hxx"

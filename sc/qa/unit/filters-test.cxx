@@ -20,7 +20,6 @@
 #include <sfx2/sfxmodelfactory.hxx>
 #include <svl/stritem.hxx>
 
-#define CALC_DEBUG_OUTPUT 0
 #define TEST_BUG_FILES 0
 
 #include "helper/qahelper.hxx"

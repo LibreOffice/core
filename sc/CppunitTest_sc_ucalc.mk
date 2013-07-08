@@ -51,6 +51,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sc_ucalc, \
     salhelper \
     sax \
     sb \
+    scqahelper \
     sfx \
     sot \
     svl \

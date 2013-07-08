@@ -10,11 +10,6 @@
 #ifndef SC_DEBUG_HELPER_HXX
 #define SC_DEBUG_HELPER_HXX
 
-/**
- * Print nicely formatted sheet content to stdout.  Indispensable when
- * debugging the unit test code involving testing of sheet contents.
- */
-
 #include <rtl/strbuf.hxx>
 #include <rtl/ustring.hxx>
 
@@ -32,13 +27,19 @@
 
 #include <iostream>
 
+#define CALC_DEBUG_OUTPUT 0
+#define CALC_TEST_PERF 0
+
 using namespace ::com::sun::star;
 using ::std::cout;
 using ::std::cerr;
 using ::std::endl;
 using ::std::vector;
 
-
+/**
+ * Print nicely formatted sheet content to stdout.  Indispensable when
+ * debugging the unit test code involving testing of sheet contents.
+ */
 class SheetPrinter
 {
     typedef ::mdds::mixed_type_matrix<OUString, bool> MatrixType;

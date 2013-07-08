@@ -7,6 +7,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#ifndef SC_QA_CSV_HANDLER_HXX
+#define SC_QA_CSV_HANDLER_HXX
+
 #include <iostream>
 
 #include "docsh.hxx"
@@ -16,6 +19,10 @@
 #include "document.hxx"
 #include "cellform.hxx"
 #include "cellvalue.hxx"
+
+#include "rtl/strbuf.hxx"
+
+#include <test/bootstrapfixture.hxx>
 
 #define DEBUG_CSV_HANDLER 0
 
@@ -220,5 +227,7 @@ private:
     SCROW mnRow;
     SCTAB mnTab;
 };
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
