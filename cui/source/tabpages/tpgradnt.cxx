@@ -72,9 +72,6 @@ SvxGradientTabPage::SvxGradientTabPage
     get(m_pMtrCenterY,     "centerymtr");
     get(m_pFtAngle,        "angleft");
     get(m_pMtrAngle,       "anglemtr");
-    m_pMtrAngle->SetUnit(FUNIT_CUSTOM);
-    get(m_pFtAngleDegrees, "anglemtrdegrees");
-    m_pMtrAngle->SetCustomUnitText(m_pFtAngleDegrees->GetText());
     get(m_pMtrBorder,      "bordermtr");
     get(m_pLbColorFrom,    "colorfromlb");
     get(m_pMtrColorFrom,   "colorfrommtr");

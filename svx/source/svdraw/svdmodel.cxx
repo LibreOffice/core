@@ -1040,6 +1040,8 @@ void SdrModel::ImpSetUIUnit()
         // TODO: Add code to handle the following if needed (added to remove warning)
         case FUNIT_CHAR   : break;
         case FUNIT_LINE   : break;
+        case FUNIT_PIXEL  : break;
+        case FUNIT_DEGREE : break;
     } // switch
 
     // check if mapping is from metric to inch and adapt

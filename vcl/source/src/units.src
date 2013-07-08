@@ -43,6 +43,9 @@ StringArray SV_FUNIT_STRINGS
         < "ch" ; FUNIT_CHAR ; > ;
         < "line" ; FUNIT_LINE ; > ;
         < "%" ; FUNIT_PERCENT ; > ;
+        < " pixels" ; FUNIT_PIXEL ; > ;
+        < " pixel" ; FUNIT_PIXEL ; > ;
+        < "°" ; FUNIT_DEGREE ; > ;
     };
 };
 

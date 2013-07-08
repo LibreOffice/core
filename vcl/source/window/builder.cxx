@@ -782,6 +782,10 @@ namespace
             eUnit = FUNIT_LINE;
         else if (sUnit == "%")
             eUnit = FUNIT_PERCENT;
+        else if ((sUnit == "pixels") || (sUnit == "pixel") || (sUnit == "px"))
+            eUnit = FUNIT_PIXEL;
+        else if ((sUnit == "degrees") || (sUnit == "degree"))
+            eUnit = FUNIT_DEGREE;
         else if (sUnit != "0")
             eUnit = FUNIT_CUSTOM;
 

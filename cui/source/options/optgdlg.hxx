@@ -84,8 +84,7 @@ private:
 
     CheckBox*       m_pFontAntiAliasing;
     FixedText*      m_pAAPointLimitLabel;
-    NumericField*   m_pAAPointLimit;
-    FixedText*      m_pAAPointLimitUnits;
+    MetricField*    m_pAAPointLimit;
 
     ListBox*        m_pMenuIconsLB;
 

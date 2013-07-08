@@ -194,6 +194,8 @@ RscEnum * RscTypCont::InitFieldUnitsType()
     SETCONST( pFieldUnits, "FUNIT_CHAR", FUNIT_CHAR );
     SETCONST( pFieldUnits, "FUNIT_LINE", FUNIT_LINE );
     SETCONST( pFieldUnits, "FUNIT_PERCENT", FUNIT_PERCENT );
+    SETCONST( pFieldUnits, "FUNIT_DEGREE",  FUNIT_DEGREE);
+    SETCONST( pFieldUnits, "FUNIT_PIXEL",   FUNIT_PIXEL );
 
     return pFieldUnits;
 }

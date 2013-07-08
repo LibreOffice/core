@@ -543,7 +543,6 @@ OfaViewTabPage::OfaViewTabPage(Window* pParent, const SfxItemSet& rSet)
     get(m_pFontAntiAliasing, "aafont");
     get(m_pAAPointLimitLabel, "aafrom");
     get(m_pAAPointLimit, "aanf");
-    get(m_pAAPointLimitUnits, "aaunits");
     get(m_pMenuIconsLB, "menuicons");
     get(m_pFontShowCB, "showfontpreview");
     get(m_pFontHistoryCB, "showfonthistory");
@@ -562,7 +561,6 @@ OfaViewTabPage::OfaViewTabPage(Window* pParent, const SfxItemSet& rSet)
     m_pFontAntiAliasing->Hide();
     m_pAAPointLimitLabel->Hide();
     m_pAAPointLimit->Hide();
-    m_pAAPointLimitUnits->Hide();
 
 #endif
 
@@ -637,7 +635,6 @@ IMPL_LINK( OfaViewTabPage, OnAntialiasingToggled, void*, NOTINTERESTEDIN )
 
     m_pAAPointLimitLabel->Enable( bAAEnabled );
     m_pAAPointLimit->Enable( bAAEnabled );
-    m_pAAPointLimitUnits->Enable( bAAEnabled );
 
     return 0L;
 }

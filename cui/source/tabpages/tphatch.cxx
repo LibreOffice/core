@@ -70,9 +70,6 @@ SvxHatchTabPage::SvxHatchTabPage
 {
     get(m_pMtrDistance, "distancemtr");
     get(m_pMtrAngle, "anglemtr");
-    get(m_pFtAngleDegrees, "anglemtrdegrees");
-    m_pMtrAngle->SetUnit(FUNIT_CUSTOM);
-    m_pMtrAngle->SetCustomUnitText(m_pFtAngleDegrees->GetText());
     get(m_pCtlAngle, "anglectl");
     m_pCtlAngle->SetCS(CS_ANGLE);
     Size aSize = LogicToPixel(Size(39, 39), MAP_APPFONT);

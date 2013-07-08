@@ -370,7 +370,6 @@ private:
     MetricField*        m_pMtrCenterY;
     FixedText*          m_pFtAngle;
     MetricField*        m_pMtrAngle;
-    FixedText*          m_pFtAngleDegrees;
     MetricField*        m_pMtrBorder;
     ColorLB*            m_pLbColorFrom;
     MetricField*        m_pMtrColorFrom;
@@ -448,7 +447,6 @@ class SvxHatchTabPage : public SvxTabPage
 private:
     MetricField*        m_pMtrDistance;
     MetricField*        m_pMtrAngle;
-    FixedText*          m_pFtAngleDegrees;
     SvxRectCtl*         m_pCtlAngle;
     ListBox*            m_pLbLineType;
     ColorLB*            m_pLbLineColor;

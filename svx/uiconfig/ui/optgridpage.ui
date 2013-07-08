@@ -500,7 +500,7 @@
                         <property name="row_spacing">6</property>
                         <property name="column_spacing">12</property>
                         <child>
-                          <object class="GtkSpinButton" id="mtrfldsnaparea:0 Pixels">
+                          <object class="GtkSpinButton" id="mtrfldsnaparea:0pixels">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="invisible_char">●</property>
@@ -520,7 +520,7 @@
                             <property name="xalign">0</property>
                             <property name="label" translatable="yes">_Snap range</property>
                             <property name="use_underline">True</property>
-                            <property name="mnemonic_widget">mtrfldsnaparea:0 Pixels</property>
+                            <property name="mnemonic_widget">mtrfldsnaparea:0pixels</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -618,7 +618,7 @@
                         <property name="row_spacing">6</property>
                         <property name="column_spacing">12</property>
                         <child>
-                          <object class="GtkSpinButton" id="mtrfldangle:0.00 degrees">
+                          <object class="GtkSpinButton" id="mtrfldangle:0.00degrees">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="invisible_char">●</property>
@@ -645,7 +645,7 @@
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
                             <accessibility>
-                              <relation type="label-for" target="mtrfldangle:0.00 degrees"/>
+                              <relation type="label-for" target="mtrfldangle:0.00degrees"/>
                             </accessibility>
                           </object>
                           <packing>
@@ -656,7 +656,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkSpinButton" id="mtrfldbezangle:0.00 degrees">
+                          <object class="GtkSpinButton" id="mtrfldbezangle:0.00degrees">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="invisible_char">●</property>
@@ -677,7 +677,7 @@
                             <property name="xalign">0</property>
                             <property name="label" translatable="yes">Point reducti_on</property>
                             <property name="use_underline">True</property>
-                            <property name="mnemonic_widget">mtrfldbezangle:0.00 degrees</property>
+                            <property name="mnemonic_widget">mtrfldbezangle:0.00degrees</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>

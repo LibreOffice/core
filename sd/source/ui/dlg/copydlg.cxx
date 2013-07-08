@@ -55,8 +55,6 @@ CopyDlg::CopyDlg(::Window* pWindow, const SfxItemSet& rInAttrs,
     get(m_pMtrFldMoveX, "x");
     get(m_pMtrFldMoveY, "y");
     get(m_pMtrFldAngle, "angle");
-    m_pMtrFldAngle->SetUnit(FUNIT_CUSTOM);
-    m_pMtrFldAngle->SetCustomUnitText(get<FixedText>("degrees")->GetText());
     get(m_pMtrFldWidth, "width");
     get(m_pMtrFldHeight, "height");
     get(m_pLbStartColor, "start");
