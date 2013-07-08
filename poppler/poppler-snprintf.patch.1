@@ -1,0 +1,21 @@
+--- poppler-0.22.5/poppler/Catalog.cc	2013-06-09 12:16:12.000000000 +0200
++++ poppler-0.22.5/poppler/Catalog.cc	2013-07-08 15:16:11.414717489 +0200
+@@ -40,6 +40,18 @@
+ 
+ #include <stddef.h>
+ #include <stdlib.h>
++
++#ifdef _WIN32
++
++#ifdef __MINGW32__
++#define _SNPRINTF_DLLIMPORT
++#endif
++#ifndef _SNPRINTF_H
++#include <systools/win32/snprintf.h>
++#endif
++
++#endif
++
+ #include "goo/gmem.h"
+ #include "Object.h"
+ #include "PDFDoc.h"

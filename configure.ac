@@ -9899,7 +9899,7 @@ if test "$_os" != Android -a "$_os" != iOS -a "$ENABLE_PDFIMPORT" != FALSE; then
   else
       AC_MSG_RESULT([internal])
       SYSTEM_POPPLER=NO
-      BUILD_TYPE="$BUILD_TYPE XPDF"
+      BUILD_TYPE="$BUILD_TYPE POPPLER"
   fi
 else
   AC_MSG_RESULT([no])
