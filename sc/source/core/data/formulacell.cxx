@@ -3064,6 +3064,14 @@ public:
 
     bool convert(ScTokenArray& rCode)
     {
+        { // debug to start with:
+            ScCompiler aComp( &mrDoc, mrPos, rCode);
+            aComp.SetGrammar(formula::FormulaGrammar::GRAM_NATIVE_XL_R1C1);
+            OUStringBuffer aAsString;
+            aComp.CreateStringFromTokenArray(aAsString);
+            SAL_DEBUG("interpret formula: " << aAsString.makeStringAndClear());
+        }
+
         rCode.Reset();
         for (const formula::FormulaToken* p = rCode.First(); p; p = rCode.Next())
         {
