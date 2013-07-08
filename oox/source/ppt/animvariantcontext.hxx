@@ -20,7 +20,7 @@
 
 
 #ifndef OOX_PPT_ANIMVARIANTCONTEXT
-#define OOX_PPT_ANIMVERIANTCONTEXT
+#define OOX_PPT_ANIMVARIANTCONTEXT
 
 
 #include <com/sun/star/uno/Any.hxx>

@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SFX_BLUETOOTHL_HXX
-#define INCLUDED_SFX_BLUETOOTH_HXX
+#ifndef INCLUDED_SFX_BLUTHSNDAPI_HXX
+#define INCLUDED_SFX_BLUTHSNDAPI_HXX
 
 #include <vector>
 #include <com/sun/star/frame/XFrame.hpp>
@@ -29,6 +29,6 @@ public:
     SendMailResult      Send( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame );
 };
 
-#endif // INCLUDED_SFX_BLUETOOTH_HXX
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

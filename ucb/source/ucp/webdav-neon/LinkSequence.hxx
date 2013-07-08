@@ -27,7 +27,7 @@
  ************************************************************************/
 
 #ifndef _LINKSEQUENCE_HXX_
-#define _LINKKSEQUENCE_HXX_
+#define _LINKSEQUENCE_HXX_
 
 #include <rtl/string.hxx>
 #include <com/sun/star/uno/Sequence.hxx>

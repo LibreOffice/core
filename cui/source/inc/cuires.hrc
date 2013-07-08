@@ -18,7 +18,7 @@
  */
 
 #ifndef _CUI_RESID_HRC
-#define _CUI_REDID_HRC
+#define _CUI_RESID_HRC
 
 #include <sfx2/sfx.hrc>
 #include <sfx2/dialogs.hrc>

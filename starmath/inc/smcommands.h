@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef SM_SNCOMMANDS_HRC
-#define SM_SMCOMMANDS_HRC
+#ifndef SM_SMCOMMANDS_H
+#define SM_SMCOMMANDS_H
 
 #define CMD_SID_ADJUST                              ".uno:Adjust"
 #define CMD_SID_ALIGN                               ".uno:ChangeAlignment"
