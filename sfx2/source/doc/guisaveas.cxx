@@ -633,7 +633,7 @@ sal_Bool ModelData_Impl::ExecuteFilterDialog_Impl( const OUString& aFilterName )
     }
     catch( const uno::Exception& e )
     {
-        SAL_WARN("sfx2.doc", "ignoring UNO exception " << e.Message);
+        SAL_WARN("sfx.doc", "ignoring UNO exception " << e.Message);
     }
 
     return bDialogUsed;
@@ -1819,7 +1819,7 @@ void SfxStoringHelper::SetDocInfoState(
     }
     catch (const uno::Exception& e)
     {
-        SAL_INFO("sfx2.doc", "SetDocInfoState: caught exception: " << e.Message);
+        SAL_INFO("sfx.doc", "SetDocInfoState: caught exception: " << e.Message);
     }
 
     // set the modified flag back if required

@@ -980,7 +980,7 @@ void SfxTabDialog::RemoveTabPage( sal_uInt16 nId )
     }
     else
     {
-        SAL_INFO( "sfx2.dialog", "TabPage-Id not known" );
+        SAL_INFO( "sfx.dialog", "TabPage-Id not known" );
     }
 }
 
@@ -1134,7 +1134,7 @@ SfxItemSet* SfxTabDialog::CreateInputItemSet( sal_uInt16 )
 */
 
 {
-    SAL_WARN( "sfx2.dialog", "CreateInputItemSet not implemented" );
+    SAL_WARN( "sfx.dialog", "CreateInputItemSet not implemented" );
     return new SfxAllItemSet( SFX_APP()->GetPool() );
 }
 
@@ -1150,7 +1150,7 @@ const SfxItemSet* SfxTabDialog::GetRefreshedSet()
 */
 
 {
-    SAL_INFO ( "sfx2.dialog", "GetRefreshedSet not implemented" );
+    SAL_INFO ( "sfx.dialog", "GetRefreshedSet not implemented" );
     return 0;
 }
 
@@ -1561,7 +1561,7 @@ const sal_uInt16* SfxTabDialog::GetInputRanges( const SfxItemPool& rPool )
 {
     if ( pSet )
     {
-        SAL_WARN( "sfx2.dialog", "Set already exists!" );
+        SAL_WARN( "sfx.dialog", "Set already exists!" );
         return pSet->GetRanges();
     }
 

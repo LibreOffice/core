@@ -720,7 +720,7 @@ Reference<ui::XUIElement> SidebarController::CreateUIElement (
     }
     catch(const Exception& rException)
     {
-        SAL_WARN("sfx2.sidebar", "Cannot create panel: " << rException.Message);
+        SAL_WARN("sfx.sidebar", "Cannot create panel: " << rException.Message);
         return NULL;
     }
 }

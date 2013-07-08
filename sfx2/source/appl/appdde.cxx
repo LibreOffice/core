@@ -104,7 +104,7 @@ namespace
         }
         catch( const uno::Exception& )
         {
-            SAL_WARN( "sfx2.appl", "Any other exception" );
+            SAL_WARN( "sfx.appl", "Any other exception" );
         }
 
         return bRet;

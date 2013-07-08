@@ -148,7 +148,7 @@ SfxApplication* SfxApplication::GetOrCreate()
     ::osl::MutexGuard aGuard(theApplicationMutex::get());
     if (!pApp)
     {
-        SAL_INFO( "sfx2.appl", "sfx2 (mb93783) ::SfxApplication::SetApp" );
+        SAL_INFO( "sfx.appl", "sfx2 (mb93783) ::SfxApplication::SetApp" );
 
         pApp = new SfxApplication;
 
@@ -182,7 +182,7 @@ SfxApplication* SfxApplication::GetOrCreate()
 SfxApplication::SfxApplication()
     : pAppData_Impl( 0 )
 {
-    SAL_INFO( "sfx2.appl", "sfx2 (mb93783) ::SfxApplication::SfxApplication" );
+    SAL_INFO( "sfx.appl", "sfx2 (mb93783) ::SfxApplication::SfxApplication" );
 
     SetName( OUString("StarOffice") );
     SvtViewOptions::AcquireOptions();
@@ -190,7 +190,7 @@ SfxApplication::SfxApplication()
     pAppData_Impl = new SfxAppData_Impl( this );
     pAppData_Impl->m_xImeStatusWindow->init();
 
-    SAL_INFO( "sfx2.appl", "{ initialize DDE" );
+    SAL_INFO( "sfx.appl", "{ initialize DDE" );
 
     sal_Bool bOk = InitializeDde();
 
@@ -217,7 +217,7 @@ SfxApplication::SfxApplication()
     pBasic   = new BasicDLL;
     StarBASIC::SetGlobalErrorHdl( LINK( this, SfxApplication, GlobalBasicErrorHdl_Impl ) );
 #endif
-    SAL_INFO( "sfx2.appl", "} initialize DDE" );
+    SAL_INFO( "sfx.appl", "} initialize DDE" );
 }
 
 SfxApplication::~SfxApplication()
@@ -570,7 +570,7 @@ SfxApplication::ChooseScript()
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
     if ( pFact )
     {
-        SAL_INFO( "sfx2.appl", "create selector dialog");
+        SAL_INFO( "sfx.appl", "create selector dialog");
 
         const SfxViewFrame* pViewFrame = SfxViewFrame::Current();
         const SfxFrame* pFrame = pViewFrame ? &pViewFrame->GetFrame() : NULL;
@@ -579,11 +579,11 @@ SfxApplication::ChooseScript()
           AbstractScriptSelectorDialog* pDlg =
             pFact->CreateScriptSelectorDialog( NULL, sal_False, xFrame );
 
-        SAL_INFO( "sfx2.appl", "done, now exec it");
+        SAL_INFO( "sfx.appl", "done, now exec it");
 
           sal_uInt16 nRet = pDlg->Execute();
 
-        SAL_INFO( "sfx2.appl", "has returned");
+        SAL_INFO( "sfx.appl", "has returned");
 
         if ( nRet == RET_OK )
         {

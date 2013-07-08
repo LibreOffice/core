@@ -310,7 +310,7 @@ SfxObjectShellRef SfxFrameLoader_Impl::impl_findObjectShell( const Reference< XM
         }
     }
 
-    SAL_WARN( "sfx2.view", "SfxFrameLoader_Impl::impl_findObjectShell: model is not based on SfxObjectShell - wrong frame loader usage!" );
+    SAL_WARN( "sfx.view", "SfxFrameLoader_Impl::impl_findObjectShell: model is not based on SfxObjectShell - wrong frame loader usage!" );
     return NULL;
 }
 
@@ -514,7 +514,7 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const Sequence< PropertyValue >& rA
 
     SolarMutexGuard aGuard;
 
-    SAL_INFO( "sfx2.view", "sfx2 (mb93783) ::SfxFrameLoader::load" );
+    SAL_INFO( "sfx.view", "sfx2 (mb93783) ::SfxFrameLoader::load" );
 
     ::comphelper::NamedValueCollection aDescriptor( rArgs );
 

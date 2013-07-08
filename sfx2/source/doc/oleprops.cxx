@@ -651,7 +651,7 @@ SfxOleThumbnailProperty::SfxOleThumbnailProperty(
 
 void SfxOleThumbnailProperty::ImplLoad( SvStream& )
 {
-    SAL_WARN( "sfx2.doc", "SfxOleThumbnailProperty::ImplLoad - not implemented" );
+    SAL_WARN( "sfx.doc", "SfxOleThumbnailProperty::ImplLoad - not implemented" );
     SetError( SVSTREAM_INVALID_ACCESS );
 }
 
@@ -685,7 +685,7 @@ void SfxOleThumbnailProperty::ImplSave( SvStream& rStrm )
     }
     else
     {
-        SAL_WARN( "sfx2.doc", "SfxOleThumbnailProperty::ImplSave - invalid thumbnail property" );
+        SAL_WARN( "sfx.doc", "SfxOleThumbnailProperty::ImplSave - invalid thumbnail property" );
         SetError( SVSTREAM_INVALID_ACCESS );
     }
 }
@@ -701,7 +701,7 @@ SfxOleBlobProperty::SfxOleBlobProperty( sal_Int32 nPropId,
 
 void SfxOleBlobProperty::ImplLoad( SvStream& )
 {
-    SAL_WARN( "sfx2.doc", "SfxOleBlobProperty::ImplLoad - not implemented" );
+    SAL_WARN( "sfx.doc", "SfxOleBlobProperty::ImplLoad - not implemented" );
     SetError( SVSTREAM_INVALID_ACCESS );
 }
 
@@ -710,7 +710,7 @@ void SfxOleBlobProperty::ImplSave( SvStream& rStrm )
     if (IsValid()) {
         rStrm.Write( mData.getConstArray(), mData.getLength() );
     } else {
-        SAL_WARN( "sfx2.doc", "SfxOleBlobProperty::ImplSave - invalid BLOB property" );
+        SAL_WARN( "sfx.doc", "SfxOleBlobProperty::ImplSave - invalid BLOB property" );
         SetError( SVSTREAM_INVALID_ACCESS );
     }
 }
@@ -1284,7 +1284,7 @@ const SvGlobalName& SfxOlePropertySet::GetSectionGuid( SfxOleSectionType eSectio
         case SECTION_GLOBAL:    return saGlobalGuid;
         case SECTION_BUILTIN:   return saBuiltInGuid;
         case SECTION_CUSTOM:    return saCustomGuid;
-        default:    SAL_WARN( "sfx2.doc", "SfxOlePropertySet::GetSectionGuid - unknown section type" );
+        default:    SAL_WARN( "sfx.doc", "SfxOlePropertySet::GetSectionGuid - unknown section type" );
     }
     return saEmptyGuid;
 }

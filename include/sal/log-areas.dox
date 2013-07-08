@@ -194,18 +194,18 @@ certain functionality.
 @li @c sdext.pdfimport.pdfparse
 @li @c sdext.presenter
 
-@section sfx2
+@section sfx
 
-@li @c sfx2
-@li @c sfx2.appl
-@li @c sfx2.bastyp
-@li @c sfx2.config
-@li @c sfx2.control
-@li @c sfx2.dialog
-@li @c sfx2.doc
-@li @c sfx2.notify
-@li @c sfx2.sidebar
-@li @c sfx2.view
+@li @c sfx
+@li @c sfx.appl
+@li @c sfx.bastyp
+@li @c sfx.config
+@li @c sfx.control
+@li @c sfx.dialog
+@li @c sfx.doc
+@li @c sfx.notify
+@li @c sfx.sidebar
+@li @c sfx.view
 
 @section slideshow
 

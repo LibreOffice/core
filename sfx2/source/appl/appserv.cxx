@@ -189,7 +189,7 @@ namespace
         }
         catch (const Exception & e)
         {
-            SAL_INFO( "sfx2.appl",
+            SAL_INFO( "sfx.appl",
                       "trying to load bibliography database, caught " << e.Message);
         }
     }
@@ -1094,7 +1094,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
             }
             catch( const ::com::sun::star::uno::Exception& )
             {
-                SAL_WARN( "sfx2.appl", "SfxApplication::OfaExec_Impl(SID_MORE_DICTIONARIES): caught an exception!" );
+                SAL_WARN( "sfx.appl", "SfxApplication::OfaExec_Impl(SID_MORE_DICTIONARIES): caught an exception!" );
             }
             break;
         }

@@ -77,11 +77,11 @@ std::vector<OUString> SfxContentHelper::GetResultSet( const OUString& rURL )
         }
         catch( const ucb::CommandAbortedException& )
         {
-            SAL_WARN( "sfx2.bastyp", "GetResultSet: CommandAbortedException" );
+            SAL_WARN( "sfx.bastyp", "GetResultSet: CommandAbortedException" );
         }
         catch( const uno::Exception& )
         {
-            SAL_WARN( "sfx2.bastyp", "GetResultSet: Any other exception" );
+            SAL_WARN( "sfx.bastyp", "GetResultSet: Any other exception" );
         }
 
 
@@ -106,17 +106,17 @@ std::vector<OUString> SfxContentHelper::GetResultSet( const OUString& rURL )
             }
             catch( const ucb::CommandAbortedException& )
             {
-                SAL_WARN( "sfx2.bastyp", "XContentAccess::next(): CommandAbortedException" );
+                SAL_WARN( "sfx.bastyp", "XContentAccess::next(): CommandAbortedException" );
             }
             catch( const uno::Exception& )
             {
-                SAL_WARN( "sfx2.bastyp", "XContentAccess::next(): Any other exception" );
+                SAL_WARN( "sfx.bastyp", "XContentAccess::next(): Any other exception" );
             }
         }
     }
     catch( const uno::Exception& e )
     {
-        SAL_WARN( "sfx2.bastyp", "GetResultSet: Any other exception: " << e.Message );
+        SAL_WARN( "sfx.bastyp", "GetResultSet: Any other exception: " << e.Message );
     }
 
     return aList;
@@ -232,7 +232,7 @@ bool SfxContentHelper::IsHelpErrorDocument( const OUString& rURL )
                       comphelper::getProcessComponentContext() );
         if ( !( aCnt.getPropertyValue( "IsErrorDocument" ) >>= bRet ) )
         {
-            SAL_WARN( "sfx2.bastyp", "Property 'IsErrorDocument' is missing" );
+            SAL_WARN( "sfx.bastyp", "Property 'IsErrorDocument' is missing" );
         }
     }
     catch( const uno::Exception& )
@@ -256,11 +256,11 @@ sal_Int64 SfxContentHelper::GetSize( const OUString& rContent )
     }
     catch( const ucb::CommandAbortedException& )
     {
-        SAL_WARN( "sfx2.bastyp", "CommandAbortedException" );
+        SAL_WARN( "sfx.bastyp", "CommandAbortedException" );
     }
     catch( const uno::Exception& )
     {
-        SAL_WARN( "sfx2.bastyp", "Any other exception" );
+        SAL_WARN( "sfx.bastyp", "Any other exception" );
     }
     return nSize;
 }

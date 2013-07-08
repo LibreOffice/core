@@ -443,7 +443,7 @@ void SfxDocTplService_Impl::init_Impl()
             m_xDocProps.set(document::DocumentProperties::create(
                         ::comphelper::getProcessComponentContext()));
         } catch (uno::RuntimeException const& e) {
-            SAL_WARN("sfx2.doc", "SfxDocTplService_Impl::init_Impl: "
+            SAL_WARN("sfx.doc", "SfxDocTplService_Impl::init_Impl: "
                 "cannot create DocumentProperties service:" << e.Message);
         }
 
@@ -476,7 +476,7 @@ void SfxDocTplService_Impl::init_Impl()
     }
     else
     {
-        SAL_WARN( "sfx2.doc", "init_Impl(): Could not create root" );
+        SAL_WARN( "sfx.doc", "init_Impl(): Could not create root" );
     }
 
     mbIsInitialized = bIsInitialized;
@@ -792,11 +792,11 @@ sal_Bool SfxDocTplService_Impl::createFolder( const OUString& rNewFolderURL,
         }
         catch( RuntimeException& )
         {
-            SAL_WARN( "sfx2.doc", "createFolder(): got runtime exception" );
+            SAL_WARN( "sfx.doc", "createFolder(): got runtime exception" );
         }
         catch( Exception& )
         {
-            SAL_WARN( "sfx2.doc", "createFolder(): Could not create new folder" );
+            SAL_WARN( "sfx.doc", "createFolder(): Could not create new folder" );
         }
     }
     else if ( bCreateParent )
@@ -996,10 +996,10 @@ sal_Bool SfxDocTplService_Impl::setProperty( Content& rContent,
                 }
                 catch( PropertyExistException& ) {}
                 catch( IllegalTypeException& ) {
-                    SAL_WARN( "sfx2.doc", "IllegalTypeException" );
+                    SAL_WARN( "sfx.doc", "IllegalTypeException" );
                 }
                 catch( IllegalArgumentException& ) {
-                    SAL_WARN( "sfx2.doc", "IllegalArgumentException" );
+                    SAL_WARN( "sfx.doc", "IllegalArgumentException" );
                 }
             }
         }
@@ -2416,7 +2416,7 @@ void SfxDocTplService_Impl::addHierGroup( GroupList_Impl& rList,
     }
     catch ( ContentCreationException& )
     {
-        SAL_WARN( "sfx2.doc", "addHierGroup: ContentCreationException" );
+        SAL_WARN( "sfx.doc", "addHierGroup: ContentCreationException" );
     }
     catch ( Exception& ) {}
 
@@ -2449,7 +2449,7 @@ void SfxDocTplService_Impl::addHierGroup( GroupList_Impl& rList,
                     sal_Bool bDocHasTitle = sal_False;
                     if( !getTitleFromURL( aTargetDir, aTmpTitle, aType, bDocHasTitle ) )
                     {
-                        SAL_WARN( "sfx2.doc", "addHierGroup(): template of alien format" );
+                        SAL_WARN( "sfx.doc", "addHierGroup(): template of alien format" );
                         continue;
                     }
 

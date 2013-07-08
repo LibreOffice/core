@@ -208,7 +208,7 @@ String GetSpecialCharsForEdit(Window* pParent, const Font& rFont)
 
 bool SfxApplication::Initialize_Impl()
 {
-    SAL_INFO( "sfx2.appl", "sfx2 (mb93783) ::SfxApplication::Initialize_Impl" );
+    SAL_INFO( "sfx.appl", "sfx2 (mb93783) ::SfxApplication::Initialize_Impl" );
 
 #ifdef TLX_VALIDATE
     StgIo::SetErrorLink( LINK( this, SfxStorageErrHdl, Error ) );

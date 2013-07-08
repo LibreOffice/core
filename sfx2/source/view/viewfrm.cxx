@@ -2693,7 +2693,7 @@ void SfxViewFrame::AddDispatchMacroToBasic_Impl( const OUString& sMacro )
 
         if(!xLibCont.is())
         {
-            SAL_WARN( "sfx2.view", "couldn't get access to the basic lib container. Adding of macro isn't possible." );
+            SAL_WARN( "sfx.view", "couldn't get access to the basic lib container. Adding of macro isn't possible." );
             return;
         }
 
@@ -3414,7 +3414,7 @@ bool SfxViewFrame::IsSidebarEnabled()
         try {
             bEnabled = officecfg::Office::Common::Misc::ExperimentalSidebar::get( xContext );
         } catch (const uno::Exception &) {
-            SAL_WARN("sfx2.view", "don't have experimental sidebar option installed");
+            SAL_WARN("sfx.view", "don't have experimental sidebar option installed");
         }
 
         // rip out the services from framework/ for good measure
@@ -3436,7 +3436,7 @@ bool SfxViewFrame::IsSidebarEnabled()
         }
         catch ( const uno::Exception &e )
         {
-            SAL_WARN( "sfx2.view", "Exception de-registering sidebar factories " << e.Message );
+            SAL_WARN( "sfx.view", "Exception de-registering sidebar factories " << e.Message );
         }
     }
 

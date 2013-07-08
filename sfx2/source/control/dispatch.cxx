@@ -1462,7 +1462,7 @@ void SfxDispatcher::_Update_Impl( sal_Bool bUIActive, sal_Bool bIsMDIApp, sal_Bo
         {
             sal_uInt32 nId = pIFace->GetChildWindowId(nNo);
             const SfxSlot *pSlot = pSlotPool->GetSlot( (sal_uInt16) nId );
-            SAL_WARN_IF( !pSlot, "sfx2.control", "Childwindow slot missing: " << nId );
+            SAL_WARN_IF( !pSlot, "sfx.control", "Childwindow slot missing: " << nId );
             if ( bReadOnlyShell )
             {
                 // only show ChildWindows if their slot is allowed for readonly documents
@@ -1659,7 +1659,7 @@ void SfxDispatcher::FlushImpl()
     for (sal_uInt16 n=0; n<SFX_OBJECTBAR_MAX; n++)
         pImp->aFixedObjBars[n].nResId = 0;
 
-    SAL_INFO("sfx2.control", "SfxDispatcher(" << this << ")::Flush() done");
+    SAL_INFO("sfx.control", "SfxDispatcher(" << this << ")::Flush() done");
 }
 
 //--------------------------------------------------------------------

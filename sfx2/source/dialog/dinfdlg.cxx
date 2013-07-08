@@ -424,13 +424,13 @@ void SfxDocumentInfoItem::UpdateDocumentInfo(
             }
             catch ( Exception& )
             {
-                SAL_WARN( "sfx2.dialog", "SfxDocumentInfoItem::updateDocumentInfo(): exception while adding custom properties" );
+                SAL_WARN( "sfx.dialog", "SfxDocumentInfoItem::updateDocumentInfo(): exception while adding custom properties" );
             }
         }
     }
     catch ( Exception& )
     {
-        SAL_WARN( "sfx2.dialog", "SfxDocumentInfoItem::updateDocumentInfo(): exception while removing custom properties" );
+        SAL_WARN( "sfx.dialog", "SfxDocumentInfoItem::updateDocumentInfo(): exception while removing custom properties" );
     }
 }
 
@@ -657,7 +657,7 @@ sal_Bool SfxDocumentDescPage::FillItemSet(SfxItemSet &rSet)
 
     if ( !pInfo )
     {
-        SAL_WARN( "sfx2.dialog", "SfxDocumentDescPage::FillItemSet(): no item found" );
+        SAL_WARN( "sfx.dialog", "SfxDocumentDescPage::FillItemSet(): no item found" );
         return sal_False;
     }
 

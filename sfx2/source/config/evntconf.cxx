@@ -209,7 +209,7 @@ uno::Any CreateEventData_Impl( const SvxMacro *pMacro )
         }
         else
         {
-            SAL_WARN( "sfx2.config", "CreateEventData_Impl(): ScriptType not supported!");
+            SAL_WARN( "sfx.config", "CreateEventData_Impl(): ScriptType not supported!");
         }
     }
     else
@@ -249,11 +249,11 @@ void PropagateEvent_Impl( SfxObjectShell *pDoc, OUString aEventName, const SvxMa
             }
             catch( const ::com::sun::star::lang::IllegalArgumentException& )
             {
-                SAL_WARN( "sfx2.config", "PropagateEvents_Impl: caught IllegalArgumentException" );
+                SAL_WARN( "sfx.config", "PropagateEvents_Impl: caught IllegalArgumentException" );
             }
             catch( const ::com::sun::star::container::NoSuchElementException& )
             {
-                SAL_WARN( "sfx2.config", "PropagateEvents_Impl: caught NoSuchElementException" );
+                SAL_WARN( "sfx.config", "PropagateEvents_Impl: caught NoSuchElementException" );
             }
         }
         else {

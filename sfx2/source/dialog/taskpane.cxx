@@ -664,7 +664,7 @@ namespace sfx2
             const CustomToolPanel* pCustomPanel = dynamic_cast< const CustomToolPanel* >( pPanel.get() );
             if ( !pCustomPanel )
             {
-                SAL_WARN( "sfx2.dialog", "ModuleTaskPane_Impl::GetPanelPos: illegal panel implementation!" );
+                SAL_WARN( "sfx.dialog", "ModuleTaskPane_Impl::GetPanelPos: illegal panel implementation!" );
                 continue;
             }
 

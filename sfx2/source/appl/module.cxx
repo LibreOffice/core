@@ -197,7 +197,7 @@ void SfxModule::RegisterChildWindow(SfxChildWinFactory *pFact)
         if (pFact->nId ==  (*pImpl->pFactArr)[nFactory]->nId)
         {
             pImpl->pFactArr->erase( pImpl->pFactArr->begin() + nFactory );
-            SAL_WARN("sfx2.appl", "ChildWindow registered multiple times!");
+            SAL_WARN("sfx.appl", "ChildWindow registered multiple times!");
             return;
         }
     }
@@ -391,7 +391,7 @@ FieldUnit SfxModule::GetCurrentFieldUnit()
             eUnit = (FieldUnit)( (SfxUInt16Item*)pItem )->GetValue();
     }
     else
-        SAL_WARN( "sfx2.appl", "GetModuleFieldUnit(): no module found" );
+        SAL_WARN( "sfx.appl", "GetModuleFieldUnit(): no module found" );
     return eUnit;
 }
 

@@ -864,7 +864,7 @@ void SfxApplication::SetOptions(const SfxItemSet &rSet)
                     case SvtPathOptions::PATH_TEMPLATE:     aPathOptions.SetTemplatePath( sValue );break;
                     case SvtPathOptions::PATH_USERCONFIG:   aPathOptions.SetUserConfigPath( sValue );break;
                     case SvtPathOptions::PATH_WORK:         aPathOptions.SetWorkPath( sValue );break;
-                    default: SAL_WARN( "sfx2.appl", "SfxApplication::SetOptions_Impl() Invalid path number found for set directories!" );
+                    default: SAL_WARN( "sfx.appl", "SfxApplication::SetOptions_Impl() Invalid path number found for set directories!" );
                 }
             }
         }

@@ -188,7 +188,7 @@ sal_Bool GetHelpAnchor_Impl( const OUString& _rURL, OUString& _rAnchor )
         }
         else
         {
-            SAL_WARN( "sfx2.appl", "Property 'AnchorName' is missing" );
+            SAL_WARN( "sfx.appl", "Property 'AnchorName' is missing" );
         }
     }
     catch (const ::com::sun::star::uno::Exception&)
@@ -282,7 +282,7 @@ OUString getDefaultModule_Impl()
         sDefaultModule = "sdatabase";
     else
     {
-        SAL_WARN( "sfx2.appl", "getDefaultModule_Impl(): no module installed" );
+        SAL_WARN( "sfx.appl", "getDefaultModule_Impl(): no module installed" );
     }
     return sDefaultModule;
 }
@@ -307,7 +307,7 @@ OUString getCurrentModuleIdentifier_Impl()
         }
         catch (const Exception&)
         {
-            SAL_WARN( "sfx2.appl", "SfxHelp::getCurrentModuleIdentifier_Impl(): exception of XModuleManager::identify()" );
+            SAL_WARN( "sfx.appl", "SfxHelp::getCurrentModuleIdentifier_Impl(): exception of XModuleManager::identify()" );
         }
     }
 
@@ -338,7 +338,7 @@ OUString SfxHelp::GetHelpModuleName_Impl()
         }
         catch (const Exception&)
         {
-            SAL_WARN( "sfx2.appl", "SfxHelp::GetHelpModuleName_Impl(): exception of XNameAccess::getByName()" );
+            SAL_WARN( "sfx.appl", "SfxHelp::GetHelpModuleName_Impl(): exception of XNameAccess::getByName()" );
         }
     }
 
