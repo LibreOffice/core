@@ -158,6 +158,7 @@ namespace drawinglayer
                 const basegfx::B2DPoint& rStart,
                 bool bUseUnitCoordinates,
                 SpreadMethod aSpreadMethod = Spread_pad);
+            virtual ~SvgGradientHelper();
 
             /// data read access
             const basegfx::B2DHomMatrix& getGradientTransform() const { return maGradientTransform; }
@@ -168,7 +169,7 @@ namespace drawinglayer
             SpreadMethod getSpreadMethod() const { return maSpreadMethod; }
 
             /// compare operator
-            virtual bool operator==(const SvgGradientHelper& rSvgGradientHelper) const;
+            bool operator==(const SvgGradientHelper& rSvgGradientHelper) const;
         };
     } // end of namespace primitive2d
 } // end of namespace drawinglayer

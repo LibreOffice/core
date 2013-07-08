@@ -304,6 +304,10 @@ namespace drawinglayer
         {
         }
 
+        SvgGradientHelper::~SvgGradientHelper()
+        {
+        }
+
         bool SvgGradientHelper::operator==(const SvgGradientHelper& rSvgGradientHelper) const
         {
             const SvgGradientHelper& rCompare = static_cast< const SvgGradientHelper& >(rSvgGradientHelper);
