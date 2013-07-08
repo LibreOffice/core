@@ -732,8 +732,6 @@ sal_Bool TGAReader::ImplReadPalette()
             mpFileHeader->nColorMapEntrySize = 0x3f;    // patch for the following switch routine
         }
         mpColorMap = new sal_uInt32[ nColors ];     // we will always index dwords
-        if ( mpColorMap == sal_False )
-            return sal_False;                       // out of memory %&!$&/!"�$
 
         switch( mpFileHeader->nColorMapEntrySize )
         {
