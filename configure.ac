@@ -990,11 +990,6 @@ AC_ARG_ENABLE(headless,
         server usage. Work in progress, use only if you are hacking on
         it. Not related to the --headless option.]), ,)
 
-AC_ARG_ENABLE(rpath,
-    AS_HELP_STRING([--disable-rpath],
-        [Disable the use of relative paths in shared libraries.]),
-,)
-
 AC_ARG_ENABLE(randr,
     AS_HELP_STRING([--disable-randr],
         [Disable RandR support in the vcl project.]),
