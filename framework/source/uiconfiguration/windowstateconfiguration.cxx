@@ -125,22 +125,14 @@ namespace framework
 //  Configuration access class for WindowState supplier implementation
 //*****************************************************************************************************************
 
-class ConfigurationAccess_WindowState : // interfaces
-                                        public  XTypeProvider                            ,
-                                        public  XNameContainer                           ,
-                                        public  XContainerListener                       ,
-                                        // baseclasses
-                                        // Order is necessary for right initialization!
+class ConfigurationAccess_WindowState : // Order is necessary for right initialization!
                                         private ThreadHelpBase                           ,
-                                        public  ::cppu::OWeakObject
+                                        // interfaces
+                                        public  ::cppu::WeakImplHelper2< XNameContainer, XContainerListener >
 {
     public:
                                   ConfigurationAccess_WindowState( const OUString& aWindowStateConfigFile, const Reference< XComponentContext >& rxContext );
         virtual                   ~ConfigurationAccess_WindowState();
-
-        //  XInterface, XTypeProvider
-        FWK_DECLARE_XINTERFACE
-        FWK_DECLARE_XTYPEPROVIDER
 
         // XNameAccess
         virtual ::com::sun::star::uno::Any SAL_CALL getByName( const OUString& aName )
@@ -255,28 +247,6 @@ class ConfigurationAccess_WindowState : // interfaces
 };
 
 //*****************************************************************************************************************
-//  XInterface, XTypeProvider
-//*****************************************************************************************************************
-DEFINE_XINTERFACE_7     (   ConfigurationAccess_WindowState                                                   ,
-                            OWeakObject                                                                     ,
-                            DIRECT_INTERFACE ( css::container::XNameContainer                               ),
-                            DIRECT_INTERFACE ( css::container::XContainerListener                           ),
-                            DIRECT_INTERFACE ( css::lang::XTypeProvider                                     ),
-                            DERIVED_INTERFACE( css::container::XElementAccess, css::container::XNameAccess  ),
-                            DERIVED_INTERFACE( css::container::XNameAccess, css::container::XNameReplace    ),
-                            DERIVED_INTERFACE( css::container::XNameReplace, css::container::XNameContainer ),
-                            DERIVED_INTERFACE( css::lang::XEventListener, XContainerListener                )
-                        )
-
-DEFINE_XTYPEPROVIDER_7  (   ConfigurationAccess_WindowState         ,
-                            css::container::XNameContainer          ,
-                            css::container::XNameReplace            ,
-                            css::container::XNameAccess             ,
-                            css::container::XElementAccess          ,
-                            css::container::XContainerListener      ,
-                            css::lang::XEventListener               ,
-                            css::lang::XTypeProvider
-                        )
 
 ConfigurationAccess_WindowState::ConfigurationAccess_WindowState( const OUString& aModuleName, const Reference< XComponentContext >& rxContext ) :
     ThreadHelpBase(),
