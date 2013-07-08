@@ -25,33 +25,12 @@
 
 FILE* g_binary_out=stderr;
 
-#ifndef SYSTEM_POPPLER
-static char ownerPassword[33] = "\001";
-static char userPassword[33]  = "\001";
-static char outputFile[256]   = "\001";
-
-static ArgDesc argDesc[] = {
-  {(char*)"-f",          argString,      outputFile,     sizeof(outputFile),
-   (char*)"output file for binary streams"},
-  {(char*)"-opw",        argString,      ownerPassword,  sizeof(ownerPassword),
-   (char*)"owner password (for encrypted files)"},
-  {(char*)"-upw",        argString,      userPassword,   sizeof(userPassword),
-   (char*)"user password (for encrypted files)"},
-  {NULL, argString, NULL, 0, NULL }
-};
-#else
 static const char *ownerPassword = "\001";
 static const char *userPassword  = "\001";
 static const char *outputFile   = "\001";
-#endif
 
 int main(int argc, char **argv)
 {
-#ifndef SYSTEM_POPPLER
-    // parse args; initialize to defaults
-    if( !parseArgs(argDesc, &argc, argv) )
-        return 1;
-#else
     int k = 0;
     while (k < argc)
     {
@@ -78,19 +57,14 @@ int main(int argc, char **argv)
         }
     ++k;
     }
-#endif
 
     if( argc != 3 )
         return 1;
 
     // read config file
-    globalParams = new GlobalParams(
-#ifndef SYSTEM_POPPLER
-        (char*)""
-#endif
-    );
+    globalParams = new GlobalParams();
     globalParams->setErrQuiet(gTrue);
-#if !defined(SYSTEM_POPPLER) || defined(_MSC_VER)
+#if defined(_MSC_VER)
     globalParams->setupBaseFonts(NULL);
 #endif
 

@@ -1,0 +1,33 @@
+--- poppler-0.22.5/poppler/Catalog.cc	2013-06-09 12:16:12.000000000 +0200
++++ poppler-0.22.5/poppler/Catalog.cc	2013-07-08 15:32:44.310309356 +0200
+@@ -40,6 +40,14 @@
+ 
+ #include <stddef.h>
+ #include <stdlib.h>
++#ifdef WIN32
++#  ifdef __MINGW32__
++#    define _SNPRINTF_DLLIMPORT
++#  endif
++#  ifndef _SNPRINTF_H
++#    include <systools/win32/snprintf.h>
++#  endif
++#endif
+ #include "goo/gmem.h"
+ #include "Object.h"
+ #include "PDFDoc.h"
+--- poppler-0.22.5/poppler/GlobalParams.cc	2013-03-25 22:48:34.000000000 +0100
++++ poppler-0.22.5/poppler/GlobalParams.cc	2013-07-08 15:32:28.549675447 +0200
+@@ -57,6 +57,12 @@
+ #ifdef _WIN32
+ #  include <shlobj.h>
+ #  include <mbstring.h>
++#  ifdef __MINGW32__
++#    define _SNPRINTF_DLLIMPORT
++#  endif
++#  ifndef _SNPRINTF_H
++#    include <systools/win32/snprintf.h>
++#  endif
+ #endif
+ #include "goo/gmem.h"
+ #include "goo/GooString.h"
+Only in poppler-0.22.5: poppler-snprintf.patch.1
