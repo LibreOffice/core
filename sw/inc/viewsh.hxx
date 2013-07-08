@@ -109,7 +109,7 @@ class SW_DLLPUBLIC ViewShell : public Ring
 
 
     // Set SwVisArea in order to enable clean formatting before printing.
-    friend void SetSwVisArea( ViewShell *pSh, const SwRect &, sal_Bool bPDFExport = sal_False );
+    friend void SetSwVisArea( ViewShell *pSh, const SwRect & );
 
     static BitmapEx*    mpReplaceBmp;    ///< replaced display of still loaded images
     static BitmapEx*    mpErrorBmp;      ///< error display of missed images
