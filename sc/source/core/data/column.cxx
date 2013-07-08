@@ -2293,7 +2293,6 @@ bool ScColumn::UpdateReference(
     }
 
     UpdateRefOnNonCopy aHandler(nCol, nTab, rRange, nDx, nDy, nDz, eUpdateRefMode, pUndoDoc);
-    FormulaCellsUndecided(0, MAXROW);
     sc::ProcessFormula(maCells, aHandler);
     return aHandler.isUpdated();
 }
