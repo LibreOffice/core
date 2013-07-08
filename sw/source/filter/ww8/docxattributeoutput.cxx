@@ -338,6 +338,14 @@ void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pT
         m_rExport.WriteText( );
         m_pSerializer->endElementNS( XML_w, XML_txbxContent );
         m_pSerializer->endElementNS( XML_v, XML_textbox );
+
+        if (m_pFlyWrapAttrList)
+        {
+            XFastAttributeListRef xFlyWrapAttrList(m_pFlyWrapAttrList);
+            m_pFlyWrapAttrList = NULL;
+            m_pSerializer->singleElementNS(XML_w10, XML_wrap, xFlyWrapAttrList);
+        }
+
         m_pSerializer->endElementNS( XML_v, XML_rect );
         m_pSerializer->endElementNS( XML_w, XML_pict );
         m_pSerializer->endElementNS( XML_w, XML_r );
@@ -4463,6 +4471,40 @@ void DocxAttributeOutput::FormatSurround( const SwFmtSurround& rSurround )
 {
     if (m_bTextFrameSyntax)
     {
+        OString sType, sSide;
+        switch (rSurround.GetSurround())
+        {
+            case SURROUND_NONE:
+                sType = "topAndBottom";
+                break;
+            case SURROUND_PARALLEL:
+                sType = "square";
+                break;
+            case SURROUND_IDEAL:
+                sType = "square";
+                sSide = "largest";
+                break;
+            case SURROUND_LEFT:
+                sType = "square";
+                sSide = "left";
+                break;
+            case SURROUND_RIGHT:
+                sType = "square";
+                sSide = "right";
+                break;
+            case SURROUND_THROUGHT:
+                /* empty type and side means throught */
+            default:
+                break;
+        }
+        if (!sType.isEmpty() || !sSide.isEmpty())
+        {
+            m_pFlyWrapAttrList = m_pSerializer->createAttrList();
+            if (!sType.isEmpty())
+                m_pFlyWrapAttrList->add(XML_type, sType);
+            if (!sSide.isEmpty())
+                m_pFlyWrapAttrList->add(XML_side, sSide);
+        }
     }
     else if ( m_rExport.bOutFlyFrmAttrs )
     {
@@ -4860,6 +4902,7 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, FSHelperPtr pSeri
       m_pHyperlinkAttrList( NULL ),
       m_pFlyAttrList( NULL ),
       m_pFlyFillAttrList( NULL ),
+      m_pFlyWrapAttrList( NULL ),
       m_pTextboxAttrList( NULL ),
       m_pFlyFrameSize(0),
       m_pFootnotesList( new ::docx::FootnotesList() ),
