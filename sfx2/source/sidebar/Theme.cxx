@@ -399,28 +399,32 @@ void Theme::UpdateTheme (void)
         */
 
         // Gradient style
+        Color aGradientStop2 (aBaseBackgroundColor);
+        aGradientStop2.IncreaseLuminance(17);
+        Color aToolBoxBorderColor (aBaseBackgroundColor);
+        aToolBoxBorderColor.DecreaseLuminance(12);
         setPropertyValue(
             maPropertyIdToNameMap[Paint_ToolBoxBackground],
             Any(Tools::VclToAwtGradient(Gradient(
                         GradientStyle_LINEAR,
-                        Color(0xf2f2f2),
-                        Color(0xfefefe)
+                        aBaseBackgroundColor.GetRGBColor(),
+                        aGradientStop2.GetRGBColor()
                         ))));
         setPropertyValue(
             maPropertyIdToNameMap[Paint_ToolBoxBorderTopLeft],
             mbIsHighContrastMode
                 ? Any(util::Color(sal_uInt32(0x00ff00)))
-                : Any(util::Color(sal_uInt32(0xf2f2f2))));
+                : Any(util::Color(aToolBoxBorderColor.GetRGBColor())));
         setPropertyValue(
             maPropertyIdToNameMap[Paint_ToolBoxBorderCenterCorners],
             mbIsHighContrastMode
                 ? Any(util::Color(sal_uInt32(0x00ff00)))
-                : Any(util::Color(sal_uInt32(0xf2f2f2))));
+                : Any(util::Color(aToolBoxBorderColor.GetRGBColor())));
         setPropertyValue(
             maPropertyIdToNameMap[Paint_ToolBoxBorderBottomRight],
             mbIsHighContrastMode
                 ? Any(util::Color(sal_uInt32(0x00ff00)))
-                : Any(util::Color(sal_uInt32(0xf2f2f2))));
+                : Any(util::Color(aToolBoxBorderColor.GetRGBColor())));
         setPropertyValue(
             maPropertyIdToNameMap[Rect_ToolBoxPadding],
             Any(awt::Rectangle(2,2,2,2)));
