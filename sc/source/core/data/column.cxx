@@ -1257,6 +1257,40 @@ class CopyToClipHandler
             maDestPos.miCellTextAttrPos, nRow, aAttrs.begin(), aAttrs.end());
     }
 
+    void groupFormulaCells(std::vector<ScFormulaCell*>& rCells)
+    {
+        if (rCells.empty())
+            return;
+
+        std::vector<ScFormulaCell*>::iterator it = rCells.begin(), itEnd = rCells.end();
+        ScFormulaCell* pPrev = *it;
+        ScFormulaCell* pCur = NULL;
+        for (++it; it != itEnd; ++it, pPrev = pCur)
+        {
+            pCur = *it;
+            ScFormulaCell::CompareState eState = pPrev->CompareByTokenArray(*pPrev);
+            if (eState == ScFormulaCell::NotEqual)
+                continue;
+
+            ScFormulaCellGroupRef xGroup = pPrev->GetCellGroup();
+            if (xGroup)
+            {
+                // Extend the group.
+                ++xGroup->mnLength;
+                pCur->SetCellGroup(xGroup);
+                continue;
+            }
+
+            // Create a new group.
+            xGroup.reset(new ScFormulaCellGroup);
+            xGroup->mnStart = pPrev->aPos.Row();
+            xGroup->mnLength = 2;
+            xGroup->mbInvariant = (eState == ScFormulaCell::EqualInvariant);
+            pPrev->SetCellGroup(xGroup);
+            pCur->SetCellGroup(xGroup);
+        }
+    }
+
 public:
     CopyToClipHandler(const ScColumn& rSrcCol, ScColumn& rDestCol, sc::ColumnBlockPosition* pDestPos) :
         mrSrcCol(rSrcCol), mrDestCol(rDestCol), mpDestPos(pDestPos)
@@ -1335,6 +1369,9 @@ public:
 
                     aCloned.push_back(new ScFormulaCell(rOld, mrDestCol.GetDoc(), aDestPos));
                 }
+
+                // Group the cloned formula cells.
+                groupFormulaCells(aCloned);
 
                 maDestPos.miCellPos = mrDestCol.GetCellStore().set(
                     maDestPos.miCellPos, nTopRow, aCloned.begin(), aCloned.end());

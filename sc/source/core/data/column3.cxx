@@ -897,6 +897,7 @@ class CopyCellsFromClipHandler
     SCCOL mnCol;
     long mnRowOffset;
     sc::ColumnBlockPosition maDestBlockPos;
+    sc::ColumnBlockPosition* mpDestBlockPos; // to save it for next iteration.
 
     bool isDateCell(SCROW nSrcRow) const
     {
@@ -928,13 +929,20 @@ public:
         mrDestCol(rDestCol),
         mnTab(nDestTab),
         mnCol(nDestCol),
-        mnRowOffset(nRowOffset)
+        mnRowOffset(nRowOffset),
+        mpDestBlockPos(mrCxt.getBlockPosition(nDestTab, nDestCol))
     {
-        sc::ColumnBlockPosition* p = mrCxt.getBlockPosition(nDestTab, nDestCol);
-        if (p)
-            maDestBlockPos = *p;
+        if (mpDestBlockPos)
+            maDestBlockPos = *mpDestBlockPos;
         else
             mrDestCol.InitBlockPosition(maDestBlockPos);
+    }
+
+    ~CopyCellsFromClipHandler()
+    {
+        if (mpDestBlockPos)
+            // Don't forget to save this to the context!
+            *mpDestBlockPos = maDestBlockPos;
     }
 
     void operator() (const sc::CellStoreType::value_type& node, size_t nOffset, size_t nDataSize)
