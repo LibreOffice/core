@@ -4673,9 +4673,6 @@ static void lcl_PaintLeftRightLine( const bool         _bLeft,
     {
         pLeftRightBorder = bR2L ? rBox.GetLeft() : rBox.GetRight();
     }
-    // OD 06.05.2003 #107169# - init boolean indicating printer output device.
-    const bool bPrtOutputDev =
-            ( OUTDEV_PRINTER == pGlobalShell->GetOut()->GetOutDevType() );
 
     if ( !pLeftRightBorder )
     {
@@ -4694,9 +4691,7 @@ static void lcl_PaintLeftRightLine( const bool         _bLeft,
                                       (aRect.*_rRectFn->fnGetWidth)() );
     }
 
-    const sal_Bool bCnt = _rFrm.IsCntntFrm();
-
-    if ( bCnt )
+    if ( _rFrm.IsCntntFrm() )
     {
         ::lcl_ExtendLeftAndRight( aRect, _rFrm, _rAttrs, _rRectFn );
 
@@ -4707,6 +4702,10 @@ static void lcl_PaintLeftRightLine( const bool         _bLeft,
 
     if ( !pLeftRightBorder->GetInWidth() )
     {
+        // OD 06.05.2003 #107169# - init boolean indicating printer output device.
+        const bool bPrtOutputDev =
+                ( OUTDEV_PRINTER == pGlobalShell->GetOut()->GetOutDevType() );
+
         // OD 06.05.2003 #107169# - add 6th parameter
         ::lcl_SubTopBottom( aRect, rBox, _rAttrs, _rFrm, _rRectFn, bPrtOutputDev );
     }
@@ -4730,8 +4729,7 @@ static void lcl_PaintTopBottomLine( const bool         _bTop,
 {
     const SvxBoxItem& rBox = _rAttrs.GetBox();
     const SvxBorderLine* pTopBottomBorder = 0;
-    const SvxBorderLine* pLeftBorder = rBox.GetLeft();
-    const SvxBorderLine* pRightBorder = rBox.GetRight();
+
     if ( _bTop )
     {
         pTopBottomBorder = rBox.GetTop();
@@ -4761,7 +4759,7 @@ static void lcl_PaintTopBottomLine( const bool         _bTop,
     if ( lcl_GetLineWidth( pTopBottomBorder ) > 0 )
     {
         lcl_MakeBorderLine(
-            aRect, false, _bTop, *pTopBottomBorder, pLeftBorder, pRightBorder);
+            aRect, false, _bTop, *pTopBottomBorder, rBox.GetLeft(), rBox.GetRight());
     }
 }
 
