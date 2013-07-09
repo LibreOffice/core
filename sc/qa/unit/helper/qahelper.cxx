@@ -7,7 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#undef SC_DLLIMPLEMENTATION
 #include "qahelper.hxx"
 #include "csv_handler.hxx"
 
@@ -166,6 +165,9 @@ const FileFormat* ScBootstrapFixture::getFileFormats()
 {
     return aFileFormats;
 }
+
+ScBootstrapFixture::ScBootstrapFixture( const OUString& rsBaseString ) : m_aBaseString( rsBaseString ) {}
+ScBootstrapFixture::~ScBootstrapFixture() {}
 
 void ScBootstrapFixture::createFileURL(
     const OUString& aFileBase, const OUString& aFileExtension, OUString& rFilePath)

@@ -141,7 +141,8 @@ protected:
 public:
     static const FileFormat* getFileFormats();
 
-    ScBootstrapFixture( const OUString& rsBaseString ) : m_aBaseString( rsBaseString ) {}
+    ScBootstrapFixture( const OUString& rsBaseString );
+    ~ScBootstrapFixture();
 
     void createFileURL(const OUString& aFileBase, const OUString& aFileExtension, OUString& rFilePath);
 
