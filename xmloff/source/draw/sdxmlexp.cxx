@@ -459,11 +459,8 @@ void SAL_CALL SdXMLExport::setSourceDocument( const Reference< lang::XComponent 
         xMapper = new XMLPropertySetMapper((XMLPropertyMapEntry*)aXMLSDPresPageProps, aFactoryRef);
 
         mpPresPagePropsMapper = new XMLPageExportPropertyMapper( xMapper, *this  );
-        if(mpPresPagePropsMapper)
-        {
-            // set lock to avoid deletion
-            mpPresPagePropsMapper->acquire();
-        }
+        // set lock to avoid deletion
+        mpPresPagePropsMapper->acquire();
     }
 
     // add family name
