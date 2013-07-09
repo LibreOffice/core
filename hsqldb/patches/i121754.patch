@@ -53,30 +53,6 @@ diff -urbwB ext_sources/hsqldb/build/build.xml ext_sources/hsqldb_1_8_0_11/build
          <arg file="${src}/org/hsqldb/lib/java/JavaSystem.java"/>
          <arg file="${src}/org/hsqldb/lib/HsqlTimer.java"/>
          <arg file="${src}/org/hsqldb/jdbc/jdbcBlob.java"/>
-diff -urbwB ext_sources/hsqldb/index.html ext_sources/hsqldb_1_8_0_11/index.html
---- misc/hsqldb/index.html	2008-06-01 15:32:15.000000000 +0200
-+++ misc/build/hsqldb/index.html	2013-07-05 23:37:19.000000000 +0200
-@@ -14,7 +14,7 @@
-   new features and improvements. There are quite a large number of changes and 
-   new features compared to 1.7.1. Please read the documentation for details. Please 
-   also check the web site at <a href="http://hsqldb.org/" target="_top">http://hsqldb.org</a>&nbsp;periodically 
--  for any release updates. This point release 1.8.0.10 features many bug fixes 
-+  for any release updates. This point release 1.8.0.11 features many bug fixes
-   introduced since the original release of 1.8.0 in June 2005.</p>
- <p>This download contains the following files and directories: </p>
- 
-diff -urbwB ext_sources/hsqldb/readme.txt ext_sources/hsqldb_1_8_0_11/readme.txt
---- misc/hsqldb/readme.txt	2008-06-01 15:32:31.000000000 +0200
-+++ misc/build/hsqldb/readme.txt	2013-07-05 23:37:49.000000000 +0200
-@@ -1,5 +1,6 @@
- Readme File
--June 2008
--This package contains HSQLDB 1.8.0.10
-+June 2013
-+This package contains HSQLDB 1.8.0.11 
-+Thie version is based on version 1.8.0.10 and includes minor patches added by OpenOffice. It compiles with Java 7
- 
- HSQLDB is a relational database engine and a set of tools written in Java.The file index.html in this directory contains the list of directories with their contents.Documentation and license information can be found in the /doc directory.Project home page: http://hsqldb.orgPlease check the site periodically for updated versions.
 diff -urbwB ext_sources/hsqldb/src/org/hsqldb/Expression.java ext_sources/hsqldb_1_8_0_11/src/org/hsqldb/Expression.java
 --- misc/hsqldb/src/org/hsqldb/Expression.java	2008-05-27 17:15:05.000000000 +0200
 +++ misc/build/hsqldb/src/org/hsqldb/Expression.java	2013-07-05 23:40:51.000000000 +0200
@@ -452,42 +428,3 @@ diff -urbwB ext_sources/hsqldb/src/org/hsqldb/TableWorks.java ext_sources/hsqldb
              table.resetDefaultsFlag();
  
              return;
-diff -urbwB ext_sources/hsqldb/src/org/hsqldb/util/DatabaseManager.java ext_sources/hsqldb_1_8_0_11/src/org/hsqldb/util/DatabaseManager.java
---- misc/hsqldb/src/org/hsqldb/util/DatabaseManager.java	2008-03-17 17:26:48.000000000 +0100
-+++ misc/build/hsqldb/src/org/hsqldb/util/DatabaseManager.java	2013-07-06 00:01:06.000000000 +0200
-@@ -124,13 +124,13 @@
-         "See the forums, mailing lists, and HSQLDB User Guide\n"
-         + "at http://hsqldb.org.\n\n"
-         + "Please paste the following version identifier with any\n"
--        + "problem reports or help requests:  $Revision: 1.37 $"
-+        + "problem reports or help requests:  $Revision: 1.33 $"
-         + (TT_AVAILABLE ? ""
-                         : ("\n\nTransferTool classes are not in CLASSPATH.\n"
-                            + "To enable the Tools menu, add 'transfer.jar' to your class path."));
-     ;
-     private static final String ABOUT_TEXT =
--        "$Revision: 1.37 $ of DatabaseManagerSwing\n\n"
-+        "$Revision: 1.33 $ of DatabaseManagerSwing\n\n"
-         + "Copyright (c) 1995-2000, The Hypersonic SQL Group.\n"
-         + "Copyright (c) 2001-2007, The HSQL Development Group.\n"
-         + "http://hsqldb.org  (User Guide available at this site).\n\n\n"
-diff -urbwB ext_sources/hsqldb/src/org/hsqldb/util/DatabaseManagerSwing.java ext_sources/hsqldb_1_8_0_11/src/org/hsqldb/util/DatabaseManagerSwing.java
---- misc/hsqldb/src/org/hsqldb/util/DatabaseManagerSwing.java	2008-03-19 12:52:12.000000000 +0100
-+++ misc/build/hsqldb/src/org/hsqldb/util/DatabaseManagerSwing.java	2013-07-06 00:01:34.000000000 +0200
-@@ -265,14 +265,14 @@
-         "See the forums, mailing lists, and HSQLDB User Guide\n"
-         + "at http://hsqldb.org.\n\n"
-         + "Please paste the following version identifier with any\n"
--        + "problem reports or help requests:  $Revision: 1.80 $"
-+        + "problem reports or help requests:  $Revision: 1.79 $"
-         + (TT_AVAILABLE ? ""
-                         : ("\n\nTransferTool classes are not in CLASSPATH.\n"
-                            + "To enable the Tools menu, add 'transfer.jar' "
-                            + "to your class path."));
-     ;
-     private static final String ABOUT_TEXT =
--        "$Revision: 1.80 $ of DatabaseManagerSwing\n\n"
-+        "$Revision: 1.79 $ of DatabaseManagerSwing\n\n"
-         + "Copyright (c) 1995-2000, The Hypersonic SQL Group.\n"
-         + "Copyright (c) 2001-2007, The HSQL Development Group.\n"
-         + "http://hsqldb.org  (User Guide available at this site).\n\n\n"
