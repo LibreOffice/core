@@ -1005,7 +1005,16 @@ NumericBox::NumericBox( Window* pParent, const ResId& rResId ) :
 
 Size NumericBox::CalcMinimumSize() const
 {
-    return calcMinimumSize(*this, *this);
+    Size aRet(calcMinimumSize(*this, *this));
+
+    if (IsDropDownBox())
+    {
+        Size aComboSugg(ComboBox::CalcMinimumSize());
+        aRet.Width() = std::max(aRet.Width(), aComboSugg.Width());
+        aRet.Height() = std::max(aRet.Height(), aComboSugg.Height());
+    }
+
+    return aRet;
 }
 
 // -----------------------------------------------------------------------
@@ -1948,7 +1957,16 @@ MetricBox::MetricBox( Window* pParent, const ResId& rResId ) :
 
 Size MetricBox::CalcMinimumSize() const
 {
-    return calcMinimumSize(*this, *this);
+    Size aRet(calcMinimumSize(*this, *this));
+
+    if (IsDropDownBox())
+    {
+        Size aComboSugg(ComboBox::CalcMinimumSize());
+        aRet.Width() = std::max(aRet.Width(), aComboSugg.Width());
+        aRet.Height() = std::max(aRet.Height(), aComboSugg.Height());
+    }
+
+    return aRet;
 }
 
 // -----------------------------------------------------------------------
