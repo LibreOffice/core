@@ -1041,7 +1041,9 @@ void VclGrid::setAllocation(const Size& rAllocation)
         calcMaxs(A, aWidths, aHeights);
     }
 
-    long nAvailableWidth = rAllocation.Width() - (get_column_spacing() * nMaxX);
+    long nAvailableWidth = rAllocation.Width();
+    if (nMaxX)
+        nAvailableWidth -= get_column_spacing() * (nMaxX - 1);
     if (get_column_homogeneous())
     {
         for (sal_Int32 x = 0; x < nMaxX; ++x)
@@ -1071,7 +1073,9 @@ void VclGrid::setAllocation(const Size& rAllocation)
         }
     }
 
-    long nAvailableHeight = rAllocation.Height() - (get_row_spacing() * nMaxY);
+    long nAvailableHeight = rAllocation.Height();
+    if (nMaxY)
+        nAvailableHeight -= get_row_spacing() * (nMaxY - 1);
     if (get_row_homogeneous())
     {
         for (sal_Int32 y = 0; y < nMaxY; ++y)
