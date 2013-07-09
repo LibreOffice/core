@@ -839,7 +839,7 @@ void OSQLParser::killThousandSeparator(OSQLParseNode* pLiteral)
         }
 }
 // -----------------------------------------------------------------------------
-OSQLParseNode* OSQLParser::convertNode(sal_Int32 nType,OSQLParseNode*& pLiteral)
+OSQLParseNode* OSQLParser::convertNode(sal_Int32 nType,OSQLParseNode*const& pLiteral)
 {
     if ( !pLiteral )
         return NULL;
@@ -957,7 +957,7 @@ OSQLParseNode* OSQLParser::convertNode(sal_Int32 nType,OSQLParseNode*& pLiteral)
     return pReturn;
 }
 // -----------------------------------------------------------------------------
-sal_Int16 OSQLParser::buildPredicateRule(OSQLParseNode*& pAppend,OSQLParseNode* pLiteral,OSQLParseNode*& pCompare,OSQLParseNode* pLiteral2)
+sal_Int16 OSQLParser::buildPredicateRule(OSQLParseNode*& pAppend,OSQLParseNode* const pLiteral,OSQLParseNode*const & pCompare,OSQLParseNode* pLiteral2)
 {
     OSL_ENSURE(inPredicateCheck(),"Only in predicate check allowed!");
     sal_Int16 nErg = 0;
@@ -986,7 +986,7 @@ sal_Int16 OSQLParser::buildPredicateRule(OSQLParseNode*& pAppend,OSQLParseNode* 
     return nErg;
 }
 // -----------------------------------------------------------------------------
-sal_Int16 OSQLParser::buildLikeRule(OSQLParseNode*& pAppend, OSQLParseNode*& pLiteral, const OSQLParseNode* pEscape)
+sal_Int16 OSQLParser::buildLikeRule(OSQLParseNode* const& pAppend, OSQLParseNode*& pLiteral, const OSQLParseNode* pEscape)
 {
     sal_Int16 nErg = 0;
     sal_Int32 nType = 0;

@@ -1,3 +1,4 @@
+%glr-parser
 %token-table
 %{
 /*
@@ -304,7 +305,7 @@ op_schema:
 		{
 			$$ = SQL_NEW_RULE;
 			$$->append($1);
-			$$->append($2 = newNode(".", SQL_NODE_PUNCTUATION));
+			$$->append(newNode(".", SQL_NODE_PUNCTUATION));
 			$$->append($3);
 		}
 	;
@@ -349,9 +350,9 @@ base_table_def:
 		$$->append($1);
 		$$->append($2);
 		$$->append($3);
-		$$->append($4 = newNode("(", SQL_NODE_PUNCTUATION));
+		$$->append(newNode("(", SQL_NODE_PUNCTUATION));
 		$$->append($5);
-		$$->append($6 = newNode(")", SQL_NODE_PUNCTUATION));}
+		$$->append(newNode(")", SQL_NODE_PUNCTUATION));}
 	;
 
 base_table_element_commalist:
@@ -424,9 +425,9 @@ column_def_opt:
 	|       SQL_TOKEN_CHECK '(' search_condition ')'
 			{$$ = SQL_NEW_RULE;
 			$$->append($1);
-			$$->append($2 = newNode("(", SQL_NODE_PUNCTUATION));
+			$$->append(newNode("(", SQL_NODE_PUNCTUATION));
 			$$->append($3);
-			$$->append($4 = newNode(")", SQL_NODE_PUNCTUATION));}
+			$$->append(newNode(")", SQL_NODE_PUNCTUATION));}
 	|       SQL_TOKEN_REFERENCES table_node
 			{$$ = SQL_NEW_RULE;
 			$$->append($1);
@@ -435,53 +436,53 @@ column_def_opt:
 			{$$ = SQL_NEW_RULE;
 			$$->append($1);
 			$$->append($2);
-			$$->append($3 = newNode("(", SQL_NODE_PUNCTUATION));
+			$$->append(newNode("(", SQL_NODE_PUNCTUATION));
 			$$->append($4);
-			$$->append($5 = newNode(")", SQL_NODE_PUNCTUATION));}
+			$$->append(newNode(")", SQL_NODE_PUNCTUATION));}
 	;
 
 table_constraint_def:
 		unique_spec '(' column_commalist ')'
 			{$$ = SQL_NEW_RULE;
 			$$->append($1);
-			$$->append($2 = newNode("(", SQL_NODE_PUNCTUATION));
+			$$->append(newNode("(", SQL_NODE_PUNCTUATION));
 			$$->append($3);
-			$$->append($4 = newNode(")", SQL_NODE_PUNCTUATION));}
+			$$->append(newNode(")", SQL_NODE_PUNCTUATION));}
 	|       SQL_TOKEN_FOREIGN SQL_TOKEN_KEY '(' column_commalist ')' SQL_TOKEN_REFERENCES table_node
 			{$$ = SQL_NEW_RULE;
 			$$->append($1);
 			$$->append($2);
-			$$->append($3 = newNode("(", SQL_NODE_PUNCTUATION));
+			$$->append(newNode("(", SQL_NODE_PUNCTUATION));
 			$$->append($4);
-			$$->append($5 = newNode(")", SQL_NODE_PUNCTUATION));
+			$$->append(newNode(")", SQL_NODE_PUNCTUATION));
 			$$->append($6);
 			$$->append($7);}
 	|       SQL_TOKEN_FOREIGN SQL_TOKEN_KEY '(' column_commalist ')' SQL_TOKEN_REFERENCES table_node '(' column_commalist ')'
 			{$$ = SQL_NEW_RULE;
 			$$->append($1);
 			$$->append($2);
-			$$->append($3 = newNode("(", SQL_NODE_PUNCTUATION));
+			$$->append(newNode("(", SQL_NODE_PUNCTUATION));
 			$$->append($4);
-			$$->append($5 = newNode(")", SQL_NODE_PUNCTUATION));
+			$$->append(newNode(")", SQL_NODE_PUNCTUATION));
 			$$->append($6);
 			$$->append($7);
-			$$->append($8 = newNode("(", SQL_NODE_PUNCTUATION));
+			$$->append(newNode("(", SQL_NODE_PUNCTUATION));
 			$$->append($9);
-			$$->append($10 = newNode(")", SQL_NODE_PUNCTUATION));}
+			$$->append(newNode(")", SQL_NODE_PUNCTUATION));}
 	|       SQL_TOKEN_CHECK '(' search_condition ')'
 			{$$ = SQL_NEW_RULE;
 			$$->append($1);
-			$$->append($2 = newNode("(", SQL_NODE_PUNCTUATION));
+			$$->append(newNode("(", SQL_NODE_PUNCTUATION));
 			$$->append($3);
-			$$->append($4 = newNode(")", SQL_NODE_PUNCTUATION));}
+			$$->append(newNode(")", SQL_NODE_PUNCTUATION));}
 	;
 op_column_commalist:
 	/* empty */ {$$ = SQL_NEW_RULE;}
 	| '(' column_commalist ')'
 		{$$ = SQL_NEW_RULE;
-			$$->append($1 = newNode("(", SQL_NODE_PUNCTUATION));
+			$$->append(newNode("(", SQL_NODE_PUNCTUATION));
 			$$->append($2);
-			$$->append($3 = newNode(")", SQL_NODE_PUNCTUATION));
+			$$->append(newNode(")", SQL_NODE_PUNCTUATION));
 		}
 	;
 column_commalist:
@@ -518,9 +519,9 @@ opt_column_commalist:
 		/* empty */         {$$ = SQL_NEW_RULE;}
 	|       '(' column_commalist ')'
 			{$$ = SQL_NEW_RULE;
-			$$->append($1 = newNode("(", SQL_NODE_PUNCTUATION));
+			$$->append(newNode("(", SQL_NODE_PUNCTUATION));
 			$$->append($2);
-			$$->append($3 = newNode(")", SQL_NODE_PUNCTUATION));}
+			$$->append(newNode(")", SQL_NODE_PUNCTUATION));}
 	;
 
 privilege_def:
@@ -671,9 +672,9 @@ manipulative_statement:
 	|		'{' odbc_call_spec '}'
 		{
 			$$ = SQL_NEW_RULE;
-			$$->append($1 = newNode("{", SQL_NODE_PUNCTUATION));
+			$$->append(newNode("{", SQL_NODE_PUNCTUATION));
 			$$->append($2);
-			$$->append($3 = newNode("}", SQL_NODE_PUNCTUATION));
+			$$->append(newNode("}", SQL_NODE_PUNCTUATION));
 		}
 	;
 
@@ -738,9 +739,9 @@ values_or_query_spec:
 		SQL_TOKEN_VALUES '(' table_value_const_list ')'
 		{$$ = SQL_NEW_RULE;
 			$$->append($1);
-			$$->append($2 = newNode("(", SQL_NODE_PUNCTUATION));
+			$$->append(newNode("(", SQL_NODE_PUNCTUATION));
 			$$->append($3);
-			$$->append($4 = newNode(")", SQL_NODE_PUNCTUATION));
+			$$->append(newNode(")", SQL_NODE_PUNCTUATION));
 		}
 	;
 
@@ -765,9 +766,9 @@ row_value_constructor:
 /*	  |		'(' row_value_const_list ')'
 			{
 				$$ = SQL_NEW_RULE;
-				$$->append($1 = newNode("(", SQL_NODE_PUNCTUATION));
+				$$->append(newNode("(", SQL_NODE_PUNCTUATION));
 				$$->append($2);
-				$$->append($3 = newNode(")", SQL_NODE_PUNCTUATION));
+				$$->append(newNode(")", SQL_NODE_PUNCTUATION));
 			}
 			*/
 	;
@@ -891,7 +892,7 @@ selection:
 		'*'
 		{
 			$$ = SQL_NEW_RULE;
-			$$->append($1 = newNode("*", SQL_NODE_PUNCTUATION));
+			$$->append(newNode("*", SQL_NODE_PUNCTUATION));
 		}
 	|	scalar_exp_commalist
 	;
@@ -1033,17 +1034,17 @@ table_ref:
 	|	'{' SQL_TOKEN_OJ joined_table '}'
 		{
 			$$ = SQL_NEW_RULE;
-			$$->append($1 = newNode("{", SQL_NODE_PUNCTUATION));
+			$$->append(newNode("{", SQL_NODE_PUNCTUATION));
 			$$->append($2);
 			$$->append($3);
-			$$->append($4 = newNode("}", SQL_NODE_PUNCTUATION));
+			$$->append(newNode("}", SQL_NODE_PUNCTUATION));
 		}
 	|	'(' joined_table ')'
 		{
 			$$ = SQL_NEW_RULE;
-			$$->append($1 = newNode("(", SQL_NODE_PUNCTUATION));
+			$$->append(newNode("(", SQL_NODE_PUNCTUATION));
 			$$->append($2);
-			$$->append($3 = newNode(")", SQL_NODE_PUNCTUATION));
+			$$->append(newNode(")", SQL_NODE_PUNCTUATION));
 		}
 	;
 where_clause:
@@ -1097,9 +1098,9 @@ boolean_primary:
 	|   '(' search_condition ')'
 		{ // boolean_primary: rule 2
 			$$ = SQL_NEW_RULE;
-			$$->append($1 = newNode("(", SQL_NODE_PUNCTUATION));
+			$$->append(newNode("(", SQL_NODE_PUNCTUATION));
 			$$->append($2);
-			$$->append($3 = newNode(")", SQL_NODE_PUNCTUATION));
+			$$->append(newNode(")", SQL_NODE_PUNCTUATION));
 		}
 	|	row_value_constructor_elem  /*[^')' ',']*/
 		{
@@ -1130,9 +1131,9 @@ parenthesized_boolean_value_expression:
    '(' search_condition ')'
 	{ // boolean_primary: rule 2
 		$$ = SQL_NEW_RULE;
-		$$->append($1 = newNode("(", SQL_NODE_PUNCTUATION));
+		$$->append(newNode("(", SQL_NODE_PUNCTUATION));
 		$$->append($2);
-		$$->append($3 = newNode(")", SQL_NODE_PUNCTUATION));
+		$$->append(newNode(")", SQL_NODE_PUNCTUATION));
 	}
 	;
 boolean_test:
@@ -1381,10 +1382,10 @@ opt_escape:
 	|	'{' SQL_TOKEN_ESCAPE SQL_TOKEN_STRING '}'
 		{
 			$$ = SQL_NEW_RULE;
-			$$->append($1 = newNode("{", SQL_NODE_PUNCTUATION));
+			$$->append(newNode("{", SQL_NODE_PUNCTUATION));
 			$$->append($2);
 			$$->append($3);
-			$$->append($4 = newNode("}", SQL_NODE_PUNCTUATION));
+			$$->append(newNode("}", SQL_NODE_PUNCTUATION));
 		}
 	;
 
@@ -1426,9 +1427,9 @@ in_predicate_value:
 		}
 	  | '(' value_exp_commalist ')'
 		{$$ = SQL_NEW_RULE;
-			$$->append($1 = newNode("(", SQL_NODE_PUNCTUATION));
+			$$->append(newNode("(", SQL_NODE_PUNCTUATION));
 			$$->append($2);
-			$$->append($3 = newNode(")", SQL_NODE_PUNCTUATION));
+			$$->append(newNode(")", SQL_NODE_PUNCTUATION));
 		}
 	;
 in_predicate_part_2:
@@ -1515,9 +1516,9 @@ unique_test:
 subquery:
 		'(' query_exp ')'
 			{$$ = SQL_NEW_RULE;
-			$$->append($1 = newNode("(", SQL_NODE_PUNCTUATION));
+			$$->append(newNode("(", SQL_NODE_PUNCTUATION));
 			$$->append($2);
-			$$->append($3 = newNode(")", SQL_NODE_PUNCTUATION));}
+			$$->append(newNode(")", SQL_NODE_PUNCTUATION));}
 	;
 
 	/* scalar expressions */
@@ -1538,8 +1539,8 @@ select_sublist:
 		{
 			$$ = SQL_NEW_RULE;
 			$$->append($1);
-			$$->append($2 = newNode(".", SQL_NODE_PUNCTUATION));
-			$$->append($3 = newNode("*", SQL_NODE_PUNCTUATION));
+			$$->append(newNode(".", SQL_NODE_PUNCTUATION));
+			$$->append(newNode("*", SQL_NODE_PUNCTUATION));
 		}
 */
 		derived_column
@@ -1564,14 +1565,14 @@ op_like:
 		{
 			$$ = SQL_NEW_RULE;
 			$$->append($1);
-			$$->append($2 = newNode("*", SQL_NODE_PUNCTUATION));
+			$$->append(newNode("*", SQL_NODE_PUNCTUATION));
 			xxx_pGLOBAL_SQLPARSER->reduceLiteral($$, sal_False);
 		}
 	|	op_like '?'
 		{
 			$$ = SQL_NEW_RULE;
 			$$->append($1);
-			$$->append($2 = newNode("?", SQL_NODE_PUNCTUATION));
+			$$->append(newNode("?", SQL_NODE_PUNCTUATION));
 			xxx_pGLOBAL_SQLPARSER->reduceLiteral($$, sal_False);
 		}
 	;
@@ -1651,19 +1652,19 @@ position_exp:
 		{
 			$$ = SQL_NEW_RULE;
 			$$->append($1);
-			$$->append($2 = newNode("(", SQL_NODE_PUNCTUATION));
+			$$->append(newNode("(", SQL_NODE_PUNCTUATION));
 			$$->append($3);
 			$$->append($4);
 			$$->append($5);
-			$$->append($6 = newNode(")", SQL_NODE_PUNCTUATION));
+			$$->append(newNode(")", SQL_NODE_PUNCTUATION));
 		}
 	|	SQL_TOKEN_POSITION '(' value_exp_commalist ')'
 		{
 			$$ = SQL_NEW_RULE;
 			$$->append($1);
-			$$->append($2 = newNode("(", SQL_NODE_PUNCTUATION));
+			$$->append(newNode("(", SQL_NODE_PUNCTUATION));
 			$$->append($3);
-			$$->append($4 = newNode(")", SQL_NODE_PUNCTUATION));
+			$$->append(newNode(")", SQL_NODE_PUNCTUATION));
 		}
 	;
 num_value_fct:
@@ -1676,17 +1677,17 @@ char_length_exp:
 		{
 			$$ = SQL_NEW_RULE;
 			$$->append($1);
-			$$->append($2 = newNode("(", SQL_NODE_PUNCTUATION));
+			$$->append(newNode("(", SQL_NODE_PUNCTUATION));
 			$$->append($3);
-			$$->append($4 = newNode(")", SQL_NODE_PUNCTUATION));
+			$$->append(newNode(")", SQL_NODE_PUNCTUATION));
 		}
 	|	SQL_TOKEN_SQL_TOKEN_INTNUM '(' value_exp ')'
 		{
 			$$ = SQL_NEW_RULE;
 			$$->append($1);
-			$$->append($2 = newNode("(", SQL_NODE_PUNCTUATION));
+			$$->append(newNode("(", SQL_NODE_PUNCTUATION));
 			$$->append($3);
-			$$->append($4 = newNode(")", SQL_NODE_PUNCTUATION));
+			$$->append(newNode(")", SQL_NODE_PUNCTUATION));
 		}
 
 	;
@@ -1695,9 +1696,9 @@ octet_length_exp:
 		{
 			$$ = SQL_NEW_RULE;
 			$$->append($1);
-			$$->append($2 = newNode("(", SQL_NODE_PUNCTUATION));
+			$$->append(newNode("(", SQL_NODE_PUNCTUATION));
 			$$->append($3);
-			$$->append($4 = newNode(")", SQL_NODE_PUNCTUATION));
+			$$->append(newNode(")", SQL_NODE_PUNCTUATION));
 		}
 	;
 bit_length_exp:
@@ -1705,9 +1706,9 @@ bit_length_exp:
 		{
 			$$ = SQL_NEW_RULE;
 			$$->append($1);
-			$$->append($2 = newNode("(", SQL_NODE_PUNCTUATION));
+			$$->append(newNode("(", SQL_NODE_PUNCTUATION));
 			$$->append($3);
-			$$->append($4 = newNode(")", SQL_NODE_PUNCTUATION));
+			$$->append(newNode(")", SQL_NODE_PUNCTUATION));
 		}
 	;
 length_exp:
@@ -1773,11 +1774,11 @@ extract_exp:
 		{
 			$$ = SQL_NEW_RULE;
 			$$->append($1);
-			$$->append($2 = newNode("(", SQL_NODE_PUNCTUATION));
+			$$->append(newNode("(", SQL_NODE_PUNCTUATION));
 			$$->append($3);
 			$$->append($4);
 			$$->append($5);
-			$$->append($6 = newNode(")", SQL_NODE_PUNCTUATION));
+			$$->append(newNode(")", SQL_NODE_PUNCTUATION));
 		}
 	;
 unsigned_value_spec:
@@ -1805,63 +1806,63 @@ set_fct_spec:
 	|	'{' odbc_fct_spec '}'
 		{
 			$$ = SQL_NEW_RULE;
-			$$->append($1 = newNode("{", SQL_NODE_PUNCTUATION));
+			$$->append(newNode("{", SQL_NODE_PUNCTUATION));
 			$$->append($2);
-			$$->append($3 = newNode("}", SQL_NODE_PUNCTUATION));
+			$$->append(newNode("}", SQL_NODE_PUNCTUATION));
 		}
 	|	function_name '(' ')'
 		{
 			$$ = SQL_NEW_RULE;
 			$$->append($1);
-			$$->append($2 = newNode("(", SQL_NODE_PUNCTUATION));
-			$$->append($3 = newNode(")", SQL_NODE_PUNCTUATION));
+			$$->append(newNode("(", SQL_NODE_PUNCTUATION));
+			$$->append(newNode(")", SQL_NODE_PUNCTUATION));
 		}
 	|	function_name0 '(' ')'
 		{
 			$$ = SQL_NEW_RULE;
 			$$->append($1);
-			$$->append($2 = newNode("(", SQL_NODE_PUNCTUATION));
-			$$->append($3 = newNode(")", SQL_NODE_PUNCTUATION));
+			$$->append(newNode("(", SQL_NODE_PUNCTUATION));
+			$$->append(newNode(")", SQL_NODE_PUNCTUATION));
 		}
 	|	function_name1 '(' function_arg ')'
 		{
 			$$ = SQL_NEW_RULE;
 			$$->append($1);
-			$$->append($2 = newNode("(", SQL_NODE_PUNCTUATION));
+			$$->append(newNode("(", SQL_NODE_PUNCTUATION));
 			$$->append($3);
-			$$->append($4 = newNode(")", SQL_NODE_PUNCTUATION));
+			$$->append(newNode(")", SQL_NODE_PUNCTUATION));
 		}
 	|	function_name2 '(' function_arg_commalist2 ')'
 		{
 			$$ = SQL_NEW_RULE;
 			$$->append($1);
-			$$->append($2 = newNode("(", SQL_NODE_PUNCTUATION));
+			$$->append(newNode("(", SQL_NODE_PUNCTUATION));
 			$$->append($3);
-			$$->append($4 = newNode(")", SQL_NODE_PUNCTUATION));
+			$$->append(newNode(")", SQL_NODE_PUNCTUATION));
 		}
 	|	function_name3 '(' function_arg_commalist3 ')'
 		{
 			$$ = SQL_NEW_RULE;
 			$$->append($1);
-			$$->append($2 = newNode("(", SQL_NODE_PUNCTUATION));
+			$$->append(newNode("(", SQL_NODE_PUNCTUATION));
 			$$->append($3);
-			$$->append($4 = newNode(")", SQL_NODE_PUNCTUATION));
+			$$->append(newNode(")", SQL_NODE_PUNCTUATION));
 		}
 	|	string_function_4Argument '(' function_arg_commalist4 ')'
 		{
 			$$ = SQL_NEW_RULE;
 			$$->append($1);
-			$$->append($2 = newNode("(", SQL_NODE_PUNCTUATION));
+			$$->append(newNode("(", SQL_NODE_PUNCTUATION));
 			$$->append($3);
-			$$->append($4 = newNode(")", SQL_NODE_PUNCTUATION));
+			$$->append(newNode(")", SQL_NODE_PUNCTUATION));
 		}
 	|	function_name '(' function_args_commalist ')'
 		{
 			$$ = SQL_NEW_RULE;
 			$$->append($1);
-			$$->append($2 = newNode("(", SQL_NODE_PUNCTUATION));
+			$$->append(newNode("(", SQL_NODE_PUNCTUATION));
 			$$->append($3);
-			$$->append($4 = newNode(")", SQL_NODE_PUNCTUATION));
+			$$->append(newNode(")", SQL_NODE_PUNCTUATION));
 		}
 	|	function_name12 '(' function_args_commalist ')'
 		{
@@ -1869,9 +1870,9 @@ set_fct_spec:
 			{
 				$$ = SQL_NEW_RULE;
 				$$->append($1);
-				$$->append($2 = newNode("(", SQL_NODE_PUNCTUATION));
+				$$->append(newNode("(", SQL_NODE_PUNCTUATION));
 				$$->append($3);
-				$$->append($4 = newNode(")", SQL_NODE_PUNCTUATION));
+				$$->append(newNode(")", SQL_NODE_PUNCTUATION));
 			}
 			else
 				YYERROR;
@@ -1882,9 +1883,9 @@ set_fct_spec:
 			{
 				$$ = SQL_NEW_RULE;
 				$$->append($1);
-				$$->append($2 = newNode("(", SQL_NODE_PUNCTUATION));
+				$$->append(newNode("(", SQL_NODE_PUNCTUATION));
 				$$->append($3);
-				$$->append($4 = newNode(")", SQL_NODE_PUNCTUATION));
+				$$->append(newNode(")", SQL_NODE_PUNCTUATION));
 			}
 			else
 				YYERROR;
@@ -2024,15 +2025,15 @@ window_function_type :
 		{
 			$$ = SQL_NEW_RULE;
 			$$->append($1);
-			$$->append($2 = newNode("(", SQL_NODE_PUNCTUATION));
-			$$->append($3 = newNode(")", SQL_NODE_PUNCTUATION));
+			$$->append(newNode("(", SQL_NODE_PUNCTUATION));
+			$$->append(newNode(")", SQL_NODE_PUNCTUATION));
 		}
 	|	SQL_TOKEN_ROW_NUMBER '(' ')'
 		{
 			$$ = SQL_NEW_RULE;
 			$$->append($1);
-			$$->append($2 = newNode("(", SQL_NODE_PUNCTUATION));
-			$$->append($3 = newNode(")", SQL_NODE_PUNCTUATION));
+			$$->append(newNode("(", SQL_NODE_PUNCTUATION));
+			$$->append(newNode(")", SQL_NODE_PUNCTUATION));
 		}
 	| general_set_fct
 	| ntile_function
@@ -2045,9 +2046,9 @@ ntile_function :
 	{
 			$$ = SQL_NEW_RULE;
 			$$->append($1);
-			$$->append($2 = newNode("(", SQL_NODE_PUNCTUATION));
+			$$->append(newNode("(", SQL_NODE_PUNCTUATION));
 			$$->append($3);
-			$$->append($4 = newNode(")", SQL_NODE_PUNCTUATION));
+			$$->append(newNode(")", SQL_NODE_PUNCTUATION));
 	}
 	;
 dynamic_parameter_specification:
@@ -2065,15 +2066,15 @@ opt_lead_or_lag_function:
 	| ',' offset
 		{
 			$$ = SQL_NEW_RULE;
-			$$->append($1 = newNode(",", SQL_NODE_PUNCTUATION));
+			$$->append(newNode(",", SQL_NODE_PUNCTUATION));
 			$$->append($2);
 		}
 	| ',' offset ',' default_expression
 		{
 			$$ = SQL_NEW_RULE;
-			$$->append($1 = newNode(",", SQL_NODE_PUNCTUATION));
+			$$->append(newNode(",", SQL_NODE_PUNCTUATION));
 			$$->append($2);
-			$$->append($3 = newNode(",", SQL_NODE_PUNCTUATION));
+			$$->append(newNode(",", SQL_NODE_PUNCTUATION));
 			$$->append($4);
 		}
 	;
@@ -2087,10 +2088,10 @@ lead_or_lag_function:
 	{
 			$$ = SQL_NEW_RULE;
 			$$->append($1);
-			$$->append($2 = newNode("(", SQL_NODE_PUNCTUATION));
+			$$->append(newNode("(", SQL_NODE_PUNCTUATION));
 			$$->append($3);
 			$$->append($4);
-			$$->append($5 = newNode(")", SQL_NODE_PUNCTUATION));
+			$$->append(newNode(")", SQL_NODE_PUNCTUATION));
 			$$->append($6);
 	}
 	;
@@ -2116,9 +2117,9 @@ first_or_last_value_function:
 	{
 			$$ = SQL_NEW_RULE;
 			$$->append($1);
-			$$->append($2 = newNode("(", SQL_NODE_PUNCTUATION));
+			$$->append(newNode("(", SQL_NODE_PUNCTUATION));
 			$$->append($3);
-			$$->append($4 = newNode(")", SQL_NODE_PUNCTUATION));
+			$$->append(newNode(")", SQL_NODE_PUNCTUATION));
 			$$->append($5);
 	}
 	;
@@ -2135,11 +2136,11 @@ nth_value_function:
 	{
 			$$ = SQL_NEW_RULE;
 			$$->append($1);
-			$$->append($2 = newNode("(", SQL_NODE_PUNCTUATION));
+			$$->append(newNode("(", SQL_NODE_PUNCTUATION));
 			$$->append($3);
-			$$->append($4 = newNode(",", SQL_NODE_PUNCTUATION));
+			$$->append(newNode(",", SQL_NODE_PUNCTUATION));
 			$$->append($5);
-			$$->append($6 = newNode(")", SQL_NODE_PUNCTUATION));
+			$$->append(newNode(")", SQL_NODE_PUNCTUATION));
 			$$->append($7);
 			$$->append($8);
 	}
@@ -2208,9 +2209,9 @@ window_specification:
 	'(' window_specification_details ')'
 	{
 		$$ = SQL_NEW_RULE;
-		$$->append($1 = newNode("(", SQL_NODE_PUNCTUATION));
+		$$->append(newNode("(", SQL_NODE_PUNCTUATION));
 		$$->append($2);
-		$$->append($3 = newNode(")", SQL_NODE_PUNCTUATION));
+		$$->append(newNode(")", SQL_NODE_PUNCTUATION));
 	}
 	;
 opt_existing_window_name:
@@ -2370,7 +2371,7 @@ op_parameter:
 	|	'?' SQL_EQUAL
 		{
 			$$ = SQL_NEW_RULE;
-			$$->append($1 = newNode("?", SQL_NODE_PUNCTUATION));
+			$$->append(newNode("?", SQL_NODE_PUNCTUATION));
 			$$->append($2);
 		}
 	;
@@ -2390,9 +2391,9 @@ op_odbc_call_parameter:
 	|	'(' odbc_parameter_commalist ')'
 		{
 			$$ = SQL_NEW_RULE;
-			$$->append($1 = newNode("(", SQL_NODE_PUNCTUATION));
+			$$->append(newNode("(", SQL_NODE_PUNCTUATION));
 			$$->append($2);
-			$$->append($3 = newNode(")", SQL_NODE_PUNCTUATION));
+			$$->append(newNode(")", SQL_NODE_PUNCTUATION));
 		}
 	;
 
@@ -2438,27 +2439,27 @@ general_set_fct:
 		{
 			$$ = SQL_NEW_RULE;
 			$$->append($1);
-			$$->append($2 = newNode("(", SQL_NODE_PUNCTUATION));
+			$$->append(newNode("(", SQL_NODE_PUNCTUATION));
 			$$->append($3);
 			$$->append($4);
-			$$->append($5 = newNode(")", SQL_NODE_PUNCTUATION));
+			$$->append(newNode(")", SQL_NODE_PUNCTUATION));
 		}
 	|	SQL_TOKEN_COUNT '(' '*' ')'
 		{
 			$$ = SQL_NEW_RULE;
 			$$->append($1);
-			$$->append($2 = newNode("(", SQL_NODE_PUNCTUATION));
-			$$->append($3 = newNode("*", SQL_NODE_PUNCTUATION));
-			$$->append($4 = newNode(")", SQL_NODE_PUNCTUATION));
+			$$->append(newNode("(", SQL_NODE_PUNCTUATION));
+			$$->append(newNode("*", SQL_NODE_PUNCTUATION));
+			$$->append(newNode(")", SQL_NODE_PUNCTUATION));
 		}
 	|	SQL_TOKEN_COUNT '(' opt_all_distinct function_arg ')'
 		{
 			$$ = SQL_NEW_RULE;
 			$$->append($1);
-			$$->append($2 = newNode("(", SQL_NODE_PUNCTUATION));
+			$$->append(newNode("(", SQL_NODE_PUNCTUATION));
 			$$->append($3);
 			$$->append($4);
-			$$->append($5 = newNode(")", SQL_NODE_PUNCTUATION));
+			$$->append(newNode(")", SQL_NODE_PUNCTUATION));
 		}
 	|	ordered_set_function
 	|	array_aggregate_function
@@ -2489,20 +2490,20 @@ hypothetical_set_function:
 		{
 			$$ = SQL_NEW_RULE;
 			$$->append($1);
-			$$->append($2 = newNode("(", SQL_NODE_PUNCTUATION));
+			$$->append(newNode("(", SQL_NODE_PUNCTUATION));
 			$$->append($3);
-			$$->append($4 = newNode(")", SQL_NODE_PUNCTUATION));
+			$$->append(newNode(")", SQL_NODE_PUNCTUATION));
 			$$->append($5);
 		}
 	|	rank_function_type '('	hypothetical_set_function_value_expression_list SQL_TOKEN_BY value_exp_commalist ')'	within_group_specification
 	{
 		$$ = SQL_NEW_RULE;
 		$$->append($1);
-		$$->append($2 = newNode("(", SQL_NODE_PUNCTUATION));
+		$$->append(newNode("(", SQL_NODE_PUNCTUATION));
 		$$->append($3);
 		$$->append($4);
 		$$->append($5);
-		$$->append($6 = newNode(")", SQL_NODE_PUNCTUATION));
+		$$->append(newNode(")", SQL_NODE_PUNCTUATION));
 		$$->append($7);
 	}
 	;
@@ -2516,9 +2517,9 @@ within_group_specification:
 		$$ = SQL_NEW_RULE;
 		$$->append($1);
 		$$->append($2);
-		$$->append($3 = newNode("(", SQL_NODE_PUNCTUATION));
+		$$->append(newNode("(", SQL_NODE_PUNCTUATION));
 		$$->append($4);
-		$$->append($5 = newNode(")", SQL_NODE_PUNCTUATION));
+		$$->append(newNode(")", SQL_NODE_PUNCTUATION));
 	}
 	;
 hypothetical_set_function_value_expression_list:
@@ -2530,9 +2531,9 @@ inverse_distribution_function:
 	{
 		$$ = SQL_NEW_RULE;
 		$$->append($1);
-		$$->append($2 = newNode("(", SQL_NODE_PUNCTUATION));
+		$$->append(newNode("(", SQL_NODE_PUNCTUATION));
 		$$->append($3);
-		$$->append($4 = newNode(")", SQL_NODE_PUNCTUATION));
+		$$->append(newNode(")", SQL_NODE_PUNCTUATION));
 	}
 	;
 inverse_distribution_function_argument:
@@ -2548,10 +2549,10 @@ array_aggregate_function:
 	{
 		$$ = SQL_NEW_RULE;
 		$$->append($1);
-		$$->append($2 = newNode("(", SQL_NODE_PUNCTUATION));
+		$$->append(newNode("(", SQL_NODE_PUNCTUATION));
 		$$->append($3);
 		$$->append($4);
-		$$->append($5 = newNode(")", SQL_NODE_PUNCTUATION));
+		$$->append(newNode(")", SQL_NODE_PUNCTUATION));
 	}
 	;
 
@@ -2646,9 +2647,9 @@ named_columns_join:
 		{
 			$$ = SQL_NEW_RULE;
 			$$->append($1);
-			$$->append($2 = newNode("(", SQL_NODE_PUNCTUATION));
+			$$->append(newNode("(", SQL_NODE_PUNCTUATION));
 			$$->append($3);
-			$$->append($4 = newNode(")", SQL_NODE_PUNCTUATION));
+			$$->append(newNode(")", SQL_NODE_PUNCTUATION));
 		}
 	;
 simple_table:
@@ -2661,9 +2662,9 @@ non_join_query_primary:
 	  | '(' non_join_query_exp ')'
 		{
 			$$ = SQL_NEW_RULE;
-			$$->append($1 = newNode("(", SQL_NODE_PUNCTUATION));
+			$$->append(newNode("(", SQL_NODE_PUNCTUATION));
 			$$->append($2);
-			$$->append($3 = newNode(")", SQL_NODE_PUNCTUATION));
+			$$->append(newNode(")", SQL_NODE_PUNCTUATION));
 		}
 	  ;
 non_join_query_term:
@@ -2721,11 +2722,11 @@ cast_spec:
 	  {
 			$$ = SQL_NEW_RULE;
 			$$->append($1);
-			$$->append($2 = newNode("(", SQL_NODE_PUNCTUATION));
+			$$->append(newNode("(", SQL_NODE_PUNCTUATION));
 			$$->append($3);
 			$$->append($4);
 			$$->append($5);
-			$$->append($6 = newNode(")", SQL_NODE_PUNCTUATION));
+			$$->append(newNode(")", SQL_NODE_PUNCTUATION));
 		}
 	;
 value_exp_primary:
@@ -2738,9 +2739,9 @@ value_exp_primary:
 	  | '(' value_exp ')'
 		{
 			$$ = SQL_NEW_RULE;
-			$$->append($1 = newNode("(", SQL_NODE_PUNCTUATION));
+			$$->append(newNode("(", SQL_NODE_PUNCTUATION));
 			$$->append($2);
-			$$->append($3 = newNode(")", SQL_NODE_PUNCTUATION));
+			$$->append(newNode(")", SQL_NODE_PUNCTUATION));
 		}
 	  | cast_spec
 	;
@@ -2754,13 +2755,13 @@ factor:
 	|	'-' num_primary  %prec SQL_TOKEN_UMINUS
 		{
 			$$ = SQL_NEW_RULE;
-			$$->append($1 = newNode("-", SQL_NODE_PUNCTUATION));
+			$$->append(newNode("-", SQL_NODE_PUNCTUATION));
 			$$->append($2);
 		}
 	|	'+' num_primary  %prec SQL_TOKEN_UMINUS
 		{
 			$$ = SQL_NEW_RULE;
-			$$->append($1 = newNode("+", SQL_NODE_PUNCTUATION));
+			$$->append(newNode("+", SQL_NODE_PUNCTUATION));
 			$$->append($2);
 		}
 	;
@@ -2771,14 +2772,14 @@ term:
 		{
 			$$ = SQL_NEW_RULE;
 			$$->append($1);
-			$$->append($2 = newNode("*", SQL_NODE_PUNCTUATION));
+			$$->append(newNode("*", SQL_NODE_PUNCTUATION));
 			$$->append($3);
 		}
 	  | term '/' factor
 		{
 			$$ = SQL_NEW_RULE;
 			$$->append($1);
-			$$->append($2 = newNode("/", SQL_NODE_PUNCTUATION));
+			$$->append(newNode("/", SQL_NODE_PUNCTUATION));
 			$$->append($3);
 		}
 	  ;
@@ -2789,14 +2790,14 @@ num_value_exp:
 		{
 			$$ = SQL_NEW_RULE;
 			$$->append($1);
-			$$->append($2 = newNode("+", SQL_NODE_PUNCTUATION));
+			$$->append(newNode("+", SQL_NODE_PUNCTUATION));
 			$$->append($3);
 		}
 	  | num_value_exp '-' term
 		{
 			$$ = SQL_NEW_RULE;
 			$$->append($1);
-			$$->append($2 = newNode("-", SQL_NODE_PUNCTUATION));
+			$$->append(newNode("-", SQL_NODE_PUNCTUATION));
 			$$->append($3);
 		}
 	  ;
@@ -2878,14 +2879,14 @@ interval_term:
 		{
 			$$ = SQL_NEW_RULE;
 			$$->append($1);
-			$$->append($2 = newNode("*", SQL_NODE_PUNCTUATION));
+			$$->append(newNode("*", SQL_NODE_PUNCTUATION));
 			$$->append($3);
 		}
 	  | interval_term '/' factor
 		{
 			$$ = SQL_NEW_RULE;
 			$$->append($1);
-			$$->append($2 = newNode("/", SQL_NODE_PUNCTUATION));
+			$$->append(newNode("/", SQL_NODE_PUNCTUATION));
 			$$->append($3);
 		}
 	;
@@ -2900,21 +2901,21 @@ datetime_value_exp:
 		{
 			$$ = SQL_NEW_RULE;
 			$$->append($1);
-			$$->append($2 = newNode("+", SQL_NODE_PUNCTUATION));
+			$$->append(newNode("+", SQL_NODE_PUNCTUATION));
 			$$->append($3);
 		}
 	  | datetime_value_exp '+' interval_term
 		{
 			$$ = SQL_NEW_RULE;
 			$$->append($1);
-			$$->append($2 = newNode("+", SQL_NODE_PUNCTUATION));
+			$$->append(newNode("+", SQL_NODE_PUNCTUATION));
 			$$->append($3);
 		}
 	  | datetime_value_exp '-' interval_term
 		{
 			$$ = SQL_NEW_RULE;
 			$$->append($1);
-			$$->append($2 = newNode("-", SQL_NODE_PUNCTUATION));
+			$$->append(newNode("-", SQL_NODE_PUNCTUATION));
 			$$->append($3);
 		}
 */	;
@@ -2929,24 +2930,24 @@ interval_value_exp:
 		{
 			$$ = SQL_NEW_RULE;
 			$$->append($1);
-			$$->append($2 = newNode("+", SQL_NODE_PUNCTUATION));
+			$$->append(newNode("+", SQL_NODE_PUNCTUATION));
 			$$->append($3);
 		}
 	  | interval_value_exp '-' interval_term
 		{
 			$$ = SQL_NEW_RULE;
 			$$->append($1);
-			$$->append($2 = newNode("-", SQL_NODE_PUNCTUATION));
+			$$->append(newNode("-", SQL_NODE_PUNCTUATION));
 			$$->append($3);
 		}
 	  | '(' datetime_value_exp '-' datetime_term ')' interval_qualifier
 		{
 			$$ = SQL_NEW_RULE;
-			$$->append($1 = newNode("(", SQL_NODE_PUNCTUATION));
+			$$->append(newNode("(", SQL_NODE_PUNCTUATION));
 			$$->append($2);
-			$$->append($3 = newNode("-", SQL_NODE_PUNCTUATION));
+			$$->append(newNode("-", SQL_NODE_PUNCTUATION));
 			$$->append($4);
-			$$->append($5 = newNode(")", SQL_NODE_PUNCTUATION));
+			$$->append(newNode(")", SQL_NODE_PUNCTUATION));
 			$$->append($6);
 		}
 	;
@@ -3117,7 +3118,7 @@ concatenation:
 		{
 			$$ = SQL_NEW_RULE;
 			$$->append($1);
-			$$->append($2 = newNode("+", SQL_NODE_PUNCTUATION));
+			$$->append(newNode("+", SQL_NODE_PUNCTUATION));
 			$$->append($3);
 		}
 	|	value_exp SQL_CONCAT value_exp
@@ -3166,12 +3167,12 @@ bit_substring_fct:
 		{
 			$$ = SQL_NEW_RULE;
 			$$->append($1);
-			$$->append($2 = newNode("(", SQL_NODE_PUNCTUATION));
+			$$->append(newNode("(", SQL_NODE_PUNCTUATION));
 			$$->append($3);
 			$$->append($4);
 			$$->append($5);
 			$$->append($6);
-			$$->append($7 = newNode(")", SQL_NODE_PUNCTUATION));
+			$$->append(newNode(")", SQL_NODE_PUNCTUATION));
 		}
 	;
 bit_value_exp:
@@ -3193,7 +3194,7 @@ bit_concatenation:
 		{
 			$$ = SQL_NEW_RULE;
 			$$->append($1);
-			$$->append($2 = newNode("+", SQL_NODE_PUNCTUATION));
+			$$->append(newNode("+", SQL_NODE_PUNCTUATION));
 			$$->append($3);
 		}
 	;
@@ -3251,20 +3252,20 @@ char_substring_fct:
 		{
 			$$ = SQL_NEW_RULE;
 			$$->append($1);
-			$$->append($2 = newNode("(", SQL_NODE_PUNCTUATION));
+			$$->append(newNode("(", SQL_NODE_PUNCTUATION));
 			$$->append($3);
 			$$->append($4);
 			$$->append($5);
 			$$->append($6);
-			$$->append($7 = newNode(")", SQL_NODE_PUNCTUATION));
+			$$->append(newNode(")", SQL_NODE_PUNCTUATION));
 		}
 	|	SQL_TOKEN_SUBSTRING '(' value_exp_commalist ')'
 		{
 			$$ = SQL_NEW_RULE;
 			$$->append($1);
-			$$->append($2 = newNode("(", SQL_NODE_PUNCTUATION));
+			$$->append(newNode("(", SQL_NODE_PUNCTUATION));
 			$$->append($3);
-			$$->append($4 = newNode(")", SQL_NODE_PUNCTUATION));
+			$$->append(newNode(")", SQL_NODE_PUNCTUATION));
 		}
 	;
 upper_lower:
@@ -3276,9 +3277,9 @@ fold:
 		{
 			$$ = SQL_NEW_RULE;
 			$$->append($1);
-			$$->append($2 = newNode("(", SQL_NODE_PUNCTUATION));
+			$$->append(newNode("(", SQL_NODE_PUNCTUATION));
 			$$->append($3);
-			$$->append($4 = newNode(")", SQL_NODE_PUNCTUATION));
+			$$->append(newNode(")", SQL_NODE_PUNCTUATION));
 		}
 	;
 form_conversion:
@@ -3286,21 +3287,21 @@ form_conversion:
 		{
 			$$ = SQL_NEW_RULE;
 			$$->append($1);
-			$$->append($2 = newNode("(", SQL_NODE_PUNCTUATION));
+			$$->append(newNode("(", SQL_NODE_PUNCTUATION));
 			$$->append($3);
 			$$->append($4);
 			$$->append($5);
-			$$->append($6 = newNode(")", SQL_NODE_PUNCTUATION));
+			$$->append(newNode(")", SQL_NODE_PUNCTUATION));
 		}
 	|	SQL_TOKEN_CONVERT '(' cast_operand ',' cast_target ')'
 		{
 			$$ = SQL_NEW_RULE;
 			$$->append($1);
-			$$->append($2 = newNode("(", SQL_NODE_PUNCTUATION));
+			$$->append(newNode("(", SQL_NODE_PUNCTUATION));
 			$$->append($3);
-			$$->append($2 = newNode(",", SQL_NODE_PUNCTUATION));
+			$$->append(newNode(",", SQL_NODE_PUNCTUATION));
 			$$->append($5);
-			$$->append($6 = newNode(")", SQL_NODE_PUNCTUATION));
+			$$->append(newNode(")", SQL_NODE_PUNCTUATION));
 		}
 	;
 char_translation:
@@ -3308,11 +3309,11 @@ char_translation:
 		{
 			$$ = SQL_NEW_RULE;
 			$$->append($1);
-			$$->append($2 = newNode("(", SQL_NODE_PUNCTUATION));
+			$$->append(newNode("(", SQL_NODE_PUNCTUATION));
 			$$->append($3);
 			$$->append($4);
 			$$->append($5);
-			$$->append($6 = newNode(")", SQL_NODE_PUNCTUATION));
+			$$->append(newNode(")", SQL_NODE_PUNCTUATION));
 		}
 	;
 trim_fct:
@@ -3320,9 +3321,9 @@ trim_fct:
 		{
 			$$ = SQL_NEW_RULE;
 			$$->append($1);
-			$$->append($2 = newNode("(", SQL_NODE_PUNCTUATION));
+			$$->append(newNode("(", SQL_NODE_PUNCTUATION));
 			$$->append($3);
-			$$->append($4 = newNode(")", SQL_NODE_PUNCTUATION));
+			$$->append(newNode(")", SQL_NODE_PUNCTUATION));
 		}
 	;
 trim_operands:
@@ -3382,14 +3383,14 @@ catalog_name:
 		{
 			$$ = SQL_NEW_RULE;
 			$$->append($1);
-			$$->append($2 = newNode(".", SQL_NODE_PUNCTUATION));
+			$$->append(newNode(".", SQL_NODE_PUNCTUATION));
 			$$->append($3);
 		}
 	|	SQL_TOKEN_NAME ':' schema_name
 		{
 			$$ = SQL_NEW_RULE;
 			$$->append($1);
-			$$->append($2 = newNode(":", SQL_NODE_PUNCTUATION));
+			$$->append(newNode(":", SQL_NODE_PUNCTUATION));
 			$$->append($3);
 		}
 ;
@@ -3398,7 +3399,7 @@ schema_name:
 		{
 			$$ = SQL_NEW_RULE;
 			$$->append($1);
-			$$->append($2 = newNode(".", SQL_NODE_PUNCTUATION));
+			$$->append(newNode(".", SQL_NODE_PUNCTUATION));
 			$$->append($3);
 		}
 ;
@@ -3416,50 +3417,50 @@ column_ref:
 /*	|       table_node '.' column_val %prec '.'
 			{$$ = SQL_NEW_RULE;
 			$$->append($1);
-			$$->append($2 = newNode(".", SQL_NODE_PUNCTUATION));
+			$$->append(newNode(".", SQL_NODE_PUNCTUATION));
 			$$->append($3);}
 */
 	|       SQL_TOKEN_NAME '.' column_val %prec '.'
 			{$$ = SQL_NEW_RULE;
 			$$->append($1);
-			$$->append($2 = newNode(".", SQL_NODE_PUNCTUATION));
+			$$->append(newNode(".", SQL_NODE_PUNCTUATION));
 			$$->append($3);
 			}
 	|       SQL_TOKEN_NAME '.' SQL_TOKEN_NAME '.' column_val %prec '.'
 			{$$ = SQL_NEW_RULE;
 			$$->append($1);
-			$$->append($2 = newNode(".", SQL_NODE_PUNCTUATION));
+			$$->append(newNode(".", SQL_NODE_PUNCTUATION));
 			$$->append($3);
-			$$->append($4 = newNode(".", SQL_NODE_PUNCTUATION));
+			$$->append(newNode(".", SQL_NODE_PUNCTUATION));
 			$$->append($5);}
 	|       SQL_TOKEN_NAME '.' SQL_TOKEN_NAME '.' SQL_TOKEN_NAME '.' column_val %prec '.'
 			{$$ = SQL_NEW_RULE;
 			$$->append($1);
-			$$->append($2= newNode(".", SQL_NODE_PUNCTUATION));
+			$$->append(newNode(".", SQL_NODE_PUNCTUATION));
 			$$->append($3);
-			$$->append($4 = newNode(".", SQL_NODE_PUNCTUATION));
+			$$->append(newNode(".", SQL_NODE_PUNCTUATION));
 			$$->append($5);
-			$$->append($6 = newNode(".", SQL_NODE_PUNCTUATION));
+			$$->append(newNode(".", SQL_NODE_PUNCTUATION));
 			$$->append($7);
 			}
 	|       SQL_TOKEN_NAME ':' SQL_TOKEN_NAME '.' SQL_TOKEN_NAME '.' column_val %prec '.'
 			{$$ = SQL_NEW_RULE;
 			$$->append($1);
-			$$->append($2= newNode(":", SQL_NODE_PUNCTUATION));
+			$$->append(newNode(":", SQL_NODE_PUNCTUATION));
 			$$->append($3);
-			$$->append($4 = newNode(".", SQL_NODE_PUNCTUATION));
+			$$->append(newNode(".", SQL_NODE_PUNCTUATION));
 			$$->append($5);
-			$$->append($6 = newNode(".", SQL_NODE_PUNCTUATION));
+			$$->append(newNode(".", SQL_NODE_PUNCTUATION));
 			$$->append($7);
 			}
 /*	|       SQL_TOKEN_NAME ';' SQL_TOKEN_NAME '.' SQL_TOKEN_NAME '.' column_val
 			{$$ = SQL_NEW_RULE;
 			$$->append($1);
-			$$->append($2= newNode(";", SQL_NODE_PUNCTUATION));
+			$$->append(newNode(";", SQL_NODE_PUNCTUATION));
 			$$->append($3);
-			$$->append($4 = newNode(".", SQL_NODE_PUNCTUATION));
+			$$->append(newNode(".", SQL_NODE_PUNCTUATION));
 			$$->append($5);
-			$$->append($6 = newNode(".", SQL_NODE_PUNCTUATION));
+			$$->append(newNode(".", SQL_NODE_PUNCTUATION));
 			$$->append($7);
 			}
 */	;
@@ -3472,7 +3473,7 @@ column_val:
 	|	'*'
 		{
 			$$ = SQL_NEW_RULE;
-			$$->append($1 = newNode("*", SQL_NODE_PUNCTUATION));
+			$$->append(newNode("*", SQL_NODE_PUNCTUATION));
 		}
 	;
 data_type:
@@ -3555,9 +3556,9 @@ paren_char_length:
 	'(' SQL_TOKEN_INTNUM ')'
 	{
 		$$ = SQL_NEW_RULE;
-		$$->append($1 = newNode("(", SQL_NODE_PUNCTUATION));
+		$$->append(newNode("(", SQL_NODE_PUNCTUATION));
 		$$->append($2);
-		$$->append($3 = newNode(")", SQL_NODE_PUNCTUATION));
+		$$->append(newNode(")", SQL_NODE_PUNCTUATION));
 	}
 	;
 opt_paren_char_large_length:
@@ -3568,9 +3569,9 @@ paren_character_large_object_length:
 	'(' large_object_length ')'
 	{
 		$$ = SQL_NEW_RULE;
-		$$->append($1 = newNode("(", SQL_NODE_PUNCTUATION));
+		$$->append(newNode("(", SQL_NODE_PUNCTUATION));
 		$$->append($2);
-		$$->append($3 = newNode(")", SQL_NODE_PUNCTUATION));
+		$$->append(newNode(")", SQL_NODE_PUNCTUATION));
 	}
 	;
 
@@ -3587,27 +3588,27 @@ opt_multiplier:
 	|	'K'
 		{
 			$$ = SQL_NEW_RULE;
-			$$->append($1 = newNode("K", SQL_NODE_PUNCTUATION));
+			$$->append(newNode("K", SQL_NODE_PUNCTUATION));
 		}
 	|	'M'
 		{
 			$$ = SQL_NEW_RULE;
-			$$->append($1 = newNode("M", SQL_NODE_PUNCTUATION));
+			$$->append(newNode("M", SQL_NODE_PUNCTUATION));
 		}
 	|	'G'
 		{
 			$$ = SQL_NEW_RULE;
-			$$->append($1 = newNode("G", SQL_NODE_PUNCTUATION));
+			$$->append(newNode("G", SQL_NODE_PUNCTUATION));
 		}
 	|	'T'
 		{
 			$$ = SQL_NEW_RULE;
-			$$->append($1 = newNode("T", SQL_NODE_PUNCTUATION));
+			$$->append(newNode("T", SQL_NODE_PUNCTUATION));
 		}
 	|	'P'
 		{
 			$$ = SQL_NEW_RULE;
-			$$->append($1 = newNode("P", SQL_NODE_PUNCTUATION));
+			$$->append(newNode("P", SQL_NODE_PUNCTUATION));
 		}
 	;
 character_large_object_type:
@@ -3752,18 +3753,18 @@ opt_paren_precision_scale:
 	|	'(' SQL_TOKEN_INTNUM ')'
 		{
 			$$ = SQL_NEW_RULE;
-			$$->append($1 = newNode("(", SQL_NODE_PUNCTUATION));
+			$$->append(newNode("(", SQL_NODE_PUNCTUATION));
 			$$->append($2);
-			$$->append($3 = newNode(")", SQL_NODE_PUNCTUATION));
+			$$->append(newNode(")", SQL_NODE_PUNCTUATION));
 		}
 	|	'(' SQL_TOKEN_INTNUM ',' SQL_TOKEN_INTNUM ')'
 		{
 			$$ = SQL_NEW_RULE;
-			$$->append($1 = newNode("(", SQL_NODE_PUNCTUATION));
+			$$->append(newNode("(", SQL_NODE_PUNCTUATION));
 			$$->append($2);
-			$$->append($3 = newNode(",", SQL_NODE_PUNCTUATION));
+			$$->append(newNode(",", SQL_NODE_PUNCTUATION));
 			$$->append($4);
-			$$->append($5 = newNode(")", SQL_NODE_PUNCTUATION));
+			$$->append(newNode(")", SQL_NODE_PUNCTUATION));
 		}
 	;
 exact_numeric_type:
@@ -3795,9 +3796,9 @@ approximate_numeric_type:
 		{
 			$$ = SQL_NEW_RULE;
 			$$->append($1);
-			$$->append($2 = newNode("(", SQL_NODE_PUNCTUATION));
+			$$->append(newNode("(", SQL_NODE_PUNCTUATION));
 			$$->append($3);
-			$$->append($4 = newNode(")", SQL_NODE_PUNCTUATION));
+			$$->append(newNode(")", SQL_NODE_PUNCTUATION));
 		}
 	|	SQL_TOKEN_FLOAT
 	|	SQL_TOKEN_REAL
@@ -3886,25 +3887,25 @@ case_abbreviation:
 		{
 			$$ = SQL_NEW_RULE;
 			$$->append($1);
-			$$->append($2 = newNode("(", SQL_NODE_PUNCTUATION));
+			$$->append(newNode("(", SQL_NODE_PUNCTUATION));
 			$$->append($3);
-			$$->append($4 = newNode(")", SQL_NODE_PUNCTUATION));
+			$$->append(newNode(")", SQL_NODE_PUNCTUATION));
 		}
 	|	SQL_TOKEN_COALESCE '(' value_exp ')'
 		{
 			$$ = SQL_NEW_RULE;
 			$$->append($1);
-			$$->append($2 = newNode("(", SQL_NODE_PUNCTUATION));
+			$$->append(newNode("(", SQL_NODE_PUNCTUATION));
 			$$->append($3);
-			$$->append($4 = newNode(")", SQL_NODE_PUNCTUATION));
+			$$->append(newNode(")", SQL_NODE_PUNCTUATION));
 		}
 	|	SQL_TOKEN_COALESCE '(' value_exp_commalist ')'
 		{
 			$$ = SQL_NEW_RULE;
 			$$->append($1);
-			$$->append($2 = newNode("(", SQL_NODE_PUNCTUATION));
+			$$->append(newNode("(", SQL_NODE_PUNCTUATION));
 			$$->append($3);
-			$$->append($4 = newNode(")", SQL_NODE_PUNCTUATION));
+			$$->append(newNode(")", SQL_NODE_PUNCTUATION));
 		}
 	;
 case_specification:
@@ -4026,16 +4027,16 @@ module:	SQL_TOKEN_NAME
 parameter:
 		':' SQL_TOKEN_NAME
 			{$$ = SQL_NEW_RULE;
-			$$->append($1 = newNode(":", SQL_NODE_PUNCTUATION));
+			$$->append(newNode(":", SQL_NODE_PUNCTUATION));
 			$$->append($2);}
 	|	'?'
 			{$$ = SQL_NEW_RULE; // test
-			$$->append($1 = newNode("?", SQL_NODE_PUNCTUATION));}
+			$$->append(newNode("?", SQL_NODE_PUNCTUATION));}
 	|	'['	SQL_TOKEN_NAME ']'
 			{$$ = SQL_NEW_RULE;
-			$$->append($1 = newNode("[", SQL_NODE_PUNCTUATION));
+			$$->append(newNode("[", SQL_NODE_PUNCTUATION));
 			$$->append($2);
-			$$->append($3 = newNode("]", SQL_NODE_PUNCTUATION));}
+			$$->append(newNode("]", SQL_NODE_PUNCTUATION));}
 	;
 
 /***
@@ -4179,7 +4180,7 @@ triggered_SQL_statement:
         $$->append($1);
         $$->append($2);
         $$->append($3);
-        $$->append($4 = newNode(";", SQL_NODE_PUNCTUATION));
+        $$->append(newNode(";", SQL_NODE_PUNCTUATION));
         $$->append($5);
     }
 	;

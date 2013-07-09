@@ -170,7 +170,7 @@ namespace connectivity
         OSQLParseNode*  buildDate(sal_Int32 _nType,OSQLParseNode*& pLiteral);
         bool            extractDate(OSQLParseNode* pLiteral,double& _rfValue);
         void            killThousandSeparator(OSQLParseNode* pLiteral);
-        OSQLParseNode*  convertNode(sal_Int32 nType,OSQLParseNode*& pLiteral);
+        OSQLParseNode*  convertNode(sal_Int32 nType,OSQLParseNode*const& pLiteral);
         // makes a string out of a number, pLiteral will be deleted
         OSQLParseNode*  buildNode_STR_NUM(OSQLParseNode*& pLiteral);
         OSQLParseNode*  buildNode_Date(const double& fValue, sal_Int32 nType);
@@ -238,9 +238,9 @@ namespace connectivity
 
         sal_Int16 buildComparsionRule(OSQLParseNode*& pAppend,OSQLParseNode* pLiteral);
         // pCompre will be deleted if it is not used
-        sal_Int16 buildPredicateRule(OSQLParseNode*& pAppend,OSQLParseNode* pLiteral,OSQLParseNode*& pCompare,OSQLParseNode* pLiteral2 = NULL);
+        sal_Int16 buildPredicateRule(OSQLParseNode*& pAppend,OSQLParseNode* const pLiteral,OSQLParseNode*const & pCompare,OSQLParseNode* pLiteral2 = NULL);
 
-        sal_Int16 buildLikeRule(OSQLParseNode*& pAppend,OSQLParseNode*& pLiteral,const OSQLParseNode* pEscape);
+        sal_Int16 buildLikeRule(OSQLParseNode* const& pAppend,OSQLParseNode*& pLiteral,const OSQLParseNode* pEscape);
         sal_Int16 buildStringNodes(OSQLParseNode*& pLiteral);
 #else
 #endif
