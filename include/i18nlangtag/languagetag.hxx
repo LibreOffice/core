@@ -376,7 +376,14 @@ private:
 
     void    convertFromRtlLocale();
 
+    /** @return whether BCP 47 language tag string was changed. */
     bool    canonicalize();
+
+    /** Canonicalize if not yet done and synchronize initialized conversions.
+
+        @return whether BCP 47 language tag string was changed.
+     */
+    bool    synCanonicalize();
 
     OUString    getLanguageFromLangtag();
     OUString    getScriptFromLangtag();

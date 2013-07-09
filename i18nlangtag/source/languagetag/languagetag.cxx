@@ -433,6 +433,8 @@ bool LanguageTag::canonicalize()
     dumper aDumper( &mpImplLangtag);
 #endif
 
+    bool bChanged = false;
+
     // Side effect: have maBcp47 in any case, resolved system.
     // Some methods calling canonicalize() (or not calling it due to
     // meIsLiblangtagNeeded==DECISION_NO) rely on this! Hence do not set
@@ -517,7 +519,7 @@ bool LanguageTag::canonicalize()
     if (meIsLiblangtagNeeded == DECISION_NO)
     {
         meIsValid = DECISION_YES;   // really, known must be valid ...
-        return true;                // that's it
+        return bChanged;            // that's it
     }
     meIsLiblangtagNeeded = DECISION_YES;
     SAL_INFO( "i18nlangtag", "LanguageTag::canonicalize: using liblangtag for " << maBcp47);
@@ -542,17 +544,20 @@ bool LanguageTag::canonicalize()
             // removes default script and such.
             if (maBcp47 != aOld)
             {
+                bChanged = true;
+                meIsIsoLocale = DECISION_DONTKNOW;
+                meIsIsoODF = DECISION_DONTKNOW;
                 if (!lt_tag_parse( MPLANGTAG, pTag, &aError.p))
                 {
                     SAL_WARN( "i18nlangtag", "LanguageTag::canonicalize: could not reparse " << maBcp47);
                     free( pTag);
                     meIsValid = DECISION_NO;
-                    return false;
+                    return bChanged;
                 }
             }
             free( pTag);
             meIsValid = DECISION_YES;
-            return true;
+            return bChanged;
         }
     }
     else
@@ -560,7 +565,25 @@ bool LanguageTag::canonicalize()
         SAL_INFO( "i18nlangtag", "LanguageTag::canonicalize: could not parse " << maBcp47);
     }
     meIsValid = DECISION_NO;
-    return false;
+    return bChanged;
+}
+
+
+bool LanguageTag::synCanonicalize()
+{
+    bool bChanged = false;
+    if (meIsLiblangtagNeeded != DECISION_NO && !mpImplLangtag)
+    {
+        bChanged = canonicalize();
+        if (bChanged)
+        {
+            if (mbInitializedLocale)
+                convertBcp47ToLocale();
+            if (mbInitializedLangID)
+                convertBcp47ToLang();
+        }
+    }
+    return bChanged;
 }
 
 
@@ -733,8 +756,7 @@ const OUString & LanguageTag::getBcp47( bool bResolveSystem ) const
 OUString LanguageTag::getLanguageFromLangtag()
 {
     OUString aLanguage;
-    if (meIsLiblangtagNeeded != DECISION_NO && !mpImplLangtag)
-        canonicalize();
+    synCanonicalize();
     if (maBcp47.isEmpty())
         return aLanguage;
     if (mpImplLangtag)
@@ -760,8 +782,7 @@ OUString LanguageTag::getLanguageFromLangtag()
 OUString LanguageTag::getScriptFromLangtag()
 {
     OUString aScript;
-    if (meIsLiblangtagNeeded != DECISION_NO && !mpImplLangtag)
-        canonicalize();
+    synCanonicalize();
     if (maBcp47.isEmpty())
         return aScript;
     if (mpImplLangtag)
@@ -787,8 +808,7 @@ OUString LanguageTag::getScriptFromLangtag()
 OUString LanguageTag::getRegionFromLangtag()
 {
     OUString aRegion;
-    if (meIsLiblangtagNeeded != DECISION_NO && !mpImplLangtag)
-        canonicalize();
+    synCanonicalize();
     if (maBcp47.isEmpty())
         return aRegion;
     if (mpImplLangtag)
@@ -842,7 +862,16 @@ LanguageType LanguageTag::getLanguageType( bool bResolveSystem ) const
         if (mbInitializedBcp47)
             const_cast<LanguageTag*>(this)->convertBcp47ToLang();
         else
+        {
             const_cast<LanguageTag*>(this)->convertLocaleToLang();
+
+            /* Resolve a locale only unknown due to some redundant information,
+             * like 'de-Latn-DE' with script tag. Never call canonicalize()
+             * from within convert...() methods due to possible recursion, so
+             * do it here. */
+            if ((!mbSystemLocale && mnLangID == LANGUAGE_SYSTEM) || mnLangID == LANGUAGE_DONTKNOW)
+                const_cast<LanguageTag*>(this)->synCanonicalize();
+        }
     }
     return mnLangID;
 }
@@ -1030,8 +1059,7 @@ bool LanguageTag::isIsoLocale() const
 {
     if (meIsIsoLocale == DECISION_DONTKNOW)
     {
-        if (meIsLiblangtagNeeded != DECISION_NO && !mpImplLangtag)
-            const_cast<LanguageTag*>(this)->canonicalize();
+        const_cast<LanguageTag*>(this)->synCanonicalize();
         // It must be at most ll-CC or lll-CC
         // Do not use getCountry() here, use getRegion() instead.
         meIsIsoLocale = ((maBcp47.isEmpty() ||
@@ -1046,8 +1074,7 @@ bool LanguageTag::isIsoODF() const
 {
     if (meIsIsoODF == DECISION_DONTKNOW)
     {
-        if (meIsLiblangtagNeeded != DECISION_NO && !mpImplLangtag)
-            const_cast<LanguageTag*>(this)->canonicalize();
+        const_cast<LanguageTag*>(this)->synCanonicalize();
         if (!isIsoScript( getScript()))
             return ((meIsIsoODF = DECISION_NO) == DECISION_YES);
         // The usual case is lll-CC so simply check that first.
@@ -1067,8 +1094,7 @@ bool LanguageTag::isValidBcp47() const
 {
     if (meIsValid == DECISION_DONTKNOW)
     {
-        if (meIsLiblangtagNeeded != DECISION_NO && !mpImplLangtag)
-           const_cast<LanguageTag*>(this)->canonicalize();
+        const_cast<LanguageTag*>(this)->synCanonicalize();
         SAL_WARN_IF( meIsValid == DECISION_DONTKNOW, "i18nlangtag",
                 "LanguageTag::isValidBcp47: canonicalize() didn't set meIsValid");
     }
