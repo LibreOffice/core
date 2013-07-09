@@ -2131,6 +2131,7 @@ double *OclCalc::OclSimpleDeltaOperation(OpCode eOp, const double *pOpArray,
     size_t global_work_size[1];
 
     kEnv.mpkKernel = clCreateKernel(kEnv.mpkProgram,kernelName, &clStatus);
+    CHECK_OPENCL(clStatus);
 
     // Ugh - horrible redundant copying ...
     cl_mem valuesCl   = allocateDoubleBuffer(kEnv, pOpArray, nElements, &clStatus);
@@ -2147,12 +2148,16 @@ double *OclCalc::OclSimpleDeltaOperation(OpCode eOp, const double *pOpArray,
 
     clStatus = clSetKernelArg(kEnv.mpkKernel, 0, sizeof(cl_mem),
                               (void *)&valuesCl);
+    CHECK_OPENCL(clStatus);
     clStatus = clSetKernelArg(kEnv.mpkKernel, 1, sizeof(cl_mem),
                               (void *)&subtractCl);
-    clStatus = clSetKernelArg(kEnv.mpkKernel, 2, sizeof(cl_mem),
+    CHECK_OPENCL(clStatus);
+    clStatus = clSetKernelArg(kEnv.mpkKernel, 2, sizeof(cl_int),
                               (void *)&start);
-    clStatus = clSetKernelArg(kEnv.mpkKernel, 3, sizeof(cl_mem),
+    CHECK_OPENCL(clStatus);
+    clStatus = clSetKernelArg(kEnv.mpkKernel, 3, sizeof(cl_int),
                               (void *)&end);
+    CHECK_OPENCL(clStatus);
     clStatus = clSetKernelArg(kEnv.mpkKernel, 4, sizeof(cl_mem),
                               (void *)&outputCl);
     CHECK_OPENCL(clStatus);

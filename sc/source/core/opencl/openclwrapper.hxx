@@ -12,6 +12,7 @@
 
 #include <config_features.h>
 #include <formula/opcode.hxx>
+#include <sal/detail/log.h>
 #include <cassert>
 #include <CL/cl.h>
 #endif
@@ -55,7 +56,7 @@ typedef int (*cl_kernel_function)(void **userdata, KernelEnv *kenv);
 #define CHECK_OPENCL(status)              \
 if(status != CL_SUCCESS)                  \
 {                                          \
-    printf ("error code is %d.\n",status);    \
+    printf ("OpenCL error code is %d at " SAL_DETAIL_WHERE "\n", status);    \
     return 0;                            \
 }
 
