@@ -118,17 +118,38 @@ public class Dialog extends java.awt.Dialog implements javax.accessibility.Acces
     public void removeNotify() {
     }
 
-        /**
-         * Determines if the object is visible.  Note: this means that the
-         * object intends to be visible; however, it may not in fact be
-         * showing on the screen because one of the objects that this object
-         * is contained by is not visible.  To determine if an object is
-         * showing on the screen, use <code>isShowing</code>.
-         *
-         * @return true if object is visible; otherwise, false
-         */
+    /**
+     * Determines if the object is visible.  Note: this means that the
+     * object intends to be visible; however, it may not in fact be
+     * showing on the screen because one of the objects that this object
+     * is contained by is not visible.  To determine if an object is
+     * showing on the screen, use <code>isShowing</code>.
+     *
+     * @return true if object is visible; otherwise, false
+     */
     public boolean isVisible(){
         return visible;
+    }
+
+    /**
+     * Determines whether this component is displayable. A component is
+     * displayable when it is connected to a native screen resource.
+     * <p>
+     * A component is made displayable either when it is added to
+     * a displayable containment hierarchy or when its containment
+     * hierarchy is made displayable.
+     * A containment hierarchy is made displayable when its ancestor
+     * window is either packed or made visible.
+     * <p>
+     * A component is made undisplayable either when it is removed from
+     * a displayable containment hierarchy or when its containment hierarchy
+     * is made undisplayable.  A containment hierarchy is made
+     * undisplayable when its ancestor window is disposed.
+     *
+     * @return <code>true</code> if the component is displayable
+     */
+    public boolean isDisplayable() {
+        return true;
     }
 
     /**
