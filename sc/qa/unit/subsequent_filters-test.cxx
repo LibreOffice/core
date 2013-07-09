@@ -41,6 +41,7 @@
 #include "markdata.hxx"
 #include "colorscale.hxx"
 #include "olinetab.hxx"
+#include "patattr.hxx"
 
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>

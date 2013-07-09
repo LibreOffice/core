@@ -1603,6 +1603,11 @@ void ScFormulaCell::SetResultToken( const formula::FormulaToken* pToken )
     aResult.SetToken(pToken);
 }
 
+double ScFormulaCell::GetResultDouble() const
+{
+    return aResult.GetDouble();
+}
+
 void ScFormulaCell::SetResultMatrix( SCCOL nCols, SCROW nRows, const ScConstMatrixRef& pMat, formula::FormulaToken* pUL )
 {
     aResult.SetMatrix(nCols, nRows, pMat, pUL);

@@ -276,7 +276,7 @@ public:
 
     void SetResultToken( const formula::FormulaToken* pToken );
 
-    double GetResultDouble() const { return aResult.GetDouble(); }
+    double GetResultDouble() const;
 
     void            SetErrCode( sal_uInt16 n );
     bool IsHyperLinkCell() const;
