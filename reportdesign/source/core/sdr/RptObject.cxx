@@ -150,7 +150,7 @@ SdrObject* OObjectBase::createObject(const uno::Reference< report::XReportCompon
             {
                 sal_Bool bOpaque = sal_False;
                 _xComponent->getPropertyValue(PROPERTY_OPAQUE) >>= bOpaque;
-                pNewObj->SetLayer(bOpaque ? RPT_LAYER_FRONT : RPT_LAYER_BACK);
+                pNewObj->NbcSetLayer(bOpaque ? RPT_LAYER_FRONT : RPT_LAYER_BACK);
             }
             catch(const uno::Exception&)
             {
