@@ -3209,6 +3209,22 @@ void ScInterpreter::ScMacro()
             case svString:
                 pPar->PutString( GetString() );
             break;
+            case svExternalSingleRef:
+            {
+                ScExternalRefCache::TokenRef pToken;
+                PopExternalSingleRef(pToken);
+                if ( nGlobalError )
+                {
+                    SetError( errIllegalArgument);
+                    bOk = false;
+                }
+                else
+                {
+                    pPar->PutDouble( pToken->GetDouble() );
+                    bOk = true;
+                }
+            }
+            break;
             case svSingleRef:
             {
                 ScAddress aAdr;
@@ -3269,11 +3285,16 @@ void ScInterpreter::ScMacro()
                 }
             }
             break;
+            case svExternalDoubleRef:
             case svMatrix:
             {
-                ScMatrixRef pMat = PopMatrix();
+                ScMatrixRef pMat;
+                if (nStackType == svMatrix)
+                    pMat = PopMatrix();
+                else
+                    PopExternalDoubleRef(pMat);
                 SCSIZE nC, nR;
-                if (pMat)
+                if (pMat && !nGlobalError)
                 {
                     pMat->GetDimensions(nC, nR);
                     SbxDimArrayRef refArray = new SbxDimArray;
