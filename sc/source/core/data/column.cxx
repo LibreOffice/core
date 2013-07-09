@@ -1535,7 +1535,7 @@ void ScColumn::CopyCellToDocument( SCROW nSrcRow, SCROW nDestRow, ScColumn& rDes
             ScAddress aDestPos = p->aPos;
             aDestPos.SetRow(nDestRow);
             ScFormulaCell* pNew = new ScFormulaCell(*p, *rDestCol.pDocument, aDestPos);
-            rDestCol.maCells.set(nDestRow, pNew);
+            rDestCol.SetFormulaCell(nDestRow, pNew);
         }
         break;
         case sc::element_type_empty:
@@ -1550,7 +1550,6 @@ void ScColumn::CopyCellToDocument( SCROW nSrcRow, SCROW nDestRow, ScColumn& rDes
     else
         rDestCol.maCellTextAttrs.set_empty(nDestRow, nDestRow);
 
-    rDestCol.RegroupFormulaCells(nDestRow);
     rDestCol.CellStorageModified();
 }
 
