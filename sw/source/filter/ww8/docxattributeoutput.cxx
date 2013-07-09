@@ -32,6 +32,7 @@
 #include <oox/token/tokens.hxx>
 #include <oox/export/utils.hxx>
 #include <oox/mathml/export.hxx>
+#include <oox/drawingml/drawingmltypes.hxx>
 
 #include <i18nlangtag/languagetag.hxx>
 
@@ -4857,7 +4858,32 @@ void DocxAttributeOutput::FormatBackground( const SvxBrushItem& rBrush )
 {
     OString sColor = msfilter::util::ConvertColor( rBrush.GetColor( ) );
     if (m_bTextFrameSyntax)
+    {
+        // Handle 'Opacity'
+        sal_Int32 nTransparency = rBrush.GetColor().GetTransparency();
+        if (nTransparency)
+        {
+            // Convert transparency to percent
+            // Consider editeng/source/items/frmitems.cxx : lcl_TransparencyToPercent() function.
+            sal_Int8 nTransparencyPercent = (sal_Int8)((nTransparency * 100 + 127) / 254);
+
+            // Calculate alpha value
+            // Consider oox/source/drawingml/color.cxx : getTransparency() function.
+            sal_Int32 nAlpha = (::oox::drawingml::MAX_PERCENT - ( ::oox::drawingml::PER_PERCENT * nTransparencyPercent ) );
+
+            // Calculate opacity value
+            // Consider oox/source/vml/vmlformatting.cxx : decodeColor() function.
+            double fOpacity = (double)nAlpha * 65535 / ::oox::drawingml::MAX_PERCENT;
+            OUString sOpacity = OUString::valueOf(fOpacity);
+
+            if ( !m_pFlyFillAttrList )
+                m_pFlyFillAttrList = m_pSerializer->createAttrList();
+
+            m_pFlyFillAttrList->add(XML_opacity, OUStringToOString(sOpacity, RTL_TEXTENCODING_UTF8) + "f");
+        }
+
         m_pFlyAttrList->add(XML_fillcolor, "#" + sColor);
+    }
     else if ( !m_rExport.bOutPageDescs )
     {
         m_pSerializer->singleElementNS( XML_w, XML_shd,
@@ -4876,7 +4902,9 @@ void DocxAttributeOutput::FormatFillGradient( const XFillGradientItem& rFillGrad
 {
     if (*m_oFillStyle == XFILL_GRADIENT)
     {
-        m_pFlyFillAttrList = m_pSerializer->createAttrList();
+        if ( !m_pFlyFillAttrList )
+            m_pFlyFillAttrList = m_pSerializer->createAttrList();
+
         m_pFlyFillAttrList->add(XML_type, "gradient");
 
         const XGradient& rGradient = rFillGradient.GetGradientValue();
@@ -4911,12 +4939,22 @@ void DocxAttributeOutput::FormatBox( const SvxBoxItem& rBox )
         if (pLeft && pRight && pTop && pBottom &&
                 *pLeft == *pRight && *pLeft == *pTop && *pLeft == *pBottom)
         {
-            OString sColor("#" + msfilter::util::ConvertColor(pTop->GetColor()));
-            m_pFlyAttrList->add(XML_strokecolor, sColor);
+            // Check border style
+            editeng::SvxBorderStyle eBorderStyle = pTop->GetBorderLineStyle();
+            if (eBorderStyle == table::BorderLineStyle::NONE)
+            {
+                m_pFlyAttrList->add(XML_stroked, "f");
+                m_pFlyAttrList->add(XML_strokeweight, "0pt");
+            }
+            else
+            {
+                OString sColor("#" + msfilter::util::ConvertColor(pTop->GetColor()));
+                m_pFlyAttrList->add(XML_strokecolor, sColor);
 
-            double const fConverted(editeng::ConvertBorderWidthToWord(pTop->GetBorderLineStyle(), pTop->GetWidth()));
-            sal_Int32 nWidth = sal_Int32(fConverted / 20);
-            m_pFlyAttrList->add(XML_strokeweight, OString::valueOf(nWidth) + "pt");
+                double const fConverted(editeng::ConvertBorderWidthToWord(pTop->GetBorderLineStyle(), pTop->GetWidth()));
+                sal_Int32 nWidth = sal_Int32(fConverted / 20);
+                m_pFlyAttrList->add(XML_strokeweight, OString::valueOf(nWidth) + "pt");
+            }
         }
 
         // v:textbox's inset attribute: inner margin values for textbox text

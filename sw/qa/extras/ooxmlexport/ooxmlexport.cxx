@@ -89,6 +89,7 @@ public:
     void testFdo65400();
     void testFdo66543();
     void testN822175();
+    void testFdo66688();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -150,6 +151,7 @@ void Test::run()
         {"fdo65400.docx", &Test::testFdo65400},
         {"fdo66543.docx", &Test::testFdo66543},
         {"n822175.odt", &Test::testN822175},
+        {"fdo66688.docx", &Test::testFdo66688},
     };
     // Don't test the first import of these, for some reason those tests fail
     const char* aBlacklist[] = {
@@ -900,6 +902,16 @@ void Test::testN822175()
     uno::Reference<beans::XPropertySet> xFrame(xDraws->getByIndex(0), uno::UNO_QUERY);
     // Was text::WrapTextMode_THROUGH, due to missing Surround handling in the exporter.
     CPPUNIT_ASSERT_EQUAL(text::WrapTextMode_PARALLEL, getProperty<text::WrapTextMode>(xFrame, "Surround"));
+}
+
+void Test::testFdo66688()
+{
+    // The problem was that TextFrame imported and exported the wrong value for transparency
+    // (was stored as 'FillTransparence' instead of 'BackColorTransparency'
+    uno::Reference<text::XTextFramesSupplier> xFramesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexAccess(xFramesSupplier->getTextFrames(), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xFrame(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL( sal_Int32( 80 ), getProperty< sal_Int32 >( xFrame, "BackColorTransparency" ) );
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
