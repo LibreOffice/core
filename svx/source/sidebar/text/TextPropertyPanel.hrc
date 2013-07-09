@@ -45,7 +45,7 @@
 #define X0                      SECTIONPAGE_MARGIN_HORIZONTAL
 #define X1                      SECTIONPAGE_MARGIN_HORIZONTAL + 1 + TOOLBOX_ITEM_WIDTH * 2  + 4
 #define X2                      (PROPERTYPAGE_WIDTH - (FONTSIZE_WIDTH))
-#define X3                      (X2 - (TOOLBOX_ITEM_DD_WIDTH) - 2)
+#define X3                      (X2 - (TOOLBOX_ITEM_DD_WIDTH) - 3)
 
 #define FIRST_LINE_Y            SECTIONPAGE_MARGIN_VERTICAL_TOP
 #define SECOND_LINE_Y           FIRST_LINE_Y + CBOX_HEIGHT + CONTROL_SPACING_VERTICAL  + 1
