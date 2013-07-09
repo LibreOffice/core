@@ -126,66 +126,6 @@ ModalDialog DLG_VERSIONS
     };
     Text [ en-US ] = "Versions of" ;
 };
-ModalDialog DLG_COMMENTS
-{
-    HelpID = "sfx2:ModalDialog:DLG_COMMENTS";
-    OutputSize = TRUE ;
-    Size = MAP_APPFONT ( 180 , 118 ) ;
-    SvLook = TRUE ;
-    Moveable = TRUE ;
-    FixedText FT_DATETIME
-    {
-        Pos = MAP_APPFONT ( 6 , 6 ) ;
-        Size = MAP_APPFONT ( 168 , 10 ) ;
-        Text [ en-US ] = "Date and time: " ;
-    };
-    FixedText FT_SAVEDBY
-    {
-        Pos = MAP_APPFONT ( 6 , 19 ) ;
-        Size = MAP_APPFONT ( 168 , 10 ) ;
-        Text [ en-US ] = "Saved by " ;
-    };
-    MultiLineEdit ME_VERSIONS
-    {
-        HelpID = "sfx2:MultiLineEdit:DLG_COMMENTS:ME_VERSIONS";
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 32 ) ;
-        Size = MAP_APPFONT ( 168 , 60 ) ;
-        TabStop = TRUE ;
-    };
-    OKButton PB_OK
-    {
-        Pos = MAP_APPFONT ( 15 , 98 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        TabStop = TRUE ;
-        DefButton = TRUE ;
-    };
-    CancelButton PB_CANCEL
-    {
-        Pos = MAP_APPFONT ( 68 , 98 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        TabStop = TRUE ;
-    };
-    PushButton PB_CLOSE
-    {
-        HelpID = "sfx2:PushButton:DLG_COMMENTS:PB_CLOSE";
-        Pos = MAP_APPFONT ( 68 , 98 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        TabStop = TRUE ;
-        Text [ en-US ] = "~Close" ;
-    };
-    HelpButton PB_HELP
-    {
-        Pos = MAP_APPFONT ( 124 , 98 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        TabStop = TRUE ;
-    };
-    Text [ en-US ] = "Insert Version Comment" ;
-};
-String DLG_COMMENTS
-{
-    Text [ en-US ] = "Version comment" ;
-};
 String STR_VIEWVERSIONCOMMENT
 {
     Text [ en-US ] = "View Version Comment" ;

@@ -375,7 +375,7 @@ IMPL_LINK( SfxVersionDialog, ButtonHdl_Impl, Button*, pButton )
     {
         SfxVersionInfo aInfo;
         aInfo.aAuthor = SvtUserOptions().GetFullName();
-        SfxViewVersionDialog_Impl* pDlg = new SfxViewVersionDialog_Impl( this, aInfo, sal_True );
+        SfxViewVersionDialog_Impl* pDlg = new SfxViewVersionDialog_Impl(this, aInfo, true);
         short nRet = pDlg->Execute();
         if ( nRet == RET_OK )
         {
@@ -409,7 +409,7 @@ IMPL_LINK( SfxVersionDialog, ButtonHdl_Impl, Button*, pButton )
     else if ( pButton == &aViewButton && pEntry )
     {
         SfxVersionInfo* pInfo = (SfxVersionInfo*) pEntry->GetUserData();
-        SfxViewVersionDialog_Impl* pDlg = new SfxViewVersionDialog_Impl( this, *pInfo, sal_False );
+        SfxViewVersionDialog_Impl* pDlg = new SfxViewVersionDialog_Impl(this, *pInfo, false);
         pDlg->Execute();
         delete pDlg;
     }
@@ -435,54 +435,46 @@ IMPL_LINK( SfxVersionDialog, ButtonHdl_Impl, Button*, pButton )
     return 0L;
 }
 
-SfxViewVersionDialog_Impl::SfxViewVersionDialog_Impl ( Window *pParent, SfxVersionInfo& rInfo, sal_Bool bEdit )
-    : SfxModalDialog( pParent, SfxResId( DLG_COMMENTS ) )
-    , aDateTimeText( this, SfxResId( FT_DATETIME ) )
-    , aSavedByText( this, SfxResId( FT_SAVEDBY ) )
-    , aEdit( this, SfxResId( ME_VERSIONS ) )
-    , aOKButton( this, SfxResId( PB_OK ) )
-    , aCancelButton( this, SfxResId( PB_CANCEL ) )
-    , aCloseButton( this, SfxResId( PB_CLOSE ) )
-    , aHelpButton( this, SfxResId( PB_HELP ) )
-    , pInfo( &rInfo )
+SfxViewVersionDialog_Impl::SfxViewVersionDialog_Impl(Window *pParent, SfxVersionInfo& rInfo, bool bEdit)
+    : SfxModalDialog(pParent, "VersionCommentDialog", "sfx/ui/versioncommentdialog.ui")
+    , m_rInfo(rInfo)
 {
-    FreeResource();
+    get(m_pDateTimeText, "timestamp");
+    get(m_pSavedByText, "author");
+    get(m_pEdit, "textview");
+    get(m_pOKButton, "ok");
+    get(m_pCancelButton, "cancel");
+    get(m_pCloseButton, "close");
 
     const LocaleDataWrapper& rLocaleWrapper( Application::GetSettings().GetLocaleDataWrapper() );
-    aDateTimeText.SetText( aDateTimeText.GetText() + ConvertDateTime_Impl( pInfo->aCreationDate, rLocaleWrapper ) );
-    aSavedByText.SetText( aSavedByText.GetText() + pInfo->aAuthor );
-    aEdit.SetText( rInfo.aComment );
+    m_pDateTimeText->SetText(m_pDateTimeText->GetText() + ConvertDateTime_Impl(rInfo.aCreationDate, rLocaleWrapper));
+    m_pSavedByText->SetText(m_pSavedByText->GetText() + rInfo.aAuthor);
+    m_pEdit->SetText(rInfo.aComment);
+    m_pEdit->set_height_request(7 * m_pEdit->GetTextHeight());
+    m_pEdit->set_width_request(40 * m_pEdit->approximate_char_width());
+    m_pOKButton->SetClickHdl(LINK(this, SfxViewVersionDialog_Impl, ButtonHdl));
 
-    aCloseButton.SetClickHdl ( LINK( this, SfxViewVersionDialog_Impl, ButtonHdl ) );
-    aOKButton.SetClickHdl ( LINK( this, SfxViewVersionDialog_Impl, ButtonHdl ) );
-
-    aEdit.GrabFocus();
-    if ( !bEdit )
+    if (!bEdit)
     {
-        aOKButton.Hide();
-        aCancelButton.Hide();
-        aEdit.SetReadOnly( sal_True );
-        SetText( SfxResId( STR_VIEWVERSIONCOMMENT ) );
+        m_pOKButton->Hide();
+        m_pCancelButton->Hide();
+        m_pEdit->SetReadOnly(true);
+        SetText(SfxResId(STR_VIEWVERSIONCOMMENT));
+        m_pCloseButton->GrabFocus();
     }
     else
     {
-        aDateTimeText.Hide();
-        aCloseButton.Hide();
+        m_pDateTimeText->Hide();
+        m_pCloseButton->Hide();
+        m_pEdit->GrabFocus();
     }
 }
 
-IMPL_LINK( SfxViewVersionDialog_Impl, ButtonHdl, Button*, pButton )
+IMPL_LINK(SfxViewVersionDialog_Impl, ButtonHdl, Button*, pButton)
 {
-    if ( pButton == &aCloseButton )
-    {
-        EndDialog( RET_CANCEL );
-    }
-    else if ( pButton == &aOKButton )
-    {
-        pInfo->aComment = aEdit.GetText();
-        EndDialog( RET_OK );
-    }
-
+    assert(pButton == m_pOKButton);
+    m_rInfo.aComment = m_pEdit->GetText();
+    EndDialog(RET_OK);
     return 0L;
 }
 

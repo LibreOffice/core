@@ -74,21 +74,19 @@ public:
 
 class SfxViewVersionDialog_Impl : public SfxModalDialog
 {
-    FixedText                   aDateTimeText;
-    FixedText                   aSavedByText;
-    MultiLineEdit               aEdit;
-    OKButton                    aOKButton;
-    CancelButton                aCancelButton;
-    PushButton                  aCloseButton;
-    HelpButton                  aHelpButton;
-    SfxVersionInfo*             pInfo;
+    FixedText*        m_pDateTimeText;
+    FixedText*        m_pSavedByText;
+    VclMultiLineEdit* m_pEdit;
+    OKButton*         m_pOKButton;
+    CancelButton*     m_pCancelButton;
+    CloseButton*      m_pCloseButton;
+    SfxVersionInfo&   m_rInfo;
 
-    DECL_LINK(                  ButtonHdl, Button* );
+    DECL_LINK(ButtonHdl, Button*);
 
 public:
-                                SfxViewVersionDialog_Impl( Window *pParent,
-                                    SfxVersionInfo& rInfo, sal_Bool bEdit );
- };
+    SfxViewVersionDialog_Impl(Window *pParent, SfxVersionInfo& rInfo, bool bEdit);
+};
 
 #endif
 
