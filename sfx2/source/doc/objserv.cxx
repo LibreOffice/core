@@ -518,10 +518,13 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                     {
                         // user has done some changes to DocumentInfo
                         pDocInfoItem->UpdateDocumentInfo(getDocProperties());
+                        uno::Sequence< document::CmisProperty > aNewCmisProperties =
+                            pDocInfoItem->GetCmisPropertiesSeq( );
+                        xCmisDoc->updateCmisProperties( aNewCmisProperties );
                         SetUseUserData( ((const SfxDocumentInfoItem *)pDocInfoItem)->IsUseUserData() );
                         // add data from dialog for possible recording purpose
                         rReq.AppendItem( SfxDocumentInfoItem( GetTitle(),
-                            getDocProperties(), aCmisProperties, IsUseUserData() ) );
+                            getDocProperties(), aNewCmisProperties, IsUseUserData() ) );
                     }
 
                     rReq.Done();

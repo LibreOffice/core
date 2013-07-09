@@ -140,6 +140,11 @@ public:
         getProperties( const com::sun::star::uno::Reference<
             com::sun::star::ucb::XCommandEnvironment > & xEnv );
 
+    virtual libcmis::ObjectPtr updateProperties(
+            const com::sun::star::uno::Any& iCmisProps,
+            const com::sun::star::uno::Reference<
+            com::sun::star::ucb::XCommandEnvironment > & xEnv);
+
     virtual com::sun::star::uno::Sequence< com::sun::star::ucb::CommandInfo >
         getCommands( const com::sun::star::uno::Reference<
             com::sun::star::ucb::XCommandEnvironment > & xEnv );

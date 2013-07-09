@@ -576,6 +576,28 @@ std::vector< CmisProperty* > SfxDocumentInfoItem::GetCmisProperties() const
     return aRet;
 }
 
+uno::Sequence< document::CmisProperty > SfxDocumentInfoItem::GetCmisPropertiesSeq() const
+{
+    Sequence< document::CmisProperty > aPropertiesSeq( m_aCmisProperties.size() );
+    sal_Int32 i = 0;
+    std::vector< CmisProperty* >::const_iterator pIter;
+    for ( pIter = m_aCmisProperties.begin();
+            pIter != m_aCmisProperties.end(); ++pIter, ++i )
+    {
+        CmisProperty* aProp = *pIter;
+        aPropertiesSeq[i].Id = aProp->m_sId;
+        aPropertiesSeq[i].Name = aProp->m_sName;
+        aPropertiesSeq[i].Updatable = aProp->m_bUpdatable;
+        aPropertiesSeq[i].Required = aProp->m_bRequired;
+        aPropertiesSeq[i].MultiValued = aProp->m_bMultiValued;
+        aPropertiesSeq[i].OpenChoice = aProp->m_bOpenChoice;
+        aPropertiesSeq[i].Choices = aProp->m_aChoices;
+        aPropertiesSeq[i].Value = aProp->m_aValue;
+    }
+
+    return aPropertiesSeq;
+}
+
 void SfxDocumentInfoItem::ClearCmisProperties()
 {
     for ( sal_uInt32 i = 0; i < m_aCmisProperties.size(); i++ )

@@ -1316,6 +1316,11 @@ public:
                 css::document::CmisProperty >& _cmisproperties )
         throw (css::uno::RuntimeException);
 
+    virtual void SAL_CALL updateCmisProperties(
+            const css::uno::Sequence<
+                css::document::CmisProperty >& _cmisproperties )
+        throw (css::uno::RuntimeException);
+
     virtual void SAL_CALL checkOut(  ) throw ( css::uno::RuntimeException );
     virtual void SAL_CALL cancelCheckOut(  ) throw ( css::uno::RuntimeException );
     virtual void SAL_CALL checkIn( sal_Bool bIsMajor, const OUString & rMessage  )

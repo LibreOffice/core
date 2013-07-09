@@ -164,6 +164,10 @@ public:
                                     const com::sun::star::uno::Any& rValue );
 
     std::vector< CmisProperty* >  GetCmisProperties() const;
+
+    ::com::sun::star::uno::Sequence< ::com::sun::star::document::CmisProperty >
+                        GetCmisPropertiesSeq() const;
+
     void        ClearCmisProperties();
     void        AddCmisProperty(  const OUString& sId, const OUString& sName,
                                   const bool bUpdatable, const bool bRequired,

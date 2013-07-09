@@ -2474,6 +2474,29 @@ void SAL_CALL SfxBaseModel::setCmisProperties( const Sequence< document::CmisPro
     m_pData->m_cmisProperties = _cmisproperties;
 }
 
+void SAL_CALL SfxBaseModel::updateCmisProperties( const Sequence< document::CmisProperty >& aProperties )
+    throw ( RuntimeException )
+{
+    SfxMedium* pMedium = m_pData->m_pObjectShell->GetMedium();
+    if ( pMedium )
+    {
+        try
+        {
+            ::ucbhelper::Content aContent( pMedium->GetName( ),
+                Reference<ucb::XCommandEnvironment>(),
+                comphelper::getProcessComponentContext() );\
+
+            aContent.executeCommand( "updateProperties", uno::makeAny( aProperties ) );
+            loadCmisProperties( );
+        }
+        catch (const Exception & e)
+        {
+            throw RuntimeException( e.Message, e.Context );
+        }
+    }
+
+}
+
 void SAL_CALL SfxBaseModel::checkOut(  ) throw ( RuntimeException )
 {
     SfxMedium* pMedium = m_pData->m_pObjectShell->GetMedium();

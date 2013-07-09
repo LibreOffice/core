@@ -44,6 +44,8 @@ interface XCmisDocument : com::sun::star::uno::XInterface
 
     boolean canCheckIn( );
 
+    void updateCmisProperties( [in] sequence <com::sun::star::document::CmisProperty> cmisProperties );
+
     /** Contains the properties values named after their CMIS ID.
      */
     [attribute] sequence <com::sun::star::document::CmisProperty> CmisProperties;

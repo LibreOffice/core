@@ -413,6 +413,25 @@ namespace cmis
             static_cast< cppu::OWeakObject * >( this ), -1) );
     }
 
+    libcmis::ObjectPtr Content::updateProperties(
+         const uno::Any& /*iCmisProps*/,
+         const uno::Reference< ucb::XCommandEnvironment >& xEnv )
+    {
+        // TODO convert iCmisProps to aProperties;
+        map< string, libcmis::PropertyPtr > aProperties;
+        libcmis::ObjectPtr updateObj;
+        try
+        {
+            updateObj = getObject( xEnv )->updateProperties( aProperties );
+        }
+        catch ( const libcmis::Exception& e )
+        {
+            SAL_INFO( "cmisucp", "Unexpected libcmis exception: "<< e.what( ) );
+        }
+
+        return updateObj;
+    }
+
     uno::Reference< sdbc::XRow > Content::getPropertyValues(
             const uno::Sequence< beans::Property >& rProperties,
             const uno::Reference< ucb::XCommandEnvironment >& xEnv )
@@ -1328,6 +1347,8 @@ namespace cmis
             ucb::CommandInfo ( OUString( "cancelCheckout" ), -1, getCppuVoidType() ),
             ucb::CommandInfo ( OUString( "checkIn" ), -1,
                     getCppuType( static_cast<ucb::TransferInfo * >( 0 ) ) ),
+            ucb::CommandInfo ( OUString( "updateProperties" ), -1, getCppuVoidType() ),
+
 
             // Folder Only, omitted if not a folder
             ucb::CommandInfo
@@ -1534,6 +1555,10 @@ namespace cmis
                 ucbhelper::cancelCommandExecution ( getBadArgExcept(), xEnv );
             }
             aRet <<= checkIn( aArg, xEnv );
+        }
+        else if ( aCommand.Name == "updateProperties" )
+        {
+            updateProperties( aCommand.Argument, xEnv );
         }
         else
         {
