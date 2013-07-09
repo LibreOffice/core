@@ -1830,8 +1830,9 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
         case RTF_ROW:
         case RTF_NESTROW:
             {
-                // If the right edge of the last cell (row width) is smaller than the width of some other row, mimic the WW8 import: add a fake cell.
-                if (nKeyword == RTF_ROW && m_aStates.top().nCellX < m_nCellxMax)
+                // If the right edge of the last cell (row width) is smaller than the width of some other row, mimic WW8TabDesc::CalcDefaults(): add a fake cell.
+                const int MINLAY = 23; // sw/inc/swtypes.hxx, minimal possible size of frames.
+                if (nKeyword == RTF_ROW && (m_nCellxMax - m_aStates.top().nCellX) >= MINLAY)
                     dispatchValue(RTF_CELLX, m_nCellxMax);
 
                 if (m_aStates.top().nCells)

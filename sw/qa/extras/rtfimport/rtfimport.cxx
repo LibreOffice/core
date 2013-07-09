@@ -152,6 +152,7 @@ public:
     void testFdo47802();
     void testFdo39001();
     void testGroupshape();
+    void testFdo66565();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -289,6 +290,7 @@ void Test::run()
         {"fdo47802.rtf", &Test::testFdo47802},
         {"fdo39001.rtf", &Test::testFdo39001},
         {"groupshape.rtf", &Test::testGroupshape},
+        {"fdo66565.rtf", &Test::testFdo66565},
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -1405,6 +1407,16 @@ void Test::testGroupshape()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xDraws->getCount());
     uno::Reference<drawing::XShapes> xGroupshape(xDraws->getByIndex(0), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xGroupshape->getCount());
+}
+
+void Test::testFdo66565()
+{
+    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(), uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
+    // Cell width of A2 was 554, should be 453/14846*10000
+    uno::Reference<table::XTableRows> xTableRows(xTable->getRows(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(304), getProperty< uno::Sequence<text::TableColumnSeparator> >(xTableRows->getByIndex(1), "TableColumnSeparators")[0].Position);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
