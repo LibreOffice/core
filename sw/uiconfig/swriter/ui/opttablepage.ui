@@ -389,6 +389,7 @@
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
                     <property name="spacing">12</property>
+                    <property name="homogeneous">True</property>
                     <child>
                       <object class="GtkGrid" id="grid4">
                         <property name="visible">True</property>
@@ -398,7 +399,6 @@
                         <property name="orientation">vertical</property>
                         <property name="row_spacing">6</property>
                         <property name="column_spacing">12</property>
-                        <property name="column_homogeneous">True</property>
                         <child>
                           <object class="GtkLabel" id="label4">
                             <property name="visible">True</property>
@@ -495,7 +495,6 @@
                         <property name="orientation">vertical</property>
                         <property name="row_spacing">6</property>
                         <property name="column_spacing">12</property>
-                        <property name="column_homogeneous">True</property>
                         <child>
                           <object class="GtkSpinButton" id="rowinsert:0.00cm">
                             <property name="visible">True</property>
