@@ -4678,14 +4678,17 @@ void DocxAttributeOutput::FormatSurround( const SwFmtSurround& rSurround )
             case SURROUND_IDEAL:
                 sType = "square";
                 sSide = "largest";
+                break;
             case SURROUND_LEFT:
                 sType = "square";
                 sSide = "left";
+                break;
             case SURROUND_RIGHT:
                 sType = "square";
                 sSide = "right";
                 break;
             case SURROUND_THROUGHT:
+                /* empty type and side means throught */
             default:
                 break;
         }
