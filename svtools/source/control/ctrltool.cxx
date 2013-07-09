@@ -382,8 +382,7 @@ FontList::FontList( OutputDevice* pDevice, OutputDevice* pDevice2, sal_Bool bAll
 FontList::~FontList()
 {
     // Gegebenenfalls SizeArray loeschen
-    if ( mpSizeAry )
-        delete[] mpSizeAry;
+    delete[] mpSizeAry;
 
     // FontInfos loeschen
     ImplFontListFontInfo *pTemp, *pInfo;

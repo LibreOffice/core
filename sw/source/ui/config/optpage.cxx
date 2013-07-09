@@ -578,8 +578,11 @@ SwStdFontTabPage::SwStdFontTabPage( Window* pParent,
 
 SwStdFontTabPage::~SwStdFontTabPage()
 {
-    if(bDeletePrinter)
+    delete pFontList;
+    if (bDeletePrinter)
+    {
         delete pPrt;
+    }
 }
 
 SfxTabPage* SwStdFontTabPage::Create( Window* pParent,
@@ -760,6 +763,11 @@ void SwStdFontTabPage::Reset( const SfxItemSet& rSet)
 
     const SfxPoolItem* pItem;
 
+    if (bDeletePrinter)
+    {
+        delete pPrt;
+    }
+
     if(SFX_ITEM_SET == rSet.GetItemState(FN_PARAM_PRINTER, sal_False, &pItem))
     {
         pPrt = (SfxPrinter*)((const SwPtrItem*)pItem)->GetValue();
@@ -771,8 +779,8 @@ void SwStdFontTabPage::Reset( const SfxItemSet& rSet)
                     SID_PRINTER_CHANGESTODOC, SID_PRINTER_CHANGESTODOC,
                     0 );
         pPrt = new SfxPrinter(pPrinterSet);
-        bDeletePrinter = sal_True;
     }
+    delete pFontList;
     pFontList = new FontList( pPrt );
     // #i94536# prevent duplication of font entries when 'reset' button is pressed
     if( !pStandardBox->GetEntryCount() )
