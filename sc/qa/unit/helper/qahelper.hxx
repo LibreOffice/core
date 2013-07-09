@@ -71,7 +71,7 @@ struct FileFormat {
     const char* pName; const char* pFilterName; const char* pTypeName; unsigned int nFormatType;
 };
 
-extern FileFormat aFileFormats[];
+SC_DLLPUBLIC extern FileFormat aFileFormats[];
 
 // Why is this here and not in osl, and using the already existing file
 // handling APIs? Do we really want to add arbitrary new file handling
