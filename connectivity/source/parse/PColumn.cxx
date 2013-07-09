@@ -214,9 +214,6 @@ OOrderColumn::OOrderColumn( const Reference<XPropertySet>& _xColumn, const OUStr
     ,m_bAscending(_bAscending)
 {
     construct();
-    OSL_ENSURE( getString(_xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TABLENAME))).isEmpty() ||
-                i_rOriginatingTableName == getString(_xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TABLENAME)) ),
-                "dbaccess::OOrderColumn::OOrderColumn: forced originating table name != underlying column table name" );
 }
 
 // -----------------------------------------------------------------------------
