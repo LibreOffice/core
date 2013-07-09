@@ -61,6 +61,7 @@ $(eval $(call gb_UIConfig_add_toolbarfiles,modules/swriter,\
 $(eval $(call gb_UIConfig_add_uifiles,modules/swriter,\
 	sw/uiconfig/swriter/ui/abstractdialog \
 	sw/uiconfig/swriter/ui/asciifilterdialog \
+    sw/uiconfig/swriter/ui/authenticationsettingsdialog \
 	sw/uiconfig/swriter/ui/autoformattable \
 	sw/uiconfig/swriter/ui/autotext \
 	sw/uiconfig/swriter/ui/bibliographyentry \
@@ -95,6 +96,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/swriter,\
 	sw/uiconfig/swriter/ui/insertscript \
 	sw/uiconfig/swriter/ui/inserttable \
 	sw/uiconfig/swriter/ui/linenumbering \
+	sw/uiconfig/swriter/ui/mailconfigpage \
 	sw/uiconfig/swriter/ui/mailmergedialog \
 	sw/uiconfig/swriter/ui/mergetabledialog \
 	sw/uiconfig/swriter/ui/newuserindexdialog \

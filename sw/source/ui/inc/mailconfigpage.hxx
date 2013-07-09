@@ -33,30 +33,20 @@ class SwMailConfigPage : public SfxTabPage
 {
     friend class SwTestAccountSettingsDialog;
 
-    FixedLine       m_aIdentityFL;
+    Edit*            m_pDisplayNameED;
+    Edit*            m_pAddressED;
 
-    FixedText       m_aDisplayNameFT;
-    Edit            m_aDisplayNameED;
-    FixedText       m_aAddressFT;
-    Edit            m_aAddressED;
+    CheckBox*        m_pReplyToCB;
+    FixedText*        m_pReplyToFT;
+    Edit*            m_pReplyToED;
 
-    CheckBox        m_aReplyToCB;
-    FixedText       m_aReplyToFT;
-    Edit            m_aReplyToED;
+    Edit*            m_pServerED;
+    NumericField*    m_pPortNF;
 
-    FixedLine       m_aSMTPFL;
+    CheckBox*        m_pSecureCB;
 
-    FixedText       m_aServerFT;
-    Edit            m_aServerED;
-    FixedText       m_aPortFT;
-    NumericField    m_aPortNF;
-
-    CheckBox        m_aSecureCB;
-
-    PushButton      m_aServerAuthenticationPB;
-
-    FixedLine       m_aSeparatorFL;
-    PushButton      m_aTestPB;
+    PushButton*      m_pServerAuthenticationPB;
+    PushButton*      m_pTestPB;
 
     SwMailMergeConfigItem*  m_pConfigItem;
 
