@@ -21,6 +21,20 @@
 typedef struct _rtl_Locale rtl_Locale;  // as in rtl/locale.h
 
 
+/** The ISO 639-2 code reserved for local use used to indicate that a
+    com::sun::star::Locale contains a BCP 47 string in its Variant field. The
+    Locale's Language field then will contain this language code.
+
+    @see LanguageTag::getLocale()
+
+    Avoid use, only needed internally or if conversion from Locale to
+    LanguageTag is not wanted, i.e. during ODF import. To check whether a
+    LanguageTag contains a plain language/country combination or a more
+    detailed BCP 47 language tag use LanguageTag::isIsoLocale() instead.
+ */
+#define I18NLANGTAG_QLT "qlt"
+
+
 /** Wrapper for liblangtag BCP 47 language tags, MS-LangIDs, locales and
     conversions in between.
 

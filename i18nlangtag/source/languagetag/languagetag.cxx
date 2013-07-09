@@ -35,11 +35,6 @@ using namespace com::sun::star;
 #define LANGTAGCAST(p) (reinterpret_cast<lt_tag_t*>(p))
 #define MPLANGTAG LANGTAGCAST(mpImplLangtag)
 
-/** Convention to signal presence of BCP 47 language tag in a Locale's Variant
-    field. The Locale's Language field then will contain this ISO 639-2
-    reserved for local use code. */
-#define ISO639_LANGUAGE_TAG "qlt"
-
 
 // Helper to ensure lt_error_t is free'd
 struct myLtError
@@ -474,7 +469,7 @@ bool LanguageTag::canonicalize()
                     }
                     else
                     {
-                        maLocale.Language = ISO639_LANGUAGE_TAG;
+                        maLocale.Language = I18NLANGTAG_QLT;
                         maLocale.Country  = aCountry;
                         maLocale.Variant  = maBcp47;
                     }
@@ -574,7 +569,7 @@ void LanguageTag::convertLocaleToBcp47()
     if (mbSystemLocale && !mbInitializedLocale)
         convertLangToLocale();
 
-    if (maLocale.Language == ISO639_LANGUAGE_TAG)
+    if (maLocale.Language == I18NLANGTAG_QLT)
     {
         maBcp47 = maLocale.Variant;
         meIsIsoLocale = DECISION_NO;
@@ -607,7 +602,7 @@ void LanguageTag::convertLocaleToLang()
     {
         /* FIXME: this is temporary until code base is converted to not use
          * MsLangId::convert...() anymore. After that, proper new method has to
-         * be implemented to allow ISO639_LANGUAGE_TAG and sript tag and such. */
+         * be implemented to allow I18NLANGTAG_QLT and sript tag and such. */
         mnLangID = MsLangId::Conversion::convertLocaleToLanguage( maLocale);
     }
     mbInitializedLangID = true;
@@ -625,7 +620,7 @@ void LanguageTag::convertBcp47ToLocale()
     }
     else
     {
-        maLocale.Language = ISO639_LANGUAGE_TAG;
+        maLocale.Language = I18NLANGTAG_QLT;
         maLocale.Country = getCountry();
         maLocale.Variant = maBcp47;
     }
@@ -661,7 +656,7 @@ void LanguageTag::convertLangToLocale()
     }
     /* FIXME: this is temporary until code base is converted to not use
      * MsLangId::convert...() anymore. After that, proper new method has to be
-     * implemented to allow ISO639_LANGUAGE_TAG and script tag and such. */
+     * implemented to allow I18NLANGTAG_QLT and script tag and such. */
     // Resolve system here!
     maLocale = MsLangId::Conversion::convertLanguageToLocale( mnLangID, true);
     mbInitializedLocale = true;
