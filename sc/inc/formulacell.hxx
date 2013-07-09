@@ -288,11 +288,8 @@ public:
 
     void            MaybeInterpret();
 
-    // Temporary formula cell grouping API
-    ScFormulaCellGroupRef  GetCellGroup()
-        { return xGroup; }
-    void                   SetCellGroup( const ScFormulaCellGroupRef &xRef )
-        { xGroup = xRef; }
+    ScFormulaCellGroupRef GetCellGroup();
+    void SetCellGroup( const ScFormulaCellGroupRef &xRef );
 
     CompareState CompareByTokenArray( ScFormulaCell& rOther ) const;
 

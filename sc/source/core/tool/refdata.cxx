@@ -19,6 +19,10 @@
 
 #include "refdata.hxx"
 
+sal_Bool ScSingleRefData::IsDeleted() const
+{
+    return IsColDeleted() || IsRowDeleted() || IsTabDeleted();
+}
 
 void ScSingleRefData::CalcRelFromAbs( const ScAddress& rPos )
 {

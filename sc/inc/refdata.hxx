@@ -81,7 +81,7 @@ struct SC_DLLPUBLIC ScSingleRefData
     inline  sal_Bool IsRowDeleted() const       { return Flags.bRowDeleted; }
     inline  void SetTabDeleted( sal_Bool bVal ) { Flags.bTabDeleted = (bVal ? sal_True : false ); }
     inline  sal_Bool IsTabDeleted() const       { return Flags.bTabDeleted; }
-    inline  sal_Bool IsDeleted() const          { return IsColDeleted() || IsRowDeleted() || IsTabDeleted(); }
+    sal_Bool IsDeleted() const;
 
     inline  void SetFlag3D( sal_Bool bVal ) { Flags.bFlag3D = (bVal ? sal_True : false ); }
     inline  sal_Bool IsFlag3D() const       { return Flags.bFlag3D; }

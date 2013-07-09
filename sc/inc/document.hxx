@@ -541,7 +541,7 @@ public:
     SC_DLLPUBLIC void SetAnonymousDBData(SCTAB nTab, ScDBData* pDBData);
     SC_DLLPUBLIC ScDBData* GetAnonymousDBData(SCTAB nTab);
 
-    SC_DLLPUBLIC inline SCTAB   GetTableCount() const { return static_cast<SCTAB>(maTabs.size()); }
+    SC_DLLPUBLIC SCTAB GetTableCount() const;
     SvNumberFormatterIndexTable* GetFormatExchangeList() const { return pFormatExchangeList; }
 
     SC_DLLPUBLIC ScDocProtection* GetDocProtection() const;
@@ -843,7 +843,7 @@ public:
     SC_DLLPUBLIC void GetInputString( SCCOL nCol, SCROW nRow, SCTAB nTab, OUString& rString );
     sal_uInt16 GetStringForFormula( const ScAddress& rPos, OUString& rString );
     SC_DLLPUBLIC double GetValue( const ScAddress& rPos ) const;
-    SC_DLLPUBLIC double GetValue( SCCOL nCol, SCROW nRow, SCTAB nTab ) const { ScAddress aAdr(nCol, nRow, nTab); return GetValue(aAdr);}
+    SC_DLLPUBLIC double GetValue( SCCOL nCol, SCROW nRow, SCTAB nTab ) const;
     SC_DLLPUBLIC void GetValue( SCCOL nCol, SCROW nRow, SCTAB nTab, double& rValue ) const;
     SC_DLLPUBLIC const EditTextObject* GetEditText( const ScAddress& rPos ) const;
     void RemoveEditTextCharAttribs( const ScAddress& rPos, const ScPatternAttr& rAttr );

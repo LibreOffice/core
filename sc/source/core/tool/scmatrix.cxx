@@ -1257,6 +1257,18 @@ void ScMatrixImpl::CalcPosition(SCSIZE nIndex, SCSIZE& rC, SCSIZE& rR) const
 
 // ============================================================================
 
+void ScMatrix::IncRef() const
+{
+    ++nRefCnt;
+}
+
+void ScMatrix::DecRef() const
+{
+    --nRefCnt;
+    if (nRefCnt == 0)
+        delete this;
+}
+
 ScMatrix::ScMatrix( SCSIZE nC, SCSIZE nR) :
     pImpl(new ScMatrixImpl(nC, nR)), nRefCnt(0)
 {

@@ -530,6 +530,16 @@ ScPostIt* ScPostIt::Clone( const ScAddress& rOwnPos, ScDocument& rDestDoc, const
     return bCloneCaption ? new ScPostIt( rDestDoc, rDestPos, *this ) : new ScPostIt( rDestDoc, rDestPos, maNoteData, false );
 }
 
+const OUString& ScPostIt::GetAuthor() const
+{
+    return maNoteData.maAuthor;
+}
+
+void ScPostIt::SetAuthor( const OUString& rAuthor )
+{
+    maNoteData.maAuthor = rAuthor;
+}
+
 void ScPostIt::AutoStamp()
 {
     maNoteData.maDate = ScGlobal::pLocaleData->getDate( Date( Date::SYSTEM ) );

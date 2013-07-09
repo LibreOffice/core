@@ -2886,6 +2886,16 @@ void ScFormulaCell::CompileColRowNameFormula()
     }
 }
 
+ScFormulaCellGroupRef ScFormulaCell::GetCellGroup()
+{
+    return xGroup;
+}
+
+void ScFormulaCell::SetCellGroup( const ScFormulaCellGroupRef &xRef )
+{
+    xGroup = xRef;
+}
+
 ScFormulaCell::CompareState ScFormulaCell::CompareByTokenArray( ScFormulaCell& rOther ) const
 {
     // no Matrix formulae yet.

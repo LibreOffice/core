@@ -70,6 +70,7 @@ struct SC_DLLPUBLIC ScSortParam
     ScSortParam( const ScSubTotalParam& rSub, const ScSortParam& rOld );
     /// TopTen sort
     ScSortParam( const ScQueryParam&, SCCOL nCol );
+    ~ScSortParam();
 
     ScSortParam&    operator=  ( const ScSortParam& r );
     bool            operator== ( const ScSortParam& rOther ) const;

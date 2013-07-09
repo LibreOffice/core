@@ -107,9 +107,9 @@ public:
     inline void         SetDate( const OUString& rDate ) { maNoteData.maDate = rDate; }
 
     /** Returns the author date of this note. */
-    inline const OUString& GetAuthor() const { return maNoteData.maAuthor; }
+    const OUString& GetAuthor() const;
     /** Sets a new author date for this note. */
-    inline void         SetAuthor( const OUString& rAuthor ) { maNoteData.maAuthor = rAuthor; }
+    void SetAuthor( const OUString& rAuthor );
 
     /** Sets date and author from system settings. */
     void                AutoStamp();

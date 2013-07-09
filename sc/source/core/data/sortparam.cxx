@@ -45,6 +45,8 @@ ScSortParam::ScSortParam( const ScSortParam& r ) :
 {
 }
 
+ScSortParam::~ScSortParam() {}
+
 //------------------------------------------------------------------------
 
 void ScSortParam::Clear()

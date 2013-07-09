@@ -213,16 +213,8 @@ public:
         MUST be at least of the size of the original matrix. */
     ScMatrix* CloneAndExtend(SCSIZE nNewCols, SCSIZE nNewRows) const;
 
-    inline void IncRef() const
-    {
-        ++nRefCnt;
-    }
-    inline void DecRef() const
-    {
-        --nRefCnt;
-        if (nRefCnt == 0)
-            delete this;
-    }
+    void IncRef() const;
+    void DecRef() const;
 
     void SetErrorInterpreter( ScInterpreter* p);
     void GetDimensions( SCSIZE& rC, SCSIZE& rR) const;

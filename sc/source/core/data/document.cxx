@@ -252,6 +252,11 @@ ScDBData* ScDocument::GetAnonymousDBData(SCTAB nTab)
     return NULL;
 }
 
+SCTAB ScDocument::GetTableCount() const
+{
+    return static_cast<SCTAB>(maTabs.size());
+}
+
 void ScDocument::SetAnonymousDBData(SCTAB nTab, ScDBData* pDBData)
 {
     if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
@@ -3256,6 +3261,10 @@ double ScDocument::GetValue( const ScAddress& rPos ) const
     return 0.0;
 }
 
+double ScDocument::GetValue( SCCOL nCol, SCROW nRow, SCTAB nTab ) const
+{
+    ScAddress aAdr(nCol, nRow, nTab); return GetValue(aAdr);
+}
 
 void ScDocument::GetNumberFormat( SCCOL nCol, SCROW nRow, SCTAB nTab,
                                   sal_uInt32& rFormat ) const
