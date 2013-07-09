@@ -63,9 +63,9 @@ dispatch_queue_t backgroundQueue;
 - (void)startConnectionTimeoutTimer
 {
     [self stopConnectionTimeoutTimer]; // Or make sure any existing timer is stopped before this method is called
-    
+
     NSTimeInterval interval = 3.0; // Measured in seconds, is a double
-    
+
     self.connectionTimeoutTimer = [NSTimer scheduledTimerWithTimeInterval:interval
                                                                    target:self
                                                                  selector:@selector(handleConnectionTimeout)
@@ -99,17 +99,17 @@ dispatch_queue_t backgroundQueue;
 {
     // Look up if there is already a pin code for this client.
     NSUserDefaults * userDefaluts = [NSUserDefaults standardUserDefaults];
-    
+
     if(!userDefaluts)
         NSLog(@"userDefaults nil");
     NSInteger newPin = [userDefaluts integerForKey:self.name];
-    
+
     // If not, generate one.
     if (!newPin) {
         newPin = arc4random() % 9999;
         [userDefaluts setInteger:newPin forKey:self.name];
     }
-    
+
     return newPin;
 }
 
@@ -119,12 +119,12 @@ dispatch_queue_t backgroundQueue;
     CFReadStreamRef readStream;
     CFWriteStreamRef writeStream;
     CFStreamCreatePairWithSocketToHost(kCFAllocatorDefault, (__bridge CFStringRef)ip, portNumber, &readStream, &writeStream);
-    
+
     if(readStream && writeStream)
     {
         CFReadStreamSetProperty(readStream, kCFStreamPropertyShouldCloseNativeSocket, kCFBooleanTrue);
         CFWriteStreamSetProperty(writeStream, kCFStreamPropertyShouldCloseNativeSocket, kCFBooleanTrue);
-        
+
         //Setup mInputStream
         self.inputStream = (__bridge NSInputStream *)readStream;
         [self.inputStream setDelegate:self];
@@ -132,7 +132,7 @@ dispatch_queue_t backgroundQueue;
             [self.inputStream scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
         });
         [self.inputStream open];
-        
+
         //Setup outputstream
         self.outputStream = (__bridge NSOutputStream *)writeStream;
         [self.outputStream setDelegate:self];
@@ -140,10 +140,10 @@ dispatch_queue_t backgroundQueue;
             [self.outputStream scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
         });
         [self.outputStream open];
-        
+
         NSArray *temp = [[NSArray alloc]initWithObjects:@"LO_SERVER_CLIENT_PAIR\n", self.name, @"\n", self.pin, @"\n\n", nil];
         NSString *command = [temp componentsJoinedByString:@""];
-        
+
         [self sendCommand:command];
     }
 }
@@ -153,7 +153,7 @@ dispatch_queue_t backgroundQueue;
     NSLog(@"Sending command %@", aCommand);
     // UTF-8 as speficied in specification
     NSData * data = [aCommand dataUsingEncoding:NSUTF8StringEncoding];
-    
+
     [self.outputStream write:(uint8_t *)[data bytes] maxLength:[data length]];
 }
 
@@ -162,20 +162,21 @@ int count = 0;
 - (void)stream:(NSStream *)stream handleEvent:(NSStreamEvent)eventCode {
     switch(eventCode) {
         case NSStreamEventOpenCompleted:{
-                [self stopConnectionTimeoutTimer];
-                [[NSNotificationCenter defaultCenter]postNotificationName:@"connection.status.connected" object:nil];
-            }
+            [self stopConnectionTimeoutTimer];
+            [[NSNotificationCenter defaultCenter]postNotificationName:@"connection.status.connected" object:nil];
+        }
             break;
         case NSStreamEventErrorOccurred:{
             [self stopConnectionTimeoutTimer];
+            [self disconnect];
             NSLog(@"Connection error occured");
             [[NSNotificationCenter defaultCenter]postNotificationName:@"connection.status.disconnected" object:nil];
-            }
+        }
             break;
         case NSStreamEventHasBytesAvailable:
         {
             NSMutableData* data;
-//            NSLog(@"NSStreamEventHasBytesAvailable");
+            //            NSLog(@"NSStreamEventHasBytesAvailable");
             if(!data) {
                 data = [[NSMutableData alloc] init];
             }
@@ -194,7 +195,7 @@ int count = 0;
                     }
                 }
             }
-            
+
             NSArray *commands = [str componentsSeparatedByString:@"\n"];
             [self.receiver parse:commands];
             data = nil;
@@ -202,9 +203,9 @@ int count = 0;
         } break;
         default:
         {
-            
+
         }
-            
+
     }
 }
 
@@ -214,6 +215,8 @@ int count = 0;
         return;
     [self.inputStream close];
     [self.outputStream close];
+    [self.inputStream removeFromRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
+    [self.outputStream removeFromRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
     self.inputStream = nil;
     self.outputStream = nil;
     self.connected = NO;

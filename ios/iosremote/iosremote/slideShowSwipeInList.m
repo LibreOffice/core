@@ -72,7 +72,8 @@ dispatch_queue_t backgroundQueue;
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [self.slideshow size];
+    // +1 for stopwatch
+    return [self.slideshow size]+1;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath

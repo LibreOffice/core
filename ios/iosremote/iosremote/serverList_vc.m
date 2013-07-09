@@ -103,7 +103,9 @@
 
 - (void)disableSpinner
 {
-    [self.tableView cellForRowAtIndexPath:self.lastSpinningCellIndex].accessoryView = nil;
+    if ([[self.tableView cellForRowAtIndexPath:self.lastSpinningCellIndex] respondsToSelector:@selector(accessoryView)]) {
+        [self.tableView cellForRowAtIndexPath:self.lastSpinningCellIndex].accessoryView = nil;
+    }
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
