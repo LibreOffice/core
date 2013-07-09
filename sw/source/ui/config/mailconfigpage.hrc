@@ -19,24 +19,6 @@
 #ifndef _MAILCONFIGPAGE_HRC
 #define _MAILCONFIGPAGE_HRC
 
-#define FL_IDENTITY                 1
-#define FT_DISPLAYNAME              2
-#define ED_DISPLAYNAME              3
-#define FT_ADDRESS                  4
-#define ED_ADDRESS                  5
-#define CB_REPLYTO                  6
-#define FT_REPLYTO                  7
-#define ED_REPLYTO                  8
-#define FL_SMTP                     9
-#define FT_SERVER                   10
-#define ED_SERVER                   11
-#define FT_PORT                     12
-#define NF_PORT                     13
-#define CB_SECURE                   14
-#define PB_AUTHENTICATION           16
-#define FL_SEPARATOR                17
-#define PB_TEST                     21
-
 #define FI_INFO                     31
 #define LB_STATUS                   32
 #define FI_ERROR                    33
@@ -54,23 +36,6 @@
 #define ST_ERROR_SERVER             46
 #define ILIST                       47
 
-#define CB_AUTHENTICATION           50
-#define RB_SEP_AUTHENTICATION       51
-#define RB_SMPTAFTERPOP             52
-#define FT_OUTGOINGSERVER           53
-#define FT_USERNAME                 54
-#define ED_USERNAME                 55
-#define FT_OUTPASSWORD              56
-#define ED_OUTPASSWORD              57
-#define FT_INCOMINGSERVER           58
-#define FT_INUSERNAME               59
-#define ED_INUSERNAME               60
-#define FT_INPASSWORD               63
-#define ED_INPASSWORD               64
-#define PB_OK                       65
-#define FT_PROTOCOL                 66
-#define RB_POP3                     67
-#define RB_IMAP                     68
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
