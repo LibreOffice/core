@@ -17,6 +17,11 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 
+# use POSIX locale for well-defined tool output
+LO_SAVE_LC_ALL=$LC_ALL
+LC_ALL=C
+export LC_ALL
+
 #
 # STAR_PROFILE_LOCKING_DISABLED=1
 # export STAR_PROFILE_LOCKING_DISABLED
@@ -137,6 +142,9 @@ AIX)
     export LIBPATH
     ;;
 esac
+
+# restore locale setting
+LC_ALL="$LO_SAVE_LC_ALL"
 
 # run soffice.bin directly when you want to get the backtrace
 if [ -n "$GDBTRACECHECK" ] ; then
