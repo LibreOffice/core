@@ -57,6 +57,7 @@ $(eval $(call gb_CppunitTest_use_components,sw_filters_test,\
     comphelper/util/comphelp \
     configmgr/source/configmgr \
     dbaccess/util/dba \
+    embeddedobj/util/embobj \
     fileaccess/source/fileacc \
     filter/source/config/cache/filterconfig1 \
     forms/util/frm \
