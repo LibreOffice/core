@@ -248,11 +248,12 @@ End
 #endif
 
 #if defined SOLAR_JAVA && defined MACOSX
-Shortcut gid_Shortcut_Dl_JavaUno
-    FileID = gid_File_Dl_JavaUno;
+Unixlink gid_Unixlink_Dl_JavaUno
+    BIN_FILE_BODY;
     Dir = SCP2_URE_DL_DIR;
     Name = "libjava_uno.jnilib";
-    Styles = (RELATIVE);
+    Target = "libjava_uno.dylib";
+    Styles = ();
 End
 #endif
 
@@ -655,6 +656,7 @@ Module gid_Module_Root_Ure_Hidden
             gid_File_Misc_ServicesRdb,
             gid_File_Misc_JavavendorsXml);
     Unixlinks = (gid_Unixlink_Ure_Bin_Urelibs,
+                 gid_Unixlink_Dl_JavaUno,
                  gid_Unixlink_File_Dl_Sal,
                  gid_Unixlink_File_Dl_Salhelper,
                  gid_Unixlink_File_Dl_Cppu,
