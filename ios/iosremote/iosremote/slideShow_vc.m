@@ -66,10 +66,11 @@
     [self.slideNumber setText:[NSString stringWithFormat:@"%u/%u", [self.slideshow currentSlide]+1, [self.slideshow size]]];
     
     
-    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:@"End"
+    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:@"Stop Presentation"
                                                                    style:UIBarButtonItemStyleBordered
                                                                   target:self
                                                                   action:@selector(handleBack:)];
+    [backButton setTintColor:[UIColor redColor]];
     self.revealViewController.navigationItem.leftBarButtonItem = backButton;
     
     self.revealButtonItem = [[UIBarButtonItem alloc] initWithImage: [UIImage imageNamed:@"more_icon.png"]

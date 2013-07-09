@@ -12,6 +12,7 @@
 #import "SlideShow.h"
 #import "CommandTransmitter.h"
 #import "SWRevealViewController.h"
+#import <QuartzCore/CALayer.h>
 
 #define TIMER_STATE_RUNNING 0
 #define TIMER_STATE_PAUSED 1
