@@ -21,6 +21,7 @@
 #define _XMLOFF_XMLINDEXALPHABETICALSOURCECONTEXT_HXX_
 
 #include "XMLIndexSourceBaseContext.hxx"
+#include <xmloff/languagetagodf.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/lang/Locale.hpp>
 
@@ -48,7 +49,7 @@ class XMLIndexAlphabeticalSourceContext : public XMLIndexSourceBaseContext
     const OUString sSortAlgorithm;
     const OUString sLocale;
 
-    ::com::sun::star::lang::Locale aLocale;
+    LanguageTagODF maLanguageTagODF;
     OUString sAlgorithm;
 
     OUString sMainEntryStyleName;

@@ -710,10 +710,7 @@ void XMLSectionExport::ExportAlphabeticalIndexStart(
         aAny = rPropertySet->getPropertyValue(sLocale);
         Locale aLocale;
         aAny >>= aLocale;
-        GetExport().AddAttribute(XML_NAMESPACE_FO, XML_LANGUAGE,
-                                 aLocale.Language);
-        GetExport().AddAttribute(XML_NAMESPACE_FO, XML_COUNTRY,
-                                 aLocale.Country);
+        GetExport().AddLanguageTagAttributes( XML_NAMESPACE_FO, XML_NAMESPACE_STYLE, aLocale, true);
 
         ExportBaseIndexSource(TEXT_SECTION_TYPE_ALPHABETICAL, rPropertySet);
     }
@@ -1696,10 +1693,7 @@ void XMLSectionExport::ExportBibliographyConfiguration(SvXMLExport& rExport)
             aAny = xPropSet->getPropertyValue(sLocale);
             Locale aLocale;
             aAny >>= aLocale;
-            rExport.AddAttribute(XML_NAMESPACE_FO, XML_LANGUAGE,
-                                     aLocale.Language);
-            rExport.AddAttribute(XML_NAMESPACE_FO, XML_COUNTRY,
-                                     aLocale.Country);
+            rExport.AddLanguageTagAttributes( XML_NAMESPACE_FO, XML_NAMESPACE_STYLE, aLocale, true);
 
             // configuration element
             SvXMLElementExport aElement(rExport, XML_NAMESPACE_TEXT,

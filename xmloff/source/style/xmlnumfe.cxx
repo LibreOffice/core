@@ -340,19 +340,8 @@ void SvXMLNumFmtExport::AddLanguageAttr_Impl( sal_Int32 nLang )
 {
     if ( nLang != LANGUAGE_SYSTEM )
     {
-        /* FIXME-BCP47: handle language tags!
-         * ODF now provides fo:script, and rfc-language-tag attribute in case a
-         * locale can't be expressed using these three ISO codes.
-         * Of course these need to be read in xmlnumfi.cxx then..
-         * In general all places using XML_LANGUAGE and XML_COUNTRY need to be
-         * adapted once we really support bcp47. */
-        OUString aLangStr, aCountryStr;
-        LanguageTag( (LanguageType)nLang ).getIsoLanguageCountry( aLangStr, aCountryStr );
-
-        if (!aLangStr.isEmpty())
-            rExport.AddAttribute( XML_NAMESPACE_NUMBER, XML_LANGUAGE, aLangStr );
-        if (!aCountryStr.isEmpty())
-            rExport.AddAttribute( XML_NAMESPACE_NUMBER, XML_COUNTRY, aCountryStr );
+        rExport.AddLanguageTagAttributes( XML_NAMESPACE_NUMBER, XML_NAMESPACE_NUMBER,
+                LanguageTag( (LanguageType)nLang), false);
     }
 }
 
@@ -1118,6 +1107,8 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
     rFormat.GetNatNumXml( aAttr, nPart );
     if ( !aAttr.Format.isEmpty() )
     {
+        /* FIXME-BCP47: ODF defines no transliteration-script or
+         * transliteration-rfc-language-tag */
         rExport.AddAttribute( XML_NAMESPACE_NUMBER, XML_TRANSLITERATION_FORMAT,
                               aAttr.Format );
         rExport.AddAttribute( XML_NAMESPACE_NUMBER, XML_TRANSLITERATION_LANGUAGE,

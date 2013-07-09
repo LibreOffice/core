@@ -66,7 +66,7 @@ XMLIndexBibliographyConfigurationContext::XMLIndexBibliographyConfigurationConte
         sSuffix(),
         sPrefix(),
         sAlgorithm(),
-        aLocale(),
+        maLanguageTagODF(),
         bNumberedEntries(sal_False),
         bSortByPosition(sal_True)
 {
@@ -133,11 +133,22 @@ void XMLIndexBibliographyConfigurationContext::ProcessAttribute(
     {
         if( IsXMLToken(sLocalName, XML_LANGUAGE) )
         {
-            aLocale.Language = sValue;
+            maLanguageTagODF.maLanguage = sValue;
+        }
+        else if( IsXMLToken(sLocalName, XML_SCRIPT) )
+        {
+            maLanguageTagODF.maScript = sValue;
         }
         else if( IsXMLToken(sLocalName, XML_COUNTRY) )
         {
-            aLocale.Country = sValue;
+            maLanguageTagODF.maCountry = sValue;
+        }
+    }
+    else if( XML_NAMESPACE_STYLE == nPrefix )
+    {
+        if( IsXMLToken(sLocalName, XML_RFC_LANGUAGE_TAG) )
+        {
+            maLanguageTagODF.maRfcLanguageTag = sValue;
         }
     }
 }
@@ -255,9 +266,9 @@ void XMLIndexBibliographyConfigurationContext::CreateAndInsert(sal_Bool)
                 aAny.setValue(&bSortByPosition, ::getBooleanCppuType());
                 xPropSet->setPropertyValue(sIsSortByPosition, aAny);
 
-                if( !aLocale.Language.isEmpty() && !aLocale.Country.isEmpty() )
+                if( !maLanguageTagODF.isEmpty() )
                 {
-                    aAny <<= aLocale;
+                    aAny <<= maLanguageTagODF.getLanguageTag().getLocale( false);
                     xPropSet->setPropertyValue(sLocale, aAny);
                 }
 

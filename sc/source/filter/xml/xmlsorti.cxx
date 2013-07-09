@@ -45,8 +45,6 @@ ScXMLSortContext::ScXMLSortContext( ScXMLImport& rImport,
                                         ScXMLDatabaseRangeContext* pTempDatabaseRangeContext) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
     pDatabaseRangeContext(pTempDatabaseRangeContext),
-    sCountry(),
-    sLanguage(),
     sAlgorithm(),
     nUserListIndex(0),
     bCopyOutputData(false),
@@ -87,11 +85,17 @@ ScXMLSortContext::ScXMLSortContext( ScXMLImport& rImport,
                 bIsCaseSensitive = IsXMLToken(sValue, XML_TRUE);
             }
             break;
+            case XML_TOK_SORT_ATTR_RFC_LANGUAGE_TAG :
+                maLanguageTagODF.maRfcLanguageTag = sValue;
+            break;
             case XML_TOK_SORT_ATTR_LANGUAGE :
-                sLanguage = sValue;
+                maLanguageTagODF.maLanguage = sValue;
+            break;
+            case XML_TOK_SORT_ATTR_SCRIPT :
+                maLanguageTagODF.maScript = sValue;
             break;
             case XML_TOK_SORT_ATTR_COUNTRY :
-                sCountry = sValue;
+                maLanguageTagODF.maCountry = sValue;
             break;
             case XML_TOK_SORT_ATTR_ALGORITHM :
                 sAlgorithm = sValue;
@@ -130,11 +134,9 @@ SvXMLImportContext *ScXMLSortContext::CreateChildContext( sal_uInt16 nPrefix,
 
 void ScXMLSortContext::EndElement()
 {
-    sal_Int32 nLangLength(sLanguage.getLength());
-    sal_Int32 nCountryLength(sCountry.getLength());
     sal_Int32 nAlgoLength(sAlgorithm.getLength());
     sal_uInt8 i (0);
-    if (nLangLength || nCountryLength)
+    if (!maLanguageTagODF.isEmpty())
         ++i;
     if (nAlgoLength)
         ++i;
@@ -153,13 +155,10 @@ void ScXMLSortContext::EndElement()
     aSortDescriptor[5].Value <<= nUserListIndex;
     aSortDescriptor[6].Name = OUString(SC_UNONAME_SORTFLD);
     aSortDescriptor[6].Value <<= aSortFields;
-    if (nLangLength || nCountryLength)
+    if (!maLanguageTagODF.isEmpty())
     {
-        lang::Locale aLocale;
-        aLocale.Language = sLanguage;
-        aLocale.Country = sCountry;
         aSortDescriptor[7].Name = OUString(SC_UNONAME_COLLLOC);
-        aSortDescriptor[7].Value <<= aLocale;
+        aSortDescriptor[7].Value <<= maLanguageTagODF.getLanguageTag().getLocale( false);
     }
     if (nAlgoLength)
     {

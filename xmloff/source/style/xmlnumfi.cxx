@@ -42,6 +42,7 @@
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/families.hxx>
 #include <xmloff/xmltoken.hxx>
+#include <xmloff/languagetagodf.hxx>
 
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <boost/ptr_container/ptr_set.hpp>
@@ -263,7 +264,9 @@ enum SvXMLStyleTokens
 enum SvXMLStyleAttrTokens
 {
     XML_TOK_STYLE_ATTR_NAME,
+    XML_TOK_STYLE_ATTR_RFC_LANGUAGE_TAG,
     XML_TOK_STYLE_ATTR_LANGUAGE,
+    XML_TOK_STYLE_ATTR_SCRIPT,
     XML_TOK_STYLE_ATTR_COUNTRY,
     XML_TOK_STYLE_ATTR_TITLE,
     XML_TOK_STYLE_ATTR_AUTOMATIC_ORDER,
@@ -271,7 +274,9 @@ enum SvXMLStyleAttrTokens
     XML_TOK_STYLE_ATTR_TRUNCATE_ON_OVERFLOW,
     XML_TOK_STYLE_ATTR_VOLATILE,
     XML_TOK_STYLE_ATTR_TRANSL_FORMAT,
+    XML_TOK_STYLE_ATTR_TRANSL_RFC_LANGUAGE_TAG,
     XML_TOK_STYLE_ATTR_TRANSL_LANGUAGE,
+    XML_TOK_STYLE_ATTR_TRANSL_SCRIPT,
     XML_TOK_STYLE_ATTR_TRANSL_COUNTRY,
     XML_TOK_STYLE_ATTR_TRANSL_STYLE
 };
@@ -287,7 +292,9 @@ enum SvXMLStyleElemAttrTokens
     XML_TOK_ELEM_ATTR_MIN_EXPONENT_DIGITS,
     XML_TOK_ELEM_ATTR_MIN_NUMERATOR_DIGITS,
     XML_TOK_ELEM_ATTR_MIN_DENOMINATOR_DIGITS,
+    XML_TOK_ELEM_ATTR_RFC_LANGUAGE_TAG,
     XML_TOK_ELEM_ATTR_LANGUAGE,
+    XML_TOK_ELEM_ATTR_SCRIPT,
     XML_TOK_ELEM_ATTR_COUNTRY,
     XML_TOK_ELEM_ATTR_STYLE,
     XML_TOK_ELEM_ATTR_TEXTUAL,
@@ -545,7 +552,9 @@ const SvXMLTokenMap& SvXMLNumImpData::GetStyleAttrTokenMap()
         {
             //  attributes for a style
             { XML_NAMESPACE_STYLE,  XML_NAME,                  XML_TOK_STYLE_ATTR_NAME                  },
+            { XML_NAMESPACE_NUMBER, XML_RFC_LANGUAGE_TAG,      XML_TOK_STYLE_ATTR_RFC_LANGUAGE_TAG,     },
             { XML_NAMESPACE_NUMBER, XML_LANGUAGE,              XML_TOK_STYLE_ATTR_LANGUAGE              },
+            { XML_NAMESPACE_NUMBER, XML_SCRIPT,                XML_TOK_STYLE_ATTR_SCRIPT                },
             { XML_NAMESPACE_NUMBER, XML_COUNTRY,               XML_TOK_STYLE_ATTR_COUNTRY               },
             { XML_NAMESPACE_NUMBER, XML_TITLE,                 XML_TOK_STYLE_ATTR_TITLE                 },
             { XML_NAMESPACE_NUMBER, XML_AUTOMATIC_ORDER,       XML_TOK_STYLE_ATTR_AUTOMATIC_ORDER       },
@@ -553,7 +562,9 @@ const SvXMLTokenMap& SvXMLNumImpData::GetStyleAttrTokenMap()
             { XML_NAMESPACE_NUMBER, XML_TRUNCATE_ON_OVERFLOW,  XML_TOK_STYLE_ATTR_TRUNCATE_ON_OVERFLOW  },
             { XML_NAMESPACE_STYLE,  XML_VOLATILE,              XML_TOK_STYLE_ATTR_VOLATILE              },
             { XML_NAMESPACE_NUMBER, XML_TRANSLITERATION_FORMAT,     XML_TOK_STYLE_ATTR_TRANSL_FORMAT    },
+            // not defined in ODF { XML_NAMESPACE_NUMBER, XML_TRANSLITERATION_RFC_LANGUAGE_TAG, XML_TOK_STYLE_ATTR_TRANSL_RFC_LANGUAGE_TAG   },
             { XML_NAMESPACE_NUMBER, XML_TRANSLITERATION_LANGUAGE,   XML_TOK_STYLE_ATTR_TRANSL_LANGUAGE  },
+            // not defined in ODF { XML_NAMESPACE_NUMBER, XML_TRANSLITERATION_SCRIPT,     XML_TOK_STYLE_ATTR_TRANSL_SCRIPT    },
             { XML_NAMESPACE_NUMBER, XML_TRANSLITERATION_COUNTRY,    XML_TOK_STYLE_ATTR_TRANSL_COUNTRY   },
             { XML_NAMESPACE_NUMBER, XML_TRANSLITERATION_STYLE,      XML_TOK_STYLE_ATTR_TRANSL_STYLE     },
             XML_TOKEN_MAP_END
@@ -580,7 +591,9 @@ const SvXMLTokenMap& SvXMLNumImpData::GetStyleElemAttrTokenMap()
             { XML_NAMESPACE_NUMBER, XML_MIN_EXPONENT_DIGITS,     XML_TOK_ELEM_ATTR_MIN_EXPONENT_DIGITS  },
             { XML_NAMESPACE_NUMBER, XML_MIN_NUMERATOR_DIGITS,    XML_TOK_ELEM_ATTR_MIN_NUMERATOR_DIGITS },
             { XML_NAMESPACE_NUMBER, XML_MIN_DENOMINATOR_DIGITS,  XML_TOK_ELEM_ATTR_MIN_DENOMINATOR_DIGITS },
+            { XML_NAMESPACE_NUMBER, XML_RFC_LANGUAGE_TAG,        XML_TOK_ELEM_ATTR_RFC_LANGUAGE_TAG     },
             { XML_NAMESPACE_NUMBER, XML_LANGUAGE,                XML_TOK_ELEM_ATTR_LANGUAGE             },
+            { XML_NAMESPACE_NUMBER, XML_SCRIPT,                  XML_TOK_ELEM_ATTR_SCRIPT               },
             { XML_NAMESPACE_NUMBER, XML_COUNTRY,                 XML_TOK_ELEM_ATTR_COUNTRY              },
             { XML_NAMESPACE_NUMBER, XML_STYLE,                   XML_TOK_ELEM_ATTR_STYLE                },
             { XML_NAMESPACE_NUMBER, XML_TEXTUAL,                 XML_TOK_ELEM_ATTR_TEXTUAL              },
@@ -925,7 +938,7 @@ SvXMLNumFmtElementContext::SvXMLNumFmtElementContext( SvXMLImport& rImport,
     bLong( sal_False ),
     bTextual( sal_False )
 {
-    OUString sLanguage, sCountry;
+    LanguageTagODF aLanguageTagODF;
     sal_Int32 nAttrVal;
     bool bAttrBool(false);
     sal_uInt16 nAttrEnum;
@@ -982,11 +995,17 @@ SvXMLNumFmtElementContext::SvXMLNumFmtElementContext( SvXMLImport& rImport,
                 if (::sax::Converter::convertNumber( nAttrVal, sValue, 0 ))
                     aNumInfo.nFracDenominator = nAttrVal;
                 break;
+            case XML_TOK_ELEM_ATTR_RFC_LANGUAGE_TAG:
+                aLanguageTagODF.maRfcLanguageTag = sValue;
+                break;
             case XML_TOK_ELEM_ATTR_LANGUAGE:
-                sLanguage = sValue;
+                aLanguageTagODF.maLanguage = sValue;
+                break;
+            case XML_TOK_ELEM_ATTR_SCRIPT:
+                aLanguageTagODF.maScript = sValue;
                 break;
             case XML_TOK_ELEM_ATTR_COUNTRY:
-                sCountry = sValue;
+                aLanguageTagODF.maCountry = sValue;
                 break;
             case XML_TOK_ELEM_ATTR_STYLE:
                 if ( SvXMLUnitConverter::convertEnum( nAttrEnum, sValue, aStyleValueMap ) )
@@ -1002,11 +1021,11 @@ SvXMLNumFmtElementContext::SvXMLNumFmtElementContext( SvXMLImport& rImport,
         }
     }
 
-    if ( !sLanguage.isEmpty() || !sCountry.isEmpty() )
+    if ( !aLanguageTagODF.isEmpty() )
     {
-        nElementLang = LanguageTag( sLanguage, sCountry ).getLanguageType( false);
+        nElementLang = aLanguageTagODF.getLanguageTag().getLanguageType( false);
         if ( nElementLang == LANGUAGE_DONTKNOW )
-            nElementLang = LANGUAGE_SYSTEM;         //! error handling for invalid locales?
+            nElementLang = LANGUAGE_SYSTEM;         //! error handling for unknown locales?
     }
 }
 
@@ -1305,7 +1324,8 @@ SvXMLNumFormatContext::SvXMLNumFormatContext( SvXMLImport& rImport,
     eDateSecs( XML_DEA_NONE ),
     bDateNoDefault( sal_False )
 {
-    OUString sLanguage, sCountry;
+    LanguageTagODF aLanguageTagODF;
+    OUString sNatNumAttrScript, sNatNumAttrRfcLanguageTag;
     ::com::sun::star::i18n::NativeNumberXmlAttributes aNatNumAttr;
     bool bAttrBool(false);
     sal_uInt16 nAttrEnum;
@@ -1324,11 +1344,17 @@ SvXMLNumFormatContext::SvXMLNumFormatContext( SvXMLImport& rImport,
         {
             case XML_TOK_STYLE_ATTR_NAME:
                 break;
+            case XML_TOK_STYLE_ATTR_RFC_LANGUAGE_TAG:
+                aLanguageTagODF.maRfcLanguageTag = sValue;
+                break;
             case XML_TOK_STYLE_ATTR_LANGUAGE:
-                sLanguage = sValue;
+                aLanguageTagODF.maLanguage = sValue;
+                break;
+            case XML_TOK_STYLE_ATTR_SCRIPT:
+                aLanguageTagODF.maScript = sValue;
                 break;
             case XML_TOK_STYLE_ATTR_COUNTRY:
-                sCountry = sValue;
+                aLanguageTagODF.maCountry = sValue;
                 break;
             case XML_TOK_STYLE_ATTR_TITLE:
                 sFormatTitle = sValue;
@@ -1354,8 +1380,14 @@ SvXMLNumFormatContext::SvXMLNumFormatContext( SvXMLImport& rImport,
             case XML_TOK_STYLE_ATTR_TRANSL_FORMAT:
                 aNatNumAttr.Format = sValue;
                 break;
+            case XML_TOK_STYLE_ATTR_TRANSL_RFC_LANGUAGE_TAG:
+                sNatNumAttrRfcLanguageTag = sValue;
+                break;
             case XML_TOK_STYLE_ATTR_TRANSL_LANGUAGE:
                 aNatNumAttr.Locale.Language = sValue;
+                break;
+            case XML_TOK_STYLE_ATTR_TRANSL_SCRIPT:
+                sNatNumAttrScript = sValue;
                 break;
             case XML_TOK_STYLE_ATTR_TRANSL_COUNTRY:
                 aNatNumAttr.Locale.Country = sValue;
@@ -1366,11 +1398,11 @@ SvXMLNumFormatContext::SvXMLNumFormatContext( SvXMLImport& rImport,
         }
     }
 
-    if ( !sLanguage.isEmpty() || !sCountry.isEmpty() )
+    if (!aLanguageTagODF.isEmpty())
     {
-        nFormatLang = LanguageTag( sLanguage, sCountry ).getLanguageType( false);
+        nFormatLang = aLanguageTagODF.getLanguageTag().getLanguageType( false);
         if ( nFormatLang == LANGUAGE_DONTKNOW )
-            nFormatLang = LANGUAGE_SYSTEM;          //! error handling for invalid locales?
+            nFormatLang = LANGUAGE_SYSTEM;          //! error handling for unknown locales?
     }
 
     if ( !aNatNumAttr.Format.isEmpty() )
@@ -1378,13 +1410,17 @@ SvXMLNumFormatContext::SvXMLNumFormatContext( SvXMLImport& rImport,
         SvNumberFormatter* pFormatter = pData->GetNumberFormatter();
         if ( pFormatter )
         {
+            LanguageTag aLanguageTag( sNatNumAttrRfcLanguageTag, aNatNumAttr.Locale.Language,
+                    sNatNumAttrScript, aNatNumAttr.Locale.Country);
+            aNatNumAttr.Locale = aLanguageTag.getLocale( false);
+
             sal_Int32 nNatNum = pFormatter->GetNatNum()->convertFromXmlAttributes( aNatNumAttr );
             aFormatCode.append( "[NatNum" );
             aFormatCode.append( nNatNum, 10 );
 
-            LanguageType eLang = LanguageTag( aNatNumAttr.Locale ).getLanguageType( false);
+            LanguageType eLang = aLanguageTag.getLanguageType( false);
             if ( eLang == LANGUAGE_DONTKNOW )
-                eLang = LANGUAGE_SYSTEM;            //! error handling for invalid locales?
+                eLang = LANGUAGE_SYSTEM;            //! error handling for unknown locales?
             if ( eLang != nFormatLang && eLang != LANGUAGE_SYSTEM )
             {
                 aFormatCode.append( "][$-" );

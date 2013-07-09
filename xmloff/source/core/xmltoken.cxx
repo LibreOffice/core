@@ -1553,6 +1553,8 @@ namespace xmloff { namespace token {
         TOKEN( "scientific-number",               XML_SCIENTIFIC_NUMBER ),
         TOKEN( "score-spaces",                    XML_SCORE_SPACES ),
         TOKEN( "script",                          XML_SCRIPT ),
+        TOKEN( "script-asian",                    XML_SCRIPT_ASIAN ),
+        TOKEN( "script-complex",                  XML_SCRIPT_COMPLEX ),
         TOKEN( "scroll",                          XML_SCROLL ),
         TOKEN( "sdev",                            XML_SDEV ),
         TOKEN( "search-criteria-must-apply-to-whole-cell",        XML_SEARCH_CRITERIA_MUST_APPLY_TO_WHOLE_CELL ),

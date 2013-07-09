@@ -172,11 +172,17 @@ void XMLIndexAlphabeticalSourceContext::ProcessAttribute(
         case XML_TOK_INDEXSOURCE_SORT_ALGORITHM:
             sAlgorithm = rValue;
             break;
+        case XML_TOK_INDEXSOURCE_RFC_LANGUAGE_TAG:
+            maLanguageTagODF.maRfcLanguageTag = rValue;
+            break;
         case XML_TOK_INDEXSOURCE_LANGUAGE:
-            aLocale.Language = rValue;
+            maLanguageTagODF.maLanguage = rValue;
+            break;
+        case XML_TOK_INDEXSOURCE_SCRIPT:
+            maLanguageTagODF.maScript = rValue;
             break;
         case XML_TOK_INDEXSOURCE_COUNTRY:
-            aLocale.Country = rValue;
+            maLanguageTagODF.maCountry = rValue;
             break;
 
         default:
@@ -228,9 +234,9 @@ void XMLIndexAlphabeticalSourceContext::EndElement()
         rIndexPropertySet->setPropertyValue(sSortAlgorithm, aAny);
     }
 
-    if ( !aLocale.Language.isEmpty()  && !aLocale.Country.isEmpty() )
+    if ( !maLanguageTagODF.isEmpty() )
     {
-        aAny <<= aLocale;
+        aAny <<= maLanguageTagODF.getLanguageTag().getLocale( false);
         rIndexPropertySet->setPropertyValue(sLocale, aAny);
     }
 

@@ -21,6 +21,7 @@
 #define _XMLOFF_XMLINDEXBIBLIOGRAPHYCONFIGURATIONCONTEXT_HXX_
 
 #include <xmloff/xmlstyle.hxx>
+#include <xmloff/languagetagodf.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -56,7 +57,7 @@ class XMLIndexBibliographyConfigurationContext : public SvXMLStyleContext
     OUString sSuffix;
     OUString sPrefix;
     OUString sAlgorithm;
-    ::com::sun::star::lang::Locale aLocale;
+    LanguageTagODF maLanguageTagODF;
     sal_Bool bNumberedEntries;
     sal_Bool bSortByPosition;
 

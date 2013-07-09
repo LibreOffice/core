@@ -368,8 +368,14 @@ const XMLPropertyHandler* XMLPropertyHandlerFactory::CreatePropertyHandler( sal_
         case XML_TYPE_CHAR_HEIGHT_DIFF:
             pPropHdl = new XMLCharHeightDiffHdl;
             break;
+        case XML_TYPE_CHAR_RFC_LANGUAGE_TAG:
+            pPropHdl = new XMLCharRfcLanguageTagHdl;
+            break;
         case XML_TYPE_CHAR_LANGUAGE:
             pPropHdl = new XMLCharLanguageHdl;
+            break;
+        case XML_TYPE_CHAR_SCRIPT:
+            pPropHdl = new XMLCharScriptHdl;
             break;
         case XML_TYPE_CHAR_COUNTRY:
             pPropHdl = new XMLCharCountryHdl;

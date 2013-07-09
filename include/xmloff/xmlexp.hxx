@@ -70,6 +70,7 @@ class XMLEventExport;
 class XMLSettingsExportHelper;
 class XMLImageMapExport;
 class XMLErrors;
+class LanguageTag;
 
 // Shapes in Writer cannot be named via context menu (#i51726#)
 #include <unotools/moduleoptions.hxx>
@@ -77,6 +78,7 @@ class XMLErrors;
 namespace com { namespace sun { namespace star {
     namespace frame { class XModel; }
     namespace container { class XIndexContainer; }
+    namespace lang { struct Locale; }
 } } }
 namespace comphelper { class UnoInterfaceToUniqueIdentifierMapper; }
 
@@ -349,6 +351,37 @@ public:
                        const OUString& rValue );
     void AddAttribute( const OUString& rQName,
                        enum ::xmloff::token::XMLTokenEnum eValue );
+
+    /** Add language tag attributes, deciding which are necessary.
+
+        @param  nPrefix
+                Namespace prefix for *:language, *:script and *:country
+
+        @param  nPrefixRfc
+                Namespace prefix for *:rfc-language-tag
+
+        @param  bWriteEmpty
+                Whether to write empty *:language and *:country attribute
+                values in case of an empty locale (denoting system).
+
+        @param  eClass
+                default, XML_LANGUAGE: XML_SCRIPT, XML_COUNTRY, XML_RFC_LANGUAGE_TAG
+                XML_LANGUAGE_ASIAN: XML_SCRIPT_ASIAN, XML_COUNTRY_ASIAN, XML_RFC_LANGUAGE_TAG_ASIAN
+                    also switches nPrefix XML_NAMESPACE_FO to XML_NAMESPACE_STYLE
+                XML_LANGUAGE_COMPLEX: XML_SCRIPT_COMPLEX, XML_COUNTRY_COMPLEX, XML_RFC_LANGUAGE_TAG_COMPLEX
+                    also switches nPrefix XML_NAMESPACE_FO to XML_NAMESPACE_STYLE
+     */
+    void AddLanguageTagAttributes( sal_uInt16 nPrefix, sal_uInt16 nPrefixRfc,
+            const ::com::sun::star::lang::Locale& rLocale, bool bWriteEmpty,
+            enum ::xmloff::token::XMLTokenEnum eClass = ::xmloff::token::XML_LANGUAGE );
+
+    /** Same as AddLanguageTagAttributes() but with LanguageTag parameter
+        instead of Locale.
+     */
+    void AddLanguageTagAttributes( sal_uInt16 nPrefix, sal_uInt16 nPrefixRfc,
+            const LanguageTag& rLanguageTag, bool bWriteEmpty,
+            enum ::xmloff::token::XMLTokenEnum eClass = ::xmloff::token::XML_LANGUAGE );
+
     // add several attributes to the common attribute list
     void AddAttributeList( const ::com::sun::star::uno::Reference<
                                   ::com::sun::star::xml::sax::XAttributeList >& xAttrList );

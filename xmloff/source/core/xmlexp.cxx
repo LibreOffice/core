@@ -34,6 +34,7 @@
 #include <com/sun/star/uri/XUriReferenceFactory.hpp>
 #include <com/sun/star/uri/UriReferenceFactory.hpp>
 #include <com/sun/star/util/MeasureUnit.hpp>
+#include <i18nlangtag/languagetag.hxx>
 #include <comphelper/processfactory.hxx>
 #include <xmloff/attrlist.hxx>
 #include <xmloff/nmspmap.hxx>
@@ -1019,6 +1020,110 @@ void SvXMLExport::AddAttribute( const OUString& rQName,
       mpAttrList->AddAttribute(
         rQName,
         GetXMLToken(eValue) );
+}
+
+void SvXMLExport::AddLanguageTagAttributes( sal_uInt16 nPrefix, sal_uInt16 nPrefixRfc,
+        const ::com::sun::star::lang::Locale& rLocale, bool bWriteEmpty,
+        enum ::xmloff::token::XMLTokenEnum eClass )
+{
+    if (rLocale.Variant.isEmpty())
+    {
+        // Per convention The BCP 47 string is always stored in Variant, if
+        // that is empty we have a plain language-country combination, no need
+        // to convert to LanguageTag first. Also catches the case of empty
+        // locale denoting system locale.
+        xmloff::token::XMLTokenEnum eLanguage, eCountry;
+        switch (eClass)
+        {
+            default:
+            case XML_LANGUAGE:
+                eLanguage = XML_LANGUAGE;
+                eCountry  = XML_COUNTRY;
+                break;
+            case XML_LANGUAGE_ASIAN:
+                eLanguage = XML_LANGUAGE_ASIAN;
+                eCountry  = XML_COUNTRY_ASIAN;
+                if (nPrefix == XML_NAMESPACE_FO)
+                    nPrefix = XML_NAMESPACE_STYLE;
+                break;
+            case XML_LANGUAGE_COMPLEX:
+                eLanguage = XML_LANGUAGE_COMPLEX;
+                eCountry  = XML_COUNTRY_COMPLEX;
+                if (nPrefix == XML_NAMESPACE_FO)
+                    nPrefix = XML_NAMESPACE_STYLE;
+                break;
+        }
+        if (bWriteEmpty || !rLocale.Language.isEmpty())
+            AddAttribute( nPrefix, eLanguage, rLocale.Language);
+        if (bWriteEmpty || !rLocale.Country.isEmpty())
+            AddAttribute( nPrefix, eCountry, rLocale.Country);
+    }
+    else
+    {
+        LanguageTag aLanguageTag( rLocale);
+        AddLanguageTagAttributes( nPrefix, nPrefixRfc, aLanguageTag, bWriteEmpty, eClass);
+    }
+}
+
+void SvXMLExport::AddLanguageTagAttributes( sal_uInt16 nPrefix, sal_uInt16 nPrefixRfc,
+        const LanguageTag& rLanguageTag, bool bWriteEmpty, xmloff::token::XMLTokenEnum eClass )
+{
+    xmloff::token::XMLTokenEnum eLanguage, eScript, eCountry, eRfcLanguageTag;
+    switch (eClass)
+    {
+        default:
+        case XML_LANGUAGE:
+            eLanguage       = XML_LANGUAGE;
+            eScript         = XML_SCRIPT;
+            eCountry        = XML_COUNTRY;
+            eRfcLanguageTag = XML_RFC_LANGUAGE_TAG;
+            break;
+        case XML_LANGUAGE_ASIAN:
+            eLanguage       = XML_LANGUAGE_ASIAN;
+            eScript         = XML_SCRIPT_ASIAN;
+            eCountry        = XML_COUNTRY_ASIAN;
+            eRfcLanguageTag = XML_RFC_LANGUAGE_TAG_ASIAN;
+            if (nPrefix == XML_NAMESPACE_FO)
+                nPrefix = XML_NAMESPACE_STYLE;
+            break;
+        case XML_LANGUAGE_COMPLEX:
+            eLanguage       = XML_LANGUAGE_COMPLEX;
+            eScript         = XML_SCRIPT_COMPLEX;
+            eCountry        = XML_COUNTRY_COMPLEX;
+            eRfcLanguageTag = XML_RFC_LANGUAGE_TAG_COMPLEX;
+            if (nPrefix == XML_NAMESPACE_FO)
+                nPrefix = XML_NAMESPACE_STYLE;
+            break;
+    }
+    if (rLanguageTag.isIsoODF())
+    {
+        if (bWriteEmpty || !rLanguageTag.isSystemLocale())
+        {
+            AddAttribute( nPrefix, eLanguage, rLanguageTag.getLanguage());
+            if (rLanguageTag.hasScript())
+                AddAttribute( nPrefix, eScript, rLanguageTag.getScript());
+            if (bWriteEmpty || !rLanguageTag.getCountry().isEmpty())
+                AddAttribute( nPrefix, eCountry, rLanguageTag.getCountry());
+        }
+    }
+    else
+    {
+        AddAttribute( nPrefixRfc, eRfcLanguageTag, rLanguageTag.getBcp47());
+        // Also in case of non-pure-ISO tag store best matching fo: attributes
+        // for consumers not handling *:rfc-language-tag, ensuring that only
+        // valid ISO codes are stored. Here the bWriteEmpty parameter has no
+        // meaning.
+        OUString aLanguage, aCountry;
+        rLanguageTag.getIsoLanguageCountry( aLanguage, aCountry);
+        if (!aLanguage.isEmpty())
+        {
+            AddAttribute( nPrefix, eLanguage, aLanguage);
+            if (rLanguageTag.hasScript())
+                AddAttribute( nPrefix, eScript, rLanguageTag.getScript());
+            if (!aCountry.isEmpty())
+                AddAttribute( nPrefix, eCountry, aCountry);
+        }
+    }
 }
 
 void SvXMLExport::AddAttributeList( const uno::Reference< xml::sax::XAttributeList >& xAttrList )

@@ -21,6 +21,7 @@
 
 #include <xmloff/xmlictxt.hxx>
 #include <xmloff/xmlimp.hxx>
+#include <xmloff/languagetagodf.hxx>
 #include <com/sun/star/util/SortField.hpp>
 #include <com/sun/star/table/CellAddress.hpp>
 
@@ -34,8 +35,7 @@ class ScXMLSortContext : public SvXMLImportContext
 
     com::sun::star::uno::Sequence <com::sun::star::util::SortField> aSortFields;
     com::sun::star::table::CellAddress aOutputPosition;
-    OUString   sCountry;
-    OUString   sLanguage;
+    LanguageTagODF maLanguageTagODF;
     OUString   sAlgorithm;
     sal_Int16   nUserListIndex;
     bool        bCopyOutputData;

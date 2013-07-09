@@ -325,10 +325,7 @@ private:
         if (aParam.bCaseSens)
             mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_CASE_SENSITIVE, XML_TRUE);
 
-        if (!aParam.aCollatorLocale.Language.isEmpty())
-            mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_LANGUAGE, aParam.aCollatorLocale.Language);
-        if (!aParam.aCollatorLocale.Country.isEmpty())
-            mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_COUNTRY, aParam.aCollatorLocale.Country);
+        mrExport.AddLanguageTagAttributes( XML_NAMESPACE_TABLE, XML_NAMESPACE_TABLE, aParam.aCollatorLocale, false);
         if (!aParam.aCollatorAlgorithm.isEmpty())
             mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_ALGORITHM, aParam.aCollatorAlgorithm);
 
