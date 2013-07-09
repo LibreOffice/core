@@ -71,7 +71,8 @@ public:
     XMLFamilyData_Impl( sal_Int32 nFamily ) :
         pCache( 0 ),
         mnFamily( nFamily ), mpParentList( NULL ),
-        mpNameList( NULL ), mnCount( 0 ), mnName( 0 )
+        mpNameList( NULL ), mnCount( 0 ), mnName( 0 ),
+        bAsFamily( false )
 
     {}
     ~XMLFamilyData_Impl();
