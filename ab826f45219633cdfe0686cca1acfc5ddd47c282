@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXn///Lo\u003d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2013-07-09T04:53:02Z",
+      "side": 1,
+      "message": "That begs the question: Why does it have to end with \u0027,\u0027? That is just a detail to simplify implementation and apparently it is not such a good idea. I would rather drop the comma and add it explicitly after all uses of _ALL variables than to workaround problems caused by the current impl.",
+      "revId": "ab826f45219633cdfe0686cca1acfc5ddd47c282",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
