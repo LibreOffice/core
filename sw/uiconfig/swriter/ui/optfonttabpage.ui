@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <!-- interface-requires gtk+ 3.0 -->
+  <!-- interface-requires LibreOffice 1.0 -->
   <object class="GtkBox" id="OptFontTabPage">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
+    <property name="hexpand">True</property>
+    <property name="vexpand">True</property>
+    <property name="border_width">6</property>
     <property name="orientation">vertical</property>
     <property name="spacing">12</property>
     <child>
@@ -93,6 +97,7 @@
                   <object class="GtkLabel" id="font_label">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="hexpand">True</property>
                     <property name="xalign">0</property>
                     <property name="label" translatable="yes">Font</property>
                   </object>
@@ -206,7 +211,6 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="margin_left">12</property>
-                    <property name="hexpand">True</property>
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
@@ -222,13 +226,14 @@
                   <object class="GtkComboBoxText" id="standardbox">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="hexpand">True</property>
                     <property name="has_entry">True</property>
                     <property name="entry_text_column">0</property>
                     <property name="id_column">1</property>
                     <child internal-child="entry">
                       <object class="GtkEntry" id="standardbox-entry">
                         <property name="can_focus">False</property>
-                        <property name="invisible_char">���</property>
+                        <property name="invisible_char">�</property>
                       </object>
                     </child>
                   </object>
@@ -243,13 +248,14 @@
                   <object class="GtkComboBoxText" id="titlebox">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="hexpand">True</property>
                     <property name="has_entry">True</property>
                     <property name="entry_text_column">0</property>
                     <property name="id_column">1</property>
                     <child internal-child="entry">
                       <object class="GtkEntry" id="titlebox-entry">
                         <property name="can_focus">False</property>
-                        <property name="invisible_char">���</property>
+                        <property name="invisible_char">�</property>
                       </object>
                     </child>
                   </object>
@@ -264,13 +270,14 @@
                   <object class="GtkComboBoxText" id="listbox">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="hexpand">True</property>
                     <property name="has_entry">True</property>
                     <property name="entry_text_column">0</property>
                     <property name="id_column">1</property>
                     <child internal-child="entry">
                       <object class="GtkEntry" id="listbox-entry">
                         <property name="can_focus">False</property>
-                        <property name="invisible_char">���</property>
+                        <property name="invisible_char">�</property>
                       </object>
                     </child>
                   </object>
@@ -285,13 +292,14 @@
                   <object class="GtkComboBoxText" id="labelbox">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="hexpand">True</property>
                     <property name="has_entry">True</property>
                     <property name="entry_text_column">0</property>
                     <property name="id_column">1</property>
                     <child internal-child="entry">
                       <object class="GtkEntry" id="labelbox-entry">
                         <property name="can_focus">False</property>
-                        <property name="invisible_char">���</property>
+                        <property name="invisible_char">�</property>
                       </object>
                     </child>
                   </object>
@@ -306,13 +314,14 @@
                   <object class="GtkComboBoxText" id="idxbox">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="hexpand">True</property>
                     <property name="has_entry">True</property>
                     <property name="entry_text_column">0</property>
                     <property name="id_column">1</property>
                     <child internal-child="entry">
                       <object class="GtkEntry" id="idxbox-entry">
                         <property name="can_focus">False</property>
-                        <property name="invisible_char">���</property>
+                        <property name="invisible_char">�</property>
                       </object>
                     </child>
                   </object>

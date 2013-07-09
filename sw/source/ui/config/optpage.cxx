@@ -536,14 +536,19 @@ SwStdFontTabPage::SwStdFontTabPage( Window* pParent,
 {
     get(pLabelFT,"label1");
     get(pStandardBox,"standardbox");
+    pStandardBox->SetStyle(pStandardBox->GetStyle() |  WB_SORT);
     get(pStandardHeightLB,"standardheight");
     get(pTitleBox,"titlebox");
+    pTitleBox->SetStyle(pTitleBox->GetStyle() |  WB_SORT);
     get(pTitleHeightLB,"titleheight");
     get(pListBox,"listbox");
+    pListBox->SetStyle(pListBox->GetStyle() |  WB_SORT);
     get(pListHeightLB,"listheight");
     get(pLabelBox,"labelbox");
+    pLabelBox->SetStyle(pLabelBox->GetStyle() |  WB_SORT);
     get(pLabelHeightLB,"labelheight");
     get(pIdxBox,"idxbox");
+    pIdxBox->SetStyle(pIdxBox->GetStyle() |  WB_SORT);
     get(pIndexHeightLB,"indexheight");
 
     get(pDocOnlyCB,"doconly");
