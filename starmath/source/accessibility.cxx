@@ -1113,11 +1113,8 @@ sal_Bool SmTextForwarder::IsValid() const
 
 OUString SmTextForwarder::CalcFieldValue( const SvxFieldItem& rField, sal_Int32 nPara, sal_uInt16 nPos, Color*& rpTxtColor, Color*& rpFldColor )
 {
-    XubString aTxt;
     EditEngine *pEditEngine = rEditAcc.GetEditEngine();
-    if (pEditEngine)
-        aTxt = pEditEngine->CalcFieldValue( rField, nPara, nPos, rpTxtColor, rpFldColor );
-    return aTxt;
+    return pEditEngine ? pEditEngine->CalcFieldValue(rField, nPara, nPos, rpTxtColor, rpFldColor) : OUString();
 }
 
 void SmTextForwarder::FieldClicked(const SvxFieldItem&, sal_Int32, sal_uInt16)
