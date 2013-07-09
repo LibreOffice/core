@@ -437,7 +437,7 @@ void SfxDispatcher::Pop
     SfxApplication *pSfxApp = SFX_APP();
 
     SAL_INFO(
-        "sfx2.control",
+        "sfx.control",
         "-SfxDispatcher(" << this << (bPush ? ")::Push(" : ")::Pop(")
             << (rShell.GetInterface()
                 ? rShell.GetInterface()->GetClassName() : SAL_STREAM(&rShell))

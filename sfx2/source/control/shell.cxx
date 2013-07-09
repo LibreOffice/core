@@ -556,7 +556,7 @@ void SfxShell::DoActivate_Impl( SfxViewFrame *pFrame, sal_Bool bMDI )
         return;
 #endif
     SAL_INFO(
-        "sfx2.control",
+        "sfx.control",
         "SfxShell::DoActivate() " << this << "  " << GetInterface()->GetName()
             << " bMDI " << (bMDI ? "MDI" : ""));
 
@@ -592,7 +592,7 @@ void SfxShell::DoDeactivate_Impl( SfxViewFrame *pFrame, sal_Bool bMDI )
         return;
 #endif
     SAL_INFO(
-        "sfx2.control",
+        "sfx.control",
         "SfxShell::DoDeactivate()" << this << "  " << GetInterface()->GetName()
             << " bMDI " << (bMDI ? "MDI" : ""));
 

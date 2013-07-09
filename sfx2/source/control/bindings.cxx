@@ -1721,7 +1721,7 @@ IMPL_LINK( SfxBindings, NextJob_Impl, Timer *, pTimer )
 sal_uInt16 SfxBindings::EnterRegistrations(const char *pFile, int nLine)
 {
     SAL_INFO(
-        "sfx2.control",
+        "sfx.control",
         std::setw(std::min(nRegLevel, sal_uInt16(8))) << ' ' << "this = " << this
             << " Level = " << nRegLevel << " SfxBindings::EnterRegistrations "
             << (pFile
@@ -1820,7 +1820,7 @@ void SfxBindings::LeaveRegistrations( sal_uInt16 nLevel, const char *pFile, int 
     }
 
     SAL_INFO(
-        "sfx2.control",
+        "sfx.control",
         std::setw(std::min(nRegLevel, sal_uInt16(8))) << ' ' << "this = " << this
             << " Level = " << nRegLevel << " SfxBindings::LeaveRegistrations "
             << (pFile

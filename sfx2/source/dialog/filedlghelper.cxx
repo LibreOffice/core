@@ -1668,7 +1668,7 @@ void FileDialogHelper_Impl::verifyPath()
         url.GetMainURL(INetURLObject::NO_DECODE), sysPathU);
     if (e != osl::FileBase::E_None) {
         SAL_WARN(
-            "sfx2.dialog",
+            "sfx.dialog",
             "getSystemPathFromFileURL("
                 << url.GetMainURL(INetURLObject::NO_DECODE) << ") failed with "
                 << +e);
@@ -1681,7 +1681,7 @@ void FileDialogHelper_Impl::verifyPath()
              | RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR)))
     {
         SAL_WARN(
-            "sfx2.dialog",
+            "sfx.dialog",
             "convertToString(" << sysPathU << ") failed for encoding "
                 << +osl_getThreadTextEncoding());
         return;
@@ -1689,7 +1689,7 @@ void FileDialogHelper_Impl::verifyPath()
     struct stat aFileStat;
     if (stat(sysPathC.getStr(), &aFileStat) == -1) {
         SAL_WARN(
-            "sfx2.dialog",
+            "sfx.dialog",
             "stat(" << sysPathC.getStr() << ") failed with errno " << errno);
         return;
     }

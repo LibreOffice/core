@@ -357,7 +357,7 @@ namespace sfx2
             ::std::pair< FilterGroupEntryReferrer::iterator, bool > aInsertRes =
             m_rEntryReferrer.insert( FilterGroupEntryReferrer::value_type( _rName, m_aClassPos ) );
             SAL_WARN_IF(
-                !aInsertRes.second, "sfx2.dialog",
+                !aInsertRes.second, "sfx.dialog",
                 "already have an element for " << _rName);
         }
     };
