@@ -1225,18 +1225,6 @@ void SwTableOptionsTabPage::Reset( const SfxItemSet& rSet)
     {
         pRepeatHeaderCB->Hide();
         pDontSplitCB->Hide();
-
-        long nMoveUpBy =
-        pRepeatHeaderCB->LogicToPixel( Size( 13, 13 ), MAP_APPFONT ).Height();
-
-        Point aPos = pRepeatHeaderCB->GetPosPixel();
-        pRepeatHeaderCB->SetPosPixel( Point( aPos.X(), aPos.Y() - nMoveUpBy ) );
-
-        nMoveUpBy +=
-        pDontSplitCB->LogicToPixel( Size( 13, 13 ), MAP_APPFONT ).Height();
-
-        aPos = pBorderCB->GetPosPixel();
-        pBorderCB->SetPosPixel( Point( aPos.X(), aPos.Y() - nMoveUpBy ) );
     }
 
     SwInsertTableOptions aInsOpts = pModOpt->GetInsTblFlags(bHTMLMode);
@@ -1326,7 +1314,6 @@ SwShdwCrsrOptionsTabPage::SwShdwCrsrOptionsTabPage( Window* pParent,
         m_pCharHiddenCB->Hide();
         m_pFldHiddenCB->Hide();
         m_pFldHiddenParaCB->Hide();
-        m_pBreakCB->SetPosPixel(m_pTabCB->GetPosPixel());
 
         m_pDirectCursorFrame->Hide();
         m_pOnOffCB->Hide();
