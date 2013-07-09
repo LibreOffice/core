@@ -96,16 +96,18 @@ Cursor::Cursor(
     RegistryKey const & key):
     manager_(manager), ucr_(ucr), key_(key), index_(0)
 {
-    prefix_ = key_.getName();
-    if (!prefix_.endsWith("/")) {
-        prefix_ += "/";
-    }
-    RegError e = key_.getKeyNames("", names_);
-    if (e != REG_NO_ERROR) {
-        throw FileFormatException(
-            key_.getRegistryName(),
-            ("legacy format: cannot get sub-key names of " + key_.getName()
-             + ": " + OUString::number(e)));
+    if (ucr_.isValid()) {
+        prefix_ = key_.getName();
+        if (!prefix_.endsWith("/")) {
+            prefix_ += "/";
+        }
+        RegError e = key_.getKeyNames("", names_);
+        if (e != REG_NO_ERROR) {
+            throw FileFormatException(
+                key_.getRegistryName(),
+                ("legacy format: cannot get sub-key names of " + key_.getName()
+                 + ": " + OUString::number(e)));
+        }
     }
 }
 
@@ -797,7 +799,11 @@ LegacyProvider::LegacyProvider(
             uri, "legacy format: cannot open root key: " + OUString::number(e));
     }
     e = root.openKey("UCR", ucr_);
-    if (e != REG_NO_ERROR) {
+    switch (e) {
+    case REG_NO_ERROR:
+    case REG_KEY_NOT_EXISTS: // such effectively empty files exist in the wild
+        break;
+    default:
         throw FileFormatException(
             uri, "legacy format: cannot open UCR key: " + OUString::number(e));
     }
@@ -810,7 +816,9 @@ rtl::Reference< MapCursor > LegacyProvider::createRootCursor() const {
 rtl::Reference< Entity > LegacyProvider::findEntity(OUString const & name)
     const
 {
-    return readEntity(manager_, ucr_, ucr_, name.replace('.', '/'), true);
+    return ucr_.isValid()
+        ? readEntity(manager_, ucr_, ucr_, name.replace('.', '/'), true)
+        : rtl::Reference< Entity >();
 }
 
 LegacyProvider::~LegacyProvider() throw () {}
