@@ -110,9 +110,15 @@ void Table::finalizeImport()
         maAutoFilters.finalizeImport( xDatabaseRange );
 
         //Setting the ScDBDataFormatting (Table style) attribute.
-        ScDBDataFormatting aTableFormatting = getStyles().getTableStyle( maModel.maTableStyleName )->getTableFormatting(); //May fail in cases of malformed corrupt table/table#.xml where the maTableStyleName is messed up
+        TableStyleRef pTableStyle = getStyles().getTableStyle( maModel.maTableStyleName );
+        if(!pTableStyle)
+        {
+            SAL_WARN("sc", "did not find Table style for: " << maModel.maTableStyleName);
+            return;
+        }
 
-        //can mess up if aTableFormatting is nothing. Need to handle that
+        ScDBDataFormatting aTableFormatting = pTableStyle->getTableFormatting();
+
         aTableFormatting.SetBandedRows( maModel.mbShowRowStripes );
         aTableFormatting.SetBandedColumns( maModel.mbShowColumnStripes );
         addDatabaseFormatting( maDBRangeName, aTableFormatting );
