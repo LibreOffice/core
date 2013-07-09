@@ -82,35 +82,31 @@ public:
 
 class SwAuthenticationSettingsDialog : public SfxModalDialog
 {
-    CheckBox        m_aAuthenticationCB;
+    CheckBox*        m_pAuthenticationCB;
 
-    RadioButton     m_aSeparateAuthenticationRB;
-    RadioButton     m_aSMTPAfterPOPRB;
+    RadioButton*     m_pSeparateAuthenticationRB;
+    RadioButton*     m_pSMTPAfterPOPRB;
 
-    FixedInfo       m_aOutgoingServerFT;
-    FixedText       m_aUserNameFT;
-    Edit            m_aUserNameED;
-    FixedText       m_aOutPasswordFT;
-    Edit            m_aOutPasswordED;
+//    FixedInfo       m_aOutgoingServerFT;
+//   FixedText       m_aUserNameFT;
+    Edit*            m_pUserNameED;
+//    FixedText       m_aOutPasswordFT;
+    Edit*            m_pOutPasswordED;
 
-    FixedInfo       m_aIncomingServerFT;
-    FixedText       m_aServerFT;
-    Edit            m_aServerED;
-    FixedText       m_aPortFT;
-    NumericField    m_aPortNF;
-    FixedText       m_aProtocolFT;
-    RadioButton     m_aPOP3RB;
-    RadioButton     m_aIMAPRB;
-    FixedText       m_aInUsernameFT;
-    Edit            m_aInUsernameED;
-    FixedText       m_aInPasswordFT;
-    Edit            m_aInPasswordED;
+//    FixedInfo       m_aIncomingServerFT;
+//    FixedText       m_aServerFT;
+    Edit*            m_pServerED;
+//    FixedText       m_aPortFT;
+    NumericField*    m_pPortNF;
+//    FixedText       m_aProtocolFT;
+    RadioButton*     m_pPOP3RB;
+    RadioButton*     m_pIMAPRB;
+//    FixedText       m_aInUsernameFT;
+    Edit*            m_pInUsernameED;
+//    FixedText       m_aInPasswordFT;
+    Edit*            m_pInPasswordED;
 
-    FixedLine       m_aSeparatorFL;
-
-    OKButton        m_aOKPB;
-    CancelButton    m_aCancelPB;
-    HelpButton      m_aHelpPB;
+    OKButton*        m_pOKPB;
 
     SwMailMergeConfigItem& rConfigItem;
 
@@ -125,36 +121,24 @@ public:
 };
 
 SwMailConfigPage::SwMailConfigPage( Window* pParent, const SfxItemSet& rSet ) :
-    SfxTabPage(pParent, SW_RES(TP_MAILCONFIG), rSet),
-#ifdef _MSC_VER
-#pragma warning (disable : 4355)
-#endif
-    m_aIdentityFL( this, SW_RES(       FL_IDENTITY)),
-    m_aDisplayNameFT( this, SW_RES(    FT_DISPLAYNAME)),
-    m_aDisplayNameED( this, SW_RES(    ED_DISPLAYNAME)),
-    m_aAddressFT( this, SW_RES(        FT_ADDRESS)),
-    m_aAddressED( this, SW_RES(        ED_ADDRESS)),
-    m_aReplyToCB( this, SW_RES(        CB_REPLYTO)),
-    m_aReplyToFT( this, SW_RES(        FT_REPLYTO)),
-    m_aReplyToED( this, SW_RES(        ED_REPLYTO)),
-    m_aSMTPFL( this, SW_RES(           FL_SMTP)),
-    m_aServerFT( this, SW_RES(         FT_SERVER)),
-    m_aServerED( this, SW_RES(         ED_SERVER)),
-    m_aPortFT( this, SW_RES(           FT_PORT)),
-    m_aPortNF( this, SW_RES(           NF_PORT)),
-    m_aSecureCB( this, SW_RES(         CB_SECURE)),
-    m_aServerAuthenticationPB( this, SW_RES( PB_AUTHENTICATION )),
-    m_aSeparatorFL( this,            SW_RES( FL_SEPARATOR      )),
-    m_aTestPB( this, SW_RES(           PB_TEST)),
-#ifdef _MSC_VER
-#pragma warning (default : 4355)
-#endif
+    SfxTabPage(pParent, "MailConfigPage" , "modules/swriter/ui/mailconfigpage.ui", rSet),
+
     m_pConfigItem( new SwMailMergeConfigItem )
 {
-    FreeResource();
-    m_aReplyToCB.SetClickHdl(LINK(this, SwMailConfigPage, ReplyToHdl));
-    m_aServerAuthenticationPB.SetClickHdl(LINK(this, SwMailConfigPage, AuthenticationHdl));
-    m_aTestPB.SetClickHdl(LINK(this, SwMailConfigPage, TestHdl));
+    get(m_pDisplayNameED,"displayname");
+    get(m_pAddressED,"address");
+    get(m_pReplyToCB,"replyto");
+    get(m_pReplyToED,"replytodiff");
+    get(m_pServerED,"server");
+    get(m_pPortNF,"port");
+    get(m_pSecureCB,"secure");
+    get(m_pServerAuthenticationPB,"serverauthentication");
+    get(m_pTestPB,"test");
+
+    //FreeResource();
+    m_pReplyToCB->SetClickHdl(LINK(this, SwMailConfigPage, ReplyToHdl));
+    m_pServerAuthenticationPB->SetClickHdl(LINK(this, SwMailConfigPage, AuthenticationHdl));
+    m_pTestPB->SetClickHdl(LINK(this, SwMailConfigPage, TestHdl));
 }
 
 SwMailConfigPage::~SwMailConfigPage()
@@ -169,21 +153,21 @@ SfxTabPage*  SwMailConfigPage::Create( Window* pParent, const SfxItemSet& rAttrS
 
 sal_Bool SwMailConfigPage::FillItemSet( SfxItemSet& /*rSet*/ )
 {
-    if(m_aDisplayNameED.GetText() != m_aDisplayNameED.GetSavedValue())
-        m_pConfigItem->SetMailDisplayName(m_aDisplayNameED.GetText());
-    if(m_aAddressED.GetText() != m_aAddressED.GetSavedValue())
-        m_pConfigItem->SetMailAddress(m_aAddressED.GetText());
-    if( m_aReplyToCB.GetSavedValue() != m_aReplyToCB.IsChecked())
-        m_pConfigItem->SetMailReplyTo(m_aReplyToCB.IsChecked());
-    if(m_aReplyToED.GetText() != m_aReplyToED.GetSavedValue())
-        m_pConfigItem->SetMailReplyTo(m_aReplyToED.GetText());
-    if(m_aServerED.GetText() != m_aServerED.GetSavedValue())
-        m_pConfigItem->SetMailServer(m_aServerED.GetText());
+    if(m_pDisplayNameED->GetText() != m_pDisplayNameED->GetSavedValue())
+        m_pConfigItem->SetMailDisplayName(m_pDisplayNameED->GetText());
+    if(m_pAddressED->GetText() != m_pAddressED->GetSavedValue())
+        m_pConfigItem->SetMailAddress(m_pAddressED->GetText());
+    if( m_pReplyToCB->GetSavedValue() != m_pReplyToCB->IsChecked())
+        m_pConfigItem->SetMailReplyTo(m_pReplyToCB->IsChecked());
+    if(m_pReplyToED->GetText() != m_pReplyToED->GetSavedValue())
+        m_pConfigItem->SetMailReplyTo(m_pReplyToED->GetText());
+    if(m_pServerED->GetText() != m_pServerED->GetSavedValue())
+        m_pConfigItem->SetMailServer(m_pServerED->GetText());
 
-    if(m_aPortNF.IsModified())
-        m_pConfigItem->SetMailPort((sal_Int16)m_aPortNF.GetValue());
+    if(m_pPortNF->IsModified())
+        m_pConfigItem->SetMailPort((sal_Int16)m_pPortNF->GetValue());
 
-    m_pConfigItem->SetSecureConnection(m_aSecureCB.IsChecked());
+    m_pConfigItem->SetSecureConnection(m_pSecureCB->IsChecked());
 
     m_pConfigItem->Commit();
     return sal_True;
@@ -191,32 +175,32 @@ sal_Bool SwMailConfigPage::FillItemSet( SfxItemSet& /*rSet*/ )
 
 void SwMailConfigPage::Reset( const SfxItemSet& /*rSet*/ )
 {
-    m_aDisplayNameED.SetText(m_pConfigItem->GetMailDisplayName());
-    m_aAddressED.SetText(m_pConfigItem->GetMailAddress());
+    m_pDisplayNameED->SetText(m_pConfigItem->GetMailDisplayName());
+    m_pAddressED->SetText(m_pConfigItem->GetMailAddress());
 
-    m_aReplyToED.SetText(m_pConfigItem->GetMailReplyTo()) ;
-    m_aReplyToCB.Check(m_pConfigItem->IsMailReplyTo());
-    m_aReplyToCB.GetClickHdl().Call(&m_aReplyToCB);
+    m_pReplyToED->SetText(m_pConfigItem->GetMailReplyTo()) ;
+    m_pReplyToCB->Check(m_pConfigItem->IsMailReplyTo());
+    m_pReplyToCB->GetClickHdl().Call(&m_pReplyToCB);
 
-    m_aServerED.SetText(m_pConfigItem->GetMailServer());
-    m_aPortNF.SetValue(m_pConfigItem->GetMailPort());
+    m_pServerED->SetText(m_pConfigItem->GetMailServer());
+    m_pPortNF->SetValue(m_pConfigItem->GetMailPort());
 
-    m_aSecureCB.Check(m_pConfigItem->IsSecureConnection());
+    m_pSecureCB->Check(m_pConfigItem->IsSecureConnection());
 
-    m_aDisplayNameED.SaveValue();
-    m_aAddressED    .SaveValue();
-    m_aReplyToCB    .SaveValue();
-    m_aReplyToED    .SaveValue();
-    m_aServerED     .SaveValue();
-    m_aPortNF       .SaveValue();
-    m_aSecureCB     .SaveValue();
+    m_pDisplayNameED->SaveValue();
+    m_pAddressED    ->SaveValue();
+    m_pReplyToCB    ->SaveValue();
+    m_pReplyToED    ->SaveValue();
+    m_pServerED     ->SaveValue();
+    m_pPortNF       ->SaveValue();
+    m_pSecureCB     ->SaveValue();
 }
 
 IMPL_LINK(SwMailConfigPage, ReplyToHdl, CheckBox*, pBox)
 {
     sal_Bool bEnable = pBox->IsChecked();
-    m_aReplyToFT.Enable(bEnable);
-    m_aReplyToED.Enable(bEnable);
+//    m_aReplyToFT.Enable(bEnable);
+    m_pReplyToED->Enable(bEnable);
     return 0;
 }
 
@@ -384,9 +368,9 @@ void SwTestAccountSettingsDialog::Test()
         //check connection
         uno::Reference< uno::XCurrentContext> xConnectionContext =
                 new SwConnectionContext(
-                    m_pParent->m_aServerED.GetText(),
-                    sal::static_int_cast< sal_Int16, sal_Int64 >(m_pParent->m_aPortNF.GetValue()),
-                    m_pParent->m_aSecureCB.IsChecked() ? OUString("Ssl") : OUString("Insecure"));
+                    m_pParent->m_pServerED->GetText(),
+                    sal::static_int_cast< sal_Int16, sal_Int64 >(m_pParent->m_pPortNF->GetValue()),
+                    m_pParent->m_pSecureCB->IsChecked() ? OUString("Ssl") : OUString("Insecure"));
         xMailService->connect(xConnectionContext, xAuthenticator);
         bIsLoggedIn = xMailService->isConnected();
         if( xInMailService.is() )
@@ -438,65 +422,61 @@ SwMailConfigDlg::~SwMailConfigDlg()
 
 SwAuthenticationSettingsDialog::SwAuthenticationSettingsDialog(
         SwMailConfigPage* pParent, SwMailMergeConfigItem& rItem) :
-    SfxModalDialog(pParent, SW_RES(DLG_MM_SERVERAUTHENTICATION)),
-#ifdef _MSC_VER
-#pragma warning (disable : 4355)
-#endif
-        m_aAuthenticationCB( this,          SW_RES( CB_AUTHENTICATION        )),
-        m_aSeparateAuthenticationRB( this,  SW_RES( RB_SEP_AUTHENTICATION   )),
-        m_aSMTPAfterPOPRB( this,            SW_RES( RB_SMPTAFTERPOP         )),
-        m_aOutgoingServerFT( this,          SW_RES( FT_OUTGOINGSERVER        )),
-        m_aUserNameFT( this,                SW_RES( FT_USERNAME             )),
-        m_aUserNameED( this,                SW_RES( ED_USERNAME             )),
-        m_aOutPasswordFT( this,             SW_RES( FT_OUTPASSWORD          )),
-        m_aOutPasswordED( this,             SW_RES( ED_OUTPASSWORD          )),
-        m_aIncomingServerFT( this,          SW_RES( FT_INCOMINGSERVER       )),
-        m_aServerFT( this,                  SW_RES( FT_SERVER               )),
-        m_aServerED( this,                  SW_RES( ED_SERVER               )),
-        m_aPortFT( this,                    SW_RES( FT_PORT                 )),
-        m_aPortNF( this,                    SW_RES( NF_PORT                 )),
-        m_aProtocolFT( this,                SW_RES( FT_PROTOCOL      )),
-        m_aPOP3RB( this,                    SW_RES( RB_POP3          )),
-        m_aIMAPRB( this,                    SW_RES( RB_IMAP          )),
-        m_aInUsernameFT( this,              SW_RES( FT_INUSERNAME            )),
-        m_aInUsernameED( this,              SW_RES( ED_INUSERNAME           )),
-        m_aInPasswordFT( this,              SW_RES( FT_INPASSWORD           )),
-        m_aInPasswordED( this,              SW_RES( ED_INPASSWORD           )),
-        m_aSeparatorFL( this,               SW_RES( FL_SEPARATOR            )),
-        m_aOKPB( this,                      SW_RES( PB_OK                   )),
-        m_aCancelPB( this,                  SW_RES( PB_CANCEL               )),
-        m_aHelpPB( this,                    SW_RES( PB_HELP                 )),
+    SfxModalDialog(pParent, "AuthenticationSettingsDialog", "modules/swriter/ui/authenticationsettingsdialog.ui"),
 #ifdef _MSC_VER
 #pragma warning (default : 4355)
 #endif
         rConfigItem( rItem )
 {
-    FreeResource();
+    get(m_pAuthenticationCB,"authentication");
+    get(m_pSeparateAuthenticationRB,"seperateauthentication");
+    get(m_pSMTPAfterPOPRB,"smtpafterpop");
+//        m_aOutgoingServerFT( this,          SW_RES( FT_OUTGOINGSERVER        )),
+//        m_aUserNameFT( this,                SW_RES( FT_USERNAME             )),
+    get(m_pUserNameED,"username");
+//        m_aOutPasswordFT( this,             SW_RES( FT_OUTPASSWORD          )),
+    get(m_pOutPasswordED,"outpassword");
+//        m_aIncomingServerFT( this,          SW_RES( FT_INCOMINGSERVER       )),
+//        m_aServerFT( this,                  SW_RES( FT_SERVER               )),
+    get(m_pServerED,"server");
+//        m_aPortFT( this,                    SW_RES( FT_PORT                 )),
+    get(m_pPortNF,"port");
+//        m_aProtocolFT( this,                SW_RES( FT_PROTOCOL      )),
+    get(m_pPOP3RB,"pop3");
+    get(m_pIMAPRB,"imap");
+//        m_aInUsernameFT( this,              SW_RES( FT_INUSERNAME            )),
+    get(m_pInUsernameED,"inusername");
+//        m_aInPasswordFT( this,              SW_RES( FT_INPASSWORD           )),
+    get(m_pInPasswordED,"inpassword");
+//        m_aSeparatorFL( this,               SW_RES( FL_SEPARATOR            )),
+    get(m_pOKPB,"ok");
 
-    m_aAuthenticationCB.SetClickHdl( LINK( this, SwAuthenticationSettingsDialog, CheckBoxHdl_Impl));
+    //FreeResource();
+
+    m_pAuthenticationCB->SetClickHdl( LINK( this, SwAuthenticationSettingsDialog, CheckBoxHdl_Impl));
     Link aRBLink = LINK( this, SwAuthenticationSettingsDialog, RadioButtonHdl_Impl );
-    m_aSeparateAuthenticationRB.SetClickHdl( aRBLink );
-    m_aSMTPAfterPOPRB.SetClickHdl( aRBLink );
-    m_aOKPB.SetClickHdl( LINK( this, SwAuthenticationSettingsDialog, OKHdl_Impl));
+    m_pSeparateAuthenticationRB->SetClickHdl( aRBLink );
+    m_pSMTPAfterPOPRB->SetClickHdl( aRBLink );
+    m_pOKPB->SetClickHdl( LINK( this, SwAuthenticationSettingsDialog, OKHdl_Impl));
 
-    m_aAuthenticationCB.Check( rConfigItem.IsAuthentication() );
+    m_pAuthenticationCB->Check( rConfigItem.IsAuthentication() );
     if(rConfigItem.IsSMTPAfterPOP())
-        m_aSMTPAfterPOPRB.Check();
+        m_pSMTPAfterPOPRB->Check();
     else
-        m_aSeparateAuthenticationRB.Check();
-    m_aUserNameED.SetText( rConfigItem.GetMailUserName() );
-    m_aOutPasswordED.SetText( rConfigItem.GetMailPassword() );
+        m_pSeparateAuthenticationRB->Check();
+    m_pUserNameED->SetText( rConfigItem.GetMailUserName() );
+    m_pOutPasswordED->SetText( rConfigItem.GetMailPassword() );
 
-    m_aServerED.SetText( rConfigItem.GetInServerName() );
-    m_aPortNF.SetValue( rConfigItem.GetInServerPort() );
+    m_pServerED->SetText( rConfigItem.GetInServerName() );
+    m_pPortNF->SetValue( rConfigItem.GetInServerPort() );
     if(rConfigItem.IsInServerPOP())
-        m_aPOP3RB.Check();
+        m_pPOP3RB->Check();
     else
-        m_aIMAPRB.Check();
-    m_aInUsernameED.SetText( rConfigItem.GetInServerUserName());
-    m_aInPasswordED.SetText( rConfigItem.GetInServerPassword() );
+        m_pIMAPRB->Check();
+    m_pInUsernameED->SetText( rConfigItem.GetInServerUserName());
+    m_pInPasswordED->SetText( rConfigItem.GetInServerPassword() );
 
-    CheckBoxHdl_Impl( &m_aAuthenticationCB );
+    CheckBoxHdl_Impl( m_pAuthenticationCB );
 }
 
 SwAuthenticationSettingsDialog::~SwAuthenticationSettingsDialog()
@@ -505,16 +485,16 @@ SwAuthenticationSettingsDialog::~SwAuthenticationSettingsDialog()
 
 IMPL_LINK_NOARG(SwAuthenticationSettingsDialog, OKHdl_Impl)
 {
-    rConfigItem.SetAuthentication( m_aAuthenticationCB.IsChecked() );
-    rConfigItem.SetSMTPAfterPOP(m_aSMTPAfterPOPRB.IsChecked());
-    rConfigItem.SetMailUserName(m_aUserNameED.GetText());
-    rConfigItem.SetMailPassword(m_aOutPasswordED.GetText());
-    rConfigItem.SetInServerName(m_aServerED.GetText());
-    rConfigItem.SetInServerPort(sal::static_int_cast< sal_Int16, sal_Int64 >(m_aPortNF.GetValue( ) ));
-    rConfigItem.SetInServerPOP(m_aPOP3RB.IsChecked());
-    rConfigItem.SetInServerUserName(m_aInUsernameED.GetText());
+    rConfigItem.SetAuthentication( m_pAuthenticationCB->IsChecked() );
+    rConfigItem.SetSMTPAfterPOP(m_pSMTPAfterPOPRB->IsChecked());
+    rConfigItem.SetMailUserName(m_pUserNameED->GetText());
+    rConfigItem.SetMailPassword(m_pOutPasswordED->GetText());
+    rConfigItem.SetInServerName(m_pServerED->GetText());
+    rConfigItem.SetInServerPort(sal::static_int_cast< sal_Int16, sal_Int64 >(m_pPortNF->GetValue( ) ));
+    rConfigItem.SetInServerPOP(m_pPOP3RB->IsChecked());
+    rConfigItem.SetInServerUserName(m_pInUsernameED->GetText());
 
-    rConfigItem.SetInServerPassword(m_aInPasswordED.GetText());
+    rConfigItem.SetInServerPassword(m_pInPasswordED->GetText());
     EndDialog(RET_OK);
     return 0;
 }
@@ -522,8 +502,8 @@ IMPL_LINK_NOARG(SwAuthenticationSettingsDialog, OKHdl_Impl)
 IMPL_LINK( SwAuthenticationSettingsDialog, CheckBoxHdl_Impl, CheckBox*, pBox)
 {
     sal_Bool bChecked = pBox->IsChecked();
-    m_aSeparateAuthenticationRB.Enable(bChecked);
-    m_aSMTPAfterPOPRB.Enable(bChecked);
+    m_pSeparateAuthenticationRB->Enable(bChecked);
+    m_pSMTPAfterPOPRB->Enable(bChecked);
     RadioButtonHdl_Impl( 0 );
 
     return 0;
@@ -531,29 +511,29 @@ IMPL_LINK( SwAuthenticationSettingsDialog, CheckBoxHdl_Impl, CheckBox*, pBox)
 
 IMPL_LINK_NOARG(SwAuthenticationSettingsDialog, RadioButtonHdl_Impl)
 {
-    sal_Bool bSeparate = m_aSeparateAuthenticationRB.IsChecked();
-    sal_Bool bIsEnabled = m_aSeparateAuthenticationRB.IsEnabled();
+    sal_Bool bSeparate = m_pSeparateAuthenticationRB->IsChecked();
+    sal_Bool bIsEnabled = m_pSeparateAuthenticationRB->IsEnabled();
     sal_Bool bNotSeparate = !bSeparate && bIsEnabled;
     bSeparate &= bIsEnabled;
 
-    m_aOutgoingServerFT.Enable(bSeparate);
-    m_aUserNameFT.Enable(bSeparate);
-    m_aUserNameED.Enable(bSeparate);
-    m_aOutPasswordFT.Enable(bSeparate);
-    m_aOutPasswordED.Enable(bSeparate);
+//    m_aOutgoingServerFT.Enable(bSeparate);
+//    m_aUserNameFT.Enable(bSeparate);
+    m_pUserNameED->Enable(bSeparate);
+//    m_aOutPasswordFT.Enable(bSeparate);
+    m_pOutPasswordED->Enable(bSeparate);
 
-    m_aIncomingServerFT.Enable(bNotSeparate);
-    m_aServerFT.Enable(bNotSeparate);
-    m_aServerED.Enable(bNotSeparate);
-    m_aPortFT.Enable(bNotSeparate);
-    m_aPortNF.Enable(bNotSeparate);
-    m_aInUsernameFT.Enable(bNotSeparate);
-    m_aInUsernameED.Enable(bNotSeparate);
-    m_aProtocolFT.Enable(bNotSeparate);
-    m_aPOP3RB.Enable(bNotSeparate);
-    m_aIMAPRB.Enable(bNotSeparate);
-    m_aInPasswordFT.Enable(bNotSeparate);
-    m_aInPasswordED.Enable(bNotSeparate);
+//    m_aIncomingServerFT.Enable(bNotSeparate);
+//    m_aServerFT.Enable(bNotSeparate);
+    m_pServerED->Enable(bNotSeparate);
+//    m_aPortFT.Enable(bNotSeparate);
+    m_pPortNF->Enable(bNotSeparate);
+//    m_aInUsernameFT.Enable(bNotSeparate);
+    m_pInUsernameED->Enable(bNotSeparate);
+//    m_aProtocolFT.Enable(bNotSeparate);
+    m_pPOP3RB->Enable(bNotSeparate);
+    m_pIMAPRB->Enable(bNotSeparate);
+//    m_aInPasswordFT.Enable(bNotSeparate);
+    m_pInPasswordED->Enable(bNotSeparate);
 
     return 0;
 }
