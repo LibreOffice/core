@@ -14,6 +14,7 @@ $(eval $(call gb_UnpackedTarball_set_tarball,poppler,$(POPPLER_TARBALL)))
 $(eval $(call gb_UnpackedTarball_add_patches,poppler,\
 	poppler/poppler-notests.patch.1 \
 	poppler/poppler-snprintf.patch.1 \
+	poppler/poppler-mac-fake.patch.1 \
 ))
 
 # vim: set noet sw=4 ts=4:

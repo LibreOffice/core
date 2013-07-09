@@ -1,0 +1,13 @@
+diff -ur poppler.org/poppler/GlobalParams.cc poppler/poppler/GlobalParams.cc
+--- poppler.org/poppler/GlobalParams.cc	2013-07-09 06:24:38.000000000 -0500
++++ poppler/poppler/GlobalParams.cc	2013-07-09 06:25:18.000000000 -0500
+@@ -1327,7 +1327,7 @@
+   return path;
+ }
+ 
+-#elif WITH_FONTCONFIGURATION_WIN32
++#elif WITH_FONTCONFIGURATION_WIN32 && defined(_WIN32)
+ #include "GlobalParamsWin.cc"
+ 
+ GooString *GlobalParams::findBase14FontFile(GooString *base14Name, GfxFont *font) {
+
