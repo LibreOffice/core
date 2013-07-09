@@ -1,0 +1,45 @@
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+  <body class="en file-preview-body shmodel-body deferred-resources pdf-preview-pdf-embedded">
+    <div id="outer-frame">   
+      <div id="page-content">
+        <div class="nav-header">
+           
+           
+          <div class="buttons">
+            <a id="create-an-account-button" href="/register?signup_tag=shmodel" target="_blank" class="freshbutton-lightblue">Sign up for Dropbox</a>
+          </div>
+        </div>
+        <div style="display: none;" id="c2d-modal">
+          <div id="create-account-content">
+            <div>
+              <form novalidate="novalidate" id="c2d-register-form" method="post">
+                <input type="hidden" name="signup_tag" value="copy_to_dropbox" />
+                <input type="hidden" name="dl_redir" value="1" />
+              </form>
+            </div>
+          </div>
+          <div style="display:none;" id="login-account-content">
+            <div style="display: none;" id="c2d-twofactor-login">
+              <form novalidate="novalidate" id="c2d-twofactor-login-form" method="post">
+                <div id="c2d-twofactor-error" class="error-message"></div>
+                <div class="sick-input">
+                  <label for="email">6-digit code</label>
+                  <input autocomplete="off" type="text" id="c2d-twofactor-code" name="twofactor_code" tabindex="13" />
+                </div>
+                <input name="twofactor_login_submit" value="Submit code" class="freshbutton-blue" type="submit" id="twofactor_login_submit" tabindex="15" />
+                <p class="resend-code">
+                  <a id="c2d-resend-link">Didn't receive one?</a>
+                </p>
+              </form>
+            </div>
+          </div>
+        </div>
+      <noscript>
+        <p class="center">The Dropbox website requires JavaScript.</p>
+      </noscript>
+    </div>
+    <div style="position: absolute; top: 0; left: 0; font-family: Courier" id="ieconsole"></div>
+    <div style="position:absolute; top:-10000px;width:0px; height:0px; left: 0;" id="FB_HiddenContainer"></div>
+    <div style="display:none;" id="notice-container" class="clearfix"></div>
+  </body>
+</html>

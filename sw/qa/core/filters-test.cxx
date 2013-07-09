@@ -117,6 +117,10 @@ void SwFiltersTest::testCVEs()
             getURLFromSrc("/sw/qa/core/data/rtf/"),
             OUString(),
             SFX_FILTER_STARONEFILTER);
+
+    testDir(OUString("HTML"),
+            getURLFromSrc("/sw/qa/core/data/html/"),
+            OUString(sHTML));
 }
 
 void SwFiltersTest::setUp()
