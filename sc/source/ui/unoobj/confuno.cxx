@@ -44,7 +44,7 @@ using namespace com::sun::star;
 
 static const SfxItemPropertyMapEntry* lcl_GetConfigPropertyMap()
 {
-    static SfxItemPropertyMapEntry aConfigPropertyMap_Impl[] =
+    static const SfxItemPropertyMapEntry aConfigPropertyMap_Impl[] =
     {
         {MAP_CHAR_LEN(SC_UNO_SHOWZERO),     0,  &getBooleanCppuType(),              0, 0},
         {MAP_CHAR_LEN(SC_UNO_SHOWNOTES),    0,  &getBooleanCppuType(),              0, 0},

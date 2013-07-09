@@ -31,7 +31,7 @@ using namespace com::sun::star;
 //------------------------------------------------------------------------
 const SfxItemPropertyMapEntry* ScDocOptionsHelper::GetPropertyMap()
 {
-    static SfxItemPropertyMapEntry aMap[] =
+    static const SfxItemPropertyMapEntry aMap[] =
     {
         {MAP_CHAR_LEN(SC_UNO_CALCASSHOWN),  PROP_UNO_CALCASSHOWN ,  &getBooleanCppuType(),          0, 0},
         {MAP_CHAR_LEN(SC_UNO_DEFTABSTOP),   PROP_UNO_DEFTABSTOP  ,  &getCppuType((sal_Int16*)0),    0, 0},

@@ -137,7 +137,7 @@ extern uno::Reference< uno::XInterface > SAL_CALL ScXMLOasisExport_Settings_crea
 
 static const SfxItemPropertyMapEntry* lcl_GetSettingsPropertyMap()
 {
-    static SfxItemPropertyMapEntry aSettingsPropertyMap_Impl[] =
+    static const SfxItemPropertyMapEntry aSettingsPropertyMap_Impl[] =
     {
         {MAP_CHAR_LEN(SC_UNONAME_DOAUTOCP), 0,  &getBooleanCppuType(),              0, 0},
         {MAP_CHAR_LEN(SC_UNONAME_ENTERED),  0,  &getBooleanCppuType(),              0, 0},

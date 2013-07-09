@@ -42,7 +42,7 @@ using namespace com::sun::star;
 
 static const SvxItemPropertySet* lcl_GetAnnotationPropertySet()
 {
-    static SfxItemPropertyMapEntry aAnnotationPropertyMap_Impl[] =
+    static const SfxItemPropertyMapEntry aAnnotationPropertyMap_Impl[] =
     {
         SVX_UNOEDIT_CHAR_PROPERTIES,
         SVX_UNOEDIT_FONT_PROPERTIES,

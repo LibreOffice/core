@@ -65,7 +65,7 @@ static const SfxItemPropertyMapEntry* lcl_GetSubTotalPropertyMap()
 {
     // some old property names are for 5.2 compatibility
 
-    static SfxItemPropertyMapEntry aSubTotalPropertyMap_Impl[] =
+    static const SfxItemPropertyMapEntry aSubTotalPropertyMap_Impl[] =
     {
         {MAP_CHAR_LEN(SC_UNONAME_BINDFMT),  0,  &getBooleanCppuType(),       0, 0},
         {MAP_CHAR_LEN(SC_UNONAME_CASE),     0,  &getBooleanCppuType(),       0, 0},
@@ -86,7 +86,7 @@ static const SfxItemPropertyMapEntry* lcl_GetSubTotalPropertyMap()
 
 static const SfxItemPropertyMapEntry* lcl_GetFilterPropertyMap()
 {
-    static SfxItemPropertyMapEntry aFilterPropertyMap_Impl[] =
+    static const SfxItemPropertyMapEntry aFilterPropertyMap_Impl[] =
     {
         {MAP_CHAR_LEN(SC_UNONAME_CONTHDR),  0,  &getBooleanCppuType(),                      0, 0},
         {MAP_CHAR_LEN(SC_UNONAME_COPYOUT),  0,  &getBooleanCppuType(),                      0, 0},
@@ -104,7 +104,7 @@ static const SfxItemPropertyMapEntry* lcl_GetFilterPropertyMap()
 
 static const SfxItemPropertyMapEntry* lcl_GetDBRangePropertyMap()
 {
-    static SfxItemPropertyMapEntry aDBRangePropertyMap_Impl[] =
+    static const SfxItemPropertyMapEntry aDBRangePropertyMap_Impl[] =
     {
         {MAP_CHAR_LEN(SC_UNONAME_AUTOFLT),  0,  &getBooleanCppuType(),                      0, 0},
         {MAP_CHAR_LEN(SC_UNONAME_FLTCRT),   0,  &getCppuType((table::CellRangeAddress*)0),  0, 0},

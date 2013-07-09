@@ -296,13 +296,13 @@ PTDataFieldModel::PTDataFieldModel() :
 
 void PTDataFieldModel::setBiffSubtotal( sal_Int32 nSubtotal )
 {
-    static sal_Int32 spnSubtotals[] = { XML_sum, XML_count, XML_average, XML_max, XML_min, XML_product, XML_countNums, XML_stdDev, XML_stdDevp, XML_var, XML_varp };
+    static const sal_Int32 spnSubtotals[] = { XML_sum, XML_count, XML_average, XML_max, XML_min, XML_product, XML_countNums, XML_stdDev, XML_stdDevp, XML_var, XML_varp };
     mnSubtotal = STATIC_ARRAY_SELECT( spnSubtotals, nSubtotal, XML_TOKEN_INVALID );
 }
 
 void PTDataFieldModel::setBiffShowDataAs( sal_Int32 nShowDataAs )
 {
-    static sal_Int32 spnShowDataAs[] = { XML_normal, XML_difference, XML_percent, XML_percentDiff, XML_runTotal, XML_percentOfRow, XML_percentOfCol, XML_percentOfTotal, XML_index };
+    static const sal_Int32 spnShowDataAs[] = { XML_normal, XML_difference, XML_percent, XML_percentDiff, XML_runTotal, XML_percentOfRow, XML_percentOfCol, XML_percentOfTotal, XML_index };
     mnShowDataAs = STATIC_ARRAY_SELECT( spnShowDataAs, nShowDataAs, XML_TOKEN_INVALID );
 }
 
@@ -859,7 +859,7 @@ void PivotTableFilter::importPTFilter( SequenceInputStream& rStrm )
     if( getFlag( nFlags, BIFF12_PTFILTER_HASSTRVALUE2 ) )
         rStrm >> maModel.maStrValue2;
 
-    static sal_Int32 spnTypes[] =
+    static const sal_Int32 spnTypes[] =
     {
         XML_unknown,
         // data field top10 filter (1-3)

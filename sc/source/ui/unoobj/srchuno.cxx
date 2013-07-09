@@ -41,7 +41,7 @@ using namespace com::sun::star;
 
 static const SfxItemPropertyMapEntry* lcl_GetSearchPropertyMap()
 {
-    static SfxItemPropertyMapEntry aSearchPropertyMap_Impl[] =
+    static const SfxItemPropertyMapEntry aSearchPropertyMap_Impl[] =
     {
         {MAP_CHAR_LEN(SC_UNO_SRCHBACK),     0,      &getBooleanCppuType(),       0, 0},
         {MAP_CHAR_LEN(SC_UNO_SRCHBYROW),    0,      &getBooleanCppuType(),       0, 0},

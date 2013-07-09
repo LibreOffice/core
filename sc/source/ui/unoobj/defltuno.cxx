@@ -42,7 +42,7 @@ using namespace ::com::sun::star;
 
 static const SfxItemPropertyMapEntry* lcl_GetDocDefaultsMap()
 {
-    static SfxItemPropertyMapEntry aDocDefaultsMap_Impl[] =
+    static const SfxItemPropertyMapEntry aDocDefaultsMap_Impl[] =
     {
         {MAP_CHAR_LEN(SC_UNONAME_CFCHARS),  ATTR_FONT,          &getCppuType((sal_Int16*)0),        0, MID_FONT_CHAR_SET },
         {MAP_CHAR_LEN(SC_UNO_CJK_CFCHARS),  ATTR_CJK_FONT,      &getCppuType((sal_Int16*)0),        0, MID_FONT_CHAR_SET },

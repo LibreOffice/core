@@ -49,7 +49,7 @@ using namespace ::com::sun::star;
 
 static const SfxItemPropertyMapEntry* lcl_GetFormulaParserMap()
 {
-    static SfxItemPropertyMapEntry aFormulaParserMap_Impl[] =
+    static const SfxItemPropertyMapEntry aFormulaParserMap_Impl[] =
     {
         {MAP_CHAR_LEN(SC_UNO_COMPILEFAP),           0,  &getBooleanCppuType(),                   0, 0 },
         {MAP_CHAR_LEN(SC_UNO_COMPILEENGLISH),       0,  &getBooleanCppuType(),                   0, 0 },

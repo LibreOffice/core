@@ -71,7 +71,7 @@ using namespace ::com::sun::star;
 
 static const SfxItemPropertyMapEntry* lcl_GetAutoFormatMap()
 {
-    static SfxItemPropertyMapEntry aAutoFormatMap_Impl[] =
+    static const SfxItemPropertyMapEntry aAutoFormatMap_Impl[] =
     {
         {MAP_CHAR_LEN(SC_UNONAME_INCBACK),  0,  &::getBooleanCppuType(),    0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_INCBORD),  0,  &::getBooleanCppuType(),    0, 0 },
@@ -89,7 +89,7 @@ static const SfxItemPropertyMapEntry* lcl_GetAutoFormatMap()
 
 static const SfxItemPropertyMapEntry* lcl_GetAutoFieldMap()
 {
-    static SfxItemPropertyMapEntry aAutoFieldMap_Impl[] =
+    static const SfxItemPropertyMapEntry aAutoFieldMap_Impl[] =
     {
         {MAP_CHAR_LEN(SC_UNONAME_CELLBACK), ATTR_BACKGROUND,        &::getCppuType((const sal_Int32*)0),        0, MID_BACK_COLOR },
         {MAP_CHAR_LEN(SC_UNONAME_CCOLOR),   ATTR_FONT_COLOR,        &::getCppuType((const sal_Int32*)0),        0, 0 },

@@ -200,7 +200,7 @@ uno::Reference< uno::XInterface > SAL_CALL ScXMLImport_Settings_createInstance(
 
 const SvXMLTokenMap& ScXMLImport::GetTableRowCellAttrTokenMap()
 {
-    static SvXMLTokenMapEntry aTableRowCellAttrTokenMap[] =
+    static const SvXMLTokenMapEntry aTableRowCellAttrTokenMap[] =
     {
         { XML_NAMESPACE_TABLE,  XML_STYLE_NAME,                     XML_TOK_TABLE_ROW_CELL_ATTR_STYLE_NAME              },
         { XML_NAMESPACE_TABLE,  XML_CONTENT_VALIDATION_NAME,        XML_TOK_TABLE_ROW_CELL_ATTR_CONTENT_VALIDATION_NAME },
@@ -418,7 +418,7 @@ const SvXMLTokenMap& ScXMLImport::GetDocElemTokenMap()
 {
     if( !pDocElemTokenMap )
     {
-        static SvXMLTokenMapEntry aDocTokenMap[] =
+        static const SvXMLTokenMapEntry aDocTokenMap[] =
         {
             { XML_NAMESPACE_OFFICE, XML_FONT_FACE_DECLS,    XML_TOK_DOC_FONTDECLS           },
             { XML_NAMESPACE_OFFICE, XML_STYLES,             XML_TOK_DOC_STYLES              },
@@ -443,7 +443,7 @@ const SvXMLTokenMap& ScXMLImport::GetBodyElemTokenMap()
 {
     if( !pBodyElemTokenMap )
     {
-        static SvXMLTokenMapEntry aBodyTokenMap[] =
+        static const SvXMLTokenMapEntry aBodyTokenMap[] =
         {
             { XML_NAMESPACE_TABLE, XML_TRACKED_CHANGES,         XML_TOK_BODY_TRACKED_CHANGES        },
             { XML_NAMESPACE_TABLE, XML_CALCULATION_SETTINGS,    XML_TOK_BODY_CALCULATION_SETTINGS   },
@@ -469,7 +469,7 @@ const SvXMLTokenMap& ScXMLImport::GetContentValidationsElemTokenMap()
 {
     if( !pContentValidationsElemTokenMap )
     {
-        static SvXMLTokenMapEntry aContentValidationsElemTokenMap[] =
+        static const SvXMLTokenMapEntry aContentValidationsElemTokenMap[] =
         {
             { XML_NAMESPACE_TABLE, XML_CONTENT_VALIDATION,  XML_TOK_CONTENT_VALIDATION  },
             XML_TOKEN_MAP_END
@@ -485,7 +485,7 @@ const SvXMLTokenMap& ScXMLImport::GetContentValidationElemTokenMap()
 {
     if( !pContentValidationElemTokenMap )
     {
-        static SvXMLTokenMapEntry aContentValidationElemTokenMap[] =
+        static const SvXMLTokenMapEntry aContentValidationElemTokenMap[] =
         {
             { XML_NAMESPACE_TABLE,  XML_HELP_MESSAGE,    XML_TOK_CONTENT_VALIDATION_ELEM_HELP_MESSAGE    },
             { XML_NAMESPACE_TABLE,  XML_ERROR_MESSAGE,   XML_TOK_CONTENT_VALIDATION_ELEM_ERROR_MESSAGE   },
@@ -504,7 +504,7 @@ const SvXMLTokenMap& ScXMLImport::GetContentValidationAttrTokenMap()
 {
     if( !pContentValidationAttrTokenMap )
     {
-        static SvXMLTokenMapEntry aContentValidationAttrTokenMap[] =
+        static const SvXMLTokenMapEntry aContentValidationAttrTokenMap[] =
         {
             { XML_NAMESPACE_TABLE, XML_NAME,                XML_TOK_CONTENT_VALIDATION_NAME                 },
             { XML_NAMESPACE_TABLE, XML_CONDITION,           XML_TOK_CONTENT_VALIDATION_CONDITION            },
@@ -524,7 +524,7 @@ const SvXMLTokenMap& ScXMLImport::GetContentValidationMessageElemTokenMap()
 {
     if( !pContentValidationMessageElemTokenMap )
     {
-        static SvXMLTokenMapEntry aContentValidationMessageElemTokenMap[] =
+        static const SvXMLTokenMapEntry aContentValidationMessageElemTokenMap[] =
         {
             { XML_NAMESPACE_TEXT, XML_P,    XML_TOK_P   },
             XML_TOKEN_MAP_END
@@ -540,7 +540,7 @@ const SvXMLTokenMap& ScXMLImport::GetContentValidationHelpMessageAttrTokenMap()
 {
     if( !pContentValidationHelpMessageAttrTokenMap )
     {
-        static SvXMLTokenMapEntry aContentValidationHelpMessageAttrTokenMap[] =
+        static const SvXMLTokenMapEntry aContentValidationHelpMessageAttrTokenMap[] =
         {
             { XML_NAMESPACE_TABLE, XML_TITLE,   XML_TOK_HELP_MESSAGE_ATTR_TITLE     },
             { XML_NAMESPACE_TABLE, XML_DISPLAY, XML_TOK_HELP_MESSAGE_ATTR_DISPLAY   },
@@ -557,7 +557,7 @@ const SvXMLTokenMap& ScXMLImport::GetContentValidationErrorMessageAttrTokenMap()
 {
     if( !pContentValidationErrorMessageAttrTokenMap )
     {
-        static SvXMLTokenMapEntry aContentValidationErrorMessageAttrTokenMap[] =
+        static const SvXMLTokenMapEntry aContentValidationErrorMessageAttrTokenMap[] =
         {
             { XML_NAMESPACE_TABLE, XML_TITLE,           XML_TOK_ERROR_MESSAGE_ATTR_TITLE        },
             { XML_NAMESPACE_TABLE, XML_DISPLAY,         XML_TOK_ERROR_MESSAGE_ATTR_DISPLAY      },
@@ -575,7 +575,7 @@ const SvXMLTokenMap& ScXMLImport::GetContentValidationErrorMacroAttrTokenMap()
 {
     if( !pContentValidationErrorMacroAttrTokenMap )
     {
-        static SvXMLTokenMapEntry aContentValidationErrorMacroAttrTokenMap[] =
+        static const SvXMLTokenMapEntry aContentValidationErrorMacroAttrTokenMap[] =
         {
             { XML_NAMESPACE_TABLE, XML_NAME,    XML_TOK_ERROR_MACRO_ATTR_NAME       },
             { XML_NAMESPACE_TABLE, XML_EXECUTE, XML_TOK_ERROR_MACRO_ATTR_EXECUTE    },
@@ -592,7 +592,7 @@ const SvXMLTokenMap& ScXMLImport::GetCondFormatsTokenMap()
 {
     if( !pCondFormatsTokenMap )
     {
-        static SvXMLTokenMapEntry aCondFormatsElemTokenMap[] =
+        static const SvXMLTokenMapEntry aCondFormatsElemTokenMap[] =
         {
             { XML_NAMESPACE_CALC_EXT, XML_CONDITIONAL_FORMAT, XML_TOK_CONDFORMATS_CONDFORMAT },
             XML_TOKEN_MAP_END
@@ -608,7 +608,7 @@ const SvXMLTokenMap& ScXMLImport::GetCondFormatTokenMap()
 {
     if( !pCondFormatTokenMap )
     {
-        static SvXMLTokenMapEntry aCondFormatElemTokenMap[] =
+        static const SvXMLTokenMapEntry aCondFormatElemTokenMap[] =
         {
             { XML_NAMESPACE_CALC_EXT, XML_COLOR_SCALE, XML_TOK_CONDFORMAT_COLORSCALE },
             { XML_NAMESPACE_CALC_EXT, XML_DATA_BAR, XML_TOK_CONDFORMAT_DATABAR },
@@ -628,7 +628,7 @@ const SvXMLTokenMap& ScXMLImport::GetCondFormatAttrMap()
 {
     if( !pCondFormatAttrMap )
     {
-        static SvXMLTokenMapEntry aCondFormatAttrTokenMap[] =
+        static const SvXMLTokenMapEntry aCondFormatAttrTokenMap[] =
         {
             { XML_NAMESPACE_CALC_EXT, XML_TARGET_RANGE_ADDRESS, XML_TOK_CONDFORMAT_TARGET_RANGE },
             XML_TOKEN_MAP_END
@@ -644,7 +644,7 @@ const SvXMLTokenMap& ScXMLImport::GetCondDateAttrMap()
 {
     if( !pCondDateAttrMap )
     {
-        static SvXMLTokenMapEntry aCondDateAttrTokenMap[] =
+        static const SvXMLTokenMapEntry aCondDateAttrTokenMap[] =
         {
             { XML_NAMESPACE_CALC_EXT, XML_DATE, XML_TOK_COND_DATE_VALUE },
             { XML_NAMESPACE_CALC_EXT, XML_STYLE, XML_TOK_COND_DATE_STYLE },
@@ -661,7 +661,7 @@ const SvXMLTokenMap& ScXMLImport::GetConditionAttrMap()
 {
     if( !pConditionAttrMap )
     {
-        static SvXMLTokenMapEntry aConditionAttrTokenMap[] =
+        static const SvXMLTokenMapEntry aConditionAttrTokenMap[] =
         {
             { XML_NAMESPACE_CALC_EXT, XML_VALUE, XML_TOK_CONDITION_VALUE },
             { XML_NAMESPACE_CALC_EXT, XML_APPLY_STYLE_NAME, XML_TOK_CONDITION_APPLY_STYLE_NAME },
@@ -679,7 +679,7 @@ const SvXMLTokenMap& ScXMLImport::GetColorScaleTokenMap()
 {
     if( !pColorScaleTokenMap )
     {
-        static SvXMLTokenMapEntry aColorScaleElemTokenMap[] =
+        static const SvXMLTokenMapEntry aColorScaleElemTokenMap[] =
         {
             { XML_NAMESPACE_CALC_EXT, XML_COLOR_SCALE_ENTRY, XML_TOK_COLORSCALE_COLORSCALEENTRY },
             XML_TOKEN_MAP_END
@@ -695,7 +695,7 @@ const SvXMLTokenMap& ScXMLImport::GetColorScaleEntryAttrMap()
 {
     if( !pColorScaleEntryAttrTokenMap )
     {
-        static SvXMLTokenMapEntry aColorScaleAttrTokenMap[] =
+        static const SvXMLTokenMapEntry aColorScaleAttrTokenMap[] =
         {
             { XML_NAMESPACE_CALC_EXT, XML_TYPE, XML_TOK_COLORSCALEENTRY_TYPE },
             { XML_NAMESPACE_CALC_EXT, XML_VALUE, XML_TOK_COLORSCALEENTRY_VALUE },
@@ -713,7 +713,7 @@ const SvXMLTokenMap& ScXMLImport::GetFormattingTokenMap()
 {
     if( !pDataBarTokenMap )
     {
-        static SvXMLTokenMapEntry aDataBarElemTokenMap[] =
+        static const SvXMLTokenMapEntry aDataBarElemTokenMap[] =
         {
             { XML_NAMESPACE_CALC_EXT, XML_DATA_BAR_ENTRY, XML_TOK_DATABAR_DATABARENTRY },
             { XML_NAMESPACE_CALC_EXT, XML_FORMATTING_ENTRY, XML_TOK_FORMATTING_ENTRY },
@@ -730,7 +730,7 @@ const SvXMLTokenMap& ScXMLImport::GetDataBarAttrMap()
 {
     if( !pDataBarAttrMap )
     {
-        static SvXMLTokenMapEntry aDataBarAttrTokenMap[] =
+        static const SvXMLTokenMapEntry aDataBarAttrTokenMap[] =
         {
             { XML_NAMESPACE_CALC_EXT, XML_POSITIVE_COLOR, XML_TOK_DATABAR_POSITIVE_COLOR },
             { XML_NAMESPACE_CALC_EXT, XML_NEGATIVE_COLOR, XML_TOK_DATABAR_NEGATIVE_COLOR },
@@ -751,7 +751,7 @@ const SvXMLTokenMap& ScXMLImport::GetIconSetAttrMap()
 {
     if( !pIconSetAttrMap )
     {
-        static SvXMLTokenMapEntry aIconSetAttrTokenMap[] =
+        static const SvXMLTokenMapEntry aIconSetAttrTokenMap[] =
         {
             { XML_NAMESPACE_CALC_EXT, XML_ICON_SET_TYPE, XML_TOK_ICONSET_TYPE },
             { XML_NAMESPACE_CALC_EXT, XML_SHOW_VALUE, XML_TOK_ICONSET_SHOWVALUE },
@@ -768,7 +768,7 @@ const SvXMLTokenMap& ScXMLImport::GetDataBarEntryAttrMap()
 {
     if( !pFormattingEntryAttrMap )
     {
-        static SvXMLTokenMapEntry aDataBarAttrEntryTokenMap[] =
+        static const SvXMLTokenMapEntry aDataBarAttrEntryTokenMap[] =
         {
             { XML_NAMESPACE_CALC_EXT, XML_TYPE, XML_TOK_DATABARENTRY_TYPE },
             { XML_NAMESPACE_CALC_EXT, XML_VALUE, XML_TOK_DATABARENTRY_VALUE },
@@ -785,7 +785,7 @@ const SvXMLTokenMap& ScXMLImport::GetLabelRangesElemTokenMap()
 {
     if( !pLabelRangesElemTokenMap )
     {
-        static SvXMLTokenMapEntry aLabelRangesElemTokenMap[] =
+        static const SvXMLTokenMapEntry aLabelRangesElemTokenMap[] =
         {
             { XML_NAMESPACE_TABLE, XML_LABEL_RANGE, XML_TOK_LABEL_RANGE_ELEM    },
             XML_TOKEN_MAP_END
@@ -801,7 +801,7 @@ const SvXMLTokenMap& ScXMLImport::GetLabelRangeAttrTokenMap()
 {
     if( !pLabelRangeAttrTokenMap )
     {
-        static SvXMLTokenMapEntry aLabelRangeAttrTokenMap[] =
+        static const SvXMLTokenMapEntry aLabelRangeAttrTokenMap[] =
         {
             { XML_NAMESPACE_TABLE, XML_LABEL_CELL_RANGE_ADDRESS,    XML_TOK_LABEL_RANGE_ATTR_LABEL_RANGE    },
             { XML_NAMESPACE_TABLE, XML_DATA_CELL_RANGE_ADDRESS,     XML_TOK_LABEL_RANGE_ATTR_DATA_RANGE     },
@@ -819,7 +819,7 @@ const SvXMLTokenMap& ScXMLImport::GetTableElemTokenMap()
 {
     if( !pTableElemTokenMap )
     {
-        static SvXMLTokenMapEntry aTableTokenMap[] =
+        static const SvXMLTokenMapEntry aTableTokenMap[] =
         {
             { XML_NAMESPACE_TABLE,  XML_NAMED_EXPRESSIONS,    XML_TOK_TABLE_NAMED_EXPRESSIONS },
             { XML_NAMESPACE_TABLE,  XML_TABLE_COLUMN_GROUP,   XML_TOK_TABLE_COL_GROUP       },
@@ -851,7 +851,7 @@ const SvXMLTokenMap& ScXMLImport::GetTableProtectionAttrTokenMap()
 {
     if (!pTableProtectionElemTokenMap)
     {
-        static SvXMLTokenMapEntry aTableProtectionTokenMap[] =
+        static const SvXMLTokenMapEntry aTableProtectionTokenMap[] =
         {
             { XML_NAMESPACE_TABLE, XML_SELECT_PROTECTED_CELLS,      XML_TOK_TABLE_SELECT_PROTECTED_CELLS    },
             { XML_NAMESPACE_TABLE, XML_SELECT_UNPROTECTED_CELLS,    XML_TOK_TABLE_SELECT_UNPROTECTED_CELLS  },
@@ -867,7 +867,7 @@ const SvXMLTokenMap& ScXMLImport::GetTableRowsElemTokenMap()
 {
     if( !pTableRowsElemTokenMap )
     {
-        static SvXMLTokenMapEntry aTableRowsElemTokenMap[] =
+        static const SvXMLTokenMapEntry aTableRowsElemTokenMap[] =
         {
             { XML_NAMESPACE_TABLE, XML_TABLE_ROW_GROUP,     XML_TOK_TABLE_ROWS_ROW_GROUP    },
             { XML_NAMESPACE_TABLE, XML_TABLE_HEADER_ROWS,   XML_TOK_TABLE_ROWS_HEADER_ROWS  },
@@ -886,7 +886,7 @@ const SvXMLTokenMap& ScXMLImport::GetTableColsElemTokenMap()
 {
     if( !pTableColsElemTokenMap )
     {
-        static SvXMLTokenMapEntry aTableColsElemTokenMap[] =
+        static const SvXMLTokenMapEntry aTableColsElemTokenMap[] =
         {
             { XML_NAMESPACE_TABLE, XML_TABLE_COLUMN_GROUP,      XML_TOK_TABLE_COLS_COL_GROUP    },
             { XML_NAMESPACE_TABLE, XML_TABLE_HEADER_COLUMNS,    XML_TOK_TABLE_COLS_HEADER_COLS  },
@@ -905,7 +905,7 @@ const SvXMLTokenMap& ScXMLImport::GetTableAttrTokenMap()
 {
     if( !pTableAttrTokenMap )
     {
-        static SvXMLTokenMapEntry aTableAttrTokenMap[] =
+        static const SvXMLTokenMapEntry aTableAttrTokenMap[] =
         {
             { XML_NAMESPACE_TABLE,     XML_NAME,           XML_TOK_TABLE_NAME          },
             { XML_NAMESPACE_TABLE,     XML_STYLE_NAME,     XML_TOK_TABLE_STYLE_NAME    },
@@ -928,7 +928,7 @@ const SvXMLTokenMap& ScXMLImport::GetTableScenarioAttrTokenMap()
 {
     if( !pTableScenarioAttrTokenMap )
     {
-        static SvXMLTokenMapEntry aTableScenarioAttrTokenMap[] =
+        static const SvXMLTokenMapEntry aTableScenarioAttrTokenMap[] =
         {
             { XML_NAMESPACE_TABLE, XML_DISPLAY_BORDER,      XML_TOK_TABLE_SCENARIO_ATTR_DISPLAY_BORDER  },
             { XML_NAMESPACE_TABLE, XML_BORDER_COLOR,        XML_TOK_TABLE_SCENARIO_ATTR_BORDER_COLOR    },
@@ -952,7 +952,7 @@ const SvXMLTokenMap& ScXMLImport::GetTableColAttrTokenMap()
 {
     if( !pTableColAttrTokenMap )
     {
-        static SvXMLTokenMapEntry aTableColAttrTokenMap[] =
+        static const SvXMLTokenMapEntry aTableColAttrTokenMap[] =
         {
             { XML_NAMESPACE_TABLE, XML_STYLE_NAME,                  XML_TOK_TABLE_COL_ATTR_STYLE_NAME       },
             { XML_NAMESPACE_TABLE, XML_NUMBER_COLUMNS_REPEATED,     XML_TOK_TABLE_COL_ATTR_REPEATED         },
@@ -971,7 +971,7 @@ const SvXMLTokenMap& ScXMLImport::GetTableRowElemTokenMap()
 {
     if( !pTableRowElemTokenMap )
     {
-        static SvXMLTokenMapEntry aTableRowTokenMap[] =
+        static const SvXMLTokenMapEntry aTableRowTokenMap[] =
         {
             { XML_NAMESPACE_TABLE, XML_TABLE_CELL,      XML_TOK_TABLE_ROW_CELL              },
             { XML_NAMESPACE_TABLE, XML_COVERED_TABLE_CELL,  XML_TOK_TABLE_ROW_COVERED_CELL      },
@@ -988,7 +988,7 @@ const SvXMLTokenMap& ScXMLImport::GetTableRowAttrTokenMap()
 {
     if( !pTableRowAttrTokenMap )
     {
-        static SvXMLTokenMapEntry aTableRowAttrTokenMap[] =
+        static const SvXMLTokenMapEntry aTableRowAttrTokenMap[] =
         {
             { XML_NAMESPACE_TABLE, XML_STYLE_NAME,                  XML_TOK_TABLE_ROW_ATTR_STYLE_NAME           },
             { XML_NAMESPACE_TABLE, XML_VISIBILITY,                  XML_TOK_TABLE_ROW_ATTR_VISIBILITY           },
@@ -1008,7 +1008,7 @@ const SvXMLTokenMap& ScXMLImport::GetTableRowCellElemTokenMap()
 {
     if( !pTableRowCellElemTokenMap )
     {
-        static SvXMLTokenMapEntry aTableRowCellTokenMap[] =
+        static const SvXMLTokenMapEntry aTableRowCellTokenMap[] =
         {
             { XML_NAMESPACE_TEXT,   XML_P,                  XML_TOK_TABLE_ROW_CELL_P                    },
             { XML_NAMESPACE_TABLE,  XML_SUB_TABLE,          XML_TOK_TABLE_ROW_CELL_TABLE                },
@@ -1028,7 +1028,7 @@ const SvXMLTokenMap& ScXMLImport::GetTableAnnotationAttrTokenMap()
 {
     if( !pTableAnnotationAttrTokenMap )
     {
-        static SvXMLTokenMapEntry aTableAnnotationAttrTokenMap[] =
+        static const SvXMLTokenMapEntry aTableAnnotationAttrTokenMap[] =
         {
             { XML_NAMESPACE_OFFICE, XML_AUTHOR,                 XML_TOK_TABLE_ANNOTATION_ATTR_AUTHOR                },
             { XML_NAMESPACE_OFFICE, XML_CREATE_DATE,            XML_TOK_TABLE_ANNOTATION_ATTR_CREATE_DATE           },
@@ -1049,7 +1049,7 @@ const SvXMLTokenMap& ScXMLImport::GetDetectiveElemTokenMap()
 {
     if( !pDetectiveElemTokenMap )
     {
-        static SvXMLTokenMapEntry aDetectiveElemTokenMap[]=
+        static const SvXMLTokenMapEntry aDetectiveElemTokenMap[]=
         {
             { XML_NAMESPACE_TABLE,  XML_HIGHLIGHTED_RANGE,  XML_TOK_DETECTIVE_ELEM_HIGHLIGHTED  },
             { XML_NAMESPACE_TABLE,  XML_OPERATION,          XML_TOK_DETECTIVE_ELEM_OPERATION    },
@@ -1066,7 +1066,7 @@ const SvXMLTokenMap& ScXMLImport::GetDetectiveHighlightedAttrTokenMap()
 {
     if( !pDetectiveHighlightedAttrTokenMap )
     {
-        static SvXMLTokenMapEntry aDetectiveHighlightedAttrTokenMap[]=
+        static const SvXMLTokenMapEntry aDetectiveHighlightedAttrTokenMap[]=
         {
             { XML_NAMESPACE_TABLE,  XML_CELL_RANGE_ADDRESS,     XML_TOK_DETECTIVE_HIGHLIGHTED_ATTR_CELL_RANGE       },
             { XML_NAMESPACE_TABLE,  XML_DIRECTION,              XML_TOK_DETECTIVE_HIGHLIGHTED_ATTR_DIRECTION        },
@@ -1085,7 +1085,7 @@ const SvXMLTokenMap& ScXMLImport::GetDetectiveOperationAttrTokenMap()
 {
     if( !pDetectiveOperationAttrTokenMap )
     {
-        static SvXMLTokenMapEntry aDetectiveOperationAttrTokenMap[]=
+        static const SvXMLTokenMapEntry aDetectiveOperationAttrTokenMap[]=
         {
             { XML_NAMESPACE_TABLE,  XML_NAME,   XML_TOK_DETECTIVE_OPERATION_ATTR_NAME   },
             { XML_NAMESPACE_TABLE,  XML_INDEX,  XML_TOK_DETECTIVE_OPERATION_ATTR_INDEX  },
@@ -1102,7 +1102,7 @@ const SvXMLTokenMap& ScXMLImport::GetTableCellRangeSourceAttrTokenMap()
 {
     if( !pTableCellRangeSourceAttrTokenMap )
     {
-        static SvXMLTokenMapEntry aTableCellRangeSourceAttrTokenMap[] =
+        static const SvXMLTokenMapEntry aTableCellRangeSourceAttrTokenMap[] =
         {
             { XML_NAMESPACE_TABLE,  XML_NAME,                   XML_TOK_TABLE_CELL_RANGE_SOURCE_ATTR_NAME           },
             { XML_NAMESPACE_XLINK,  XML_HREF,                   XML_TOK_TABLE_CELL_RANGE_SOURCE_ATTR_HREF           },
@@ -1124,7 +1124,7 @@ const SvXMLTokenMap& ScXMLImport::GetNamedExpressionsElemTokenMap()
 {
     if( !pNamedExpressionsElemTokenMap )
     {
-        static SvXMLTokenMapEntry aNamedExpressionsTokenMap[] =
+        static const SvXMLTokenMapEntry aNamedExpressionsTokenMap[] =
         {
             { XML_NAMESPACE_TABLE, XML_NAMED_RANGE,             XML_TOK_NAMED_EXPRESSIONS_NAMED_RANGE           },
             { XML_NAMESPACE_TABLE, XML_NAMED_EXPRESSION,        XML_TOK_NAMED_EXPRESSIONS_NAMED_EXPRESSION  },
@@ -1141,7 +1141,7 @@ const SvXMLTokenMap& ScXMLImport::GetNamedRangeAttrTokenMap()
 {
     if( !pNamedRangeAttrTokenMap )
     {
-        static SvXMLTokenMapEntry aNamedRangeAttrTokenMap[] =
+        static const SvXMLTokenMapEntry aNamedRangeAttrTokenMap[] =
         {
             { XML_NAMESPACE_TABLE, XML_NAME,                XML_TOK_NAMED_RANGE_ATTR_NAME               },
             { XML_NAMESPACE_TABLE, XML_CELL_RANGE_ADDRESS,  XML_TOK_NAMED_RANGE_ATTR_CELL_RANGE_ADDRESS },
@@ -1160,7 +1160,7 @@ const SvXMLTokenMap& ScXMLImport::GetNamedExpressionAttrTokenMap()
 {
     if( !pNamedExpressionAttrTokenMap )
     {
-        static SvXMLTokenMapEntry aNamedExpressionAttrTokenMap[] =
+        static const SvXMLTokenMapEntry aNamedExpressionAttrTokenMap[] =
         {
             { XML_NAMESPACE_TABLE, XML_NAME,                XML_TOK_NAMED_EXPRESSION_ATTR_NAME              },
             { XML_NAMESPACE_TABLE, XML_BASE_CELL_ADDRESS,   XML_TOK_NAMED_EXPRESSION_ATTR_BASE_CELL_ADDRESS },
@@ -1178,7 +1178,7 @@ const SvXMLTokenMap& ScXMLImport::GetDatabaseRangesElemTokenMap()
 {
     if( !pDatabaseRangesElemTokenMap )
     {
-        static SvXMLTokenMapEntry aDatabaseRangesTokenMap[] =
+        static const SvXMLTokenMapEntry aDatabaseRangesTokenMap[] =
         {
             { XML_NAMESPACE_TABLE, XML_DATABASE_RANGE,  XML_TOK_DATABASE_RANGE      },
             XML_TOKEN_MAP_END
@@ -1194,7 +1194,7 @@ const SvXMLTokenMap& ScXMLImport::GetDatabaseRangeElemTokenMap()
 {
     if( !pDatabaseRangeElemTokenMap )
     {
-        static SvXMLTokenMapEntry aDatabaseRangeTokenMap[] =
+        static const SvXMLTokenMapEntry aDatabaseRangeTokenMap[] =
         {
             { XML_NAMESPACE_TABLE, XML_DATABASE_SOURCE_SQL,     XML_TOK_DATABASE_RANGE_SOURCE_SQL       },
             { XML_NAMESPACE_TABLE, XML_DATABASE_SOURCE_TABLE,   XML_TOK_DATABASE_RANGE_SOURCE_TABLE     },
@@ -1215,7 +1215,7 @@ const SvXMLTokenMap& ScXMLImport::GetDatabaseRangeAttrTokenMap()
 {
     if( !pDatabaseRangeAttrTokenMap )
     {
-        static SvXMLTokenMapEntry aDatabaseRangeAttrTokenMap[] =
+        static const SvXMLTokenMapEntry aDatabaseRangeAttrTokenMap[] =
         {
             { XML_NAMESPACE_TABLE, XML_NAME,                    XML_TOK_DATABASE_RANGE_ATTR_NAME                    },
             { XML_NAMESPACE_TABLE, XML_IS_SELECTION,            XML_TOK_DATABASE_RANGE_ATTR_IS_SELECTION            },
@@ -1240,7 +1240,7 @@ const SvXMLTokenMap& ScXMLImport::GetDatabaseRangeSourceSQLAttrTokenMap()
 {
     if( !pDatabaseRangeSourceSQLAttrTokenMap )
     {
-        static SvXMLTokenMapEntry aDatabaseRangeSourceSQLAttrTokenMap[] =
+        static const SvXMLTokenMapEntry aDatabaseRangeSourceSQLAttrTokenMap[] =
         {
             { XML_NAMESPACE_TABLE, XML_DATABASE_NAME,           XML_TOK_SOURCE_SQL_ATTR_DATABASE_NAME       },
             { XML_NAMESPACE_XLINK, XML_HREF,                    XML_TOK_SOURCE_SQL_ATTR_HREF                },
@@ -1260,7 +1260,7 @@ const SvXMLTokenMap& ScXMLImport::GetDatabaseRangeSourceTableAttrTokenMap()
 {
     if( !pDatabaseRangeSourceTableAttrTokenMap )
     {
-        static SvXMLTokenMapEntry aDatabaseRangeSourceTableAttrTokenMap[] =
+        static const SvXMLTokenMapEntry aDatabaseRangeSourceTableAttrTokenMap[] =
         {
             { XML_NAMESPACE_TABLE, XML_DATABASE_NAME,           XML_TOK_SOURCE_TABLE_ATTR_DATABASE_NAME         },
             { XML_NAMESPACE_XLINK, XML_HREF,                    XML_TOK_SOURCE_TABLE_ATTR_HREF                  },
@@ -1279,7 +1279,7 @@ const SvXMLTokenMap& ScXMLImport::GetDatabaseRangeSourceQueryAttrTokenMap()
 {
     if( !pDatabaseRangeSourceQueryAttrTokenMap )
     {
-        static SvXMLTokenMapEntry aDatabaseRangeSourceQueryAttrTokenMap[] =
+        static const SvXMLTokenMapEntry aDatabaseRangeSourceQueryAttrTokenMap[] =
         {
             { XML_NAMESPACE_TABLE, XML_DATABASE_NAME,           XML_TOK_SOURCE_QUERY_ATTR_DATABASE_NAME         },
             { XML_NAMESPACE_XLINK, XML_HREF,                    XML_TOK_SOURCE_QUERY_ATTR_HREF                  },
@@ -1298,7 +1298,7 @@ const SvXMLTokenMap& ScXMLImport::GetFilterElemTokenMap()
 {
     if( !pFilterElemTokenMap )
     {
-        static SvXMLTokenMapEntry aFilterTokenMap[] =
+        static const SvXMLTokenMapEntry aFilterTokenMap[] =
         {
             { XML_NAMESPACE_TABLE, XML_FILTER_AND,          XML_TOK_FILTER_AND          },
             { XML_NAMESPACE_TABLE, XML_FILTER_OR,           XML_TOK_FILTER_OR           },
@@ -1316,7 +1316,7 @@ const SvXMLTokenMap& ScXMLImport::GetFilterAttrTokenMap()
 {
     if( !pFilterAttrTokenMap )
     {
-        static SvXMLTokenMapEntry aFilterAttrTokenMap[] =
+        static const SvXMLTokenMapEntry aFilterAttrTokenMap[] =
         {
             { XML_NAMESPACE_TABLE, XML_TARGET_RANGE_ADDRESS,            XML_TOK_FILTER_ATTR_TARGET_RANGE_ADDRESS            },
             { XML_NAMESPACE_TABLE, XML_CONDITION_SOURCE_RANGE_ADDRESS,  XML_TOK_FILTER_ATTR_CONDITION_SOURCE_RANGE_ADDRESS  },
@@ -1335,7 +1335,7 @@ const SvXMLTokenMap& ScXMLImport::GetFilterConditionElemTokenMap()
 {
     if( !pFilterConditionElemTokenMap )
     {
-        static SvXMLTokenMapEntry aTokenMap[] =
+        static const SvXMLTokenMapEntry aTokenMap[] =
         {
             { XML_NAMESPACE_TABLE, XML_FILTER_SET_ITEM, XML_TOK_CONDITION_FILTER_SET_ITEM },
             XML_TOKEN_MAP_END
@@ -1351,7 +1351,7 @@ const SvXMLTokenMap& ScXMLImport::GetFilterConditionAttrTokenMap()
 {
     if( !pFilterConditionAttrTokenMap )
     {
-        static SvXMLTokenMapEntry aFilterConditionAttrTokenMap[] =
+        static const SvXMLTokenMapEntry aFilterConditionAttrTokenMap[] =
         {
             { XML_NAMESPACE_TABLE, XML_FIELD_NUMBER,    XML_TOK_CONDITION_ATTR_FIELD_NUMBER     },
             { XML_NAMESPACE_TABLE, XML_CASE_SENSITIVE,  XML_TOK_CONDITION_ATTR_CASE_SENSITIVE   },
@@ -1371,7 +1371,7 @@ const SvXMLTokenMap& ScXMLImport::GetFilterSetItemAttrTokenMap()
 {
     if( !pFilterSetItemAttrTokenMap )
     {
-        static SvXMLTokenMapEntry aTokenMap[] =
+        static const SvXMLTokenMapEntry aTokenMap[] =
         {
             { XML_NAMESPACE_TABLE, XML_VALUE, XML_TOK_FILTER_SET_ITEM_ATTR_VALUE },
             XML_TOKEN_MAP_END
@@ -1387,7 +1387,7 @@ const SvXMLTokenMap& ScXMLImport::GetSortElemTokenMap()
 {
     if( !pSortElemTokenMap )
     {
-        static SvXMLTokenMapEntry aSortTokenMap[] =
+        static const SvXMLTokenMapEntry aSortTokenMap[] =
         {
             { XML_NAMESPACE_TABLE, XML_SORT_BY, XML_TOK_SORT_SORT_BY    },
             XML_TOKEN_MAP_END
@@ -1403,7 +1403,7 @@ const SvXMLTokenMap& ScXMLImport::GetSortAttrTokenMap()
 {
     if( !pSortAttrTokenMap )
     {
-        static SvXMLTokenMapEntry aSortAttrTokenMap[] =
+        static const SvXMLTokenMapEntry aSortAttrTokenMap[] =
         {
             { XML_NAMESPACE_TABLE, XML_BIND_STYLES_TO_CONTENT,  XML_TOK_SORT_ATTR_BIND_STYLES_TO_CONTENT    },
             { XML_NAMESPACE_TABLE, XML_TARGET_RANGE_ADDRESS,    XML_TOK_SORT_ATTR_TARGET_RANGE_ADDRESS      },
@@ -1424,7 +1424,7 @@ const SvXMLTokenMap& ScXMLImport::GetSortSortByAttrTokenMap()
 {
     if( !pSortSortByAttrTokenMap )
     {
-        static SvXMLTokenMapEntry aSortSortByAttrTokenMap[] =
+        static const SvXMLTokenMapEntry aSortSortByAttrTokenMap[] =
         {
             { XML_NAMESPACE_TABLE, XML_FIELD_NUMBER,    XML_TOK_SORT_BY_ATTR_FIELD_NUMBER   },
             { XML_NAMESPACE_TABLE, XML_DATA_TYPE,       XML_TOK_SORT_BY_ATTR_DATA_TYPE      },
@@ -1442,7 +1442,7 @@ const SvXMLTokenMap& ScXMLImport::GetDatabaseRangeSubTotalRulesElemTokenMap()
 {
     if( !pDatabaseRangeSubTotalRulesElemTokenMap )
     {
-        static SvXMLTokenMapEntry aDatabaseRangeSubTotalRulesTokenMap[] =
+        static const SvXMLTokenMapEntry aDatabaseRangeSubTotalRulesTokenMap[] =
         {
             { XML_NAMESPACE_TABLE, XML_SORT_GROUPS,     XML_TOK_SUBTOTAL_RULES_SORT_GROUPS      },
             { XML_NAMESPACE_TABLE, XML_SUBTOTAL_RULE,   XML_TOK_SUBTOTAL_RULES_SUBTOTAL_RULE    },
@@ -1459,7 +1459,7 @@ const SvXMLTokenMap& ScXMLImport::GetDatabaseRangeSubTotalRulesAttrTokenMap()
 {
     if( !pDatabaseRangeSubTotalRulesAttrTokenMap )
     {
-        static SvXMLTokenMapEntry aDatabaseRangeSubTotalRulesAttrTokenMap[] =
+        static const SvXMLTokenMapEntry aDatabaseRangeSubTotalRulesAttrTokenMap[] =
         {
             { XML_NAMESPACE_TABLE, XML_BIND_STYLES_TO_CONTENT,          XML_TOK_SUBTOTAL_RULES_ATTR_BIND_STYLES_TO_CONTENT      },
             { XML_NAMESPACE_TABLE, XML_CASE_SENSITIVE,                  XML_TOK_SUBTOTAL_RULES_ATTR_CASE_SENSITIVE              },
@@ -1477,7 +1477,7 @@ const SvXMLTokenMap& ScXMLImport::GetSubTotalRulesSortGroupsAttrTokenMap()
 {
     if( !pSubTotalRulesSortGroupsAttrTokenMap )
     {
-        static SvXMLTokenMapEntry aSubTotalRulesSortGroupsAttrTokenMap[] =
+        static const SvXMLTokenMapEntry aSubTotalRulesSortGroupsAttrTokenMap[] =
         {
             { XML_NAMESPACE_TABLE, XML_DATA_TYPE,   XML_TOK_SORT_GROUPS_ATTR_DATA_TYPE  },
             { XML_NAMESPACE_TABLE, XML_ORDER,       XML_TOK_SORT_GROUPS_ATTR_ORDER      },
@@ -1494,7 +1494,7 @@ const SvXMLTokenMap& ScXMLImport::GetSubTotalRulesSubTotalRuleElemTokenMap()
 {
     if( !pSubTotalRulesSubTotalRuleElemTokenMap )
     {
-        static SvXMLTokenMapEntry aSubTotalRulesSubTotalRuleTokenMap[] =
+        static const SvXMLTokenMapEntry aSubTotalRulesSubTotalRuleTokenMap[] =
         {
             { XML_NAMESPACE_TABLE, XML_SUBTOTAL_FIELD,  XML_TOK_SUBTOTAL_RULE_SUBTOTAL_FIELD    },
             XML_TOKEN_MAP_END
@@ -1510,7 +1510,7 @@ const SvXMLTokenMap& ScXMLImport::GetSubTotalRulesSubTotalRuleAttrTokenMap()
 {
     if( !pSubTotalRulesSubTotalRuleAttrTokenMap )
     {
-        static SvXMLTokenMapEntry aSubTotalRulesSubTotalRuleAttrTokenMap[] =
+        static const SvXMLTokenMapEntry aSubTotalRulesSubTotalRuleAttrTokenMap[] =
         {
             { XML_NAMESPACE_TABLE, XML_GROUP_BY_FIELD_NUMBER,   XML_TOK_SUBTOTAL_RULE_ATTR_GROUP_BY_FIELD_NUMBER    },
             XML_TOKEN_MAP_END
@@ -1526,7 +1526,7 @@ const SvXMLTokenMap& ScXMLImport::GetSubTotalRuleSubTotalFieldAttrTokenMap()
 {
     if( !pSubTotalRuleSubTotalFieldAttrTokenMap )
     {
-        static SvXMLTokenMapEntry aSubTotalRuleSubTotalFieldAttrTokenMap[] =
+        static const SvXMLTokenMapEntry aSubTotalRuleSubTotalFieldAttrTokenMap[] =
         {
             { XML_NAMESPACE_TABLE, XML_FIELD_NUMBER,    XML_TOK_SUBTOTAL_FIELD_ATTR_FIELD_NUMBER    },
             { XML_NAMESPACE_TABLE, XML_FUNCTION,        XML_TOK_SUBTOTAL_FIELD_ATTR_FUNCTION        },
@@ -1543,7 +1543,7 @@ const SvXMLTokenMap& ScXMLImport::GetDataPilotTablesElemTokenMap()
 {
     if( !pDataPilotTablesElemTokenMap )
     {
-        static SvXMLTokenMapEntry aDataPilotTablesElemTokenMap[] =
+        static const SvXMLTokenMapEntry aDataPilotTablesElemTokenMap[] =
         {
             { XML_NAMESPACE_TABLE, XML_DATA_PILOT_TABLE,    XML_TOK_DATA_PILOT_TABLE    },
             XML_TOKEN_MAP_END
@@ -1559,7 +1559,7 @@ const SvXMLTokenMap& ScXMLImport::GetDataPilotTableAttrTokenMap()
 {
     if( !pDataPilotTableAttrTokenMap )
     {
-        static SvXMLTokenMapEntry aDataPilotTableAttrTokenMap[] =
+        static const SvXMLTokenMapEntry aDataPilotTableAttrTokenMap[] =
         {
             { XML_NAMESPACE_TABLE, XML_NAME,                    XML_TOK_DATA_PILOT_TABLE_ATTR_NAME                  },
             { XML_NAMESPACE_TABLE, XML_APPLICATION_DATA,        XML_TOK_DATA_PILOT_TABLE_ATTR_APPLICATION_DATA      },
@@ -1584,7 +1584,7 @@ const SvXMLTokenMap& ScXMLImport::GetDataPilotTableElemTokenMap()
 {
     if( !pDataPilotTableElemTokenMap )
     {
-        static SvXMLTokenMapEntry aDataPilotTableElemTokenMap[] =
+        static const SvXMLTokenMapEntry aDataPilotTableElemTokenMap[] =
         {
             { XML_NAMESPACE_TABLE, XML_DATABASE_SOURCE_SQL, XML_TOK_DATA_PILOT_TABLE_ELEM_SOURCE_SQL        },
             { XML_NAMESPACE_TABLE, XML_DATABASE_SOURCE_TABLE,   XML_TOK_DATA_PILOT_TABLE_ELEM_SOURCE_TABLE      },
@@ -1607,7 +1607,7 @@ const SvXMLTokenMap& ScXMLImport::GetDataPilotTableSourceServiceAttrTokenMap()
 {
     if( !pDataPilotTableSourceServiceAttrTokenMap )
     {
-        static SvXMLTokenMapEntry aDataPilotTableSourceServiceAttrTokenMap[] =
+        static const SvXMLTokenMapEntry aDataPilotTableSourceServiceAttrTokenMap[] =
         {
             { XML_NAMESPACE_TABLE, XML_NAME,                    XML_TOK_SOURCE_SERVICE_ATTR_NAME                },
             { XML_NAMESPACE_TABLE, XML_SOURCE_NAME,             XML_TOK_SOURCE_SERVICE_ATTR_SOURCE_NAME         },
@@ -1627,7 +1627,7 @@ const SvXMLTokenMap& ScXMLImport::GetDataPilotGrandTotalAttrTokenMap()
 {
     if (!pDataPilotGrandTotalAttrTokenMap)
     {
-        static SvXMLTokenMapEntry aDataPilotGrandTotalAttrTokenMap[] =
+        static const SvXMLTokenMapEntry aDataPilotGrandTotalAttrTokenMap[] =
         {
             { XML_NAMESPACE_TABLE,     XML_DISPLAY,      XML_TOK_DATA_PILOT_GRAND_TOTAL_ATTR_DISPLAY          },
             { XML_NAMESPACE_TABLE,     XML_ORIENTATION,  XML_TOK_DATA_PILOT_GRAND_TOTAL_ATTR_ORIENTATION      },
@@ -1646,7 +1646,7 @@ const SvXMLTokenMap& ScXMLImport::GetDataPilotTableSourceCellRangeAttrTokenMap()
 {
     if( !pDataPilotTableSourceCellRangeAttrTokenMap )
     {
-        static SvXMLTokenMapEntry aDataPilotTableSourceCellRangeAttrTokenMap[] =
+        static const SvXMLTokenMapEntry aDataPilotTableSourceCellRangeAttrTokenMap[] =
         {
             { XML_NAMESPACE_TABLE, XML_CELL_RANGE_ADDRESS, XML_TOK_SOURCE_CELL_RANGE_ATTR_CELL_RANGE_ADDRESS },
             { XML_NAMESPACE_TABLE, XML_NAME, XML_TOK_SOURCE_CELL_RANGE_ATTR_NAME },
@@ -1663,7 +1663,7 @@ const SvXMLTokenMap& ScXMLImport::GetDataPilotTableSourceCellRangeElemTokenMap()
 {
     if( !pDataPilotTableSourceCellRangeElemTokenMap )
     {
-        static SvXMLTokenMapEntry aDataPilotTableSourceCellRangeElemTokenMap[] =
+        static const SvXMLTokenMapEntry aDataPilotTableSourceCellRangeElemTokenMap[] =
         {
             { XML_NAMESPACE_TABLE, XML_FILTER,      XML_TOK_SOURCE_CELL_RANGE_ELEM_FILTER},
             XML_TOKEN_MAP_END
@@ -1679,7 +1679,7 @@ const SvXMLTokenMap& ScXMLImport::GetDataPilotFieldAttrTokenMap()
 {
     if( !pDataPilotFieldAttrTokenMap )
     {
-        static SvXMLTokenMapEntry aDataPilotFieldAttrTokenMap[] =
+        static const SvXMLTokenMapEntry aDataPilotFieldAttrTokenMap[] =
         {
             { XML_NAMESPACE_TABLE,     XML_SOURCE_FIELD_NAME,    XML_TOK_DATA_PILOT_FIELD_ATTR_SOURCE_FIELD_NAME    },
             { XML_NAMESPACE_TABLE,     XML_DISPLAY_NAME,         XML_TOK_DATA_PILOT_FIELD_ATTR_DISPLAY_NAME         },
@@ -1702,7 +1702,7 @@ const SvXMLTokenMap& ScXMLImport::GetDataPilotFieldElemTokenMap()
 {
     if( !pDataPilotFieldElemTokenMap )
     {
-        static SvXMLTokenMapEntry aDataPilotFieldElemTokenMap[] =
+        static const SvXMLTokenMapEntry aDataPilotFieldElemTokenMap[] =
         {
             { XML_NAMESPACE_TABLE, XML_DATA_PILOT_LEVEL,        XML_TOK_DATA_PILOT_FIELD_ELEM_DATA_PILOT_LEVEL      },
             { XML_NAMESPACE_TABLE, XML_DATA_PILOT_FIELD_REFERENCE, XML_TOK_DATA_PILOT_FIELD_ELEM_DATA_PILOT_REFERENCE },
@@ -1720,7 +1720,7 @@ const SvXMLTokenMap& ScXMLImport::GetDataPilotLevelAttrTokenMap()
 {
     if( !pDataPilotLevelAttrTokenMap )
     {
-        static SvXMLTokenMapEntry aDataPilotLevelAttrTokenMap[] =
+        static const SvXMLTokenMapEntry aDataPilotLevelAttrTokenMap[] =
         {
             { XML_NAMESPACE_TABLE, XML_SHOW_EMPTY,              XML_TOK_DATA_PILOT_LEVEL_ATTR_SHOW_EMPTY            },
             XML_TOKEN_MAP_END
@@ -1736,7 +1736,7 @@ const SvXMLTokenMap& ScXMLImport::GetDataPilotLevelElemTokenMap()
 {
     if( !pDataPilotLevelElemTokenMap )
     {
-        static SvXMLTokenMapEntry aDataPilotLevelElemTokenMap[] =
+        static const SvXMLTokenMapEntry aDataPilotLevelElemTokenMap[] =
         {
             { XML_NAMESPACE_TABLE, XML_DATA_PILOT_SUBTOTALS,    XML_TOK_DATA_PILOT_LEVEL_ELEM_DATA_PILOT_SUBTOTALS  },
             { XML_NAMESPACE_TABLE, XML_DATA_PILOT_MEMBERS,      XML_TOK_DATA_PILOT_LEVEL_ELEM_DATA_PILOT_MEMBERS    },
@@ -1756,7 +1756,7 @@ const SvXMLTokenMap& ScXMLImport::GetDataPilotSubTotalsElemTokenMap()
 {
     if( !pDataPilotSubTotalsElemTokenMap )
     {
-        static SvXMLTokenMapEntry aDataPilotSubTotalsElemTokenMap[] =
+        static const SvXMLTokenMapEntry aDataPilotSubTotalsElemTokenMap[] =
         {
             { XML_NAMESPACE_TABLE, XML_DATA_PILOT_SUBTOTAL, XML_TOK_DATA_PILOT_SUBTOTALS_ELEM_DATA_PILOT_SUBTOTAL   },
             XML_TOKEN_MAP_END
@@ -1772,7 +1772,7 @@ const SvXMLTokenMap& ScXMLImport::GetDataPilotSubTotalAttrTokenMap()
 {
     if( !pDataPilotSubTotalAttrTokenMap )
     {
-        static SvXMLTokenMapEntry aDataPilotSubTotalAttrTokenMap[] =
+        static const SvXMLTokenMapEntry aDataPilotSubTotalAttrTokenMap[] =
         {
             { XML_NAMESPACE_TABLE,     XML_FUNCTION,     XML_TOK_DATA_PILOT_SUBTOTAL_ATTR_FUNCTION         },
             { XML_NAMESPACE_TABLE,     XML_DISPLAY_NAME, XML_TOK_DATA_PILOT_SUBTOTAL_ATTR_DISPLAY_NAME     },
@@ -1790,7 +1790,7 @@ const SvXMLTokenMap& ScXMLImport::GetDataPilotMembersElemTokenMap()
 {
     if( !pDataPilotMembersElemTokenMap )
     {
-        static SvXMLTokenMapEntry aDataPilotMembersElemTokenMap[] =
+        static const SvXMLTokenMapEntry aDataPilotMembersElemTokenMap[] =
         {
             { XML_NAMESPACE_TABLE, XML_DATA_PILOT_MEMBER,       XML_TOK_DATA_PILOT_MEMBERS_ELEM_DATA_PILOT_MEMBER   },
             XML_TOKEN_MAP_END
@@ -1806,7 +1806,7 @@ const SvXMLTokenMap& ScXMLImport::GetDataPilotMemberAttrTokenMap()
 {
     if( !pDataPilotMemberAttrTokenMap )
     {
-        static SvXMLTokenMapEntry aDataPilotMemberAttrTokenMap[] =
+        static const SvXMLTokenMapEntry aDataPilotMemberAttrTokenMap[] =
         {
             { XML_NAMESPACE_TABLE,     XML_NAME,         XML_TOK_DATA_PILOT_MEMBER_ATTR_NAME             },
             { XML_NAMESPACE_TABLE,     XML_DISPLAY_NAME, XML_TOK_DATA_PILOT_MEMBER_ATTR_DISPLAY_NAME     },
@@ -1826,7 +1826,7 @@ const SvXMLTokenMap& ScXMLImport::GetConsolidationAttrTokenMap()
 {
     if( !pConsolidationAttrTokenMap )
     {
-        static SvXMLTokenMapEntry aConsolidationAttrTokenMap[] =
+        static const SvXMLTokenMapEntry aConsolidationAttrTokenMap[] =
         {
             { XML_NAMESPACE_TABLE,  XML_FUNCTION,                       XML_TOK_CONSOLIDATION_ATTR_FUNCTION         },
             { XML_NAMESPACE_TABLE,  XML_SOURCE_CELL_RANGE_ADDRESSES,    XML_TOK_CONSOLIDATION_ATTR_SOURCE_RANGES    },
@@ -1846,7 +1846,7 @@ const SvXMLTokenMap& ScXMLImport::GetCellTextParaElemTokenMap()
 {
     if (!pCellTextParaElemTokenMap)
     {
-        static SvXMLTokenMapEntry aMap[] =
+        static const SvXMLTokenMapEntry aMap[] =
         {
             { XML_NAMESPACE_TEXT, XML_SPAN, XML_TOK_CELL_TEXT_SPAN },
             { XML_NAMESPACE_TEXT, XML_SHEET_NAME, XML_TOK_CELL_TEXT_SHEET_NAME },
@@ -1865,7 +1865,7 @@ const SvXMLTokenMap& ScXMLImport::GetCellTextSpanElemTokenMap()
 {
     if (!pCellTextSpanElemTokenMap)
     {
-        static SvXMLTokenMapEntry aMap[] =
+        static const SvXMLTokenMapEntry aMap[] =
         {
             { XML_NAMESPACE_TEXT, XML_SHEET_NAME, XML_TOK_CELL_TEXT_SPAN_ELEM_SHEET_NAME },
             { XML_NAMESPACE_TEXT, XML_DATE, XML_TOK_CELL_TEXT_SPAN_ELEM_DATE },
@@ -1883,7 +1883,7 @@ const SvXMLTokenMap& ScXMLImport::GetCellTextSpanAttrTokenMap()
 {
     if (!pCellTextSpanAttrTokenMap)
     {
-        static SvXMLTokenMapEntry aMap[] =
+        static const SvXMLTokenMapEntry aMap[] =
         {
             { XML_NAMESPACE_TEXT, XML_STYLE_NAME, XML_TOK_CELL_TEXT_SPAN_ATTR_STYLE_NAME },
             XML_TOKEN_MAP_END
@@ -1898,7 +1898,7 @@ const SvXMLTokenMap& ScXMLImport::GetCellTextURLAttrTokenMap()
 {
     if (!pCellTextURLAttrTokenMap)
     {
-        static SvXMLTokenMapEntry aMap[] =
+        static const SvXMLTokenMapEntry aMap[] =
         {
             { XML_NAMESPACE_XLINK, XML_HREF, XML_TOK_CELL_TEXT_URL_ATTR_UREF },
             { XML_NAMESPACE_XLINK, XML_TYPE, XML_TOK_CELL_TEXT_URL_ATTR_TYPE },

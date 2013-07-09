@@ -153,7 +153,7 @@ public:
 
 static const SfxItemPropertySet* lcl_GetCellsPropertySet()
 {
-    static SfxItemPropertyMapEntry aCellsPropertyMap_Impl[] =
+    static const SfxItemPropertyMapEntry aCellsPropertyMap_Impl[] =
     {
         {MAP_CHAR_LEN(SC_UNONAME_ABSNAME),  SC_WID_UNO_ABSNAME, &getCppuType((OUString*)0),        0 | beans::PropertyAttribute::READONLY, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_ASIANVERT),ATTR_VERTICAL_ASIAN,&getBooleanCppuType(),                  0, 0 },
@@ -262,7 +262,7 @@ static const SfxItemPropertySet* lcl_GetCellsPropertySet()
 
 static const SfxItemPropertySet* lcl_GetRangePropertySet()
 {
-    static SfxItemPropertyMapEntry aRangePropertyMap_Impl[] =
+    static const SfxItemPropertyMapEntry aRangePropertyMap_Impl[] =
     {
         {MAP_CHAR_LEN(SC_UNONAME_ABSNAME),  SC_WID_UNO_ABSNAME, &getCppuType((OUString*)0),        0 | beans::PropertyAttribute::READONLY, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_ASIANVERT),ATTR_VERTICAL_ASIAN,&getBooleanCppuType(),                  0, 0 },
@@ -372,7 +372,7 @@ static const SfxItemPropertySet* lcl_GetRangePropertySet()
 
 static const SfxItemPropertySet* lcl_GetCellPropertySet()
 {
-    static SfxItemPropertyMapEntry aCellPropertyMap_Impl[] =
+    static const SfxItemPropertyMapEntry aCellPropertyMap_Impl[] =
     {
         {MAP_CHAR_LEN(SC_UNONAME_ABSNAME),  SC_WID_UNO_ABSNAME, &getCppuType((OUString*)0),        0 | beans::PropertyAttribute::READONLY, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_ASIANVERT),ATTR_VERTICAL_ASIAN,&getBooleanCppuType(),                  0, 0 },
@@ -486,7 +486,7 @@ static const SfxItemPropertySet* lcl_GetCellPropertySet()
 
 static const SfxItemPropertySet* lcl_GetColumnPropertySet()
 {
-    static SfxItemPropertyMapEntry aColumnPropertyMap_Impl[] =
+    static const SfxItemPropertyMapEntry aColumnPropertyMap_Impl[] =
     {
         {MAP_CHAR_LEN(SC_UNONAME_ABSNAME),  SC_WID_UNO_ABSNAME, &getCppuType((OUString*)0),        0 | beans::PropertyAttribute::READONLY, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_ASIANVERT),ATTR_VERTICAL_ASIAN,&getBooleanCppuType(),                  0, 0 },
@@ -598,7 +598,7 @@ static const SfxItemPropertySet* lcl_GetColumnPropertySet()
 
 static const SfxItemPropertySet* lcl_GetRowPropertySet()
 {
-    static SfxItemPropertyMapEntry aRowPropertyMap_Impl[] =
+    static const SfxItemPropertyMapEntry aRowPropertyMap_Impl[] =
     {
         {MAP_CHAR_LEN(SC_UNONAME_ABSNAME),  SC_WID_UNO_ABSNAME, &getCppuType((OUString*)0),        0 | beans::PropertyAttribute::READONLY, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_ASIANVERT),ATTR_VERTICAL_ASIAN,&getBooleanCppuType(),                  0, 0 },
@@ -711,7 +711,7 @@ static const SfxItemPropertySet* lcl_GetRowPropertySet()
 
 static const SfxItemPropertySet* lcl_GetSheetPropertySet()
 {
-    static SfxItemPropertyMapEntry aSheetPropertyMap_Impl[] =
+    static const SfxItemPropertyMapEntry aSheetPropertyMap_Impl[] =
     {
         {MAP_CHAR_LEN(SC_UNONAME_ABSNAME),  SC_WID_UNO_ABSNAME, &getCppuType((OUString*)0),        0 | beans::PropertyAttribute::READONLY, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_ASIANVERT),ATTR_VERTICAL_ASIAN,&getBooleanCppuType(),                  0, 0 },
@@ -835,7 +835,7 @@ static const SfxItemPropertySet* lcl_GetSheetPropertySet()
 
 static const SfxItemPropertyMapEntry* lcl_GetEditPropertyMap()
 {
-    static SfxItemPropertyMapEntry aEditPropertyMap_Impl[] =
+    static const SfxItemPropertyMapEntry aEditPropertyMap_Impl[] =
     {
         SVX_UNOEDIT_CHAR_PROPERTIES,
         SVX_UNOEDIT_FONT_PROPERTIES,

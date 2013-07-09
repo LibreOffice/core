@@ -71,7 +71,7 @@ using namespace ::com::sun::star;
 
 static const SfxItemPropertySet* lcl_GetCellStyleSet()
 {
-    static SfxItemPropertyMapEntry aCellStyleMap_Impl[] =
+    static const SfxItemPropertyMapEntry aCellStyleMap_Impl[] =
     {
         {MAP_CHAR_LEN(SC_UNONAME_ASIANVERT),ATTR_VERTICAL_ASIAN,&getBooleanCppuType(),                  0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_BOTTBORDER),ATTR_BORDER,       &::getCppuType((const table::BorderLine*)0),        0, BOTTOM_BORDER | CONVERT_TWIPS },
@@ -171,7 +171,7 @@ static const SfxItemPropertySet* lcl_GetCellStyleSet()
 
 static const SfxItemPropertySet * lcl_GetPageStyleSet()
 {
-    static SfxItemPropertyMapEntry aPageStyleMap_Impl[] =
+    static const SfxItemPropertyMapEntry aPageStyleMap_Impl[] =
     {
         {MAP_CHAR_LEN(SC_UNO_PAGE_BACKCOLOR),   ATTR_BACKGROUND,    &::getCppuType((const sal_Int32*)0),            0, MID_BACK_COLOR },
         {MAP_CHAR_LEN(SC_UNO_PAGE_GRAPHICFILT), ATTR_BACKGROUND,    &::getCppuType((const OUString*)0),          0, MID_GRAPHIC_FILTER },
@@ -292,7 +292,7 @@ static const SfxItemPropertySet * lcl_GetPageStyleSet()
 
 static const SfxItemPropertyMap* lcl_GetHeaderStyleMap()
 {
-    static SfxItemPropertyMapEntry aHeaderStyleMap_Impl[] =
+    static const SfxItemPropertyMapEntry aHeaderStyleMap_Impl[] =
     {
         {MAP_CHAR_LEN(SC_UNO_PAGE_HDRBACKCOL),  ATTR_BACKGROUND,    &::getCppuType((const sal_Int32*)0),            0, MID_BACK_COLOR },
         {MAP_CHAR_LEN(SC_UNO_PAGE_HDRGRFFILT),  ATTR_BACKGROUND,    &::getCppuType((const OUString*)0),          0, MID_GRAPHIC_FILTER },
@@ -331,7 +331,7 @@ static const SfxItemPropertyMap* lcl_GetHeaderStyleMap()
 
 static const SfxItemPropertyMap* lcl_GetFooterStyleMap()
 {
-    static SfxItemPropertyMapEntry aFooterStyleMap_Impl[] =
+    static const SfxItemPropertyMapEntry aFooterStyleMap_Impl[] =
     {
         {MAP_CHAR_LEN(SC_UNO_PAGE_FTRBACKCOL),  ATTR_BACKGROUND,    &::getCppuType((const sal_Int32*)0),            0, MID_BACK_COLOR },
         {MAP_CHAR_LEN(SC_UNO_PAGE_FTRGRFFILT),  ATTR_BACKGROUND,    &::getCppuType((const OUString*)0),          0, MID_GRAPHIC_FILTER },

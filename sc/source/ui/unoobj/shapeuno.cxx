@@ -53,7 +53,7 @@ static ScShapeImplementationIdMap aImplementationIdMap;
 
 static const SfxItemPropertyMapEntry* lcl_GetShapeMap()
 {
-    static SfxItemPropertyMapEntry aShapeMap_Impl[] =
+    static const SfxItemPropertyMapEntry aShapeMap_Impl[] =
     {
         {MAP_CHAR_LEN(SC_UNONAME_ANCHOR), 0, &getCppuType((uno::Reference<uno::XInterface>*)0), 0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_HORIPOS), 0, &getCppuType((sal_Int32*)0), 0, 0 },

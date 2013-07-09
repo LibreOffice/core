@@ -46,7 +46,7 @@ using namespace ::formula;
 
 static const SfxItemPropertyMapEntry* lcl_GetValidatePropertyMap()
 {
-    static SfxItemPropertyMapEntry aValidatePropertyMap_Impl[] =
+    static const SfxItemPropertyMapEntry aValidatePropertyMap_Impl[] =
     {
         {MAP_CHAR_LEN(SC_UNONAME_ERRALSTY), 0,  &getCppuType((sheet::ValidationAlertStyle*)0),  0, 0},
         {MAP_CHAR_LEN(SC_UNONAME_ERRMESS),  0,  &getCppuType((OUString*)0),                0, 0},

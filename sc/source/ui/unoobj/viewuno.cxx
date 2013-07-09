@@ -81,7 +81,7 @@ using namespace com::sun::star;
 
 static const SfxItemPropertyMapEntry* lcl_GetViewOptPropertyMap()
 {
-    static SfxItemPropertyMapEntry aViewOptPropertyMap_Impl[] =
+    static const SfxItemPropertyMapEntry aViewOptPropertyMap_Impl[] =
     {
         {MAP_CHAR_LEN(OLD_UNO_COLROWHDR),   0,  &getBooleanCppuType(),          0, 0},
         {MAP_CHAR_LEN(SC_UNO_GRIDCOLOR),    0,  &getCppuType((sal_Int32*)0),    0, 0},
@@ -1039,7 +1039,7 @@ sal_Bool SAL_CALL ScTabViewObj::hasElements() throw(uno::RuntimeException)
 
 ScViewPaneObj* ScTabViewObj::GetObjectByIndex_Impl(sal_uInt16 nIndex) const
 {
-    static ScSplitPos ePosHV[4] =
+    static const ScSplitPos ePosHV[4] =
         { SC_SPLIT_TOPLEFT, SC_SPLIT_BOTTOMLEFT, SC_SPLIT_TOPRIGHT, SC_SPLIT_BOTTOMRIGHT };
 
     ScTabViewShell* pViewSh = GetViewShell();

@@ -53,7 +53,7 @@ namespace {
 
 const SfxItemPropertySet* getDateTimePropertySet()
 {
-    static SfxItemPropertyMapEntry aMapContent[] =
+    static const SfxItemPropertyMapEntry aMapContent[] =
     {
         { MAP_CHAR_LEN(SC_UNONAME_DATETIME), 0, &getCppuType((const util::DateTime*)0), 0, 0 },
         { MAP_CHAR_LEN(SC_UNONAME_ISFIXED),  0, &getBooleanCppuType(),                  0, 0 },
@@ -67,7 +67,7 @@ const SfxItemPropertySet* getDateTimePropertySet()
 
 const SfxItemPropertySet* getEmptyPropertySet()
 {
-    static SfxItemPropertyMapEntry aMapContent[] =
+    static const SfxItemPropertyMapEntry aMapContent[] =
     {
         {0,0,0,0,0,0}
     };
@@ -77,7 +77,7 @@ const SfxItemPropertySet* getEmptyPropertySet()
 
 const SfxItemPropertySet* lcl_GetURLPropertySet()
 {
-    static SfxItemPropertyMapEntry aURLPropertyMap_Impl[] =
+    static const SfxItemPropertyMapEntry aURLPropertyMap_Impl[] =
     {
         {MAP_CHAR_LEN(SC_UNONAME_ANCTYPE),  0,  &getCppuType((text::TextContentAnchorType*)0), beans::PropertyAttribute::READONLY, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_ANCTYPES), 0,  &getCppuType((uno::Sequence<text::TextContentAnchorType>*)0), beans::PropertyAttribute::READONLY, 0 },
@@ -93,7 +93,7 @@ const SfxItemPropertySet* lcl_GetURLPropertySet()
 
 const SfxItemPropertySet* lcl_GetHeaderFieldPropertySet()
 {
-    static SfxItemPropertyMapEntry aHeaderFieldPropertyMap_Impl[] =
+    static const SfxItemPropertyMapEntry aHeaderFieldPropertyMap_Impl[] =
     {
         {MAP_CHAR_LEN(SC_UNONAME_ANCTYPE),  0,  &getCppuType((text::TextContentAnchorType*)0), beans::PropertyAttribute::READONLY, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_ANCTYPES), 0,  &getCppuType((uno::Sequence<text::TextContentAnchorType>*)0), beans::PropertyAttribute::READONLY, 0 },
@@ -106,7 +106,7 @@ const SfxItemPropertySet* lcl_GetHeaderFieldPropertySet()
 
 const SfxItemPropertySet* lcl_GetFileFieldPropertySet()
 {
-    static SfxItemPropertyMapEntry aFileFieldPropertyMap_Impl[] =
+    static const SfxItemPropertyMapEntry aFileFieldPropertyMap_Impl[] =
     {
         {MAP_CHAR_LEN(SC_UNONAME_ANCTYPE),  0,  &getCppuType((text::TextContentAnchorType*)0), beans::PropertyAttribute::READONLY, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_ANCTYPES), 0,  &getCppuType((uno::Sequence<text::TextContentAnchorType>*)0), beans::PropertyAttribute::READONLY, 0 },

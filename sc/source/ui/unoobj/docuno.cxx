@@ -105,7 +105,7 @@ using namespace com::sun::star;
 //! umbenennen, sind nicht mehr nur Options
 static const SfxItemPropertyMapEntry* lcl_GetDocOptPropertyMap()
 {
-    static SfxItemPropertyMapEntry aDocOptPropertyMap_Impl[] =
+    static const SfxItemPropertyMapEntry aDocOptPropertyMap_Impl[] =
     {
         {MAP_CHAR_LEN(SC_UNO_APPLYFMDES),        0, &getBooleanCppuType(),                                    0, 0},
         {MAP_CHAR_LEN(SC_UNO_AREALINKS),         0, &getCppuType((uno::Reference<sheet::XAreaLinks>*)0),      0, 0},
@@ -157,7 +157,7 @@ static const SfxItemPropertyMapEntry* lcl_GetDocOptPropertyMap()
 
 static const SfxItemPropertyMapEntry* lcl_GetColumnsPropertyMap()
 {
-    static SfxItemPropertyMapEntry aColumnsPropertyMap_Impl[] =
+    static const SfxItemPropertyMapEntry aColumnsPropertyMap_Impl[] =
     {
         {MAP_CHAR_LEN(SC_UNONAME_MANPAGE),  0,  &getBooleanCppuType(),          0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_NEWPAGE),  0,  &getBooleanCppuType(),          0, 0 },
@@ -171,7 +171,7 @@ static const SfxItemPropertyMapEntry* lcl_GetColumnsPropertyMap()
 
 static const SfxItemPropertyMapEntry* lcl_GetRowsPropertyMap()
 {
-    static SfxItemPropertyMapEntry aRowsPropertyMap_Impl[] =
+    static const SfxItemPropertyMapEntry aRowsPropertyMap_Impl[] =
     {
         {MAP_CHAR_LEN(SC_UNONAME_CELLHGT),  0,  &getCppuType((sal_Int32*)0),    0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_CELLFILT), 0,  &getBooleanCppuType(),          0, 0 },

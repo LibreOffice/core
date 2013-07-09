@@ -53,7 +53,7 @@ using ::std::vector;
 //  fuer Sheet- und Area-Links benutzt:
 static const SfxItemPropertyMapEntry* lcl_GetSheetLinkMap()
 {
-    static SfxItemPropertyMapEntry aSheetLinkMap_Impl[] =
+    static const SfxItemPropertyMapEntry aSheetLinkMap_Impl[] =
     {
         {MAP_CHAR_LEN(SC_UNONAME_FILTER),   0,  &getCppuType((OUString*)0),    0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_FILTOPT),  0,  &getCppuType((OUString*)0),    0, 0 },
