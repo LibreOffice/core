@@ -87,6 +87,7 @@ public:
     void testFdo56679();
     void testFdo65400();
     void testFdo66543();
+    void testFdo66688();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -147,6 +148,7 @@ void Test::run()
         {"fdo56679.docx", &Test::testFdo56679},
         {"fdo65400.docx", &Test::testFdo65400},
         {"fdo66543.docx", &Test::testFdo66543},
+        {"fdo66688.docx", &Test::testFdo66688},
     };
     // Don't test the first import of these, for some reason those tests fail
     const char* aBlacklist[] = {
@@ -888,6 +890,16 @@ void Test::testFdo66543()
 
     uno::Reference< text::XTextRange > paragraph1 = getParagraph( 1 );
     CPPUNIT_ASSERT_EQUAL( sal_Int32( 1 ), getProperty< sal_Int32 >( paragraph1, "ParaLineNumberStartValue" ));
+}
+
+void Test::testFdo66688()
+{
+    // The problem was that TextFrame imported and exported the wrong value for transparency
+    // (was stored as 'FillTransparence' instead of 'BackColorTransparency'
+    uno::Reference<text::XTextFramesSupplier> xFramesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexAccess(xFramesSupplier->getTextFrames(), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xFrame(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL( getProperty< sal_Int32 >( xFrame, "BackColorTransparency" ), sal_Int32( 80 ));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

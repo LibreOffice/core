@@ -390,6 +390,12 @@ void ShapeBase::convertShapeProperties( const Reference< XShape >& rxShape ) con
             aPropMap.setProperty(PROP_BackColor, aPropMap[PROP_FillColor]);
             aPropMap.erase(PROP_FillColor);
         }
+        // TextFrames have BackColorTransparency, not FillTransparence
+        if (aPropMap.hasProperty(PROP_FillTransparence))
+        {
+            aPropMap.setProperty(PROP_BackColorTransparency, aPropMap[PROP_FillTransparence]);
+            aPropMap.erase(PROP_FillTransparence);
+        }
         // And no LineColor property; individual borders can have colors and widths
         boost::optional<sal_Int32> oLineWidth;
         if (maTypeModel.maStrokeModel.moWeight.has())
