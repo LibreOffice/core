@@ -11,7 +11,7 @@
 #include "editutil.hxx"
 #include "formulacell.hxx"
 #include "cellvalue.hxx"
-#include "docsh.hxx"
+#include "docshell.hxx"
 
 void Test::testSharedFormulas()
 {
