@@ -260,6 +260,15 @@ diff -urN epm-3.7-old//deb.c epm-3.7/deb.c
    else
      fprintf(fp, "Architecture: %s\n", platform->machine);
  
+@@ -139,7 +192,7 @@
+ 	  else
+ 	  {
+ 	    if (d->vernumber[1] < INT_MAX)
+-	      fprintf(fp, " (>= %s, <= %s)", d->version[0], d->version[1]);
++	      fprintf(fp, " (>= %s), %s (<= %s)", d->version[0], d->product, d->version[1]);
+ 	    else
+ 	      fprintf(fp, " (>= %s)", d->version[0]);
+ 	  }
 @@ -148,9 +193,9 @@
        putc('\n', fp);
      }
