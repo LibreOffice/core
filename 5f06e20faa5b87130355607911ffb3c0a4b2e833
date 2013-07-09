@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXn///LM\u003d",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 902,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2013-07-09T07:31:29Z",
+      "side": 1,
+      "message": "Nitpick: the order is \"expected, actual\", not \"actual, expected\", when the test fails, the error message will be misleading.",
+      "revId": "5f06e20faa5b87130355607911ffb3c0a4b2e833",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn///LU\u003d",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4829,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2013-07-09T07:31:29Z",
+      "side": 1,
+      "message": "Please include oox/drawingml/drawingmltypes.hxx, and use the MAX_PERCENT / PER_PERCENT constants from there, instead of magic numbers.",
+      "revId": "5f06e20faa5b87130355607911ffb3c0a4b2e833",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn///LQ\u003d",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4834,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2013-07-09T07:31:29Z",
+      "side": 1,
+      "message": "Again, that\u0027s MAX_PERCENT, which could be used here.",
+      "revId": "5f06e20faa5b87130355607911ffb3c0a4b2e833",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn///LY\u003d",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4903,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2013-07-09T07:31:29Z",
+      "side": 1,
+      "message": "Please use table::BorderLineStyle::NONE here, instead of the magic number.",
+      "revId": "5f06e20faa5b87130355607911ffb3c0a4b2e833",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
