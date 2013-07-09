@@ -26,6 +26,7 @@
 #include <comphelper/processfactory.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/sfxsids.hrc>
+#include <sfx2/thumbnailview.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <vcl/image.hxx>
 #include <vcl/pngread.hxx>
@@ -110,102 +111,7 @@ Image TemplatePreviewProvider::operator() (
     (void)pPage;
     (void)rRenderer;
 
-    // Load the thumbnail from a template document.
-    uno::Reference<io::XInputStream> xIStream;
-
-    uno::Reference< uno::XComponentContext > xContext(::comphelper::getProcessComponentContext());
-    try
-    {
-        uno::Reference<lang::XSingleServiceFactory> xStorageFactory = embed::StorageFactory::create(xContext);
-
-        uno::Sequence<uno::Any> aArgs (2);
-        aArgs[0] <<= msURL;
-        aArgs[1] <<= embed::ElementModes::READ;
-        uno::Reference<embed::XStorage> xDocStorage (
-            xStorageFactory->createInstanceWithArguments(aArgs),
-            uno::UNO_QUERY);
-
-        try
-        {
-            if (xDocStorage.is())
-            {
-                uno::Reference<embed::XStorage> xStorage (
-                    xDocStorage->openStorageElement(
-                        "Thumbnails",
-                        embed::ElementModes::READ));
-                if (xStorage.is())
-                {
-                    uno::Reference<io::XStream> xThumbnailCopy (
-                        xStorage->cloneStreamElement("thumbnail.png"));
-                    if (xThumbnailCopy.is())
-                        xIStream = xThumbnailCopy->getInputStream();
-                }
-            }
-        }
-        catch (const uno::Exception& rException)
-        {
-            OSL_TRACE (
-                "caught exception while trying to access Thumbnail/thumbnail.png of %s: %s",
-                OUStringToOString(msURL,
-                    RTL_TEXTENCODING_UTF8).getStr(),
-                OUStringToOString(rException.Message,
-                    RTL_TEXTENCODING_UTF8).getStr());
-        }
-
-        try
-        {
-            // An (older) implementation had a bug - The storage
-            // name was "Thumbnail" instead of "Thumbnails".  The
-            // old name is still used as fallback but this code can
-            // be removed soon.
-            if ( ! xIStream.is())
-            {
-                uno::Reference<embed::XStorage> xStorage (
-                    xDocStorage->openStorageElement( "Thumbnail",
-                        embed::ElementModes::READ));
-                if (xStorage.is())
-                {
-                    uno::Reference<io::XStream> xThumbnailCopy (
-                        xStorage->cloneStreamElement("thumbnail.png"));
-                    if (xThumbnailCopy.is())
-                        xIStream = xThumbnailCopy->getInputStream();
-                }
-            }
-        }
-        catch (const uno::Exception& rException)
-        {
-            OSL_TRACE (
-                "caught exception while trying to access Thumbnails/thumbnail.png of %s: %s",
-                OUStringToOString(msURL,
-                    RTL_TEXTENCODING_UTF8).getStr(),
-                OUStringToOString(rException.Message,
-                    RTL_TEXTENCODING_UTF8).getStr());
-        }
-    }
-    catch (const uno::Exception& rException)
-    {
-        OSL_TRACE (
-            "caught exception while trying to access tuhmbnail of %s: %s",
-            OUStringToOString(msURL,
-                RTL_TEXTENCODING_UTF8).getStr(),
-            OUStringToOString(rException.Message,
-                RTL_TEXTENCODING_UTF8).getStr());
-    }
-
-    // Extract the image from the stream.
-    BitmapEx aThumbnail;
-    if (xIStream.is())
-    {
-        ::std::auto_ptr<SvStream> pStream (
-            ::utl::UcbStreamHelper::CreateStream (xIStream));
-        ::vcl::PNGReader aReader (*pStream);
-        aThumbnail = aReader.Read ();
-    }
-
-    // Note that the preview is returned without scaling it to the desired
-    // width.  This gives the caller the chance to take advantage of a
-    // possibly larger resolution then was asked for.
-    return aThumbnail;
+    return ThumbnailView::readThumbnail(msURL);
 }
 
 

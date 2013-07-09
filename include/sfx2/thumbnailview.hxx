@@ -15,9 +15,16 @@
 #include <vector>
 #include <boost/function.hpp>
 
+#include <comphelper/processfactory.hxx>
+#include <unotools/ucbstreamhelper.hxx>
 #include <sfx2/thumbnailviewitem.hxx>
 #include <vcl/ctrl.hxx>
 #include <vcl/timer.hxx>
+#include <vcl/pngread.hxx>
+
+#include <com/sun/star/embed/ElementModes.hpp>
+#include <com/sun/star/embed/XStorage.hpp>
+#include <com/sun/star/embed/StorageFactory.hpp>
 
 class BitmapEx;
 class MouseEvent;
@@ -241,6 +248,8 @@ public:
     virtual void Resize();
 
     virtual bool renameItem(ThumbnailViewItem* pItem, OUString sNewTitle);
+
+    static BitmapEx readThumbnail(const OUString &msURL);
 
 protected:
 
