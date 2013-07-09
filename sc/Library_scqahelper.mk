@@ -38,6 +38,7 @@ $(eval $(call gb_Library_use_libraries,scqahelper,\
 	utl \
 	sc \
 	ucbhelper \
+	unotest \
 	$(gb_UWINAPI) \
 ))
 
