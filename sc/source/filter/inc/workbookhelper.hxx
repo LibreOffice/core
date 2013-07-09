@@ -23,6 +23,7 @@
 #include <boost/shared_ptr.hpp>
 #include <rtl/ref.hxx>
 #include "oox/helper/storagebase.hxx"
+#include "oox/drawingml/chart/chartconverter.hxx"
 #include "biffhelper.hxx"
 #include "rangenam.hxx"
 
@@ -144,6 +145,7 @@ public:
     void                setCurrentSheetIndex( sal_Int16 nSheet );
     /** Final conversion after importing the workbook. */
     void                finalizeWorkbookImport();
+    void                useInternalChartDataTable( bool bInternal );
 
     // document model ---------------------------------------------------------
     ScDocument& getScDocument() const;
@@ -248,7 +250,7 @@ public:
     /** Returns the converter for string to cell address/range conversion. */
     AddressConverter&   getAddressConverter() const;
     /** Returns the chart object converter. */
-    ExcelChartConverter* getChartConverter() const;
+    oox::drawingml::chart::ChartConverter* getChartConverter() const;
     /** Returns the page and print settings converter. */
     PageSettingsConverter& getPageSettingsConverter() const;
 
