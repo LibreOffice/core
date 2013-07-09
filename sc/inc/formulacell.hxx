@@ -148,15 +148,15 @@ public:
     void            SetDirtyVar();
     // If setting entire document dirty after load, no broadcasts but still append to FormulaTree.
     void            SetDirtyAfterLoad();
-    inline void     ResetTableOpDirtyVar() { bTableOpDirty = false; }
+    void ResetTableOpDirtyVar();
     void            SetTableOpDirty();
     bool            IsDirtyOrInTableOpDirty() const;
-    bool            GetDirty() const { return bDirty; }
-    void            ResetDirty() { bDirty = false; }
-    bool            NeedsListening() const { return bNeedListening; }
-    void            SetNeedsListening( bool bVar ) { bNeedListening = bVar; }
-    void            SetNeedNumberFormat( bool bVal ) { mbNeedsNumberFormat = bVal; }
-    short           GetFormatType() const { return nFormatType; }
+    bool GetDirty() const;
+    void ResetDirty();
+    bool NeedsListening() const;
+    void SetNeedsListening( bool bVar );
+    void SetNeedNumberFormat( bool bVal );
+    short GetFormatType() const;
     void            Compile(const OUString& rFormula,
                             bool bNoListening = false,
                             const formula::FormulaGrammar::Grammar = formula::FormulaGrammar::GRAM_DEFAULT );
@@ -165,8 +165,8 @@ public:
     void            CalcAfterLoad();
     bool            MarkUsedExternalReferences();
     void            Interpret();
-    inline bool     IsIterCell() const { return bIsIterCell; }
-    inline sal_uInt16   GetSeenInIteration() const { return nSeenInIteration; }
+    bool IsIterCell() const;
+    sal_uInt16 GetSeenInIteration() const;
 
     bool            HasOneReference( ScRange& r ) const;
     /* Checks if the formula contains reference list that can be
@@ -200,7 +200,7 @@ public:
     bool            TestTabRefAbs(SCTAB nTable);
     void            UpdateCompile( bool bForceIfNameInUse = false );
     void            FindRangeNamesInUse(std::set<sal_uInt16>& rIndexes) const;
-    bool            IsSubTotal() const                      { return bSubTotal; }
+    bool IsSubTotal() const;
     bool            IsChanged() const;
     void SetChanged(bool b);
     bool            IsEmpty();      // formula::svEmptyCell result
@@ -219,51 +219,49 @@ public:
     sal_uInt16      GetErrCode();   // interpret first if necessary
     sal_uInt16      GetRawError();  // don't interpret, just return code or result error
     bool GetErrorOrValue( sal_uInt16& rErr, double& rVal );
-    sal_uInt8       GetMatrixFlag() const                   { return cMatrixFlag; }
-    ScTokenArray*   GetCode() const                         { return pCode; }
+    sal_uInt8       GetMatrixFlag() const;
+    ScTokenArray*   GetCode() const;
 
-    bool            IsRunning() const                       { return bRunning; }
-    void            SetRunning( bool bVal )                 { bRunning = bVal; }
+    bool            IsRunning() const;
+    void            SetRunning( bool bVal );
     void            CompileDBFormula();
     void            CompileDBFormula( bool bCreateFormulaString );
     void            CompileNameFormula( bool bCreateFormulaString );
     void            CompileColRowNameFormula();
-    ScFormulaCell*  GetPrevious() const                 { return pPrevious; }
-    ScFormulaCell*  GetNext() const                     { return pNext; }
-    void            SetPrevious( ScFormulaCell* pF )    { pPrevious = pF; }
-    void            SetNext( ScFormulaCell* pF )        { pNext = pF; }
-    ScFormulaCell*  GetPreviousTrack() const                { return pPreviousTrack; }
-    ScFormulaCell*  GetNextTrack() const                    { return pNextTrack; }
-    void            SetPreviousTrack( ScFormulaCell* pF )   { pPreviousTrack = pF; }
-    void            SetNextTrack( ScFormulaCell* pF )       { pNextTrack = pF; }
+    ScFormulaCell*  GetPrevious() const;
+    ScFormulaCell*  GetNext() const;
+    void            SetPrevious( ScFormulaCell* pF );
+    void            SetNext( ScFormulaCell* pF );
+    ScFormulaCell*  GetPreviousTrack() const;
+    ScFormulaCell*  GetNextTrack() const;
+    void            SetPreviousTrack( ScFormulaCell* pF );
+    void            SetNextTrack( ScFormulaCell* pF );
 
     virtual void    Notify( SvtBroadcaster& rBC, const SfxHint& rHint);
-    void            SetCompile( bool bVal ) { bCompile = bVal; }
-    ScDocument*     GetDocument() const     { return pDocument; }
+    void SetCompile( bool bVal );
+    ScDocument* GetDocument() const;
     void            SetMatColsRows( SCCOL nCols, SCROW nRows, bool bDirtyFlag=true );
     void            GetMatColsRows( SCCOL& nCols, SCROW& nRows ) const;
 
                     // cell belongs to ChangeTrack and not to the real document
-    void            SetInChangeTrack( bool bVal ) { bInChangeTrack = bVal; }
-    bool            IsInChangeTrack() const { return bInChangeTrack; }
+    void SetInChangeTrack( bool bVal );
+    bool IsInChangeTrack() const;
 
     // For import filters!
     void            AddRecalcMode( formula::ScRecalcMode );
     /** For import only: set a double result. */
-    void            SetHybridDouble( double n )     { aResult.SetHybridDouble( n); }
+    void SetHybridDouble( double n );
     /** For import only: set a string result.
         If for whatever reason you have to use both, SetHybridDouble() and
         SetHybridString() or SetHybridFormula(), use SetHybridDouble() first
         for performance reasons.*/
-    void            SetHybridString( const OUString& r )
-                        { aResult.SetHybridString( r); }
+    void SetHybridString( const OUString& r );
     /** For import only: set a temporary formula string to be compiled later.
         If for whatever reason you have to use both, SetHybridDouble() and
         SetHybridString() or SetHybridFormula(), use SetHybridDouble() first
         for performance reasons.*/
-    void            SetHybridFormula( const OUString& r,
-                                    const formula::FormulaGrammar::Grammar eGrammar )
-                        { aResult.SetHybridFormula( r); eTempGrammar = eGrammar; }
+    void SetHybridFormula(
+        const OUString& r, const formula::FormulaGrammar::Grammar eGrammar );
 
     void SetResultMatrix( SCCOL nCols, SCROW nRows, const ScConstMatrixRef& pMat, formula::FormulaToken* pUL );
 

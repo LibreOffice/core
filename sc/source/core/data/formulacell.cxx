@@ -704,6 +704,13 @@ void ScFormulaCell::GetResultDimensions( SCSIZE& rCols, SCSIZE& rRows )
     }
 }
 
+bool ScFormulaCell::GetDirty() const { return bDirty; }
+void ScFormulaCell::ResetDirty() { bDirty = false; }
+bool ScFormulaCell::NeedsListening() const { return bNeedListening; }
+void ScFormulaCell::SetNeedsListening( bool bVar ) { bNeedListening = bVar; }
+void ScFormulaCell::SetNeedNumberFormat( bool bVal ) { mbNeedsNumberFormat = bVal; }
+short ScFormulaCell::GetFormatType() const { return nFormatType; }
+
 void ScFormulaCell::Compile( const OUString& rFormula, bool bNoListening,
                             const FormulaGrammar::Grammar eGrammar )
 {
@@ -1143,6 +1150,9 @@ void ScFormulaCell::Interpret()
     }
 }
 
+bool ScFormulaCell::IsIterCell() const { return bIsIterCell; }
+sal_uInt16 ScFormulaCell::GetSeenInIteration() const { return nSeenInIteration; }
+
 void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam )
 {
     class RecursionCounter
@@ -1454,6 +1464,15 @@ void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam )
     }
 }
 
+void ScFormulaCell::SetCompile( bool bVal )
+{
+    bCompile = bVal;
+}
+
+ScDocument* ScFormulaCell::GetDocument() const
+{
+    return pDocument;
+}
 
 void ScFormulaCell::SetMatColsRows( SCCOL nCols, SCROW nRows, bool bDirtyFlag )
 {
@@ -1482,6 +1501,15 @@ void ScFormulaCell::GetMatColsRows( SCCOL & nCols, SCROW & nRows ) const
     }
 }
 
+void ScFormulaCell::SetInChangeTrack( bool bVal )
+{
+    bInChangeTrack = bVal;
+}
+
+bool ScFormulaCell::IsInChangeTrack() const
+{
+    return bInChangeTrack;
+}
 
 void ScFormulaCell::Notify( SvtBroadcaster&, const SfxHint& rHint)
 {
@@ -1565,6 +1593,11 @@ void ScFormulaCell::SetDirtyAfterLoad()
         pDocument->PutInFormulaTree( this );
 }
 
+void ScFormulaCell::ResetTableOpDirtyVar()
+{
+    bTableOpDirty = false;
+}
+
 void ScFormulaCell::SetTableOpDirty()
 {
     if ( !IsInChangeTrack() )
@@ -1634,6 +1667,22 @@ void ScFormulaCell::AddRecalcMode( ScRecalcMode nBits )
         nBits = (nBits & ~RECALCMODE_EMASK) | RECALCMODE_NORMAL;
     }
     pCode->AddRecalcMode( nBits );
+}
+
+void ScFormulaCell::SetHybridDouble( double n )
+{
+    aResult.SetHybridDouble( n);
+}
+
+void ScFormulaCell::SetHybridString( const OUString& r )
+{
+    aResult.SetHybridString( r);
+}
+
+void ScFormulaCell::SetHybridFormula( const OUString& r,
+                                    const formula::FormulaGrammar::Grammar eGrammar )
+{
+    aResult.SetHybridFormula( r); eTempGrammar = eGrammar;
 }
 
 // Dynamically create the URLField on a mouse-over action on a hyperlink() cell.
@@ -2748,6 +2797,11 @@ void ScFormulaCell::FindRangeNamesInUse(std::set<sal_uInt16>& rIndexes) const
     lcl_FindRangeNamesInUse( rIndexes, pCode, pDocument->GetRangeName() );
 }
 
+bool ScFormulaCell::IsSubTotal() const
+{
+    return bSubTotal;
+}
+
 bool ScFormulaCell::IsChanged() const
 {
     return bChanged;
@@ -2757,6 +2811,11 @@ void ScFormulaCell::SetChanged(bool b)
 {
     bChanged = b;
 }
+
+sal_uInt8       ScFormulaCell::GetMatrixFlag() const                   { return cMatrixFlag; }
+ScTokenArray*   ScFormulaCell::GetCode() const                         { return pCode; }
+bool            ScFormulaCell::IsRunning() const                       { return bRunning; }
+void            ScFormulaCell::SetRunning( bool bVal )                 { bRunning = bVal; }
 
 void ScFormulaCell::CompileDBFormula()
 {
@@ -2885,6 +2944,15 @@ void ScFormulaCell::CompileColRowNameFormula()
         }
     }
 }
+
+ScFormulaCell*  ScFormulaCell::GetPrevious() const                 { return pPrevious; }
+ScFormulaCell*  ScFormulaCell::GetNext() const                     { return pNext; }
+void            ScFormulaCell::SetPrevious( ScFormulaCell* pF )    { pPrevious = pF; }
+void            ScFormulaCell::SetNext( ScFormulaCell* pF )        { pNext = pF; }
+ScFormulaCell*  ScFormulaCell::GetPreviousTrack() const                { return pPreviousTrack; }
+ScFormulaCell*  ScFormulaCell::GetNextTrack() const                    { return pNextTrack; }
+void            ScFormulaCell::SetPreviousTrack( ScFormulaCell* pF )   { pPreviousTrack = pF; }
+void            ScFormulaCell::SetNextTrack( ScFormulaCell* pF )       { pNextTrack = pF; }
 
 ScFormulaCellGroupRef ScFormulaCell::GetCellGroup()
 {

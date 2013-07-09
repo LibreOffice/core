@@ -530,6 +530,21 @@ ScPostIt* ScPostIt::Clone( const ScAddress& rOwnPos, ScDocument& rDestDoc, const
     return bCloneCaption ? new ScPostIt( rDestDoc, rDestPos, *this ) : new ScPostIt( rDestDoc, rDestPos, maNoteData, false );
 }
 
+const ScNoteData& ScPostIt::GetNoteData() const
+{
+    return maNoteData;
+}
+
+const OUString& ScPostIt::GetDate() const
+{
+    return maNoteData.maDate;
+}
+
+void ScPostIt::SetDate( const OUString& rDate )
+{
+    maNoteData.maDate = rDate;
+}
+
 const OUString& ScPostIt::GetAuthor() const
 {
     return maNoteData.maAuthor;
@@ -586,6 +601,11 @@ void ScPostIt::SetText( const ScAddress& rPos, const OUString& rText )
         maNoteData.mpCaption->SetText( rText );
 }
 
+SdrCaptionObj* ScPostIt::GetCaption() const
+{
+    return maNoteData.mpCaption;
+}
+
 SdrCaptionObj* ScPostIt::GetOrCreateCaption( const ScAddress& rPos ) const
 {
     CreateCaptionFromInitData( rPos );
@@ -607,6 +627,11 @@ void ScPostIt::ShowCaption( const ScAddress& rPos, bool bShow )
     maNoteData.mbShown = bShow;
     if( maNoteData.mpCaption )
         ScCaptionUtil::SetCaptionLayer( *maNoteData.mpCaption, bShow );
+}
+
+bool ScPostIt::IsCaptionShown() const
+{
+    return maNoteData.mbShown;
 }
 
 void ScPostIt::ShowCaptionTemp( const ScAddress& rPos, bool bShow )
