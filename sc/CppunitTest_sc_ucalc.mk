@@ -16,7 +16,10 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sc_ucalc, \
     sc/qa/unit/ucalc_sharedformula \
 ))
 
-$(eval $(call gb_CppunitTest_use_library_objects,sc_ucalc,sc))
+$(eval $(call gb_CppunitTest_use_library_objects,sc_ucalc, \
+	sc \
+	scqahelper \
+))
 
 ifeq ($(ENABLE_TELEPATHY),TRUE)
 $(eval $(call gb_CppunitTest_use_libraries,sc_ucalc,tubes))
@@ -52,7 +55,6 @@ $(eval $(call gb_CppunitTest_use_libraries,sc_ucalc, \
     salhelper \
     sax \
     sb \
-    scqahelper \
     sfx \
     sot \
     svl \
@@ -63,6 +65,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sc_ucalc, \
     tk \
     tl \
     ucbhelper \
+	unotest \
     utl \
     vbahelper \
     vcl \
