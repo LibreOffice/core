@@ -12,6 +12,8 @@
 
 #include "helper/qahelper.hxx"
 
+struct TestImpl;
+
 class Test : public test::BootstrapFixture
 {
 public:
@@ -19,6 +21,9 @@ public:
     static void clearRange(ScDocument* pDoc, const ScRange& rRange);
 
     Test();
+    ~Test();
+
+    ScDocShell& getDocShell();
 
     virtual void setUp();
     virtual void tearDown();
@@ -296,8 +301,8 @@ public:
     CPPUNIT_TEST_SUITE_END();
 
 private:
+    TestImpl* m_pImpl;
     ScDocument *m_pDoc;
-    ScDocShellRef m_xDocShRef;
 };
 
 

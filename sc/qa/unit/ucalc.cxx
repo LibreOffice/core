@@ -54,6 +54,7 @@
 #include "tokenarray.hxx"
 #include "scopetools.hxx"
 #include "dociter.hxx"
+#include "docsh.hxx"
 
 #include "formula/IFunctionDescription.hxx"
 
@@ -80,6 +81,11 @@
 #include <vector>
 
 #include "ucalc.hxx"
+
+struct TestImpl
+{
+    ScDocShellRef m_xDocShell;
+};
 
 void printRange(ScDocument* pDoc, const ScRange& rRange, const char* pCaption)
 {
@@ -172,9 +178,20 @@ public:
     }
 };
 
-Test::Test()
-    : m_pDoc(0)
+Test::Test() :
+    m_pImpl(new TestImpl),
+    m_pDoc(0)
 {
+}
+
+Test::~Test()
+{
+    delete m_pImpl;
+}
+
+ScDocShell& Test::getDocShell()
+{
+    return *m_pImpl->m_xDocShell;
 }
 
 void Test::setUp()
@@ -182,18 +199,18 @@ void Test::setUp()
     BootstrapFixture::setUp();
 
     ScDLL::Init();
-    m_xDocShRef = new ScDocShell(
+    m_pImpl->m_xDocShell = new ScDocShell(
         SFXMODEL_STANDARD |
         SFXMODEL_DISABLE_EMBEDDED_SCRIPTS |
         SFXMODEL_DISABLE_DOCUMENT_RECOVERY);
 
-    m_xDocShRef->DoInitUnitTest();
-    m_pDoc = m_xDocShRef->GetDocument();
+    m_pImpl->m_xDocShell->DoInitUnitTest();
+    m_pDoc = m_pImpl->m_xDocShell->GetDocument();
 }
 
 void Test::tearDown()
 {
-    m_xDocShRef.Clear();
+    m_pImpl->m_xDocShell.Clear();
     BootstrapFixture::tearDown();
 }
 
@@ -308,7 +325,7 @@ void Test::testPerf()
 
         // Create an undo object for this.
         ScRefUndoData* pRefUndoData = new ScRefUndoData(m_pDoc);
-        ScUndoPaste aUndo(&(*m_xDocShRef), aPasteRange, aMark, pUndoDoc, pRedoDoc, IDF_CONTENTS, pRefUndoData);
+        ScUndoPaste aUndo(&getDocShell(), aPasteRange, aMark, pUndoDoc, pRedoDoc, IDF_CONTENTS, pRefUndoData);
 
         // Make sure it did what it's supposed to do.
         CPPUNIT_ASSERT_EQUAL(m_pDoc->GetString(aPos), m_pDoc->GetString(aPasteRange.aStart));
@@ -379,7 +396,7 @@ void Test::testPerf()
 
         // Create an undo object for this.
         ScRefUndoData* pRefUndoData = new ScRefUndoData(m_pDoc);
-        ScUndoPaste aUndo(&(*m_xDocShRef), aPasteRange, aMark, pUndoDoc, pRedoDoc, IDF_CONTENTS, pRefUndoData);
+        ScUndoPaste aUndo(&getDocShell(), aPasteRange, aMark, pUndoDoc, pRedoDoc, IDF_CONTENTS, pRefUndoData);
 
         // Make sure it did what it's supposed to do.
         CPPUNIT_ASSERT_EQUAL(m_pDoc->GetString(aPos), m_pDoc->GetString(aPasteRange.aStart));
@@ -456,7 +473,7 @@ void Test::testPerf()
 
         // Create an undo object for this.
         ScRefUndoData* pRefUndoData = new ScRefUndoData(m_pDoc);
-        ScUndoPaste aUndo(&(*m_xDocShRef), aPasteRange, aMark, pUndoDoc, pRedoDoc, IDF_CONTENTS, pRefUndoData);
+        ScUndoPaste aUndo(&getDocShell(), aPasteRange, aMark, pUndoDoc, pRedoDoc, IDF_CONTENTS, pRefUndoData);
 
         // Make sure it did what it's supposed to do.
         CPPUNIT_ASSERT_EQUAL(CELLTYPE_FORMULA, m_pDoc->GetCellType(aPasteRange.aStart));
@@ -4313,7 +4330,7 @@ void Test::testPivotTableDocFunc()
     CPPUNIT_ASSERT_MESSAGE("Failed to create pivot table object.", pDPObj);
 
     // Craete a new pivot table output.
-    ScDBDocFunc aFunc(*m_xDocShRef);
+    ScDBDocFunc aFunc(getDocShell());
     bool bSuccess = aFunc.CreatePivotTable(*pDPObj, false, true);
     CPPUNIT_ASSERT_MESSAGE("Failed to create pivot table output via ScDBDocFunc.", bSuccess);
     ScDPCollection* pDPs = m_pDoc->GetDPCollection();
@@ -5758,7 +5775,7 @@ void Test::testCopyPaste()
     aMarkData2.SetMarkArea(aRange);
     ScRefUndoData* pRefUndoData= new ScRefUndoData(m_pDoc);
     ScUndoPaste aUndo(
-        &m_xDocShRef, aRange, aMarkData2, pUndoDoc, NULL, IDF_ALL, pRefUndoData, false);
+        &getDocShell(), aRange, aMarkData2, pUndoDoc, NULL, IDF_ALL, pRefUndoData, false);
     m_pDoc->CopyFromClip(aRange, aMarkData2, nFlags, NULL, &aClipDoc);
 
     //check values after copying
@@ -5812,7 +5829,7 @@ void Test::testMergedCells()
     ScRange aRange(0,2,0,MAXCOL,2,0);
     ScMarkData aMark;
     aMark.SetMarkArea(aRange);
-    m_xDocShRef->GetDocFunc().InsertCells(aRange, &aMark, INS_INSROWS, true, true);
+    getDocShell().GetDocFunc().InsertCells(aRange, &aMark, INS_INSROWS, true, true);
     m_pDoc->ExtendMerge(1, 1, nEndCol, nEndRow, 0, false);
     cout << nEndRow << nEndCol;
     CPPUNIT_ASSERT_MESSAGE("did not increase merge area", nEndCol == 3 && nEndRow == 4);
@@ -5831,12 +5848,12 @@ void Test::testRenameTable()
 
     //test case 1 , rename table2 to sheet 1, it should return error
     OUString nameToSet = "Sheet1";
-    ScDocFunc& rDocFunc = m_xDocShRef->GetDocFunc();
+    ScDocFunc& rDocFunc = getDocShell().GetDocFunc();
     CPPUNIT_ASSERT_MESSAGE("name same as another table is being set", !rDocFunc.RenameTable(1,nameToSet,false,true) );
 
     //test case 2 , simple rename to check name
     nameToSet = "test1";
-    m_xDocShRef->GetDocFunc().RenameTable(0,nameToSet,false,true);
+    getDocShell().GetDocFunc().RenameTable(0,nameToSet,false,true);
     OUString nameJustSet;
     m_pDoc->GetName(0,nameJustSet);
     CPPUNIT_ASSERT_MESSAGE("table not renamed", nameToSet == nameJustSet);
@@ -5851,7 +5868,7 @@ void Test::testRenameTable()
     CPPUNIT_ASSERT_MESSAGE("table not renamed", nameToSet == nameJustSet);
 
     //test case 4 , check if  undo works
-    SfxUndoAction* pUndo = new ScUndoRenameTab(m_xDocShRef,0,anOldName,nameToSet);
+    SfxUndoAction* pUndo = new ScUndoRenameTab(&getDocShell(),0,anOldName,nameToSet);
     pUndo->Undo();
     m_pDoc->GetName(0,nameJustSet);
     CPPUNIT_ASSERT_MESSAGE("the correct name is not set after undo", nameJustSet == anOldName);
@@ -5876,19 +5893,19 @@ void Test::testSetBackgroundColor()
 
      //test yellow
     aColor=Color(COL_YELLOW);
-    m_xDocShRef->GetDocFunc().SetTabBgColor(0,aColor,false, true);
+    getDocShell().GetDocFunc().SetTabBgColor(0,aColor,false, true);
     CPPUNIT_ASSERT_MESSAGE("the correct color is not set",
                            m_pDoc->GetTabBgColor(0) == aColor);
 
 
     Color aOldTabBgColor=m_pDoc->GetTabBgColor(0);
     aColor.SetColor(COL_BLUE);//set BLUE
-    m_xDocShRef->GetDocFunc().SetTabBgColor(0,aColor,false, true);
+    getDocShell().GetDocFunc().SetTabBgColor(0,aColor,false, true);
     CPPUNIT_ASSERT_MESSAGE("the correct color is not set the second time",
                            m_pDoc->GetTabBgColor(0) == aColor);
 
     //now check for undo
-    SfxUndoAction* pUndo = new ScUndoTabColor(m_xDocShRef,0, aOldTabBgColor, aColor);
+    SfxUndoAction* pUndo = new ScUndoTabColor(&getDocShell(), 0, aOldTabBgColor, aColor);
     pUndo->Undo();
     CPPUNIT_ASSERT_MESSAGE("the correct color is not set after undo", m_pDoc->GetTabBgColor(0)== aOldTabBgColor);
     pUndo->Redo();
@@ -6132,7 +6149,7 @@ void Test::testJumpToPrecedentsDependents()
     m_pDoc->CalcAll();
 
     std::vector<ScTokenRef> aRefTokens;
-    ScDocFunc& rDocFunc = m_xDocShRef->GetDocFunc();
+    ScDocFunc& rDocFunc = getDocShell().GetDocFunc();
 
     {
         // C1's precedent should be A1:A2,B3.
@@ -6247,7 +6264,7 @@ void Test::testCopyPasteFormulas()
     // to prevent ScEditableTester in ScDocFunc::MoveBlock
     ASSERT_DOUBLES_EQUAL(m_pDoc->GetValue(0,0,0), 1.0);
     ASSERT_DOUBLES_EQUAL(m_pDoc->GetValue(0,1,0), 1.0);
-    ScDocFunc& rDocFunc = m_xDocShRef->GetDocFunc();
+    ScDocFunc& rDocFunc = getDocShell().GetDocFunc();
     bool bMoveDone = rDocFunc.MoveBlock(ScRange(0,0,0,0,4,0), ScAddress( 10, 10, 0), false, false, false, true);
 
     // check that moving was succesful, mainly for editable tester
@@ -6271,8 +6288,8 @@ void Test::testCopyPasteFormulasExternalDoc()
 {
     OUString aDocName("file:///source.fake");
     SfxMedium* pMedium = new SfxMedium(aDocName, STREAM_STD_READWRITE);
-    m_xDocShRef->DoInitNew(pMedium);
-    m_pDoc = m_xDocShRef->GetDocument();
+    getDocShell().DoInitNew(pMedium);
+    m_pDoc = getDocShell().GetDocument();
 
     ScDocShellRef xExtDocSh = new ScDocShell;
     OUString aExtDocName("file:///extdata.fake");
@@ -6406,41 +6423,40 @@ void Test::testFindAreaPosColRight()
         { "", "1", "1", "", "1", "1", "1" },
         { "", "", "1", "1", "1", "", "1" }, };
 
-    ScDocument* pDoc = m_xDocShRef->GetDocument();
     OUString aTabName1("test1");
-    pDoc->InsertTab(0, aTabName1);
-    clearRange( pDoc, ScRange(0, 0, 0, 7, SAL_N_ELEMENTS(aData), 0));
+    m_pDoc->InsertTab(0, aTabName1);
+    clearRange( m_pDoc, ScRange(0, 0, 0, 7, SAL_N_ELEMENTS(aData), 0));
     ScAddress aPos(0,0,0);
-    ScRange aDataRange = insertRangeData( pDoc, aPos, aData, SAL_N_ELEMENTS(aData));
+    ScRange aDataRange = insertRangeData( m_pDoc, aPos, aData, SAL_N_ELEMENTS(aData));
     CPPUNIT_ASSERT_MESSAGE("failed to insert range data at correct position", aDataRange.aStart == aPos);
 
-    pDoc->SetColHidden(4,4,0,true);
-    bool bHidden = pDoc->ColHidden(4,0);
+    m_pDoc->SetColHidden(4,4,0,true);
+    bool bHidden = m_pDoc->ColHidden(4,0);
     CPPUNIT_ASSERT(bHidden);
 
     SCCOL nCol = 0;
     SCROW nRow = 0;
-    pDoc->FindAreaPos(nCol, nRow, 0, SC_MOVE_RIGHT);
+    m_pDoc->FindAreaPos(nCol, nRow, 0, SC_MOVE_RIGHT);
 
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(0), nRow);
     CPPUNIT_ASSERT_EQUAL(static_cast<SCCOL>(1), nCol);
 
-    pDoc->FindAreaPos(nCol, nRow, 0, SC_MOVE_RIGHT);
+    m_pDoc->FindAreaPos(nCol, nRow, 0, SC_MOVE_RIGHT);
 
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(0), nRow);
     CPPUNIT_ASSERT_EQUAL(static_cast<SCCOL>(2), nCol);
 
-    pDoc->FindAreaPos(nCol, nRow, 0, SC_MOVE_RIGHT);
+    m_pDoc->FindAreaPos(nCol, nRow, 0, SC_MOVE_RIGHT);
 
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(0), nRow);
     CPPUNIT_ASSERT_EQUAL(static_cast<SCCOL>(5), nCol);
 
-    pDoc->FindAreaPos(nCol, nRow, 0, SC_MOVE_RIGHT);
+    m_pDoc->FindAreaPos(nCol, nRow, 0, SC_MOVE_RIGHT);
 
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(0), nRow);
     CPPUNIT_ASSERT_EQUAL(static_cast<SCCOL>(6), nCol);
 
-    pDoc->FindAreaPos(nCol, nRow, 0, SC_MOVE_RIGHT);
+    m_pDoc->FindAreaPos(nCol, nRow, 0, SC_MOVE_RIGHT);
 
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(0), nRow);
     CPPUNIT_ASSERT_EQUAL(static_cast<SCCOL>(MAXCOL), nCol);
@@ -6448,24 +6464,24 @@ void Test::testFindAreaPosColRight()
     nCol = 2;
     nRow = 1;
 
-    pDoc->FindAreaPos(nCol, nRow, 0, SC_MOVE_RIGHT);
+    m_pDoc->FindAreaPos(nCol, nRow, 0, SC_MOVE_RIGHT);
 
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(1), nRow);
     CPPUNIT_ASSERT_EQUAL(static_cast<SCCOL>(3), nCol);
 
-    pDoc->FindAreaPos(nCol, nRow, 0, SC_MOVE_RIGHT);
+    m_pDoc->FindAreaPos(nCol, nRow, 0, SC_MOVE_RIGHT);
 
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(1), nRow);
     CPPUNIT_ASSERT_EQUAL(static_cast<SCCOL>(6), nCol);
 
-    pDoc->DeleteTab(0);
+    m_pDoc->DeleteTab(0);
 }
 
 // regression test fo fdo#53814, sorting doens't work as expected
 // if cells in the sort are referenced by formulas
 void Test::testSortWithFormulaRefs()
 {
-    ScDocument* pDoc = m_xDocShRef->GetDocument();
+    ScDocument* pDoc = getDocShell().GetDocument();
     OUString aTabName1("List1");
     OUString aTabName2("List2");
     pDoc->InsertTab(0, aTabName1);
@@ -6642,7 +6658,7 @@ void Test::testShiftCells()
 
 void Test::testDeleteRow()
 {
-    ScDocument* pDoc = m_xDocShRef->GetDocument();
+    ScDocument* pDoc = getDocShell().GetDocument();
     OUString aSheet1("Sheet1");
     pDoc->InsertTab(0, aSheet1);
 
@@ -6661,7 +6677,7 @@ void Test::testDeleteRow()
 
 void Test::testDeleteCol()
 {
-    ScDocument* pDoc = m_xDocShRef->GetDocument();
+    ScDocument* pDoc = getDocShell().GetDocument();
     OUString aSheet1("Sheet1");
     pDoc->InsertTab(0, aSheet1);
 
