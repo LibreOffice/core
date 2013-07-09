@@ -23,6 +23,10 @@ $(eval $(call gb_Library_use_externals,scqahelper, \
 	cppunit \
 ))
 
+$(eval $(call gb_Library_add_defs,scqahelper,\
+	-DSC_DLLIMPLEMENTATION \
+))
+
 $(eval $(call gb_Library_use_sdk_api,scqahelper))
 
 $(eval $(call gb_Library_use_libraries,scqahelper,\
