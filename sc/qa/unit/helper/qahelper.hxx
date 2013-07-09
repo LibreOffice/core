@@ -10,8 +10,6 @@
 #ifndef SC_QA_HELPER_HXX
 #define SC_QA_HELPER_HXX
 
-#define SC_DLLIMPLEMENTATION
-
 #include "scdllapi.h"
 #include "debughelper.hxx"
 #include "address.hxx"
