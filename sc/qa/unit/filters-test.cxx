@@ -133,8 +133,8 @@ void ScFiltersTest::testCVEs()
 
 void ScFiltersTest::testDir(osl::Directory& rDir, sal_uInt32 nType)
 {
-    OUString aFilterName(aFileFormats[nType].pFilterName, strlen(aFileFormats[nType].pFilterName), RTL_TEXTENCODING_UTF8) ;
-    OUString aFilterType(aFileFormats[nType].pTypeName, strlen(aFileFormats[nType].pTypeName), RTL_TEXTENCODING_UTF8);
+    OUString aFilterName(getFileFormats()[nType].pFilterName, strlen(getFileFormats()[nType].pFilterName), RTL_TEXTENCODING_UTF8) ;
+    OUString aFilterType(getFileFormats()[nType].pTypeName, strlen(getFileFormats()[nType].pTypeName), RTL_TEXTENCODING_UTF8);
 
     osl::DirectoryItem aItem;
     osl::FileStatus aFileStatus(osl_FileStatus_Mask_FileURL|osl_FileStatus_Mask_Type);
@@ -146,7 +146,7 @@ void ScFiltersTest::testDir(osl::Directory& rDir, sal_uInt32 nType)
         //OStringBuffer aMessage("Failed loading: ");
         //aMessage.append(OUStringToOString(sURL, RTL_TEXTENCODING_UTF8));
 
-        unsigned int nFormatType = aFileFormats[nType].nFormatType;
+        unsigned int nFormatType = getFileFormats()[nType].nFormatType;
         unsigned int nClipboardId = nFormatType ? SFX_FILTER_IMPORT | SFX_FILTER_USESOPTIONS : 0;
         ScDocShellRef xDocSh = load(sURL, aFilterName, OUString(),
             aFilterType, nFormatType, nClipboardId );

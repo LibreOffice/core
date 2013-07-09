@@ -1165,14 +1165,14 @@ void ScFiltersTest::testDataValidityODS()
 void ScFiltersTest::testBrokenQuotesCSV()
 {
     const OUString aFileNameBase("fdo48621_broken_quotes.");
-    OUString aFileExtension(aFileFormats[CSV].pName, strlen(aFileFormats[CSV].pName), RTL_TEXTENCODING_UTF8 );
-    OUString aFilterName(aFileFormats[CSV].pFilterName, strlen(aFileFormats[CSV].pFilterName), RTL_TEXTENCODING_UTF8) ;
+    OUString aFileExtension(getFileFormats()[CSV].pName, strlen(getFileFormats()[CSV].pName), RTL_TEXTENCODING_UTF8 );
+    OUString aFilterName(getFileFormats()[CSV].pFilterName, strlen(getFileFormats()[CSV].pFilterName), RTL_TEXTENCODING_UTF8) ;
     OUString aFileName;
     createFileURL(aFileNameBase, aFileExtension, aFileName);
-    OUString aFilterType(aFileFormats[CSV].pTypeName, strlen(aFileFormats[CSV].pTypeName), RTL_TEXTENCODING_UTF8);
-    std::cout << aFileFormats[CSV].pName << " Test" << std::endl;
+    OUString aFilterType(getFileFormats()[CSV].pTypeName, strlen(getFileFormats()[CSV].pTypeName), RTL_TEXTENCODING_UTF8);
+    std::cout << getFileFormats()[CSV].pName << " Test" << std::endl;
 
-    unsigned int nFormatType = aFileFormats[CSV].nFormatType;
+    unsigned int nFormatType = getFileFormats()[CSV].nFormatType;
     unsigned int nClipboardId = nFormatType ? SFX_FILTER_IMPORT | SFX_FILTER_USESOPTIONS : 0;
     ScDocShellRef xDocSh = ScBootstrapFixture::load(aFileName, aFilterName, OUString(), aFilterType,
         nFormatType, nClipboardId, SOFFICE_FILEFORMAT_CURRENT);
@@ -1193,14 +1193,14 @@ void ScFiltersTest::testBrokenQuotesCSV()
 void ScFiltersTest::testCellValueXLSX()
 {
     const OUString aFileNameBase("cell-value.");
-    OUString aFileExtension(aFileFormats[XLSX].pName, strlen(aFileFormats[XLSX].pName), RTL_TEXTENCODING_UTF8 );
-    OUString aFilterName(aFileFormats[XLSX].pFilterName, strlen(aFileFormats[XLSX].pFilterName), RTL_TEXTENCODING_UTF8) ;
+    OUString aFileExtension(getFileFormats()[XLSX].pName, strlen(getFileFormats()[XLSX].pName), RTL_TEXTENCODING_UTF8 );
+    OUString aFilterName(getFileFormats()[XLSX].pFilterName, strlen(getFileFormats()[XLSX].pFilterName), RTL_TEXTENCODING_UTF8) ;
     OUString aFileName;
     createFileURL(aFileNameBase, aFileExtension, aFileName);
-    OUString aFilterType(aFileFormats[XLSX].pTypeName, strlen(aFileFormats[XLSX].pTypeName), RTL_TEXTENCODING_UTF8);
-    std::cout << aFileFormats[XLSX].pName << " Test" << std::endl;
+    OUString aFilterType(getFileFormats()[XLSX].pTypeName, strlen(getFileFormats()[XLSX].pTypeName), RTL_TEXTENCODING_UTF8);
+    std::cout << getFileFormats()[XLSX].pName << " Test" << std::endl;
 
-    unsigned int nFormatType = aFileFormats[XLSX].nFormatType;
+    unsigned int nFormatType = getFileFormats()[XLSX].nFormatType;
     unsigned int nClipboardId = nFormatType ? SFX_FILTER_IMPORT | SFX_FILTER_USESOPTIONS : 0;
     ScDocShellRef xDocSh = ScBootstrapFixture::load( aFileName, aFilterName, OUString(), aFilterType,
         nFormatType, nClipboardId, SOFFICE_FILEFORMAT_CURRENT);
@@ -1218,16 +1218,16 @@ void ScFiltersTest::testCellValueXLSX()
 
 void ScFiltersTest::testPassword_Impl(const OUString& aFileNameBase)
 {
-    OUString aFileExtension(aFileFormats[0].pName, strlen(aFileFormats[0].pName), RTL_TEXTENCODING_UTF8 );
-    OUString aFilterName(aFileFormats[0].pFilterName, strlen(aFileFormats[0].pFilterName), RTL_TEXTENCODING_UTF8) ;
+    OUString aFileExtension(getFileFormats()[0].pName, strlen(getFileFormats()[0].pName), RTL_TEXTENCODING_UTF8 );
+    OUString aFilterName(getFileFormats()[0].pFilterName, strlen(getFileFormats()[0].pFilterName), RTL_TEXTENCODING_UTF8) ;
     OUString aFileName;
     createFileURL(aFileNameBase, aFileExtension, aFileName);
-    OUString aFilterType(aFileFormats[0].pTypeName, strlen(aFileFormats[0].pTypeName), RTL_TEXTENCODING_UTF8);
+    OUString aFilterType(getFileFormats()[0].pTypeName, strlen(getFileFormats()[0].pTypeName), RTL_TEXTENCODING_UTF8);
 
     sal_uInt32 nFormat = SFX_FILTER_IMPORT | SFX_FILTER_USESOPTIONS;
     SfxFilter* aFilter = new SfxFilter(
         aFilterName,
-        OUString(), aFileFormats[0].nFormatType, nFormat, aFilterType, 0, OUString(),
+        OUString(), getFileFormats()[0].nFormatType, nFormat, aFilterType, 0, OUString(),
         OUString(), OUString("private:factory/scalc*") );
     aFilter->SetVersion(SOFFICE_FILEFORMAT_CURRENT);
 

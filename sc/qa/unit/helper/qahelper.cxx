@@ -162,6 +162,11 @@ ScDocShellRef ScBootstrapFixture::loadDoc(
     return load(bReadWrite, aFileName, aFilterName, OUString(), aFilterType, nFormatType, nClipboardId, nFormatType);
 }
 
+const FileFormat* ScBootstrapFixture::getFileFormats()
+{
+    return aFileFormats;
+}
+
 void ScBootstrapFixture::createFileURL(
     const OUString& aFileBase, const OUString& aFileExtension, OUString& rFilePath)
 {
