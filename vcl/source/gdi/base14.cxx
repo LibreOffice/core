@@ -583,7 +583,9 @@ const PDFWriterImpl::BuiltinFont PDFWriterImpl::m_aBuiltinFonts[ 14 ] = {
     }
 },
 
-{ "Symbol", // family name
+// The font name "Symbol" is too generic and causes plenty of trouble.
+// To ensure WYSIWIG the PDF-Base14 variant gets a not-confusable name
+{ "PDF_Base14_Symbol", // family name
   "Normal", // style
   "Symbol", // PSName
   1010, -293, // ascend, descend
