@@ -35,17 +35,17 @@ class SvNumberFormatter;
 class ScDocument;
 
 
-//  how to treat COL_AUTO in GetFont:
+///  how to treat COL_AUTO in GetFont:
 
 enum ScAutoFontColorMode
 {
-    SC_AUTOCOL_RAW,         // COL_AUTO is returned
-    SC_AUTOCOL_BLACK,       // always use black
-    SC_AUTOCOL_PRINT,       // black or white, depending on background
-    SC_AUTOCOL_DISPLAY,     // from style settings, or black/white if needed
-    SC_AUTOCOL_IGNOREFONT,  // like DISPLAY, but ignore stored font color (assume COL_AUTO)
-    SC_AUTOCOL_IGNOREBACK,  // like DISPLAY, but ignore stored background color (use configured color)
-    SC_AUTOCOL_IGNOREALL    // like DISPLAY, but ignore stored font and background colors
+    SC_AUTOCOL_RAW,         ///< COL_AUTO is returned
+    SC_AUTOCOL_BLACK,       ///< always use black
+    SC_AUTOCOL_PRINT,       ///< black or white, depending on background
+    SC_AUTOCOL_DISPLAY,     ///< from style settings, or black/white if needed
+    SC_AUTOCOL_IGNOREFONT,  ///< like DISPLAY, but ignore stored font color (assume COL_AUTO)
+    SC_AUTOCOL_IGNOREBACK,  ///< like DISPLAY, but ignore stored background color (use configured color)
+    SC_AUTOCOL_IGNOREALL    ///< like DISPLAY, but ignore stored font and background colors
 };
 
 
@@ -74,7 +74,7 @@ public:
     static const SfxPoolItem& GetItem( sal_uInt16 nWhich, const SfxItemSet& rItemSet, const SfxItemSet* pCondSet );
     const SfxPoolItem&      GetItem( sal_uInt16 nWhich, const SfxItemSet* pCondSet ) const;
 
-                            // pWhich are no ranges, but single IDs, 0-terminated
+                            /// @param pWhich are no ranges, but single IDs, 0-terminated
     bool                    HasItemsSet( const sal_uInt16* pWhich ) const;
     void                    ClearItems( const sal_uInt16* pWhich );
 
@@ -145,7 +145,7 @@ class ScFontToSubsFontConverter_AutoPtr
                                             DestroyFontToSubsFontConverter( h );
                                     }
 
-                                // prevent usage
+                                /// prevent usage
                                 ScFontToSubsFontConverter_AutoPtr( const ScFontToSubsFontConverter_AutoPtr& );
     ScFontToSubsFontConverter_AutoPtr& operator=( const ScFontToSubsFontConverter_AutoPtr& );
 

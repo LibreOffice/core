@@ -41,7 +41,7 @@ public:
 
     virtual ~ScAccessibleFilterMenuItem();
 
-    // XAccessibleContext
+    /// XAccessibleContext
 
     virtual sal_Int32 SAL_CALL getAccessibleChildCount()
         throw (::com::sun::star::uno::RuntimeException);
@@ -59,7 +59,7 @@ public:
     virtual OUString SAL_CALL getImplementationName()
         throw (::com::sun::star::uno::RuntimeException);
 
-    // XAccessibleAction
+    /// XAccessibleAction
 
     virtual ::sal_Int32 SAL_CALL getAccessibleActionCount()
         throw (::com::sun::star::uno::RuntimeException);
@@ -75,7 +75,7 @@ public:
         getAccessibleActionKeyBinding(sal_Int32 nIndex)
             throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
 
-    // XInterface
+    /// XInterface
 
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface(
         ::com::sun::star::uno::Type const & rType )
@@ -84,7 +84,7 @@ public:
     virtual void SAL_CALL acquire() throw ();
     virtual void SAL_CALL release() throw ();
 
-    // Non-UNO Methods
+    /// Non-UNO Methods
 
     void setEnabled(bool bEnabled);
 

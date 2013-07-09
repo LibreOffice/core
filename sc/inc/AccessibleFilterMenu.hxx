@@ -52,7 +52,7 @@ public:
             ScMenuFloatingWindow* pWin, const OUString& rName, size_t nMenuPos);
     virtual ~ScAccessibleFilterMenu();
 
-    // XAccessibleComponent
+    /// XAccessibleComponent
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
         SAL_CALL getAccessibleAtPoint( const ::com::sun::star::awt::Point& rPoint )
@@ -70,7 +70,7 @@ public:
     virtual sal_Int32 SAL_CALL getBackground()
         throw (::com::sun::star::uno::RuntimeException);
 
-    // XAccessibleContext
+    /// XAccessibleContext
 
     virtual OUString SAL_CALL getAccessibleName()
         throw (::com::sun::star::uno::RuntimeException);
@@ -90,7 +90,7 @@ public:
     virtual OUString SAL_CALL getImplementationName()
         throw (::com::sun::star::uno::RuntimeException);
 
-    // XAccessibleEventBroadcaster
+    /// XAccessibleEventBroadcaster
     virtual void SAL_CALL
         addAccessibleEventListener(
             const ::com::sun::star::uno::Reference<
@@ -104,7 +104,7 @@ public:
                 ::com::sun::star::accessibility::XAccessibleEventListener>& xListener)
         throw (com::sun::star::uno::RuntimeException);
 
-    // XAccessibleSelection
+    /// XAccessibleSelection
 
     virtual void SAL_CALL selectAccessibleChild(sal_Int32 nChildIndex)
         throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
@@ -128,7 +128,7 @@ public:
     virtual void SAL_CALL deselectAccessibleChild(sal_Int32 nChildIndex)
         throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
 
-    // XInterface
+    /// XInterface
 
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface(
         ::com::sun::star::uno::Type const & rType )
@@ -137,12 +137,12 @@ public:
     virtual void SAL_CALL acquire() throw ();
     virtual void SAL_CALL release() throw ();
 
-    // XTypeProvider
+    /// XTypeProvider
 
     virtual ::com::sun::star::uno::Sequence<sal_Int8> SAL_CALL getImplementationId()
         throw (::com::sun::star::uno::RuntimeException);
 
-    // non-UNO methods
+    /// non-UNO methods
 
     void appendMenuItem(const OUString& rName, bool bEnabled, size_t nMenuPos);
     void setMenuPos(size_t nMenuPos);

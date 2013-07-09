@@ -31,9 +31,9 @@ class ScPrintSaverTab
 {
     typedef ::std::vector< ScRange > ScRangeVec;
 
-    ScRangeVec  maPrintRanges;      // Array
-    ScRange*    mpRepeatCol;        // single
-    ScRange*    mpRepeatRow;        // single
+    ScRangeVec  maPrintRanges;      ///< Array
+    ScRange*    mpRepeatCol;        ///< single
+    ScRange*    mpRepeatRow;        ///< single
     sal_Bool        mbEntireSheet;
 
 public:
@@ -54,7 +54,7 @@ public:
 class ScPrintRangeSaver
 {
     SCTAB               nTabCount;
-    ScPrintSaverTab*    pData;      // Array
+    ScPrintSaverTab*    pData;      ///< Array
 
 public:
             ScPrintRangeSaver( SCTAB nCount );

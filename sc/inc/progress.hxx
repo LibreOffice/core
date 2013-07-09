@@ -52,7 +52,7 @@ private:
 
             SfxProgress*    pProgress;
 
-                            // not implemented
+                            /// not implemented
                             ScProgress( const ScProgress& );
             ScProgress&     operator=( const ScProgress& );
 
@@ -80,10 +80,10 @@ public:
                             ~ScProgress();
 
 #ifdef SC_PROGRESS_CXX
-                            // for DummyInterpret only, never use otherwise!!!
+                            /// for DummyInterpret only, never use otherwise!!!
                             ScProgress();
 #endif
-                            // might be NULL!
+                            /// might be NULL!
             SfxProgress*    GetSfxProgress() const { return pProgress; }
 
             sal_Bool            SetStateText( sal_uLong nVal, const String &rVal, sal_uLong nNewRange = 0 )
@@ -124,14 +124,14 @@ public:
                                     return sal_True;
                                 }
             sal_Bool            SetStateOnPercent( sal_uLong nVal )
-                                {   // only if percentage increased
+                                {   /// only if percentage increased
                                     if ( nGlobalRange && (nVal * 100 /
                                             nGlobalRange) > nGlobalPercent )
                                         return SetState( nVal );
                                     return sal_True;
                                 }
             sal_Bool            SetStateCountDownOnPercent( sal_uLong nVal )
-                                {   // only if percentage increased
+                                {   /// only if percentage increased
                                     if ( nGlobalRange &&
                                             ((nGlobalRange - nVal) * 100 /
                                             nGlobalRange) > nGlobalPercent )
