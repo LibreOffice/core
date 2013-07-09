@@ -272,7 +272,7 @@ public:
         formula string because the formula is present as a token array, as it
         is the case for binary Excel import.
      */
-    void            SetResultDouble( double n )     { aResult.SetDouble( n); }
+    void SetResultDouble( double n );
 
     void SetResultToken( const formula::FormulaToken* pToken );
 

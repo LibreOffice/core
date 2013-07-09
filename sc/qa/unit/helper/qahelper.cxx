@@ -7,7 +7,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#undef SC_DLLIMPLEMENTATION
 #include "qahelper.hxx"
+#include "csv_handler.hxx"
 
 #if defined WNT
 #define __ORCUS_STATIC_LIB
@@ -242,7 +244,7 @@ void ScBootstrapFixture::miscRowHeightsTest( TestParam* aTestValues, unsigned in
             SCTAB nTab = aTestValues[ index ].pData[ i ].nTab;
             int nExpectedHeight = aTestValues[ index ].pData[ i ].nExpectedHeight;
             if ( nExpectedHeight == -1 )
-                nExpectedHeight =  sc::TwipsToHMM( ScGlobal::nStdRowHeight );
+                nExpectedHeight =  sc::TwipsToHMM( ScGlobal::GetStandardRowHeight() );
             bool bCheckOpt = ( ( aTestValues[ index ].pData[ i ].nCheck & CHECK_OPTIMAL ) == CHECK_OPTIMAL );
             for ( ; nRow <= nEndRow; ++nRow )
             {

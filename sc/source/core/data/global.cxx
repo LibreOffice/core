@@ -191,6 +191,11 @@ sal_uLong ScGlobal::GetStandardFormat( SvNumberFormatter& rFormatter,
     return rFormatter.GetStandardFormat( nType, eLnge );
 }
 
+sal_uInt16 ScGlobal::GetStandardRowHeight()
+{
+    return nStdRowHeight;
+}
+
 sal_uLong ScGlobal::GetStandardFormat( double fNumber, SvNumberFormatter& rFormatter,
         sal_uLong nFormat, short nType )
 {

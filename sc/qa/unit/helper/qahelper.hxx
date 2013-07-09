@@ -10,9 +10,12 @@
 #ifndef SC_QA_HELPER_HXX
 #define SC_QA_HELPER_HXX
 
+#define SC_DLLIMPLEMENTATION
+
 #include "scdllapi.h"
 #include "debughelper.hxx"
-#include "csv_handler.hxx"
+#include "address.hxx"
+#include "docsh.hxx"
 
 #include <test/bootstrapfixture.hxx>
 #include <comphelper/documentconstants.hxx>
@@ -43,6 +46,8 @@
 #define HTML     4
 #define LOTUS123 5
 #define DIF      6
+
+enum StringType { PureString, FormulaValue, StringValue };
 
 SC_DLLPUBLIC bool testEqualsWithTolerance( long nVal1, long nVal2, long nTol );
 

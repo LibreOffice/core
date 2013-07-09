@@ -9,6 +9,8 @@
 
 #include "ucalc.hxx"
 #include "editutil.hxx"
+#include "formulacell.hxx"
+#include "cellvalue.hxx"
 
 void Test::testSharedFormulas()
 {

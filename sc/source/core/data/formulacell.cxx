@@ -1593,6 +1593,11 @@ bool ScFormulaCell::IsDirtyOrInTableOpDirty() const
     return bDirty || (bTableOpDirty && pDocument->IsInInterpreterTableOp());
 }
 
+void ScFormulaCell::SetResultDouble( double n )
+{
+    aResult.SetDouble( n);
+}
+
 void ScFormulaCell::SetResultToken( const formula::FormulaToken* pToken )
 {
     aResult.SetToken(pToken);

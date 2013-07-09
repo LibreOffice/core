@@ -576,6 +576,7 @@ public:
     SC_DLLPUBLIC static sal_uLong               GetStandardFormat( double, SvNumberFormatter&,
                                     sal_uLong nFormat, short nType );
 
+    SC_DLLPUBLIC static sal_uInt16 GetStandardRowHeight();
     SC_DLLPUBLIC static double              nScreenPPTX;
     SC_DLLPUBLIC static double              nScreenPPTY;
 

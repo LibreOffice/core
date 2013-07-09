@@ -81,8 +81,6 @@ OString createErrorMessage(SCCOL nCol, SCROW nRow, SCTAB nTab, double aExpected,
 
 }
 
-enum StringType { PureString, FormulaValue, StringValue };
-
 class csv_handler
 {
 public:

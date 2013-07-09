@@ -33,12 +33,15 @@ $(eval $(call gb_Library_use_libraries,scqahelper,\
 	comphelper \
 	cppu \
 	cppuhelper \
+	for \
 	sal \
 	sfx \
 	sot \
 	svl \
 	svt \
+	test \
 	tl \
+	unotest \
 	utl \
 	sc \
 	ucbhelper \
