@@ -87,6 +87,17 @@ struct TestImpl
     ScDocShellRef m_xDocShell;
 };
 
+FormulaGrammarSwitch::FormulaGrammarSwitch(ScDocument* pDoc, formula::FormulaGrammar::Grammar eGrammar) :
+    mpDoc(pDoc), meOldGrammar(pDoc->GetGrammar())
+{
+    mpDoc->SetGrammar(eGrammar);
+}
+
+FormulaGrammarSwitch::~FormulaGrammarSwitch()
+{
+    mpDoc->SetGrammar(meOldGrammar);
+}
+
 void printRange(ScDocument* pDoc, const ScRange& rRange, const char* pCaption)
 {
     SCROW nRow1 = rRange.aStart.Row(), nRow2 = rRange.aEnd.Row();
@@ -128,26 +139,6 @@ ScRange insertRangeData(ScDocument* pDoc, const ScAddress& rPos, const char* aDa
     printRange(pDoc, aRange, "Range data content");
     return aRange;
 }
-
-/**
- * Temporarily set formula grammar.
- */
-class FormulaGrammarSwitch
-{
-    ScDocument* mpDoc;
-    formula::FormulaGrammar::Grammar meOldGrammar;
-public:
-    FormulaGrammarSwitch(ScDocument* pDoc, formula::FormulaGrammar::Grammar eGrammar) :
-        mpDoc(pDoc), meOldGrammar(pDoc->GetGrammar())
-    {
-        mpDoc->SetGrammar(eGrammar);
-    }
-
-    ~FormulaGrammarSwitch()
-    {
-        mpDoc->SetGrammar(meOldGrammar);
-    }
-};
 
 class MeasureTimeSwitch
 {
@@ -5761,11 +5752,8 @@ void Test::testCopyPaste()
 
     //copy Sheet1.A1:C1 to Sheet2.A2:C2
     ScRange aRange(0,0,0,2,0,0);
-    ScClipParam aClipParam(aRange, false);
-    ScMarkData aMark;
-    aMark.SetMarkArea(aRange);
     ScDocument aClipDoc(SCDOCMODE_CLIP);
-    m_pDoc->CopyToClip(aClipParam, &aClipDoc, &aMark);
+    copyToClip(m_pDoc, aRange, &aClipDoc);
 
     sal_uInt16 nFlags = IDF_ALL;
     aRange = ScRange(0,1,1,2,1,1);//target: Sheet2.A2:C2
@@ -6952,6 +6940,21 @@ void Test::clearRange(ScDocument* pDoc, const ScRange& rRange)
     pDoc->DeleteArea(
         rRange.aStart.Col(), rRange.aStart.Row(),
         rRange.aEnd.Col(), rRange.aEnd.Row(), aMarkData, IDF_CONTENTS);
+}
+
+void Test::copyToClip(ScDocument* pSrcDoc, const ScRange& rRange, ScDocument* pClipDoc)
+{
+    ScClipParam aClipParam(rRange, false);
+    ScMarkData aMark;
+    aMark.SetMarkArea(rRange);
+    pSrcDoc->CopyToClip(aClipParam, pClipDoc, &aMark);
+}
+
+void Test::pasteFromClip(ScDocument* pDestDoc, const ScRange& rDestRange, ScDocument* pClipDoc)
+{
+    ScMarkData aMark;
+    aMark.SetMarkArea(rDestRange);
+    pDestDoc->CopyFromClip(rDestRange, aMark, IDF_ALL, NULL, pClipDoc);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

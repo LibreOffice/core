@@ -12,6 +12,9 @@
 #include "formulacell.hxx"
 #include "cellvalue.hxx"
 #include "docsh.hxx"
+#include "clipparam.hxx"
+
+#include "formula/grammar.hxx"
 
 void Test::testSharedFormulas()
 {
@@ -223,6 +226,45 @@ void Test::testSharedFormulas()
     CPPUNIT_ASSERT_MESSAGE("B6 should be a formula cell.", pFC);
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(5), pFC->GetSharedTopRow());
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(2), pFC->GetSharedLength());
+
+    m_pDoc->DeleteTab(0);
+}
+
+void Test::testSharedFormulasCopyPaste()
+{
+    m_pDoc->InsertTab(0, "Test");
+    FormulaGrammarSwitch aFGSwitch(m_pDoc, formula::FormulaGrammar::GRAM_ENGLISH_XL_R1C1);
+
+    // Fill formula cells B1:B10.
+    for (SCROW i = 0; i <= 9; ++i)
+        m_pDoc->SetString(1, i, 0, "=RC[-1]");
+
+    ScAddress aPos(1, 8, 0); // B9
+    ScFormulaCell* pFC = m_pDoc->GetFormulaCell(aPos);
+    CPPUNIT_ASSERT_MESSAGE("B9 should be a formula cell.", pFC);
+    CPPUNIT_ASSERT_EQUAL(0, pFC->GetSharedTopRow());
+    CPPUNIT_ASSERT_EQUAL(10, pFC->GetSharedLength());
+
+    // Copy formulas in B6:B9 to the clipboard doc.
+    ScRange aSrcRange(1,5,0,1,8,0); // B6:B9
+    ScDocument aClipDoc(SCDOCMODE_CLIP);
+    copyToClip(m_pDoc, aSrcRange, &aClipDoc);
+    pFC = aClipDoc.GetFormulaCell(aPos);
+    CPPUNIT_ASSERT_MESSAGE("B9 in the clip doc should be a formula cell.", pFC);
+    CPPUNIT_ASSERT_EQUAL(5, pFC->GetSharedTopRow());
+    CPPUNIT_ASSERT_EQUAL(4, pFC->GetSharedLength());
+
+    // Paste them to C2:C10.
+    ScRange aDestRange(2,1,0,2,9,0);
+    OUString aRS;
+    aDestRange.Format(aRS, SCR_ABS);
+    pasteFromClip(m_pDoc, aDestRange, &aClipDoc);
+    aPos.SetCol(2);
+    aPos.SetRow(1);
+    pFC = m_pDoc->GetFormulaCell(aPos);
+    CPPUNIT_ASSERT_MESSAGE("C2 should be a formula cell.", pFC);
+    CPPUNIT_ASSERT_EQUAL(1, pFC->GetSharedTopRow());
+    CPPUNIT_ASSERT_EQUAL(9, pFC->GetSharedLength());
 
     m_pDoc->DeleteTab(0);
 }

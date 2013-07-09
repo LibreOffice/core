@@ -14,11 +14,25 @@
 
 struct TestImpl;
 
+/**
+ * Temporarily set formula grammar.
+ */
+class FormulaGrammarSwitch
+{
+    ScDocument* mpDoc;
+    formula::FormulaGrammar::Grammar meOldGrammar;
+public:
+    FormulaGrammarSwitch(ScDocument* pDoc, formula::FormulaGrammar::Grammar eGrammar);
+    ~FormulaGrammarSwitch();
+};
+
 class Test : public test::BootstrapFixture
 {
 public:
 
     static void clearRange(ScDocument* pDoc, const ScRange& rRange);
+    static void copyToClip(ScDocument* pSrcDoc, const ScRange& rRange, ScDocument* pClipDoc);
+    static void pasteFromClip(ScDocument* pDestDoc, const ScRange& rDestRange, ScDocument* pClipDoc);
 
     Test();
     ~Test();
@@ -162,6 +176,7 @@ public:
     void testUpdateReference();
     void testSearchCells();
     void testSharedFormulas();
+    void testSharedFormulasCopyPaste();
     void testFormulaPosition();
 
     /**
@@ -280,6 +295,7 @@ public:
     CPPUNIT_TEST(testUpdateReference);
     CPPUNIT_TEST(testSearchCells);
     CPPUNIT_TEST(testSharedFormulas);
+    CPPUNIT_TEST(testSharedFormulasCopyPaste);
     CPPUNIT_TEST(testFormulaPosition);
     CPPUNIT_TEST(testJumpToPrecedentsDependents);
     CPPUNIT_TEST(testSetBackgroundColor);
