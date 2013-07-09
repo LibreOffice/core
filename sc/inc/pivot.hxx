@@ -55,8 +55,8 @@
 
 struct ScDPName
 {
-    OUString     maName;         /// Original name of the dimension.
-    OUString     maLayoutName;   /// Layout name (display name)
+    OUString     maName;         ///< Original name of the dimension.
+    OUString     maLayoutName;   ///< Layout name (display name)
 
     explicit ScDPName(const OUString& rName, const OUString& rLayoutName);
 };
@@ -65,16 +65,16 @@ struct ScDPName
 
 struct ScDPLabelData
 {
-    OUString       maName;         /// Original name of the dimension.
-    OUString       maLayoutName;   /// Layout name (display name)
+    OUString       maName;              ///< Original name of the dimension.
+    OUString       maLayoutName;        ///< Layout name (display name)
     OUString       maSubtotalName;
-    SCCOL               mnCol;          /// 0-based field index (not the source column index)
-    long                mnOriginalDim;  /// original dimension index (>= 0 for duplicated dimension)
-    sal_uInt16          mnFuncMask;     /// Page/Column/Row subtotal function.
-    sal_Int32           mnUsedHier;     /// Used hierarchy.
-    sal_Int32           mnFlags;        /// Flags from the DataPilotSource dimension
-    bool                mbShowAll:1;    /// true = Show all (also empty) results.
-    bool                mbIsValue:1;    /// true = Sum or count in data field.
+    SCCOL               mnCol;          ///< 0-based field index (not the source column index)
+    long                mnOriginalDim;  ///< original dimension index (>= 0 for duplicated dimension)
+    sal_uInt16          mnFuncMask;     ///< Page/Column/Row subtotal function.
+    sal_Int32           mnUsedHier;     ///< Used hierarchy.
+    sal_Int32           mnFlags;        ///< Flags from the DataPilotSource dimension
+    bool                mbShowAll:1;    ///< true = Show all (also empty) results.
+    bool                mbIsValue:1;    ///< true = Sum or count in data field.
     bool                mbDataLayout:1;
 
     struct Member
@@ -87,22 +87,22 @@ struct ScDPLabelData
         Member();
 
         /**
-         * return the name that should be displayed in the dp dialogs i.e.
+         * @return the name that should be displayed in the dp dialogs i.e.
          * when the layout name is present, use it, or else use the original
          * name.
          */
         OUString SC_DLLPUBLIC getDisplayName() const;
     };
     ::std::vector<Member>                               maMembers;
-    ::com::sun::star::uno::Sequence< OUString >  maHiers;        /// Hierarchies.
-    ::com::sun::star::sheet::DataPilotFieldSortInfo     maSortInfo;     /// Sorting info.
-    ::com::sun::star::sheet::DataPilotFieldLayoutInfo   maLayoutInfo;   /// Layout info.
-    ::com::sun::star::sheet::DataPilotFieldAutoShowInfo maShowInfo;     /// AutoShow info.
+    ::com::sun::star::uno::Sequence< OUString >  maHiers;               ///< Hierarchies.
+    ::com::sun::star::sheet::DataPilotFieldSortInfo     maSortInfo;     ///< Sorting info.
+    ::com::sun::star::sheet::DataPilotFieldLayoutInfo   maLayoutInfo;   ///< Layout info.
+    ::com::sun::star::sheet::DataPilotFieldAutoShowInfo maShowInfo;     ///< AutoShow info.
 
     ScDPLabelData();
 
     /**
-     * return the name that should be displayed in the dp dialogs i.e. when
+     * @return the name that should be displayed in the dp dialogs i.e. when
      * the layout name is present, use it, or else use the original name.
      */
     OUString SC_DLLPUBLIC getDisplayName() const;
@@ -112,8 +112,8 @@ typedef boost::ptr_vector<ScDPLabelData> ScDPLabelDataVector;
 
 struct ScPivotField
 {
-    SCCOL               nCol; /// 0-based dimension index (not source column index)
-    long                mnOriginalDim; /// >= 0 for duplicated field.
+    SCCOL               nCol;          ///< 0-based dimension index (not source column index)
+    long                mnOriginalDim; ///< >= 0 for duplicated field.
     sal_uInt16          nFuncMask;
     sal_uInt8           mnDupCount;
     ::com::sun::star::sheet::DataPilotFieldReference maFieldRef;
@@ -129,8 +129,8 @@ typedef ::std::vector< ScPivotField > ScPivotFieldVector;
 
 struct ScPivotParam
 {
-    SCCOL           nCol;           // Cursor Position /
-    SCROW           nRow;           // or start of destination area
+    SCCOL           nCol;           ///< Cursor Position /
+    SCROW           nRow;           ///< or start of destination area
     SCTAB           nTab;
     ScDPLabelDataVector maLabelArray;
     ScPivotFieldVector maPageFields;

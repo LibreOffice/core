@@ -30,9 +30,9 @@ class ScAddress;
 struct ScRefCellValue;
 
 enum ScForceTextFmt {
-    ftDontForce,            // numbers as numbers
-    ftForce,                // numbers as text
-    ftCheck                 // is the numberformat a textformat?
+    ftDontForce,            ///< numbers as numbers
+    ftForce,                ///< numbers as text
+    ftCheck                 ///< is the numberformat a textformat?
 };
 
 //------------------------------------------------------------------------

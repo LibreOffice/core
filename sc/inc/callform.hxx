@@ -80,9 +80,9 @@ public:
     bool        Call(void** ppParam) const;
     bool        Unadvice(double nHandle);
 
-                // name and description of parameter nParam.
-                // nParam==0 => Desc := function description,
-                // Name := n/a
+                /** name and description of parameter nParam.
+                    nParam==0 => Desc := function description,
+                    Name := n/a */
     bool getParamDesc( OUString& aName, OUString& aDesc, sal_uInt16 nParam ) const;
 };
 
