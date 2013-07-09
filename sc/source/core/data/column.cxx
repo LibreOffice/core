@@ -1395,7 +1395,6 @@ void ScColumn::CopyToClip(
 
     CopyToClipHandler aFunc(*this, rColumn, rCxt.getBlockPosition(rColumn.nTab, rColumn.nCol));
     sc::ParseBlock(maCells.begin(), maCells, aFunc, nRow1, nRow2);
-    rColumn.RegroupFormulaCells(nRow1, nRow2);
     rColumn.CellStorageModified();
 }
 
@@ -1502,7 +1501,6 @@ void ScColumn::CopyStaticToDocument(SCROW nRow1, SCROW nRow2, ScColumn& rDestCol
             break;
     }
 
-    rDestCol.RegroupFormulaCells(nRow1, nRow2);
     rDestCol.CellStorageModified();
 }
 
