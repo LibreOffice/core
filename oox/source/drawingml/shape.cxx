@@ -52,6 +52,7 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <com/sun/star/document/XActionLockable.hpp>
+#include <com/sun/star/chart2/data/XDataReceiver.hpp>
 
 using namespace ::oox::core;
 using namespace ::com::sun::star;
@@ -711,7 +712,21 @@ void Shape::finalizeXShape( XmlFilterBase& rFilter, const Reference< XShapes >& 
                 if( !mxChartShapeInfo->mbEmbedShapes )
                     xExternalPage = rxShapes;
                 if( rFilter.getChartConverter() )
+                {
                     rFilter.getChartConverter()->convertFromModel( rFilter, aModel, xChartDoc, xExternalPage, mxShape->getPosition(), mxShape->getSize() );
+                    if( !xChartDoc->hasInternalDataProvider() )
+                    {
+                        Reference< chart2::data::XDataReceiver > xDataRec( xChartDoc, UNO_QUERY );
+                        Reference< chart2::data::XDataSource > xData( xDataRec->getUsedData(), UNO_QUERY );
+                        if( xData->getDataSequences()[0]->getValues()->getData().getLength() <= 0 )
+                        {
+                            rFilter.useInternalChartDataTable( true );
+                            rFilter.getChartConverter()->convertFromModel( rFilter, aModel, xChartDoc, xExternalPage, mxShape->getPosition(), mxShape->getSize() );
+                            rFilter.useInternalChartDataTable( false );
+                        }
+                    }
+
+                }
             }
             catch( Exception& )
             {

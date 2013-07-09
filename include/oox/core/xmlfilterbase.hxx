@@ -90,6 +90,9 @@ public:
         converter object, that should be global per imported document. */
     virtual ::oox::drawingml::chart::ChartConverter* getChartConverter() = 0;
 
+    /** Helper to switch chart data table - specifically for xlsx imports */
+     virtual void useInternalChartDataTable( bool /*bInternal*/ ) { }
+
     /** Has to be implemented by each filter to return the table style list. */
     virtual const ::oox::drawingml::table::TableStyleListPtr getTableStyles() = 0;
 

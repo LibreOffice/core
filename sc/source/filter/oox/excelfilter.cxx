@@ -149,6 +149,11 @@ const TableStyleListPtr ExcelFilter::getTableStyles()
     return WorkbookHelper( getWorkbookGlobals() ).getChartConverter();
 }
 
+void ExcelFilter::useInternalChartDataTable( bool bInternal )
+{
+    return WorkbookHelper( getWorkbookGlobals() ).useInternalChartDataTable( bInternal );
+}
+
 GraphicHelper* ExcelFilter::implCreateGraphicHelper() const
 {
     return new ExcelGraphicHelper( getWorkbookGlobals() );

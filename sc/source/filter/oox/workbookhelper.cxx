@@ -178,6 +178,8 @@ public:
     Reference< XDatabaseRange > createUnnamedDatabaseRangeObject( const CellRangeAddress& rRangeAddr ) const;
     /** Creates and returns a com.sun.star.style.Style object for cells or pages. */
     Reference< XStyle > createStyleObject( OUString& orStyleName, bool bPageStyle ) const;
+    /** Helper to switch chart data table - specifically for xlsx imports */
+    void useInternalChartDataTable( bool bInternal );
 
     // buffers ----------------------------------------------------------------
 
@@ -218,7 +220,7 @@ public:
     /** Returns the converter for string to cell address/range conversion. */
     inline AddressConverter& getAddressConverter() const { return *mxAddrConverter; }
     /** Returns the chart object converter. */
-    inline ExcelChartConverter* getChartConverter() const { return mxChartConverter.get(); }
+    inline oox::drawingml::chart::ChartConverter* getChartConverter() const { return mxChartConverter.get(); }
     /** Returns the page/print settings converter. */
     inline PageSettingsConverter& getPageSettingsConverter() const { return *mxPageSettConverter; }
 
@@ -262,7 +264,7 @@ private:
     typedef ::std::auto_ptr< FormulaParser >            FormulaParserPtr;
     typedef ::std::auto_ptr< UnitConverter >            UnitConvPtr;
     typedef ::std::auto_ptr< AddressConverter >         AddressConvPtr;
-    typedef ::std::auto_ptr< ExcelChartConverter >      ExcelChartConvPtr;
+    typedef ::std::auto_ptr< oox::drawingml::chart::ChartConverter >      ExcelChartConvPtr;
     typedef ::std::auto_ptr< PageSettingsConverter >    PageSettConvPtr;
     typedef ::std::auto_ptr< BiffCodecHelper >          BiffCodecHelperPtr;
 
@@ -504,6 +506,14 @@ Reference< XStyle > WorkbookGlobals::createStyleObject( OUString& orStyleName, b
     }
     OSL_ENSURE( xStyle.is(), "WorkbookGlobals::createStyleObject - cannot create style" );
     return xStyle;
+}
+
+void WorkbookGlobals::useInternalChartDataTable( bool bInternal )
+{
+    if( bInternal )
+        mxChartConverter.reset( new oox::drawingml::chart::ChartConverter() );
+    else
+        mxChartConverter.reset( new ExcelChartConverter( *this ) );
 }
 
 // BIFF specific --------------------------------------------------------------
@@ -896,9 +906,14 @@ AddressConverter& WorkbookHelper::getAddressConverter() const
     return mrBookGlob.getAddressConverter();
 }
 
-ExcelChartConverter* WorkbookHelper::getChartConverter() const
+oox::drawingml::chart::ChartConverter* WorkbookHelper::getChartConverter() const
 {
     return mrBookGlob.getChartConverter();
+}
+
+void WorkbookHelper::useInternalChartDataTable( bool bInternal )
+{
+    mrBookGlob.useInternalChartDataTable( bInternal );
 }
 
 PageSettingsConverter& WorkbookHelper::getPageSettingsConverter() const
