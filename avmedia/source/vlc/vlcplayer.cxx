@@ -18,6 +18,8 @@ const char * const VLC_ARGS[] = {
     "--quiet"
 };
 
+const int MS_IN_SEC = 1000; // Millisec in sec
+
 namespace
 {
     libvlc_media_t* initMedia( const rtl::OUString& url, boost::shared_ptr<libvlc_instance_t>& instance )
@@ -58,19 +60,19 @@ void SAL_CALL VLCPlayer::stop()
 double SAL_CALL VLCPlayer::getDuration()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-    return libvlc_media_get_duration( mMedia.get() );
+    return static_cast<double>( libvlc_media_get_duration( mMedia.get() ) ) / MS_IN_SEC;
 }
 
 void SAL_CALL VLCPlayer::setMediaTime( double fTime )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-    libvlc_media_player_set_time( mPlayer.get(), fTime );
+    libvlc_media_player_set_time( mPlayer.get(), fTime * MS_IN_SEC );
 }
 
 double SAL_CALL VLCPlayer::getMediaTime()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-    return libvlc_media_player_get_time( mPlayer.get() );
+    return static_cast<double>( libvlc_media_player_get_time( mPlayer.get() ) ) / MS_IN_SEC;
 }
 
 double SAL_CALL VLCPlayer::getRate()

@@ -10,6 +10,7 @@ const ::rtl::OUString AVMEDIA_VLC_GRABBER_IMPLEMENTATIONNAME = "com.sun.star.com
 const ::rtl::OUString AVMEDIA_VLC_GRABBER_SERVICENAME = "com.sun.star.media.VLCFrameGrabber_VLC";
 
 SAL_CALL VLCFrameGrabber::VLCFrameGrabber()
+    : FrameGrabber_BASE()
 {
 }
 
