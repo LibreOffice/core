@@ -21,6 +21,8 @@
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 #include <com/sun/star/text/XTextSection.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
+#include <com/sun/star/style/LineSpacing.hpp>
+#include <com/sun/star/style/LineSpacingMode.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/table/ShadowFormat.hpp>
@@ -87,6 +89,7 @@ public:
     void testFdo56679();
     void testFdo65400();
     void testFdo66543();
+    void testFdo66773();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -147,6 +150,7 @@ void Test::run()
         {"fdo56679.docx", &Test::testFdo56679},
         {"fdo65400.docx", &Test::testFdo65400},
         {"fdo66543.docx", &Test::testFdo66543},
+        {"fdo66773.docx", &Test::testFdo66773},
     };
     // Don't test the first import of these, for some reason those tests fail
     const char* aBlacklist[] = {
@@ -888,6 +892,21 @@ void Test::testFdo66543()
 
     uno::Reference< text::XTextRange > paragraph1 = getParagraph( 1 );
     CPPUNIT_ASSERT_EQUAL( sal_Int32( 1 ), getProperty< sal_Int32 >( paragraph1, "ParaLineNumberStartValue" ));
+}
+
+void Test::testFdo66773()
+{
+    // The problem was the line spacing was interpreted by Word as 'Multiple 1.08' if no default settings were written.
+    // Now after the 'docDefaults' section is written in <styles.xml> - there is no more problem.
+    // (Word does not try to calculate some arbitrary value for line spacing).
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xTextDocument->getText(), uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
+    CPPUNIT_ASSERT(xParaEnum->hasMoreElements());
+
+    style::LineSpacing alineSpacing = getProperty<style::LineSpacing>(xParaEnum->nextElement(), "ParaLineSpacing");
+    CPPUNIT_ASSERT_EQUAL(style::LineSpacingMode::PROP, alineSpacing.Mode);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(100), static_cast<sal_Int32>(alineSpacing.Height));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
