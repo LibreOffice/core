@@ -3288,11 +3288,7 @@ void ScInterpreter::ScMacro()
             case svExternalDoubleRef:
             case svMatrix:
             {
-                ScMatrixRef pMat;
-                if (nStackType == svMatrix)
-                    pMat = PopMatrix();
-                else
-                    PopExternalDoubleRef(pMat);
+                ScMatrixRef pMat = GetMatrix();
                 SCSIZE nC, nR;
                 if (pMat && !nGlobalError)
                 {
