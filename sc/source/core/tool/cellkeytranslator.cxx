@@ -37,25 +37,33 @@ enum LocaleMatch
 {
     LOCALE_MATCH_NONE = 0,
     LOCALE_MATCH_LANG,
-    LOCALE_MATCH_LANG_COUNTRY,
+    LOCALE_MATCH_LANG_SCRIPT,
+    LOCALE_MATCH_LANG_SCRIPT_COUNTRY,
     LOCALE_MATCH_ALL
 };
 
-static LocaleMatch lclLocaleCompare(const Locale& rLocale1, const Locale& rLocale2)
+static LocaleMatch lclLocaleCompare(const Locale& rLocale1, const LanguageTag& rLanguageTag2)
 {
     LocaleMatch eMatchLevel = LOCALE_MATCH_NONE;
-    if ( rLocale1.Language == rLocale2.Language )
+    LanguageTag aLanguageTag1( rLocale1);
+
+    if ( aLanguageTag1.getLanguage() == rLanguageTag2.getLanguage() )
         eMatchLevel = LOCALE_MATCH_LANG;
     else
         return eMatchLevel;
 
-    if ( rLocale1.Country == rLocale2.Country )
-        eMatchLevel = LOCALE_MATCH_LANG_COUNTRY;
+    if ( aLanguageTag1.getScript() == rLanguageTag2.getScript() )
+        eMatchLevel = LOCALE_MATCH_LANG_SCRIPT;
     else
         return eMatchLevel;
 
-    if ( rLocale1.Variant == rLocale2.Variant )
-        eMatchLevel = LOCALE_MATCH_ALL;
+    if ( aLanguageTag1.getCountry() == rLanguageTag2.getCountry() )
+        eMatchLevel = LOCALE_MATCH_LANG_SCRIPT_COUNTRY;
+    else
+        return eMatchLevel;
+
+    if (aLanguageTag1 == rLanguageTag2)
+        return LOCALE_MATCH_ALL;
 
     return eMatchLevel;
 }
@@ -87,6 +95,7 @@ static void lclMatchKeyword(String& rName, const ScCellKeywordHashMap& aMap,
         return;
     }
 
+    LanguageTag aLanguageTag( pLocale ? *pLocale : Locale("","",""));
     const sal_Char* aBestMatchName = itr->second.front().mpName;
     LocaleMatch eLocaleMatchLevel = LOCALE_MATCH_NONE;
     bool bOpCodeMatched = false;
@@ -99,7 +108,7 @@ static void lclMatchKeyword(String& rName, const ScCellKeywordHashMap& aMap,
         {
             if ( itrList->meOpCode == eOpCode )
             {
-                LocaleMatch eLevel = lclLocaleCompare(itrList->mrLocale, *pLocale);
+                LocaleMatch eLevel = lclLocaleCompare(itrList->mrLocale, aLanguageTag);
                 if ( eLevel == LOCALE_MATCH_ALL )
                 {
                     // Name with matching opcode and locale found.
@@ -130,7 +139,7 @@ static void lclMatchKeyword(String& rName, const ScCellKeywordHashMap& aMap,
         }
         else if ( !eOpCode && pLocale )
         {
-            LocaleMatch eLevel = lclLocaleCompare(itrList->mrLocale, *pLocale);
+            LocaleMatch eLevel = lclLocaleCompare(itrList->mrLocale, aLanguageTag);
             if ( eLevel == LOCALE_MATCH_ALL )
             {
                 // Name with matching locale preferred.
