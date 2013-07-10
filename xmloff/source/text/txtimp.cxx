@@ -1029,39 +1029,32 @@ SvXMLImportPropertyMapper *XMLTextImportHelper::CreateShapeExtPropMapper(SvXMLIm
 {
     XMLPropertySetMapper *pPropMapper =
         new XMLTextPropertySetMapper( TEXT_PROP_MAP_FRAME );
-    return new XMLTextImportPropertyMapper( pPropMapper, rImport,
-                   const_cast<XMLFontStylesContext*>(rImport.GetFontDecls()) );
+    return new XMLTextImportPropertyMapper( pPropMapper, rImport );
 }
 
-SvXMLImportPropertyMapper *XMLTextImportHelper::CreateParaExtPropMapper(SvXMLImport& rImport, XMLFontStylesContext *pFontDecls)
+SvXMLImportPropertyMapper *XMLTextImportHelper::CreateParaExtPropMapper(SvXMLImport& rImport)
 {
     XMLPropertySetMapper *pPropMapper =
         new XMLTextPropertySetMapper( TEXT_PROP_MAP_SHAPE_PARA );
-    if (!pFontDecls)
-        pFontDecls = const_cast<XMLFontStylesContext*>(rImport.GetFontDecls());
-    return new XMLTextImportPropertyMapper( pPropMapper, rImport, pFontDecls );
+    return new XMLTextImportPropertyMapper( pPropMapper, rImport );
 }
 
-SvXMLImportPropertyMapper *XMLTextImportHelper::CreateParaDefaultExtPropMapper(SvXMLImport& rImport, XMLFontStylesContext* pFontDecls)
+SvXMLImportPropertyMapper *XMLTextImportHelper::CreateParaDefaultExtPropMapper(SvXMLImport& rImport)
 {
-    if (!pFontDecls)
-        pFontDecls = const_cast<XMLFontStylesContext*>(rImport.GetFontDecls());
-
     XMLPropertySetMapper* pPropMapper =
         new XMLTextPropertySetMapper( TEXT_PROP_MAP_SHAPE_PARA );
-    SvXMLImportPropertyMapper* pImportMapper = new XMLTextImportPropertyMapper( pPropMapper, rImport, pFontDecls );
+    SvXMLImportPropertyMapper* pImportMapper = new XMLTextImportPropertyMapper( pPropMapper, rImport );
 
     pPropMapper =
         new XMLTextPropertySetMapper( TEXT_PROP_MAP_TEXT_ADDITIONAL_DEFAULTS );
-    pImportMapper->ChainImportMapper( new XMLTextImportPropertyMapper( pPropMapper, rImport, pFontDecls ) );
+    pImportMapper->ChainImportMapper( new XMLTextImportPropertyMapper( pPropMapper, rImport ) );
 
     return pImportMapper;
 }
 
 SvXMLImportPropertyMapper*
     XMLTextImportHelper::CreateTableDefaultExtPropMapper(
-        SvXMLImport& rImport,
-        XMLFontStylesContext* )
+        SvXMLImport& rImport )
 {
     XMLPropertySetMapper *pPropMapper =
         new XMLTextPropertySetMapper( TEXT_PROP_MAP_TABLE_DEFAULTS );
@@ -1070,8 +1063,7 @@ SvXMLImportPropertyMapper*
 
 SvXMLImportPropertyMapper*
     XMLTextImportHelper::CreateTableRowDefaultExtPropMapper(
-        SvXMLImport& rImport,
-        XMLFontStylesContext* )
+        SvXMLImport& rImport )
 {
     XMLPropertySetMapper *pPropMapper =
         new XMLTextPropertySetMapper( TEXT_PROP_MAP_TABLE_ROW_DEFAULTS );
@@ -2153,20 +2145,6 @@ void XMLTextImportHelper::SetRuby(
 void XMLTextImportHelper::SetAutoStyles( SvXMLStylesContext *pStyles )
 {
     m_pImpl->m_xAutoStyles = pStyles;
-}
-
-void XMLTextImportHelper::SetFontDecls( XMLFontStylesContext *pFontDecls )
-{
-    m_pImpl->m_xFontDecls = pFontDecls;
-    ((XMLTextImportPropertyMapper *)m_pImpl->m_xParaImpPrMap.get())
-        ->SetFontDecls( pFontDecls );
-    ((XMLTextImportPropertyMapper *)m_pImpl->m_xTextImpPrMap.get())
-        ->SetFontDecls( pFontDecls );
-}
-
-const XMLFontStylesContext *XMLTextImportHelper::GetFontDecls() const
-{
-    return (XMLFontStylesContext *)&m_pImpl->m_xFontDecls;
 }
 
 SvXMLImportContext *XMLTextImportHelper::CreateTextChildContext(

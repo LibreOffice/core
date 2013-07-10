@@ -54,7 +54,7 @@ bool XMLTextImportPropertyMapper::handleSpecialItem(
     case CTF_FONTNAME:
     case CTF_FONTNAME_CJK:
     case CTF_FONTNAME_CTL:
-        if( xFontDecls.Is() )
+        if( GetImport().GetFontDecls() != NULL )
         {
             DBG_ASSERT(
                 ( CTF_FONTFAMILYNAME ==
@@ -89,7 +89,7 @@ bool XMLTextImportPropertyMapper::handleSpecialItem(
                     getPropertySetMapper()->GetEntryContextId(nIndex+5) ),
                 "illegal property map" );
 
-            ((XMLFontStylesContext *)&xFontDecls)->FillProperties(
+            GetImport().GetFontDecls()->FillProperties(
                             rValue, rProperties,
                             rProperty.mnIndex+1, rProperty.mnIndex+2,
                             rProperty.mnIndex+3, rProperty.mnIndex+4,
@@ -132,23 +132,15 @@ bool XMLTextImportPropertyMapper::handleSpecialItem(
 
 XMLTextImportPropertyMapper::XMLTextImportPropertyMapper(
             const UniReference< XMLPropertySetMapper >& rMapper,
-            SvXMLImport& rImp,
-            XMLFontStylesContext *pFontDecls ) :
+            SvXMLImport& rImp ) :
     SvXMLImportPropertyMapper( rMapper, rImp ),
     nSizeTypeIndex( -2 ),
-    nWidthTypeIndex( -2 ),
-    xFontDecls( pFontDecls )
+    nWidthTypeIndex( -2 )
 {
 }
 
 XMLTextImportPropertyMapper::~XMLTextImportPropertyMapper()
 {
-}
-
-void XMLTextImportPropertyMapper::SetFontDecls(
-        XMLFontStylesContext *pFontDecls )
-{
-    xFontDecls = pFontDecls;
 }
 
 void XMLTextImportPropertyMapper::FontFinished(

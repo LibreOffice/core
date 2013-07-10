@@ -213,9 +213,9 @@ UniReference < SvXMLImportPropertyMapper >
                 if( !m_xCellImpPropMapper.is() )
                 {
                     m_xCellImpPropMapper =
-                        new XMLTextImportPropertyMapper/*OSpecialHanldeXMLImportPropertyMapper*/( rImport.GetCellStylesPropertySetMapper(), m_rImport , const_cast<XMLFontStylesContext*>(m_rImport.GetFontDecls()));
+                        new XMLTextImportPropertyMapper/*OSpecialHanldeXMLImportPropertyMapper*/( rImport.GetCellStylesPropertySetMapper(), m_rImport );
 
-                    m_xCellImpPropMapper->ChainImportMapper(XMLTextImportHelper::CreateParaExtPropMapper(m_rImport, const_cast<XMLFontStylesContext*>(m_rImport.GetFontDecls())));
+                    m_xCellImpPropMapper->ChainImportMapper(XMLTextImportHelper::CreateParaExtPropMapper(m_rImport));
                 }
                 xMapper = m_xCellImpPropMapper;
             }
