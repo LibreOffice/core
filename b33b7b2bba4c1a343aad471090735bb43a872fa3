@@ -69,6 +69,24 @@
       "revId": "b33b7b2bba4c1a343aad471090735bb43a872fa3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn///DI\u003d",
+        "filename": "sc/source/core/tool/interpr4.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3229,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-07-10T13:02:56Z",
+      "side": 1,
+      "message": "As mentioned on IRC ;-)  Handle svDouble and svString, else SetError( errIllegalArgument)\n\nComplicated types AFAIK could not occur, especially an svRefList would need to have an external reference hold an entire formula expression.",
+      "parentUuid": "AAAAXn///DQ\u003d",
+      "revId": "b33b7b2bba4c1a343aad471090735bb43a872fa3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
