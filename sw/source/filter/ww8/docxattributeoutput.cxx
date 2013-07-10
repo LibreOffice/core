@@ -2179,6 +2179,19 @@ void DocxAttributeOutput::StartStyles()
     m_pSerializer->startElementNS( XML_w, XML_styles,
             FSNS( XML_xmlns, XML_w ), "http://schemas.openxmlformats.org/wordprocessingml/2006/main",
             FSEND );
+
+    DocDefaults();
+}
+
+void DocxAttributeOutput::DocDefaults( )
+{
+    // To-Do : fill the '<w:docDefaults>' node with actual data
+
+    // Write the '<w:docDefaults>' section here
+    m_pSerializer->startElementNS( XML_w, XML_docDefaults, FSEND );
+    m_pSerializer->singleElementNS( XML_w, XML_rPrDefault, FSEND );
+    m_pSerializer->singleElementNS( XML_w, XML_pPrDefault, FSEND );
+    m_pSerializer->endElementNS( XML_w, XML_docDefaults );
 }
 
 void DocxAttributeOutput::EndStyles( sal_uInt16 /*nNumberOfStyles*/ )

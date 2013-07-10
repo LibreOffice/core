@@ -192,6 +192,9 @@ public:
     /// Write default style.
     virtual void DefaultStyle( sal_uInt16 nStyle );
 
+    /// Write Doc Defaults
+    void DocDefaults( );
+
     /// Start of a style in the styles table.
     virtual void StartStyle( const String& rName, bool bPapFmt,
             sal_uInt16 nBase, sal_uInt16 nNext, sal_uInt16 nWwId, sal_uInt16 nId,
