@@ -1994,10 +1994,7 @@ void ScColumn::CopyUpdated( const ScColumn& rPosCol, ScColumn& rDestCol ) const
     sc::CellStoreType::const_iterator itPos = maCells.begin();
     sc::SingleColumnSpanSet::SpansType::const_iterator it = aRanges.begin(), itEnd = aRanges.end();
     for (; it != itEnd; ++it)
-    {
         itPos = sc::ParseBlock(itPos, maCells, aFunc, it->mnRow1, it->mnRow2);
-        rDestCol.RegroupFormulaCells(it->mnRow1, it->mnRow2);
-    }
 
     rDestCol.CellStorageModified();
 }
