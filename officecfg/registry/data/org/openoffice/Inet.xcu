@@ -179,50 +179,6 @@
         </prop>
       </node>
     </node>
-    <node oor:name="AltaVista" oor:op="replace">
-      <node oor:name="Or">
-        <prop oor:name="ooInetPrefix" oor:type="xs:string">
-          <value>http://www.altavista.com/web/results/?qbmode=&amp;aqa=&amp;aqp=&amp;aqo=</value>
-        </prop>
-        <prop oor:name="ooInetSeparator" oor:type="xs:string">
-          <value>+</value>
-        </prop>
-        <prop oor:name="ooInetSuffix" oor:type="xs:string">
-          <value>&amp;aqn=&amp;kgs=0&amp;kls=1&amp;avkw=aapt</value>
-        </prop>
-        <prop oor:name="ooInetCaseMatch" oor:type="xs:int">
-          <value>0</value>
-        </prop>
-      </node>
-      <node oor:name="And">
-        <prop oor:name="ooInetPrefix" oor:type="xs:string">
-          <value>http://www.altavista.com/web/results/?qbmode=&amp;aqa=</value>
-        </prop>
-        <prop oor:name="ooInetSuffix" oor:type="xs:string">
-          <value>&amp;aqp=&amp;aqo=&amp;aqn=&amp;kgs=0&amp;kls=1&amp;avkw=aapt</value>
-        </prop>
-        <prop oor:name="ooInetCaseMatch" oor:type="xs:int">
-          <value>0</value>
-        </prop>
-        <prop oor:name="ooInetSeparator" oor:type="xs:string">
-          <value>+</value>
-        </prop>
-      </node>
-      <node oor:name="Exact">
-        <prop oor:name="ooInetPrefix" oor:type="xs:string">
-          <value>http://www.altavista.com/web/results?q=%22</value>
-        </prop>
-        <prop oor:name="ooInetSuffix" oor:type="xs:string">
-          <value>%22&amp;kgs=0&amp;kls=1&amp;avkw=aapt</value>
-        </prop>
-        <prop oor:name="ooInetCaseMatch" oor:type="xs:int">
-          <value>0</value>
-        </prop>
-        <prop oor:name="ooInetSeparator" oor:type="xs:string">
-          <value>%20</value>
-        </prop>
-      </node>
-    </node>
     <node oor:name="Google" oor:op="replace">
       <node oor:name="And">
         <prop oor:name="ooInetSuffix" oor:type="xs:string">
