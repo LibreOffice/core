@@ -38,6 +38,7 @@
 #endif
 
 #include "sqlbison.hxx"
+#undef SQLyylex
 #endif
 #include "sqlscan.hxx"
 #include <osl/diagnose.h>
