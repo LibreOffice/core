@@ -194,6 +194,55 @@ namespace
         }
         return aValue;
     }
+
+    libcmis::PropertyPtr lcl_unoToCmisProperty( document::CmisProperty prop )
+    {
+        libcmis::PropertyTypePtr propertyType( new libcmis::PropertyType( ) );
+
+        OUString id = prop.Id;
+        OUString name = prop.Name;
+        bool bUpdatable = prop.Updatable;
+        bool bRequired = prop.Required;
+        bool bMultiValued = prop.MultiValued;
+        bool bOpenChoice = prop.OpenChoice;
+        uno::Any value = prop.Value;
+        libcmis::PropertyType::Type type = libcmis::PropertyType::String;
+
+        propertyType->setId( OUSTR_TO_STDSTR( id ));
+        propertyType->setDisplayName( OUSTR_TO_STDSTR( name ) );
+        propertyType->setUpdatable( bUpdatable );
+        propertyType->setRequired( bRequired );
+        propertyType->setMultiValued( bMultiValued );
+        propertyType->setOpenChoice( bOpenChoice );
+        propertyType->setType( type );
+
+        std::vector< std::string > values;
+
+        // convert UNO value to string vector
+        if ( bMultiValued )
+        {
+            uno::Sequence< OUString > aStrings;
+            value >>= aStrings;
+            sal_Int32 len = aStrings.getLength( );
+            for ( sal_Int32 i = 0; i < len; i++ )
+            {
+                string str = OUSTR_TO_STDSTR( aStrings[i] );
+                values.push_back( str );
+            }
+        }
+        else
+        {
+            OUString val;
+            value >>= val;
+            std::string str = OUSTR_TO_STDSTR( val );
+            values.push_back( str);
+        }
+
+        libcmis::PropertyPtr property( new libcmis::Property( propertyType, values ) );
+
+        return property;
+    }
+
 }
 
 namespace cmis
@@ -414,11 +463,21 @@ namespace cmis
     }
 
     libcmis::ObjectPtr Content::updateProperties(
-         const uno::Any& /*iCmisProps*/,
+         const uno::Any& iCmisProps,
          const uno::Reference< ucb::XCommandEnvironment >& xEnv )
     {
-        // TODO convert iCmisProps to aProperties;
+        // Convert iCmisProps to Cmis Properties;
+        uno::Sequence< document::CmisProperty > aPropsSeq;
+        iCmisProps >>= aPropsSeq;
         map< string, libcmis::PropertyPtr > aProperties;
+
+        sal_Int32 propsLen = aPropsSeq.getLength( );
+        for ( sal_Int32 i = 0; i< propsLen; i++ )
+        {
+            std::string id = OUSTR_TO_STDSTR( aPropsSeq[i].Id );
+            libcmis::PropertyPtr prop = lcl_unoToCmisProperty( aPropsSeq[i] );
+            aProperties.insert( std::pair<string, libcmis::PropertyPtr>( id, prop ) );
+        }
         libcmis::ObjectPtr updateObj;
         try
         {
