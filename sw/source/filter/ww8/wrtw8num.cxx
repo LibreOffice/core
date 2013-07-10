@@ -700,8 +700,13 @@ void MSWordExportBase::SubstituteBullet( String& rNumStr,
     if (!bSubstituteBullets)
         return;
     OUString sFontName = rFontName;
-    rNumStr.SetChar(0, msfilter::util::bestFitOpenSymbolToMSFont(rNumStr.GetChar(0),
-        rChrSet, sFontName, !SupportsUnicode()));
+
+    // If Bullet char is "", don't change
+    if (rNumStr.GetChar(0) != sal_Unicode(0x0))
+    {
+        rNumStr.SetChar(0, msfilter::util::bestFitOpenSymbolToMSFont(rNumStr.GetChar(0), rChrSet, sFontName, !SupportsUnicode()));
+    }
+
     rFontName = sFontName;
 }
 

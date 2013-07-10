@@ -287,7 +287,11 @@ void SvxXMLNumRuleExport::exportLevelStyle( sal_Int32 nLevel,
             GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_BULLET_CHAR,
                           sTmp.makeStringAndClear() );
         }
-
+        else
+        {
+            // If 'cBullet' is zero, XML_BULLET_CHAR must exist with blank.
+            GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_BULLET_CHAR, "");
+        }
     }
     else if( NumberingType::BITMAP == eType )
     {
