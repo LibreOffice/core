@@ -224,99 +224,16 @@ namespace
         return BitmapEx( aSolid, aMask );
     }
 
-    /** Shameless rip from vcl/source/gdi/outdev3.cxx
-
-        Should consolidate, into something like basetxt...
-     */
-    sal_Unicode getLocalizedChar( sal_Unicode nChar, LanguageType eLang )
-    {
-        // currently only conversion from ASCII digits is interesting
-        if( (nChar < '0') || ('9' < nChar) )
-            return nChar;
-
-        sal_Unicode nOffset(0);
-        // eLang & LANGUAGE_MASK_PRIMARY catches language independent of region.
-        // CAVEAT! To some like Mongolian MS assigned the same primary language
-        // although the script type is different!
-        switch( eLang & LANGUAGE_MASK_PRIMARY )
-        {
-            default:
-                break;
-
-            case LANGUAGE_ARABIC_SAUDI_ARABIA  & LANGUAGE_MASK_PRIMARY:
-            case LANGUAGE_URDU          & LANGUAGE_MASK_PRIMARY:
-            case LANGUAGE_PUNJABI       & LANGUAGE_MASK_PRIMARY: //???
-                nOffset = 0x0660 - '0';  // arabic/persian/urdu
-                break;
-            case LANGUAGE_BENGALI       & LANGUAGE_MASK_PRIMARY:
-                nOffset = 0x09E6 - '0';  // bengali
-                break;
-            case LANGUAGE_BURMESE       & LANGUAGE_MASK_PRIMARY:
-                nOffset = 0x1040 - '0';  // burmese
-                break;
-            case LANGUAGE_HINDI         & LANGUAGE_MASK_PRIMARY:
-                nOffset = 0x0966 - '0';  // devanagari
-                break;
-            case LANGUAGE_GUJARATI      & LANGUAGE_MASK_PRIMARY:
-                nOffset = 0x0AE6 - '0';  // gujarati
-                break;
-            case LANGUAGE_KANNADA       & LANGUAGE_MASK_PRIMARY:
-                nOffset = 0x0CE6 - '0';  // kannada
-                break;
-            case LANGUAGE_KHMER         & LANGUAGE_MASK_PRIMARY:
-                nOffset = 0x17E0 - '0';  // khmer
-                break;
-            case LANGUAGE_LAO           & LANGUAGE_MASK_PRIMARY:
-                nOffset = 0x0ED0 - '0';  // lao
-                break;
-            case LANGUAGE_MALAYALAM     & LANGUAGE_MASK_PRIMARY:
-                nOffset = 0x0D66 - '0';   // malayalam
-                break;
-            case LANGUAGE_MONGOLIAN     & LANGUAGE_MASK_PRIMARY:
-                if (eLang == LANGUAGE_MONGOLIAN_MONGOLIAN)
-                    nOffset = 0x1810 - '0';   // mongolian
-                else
-                    nOffset = 0;              // mongolian cyrillic
-                break;
-            case LANGUAGE_ORIYA         & LANGUAGE_MASK_PRIMARY:
-                nOffset = 0x0B66 - '0';   // oriya
-                break;
-            case LANGUAGE_TAMIL         & LANGUAGE_MASK_PRIMARY:
-                nOffset = 0x0BE7 - '0';   // tamil
-                break;
-            case LANGUAGE_TELUGU        & LANGUAGE_MASK_PRIMARY:
-                nOffset = 0x0C66 - '0';   // telugu
-                break;
-            case LANGUAGE_THAI          & LANGUAGE_MASK_PRIMARY:
-                nOffset = 0x0E50 - '0';   // thai
-                break;
-            case LANGUAGE_TIBETAN       & LANGUAGE_MASK_PRIMARY:
-                nOffset = 0x0F20 - '0';   // tibetan
-                break;
-        }
-
-        nChar = sal::static_int_cast<sal_Unicode>(nChar + nOffset);
-        return nChar;
-    }
-
     OUString convertToLocalizedNumerals(const OUString& rStr,
         LanguageType eTextLanguage)
     {
         OUStringBuffer aBuf(rStr);
-
         for (sal_Int32 i = 0; i < aBuf.getLength(); ++i)
         {
-            // TODO: are there non-digit localizations?
-            sal_Unicode nOrigChar = aBuf[i];
-            if( (nOrigChar >= '0') && (nOrigChar <= '9') )
-            {
-                // translate characters to local preference
-                sal_Unicode cChar = getLocalizedChar(nOrigChar, eTextLanguage);
-                if (cChar != nOrigChar)
-                    aBuf[i] = cChar;
-            }
+            sal_Unicode nChar = aBuf[i];
+            if (nChar >= '0' && nChar <= '9')
+                aBuf[i] = GetLocalizedChar(nChar, eTextLanguage);
         }
-
         return aBuf.makeStringAndClear();
     }
 }
