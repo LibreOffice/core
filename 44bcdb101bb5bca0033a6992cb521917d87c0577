@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXn///Eo\u003d",
+        "filename": "sc/source/core/tool/interpr4.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3301,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-07-10T10:30:57Z",
+      "side": 1,
+      "message": "There\u0027s nothing wrong with \"manually\" handling the two cases, but just as a hint that this could be simply a call to GetMatrix() instead that takes care of all various matrix situations and actually internally does the same, so just replacing the original call to PopMatrix() with GetMatrix() would do and be slightly more readable.",
+      "revId": "44bcdb101bb5bca0033a6992cb521917d87c0577",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
