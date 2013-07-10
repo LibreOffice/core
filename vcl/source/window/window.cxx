@@ -8481,19 +8481,11 @@ uno::Reference< XClipboard > Window::GetClipboard()
             try
             {
                 uno::Reference< XComponentContext > xContext( comphelper::getProcessComponentContext() );
-                Reference<XSystemClipboard> xSystemClipboard = SystemClipboard::createDefault(xContext);
+                Reference<XSystemClipboard> xSystemClipboard;
 #if defined(UNX) && !defined(MACOSX)          // unix clipboard needs to be initialized
-                uno::Reference< XInitialization > xInit = uno::Reference< XInitialization >( xSystemClipboard, UNO_QUERY );
-
-                if( xInit.is() )
-                {
-                    Sequence< Any > aArgumentList( 3 );
-                    aArgumentList[ 0 ] = makeAny( Application::GetDisplayConnection() );
-                    aArgumentList[ 1 ] = makeAny( OUString("CLIPBOARD") );
-                    aArgumentList[ 2 ] = makeAny( vcl::createBmpConverter() );
-
-                    xInit->initialize( aArgumentList );
-                }
+                xSystemClipboard = SystemClipboard::createUnix( xContext, Application::GetDisplayConnection(), "CLIPBOARD", vcl::createBmpConverter() );
+#else
+                xSystemClipboard = SystemClipboard::createDefault(xContext);
 #endif
                 mpWindowImpl->mpFrameData->mxClipboard.set( xSystemClipboard, UNO_QUERY );
             }
