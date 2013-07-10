@@ -337,39 +337,24 @@ public:
  -----------------------------------------------------------------------*/
 class SwRedlineOptionsTabPage : public SfxTabPage
 {
-    FixedLine           aInsertFL;
+    ListBox*             pInsertLB;
+    ColorListBox*        pInsertColorLB;
+    SvxFontPrevWindow*   pInsertedPreviewWN;
 
-    FixedText           aInsertFT;
-    FixedText           aInsertAttrFT;
-    ListBox             aInsertLB;
-    FixedText           aInsertColorFT;
-    ColorListBox        aInsertColorLB;
-    SvxFontPrevWindow   aInsertedPreviewWN;
+    ListBox*             pDeletedLB;
+    ColorListBox*        pDeletedColorLB;
+    SvxFontPrevWindow*   pDeletedPreviewWN;
 
-    FixedText           aDeletedFT;
-    FixedText           aDeletedAttrFT;
-    ListBox             aDeletedLB;
-    FixedText           aDeletedColorFT;
-    ColorListBox        aDeletedColorLB;
-    SvxFontPrevWindow   aDeletedPreviewWN;
+    ListBox*             pChangedLB;
+    ColorListBox*        pChangedColorLB;
+    SvxFontPrevWindow*   pChangedPreviewWN;
 
-    FixedText           aChangedFT;
-    FixedText           aChangedAttrFT;
-    ListBox             aChangedLB;
-    FixedText           aChangedColorFT;
-    ColorListBox        aChangedColorLB;
-    SvxFontPrevWindow   aChangedPreviewWN;
+    ListBox*             pMarkPosLB;
+    ColorListBox*        pMarkColorLB;
+    SwMarkPreview*       pMarkPreviewWN;
 
-    FixedLine           aChangedFL;
-
-    FixedText           aMarkPosFT;
-    ListBox             aMarkPosLB;
-    FixedText           aMarkColorFT;
-    ColorListBox        aMarkColorLB;
-    SwMarkPreview       aMarkPreviewWN;
-
-    String              sAuthor;
-    String              sNone;
+    //String              sAuthor;
+    //String              sNone;
 
     SwRedlineOptionsTabPage( Window* pParent, const SfxItemSet& rSet );
     ~SwRedlineOptionsTabPage();
