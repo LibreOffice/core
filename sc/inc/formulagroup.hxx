@@ -39,6 +39,9 @@ class SC_DLLPUBLIC FormulaGroupInterpreter
  protected:
     FormulaGroupInterpreter() {}
     virtual ~FormulaGroupInterpreter() {}
+
+    static void generateRPNCode(ScDocument& rDoc, const ScAddress& rPos, ScTokenArray& rCode);
+
  public:
     static FormulaGroupInterpreter *getStatic();
 

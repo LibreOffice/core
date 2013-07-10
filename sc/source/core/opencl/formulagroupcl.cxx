@@ -65,6 +65,8 @@ ScMatrixRef FormulaGroupInterpreterOpenCL::inverseMatrix(const ScMatrix& /* rMat
 bool FormulaGroupInterpreterOpenCL::interpret(ScDocument& rDoc, const ScAddress& rTopPos,
                                               const ScFormulaCellGroupRef& xGroup, ScTokenArray& rCode)
 {
+    generateRPNCode(rDoc, rTopPos, rCode);
+
     size_t rowSize = xGroup->mnLength;
     fprintf(stderr,"rowSize at begin is ...%ld.\n",(long)rowSize);
     // The row quantity can be gotten from p2->GetArrayLength()
@@ -193,9 +195,7 @@ bool FormulaGroupInterpreterOpenCL::interpret(ScDocument& rDoc, const ScAddress&
         if(!getenv("SC_GPU")||!ocl_calc.GetOpenclState())
         {
             fprintf(stderr,"ccCPU flow...\n\n");
-            ScCompiler aComp(&rDoc, aTmpPos, aCode2);
-            aComp.SetGrammar(rDoc.GetGrammar());
-            aComp.CompileTokenArray(); // Create RPN token array.
+            generateRPNCode(rDoc, aTmpPos, aCode2);
             ScInterpreter aInterpreter(pDest, &rDoc, aTmpPos, aCode2);
             aInterpreter.Interpret();
             pDest->SetResultToken(aInterpreter.GetResultToken().get());
@@ -306,6 +306,8 @@ bool FormulaGroupInterpreterGroundwater::interpret(ScDocument& rDoc, const ScAdd
                                                    const ScFormulaCellGroupRef& xGroup,
                                                    ScTokenArray& rCode)
 {
+    generateRPNCode(rDoc, rTopPos, rCode);
+
     // Inputs: both of length xGroup->mnLength
     OpCode eOp; // type of operation: ocAverage, ocMax, ocMin
     const double *pArrayToSubtractOneElementFrom;
