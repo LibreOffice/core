@@ -53,7 +53,7 @@
 #pragma warning(disable:4273 4701 4706)
 #endif
 
-static ::rtl::OUString aEmptyString;
+static const ::rtl::OUString aEmptyString;
 
 static connectivity::OSQLInternalNode* newNode(const sal_Char* pNewValue,
 							     const connectivity::SQLNodeType eNodeType,
