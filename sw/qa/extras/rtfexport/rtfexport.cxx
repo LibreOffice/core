@@ -64,6 +64,7 @@ public:
     void testHyperlink();
     void testTextFrameBorders();
     void testTextframeGradient();
+    void testFdo66682();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -117,6 +118,7 @@ void Test::run()
         {"hyperlink.rtf", &Test::testHyperlink},
         {"textframe-borders.rtf", &Test::testTextFrameBorders},
         {"textframe-gradient.rtf", &Test::testTextframeGradient},
+        {"fdo66682.rtf", &Test::testFdo66682},
     };
     // Don't test the first import of these, for some reason those tests fail
     const char* aBlacklist[] = {
@@ -582,6 +584,25 @@ void Test::testTextframeGradient()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0x000000), aGradient.StartColor);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0x666666), aGradient.EndColor);
     CPPUNIT_ASSERT_EQUAL(awt::GradientStyle_AXIAL, aGradient.Style);
+}
+
+void Test::testFdo66682()
+{
+    uno::Reference<beans::XPropertySet> xPropertySet(getStyles("NumberingStyles")->getByName("WWNum1"), uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xLevels(xPropertySet->getPropertyValue("NumberingRules"), uno::UNO_QUERY);
+    uno::Sequence<beans::PropertyValue> aProps;
+    xLevels->getByIndex(0) >>= aProps; // 1st level
+
+    OUString aSuffix;
+    for (int i = 0; i < aProps.getLength(); ++i)
+    {
+        const beans::PropertyValue& rProp = aProps[i];
+
+        if (rProp.Name == "Suffix")
+            aSuffix = rProp.Value.get<OUString>();
+    }
+    // Suffix was '\0' instead of ' '.
+    CPPUNIT_ASSERT_EQUAL(OUString(" "), aSuffix);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
