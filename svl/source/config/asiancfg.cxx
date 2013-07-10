@@ -40,31 +40,17 @@
 #include "rtl/ustring.hxx"
 #include "sal/log.hxx"
 #include "sal/types.h"
+#include "i18nlangtag/languagetag.hxx"
 #include "svl/asiancfg.hxx"
 
 namespace {
 
 OUString toString(css::lang::Locale const & locale) {
-    SAL_WARN_IF(
-        locale.Language.indexOf('-') != -1, "svl",
-        "Locale language \"" << locale.Language << "\" contains \"-\"");
-    OUStringBuffer buf(locale.Language);
-    SAL_WARN_IF(
-        locale.Country.isEmpty() && !locale.Variant.isEmpty(), "svl",
-        "Locale has empty country but non-empty variant \"" << locale.Variant
-            << '"');
-    if (!locale.Country.isEmpty()) {
-        buf.append('-');
-        SAL_WARN_IF(
-            locale.Country.indexOf('-') != -1, "svl",
+    SAL_WARN_IF( locale.Language.indexOf('-') != -1, "svl",
+            "Locale language \"" << locale.Language << "\" contains \"-\"");
+    SAL_WARN_IF( locale.Country.indexOf('-') != -1, "svl",
             "Locale country \"" << locale.Country << "\" contains \"-\"");
-        buf.append(locale.Country);
-        if (!locale.Variant.isEmpty()) {
-            buf.append('-');
-            buf.append(locale.Variant);
-        }
-    }
-    return buf.makeStringAndClear();
+    return LanguageTag( locale).getBcp47( false);
 }
 
 }
