@@ -1417,34 +1417,83 @@ static void CalcAutoLayoutRectangles( SdPage& rPage, int nLayout, Rectangle* rRe
         break;
 
     case 5: // title, 2 shapes above shape
-        aLayoutSize.Height() = long (aLayoutSize.Height() * 0.477);
-        aLayoutSize.Width() = long (aLayoutSize.Width() * 0.488);
+        // aLayoutSize.Height() = long (aLayoutSize.Height() * 0.477);
+        // aLayoutSize.Width() = long (aLayoutSize.Width() * 0.488);
+        // rRectangle[1] = Rectangle (aLayoutPos, aLayoutSize);
+
+        // aTempPnt = aLayoutPos;
+        // aLayoutPos.X() = long (aLayoutPos.X() + aLayoutSize.Width() * 1.05);
+        // rRectangle[2] = Rectangle (aLayoutPos, aLayoutSize);
+
+        // aLayoutPos.X() = aTempPnt.X();
+        // aLayoutPos.Y() = long (aLayoutPos.Y() + aLayoutSize.Height() * 1.095);
+        // aLayoutSize.Width() = long (aLayoutSize.Width() / 0.488);
+        // rRectangle[3] = Rectangle (aLayoutPos, aLayoutSize);
+        // break;
+        readLayoutPropFromFile(root, "AUTOLAYOUT_TITLE_CONTENT_2CONTENT" ,"PRESOBJ_OUTLINE1" ,propvalue);
+        aLayoutPos.X() = propvalue[0];
+        aLayoutPos.Y() = propvalue[1];
+        aLayoutSize.Height() = propvalue[2];
+        aLayoutSize.Width() = propvalue[3];
         rRectangle[1] = Rectangle (aLayoutPos, aLayoutSize);
 
-        aTempPnt = aLayoutPos;
-        aLayoutPos.X() = long (aLayoutPos.X() + aLayoutSize.Width() * 1.05);
+        readLayoutPropFromFile(root, "AUTOLAYOUT_TITLE_CONTENT_2CONTENT" ,"PRESOBJ_OUTLINE2" ,propvalue);
+        aLayoutPos.X() = propvalue[0];
+        aLayoutPos.Y() = propvalue[1];
+        aLayoutSize.Height() = propvalue[2];
+        aLayoutSize.Width() = propvalue[3];
         rRectangle[2] = Rectangle (aLayoutPos, aLayoutSize);
 
-        aLayoutPos.X() = aTempPnt.X();
-        aLayoutPos.Y() = long (aLayoutPos.Y() + aLayoutSize.Height() * 1.095);
-        aLayoutSize.Width() = long (aLayoutSize.Width() / 0.488);
+        readLayoutPropFromFile(root, "AUTOLAYOUT_TITLE_CONTENT_2CONTENT" ,"PRESOBJ_OUTLINE3" ,propvalue);
+        aLayoutPos.X() = propvalue[0];
+        aLayoutPos.Y() = propvalue[1];
+        aLayoutSize.Height() = propvalue[2];
+        aLayoutSize.Width() = propvalue[3];
         rRectangle[3] = Rectangle (aLayoutPos, aLayoutSize);
         break;
     case 6: // title, 4 shapes
     {
-        sal_uLong nX = long (aLayoutPos.X());
+        // sal_uLong nX = long (aLayoutPos.X());
 
-        aLayoutSize.Height() = long (aLayoutSize.Height() * 0.477);
-        aLayoutSize.Width()  = long (aLayoutSize.Width() * 0.488);
+        // aLayoutSize.Height() = long (aLayoutSize.Height() * 0.477);
+        // aLayoutSize.Width()  = long (aLayoutSize.Width() * 0.488);
+        // rRectangle[1] = Rectangle (aLayoutPos, aLayoutSize);
+
+        // aLayoutPos.X() = long (nX + aLayoutSize.Width() * 1.05);
+        // rRectangle[2] = Rectangle (aLayoutPos, aLayoutSize);
+
+        // aLayoutPos.Y() = long (aLayoutPos.Y() + aLayoutSize.Height() * 1.095);
+        // rRectangle[3] = Rectangle (aLayoutPos, aLayoutSize);
+
+        // aLayoutPos.X() = nX;
+        // rRectangle[4] = Rectangle (aLayoutPos, aLayoutSize);
+        // break;
+        readLayoutPropFromFile(root, "AUTOLAYOUT_TITLE_4SCONTENT" ,"PRESOBJ_OUTLINE1" ,propvalue);
+        aLayoutPos.X() = propvalue[0];
+        aLayoutPos.Y() = propvalue[1];
+        aLayoutSize.Height() = propvalue[2];
+        aLayoutSize.Width() = propvalue[3];
         rRectangle[1] = Rectangle (aLayoutPos, aLayoutSize);
 
-        aLayoutPos.X() = long (nX + aLayoutSize.Width() * 1.05);
+        readLayoutPropFromFile(root, "AUTOLAYOUT_TITLE_4SCONTENT" ,"PRESOBJ_OUTLINE2" ,propvalue);
+        aLayoutPos.X() = propvalue[0];
+        aLayoutPos.Y() = propvalue[1];
+        aLayoutSize.Height() = propvalue[2];
+        aLayoutSize.Width() = propvalue[3];
         rRectangle[2] = Rectangle (aLayoutPos, aLayoutSize);
 
-        aLayoutPos.Y() = long (aLayoutPos.Y() + aLayoutSize.Height() * 1.095);
+        readLayoutPropFromFile(root, "AUTOLAYOUT_TITLE_4SCONTENT" ,"PRESOBJ_OUTLINE3" ,propvalue);
+        aLayoutPos.X() = propvalue[0];
+        aLayoutPos.Y() = propvalue[1];
+        aLayoutSize.Height() = propvalue[2];
+        aLayoutSize.Width() = propvalue[3];
         rRectangle[3] = Rectangle (aLayoutPos, aLayoutSize);
 
-        aLayoutPos.X() = nX;
+        readLayoutPropFromFile(root, "AUTOLAYOUT_TITLE_4SCONTENT" ,"PRESOBJ_OUTLINE4" ,propvalue);
+        aLayoutPos.X() = propvalue[0];
+        aLayoutPos.Y() = propvalue[1];
+        aLayoutSize.Height() = propvalue[2];
+        aLayoutSize.Width() = propvalue[3];
         rRectangle[4] = Rectangle (aLayoutPos, aLayoutSize);
         break;
     }
