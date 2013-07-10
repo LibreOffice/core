@@ -447,6 +447,7 @@ IMPL_LINK(FmSearchDialog, OnSearchTextModified, ComboBox*, EMPTYARG)
 IMPL_LINK(FmSearchDialog, OnFocusGrabbed, ComboBox*, EMPTYARG)
 {
     m_cmbSearchText.SetSelection( Selection( SELECTION_MIN, SELECTION_MAX ) );
+    return 0;
 }
 
 //------------------------------------------------------------------------
