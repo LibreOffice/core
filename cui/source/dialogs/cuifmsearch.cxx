@@ -245,6 +245,7 @@ void FmSearchDialog::Init(const OUString& strVisibleFields, const OUString& sIni
 
     m_cmbSearchText.SetModifyHdl(LINK(this, FmSearchDialog, OnSearchTextModified));
     m_cmbSearchText.EnableAutocomplete(sal_False);
+    m_cmbSearchText.SetGetFocusHdl(LINK(this, FmSearchDialog, OnFocusGrabbed));
 
     m_cbUseFormat.SetToggleHdl(LINK(this, FmSearchDialog, OnCheckBoxToggled));
     m_cbBackwards.SetToggleHdl(LINK(this, FmSearchDialog, OnCheckBoxToggled));
@@ -433,6 +434,13 @@ IMPL_LINK_NOARG(FmSearchDialog, OnSearchTextModified)
         m_pbSearchAgain.Disable();
 
     m_pSearchEngine->InvalidatePreviousLoc();
+    return 0;
+}
+
+//------------------------------------------------------------------------
+IMPL_LINK(FmSearchDialog, OnFocusGrabbed, ComboBox*, EMPTYARG)
+{
+    m_cmbSearchText.SetSelection( Selection( SELECTION_MIN, SELECTION_MAX ) );
     return 0;
 }
 
