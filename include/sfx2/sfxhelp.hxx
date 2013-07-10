@@ -31,8 +31,6 @@ class SFX2_DLLPUBLIC SfxHelp : public Help
 {
     OUString        aTicket;        // for Plugins
     OUString        aUser;
-    OUString        aLanguageStr;
-    OUString        aCountryStr;
     sal_Bool        bIsDebug;
     SfxHelp_Impl*   pImp;
 

@@ -231,28 +231,6 @@ SfxHelp::SfxHelp() :
     }
 
     pImp = new SfxHelp_Impl();
-
-    OUString aLocaleStr = HelpLocaleString();
-
-    sal_Int32 nSepPos = aLocaleStr.indexOf( '_' );
-    if ( nSepPos != -1 )
-    {
-        aLanguageStr = aLocaleStr.copy( 0, nSepPos );
-        aCountryStr = aLocaleStr.copy( nSepPos+1 );
-    }
-    else
-    {
-        nSepPos = aLocaleStr.indexOf( '-' );
-        if ( nSepPos != -1 )
-        {
-            aLanguageStr = aLocaleStr.copy( 0, nSepPos );
-            aCountryStr = aLocaleStr.copy( nSepPos+1 );
-        }
-        else
-        {
-            aLanguageStr = aLocaleStr;
-        }
-    }
 }
 
 SfxHelp::~SfxHelp()
