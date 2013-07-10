@@ -87,6 +87,7 @@ public:
     void testFdo56679();
     void testFdo65400();
     void testFdo66543();
+    void testFdo66781();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -147,6 +148,7 @@ void Test::run()
         {"fdo56679.docx", &Test::testFdo56679},
         {"fdo65400.docx", &Test::testFdo65400},
         {"fdo66543.docx", &Test::testFdo66543},
+        {"fdo66781.docx", &Test::testFdo66781},
     };
     // Don't test the first import of these, for some reason those tests fail
     const char* aBlacklist[] = {
@@ -888,6 +890,29 @@ void Test::testFdo66543()
 
     uno::Reference< text::XTextRange > paragraph1 = getParagraph( 1 );
     CPPUNIT_ASSERT_EQUAL( sal_Int32( 1 ), getProperty< sal_Int32 >( paragraph1, "ParaLineNumberStartValue" ));
+}
+
+void Test::testFdo66781()
+{
+    // The problem was that bullets with level=0 were shown in LO as normal bullets,
+    // and when saved back to DOCX were saved with level=1 (so hidden bullets became visible)
+    uno::Reference<beans::XPropertySet> xPropertySet(getStyles("NumberingStyles")->getByName("WWNum1"), uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xLevels(xPropertySet->getPropertyValue("NumberingRules"), uno::UNO_QUERY);
+    uno::Sequence<beans::PropertyValue> aProps;
+    xLevels->getByIndex(0) >>= aProps; // 1st level
+
+    for (int i = 0; i < aProps.getLength(); ++i)
+    {
+        const beans::PropertyValue& rProp = aProps[i];
+        if (rProp.Name == "BulletChar")
+        {
+            CPPUNIT_ASSERT_EQUAL(OUString("\x0", 1, RTL_TEXTENCODING_UTF8), rProp.Value.get<OUString>());
+            return;
+        }
+    }
+
+    // Shouldn't reach here
+    CPPUNIT_FAIL("Did not find bullet with level 0");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

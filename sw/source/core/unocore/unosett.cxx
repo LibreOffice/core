@@ -1980,8 +1980,15 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
                     {
                         aFmt.SetBulletChar(aChar.toChar());
                     }
+                    else if(aChar.getLength() == 0)
+                    {
+                        // If w:lvlText's value is null - set bullet char to zero
+                        aFmt.SetBulletChar(sal_Unicode(0x0));
+                    }
                     else
+                    {
                         bWrongArg = true;
+                    }
                 }
                 break;
                 case 20: //UNO_NAME_GRAPHIC_URL,
