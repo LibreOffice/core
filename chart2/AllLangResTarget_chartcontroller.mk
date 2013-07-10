@@ -32,7 +32,6 @@ $(eval $(call gb_SrsTarget_add_files,chart2/res,\
     chart2/source/controller/dialogs/dlg_CreationWizard.src \
     chart2/source/controller/dialogs/dlg_DataEditor.src \
     chart2/source/controller/dialogs/dlg_DataSource.src \
-    chart2/source/controller/dialogs/dlg_InsertAxis_Grid.src \
     chart2/source/controller/dialogs/dlg_InsertDataLabel.src \
     chart2/source/controller/dialogs/dlg_InsertErrorBars.src \
     chart2/source/controller/dialogs/dlg_InsertLegend.src \

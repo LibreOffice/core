@@ -28,7 +28,6 @@
 #define DLG_DIAGRAM_TYPE    743
 #define DLG_CHART_WIZARD    902
 #define DLG_DATA_SOURCE     901
-#define DLG_AXIS_OR_GRID    839
 #define DLG_DATA_DESCR      836
 #define DLG_LEGEND          835
 #define DLG_TITLE           834

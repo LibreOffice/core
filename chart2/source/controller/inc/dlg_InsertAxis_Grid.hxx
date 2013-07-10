@@ -48,21 +48,12 @@ struct InsertAxisOrGridDialogData
 class SchAxisDlg : public ModalDialog
 {
 protected:
-    FixedLine           aFlPrimary;
-    FixedLine           aFlPrimaryGrid;
-    CheckBox            aCbPrimaryX;
-    CheckBox            aCbPrimaryY;
-    CheckBox            aCbPrimaryZ;
-
-    FixedLine           aFlSecondary;
-    FixedLine           aFlSecondaryGrid;
-    CheckBox            aCbSecondaryX;
-    CheckBox            aCbSecondaryY;
-    CheckBox            aCbSecondaryZ;
-
-    OKButton            aPbOK;
-    CancelButton        aPbCancel;
-    HelpButton          aPbHelp;
+    CheckBox* m_pCbPrimaryX;
+    CheckBox* m_pCbPrimaryY;
+    CheckBox* m_pCbPrimaryZ;
+    CheckBox* m_pCbSecondaryX;
+    CheckBox* m_pCbSecondaryY;
+    CheckBox* m_pCbSecondaryZ;
 
 public:
     SchAxisDlg( Window* pParent, const InsertAxisOrGridDialogData& rInput, sal_Bool bAxisDlg=true );
