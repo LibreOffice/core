@@ -1957,7 +1957,6 @@ void ScColumn::CopyToColumn(
             sc::ParseBlock(maCells.begin(), maCells, aFunc, nRow1, nRow2);
         }
 
-        rColumn.RegroupFormulaCells(nRow1, nRow2);
         rColumn.CellStorageModified();
     }
 }
