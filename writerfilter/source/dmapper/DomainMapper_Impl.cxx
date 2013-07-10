@@ -3399,9 +3399,12 @@ void DomainMapper_Impl::SetFieldResult( OUString& rResult )
                         bool bIsSetExpression = xServiceInfo->supportsService("com.sun.star.text.TextField.SetExpression");
                         // If we already have content set, then use the current presentation
                         rtl::OUString sValue;
-                        uno::Any aValue = xFieldProperties->getPropertyValue(
-                                rPropNameSupplier.GetName(PROP_CONTENT));
-                        aValue >>= sValue;
+                        if (bIsSetExpression)
+                        {   // this will throw for field types without Content
+                            uno::Any aValue(xFieldProperties->getPropertyValue(
+                                    rPropNameSupplier.GetName(PROP_CONTENT)));
+                            aValue >>= sValue;
+                        }
                         xFieldProperties->setPropertyValue(
                                 rPropNameSupplier.GetName(bIsSetExpression && sValue.isEmpty()? PROP_CONTENT : PROP_CURRENT_PRESENTATION),
                              uno::makeAny( rResult ));
