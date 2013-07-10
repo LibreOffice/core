@@ -23,13 +23,12 @@
 
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
-#include <cppuhelper/compbase3.hxx>
+#include <cppuhelper/compbase4.hxx>
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboardEx.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboardOwner.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboardListener.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboardNotifier.hpp>
-#include <com/sun/star/datatransfer/clipboard/XSystemClipboard.hpp>
 #include <com/sun/star/datatransfer/clipboard/XFlushableClipboard.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -63,9 +62,10 @@ protected:
 
 class CWinClipboard :
     public CWinClipboardDummy,
-    public cppu::WeakComponentImplHelper3<
-        ::com::sun::star::datatransfer::clipboard::XSystemClipboard,
+    public cppu::WeakComponentImplHelper4<
+        ::com::sun::star::datatransfer::clipboard::XClipboardEx, \
         ::com::sun::star::datatransfer::clipboard::XFlushableClipboard,
+        ::com::sun::star::datatransfer::clipboard::XClipboardNotifier,
         ::com::sun::star::lang::XServiceInfo >
 {
 public:

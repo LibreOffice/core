@@ -59,7 +59,7 @@ namespace
 //------------------------------------------------------------------------
 /*XEventListener,*/
 CWinClipboard::CWinClipboard( const Reference< XComponentContext >& rxContext, const OUString& aClipboardName ) :
-    WeakComponentImplHelper3< XSystemClipboard, XFlushableClipboard, XServiceInfo >( m_aCbListenerMutex ),
+    WeakComponentImplHelper4< XClipboardEx, XFlushableClipboard, XClipboardNotifier, XServiceInfo >( m_aCbListenerMutex ),
     m_xContext( rxContext )
 {
     m_pImpl.reset( new CWinClipbImpl( aClipboardName, this ) );
