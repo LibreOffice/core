@@ -62,9 +62,7 @@ void SharedFormulaUtil::splitFormulaCellGroup(const CellStoreType::position_type
     }
 }
 
-namespace {
-
-void joinFormulaCells(const sc::CellStoreType::position_type& rPos, ScFormulaCell& rCell1, ScFormulaCell& rCell2)
+void SharedFormulaUtil::joinFormulaCells(const CellStoreType::position_type& rPos, ScFormulaCell& rCell1, ScFormulaCell& rCell2)
 {
     ScFormulaCell::CompareState eState = rCell1.CompareByTokenArray(rCell2);
     if (eState == ScFormulaCell::NotEqual)
@@ -121,8 +119,6 @@ void joinFormulaCells(const sc::CellStoreType::position_type& rPos, ScFormulaCel
             rCell2.SetCellGroup(xGroup1);
         }
     }
-}
-
 }
 
 void SharedFormulaUtil::joinFormulaCellAbove(const CellStoreType::position_type& aPos)

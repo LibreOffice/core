@@ -66,6 +66,16 @@ public:
     static void splitFormulaCellGroup(const CellStoreType::position_type& aPos);
 
     /**
+     * See if two specified adjacent formula cells can be merged, and if they
+     * can, merge them into the same group.
+     *
+     * @param rPos position object of the first cell
+     * @param rCell1 first cell
+     * @param rCell2 second cell located immediately below the first cell.
+     */
+    static void joinFormulaCells(
+        const CellStoreType::position_type& rPos, ScFormulaCell& rCell1, ScFormulaCell& rCell2);
+    /**
      * Merge with an existing formula group (if any) located immediately above
      * if the cell at specified position is a formula cell, and its formula
      * tokens are identical to that of the above formula group.
