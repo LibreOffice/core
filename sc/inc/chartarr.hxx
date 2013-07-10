@@ -29,9 +29,9 @@
 
 class ScDocument;
 
-// ScMemChart is a stripped-down SchMemChart from old chart,
-// used only to transport a rectangular data array for the UNO API,
-// contains only column/row header text and data values.
+/** ScMemChart is a stripped-down SchMemChart from old chart,
+    used only to transport a rectangular data array for the UNO API,
+    contains only column/row header text and data values.*/
 
 class ScMemChart
 {
@@ -41,7 +41,7 @@ class ScMemChart
     OUString* pColText;
     OUString* pRowText;
 
-    ScMemChart(const ScMemChart& rMemChart);      // not implemented
+    ScMemChart(const ScMemChart& rMemChart);      ///< not implemented
 
 public:
     ScMemChart(short nCols, short nRows);
@@ -57,12 +57,12 @@ public:
     void SetRowText(short nRow, const OUString& rText) { pRowText[nRow] = rText; }
 };
 
-class SC_DLLPUBLIC ScChartArray             // only parameter-struct
+class SC_DLLPUBLIC ScChartArray             ///< only parameter-struct
 {
     OUString aName;
     ScDocument* pDocument;
     ScChartPositioner aPositioner;
-    bool        bValid;             // for creation out of SchMemChart
+    bool        bValid;             ///< for creation out of SchMemChart
 
 private:
     ScMemChart* CreateMemChartSingle();

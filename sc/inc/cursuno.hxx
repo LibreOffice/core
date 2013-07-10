@@ -40,7 +40,7 @@ public:
     virtual void SAL_CALL   acquire() throw();
     virtual void SAL_CALL   release() throw();
 
-                            // XSheetCellCursor
+                            /// XSheetCellCursor
     virtual void SAL_CALL   collapseToCurrentRegion() throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL   collapseToCurrentArray() throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL   collapseToMergedArea() throw(::com::sun::star::uno::RuntimeException);
@@ -49,13 +49,13 @@ public:
     virtual void SAL_CALL   collapseToSize( sal_Int32 nColumns, sal_Int32 nRows )
                                 throw(::com::sun::star::uno::RuntimeException);
 
-                            // XUsedAreaCursor
+                            /// XUsedAreaCursor
     virtual void SAL_CALL   gotoStartOfUsedArea( sal_Bool bExpand )
                                 throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL   gotoEndOfUsedArea( sal_Bool bExpand )
                                 throw(::com::sun::star::uno::RuntimeException);
 
-                            // XCellCursor
+                            /// XCellCursor
     virtual void SAL_CALL   gotoStart() throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL   gotoEnd() throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL   gotoNext() throw(::com::sun::star::uno::RuntimeException);
@@ -63,11 +63,11 @@ public:
     virtual void SAL_CALL   gotoOffset( sal_Int32 nColumnOffset, sal_Int32 nRowOffset )
                                 throw(::com::sun::star::uno::RuntimeException);
 
-                            // XSheetCellRange
+                            /// XSheetCellRange
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XSpreadsheet > SAL_CALL
                             getSpreadsheet() throw(::com::sun::star::uno::RuntimeException);
 
-                            // XCellRange
+                            /// XCellRange
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::table::XCell > SAL_CALL
                             getCellByPosition( sal_Int32 nColumn, sal_Int32 nRow )
                                 throw(::com::sun::star::lang::IndexOutOfBoundsException,
@@ -82,7 +82,7 @@ public:
                             getCellRangeByName( const OUString& aRange )
                                 throw(::com::sun::star::uno::RuntimeException);
 
-                            // XServiceInfo
+                            /// XServiceInfo
     virtual OUString SAL_CALL getImplementationName()
                                 throw(::com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
@@ -90,7 +90,7 @@ public:
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
                                 throw(::com::sun::star::uno::RuntimeException);
 
-                            // XTypeProvider
+                            /// XTypeProvider
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes()
                                 throw(::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId()

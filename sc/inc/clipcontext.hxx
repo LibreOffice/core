@@ -28,7 +28,7 @@ class ClipContextBase : boost::noncopyable
 {
     boost::scoped_ptr<ColumnBlockPositionSet> mpSet;
 
-    ClipContextBase(); // disabled
+    ClipContextBase(); ///< disabled
 
 public:
     ClipContextBase(ScDocument& rDoc);
@@ -47,7 +47,7 @@ class CopyFromClipContext : public ClipContextBase
     bool        mbAsLink:1;
     bool        mbSkipAttrForEmptyCells:1;
 
-    CopyFromClipContext(); // disabled
+    CopyFromClipContext(); ///< disabled
 
 public:
     CopyFromClipContext(ScDocument& rDoc,
@@ -73,7 +73,7 @@ class CopyToClipContext : public ClipContextBase
     bool mbKeepScenarioFlags:1;
     bool mbCloneNotes:1;
 
-    CopyToClipContext(); // disabled
+    CopyToClipContext(); ///< disabled
 
 public:
     CopyToClipContext(ScDocument& rDoc, bool bKeepScenarioFlags, bool bCloneNotes);

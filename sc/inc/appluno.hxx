@@ -71,7 +71,7 @@ public:
     static OUString  getImplementationName_Static();
     static ::com::sun::star::uno::Sequence< OUString > getSupportedServiceNames_Static();
 
-    // XGlobalSheetSettings
+    /// XGlobalSheetSettings
     virtual sal_Bool SAL_CALL getMoveSelection() throw (css::uno::RuntimeException)
         { return getPropertyBool("MoveSelection"); }
     virtual void SAL_CALL setMoveSelection(sal_Bool p1) throw (css::uno::RuntimeException)
@@ -150,7 +150,7 @@ public:
     virtual void SAL_CALL setReplaceCellsWarning(sal_Bool p1) throw (css::uno::RuntimeException)
         { setProperty("ReplaceCellsWarning", p1); }
 
-    // XPropertySet
+    /// XPropertySet
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >
                             SAL_CALL getPropertySetInfo()
                                 throw(::com::sun::star::uno::RuntimeException);
@@ -191,7 +191,7 @@ public:
                                     ::com::sun::star::lang::WrappedTargetException,
                                     ::com::sun::star::uno::RuntimeException);
 
-    // XServiceInfo
+    /// XServiceInfo
     virtual OUString SAL_CALL getImplementationName()
                                 throw(::com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
@@ -212,7 +212,7 @@ public:
     static OUString  getImplementationName_Static();
     static ::com::sun::star::uno::Sequence< OUString > getSupportedServiceNames_Static();
 
-                            // XRecentFunctions
+                            /// XRecentFunctions
     virtual ::com::sun::star::uno::Sequence< sal_Int32 > SAL_CALL getRecentFunctionIds()
                                 throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setRecentFunctionIds( const ::com::sun::star::uno::Sequence<
@@ -221,7 +221,7 @@ public:
     virtual sal_Int32 SAL_CALL getMaxRecentFunctions()
                                 throw(::com::sun::star::uno::RuntimeException);
 
-                            // XServiceInfo
+                            /// XServiceInfo
     virtual OUString SAL_CALL getImplementationName()
                                 throw(::com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
@@ -244,13 +244,13 @@ public:
     static OUString  getImplementationName_Static();
     static ::com::sun::star::uno::Sequence< OUString > getSupportedServiceNames_Static();
 
-                            // XFunctionDescriptions
+                            /// XFunctionDescriptions
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > SAL_CALL
                             getById( sal_Int32 nId )
                                 throw(::com::sun::star::lang::IllegalArgumentException,
                                 ::com::sun::star::uno::RuntimeException);
 
-                            // XNameAccess
+                            /// XNameAccess
     virtual ::com::sun::star::uno::Any SAL_CALL getByName( const OUString& aName )
                                 throw(::com::sun::star::container::NoSuchElementException,
                                     ::com::sun::star::lang::WrappedTargetException,
@@ -260,23 +260,23 @@ public:
     virtual sal_Bool SAL_CALL hasByName( const OUString& aName )
                                 throw(::com::sun::star::uno::RuntimeException);
 
-                            // XIndexAccess
+                            /// XIndexAccess
     virtual sal_Int32 SAL_CALL getCount() throw(::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Any SAL_CALL getByIndex( sal_Int32 Index )
                                 throw(::com::sun::star::lang::IndexOutOfBoundsException,
                                     ::com::sun::star::lang::WrappedTargetException,
                                     ::com::sun::star::uno::RuntimeException);
 
-                            // XEnumerationAccess
+                            /// XEnumerationAccess
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XEnumeration > SAL_CALL
                             createEnumeration() throw(::com::sun::star::uno::RuntimeException);
 
-                            // XElementAccess
+                            /// XElementAccess
     virtual ::com::sun::star::uno::Type SAL_CALL getElementType()
                                 throw(::com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL hasElements() throw(::com::sun::star::uno::RuntimeException);
 
-                            // XServiceInfo
+                            /// XServiceInfo
     virtual OUString SAL_CALL getImplementationName()
                                 throw(::com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )

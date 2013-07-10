@@ -51,7 +51,7 @@ class ScChartsObj : public cppu::WeakImplHelper4<
 {
 private:
     ScDocShell*             pDocShell;
-    SCTAB                   nTab;           // Charts are per sheet
+    SCTAB                   nTab;           ///< Charts are per sheet
 
     ScChartObj*             GetObjectByIndex_Impl(long nIndex) const;
     ScChartObj*             GetObjectByName_Impl(const OUString& aName) const;
@@ -62,7 +62,7 @@ public:
 
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
-                            // XTableCharts
+                            /// XTableCharts
     virtual void SAL_CALL   addNewByName( const OUString& aName,
                                     const ::com::sun::star::awt::Rectangle& aRect,
                                     const ::com::sun::star::uno::Sequence<
@@ -72,7 +72,7 @@ public:
     virtual void SAL_CALL   removeByName( const OUString& aName )
                                         throw(::com::sun::star::uno::RuntimeException);
 
-                            // XNameAccess
+                            /// XNameAccess
     virtual ::com::sun::star::uno::Any SAL_CALL getByName( const OUString& aName )
                                 throw(::com::sun::star::container::NoSuchElementException,
                                     ::com::sun::star::lang::WrappedTargetException,
@@ -82,23 +82,23 @@ public:
     virtual sal_Bool SAL_CALL hasByName( const OUString& aName )
                                 throw(::com::sun::star::uno::RuntimeException);
 
-                            // XIndexAccess
+                            /// XIndexAccess
     virtual sal_Int32 SAL_CALL getCount() throw(::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Any SAL_CALL getByIndex( sal_Int32 Index )
                                 throw(::com::sun::star::lang::IndexOutOfBoundsException,
                                     ::com::sun::star::lang::WrappedTargetException,
                                     ::com::sun::star::uno::RuntimeException);
 
-                            // XEnumerationAccess
+                            /// XEnumerationAccess
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XEnumeration > SAL_CALL
                             createEnumeration() throw(::com::sun::star::uno::RuntimeException);
 
-                            // XElementAccess
+                            /// XElementAccess
     virtual ::com::sun::star::uno::Type SAL_CALL getElementType()
                                 throw(::com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL hasElements() throw(::com::sun::star::uno::RuntimeException);
 
-                            // XServiceInfo
+                            /// XServiceInfo
     virtual OUString SAL_CALL getImplementationName()
                                 throw(::com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
@@ -125,21 +125,21 @@ class ScChartObj : public ::comphelper::OBaseMutex
 {
 private:
     ScDocShell*             pDocShell;
-    SCTAB                   nTab;           // Charts are per sheet
+    SCTAB                   nTab;           ///< Charts are per sheet
     String                  aChartName;
 
     void    Update_Impl( const ScRangeListRef& rRanges, bool bColHeaders, bool bRowHeaders );
     void    GetData_Impl( ScRangeListRef& rRanges, bool& rColHeaders, bool& rRowHeaders ) const;
 
 protected:
-    // ::comphelper::OPropertySetHelper
+    /// ::comphelper::OPropertySetHelper
     virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
     virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue )
         throw (::com::sun::star::uno::Exception);
     using ::cppu::OPropertySetHelper::getFastPropertyValue;
     virtual void SAL_CALL getFastPropertyValue( ::com::sun::star::uno::Any& rValue, sal_Int32 nHandle ) const;
 
-    // ::comphelper::OPropertyArrayUsageHelper
+    /// ::comphelper::OPropertyArrayUsageHelper
     virtual ::cppu::IPropertyArrayHelper* createArrayHelper() const;
 
 public:
@@ -148,16 +148,16 @@ public:
 
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
-    // XInterface
+    /// XInterface
     DECLARE_XINTERFACE()
 
-    // XTypeProvider
+    /// XTypeProvider
     DECLARE_XTYPEPROVIDER()
 
-    // XComponent
+    /// XComponent
     virtual void SAL_CALL disposing();
 
-                            // XTableChart
+                            /// XTableChart
     virtual sal_Bool SAL_CALL getHasColumnHeaders() throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL   setHasColumnHeaders( sal_Bool bHasColumnHeaders )
                                 throw(::com::sun::star::uno::RuntimeException);
@@ -170,16 +170,16 @@ public:
                                     ::com::sun::star::table::CellRangeAddress >& aRanges )
                                 throw(::com::sun::star::uno::RuntimeException);
 
-                            // XEmbeddedObjectSupplier
+                            /// XEmbeddedObjectSupplier
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > SAL_CALL
                             getEmbeddedObject() throw(::com::sun::star::uno::RuntimeException);
 
-                            // XNamed
+                            /// XNamed
     virtual OUString SAL_CALL getName() throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL   setName( const OUString& aName )
                                 throw(::com::sun::star::uno::RuntimeException);
 
-                            // XServiceInfo
+                            /// XServiceInfo
     virtual OUString SAL_CALL getImplementationName()
                                 throw(::com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
@@ -187,7 +187,7 @@ public:
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
                                 throw(::com::sun::star::uno::RuntimeException);
 
-    // XPropertySet
+    /// XPropertySet
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo()
         throw (::com::sun::star::uno::RuntimeException);
 };

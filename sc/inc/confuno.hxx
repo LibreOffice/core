@@ -41,10 +41,10 @@ public:
                             ScDocumentConfiguration(ScDocShell* pDocShell);
     virtual                 ~ScDocumentConfiguration();
 
-                            // SfxListener
+                            /// SfxListener
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
-                            // XPropertySet
+                            /// XPropertySet
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >
                             SAL_CALL getPropertySetInfo()
                                 throw(::com::sun::star::uno::RuntimeException);
@@ -85,7 +85,7 @@ public:
                                     ::com::sun::star::lang::WrappedTargetException,
                                     ::com::sun::star::uno::RuntimeException);
 
-                            // XServiceInfo
+                            /// XServiceInfo
     virtual OUString SAL_CALL getImplementationName()
                                 throw(::com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )

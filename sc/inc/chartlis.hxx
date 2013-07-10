@@ -70,11 +70,11 @@ private:
     OUString maName;
     ScChartUnoData* pUnoData;
     ScDocument*     mpDoc;
-    bool            bUsed:1;  // for ScChartListenerCollection::FreeUnused
+    bool            bUsed:1;  ///< for ScChartListenerCollection::FreeUnused
     bool            bDirty:1;
     bool            bSeriesRangesScheduled:1;
 
-                    // not implemented
+                    /// not implemented
     ScChartListener& operator=( const ScChartListener& );
 
 public:
@@ -109,7 +109,7 @@ public:
 
     void            UpdateChartIntersecting( const ScRange& rRange );
 
-    // if chart series ranges are to be updated later on (e.g. DeleteTab, InsertTab)
+    /// if chart series ranges are to be updated later on (e.g. DeleteTab, InsertTab)
     void            ScheduleSeriesRanges()      { bSeriesRangesScheduled = true; }
     void            UpdateScheduledSeriesRanges();
     void            UpdateSeriesRanges();
@@ -155,7 +155,7 @@ private:
 
                     DECL_LINK(TimerHdl, void *);
 
-                    // not implemented
+                    /// not implemented
     ScChartListenerCollection& operator=( const ScChartListenerCollection& );
 
 public:
@@ -163,7 +163,7 @@ public:
     ScChartListenerCollection( const ScChartListenerCollection& );
     ~ScChartListenerCollection();
 
-                    // only needed after copy-ctor, if newly added to doc
+                    /// only needed after copy-ctor, if newly added to doc
     void            StartAllListeners();
 
     SC_DLLPUBLIC void insert(ScChartListener* pListener);
@@ -186,7 +186,7 @@ public:
     void            ChangeListening( const String& rName,
                                     const ScRangeListRef& rRangeListRef,
                                     bool bDirty = false );
-    // use FreeUnused only the way it's used in ScDocument::UpdateChartListenerCollection
+    /// use FreeUnused only the way it's used in ScDocument::UpdateChartListenerCollection
     void            FreeUnused();
     void            FreeUno( const com::sun::star::uno::Reference< com::sun::star::chart::XChartDataChangeEventListener >& rListener,
                              const com::sun::star::uno::Reference< com::sun::star::chart::XChartData >& rSource );
@@ -196,7 +196,7 @@ public:
     void            SetDiffDirty( const ScChartListenerCollection&,
                         bool bSetChartRangeLists = false );
 
-    void            SetRangeDirty( const ScRange& rRange );     // for example rows/columns
+    void            SetRangeDirty( const ScRange& rRange );     ///< for example rows/columns
 
     void            UpdateScheduledSeriesRanges();
     void            UpdateChartsContainingTab( SCTAB nTab );

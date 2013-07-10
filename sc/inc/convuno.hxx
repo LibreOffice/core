@@ -35,44 +35,44 @@ public:
     static LanguageType GetLanguage( const com::sun::star::lang::Locale& rLocale );
     static void FillLocale( com::sun::star::lang::Locale& rLocale, LanguageType eLang );
 
-    // CellAddress -> ScAddress
+    /// CellAddress -> ScAddress
     static inline void  FillScAddress(
                             ScAddress& rScAddress,
                             const ::com::sun::star::table::CellAddress& rApiAddress );
-    // ScAddress -> CellAddress
+    /// ScAddress -> CellAddress
     static inline void  FillApiAddress(
                             ::com::sun::star::table::CellAddress& rApiAddress,
                             const ScAddress& rScAddress );
-    // CellRangeAddress -> ScRange
+    /// CellRangeAddress -> ScRange
     static inline void  FillScRange(
                             ScRange& rScRange,
                             const ::com::sun::star::table::CellRangeAddress& rApiRange );
-    // ScRange -> CellRangeAddress
+    /// ScRange -> CellRangeAddress
     static inline void  FillApiRange(
                             ::com::sun::star::table::CellRangeAddress& rApiRange,
                             const ScRange& rScRange );
-    // CellAddress -> CellRangeAddress
+    /// CellAddress -> CellRangeAddress
     static inline void  FillApiRange(
                             ::com::sun::star::table::CellRangeAddress& rApiRange,
                             const ::com::sun::star::table::CellAddress& rApiAddress );
-    // CellRangeAddress-Start -> CellAddress
+    /// CellRangeAddress-Start -> CellAddress
     static inline void  FillApiStartAddress(
                             ::com::sun::star::table::CellAddress& rApiAddress,
                             const ::com::sun::star::table::CellRangeAddress& rApiRange );
-    // CellRangeAddress-End -> CellAddress
+    /// CellRangeAddress-End -> CellAddress
     static inline void  FillApiEndAddress(
                             ::com::sun::star::table::CellAddress& rApiAddress,
                             const ::com::sun::star::table::CellRangeAddress& rApiRange );
 
-    /** Returns true, if the passed ranges have at least one common cell. */
+    /** @return true, if the passed ranges have at least one common cell. */
     static inline bool  Intersects(
                             const ::com::sun::star::table::CellRangeAddress& rApiARange1,
                             const ::com::sun::star::table::CellRangeAddress& rApiARange2 );
-    /** Returns true, if the passed address rApiInner is inside the passed range rApiOuter. */
+    /** @return true, if the passed address rApiInner is inside the passed range rApiOuter. */
     static inline bool  Contains(
                             const ::com::sun::star::table::CellRangeAddress& rApiOuter,
                             const ::com::sun::star::table::CellAddress& rApiInner );
-    /** Returns true, if the passed range rApiInner is completely inside the passed range rApiOuter. */
+    /** @return true, if the passed range rApiInner is completely inside the passed range rApiOuter. */
     static inline bool  Contains(
                             const ::com::sun::star::table::CellRangeAddress& rApiOuter,
                             const ::com::sun::star::table::CellRangeAddress& rApiInner );
