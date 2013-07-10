@@ -1112,7 +1112,7 @@ LayoutDescriptor::LayoutDescriptor( int nLayout, int k0, int k1, int k2, int k3,
 
 static const LayoutDescriptor& GetLayoutDescriptor( AutoLayout eLayout )
 {
-    static LayoutDescriptor aLayouts[AUTOLAYOUT__END-AUTOLAYOUT__START] =
+    static const LayoutDescriptor aLayouts[AUTOLAYOUT__END-AUTOLAYOUT__START] =
     {
         LayoutDescriptor( 0, PRESOBJ_TITLE, PRESOBJ_TEXT ),                                 // AUTOLAYOUT_TITLE
         LayoutDescriptor( 0, PRESOBJ_TITLE, PRESOBJ_OUTLINE ),                              // AUTOLAYOUT_ENUM
@@ -2881,7 +2881,7 @@ void SdPage::CalculateHandoutAreas( SdDrawDocument& rModel, AutoLayout eLayout, 
 
         const bool bLandscape = aArea.Width() > aArea.Height();
 
-        static sal_uInt16 aOffsets[5][9] =
+        static const sal_uInt16 aOffsets[5][9] =
         {
             { 0, 1, 2, 3, 4, 5, 6, 7, 8 }, // AUTOLAYOUT_HANDOUT9, Portrait, Horizontal order
             { 0, 2, 4, 1, 3, 5, 0, 0, 0 }, // AUTOLAYOUT_HANDOUT3, Landscape, Vertical
@@ -2890,7 +2890,7 @@ void SdPage::CalculateHandoutAreas( SdDrawDocument& rModel, AutoLayout eLayout, 
             { 0, 3, 6, 1, 4, 7, 2, 5, 8 }, // AUTOLAYOUT_HANDOUT9, Landscape, Vertical
         };
 
-        sal_uInt16* pOffsets = aOffsets[0];
+        const sal_uInt16* pOffsets = aOffsets[0];
         sal_uInt16  nColCnt = 0, nRowCnt = 0;
         switch ( eLayout )
         {

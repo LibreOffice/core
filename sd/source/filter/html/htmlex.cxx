@@ -2735,7 +2735,7 @@ String HtmlExport::CreateImage( const String& aImage, const String& aAltText,
 // =====================================================================
 String HtmlExport::ColorToHTMLString( Color aColor )
 {
-    static char hex[] = "0123456789ABCDEF";
+    static const char hex[] = "0123456789ABCDEF";
     String aStr( "#xxxxxx" );
     aStr.SetChar(1, hex[(aColor.GetRed() >> 4) & 0xf] );
     aStr.SetChar(2, hex[aColor.GetRed()   & 0xf] );

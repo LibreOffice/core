@@ -330,7 +330,7 @@ IMPL_LINK_NOARG(TableDesignPane, implCheckBoxHdl)
 
 void TableDesignPane::ApplyOptions()
 {
-    static sal_uInt16 gParamIds[CB_BANDED_COLUMNS-CB_HEADER_ROW+1] =
+    static const sal_uInt16 gParamIds[CB_BANDED_COLUMNS-CB_HEADER_ROW+1] =
     {
         ID_VAL_USEFIRSTROWSTYLE, ID_VAL_USELASTROWSTYLE, ID_VAL_USEBANDINGROWSTYLE,
         ID_VAL_USEFIRSTCOLUMNSTYLE, ID_VAL_USELASTCOLUMNSTYLE, ID_VAL_USEBANDINGCOLUMNSTYLE
@@ -523,7 +523,7 @@ void TableDesignPane::updateLayout()
 
 void TableDesignPane::updateControls()
 {
-    static sal_Bool gDefaults[CB_BANDED_COLUMNS-CB_HEADER_ROW+1] = { sal_True, sal_False, sal_True, sal_False, sal_False, sal_False };
+    static const sal_Bool gDefaults[CB_BANDED_COLUMNS-CB_HEADER_ROW+1] = { sal_True, sal_False, sal_True, sal_False, sal_False, sal_False };
 
     const bool bHasTable = mxSelectedTable.is();
     const OUString* pPropNames = getPropertyNames();

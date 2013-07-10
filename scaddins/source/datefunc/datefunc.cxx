@@ -532,7 +532,7 @@ sal_Bool IsLeapYear( sal_uInt16 nYear )
 
 sal_uInt16 DaysInMonth( sal_uInt16 nMonth, sal_uInt16 nYear )
 {
-    static sal_uInt16 aDaysInMonth[12] = { 31, 28, 31, 30, 31, 30,
+    static const sal_uInt16 aDaysInMonth[12] = { 31, 28, 31, 30, 31, 30,
                                         31, 31, 30, 31, 30, 31 };
 
     if ( nMonth != 2 )

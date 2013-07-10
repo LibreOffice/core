@@ -258,7 +258,7 @@ static SdTypesCache gImplTypesCache;
     }
     static const SfxItemPropertyMapEntry* lcl_GetEmpty_SdXShapePropertyMap_Impl()
     {
-        static SfxItemPropertyMapEntry aEmpty_SdXShapePropertyMap_Impl[] =
+        static const SfxItemPropertyMapEntry aEmpty_SdXShapePropertyMap_Impl[] =
         {
             { 0,0,0,0,0,0}
         };

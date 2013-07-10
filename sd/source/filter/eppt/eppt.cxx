@@ -502,7 +502,7 @@ sal_Bool PPTWriter::ImplCreateDocumentSummaryInformation()
     if (xDocProps.is()) {
 
         // no idea what this is...
-        static sal_uInt8 aGuid[ 0x52 ] =
+        static const sal_uInt8 aGuid[ 0x52 ] =
         {
             0x4e, 0x00, 0x00, 0x00,
             '{',0,'D',0,'B',0,'1',0,'A',0,'C',0,'9',0,'6',0,'4',0,'-',0,
