@@ -3213,15 +3213,14 @@ void ScInterpreter::ScMacro()
             {
                 ScExternalRefCache::TokenRef pToken;
                 PopExternalSingleRef(pToken);
-                if ( nGlobalError )
-                {
-                    SetError( errIllegalArgument);
-                    bOk = false;
-                }
+                if ( pToken->GetType() == svString )
+                    pPar->PutString( pToken->GetString() );
+                else if ( pToken->GetType() == svDouble )
+                    pPar->PutDouble( pToken->GetDouble() );
                 else
                 {
-                    pPar->PutDouble( pToken->GetDouble() );
-                    bOk = true;
+                    SetError( errIllegalArgument );
+                    bOk = false;
                 }
             }
             break;
