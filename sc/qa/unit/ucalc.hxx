@@ -13,6 +13,7 @@
 #include "helper/qahelper.hxx"
 
 struct TestImpl;
+class ScUndoPaste;
 
 /**
  * Temporarily set formula grammar.
@@ -33,6 +34,7 @@ public:
     static void clearRange(ScDocument* pDoc, const ScRange& rRange);
     static void copyToClip(ScDocument* pSrcDoc, const ScRange& rRange, ScDocument* pClipDoc);
     static void pasteFromClip(ScDocument* pDestDoc, const ScRange& rDestRange, ScDocument* pClipDoc);
+    static ScUndoPaste* createUndoPaste(ScDocShell& rDocSh, const ScRange& rRange, ScDocument* pUndoDoc);
 
     Test();
     ~Test();

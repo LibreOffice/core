@@ -5755,16 +5755,13 @@ void Test::testCopyPaste()
     ScDocument aClipDoc(SCDOCMODE_CLIP);
     copyToClip(m_pDoc, aRange, &aClipDoc);
 
-    sal_uInt16 nFlags = IDF_ALL;
     aRange = ScRange(0,1,1,2,1,1);//target: Sheet2.A2:C2
     ScDocument* pUndoDoc = new ScDocument(SCDOCMODE_UNDO);
     pUndoDoc->InitUndo(m_pDoc, 1, 1, true, true);
-    ScMarkData aMarkData2;
-    aMarkData2.SetMarkArea(aRange);
-    ScRefUndoData* pRefUndoData= new ScRefUndoData(m_pDoc);
-    ScUndoPaste aUndo(
-        &getDocShell(), aRange, aMarkData2, pUndoDoc, NULL, IDF_ALL, pRefUndoData, false);
-    m_pDoc->CopyFromClip(aRange, aMarkData2, nFlags, NULL, &aClipDoc);
+    boost::scoped_ptr<ScUndoPaste> pUndo(createUndoPaste(getDocShell(), aRange, pUndoDoc));
+    ScMarkData aMark;
+    aMark.SetMarkArea(aRange);
+    m_pDoc->CopyFromClip(aRange, aMark, IDF_ALL, NULL, &aClipDoc);
 
     //check values after copying
     OUString aString;
@@ -5786,13 +5783,13 @@ void Test::testCopyPaste()
 
 
     //check undo and redo
-    aUndo.Undo();
+    pUndo->Undo();
     fValue = m_pDoc->GetValue(ScAddress(1,1,1));
     ASSERT_DOUBLES_EQUAL_MESSAGE("after undo formula should return nothing", fValue, 0);
     aString = m_pDoc->GetString(2, 1, 1);
     CPPUNIT_ASSERT_MESSAGE("after undo string should be removed", aString.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("")));
 
-    aUndo.Redo();
+    pUndo->Redo();
     fValue = m_pDoc->GetValue(ScAddress(1,1,1));
     ASSERT_DOUBLES_EQUAL_MESSAGE("formula should return 2 after redo", fValue, 2);
     aString = m_pDoc->GetString(2, 1, 1);
@@ -6955,6 +6952,17 @@ void Test::pasteFromClip(ScDocument* pDestDoc, const ScRange& rDestRange, ScDocu
     ScMarkData aMark;
     aMark.SetMarkArea(rDestRange);
     pDestDoc->CopyFromClip(rDestRange, aMark, IDF_ALL, NULL, pClipDoc);
+}
+
+ScUndoPaste* Test::createUndoPaste(ScDocShell& rDocSh, const ScRange& rRange, ScDocument* pUndoDoc)
+{
+    ScDocument* pDoc = rDocSh.GetDocument();
+    ScMarkData aMarkData;
+    aMarkData.SetMarkArea(rRange);
+    ScRefUndoData* pRefUndoData = new ScRefUndoData(pDoc);
+
+    return new ScUndoPaste(
+        &rDocSh, rRange, aMarkData, pUndoDoc, NULL, IDF_ALL, pRefUndoData, false);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

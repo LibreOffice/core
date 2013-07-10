@@ -13,6 +13,7 @@
 #include "cellvalue.hxx"
 #include "docsh.hxx"
 #include "clipparam.hxx"
+#include "undoblk.hxx"
 
 #include "formula/grammar.hxx"
 
@@ -265,6 +266,43 @@ void Test::testSharedFormulasCopyPaste()
     CPPUNIT_ASSERT_MESSAGE("C2 should be a formula cell.", pFC);
     CPPUNIT_ASSERT_EQUAL(1, pFC->GetSharedTopRow());
     CPPUNIT_ASSERT_EQUAL(9, pFC->GetSharedLength());
+
+    ScRange aRange(1,0,0,1,9,0); // B1:B10
+    ScDocument* pUndoDoc = new ScDocument(SCDOCMODE_UNDO);
+    pUndoDoc->InitUndo(m_pDoc, 0, 0, true, true);
+    m_pDoc->CopyToDocument(aRange, IDF_CONTENTS, false, pUndoDoc);
+    boost::scoped_ptr<ScUndoPaste> pUndo(createUndoPaste(*m_xDocShRef, aRange, pUndoDoc));
+
+    // First, make sure the formula cells are shared in the undo document.
+    aPos.SetCol(1);
+    for (SCROW i = 0; i <= 9; ++i)
+    {
+        aPos.SetRow(i);
+        pFC = pUndoDoc->GetFormulaCell(aPos);
+        CPPUNIT_ASSERT_MESSAGE("Must be a formula cell.", pFC);
+        CPPUNIT_ASSERT_EQUAL(0, pFC->GetSharedTopRow());
+        CPPUNIT_ASSERT_EQUAL(10, pFC->GetSharedLength());
+    }
+
+    // Overwrite B1:B10.
+    for (SCROW i = 0; i <= 9; ++i)
+        m_pDoc->SetValue(ScAddress(1,i,0), i*10);
+
+    for (SCROW i = 0; i <= 9; ++i)
+        CPPUNIT_ASSERT_MESSAGE("Numeric cell was expected.", m_pDoc->GetCellType(ScAddress(1,i,0)) == CELLTYPE_VALUE);
+
+    // Undo the action to fill B1:B10 with formula cells again.
+    pUndo->Undo();
+
+    aPos.SetCol(1);
+    for (SCROW i = 0; i <= 9; ++i)
+    {
+        aPos.SetRow(i);
+        pFC = m_pDoc->GetFormulaCell(aPos);
+        CPPUNIT_ASSERT_MESSAGE("This should be a formula cell.", pFC);
+        CPPUNIT_ASSERT_EQUAL(0, pFC->GetSharedTopRow());
+        CPPUNIT_ASSERT_EQUAL(10, pFC->GetSharedLength());
+    }
 
     m_pDoc->DeleteTab(0);
 }
