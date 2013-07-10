@@ -299,28 +299,27 @@ namespace
         return nChar;
     }
 
-    void convertToLocalizedNumerals( XubString&   rStr,
-                                     LanguageType eTextLanguage )
+    OUString convertToLocalizedNumerals(const OUString& rStr,
+        LanguageType eTextLanguage)
     {
-        const sal_Unicode* pBase = rStr.GetBuffer();
-        const sal_Unicode* pBegin = pBase + 0;
-        const xub_StrLen nEndIndex = rStr.Len();
-        const sal_Unicode* pEnd = pBase + nEndIndex;
+        OUStringBuffer aBuf(rStr);
 
-        for( ; pBegin < pEnd; ++pBegin )
+        for (sal_Int32 i = 0; i < aBuf.getLength(); ++i)
         {
             // TODO: are there non-digit localizations?
-            if( (*pBegin >= '0') && (*pBegin <= '9') )
+            sal_Unicode nOrigChar = aBuf[i];
+            if( (nOrigChar >= '0') && (nOrigChar <= '9') )
             {
                 // translate characters to local preference
-                sal_Unicode cChar = getLocalizedChar( *pBegin, eTextLanguage );
-                if( cChar != *pBegin )
-                    rStr.SetChar( sal::static_int_cast<sal_uInt16>(pBegin - pBase), cChar );
+                sal_Unicode cChar = getLocalizedChar(nOrigChar, eTextLanguage);
+                if (cChar != nOrigChar)
+                    aBuf[i] = cChar;
             }
         }
+
+        return aBuf.makeStringAndClear();
     }
 }
-
 
 namespace cppcanvas
 {
@@ -2557,10 +2556,10 @@ namespace cppcanvas
                     case META_TEXT_ACTION:
                     {
                         MetaTextAction* pAct = static_cast<MetaTextAction*>(pCurrAct);
-                        XubString sText = XubString( pAct->GetText() );
+                        OUString sText = pAct->GetText();
 
-                        if( rVDev.GetDigitLanguage())
-                            convertToLocalizedNumerals ( sText,rVDev.GetDigitLanguage() );
+                        if (rVDev.GetDigitLanguage())
+                            sText = convertToLocalizedNumerals(sText, rVDev.GetDigitLanguage());
 
                         createTextAction(
                             pAct->GetPoint(),
@@ -2576,10 +2575,10 @@ namespace cppcanvas
                     case META_TEXTARRAY_ACTION:
                     {
                         MetaTextArrayAction* pAct = static_cast<MetaTextArrayAction*>(pCurrAct);
-                        XubString sText = XubString( pAct->GetText() );
+                        OUString sText = pAct->GetText();
 
-                        if( rVDev.GetDigitLanguage())
-                            convertToLocalizedNumerals ( sText,rVDev.GetDigitLanguage() );
+                        if (rVDev.GetDigitLanguage())
+                            sText = convertToLocalizedNumerals(sText, rVDev.GetDigitLanguage());
 
                         createTextAction(
                             pAct->GetPoint(),
@@ -2654,10 +2653,10 @@ namespace cppcanvas
                     case META_STRETCHTEXT_ACTION:
                     {
                         MetaStretchTextAction* pAct = static_cast<MetaStretchTextAction*>(pCurrAct);
-                        XubString sText = XubString( pAct->GetText() );
+                        OUString sText = pAct->GetText();
 
-                        if( rVDev.GetDigitLanguage())
-                            convertToLocalizedNumerals ( sText,rVDev.GetDigitLanguage() );
+                        if (rVDev.GetDigitLanguage())
+                            sText = convertToLocalizedNumerals(sText, rVDev.GetDigitLanguage());
 
                         const sal_uInt16 nLen( pAct->GetLen() == (sal_uInt16)STRING_LEN ?
                                            pAct->GetText().getLength() - pAct->GetIndex() : pAct->GetLen() );
