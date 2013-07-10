@@ -590,6 +590,11 @@ public:
 
 struct CmisPropertyLine
 {
+    OUString                      m_sId;
+    bool                          m_bUpdatable;
+    bool                          m_bRequired;
+    bool                          m_bMultiValued;
+    bool                          m_bOpenChoice;
     FixedText                     m_aName;
     FixedText                     m_aType;
     CmisPropertiesEdit            m_aValueEdit;

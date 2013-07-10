@@ -578,21 +578,33 @@ std::vector< CmisProperty* > SfxDocumentInfoItem::GetCmisProperties() const
 
 uno::Sequence< document::CmisProperty > SfxDocumentInfoItem::GetCmisPropertiesSeq() const
 {
-    Sequence< document::CmisProperty > aPropertiesSeq( m_aCmisProperties.size() );
+
     sal_Int32 i = 0;
     std::vector< CmisProperty* >::const_iterator pIter;
+    sal_Int32 updatableCount = 0, nCount = 0;
+
     for ( pIter = m_aCmisProperties.begin();
-            pIter != m_aCmisProperties.end(); ++pIter, ++i )
+        pIter != m_aCmisProperties.end(); ++pIter, ++i )
+    {
+        if ( ( *pIter )->m_bUpdatable ) updatableCount++;
+    }
+    Sequence< document::CmisProperty > aPropertiesSeq( updatableCount );
+
+    for ( pIter = m_aCmisProperties.begin();
+        pIter != m_aCmisProperties.end(); ++pIter, ++i )
+        if (( *pIter )->m_bUpdatable )
     {
         CmisProperty* aProp = *pIter;
-        aPropertiesSeq[i].Id = aProp->m_sId;
-        aPropertiesSeq[i].Name = aProp->m_sName;
-        aPropertiesSeq[i].Updatable = aProp->m_bUpdatable;
-        aPropertiesSeq[i].Required = aProp->m_bRequired;
-        aPropertiesSeq[i].MultiValued = aProp->m_bMultiValued;
-        aPropertiesSeq[i].OpenChoice = aProp->m_bOpenChoice;
-        aPropertiesSeq[i].Choices = aProp->m_aChoices;
-        aPropertiesSeq[i].Value = aProp->m_aValue;
+        aPropertiesSeq[nCount].Id = aProp->m_sId;
+        aPropertiesSeq[nCount].Name = aProp->m_sName;
+        aPropertiesSeq[nCount].Updatable = aProp->m_bUpdatable;
+        aPropertiesSeq[nCount].Required = aProp->m_bRequired;
+        aPropertiesSeq[nCount].MultiValued = aProp->m_bMultiValued;
+        aPropertiesSeq[nCount].OpenChoice = aProp->m_bOpenChoice;
+        aPropertiesSeq[nCount].Choices = aProp->m_aChoices;
+        aPropertiesSeq[nCount].Value = aProp->m_aValue;
+
+        nCount++;
     }
 
     return aPropertiesSeq;
@@ -2303,6 +2315,7 @@ void CmisPropertiesYesNoButton::Resize()
 
 // struct CmisPropertyLine ---------------------------------------------
 CmisPropertyLine::CmisPropertyLine( Window* pParent ) :
+    m_sId           ( ),
     m_aName         ( pParent, SfxResId( SFX_CMIS_PROPERTY_NAME ) ),
     m_aType         ( pParent, SfxResId( SFX_CMIS_PROPERTY_TYPE ) ),
     m_aValueEdit    ( pParent, SfxResId( SFX_CMIS_ED_PROPERTY_VALUE ), this ),
@@ -2501,12 +2514,19 @@ void CmisPropertiesWindow::updateLineWidth()
     }
 }
 
-void CmisPropertiesWindow::AddLine( const OUString& /*sId*/, const OUString& sName,
-                                    const bool bUpdatable, const bool /*bRequired*/,
-                                    const bool /*bMultiValued*/, const bool /*bOpenChoice*/,
+void CmisPropertiesWindow::AddLine( const OUString& sId, const OUString& sName,
+                                    const bool bUpdatable, const bool bRequired,
+                                    const bool bMultiValued, const bool bOpenChoice,
                                     Any& /*aChoices*/, Any& rAny )
 {
     CmisPropertyLine* pNewLine = new CmisPropertyLine( this );
+
+    pNewLine->m_sId = sId;
+    pNewLine->m_bUpdatable = bUpdatable;
+    pNewLine->m_bRequired = bRequired;
+    pNewLine->m_bMultiValued = bMultiValued;
+    pNewLine->m_bOpenChoice = bOpenChoice;
+
     pNewLine->m_aValueEdit.SetLoseFocusHdl( LINK( this, CmisPropertiesWindow, EditLoseFocusHdl ) );
 
     pNewLine->m_aName.SetAccessibleName(m_aName.GetAccessibleName());
@@ -2668,6 +2688,12 @@ Sequence< document::CmisProperty > CmisPropertiesWindow::GetCmisProperties() con
             pIter != m_aCmisPropertiesLines.end(); ++pIter, ++i )
     {
         CmisPropertyLine* pLine = *pIter;
+
+        aPropertiesSeq[i].Id = pLine->m_sId;
+        aPropertiesSeq[i].Updatable = pLine->m_bUpdatable;
+        aPropertiesSeq[i].Required = pLine->m_bRequired;
+        aPropertiesSeq[i].OpenChoice = pLine->m_bOpenChoice;
+        aPropertiesSeq[i].MultiValued = pLine->m_bMultiValued;
 
         String sPropertyName = pLine->m_aName.GetText();
         if ( sPropertyName.Len() > 0 )
@@ -2845,7 +2871,7 @@ sal_Bool SfxCmisPropertiesPage::FillItemSet( SfxItemSet& rSet )
         sal_Int32 i = 0, nCount = aPropertySeq.getLength();
         for ( ; i < nCount; ++i )
         {
-            if ( !aPropertySeq[i].Name.isEmpty() )
+            if ( !aPropertySeq[i].Id.isEmpty() )
                 pInfo->AddCmisProperty( aPropertySeq[i].Id,
                                         aPropertySeq[i].Name,
                                         aPropertySeq[i].Updatable,
