@@ -153,7 +153,7 @@ public:
     static void                 Execute();
     static void                 Quit();
     static void                 Reschedule( bool bAllEvents = false );
-    static void                 Yield( bool bAllEvents = false );
+    static void                 Yield();
     static void                 EndYield();
     static comphelper::SolarMutex& GetSolarMutex();
     static oslThreadIdentifier  GetMainThreadIdentifier();

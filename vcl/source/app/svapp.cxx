@@ -446,9 +446,9 @@ void Application::Reschedule( bool i_bAllEvents )
 
 // -----------------------------------------------------------------------
 
-void Application::Yield( bool i_bAllEvents )
+void Application::Yield()
 {
-    ImplYield( true, i_bAllEvents );
+    ImplYield( true, false );
 }
 
 // -----------------------------------------------------------------------
