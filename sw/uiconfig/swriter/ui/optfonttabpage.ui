@@ -233,7 +233,7 @@
                     <child internal-child="entry">
                       <object class="GtkEntry" id="standardbox-entry">
                         <property name="can_focus">False</property>
-                        <property name="invisible_char">�</property>
+                        <property name="invisible_char">●</property>
                       </object>
                     </child>
                   </object>
@@ -255,7 +255,7 @@
                     <child internal-child="entry">
                       <object class="GtkEntry" id="titlebox-entry">
                         <property name="can_focus">False</property>
-                        <property name="invisible_char">�</property>
+                        <property name="invisible_char">●</property>
                       </object>
                     </child>
                   </object>
@@ -277,7 +277,7 @@
                     <child internal-child="entry">
                       <object class="GtkEntry" id="listbox-entry">
                         <property name="can_focus">False</property>
-                        <property name="invisible_char">�</property>
+                        <property name="invisible_char">●</property>
                       </object>
                     </child>
                   </object>
@@ -299,7 +299,7 @@
                     <child internal-child="entry">
                       <object class="GtkEntry" id="labelbox-entry">
                         <property name="can_focus">False</property>
-                        <property name="invisible_char">�</property>
+                        <property name="invisible_char">●</property>
                       </object>
                     </child>
                   </object>
@@ -321,7 +321,7 @@
                     <child internal-child="entry">
                       <object class="GtkEntry" id="idxbox-entry">
                         <property name="can_focus">False</property>
-                        <property name="invisible_char">�</property>
+                        <property name="invisible_char">●</property>
                       </object>
                     </child>
                   </object>
