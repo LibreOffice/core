@@ -55,6 +55,11 @@
 
 static const ::rtl::OUString aEmptyString;
 
+#if HAVE_GCC_PRAGMA_DIAGNOSTIC_MODIFY
+# pragma GCC diagnostic ignored "-Wwrite-strings"
+# pragma GCC diagnostic ignored "-Wunused-function"
+#endif
+
 static connectivity::OSQLInternalNode* newNode(const sal_Char* pNewValue,
 							     const connectivity::SQLNodeType eNodeType,
 								 const sal_uInt32 nNodeID = 0)

@@ -46,10 +46,7 @@
 #include <rtl/strbuf.hxx>
 #include <connectivity/sqlparse.hxx>
 
-#if HAVE_GCC_PRAGMA_DIAGNOSTIC_MODIFY
-# pragma GCC diagnostic ignored "-Wwrite-strings"
-# pragma GCC diagnostic ignored "-Wunused-function"
-#elif defined __SUNPRO_CC
+#if defined __SUNPRO_CC
 #pragma disable_warn
 #elif defined _MSC_VER
 #pragma warning(push, 1)
