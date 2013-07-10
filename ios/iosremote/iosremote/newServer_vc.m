@@ -38,14 +38,6 @@
     }
 }
 
-- (BOOL)isModal
-{
-    NSArray *viewControllers = [[self navigationController] viewControllers];
-    UIViewController *rootViewController = [viewControllers objectAtIndex:0];
-    
-    return rootViewController == self;
-}
-
 - (EditableTableViewCell *)newDetailCellWithTag:(NSInteger)tag
 {
     EditableTableViewCell *cell = [[EditableTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil];
@@ -57,45 +49,10 @@
 }
 
 #pragma mark -
-#pragma mark Action Methods
-
-- (void)save
-{
-    [self dismissModalViewControllerAnimated:YES];
-}
-
-- (void)cancel
-{
-    [self dismissModalViewControllerAnimated:YES];
-}
-
-#pragma mark -
 #pragma mark UIViewController Methods
 
 - (void)viewDidLoad
 {
-    //  If the user clicked the '+' button in the list view, we're
-    //  creating a new entry rather than modifying an existing one, so
-    //  we're in a modal nav controller. Modal nav controllers don't add
-    //  a back button to the nav bar; instead we'll add Save and
-    //  Cancel buttons.
-    //
-    if ([self isModal])
-    {
-        UIBarButtonItem *saveButton = [[UIBarButtonItem alloc]
-                                       initWithBarButtonSystemItem:UIBarButtonSystemItemSave
-                                       target:self
-                                       action:@selector(save)];
-        
-        [[self navigationItem] setRightBarButtonItem:saveButton];
-        
-        UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc]
-                                         initWithBarButtonSystemItem:UIBarButtonSystemItemCancel
-                                         target:self
-                                         action:@selector(cancel)];
-        
-        [[self navigationItem] setLeftBarButtonItem:cancelButton];
-    }
     self.comManager = [CommunicationManager sharedComManager];
     [self setNameCell: [self newDetailCellWithTag:ServerName]];
     [self setAddrCell: [self newDetailCellWithTag:ServerAddr]];
@@ -166,14 +123,7 @@
 //  value to the corresponding property of the model object.
 //
 - (void)textFieldDidEndEditing:(UITextField *)textField
-{
-    static NSNumberFormatter *_formatter;
-    
-    if (_formatter == nil)
-    {
-        _formatter = [[NSNumberFormatter alloc] init];
-    }
-    
+{    
     NSString *text = [textField text];
     
     switch ([textField tag])
@@ -207,16 +157,9 @@
         
         [nextTextField becomeFirstResponder];
     }
-    else if ([self isModal])
-    {
-        //  We're in a modal navigation controller, which means the user is
-        //  adding a new book rather than editing an existing one.
-        //
-        [self save];
-    }
     else
     {
-        [[self navigationController] popViewControllerAnimated:YES];
+        [self save:nil];
     }
     
     return YES;
@@ -233,24 +176,13 @@
 - (NSInteger)tableView:(UITableView *)tableView
  numberOfRowsInSection:(NSInteger)section
 {
-    return section == 0 ? 2 : 1;
-}
-
-- (NSString *)tableView:(UITableView *)tableView
-titleForHeaderInSection:(NSInteger)section
-{
-    switch (section)
-    {
-        case InformationSection:  return nil;
-    }    
-    return nil;
+    return 2;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView
          cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     EditableTableViewCell *cell = nil;
-    NSInteger tag = INT_MIN;
     NSString *text = nil;
     NSString *placeholder = nil;
     UIKeyboardType keyboardType;
@@ -266,7 +198,6 @@ titleForHeaderInSection:(NSInteger)section
             {
                 cell = [self nameCell];
                 text = [self.server serverName];
-                tag = ServerName;
                 placeholder = @"Server Name (optional)";
                 keyboardType = UIKeyboardTypeDefault;
             }
@@ -274,7 +205,6 @@ titleForHeaderInSection:(NSInteger)section
             {
                 cell = [self addrCell];
                 text = [self.server serverAddress];
-                tag = ServerAddr;
                 placeholder = @"IP Address";
                 keyboardType = UIKeyboardTypeNumbersAndPunctuation;
             }
@@ -282,7 +212,6 @@ titleForHeaderInSection:(NSInteger)section
         }
     }
     [cell.textField setPlaceholder:placeholder];
-    [cell setTag:tag];
     [cell.textField setText:text];
     [cell.textField setKeyboardType:keyboardType];
     return cell;

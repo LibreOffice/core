@@ -1,10 +1,10 @@
-//
-//  slideShowPreviewTable_vc.m
-//  iosremote
-//
-//  Created by Liu Siqi on 7/4/13.
-//  Copyright (c) 2013 libreoffice. All rights reserved.
-//
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
 
 #import "slideShowPreviewTable_vc.h"
 #import "CommunicationManager.h"
@@ -46,7 +46,7 @@
  
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
-    self.optionsArray = [NSArray arrayWithObjects:@"Lecturer's Notes", @"Timer", @"Pointer", nil];
+    self.optionsArray = [NSArray arrayWithObjects:@"Timer auto-start", nil];
     self.comManager = [CommunicationManager sharedComManager];
     self.comManager.delegate = self;
     self.slidesRunning = NO;
@@ -57,7 +57,6 @@
                                                                                 usingBlock:^(NSNotification *note) {
                                                                                     self.slidesRunning = YES;
                                                                                 }];
-
     }
 
 - (void) viewDidAppear:(BOOL)animated
@@ -163,7 +162,6 @@
         _startButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
         _startButton.frame = CGRectMake(10.0, 10.0, 300.0, 50.0);
         [_startButton setTitle:@"Start Presentation" forState:UIControlStateNormal];
-        _startButton.backgroundColor = [UIColor clearColor];
         [_startButton addTarget:self action:@selector(startPresentationAction:) forControlEvents:UIControlEventTouchDown];
         
         _startButton.tag = 1;

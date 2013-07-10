@@ -17,7 +17,7 @@
 @property (nonatomic, weak) NSNotificationCenter* center;
 @property (nonatomic, strong) id slideShowPreviewStartObserver;
 @property (nonatomic, strong) id pinValidationObserver;
-@property (nonatomic, strong) NSIndexPath *lastSpinningCellIndex;
+@property (atomic, strong) NSIndexPath *lastSpinningCellIndex;
 
 @end
 
@@ -47,7 +47,7 @@
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
     
-    self.lastSpinningCellIndex = [[NSIndexPath alloc] init];
+//    self.lastSpinningCellIndex = [[NSIndexPath alloc] init];
     self.center = [NSNotificationCenter defaultCenter];
     self.comManager = [CommunicationManager sharedComManager];
     self.serverTable.dataSource = self;
@@ -103,8 +103,12 @@
 
 - (void)disableSpinner
 {
-    if ([[self.tableView cellForRowAtIndexPath:self.lastSpinningCellIndex] respondsToSelector:@selector(accessoryView)]) {
-        [self.tableView cellForRowAtIndexPath:self.lastSpinningCellIndex].accessoryView = nil;
+    @synchronized(self.lastSpinningCellIndex){
+        if ([[self.tableView cellForRowAtIndexPath:self.lastSpinningCellIndex] respondsToSelector:@selector(accessoryView)]) {
+            if (self.tableView && [self.tableView cellForRowAtIndexPath:self.lastSpinningCellIndex]) {
+                [[self.tableView cellForRowAtIndexPath:self.lastSpinningCellIndex] setAccessoryView:nil];
+            }
+        }
     }
 }
 

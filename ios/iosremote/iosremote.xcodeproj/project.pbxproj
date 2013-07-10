@@ -36,7 +36,7 @@
 		57C6E405175E06E800E8BC5F /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 57C6E404175E06E800E8BC5F /* Default.png */; };
 		57C6E407175E06E800E8BC5F /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 57C6E406175E06E800E8BC5F /* Default@2x.png */; };
 		57C6E409175E06E800E8BC5F /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 57C6E408175E06E800E8BC5F /* Default-568h@2x.png */; };
-		57C6E40C175E06E800E8BC5F /* MainStoryboard_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 57C6E40A175E06E800E8BC5F /* MainStoryboard_iPhone.storyboard */; };
+		57C6E40C175E06E800E8BC5F /* iPhone_autolayout.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 57C6E40A175E06E800E8BC5F /* iPhone_autolayout.storyboard */; };
 		57C6E42E175E076900E8BC5F /* Client.m in Sources */ = {isa = PBXBuildFile; fileRef = 57C6E427175E076900E8BC5F /* Client.m */; };
 		57C6E42F175E076900E8BC5F /* CommunicationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 57C6E429175E076900E8BC5F /* CommunicationManager.m */; };
 		57C6E430175E076900E8BC5F /* CommandInterpreter.m in Sources */ = {isa = PBXBuildFile; fileRef = 57C6E42B175E076900E8BC5F /* CommandInterpreter.m */; };
@@ -93,7 +93,7 @@
 		57C6E404175E06E800E8BC5F /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
 		57C6E406175E06E800E8BC5F /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
 		57C6E408175E06E800E8BC5F /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
-		57C6E40B175E06E800E8BC5F /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard_iPhone.storyboard; sourceTree = "<group>"; };
+		57C6E40B175E06E800E8BC5F /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/iPhone_autolayout.storyboard; sourceTree = "<group>"; };
 		57C6E426175E076900E8BC5F /* Client.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Client.h; sourceTree = "<group>"; };
 		57C6E427175E076900E8BC5F /* Client.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Client.m; sourceTree = "<group>"; };
 		57C6E428175E076900E8BC5F /* CommunicationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = CommunicationManager.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
@@ -217,7 +217,7 @@
 			isa = PBXGroup;
 			children = (
 				57C6E3F9175E06E800E8BC5F /* Supporting Files */,
-				57C6E40A175E06E800E8BC5F /* MainStoryboard_iPhone.storyboard */,
+				57C6E40A175E06E800E8BC5F /* iPhone_autolayout.storyboard */,
 				57FE71E11785C61300B50125 /* pinValidation_vc.h */,
 				57FE71E21785C61400B50125 /* pinValidation_vc.m */,
 				57AEEDAB1789443D007F4F97 /* slideShowPreview */,
@@ -327,7 +327,7 @@
 				57C6E405175E06E800E8BC5F /* Default.png in Resources */,
 				57C6E407175E06E800E8BC5F /* Default@2x.png in Resources */,
 				57C6E409175E06E800E8BC5F /* Default-568h@2x.png in Resources */,
-				57C6E40C175E06E800E8BC5F /* MainStoryboard_iPhone.storyboard in Resources */,
+				57C6E40C175E06E800E8BC5F /* iPhone_autolayout.storyboard in Resources */,
 				57867A541787172A00EBBE52 /* impress.jpeg in Resources */,
 				57867A5A1787510700EBBE52 /* pushed_next_button.png in Resources */,
 				57867A5B1787510700EBBE52 /* released_next_button.png in Resources */,
@@ -384,12 +384,12 @@
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
 		};
-		57C6E40A175E06E800E8BC5F /* MainStoryboard_iPhone.storyboard */ = {
+		57C6E40A175E06E800E8BC5F /* iPhone_autolayout.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
 				57C6E40B175E06E800E8BC5F /* en */,
 			);
-			name = MainStoryboard_iPhone.storyboard;
+			name = iPhone_autolayout.storyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */

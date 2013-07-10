@@ -33,64 +33,56 @@
 
 // Received a set of instructions from server.
 - (void) parse:(NSArray*)command{
+    uint marker = 0;
     if ([command count] == 0) {
         return;
     }
-//    NSLog(@"Command:%@", command);
+
     NSString *instruction = [command objectAtIndex:0];
     if ([instruction isEqualToString:STATUS_PAIRING_PINVALIDATION]) {
         [[NSNotificationCenter defaultCenter] postNotificationName:STATUS_PAIRING_PINVALIDATION
                                                             object:nil];
+        marker = 2;
     }
     else if ([instruction isEqualToString:STATUS_PAIRING_PAIRED]){
         NSLog(@"Paired command: %@", command);
         [[NSNotificationCenter defaultCenter] postNotificationName:STATUS_PAIRING_PAIRED
                                                             object:nil];
-        if ([command objectAtIndex:2] && [[command objectAtIndex:2] isEqualToString:@"slideshow_started"]){
-            NSRange range;
-            range.location = 2;
-            range.length = [command count] - 2;
-            [self parse:[command subarrayWithRange:range]];
-        }
+        marker = 2;
     }
     else if([instruction isEqualToString:@"slideshow_started"]){
         uint slideLength = [[command objectAtIndex:1] integerValue];
         uint currentSlide = [[command objectAtIndex:2] integerValue];
         NSLog(@"Interpreter: slideshow_started with currentSlide: %u slideLength: %u", currentSlide, slideLength);
-        
+
         [self.slideShow setSize:slideLength];
         [self.slideShow setCurrentSlide:currentSlide];
-        
+
         [[NSNotificationCenter defaultCenter] postNotificationName:STATUS_CONNECTED_SLIDESHOW_RUNNING
-                          object:nil];
+                                                            object:nil];
         [[NSNotificationCenter defaultCenter] postNotificationName:MSG_SLIDE_CHANGED object:nil];
-        
+        marker = 4;
     } else if ([instruction isEqualToString:@"slideshow_finished"]){
         NSLog(@"Interpreter: slideshow_finished");
         self.slideShow = [[SlideShow alloc] init];
         [[NSNotificationCenter defaultCenter] postNotificationName:STATUS_CONNECTED_NOSLIDESHOW object:nil];
+        marker = 2;
     } else {
         if ([instruction isEqualToString:@"slide_updated"]) {
             NSLog(@"Interpreter: slide_updated");
             uint newSlideNumber = [[command objectAtIndex:1] integerValue];
             [self.slideShow setCurrentSlide:newSlideNumber];
-            
+
             [[NSNotificationCenter defaultCenter] postNotificationName:MSG_SLIDE_CHANGED object:nil];
-            
+            marker = 3;
         } else if ([instruction isEqualToString:@"slide_preview"]){
             NSLog(@"Interpreter: slide_preview");
             uint slideNumber = [[command objectAtIndex:1] integerValue];
             NSString * imageData = [command objectAtIndex:2];
             [self.slideShow putImage:imageData
-                              AtIndex:slideNumber];
+                             AtIndex:slideNumber];
             [[NSNotificationCenter defaultCenter] postNotificationName:MSG_SLIDE_PREVIEW object:[NSNumber numberWithUnsignedInt:slideNumber]];
-            if ([[command objectAtIndex:4] isEqualToString:@"slide_notes"])
-            {
-                NSRange range;
-                range.location = 4;
-                range.length = [command count] - 4;
-                [self parse:[command subarrayWithRange:range]];
-            }
+            marker = 4;
         } else if ([instruction isEqualToString:@"slide_notes"]){
             NSLog(@"Interpreter: slide_notes");
             uint slideNumber = [[command objectAtIndex:1] integerValue];
@@ -98,15 +90,23 @@
             for (int i = 2; i<command.count; ++i) {
                 [notes appendString:[command objectAtIndex:i]];
                 if ([notes hasSuffix:@"</body>"]) {
+                    marker = i+2;
                     break;
                 }
             }
             [self.slideShow putNotes:notes
-                              AtIndex:slideNumber];
+                             AtIndex:slideNumber];
             [[NSNotificationCenter defaultCenter] postNotificationName:MSG_SLIDE_NOTES object: [NSNumber numberWithUnsignedInt:slideNumber]];
         }
+
     }
-    
+    if ([command objectAtIndex:marker] && ![[command objectAtIndex:marker] isEqualToString:@""])
+    {
+        NSRange range;
+        range.location = marker;
+        range.length = [command count] - marker;
+        [self parse:[command subarrayWithRange:range]];
+    }
 }
 
 @end

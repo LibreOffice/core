@@ -14,10 +14,10 @@
 
 @interface SlideShow()
 
-@property (nonatomic, strong) NSMutableDictionary* imagesDictionary;
-@property (nonatomic, strong) NSMutableDictionary* notesDictionary;
+@property (atomic, strong) NSMutableDictionary* imagesDictionary;
+@property (atomic, strong) NSMutableDictionary* notesDictionary;
 
-@property (nonatomic, strong) NSMutableDictionary* loadBuffer;
+@property (atomic, strong) NSMutableDictionary* loadBuffer;
 @property (nonatomic, strong) id slideShowImageReadyObserver;
 @property (nonatomic, strong) id slideShowNoteReadyObserver;
 
@@ -93,10 +93,8 @@ dispatch_queue_t backgroundQueue;
 }
 
 - (void) putImage: (NSString *)img AtIndex: (uint) index{
-//    NSLog(@"Put Image into %u", index);
         NSData* data = [NSData dataWithBase64String:img];
         UIImage* image = [UIImage imageWithData:data];
-        NSLog(@"%@", image);
         [self.imagesDictionary setObject:image forKey:[NSNumber numberWithUnsignedInt:index]];
         [[NSNotificationCenter defaultCenter] postNotificationName:@"storage_update_ready"
                                                             object:nil
@@ -129,6 +127,7 @@ dispatch_queue_t backgroundQueue;
     }
     if (![self.imagesDictionary objectForKey:[NSNumber numberWithUnsignedInt:index]])
     {
+        NSLog(@"Didn't find %u, putting into buffer", index);
         [self.loadBuffer setObject:[NSNumber numberWithInt:index ] forKey:[NSNumber numberWithInt:[view tag]]];
     }
     else{
