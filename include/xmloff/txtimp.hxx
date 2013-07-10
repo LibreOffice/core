@@ -409,9 +409,6 @@ public:
 
     void SetAutoStyles( SvXMLStylesContext *pStyles );
 
-    void SetFontDecls( XMLFontStylesContext *pFontDecls );
-    const XMLFontStylesContext *GetFontDecls() const;
-
     SvXMLImportContext *CreateTextChildContext(
             SvXMLImport& rImport,
             sal_uInt16 nPrefix, const OUString& rLocalName,
@@ -557,10 +554,10 @@ public:
         GetRubyImportPropertySetMapper() const;
 
     static SvXMLImportPropertyMapper *CreateShapeExtPropMapper(SvXMLImport&);
-    static SvXMLImportPropertyMapper *CreateParaExtPropMapper(SvXMLImport&, XMLFontStylesContext *pFontDecls = NULL);
-    static SvXMLImportPropertyMapper* CreateParaDefaultExtPropMapper(SvXMLImport&, XMLFontStylesContext* pFontDecls = NULL);
-    static SvXMLImportPropertyMapper* CreateTableDefaultExtPropMapper(SvXMLImport&, XMLFontStylesContext* pFontDecls = NULL);
-    static SvXMLImportPropertyMapper* CreateTableRowDefaultExtPropMapper(SvXMLImport&, XMLFontStylesContext* pFontDecls = NULL);
+    static SvXMLImportPropertyMapper *CreateParaExtPropMapper(SvXMLImport&);
+    static SvXMLImportPropertyMapper* CreateParaDefaultExtPropMapper(SvXMLImport&);
+    static SvXMLImportPropertyMapper* CreateTableDefaultExtPropMapper(SvXMLImport&);
+    static SvXMLImportPropertyMapper* CreateTableRowDefaultExtPropMapper(SvXMLImport&);
 
     SvI18NMap& GetRenameMap();
 

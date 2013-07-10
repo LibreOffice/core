@@ -784,7 +784,7 @@ SvxXMLListLevelStyleAttrContext_Impl::SvxXMLListLevelStyleAttrContext_Impl(
     if( !sFontName.isEmpty() )
     {
         const XMLFontStylesContext *pFontDecls =
-            GetImport().GetTextImport()->GetFontDecls();
+            GetImport().GetFontDecls();
         if( pFontDecls )
         {
             ::std::vector < XMLPropertyState > aProps;
