@@ -1373,8 +1373,21 @@ public:
                 // Group the cloned formula cells.
                 groupFormulaCells(aCloned);
 
-                maDestPos.miCellPos = mrDestCol.GetCellStore().set(
+                sc::CellStoreType& rDestCells = mrDestCol.GetCellStore();
+                maDestPos.miCellPos = rDestCells.set(
                     maDestPos.miCellPos, nTopRow, aCloned.begin(), aCloned.end());
+
+                // Merge adjacent formula cell groups (if applicable).
+                sc::CellStoreType::position_type aPos =
+                    rDestCells.position(maDestPos.miCellPos, nTopRow);
+                maDestPos.miCellPos = aPos.first;
+                mrDestCol.JoinFormulaCellAbove(aPos);
+                size_t nLastRow = nTopRow + nDataSize;
+                if (nLastRow < static_cast<size_t>(MAXROW))
+                {
+                    aPos = rDestCells.position(maDestPos.miCellPos, nLastRow+1);
+                    mrDestCol.JoinFormulaCellAbove(aPos);
+                }
 
                 setDefaultAttrsToDest(nTopRow, nDataSize);
             }
