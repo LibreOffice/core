@@ -65,12 +65,12 @@ SvRTLInputBox::SvRTLInputBox( Window* pParent, const String& rPrompt,
     aCancel.Show();
     aEdit.Show();
     aPromptText.Show();
-    SetText( OUString(rTitle) );
+    SetText( rTitle );
     Font aFont( GetFont());
     Color aColor( GetBackground().GetColor() );
     aFont.SetFillColor( aColor );
     aEdit.SetFont( aFont );
-    aEdit.SetText( OUString(rDefault) );
+    aEdit.SetText( rDefault );
     aEdit.SetSelection( Selection( SELECTION_MIN, SELECTION_MAX ) );
 }
 
@@ -107,9 +107,9 @@ void SvRTLInputBox::PositionPrompt(const String& rPrompt,const Size& rDlgSize)
 {
     if ( rPrompt.Len() == 0 )
         return;
-    String aText_(convertLineEnd(rPrompt, LINEEND_CR));
+    OUString aText_(convertLineEnd(rPrompt, LINEEND_CR));
     aPromptText.SetPosPixel( LogicToPixel(Point(5,5)));
-    aPromptText.SetText( OUString(aText_) );
+    aPromptText.SetText( aText_ );
     Size aSize( rDlgSize );
     aSize.Width() -= 70;
     aSize.Height() -= 50;
