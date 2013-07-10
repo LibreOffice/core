@@ -1383,12 +1383,12 @@ public:
                 sc::CellStoreType::position_type aPos =
                     rDestCells.position(maDestPos.miCellPos, nTopRow);
                 maDestPos.miCellPos = aPos.first;
-                mrDestCol.JoinFormulaCellAbove(aPos);
+                sc::SharedFormulaUtil::joinFormulaCellAbove(aPos);
                 size_t nLastRow = nTopRow + nDataSize;
                 if (nLastRow < static_cast<size_t>(MAXROW))
                 {
                     aPos = rDestCells.position(maDestPos.miCellPos, nLastRow+1);
-                    mrDestCol.JoinFormulaCellAbove(aPos);
+                    sc::SharedFormulaUtil::joinFormulaCellAbove(aPos);
                 }
 
                 setDefaultAttrsToDest(nTopRow, nDataSize);
@@ -2170,15 +2170,15 @@ void ScColumn::MoveTo(SCROW nStartRow, SCROW nEndRow, ScColumn& rCol)
 
     // Split the formula grouping at the top and bottom boundaries.
     sc::CellStoreType::position_type aPos = maCells.position(nStartRow);
-    SplitFormulaCellGroup(aPos);
+    sc::SharedFormulaUtil::splitFormulaCellGroup(aPos);
     aPos = maCells.position(aPos.first, nEndRow+1);
-    SplitFormulaCellGroup(aPos);
+    sc::SharedFormulaUtil::splitFormulaCellGroup(aPos);
 
     // Do the same with the destination column.
     aPos = rCol.maCells.position(nStartRow);
-    rCol.SplitFormulaCellGroup(aPos);
+    sc::SharedFormulaUtil::splitFormulaCellGroup(aPos);
     aPos = rCol.maCells.position(aPos.first, nEndRow+1);
-    rCol.SplitFormulaCellGroup(aPos);
+    sc::SharedFormulaUtil::splitFormulaCellGroup(aPos);
 
     // Move the broadcasters to the destination column.
     maBroadcasters.transfer(nStartRow, nEndRow, rCol.maBroadcasters, nStartRow);
@@ -2187,9 +2187,9 @@ void ScColumn::MoveTo(SCROW nStartRow, SCROW nEndRow, ScColumn& rCol)
 
     // Re-group transferred formula cells.
     aPos = rCol.maCells.position(nStartRow);
-    rCol.JoinFormulaCellAbove(aPos);
+    sc::SharedFormulaUtil::joinFormulaCellAbove(aPos);
     aPos = rCol.maCells.position(aPos.first, nEndRow+1);
-    rCol.JoinFormulaCellAbove(aPos);
+    sc::SharedFormulaUtil::joinFormulaCellAbove(aPos);
 
     CellStorageModified();
     rCol.CellStorageModified();
@@ -2315,11 +2315,11 @@ bool ScColumn::UpdateReferenceOnCopy(
 
     // The formula groups at the top and bottom boundaries are expected to
     // have been split prior to this call. Here, we only do the joining.
-    JoinFormulaCellAbove(aPos);
+    sc::SharedFormulaUtil::joinFormulaCellAbove(aPos);
     if (rRange.aEnd.Row() < MAXROW)
     {
         aPos = maCells.position(aPos.first, rRange.aEnd.Row()+1);
-        JoinFormulaCellAbove(aPos);
+        sc::SharedFormulaUtil::joinFormulaCellAbove(aPos);
     }
 
     return aHandler.isUpdated();
@@ -2341,12 +2341,12 @@ bool ScColumn::UpdateReference(
         if (ValidRow(nSplitPos))
         {
             sc::CellStoreType::position_type aPos = maCells.position(nSplitPos);
-            SplitFormulaCellGroup(aPos);
+            sc::SharedFormulaUtil::splitFormulaCellGroup(aPos);
             nSplitPos = rRange.aEnd.Row() + 1;
             if (ValidRow(nSplitPos))
             {
                 aPos = maCells.position(aPos.first, nSplitPos);
-                SplitFormulaCellGroup(aPos);
+                sc::SharedFormulaUtil::splitFormulaCellGroup(aPos);
             }
         }
     }

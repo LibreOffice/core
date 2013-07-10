@@ -281,7 +281,7 @@ void ScColumn::DeleteRow( SCROW nStartRow, SCSIZE nSize )
     ShiftFormulaPosHandler aShiftFormulaFunc;
     sc::ProcessFormula(aPos.first, maCells, nStartRow, MAXROW, aShiftFormulaFunc);
 
-    JoinFormulaCellAbove(aPos);
+    sc::SharedFormulaUtil::joinFormulaCellAbove(aPos);
 
     // Single cell broadcasts on deleted cells.
     BroadcastCells(aDeleteRowsFunc.getNonEmptyRows());
@@ -420,13 +420,13 @@ void ScColumn::DetachFormulaCells(
     const sc::CellStoreType::position_type& aPos, size_t nLength )
 {
     // Split formula grouping at the top and bottom boundaries.
-    SplitFormulaCellGroup(aPos);
+    sc::SharedFormulaUtil::splitFormulaCellGroup(aPos);
     size_t nRow = aPos.first->position + aPos.second;
     size_t nNextTopRow = nRow + nLength; // start row of next formula group.
     if (ValidRow(nNextTopRow))
     {
         sc::CellStoreType::position_type aPos2 = maCells.position(aPos.first, nNextTopRow);
-        SplitFormulaCellGroup(aPos2);
+        sc::SharedFormulaUtil::splitFormulaCellGroup(aPos2);
     }
 
     if (pDocument->IsClipOrUndo())
@@ -553,74 +553,6 @@ void ScColumn::UnshareFormulaCell(
     }
 
     rCell.SetCellGroup(xNone);
-}
-
-void ScColumn::SplitFormulaCellGroup( const sc::CellStoreType::position_type& aPos ) const
-{
-    SCROW nRow = aPos.first->position + aPos.second;
-
-    if (aPos.first->type != sc::element_type_formula)
-        // Not a formula cell block.
-        return;
-
-    if (aPos.second == 0)
-        // Split position coincides with the block border. Nothing to do.
-        return;
-
-    sc::formula_block::iterator it = sc::formula_block::begin(*aPos.first->data);
-    std::advance(it, aPos.second);
-    ScFormulaCell& rTop = **it;
-    if (!rTop.IsShared())
-        // Not a shared formula.
-        return;
-
-    if (nRow == rTop.GetSharedTopRow())
-        // Already the top cell of a shared group.
-        return;
-
-    ScFormulaCellGroupRef xGroup = rTop.GetCellGroup();
-
-    ScFormulaCellGroupRef xGroup2(new ScFormulaCellGroup);
-    xGroup2->mbInvariant = xGroup->mbInvariant;
-    xGroup2->mnStart = nRow;
-    xGroup2->mnLength = xGroup->mnStart + xGroup->mnLength - nRow;
-
-    xGroup->mnLength = nRow - xGroup->mnStart;
-
-    // Apply the lower group object to the lower cells.
-#if DEBUG_COLUMN_STORAGE
-        if (xGroup2->mnStart + xGroup2->mnLength > aPos.first->position + aPos.first->size)
-        {
-            cerr << "ScColumn::SplitFormulaCellGroup: Shared formula region goes beyond the formula block. Not good." << endl;
-            cerr.flush();
-            abort();
-        }
-#endif
-    sc::formula_block::iterator itEnd = it;
-    std::advance(itEnd, xGroup2->mnLength);
-    for (; it != itEnd; ++it)
-    {
-        ScFormulaCell& rCell = **it;
-        rCell.SetCellGroup(xGroup2);
-    }
-}
-
-void ScColumn::JoinFormulaCellAbove( const sc::CellStoreType::position_type& aPos ) const
-{
-    if (aPos.first->type != sc::element_type_formula)
-        // This is not a formula cell.
-        return;
-
-    if (aPos.second == 0)
-        // This cell is already the top cell in a formula block; the previous
-        // cell is not a formula cell.
-        return;
-
-    ScFormulaCell& rPrev = *sc::formula_block::at(*aPos.first->data, aPos.second-1);
-    ScFormulaCell& rCell = *sc::formula_block::at(*aPos.first->data, aPos.second);
-    sc::CellStoreType::position_type aPosPrev = aPos;
-    --aPosPrev.second;
-    joinFormulaCells(aPosPrev, rPrev, rCell);
 }
 
 sc::CellStoreType::iterator ScColumn::GetPositionToInsert( const sc::CellStoreType::iterator& it, SCROW nRow )
@@ -1545,14 +1477,14 @@ public:
 
                     // Merge with the previous formula group (if any).
                     aPos = rDestCells.position(itDestPos, nDestRow);
-                    mrDestColumn.JoinFormulaCellAbove(aPos);
+                    sc::SharedFormulaUtil::joinFormulaCellAbove(aPos);
 
                     // Merge with the next formula group (if any).
                     size_t nNextRow = nDestRow + it->size;
                     if (ValidRow(nNextRow))
                     {
                         aPos = rDestCells.position(aPos.first, nNextRow);
-                        mrDestColumn.JoinFormulaCellAbove(aPos);
+                        sc::SharedFormulaUtil::joinFormulaCellAbove(aPos);
                     }
                 }
                 break;

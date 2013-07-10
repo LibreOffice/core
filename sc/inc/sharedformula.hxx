@@ -11,6 +11,7 @@
 #define SC_SHAREDFORMULA_HXX
 
 #include "formulacell.hxx"
+#include "mtvelements.hxx"
 
 namespace sc {
 
@@ -18,6 +19,10 @@ class SharedFormulaUtil
 {
 public:
 
+    /**
+     * Group formula cells stored in the passed container. The formula cells
+     * in the container are assumed to be all <b>non-shared</b>.
+     */
     template<typename _Iter>
     static void groupFormulaCells(const _Iter& itBeg, const _Iter& itEnd)
     {
@@ -49,6 +54,25 @@ public:
             pCur->SetCellGroup(xGroup);
         }
     }
+
+    /**
+     * Split existing shared formula range at specified position. The cell at
+     * specified position becomes the top cell of the lower shared formula
+     * range after this call.  This method does nothing if the cell at
+     * specified position is not a formula cell.
+     *
+     * @param aPos position of cell to examine.
+     */
+    static void splitFormulaCellGroup(const CellStoreType::position_type& aPos);
+
+    /**
+     * Merge with an existing formula group (if any) located immediately above
+     * if the cell at specified position is a formula cell, and its formula
+     * tokens are identical to that of the above formula group.
+     *
+     * @param aPos position of cell to examine.
+     */
+    static void joinFormulaCellAbove(const CellStoreType::position_type& aPos);
 };
 
 }
