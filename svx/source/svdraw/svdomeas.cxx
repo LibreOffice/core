@@ -78,9 +78,9 @@
 SdrMeasureObjGeoData::SdrMeasureObjGeoData() {}
 SdrMeasureObjGeoData::~SdrMeasureObjGeoData() {}
 
-void SdrMeasureObj::TakeRepresentation( XubString& rStr, SdrMeasureFieldKind eMeasureFieldKind ) const
+OUString SdrMeasureObj::TakeRepresentation(SdrMeasureFieldKind eMeasureFieldKind) const
 {
-    rStr.Erase();
+    String aStr;
     Fraction aMeasureScale(1, 1);
     sal_Bool bTextRota90(sal_False);
     sal_Bool bShowUnit(sal_False);
@@ -127,41 +127,41 @@ void SdrMeasureObj::TakeRepresentation( XubString& rStr, SdrMeasureFieldKind eMe
 
                 OUString aTmp;
                 pModel->TakeMetricStr(nLen, aTmp, true, nNumDigits);
-                rStr = aTmp;
+                aStr = aTmp;
 
                 if(!aFact.IsValid())
                 {
-                    rStr = String();
-                    rStr += sal_Unicode('?');
+                    aStr = String();
+                    aStr += sal_Unicode('?');
                 }
 
                 sal_Unicode cDec(SvtSysLocale().GetLocaleData().getNumDecimalSep()[0]);
 
-                if(rStr.Search(cDec) != STRING_NOTFOUND)
+                if(aStr.Search(cDec) != STRING_NOTFOUND)
                 {
-                    xub_StrLen nLen2(rStr.Len() - 1);
+                    xub_StrLen nLen2(aStr.Len() - 1);
 
-                    while(rStr.GetChar(nLen2) == sal_Unicode('0'))
+                    while(aStr.GetChar(nLen2) == sal_Unicode('0'))
                     {
-                        rStr.Erase(nLen2);
+                        aStr.Erase(nLen2);
                         nLen2--;
                     }
 
-                    if(rStr.GetChar(nLen2) == cDec)
+                    if(aStr.GetChar(nLen2) == cDec)
                     {
-                        rStr.Erase(nLen2);
+                        aStr.Erase(nLen2);
                         nLen2--;
                     }
 
-                    if(!rStr.Len())
-                        rStr += sal_Unicode('0');
+                    if(!aStr.Len())
+                        aStr += sal_Unicode('0');
                 }
             }
             else
             {
                 // if there's no Model ... (e. g. preview in dialog)
-                rStr = String();
-                rStr.AppendAscii("4711");
+                aStr = String();
+                aStr.AppendAscii("4711");
             }
 
             break;
@@ -178,7 +178,7 @@ void SdrMeasureObj::TakeRepresentation( XubString& rStr, SdrMeasureFieldKind eMe
                         eMeasureUnit = eModUIUnit;
 
                     if(bShowUnit)
-                        pModel->TakeUnitStr(eMeasureUnit, rStr);
+                        pModel->TakeUnitStr(eMeasureUnit, aStr);
                 }
             }
 
@@ -188,13 +188,14 @@ void SdrMeasureObj::TakeRepresentation( XubString& rStr, SdrMeasureFieldKind eMe
         {
             if(bTextRota90)
             {
-                rStr = String();
-                rStr += sal_Unicode(' ');
+                aStr = String();
+                aStr += sal_Unicode(' ');
             }
 
             break;
         }
     }
+    return aStr;
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -591,7 +592,7 @@ bool SdrMeasureObj::CalcFieldValue(const SvxFieldItem& rField, sal_Int32 nPara, 
     const SvxFieldData* pField=rField.GetField();
     SdrMeasureField* pMeasureField=PTR_CAST(SdrMeasureField,pField);
     if (pMeasureField!=NULL) {
-        TakeRepresentation(rRet, pMeasureField->GetMeasureFieldKind());
+        rRet = TakeRepresentation(pMeasureField->GetMeasureFieldKind());
         if (rpFldColor!=NULL) {
             if (!bEdit)
             {

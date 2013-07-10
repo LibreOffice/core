@@ -63,7 +63,7 @@ RedlinData::~RedlinData()
 //----------------------------------------------------------------------------
 
 SvxRedlinEntry::SvxRedlinEntry()
-    :SvTreeListEntry()
+    : SvTreeListEntry()
 {
 }
 
@@ -77,10 +77,9 @@ SvxRedlinEntry::~SvxRedlinEntry()
 
 DBG_NAME(SvLBoxColorString);
 
-SvLBoxColorString::SvLBoxColorString( SvTreeListEntry*pEntry,sal_uInt16 nFlags,const XubString& rStr,
-                                    const Color& rCol)
-
-: SvLBoxString( pEntry, nFlags, rStr )
+SvLBoxColorString::SvLBoxColorString(SvTreeListEntry*pEntry, sal_uInt16 nFlags, const OUString& rStr,
+    const Color& rCol)
+    : SvLBoxString(pEntry, nFlags, rStr)
 {
     DBG_CTOR(SvLBoxColorString,0);
     aPrivColor=rCol;

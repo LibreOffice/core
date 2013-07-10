@@ -34,7 +34,7 @@ SvLBoxFontString::SvLBoxFontString() :
 }
 
 SvLBoxFontString::SvLBoxFontString(
-        SvTreeListEntry* pEntry, sal_uInt16 nFlags, const XubString& rString,
+        SvTreeListEntry* pEntry, sal_uInt16 nFlags, const OUString& rString,
         const Font& rFont, const Color* pColor ) :
     SvLBoxString( pEntry, nFlags, rString ),
     maFont( rFont ),
@@ -136,9 +136,9 @@ sal_uLong SvxFontListBox::GetSelectEntryPos() const
     return pSvLBoxEntry ? GetModel()->GetAbsPos( pSvLBoxEntry ) : LIST_APPEND;
 }
 
-XubString SvxFontListBox::GetSelectEntry() const
+OUString SvxFontListBox::GetSelectEntry() const
 {
-    return GetEntryText( GetSelectEntryPos() );
+    return GetEntryText(GetSelectEntryPos());
 }
 
 void SvxFontListBox::InitEntry(

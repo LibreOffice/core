@@ -59,11 +59,11 @@ struct FmFormModelImplData
 |*
 \************************************************************************/
 FmFormModel::FmFormModel(SfxItemPool* pPool, SfxObjectShell* pPers)
-            :SdrModel(pPool, pPers, LOADREFCOUNTS)
-            ,m_pImpl(NULL)
-            ,m_pObjShell(0)
-            ,m_bOpenInDesignMode(sal_False)
-            ,m_bAutoControlFocus(sal_False)
+    : SdrModel(pPool, pPers, LOADREFCOUNTS)
+    , m_pImpl(NULL)
+    , m_pObjShell(0)
+    , m_bOpenInDesignMode(false)
+    , m_bAutoControlFocus(false)
 {
     m_pImpl = new FmFormModelImplData;
     m_pImpl->pUndoEnv = new FmXUndoEnvironment(*this);
@@ -75,12 +75,12 @@ FmFormModel::FmFormModel(SfxItemPool* pPool, SfxObjectShell* pPers)
 |* Ctor
 |*
 \************************************************************************/
-FmFormModel::FmFormModel(const XubString& rPath, SfxItemPool* pPool, SfxObjectShell* pPers)
-            :SdrModel(rPath, pPool, pPers)
-            ,m_pImpl(NULL)
-            ,m_pObjShell(0)
-            ,m_bOpenInDesignMode(sal_False)
-            ,m_bAutoControlFocus(sal_False)
+FmFormModel::FmFormModel(const OUString& rPath, SfxItemPool* pPool, SfxObjectShell* pPers)
+    : SdrModel(rPath, pPool, pPers)
+    , m_pImpl(NULL)
+    , m_pObjShell(0)
+    , m_bOpenInDesignMode(false)
+    , m_bAutoControlFocus(false)
 {
     m_pImpl = new FmFormModelImplData;
     m_pImpl->pUndoEnv = new FmXUndoEnvironment(*this);
@@ -92,13 +92,13 @@ FmFormModel::FmFormModel(const XubString& rPath, SfxItemPool* pPool, SfxObjectSh
 |* Ctor
 |*
 \************************************************************************/
-FmFormModel::FmFormModel(const XubString& rPath, SfxItemPool* pPool, SfxObjectShell* pPers,
+FmFormModel::FmFormModel(const OUString& rPath, SfxItemPool* pPool, SfxObjectShell* pPers,
                          bool bUseExtColorTable)
-            :SdrModel(rPath, pPool, pPers, bUseExtColorTable, LOADREFCOUNTS)
-            ,m_pImpl( NULL )
-            ,m_pObjShell(0)
-            ,m_bOpenInDesignMode(sal_False)
-            ,m_bAutoControlFocus(sal_False)
+    : SdrModel(rPath, pPool, pPers, bUseExtColorTable, LOADREFCOUNTS)
+    , m_pImpl(NULL)
+    , m_pObjShell(0)
+    , m_bOpenInDesignMode(false)
+    , m_bAutoControlFocus(false)
 {
     m_pImpl = new FmFormModelImplData;
     m_pImpl->pUndoEnv = new FmXUndoEnvironment(*this);

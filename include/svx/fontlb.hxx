@@ -39,7 +39,7 @@ public:
                                 SvLBoxFontString(
                                     SvTreeListEntry* pEntry,
                                     sal_uInt16 nFlags,
-                                    const XubString& rString,
+                                    const OUString& rString,
                                     const Font& rFont,
                                     const Color* pColor = NULL );
 
@@ -83,9 +83,9 @@ public:
     void                        SetNoSelection();
 
     /** Returns the position of the entry currently selected or LIST_APPEND. */
-    sal_uLong                       GetSelectEntryPos() const;
+    sal_uLong                   GetSelectEntryPos() const;
     /** Returns the text of the selected entry or an empty string. */
-    XubString                   GetSelectEntry() const;
+    OUString                    GetSelectEntry() const;
 
 protected:
     /** Initializes a new SvLBoxFontString entry.

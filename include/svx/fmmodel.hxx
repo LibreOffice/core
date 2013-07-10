@@ -49,9 +49,9 @@ public:
     TYPEINFO();
 
     FmFormModel(SfxItemPool* pPool=NULL, SfxObjectShell* pPers=NULL );
-    FmFormModel(const XubString& rPath, SfxItemPool* pPool=NULL,
+    FmFormModel(const OUString& rPath, SfxItemPool* pPool=NULL,
                 SfxObjectShell* pPers=NULL );
-    FmFormModel(const XubString& rPath, SfxItemPool* pPool, SfxObjectShell* pPers,
+    FmFormModel(const OUString& rPath, SfxItemPool* pPool, SfxObjectShell* pPers,
                 bool bUseExtColorTable);
 
     virtual ~FmFormModel();

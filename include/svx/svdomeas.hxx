@@ -73,7 +73,7 @@ protected:
 
 protected:
     void ImpTakeAttr(ImpMeasureRec& rRec) const;
-    void TakeRepresentation( XubString& rStr, SdrMeasureFieldKind eMeasureFieldKind ) const;
+    OUString TakeRepresentation(SdrMeasureFieldKind eMeasureFieldKind) const;
     void ImpCalcGeometrics(const ImpMeasureRec& rRec, ImpMeasurePoly& rPol) const;
     basegfx::B2DPolyPolygon ImpCalcXPoly(const ImpMeasurePoly& rPol) const;
     void ImpEvalDrag(ImpMeasureRec& rRec, const SdrDragStat& rDrag) const;

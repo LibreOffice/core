@@ -74,7 +74,7 @@ private:
     Color           aPrivColor;
 
 public:
-                    SvLBoxColorString( SvTreeListEntry*,sal_uInt16 nFlags,const XubString& rStr,
+                    SvLBoxColorString( SvTreeListEntry*, sal_uInt16 nFlags, const OUString& rStr,
                                     const Color& rCol);
                     SvLBoxColorString();
                     ~SvLBoxColorString();
