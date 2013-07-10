@@ -1656,7 +1656,9 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
 int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
 {
     if (nKeyword != RTF_HEXCHAR)
-        checkUnicode();
+        checkUnicode(/*bUnicode =*/ true, /*bHex =*/ true);
+    else
+        checkUnicode(/*bUnicode =*/ true, /*bHex =*/ false);
     setNeedSect();
     RTFSkipDestination aSkip(*this);
 
@@ -2977,7 +2979,8 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             if ((SAL_MIN_INT16 <= nParam) && (nParam <= SAL_MAX_UINT16))
             {
                 m_aUnicodeBuffer.append(static_cast<sal_Unicode>(nParam));
-                m_aStates.top().nCharsToSkip = m_aStates.top().nUc;
+                if (m_aStates.top().nDestinationState != DESTINATION_LEVELTEXT)
+                    m_aStates.top().nCharsToSkip = m_aStates.top().nUc;
             }
             break;
         case RTF_LEVELFOLLOW:
