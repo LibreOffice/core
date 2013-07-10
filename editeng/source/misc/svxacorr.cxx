@@ -621,11 +621,10 @@ sal_Bool SvxAutoCorrect::FnAddNonBrkSpace(
     bool bRet = false;
 
     CharClass& rCC = GetCharClass( eLang );
-    const lang::Locale rLocale = rCC.getLanguageTag().getLocale( );
 
-    if ( rLocale.Language == OUString( "fr" ) )
+    if ( rCC.getLanguageTag().getLanguage() == "fr" )
     {
-        bool bFrCA = rLocale.Country == OUString( "CA" );
+        bool bFrCA = (rCC.getLanguageTag().getCountry() == "CA");
         OUString allChars = OUString( ":;?!%" );
         OUString chars( allChars );
         if ( bFrCA )
