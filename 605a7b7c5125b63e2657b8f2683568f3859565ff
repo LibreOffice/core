@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXn///E0\u003d",
+        "filename": "sc/inc/addruno.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-07-10T10:11:06Z",
+      "side": 1,
+      "message": "These X... are not comments for methods but comments to the next block of virtual methods that implement this UNO interface. It does not make sense to have them doxygenified and make them show up as a method comment.",
+      "revId": "605a7b7c5125b63e2657b8f2683568f3859565ff",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
