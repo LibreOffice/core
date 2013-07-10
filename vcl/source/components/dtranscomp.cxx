@@ -34,13 +34,13 @@
 #include "com/sun/star/datatransfer/clipboard/XClipboardEx.hpp"
 #include "com/sun/star/datatransfer/clipboard/XClipboardNotifier.hpp"
 #include "com/sun/star/datatransfer/clipboard/XClipboardListener.hpp"
-#include "com/sun/star/datatransfer/clipboard/XSystemClipboard.hpp"
 #include "com/sun/star/datatransfer/dnd/XDragSource.hpp"
 #include "com/sun/star/datatransfer/dnd/XDropTarget.hpp"
 #include "com/sun/star/datatransfer/dnd/DNDConstants.hpp"
 
 #include "cppuhelper/compbase1.hxx"
 #include "cppuhelper/compbase2.hxx"
+#include "cppuhelper/compbase3.hxx"
 #include "cppuhelper/implbase1.hxx"
 
 using namespace com::sun::star;
@@ -53,8 +53,9 @@ namespace vcl
 {
 // generic implementation to satisfy SalInstance
 class GenericClipboard :
-        public cppu::WeakComponentImplHelper2 <
-        datatransfer::clipboard::XSystemClipboard,
+        public cppu::WeakComponentImplHelper3 <
+        datatransfer::clipboard::XClipboardEx,
+        datatransfer::clipboard::XClipboardNotifier,
         XServiceInfo
         >
 {
@@ -68,8 +69,9 @@ class GenericClipboard :
 
 public:
 
-    GenericClipboard() : cppu::WeakComponentImplHelper2<
-        datatransfer::clipboard::XSystemClipboard,
+    GenericClipboard() : cppu::WeakComponentImplHelper3<
+        datatransfer::clipboard::XClipboardEx,
+        datatransfer::clipboard::XClipboardNotifier,
         XServiceInfo
         >( m_aMutex )
     {}

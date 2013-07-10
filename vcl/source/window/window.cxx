@@ -84,7 +84,6 @@
 #include "com/sun/star/datatransfer/dnd/XDragSource.hpp"
 #include "com/sun/star/datatransfer/dnd/XDropTarget.hpp"
 #include "com/sun/star/datatransfer/clipboard/XClipboard.hpp"
-#include "com/sun/star/datatransfer/clipboard/SystemClipboard.hpp"
 #include "com/sun/star/lang/XInitialization.hpp"
 #include "com/sun/star/lang/XComponent.hpp"
 #include "com/sun/star/lang/XServiceName.hpp"
@@ -8434,15 +8433,28 @@ uno::Reference< XClipboard > Window::GetClipboard()
         {
             try
             {
-                uno::Reference< XComponentContext > xContext( comphelper::getProcessComponentContext() );
-                Reference<XSystemClipboard> xSystemClipboard;
+                uno::Reference< XMultiServiceFactory > xFactory( comphelper::getProcessServiceFactory() );
+
+                mpWindowImpl->mpFrameData->mxClipboard = uno::Reference< XClipboard >( xFactory->createInstance( OUString("com.sun.star.datatransfer.clipboard.SystemClipboard") ), UNO_QUERY );
+
 #if defined(UNX) && !defined(MACOSX)          // unix clipboard needs to be initialized
-                xSystemClipboard = SystemClipboard::createUnix( xContext, Application::GetDisplayConnection(), "CLIPBOARD", vcl::createBmpConverter() );
-#else
-                xSystemClipboard = SystemClipboard::createDefault(xContext);
+                if( mpWindowImpl->mpFrameData->mxClipboard.is() )
+                {
+                    uno::Reference< XInitialization > xInit = uno::Reference< XInitialization >( mpWindowImpl->mpFrameData->mxClipboard, UNO_QUERY );
+
+                    if( xInit.is() )
+                    {
+                        Sequence< Any > aArgumentList( 3 );
+                        aArgumentList[ 0 ] = makeAny( Application::GetDisplayConnection() );
+                        aArgumentList[ 1 ] = makeAny( OUString("CLIPBOARD") );
+                        aArgumentList[ 2 ] = makeAny( vcl::createBmpConverter() );
+
+                        xInit->initialize( aArgumentList );
+                    }
+                }
 #endif
-                mpWindowImpl->mpFrameData->mxClipboard.set( xSystemClipboard, UNO_QUERY );
             }
+
             // createInstance can throw any exception
             catch (const Exception&)
             {
@@ -8469,12 +8481,19 @@ uno::Reference< XClipboard > Window::GetPrimarySelection()
         {
             try
             {
+#if defined(UNX) && !defined(MACOSX)
+                uno::Reference< XMultiServiceFactory > xFactory( comphelper::getProcessServiceFactory() );
+
+                Sequence< Any > aArgumentList( 3 );
+                aArgumentList[ 0 ] = makeAny( Application::GetDisplayConnection() );
+                aArgumentList[ 1 ] = makeAny( OUString("PRIMARY") );
+                aArgumentList[ 2 ] = makeAny( vcl::createBmpConverter() );
+
+                mpWindowImpl->mpFrameData->mxSelection = uno::Reference< XClipboard >( xFactory->createInstanceWithArguments(
+                                                                                           OUString("com.sun.star.datatransfer.clipboard.SystemClipboard"), aArgumentList ), UNO_QUERY );
+#       else
                 uno::Reference< XComponentContext > xContext( comphelper::getProcessComponentContext() );
 
-#if defined(UNX) && !defined(MACOSX)
-                Reference<XSystemClipboard> xSystemClipboard = SystemClipboard::createUnix( xContext, Application::GetDisplayConnection(), "PRIMARY", vcl::createBmpConverter() );
-                mpWindowImpl->mpFrameData->mxSelection = uno::Reference< XClipboard >( xSystemClipboard, UNO_QUERY );
-#       else
                 static uno::Reference< XClipboard > s_xSelection(
                     xContext->getServiceManager()->createInstanceWithContext( "com.sun.star.datatransfer.clipboard.GenericClipboard", xContext ), UNO_QUERY );
 
