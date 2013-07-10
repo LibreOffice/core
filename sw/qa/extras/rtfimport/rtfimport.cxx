@@ -153,7 +153,6 @@ public:
     void testFdo39001();
     void testGroupshape();
     void testFdo66565();
-    void testRhbz960019();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -292,7 +291,6 @@ void Test::run()
         {"fdo39001.rtf", &Test::testFdo39001},
         {"groupshape.rtf", &Test::testGroupshape},
         {"fdo66565.rtf", &Test::testFdo66565},
-        {"rhbz960019.rtf", &Test::testRhbz960019},
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -1419,11 +1417,6 @@ void Test::testFdo66565()
     // Cell width of A2 was 554, should be 453/14846*10000
     uno::Reference<table::XTableRows> xTableRows(xTable->getRows(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int16(304), getProperty< uno::Sequence<text::TableColumnSeparator> >(xTableRows->getByIndex(1), "TableColumnSeparators")[0].Position);
-}
-
-void Test::testRhbz960019()
-{
-    // used to crash due to extra group in listoverride entry
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
