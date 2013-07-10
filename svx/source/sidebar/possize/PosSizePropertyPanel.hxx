@@ -24,6 +24,7 @@
 #include <sfx2/sidebar/IContextChangeReceiver.hxx>
 #include <boost/scoped_ptr.hpp>
 #include <svx/rectenum.hxx>
+#include <svx/sidebar/PanelLayout.hxx>
 #include <svl/poolitem.hxx>
 #include <tools/fldunit.hxx>
 #include <com/sun/star/ui/XSidebar.hpp>
@@ -41,7 +42,7 @@ namespace svx { namespace sidebar {
 class SidebarDialControl;
 
 class PosSizePropertyPanel
-:   public Control,
+:   public PanelLayout,
     public ::sfx2::sidebar::IContextChangeReceiver,
     public ::sfx2::sidebar::ControllerItem::ItemUpdateReceiverInterface
 {
@@ -69,29 +70,28 @@ public:
 
 private:
     //Position
-    ::boost::scoped_ptr< FixedText >        mpFtPosX;
-    ::boost::scoped_ptr< MetricField >      mpMtrPosX;
-    ::boost::scoped_ptr< FixedText >        mpFtPosY;
-    ::boost::scoped_ptr< MetricField >      mpMtrPosY;
+    FixedText*        mpFtPosX;
+    MetricField*      mpMtrPosX;
+    FixedText*        mpFtPosY;
+    MetricField*      mpMtrPosY;
 
     // size
-    ::boost::scoped_ptr< FixedText >        mpFtWidth;
-    ::boost::scoped_ptr< MetricField >      mpMtrWidth;
-    ::boost::scoped_ptr< FixedText >        mpFtHeight;
-    ::boost::scoped_ptr< MetricField >      mpMtrHeight;
-    ::boost::scoped_ptr< CheckBox >         mpCbxScale;
+    FixedText*        mpFtWidth;
+    MetricField*      mpMtrWidth;
+    FixedText*        mpFtHeight;
+    MetricField*      mpMtrHeight;
+    CheckBox*         mpCbxScale;
 
     //rotation
-    ::boost::scoped_ptr< FixedText >        mpFtAngle;
-    ::boost::scoped_ptr< MetricBox >        mpMtrAngle;
+    FixedText*        mpFtAngle;
+    MetricBox*        mpMtrAngle;
 
     //rotation control
-    ::boost::scoped_ptr<SidebarDialControl> mpDial;
+    SidebarDialControl*  mpDial;
 
     //flip
-    ::boost::scoped_ptr< FixedText >        mpFtFlip;
-    ::boost::scoped_ptr< Window >           mpFlipTbxBackground;
-    ::boost::scoped_ptr< ToolBox >          mpFlipTbx;
+    FixedText*        mpFtFlip;
+    ToolBox*          mpFlipTbx;
 
     // Internal variables
     Rectangle                               maRect;
@@ -174,8 +174,6 @@ private:
     void MetricState( SfxItemState eState, const SfxPoolItem* pState );
     FieldUnit GetCurrentUnit( SfxItemState eState, const SfxPoolItem* pState );
     void DisableControls();
-    void AdaptWidthHeightScalePosition(bool bOriginal);
-    void AdaptAngleFlipDialPosition(bool bOriginal);
 };
 
 
