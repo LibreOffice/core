@@ -16,26 +16,20 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 //  RID_SIDEBAR_POSSIZE_PANEL--------------------------------------------------------------
-#define FT_WIDTH                                            1
-#define MTR_FLD_WIDTH                                       2
-#define FT_HEIGHT                                           3
-#define MTR_FLD_HEIGHT                                      4
-#define CBX_SCALE                                           5
-#define FT_SBSHAPE_HORIZONTAL                               7
-#define MF_SBSHAPE_HORIZONTAL                               8
-#define FT_SBSHAPE_VERTICAL                                 9
-#define MF_SBSHAPE_VERTICAL                                 10
-#define FT_SBSHAPE_POSREFERENCE                             11
-#define CTL_SBSHAPE_POSREFERENCE                            12
-#define FT_ANGLE                                            13
-#define MTR_FLD_ANGLE                                       14
-#define TBX_FLIP                                            15
+
+#include "svx/dialogs.hrc"
+
+// global definitions
+#define FT_SBSHAPE_HORIZONTAL       (RID_SVX_SIDEBAR_BEGIN +  70)
+#define MF_SBSHAPE_HORIZONTAL       (RID_SVX_SIDEBAR_BEGIN +  71)
+#define FT_SBSHAPE_VERTICAL         (RID_SVX_SIDEBAR_BEGIN +  72)
+#define MF_SBSHAPE_VERTICAL         (RID_SVX_SIDEBAR_BEGIN +  73)
+
+//#define MTR_FLD_HEIGHT                                      4
+//#define FT_SBSHAPE_POSREFERENCE                             11
+//#define CTL_SBSHAPE_POSREFERENCE                            12
+//#define MTR_FLD_ANGLE                                       14
 #define DIAL_CONTROL                                        17
-#define FLIP_HORIZONTAL                                     18
-#define FLIP_VERTICAL                                       19
-#define FT_FLIP                                             22
-#define STR_QH_HORI_FLIP                                    23
-#define STR_QH_VERT_FLIP                                    24
 
 #define MBOX_WIDTH                      50
 #define TEXT_WIDTH                      40

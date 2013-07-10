@@ -24,6 +24,7 @@
 #include <sfx2/sidebar/IContextChangeReceiver.hxx>
 #include <boost/scoped_ptr.hpp>
 #include <svx/rectenum.hxx>
+#include <svx/sidebar/PanelLayout.hxx>
 #include <svl/poolitem.hxx>
 #include <tools/fldunit.hxx>
 #include <com/sun/star/ui/XSidebar.hpp>
@@ -41,7 +42,7 @@ namespace svx { namespace sidebar {
 class SidebarDialControl;
 
 class PosSizePropertyPanel
-:   public Control,
+:   public PanelLayout,
     public ::sfx2::sidebar::IContextChangeReceiver,
     public ::sfx2::sidebar::ControllerItem::ItemUpdateReceiverInterface
 {
@@ -75,23 +76,22 @@ private:
     ::boost::scoped_ptr< MetricField >      mpMtrPosY;
 
     // size
-    ::boost::scoped_ptr< FixedText >        mpFtWidth;
-    ::boost::scoped_ptr< MetricField >      mpMtrWidth;
-    ::boost::scoped_ptr< FixedText >        mpFtHeight;
-    ::boost::scoped_ptr< MetricField >      mpMtrHeight;
-    ::boost::scoped_ptr< CheckBox >         mpCbxScale;
+    FixedText*        mpFtWidth;
+    MetricField*      mpMtrWidth;
+    FixedText*        mpFtHeight;
+    MetricField*      mpMtrHeight;
+    CheckBox*         mpCbxScale;
 
     //rotation
-    ::boost::scoped_ptr< FixedText >        mpFtAngle;
-    ::boost::scoped_ptr< MetricBox >        mpMtrAngle;
+    FixedText*        mpFtAngle;
+    MetricBox*        mpMtrAngle;
 
     //rotation control
-    ::boost::scoped_ptr<SidebarDialControl> mpDial;
+    SidebarDialControl*  mpDial;
 
     //flip
-    ::boost::scoped_ptr< FixedText >        mpFtFlip;
-    ::boost::scoped_ptr< Window >           mpFlipTbxBackground;
-    ::boost::scoped_ptr< ToolBox >          mpFlipTbx;
+    FixedText*        mpFtFlip;
+    ToolBox*          mpFlipTbx;
 
     // Internal variables
     Rectangle                               maRect;
