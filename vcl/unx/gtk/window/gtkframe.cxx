@@ -1244,18 +1244,30 @@ Size GtkSalFrame::calcDefaultSize()
     long w = aScreenSize.Width();
     long h = aScreenSize.Height();
 
-    // fill in holy default values brought to us by product management
-    if( aScreenSize.Width() >= 800 )
-        w = 785;
-    if( aScreenSize.Width() >= 1024 )
-        w = 920;
 
-    if( aScreenSize.Height() >= 600 )
-        h = 550;
-    if( aScreenSize.Height() >= 768 )
-        h = 630;
-    if( aScreenSize.Height() >= 1024 )
-        h = 875;
+    if (true || aScreenSize.Width() <= 1024)
+    {
+        // For small screen use the old default values.  Original comment:
+        // fill in holy default values brought to us by product management
+        if( aScreenSize.Width() >= 800 )
+            w = 785;
+        if( aScreenSize.Width() >= 1024 )
+            w = 920;
+
+        if( aScreenSize.Height() >= 600 )
+            h = 550;
+        if( aScreenSize.Height() >= 768 )
+            h = 630;
+        if( aScreenSize.Height() >= 1024 )
+            h = 875;
+    }
+    else
+    {
+        // Use the same size calculation as on Mac OSX: 80% of width
+        // and height.
+        w = static_cast<long>(aScreenSize.Width() * 0.8);
+        h = static_cast<long>(aScreenSize.Height() * 0.8);
+    }
 
     return Size( w, h );
 }
