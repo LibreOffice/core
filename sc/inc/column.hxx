@@ -516,13 +516,6 @@ public:
     void RegroupFormulaCells();
 
     /**
-     * Regroup existing formula cells when a new cell is inserted.
-     *
-     * @param nRow row at which a new cell is inserted.
-     */
-    void RegroupFormulaCells( SCROW nRow );
-
-    /**
      * Regroup existing formula cells when a range of new cells are inserted.
      *
      * @param nRow1 first row of inserted new cell span.
