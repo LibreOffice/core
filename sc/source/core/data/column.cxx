@@ -39,6 +39,7 @@
 #include "mtvcellfunc.hxx"
 #include "columnspanset.hxx"
 #include "scopetools.hxx"
+#include "sharedformula.hxx"
 
 #include <svl/poolcach.hxx>
 #include <svl/zforlist.hxx>
@@ -868,8 +869,8 @@ void ScColumn::SwapRow(SCROW nRow1, SCROW nRow2)
                 // TODO: Find out a way to adjust references without cloning new instances.
                 boost::scoped_ptr<ScFormulaCell> pOld1(*itf1);
                 boost::scoped_ptr<ScFormulaCell> pOld2(*itf2);
-                DetouchFormulaCell(aPos1, **itf1);
-                DetouchFormulaCell(aPos2, **itf2);
+                DetachFormulaCell(aPos1, **itf1);
+                DetachFormulaCell(aPos2, **itf2);
                 ScFormulaCell* pNew1 = cloneFormulaCell(pDocument, ScAddress(nCol, nRow1, nTab), *pOld2);
                 ScFormulaCell* pNew2 = cloneFormulaCell(pDocument, ScAddress(nCol, nRow2, nTab), *pOld1);
                 *itf1 = pNew1;
@@ -920,7 +921,7 @@ void ScColumn::SwapRow(SCROW nRow1, SCROW nRow2)
             {
                 // cell 1 is empty and cell 2 is a formula cell.
                 ScFormulaCell* pNew = cloneFormulaCell(pDocument, ScAddress(nCol, nRow1, nTab), *aCell2.mpFormula);
-                DetouchFormulaCell(aPos2, *aCell2.mpFormula);
+                DetachFormulaCell(aPos2, *aCell2.mpFormula);
                 it1 = maCells.set(it1, nRow1, pNew);
                 maCells.set_empty(it1, nRow2, nRow2); // original formula cell gets deleted.
                 ActivateNewFormulaCell(it1, nRow1, *pNew);
@@ -964,7 +965,7 @@ void ScColumn::SwapRow(SCROW nRow1, SCROW nRow2)
             {
                 // cell 1 is a formula cell and cell 2 is empty.
                 ScFormulaCell* pNew = cloneFormulaCell(pDocument, ScAddress(nCol, nRow2, nTab), *aCell1.mpFormula);
-                DetouchFormulaCell(aPos1, *aCell1.mpFormula);
+                DetachFormulaCell(aPos1, *aCell1.mpFormula);
                 it1 = maCells.set_empty(it1, nRow1, nRow1); // original formula cell is gone.
                 it1 = maCells.set(it1, nRow2, pNew);
                 ActivateNewFormulaCell(it1, nRow2, *pNew);
@@ -999,7 +1000,7 @@ void ScColumn::SwapRow(SCROW nRow1, SCROW nRow2)
                 break;
                 case CELLTYPE_FORMULA:
                 {
-                    DetouchFormulaCell(aPos2, *aCell2.mpFormula);
+                    DetachFormulaCell(aPos2, *aCell2.mpFormula);
                     ScFormulaCell* pNew = cloneFormulaCell(pDocument, ScAddress(nCol, nRow1, nTab), *aCell2.mpFormula);
                     it1 = maCells.set(it1, nRow1, pNew);
                     ActivateNewFormulaCell(it1, nRow1, *pNew);
@@ -1032,7 +1033,7 @@ void ScColumn::SwapRow(SCROW nRow1, SCROW nRow2)
                 case CELLTYPE_FORMULA:
                 {
                     // cell 1 - string, cell 2 - formula
-                    DetouchFormulaCell(aPos2, *aCell2.mpFormula);
+                    DetachFormulaCell(aPos2, *aCell2.mpFormula);
                     ScFormulaCell* pNew = cloneFormulaCell(pDocument, ScAddress(nCol, nRow1, nTab), *aCell2.mpFormula);
                     it1 = maCells.set(it1, nRow1, pNew);
                     ActivateNewFormulaCell(it1, nRow1, *pNew);
@@ -1061,7 +1062,7 @@ void ScColumn::SwapRow(SCROW nRow1, SCROW nRow2)
                 break;
                 case CELLTYPE_FORMULA:
                 {
-                    DetouchFormulaCell(aPos2, *aCell2.mpFormula);
+                    DetachFormulaCell(aPos2, *aCell2.mpFormula);
                     ScFormulaCell* pNew = cloneFormulaCell(pDocument, ScAddress(nCol, nRow1, nTab), *aCell2.mpFormula);
                     it1 = maCells.set(it1, nRow1, pNew);
                     ActivateNewFormulaCell(it1, nRow1, *pNew);
@@ -1078,7 +1079,7 @@ void ScColumn::SwapRow(SCROW nRow1, SCROW nRow2)
         case CELLTYPE_FORMULA:
         {
             // cell 1 is a formula cell and cell 2 is not.
-            DetouchFormulaCell(aPos1, *aCell1.mpFormula);
+            DetachFormulaCell(aPos1, *aCell1.mpFormula);
             ScFormulaCell* pNew = cloneFormulaCell(pDocument, ScAddress(nCol, nRow2, nTab), *aCell1.mpFormula);
             switch (aCell2.meType)
             {
@@ -1371,7 +1372,8 @@ public:
                 }
 
                 // Group the cloned formula cells.
-                groupFormulaCells(aCloned);
+                if (!aCloned.empty())
+                    sc::SharedFormulaUtil::groupFormulaCells(aCloned.begin(), aCloned.end());
 
                 sc::CellStoreType& rDestCells = mrDestCol.GetCellStore();
                 maDestPos.miCellPos = rDestCells.set(

@@ -487,17 +487,18 @@ public:
     bool HasBroadcaster() const;
 
     void BroadcastCells( const std::vector<SCROW>& rRows );
-    void EndFormulaListening( sc::ColumnBlockPosition& rBlockPos, SCROW nRow1, SCROW nRow2 );
 
     void InterpretDirtyCells( SCROW nRow1, SCROW nRow2 );
 
     void JoinNewFormulaCell( const sc::CellStoreType::position_type& aPos, ScFormulaCell& rCell ) const;
 
     /**
-     * Detouch a formula cell that's about to be deleted, or removed from
+     * Detach a formula cell that's about to be deleted, or removed from
      * document storage (if that ever happens).
      */
-    void DetouchFormulaCell( const sc::CellStoreType::position_type& aPos, ScFormulaCell& rCell ) const;
+    void DetachFormulaCell( const sc::CellStoreType::position_type& aPos, ScFormulaCell& rCell );
+
+    void DetachFormulaCells( const sc::CellStoreType::position_type& aPos, size_t nLength );
 
     void UnshareFormulaCell( const sc::CellStoreType::position_type& aPos, ScFormulaCell& rCell ) const;
 
@@ -514,14 +515,6 @@ public:
      * Regroup formula cells for the entire column.
      */
     void RegroupFormulaCells();
-
-    /**
-     * Regroup existing formula cells when a range of new cells are inserted.
-     *
-     * @param nRow1 first row of inserted new cell span.
-     * @param nRow2 last row of inserted new cell span.
-     */
-    void RegroupFormulaCells( SCROW nRow1, SCROW nRow2 );
 
 #if DEBUG_COLUMN_STORAGE
     void DumpFormulaGroups() const;
