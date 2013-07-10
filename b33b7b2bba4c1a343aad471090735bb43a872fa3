@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXn///D4\u003d",
+        "filename": "sc/source/core/tool/interpr4.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3224,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-07-10T12:08:00Z",
+      "side": 1,
+      "message": "Btw, explicitly setting an error is unnecessary (and will be ignored if nGlobalError is already set), the nGlobalError will be propagated automatically with the next Push...()",
+      "revId": "b33b7b2bba4c1a343aad471090735bb43a872fa3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn///D8\u003d",
+        "filename": "sc/source/core/tool/interpr4.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3229,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-07-10T12:08:00Z",
+      "side": 1,
+      "message": "The resolved ref can have other types than double, e.g. string. This needs checking pToken-\u003eGetType() for svDouble or svString and put the SbxVariable accordingly.",
+      "revId": "b33b7b2bba4c1a343aad471090735bb43a872fa3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
