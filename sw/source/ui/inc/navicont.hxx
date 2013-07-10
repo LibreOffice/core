@@ -45,7 +45,6 @@ public:
     const String&   GetURL() const              { return aUrl; }
     const String&   GetDescription() const      { return aDescr; }
     sal_uInt16          GetDefaultDragType() const  { return nDefDrag; }
-    long            GetDocShell() const         { return nDocSh; }
     void            Copy( TransferDataContainer& rData ) const;
     sal_Bool            Paste( TransferableDataHelper& rData );
 };
