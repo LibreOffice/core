@@ -1691,6 +1691,10 @@ bool checkNamingSceme( const OUString& aName, const OUString& aNameBase,
     {
         bSuccess = true;
 
+        /* FIXME-BCP47: this uses '_' underscore character as separator and
+         * also appends Variant, which can't be blindly changed as it would
+         * violate the naming scheme in use. */
+
         sal_Int32 iStart = nNameBaseLen + 1;
         sal_Int32 iNext_ = aName.indexOf( '_', iStart );
         if( iNext_ != -1 && iNext_ < nNameLen-1 )
@@ -1821,6 +1825,10 @@ bool StringResourcePersistenceImpl::implLoadLocale( LocaleItem* )
 
 OUString implGetNameScemeForLocaleItem( const LocaleItem* pLocaleItem )
 {
+    /* FIXME-BCP47: this uses '_' underscore character as separator and
+     * also appends Variant, which can't be blindly changed as it would
+     * violate the naming scheme in use. */
+
     static OUString aUnder("_");
 
     OSL_ENSURE( pLocaleItem,
