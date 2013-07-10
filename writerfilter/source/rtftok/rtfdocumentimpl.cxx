@@ -4563,8 +4563,18 @@ int RTFDocumentImpl::popState()
             // list override table
         case DESTINATION_LISTOVERRIDEENTRY:
             {
-                RTFValue::Pointer_t pValue(new RTFValue(aState.aTableAttributes, aState.aTableSprms));
-                m_aListTableSprms.set(NS_ooxml::LN_CT_Numbering_num, pValue, false);
+                if (m_aStates.top().nDestinationState == DESTINATION_LISTOVERRIDEENTRY)
+                {   // copy properties upwards so upper popState inserts it
+                    m_aStates.top().aTableAttributes = aState.aTableAttributes;
+                    m_aStates.top().aTableSprms = aState.aTableSprms;
+                }
+                else
+                {
+                    RTFValue::Pointer_t pValue(new RTFValue(
+                                aState.aTableAttributes, aState.aTableSprms));
+                    m_aListTableSprms.set(NS_ooxml::LN_CT_Numbering_num,
+                            pValue, false);
+                }
             }
             break;
         case DESTINATION_LEVELTEXT:
