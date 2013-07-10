@@ -1572,7 +1572,6 @@ class CopyAsLinkHandler
     sc::ColumnBlockPosition maDestPos;
     sc::ColumnBlockPosition* mpDestPos;
     sal_uInt16 mnCopyFlags;
-    std::vector<ScFormulaCell*> maCellBuffer;
 
     void setDefaultAttrToDest(size_t nRow)
     {
@@ -1602,13 +1601,12 @@ class CopyAsLinkHandler
     {
         size_t nTopRow = aNode.position + nOffset;
 
-        maCellBuffer.clear();
-        maCellBuffer.reserve(nDataSize);
-
         for (size_t i = 0; i < nDataSize; ++i)
-            maCellBuffer.push_back(createRefCell(nTopRow + i));
+        {
+            SCROW nRow = nTopRow + i;
+            mrDestCol.SetFormulaCell(maDestPos, nRow, createRefCell(nRow));
+        }
 
-        maDestPos.miCellPos = mrDestCol.GetCellStore().set(maDestPos.miCellPos, nTopRow, maCellBuffer.begin(), maCellBuffer.end());
         setDefaultAttrsToDest(nTopRow, nDataSize);
     }
 
@@ -1727,7 +1725,7 @@ class CopyByCloneHandler
             // Clone as formula cell.
             ScFormulaCell* pCell = new ScFormulaCell(rSrcCell, mrDestCol.GetDoc(), aDestPos);
             pCell->SetDirtyVar();
-            maDestPos.miCellPos = mrDestCol.GetCellStore().set(maDestPos.miCellPos, nRow, pCell);
+            mrDestCol.SetFormulaCell(maDestPos, nRow, pCell);
             setDefaultAttrToDest(nRow);
             return;
         }
@@ -1743,8 +1741,7 @@ class CopyByCloneHandler
                 // error codes are cloned with values
                 ScFormulaCell* pErrCell = new ScFormulaCell(&mrDestCol.GetDoc(), aDestPos);
                 pErrCell->SetErrCode(nErr);
-                maDestPos.miCellPos = mrDestCol.GetCellStore().set(
-                    maDestPos.miCellPos, nRow, new ScFormulaCell(rSrcCell, mrDestCol.GetDoc(), aDestPos));
+                mrDestCol.SetFormulaCell(maDestPos, nRow, pErrCell);
                 setDefaultAttrToDest(nRow);
                 return;
             }
