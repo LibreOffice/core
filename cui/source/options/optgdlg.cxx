@@ -1148,22 +1148,6 @@ SfxTabPage* OfaLanguagesTabPage::Create( Window* pParent, const SfxItemSet& rAtt
     return new OfaLanguagesTabPage(pParent, rAttrSet);
 }
 
-static LanguageType lcl_LangStringToLangType(const OUString& rLang)
-{
-    Locale aLocale;
-    sal_Int32 nSep = rLang.indexOf('-');
-    if (nSep < 0)
-        aLocale.Language = rLang;
-    else
-    {
-        aLocale.Language = rLang.copy(0, nSep);
-        if (nSep < rLang.getLength())
-            aLocale.Country = rLang.copy(nSep+1, rLang.getLength() - (nSep+1));
-    }
-    LanguageType eLangType = LanguageTag( aLocale ).getLanguageType();
-    return eLangType;
-}
-
 static void lcl_UpdateAndDelete(SfxVoidItem* pInvalidItems[], SfxBoolItem* pBoolItems[], sal_uInt16 nCount)
 {
     SfxViewFrame* pCurrentFrm = SfxViewFrame::Current();
@@ -1261,7 +1245,7 @@ sal_Bool OfaLanguagesTabPage::FillItemSet( SfxItemSet& rSet )
 
     OUString sLang = pLangConfig->aSysLocaleOptions.GetLocaleConfigString();
     LanguageType eOldLocale = (!sLang.isEmpty() ?
-        lcl_LangStringToLangType( sLang ) : LANGUAGE_SYSTEM);
+        LanguageTag( sLang ).getLanguageType() : LANGUAGE_SYSTEM);
     LanguageType eNewLocale = m_pLocaleSettingLB->GetSelectLanguage();
     if ( eOldLocale != eNewLocale )
     {
@@ -1423,7 +1407,7 @@ void OfaLanguagesTabPage::Reset( const SfxItemSet& rSet )
 {
     OUString sLang = pLangConfig->aSysLocaleOptions.GetLocaleConfigString();
     if ( !sLang.isEmpty() )
-        m_pLocaleSettingLB->SelectLanguage(lcl_LangStringToLangType(sLang));
+        m_pLocaleSettingLB->SelectLanguage(LanguageTag(sLang).getLanguageType());
     else
         m_pLocaleSettingLB->SelectLanguage( LANGUAGE_USER_SYSTEM_CONFIG );
     sal_Bool bReadonly = pLangConfig->aSysLocaleOptions.IsReadOnly(SvtSysLocaleOptions::E_LOCALE);
