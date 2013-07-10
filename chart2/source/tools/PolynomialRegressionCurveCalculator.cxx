@@ -24,10 +24,8 @@
 #include <cmath>
 #include <rtl/math.hxx>
 #include <rtl/ustrbuf.hxx>
-#include "gauss.hxx"
 
 using namespace com::sun::star;
-
 
 namespace chart
 {
@@ -49,80 +47,138 @@ void SAL_CALL PolynomialRegressionCurveCalculator::recalculateRegression(
     RegressionCalculationHelper::tDoubleVectorPair aValues(
         RegressionCalculationHelper::cleanup( aXValues, aYValues, RegressionCalculationHelper::isValid()));
 
-    sal_Int32 aNoElements = mForceIntercept ? mDegree : mDegree + 1;
-    sal_Int32 aNumberOfPowers = 2 * aNoElements - 1;
+    const sal_Int32 aNoValues = aValues.first.size();
 
-    std::vector<double> aPowers;
-    aPowers.resize(aNumberOfPowers, 0.0);
+    const sal_Int32 aNoPowers = mForceIntercept ? mDegree : mDegree + 1;
 
-    sal_Int32 aNoColumns = aNoElements;
-    sal_Int32 aNoRows    = aNoElements + 1;
-
-    std::vector<double> aMatrix;
-    aMatrix.resize(aNoColumns * aNoRows, 0.0);
-
-    const size_t aNoValues = aValues.first.size();
+    mCoefficients.clear();
+    mCoefficients.resize(aNoPowers, 0.0);
 
     double yAverage = 0.0;
 
-    for( size_t i = 0; i < aNoValues; ++i )
+    std::vector<double> aQRTransposed;
+    aQRTransposed.resize(aNoValues * aNoPowers, 0.0);
+
+    std::vector<double> yVector;
+    yVector.resize(aNoValues, 0.0);
+
+    for(sal_Int32 i = 0; i < aNoValues; i++)
     {
-        double x = aValues.first[i];
-        double y = aValues.second[i];
-
-        for (sal_Int32 j = 0; j < aNumberOfPowers; j++)
-        {
-            if (mForceIntercept)
-                aPowers[j] += std::pow(x, (int) j + 2);
-            else
-                aPowers[j] += std::pow(x, (int) j);
-        }
-
-        for (sal_Int32 j = 0; j < aNoElements; j++)
-        {
-            if (mForceIntercept)
-                aMatrix[j * aNoRows + aNoElements] += std::pow(x, (int) j + 1) * ( y - mInterceptValue );
-            else
-                aMatrix[j * aNoRows + aNoElements] += std::pow(x, (int) j) * y;
-        }
-
-        yAverage += y;
+        double yValue = aValues.second[i];
+        if (mForceIntercept)
+            yValue -= mInterceptValue;
+        yVector[i] = yValue;
+        yAverage += yValue;
     }
+    yAverage /= aNoValues;
 
-    yAverage = yAverage / aNoValues;
-
-    for (sal_Int32 y = 0; y < aNoElements; y++)
+    for(sal_Int32 j = 0; j < aNoPowers; j++)
     {
-        for (sal_Int32 x = 0; x < aNoElements; x++)
+        sal_Int32 aPower = mForceIntercept ? j+1 : j;
+        sal_Int32 aColumnIndex = j * aNoValues;
+        for(sal_Int32 i = 0; i < aNoValues; i++)
         {
-            aMatrix[y * aNoRows + x] = aPowers[y + x];
+            double xValue = aValues.first[i];
+            aQRTransposed[i + aColumnIndex] = std::pow(xValue, aPower);
         }
     }
 
-    mResult.clear();
-    mResult.resize(aNoElements, 0.0);
+    // QR decomposition - based on org.apache.commons.math.linear.QRDecomposition from apache commons math (ASF)
+    sal_Int32 aMinorSize = std::min(aNoValues, aNoPowers);
 
-    solve(aMatrix, aNoColumns, aNoRows, mResult, 1.0e-20);
+    std::vector<double> aDiagonal;
+    aDiagonal.resize(aMinorSize, 0.0);
 
-    // Set intercept value if force intercept is enabled
-    if (mForceIntercept) {
-        mResult.insert( mResult.begin(), mInterceptValue );
+    // Calculate Householder reflectors
+    for (sal_Int32 aMinor = 0; aMinor < aMinorSize; aMinor++)
+    {
+        double aNormSqr = 0.0;
+        for (sal_Int32 x = aMinor; x < aNoValues; x++)
+        {
+            double c = aQRTransposed[x + aMinor * aNoValues];
+            aNormSqr += c * c;
+        }
+
+        double a;
+
+        if (aQRTransposed[aMinor + aMinor * aNoValues] > 0.0)
+            a = -std::sqrt(aNormSqr);
+        else
+            a = std::sqrt(aNormSqr);
+
+        aDiagonal[aMinor] = a;
+
+        if (a != 0.0)
+        {
+            aQRTransposed[aMinor + aMinor * aNoValues] -= a;
+
+            for (sal_Int32 aColumn = aMinor + 1; aColumn < aNoPowers; aColumn++)
+            {
+                double alpha = 0.0;
+                for (sal_Int32 aRow = aMinor; aRow < aNoValues; aRow++)
+                {
+                    alpha -= aQRTransposed[aRow + aColumn * aNoValues] * aQRTransposed[aRow + aMinor * aNoValues];
+                }
+                alpha /= a * aQRTransposed[aMinor + aMinor * aNoValues];
+
+                for (sal_Int32 aRow = aMinor; aRow < aNoValues; aRow++)
+                {
+                    aQRTransposed[aRow + aColumn * aNoValues] -= alpha * aQRTransposed[aRow + aMinor * aNoValues];
+                }
+            }
+        }
+    }
+
+    // Solve the linear equation
+    for (sal_Int32 aMinor = 0; aMinor < aMinorSize; aMinor++)
+    {
+        double aDotProduct = 0;
+
+        for (sal_Int32 aRow = aMinor; aRow < aNoValues; aRow++)
+        {
+            aDotProduct += yVector[aRow] * aQRTransposed[aRow + aMinor * aNoValues];
+        }
+        aDotProduct /= aDiagonal[aMinor] * aQRTransposed[aMinor + aMinor * aNoValues];
+
+        for (sal_Int32 aRow = aMinor; aRow < aNoValues; aRow++)
+        {
+            yVector[aRow] += aDotProduct * aQRTransposed[aRow + aMinor * aNoValues];
+        }
+
+    }
+
+    for (sal_Int32 aRow = aDiagonal.size() - 1; aRow >= 0; aRow--)
+    {
+        yVector[aRow] /= aDiagonal[aRow];
+        double yRow = yVector[aRow];
+        mCoefficients[aRow] = yRow;
+
+        for (sal_Int32 i = 0; i < aRow; i++)
+        {
+            yVector[i] -= yRow * aQRTransposed[i + aRow * aNoValues];
+        }
+    }
+
+    if(mForceIntercept)
+    {
+        mCoefficients.insert(mCoefficients.begin(), mInterceptValue);
     }
 
     // Calculate correlation coeffitient
     double aSumError = 0.0;
     double aSumTotal = 0.0;
 
-    for( size_t i = 0; i < aNoValues; ++i )
+    for( sal_Int32 i = 0; i < aNoValues; i++ )
     {
-        double x = aValues.first[i];
+        double xValue = aValues.first[i];
         double yActual = aValues.second[i];
-        double yPredicted = getCurveValue( x );
+        double yPredicted = getCurveValue( xValue );
         aSumTotal += (yActual - yAverage) * (yActual - yAverage);
         aSumError += (yActual - yPredicted) * (yActual - yPredicted);
     }
 
     double aRSquared = 1.0 - (aSumError / aSumTotal);
+
     if (aRSquared > 0.0)
         m_fCorrelationCoeffitient = std::sqrt(aRSquared);
     else
@@ -136,15 +192,18 @@ double SAL_CALL PolynomialRegressionCurveCalculator::getCurveValue( double x )
     double fResult;
     rtl::math::setNan(&fResult);
 
-    if (mResult.empty())
+    if (mCoefficients.empty())
     {
         return fResult;
     }
 
+    sal_Int32 aNoCoefficients = (sal_Int32) mCoefficients.size();
+
+    // Horner's method
     fResult = 0.0;
-    for (size_t i = 0; i<mResult.size(); i++)
+    for (sal_Int32 i = aNoCoefficients - 1; i >= 0; i--)
     {
-        fResult += mResult[i] * std::pow(x, (int) i);
+        fResult = mCoefficients[i] + (x * fResult);
     }
     return fResult;
 }
@@ -167,10 +226,10 @@ OUString PolynomialRegressionCurveCalculator::ImplGetRepresentation(
 {
     OUStringBuffer aBuf( "f(x) = ");
 
-    sal_Int32 aLastIndex = mResult.size() - 1;
+    sal_Int32 aLastIndex = mCoefficients.size() - 1;
     for (sal_Int32 i = aLastIndex; i >= 0; i--)
     {
-        double aValue = mResult[i];
+        double aValue = mCoefficients[i];
         if (aValue == 0.0)
         {
             continue;

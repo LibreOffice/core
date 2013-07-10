@@ -1025,11 +1025,12 @@ void VSeriesPlotter::createRegressionCurvesShapes( VDataSeries& rVDataSeries,
 
             fPointScale = (fMaxX - fMinX) / (fChartMaxX - fChartMinX);
         }
-
         xCalculator->setRegressionProperties(aDegree, aForceIntercept, aInterceptValue, aPeriod);
         xCalculator->recalculateRegression( rVDataSeries.getAllX(), rVDataSeries.getAllY() );
-
         sal_Int32 nPointCount = 100 * fPointScale;
+
+        if ( nPointCount < 2 )
+            nPointCount = 2;
 
         drawing::PolyPolygonShape3D aRegressionPoly;
         aRegressionPoly.SequenceX.realloc(1);

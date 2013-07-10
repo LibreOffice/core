@@ -25,6 +25,7 @@
 namespace chart
 {
 
+
 class PolynomialRegressionCurveCalculator : public RegressionCurveCalculator
 {
 public:
@@ -57,7 +58,7 @@ private:
         throw (com::sun::star::lang::IllegalArgumentException,
                com::sun::star::uno::RuntimeException);
 
-    std::vector<double> mResult;
+    std::vector<double> mCoefficients;
 };
 
 } //  namespace chart
