@@ -34,7 +34,6 @@ $(eval $(call gb_SrsTarget_set_include,sc/res,\
 
 $(eval $(call gb_SrsTarget_add_files,sc/res,\
     sc/source/ui/src/iconsets.src \
-    sc/source/ui/src/optdlg.src \
     sc/source/ui/src/popup.src \
     sc/source/ui/src/autofmt.src \
     sc/source/ui/src/globstr.src \

@@ -35,44 +35,31 @@ class ScViewOptions;
 
 class ScTpContentOptions : public SfxTabPage
 {
-    FixedLine       aLinesGB;
-    FixedText       aGridFT;
-    ListBox         aGridLB;
-    FixedText       aColorFT;
-    ColorListBox    aColorLB;
-    CheckBox        aBreakCB;
-    CheckBox        aGuideLineCB;
+    ListBox*         pGridLB;
+    FixedText*       pColorFT;
+    ColorListBox*    pColorLB;
+    CheckBox*        pBreakCB;
+    CheckBox*        pGuideLineCB;
 
-    FixedLine       aSeparator1FL;
+    CheckBox*        pFormulaCB;
+    CheckBox*        pNilCB;
+    CheckBox*        pAnnotCB;
+    CheckBox*        pValueCB;
+    CheckBox*        pAnchorCB;
+    CheckBox*        pClipMarkCB;
+    CheckBox*        pRangeFindCB;
 
-    FixedLine       aDisplayGB;
-    CheckBox        aFormulaCB;
-    CheckBox        aNilCB;
-    CheckBox        aAnnotCB;
-    CheckBox        aValueCB;
-    CheckBox        aAnchorCB;
-    CheckBox        aClipMarkCB;
-    CheckBox        aRangeFindCB;
+    ListBox*         pObjGrfLB;
+    ListBox*         pDiagramLB;
+    ListBox*         pDrawLB;
 
-    FixedLine       aObjectGB;
-    FixedText       aObjGrfFT;
-    ListBox         aObjGrfLB;
-    FixedText       aDiagramFT;
-    ListBox         aDiagramLB;
-    FixedText       aDrawFT;
-    ListBox         aDrawLB;
+    CheckBox*        pSyncZoomCB;
 
-    FixedLine       aZoomGB;
-    CheckBox        aSyncZoomCB;
-
-    FixedLine       aSeparator2FL;
-
-    FixedLine       aWindowGB;
-    CheckBox        aRowColHeaderCB;
-    CheckBox        aHScrollCB;
-    CheckBox        aVScrollCB;
-    CheckBox        aTblRegCB;
-    CheckBox        aOutlineCB;
+    CheckBox*        pRowColHeaderCB;
+    CheckBox*        pHScrollCB;
+    CheckBox*        pVScrollCB;
+    CheckBox*        pTblRegCB;
+    CheckBox*        pOutlineCB;
 
     ScViewOptions*  pLocalOptions;
 
