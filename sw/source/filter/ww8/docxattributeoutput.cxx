@@ -3484,9 +3484,15 @@ void DocxAttributeOutput::NumberingLevel( sal_uInt8 nLevel,
     if ( pPrev < pIt )
         aBuffer.append( pPrev, pIt - pPrev );
 
-    m_pSerializer->singleElementNS( XML_w, XML_lvlText,
-            FSNS( XML_w, XML_val ), OUStringToOString( aBuffer.makeStringAndClear(), RTL_TEXTENCODING_UTF8 ).getStr(),
-            FSEND );
+    // If bullet char is empty, set lvlText as empty
+    if ( aText.equals ( OUString(sal_Unicode(0)) ) )
+    {
+        m_pSerializer->singleElementNS( XML_w, XML_lvlText, FSNS( XML_w, XML_val ), "", FSEND );
+    }
+    else
+    {
+        m_pSerializer->singleElementNS( XML_w, XML_lvlText,FSNS( XML_w, XML_val ), OUStringToOString( aBuffer.makeStringAndClear(), RTL_TEXTENCODING_UTF8 ).getStr(), FSEND );
+    }
 
     // bullet
     if (nNumberingType == SVX_NUM_BITMAP && pBrush)

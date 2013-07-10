@@ -99,6 +99,7 @@ public:
     void testFdo66145();
     void testPageBorderSpacingExportCase2();
     void testGrabBag();
+    void testFdo66781();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -176,6 +177,7 @@ void Test::run()
         {"fdo66929.docx", &Test::testFdo66929},
         {"page-borders-export-case-2.docx", &Test::testPageBorderSpacingExportCase2},
         {"grabbag.docx", &Test::testGrabBag},
+        {"fdo66781.docx", &Test::testFdo66781},
     };
     // Don't test the first import of these, for some reason those tests fail
     const char* aBlacklist[] = {
@@ -1021,6 +1023,29 @@ void Test::testGrabBag()
     // w:mirrorIndents was lost on roundtrip, now should be handled as a grab bag property
     xmlDocPtr pXmlDoc = parseExport();
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:pPr/w:mirrorIndents");
+}
+
+void Test::testFdo66781()
+{
+    // The problem was that bullets with level=0 were shown in LO as normal bullets,
+    // and when saved back to DOCX were saved with level=1 (so hidden bullets became visible)
+    uno::Reference<beans::XPropertySet> xPropertySet(getStyles("NumberingStyles")->getByName("WWNum1"), uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xLevels(xPropertySet->getPropertyValue("NumberingRules"), uno::UNO_QUERY);
+    uno::Sequence<beans::PropertyValue> aProps;
+    xLevels->getByIndex(0) >>= aProps; // 1st level
+
+    for (int i = 0; i < aProps.getLength(); ++i)
+    {
+        const beans::PropertyValue& rProp = aProps[i];
+        if (rProp.Name == "BulletChar")
+        {
+            CPPUNIT_ASSERT_EQUAL(OUString("\x0", 1, RTL_TEXTENCODING_UTF8), rProp.Value.get<OUString>());
+            return;
+        }
+    }
+
+    // Shouldn't reach here
+    CPPUNIT_FAIL("Did not find bullet with level 0");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

@@ -417,7 +417,7 @@ Sequence<beans::PropertyValue> SvxXMLListLevelStyleContext_Impl::GetProperties(
     if( bBullet )
     {
         eType = NumberingType::CHAR_SPECIAL;
-        nCount = cBullet ? 15 : 14;
+        nCount = 15; // 'cBullet' will be written anyway if 'bBullet' is true
     }
     if( bImage )
     {
@@ -533,13 +533,12 @@ Sequence<beans::PropertyValue> SvxXMLListLevelStyleContext_Impl::GetProperties(
                     aFDesc.Name = OUString( "StarSymbol"  );
             }
 
-            if( cBullet )
-            {
-                OUStringBuffer sTmp(1);
-                sTmp.append( cBullet );
-                pProps[nPos].Name = "BulletChar";
-                pProps[nPos++].Value <<= sTmp.makeStringAndClear();
-            }
+            // Must append 'cBullet' even if it is zero
+            // if 'bBullet' is true and 'cBullet' is zero - BulletChar property must be 0.
+            OUStringBuffer sTmp(1);
+            sTmp.append( cBullet );
+            pProps[nPos].Name = "BulletChar";
+            pProps[nPos++].Value <<= sTmp.makeStringAndClear();
 
             pProps[nPos].Name = "BulletFont";
             pProps[nPos++].Value <<= aFDesc;

@@ -289,8 +289,18 @@ uno::Sequence< beans::PropertyValue > ListLevel::GetLevelProperties( )
     if( !isOutlineNumbering())
     {
         // todo: this is not the bullet char
-        if( nNumberFormat == style::NumberingType::CHAR_SPECIAL && !m_sBulletChar.isEmpty() )
-            aNumberingProperties.push_back( MAKE_PROPVAL(PROP_BULLET_CHAR, m_sBulletChar.copy(0,1)));
+        if( nNumberFormat == style::NumberingType::CHAR_SPECIAL )
+        {
+            if (!m_sBulletChar.isEmpty())
+            {
+                aNumberingProperties.push_back( MAKE_PROPVAL(PROP_BULLET_CHAR, m_sBulletChar.copy(0,1)));
+            }
+            else
+            {
+                // If w:lvlText's value is null - set bullet char to zero.
+                aNumberingProperties.push_back( MAKE_PROPVAL(PROP_BULLET_CHAR, sal_Unicode(0x0)));
+            }
+        }
         if (!m_sGraphicURL.isEmpty())
             aNumberingProperties.push_back(MAKE_PROPVAL(PROP_GRAPHIC_URL, m_sGraphicURL));
         if (m_sGraphicBitmap.is())
