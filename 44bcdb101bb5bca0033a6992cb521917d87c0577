@@ -16,6 +16,24 @@
       "revId": "44bcdb101bb5bca0033a6992cb521917d87c0577",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn///Ec\u003d",
+        "filename": "sc/source/core/tool/interpr4.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3301,
+      "author": {
+        "id": 1000065
+      },
+      "writtenOn": "2013-07-10T10:56:17Z",
+      "side": 1,
+      "message": "oh, I didn\u0027t look far enough ( guilty of copying other instances in the code ) anyway good to know, let me update the patch ( on master too )  might be a little while :)",
+      "parentUuid": "AAAAXn///Eo\u003d",
+      "revId": "44bcdb101bb5bca0033a6992cb521917d87c0577",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
