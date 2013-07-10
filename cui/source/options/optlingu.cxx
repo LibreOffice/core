@@ -656,7 +656,8 @@ static void lcl_MergeLocales(Sequence< Locale >& aAllLocales, const Sequence< Lo
         for(sal_Int32 j = 0; j < aAllLocales.getLength() && !bFound; j++)
         {
             bFound = pAdd[i].Language == pAllLocales[j].Language &&
-                pAdd[i].Country == pAllLocales[j].Country;
+                pAdd[i].Country == pAllLocales[j].Country &&
+                pAdd[i].Variant == pAllLocales[j].Variant;
         }
         if(!bFound)
         {
