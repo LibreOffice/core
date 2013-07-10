@@ -42,6 +42,9 @@ using namespace css;
 using namespace cssu;
 using ::sfx2::sidebar::Theme;
 
+const char UNO_FLIPHORIZONTAL[] = ".uno:FlipHorizontal";
+const char UNO_FLIPVERTICAL[]   = ".uno:FlipVertical";
+
 #define A2S(pString) (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(pString)))
 #define USERITEM_NAME rtl::OUString::createFromAscii("FitItem")
 
@@ -55,24 +58,11 @@ PosSizePropertyPanel::PosSizePropertyPanel(
     const cssu::Reference<css::frame::XFrame>& rxFrame,
     SfxBindings* pBindings,
     const cssu::Reference<css::ui::XSidebar>& rxSidebar)
-:   Control(
-        pParent,
-        SVX_RES(RID_SIDEBAR_POSSIZE_PANEL)),
+:   PanelLayout(pParent, "PosSizePropertyPanel", "svx/ui/sidebarpossize.ui", rxFrame),
     mpFtPosX(new FixedText(this, SVX_RES(FT_SBSHAPE_HORIZONTAL))),
     mpMtrPosX(new MetricField(this, SVX_RES(MF_SBSHAPE_HORIZONTAL))),
     mpFtPosY(new FixedText(this, SVX_RES(FT_SBSHAPE_VERTICAL))),
     mpMtrPosY(new MetricField(this, SVX_RES(MF_SBSHAPE_VERTICAL))),
-    mpFtWidth(new FixedText(this, SVX_RES(FT_WIDTH))),
-    mpMtrWidth(new MetricField(this, SVX_RES(MTR_FLD_WIDTH))),
-    mpFtHeight(new FixedText(this, SVX_RES(FT_HEIGHT))),
-    mpMtrHeight(new MetricField(this, SVX_RES(MTR_FLD_HEIGHT))),
-    mpCbxScale(new CheckBox(this, SVX_RES(CBX_SCALE))),
-    mpFtAngle(new FixedText(this, SVX_RES(FT_ANGLE))),
-    mpMtrAngle(new MetricBox(this, SVX_RES(MTR_FLD_ANGLE))),
-    mpDial(new SidebarDialControl(this, SVX_RES(DIAL_CONTROL))),
-    mpFtFlip(new FixedText(this, SVX_RES(FT_FLIP))),
-    mpFlipTbxBackground(sfx2::sidebar::ControlFactory::CreateToolBoxBackground(this)),
-    mpFlipTbx(sfx2::sidebar::ControlFactory::CreateToolBox(mpFlipTbxBackground.get(), SVX_RES(TBX_FLIP))),
     maRect(),
     mpView(0),
     mlOldWidth(1),
@@ -99,6 +89,7 @@ PosSizePropertyPanel::PosSizePropertyPanel(
     mxFrame(rxFrame),
     maContext(),
     mpBindings(pBindings),
+    /*
     maFtWidthOrigPos(mpFtWidth->GetPosPixel()),
     maMtrWidthOrigPos(mpMtrWidth->GetPosPixel()),
     maFtHeightOrigPos(mpFtHeight->GetPosPixel()),
@@ -108,7 +99,7 @@ PosSizePropertyPanel::PosSizePropertyPanel(
     maMtrAnglOrigPos(mpMtrAngle->GetPosPixel()),
     maFlipTbxOrigPos(mpFlipTbx->GetPosPixel()),
     maDialOrigPos(mpDial->GetPosPixel()),
-    maFtFlipOrigPos(mpFtFlip->GetPosPixel()),
+    */
     mbMtrPosXMirror(false),
     mbSizeProtected(false),
     mbPositionProtected(false),
@@ -118,8 +109,17 @@ PosSizePropertyPanel::PosSizePropertyPanel(
     mbIsFlip(false),
     mxSidebar(rxSidebar)
 {
+    get( mpFtWidth,   "widthlabel" );
+    get( mpMtrWidth,  "selectwidth" );
+    get( mpFtHeight,  "heightlabel" );
+    get( mpMtrHeight, "selectheight" );
+    get( mpCbxScale,  "ratio" );
+    get( mpFtAngle,   "rotationlabel" );
+    get( mpMtrAngle,  "rotation" );
+    get( mpDial,      "orientationcontrol" );
+    get( mpFtFlip,    "fliplabel" );
+    get( mpFlipTbx,   "selectrotationtype" );
     Initialize();
-    FreeResource();
 
     mpBindings->Update( SID_ATTR_TRANSFORM_WIDTH );
     mpBindings->Update( SID_ATTR_TRANSFORM_HEIGHT );
@@ -131,9 +131,6 @@ PosSizePropertyPanel::PosSizePropertyPanel(
 
 PosSizePropertyPanel::~PosSizePropertyPanel()
 {
-    // Destroy the background windows of the toolboxes.
-    mpFlipTbx.reset();
-    mpFlipTbxBackground.reset();
 }
 
 
@@ -182,10 +179,6 @@ void PosSizePropertyPanel::Initialize()
 {
     mpFtPosX->SetBackground(Wallpaper());
     mpFtPosY->SetBackground(Wallpaper());
-    mpFtWidth->SetBackground(Wallpaper());
-    mpFtHeight->SetBackground(Wallpaper());
-    mpFtAngle->SetBackground(Wallpaper());
-    mpFtFlip->SetBackground(Wallpaper());
 
         //Position : Horizontal / Vertical
     mpMtrPosX->SetModifyHdl( LINK( this, PosSizePropertyPanel, ChangePosXHdl ) );
@@ -212,24 +205,25 @@ void PosSizePropertyPanel::Initialize()
 
     //flip:
     mpFlipTbx->SetSelectHdl( LINK( this, PosSizePropertyPanel, FlipHdl) );
+
+    const sal_uInt16 nIdFlipHorizontal = mpFlipTbx->GetItemId(UNO_FLIPHORIZONTAL);
+    const sal_uInt16 nIdFlipVertical   = mpFlipTbx->GetItemId(UNO_FLIPVERTICAL);
     mpFlipTbx->SetItemImage(
-        FLIP_HORIZONTAL,
+        nIdFlipHorizontal,
         GetImage(mxFrame, A2S(".uno:FlipHorizontal"), sal_False));
     mpFlipTbx->SetItemImage(
-        FLIP_VERTICAL,
+        nIdFlipVertical,
         GetImage(mxFrame, A2S(".uno:FlipVertical"), sal_False));
-    mpFlipTbx->SetQuickHelpText(FLIP_HORIZONTAL, SVX_RESSTR(STR_QH_HORI_FLIP)); //Add
-    mpFlipTbx->SetQuickHelpText(FLIP_VERTICAL, SVX_RESSTR(STR_QH_VERT_FLIP)); //Add
 
     mpMtrPosX->SetAccessibleRelationLabeledBy(mpFtPosX.get());
     mpMtrPosY->SetAccessibleRelationLabeledBy(mpFtPosY.get());
-    mpMtrWidth->SetAccessibleRelationLabeledBy(mpFtWidth.get());
-    mpMtrHeight->SetAccessibleRelationLabeledBy(mpFtHeight.get());
-    mpMtrAngle->SetAccessibleRelationLabeledBy(mpFtAngle.get());
+    mpMtrWidth->SetAccessibleRelationLabeledBy(mpFtWidth);
+    mpMtrHeight->SetAccessibleRelationLabeledBy(mpFtHeight);
+    mpMtrAngle->SetAccessibleRelationLabeledBy(mpFtAngle);
 #ifdef HAS_IA2
-    mpMtrAngle->SetMpSubEditAccLableBy(mpFtAngle.get());
+    mpMtrAngle->SetMpSubEditAccLableBy(mpFtAngle);
 #endif
-    mpFlipTbx->SetAccessibleRelationLabeledBy(mpFtFlip.get());
+    mpFlipTbx->SetAccessibleRelationLabeledBy(mpFtFlip);
 
     mpMtrAngle->InsertValue(0, FUNIT_CUSTOM);
     mpMtrAngle->InsertValue(4500, FUNIT_CUSTOM);
@@ -416,8 +410,6 @@ void PosSizePropertyPanel::HandleContextChange(
             //flip
             mpFtFlip->Show();
             mpFlipTbx->Show();
-            Size aTbxSize = mpFlipTbx->CalcWindowSizePixel();
-            mpFlipTbx->SetOutputSizePixel( aTbxSize );
             mbIsFlip = true;
 
             AdaptWidthHeightScalePosition(false);
@@ -484,8 +476,6 @@ void PosSizePropertyPanel::HandleContextChange(
             //flip
             mpFlipTbx->Show();
             mpFtFlip->Show();
-            Size aTbxSize = mpFlipTbx->CalcWindowSizePixel();
-            mpFlipTbx->SetOutputSizePixel( aTbxSize );
             mbIsFlip = true;
 
             AdaptWidthHeightScalePosition(true);
@@ -529,10 +519,6 @@ void PosSizePropertyPanel::HandleContextChange(
         }
         break;
     }
-
-    //Added for windows classic theme
-    mpFlipTbx->SetBackground(Wallpaper());
-    mpFlipTbx->SetPaintTransparent(true);
 }
 
 
@@ -670,22 +656,20 @@ IMPL_LINK( PosSizePropertyPanel, RotationHdl, void *, EMPTYARG )
 
 IMPL_LINK( PosSizePropertyPanel, FlipHdl, ToolBox*, pBox )
 {
-    switch (pBox->GetCurItemId())
+    const OUString aCommand(pBox->GetItemCommand(pBox->GetCurItemId()));
     {
-        case FLIP_HORIZONTAL:
+        if(aCommand == UNO_FLIPHORIZONTAL)
         {
             SfxVoidItem aHoriItem (SID_FLIP_HORIZONTAL);
             GetBindings()->GetDispatcher()->Execute(
                 SID_FLIP_HORIZONTAL, SFX_CALLMODE_RECORD, &aHoriItem, 0L );
         }
-        break;
-        case FLIP_VERTICAL:
+        else if(aCommand == UNO_FLIPVERTICAL)
         {
             SfxVoidItem aVertItem (SID_FLIP_VERTICAL );
             GetBindings()->GetDispatcher()->Execute(
                 SID_FLIP_VERTICAL, SFX_CALLMODE_RECORD, &aVertItem, 0L );
         }
-        break;
     }
     return 0;
 }
