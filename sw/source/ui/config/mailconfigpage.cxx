@@ -87,13 +87,13 @@ class SwAuthenticationSettingsDialog : public SfxModalDialog
     RadioButton*     m_pSeparateAuthenticationRB;
     RadioButton*     m_pSMTPAfterPOPRB;
 
-    FixedInfo*       m_pOutgoingServerFT;
+    FixedText*       m_pOutgoingServerFT;
     FixedText*       m_pUserNameFT;
     Edit*            m_pUserNameED;
     FixedText*       m_pOutPasswordFT;
     Edit*            m_pOutPasswordED;
 
-    FixedInfo*       m_pIncomingServerFT;
+    FixedText*       m_pIncomingServerFT;
     FixedText*       m_pServerFT;
     Edit*            m_pServerED;
     FixedText*       m_pPortFT;
@@ -136,7 +136,6 @@ SwMailConfigPage::SwMailConfigPage( Window* pParent, const SfxItemSet& rSet ) :
     get(m_pServerAuthenticationPB,"serverauthentication");
     get(m_pTestPB,"test");
 
-    //FreeResource();
     m_pReplyToCB->SetClickHdl(LINK(this, SwMailConfigPage, ReplyToHdl));
     m_pServerAuthenticationPB->SetClickHdl(LINK(this, SwMailConfigPage, AuthenticationHdl));
     m_pTestPB->SetClickHdl(LINK(this, SwMailConfigPage, TestHdl));
@@ -422,12 +421,9 @@ SwMailConfigDlg::~SwMailConfigDlg()
 }
 
 SwAuthenticationSettingsDialog::SwAuthenticationSettingsDialog(
-        SwMailConfigPage* pParent, SwMailMergeConfigItem& rItem) :
-    SfxModalDialog(pParent, "AuthenticationSettingsDialog", "modules/swriter/ui/authenticationsettingsdialog.ui"),
-#ifdef _MSC_VER
-#pragma warning (default : 4355)
-#endif
-        rConfigItem( rItem )
+    SwMailConfigPage* pParent, SwMailMergeConfigItem& rItem)
+    : SfxModalDialog(pParent, "AuthenticationSettingsDialog", "modules/swriter/ui/authenticationsettingsdialog.ui")
+    , rConfigItem( rItem )
 {
     get(m_pAuthenticationCB,"authentication");
     get(m_pSeparateAuthenticationRB,"seperateauthentication");

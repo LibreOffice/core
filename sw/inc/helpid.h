@@ -461,7 +461,6 @@
 #define HID_MM_COPYTO                                           "SW_HID_MM_COPYTO"
 #define HID_MM_ADDRESSLIST_HB                                   "SW_HID_MM_ADDRESSLIST_HB"
 #define HID_MM_ADDRESSLIST_TLB                                  "SW_HID_MM_ADDRESSLIST_TLB"
-#define HID_TP_MAILCONFIG                                       "SW_HID_TP_MAILCONFIG"
 #define HID_MM_TESTACCOUNTSETTINGS                              "SW_HID_MM_TESTACCOUNTSETTINGS"
 #define HID_MM_TESTACCOUNTSETTINGS_TLB                          "SW_HID_MM_TESTACCOUNTSETTINGS_TLB"
 #define HID_MM_TESTACCOUNTSETTINGS_HB                           "SW_HID_MM_TESTACCOUNTSETTINGS_HB"
@@ -475,7 +474,6 @@
 #define HID_MM_SAVEWARNING                                      "SW_HID_MM_SAVEWARNING"
 #define HID_MM_QUERY                                            "SW_HID_MM_QUERY"
 #define HID_MM_SENDWARNING                                      "SW_HID_MM_SENDWARNING"
-#define HID_MM_SERVERAUTHENTICATION                             "SW_HID_MM_SERVERAUTHENTICATION"
 
 #define HID_NID_TBL                                             "SW_HID_NID_TBL"
 #define HID_NID_FRM                                             "SW_HID_NID_FRM"
