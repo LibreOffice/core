@@ -72,7 +72,6 @@ $(eval $(call gb_SrsTarget_add_files,svx/res,\
     svx/source/sidebar/area/AreaPropertyPanel.src \
     svx/source/sidebar/graphic/GraphicPropertyPanel.src \
     svx/source/sidebar/line/LinePropertyPanel.src \
-    svx/source/sidebar/possize/PosSizePropertyPanel.src \
     svx/source/sidebar/text/TextPropertyPanel.src \
     svx/source/sidebar/paragraph/ParaPropertyPanel.src \
     svx/source/sidebar/insert/InsertPropertyPanel.src \
