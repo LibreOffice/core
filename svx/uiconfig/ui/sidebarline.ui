@@ -197,6 +197,12 @@
                   <class name="Mitered"/>
                   <class name="Beveled"/>
                 </style>
+                <items>
+                  <item translatable="yes">Rounded</item>
+                  <item translatable="yes">- none -</item>
+                  <item translatable="yes">Mitered</item>
+                  <item translatable="yes">Beveled</item>
+                </items>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -217,6 +223,11 @@
                   <class name="Round"/>
                   <class name="Square"/>
                 </style>
+                <items>
+                  <item translatable="yes">Flat</item>
+                  <item translatable="yes">Round</item>
+                  <item translatable="yes">Square</item>
+                </items>
               </object>
               <packing>
                 <property name="left_attach">1</property>
