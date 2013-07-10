@@ -28,7 +28,7 @@
 
 #include <string.h>
 
-#include "internalnode.hxx"
+#include <connectivity/internalnode.hxx>
 
 #ifndef _CONNECTIVITY_SQLYACC_HXX
 #define _CONNECTIVITY_SQLYACC_HXX
@@ -41,10 +41,10 @@
 #undef SQLyylex
 #undef SQLyyerror
 #endif
-#include "sqlscan.hxx"
 #include <osl/diagnose.h>
 #include <rtl/strbuf.hxx>
 #include <connectivity/sqlparse.hxx>
+#include <connectivity/sqlscan.hxx>
 
 #if defined __SUNPRO_CC
 #pragma disable_warn

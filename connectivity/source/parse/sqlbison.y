@@ -21,11 +21,12 @@
 
 #include <vector>
 #include <string.h>
-#include "parse/sqlbison_exports.hxx"
 
 #include <connectivity/sqlnode.hxx>
 #include <connectivity/sqlparse.hxx>
-#include <internalnode.hxx>
+#include <connectivity/sqlbison_exports.hxx>
+#include <connectivity/sqlscan.hxx>
+#include <connectivity/internalnode.hxx>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/util/Date.hpp>
@@ -40,7 +41,6 @@
 #include <com/sun/star/i18n/KParseType.hpp>
 #include <com/sun/star/i18n/KParseTokens.hpp>
 
-#include "sqlscan.hxx"
 #include <osl/diagnose.h>
 #include "connectivity/dbconversion.hxx"
 #include <rtl/ustrbuf.hxx>

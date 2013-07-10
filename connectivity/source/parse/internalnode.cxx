@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "internalnode.hxx"
-
 #include <algorithm>
+
 #include <connectivity/sqlparse.hxx>
+#include <connectivity/internalnode.hxx>
 
 using namespace connectivity;
 

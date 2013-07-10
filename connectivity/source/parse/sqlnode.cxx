@@ -17,15 +17,15 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "parse/sqlbison_exports.hxx"
-
 #include <sal/macros.h>
 #include <connectivity/sqlnode.hxx>
 #include <connectivity/sqlerror.hxx>
-#include <internalnode.hxx>
+#include <connectivity/sqlbison_exports.hxx>
+#include <connectivity/internalnode.hxx>
 #define YYBISON   1
 #include <sqlbison.hxx>
 #include <connectivity/sqlparse.hxx>
+#include <connectivity/sqlscan.hxx>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/util/XNumberFormatter.hpp>
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
@@ -47,7 +47,6 @@
 #include <com/sun/star/util/Time.hpp>
 #include <com/sun/star/util/Date.hpp>
 #include "TConnection.hxx"
-#include "sqlscan.hxx"
 #include <comphelper/numbers.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/stl_types.hxx>
