@@ -374,6 +374,7 @@ $(eval $(call gb_Library_use_system_darwin_frameworks,vcl,\
 ))
 else
 $(eval $(call gb_Library_use_system_darwin_frameworks,vcl,\
+	CoreGraphics \
 	CoreText \
 ))
 endif
