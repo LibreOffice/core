@@ -4864,8 +4864,7 @@ void DocxAttributeOutput::FormatBackground( const SvxBrushItem& rBrush )
         if (nTransparency)
         {
             // Convert transparency to percent
-            // Consider editeng/source/items/frmitems.cxx : lcl_TransparencyToPercent() function.
-            sal_Int8 nTransparencyPercent = (sal_Int8)((nTransparency * 100 + 127) / 254);
+            sal_Int8 nTransparencyPercent = SvxBrushItem::TransparencyToPercent(nTransparency);
 
             // Calculate alpha value
             // Consider oox/source/drawingml/color.cxx : getTransparency() function.

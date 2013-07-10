@@ -3567,7 +3567,7 @@ static inline sal_Int8 lcl_PercentToTransparency(long nPercent)
     //0xff must not be returned!
     return sal_Int8(nPercent ? (50 + 0xfe * nPercent) / 100 : 0);
 }
-static inline sal_Int8 lcl_TransparencyToPercent(sal_Int32 nTrans)
+sal_Int8 SvxBrushItem::TransparencyToPercent(sal_Int32 nTrans)
 {
     return (sal_Int8)((nTrans * 100 + 127) / 254);
 }
@@ -3584,7 +3584,7 @@ bool SvxBrushItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
             rVal <<= (sal_Int32)( aColor.GetRGBColor() );
         break;
         case MID_BACK_COLOR_TRANSPARENCY:
-            rVal <<= lcl_TransparencyToPercent(aColor.GetTransparency());
+            rVal <<= SvxBrushItem::TransparencyToPercent(aColor.GetTransparency());
         break;
         case MID_GRAPHIC_POSITION:
             rVal <<= (style::GraphicLocation)(sal_Int16)eGraphicPos;
