@@ -1113,13 +1113,13 @@ void SvXMLExport::AddLanguageTagAttributes( sal_uInt16 nPrefix, sal_uInt16 nPref
         // for consumers not handling *:rfc-language-tag, ensuring that only
         // valid ISO codes are stored. Here the bWriteEmpty parameter has no
         // meaning.
-        OUString aLanguage, aCountry;
-        rLanguageTag.getIsoLanguageCountry( aLanguage, aCountry);
+        OUString aLanguage, aScript, aCountry;
+        rLanguageTag.getIsoLanguageScriptCountry( aLanguage, aScript, aCountry);
         if (!aLanguage.isEmpty())
         {
             AddAttribute( nPrefix, eLanguage, aLanguage);
-            if (rLanguageTag.hasScript())
-                AddAttribute( nPrefix, eScript, rLanguageTag.getScript());
+            if (!aScript.isEmpty())
+                AddAttribute( nPrefix, eScript, aScript);
             if (!aCountry.isEmpty())
                 AddAttribute( nPrefix, eCountry, aCountry);
         }

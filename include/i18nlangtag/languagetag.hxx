@@ -128,20 +128,20 @@ public:
      */
     LanguageType                    getLanguageType( bool bResolveSystem = true ) const;
 
-    /** Obtain ISO strings for language and country.
+    /** Obtain ISO strings for language, script and country.
 
-        This is a convenience method for places that so far use only language and
-        country to replace the MsLangId::convert...IsoNames...() calls. Avoid
-        use in new code.
+        This is a convenience method for ODF export places only. Avoid use in
+        other code.
 
         ATTENTION! May return empty strings if the language tag is not
         expressable in valid ISO codes!
 
-        @see isIsoLocale()
+        @see isIsoODF()
 
         Always resolves an empty tag to the system locale.
      */
-    void                            getIsoLanguageCountry( OUString& rLanguage, OUString& rCountry ) const;
+    void                            getIsoLanguageScriptCountry( OUString& rLanguage,
+                                                                 OUString& rScript, OUString& rCountry ) const;
 
     /** Get ISO 639 language code, or BCP 47 language.
 

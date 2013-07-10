@@ -877,17 +877,22 @@ LanguageType LanguageTag::getLanguageType( bool bResolveSystem ) const
 }
 
 
-void LanguageTag::getIsoLanguageCountry( OUString& rLanguage, OUString& rCountry ) const
+void LanguageTag::getIsoLanguageScriptCountry( OUString& rLanguage, OUString& rScript, OUString& rCountry ) const
 {
-    if (!isIsoLocale())
+    // Calling isIsoODF() first is a predicate for getLanguage(), getScript()
+    // and getCountry() to work correctly in this context.
+    if (isIsoODF())
     {
-        rLanguage = OUString();
-        rCountry = OUString();
-        return;
+        rLanguage = getLanguage();
+        rScript   = getScript();
+        rCountry  = getCountry();
     }
-    // After isIsoLocale() it's safe to call getLanguage() for ISO code.
-    rLanguage = getLanguage();
-    rCountry = getCountry();
+    else
+    {
+        rLanguage = (isIsoLanguage( getLanguage()) ? getLanguage() : OUString());
+        rScript   = (isIsoScript(   getScript())   ? getScript()   : OUString());
+        rCountry  = (isIsoCountry(  getCountry())  ? getCountry()  : OUString());
+    }
 }
 
 

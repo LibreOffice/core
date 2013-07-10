@@ -115,8 +115,8 @@ sal_Bool XMLCharLanguageHdl::exportXML( OUString& rStrExpValue, const uno::Any& 
     else
     {
         LanguageTag aLanguageTag( aLocale);
-        OUString aCountry;
-        aLanguageTag.getIsoLanguageCountry( rStrExpValue, aCountry);
+        OUString aScript, aCountry;
+        aLanguageTag.getIsoLanguageScriptCountry( rStrExpValue, aScript, aCountry);
         // Do not write *:language='none' for a non-ISO language with
         // *:rfc-language-tag that is written if Variant is not empty. If there
         // is no match do not write this attribute at all.
@@ -235,10 +235,13 @@ sal_Bool XMLCharScriptHdl::exportXML( OUString& rStrExpValue, const uno::Any& rV
     if (!aLanguageTag.hasScript())
         return sal_False;
 
-    rStrExpValue = aLanguageTag.getScript();
-
-    if( rStrExpValue.isEmpty() )
-        rStrExpValue = GetXMLToken( XML_NONE );
+    OUString aLanguage, aCountry;
+    aLanguageTag.getIsoLanguageScriptCountry( aLanguage, rStrExpValue, aCountry);
+    // For non-ISO language it does not make sense to write *:script if
+    // *:language is not written either, does it? It's all in
+    // *:rfc-language-tag
+    if (aLanguage.isEmpty() || rStrExpValue.isEmpty())
+        return sal_False;
 
     return sal_True;
 }
@@ -301,8 +304,8 @@ sal_Bool XMLCharCountryHdl::exportXML( OUString& rStrExpValue, const uno::Any& r
     else
     {
         LanguageTag aLanguageTag( aLocale);
-        OUString aLanguage;
-        aLanguageTag.getIsoLanguageCountry( aLanguage, rStrExpValue);
+        OUString aLanguage, aScript;
+        aLanguageTag.getIsoLanguageScriptCountry( aLanguage, aScript, rStrExpValue);
         // Do not write *:country='none' for a non-ISO country with
         // *:rfc-language-tag that is written if Variant is not empty. If there
         // is no match do not write this attribute at all.
