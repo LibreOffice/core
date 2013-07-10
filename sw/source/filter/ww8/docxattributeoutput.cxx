@@ -1199,9 +1199,7 @@ void DocxAttributeOutput::StartRuby( const SwTxtNode& rNode, xub_StrLen nPos, co
     // lid
     lang::Locale aLocale( SwBreakIt::Get()->GetLocale(
                 rNode.GetLang( nPos ) ) );
-    OUString sLang( aLocale.Language );
-    if ( !aLocale.Country.isEmpty() )
-        sLang += "-" + aLocale.Country;
+    OUString sLang( LanguageTag( aLocale).getBcp47() );
     m_pSerializer->singleElementNS( XML_w, XML_lid,
             FSNS( XML_w, XML_val ),
             OUStringToOString( sLang, RTL_TEXTENCODING_UTF8 ).getStr( ), FSEND );
@@ -3624,11 +3622,9 @@ void DocxAttributeOutput::CharLanguage( const SvxLanguageItem& rLanguage )
     if (!m_pCharLangAttrList)
         m_pCharLangAttrList = m_pSerializer->createAttrList();
 
-    ::com::sun::star::lang::Locale xLocale= LanguageTag( rLanguage.GetLanguage( ) ).getLocale();
-    OString sLanguage = OUStringToOString(xLocale.Language, RTL_TEXTENCODING_UTF8);
-    OString sCountry = OUStringToOString(xLocale.Country, RTL_TEXTENCODING_UTF8);
-
-    OString aLanguageCode = sLanguage + "-" + sCountry;
+    OString aLanguageCode( OUStringToOString(
+                LanguageTag( rLanguage.GetLanguage()).getBcp47(),
+                RTL_TEXTENCODING_UTF8));
 
     switch ( rLanguage.Which() )
     {
