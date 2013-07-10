@@ -1397,7 +1397,7 @@ void RtfAttributeOutput::NumberingLevel( sal_uInt8 nLevel,
     else
     {
         m_rExport.Strm() << "\\'" << msfilter::rtfutil::OutHex( rNumberingString.Len(), 2 ).getStr();
-        m_rExport.Strm() << msfilter::rtfutil::OutString( rNumberingString, m_rExport.eDefaultEncoding ).getStr();
+        m_rExport.Strm() << msfilter::rtfutil::OutString( rNumberingString, m_rExport.eDefaultEncoding, /*bUnicode =*/ false ).getStr();
     }
 
     m_rExport.Strm() << ";}";
