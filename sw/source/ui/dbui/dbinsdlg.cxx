@@ -1670,11 +1670,7 @@ void SwInsertDBColAutoPilot::Commit()
 
         if( eLang != ePrevLang )
         {
-            /* FIXME-BCP47: handle language tags! */
-            lang::Locale aLocale( LanguageTag( eLang ).getLocale());
-            /* umm.. what's this string anyway, "Country-Language" instead of
-             * "Language-Country" ??? */
-            (( sPrevLang = aLocale.Country ) += OUString( '-' )) += aLocale.Language;
+            sPrevLang = LanguageTag( eLang ).getBcp47();
             ePrevLang = eLang;
         }
 
@@ -1757,13 +1753,15 @@ void SwInsertDBColAutoPilot::Load()
                 OUString sNumberFormatLocale;
                 pSubProps[5] >>= sNumberFormatLocale;
 
-                /* FIXME-BCP47: handle language tags, and cope with the wrong
-                 * Country-Language string that
-                 * SwInsertDBColAutoPilot::Commit() writes so far! */
-                lang::Locale aLocale;
-                aLocale.Language = sNumberFormatLocale.copy(0, 2);
-                aLocale.Country = sNumberFormatLocale.copy(3, 2);
-                pInsDBColumn->eUsrNumFmtLng = LanguageTag( aLocale ).getLanguageType();
+                /* XXX Earlier versions wrote a Country-Language string in
+                 * SwInsertDBColAutoPilot::Commit() that here was read as
+                 * Language-Country with 2 characters copied to language,
+                 * 1 character separator and unconditionally 2 characters read
+                 * as country. So for 'DE-de' and locales that have similar
+                 * case-insensitive equal language/country combos that may have
+                 * worked, for all others not. FIXME if you need to read old
+                 * data that you were never able to read before. */
+                pInsDBColumn->eUsrNumFmtLng = LanguageTag( sNumberFormatLocale ).getLanguageType();
 
                 pInsDBColumn->nUsrNumFmt = rNFmtr.GetEntryKey( pInsDBColumn->sUsrNumFmt,
                                                         pInsDBColumn->eUsrNumFmtLng );
