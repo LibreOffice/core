@@ -25,6 +25,7 @@ use installer::globals;
 use installer::logger;
 use installer::remover;
 use installer::systemactions;
+use File::Temp qw/ :mktemp /;
 
 ############################################
 # Parameter Operations
@@ -368,8 +369,9 @@ sub setglobalvariables
     {
         $installer::globals::temppath = $ENV{'TMPDIR'};
         $installer::globals::temppath =~ s/\Q$installer::globals::separator\E\s*$//;    # removing ending slashes and backslashes
-        $installer::globals::temppath .= $installer::globals::separator . 'ooopackaging';
-        installer::systemactions::create_directory_with_privileges($installer::globals::temppath, "777");
+        $installer::globals::temppath .= $installer::globals::separator . 'ooopackagingXXXXXX';
+        $installer::globals::temppath = mkdtemp($installer::globals::temppath);
+
         my $dirsave = $installer::globals::temppath;
 
         if ( $installer::globals::compiler =~ /^unxmac/ )

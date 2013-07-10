@@ -18,6 +18,7 @@
 
 use Cwd;
 use File::Copy;
+use File::Temp qw/ :mktemp /;
 
 #################################################################################
 # Global settings
@@ -29,7 +30,7 @@ BEGIN
     $targetdir = "";
     $databasepath = "";
     $starttime = "";
-    $globaltempdirname = "ooopackaging";
+    $globaltempdirname = "ooopackagingXXXXXX";
     $savetemppath = "";
     $msiinfo_available = 0;
     $path_displayed = 0;
@@ -961,7 +962,7 @@ sub get_temppath
 
         $temppath =~ s/\Q$separator\E\s*$//;    # removing ending slashes and backslashes
         $temppath = $temppath . $separator . $globaltempdirname;
-        create_directory_with_privileges($temppath, "777");
+        $temppath = mkdtemp($temppath);
 
         my $dirsave = $temppath;
 
