@@ -1491,7 +1491,6 @@ XMLEventImportHelper& SvXMLImport::GetEventImport()
 void SvXMLImport::SetFontDecls( XMLFontStylesContext *pFontDecls )
 {
     mxFontDecls = pFontDecls;
-    GetTextImport()->SetFontDecls( pFontDecls );
 }
 
 void SvXMLImport::SetStyles( SvXMLStylesContext *pStyles )
