@@ -34,57 +34,6 @@ Control RID_SIDEBAR_POSSIZE_PANEL
     HelpID = HID_PROPERTYPANEL_POSIZE_SECTION ;
     Text  = "Position and Size";
 
-    FixedText FT_WIDTH
-    {
-        Pos = MAP_APPFONT ( FT_WIDTH_X, FT_WIDTH_Y );
-        Size = MAP_APPFONT ( MBOX_WIDTH , TEXT_HEIGHT) ;
-        Text [ en-US ] = "~Width:";
-    };
-    MetricField MTR_FLD_WIDTH
-    {
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( FLD_WIDTH_X, FLD_WIDTH_Y );
-        Size = MAP_APPFONT ( MBOX_WIDTH, MBOX_HEIGHT ) ;
-        QuickHelpText [ en-US ] = "Enter a width for the selected object.";
-        Repeat = TRUE ;
-        Spin = TRUE ;
-        Maximum = 9999 ;
-        StrictFormat = TRUE ;
-        Unit = FUNIT_INCH;
-        Last = 9999 ;
-        SpinSize = 2 ;
-        HelpID = HID_PROPERTY_PANEL_POSIZE_MTR_FLD_WIDTH;
-    };
-    FixedText FT_HEIGHT
-    {
-        Pos = MAP_APPFONT ( FT_HEIGHT_X, FT_HEIGHT_Y );
-        Size = MAP_APPFONT ( MBOX_WIDTH , TEXT_HEIGHT) ;
-        Text [ en-US ] = "H~eight:";
-    };
-    MetricField MTR_FLD_HEIGHT
-    {
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( FLD_HEIGHT_X, FLD_HEIGHT_Y );
-        Size = MAP_APPFONT ( MBOX_WIDTH + 1, MBOX_HEIGHT ) ;
-        QuickHelpText [ en-US ] = "Enter a height for the selected object.";
-        Repeat = TRUE ;
-        Spin = TRUE ;
-        Maximum = 9999 ;
-        StrictFormat = TRUE ;
-        Unit = FUNIT_INCH;
-        Last = 9999 ;
-        SpinSize = 2 ;
-        HelpID = HID_PROPERTY_PANEL_POSIZE_MTR_FLD_HEIGHT;
-    };
-    CheckBox CBX_SCALE
-    {
-        Pos = MAP_APPFONT ( CBX_X , CBX_Y ) ;
-        Size = MAP_APPFONT ( MBOX_WIDTH + 30 , CBOX_HEIGHT ) ;
-        TabStop = TRUE ;
-        Text [ en-US ] = "~Keep ratio" ;
-        QuickHelpText [ en-US ] = "Maintain proportions when you resize the selected object.";
-        HelpID = HID_PROPERTY_PANEL_POSIZE_CBX_SCALE;
-    };
     //------------ Position ------------
     FixedText FT_SBSHAPE_HORIZONTAL
     {
@@ -132,69 +81,6 @@ Control RID_SIDEBAR_POSSIZE_PANEL
         SpinSize = 10;
         HelpID = HID_PROPERTY_PANEL_POSIZE_MF_VERTICAL;
     };
-    FixedText FT_ANGLE
-    {
-        Pos = MAP_APPFONT ( FT_ROTATION_X , FT_ROTATION_Y );
-        Size = MAP_APPFONT ( TEXT_WIDTH + 50, TEXT_HEIGHT) ;
-        Text [ en-US ] = "~Rotation:";
-    };
-
-    MetricBox MTR_FLD_ANGLE
-    {
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( MF_ROTATION_X , MF_ROTATION_Y );
-        Size = MAP_APPFONT ( MBOX_WIDTH + 10, MBOX_HEIGHT ) ;
-        QuickHelpText [ en-US ] = "Select the angle for rotation.";
-        Unit = FUNIT_CUSTOM ;
-        CustomUnitText [ en-US ] = " degrees";
-        DecimalDigits = 2;
-        Minimum = -18000;       // set minmun value or it will be 0 as default
-        TabStop = TRUE ;
-        DropDown = TRUE ;
-        HelpID = HID_PROPERTY_PANEL_POSIZE_MTR_FLD_ANGLE;
-    };
-
-    FixedText FT_FLIP
-    {
-        Pos = MAP_APPFONT ( FT_FLIP_X , FT_FLIP_Y );
-        Size = MAP_APPFONT ( PROPERTYPAGE_WIDTH - SECTIONPAGE_MARGIN_HORIZONTAL*2  - 40 - CONTROL_SPACING_HORIZONTAL - TOOLBOX_ITEM_WIDTH * 2 , TEXT_HEIGHT) ;//20     wj
-        Text [ en-US ] = "~Flip:";
-    };
-
-    ToolBox TBX_FLIP
-    {
-        Pos = MAP_APPFONT ( BTN_FLIP_HORI_X , BTN_FLIP_HORI_Y );
-        Size = MAP_APPFONT ( TOOLBOX_ITEM_WIDTH * 2, TOOLBOX_HEIGHT);
-        SVLook = TRUE ;
-        Border = FALSE ;
-        HelpID = HID_PROPERTY_PANEL_POSIZE_TBX_FLIP;
-        Text = "Flip";
-        ItemList =
-        {
-            ToolBoxItem
-            {
-                Identifier = FLIP_VERTICAL ;
-                Text [ en-US ] = "Flip Vertically" ;
-                HelpID = HID_PROPERTY_PANEL_POSIZE_FLIP_VERTICAL;
-            };
-            ToolBoxItem
-            {
-                Identifier = FLIP_HORIZONTAL ;
-                Text [ en-US ] = "Flip Horizontally" ;
-                HelpID = HID_PROPERTY_PANEL_POSIZE_FLIP_HORIZONTAL;
-            };
-        };
-    };
-
-    String STR_QH_HORI_FLIP
-    {
-        Text [ en-US ] = "Flip the selected object horizontally.";
-    };
-    String STR_QH_VERT_FLIP
-    {
-        Text [ en-US ] = "Flip the selected object vertically.";
-    };
-
     Control DIAL_CONTROL
     {
         Pos = MAP_APPFONT ( ROTATE_CONTROL_X , ROTATE_CONTROL_Y );
