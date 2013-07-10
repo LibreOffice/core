@@ -32,15 +32,15 @@
 
 #define _SOLVRDLG_CXX
 #include "solvrdlg.hxx"
-#undef _SOLVERDLG_CXX
+#undef  _SOLVRDLG_CXX
 
-
-#define ERRORBOX(s) ErrorBox( this, WinBits( WB_OK | WB_DEF_OK), s ).Execute()
-
-
-//============================================================================
-//  class ScSolverDlg
-//----------------------------------------------------------------------------
+namespace
+{
+    void lclErrorDialog( Window* pParent, OUString aString )
+    {
+        ErrorBox( pParent, WinBits( WB_OK | WB_DEF_OK), aString ).Execute();
+    }
+}
 
 ScSolverDlg::ScSolverDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
                           ScDocument* pDocument,
@@ -165,22 +165,22 @@ void ScSolverDlg::RaiseError( ScSolverErr eError )
     switch ( eError )
     {
         case SOLVERR_NOFORMULA:
-            ERRORBOX( errMsgNoFormula );
+            lclErrorDialog( this, errMsgNoFormula );
             m_pEdFormulaCell->GrabFocus();
             break;
 
         case SOLVERR_INVALID_FORMULA:
-            ERRORBOX( errMsgInvalidForm );
+            lclErrorDialog( this, errMsgInvalidForm );
             m_pEdFormulaCell->GrabFocus();
             break;
 
         case SOLVERR_INVALID_VARIABLE:
-            ERRORBOX( errMsgInvalidVar );
+            lclErrorDialog( this, errMsgInvalidVar );
             m_pEdVariableCell->GrabFocus();
             break;
 
         case SOLVERR_INVALID_TARGETVALUE:
-            ERRORBOX( errMsgInvalidVal );
+            lclErrorDialog( this, errMsgInvalidVal );
             m_pEdTargetVal->GrabFocus();
             break;
     }
@@ -291,8 +291,6 @@ IMPL_LINK_NOARG(ScSolverDlg, LoseFocusHdl)
     bDlgLostFocus = !IsActive();
     return 0;
 }
-
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
