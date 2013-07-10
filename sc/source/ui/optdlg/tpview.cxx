@@ -48,71 +48,57 @@
 
 ScTpContentOptions::ScTpContentOptions( Window*         pParent,
                              const SfxItemSet&  rArgSet ) :
-    SfxTabPage(pParent, ScResId( RID_SCPAGE_CONTENT ), rArgSet),
-
-    aLinesGB( this,         ScResId(GB_LINES          )),
-    aGridFT( this,         ScResId(FT_GRID            )),
-    aGridLB( this,         ScResId(LB_GRID            )),
-    aColorFT( this,         ScResId(FT_COLOR            )),
-    aColorLB( this,         ScResId(LB_COLOR            )),
-    aBreakCB( this,         ScResId(CB_PAGEBREAKS       )),
-    aGuideLineCB( this,     ScResId(CB_GUIDELINE        )),
-
-    aSeparator1FL    (this, ScResId(FL_SEPARATOR1 )),
-    aDisplayGB( this,   ScResId(GB_DISPLAY)),
-    aFormulaCB( this,   ScResId(CB_FORMULA)),
-    aNilCB( this,       ScResId(CB_NIL  )),
-    aAnnotCB( this,     ScResId(CB_ANNOT    )),
-    aValueCB( this,     ScResId(CB_VALUE    )),
-    aAnchorCB( this,    ScResId(CB_ANCHOR   )),
-    aClipMarkCB( this,  ScResId(CB_CLIP )),
-    aRangeFindCB( this,     ScResId( CB_RFIND     )),
-
-    aObjectGB( this,    ScResId(GB_OBJECT )),
-    aObjGrfFT( this,    ScResId(FT_OBJGRF   )),
-    aObjGrfLB( this,    ScResId(LB_OBJGRF   )),
-    aDiagramFT( this,   ScResId(FT_DIAGRAM)),
-    aDiagramLB( this,   ScResId(LB_DIAGRAM)),
-    aDrawFT( this,      ScResId(FT_DRAW )),
-    aDrawLB( this,      ScResId(LB_DRAW )),
-
-    aZoomGB( this,      ScResId(GB_ZOOM) ),
-    aSyncZoomCB( this,  ScResId(CB_SYNCZOOM) ),
-
-    aSeparator2FL    (this, ScResId(FL_SEPARATOR2)),
-    aWindowGB( this,        ScResId(GB_WINDOW         )),
-    aRowColHeaderCB(this,   ScResId(CB_ROWCOLHEADER )),
-    aHScrollCB( this,       ScResId(CB_HSCROLL      )),
-    aVScrollCB( this,       ScResId(CB_VSCROLL      )),
-    aTblRegCB( this,        ScResId(CB_TBLREG           )),
-    aOutlineCB( this,       ScResId(CB_OUTLINE      )),
+    SfxTabPage(pParent, "TpViewPage", "modules/scalc/ui/tpviewpage.ui", rArgSet),
     pLocalOptions(0)
 {
-    FreeResource();
-    aSeparator1FL.SetStyle( aSeparator1FL.GetStyle() | WB_VERT );
-    aSeparator2FL.SetStyle( aSeparator2FL.GetStyle() | WB_VERT );
+    get(pGridLB,"grid");
+    get(pColorFT,"color_label");
+    get(pColorLB,"color");
+    get(pBreakCB,"break");
+    get(pGuideLineCB,"guideline");
+
+    get(pFormulaCB,"formula");
+    get(pNilCB,"nil");
+    get(pAnnotCB,"annot");
+    get(pValueCB,"value");
+    get(pAnchorCB,"anchor");
+    get(pClipMarkCB,"clipmark");
+    get(pRangeFindCB,"rangefind");
+
+    get(pObjGrfLB,"objgrf");
+    get(pDiagramLB,"diagram");
+    get(pDrawLB,"draw");
+
+    get(pSyncZoomCB,"synczoom");
+
+    get(pRowColHeaderCB,"rowcolheader");
+    get(pHScrollCB,"hscroll");
+    get(pVScrollCB,"vscroll");
+    get(pTblRegCB,"tblreg");
+    get(pOutlineCB,"outline");
+
     SetExchangeSupport();
     Link aSelObjHdl(LINK( this, ScTpContentOptions, SelLbObjHdl ) );
-    aObjGrfLB.  SetSelectHdl(aSelObjHdl);
-    aDiagramLB. SetSelectHdl(aSelObjHdl);
-    aDrawLB.    SetSelectHdl(aSelObjHdl);
-    aGridLB.    SetSelectHdl( LINK( this, ScTpContentOptions, GridHdl ) );
+    pObjGrfLB->  SetSelectHdl(aSelObjHdl);
+    pDiagramLB-> SetSelectHdl(aSelObjHdl);
+    pDrawLB->    SetSelectHdl(aSelObjHdl);
+    pGridLB->    SetSelectHdl( LINK( this, ScTpContentOptions, GridHdl ) );
 
     Link aCBHdl(LINK( this, ScTpContentOptions, CBHdl ) );
-    aFormulaCB  .SetClickHdl(aCBHdl);
-    aNilCB      .SetClickHdl(aCBHdl);
-    aAnnotCB    .SetClickHdl(aCBHdl);
-    aValueCB    .SetClickHdl(aCBHdl);
-    aAnchorCB   .SetClickHdl(aCBHdl);
-    aClipMarkCB .SetClickHdl(aCBHdl);
+    pFormulaCB  ->SetClickHdl(aCBHdl);
+    pNilCB      ->SetClickHdl(aCBHdl);
+    pAnnotCB    ->SetClickHdl(aCBHdl);
+    pValueCB    ->SetClickHdl(aCBHdl);
+    pAnchorCB   ->SetClickHdl(aCBHdl);
+    pClipMarkCB ->SetClickHdl(aCBHdl);
 
-    aVScrollCB  .SetClickHdl(aCBHdl);
-    aHScrollCB  .SetClickHdl(aCBHdl);
-    aTblRegCB   .SetClickHdl(aCBHdl);
-    aOutlineCB  .SetClickHdl(aCBHdl);
-    aBreakCB    .SetClickHdl(aCBHdl);
-    aGuideLineCB.SetClickHdl(aCBHdl);
-    aRowColHeaderCB.SetClickHdl(aCBHdl);
+    pVScrollCB  ->SetClickHdl(aCBHdl);
+    pHScrollCB  ->SetClickHdl(aCBHdl);
+    pTblRegCB   ->SetClickHdl(aCBHdl);
+    pOutlineCB  ->SetClickHdl(aCBHdl);
+    pBreakCB    ->SetClickHdl(aCBHdl);
+    pGuideLineCB->SetClickHdl(aCBHdl);
+    pRowColHeaderCB->SetClickHdl(aCBHdl);
 
 }
 
@@ -130,38 +116,38 @@ SfxTabPage* ScTpContentOptions::Create( Window*     pParent,
 sal_Bool    ScTpContentOptions::FillItemSet( SfxItemSet& rCoreSet )
 {
     sal_Bool bRet = false;
-    if( aFormulaCB  .GetSavedValue() != aFormulaCB  .IsChecked() ||
-        aNilCB      .GetSavedValue() != aNilCB      .IsChecked() ||
-        aAnnotCB    .GetSavedValue() != aAnnotCB    .IsChecked() ||
-        aValueCB    .GetSavedValue() != aValueCB    .IsChecked() ||
-        aAnchorCB   .GetSavedValue() != aAnchorCB   .IsChecked() ||
-        aClipMarkCB .GetSavedValue() != aClipMarkCB .IsChecked() ||
-        aObjGrfLB   .GetSavedValue() != aObjGrfLB   .GetSelectEntryPos() ||
-        aDiagramLB  .GetSavedValue() != aDiagramLB  .GetSelectEntryPos() ||
-        aDrawLB     .GetSavedValue() != aDrawLB     .GetSelectEntryPos() ||
-        aGridLB         .GetSavedValue() != aGridLB .GetSelectEntryPos() ||
-        aRowColHeaderCB .GetSavedValue() != aRowColHeaderCB.IsChecked() ||
-        aHScrollCB      .GetSavedValue() != aHScrollCB     .IsChecked() ||
-        aVScrollCB      .GetSavedValue() != aVScrollCB     .IsChecked() ||
-        aTblRegCB       .GetSavedValue() != aTblRegCB      .IsChecked() ||
-        aOutlineCB      .GetSavedValue() != aOutlineCB     .IsChecked() ||
-        aColorLB        .GetSavedValue() != aColorLB       .GetSelectEntryPos() ||
-        aBreakCB        .GetSavedValue() != aBreakCB       .IsChecked() ||
-        aGuideLineCB    .GetSavedValue() != aGuideLineCB   .IsChecked())
+    if( pFormulaCB ->GetSavedValue() != pFormulaCB ->IsChecked() ||
+        pNilCB     ->GetSavedValue() != pNilCB     ->IsChecked() ||
+        pAnnotCB   ->GetSavedValue() != pAnnotCB   ->IsChecked() ||
+        pValueCB   ->GetSavedValue() != pValueCB   ->IsChecked() ||
+        pAnchorCB  ->GetSavedValue() != pAnchorCB  ->IsChecked() ||
+        pClipMarkCB->GetSavedValue() != pClipMarkCB->IsChecked() ||
+        pObjGrfLB  ->GetSavedValue() != pObjGrfLB  ->GetSelectEntryPos() ||
+        pDiagramLB ->GetSavedValue() != pDiagramLB ->GetSelectEntryPos() ||
+        pDrawLB    ->GetSavedValue() != pDrawLB    ->GetSelectEntryPos() ||
+        pGridLB        ->GetSavedValue() != pGridLB->GetSelectEntryPos() ||
+        pRowColHeaderCB->GetSavedValue() != pRowColHeaderCB->IsChecked() ||
+        pHScrollCB     ->GetSavedValue() != pHScrollCB     ->IsChecked() ||
+        pVScrollCB     ->GetSavedValue() != pVScrollCB     ->IsChecked() ||
+        pTblRegCB      ->GetSavedValue() != pTblRegCB      ->IsChecked() ||
+        pOutlineCB     ->GetSavedValue() != pOutlineCB     ->IsChecked() ||
+        pColorLB       ->GetSavedValue() != pColorLB       ->GetSelectEntryPos() ||
+        pBreakCB       ->GetSavedValue() != pBreakCB       ->IsChecked() ||
+        pGuideLineCB   ->GetSavedValue() != pGuideLineCB   ->IsChecked())
     {
-        pLocalOptions->SetGridColor( aColorLB.GetSelectEntryColor(),
-                                     aColorLB.GetSelectEntry() );
+        pLocalOptions->SetGridColor( pColorLB->GetSelectEntryColor(),
+                                     pColorLB->GetSelectEntry() );
         rCoreSet.Put(ScTpViewItem(SID_SCVIEWOPTIONS, *pLocalOptions));
         bRet = sal_True;
     }
-    if(aRangeFindCB.GetSavedValue() != aRangeFindCB.IsChecked())
+    if(pRangeFindCB->GetSavedValue() != pRangeFindCB->IsChecked())
     {
-        rCoreSet.Put(SfxBoolItem(SID_SC_INPUT_RANGEFINDER, aRangeFindCB.IsChecked()));
+        rCoreSet.Put(SfxBoolItem(SID_SC_INPUT_RANGEFINDER, pRangeFindCB->IsChecked()));
         bRet = sal_True;
     }
-    if(aSyncZoomCB.GetSavedValue() != aSyncZoomCB.IsChecked())
+    if(pSyncZoomCB->GetSavedValue() != pSyncZoomCB->IsChecked())
     {
-        rCoreSet.Put(SfxBoolItem(SID_SC_OPT_SYNCZOOM, aSyncZoomCB.IsChecked()));
+        rCoreSet.Put(SfxBoolItem(SID_SC_OPT_SYNCZOOM, pSyncZoomCB->IsChecked()));
         bRet = sal_True;
     }
 
@@ -177,54 +163,54 @@ void    ScTpContentOptions::Reset( const SfxItemSet& rCoreSet )
                             ((const ScTpViewItem*)pItem)->GetViewOptions() );
     else
         pLocalOptions = new ScViewOptions;
-    aFormulaCB  .Check(pLocalOptions->GetOption(VOPT_FORMULAS));
-    aNilCB      .Check(pLocalOptions->GetOption(VOPT_NULLVALS));
-    aAnnotCB    .Check(pLocalOptions->GetOption(VOPT_NOTES));
-    aValueCB    .Check(pLocalOptions->GetOption(VOPT_SYNTAX));
-    aAnchorCB   .Check(pLocalOptions->GetOption(VOPT_ANCHOR));
-    aClipMarkCB .Check(pLocalOptions->GetOption(VOPT_CLIPMARKS));
+    pFormulaCB ->Check(pLocalOptions->GetOption(VOPT_FORMULAS));
+    pNilCB     ->Check(pLocalOptions->GetOption(VOPT_NULLVALS));
+    pAnnotCB   ->Check(pLocalOptions->GetOption(VOPT_NOTES));
+    pValueCB   ->Check(pLocalOptions->GetOption(VOPT_SYNTAX));
+    pAnchorCB  ->Check(pLocalOptions->GetOption(VOPT_ANCHOR));
+    pClipMarkCB->Check(pLocalOptions->GetOption(VOPT_CLIPMARKS));
 
-    aObjGrfLB   .SelectEntryPos( (sal_uInt16)pLocalOptions->GetObjMode(VOBJ_TYPE_OLE) );
-    aDiagramLB  .SelectEntryPos( (sal_uInt16)pLocalOptions->GetObjMode(VOBJ_TYPE_CHART) );
-    aDrawLB     .SelectEntryPos( (sal_uInt16)pLocalOptions->GetObjMode(VOBJ_TYPE_DRAW) );
+    pObjGrfLB  ->SelectEntryPos( (sal_uInt16)pLocalOptions->GetObjMode(VOBJ_TYPE_OLE) );
+    pDiagramLB ->SelectEntryPos( (sal_uInt16)pLocalOptions->GetObjMode(VOBJ_TYPE_CHART) );
+    pDrawLB    ->SelectEntryPos( (sal_uInt16)pLocalOptions->GetObjMode(VOBJ_TYPE_DRAW) );
 
-    aRowColHeaderCB.Check( pLocalOptions->GetOption(VOPT_HEADER) );
-    aHScrollCB .Check( pLocalOptions->GetOption(VOPT_HSCROLL) );
-    aVScrollCB .Check( pLocalOptions->GetOption(VOPT_VSCROLL) );
-    aTblRegCB  .Check( pLocalOptions->GetOption(VOPT_TABCONTROLS) );
-    aOutlineCB .Check( pLocalOptions->GetOption(VOPT_OUTLINER) );
+    pRowColHeaderCB->Check( pLocalOptions->GetOption(VOPT_HEADER) );
+    pHScrollCB->Check( pLocalOptions->GetOption(VOPT_HSCROLL) );
+    pVScrollCB->Check( pLocalOptions->GetOption(VOPT_VSCROLL) );
+    pTblRegCB ->Check( pLocalOptions->GetOption(VOPT_TABCONTROLS) );
+    pOutlineCB->Check( pLocalOptions->GetOption(VOPT_OUTLINER) );
 
     InitGridOpt();
 
-    aBreakCB.Check( pLocalOptions->GetOption(VOPT_PAGEBREAKS) );
-    aGuideLineCB.Check( pLocalOptions->GetOption(VOPT_HELPLINES) );
+    pBreakCB->Check( pLocalOptions->GetOption(VOPT_PAGEBREAKS) );
+    pGuideLineCB->Check( pLocalOptions->GetOption(VOPT_HELPLINES) );
 
     if(SFX_ITEM_SET == rCoreSet.GetItemState(SID_SC_INPUT_RANGEFINDER, false, &pItem))
-        aRangeFindCB.Check(((const SfxBoolItem*)pItem)->GetValue());
+        pRangeFindCB->Check(((const SfxBoolItem*)pItem)->GetValue());
     if(SFX_ITEM_SET == rCoreSet.GetItemState(SID_SC_OPT_SYNCZOOM, false, &pItem))
-        aSyncZoomCB.Check(((const SfxBoolItem*)pItem)->GetValue());
+        pSyncZoomCB->Check(((const SfxBoolItem*)pItem)->GetValue());
 
-    aRangeFindCB.SaveValue();
-    aSyncZoomCB.SaveValue();
+    pRangeFindCB->SaveValue();
+    pSyncZoomCB->SaveValue();
 
-    aFormulaCB  .SaveValue();
-    aNilCB      .SaveValue();
-    aAnnotCB    .SaveValue();
-    aValueCB    .SaveValue();
-    aAnchorCB   .SaveValue();
-    aClipMarkCB .SaveValue();
-    aObjGrfLB   .SaveValue();
-    aDiagramLB  .SaveValue();
-    aDrawLB     .SaveValue();
-    aRowColHeaderCB .SaveValue();
-    aHScrollCB      .SaveValue();
-    aVScrollCB      .SaveValue();
-    aTblRegCB       .SaveValue();
-    aOutlineCB      .SaveValue();
-    aGridLB         .SaveValue();
-    aColorLB        .SaveValue();
-    aBreakCB        .SaveValue();
-    aGuideLineCB    .SaveValue();
+    pFormulaCB->SaveValue();
+    pNilCB->SaveValue();
+    pAnnotCB->SaveValue();
+    pValueCB->SaveValue();
+    pAnchorCB->SaveValue();
+    pClipMarkCB->SaveValue();
+    pObjGrfLB->SaveValue();
+    pDiagramLB->SaveValue();
+    pDrawLB->SaveValue();
+    pRowColHeaderCB->SaveValue();
+    pHScrollCB->SaveValue();
+    pVScrollCB->SaveValue();
+    pTblRegCB->SaveValue();
+    pOutlineCB->SaveValue();
+    pGridLB->SaveValue();
+    pColorLB->SaveValue();
+    pBreakCB->SaveValue();
+    pGuideLineCB->SaveValue();
 }
 
 void ScTpContentOptions::ActivatePage( const SfxItemSet& rSet)
@@ -247,9 +233,9 @@ IMPL_LINK( ScTpContentOptions, SelLbObjHdl, ListBox*, pLb )
     ScVObjMode  eMode   = ScVObjMode(nSelPos);
     ScVObjType  eType   = VOBJ_TYPE_OLE;
 
-    if ( pLb == &aDiagramLB )
+    if ( pLb == pDiagramLB )
         eType = VOBJ_TYPE_CHART;
-    else if ( pLb == &aDrawLB )
+    else if ( pLb == pDrawLB )
         eType = VOBJ_TYPE_DRAW;
 
     pLocalOptions->SetObjMode( eType, eMode );
@@ -262,19 +248,19 @@ IMPL_LINK( ScTpContentOptions, CBHdl, CheckBox*, pBtn )
     ScViewOption eOption = VOPT_FORMULAS;
     sal_Bool         bChecked = pBtn->IsChecked();
 
-    if (      &aFormulaCB   == pBtn )   eOption = VOPT_FORMULAS;
-    else if ( &aNilCB       == pBtn )   eOption = VOPT_NULLVALS;
-    else if ( &aAnnotCB     == pBtn )   eOption = VOPT_NOTES;
-    else if ( &aValueCB     == pBtn )   eOption = VOPT_SYNTAX;
-    else if ( &aAnchorCB    == pBtn )   eOption = VOPT_ANCHOR;
-    else if ( &aClipMarkCB  == pBtn )   eOption = VOPT_CLIPMARKS;
-    else if ( &aVScrollCB       == pBtn )   eOption = VOPT_VSCROLL;
-    else if ( &aHScrollCB       == pBtn )   eOption = VOPT_HSCROLL;
-    else if ( &aTblRegCB        == pBtn )   eOption = VOPT_TABCONTROLS;
-    else if ( &aOutlineCB       == pBtn )   eOption = VOPT_OUTLINER;
-    else if ( &aBreakCB         == pBtn )   eOption = VOPT_PAGEBREAKS;
-    else if ( &aGuideLineCB     == pBtn )   eOption = VOPT_HELPLINES;
-    else if ( &aRowColHeaderCB  == pBtn )   eOption = VOPT_HEADER;
+    if (      pFormulaCB   == pBtn )   eOption = VOPT_FORMULAS;
+    else if ( pNilCB       == pBtn )   eOption = VOPT_NULLVALS;
+    else if ( pAnnotCB     == pBtn )   eOption = VOPT_NOTES;
+    else if ( pValueCB     == pBtn )   eOption = VOPT_SYNTAX;
+    else if ( pAnchorCB    == pBtn )   eOption = VOPT_ANCHOR;
+    else if ( pClipMarkCB  == pBtn )   eOption = VOPT_CLIPMARKS;
+    else if ( pVScrollCB       == pBtn )   eOption = VOPT_VSCROLL;
+    else if ( pHScrollCB       == pBtn )   eOption = VOPT_HSCROLL;
+    else if ( pTblRegCB        == pBtn )   eOption = VOPT_TABCONTROLS;
+    else if ( pOutlineCB       == pBtn )   eOption = VOPT_OUTLINER;
+    else if ( pBreakCB         == pBtn )   eOption = VOPT_PAGEBREAKS;
+    else if ( pGuideLineCB     == pBtn )   eOption = VOPT_HELPLINES;
+    else if ( pRowColHeaderCB  == pBtn )   eOption = VOPT_HEADER;
 
     pLocalOptions->SetOption( eOption, bChecked );
 
@@ -290,7 +276,7 @@ void ScTpContentOptions::InitGridOpt()
 
     if ( bGrid || bGridOnTop )
     {
-        aColorFT.Enable(), aColorLB.Enable();
+        pColorFT->Enable(), pColorLB->Enable();
         if ( !bGridOnTop )
             nSelPos = 0;
         else
@@ -298,13 +284,13 @@ void ScTpContentOptions::InitGridOpt()
     }
     else
     {
-        aColorFT.Disable(), aColorLB.Disable();
+        pColorFT->Disable(), pColorLB->Disable();
         nSelPos = 2;
     }
 
-    aGridLB.SelectEntryPos (nSelPos);
+    pGridLB->SelectEntryPos (nSelPos);
 
-    if ( aColorLB.GetEntryCount() == 0 )
+    if ( pColorLB->GetEntryCount() == 0 )
     {
         SfxObjectShell* pDocSh = SfxObjectShell::Current();
         // there might be another DocShell here
@@ -325,7 +311,7 @@ void ScTpContentOptions::InitGridOpt()
 
         //------------------------------------------------------
 
-        aColorLB.SetUpdateMode( false );
+        pColorLB->SetUpdateMode( false );
 
         // items from ColorTable
 
@@ -333,17 +319,17 @@ void ScTpContentOptions::InitGridOpt()
         for ( long n=0; n<nCount; n++ )
         {
             XColorEntry* pEntry = pColorList->GetColor(n);
-            aColorLB.InsertEntry( pEntry->GetColor(), pEntry->GetName() );
+            pColorLB->InsertEntry( pEntry->GetColor(), pEntry->GetName() );
         }
 
         // default GridColor
 
         Color aStdCol( SC_STD_GRIDCOLOR );          // same default as in ScViewOptions
         if ( LISTBOX_ENTRY_NOTFOUND ==
-                aColorLB.GetEntryPos( aStdCol ) )
-            aColorLB.InsertEntry( aStdCol, ScGlobal::GetRscString( STR_GRIDCOLOR ) );
+                pColorLB->GetEntryPos( aStdCol ) )
+            pColorLB->InsertEntry( aStdCol, ScGlobal::GetRscString( STR_GRIDCOLOR ) );
 
-        aColorLB.SetUpdateMode( sal_True );
+        pColorLB->SetUpdateMode( sal_True );
 
         Invalidate();
     }
@@ -352,12 +338,12 @@ void ScTpContentOptions::InitGridOpt()
 
     String  aName;
     Color   aCol    = pLocalOptions->GetGridColor( &aName );
-    nSelPos = aColorLB.GetEntryPos( aCol );
+    nSelPos = pColorLB->GetEntryPos( aCol );
 
     if ( LISTBOX_ENTRY_NOTFOUND != nSelPos )
-        aColorLB.SelectEntryPos( nSelPos );
+        pColorLB->SelectEntryPos( nSelPos );
     else
-        aColorLB.SelectEntryPos( aColorLB.InsertEntry( aCol, aName ) );
+        pColorLB->SelectEntryPos( pColorLB->InsertEntry( aCol, aName ) );
 }
 
 IMPL_LINK( ScTpContentOptions, GridHdl, ListBox*, pLb )
@@ -366,8 +352,8 @@ IMPL_LINK( ScTpContentOptions, GridHdl, ListBox*, pLb )
     sal_Bool    bGrid = ( nSelPos <= 1 );
     sal_Bool    bGridOnTop = ( nSelPos == 1 );
 
-    aColorFT.Enable(bGrid);
-    aColorLB.Enable(bGrid);
+    pColorFT->Enable(bGrid);
+    pColorLB->Enable(bGrid);
     pLocalOptions->SetOption( VOPT_GRID, bGrid );
     pLocalOptions->SetOption( VOPT_GRID_ONTOP, bGridOnTop );
     return 0;
