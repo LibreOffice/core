@@ -28,7 +28,6 @@ class XMLOFF_DLLPUBLIC XMLTextImportPropertyMapper : public SvXMLImportPropertyM
 {
     sal_Int32 nSizeTypeIndex;
     sal_Int32 nWidthTypeIndex;
-    SvXMLImportContextRef xFontDecls;
 
     void FontFinished(
                 XMLPropertyState *pFontFamilyNameState,
@@ -58,11 +57,8 @@ protected:
 public:
     XMLTextImportPropertyMapper(
             const UniReference< XMLPropertySetMapper >& rMapper,
-            SvXMLImport& rImport,
-            XMLFontStylesContext *pFontDecls = 0 );
+            SvXMLImport& rImport );
     virtual ~XMLTextImportPropertyMapper();
-
-    void SetFontDecls( XMLFontStylesContext *pFontDecls );
 
     /** This method is called when all attributes have benn processed. It may be used to remove items that are incomplete */
     virtual void finished(

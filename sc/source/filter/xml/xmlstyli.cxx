@@ -750,7 +750,7 @@ UniReference < SvXMLImportPropertyMapper >
                 {
                     ((XMLTableStylesContext *)this)->xCellImpPropMapper =
                         new ScXMLCellImportPropertyMapper( GetScImport().GetCellStylesPropertySetMapper(), const_cast<SvXMLImport&>(GetImport()) );
-                    xCellImpPropMapper->ChainImportMapper(XMLTextImportHelper::CreateParaExtPropMapper(const_cast<SvXMLImport&>(GetImport()), const_cast<XMLFontStylesContext*>(GetScImport().GetFontDecls())));
+                    xCellImpPropMapper->ChainImportMapper(XMLTextImportHelper::CreateParaExtPropMapper(const_cast<SvXMLImport&>(GetImport())));
                 }
                 xMapper = xCellImpPropMapper;
             }
