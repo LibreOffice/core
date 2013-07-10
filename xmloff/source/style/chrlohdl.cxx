@@ -117,6 +117,11 @@ sal_Bool XMLCharLanguageHdl::exportXML( OUString& rStrExpValue, const uno::Any& 
         LanguageTag aLanguageTag( aLocale);
         OUString aCountry;
         aLanguageTag.getIsoLanguageCountry( rStrExpValue, aCountry);
+        // Do not write *:language='none' for a non-ISO language with
+        // *:rfc-language-tag that is written if Variant is not empty. If there
+        // is no match do not write this attribute at all.
+        if (rStrExpValue.isEmpty())
+            return sal_False;
     }
 
     if( rStrExpValue.isEmpty() )
@@ -298,6 +303,11 @@ sal_Bool XMLCharCountryHdl::exportXML( OUString& rStrExpValue, const uno::Any& r
         LanguageTag aLanguageTag( aLocale);
         OUString aLanguage;
         aLanguageTag.getIsoLanguageCountry( aLanguage, rStrExpValue);
+        // Do not write *:country='none' for a non-ISO country with
+        // *:rfc-language-tag that is written if Variant is not empty. If there
+        // is no match do not write this attribute at all.
+        if (rStrExpValue.isEmpty())
+            return sal_False;
     }
 
     if( rStrExpValue.isEmpty() )
