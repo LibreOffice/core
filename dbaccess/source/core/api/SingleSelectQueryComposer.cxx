@@ -521,12 +521,13 @@ void SAL_CALL OSingleSelectQueryComposer::appendFilterByColumn( const Reference<
                     ::dbtools::qualifiedNameComponents(m_xMetaData,sTableName,aCatlog,aSchema,aTable,::dbtools::eInDataManipulation);
                     sTableName = ::dbtools::composeTableName( m_xMetaData, aCatlog, aSchema, aTable, sal_True, ::dbtools::eInDataManipulation );
                 }
-                else
+                else if (!sTableName.isEmpty())
                     sTableName = ::dbtools::quoteName(aQuote,sTableName);
 
-                aNewName =  sTableName;
-                aNewName += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("."));
-                aNewName += ::dbtools::quoteName(aQuote,sRealName);
+                if(sTableName.isEmpty())
+                    aNewName =  ::dbtools::quoteName(aQuote,sRealName);
+                else
+                    aNewName =  sTableName + "." + ::dbtools::quoteName(aQuote,sRealName);
             }
         }
         else
