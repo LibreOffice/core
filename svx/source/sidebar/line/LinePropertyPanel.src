@@ -59,11 +59,6 @@ Control RID_SIDEBAR_LINE_PANEL
     {
         ImageBitmap = Bitmap{File = "symphony/Line_color.png";};
     };
-    Image IMG_COLOR_NO
-    {
-        ImageBitmap = Bitmap{File = "symphony/no color.png";};
-    };
-
     Image IMG_NONE_ICON
     {
         ImageBitmap = Bitmap{File = "symphony/blank.png";};

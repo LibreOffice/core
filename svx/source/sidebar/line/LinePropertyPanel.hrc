@@ -31,7 +31,6 @@
 #define LB_CAPSTYLE         21
 
 #define IMG_COLOR           23
-#define IMG_COLOR_NO        24
 #define IMG_NONE_ICON       36
 
 #define IMG_WIDTH1_ICON     41
