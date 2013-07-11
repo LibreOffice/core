@@ -1315,10 +1315,9 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
     {
         if( !mxClipboard.is() )
         {
-            ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
             // remember clipboard here
-            mxClipboard = ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboard > (
-                ::com::sun::star::datatransfer::clipboard::SystemClipboard::createDefault(xContext), ::com::sun::star::uno::UNO_QUERY );
+            mxClipboard = css::datatransfer::clipboard::SystemClipboard::create(
+                comphelper::getProcessComponentContext());
         }
 
         return mxClipboard;

@@ -8480,20 +8480,15 @@ uno::Reference< XClipboard > Window::GetClipboard()
         {
             try
             {
-                uno::Reference< XComponentContext > xContext( comphelper::getProcessComponentContext() );
-                Reference<XSystemClipboard> xSystemClipboard;
-#if defined(UNX) && !defined(MACOSX)          // unix clipboard needs to be initialized
-                xSystemClipboard = SystemClipboard::createUnix( xContext, Application::GetDisplayConnection(), "CLIPBOARD", vcl::createBmpConverter() );
-#else
-                xSystemClipboard = SystemClipboard::createDefault(xContext);
-#endif
-                mpWindowImpl->mpFrameData->mxClipboard.set( xSystemClipboard, UNO_QUERY );
+                mpWindowImpl->mpFrameData->mxClipboard
+                    = css::datatransfer::clipboard::SystemClipboard::create(
+                        comphelper::getProcessComponentContext());
             }
-            // createInstance can throw any exception
-            catch (const Exception&)
+            catch (css::uno::DeploymentException & e)
             {
-                // release all instances
-                mpWindowImpl->mpFrameData->mxClipboard.clear();
+                SAL_WARN(
+                    "vcl.window",
+                    "ignoring DeploymentException \"" << e.Message << "\"");
             }
         }
 
@@ -8518,8 +8513,18 @@ uno::Reference< XClipboard > Window::GetPrimarySelection()
                 uno::Reference< XComponentContext > xContext( comphelper::getProcessComponentContext() );
 
 #if defined(UNX) && !defined(MACOSX)
-                Reference<XSystemClipboard> xSystemClipboard = SystemClipboard::createUnix( xContext, Application::GetDisplayConnection(), "PRIMARY", vcl::createBmpConverter() );
-                mpWindowImpl->mpFrameData->mxSelection = uno::Reference< XClipboard >( xSystemClipboard, UNO_QUERY );
+                // A hack, making the primary selection available as an instance of
+                // the SystemClipboard service on X11:
+                css::uno::Sequence<css::uno::Any> args(3);
+                args[0] <<= Application::GetDisplayConnection();
+                args[1] <<= OUString("PRIMARY");
+                args[2] <<= vcl::createBmpConverter();
+                mpWindowImpl->mpFrameData->mxSelection.set(
+                    (xContext->getServiceManager()->
+                     createInstanceWithArgumentsAndContext(
+                         "com.sun.star.datatransfer.clipboard.SystemClipboard",
+                         args, xContext)),
+                    css::uno::UNO_QUERY_THROW);
 #       else
                 static uno::Reference< XClipboard > s_xSelection(
                     xContext->getServiceManager()->createInstanceWithContext( "com.sun.star.datatransfer.clipboard.GenericClipboard", xContext ), UNO_QUERY );
@@ -8527,12 +8532,11 @@ uno::Reference< XClipboard > Window::GetPrimarySelection()
                 mpWindowImpl->mpFrameData->mxSelection = s_xSelection;
 #       endif
             }
-
-            // createInstance can throw any exception
-            catch (const Exception&)
+            catch (css::uno::RuntimeException & e)
             {
-                // release all instances
-                mpWindowImpl->mpFrameData->mxSelection.clear();
+                SAL_WARN(
+                    "vcl.window",
+                    "ignoring RuntimeException \"" << e.Message << "\"");
             }
         }
 

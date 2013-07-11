@@ -267,12 +267,6 @@ sal_Bool SAL_CALL X11Clipboard::supportsService( const OUString& ServiceName )
 
 // ------------------------------------------------------------------------
 
-void SAL_CALL X11Clipboard::initialize( const Sequence< Any >& ) throw( ::com::sun::star::uno::Exception )
-{
-}
-
-// ------------------------------------------------------------------------
-
 Sequence< OUString > SAL_CALL X11Clipboard::getSupportedServiceNames(    )
     throw(RuntimeException)
 {

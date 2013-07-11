@@ -64,11 +64,6 @@ namespace x11 {
         static X11Clipboard* get( const OUString& rDisplayName, Atom aSelection );
 
         /*
-         *  XInitialization
-         */
-        virtual void SAL_CALL initialize( const Sequence< Any >& arguments ) throw(  ::com::sun::star::uno::Exception );
-
-        /*
          * XServiceInfo
          */
 
