@@ -478,6 +478,7 @@ int OpenclDevice::CompileKernelFile(GPUEnv *gpuInfo, const char *buildOption) {
                 sizeof(cl_device_id) * numDevices, mpArryDevsID, NULL);
         CHECK_OPENCL(status)
 
+        fprintf(stderr, "Create kernel from binary\n");
         gpuInfo->mpArryPrograms[idx] = clCreateProgramWithBinary(gpuInfo->mpContext,
                 numDevices, mpArryDevsID, &length, (const unsigned char**) &binary,
                 &binary_status, &status);
@@ -488,6 +489,7 @@ int OpenclDevice::CompileKernelFile(GPUEnv *gpuInfo, const char *buildOption) {
         mpArryDevsID = NULL;
     } else {
         // create a CL program using the kernel source
+        fprintf(stderr, "Create kernel from source\n");
         gpuEnv.mpArryPrograms[idx] = clCreateProgramWithSource(gpuEnv.mpContext,
                 1, &source, source_size, &status);
         CHECK_OPENCL(status);
@@ -502,21 +504,21 @@ int OpenclDevice::CompileKernelFile(GPUEnv *gpuInfo, const char *buildOption) {
     printf("BuildProgram.\n");
     if (!gpuInfo->mnIsUserCreated) {
         status = clBuildProgram(gpuInfo->mpArryPrograms[idx], 1, gpuInfo->mpArryDevsID,
-                buildOption, NULL, NULL);
+                                buildOption, NULL, NULL);
     } else {
         status = clBuildProgram(gpuInfo->mpArryPrograms[idx], 1, &(gpuInfo->mpDevID),
-                buildOption, NULL, NULL);
+                                buildOption, NULL, NULL);
     }
 
     if (status != CL_SUCCESS) {
         printf ("BuildProgram error!\n");
         if (!gpuInfo->mnIsUserCreated) {
             status = clGetProgramBuildInfo(gpuInfo->mpArryPrograms[idx],
-                    gpuInfo->mpArryDevsID[0], CL_PROGRAM_BUILD_LOG, 0, NULL,
-                    &length);
+                                           gpuInfo->mpArryDevsID[0], CL_PROGRAM_BUILD_LOG, 0, NULL,
+                                           &length);
         } else {
             status = clGetProgramBuildInfo(gpuInfo->mpArryPrograms[idx],
-                    gpuInfo->mpDevID, CL_PROGRAM_BUILD_LOG, 0, NULL, &length);
+                                           gpuInfo->mpDevID, CL_PROGRAM_BUILD_LOG, 0, NULL, &length);
         }
         if (status != CL_SUCCESS) {
             printf("opencl create build log fail\n");
@@ -534,6 +536,10 @@ int OpenclDevice::CompileKernelFile(GPUEnv *gpuInfo, const char *buildOption) {
             status = clGetProgramBuildInfo(gpuInfo->mpArryPrograms[idx],
                     gpuInfo->mpDevID, CL_PROGRAM_BUILD_LOG, length, buildLog,
                     &length);
+        }
+        if (status != CL_SUCCESS) {
+            printf("opencl program build info fail\n");
+            return 0;
         }
 
         fd1 = fopen("kernel-build.log", "w+");
@@ -2143,12 +2149,14 @@ double *OclCalc::OclSimpleDeltaOperation(OpCode eOp, const double *pOpArray,
     size_t global_work_size[1];
 
     kEnv.mpkKernel = clCreateKernel(kEnv.mpkProgram, kernelName, &clStatus);
-    CHECK_OPENCL(clStatus);
     if (!kEnv.mpkKernel)
     {
-        fprintf(stderr, "could not clCreateKernel '%s'\n", kernelName);
+        fprintf(stderr, "\n\n*** Error: Could not clCreateKernel '%s' ***\n\n", kernelName);
+        fprintf(stderr, "\tprobably your binary cache is out of date\n"
+                "\tplease delete kernel-*.bin in your cwd\n\n\n");
         return NULL;
     }
+    CHECK_OPENCL(clStatus);
 
     // Ugh - horrible redundant copying ...
     cl_mem valuesCl   = allocateDoubleBuffer(kEnv, pOpArray, nElements, &clStatus);

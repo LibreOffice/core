@@ -333,6 +333,8 @@ public:
     }
 
     virtual ScMatrixRef inverseMatrix(const ScMatrix& /* rMat */) { return ScMatrixRef(); }
+    virtual bool interpretCL(ScDocument& rDoc, const ScAddress& rTopPos,
+                             const ScFormulaCellGroupRef& xGroup, ScTokenArray& rCode);
     virtual bool interpret(ScDocument& rDoc, const ScAddress& rTopPos,
                            const ScFormulaCellGroupRef& xGroup, ScTokenArray& rCode);
 };
@@ -341,12 +343,9 @@ public:
 
 #include "compiler.hxx"
 
-// FIXME: really we should compile the formula and operate on the
-// RPN representation which -should- be more compact and have no Open / Close
-// or precedence issues; cf. rCode.FirstRPN() etc.
-bool FormulaGroupInterpreterGroundwater::interpret(ScDocument& rDoc, const ScAddress& rTopPos,
-                                                   const ScFormulaCellGroupRef& xGroup,
-                                                   ScTokenArray& rCode)
+bool FormulaGroupInterpreterGroundwater::interpretCL(ScDocument& rDoc, const ScAddress& rTopPos,
+                                                     const ScFormulaCellGroupRef& xGroup,
+                                                     ScTokenArray& rCode)
 {
     generateRPNCode(rDoc, rTopPos, rCode);
 
@@ -411,6 +410,17 @@ bool FormulaGroupInterpreterGroundwater::interpret(ScDocument& rDoc, const ScAdd
 
     SAL_DEBUG ("exit cleanly !");
     return true;
+}
+
+bool FormulaGroupInterpreterGroundwater::interpret(ScDocument& rDoc, const ScAddress& rTopPos,
+                                                   const ScFormulaCellGroupRef& xGroup,
+                                                   ScTokenArray& rCode)
+{
+    bool bComplete = interpretCL(rDoc, rTopPos, xGroup, rCode);
+    if (!bComplete) // fallback to the (potentially) faster S/W formula group interpreter
+        return FormulaGroupInterpreterSoftware::interpret(rDoc, rTopPos, xGroup, rCode);
+    else
+        return true;
 }
 
 namespace opencl {
