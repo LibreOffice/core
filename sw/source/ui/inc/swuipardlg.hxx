@@ -27,7 +27,17 @@ class SwParaDlg: public SfxTabDialog
     sal_uInt8 nDlgMode;
     sal_Bool bDrawParaDlg;
 
-    void PageCreated(sal_uInt16 nID, SfxTabPage& rPage);
+    sal_uInt16 m_nParaStd;
+    sal_uInt16 m_nParaAlign;
+    sal_uInt16 m_nParaExt;
+    sal_uInt16 m_nParaAsian;
+    sal_uInt16 m_nParaTab;
+    sal_uInt16 m_nParaNumPara;
+    sal_uInt16 m_nParaDrpCps;
+    sal_uInt16 m_nParaBckGrnd;
+    sal_uInt16 m_nParaBorder;
+
+    void PageCreated(sal_uInt16 nId, SfxTabPage& rPage);
 
 public:
     SwParaDlg(  Window *pParent,

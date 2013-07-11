@@ -821,25 +821,12 @@ SwLabDlgMethod SwAbstractDialogFactory_Impl::GetSwLabDlgStaticMethod ()
 SfxAbstractTabDialog* SwAbstractDialogFactory_Impl::CreateSwParaDlg ( Window *pParent, SwView& rVw,
                                                     const SfxItemSet& rCoreSet  ,
                                                     sal_uInt8 nDialogMode,
-                                                    int nResId,
                                                     const String *pCollName,
-                                                    sal_Bool bDraw , sal_uInt16 nDefPage)
+                                                    sal_Bool bDraw ,
+                                                    sal_uInt16 nDefPage)
 {
-    SfxTabDialog* pDlg=NULL;
-    switch ( nResId )
-    {
-        case DLG_DRAWPARA :
-        case DLG_PARA :
-            pDlg = new SwParaDlg( pParent, rVw, rCoreSet,nDialogMode, pCollName, bDraw, nDefPage );
-            break;
-
-        default:
-            break;
-    }
-
-    if ( pDlg )
-        return new AbstractTabDialog_Impl( pDlg );
-    return 0;
+    SfxTabDialog* pDlg = new SwParaDlg( pParent, rVw, rCoreSet,nDialogMode, pCollName, bDraw, nDefPage );
+    return new AbstractTabDialog_Impl( pDlg );
 }
 
 VclAbstractDialog * SwAbstractDialogFactory_Impl::CreateVclAbstractDialog ( Window *pParent, SwWrtShell &rSh, int nResId )
