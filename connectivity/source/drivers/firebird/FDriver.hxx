@@ -57,6 +57,10 @@ namespace connectivity
             OWeakRefArray               m_xConnections; //  vector containing a list
                                                         //  of all the Connection objects
                                                         //  for this Driver
+        private:
+            bool mbIsEmbedded;
+            OUString mFilePath;
+
         public:
 
             FirebirdDriver();
