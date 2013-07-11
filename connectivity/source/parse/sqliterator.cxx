@@ -1096,23 +1096,19 @@ void OSQLParseTreeIterator::traverseByColumnNames(const OSQLParseNode* pSelectNo
 
             pColumnRef = pColumnRef->getChild(0);
         }
+        OSL_ENSURE(pColumnRef != NULL,"OSQLParseTreeIterator: error in parse tree!");
         aTableRange = OUString();
         sColumnName = OUString();
         if ( SQL_ISRULE(pColumnRef,column_ref) )
         {
             // Column name (and TableRange):
-            if(SQL_ISRULE(pColumnRef,column_ref))
-                getColumnRange(pColumnRef,sColumnName,aTableRange);
-            else // an expression
-                pColumnRef->parseNodeToStr( sColumnName, m_pImpl->m_xConnection, NULL, sal_False, sal_False );
-
-            OSL_ENSURE(!sColumnName.isEmpty(),"sColumnName must not be empty!");
+            getColumnRange(pColumnRef,sColumnName,aTableRange);
         }
         else
         {   // here I found a predicate
             pColumnRef->parseNodeToStr( sColumnName, m_pImpl->m_xConnection, NULL, sal_False, sal_False );
         }
-        OSL_ENSURE(pColumnRef != NULL,"OSQLParseTreeIterator: error in parse tree!");
+        OSL_ENSURE(!sColumnName.isEmpty(),"sColumnName must not be empty!");
         if ( _bOrder )
         {
             // Ascending/Descending
