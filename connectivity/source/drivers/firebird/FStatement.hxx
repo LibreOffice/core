@@ -89,6 +89,7 @@ namespace connectivity
             // OPropertyArrayUsageHelper
             virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const;
             // OPropertySetHelper
+            using OPropertySetHelper::getFastPropertyValue;
             virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper();
             virtual sal_Bool SAL_CALL convertFastPropertyValue(
                                                                 ::com::sun::star::uno::Any & rConvertedValue,
