@@ -2731,16 +2731,28 @@ sal_Int32 PDFWriterImpl::emitStructure( PDFStructureElement& rEle )
     }
     if( !rEle.m_aLocale.Language.isEmpty() )
     {
-        OUStringBuffer aLocBuf( 16 );
-        aLocBuf.append( rEle.m_aLocale.Language.toAsciiLowerCase() );
-        if( !rEle.m_aLocale.Country.isEmpty() )
+        /* PDF allows only RFC 3066, which is only partly BCP 47 and does not
+         * include script tags and others.
+         * http://pdf.editme.com/pdfua-naturalLanguageSpecification
+         * http://partners.adobe.com/public/developer/en/pdf/PDFReference16.pdf#page=886
+         * https://www.adobe.com/content/dam/Adobe/en/devnet/pdf/pdfs/PDF32000_2008.pdf#M13.9.19332.1Heading.97.Natural.Language.Specification
+         * */
+        LanguageTag aLanguageTag( rEle.m_aLocale);
+        OUString aLanguage, aScript, aCountry;
+        aLanguageTag.getIsoLanguageScriptCountry( aLanguage, aScript, aCountry);
+        if (!aLanguage.isEmpty())
         {
-            aLocBuf.append( sal_Unicode('-') );
-            aLocBuf.append( rEle.m_aLocale.Country );
+            OUStringBuffer aLocBuf( 16 );
+            aLocBuf.append( aLanguage );
+            if( !aCountry.isEmpty() )
+            {
+                aLocBuf.append( sal_Unicode('-') );
+                aLocBuf.append( aCountry );
+            }
+            aLine.append( "/Lang" );
+            appendLiteralStringEncrypt( aLocBuf.makeStringAndClear(), rEle.m_nObject, aLine );
+            aLine.append( "\n" );
         }
-        aLine.append( "/Lang" );
-        appendLiteralStringEncrypt( aLocBuf.makeStringAndClear(), rEle.m_nObject, aLine );
-        aLine.append( "\n" );
     }
     if( ! rEle.m_aKids.empty() )
     {
@@ -5783,16 +5795,23 @@ bool PDFWriterImpl::emitCatalog()
     }
     if( !m_aContext.DocumentLocale.Language.isEmpty() )
     {
-        OUStringBuffer aLocBuf( 16 );
-        aLocBuf.append( m_aContext.DocumentLocale.Language.toAsciiLowerCase() );
-        if( !m_aContext.DocumentLocale.Country.isEmpty() )
+        /* PDF allows only RFC 3066, see above in emitStructure(). */
+        LanguageTag aLanguageTag( m_aContext.DocumentLocale);
+        OUString aLanguage, aScript, aCountry;
+        aLanguageTag.getIsoLanguageScriptCountry( aLanguage, aScript, aCountry);
+        if (!aLanguage.isEmpty())
         {
-            aLocBuf.append( sal_Unicode('-') );
-            aLocBuf.append( m_aContext.DocumentLocale.Country );
+            OUStringBuffer aLocBuf( 16 );
+            aLocBuf.append( aLanguage );
+            if( !aCountry.isEmpty() )
+            {
+                aLocBuf.append( sal_Unicode('-') );
+                aLocBuf.append( aCountry );
+            }
+            aLine.append( "/Lang" );
+            appendLiteralStringEncrypt( aLocBuf.makeStringAndClear(), m_nCatalogObject, aLine );
+            aLine.append( "\n" );
         }
-        aLine.append( "/Lang" );
-        appendLiteralStringEncrypt( aLocBuf.makeStringAndClear(), m_nCatalogObject, aLine );
-        aLine.append( "\n" );
     }
     if( m_aContext.Tagged && m_aContext.Version > PDFWriter::PDF_1_3 )
     {
