@@ -464,6 +464,20 @@ bool LanguageTag::canonicalize()
                 Extraction eExt = simpleExtract( maBcp47, aLanguage, aScript, aCountry);
                 if (eExt != EXTRACTED_NONE)
                 {
+                    if (eExt == EXTRACTED_LSC)
+                    {
+                        // Rebuild bcp47 with proper casing of tags.
+                        OUString aStr( aLanguage);
+                        if (!aScript.isEmpty())
+                            aStr += "-" + aScript;
+                        if (!aCountry.isEmpty())
+                            aStr += "-" + aCountry;
+                        if (maBcp47 != aStr)
+                        {
+                            maBcp47 = aStr;
+                            bChanged = true;
+                        }
+                    }
                     if (eExt == EXTRACTED_LSC && aScript.isEmpty())
                     {
                         maLocale.Language = aLanguage;
@@ -1233,15 +1247,15 @@ LanguageTag::Extraction LanguageTag::simpleExtract( const OUString& rBcp47,
     }
     else if ((nLen == 2 || nLen == 3) && nHyph1 < 0) // ll or lll
     {
-        rLanguage = rBcp47;
+        rLanguage = rBcp47.toAsciiLowerCase();
         rScript = rCountry = OUString();
         eRet = EXTRACTED_LSC;
     }
     else if (  (nLen == 5 && nHyph1 == 2)           // ll-CC
             || (nLen == 6 && nHyph1 == 3))          // lll-CC
     {
-        rLanguage = rBcp47.copy( 0, nHyph1);
-        rCountry  = rBcp47.copy( nHyph1 + 1, 2);
+        rLanguage = rBcp47.copy( 0, nHyph1).toAsciiLowerCase();
+        rCountry  = rBcp47.copy( nHyph1 + 1, 2).toAsciiUpperCase();
         rScript = OUString();
         eRet = EXTRACTED_LSC;
     }
@@ -1251,9 +1265,9 @@ LanguageTag::Extraction LanguageTag::simpleExtract( const OUString& rBcp47,
         const sal_Int32 nHyph2 = rBcp47.indexOf( '-', nHyph1 + 1);
         if (nHyph2 == nHyph1 + 5)
         {
-            rLanguage = rBcp47.copy( 0, nHyph1);
-            rScript   = rBcp47.copy( nHyph1 + 1, 4);
-            rCountry  = rBcp47.copy( nHyph2 + 1, 2);
+            rLanguage = rBcp47.copy( 0, nHyph1).toAsciiLowerCase();
+            rScript   = rBcp47.copy( nHyph1 + 1, 1).toAsciiUpperCase() + rBcp47.copy( nHyph1 + 2, 3).toAsciiLowerCase();
+            rCountry  = rBcp47.copy( nHyph2 + 1, 2).toAsciiUpperCase();
             eRet = EXTRACTED_LSC;
         }
     }
