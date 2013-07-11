@@ -2096,7 +2096,7 @@ static cl_mem allocateDoubleBuffer(KernelEnv &rEnv, const double *_pValues,
                                     nElements * sizeof(double), NULL, pStatus);
     fp_t *pValues = (fp_t *)clEnqueueMapBuffer(rEnv.mpkCmdQueue,xValues,CL_TRUE,CL_MAP_WRITE,0,
                                                    nElements * sizeof(fp_t),0,NULL,NULL,NULL);
-    for(int i=0;i<nElements;i++)
+    for(size_t i=0;i<nElements;i++)
         pValues[i] = (fp_t)_pValues[i];
 
     clEnqueueUnmapMemObject(rEnv.mpkCmdQueue,xValues,pValues,0,NULL,NULL);
@@ -2173,7 +2173,7 @@ double *OclCalc::OclSimpleDeltaOperation(OpCode eOp, const double *pOpArray,
     fp_t *pOutput = (fp_t *)clEnqueueMapBuffer(kEnv.mpkCmdQueue,outputCl,CL_TRUE,
                                                CL_MAP_READ,0,nElements*sizeof(fp_t),
                                                0,NULL,NULL,NULL);
-    for(int i = 0; i < nElements; i++)
+    for(size_t i = 0; i < nElements; i++)
         pResult[i] = (double)pOutput[i];
 
     clEnqueueUnmapMemObject(kEnv.mpkCmdQueue,outputCl,pOutput,0,NULL,NULL);
