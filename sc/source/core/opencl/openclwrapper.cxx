@@ -191,7 +191,7 @@ int OpenclDevice::BinaryGenerated(const char * clFileName, FILE ** fhandle)
     FILE *fd = NULL;
     cl_uint numDevices=0;
     status = clGetDeviceIDs(gpuEnv.mpPlatformID, // platform
-                            CL_DEVICE_TYPE_GPU, // device_type
+                            CL_DEVICE_TYPE_ALL, // device_type
                             0, // num_entries
                             NULL, // devices ID
                             &numDevices);
@@ -670,7 +670,7 @@ int OpenclDevice::InitOpenclRunEnv(GPUEnv *gpuInfo)
                     gpuInfo->mpPlatformID = platforms[i];
 
                     status = clGetDeviceIDs(gpuInfo->mpPlatformID, // platform
-                                            CL_DEVICE_TYPE_GPU,    // device_type
+                                            CL_DEVICE_TYPE_ALL,    // device_type
                                             0,                       // num_entries
                                             NULL,                   // devices
                                             &numDevices);
@@ -700,12 +700,15 @@ int OpenclDevice::InitOpenclRunEnv(GPUEnv *gpuInfo)
         gpuInfo->mpContext = clCreateContextFromType(cps, gpuInfo->mDevType, NULL,
                 NULL, &status);
 
+        // If no GPU, check for CPU.
         if ((gpuInfo->mpContext == (cl_context) NULL)
                 || (status != CL_SUCCESS)) {
             gpuInfo->mDevType = CL_DEVICE_TYPE_CPU;
             gpuInfo->mpContext = clCreateContextFromType(cps, gpuInfo->mDevType,
                     NULL, NULL, &status);
         }
+
+        // If no GPU or CPU, check for a "default" type.
         if ((gpuInfo->mpContext == (cl_context) NULL)
                 || (status != CL_SUCCESS)) {
             gpuInfo->mDevType = CL_DEVICE_TYPE_DEFAULT;
