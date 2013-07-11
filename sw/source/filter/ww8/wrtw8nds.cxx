@@ -1795,10 +1795,10 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
         AppendWordBookmark( sBkmkName );
     }
 
-    String aStr( rNode.GetTxt() );
+    OUString aStr( rNode.GetTxt() );
 
-    xub_StrLen nAktPos = 0;
-    xub_StrLen const nEnd = aStr.Len();
+    sal_Int32 nAktPos = 0;
+    sal_Int32 const nEnd = aStr.getLength();
     bool bRedlineAtEnd = false;
     int nOpenAttrWithRange = 0;
 
@@ -1829,7 +1829,7 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
         xub_StrLen nLen = nNextAttr - nAktPos;
         if ( !bTxtAtr && nLen )
         {
-            sal_Unicode ch = aStr.GetChar( nAktPos );
+            sal_Unicode ch = aStr[nAktPos];
             int ofs = ( ch == CH_TXT_ATR_FIELDSTART || ch == CH_TXT_ATR_FIELDEND || ch == CH_TXT_ATR_FORMELEMENT? 1: 0 );
 
             IDocumentMarkAccess* const pMarkAccess = pDoc->getIDocumentMarkAccess();
@@ -1936,9 +1936,9 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
                 if ( isDropdownOrCheckbox )
                     AppendBookmark( pFieldmark->GetName(), false );
             }
-            nLen -= static_cast< sal_uInt16 >( ofs );
+            nLen -= static_cast< sal_Int32 >( ofs );
 
-            String aSnippet( aAttrIter.GetSnippet( aStr, nAktPos + static_cast< sal_uInt16 >( ofs ), nLen ) );
+            String aSnippet( aAttrIter.GetSnippet( aStr, nAktPos + static_cast< sal_Int32 >( ofs ), nLen ) );
             if ( ( nTxtTyp == TXT_EDN || nTxtTyp == TXT_FTN ) && nAktPos == 0 && nLen > 0 )
             {
                 // Insert tab for aesthetic puposes #i24762#
