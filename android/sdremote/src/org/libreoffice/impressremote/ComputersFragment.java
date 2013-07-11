@@ -117,7 +117,7 @@ public class ComputersFragment extends SherlockListFragment implements ServiceCo
         mIntentsReceiver = new IntentsReceiver(this);
         IntentFilter aIntentFilter = buildIntentsReceiverFilter();
 
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mIntentsReceiver, aIntentFilter);
+        getBroadcastManager().registerReceiver(mIntentsReceiver, aIntentFilter);
     }
 
     private static final class IntentsReceiver extends BroadcastReceiver {
@@ -140,6 +140,12 @@ public class ComputersFragment extends SherlockListFragment implements ServiceCo
         aIntentFilter.addAction(CommunicationService.MSG_SERVERLIST_CHANGED);
 
         return aIntentFilter;
+    }
+
+    private LocalBroadcastManager getBroadcastManager() {
+        Context aContext = getActivity().getApplicationContext();
+
+        return LocalBroadcastManager.getInstance(aContext);
     }
 
     public void loadComputers() {
@@ -205,7 +211,7 @@ public class ComputersFragment extends SherlockListFragment implements ServiceCo
 
     private void unregisterIntentsReceiver() {
         try {
-            getActivity().unregisterReceiver(mIntentsReceiver);
+            getBroadcastManager().unregisterReceiver(mIntentsReceiver);
         } catch (IllegalArgumentException e) {
             // Receiver not registered.
             // Fixed in Honeycomb: Android’s issue #6191.

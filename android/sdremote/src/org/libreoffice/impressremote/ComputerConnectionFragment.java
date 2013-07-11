@@ -96,7 +96,7 @@ public class ComputerConnectionFragment extends SherlockFragment implements Serv
         mIntentsReceiver = new IntentsReceiver(this);
         IntentFilter aIntentFilter = buildIntentsReceiverFilter();
 
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mIntentsReceiver, aIntentFilter);
+        getBroadcastManager().registerReceiver(mIntentsReceiver, aIntentFilter);
     }
 
     private static class IntentsReceiver extends BroadcastReceiver {
@@ -137,6 +137,12 @@ public class ComputerConnectionFragment extends SherlockFragment implements Serv
         return aIntentFilter;
     }
 
+    private LocalBroadcastManager getBroadcastManager() {
+        Context aContext = getActivity().getApplicationContext();
+
+        return LocalBroadcastManager.getInstance(aContext);
+    }
+
     public void setUpPinValidationInstructions(String aPin) {
         TextView aPinTextView = (TextView) getView().findViewById(R.id.text_pin);
         aPinTextView.setText(aPin);
@@ -152,8 +158,6 @@ public class ComputerConnectionFragment extends SherlockFragment implements Serv
     }
 
     public void setUpPresentation() {
-        // TODO: implement
-
         getActivity().finish();
     }
 
@@ -193,7 +197,7 @@ public class ComputerConnectionFragment extends SherlockFragment implements Serv
 
     private void unregisterIntentsReceiver() {
         try {
-            getActivity().unregisterReceiver(mIntentsReceiver);
+            getBroadcastManager().unregisterReceiver(mIntentsReceiver);
         } catch (IllegalArgumentException e) {
             // Receiver not registered.
             // Fixed in Honeycomb: Android’s issue #6191.
