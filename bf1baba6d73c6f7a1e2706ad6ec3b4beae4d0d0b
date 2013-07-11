@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXn//++8\u003d",
+        "filename": "solenv/gbuild/platform/com_GCC_class.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 240,
+      "author": {
+        "id": 1000053
+      },
+      "writtenOn": "2013-07-11T09:48:52Z",
+      "side": 1,
+      "message": "Was the -v option added by purpose, please?",
+      "revId": "bf1baba6d73c6f7a1e2706ad6ec3b4beae4d0d0b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
