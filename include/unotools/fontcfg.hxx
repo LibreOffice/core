@@ -19,6 +19,7 @@
 #ifndef _UNOTOOLS_FONTCFG_HXX
 #define _UNOTOOLS_FONTCFG_HXX
 
+#include <i18nlangtag/languagetag.hxx>
 #include <unotools/unotoolsdllapi.h>
 #include <tools/solar.h>
 #include <tools/fontenum.hxx>
@@ -59,8 +60,8 @@ class UNOTOOLS_DLLPUBLIC DefaultFontConfiguration
 
     static DefaultFontConfiguration& get();
 
-    OUString getDefaultFont( const com::sun::star::lang::Locale& rLocale, int nType ) const;
-    OUString getUserInterfaceFont( const com::sun::star::lang::Locale& rLocale ) const;
+    OUString getDefaultFont( const LanguageTag& rLanguageTag, int nType ) const;
+    OUString getUserInterfaceFont( const LanguageTag& rLanguageTag ) const;
 };
 
 // IMPL_FONT_ATTR_DEFAULT       - Default-Font like Andale Sans UI, Palace Script, Albany, Thorndale, Cumberland, ...
@@ -175,10 +176,7 @@ public:
 
     const FontNameAttr* getSubstInfo(
                                      const OUString& rFontName,
-                                     const com::sun::star::lang::Locale& rLocale =
-                                     com::sun::star::lang::Locale( OUString( "en" ),
-                                                                   OUString(),
-                                                                   OUString() )
+                                     const LanguageTag& rLanguageTag = LanguageTag( OUString( "en"))
                                      ) const;
     static void getMapName( const OUString& rOrgName, OUString& rShortName, OUString& rFamilyName, FontWeight& rWeight, FontWidth& rWidth, sal_uLong& rType );
 };

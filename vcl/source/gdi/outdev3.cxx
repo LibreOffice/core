@@ -426,19 +426,14 @@ static void ImplFontSubstitute( OUString& rFontName,
 Font OutputDevice::GetDefaultFont( sal_uInt16 nType, LanguageType eLang,
                                    sal_uLong nFlags, const OutputDevice* pOutDev )
 {
-    com::sun::star::lang::Locale aLocale;
-    if( eLang == LANGUAGE_NONE || eLang == LANGUAGE_SYSTEM || eLang == LANGUAGE_DONTKNOW )
-    {
-        aLocale = Application::GetSettings().GetUILanguageTag().getLocale();
-    }
-    else
-    {
-        aLocale = LanguageTag( eLang ).getLocale();
-    }
+    LanguageTag aLanguageTag(
+            ( eLang == LANGUAGE_NONE || eLang == LANGUAGE_SYSTEM || eLang == LANGUAGE_DONTKNOW ) ?
+            Application::GetSettings().GetUILanguageTag() :
+            LanguageTag( eLang ));
 
     utl::DefaultFontConfiguration& rDefaults = utl::DefaultFontConfiguration::get();
-    String aSearch = rDefaults.getUserInterfaceFont( aLocale ); // ensure a fallback
-    String aDefault = rDefaults.getDefaultFont( aLocale, nType );
+    String aSearch = rDefaults.getUserInterfaceFont( aLanguageTag ); // ensure a fallback
+    String aDefault = rDefaults.getDefaultFont( aLanguageTag, nType );
     if( aDefault.Len() )
         aSearch = aDefault;
 
@@ -1895,23 +1890,23 @@ ImplDevFontListData* ImplDevFontList::FindDefaultFont() const
     // try to find one of the default fonts of the
     // UNICODE, SANSSERIF, SERIF or FIXED default font lists
     const DefaultFontConfiguration& rDefaults = DefaultFontConfiguration::get();
-    com::sun::star::lang::Locale aLocale( OUString( "en" ), OUString(), OUString() );
-    String aFontname = rDefaults.getDefaultFont( aLocale, DEFAULTFONT_SANS_UNICODE );
+    LanguageTag aLanguageTag( OUString( "en"));
+    String aFontname = rDefaults.getDefaultFont( aLanguageTag, DEFAULTFONT_SANS_UNICODE );
     ImplDevFontListData* pFoundData = ImplFindByTokenNames( aFontname );
     if( pFoundData )
         return pFoundData;
 
-    aFontname = rDefaults.getDefaultFont( aLocale, DEFAULTFONT_SANS );
+    aFontname = rDefaults.getDefaultFont( aLanguageTag, DEFAULTFONT_SANS );
     pFoundData = ImplFindByTokenNames( aFontname );
     if( pFoundData )
         return pFoundData;
 
-    aFontname = rDefaults.getDefaultFont( aLocale, DEFAULTFONT_SERIF );
+    aFontname = rDefaults.getDefaultFont( aLanguageTag, DEFAULTFONT_SERIF );
     pFoundData = ImplFindByTokenNames( aFontname );
     if( pFoundData )
         return pFoundData;
 
-    aFontname = rDefaults.getDefaultFont( aLocale, DEFAULTFONT_FIXED );
+    aFontname = rDefaults.getDefaultFont( aLanguageTag, DEFAULTFONT_FIXED );
     pFoundData = ImplFindByTokenNames( aFontname );
     if( pFoundData )
         return pFoundData;
@@ -2559,8 +2554,8 @@ ImplDevFontListData* ImplDevFontList::ImplFindByFont( FontSelectPattern& rFSD,
     // if a target symbol font is not available use a default symbol font
     if( rFSD.IsSymbolFont() )
     {
-        com::sun::star::lang::Locale aDefaultLocale( OUString( "en" ), OUString(), OUString() );
-        aSearchName = DefaultFontConfiguration::get().getDefaultFont( aDefaultLocale, DEFAULTFONT_SYMBOL );
+        LanguageTag aDefaultLanguageTag( OUString( "en"));
+        aSearchName = DefaultFontConfiguration::get().getDefaultFont( aDefaultLanguageTag, DEFAULTFONT_SYMBOL );
         ImplDevFontListData* pFoundData = ImplFindByTokenNames( aSearchName );
         if( pFoundData )
             return pFoundData;

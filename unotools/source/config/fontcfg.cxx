@@ -209,24 +209,23 @@ OUString DefaultFontConfiguration::tryLocale( const OUString& rBcp47, const OUSt
     return aRet;
 }
 
-OUString DefaultFontConfiguration::getDefaultFont( const Locale& rLocale, int nType ) const
+OUString DefaultFontConfiguration::getDefaultFont( const LanguageTag& rLanguageTag, int nType ) const
 {
     OUString aType = OUString::createFromAscii( getKeyType( nType ) );
-    LanguageTag aLanguageTag( rLocale);
     // Try the simple cases first without constructing fallbacks.
-    OUString aRet = tryLocale( aLanguageTag.getBcp47(), aType );
+    OUString aRet = tryLocale( rLanguageTag.getBcp47(), aType );
     if (aRet.isEmpty())
     {
-        if (rLocale.Variant.isEmpty())
+        if (rLanguageTag.isIsoLocale())
         {
-            if (!rLocale.Country.isEmpty())
+            if (!rLanguageTag.getCountry().isEmpty())
             {
-                aRet = tryLocale( rLocale.Language, aType );
+                aRet = tryLocale( rLanguageTag.getLanguage(), aType );
             }
         }
         else
         {
-            ::std::vector< OUString > aFallbacks( aLanguageTag.getFallbackStrings());
+            ::std::vector< OUString > aFallbacks( rLanguageTag.getFallbackStrings());
             aFallbacks.erase( aFallbacks.begin());  // first is full BCP47, we already checked that
             for (::std::vector< OUString >::const_iterator it( aFallbacks.begin());
                     it != aFallbacks.end() && aRet.isEmpty(); ++it)
@@ -242,13 +241,13 @@ OUString DefaultFontConfiguration::getDefaultFont( const Locale& rLocale, int nT
     return aRet;
 }
 
-OUString DefaultFontConfiguration::getUserInterfaceFont( const Locale& rLocale ) const
+OUString DefaultFontConfiguration::getUserInterfaceFont( const LanguageTag& rLanguageTag ) const
 {
-    Locale aLocale = rLocale;
-    if( aLocale.Language.isEmpty() )
-        aLocale = SvtSysLocale().GetUILanguageTag().getLocale();
+    LanguageTag aLanguageTag( rLanguageTag);
+    if( aLanguageTag.isSystemLocale() )
+        aLanguageTag = SvtSysLocale().GetUILanguageTag();
 
-    OUString aUIFont = getDefaultFont( aLocale, DEFAULTFONT_UI_SANS );
+    OUString aUIFont = getDefaultFont( aLanguageTag, DEFAULTFONT_UI_SANS );
 
     if( !aUIFont.isEmpty() )
         return aUIFont;
@@ -265,16 +264,18 @@ OUString DefaultFontConfiguration::getUserInterfaceFont( const Locale& rLocale )
     #define FALLBACKFONT_UI_SANS_CHINSIM "Andale Sans UI;Arial Unicode MS;ZYSong18030;AR PL SungtiL GB;AR PL KaitiM GB;SimSun;Lucida Sans Unicode;Fangsong;Hei;Song;Kai;Ming;gnu-unifont;Interface User;"
     #define FALLBACKFONT_UI_SANS_CHINTRD "Andale Sans UI;Arial Unicode MS;AR PL Mingti2L Big5;AR PL KaitiM Big5;Kai;PMingLiU;MingLiU;Ming;Lucida Sans Unicode;gnu-unifont;Interface User;"
 
+    const OUString aLanguage( aLanguageTag.getLanguage());
+
     // optimize font list for some locales, as long as Andale Sans UI does not support them
-    if( aLocale.Language == "ar" || aLocale.Language == "he" || aLocale.Language == "iw"  )
+    if( aLanguage == "ar" || aLanguage == "he" || aLanguage == "iw"  )
     {
         return OUString(FALLBACKFONT_UI_SANS_ARABIC);
     }
-    else if ( aLocale.Language == "th" )
+    else if ( aLanguage == "th" )
     {
         return OUString(FALLBACKFONT_UI_SANS_THAI);
     }
-    else if ( aLocale.Language == "ko" )
+    else if ( aLanguage == "ko" )
     {
         // we need localized names for korean fonts
         const sal_Unicode aSunGulim[] = { 0xC36C, 0xAD74, 0xB9BC, 0 };
@@ -289,23 +290,19 @@ OUString DefaultFontConfiguration::getUserInterfaceFont( const Locale& rLocale )
 
         return aFallBackKoreanLocalized.makeStringAndClear();
     }
-    else if( aLocale.Language == "cs" ||
-             aLocale.Language == "hu" ||
-             aLocale.Language == "pl" ||
-             aLocale.Language == "ro" ||
-             aLocale.Language == "rm" ||
-             aLocale.Language == "hr" ||
-             aLocale.Language == "sk" ||
-             aLocale.Language == "sl" ||
-             aLocale.Language == "sb")
+    else if( aLanguage == "cs" ||
+             aLanguage == "hu" ||
+             aLanguage == "pl" ||
+             aLanguage == "ro" ||
+             aLanguage == "rm" ||
+             aLanguage == "hr" ||
+             aLanguage == "sk" ||
+             aLanguage == "sl" ||
+             aLanguage == "sb")
     {
         return OUString(FALLBACKFONT_UI_SANS_LATIN2);
     }
-    else if (MsLangId::isTraditionalChinese(aLocale))
-        return OUString(FALLBACKFONT_UI_SANS_CHINTRD);
-    else if (MsLangId::isSimplifiedChinese(aLocale))
-        return OUString(FALLBACKFONT_UI_SANS_CHINSIM);
-    else if ( aLocale.Language == "ja" )
+    else if ( aLanguage == "ja" )
     {
         // we need localized names for japanese fonts
         const sal_Unicode aMSGothic[] = { 0xFF2D, 0xFF33, ' ', 0x30B4, 0x30B7, 0x30C3, 0x30AF, 0 };
@@ -330,6 +327,14 @@ OUString DefaultFontConfiguration::getUserInterfaceFont( const Locale& rLocale )
         aFallBackJapaneseLocalized.append(FALLBACKFONT_UI_SANS_JAPANESE2);
 
         return aFallBackJapaneseLocalized.makeStringAndClear();
+    }
+    else
+    {
+        Locale aLocale( aLanguageTag.getLocale());
+        if (MsLangId::isTraditionalChinese(aLocale))
+            return OUString(FALLBACKFONT_UI_SANS_CHINTRD);
+        else if (MsLangId::isSimplifiedChinese(aLocale))
+            return OUString(FALLBACKFONT_UI_SANS_CHINSIM);
     }
 
     return OUString(FALLBACKFONT_UI_SANS);
@@ -1125,7 +1130,8 @@ void FontSubstConfiguration::readLocaleSubst( const OUString& rBcp47 ) const
     }
 }
 
-const FontNameAttr* FontSubstConfiguration::getSubstInfo( const OUString& rFontName, const Locale& rLocale ) const
+const FontNameAttr* FontSubstConfiguration::getSubstInfo( const OUString& rFontName,
+        const LanguageTag& rLanguageTag ) const
 {
     if( rFontName.isEmpty() )
         return NULL;
@@ -1136,7 +1142,7 @@ const FontNameAttr* FontSubstConfiguration::getSubstInfo( const OUString& rFontN
     FontNameAttr aSearchAttr;
     aSearchAttr.Name = aSearchFont;
 
-    LanguageTag aLanguageTag( rLocale);
+    LanguageTag aLanguageTag( rLanguageTag);
 
     if( aLanguageTag.isSystemLocale() )
         aLanguageTag = SvtSysLocale().GetUILanguageTag();

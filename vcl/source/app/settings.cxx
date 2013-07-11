@@ -377,7 +377,7 @@ void ImplStyleData::SetStandardStyles()
     Font aStdFont( FAMILY_SWISS, Size( 0, 8 ) );
     aStdFont.SetCharSet( osl_getThreadTextEncoding() );
     aStdFont.SetWeight( WEIGHT_NORMAL );
-    aStdFont.SetName( utl::DefaultFontConfiguration::get().getUserInterfaceFont(com::sun::star::lang::Locale( OUString( "en" ), OUString(), OUString() ) ) );
+    aStdFont.SetName( utl::DefaultFontConfiguration::get().getUserInterfaceFont( LanguageTag("en")) );
     maAppFont                   = aStdFont;
     maHelpFont                  = aStdFont;
     maMenuFont                  = aStdFont;
