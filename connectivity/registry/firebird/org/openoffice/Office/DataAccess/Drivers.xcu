@@ -57,28 +57,8 @@
         </node>
       </node>
       <node oor:name="Features">
-        <!-- These entries enable the "Advanced Settings" UI to change the settings
-             whose default is set in node "Properties" above;
-             as this is guaranteed not to work with PostgreSQL,
-             we don't let people shoot themselves in the foot and don't enable the UI. -->
-      <!--   <node oor:name="EscapeDateTime" oor:op="replace"> -->
-      <!--     <prop oor:name="Value" oor:type="xs:boolean"> -->
-      <!--       <value>false</value> -->
-      <!--     </prop> -->
-      <!--   </node> -->
-        <!--   Confusingly, this corresponds to "EnableOuterJoinEscape" in the Properties -->
-      <!--   <node oor:name="UseBracketedOuterJoinSyntax" oor:op="replace"> -->
-      <!--     <prop oor:name="Value" oor:type="xs:boolean"> -->
-      <!--       <value>false</value> -->
-      <!--     </prop> -->
-      <!--   </node> -->
       </node>
       <node oor:name="MetaData">
-       <node oor:name="Authentication" oor:op="replace">
-          <prop oor:name="Value" oor:type="xs:string">
-            <value>UserPassword</value>
-          </prop>
-        </node>
       </node>
     </node>
     <node oor:name="sdbc:firebird:*" oor:op="replace">
