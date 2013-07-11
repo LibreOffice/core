@@ -386,6 +386,7 @@ void generateXCompatibilityNamesBodies(std::ostream& o, const OString & classnam
         "xNameAccess->getByName(sLocale) >>= sCompatibilityName;\n\n"
         "                css::lang::Locale aLocale;\n                "
         "::sal_Int32 nIndex = 0, nToken = 0;\n                "
+        /* FIXME-BCP47: this will break. */
         "do {\n                    ::rtl::OUString aToken = sLocale.getToken(0, '-', "
         "nIndex);\n                    switch (nToken++) {\n                    "
         "case 0:\n                        aLocale.Language = aToken;\n"
