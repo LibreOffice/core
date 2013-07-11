@@ -100,7 +100,7 @@ struct ImplEntryType
 class ImplEntryList
 {
 private:
-    Window*         mpWindow;   // For getting the current locale when matching strings
+    Window*         mpWindow;   ///< For getting the current locale when matching strings
     sal_uInt16          mnLastSelected;
     sal_uInt16          mnSelectionAnchor;
     sal_uInt16          mnImages;
@@ -133,10 +133,10 @@ public:
     sal_uInt16          FindEntry( const XubString& rStr, sal_Bool bSearchMRUArea = sal_False ) const;
     sal_uInt16          FindEntry( const void* pData ) const;
 
-    // helper: add up heights up to index nEndIndex.
-    // GetAddedHeight( 0 ) returns 0
-    // GetAddedHeight( LISTBOX_ENTRY_NOTFOUND ) returns 0
-    // GetAddedHeight( i, k ) with k > i is equivalent -GetAddedHeight( k, i )
+    /// helper: add up heights up to index nEndIndex.
+    /// GetAddedHeight( 0 ) @return 0
+    /// GetAddedHeight( LISTBOX_ENTRY_NOTFOUND ) @return 0
+    /// GetAddedHeight( i, k ) with k > i is equivalent -GetAddedHeight( k, i )
     long            GetAddedHeight( sal_uInt16 nEndIndex, sal_uInt16 nBeginIndex = 0, long nBeginHeight = 0 ) const;
     long            GetEntryHeight( sal_uInt16 nPos ) const;
 
@@ -181,7 +181,7 @@ public:
         LISTBOX_ENTRY_FLAG_DISABLE_SELECTION flag set. */
     bool            IsEntrySelectable( sal_uInt16 nPos ) const;
 
-    /** returns the first entry found from the given position nPos that is selectable
+    /** @return the first entry found from the given position nPos that is selectable
         or LISTBOX_ENTRY_NOTFOUND if non is found. If the entry at nPos is not selectable,
         it returns the first selectable entry after nPos if bForward is true and the
         first selectable entry after nPos is bForward is false.
@@ -196,55 +196,55 @@ public:
 class ImplListBoxWindow : public Control, public ::vcl::ISearchableStringList
 {
 private:
-    ImplEntryList*  mpEntryList;     // EntryList
+    ImplEntryList*  mpEntryList;     ///< EntryList
     Rectangle       maFocusRect;
 
     Size            maUserItemSize;
 
-    long            mnMaxTxtHeight;  // Maximum height of a text item
-    long            mnMaxTxtWidth;   // Maximum width of a text item
-                                     // Entry without Image
-    long            mnMaxImgTxtWidth;// Maximum width of a text item
-                                     // Entry AND Image
-    long            mnMaxImgWidth;   // Maximum width of an image item
-    long            mnMaxImgHeight;  // Maximum height of an image item
-    long            mnMaxWidth;      // Maximum width of an entry
-    long            mnMaxHeight;     // Maximum height of an entry
+    long            mnMaxTxtHeight;  ///< Maximum height of a text item
+    long            mnMaxTxtWidth;   ///< Maximum width of a text item
+                                     ///< Entry without Image
+    long            mnMaxImgTxtWidth;///< Maximum width of a text item
+                                     ///< Entry AND Image
+    long            mnMaxImgWidth;   ///< Maximum width of an image item
+    long            mnMaxImgHeight;  ///< Maximum height of an image item
+    long            mnMaxWidth;      ///< Maximum width of an entry
+    long            mnMaxHeight;     ///< Maximum height of an entry
 
-    sal_uInt16          mnCurrentPos;    // Position (Focus)
-    sal_uInt16          mnTrackingSaveSelection; // Selection before Tracking();
+    sal_uInt16          mnCurrentPos;    ///< Position (Focus)
+    sal_uInt16          mnTrackingSaveSelection; ///< Selection before Tracking();
 
-    sal_uInt16          mnSeparatorPos; // Separator
+    sal_uInt16          mnSeparatorPos; ///< Separator
 
     sal_uInt16          mnUserDrawEntry;
 
-    sal_uInt16      mnTop;           // output from line on
-    long            mnLeft;          // output from column on
-    long            mnBorder;        // distance border - text
-    long            mnTextHeight;    // text height
-    ProminentEntry  meProminentType; // where is the "prominent" entry
+    sal_uInt16      mnTop;           ///< output from line on
+    long            mnLeft;          ///< output from column on
+    long            mnBorder;        ///< distance border - text
+    long            mnTextHeight;    ///< text height
+    ProminentEntry  meProminentType; ///< where is the "prominent" entry
 
-    sal_uInt16          mnSelectModifier;   // Modifiers
+    sal_uInt16          mnSelectModifier;   ///< Modifiers
 
     /// bitfield
     bool mbHasFocusRect : 1;
-    bool mbSort : 1;             // ListBox sorted
-    bool mbTrack : 1;            // Tracking
-    bool mbMulti : 1;            // MultiListBox
-    bool mbStackMode : 1;        // StackSelection
-    bool mbSimpleMode : 1;       // SimpleMode for MultiListBox
-    bool mbImgsDiffSz : 1;       // Images have different sizes
-    bool mbTravelSelect : 1;     // TravelSelect
-    bool mbTrackingSelect : 1;   // Selected at a MouseMove
-    bool mbSelectionChanged : 1; // Do not call Select() too often ...
-    bool mbMouseMoveSelect : 1;  // Select at MouseMove
-    bool mbGrabFocus : 1;        // Grab focus at MBDown
-    bool mbUserDrawEnabled : 1;  // UserDraw possible
-    bool mbInUserDraw : 1;       // In UserDraw
-    bool mbReadOnly : 1;         // ReadOnly
-    bool mbMirroring : 1;        // pb: #106948# explicit mirroring for calc
-    bool mbRight : 1;            // right align Text output
-    bool mbCenter : 1;           // center Text output
+    bool mbSort : 1;             ///< ListBox sorted
+    bool mbTrack : 1;            ///< Tracking
+    bool mbMulti : 1;            ///< MultiListBox
+    bool mbStackMode : 1;        ///< StackSelection
+    bool mbSimpleMode : 1;       ///< SimpleMode for MultiListBox
+    bool mbImgsDiffSz : 1;       ///< Images have different sizes
+    bool mbTravelSelect : 1;     ///< TravelSelect
+    bool mbTrackingSelect : 1;   ///< Selected at a MouseMove
+    bool mbSelectionChanged : 1; ///< Do not call Select() too often ...
+    bool mbMouseMoveSelect : 1;  ///< Select at MouseMove
+    bool mbGrabFocus : 1;        ///< Grab focus at MBDown
+    bool mbUserDrawEnabled : 1;  ///< UserDraw possible
+    bool mbInUserDraw : 1;       ///< In UserDraw
+    bool mbReadOnly : 1;         ///< ReadOnly
+    bool mbMirroring : 1;        ///< pb: #106948# explicit mirroring for calc
+    bool mbRight : 1;            ///< right align Text output
+    bool mbCenter : 1;           ///< center Text output
     bool mbEdgeBlending : 1;
 
     Link            maScrollHdl;
@@ -307,8 +307,8 @@ public:
 
     void            SetTopEntry( sal_uInt16 nTop );
     sal_uInt16          GetTopEntry() const             { return mnTop; }
-    // ShowProminentEntry will set the entry correspoding to nEntryPos
-    // either at top or in the middle depending on the chosen style
+    /** ShowProminentEntry will set the entry correspoding to nEntryPos
+        either at top or in the middle depending on the chosen style*/
     void            ShowProminentEntry( sal_uInt16 nEntryPos );
     void            SetProminentEntryType( ProminentEntry eType ) { meProminentType = eType; }
     ProminentEntry  GetProminentEntryType() const { return meProminentType; }
@@ -376,7 +376,7 @@ public:
     void            ImplInitSettings( sal_Bool bFont, sal_Bool bForeground, sal_Bool bBackground );
     sal_uInt16          ImplGetTextStyle() const;
 
-    // pb: #106948# explicit mirroring for calc
+    /// pb: #106948# explicit mirroring for calc
     inline void     EnableMirroring()       { mbMirroring = true; }
     inline bool     IsMirroring() const { return mbMirroring; }
 
@@ -514,7 +514,7 @@ public:
     bool GetEdgeBlending() const { return mbEdgeBlending; }
     void SetEdgeBlending(bool bNew);
 
-    // pb: #106948# explicit mirroring for calc
+    /// pb: #106948# explicit mirroring for calc
     inline void     EnableMirroring()   { maLBWindow.EnableMirroring(); }
     inline void     SetDropTraget(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& i_xDNDListenerContainer){ mxDNDListenerContainer= i_xDNDListenerContainer; }
 };
@@ -570,7 +570,7 @@ class ImplWin : public Control
 {
 private:
 
-    sal_uInt16      mnItemPos;  // because of UserDraw I have to know which item I draw
+    sal_uInt16      mnItemPos;  ///< because of UserDraw I have to know which item I draw
     OUString        maString;
     Image           maImage;
 

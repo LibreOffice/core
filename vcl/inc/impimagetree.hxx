@@ -42,7 +42,7 @@ public:
 
     ~ImplImageTree();
 
-    // check whether the icon style is installed
+    /// check whether the icon style is installed
     bool checkStyle(OUString const & style);
 
     bool loadImage(
@@ -53,10 +53,10 @@ public:
         OUString const & style,
         BitmapEx& bitmap);
 
+/** a crude form of life cycle control (called from DeInitVCL; otherwise,
+ *  if the ImplImageTree singleton were destroyed during exit that would
+ *  be too late for the destructors of the bitmaps in m_iconCache)*/
     void shutDown();
-        // a crude form of life cycle control (called from DeInitVCL; otherwise,
-        // if the ImplImageTree singleton were destroyed during exit that would
-        // be too late for the destructors of the bitmaps in m_iconCache)
 
 private:
     bool doLoadImage(
