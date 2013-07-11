@@ -571,7 +571,8 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsANSI92IntermediateSQL(  ) throw(SQL
 // -------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL ODatabaseMetaData::getURL(  ) throw(SQLException, RuntimeException)
 {
-    ::rtl::OUString aValue("sdbc:firebird:");
+    // TODO: return actual URL as necessary
+    ::rtl::OUString aValue("sdbc:embedded:firebird");
     return aValue;
 }
 // -------------------------------------------------------------------------

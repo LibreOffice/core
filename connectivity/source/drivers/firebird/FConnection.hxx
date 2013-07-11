@@ -107,7 +107,10 @@ namespace connectivity
             void                    buildTypeInfo() throw( ::com::sun::star::sdbc::SQLException);
 
         public:
-            virtual void construct( const ::rtl::OUString& url,const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& info) throw(::com::sun::star::sdbc::SQLException);
+            virtual void construct( const ::rtl::OUString& url,
+                                    const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& info,
+                                    const bool constructNewDatabase)
+            throw(::com::sun::star::sdbc::SQLException);
 
             OConnection(FirebirdDriver* _pDriver);
             virtual ~OConnection();

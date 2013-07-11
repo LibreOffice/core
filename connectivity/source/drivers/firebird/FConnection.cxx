@@ -103,7 +103,9 @@ static int pr_error(const ISC_STATUS* status, char* operation)
     return 1;
 }
 
-void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyValue >& info)  throw(SQLException)
+void OConnection::construct(const ::rtl::OUString& url, const Sequence< PropertyValue >& info,
+            const bool constructNewDatabase)
+    throw(SQLException)
 {
     SAL_INFO("connectivity.firebird", "=> OConnection::construct().");
 
@@ -113,10 +115,22 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
 
     ISC_STATUS_ARRAY status;            /* status vector */
 
-    if (isc_attach_database(status, 0, "/var/tmp/libo-fb/new.fdb", &m_DBHandler, 0, NULL))
-        if (pr_error(status, "attach database"))
-            return;
-
+    if (constructNewDatabase)
+    {
+        if (isc_create_database(status, url.getLength(), OUStringToOString(url, RTL_TEXTENCODING_UTF8).getStr(),
+                                                            &m_DBHandler, 0, NULL, 0))
+        {
+            if(pr_error(status, "create new database"))
+                return;
+        }
+    }
+    else
+    {
+        if (isc_attach_database(status, url.getLength(), OUStringToOString(url, RTL_TEXTENCODING_UTF8).getStr(),
+                                                        &m_DBHandler, 0, NULL))
+            if (pr_error(status, "attach database"))
+                return;
+    }
     osl_atomic_decrement( &m_refCount );
 }
 // XServiceInfo
