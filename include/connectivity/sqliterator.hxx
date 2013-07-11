@@ -111,6 +111,14 @@ namespace connectivity
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > findColumn(
             const OUString & rColumnName, OUString & rTableRange, bool _bLookInSubTables );
 
+        /** finds a column with a given name among the select columns
+            @param  rColumnName
+                the column name to look for
+            @return
+        */
+        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > findSelectColumn(
+            const OUString & rColumnName );
+
       protected:
         void setSelectColumnName(::rtl::Reference<OSQLColumns>& _rColumns,const OUString & rColumnName,const OUString & rColumnAlias, const OUString & rTableRange,sal_Bool bFkt=sal_False,sal_Int32 _nType = com::sun::star::sdbc::DataType::VARCHAR,sal_Bool bAggFkt=sal_False);
         void appendColumns(::rtl::Reference<OSQLColumns>& _rColumns,const OUString& _rTableAlias,const OSQLTable& _rTable);
