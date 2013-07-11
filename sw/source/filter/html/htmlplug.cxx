@@ -56,8 +56,6 @@
 
 #include <comphelper/embeddedobjectcontainer.hxx>
 #include <comphelper/classids.hxx>
-#include <vcl/cvtgrf.hxx>
-#include <sax/tools/converter.hxx>
 
 using namespace com::sun::star;
 

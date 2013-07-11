@@ -53,8 +53,6 @@
 #include <flypos.hxx>
 #include <docary.hxx>
 #include <ndgrf.hxx>
-#include <vcl/cvtgrf.hxx>
-#include <sax/tools/converter.hxx>
 
 #include "doc.hxx"
 #include "ndtxt.hxx"
