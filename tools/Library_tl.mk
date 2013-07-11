@@ -80,7 +80,6 @@ $(eval $(call gb_Library_add_exception_objects,tl,\
     tools/source/ref/globname \
     tools/source/ref/pstm \
     tools/source/ref/ref \
-    tools/source/stream/cachestr \
     tools/source/stream/stream \
     tools/source/stream/strmsys \
     tools/source/stream/vcompat \

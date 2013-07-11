@@ -42,7 +42,6 @@
 #include <sfx2/ipclient.hxx>
 #include <svtools/ehdl.hxx>
 #include <svtools/soerr.hxx>
-#include <tools/cachestr.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <editeng/sizeitem.hxx>
 #include <editeng/formatbreakitem.hxx>

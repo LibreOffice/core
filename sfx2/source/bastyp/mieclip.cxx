@@ -18,7 +18,6 @@
  */
 
 #include <tools/stream.hxx>
-#include <tools/cachestr.hxx>
 
 #include <sot/storage.hxx>
 #include <sot/formats.hxx>
@@ -76,7 +75,7 @@ SvStream* MSE40HTMLClipFormatObj::IsValid( SvStream& rStream )
     {
         rStream.Seek( nStt );
 
-        pStrm = new SvCacheStream( ( nEnd - nStt < 0x10000l
+        pStrm = new SvMemoryStream( ( nEnd - nStt < 0x10000l
                                         ? nEnd - nStt + 32
                                         : 0 ));
         *pStrm << rStream;
@@ -91,7 +90,7 @@ SvStream* MSE40HTMLClipFormatObj::IsValid( SvStream& rStream )
         if (nSize < 0x10000L)
         {
             rStream.Seek(nFragStart);
-            pStrm = new SvCacheStream(nSize);
+            pStrm = new SvMemoryStream(nSize);
             *pStrm << rStream;
             pStrm->SetStreamSize(nSize);
             pStrm->Seek(STREAM_SEEK_TO_BEGIN);

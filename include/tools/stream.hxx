@@ -702,8 +702,7 @@ class TOOLS_DLLPUBLIC SvMemoryStream : public SvStream
     SvMemoryStream (const SvMemoryStream&);
     SvMemoryStream & operator= (const SvMemoryStream&);
 
-    friend class SvCacheStream;
-    sal_Size        GetSize() const { return nSize; }
+    sal_Size        GetBufSize() const { return nSize; }
 
 protected:
     sal_Size        nSize;
@@ -744,6 +743,8 @@ public:
 
     virtual void    ResetError();
 
+    const void*    GetBuffer();
+    sal_uIntPtr     GetSize();
     sal_Size        GetEndOfData() const { return nEndOfData; }
     const void*     GetData() { Flush(); return pBuf; }
     operator const  void*() { Flush(); return pBuf; }
@@ -757,7 +758,7 @@ public:
     bool            IsObjectMemoryOwner() { return bOwnsData; }
     void            SetResizeOffset( sal_Size nNewResize ) { nResize = nNewResize; }
     sal_Size        GetResizeOffset() const { return nResize; }
-    virtual sal_Size remainingSize() { return GetSize() - Tell(); }
+    virtual sal_Size remainingSize() { return GetBufSize() - Tell(); }
 };
 
 /** Data Copy Stream

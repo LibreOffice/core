@@ -1715,6 +1715,21 @@ sal_uInt16 SvMemoryStream::IsA() const
     return (sal_uInt16)ID_MEMORYSTREAM;
 }
 
+const void* SvMemoryStream::GetBuffer()
+{
+    Flush();
+    return (const void*)GetData();
+}
+
+sal_uIntPtr SvMemoryStream::GetSize()
+{
+    Flush();
+    sal_uIntPtr nTemp = Tell();
+    sal_uIntPtr nLength = Seek( STREAM_SEEK_TO_END );
+    Seek( nTemp );
+    return nLength;
+}
+
 void* SvMemoryStream::SetBuffer( void* pNewBuf, sal_Size nCount,
                                  bool bOwnsDat, sal_Size nEOF )
 {

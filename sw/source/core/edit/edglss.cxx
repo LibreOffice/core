@@ -21,7 +21,6 @@
 #include <osl/endian.h>
 #include <hintids.hxx>
 #include <svl/urihelper.hxx>
-#include <tools/cachestr.hxx>
 #include <doc.hxx>
 #include <pam.hxx>
 #include <docary.hxx>
@@ -276,7 +275,7 @@ sal_Bool SwEditShell::GetSelectedText( String &rBuf, int nHndlParaBrk )
     }
     else if( IsSelection() )
     {
-        SvCacheStream aStream(20480);
+        SvMemoryStream aStream;
 #ifdef OSL_BIGENDIAN
         aStream.SetNumberFormatInt( NUMBERFORMAT_INT_BIGENDIAN );
 #else
