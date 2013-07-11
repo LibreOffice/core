@@ -238,7 +238,8 @@ int OpenclDevice::GeneratBinFromKernelSource(cl_program program,
 {
      unsigned int i = 0;
     cl_int status;
-    size_t *binarySizes, numDevices;
+    size_t *binarySizes;
+    cl_uint numDevices;
     cl_device_id *mpArryDevsID;
     char **binaries, *str = NULL;
 
@@ -426,7 +427,7 @@ int OpenclDevice::CompileKernelFile(GPUEnv *gpuInfo, const char *buildOption) {
     const char *source;
     size_t source_size[1];
     int b_error, binary_status, binaryExisted, idx;
-    size_t numDevices;
+    cl_uint numDevices;
     cl_device_id *mpArryDevsID;
     FILE *fd, *fd1;
     const char* filename = "kernel.cl";
