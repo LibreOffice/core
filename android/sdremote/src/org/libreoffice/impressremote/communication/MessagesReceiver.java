@@ -24,14 +24,12 @@ public class MessagesReceiver implements Runnable {
 
     private final MessagesListener mMessagesListener;
 
-    private final Thread mMessagesListenerThread;
-
     public MessagesReceiver(ServerConnection aServerConnection, MessagesListener aMessagesListener) {
         mMessagesReader = buildMessagesReader(aServerConnection);
 
         mMessagesListener = aMessagesListener;
 
-        mMessagesListenerThread = new Thread(this);
+        Thread mMessagesListenerThread = new Thread(this);
         mMessagesListenerThread.start();
     }
 
@@ -89,7 +87,7 @@ public class MessagesReceiver implements Runnable {
         try {
             return mMessagesReader.readLine();
         } catch (IOException e) {
-            throw new RuntimeException("Unable to read message parameter.");
+            return null;
         }
     }
 
