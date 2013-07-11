@@ -124,19 +124,9 @@ DefaultFontConfiguration::DefaultFontConfiguration()
                 // fill config hash with empty interfaces
                 int nLocales = aLocales.getLength();
                 const OUString* pLocaleStrings = aLocales.getConstArray();
-                Locale aLoc;
                 for( int i = 0; i < nLocales; i++ )
                 {
-                    sal_Int32 nIndex = 0;
-                    aLoc.Language = pLocaleStrings[i].getToken( 0, sal_Unicode('-'), nIndex ).toAsciiLowerCase();
-                    if( nIndex != -1 )
-                        aLoc.Country = pLocaleStrings[i].getToken( 0, sal_Unicode('-'), nIndex ).toAsciiUpperCase();
-                    else
-                        aLoc.Country = OUString();
-                    if( nIndex != -1 )
-                        aLoc.Variant = pLocaleStrings[i].getToken( 0, sal_Unicode('-'), nIndex ).toAsciiUpperCase();
-                    else
-                        aLoc.Variant = OUString();
+                    Locale aLoc( LanguageTag( pLocaleStrings[i]).getLocale( false));
                     m_aConfig[ aLoc ] = LocaleAccess();
                     m_aConfig[ aLoc ].aConfigLocaleString = pLocaleStrings[i];
                 }
@@ -389,19 +379,9 @@ FontSubstConfiguration::FontSubstConfiguration() :
                 // fill config hash with empty interfaces
                 int nLocales = aLocales.getLength();
                 const OUString* pLocaleStrings = aLocales.getConstArray();
-                Locale aLoc;
                 for( int i = 0; i < nLocales; i++ )
                 {
-                    sal_Int32 nIndex = 0;
-                    aLoc.Language = pLocaleStrings[i].getToken( 0, sal_Unicode('-'), nIndex ).toAsciiLowerCase();
-                    if( nIndex != -1 )
-                        aLoc.Country = pLocaleStrings[i].getToken( 0, sal_Unicode('-'), nIndex ).toAsciiUpperCase();
-                    else
-                        aLoc.Country = OUString();
-                    if( nIndex != -1 )
-                        aLoc.Variant = pLocaleStrings[i].getToken( 0, sal_Unicode('-'), nIndex ).toAsciiUpperCase();
-                    else
-                        aLoc.Variant = OUString();
+                    Locale aLoc( LanguageTag( pLocaleStrings[i]).getLocale( false));
                     m_aSubst[ aLoc ] = LocaleSubst();
                     m_aSubst[ aLoc ].aConfigLocaleString = pLocaleStrings[i];
                 }
