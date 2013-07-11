@@ -1115,7 +1115,7 @@ void OSQLParseTreeIterator::traverseByColumnNames(const OSQLParseNode* pSelectNo
             OSQLParseNode * pOptAscDesc = pColumnRef->getParent()->getChild(1);
             OSL_ENSURE(pOptAscDesc != NULL,"OSQLParseTreeIterator: error in parse tree!");
 
-            sal_Bool bAscending = pOptAscDesc && SQL_ISTOKEN(pOptAscDesc,ASC);
+            sal_Bool bAscending = ! (pOptAscDesc && SQL_ISTOKEN(pOptAscDesc,DESC));
             setOrderByColumnName(sColumnName, aTableRange,bAscending);
         }
         else
