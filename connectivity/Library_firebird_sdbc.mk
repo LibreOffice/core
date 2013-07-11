@@ -7,33 +7,35 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Library_Library,firebird-sdbc))
+$(eval $(call gb_Library_Library,firebird_sdbc))
 
-$(eval $(call gb_Library_use_sdk_api,firebird-sdbc))
+$(eval $(call gb_Library_use_sdk_api,firebird_sdbc))
 
-$(eval $(call gb_Library_use_externals,firebird-sdbc,\
+$(eval $(call gb_Library_use_externals,firebird_sdbc,\
 	libfbembed \
 ))
 
-$(eval $(call gb_Library_set_include,firebird-sdbc,\
+$(eval $(call gb_Library_set_include,firebird_sdbc,\
 	-I$(SRCDIR)/connectivity/source/inc \
 	$$(INCLUDE) \
 	-I$(WORKDIR)/YaccTarget/connectivity/source/parse \
 ))
 
-$(eval $(call gb_Library_use_libraries,firebird-sdbc, \
+$(eval $(call gb_Library_use_libraries,firebird_sdbc, \
     comphelper \
     cppu \
     cppuhelper \
     dbtools \
     sal \
     salhelper \
+    utl \
+    vcl \
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_set_componentfile,firebird-sdbc,connectivity/source/drivers/firebird/firebird-sdbc))
+$(eval $(call gb_Library_set_componentfile,firebird_sdbc,connectivity/source/drivers/firebird/firebird_sdbc))
 
-$(eval $(call gb_Library_add_exception_objects,firebird-sdbc,\
+$(eval $(call gb_Library_add_exception_objects,firebird_sdbc,\
     connectivity/source/drivers/firebird/propertyids \
     connectivity/source/drivers/firebird/FConnection \
     connectivity/source/drivers/firebird/FDatabaseMetaData \

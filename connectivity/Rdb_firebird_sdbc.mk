@@ -7,8 +7,8 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Rdb_Rdb,firebird-sdbc))
+$(eval $(call gb_Rdb_Rdb,firebird_sdbc))
 
-$(eval $(call gb_Rdb_add_components,firebird-sdbc,\
-	connectivity/source/drivers/firebird/firebird-sdbc \
+$(eval $(call gb_Rdb_add_components,firebird_sdbc,\
+	connectivity/source/drivers/firebird/firebird_sdbc \
 ))

@@ -87,8 +87,8 @@ endif
 ifeq ($(ENABLE_FIREBIRD_SDBC),TRUE)
 $(eval $(call gb_Module_add_targets,connectivity,\
 	Configuration_firebird \
-	Library_firebird-sdbc \
-	Rdb_firebird-sdbc \
+	Library_firebird_sdbc \
+	Rdb_firebird_sdbc \
 ))
 endif
 
