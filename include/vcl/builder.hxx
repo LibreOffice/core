@@ -211,7 +211,7 @@ private:
         std::vector<MnemonicWidgetMap> m_aMnemonicWidgetMaps;
     };
 
-    void loadTranslations(const com::sun::star::lang::Locale &rLocale, const OUString &rUri);
+    void loadTranslations(const LanguageTag &rLanguageTag, const OUString &rUri);
     OString getTranslation(const OString &rId, const OString &rProperty) const;
 
     OString m_sID;

@@ -81,9 +81,11 @@ namespace
     }
 }
 
-void VclBuilder::loadTranslations(const com::sun::star::lang::Locale &rLocale, const OUString& rUri)
+void VclBuilder::loadTranslations(const LanguageTag &rLanguageTag, const OUString& rUri)
 {
-    for (int i = rLocale.Country.isEmpty() ? 1 : 0; i < 2; ++i)
+    /* FIXME-BCP47: support language tags with
+     * LanguageTag::getFallbackStrings() ? */
+    for (int i = rLanguageTag.getCountry().isEmpty() ? 1 : 0; i < 2; ++i)
     {
         OUStringBuffer aTransBuf;
         sal_Int32 nLastSlash = rUri.lastIndexOf('/');
@@ -94,11 +96,11 @@ void VclBuilder::loadTranslations(const com::sun::star::lang::Locale &rLocale, c
             aTransBuf.append('.');
             nLastSlash = 0;
         }
-        aTransBuf.append("/res/").append(rLocale.Language);
+        aTransBuf.append("/res/").append(rLanguageTag.getLanguage());
         switch (i)
         {
             case 0:
-                aTransBuf.append('-').append(rLocale.Country);
+                aTransBuf.append('-').append(rLanguageTag.getCountry());
                 break;
             default:
                 break;
@@ -157,10 +159,10 @@ VclBuilder::VclBuilder(Window *pParent, OUString sUIDir, OUString sUIFile, OStri
 
     OUString sUri = sUIDir + sUIFile;
 
-    com::sun::star::lang::Locale aLocale = Application::GetSettings().GetUILanguageTag().getLocale();
-    bool bEN_US = aLocale.Language == "en" && aLocale.Country == "US" && aLocale.Variant.isEmpty();
+    const LanguageTag& rLanguageTag = Application::GetSettings().GetUILanguageTag();
+    bool bEN_US = (rLanguageTag.getBcp47() == "en-US");
     if (!bEN_US)
-        loadTranslations(aLocale, sUri);
+        loadTranslations(rLanguageTag, sUri);
 
     try
     {
