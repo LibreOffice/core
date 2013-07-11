@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <libcmis/session-factory.hxx>
+#include <libcmis/libcmis.hxx>
 
 #include <rtl/uri.hxx>
 

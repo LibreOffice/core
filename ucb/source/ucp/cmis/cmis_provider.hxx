@@ -12,7 +12,7 @@
 
 #include <com/sun/star/beans/Property.hpp>
 #include <ucbhelper/providerhelper.hxx>
-#include <libcmis/session.hxx>
+#include <libcmis/libcmis.hxx>
 
 namespace cmis
 {

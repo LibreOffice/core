@@ -7646,7 +7646,7 @@ libo_CHECK_SYSTEM_MODULE([libvisio],[VISIO],[libvisio-0.0])
 dnl ===================================================================
 dnl Check for system libcmis
 dnl ===================================================================
-libo_CHECK_SYSTEM_MODULE([libcmis],[CMIS],[libcmis-0.3 >= 0.3.1])
+libo_CHECK_SYSTEM_MODULE([libcmis],[CMIS],[libcmis-0.4 >= 0.4.0])
 
 dnl ===================================================================
 dnl Check for system libwpd

@@ -9,7 +9,7 @@
 #ifndef AUTH_PROVIDER_HXX
 #define AUTH_PROVIDER_HXX
 
-#include <libcmis/session.hxx>
+#include <libcmis/libcmis.hxx>
 
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 

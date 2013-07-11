@@ -20,8 +20,9 @@
 #include <com/sun/star/ucb/TransferInfo.hpp>
 #include <com/sun/star/ucb/XContentCreator.hpp>
 #include <ucbhelper/contenthelper.hxx>
-#include <libcmis/repository.hxx>
+#include <libcmis/libcmis.hxx>
 
+#include <vector>
 #include <list>
 
 namespace com { namespace sun { namespace star {
@@ -52,7 +53,7 @@ private:
     URL                    m_aURL;
     OUString          m_sRepositoryId;
 
-    std::list< libcmis::RepositoryPtr > m_aRepositories;
+    std::vector< libcmis::RepositoryPtr > m_aRepositories;
 
 private:
 
@@ -76,7 +77,7 @@ public:
     RepoContent( const com::sun::star::uno::Reference<
         com::sun::star::uno::XComponentContext >& rxContext, ContentProvider *pProvider,
         const com::sun::star::uno::Reference< com::sun::star::ucb::XContentIdentifier >& Identifier,
-        std::list< libcmis::RepositoryPtr > aRepos = std::list< libcmis::RepositoryPtr > ( ) )
+        std::vector< libcmis::RepositoryPtr > aRepos = std::vector< libcmis::RepositoryPtr > ( ) )
             throw ( com::sun::star::ucb::ContentCreationException );
 
     virtual ~RepoContent();

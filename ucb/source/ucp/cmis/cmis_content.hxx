@@ -21,7 +21,7 @@
 #include <com/sun/star/ucb/TransferInfo.hpp>
 #include <com/sun/star/ucb/XContentCreator.hpp>
 #include <ucbhelper/contenthelper.hxx>
-#include <libcmis/session-factory.hxx>
+#include <libcmis/libcmis.hxx>
 
 #include <list>
 
