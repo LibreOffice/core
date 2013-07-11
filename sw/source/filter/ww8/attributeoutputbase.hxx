@@ -176,7 +176,7 @@ public:
     virtual void WritePostitFieldEnd() {};
 
     /// Output text (inside a run).
-    virtual void RunText( const String& rText, rtl_TextEncoding eCharSet ) = 0;
+    virtual void RunText( const OUString& rText, rtl_TextEncoding eCharSet ) = 0;
 
     /// Output text (without markup).
     virtual void RawText( const String& rText, bool bForceUnicode, rtl_TextEncoding eCharSet ) = 0;

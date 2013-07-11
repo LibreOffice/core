@@ -415,7 +415,7 @@ void RtfAttributeOutput::EndRunProperties( const SwRedlineData* /*pRedlineData*/
     m_aRun->append(m_aStyles.makeStringAndClear());
 }
 
-void RtfAttributeOutput::RunText( const String& rText, rtl_TextEncoding /*eCharSet*/ )
+void RtfAttributeOutput::RunText( const OUString& rText, rtl_TextEncoding /*eCharSet*/ )
 {
     SAL_INFO("sw.rtf", OSL_THIS_FUNC << ", rText: " << rText);
     RawText( rText, 0, m_rExport.eCurrentEncoding );

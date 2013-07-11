@@ -73,7 +73,7 @@ public:
     virtual void WritePostitFieldEnd() SAL_OVERRIDE;
 
     /// Output text (inside a run).
-    virtual void RunText( const String& rText, rtl_TextEncoding eCharSet = RTL_TEXTENCODING_UTF8 );
+    virtual void RunText( const OUString& rText, rtl_TextEncoding eCharSet = RTL_TEXTENCODING_UTF8 );
 
     // Access to (anyway) private buffers, used by the sdr exporter
     OStringBuffer& RunText();

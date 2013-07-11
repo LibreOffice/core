@@ -60,7 +60,7 @@ public:
     virtual void EndRunProperties( const SwRedlineData* pRedlineData );
 
     /// Output text.
-    virtual void RunText( const String& rText, rtl_TextEncoding eCharSet );
+    virtual void RunText( const OUString& rText, rtl_TextEncoding eCharSet );
 
     /// Output text (without markup).
     virtual void RawText( const String& rText, bool bForceUnicode, rtl_TextEncoding eCharSet );

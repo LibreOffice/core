@@ -1133,18 +1133,17 @@ static void impl_WriteRunText( FSHelperPtr pSerializer, sal_Int32 nTextToken,
     pSerializer->endElementNS( XML_w, nTextToken );
 }
 
-void DocxAttributeOutput::RunText( const String& rText, rtl_TextEncoding /*eCharSet*/ )
+void DocxAttributeOutput::RunText( const OUString& rText, rtl_TextEncoding /*eCharSet*/ )
 {
     if( m_closeHyperlinkInThisRun )
     {
         m_closeHyperlinkInPreviousRun = true;
         m_closeHyperlinkInThisRun = false;
     }
-    OUString aText( rText );
 
     // one text can be split into more <w:t>blah</w:t>'s by line breaks etc.
-    const sal_Unicode *pBegin = aText.getStr();
-    const sal_Unicode *pEnd = pBegin + aText.getLength();
+    const sal_Unicode *pBegin = rText.getStr();
+    const sal_Unicode *pEnd = pBegin + rText.getLength();
 
     // the text run is usually XML_t, with the exception of the deleted text
     sal_Int32 nTextToken = XML_t;
