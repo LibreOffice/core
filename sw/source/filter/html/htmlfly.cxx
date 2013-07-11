@@ -1220,16 +1220,14 @@ Writer& OutHTML_BulletImage( Writer& rWrt,
             const Graphic* pGrf = pBrush->GetGraphic();
             if( pGrf )
             {
-                const Graphic* aGraphic = pBrush->GetGraphic();
-                sal_uLong nErr = XOutBitmap::GraphicToBase64(*aGraphic, aGraphicInBase64);
+                sal_uLong nErr = XOutBitmap::GraphicToBase64(*pGrf, aGraphicInBase64);
                 if( nErr )
                 {
                     rHTMLWrt.nWarn = WARN_SWG_POOR_LOAD | WARN_SW_WRITE_BASE;
                 }
-                // Grafik als (JPG-)File speichern
                 if( rHTMLWrt.GetOrigFileName() )
                     rGrfName = *rHTMLWrt.GetOrigFileName();
-                    pLink = &rGrfName;
+                pLink = &rGrfName;
             }
         }
     }
