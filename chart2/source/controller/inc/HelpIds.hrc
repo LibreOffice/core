@@ -55,9 +55,6 @@
 #define HID_SCH_LB_BAR_GEOMETRY                             "CHART2_HID_SCH_LB_BAR_GEOMETRY"
 #define HID_SCH_DLG_RANGES                                  "CHART2_HID_SCH_DLG_RANGES"
 
-#define HID_SCH_CB_XAXIS                                    "CHART2_HID_SCH_CB_XAXIS"
-#define HID_SCH_CB_YAXIS                                    "CHART2_HID_SCH_CB_YAXIS"
-#define HID_SCH_CB_ZAXIS                                    "CHART2_HID_SCH_CB_ZAXIS"
 #define HID_SCH_CB_SECONDARY_XAXIS                          "CHART2_HID_SCH_CB_SECONDARY_XAXIS"
 #define HID_SCH_CB_SECONDARY_YAXIS                          "CHART2_HID_SCH_CB_SECONDARY_YAXIS"
 #define HID_SCH_CB_SECONDARY_ZAXIS                          "CHART2_HID_SCH_CB_SECONDARY_ZAXIS"
@@ -142,7 +139,6 @@
 #define HID_DIAGRAM_TYPE                                    "CHART2_HID_DIAGRAM_TYPE"
 #define HID_3D_VIEW                                         "CHART2_HID_3D_VIEW"
 #define HID_DIAGRAM_DATA                                    "CHART2_HID_DIAGRAM_DATA"
-#define HID_INSERT_AXIS                                     "CHART2_HID_INSERT_AXIS"
 #define HID_INSERT_STATISTICS                               "CHART2_HID_INSERT_STATISTICS"
 #define HID_INSERT_TITLE                                    "CHART2_HID_INSERT_TITLE"
 #define HID_INSERT_CHART_LEGEND                             "CHART2_HID_INSERT_CHART_LEGEND"
