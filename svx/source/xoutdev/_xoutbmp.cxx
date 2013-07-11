@@ -31,7 +31,6 @@
 #include <vcl/graphicfilter.hxx>
 #include <vcl/cvtgrf.hxx>
 #include <sax/tools/converter.hxx>
-#include <svtools/htmlkywd.hxx>
 
 #define FORMAT_BMP  OUString("bmp")
 #define FORMAT_GIF  OUString("gif")
