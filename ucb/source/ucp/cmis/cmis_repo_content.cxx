@@ -43,7 +43,7 @@ namespace cmis
 {
     RepoContent::RepoContent( const uno::Reference< uno::XComponentContext >& rxContext,
         ContentProvider *pProvider, const uno::Reference< ucb::XContentIdentifier >& Identifier,
-        list< libcmis::RepositoryPtr > aRepos )
+        vector< libcmis::RepositoryPtr > aRepos )
             throw ( ucb::ContentCreationException )
         : ContentImplHelper( rxContext, pProvider, Identifier ),
         m_pProvider( pProvider ),
@@ -172,7 +172,7 @@ namespace cmis
 
         if ( !m_sRepositoryId.isEmpty() )
         {
-            for ( list< libcmis::RepositoryPtr >::iterator it = m_aRepositories.begin( );
+            for ( vector< libcmis::RepositoryPtr >::iterator it = m_aRepositories.begin( );
                     it != m_aRepositories.end( ) && NULL == repo.get( ); ++it )
             {
                 if ( STD_TO_OUSTR( ( *it )->getId( ) ) == m_sRepositoryId )
@@ -352,7 +352,7 @@ namespace cmis
 
         if ( m_sRepositoryId.isEmpty( ) )
         {
-            for ( list< libcmis::RepositoryPtr >::iterator it = m_aRepositories.begin( );
+            for ( vector< libcmis::RepositoryPtr >::iterator it = m_aRepositories.begin( );
                     it != m_aRepositories.end(); ++it )
             {
                 URL aUrl( m_aURL );

@@ -10,7 +10,7 @@
  *
  */
 
-#include <libcmis/session-factory.hxx>
+#include <libcmis/libcmis.hxx>
 
 #include <rtl/uri.hxx>
 
