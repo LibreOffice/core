@@ -642,7 +642,7 @@ private:
     // beginning of the next paragraph
     DocxColBreakStatus m_nColBreakStatus;
 
-    sw::Frame *m_pParentFrame;
+    std::vector<sw::Frame> m_aParentFrames;
     bool m_bTextFrameSyntax;
     OStringBuffer m_aTextFrameStyle;
     // close of hyperlink needed

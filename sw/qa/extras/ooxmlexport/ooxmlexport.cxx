@@ -93,6 +93,7 @@ public:
     void testN822175();
     void testFdo66688();
     void testFdo66773();
+    void testFdo58577();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -156,6 +157,7 @@ void Test::run()
         {"n822175.odt", &Test::testN822175},
         {"fdo66688.docx", &Test::testFdo66688},
         {"fdo66773.docx", &Test::testFdo66773},
+        {"fdo58577.odt", &Test::testFdo58577},
     };
     // Don't test the first import of these, for some reason those tests fail
     const char* aBlacklist[] = {
@@ -931,6 +933,14 @@ void Test::testFdo66773()
     style::LineSpacing alineSpacing = getProperty<style::LineSpacing>(xParaEnum->nextElement(), "ParaLineSpacing");
     CPPUNIT_ASSERT_EQUAL(style::LineSpacingMode::PROP, alineSpacing.Mode);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(100), static_cast<sal_Int32>(alineSpacing.Height));
+}
+
+void Test::testFdo58577()
+{
+    // The second frame was simply missing, so let's check if both frames were imported back.
+    uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xIndexAccess->getCount());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

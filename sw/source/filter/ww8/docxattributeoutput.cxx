@@ -293,10 +293,13 @@ void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pT
     m_pSerializer->mergeTopMarks();
 
     // Write the anchored frame if any
-    if ( m_pParentFrame )
+    // Make a copy and clear the original early, as this method is called
+    // recursively for in-frame paragraphs
+    std::vector<sw::Frame> aParentFrames = m_aParentFrames;
+    m_aParentFrames.clear();
+    for (size_t i = 0; i < aParentFrames.size(); ++i)
     {
-        sw::Frame *pParentFrame = m_pParentFrame;
-        m_pParentFrame = NULL;
+        sw::Frame* pParentFrame = &aParentFrames[i];
 
         const SwFrmFmt& rFrmFmt = pParentFrame->GetFrmFmt( );
         const SwNodeIndex* pNodeIndex = rFrmFmt.GetCntnt().GetCntntIdx();
@@ -356,8 +359,6 @@ void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pT
         m_rExport.RestoreData();
 
         m_rExport.mpParentFrame = NULL;
-
-        delete pParentFrame;
     }
 
     m_pSerializer->endElementNS( XML_w, XML_p );
@@ -2772,7 +2773,7 @@ void DocxAttributeOutput::OutputFlyFrame_Impl( const sw::Frame &rFrame, const Po
         case sw::Frame::eTxtBox:
             {
                 // The frame output is postponed to the end of the anchor paragraph
-                m_pParentFrame = new sw::Frame(rFrame);
+                m_aParentFrames.push_back(sw::Frame(rFrame));
             }
             break;
         case sw::Frame::eOle:
@@ -5162,7 +5163,6 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, FSHelperPtr pSeri
       m_nTableDepth( 0 ),
       m_bParagraphOpened( false ),
       m_nColBreakStatus( COLBRK_NONE ),
-      m_pParentFrame( NULL ),
       m_bTextFrameSyntax( false ),
       m_closeHyperlinkInThisRun( false ),
       m_closeHyperlinkInPreviousRun( false ),
@@ -5192,7 +5192,6 @@ DocxAttributeOutput::~DocxAttributeOutput()
     delete m_pEndnotesList, m_pEndnotesList = NULL;
 
     delete m_pTableWrt, m_pTableWrt = NULL;
-    delete m_pParentFrame;
 }
 
 DocxExport& DocxAttributeOutput::GetExport()
