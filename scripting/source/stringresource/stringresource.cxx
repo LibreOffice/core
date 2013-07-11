@@ -36,6 +36,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <rtl/strbuf.hxx>
 #include <tools/urlobj.hxx>
+#include <i18nlangtag/languagetag.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
@@ -679,33 +680,21 @@ LocaleItem* StringResourceImpl::getItemForLocale
     return pRetItem;
 }
 
-// Returns the LocalItem for a given locale, if it exists, otherwise NULL
-// This method performes a closest match search, at least the language must match
+// Returns the LocaleItem for a given locale, if it exists, otherwise NULL.
+// This method performs a closest match search, at least the language must match.
 LocaleItem* StringResourceImpl::getClosestMatchItemForLocale( const Locale& locale )
 {
     LocaleItem* pRetItem = NULL;
 
-    // Search for locale
-    for( sal_Int32 iPass = 0 ; iPass <= 2 ; ++iPass )
+    ::std::vector< Locale > aLocales( m_aLocaleItemVector.size());
+    for( LocaleItemVectorConstIt it = m_aLocaleItemVector.begin(); it != m_aLocaleItemVector.end(); ++it )
     {
-        for( LocaleItemVectorConstIt it = m_aLocaleItemVector.begin(); it != m_aLocaleItemVector.end(); ++it )
-        {
-            LocaleItem* pLocaleItem = *it;
-            if( pLocaleItem )
-            {
-                Locale& cmp_locale = pLocaleItem->m_locale;
-                if( cmp_locale.Language == locale.Language &&
-                    (iPass > 1 || cmp_locale.Country  == locale.Country) &&
-                    (iPass > 0 || cmp_locale.Variant  == locale.Variant) )
-                {
-                    pRetItem = pLocaleItem;
-                    break;
-                }
-            }
-        }
-        if( pRetItem )
-            break;
+        LocaleItem* pLocaleItem = *it;
+        aLocales.push_back( pLocaleItem ? pLocaleItem->m_locale : Locale());
     }
+    ::std::vector< Locale >::const_iterator iFound( LanguageTag::getMatchingFallback( aLocales, locale));
+    if (iFound != aLocales.end())
+        pRetItem = *(m_aLocaleItemVector.begin() + (iFound - aLocales.begin()));
 
     return pRetItem;
 }
