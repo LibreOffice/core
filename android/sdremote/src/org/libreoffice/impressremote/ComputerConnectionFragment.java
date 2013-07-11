@@ -13,10 +13,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.ViewAnimator;
 
 import com.actionbarsherlock.app.SherlockFragment;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuInflater;
+import com.actionbarsherlock.view.MenuItem;
 import org.libreoffice.impressremote.communication.CommunicationService;
 import org.libreoffice.impressremote.communication.Server;
 
@@ -47,6 +51,12 @@ public class ComputerConnectionFragment extends SherlockFragment implements Serv
         super.onCreate(aSavedInstance);
 
         mComputer = getArguments().getParcelable("COMPUTER");
+
+        setUpActionBarMenu();
+    }
+
+    private void setUpActionBarMenu() {
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -72,6 +82,14 @@ public class ComputerConnectionFragment extends SherlockFragment implements Serv
         CommunicationService.CBinder aServiceBinder = (CommunicationService.CBinder) aBinder;
 
         mCommunicationService = aServiceBinder.getService();
+
+        connectToComputer();
+    }
+
+    private void connectToComputer() {
+        if (!isServiceBound()) {
+            return;
+        }
 
         mCommunicationService.connectTo(mComputer);
     }
@@ -186,6 +204,31 @@ public class ComputerConnectionFragment extends SherlockFragment implements Serv
         LinearLayout aMessageLayout = (LinearLayout) getView().findViewById(R.id.layout_error_message);
 
         aViewAnimator.setDisplayedChild(aViewAnimator.indexOfChild(aMessageLayout));
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu aMenu, MenuInflater aMenuInflater) {
+        aMenuInflater.inflate(R.menu.menu_action_bar_computer_connection, aMenu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem aMenuItem) {
+        switch (aMenuItem.getItemId()) {
+            case R.id.menu_reconnect:
+                showProgressBar();
+                connectToComputer();
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(aMenuItem);
+        }
+    }
+
+    private void showProgressBar() {
+        ViewAnimator aViewAnimator = (ViewAnimator) getView().findViewById(R.id.view_animator);
+        ProgressBar aProgressBar = (ProgressBar) getView().findViewById(R.id.progress_bar);
+
+        aViewAnimator.setDisplayedChild(aViewAnimator.indexOfChild(aProgressBar));
     }
 
     @Override

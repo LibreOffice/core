@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/menu_reconnect"
+        android:title="@string/menu_reconnect"
+        android:icon="@drawable/ic_action_reconnect"
+        android:showAsAction="always"/>
+
+</menu>
