@@ -27,11 +27,8 @@
 #include <X11/Xutil.h>
 #include <postx.h>
 
+#include <com/sun/star/uno/Sequence.hxx>
 #include <sal/types.h>
-#include <com/sun/star/awt/XBitmap.hpp>
-#include <cppuhelper/compbase1.hxx>
-
-
 
 namespace x11 {
 
@@ -78,19 +75,8 @@ public:
     int getDepth() const { return m_aInfo.depth; }
 };
 
-class BmpTransporter :
-        public cppu::WeakImplHelper1< com::sun::star::awt::XBitmap >
-{
-    com::sun::star::uno::Sequence<sal_Int8>         m_aBM;
-    com::sun::star::awt::Size                       m_aSize;
-public:
-    BmpTransporter( const com::sun::star::uno::Sequence<sal_Int8>& rBmp );
-    virtual  ~BmpTransporter();
-
-    virtual com::sun::star::awt::Size SAL_CALL getSize() throw();
-    virtual com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getDIB() throw();
-    virtual com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getMaskDIB() throw();
-};
+css::uno::Sequence<sal_Int8> convertBitmapDepth(
+    css::uno::Sequence<sal_Int8> const & data, int depth);
 
 }
 

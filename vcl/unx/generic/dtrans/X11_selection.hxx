@@ -28,7 +28,6 @@
 #include <com/sun/star/awt/XDisplayConnection.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/script/XInvocation.hpp>
 #include <com/sun/star/frame/XDesktop2.hpp>
 #include <osl/thread.h>
 
@@ -257,8 +256,6 @@ namespace x11 {
         com::sun::star::uno::Reference< ::com::sun::star::frame::XDesktop2 > m_xDesktop;
         com::sun::star::uno::Reference< ::com::sun::star::awt::XDisplayConnection >
                                     m_xDisplayConnection;
-        com::sun::star::uno::Reference< com::sun::star::script::XInvocation >
-                                    m_xBitmapConverter;
         sal_Int32                   m_nSelectionTimeout;
         XLIB_Time                   m_nSelectionTimestamp;
 

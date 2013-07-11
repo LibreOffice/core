@@ -20,8 +20,7 @@
 #ifndef _SV_SALCTYPE_HXX
 #define _SV_SALCTYPE_HXX
 
-#include <com/sun/star/script/XInvocation.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include "sal/config.h"
 
 #include <vcl/graph.hxx>
 
@@ -60,11 +59,6 @@ public:
 typedef sal_uLong (*SALGRFCVTPROC)( void* pInst,
                                 sal_uLong nInFormat, void* pInBuffer, sal_uLong nInBufSize,
                                 sal_uLong nOutFormat, void** ppOutBuffer );
-
-namespace vcl
-{
-com::sun::star::uno::Reference< com::sun::star::script::XInvocation > createBmpConverter();
-}
 
 #endif // _SV_SALCTYPE_HXX
 

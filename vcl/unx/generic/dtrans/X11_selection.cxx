@@ -341,12 +341,6 @@ void SelectionManager::initialize( const Sequence< Any >& arguments ) throw (::c
             m_xDisplayConnection->addEventHandler( Any(), this, ~0 );
     }
 
-    if( !m_xBitmapConverter.is() )
-    {
-        if( arguments.getLength() > 2 )
-            arguments.getConstArray()[2] >>= m_xBitmapConverter;
-    }
-
     if( ! m_pDisplay )
     {
         OUString aUDisplay;
@@ -1496,32 +1490,12 @@ bool SelectionManager::sendData( SelectionAdaptor* pAdaptor,
                     // the pixmap in another thread
                     pPixmap = getPixmapHolder( selection );
                     // conversion succeeded, so aData contains image/bmp now
-                    if( pPixmap->needsConversion( (const sal_uInt8*)aData.getConstArray() )
-                        && m_xBitmapConverter.is() )
+                    if( pPixmap->needsConversion( (const sal_uInt8*)aData.getConstArray() ) )
                     {
-#if OSL_DEBUG_LEVEL > 1
-                        fprintf( stderr, "trying bitmap conversion\n" );
-#endif
-                        css::uno::Reference<XBitmap> xBM( new BmpTransporter( aData ) );
-                        Sequence<Any> aArgs(2), aOutArgs;
-                        Sequence<sal_Int16> aOutIndex;
-                        aArgs.getArray()[0] = makeAny( xBM );
-                        aArgs.getArray()[1] = makeAny( (sal_uInt16)pPixmap->getDepth() );
+                        SAL_INFO( "vcl", "trying bitmap conversion" );
+                        int depth = pPixmap->getDepth();
                         aGuard.clear();
-                        try
-                        {
-                            Any aResult =
-                                m_xBitmapConverter->invoke( OUString("convert-bitmap-depth"),
-                                                            aArgs, aOutIndex, aOutArgs );
-                            if( aResult >>= xBM )
-                                aData = xBM->getDIB();
-                        }
-                        catch(...)
-                        {
-#if OSL_DEBUG_LEVEL > 1
-                            fprintf( stderr, "exception in bitmap converter\n" );
-#endif
-                        }
+                        aData = convertBitmapDepth(aData, depth);
                         aGuard.reset();
                     }
                     // get pixmap again since clearing the guard could have invalidated

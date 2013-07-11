@@ -43,7 +43,6 @@
 #include "vcl/wrkwin.hxx"
 #include "vcl/wall.hxx"
 #include "vcl/gradient.hxx"
-#include "vcl/salctype.hxx"
 #include "vcl/button.hxx"
 #include "vcl/taskpanelist.hxx"
 #include "vcl/dialog.hxx"
@@ -8423,16 +8422,12 @@ uno::Reference< XDragSource > Window::GetDragSource()
                     aDragSourceAL[ 1 ] = makeAny( static_cast<sal_uInt64>( reinterpret_cast<sal_IntPtr>(pEnvData->pView) ) );
                     aDropTargetAL[ 0 ] = makeAny( static_cast<sal_uInt64>( reinterpret_cast<sal_IntPtr>(pEnvData->pView) ) );
 #elif defined UNX
-                    aDropTargetAL.realloc( 3 );
-                    aDragSourceAL.realloc( 3 );
                     aDragSourceSN = OUString("com.sun.star.datatransfer.dnd.X11DragSource");
                     aDropTargetSN = OUString("com.sun.star.datatransfer.dnd.X11DropTarget");
 
                     aDragSourceAL[ 0 ] = makeAny( Application::GetDisplayConnection() );
-                    aDragSourceAL[ 2 ] = makeAny( vcl::createBmpConverter() );
                     aDropTargetAL[ 0 ] = makeAny( Application::GetDisplayConnection() );
                     aDropTargetAL[ 1 ] = makeAny( (sal_Size)(pEnvData->aShellWindow) );
-                    aDropTargetAL[ 2 ] = makeAny( vcl::createBmpConverter() );
 #endif
                     if( !aDragSourceSN.isEmpty() )
                         mpWindowImpl->mpFrameData->mxDragSource.set(
@@ -8515,10 +8510,9 @@ uno::Reference< XClipboard > Window::GetPrimarySelection()
 #if defined(UNX) && !defined(MACOSX)
                 // A hack, making the primary selection available as an instance of
                 // the SystemClipboard service on X11:
-                css::uno::Sequence<css::uno::Any> args(3);
+                css::uno::Sequence<css::uno::Any> args(2);
                 args[0] <<= Application::GetDisplayConnection();
                 args[1] <<= OUString("PRIMARY");
-                args[2] <<= vcl::createBmpConverter();
                 mpWindowImpl->mpFrameData->mxSelection.set(
                     (xContext->getServiceManager()->
                      createInstanceWithArgumentsAndContext(

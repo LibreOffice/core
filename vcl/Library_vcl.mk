@@ -196,7 +196,6 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/gdi/bmpacc2 \
     vcl/source/gdi/bmpacc3 \
     vcl/source/gdi/bmpacc \
-    vcl/source/gdi/bmpconv \
     vcl/source/gdi/bmpfast \
     vcl/source/gdi/configsettings \
     vcl/source/gdi/cvtgrf \

@@ -26,12 +26,13 @@
 
 #include <X11_selection.hxx>
 #include <unx/x11/xlimits.hxx>
+
 #include <sal/macros.h>
+#include <tools/stream.hxx>
+#include <vcl/dibtools.hxx>
+#include <vcl/svapp.hxx>
 
 using namespace x11;
-using namespace com::sun::star::uno;
-using namespace com::sun::star::script;
-using namespace com::sun::star::awt;
 
 /*
  *  helper functions
@@ -63,45 +64,6 @@ inline sal_uInt16 readLE32( const sal_uInt8* pBuffer )
         (((sal_uInt32)pBuffer[2]) << 16 ) |
         (((sal_uInt32)pBuffer[1]) <<  8 ) |
         pBuffer[0];
-}
-
-
-/*
- * BmpTransporter
- */
-
-BmpTransporter::BmpTransporter( const Sequence<sal_Int8>& rBmp ) :
-        m_aBM( rBmp )
-{
-    const sal_uInt8* pData = (const sal_uInt8*)rBmp.getConstArray();
-
-    if( pData[0] == 'B' || pData[1] == 'M' )
-    {
-        pData = pData+14;
-        m_aSize.Width   = readLE32( pData+4 );
-        m_aSize.Height  = readLE32( pData+8 );
-    }
-    else
-        m_aSize.Width = m_aSize.Height = 0;
-}
-
-BmpTransporter::~BmpTransporter()
-{
-}
-
-com::sun::star::awt::Size SAL_CALL BmpTransporter::getSize() throw()
-{
-    return m_aSize;
-}
-
-Sequence< sal_Int8 > SAL_CALL BmpTransporter::getDIB() throw()
-{
-    return m_aBM;
-}
-
-Sequence< sal_Int8 > SAL_CALL BmpTransporter::getMaskDIB() throw()
-{
-    return Sequence< sal_Int8 >();
 }
 
 /*
@@ -727,6 +689,47 @@ Pixmap PixmapHolder::setBitmapData( const sal_uInt8* pData )
     }
 
     return m_aPixmap;
+}
+
+css::uno::Sequence<sal_Int8> x11::convertBitmapDepth(
+    css::uno::Sequence<sal_Int8> const & data, int depth)
+{
+    if (depth < 4) {
+        depth = 1;
+    } else if (depth < 8) {
+        depth = 4;
+    } else if (depth > 8 && depth < 24) {
+        depth = 24;
+    }
+    SolarMutexGuard g;
+    SvMemoryStream in(
+        const_cast<sal_Int8 *>(data.getConstArray()), data.getLength(),
+        STREAM_READ);
+    Bitmap bm;
+    ReadDIB(bm, in, true);
+    if (bm.GetBitCount() == 24 && depth <= 8) {
+        bm.Dither(BMP_DITHER_FLOYD);
+    }
+    if (bm.GetBitCount() != depth) {
+        switch (depth) {
+        case 1:
+            bm.Convert(BMP_CONVERSION_1BIT_THRESHOLD);
+            break;
+        case 4:
+            bm.ReduceColors(BMP_CONVERSION_4BIT_COLORS);
+            break;
+        case 8:
+            bm.ReduceColors(BMP_CONVERSION_8BIT_COLORS);
+            break;
+        case 24:
+            bm.Convert(BMP_CONVERSION_24BIT);
+            break;
+        }
+    }
+    SvMemoryStream out;
+    WriteDIB(bm, out, false, true);
+    return css::uno::Sequence<sal_Int8>(
+        static_cast<sal_Int8 const *>(out.GetData()), out.GetEndOfData());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
