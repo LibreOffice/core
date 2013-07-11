@@ -15,7 +15,6 @@
 #include <sal/detail/log.h>
 #include <cassert>
 #include <CL/cl.h>
-#endif
 
 #if defined(_MSC_VER)
 #ifndef strcasecmp
