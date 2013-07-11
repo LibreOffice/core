@@ -82,20 +82,23 @@ using namespace com::sun::star::sdbc;
 using namespace com::sun::star::uno;
 
 OConnection::OConnection(FirebirdDriver*    _pDriver)
-                         : OSubComponent<OConnection, OConnection_BASE>((::cppu::OWeakObject*)_pDriver, this),
-                         OMetaConnection_BASE(m_aMutex),
+                        :OMetaConnection_BASE(m_aMutex),
+                         OSubComponent<OConnection, OConnection_BASE>((::cppu::OWeakObject*)_pDriver, this),
+                         m_xMetaData(NULL),
+                         m_bIsEmbedded(sal_False),
+                         m_aURL(),
+                         m_sUser(),
                          m_pDriver(_pDriver),
                          m_bClosed(sal_False),
-                         m_xMetaData(NULL),
                          m_bUseCatalog(sal_False),
-                         m_bUseOldDateFormat(sal_False)
+                         m_bUseOldDateFormat(sal_False),
+                         m_DBHandler(0)
 {
     SAL_INFO("connectivity.firebird", "=> OConnection::OConnection().");
 
     m_pDriver->acquire();
-    m_DBHandler = NULL;
 }
-//-----------------------------------------------------------------------------
+
 OConnection::~OConnection()
 {
     SAL_INFO("connectivity.firebird", "=> OConnection::~OConnection().");
@@ -105,7 +108,7 @@ OConnection::~OConnection()
     m_pDriver->release();
     m_pDriver = NULL;
 }
-//-----------------------------------------------------------------------------
+
 void SAL_CALL OConnection::release() throw()
 {
     SAL_INFO("connectivity.firebird", "=> OConnection::release().");
@@ -118,7 +121,7 @@ void SAL_CALL OConnection::release() throw()
 /*    Print the status, the SQLCODE, and exit.
  *    Also, indicate which operation the error occured on.
  */
-static int pr_error(const ISC_STATUS* status, char* operation)
+static int pr_error(const ISC_STATUS* status, const char* operation)
 {
     SAL_WARN("connectivity.firebird", "=> OConnection static pr_error().");
 
