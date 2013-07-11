@@ -31,6 +31,7 @@ class VLCWindow : public ::cppu::WeakImplHelper2 < ::com::sun::star::media::XPla
     VLCPlayer& mPlayer;
 public:
     SAL_CALL VLCWindow(VLCPlayer& player);
+
     void SAL_CALL update();
     ::sal_Bool SAL_CALL setZoomLevel( css::media::ZoomLevel ZoomLevel );
     css::media::ZoomLevel SAL_CALL getZoomLevel();
