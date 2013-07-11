@@ -127,6 +127,18 @@
                         icon-name="widget-gtk-combobox"/>
     <glade-widget-class title="Font Preview" name="svxlo-SvxFontPrevWindow"
                         generic-name="Font Preview Window" parent="GtkDrawingArea"
+                        icon-name="widget-gtk-drawingarea">
+      <properties>
+        <property id="text" name="Label">
+          <parameter-spec>
+            <type>GParamString</type>
+          </parameter-spec>
+        </property>
+      </properties>
+    </glade-widget-class>
+
+    <glade-widget-class title="Mark Preview" name="swuilo-SwMarkPreview"
+                        generic-name="Mark Preview Window" parent="GtkDrawingArea"
                         icon-name="widget-gtk-drawingarea"/>
     <glade-widget-class title="Show Math Symbol" name="smlo-SmShowSymbol"
                         generic-name="Show Math Symbol" parent="GtkDrawingArea"

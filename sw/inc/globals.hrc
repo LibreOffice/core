@@ -185,7 +185,7 @@
 #define TP_OPTSHDWCRSR              (RC_GLOBALS_BEGIN +  70)
 #define TP_NUMPARA                  (RC_GLOBALS_BEGIN +  73)
 
-#define TP_REDLINE_OPT              (RC_GLOBALS_BEGIN +  74)
+
 
 #define TP_OPTCAPTION_PAGE          (RC_GLOBALS_BEGIN +  78)
 #define DLG_SVXTEST_NUM_BULLET      (RC_GLOBALS_BEGIN +  79)

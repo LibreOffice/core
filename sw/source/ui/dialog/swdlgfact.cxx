@@ -1301,7 +1301,6 @@ CreateTabPage SwAbstractDialogFactory_Impl::GetTabPageCreatorFunc( sal_uInt16 nI
             pRet = SwShdwCrsrOptionsTabPage::Create;
             break;
         case RID_SW_TP_REDLINE_OPT :
-        case TP_REDLINE_OPT :
             pRet = SwRedlineOptionsTabPage::Create;
             break;
         case RID_SW_TP_OPTTEST_PAGE :

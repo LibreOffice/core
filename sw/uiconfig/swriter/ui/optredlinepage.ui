@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <!-- interface-requires gtk+ 3.0 -->
+  <!-- interface-requires LibreOffice 1.0 -->
   <object class="GtkBox" id="OptRedLinePage">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
+    <property name="border_width">6</property>
     <property name="orientation">vertical</property>
     <property name="spacing">12</property>
-    <property name="border_width">6</property>
     <child>
       <object class="GtkFrame" id="frame1">
         <property name="visible">True</property>
@@ -44,37 +45,9 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkComboBox" id="insert">
+                  <object class="svtlo-ColorListBox" id="insertcolor">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <items>
-                      <item>[None]</item>
-                      <item>Bold</item>
-                      <item>Italic</item>
-                      <item>Underlined</item>
-                      <item>Underlined: double</item>
-                      <item>Uppercase</item>
-                      <item>Lowercase</item>
-                      <item>Small caps</item>
-                      <item>Title font</item>
-                      <item>Background color</item>
-                    </items>
-                  </object>
-                  <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">1</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkComboBox" id="insertcolor">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <items>
-                      <item>[None]</item>
-                      <item>By Author</item>
-                    </items>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -84,36 +57,9 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkComboBox" id="deleted">
+                  <object class="svtlo-ColorListBox" id="deletedcolor">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <items>
-                      <item>[None]</item>
-                      <item>Bold</item>
-                      <item>Italic</item>
-                      <item>Strikethrough</item>
-                      <item>Uppercase</item>
-                      <item>Lowercase</item>
-                      <item>Small caps</item>
-                      <item>Title font</item>
-                      <item>Background color</item>
-                    </items>
-                  </object>
-                  <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">4</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkComboBox" id="deletedcolor">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <items>
-                      <item>[None]</item>
-                      <item>By Author</item>
-                    </items>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -126,18 +72,6 @@
                   <object class="GtkComboBox" id="changed">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <items>
-                      <item>[None]</item>
-                      <item>Bold</item>
-                      <item>Italic</item>
-                      <item>Underlined</item>
-                      <item>Underlined: double</item>
-                      <item>Uppercase</item>
-                      <item>Lowercase</item>
-                      <item>Small caps</item>
-                      <item>Title font</item>
-                      <item>Background color</item>
-                    </items>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -147,13 +81,9 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkComboBox" id="changedcolor">
+                  <object class="svtlo-ColorListBox" id="changedcolor">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <items>
-                      <item>[None]</item>
-                      <item>By Author</item>
-                    </items>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -163,14 +93,62 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkLabel" id="insert_label">
+                  <object class="svxlo-SvxFontPrevWindow" id="insertedpreview:border">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="margin_left">12</property>
-                    <property name="xalign">0</property>
-                    <property name="label" translatable="yes">_Attributes:</property>
-                    <property name="use_underline">True</property>
-                    <property name="mnemonic_widget">insert</property>
+                    <property name="hexpand">True</property>
+                    <property name="text">Insert</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">2</property>
+                    <property name="top_attach">1</property>
+                    <property name="width">1</property>
+                    <property name="height">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="svxlo-SvxFontPrevWindow" id="deletedpreview:border">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="hexpand">True</property>
+                    <property name="text">Delete</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">2</property>
+                    <property name="top_attach">4</property>
+                    <property name="width">1</property>
+                    <property name="height">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="svxlo-SvxFontPrevWindow" id="changedpreview:border">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="hexpand">True</property>
+                    <property name="text">Attributes</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">2</property>
+                    <property name="top_attach">7</property>
+                    <property name="width">1</property>
+                    <property name="height">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkAlignment" id="alignment3">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="left_padding">12</property>
+                    <child>
+                      <object class="GtkLabel" id="insert_label">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
+                        <property name="label" translatable="yes">_Attributes:</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">insert</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -180,14 +158,20 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkLabel" id="insertcolor_label">
+                  <object class="GtkAlignment" id="alignment4">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="margin_left">12</property>
-                    <property name="xalign">0</property>
-                    <property name="label" translatable="yes">Co_lor:</property>
-                    <property name="use_underline">True</property>
-                    <property name="mnemonic_widget">insertcolor</property>
+                    <property name="left_padding">12</property>
+                    <child>
+                      <object class="GtkLabel" id="insertcolor_label">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
+                        <property name="label" translatable="yes">Co_lor:</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">insertcolor</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -197,28 +181,20 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkLabel" id="label3">
+                  <object class="GtkAlignment" id="alignment5">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="xalign">0</property>
-                    <property name="label" translatable="yes">Deletions</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">3</property>
-                    <property name="width">3</property>
-                    <property name="height">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="deleted_label">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="margin_left">12</property>
-                    <property name="xalign">0</property>
-                    <property name="label" translatable="yes">Attri_butes:</property>
-                    <property name="use_underline">True</property>
-                    <property name="mnemonic_widget">deleted</property>
+                    <property name="left_padding">12</property>
+                    <child>
+                      <object class="GtkLabel" id="deleted_label">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
+                        <property name="label" translatable="yes">Attri_butes:</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">deleted</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -228,14 +204,20 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkLabel" id="deletedcolor_label">
+                  <object class="GtkAlignment" id="alignment7">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="margin_left">12</property>
-                    <property name="xalign">0</property>
-                    <property name="label" translatable="yes">Col_or:</property>
-                    <property name="use_underline">True</property>
-                    <property name="mnemonic_widget">deletedcolor</property>
+                    <property name="left_padding">12</property>
+                    <child>
+                      <object class="GtkLabel" id="deletedcolor_label">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
+                        <property name="label" translatable="yes">Col_or:</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">deletedcolor</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -245,14 +227,20 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkLabel" id="changed_label">
+                  <object class="GtkAlignment" id="alignment8">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="margin_left">12</property>
-                    <property name="xalign">0</property>
-                    <property name="label" translatable="yes">Attrib_utes:</property>
-                    <property name="use_underline">True</property>
-                    <property name="mnemonic_widget">changed</property>
+                    <property name="left_padding">12</property>
+                    <child>
+                      <object class="GtkLabel" id="changed_label">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
+                        <property name="label" translatable="yes">Attrib_utes:</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">changed</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -262,14 +250,20 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkLabel" id="changedcolor_label">
+                  <object class="GtkAlignment" id="alignment9">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="margin_left">12</property>
-                    <property name="xalign">0</property>
-                    <property name="label" translatable="yes">Colo_r:</property>
-                    <property name="use_underline">True</property>
-                    <property name="mnemonic_widget">changedcolor</property>
+                    <property name="left_padding">12</property>
+                    <child>
+                      <object class="GtkLabel" id="changedcolor_label">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
+                        <property name="label" translatable="yes">Colo_r:</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">changedcolor</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -293,42 +287,56 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="svxlo-SvxFontPrevWindow" id="insertedpreview">
-                    <property name="height_request">30</property>
+                  <object class="GtkLabel" id="label3">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="xalign">0</property>
+                    <property name="label" translatable="yes">Deletions</property>
                   </object>
                   <packing>
-                    <property name="left_attach">2</property>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">3</property>
+                    <property name="width">3</property>
+                    <property name="height">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkComboBoxText" id="insert">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="entry_text_column">0</property>
+                    <property name="id_column">1</property>
+                    <items>
+                      <item translatable="yes">[None]</item>
+                      <item translatable="yes">Bold</item>
+                      <item translatable="yes">Italic</item>
+                      <item translatable="yes">Underlined</item>
+                      <item translatable="yes">Underlined: double</item>
+                      <item translatable="yes">Strikethrough</item>
+                      <item translatable="yes">Uppercase</item>
+                      <item translatable="yes">Lowercase</item>
+                      <item translatable="yes">Small caps</item>
+                      <item translatable="yes">Title font</item>
+                      <item translatable="yes">Background color</item>
+                    </items>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
                     <property name="top_attach">1</property>
                     <property name="width">1</property>
-                    <property name="height">2</property>
+                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="svxlo-SvxFontPrevWindow" id="deletedpreview">
-                    <property name="height_request">30</property>
+                  <object class="GtkComboBox" id="deleted">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                   </object>
                   <packing>
-                    <property name="left_attach">2</property>
+                    <property name="left_attach">1</property>
                     <property name="top_attach">4</property>
                     <property name="width">1</property>
-                    <property name="height">2</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="svxlo-SvxFontPrevWindow" id="changedpreview">
-                    <property name="height_request">30</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">2</property>
-                    <property name="top_attach">7</property>
-                    <property name="width">1</property>
-                    <property name="height">2</property>
+                    <property name="height">1</property>
                   </packing>
                 </child>
               </object>
@@ -375,26 +383,7 @@
                 <property name="row_spacing">6</property>
                 <property name="column_spacing">12</property>
                 <child>
-                  <object class="GtkComboBox" id="markpos">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <items>
-                      <item>[None]</item>
-                      <item>Left margin</item>
-                      <item>Right margin</item>
-                      <item>Outer margin</item>
-                      <item>Inner margin</item>
-                    </items>
-                  </object>
-                  <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">0</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkComboBox" id="markcolor">
+                  <object class="svtlo-ColorListBox" id="markcolor">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                   </object>
@@ -438,15 +427,37 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkDrawingArea" id="markpreview">
+                  <object class="swuilo-SwMarkPreview" id="markpreview">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="hexpand">True</property>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
                     <property name="top_attach">0</property>
                     <property name="width">1</property>
                     <property name="height">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkComboBoxText" id="markpos">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="entry_text_column">0</property>
+                    <property name="id_column">1</property>
+                    <items>
+                      <item translatable="yes">[None]</item>
+                      <item translatable="yes">Left margin</item>
+                      <item translatable="yes">Right margin</item>
+                      <item translatable="yes">Outer margin</item>
+                      <item translatable="yes">Inner margin</item>
+                    </items>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">0</property>
+                    <property name="width">1</property>
+                    <property name="height">1</property>
                   </packing>
                 </child>
               </object>
@@ -470,5 +481,42 @@
         <property name="position">1</property>
       </packing>
     </child>
+    <child>
+      <object class="GtkLabel" id="byauthor">
+        <property name="can_focus">False</property>
+        <property name="no_show_all">True</property>
+        <property name="label" translatable="yes">By author</property>
+        <property name="use_underline">True</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+        <property name="position">2</property>
+      </packing>
+    </child>
+  </object>
+  <object class="GtkSizeGroup" id="sizegroup1">
+    <widgets>
+      <widget name="alignment3"/>
+      <widget name="alignment4"/>
+      <widget name="alignment5"/>
+      <widget name="alignment7"/>
+      <widget name="alignment8"/>
+      <widget name="alignment9"/>
+      <widget name="markpos_label"/>
+      <widget name="markcolor_label"/>
+    </widgets>
+  </object>
+  <object class="GtkSizeGroup" id="sizegroup2">
+    <widgets>
+      <widget name="insertcolor"/>
+      <widget name="deletedcolor"/>
+      <widget name="changed"/>
+      <widget name="changedcolor"/>
+      <widget name="insert"/>
+      <widget name="deleted"/>
+      <widget name="markcolor"/>
+      <widget name="markpos"/>
+    </widgets>
   </object>
 </interface>

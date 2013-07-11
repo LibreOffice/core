@@ -300,6 +300,8 @@ public:
  -----------------------------------------------------------------------*/
 class SwMarkPreview : public Window
 {
+    Size            m_aInitialSize;
+
     Color           m_aBgCol;           // background
     Color           m_aTransCol;        // transparency
     Color           m_aMarkCol;         // marks
@@ -325,11 +327,12 @@ protected:
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );
 
 public:
-                    SwMarkPreview(Window* pParent, const ResId& rResID);
+                    SwMarkPreview(Window* pParent, WinBits nWinBits);
     virtual         ~SwMarkPreview();
 
     inline void     SetColor(const Color& rCol) { m_aMarkCol = rCol; }
     inline void     SetMarkPos(sal_uInt16 nPos) { nMarkPos = nPos; }
+    virtual Size    GetOptimalSize() const;
 };
 
 /*-----------------------------------------------------------------------
@@ -353,8 +356,8 @@ class SwRedlineOptionsTabPage : public SfxTabPage
     ColorListBox*        pMarkColorLB;
     SwMarkPreview*       pMarkPreviewWN;
 
-    //String              sAuthor;
-    //String              sNone;
+    OUString             sAuthor;
+    OUString             sNone;
 
     SwRedlineOptionsTabPage( Window* pParent, const SfxItemSet& rSet );
     ~SwRedlineOptionsTabPage();

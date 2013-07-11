@@ -41,7 +41,6 @@
 #include <viewopt.hxx>
 #include <globals.hrc>
 #include <config.hrc>
-#include <redlopt.hrc>
 #include <optdlg.hrc>
 #include <swwrtshitem.hxx>
 #include <unomid.h>
@@ -1485,38 +1484,22 @@ static sal_uInt16 aChangedAttrMap[] = { 0, 1, 2, 3, 4, 6, 7, 8, 9, 10 };
 /*-----------------------------------------------------------------------
     Description: Preview of selection
  -----------------------------------------------------------------------*/
-SwMarkPreview::SwMarkPreview( Window *pParent, const ResId& rResID ) :
+SwMarkPreview::SwMarkPreview( Window *pParent, WinBits nWinBits ) :
 
-    Window(pParent, rResID),
+    Window(pParent, nWinBits),
     m_aTransCol( COL_TRANSPARENT ),
     m_aMarkCol( COL_LIGHTRED ),
     nMarkPos(0)
 
 {
+    m_aInitialSize = LogicToPixel(Size(70 , 27), MapMode(MAP_APPFONT));
     InitColors();
     SetMapMode(MAP_PIXEL);
+}
 
-    const Size aSz(GetOutputSizePixel());
-
-    // Page
-    aPage.SetSize(Size(aSz.Width() - 3, aSz.Height() - 3));
-
-    sal_uLong nOutWPix = aPage.GetWidth();
-    sal_uLong nOutHPix = aPage.GetHeight();
-
-    // PrintArea
-    sal_uLong nLBorder = 8;
-    sal_uLong nRBorder = 8;
-    sal_uLong nTBorder = 4;
-    sal_uLong nBBorder = 4;
-
-    aLeftPagePrtArea = Rectangle(Point(nLBorder, nTBorder), Point((nOutWPix - 1) - nRBorder, (nOutHPix - 1) - nBBorder));
-    sal_uInt16 nWidth = (sal_uInt16)aLeftPagePrtArea.GetWidth();
-    sal_uInt16 nKorr = (nWidth & 1) != 0 ? 0 : 1;
-    aLeftPagePrtArea.SetSize(Size(nWidth / 2 - (nLBorder + nRBorder) / 2 + nKorr, aLeftPagePrtArea.GetHeight()));
-
-    aRightPagePrtArea = aLeftPagePrtArea;
-    aRightPagePrtArea.Move(aLeftPagePrtArea.GetWidth() + nLBorder + nRBorder + 1, 0);
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSwMarkPreview(Window *pParent, VclBuilder::stringmap &)
+{
+    return new SwMarkPreview(pParent, 0);
 }
 
 SwMarkPreview::~SwMarkPreview()
@@ -1547,6 +1530,28 @@ void SwMarkPreview::DataChanged( const DataChangedEvent& rDCEvt )
 
 void SwMarkPreview::Paint(const Rectangle &/*rRect*/)
 {
+    const Size aSz(GetOutputSizePixel());
+
+    // Page
+    aPage.SetSize(Size(aSz.Width() - 3, aSz.Height() - 3));
+
+    sal_uLong nOutWPix = aPage.GetWidth();
+    sal_uLong nOutHPix = aPage.GetHeight();
+
+    // PrintArea
+    sal_uLong nLBorder = 8;
+    sal_uLong nRBorder = 8;
+    sal_uLong nTBorder = 4;
+    sal_uLong nBBorder = 4;
+
+    aLeftPagePrtArea = Rectangle(Point(nLBorder, nTBorder), Point((nOutWPix - 1) - nRBorder, (nOutHPix - 1) - nBBorder));
+    sal_uInt16 nWidth = (sal_uInt16)aLeftPagePrtArea.GetWidth();
+    sal_uInt16 nKorr = (nWidth & 1) != 0 ? 0 : 1;
+    aLeftPagePrtArea.SetSize(Size(nWidth / 2 - (nLBorder + nRBorder) / 2 + nKorr, aLeftPagePrtArea.GetHeight()));
+
+    aRightPagePrtArea = aLeftPagePrtArea;
+    aRightPagePrtArea.Move(aLeftPagePrtArea.GetWidth() + nLBorder + nRBorder + 1, 0);
+
     // draw shadow
     Rectangle aShadow(aPage);
     aShadow += Point(3, 3);
@@ -1636,6 +1641,11 @@ void SwMarkPreview::DrawRect(const Rectangle &rRect, const Color &rFillColor, co
     Window::DrawRect(rRect);
 }
 
+Size SwMarkPreview::GetOptimalSize() const
+{
+    return m_aInitialSize;
+}
+
 namespace
 {
     void lcl_FillRedlineAttrListBox(
@@ -1656,11 +1666,8 @@ namespace
 SwRedlineOptionsTabPage::SwRedlineOptionsTabPage( Window* pParent,
                                                     const SfxItemSet& rSet )
     : SfxTabPage(pParent, "OptRedLinePage", "modules/swriter/ui/optredlinepage.ui" , rSet)
-//    ,sAuthor             ( SW_RES( STR_AUTHOR )),
-//    sNone               ( SW_RES( STR_NOTHING ))
-
+    , sNone(SW_RESSTR(SW_STR_NONE))
 {
-
     get(pInsertLB,"insert");
     get(pInsertColorLB,"insertcolor");
     get(pInsertedPreviewWN,"insertedpreview");
@@ -1677,21 +1684,21 @@ SwRedlineOptionsTabPage::SwRedlineOptionsTabPage( Window* pParent,
     get(pMarkColorLB,"markcolor");
     get(pMarkPreviewWN,"markpreview");
 
-    //FreeResource();
-/*
-    for(sal_uInt16 i = 0; i < pInsertLB->GetEntryCount(); i++)
+    sAuthor = get<Window>("byauthor")->GetText();
+
+    for (sal_uInt16 i = 0; i < pInsertLB->GetEntryCount(); ++i)
     {
-        String sEntry(pInsertLB->GetEntry(i));
+        OUString sEntry(pInsertLB->GetEntry(i));
         pDeletedLB->InsertEntry(sEntry);
         pChangedLB->InsertEntry(sEntry);
-    };*/
-/*
+    };
+
     // remove strikethrough from insert and change and underline + double
     // underline from delete
     pInsertLB->RemoveEntry(5);
     pChangedLB->RemoveEntry(5);
     pDeletedLB->RemoveEntry(4);
-    pDeletedLB->RemoveEntry(3);*/
+    pDeletedLB->RemoveEntry(3);
 
     Link aLk = LINK(this, SwRedlineOptionsTabPage, AttribHdl);
     pInsertLB->SetSelectHdl( aLk );
@@ -1868,7 +1875,6 @@ void SwRedlineOptionsTabPage::Reset( const SfxItemSet&  )
     pDeletedColorLB->SetUpdateMode(sal_False);
     pChangedColorLB->SetUpdateMode(sal_False);
     pMarkColorLB->SetUpdateMode(sal_False);
-/*
     pInsertColorLB->InsertEntry(sNone);
     pDeletedColorLB->InsertEntry(sNone);
     pChangedColorLB->InsertEntry(sNone);
@@ -1876,7 +1882,7 @@ void SwRedlineOptionsTabPage::Reset( const SfxItemSet&  )
     pInsertColorLB->InsertEntry(sAuthor);
     pDeletedColorLB->InsertEntry(sAuthor);
     pChangedColorLB->InsertEntry(sAuthor);
-*/
+
     XColorListRef pColorLst = XColorList::GetStdColorList();
     sal_uInt16 i;
     for( i = 0; i < pColorLst->Count(); ++i )

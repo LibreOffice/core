@@ -506,15 +506,20 @@ SvxFontPrevWindow::SvxFontPrevWindow( Window* pParent, const ResId& rId ) :
     Init();
 }
 
-SvxFontPrevWindow::SvxFontPrevWindow(Window* pParent) :
-    Window(pParent)
+SvxFontPrevWindow::SvxFontPrevWindow(Window* pParent, WinBits nStyle)
+    : Window(pParent, nStyle)
 {
+    m_aInitialSize = LogicToPixel(Size(70 , 27), MapMode(MAP_APPFONT));
     Init();
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxFontPrevWindow(Window *pParent, VclBuilder::stringmap &)
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxFontPrevWindow(Window *pParent, VclBuilder::stringmap &rMap)
 {
-    SvxFontPrevWindow *pWindow = new SvxFontPrevWindow(pParent);
+    WinBits nWinStyle = 0;
+    OString sBorder = VclBuilder::extractCustomProperty(rMap);
+    if (!sBorder.isEmpty())
+        nWinStyle |= WB_BORDER;
+    SvxFontPrevWindow *pWindow = new SvxFontPrevWindow(pParent, nWinStyle);
     return pWindow;
 }
 
