@@ -243,8 +243,8 @@ void Test::testSharedFormulasCopyPaste()
     ScAddress aPos(1, 8, 0); // B9
     ScFormulaCell* pFC = m_pDoc->GetFormulaCell(aPos);
     CPPUNIT_ASSERT_MESSAGE("B9 should be a formula cell.", pFC);
-    CPPUNIT_ASSERT_EQUAL(0, pFC->GetSharedTopRow());
-    CPPUNIT_ASSERT_EQUAL(10, pFC->GetSharedLength());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(0), pFC->GetSharedTopRow());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(10), pFC->GetSharedLength());
 
     // Copy formulas in B6:B9 to the clipboard doc.
     ScRange aSrcRange(1,5,0,1,8,0); // B6:B9
@@ -252,8 +252,8 @@ void Test::testSharedFormulasCopyPaste()
     copyToClip(m_pDoc, aSrcRange, &aClipDoc);
     pFC = aClipDoc.GetFormulaCell(aPos);
     CPPUNIT_ASSERT_MESSAGE("B9 in the clip doc should be a formula cell.", pFC);
-    CPPUNIT_ASSERT_EQUAL(5, pFC->GetSharedTopRow());
-    CPPUNIT_ASSERT_EQUAL(4, pFC->GetSharedLength());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(5), pFC->GetSharedTopRow());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(4), pFC->GetSharedLength());
 
     // Paste them to C2:C10.
     ScRange aDestRange(2,1,0,2,9,0);
@@ -264,8 +264,8 @@ void Test::testSharedFormulasCopyPaste()
     aPos.SetRow(1);
     pFC = m_pDoc->GetFormulaCell(aPos);
     CPPUNIT_ASSERT_MESSAGE("C2 should be a formula cell.", pFC);
-    CPPUNIT_ASSERT_EQUAL(1, pFC->GetSharedTopRow());
-    CPPUNIT_ASSERT_EQUAL(9, pFC->GetSharedLength());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(1), pFC->GetSharedTopRow());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(9), pFC->GetSharedLength());
 
     ScRange aRange(1,0,0,1,9,0); // B1:B10
     ScDocument* pUndoDoc = new ScDocument(SCDOCMODE_UNDO);
@@ -280,8 +280,8 @@ void Test::testSharedFormulasCopyPaste()
         aPos.SetRow(i);
         pFC = pUndoDoc->GetFormulaCell(aPos);
         CPPUNIT_ASSERT_MESSAGE("Must be a formula cell.", pFC);
-        CPPUNIT_ASSERT_EQUAL(0, pFC->GetSharedTopRow());
-        CPPUNIT_ASSERT_EQUAL(10, pFC->GetSharedLength());
+        CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(0), pFC->GetSharedTopRow());
+        CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(10), pFC->GetSharedLength());
     }
 
     // Overwrite B1:B10.
@@ -300,8 +300,8 @@ void Test::testSharedFormulasCopyPaste()
         aPos.SetRow(i);
         pFC = m_pDoc->GetFormulaCell(aPos);
         CPPUNIT_ASSERT_MESSAGE("This should be a formula cell.", pFC);
-        CPPUNIT_ASSERT_EQUAL(0, pFC->GetSharedTopRow());
-        CPPUNIT_ASSERT_EQUAL(10, pFC->GetSharedLength());
+        CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(0), pFC->GetSharedTopRow());
+        CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(10), pFC->GetSharedLength());
     }
 
     m_pDoc->DeleteTab(0);
