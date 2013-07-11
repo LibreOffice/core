@@ -467,11 +467,14 @@ bool LanguageTag::canonicalize()
                     if (eExt == EXTRACTED_LSC)
                     {
                         // Rebuild bcp47 with proper casing of tags.
-                        OUString aStr( aLanguage);
+                        OUStringBuffer aBuf( aLanguage.getLength() + 1 + aScript.getLength() +
+                                1 + aCountry.getLength());
+                        aBuf.append( aLanguage);
                         if (!aScript.isEmpty())
-                            aStr += "-" + aScript;
+                            aBuf.append('-').append( aScript);
                         if (!aCountry.isEmpty())
-                            aStr += "-" + aCountry;
+                            aBuf.append('-').append( aCountry);
+                        OUString aStr( aBuf.makeStringAndClear());
                         if (maBcp47 != aStr)
                         {
                             maBcp47 = aStr;
