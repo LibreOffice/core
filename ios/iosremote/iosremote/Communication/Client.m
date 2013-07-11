@@ -195,7 +195,7 @@ int count = 0;
                     }
                 }
             }
-            NSLog(@"Command:%@", str);
+//            NSLog(@"Command:%@", str);
             NSArray *commands = [str componentsSeparatedByString:@"\n"];
             [self.receiver parse:commands];
             data = nil;

@@ -13,11 +13,19 @@
 - (IBAction)nextSlideAction:(id)sender;
 - (IBAction)previousSlideAction:(id)sender;
 - (IBAction)pointerAction:(id)sender;
+- (IBAction)accPointerAction:(id)sender;
 
 @property (weak, nonatomic) IBOutlet UIView *notesView;
 @property (weak, nonatomic) IBOutlet UIWebView *lecturer_notes;
 @property (weak, nonatomic) IBOutlet UIImageView *slideView;
 @property (weak, nonatomic) IBOutlet UIImageView *secondarySlideView;
 @property (weak, nonatomic) IBOutlet UILabel *slideNumber;
+
+@property (weak, nonatomic) IBOutlet UIView *movingPointer;
+@property (weak, nonatomic) IBOutlet UIImageView *touchPointerImage;
+@property (weak, nonatomic) IBOutlet UIView *blockingView;
+@property (weak, nonatomic) IBOutlet UIView *bottomView;
+@property (weak, nonatomic) IBOutlet UIScrollView *touchPointerScrollView;
+@property (weak, nonatomic) IBOutlet UIButton *pointerBtn;
 
 @end

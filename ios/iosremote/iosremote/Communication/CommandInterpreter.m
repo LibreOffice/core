@@ -20,6 +20,8 @@
 
 @synthesize slideShow = _slideShow;
 
+dispatch_queue_t backgroundQueue;
+
 - (CommandInterpreter *) init
 {
     self = [super init];
@@ -45,7 +47,7 @@
         marker = 2;
     }
     else if ([instruction isEqualToString:STATUS_PAIRING_PAIRED]){
-        NSLog(@"Paired command: %@", command);
+//        NSLog(@"Paired command: %@", command);
         [[NSNotificationCenter defaultCenter] postNotificationName:STATUS_PAIRING_PAIRED
                                                             object:nil];
         marker = 2;
@@ -77,14 +79,17 @@
             marker = 3;
         } else if ([instruction isEqualToString:@"slide_preview"]){
             NSLog(@"Interpreter: slide_preview");
-            uint slideNumber = [[command objectAtIndex:1] integerValue];
-            NSString * imageData = [command objectAtIndex:2];
-            [self.slideShow putImage:imageData
-                             AtIndex:slideNumber];
-            [[NSNotificationCenter defaultCenter] postNotificationName:MSG_SLIDE_PREVIEW object:[NSNumber numberWithUnsignedInt:slideNumber]];
+            backgroundQueue = dispatch_queue_create("com.libreoffice.iosremote", NULL);
+            dispatch_async(backgroundQueue, ^(void) {
+                uint slideNumber = [[command objectAtIndex:1] integerValue];
+                NSString * imageData = [command objectAtIndex:2];
+                [self.slideShow putImage:imageData
+                                 AtIndex:slideNumber];
+            });
             marker = 4;
         } else if ([instruction isEqualToString:@"slide_notes"]){
             NSLog(@"Interpreter: slide_notes");
+            backgroundQueue = dispatch_queue_create("com.libreoffice.iosremote", NULL);
             uint slideNumber = [[command objectAtIndex:1] integerValue];
             NSMutableString *notes = [[NSMutableString alloc] init];
             for (int i = 2; i<command.count; ++i) {

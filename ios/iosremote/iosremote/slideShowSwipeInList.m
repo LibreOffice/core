@@ -12,6 +12,7 @@
 #import "SlideShow.h"
 #import "CommandTransmitter.h"
 #import "SWRevealViewController.h"
+#import "slideShowPreviewTable_vc.h"
 #import <QuartzCore/CALayer.h>
 
 #define TIMER_STATE_RUNNING 0
@@ -42,6 +43,11 @@ dispatch_queue_t backgroundQueue;
     self.slideshow = self.comManager.interpreter.slideShow;
     self.slideshow.secondaryDelegate = self;
     self.state = TIMER_STATE_CLEARED;
+
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:KEY_TIMER]) {
+        UIButton *l = (UIButton *)[[self.slidesTable cellForRowAtIndexPath:[NSIndexPath indexPathForItem:0 inSection:0]] viewWithTag:2];
+        [self stopWatchStart:l];
+    }
 }
 
 - (void) prepareForSegue: (UIStoryboardSegue *) segue sender: (id) sender

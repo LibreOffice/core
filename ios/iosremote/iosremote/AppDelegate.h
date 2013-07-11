@@ -7,9 +7,16 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 #import <UIKit/UIKit.h>
+#import <CoreMotion/CoreMotion.h>
 
-@interface libreoffice_sdremoteAppDelegate : UIResponder <UIApplicationDelegate>
+@class ViewController;
 
+@interface AppDelegate : UIResponder <UIApplicationDelegate> {
+    CMMotionManager *motionManager;
+}
+
+@property (readonly) CMMotionManager *motionManager;
 @property (strong, nonatomic) UIWindow *window;
+@property (strong, nonatomic) ViewController *viewController;
 
 @end

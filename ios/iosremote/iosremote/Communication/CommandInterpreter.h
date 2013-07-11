@@ -13,7 +13,7 @@
 
 @interface CommandInterpreter : NSObject
 
-@property (nonatomic, strong) SlideShow* slideShow;
+@property (atomic, strong) SlideShow* slideShow;
 
 - (void) parse:(NSArray *)cmd;
 

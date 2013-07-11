@@ -32,7 +32,7 @@
 		57C6E3F7175E06E800E8BC5F /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 57C6E3F6175E06E800E8BC5F /* CoreGraphics.framework */; };
 		57C6E3FD175E06E800E8BC5F /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 57C6E3FB175E06E800E8BC5F /* InfoPlist.strings */; };
 		57C6E3FF175E06E800E8BC5F /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 57C6E3FE175E06E800E8BC5F /* main.m */; };
-		57C6E403175E06E800E8BC5F /* libreoffice_sdremoteAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 57C6E402175E06E800E8BC5F /* libreoffice_sdremoteAppDelegate.m */; };
+		57C6E403175E06E800E8BC5F /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 57C6E402175E06E800E8BC5F /* AppDelegate.m */; };
 		57C6E405175E06E800E8BC5F /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 57C6E404175E06E800E8BC5F /* Default.png */; };
 		57C6E407175E06E800E8BC5F /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 57C6E406175E06E800E8BC5F /* Default@2x.png */; };
 		57C6E409175E06E800E8BC5F /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 57C6E408175E06E800E8BC5F /* Default-568h@2x.png */; };
@@ -44,6 +44,11 @@
 		57CC48C6178B42A400075DE4 /* timer_pause_btn.png in Resources */ = {isa = PBXBuildFile; fileRef = 57CC48C4178B42A400075DE4 /* timer_pause_btn.png */; };
 		57CC48C7178B42A400075DE4 /* timer_resume_btn.png in Resources */ = {isa = PBXBuildFile; fileRef = 57CC48C5178B42A400075DE4 /* timer_resume_btn.png */; };
 		57CFED9917838FDC00E82E05 /* EditableTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 57CFED9817838FDC00E82E05 /* EditableTableViewCell.m */; };
+		57DC7003178D82610050FC58 /* ic_launcher.png in Resources */ = {isa = PBXBuildFile; fileRef = 57DC7002178D82610050FC58 /* ic_launcher.png */; };
+		57DC7005178D82940050FC58 /* ic_launcher@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 57DC7004178D82940050FC58 /* ic_launcher@2x.png */; };
+		57DC7007178D84490050FC58 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 57DC7006178D84490050FC58 /* CoreMotion.framework */; };
+		57DC700F178E03330050FC58 /* touchPointer_vc.m in Sources */ = {isa = PBXBuildFile; fileRef = 57DC700E178E03330050FC58 /* touchPointer_vc.m */; };
+		57DC7012178E16A40050FC58 /* setRecursiveUserInteraction.m in Sources */ = {isa = PBXBuildFile; fileRef = 57DC7011178E16A40050FC58 /* setRecursiveUserInteraction.m */; };
 		57FE71E31785C61400B50125 /* pinValidation_vc.m in Sources */ = {isa = PBXBuildFile; fileRef = 57FE71E21785C61400B50125 /* pinValidation_vc.m */; };
 		57FE71E61785D7FE00B50125 /* slideShowPreview_vc.m in Sources */ = {isa = PBXBuildFile; fileRef = 57FE71E51785D7FE00B50125 /* slideShowPreview_vc.m */; };
 		57FE71E917861A9000B50125 /* slideShowPreviewTable_vc.m in Sources */ = {isa = PBXBuildFile; fileRef = 57FE71E817861A9000B50125 /* slideShowPreviewTable_vc.m */; };
@@ -88,8 +93,8 @@
 		57C6E3FC175E06E800E8BC5F /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		57C6E3FE175E06E800E8BC5F /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		57C6E400175E06E800E8BC5F /* iosremote-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "iosremote-Prefix.pch"; sourceTree = "<group>"; };
-		57C6E401175E06E800E8BC5F /* libreoffice_sdremoteAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = libreoffice_sdremoteAppDelegate.h; sourceTree = "<group>"; };
-		57C6E402175E06E800E8BC5F /* libreoffice_sdremoteAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = libreoffice_sdremoteAppDelegate.m; sourceTree = "<group>"; };
+		57C6E401175E06E800E8BC5F /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		57C6E402175E06E800E8BC5F /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		57C6E404175E06E800E8BC5F /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
 		57C6E406175E06E800E8BC5F /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
 		57C6E408175E06E800E8BC5F /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
@@ -106,6 +111,13 @@
 		57CC48C5178B42A400075DE4 /* timer_resume_btn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = timer_resume_btn.png; path = iosremote/timer_resume_btn.png; sourceTree = "<group>"; };
 		57CFED9717838FDC00E82E05 /* EditableTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditableTableViewCell.h; sourceTree = "<group>"; };
 		57CFED9817838FDC00E82E05 /* EditableTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditableTableViewCell.m; sourceTree = "<group>"; };
+		57DC7002178D82610050FC58 /* ic_launcher.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_launcher.png; sourceTree = "<group>"; };
+		57DC7004178D82940050FC58 /* ic_launcher@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_launcher@2x.png"; sourceTree = "<group>"; };
+		57DC7006178D84490050FC58 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
+		57DC700D178E03330050FC58 /* touchPointer_vc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = touchPointer_vc.h; sourceTree = "<group>"; };
+		57DC700E178E03330050FC58 /* touchPointer_vc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = touchPointer_vc.m; sourceTree = "<group>"; };
+		57DC7010178E16A40050FC58 /* setRecursiveUserInteraction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = setRecursiveUserInteraction.h; sourceTree = "<group>"; };
+		57DC7011178E16A40050FC58 /* setRecursiveUserInteraction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = setRecursiveUserInteraction.m; sourceTree = "<group>"; };
 		57FE71E11785C61300B50125 /* pinValidation_vc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = pinValidation_vc.h; path = Communication/pinValidation_vc.h; sourceTree = "<group>"; };
 		57FE71E21785C61400B50125 /* pinValidation_vc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = pinValidation_vc.m; path = Communication/pinValidation_vc.m; sourceTree = "<group>"; };
 		57FE71E41785D7FE00B50125 /* slideShowPreview_vc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = slideShowPreview_vc.h; sourceTree = "<group>"; };
@@ -120,6 +132,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				57DC7007178D84490050FC58 /* CoreMotion.framework in Frameworks */,
 				BE9EBD071765BF0800283FD2 /* CoreImage.framework in Frameworks */,
 				57C6E3F3175E06E800E8BC5F /* UIKit.framework in Frameworks */,
 				57C6E3F5175E06E800E8BC5F /* Foundation.framework in Frameworks */,
@@ -139,6 +152,10 @@
 				5770173E178B08A800B99793 /* SWReavealMainController.m */,
 				57701740178B0A6800B99793 /* slideShowSwipeInList.h */,
 				57701741178B0A6900B99793 /* slideShowSwipeInList.m */,
+				57DC700D178E03330050FC58 /* touchPointer_vc.h */,
+				57DC700E178E03330050FC58 /* touchPointer_vc.m */,
+				57DC7010178E16A40050FC58 /* setRecursiveUserInteraction.h */,
+				57DC7011178E16A40050FC58 /* setRecursiveUserInteraction.m */,
 			);
 			name = slideShow;
 			sourceTree = "<group>";
@@ -186,6 +203,9 @@
 		57C6E3E6175E06E800E8BC5F = {
 			isa = PBXGroup;
 			children = (
+				57DC7006178D84490050FC58 /* CoreMotion.framework */,
+				57DC7004178D82940050FC58 /* ic_launcher@2x.png */,
+				57DC7002178D82610050FC58 /* ic_launcher.png */,
 				57AEEDAA1788D7B2007F4F97 /* Assets */,
 				BE9EBD061765BF0800283FD2 /* CoreImage.framework */,
 				57C6E425175E076900E8BC5F /* Communication */,
@@ -221,8 +241,8 @@
 				57FE71E11785C61300B50125 /* pinValidation_vc.h */,
 				57FE71E21785C61400B50125 /* pinValidation_vc.m */,
 				57AEEDAB1789443D007F4F97 /* slideShowPreview */,
-				57C6E401175E06E800E8BC5F /* libreoffice_sdremoteAppDelegate.h */,
-				57C6E402175E06E800E8BC5F /* libreoffice_sdremoteAppDelegate.m */,
+				57C6E401175E06E800E8BC5F /* AppDelegate.h */,
+				57C6E402175E06E800E8BC5F /* AppDelegate.m */,
 				571BFAD2178AB7BA00EF1BDB /* slideShow */,
 				5753DD9717834D7100DB71BB /* newServer_vc.h */,
 				5753DD9817834D7100DB71BB /* newServer_vc.m */,
@@ -341,6 +361,8 @@
 				571D4808178B2F080063D93B /* timer_start_btn.png in Resources */,
 				57CC48C6178B42A400075DE4 /* timer_pause_btn.png in Resources */,
 				57CC48C7178B42A400075DE4 /* timer_resume_btn.png in Resources */,
+				57DC7003178D82610050FC58 /* ic_launcher.png in Resources */,
+				57DC7005178D82940050FC58 /* ic_launcher@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -352,7 +374,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				57C6E3FF175E06E800E8BC5F /* main.m in Sources */,
-				57C6E403175E06E800E8BC5F /* libreoffice_sdremoteAppDelegate.m in Sources */,
+				57C6E403175E06E800E8BC5F /* AppDelegate.m in Sources */,
 				57C6E42E175E076900E8BC5F /* Client.m in Sources */,
 				57C6E42F175E076900E8BC5F /* CommunicationManager.m in Sources */,
 				57C6E430175E076900E8BC5F /* CommandInterpreter.m in Sources */,
@@ -370,6 +392,8 @@
 				57701739178AC83E00B99793 /* SWRevealViewController.m in Sources */,
 				5770173F178B08A800B99793 /* SWReavealMainController.m in Sources */,
 				57701742178B0A6900B99793 /* slideShowSwipeInList.m in Sources */,
+				57DC700F178E03330050FC58 /* touchPointer_vc.m in Sources */,
+				57DC7012178E16A40050FC58 /* setRecursiveUserInteraction.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

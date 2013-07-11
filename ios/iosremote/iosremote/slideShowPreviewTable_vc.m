@@ -46,7 +46,7 @@
  
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
-    self.optionsArray = [NSArray arrayWithObjects:@"Timer auto-start", nil];
+    self.optionsArray = [NSArray arrayWithObjects:OPTION_TIMER, OPTION_POINTER, nil];
     self.comManager = [CommunicationManager sharedComManager];
     self.comManager.delegate = self;
     self.slidesRunning = NO;
@@ -106,7 +106,11 @@
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
         UISwitch *toggleSwitch = [[UISwitch alloc] init];
         cell.accessoryView = [[UIView alloc] initWithFrame:toggleSwitch.frame];
-        [toggleSwitch setOn:YES];
+        if (indexPath.row == 0) {
+            [toggleSwitch setOn:[[NSUserDefaults standardUserDefaults] boolForKey:KEY_TIMER]];
+        } else {
+            [toggleSwitch setOn:[[NSUserDefaults standardUserDefaults] boolForKey:KEY_POINTER]];
+        }
         [cell.accessoryView addSubview:toggleSwitch];
     }
     cell.textLabel.text = [self.optionsArray objectAtIndex:indexPath.row];
@@ -154,6 +158,14 @@
 */
 
 -(IBAction)startPresentationAction:(id)sender {
+    for (UITableViewCell *cell in self.tableView.visibleCells) {
+        UISwitch * toggle = [[[cell accessoryView] subviews] objectAtIndex:0];
+
+        if ([cell.textLabel.text isEqualToString:OPTION_TIMER])
+            [[NSUserDefaults standardUserDefaults] setBool:[toggle isOn] forKey:KEY_TIMER];
+        else if ([cell.textLabel.text isEqualToString:OPTION_POINTER])
+            [[NSUserDefaults standardUserDefaults] setBool:[toggle isOn] forKey:KEY_POINTER];
+    }
     [[self.comManager transmitter] startPresentation];
 }
 

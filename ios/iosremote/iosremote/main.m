@@ -8,11 +8,11 @@
 
 #import <UIKit/UIKit.h>
 
-#import "libreoffice_sdremoteAppDelegate.h"
+#import "AppDelegate.h"
 
 int main(int argc, char *argv[])
 {
     @autoreleasepool {
-        return UIApplicationMain(argc, argv, nil, NSStringFromClass([libreoffice_sdremoteAppDelegate class]));
+        return UIApplicationMain(argc, argv, nil, NSStringFromClass([AppDelegate class]));
     }
 }

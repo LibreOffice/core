@@ -31,6 +31,7 @@
 @synthesize secondaryDelegate = _secondaryDelegate;
 
 dispatch_queue_t backgroundQueue;
+NSLock *dictLock;
 
 - (SlideShow *) init{
     self = [super init];
@@ -56,6 +57,7 @@ dispatch_queue_t backgroundQueue;
                                                           object:nil
                                                            queue:mainQueue
                                                       usingBlock:^(NSNotification *note) {
+                                                          dispatch_async(backgroundQueue, ^(void) {
                                                           if ([[self.loadBuffer allKeysForObject:[NSNumber numberWithInt:[[[note userInfo] objectForKey:@"index"] intValue]]] count]) {
                                                               NSArray * tagArray = [self.loadBuffer allKeysForObject:[NSNumber numberWithInt:[[[note userInfo] objectForKey:@"index"] intValue]]];
                                                               for (NSNumber *tag in tagArray) {
@@ -67,7 +69,9 @@ dispatch_queue_t backgroundQueue;
                                                                   if ([view isKindOfClass:[UIImageView class]]){
                                                                       UIImage *image = [self.imagesDictionary objectForKey:[self.loadBuffer objectForKey:tag]];
                                                                       if (image) {
-                                                                          [(UIImageView *)view setImage:image];
+                                                                          dispatch_async(dispatch_get_main_queue(), ^{
+                                                                             [(UIImageView *)view setImage:image];
+                                                                          });
                                                                           [self.loadBuffer removeObjectForKey:tag];
                                                                       }
                                                                   }
@@ -75,27 +79,35 @@ dispatch_queue_t backgroundQueue;
 //                                                                      NSLog(@"Async notes");
                                                                       NSString *note = [self.notesDictionary objectForKey:[self.loadBuffer objectForKey:tag]];
                                                                       if (note) {
-                                                                          [(UIWebView *)view loadHTMLString:note baseURL:nil];
+                                                                          dispatch_async(dispatch_get_main_queue(), ^{
+                                                                              [(UIWebView *)view loadHTMLString:note baseURL:nil];
+                                                                          });
                                                                           [self.loadBuffer removeObjectForKey:tag];
                                                                       }
                                                                   } else if ([view isKindOfClass:[UITableViewCell class]]){
                                                                       UIImage *image = [self.imagesDictionary objectForKey:[self.loadBuffer objectForKey:tag]];
                                                                       if (image){
                                                                           UIImageView *imageView = (UIImageView *)[view viewWithTag:1];
-                                                                          [imageView setImage:image];
+                                                                          dispatch_async(dispatch_get_main_queue(), ^{
+                                                                              [imageView setImage:image];
+                                                                          });
                                                                           [self.loadBuffer removeObjectForKey:tag];
                                                                       }
                                                                   }
                                                               }
                                                           }
+                                                          });
                                                       }];
+    dictLock = [[NSLock alloc] init];
     return self;
 }
 
 - (void) putImage: (NSString *)img AtIndex: (uint) index{
         NSData* data = [NSData dataWithBase64String:img];
         UIImage* image = [UIImage imageWithData:data];
+        [dictLock lock];
         [self.imagesDictionary setObject:image forKey:[NSNumber numberWithUnsignedInt:index]];
+        [dictLock unlock];
         [[NSNotificationCenter defaultCenter] postNotificationName:@"storage_update_ready"
                                                             object:nil
                                                           userInfo:[NSDictionary dictionaryWithObject:[NSNumber numberWithInt:index] forKey:@"index"]];
