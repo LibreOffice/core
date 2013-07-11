@@ -61,12 +61,16 @@
                                                                                    object:nil
                                                                                     queue:mainQueue
                                                                                usingBlock:^(NSNotification *note) {
+                                                                                   self.comManager.state = CONNECTED;
+                                                                                   [self disableSpinner];
                                                                                    [self performSegueWithIdentifier:@"pinValidation" sender:self ];
                                                                                }];
     self.slideShowPreviewStartObserver = [[NSNotificationCenter defaultCenter] addObserverForName:STATUS_PAIRING_PAIRED
                                                                                            object:nil
                                                                                             queue:mainQueue
                                                                                        usingBlock:^(NSNotification *note) {
+                                                                                           self.comManager.state = CONNECTED;
+                                                                                           [self disableSpinner];
                                                                                            [self performSegueWithIdentifier:@"SlideShowPreview" sender:self ];
                                                                                        }];
     [super viewDidAppear:animated];

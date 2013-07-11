@@ -460,31 +460,18 @@
                                     <accessibilityTraits key="traits" none="YES" notEnabled="YES"/>
                                 </accessibility>
                             </view>
-                            <scrollView hidden="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" verticalCompressionResistancePriority="1000" scrollEnabled="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sco-8x-zSx">
-                                <subviews>
-                                    <imageView hidden="YES" userInteractionEnabled="NO" alpha="0.0" contentMode="scaleAspectFit" image="ic_launcher@2x.png" translatesAutoresizingMaskIntoConstraints="NO" id="ExH-sw-Z1i">
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="251" type="user" id="fag-vU-Fek"/>
-                                        </constraints>
-                                    </imageView>
-                                    <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="iCc-m2-vR5" userLabel="pointer">
-                                        <color key="backgroundColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="5" id="Pvc-0L-c6j"/>
-                                            <constraint firstAttribute="height" constant="5" id="pYn-Z0-Lv4"/>
-                                        </constraints>
-                                    </view>
-                                </subviews>
+                            <imageView hidden="YES" alpha="0.0" contentMode="scaleAspectFit" image="ic_launcher@2x.png" translatesAutoresizingMaskIntoConstraints="NO" id="ExH-sw-Z1i">
                                 <constraints>
-                                    <constraint firstItem="iCc-m2-vR5" firstAttribute="centerY" secondItem="ExH-sw-Z1i" secondAttribute="centerY" type="user" id="1ij-Ea-epv"/>
-                                    <constraint firstItem="ExH-sw-Z1i" firstAttribute="centerX" secondItem="sco-8x-zSx" secondAttribute="centerX" type="default" id="HzU-KT-Di4"/>
-                                    <constraint firstItem="ExH-sw-Z1i" firstAttribute="centerY" secondItem="sco-8x-zSx" secondAttribute="centerY" type="default" id="Jp6-hL-zFM"/>
-                                    <constraint firstItem="ExH-sw-Z1i" firstAttribute="leading" secondItem="sco-8x-zSx" secondAttribute="leading" type="default" id="Mlu-wO-svM"/>
-                                    <constraint firstItem="iCc-m2-vR5" firstAttribute="centerX" secondItem="ExH-sw-Z1i" secondAttribute="centerX" type="user" id="W0H-CC-5rY"/>
-                                    <constraint firstItem="ExH-sw-Z1i" firstAttribute="trailing" secondItem="sco-8x-zSx" secondAttribute="trailing" type="default" id="cE4-Q3-f4A"/>
-                                    <constraint firstAttribute="bottom" secondItem="ExH-sw-Z1i" secondAttribute="bottom" constant="149" id="vm4-SB-sLt"/>
+                                    <constraint firstAttribute="height" constant="253" id="li4-9E-WeL"/>
                                 </constraints>
-                            </scrollView>
+                            </imageView>
+                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="iCc-m2-vR5" userLabel="pointer">
+                                <color key="backgroundColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="5" id="Pvc-0L-c6j"/>
+                                    <constraint firstAttribute="height" constant="5" id="pYn-Z0-Lv4"/>
+                                </constraints>
+                            </view>
                             <view contentMode="scaleToFill" restorationIdentifier="" translatesAutoresizingMaskIntoConstraints="NO" id="3od-5c-yzI" userLabel="Bottom">
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vh9-Zy-DPu">
@@ -555,24 +542,25 @@
                         </subviews>
                         <color key="backgroundColor" red="0.90196079015731812" green="0.90196079015731812" blue="0.90196079015731812" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
+                            <constraint firstItem="ExH-sw-Z1i" firstAttribute="trailing" secondItem="Xty-aF-WDv" secondAttribute="trailing" type="default" id="5D0-O5-xr5"/>
                             <constraint firstItem="evg-Ah-Kcw" firstAttribute="leading" secondItem="Xty-aF-WDv" secondAttribute="leading" constant="-13" id="5Ku-go-4Y7"/>
                             <constraint firstItem="3od-5c-yzI" firstAttribute="leading" secondItem="Xty-aF-WDv" secondAttribute="leading" type="default" id="5et-XH-ZVD"/>
-                            <constraint firstItem="sco-8x-zSx" firstAttribute="centerY" secondItem="Xty-aF-WDv" secondAttribute="centerY" type="default" id="5g1-xQ-Rjo"/>
                             <constraint firstItem="uSh-Ne-BdH" firstAttribute="top" secondItem="Xty-aF-WDv" secondAttribute="top" type="default" id="5oi-ag-u6c"/>
                             <constraint firstAttribute="bottom" secondItem="uSh-Ne-BdH" secondAttribute="bottom" constant="-92" id="7f7-gO-D5h"/>
                             <constraint firstItem="3od-5c-yzI" firstAttribute="bottom" secondItem="Xty-aF-WDv" secondAttribute="bottom" type="default" id="9qT-8J-cJX"/>
-                            <constraint firstItem="sco-8x-zSx" firstAttribute="top" secondItem="Xty-aF-WDv" secondAttribute="top" constant="-1" id="ABt-Qu-Csc"/>
                             <constraint firstItem="YvB-Gp-Fvr" firstAttribute="top" secondItem="Xty-aF-WDv" secondAttribute="top" constant="5" type="user" id="DoA-5l-NFS"/>
                             <constraint firstItem="evg-Ah-Kcw" firstAttribute="top" secondItem="YvB-Gp-Fvr" secondAttribute="bottom" constant="8" symbolic="YES" type="default" id="FDk-Bs-3cI"/>
                             <constraint firstItem="YvB-Gp-Fvr" firstAttribute="trailing" secondItem="Xty-aF-WDv" secondAttribute="trailing" type="default" id="FXg-Ij-nfl"/>
                             <constraint firstItem="uSh-Ne-BdH" firstAttribute="trailing" secondItem="Xty-aF-WDv" secondAttribute="trailing" type="default" id="HAC-vD-Hqj"/>
                             <constraint firstItem="uSh-Ne-BdH" firstAttribute="leading" secondItem="Xty-aF-WDv" secondAttribute="leading" type="default" id="HeG-j9-sqU"/>
                             <constraint firstItem="YvB-Gp-Fvr" firstAttribute="leading" secondItem="Xty-aF-WDv" secondAttribute="leading" type="default" id="I4g-8o-Kbt"/>
-                            <constraint firstItem="3od-5c-yzI" firstAttribute="centerX" secondItem="evg-Ah-Kcw" secondAttribute="centerX" type="default" id="OBV-yE-3pQ"/>
-                            <constraint firstItem="sco-8x-zSx" firstAttribute="trailing" secondItem="Xty-aF-WDv" secondAttribute="trailing" type="default" id="TvG-hv-kxd"/>
+                            <constraint firstItem="ExH-sw-Z1i" firstAttribute="centerX" secondItem="evg-Ah-Kcw" secondAttribute="centerX" type="default" id="VNk-MY-fXM"/>
+                            <constraint firstItem="ExH-sw-Z1i" firstAttribute="centerY" secondItem="Xty-aF-WDv" secondAttribute="centerY" type="default" id="Vim-gy-wQ5"/>
+                            <constraint firstItem="iCc-m2-vR5" firstAttribute="leading" secondItem="Xty-aF-WDv" secondAttribute="leading" constant="157" id="dda-gh-C3S"/>
                             <constraint firstItem="3od-5c-yzI" firstAttribute="trailing" secondItem="Xty-aF-WDv" secondAttribute="trailing" type="default" id="eJ5-5R-zZM"/>
-                            <constraint firstItem="sco-8x-zSx" firstAttribute="leading" secondItem="Xty-aF-WDv" secondAttribute="leading" type="default" id="tDh-lz-AgT"/>
+                            <constraint firstItem="ExH-sw-Z1i" firstAttribute="leading" secondItem="Xty-aF-WDv" secondAttribute="leading" type="default" id="tz5-fd-LV0"/>
                             <constraint firstAttribute="bottom" secondItem="evg-Ah-Kcw" secondAttribute="bottom" constant="88" id="uDo-cI-z18"/>
+                            <constraint firstItem="iCc-m2-vR5" firstAttribute="centerY" secondItem="ExH-sw-Z1i" secondAttribute="centerY" type="default" id="wfp-Rv-pF0"/>
                         </constraints>
                     </view>
                     <connections>
@@ -586,7 +574,6 @@
                         <outlet property="slideNumber" destination="3BV-KX-Qla" id="681-YP-k0T"/>
                         <outlet property="slideView" destination="bZq-z2-OKU" id="yu0-P8-F3v"/>
                         <outlet property="touchPointerImage" destination="ExH-sw-Z1i" id="I0L-0P-zSk"/>
-                        <outlet property="touchPointerScrollView" destination="sco-8x-zSx" id="7B3-1T-ZI8"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Uei-nM-J1S" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -821,6 +808,79 @@
         <image name="timer_clear_btn.png" width="74" height="74"/>
         <image name="timer_start_btn.png" width="74" height="74"/>
     </resources>
+    <classes>
+        <class className="EditableTableViewCell" superclassName="UITableViewCell">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/EditableTableViewCell.h"/>
+        </class>
+        <class className="NSLayoutConstraint" superclassName="NSObject">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/NSLayoutConstraint.h"/>
+        </class>
+        <class className="SWRevealViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/SWRevealViewController.h"/>
+        </class>
+        <class className="newServerViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/newServerViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="save:"/>
+            </relationships>
+        </class>
+        <class className="pinValidation_vc" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/pinValidation_vc.h"/>
+            <relationships>
+                <relationship kind="outlet" name="pinLabel" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="statusLabel" candidateClass="UILabel"/>
+            </relationships>
+        </class>
+        <class className="server_list_vc" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/server_list_vc.h"/>
+            <relationships>
+                <relationship kind="outlet" name="serverTable" candidateClass="UITableView"/>
+            </relationships>
+        </class>
+        <class className="slideShowPreviewTable_vc" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/slideShowPreviewTable_vc.h"/>
+            <relationships>
+                <relationship kind="action" name="startPresentationAction:"/>
+                <relationship kind="outlet" name="optionsTable" candidateClass="UITableView"/>
+            </relationships>
+        </class>
+        <class className="slideShowSwipeInList" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/slideShowSwipeInList.h"/>
+            <relationships>
+                <relationship kind="action" name="stopWatchClear:"/>
+                <relationship kind="action" name="stopWatchStart:"/>
+                <relationship kind="outlet" name="slidesTable" candidateClass="UITableView"/>
+            </relationships>
+        </class>
+        <class className="slideShow_vc" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/slideShow_vc.h"/>
+            <relationships>
+                <relationship kind="action" name="accPointerAction:"/>
+                <relationship kind="action" name="nextSlideAction:"/>
+                <relationship kind="action" name="pointerAction:"/>
+                <relationship kind="action" name="previousSlideAction:"/>
+                <relationship kind="outlet" name="blockingView" candidateClass="UIView"/>
+                <relationship kind="outlet" name="bottomView" candidateClass="UIView"/>
+                <relationship kind="outlet" name="lecturer_notes" candidateClass="UIWebView"/>
+                <relationship kind="outlet" name="movingPointer" candidateClass="UIView"/>
+                <relationship kind="outlet" name="notesView" candidateClass="UIView"/>
+                <relationship kind="outlet" name="pointerBtn" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="revealButtonItem" candidateClass="UIBarButtonItem"/>
+                <relationship kind="outlet" name="secondarySlideView" candidateClass="UIImageView"/>
+                <relationship kind="outlet" name="slideNumber" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="slideView" candidateClass="UIImageView"/>
+                <relationship kind="outlet" name="touchPointerImage" candidateClass="UIImageView"/>
+                <relationship kind="outlet" name="touchPointerScrollView" candidateClass="UIScrollView"/>
+            </relationships>
+        </class>
+        <class className="touchPointer_vc" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/touchPointer_vc.h"/>
+            <relationships>
+                <relationship kind="action" name="dismissModal:"/>
+                <relationship kind="outlet" name="imageView" candidateClass="UIImageView"/>
+            </relationships>
+        </class>
+    </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>

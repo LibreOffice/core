@@ -187,19 +187,34 @@
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
     UITouch *touch = [[event allTouches] anyObject];
-    CGPoint loc = [touch locationInView:self.slideView];
-    if (loc.x >= 0 && loc.x <= self.slideView.frame.origin.x+self.slideView.frame.size.width
-        && loc.y >= 0 && loc.y <= self.slideView.frame.origin.y + self.slideView.frame.size.height)
-        NSLog(@"Touch begins at: %f, %f", loc.x, loc.y);
+    CGPoint loc = [touch locationInView:self.touchPointerImage];
+    if (loc.x >= 0 && loc.x <= self.touchPointerImage.frame.size.width
+        && loc.y >= 0 && loc.y <= self.touchPointerImage.frame.size.height){
+        CGPoint p;
+        p.x = loc.x + self.touchPointerImage.frame.origin.x;
+        p.y = loc.y + self.touchPointerImage.frame.origin.y;
+        self.movingPointer.center = p;
+        [self.movingPointer setHidden:NO];
+    }
 }
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
 {
     UITouch *touch = [[event allTouches] anyObject];
-    CGPoint loc = [touch locationInView:self.slideView];
-    if (loc.x >= 0 && loc.x <= self.slideView.frame.origin.x+self.slideView.frame.size.width
-        && loc.y >= 0 && loc.y <= self.slideView.frame.origin.y + self.slideView.frame.size.height)
-        NSLog(@"Touch at: %f, %f", loc.x, loc.y);
+    CGPoint loc = [touch locationInView:self.touchPointerImage];
+    if (loc.x >= 0 && loc.x <= self.touchPointerImage.frame.size.width
+        && loc.y >= self.movingPointer.frame.size.height && loc.y <= self.touchPointerImage.frame.size.height - self.movingPointer.frame.size.height)
+    {
+        CGPoint p;
+        p.x = loc.x + self.touchPointerImage.frame.origin.x;
+        p.y = loc.y + self.touchPointerImage.frame.origin.y;
+        self.movingPointer.center = p;
+    }
+}
+
+- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    [self.movingPointer setHidden:YES];
 }
 
 #pragma mark - System defaults
@@ -253,8 +268,12 @@
 
     BOOL acc = [[NSUserDefaults standardUserDefaults] boolForKey:KEY_POINTER];
     if (!acc) {
+        // Hook up acc detection
         [self.pointerBtn addTarget:self action:@selector(pointerAction:) forControlEvents:UIControlEventTouchUpOutside];
         [self.pointerBtn addTarget:self action:@selector(pointerAction:) forControlEvents:UIControlEventTouchUpInside];
+    } else {
+        // Disable all calibration functions for acc based pointer
+        self.count = INT_MAX;
     }
 }
 

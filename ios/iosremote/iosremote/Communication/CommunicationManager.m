@@ -49,15 +49,14 @@
 
 - (void) connectionStatusHandler:(NSNotification *)note
 {
-    if ([self.delegate respondsToSelector:@selector(disableSpinner)])
-        [self.delegate disableSpinner];
     if([[note name] isEqualToString:@"connection.status.connected"]){
         if (self.state!=CONNECTED){
-            NSLog(@"Connected");
+            NSLog(@"Connected, waiting for pairing response");
             self.transmitter = [[CommandTransmitter alloc] initWithClient:self.client];
-            self.state = CONNECTED;
         }
     } else if ([[note name] isEqualToString:@"connection.status.disconnected"]){
+        if ([self.delegate respondsToSelector:@selector(disableSpinner)])
+            [self.delegate disableSpinner];
         if (self.state != DISCONNECTED) {
             NSLog(@"Connection Failed");
             self.state = DISCONNECTED;
@@ -118,8 +117,8 @@
     if (self.state == CONNECTING) {
         return;
     } else {
-            self.state = CONNECTING;
             [self.client disconnect];
+            self.state = CONNECTING;
             // initialise it with a given server
             self.client = [[Client alloc]initWithServer:server managedBy:self interpretedBy:self.interpreter];
             self.transmitter = [[CommandTransmitter alloc] initWithClient:self.client];
