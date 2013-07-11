@@ -233,32 +233,13 @@ endef
 
 # YaccTarget class
 
-ifeq ($(ANCIENT_BISON),YES)
-#
-# There are ancient versions of bison out there, which do not handle
-# well .cxx extensions, nor do they support --defines=<file>. The
-# result is that the header is named <foo>.cxx.h instead of <foo>.hxx
-# so we queue a mv to rename the header accordingly.
-# One example is XCode versions 2.x, which are used on OSX ppc
-# machines.
-#
 define gb_YaccTarget__command
 $(call gb_Output_announce,$(2),$(true),YAC,3)
 $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(3)) && \
-	$(gb_YACC) $(T_YACCFLAGS) -d -o $(5) $(1) && mv $(5).h $(4) && touch $(3) )
+	$(gb_YACC) $(T_YACCFLAGS) -v --defines=$(4) -o $(5) $(1) && touch $(3) )
 
 endef
-
-else
-define gb_YaccTarget__command
-$(call gb_Output_announce,$(2),$(true),YAC,3)
-$(call gb_Helper_abbreviate_dirs,\
-	mkdir -p $(dir $(3)) && \
-	$(gb_YACC) $(T_YACCFLAGS) --defines=$(4) -o $(5) $(1) && touch $(3) )
-
-endef
-endif
 
 # ExternalProject class
 
