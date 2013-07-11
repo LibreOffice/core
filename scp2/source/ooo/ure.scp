@@ -598,7 +598,7 @@ Module gid_Module_Root_Ure_Hidden
             gid_Dir_Ure_Share,
             gid_Dir_Ure_Java,
             gid_Dir_Ure_Misc);
-    Files = (auto_ure_ALL
+    Files = (auto_ure_ALL,
             gid_File_ThirdpartylicensereadmeHtml_Ure,
             gid_File_Readme_Ure,
             gid_File_License_Ure,

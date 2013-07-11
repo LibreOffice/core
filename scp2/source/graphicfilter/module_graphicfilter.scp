@@ -26,6 +26,6 @@ Module gid_Module_Optional_Grfflt
     Sortkey = "600";
     ParentID = gid_Module_Optional;
     Default = YES;
-    Files = (auto_graphicfilter_ALL
+    Files = (auto_graphicfilter_ALL,
         gid_File_Share_Registry_Graphicfilter_Xcd);
 End
