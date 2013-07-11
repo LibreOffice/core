@@ -286,8 +286,7 @@ sub check_shortcut_assignments
         if (( exists($allshortcuts->{$shortcut}->{'FileID'}) ) &&
             ( ! exists($allfiles->{$allshortcuts->{$shortcut}->{'FileID'}}) ))
         {
-            # die "\nERROR: FileID $allshortcuts->{$shortcut}->{'FileID'} has no definition at shortcut $shortcut !\n";
-            print "\n\tWARNING: FileID $allshortcuts->{$shortcut}->{'FileID'} has no definition at shortcut $shortcut !\n";
+            die "\nERROR: FileID $allshortcuts->{$shortcut}->{'FileID'} has no definition at shortcut $shortcut !\n";
         }
 
         if (( exists($allshortcuts->{$shortcut}->{'ShortcutID'}) ) &&
