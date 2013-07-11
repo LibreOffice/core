@@ -32,15 +32,16 @@
  *
  *************************************************************************/
 
-import com.sun.star.lang.XMultiComponentFactory;
 import com.sun.star.uno.XComponentContext;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.frame.XComponentLoader;
+import com.sun.star.frame.Desktop;
+import com.sun.star.frame.XDesktop2;
 import com.sun.star.datatransfer.DataFlavor;
 import com.sun.star.datatransfer.UnsupportedFlavorException;
 import com.sun.star.datatransfer.XTransferable;
 import com.sun.star.datatransfer.clipboard.XClipboard;
-import com.sun.star.datatransfer.clipboard.XClipboardNotifier;
+import com.sun.star.datatransfer.clipboard.SystemClipboard;
+import com.sun.star.datatransfer.clipboard.XSystemClipboard;
 import com.sun.star.text.XTextDocument;
 import com.sun.star.uno.AnyConverter;
 
@@ -59,18 +60,11 @@ public class Clipboard
             XComponentContext xOfficeContext =
                 com.sun.star.comp.helper.Bootstrap.bootstrap();
             System.out.println("Connected to a running office ...");
-            // get the service manager from the office context
-            XMultiComponentFactory xServiceManager =
-                xOfficeContext.getServiceManager();
 
             // create a new test document
-            Object oDesktop = xServiceManager.createInstanceWithContext(
-                "com.sun.star.frame.Desktop", xOfficeContext);
-
-            XComponentLoader xCompLoader =UnoRuntime.queryInterface(XComponentLoader.class, oDesktop);
-
+            XDesktop2 xDesktop = Desktop.create(xOfficeContext);
             com.sun.star.lang.XComponent xComponent =
-                xCompLoader.loadComponentFromURL("private:factory/swriter",
+                xDesktop.loadComponentFromURL("private:factory/swriter",
                     "_blank", 0, new com.sun.star.beans.PropertyValue[0]);
             {
             XTextDocument xDoc =UnoRuntime.queryInterface(XTextDocument.class, xComponent);
@@ -93,21 +87,15 @@ public class Clipboard
             }
             // test document will be closed later
 
-            Object oClipboard = xServiceManager.createInstanceWithContext(
-                "com.sun.star.datatransfer.clipboard.SystemClipboard",
-                xOfficeContext);
-
-            XClipboard xClipboard = UnoRuntime.queryInterface(XClipboard.class, oClipboard);
+            XSystemClipboard xClipboard = SystemClipboard.create(xOfficeContext);
 
             //---------------------------------------------------
             // registering as clipboard listener
             //---------------------------------------------------
 
-            XClipboardNotifier xClipNotifier = UnoRuntime.queryInterface(XClipboardNotifier.class, oClipboard);
-
             ClipboardListener aClipListener= new ClipboardListener();
 
-            xClipNotifier.addClipboardListener(aClipListener);
+            xClipboard.addClipboardListener(aClipListener);
 
             // Read ClipBoard
             readClipBoard(xClipboard);
@@ -145,7 +133,7 @@ public class Clipboard
             //---------------------------------------------------
             // unregistering as clipboard listener
             //---------------------------------------------------
-            xClipNotifier.removeClipboardListener(aClipListener);
+            xClipboard.removeClipboardListener(aClipListener);
 
             // close test document
             com.sun.star.util.XCloseable xCloseable = UnoRuntime.queryInterface(com.sun.star.util.XCloseable.class,
