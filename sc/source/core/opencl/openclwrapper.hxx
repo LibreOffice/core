@@ -14,7 +14,11 @@
 #include <formula/opcode.hxx>
 #include <sal/detail/log.h>
 #include <cassert>
+#ifdef __APPLE__
+#include <OpenCL/cl.h>
+#else
 #include <CL/cl.h>
+#endif
 
 #if defined(_MSC_VER)
 #ifndef strcasecmp
