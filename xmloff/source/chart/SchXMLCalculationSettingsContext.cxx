@@ -53,7 +53,7 @@ SchXMLCalculationSettingsContext::SchXMLCalculationSettingsContext( SvXMLImport&
         {
             util::DateTime aNullDate;
             const OUString sValue = xAttrList->getValueByIndex( i );
-            ::sax::Converter::convertDateTime(aNullDate, sValue);
+            ::sax::Converter::parseDateTime(aNullDate, 0, sValue);
             m_aNullDate <<= aNullDate;
         }
     }

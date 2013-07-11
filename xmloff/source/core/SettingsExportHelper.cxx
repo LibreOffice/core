@@ -267,7 +267,7 @@ void XMLSettingsExportHelper::exportDateTime(const util::DateTime& aValue, const
     m_rContext.AddAttribute( XML_NAME, rName );
     m_rContext.AddAttribute( XML_TYPE, XML_DATETIME );
     OUStringBuffer sBuffer;
-	::sax::Converter::convertDateTime(sBuffer, aValue);
+    ::sax::Converter::convertDateTime(sBuffer, aValue, 0);
     m_rContext.StartElement( XML_CONFIG_ITEM, sal_True );
     m_rContext.Characters( sBuffer.makeStringAndClear() );
     m_rContext.EndElement( sal_False );

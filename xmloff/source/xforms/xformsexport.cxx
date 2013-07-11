@@ -693,7 +693,7 @@ void xforms_formatTime( OUStringBuffer& aBuffer, const com::sun::star::util::Tim
 
 void xforms_formatDateTime( OUStringBuffer& aBuffer, const util::DateTime& aDateTime )
 {
-    ::sax::Converter::convertDateTime( aBuffer, aDateTime );
+    ::sax::Converter::convertDateTime(aBuffer, aDateTime, 0);
 }
 
 OUString xforms_whitespace( const Any& rAny )
