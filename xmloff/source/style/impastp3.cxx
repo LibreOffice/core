@@ -137,6 +137,7 @@ OUString SvXMLAutoStylePoolParentP_Impl::Find( const XMLFamilyData_Impl& rFamily
 {
     OUString sName;
     vector< XMLPropertyState>::size_type nItems = rProperties.size();
+
     size_t nCount = maPropertiesList.size();
     for( size_t i = 0; i < nCount; i++ )
     {
