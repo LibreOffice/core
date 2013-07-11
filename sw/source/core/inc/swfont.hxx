@@ -182,10 +182,10 @@ public:
     void SetRightBorder( const editeng::SvxBorderLine* pRightBorder );
     void SetLeftBorder( const editeng::SvxBorderLine* pLeftBorder );
 
-    const boost::optional<editeng::SvxBorderLine>& GetTopBorder() { return m_aTopBorder; }
-    const boost::optional<editeng::SvxBorderLine>& GetBottomBorder() { return m_aBottomBorder; }
-    const boost::optional<editeng::SvxBorderLine>& GetRightBorder() { return m_aRightBorder; }
-    const boost::optional<editeng::SvxBorderLine>& GetLeftBorder() { return m_aLeftBorder; }
+    const boost::optional<editeng::SvxBorderLine>& GetTopBorder() const { return m_aTopBorder; }
+    const boost::optional<editeng::SvxBorderLine>& GetBottomBorder() const { return m_aBottomBorder; }
+    const boost::optional<editeng::SvxBorderLine>& GetRightBorder() const { return m_aRightBorder; }
+    const boost::optional<editeng::SvxBorderLine>& GetLeftBorder() const { return m_aLeftBorder; }
 
     inline void ChkMagic( ViewShell *pSh, sal_uInt8 nWhich )
         { if( !aSub[ nWhich ].pMagic ) GoMagic( pSh, nWhich ); }

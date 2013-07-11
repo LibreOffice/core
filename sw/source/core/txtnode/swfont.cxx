@@ -452,10 +452,6 @@ void SwFont::SetDiffFnt( const SfxItemSet *pAttrSet,
 
 SwFont::SwFont()
     : pBackColor(0)
-    , m_aTopBorder(boost::none)
-    , m_aBottomBorder(boost::none)
-    , m_aRightBorder(boost::none)
-    , m_aLeftBorder(boost::none)
     , nActual(SW_LATIN)
 {
 }
