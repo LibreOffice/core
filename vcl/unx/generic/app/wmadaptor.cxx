@@ -984,23 +984,12 @@ void WMAdaptor::setWMName( X11SalFrame* pFrame, const String& rWMName ) const
     OString aTitle(OUStringToOString(rWMName,
         osl_getThreadTextEncoding()));
 
-    /* FIXME-BCP47: what slumbering dogs may we wake up here? */
     OString aWMLocale;
     rtl_Locale* pLocale = NULL;
     osl_getProcessLocale( &pLocale );
     if( pLocale )
     {
-        OUString aLocaleString( pLocale->Language );
-        OUString aCountry( pLocale->Country );
-        OUString aVariant( pLocale->Variant );
-
-        if( !aCountry.isEmpty() )
-        {
-            aLocaleString += OUString("_");
-            aLocaleString += aCountry;
-        }
-        if( !aVariant.isEmpty() )
-            aLocaleString += aVariant;
+        OUString aLocaleString( LanguageTag( *pLocale).getGlibcLocaleString( OUString()));
         aWMLocale = OUStringToOString( aLocaleString, RTL_TEXTENCODING_ISO_8859_1 );
     }
     else
