@@ -33,6 +33,7 @@
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/ui/dialogs/ControlActions.hpp>
 #include <com/sun/star/uno/Any.hxx>
+#include <comphelper/string.hxx>
 #include <osl/mutex.hxx>
 #include "unx/gtk/gtkinst.hxx"
 
@@ -794,6 +795,25 @@ uno::Sequence<rtl::OUString> SAL_CALL SalGtkFilePicker::getFiles() throw( uno::R
     return aFiles;
 }
 
+namespace
+{
+
+bool lcl_matchFilter( const rtl::OUString& rFilter, const rtl::OUString& rExt )
+{
+    const int nCount = comphelper::string::getTokenCount( rFilter, ';' );
+
+    for ( int n = 0; n != nCount; ++n )
+    {
+        const rtl::OUString aToken = comphelper::string::getToken( rFilter, n, ';' );
+        if ( aToken == rExt )
+            return true;
+    }
+
+    return false;
+}
+
+}
+
 uno::Sequence<rtl::OUString> SAL_CALL SalGtkFilePicker::getSelectedFiles() throw( uno::RuntimeException )
 {
     SolarMutexGuard g;
@@ -856,7 +876,7 @@ uno::Sequence<rtl::OUString> SAL_CALL SalGtkFilePicker::getSelectedFiles() throw
                               ++aListIter
                         )
                         {
-                            if( aListIter->getFilter().equalsIgnoreAsciiCase( aStarDot+sExtension ) )
+                            if( lcl_matchFilter( aListIter->getFilter(), aStarDot+sExtension ) )
                             {
                                 if( aNewFilter.isEmpty() )
                                     aNewFilter = aListIter->getTitle();
