@@ -47,12 +47,12 @@ Module gid_Module_Prg_Base_Bin
 End
 
 /* This could be moved to a std location */
-STD_LIB_FILE(gid_File_Lib_FirebirdSdbc, firebird-sdbc)
+STD_LIB_FILE(gid_File_Lib_FirebirdSdbc, firebird_sdbc)
 
 File gid_File_FirebirdSdbc_Rdb
     TXT_FILE_BODY;
     Dir = gid_Brand_Dir_Program_Services;
-    Name = "firebird-sdbc.rdb";
+    Name = "firebird_sdbc.rdb";
     Styles = (PACKED);
 End
 
