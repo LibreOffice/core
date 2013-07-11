@@ -1,9 +1,7 @@
 package org.libreoffice.impressremote;
 
 import android.content.ContentResolver;
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.NavUtils;
 import android.webkit.WebView;
 
 import com.actionbarsherlock.app.SherlockActivity;
@@ -50,10 +48,9 @@ public class LicensesActivity extends SherlockActivity {
             default:
                 return super.onOptionsItemSelected(aMenuItem);
         }
-        }
+    }
 
     private void navigateUp() {
-        Intent aIntent = new Intent(this, ComputersActivity.class);
-        NavUtils.navigateUpTo(this, aIntent);
+        finish();
     }
 }
