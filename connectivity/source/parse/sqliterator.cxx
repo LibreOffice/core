@@ -1903,7 +1903,7 @@ void OSQLParseTreeIterator::setGroupByColumnName(const OUString & rColumnName, O
     }
 
 #ifdef SQL_TEST_PARSETREEITERATOR
-    cout << "OSQLParseTreeIterator::setOrderByColumnName: "
+    cout << "OSQLParseTreeIterator::setGroupByColumnName: "
          << (const char *) rColumnName << ", "
          << (const char *) rTableRange << ", "
          << (bAscending ? "true" : "false")
