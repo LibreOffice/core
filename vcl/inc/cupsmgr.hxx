@@ -47,9 +47,9 @@ class CUPSManager : public PrinterInfoManager
     boost::unordered_map< OUString, PPDContext, OUStringHash > m_aDefaultContexts;
 
     OString                                                m_aUser;
-    // this is a security risk, but the CUPS API demands
-    // to deliver a pointer to a static buffer containing
-    // the password, so this cannot be helped
+    /** this is a security risk, but the CUPS API demands
+        to deliver a pointer to a static buffer containing
+        the password, so this cannot be helped*/
     OString                                                m_aPassword;
 
     osl::Mutex                                                  m_aCUPSMutex;
@@ -67,13 +67,13 @@ class CUPSManager : public PrinterInfoManager
     void runDests();
     OString threadedCupsGetPPD(const char* pPrinter);
 public:
-    // public for stub
+    /// public for stub
     static void runDestThread(void* pMgr);
 
     static CUPSManager* tryLoadCUPS();
 
+    /// wraps cupsGetPPD, so unlink after use !
     const PPDParser* createCUPSParser( const OUString& rPrinter );
-    // wraps cupsGetPPD, so unlink after use !
 
     const char* authenticateUser( const char* );
 
@@ -81,10 +81,10 @@ public:
     virtual int endSpool( const OUString& rPrinterName, const OUString& rJobTitle, FILE* pFile, const JobData& rDocumentJobData, bool bBanner );
     virtual void setupJobContextData( JobData& rData );
 
-    // changes the info about a named printer
+    /// changes the info about a named printer
     virtual void changePrinterInfo( const OUString& rPrinter, const PrinterInfo& rNewInfo );
 
-    // check if the printer configuration has changed
+    /// check if the printer configuration has changed
     virtual bool checkPrintersChanged( bool bWait );
 
     // members for administration (->padmin)

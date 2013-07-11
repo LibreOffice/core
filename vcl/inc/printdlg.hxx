@@ -128,7 +128,7 @@ namespace vcl
             FixedText*                              mpNupOrderTxt;
             ListBox*                                mpNupOrderBox;
             ShowNupOrderWindow*                     mpNupOrderWin;
-            // border around each page
+            /// border around each page
             CheckBox*                               mpBorderCB;
 
             void setupLayout();
@@ -215,7 +215,7 @@ namespace vcl
         Size                                    maNupPortraitSize;
         Size                                    maNupLandscapeSize;
 
-        // internal, used for automatic Nup-Portrait/landscape
+        /// internal, used for automatic Nup-Portrait/landscape
         Size                                    maFirstPageSize;
 
         OUString                           maPrintToFileText;
