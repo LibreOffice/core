@@ -1,0 +1,30 @@
+--- misc/build/JLanguageTool-1.7.0/src/java/org/languagetool/openoffice/OOoAboutDialog.java	2013-07-11 13:33:26.681387525 +0100
++++ misc/build/JLanguageTool-1.7.0/src/java/org/languagetool/openoffice/OOoAboutDialog.java	2013-07-11 13:34:46.666424549 +0100
+@@ -19,6 +19,7 @@
+ package org.languagetool.openoffice;
+ 
+ import com.sun.star.awt.Rectangle;
++import com.sun.star.awt.MessageBoxType;
+ import com.sun.star.awt.XMessageBox;
+ import com.sun.star.awt.XMessageBoxFactory;
+ import com.sun.star.awt.XWindowPeer;
+@@ -49,16 +50,14 @@
+         .getString("guiMenuAbout"));
+     final XMessageBoxFactory messageBoxFactory = (XMessageBoxFactory) UnoRuntime
+         .queryInterface(XMessageBoxFactory.class, winPeer.getToolkit());
+-    final Rectangle messageBoxRectangle = new Rectangle();
+     final XMessageBox box = messageBoxFactory
+         .createMessageBox(
+             winPeer,
+-            messageBoxRectangle,
+-            "infobox",
++            MessageBoxType.INFOBOX,
+             0,
+             aboutDialogTitle,
+             getAboutText());
+     box.execute();
+   }
+   
+-}
+\ No newline at end of file
++}
