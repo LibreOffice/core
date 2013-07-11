@@ -9818,7 +9818,7 @@ if test \( -z "$with_opencl_sdk" -o "$with_opencl_sdk" = yes \) -a $_os = Darwin
     OPENCL_CFLAGS=
     OPENCL_LIBS="-framework OpenCL"
     AC_DEFINE(HAVE_FEATURE_OPENCL)
-elif test "z$with_opencl_sdk" = "z"; then
+elif test -z "$with_opencl_sdk" -o "$with_opencl_sdk" = no; then
     AC_MSG_RESULT([no])
 else
     if test -d "$with_opencl_sdk/include"; then
