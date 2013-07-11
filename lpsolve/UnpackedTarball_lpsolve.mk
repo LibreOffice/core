@@ -15,6 +15,7 @@ $(eval $(call gb_UnpackedTarball_set_patchlevel,lpsolve,3))
 
 ifeq ($(OS_FOR_BUILD),WNT)
 
+$(eval $(call gb_UnpackedTarball_set_patchflags,lpsolve,--binary))
 $(eval $(call gb_UnpackedTarball_add_patches,lpsolve,\
 	lpsolve/lp_solve_5.5-windows.patch \
 ))

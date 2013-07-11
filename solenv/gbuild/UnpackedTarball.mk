@@ -143,7 +143,7 @@ $(call gb_Helper_abbreviate_dirs,\
 			for p in $(UNPACKED_PATCHES); do \
 				pl=$(UNPACKED_PATCHLEVEL); \
 				s=$${p##*.}; case "$$s" in [0-9]$(CLOSE_PAREN) pl="$$s"; ;; esac ; \
-				$(GNUPATCH) -f -s "-p$$pl" --fuzz=0 < "$$p"; \
+				$(GNUPATCH) $(UNPACKED_PATCHFLAGS) -f -s "-p$$pl" --fuzz=0 < "$$p"; \
 				if test "$$?" -ne 0; then echo "Patch FAILED: $$p"; exit 1; fi;\
 			done && \
 		) \
@@ -195,6 +195,7 @@ $(call gb_UnpackedTarball_get_target,$(1)) : UNPACKED_FILES :=
 $(call gb_UnpackedTarball_get_target,$(1)) : UNPACKED_FIX_EOL :=
 $(call gb_UnpackedTarball_get_target,$(1)) : UNPACKED_PATCHES :=
 $(call gb_UnpackedTarball_get_target,$(1)) : UNPACKED_PATCHLEVEL := $(gb_UnpackedTarball_PATCHLEVEL_DEFAULT)
+$(call gb_UnpackedTarball_get_target,$(1)) : UNPACKED_PATCHFLAGS :=
 $(call gb_UnpackedTarball_get_target,$(1)) : UNPACKED_POST_ACTION :=
 $(call gb_UnpackedTarball_get_target,$(1)) : UNPACKED_PRE_ACTION :=
 
@@ -247,6 +248,14 @@ endef
 # gb_UnpackedTarball_set_patchlevel unpacked level
 define gb_UnpackedTarball_set_patchlevel
 $(call gb_UnpackedTarball_get_target,$(1)) : UNPACKED_PATCHLEVEL := $(2)
+
+endef
+
+# Add patch flags to be passed to patch for all patches cf. fdo#66826
+#
+# gb_UnpackedTarball_set_patchlevel unpacked level
+define gb_UnpackedTarball_set_patchflags
+$(call gb_UnpackedTarball_get_target,$(1)) : UNPACKED_PATCHFLAGS := $(2)
 
 endef
 
