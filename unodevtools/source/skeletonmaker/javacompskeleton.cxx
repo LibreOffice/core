@@ -402,6 +402,7 @@ void generateXCompatibilityNamesBodies(std::ostream& o)
         "toString(\n                        xNameAccess.getByName(sLocale));\n\n"
         "                    com.sun.star.lang.Locale aLocale = \n"
         "                        new com.sun.star.lang.Locale();\n\n"
+        /* FIXME-BCP47: this will break. */
         "                    String tokens[] = sLocale.split(\"-\");\n"
         "                    int nToken = tokens.length;\n"
         "                    if (nToken >= 1) aLocale.Language = tokens[0];\n"
