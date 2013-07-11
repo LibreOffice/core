@@ -325,6 +325,7 @@ public:
 
     /** Set the width in Twips */
     void            SetWidth( long nWidth );
+    long            GetWidth() const { return m_nWidth; }
     void            SetNone( const XubString& sNone );
 
     using ListBox::InsertEntry;
@@ -356,7 +357,7 @@ public:
     inline FieldUnit    GetSourceUnit() const { return eSourceUnit; }
 
     void            SetColor( const Color& rColor );
-    inline Color    GetColor( void ) const;
+    Color           GetColor() const { return aColor; }
 
 protected:
 
@@ -387,11 +388,6 @@ inline void LineListBox::SetColor( const Color& rColor )
     aColor = rColor;
 
     UpdateEntries( m_nWidth );
-}
-
-inline Color LineListBox::GetColor( void ) const
-{
-    return aColor;
 }
 
 const Color& LineListBox::GetPaintColor( void ) const

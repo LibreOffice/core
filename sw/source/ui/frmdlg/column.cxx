@@ -731,8 +731,13 @@ IMPL_LINK( SwColumnPage, UpdateColMgr, void *, /*pField*/ )
         m_pLinePosLbl->Enable( bEnable );
         m_pLinePosDLB->Enable( bEnable );
 
-        m_pLineTypeDLB->SetWidth( nLineWidth );
-        m_pLineTypeDLB->SetColor( m_pLineColorDLB->GetSelectEntryColor( ) );
+        //fdo#66815 if the values are going to be the same, don't update
+        //them to avoid the listbox selection resetting
+        if (nLineWidth != m_pLineTypeDLB->GetWidth())
+            m_pLineTypeDLB->SetWidth(nLineWidth);
+        Color aColor(m_pLineColorDLB->GetSelectEntryColor());
+        if (aColor != m_pLineTypeDLB->GetColor())
+            m_pLineTypeDLB->SetColor(aColor);
     }
     else
     {
