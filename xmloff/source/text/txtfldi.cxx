@@ -1114,7 +1114,7 @@ void XMLTimeFieldImportContext::ProcessAttribute(
                 bTimeOK = sal_True;
             }
 
-            if (::sax::Converter::convertDateTime(aDateTimeValue, sAttrValue))
+            if (::sax::Converter::parseDateTime(aDateTimeValue, 0, sAttrValue))
             {
                 bTimeOK = sal_True;
             }
@@ -1255,7 +1255,7 @@ void XMLDateFieldImportContext::ProcessAttribute(
                 bTimeOK = sal_True;
             }
 
-            if (::sax::Converter::convertDateTime(aDateTimeValue, sAttrValue))
+            if (::sax::Converter::parseDateTime(aDateTimeValue, 0, sAttrValue))
             {
                 bTimeOK = sal_True;
             }
@@ -3820,7 +3820,7 @@ void XMLAnnotationImportContext::PrepareField(
     xPropertySet->setPropertyValue(sPropertyInitials, makeAny(sInitials));
 
     util::DateTime aDateTime;
-    if (::sax::Converter::convertDateTime(aDateTime,
+    if (::sax::Converter::parseDateTime(aDateTime, 0,
                                             aDateBuffer.makeStringAndClear()))
     {
         /*

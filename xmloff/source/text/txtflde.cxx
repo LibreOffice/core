@@ -1745,7 +1745,7 @@ void XMLTextFieldExport::ExportFieldHelper(
         util::DateTime aDate( GetDateTimeProperty(sPropertyDateTimeValue, rPropSet) );
         {
             OUStringBuffer aBuffer;
-            ::sax::Converter::convertDateTime(aBuffer, aDate, true);
+            ::sax::Converter::convertDateTime(aBuffer, aDate, 0, true);
             SvXMLElementExport aDateElem( GetExport(), XML_NAMESPACE_DC,
                                               XML_DATE, sal_True,
                                               sal_False );
@@ -2652,7 +2652,7 @@ void XMLTextFieldExport::ProcessDateTime(enum XMLTokenEnum eName,
     }
 
     // date/time value
-    ::sax::Converter::convertDateTime(aBuffer, aDateTime);
+    ::sax::Converter::convertDateTime(aBuffer, aDateTime, 0);
 
     // output attribute
     ProcessString(eName, aBuffer.makeStringAndClear(), sal_True, nPrefix);

@@ -428,7 +428,7 @@ sal_Bool SvXMLUnitConverter::convertDateTime( double& fDateTime,
                             const OUString& rString, const com::sun::star::util::Date& aTempNullDate)
 {
     com::sun::star::util::DateTime aDateTime;
-    sal_Bool bSuccess = ::sax::Converter::convertDateTime(aDateTime, rString);
+    bool bSuccess = ::sax::Converter::parseDateTime(aDateTime, 0, rString);
 
     if (bSuccess)
     {

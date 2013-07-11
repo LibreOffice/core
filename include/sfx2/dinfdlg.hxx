@@ -285,9 +285,11 @@ private:
     CustomPropertyLine*             m_pLine;
 
 public:
+    sal_Int16 m_TZ;
+
     inline CustomPropertiesDateField(
         Window* pParent, const ResId& rResId, CustomPropertyLine* pLine ) :
-            DateField( pParent, rResId ), m_pLine( pLine ) {}
+            DateField( pParent, rResId ), m_pLine( pLine ), m_TZ(-1) {}
 
     inline CustomPropertyLine*      GetLine() const { return m_pLine; }
 };
@@ -297,9 +299,11 @@ private:
     CustomPropertyLine*             m_pLine;
 
 public:
+    bool m_isUTC;
+
     inline CustomPropertiesTimeField(
         Window* pParent, const ResId& rResId, CustomPropertyLine* pLine ) :
-            TimeField( pParent, rResId ), m_pLine( pLine ) {}
+            TimeField( pParent, rResId ), m_pLine( pLine ), m_isUTC(false) {}
 
     inline CustomPropertyLine*      GetLine() const { return m_pLine; }
 };

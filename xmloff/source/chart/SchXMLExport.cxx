@@ -1212,7 +1212,7 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument >&
         SvXMLElementExport aSet( mrExport, XML_NAMESPACE_TABLE, XML_CALCULATION_SETTINGS, sal_True, sal_True );
         {
             OUStringBuffer sBuffer;
-            ::sax::Converter::convertDateTime(sBuffer, aNullDate);
+            ::sax::Converter::convertDateTime(sBuffer, aNullDate, 0);
             mrExport.AddAttribute( XML_NAMESPACE_TABLE,XML_DATE_VALUE,sBuffer.makeStringAndClear());
             SvXMLElementExport aNull( mrExport, XML_NAMESPACE_TABLE, XML_NULL_DATE, sal_True, sal_True );
         }

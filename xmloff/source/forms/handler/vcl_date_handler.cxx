@@ -66,7 +66,7 @@ namespace xmloff
         aDateTime.Year = aVCLDate.GetYear();
 
         OUStringBuffer aBuffer;
-        ::sax::Converter::convertDateTime( aBuffer, aDateTime, false );
+        ::sax::Converter::convertDateTime( aBuffer, aDateTime, 0, false );
         return aBuffer.makeStringAndClear();
     }
 
@@ -76,7 +76,7 @@ namespace xmloff
         sal_Int32 nVCLDate(0);
 
         DateTime aDateTime;
-        if (::sax::Converter::convertDateTime( aDateTime, i_attributeValue ))
+        if (::sax::Converter::parseDateTime( aDateTime, 0, i_attributeValue ))
         {
             ::Date aVCLDate( aDateTime.Day, aDateTime.Month, aDateTime.Year );
             nVCLDate = aVCLDate.GetDate();

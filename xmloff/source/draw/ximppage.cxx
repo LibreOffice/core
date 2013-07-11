@@ -192,7 +192,7 @@ void DrawAnnotationContext::EndElement()
         mxAnnotation->setAuthor( maAuthorBuffer.makeStringAndClear() );
 
         util::DateTime aDateTime;
-        if (::sax::Converter::convertDateTime(aDateTime,
+        if (::sax::Converter::parseDateTime(aDateTime, 0,
                 maDateBuffer.makeStringAndClear()))
         {
             mxAnnotation->setDateTime(aDateTime);

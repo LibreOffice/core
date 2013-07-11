@@ -54,6 +54,8 @@
 #include "com/sun/star/xml/xpath/XPathAPI.hpp"
 #include "com/sun/star/util/Date.hpp"
 #include "com/sun/star/util/Time.hpp"
+#include "com/sun/star/util/DateWithTimeZone.hpp"
+#include "com/sun/star/util/DateTimeWithTimeZone.hpp"
 #include "com/sun/star/util/Duration.hpp"
 
 #include "SfxDocumentMetaData.hxx"
@@ -529,10 +531,10 @@ OUString SAL_CALL getNameSpace(const char* i_qname) throw ()
 
 bool SAL_CALL
 textToDateOrDateTime(css::util::Date & io_rd, css::util::DateTime & io_rdt,
-        bool & o_rIsDateTime, OUString i_text) throw ()
+        bool & o_rIsDateTime, sal_Int16 & o_rTimeZone, OUString i_text) throw ()
 {
-    if (::sax::Converter::convertDateOrDateTime(
-                io_rd, io_rdt, o_rIsDateTime, i_text)) {
+    if (::sax::Converter::parseDateOrDateTime(
+                &io_rd, io_rdt, o_rIsDateTime, &o_rTimeZone, i_text)) {
         return true;
     } else {
         DBG_WARNING1("SfxDocumentMetaData: invalid date: %s",
@@ -545,7 +547,7 @@ textToDateOrDateTime(css::util::Date & io_rd, css::util::DateTime & io_rdt,
 bool SAL_CALL
 textToDateTime(css::util::DateTime & io_rdt, OUString i_text) throw ()
 {
-    if (::sax::Converter::convertDateTime(io_rdt, i_text)) {
+    if (::sax::Converter::parseDateTime(io_rdt, 0, i_text)) {
         return true;
     } else {
         DBG_WARNING1("SfxDocumentMetaData: invalid date: %s",
@@ -566,11 +568,12 @@ textToDateTimeDefault(OUString i_text) throw ()
 
 // convert date to string
 OUString SAL_CALL
-dateToText(css::util::Date const& i_rd) throw ()
+dateToText(css::util::Date const& i_rd,
+           sal_Int16 const*const pTimeZone = 0) throw ()
 {
     if (isValidDate(i_rd)) {
         OUStringBuffer buf;
-        ::sax::Converter::convertDate(buf, i_rd);
+        ::sax::Converter::convertDate(buf, i_rd, pTimeZone);
         return buf.makeStringAndClear();
     } else {
         return OUString();
@@ -580,11 +583,12 @@ dateToText(css::util::Date const& i_rd) throw ()
 
 // convert date/time to string
 OUString SAL_CALL
-dateTimeToText(css::util::DateTime const& i_rdt) throw ()
+dateTimeToText(css::util::DateTime const& i_rdt,
+               sal_Int16 const*const pTimeZone = 0) throw ()
 {
     if (isValidDateTime(i_rdt)) {
         OUStringBuffer buf;
-        ::sax::Converter::convertDateTime(buf, i_rdt, true);
+        ::sax::Converter::convertDateTime(buf, i_rdt, pTimeZone, true);
         return buf.makeStringAndClear();
     } else {
         return OUString();
@@ -959,6 +963,18 @@ propsToStrings(css::uno::Reference<css::beans::XPropertySet> const & i_xPropSet)
             values.push_back(dateToText(d));
             as.push_back(std::make_pair(vt,
                 OUString("date")));
+        } else if (type == ::cppu::UnoType<css::util::DateTimeWithTimeZone>::get()) {
+            css::util::DateTimeWithTimeZone dttz;
+            any >>= dttz;
+            values.push_back(dateTimeToText(dttz.DateTimeInTZ, &dttz.TimeZone));
+            as.push_back(std::make_pair(vt,
+                OUString("date")));
+        } else if (type == ::cppu::UnoType<css::util::DateWithTimeZone>::get()) {
+            css::util::DateWithTimeZone dtz;
+            any >>= dtz;
+            values.push_back(dateToText(dtz.DateInTZ, &dtz.TimeZone));
+            as.push_back(std::make_pair(vt,
+                OUString("date")));
         } else if (type == ::cppu::UnoType<css::util::Time>::get()) {
             // #i97029#: replaced by Duration
             // Time is supported for backward compatibility with OOo 3.x, x<=2
@@ -1292,11 +1308,20 @@ void SAL_CALL SfxDocumentMetaData::init(
             bool isDateTime;
             css::util::Date d;
             css::util::DateTime dt;
-            if (textToDateOrDateTime(d, dt, isDateTime, text)) {
+            sal_Int16 nTimeZone(-1);
+            if (textToDateOrDateTime(d, dt, isDateTime, nTimeZone, text)) {
                 if (isDateTime) {
-                    any <<= dt;
+                    if (-1 == nTimeZone) {
+                        any <<= dt;
+                    } else {
+                        any <<= css::util::DateTimeWithTimeZone(dt, nTimeZone);
+                    }
                 } else {
-                    any <<= d;
+                    if (-1 == nTimeZone) {
+                        any <<= d;
+                    } else {
+                        any <<= css::util::DateWithTimeZone(d, nTimeZone);
+                    }
                 }
             } else {
                 DBG_WARNING1("SfxDocumentMetaData: invalid date: %s",
@@ -2271,19 +2296,21 @@ void SfxDocumentMetaData::createUserDefined()
     // values of allowed types
     if ( !m_xUserDefined.is() )
     {
-        css::uno::Sequence<css::uno::Type> types(11);
-        types[0] = ::cppu::UnoType<bool>::get();
-        types[1] = ::cppu::UnoType< OUString>::get();
-        types[2] = ::cppu::UnoType<css::util::DateTime>::get();
-        types[3] = ::cppu::UnoType<css::util::Date>::get();
-        types[4] = ::cppu::UnoType<css::util::Duration>::get();
-        types[5] = ::cppu::UnoType<float>::get();
-        types[6] = ::cppu::UnoType<double>::get();
-        types[7] = ::cppu::UnoType<sal_Int16>::get();
-        types[8] = ::cppu::UnoType<sal_Int32>::get();
-        types[9] = ::cppu::UnoType<sal_Int64>::get();
+        css::uno::Sequence<css::uno::Type> types(13);
+        types[ 0] = ::cppu::UnoType<bool>::get();
+        types[ 1] = ::cppu::UnoType< OUString>::get();
+        types[ 2] = ::cppu::UnoType<css::util::DateTime>::get();
+        types[ 3] = ::cppu::UnoType<css::util::Date>::get();
+        types[ 4] = ::cppu::UnoType<css::util::DateTimeWithTimeZone>::get();
+        types[ 5] = ::cppu::UnoType<css::util::DateWithTimeZone>::get();
+        types[ 6] = ::cppu::UnoType<css::util::Duration>::get();
+        types[ 7] = ::cppu::UnoType<float>::get();
+        types[ 8] = ::cppu::UnoType<double>::get();
+        types[ 9] = ::cppu::UnoType<sal_Int16>::get();
+        types[10] = ::cppu::UnoType<sal_Int32>::get();
+        types[11] = ::cppu::UnoType<sal_Int64>::get();
         // Time is supported for backward compatibility with OOo 3.x, x<=2
-        types[10] = ::cppu::UnoType<css::util::Time>::get();
+        types[12] = ::cppu::UnoType<css::util::Time>::get();
         // #i94175#:  ODF allows empty user-defined property names!
         m_xUserDefined.set(
             css::beans::PropertyBag::createWithTypes( m_xContext, types, sal_True/*AllowEmptyPropertyName*/, sal_False/*AutomaticAddition*/ ),

@@ -484,7 +484,7 @@ void XMLRedlineExport::ExportChangeInfo(
     aAny >>= aDateTime;
     {
         OUStringBuffer sBuf;
-        ::sax::Converter::convertDateTime(sBuf, aDateTime);
+        ::sax::Converter::convertDateTime(sBuf, aDateTime, 0);
         SvXMLElementExport aDateElem( rExport, XML_NAMESPACE_DC,
                                           XML_DATE, sal_True,
                                           sal_False );
@@ -525,7 +525,7 @@ void XMLRedlineExport::ExportChangeInfo(
             util::DateTime aDateTime;
             rVal.Value >>= aDateTime;
             OUStringBuffer sBuf;
-            ::sax::Converter::convertDateTime(sBuf, aDateTime);
+            ::sax::Converter::convertDateTime(sBuf, aDateTime, 0);
             rExport.AddAttribute(XML_NAMESPACE_OFFICE, XML_CHG_DATE_TIME,
                                  sBuf.makeStringAndClear());
         }
