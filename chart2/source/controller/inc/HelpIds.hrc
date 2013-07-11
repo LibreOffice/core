@@ -139,8 +139,6 @@
 #define HID_SCH_STATISTIK_SHOW_POSITIVE                     "CHART2_HID_SCH_STATISTIK_SHOW_POSITIVE"
 #define HID_SCH_STATISTIK_SHOW_NEGATIVE                     "CHART2_HID_SCH_STATISTIK_SHOW_NEGATIVE"
 
-#define HID_INSERT_GRIDS                                    "CHART2_HID_INSERT_GRIDS"
-
 #define HID_DIAGRAM_TYPE                                    "CHART2_HID_DIAGRAM_TYPE"
 #define HID_3D_VIEW                                         "CHART2_HID_3D_VIEW"
 #define HID_DIAGRAM_DATA                                    "CHART2_HID_DIAGRAM_DATA"

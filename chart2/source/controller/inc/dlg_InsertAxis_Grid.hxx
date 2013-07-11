@@ -56,7 +56,7 @@ protected:
     CheckBox* m_pCbSecondaryZ;
 
 public:
-    SchAxisDlg( Window* pParent, const InsertAxisOrGridDialogData& rInput, sal_Bool bAxisDlg=true );
+    SchAxisDlg(Window* pParent, const InsertAxisOrGridDialogData& rInput, bool bAxisDlg=true);
     virtual ~SchAxisDlg();
 
     void getResult( InsertAxisOrGridDialogData& rOutput );

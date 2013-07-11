@@ -50,16 +50,15 @@ InsertAxisOrGridDialogData::InsertAxisOrGridDialogData()
 //
 //==============================
 
-SchAxisDlg::SchAxisDlg( Window* pWindow
-                       , const InsertAxisOrGridDialogData& rInput, sal_Bool bAxisDlg )
-        : ModalDialog(pWindow,
-              bAxisDlg ?
-                  OString("InsertAxisDialog") :
-                  OString("InsertGridDialog"),
-              bAxisDlg ?
-                  OUString("modules/schart/ui/insertaxisdlg.ui") :
-                  OUString("modules/schart/ui/insertgriddlg.ui"))
-        //rOutAttrs( rInAttrs )
+SchAxisDlg::SchAxisDlg(Window* pWindow,
+    const InsertAxisOrGridDialogData& rInput, bool bAxisDlg)
+    : ModalDialog(pWindow,
+          bAxisDlg ?
+              OString("InsertAxisDialog") :
+              OString("InsertGridDialog"),
+          bAxisDlg ?
+              OUString("modules/schart/ui/insertaxisdlg.ui") :
+              OUString("modules/schart/ui/insertgriddlg.ui"))
 {
     get(m_pCbPrimaryX, "primaryX");
     get(m_pCbPrimaryY, "primaryY");
@@ -68,28 +67,11 @@ SchAxisDlg::SchAxisDlg( Window* pWindow
     get(m_pCbSecondaryY, "secondaryY");
     get(m_pCbSecondaryZ, "secondaryZ");
 
-    if(!bAxisDlg)
-    {
-        SetHelpId( HID_INSERT_GRIDS );
-
-        m_pCbPrimaryX->SetHelpId( HID_SCH_CB_XGRID );
-        m_pCbPrimaryY->SetHelpId( HID_SCH_CB_YGRID );
-        m_pCbPrimaryZ->SetHelpId( HID_SCH_CB_ZGRID );
-        m_pCbSecondaryX->SetHelpId( HID_SCH_CB_SECONDARY_XGRID );
-        m_pCbSecondaryY->SetHelpId( HID_SCH_CB_SECONDARY_YGRID );
-        m_pCbSecondaryZ->SetHelpId( HID_SCH_CB_SECONDARY_ZGRID );
-    }
-    else
+    if (bAxisDlg)
     {
 
         //todo: remove if secondary z axis are possible somewhere
-        {
-            m_pCbSecondaryZ->Hide();
-
-            Size aSize( GetSizePixel() );
-            aSize.Height() -= ( m_pCbSecondaryZ->GetPosPixel().Y() - m_pCbSecondaryY->GetPosPixel().Y() );
-            SetSizePixel(aSize);
-        }
+        m_pCbSecondaryZ->Hide();
     }
 
     m_pCbPrimaryX->Check( rInput.aExistenceList[0] );
