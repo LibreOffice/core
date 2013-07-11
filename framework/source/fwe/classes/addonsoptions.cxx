@@ -651,7 +651,7 @@ static Image ScaleImage( const Image &rImage, bool bBig )
 {
     Size aSize = ToolBox::GetDefaultImageSize(bBig);
     BitmapEx aScaleBmp(rImage.GetBitmapEx());
-    SAL_INFO("framework", "Addons: expensive scale image from "
+    SAL_INFO("fwk", "Addons: expensive scale image from "
              << aScaleBmp.GetSizePixel() << " to " << aSize);
     aScaleBmp.Scale(aSize, BMP_SCALE_BESTQUALITY);
     return Image(aScaleBmp);
@@ -664,7 +664,7 @@ Image AddonsOptions_Impl::GetImageFromURL( const OUString& aURL, sal_Bool bBig, 
     int nIdx = (int)eSize;
     int nOtherIdx = nIdx ? 0 : 1;
 
-    SAL_INFO("framework", "Expensive: Addons GetImageFromURL " << aURL <<
+    SAL_INFO("fwk", "Expensive: Addons GetImageFromURL " << aURL <<
              " big " << (bBig?"big":"litte") <<
              " scale " << (bNoScale ? "noscale" : "scale"));
 
@@ -681,7 +681,7 @@ Image AddonsOptions_Impl::GetImageFromURL( const OUString& aURL, sal_Bool bBig, 
             aImage = ScaleImage(ReadImageFromURL(rEntry.aURL[nOtherIdx]), bBig);
             rEntry.aImage[nIdx] = aImage;
             if (!rEntry.aImage[nIdx])
-                SAL_WARN("framework", "failed to load addons image " << aURL);
+                SAL_WARN("fwk", "failed to load addons image " << aURL);
         }
 
         // FIXME: bNoScale is not terribly meaningful or useful
