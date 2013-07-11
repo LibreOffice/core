@@ -16,6 +16,24 @@
       "revId": "bf1baba6d73c6f7a1e2706ad6ec3b4beae4d0d0b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//+9E\u003d",
+        "filename": "solenv/gbuild/platform/com_GCC_class.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 240,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2013-07-11T11:35:35Z",
+      "side": 1,
+      "message": "yes, so that the .output is generated, so that one can look at the ruleset and the shift/reduce that exist.",
+      "parentUuid": "AAAAXn//++8\u003d",
+      "revId": "bf1baba6d73c6f7a1e2706ad6ec3b4beae4d0d0b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
