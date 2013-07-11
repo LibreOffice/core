@@ -110,7 +110,7 @@ namespace vcl
             FixedText*                              mpPagesBoxTitleTxt;
             ListBox*                                mpNupPagesBox;
 
-            // controls for "Custom" page mode
+            /// controls for "Custom" page mode
             FixedText*                              mpNupNumPagesTxt;
             NumericField*                           mpNupColEdt;
             FixedText*                              mpNupTimesTxt;
@@ -124,11 +124,11 @@ namespace vcl
             FixedText*                              mpNupOrientationTxt;
             ListBox*                                mpNupOrientationBox;
 
-            // page order ("left to right, then down")
+            /// page order ("left to right, then down")
             FixedText*                              mpNupOrderTxt;
             ListBox*                                mpNupOrderBox;
             ShowNupOrderWindow*                     mpNupOrderWin;
-            // border around each page
+            /// border around each page
             CheckBox*                               mpBorderCB;
 
             void setupLayout();
@@ -215,7 +215,7 @@ namespace vcl
         Size                                    maNupPortraitSize;
         Size                                    maNupLandscapeSize;
 
-        // internal, used for automatic Nup-Portrait/landscape
+        /// internal, used for automatic Nup-Portrait/landscape
         Size                                    maFirstPageSize;
 
         OUString                           maPrintToFileText;
