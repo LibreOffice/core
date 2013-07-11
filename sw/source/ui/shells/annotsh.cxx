@@ -530,7 +530,7 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-                SfxAbstractTabDialog* pDlg = pFact->CreateSwParaDlg( rView.GetWindow(), rView, aDlgAttr,DLG_STD, DLG_PARA, 0, sal_True );
+                SfxAbstractTabDialog* pDlg = pFact->CreateSwParaDlg( rView.GetWindow(), rView, aDlgAttr,DLG_STD, 0, sal_True );
                 OSL_ENSURE(pDlg, "Dialogdiet fail!");
                 sal_uInt16 nRet = pDlg->Execute();
                 if(RET_OK == nRet)

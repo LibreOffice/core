@@ -421,7 +421,7 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-                SfxAbstractTabDialog* pDlg = pFact->CreateSwParaDlg( GetView().GetWindow(), GetView(), aDlgAttr,DLG_STD, DLG_PARA, 0, sal_True );
+                SfxAbstractTabDialog* pDlg = pFact->CreateSwParaDlg( GetView().GetWindow(), GetView(), aDlgAttr,DLG_STD, 0, sal_True );
                 OSL_ENSURE(pDlg, "Dialogdiet fail!");
                 sal_uInt16 nRet = pDlg->Execute();
                 if(RET_OK == nRet)
