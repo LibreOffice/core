@@ -31,7 +31,6 @@
 #include <sot/formats.hxx>
 #include <sot/exchange.hxx>
 #include <unotools/ucbstreamhelper.hxx>
-#include <tools/cachestr.hxx>
 #include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/localfilehelper.hxx>
@@ -68,7 +67,7 @@ SvLockBytesRef MakeLockBytes_Impl( const OUString & rName, StreamMode nMode )
     }
     else
     {
-        SvStream * pCacheStm = new SvCacheStream();
+        SvStream * pCacheStm = new SvMemoryStream();
         xLB = new SvLockBytes( pCacheStm, true );
     }
     return xLB;
