@@ -40,21 +40,9 @@
 #include "resource/hsqldb_res.hrc"
 #include "resource/sharedresources.hxx"
 
-#include <unotools/tempfile.hxx>
-
 #include <comphelper/processfactory.hxx>
-#include <unotools/ucbstreamhelper.hxx>
-
-#include <com/sun/star/embed/ElementModes.hpp>
-#include <com/sun/star/embed/XStorage.hpp>
-#include <com/sun/star/io/TempFile.hpp>
-#include <com/sun/star/io/XStream.hpp>
-#include <com/sun/star/ucb/SimpleFileAccess.hpp>
-#include <com/sun/star/ucb/XSimpleFileAccess2.hpp>
 
 using namespace com::sun::star;
-using namespace com::sun::star::embed;
-using namespace com::sun::star::io;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
@@ -77,9 +65,7 @@ namespace connectivity
 }
 // --------------------------------------------------------------------------------
 FirebirdDriver::FirebirdDriver()
-    : ODriver_BASE(m_aMutex),
-      mbIsEmbedded(false),
-      mFilePath()
+    : ODriver_BASE(m_aMutex)
 {
 }
 // --------------------------------------------------------------------------------
@@ -145,77 +131,6 @@ Sequence< ::rtl::OUString > SAL_CALL FirebirdDriver::getSupportedServiceNames(  
 Reference< XConnection > SAL_CALL FirebirdDriver::connect( const ::rtl::OUString& url, const Sequence< PropertyValue >& info ) throw(SQLException, RuntimeException)
 {
     Reference< XConnection > xConnection;
-    bool bIsNewDatabase = false;
-    if (url.equals("sdbc:embedded:firebird"))
-    {
-        mbIsEmbedded = true;
-        Reference<XStorage> xStorage;
-        const PropertyValue* pIter = info.getConstArray();
-        const PropertyValue* pEnd = pIter + info.getLength();
-
-        for (;pIter != pEnd; ++pIter)
-        {
-            if ( pIter->Name == "Storage" )
-            {
-                xStorage.set(pIter->Value,UNO_QUERY);
-            }
-        }
-
-        if ( !xStorage.is() )
-        {
-            ::connectivity::SharedResources aResources;
-            const OUString sMessage = aResources.getResourceString(STR_NO_STROAGE);
-            ::dbtools::throwGenericSQLException(sMessage ,*this);
-        }
-
-        bIsNewDatabase = !xStorage->hasElements();
-
-        const OUString sDBName( "firebird.fdb" ); // Location within .odb container
-        mFilePath = utl::TempFile::CreateTempName() + ".fdb";
-
-        SAL_INFO("connectivity.firebird", "Temporary .fdb location:  "
-                    << OUStringToOString(mFilePath,RTL_TEXTENCODING_UTF8 ).getStr());
-        if (!bIsNewDatabase)
-        {
-            SAL_INFO("connectivity.firebird", "Extracting .fdb from .odb" );
-            if (!xStorage->isStreamElement(sDBName))
-            {
-                ::connectivity::SharedResources aResources;
-                const OUString sMessage = aResources.getResourceString(STR_ERROR_NEW_VERSION);
-                ::dbtools::throwGenericSQLException(sMessage ,*this);
-            }
-
-            Reference< XStream > xDBStream(xStorage->openStreamElement(sDBName,
-                                                            ElementModes::READ));
-
-            SAL_INFO("connectivity.firebird", ".fdb being written to "
-                    << OUStringToOString(mFilePath,RTL_TEXTENCODING_UTF8 ).getStr());
-
-            uno::Reference< ucb::XSimpleFileAccess2 > xFileAccess(
-                    ucb::SimpleFileAccess::create( comphelper::getProcessComponentContext() ),
-                                                                uno::UNO_QUERY );
-            if ( !xFileAccess.is() )
-            {
-                // TODO: Error
-                ::connectivity::SharedResources aResources;
-                const OUString sMessage = aResources.getResourceString(STR_ERROR_NEW_VERSION);
-                ::dbtools::throwGenericSQLException(sMessage ,*this);
-            }
-            try {
-                xFileAccess->writeFile(mFilePath,xDBStream->getInputStream());
-            }
-            catch (...)
-            {
-                // TODO
-            }
-        }
-
-        if (bIsNewDatabase)
-        {
-        }
-        // Get DB properties from XML
-
-    }
 
     SAL_INFO("connectivity.firebird", "=> ODriver_BASE::connect(), URL: " << url );
 
@@ -226,12 +141,10 @@ Reference< XConnection > SAL_CALL FirebirdDriver::connect( const ::rtl::OUString
     if ( ! acceptsURL(url) )
         return NULL;
 
-    bool bCreateNewFile = mbIsEmbedded&&bIsNewDatabase;
-
     // create a new connection with the given properties and append it to our vector
     OConnection* pCon = new OConnection(this);
     Reference< XConnection > xCon = pCon;   // important here because otherwise the connection could be deleted inside (refcount goes -> 0)
-    pCon->construct(mFilePath,info,bCreateNewFile); // late constructor call which can throw exception and allows a correct dtor call when so
+    pCon->construct(url,info); // late constructor call which can throw exception and allows a correct dtor call when so
     m_xConnections.push_back(WeakReferenceHelper(*pCon));
 
     return xCon;
