@@ -72,6 +72,10 @@ published service PrintOptions
         @see DuplexMode for more information about supported values
      */
     [optional, property] short DuplexMode;
+
+    /** if set, specifies name of the printer to use.
+     */
+    [optional, property] string PrinterName;
 };
 
 
