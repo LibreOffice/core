@@ -118,7 +118,7 @@ void ScColumn::Delete( SCROW nRow )
     {
         ScFormulaCell* p = sc::formula_block::at(*it->data, aPos.second);
         p->EndListeningTo(pDocument);
-        UnshareFormulaCell(aPos, *p);
+        sc::SharedFormulaUtil::unshareFormulaCell(aPos, *p);
     }
     maCells.set_empty(nRow, nRow);
     maCellTextAttrs.set_empty(nRow, nRow);
@@ -333,8 +333,7 @@ void ScColumn::DetachFormulaCell(
         // Have the dying formula cell stop listening.
         rCell.EndListeningTo(pDocument);
 
-    if (rCell.IsShared())
-        UnshareFormulaCell(aPos, rCell);
+    sc::SharedFormulaUtil::unshareFormulaCell(aPos, rCell);
 }
 
 namespace {
@@ -371,125 +370,6 @@ void ScColumn::DetachFormulaCells(
 
     DetachFormulaCellsHandler aFunc(pDocument);
     sc::ProcessFormula(aPos.first, maCells, nRow, nNextTopRow-1, aFunc);
-}
-
-void ScColumn::UnshareFormulaCell(
-    const sc::CellStoreType::position_type& aPos, ScFormulaCell& rCell ) const
-{
-    if (!rCell.IsShared())
-        return;
-
-    ScFormulaCellGroupRef xNone;
-    sc::CellStoreType::iterator it = aPos.first;
-
-    // This formula cell is shared. Adjust the shared group.
-    if (rCell.aPos.Row() == rCell.GetSharedTopRow())
-    {
-        // Top of the shared range.
-        ScFormulaCellGroupRef xGroup = rCell.GetCellGroup();
-        if (xGroup->mnLength == 2)
-        {
-            // Group consists only only two cells. Mark the second one non-shared.
-#if DEBUG_COLUMN_STORAGE
-            if (aPos.second+1 >= aPos.first->size)
-            {
-                cerr << "ScColumn::UnshareFormulaCell: There is no next formula cell but there should be!" << endl;
-                cerr.flush();
-                abort();
-            }
-#endif
-            ScFormulaCell& rNext = *sc::formula_block::at(*it->data, aPos.second+1);
-            rNext.SetCellGroup(xNone);
-        }
-        else
-        {
-            // Move the top cell to the next formula cell down.
-            --xGroup->mnLength;
-            ++xGroup->mnStart;
-        }
-    }
-    else if (rCell.aPos.Row() == rCell.GetSharedTopRow() + rCell.GetSharedLength() - 1)
-    {
-        // Bottom of the shared range.
-        ScFormulaCellGroupRef xGroup = rCell.GetCellGroup();
-        if (xGroup->mnLength == 2)
-        {
-            // Mark the top cell non-shared.
-#if DEBUG_COLUMN_STORAGE
-            if (aPos.second == 0)
-            {
-                cerr << "ScColumn::UnshareFormulaCell: There is no previous formula cell but there should be!" << endl;
-                cerr.flush();
-                abort();
-            }
-#endif
-            ScFormulaCell& rPrev = *sc::formula_block::at(*it->data, aPos.second-1);
-            rPrev.SetCellGroup(xNone);
-        }
-        else
-        {
-            // Just shortern the shared range length by one.
-            --xGroup->mnLength;
-        }
-    }
-    else
-    {
-        // In the middle of the shared range. Split it into two groups.
-        ScFormulaCellGroupRef xGroup = rCell.GetCellGroup();
-        SCROW nEndRow = xGroup->mnStart + xGroup->mnLength - 1;
-        xGroup->mnLength = rCell.aPos.Row() - xGroup->mnStart; // Shorten the top group.
-        if (xGroup->mnLength == 1)
-        {
-            // Make the top cell non-shared.
-#if DEBUG_COLUMN_STORAGE
-            if (aPos.second == 0)
-            {
-                cerr << "ScColumn::UnshareFormulaCell: There is no previous formula cell but there should be!" << endl;
-                cerr.flush();
-                abort();
-            }
-#endif
-            ScFormulaCell& rPrev = *sc::formula_block::at(*it->data, aPos.second-1);
-            rPrev.SetCellGroup(xNone);
-        }
-
-        SCROW nLength2 = nEndRow - rCell.aPos.Row();
-        if (nLength2 >= 2)
-        {
-            ScFormulaCellGroupRef xGroup2;
-            xGroup2.reset(new ScFormulaCellGroup);
-            xGroup2->mnStart = rCell.aPos.Row() + 1;
-            xGroup2->mnLength = nLength2;
-            xGroup2->mbInvariant = xGroup->mbInvariant;
-#if DEBUG_COLUMN_STORAGE
-            if (xGroup2->mnStart + xGroup2->mnLength > it->position + it->size)
-            {
-                cerr << "ScColumn::UnshareFormulaCell: Shared formula region goes beyond the formula block. Not good." << endl;
-                cerr.flush();
-                abort();
-            }
-#endif
-            sc::formula_block::iterator itCell = sc::formula_block::begin(*it->data);
-            std::advance(itCell, aPos.second+1);
-            sc::formula_block::iterator itCellEnd = itCell;
-            std::advance(itCellEnd, xGroup2->mnLength);
-            for (; itCell != itCellEnd; ++itCell)
-            {
-                ScFormulaCell& rCell2 = **itCell;
-                rCell2.SetCellGroup(xGroup2);
-            }
-        }
-        else
-        {
-            // Make the next cell non-shared.
-            sc::formula_block::iterator itCell = sc::formula_block::begin(*it->data);
-            std::advance(itCell, aPos.second+1);
-            ScFormulaCell& rCell2 = **itCell;
-            rCell2.SetCellGroup(xNone);
-        }
-    }
-
-    rCell.SetCellGroup(xNone);
 }
 
 sc::CellStoreType::iterator ScColumn::GetPositionToInsert( const sc::CellStoreType::iterator& it, SCROW nRow )
@@ -662,7 +542,7 @@ class EmptyCells
         if (rPos.first->type == sc::element_type_formula)
         {
             ScFormulaCell& rCell = *sc::formula_block::at(*rPos.first->data, rPos.second);
-            mrColumn.UnshareFormulaCell(rPos, rCell);
+            sc::SharedFormulaUtil::unshareFormulaCell(rPos, rCell);
         }
     }
 

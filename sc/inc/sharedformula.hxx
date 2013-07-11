@@ -83,6 +83,15 @@ public:
      * @param aPos position of cell to examine.
      */
     static void joinFormulaCellAbove(const CellStoreType::position_type& aPos);
+
+    /**
+     * Turn a shared formula cell into a non-shared one, and split it off from
+     * the adjacent formula cell groups.
+     *
+     * @param aPos position of cell to examine
+     * @param rCell formula cell instance
+     */
+    static void unshareFormulaCell(const CellStoreType::position_type& aPos, ScFormulaCell& rCell);
 };
 
 }

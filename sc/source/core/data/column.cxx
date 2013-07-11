@@ -1136,14 +1136,14 @@ void ScColumn::SwapCell( SCROW nRow, ScColumn& rCol)
     {
         ScFormulaCell& rCell = *sc::formula_block::at(*aPos1.first->data, aPos1.second);
         updateRefInFormulaCell(rCell, rCol.nCol, nTab, rCol.nCol - nCol);
-        UnshareFormulaCell(aPos1, rCell);
+        sc::SharedFormulaUtil::unshareFormulaCell(aPos1, rCell);
     }
 
     if (aPos2.first->type == sc::element_type_formula)
     {
         ScFormulaCell& rCell = *sc::formula_block::at(*aPos2.first->data, aPos2.second);
         updateRefInFormulaCell(rCell, nCol, nTab, nCol - rCol.nCol);
-        UnshareFormulaCell(aPos2, rCell);
+        sc::SharedFormulaUtil::unshareFormulaCell(aPos2, rCell);
     }
 
     maCells.swap(nRow, nRow, rCol.maCells, nRow);
@@ -2375,7 +2375,7 @@ public:
     {
         sc::CellStoreType::position_type aPos = mrColumn.GetCellStore().position(miPos, nRow);
         miPos = aPos.first;
-        mrColumn.UnshareFormulaCell(aPos, *pCell);
+        sc::SharedFormulaUtil::unshareFormulaCell(aPos, *pCell);
         pCell->UpdateTranspose(maSource, maDest, mpUndoDoc);
         mrColumn.JoinNewFormulaCell(aPos, *pCell);
     }
@@ -2398,7 +2398,7 @@ public:
     {
         sc::CellStoreType::position_type aPos = mrColumn.GetCellStore().position(miPos, nRow);
         miPos = aPos.first;
-        mrColumn.UnshareFormulaCell(aPos, *pCell);
+        sc::SharedFormulaUtil::unshareFormulaCell(aPos, *pCell);
         pCell->UpdateGrow(maArea, mnGrowX, mnGrowY);
         mrColumn.JoinNewFormulaCell(aPos, *pCell);
     }
@@ -2784,7 +2784,7 @@ public:
 
         sc::CellStoreType::position_type aPos = mrColumn.GetCellStore().position(miPos, nRow);
         miPos = aPos.first;
-        mrColumn.UnshareFormulaCell(aPos, *pCell);
+        sc::SharedFormulaUtil::unshareFormulaCell(aPos, *pCell);
         pCell->GetCode()->SetCodeError(0);
         OUStringBuffer aBuf;
         pCell->GetFormula(aBuf, meGram);
