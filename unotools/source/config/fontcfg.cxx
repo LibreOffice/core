@@ -1137,16 +1137,18 @@ const FontNameAttr* FontSubstConfiguration::getSubstInfo( const OUString& rFontN
     FontNameAttr aSearchAttr;
     aSearchAttr.Name = aSearchFont;
 
-    Locale aLocale;
-    aLocale.Language = rLocale.Language.toAsciiLowerCase();
-    aLocale.Country = rLocale.Country.toAsciiUpperCase();
-    aLocale.Variant = rLocale.Variant.toAsciiUpperCase();
+    LanguageTag aLanguageTag( rLocale);
 
-    if( aLocale.Language.isEmpty() )
-        aLocale = SvtSysLocale().GetUILanguageTag().getLocale();
+    if( aLanguageTag.isSystemLocale() )
+        aLanguageTag = SvtSysLocale().GetUILanguageTag();
 
-    while( !aLocale.Language.isEmpty() )
+    ::std::vector< OUString > aFallbacks( aLanguageTag.getFallbackStrings());
+    if (aLanguageTag.getLanguage() != "en")
+        aFallbacks.push_back("en");
+
+    for (::std::vector< OUString >::const_iterator fb( aFallbacks.begin()); fb != aFallbacks.end(); ++fb)
     {
+        Locale aLocale( LanguageTag( *fb).getLocale());
         boost::unordered_map< Locale, LocaleSubst, LocaleHash >::const_iterator lang = m_aSubst.find( aLocale );
         if( lang != m_aSubst.end() )
         {
@@ -1165,15 +1167,6 @@ const FontNameAttr* FontSubstConfiguration::getSubstInfo( const OUString& rFontN
                         return &rFoundAttr;
             }
         }
-        // gradually become more unspecific
-        if( !aLocale.Variant.isEmpty() )
-            aLocale.Variant = OUString();
-        else if( !aLocale.Country.isEmpty() )
-            aLocale.Country = OUString();
-        else if( aLocale.Language != "en" )
-            aLocale.Language = OUString( "en" );
-        else
-            aLocale.Language = OUString();
     }
     return NULL;
 }
