@@ -116,16 +116,19 @@ bool FormulaGroupInterpreterOpenCL::interpret(ScDocument& rDoc, const ScAddress&
     memset(rResult,0,rowSize);
     float * fpOclSrcData = NULL; // Point to the input data from CPU
     uint * npOclStartPos = NULL; // The first position for calculation,for example,the A1 in (=MAX(A1:A100))
-    uint * npOclEndPos     = NULL; // The last position for calculation,for example, the A100 in (=MAX(A1:A100))
-    float * fpLeftData     = NULL; // Left input for binary operator(+,-,*,/),for example,(=leftData+rightData)
+    uint * npOclEndPos   = NULL; // The last position for calculation,for example, the A100 in (=MAX(A1:A100))
+    float * fpLeftData   = NULL; // Left input for binary operator(+,-,*,/),for example,(=leftData+rightData)
     float * fpRightData  = NULL; // Right input for binary operator(+,-,*,/),for example,(=leftData/rightData)
                                  // The rightData can't be zero for "/"
     static OclCalc ocl_calc;
-    // Don't know how large the size will be applied previously, so create them as the rowSize or 65536
-    // Don't know which formulae will be used previously, so create buffers for different formulae used probably
-    ocl_calc.CreateBuffer(fpOclSrcData,npOclStartPos,npOclEndPos,rowSize);
-    ocl_calc.CreateBuffer(fpLeftData,fpRightData,rowSize);
-    //printf("pptrr is %d,%d,%d\n",fpOclSrcData,npOclStartPos,npOclEndPos);
+    if(ocl_calc.GetOpenclState())
+    {
+        // Don't know how large the size will be applied previously, so create them as the rowSize or 65536
+        // Don't know which formulae will be used previously, so create buffers for different formulae used probably
+        ocl_calc.CreateBuffer(fpOclSrcData,npOclStartPos,npOclEndPos,rowSize);
+        ocl_calc.CreateBuffer(fpLeftData,fpRightData,rowSize);
+        //printf("pptrr is %d,%d,%d\n",fpOclSrcData,npOclStartPos,npOclEndPos);
+    }
 ///////////////////////////////////////////////////////////////////////////////////////////
 
     // Until we implement group calculation for real, decompose the group into
@@ -157,10 +160,11 @@ bool FormulaGroupInterpreterOpenCL::interpret(ScDocument& rDoc, const ScAddress&
                         nRowEnd += i;
                     size_t nRowSize = nRowEnd - nRowStart + 1;
                     ScMatrixRef pMat(new ScMatrix(nColSize, nRowSize, 0.0));
-
-                    npOclStartPos[i] = nRowStart; // record the start position
-                    npOclEndPos[i]     = nRowEnd;   // record the end position
-
+                    if(ocl_calc.GetOpenclState())
+                    {
+                        npOclStartPos[i] = nRowStart; // record the start position
+                        npOclEndPos[i]   = nRowEnd;   // record the end position
+                    }
                     for (size_t nCol = 0; nCol < nColSize; ++nCol)
                     {
                         const double* pArray = rArrays[nCol];
@@ -169,12 +173,14 @@ bool FormulaGroupInterpreterOpenCL::interpret(ScDocument& rDoc, const ScAddress&
                             fprintf(stderr,"Error: pArray is NULL!\n");
                             return false;
                         }
-
-                        for( size_t u=0; u<rowSize; u++ )
+                        if(ocl_calc.GetOpenclState())
                         {
-                            // Many video cards can't support double type in kernel, so need transfer the double to float
-                            fpOclSrcData[u] = (float)pArray[u];
-                            //fprintf(stderr,"fpOclSrcData[%d] is %f.\n",u,fpOclSrcData[u]);
+                            for( size_t u=nRowStart; u<=nRowEnd; u++ )
+                            {
+                                // Many video cards can't support double type in kernel, so need transfer the double to float
+                                fpOclSrcData[u] = (float)pArray[u];
+                                //fprintf(stderr,"fpOclSrcData[%d] is %f.\n",u,fpOclSrcData[u]);
+                            }
                         }
 
                         for (size_t nRow = 0; nRow < nRowSize; ++nRow)
@@ -199,22 +205,23 @@ bool FormulaGroupInterpreterOpenCL::interpret(ScDocument& rDoc, const ScAddress&
         ScFormulaCell* pDest = rDoc.GetFormulaCell(aTmpPos);
         if (!pDest)
             return false;
-
-        const formula::FormulaToken *pCur = aCode2.First();
-        aCode2.Reset();
-        while( ( pCur = aCode2.Next() ) != NULL )
+        if(ocl_calc.GetOpenclState())
         {
-            OpCode eOp = pCur->GetOpCode();
-            if(eOp==0)
+            const formula::FormulaToken *pCur = aCode2.First();
+            aCode2.Reset();
+            while( ( pCur = aCode2.Next() ) != NULL )
             {
-                 if(nCount3%2==0)
-                     fpLeftData[nCount1++] = (float)pCur->GetDouble();
-                 else
-                     fpRightData[nCount2++] = (float)pCur->GetDouble();
-                 nCount3++;
-            }
-            else if( eOp!=ocOpen && eOp!=ocClose )
-                nOclOp = eOp;
+                OpCode eOp = pCur->GetOpCode();
+                if(eOp==0)
+                {
+                     if(nCount3%2==0)
+                         fpLeftData[nCount1++] = (float)pCur->GetDouble();
+                     else
+                         fpRightData[nCount2++] = (float)pCur->GetDouble();
+                     nCount3++;
+                }
+                else if( eOp!=ocOpen && eOp!=ocClose )
+                    nOclOp = eOp;
 
 //              if(count1>0){//dbg
 //                  fprintf(stderr,"leftData is %f.\n",leftData[count1-1]);
@@ -224,11 +231,12 @@ bool FormulaGroupInterpreterOpenCL::interpret(ScDocument& rDoc, const ScAddress&
 //                  fprintf(stderr,"rightData is %f.\n",rightData[count2-1]);
 //                  count2--;
 //              }
+            }
         }
 
         if(!getenv("SC_GPU")||!ocl_calc.GetOpenclState())
         {
-            fprintf(stderr,"ccCPU flow...\n\n");
+            //fprintf(stderr,"ccCPU flow...\n\n");
             generateRPNCode(rDoc, aTmpPos, aCode2);
             ScInterpreter aInterpreter(pDest, &rDoc, aTmpPos, aCode2);
             aInterpreter.Interpret();

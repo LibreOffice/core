@@ -162,31 +162,65 @@ __kernel void oclFormulaMinverse(__global float *data,
 }
 
 // Double precision is a requirement of spreadsheets
-#if 0
-#if defined(cl_khr_fp64)  // Khronos extension
-#pragma OPENCL EXTENSION cl_khr_fp64 : enable
-#elif defined(cl_amd_fp64)  // AMD extension
-#pragma OPENCL EXTENSION cl_amd_fp64 : enable
-#endif
-typedef double fp_t;
-#else
-typedef float fp_t;
-#endif
+// cl_khr_fp64: Khronos extension
+// cl_amd_fp64: AMD extension
+\n#if 0 \n
+\n#if defined(cl_khr_fp64) \n
+\n#pragma OPENCL EXTENSION cl_khr_fp64 : enable \n
+\n#elif defined(cl_amd_fp64) \n
+\n#pragma OPENCL EXTENSION cl_amd_fp64 : enable \n
+\n#endif \n
+\ntypedef double fp_t; \n
+\n#else \n
+\ntypedef float fp_t; \n
+\n#endif \n
 
-__kernel void oclAverageDelta(__global fp_t *values, __global fp_t *subtract, __global int start, __global int end, __global fp_t *output)
+__kernel void oclAverageDelta(__global fp_t *values, __global fp_t *subtract, uint start, uint end, __global fp_t *output)
 {
     const unsigned int id = get_global_id(0);
 
     // Average
-    int i;
-    fp_t sum = 0.0;
-    for(i = start; i < end; i++)
-        sum += values[i];
-    fp_t val = sum/(end-start);
+    fp_t fSum = 0.0f;
+    for(int i = start; i < end; i++)
+        fSum += values[i];
+    fp_t fVal = fSum/(end-start);
 
     // Subtract & output
-    output[id] = val - subtract[id];
+    output[id] = fVal - subtract[id];
 }
+
+__kernel void oclMaxDelta(__global fp_t *values, __global fp_t *subtract, uint start, uint end, __global fp_t *output)
+{
+    const unsigned int id = get_global_id(0);
+
+    // Max
+    float fMaxVal = values[start];
+    for(int i=start+1;i < end;i++)
+    {
+        if(values[i]>fMaxVal)
+            fMaxVal = values[i];
+    }
+
+    // Subtract & output
+    output[id] = fMaxVal - subtract[id];
+}
+
+__kernel void oclMinDelta(__global fp_t *values, __global fp_t *subtract, uint start, uint end, __global fp_t *output)
+{
+    const unsigned int id = get_global_id(0);
+
+    // Min
+    float fMinVal = values[start];
+    for(int i=start+1;i < end;i++)
+    {
+        if(values[i]<fMinVal)
+            fMinVal = values[i];
+    }
+
+    // Subtract & output
+    output[id] = fMinVal - subtract[id];
+}
+
 
 );
 
