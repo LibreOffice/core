@@ -386,10 +386,10 @@ void BrowseBox::GrabTableFocus()
     GrabFocus();
 }
 // -----------------------------------------------------------------------------
-String BrowseBox::GetCellText(long, sal_uInt16 ) const
+OUString BrowseBox::GetCellText(long, sal_uInt16 ) const
 {
     DBG_ASSERT(0,"This method has to be implemented by the derived classes! BUG!!");
-    return String();
+    return OUString();
 }
 
 // -----------------------------------------------------------------------------
@@ -520,7 +520,7 @@ sal_Bool BrowseBox::IsCellVisible( sal_Int32 _nRow, sal_uInt16 _nColumnPos ) con
     return IsFieldVisible( _nRow, GetColumnId( _nColumnPos ) );
 }
 // -----------------------------------------------------------------------------
-String BrowseBox::GetAccessibleCellText(long _nRow, sal_uInt16 _nColPos) const
+OUString BrowseBox::GetAccessibleCellText(long _nRow, sal_uInt16 _nColPos) const
 {
     return GetCellText( _nRow, GetColumnId( _nColPos ) );
 }

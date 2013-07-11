@@ -274,7 +274,7 @@ sal_Bool OTableGrantControl::SaveModified()
 }
 
 //------------------------------------------------------------------------------
-String OTableGrantControl::GetCellText( long nRow, sal_uInt16 nColId ) const
+OUString OTableGrantControl::GetCellText( long nRow, sal_uInt16 nColId ) const
 {
     DBG_CHKTHIS(OTableGrantControl,NULL);
     if(COL_TABLE_NAME == nColId)

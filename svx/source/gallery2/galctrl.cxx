@@ -570,9 +570,9 @@ sal_Bool GalleryListView::SeekRow( long nRow )
     return sal_True;
 }
 
-String GalleryListView::GetCellText(long _nRow, sal_uInt16 nColumnId) const
+OUString GalleryListView::GetCellText(long _nRow, sal_uInt16 nColumnId) const
 {
-    String sRet;
+    OUString sRet;
     if( mpTheme && ( _nRow < static_cast< long >( mpTheme->GetObjectCount() ) ) )
     {
         SgaObject* pObj = mpTheme->AcquireObject( _nRow );

@@ -84,7 +84,7 @@ public:
         @return
             the text out of the cell
     */
-    virtual String  GetCellText(long _nRow, sal_uInt16 _nColId) const;
+    virtual OUString  GetCellText(long _nRow, sal_uInt16 _nColId) const;
 
     const ImpItemListRow* GetAktChangeEntry() const { return pAktChangeEntry; }
     XubString GetNewEntryValue() const                 { return pEditControl->GetText(); }

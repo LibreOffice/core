@@ -83,7 +83,7 @@ Name generiert, der dem Anwender praesentiert werden kann.
 
 --------------------------------------------------------------------------
 
-XubString FontList::GetFontMapText( const FontInfo& rInfo ) const;
+OUString FontList::GetFontMapText( const FontInfo& rInfo ) const;
 
 Diese Methode gibt einen Matchstring zurueck, der dem Anwender
 anzeigen soll, welche Probleme es mit diesem Font geben kann.
@@ -149,7 +149,7 @@ private:
     OUString                maMapScreenOnly;
     OUString                maMapSizeNotAvailable;
     OUString                maMapStyleNotAvailable;
-    OUString                maMapNotAvailable;
+    mutable OUString        maMapNotAvailable;
     OUString                maLight;
     OUString                maLightItalic;
     OUString                maNormal;
@@ -178,7 +178,7 @@ public:
 
     OutputDevice*           GetDevice() const { return mpDev; }
     OutputDevice*           GetDevice2() const { return mpDev2; }
-    XubString               GetFontMapText( const FontInfo& rInfo ) const;
+    OUString                GetFontMapText( const FontInfo& rInfo ) const;
 
     const OUString&         GetNormalStr() const { return maNormal; }
     const OUString&         GetItalicStr() const { return maNormalItalic; }

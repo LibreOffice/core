@@ -503,12 +503,11 @@ OUString FontList::GetStyleName(const FontInfo& rInfo) const
 
 // -----------------------------------------------------------------------
 
-XubString FontList::GetFontMapText( const FontInfo& rInfo ) const
+OUString FontList::GetFontMapText( const FontInfo& rInfo ) const
 {
     if ( !rInfo.GetName().Len() )
     {
-        XubString aEmptryStr;
-        return aEmptryStr;
+        return OUString();
     }
 
     // Search Fontname
@@ -516,7 +515,7 @@ XubString FontList::GetFontMapText( const FontInfo& rInfo ) const
     if ( !pData )
     {
         if (maMapNotAvailable.isEmpty())
-            ((FontList*)this)->maMapNotAvailable = SVT_RESSTR(STR_SVT_FONTMAP_NOTAVAILABLE);
+            maMapNotAvailable = SVT_RESSTR(STR_SVT_FONTMAP_NOTAVAILABLE);
         return maMapNotAvailable;
     }
 
@@ -544,8 +543,7 @@ XubString FontList::GetFontMapText( const FontInfo& rInfo ) const
 
         if ( bNoneAvailable )
         {
-            XubString aEmptryStr;
-            return aEmptryStr;
+            return OUString();
         }
         else if ( !bNotSynthetic )
         {

@@ -900,9 +900,9 @@ sal_Bool SvHeaderTabListBox::IsCellVisible( sal_Int32, sal_uInt16 ) const
     return sal_True;
 }
 // -----------------------------------------------------------------------
-String SvHeaderTabListBox::GetAccessibleCellText( long _nRow, sal_uInt16 _nColumnPos ) const
+OUString SvHeaderTabListBox::GetAccessibleCellText( long _nRow, sal_uInt16 _nColumnPos ) const
 {
-    return OUString( GetTabEntryText( _nRow, _nColumnPos ) );
+    return GetTabEntryText(_nRow, _nColumnPos);
 }
 // -----------------------------------------------------------------------
 Rectangle SvHeaderTabListBox::calcHeaderRect( sal_Bool _bIsColumnBar, sal_Bool _bOnScreen )
@@ -1272,7 +1272,7 @@ Rectangle SvHeaderTabListBox::GetFieldCharacterBounds(sal_Int32,sal_Int32,sal_In
 // -----------------------------------------------------------------------------
 sal_Int32 SvHeaderTabListBox::GetFieldIndexAtPoint(sal_Int32 _nRow,sal_Int32 _nColumnPos,const Point& _rPoint)
 {
-    String sText = GetAccessibleCellText( _nRow, static_cast< sal_uInt16 >( _nColumnPos ) );
+    OUString sText = GetAccessibleCellText( _nRow, static_cast< sal_uInt16 >( _nColumnPos ) );
     MetricVector aRects;
     if ( GetGlyphBoundRects(Point(0,0),sText,0,STRING_LEN,0,aRects) )
     {

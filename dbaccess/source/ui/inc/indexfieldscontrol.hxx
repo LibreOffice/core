@@ -70,7 +70,7 @@ namespace dbaui
 
         void SetModifyHdl(const Link& _rHdl) { m_aModifyHdl = _rHdl; }
         Link GetModifyHdl() const { return m_aModifyHdl; }
-        virtual String GetCellText(long _nRow,sal_uInt16 nColId) const;
+        virtual OUString GetCellText(long _nRow,sal_uInt16 nColId) const;
 
     protected:
         // EditBrowseBox overridables

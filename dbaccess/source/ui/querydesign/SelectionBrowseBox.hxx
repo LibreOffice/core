@@ -154,7 +154,7 @@ namespace dbaui
             @return
                 the text out of the cell
         */
-        virtual String              GetCellText(long _nRow, sal_uInt16 _nColId) const;
+        virtual OUString            GetCellText(long _nRow, sal_uInt16 _nColId) const;
 
         /** returns the description of the row.
             @param  _nRow

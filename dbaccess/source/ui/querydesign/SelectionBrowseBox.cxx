@@ -2203,7 +2203,7 @@ void OSelectionBrowseBox::SetNoneVisbleRow(long nRows)
         m_bVisibleRow[i] = !(nRows & nVisibleRowMask[i]);
 }
 //------------------------------------------------------------------------------
-String OSelectionBrowseBox::GetCellText(long nRow, sal_uInt16 nColId) const
+OUString OSelectionBrowseBox::GetCellText(long nRow, sal_uInt16 nColId) const
 {
     DBG_CHKTHIS(OSelectionBrowseBox,NULL);
 
@@ -2212,7 +2212,7 @@ String OSelectionBrowseBox::GetCellText(long nRow, sal_uInt16 nColId) const
     OTableFieldDescRef pEntry = getFields()[nPos-1];
     OSL_ENSURE(pEntry != NULL, "OSelectionBrowseBox::GetCellText : invalid column id, prepare for GPF ... ");
     if ( pEntry->IsEmpty() )
-        return String();
+        return OUString();
 
     String aText;
     switch (nRow)

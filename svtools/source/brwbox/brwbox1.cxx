@@ -212,7 +212,7 @@ void BrowseBox::DoHideCursor( const char * )
 
 //-------------------------------------------------------------------
 
-void BrowseBox::SetRealRowCount( const String &rRealRowCount )
+void BrowseBox::SetRealRowCount( const OUString &rRealRowCount )
 {
     getDataWindow()->aRealRowCount = rRealRowCount;
 }
@@ -228,7 +228,7 @@ void BrowseBox::SetFont( const Font& rNewFont )
 
 //-------------------------------------------------------------------
 
-sal_uLong BrowseBox::GetDefaultColumnWidth( const String& _rText ) const
+sal_uLong BrowseBox::GetDefaultColumnWidth( const OUString& _rText ) const
 {
     return GetDataWindow().GetTextWidth( _rText ) + GetDataWindow().GetTextWidth(OUString('0')) * 4;
 }
@@ -250,7 +250,7 @@ void BrowseBox::InsertHandleColumn( sal_uLong nWidth )
     }
 #endif
 
-    pCols->insert( pCols->begin(), new BrowserColumn( 0, Image(), String(), nWidth, GetZoom() ) );
+    pCols->insert( pCols->begin(), new BrowserColumn( 0, Image(), OUString(), nWidth, GetZoom() ) );
     FreezeColumn( 0 );
 
     // adjust headerbar
@@ -267,7 +267,7 @@ void BrowseBox::InsertHandleColumn( sal_uLong nWidth )
 
 //-------------------------------------------------------------------
 
-void BrowseBox::InsertDataColumn( sal_uInt16 nItemId, const XubString& rText,
+void BrowseBox::InsertDataColumn( sal_uInt16 nItemId, const OUString& rText,
         long nWidth, HeaderBarItemBits nBits, sal_uInt16 nPos )
 {
     DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
@@ -532,7 +532,7 @@ void BrowseBox::SetColumnPos( sal_uInt16 nColumnId, sal_uInt16 nPos )
 
 //-------------------------------------------------------------------
 
-void BrowseBox::SetColumnTitle( sal_uInt16 nItemId, const String& rTitle )
+void BrowseBox::SetColumnTitle( sal_uInt16 nItemId, const OUString& rTitle )
 {
     DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
 
@@ -856,13 +856,13 @@ void BrowseBox::RemoveColumns()
 
 //-------------------------------------------------------------------
 
-String BrowseBox::GetColumnTitle( sal_uInt16 nId ) const
+OUString BrowseBox::GetColumnTitle( sal_uInt16 nId ) const
 {
     DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
 
     sal_uInt16 nItemPos = GetColumnPos( nId );
     if ( nItemPos >= pCols->size() )
-        return String();
+        return OUString();
     return (*pCols)[ nItemPos ]->Title();
 }
 

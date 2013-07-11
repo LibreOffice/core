@@ -454,7 +454,7 @@ DBG_NAME(IndexFieldsControl)
         return 0L;
     }
     //------------------------------------------------------------------
-    String IndexFieldsControl::GetCellText(long _nRow,sal_uInt16 nColId) const
+    OUString IndexFieldsControl::GetCellText(long _nRow,sal_uInt16 nColId) const
     {
         ConstIndexFieldsIterator aRow = m_aFields.end();
         if ( _nRow >= 0 )

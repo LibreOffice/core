@@ -298,9 +298,9 @@ sal_Bool _SdrItemBrowserControl::SeekRow(long nRow)
     return sal_True;
 }
 
-String _SdrItemBrowserControl::GetCellText(long _nRow, sal_uInt16 _nColId) const
+OUString _SdrItemBrowserControl::GetCellText(long _nRow, sal_uInt16 _nColId) const
 {
-    String sRet;
+    OUString sRet;
     if ( _nRow >= 0 && _nRow < (sal_Int32)aList.size() )
     {
         ImpItemListRow* pEntry = ImpGetEntry(_nRow);
@@ -313,9 +313,7 @@ String _SdrItemBrowserControl::GetCellText(long _nRow, sal_uInt16 _nColId) const
             }
             else
             {
-                rtl_TextEncoding aTextEncoding = osl_getThreadTextEncoding();
-
-                sRet = XubString("???", aTextEncoding);
+                sRet = OUString("???");
                 switch (_nColId)
                 {
                     case ITEMBROWSER_WHICHCOL_ID:
@@ -324,11 +322,11 @@ String _SdrItemBrowserControl::GetCellText(long _nRow, sal_uInt16 _nColId) const
                     {
                         switch (pEntry->eState)
                         {
-                            case SFX_ITEM_UNKNOWN : sRet=String("Uknown", aTextEncoding);   break;
-                            case SFX_ITEM_DISABLED: sRet=String("Disabled", aTextEncoding); break;
-                            case SFX_ITEM_DONTCARE: sRet=String("DontCare", aTextEncoding); break;
-                            case SFX_ITEM_SET     : sRet=String("Set", aTextEncoding);      break;
-                            case SFX_ITEM_DEFAULT : sRet=String("Default", aTextEncoding);  break;
+                            case SFX_ITEM_UNKNOWN : sRet=OUString("Unknown");   break;
+                            case SFX_ITEM_DISABLED: sRet=OUString("Disabled"); break;
+                            case SFX_ITEM_DONTCARE: sRet=OUString("DontCare"); break;
+                            case SFX_ITEM_SET     : sRet=OUString("Set");      break;
+                            case SFX_ITEM_DEFAULT : sRet=OUString("Default");  break;
                         } // switch
                     } break;
                     case ITEMBROWSER_TYPECOL_ID: sRet = pEntry->GetItemTypeStr(); break;

@@ -335,7 +335,7 @@ public:
 
 protected:
     // fuer Anzeige im VScrollBar z.B. auf "?" oder setzen
-    void            SetRealRowCount( const String &rRealRowCount );
+    void            SetRealRowCount( const OUString &rRealRowCount );
 
     // Return Value muss immer sal_True sein - SeekRow *muss* klappen!
     // (sonst ASSERT) MI: wer hat das eingebaut? Das darf nicht so sein!
@@ -468,10 +468,10 @@ public:
 
     // inserting, changing, removing and freezing of columns
     void            InsertHandleColumn( sal_uLong nWidth );
-    void            InsertDataColumn( sal_uInt16 nItemId, const XubString& rText,
+    void            InsertDataColumn( sal_uInt16 nItemId, const OUString& rText,
                                     long nSize, HeaderBarItemBits nBits = HIB_STDSTYLE,
                                     sal_uInt16 nPos = HEADERBAR_APPEND );
-    void            SetColumnTitle( sal_uInt16 nColumnId, const String &rTitle );
+    void            SetColumnTitle( sal_uInt16 nColumnId, const OUString &rTitle );
     void            SetColumnWidth( sal_uInt16 nColumnId, sal_uLong nWidth );
     void            SetColumnPos( sal_uInt16 nColumnId, sal_uInt16 nPos );
     void            FreezeColumn( sal_uInt16 nColumnId, sal_Bool bFreeze = sal_True );
@@ -487,7 +487,7 @@ public:
     virtual long    GetTitleHeight() const;
 
     // access to dynamic values of cursor row
-    String          GetColumnTitle( sal_uInt16 nColumnId ) const;
+    OUString        GetColumnTitle( sal_uInt16 nColumnId ) const;
     Rectangle       GetFieldRect( sal_uInt16 nColumnId ) const;
     sal_uLong           GetColumnWidth( sal_uInt16 nColumnId ) const;
     sal_uInt16          GetColumnId( sal_uInt16 nPos ) const;
@@ -581,7 +581,7 @@ public:
 
         The width is calculated so that the text fits completely, plus som margin.
     */
-    sal_uLong           GetDefaultColumnWidth( const String& _rText ) const;
+    sal_uLong         GetDefaultColumnWidth( const OUString& _rText ) const;
 
     /** GetCellText returns the text at the given position
         @param  _nRow
@@ -591,7 +591,7 @@ public:
         @return
             the text out of the cell
     */
-    virtual String  GetCellText(long _nRow, sal_uInt16 _nColId) const;
+    virtual OUString  GetCellText(long _nRow, sal_uInt16 _nColId) const;
 
     /** @return
             the current column count
@@ -797,7 +797,7 @@ public:
     virtual void                    GetAllSelectedRows( css::uno::Sequence< sal_Int32 >& _rRows ) const;
     virtual void                    GetAllSelectedColumns( css::uno::Sequence< sal_Int32 >& _rColumns ) const;
     virtual sal_Bool                IsCellVisible( sal_Int32 _nRow, sal_uInt16 _nColumn ) const;
-    virtual String                  GetAccessibleCellText(long _nRow, sal_uInt16 _nColPos) const;
+    virtual OUString                GetAccessibleCellText(long _nRow, sal_uInt16 _nColPos) const;
     virtual sal_Bool                    GetGlyphBoundRects( const Point& rOrigin, const String& rStr, int nIndex, int nLen, int nBase, MetricVector& rVector );
     virtual Rectangle               GetWindowExtentsRelative( Window *pRelativeWindow ) const;
     virtual void                    GrabFocus();

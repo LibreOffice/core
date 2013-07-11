@@ -648,7 +648,7 @@ OUString DataBrowser::GetRowString( sal_Int32 nRow ) const
     return OUString::valueOf(nRow + 1);
 }
 
-String DataBrowser::GetCellText( long nRow, sal_uInt16 nColumnId ) const
+OUString DataBrowser::GetCellText( long nRow, sal_uInt16 nColumnId ) const
 {
     OUString aResult;
 

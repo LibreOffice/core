@@ -2689,11 +2689,11 @@ void DbGridControl::SetFilterMode(sal_Bool bMode)
     }
 }
 // -----------------------------------------------------------------------------
-String DbGridControl::GetCellText(long _nRow, sal_uInt16 _nColId) const
+OUString DbGridControl::GetCellText(long _nRow, sal_uInt16 _nColId) const
 {
     size_t Location = GetModelColumnPos( _nColId );
     DbGridColumn* pColumn = ( Location < m_aColumns.size() ) ? m_aColumns[ Location ] : NULL;
-    String sRet;
+    OUString sRet;
     if ( const_cast<DbGridControl*>(this)->SeekRow(_nRow) )
         sRet = GetCurrentRowCellText(pColumn, m_xPaintRow);
     return sRet;

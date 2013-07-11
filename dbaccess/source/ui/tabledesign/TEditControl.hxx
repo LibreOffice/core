@@ -102,7 +102,7 @@ namespace dbaui
                                         // return sal_False, verhindert Zellenwechsel
         virtual void Undo();
         virtual void Redo();
-        virtual String GetCellText(long nRow, sal_uInt16 nColId) const;
+        virtual OUString GetCellText(long nRow, sal_uInt16 nColId) const;
         virtual sal_uInt32 GetTotalCellWidth(long nRow, sal_uInt16 nColId);
 
         virtual void CopyRows();

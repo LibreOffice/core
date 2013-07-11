@@ -183,7 +183,7 @@ public:
 
     sal_Bool                        IsModified()const;
 
-    virtual String GetCellText( long nRow, sal_uInt16 nColumn ) const;
+    virtual OUString GetCellText( long nRow, sal_uInt16 nColumn ) const;
     virtual void Resize();
     virtual Size GetOptimalSize() const;
 };
@@ -4002,7 +4002,7 @@ sal_Bool    SwEntryBrowseBox::SeekRow( long nRow )
     return sal_True;
 }
 
-String SwEntryBrowseBox::GetCellText(long nRow, sal_uInt16 nColumn) const
+OUString SwEntryBrowseBox::GetCellText(long nRow, sal_uInt16 nColumn) const
 {
     const String* pRet = &aEmptyStr;
     if(static_cast<sal_uInt16>( aEntryArr.size() ) > nRow)

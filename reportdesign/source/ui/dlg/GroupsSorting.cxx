@@ -138,7 +138,7 @@ protected:
     virtual void PaintCell( OutputDevice& rDev, const Rectangle& rRect, sal_uInt16 nColId ) const;
     virtual sal_Bool SeekRow( long nRow );
     virtual sal_Bool SaveModified();
-    virtual String GetCellText( long nRow, sal_uInt16 nColId ) const;
+    virtual OUString GetCellText( long nRow, sal_uInt16 nColId ) const;
     virtual RowStatus GetRowStatus(long nRow) const;
 
     virtual void KeyInput(const KeyEvent& rEvt);
@@ -490,10 +490,10 @@ sal_Bool OFieldExpressionControl::SaveModified(bool _bAppendRow)
     return sal_True;
 }
 //------------------------------------------------------------------------------
-String OFieldExpressionControl::GetCellText( long nRow, sal_uInt16 /*nColId*/ ) const
+OUString OFieldExpressionControl::GetCellText( long nRow, sal_uInt16 /*nColId*/ ) const
 {
     DBG_CHKTHIS( rpt_OFieldExpressionControl,NULL);
-    String sText;
+    OUString sText;
     if ( nRow != BROWSER_ENDOFSELECTION && m_aGroupPositions[nRow] != NO_GROUP )
     {
         try
@@ -510,9 +510,9 @@ String OFieldExpressionControl::GetCellText( long nRow, sal_uInt16 /*nColId*/ ) 
                     break;
                 }
             }
-            sText  = sExpression;
+            sText = sExpression;
         }
-        catch(uno::Exception&)
+        catch (const uno::Exception&)
         {
             OSL_FAIL("Exception caught while getting expression value from the group");
         }

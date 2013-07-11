@@ -87,7 +87,7 @@ protected:
     virtual void PaintCell( OutputDevice& rDev, const Rectangle& rRect, sal_uInt16 nColId ) const;
     virtual sal_Bool SeekRow( long nRow );
     virtual sal_Bool SaveModified();
-    virtual String GetCellText( long nRow, sal_uInt16 nColId ) const;
+    virtual OUString GetCellText( long nRow, sal_uInt16 nColId ) const;
 
     virtual void CellModified();
 

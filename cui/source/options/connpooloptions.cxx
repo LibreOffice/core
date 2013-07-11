@@ -54,7 +54,7 @@ namespace offapp
 
         virtual void Init();
                 void Update(const DriverPoolingSettings& _rSettings);
-        virtual String GetCellText( long nRow, sal_uInt16 nColId ) const;
+        virtual OUString GetCellText( long nRow, sal_uInt16 nColId ) const;
 
         // the handler will be called with a DriverPoolingSettings::const_iterator as parameter,
         // or NULL if no valid current row exists
@@ -242,9 +242,9 @@ namespace offapp
     }
 
     //--------------------------------------------------------------------
-    String DriverListControl::GetCellText( long nRow, sal_uInt16 nColId ) const
+    OUString DriverListControl::GetCellText( long nRow, sal_uInt16 nColId ) const
     {
-        String sReturn;
+        OUString sReturn;
         if (nRow > m_aSettings.size())
         {
             OSL_FAIL("DriverListControl::GetCellText: don't ask me for such rows!");

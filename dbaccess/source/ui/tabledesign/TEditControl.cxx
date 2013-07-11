@@ -1243,7 +1243,7 @@ Any OTableEditorCtrl::GetCellData( long nRow, sal_uInt16 nColId )
 }
 
 //------------------------------------------------------------------------------
-String OTableEditorCtrl::GetCellText( long nRow, sal_uInt16 nColId ) const
+OUString OTableEditorCtrl::GetCellText( long nRow, sal_uInt16 nColId ) const
 {
     DBG_CHKTHIS(OTableEditorCtrl,NULL);
     OUString sCellText;

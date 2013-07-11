@@ -78,7 +78,7 @@ public:
         @return
             the text out of the cell
     */
-    virtual String  GetCellText(long nRow, sal_uInt16 nColId) const;
+    virtual OUString  GetCellText(long nRow, sal_uInt16 nColId) const;
 
     /** returns the number in the given cell. If a cell is empty or contains a
         string, the result will be Nan

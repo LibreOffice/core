@@ -155,7 +155,7 @@ public:
         @return
             the text out of the cell
     */
-    virtual String  GetCellText(long _nRow, sal_uInt16 _nColId) const;
+    virtual OUString  GetCellText(long _nRow, sal_uInt16 _nColId) const;
 
     // from IAccessibleTableProvider
     virtual Rectangle GetFieldCharacterBounds(sal_Int32 _nRow,sal_Int32 _nColumnPos,sal_Int32 nIndex);

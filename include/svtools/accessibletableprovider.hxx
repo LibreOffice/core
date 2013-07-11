@@ -87,7 +87,7 @@ public:
 
     /** @return  <TRUE/>, if the cell is visible. */
     virtual sal_Bool                IsCellVisible( sal_Int32 _nRow, sal_uInt16 _nColumnPos ) const = 0;
-    virtual String                  GetAccessibleCellText( long _nRow, sal_uInt16 _nColumnPos ) const = 0;
+    virtual OUString                GetAccessibleCellText( long _nRow, sal_uInt16 _nColumnPos ) const = 0;
 
     virtual Rectangle               calcHeaderRect( sal_Bool _bIsColumnBar, sal_Bool _bOnScreen = sal_True ) = 0;
     virtual Rectangle               calcTableRect( sal_Bool _bOnScreen = sal_True ) = 0;
