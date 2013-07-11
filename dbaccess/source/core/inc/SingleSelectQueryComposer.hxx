@@ -180,9 +180,25 @@ namespace dbaccess
         */
         OUString composeStatementFromParts( const ::std::vector< OUString >& _rParts );
 
-        /** return the name of the column.
+        /** return the name of the column in the *source* *table*.
+
+            That is, for (SELECT a AS b FROM t), it returns A or "t"."A", as appropriate.
+
+            Use e.g. for WHERE, GROUP BY and HAVING clauses.
+
+            @param bGroupBy: for GROUP BY clause? In that case, throw exception if trying to use an unrelated column and the database does not support that.
         */
-        OUString impl_getColumnName_throw(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& column);
+        OUString impl_getColumnRealName_throw(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& column, bool bGroupBy);
+
+        /** return the name of the column in the *query*
+
+            That is, for (SELECT a AS b FROM t), it returns "b"
+
+            Use e.g. for ORDER BY clause.
+
+            @param bOrderBy: for ORDER BY clause? In that case, throw exception if trying to use an unrelated column and the database does not support that.
+        */
+        OUString impl_getColumnName_throw(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& column, bool bOrderBy);
 
     protected:
         virtual ~OSingleSelectQueryComposer();

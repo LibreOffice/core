@@ -234,30 +234,7 @@ OUString DlgOrderCrit::GetOrderList( ) const
                 sOrder += OUString(",");
 
             String sName = m_aColumnList[i]->GetSelectEntry();
-            try
-            {
-                sal_Bool bFunction = sal_False;
-                Reference< XPropertySet > xColumn;
-                if ( xColumns.is() && xColumns->hasByName( sName ) && (xColumns->getByName( sName ) >>= xColumn) && xColumn.is() )
-                {
-                    if ( xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_REALNAME) )
-                    {
-                        OUString sRealName;
-                        xColumn->getPropertyValue(PROPERTY_REALNAME)    >>= sRealName;
-                        sName = sRealName;
-                        static OUString sFunction("Function");
-                        if ( xColumn->getPropertySetInfo()->hasPropertyByName(sFunction) )
-                            xColumn->getPropertyValue(sFunction) >>= bFunction;
-                    }
-                }
-                if ( bFunction )
-                    sOrder += sName;
-                else
-                    sOrder += ::dbtools::quoteName(sQuote,sName);
-            }
-            catch(const Exception&)
-            {
-            }
+            sOrder += ::dbtools::quoteName(sQuote,sName);
             if(m_aValueList[i]->GetSelectEntryPos())
                 sOrder += sDESC;
             else
