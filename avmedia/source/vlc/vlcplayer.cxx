@@ -1,3 +1,6 @@
+#include <vcl/syschild.hxx>
+#include <vcl/sysdata.hxx>
+
 #include "vlcplayer.hxx"
 #include "vlcwindow.hxx"
 #include "vlcframegrabber.hxx"
@@ -22,7 +25,7 @@ const int MS_IN_SEC = 1000; // Millisec in sec
 
 namespace
 {
-    libvlc_media_t* initMedia( const rtl::OUString& url, boost::shared_ptr<libvlc_instance_t>& instance )
+    libvlc_media_t* InitMedia( const rtl::OUString& url, boost::shared_ptr<libvlc_instance_t>& instance )
     {
         rtl::OString dest;
         url.convertToString(&dest, RTL_TEXTENCODING_UTF8, 0);
@@ -34,7 +37,7 @@ VLCPlayer::VLCPlayer( const rtl::OUString& url )
     : VLC_Base(m_aMutex)
     , mInstance( libvlc_new( sizeof( VLC_ARGS ) / sizeof( VLC_ARGS[0] ), VLC_ARGS ), libvlc_release )
     , mPlayer( libvlc_media_player_new(mInstance.get()), libvlc_media_player_release )
-    , mMedia( initMedia( url, mInstance), libvlc_media_release )
+    , mMedia( InitMedia( url, mInstance), libvlc_media_release )
 {
     libvlc_media_player_set_media( mPlayer.get(), mMedia.get() );
 }
@@ -119,10 +122,47 @@ css::awt::Size SAL_CALL VLCPlayer::getPreferredPlayerWindowSize()
     return css::awt::Size( 1, 1 );
 }
 
+namespace
+{
+    // TODO: Move this function to the common space for avoiding duplication with
+    // gstreamer/gstwindow::createPlayerWindow functionality
+    int GetWindowID( const uno::Sequence< uno::Any >& arguments )
+    {
+        if (arguments.getLength() <= 2)
+            return -1;
+
+        sal_IntPtr pIntPtr = 0;
+
+        arguments[ 2 ] >>= pIntPtr;
+
+        SystemChildWindow *pParentWindow = reinterpret_cast< SystemChildWindow* >( pIntPtr );
+
+        const SystemEnvData* pEnvData = pParentWindow ? pParentWindow->GetSystemData() : NULL;
+
+        if (pEnvData == NULL)
+            return -1;
+
+        // Explicit converts from long to int
+        const int id = static_cast<int>( pEnvData->aWindow );
+
+        return id;
+    }
+}
+
 uno::Reference< css::media::XPlayerWindow > SAL_CALL VLCPlayer::createPlayerWindow( const uno::Sequence< uno::Any >& aArguments )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-    return uno::Reference< css::media::XPlayerWindow >(new VLCWindow( *this ));
+
+    VLCWindow * const window = new VLCWindow( *this );
+
+    const int winID = GetWindowID( aArguments );
+
+    if (winID != -1)
+    {
+        libvlc_media_player_set_xwindow( mPlayer.get(), winID );
+    }
+
+    return uno::Reference< css::media::XPlayerWindow >( window );
 }
 
 uno::Reference< css::media::XFrameGrabber > SAL_CALL VLCPlayer::createFrameGrabber()
