@@ -1649,7 +1649,7 @@ String RID_SVXSTR_DASH1
 };
 String RID_SVXSTR_DASH2
 {
-    Text [ en-US ] = "Ultrafine 2 Dots 3 Dashes";
+    Text [ en-US ] = "2 Dots 3 Dashes";
 };
 String RID_SVXSTR_DASH3
 {
@@ -1661,15 +1661,15 @@ String RID_SVXSTR_DASH4
 };
 String RID_SVXSTR_DASH5
 {
-    Text [ en-US ] = "Fine Dashed (var)";
+    Text [ en-US ] = "Fine Dashed";
 };
 String RID_SVXSTR_DASH6
 {
-    Text [ en-US ] = "3 Dashes 3 Dots (var)";
+    Text [ en-US ] = "3 Dashes 3 Dots";
 };
 String RID_SVXSTR_DASH7
 {
-    Text [ en-US ] = "Ultrafine Dotted (var)";
+    Text [ en-US ] = "Ultrafine Dotted";
 };
 String RID_SVXSTR_DASH8
 {
@@ -1681,7 +1681,7 @@ String RID_SVXSTR_DASH9
 };
 String RID_SVXSTR_DASH10
 {
-    Text [ en-US ] = "Dashed (var)";
+    Text [ en-US ] = "Dashed";
 };
 String RID_SVXSTR_DASH11
 {
