@@ -39,20 +39,47 @@
 #include "FDriver.hxx"
 #include "FStatement.hxx"
 #include "FPreparedStatement.hxx"
+
+#include <com/sun/star/document/XDocumentEventBroadcaster.hpp>
+#include <com/sun/star/embed/ElementModes.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
+#include <com/sun/star/frame/FrameSearchFlag.hpp>
+#include <com/sun/star/frame/XController.hpp>
+#include <com/sun/star/frame/XFrame.hpp>
+#include <com/sun/star/frame/XFrames.hpp>
+#include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/io/TempFile.hpp>
+#include <com/sun/star/io/XStream.hpp>
+#include <com/sun/star/lang/DisposedException.hpp>
+#include <com/sun/star/lang/EventObject.hpp>
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/TransactionIsolation.hpp>
-#include <com/sun/star/lang/DisposedException.hpp>
+#include <com/sun/star/ucb/SimpleFileAccess.hpp>
+#include <com/sun/star/ucb/XSimpleFileAccess2.hpp>
+
+#include "connectivity/dbexception.hxx"
+#include "resource/common_res.hrc"
+#include "resource/hsqldb_res.hrc"
+#include "resource/sharedresources.hxx"
+
+#include <comphelper/processfactory.hxx>
+#include <unotools/tempfile.hxx>
+#include <unotools/ucbstreamhelper.hxx>
 
 using namespace connectivity::firebird;
 using namespace connectivity;
 
-//------------------------------------------------------------------------------
-using namespace com::sun::star::uno;
-using namespace com::sun::star::lang;
+using namespace com::sun::star;
 using namespace com::sun::star::beans;
+using namespace com::sun::star::document;
+using namespace com::sun::star::embed;
+using namespace com::sun::star::frame;
+using namespace com::sun::star::io;
+using namespace com::sun::star::lang;
 using namespace com::sun::star::sdbc;
-// --------------------------------------------------------------------------------
+using namespace com::sun::star::uno;
+
 OConnection::OConnection(FirebirdDriver*    _pDriver)
                          : OSubComponent<OConnection, OConnection_BASE>((::cppu::OWeakObject*)_pDriver, this),
                          OMetaConnection_BASE(m_aMutex),
@@ -103,21 +130,92 @@ static int pr_error(const ISC_STATUS* status, char* operation)
     return 1;
 }
 
-void OConnection::construct(const ::rtl::OUString& url, const Sequence< PropertyValue >& info,
-            const bool constructNewDatabase)
+void OConnection::construct(const ::rtl::OUString& url, const Sequence< PropertyValue >& info)
     throw(SQLException)
 {
     SAL_INFO("connectivity.firebird", "=> OConnection::construct().");
 
     osl_atomic_increment( &m_refCount );
 
-    // some example code how to get the information out of the sequence
+    bool bIsNewDatabase = false;
+    OUString aStorageURL;
+    if (url.equals("sdbc:embedded:firebird"))
+    {
+        m_bIsEmbedded = true;
+        const PropertyValue* pIter = info.getConstArray();
+        const PropertyValue* pEnd = pIter + info.getLength();
+
+        for (;pIter != pEnd; ++pIter)
+        {
+            if ( pIter->Name == "Storage" )
+            {
+                m_xEmbeddedStorage.set(pIter->Value,UNO_QUERY);
+            }
+            else if ( pIter->Name == "URL" )
+            {
+                pIter->Value >>= aStorageURL;
+            }
+        }
+
+        if ( !m_xEmbeddedStorage.is() )
+        {
+            ::connectivity::SharedResources aResources;
+            const OUString sMessage = aResources.getResourceString(STR_NO_STROAGE);
+            ::dbtools::throwGenericSQLException(sMessage ,*this);
+        }
+
+        bIsNewDatabase = !m_xEmbeddedStorage->hasElements();
+
+        const OUString sDBName( "firebird.fdb" ); // Location within .odb container
+        m_aURL = utl::TempFile::CreateTempName() + ".fdb";
+
+        SAL_INFO("connectivity.firebird", "Temporary .fdb location:  "
+                    << OUStringToOString(m_aURL,RTL_TEXTENCODING_UTF8 ).getStr());
+        if (!bIsNewDatabase)
+        {
+            SAL_INFO("connectivity.firebird", "Extracting .fdb from .odb" );
+            if (!m_xEmbeddedStorage->isStreamElement(sDBName))
+            {
+                ::connectivity::SharedResources aResources;
+                const OUString sMessage = aResources.getResourceString(STR_ERROR_NEW_VERSION);
+                ::dbtools::throwGenericSQLException(sMessage ,*this);
+            }
+
+            Reference< XStream > xDBStream(m_xEmbeddedStorage->openStreamElement(sDBName,
+                                                            ElementModes::READ));
+
+            uno::Reference< ucb::XSimpleFileAccess2 > xFileAccess(
+                    ucb::SimpleFileAccess::create( comphelper::getProcessComponentContext() ),
+                                                                uno::UNO_QUERY );
+            if ( !xFileAccess.is() )
+            {
+                // TODO: Error
+                ::connectivity::SharedResources aResources;
+                const OUString sMessage = aResources.getResourceString(STR_ERROR_NEW_VERSION);
+                ::dbtools::throwGenericSQLException(sMessage ,*this);
+            }
+            try {
+                xFileAccess->writeFile(m_aURL,xDBStream->getInputStream());
+            }
+            catch (...)
+            {
+                // TODO
+            }
+        }
+
+        if (bIsNewDatabase)
+        {
+        }
+        // Get DB properties from XML
+
+    }
+    // else if url.begins(sdbc:firebird...)
 
     ISC_STATUS_ARRAY status;            /* status vector */
 
-    if (constructNewDatabase)
+    if (bIsNewDatabase)
     {
-        if (isc_create_database(status, url.getLength(), OUStringToOString(url, RTL_TEXTENCODING_UTF8).getStr(),
+        if (isc_create_database(status, m_aURL.getLength(), OUStringToOString(m_aURL, RTL_TEXTENCODING_UTF8).getStr(),
                                                             &m_DBHandler, 0, NULL, 0))
         {
             if(pr_error(status, "create new database"))
@@ -126,11 +224,46 @@ void OConnection::construct(const ::rtl::OUString& url, const Sequence< Property
     }
     else
     {
-        if (isc_attach_database(status, url.getLength(), OUStringToOString(url, RTL_TEXTENCODING_UTF8).getStr(),
+        if (isc_attach_database(status, m_aURL.getLength(), OUStringToOString(m_aURL, RTL_TEXTENCODING_UTF8).getStr(),
                                                         &m_DBHandler, 0, NULL))
             if (pr_error(status, "attach database"))
                 return;
     }
+
+    if (m_bIsEmbedded)
+    {
+        uno::Reference< frame::XDesktop2 > xFramesSupplier =
+            frame::Desktop::create(::comphelper::getProcessComponentContext());
+        uno::Reference< frame::XFrames > xFrames( xFramesSupplier->getFrames(),
+                                                                uno::UNO_QUERY);
+        uno::Sequence< uno::Reference<frame::XFrame> > xFrameList =
+                            xFrames->queryFrames( frame::FrameSearchFlag::ALL );
+        for (sal_Int32 i = 0; i < xFrameList.getLength(); i++)
+        {
+            uno::Reference< frame::XFrame > xf = xFrameList[i];
+
+            uno::Reference< XController > xc;
+            if (xf.is())
+                xc = xf->getController();
+
+            uno::Reference< XModel > xm;
+            if (xc.is())
+                xm = xc->getModel();
+
+            OUString aURL;
+
+            if (xm.is())
+                aURL = xm->getURL();
+            if (aURL == aStorageURL)
+            {
+                uno::Reference<XDocumentEventBroadcaster> xBroadcaster( xm, UNO_QUERY);
+                if (xBroadcaster.is())
+                    xBroadcaster->addDocumentEventListener( this );
+                //TODO: remove in the disposing?
+            }
+        }
+    }
+
     osl_atomic_decrement( &m_refCount );
 }
 // XServiceInfo
@@ -360,6 +493,20 @@ void SAL_CALL OConnection::clearWarnings(  ) throw(SQLException, RuntimeExceptio
 {
     // you should clear your collected warnings here
 }
+// --------------------------------------------------------------------------------
+// XDocumentEventListener
+void SAL_CALL OConnection::documentEventOccured( const DocumentEvent& _Event )
+                                                        throw(RuntimeException)
+{
+    if (_Event.EventName == "onSave" || _Event.EventName == "onSaveAs")
+    {
+        // TODO: write to storage
+    }
+}
+// XEventListener
+void SAL_CALL OConnection::disposing( const EventObject& Source ) throw (RuntimeException)
+{
+}
 //--------------------------------------------------------------------
 void OConnection::buildTypeInfo() throw( SQLException)
 {
@@ -438,7 +585,7 @@ void OConnection::disposing()
             return;
 
     dispose_ChildImpl();
-    OConnection_BASE::disposing();
+    cppu::WeakComponentImplHelperBase::disposing();
 }
 // -----------------------------------------------------------------------------
 
