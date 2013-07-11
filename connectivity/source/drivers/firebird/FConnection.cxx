@@ -64,6 +64,7 @@
 #include "resource/sharedresources.hxx"
 
 #include <comphelper/processfactory.hxx>
+#include <comphelper/storagehelper.hxx>
 #include <unotools/tempfile.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 
@@ -498,9 +499,28 @@ void SAL_CALL OConnection::clearWarnings(  ) throw(SQLException, RuntimeExceptio
 void SAL_CALL OConnection::documentEventOccured( const DocumentEvent& _Event )
                                                         throw(RuntimeException)
 {
-    if (_Event.EventName == "onSave" || _Event.EventName == "onSaveAs")
+    if (_Event.EventName == "OnSave" || _Event.EventName == "OnSaveAs")
     {
-        // TODO: write to storage
+        if ( m_bIsEmbedded && m_xEmbeddedStorage.is() )
+        {
+            const OUString sDBName( "firebird.fdb" ); // Location within .odb container
+
+            SAL_INFO("connectivity.firebird", "Writing .fdb into .odb" );
+
+            Reference< XStream > xDBStream(m_xEmbeddedStorage->openStreamElement(sDBName,
+                                                            ElementModes::WRITE));
+
+            using namespace ::comphelper;
+            Reference< XComponentContext > xContext = comphelper::getProcessComponentContext();
+            Reference< XInputStream > xInputStream;
+            if (xContext.is())
+                xInputStream =
+                        OStorageHelper::GetInputStreamFromURL(m_aURL, xContext);
+            if (xInputStream.is())
+                OStorageHelper::CopyInputToOutput( xInputStream,
+                                                xDBStream->getOutputStream());
+            // TODO: ensure db is in safe state
+        }
     }
 }
 // XEventListener
