@@ -295,7 +295,7 @@ public:
                            const ScFormulaCellGroupRef& xGroup, ScTokenArray& rCode);
 };
 
-#define RETURN_IF_FAIL(a,b) do { if (!(a)) { fprintf (stderr,b); return false; } } while (0)
+#define RETURN_IF_FAIL(a,b) do { if (!(a)) { fprintf (stderr,b"\n"); return false; } } while (0)
 
 #include "compiler.hxx"
 
@@ -313,61 +313,36 @@ bool FormulaGroupInterpreterGroundwater::interpret(ScDocument& rDoc, const ScAdd
     const double *pArrayToSubtractOneElementFrom;
     const double *pGroundWaterDataArray;
 
-    // Output:
-    std::vector<double> aMatrixContent;
+    const formula::FormulaToken* p = rCode.FirstRPN();
+    RETURN_IF_FAIL(p != NULL && p->GetOpCode() == ocPush && p->GetType() == formula::svDoubleVectorRef, "double vector ref expected");
 
-    const formula::FormulaToken *p;
+    // Get the range reference vector.
+    const formula::DoubleVectorRefToken* pDvr = static_cast<const formula::DoubleVectorRefToken*>(p);
+    const std::vector<const double*>& rArrays = pDvr->GetArrays();
+    RETURN_IF_FAIL(rArrays.size() == 1, "unexpectedly large double ref array");
+    RETURN_IF_FAIL(pDvr->GetArrayLength() == (size_t)xGroup->mnLength, "wrong double ref length");
+    RETURN_IF_FAIL(pDvr->IsStartFixed() && pDvr->IsEndFixed(), "non-fixed ranges )");
+    pGroundWaterDataArray = rArrays[0];
 
-    // special cased formula parser:
+    // Function:
+    p = rCode.NextRPN();
+    RETURN_IF_FAIL(p != NULL, "no operator");
+    eOp = p->GetOpCode();
+    RETURN_IF_FAIL(eOp == ocAverage || eOp == ocMax || eOp == ocMin, "unexpected opcode - expected either average, max, or min");
 
-    p = rCode.FirstNoSpaces();
-    RETURN_IF_FAIL(p != NULL && p->GetOpCode() == ocOpen, "no opening (");
+    p = rCode.NextRPN();
+    RETURN_IF_FAIL(p != NULL && p->GetOpCode() == ocPush && p->GetType() == formula::svSingleVectorRef, "single vector ref expected");
 
-    {
-        p = rCode.NextNoSpaces();
-        RETURN_IF_FAIL(p != NULL, "no operator");
+    // Get the single reference vector.
+    const formula::SingleVectorRefToken* pSvr = static_cast<const formula::SingleVectorRefToken*>(p);
+    pArrayToSubtractOneElementFrom = pSvr->GetArray();
+    RETURN_IF_FAIL(pSvr->GetArrayLength() == (size_t)xGroup->mnLength, "wrong single ref length");
 
-        // Function:
-        eOp = p->GetOpCode();
-        RETURN_IF_FAIL(eOp == ocAverage || eOp == ocMax || eOp == ocMin, "unexpected opcode");
+    p = rCode.NextRPN();
+    RETURN_IF_FAIL(p != NULL && p->GetOpCode() == ocSub, "missing subtract opcode");
 
-        { // function arguments
-            p = rCode.NextNoSpaces();
-            RETURN_IF_FAIL(p != NULL && p->GetOpCode() == ocOpen, "missing opening (");
-
-            p = rCode.NextNoSpaces();
-            RETURN_IF_FAIL(p != NULL, "no function argument");
-            RETURN_IF_FAIL(p->GetType() == formula::svDoubleVectorRef, "wrong type of fn argument");
-            const formula::DoubleVectorRefToken* pDvr = static_cast<const formula::DoubleVectorRefToken*>(p);
-            const std::vector<const double*>& rArrays = pDvr->GetArrays();
-            RETURN_IF_FAIL(rArrays.size() == 1, "unexpectedly large double ref array");
-            RETURN_IF_FAIL(pDvr->GetArrayLength() == (size_t)xGroup->mnLength, "wrong double ref length");
-            RETURN_IF_FAIL(pDvr->IsStartFixed() && pDvr->IsEndFixed(), "non-fixed ranges )");
-            pGroundWaterDataArray = rArrays[0];
-
-            p = rCode.NextNoSpaces();
-            RETURN_IF_FAIL(p != NULL && p->GetOpCode() == ocClose, "missing closing )");
-        }
-
-        // Subtract operator
-        p = rCode.NextNoSpaces();
-        RETURN_IF_FAIL(p != NULL && p->GetOpCode() == ocSub, "missing subtract opcode");
-
-        { // subtract parameter
-            p = rCode.NextNoSpaces();
-            RETURN_IF_FAIL(p != NULL, "no tokens");
-            RETURN_IF_FAIL(p->GetType() == formula::svSingleVectorRef, "not a single ref");
-            const formula::SingleVectorRefToken* pSvr = static_cast<const formula::SingleVectorRefToken*>(p);
-            pArrayToSubtractOneElementFrom = pSvr->GetArray();
-            RETURN_IF_FAIL(pSvr->GetArrayLength() == (size_t)xGroup->mnLength, "wrong single ref length");
-        }
-
-        p = rCode.NextNoSpaces();
-        RETURN_IF_FAIL(p != NULL && p->GetOpCode() == ocClose, "missing closing )");
-    }
-
-    p = rCode.NextNoSpaces();
-    RETURN_IF_FAIL(p == NULL, "has 5th");
+    p = rCode.NextRPN();
+    RETURN_IF_FAIL(p == NULL, "there should be no more token");
 
     static OclCalc ocl_calc;
 
@@ -380,7 +355,7 @@ bool FormulaGroupInterpreterGroundwater::interpret(ScDocument& rDoc, const ScAdd
     //   pArrayToSubtractOneElementFrom => contains L$5:L$7701 (ie. a copy)
     //   length of this array -> xGroup->mnLength
 
-    fprintf (stderr, "Calculate !\n");
+    fprintf (stderr, "Calculate !");
 
     double *pResult = ocl_calc.OclSimpleDeltaOperation( eOp, pGroundWaterDataArray,
                                                         pArrayToSubtractOneElementFrom,
