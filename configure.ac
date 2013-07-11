@@ -9219,29 +9219,17 @@ dnl ***************************************
 dnl Checking for bison and flex
 dnl ***************************************
 AC_PATH_PROG(BISON, bison)
-ANCIENT_BISON="NO"
 if test -z "$BISON"; then
     AC_MSG_ERROR([no bison found in \$PATH, install it])
 else
     AC_MSG_CHECKING([the bison version])
     _bison_version=`$BISON --version | grep GNU | $SED -e 's@^[[^0-9]]*@@' -e 's@ .*@@' -e 's@,.*@@'`
     _bison_longver=`echo $_bison_version | $AWK -F. '{ print \$1*1000+\$2}'`
-    # Accept newer than 1.875 or older(equal) than 1.75
-    if test "$_bison_longver" -ge 1875 -o "$_bison_longver" -le 1075; then
-        if test "$_bison_version" = "1.875"; then
-            AC_MSG_WARN([suspect ($BISON $_bison_version)])
-            add_warning "Suspect ($BISON $_bison_version) suggest upgrade"
-        else
-            AC_MSG_RESULT([checked ($BISON $_bison_version)])
-        fi
-    else
-        AC_MSG_ERROR([failed ($BISON $_bison_version need 1.875+ (or 1.75 and older))])
-    fi
+    # Accept newer than 2.0
     if test "$_bison_longver" -lt 2000; then
-        ANCIENT_BISON="YES"
+        AC_MSG_ERROR([failed ($BISON $_bison_version need 2.0+)])
     fi
 fi
-AC_SUBST(ANCIENT_BISON)
 
 AC_PATH_PROG(FLEX, flex)
 if test -z "$FLEX"; then
