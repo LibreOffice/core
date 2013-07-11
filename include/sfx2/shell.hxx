@@ -162,12 +162,10 @@ protected:
                                 SfxShell();
                                 SfxShell( SfxViewShell *pViewSh );
 
-#ifndef _SFXSH_HXX
     SAL_DLLPRIVATE void SetViewShell_Impl( SfxViewShell* pView );
     SAL_DLLPRIVATE void Invalidate_Impl( SfxBindings& rBindings, sal_uInt16 nId );
     SAL_DLLPRIVATE SfxShellObject* GetShellObj_Impl() const;
     SAL_DLLPRIVATE void SetShellObj_Impl( SfxShellObject* pObj );
-#endif
 
 public:
                                 TYPEINFO();
@@ -253,11 +251,9 @@ public:
     */
     void BroadcastContextForActivation (const bool bIsActivated);
 
-#ifndef _SFXSH_HXX
     SAL_DLLPRIVATE bool CanExecuteSlot_Impl( const SfxSlot &rSlot );
     SAL_DLLPRIVATE void DoActivate_Impl( SfxViewFrame *pFrame, sal_Bool bMDI);
     SAL_DLLPRIVATE void DoDeactivate_Impl( SfxViewFrame *pFrame, sal_Bool bMDI);
-#endif
 };
 
 //--------------------------------------------------------------------
