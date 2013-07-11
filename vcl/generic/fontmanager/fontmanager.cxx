@@ -1831,6 +1831,7 @@ void PrintFontManager::initialize()
                                 m_aFontFileToFontID[ aFileName ].insert( m_nNextFontID );
                                 m_aFonts[ m_nNextFontID++ ] = *it;
                                 m_pFontCache->updateFontCacheEntry( *it, false );
+                                ++nDirFonts;
 #if OSL_DEBUG_LEVEL > 2
                                 nBuiltinFonts++;
 #endif
