@@ -201,7 +201,7 @@ Any xforms_date( const OUString& rValue )
 Any xforms_dateTime( const OUString& rValue )
 {
     util::DateTime aDateTime;
-    bool const bSuccess = ::sax::Converter::convertDateTime(aDateTime, rValue);
+    bool const bSuccess = ::sax::Converter::parseDateTime(aDateTime, 0, rValue);
     return bSuccess ? makeAny( aDateTime ) : Any();
 }
 

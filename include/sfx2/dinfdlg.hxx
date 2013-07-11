@@ -16,8 +16,10 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SFX_DINFDLG_HXX
-#define _SFX_DINFDLG_HXX
+#ifndef SFX_DINFDLG_HXX
+#define SFX_DINFDLG_HXX
+
+#include <boost/optional/optional.hpp>
 
 #include "sal/config.h"
 #include "sfx2/dllapi.h"
@@ -285,6 +287,8 @@ private:
     CustomPropertyLine*             m_pLine;
 
 public:
+    ::boost::optional<sal_Int16> m_TZ;
+
     inline CustomPropertiesDateField(
         Window* pParent, const ResId& rResId, CustomPropertyLine* pLine ) :
             DateField( pParent, rResId ), m_pLine( pLine ) {}
@@ -297,9 +301,11 @@ private:
     CustomPropertyLine*             m_pLine;
 
 public:
+    bool m_isUTC;
+
     inline CustomPropertiesTimeField(
         Window* pParent, const ResId& rResId, CustomPropertyLine* pLine ) :
-            TimeField( pParent, rResId ), m_pLine( pLine ) {}
+            TimeField( pParent, rResId ), m_pLine( pLine ), m_isUTC(false) {}
 
     inline CustomPropertyLine*      GetLine() const { return m_pLine; }
 };

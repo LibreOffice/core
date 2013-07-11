@@ -41,7 +41,8 @@
 #include <com/sun/star/beans/XPropertyContainer.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/util/Date.hpp>
-#include <com/sun/star/util/Time.hpp>
+#include <com/sun/star/util/DateTimeWithTimezone.hpp>
+#include <com/sun/star/util/DateWithTimezone.hpp>
 #include <com/sun/star/util/Duration.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
 
@@ -1715,6 +1716,8 @@ void CustomPropertiesWindow::AddLine( const OUString& sName, Any& rAny )
     OUString sTmpValue;
     util::DateTime aTmpDateTime;
     util::Date aTmpDate;
+    util::DateTimeWithTimezone aTmpDateTimeTZ;
+    util::DateWithTimezone aTmpDateTZ;
     util::Duration aTmpDuration;
     SvtSysLocale aSysLocale;
     const LocaleDataWrapper& rLocaleWrapper = aSysLocale.GetLocaleData();
@@ -1741,21 +1744,37 @@ void CustomPropertiesWindow::AddLine( const OUString& sName, Any& rAny )
     }
     else if ( rAny >>= aTmpDate )
     {
-        nType = CUSTOM_TYPE_DATE;
         pNewLine->m_aDateField.SetDate( Date( aTmpDate.Day, aTmpDate.Month, aTmpDate.Year ) );
-
-    }
-    else if ( rAny >>= aTmpDuration )
-    {
-        nType = CUSTOM_TYPE_DURATION;
-        pNewLine->m_aDurationField.SetDuration( aTmpDuration );
+        nType = CUSTOM_TYPE_DATE;
     }
     else if ( rAny >>= aTmpDateTime )
     {
         pNewLine->m_aDateField.SetDate( Date( aTmpDateTime.Day, aTmpDateTime.Month, aTmpDateTime.Year ) );
         pNewLine->m_aTimeField.SetTime( Time( aTmpDateTime.Hours, aTmpDateTime.Minutes, aTmpDateTime.Seconds, aTmpDateTime.NanoSeconds ) );
-
+        pNewLine->m_aTimeField.m_isUTC = aTmpDateTime.IsUTC;
         nType = CUSTOM_TYPE_DATETIME;
+    }
+    else if ( rAny >>= aTmpDateTZ )
+    {
+        pNewLine->m_aDateField.SetDate( Date( aTmpDateTZ.DateInTZ.Day,
+                    aTmpDateTZ.DateInTZ.Month, aTmpDateTZ.DateInTZ.Year ) );
+        pNewLine->m_aDateField.m_TZ = aTmpDateTZ.Timezone;
+        nType = CUSTOM_TYPE_DATE;
+    }
+    else if ( rAny >>= aTmpDateTimeTZ )
+    {
+        util::DateTime const& rDT(aTmpDateTimeTZ.DateTimeInTZ);
+        pNewLine->m_aDateField.SetDate( Date( rDT.Day, rDT.Month, rDT.Year ) );
+        pNewLine->m_aTimeField.SetTime( Time( rDT.Hours, rDT.Minutes,
+                    rDT.Seconds, rDT.NanoSeconds ) );
+        pNewLine->m_aTimeField.m_isUTC = rDT.IsUTC;
+        pNewLine->m_aDateField.m_TZ = aTmpDateTimeTZ.Timezone;
+        nType = CUSTOM_TYPE_DATETIME;
+    }
+    else if ( rAny >>= aTmpDuration )
+    {
+        nType = CUSTOM_TYPE_DURATION;
+        pNewLine->m_aDurationField.SetDuration( aTmpDuration );
     }
 
     if ( nType != CUSTOM_TYPE_UNKNOWN )
@@ -1870,20 +1889,35 @@ Sequence< beans::PropertyValue > CustomPropertiesWindow::GetCustomProperties() c
                 util::DateTime const aDateTime(aTmpTime.GetNanoSec(),
                     aTmpTime.GetSec(), aTmpTime.GetMin(), aTmpTime.GetHour(),
                     aTmpDate.GetDay(), aTmpDate.GetMonth(), aTmpDate.GetYear(),
-                    false);
-                aPropertiesSeq[i].Value <<= aDateTime;
-            }
-            else if ( CUSTOM_TYPE_DURATION == nType )
-            {
-                aPropertiesSeq[i].Value <<= pLine->m_aDurationField.GetDuration();
+                    pLine->m_aTimeField.m_isUTC);
+                if (pLine->m_aDateField.m_TZ.is_initialized())
+                {
+                    aPropertiesSeq[i].Value <<= util::DateTimeWithTimezone(
+                            aDateTime, pLine->m_aDateField.m_TZ.get());
+                }
+                else
+                {
+                    aPropertiesSeq[i].Value <<= aDateTime;
+                }
             }
             else if ( CUSTOM_TYPE_DATE == nType )
             {
                 Date aTmpDate = pLine->m_aDateField.GetDate();
                 util::Date const aDate(aTmpDate.GetDay(), aTmpDate.GetMonth(),
                         aTmpDate.GetYear());
-                aPropertiesSeq[i].Value <<= aDate;
-
+                if (pLine->m_aDateField.m_TZ.is_initialized())
+                {
+                    aPropertiesSeq[i].Value <<= util::DateWithTimezone(
+                            aDate, pLine->m_aDateField.m_TZ.get());
+                }
+                else
+                {
+                    aPropertiesSeq[i].Value <<= aDate;
+                }
+            }
+            else if ( CUSTOM_TYPE_DURATION == nType )
+            {
+                aPropertiesSeq[i].Value <<= pLine->m_aDurationField.GetDuration();
             }
             else
             {

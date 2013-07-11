@@ -162,7 +162,7 @@ void XMLChangedRegionImportContext::SetChangeInfo(
     const OUString& rDate)
 {
     util::DateTime aDateTime;
-    if (::sax::Converter::convertDateTime(aDateTime, rDate))
+    if (::sax::Converter::parseDateTime(aDateTime, 0, rDate))
     {
         GetImport().GetTextImport()->RedlineAdd(
             rType, sID, rAuthor, rComment, aDateTime, bMergeLastPara);

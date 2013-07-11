@@ -22,6 +22,8 @@
 
 #include "sax/saxdllapi.h"
 
+#include <boost/optional/optional.hpp>
+
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -36,6 +38,8 @@ namespace com { namespace sun { namespace star {
     namespace util {
         struct Date;
         struct DateTime;
+        struct DateWithTimeZone;
+        struct DateTimeWithTimeZone;
         struct Duration;
     }
 } } }
@@ -153,23 +157,33 @@ public:
 
     /** convert util::Date to ISO "date" string */
     static void convertDate( OUStringBuffer& rBuffer,
-                    const com::sun::star::util::Date& rDate );
+                    const com::sun::star::util::Date& rDate,
+                    sal_Int16 const* pTimeZoneOffset);
 
     /** convert util::DateTime to ISO "date" or "dateTime" string */
     static void convertDateTime( OUStringBuffer& rBuffer,
                                 const com::sun::star::util::DateTime& rDateTime,
+                                 sal_Int16 const* pTimeZoneOffset,
                                    bool bAddTimeIf0AM = false );
 
+    static void convertDateTZ( OUStringBuffer& rBuffer,
+                    com::sun::star::util::DateWithTimeZone const& rDate );
+
+    static void convertDateTimeTZ( OUStringBuffer& rBuffer,
+                com::sun::star::util::DateTimeWithTimeZone const& rDateTime );
+
     /** convert ISO "date" or "dateTime" string to util::DateTime */
-    static bool convertDateTime( com::sun::star::util::DateTime& rDateTime,
+    static bool parseDateTime( com::sun::star::util::DateTime& rDateTime,
+                                 boost::optional<sal_Int16> * pTimeZoneOffset,
                                  const OUString& rString );
 
     /** convert ISO "date" or "dateTime" string to util::DateTime or
         util::Date */
-    static bool convertDateOrDateTime(
-                    com::sun::star::util::Date & rDate,
+    static bool parseDateOrDateTime(
+                    com::sun::star::util::Date * pDate,
                     com::sun::star::util::DateTime & rDateTime,
                     bool & rbDateTime,
+                    boost::optional<sal_Int16> * pTimeZoneOffset,
                     const OUString & rString );
 
     /** gets the position of the first comma after npos in the string

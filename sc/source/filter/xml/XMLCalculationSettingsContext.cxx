@@ -171,7 +171,7 @@ ScXMLNullDateContext::ScXMLNullDateContext( ScXMLImport& rImport,
         if (nPrefix == XML_NAMESPACE_TABLE && IsXMLToken(aLocalName, XML_DATE_VALUE))
         {
             util::DateTime aDateTime;
-            ::sax::Converter::convertDateTime(aDateTime, sValue);
+            ::sax::Converter::parseDateTime(aDateTime, 0, sValue);
             util::Date aDate;
             aDate.Day = aDateTime.Day;
             aDate.Month = aDateTime.Month;

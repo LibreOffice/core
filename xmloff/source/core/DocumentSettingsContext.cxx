@@ -631,7 +631,7 @@ void XMLConfigItemContext::EndElement()
         else if (IsXMLToken(msType, XML_DATETIME))
         {
             util::DateTime aDateTime;
-			::sax::Converter::convertDateTime(aDateTime, msValue);
+            ::sax::Converter::parseDateTime(aDateTime, 0, msValue);
             mrAny <<= aDateTime;
         }
         else if (IsXMLToken(msType, XML_BASE64BINARY))

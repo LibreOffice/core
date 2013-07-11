@@ -22,6 +22,8 @@
 #include <com/sun/star/i18n/UnicodeType.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/util/Date.hpp>
+#include <com/sun/star/util/DateTimeWithTimeZone.hpp>
+#include <com/sun/star/util/DateWithTimeZone.hpp>
 #include <com/sun/star/util/Duration.hpp>
 #include <com/sun/star/util/Time.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
@@ -1221,20 +1223,34 @@ lcl_AppendTimezone(OUStringBuffer & i_rBuffer, sal_Int16 const nOffset)
     }
 }
 
+void Converter::convertDateTZ( OUStringBuffer& rBuffer,
+                com::sun::star::util::DateWithTimeZone const& rDate)
+{
+    convertDate(rBuffer, rDate.DateInTZ, &rDate.Timezone);
+}
+
+void Converter::convertDateTimeTZ( OUStringBuffer& rBuffer,
+            com::sun::star::util::DateTimeWithTimeZone const& rDateTime)
+{
+    convertDateTime(rBuffer, rDateTime.DateTimeInTZ, &rDateTime.Timezone);
+}
+
 /** convert util::Date to ISO "date" string */
 void Converter::convertDate(
         OUStringBuffer& i_rBuffer,
-        const util::Date& i_rDate)
+        const util::Date& i_rDate,
+        sal_Int16 const*const pTimeZoneOffset)
 {
     const util::DateTime dt(0, 0, 0, 0,
         i_rDate.Day, i_rDate.Month, i_rDate.Year, false);
-    convertDateTime(i_rBuffer, dt, false);
+    convertDateTime(i_rBuffer, dt, pTimeZoneOffset, false);
 }
 
 /** convert util::DateTime to ISO "date" or "dateTime" string */
 void Converter::convertDateTime(
         OUStringBuffer& i_rBuffer,
         const com::sun::star::util::DateTime& i_rDateTime,
+        sal_Int16 const*const pTimeZoneOffset,
         bool i_bAddTimeIf0AM )
 {
     const sal_Unicode dash('-');
@@ -1297,10 +1313,9 @@ void Converter::convertDateTime(
         }
     }
 
-    sal_uInt16 * pTimezone(0); // FIXME pass this as parameter
-    if (pTimezone)
+    if (pTimeZoneOffset)
     {
-        lcl_AppendTimezone(i_rBuffer, *pTimezone);
+        lcl_AppendTimezone(i_rBuffer, *pTimeZoneOffset);
     }
     else if (i_rDateTime.IsUTC)
     {
@@ -1310,33 +1325,13 @@ void Converter::convertDateTime(
 }
 
 /** convert ISO "date" or "dateTime" string to util::DateTime */
-bool Converter::convertDateTime( util::DateTime& rDateTime,
+bool Converter::parseDateTime(   util::DateTime& rDateTime,
+                             boost::optional<sal_Int16> *const pTimeZoneOffset,
                                  const OUString& rString )
 {
     bool isDateTime;
-    util::Date date;
-    if (convertDateOrDateTime(date, rDateTime, isDateTime, rString))
-    {
-        if (!isDateTime)
-        {
-            rDateTime.Year = date.Year;
-            rDateTime.Month = date.Month;
-            rDateTime.Day = date.Day;
-            rDateTime.Hours = 0;
-            rDateTime.Minutes = 0;
-            rDateTime.Seconds = 0;
-            rDateTime.NanoSeconds = 0;
-            // FIXME
-#if 0
-            rDateTime.IsUTC = date.IsUTC;
-#endif
-        }
-        return true;
-    }
-    else
-    {
-        return false;
-    }
+    return parseDateOrDateTime(0, rDateTime, isDateTime, pTimeZoneOffset,
+            rString);
 }
 
 static bool lcl_isLeapYear(const sal_uInt32 nYear)
@@ -1456,9 +1451,11 @@ readDateTimeComponent(const OUString & rString,
 
 
 /** convert ISO "date" or "dateTime" string to util::DateTime or util::Date */
-bool Converter::convertDateOrDateTime(
-                util::Date & rDate, util::DateTime & rDateTime,
-                bool & rbDateTime, const OUString & rString )
+bool Converter::parseDateOrDateTime(
+                util::Date *const pDate, util::DateTime & rDateTime,
+                bool & rbDateTime,
+                boost::optional<sal_Int16> *const pTimeZoneOffset,
+                const OUString & rString )
 {
     bool bSuccess = true;
     bool isNegative(false);
@@ -1655,10 +1652,9 @@ bool Converter::convertDateOrDateTime(
 
     if (bSuccess)
     {
-        sal_uInt16 * pTimezone(0); // FIXME pass this as parameter
         sal_Int16 const nTimezoneOffset = ((bHaveTimezoneMinus) ? (-1) : (+1))
                         * ((nTimezoneHours * 60) + nTimezoneMinutes);
-        if (bHaveTime) // time is optional
+        if (!pDate || bHaveTime) // time is optional
         {
             rDateTime.Year =
                 ((isNegative) ? (-1) : (+1)) * static_cast<sal_Int16>(nYear);
@@ -1670,9 +1666,9 @@ bool Converter::convertDateOrDateTime(
             rDateTime.NanoSeconds = static_cast<sal_uInt32>(nNanoSeconds);
             if (bHaveTimezone)
             {
-                if (pTimezone)
+                if (pTimeZoneOffset)
                 {
-                    *pTimezone = nTimezoneOffset;
+                    *pTimeZoneOffset = nTimezoneOffset;
                     rDateTime.IsUTC = (0 == nTimezoneOffset);
                 }
                 else
@@ -1685,26 +1681,37 @@ bool Converter::convertDateOrDateTime(
             }
             else
             {
+                if (pTimeZoneOffset)
+                {
+                    pTimeZoneOffset->reset();
+                }
                 rDateTime.IsUTC = false;
             }
-            rbDateTime = true;
+            rbDateTime = bHaveTime;
         }
         else
         {
-            rDate.Year =
+            pDate->Year =
                 ((isNegative) ? (-1) : (+1)) * static_cast<sal_Int16>(nYear);
-            rDate.Month = static_cast<sal_uInt16>(nMonth);
-            rDate.Day = static_cast<sal_uInt16>(nDay);
+            pDate->Month = static_cast<sal_uInt16>(nMonth);
+            pDate->Day = static_cast<sal_uInt16>(nDay);
             if (bHaveTimezone)
             {
-                if (pTimezone)
+                if (pTimeZoneOffset)
                 {
-                    *pTimezone = nTimezoneOffset;
+                    *pTimeZoneOffset = nTimezoneOffset;
                 }
                 else
                 {
                     // a Date cannot be adjusted
                     SAL_INFO("sax", "dropping timezone");
+                }
+            }
+            else
+            {
+                if (pTimeZoneOffset)
+                {
+                    pTimeZoneOffset->reset();
                 }
             }
             rbDateTime = false;
@@ -2447,7 +2454,7 @@ bool Converter::convertAny(OUStringBuffer&    rsValue,
                     aTempValue.Seconds          = 0;
                     aTempValue.Minutes          = 0;
                     aTempValue.Hours            = 0;
-                    ::sax::Converter::convertDateTime(rsValue, aTempValue);
+                    ::sax::Converter::convertDateTime(rsValue, aTempValue, 0);
                 }
                 else
                 if (rValue >>= aTime)
@@ -2469,7 +2476,7 @@ bool Converter::convertAny(OUStringBuffer&    rsValue,
                 {
                     rsType.appendAscii("date");
                     bConverted = true;
-                    ::sax::Converter::convertDateTime(rsValue, aDateTime);
+                    ::sax::Converter::convertDateTime(rsValue, aDateTime, 0);
                 }
             }
             break;

@@ -341,7 +341,7 @@ void ScXMLConverter::ConvertDateTimeToString(const DateTime& aDateTime, OUString
 {
     util::DateTime aAPIDateTime;
     ConvertCoreToAPIDateTime(aDateTime, aAPIDateTime);
-    ::sax::Converter::convertDateTime(sDate, aAPIDateTime);
+    ::sax::Converter::convertDateTime(sDate, aAPIDateTime, 0);
 }
 
 void ScXMLConverter::ConvertCoreToAPIDateTime(const DateTime& aDateTime, util::DateTime& rDateTime)
