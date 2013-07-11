@@ -105,10 +105,7 @@ css::uno::Sequence< css::lang::Locale > SvxAsianConfig::GetStartEndCharLocales()
         getElementNames());
     css::uno::Sequence< css::lang::Locale > ls(ns.getLength());
     for (sal_Int32 i = 0; i < ns.getLength(); ++i) {
-        sal_Int32 n = 0;
-        ls[i].Language = ns[i].getToken(0, '-', n);
-        ls[i].Country = ns[i].getToken(0, '-', n);
-        ls[i].Variant = ns[i].getToken(0, '-', n);
+        ls[i] = LanguageTag( ns[i]).getLocale( false);
     }
     return ls;
 }
