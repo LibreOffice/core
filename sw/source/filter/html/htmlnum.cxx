@@ -827,7 +827,6 @@ Writer& OutHTML_NumBulListStart( SwHTMLWriter& rWrt,
             OutHTML_BulletImage( rWrt,
                                     0,
                                     rNumFmt.GetBrush(),
-                                    rWrt.aBulletGrfs[i],
                                     rNumFmt.GetGraphicSize(),
                                     rNumFmt.GetGraphicOrientation() );
         }

@@ -1199,33 +1199,21 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrmFmt &rFrmFmt,
 Writer& OutHTML_BulletImage( Writer& rWrt,
                              const sal_Char *pTag,
                              const SvxBrushItem* pBrush,
-                             String &rGrfName,
                              const Size &rSize,
                              const SwFmtVertOrient* pVertOrient )
 {
     SwHTMLWriter & rHTMLWrt = (SwHTMLWriter&)rWrt;
 
-    //Wenn es ein BrushItem gibt, muss die Grafiknoch exportiert werden
-    const String *pLink = 0;
     OUString aGraphicInBase64;
     if( pBrush )
     {
-        pLink = pBrush->GetGraphicLink();
-
-        //embeddete Grafik -> WriteEmbedded schreiben
-        if( !pLink )
+        const Graphic* pGrf = pBrush->GetGraphic();
+        if( pGrf )
         {
-            const Graphic* pGrf = pBrush->GetGraphic();
-            if( pGrf )
+            sal_uLong nErr = XOutBitmap::GraphicToBase64(*pGrf, aGraphicInBase64);
+            if( nErr )
             {
-                sal_uLong nErr = XOutBitmap::GraphicToBase64(*pGrf, aGraphicInBase64);
-                if( nErr )
-                {
-                    rHTMLWrt.nWarn = WARN_SWG_POOR_LOAD | WARN_SW_WRITE_BASE;
-                }
-                if( rHTMLWrt.GetOrigFileName() )
-                    rGrfName = *rHTMLWrt.GetOrigFileName();
-                pLink = &rGrfName;
+                rHTMLWrt.nWarn = WARN_SWG_POOR_LOAD | WARN_SW_WRITE_BASE;
             }
         }
     }
@@ -1234,61 +1222,58 @@ Writer& OutHTML_BulletImage( Writer& rWrt,
     if( pTag )
         sOut.append('<').append(pTag);
 
-    if( pLink )
+    sOut.append(' ');
+    sOut.append(OOO_STRING_SVTOOLS_HTML_O_src).append("=\"").
+    append(OOO_STRING_SVTOOLS_HTML_O_data).append(":");
+    rWrt.Strm() << sOut.makeStringAndClear().getStr();
+    HTMLOutFuncs::Out_String( rWrt.Strm(), aGraphicInBase64, rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
+    sOut.append('\"');
+
+    // Groesse des Objekts Twips ohne Raender
+    Size aPixelSz( 0, 0 );
+    if( (rSize.Width() || rSize.Height()) && Application::GetDefaultDevice() )
     {
-        sOut.append(' ');
-        sOut.append(OOO_STRING_SVTOOLS_HTML_O_src).append("=\"").
-        append(OOO_STRING_SVTOOLS_HTML_O_data).append(":");
-        rWrt.Strm() << sOut.makeStringAndClear().getStr();
-        HTMLOutFuncs::Out_String( rWrt.Strm(), aGraphicInBase64, rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
-        sOut.append('\"');
+        aPixelSz =
+            Application::GetDefaultDevice()->LogicToPixel( rSize,
+                                                MapMode(MAP_TWIP) );
+        if( !aPixelSz.Width() && rSize.Width() )
+            aPixelSz.Width() = 1;
+        if( !aPixelSz.Height() && rSize.Height() )
+            aPixelSz.Height() = 1;
+    }
 
-        // Groesse des Objekts Twips ohne Raender
-        Size aPixelSz( 0, 0 );
-        if( (rSize.Width() || rSize.Height()) && Application::GetDefaultDevice() )
+    if( aPixelSz.Width() )
+    {
+        sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_width).
+            append('=').append(static_cast<sal_Int32>(aPixelSz.Width()));
+    }
+
+    if( aPixelSz.Height() )
+    {
+        sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_height).
+            append('=').append(static_cast<sal_Int32>(aPixelSz.Height()));
+    }
+
+    if( pVertOrient )
+    {
+        const sal_Char *pStr = 0;
+        switch( pVertOrient->GetVertOrient() )
         {
-            aPixelSz =
-                Application::GetDefaultDevice()->LogicToPixel( rSize,
-                                                    MapMode(MAP_TWIP) );
-            if( !aPixelSz.Width() && rSize.Width() )
-                aPixelSz.Width() = 1;
-            if( !aPixelSz.Height() && rSize.Height() )
-                aPixelSz.Height() = 1;
+        case text::VertOrientation::LINE_TOP:     pStr = OOO_STRING_SVTOOLS_HTML_VA_top;        break;
+        case text::VertOrientation::CHAR_TOP:
+        case text::VertOrientation::BOTTOM:       pStr = OOO_STRING_SVTOOLS_HTML_VA_texttop;    break;  // geht nicht
+        case text::VertOrientation::LINE_CENTER:
+        case text::VertOrientation::CHAR_CENTER:  pStr = OOO_STRING_SVTOOLS_HTML_VA_absmiddle;  break;  // geht nicht
+        case text::VertOrientation::CENTER:       pStr = OOO_STRING_SVTOOLS_HTML_VA_middle;     break;
+        case text::VertOrientation::LINE_BOTTOM:
+        case text::VertOrientation::CHAR_BOTTOM:  pStr = OOO_STRING_SVTOOLS_HTML_VA_absbottom;  break;  // geht nicht
+        case text::VertOrientation::TOP:          pStr = OOO_STRING_SVTOOLS_HTML_VA_bottom;     break;
+        case text::VertOrientation::NONE:     break;
         }
-
-        if( aPixelSz.Width() )
+        if( pStr )
         {
-            sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_width).
-                append('=').append(static_cast<sal_Int32>(aPixelSz.Width()));
-        }
-
-        if( aPixelSz.Height() )
-        {
-            sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_height).
-                append('=').append(static_cast<sal_Int32>(aPixelSz.Height()));
-        }
-
-        if( pVertOrient )
-        {
-            const sal_Char *pStr = 0;
-            switch( pVertOrient->GetVertOrient() )
-            {
-            case text::VertOrientation::LINE_TOP:     pStr = OOO_STRING_SVTOOLS_HTML_VA_top;        break;
-            case text::VertOrientation::CHAR_TOP:
-            case text::VertOrientation::BOTTOM:       pStr = OOO_STRING_SVTOOLS_HTML_VA_texttop;    break;  // geht nicht
-            case text::VertOrientation::LINE_CENTER:
-            case text::VertOrientation::CHAR_CENTER:  pStr = OOO_STRING_SVTOOLS_HTML_VA_absmiddle;  break;  // geht nicht
-            case text::VertOrientation::CENTER:       pStr = OOO_STRING_SVTOOLS_HTML_VA_middle;     break;
-            case text::VertOrientation::LINE_BOTTOM:
-            case text::VertOrientation::CHAR_BOTTOM:  pStr = OOO_STRING_SVTOOLS_HTML_VA_absbottom;  break;  // geht nicht
-            case text::VertOrientation::TOP:          pStr = OOO_STRING_SVTOOLS_HTML_VA_bottom;     break;
-            case text::VertOrientation::NONE:     break;
-            }
-            if( pStr )
-            {
-                sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_align).
-                    append('=').append(pStr);
-            }
+            sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_align).
+                append('=').append(pStr);
         }
     }
 

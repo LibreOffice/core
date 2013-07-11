@@ -636,7 +636,7 @@ Writer& OutHTML_Image( Writer&, const SwFrmFmt& rFmt,
                        const ImageMap *pGenImgMap = 0 );
 
 Writer& OutHTML_BulletImage( Writer& rWrt, const sal_Char *pTag,
-                             const SvxBrushItem* pBrush, String &rGrfName,
+                             const SvxBrushItem* pBrush,
                              const Size &rSize,
                              const SwFmtVertOrient* pVertOrient );
 
