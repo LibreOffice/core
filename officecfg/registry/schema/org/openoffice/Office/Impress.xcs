@@ -480,7 +480,7 @@
           </desc>
           <label>List of files containing list of layouts</label>
         </info>
-        <value oor:separator=";">vnd.sun.star.expand:$BRAND_BASE_DIR/$BRAND_SHARE_SUBDIR/config/soffice.cfg/simpress/layoutlist.xml</value>
+        <value oor:separator=";">vnd.sun.star.expand:$BRAND_BASE_DIR/../user/config/soffice.cfg/simpress/layoutlist.xml</value>
       </prop>
       <prop oor:name="PreviewNewEffects" oor:type="xs:boolean" oor:nillable="false">
         <!-- OldPath: -->
