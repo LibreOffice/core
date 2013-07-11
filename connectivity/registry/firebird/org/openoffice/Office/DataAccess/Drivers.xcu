@@ -33,6 +33,54 @@
  ************************************************************************ -->
 <oor:component-data oor:name="Drivers" oor:package="org.openoffice.Office.DataAccess" xmlns:install="http://openoffice.org/2004/installation" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema">
   <node oor:name="Installed" install:module="firebird">
+    <node oor:name="sdbc:embedded:firebird" oor:op="replace">
+      <prop oor:name="Driver">
+        <value>com.sun.star.comp.sdbc.FirebirdDriver</value>
+      </prop>
+      <prop oor:name="DriverTypeDisplayName" oor:type="xs:string">
+        <value xml:lang="en-US">Firebird</value>
+      </prop>
+      <node oor:name="Properties">
+        <!-- Don't use ODBC syntax for date&time literals and (full) outer joins,
+             as PostgreSQL does not support it,
+             but supports the _interior_ of these escapes just fine. -->
+        <node oor:name="EscapeDateTime" oor:op="replace">
+          <prop oor:name="Value" oor:type="xs:boolean">
+            <value>false</value>
+          </prop>
+        </node>
+        <!--   Confusingly, this corresponds to "UseBracketedOuterJoinSyntax" in the Features -->
+        <node oor:name="EnableOuterJoinEscape" oor:op="replace">
+          <prop oor:name="Value" oor:type="xs:boolean">
+            <value>false</value>
+          </prop>
+        </node>
+      </node>
+      <node oor:name="Features">
+        <!-- These entries enable the "Advanced Settings" UI to change the settings
+             whose default is set in node "Properties" above;
+             as this is guaranteed not to work with PostgreSQL,
+             we don't let people shoot themselves in the foot and don't enable the UI. -->
+      <!--   <node oor:name="EscapeDateTime" oor:op="replace"> -->
+      <!--     <prop oor:name="Value" oor:type="xs:boolean"> -->
+      <!--       <value>false</value> -->
+      <!--     </prop> -->
+      <!--   </node> -->
+        <!--   Confusingly, this corresponds to "EnableOuterJoinEscape" in the Properties -->
+      <!--   <node oor:name="UseBracketedOuterJoinSyntax" oor:op="replace"> -->
+      <!--     <prop oor:name="Value" oor:type="xs:boolean"> -->
+      <!--       <value>false</value> -->
+      <!--     </prop> -->
+      <!--   </node> -->
+      </node>
+      <node oor:name="MetaData">
+       <node oor:name="Authentication" oor:op="replace">
+          <prop oor:name="Value" oor:type="xs:string">
+            <value>UserPassword</value>
+          </prop>
+        </node>
+      </node>
+    </node>
     <node oor:name="sdbc:firebird:*" oor:op="replace">
       <prop oor:name="Driver">
         <value>com.sun.star.comp.sdbc.FirebirdDriver</value>
