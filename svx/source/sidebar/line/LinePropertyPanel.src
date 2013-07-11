@@ -24,81 +24,48 @@
 #define TOOLBOX_HEIGHT      14
 #define LISTBOX_HEIGHT      99
 
-Control RID_SIDEBAR_LINE_PANEL
+Image IMG_COLOR
 {
-    OutputSize = TRUE;
-    DialogControl = TRUE;
-    Border = FALSE;
-    Text = "Line";
-
-    Size = MAP_APPFONT(
-        PROPERTYPAGE_WIDTH,
-        SECTIONPAGE_MARGIN_VERTICAL_TOP + TEXT_HEIGHT*4 + TEXT_CONTROL_SPACING_VERTICAL*4 + TOOLBOX_HEIGHT*3  + CONTROL_SPACING_VERTICAL*3 + CBOX_HEIGHT + SECTIONPAGE_MARGIN_VERTICAL_BOT );
-    HelpID = HID_PROPERTYPANEL_LINE_SECTION ;
-
-/*
-    MetricField MF_TRANSPARENT
-    {
-        Border = TRUE ;
-        HelpID = HID_PPROPERTYPANEL_LINE_MTR_TRANCEPARENCE;
-        Pos = MAP_APPFONT ( SECTIONPAGE_MARGIN_HORIZONTAL + TOOLBOX_WIDTH + 3 , SECTIONPAGE_MARGIN_VERTICAL_TOP + TEXT_HEIGHT*2 + TEXT_CONTROL_SPACING_VERTICAL*2 + TOOLBOX_HEIGHT  + CONTROL_SPACING_VERTICAL) ;
-        Size = MAP_APPFONT ( TOOLBOX_WIDTH + 1 , 12 ) ;
-        TabStop = TRUE ;
-        Repeat = TRUE ;
-        Spin = TRUE ;
-        Maximum = 100 ;
-        StrictFormat = TRUE ;
-        Unit = FUNIT_CUSTOM ;
-        CustomUnitText = "%" ;
-        Last = 100 ;
-        SpinSize = 5 ;
-        QuickHelpText [ en-US ] = "Specify the transparency of the line.";
-    };
-*/
-    Image IMG_COLOR
-    {
-        ImageBitmap = Bitmap{File = "symphony/Line_color.png";};
-    };
-    Image IMG_NONE_ICON
-    {
-        ImageBitmap = Bitmap{File = "symphony/blank.png";};
-    };
-
-    //WIDTH ICON
-    Image IMG_WIDTH1_ICON
-    {
-        ImageBitmap = Bitmap{File = "symphony/width1.png";};
-    };
-    Image IMG_WIDTH2_ICON
-    {
-        ImageBitmap = Bitmap{File = "symphony/width2.png";};
-    };
-    Image IMG_WIDTH3_ICON
-    {
-        ImageBitmap = Bitmap{File = "symphony/width3.png";};
-    };
-    Image IMG_WIDTH4_ICON
-    {
-        ImageBitmap = Bitmap{File = "symphony/width4.png";};
-    };
-    Image IMG_WIDTH5_ICON
-    {
-        ImageBitmap = Bitmap{File = "symphony/width5.png";};
-    };
-    Image IMG_WIDTH6_ICON
-    {
-        ImageBitmap = Bitmap{File = "symphony/width6.png";};
-    };
-    Image IMG_WIDTH7_ICON
-    {
-        ImageBitmap = Bitmap{File = "symphony/width7.png";};
-    };
-    Image IMG_WIDTH8_ICON
-    {
-        ImageBitmap = Bitmap{File = "symphony/width8.png";};
-    };
-
+    ImageBitmap = Bitmap{File = "symphony/Line_color.png";};
 };
+Image IMG_NONE_ICON
+{
+    ImageBitmap = Bitmap{File = "symphony/blank.png";};
+};
+
+Image IMG_WIDTH1_ICON
+{
+    ImageBitmap = Bitmap{File = "symphony/width1.png";};
+};
+Image IMG_WIDTH2_ICON
+{
+    ImageBitmap = Bitmap{File = "symphony/width2.png";};
+};
+Image IMG_WIDTH3_ICON
+{
+    ImageBitmap = Bitmap{File = "symphony/width3.png";};
+};
+Image IMG_WIDTH4_ICON
+{
+    ImageBitmap = Bitmap{File = "symphony/width4.png";};
+};
+Image IMG_WIDTH5_ICON
+{
+    ImageBitmap = Bitmap{File = "symphony/width5.png";};
+};
+Image IMG_WIDTH6_ICON
+{
+    ImageBitmap = Bitmap{File = "symphony/width6.png";};
+};
+Image IMG_WIDTH7_ICON
+{
+    ImageBitmap = Bitmap{File = "symphony/width7.png";};
+};
+Image IMG_WIDTH8_ICON
+{
+    ImageBitmap = Bitmap{File = "symphony/width8.png";};
+};
+
 Control RID_POPUPPANEL_LINEPAGE_COLOR
 {
     OutputSize = TRUE;

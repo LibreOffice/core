@@ -30,17 +30,17 @@
 #define FT_CAPSTYLE         20
 #define LB_CAPSTYLE         21
 
-#define IMG_COLOR           23
-#define IMG_NONE_ICON       36
+#define IMG_COLOR           (RID_SVX_SIDEBAR_BEGIN + 20)
+#define IMG_NONE_ICON       (RID_SVX_SIDEBAR_BEGIN + 21)
 
-#define IMG_WIDTH1_ICON     41
-#define IMG_WIDTH2_ICON     42
-#define IMG_WIDTH3_ICON     43
-#define IMG_WIDTH4_ICON     44
-#define IMG_WIDTH5_ICON     45
-#define IMG_WIDTH6_ICON     46
-#define IMG_WIDTH7_ICON     47
-#define IMG_WIDTH8_ICON     48
+#define IMG_WIDTH1_ICON     (RID_SVX_SIDEBAR_BEGIN + 22)
+#define IMG_WIDTH2_ICON     (RID_SVX_SIDEBAR_BEGIN + 23)
+#define IMG_WIDTH3_ICON     (RID_SVX_SIDEBAR_BEGIN + 24)
+#define IMG_WIDTH4_ICON     (RID_SVX_SIDEBAR_BEGIN + 25)
+#define IMG_WIDTH5_ICON     (RID_SVX_SIDEBAR_BEGIN + 26)
+#define IMG_WIDTH6_ICON     (RID_SVX_SIDEBAR_BEGIN + 27)
+#define IMG_WIDTH7_ICON     (RID_SVX_SIDEBAR_BEGIN + 28)
+#define IMG_WIDTH8_ICON     (RID_SVX_SIDEBAR_BEGIN + 29)
 
 //color popup page
 #define VS_COLOR        1
