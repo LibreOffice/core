@@ -2058,7 +2058,7 @@ Reference< XPropertySet > OSQLParseTreeIterator::findSelectColumn( const OUStrin
         Reference< XPropertySet > xColumn( *lookupColumn );
         try
         {
-            OUString sName, sTableName;
+            OUString sName;
             xColumn->getPropertyValue( OMetaConnection::getPropMap().getNameByIndex( PROPERTY_ID_NAME ) ) >>= sName;
             if ( sName == rColumnName )
                 return xColumn;
