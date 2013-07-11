@@ -211,26 +211,33 @@ OUString DefaultFontConfiguration::tryLocale( const Locale& rLocale, const OUStr
 
 OUString DefaultFontConfiguration::getDefaultFont( const Locale& rLocale, int nType ) const
 {
-    Locale aLocale;
-    aLocale.Language = rLocale.Language.toAsciiLowerCase();
-    aLocale.Country = rLocale.Country.toAsciiUpperCase();
-    aLocale.Variant = rLocale.Variant.toAsciiUpperCase();
-
     OUString aType = OUString::createFromAscii( getKeyType( nType ) );
-    OUString aRet = tryLocale( aLocale, aType );
-    if( aRet.isEmpty() && !aLocale.Variant.isEmpty() )
+    OUString aRet = tryLocale( rLocale, aType );
+    if (aRet.isEmpty())
     {
-        aLocale.Variant = OUString();
-        aRet = tryLocale( aLocale, aType );
-    }
-    if( aRet.isEmpty() && !aLocale.Country.isEmpty() )
-    {
-        aLocale.Country = OUString();
-        aRet = tryLocale( aLocale, aType );
+        if (rLocale.Variant.isEmpty())
+        {
+            if (!rLocale.Country.isEmpty())
+            {
+                Locale aLocale( rLocale.Language, "", "");
+                aRet = tryLocale( aLocale, aType );
+            }
+        }
+        else
+        {
+            ::std::vector< OUString > aFallbacks( LanguageTag( rLocale).getFallbackStrings());
+            aFallbacks.erase( aFallbacks.begin());  // first is full BCP47, we already checked that
+            for (::std::vector< OUString >::const_iterator it( aFallbacks.begin());
+                    it != aFallbacks.end() && aRet.isEmpty(); ++it)
+            {
+                Locale aLocale( LanguageTag( *it).getLocale( false));
+                aRet = tryLocale( aLocale, aType );
+            }
+        }
     }
     if( aRet.isEmpty() )
     {
-        aLocale.Language = OUString( "en" );
+        Locale aLocale("en","","");
         aRet = tryLocale( aLocale, aType );
     }
     return aRet;
