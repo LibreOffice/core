@@ -1312,4 +1312,49 @@ LanguageTag::Extraction LanguageTag::simpleExtract( const OUString& rBcp47,
 }
 
 
+// static
+::std::vector< com::sun::star::lang::Locale >::const_iterator LanguageTag::getMatchingFallback(
+        const ::std::vector< com::sun::star::lang::Locale > & rList,
+        const com::sun::star::lang::Locale & rReference )
+{
+    if (rList.empty())
+        return rList.end();
+
+    ::std::vector< lang::Locale >::const_iterator it;
+
+    // Try the simple case first without constructing fallbacks.
+    for (it = rList.begin(); it != rList.end(); ++it)
+    {
+        if (    (*it).Language == rReference.Language &&
+                (*it).Country  == rReference.Country  &&
+                (*it).Variant  == rReference.Variant)
+            return it;  // exact match
+    }
+
+    // Now for each reference fallback test the fallbacks of the list in order.
+    ::std::vector< OUString > aFallbacks( LanguageTag( rReference).getFallbackStrings());
+    aFallbacks.erase( aFallbacks.begin());  // first is full BCP47, we already checked that
+    ::std::vector< ::std::vector< OUString > > aListFallbacks( rList.size());
+    for (it = rList.begin(); it != rList.end(); ++it)
+    {
+        ::std::vector< OUString > aTmp( LanguageTag( *it).getFallbackStrings());
+        aListFallbacks.push_back( aTmp);
+    }
+    for (::std::vector< OUString >::const_iterator rfb( aFallbacks.begin()); rfb != aFallbacks.end(); ++rfb)
+    {
+        for (::std::vector< ::std::vector< OUString > >::const_iterator lfb( aListFallbacks.begin());
+                lfb != aListFallbacks.end(); ++lfb)
+        {
+            for (::std::vector< OUString >::const_iterator fb( (*lfb).begin()); fb != (*lfb).end(); ++fb)
+            {
+                if (*rfb == *fb)
+                    return rList.begin() + (lfb - aListFallbacks.begin());
+            }
+        }
+    }
+
+    // No match found.
+    return rList.end();
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

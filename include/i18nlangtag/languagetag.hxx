@@ -273,7 +273,7 @@ public:
     ::std::vector< OUString >       getFallbackStrings() const;
 
 
-    /** @short  search for an equal or at least for a similar locale in a list
+    /** @short  Search for an equal or at least for a similar locale in a list
                 of possible ones.
 
         @descr  First search for a locale that is equal to the reference
@@ -306,10 +306,37 @@ public:
 
         @return An iterator that points to the found element inside the given
                 locale list. If no matching locale could be found it points to
-                the end of the list.
+                the beginning of the list.
      */
     static ::std::vector< OUString >::const_iterator getFallback( const ::std::vector< OUString > & rList,
                                                                   const OUString & rReference );
+
+
+    /** @short  Search for an equal or for a similar locale in a list
+                of possible ones where at least the language matches.
+
+        @descr  First search for a locale that is equal to the reference
+                locale.
+
+                If the reference locale could not be located, check for
+                "similar" locales, in the same order as obtained by
+                getFallbackStrings().
+
+                If no locale matches, rList.end() is returned.
+
+        @param  rList
+                the vector of possible locales.
+
+        @param  rReference
+                the reference locale.
+
+        @return An iterator that points to the found element inside the given
+                locale list. If no matching locale could be found it points to
+                the end of the list.
+     */
+    static ::std::vector< com::sun::star::lang::Locale >::const_iterator getMatchingFallback(
+            const ::std::vector< com::sun::star::lang::Locale > & rList,
+            const com::sun::star::lang::Locale & rReference );
 
 
     /** Test equality of two LanguageTag, possibly resolving system locale.
