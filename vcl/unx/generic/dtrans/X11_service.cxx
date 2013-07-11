@@ -61,47 +61,27 @@ Sequence< OUString > SAL_CALL x11::Xdnd_dropTarget_getSupportedServiceNames()
 
 css::uno::Reference< XInterface > X11SalInstance::CreateClipboard( const Sequence< Any >& arguments )
 {
-    OUString aDisplayName;
-    Atom nSelection;
+    SelectionManager& rManager = SelectionManager::get();
+    css::uno::Sequence<css::uno::Any> mgrArgs(1);
+    mgrArgs[0] <<= Application::GetDisplayConnection();
+    rManager.initialize(mgrArgs);
 
-    // extract display name from connection argument. An exception is thrown
-    // by SelectionManager.initialize() if no display connection is given.
-    if( arguments.getLength() > 0 )
-    {
-        css::uno::Reference< XDisplayConnection > xConn;
-        arguments.getConstArray()[0] >>= xConn;
-
-        if( xConn.is() )
-        {
-            Any aIdentifier = xConn->getIdentifier();
-            aIdentifier >>= aDisplayName;
-        }
+    OUString sel;
+    if (arguments.getLength() == 0) {
+        sel = "CLIPBOARD";
+    } else if (arguments.getLength() != 1 || !(arguments[0] >>= sel)) {
+        throw css::lang::IllegalArgumentException(
+            "bad X11SalInstance::CreateClipboard arguments",
+            css::uno::Reference<css::uno::XInterface>(), -1);
     }
+    Atom nSelection = rManager.getAtom(sel);
 
-    SelectionManager& rManager = SelectionManager::get( aDisplayName );
-    rManager.initialize( arguments );
-
-    // check if any other selection than clipboard selection is specified
-    if( arguments.getLength() > 1 )
-    {
-        OUString aSelectionName;
-
-        arguments.getConstArray()[1] >>= aSelectionName;
-        nSelection = rManager.getAtom( aSelectionName );
-    }
-    else
-    {
-        // default atom is clipboard selection
-        nSelection = rManager.getAtom( OUString("CLIPBOARD") );
-    }
-
-    ::boost::unordered_map< Atom, css::uno::Reference< XClipboard > >& rMap( m_aInstances[ aDisplayName ] );
-    ::boost::unordered_map< Atom, css::uno::Reference< XClipboard > >::iterator it = rMap.find( nSelection );
-    if( it != rMap.end() )
+    ::boost::unordered_map< Atom, css::uno::Reference< XClipboard > >::iterator it = m_aInstances.find( nSelection );
+    if( it != m_aInstances.end() )
         return it->second;
 
     X11Clipboard* pClipboard = new X11Clipboard( rManager, nSelection );
-    rMap[ nSelection ] = pClipboard;
+    m_aInstances[ nSelection ] = pClipboard;
 
     return static_cast<OWeakObject*>(pClipboard);
 }

@@ -8508,11 +8508,10 @@ uno::Reference< XClipboard > Window::GetPrimarySelection()
                 uno::Reference< XComponentContext > xContext( comphelper::getProcessComponentContext() );
 
 #if defined(UNX) && !defined(MACOSX)
-                // A hack, making the primary selection available as an instance of
-                // the SystemClipboard service on X11:
-                css::uno::Sequence<css::uno::Any> args(2);
-                args[0] <<= Application::GetDisplayConnection();
-                args[1] <<= OUString("PRIMARY");
+                // A hack, making the primary selection available as an instance
+                // of the SystemClipboard service on X11:
+                css::uno::Sequence<css::uno::Any> args(1);
+                args[0] <<= OUString("PRIMARY");
                 mpWindowImpl->mpFrameData->mxSelection.set(
                     (xContext->getServiceManager()->
                      createInstanceWithArgumentsAndContext(
