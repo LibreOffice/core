@@ -743,9 +743,6 @@ int OpenclDevice::InitOpenclRunEnv(GPUEnv *gpuInfo)
         }
     }
 
-    status = clGetCommandQueueInfo(gpuInfo->mpCmdQueue,
-            CL_QUEUE_THREAD_HANDLE_AMD, 0, NULL, NULL);
-
     return 0;
 
 }
