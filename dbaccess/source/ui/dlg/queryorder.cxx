@@ -234,30 +234,7 @@ void DlgOrderCrit::EnableLines()
                 sOrder += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(","));
 
             String sName = m_aColumnList[i]->GetSelectEntry();
-            try
-            {
-                sal_Bool bFunction = sal_False;
-                Reference< XPropertySet > xColumn;
-                if ( xColumns.is() && xColumns->hasByName( sName ) && (xColumns->getByName( sName ) >>= xColumn) && xColumn.is() )
-                {
-                    if ( xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_REALNAME) )
-                    {
-                        ::rtl::OUString sRealName;
-                        xColumn->getPropertyValue(PROPERTY_REALNAME)    >>= sRealName;
-                        sName = sRealName;
-                        static ::rtl::OUString sFunction(RTL_CONSTASCII_USTRINGPARAM("Function"));
-                        if ( xColumn->getPropertySetInfo()->hasPropertyByName(sFunction) )
-                            xColumn->getPropertyValue(sFunction) >>= bFunction;
-                    }
-                }
-                if ( bFunction )
-                    sOrder += sName;
-                else
-                    sOrder += ::dbtools::quoteName(sQuote,sName);
-            }
-            catch(const Exception&)
-            {
-            }
+            sOrder += ::dbtools::quoteName(sQuote,sName);
             if(m_aValueList[i]->GetSelectEntryPos())
                 sOrder += sDESC;
             else
