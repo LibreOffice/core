@@ -20,10 +20,11 @@ Globals
             LIBRARYVERSION 10.0.0
             POOLPRODUCT 1
             PROGRESSBARCOLOR 14,133,205
-            PROGRESSSIZE 320,7
-            PROGRESSPOSITION 185,206
+            PROGRESSSIZE 432,4
+            PROGRESSPOSITION 60,180
             PROGRESSFRAMECOLOR 207,208,211
-            NATIVEPROGRESS true
+            SHOWPROGRESSFRAME false
+            NATIVEPROGRESS false
             REGISTRYLAYERNAME Layers
             SERVICEPACK 1
             UPDATE_DATABASE 1

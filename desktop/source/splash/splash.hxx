@@ -84,6 +84,7 @@ private:
     VirtualDevice   _vdev;
     BitmapEx        _aIntroBmp;
     Color           _cProgressFrameColor;
+    bool            _bShowProgressFrame;
     Color           _cProgressBarColor;
     bool            _bNativeProgress;
     OUString        _sAppName;

@@ -55,6 +55,7 @@ SplashScreen::SplashScreen(const Reference< XMultiServiceFactory >& rSMgr)
     : IntroWindow()
     , _vdev(*((IntroWindow*)this))
     , _cProgressFrameColor(sal::static_int_cast< ColorData >(NOT_LOADED))
+    , _bShowProgressFrame(true)
     , _cProgressBarColor(sal::static_int_cast< ColorData >(NOT_LOADED))
     , _bNativeProgress(true)
     , _iMax(100)
@@ -303,6 +304,8 @@ void SplashScreen::loadConfig()
         OUString( RTL_CONSTASCII_USTRINGPARAM( "FullScreenSplash" ) ) );
     OUString sNativeProgress = implReadBootstrapKey(
         OUString( RTL_CONSTASCII_USTRINGPARAM( "NativeProgress" ) ) );
+    OUString sShowProgressFrame = implReadBootstrapKey(
+        OUString( RTL_CONSTASCII_USTRINGPARAM( "ShowProgressFrame" ) ) );
 
 
     // Determine full screen splash mode
@@ -332,6 +335,11 @@ void SplashScreen::loadConfig()
             nBlue = static_cast< sal_uInt8 >( sProgressFrameColor.getToken( 0, ',', idx ).toInt32() );
             _cProgressFrameColor = Color( nRed, nGreen, nBlue );
         }
+    }
+
+    if (sShowProgressFrame.getLength() > 0)
+    {
+        _bShowProgressFrame = sShowProgressFrame.toBoolean();
     }
 
     if ( sProgressBarColor.getLength() )
@@ -658,18 +666,40 @@ void SplashScreen::Paint( const Rectangle&)
     if (_bPaintBitmap)
         _vdev.DrawBitmapEx( Point(), _aIntroBmp );
 
-    if (_bPaintProgress) {
+    if (_bPaintProgress)
+    {
         // draw progress...
-        long length = (_iProgress * _barwidth / _iMax) - (2 * _barspace);
-        if (length < 0) length = 0;
+        long length = (_iProgress * _barwidth / _iMax);
+        if (_bShowProgressFrame)
+            length -= (2 * _barspace);
+        if (length < 0)
+            length = 0;
 
-        // border
-        _vdev.SetFillColor();
-        _vdev.SetLineColor( _cProgressFrameColor );
-        _vdev.DrawRect(Rectangle(_tlx, _tly, _tlx+_barwidth, _tly+_barheight));
-        _vdev.SetFillColor( _cProgressBarColor );
-        _vdev.SetLineColor();
-        _vdev.DrawRect(Rectangle(_tlx+_barspace, _tly+_barspace, _tlx+_barspace+length, _tly+_barheight-_barspace));
+        if (_bShowProgressFrame)
+        {
+            // border
+            _vdev.SetFillColor();
+            _vdev.SetLineColor( _cProgressFrameColor );
+            _vdev.DrawRect(Rectangle(_tlx, _tly, _tlx+_barwidth, _tly+_barheight));
+            _vdev.SetFillColor( _cProgressBarColor );
+            _vdev.SetLineColor();
+            _vdev.DrawRect(Rectangle(_tlx+_barspace, _tly+_barspace, _tlx+_barspace+length, _tly+_barheight-_barspace));
+            _vdev.DrawText( Rectangle(_tlx, _tly+_barheight+5, _tlx+_barwidth, _tly+_barheight+5+20), _sProgressText, TEXT_DRAW_CENTER );
+        }
+        else
+        {
+            // Show flat progress bar without frame.
+
+            // border
+            _vdev.SetFillColor( _cProgressFrameColor );
+            _vdev.SetLineColor();
+            _vdev.DrawRect(Rectangle(_tlx, _tly, _tlx+_barwidth, _tly+_barheight));
+
+            _vdev.SetFillColor( _cProgressBarColor );
+            _vdev.SetLineColor();
+            _vdev.DrawRect(Rectangle(_tlx, _tly, _tlx+length, _tly+_barheight));
+        }
+
         _vdev.DrawText( Rectangle(_tlx, _tly+_barheight+5, _tlx+_barwidth, _tly+_barheight+5+20), _sProgressText, TEXT_DRAW_CENTER );
     }
     Size aSize =  GetOutputSizePixel();
