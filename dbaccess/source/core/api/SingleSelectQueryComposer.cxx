@@ -695,7 +695,7 @@ void OSingleSelectQueryComposer::setSingleAdditiveClause( SQLPart _ePart, const 
     clearColumns( ParameterColumns );
     if ( _ePart == Order )
         clearColumns( OrderColumns );
-    if ( _ePart == Group )
+    else if ( _ePart == Group )
         clearColumns( GroupByColumns );
 
     // also, since the "additive filter" change, we need to rebuild our "additive" statement
