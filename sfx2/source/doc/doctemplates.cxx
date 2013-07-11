@@ -401,9 +401,7 @@ void SfxDocTplService_Impl::init_Impl()
         getDefaultLocale();
 
     // convert locale to string
-    OUString aLang = maLocale.Language;
-    aLang += OUString( '-' );
-    aLang += maLocale.Country;
+    OUString aLang = LanguageTag( maLocale).getBcp47();
 
     // set maRootContent to the root of the templates hierarchy. Create the
     // entry if necessary
@@ -490,31 +488,7 @@ void SfxDocTplService_Impl::getDefaultLocale()
         ::osl::MutexGuard aGuard( maMutex );
         if ( !mbLocaleSet )
         {
-            OUString aLocale( utl::ConfigManager::getLocale() );
-            if ( !aLocale.isEmpty() )
-            {
-                sal_Int32 nPos = aLocale.indexOf( sal_Unicode( '-' ) );
-                if ( nPos != -1 )
-                {
-                    maLocale.Language = aLocale.copy( 0, nPos );
-                    nPos = aLocale.indexOf( sal_Unicode( '_' ), nPos + 1 );
-                    if ( nPos != -1 )
-                    {
-                        maLocale.Country
-                            = aLocale.copy( maLocale.Language.getLength() + 1,
-                                            nPos - maLocale.Language.getLength() - 1 );
-                        maLocale.Variant
-                            = aLocale.copy( nPos + 1 );
-                    }
-                    else
-                    {
-                        maLocale.Country
-                            = aLocale.copy( maLocale.Language.getLength() + 1 );
-                    }
-                }
-
-            }
-
+            maLocale = LanguageTag( utl::ConfigManager::getLocale()).getLocale( false);
             mbLocaleSet = sal_True;
         }
     }
