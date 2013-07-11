@@ -20,11 +20,52 @@
 
 #ifndef SYSTEM_FIREBIRD
 
-File gid_File_Firebird
+/*File gid_File_Firebird
     TXT_FILE_BODY;
     Dir = gid_Dir_Brand_Root;
     Name = "firebird.filelist";
     Styles = (FILELIST,USE_INTERNAL_RIGHTS);
+End*/
+
+File gid_File_Firebird_Lib_252
+    LIB_FILE_BODY;
+    Styles = (PACKED);
+    Dir = SCP2_OOO_BIN_DIR;
+  #ifdef UNX
+    #ifdef MACOSX
+       Name = STRING(CONCAT4(libfbembed,.,2.5.2,UNXSUFFIX));
+    #else
+       Name = STRING(CONCAT4(libfbembed,UNXSUFFIX,.,2.5.2));
+    #endif
+  #endif
+End
+
+File gid_File_Firebird_Lib_25
+    LIB_FILE_BODY;
+    Styles = (PACKED);
+    Dir = SCP2_OOO_BIN_DIR;
+  #ifdef UNX
+    #ifdef MACOSX
+       Name = STRING(CONCAT4(libfbembed,.,2.5,UNXSUFFIX));
+    #else
+       Name = STRING(CONCAT4(libfbembed,UNXSUFFIX,.,2.5));
+    #endif
+  #endif
+End
+
+File gid_File_Firebird_Lib
+    LIB_FILE_BODY;
+    Styles = (PACKED);
+    Dir = SCP2_OOO_BIN_DIR;
+  #ifdef UNX
+    #ifdef MACOSX
+       Name = STRING(CONCAT3(libfbembed,.,UNXSUFFIX));
+    #else
+       Name = STRING(CONCAT2(libfbembed,UNXSUFFIX));
+    #endif
+  #else
+   Name = "ifbembed.dll";
+  #endif
 End
 
 #endif
