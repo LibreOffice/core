@@ -11,6 +11,7 @@
 #define SC_UCALC_HXX
 
 #include "helper/qahelper.hxx"
+#include "document.hxx"
 
 struct TestImpl;
 class ScUndoPaste;
@@ -31,10 +32,37 @@ class Test : public test::BootstrapFixture
 {
 public:
 
+    static void printRange(ScDocument* pDoc, const ScRange& rRange, const char* pCaption);
     static void clearRange(ScDocument* pDoc, const ScRange& rRange);
     static void copyToClip(ScDocument* pSrcDoc, const ScRange& rRange, ScDocument* pClipDoc);
     static void pasteFromClip(ScDocument* pDestDoc, const ScRange& rDestRange, ScDocument* pClipDoc);
     static ScUndoPaste* createUndoPaste(ScDocShell& rDocSh, const ScRange& rRange, ScDocument* pUndoDoc);
+
+    template<size_t _Size>
+    static ScRange insertRangeData(ScDocument* pDoc, const ScAddress& rPos, const char* aData[][_Size], size_t nRowCount)
+    {
+        ScRange aRange(rPos);
+        aRange.aEnd.SetCol(rPos.Col()+_Size-1);
+        aRange.aEnd.SetRow(rPos.Row()+nRowCount-1);
+
+        clearRange(pDoc, aRange);
+
+        for (size_t i = 0; i < _Size; ++i)
+        {
+            for (size_t j = 0; j < nRowCount; ++j)
+            {
+                if (!aData[j][i])
+                    continue;
+
+                SCCOL nCol = i + rPos.Col();
+                SCROW nRow = j + rPos.Row();
+                pDoc->SetString(nCol, nRow, rPos.Tab(), OUString(aData[j][i], strlen(aData[j][i]), RTL_TEXTENCODING_UTF8));
+            }
+        }
+
+        printRange(pDoc, aRange, "Range data content");
+        return aRange;
+    }
 
     Test();
     ~Test();
