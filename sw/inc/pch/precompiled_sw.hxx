@@ -955,7 +955,6 @@
 #include <toolkit/awt/vclxdevice.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/bigint.hxx>
-#include <tools/cachestr.hxx>
 #include <tools/color.hxx>
 #include <tools/date.hxx>
 #include <tools/datetime.hxx>

@@ -21,7 +21,6 @@
 #include <svl/poolitem.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
-#include <tools/cachestr.hxx>
 
 // -----------------------------------------------------------------------
 
@@ -39,7 +38,7 @@ SfxLockBytesItem::SfxLockBytesItem( sal_uInt16 nW, SvStream &rStream )
 :   SfxPoolItem( nW )
 {
     rStream.Seek( 0L );
-    _xVal = new SvLockBytes( new SvCacheStream(), sal_True );
+    _xVal = new SvLockBytes( new SvMemoryStream(), sal_True );
 
     SvStream aLockBytesStream( _xVal );
     rStream >> aLockBytesStream;
@@ -121,7 +120,7 @@ bool SfxLockBytesItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8
     {
         if ( aSeq.getLength() )
         {
-            SvCacheStream* pStream = new SvCacheStream;
+            SvMemoryStream* pStream = new SvMemoryStream();
             pStream->Write( (void*)aSeq.getConstArray(), aSeq.getLength() );
             pStream->Seek(0);
 

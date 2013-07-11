@@ -20,7 +20,6 @@
 #include <comphelper/string.hxx>
 #include <sal/types.h>
 #include <rtl/strbuf.hxx>
-#include <tools/cachestr.hxx>
 #include <tools/inetmsg.hxx>
 #include <tools/inetstrm.hxx>
 
@@ -1396,7 +1395,7 @@ int INetMIMEMessageStream::PutMsgLine(const sal_Char* pData, sal_uIntPtr nSize)
                 {
                     // Encapsulated message.
                     INetMIMEMessage* pNewMessage = new INetMIMEMessage;
-                    pNewMessage->SetDocumentLB( new SvAsyncLockBytes(new SvCacheStream, false));
+                    pNewMessage->SetDocumentLB( new SvAsyncLockBytes(new SvMemoryStream(), false));
                     pMsg->AttachChild( *pNewMessage, true );
 
                     // Encapsulated message body. Create message parser stream.
@@ -1509,7 +1508,7 @@ int INetMIMEMessageStream::PutMsgLine(const sal_Char* pData, sal_uIntPtr nSize)
                                     new INetMIMEMessage;
                                 pNewMessage->SetDocumentLB(
                                     new SvAsyncLockBytes(
-                                        new SvCacheStream, false));
+                                        new SvMemoryStream(), false));
 
                                 pMsg->AttachChild( *pNewMessage, true );
 
