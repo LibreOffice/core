@@ -751,8 +751,11 @@ namespace
                         OUString sName, sTableName;
                         xColumn->getPropertyValue( OMetaConnection::getPropMap().getNameByIndex( PROPERTY_ID_REALNAME ) ) >>= sName;
                         xColumn->getPropertyValue( OMetaConnection::getPropMap().getNameByIndex( PROPERTY_ID_TABLENAME ) ) >>= sTableName;
-                        if ( sName == _out_rColumnName && sTableName == _out_rTableRange )
+                        if ( sName == _out_rColumnName && ( _out_rTableRange.isEmpty() || sTableName == _out_rTableRange ) )
+                        {
                             xColumn->getPropertyValue( OMetaConnection::getPropMap().getNameByIndex( PROPERTY_ID_NAME ) ) >>= _out_rColumnAliasIfPresent;
+                            break;
+                        }
                     }
                     catch( const Exception& )
                     {
