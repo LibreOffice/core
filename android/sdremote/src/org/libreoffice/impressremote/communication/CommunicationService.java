@@ -208,6 +208,8 @@ public class CommunicationService extends Service implements Runnable, MessagesL
     }
 
     public void startSearch() {
+        mState = State.SEARCHING;
+
         mTcpServersFinder.startSearch();
 
         BluetoothAdapter aAdapter = BluetoothAdapter.getDefaultAdapter();
