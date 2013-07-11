@@ -2145,7 +2145,7 @@ struct PartiallyFilledEmptyMatrix
 
 void Test::testMatrix()
 {
-    ScMatrixRef pMat;
+    ScMatrixRef pMat, pMat2;
 
     // First, test the zero matrix type.
     pMat = new ScMatrix(0, 0, 0.0);
@@ -2226,6 +2226,49 @@ void Test::testMatrix()
     pMat->PutDouble(12.5, 1, 1);
     CPPUNIT_ASSERT_EQUAL(0.0, pMat->GetMinValue(false));
     CPPUNIT_ASSERT_EQUAL(12.5, pMat->GetMaxValue(false));
+
+    // Convert matrix into a linear double array. String elements become NaN
+    // and empty elements become 0.
+    pMat = new ScMatrix(3, 3);
+    pMat->PutDouble(2.5, 0, 0);
+    pMat->PutDouble(1.2, 0, 1);
+    pMat->PutString("A", 1, 1);
+    pMat->PutDouble(2.3, 2, 1);
+    pMat->PutDouble(-20, 2, 2);
+
+    double fNaN;
+    rtl::math::setNan(&fNaN);
+
+    std::vector<double> aDoubles;
+    pMat->GetDoubleArray(aDoubles);
+
+    {
+        const double pChecks[] = { 2.5, 1.2, 0, 0, fNaN, 0, 0, 2.3, -20 };
+        CPPUNIT_ASSERT_EQUAL(SAL_N_ELEMENTS(pChecks), aDoubles.size());
+        for (size_t i = 0, n = aDoubles.size(); i < n; ++i)
+        {
+            if (rtl::math::isNan(pChecks[i]))
+                CPPUNIT_ASSERT_MESSAGE("NaN is expected, but it's not.", rtl::math::isNan(aDoubles[i]));
+            else
+                CPPUNIT_ASSERT_EQUAL(pChecks[i], aDoubles[i]);
+        }
+    }
+
+    pMat2 = new ScMatrix(3, 3, 10.0);
+    pMat2->PutString("B", 1, 0);
+    pMat2->MergeDoubleArray(aDoubles, ScMatrix::Mul);
+
+    {
+        const double pChecks[] = { 25, 12, 0, fNaN, fNaN, 0, 0, 23, -200 };
+        CPPUNIT_ASSERT_EQUAL(SAL_N_ELEMENTS(pChecks), aDoubles.size());
+        for (size_t i = 0, n = aDoubles.size(); i < n; ++i)
+        {
+            if (rtl::math::isNan(pChecks[i]))
+                CPPUNIT_ASSERT_MESSAGE("NaN is expected, but it's not.", rtl::math::isNan(aDoubles[i]));
+            else
+                CPPUNIT_ASSERT_EQUAL(pChecks[i], aDoubles[i]);
+        }
+    }
 }
 
 void Test::testEnterMixedMatrix()

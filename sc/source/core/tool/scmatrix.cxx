@@ -1063,6 +1063,8 @@ public:
                     *miPos = mfNaN;
             }
             break;
+            case mdds::mtm::element_empty:
+                std::advance(miPos, node.size);
             default:
                 ;
         }
@@ -1133,6 +1135,8 @@ public:
                     *miPos = mfNaN;
             }
             break;
+            case mdds::mtm::element_empty:
+                std::advance(miPos, node.size);
             default:
                 ;
         }
