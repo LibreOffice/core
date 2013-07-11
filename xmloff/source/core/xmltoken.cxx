@@ -403,6 +403,7 @@ namespace xmloff { namespace token {
         TOKEN( "changed-region",                  XML_CHANGED_REGION ),
         TOKEN( "chapter",                         XML_CHAPTER ),
         TOKEN( "char",                            XML_CHAR ),
+        TOKEN( "char-shading-value",              XML_CHAR_SHADING_VALUE ),
         TOKEN( "character-count",                 XML_CHARACTER_COUNT ),
         TOKEN( "chart",                           XML_CHART ),
         TOKEN( "charts",                          XML_CHARTS ),

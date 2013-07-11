@@ -399,6 +399,7 @@ namespace xmloff { namespace token {
         XML_CHANGED_REGION,
         XML_CHAPTER,
         XML_CHAR,
+        XML_CHAR_SHADING_VALUE,
         XML_CHARACTER_COUNT,
         XML_CHART,
         XML_CHARTS,
