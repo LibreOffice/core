@@ -816,28 +816,6 @@ void SAL_CALL SlideShow::end() throw(RuntimeException)
                                     UNO_QUERY));
                     }
                 }
-
-                if( pViewShell->GetDoc()->IsStartWithPresentation() )
-                {
-                    pViewShell->GetDoc()->SetStartWithPresentation( false );
-
-                    Reference<frame::XDispatchProvider> xProvider(pViewShell->GetViewShellBase().GetController()->getFrame(),
-                                                                  UNO_QUERY);
-                    if( xProvider.is() )
-                    {
-                        util::URL aURL;
-                        aURL.Complete = ".uno:CloseFrame";
-
-                        uno::Reference< frame::XDispatch > xDispatch(
-                            xProvider->queryDispatch(
-                                aURL, OUString(), 0));
-                        if( xDispatch.is() )
-                        {
-                            xDispatch->dispatch(aURL,
-                                                uno::Sequence< beans::PropertyValue >());
-                        }
-                    }
-                }
             }
         }
         mpCurrentViewShellBase = 0;
