@@ -367,7 +367,7 @@ static void lclDumpAnyValue( Any value)
         } else if( value >>= aWritingMode )
             fprintf (stderr, "%d writing mode\n", aWritingMode);
         else if( value >>= aTextVertAdj ) {
-            const char* s = "uknown";
+            const char* s = "unknown";
             switch( aTextVertAdj ) {
             case TextVerticalAdjust_TOP:
                 s = "top";
@@ -387,7 +387,7 @@ static void lclDumpAnyValue( Any value)
         }
         fprintf (stderr, "%s\n", s);
     } else if( value >>= aTextHorizAdj ) {
-        const char* s = "uknown";
+        const char* s = "unknown";
         switch( aTextHorizAdj ) {
             case TextHorizontalAdjust_LEFT:
                 s = "left";
@@ -761,7 +761,7 @@ static const char* lclDumpAnyValueCode( Any value, int level = 0)
         } else if( value >>= aWritingMode )
             fprintf (stderr, "%d writing mode\n", aWritingMode);
         else if( value >>= aTextVertAdj ) {
-            const char* s = "uknown";
+            const char* s = "unknown";
             switch( aTextVertAdj ) {
             case TextVerticalAdjust_TOP:
                 s = "top";
@@ -781,7 +781,7 @@ static const char* lclDumpAnyValueCode( Any value, int level = 0)
         }
         fprintf (stderr, "%s\n", s);
     } else if( value >>= aTextHorizAdj ) {
-        const char* s = "uknown";
+        const char* s = "unknown";
         switch( aTextHorizAdj ) {
             case TextHorizontalAdjust_LEFT:
                 s = "left";
