@@ -35,7 +35,7 @@ Module gid_Module_Prg_Impress_Bin
     Minimal = YES;
     Default = YES;
     Styles = (HIDDEN_ROOT);
-    Files = (auto_impress_ALL
+    Files = (auto_impress_ALL,
     gid_File_Extra_Urldesktop_Impress,gid_File_Extra_Urlnew_Impress,gid_File_Extra_Urlstart_Impress,gid_File_Extra_Urltasks_Impress,
     gid_File_Share_Registry_Impress_Xcd,
     gid_File_sd_xml,
