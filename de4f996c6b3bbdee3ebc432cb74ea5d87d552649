@@ -1,0 +1,157 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXn//++s\u003d",
+        "filename": "vcl/inc/cupsmgr.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1000053
+      },
+      "writtenOn": "2013-07-11T10:06:41Z",
+      "side": 1,
+      "message": "This comment should be above the createCUPSParser definition",
+      "revId": "de4f996c6b3bbdee3ebc432cb74ea5d87d552649",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//++o\u003d",
+        "filename": "vcl/inc/cupsmgr.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1000053
+      },
+      "writtenOn": "2013-07-11T10:06:41Z",
+      "side": 1,
+      "message": "These two comments seem to be for the block of commands.",
+      "revId": "de4f996c6b3bbdee3ebc432cb74ea5d87d552649",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//++Y\u003d",
+        "filename": "vcl/inc/fontsubset.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1000053
+      },
+      "writtenOn": "2013-07-11T10:06:41Z",
+      "side": 1,
+      "message": "These two commens seem to be for the whole block and not for the m_aPSName variable.",
+      "revId": "de4f996c6b3bbdee3ebc432cb74ea5d87d552649",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//++U\u003d",
+        "filename": "vcl/inc/fontsubset.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1000053
+      },
+      "writtenOn": "2013-07-11T10:06:41Z",
+      "side": 1,
+      "message": "again, this is for the whole block",
+      "revId": "de4f996c6b3bbdee3ebc432cb74ea5d87d552649",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//++Q\u003d",
+        "filename": "vcl/inc/fontsubset.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1000053
+      },
+      "writtenOn": "2013-07-11T10:06:41Z",
+      "side": 1,
+      "message": "again, this is for the whole block",
+      "revId": "de4f996c6b3bbdee3ebc432cb74ea5d87d552649",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//++M\u003d",
+        "filename": "vcl/inc/ilstbox.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 387,
+      "author": {
+        "id": 1000053
+      },
+      "writtenOn": "2013-07-11T10:06:41Z",
+      "side": 1,
+      "message": "This seems to be for the whole block",
+      "revId": "de4f996c6b3bbdee3ebc432cb74ea5d87d552649",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//++E\u003d",
+        "filename": "vcl/inc/impimagetree.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1000053
+      },
+      "writtenOn": "2013-07-11T10:06:41Z",
+      "side": 1,
+      "message": "This comment is for the shutDown method. We should move it above the definition.",
+      "revId": "de4f996c6b3bbdee3ebc432cb74ea5d87d552649",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//++A\u003d",
+        "filename": "vcl/inc/printdlg.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1000053
+      },
+      "writtenOn": "2013-07-11T10:06:41Z",
+      "side": 1,
+      "message": "this is for the whole section",
+      "revId": "de4f996c6b3bbdee3ebc432cb74ea5d87d552649",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//+98\u003d",
+        "filename": "vcl/inc/printdlg.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1000053
+      },
+      "writtenOn": "2013-07-11T10:06:41Z",
+      "side": 1,
+      "message": "again fot the whole section",
+      "revId": "de4f996c6b3bbdee3ebc432cb74ea5d87d552649",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
