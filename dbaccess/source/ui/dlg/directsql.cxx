@@ -122,6 +122,7 @@ DBG_NAME(DirectSQLDialog)
             stopAllComponentListening();
         }
         delete m_pSQLHistory;
+        delete m_pShowOutput;
 
         DBG_DTOR(DirectSQLDialog,NULL);
     }
