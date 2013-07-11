@@ -1912,7 +1912,9 @@ void OSQLParseTreeIterator::setSelectColumnName(::rtl::Reference<OSQLColumns>& _
 void OSQLParseTreeIterator::setOrderByColumnName(const ::rtl::OUString & rColumnName, ::rtl::OUString & rTableRange, sal_Bool bAscending)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "parse", "Ocke.Janssen@sun.com", "OSQLParseTreeIterator::setOrderByColumnName" );
-    Reference<XPropertySet> xColumn = findColumn( rColumnName, rTableRange, false );
+    Reference<XPropertySet> xColumn = findSelectColumn( rColumnName );
+    if ( !xColumn.is() )
+        xColumn = findColumn ( rColumnName, rTableRange, false );
     if ( xColumn.is() )
         m_aOrderColumns->get().push_back(new OOrderColumn( xColumn, rTableRange, isCaseSensitive(), bAscending ) );
     else
@@ -2090,7 +2092,31 @@ const OSQLParseNode* OSQLParseTreeIterator::getSimpleHavingTree() const
 }
 
 // -----------------------------------------------------------------------------
-Reference< XPropertySet > OSQLParseTreeIterator::findColumn( const ::rtl::OUString & rColumnName, ::rtl::OUString & rTableRange, bool _bLookInSubTables )
+Reference< XPropertySet > OSQLParseTreeIterator::findSelectColumn( const OUString & rColumnName )
+{
+    SAL_INFO( "connectivity.parse", "parse lionel@mamane.lu OSQLParseTreeIterator::findSelectColumn" );
+    for ( OSQLColumns::Vector::const_iterator lookupColumn = m_aSelectColumns->get().begin();
+          lookupColumn != m_aSelectColumns->get().end();
+          ++lookupColumn )
+    {
+        Reference< XPropertySet > xColumn( *lookupColumn );
+        try
+        {
+            OUString sName, sTableName;
+            xColumn->getPropertyValue( OMetaConnection::getPropMap().getNameByIndex( PROPERTY_ID_NAME ) ) >>= sName;
+            if ( sName == rColumnName )
+                return xColumn;
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
+    }
+    return NULL;
+}
+
+// -----------------------------------------------------------------------------
+Reference< XPropertySet > OSQLParseTreeIterator::findColumn( const OUString & rColumnName, OUString & rTableRange, bool _bLookInSubTables )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "parse", "Ocke.Janssen@sun.com", "OSQLParseTreeIterator::findColumn" );
     Reference< XPropertySet > xColumn = findColumn( *m_pImpl->m_pTables, rColumnName, rTableRange );
