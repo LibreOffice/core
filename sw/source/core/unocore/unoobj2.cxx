@@ -38,7 +38,6 @@
 #include <docary.hxx>
 #include <paratr.hxx>
 #include <pam.hxx>
-#include <tools/cachestr.hxx>
 #include <shellio.hxx>
 #include <swerror.h>
 #include <swtblfmt.hxx>

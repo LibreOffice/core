@@ -21,7 +21,6 @@
 #include <osl/endian.h>
 #include <hintids.hxx>
 #include <svl/urihelper.hxx>
-#include <tools/cachestr.hxx>
 #include <doc.hxx>
 #include <pam.hxx>
 #include <docary.hxx>
@@ -276,7 +275,7 @@ sal_Bool SwEditShell::GetSelectedText( String &rBuf, int nHndlParaBrk )
     }
     else if( IsSelection() )
     {
-        SvCacheStream aStream(20480);
+        SvMemoryStream aStream(20480);
 #ifdef OSL_BIGENDIAN
         aStream.SetNumberFormatInt( NUMBERFORMAT_INT_BIGENDIAN );
 #else
@@ -311,12 +310,12 @@ sal_Bool SwEditShell::GetSelectedText( String &rBuf, int nHndlParaBrk )
 
             long lLen;
             if( !IsError( aWriter.Write( xWrt ) ) &&
-                STRING_MAXLEN > (( lLen  = aStream.GetSize() )
+                STRING_MAXLEN > (( lLen  = aStream.GetEndOfData() )
                                         / sizeof( sal_Unicode )) + 1 )
             {
                 aStream << (sal_Unicode)'\0';
 
-                const sal_Unicode *p = (sal_Unicode*)aStream.GetBuffer();
+                const sal_Unicode *p = (sal_Unicode*)aStream.GetData();
                 if( p )
                     rBuf = OUString(p);
                 else
