@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ViewAnimator xmlns:android="http://schemas.android.com/apk/res/android"
+              android:id="@+id/view_animator"
+              android:inAnimation="@android:anim/fade_in"
+              android:outAnimation="@android:anim/fade_out"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <ProgressBar
+        android:id="@android:id/progress"
+        style="?android:progressBarStyleLarge"
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <LinearLayout
+        android:id="@+id/layout_pin_validation"
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/padding_horizontal_connection_layout"
+        android:paddingRight="@dimen/padding_horizontal_connection_layout"
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:text="@string/message_impress_pin_validation"
+            android:gravity="center_horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+        <TextView
+            android:id="@+id/text_pin"
+            android:textSize="@dimen/text_size_pin"
+            android:gravity="center_horizontal"
+            android:paddingTop="@dimen/padding_vertical_pin"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_error_message"
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/padding_horizontal_connection_layout"
+        android:paddingRight="@dimen/padding_horizontal_connection_layout"
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/text_error_title"
+            android:text="@string/message_connection_failed_title"
+            android:textStyle="bold"
+            android:textSize="@dimen/text_size_error_title"
+            android:gravity="center_horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+        <TextView
+            android:id="@+id/text_primary_error_message"
+            android:text="@string/message_impress_remote_enabling"
+            android:gravity="center_horizontal"
+            android:paddingTop="@dimen/padding_vertical_error_message"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+        <TextView
+            android:id="@+id/text_secondary_error_message"
+            android:gravity="center_horizontal"
+            android:paddingTop="@dimen/padding_vertical_error_message"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+     </LinearLayout>
+
+</ViewAnimator>

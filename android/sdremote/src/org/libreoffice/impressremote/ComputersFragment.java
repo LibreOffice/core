@@ -20,6 +20,8 @@ import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.content.LocalBroadcastManager;
+import android.view.View;
+import android.widget.ListView;
 
 import com.actionbarsherlock.app.SherlockListFragment;
 import org.libreoffice.impressremote.communication.CommunicationService;
@@ -208,6 +210,15 @@ public class ComputersFragment extends SherlockListFragment implements ServiceCo
             // Receiver not registered.
             // Fixed in Honeycomb: Android’s issue #6191.
         }
+    }
+
+    @Override
+    public void onListItemClick(ListView aListView, View aView, int aPosition, long aId) {
+        Server aComputer = getComputersAdapter().getItem(aPosition);
+
+        Intent aIntent = new Intent(getActivity(), ComputerConnectionActivity.class);
+        aIntent.putExtra("COMPUTER", aComputer);
+        startActivity(aIntent);
     }
 }
 

@@ -119,7 +119,12 @@ public class CommunicationService extends Service implements Runnable, MessagesL
                     if (mStateDesired == State.CONNECTED) {
                         mState = State.CONNECTING;
 
-                        openConnection();
+                        try {
+                            openConnection();
+                        }
+                        catch (RuntimeException e) {
+                            connectionFailed();
+                        }
                     }
                 }
             }

@@ -32,6 +32,11 @@
         </activity>
 
         <activity
+            android:name=".ComputerConnectionActivity"
+            android:label="@string/title_connection">
+        </activity>
+
+        <activity
             android:name=".SelectorActivity"
             android:label="@string/selector_choose_a_computer"
             android:uiOptions="splitActionBarWhenNarrow">

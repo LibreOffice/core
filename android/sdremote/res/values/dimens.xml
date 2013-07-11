@@ -2,7 +2,13 @@
 <resources>
 
     <dimen name="padding_horizontal_list_item">8dp</dimen>
+    <dimen name="padding_horizontal_connection_layout">40dp</dimen>
+
+    <dimen name="padding_vertical_pin">10dp</dimen>
+    <dimen name="padding_vertical_error_message">10dp</dimen>
 
     <dimen name="text_size_list_item">18sp</dimen>
+    <dimen name="text_size_pin">35sp</dimen>
+    <dimen name="text_size_error_title">20sp</dimen>
 
 </resources>

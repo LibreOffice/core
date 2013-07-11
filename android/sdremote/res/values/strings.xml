@@ -69,7 +69,14 @@
     <string name="title_bluetooth" translatable="false">Bluetooth</string>
     <string name="title_wifi" translatable="false">WiFi</string>
     <string name="title_licenses">Open source licenses</string>
+    <string name="title_connection">Connection</string>
 
     <string name="menu_licenses">Open source licenses</string>
+
+    <string name="message_impress_pin_validation">Go to “Slide Show → Impress Remote” in LibreOffice Impress and enter the code.</string>
+    <string name="message_connection_failed_title">Connection failed</string>
+    <string name="message_impress_remote_enabling">Make sure you enabled remote control. Go to “Tools → Options → LibreOffice Impress → General” in LibreOffice Impress.</string>
+    <string name="message_impress_wifi_enabling">You should enable experimental features at “Tools → Options → LibreOffice → Advanced” as well.</string>
+    <string name="message_impress_pairing_check">If you have Bluetooth pairing issues check instructions related to your desktop OS.</string>
 
 </resources>
