@@ -466,7 +466,6 @@ public:
                                                     SwView& rVw,
                                                     const SfxItemSet& rCoreSet,
                                                     sal_uInt8 nDialogMode,
-                                                    int nResId,
                                                     const String *pCollName = 0,
                                                     sal_Bool bDraw = sal_False,
                                                     sal_uInt16 nDefPage = 0);

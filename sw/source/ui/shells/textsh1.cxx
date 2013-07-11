@@ -961,7 +961,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-                pDlg = pFact->CreateSwParaDlg( GetView().GetWindow(),GetView(), aCoreSet,DLG_STD, DLG_PARA,NULL, sal_False, nDefPage );
+                pDlg = pFact->CreateSwParaDlg( GetView().GetWindow(),GetView(), aCoreSet, DLG_STD, NULL, sal_False, nDefPage );
                 OSL_ENSURE(pDlg, "Dialogdiet fail!");
             }
             SfxItemSet* pSet = NULL;
