@@ -113,23 +113,7 @@
 
 #define FT_NAME                 110
 #define ED_NAME                 111
-#define FT_ALT_NAME             112
-#define ED_ALT_NAME             113
-#define FT_PREV                 114
-#define LB_PREV                 115
-#define FT_NEXT                 116
-#define LB_NEXT                 117
-#define FL_NAME                 118
-#define CB_PROTECT_CONTENT      119
-#define CB_PROTECT_FRAME        120
-#define CB_PROTECT_SIZE         121
-#define FL_PROTECT              122
-#define CB_EDIT_IN_READONLY     123
-#define CB_PRINT_FRAME          124
-#define FL_EXT                  125
 #define FL_TYPE_SEP             126
-#define FT_TEXTFLOW             127
-#define LB_TEXTFLOW             128
 #define CB_FOLLOWTEXTFLOW       129
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

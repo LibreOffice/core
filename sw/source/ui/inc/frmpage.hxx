@@ -274,27 +274,26 @@ public:
 
 class SwFrmAddPage : public SfxTabPage
 {
-      FixedLine   aNamesFL;
-    FixedText   aNameFT;
-    Edit        aNameED;
-    FixedText   aAltNameFT;
-    Edit        aAltNameED;
-    FixedText   aPrevFT;
-    ListBox     aPrevLB;
-    FixedText   aNextFT;
-    ListBox     aNextLB;
-        FixedLine   aProtectFL;
+    FixedText*   pNamesFT;
+    FixedText*   pNameFT;
+    Edit*        pNameED;
+    FixedText*   pAltNameFT;
+    Edit*        pAltNameED;
+    FixedText*   pPrevFT;
+    ListBox*     pPrevLB;
+    FixedText*   pNextFT;
+    ListBox*     pNextLB;
+    FixedText*   pProtectFT;
 
-    CheckBox    aProtectContentCB;
-    CheckBox    aProtectFrameCB;
-    CheckBox    aProtectSizeCB;
-    FixedLine   aExtFL;
+    CheckBox*    pProtectContentCB;
+    CheckBox*    pProtectFrameCB;
+    CheckBox*    pProtectSizeCB;
+    FixedText*   pExtFT;
 
-    CheckBox    aEditInReadonlyCB;
-    CheckBox    aPrintFrameCB;
-    FixedText   aTextFlowFT;
-    ListBox     aTextFlowLB;
-
+    CheckBox*    pEditInReadonlyCB;
+    CheckBox*    pPrintFrameCB;
+    FixedText*   pTextFlowFT;
+    ListBox*     pTextFlowLB;
 
     SwWrtShell* pWrtSh;
 
