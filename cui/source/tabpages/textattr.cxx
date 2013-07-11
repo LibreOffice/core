@@ -547,7 +547,9 @@ void SvxTextAttrPage::Construct()
                 case OBJ_OUTLINETEXT :
                 case OBJ_CAPTION :
                 {
-                    if ( ((SdrTextObj*)pObj)->HasText() )
+                    if( // #121917# The original ((SdrTextObj*)pObj)->HasText() will fail badly with SdrVirtObjs from Writer
+                        0 != dynamic_cast< const SdrTextObj* >(pObj) &&
+                        static_cast< const SdrTextObj* >(pObj)->HasText() )
                     {
                         // Konturfluss ist NICHT bei reinen Textobjekten m�glich
                         bContourEnabled = sal_False;
