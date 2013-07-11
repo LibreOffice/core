@@ -30,36 +30,8 @@
 #include <boost/unordered_set.hpp>
 #include <vector>
 
-namespace com {
-namespace sun {
-namespace star {
-namespace lang {
-
-// equality operator needed for hash_map;
-// (-> why does this need to be in the namespace of Locale ? g++ fails to compile else)
-inline bool operator==( const com::sun::star::lang::Locale& rLeft, const com::sun::star::lang::Locale& rRight )
-{
-    return
-        rLeft.Language.equals( rRight.Language ) &&
-        rLeft.Country.equals( rRight.Country )  &&
-        rLeft.Variant.equals( rRight.Variant )
-        ;
-}
-}}}}
-
 namespace utl
 {
-
-struct LocaleHash
-{
-    size_t operator()( const com::sun::star::lang::Locale& rLocale ) const
-    {
-        return
-            (size_t)rLocale.Language.hashCode() ^
-            (size_t)rLocale.Country.hashCode()  ^
-            (size_t)rLocale.Variant.hashCode();
-    }
-};
 
 class UNOTOOLS_DLLPUBLIC DefaultFontConfiguration
 {
@@ -77,12 +49,9 @@ class UNOTOOLS_DLLPUBLIC DefaultFontConfiguration
         mutable com::sun::star::uno::Reference< com::sun::star::container::XNameAccess > xAccess;
     };
 
-    boost::unordered_map< com::sun::star::lang::Locale,
-                   LocaleAccess,
-                   utl::LocaleHash >
-            m_aConfig;
+    boost::unordered_map< OUString, LocaleAccess, OUStringHash > m_aConfig;
 
-    OUString tryLocale( const com::sun::star::lang::Locale& rLocale, const OUString& rType ) const;
+    OUString tryLocale( const OUString& rBcp47, const OUString& rType ) const;
 
     public:
     DefaultFontConfiguration();
@@ -183,7 +152,7 @@ private:
 
         LocaleSubst() : bConfigRead( false ) {}
     };
-    boost::unordered_map< com::sun::star::lang::Locale, LocaleSubst, utl::LocaleHash > m_aSubst;
+    boost::unordered_map< OUString, LocaleSubst, OUStringHash > m_aSubst;
     typedef boost::unordered_set< OUString, OUStringHash > UniqueSubstHash;
     mutable UniqueSubstHash maSubstHash;
 
@@ -197,7 +166,7 @@ private:
                              const OUString& rType ) const;
     unsigned long getSubstType( const com::sun::star::uno::Reference< com::sun::star::container::XNameAccess > xFont,
                                 const OUString& rType ) const;
-    void readLocaleSubst( const com::sun::star::lang::Locale& rLocale ) const;
+    void readLocaleSubst( const OUString& rBcp47 ) const;
 public:
     FontSubstConfiguration();
     ~FontSubstConfiguration();

@@ -126,7 +126,8 @@ DefaultFontConfiguration::DefaultFontConfiguration()
                 const OUString* pLocaleStrings = aLocales.getConstArray();
                 for( int i = 0; i < nLocales; i++ )
                 {
-                    Locale aLoc( LanguageTag( pLocaleStrings[i]).getLocale( false));
+                    // Feed through LanguageTag for casing.
+                    OUString aLoc( LanguageTag( pLocaleStrings[i], true).getBcp47( false));
                     m_aConfig[ aLoc ] = LocaleAccess();
                     m_aConfig[ aLoc ].aConfigLocaleString = pLocaleStrings[i];
                 }
@@ -160,12 +161,11 @@ DefaultFontConfiguration::~DefaultFontConfiguration()
     m_xConfigProvider.clear();
 }
 
-OUString DefaultFontConfiguration::tryLocale( const Locale& rLocale, const OUString& rType ) const
+OUString DefaultFontConfiguration::tryLocale( const OUString& rBcp47, const OUString& rType ) const
 {
     OUString aRet;
 
-    boost::unordered_map< Locale, LocaleAccess, LocaleHash >::const_iterator it =
-        m_aConfig.find( rLocale );
+    boost::unordered_map< OUString, LocaleAccess, OUStringHash >::const_iterator it = m_aConfig.find( rBcp47 );
     if( it != m_aConfig.end() )
     {
         if( !it->second.xAccess.is() )
@@ -212,33 +212,32 @@ OUString DefaultFontConfiguration::tryLocale( const Locale& rLocale, const OUStr
 OUString DefaultFontConfiguration::getDefaultFont( const Locale& rLocale, int nType ) const
 {
     OUString aType = OUString::createFromAscii( getKeyType( nType ) );
-    OUString aRet = tryLocale( rLocale, aType );
+    LanguageTag aLanguageTag( rLocale);
+    // Try the simple cases first without constructing fallbacks.
+    OUString aRet = tryLocale( aLanguageTag.getBcp47(), aType );
     if (aRet.isEmpty())
     {
         if (rLocale.Variant.isEmpty())
         {
             if (!rLocale.Country.isEmpty())
             {
-                Locale aLocale( rLocale.Language, "", "");
-                aRet = tryLocale( aLocale, aType );
+                aRet = tryLocale( rLocale.Language, aType );
             }
         }
         else
         {
-            ::std::vector< OUString > aFallbacks( LanguageTag( rLocale).getFallbackStrings());
+            ::std::vector< OUString > aFallbacks( aLanguageTag.getFallbackStrings());
             aFallbacks.erase( aFallbacks.begin());  // first is full BCP47, we already checked that
             for (::std::vector< OUString >::const_iterator it( aFallbacks.begin());
                     it != aFallbacks.end() && aRet.isEmpty(); ++it)
             {
-                Locale aLocale( LanguageTag( *it).getLocale( false));
-                aRet = tryLocale( aLocale, aType );
+                aRet = tryLocale( *it, aType );
             }
         }
     }
     if( aRet.isEmpty() )
     {
-        Locale aLocale("en","","");
-        aRet = tryLocale( aLocale, aType );
+        aRet = tryLocale( "en", aType );
     }
     return aRet;
 }
@@ -388,7 +387,8 @@ FontSubstConfiguration::FontSubstConfiguration() :
                 const OUString* pLocaleStrings = aLocales.getConstArray();
                 for( int i = 0; i < nLocales; i++ )
                 {
-                    Locale aLoc( LanguageTag( pLocaleStrings[i]).getLocale( false));
+                    // Feed through LanguageTag for casing.
+                    OUString aLoc( LanguageTag( pLocaleStrings[i], true).getBcp47( false));
                     m_aSubst[ aLoc ] = LocaleSubst();
                     m_aSubst[ aLoc ].aConfigLocaleString = pLocaleStrings[i];
                 }
@@ -1046,10 +1046,9 @@ unsigned long FontSubstConfiguration::getSubstType( const com::sun::star::uno::R
     return type;
 }
 
-void FontSubstConfiguration::readLocaleSubst( const com::sun::star::lang::Locale& rLocale ) const
+void FontSubstConfiguration::readLocaleSubst( const OUString& rBcp47 ) const
 {
-    boost::unordered_map< Locale, LocaleSubst, LocaleHash >::const_iterator it =
-        m_aSubst.find( rLocale );
+    boost::unordered_map< OUString, LocaleSubst, OUStringHash >::const_iterator it = m_aSubst.find( rBcp47 );
     if( it != m_aSubst.end() )
     {
         if( ! it->second.bConfigRead )
@@ -1148,12 +1147,11 @@ const FontNameAttr* FontSubstConfiguration::getSubstInfo( const OUString& rFontN
 
     for (::std::vector< OUString >::const_iterator fb( aFallbacks.begin()); fb != aFallbacks.end(); ++fb)
     {
-        Locale aLocale( LanguageTag( *fb).getLocale());
-        boost::unordered_map< Locale, LocaleSubst, LocaleHash >::const_iterator lang = m_aSubst.find( aLocale );
+        boost::unordered_map< OUString, LocaleSubst, OUStringHash >::const_iterator lang = m_aSubst.find( *fb );
         if( lang != m_aSubst.end() )
         {
             if( ! lang->second.bConfigRead )
-                readLocaleSubst( aLocale );
+                readLocaleSubst( *fb );
             // try to find an exact match
             // because the list is sorted this will also find fontnames of the form searchfontname*
             std::vector< FontNameAttr >::const_iterator it = ::std::lower_bound( lang->second.aSubstAttributes.begin(), lang->second.aSubstAttributes.end(), aSearchAttr, StrictStringSort() );
