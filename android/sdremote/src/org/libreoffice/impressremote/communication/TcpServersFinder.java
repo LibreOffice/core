@@ -20,6 +20,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import android.content.Context;
 import android.content.Intent;
@@ -27,7 +30,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 
 public class TcpServersFinder implements ServersFinder, Runnable {
-    private static final int SEARCH_DELAY_IN_MILLISECONDS = 1000 * 10;
+    private static final int SEARCH_DELAY_IN_SECONDS = 10;
     private static final int BLOCKING_TIMEOUT_IN_MILLISECONDS = 1000 * 10;
 
     private static final int SEARCH_RESULT_BUFFER_SIZE = 1024;
@@ -37,8 +40,7 @@ public class TcpServersFinder implements ServersFinder, Runnable {
     private final Map<String, Server> mServers;
 
     private DatagramSocket mSearchSocket;
-    private Thread mSearchResultsListenerThread;
-    private boolean mSearchStopRequested;
+    private ScheduledExecutorService mSearchService;
 
     public TcpServersFinder(Context aContext) {
         mContext = aContext;
@@ -48,27 +50,17 @@ public class TcpServersFinder implements ServersFinder, Runnable {
 
     @Override
     public void startSearch() {
-        if (mSearchResultsListenerThread != null) {
-            return;
-        }
-
-        mSearchStopRequested = false;
-
-        mSearchResultsListenerThread = new Thread(this);
-        mSearchResultsListenerThread.start();
+        mSearchService = Executors.newSingleThreadScheduledExecutor();
+        mSearchService.scheduleAtFixedRate(this, 0, SEARCH_DELAY_IN_SECONDS, TimeUnit.SECONDS);
     }
 
     @Override
     public void run() {
         setUpSearchSocket();
 
-        while (!mSearchStopRequested) {
-            sendSearchCommand();
+        sendSearchCommand();
 
-            listenForSearchResults();
-
-            setUpSearchDelay();
-        }
+        listenForSearchResults();
 
         tearDownSearchSocket();
     }
@@ -166,27 +158,13 @@ public class TcpServersFinder implements ServersFinder, Runnable {
             .sendBroadcast(aServersListUpdatedIntent);
     }
 
-    private void setUpSearchDelay() {
-        try {
-            Thread.sleep(SEARCH_DELAY_IN_MILLISECONDS);
-        } catch (InterruptedException e) {
-            mSearchStopRequested = true;
-        }
-    }
-
     private void tearDownSearchSocket() {
         mSearchSocket.close();
     }
 
     @Override
     public void stopSearch() {
-        if (mSearchResultsListenerThread == null) {
-            return;
-        }
-
-        mSearchStopRequested = true;
-
-        mSearchResultsListenerThread = null;
+        mSearchService.shutdown();
     }
 
     @Override
