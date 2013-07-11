@@ -1133,9 +1133,10 @@ void SfxDocTplService_Impl::setLocale( const Locale &rLocale )
 {
     ::osl::MutexGuard aGuard( maMutex );
 
-    if ( mbLocaleSet &&
-         ( maLocale.Language != rLocale.Language ) &&
-         ( maLocale.Country != rLocale.Country ) )
+    if ( mbLocaleSet && (
+         ( maLocale.Language != rLocale.Language ) ||
+         ( maLocale.Country  != rLocale.Country  ) ||
+         ( maLocale.Variant  != rLocale.Variant  ) ) )
         mbIsInitialized = sal_False;
 
     maLocale    = rLocale;
