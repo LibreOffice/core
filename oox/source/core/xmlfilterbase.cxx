@@ -506,8 +506,11 @@ writeElement( FSHelperPtr pDoc, sal_Int32 nXmlElement, Sequence< OUString > aIte
 static void
 writeElement( FSHelperPtr pDoc, sal_Int32 nXmlElement, const LanguageTag& rLanguageTag )
 {
-    // TODO: what to do with .Country and .Variant
-    writeElement( pDoc, nXmlElement, rLanguageTag.getLanguage() );
+    // dc:language, Dublin Core recommends "such as RFC 4646", which is BCP 47
+    // and obsoleted by RFC 5646, see
+    // http://dublincore.org/documents/dcmi-terms/#terms-language
+    // http://dublincore.org/documents/dcmi-terms/#elements-language
+    writeElement( pDoc, nXmlElement, rLanguageTag.getBcp47() );
 }
 
 static void
