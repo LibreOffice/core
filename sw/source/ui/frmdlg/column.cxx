@@ -703,18 +703,21 @@ IMPL_LINK( SwColumnPage, UpdateColMgr, void *, /*pField*/ )
 
         }
 
-            // nothing is turned off
-        const sal_uInt16 nPos = m_pLineTypeDLB->GetSelectEntryPos();
-        sal_Bool bEnable = 0 != nPos;
+        bool bEnable = isLineNotNone();
         m_pLineHeightEdit->Enable( bEnable );
         m_pLineHeightLbl->Enable( bEnable );
+        m_pLineWidthLbl->Enable( bEnable );
+        m_pLineWidthEdit->Enable( bEnable );
+        m_pLineColorDLB->Enable( bEnable );
+        m_pLineColorLbl->Enable( bEnable );
+
         long nLineWidth = static_cast<long>(MetricField::ConvertDoubleValue(
                 m_pLineWidthEdit->GetValue( ),
                 m_pLineWidthEdit->GetDecimalDigits( ),
                 m_pLineWidthEdit->GetUnit(), MAP_TWIP ));
         if( !bEnable )
             pColMgr->SetNoLine();
-        else if( LISTBOX_ENTRY_NOTFOUND != nPos )
+        else
         {
             pColMgr->SetLineWidthAndColor(
                     ::editeng::SvxBorderStyle( m_pLineTypeDLB->GetSelectEntryStyle( ) ),
@@ -824,6 +827,13 @@ void SwColumnPage::Init()
         std::min(long(nMaxCols), long( pColMgr->GetActualSize() / nMinWidth) )));
 }
 
+bool SwColumnPage::isLineNotNone() const
+{
+    // nothing is turned off
+    const sal_uInt16 nPos = m_pLineTypeDLB->GetSelectEntryPos();
+    return nPos != LISTBOX_ENTRY_NOTFOUND && nPos != 0;
+}
+
 /*------------------------------------------------------------------------
  Description:   The number of columns has changed -- here the controls for
                 editing of the columns are en- or disabled according to the
@@ -855,7 +865,9 @@ void SwColumnPage::UpdateCols()
         }
     }
     aEd1.Enable( bEnable12 );
-    aDistEd1.Enable(nCols > 1);
+    bool bEnable = nCols > 1;
+    aDistEd1.Enable(bEnable);
+    m_pAutoWidthBox->Enable( bEnable && !bHtmlMode );
     aEd2.Enable( bEnable12 );
     aDistEd2.Enable(bEnable3);
     aEd3.Enable( bEnable3  );
@@ -865,21 +877,28 @@ void SwColumnPage::UpdateCols()
     m_pBtnBack->Enable( bEnableBtns );
     m_pBtnNext->Enable( bEnableBtns );
 
-    const sal_Bool bEnable = nCols > 1;
-    if( !bEnable )
-    {
-        m_pLinePosDLB->Enable( sal_False );
-        m_pLinePosLbl->Enable( sal_False );
-    }
-    m_pLineHeightEdit->Enable( bEnable );
-    m_pLineHeightLbl->Enable( bEnable );
     m_pLineTypeDLB->Enable( bEnable );
     m_pLineTypeLbl->Enable( bEnable );
+
+    if (bEnable)
+    {
+        bEnable = isLineNotNone();
+    }
+
+    //all these depend on > 1 column and line style != none
+    m_pLineHeightEdit->Enable( bEnable );
+    m_pLineHeightLbl->Enable( bEnable );
     m_pLineWidthLbl->Enable( bEnable );
     m_pLineWidthEdit->Enable( bEnable );
     m_pLineColorDLB->Enable( bEnable );
     m_pLineColorLbl->Enable( bEnable );
-    m_pAutoWidthBox->Enable( bEnable && !bHtmlMode );
+
+    if (bEnable)
+        bEnable = pColMgr->GetLineHeightPercent() != 100;
+
+    //and these additionally depend on line height != 100%
+    m_pLinePosDLB->Enable( bEnable );
+    m_pLinePosLbl->Enable( bEnable );
 }
 
 void SwColumnPage::SetLabels( sal_uInt16 nVis )

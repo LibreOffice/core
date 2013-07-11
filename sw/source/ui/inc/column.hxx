@@ -171,6 +171,8 @@ class SwColumnPage : public SfxTabPage
 
     void connectPercentFieldWrapper(PercentFieldWrap &rWrap, const OString &rName);
 
+    bool isLineNotNone() const;
+
 public:
     virtual ~SwColumnPage();
 
