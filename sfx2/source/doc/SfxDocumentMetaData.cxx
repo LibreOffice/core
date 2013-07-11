@@ -70,6 +70,7 @@
 #include "sot/storage.hxx"
 #include "sfx2/docfile.hxx"
 #include "sax/tools/converter.hxx"
+#include "i18nlangtag/languagetag.hxx"
 
 #include <utility>
 #include <vector>
@@ -1515,15 +1516,7 @@ css::lang::Locale SAL_CALL
         SfxDocumentMetaData::getLanguage() throw (css::uno::RuntimeException)
 {
     ::osl::MutexGuard g(m_aMutex);
-    css::lang::Locale loc;
-    OUString text = getMetaText("dc:language");
-    sal_Int32 ix = text.indexOf(static_cast<sal_Unicode> ('-'));
-    if (ix == -1) {
-        loc.Language = text;
-    } else {
-        loc.Language = text.copy(0, ix);
-        loc.Country = text.copy(ix+1);
-    }
+    css::lang::Locale loc( LanguageTag( getMetaText("dc:language")).getLocale( false));
     return loc;
 }
 
@@ -1531,10 +1524,7 @@ void SAL_CALL
 SfxDocumentMetaData::setLanguage(const css::lang::Locale & the_value)
         throw (css::uno::RuntimeException)
 {
-    OUString text = the_value.Language;
-    if (!the_value.Country.isEmpty()) {
-        text += OUString("-").concat(the_value.Country);
-    }
+    OUString text( LanguageTag( the_value).getBcp47( false));
     setMetaTextAndNotify("dc:language", text);
 }
 
