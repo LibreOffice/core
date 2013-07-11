@@ -514,6 +514,7 @@ $(eval $(call gb_Package_add_files_with_dir,odk_examples,$(gb_Package_SDKDIRNAME
     java/ToDo/ToDo.java \
     java/ToDo/ToDo.ods \
     java/ToDo/XToDo.idl \
+    python/toolpanel/CalcWindowState.xcu \
     python/toolpanel/Factory.xcu \
     python/toolpanel/META-INF/manifest.xml \
     python/toolpanel/Makefile \
