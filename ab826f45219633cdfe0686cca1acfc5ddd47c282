@@ -16,6 +16,24 @@
       "revId": "ab826f45219633cdfe0686cca1acfc5ddd47c282",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//+/E\u003d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000035
+      },
+      "writtenOn": "2013-07-11T09:31:23Z",
+      "side": 1,
+      "message": "Yeah, if that was easy, I would have done that already.\nMaybe the whole _ALL variable is not good idea, and just listing all libraries would do.\nAnyhow, what\u0027s wrong with this patch ?\nSurely it\u0027s possible to \u0027fix\u0027 _ALL later - although I don\u0027t plan to do that.",
+      "parentUuid": "AAAAXn///Lo\u003d",
+      "revId": "ab826f45219633cdfe0686cca1acfc5ddd47c282",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
