@@ -456,7 +456,7 @@ void SAL_CALL OSingleSelectQueryComposer::appendFilterByColumn( const Reference<
     setConditionByColumn(column,andCriteria,F_tmp,filterOperator);
 }
 
-OUString OSingleSelectQueryComposer::impl_getColumnName_throw(const Reference< XPropertySet >& column)
+OUString OSingleSelectQueryComposer::impl_getColumnRealName_throw(const Reference< XPropertySet >& column, bool bGroupBy)
 {
     ::connectivity::checkDisposed(OSubComponent::rBHelper.bDisposed);
 
@@ -471,17 +471,18 @@ OUString OSingleSelectQueryComposer::impl_getColumnName_throw(const Reference< X
             throw SQLException(DBACORE_RESSTRING(RID_STR_COLUMN_NOT_VALID),*this,SQLSTATE_GENERAL,1000,makeAny(aErr) );
         }
 
-    OUString aName,aNewName;
+    OUString aName, aNewName;
     column->getPropertyValue(PROPERTY_NAME)         >>= aName;
 
-    if ( !m_xMetaData->supportsOrderByUnrelated() && m_aCurrentColumns[SelectColumns] && !m_aCurrentColumns[SelectColumns]->hasByName(aName))
+    if ( bGroupBy &&
+         !m_xMetaData->supportsGroupByUnrelated() &&
+         m_aCurrentColumns[SelectColumns] &&
+         !m_aCurrentColumns[SelectColumns]->hasByName(aName) )
     {
         OUString sError(DBACORE_RESSTRING(RID_STR_COLUMN_MUST_VISIBLE));
         throw SQLException(sError.replaceAll("%name", aName),*this,SQLSTATE_GENERAL,1000,Any() );
     }
 
-    // Attach filter
-    // Construct SELECT without WHERE and ORDER BY
     OUString aQuote  = m_xMetaData->getIdentifierQuoteString();
     if ( m_aCurrentColumns[SelectColumns]->hasByName(aName) )
     {
@@ -491,7 +492,7 @@ OUString OSingleSelectQueryComposer::impl_getColumnName_throw(const Reference< X
         OSL_ENSURE(xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_TABLENAME),"Property TABLENAME not available!");
         OSL_ENSURE(xColumn->getPropertySetInfo()->hasPropertyByName("Function"),"Property FUNCTION not available!");
 
-        OUString sRealName,sTableName;
+        OUString sRealName, sTableName;
         xColumn->getPropertyValue(PROPERTY_REALNAME)    >>= sRealName;
         xColumn->getPropertyValue(PROPERTY_TABLENAME)   >>= sTableName;
         sal_Bool bFunction = sal_False;
@@ -525,11 +526,43 @@ OUString OSingleSelectQueryComposer::impl_getColumnName_throw(const Reference< X
     return aNewName;
 }
 
+OUString OSingleSelectQueryComposer::impl_getColumnName_throw(const Reference< XPropertySet >& column, bool bOrderBy)
+{
+    ::connectivity::checkDisposed(OSubComponent::rBHelper.bDisposed);
+
+    getColumns();
+    if ( !column.is()
+        || !m_aCurrentColumns[SelectColumns]
+        || !column->getPropertySetInfo()->hasPropertyByName(PROPERTY_NAME)
+        )
+        {
+            OUString sError(DBACORE_RESSTRING(RID_STR_COLUMN_UNKNOWN_PROP));
+            SQLException aErr(sError.replaceAll("%value", OUString(PROPERTY_NAME)),*this,SQLSTATE_GENERAL,1000,Any() );
+            throw SQLException(DBACORE_RESSTRING(RID_STR_COLUMN_NOT_VALID),*this,SQLSTATE_GENERAL,1000,makeAny(aErr) );
+        }
+
+    OUString aName, aNewName;
+    column->getPropertyValue(PROPERTY_NAME)         >>= aName;
+
+    if ( bOrderBy &&
+         !m_xMetaData->supportsOrderByUnrelated() &&
+         m_aCurrentColumns[SelectColumns] &&
+         !m_aCurrentColumns[SelectColumns]->hasByName(aName) )
+    {
+        OUString sError(DBACORE_RESSTRING(RID_STR_COLUMN_MUST_VISIBLE));
+        throw SQLException(sError.replaceAll("%name", aName),*this,SQLSTATE_GENERAL,1000,Any() );
+    }
+
+    const OUString aQuote  = m_xMetaData->getIdentifierQuoteString();
+    aNewName = ::dbtools::quoteName(aQuote,aName);
+    return aNewName;
+}
+
 void SAL_CALL OSingleSelectQueryComposer::appendOrderByColumn( const Reference< XPropertySet >& column, sal_Bool ascending ) throw(SQLException, RuntimeException)
 {
     SAL_INFO("dbaccess", "OSingleSelectQueryComposer::appendOrderByColumn" );
     ::osl::MutexGuard aGuard( m_aMutex );
-    OUString sColumnName( impl_getColumnName_throw(column) );
+    OUString sColumnName( impl_getColumnName_throw(column, true) );
     OUString sOrder = getOrder();
     if ( !(sOrder.isEmpty() || sColumnName.isEmpty()) )
         sOrder += COMMA;
@@ -544,7 +577,7 @@ void SAL_CALL OSingleSelectQueryComposer::appendGroupByColumn( const Reference< 
 {
     SAL_INFO("dbaccess", "OSingleSelectQueryComposer::appendGroupByColumn" );
     ::osl::MutexGuard aGuard( m_aMutex );
-    OUString sColumnName( impl_getColumnName_throw(column) );
+    OUString sColumnName( impl_getColumnRealName_throw(column, true) );
     OrderCreator aComposer;
     aComposer.append( getGroup() );
     aComposer.append( sColumnName );

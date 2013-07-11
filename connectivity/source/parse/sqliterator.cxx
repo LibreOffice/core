@@ -1868,7 +1868,9 @@ OUString OSQLParseTreeIterator::getUniqueColumnName(const OUString & rColumnName
 void OSQLParseTreeIterator::setOrderByColumnName(const OUString & rColumnName, OUString & rTableRange, sal_Bool bAscending)
 {
     SAL_INFO( "connectivity.parse", "parse Ocke.Janssen@sun.com OSQLParseTreeIterator::setOrderByColumnName" );
-    Reference<XPropertySet> xColumn = findColumn( rColumnName, rTableRange, false );
+    Reference<XPropertySet> xColumn = findSelectColumn( rColumnName );
+    if ( !xColumn.is() )
+        xColumn = findColumn ( rColumnName, rTableRange, false );
     if ( xColumn.is() )
         m_aOrderColumns->get().push_back(new OOrderColumn( xColumn, rTableRange, isCaseSensitive(), bAscending ) );
     else
@@ -2043,6 +2045,30 @@ const OSQLParseNode* OSQLParseTreeIterator::getSimpleHavingTree() const
     SAL_INFO( "connectivity.parse", "parse Ocke.Janssen@sun.com OSQLParseTreeIterator::getSimpleHavingTree" );
     const OSQLParseNode* pNode = getHavingTree();
     return pNode ? pNode->getChild(1) : NULL;
+}
+
+// -----------------------------------------------------------------------------
+Reference< XPropertySet > OSQLParseTreeIterator::findSelectColumn( const OUString & rColumnName )
+{
+    SAL_INFO( "connectivity.parse", "parse lionel@mamane.lu OSQLParseTreeIterator::findSelectColumn" );
+    for ( OSQLColumns::Vector::const_iterator lookupColumn = m_aSelectColumns->get().begin();
+          lookupColumn != m_aSelectColumns->get().end();
+          ++lookupColumn )
+    {
+        Reference< XPropertySet > xColumn( *lookupColumn );
+        try
+        {
+            OUString sName, sTableName;
+            xColumn->getPropertyValue( OMetaConnection::getPropMap().getNameByIndex( PROPERTY_ID_NAME ) ) >>= sName;
+            if ( sName == rColumnName )
+                return xColumn;
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
+    }
+    return NULL;
 }
 
 // -----------------------------------------------------------------------------
