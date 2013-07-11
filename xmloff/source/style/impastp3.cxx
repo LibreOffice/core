@@ -19,6 +19,8 @@
 
 #include "impastpl.hxx"
 #include <xmloff/xmlprmap.hxx>
+#include <sal/log.hxx>
+#include <stdio.h>
 
 using namespace std;
 
@@ -137,6 +139,24 @@ OUString SvXMLAutoStylePoolParentP_Impl::Find( const XMLFamilyData_Impl& rFamily
 {
     OUString sName;
     vector< XMLPropertyState>::size_type nItems = rProperties.size();
+
+    //SAL_DEBU(" ");
+    //SAL_DEBU(" ");
+    //SAL_DEBU("-------------------------------------- ");
+    //SAL_DEBU("inside SvXMLAutoStylePoolParentP_Impl");
+    //SAL_DEBU("-------------------------------------- ");
+    //SAL_DEBU(" ");
+    //char strTmp[100];
+    //sprintf(strTmp, "nItems = %d", (int)nItems);
+    //SAL_DEBU(strTmp);
+    //
+    //for( size_t i1 = 0; i1 < nItems; i1++ )
+    //{
+    //    XMLPropertyState propTmp = rProperties[ i1 ];
+    //    SAL_DEBU("    " << "Property " << i1 << " = " << "    " << propTmp.mnIndex);
+    //}
+
+
     size_t nCount = maPropertiesList.size();
     for( size_t i = 0; i < nCount; i++ )
     {
@@ -155,6 +175,9 @@ OUString SvXMLAutoStylePoolParentP_Impl::Find( const XMLFamilyData_Impl& rFamily
             break;
         }
     }
+
+    //sprintf(strTmp, "sName (%d) = ", sName.getLength());
+    //SAL_DEBU(strTmp << sName);
 
     return sName;
 }

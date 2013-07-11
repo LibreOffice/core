@@ -95,15 +95,20 @@ XMLNumberPropHdl::~XMLNumberPropHdl()
 
 sal_Bool XMLNumberPropHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
 {
+    //SAL_DEBU(" * Inside XMLNumberPropHdl::importXML * ");
     sal_Int32 nValue = 0;
     bool bRet = ::sax::Converter::convertNumber( nValue, rStrImpValue );
     lcl_xmloff_setAny( rValue, nValue, nBytes );
+
+    //SAL_DEBU(" * RETURN [import] = " << bRet << " * ");
 
     return bRet;
 }
 
 sal_Bool XMLNumberPropHdl::exportXML( OUString& rStrExpValue, const Any& rValue, const SvXMLUnitConverter& ) const
 {
+    //SAL_DEBU(" * Inside XMLNumberPropHdl::exportXML * ");
+
     sal_Bool bRet = sal_False;
     sal_Int32 nValue;
       OUStringBuffer aOut;
@@ -115,6 +120,9 @@ sal_Bool XMLNumberPropHdl::exportXML( OUString& rStrExpValue, const Any& rValue,
 
         bRet = sal_True;
     }
+
+    //SAL_DEBU(" * export => " << (int)nValue << " * ");
+    //SAL_DEBU(" * RETURN [export] = " << (bool)bRet << " * ");
 
     return bRet;
 }

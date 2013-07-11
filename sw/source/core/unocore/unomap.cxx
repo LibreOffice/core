@@ -622,6 +622,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     { SW_PROP_NMID(UNO_NAME_CHAR_SCALE_WIDTH), RES_CHRATR_SCALEW,       CPPU_E2T(CPPUTYPE_INT16),   PROPERTY_NONE,         0 },
                     { SW_PROP_NMID(UNO_NAME_CHAR_RELIEF), RES_CHRATR_RELIEF,      CPPU_E2T(CPPUTYPE_INT16),    PROPERTY_NONE,      MID_RELIEF },
                     { SW_PROP_NMID(UNO_NAME_CHAR_AUTO_STYLE_NAME), RES_TXTATR_AUTOFMT,     CPPU_E2T(CPPUTYPE_OUSTRING),         PropertyAttribute::MAYBEVOID,     0},
+                    { SW_PROP_NMID(UNO_NAME_CHAR_SHADING_VALUE), RES_CHRATR_BACKGROUND,      CPPU_E2T(CPPUTYPE_INT32),    PROPERTY_NONE,      MID_SHADING_VALUE },
                     {0,0,0,0,0,0}
                 };
                 aMapEntriesArr[nPropertyId] = aAutoCharStyleMap;
