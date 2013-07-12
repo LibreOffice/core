@@ -2461,14 +2461,13 @@ bool ScCompiler::IsOpCode( const String& rName, bool bInArray )
             OpCode          eOp;
         };
         static const FunctionName aOdffAliases[] = {
-            // Renamed old names:
+            // Renamed old names, still accept them:
             { "B",              ocB },              // B -> BINOM.DIST.RANGE
             { "TDIST",          ocTDist },          // TDIST -> LEGACY.TDIST
             { "EASTERSUNDAY",   ocEasterSunday },   // EASTERSUNDAY -> ORG.OPENOFFICE.EASTERSUNDAY
-            { "ZGZ",            ocZGZ }             // ZGZ -> RRI
-            // Renamed new names:
-            // XXX none currently. Example:
-            //{ "ORG.OPENOFFICE.EASTERSUNDAY", ocEasterSunday }
+            { "ZGZ",            ocZGZ },            // ZGZ -> RRI
+            // Renamed new names, prepare to read future names:
+            { "ORG.OPENOFFICE.GOALSEEK", ocBackSolver } // GOALSEEK -> ORG.OPENOFFICE.GOALSEEK
         };
         static const size_t nOdffAliases = sizeof(aOdffAliases) / sizeof(aOdffAliases[0]);
         for (size_t i=0; i<nOdffAliases; ++i)
