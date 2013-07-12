@@ -197,15 +197,35 @@ void SvtCJKOptions_Impl::Load()
         }
     }
 
-    SvtSystemLanguageOptions aSystemLocaleSettings;
-    LanguageType eSystemLanguage = aSystemLocaleSettings.GetWin16SystemLanguage();
-    sal_uInt16 nWinScript = SvtLanguageOptions::GetScriptTypeOfLanguage( eSystemLanguage );
-
-    sal_uInt16 nScriptType = SvtLanguageOptions::GetScriptTypeOfLanguage(LANGUAGE_SYSTEM);
-    if ( !bCJKFont && (( nScriptType & SCRIPTTYPE_ASIAN )||
-             ((eSystemLanguage != LANGUAGE_SYSTEM)  && ( nWinScript & SCRIPTTYPE_ASIAN ))))
+    if (!bCJKFont)
     {
-        SetAll(sal_True);
+        bool bAutoEnableCJK = false;
+
+        sal_uInt16 nScriptType = SvtLanguageOptions::GetScriptTypeOfLanguage(LANGUAGE_SYSTEM);
+        //system locale is CJK
+        bAutoEnableCJK = (nScriptType & SCRIPTTYPE_ASIAN);
+
+        if (!bAutoEnableCJK)
+        {
+            SvtSystemLanguageOptions aSystemLocaleSettings;
+
+            //windows secondary system locale is CJK
+            LanguageType eSystemLanguage = aSystemLocaleSettings.GetWin16SystemLanguage();
+            if (eSystemLanguage != LANGUAGE_SYSTEM)
+            {
+                sal_uInt16 nWinScript = SvtLanguageOptions::GetScriptTypeOfLanguage( eSystemLanguage );
+                bAutoEnableCJK = (nWinScript & SCRIPTTYPE_ASIAN);
+            }
+
+            //CJK keyboard is installed
+            if (!bAutoEnableCJK)
+                bAutoEnableCJK = aSystemLocaleSettings.isCJKKeyboardLayoutInstalled();
+        }
+
+        if (bAutoEnableCJK)
+        {
+            SetAll(sal_True);
+        }
     }
     bIsLoaded = sal_True;
 }

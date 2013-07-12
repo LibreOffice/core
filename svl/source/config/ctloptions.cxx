@@ -287,21 +287,46 @@ void SvtCTLOptions_Impl::Load()
             }
         }
     }
-    sal_uInt16 nType = SvtLanguageOptions::GetScriptTypeOfLanguage(LANGUAGE_SYSTEM);
-    SvtSystemLanguageOptions aSystemLocaleSettings;
-    LanguageType eSystemLanguage = aSystemLocaleSettings.GetWin16SystemLanguage();
-    sal_uInt16 nWinScript = SvtLanguageOptions::GetScriptTypeOfLanguage( eSystemLanguage );
-    if( !m_bCTLFontEnabled && (( nType & SCRIPTTYPE_COMPLEX ) ||
-            ((eSystemLanguage != LANGUAGE_SYSTEM)  && ( nWinScript & SCRIPTTYPE_COMPLEX )))  )
+
+    if (!m_bCTLFontEnabled)
     {
-        m_bCTLFontEnabled = sal_True;
-        sal_uInt16 nLanguage = SvtSysLocale().GetLanguageTag().getLanguageType();
-        //enable sequence checking for the appropriate languages
-        m_bCTLSequenceChecking = m_bCTLRestricted = m_bCTLTypeAndReplace =
-            (MsLangId::needsSequenceChecking( nLanguage) ||
-             MsLangId::needsSequenceChecking( eSystemLanguage));
-        Commit();
+        bool bAutoEnableCTL = false;
+
+        sal_uInt16 nScriptType = SvtLanguageOptions::GetScriptTypeOfLanguage(LANGUAGE_SYSTEM);
+        //system locale is CTL
+        bAutoEnableCTL = (nScriptType & SCRIPTTYPE_COMPLEX);
+
+        LanguageType eSystemLanguage = LANGUAGE_SYSTEM;
+
+        if (!bAutoEnableCTL)
+        {
+            SvtSystemLanguageOptions aSystemLocaleSettings;
+
+            //windows secondary system locale is CTL
+            eSystemLanguage = aSystemLocaleSettings.GetWin16SystemLanguage();
+            if (eSystemLanguage != LANGUAGE_SYSTEM)
+            {
+                sal_uInt16 nWinScript = SvtLanguageOptions::GetScriptTypeOfLanguage( eSystemLanguage );
+                bAutoEnableCTL = (nWinScript & SCRIPTTYPE_COMPLEX);
+            }
+
+            //CTL keyboard is installed
+            if (!bAutoEnableCTL)
+                bAutoEnableCTL = aSystemLocaleSettings.isCTLKeyboardLayoutInstalled();
+        }
+
+        if (bAutoEnableCTL)
+        {
+            m_bCTLFontEnabled = sal_True;
+            sal_uInt16 nLanguage = SvtSysLocale().GetLanguageTag().getLanguageType();
+            //enable sequence checking for the appropriate languages
+            m_bCTLSequenceChecking = m_bCTLRestricted = m_bCTLTypeAndReplace =
+                (MsLangId::needsSequenceChecking( nLanguage) ||
+                 MsLangId::needsSequenceChecking( eSystemLanguage));
+            Commit();
+        }
     }
+
     m_bIsLoaded = sal_True;
 }
 //------------------------------------------------------------------------------
