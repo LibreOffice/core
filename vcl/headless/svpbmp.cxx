@@ -54,7 +54,7 @@ bool SvpSalBitmap::Create( const Size& rSize,
 #if defined(ANDROID) || defined(IOS)
         case 32: nFormat = Format::THIRTYTWO_BIT_TC_MASK_RGBA; break;
 #else
-        case 32: nFormat = Format::THIRTYTWO_BIT_TC_MASK; break;
+        case 32: nFormat = Format::THIRTYTWO_BIT_TC_MASK_BGRA; break;
 #endif
     }
     B2IVector aSize( rSize.Width(), rSize.Height() );

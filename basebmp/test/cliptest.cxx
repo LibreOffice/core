@@ -196,7 +196,7 @@ public:
                                            Format::ONE_BIT_MSB_PAL );
         mpDevice32bpp = createBitmapDevice( aSize,
                                            true,
-                                           Format::THIRTYTWO_BIT_TC_MASK );
+                                           Format::THIRTYTWO_BIT_TC_MASK_BGRA );
 
         OUString aSvg( "m 0 0 h5 l5 5 v5 h-5 l-5-5 z" );
         basegfx::B2DPolyPolygon aPoly;

@@ -266,7 +266,7 @@ public:
         {
             pDevice = createBitmapDevice( aSize,
                                           true,
-                                          Format::THIRTYTWO_BIT_TC_MASK );
+                                          Format::THIRTYTWO_BIT_TC_MASK_BGRA );
 
             const Color aCol4(0x01010101);
             pDevice->setPixel( aPt, aCol4, DrawMode_PAINT );

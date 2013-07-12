@@ -1055,7 +1055,7 @@ void TestWindow::Paint( const Rectangle& /*rRect*/ )
     basegfx::B2ISize aTestSize(1000,1000);
     basebmp::BitmapDeviceSharedPtr pDevice( basebmp::createBitmapDevice( aTestSize,
                                                                          false,
-                                                                         basebmp::Format::THIRTYTWO_BIT_TC_MASK ));
+                                                                         basebmp::Format::THIRTYTWO_BIT_TC_MASK_BGRA ));
 
     {
         OUString aSvg;
