@@ -2599,22 +2599,17 @@ void BmpWindow::SetGraphic(const Graphic& rGrf)
     Description:    set URL and ImageMap at frames
 ***************************************************************************/
 SwFrmURLPage::SwFrmURLPage( Window *pParent, const SfxItemSet &rSet ) :
-    SfxTabPage(pParent,     SW_RES(TP_FRM_URL), rSet),
-    aHyperLinkFL    (this, SW_RES( FL_HYPERLINK )),
-    aURLFT          (this, SW_RES( FT_URL    )),
-    aURLED          (this, SW_RES( ED_URL    )),
-    aSearchPB       (this, SW_RES( PB_SEARCH  )),
-    aNameFT         (this, SW_RES( FT_NAME   )),
-    aNameED         (this, SW_RES( ED_NAME   )),
-    aFrameFT        (this, SW_RES( FT_FRAME   )),
-    aFrameCB        (this, SW_RES( CB_FRAME   )),
-
-    aImageFL        (this, SW_RES( FL_IMAGE   )),
-    aServerCB       (this, SW_RES( CB_SERVER  )),
-    aClientCB       (this, SW_RES( CB_CLIENT  ))
+    SfxTabPage(pParent, "FrmURLPage" , "modules/swriter/ui/frmurlpage.ui", rSet)
 {
-    FreeResource();
-    aSearchPB.SetClickHdl(LINK(this, SwFrmURLPage, InsertFileHdl));
+    get(pURLED,"url");
+    get(pSearchPB,"search");
+    get(pNameED,"name");
+    get(pFrameCB,"frame");
+
+    get(pServerCB,"server");
+    get(pClientCB,"client");
+
+    pSearchPB->SetClickHdl(LINK(this, SwFrmURLPage, InsertFileHdl));
 }
 
 SwFrmURLPage::~SwFrmURLPage()
@@ -2633,7 +2628,7 @@ void SwFrmURLPage::Reset( const SfxItemSet &rSet )
             size_t nCount = pList->size();
             for ( size_t i = 0; i < nCount; i++ )
             {
-                aFrameCB.InsertEntry( *pList->at( i ) );
+                pFrameCB->InsertEntry( *pList->at( i ) );
             }
             for ( size_t i = nCount; i; )
             {
@@ -2646,24 +2641,24 @@ void SwFrmURLPage::Reset( const SfxItemSet &rSet )
     if ( SFX_ITEM_SET == rSet.GetItemState( RES_URL, sal_True, &pItem ) )
     {
         const SwFmtURL* pFmtURL = (const SwFmtURL*)pItem;
-        aURLED.SetText( INetURLObject::decode( pFmtURL->GetURL(),
+        pURLED->SetText( INetURLObject::decode( pFmtURL->GetURL(),
                                         INET_HEX_ESCAPE,
                                            INetURLObject::DECODE_UNAMBIGUOUS,
                                         RTL_TEXTENCODING_UTF8 ));
-        aNameED.SetText( pFmtURL->GetName());
+        pNameED->SetText( pFmtURL->GetName());
 
-        aClientCB.Enable( pFmtURL->GetMap() != 0 );
-        aClientCB.Check ( pFmtURL->GetMap() != 0 );
-        aServerCB.Check ( pFmtURL->IsServerMap() );
+        pClientCB->Enable( pFmtURL->GetMap() != 0 );
+        pClientCB->Check ( pFmtURL->GetMap() != 0 );
+        pServerCB->Check ( pFmtURL->IsServerMap() );
 
-        aFrameCB.SetText(pFmtURL->GetTargetFrameName());
-        aFrameCB.SaveValue();
+        pFrameCB->SetText(pFmtURL->GetTargetFrameName());
+        pFrameCB->SaveValue();
     }
     else
-        aClientCB.Enable( sal_False );
+        pClientCB->Enable( sal_False );
 
-    aServerCB.SaveValue();
-    aClientCB.SaveValue();
+    pServerCB->SaveValue();
+    pClientCB->SaveValue();
 }
 
 sal_Bool SwFrmURLPage::FillItemSet(SfxItemSet &rSet)
@@ -2677,27 +2672,27 @@ sal_Bool SwFrmURLPage::FillItemSet(SfxItemSet &rSet)
         pFmtURL = new SwFmtURL();
 
     {
-        String sText = aURLED.GetText();
+        String sText = pURLED->GetText();
 
         if( pFmtURL->GetURL() != sText ||
-            OUString(pFmtURL->GetName()) != aNameED.GetText() ||
-            aServerCB.IsChecked() != pFmtURL->IsServerMap() )
+            OUString(pFmtURL->GetName()) != pNameED->GetText() ||
+            pServerCB->IsChecked() != pFmtURL->IsServerMap() )
         {
-            pFmtURL->SetURL( sText, aServerCB.IsChecked() );
-            pFmtURL->SetName( aNameED.GetText() );
+            pFmtURL->SetURL( sText, pServerCB->IsChecked() );
+            pFmtURL->SetName( pNameED->GetText() );
             bModified = sal_True;
         }
     }
 
-    if(!aClientCB.IsChecked() && pFmtURL->GetMap() != 0)
+    if(!pClientCB->IsChecked() && pFmtURL->GetMap() != 0)
     {
         pFmtURL->SetMap(0);
         bModified = sal_True;
     }
 
-    if(OUString(pFmtURL->GetTargetFrameName()) != aFrameCB.GetText())
+    if(OUString(pFmtURL->GetTargetFrameName()) != pFrameCB->GetText())
     {
-        pFmtURL->SetTargetFrameName(aFrameCB.GetText());
+        pFmtURL->SetTargetFrameName(pFrameCB->GetText());
         bModified = sal_True;
     }
     rSet.Put(*pFmtURL);
@@ -2717,7 +2712,7 @@ IMPL_LINK_NOARG(SwFrmURLPage, InsertFileHdl)
 
     try
     {
-        String sTemp(aURLED.GetText());
+        String sTemp(pURLED->GetText());
         if(sTemp.Len())
             xFP->setDisplayDirectory(sTemp);
     }
@@ -2727,7 +2722,7 @@ IMPL_LINK_NOARG(SwFrmURLPage, InsertFileHdl)
     }
     if( aDlgHelper.Execute() == ERRCODE_NONE )
     {
-        aURLED.SetText( xFP->getFiles().getConstArray()[0] );
+        pURLED->SetText( xFP->getFiles().getConstArray()[0] );
     }
 
     return 0;
