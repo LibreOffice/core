@@ -200,16 +200,14 @@ void    SvtSystemLanguageOptions::Notify( const com::sun::star::uno::Sequence< O
     // no listeners supported yet
 }
 
-
-LanguageType SvtSystemLanguageOptions::GetWin16SystemLanguage()
+LanguageType SvtSystemLanguageOptions::GetWin16SystemLanguage() const
 {
     if( m_sWin16SystemLocale.isEmpty() )
         return LANGUAGE_NONE;
     return LanguageTag( m_sWin16SystemLocale ).getLanguageType();
 }
 
-
-bool SvtSystemLanguageOptions::isKeyboardLayoutTypeInstalled(sal_Int16 scriptType)
+bool SvtSystemLanguageOptions::isKeyboardLayoutTypeInstalled(sal_Int16 scriptType) const
 {
     bool isInstalled = false;
 #ifdef WNT
@@ -241,13 +239,13 @@ bool SvtSystemLanguageOptions::isKeyboardLayoutTypeInstalled(sal_Int16 scriptTyp
 }
 
 
-bool SvtSystemLanguageOptions::isCTLKeyboardLayoutInstalled()
+bool SvtSystemLanguageOptions::isCTLKeyboardLayoutInstalled() const
 {
     return isKeyboardLayoutTypeInstalled(::com::sun::star::i18n::ScriptType::COMPLEX);
 }
 
 
-bool SvtSystemLanguageOptions::isCJKKeyboardLayoutInstalled()
+bool SvtSystemLanguageOptions::isCJKKeyboardLayoutInstalled() const
 {
     return isKeyboardLayoutTypeInstalled(::com::sun::star::i18n::ScriptType::ASIAN);
 }
