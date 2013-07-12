@@ -31,26 +31,4 @@
 #define IMG_LEFTRIGHT       (SC_DIALOGS_START + 43 + 23)
 #define IMG_TOPDOWN         (SC_DIALOGS_START + 43 + 24)
 
-//================================================
-// Dialog: Druckbereiche
-
-#define FL_PRINTAREA        10
-#define ED_PRINTAREA        11
-#define RB_PRINTAREA        12
-#define LB_PRINTAREA        13
-
-#define FL_REPEATROW        20
-#define ED_REPEATROW        21
-#define RB_REPEATROW        22
-#define LB_REPEATROW        23
-
-#define FL_REPEATCOL        30
-#define ED_REPEATCOL        31
-#define RB_REPEATCOL        32
-#define LB_REPEATCOL        33
-
-#define BTN_OK              1
-#define BTN_CANCEL          2
-#define BTN_HELP            3
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
