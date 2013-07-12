@@ -25,6 +25,8 @@
 #include <drawinglayer/processor2d/vclprocessor2d.hxx>
 #include <vcl/outdev.hxx>
 
+#include <boost/scoped_ptr.hpp>
+
 //////////////////////////////////////////////////////////////////////////////
 
 namespace drawinglayer
@@ -40,6 +42,9 @@ namespace drawinglayer
         class DRAWINGLAYER_DLLPUBLIC VclPixelProcessor2D : public VclProcessor2D
         {
         private:
+            struct Impl;
+            boost::scoped_ptr<Impl> m_pImpl;
+
         protected:
             /*  the local processor for BasePrinitive2D-Implementation based primitives,
                 called from the common process()-implementation
