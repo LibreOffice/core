@@ -73,14 +73,8 @@ bool FormulaGroupInterpreterSoftware::interpret(ScDocument& rDoc, const ScAddres
                     for (size_t nCol = 0; nCol < nColSize; ++nCol)
                     {
                         const double* pArray = rArrays[nCol];
-                        for (size_t nRow = 0; nRow < nRowSize; ++nRow)
-                        {
-                            if (nRowStart + nRow < p2->GetArrayLength())
-                            {
-                                double fVal = pArray[nRowStart+nRow];
-                                pMat->PutDouble(fVal, nCol, nRow);
-                            }
-                        }
+                        pArray += nRowStart;
+                        pMat->PutDouble(pArray, nRowSize, nCol, 0);
                     }
 
                     ScMatrixToken aTok(pMat);
