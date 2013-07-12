@@ -18,7 +18,7 @@
  */
 
 #include <tools/debug.hxx>
-#include <i18nlangtag/mslangid.hxx>
+#include <i18nlangtag/languagetag.hxx>
 #include <rtl/ustrbuf.hxx>
 
 #include <xmloff/xmlmetae.hxx>
@@ -148,14 +148,8 @@ void SvXMLMetaExport::_MExport()
 
     //  document language
     {
-        const lang::Locale aLocale = mxDocProps->getLanguage();
-        OUString sValue = aLocale.Language;
+        OUString sValue = LanguageTag( mxDocProps->getLanguage()).getBcp47( false);
         if (!sValue.isEmpty()) {
-            if ( !aLocale.Country.isEmpty() )
-            {
-                sValue += OUString::valueOf((sal_Unicode)'-');
-                sValue += aLocale.Country;
-            }
             SvXMLElementExport aElem( mrExport, XML_NAMESPACE_DC, XML_LANGUAGE,
                                       sal_True, sal_False );
             mrExport.Characters( sValue );
