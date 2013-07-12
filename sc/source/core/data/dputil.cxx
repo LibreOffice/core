@@ -11,10 +11,10 @@
  */
 
 #include "dputil.hxx"
-#include "global.hxx"
 #include "dpitemdata.hxx"
 #include "dpnumgroupinfo.hxx"
 #include "globalnames.hxx"
+#include "globstr.hrc"
 
 #include "comphelper/string.hxx"
 #include "unotools/localedatawrapper.hxx"
@@ -345,6 +345,63 @@ sal_Int32 ScDPUtil::getDatePartValue(
     }
 
     return nResult;
+}
+
+namespace {
+
+sal_uInt16 nFuncStrIds[12] = {
+    0,                              // SUBTOTAL_FUNC_NONE
+    STR_FUN_TEXT_AVG,               // SUBTOTAL_FUNC_AVE
+    STR_FUN_TEXT_COUNT,             // SUBTOTAL_FUNC_CNT
+    STR_FUN_TEXT_COUNT,             // SUBTOTAL_FUNC_CNT2
+    STR_FUN_TEXT_MAX,               // SUBTOTAL_FUNC_MAX
+    STR_FUN_TEXT_MIN,               // SUBTOTAL_FUNC_MIN
+    STR_FUN_TEXT_PRODUCT,           // SUBTOTAL_FUNC_PROD
+    STR_FUN_TEXT_STDDEV,            // SUBTOTAL_FUNC_STD
+    STR_FUN_TEXT_STDDEV,            // SUBTOTAL_FUNC_STDP
+    STR_FUN_TEXT_SUM,               // SUBTOTAL_FUNC_SUM
+    STR_FUN_TEXT_VAR,               // SUBTOTAL_FUNC_VAR
+    STR_FUN_TEXT_VAR                // SUBTOTAL_FUNC_VARP
+};
+
+}
+
+OUString ScDPUtil::getDisplayedMeasureName(const OUString& rName, ScSubTotalFunc eFunc)
+{
+    OUStringBuffer aRet;
+    sal_uInt16 nId = nFuncStrIds[eFunc];
+    if (nId)
+    {
+        aRet.append(ScGlobal::GetRscString(nId));        // function name
+        aRet.appendAscii(RTL_CONSTASCII_STRINGPARAM(" - "));
+    }
+    aRet.append(rName);                   // field name
+
+    return aRet.makeStringAndClear();
+}
+
+ScSubTotalFunc ScDPUtil::toSubTotalFunc(com::sun::star::sheet::GeneralFunction eGenFunc)
+{
+    ScSubTotalFunc eSubTotal;
+    switch (eGenFunc)
+    {
+        case sheet::GeneralFunction_NONE:       eSubTotal = SUBTOTAL_FUNC_NONE; break;
+        case sheet::GeneralFunction_SUM:        eSubTotal = SUBTOTAL_FUNC_SUM;  break;
+        case sheet::GeneralFunction_COUNT:      eSubTotal = SUBTOTAL_FUNC_CNT2; break;
+        case sheet::GeneralFunction_AVERAGE:    eSubTotal = SUBTOTAL_FUNC_AVE;  break;
+        case sheet::GeneralFunction_MAX:        eSubTotal = SUBTOTAL_FUNC_MAX;  break;
+        case sheet::GeneralFunction_MIN:        eSubTotal = SUBTOTAL_FUNC_MIN;  break;
+        case sheet::GeneralFunction_PRODUCT:    eSubTotal = SUBTOTAL_FUNC_PROD; break;
+        case sheet::GeneralFunction_COUNTNUMS:  eSubTotal = SUBTOTAL_FUNC_CNT;  break;
+        case sheet::GeneralFunction_STDEV:      eSubTotal = SUBTOTAL_FUNC_STD;  break;
+        case sheet::GeneralFunction_STDEVP:     eSubTotal = SUBTOTAL_FUNC_STDP; break;
+        case sheet::GeneralFunction_VAR:        eSubTotal = SUBTOTAL_FUNC_VAR;  break;
+        case sheet::GeneralFunction_VARP:       eSubTotal = SUBTOTAL_FUNC_VARP; break;
+        case sheet::GeneralFunction_AUTO:
+        default:
+            eSubTotal = SUBTOTAL_FUNC_NONE;
+    }
+    return eSubTotal;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
