@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXn//+44\u003d",
+        "filename": "include/sax/tools/converter.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2013-07-12T08:42:20Z",
+      "side": 1,
+      "message": "This pointer is used to mean \"an optional offset\". How about using boost::Optional\u003csal_Int16\u003e?\n(same for next uses)",
+      "revId": "ca9f54c98395d6afd6f26eb5eedd11a15db2ca66",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//+40\u003d",
+        "filename": "include/sfx2/dinfdlg.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 292,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2013-07-12T08:42:20Z",
+      "side": 1,
+      "message": "You seem to be using \"-1\" as special value \"no timezone\", while it is a perfectly valid value? If you want to use a special sal_Int16 value for that, I\u0027d suggest either using 0x7FFF or 0xFFFF, and declaring it in the class as:\n\n static const sal_Int16 NO_TZ;\n\nThis being said, from an algebraic datatype purity perspective, I\u0027d prefer\n\n boost::Optional\u003csal_Int16\u003e m_TZ\n\nor failing that:\n\n bool m_hasTZ;\n sal_Int16 m_TZ;\n\n(but the latter is more error-prone)",
+      "revId": "ca9f54c98395d6afd6f26eb5eedd11a15db2ca66",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
