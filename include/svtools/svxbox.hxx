@@ -77,7 +77,12 @@ public:
     sal_uInt16              GetEntryPos( const SvxBoxEntry& rEntry ) const;
     const SvxBoxEntry&  GetSvxBoxEntry( sal_uInt16 nIdx ) const;
 
-    inline sal_Bool         IsEntrySelected( const SvxBoxEntry& rEntry ) const;
+    inline bool         IsEntrySelected(const SvxBoxEntry& rEntry) const;
+    {
+        return ListBox::IsEntrySelected(aEntry.aName);
+    }
+
+
     const SvxBoxEntry&  GetSelectSvxBoxEntry( sal_uInt16 nIdx = 0 ) const;
     inline void         SelectEntry( const SvxBoxEntry& rEntry,
                                      sal_Bool bSelect = sal_True );
@@ -102,9 +107,6 @@ private:
 };
 
 // inlines ---------------------------------------------------------------
-
-inline sal_Bool SvxListBox::IsEntrySelected( const SvxBoxEntry& aEntry ) const
-    { return ListBox::IsEntrySelected( aEntry.aName ); }
 
 inline void SvxListBox::SelectEntry( const SvxBoxEntry& aEntry, sal_Bool bSelect )
     { ListBox::SelectEntry( aEntry.aName, bSelect ); }

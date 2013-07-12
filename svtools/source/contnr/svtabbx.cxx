@@ -310,28 +310,28 @@ String SvTabListBox::GetEntryText( sal_uLong nPos, sal_uInt16 nCol ) const
     return GetEntryText( pEntry, nCol );
 }
 
-void SvTabListBox::SetEntryText( const XubString& rStr, sal_uLong nPos, sal_uInt16 nCol )
+void SvTabListBox::SetEntryText(const OUString& rStr, sal_uLong nPos, sal_uInt16 nCol)
 {
     SvTreeListEntry* pEntry = SvTreeListBox::GetEntry( nPos );
     SetEntryText( rStr, pEntry, nCol );
 }
 
-void SvTabListBox::SetEntryText( const XubString& rStr, SvTreeListEntry* pEntry, sal_uInt16 nCol )
+void SvTabListBox::SetEntryText(const OUString& rStr, SvTreeListEntry* pEntry, sal_uInt16 nCol)
 {
     DBG_ASSERT(pEntry,"SetEntryText:Invalid Entry");
     if( !pEntry )
         return;
 
-    String sOldText = GetEntryText( pEntry, nCol );
-    if ( sOldText == rStr )
+    OUString sOldText = GetEntryText(pEntry, nCol);
+    if (sOldText == rStr)
         return;
 
     sal_uInt16 nTextColumn = nCol;
-    const sal_Unicode* pCurToken = rStr.GetBuffer();
+    const sal_Unicode* pCurToken = rStr.getStr();
     sal_uInt16 nCurTokenLen;
     const sal_Unicode* pNextToken = GetToken( pCurToken, nCurTokenLen );
 
-    XubString aTemp;
+    OUString aTemp;
     sal_uInt16 nCount = pEntry->ItemCount();
     sal_uInt16 nCur = 0;
     while( nCur < nCount )
@@ -344,7 +344,7 @@ void SvTabListBox::SetEntryText( const XubString& rStr, SvTreeListEntry* pEntry,
                 if( pCurToken )
                     aTemp = OUString(pCurToken, nCurTokenLen);
                 else
-                    aTemp.Erase(); // delete all columns without a token
+                    aTemp = OUString(); // delete all columns without a token
                 ((SvLBoxString*)pStr)->SetText( aTemp );
                 pCurToken = pNextToken;
                 pNextToken = GetToken( pCurToken, nCurTokenLen );

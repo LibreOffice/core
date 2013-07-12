@@ -1890,12 +1890,12 @@ SvTreeListEntry* SvTreeListBox::InsertEntry( const XubString& aText,
     return pEntry;
 }
 
-void SvTreeListBox::SetEntryText( SvTreeListEntry* pEntry, const XubString& aStr)
+void SvTreeListBox::SetEntryText(SvTreeListEntry* pEntry, const OUString& rStr)
 {
     DBG_CHKTHIS(SvTreeListBox,0);
     SvLBoxString* pItem = (SvLBoxString*)(pEntry->GetFirstItem(SV_ITEM_ID_LBOXSTRING));
     DBG_ASSERT(pItem,"SetText:Item not found");
-    pItem->SetText( aStr );
+    pItem->SetText(rStr);
     pItem->InitViewData( this, pEntry, 0 );
     GetModel()->InvalidateEntry( pEntry );
 }
@@ -2825,7 +2825,7 @@ void SvTreeListBox::SetChildrenNotTransient()
     pImp->SetChildrenNotTransient();
 }
 
-void SvTreeListBox::EditedText( const XubString& rStr )
+void SvTreeListBox::EditedText( const OUString& rStr )
 
 {
     DBG_CHKTHIS(SvTreeListBox,0);

@@ -529,7 +529,7 @@ protected:
 
     void            EditItemText( SvTreeListEntry* pEntry, SvLBoxString* pItem,
                         const Selection& );
-    void            EditedText( const XubString& );
+    void            EditedText(const OUString&);
 
     // Recalculate all tabs depending on TreeListStyle and Bitmap sizes
     // Is called automatically when inserting/changing Bitmaps, changing the Model etc.
@@ -632,7 +632,7 @@ public:
     void            SetCheckButtonInvisible( SvTreeListEntry* );
     SvButtonState   GetCheckButtonState( SvTreeListEntry* ) const;
 
-    void            SetEntryText(SvTreeListEntry*, const XubString& );
+    void            SetEntryText(SvTreeListEntry*, const OUString& );
     void            SetExpandedEntryBmp( SvTreeListEntry* _pEntry, const Image& _rImage );
     void            SetCollapsedEntryBmp( SvTreeListEntry* _pEntry, const Image& _rImage );
 

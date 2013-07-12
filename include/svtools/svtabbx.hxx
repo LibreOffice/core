@@ -98,8 +98,8 @@ public:
     String          GetEntryText( SvTreeListEntry*, sal_uInt16 nCol ) const;
     String          GetEntryText( sal_uLong nPos, sal_uInt16 nCol = 0xffff ) const;
     using SvTreeListBox::SetEntryText;
-    void            SetEntryText( const XubString&, sal_uLong, sal_uInt16 nCol=0xffff );
-    void            SetEntryText(const XubString&,SvTreeListEntry*,sal_uInt16 nCol=0xffff);
+    void            SetEntryText(const OUString&, sal_uLong, sal_uInt16 nCol=0xffff);
+    void            SetEntryText(const OUString&, SvTreeListEntry*, sal_uInt16 nCol=0xffff);
     String          GetCellText( sal_uLong nPos, sal_uInt16 nCol ) const;
     sal_uLong           GetEntryPos( const XubString&, sal_uInt16 nCol = 0xffff );
     sal_uLong           GetEntryPos( const SvTreeListEntry* pEntry ) const;

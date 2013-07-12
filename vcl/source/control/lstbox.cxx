@@ -1115,7 +1115,7 @@ sal_uInt16 ListBox::GetSelectEntryPos( sal_uInt16 nIndex ) const
 }
 
 
-sal_Bool ListBox::IsEntrySelected( const XubString& rStr ) const
+bool ListBox::IsEntrySelected(const OUString& rStr) const
 {
     return IsEntryPosSelected( GetEntryPos( rStr ) );
 }

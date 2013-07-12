@@ -199,10 +199,19 @@ public:
     XubString       GetSelectEntry( sal_uInt16 nSelIndex = 0 ) const
                         { return ListBox::GetSelectEntry( nSelIndex ); }
     Color           GetSelectEntryColor( sal_uInt16 nSelIndex = 0 ) const;
-    sal_Bool            IsEntrySelected( const XubString& rStr ) const
-                        { return ListBox::IsEntrySelected( rStr ); }
+    bool            IsEntrySelected(const OUString& rStr ) const
+    {
+        return ListBox::IsEntrySelected(rStr);
+    }
 
-    sal_Bool            IsEntrySelected( const Color& rColor ) const;
+    bool            IsEntrySelected(const Color& rColor) const
+    {
+        sal_uInt16 nPos = GetEntryPos( rColor );
+        if ( nPos != LISTBOX_ENTRY_NOTFOUND )
+            return IsEntryPosSelected( nPos );
+        else
+            return sal_False;
+    }
 
 private:
     // declared as private because some compilers would generate the default functions
@@ -218,15 +227,6 @@ inline void ColorListBox::SelectEntry( const Color& rColor, sal_Bool bSelect )
     sal_uInt16 nPos = GetEntryPos( rColor );
     if ( nPos != LISTBOX_ENTRY_NOTFOUND )
         ListBox::SelectEntryPos( nPos, bSelect );
-}
-
-inline sal_Bool ColorListBox::IsEntrySelected( const Color& rColor ) const
-{
-    sal_uInt16 nPos = GetEntryPos( rColor );
-    if ( nPos != LISTBOX_ENTRY_NOTFOUND )
-        return IsEntryPosSelected( nPos );
-    else
-        return sal_False;
 }
 
 inline Color ColorListBox::GetSelectEntryColor( sal_uInt16 nSelIndex ) const
@@ -348,8 +348,18 @@ public:
     void            SelectEntry( const XubString& rStr, sal_Bool bSelect = sal_True ) { ListBox::SelectEntry( rStr, bSelect ); }
     void            SelectEntry( sal_uInt16 nStyle = STYLE_SOLID, sal_Bool bSelect = sal_True );
     sal_uInt16          GetSelectEntryStyle( sal_uInt16 nSelIndex = 0 ) const;
-    inline sal_Bool     IsEntrySelected( const XubString& rStr ) const { return ListBox::IsEntrySelected( rStr ); }
-    sal_Bool            IsEntrySelected( sal_uInt16 nStyle1 = STYLE_SOLID ) const;
+    bool            IsEntrySelected(const OUString& rStr) const
+    {
+        return ListBox::IsEntrySelected(rStr);
+    }
+    bool            IsEntrySelected(sal_uInt16 nStyle = STYLE_SOLID) const
+    {
+        sal_uInt16 nPos = GetEntryPos( nStyle );
+        if ( nPos != LISTBOX_ENTRY_NOTFOUND )
+            return IsEntryPosSelected( nPos );
+        else
+            return sal_False;
+    }
 
     inline void     SetUnit( FieldUnit eNewUnit ) { eUnit = eNewUnit; }
     inline FieldUnit    GetUnit() const { return eUnit; }
@@ -373,15 +383,6 @@ private:
     void            SetEntryData( sal_uInt16 nPos, void* pNewData );
     void*           GetEntryData( sal_uInt16 nPos ) const;
 };
-
-inline sal_Bool LineListBox::IsEntrySelected( sal_uInt16 nStyle ) const
-{
-    sal_uInt16 nPos = GetEntryPos( nStyle );
-    if ( nPos != LISTBOX_ENTRY_NOTFOUND )
-        return IsEntryPosSelected( nPos );
-    else
-        return sal_False;
-}
 
 inline void LineListBox::SetColor( const Color& rColor )
 {

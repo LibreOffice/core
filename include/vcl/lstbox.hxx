@@ -135,7 +135,7 @@ public:
     virtual XubString   GetSelectEntry( sal_uInt16 nSelIndex = 0 ) const;
     virtual sal_uInt16      GetSelectEntryPos( sal_uInt16 nSelIndex = 0 ) const;
 
-    virtual sal_Bool        IsEntrySelected( const XubString& rStr ) const;
+    virtual bool        IsEntrySelected(const OUString& rStr) const;
     virtual sal_Bool        IsEntryPosSelected( sal_uInt16 nPos ) const;
     virtual void        SetNoSelection();
 
