@@ -31,51 +31,48 @@
 
 namespace basebmp
 {
-    namespace Format
+    const char* formatName( Format nScanlineFormat )
     {
-        const char* formatName( sal_Int32 nScanlineFormat )
+        switch( nScanlineFormat )
         {
-            switch( nScanlineFormat )
-            {
-                case Format::NONE:
-                    return "NONE";
-                case Format::ONE_BIT_MSB_GREY:
-                    return "ONE_BIT_MSB_GREY";
-                case Format::ONE_BIT_LSB_GREY:
-                    return "ONE_BIT_LSB_GREY";
-                case Format::ONE_BIT_MSB_PAL:
-                    return "ONE_BIT_MSB_PAL";
-                case Format::ONE_BIT_LSB_PAL:
-                    return "ONE_BIT_LSB_PAL";
-                case Format::FOUR_BIT_MSB_GREY:
-                    return "FOUR_BIT_MSB_GREY";
-                case Format::FOUR_BIT_LSB_GREY:
-                    return "FOUR_BIT_LSB_GREY";
-                case Format::FOUR_BIT_MSB_PAL:
-                    return "FOUR_BIT_MSB_PAL";
-                case Format::FOUR_BIT_LSB_PAL:
-                    return "FOUR_BIT_LSB_PAL";
-                case Format::EIGHT_BIT_PAL:
-                    return "EIGHT_BIT_PAL";
-                case Format::EIGHT_BIT_GREY:
-                    return "EIGHT_BIT_GREY";
-                case Format::SIXTEEN_BIT_LSB_TC_MASK:
-                    return "SIXTEEN_BIT_LSB_TC_MASK";
-                case Format::SIXTEEN_BIT_MSB_TC_MASK:
-                    return "SIXTEEN_BIT_MSB_TC_MASK";
-                case Format::TWENTYFOUR_BIT_TC_MASK:
-                    return "TWENTYFOUR_BIT_TC_MASK";
-                case Format::THIRTYTWO_BIT_TC_MASK_BGRA:
-                    return "THIRTYTWO_BIT_TC_MASK_BGRA";
-                case Format::THIRTYTWO_BIT_TC_MASK_ARGB:
-                    return "THIRTYTWO_BIT_TC_MASK_ARGB";
-                case Format::THIRTYTWO_BIT_TC_MASK_ABGR:
-                    return "THIRTYTWO_BIT_TC_MASK_ABGR";
-                case Format::THIRTYTWO_BIT_TC_MASK_RGBA:
-                    return "THIRTYTWO_BIT_TC_MASK_RGBA";
-                default:
-                    return "<unknown>";
-            }
+        case FORMAT_NONE:
+            return "NONE";
+        case FORMAT_ONE_BIT_MSB_GREY:
+            return "ONE_BIT_MSB_GREY";
+        case FORMAT_ONE_BIT_LSB_GREY:
+            return "ONE_BIT_LSB_GREY";
+        case FORMAT_ONE_BIT_MSB_PAL:
+            return "ONE_BIT_MSB_PAL";
+        case FORMAT_ONE_BIT_LSB_PAL:
+            return "ONE_BIT_LSB_PAL";
+        case FORMAT_FOUR_BIT_MSB_GREY:
+            return "FOUR_BIT_MSB_GREY";
+        case FORMAT_FOUR_BIT_LSB_GREY:
+            return "FOUR_BIT_LSB_GREY";
+        case FORMAT_FOUR_BIT_MSB_PAL:
+            return "FOUR_BIT_MSB_PAL";
+        case FORMAT_FOUR_BIT_LSB_PAL:
+            return "FOUR_BIT_LSB_PAL";
+        case FORMAT_EIGHT_BIT_PAL:
+            return "EIGHT_BIT_PAL";
+        case FORMAT_EIGHT_BIT_GREY:
+            return "EIGHT_BIT_GREY";
+        case FORMAT_SIXTEEN_BIT_LSB_TC_MASK:
+            return "SIXTEEN_BIT_LSB_TC_MASK";
+        case FORMAT_SIXTEEN_BIT_MSB_TC_MASK:
+            return "SIXTEEN_BIT_MSB_TC_MASK";
+        case FORMAT_TWENTYFOUR_BIT_TC_MASK:
+            return "TWENTYFOUR_BIT_TC_MASK";
+        case FORMAT_THIRTYTWO_BIT_TC_MASK_BGRA:
+            return "THIRTYTWO_BIT_TC_MASK_BGRA";
+        case FORMAT_THIRTYTWO_BIT_TC_MASK_ARGB:
+            return "THIRTYTWO_BIT_TC_MASK_ARGB";
+        case FORMAT_THIRTYTWO_BIT_TC_MASK_ABGR:
+            return "THIRTYTWO_BIT_TC_MASK_ABGR";
+        case FORMAT_THIRTYTWO_BIT_TC_MASK_RGBA:
+            return "THIRTYTWO_BIT_TC_MASK_RGBA";
+        default:
+            return "<unknown>";
         }
     }
 
@@ -86,7 +83,7 @@ namespace basebmp
     {
         const basegfx::B2IVector aSize( rDevice->getSize() );
         const bool               bTopDown( rDevice->isTopDown() );
-        const sal_Int32          nScanlineFormat( rDevice->getScanlineFormat() );
+        const Format             nScanlineFormat( rDevice->getScanlineFormat() );
 
         rOutputStream
             << "/* basebmp::BitmapDevice content dump */" << std::endl

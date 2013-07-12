@@ -20,36 +20,40 @@
 #ifndef INCLUDED_BASEBMP_SCANLINEFORMATS_HXX
 #define INCLUDED_BASEBMP_SCANLINEFORMATS_HXX
 
-#include <sal/types.h>
+#include "sal/config.h"
 
 /* Definition of Scanline formats */
 
-namespace basebmp { namespace Format
+namespace basebmp {
+
+enum Format
 {
-    static const sal_Int32 NONE                         = 0;
-    static const sal_Int32 ONE_BIT_MSB_GREY             = (sal_Int32)0x01;
-    static const sal_Int32 ONE_BIT_LSB_GREY             = (sal_Int32)0x02;
-    static const sal_Int32 ONE_BIT_MSB_PAL              = (sal_Int32)0x03;
-    static const sal_Int32 ONE_BIT_LSB_PAL              = (sal_Int32)0x04;
-    static const sal_Int32 FOUR_BIT_MSB_GREY            = (sal_Int32)0x05;
-    static const sal_Int32 FOUR_BIT_LSB_GREY            = (sal_Int32)0x06;
-    static const sal_Int32 FOUR_BIT_MSB_PAL             = (sal_Int32)0x07;
-    static const sal_Int32 FOUR_BIT_LSB_PAL             = (sal_Int32)0x08;
-    static const sal_Int32 EIGHT_BIT_PAL                = (sal_Int32)0x09;
-    static const sal_Int32 EIGHT_BIT_GREY               = (sal_Int32)0x0A;
-    static const sal_Int32 SIXTEEN_BIT_LSB_TC_MASK      = (sal_Int32)0x0B;
-    static const sal_Int32 SIXTEEN_BIT_MSB_TC_MASK      = (sal_Int32)0x0C;
-    static const sal_Int32 TWENTYFOUR_BIT_TC_MASK       = (sal_Int32)0x0D;
+    FORMAT_NONE,
+    FORMAT_ONE_BIT_MSB_GREY,
+    FORMAT_ONE_BIT_LSB_GREY,
+    FORMAT_ONE_BIT_MSB_PAL,
+    FORMAT_ONE_BIT_LSB_PAL,
+    FORMAT_FOUR_BIT_MSB_GREY,
+    FORMAT_FOUR_BIT_LSB_GREY,
+    FORMAT_FOUR_BIT_MSB_PAL,
+    FORMAT_FOUR_BIT_LSB_PAL,
+    FORMAT_EIGHT_BIT_PAL,
+    FORMAT_EIGHT_BIT_GREY,
+    FORMAT_SIXTEEN_BIT_LSB_TC_MASK,
+    FORMAT_SIXTEEN_BIT_MSB_TC_MASK,
+    FORMAT_TWENTYFOUR_BIT_TC_MASK,
     // The order of the channels code letters indicates the order of the
     // channel bytes in memory, I think
-    static const sal_Int32 THIRTYTWO_BIT_TC_MASK_BGRA   = (sal_Int32)0x0E;
-    static const sal_Int32 THIRTYTWO_BIT_TC_MASK_ARGB   = (sal_Int32)0x0F;
-    static const sal_Int32 THIRTYTWO_BIT_TC_MASK_ABGR   = (sal_Int32)0x10;
-    static const sal_Int32 THIRTYTWO_BIT_TC_MASK_RGBA   = (sal_Int32)0x11;
-    static const sal_Int32 MAX                          = (sal_Int32)0x11;
+    FORMAT_THIRTYTWO_BIT_TC_MASK_BGRA,
+    FORMAT_THIRTYTWO_BIT_TC_MASK_ARGB,
+    FORMAT_THIRTYTWO_BIT_TC_MASK_ABGR,
+    FORMAT_THIRTYTWO_BIT_TC_MASK_RGBA,
+    FORMAT_MAX = FORMAT_THIRTYTWO_BIT_TC_MASK_RGBA
+};
 
-    const char *formatName(sal_Int32 nScanlineFormat);
-} }
+const char *formatName(Format nScanlineFormat);
+
+}
 
 #endif /* INCLUDED_BASEBMP_SCANLINEFORMATS_HXX */
 

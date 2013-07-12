@@ -60,7 +60,7 @@ class SvpSalGraphics : public SalGraphics
     // headless backend, i.e. not on iOS.
     basebmp::Color                       m_aTextColor;
     ServerFont*                          m_pServerFont[ MAX_FALLBACK ];
-    sal_uInt32                           m_eTextFmt;
+    basebmp::Format                      m_eTextFmt;
 #endif
 
     basebmp::BitmapDeviceSharedPtr       m_aClipMap;

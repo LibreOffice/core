@@ -152,7 +152,7 @@ public:
                      sal_uLong           nSalFrameStyle,
                      SystemParentData   *pSysParent )
         : SvpSalFrame( pInstance, pParent, nSalFrameStyle,
-                       true, basebmp::Format::THIRTYTWO_BIT_TC_MASK_RGBA,
+                       true, basebmp::FORMAT_THIRTYTWO_BIT_TC_MASK_RGBA,
                        pSysParent )
     {
         enableDamageTracker();

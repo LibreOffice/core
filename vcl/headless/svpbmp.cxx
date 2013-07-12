@@ -38,23 +38,23 @@ bool SvpSalBitmap::Create( const Size& rSize,
                            sal_uInt16 nBitCount,
                            const BitmapPalette& rPalette )
 {
-    sal_uInt32 nFormat = SVP_DEFAULT_BITMAP_FORMAT;
+    basebmp::Format nFormat = SVP_DEFAULT_BITMAP_FORMAT;
     SAL_INFO( "vcl.headless", "SvpSalBitmap::Create(" << rSize.Width() << "," << rSize.Height() << "," << nBitCount << ")" );
     switch( nBitCount )
     {
-        case 1: nFormat = Format::ONE_BIT_MSB_PAL; break;
-        case 4: nFormat = Format::FOUR_BIT_MSB_PAL; break;
-        case 8: nFormat = Format::EIGHT_BIT_PAL; break;
+        case 1: nFormat = FORMAT_ONE_BIT_MSB_PAL; break;
+        case 4: nFormat = FORMAT_FOUR_BIT_MSB_PAL; break;
+        case 8: nFormat = FORMAT_EIGHT_BIT_PAL; break;
 #ifdef OSL_BIGENDIAN
-        case 16: nFormat = Format::SIXTEEN_BIT_MSB_TC_MASK; break;
+        case 16: nFormat = FORMAT_SIXTEEN_BIT_MSB_TC_MASK; break;
 #else
-        case 16: nFormat = Format::SIXTEEN_BIT_LSB_TC_MASK; break;
+        case 16: nFormat = FORMAT_SIXTEEN_BIT_LSB_TC_MASK; break;
 #endif
-        case 24: nFormat = Format::TWENTYFOUR_BIT_TC_MASK; break;
+        case 24: nFormat = FORMAT_TWENTYFOUR_BIT_TC_MASK; break;
 #if defined(ANDROID) || defined(IOS)
-        case 32: nFormat = Format::THIRTYTWO_BIT_TC_MASK_RGBA; break;
+        case 32: nFormat = FORMAT_THIRTYTWO_BIT_TC_MASK_RGBA; break;
 #else
-        case 32: nFormat = Format::THIRTYTWO_BIT_TC_MASK_BGRA; break;
+        case 32: nFormat = FORMAT_THIRTYTWO_BIT_TC_MASK_BGRA; break;
 #endif
     }
     B2IVector aSize( rSize.Width(), rSize.Height() );
@@ -152,49 +152,49 @@ BitmapBuffer* SvpSalBitmap::AcquireBuffer( bool )
         sal_uInt16 nBitCount = 1;
         switch( m_aBitmap->getScanlineFormat() )
         {
-            case Format::ONE_BIT_MSB_GREY:
-            case Format::ONE_BIT_MSB_PAL:
+            case FORMAT_ONE_BIT_MSB_GREY:
+            case FORMAT_ONE_BIT_MSB_PAL:
                 nBitCount = 1;
                 pBuf->mnFormat = BMP_FORMAT_1BIT_MSB_PAL;
                 break;
-            case Format::ONE_BIT_LSB_GREY:
-            case Format::ONE_BIT_LSB_PAL:
+            case FORMAT_ONE_BIT_LSB_GREY:
+            case FORMAT_ONE_BIT_LSB_PAL:
                 nBitCount = 1;
                 pBuf->mnFormat = BMP_FORMAT_1BIT_LSB_PAL;
                 break;
-            case Format::FOUR_BIT_MSB_GREY:
-            case Format::FOUR_BIT_MSB_PAL:
+            case FORMAT_FOUR_BIT_MSB_GREY:
+            case FORMAT_FOUR_BIT_MSB_PAL:
                 nBitCount = 4;
                 pBuf->mnFormat = BMP_FORMAT_4BIT_MSN_PAL;
                 break;
-            case Format::FOUR_BIT_LSB_GREY:
-            case Format::FOUR_BIT_LSB_PAL:
+            case FORMAT_FOUR_BIT_LSB_GREY:
+            case FORMAT_FOUR_BIT_LSB_PAL:
                 nBitCount = 4;
                 pBuf->mnFormat = BMP_FORMAT_4BIT_LSN_PAL;
                 break;
-            case Format::EIGHT_BIT_PAL:
+            case FORMAT_EIGHT_BIT_PAL:
                 nBitCount = 8;
                 pBuf->mnFormat = BMP_FORMAT_8BIT_PAL;
                 break;
-            case Format::EIGHT_BIT_GREY:
+            case FORMAT_EIGHT_BIT_GREY:
                 nBitCount = 8;
                 pBuf->mnFormat = BMP_FORMAT_8BIT_PAL;
                 break;
-            case Format::SIXTEEN_BIT_LSB_TC_MASK:
+            case FORMAT_SIXTEEN_BIT_LSB_TC_MASK:
                 nBitCount = 16;
                 pBuf->mnFormat = BMP_FORMAT_16BIT_TC_LSB_MASK;
                 pBuf->maColorMask = ColorMask( 0xf800, 0x07e0, 0x001f );
                 break;
-            case Format::SIXTEEN_BIT_MSB_TC_MASK:
+            case FORMAT_SIXTEEN_BIT_MSB_TC_MASK:
                 nBitCount = 16;
                 pBuf->mnFormat = BMP_FORMAT_16BIT_TC_MSB_MASK;
                 pBuf->maColorMask = ColorMask( 0xf800, 0x07e0, 0x001f );
                 break;
-            case Format::TWENTYFOUR_BIT_TC_MASK:
+            case FORMAT_TWENTYFOUR_BIT_TC_MASK:
                 nBitCount = 24;
                 pBuf->mnFormat = BMP_FORMAT_24BIT_TC_BGR;
                 break;
-            case Format::THIRTYTWO_BIT_TC_MASK_BGRA:
+            case FORMAT_THIRTYTWO_BIT_TC_MASK_BGRA:
                 nBitCount = 32;
                 pBuf->mnFormat = BMP_FORMAT_32BIT_TC_MASK;
 #ifdef OSL_BIGENDIAN
@@ -203,7 +203,7 @@ BitmapBuffer* SvpSalBitmap::AcquireBuffer( bool )
                 pBuf->maColorMask = ColorMask( 0x00ff0000, 0x0000ff00, 0x000000ff );
 #endif
                 break;
-            case Format::THIRTYTWO_BIT_TC_MASK_ARGB:
+            case FORMAT_THIRTYTWO_BIT_TC_MASK_ARGB:
                 nBitCount = 32;
                 pBuf->mnFormat = BMP_FORMAT_32BIT_TC_MASK;
 #ifdef OSL_BIGENDIAN
@@ -212,7 +212,7 @@ BitmapBuffer* SvpSalBitmap::AcquireBuffer( bool )
                 pBuf->maColorMask = ColorMask( 0x0000ff00, 0x00ff0000, 0xff000000 );
 #endif
                 break;
-            case Format::THIRTYTWO_BIT_TC_MASK_ABGR:
+            case FORMAT_THIRTYTWO_BIT_TC_MASK_ABGR:
                 nBitCount = 32;
                 pBuf->mnFormat = BMP_FORMAT_32BIT_TC_MASK;
 #ifdef OSL_BIGENDIAN
@@ -221,7 +221,7 @@ BitmapBuffer* SvpSalBitmap::AcquireBuffer( bool )
                 pBuf->maColorMask = ColorMask( 0xff000000, 0x00ff0000, 0x0000ff00 );
 #endif
                 break;
-            case Format::THIRTYTWO_BIT_TC_MASK_RGBA:
+            case FORMAT_THIRTYTWO_BIT_TC_MASK_RGBA:
                 nBitCount = 32;
                 pBuf->mnFormat = BMP_FORMAT_32BIT_TC_MASK;
 #ifdef OSL_BIGENDIAN
@@ -248,11 +248,11 @@ BitmapBuffer* SvpSalBitmap::AcquireBuffer( bool )
         pBuf->mpBits            = (sal_uInt8*)m_aBitmap->getBuffer().get();
         if( nBitCount <= 8 )
         {
-            if( m_aBitmap->getScanlineFormat() == Format::EIGHT_BIT_GREY ||
-                m_aBitmap->getScanlineFormat() == Format::FOUR_BIT_LSB_GREY ||
-                m_aBitmap->getScanlineFormat() == Format::FOUR_BIT_MSB_GREY ||
-                m_aBitmap->getScanlineFormat() == Format::ONE_BIT_LSB_GREY ||
-                m_aBitmap->getScanlineFormat() == Format::ONE_BIT_MSB_GREY
+            if( m_aBitmap->getScanlineFormat() == FORMAT_EIGHT_BIT_GREY ||
+                m_aBitmap->getScanlineFormat() == FORMAT_FOUR_BIT_LSB_GREY ||
+                m_aBitmap->getScanlineFormat() == FORMAT_FOUR_BIT_MSB_GREY ||
+                m_aBitmap->getScanlineFormat() == FORMAT_ONE_BIT_LSB_GREY ||
+                m_aBitmap->getScanlineFormat() == FORMAT_ONE_BIT_MSB_GREY
                 )
                 pBuf->maPalette = Bitmap::GetGreyPalette( 1U << nBitCount );
             else
@@ -287,29 +287,29 @@ void SvpSalBitmap::ReleaseBuffer( BitmapBuffer* pBuffer, bool bReadOnly )
         sal_uInt16 nBitCount = 0;
         switch( m_aBitmap->getScanlineFormat() )
         {
-            case Format::ONE_BIT_MSB_GREY:
+            case FORMAT_ONE_BIT_MSB_GREY:
                 // FALLTHROUGH intended
-            case Format::ONE_BIT_MSB_PAL:
+            case FORMAT_ONE_BIT_MSB_PAL:
                 // FALLTHROUGH intended
-            case Format::ONE_BIT_LSB_GREY:
+            case FORMAT_ONE_BIT_LSB_GREY:
                 // FALLTHROUGH intended
-            case Format::ONE_BIT_LSB_PAL:
+            case FORMAT_ONE_BIT_LSB_PAL:
                 nBitCount = 1;
                 break;
 
-            case Format::FOUR_BIT_MSB_GREY:
+            case FORMAT_FOUR_BIT_MSB_GREY:
                 // FALLTHROUGH intended
-            case Format::FOUR_BIT_MSB_PAL:
+            case FORMAT_FOUR_BIT_MSB_PAL:
                 // FALLTHROUGH intended
-            case Format::FOUR_BIT_LSB_GREY:
+            case FORMAT_FOUR_BIT_LSB_GREY:
                 // FALLTHROUGH intended
-            case Format::FOUR_BIT_LSB_PAL:
+            case FORMAT_FOUR_BIT_LSB_PAL:
                 nBitCount = 4;
                 break;
 
-            case Format::EIGHT_BIT_PAL:
+            case FORMAT_EIGHT_BIT_PAL:
                 // FALLTHROUGH intended
-            case Format::EIGHT_BIT_GREY:
+            case FORMAT_EIGHT_BIT_GREY:
                 nBitCount = 8;
                 break;
 
@@ -349,38 +349,38 @@ bool SvpSalBitmap::GetSystemData( BitmapSystemData& )
     return false;
 }
 
-sal_uInt32 SvpSalBitmap::getBitCountFromScanlineFormat( sal_Int32 nFormat )
+sal_uInt32 SvpSalBitmap::getBitCountFromScanlineFormat( basebmp::Format nFormat )
 {
     sal_uInt32 nBitCount = 1;
     switch( nFormat )
     {
-        case Format::ONE_BIT_MSB_GREY:
-        case Format::ONE_BIT_LSB_GREY:
-        case Format::ONE_BIT_MSB_PAL:
-        case Format::ONE_BIT_LSB_PAL:
+        case FORMAT_ONE_BIT_MSB_GREY:
+        case FORMAT_ONE_BIT_LSB_GREY:
+        case FORMAT_ONE_BIT_MSB_PAL:
+        case FORMAT_ONE_BIT_LSB_PAL:
             nBitCount = 1;
             break;
-        case Format::FOUR_BIT_MSB_GREY:
-        case Format::FOUR_BIT_LSB_GREY:
-        case Format::FOUR_BIT_MSB_PAL:
-        case Format::FOUR_BIT_LSB_PAL:
+        case FORMAT_FOUR_BIT_MSB_GREY:
+        case FORMAT_FOUR_BIT_LSB_GREY:
+        case FORMAT_FOUR_BIT_MSB_PAL:
+        case FORMAT_FOUR_BIT_LSB_PAL:
             nBitCount = 4;
             break;
-        case Format::EIGHT_BIT_PAL:
-        case Format::EIGHT_BIT_GREY:
+        case FORMAT_EIGHT_BIT_PAL:
+        case FORMAT_EIGHT_BIT_GREY:
             nBitCount = 8;
             break;
-        case Format::SIXTEEN_BIT_LSB_TC_MASK:
-        case Format::SIXTEEN_BIT_MSB_TC_MASK:
+        case FORMAT_SIXTEEN_BIT_LSB_TC_MASK:
+        case FORMAT_SIXTEEN_BIT_MSB_TC_MASK:
             nBitCount = 16;
             break;
-        case Format::TWENTYFOUR_BIT_TC_MASK:
+        case FORMAT_TWENTYFOUR_BIT_TC_MASK:
             nBitCount = 24;
             break;
-        case Format::THIRTYTWO_BIT_TC_MASK_BGRA:
-        case Format::THIRTYTWO_BIT_TC_MASK_ARGB:
-        case Format::THIRTYTWO_BIT_TC_MASK_ABGR:
-        case Format::THIRTYTWO_BIT_TC_MASK_RGBA:
+        case FORMAT_THIRTYTWO_BIT_TC_MASK_BGRA:
+        case FORMAT_THIRTYTWO_BIT_TC_MASK_ARGB:
+        case FORMAT_THIRTYTWO_BIT_TC_MASK_ABGR:
+        case FORMAT_THIRTYTWO_BIT_TC_MASK_RGBA:
             nBitCount = 32;
             break;
         default:

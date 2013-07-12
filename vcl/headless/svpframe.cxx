@@ -65,7 +65,7 @@ SvpSalFrame::SvpSalFrame( SvpSalInstance* pInstance,
                           SalFrame* pParent,
                           sal_uLong nSalFrameStyle,
                           bool      bTopDown,
-                          sal_Int32 nScanlineFormat,
+                          basebmp::Format nScanlineFormat,
                           SystemParentData* ) :
     m_pInstance( pInstance ),
     m_pParent( static_cast<SvpSalFrame*>(pParent) ),

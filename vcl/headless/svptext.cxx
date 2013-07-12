@@ -46,7 +46,7 @@ public:
     SvpGlyphPeer() {}
 
     BitmapDeviceSharedPtr GetGlyphBmp( ServerFont&, int nGlyphIndex,
-                            sal_uInt32 nBmpFormat, B2IPoint& rTargetPos );
+                            basebmp::Format nBmpFormat, B2IPoint& rTargetPos );
 
 protected:
     virtual void    RemovingFont( ServerFont& );
@@ -110,15 +110,15 @@ SvpGlyphCache& SvpGlyphCache::GetInstance()
 
 
 BitmapDeviceSharedPtr SvpGlyphPeer::GetGlyphBmp( ServerFont& rServerFont,
-    int nGlyphIndex, sal_uInt32 nBmpFormat, B2IPoint& rTargetPos )
+    int nGlyphIndex, basebmp::Format nBmpFormat, B2IPoint& rTargetPos )
 {
     GlyphData& rGlyphData = rServerFont.GetGlyphData( nGlyphIndex );
     SvpGcpHelper* pGcpHelper = (SvpGcpHelper*)rGlyphData.ExtDataRef().mpData;
 
     // nothing to do if the GlyphPeer hasn't allocated resources for the glyph
-    if( rGlyphData.ExtDataRef().meInfo != sal::static_int_cast<int>(nBmpFormat) )
+    if( rGlyphData.ExtDataRef().meInfo != nBmpFormat )
     {
-        if( rGlyphData.ExtDataRef().meInfo == Format::NONE )
+        if( rGlyphData.ExtDataRef().meInfo == FORMAT_NONE )
             pGcpHelper = new SvpGcpHelper;
         RawBitmap& rRawBitmap = pGcpHelper->maRawBitmap;
 
@@ -126,16 +126,16 @@ BitmapDeviceSharedPtr SvpGlyphPeer::GetGlyphBmp( ServerFont& rServerFont,
         bool bFound = false;
         switch( nBmpFormat )
         {
-            case Format::ONE_BIT_LSB_GREY:
+            case FORMAT_ONE_BIT_LSB_GREY:
                 bFound = rServerFont.GetGlyphBitmap1( nGlyphIndex, pGcpHelper->maRawBitmap );
                 break;
-            case Format::EIGHT_BIT_GREY:
+            case FORMAT_EIGHT_BIT_GREY:
                 bFound = rServerFont.GetGlyphBitmap8( nGlyphIndex, pGcpHelper->maRawBitmap );
                 break;
             default:
                 OSL_FAIL( "SVP GCP::GetGlyphBmp(): illegal scanline format");
                 // fall back to black&white mask
-                nBmpFormat = Format::ONE_BIT_LSB_GREY;
+                nBmpFormat = FORMAT_ONE_BIT_LSB_GREY;
                 bFound = false;
                 break;
         }
@@ -172,10 +172,10 @@ void SvpGlyphPeer::RemovingFont( ServerFont& )
 
 void SvpGlyphPeer::RemovingGlyph( ServerFont&, GlyphData& rGlyphData, int /*nGlyphIndex*/ )
 {
-    if( rGlyphData.ExtDataRef().mpData != Format::NONE )
+    if( rGlyphData.ExtDataRef().mpData != 0 )
     {
         // release the glyph related resources
-        DBG_ASSERT( (rGlyphData.ExtDataRef().meInfo <= Format::MAX), "SVP::RG() invalid alpha format" );
+        DBG_ASSERT( (rGlyphData.ExtDataRef().meInfo <= FORMAT_MAX), "SVP::RG() invalid alpha format" );
         SvpGcpHelper* pGcpHelper = (SvpGcpHelper*)rGlyphData.ExtDataRef().mpData;
         delete[] pGcpHelper->maRawBitmap.mpBits;
         delete pGcpHelper;

@@ -156,7 +156,7 @@ private:
     {
         BitmapDeviceSharedPtr pBmp( createBitmapDevice( rDevice->getSize(),
                                                         true,
-                                                        Format::EIGHT_BIT_GREY ));
+                                                        FORMAT_EIGHT_BIT_GREY ));
 
         OUString aSvg( "m 0 0h5v10h5v-5h-10z" );
 
@@ -190,13 +190,13 @@ public:
         const basegfx::B2ISize aSize(11,11);
         mpClipMask = createBitmapDevice( aSize,
                                          true,
-                                         Format::ONE_BIT_MSB_GREY );
+                                         FORMAT_ONE_BIT_MSB_GREY );
         mpDevice1bpp = createBitmapDevice( aSize,
                                            true,
-                                           Format::ONE_BIT_MSB_PAL );
+                                           FORMAT_ONE_BIT_MSB_PAL );
         mpDevice32bpp = createBitmapDevice( aSize,
                                            true,
-                                           Format::THIRTYTWO_BIT_TC_MASK_BGRA );
+                                           FORMAT_THIRTYTWO_BIT_TC_MASK_BGRA );
 
         OUString aSvg( "m 0 0 h5 l5 5 v5 h-5 l-5-5 z" );
         basegfx::B2DPolyPolygon aPoly;

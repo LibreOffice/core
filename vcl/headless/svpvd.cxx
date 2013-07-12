@@ -61,28 +61,28 @@ sal_Bool SvpSalVirtualDevice::SetSizeUsingBuffer( long nNewDX, long nNewDY, cons
         aDevSize.setY( 1 );
     if( ! m_aDevice.get() || m_aDevice->getSize() != aDevSize )
     {
-        sal_uInt32 nFormat = SVP_DEFAULT_BITMAP_FORMAT;
+        basebmp::Format nFormat = SVP_DEFAULT_BITMAP_FORMAT;
         std::vector< basebmp::Color > aDevPal;
         switch( m_nBitCount )
         {
-            case 1: nFormat = Format::ONE_BIT_MSB_PAL;
+            case 1: nFormat = FORMAT_ONE_BIT_MSB_PAL;
                 aDevPal.reserve(2);
                 aDevPal.push_back( basebmp::Color( 0, 0, 0 ) );
                 aDevPal.push_back( basebmp::Color( 0xff, 0xff, 0xff ) );
                 break;
-            case 4: nFormat = Format::FOUR_BIT_MSB_PAL; break;
-            case 8: nFormat = Format::EIGHT_BIT_PAL; break;
+            case 4: nFormat = FORMAT_FOUR_BIT_MSB_PAL; break;
+            case 8: nFormat = FORMAT_EIGHT_BIT_PAL; break;
 #ifdef OSL_BIGENDIAN
-            case 16: nFormat = Format::SIXTEEN_BIT_MSB_TC_MASK; break;
+            case 16: nFormat = FORMAT_SIXTEEN_BIT_MSB_TC_MASK; break;
 #else
-            case 16: nFormat = Format::SIXTEEN_BIT_LSB_TC_MASK; break;
+            case 16: nFormat = FORMAT_SIXTEEN_BIT_LSB_TC_MASK; break;
 #endif
-            case 24: nFormat = Format::TWENTYFOUR_BIT_TC_MASK; break;
-            case 32: nFormat = Format::THIRTYTWO_BIT_TC_MASK_BGRA; break;
+            case 24: nFormat = FORMAT_TWENTYFOUR_BIT_TC_MASK; break;
+            case 32: nFormat = FORMAT_THIRTYTWO_BIT_TC_MASK_BGRA; break;
 #if defined(ANDROID) || defined(IOS)
-            case 0:  nFormat = Format::THIRTYTWO_BIT_TC_MASK_RGBA; break;
+            case 0:  nFormat = FORMAT_THIRTYTWO_BIT_TC_MASK_RGBA; break;
 #else
-            case 0:  nFormat = Format::TWENTYFOUR_BIT_TC_MASK; break;
+            case 0:  nFormat = FORMAT_TWENTYFOUR_BIT_TC_MASK; break;
 #endif
         }
         m_aDevice = aDevPal.empty()
