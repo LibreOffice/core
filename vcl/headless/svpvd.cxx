@@ -78,7 +78,7 @@ sal_Bool SvpSalVirtualDevice::SetSizeUsingBuffer( long nNewDX, long nNewDY, cons
             case 16: nFormat = Format::SIXTEEN_BIT_LSB_TC_MASK; break;
 #endif
             case 24: nFormat = Format::TWENTYFOUR_BIT_TC_MASK; break;
-            case 32: nFormat = Format::THIRTYTWO_BIT_TC_MASK; break;
+            case 32: nFormat = Format::THIRTYTWO_BIT_TC_MASK_BGRA; break;
 #if defined(ANDROID) || defined(IOS)
             case 0:  nFormat = Format::THIRTYTWO_BIT_TC_MASK_RGBA; break;
 #else

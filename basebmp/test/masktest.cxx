@@ -107,7 +107,7 @@ public:
                                            Format::ONE_BIT_MSB_PAL );
         mpDevice32bpp = createBitmapDevice( aSize,
                                             true,
-                                            Format::THIRTYTWO_BIT_TC_MASK );
+                                            Format::THIRTYTWO_BIT_TC_MASK_BGRA );
 
         mpMask = createBitmapDevice( aSize,
                                      true,
