@@ -266,7 +266,7 @@ OUString WinSalInstance::GetDefaultPrinter()
         char* pTmp = pBuf;
         while ( *pTmp && (*pTmp != ',') )
             pTmp++;
-        return ImplSalGetUniString( pBuf, (xub_StrLen)(pTmp-pBuf) );
+        return ImplSalGetUniString( pBuf, static_cast<sal_Int32>(pTmp-pBuf) );
     }
     else
         return OUString();

@@ -44,9 +44,10 @@ rtl_TextEncoding ImplSalGetSystemEncoding()
 
 // -----------------------------------------------------------------------
 
-OUString ImplSalGetUniString( const sal_Char* pStr, xub_StrLen nLen )
+OUString ImplSalGetUniString(const sal_Char* pStr, sal_Int32 const nLen)
 {
-    return OUString( pStr, nLen, ImplSalGetSystemEncoding(),
+    return OUString( pStr, (-1 == nLen) ? strlen(pStr) : nLen,
+                      ImplSalGetSystemEncoding(),
                       RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_DEFAULT |
                       RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_DEFAULT |
                       RTL_TEXTTOUNICODE_FLAGS_INVALID_DEFAULT );
