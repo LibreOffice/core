@@ -16,7 +16,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include "InsertPropertyPanel.hxx"
-#include "InsertPropertyPanel.hrc"
 #include "sfx2/sidebar/CommandInfoProvider.hxx"
 
 #include <sfx2/sidebar/Theme.hxx>
@@ -42,27 +41,17 @@ using namespace cssu;
 using ::rtl::OUString;
 using ::sfx2::sidebar::SidebarToolBox;
 
-
 namespace svx { namespace sidebar {
 
 
 InsertPropertyPanel::InsertPropertyPanel (
     Window* pParent,
     const cssu::Reference<css::frame::XFrame>& rxFrame)
-    :   Control(pParent, SVX_RES(RID_SIDEBAR_INSERT_PANEL)),
-        mpStandardShapesBackground(sfx2::sidebar::ControlFactory::CreateToolBoxBackground(this)),
-        mpStandardShapesToolBox(sfx2::sidebar::ControlFactory::CreateToolBox(
-                mpStandardShapesBackground.get(),
-                SVX_RES(TB_INSERT_STANDARD),
-                rxFrame)),
-        mpCustomShapesBackground(sfx2::sidebar::ControlFactory::CreateToolBoxBackground(this)),
-        mpCustomShapesToolBox(sfx2::sidebar::ControlFactory::CreateToolBox(
-                mpCustomShapesBackground.get(),
-                SVX_RES(TB_INSERT_CUSTOM),
-                rxFrame)),
+    :   PanelLayout(pParent, "InsertPropertyPanel", "svx/ui/sidebarinsert.ui", rxFrame),
         mxFrame(rxFrame)
 {
-    FreeResource();
+    get(mpStandardShapesToolBox, "standardshapes");
+    get(mpCustomShapesToolBox,   "customshapes");
 
     mpStandardShapesToolBox->Show();
     mpCustomShapesToolBox->Show();
@@ -84,11 +73,6 @@ InsertPropertyPanel::~InsertPropertyPanel (void)
     while (pTopWindow->GetParent() != NULL)
         pTopWindow = pTopWindow->GetParent();
     pTopWindow->RemoveChildEventListener(LINK(this, InsertPropertyPanel, WindowEventListener));
-
-    mpStandardShapesToolBox.reset();
-    mpCustomShapesToolBox.reset();
-    mpStandardShapesBackground.reset();
-    mpCustomShapesBackground.reset();
 }
 
 
@@ -124,13 +108,13 @@ IMPL_LINK(InsertPropertyPanel, WindowEventListener, VclSimpleEvent*, pEvent)
     if (nId == 0)
         return 1;
 
-    SidebarToolBox* pSidebarToolBox = dynamic_cast<SidebarToolBox*>(mpStandardShapesToolBox.get());
+    SidebarToolBox* pSidebarToolBox = dynamic_cast<SidebarToolBox*>(mpStandardShapesToolBox);
     if (pSidebarToolBox == NULL)
         return 1;
     sal_uInt16 nItemId (pSidebarToolBox->GetItemIdForSubToolbarName(aURL.Path));
     if (nItemId == 0)
     {
-        pSidebarToolBox = dynamic_cast<SidebarToolBox*>(mpCustomShapesToolBox.get());
+        pSidebarToolBox = dynamic_cast<SidebarToolBox*>(mpCustomShapesToolBox);
         if (pSidebarToolBox == NULL)
             return 1;
         nItemId = pSidebarToolBox->GetItemIdForSubToolbarName(aURL.Path);
@@ -139,7 +123,7 @@ IMPL_LINK(InsertPropertyPanel, WindowEventListener, VclSimpleEvent*, pEvent)
     }
 
     Reference<frame::XSubToolbarController> xController (pSidebarToolBox->GetControllerForItemId(nItemId), UNO_QUERY);
-    if ( ! xController.is())
+    if ( ! xController.is() )
         return 1;
 
     const OUString sCommand (pToolBox->GetItemCommand(nId));
