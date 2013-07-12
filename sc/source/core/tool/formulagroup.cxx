@@ -19,6 +19,7 @@
 #include "formula/vectortoken.hxx"
 
 #include <vector>
+#include <boost/unordered_map.hpp>
 
 #define USE_DUMMY_INTERPRETER 1
 
@@ -37,6 +38,8 @@ bool FormulaGroupInterpreterSoftware::interpret(ScDocument& rDoc, const ScAddres
                                                 const ScFormulaCellGroupRef& xGroup,
                                                 ScTokenArray& rCode)
 {
+    typedef boost::unordered_map<const formula::FormulaToken*, formula::FormulaTokenRef> CachedTokensType;
+
     // Decompose the group into individual cells and calculate them individually.
 
     // The caller must ensure that the top position is the start position of
@@ -45,11 +48,21 @@ bool FormulaGroupInterpreterSoftware::interpret(ScDocument& rDoc, const ScAddres
     ScAddress aTmpPos = rTopPos;
     std::vector<double> aResults;
     aResults.reserve(xGroup->mnLength);
+    CachedTokensType aCachedTokens;
+
     for (SCROW i = 0; i < xGroup->mnLength; ++i, aTmpPos.IncRow())
     {
         ScTokenArray aCode2;
         for (const formula::FormulaToken* p = rCode.First(); p; p = rCode.Next())
         {
+            CachedTokensType::iterator it = aCachedTokens.find(p);
+            if (it != aCachedTokens.end())
+            {
+                // This token is cached. Use the cached one.
+                aCode2.AddToken(*it->second);
+                continue;
+            }
+
             switch (p->GetType())
             {
                 case formula::svSingleVectorRef:
@@ -77,8 +90,18 @@ bool FormulaGroupInterpreterSoftware::interpret(ScDocument& rDoc, const ScAddres
                         pMat->PutDouble(pArray, nRowSize, nCol, 0);
                     }
 
-                    ScMatrixToken aTok(pMat);
-                    aCode2.AddToken(aTok);
+                    if (p2->IsStartFixed() && p2->IsEndFixed())
+                    {
+                        // Cached the converted token for absolute range referene.
+                        formula::FormulaTokenRef xTok(new ScMatrixToken(pMat));
+                        aCachedTokens.insert(CachedTokensType::value_type(p, xTok));
+                        aCode2.AddToken(*xTok);
+                    }
+                    else
+                    {
+                        ScMatrixToken aTok(pMat);
+                        aCode2.AddToken(aTok);
+                    }
                 }
                 break;
                 default:
