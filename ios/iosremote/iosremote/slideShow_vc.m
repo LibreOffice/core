@@ -7,7 +7,7 @@
  */
 #import "slideShow_vc.h"
 #import "SlideShow.h"
-#import "setRecursiveUserInteraction.h"
+#import "UIViewTransitionCategory.h"
 #import "CommunicationManager.h"
 #import "SWRevealViewController.h"
 #import "CommandInterpreter.h"
