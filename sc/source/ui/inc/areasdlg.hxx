@@ -48,24 +48,24 @@ public:
     virtual sal_Bool    Close();
 
 private:
-    FixedLine       aFlPrintArea;
-    ListBox         aLbPrintArea;
-    formula::RefEdit        aEdPrintArea;
-    formula::RefButton      aRbPrintArea;
+    FixedLine*               pFlPrintArea;
+    ListBox*                 pLbPrintArea;
+    formula::RefEdit*        pEdPrintArea;
+    formula::RefButton*      pRbPrintArea;
 
-    FixedLine       aFlRepeatRow;
-    ListBox         aLbRepeatRow;
-    formula::RefEdit        aEdRepeatRow;
-    formula::RefButton      aRbRepeatRow;
+    FixedLine*               pFlRepeatRow;
+    ListBox*                 pLbRepeatRow;
+    formula::RefEdit*        pEdRepeatRow;
+    formula::RefButton*      pRbRepeatRow;
 
-    FixedLine       aFlRepeatCol;
-    ListBox         aLbRepeatCol;
-    formula::RefEdit        aEdRepeatCol;
-    formula::RefButton      aRbRepeatCol;
+    FixedLine*               pFlRepeatCol;
+    ListBox*                 pLbRepeatCol;
+    formula::RefEdit*        pEdRepeatCol;
+    formula::RefButton*      pRbRepeatCol;
 
-    OKButton        aBtnOk;
-    CancelButton    aBtnCancel;
-    HelpButton      aBtnHelp;
+    OKButton*        pBtnOk;
+    CancelButton*    pBtnCancel;
+    HelpButton*      pBtnHelp;
 
     sal_Bool            bDlgLostFocus;
     formula::RefEdit*       pRefInputEdit;
