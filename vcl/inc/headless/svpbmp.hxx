@@ -26,7 +26,7 @@
 
 #include <salbmp.hxx>
 
-#define SVP_DEFAULT_BITMAP_FORMAT basebmp::Format::TWENTYFOUR_BIT_TC_MASK
+#define SVP_DEFAULT_BITMAP_FORMAT basebmp::FORMAT_TWENTYFOUR_BIT_TC_MASK
 
 class SvpSalBitmap : public SalBitmap
 {
@@ -58,7 +58,7 @@ public:
     virtual void            ReleaseBuffer( BitmapBuffer* pBuffer, bool bReadOnly );
     virtual bool            GetSystemData( BitmapSystemData& rData );
 
-    static sal_uInt32 getBitCountFromScanlineFormat( sal_Int32 nFormat );
+    static sal_uInt32 getBitCountFromScanlineFormat( basebmp::Format nFormat );
 };
 
 #endif

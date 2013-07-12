@@ -842,14 +842,14 @@ bool SvpSalGraphics::CheckContext()
               " bufferSize=(" << bufferSize.getX() << "," << bufferSize.getY() << ")" );
 
     switch( m_aDevice->getScanlineFormat() ) {
-    case basebmp::Format::EIGHT_BIT_PAL:
+    case basebmp::FORMAT_EIGHT_BIT_PAL:
         mrContext = CGBitmapContextCreate(pixelBuffer.get(),
                                           bufferSize.getX(), bufferSize.getY(),
                                           8, scanlineStride,
                                           CGColorSpaceCreateDeviceGray(),
                                           kCGImageAlphaNone);
         break;
-    case basebmp::Format::THIRTYTWO_BIT_TC_MASK_RGBA:
+    case basebmp::FORMAT_THIRTYTWO_BIT_TC_MASK_RGBA:
         mrContext = CGBitmapContextCreate(pixelBuffer.get(),
                                           bufferSize.getX(), bufferSize.getY(),
                                           8, scanlineStride,
@@ -857,7 +857,7 @@ bool SvpSalGraphics::CheckContext()
                                           kCGImageAlphaNoneSkipLast);
         break;
     default:
-        SAL_INFO( "vcl.ios", "CheckContext: unsupported color format " << basebmp::Format::formatName( m_aDevice->getScanlineFormat() ) );
+        SAL_INFO( "vcl.ios", "CheckContext: unsupported color format " << basebmp::formatName( m_aDevice->getScanlineFormat() ) );
     }
 
     SAL_WARN_IF( mrContext == NULL, "vcl.ios", "CheckContext() failed" );

@@ -95,7 +95,7 @@ SvpSalGraphics::SvpSalGraphics() :
     m_aFillColor( COL_WHITE ),
     m_aDrawMode( basebmp::DrawMode_PAINT ),
     m_aTextColor( COL_BLACK ),
-    m_eTextFmt( basebmp::Format::EIGHT_BIT_GREY ),
+    m_eTextFmt( basebmp::FORMAT_EIGHT_BIT_GREY ),
     m_bClipSetup( false )
 {
     for( int i = 0; i < MAX_FALLBACK; ++i )
@@ -115,22 +115,22 @@ void SvpSalGraphics::setDevice( basebmp::BitmapDeviceSharedPtr& rDevice )
 
 #ifndef IOS
     // determine matching bitmap format for masks
-    sal_uInt32 nDeviceFmt = m_aDevice->getScanlineFormat();
-    DBG_ASSERT( (nDeviceFmt <= (sal_uInt32)basebmp::Format::MAX), "SVP::setDevice() with invalid bitmap format" );
+    basebmp::Format nDeviceFmt = m_aDevice->getScanlineFormat();
+    DBG_ASSERT( (nDeviceFmt <= (sal_uInt32)basebmp::FORMAT_MAX), "SVP::setDevice() with invalid bitmap format" );
     switch( nDeviceFmt )
     {
-        case basebmp::Format::EIGHT_BIT_GREY:
-        case basebmp::Format::SIXTEEN_BIT_LSB_TC_MASK:
-        case basebmp::Format::SIXTEEN_BIT_MSB_TC_MASK:
-        case basebmp::Format::TWENTYFOUR_BIT_TC_MASK:
-        case basebmp::Format::THIRTYTWO_BIT_TC_MASK_BGRA:
-        case basebmp::Format::THIRTYTWO_BIT_TC_MASK_ARGB:
-        case basebmp::Format::THIRTYTWO_BIT_TC_MASK_ABGR:
-        case basebmp::Format::THIRTYTWO_BIT_TC_MASK_RGBA:
-            m_eTextFmt = basebmp::Format::EIGHT_BIT_GREY;
+        case basebmp::FORMAT_EIGHT_BIT_GREY:
+        case basebmp::FORMAT_SIXTEEN_BIT_LSB_TC_MASK:
+        case basebmp::FORMAT_SIXTEEN_BIT_MSB_TC_MASK:
+        case basebmp::FORMAT_TWENTYFOUR_BIT_TC_MASK:
+        case basebmp::FORMAT_THIRTYTWO_BIT_TC_MASK_BGRA:
+        case basebmp::FORMAT_THIRTYTWO_BIT_TC_MASK_ARGB:
+        case basebmp::FORMAT_THIRTYTWO_BIT_TC_MASK_ABGR:
+        case basebmp::FORMAT_THIRTYTWO_BIT_TC_MASK_RGBA:
+            m_eTextFmt = basebmp::FORMAT_EIGHT_BIT_GREY;
             break;
         default:
-            m_eTextFmt = basebmp::Format::ONE_BIT_LSB_GREY;
+            m_eTextFmt = basebmp::FORMAT_ONE_BIT_LSB_GREY;
             break;
     }
 #endif
@@ -173,7 +173,7 @@ void SvpSalGraphics::ensureClip()
 
     m_aDevice = m_aOrigDevice;
     basegfx::B2IVector aSize = m_aDevice->getSize();
-    m_aClipMap = basebmp::createBitmapDevice( aSize, false, basebmp::Format::ONE_BIT_MSB_GREY );
+    m_aClipMap = basebmp::createBitmapDevice( aSize, false, basebmp::FORMAT_ONE_BIT_MSB_GREY );
     m_aClipMap->clear( basebmp::Color(0xFFFFFFFF) );
 
     RectangleVector aRectangles;

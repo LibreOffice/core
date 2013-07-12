@@ -43,7 +43,7 @@ class SvpSalFrame : public SalFrame
     bool                                m_bVisible;
     bool                                m_bDamageTracking;
     bool                                m_bTopDown;
-    sal_Int32                           m_nScanlineFormat;
+    basebmp::Format                     m_nScanlineFormat;
     long                                m_nMinWidth;
     long                                m_nMinHeight;
     long                                m_nMaxWidth;
@@ -60,7 +60,7 @@ public:
                  SalFrame* pParent,
                  sal_uLong nSalFrameStyle,
                  bool      bTopDown,
-                 sal_Int32 nScanlineFormat,
+                 basebmp::Format nScanlineFormat,
                  SystemParentData* pSystemParent = NULL );
     virtual ~SvpSalFrame();
 

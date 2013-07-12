@@ -292,10 +292,10 @@ public:
         const basegfx::B2ISize aSize(10,10);
         mpDevice1bpp = createBitmapDevice( aSize,
                                            true,
-                                           Format::ONE_BIT_MSB_PAL );
+                                           FORMAT_ONE_BIT_MSB_PAL );
         mpDevice32bpp = createBitmapDevice( aSize,
                                             true,
-                                            Format::THIRTYTWO_BIT_TC_MASK_BGRA );
+                                            FORMAT_THIRTYTWO_BIT_TC_MASK_BGRA );
     }
 
     void testEmpty()

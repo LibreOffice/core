@@ -1778,7 +1778,7 @@ void GtkSalFrame::AllocateFrame()
         if( aFrameSize.getY() == 0 )
             aFrameSize.setY( 1 );
         m_aFrame = basebmp::createBitmapDevice( aFrameSize, true,
-                                                basebmp::Format::TWENTYFOUR_BIT_TC_MASK );
+                                                basebmp::FORMAT_TWENTYFOUR_BIT_TC_MASK );
         m_aFrame->setDamageTracker(
             basebmp::IBitmapDeviceDamageTrackerSharedPtr(new DamageTracker(*this)) );
         fprintf( stderr, "allocated m_aFrame size of %dx%d \n",

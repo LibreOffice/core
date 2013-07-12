@@ -1055,7 +1055,7 @@ void TestWindow::Paint( const Rectangle& /*rRect*/ )
     basegfx::B2ISize aTestSize(1000,1000);
     basebmp::BitmapDeviceSharedPtr pDevice( basebmp::createBitmapDevice( aTestSize,
                                                                          false,
-                                                                         basebmp::Format::THIRTYTWO_BIT_TC_MASK_BGRA ));
+                                                                         basebmp::FORMAT_THIRTYTWO_BIT_TC_MASK_BGRA ));
 
     {
         OUString aSvg;
@@ -1074,7 +1074,7 @@ void TestWindow::Paint( const Rectangle& /*rRect*/ )
     {
         basebmp::BitmapDeviceSharedPtr pMask( basebmp::createBitmapDevice( aTestSize,
                                                                            false,
-                                                                           basebmp::Format::ONE_BIT_MSB_GREY ));
+                                                                           basebmp::FORMAT_ONE_BIT_MSB_GREY ));
 
         const basegfx::B2IPoint aPt111(10,10);
         const basegfx::B2IPoint aPt222(0,10);

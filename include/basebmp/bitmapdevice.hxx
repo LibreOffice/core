@@ -22,6 +22,7 @@
 
 #include <sal/types.h>
 #include <basebmp/drawmodes.hxx>
+#include <basebmp/scanlineformats.hxx>
 #include <basebmp/basebmpdllapi.h>
 
 #include <boost/scoped_ptr.hpp>
@@ -101,7 +102,7 @@ public:
 
     /** Query type of scanline memory format
      */
-    sal_Int32 getScanlineFormat() const;
+    Format getScanlineFormat() const;
 
     /** Query byte offset to get from scanline n to scanline n+1
 
@@ -556,7 +557,7 @@ public:
 protected:
     BASEBMP_DLLPRIVATE BitmapDevice( const basegfx::B2IBox&           rBounds,
                                      const basegfx::B2IVector&        rBufferSize,
-                                     sal_Int32                        nScanlineFormat,
+                                     Format                           nScanlineFormat,
                                      sal_Int32                        nScanlineStride,
                                      sal_uInt8*                       pFirstScanline,
                                      const RawMemorySharedArray&      rMem,
@@ -662,7 +663,7 @@ private:
  */
 BitmapDeviceSharedPtr BASEBMP_DLLPUBLIC createBitmapDevice( const basegfx::B2IVector& rSize,
                                                             bool                      bTopDown,
-                                                            sal_Int32                 nScanlineFormat );
+                                                            Format                    nScanlineFormat );
 
 /** Function to create a BitmapDevice for given scanline format
     with the given palette
@@ -673,7 +674,7 @@ BitmapDeviceSharedPtr BASEBMP_DLLPUBLIC createBitmapDevice( const basegfx::B2IVe
  */
 BitmapDeviceSharedPtr BASEBMP_DLLPUBLIC createBitmapDevice( const basegfx::B2IVector&        rSize,
                                                             bool                             bTopDown,
-                                                            sal_Int32                        nScanlineFormat,
+                                                            Format                           nScanlineFormat,
                                                             const PaletteMemorySharedVector& rPalette );
 
 /** Function to create a BitmapDevice for given scanline format
@@ -684,7 +685,7 @@ BitmapDeviceSharedPtr BASEBMP_DLLPUBLIC createBitmapDevice( const basegfx::B2IVe
  */
 BitmapDeviceSharedPtr BASEBMP_DLLPUBLIC createBitmapDevice( const basegfx::B2IVector&        rSize,
                                                             bool                             bTopDown,
-                                                            sal_Int32                        nScanlineFormat,
+                                                            Format                           nScanlineFormat,
                                                             const RawMemorySharedArray&      rMem,
                                                             const PaletteMemorySharedVector& rPalette );
 
