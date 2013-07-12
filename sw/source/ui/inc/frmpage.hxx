@@ -241,19 +241,14 @@ public:
 class SwFrmURLPage : public SfxTabPage
 {
     // hyperlink
-    FixedLine       aHyperLinkFL;
-    FixedText       aURLFT;
-    Edit            aURLED;
-    PushButton      aSearchPB;
-    FixedText       aNameFT;
-    Edit            aNameED;
-    FixedText       aFrameFT;
-    ComboBox        aFrameCB;
+    Edit*            pURLED;
+    PushButton*      pSearchPB;
+    Edit*            pNameED;
+    ComboBox*        pFrameCB;
 
     // image map
-    FixedLine       aImageFL;
-    CheckBox        aServerCB;
-    CheckBox        aClientCB;
+    CheckBox*        pServerCB;
+    CheckBox*        pClientCB;
 
     DECL_LINK(InsertFileHdl, void *);
 
