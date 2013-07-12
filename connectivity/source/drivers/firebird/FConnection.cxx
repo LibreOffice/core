@@ -89,7 +89,8 @@ OConnection::OConnection(FirebirdDriver*    _pDriver)
                          OSubComponent<OConnection, OConnection_BASE>((::cppu::OWeakObject*)_pDriver, this),
                          m_xMetaData(NULL),
                          m_bIsEmbedded(sal_False),
-                         m_aURL(),
+                         m_sConnectionURL(),
+                         m_sURL(),
                          m_sUser(),
                          m_pDriver(_pDriver),
                          m_bClosed(sal_False),
@@ -147,6 +148,8 @@ void OConnection::construct(const ::rtl::OUString& url, const Sequence< Property
 
     osl_atomic_increment( &m_refCount );
 
+    m_sConnectionURL = url;
+
     bool bIsNewDatabase = false;
     OUString aStorageURL;
     if (url.equals("sdbc:embedded:firebird"))
@@ -176,10 +179,10 @@ void OConnection::construct(const ::rtl::OUString& url, const Sequence< Property
 
         bIsNewDatabase = !m_xEmbeddedStorage->hasElements();
 
-        m_aURL = utl::TempFile::CreateTempName() + ".fdb";
+        m_sURL = utl::TempFile::CreateTempName() + ".fdb";
 
         SAL_INFO("connectivity.firebird", "Temporary .fdb location:  "
-                    << OUStringToOString(m_aURL,RTL_TEXTENCODING_UTF8 ).getStr());
+                    << OUStringToOString(m_sURL,RTL_TEXTENCODING_UTF8 ).getStr());
         if (!bIsNewDatabase)
         {
             SAL_INFO("connectivity.firebird", "Extracting .fdb from .odb" );
@@ -204,7 +207,7 @@ void OConnection::construct(const ::rtl::OUString& url, const Sequence< Property
                 ::dbtools::throwGenericSQLException(sMessage ,*this);
             }
             try {
-                xFileAccess->writeFile(m_aURL,xDBStream->getInputStream());
+                xFileAccess->writeFile(m_sURL,xDBStream->getInputStream());
             }
             catch (...)
             {
@@ -224,7 +227,7 @@ void OConnection::construct(const ::rtl::OUString& url, const Sequence< Property
 
     if (bIsNewDatabase)
     {
-        if (isc_create_database(status, m_aURL.getLength(), OUStringToOString(m_aURL, RTL_TEXTENCODING_UTF8).getStr(),
+        if (isc_create_database(status, m_sURL.getLength(), OUStringToOString(m_sURL, RTL_TEXTENCODING_UTF8).getStr(),
                                                             &m_DBHandler, 0, NULL, 0))
         {
             if(pr_error(status, "create new database"))
@@ -233,7 +236,7 @@ void OConnection::construct(const ::rtl::OUString& url, const Sequence< Property
     }
     else
     {
-        if (isc_attach_database(status, m_aURL.getLength(), OUStringToOString(m_aURL, RTL_TEXTENCODING_UTF8).getStr(),
+        if (isc_attach_database(status, m_sURL.getLength(), OUStringToOString(m_sURL, RTL_TEXTENCODING_UTF8).getStr(),
                                                         &m_DBHandler, 0, NULL))
             if (pr_error(status, "attach database"))
                 return;
@@ -577,7 +580,7 @@ void SAL_CALL OConnection::documentEventOccured( const DocumentEvent& _Event )
             Reference< XInputStream > xInputStream;
             if (xContext.is())
                 xInputStream =
-                        OStorageHelper::GetInputStreamFromURL(m_aURL, xContext);
+                        OStorageHelper::GetInputStreamFromURL(m_sURL, xContext);
             if (xInputStream.is())
                 OStorageHelper::CopyInputToOutput( xInputStream,
                                                 xDBStream->getOutputStream());
