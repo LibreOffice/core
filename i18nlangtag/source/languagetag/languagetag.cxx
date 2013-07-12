@@ -616,17 +616,7 @@ void LanguageTag::convertLocaleToBcp47()
     }
     else
     {
-        /* XXX NOTE: most legacy code never evaluated the Variant field, so for
-         * now just concatenate language and country. In case we stumbled over
-         * variant aware code we'd have to take care of that. */
-        if (maLocale.Country.isEmpty())
-            maBcp47 = maLocale.Language;
-        else
-        {
-            OUStringBuffer aBuf( maLocale.Language.getLength() + 1 + maLocale.Country.getLength());
-            aBuf.append( maLocale.Language).append( '-').append( maLocale.Country);
-            maBcp47 = aBuf.makeStringAndClear();
-        }
+        maBcp47 = convertToBcp47( maLocale, true);
     }
     mbInitializedBcp47 = true;
 }
@@ -640,10 +630,7 @@ void LanguageTag::convertLocaleToLang()
     }
     else
     {
-        /* FIXME: this is temporary until code base is converted to not use
-         * MsLangId::convert...() anymore. After that, proper new method has to
-         * be implemented to allow I18NLANGTAG_QLT and sript tag and such. */
-        mnLangID = MsLangId::Conversion::convertLocaleToLanguage( maLocale);
+        mnLangID = convertToLanguageType( maLocale, true);
     }
     mbInitializedLangID = true;
 }
@@ -694,11 +681,8 @@ void LanguageTag::convertLangToLocale()
         mnLangID = MsLangId::getRealLanguage( LANGUAGE_SYSTEM);
         mbInitializedLangID = true;
     }
-    /* FIXME: this is temporary until code base is converted to not use
-     * MsLangId::convert...() anymore. After that, proper new method has to be
-     * implemented to allow I18NLANGTAG_QLT and script tag and such. */
-    // Resolve system here!
-    maLocale = MsLangId::Conversion::convertLanguageToLocale( mnLangID, true);
+    // Resolve system here! The original is remembered as mbSystemLocale.
+    maLocale = convertToLocale( mnLangID, true);
     mbInitializedLocale = true;
 }
 
@@ -1372,6 +1356,108 @@ LanguageTag::Extraction LanguageTag::simpleExtract( const OUString& rBcp47,
 
     // No match found.
     return rList.end();
+}
+
+
+static bool lcl_isSystem( LanguageType nLangID )
+{
+    if (nLangID == LANGUAGE_SYSTEM)
+        return true;
+    // There are some special values that simplify to SYSTEM,
+    // getRealLanguage() catches and resolves them.
+    LanguageType nNewLangID = MsLangId::getRealLanguage( nLangID);
+    if (nNewLangID != nLangID)
+        return true;
+    return false;
+}
+
+
+// static
+com::sun::star::lang::Locale LanguageTag::convertToLocale( LanguageType nLangID, bool bResolveSystem )
+{
+    if (!bResolveSystem && lcl_isSystem( nLangID))
+        return lang::Locale();
+
+    /* FIXME: this is temporary until code base is converted to not use
+     * MsLangId::convert...() anymore. After that, proper new method has to be
+     * implemented to allow I18NLANGTAG_QLT and script tag and such. */
+    return MsLangId::Conversion::convertLanguageToLocale( nLangID, bResolveSystem);
+}
+
+
+// static
+LanguageType LanguageTag::convertToLanguageType( const com::sun::star::lang::Locale& rLocale, bool bResolveSystem )
+{
+    if (rLocale.Language.isEmpty() && !bResolveSystem)
+        return LANGUAGE_SYSTEM;
+
+    /* FIXME: this is temporary until code base is converted to not use
+     * MsLangId::convert...() anymore. After that, proper new method has to
+     * be implemented to allow I18NLANGTAG_QLT and sript tag and such. */
+    return MsLangId::Conversion::convertLocaleToLanguage( rLocale);
+}
+
+
+// static
+OUString LanguageTag::convertToBcp47( const com::sun::star::lang::Locale& rLocale, bool bResolveSystem )
+{
+    OUString aBcp47;
+    if (rLocale.Language.isEmpty())
+    {
+        if (bResolveSystem)
+            aBcp47 = convertToBcp47( LANGUAGE_SYSTEM, true);
+        // else aBcp47 stays empty
+    }
+    else if (rLocale.Language == I18NLANGTAG_QLT)
+    {
+        aBcp47 = rLocale.Variant;
+    }
+    else
+    {
+        /* XXX NOTE: most legacy code never evaluated the Variant field, so for
+         * now just concatenate language and country. In case we stumbled over
+         * variant aware code we'd have to take care of that. */
+        if (rLocale.Country.isEmpty())
+            aBcp47 = rLocale.Language;
+        else
+        {
+            OUStringBuffer aBuf( rLocale.Language.getLength() + 1 + rLocale.Country.getLength());
+            aBuf.append( rLocale.Language).append( '-').append( rLocale.Country);
+            aBcp47 = aBuf.makeStringAndClear();
+        }
+    }
+    return aBcp47;
+}
+
+
+// static
+OUString LanguageTag::convertToBcp47( LanguageType nLangID, bool bResolveSystem )
+{
+    // Catch this first so we don't need the rest.
+    if (!bResolveSystem && lcl_isSystem( nLangID))
+        return OUString();
+
+    lang::Locale aLocale( convertToLocale( nLangID, bResolveSystem));
+    // If system for some reason (should not happen.. haha) could not be
+    // resolved DO NOT CALL convertToBcp47() because that would recurse into
+    // this method here!
+    if (aLocale.Language.isEmpty() && bResolveSystem)
+        return OUString();      // bad luck, bail out
+    return convertToBcp47( aLocale, bResolveSystem);
+}
+
+
+// static
+com::sun::star::lang::Locale LanguageTag::convertToLocale( const OUString& rBcp47, bool bResolveSystem )
+{
+    return LanguageTag( rBcp47).getLocale( bResolveSystem);
+}
+
+
+// static
+LanguageType LanguageTag::convertToLanguageType( const OUString& rBcp47, bool bResolveSystem )
+{
+    return LanguageTag( rBcp47).getLanguageType( bResolveSystem);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

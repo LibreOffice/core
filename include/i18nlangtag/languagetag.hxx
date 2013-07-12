@@ -41,6 +41,9 @@ typedef struct _rtl_Locale rtl_Locale;  // as in rtl/locale.h
     Note that member variables are mutable and may change their values even in
     const methods. Getter methods return either the original value or matching
     converted values.
+
+    For standalone conversions if no LanguageTag instance is at hand, static
+    convertTo...() methods exist.
  */
 class I18NLANGTAG_DLLPUBLIC LanguageTag
 {
@@ -364,6 +367,71 @@ public:
         !equals(,...true) instead if system locales shall be resolved.
      */
     bool    operator!=( const LanguageTag & rLanguageTag ) const;
+
+
+    /** Convert MS-LangID to Locale.
+
+        @param bResolveSystem
+               If TRUE, resolve an empty language tag denoting the system
+               locale to the real locale used.
+               If FALSE, return an empty Locale for such a tag.
+     */
+    static com::sun::star::lang::Locale convertToLocale( LanguageType nLangID, bool bResolveSystem = true );
+
+    /** Convert Locale to MS-LangID.
+
+        @param bResolveSystem
+               If TRUE, resolve an empty language tag denoting the system
+               locale to the real locale used.
+               If FALSE, return LANGUAGE_SYSTEM for such a tag.
+     */
+    static LanguageType convertToLanguageType( const com::sun::star::lang::Locale& rLocale, bool bResolveSystem = true );
+
+    /** Convert MS-LangID to BCP 47 string.
+
+        @param bResolveSystem
+               If TRUE, resolve an empty language tag denoting the system
+               locale to the real locale used.
+               If FALSE, return an empty OUString for such a tag.
+     */
+    static OUString convertToBcp47( LanguageType nLangID, bool bResolveSystem = true );
+
+    /** Convert Locale to BCP 47 string.
+
+        @param bResolveSystem
+               If TRUE, resolve an empty language tag denoting the system
+               locale to the real locale used.
+               If FALSE, return an empty OUString for such a tag.
+     */
+    static OUString convertToBcp47( const com::sun::star::lang::Locale& rLocale, bool bResolveSystem = true );
+
+    /** Convert BCP 47 string to Locale, convenience method.
+
+        NOTE: exists only for consistency with the other convertTo...()
+        methods, internally uses a temporary LanguageTag instance for
+        conversion so does not save anything compared to
+        LanguageTag(rBcp47).getLocale(bResolveSystem).
+
+        @param bResolveSystem
+               If TRUE, resolve an empty language tag denoting the system
+               locale to the real locale used.
+               If FALSE, return an empty Locale for such a tag.
+     */
+    static com::sun::star::lang::Locale convertToLocale( const OUString& rBcp47, bool bResolveSystem = true );
+
+    /** Convert BCP 47 string to MS-LangID, convenience method.
+
+        NOTE: exists only for consistency with the other convertTo...()
+        methods, internally uses a temporary LanguageTag instance for
+        conversion so does not save anything compared to
+        LanguageTag(rBcp47).getLanguageType(bResolveSystem).
+
+        @param bResolveSystem
+               If TRUE, resolve an empty language tag denoting the system
+               locale to the real locale used.
+               If FALSE, return LANGUAGE_SYSTEM for such a tag.
+     */
+    static LanguageType convertToLanguageType( const OUString& rBcp47, bool bResolveSystem = true );
 
 private:
 
