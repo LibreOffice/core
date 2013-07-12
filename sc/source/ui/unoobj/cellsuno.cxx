@@ -122,6 +122,7 @@
 #include "formulaiter.hxx"
 #include "tokenarray.hxx"
 #include "stylehelper.hxx"
+#include "dputil.hxx"
 
 #include <list>
 #include <boost/scoped_ptr.hpp>
@@ -932,58 +933,6 @@ static sal_Bool lcl_WholeSheet( const ScRangeList& rRanges )
     }
     return false;
 }
-
-//------------------------------------------------------------------------
-
-static ScSubTotalFunc lcl_SummaryToSubTotal( sheet::GeneralFunction eSummary )
-{
-    ScSubTotalFunc eSubTotal;
-    switch (eSummary)
-    {
-        case sheet::GeneralFunction_SUM:
-            eSubTotal = SUBTOTAL_FUNC_SUM;
-            break;
-        case sheet::GeneralFunction_COUNT:
-            eSubTotal = SUBTOTAL_FUNC_CNT2;
-            break;
-        case sheet::GeneralFunction_AVERAGE:
-            eSubTotal = SUBTOTAL_FUNC_AVE;
-            break;
-        case sheet::GeneralFunction_MAX:
-            eSubTotal = SUBTOTAL_FUNC_MAX;
-            break;
-        case sheet::GeneralFunction_MIN:
-            eSubTotal = SUBTOTAL_FUNC_MIN;
-            break;
-        case sheet::GeneralFunction_PRODUCT:
-            eSubTotal = SUBTOTAL_FUNC_PROD;
-            break;
-        case sheet::GeneralFunction_COUNTNUMS:
-            eSubTotal = SUBTOTAL_FUNC_CNT;
-            break;
-        case sheet::GeneralFunction_STDEV:
-            eSubTotal = SUBTOTAL_FUNC_STD;
-            break;
-        case sheet::GeneralFunction_STDEVP:
-            eSubTotal = SUBTOTAL_FUNC_STDP;
-            break;
-        case sheet::GeneralFunction_VAR:
-            eSubTotal = SUBTOTAL_FUNC_VAR;
-            break;
-        case sheet::GeneralFunction_VARP:
-            eSubTotal = SUBTOTAL_FUNC_VARP;
-            break;
-
-        case sheet::GeneralFunction_NONE:
-        case sheet::GeneralFunction_AUTO:
-        default:
-            eSubTotal = SUBTOTAL_FUNC_NONE;
-            break;
-    }
-    return eSubTotal;
-}
-
-//------------------------------------------------------------------------
 
 namespace {
 template<typename BorderLineType>
@@ -1877,7 +1826,7 @@ double SAL_CALL ScCellRangesBase::computeFunction( sheet::GeneralFunction nFunct
 
     ScAddress aDummy;                   // wenn nicht Marked, ignoriert wegen Negative
     double fVal;
-    ScSubTotalFunc eFunc = lcl_SummaryToSubTotal( nFunction );
+    ScSubTotalFunc eFunc = ScDPUtil::toSubTotalFunc(nFunction);
     ScDocument* pDoc = pDocShell->GetDocument();
     if ( !pDoc->GetSelectionFunction( eFunc, aDummy, aMark, fVal ) )
     {

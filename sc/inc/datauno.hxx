@@ -68,7 +68,6 @@ typedef boost::ptr_vector<XDBRefreshListenerRef> XDBRefreshListenerArr_Impl;
 class ScDataUnoConversion
 {
 public:
-    static ScSubTotalFunc   GeneralToSubTotal( com::sun::star::sheet::GeneralFunction eSummary );
     static com::sun::star::sheet::GeneralFunction SubTotalToGeneral( ScSubTotalFunc eSubTotal );
 };
 

@@ -48,6 +48,7 @@
 #include "attrib.hxx"
 #include "dpshttab.hxx"
 #include "queryentry.hxx"
+#include "dputil.hxx"
 
 #include <comphelper/extract.hxx>
 #include <comphelper/servicehelper.hxx>
@@ -133,34 +134,6 @@ SC_SIMPLE_SERVICE_INFO( ScDatabaseRangesObj, "ScDatabaseRangesObj", "com.sun.sta
 SC_SIMPLE_SERVICE_INFO( ScFilterDescriptorBase, "ScFilterDescriptorBase", "com.sun.star.sheet.SheetFilterDescriptor" )
 SC_SIMPLE_SERVICE_INFO( ScSubTotalDescriptorBase, "ScSubTotalDescriptorBase", "com.sun.star.sheet.SubTotalDescriptor" )
 SC_SIMPLE_SERVICE_INFO( ScSubTotalFieldObj, "ScSubTotalFieldObj", "com.sun.star.sheet.SubTotalField" )
-
-
-//------------------------------------------------------------------------
-
-ScSubTotalFunc ScDataUnoConversion::GeneralToSubTotal( sheet::GeneralFunction eSummary )
-{
-    ScSubTotalFunc eSubTotal;
-    switch (eSummary)
-    {
-        case sheet::GeneralFunction_NONE:       eSubTotal = SUBTOTAL_FUNC_NONE; break;
-        case sheet::GeneralFunction_SUM:        eSubTotal = SUBTOTAL_FUNC_SUM;  break;
-        case sheet::GeneralFunction_COUNT:      eSubTotal = SUBTOTAL_FUNC_CNT2; break;
-        case sheet::GeneralFunction_AVERAGE:    eSubTotal = SUBTOTAL_FUNC_AVE;  break;
-        case sheet::GeneralFunction_MAX:        eSubTotal = SUBTOTAL_FUNC_MAX;  break;
-        case sheet::GeneralFunction_MIN:        eSubTotal = SUBTOTAL_FUNC_MIN;  break;
-        case sheet::GeneralFunction_PRODUCT:    eSubTotal = SUBTOTAL_FUNC_PROD; break;
-        case sheet::GeneralFunction_COUNTNUMS:  eSubTotal = SUBTOTAL_FUNC_CNT;  break;
-        case sheet::GeneralFunction_STDEV:      eSubTotal = SUBTOTAL_FUNC_STD;  break;
-        case sheet::GeneralFunction_STDEVP:     eSubTotal = SUBTOTAL_FUNC_STDP; break;
-        case sheet::GeneralFunction_VAR:        eSubTotal = SUBTOTAL_FUNC_VAR;  break;
-        case sheet::GeneralFunction_VARP:       eSubTotal = SUBTOTAL_FUNC_VARP; break;
-        case sheet::GeneralFunction_AUTO:
-        default:
-            OSL_FAIL("GeneralToSubTotal: falscher enum");
-            eSubTotal = SUBTOTAL_FUNC_NONE;
-    }
-    return eSubTotal;
-}
 
 sheet::GeneralFunction  ScDataUnoConversion::SubTotalToGeneral( ScSubTotalFunc eSubTotal )
 {
@@ -569,8 +542,7 @@ void SAL_CALL ScSubTotalFieldObj::setSubTotalColumns(
             for (SCCOL i=0; i<nCount; i++)
             {
                 aParam.pSubTotals[nPos][i] = static_cast<SCCOL>(pAry[i].Column);
-                aParam.pFunctions[nPos][i] =
-                            ScDataUnoConversion::GeneralToSubTotal( pAry[i].Function );
+                aParam.pFunctions[nPos][i] = ScDPUtil::toSubTotalFunc(pAry[i].Function);
             }
         }
         else
@@ -651,8 +623,7 @@ void SAL_CALL ScSubTotalDescriptorBase::addNew(
             for (SCCOL i=0; i<nCount; i++)
             {
                 aParam.pSubTotals[nPos][i] = static_cast<SCCOL>(pAry[i].Column);
-                aParam.pFunctions[nPos][i] =
-                            ScDataUnoConversion::GeneralToSubTotal( pAry[i].Function );
+                aParam.pFunctions[nPos][i] = ScDPUtil::toSubTotalFunc(pAry[i].Function);
             }
         }
         else
@@ -919,7 +890,7 @@ void SAL_CALL ScConsolidationDescriptor::setFunction( sheet::GeneralFunction nFu
                                                     throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    aParam.eFunction = ScDataUnoConversion::GeneralToSubTotal(nFunction);
+    aParam.eFunction = ScDPUtil::toSubTotalFunc(nFunction);
 }
 
 uno::Sequence<table::CellRangeAddress> SAL_CALL ScConsolidationDescriptor::getSources()

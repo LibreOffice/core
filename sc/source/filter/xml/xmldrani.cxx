@@ -33,6 +33,7 @@
 #include "XMLConverter.hxx"
 #include "rangeutl.hxx"
 #include "queryentry.hxx"
+#include "dputil.hxx"
 
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/nmspmap.hxx>
@@ -398,8 +399,7 @@ ScDBData* ScXMLDatabaseRangeContext::ConvertToDBData(const OUString& rName)
                 for (SCCOL i = 0; i < nCount; ++i)
                 {
                     aParam.pSubTotals[nPos][i] = static_cast<SCCOL>(pAry[i].Column);
-                    aParam.pFunctions[nPos][i] =
-                        ScDataUnoConversion::GeneralToSubTotal( pAry[i].Function );
+                    aParam.pFunctions[nPos][i] = ScDPUtil::toSubTotalFunc(pAry[i].Function);
                 }
             }
             else
