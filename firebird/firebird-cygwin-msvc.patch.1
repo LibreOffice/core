@@ -30,7 +30,7 @@ diff -u firebird/builds/posix/make.defaults firebird/builds/posix/make.defaults
  
  LINK_LIBS = @LIBS@
 +ifeq ($(PLATFORM),win32)
-+ICU_LIBS = -licuuc -licudt -licui
++ICU_LIBS = -licuuc -licudt -licuin
 +else
  ICU_LIBS = -licuuc -licudata -licui18n
 +endif
