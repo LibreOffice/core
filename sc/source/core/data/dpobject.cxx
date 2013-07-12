@@ -1289,11 +1289,19 @@ public:
     FindByName(const OUString& rName) : maName(rName) {}
     bool operator() (const ScDPSaveDimension* pDim) const
     {
+        // Layout name takes precedence.
         const OUString* pLayoutName = pDim->GetLayoutName();
         if (pLayoutName)
             return *pLayoutName == maName;
 
-        return maName == pDim->GetName();
+        sheet::GeneralFunction eGenFunc = static_cast<sheet::GeneralFunction>(pDim->GetFunction());
+        ScSubTotalFunc eFunc = ScDPUtil::toSubTotalFunc(eGenFunc);
+        OUString aSrcName = ScDPUtil::getSourceDimensionName(pDim->GetName());
+        OUString aFuncName = ScDPUtil::getDisplayedMeasureName(aSrcName, eFunc);
+        if (maName == aFuncName)
+            return true;
+
+        return maName == aSrcName;
     }
 };
 

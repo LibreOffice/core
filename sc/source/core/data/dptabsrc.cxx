@@ -823,7 +823,7 @@ void ScDPSource::CreateRes_Impl()
         }
 
         // Map UNO's enum to internal enum ScSubTotalFunc.
-        aDataFunctions.push_back(ScDataUnoConversion::GeneralToSubTotal(eUser));
+        aDataFunctions.push_back(ScDPUtil::toSubTotalFunc(eUser));
 
         // Get reference field/item information.
         aDataRefValues.push_back(pDim->GetReferenceValue());

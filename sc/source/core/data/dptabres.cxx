@@ -24,12 +24,12 @@
 #include "global.hxx"
 #include "subtotal.hxx"
 #include "globstr.hrc"
-#include "datauno.hxx"      // ScDataUnoConversion
 #include "dpitemdata.hxx"
 
 #include "document.hxx"     // for DumpState only!
 #include "stlalgorithm.hxx"
 #include "dpresfilter.hxx"
+#include "dputil.hxx"
 
 #include <osl/diagnose.h>
 #include <rtl/math.hxx>
@@ -110,7 +110,7 @@ public:
         mrFilters.push_back(ScDPResultFilter(rName, bDataLayout));
     }
 
-    void pushDimValue(const ScDPItemData& rValue)
+    void pushDimValue(const OUString& rValue)
     {
         ScDPResultFilter& rFilter = mrFilters.back();
         rFilter.maValue = rValue;
@@ -749,7 +749,7 @@ static ScSubTotalFunc lcl_GetForceFunc( const ScDPLevel* pLevel, long nFuncNo )
         {
             sheet::GeneralFunction eUser = aSeq.getConstArray()[nFuncNo];
             if (eUser != sheet::GeneralFunction_AUTO)
-                eRet = ScDataUnoConversion::GeneralToSubTotal( eUser );
+                eRet = ScDPUtil::toSubTotalFunc(eUser);
         }
     }
     return eRet;
@@ -863,18 +863,11 @@ OUString ScDPResultData::GetMeasureString(long nMeasure, bool bForce, ScSubTotal
             if (pLayoutName)
                 return *pLayoutName;
         }
-        OUStringBuffer aRet;
+
         ScSubTotalFunc eFunc = ( eForceFunc == SUBTOTAL_FUNC_NONE ) ?
                                     GetMeasureFunction(nMeasure) : eForceFunc;
-        sal_uInt16 nId = nFuncStrIds[eFunc];
-        if (nId)
-        {
-            aRet.append(ScGlobal::GetRscString(nId));        // function name
-            aRet.appendAscii(RTL_CONSTASCII_STRINGPARAM(" - "));
-        }
-        aRet.append(maMeasureNames[nMeasure]);                   // field name
 
-        return aRet.makeStringAndClear();
+        return ScDPUtil::getDisplayedMeasureName(maMeasureNames[nMeasure], eFunc);
     }
 }
 
@@ -1002,6 +995,23 @@ OUString ScDPResultMember::GetName() const
         return pMemberDesc->GetNameStr();
     else
         return ScGlobal::GetRscString(STR_PIVOT_TOTAL);         // root member
+}
+
+OUString ScDPResultMember::GetDisplayName() const
+{
+    const ScDPMember* pDPMember = GetDPMember();
+    if (!pDPMember)
+        return OUString();
+
+    ScDPItemData aItem;
+    pDPMember->FillItemData(aItem);
+    if (aParentDimData.mpParentDim)
+    {
+        long nDim = aParentDimData.mpParentDim->GetDimension();
+        return pResultData->GetSource().GetData()->GetFormattedString(nDim, aItem);
+    }
+
+    return aItem.GetString();
 }
 
 void ScDPResultMember::FillItemData( ScDPItemData& rData ) const
@@ -1536,10 +1546,9 @@ void ScDPResultMember::FillDataResults(
     if (pDPMember)
     {
         // Root result has no corresponding DP member. Only take the non-root results.
-        ScDPItemData aItem;
-        pDPMember->FillItemData(aItem);
+        OUString aMemStr = GetDisplayName();
         pFilterStack.reset(new FilterStack(rFilterCxt.maFilters));
-        pFilterStack->pushDimValue(aItem);
+        pFilterStack->pushDimValue(aMemStr);
     }
 
     //  IsVisible() test is in ScDPResultDimension::FillDataResults
@@ -2044,12 +2053,8 @@ void ScDPDataMember::FillDataRow(
         // Topmost data member (pResultMember=NULL) doesn't need to be handled
         // since its immediate parent result member is linked to the same
         // dimension member.
-        ScDPItemData aItem;
-        const ScDPMember* pDPMember = pResultMember->GetDPMember();
-        if (pDPMember)
-            pDPMember->FillItemData(aItem);
         pFilterStack.reset(new FilterStack(rFilterCxt.maFilters));
-        pFilterStack->pushDimValue(aItem);
+        pFilterStack->pushDimValue(pResultMember->GetDisplayName());
     }
 
     OSL_ENSURE( pRefMember == pResultMember || !pResultMember, "bla" );
