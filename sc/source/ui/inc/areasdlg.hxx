@@ -62,7 +62,6 @@ private:
 
     OKButton*        pBtnOk;
     CancelButton*    pBtnCancel;
-    HelpButton*      pBtnHelp;
 
     sal_Bool            bDlgLostFocus;
     formula::RefEdit*       pRefInputEdit;
