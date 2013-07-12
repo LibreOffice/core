@@ -109,6 +109,7 @@ namespace connectivity
             sal_Bool                                m_bUseCatalog;  // should we use the catalog on filebased databases
             sal_Bool                                m_bUseOldDateFormat;
             sal_Bool                                m_bAutoCommit;
+            sal_Bool                                m_bReadOnly;
             isc_db_handle                           m_DBHandler;
             isc_tr_handle                           m_transactionHandle;
 
