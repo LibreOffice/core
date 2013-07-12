@@ -96,6 +96,7 @@ OConnection::OConnection(FirebirdDriver*    _pDriver)
                          m_bUseOldDateFormat(sal_False),
                          m_bAutoCommit(sal_True),
                          m_bReadOnly(sal_False),
+                         m_aTransactionIsolation(TransactionIsolation::REPEATABLE_READ),
                          m_DBHandler(0),
                          m_transactionHandle(0)
 {
@@ -383,11 +384,31 @@ void OConnection::setupTransaction()
         isc_rollback_transaction(status_vector, &m_transactionHandle);
     }
 
+    char aTransactionIsolation = 0;
+    switch (m_aTransactionIsolation)
+    {
+        // TODO: confirm that these are correct.
+        case(TransactionIsolation::READ_UNCOMMITTED):
+            aTransactionIsolation = isc_tpb_concurrency;
+            break;
+        case(TransactionIsolation::READ_COMMITTED):
+            aTransactionIsolation = isc_tpb_read_committed;
+            break;
+        case(TransactionIsolation::REPEATABLE_READ):
+            aTransactionIsolation = isc_tpb_consistency;
+            break;
+        case(TransactionIsolation::SERIALIZABLE):
+            aTransactionIsolation = isc_tpb_consistency;
+            break;
+        default:
+            assert( false ); // We must have a valid TransactionIsolation.
+    }
+
     static char isc_tpb[] = {
         isc_tpb_version3,
         (char) (m_bAutoCommit ? isc_tpb_autocommit : 0),
         (char) (!m_bReadOnly ? isc_tpb_write : isc_tpb_read),
-        isc_tpb_read_committed, // TODO: set isolation level here
+        aTransactionIsolation,
         isc_tpb_wait
     };
 
@@ -486,24 +507,22 @@ void SAL_CALL OConnection::setCatalog( const ::rtl::OUString& catalog ) throw(SQ
     // return your current catalog
     return ::rtl::OUString();
 }
-// --------------------------------------------------------------------------------
+
 void SAL_CALL OConnection::setTransactionIsolation( sal_Int32 level ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
 
-    // set your isolation level
-    // please have a look at @see com.sun.star.sdbc.TransactionIsolation
+    m_aTransactionIsolation = level;
+    setupTransaction();
 }
-// --------------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL OConnection::getTransactionIsolation(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
 
-
-    // please have a look at @see com.sun.star.sdbc.TransactionIsolation
-    return TransactionIsolation::NONE;
+    return m_aTransactionIsolation;
 }
 // --------------------------------------------------------------------------------
 Reference< ::com::sun::star::container::XNameAccess > SAL_CALL OConnection::getTypeMap(  ) throw(SQLException, RuntimeException)
