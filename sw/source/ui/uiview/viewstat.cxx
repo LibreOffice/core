@@ -82,7 +82,7 @@ void SwView::GetState(SfxItemSet &rSet)
 
             case FN_INSERT_CAPTION:
             {
-                // Captions gibt's fuer Grafiken, OLE-Objekte, Rahmen und Tabellen
+                // There are captions for graphics, OLE objects, frames and tables
                 if( !bGetFrmType )
                     eFrmType = m_pWrtShell->GetFrmType(0,sal_True), bGetFrmType = sal_True;
                 if (! ( ((eFrmType & FRMTYPE_FLY_ANY) && m_nSelectionType != nsSelectionType::SEL_DRW_TXT)||
@@ -148,8 +148,7 @@ void SwView::GetState(SfxItemSet &rSet)
             break;
             case SID_UNDO:
             {
-                // die muss noch nicht vorhanden sein
-                // also lasse sie mal anlegen:
+                // which must not be present, so let them create:
                 if( !m_pShell )
                     SelectShell();
 

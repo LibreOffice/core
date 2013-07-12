@@ -66,9 +66,8 @@
 
 using namespace ::com::sun::star;
 
-/*--------------------------------------------------------------------
-    Beschreibung:   Drucker an Sfx uebergeben
- --------------------------------------------------------------------*/
+// Hand over the printer to Sfx
+
 SfxPrinter* SwView::GetPrinter( sal_Bool bCreate )
 {
     const IDocumentDeviceAccess* pIDDA = GetWrtShell().getIDocumentDeviceAccess();
@@ -82,16 +81,15 @@ SfxPrinter* SwView::GetPrinter( sal_Bool bCreate )
     return pPrt;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:   Druckerwechsel weitermelden
- --------------------------------------------------------------------*/
+// Propagate printer change
+
 void SetPrinter( IDocumentDeviceAccess* pIDDA, SfxPrinter* pNew, sal_Bool bWeb )
 {
     SwPrintOptions* pOpt = SW_MOD()->GetPrtOptions(bWeb);
     if( !pOpt)
         return;
 
-    // Applikationseigene Druckoptionen aus SfxPrinter auslesen
+    // Reading Application own printing options from SfxPrinter
     const SfxItemSet& rSet = pNew->GetOptions();
 
     const SwAddPrinterItem* pAddPrinterAttr;
@@ -146,18 +144,16 @@ bool SwView::HasPrintOptionsPage() const
     return true;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:   TabPage fuer applikationsspezifische Druckoptionen
- --------------------------------------------------------------------*/
+// TabPage for application-specific print options
+
 SfxTabPage* SwView::CreatePrintOptionsPage(Window* pParent,
                                                     const SfxItemSet& rSet)
 {
     return ::CreatePrintOptionsPage( pParent, rSet, sal_False );
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:   Print-Dispatcher
- --------------------------------------------------------------------*/
+// Print dispatcher
+
 void SwView::ExecutePrint(SfxRequest& rReq)
 {
     sal_Bool bWeb = 0 != PTR_CAST(SwWebView, this);
@@ -247,10 +243,8 @@ void SwView::ExecutePrint(SfxRequest& rReq)
     }
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:   Page Drucker/Zusaetze erzeugen fuer SwView und
-                    SwPagePreview
- --------------------------------------------------------------------*/
+// Create page printer/additions for SwView and SwPagePreview
+
 SfxTabPage* CreatePrintOptionsPage( Window *pParent,
                                 const SfxItemSet &rOptions, sal_Bool bPreview )
 {
@@ -283,7 +277,7 @@ void SetAppPrintOptions( ViewShell* pSh, sal_Bool bWeb )
 
     if( pIDDA->getPrinter( false ) )
     {
-        // Applikationseigene Druckoptionen in SfxPrinter schiessen
+        // Close application own printing options in SfxPrinter.
         SwAddPrinterItem aAddPrinterItem (FN_PARAM_ADDPRINTER, aPrtData);
         SfxItemSet aSet( pSh->GetAttrPool(),
                     FN_PARAM_ADDPRINTER,        FN_PARAM_ADDPRINTER,
