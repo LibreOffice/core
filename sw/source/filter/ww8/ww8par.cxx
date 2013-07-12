@@ -3924,8 +3924,6 @@ void GiveNodePageDesc(SwNodeIndex &rIdx, const SwFmtPageDesc &rPgDesc,
 SwFmtPageDesc wwSectionManager::SetSwFmtPageDesc(mySegIter &rIter,
     mySegIter &rStart, bool bIgnoreCols)
 {
-    SwFmtPageDesc aEmpty;
-
     if (IsNewDoc() && rIter == rStart)
     {
         rIter->mpPage =
@@ -3940,7 +3938,7 @@ SwFmtPageDesc wwSectionManager::SetSwFmtPageDesc(mySegIter &rIter,
     }
     OSL_ENSURE(rIter->mpPage, "no page!");
     if (!rIter->mpPage)
-        return aEmpty;
+        return SwFmtPageDesc();
 
     // Set page before hd/ft
     const wwSection *pPrevious = 0;
