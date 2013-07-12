@@ -84,9 +84,14 @@ String STR_FPICKER_FOLDER_DEFAULT_DESCRIPTION
     Text [ en-US ] = "Please select a folder.";
 };
 
-String STR_FPICKER_ALREADYEXISTOVERWRITE
+String STR_FPICKER_ALREADYEXISTOVERWRITE_PRIMARY
 {
-    Text [ en-US ] = "A file named \"$filename$\" already exists.\n\nDo you want to replace it?" ;
+    Text [ en-US ] = "A file named \"$filename$\" already exists. Do you want to replace it?" ;
+};
+
+String STR_FPICKER_ALREADYEXISTOVERWRITE_SECONDARY
+{
+    Text [ en-US ] = "The file already exists in \"$dirname$\". Replacing it will overwrite its contents." ;
 };
 
 String STR_FPICKER_ALLFORMATS

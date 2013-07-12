@@ -31,13 +31,14 @@
 #include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
 
-#define FOLDERPICKER_TITLE            500
-#define FOLDER_PICKER_DEF_DESCRIPTION 501
-#define FILE_PICKER_TITLE_OPEN        502
-#define FILE_PICKER_TITLE_SAVE        503
-#define FILE_PICKER_FILE_TYPE         504
-#define FILE_PICKER_OVERWRITE         505
-#define FILE_PICKER_ALLFORMATS        506
+#define FOLDERPICKER_TITLE              500
+#define FOLDER_PICKER_DEF_DESCRIPTION   501
+#define FILE_PICKER_TITLE_OPEN          502
+#define FILE_PICKER_TITLE_SAVE          503
+#define FILE_PICKER_FILE_TYPE           504
+#define FILE_PICKER_OVERWRITE_PRIMARY   505
+#define FILE_PICKER_OVERWRITE_SECONDARY 506
+#define FILE_PICKER_ALLFORMATS          507
 
 class SalGtkPicker
 {

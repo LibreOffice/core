@@ -1011,7 +1011,6 @@ sal_Int16 SAL_CALL SalGtkFilePicker::execute() throw( uno::RuntimeException )
                         gchar *gFileName = g_filename_from_uri ( sFileName.getStr(), NULL, NULL );
                         if( g_file_test( gFileName, G_FILE_TEST_IS_REGULAR ) )
                         {
-                            GtkWidget *dlg;
                             INetURLObject aFileObj( sFileName );
 
                             OString baseName(
@@ -1026,11 +1025,11 @@ sal_Int16 SAL_CALL SalGtkFilePicker::execute() throw( uno::RuntimeException )
                             );
                             OString aMsg(
                               OUStringToOString(
-                                getResString( FILE_PICKER_OVERWRITE ),
+                                getResString( FILE_PICKER_OVERWRITE_PRIMARY ),
                                 RTL_TEXTENCODING_UTF8
                               )
                             );
-                            OString toReplace( RTL_CONSTASCII_STRINGPARAM( "$filename$" ));
+                            OString toReplace("$filename$");
 
                             aMsg = aMsg.replaceAt(
                               aMsg.indexOf( toReplace ),
@@ -1038,13 +1037,44 @@ sal_Int16 SAL_CALL SalGtkFilePicker::execute() throw( uno::RuntimeException )
                               baseName
                             );
 
-                            dlg = gtk_message_dialog_new( NULL,
+                            GtkWidget *dlg = gtk_message_dialog_new( NULL,
                                 GTK_DIALOG_MODAL,
                                 GTK_MESSAGE_QUESTION,
                                 GTK_BUTTONS_YES_NO,
                                 "%s",
                                 aMsg.getStr()
                             );
+
+                            sal_Int32 nSegmentCount = aFileObj.getSegmentCount();
+                            if (nSegmentCount >= 2)
+                            {
+                                OString dirName(
+                                  OUStringToOString(
+                                    aFileObj.getName(
+                                      nSegmentCount-2,
+                                      true,
+                                      INetURLObject::DECODE_WITH_CHARSET
+                                    ),
+                                    RTL_TEXTENCODING_UTF8
+                                  )
+                                );
+
+                                aMsg =
+                                  OUStringToOString(
+                                    getResString( FILE_PICKER_OVERWRITE_SECONDARY ),
+                                    RTL_TEXTENCODING_UTF8
+                                  );
+
+                                toReplace = "$dirname$";
+
+                                aMsg = aMsg.replaceAt(
+                                  aMsg.indexOf( toReplace ),
+                                  toReplace.getLength(),
+                                  dirName
+                                );
+
+                                gtk_message_dialog_format_secondary_text( GTK_MESSAGE_DIALOG( dlg ), "%s", aMsg.getStr() );
+                            }
 
                             gtk_window_set_title( GTK_WINDOW( dlg ),
                                 OUStringToOString(getResString(FILE_PICKER_TITLE_SAVE ),
