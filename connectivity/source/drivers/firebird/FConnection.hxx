@@ -110,6 +110,9 @@ namespace connectivity
             sal_Bool                                m_bUseOldDateFormat;
             sal_Bool                                m_bAutoCommit;
             sal_Bool                                m_bReadOnly;
+
+            sal_Int32                               m_aTransactionIsolation;
+
             isc_db_handle                           m_DBHandler;
             isc_tr_handle                           m_transactionHandle;
 
