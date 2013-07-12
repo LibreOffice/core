@@ -71,15 +71,16 @@
 using namespace connectivity::firebird;
 using namespace connectivity;
 
-using namespace com::sun::star;
-using namespace com::sun::star::beans;
-using namespace com::sun::star::document;
-using namespace com::sun::star::embed;
-using namespace com::sun::star::frame;
-using namespace com::sun::star::io;
-using namespace com::sun::star::lang;
-using namespace com::sun::star::sdbc;
-using namespace com::sun::star::uno;
+using namespace ::com::sun::star;
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::document;
+using namespace ::com::sun::star::embed;
+using namespace ::com::sun::star::frame;
+using namespace ::com::sun::star::io;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::sdbc;
+using namespace ::com::sun::star::uno;
 
 const OUString OConnection::sDBLocation( "firebird.fdb" );
 
@@ -92,7 +93,6 @@ OConnection::OConnection(FirebirdDriver*    _pDriver)
                          m_sUser(),
                          m_pDriver(_pDriver),
                          m_bClosed(sal_False),
-                         m_bUseCatalog(sal_False),
                          m_bUseOldDateFormat(sal_False),
                          m_bAutoCommit(sal_True),
                          m_bReadOnly(sal_False),
@@ -493,7 +493,7 @@ sal_Bool SAL_CALL OConnection::isReadOnly() throw(SQLException, RuntimeException
 void SAL_CALL OConnection::setCatalog(const OUString& catalog)
                                             throw(SQLException, RuntimeException)
 {
-    // Unsupported
+    ::dbtools::throwFeatureNotImplementedException( "XConnection::setCatalog", *this );
     (void) catalog;
 }
 
@@ -519,23 +519,21 @@ sal_Int32 SAL_CALL OConnection::getTransactionIsolation(  ) throw(SQLException, 
 
     return m_aTransactionIsolation;
 }
-// --------------------------------------------------------------------------------
-Reference< ::com::sun::star::container::XNameAccess > SAL_CALL OConnection::getTypeMap(  ) throw(SQLException, RuntimeException)
-{
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OConnection_BASE::rBHelper.bDisposed);
 
-    // if your driver has special database types you can return it here
-
-    return NULL;
-}
-// --------------------------------------------------------------------------------
-void SAL_CALL OConnection::setTypeMap( const Reference< ::com::sun::star::container::XNameAccess >& typeMap ) throw(SQLException, RuntimeException)
+Reference< XNameAccess > SAL_CALL OConnection::getTypeMap() throw(SQLException, RuntimeException)
 {
-    // the other way around
+    ::dbtools::throwFeatureNotImplementedException( "XConnection::getTypeMap", *this );
+    return 0;
 }
-// --------------------------------------------------------------------------------
-// XCloseable
+
+void SAL_CALL OConnection::setTypeMap(const Reference< XNameAccess >& typeMap)
+                                            throw(SQLException, RuntimeException)
+{
+    ::dbtools::throwFeatureNotImplementedException( "XConnection::setTypeMap", *this );
+    (void) typeMap;
+}
+
+//----- XCloseable -----------------------------------------------------------
 void SAL_CALL OConnection::close(  ) throw(SQLException, RuntimeException)
 {
     SAL_INFO("connectivity.firebird", "=> OConnection::close().");
