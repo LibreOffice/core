@@ -530,7 +530,16 @@ void EditorWindow::KeyInput( const KeyEvent& rKEvt )
         OUString aLine( pEditEngine->GetText( nLine ) ); // the line being modified
         OUString aStr = aLine.copy( std::max(aLine.lastIndexOf(" "), aLine.lastIndexOf("\t"))+1 ); // variable name
         OUString sActSub = GetActualSubName( nLine );
-        std::vector< OUString > aVect = Split( aStr, '.' );
+        std::vector< OUString > aVect; //= Split( aStr, '.' );
+
+        HighlightPortions aPortions;
+        aHighlighter.getHighlightPortions( nLine, aLine, aPortions );
+        for ( size_t i = 0; i < aPortions.size(); i++ )
+        {
+            HighlightPortion& r = aPortions[i];
+            if( r.tokenType == 1 ) // extract the identifers(methods, base variable)
+                aVect.push_back( aLine.copy(r.nBegin, r.nEnd - r.nBegin) );
+        }
         OUString sBaseName = aVect[0];
         for( unsigned int i = 0; i < aCodeCompleteCache.size(); ++i)
         {
