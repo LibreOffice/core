@@ -1226,16 +1226,6 @@ void TreeControlPeer::onChangeDataModel( UnoTreeListBoxImpl& rTree, const Refere
     if( mxDataModel.is() )
         mxDataModel->removeTreeDataModelListener( xListener );
 
-    if( !xDataModel.is() )
-    {
-        static const OUString aSN( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.tree.DefaultTreeDataModel" ) );
-        Reference< XMultiServiceFactory > xORB( ::comphelper::getProcessServiceFactory() );
-        if( xORB.is() )
-        {
-            mxDataModel.query( xORB->createInstance( aSN ) );
-        }
-    }
-
     mxDataModel = xDataModel;
 
     fillTree( rTree, mxDataModel );
