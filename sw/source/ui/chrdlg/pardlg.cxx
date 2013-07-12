@@ -50,15 +50,21 @@ SwParaDlg::SwParaDlg(Window *pParent,
                     sal_uInt8 nDialogMode,
                     const String *pTitle,
                     sal_Bool bDraw,
-                    sal_uInt16 nDefPage):
-    SfxTabDialog(pParent,
+                    sal_uInt16 nDefPage)
+    : SfxTabDialog(pParent,
                  "ParagraphPropertiesDialog",
                  "modules/swriter/ui/paradialog.ui",
-                 &rCoreSet,  0 != pTitle),
-    rView(rVw),
-    nDlgMode(nDialogMode),
-    bDrawParaDlg(bDraw)
-
+                 &rCoreSet,  0 != pTitle)
+    , rView(rVw)
+    , nDlgMode(nDialogMode)
+    , bDrawParaDlg(bDraw)
+    , m_nParaStd(0)
+    , m_nParaAlign(0)
+    , m_nParaExt(0)
+    , m_nParaNumPara(0)
+    , m_nParaDrpCps(0)
+    , m_nParaBckGrnd(0)
+    , m_nParaBorder(0)
 {
     nHtmlMode = ::GetHtmlMode(rVw.GetDocShell());
     sal_Bool bHtmlMode = static_cast< sal_Bool >(nHtmlMode & HTMLMODE_ON);
@@ -101,7 +107,7 @@ SwParaDlg::SwParaDlg(Window *pParent,
     {
         OSL_ENSURE(pFact->GetTabPageCreatorFunc(RID_SVXPAGE_PARA_ASIAN), "GetTabPageCreatorFunc fail!");
         OSL_ENSURE(pFact->GetTabPageRangesFunc(RID_SVXPAGE_PARA_ASIAN), "GetTabPageRangesFunc fail!");
-        m_nParaAsian = AddTabPage( "labelTP_PARA_ASIAN",  pFact->GetTabPageCreatorFunc(RID_SVXPAGE_PARA_ASIAN),
+        AddTabPage( "labelTP_PARA_ASIAN",  pFact->GetTabPageCreatorFunc(RID_SVXPAGE_PARA_ASIAN),
                                    pFact->GetTabPageRangesFunc(RID_SVXPAGE_PARA_ASIAN) );
     }
     else
@@ -115,7 +121,7 @@ SwParaDlg::SwParaDlg(Window *pParent,
     {
         OSL_ENSURE(pFact->GetTabPageCreatorFunc(RID_SVXPAGE_TABULATOR), "GetTabPageCreatorFunc fail!");
         OSL_ENSURE(pFact->GetTabPageRangesFunc(RID_SVXPAGE_TABULATOR), "GetTabPageRangesFunc fail!");
-        m_nParaTab = AddTabPage( "labelTP_TABULATOR", pFact->GetTabPageCreatorFunc(RID_SVXPAGE_TABULATOR), pFact->GetTabPageRangesFunc(RID_SVXPAGE_TABULATOR) );
+        AddTabPage( "labelTP_TABULATOR", pFact->GetTabPageCreatorFunc(RID_SVXPAGE_TABULATOR), pFact->GetTabPageRangesFunc(RID_SVXPAGE_TABULATOR) );
     }
 
     // remove unwanted tabs for draw text box paragraph properties
