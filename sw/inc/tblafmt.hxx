@@ -128,7 +128,8 @@ public:
 
     SwTableAutoFmt& operator=( const SwTableAutoFmt& rNew );
 
-    SwTableFmt* GetTableStyle() { return m_pTableStyle; }
+    SwTableFmt* GetTableStyle() const   { return m_pTableStyle; }
+    SwTableFmt* GetTableStyle()         { return m_pTableStyle; }
 
     void SetBoxFmt( const SwTableBoxFmt& rNew, sal_uInt8 nPos );
     SwTableBoxFmt* GetBoxFmt( sal_uInt8 nPos ) const;

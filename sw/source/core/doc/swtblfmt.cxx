@@ -110,7 +110,7 @@ void SwTableFmt::SetBoxFmt( const SwTableBoxFmt& rNew, sal_uInt8 nPos )
     sal_uInt8 nLine = nPos / 4;
     sal_uInt8 nBox = nPos % 4;
 
-    SwTableLineFmt* pLine;
+    SwTableLineFmt* pLine = 0;
 
     switch( nLine )
     {
@@ -145,7 +145,7 @@ SwTableBoxFmt* SwTableFmt::GetBoxFmt( sal_uInt8 nPos ) const
     sal_uInt8 nLine = nPos / 4;
     sal_uInt8 nBox = nPos % 4;
 
-    SwTableLineFmt* pLine;
+    SwTableLineFmt* pLine = 0;
     SwTableBoxFmt* pRet;
 
     switch( nLine )
