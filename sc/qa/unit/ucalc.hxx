@@ -94,6 +94,8 @@ public:
     void testFuncDATEDIF();
     void testFuncINDIRECT();
     void testFuncIFERROR();
+    void testFuncGETPIVOTDATA();
+
     void testCopyToDocument();
     /**
      * Make sure the SHEETS function gets properly updated during sheet
@@ -280,6 +282,7 @@ public:
     CPPUNIT_TEST(testFuncDATEDIF);
     CPPUNIT_TEST(testFuncINDIRECT);
     CPPUNIT_TEST(testFuncIFERROR);
+    CPPUNIT_TEST(testFuncGETPIVOTDATA);
     CPPUNIT_TEST(testCopyToDocument);
     CPPUNIT_TEST(testSheetsFunc);
     CPPUNIT_TEST(testVolatileFunc);

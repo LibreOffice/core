@@ -2076,4 +2076,165 @@ void Test::testPivotTableDocFunc()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testFuncGETPIVOTDATA()
+{
+    m_pDoc->InsertTab(0, "Data");
+    m_pDoc->InsertTab(1, "Table");
+
+    // Raw data
+    const char* aData[][2] = {
+        { "Name", "Value" },
+        { "A", "1" },
+        { "A", "2" },
+        { "A", "3" },
+        { "B", "4" },
+        { "B", "5" },
+        { "B", "6" },
+    };
+
+    ScAddress aPos(1,1,0);
+    ScRange aDataRange = insertRangeData(m_pDoc, aPos, aData, SAL_N_ELEMENTS(aData));
+    CPPUNIT_ASSERT_MESSAGE("failed to insert range data at correct position", aDataRange.aStart == aPos);
+
+    ScDPObject* pDPObj = NULL;
+
+    {
+        // Dimension definition
+        DPFieldDef aFields[] = {
+            { "Name", sheet::DataPilotFieldOrientation_ROW, 0 },
+            { "Value", sheet::DataPilotFieldOrientation_DATA, sheet::GeneralFunction_SUM },
+        };
+
+        pDPObj = createDPFromRange(m_pDoc, aDataRange, aFields, SAL_N_ELEMENTS(aFields), false);
+    }
+
+    ScDPCollection* pDPs = m_pDoc->GetDPCollection();
+    bool bSuccess = pDPs->InsertNewTable(pDPObj);
+
+    CPPUNIT_ASSERT_MESSAGE("failed to insert a new pivot table object into document.", bSuccess);
+    CPPUNIT_ASSERT_MESSAGE("there should be only one data pilot table.",
+                           pDPs->GetCount() == 1);
+    pDPObj->SetName(pDPs->CreateNewName());
+
+    ScRange aOutRange = refresh(pDPObj);
+    {
+        // Expected output table content.  0 = empty cell
+        const char* aOutputCheck[][2] = {
+            { "Name", 0 },
+            { "A", "6" },
+            { "B", "15" },
+            { "Total Result", "21" },
+        };
+
+        bSuccess = checkDPTableOutput<2>(m_pDoc, aOutRange, aOutputCheck, "Pivot table created for GETPIVOTDATA");
+        CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
+    }
+
+    aPos = aOutRange.aEnd;
+    aPos.IncRow(2); // Move 2 rows down from the table outout.
+
+    OUString aPivotPosStr;
+    aOutRange.aStart.Format(aPivotPosStr, SCA_ABS);
+
+    sc::AutoCalcSwitch aSwitch(*m_pDoc, true); // turn autocalc on.
+
+    // First, get the grand total.
+    OUString aFormula("=GETPIVOTDATA(\"Value\";");
+    aFormula += aPivotPosStr;
+    aFormula += ")";
+    m_pDoc->SetString(aPos, aFormula);
+    double fVal = m_pDoc->GetValue(aPos);
+    CPPUNIT_ASSERT_EQUAL(21.0, fVal);
+
+    // Get the subtotal for 'A'.
+    aFormula = "=GETPIVOTDATA(\"Value\";" + aPivotPosStr + ";\"Name\";\"A\")";
+    m_pDoc->SetString(aPos, aFormula);
+    fVal = m_pDoc->GetValue(aPos);
+    CPPUNIT_ASSERT_EQUAL(6.0, fVal);
+
+    // Get the subtotal for 'B'.
+    aFormula = "=GETPIVOTDATA(\"Value\";" + aPivotPosStr + ";\"Name\";\"B\")";
+    m_pDoc->SetString(aPos, aFormula);
+    fVal = m_pDoc->GetValue(aPos);
+    CPPUNIT_ASSERT_EQUAL(15.0, fVal);
+
+    clearRange(m_pDoc, aPos); // Delete the formula.
+
+    pDPs->FreeTable(pDPObj);
+
+    {
+        // Dimension definition
+        DPFieldDef aFields[] = {
+            { "Name", sheet::DataPilotFieldOrientation_ROW, 0 },
+            { "Value", sheet::DataPilotFieldOrientation_DATA, sheet::GeneralFunction_SUM },
+            { "Value", sheet::DataPilotFieldOrientation_DATA, sheet::GeneralFunction_COUNT },
+        };
+
+        pDPObj = createDPFromRange(m_pDoc, aDataRange, aFields, SAL_N_ELEMENTS(aFields), false);
+    }
+
+    pDPs->InsertNewTable(pDPObj);
+    aOutRange = refresh(pDPObj);
+
+    {
+        // Expected output table content.  0 = empty cell
+        const char* aOutputCheck[][3] = {
+            { "Name",                "Data",           0   },
+            { "A",                   "Sum - Value",   "6"  },
+            {  0,                    "Count - Value", "3"  },
+            { "B",                   "Sum - Value",  "15"  },
+            {  0,                    "Count - Value", "3"  },
+            { "Total Sum - Value",   0,               "21" },
+            { "Total Count - Value", 0,               "6"  },
+        };
+
+        bSuccess = checkDPTableOutput<3>(m_pDoc, aOutRange, aOutputCheck, "Pivot table refreshed");
+        CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
+    }
+
+    aPos = aOutRange.aEnd;
+    aPos.IncRow(2); // move 2 rows down from the output.
+
+    aOutRange.aStart.Format(aPivotPosStr, SCA_ABS);
+
+    // First, get the grand totals.
+    aFormula = ("=GETPIVOTDATA(\"Sum - Value\";") + aPivotPosStr + ")";
+    m_pDoc->SetString(aPos, aFormula);
+    fVal = m_pDoc->GetValue(aPos);
+    CPPUNIT_ASSERT_EQUAL(21.0, fVal);
+    aFormula = ("=GETPIVOTDATA(\"Count - Value\";") + aPivotPosStr + ")";
+    m_pDoc->SetString(aPos, aFormula);
+    fVal = m_pDoc->GetValue(aPos);
+    CPPUNIT_ASSERT_EQUAL(6.0, fVal);
+
+    // Get the subtotals for 'A'.
+    aFormula = "=GETPIVOTDATA(\"Sum - Value\";" + aPivotPosStr + ";\"Name\";\"A\")";
+    m_pDoc->SetString(aPos, aFormula);
+    fVal = m_pDoc->GetValue(aPos);
+    CPPUNIT_ASSERT_EQUAL(6.0, fVal);
+    aFormula = "=GETPIVOTDATA(\"Count - Value\";" + aPivotPosStr + ";\"Name\";\"A\")";
+    m_pDoc->SetString(aPos, aFormula);
+    fVal = m_pDoc->GetValue(aPos);
+    CPPUNIT_ASSERT_EQUAL(3.0, fVal);
+
+    // Get the subtotals for 'B'.
+    aFormula = "=GETPIVOTDATA(\"Sum - Value\";" + aPivotPosStr + ";\"Name\";\"B\")";
+    m_pDoc->SetString(aPos, aFormula);
+    fVal = m_pDoc->GetValue(aPos);
+    CPPUNIT_ASSERT_EQUAL(15.0, fVal);
+    aFormula = "=GETPIVOTDATA(\"Count - Value\";" + aPivotPosStr + ";\"Name\";\"B\")";
+    m_pDoc->SetString(aPos, aFormula);
+    fVal = m_pDoc->GetValue(aPos);
+    CPPUNIT_ASSERT_EQUAL(3.0, fVal);
+
+    pDPs->FreeTable(pDPObj);
+
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be no more tables.", pDPs->GetCount(), static_cast<size_t>(0));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("There shouldn't be any more cache stored.",
+                           pDPs->GetSheetCaches().size(), static_cast<size_t>(0));
+
+    m_pDoc->DeleteTab(1);
+    m_pDoc->DeleteTab(0);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -11,6 +11,7 @@
 #define SC_DEBUG_HELPER_HXX
 
 #include <rtl/strbuf.hxx>
+#include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
 
 #ifdef WNT
