@@ -30,16 +30,10 @@ $(eval $(call gb_CppunitTest_use_libraries,smoketest,\
 	unotest \
 ))
 
-ifeq ($(OS),MACOSX)
-smoketest_SOFFICE := path:$(gb_DEVINSTALLROOT)/MacOS/soffice
-else
-smoketest_SOFFICE := path:$(gb_DEVINSTALLROOT)/program/soffice
-endif
-
 $(eval $(call gb_CppunitTest_use_ure,smoketest))
 
 $(eval $(call gb_CppunitTest_add_arguments,smoketest,\
-	-env:arg-soffice=$(smoketest_SOFFICE) \
+	-env:arg-soffice=$(gb_JunitTest_SOFFICEARG) \
 	-env:arg-user=$(WORKDIR)/CustomTarget/smoketest \
 	-env:arg-env=$(gb_Helper_LIBRARY_PATH_VAR)"$$$${$(gb_Helper_LIBRARY_PATH_VAR)+=$$$$$(gb_Helper_LIBRARY_PATH_VAR)}" \
 	-env:arg-testarg.smoketest.doc=$(WORKDIR)/Zip/smoketestdoc.sxw \
