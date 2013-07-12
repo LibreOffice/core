@@ -1245,7 +1245,7 @@ Size GtkSalFrame::calcDefaultSize()
     long h = aScreenSize.Height();
 
 
-    if (true || aScreenSize.Width() <= 1024)
+    if (aScreenSize.Width() <= 1024)
     {
         // For small screen use the old default values.  Original comment:
         // fill in holy default values brought to us by product management
