@@ -18,6 +18,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.content.LocalBroadcastManager;
@@ -50,7 +51,7 @@ public class PairingActivity extends SherlockActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         String aPin = getIntent().getStringExtra("PIN");
-        String aServerName = getIntent().getStringExtra("SERVERNAME");
+        String aServerName = Build.MODEL;
 
         ((TextView) findViewById(R.id.pairing_pin)).setText(aPin);
         ((TextView) findViewById(R.id.pairing_instruction2_deviceName))

@@ -126,8 +126,8 @@ public class ComputerConnectionFragment extends SherlockFragment implements Serv
 
         @Override
         public void onReceive(Context aContext, Intent aIntent) {
-            if (Intents.Actions.PAIRING_STARTED.equals(aIntent.getAction())) {
-                String aPin = aIntent.getStringExtra("PIN");
+            if (Intents.Actions.PAIRING_VALIDATION.equals(aIntent.getAction())) {
+                String aPin = aIntent.getStringExtra(Intents.Extras.PIN);
 
                 mComputerConnectionFragment.setUpPinValidationInstructions(aPin);
 
@@ -148,7 +148,7 @@ public class ComputerConnectionFragment extends SherlockFragment implements Serv
 
     private IntentFilter buildIntentsReceiverFilter() {
         IntentFilter aIntentFilter = new IntentFilter();
-        aIntentFilter.addAction(Intents.Actions.PAIRING_STARTED);
+        aIntentFilter.addAction(Intents.Actions.PAIRING_VALIDATION);
         aIntentFilter.addAction(Intents.Actions.PAIRING_SUCCESSFUL);
         aIntentFilter.addAction(Intents.Actions.CONNECTION_FAILED);
 

@@ -15,7 +15,6 @@ public final class Intents {
 
         public static final String SERVERS_LIST_CHANGED = "SERVERS_LIST_CHANGED";
 
-        public static final String PAIRING_STARTED = "PAIRING_STARTED";
         public static final String PAIRING_SUCCESSFUL = "PAIRING_SUCCESSFUL";
         public static final String PAIRING_VALIDATION = "PAIRING_VALIDATION";
 
@@ -37,7 +36,6 @@ public final class Intents {
         public static final String PIN = "PIN";
 
         public static final String SERVER = "SERVER";
-        public static final String SERVER_NAME = "SERVER_NAME";
 
         public static final String SLIDE_INDEX = "SLIDE_INDEX";
     }
@@ -46,21 +44,13 @@ public final class Intents {
         return new Intent(Actions.SERVERS_LIST_CHANGED);
     }
 
-    public static Intent buildPairingStartedIntent(String aPin) {
-        Intent aIntent = new Intent(Actions.PAIRING_STARTED);
-        aIntent.putExtra(Extras.PIN, aPin);
-
-        return aIntent;
-    }
-
     public static Intent buildPairingSuccessfulIntent() {
         return new Intent(Actions.PAIRING_SUCCESSFUL);
     }
 
-    public static Intent buildPairingValidationIntent(String aPin, String aServerName) {
+    public static Intent buildPairingValidationIntent(String aPin) {
         Intent aIntent = new Intent(Actions.PAIRING_VALIDATION);
         aIntent.putExtra(Extras.PIN, aPin);
-        aIntent.putExtra(Extras.SERVER_NAME, aServerName);
 
         return aIntent;
     }

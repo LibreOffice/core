@@ -118,7 +118,9 @@ public class CommunicationService extends Service implements Runnable, MessagesL
         mMessagesReceiver = new MessagesReceiver(mServerConnection, this);
         mCommandsTransmitter = new CommandsTransmitter(mServerConnection);
 
-        pairWithServer();
+        if (isPairingNecessary()) {
+            pair();
+        }
 
         mState = State.CONNECTED;
     }
@@ -136,19 +138,12 @@ public class CommunicationService extends Service implements Runnable, MessagesL
         }
     }
 
-    private void pairWithServer() {
-        if (mServerDesired.getProtocol() == Server.Protocol.BLUETOOTH) {
-            return;
-        }
-
-        mCommandsTransmitter.pair(getDeviceName(), loadPin());
-
-        startPairingActivity();
+    private boolean isPairingNecessary() {
+        return mServerDesired.getProtocol() == Server.Protocol.TCP;
     }
 
-    private void startPairingActivity() {
-        Intent aIntent = Intents.buildPairingStartedIntent(loadPin());
-        LocalBroadcastManager.getInstance(this).sendBroadcast(aIntent);
+    private void pair() {
+        mCommandsTransmitter.pair(getDeviceName(), loadPin());
     }
 
     private String loadPin() {
@@ -268,10 +263,7 @@ public class CommunicationService extends Service implements Runnable, MessagesL
 
     @Override
     public void onPinValidation() {
-        String aPin = loadPin();
-        String aServerName = mServerDesired.getName();
-
-        Intent aIntent = Intents.buildPairingValidationIntent(aPin, aServerName);
+        Intent aIntent = Intents.buildPairingValidationIntent(loadPin());
         LocalBroadcastManager.getInstance(this).sendBroadcast(aIntent);
     }
 
