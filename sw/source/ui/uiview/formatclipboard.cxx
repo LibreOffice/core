@@ -21,22 +21,17 @@
 #include "formatclipboard.hxx"
 
 
-#include <hintids.hxx>
 #include <svx/svxids.hrc>
 #include <cmdid.h>
-#include <format.hxx>
 #include <charfmt.hxx>
-#include <fmtcol.hxx>
 #include <frmfmt.hxx>
 #include <docstyle.hxx>
 #include <fchrfmt.hxx>
-#include <pam.hxx>
 // header for class SdrView
 #include <svx/svdview.hxx>
 //SvxBrushItem
 #include <editeng/brushitem.hxx>
 #include <editeng/shaditem.hxx>
-#include <frmatr.hxx>
 // header for class SvxBoxInfoItem
 #include <editeng/boxitem.hxx>
 // header for class SvxFmtBreakItem
@@ -47,13 +42,8 @@
 #include <editeng/keepitem.hxx>
 // header for class SvxFrameDirectionItem
 #include <editeng/frmdiritem.hxx>
-#include <paratr.hxx>
 #include <fmtpdsc.hxx>
 #include <fmtrowsplt.hxx>
-#include <swundo.hxx>           // for the UndoIds
-#include <boost/shared_ptr.hpp>
-
-
 
 namespace
 {
