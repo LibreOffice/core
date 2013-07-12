@@ -65,9 +65,9 @@
 
 - (void)startMotionDetect
 {
-//    __block float stepMoveFactorX = 5;
-//    __block float stepMoveFactorY = 5;
-//    __block double refX, refY;
+    //    __block float stepMoveFactorX = 5;
+    //    __block float stepMoveFactorY = 5;
+    //    __block double refX, refY;
 
     [self.motionManager
      startAccelerometerUpdatesToQueue:[[NSOperationQueue alloc] init]
@@ -76,38 +76,38 @@
 
          dispatch_async(dispatch_get_main_queue(),
                         ^{
-                                CGRect rect = self.movingPointer.frame;
-                                NSLog(@"x:%f y:%f z:%f", data.acceleration.x, data.acceleration.y, data.acceleration.z);
-                                // Used to calibrate pointer based on initial position
-                                //                            if (self.pointerCalibrationOn){
-                                //                                refX = data.acceleration.x;
-                                //                                refY = data.acceleration.y;
-                                //                                self.pointerCalibrationOn = NO;
-                                //                            }
-//                                float movetoX = rect.origin.x + ((data.acceleration.x - refX) * stepMoveFactorX);
+                            CGRect rect = self.movingPointer.frame;
+                            NSLog(@"x:%f y:%f z:%f", data.acceleration.x, data.acceleration.y, data.acceleration.z);
+                            // Used to calibrate pointer based on initial position
+                            //                            if (self.pointerCalibrationOn){
+                            //                                refX = data.acceleration.x;
+                            //                                refY = data.acceleration.y;
+                            //                                self.pointerCalibrationOn = NO;
+                            //                            }
+                            //                                float movetoX = rect.origin.x + ((data.acceleration.x - refX) * stepMoveFactorX);
 
-                                float movetoX = self.touchPointerImage.frame.origin.x + self.touchPointerImage.frame.size.width * ABS(data.acceleration.x - self.refLeftUpperGravity.x) / ABS(self.refRightUpperGravity.x - self.refLeftUpperGravity.x);
-                                float maxX = self.touchPointerImage.frame.origin.x + self.touchPointerImage.frame.size.width - rect.size.width;
+                            float movetoX = self.touchPointerImage.frame.origin.x + self.touchPointerImage.frame.size.width * ABS(data.acceleration.x - self.refLeftUpperGravity.x) / ABS(self.refRightUpperGravity.x - self.refLeftUpperGravity.x);
+                            float maxX = self.touchPointerImage.frame.origin.x + self.touchPointerImage.frame.size.width - rect.size.width;
 
-//                                float movetoY = (rect.origin.y) + ((data.acceleration.y - refY) * stepMoveFactorY);
-                                float movetoY = self.touchPointerImage.frame.origin.y + self.touchPointerImage.frame.size.height * ABS(data.acceleration.y - self.refRightUpperGravity.y) / ABS(self.refRightLowerGravity.y - self.refRightUpperGravity.y);
-                                float maxY = self.touchPointerImage.frame.origin.y + self.touchPointerImage.frame.size.height;
+                            //                                float movetoY = (rect.origin.y) + ((data.acceleration.y - refY) * stepMoveFactorY);
+                            float movetoY = self.touchPointerImage.frame.origin.y + self.touchPointerImage.frame.size.height * ABS(data.acceleration.y - self.refRightUpperGravity.y) / ABS(self.refRightLowerGravity.y - self.refRightUpperGravity.y);
+                            float maxY = self.touchPointerImage.frame.origin.y + self.touchPointerImage.frame.size.height;
 
-                                if ( movetoX > self.touchPointerImage.frame.origin.x && movetoX < maxX ) {
-                                    rect.origin.x = movetoX;
-                                };
+                            if ( movetoX > self.touchPointerImage.frame.origin.x && movetoX < maxX ) {
+                                rect.origin.x = movetoX;
+                            };
 
-                                if ( movetoY > self.touchPointerImage.frame.origin.y && movetoY < maxY ) {
-                                    rect.origin.y = movetoY;
-                                };
+                            if ( movetoY > self.touchPointerImage.frame.origin.y && movetoY < maxY ) {
+                                rect.origin.y = movetoY;
+                            };
 
-                                [UIView animateWithDuration:0 delay:0
-                                                    options:UIViewAnimationOptionCurveEaseIn
-                                                 animations:^{
-                                     self.movingPointer.frame = rect;
-                                 }
-                                                 completion:nil
-                                 ];
+                            [UIView animateWithDuration:0 delay:0
+                                                options:UIViewAnimationOptionCurveEaseIn
+                                             animations:^{
+                                                 self.movingPointer.frame = rect;
+                                             }
+                                             completion:nil
+                             ];
                         });
      }];
 }
@@ -186,29 +186,33 @@
 }
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
-    UITouch *touch = [[event allTouches] anyObject];
-    CGPoint loc = [touch locationInView:self.touchPointerImage];
-    if (loc.x >= 0 && loc.x <= self.touchPointerImage.frame.size.width
-        && loc.y >= 0 && loc.y <= self.touchPointerImage.frame.size.height){
-        CGPoint p;
-        p.x = loc.x + self.touchPointerImage.frame.origin.x;
-        p.y = loc.y + self.touchPointerImage.frame.origin.y;
-        self.movingPointer.center = p;
-        [self.movingPointer setHidden:NO];
+    if (!self.touchPointerImage.isHidden){
+        UITouch *touch = [[event allTouches] anyObject];
+        CGPoint loc = [touch locationInView:self.touchPointerImage];
+        if (loc.x >= 0 && loc.x <= self.touchPointerImage.frame.size.width
+            && loc.y >= 0 && loc.y <= self.touchPointerImage.frame.size.height){
+            CGPoint p;
+            p.x = loc.x + self.touchPointerImage.frame.origin.x;
+            p.y = loc.y + self.touchPointerImage.frame.origin.y;
+            self.movingPointer.center = p;
+            [self.movingPointer setHidden:NO];
+        }
     }
 }
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    UITouch *touch = [[event allTouches] anyObject];
-    CGPoint loc = [touch locationInView:self.touchPointerImage];
-    if (loc.x >= 0 && loc.x <= self.touchPointerImage.frame.size.width
-        && loc.y >= self.movingPointer.frame.size.height && loc.y <= self.touchPointerImage.frame.size.height - self.movingPointer.frame.size.height)
-    {
-        CGPoint p;
-        p.x = loc.x + self.touchPointerImage.frame.origin.x;
-        p.y = loc.y + self.touchPointerImage.frame.origin.y;
-        self.movingPointer.center = p;
+    if (!self.touchPointerImage.isHidden){
+        UITouch *touch = [[event allTouches] anyObject];
+        CGPoint loc = [touch locationInView:self.touchPointerImage];
+        if (loc.x >= 0 && loc.x <= self.touchPointerImage.frame.size.width
+            && loc.y >= self.movingPointer.frame.size.height && loc.y <= self.touchPointerImage.frame.size.height - self.movingPointer.frame.size.height)
+        {
+            CGPoint p;
+            p.x = loc.x + self.touchPointerImage.frame.origin.x;
+            p.y = loc.y + self.touchPointerImage.frame.origin.y;
+            self.movingPointer.center = p;
+        }
     }
 }
 
