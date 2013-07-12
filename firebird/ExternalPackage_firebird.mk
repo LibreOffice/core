@@ -11,34 +11,6 @@ $(eval $(call gb_ExternalPackage_ExternalPackage,firebird,firebird))
 
 $(eval $(call gb_ExternalPackage_use_external_project,firebird,firebird))
 
-#$(eval $(call gb_ExternalPackage_add_unpacked_files,firebird,inc/external/firebird,\
-#	gen/firebird/include/ib_util.h \
-#	gen/firebird/include/ibase.h \
-#	gen/firebird/include/iberror.h \
-#	gen/firebird/include/perf.h \
-#))
-
-# Need to be added?
-# $(eval $(call gb_ExternalPackage_add_unpacked_files,firebird,share/firebird,\
-# 	gen/install/misc/firebird.conf \
-# ))
-# $(eval $(call gb_ExternalPackage_add_unpacked_files,firebird,share/firebird,\
-# 	gen/firebird/firebird.msg \
-# ))
-# $(eval $(call gb_ExternalPackage_add_unpacked_files,firebird,bin/firebird,\
-# 	gen/firebird/bin/isql \
-# 	gen/firebird/bin/isql_static \
-# ))
-# $(eval $(call gb_ExternalPackage_add_unpacked_files,firebird,share/firebird,\
-# 	gen/install/misc/fbintl.conf \
-# ))
-# $(eval $(call gb_ExternalPackage_add_unpacked_files,firebird,share/firebird,\
-# 	gen/firebird/intl/libfbintl.so \
-# ))
-# $(eval $(call gb_ExternalPackage_add_unpacked_files,firebird,share/firebird,\
-# 	gen/firebird/security2.fdb \
-# ))
-
 ifeq ($(OS)-$(COM),WNT-MSC)
 $(eval $(call gb_ExternalPackage_add_file,firebird,bin/ifbembed.dll,gen/firebird/bin/ifbembed.dll))
 $(eval $(call gb_ExternalPackage_add_file,firebird,lib/ifbembed.lib,gen/firebird/bin/ifbembed.lib))
