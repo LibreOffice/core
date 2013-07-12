@@ -30,7 +30,7 @@ public class ComputerConnectionActivity extends SherlockFragmentActivity {
     }
 
     private Server extractReceivedComputer() {
-        return getIntent().getParcelableExtra("COMPUTER");
+        return getIntent().getParcelableExtra(Intents.Extras.SERVER);
     }
 
     @Override

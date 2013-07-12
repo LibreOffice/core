@@ -18,27 +18,13 @@ import android.os.Build;
 import android.os.IBinder;
 import android.support.v4.content.LocalBroadcastManager;
 
+import org.libreoffice.impressremote.Intents;
 import org.libreoffice.impressremote.Preferences;
 
 public class CommunicationService extends Service implements Runnable, MessagesListener {
     public static enum State {
         DISCONNECTED, SEARCHING, CONNECTING, CONNECTED
     }
-
-    public static final String MSG_SLIDESHOW_STARTED = "SLIDESHOW_STARTED";
-    public static final String MSG_SLIDE_CHANGED = "SLIDE_CHANGED";
-    public static final String MSG_SLIDE_PREVIEW = "SLIDE_PREVIEW";
-    public static final String MSG_SLIDE_NOTES = "SLIDE_NOTES";
-
-    public static final String MSG_SERVERLIST_CHANGED = "SERVERLIST_CHANGED";
-    public static final String MSG_PAIRING_STARTED = "PAIRING_STARTED";
-    public static final String MSG_PAIRING_SUCCESSFUL = "PAIRING_SUCCESSFUL";
-
-    public static final String STATUS_CONNECTED_SLIDESHOW_RUNNING = "STATUS_CONNECTED_SLIDESHOW_RUNNING";
-    public static final String STATUS_CONNECTED_NOSLIDESHOW = "STATUS_CONNECTED_NOSLIDESHOW";
-
-    public static final String STATUS_PAIRING_PINVALIDATION = "STATUS_PAIRING_PINVALIDATION";
-    public static final String STATUS_CONNECTION_FAILED = "STATUS_CONNECTION_FAILED";
 
     /**
      * Used to protect all writes to mState, mStateDesired, and mServerDesired.
@@ -161,10 +147,8 @@ public class CommunicationService extends Service implements Runnable, MessagesL
     }
 
     private void startPairingActivity() {
-        Intent aPairingIntent = new Intent(MSG_PAIRING_STARTED);
-        aPairingIntent.putExtra("PIN", loadPin());
-
-        LocalBroadcastManager.getInstance(this).sendBroadcast(aPairingIntent);
+        Intent aIntent = Intents.buildPairingStartedIntent(loadPin());
+        LocalBroadcastManager.getInstance(this).sendBroadcast(aIntent);
     }
 
     private String loadPin() {
@@ -186,8 +170,8 @@ public class CommunicationService extends Service implements Runnable, MessagesL
 
     private void connectionFailed() {
         mState = State.DISCONNECTED;
-        Intent aIntent = new Intent(
-            CommunicationService.STATUS_CONNECTION_FAILED);
+
+        Intent aIntent = Intents.buildConnectionFailedIntent();
         LocalBroadcastManager.getInstance(this).sendBroadcast(aIntent);
     }
 
@@ -284,27 +268,17 @@ public class CommunicationService extends Service implements Runnable, MessagesL
 
     @Override
     public void onPinValidation() {
-        startPinValidation();
-    }
+        String aPin = loadPin();
+        String aServerName = mServerDesired.getName();
 
-    private void startPinValidation() {
-        Intent aPairingIntent = new Intent(STATUS_PAIRING_PINVALIDATION);
-        aPairingIntent.putExtra("PIN", loadPin());
-        aPairingIntent.putExtra("SERVERNAME", mServerDesired.getName());
-
-        LocalBroadcastManager.getInstance(this).sendBroadcast(aPairingIntent);
+        Intent aIntent = Intents.buildPairingValidationIntent(aPin, aServerName);
+        LocalBroadcastManager.getInstance(this).sendBroadcast(aIntent);
     }
 
     @Override
     public void onSuccessfulPairing() {
-        callSuccessfulPairing();
-    }
-
-    private void callSuccessfulPairing() {
-        Intent aSuccessfulPairingIntent = new Intent(MSG_PAIRING_SUCCESSFUL);
-
-        LocalBroadcastManager.getInstance(this).sendBroadcast(
-            aSuccessfulPairingIntent);
+        Intent aIntent = Intents.buildPairingSuccessfulIntent();
+        LocalBroadcastManager.getInstance(this).sendBroadcast(aIntent);
     }
 
     private SlideShow mSlideShow;
@@ -313,61 +287,43 @@ public class CommunicationService extends Service implements Runnable, MessagesL
     public void onSlideShowStart(int aSlidesCount, int aCurrentSlideIndex) {
         mSlideShow = new SlideShow();
         mSlideShow.setSlidesCount(aSlidesCount);
-        mSlideShow.setCurrentSlideIndex(aCurrentSlideIndex);
 
-        Intent aStatusConnectedSlideShowRunningIntent = new Intent(
-            STATUS_CONNECTED_SLIDESHOW_RUNNING);
-        Intent aSlideChangedIntent = new Intent(MSG_SLIDE_CHANGED);
-        aSlideChangedIntent.putExtra("slide_number", aCurrentSlideIndex);
+        Intent aIntent = Intents.buildSlideShowRunningIntent();
+        LocalBroadcastManager.getInstance(this).sendBroadcast(aIntent);
 
-        LocalBroadcastManager.getInstance(this)
-            .sendBroadcast(aStatusConnectedSlideShowRunningIntent);
-        LocalBroadcastManager.getInstance(this)
-            .sendBroadcast(aSlideChangedIntent);
+        onSlideChanged(aCurrentSlideIndex);
     }
 
     @Override
     public void onSlideShowFinish() {
         mSlideShow = new SlideShow();
 
-        Intent aStatusConnectedNoSlideShowIntent = new Intent(
-            STATUS_CONNECTED_NOSLIDESHOW);
-
-        LocalBroadcastManager.getInstance(this)
-            .sendBroadcast(aStatusConnectedNoSlideShowIntent);
+        Intent aIntent = Intents.buildSlideShowStoppedIntent();
+        LocalBroadcastManager.getInstance(this).sendBroadcast(aIntent);
     }
 
     @Override
     public void onSlideChanged(int aCurrentSlideIndex) {
         mSlideShow.setCurrentSlideIndex(aCurrentSlideIndex);
 
-        Intent aSlideChangedIntent = new Intent(MSG_SLIDE_CHANGED);
-        aSlideChangedIntent.putExtra("slide_number", aCurrentSlideIndex);
-
-        LocalBroadcastManager.getInstance(this)
-            .sendBroadcast(aSlideChangedIntent);
+        Intent aIntent = Intents.buildSlideChangedIntent(aCurrentSlideIndex);
+        LocalBroadcastManager.getInstance(this).sendBroadcast(aIntent);
     }
 
     @Override
     public void onSlidePreview(int aSlideIndex, byte[] aPreview) {
         mSlideShow.setSlidePreview(aSlideIndex, aPreview);
 
-        Intent aSlidePreviewChangedIntent = new Intent(MSG_SLIDE_PREVIEW);
-        aSlidePreviewChangedIntent.putExtra("slide_number", aSlideIndex);
-
-        LocalBroadcastManager.getInstance(this)
-            .sendBroadcast(aSlidePreviewChangedIntent);
+        Intent aIntent = Intents.buildSlidePreviewIntent(aSlideIndex);
+        LocalBroadcastManager.getInstance(this).sendBroadcast(aIntent);
     }
 
     @Override
     public void onSlideNotes(int aSlideIndex, String aNotes) {
         mSlideShow.setSlideNotes(aSlideIndex, aNotes);
 
-        Intent aSlideNotesChangedIntent = new Intent(MSG_SLIDE_NOTES);
-        aSlideNotesChangedIntent.putExtra("slide_number", aSlideIndex);
-
-        LocalBroadcastManager.getInstance(this)
-            .sendBroadcast(aSlideNotesChangedIntent);
+        Intent aIntent = Intents.buildSlideNotesIntent(aSlideIndex);
+        LocalBroadcastManager.getInstance(this).sendBroadcast(aIntent);
     }
 }
 

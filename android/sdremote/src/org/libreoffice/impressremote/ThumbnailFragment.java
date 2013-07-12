@@ -61,8 +61,8 @@ public class ThumbnailFragment extends SherlockFragment {
         }
 
         IntentFilter aFilter = new IntentFilter(
-                        CommunicationService.MSG_SLIDE_CHANGED);
-        aFilter.addAction(CommunicationService.MSG_SLIDE_PREVIEW);
+                        Intents.Actions.SLIDE_CHANGED);
+        aFilter.addAction(Intents.Actions.SLIDE_PREVIEW);
         LocalBroadcastManager
                         .getInstance(getActivity().getApplicationContext())
                         .registerReceiver(mListener, aFilter);
@@ -147,11 +147,11 @@ public class ThumbnailFragment extends SherlockFragment {
             if (mGrid == null)
                 return;
             if (aIntent.getAction().equals(
-                            CommunicationService.MSG_SLIDE_CHANGED)) {
+                            Intents.Actions.SLIDE_CHANGED)) {
                 int aSlide = aIntent.getExtras().getInt("slide_number");
                 setSelected(aSlide);
             } else if (aIntent.getAction().equals(
-                            CommunicationService.MSG_SLIDE_PREVIEW)) {
+                            Intents.Actions.SLIDE_PREVIEW)) {
                 mGrid.invalidateViews();
             }
 

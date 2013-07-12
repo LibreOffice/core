@@ -131,7 +131,7 @@ public class ComputersFragment extends SherlockListFragment implements ServiceCo
 
         @Override
         public void onReceive(Context aContext, Intent aIntent) {
-            if (CommunicationService.MSG_SERVERLIST_CHANGED.equals(aIntent.getAction())) {
+            if (Intents.Actions.SERVERS_LIST_CHANGED.equals(aIntent.getAction())) {
                 mComputersFragment.loadComputers();
             }
         }
@@ -139,7 +139,7 @@ public class ComputersFragment extends SherlockListFragment implements ServiceCo
 
     private IntentFilter buildIntentsReceiverFilter() {
         IntentFilter aIntentFilter = new IntentFilter();
-        aIntentFilter.addAction(CommunicationService.MSG_SERVERLIST_CHANGED);
+        aIntentFilter.addAction(Intents.Actions.SERVERS_LIST_CHANGED);
 
         return aIntentFilter;
     }
@@ -224,8 +224,7 @@ public class ComputersFragment extends SherlockListFragment implements ServiceCo
     public void onListItemClick(ListView aListView, View aView, int aPosition, long aId) {
         Server aComputer = getComputersAdapter().getItem(aPosition);
 
-        Intent aIntent = new Intent(getActivity(), ComputerConnectionActivity.class);
-        aIntent.putExtra("COMPUTER", aComputer);
+        Intent aIntent = Intents.buildComputerConnectionIntent(getActivity(), aComputer);
         startActivity(aIntent);
     }
 }

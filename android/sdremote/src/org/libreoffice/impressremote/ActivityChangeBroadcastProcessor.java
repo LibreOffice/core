@@ -8,8 +8,6 @@
  */
 package org.libreoffice.impressremote;
 
-import org.libreoffice.impressremote.communication.CommunicationService;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -35,26 +33,26 @@ public class ActivityChangeBroadcastProcessor {
     }
 
     public void addToFilter(IntentFilter aFilter) {
-        aFilter.addAction(CommunicationService.STATUS_CONNECTED_NOSLIDESHOW);
-        aFilter.addAction(CommunicationService.STATUS_CONNECTED_SLIDESHOW_RUNNING);
-        aFilter.addAction(CommunicationService.STATUS_PAIRING_PINVALIDATION);
+        aFilter.addAction(Intents.Actions.SLIDE_SHOW_STOPPED);
+        aFilter.addAction(Intents.Actions.SLIDE_SHOW_RUNNING);
+        aFilter.addAction(Intents.Actions.PAIRING_VALIDATION);
     }
 
     public void onReceive(Context aContext, Intent aIntent) {
         if (aIntent.getAction().equals(
-                        CommunicationService.STATUS_CONNECTED_NOSLIDESHOW)) {
+                        Intents.Actions.SLIDE_SHOW_STOPPED)) {
             Intent nIntent = new Intent(mActivity,
                             StartPresentationActivity.class);
             nIntent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
             mActivity.startActivity(nIntent);
         } else if (aIntent
                         .getAction()
-                        .equals(CommunicationService.STATUS_CONNECTED_SLIDESHOW_RUNNING)) {
+                        .equals(Intents.Actions.SLIDE_SHOW_RUNNING)) {
             Intent nIntent = new Intent(mActivity, PresentationActivity.class);
             nIntent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
             mActivity.startActivity(nIntent);
         } else if (aIntent.getAction().equals(
-                        CommunicationService.STATUS_PAIRING_PINVALIDATION)) {
+                Intents.Actions.PAIRING_VALIDATION)) {
             Intent nIntent = new Intent(mActivity, PairingActivity.class);
             nIntent.putExtras(aIntent.getExtras()); // Pass on pin and other info.
             mActivity.startActivity(nIntent);

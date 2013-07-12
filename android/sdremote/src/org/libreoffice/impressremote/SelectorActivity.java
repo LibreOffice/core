@@ -66,8 +66,8 @@ public class SelectorActivity extends SherlockActivity {
         if (mCommunicationService != null)
             mCommunicationService.disconnect();
         IntentFilter aFilter = new IntentFilter(
-                        CommunicationService.MSG_SERVERLIST_CHANGED);
-        aFilter.addAction(CommunicationService.STATUS_CONNECTION_FAILED);
+                        Intents.Actions.SERVERS_LIST_CHANGED);
+        aFilter.addAction(Intents.Actions.CONNECTION_FAILED);
 
         mBroadcastProcessor = new ActivityChangeBroadcastProcessor(this);
         mBroadcastProcessor.addToFilter(aFilter);
@@ -217,11 +217,11 @@ public class SelectorActivity extends SherlockActivity {
         @Override
         public void onReceive(Context aContext, Intent aIntent) {
             if (aIntent.getAction().equals(
-                            CommunicationService.MSG_SERVERLIST_CHANGED)) {
+                            Intents.Actions.SERVERS_LIST_CHANGED)) {
                 refreshLists();
                 return;
             } else if (aIntent.getAction().equals(
-                            CommunicationService.STATUS_CONNECTION_FAILED)) {
+                            Intents.Actions.CONNECTION_FAILED)) {
                 if (mProgressDialog != null) {
                     mProgressDialog.dismiss();
 

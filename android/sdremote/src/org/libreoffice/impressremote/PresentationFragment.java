@@ -127,9 +127,9 @@ public class PresentationFragment extends SherlockFragment {
         }
 
         IntentFilter aFilter = new IntentFilter(
-                        CommunicationService.MSG_SLIDE_CHANGED);
-        aFilter.addAction(CommunicationService.MSG_SLIDE_NOTES);
-        aFilter.addAction(CommunicationService.MSG_SLIDE_PREVIEW);
+                        Intents.Actions.SLIDE_CHANGED);
+        aFilter.addAction(Intents.Actions.SLIDE_NOTES);
+        aFilter.addAction(Intents.Actions.SLIDE_PREVIEW);
         LocalBroadcastManager
                         .getInstance(getActivity().getApplicationContext())
                         .registerReceiver(mListener, aFilter);
@@ -261,7 +261,7 @@ public class PresentationFragment extends SherlockFragment {
             if (mTopView == null || mTopView.getAdapter() == null)
                 return;
             if (aIntent.getAction().equals(
-                            CommunicationService.MSG_SLIDE_CHANGED)) {
+                            Intents.Actions.SLIDE_CHANGED)) {
                 int aSlide = aIntent.getExtras().getInt("slide_number");
 
                 if (aSlide == mTopView.getSelectedItemPosition())
@@ -271,11 +271,11 @@ public class PresentationFragment extends SherlockFragment {
                 }
                 mTopView.setSelection(aSlide, true);
             } else if (aIntent.getAction().equals(
-                            CommunicationService.MSG_SLIDE_PREVIEW)) {
+                            Intents.Actions.SLIDE_PREVIEW)) {
                 ThumbnailAdapter aThumbAdaptor = (ThumbnailAdapter) mTopView.getAdapter();
                 aThumbAdaptor.notifyDataSetChanged();
             } else if (aIntent.getAction().equals(
-                            CommunicationService.MSG_SLIDE_NOTES)) {
+                            Intents.Actions.SLIDE_NOTES)) {
                 int aPosition = aIntent.getExtras().getInt("slide_number");
                 if ( aPosition == mTopView.getSelectedItemPosition() ) {
                     mNotes.loadDataWithBaseURL(null, mCommunicationService.getSlideShow()

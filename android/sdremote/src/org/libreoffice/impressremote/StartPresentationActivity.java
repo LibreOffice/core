@@ -41,7 +41,7 @@ public class StartPresentationActivity extends SherlockActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         IntentFilter aFilter = new IntentFilter(
-                        CommunicationService.MSG_SLIDESHOW_STARTED);
+                        Intents.Actions.SLIDE_SHOW_STARTED);
 
         mBroadcastProcessor = new ActivityChangeBroadcastProcessor(this);
         mBroadcastProcessor.addToFilter(aFilter);

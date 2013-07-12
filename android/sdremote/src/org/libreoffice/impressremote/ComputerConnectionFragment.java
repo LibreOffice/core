@@ -126,7 +126,7 @@ public class ComputerConnectionFragment extends SherlockFragment implements Serv
 
         @Override
         public void onReceive(Context aContext, Intent aIntent) {
-            if (CommunicationService.MSG_PAIRING_STARTED.equals(aIntent.getAction())) {
+            if (Intents.Actions.PAIRING_STARTED.equals(aIntent.getAction())) {
                 String aPin = aIntent.getStringExtra("PIN");
 
                 mComputerConnectionFragment.setUpPinValidationInstructions(aPin);
@@ -134,13 +134,13 @@ public class ComputerConnectionFragment extends SherlockFragment implements Serv
                 return;
             }
 
-            if (CommunicationService.MSG_PAIRING_SUCCESSFUL.equals(aIntent.getAction())) {
+            if (Intents.Actions.PAIRING_SUCCESSFUL.equals(aIntent.getAction())) {
                 mComputerConnectionFragment.setUpPresentation();
 
                 return;
             }
 
-            if (CommunicationService.STATUS_CONNECTION_FAILED.equals(aIntent.getAction())) {
+            if (Intents.Actions.CONNECTION_FAILED.equals(aIntent.getAction())) {
                 mComputerConnectionFragment.setUpErrorMessage();
             }
         }
@@ -148,9 +148,9 @@ public class ComputerConnectionFragment extends SherlockFragment implements Serv
 
     private IntentFilter buildIntentsReceiverFilter() {
         IntentFilter aIntentFilter = new IntentFilter();
-        aIntentFilter.addAction(CommunicationService.MSG_PAIRING_STARTED);
-        aIntentFilter.addAction(CommunicationService.MSG_PAIRING_SUCCESSFUL);
-        aIntentFilter.addAction(CommunicationService.STATUS_CONNECTION_FAILED);
+        aIntentFilter.addAction(Intents.Actions.PAIRING_STARTED);
+        aIntentFilter.addAction(Intents.Actions.PAIRING_SUCCESSFUL);
+        aIntentFilter.addAction(Intents.Actions.CONNECTION_FAILED);
 
         return aIntentFilter;
     }

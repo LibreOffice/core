@@ -22,6 +22,7 @@ import android.content.IntentFilter;
 import android.os.Handler;
 import android.support.v4.content.LocalBroadcastManager;
 
+import org.libreoffice.impressremote.Intents;
 import org.libreoffice.impressremote.communication.Server.Protocol;
 
 public class BluetoothServersFinder extends BroadcastReceiver implements ServersFinder, Runnable {
@@ -97,11 +98,8 @@ public class BluetoothServersFinder extends BroadcastReceiver implements Servers
     }
 
     private void callUpdatingServersList() {
-        Intent aServersListUpdatedIntent = new Intent(
-            CommunicationService.MSG_SERVERLIST_CHANGED);
-
-        LocalBroadcastManager.getInstance(mContext)
-            .sendBroadcast(aServersListUpdatedIntent);
+        Intent aIntent = Intents.buildServersListChangedIntent();
+        LocalBroadcastManager.getInstance(mContext).sendBroadcast(aIntent);
     }
 
     private void startDiscoveryDelayed() {
