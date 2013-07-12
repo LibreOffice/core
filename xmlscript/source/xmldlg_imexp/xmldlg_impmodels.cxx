@@ -31,6 +31,7 @@
 #include <com/sun/star/script/vba/XVBACompatibility.hpp>
 
 #include <comphelper/processfactory.hxx>
+#include <i18nlangtag/languagetag.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -539,21 +540,24 @@ void FormattedFieldElement::endElement()
         if (!sLocale.isEmpty())
         {
             // split locale
+            // Don't know what may have written what we read here, so parse all
+            // old style including the trailing ";Variant" if present.
             sal_Int32 semi0 = sLocale.indexOf( ';' );
-            if (semi0 < 0) // no semi at all, just try language
+            if (semi0 < 0) // no semi at all, try new BCP47 or just language
             {
-                locale.Language = sLocale;
+                locale = LanguageTag( sLocale).getLocale( false);
             }
             else
             {
                 sal_Int32 semi1 = sLocale.indexOf( ';', semi0 +1 );
                 if (semi1 > semi0) // language;country;variant
                 {
+                    SAL_WARN( "xmlscript.xmldlg", "format-locale with variant that is ignored: " << sLocale);
                     locale.Language = sLocale.copy( 0, semi0 );
                     locale.Country = sLocale.copy( semi0 +1, semi1 - semi0 -1 );
-                    locale.Variant = sLocale.copy( semi1 +1 );
+                    // Ignore Variant that no one knows what it would be.
                 }
-                else // try language;country
+                else // language;country
                 {
                     locale.Language = sLocale.copy( 0, semi0 );
                     locale.Country = sLocale.copy( semi0 +1 );

@@ -21,6 +21,7 @@ $(eval $(call gb_Library_use_libraries,xmlscript,\
     cppuhelper \
     sal \
     tl \
+	i18nlangtag \
 	$(gb_UWINAPI) \
 ))
 

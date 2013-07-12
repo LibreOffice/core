@@ -58,6 +58,7 @@
 #include <com/sun/star/document/GraphicObjectResolver.hpp>
 
 #include <comphelper/processfactory.hxx>
+#include <i18nlangtag/languagetag.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -485,19 +486,22 @@ void ElementDescriptor::addNumberFormatAttr(
     addAttribute(XMLNS_DIALOGS_PREFIX ":format-code", sFormat );
 
     // format-locale
-    OUStringBuffer buf( 48 );
-    buf.append( locale.Language );
-    if (!locale.Country.isEmpty())
+    LanguageTag aLanguageTag( locale);
+    OUString aStr;
+    if (aLanguageTag.isIsoLocale())
     {
-        buf.append( (sal_Unicode)';' );
-        buf.append( locale.Country );
-        if (!locale.Variant.isEmpty())
-        {
-            buf.append( (sal_Unicode)';' );
-            buf.append( locale.Variant );
-        }
+        // Old style "lll;CC" for compatibility, I really don't know what may
+        // consume this.
+        if (aLanguageTag.getCountry().isEmpty())
+            aStr = aLanguageTag.getLanguage();
+        else
+            aStr = aLanguageTag.getLanguage() + ";" + aLanguageTag.getCountry();
     }
-    addAttribute( XMLNS_DIALOGS_PREFIX ":format-locale", buf.makeStringAndClear() );
+    else
+    {
+        aStr = aLanguageTag.getBcp47( false);
+    }
+    addAttribute( XMLNS_DIALOGS_PREFIX ":format-locale", aStr );
 }
 //__________________________________________________________________________________________________
 Any ElementDescriptor::readProp( OUString const & rPropName )
