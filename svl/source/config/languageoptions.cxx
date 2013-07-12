@@ -28,6 +28,10 @@
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <unotools/syslocale.hxx>
 
+#ifdef WNT
+#include <windows.h>
+#endif
+
 using namespace ::com::sun::star;
 // global ----------------------------------------------------------------------
 
@@ -204,5 +208,48 @@ LanguageType SvtSystemLanguageOptions::GetWin16SystemLanguage()
     return LanguageTag( m_sWin16SystemLocale ).getLanguageType();
 }
 
+
+bool SvtSystemLanguageOptions::isKeyboardLayoutTypeInstalled(sal_Int16 scriptType)
+{
+    bool isInstalled = false;
+#ifdef WNT
+    int nLayouts = GetKeyboardLayoutList(0, NULL);
+    if (nLayouts > 0)
+    {
+        HKL *lpList = (HKL*)LocalAlloc(LPTR, (nLayouts * sizeof(HKL)));
+        if (lpList)
+        {
+            nLayouts = GetKeyboardLayoutList(nLayouts, lpList);
+
+            for(int i = 0; i < nLayouts; ++i)
+            {
+                LCID lang = MAKELCID(((UINT)lpList[i] & 0xffffffff), SORT_DEFAULT);
+                if (MsLangId::getScriptType(lang) == scriptType)
+                {
+                    isInstalled = true;
+                    break;
+                }
+            }
+
+            LocalFree(lpList);
+        }
+    }
+#else
+    (void)scriptType;
+#endif
+    return isInstalled;
+}
+
+
+bool SvtSystemLanguageOptions::isCTLKeyboardLayoutInstalled()
+{
+    return isKeyboardLayoutTypeInstalled(::com::sun::star::i18n::ScriptType::COMPLEX);
+}
+
+
+bool SvtSystemLanguageOptions::isCJKKeyboardLayoutInstalled()
+{
+    return isKeyboardLayoutTypeInstalled(::com::sun::star::i18n::ScriptType::ASIAN);
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

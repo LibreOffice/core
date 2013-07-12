@@ -98,6 +98,8 @@ class SVL_DLLPUBLIC SvtSystemLanguageOptions : public utl::ConfigItem
 private:
     OUString m_sWin16SystemLocale;
 
+    bool isKeyboardLayoutTypeInstalled(sal_Int16 scriptType);
+
 public:
     SvtSystemLanguageOptions();
     ~SvtSystemLanguageOptions();
@@ -106,6 +108,9 @@ public:
     virtual void    Notify( const com::sun::star::uno::Sequence< OUString >& rPropertyNames );
 
     LanguageType GetWin16SystemLanguage();
+
+    bool isCTLKeyboardLayoutInstalled();
+    bool isCJKKeyboardLayoutInstalled();
 };
 
 #endif // _SVTOOLS_LANGUAGEOPTIONS_HXX
