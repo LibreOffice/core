@@ -106,7 +106,6 @@ namespace connectivity
                                                                     //  driver object
 
             sal_Bool                                m_bClosed;
-            sal_Bool                                m_bUseCatalog;  // should we use the catalog on filebased databases
             sal_Bool                                m_bUseOldDateFormat;
             sal_Bool                                m_bAutoCommit;
             sal_Bool                                m_bReadOnly;
@@ -167,8 +166,6 @@ namespace connectivity
             // css.lang.XEventListener
             virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException);
 
-            // should we use the catalog on filebased databases
-            inline sal_Bool         isCatalogUsed()     const { return m_bUseCatalog; }
             inline ::rtl::OUString  getUserName()       const { return m_sUser; }
             inline isc_db_handle    getDBHandler()      const { return m_DBHandler; }
             inline FirebirdDriver*  getDriver()         const { return m_pDriver;}

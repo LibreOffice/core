@@ -61,17 +61,10 @@ namespace connectivity
 
 ODatabaseMetaData::ODatabaseMetaData(OConnection* _pCon)
 : m_pConnection(_pCon)
-, m_bUseCatalog(sal_True)
 {
     OSL_ENSURE(m_pConnection,"ODatabaseMetaData::ODatabaseMetaData: No connection set!");
-    if(!m_pConnection->isCatalogUsed())
-    {
-        osl_atomic_increment( &m_refCount );
-        m_bUseCatalog   = !(usesLocalFiles() || usesLocalFilePerTable());
-        osl_atomic_decrement( &m_refCount );
-    }
 }
-// -------------------------------------------------------------------------
+
 ODatabaseMetaData::~ODatabaseMetaData()
 {
 }
@@ -79,9 +72,6 @@ ODatabaseMetaData::~ODatabaseMetaData()
 ::rtl::OUString SAL_CALL ODatabaseMetaData::getCatalogSeparator(  ) throw(SQLException, RuntimeException)
 {
     ::rtl::OUString aVal;
-    if(m_bUseCatalog)
-    { // do some special here for you database
-    }
 
     return aVal;
 }
@@ -218,9 +208,6 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsNonNullableColumns(  ) throw(SQLExc
 ::rtl::OUString SAL_CALL ODatabaseMetaData::getCatalogTerm(  ) throw(SQLException, RuntimeException)
 {
     ::rtl::OUString aVal;
-    if(m_bUseCatalog)
-    {
-    }
     return aVal;
 }
 // -------------------------------------------------------------------------
@@ -245,9 +232,6 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsDifferentTableCorrelationNames(  ) 
 sal_Bool SAL_CALL ODatabaseMetaData::isCatalogAtStart(  ) throw(SQLException, RuntimeException)
 {
     sal_Bool bValue = sal_False;
-    if(m_bUseCatalog)
-    {
-    }
     return bValue;
 }
 // -------------------------------------------------------------------------

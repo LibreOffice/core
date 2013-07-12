@@ -53,7 +53,6 @@ namespace connectivity
         class ODatabaseMetaData : public ODatabaseMetaData_BASE
         {
             OConnection*    m_pConnection;
-            sal_Bool        m_bUseCatalog;
         public:
 
             inline OConnection* getOwnConnection() const { return m_pConnection; }
