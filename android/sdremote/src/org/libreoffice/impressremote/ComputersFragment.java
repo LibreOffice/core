@@ -110,6 +110,8 @@ public class ComputersFragment extends SherlockListFragment implements ServiceCo
     public void onResume() {
         super.onResume();
 
+        loadComputers();
+
         registerIntentsReceiver();
     }
 
