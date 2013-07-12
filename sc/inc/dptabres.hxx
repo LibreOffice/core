@@ -380,6 +380,8 @@ public:
                                         ScDPInitState& rInitState);
     void CheckShowEmpty( bool bShow = false );
     OUString GetName() const;
+    OUString GetDisplayName() const;
+
     void                FillItemData( ScDPItemData& rData ) const;
     bool IsValid() const;
     bool IsVisible() const;

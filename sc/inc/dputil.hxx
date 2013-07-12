@@ -7,11 +7,14 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef __SC_DPUTIL_HXX__
-#define __SC_DPUTIL_HXX__
+#ifndef SC_DPUTIL_HXX
+#define SC_DPUTIL_HXX
 
 #include "rtl/ustring.hxx"
 #include "scdllapi.h"
+#include "global.hxx"
+
+#include <com/sun/star/sheet/GeneralFunction.hpp>
 
 class SvNumberFormatter;
 struct ScDPNumGroupInfo;
@@ -38,6 +41,10 @@ public:
     static sal_Int32 getDatePartValue(
         double fValue, const ScDPNumGroupInfo& rInfo, sal_Int32 nDatePart,
         SvNumberFormatter* pFormatter);
+
+    static OUString getDisplayedMeasureName(const OUString& rName, ScSubTotalFunc eFunc);
+
+    static ScSubTotalFunc toSubTotalFunc(com::sun::star::sheet::GeneralFunction eGenFunc);
 };
 
 #endif
