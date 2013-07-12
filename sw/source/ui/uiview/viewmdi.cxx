@@ -108,7 +108,7 @@ void SwView::_SetZoom( const Size &rEditSize, SvxZoomType eZoomType,
         const MapMode aTmpMap( MAP_TWIP );
         const Size aWindowSize( GetEditWin().PixelToLogic( rEditSize, aTmpMap ) );
 
-        if( nsUseOnPage::PD_MIRROR == rDesc.GetUseOn() )    // gespiegelte Seiten
+        if( nsUseOnPage::PD_MIRROR == rDesc.GetUseOn() )    // mirrored pages
         {
             const SvxLRSpaceItem &rLeftLRSpace = rDesc.GetLeft().GetLRSpace();
             aPageSize.Width() += std::abs( long(rLeftLRSpace.GetLeft()) - long(rLRSpace.GetLeft()) );
@@ -147,8 +147,7 @@ void SwView::_SetZoom( const Size &rEditSize, SvxZoomType eZoomType,
     SwViewOption aOpt( *pOpt );
     if ( !GetViewFrame()->GetFrame().IsInPlace() )
     {
-        //MasterUsrPrefs updaten UND DANACH die ViewOptions der aktuellen
-        //View updaten.
+        //Update MasterUsrPrefs and after that update the ViewOptions of the current View.
         if ( !bViewOnly &&
                 (sal_uInt16(nFac)      != pUsrPref->GetZoom() ||
                 sal_uInt8  (eZoomType) != pUsrPref->GetZoomType()) )
@@ -174,8 +173,8 @@ void SwView::_SetZoom( const Size &rEditSize, SvxZoomType eZoomType,
                 aPos.Y() = m_pWrtShell->GetAnyCurRect(RECT_PAGE).Top() - DOCUMENTBORDER;
             else
             {
-                //sicherstellen, dass sich der Cursor im sichtbaren
-                //Bereich befindet, damit nur 1x gescrollt wird
+                // Make sure that the cursor is in the visible range, so that
+                // the scrolling will be performed only once.
                 aPos.X() = lLeftMargin;
                 const SwRect &rCharRect = m_pWrtShell->GetCharRect();
                 if ( rCharRect.Top() > GetVisArea().Bottom() ||
@@ -186,10 +185,10 @@ void SwView::_SetZoom( const Size &rEditSize, SvxZoomType eZoomType,
             }
             SetVisArea( aPos );
         }
-        // OS: Notloesung - in CalcVisArea wird u.U. wieder SetZoom gerufen und
-        // dann werden falsche Werte eingestellt
+        // Compromise solution - Under certain circumstances SetZoom is called
+        // in CalcVisAreas again and thus be set wrong values.
         ((SwViewOption*)m_pWrtShell->GetViewOptions())->SetZoomType( eZoomType );
-        CalcVisArea( rEditSize );   //fuer das Neuberechnen des sichtbaren Bereiches
+        CalcVisArea( rEditSize );   // for the recalculation of the viewable area
     }
     else if ( sal_uInt16(nFac) != pOpt->GetZoom() )
     {
@@ -224,8 +223,7 @@ void SwView::SetViewLayout( sal_uInt16 nColumns, bool bBookMode, sal_Bool bViewO
         const sal_Bool bWeb = 0 != PTR_CAST(SwWebView, this);
         SwMasterUsrPref *pUsrPref = (SwMasterUsrPref*)SW_MOD()->GetUsrPref(bWeb);
 
-        //MasterUsrPrefs updaten UND DANACH die ViewOptions der aktuellen
-        //View updaten.
+        // Update MasterUsrPrefs and after that update the ViewOptions of the current View.
         if ( nColumns  != pUsrPref->GetViewLayoutColumns() ||
              bBookMode != pUsrPref->IsViewLayoutBookMode() )
         {
@@ -263,9 +261,8 @@ void SwView::SetViewLayout( sal_uInt16 nColumns, bool bBookMode, sal_Bool bViewO
     rBnd.Invalidate( SID_ATTR_ZOOMSLIDER);
 }
 
-/*
- * Scrollbar - Handler
- */
+// Scrollbar - Handler
+
 IMPL_LINK( SwView, WindowChildEventListener, VclSimpleEvent*, pEvent )
 {
     OSL_ENSURE( pEvent && pEvent->ISA( VclWindowEvent ), "Unknown WindowEvent!" );
@@ -300,7 +297,7 @@ int SwView::_CreateScrollbar( sal_Bool bHori )
     Window *pMDI = &GetViewFrame()->GetWindow();
     SwScrollbar** ppScrollbar = bHori ? &m_pHScrollbar : &m_pVScrollbar;
 
-    OSL_ENSURE( !*ppScrollbar, "vorher abpruefen!" );
+    OSL_ENSURE( !*ppScrollbar, "check beforehand!" );
 
     if( !bHori )
         CreatePageButtons( !m_bShowAtResize );
@@ -318,8 +315,8 @@ int SwView::_CreateScrollbar( sal_Bool bHori )
     if(GetWindow())
         InvalidateBorder();
 
-    // Scrollbar muss nochmals getestet werden, da im InvalidateBorder u.U. der
-    // Scrollbar wieder geloescht wurde
+    // The scrollbar has to be tested again, as in InvalidateBorder possibly
+    // the scrollbar has been deleted.
     if ( !m_bShowAtResize && (*ppScrollbar))
         (*ppScrollbar)->ExtendedShow();
 
@@ -353,9 +350,8 @@ void SwView::CreatePageButtons(sal_Bool bShow)
     }
 };
 
-/*
- * Button-Handler
- */
+// Button-Handler
+
 IMPL_LINK( SwView, BtnPage, Button *, pButton )
 {
     // #i75416# move the execution of the search to an asynchronously called static link
