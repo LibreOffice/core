@@ -43,6 +43,10 @@ public class Server implements Parcelable {
         this.mTimeDiscovered = System.currentTimeMillis();
     }
 
+    public static Server newTcpInstance(String aAddress, String aName) {
+        return new Server(Protocol.TCP, aAddress, aName);
+    }
+
     public Protocol getProtocol() {
         return mProtocol;
     }

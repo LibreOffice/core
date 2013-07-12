@@ -8,20 +8,14 @@
  */
 package org.libreoffice.impressremote.communication;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 
 import android.app.Service;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Binder;
 import android.os.Build;
 import android.os.IBinder;
-import android.preference.PreferenceManager;
 import android.support.v4.content.LocalBroadcastManager;
 
 import org.libreoffice.impressremote.Preferences;
@@ -56,21 +50,11 @@ public class CommunicationService extends Service implements Runnable, MessagesL
 
     private Server mServerDesired = null;
 
-    private boolean mBluetoothPreviouslyEnabled;
-
     private final IBinder mBinder = new CBinder();
 
-    private final ServersFinder mTcpServersFinder = new TcpServersFinder(this);
-    private final ServersFinder mBluetoothServersFinder = new BluetoothServersFinder(
-        this);
+    private final ServersManager mServersManager = new ServersManager(this);
 
     private Thread mThread = null;
-
-    /**
-     * Key to use with getSharedPreferences to obtain a Map of stored servers.
-     * The keys are the ip/hostnames, the values are the friendly names.
-     */
-    private final Map<String, Server> mManualServers = new HashMap<String, Server>();
 
     /**
      * Get the publicly visible device name -- generally the bluetooth name,
@@ -210,36 +194,25 @@ public class CommunicationService extends Service implements Runnable, MessagesL
     public void startSearch() {
         mState = State.SEARCHING;
 
-        mTcpServersFinder.startSearch();
-
-        BluetoothAdapter aAdapter = BluetoothAdapter.getDefaultAdapter();
-        if (aAdapter != null) {
-            mBluetoothPreviouslyEnabled = aAdapter.isEnabled();
-
-            if (!mBluetoothPreviouslyEnabled) {
-                aAdapter.enable();
-            }
-
-            mBluetoothServersFinder.startSearch();
+        if (BluetoothAdapter.getDefaultAdapter() != null) {
+            BluetoothAdapter.getDefaultAdapter().enable();
         }
+
+        mServersManager.startServersSearch();
     }
 
     public void stopSearch() {
-        mTcpServersFinder.stopSearch();
-        mBluetoothServersFinder.stopSearch();
-        BluetoothAdapter aAdapter = BluetoothAdapter.getDefaultAdapter();
-        if (aAdapter != null) {
-            if (!mBluetoothPreviouslyEnabled) {
-                aAdapter.disable();
-            }
+        mServersManager.stopServersSearch();
+
+        if (BluetoothAdapter.getDefaultAdapter() != null) {
+            BluetoothAdapter.getDefaultAdapter().disable();
         }
     }
 
     public void connectTo(Server aServer) {
         synchronized (mConnectionVariableMutex) {
             if (mState == State.SEARCHING) {
-                mTcpServersFinder.stopSearch();
-                mBluetoothServersFinder.stopSearch();
+                mServersManager.stopServersSearch();
                 mState = State.DISCONNECTED;
             }
             mServerDesired = aServer;
@@ -274,15 +247,13 @@ public class CommunicationService extends Service implements Runnable, MessagesL
 
     @Override
     public void onCreate() {
-        loadServersFromPreferences();
-
         mThread = new Thread(this);
         mThread.start();
     }
 
     @Override
     public void onDestroy() {
-        mManualServers.clear();
+        stopSearch();
 
         mThread.interrupt();
         mThread = null;
@@ -293,58 +264,22 @@ public class CommunicationService extends Service implements Runnable, MessagesL
     }
 
     public List<Server> getServers() {
-        List<Server> aServers = new ArrayList<Server>();
-
-        aServers.addAll(mTcpServersFinder.getServers());
-        aServers.addAll(mBluetoothServersFinder.getServers());
-        aServers.addAll(mManualServers.values());
-
-        return aServers;
+        return mServersManager.getServers();
     }
 
     public SlideShow getSlideShow() {
         return mSlideShow;
     }
 
-    void loadServersFromPreferences() {
-        SharedPreferences aPref = getSharedPreferences(
-            Preferences.Locations.STORED_SERVERS,
-            MODE_PRIVATE);
-
-        @SuppressWarnings("unchecked")
-        Map<String, String> aStoredMap = (Map<String, String>) aPref.getAll();
-
-        for (Entry<String, String> aServerEntry : aStoredMap.entrySet()) {
-            mManualServers.put(aServerEntry.getKey(), new Server(
-                Server.Protocol.TCP, aServerEntry.getKey(),
-                aServerEntry.getValue(), 0));
-        }
-    }
-
     /**
      * Manually add a new (network) server to the list of servers.
      */
     public void addServer(String aAddress, String aName, boolean aRemember) {
-        for (String aServer : mManualServers.keySet()) {
-            if (aServer.equals(aAddress))
-                return;
-        }
-        mManualServers
-            .put(aAddress, new Server(Server.Protocol.TCP, aAddress,
-                aName, 0));
-        if (aRemember) {
-
-            Preferences
-                .set(this, Preferences.Locations.STORED_SERVERS, aAddress,
-                    aName);
-        }
+        mServersManager.addTcpServer(aAddress, aName);
     }
 
     public void removeServer(Server aServer) {
-        mManualServers.remove(aServer.getAddress());
-
-        Preferences.remove(this, Preferences.Locations.STORED_SERVERS,
-            aServer.getAddress());
+        mServersManager.removeServer(aServer);
     }
 
     @Override

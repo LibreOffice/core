@@ -8,6 +8,8 @@
  */
 package org.libreoffice.impressremote;
 
+import java.util.Map;
+
 import android.content.Context;
 import android.content.SharedPreferences;
 
@@ -29,6 +31,10 @@ public final class Preferences {
 
     private static SharedPreferences getPreferences(Context aContext, String aLocation) {
         return aContext.getSharedPreferences(aLocation, Context.MODE_PRIVATE);
+    }
+
+    public static Map<String, ?> getAll(Context aContext, String aLocation) {
+        return getPreferences(aContext, aLocation).getAll();
     }
 
     public static String getString(Context aContext, String aLocation, String aKey) {
