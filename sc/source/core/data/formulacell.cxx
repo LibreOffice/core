@@ -3093,11 +3093,6 @@ public:
                         // returned array equals or greater than the requested
                         // length.
 
-                        // TODO: For now, it returns an array pointer only when
-                        // the entire array is in contiguous memory space.  Once
-                        // we finish cell storage rework, we'll support temporary
-                        // generation of a double array which is a combination of
-                        // multiple cell array segments.
                         const double* pArray = mrDoc.FetchDoubleArray(mrCxt, aRefPos, mrCell.GetCellGroup()->mnLength);
                         if (!pArray)
                             return false;
