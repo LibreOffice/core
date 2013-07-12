@@ -10,7 +10,6 @@
 $(eval $(call gb_Module_Module,firebird))
 
 ifeq ($(SYSTEM_FIREBIRD),NO)
-
 $(eval $(call gb_Module_add_targets,firebird,\
 	ExternalPackage_firebird \
 	ExternalProject_firebird \
