@@ -36,7 +36,6 @@
 		57C6E405175E06E800E8BC5F /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 57C6E404175E06E800E8BC5F /* Default.png */; };
 		57C6E407175E06E800E8BC5F /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 57C6E406175E06E800E8BC5F /* Default@2x.png */; };
 		57C6E409175E06E800E8BC5F /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 57C6E408175E06E800E8BC5F /* Default-568h@2x.png */; };
-		57C6E40C175E06E800E8BC5F /* iPhone_autolayout.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 57C6E40A175E06E800E8BC5F /* iPhone_autolayout.storyboard */; };
 		57C6E42E175E076900E8BC5F /* Client.m in Sources */ = {isa = PBXBuildFile; fileRef = 57C6E427175E076900E8BC5F /* Client.m */; };
 		57C6E42F175E076900E8BC5F /* CommunicationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 57C6E429175E076900E8BC5F /* CommunicationManager.m */; };
 		57C6E430175E076900E8BC5F /* CommandInterpreter.m in Sources */ = {isa = PBXBuildFile; fileRef = 57C6E42B175E076900E8BC5F /* CommandInterpreter.m */; };
@@ -49,7 +48,7 @@
 		57DC7007178D84490050FC58 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 57DC7006178D84490050FC58 /* CoreMotion.framework */; };
 		57DC700F178E03330050FC58 /* touchPointer_vc.m in Sources */ = {isa = PBXBuildFile; fileRef = 57DC700E178E03330050FC58 /* touchPointer_vc.m */; };
 		57DC7012178E16A40050FC58 /* setRecursiveUserInteraction.m in Sources */ = {isa = PBXBuildFile; fileRef = 57DC7011178E16A40050FC58 /* setRecursiveUserInteraction.m */; };
-		57DF0A85178FFFAB008B2D3D /* iPhone_spring&strut.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 57DF0A83178FFFAB008B2D3D /* iPhone_spring&strut.storyboard */; };
+		57DF0A85178FFFAB008B2D3D /* iPhone_autosize.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 57DF0A83178FFFAB008B2D3D /* iPhone_autosize.storyboard */; };
 		57FE71E31785C61400B50125 /* pinValidation_vc.m in Sources */ = {isa = PBXBuildFile; fileRef = 57FE71E21785C61400B50125 /* pinValidation_vc.m */; };
 		57FE71E61785D7FE00B50125 /* slideShowPreview_vc.m in Sources */ = {isa = PBXBuildFile; fileRef = 57FE71E51785D7FE00B50125 /* slideShowPreview_vc.m */; };
 		57FE71E917861A9000B50125 /* slideShowPreviewTable_vc.m in Sources */ = {isa = PBXBuildFile; fileRef = 57FE71E817861A9000B50125 /* slideShowPreviewTable_vc.m */; };
@@ -99,7 +98,6 @@
 		57C6E404175E06E800E8BC5F /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
 		57C6E406175E06E800E8BC5F /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
 		57C6E408175E06E800E8BC5F /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
-		57C6E40B175E06E800E8BC5F /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/iPhone_autolayout.storyboard; sourceTree = "<group>"; };
 		57C6E426175E076900E8BC5F /* Client.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Client.h; sourceTree = "<group>"; };
 		57C6E427175E076900E8BC5F /* Client.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Client.m; sourceTree = "<group>"; };
 		57C6E428175E076900E8BC5F /* CommunicationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = CommunicationManager.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
@@ -119,7 +117,7 @@
 		57DC700E178E03330050FC58 /* touchPointer_vc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = touchPointer_vc.m; sourceTree = "<group>"; };
 		57DC7010178E16A40050FC58 /* setRecursiveUserInteraction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = setRecursiveUserInteraction.h; sourceTree = "<group>"; };
 		57DC7011178E16A40050FC58 /* setRecursiveUserInteraction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = setRecursiveUserInteraction.m; sourceTree = "<group>"; };
-		57DF0A84178FFFAB008B2D3D /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = "en.lproj/iPhone_spring&strut.storyboard"; sourceTree = "<group>"; };
+		57DF0A84178FFFAB008B2D3D /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/iPhone_autoSize.storyboard; sourceTree = "<group>"; };
 		57FE71E11785C61300B50125 /* pinValidation_vc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = pinValidation_vc.h; path = Communication/pinValidation_vc.h; sourceTree = "<group>"; };
 		57FE71E21785C61400B50125 /* pinValidation_vc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = pinValidation_vc.m; path = Communication/pinValidation_vc.m; sourceTree = "<group>"; };
 		57FE71E41785D7FE00B50125 /* slideShowPreview_vc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = slideShowPreview_vc.h; sourceTree = "<group>"; };
@@ -296,8 +294,7 @@
 		57DF0A78178FFF8C008B2D3D /* StoryBoards */ = {
 			isa = PBXGroup;
 			children = (
-				57DF0A83178FFFAB008B2D3D /* iPhone_spring&strut.storyboard */,
-				57C6E40A175E06E800E8BC5F /* iPhone_autolayout.storyboard */,
+				57DF0A83178FFFAB008B2D3D /* iPhone_autosize.storyboard */,
 			);
 			name = StoryBoards;
 			sourceTree = "<group>";
@@ -358,7 +355,6 @@
 				57C6E405175E06E800E8BC5F /* Default.png in Resources */,
 				57C6E407175E06E800E8BC5F /* Default@2x.png in Resources */,
 				57C6E409175E06E800E8BC5F /* Default-568h@2x.png in Resources */,
-				57C6E40C175E06E800E8BC5F /* iPhone_autolayout.storyboard in Resources */,
 				57867A541787172A00EBBE52 /* impress.jpeg in Resources */,
 				57867A5A1787510700EBBE52 /* pushed_next_button.png in Resources */,
 				57867A5B1787510700EBBE52 /* released_next_button.png in Resources */,
@@ -374,7 +370,7 @@
 				57CC48C7178B42A400075DE4 /* timer_resume_btn.png in Resources */,
 				57DC7003178D82610050FC58 /* ic_launcher.png in Resources */,
 				57DC7005178D82940050FC58 /* ic_launcher@2x.png in Resources */,
-				57DF0A85178FFFAB008B2D3D /* iPhone_spring&strut.storyboard in Resources */,
+				57DF0A85178FFFAB008B2D3D /* iPhone_autosize.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -420,20 +416,12 @@
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
 		};
-		57C6E40A175E06E800E8BC5F /* iPhone_autolayout.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				57C6E40B175E06E800E8BC5F /* en */,
-			);
-			name = iPhone_autolayout.storyboard;
-			sourceTree = "<group>";
-		};
-		57DF0A83178FFFAB008B2D3D /* iPhone_spring&strut.storyboard */ = {
+		57DF0A83178FFFAB008B2D3D /* iPhone_autosize.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
 				57DF0A84178FFFAB008B2D3D /* en */,
 			);
-			name = "iPhone_spring&strut.storyboard";
+			name = iPhone_autosize.storyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */

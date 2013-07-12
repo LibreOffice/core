@@ -10,9 +10,27 @@
 
 @implementation AppDelegate
 
+@synthesize window = _window;
+
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     // Override point for customization after application launch.
+    /**
+     * If ever we need some iOS6-only storyboard based features and we want to keep backward compatibility, we should uncomment these code to pick the right storyboard based on the existence on certains classes.
+     */
+//    UIStoryboard *mainStoryboard = nil;
+//    if (NSClassFromString(@"NSLayoutConstraint")) {
+//        mainStoryboard = [UIStoryboard storyboardWithName:@"iPhone_autolayout" bundle:nil];
+//        NSLog(@"loading autolayout storyboard");
+//    } else {
+//        mainStoryboard = [UIStoryboard storyboardWithName:@"iPhone_autosize" bundle:nil];
+//        NSLog(@"Doesn't support autolayout, loading autosize");
+//    }
+//
+//    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+//    self.window.rootViewController = [mainStoryboard instantiateInitialViewController];
+//    [self.window makeKeyAndVisible];
+
     return YES;
 }
 

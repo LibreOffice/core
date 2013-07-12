@@ -723,58 +723,63 @@
                                 <subviews>
                                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Title of the presentation(TODO)" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="5" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="178" translatesAutoresizingMaskIntoConstraints="NO" id="nJf-ed-YfY">
                                         <constraints>
-                                            <constraint firstAttribute="width" constant="178" id="wto-RF-nap"/>
+                                            <constraint firstAttribute="height" constant="90" id="1hf-EL-dAY"/>
+                                            <constraint firstAttribute="width" constant="178" id="oTg-63-OXu"/>
                                         </constraints>
-                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="25"/>
+                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="18"/>
                                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Author:  author name" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="g5m-gQ-o0u">
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2w1-DC-NmV">
+                                        <subviews>
+                                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Author:  author name" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="g5m-gQ-o0u">
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="12" type="user" id="6dy-Ki-jHp"/>
+                                                    <constraint firstAttribute="width" constant="160" id="uDT-Sz-6yp"/>
+                                                </constraints>
+                                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                <color key="textColor" name="alternateSelectedControlColor" catalog="System" colorSpace="catalog"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Last modified:  3 Jul 2013" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Dds-oJ-Uhh">
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="14" type="user" id="xvr-u8-mTb"/>
+                                                </constraints>
+                                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                <color key="textColor" name="alternateSelectedControlColor" catalog="System" colorSpace="catalog"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Current slide:  5 of 22" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mrB-Wd-OcP">
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="16" type="user" id="4n7-Yu-phk"/>
+                                                    <constraint firstAttribute="width" constant="169" id="ZdR-LV-4aK"/>
+                                                </constraints>
+                                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                <color key="textColor" name="alternateSelectedControlColor" catalog="System" colorSpace="catalog"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                        </subviews>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="12" type="user" id="6dy-Ki-jHp"/>
-                                            <constraint firstAttribute="width" constant="160" id="uDT-Sz-6yp"/>
+                                            <constraint firstAttribute="trailing" secondItem="Dds-oJ-Uhh" secondAttribute="trailing" constant="20" symbolic="YES" type="default" id="7LJ-x2-nKz"/>
+                                            <constraint firstItem="g5m-gQ-o0u" firstAttribute="leading" secondItem="2w1-DC-NmV" secondAttribute="leading" constant="20" symbolic="YES" type="default" id="7eg-Tz-OWY"/>
+                                            <constraint firstItem="mrB-Wd-OcP" firstAttribute="leading" secondItem="2w1-DC-NmV" secondAttribute="leading" constant="20" symbolic="YES" type="default" id="9Q5-VN-l9h"/>
+                                            <constraint firstItem="g5m-gQ-o0u" firstAttribute="top" secondItem="2w1-DC-NmV" secondAttribute="top" constant="5" type="user" id="S04-dj-MD7"/>
+                                            <constraint firstAttribute="bottom" secondItem="mrB-Wd-OcP" secondAttribute="bottom" constant="4" type="user" id="X18-Zx-Jy8"/>
+                                            <constraint firstItem="Dds-oJ-Uhh" firstAttribute="leading" secondItem="2w1-DC-NmV" secondAttribute="leading" constant="20" symbolic="YES" type="default" id="dnI-jO-0US"/>
+                                            <constraint firstItem="Dds-oJ-Uhh" firstAttribute="top" secondItem="g5m-gQ-o0u" secondAttribute="bottom" constant="8" symbolic="YES" type="default" id="hpH-2w-OOX"/>
                                         </constraints>
-                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                        <color key="textColor" name="alternateSelectedControlColor" catalog="System" colorSpace="catalog"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Last modified:  3 Jul 2013" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Dds-oJ-Uhh">
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="194" id="ejq-Nh-ofA"/>
-                                            <constraint firstAttribute="height" constant="14" type="user" id="xvr-u8-mTb"/>
-                                        </constraints>
-                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                        <color key="textColor" name="alternateSelectedControlColor" catalog="System" colorSpace="catalog"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Current slide:  5 of 22" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mrB-Wd-OcP">
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="16" type="user" id="4n7-Yu-phk"/>
-                                            <constraint firstAttribute="width" constant="169" id="ZdR-LV-4aK"/>
-                                        </constraints>
-                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                        <color key="textColor" name="alternateSelectedControlColor" catalog="System" colorSpace="catalog"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
+                                    </view>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                                 <constraints>
-                                    <constraint firstItem="mrB-Wd-OcP" firstAttribute="leading" secondItem="2Zo-K8-3NM" secondAttribute="leading" constant="32" type="user" id="2tP-aR-jNq"/>
-                                    <constraint firstItem="mrB-Wd-OcP" firstAttribute="leading" secondItem="Dds-oJ-Uhh" secondAttribute="leading" type="user" id="4dK-pH-sCn"/>
-                                    <constraint firstItem="mrB-Wd-OcP" firstAttribute="top" secondItem="Dds-oJ-Uhh" secondAttribute="bottom" constant="8" type="user" id="4xF-Ed-MnM"/>
-                                    <constraint firstItem="Dds-oJ-Uhh" firstAttribute="top" secondItem="g5m-gQ-o0u" secondAttribute="bottom" constant="8" type="user" id="6Hw-b9-1hx"/>
-                                    <constraint firstItem="g5m-gQ-o0u" firstAttribute="leading" secondItem="Dds-oJ-Uhh" secondAttribute="leading" type="user" id="9IO-Cs-oNg"/>
-                                    <constraint firstItem="Dds-oJ-Uhh" firstAttribute="leading" secondItem="g5m-gQ-o0u" secondAttribute="leading" type="user" id="AxU-4u-7y0"/>
-                                    <constraint firstItem="g5m-gQ-o0u" firstAttribute="top" secondItem="nJf-ed-YfY" secondAttribute="bottom" constant="15" type="user" id="I8g-AQ-6mK"/>
-                                    <constraint firstItem="mrB-Wd-OcP" firstAttribute="top" secondItem="Dds-oJ-Uhh" secondAttribute="bottom" constant="8" symbolic="YES" type="user" id="Jzi-ST-t3y"/>
-                                    <constraint firstItem="g5m-gQ-o0u" firstAttribute="leading" secondItem="2Zo-K8-3NM" secondAttribute="leading" constant="32" type="user" id="KQN-2D-WYg"/>
-                                    <constraint firstItem="Dds-oJ-Uhh" firstAttribute="leading" secondItem="2Zo-K8-3NM" secondAttribute="leading" constant="32" type="user" id="V6U-Sp-6hc"/>
-                                    <constraint firstItem="g5m-gQ-o0u" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="2Zo-K8-3NM" secondAttribute="leading" constant="32" type="user" id="VP2-HW-0K1"/>
-                                    <constraint firstItem="Dds-oJ-Uhh" firstAttribute="leading" secondItem="mrB-Wd-OcP" secondAttribute="leading" type="user" id="WW4-GU-mSH"/>
-                                    <constraint firstItem="Dds-oJ-Uhh" firstAttribute="top" secondItem="g5m-gQ-o0u" secondAttribute="bottom" constant="8" symbolic="YES" type="user" id="gtQ-av-tu7"/>
+                                    <constraint firstItem="2w1-DC-NmV" firstAttribute="leading" secondItem="2Zo-K8-3NM" secondAttribute="leading" constant="12" id="27H-un-hlX"/>
+                                    <constraint firstItem="nJf-ed-YfY" firstAttribute="top" secondItem="2Zo-K8-3NM" secondAttribute="top" constant="12" id="9yy-AD-2z5"/>
+                                    <constraint firstAttribute="trailing" secondItem="2w1-DC-NmV" secondAttribute="trailing" constant="48" id="GZ0-ab-RrF"/>
+                                    <constraint firstItem="2w1-DC-NmV" firstAttribute="top" secondItem="2Zo-K8-3NM" secondAttribute="top" constant="98" id="ggV-M4-VXs"/>
                                     <constraint firstAttribute="height" constant="169" type="user" id="kbX-jk-qBX"/>
+                                    <constraint firstAttribute="bottom" secondItem="2w1-DC-NmV" secondAttribute="bottom" constant="4" id="leE-c3-5wP"/>
                                     <constraint firstItem="nJf-ed-YfY" firstAttribute="centerX" secondItem="2Zo-K8-3NM" secondAttribute="centerX" type="default" id="qYz-zW-Lfz"/>
-                                    <constraint firstItem="nJf-ed-YfY" firstAttribute="top" secondItem="2Zo-K8-3NM" secondAttribute="top" constant="20" symbolic="YES" type="user" id="qcW-Ip-dGx"/>
                                 </constraints>
                             </view>
                         </subviews>
@@ -838,6 +843,7 @@
         <class className="slideShowPreviewTable_vc" superclassName="UITableViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/slideShowPreviewTable_vc.h"/>
             <relationships>
+                <relationship kind="action" name="startPresentationAction:"/>
                 <relationship kind="outlet" name="optionsTable" candidateClass="UITableView"/>
             </relationships>
         </class>

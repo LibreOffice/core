@@ -63,14 +63,18 @@
 {
     if (self.slidesRunning && [self.comManager.interpreter.slideShow size] > 0){
         self.slidesRunning = NO;
-        [self.parentViewController performSegueWithIdentifier:@"slideShowSegue" sender:self];
+        [self performSegueWithIdentifier:@"slideShowSegue" sender:self];
     }
     NSOperationQueue *mainQueue = [NSOperationQueue mainQueue];
     self.slideShowStartObserver = [[NSNotificationCenter defaultCenter] addObserverForName:STATUS_CONNECTED_SLIDESHOW_RUNNING
                                                                                     object:nil
                                                                                      queue:mainQueue
                                                                                 usingBlock:^(NSNotification *note) {
-                                                                                    [self.parentViewController performSegueWithIdentifier:@"slideShowSegue" sender:self];
+//                                                                                    if (NSClassFromString(@"NSLayoutConstraint"))
+//                                                                                        // support autolayout, this tablevc has a parent_vc which has this segue
+//                                                                                        [self.parentViewController performSegueWithIdentifier:@"slideShowSegue" sender:self];
+//                                                                                    else
+                                                                                      [self performSegueWithIdentifier:@"slideShowSegue" sender:self];
                                                                                 }];
     [super viewDidAppear:animated];
 }

@@ -52,11 +52,11 @@ dispatch_queue_t backgroundQueue;
 - (void) viewDidAppear:(BOOL)animated
 {
     [self changeStartButtonIconForButton:nil];
-    NSIndexPath *indexPath = [NSIndexPath indexPathForItem:self.slideshow.currentSlide
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:self.slideshow.currentSlide
                                                 inSection:1];
     [self.tableView selectRowAtIndexPath:indexPath animated:NO scrollPosition:UITableViewScrollPositionNone];
     [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionMiddle animated:NO];
-    [[[self.tableView cellForRowAtIndexPath:indexPath] viewWithTag:2] setBackgroundColor:[UIColor lightGrayColor]];
+//    [[[self.tableView cellForRowAtIndexPath:indexPath] viewWithTag:2] setBackgroundColor:[UIColor lightGrayColor]];
 }
 
 - (void) prepareForSegue: (UIStoryboardSegue *) segue sender: (id) sender
@@ -114,6 +114,11 @@ dispatch_queue_t backgroundQueue;
     return nil;
 }
 
+- (void) tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath
+{
+    [self performSegueWithIdentifier: @"sw_customized_segue" sender: [tableView cellForRowAtIndexPath: indexPath]];
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.section == 0) {
@@ -134,6 +139,16 @@ dispatch_queue_t backgroundQueue;
         [self.slideshow getContentAtIndex:indexPath.row forView:cell];
         [slideNumber setText:[NSString stringWithFormat:@"%u", indexPath.row+1]];
         return cell;
+    }
+}
+
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
+    // Otherwise selection will disable background color and make slide number unreadable
+    if(indexPath.section == 1 && cell.selected){
+        UILabel *label = (UILabel *)[cell viewWithTag:2];
+        if ([label backgroundColor]!=[UIColor lightGrayColor]) {
+            [label setBackgroundColor:[UIColor lightGrayColor]];
+        }
     }
 }
 
@@ -165,7 +180,7 @@ dispatch_queue_t backgroundQueue;
 
     // Format the elapsed time and set it to the label
     NSString *timeString = [dateFormatter stringFromDate:timerDate];
-    UILabel *l = (UILabel *)[[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForItem:0 inSection:0]] viewWithTag:1];
+    UILabel *l = (UILabel *)[[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]] viewWithTag:1];
     l.text = timeString;
 }
 
@@ -207,7 +222,7 @@ dispatch_queue_t backgroundQueue;
 {
     UIButton * btn = sender;
     if (!btn) {
-        btn = (UIButton *)[[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForItem:0 inSection:0]] viewWithTag:2];
+        btn = (UIButton *)[[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]] viewWithTag:2];
     }
     switch (self.state) {
         case TIMER_STATE_RUNNING:
@@ -231,7 +246,7 @@ dispatch_queue_t backgroundQueue;
     self.lastInterval = 0;
     self.state = TIMER_STATE_CLEARED;
 
-    UIButton *l = (UIButton *)[[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForItem:0 inSection:0]] viewWithTag:2];
+    UIButton *l = (UIButton *)[[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]] viewWithTag:2];
     [l setImage:[UIImage imageNamed:@"timer_start_btn"] forState:UIControlStateNormal];
     [self updateTimer];
 }
