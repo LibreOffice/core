@@ -23,16 +23,12 @@
 
 
 RawBitmap::RawBitmap()
-: mpBits(0), mnAllocated(0)
+: mnAllocated(0)
 {}
 
 
 RawBitmap::~RawBitmap()
-{
-    delete[] mpBits;
-    mpBits = 0;
-    mnAllocated = 0;
-}
+{}
 
 
 // used by 90 and 270 degree rotations on 8 bit deep bitmaps
@@ -171,7 +167,7 @@ bool RawBitmap::Rotate( int nAngle )
             mnYOffset = -(mnYOffset + mnHeight);
             if( mnBitCount == 8 )
             {
-                ImplRotate8_180( mpBits, mnWidth, mnHeight, mnScanlineSize-mnWidth );
+                ImplRotate8_180( mpBits.get(), mnWidth, mnHeight, mnScanlineSize-mnWidth );
                 return true;
             }
             nNewWidth        = mnWidth;
@@ -203,7 +199,7 @@ bool RawBitmap::Rotate( int nAngle )
     {
         case 1800:  // rotate by 180 degrees
             // we know we only need to deal with 1 bit depth
-            ImplRotate1_180( pBuf, mpBits + mnHeight * mnScanlineSize,
+            ImplRotate1_180( pBuf, mpBits.get() + mnHeight * mnScanlineSize,
                 mnWidth, mnHeight, mnScanlineSize - (mnWidth + 7) / 8 );
             break;
         case +900:  // rotate left by 90 degrees
@@ -211,11 +207,11 @@ bool RawBitmap::Rotate( int nAngle )
             mnXOffset = mnYOffset;
             mnYOffset = -nNewHeight - i;
             if( mnBitCount == 8 )
-                ImplRotate8_90( pBuf, mpBits + mnWidth - 1,
+                ImplRotate8_90( pBuf, mpBits.get() + mnWidth - 1,
                     nNewWidth, nNewHeight, +mnScanlineSize, -1-mnHeight*mnScanlineSize,
                     nNewScanlineSize - nNewWidth );
             else
-                ImplRotate1_90( pBuf, mpBits + (mnWidth - 1) / 8,
+                ImplRotate1_90( pBuf, mpBits.get() + (mnWidth - 1) / 8,
                     nNewWidth, nNewHeight, +mnScanlineSize,
                     (-mnWidth & 7), +1, nNewScanlineSize - (nNewWidth + 7) / 8 );
             break;
@@ -225,11 +221,11 @@ bool RawBitmap::Rotate( int nAngle )
             mnXOffset = -(nNewWidth + mnYOffset);
             mnYOffset = i;
             if( mnBitCount == 8 )
-                ImplRotate8_90( pBuf, mpBits + mnScanlineSize * (mnHeight-1),
+                ImplRotate8_90( pBuf, mpBits.get() + mnScanlineSize * (mnHeight-1),
                     nNewWidth, nNewHeight, -mnScanlineSize, +1+mnHeight*mnScanlineSize,
                     nNewScanlineSize - nNewWidth );
             else
-                ImplRotate1_90( pBuf, mpBits + mnScanlineSize * (mnHeight-1),
+                ImplRotate1_90( pBuf, mpBits.get() + mnScanlineSize * (mnHeight-1),
                     nNewWidth, nNewHeight, -mnScanlineSize,
                     +7, -1, nNewScanlineSize - (nNewWidth + 7) / 8 );
             break;
@@ -241,13 +237,12 @@ bool RawBitmap::Rotate( int nAngle )
 
     if( nBufSize < mnAllocated )
     {
-        memcpy( mpBits, pBuf, nBufSize );
+        memcpy( mpBits.get(), pBuf, nBufSize );
         delete[] pBuf;
     }
     else
     {
-        delete[] mpBits;
-        mpBits = pBuf;
+        mpBits.reset(pBuf);
         mnAllocated = nBufSize;
     }
 

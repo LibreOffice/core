@@ -34,6 +34,7 @@ struct ImplKernPairData;
 class ImplFontOptions;
 
 #include <tools/gen.hxx>
+#include <basebmp/bitmapdevice.hxx>
 #include <boost/unordered_map.hpp>
 #include <boost/unordered_set.hpp>
 #include <boost/shared_ptr.hpp>
@@ -90,7 +91,7 @@ private:
     friend class ServerFont;
     // used by ServerFont class only
     void                        AddedGlyph( ServerFont&, GlyphData& );
-    void                        RemovingGlyph( ServerFont&, GlyphData&, int nGlyphIndex );
+    void                        RemovingGlyph( GlyphData& );
     void                        UsingGlyph( ServerFont&, GlyphData& );
     void                        GrowNotify();
 
@@ -139,7 +140,9 @@ private:
 // -----------------------------------------------------------------------
 
 // the glyph specific data needed by a GlyphCachePeer is usually trivial,
-// not attaching it to the corresponding GlyphData would be overkill
+// not attaching it to the corresponding GlyphData would be overkill;
+// this is currently only used by the headless (aka svp) plugin, where meInfo is
+// basebmp::Format and mpData is SvpGcpHelper*
 struct ExtGlyphData
 {
     int     meInfo;
@@ -219,10 +222,6 @@ public:
     bool                GetGlyphBitmap1( int nGlyphIndex, RawBitmap& ) const;
     bool                GetGlyphBitmap8( int nGlyphIndex, RawBitmap& ) const;
 
-    void                        SetExtended( int nInfo, void* ppVoid );
-    int                         GetExtInfo() { return mnExtInfo; }
-    void*                       GetExtPointer() { return mpExtData; }
-
 private:
     friend class GlyphCache;
     friend class ServerFontLayout;
@@ -247,10 +246,6 @@ private:
     mutable GlyphList           maGlyphList;
 
     const FontSelectPattern    maFontSelData;
-
-    // info for GlyphcachePeer
-    int                         mnExtInfo;
-    void*                       mpExtData;
 
     // used by GlyphCache for cache LRU algorithm
     mutable long                mnRefCount;
@@ -351,7 +346,7 @@ protected:
 public:
     sal_Int32       GetByteCount() const { return mnBytesUsed; }
     virtual void    RemovingFont( ServerFont& ) {}
-    virtual void    RemovingGlyph( ServerFont&, GlyphData&, int ) {}
+    virtual void    RemovingGlyph( GlyphData& ) {}
 
 protected:
     sal_Int32       mnBytesUsed;
@@ -367,7 +362,7 @@ public:
     bool            Rotate( int nAngle );
 
 public:
-    unsigned char*  mpBits;
+    basebmp::RawMemorySharedArray mpBits;
     sal_uLong           mnAllocated;
 
     sal_uLong           mnWidth;
@@ -379,14 +374,6 @@ public:
     int             mnXOffset;
     int             mnYOffset;
 };
-
-// =======================================================================
-
-inline void ServerFont::SetExtended( int nInfo, void* pVoid )
-{
-    mnExtInfo = nInfo;
-    mpExtData = pVoid;
-}
 
 // =======================================================================
 

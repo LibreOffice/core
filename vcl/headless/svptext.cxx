@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include "sal/config.h"
+
+#include <cassert>
+
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/range/b2ibox.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
@@ -50,7 +54,7 @@ public:
 
 protected:
     virtual void    RemovingFont( ServerFont& );
-    virtual void    RemovingGlyph( ServerFont&, GlyphData&, int nGlyphIndex );
+    virtual void    RemovingGlyph( GlyphData& );
 
     class SvpGcpHelper
     {
@@ -113,14 +117,14 @@ BitmapDeviceSharedPtr SvpGlyphPeer::GetGlyphBmp( ServerFont& rServerFont,
     int nGlyphIndex, basebmp::Format nBmpFormat, B2IPoint& rTargetPos )
 {
     GlyphData& rGlyphData = rServerFont.GetGlyphData( nGlyphIndex );
-    SvpGcpHelper* pGcpHelper = (SvpGcpHelper*)rGlyphData.ExtDataRef().mpData;
 
-    // nothing to do if the GlyphPeer hasn't allocated resources for the glyph
     if( rGlyphData.ExtDataRef().meInfo != nBmpFormat )
     {
-        if( rGlyphData.ExtDataRef().meInfo == FORMAT_NONE )
+        SvpGcpHelper* pGcpHelper = static_cast<SvpGcpHelper*>(
+            rGlyphData.ExtDataRef().mpData);
+        bool bNew = pGcpHelper == 0;
+        if( bNew )
             pGcpHelper = new SvpGcpHelper;
-        RawBitmap& rRawBitmap = pGcpHelper->maRawBitmap;
 
         // get glyph bitmap in matching format
         bool bFound = false;
@@ -143,22 +147,28 @@ BitmapDeviceSharedPtr SvpGlyphPeer::GetGlyphBmp( ServerFont& rServerFont,
         // return .notdef glyph if needed
         if( !bFound && (nGlyphIndex != 0) )
         {
-            delete pGcpHelper;
+            if( bNew )
+                delete pGcpHelper;
             return GetGlyphBmp( rServerFont, 0, nBmpFormat, rTargetPos );
         }
 
         // construct alpha mask from raw bitmap
-        const B2IVector aSize( rRawBitmap.mnScanlineSize, rRawBitmap.mnHeight );
+        const B2IVector aSize(
+            pGcpHelper->maRawBitmap.mnScanlineSize,
+            pGcpHelper->maRawBitmap.mnHeight );
         if( aSize.getX() && aSize.getY() )
         {
             static PaletteMemorySharedVector aDummyPAL;
-            RawMemorySharedArray aRawPtr( rRawBitmap.mpBits );
-            pGcpHelper->maBitmapDev = createBitmapDevice( aSize, true, nBmpFormat, aRawPtr, aDummyPAL );
+            pGcpHelper->maBitmapDev = createBitmapDevice( aSize, true, nBmpFormat, pGcpHelper->maRawBitmap.mpBits, aDummyPAL );
         }
 
-        rServerFont.SetExtended( nBmpFormat, (void*)pGcpHelper );
+        rGlyphData.ExtDataRef().meInfo = nBmpFormat;
+        rGlyphData.ExtDataRef().mpData = pGcpHelper;
     }
 
+    SvpGcpHelper* pGcpHelper = static_cast<SvpGcpHelper*>(
+        rGlyphData.ExtDataRef().mpData);
+    assert(pGcpHelper != 0);
     rTargetPos += B2IPoint( pGcpHelper->maRawBitmap.mnXOffset, pGcpHelper->maRawBitmap.mnYOffset );
     return pGcpHelper->maBitmapDev;
 }
@@ -170,16 +180,13 @@ void SvpGlyphPeer::RemovingFont( ServerFont& )
 }
 
 
-void SvpGlyphPeer::RemovingGlyph( ServerFont&, GlyphData& rGlyphData, int /*nGlyphIndex*/ )
+void SvpGlyphPeer::RemovingGlyph( GlyphData& rGlyphData )
 {
-    if( rGlyphData.ExtDataRef().mpData != 0 )
-    {
-        // release the glyph related resources
-        DBG_ASSERT( (rGlyphData.ExtDataRef().meInfo <= FORMAT_MAX), "SVP::RG() invalid alpha format" );
-        SvpGcpHelper* pGcpHelper = (SvpGcpHelper*)rGlyphData.ExtDataRef().mpData;
-        delete[] pGcpHelper->maRawBitmap.mpBits;
-        delete pGcpHelper;
-    }
+    SvpGcpHelper* pGcpHelper = static_cast<SvpGcpHelper*>(
+        rGlyphData.ExtDataRef().mpData);
+    rGlyphData.ExtDataRef().meInfo = basebmp::FORMAT_NONE;
+    rGlyphData.ExtDataRef().mpData = 0;
+    delete pGcpHelper;
 }
 
 

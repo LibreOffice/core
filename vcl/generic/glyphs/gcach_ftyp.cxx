@@ -650,7 +650,6 @@ ImplFontEntry* ImplFTSFontData::CreateFontInstance( FontSelectPattern& rFSD ) co
 ServerFont::ServerFont( const FontSelectPattern& rFSD, FtFontInfo* pFI )
 :   maGlyphList( 0),
     maFontSelData(rFSD),
-    mnExtInfo(0),
     mnRefCount(1),
     mnBytesUsed( sizeof(ServerFont) ),
     mpPrevGCFont( NULL ),
@@ -1420,20 +1419,19 @@ bool ServerFont::GetGlyphBitmap1( int nGlyphIndex, RawBitmap& rRawBitmap ) const
 
     if( rRawBitmap.mnAllocated < nNeededSize )
     {
-        delete[] rRawBitmap.mpBits;
         rRawBitmap.mnAllocated = 2*nNeededSize;
-        rRawBitmap.mpBits = new unsigned char[ rRawBitmap.mnAllocated ];
+        rRawBitmap.mpBits.reset(new unsigned char[ rRawBitmap.mnAllocated ]);
     }
 
     if( !mbArtBold || pFTEmbolden )
     {
-        memcpy( rRawBitmap.mpBits, rBitmapFT.buffer, nNeededSize );
+        memcpy( rRawBitmap.mpBits.get(), rBitmapFT.buffer, nNeededSize );
     }
     else
     {
-        memset( rRawBitmap.mpBits, 0, nNeededSize );
+        memset( rRawBitmap.mpBits.get(), 0, nNeededSize );
         const unsigned char* pSrcLine = rBitmapFT.buffer;
-        unsigned char* pDstLine = rRawBitmap.mpBits;
+        unsigned char* pDstLine = rRawBitmap.mpBits.get();
         for( int h = rRawBitmap.mnHeight; --h >= 0; )
         {
             memcpy( pDstLine, pSrcLine, rBitmapFT.pitch );
@@ -1441,7 +1439,7 @@ bool ServerFont::GetGlyphBitmap1( int nGlyphIndex, RawBitmap& rRawBitmap ) const
             pSrcLine += rBitmapFT.pitch;
         }
 
-        unsigned char* p = rRawBitmap.mpBits;
+        unsigned char* p = rRawBitmap.mpBits.get();
         for( sal_uLong y=0; y < rRawBitmap.mnHeight; y++ )
         {
             unsigned char nLastByte = 0;
@@ -1549,13 +1547,12 @@ bool ServerFont::GetGlyphBitmap8( int nGlyphIndex, RawBitmap& rRawBitmap ) const
     const sal_uLong nNeededSize = rRawBitmap.mnScanlineSize * rRawBitmap.mnHeight;
     if( rRawBitmap.mnAllocated < nNeededSize )
     {
-        delete[] rRawBitmap.mpBits;
         rRawBitmap.mnAllocated = 2*nNeededSize;
-        rRawBitmap.mpBits = new unsigned char[ rRawBitmap.mnAllocated ];
+        rRawBitmap.mpBits.reset(new unsigned char[ rRawBitmap.mnAllocated ]);
     }
 
     const unsigned char* pSrc = rBitmapFT.buffer;
-    unsigned char* pDest = rRawBitmap.mpBits;
+    unsigned char* pDest = rRawBitmap.mpBits.get();
     if( !bEmbedded )
     {
         for( int y = rRawBitmap.mnHeight, x; --y >= 0 ; )
@@ -1585,7 +1582,7 @@ bool ServerFont::GetGlyphBitmap8( int nGlyphIndex, RawBitmap& rRawBitmap ) const
     if( mbArtBold && !pFTEmbolden )
     {
         // overlay with glyph image shifted by one left pixel
-        unsigned char* p = rRawBitmap.mpBits;
+        unsigned char* p = rRawBitmap.mpBits.get();
         for( sal_uLong y=0; y < rRawBitmap.mnHeight; y++ )
         {
             unsigned char nLastByte = 0;
@@ -1601,7 +1598,7 @@ bool ServerFont::GetGlyphBitmap8( int nGlyphIndex, RawBitmap& rRawBitmap ) const
 
     if( !bEmbedded && mbUseGamma )
     {
-        unsigned char* p = rRawBitmap.mpBits;
+        unsigned char* p = rRawBitmap.mpBits.get();
         for( sal_uLong y=0; y < rRawBitmap.mnHeight; y++ )
         {
             for( sal_uLong x=0; x < rRawBitmap.mnWidth; x++ )

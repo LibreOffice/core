@@ -315,9 +315,9 @@ void GlyphCache::GrowNotify()
 }
 
 
-inline void GlyphCache::RemovingGlyph( ServerFont& rSF, GlyphData& rGD, int nGlyphIndex )
+inline void GlyphCache::RemovingGlyph( GlyphData& rGD )
 {
-    mrPeer.RemovingGlyph( rSF, rGD, nGlyphIndex );
+    mrPeer.RemovingGlyph( rGD );
     mnBytesUsed -= sizeof( GlyphData );
     --mnGlyphCount;
 }
@@ -372,7 +372,7 @@ void ServerFont::GarbageCollect( long nMinLruIndex )
         {
             OSL_ASSERT( mnBytesUsed >= sizeof(GlyphData) );
             mnBytesUsed -= sizeof( GlyphData );
-            GlyphCache::GetInstance().RemovingGlyph( *this, rGD, it->first );
+            GlyphCache::GetInstance().RemovingGlyph( rGD );
             maGlyphList.erase( it );
             it_next = maGlyphList.begin();
         }
