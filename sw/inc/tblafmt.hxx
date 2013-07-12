@@ -128,7 +128,8 @@ public:
 
     SwTableAutoFormat& operator=( const SwTableAutoFormat& rNew );
 
-    SwTableFormat* GetTableStyle() { return m_pTableStyle; }
+    SwTableFormat* GetTableStyle() const   { return m_pTableStyle; }
+    SwTableFormat* GetTableStyle()         { return m_pTableStyle; }
 
     void SetBoxFormat( const SwTableBoxFormat& rNew, sal_uInt8 nPos );
     SwTableBoxFormat* GetBoxFormat( sal_uInt8 nPos ) const;

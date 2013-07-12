@@ -112,7 +112,7 @@ void SwTableFormat::SetBoxFormat( const SwTableBoxFormat& rNew, sal_uInt8 nPos )
     sal_uInt8 nLine = nPos / 4;
     sal_uInt8 nBox = nPos % 4;
 
-    SwTableLineFormat* pLine;
+    SwTableLineFormat* pLine = 0;
 
     switch( nLine )
     {
@@ -147,7 +147,7 @@ SwTableBoxFormat* SwTableFormat::GetBoxFormat( sal_uInt8 nPos ) const
     sal_uInt8 nLine = nPos / 4;
     sal_uInt8 nBox = nPos % 4;
 
-    SwTableLineFormat* pLine;
+    SwTableLineFormat* pLine = 0;
     SwTableBoxFormat* pRet;
 
     switch( nLine )
