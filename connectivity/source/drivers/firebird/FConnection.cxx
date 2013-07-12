@@ -81,6 +81,8 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::sdbc;
 using namespace com::sun::star::uno;
 
+const OUString OConnection::sDBLocation( "firebird.fdb" );
+
 OConnection::OConnection(FirebirdDriver*    _pDriver)
                         :OMetaConnection_BASE(m_aMutex),
                          OSubComponent<OConnection, OConnection_BASE>((::cppu::OWeakObject*)_pDriver, this),
@@ -173,7 +175,6 @@ void OConnection::construct(const ::rtl::OUString& url, const Sequence< Property
 
         bIsNewDatabase = !m_xEmbeddedStorage->hasElements();
 
-        const OUString sDBName( "firebird.fdb" ); // Location within .odb container
         m_aURL = utl::TempFile::CreateTempName() + ".fdb";
 
         SAL_INFO("connectivity.firebird", "Temporary .fdb location:  "
@@ -181,14 +182,14 @@ void OConnection::construct(const ::rtl::OUString& url, const Sequence< Property
         if (!bIsNewDatabase)
         {
             SAL_INFO("connectivity.firebird", "Extracting .fdb from .odb" );
-            if (!m_xEmbeddedStorage->isStreamElement(sDBName))
+            if (!m_xEmbeddedStorage->isStreamElement(sDBLocation))
             {
                 ::connectivity::SharedResources aResources;
                 const OUString sMessage = aResources.getResourceString(STR_ERROR_NEW_VERSION);
                 ::dbtools::throwGenericSQLException(sMessage ,*this);
             }
 
-            Reference< XStream > xDBStream(m_xEmbeddedStorage->openStreamElement(sDBName,
+            Reference< XStream > xDBStream(m_xEmbeddedStorage->openStreamElement(sDBLocation,
                                                             ElementModes::READ));
 
             uno::Reference< ucb::XSimpleFileAccess2 > xFileAccess(
@@ -554,11 +555,9 @@ void SAL_CALL OConnection::documentEventOccured( const DocumentEvent& _Event )
     {
         if ( m_bIsEmbedded && m_xEmbeddedStorage.is() )
         {
-            const OUString sDBName( "firebird.fdb" ); // Location within .odb container
-
             SAL_INFO("connectivity.firebird", "Writing .fdb into .odb" );
 
-            Reference< XStream > xDBStream(m_xEmbeddedStorage->openStreamElement(sDBName,
+            Reference< XStream > xDBStream(m_xEmbeddedStorage->openStreamElement(sDBLocation,
                                                             ElementModes::WRITE));
 
             using namespace ::comphelper;

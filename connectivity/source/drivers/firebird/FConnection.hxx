@@ -82,7 +82,7 @@ namespace connectivity
             friend class connectivity::firebird::OSubComponent<OConnection, OConnection_BASE>;
 
         protected:
-
+            static const OUString sDBLocation; // Location within .odb container
             rtl_TextEncoding                        m_nTextEncoding; // the encoding which is used for all text conversions
             //====================================================================
             // Data attributes
