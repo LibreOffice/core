@@ -28,6 +28,9 @@
 
 - (void) sendCommand:(NSString *)aCommand;
 
+- (void)startConnectionTimeoutTimerwithInterval:(double) interval;
+- (void)stopConnectionTimeoutTimer;
+
 -(void)stream:(NSStream *)stream handleEvent:(NSStreamEvent)eventCode;
 
 @end

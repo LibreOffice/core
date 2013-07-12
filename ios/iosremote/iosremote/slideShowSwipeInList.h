@@ -14,7 +14,4 @@
 @property (strong, nonatomic) NSTimer *stopWatchTimer;
 @property (strong, nonatomic) NSDate *startDate;
 
-
-@property (strong, nonatomic) IBOutlet UITableView *slidesTable;
-
 @end

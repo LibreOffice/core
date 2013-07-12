@@ -72,6 +72,7 @@ enum ConnectionState : NSInteger {
 @property ConnectionState state;
 @property (nonatomic, strong) id delegate;
 @property (atomic, strong) NSMutableArray* servers;
+@property (nonatomic, strong) Client* client;
 @property (nonatomic, strong) CommandInterpreter* interpreter;
 @property (nonatomic, strong) CommandTransmitter* transmitter;
 

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="2.0" toolsVersion="3084" systemVersion="13A497d" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="qoG-TN-hN0">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="2.0" toolsVersion="3084" systemVersion="13A510d" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="qoG-TN-hN0">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="2083"/>
     </dependencies>
@@ -330,14 +330,17 @@
                                                 <constraint firstAttribute="height" constant="122" id="idF-T1-zdQ"/>
                                             </constraints>
                                         </imageView>
-                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="2" contentMode="left" text="1" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" minimumScaleFactor="1" preferredMaxLayoutWidth="29" translatesAutoresizingMaskIntoConstraints="NO" id="yWM-Nx-KmF">
+                                        <label clipsSubviews="YES" userInteractionEnabled="NO" tag="2" contentMode="left" text="1" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="1" highlighted="YES" translatesAutoresizingMaskIntoConstraints="NO" id="yWM-Nx-KmF">
                                             <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                            <accessibility key="accessibilityConfiguration">
+                                                <accessibilityTraits key="traits" none="YES" selected="YES" staticText="YES"/>
+                                            </accessibility>
                                             <constraints>
                                                 <constraint firstAttribute="width" constant="29" id="d7p-Jx-M0G"/>
                                             </constraints>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                            <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                            <nil key="highlightedColor"/>
                                         </label>
                                     </subviews>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -358,9 +361,6 @@
                             <outlet property="delegate" destination="5d0-J5-Cal" id="QXg-wT-RSm"/>
                         </connections>
                     </tableView>
-                    <connections>
-                        <outlet property="slidesTable" destination="Ke1-ze-r00" id="Jvb-7c-oza"/>
-                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Fb5-Zn-HeE" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -721,9 +721,8 @@
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2Zo-K8-3NM">
                                 <subviews>
-                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Title of the presentation" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="5" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="178" translatesAutoresizingMaskIntoConstraints="NO" id="nJf-ed-YfY">
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Title of the presentation(TODO)" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="5" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="178" translatesAutoresizingMaskIntoConstraints="NO" id="nJf-ed-YfY">
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="56" type="user" id="VUf-zJ-vPG"/>
                                             <constraint firstAttribute="width" constant="178" id="wto-RF-nap"/>
                                         </constraints>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="25"/>
@@ -773,7 +772,6 @@
                                     <constraint firstItem="g5m-gQ-o0u" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="2Zo-K8-3NM" secondAttribute="leading" constant="32" type="user" id="VP2-HW-0K1"/>
                                     <constraint firstItem="Dds-oJ-Uhh" firstAttribute="leading" secondItem="mrB-Wd-OcP" secondAttribute="leading" type="user" id="WW4-GU-mSH"/>
                                     <constraint firstItem="Dds-oJ-Uhh" firstAttribute="top" secondItem="g5m-gQ-o0u" secondAttribute="bottom" constant="8" symbolic="YES" type="user" id="gtQ-av-tu7"/>
-                                    <constraint firstAttribute="bottom" secondItem="mrB-Wd-OcP" secondAttribute="bottom" constant="20" symbolic="YES" type="user" id="imp-d1-gQ3"/>
                                     <constraint firstAttribute="height" constant="169" type="user" id="kbX-jk-qBX"/>
                                     <constraint firstItem="nJf-ed-YfY" firstAttribute="centerX" secondItem="2Zo-K8-3NM" secondAttribute="centerX" type="default" id="qYz-zW-Lfz"/>
                                     <constraint firstItem="nJf-ed-YfY" firstAttribute="top" secondItem="2Zo-K8-3NM" secondAttribute="top" constant="20" symbolic="YES" type="user" id="qcW-Ip-dGx"/>
@@ -840,7 +838,6 @@
         <class className="slideShowPreviewTable_vc" superclassName="UITableViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/slideShowPreviewTable_vc.h"/>
             <relationships>
-                <relationship kind="action" name="startPresentationAction:"/>
                 <relationship kind="outlet" name="optionsTable" candidateClass="UITableView"/>
             </relationships>
         </class>
@@ -849,7 +846,6 @@
             <relationships>
                 <relationship kind="action" name="stopWatchClear:"/>
                 <relationship kind="action" name="stopWatchStart:"/>
-                <relationship kind="outlet" name="slidesTable" candidateClass="UITableView"/>
             </relationships>
         </class>
         <class className="slideShow_vc" superclassName="UIViewController">

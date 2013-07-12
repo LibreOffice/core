@@ -10,6 +10,7 @@
 #import "CommunicationManager.h"
 #import "newServer_vc.h"
 #import "Server.h"
+#import "Client.h"
 
 @interface server_list_vc ()
 
@@ -61,6 +62,7 @@
                                                                                    object:nil
                                                                                     queue:mainQueue
                                                                                usingBlock:^(NSNotification *note) {
+                                                                                   [self.comManager.client stopConnectionTimeoutTimer];
                                                                                    self.comManager.state = CONNECTED;
                                                                                    [self disableSpinner];
                                                                                    [self performSegueWithIdentifier:@"pinValidation" sender:self ];
@@ -69,6 +71,7 @@
                                                                                            object:nil
                                                                                             queue:mainQueue
                                                                                        usingBlock:^(NSNotification *note) {
+                                                                                           [self.comManager.client stopConnectionTimeoutTimer];
                                                                                            self.comManager.state = CONNECTED;
                                                                                            [self disableSpinner];
                                                                                            [self performSegueWithIdentifier:@"SlideShowPreview" sender:self ];
@@ -128,7 +131,6 @@
     }
 
     NSLog(@"Connecting to %@:%@", [[self.comManager.servers objectAtIndex:indexPath.row] serverName], [[self.comManager.servers objectAtIndex:indexPath.row] serverAddress]);
-    self.comManager.delegate = self;
     [self.comManager connectToServer:[self.comManager.servers objectAtIndex:indexPath.row]];
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }

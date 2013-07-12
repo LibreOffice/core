@@ -11,6 +11,7 @@
 #import "Server.h"
 #import "CommandInterpreter.h"
 #import "CommunicationManager.h"
+#import "serverList_vc.h"
 
 #define CHARSET @"UTF-8"
 
@@ -60,11 +61,10 @@ dispatch_queue_t backgroundQueue;
     return self;
 }
 
-- (void)startConnectionTimeoutTimer
+#pragma mark - Connection timeout handling
+- (void)startConnectionTimeoutTimerwithInterval:(double) interval
 {
     [self stopConnectionTimeoutTimer]; // Or make sure any existing timer is stopped before this method is called
-
-    NSTimeInterval interval = 3.0; // Measured in seconds, is a double
 
     self.connectionTimeoutTimer = [NSTimer scheduledTimerWithTimeInterval:interval
                                                                    target:self
@@ -75,9 +75,11 @@ dispatch_queue_t backgroundQueue;
 
 - (void)handleConnectionTimeout
 {
-    NSLog(@"handleConnectionTimeout");
-    [self disconnect];
-    [[NSNotificationCenter defaultCenter]postNotificationName:@"connection.status.disconnected" object:nil];
+    if (self.comManager.state == CONNECTING){
+        NSLog(@"handleConnectionTimeout");
+        [self disconnect];
+        [[NSNotificationCenter defaultCenter]postNotificationName:@"connection.status.disconnected" object:nil];
+    }
 }
 
 - (void)dealloc
@@ -224,7 +226,7 @@ int count = 0;
 
 - (void) connect
 {
-    [self startConnectionTimeoutTimer];
+    [self startConnectionTimeoutTimerwithInterval:3.0];
     backgroundQueue = dispatch_queue_create("com.libreoffice.iosremote", NULL);
     dispatch_async(backgroundQueue, ^(void) {
         [self streamOpenWithIp:self.server.serverAddress withPortNumber:self.mPort];

@@ -43,11 +43,20 @@ dispatch_queue_t backgroundQueue;
     self.slideshow = self.comManager.interpreter.slideShow;
     self.slideshow.secondaryDelegate = self;
     self.state = TIMER_STATE_CLEARED;
-
     if ([[NSUserDefaults standardUserDefaults] boolForKey:KEY_TIMER]) {
-        UIButton *l = (UIButton *)[[self.slidesTable cellForRowAtIndexPath:[NSIndexPath indexPathForItem:0 inSection:0]] viewWithTag:2];
-        [self stopWatchStart:l];
+        [self stopWatchStart:nil];
     }
+    self.clearsSelectionOnViewWillAppear = NO;
+}
+
+- (void) viewDidAppear:(BOOL)animated
+{
+    [self changeStartButtonIconForButton:nil];
+    NSIndexPath *indexPath = [NSIndexPath indexPathForItem:self.slideshow.currentSlide
+                                                inSection:1];
+    [self.tableView selectRowAtIndexPath:indexPath animated:NO scrollPosition:UITableViewScrollPositionNone];
+    [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionMiddle animated:NO];
+    [[[self.tableView cellForRowAtIndexPath:indexPath] viewWithTag:2] setBackgroundColor:[UIColor lightGrayColor]];
 }
 
 - (void) prepareForSegue: (UIStoryboardSegue *) segue sender: (id) sender
@@ -77,15 +86,37 @@ dispatch_queue_t backgroundQueue;
 
 #pragma mark - Table view data source
 
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    return 2;
+}
+
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    // +1 for stopwatch
-    return [self.slideshow size]+1;
+    // Section one used for stopwatch
+    if (section == 0)
+        return 1;
+    else
+        return [self.slideshow size];
+}
+
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+{
+    switch (section) {
+        case 0:
+            return @"Stop Watch";
+            break;
+        case 1:
+            return @"Slides";
+        default:
+            break;
+    }
+    return nil;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.row == 0) {
+    if (indexPath.section == 0) {
         static NSString *CellIdentifier = @"stopWatch";
 
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier: CellIdentifier];
@@ -98,26 +129,25 @@ dispatch_queue_t backgroundQueue;
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier: CellIdentifier];
         UILabel * slideNumber = (UILabel *)[cell viewWithTag:2];
 
+        // Starting 20, all tags are used for thumbnails in this sidebar
         [cell setTag:20+indexPath.row];
-        [self.slideshow getContentAtIndex:indexPath.row-1 forView:cell];
-        [slideNumber setText:[NSString stringWithFormat:@"%u", indexPath.row]];
+        [self.slideshow getContentAtIndex:indexPath.row forView:cell];
+        [slideNumber setText:[NSString stringWithFormat:@"%u", indexPath.row+1]];
         return cell;
     }
 }
 
-
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.row == 0)
+    if (indexPath.section == 0)
         return;
-    [self.comManager.transmitter gotoSlide:indexPath.row - 1];
+    [self.comManager.transmitter gotoSlide:indexPath.row];
+    [[[self.tableView cellForRowAtIndexPath:indexPath] viewWithTag:2] setBackgroundColor:[UIColor lightGrayColor]];
     [self.revealViewController revealToggle: self];
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 
 - (void)viewDidUnload {
-    [self setSlidesTable:nil];
     [super viewDidUnload];
 }
 
@@ -135,7 +165,7 @@ dispatch_queue_t backgroundQueue;
 
     // Format the elapsed time and set it to the label
     NSString *timeString = [dateFormatter stringFromDate:timerDate];
-    UILabel *l = (UILabel *)[[self.slidesTable cellForRowAtIndexPath:[NSIndexPath indexPathForItem:0 inSection:0]] viewWithTag:1];
+    UILabel *l = (UILabel *)[[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForItem:0 inSection:0]] viewWithTag:1];
     l.text = timeString;
 }
 
@@ -170,8 +200,15 @@ dispatch_queue_t backgroundQueue;
             break;
     }
 
-    UIButton * btn = (UIButton *)sender;
+    [self changeStartButtonIconForButton:sender];
+}
 
+- (void) changeStartButtonIconForButton:(UIButton *)sender
+{
+    UIButton * btn = sender;
+    if (!btn) {
+        btn = (UIButton *)[[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForItem:0 inSection:0]] viewWithTag:2];
+    }
     switch (self.state) {
         case TIMER_STATE_RUNNING:
             [btn setImage:[UIImage imageNamed:@"timer_pause_btn"] forState:UIControlStateNormal];
@@ -194,7 +231,7 @@ dispatch_queue_t backgroundQueue;
     self.lastInterval = 0;
     self.state = TIMER_STATE_CLEARED;
 
-    UIButton *l = (UIButton *)[[self.slidesTable cellForRowAtIndexPath:[NSIndexPath indexPathForItem:0 inSection:0]] viewWithTag:2];
+    UIButton *l = (UIButton *)[[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForItem:0 inSection:0]] viewWithTag:2];
     [l setImage:[UIImage imageNamed:@"timer_start_btn"] forState:UIControlStateNormal];
     [self updateTimer];
 }

@@ -19,9 +19,6 @@
 #define ExistingServersKey @"CommunicationManager.ExistingServers"
 
 @interface CommunicationManager()
-
-@property (nonatomic, strong) Client* client;
-
 @end
 
 // Singlton Pattern
@@ -52,6 +49,8 @@
     if([[note name] isEqualToString:@"connection.status.connected"]){
         if (self.state!=CONNECTED){
             NSLog(@"Connected, waiting for pairing response");
+            // A 5 seconds timer waiting for pairing response. 
+            [self.client startConnectionTimeoutTimerwithInterval:5.0];
             self.transmitter = [[CommandTransmitter alloc] initWithClient:self.client];
         }
     } else if ([[note name] isEqualToString:@"connection.status.disconnected"]){
