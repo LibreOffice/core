@@ -33,7 +33,7 @@
 #include "ViewShell.hxx"
 #include "drawdoc.hxx"
 #include "sdabstdlg.hxx"
-#include "paragr.hrc"
+//#include "paragr.hrc"
 #include "sdattr.hrc"
 
 namespace sd {
