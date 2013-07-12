@@ -31,16 +31,24 @@ except NameError:
     unicode = str
 
 class LogLevel:
-    NONE = 0
-    ERROR = 1
-    DEBUG = 2
+    NONE = 0   # production level
+    ERROR = 1  # for script developers
+    DEBUG = 2  # for script framework developers
+
+PYSCRIPT_LOG_ENV = "PYSCRIPT_LOG_LEVEL"
+PYSCRIPT_LOG_STDOUT_ENV = "PYSCRIPT_LOG_STDOUT"
 
 # Configuration ----------------------------------------------------
-LogLevel.use = LogLevel.NONE                # production level
-#LogLevel.use = LogLevel.ERROR               # for script developers
-#LogLevel.use = LogLevel.DEBUG               # for script framework developers
-LOG_STDOUT = True                           # True, writes to stdout (difficult on windows)
-                                            # False, writes to user/Scripts/python/log.txt
+LogLevel.use = LogLevel.NONE
+if os.environ.get(PYSCRIPT_LOG_ENV) == "ERROR":
+    LogLevel.use = LogLevel.ERROR
+elif os.environ.get(PYSCRIPT_LOG_ENV) == "DEBUG":
+    LogLevel.use = LogLevel.DEBUG
+
+# True, writes to stdout (difficult on windows)
+# False, writes to user/Scripts/python/log.txt
+LOG_STDOUT = os.environ.get(PYSCRIPT_LOG_STDOUT_ENV, "1") != "0"
+
 ENABLE_EDIT_DIALOG=False                    # offers a minimal editor for editing.
 #-------------------------------------------------------------------
 
