@@ -59,9 +59,7 @@ using com::sun::star::xml::sax::XParser;
 sal_Bool SAL_CALL WPGImportFilter::filter( const Sequence< ::com::sun::star::beans::PropertyValue >& aDescriptor )
 throw (RuntimeException)
 {
-#ifdef DEBUG
-    std::cerr << "WPGImportFilter::filter" << std::endl;
-#endif
+    SAL_INFO("writerperfect", "WPGImportFilter::filter");
     sal_Int32 nLength = aDescriptor.getLength();
     const PropertyValue *pValue = aDescriptor.getConstArray();
     Reference < XInputStream > xInputStream;
@@ -98,18 +96,14 @@ throw (RuntimeException)
 void SAL_CALL WPGImportFilter::cancel(  )
 throw (RuntimeException)
 {
-#ifdef DEBUG
-    std::cerr << "WPGImportFilter::cancel" << std::endl;
-#endif
+    SAL_INFO("writerperfect", "WPGImportFilter::cancel");
 }
 
 // XImporter
 void SAL_CALL WPGImportFilter::setTargetDocument( const Reference< ::com::sun::star::lang::XComponent >& xDoc )
 throw (::com::sun::star::lang::IllegalArgumentException, RuntimeException)
 {
-#ifdef DEBUG
-    std::cerr << "WPGImportFilter::setTargetDocument" << std::endl;
-#endif
+    SAL_INFO("writerperfect", "WPGImportFilter::setTargetDocument");
     mxDoc = xDoc;
 }
 
@@ -117,9 +111,7 @@ throw (::com::sun::star::lang::IllegalArgumentException, RuntimeException)
 OUString SAL_CALL WPGImportFilter::detect( com::sun::star::uno::Sequence< PropertyValue >& Descriptor )
 throw( com::sun::star::uno::RuntimeException )
 {
-#ifdef DEBUG
-    std::cerr << "WPGImportFilter::detect" << std::endl;
-#endif
+    SAL_INFO("writerperfect", "WPGImportFilter::detect");
     OUString sTypeName;
     sal_Int32 nLength = Descriptor.getLength();
     sal_Int32 location = nLength;
@@ -159,9 +151,7 @@ throw( com::sun::star::uno::RuntimeException )
 void SAL_CALL WPGImportFilter::initialize( const Sequence< Any >& aArguments )
 throw (Exception, RuntimeException)
 {
-#ifdef DEBUG
-    std::cerr << "WPGImportFilter::initialize" << std::endl;
-#endif
+    SAL_INFO("writerperfect", "WPGImportFilter::initialize");
     Sequence < PropertyValue > aAnySeq;
     sal_Int32 nLength = aArguments.getLength();
     if ( nLength && ( aArguments[0] >>= aAnySeq ) )
@@ -181,9 +171,7 @@ throw (Exception, RuntimeException)
 OUString WPGImportFilter_getImplementationName ()
 throw (RuntimeException)
 {
-#ifdef DEBUG
-    std::cerr << "WPGImportFilter_getImplementationName" << std::endl;
-#endif
+    SAL_INFO("writerperfect", "WPGImportFilter_getImplementationName");
     return OUString (  "com.sun.star.comp.Draw.WPGImportFilter"  );
 }
 
@@ -192,17 +180,13 @@ throw (RuntimeException)
 sal_Bool SAL_CALL WPGImportFilter_supportsService( const OUString &ServiceName )
 throw (RuntimeException)
 {
-#ifdef DEBUG
-    std::cerr << "WPGImportFilter_supportsService" << std::endl;
-#endif
+    SAL_INFO("writerperfect", "WPGImportFilter_supportsService");
     return ( ServiceName == SERVICE_NAME1 || ServiceName == SERVICE_NAME2 );
 }
 Sequence< OUString > SAL_CALL WPGImportFilter_getSupportedServiceNames(  )
 throw (RuntimeException)
 {
-#ifdef DEBUG
-    std::cerr << "WPGImportFilter_getSupportedServiceNames" << std::endl;
-#endif
+    SAL_INFO("writerperfect", "WPGImportFilter_getSupportedServiceNames");
     Sequence < OUString > aRet(2);
     OUString *pArray = aRet.getArray();
     pArray[0] =  OUString (  SERVICE_NAME1  );
@@ -215,9 +199,7 @@ throw (RuntimeException)
 Reference< XInterface > SAL_CALL WPGImportFilter_createInstance( const Reference< XComponentContext > & rContext)
 throw( Exception )
 {
-#ifdef DEBUG
-    std::cerr << "WPGImportFilter_createInstance" << std::endl;
-#endif
+    SAL_INFO("writerperfect", "WPGImportFilter_createInstance");
     return (cppu::OWeakObject *) new WPGImportFilter( rContext );
 }
 
@@ -225,25 +207,19 @@ throw( Exception )
 OUString SAL_CALL WPGImportFilter::getImplementationName(  )
 throw (RuntimeException)
 {
-#ifdef DEBUG
-    std::cerr << "WPGImportFilter::getImplementationName" << std::endl;
-#endif
+    SAL_INFO("writerperfect", "WPGImportFilter::getImplementationName");
     return WPGImportFilter_getImplementationName();
 }
 sal_Bool SAL_CALL WPGImportFilter::supportsService( const OUString &rServiceName )
 throw (RuntimeException)
 {
-#ifdef DEBUG
-    std::cerr << "WPGImportFilter::supportsService" << std::endl;
-#endif
+    SAL_INFO("writerperfect", "WPGImportFilter::supportsService");
     return WPGImportFilter_supportsService( rServiceName );
 }
 Sequence< OUString > SAL_CALL WPGImportFilter::getSupportedServiceNames(  )
 throw (RuntimeException)
 {
-#ifdef DEBUG
-    std::cerr << "WPGImportFilter::getSupportedServiceNames" << std::endl;
-#endif
+    SAL_INFO("writerperfect", "WPGImportFilter::getSupportedServiceNames");
     return WPGImportFilter_getSupportedServiceNames();
 }
 

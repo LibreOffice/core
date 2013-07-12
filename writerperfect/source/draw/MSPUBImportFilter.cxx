@@ -53,9 +53,7 @@ using com::sun::star::xml::sax::XParser;
 sal_Bool SAL_CALL MSPUBImportFilter::filter( const Sequence< ::com::sun::star::beans::PropertyValue >& aDescriptor )
 throw (RuntimeException)
 {
-#ifdef DEBUG
-    std::cerr << "MSPUBImportFilter::filter" << std::endl;
-#endif
+    SAL_INFO("writerperfect", "MSPUBImportFilter::filter");
     sal_Int32 nLength = aDescriptor.getLength();
     const PropertyValue *pValue = aDescriptor.getConstArray();
     Reference < XInputStream > xInputStream;
@@ -92,18 +90,14 @@ throw (RuntimeException)
 void SAL_CALL MSPUBImportFilter::cancel(  )
 throw (RuntimeException)
 {
-#ifdef DEBUG
-    std::cerr << "MSPUBImportFilter::cancel" << std::endl;
-#endif
+    SAL_INFO("writerperfect", "MSPUBImportFilter::cancel");
 }
 
 // XImporter
 void SAL_CALL MSPUBImportFilter::setTargetDocument( const Reference< ::com::sun::star::lang::XComponent >& xDoc )
 throw (::com::sun::star::lang::IllegalArgumentException, RuntimeException)
 {
-#ifdef DEBUG
-    std::cerr << "MSPUBImportFilter::setTargetDocument" << std::endl;
-#endif
+    SAL_INFO("writerperfect", "MSPUBImportFilter::setTargetDocument");
     mxDoc = xDoc;
 }
 
@@ -111,9 +105,7 @@ throw (::com::sun::star::lang::IllegalArgumentException, RuntimeException)
 OUString SAL_CALL MSPUBImportFilter::detect( com::sun::star::uno::Sequence< PropertyValue >& Descriptor )
 throw( com::sun::star::uno::RuntimeException )
 {
-#ifdef DEBUG
-    std::cerr << "MSPUBImportFilter::detect" << std::endl;
-#endif
+    SAL_INFO("writerperfect", "MSPUBImportFilter::detect");
     OUString sTypeName;
     sal_Int32 nLength = Descriptor.getLength();
     sal_Int32 location = nLength;
@@ -153,9 +145,7 @@ throw( com::sun::star::uno::RuntimeException )
 void SAL_CALL MSPUBImportFilter::initialize( const Sequence< Any >& aArguments )
 throw (Exception, RuntimeException)
 {
-#ifdef DEBUG
-    std::cerr << "MSPUBImportFilter::initialize" << std::endl;
-#endif
+    SAL_INFO("writerperfect", "MSPUBImportFilter::initialize");
     Sequence < PropertyValue > aAnySeq;
     sal_Int32 nLength = aArguments.getLength();
     if ( nLength && ( aArguments[0] >>= aAnySeq ) )
@@ -175,9 +165,7 @@ throw (Exception, RuntimeException)
 OUString MSPUBImportFilter_getImplementationName ()
 throw (RuntimeException)
 {
-#ifdef DEBUG
-    std::cerr << "MSPUBImportFilter_getImplementationName" << std::endl;
-#endif
+    SAL_INFO("writerperfect", "MSPUBImportFilter_getImplementationName");
     return OUString ( "com.sun.star.comp.Draw.MSPUBImportFilter" );
 }
 
@@ -186,17 +174,13 @@ throw (RuntimeException)
 sal_Bool SAL_CALL MSPUBImportFilter_supportsService( const OUString &ServiceName )
 throw (RuntimeException)
 {
-#ifdef DEBUG
-    std::cerr << "MSPUBImportFilter_supportsService" << std::endl;
-#endif
+    SAL_INFO("writerperfect", "MSPUBImportFilter_supportsService");
     return ( ServiceName == SERVICE_NAME1 || ServiceName == SERVICE_NAME2 );
 }
 Sequence< OUString > SAL_CALL MSPUBImportFilter_getSupportedServiceNames(  )
 throw (RuntimeException)
 {
-#ifdef DEBUG
-    std::cerr << "MSPUBImportFilter_getSupportedServiceNames" << std::endl;
-#endif
+    SAL_INFO("writerperfect", "MSPUBImportFilter_getSupportedServiceNames");
     Sequence < OUString > aRet(2);
     OUString *pArray = aRet.getArray();
     pArray[0] =  OUString ( SERVICE_NAME1 );
@@ -209,9 +193,7 @@ throw (RuntimeException)
 Reference< XInterface > SAL_CALL MSPUBImportFilter_createInstance( const Reference< XComponentContext > & rContext)
 throw( Exception )
 {
-#ifdef DEBUG
-    std::cerr << "MSPUBImportFilter_createInstance" << std::endl;
-#endif
+    SAL_INFO("writerperfect", "MSPUBImportFilter_createInstance");
     return (cppu::OWeakObject *) new MSPUBImportFilter( rContext );
 }
 
@@ -219,25 +201,19 @@ throw( Exception )
 OUString SAL_CALL MSPUBImportFilter::getImplementationName(  )
 throw (RuntimeException)
 {
-#ifdef DEBUG
-    std::cerr << "MSPUBImportFilter::getImplementationName" << std::endl;
-#endif
+    SAL_INFO("writerperfect", "MSPUBImportFilter::getImplementationName");
     return MSPUBImportFilter_getImplementationName();
 }
 sal_Bool SAL_CALL MSPUBImportFilter::supportsService( const OUString &rServiceName )
 throw (RuntimeException)
 {
-#ifdef DEBUG
-    std::cerr << "MSPUBImportFilter::supportsService" << std::endl;
-#endif
+    SAL_INFO("writerperfect", "MSPUBImportFilter::supportsService");
     return MSPUBImportFilter_supportsService( rServiceName );
 }
 Sequence< OUString > SAL_CALL MSPUBImportFilter::getSupportedServiceNames(  )
 throw (RuntimeException)
 {
-#ifdef DEBUG
-    std::cerr << "MSPUBImportFilter::getSupportedServiceNames" << std::endl;
-#endif
+    SAL_INFO("writerperfect", "MSPUBImportFilter::getSupportedServiceNames");
     return MSPUBImportFilter_getSupportedServiceNames();
 }
 

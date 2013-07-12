@@ -53,9 +53,7 @@ using com::sun::star::xml::sax::XParser;
 sal_Bool SAL_CALL VisioImportFilter::filter( const Sequence< ::com::sun::star::beans::PropertyValue >& aDescriptor )
 throw (RuntimeException)
 {
-#ifdef DEBUG
-    std::cerr << "VisioImportFilter::filter" << std::endl;
-#endif
+    SAL_INFO("writerperfect", "VisioImportFilter::filter");
     sal_Int32 nLength = aDescriptor.getLength();
     const PropertyValue *pValue = aDescriptor.getConstArray();
     Reference < XInputStream > xInputStream;
@@ -92,18 +90,14 @@ throw (RuntimeException)
 void SAL_CALL VisioImportFilter::cancel(  )
 throw (RuntimeException)
 {
-#ifdef DEBUG
-    std::cerr << "VisioImportFilter::cancel" << std::endl;
-#endif
+    SAL_INFO("writerperfect", "VisioImportFilter::cancel");
 }
 
 // XImporter
 void SAL_CALL VisioImportFilter::setTargetDocument( const Reference< ::com::sun::star::lang::XComponent >& xDoc )
 throw (::com::sun::star::lang::IllegalArgumentException, RuntimeException)
 {
-#ifdef DEBUG
-    std::cerr << "VisioImportFilter::setTargetDocument" << std::endl;
-#endif
+    SAL_INFO("writerperfect", "VisioImportFilter::setTargetDocument");
     mxDoc = xDoc;
 }
 
@@ -111,9 +105,7 @@ throw (::com::sun::star::lang::IllegalArgumentException, RuntimeException)
 OUString SAL_CALL VisioImportFilter::detect( com::sun::star::uno::Sequence< PropertyValue >& Descriptor )
 throw( com::sun::star::uno::RuntimeException )
 {
-#ifdef DEBUG
-    std::cerr << "VisioImportFilter::detect" << std::endl;
-#endif
+    SAL_INFO("writerperfect", "VisioImportFilter::detect");
     OUString sTypeName;
     sal_Int32 nLength = Descriptor.getLength();
     sal_Int32 location = nLength;
@@ -153,9 +145,7 @@ throw( com::sun::star::uno::RuntimeException )
 void SAL_CALL VisioImportFilter::initialize( const Sequence< Any >& aArguments )
 throw (Exception, RuntimeException)
 {
-#ifdef DEBUG
-    std::cerr << "VisioImportFilter::initialize" << std::endl;
-#endif
+    SAL_INFO("writerperfect", "VisioImportFilter::initialize");
     Sequence < PropertyValue > aAnySeq;
     sal_Int32 nLength = aArguments.getLength();
     if ( nLength && ( aArguments[0] >>= aAnySeq ) )
@@ -175,9 +165,7 @@ throw (Exception, RuntimeException)
 OUString VisioImportFilter_getImplementationName ()
 throw (RuntimeException)
 {
-#ifdef DEBUG
-    std::cerr << "VisioImportFilter_getImplementationName" << std::endl;
-#endif
+    SAL_INFO("writerperfect", "VisioImportFilter_getImplementationName");
     return OUString ( "com.sun.star.comp.Draw.VisioImportFilter" );
 }
 
@@ -186,17 +174,13 @@ throw (RuntimeException)
 sal_Bool SAL_CALL VisioImportFilter_supportsService( const OUString &ServiceName )
 throw (RuntimeException)
 {
-#ifdef DEBUG
-    std::cerr << "VisioImportFilter_supportsService" << std::endl;
-#endif
+    SAL_INFO("writerperfect", "VisioImportFilter_supportsService");
     return ( ServiceName == SERVICE_NAME1 || ServiceName == SERVICE_NAME2 );
 }
 Sequence< OUString > SAL_CALL VisioImportFilter_getSupportedServiceNames(  )
 throw (RuntimeException)
 {
-#ifdef DEBUG
-    std::cerr << "VisioImportFilter_getSupportedServiceNames" << std::endl;
-#endif
+    SAL_INFO("writerperfect", "VisioImportFilter_getSupportedServiceNames");
     Sequence < OUString > aRet(2);
     OUString *pArray = aRet.getArray();
     pArray[0] =  OUString ( SERVICE_NAME1 );
@@ -209,9 +193,7 @@ throw (RuntimeException)
 Reference< XInterface > SAL_CALL VisioImportFilter_createInstance( const Reference< XComponentContext > & rContext)
 throw( Exception )
 {
-#ifdef DEBUG
-    std::cerr << "VisioImportFilter_createInstance" << std::endl;
-#endif
+    SAL_INFO("writerperfect", "VisioImportFilter_createInstance");
     return (cppu::OWeakObject *) new VisioImportFilter( rContext );
 }
 
@@ -219,25 +201,19 @@ throw( Exception )
 OUString SAL_CALL VisioImportFilter::getImplementationName(  )
 throw (RuntimeException)
 {
-#ifdef DEBUG
-    std::cerr << "VisioImportFilter::getImplementationName" << std::endl;
-#endif
+    SAL_INFO("writerperfect", "VisioImportFilter::getImplementationName");
     return VisioImportFilter_getImplementationName();
 }
 sal_Bool SAL_CALL VisioImportFilter::supportsService( const OUString &rServiceName )
 throw (RuntimeException)
 {
-#ifdef DEBUG
-    std::cerr << "VisioImportFilter::supportsService" << std::endl;
-#endif
+    SAL_INFO("writerperfect", "VisioImportFilter::supportsService");
     return VisioImportFilter_supportsService( rServiceName );
 }
 Sequence< OUString > SAL_CALL VisioImportFilter::getSupportedServiceNames(  )
 throw (RuntimeException)
 {
-#ifdef DEBUG
-    std::cerr << "VisioImportFilter::getSupportedServiceNames" << std::endl;
-#endif
+    SAL_INFO("writerperfect", "VisioImportFilter::getSupportedServiceNames");
     return VisioImportFilter_getSupportedServiceNames();
 }
 

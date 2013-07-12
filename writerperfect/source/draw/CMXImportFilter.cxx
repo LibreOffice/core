@@ -57,9 +57,7 @@ using com::sun::star::xml::sax::XParser;
 sal_Bool SAL_CALL CMXImportFilter::filter( const Sequence< ::com::sun::star::beans::PropertyValue >& aDescriptor )
 throw (RuntimeException)
 {
-#ifdef DEBUG
-    std::cerr << "CMXImportFilter::filter" << std::endl;
-#endif
+    SAL_INFO("writerperfect", "CMXImportFilter::filter");
     sal_Int32 nLength = aDescriptor.getLength();
     const PropertyValue *pValue = aDescriptor.getConstArray();
     Reference < XInputStream > xInputStream;
@@ -96,18 +94,14 @@ throw (RuntimeException)
 void SAL_CALL CMXImportFilter::cancel(  )
 throw (RuntimeException)
 {
-#ifdef DEBUG
-    std::cerr << "CMXImportFilter::cancel" << std::endl;
-#endif
+    SAL_INFO("writerperfect", "CMXImportFilter::cancel");
 }
 
 // XImporter
 void SAL_CALL CMXImportFilter::setTargetDocument( const Reference< ::com::sun::star::lang::XComponent >& xDoc )
 throw (::com::sun::star::lang::IllegalArgumentException, RuntimeException)
 {
-#ifdef DEBUG
-    std::cerr << "CMXImportFilter::setTargetDocument" << std::endl;
-#endif
+    SAL_INFO("writerperfect", "CMXImportFilter::setTargetDocument");
     mxDoc = xDoc;
 }
 
@@ -115,9 +109,7 @@ throw (::com::sun::star::lang::IllegalArgumentException, RuntimeException)
 OUString SAL_CALL CMXImportFilter::detect( com::sun::star::uno::Sequence< PropertyValue >& Descriptor )
 throw( com::sun::star::uno::RuntimeException )
 {
-#ifdef DEBUG
-    std::cerr << "CMXImportFilter::detect" << std::endl;
-#endif
+    SAL_INFO("writerperfect", "CMXImportFilter::detect");
     OUString sTypeName;
     sal_Int32 nLength = Descriptor.getLength();
     sal_Int32 location = nLength;
@@ -157,9 +149,7 @@ throw( com::sun::star::uno::RuntimeException )
 void SAL_CALL CMXImportFilter::initialize( const Sequence< Any >& aArguments )
 throw (Exception, RuntimeException)
 {
-#ifdef DEBUG
-    std::cerr << "CMXImportFilter::initialize" << std::endl;
-#endif
+    SAL_INFO("writerperfect", "CMXImportFilter::initialize");
     Sequence < PropertyValue > aAnySeq;
     sal_Int32 nLength = aArguments.getLength();
     if ( nLength && ( aArguments[0] >>= aAnySeq ) )
@@ -179,9 +169,7 @@ throw (Exception, RuntimeException)
 OUString CMXImportFilter_getImplementationName ()
 throw (RuntimeException)
 {
-#ifdef DEBUG
-    std::cerr << "CMXImportFilter_getImplementationName" << std::endl;
-#endif
+    SAL_INFO("writerperfect", "CMXImportFilter_getImplementationName");
     return OUString ( "com.sun.star.comp.Draw.CMXImportFilter" );
 }
 
@@ -190,17 +178,13 @@ throw (RuntimeException)
 sal_Bool SAL_CALL CMXImportFilter_supportsService( const OUString &ServiceName )
 throw (RuntimeException)
 {
-#ifdef DEBUG
-    std::cerr << "CMXImportFilter_supportsService" << std::endl;
-#endif
+    SAL_INFO("writerperfect", "CMXImportFilter_supportsService");
     return ( ServiceName == SERVICE_NAME1 || ServiceName == SERVICE_NAME2 );
 }
 Sequence< OUString > SAL_CALL CMXImportFilter_getSupportedServiceNames(  )
 throw (RuntimeException)
 {
-#ifdef DEBUG
-    std::cerr << "CMXImportFilter_getSupportedServiceNames" << std::endl;
-#endif
+    SAL_INFO("writerperfect", "CMXImportFilter_getSupportedServiceNames");
     Sequence < OUString > aRet(2);
     OUString *pArray = aRet.getArray();
     pArray[0] =  OUString ( SERVICE_NAME1 );
@@ -213,9 +197,7 @@ throw (RuntimeException)
 Reference< XInterface > SAL_CALL CMXImportFilter_createInstance( const Reference< XComponentContext > & rContext)
 throw( Exception )
 {
-#ifdef DEBUG
-    std::cerr << "CMXImportFilter_createInstance" << std::endl;
-#endif
+    SAL_INFO("writerperfect", "CMXImportFilter_createInstance");
     return (cppu::OWeakObject *) new CMXImportFilter( rContext );
 }
 
@@ -223,25 +205,19 @@ throw( Exception )
 OUString SAL_CALL CMXImportFilter::getImplementationName(  )
 throw (RuntimeException)
 {
-#ifdef DEBUG
-    std::cerr << "CMXImportFilter::getImplementationName" << std::endl;
-#endif
+    SAL_INFO("writerperfect", "CMXImportFilter::getImplementationName");
     return CMXImportFilter_getImplementationName();
 }
 sal_Bool SAL_CALL CMXImportFilter::supportsService( const OUString &rServiceName )
 throw (RuntimeException)
 {
-#ifdef DEBUG
-    std::cerr << "CMXImportFilter::supportsService" << std::endl;
-#endif
+    SAL_INFO("writerperfect", "CMXImportFilter::supportsService");
     return CMXImportFilter_supportsService( rServiceName );
 }
 Sequence< OUString > SAL_CALL CMXImportFilter::getSupportedServiceNames(  )
 throw (RuntimeException)
 {
-#ifdef DEBUG
-    std::cerr << "CMXImportFilter::getSupportedServiceNames" << std::endl;
-#endif
+    SAL_INFO("writerperfect", "CMXImportFilter::getSupportedServiceNames");
     return CMXImportFilter_getSupportedServiceNames();
 }
 
