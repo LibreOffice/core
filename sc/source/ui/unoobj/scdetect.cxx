@@ -794,10 +794,9 @@ OUString SAL_CALL ScFilterDetect::detect( uno::Sequence<beans::PropertyValue>& l
             lDescriptor[nIndexOfFilterName].Value <<= OUString(pFilter->GetName());
     }
 
-    if ( pFilter )
-        aTypeName = pFilter->GetTypeName();
-    else
+    if (!pFilter)
         aTypeName.Erase();
+
     return aTypeName;
 }
 
