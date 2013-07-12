@@ -516,6 +516,7 @@ public:
     virtual Window *get_child();
     virtual const Window *get_child() const;
     virtual bool set_property(const OString &rKey, const OString &rValue);
+    virtual void StateChanged(StateChangedType nType);
 protected:
     virtual Size calculateRequisition() const;
     virtual void setAllocation(const Size &rAllocation);
