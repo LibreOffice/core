@@ -42,6 +42,10 @@
 #include <com/sun/star/sdbc/XParameters.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 
+#include <gen/autoconfig.h>
+#include <fb_types.h>
+#include <constants.h>
+
 using namespace connectivity::firebird;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -68,78 +72,111 @@ ODatabaseMetaData::ODatabaseMetaData(OConnection* _pCon)
 ODatabaseMetaData::~ODatabaseMetaData()
 {
 }
-// -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL ODatabaseMetaData::getCatalogSeparator(  ) throw(SQLException, RuntimeException)
-{
-    ::rtl::OUString aVal;
 
-    return aVal;
-}
-// -------------------------------------------------------------------------
-sal_Int32 SAL_CALL ODatabaseMetaData::getMaxBinaryLiteralLength(  ) throw(SQLException, RuntimeException)
+//----- Catalog Info ---------------------------------------------------------
+OUString SAL_CALL ODatabaseMetaData::getCatalogSeparator() throw(SQLException, RuntimeException)
 {
-    sal_Int32 nValue = 0; // 0 means no limit
-    return nValue;
+    return OUString();
 }
-// -------------------------------------------------------------------------
-sal_Int32 SAL_CALL ODatabaseMetaData::getMaxRowSize(  ) throw(SQLException, RuntimeException)
+
+sal_Int32 SAL_CALL ODatabaseMetaData::getMaxCatalogNameLength() throw(SQLException, RuntimeException)
 {
-    sal_Int32 nValue = 0; // 0 means no limit
-    return nValue;
+    return 0;
 }
-// -------------------------------------------------------------------------
-sal_Int32 SAL_CALL ODatabaseMetaData::getMaxCatalogNameLength(  ) throw(SQLException, RuntimeException)
+
+OUString SAL_CALL ODatabaseMetaData::getCatalogTerm() throw(SQLException, RuntimeException)
 {
-    sal_Int32 nValue = 0; // 0 means no limit
-    return nValue;
+    return OUString();
 }
-// -------------------------------------------------------------------------
-sal_Int32 SAL_CALL ODatabaseMetaData::getMaxCharLiteralLength(  ) throw(SQLException, RuntimeException)
+
+sal_Bool SAL_CALL ODatabaseMetaData::isCatalogAtStart() throw(SQLException, RuntimeException)
 {
-    sal_Int32 nValue = 0; // 0 means no limit
-    return nValue;
+    return sal_False;
 }
-// -------------------------------------------------------------------------
-sal_Int32 SAL_CALL ODatabaseMetaData::getMaxColumnNameLength(  ) throw(SQLException, RuntimeException)
+
+sal_Bool SAL_CALL ODatabaseMetaData::supportsCatalogsInTableDefinitions() throw(SQLException, RuntimeException)
 {
-    sal_Int32 nValue = 0; // 0 means no limit
-    return nValue;
+    return sal_False;
 }
-// -------------------------------------------------------------------------
-sal_Int32 SAL_CALL ODatabaseMetaData::getMaxColumnsInIndex(  ) throw(SQLException, RuntimeException)
+
+sal_Bool SAL_CALL ODatabaseMetaData::supportsCatalogsInIndexDefinitions() throw(SQLException, RuntimeException)
 {
-    sal_Int32 nValue = 0; // 0 means no limit
-    return nValue;
+    return sal_False;
 }
-// -------------------------------------------------------------------------
-sal_Int32 SAL_CALL ODatabaseMetaData::getMaxCursorNameLength(  ) throw(SQLException, RuntimeException)
+
+sal_Bool SAL_CALL ODatabaseMetaData::supportsCatalogsInDataManipulation(  ) throw(SQLException, RuntimeException)
 {
-    sal_Int32 nValue = 0; // 0 means no limit
-    return nValue;
+    return sal_False;
 }
-// -------------------------------------------------------------------------
-sal_Int32 SAL_CALL ODatabaseMetaData::getMaxConnections(  ) throw(SQLException, RuntimeException)
+
+Reference< XResultSet > SAL_CALL ODatabaseMetaData::getCatalogs() throw(SQLException, RuntimeException)
 {
-    sal_Int32 nValue = 0; // 0 means no limit
-    return nValue;
+    return 0;
 }
-// -------------------------------------------------------------------------
-sal_Int32 SAL_CALL ODatabaseMetaData::getMaxColumnsInTable(  ) throw(SQLException, RuntimeException)
+
+sal_Bool SAL_CALL ODatabaseMetaData::supportsCatalogsInProcedureCalls() throw(SQLException, RuntimeException)
 {
-    sal_Int32 nValue = 0; // 0 means no limit
-    return nValue;
+    return sal_False;
 }
-// -------------------------------------------------------------------------
-sal_Int32 SAL_CALL ODatabaseMetaData::getMaxStatementLength(  ) throw(SQLException, RuntimeException)
+
+sal_Bool SAL_CALL ODatabaseMetaData::supportsCatalogsInPrivilegeDefinitions() throw(SQLException, RuntimeException)
 {
-    sal_Int32 nValue = 0; // 0 means no limit
-    return nValue;
+    return sal_False;
 }
-// -------------------------------------------------------------------------
-sal_Int32 SAL_CALL ODatabaseMetaData::getMaxTableNameLength(  ) throw(SQLException, RuntimeException)
+
+//----- Max Sizes/Lengths -----------------------------------------------------
+sal_Int32 SAL_CALL ODatabaseMetaData::getMaxBinaryLiteralLength() throw(SQLException, RuntimeException)
 {
-    sal_Int32 nValue = 0; // 0 means no limit
-    return nValue;
+    return MAX_COLUMN_SIZE;
+}
+
+sal_Int32 SAL_CALL ODatabaseMetaData::getMaxRowSize() throw(SQLException, RuntimeException)
+{
+    return MAX_COLUMN_SIZE;
+}
+
+sal_Int32 SAL_CALL ODatabaseMetaData::getMaxCharLiteralLength() throw(SQLException, RuntimeException)
+{
+    return MAX_COLUMN_SIZE;
+}
+
+sal_Int32 SAL_CALL ODatabaseMetaData::getMaxColumnNameLength() throw(SQLException, RuntimeException)
+{
+    return MAX_SQL_IDENTIFIER_SIZE;
+}
+
+sal_Int32 SAL_CALL ODatabaseMetaData::getMaxColumnsInIndex() throw(SQLException, RuntimeException)
+{
+    // No idea.
+    // See: http://www.firebirdsql.org/en/firebird-technical-specifications/
+    return MAX_INDEX_SEGMENTS;
+}
+
+sal_Int32 SAL_CALL ODatabaseMetaData::getMaxCursorNameLength() throw(SQLException, RuntimeException)
+{
+    return MAX_SQL_IDENTIFIER_SIZE;
+}
+
+sal_Int32 SAL_CALL ODatabaseMetaData::getMaxConnections() throw(SQLException, RuntimeException)
+{
+    return 100; // Arbitrary
+}
+
+sal_Int32 SAL_CALL ODatabaseMetaData::getMaxColumnsInTable() throw(SQLException, RuntimeException)
+{
+    // May however be smaller.
+    // See: http://www.firebirdsql.org/en/firebird-technical-specifications/
+    return MAX_COLUMN_SIZE;
+}
+
+sal_Int32 SAL_CALL ODatabaseMetaData::getMaxStatementLength() throw(SQLException, RuntimeException)
+{
+    return MAX_COLUMN_SIZE;
+}
+
+sal_Int32 SAL_CALL ODatabaseMetaData::getMaxTableNameLength() throw(SQLException, RuntimeException)
+{
+    return MAX_SQL_IDENTIFIER_SIZE;
 }
 // -------------------------------------------------------------------------
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxTablesInSelect(  ) throw(SQLException, RuntimeException)
@@ -205,12 +242,6 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsNonNullableColumns(  ) throw(SQLExc
     return sal_False;
 }
 // -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL ODatabaseMetaData::getCatalogTerm(  ) throw(SQLException, RuntimeException)
-{
-    ::rtl::OUString aVal;
-    return aVal;
-}
-// -------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL ODatabaseMetaData::getIdentifierQuoteString(  ) throw(SQLException, RuntimeException)
 {
     // normally this is "
@@ -227,12 +258,6 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsNonNullableColumns(  ) throw(SQLExc
 sal_Bool SAL_CALL ODatabaseMetaData::supportsDifferentTableCorrelationNames(  ) throw(SQLException, RuntimeException)
 {
     return sal_False;
-}
-// -------------------------------------------------------------------------
-sal_Bool SAL_CALL ODatabaseMetaData::isCatalogAtStart(  ) throw(SQLException, RuntimeException)
-{
-    sal_Bool bValue = sal_False;
-    return bValue;
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ODatabaseMetaData::dataDefinitionIgnoredInTransactions(  ) throw(SQLException, RuntimeException)
@@ -320,21 +345,6 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsSchemasInTableDefinitions(  ) throw
     return sal_False;
 }
 // -------------------------------------------------------------------------
-sal_Bool SAL_CALL ODatabaseMetaData::supportsCatalogsInTableDefinitions(  ) throw(SQLException, RuntimeException)
-{
-    return sal_False;
-}
-// -------------------------------------------------------------------------
-sal_Bool SAL_CALL ODatabaseMetaData::supportsCatalogsInIndexDefinitions(  ) throw(SQLException, RuntimeException)
-{
-    return sal_False;
-}
-// -------------------------------------------------------------------------
-sal_Bool SAL_CALL ODatabaseMetaData::supportsCatalogsInDataManipulation(  ) throw(SQLException, RuntimeException)
-{
-    return sal_False;
-}
-// -------------------------------------------------------------------------
 sal_Bool SAL_CALL ODatabaseMetaData::supportsOuterJoins(  ) throw(SQLException, RuntimeException)
 {
     return sal_False;
@@ -357,20 +367,20 @@ sal_Int32 SAL_CALL ODatabaseMetaData::getMaxSchemaNameLength(  ) throw(SQLExcept
     sal_Int32 nValue = 0; // 0 means no limit
     return nValue;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL ODatabaseMetaData::supportsTransactions(  ) throw(SQLException, RuntimeException)
 {
-    return sal_False;
+    return sal_True;
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ODatabaseMetaData::allProceduresAreCallable(  ) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL ODatabaseMetaData::supportsStoredProcedures(  ) throw(SQLException, RuntimeException)
 {
-    return sal_False;
+    return sal_True;
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ODatabaseMetaData::supportsSelectForUpdate(  ) throw(SQLException, RuntimeException)
@@ -385,14 +395,14 @@ sal_Bool SAL_CALL ODatabaseMetaData::allTablesAreSelectable(  ) throw(SQLExcepti
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ODatabaseMetaData::isReadOnly(  ) throw(SQLException, RuntimeException)
 {
-    return sal_False;
+    return m_pConnection->isReadOnly();
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL ODatabaseMetaData::usesLocalFiles(  ) throw(SQLException, RuntimeException)
 {
-    return sal_False;
+    return m_pConnection->isEmbedded();
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL ODatabaseMetaData::usesLocalFilePerTable(  ) throw(SQLException, RuntimeException)
 {
     return sal_False;
@@ -427,25 +437,27 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsExpressionsInOrderBy(  ) throw(SQLE
 {
     return sal_False;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL ODatabaseMetaData::supportsGroupBy(  ) throw(SQLException, RuntimeException)
 {
-    return sal_False;
+    return sal_True;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL ODatabaseMetaData::supportsGroupByBeyondSelect(  ) throw(SQLException, RuntimeException)
 {
-    return sal_False;
+    // Unsure
+    return sal_True;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL ODatabaseMetaData::supportsGroupByUnrelated(  ) throw(SQLException, RuntimeException)
 {
+    // Unsure
     return sal_False;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL ODatabaseMetaData::supportsMultipleTransactions(  ) throw(SQLException, RuntimeException)
 {
-    return sal_False;
+    return sal_True;
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ODatabaseMetaData::supportsMultipleResultSets(  ) throw(SQLException, RuntimeException)
@@ -462,15 +474,15 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsOrderByUnrelated(  ) throw(SQLExcep
 {
     return sal_False;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL ODatabaseMetaData::supportsUnion(  ) throw(SQLException, RuntimeException)
 {
-    return sal_False;
+    return sal_True;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL ODatabaseMetaData::supportsUnionAll(  ) throw(SQLException, RuntimeException)
 {
-    return sal_False;
+    return sal_True;
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ODatabaseMetaData::supportsMixedCaseIdentifiers(  ) throw(SQLException, RuntimeException)
@@ -513,16 +525,6 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsSchemasInPrivilegeDefinitions(  ) t
     return sal_False;
 }
 // -------------------------------------------------------------------------
-sal_Bool SAL_CALL ODatabaseMetaData::supportsCatalogsInProcedureCalls(  ) throw(SQLException, RuntimeException)
-{
-    return sal_False;
-}
-// -------------------------------------------------------------------------
-sal_Bool SAL_CALL ODatabaseMetaData::supportsCatalogsInPrivilegeDefinitions(  ) throw(SQLException, RuntimeException)
-{
-    return sal_False;
-}
-// -------------------------------------------------------------------------
 sal_Bool SAL_CALL ODatabaseMetaData::supportsCorrelatedSubqueries(  ) throw(SQLException, RuntimeException)
 {
     return sal_False;
@@ -552,12 +554,10 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsANSI92IntermediateSQL(  ) throw(SQL
 {
     return sal_False;
 }
-// -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL ODatabaseMetaData::getURL(  ) throw(SQLException, RuntimeException)
+
+OUString SAL_CALL ODatabaseMetaData::getURL() throw(SQLException, RuntimeException)
 {
-    // TODO: return actual URL as necessary
-    ::rtl::OUString aValue("sdbc:embedded:firebird");
-    return aValue;
+    return m_pConnection->getConnectionURL();
 }
 // -------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL ODatabaseMetaData::getUserName(  ) throw(SQLException, RuntimeException)
@@ -694,8 +694,7 @@ sal_Int32 SAL_CALL ODatabaseMetaData::getMaxColumnsInSelect(  ) throw(SQLExcepti
 // -------------------------------------------------------------------------
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxUserNameLength(  ) throw(SQLException, RuntimeException)
 {
-    sal_Int32 nValue = 0; // 0 means no limit
-    return nValue;
+    return USERNAME_LENGTH;
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ODatabaseMetaData::supportsResultSetType( sal_Int32 setType ) throw(SQLException, RuntimeException)
@@ -757,10 +756,10 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsBatchUpdates(  ) throw(SQLException
 {
     return sal_False;
 }
-// -------------------------------------------------------------------------
-Reference< XConnection > SAL_CALL ODatabaseMetaData::getConnection(  ) throw(SQLException, RuntimeException)
+
+Reference< XConnection > SAL_CALL ODatabaseMetaData::getConnection() throw(SQLException, RuntimeException)
 {
-    return (Reference< XConnection >)m_pConnection;//new OConnection(m_aConnectionHandle);
+    return (Reference< XConnection >) m_pConnection;
 }
 // -------------------------------------------------------------------------
 // here follow all methods which return a resultset
@@ -813,11 +812,6 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTypeInfo(  ) throw(SQLExc
     }
     pResultSet->setRows(aRows);
     return xResultSet;
-}
-// -------------------------------------------------------------------------
-Reference< XResultSet > SAL_CALL ODatabaseMetaData::getCatalogs(  ) throw(SQLException, RuntimeException)
-{
-    return NULL;
 }
 // -----------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getSchemas(  ) throw(SQLException, RuntimeException)
