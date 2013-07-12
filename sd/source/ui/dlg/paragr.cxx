@@ -41,31 +41,33 @@ public:
     ~SdParagraphNumTabPage();
 
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rSet );
-    static sal_uInt16*      GetRanges();
+    static sal_uInt16*  GetRanges();
 
-    virtual sal_Bool        FillItemSet( SfxItemSet& rSet );
+    virtual sal_Bool    FillItemSet( SfxItemSet& rSet );
     virtual void        Reset( const SfxItemSet& rSet );
 
 private:
-    TriStateBox     maNewStartCB;
-    TriStateBox     maNewStartNumberCB;
-    NumericField    maNewStartNF;
-    bool            mbModified;
+    TriStateBox*     m_pNewStartCB;
+    TriStateBox*     m_pNewStartNumberCB;
+    NumericField*    m_pNewStartNF;
+    bool             mbModified;
 
     DECL_LINK( ImplNewStartHdl, void* );
 };
 
 SdParagraphNumTabPage::SdParagraphNumTabPage(Window* pParent, const SfxItemSet& rAttr )
-: SfxTabPage(pParent, SdResId(RID_TABPAGE_PARA_NUMBERING), rAttr)
-, maNewStartCB( this, SdResId( CB_NEW_START ) )
-, maNewStartNumberCB( this, SdResId( CB_NUMBER_NEW_START ) )
-, maNewStartNF( this, SdResId( NF_NEW_START ) )
-, mbModified(false)
+                      : SfxTabPage(pParent,
+                                   "DrawParaNumbering",
+                                   "modules/sdraw/ui/paranumberingtab.ui",
+                                   rAttr),
+                        mbModified(false)
 {
-    FreeResource();
+    get(m_pNewStartCB,"checkbuttonCB_NEW_START");
+    get(m_pNewStartNumberCB,"checkbuttonCB_NUMBER_NEW_START");
+    get(m_pNewStartNF,"spinbuttonNF_NEW_START");
 
-    maNewStartCB.SetClickHdl(LINK(this, SdParagraphNumTabPage, ImplNewStartHdl));
-    maNewStartNumberCB.SetClickHdl(LINK(this, SdParagraphNumTabPage, ImplNewStartHdl));
+    m_pNewStartCB->SetClickHdl(LINK(this, SdParagraphNumTabPage, ImplNewStartHdl));
+    m_pNewStartNumberCB->SetClickHdl(LINK(this, SdParagraphNumTabPage, ImplNewStartHdl));
 }
 
 SdParagraphNumTabPage::~SdParagraphNumTabPage()
@@ -90,16 +92,16 @@ sal_uInt16* SdParagraphNumTabPage::GetRanges()
 
 sal_Bool SdParagraphNumTabPage::FillItemSet( SfxItemSet& rSet )
 {
-    if(maNewStartCB.GetState() != maNewStartCB.GetSavedValue() ||
-        maNewStartNumberCB.GetState() != maNewStartNumberCB.GetSavedValue()||
-       maNewStartNF.GetText() != maNewStartNF.GetSavedValue())
+    if(m_pNewStartCB->GetState() != m_pNewStartCB->GetSavedValue() ||
+        m_pNewStartNumberCB->GetState() != m_pNewStartNumberCB->GetSavedValue()||
+       m_pNewStartNF->GetText() != m_pNewStartNF->GetSavedValue())
     {
         mbModified = true;
-        sal_Bool bNewStartChecked = STATE_CHECK == maNewStartCB.GetState();
-        sal_Bool bNumberNewStartChecked = STATE_CHECK == maNewStartNumberCB.GetState();
+        sal_Bool bNewStartChecked = STATE_CHECK == m_pNewStartCB->GetState();
+        sal_Bool bNumberNewStartChecked = STATE_CHECK == m_pNewStartNumberCB->GetState();
         rSet.Put(SfxBoolItem(ATTR_NUMBER_NEWSTART, bNewStartChecked));
 
-        const sal_Int16 nStartAt = (sal_Int16)maNewStartNF.GetValue();
+        const sal_Int16 nStartAt = (sal_Int16)m_pNewStartNF->GetValue();
         rSet.Put(SfxInt16Item(ATTR_NUMBER_NEWSTART_AT, bNumberNewStartChecked && bNewStartChecked ? nStartAt : -1));
     }
 
@@ -112,80 +114,77 @@ void SdParagraphNumTabPage::Reset( const SfxItemSet& rSet )
     if(eItemState > SFX_ITEM_AVAILABLE )
     {
         const SfxBoolItem& rStart = (const SfxBoolItem&)rSet.Get(ATTR_NUMBER_NEWSTART);
-        maNewStartCB.SetState( rStart.GetValue() ? STATE_CHECK : STATE_NOCHECK );
-        maNewStartCB.EnableTriState(sal_False);
+        m_pNewStartCB->SetState( rStart.GetValue() ? STATE_CHECK : STATE_NOCHECK );
+        m_pNewStartCB->EnableTriState(sal_False);
     }
     else
     {
-        maNewStartCB.SetState(STATE_DONTKNOW);
-        maNewStartCB.Disable();
+        m_pNewStartCB->SetState(STATE_DONTKNOW);
+        m_pNewStartCB->Disable();
     }
-    maNewStartCB.SaveValue();
+    m_pNewStartCB->SaveValue();
 
     eItemState = rSet.GetItemState( ATTR_NUMBER_NEWSTART_AT);
     if( eItemState > SFX_ITEM_AVAILABLE )
     {
         sal_Int16 nNewStart = ((const SfxInt16Item&)rSet.Get(ATTR_NUMBER_NEWSTART_AT)).GetValue();
-        maNewStartNumberCB.Check(-1 != nNewStart);
+        m_pNewStartNumberCB->Check(-1 != nNewStart);
         if(-1 == nNewStart)
             nNewStart = 1;
 
-        maNewStartNF.SetValue(nNewStart);
-        maNewStartNumberCB.EnableTriState(sal_False);
+        m_pNewStartNF->SetValue(nNewStart);
+        m_pNewStartNumberCB->EnableTriState(sal_False);
     }
     else
     {
-        maNewStartCB.SetState(STATE_DONTKNOW);
+        m_pNewStartCB->SetState(STATE_DONTKNOW);
     }
-    ImplNewStartHdl(&maNewStartCB);
-    maNewStartNF.SaveValue();
-    maNewStartNumberCB.SaveValue();
+    ImplNewStartHdl(m_pNewStartCB);
+    m_pNewStartNF->SaveValue();
+    m_pNewStartNumberCB->SaveValue();
     mbModified = sal_False;
 }
 
 IMPL_LINK_NOARG(SdParagraphNumTabPage, ImplNewStartHdl)
 {
-    sal_Bool bEnable = maNewStartCB.IsChecked();
-    maNewStartNumberCB.Enable(bEnable);
-    maNewStartNF.Enable(bEnable && maNewStartNumberCB.IsChecked());
+    sal_Bool bEnable = m_pNewStartCB->IsChecked();
+    m_pNewStartNumberCB->Enable(bEnable);
+    m_pNewStartNF->Enable(bEnable && m_pNewStartNumberCB->IsChecked());
     return 0;
 }
 
 SdParagraphDlg::SdParagraphDlg( Window* pParent, const SfxItemSet* pAttr )
-: SfxTabDialog( pParent, SdResId( TAB_PARAGRAPH ), pAttr )
+               : SfxTabDialog( pParent,
+                               "DrawParagraphPropertiesDialog",
+                               "modules/sdraw/ui/drawparadialog.ui",
+                               pAttr )
 {
-    FreeResource();
-
-    AddTabPage( RID_SVXPAGE_STD_PARAGRAPH );
+    m_nParaStd = AddTabPage( "labelTP_PARA_STD", RID_SVXPAGE_STD_PARAGRAPH);
 
     SvtCJKOptions aCJKOptions;
     if( aCJKOptions.IsAsianTypographyEnabled() )
-        AddTabPage( RID_SVXPAGE_PARA_ASIAN);
+        m_nParaAsian = AddTabPage( "labelTP_PARA_ASIAN", RID_SVXPAGE_PARA_ASIAN);
     else
-        RemoveTabPage( RID_SVXPAGE_PARA_ASIAN );
+        RemoveTabPage( "labelTP_PARA_ASIAN" );
 
-    AddTabPage( RID_SVXPAGE_ALIGN_PARAGRAPH );
+    m_nParaAlign = AddTabPage( "labelTP_PARA_ALIGN", RID_SVXPAGE_ALIGN_PARAGRAPH);
 
     static const sal_Bool bShowParaNumbering = ( getenv( "SD_SHOW_NUMBERING_PAGE" ) != NULL );
     if( bShowParaNumbering )
-        AddTabPage( RID_TABPAGE_PARA_NUMBERING, SdParagraphNumTabPage::Create, SdParagraphNumTabPage::GetRanges );
+         m_nParaNumPara = AddTabPage( "labelNUMBERING", SdParagraphNumTabPage::Create, SdParagraphNumTabPage::GetRanges );
     else
-        RemoveTabPage( RID_TABPAGE_PARA_NUMBERING );
+        RemoveTabPage( "labelNUMBERING" );
 
-       AddTabPage( RID_SVXPAGE_TABULATOR );
+      m_nParaTab =  AddTabPage( "labelTP_TABULATOR", RID_SVXPAGE_TABULATOR);
 }
 
 void SdParagraphDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
 {
     SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
-    switch( nId )
+    if (m_nParaStd == nId)
     {
-    case RID_SVXPAGE_STD_PARAGRAPH:
         aSet.Put(SfxUInt32Item(SID_SVXSTDPARAGRAPHTABPAGE_ABSLINEDIST, MM50/2));
         rPage.PageCreated(aSet);
-        break;
-    default:
-        break;
     }
 }
 

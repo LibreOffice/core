@@ -183,7 +183,6 @@
 #define HID_SD_ANNOTATIONS                                      "SD_HID_SD_ANNOTATIONS"
 
 #define HID_DLG_INSERT_PAGES_OBJS                               "SD_HID_DLG_INSERT_PAGES_OBJS"
-#define HID_TABPAGE_PARA_NUMBERING                              "SD_HID_TABPAGE_PARA_NUMBERING"
 #define HID_VECTORIZE_DLG                                       "SD_HID_VECTORIZE_DLG"
 #define HID_UNDO_DELETE_WARNING                                 "SD_HID_UNDO_DELETE_WARNING"
 

@@ -59,7 +59,6 @@ $(eval $(call gb_SrsTarget_add_files,sd/res,\
     sd/source/ui/dlg/morphdlg.src \
     sd/source/ui/dlg/navigatr.src \
     sd/source/ui/dlg/PaneDockingWindow.src \
-    sd/source/ui/dlg/paragr.src \
     sd/source/ui/dlg/prltempl.src \
     sd/source/ui/dlg/RemoteDialog.src \
     sd/source/ui/dlg/sdpreslt.src \
