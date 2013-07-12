@@ -4172,7 +4172,7 @@ void DisclosureButton::KeyInput( const KeyEvent& rKEvt )
         Check( aKeyCode.GetCode() == KEY_ADD );
     }
     else
-        Button::KeyInput( rKEvt );
+        CheckBox::KeyInput( rKEvt );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
