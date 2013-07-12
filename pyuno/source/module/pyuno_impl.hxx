@@ -227,8 +227,6 @@ com::sun::star::uno::TypeClass StringToTypeClass (char* string);
 PyRef PyUNO_callable_new (
     const com::sun::star::uno::Reference<com::sun::star::script::XInvocation2> &xInv,
     const OUString &methodName,
-    const com::sun::star::uno::Reference<com::sun::star::lang::XSingleServiceFactory> &ssf,
-    const com::sun::star::uno::Reference<com::sun::star::script::XTypeConverter> &tc,
     ConversionMode mode = REJECT_UNO_ANY );
 
 PyObject* PyUNO_Type_new (const char *typeName , com::sun::star::uno::TypeClass t , const Runtime &r );

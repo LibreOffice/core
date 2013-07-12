@@ -342,8 +342,6 @@ PyObject *PyUNO_invoke( PyObject *object, const char *name , PyObject *args )
             callable = PyUNO_callable_new (
                 me->members->xInvocation,
                 attrName,
-                runtime.getImpl()->cargo->xInvocation,
-                runtime.getImpl()->cargo->xTypeConverter,
                 ACCEPT_UNO_ANY);
             paras = args;
         }
@@ -486,9 +484,7 @@ PyObject* PyUNO_getattr (PyObject* self, char* name)
             //Create a callable object to invoke this...
             PyRef ret = PyUNO_callable_new (
                 me->members->xInvocation,
-                attrName,
-                runtime.getImpl()->cargo->xInvocation,
-                runtime.getImpl()->cargo->xTypeConverter);
+                attrName);
             Py_XINCREF( ret.get() );
             return ret.get();
 
