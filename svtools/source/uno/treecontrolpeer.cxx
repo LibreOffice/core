@@ -22,8 +22,6 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/view/SelectionType.hpp>
-#include <com/sun/star/awt/tree/DefaultTreeDataModel.hpp>
-
 #include <toolkit/helper/property.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 
@@ -1230,8 +1228,12 @@ void TreeControlPeer::onChangeDataModel( UnoTreeListBoxImpl& rTree, const Refere
 
     if( !xDataModel.is() )
     {
-        Reference< XComponentContext > xORB( ::comphelper::getProcessComponentContext() );
-        mxDataModel.query( DefaultTreeDataModel::create(xORB));
+        static const OUString aSN( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.tree.DefaultTreeDataModel" ) );
+        Reference< XMultiServiceFactory > xORB( ::comphelper::getProcessServiceFactory() );
+        if( xORB.is() )
+        {
+            mxDataModel.query( xORB->createInstance( aSN ) );
+        }
     }
 
     mxDataModel = xDataModel;
