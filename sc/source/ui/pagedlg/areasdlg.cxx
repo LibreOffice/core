@@ -105,32 +105,28 @@ static void printAddressFlags(sal_uInt16 nFlag)
 //----------------------------------------------------------------------------
 
 ScPrintAreasDlg::ScPrintAreasDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent )
-    :   ScAnyRefDlg     ( pB, pCW, pParent, "PrintAreasDialog", "modules/scalc/ui/printareasdialog.ui"),
-        //
-        bDlgLostFocus   ( false ),
-        pDoc            ( NULL ),
-        pViewData       ( NULL ),
-        nCurTab         ( 0 )
+    : ScAnyRefDlg(pB, pCW, pParent, "PrintAreasDialog", "modules/scalc/ui/printareasdialog.ui")
+    , bDlgLostFocus(false)
+    , pDoc(NULL)
+    , pViewData(NULL)
+    , nCurTab(0)
 {
-    get(pFlPrintArea,"label1");
     get(pLbPrintArea,"lbprintarea");
     get(pEdPrintArea,"edprintarea");
-    pEdPrintArea->SetReferences(this, pFlPrintArea);
+    pEdPrintArea->SetReferences(this, get<VclFrame>("printframe")->get_label_widget());
     pRefInputEdit = pEdPrintArea;
     get(pRbPrintArea,"rbprintarea");
     pRbPrintArea->SetReferences(this, pEdPrintArea);
 
-    get(pFlRepeatRow,"label2");
     get(pLbRepeatRow,"lbrepeatrow");
     get(pEdRepeatRow,"edrepeatrow");
-    pEdRepeatRow->SetReferences(this, pFlRepeatRow);
+    pEdRepeatRow->SetReferences(this, get<VclFrame>("rowframe")->get_label_widget());
     get(pRbRepeatRow,"rbrepeatrow");
     pRbRepeatRow->SetReferences(this, pEdRepeatRow);
 
-    get(pFlRepeatCol,"label3");
     get(pLbRepeatCol,"lbrepeatcol");
     get(pEdRepeatCol,"edrepeatcol");
-    pEdRepeatCol->SetReferences(this, pFlRepeatCol);
+    pEdRepeatCol->SetReferences(this, get<VclFrame>("colframe")->get_label_widget());
     get(pRbRepeatCol,"rbrepeatcol");
     pRbRepeatCol->SetReferences(this, pEdRepeatCol);
 
@@ -162,13 +158,13 @@ ScPrintAreasDlg::ScPrintAreasDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* 
 ScPrintAreasDlg::~ScPrintAreasDlg()
 {
     // Extra-Data an ListBox-Entries abraeumen
-    ListBox* pLb[3] = { pLbPrintArea, pLbRepeatRow, pLbRepeatCol };
+    ListBox* aLb[3] = { pLbPrintArea, pLbRepeatRow, pLbRepeatCol };
 
-    for ( sal_uInt16 i=0; i<3; i++ )
+    for (sal_uInt16 i = 0; i < SAL_N_ELEMENTS(aLb); ++i)
     {
-        sal_uInt16 nCount = pLb[i]->GetEntryCount();
+        sal_uInt16 nCount = aLb[i]->GetEntryCount();
         for ( sal_uInt16 j=0; j<nCount; j++ )
-            delete (String*)pLb[i]->GetEntryData(j);
+            delete (String*)aLb[i]->GetEntryData(j);
     }
 }
 

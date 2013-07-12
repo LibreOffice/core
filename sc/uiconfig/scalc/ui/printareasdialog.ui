@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <!-- interface-requires gtk+ 3.0 -->
+  <!-- interface-requires LibreOffice 1.0 -->
   <object class="GtkDialog" id="PrintAreasDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
+    <property name="title" translatable="yes">Edit Print Ranges</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="internal-box1">
@@ -19,6 +21,8 @@
                 <property name="label">gtk-ok</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="can_default">True</property>
+                <property name="has_default">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_stock">True</property>
               </object>
@@ -71,7 +75,7 @@
             <property name="orientation">vertical</property>
             <property name="spacing">12</property>
             <child>
-              <object class="GtkFrame" id="frame1">
+              <object class="GtkFrame" id="printframe">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label_xalign">0</property>
@@ -119,15 +123,16 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkComboBox" id="lbprintarea">
+                          <object class="GtkComboBoxText" id="lbprintarea">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="hexpand">True</property>
+                            <property name="entry_text_column">0</property>
+                            <property name="id_column">1</property>
                             <items>
-                              <item>- none -</item>
-                              <item>- entire sheet -</item>
-                              <item>- user defined -</item>
-                              <item>- selection -</item>
+                              <item translatable="yes">- none -</item>
+                              <item translatable="yes">- entire sheet -</item>
+                              <item translatable="yes">- user defined -</item>
+                              <item translatable="yes">- selection -</item>
                             </items>
                           </object>
                           <packing>
@@ -159,7 +164,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkFrame" id="frame2">
+              <object class="GtkFrame" id="rowframe">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label_xalign">0</property>
@@ -177,23 +182,6 @@
                         <property name="row_spacing">6</property>
                         <property name="column_spacing">12</property>
                         <child>
-                          <object class="GtkComboBox" id="lbrepeatrow">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="hexpand">True</property>
-                            <items>
-                              <item>- none -</item>
-                              <item>- user defined -</item>
-                            </items>
-                          </object>
-                          <packing>
-                            <property name="left_attach">0</property>
-                            <property name="top_attach">0</property>
-                            <property name="width">1</property>
-                            <property name="height">1</property>
-                          </packing>
-                        </child>
-                        <child>
                           <object class="foruilo-RefEdit" id="edrepeatrow">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
@@ -210,7 +198,7 @@
                         <child>
                           <object class="foruilo-RefButton" id="rbrepeatrow">
                             <property name="visible">True</property>
-                            <property name="can_focus">Fales</property>
+                            <property name="can_focus">False</property>
                             <property name="receives_default">False</property>
                             <child>
                               <placeholder/>
@@ -218,6 +206,24 @@
                           </object>
                           <packing>
                             <property name="left_attach">2</property>
+                            <property name="top_attach">0</property>
+                            <property name="width">1</property>
+                            <property name="height">1</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkComboBoxText" id="lbrepeatrow">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="entry_text_column">0</property>
+                            <property name="id_column">1</property>
+                            <items>
+                              <item translatable="yes">- none -</item>
+                              <item translatable="yes">- user defined -</item>
+                            </items>
+                          </object>
+                          <packing>
+                            <property name="left_attach">0</property>
                             <property name="top_attach">0</property>
                             <property name="width">1</property>
                             <property name="height">1</property>
@@ -231,7 +237,7 @@
                   <object class="GtkLabel" id="label2">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Moves to repeat</property>
+                    <property name="label" translatable="yes">Rows to repeat</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>
@@ -245,7 +251,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkFrame" id="frame3">
+              <object class="GtkFrame" id="colframe">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label_xalign">0</property>
@@ -262,23 +268,6 @@
                         <property name="can_focus">False</property>
                         <property name="row_spacing">6</property>
                         <property name="column_spacing">12</property>
-                        <child>
-                          <object class="GtkComboBox" id="lbrepeatcol">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="hexpand">True</property>
-                            <items>
-                              <item>- none -</item>
-                              <item>- user defined -</item>
-                            </items>
-                          </object>
-                          <packing>
-                            <property name="left_attach">0</property>
-                            <property name="top_attach">0</property>
-                            <property name="width">1</property>
-                            <property name="height">1</property>
-                          </packing>
-                        </child>
                         <child>
                           <object class="foruilo-RefEdit" id="edrepeatcol">
                             <property name="visible">True</property>
@@ -304,6 +293,24 @@
                           </object>
                           <packing>
                             <property name="left_attach">2</property>
+                            <property name="top_attach">0</property>
+                            <property name="width">1</property>
+                            <property name="height">1</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkComboBoxText" id="lbrepeatcol">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="entry_text_column">0</property>
+                            <property name="id_column">1</property>
+                            <items>
+                              <item translatable="yes">- none -</item>
+                              <item translatable="yes">- user defined -</item>
+                            </items>
+                          </object>
+                          <packing>
+                            <property name="left_attach">0</property>
                             <property name="top_attach">0</property>
                             <property name="width">1</property>
                             <property name="height">1</property>

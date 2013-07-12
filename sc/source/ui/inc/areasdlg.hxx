@@ -48,17 +48,14 @@ public:
     virtual sal_Bool    Close();
 
 private:
-    FixedLine*               pFlPrintArea;
     ListBox*                 pLbPrintArea;
     formula::RefEdit*        pEdPrintArea;
     formula::RefButton*      pRbPrintArea;
 
-    FixedLine*               pFlRepeatRow;
     ListBox*                 pLbRepeatRow;
     formula::RefEdit*        pEdRepeatRow;
     formula::RefButton*      pRbRepeatRow;
 
-    FixedLine*               pFlRepeatCol;
     ListBox*                 pLbRepeatCol;
     formula::RefEdit*        pEdRepeatCol;
     formula::RefButton*      pRbRepeatCol;
