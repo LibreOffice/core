@@ -489,23 +489,18 @@ sal_Bool SAL_CALL OConnection::isReadOnly() throw(SQLException, RuntimeException
 
     return m_bReadOnly;
 }
-// --------------------------------------------------------------------------------
-void SAL_CALL OConnection::setCatalog( const ::rtl::OUString& catalog ) throw(SQLException, RuntimeException)
-{
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OConnection_BASE::rBHelper.bDisposed);
 
-    // if your database doesn't work with catalogs you go to next method otherwise you kjnow what to do
+void SAL_CALL OConnection::setCatalog(const OUString& catalog)
+                                            throw(SQLException, RuntimeException)
+{
+    // Unsupported
+    (void) catalog;
 }
-// --------------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OConnection::getCatalog(  ) throw(SQLException, RuntimeException)
+
+OUString SAL_CALL OConnection::getCatalog() throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OConnection_BASE::rBHelper.bDisposed);
-
-
-    // return your current catalog
-    return ::rtl::OUString();
+    // Unsupported
+    return OUString();
 }
 
 void SAL_CALL OConnection::setTransactionIsolation( sal_Int32 level ) throw(SQLException, RuntimeException)
