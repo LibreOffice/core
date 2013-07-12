@@ -93,6 +93,7 @@ OConnection::OConnection(FirebirdDriver*    _pDriver)
                          m_bUseCatalog(sal_False),
                          m_bUseOldDateFormat(sal_False),
                          m_bAutoCommit(sal_True),
+                         m_bReadOnly(sal_False),
                          m_DBHandler(0),
                          m_transactionHandle(0)
 {
@@ -383,11 +384,10 @@ void OConnection::setupTransaction()
 
     static char isc_tpb[] = {
         isc_tpb_version3,
-        (m_bAutoCommit ? isc_tpb_autocommit : 0),
-        isc_tpb_write,
-        isc_tpb_read_committed,
-        isc_tpb_wait,
-        isc_tpb_no_rec_version
+        (char) (m_bAutoCommit ? isc_tpb_autocommit : 0),
+        (char) (!m_bReadOnly ? isc_tpb_write : isc_tpb_read),
+        isc_tpb_read_committed, // TODO: set isolation level here
+        isc_tpb_wait
     };
 
     isc_start_transaction(status_vector, &m_transactionHandle, 1, &m_DBHandler,
@@ -449,22 +449,23 @@ Reference< XDatabaseMetaData > SAL_CALL OConnection::getMetaData(  ) throw(SQLEx
 
     return xMetaData;
 }
-// --------------------------------------------------------------------------------
-void SAL_CALL OConnection::setReadOnly( sal_Bool readOnly ) throw(SQLException, RuntimeException)
+
+void SAL_CALL OConnection::setReadOnly(sal_Bool readOnly)
+                                            throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
 
-    // set you connection to readonly
+    m_bReadOnly = readOnly;
+    setupTransaction();
 }
-// --------------------------------------------------------------------------------
-sal_Bool SAL_CALL OConnection::isReadOnly(  ) throw(SQLException, RuntimeException)
+
+sal_Bool SAL_CALL OConnection::isReadOnly() throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
 
-    // return if your connection to readonly
-    return sal_False;
+    return m_bReadOnly;
 }
 // --------------------------------------------------------------------------------
 void SAL_CALL OConnection::setCatalog( const ::rtl::OUString& catalog ) throw(SQLException, RuntimeException)
