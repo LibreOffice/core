@@ -1484,6 +1484,9 @@ void VclExpander::StateChanged(StateChangedType nType)
             if (!pLabelWidget->get_mnemonic_widget())
                 pLabelWidget->set_mnemonic_widget(&m_aDisclosureButton);
         }
+
+        if (pChild)
+            pChild->Show(m_aDisclosureButton.IsChecked());
     }
 }
 
