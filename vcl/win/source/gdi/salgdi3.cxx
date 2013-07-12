@@ -507,12 +507,12 @@ namespace
 {
     //used by 2-level font fallback
     ImplDevFontListData* findDevFontListByLocale(const ImplDevFontList &rDevFontList,
-        const com::sun::star::lang::Locale& rLocale )
+        const LanguageTag& rLanguageTag )
     {
         // get the default font for a specified locale
         const utl::DefaultFontConfiguration& rDefaults =
             utl::DefaultFontConfiguration::get();
-        const OUString aDefault = rDefaults.getUserInterfaceFont(rLocale);
+        const OUString aDefault = rDefaults.getUserInterfaceFont(rLanguageTag);
         return rDevFontList.ImplFindByTokenNames(aDefault);
     }
 }
@@ -522,8 +522,8 @@ namespace
 bool WinGlyphFallbackSubstititution::FindFontSubstitute( FontSelectPattern& rFontSelData, OUString& rMissingChars ) const
 {
     // guess a locale matching to the missing chars
-    com::sun::star::lang::Locale aLocale;
     LanguageType eLang = LANGUAGE_DONTKNOW;
+    LanguageTag aLanguageTag( eLang);
 
     sal_Int32 nStrIdx = 0;
     const sal_Int32 nStrLen = rMissingChars.getLength();
@@ -533,18 +533,18 @@ bool WinGlyphFallbackSubstititution::FindFontSubstitute( FontSelectPattern& rFon
         eLang = MapCharToLanguage( uChar );
         if( eLang == LANGUAGE_DONTKNOW )
             continue;
-        aLocale = LanguageTag( eLang ).getLocale();
+        aLanguageTag.reset( eLang);
         break;
     }
 
     // fall back to default UI locale if the missing characters are inconclusive
     if( eLang == LANGUAGE_DONTKNOW )
-        aLocale = Application::GetSettings().GetUILanguageTag().getLocale();
+        aLanguageTag = Application::GetSettings().GetUILanguageTag();
 
     // first level fallback:
     // try use the locale specific default fonts defined in VCL.xcu
     const ImplDevFontList* pDevFontList = ImplGetSVData()->maGDIData.mpScreenFontList;
-    /*const*/ ImplDevFontListData* pDevFont = findDevFontListByLocale(*pDevFontList, aLocale);
+    /*const*/ ImplDevFontListData* pDevFont = findDevFontListByLocale(*pDevFontList, aLanguageTag);
     if( pDevFont )
     {
         const PhysicalFontFace* pFace = pDevFont->FindBestFontFace( rFontSelData );
