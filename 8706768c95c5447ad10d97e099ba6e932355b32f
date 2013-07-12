@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXn//+6I\u003d",
+        "filename": "sc/source/filter/excel/excform8.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1000028
+      },
+      "writtenOn": "2013-07-12T06:57:04Z",
+      "side": 1,
+      "message": "!pFileUrl-\u003eisEmpty() is wrong, it should be pFileUrl-\u003eisEmpty()",
+      "revId": "8706768c95c5447ad10d97e099ba6e932355b32f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
