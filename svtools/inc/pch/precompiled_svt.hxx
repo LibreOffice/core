@@ -95,7 +95,6 @@
 #include <com/sun/star/awt/grid/XGridColumn.hpp>
 #include <com/sun/star/awt/grid/XGridColumnListener.hpp>
 #include <com/sun/star/awt/grid/XSortableGridData.hpp>
-#include <com/sun/star/awt/tree/DefaultTreeDataModel.hpp>
 #include <com/sun/star/awt/tree/XMutableTreeNode.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/Property.hpp>
