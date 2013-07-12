@@ -108,12 +108,15 @@ namespace connectivity
             sal_Bool                                m_bClosed;
             sal_Bool                                m_bUseCatalog;  // should we use the catalog on filebased databases
             sal_Bool                                m_bUseOldDateFormat;
+            sal_Bool                                m_bAutoCommit;
             isc_db_handle                           m_DBHandler;
+            isc_tr_handle                           m_transactionHandle;
 
             ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > m_xEmbeddedStorage;
 
             void                    buildTypeInfo() throw( ::com::sun::star::sdbc::SQLException);
 
+            void                    setupTransaction();
         public:
             virtual void construct( const ::rtl::OUString& url,
                                     const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& info)

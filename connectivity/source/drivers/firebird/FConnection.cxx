@@ -92,7 +92,9 @@ OConnection::OConnection(FirebirdDriver*    _pDriver)
                          m_bClosed(sal_False),
                          m_bUseCatalog(sal_False),
                          m_bUseOldDateFormat(sal_False),
-                         m_DBHandler(0)
+                         m_bAutoCommit(sal_True),
+                         m_DBHandler(0),
+                         m_transactionHandle(0)
 {
     SAL_INFO("connectivity.firebird", "=> OConnection::OConnection().");
 
@@ -234,7 +236,7 @@ void OConnection::construct(const ::rtl::OUString& url, const Sequence< Property
                 return;
     }
 
-    if (m_bIsEmbedded)
+    if (m_bIsEmbedded) // Add DocumentEventListener to save the .fdb as needed
     {
         uno::Reference< frame::XDesktop2 > xFramesSupplier =
             frame::Desktop::create(::comphelper::getProcessComponentContext());
@@ -270,12 +272,14 @@ void OConnection::construct(const ::rtl::OUString& url, const Sequence< Property
 
     osl_atomic_decrement( &m_refCount );
 }
-// XServiceInfo
-// --------------------------------------------------------------------------------
-IMPLEMENT_SERVICE_INFO(OConnection, "com.sun.star.sdbc.drivers.firebird.OConnection", "com.sun.star.sdbc.Connection")
 
-// --------------------------------------------------------------------------------
-Reference< XStatement > SAL_CALL OConnection::createStatement(  ) throw(SQLException, RuntimeException)
+//----- XServiceInfo ---------------------------------------------------------
+IMPLEMENT_SERVICE_INFO(OConnection, "com.sun.star.sdbc.drivers.firebird.OConnection",
+                                                    "com.sun.star.sdbc.Connection")
+
+//----- XConnection ----------------------------------------------------------
+Reference< XStatement > SAL_CALL OConnection::createStatement( )
+                                        throw(SQLException, RuntimeException)
 {
     SAL_INFO("connectivity.firebird", "=> OConnection::createStatement().");
 
@@ -295,8 +299,9 @@ Reference< XStatement > SAL_CALL OConnection::createStatement(  ) throw(SQLExcep
     m_aStatements.push_back(WeakReferenceHelper(xReturn));
     return xReturn;
 }
-// --------------------------------------------------------------------------------
-Reference< XPreparedStatement > SAL_CALL OConnection::prepareStatement( const ::rtl::OUString& _sSql ) throw(SQLException, RuntimeException)
+
+Reference< XPreparedStatement > SAL_CALL OConnection::prepareStatement(
+            const ::rtl::OUString& _sSql ) throw(SQLException, RuntimeException)
 {
     SAL_INFO("connectivity.firebird", "=> OConnection::prepareStatement(). "
              "Got called with sql: " << _sSql);
@@ -321,8 +326,9 @@ Reference< XPreparedStatement > SAL_CALL OConnection::prepareStatement( const ::
 
     return xReturn;
 }
-// --------------------------------------------------------------------------------
-Reference< XPreparedStatement > SAL_CALL OConnection::prepareCall( const ::rtl::OUString& _sSql ) throw(SQLException, RuntimeException)
+
+Reference< XPreparedStatement > SAL_CALL OConnection::prepareCall(
+                const OUString& _sSql ) throw(SQLException, RuntimeException)
 {
     SAL_INFO("connectivity.firebird", "=> OConnection::prepareCall(). "
              "_sSql: " << _sSql);
@@ -333,49 +339,90 @@ Reference< XPreparedStatement > SAL_CALL OConnection::prepareCall( const ::rtl::
     // not implemented yet :-) a task to do
     return NULL;
 }
-// --------------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OConnection::nativeSQL( const ::rtl::OUString& _sSql ) throw(SQLException, RuntimeException)
+
+OUString SAL_CALL OConnection::nativeSQL( const OUString& _sSql )
+                                        throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    // when you need to transform SQL92 to you driver specific you can do it here
-
+    // We do not need to adapt the SQL for Firebird atm.
     return _sSql;
 }
-// --------------------------------------------------------------------------------
-void SAL_CALL OConnection::setAutoCommit( sal_Bool autoCommit ) throw(SQLException, RuntimeException)
-{
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OConnection_BASE::rBHelper.bDisposed);
-    // here you  have to set your commit mode please have a look at the jdbc documentation to get a clear explanation
-}
-// --------------------------------------------------------------------------------
-sal_Bool SAL_CALL OConnection::getAutoCommit(  ) throw(SQLException, RuntimeException)
-{
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OConnection_BASE::rBHelper.bDisposed);
-    // you have to distinguish which if you are in autocommit mode or not
-    // at normal case true should be fine here
 
-    return sal_True;
-}
-// --------------------------------------------------------------------------------
-void SAL_CALL OConnection::commit(  ) throw(SQLException, RuntimeException)
+void SAL_CALL OConnection::setAutoCommit( sal_Bool autoCommit )
+                                        throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
 
-    // when you database does support transactions you should commit here
+    m_bAutoCommit = autoCommit;
+
+    if (m_transactionHandle)
+    {
+        setupTransaction();
+    }
 }
-// --------------------------------------------------------------------------------
-void SAL_CALL OConnection::rollback(  ) throw(SQLException, RuntimeException)
+
+sal_Bool SAL_CALL OConnection::getAutoCommit() throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
 
-
-    // same as commit but for the other case
+    return m_bAutoCommit;
 }
-// --------------------------------------------------------------------------------
+
+void OConnection::setupTransaction()
+{
+    ISC_STATUS status_vector[20];
+
+    // TODO: is this sensible? If we have changed parameters then transaction
+    // is lost...
+    if (m_transactionHandle)
+    {
+        isc_rollback_transaction(status_vector, &m_transactionHandle);
+    }
+
+    static char isc_tpb[] = {
+        isc_tpb_version3,
+        (m_bAutoCommit ? isc_tpb_autocommit : 0),
+        isc_tpb_write,
+        isc_tpb_read_committed,
+        isc_tpb_wait,
+        isc_tpb_no_rec_version
+    };
+
+    isc_start_transaction(status_vector, &m_transactionHandle, 1, &m_DBHandler,
+                          (unsigned short) sizeof(isc_tpb), isc_tpb);
+
+    //TODO: transmit to open statements?
+
+}
+
+void SAL_CALL OConnection::commit() throw(SQLException, RuntimeException)
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+    checkDisposed(OConnection_BASE::rBHelper.bDisposed);
+
+    ISC_STATUS status_vector[20];
+
+    if (!m_bAutoCommit && m_transactionHandle)
+    {
+        isc_commit_transaction(status_vector, &m_transactionHandle);
+    }
+}
+
+void SAL_CALL OConnection::rollback() throw(SQLException, RuntimeException)
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+    checkDisposed(OConnection_BASE::rBHelper.bDisposed);
+
+    ISC_STATUS status_vector[20];
+
+    if (!m_bAutoCommit && m_transactionHandle)
+    {
+        isc_rollback_transaction(status_vector, &m_transactionHandle);
+    }
+}
+
 sal_Bool SAL_CALL OConnection::isClosed(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -606,6 +653,8 @@ void OConnection::disposing()
     if (isc_detach_database(status, &m_DBHandler))
         if (pr_error(status, "dattach database"))
             return;
+    // TODO: write to storage again?
+    // and delete temporary file.
 
     dispose_ChildImpl();
     cppu::WeakComponentImplHelperBase::disposing();
