@@ -274,33 +274,32 @@ public:
 
 class SwFrmAddPage : public SfxTabPage
 {
-    FixedText*   pNamesFT;
-    FixedText*   pNameFT;
-    Edit*        pNameED;
-    FixedText*   pAltNameFT;
-    Edit*        pAltNameED;
-    FixedText*   pPrevFT;
-    ListBox*     pPrevLB;
-    FixedText*   pNextFT;
-    ListBox*     pNextLB;
-    FixedText*   pProtectFT;
+    VclContainer* pNameFrame;
+    FixedText*    pNameFT;
+    Edit*         pNameED;
+    FixedText*    pAltNameFT;
+    Edit*         pAltNameED;
+    FixedText*    pPrevFT;
+    ListBox*      pPrevLB;
+    FixedText*    pNextFT;
+    ListBox*      pNextLB;
 
-    CheckBox*    pProtectContentCB;
-    CheckBox*    pProtectFrameCB;
-    CheckBox*    pProtectSizeCB;
-    FixedText*   pExtFT;
+    VclContainer* pProtectFrame;
+    CheckBox*     pProtectContentCB;
+    CheckBox*     pProtectFrameCB;
+    CheckBox*     pProtectSizeCB;
 
-    CheckBox*    pEditInReadonlyCB;
-    CheckBox*    pPrintFrameCB;
-    FixedText*   pTextFlowFT;
-    ListBox*     pTextFlowLB;
+    CheckBox*     pEditInReadonlyCB;
+    CheckBox*     pPrintFrameCB;
+    FixedText*    pTextFlowFT;
+    ListBox*      pTextFlowLB;
 
-    SwWrtShell* pWrtSh;
+    SwWrtShell*   pWrtSh;
 
-    sal_uInt16      nDlgType;
-    sal_Bool        bHtmlMode;
-    sal_Bool        bFormat;
-    sal_Bool        bNew;
+    sal_uInt16    nDlgType;
+    sal_Bool      bHtmlMode;
+    sal_Bool      bFormat;
+    sal_Bool      bNew;
 
     DECL_LINK(EditModifyHdl, void *);
     DECL_LINK(ChainModifyHdl, ListBox*);

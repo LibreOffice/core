@@ -2733,13 +2733,6 @@ IMPL_LINK_NOARG(SwFrmURLPage, InsertFileHdl)
     return 0;
 }
 
-static void lcl_Move(Window& rWin, sal_Int32 nDiff)
-{
-    Point aPos(rWin.GetPosPixel());
-    aPos.Y() -= nDiff;
-    rWin.SetPosPixel(aPos);
-}
-
 SwFrmAddPage::SwFrmAddPage(Window *pParent, const SfxItemSet &rSet ) :
     SfxTabPage(pParent, "FrmAddPage" , "modules/swriter/ui/frmaddpage.ui", rSet),
     pWrtSh(0),
@@ -2749,7 +2742,7 @@ SwFrmAddPage::SwFrmAddPage(Window *pParent, const SfxItemSet &rSet ) :
     bFormat(sal_False),
     bNew(sal_False)
 {
-    get(pNamesFT,"");
+    get(pNameFrame, "nameframe");
     get(pNameFT,"name_label");
     get(pNameED,"name");
     get(pAltNameFT,"altname_label");
@@ -2758,12 +2751,11 @@ SwFrmAddPage::SwFrmAddPage(Window *pParent, const SfxItemSet &rSet ) :
     get(pPrevLB,"prev");
     get(pNextFT,"next_label");
     get(pNextLB,"next");
-    get(pProtectFT,"label1");
 
+    get(pProtectFrame,"protect");
     get(pProtectContentCB,"protectcontent");
     get(pProtectFrameCB,"protectframe");
     get(pProtectSizeCB,"protectsize");
-    get(pExtFT,"label2");
 
     get(pEditInReadonlyCB,"editinreadonly");
     get(pPrintFrameCB,"printframe");
@@ -2786,20 +2778,15 @@ void SwFrmAddPage::Reset(const SfxItemSet &rSet )
     const SfxPoolItem* pItem;
     sal_uInt16 nHtmlMode = ::GetHtmlMode((const SwDocShell*)SfxObjectShell::Current());
     bHtmlMode = nHtmlMode & HTMLMODE_ON ? sal_True : sal_False;
-    if(bHtmlMode)
+    if (bHtmlMode)
     {
-        pProtectContentCB->Hide();
-        pProtectFrameCB->Hide();
-        pProtectSizeCB->Hide();
+        pProtectFrame->Hide();
         pEditInReadonlyCB->Hide();
         pPrintFrameCB->Hide();
-        pExtFT->Hide();
-        pProtectFT->Hide();
     }
     if ( DLG_FRM_GRF == nDlgType || DLG_FRM_OLE == nDlgType )
     {
         pEditInReadonlyCB->Hide();
-        pPrintFrameCB->SetPosPixel(pEditInReadonlyCB->GetPosPixel());
     }
 
     if(SFX_ITEM_SET == rSet.GetItemState(FN_SET_FRM_ALT_NAME, sal_False, &pItem))
@@ -2843,37 +2830,11 @@ void SwFrmAddPage::Reset(const SfxItemSet &rSet )
         pAltNameED->Enable(sal_False);
         pNameFT->Enable( sal_False );
         pAltNameFT->Enable(sal_False);
-        pNamesFT->Enable(sal_False);
     }
     if(nDlgType == DLG_FRM_STD && pAltNameFT->IsVisible())
     {
         pAltNameFT->Hide();
         pAltNameED->Hide();
-        //move all controls one step up
-        /*Window* aWindows[] =
-        {
-            pPrevFT,
-            pPrevLB,
-            pNextFT,
-            pNextLB,
-            pNamesFT,
-            pProtectContentCB,
-            pProtectFrameCB,
-            pProtectSizeCB,
-            pProtectFT,
-            pEditInReadonlyCB,
-            pPrintFrameCB,
-            pTextFlowFT,
-            pTextFlowLB,
-            pExtFT,
-            0
-        };
-        sal_Int32 nOffset = pAltNameED->GetPosPixel().Y() - pNameED->GetPosPixel().Y();
-        sal_Int32 nIdx = 0;
-        while(aWindows[nIdx])
-        {
-            lcl_Move(*aWindows[nIdx++], nOffset);
-        }*/
     }
     else
     {
@@ -3054,38 +3015,12 @@ IMPL_LINK_NOARG(SwFrmAddPage, EditModifyHdl)
     return 0;
 }
 
-void    SwFrmAddPage::SetFormatUsed(sal_Bool bFmt)
+void SwFrmAddPage::SetFormatUsed(sal_Bool bFmt)
 {
-    bFormat  = bFmt;
-    if(bFormat)
+    bFormat = bFmt;
+    if (bFormat)
     {
-        pNameFT->Show(sal_False);
-        pNameED->Show(sal_False);
-        pAltNameFT->Show(sal_False);
-        pAltNameED->Show(sal_False);
-        pPrevFT->Show(sal_False);
-        pPrevLB->Show(sal_False);
-        pNextFT->Show(sal_False);
-        pNextLB->Show(sal_False);
-        pNamesFT->Show(sal_False);
-
-        sal_Int32 nDiff = pExtFT->GetPosPixel().Y() - pNamesFT->GetPosPixel().Y();
-        Window* aWindows[] =
-        {
-            pProtectContentCB,
-            pProtectFrameCB,
-            pProtectSizeCB,
-            pProtectFT,
-            pEditInReadonlyCB,
-            pPrintFrameCB,
-            pExtFT,
-            pTextFlowFT,
-            pTextFlowLB,
-            0
-        };
-        sal_Int32 nIdx = 0;
-        while(aWindows[nIdx])
-            lcl_Move(*aWindows[nIdx++], nDiff);
+        pNameFrame->Hide();
     }
 }
 
