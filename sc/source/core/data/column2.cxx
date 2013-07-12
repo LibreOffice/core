@@ -2244,6 +2244,7 @@ const double* ScColumn::FetchDoubleArray( sc::FormulaGroupContext& rCxt, SCROW n
             rArray.reserve(nLenRequested);
 
             sc::formula_block::const_iterator it = sc::formula_block::begin(*aPos.first->data);
+            std::advance(it, aPos.second);
             sc::formula_block::const_iterator itEnd;
             if (nLenRequested <= nLen)
             {
