@@ -9,8 +9,7 @@
   <object class="GtkFrame" id="DrawParaNumbering">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="margin_left">6</property>
-    <property name="margin_top">6</property>
+    <property name="border_width">6</property>
     <property name="label_xalign">0</property>
     <property name="shadow_type">none</property>
     <child>
@@ -18,13 +17,11 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="top_padding">6</property>
-        <property name="left_padding">6</property>
+        <property name="left_padding">12</property>
         <child>
           <object class="GtkGrid" id="grid1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="margin_left">12</property>
-            <property name="margin_top">12</property>
             <property name="row_spacing">6</property>
             <property name="column_spacing">6</property>
             <child>
@@ -41,13 +38,14 @@
               <packing>
                 <property name="left_attach">0</property>
                 <property name="top_attach">0</property>
-                <property name="width">1</property>
+                <property name="width">2</property>
                 <property name="height">1</property>
               </packing>
             </child>
             <child>
               <object class="GtkSpinButton" id="spinbuttonNF_NEW_START">
                 <property name="visible">True</property>
+                <property name="sensitive">False</property>
                 <property name="can_focus">False</property>
                 <property name="invisible_char">•</property>
                 <property name="adjustment">adjustment1</property>
@@ -63,10 +61,11 @@
               <object class="GtkCheckButton" id="checkbuttonCB_NUMBER_NEW_START">
                 <property name="label" translatable="yes">S_tart with</property>
                 <property name="visible">True</property>
+                <property name="sensitive">False</property>
                 <property name="can_focus">False</property>
                 <property name="receives_default">False</property>
                 <property name="halign">start</property>
-                <property name="margin_left">17</property>
+                <property name="margin_left">12</property>
                 <property name="use_underline">True</property>
                 <property name="xalign">0</property>
                 <property name="inconsistent">True</property>
@@ -78,9 +77,6 @@
                 <property name="width">1</property>
                 <property name="height">1</property>
               </packing>
-            </child>
-            <child>
-              <placeholder/>
             </child>
           </object>
         </child>

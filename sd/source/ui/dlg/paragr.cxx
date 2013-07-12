@@ -163,19 +163,19 @@ SdParagraphDlg::SdParagraphDlg( Window* pParent, const SfxItemSet* pAttr )
 
     SvtCJKOptions aCJKOptions;
     if( aCJKOptions.IsAsianTypographyEnabled() )
-        m_nParaAsian = AddTabPage( "labelTP_PARA_ASIAN", RID_SVXPAGE_PARA_ASIAN);
+        AddTabPage( "labelTP_PARA_ASIAN", RID_SVXPAGE_PARA_ASIAN);
     else
         RemoveTabPage( "labelTP_PARA_ASIAN" );
 
-    m_nParaAlign = AddTabPage( "labelTP_PARA_ALIGN", RID_SVXPAGE_ALIGN_PARAGRAPH);
+    AddTabPage( "labelTP_PARA_ALIGN", RID_SVXPAGE_ALIGN_PARAGRAPH);
 
     static const sal_Bool bShowParaNumbering = ( getenv( "SD_SHOW_NUMBERING_PAGE" ) != NULL );
     if( bShowParaNumbering )
-         m_nParaNumPara = AddTabPage( "labelNUMBERING", SdParagraphNumTabPage::Create, SdParagraphNumTabPage::GetRanges );
+        AddTabPage( "labelNUMBERING", SdParagraphNumTabPage::Create, SdParagraphNumTabPage::GetRanges );
     else
         RemoveTabPage( "labelNUMBERING" );
 
-      m_nParaTab =  AddTabPage( "labelTP_TABULATOR", RID_SVXPAGE_TABULATOR);
+      AddTabPage("labelTP_TABULATOR", RID_SVXPAGE_TABULATOR);
 }
 
 void SdParagraphDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )

@@ -29,10 +29,6 @@
 class SdParagraphDlg : public SfxTabDialog
 {
     sal_uInt16      m_nParaStd;
-    sal_uInt16      m_nParaNumPara;
-    sal_uInt16      m_nParaAsian;
-    sal_uInt16      m_nParaTab;
-    sal_uInt16      m_nParaAlign;
 
 private:
     virtual void    PageCreated( sal_uInt16 nId, SfxTabPage &rPage );
