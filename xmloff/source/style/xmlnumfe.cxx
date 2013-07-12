@@ -1109,12 +1109,15 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
     {
         /* FIXME-BCP47: ODF defines no transliteration-script or
          * transliteration-rfc-language-tag */
+        LanguageTag aLanguageTag( aAttr.Locale);
+        OUString aLanguage, aScript, aCountry;
+        aLanguageTag.getIsoLanguageScriptCountry( aLanguage, aScript, aCountry);
         rExport.AddAttribute( XML_NAMESPACE_NUMBER, XML_TRANSLITERATION_FORMAT,
                               aAttr.Format );
         rExport.AddAttribute( XML_NAMESPACE_NUMBER, XML_TRANSLITERATION_LANGUAGE,
-                              aAttr.Locale.Language );
+                              aLanguage );
         rExport.AddAttribute( XML_NAMESPACE_NUMBER, XML_TRANSLITERATION_COUNTRY,
-                              aAttr.Locale.Country );
+                              aCountry );
         rExport.AddAttribute( XML_NAMESPACE_NUMBER, XML_TRANSLITERATION_STYLE,
                               aAttr.Style );
     }
