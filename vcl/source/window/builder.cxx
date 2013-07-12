@@ -1799,7 +1799,7 @@ void VclBuilder::reorderWithinParent(std::vector<Window*>& rChilds, bool bIsButt
         reorderWithinParent(*rChilds[i], i);
 
         if (!bIsButtonBox)
-            break;
+            continue;
 
         //The first member of the group for legacy code needs WB_GROUP set and the
         //others not
