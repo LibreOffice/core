@@ -496,9 +496,7 @@ OUString SAL_CALL SdFilterDetect::detect( Sequence< beans::PropertyValue >& lDes
             lDescriptor[nIndexOfDocumentTitle].Value <<= aDocumentTitle;
     }
 
-    if ( pFilter )
-        aTypeName = pFilter->GetTypeName();
-    else
+    if (!pFilter)
         aTypeName = OUString();
 
     return aTypeName;
