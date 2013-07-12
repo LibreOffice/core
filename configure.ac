@@ -1170,10 +1170,10 @@ AC_ARG_ENABLE(lotuswordpro,
 ,enable_lotuswordpro=yes)
 
 AC_ARG_ENABLE(firebird-sdbc,
-    AS_HELP_STRING([--enable-firebird-sdbc],
+    AS_HELP_STRING([--disable-firebird-sdbc],
         [Enable the build of the Firebird-SDBC driver. Work in progress,
          use only if you are hacking on it.]),
-,enable_firebird_sdbc=no)
+,enable_firebird_sdbc=yes)
 
 AC_ARG_ENABLE(coretext,
     AS_HELP_STRING([--enable-coretext],
@@ -1446,17 +1446,6 @@ AC_ARG_WITH(system-firebird,
         [Use Firebird libraries already on system, for building the Firebird-SDBC
          driver. If fb_config is not in PATH, use FBCONFIG to point to it.]),,
     [with_system_firebird="$with_system_libs"])
-
-# To be replaced with IBPP, in case we want ot use it
-dnl AC_ARG_WITH(libibpp-path,
-dnl     AS_HELP_STRING([--with-libibpp-path],
-dnl         [Use this Firebird C++ API (libibpp) installation for building
-dnl          the Firebird-SDBC extension.])
-dnl     [
-dnl                           Usage:     --with-libibpp-path=<absolute path to
-dnl                                                   your libibpp installation>
-dnl     ],
-dnl ,)
 
 AC_ARG_WITH(system-hsqldb,
     AS_HELP_STRING([--with-system-hsqldb],
@@ -8106,7 +8095,7 @@ dnl ===================================================================
 dnl Check for Firebird stuff
 dnl ===================================================================
 ENABLE_FIREBIRD_SDBC=""
-if test "x$enable_firebird_sdbc" != "xno"; then
+if test "x$enable_firebird_sdbc" = "xyes"; then
 
     SCPDEFS="$SCPDEFS -DWITH_FIREBIRD_SDBC"
 
