@@ -707,15 +707,18 @@ Kerning2Stretch(const uno::Any& rAny)
 static gchar*
 Locale2String(const uno::Any& rAny)
 {
+    /* FIXME-BCP47: support language tags? And why is country lowercase? */
     lang::Locale aLocale = rAny.get<lang::Locale> ();
+    LanguageTag aLanguageTag( aLocale);
     return g_strdup_printf( "%s-%s",
-        OUStringToOString( aLocale.Language, RTL_TEXTENCODING_ASCII_US).getStr(),
-        OUStringToOString( aLocale.Country, RTL_TEXTENCODING_ASCII_US).toAsciiLowerCase().getStr() );
+        OUStringToOString( aLanguageTag.getLanguage(), RTL_TEXTENCODING_ASCII_US).getStr(),
+        OUStringToOString( aLanguageTag.getCountry(), RTL_TEXTENCODING_ASCII_US).toAsciiLowerCase().getStr() );
 }
 
 static bool
 String2Locale( uno::Any& rAny, const gchar * value )
 {
+    /* FIXME-BCP47: support language tags? */
     bool ret = false;
 
     gchar ** str_array = g_strsplit_set( value, "-.@", -1 );
