@@ -40,17 +40,17 @@
 #include <editeng/SpellPortions.hxx>
 #include <swmodule.hxx>
 #include <swwait.hxx>
-#include <initui.hxx>               // fuer SpellPointer
+#include <initui.hxx>               // for SpellPointer
 #include <uitool.hxx>
 #include <view.hxx>
 #include <wrtsh.hxx>
 #include <basesh.hxx>
 #include <docsh.hxx>                // CheckSpellChanges
 #include <viewopt.hxx>              // Viewoptions
-#include <swundo.hxx>               // fuer Undo-Ids
-#include <hyp.hxx>                  // Trennung
-#include <olmenu.hxx>               // PopupMenu fuer OnlineSpelling
-#include <pam.hxx>                  // Spelling: Multiselektion
+#include <swundo.hxx>               // for Undo-Ids
+#include <hyp.hxx>                  // hyphenation
+#include <olmenu.hxx>               // PopupMenu for OnlineSpelling
+#include <pam.hxx>                  // Spelling: Multiselection
 #include <edtwin.hxx>
 #include <crsskip.hxx>
 #include <ndtxt.hxx>
@@ -93,9 +93,8 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::linguistic2;
 using namespace ::com::sun::star::smarttags;
 
-/*--------------------------------------------------------------------
-    Beschreibung:   Lingu-Dispatcher
- --------------------------------------------------------------------*/
+// Lingu-Dispatcher
+
 void SwView::ExecLingu(SfxRequest &rReq)
 {
     switch(rReq.GetSlot())
@@ -218,9 +217,8 @@ void SwView::ExecLingu(SfxRequest &rReq)
     }
 }
 
-/*--------------------------------------------------------------------
-    Description: start language specific text conversion
- --------------------------------------------------------------------*/
+// start language specific text conversion
+
 void SwView::StartTextConversion(
         LanguageType nSourceLang,
         LanguageType nTargetLang,
@@ -263,9 +261,8 @@ void SwView::StartTextConversion(
     SpellKontext(sal_False);
 }
 
-/*--------------------------------------------------------------------
-     spellcheck and text conversion related stuff
- --------------------------------------------------------------------*/
+// spellcheck and text conversion related stuff
+
 void SwView::SpellStart( SvxSpellArea eWhich,
         bool bStartDone, bool bEndDone,
         SwConversionArgs *pConvArgs )
@@ -324,10 +321,9 @@ void SwView::SpellStart( SvxSpellArea eWhich,
     m_pWrtShell->SpellStart( eStart, eEnde, eCurr, pConvArgs );
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung: Fehlermeldung beim Spelling
- --------------------------------------------------------------------*/
-// Der uebergebene Pointer nLang ist selbst der Wert
+// Error message while Spelling
+
+// The passed pointer nlang is itself the value
 void SwView::SpellError(LanguageType eLang)
 {
 #if OSL_DEBUG_LEVEL > 1
@@ -385,9 +381,8 @@ void SwView::SpellError(LanguageType eLang)
 
 }
 
-/*--------------------------------------------------------------------
-     Beschreibung: Spelling beenden und Cursor wiederherstellen
- --------------------------------------------------------------------*/
+// Finish spelling and restore cursor
+
 void SwView::SpellEnd( SwConversionArgs *pConvArgs )
 {
     m_pWrtShell->SpellEnd( pConvArgs );
@@ -416,12 +411,11 @@ void SwView::HyphStart( SvxSpellArea eWhich )
     }
 }
 
-/*--------------------------------------------------------------------
-     Beschreibung: Interaktive Trennung
- --------------------------------------------------------------------*/
+// Interactive separation
+
 void SwView::HyphenateDocument()
 {
-    // do not hyphenate if interactive hyphenationg is active elsewhere
+    // do not hyphenate if interactive hyphenation is active elsewhere
     if (GetWrtShell().HasHyphIter())
     {
         MessBox( 0, WB_OK, String( SW_RES( STR_HYPH_TITLE ) ),
@@ -441,7 +435,7 @@ void SwView::HyphenateDocument()
 
     if (m_pWrtShell->GetSelectionType() & (nsSelectionType::SEL_DRW_TXT|nsSelectionType::SEL_DRW))
     {
-        // Silbentrennung in einem Draw-Objekt
+        // Hyphenation in a Draw object
         HyphenateDrawText();
     }
     else
@@ -453,7 +447,7 @@ void SwView::HyphenateDocument()
         Reference< XLinguProperties >  xProp( ::GetLinguPropertySet() );
 
 
-        m_pWrtShell->StartUndo(UNDO_INSATTR);         // spaeter gueltig
+        m_pWrtShell->StartUndo(UNDO_INSATTR);         // valid later
 
         sal_Bool bHyphSpecial = xProp.is() ? xProp->getIsHyphSpecial() : sal_False;
         sal_Bool bSelection = ((SwCrsrShell*)m_pWrtShell)->HasSelection() ||
@@ -462,9 +456,9 @@ void SwView::HyphenateDocument()
         sal_Bool bStart = bSelection || ( !bOther && m_pWrtShell->IsStartOfDoc() );
         bool bStop = false;
         if( !bOther && !(m_pWrtShell->GetFrmType(0,sal_True) & FRMTYPE_BODY) && !bSelection )
-        // kein Sonderbereich eingeschaltet
+        // turned on no special area
         {
-            // Ich will auch in Sonderbereichen trennen
+            // I want also in special areas hyphenation
             QueryBox aBox( &GetEditWin(), SW_RES( DLG_SPECIAL_FORCED ) );
             if( aBox.Execute() == RET_YES )
             {
@@ -475,7 +469,7 @@ void SwView::HyphenateDocument()
                 }
             }
             else
-                bStop = true; // Nein Es wird nicht getrennt
+                bStop = true; // No hyphenation
         }
 
         if( !bStop )
@@ -545,9 +539,8 @@ void SwView::InsertThesaurusSynonym( const String &rSynonmText, const String &rL
     m_pWrtShell->SetInsMode( bOldIns );
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:   Thesaurus starten
- --------------------------------------------------------------------*/
+// Start thesaurus
+
 void SwView::StartThesaurus()
 {
     if (!IsValidSelectionForThesaurus())
@@ -556,8 +549,7 @@ void SwView::StartThesaurus()
     SfxErrorContext aContext( ERRCTX_SVX_LINGU_THESAURUS, aEmptyStr, m_pEditWin,
          RID_SVXERRCTX, &DIALOG_MGR() );
 
-    // Sprache rausholen
-    //
+    // Determine language
     LanguageType eLang = m_pWrtShell->GetCurLang();
     if( LANGUAGE_SYSTEM == eLang )
        eLang = GetAppLanguage();
@@ -600,9 +592,8 @@ void SwView::StartThesaurus()
     pVOpt->SetIdle( bOldIdle );
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:   Online-Vorschlaege anbieten
- *--------------------------------------------------------------------*/
+// Offer online suggestions
+
 //!! Start of extra code for context menu modifying extensions
 struct ExecuteInfo
 {
