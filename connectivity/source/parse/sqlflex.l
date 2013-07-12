@@ -66,8 +66,6 @@ using namespace connectivity;
 // Erzeugung der Blaetter fuer die Token
 // Blaetter werden generell vom Lexer erzeugt
 
-static const ::rtl::OUString aEmptyStr;
-
 static sal_Int32    gatherString(int delim, sal_Int32 nTyp);
 static sal_Int32    gatherName(const sal_Char*);
 static sal_Int32    gatherNamePre(const sal_Char* );
@@ -78,7 +76,7 @@ OSQLScanner* xxx_pGLOBAL_SQLSCAN = NULL;
         SQLyylval.pParseNode = new OSQLInternalNode(text, token);
 
 #define SQL_NEW_KEYWORD(token)                      \
-        SQLyylval.pParseNode = new OSQLInternalNode(aEmptyStr, SQL_NODE_KEYWORD, (token));       return token;
+        SQLyylval.pParseNode = new OSQLInternalNode("", SQL_NODE_KEYWORD, (token));       return token;
 
 #define SQL_NEW_INTNUM      SQL_NEW_NODE(::rtl::OUString(SQLyytext,strlen(SQLyytext),RTL_TEXTENCODING_UTF8), SQL_NODE_INTNUM); return SQL_TOKEN_INTNUM;
 #define SQL_NEW_APPROXNUM   SQL_NEW_NODE(::rtl::OUString(SQLyytext,strlen(SQLyytext),RTL_TEXTENCODING_UTF8), SQL_NODE_APPROXNUM); return SQL_TOKEN_APPROXNUM;

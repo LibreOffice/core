@@ -53,8 +53,6 @@
 #pragma warning(disable:4273 4701 4706)
 #endif
 
-static const ::rtl::OUString aEmptyString;
-
 #if HAVE_GCC_PRAGMA_DIAGNOSTIC_MODIFY
 # pragma GCC diagnostic ignored "-Wwrite-strings"
 # pragma GCC diagnostic ignored "-Wunused-function"
@@ -84,9 +82,9 @@ static connectivity::OSQLInternalNode* newNode(const ::rtl::OUString& _NewValue,
 
 // yyi ist die interne Nr. der Regel, die gerade reduziert wird.
 // Ueber die Mapping-Tabelle yyrmap wird daraus eine externe Regel-Nr.
-#define SQL_NEW_RULE 			newNode(aEmptyString, SQL_NODE_RULE, yyr1[yyn])
-#define SQL_NEW_LISTRULE 		newNode(aEmptyString, SQL_NODE_LISTRULE, yyr1[yyn])
-#define SQL_NEW_COMMALISTRULE   newNode(aEmptyString, SQL_NODE_COMMALISTRULE, yyr1[yyn])
+#define SQL_NEW_RULE 			newNode("", SQL_NODE_RULE, yyr1[yyn])
+#define SQL_NEW_LISTRULE 		newNode("", SQL_NODE_LISTRULE, yyr1[yyn])
+#define SQL_NEW_COMMALISTRULE   newNode("", SQL_NODE_COMMALISTRULE, yyr1[yyn])
 
 
 extern connectivity::OSQLParser* xxx_pGLOBAL_SQLPARSER;
@@ -1266,7 +1264,7 @@ between_predicate_part_2:
 					$$ = pTemp->removeAt((sal_uInt32)0);
 					OSQLParseNode* pColumnRef = $$->removeAt((sal_uInt32)0);
 					$$->insert(0,$1);
-					OSQLParseNode* pBetween_predicate = new OSQLInternalNode(aEmptyString, SQL_NODE_RULE,OSQLParser::RuleID(OSQLParseNode::between_predicate));
+					OSQLParseNode* pBetween_predicate = new OSQLInternalNode("", SQL_NODE_RULE,OSQLParser::RuleID(OSQLParseNode::between_predicate));
 					pBetween_predicate->append(pColumnRef);
 					pBetween_predicate->append($$);
 					$$ = pBetween_predicate;
@@ -1336,7 +1334,7 @@ like_predicate:
 		{
 			if (xxx_pGLOBAL_SQLPARSER->inPredicateCheck())  // like_predicate: rule 5
 			{
-				OSQLParseNode* pColumnRef = newNode(aEmptyString, SQL_NODE_RULE,OSQLParser::RuleID(OSQLParseNode::column_ref));
+				OSQLParseNode* pColumnRef = newNode("", SQL_NODE_RULE,OSQLParser::RuleID(OSQLParseNode::column_ref));
 				pColumnRef->append(newNode(xxx_pGLOBAL_SQLPARSER->getFieldName(),SQL_NODE_NAME));
 
 				$$ = SQL_NEW_RULE;
@@ -1358,7 +1356,7 @@ like_predicate:
 		{
 			if (xxx_pGLOBAL_SQLPARSER->inPredicateCheck()) // like_predicate: rule 6
 			{
-				OSQLParseNode* pColumnRef = newNode(aEmptyString, SQL_NODE_RULE,OSQLParser::RuleID(OSQLParseNode::column_ref));
+				OSQLParseNode* pColumnRef = newNode("", SQL_NODE_RULE,OSQLParser::RuleID(OSQLParseNode::column_ref));
 				pColumnRef->append(newNode(xxx_pGLOBAL_SQLPARSER->getFieldName(),SQL_NODE_NAME));
 
 				$$ = SQL_NEW_RULE;
@@ -1414,7 +1412,7 @@ test_for_null:
 		{
 			if (xxx_pGLOBAL_SQLPARSER->inPredicateCheck())// test_for_null: rule 2
 			{
-				OSQLParseNode* pColumnRef = newNode(aEmptyString, SQL_NODE_RULE,OSQLParser::RuleID(OSQLParseNode::column_ref));
+				OSQLParseNode* pColumnRef = newNode("", SQL_NODE_RULE,OSQLParser::RuleID(OSQLParseNode::column_ref));
 				pColumnRef->append(newNode(xxx_pGLOBAL_SQLPARSER->getFieldName(),SQL_NODE_NAME));
 
 				$$ = SQL_NEW_RULE;
@@ -1457,7 +1455,7 @@ in_predicate:
 		{
 			if ( xxx_pGLOBAL_SQLPARSER->inPredicateCheck() )// in_predicate: rule 2
 			{
-				OSQLParseNode* pColumnRef = newNode(aEmptyString, SQL_NODE_RULE,OSQLParser::RuleID(OSQLParseNode::column_ref));
+				OSQLParseNode* pColumnRef = newNode("", SQL_NODE_RULE,OSQLParser::RuleID(OSQLParseNode::column_ref));
 				pColumnRef->append(newNode(xxx_pGLOBAL_SQLPARSER->getFieldName(),SQL_NODE_NAME));
 
 				$$ = SQL_NEW_RULE;
@@ -1488,7 +1486,7 @@ all_or_any_predicate:
 		{
 			if(xxx_pGLOBAL_SQLPARSER->inPredicateCheck())
 			{
-				OSQLParseNode* pColumnRef = newNode(aEmptyString, SQL_NODE_RULE,OSQLParser::RuleID(OSQLParseNode::column_ref));
+				OSQLParseNode* pColumnRef = newNode("", SQL_NODE_RULE,OSQLParser::RuleID(OSQLParseNode::column_ref));
 				pColumnRef->append(newNode(xxx_pGLOBAL_SQLPARSER->getFieldName(),SQL_NODE_NAME));
 
 				$$ = SQL_NEW_RULE;
@@ -4759,20 +4757,20 @@ sal_uInt32 OSQLParser::RuleID(OSQLParseNode::Rule eRule)
 // -------------------------------------------------------------------------
 sal_Int16 OSQLParser::buildNode(OSQLParseNode*& pAppend,OSQLParseNode* pCompare,OSQLParseNode* pLiteral,OSQLParseNode* pLiteral2)
 {
-	OSQLParseNode* pColumnRef = new OSQLInternalNode(aEmptyString, SQL_NODE_RULE,OSQLParser::RuleID(OSQLParseNode::column_ref));
+	OSQLParseNode* pColumnRef = new OSQLInternalNode("", SQL_NODE_RULE,OSQLParser::RuleID(OSQLParseNode::column_ref));
 	pColumnRef->append(new OSQLInternalNode(m_sFieldName,SQL_NODE_NAME));
 	OSQLParseNode* pComp = NULL;
 	if ( SQL_ISTOKEN( pCompare, BETWEEN) && pLiteral2 )
-		pComp = new OSQLInternalNode(aEmptyString, SQL_NODE_RULE,OSQLParser::RuleID(OSQLParseNode::between_predicate_part_2));
+		pComp = new OSQLInternalNode("", SQL_NODE_RULE,OSQLParser::RuleID(OSQLParseNode::between_predicate_part_2));
 	else
-		pComp = new OSQLInternalNode(aEmptyString, SQL_NODE_RULE,OSQLParser::RuleID(OSQLParseNode::comparison_predicate));
+		pComp = new OSQLInternalNode("", SQL_NODE_RULE,OSQLParser::RuleID(OSQLParseNode::comparison_predicate));
 
 	pComp->append(pColumnRef);
 	pComp->append(pCompare);
 	pComp->append(pLiteral);
 	if ( pLiteral2 )
 	{
-		pComp->append(new OSQLInternalNode(aEmptyString, SQL_NODE_KEYWORD,SQL_TOKEN_AND));
+		pComp->append(new OSQLInternalNode("", SQL_NODE_KEYWORD,SQL_TOKEN_AND));
 		pComp->append(pLiteral2);
 	}
 	pAppend->append(pComp);
