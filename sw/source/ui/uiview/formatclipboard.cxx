@@ -528,19 +528,8 @@ void SwFormatClipboard::Paste( SwWrtShell& rWrtShell, SfxStyleSheetBasePool* pPo
             // remove attribute that were applied by named text and paragraph formatting
             lcl_RemoveEqualItems( *pTemplateItemSet, aItemVector );
 
-            // it can't be a multiple selection
-            SwPaM* pCrsr = rWrtShell.GetCrsr();
-
             // apply the paragraph automatic attributes to all the nodes in the selection
-            for (SwNodeIndex pNodeIndexIterator = pCrsr->Start()->nNode,
-                             pNodeIndexEnd = pCrsr->End()->nNode;
-                    pNodeIndexIterator != pNodeIndexEnd;
-                    ++pNodeIndexIterator )
-            {
-                pNodeIndexIterator.GetNode().GetCntntNode()->SetAttr( *pTemplateItemSet );
-            }
-            // same as pCrsr->End()->nNode.GetNode().GetCntntNode()->SetAttr
-            pCrsr->GetCntntNode()->SetAttr( *pTemplateItemSet );
+            rWrtShell.SetAttr(*pTemplateItemSet);
 
             // store the attributes in aItemVector in order not to apply them as
             // text automatic formating attributes later in the code
