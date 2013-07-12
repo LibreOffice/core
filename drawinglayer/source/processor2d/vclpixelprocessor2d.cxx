@@ -62,8 +62,18 @@ namespace drawinglayer
 {
     namespace processor2d
     {
+        struct VclPixelProcessor2D::Impl
+        {
+            sal_uInt16 m_nOrigAntiAliasing;
+
+            explicit Impl(OutputDevice const& rOutDev)
+                : m_nOrigAntiAliasing(rOutDev.GetAntialiasing())
+            { }
+        };
+
         VclPixelProcessor2D::VclPixelProcessor2D(const geometry::ViewInformation2D& rViewInformation, OutputDevice& rOutDev)
-        :   VclProcessor2D(rViewInformation, rOutDev)
+            :   VclProcessor2D(rViewInformation, rOutDev)
+            ,   m_pImpl(new Impl(rOutDev))
         {
             // prepare maCurrentTransformation matrix with viewTransformation to target directly to pixels
             maCurrentTransformation = rViewInformation.getObjectToViewTransformation();
@@ -75,11 +85,13 @@ namespace drawinglayer
             // react on AntiAliasing settings
             if(getOptionsDrawinglayer().IsAntiAliasing())
             {
-                mpOutputDevice->SetAntialiasing(mpOutputDevice->GetAntialiasing() | ANTIALIASING_ENABLE_B2DDRAW);
+                mpOutputDevice->SetAntialiasing(
+                   m_pImpl->m_nOrigAntiAliasing | ANTIALIASING_ENABLE_B2DDRAW);
             }
             else
             {
-                mpOutputDevice->SetAntialiasing(mpOutputDevice->GetAntialiasing() & ~ANTIALIASING_ENABLE_B2DDRAW);
+                mpOutputDevice->SetAntialiasing(
+                   m_pImpl->m_nOrigAntiAliasing & ~ANTIALIASING_ENABLE_B2DDRAW);
             }
         }
 
@@ -89,7 +101,7 @@ namespace drawinglayer
                mpOutputDevice->Pop();
 
             // restore AntiAliasing
-            mpOutputDevice->SetAntialiasing(mpOutputDevice->GetAntialiasing() & ~ANTIALIASING_ENABLE_B2DDRAW);
+            mpOutputDevice->SetAntialiasing(m_pImpl->m_nOrigAntiAliasing);
         }
 
         bool VclPixelProcessor2D::tryDrawPolyPolygonColorPrimitive2DDirect(const drawinglayer::primitive2d::PolyPolygonColorPrimitive2D& rSource, double fTransparency)
