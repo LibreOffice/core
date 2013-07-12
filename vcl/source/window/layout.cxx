@@ -1498,6 +1498,18 @@ bool VclExpander::set_property(const OString &rKey, const OString &rValue)
     return true;
 }
 
+void VclExpander::StateChanged(StateChangedType nType)
+{
+    VclBin::StateChanged( nType );
+
+    if (nType == STATE_CHANGE_INITSHOW)
+    {
+        Window *pChild = get_child();
+        if (pChild)
+            pChild->Show(m_aDisclosureButton.IsChecked());
+    }
+}
+
 IMPL_LINK( VclExpander, ClickHdl, DisclosureButton*, pBtn )
 {
     Window *pChild = get_child();
