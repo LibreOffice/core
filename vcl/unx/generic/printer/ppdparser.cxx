@@ -149,6 +149,7 @@ namespace psp
             }
             #endif
         }
+        /* FIXME-BCP47: using Variant, uppercase? */
         aLoc.Language = aLoc.Language.toAsciiLowerCase();
         aLoc.Country  = aLoc.Country.toAsciiUpperCase();
         aLoc.Variant  = aLoc.Variant.toAsciiUpperCase();
@@ -180,6 +181,7 @@ namespace psp
         {
             OUString aK( aKey.makeStringAndClear() );
             com::sun::star::lang::Locale aLoc;
+            /* FIXME-BCP47: using Variant, uppercase? */
             aLoc.Language = i_rLocale.Language.toAsciiLowerCase();
             aLoc.Country  = i_rLocale.Country.toAsciiUpperCase();
             aLoc.Variant  = i_rLocale.Variant.toAsciiUpperCase();
@@ -217,6 +219,7 @@ namespace psp
                 const translation_map& rMap( it->second );
 
                 com::sun::star::lang::Locale aLoc( normalizeInputLocale( i_rLocale, true ) );
+                /* FIXME-BCP47: use LanguageTag::getFallbackStrings()? */
                 for( int nTry = 0; nTry < 4; nTry++ )
                 {
                     translation_map::const_iterator tr = rMap.find( aLoc );
@@ -1016,6 +1019,8 @@ void PPDParser::parse( ::std::list< OString >& rLines )
 
         String aUniKey(OStringToOUString(aKey, RTL_TEXTENCODING_MS_1252));
         // handle CUPS extension for globalized PPDs
+        /* FIXME-BCP47: really only ISO 639-1 two character language codes?
+         * goodnight.. */
         bool bIsGlobalizedLine = false;
         com::sun::star::lang::Locale aTransLocale;
         if( ( aUniKey.Len() > 3 && aUniKey.GetChar( 2 ) == '.' ) ||
