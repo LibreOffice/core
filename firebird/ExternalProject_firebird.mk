@@ -17,11 +17,6 @@ $(eval $(call gb_ExternalProject_use_externals,firebird,\
 	libatomic_ops \
 ))
 
-# Dependency in 3.0
-# $(eval $(call gb_ExternalProject_use_packages,firebird, \
-#     tommath \
-# ))
-
 $(eval $(call gb_ExternalProject_register_targets,firebird,\
 	build \
 ))
