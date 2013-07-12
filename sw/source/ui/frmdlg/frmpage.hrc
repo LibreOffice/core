@@ -89,25 +89,15 @@
 #define ED_CONNECT              54
 #define FL_CONNECT              55
 #define FT_CONNECT              57
-#define FT_URL                  58
-#define ED_URL                  59
 
 #define BMP_EXAMPLE             62
 #define RB_MIRROR_ALL_PAGES     64
 #define RB_MIRROR_LEFT_PAGES    65
 #define RB_MIRROR_RIGHT_PAGES   66
 
-#define FL_HYPERLINK                    94
-#define FT_FRAME                95
-#define CB_FRAME                96
-#define FL_IMAGE                97
-#define CB_SERVER               98
-#define CB_CLIENT               99
-
 #define CB_REL_WIDTH            100
 #define CB_REL_HEIGHT           101
 #define CB_FIXEDRATIO           102
-#define PB_SEARCH               103
 
 #define CB_ANCHOR_ONLY          103
 
