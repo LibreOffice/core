@@ -22,9 +22,9 @@
               <object class="GtkGrid" id="grid4">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="hexpand">True</property>
                 <property name="row_spacing">6</property>
                 <property name="column_spacing">6</property>
-                <property name="column_homogeneous">True</property>
                 <child>
                   <object class="GtkLabel" id="widthlabel">
                     <property name="visible">True</property>
@@ -85,6 +85,25 @@
                   </packing>
                 </child>
                 <child>
+                  <object class="GtkSpinButton" id="linetransparency:0%">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="has_tooltip">True</property>
+                    <property name="tooltip_markup" translatable="yes">Specify the transparency of the line.</property>
+                    <property name="tooltip_text" translatable="yes">Specify the transparency of the line.</property>
+                    <property name="hexpand">True</property>
+                    <property name="invisible_char">•</property>
+                    <property name="invisible_char_set">True</property>
+                    <property name="climb_rate">5</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">2</property>
+                    <property name="width">1</property>
+                    <property name="height">1</property>
+                  </packing>
+                </child>
+                <child>
                   <object class="GtkToolbar" id="color">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
@@ -110,8 +129,8 @@
                     </child>
                   </object>
                   <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">2</property>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">1</property>
                     <property name="width">1</property>
                     <property name="height">1</property>
                   </packing>
@@ -125,25 +144,7 @@
                     <property name="use_underline">True</property>
                   </object>
                   <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">1</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkSpinButton" id="linetransparency:0%">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="has_tooltip">True</property>
-                    <property name="tooltip_markup" translatable="yes">Specify the transparency of the line.</property>
-                    <property name="tooltip_text" translatable="yes">Specify the transparency of the line.</property>
-                    <property name="invisible_char">•</property>
-                    <property name="invisible_char_set">True</property>
-                    <property name="climb_rate">5</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">1</property>
+                    <property name="left_attach">0</property>
                     <property name="top_attach">2</property>
                     <property name="width">1</property>
                     <property name="height">1</property>
