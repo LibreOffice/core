@@ -633,8 +633,8 @@ void ViewSettings::finalizeImport()
     {
         // calculate the visible area in units of 1/100 mm
         PropertySet aRangeProp( getCellRangeFromDoc( *pVisibleArea ) );
-        Point aPos;
-        Size aSize;
+        css::awt::Point aPos;
+        css::awt::Size aSize;
         if( aRangeProp.getProperty( aPos, PROP_Position ) && aRangeProp.getProperty( aSize, PROP_Size ) )
         {
             // set the visible area as sequence of long at the media descriptor

@@ -214,7 +214,7 @@ void WorkbookSettings::finalizeImport()
     }
 
     // calculation settings
-    Date aNullDate = getNullDate();
+    css::util::Date aNullDate = getNullDate();
 
     aPropSet.setProperty( PROP_NullDate,           aNullDate );
     aPropSet.setProperty( PROP_IsIterationEnabled, maCalcSettings.mbIterate );
@@ -250,11 +250,11 @@ sal_Int16 WorkbookSettings::getApiShowObjectMode() const
     return API_SHOWMODE_SHOW;
 }
 
-Date WorkbookSettings::getNullDate() const
+css::util::Date WorkbookSettings::getNullDate() const
 {
-    static const Date saDate1900                 ( 30, 12, 1899 );
-    static const Date saDate1904                 ( 1, 1, 1904 );
-    static const Date saDateBackCompatibility1900( 31, 12, 1899 );
+    static const css::util::Date saDate1900                 ( 30, 12, 1899 );
+    static const css::util::Date saDate1904                 ( 1, 1, 1904 );
+    static const css::util::Date saDateBackCompatibility1900( 31, 12, 1899 );
 
     if( getOoxFilter().getVersion() == oox::core::ISOIEC_29500_2008 )
     {

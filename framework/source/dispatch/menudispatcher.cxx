@@ -265,7 +265,7 @@ void MenuDispatcher::impl_setAccelerators( Menu* pMenu, const Accelerator& aAcce
     for ( sal_uInt16 nPos = 0; nPos < pMenu->GetItemCount(); ++nPos )
     {
         sal_uInt16     nId    = pMenu->GetItemId(nPos);
-        PopupMenu* pPopup = pMenu->GetPopupMenu(nId);
+        ::PopupMenu* pPopup = pMenu->GetPopupMenu(nId);
         if ( pPopup )
             impl_setAccelerators( (Menu *)pPopup, aAccel );
         else if ( nId && !pMenu->GetPopupMenu(nId))

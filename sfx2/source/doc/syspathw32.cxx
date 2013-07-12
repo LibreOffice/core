@@ -23,6 +23,10 @@
 #ifdef _MSC_VER
 #pragma warning(disable:4917)
 #endif
+
+#undef WB_LEFT
+#undef WB_RIGHT
+
 #include <shlobj.h>
 
 static bool _SHGetSpecialFolderW32( int nFolderID, WCHAR* pszFolder, int nSize )

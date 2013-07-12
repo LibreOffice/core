@@ -16,6 +16,8 @@ $(eval $(call gb_Library_set_include,cui,\
     -I$(SRCDIR)/cui/source/inc \
 ))
 
+$(eval $(call gb_Library_set_precompiled_header,cui,$(SRCDIR)/cui/inc/pch/precompiled_cui))
+
 $(eval $(call gb_Library_add_defs,cui,\
     $(if $(filter TRUE,$(ENABLE_GTK)),-DENABLE_GTK) \
     $(if $(filter TRUE,$(ENABLE_TDE)),-DENABLE_TDE) \

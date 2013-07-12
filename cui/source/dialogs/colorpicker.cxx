@@ -74,7 +74,7 @@ const sal_uInt16 COLORCOMP_KEY     = 0x43;
 
 static void RGBtoHSV( double dR, double dG, double dB, double& dH, double& dS, double& dV )
 {
-    BColor result = tools::rgb2hsv( BColor( dR, dG, dB ) );
+    BColor result = basegfx::tools::rgb2hsv( BColor( dR, dG, dB ) );
 
     dH = result.getX();
     dS = result.getY();
@@ -83,7 +83,7 @@ static void RGBtoHSV( double dR, double dG, double dB, double& dH, double& dS, d
 
 static void HSVtoRGB(double dH, double dS, double dV, double& dR, double& dG, double& dB )
 {
-    BColor result = tools::hsv2rgb( BColor( dH, dS, dV ) );
+    BColor result = basegfx::tools::hsv2rgb( BColor( dH, dS, dV ) );
 
     dR = result.getRed();
     dG = result.getGreen();

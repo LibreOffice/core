@@ -145,7 +145,7 @@ const sal_uInt16 BIFF_PCDEFINITION_ENABLEREFRESH    = 0x0020;
     1900-Jan-00. Nothing has to be done when the workbook is stored in 1904
     date mode (dates before 1904-Jan-01 will not occur in this case).
  */
-void lclAdjustBinDateTime( DateTime& orDateTime )
+void lclAdjustBinDateTime( css::util::DateTime& orDateTime )
 {
     if( (orDateTime.Year == 1900) && (orDateTime.Month <= 2) )
     {
@@ -182,7 +182,7 @@ void PivotCacheItem::readNumeric( const AttributeList& rAttribs )
 
 void PivotCacheItem::readDate( const AttributeList& rAttribs )
 {
-    maValue <<= rAttribs.getDateTime( XML_v, DateTime() );
+    maValue <<= rAttribs.getDateTime( XML_v, css::util::DateTime() );
     mnType = XML_d;
 }
 
@@ -218,7 +218,7 @@ void PivotCacheItem::readDouble( SequenceInputStream& rStrm )
 
 void PivotCacheItem::readDate( SequenceInputStream& rStrm )
 {
-    DateTime aDateTime;
+    css::util::DateTime aDateTime;
     aDateTime.Year = rStrm.readuInt16();
     aDateTime.Month = rStrm.readuInt16();
     aDateTime.Day = rStrm.readuInt8();
@@ -268,7 +268,7 @@ void PivotCacheItem::readInteger( BiffInputStream& rStrm )
 
 void PivotCacheItem::readDate( BiffInputStream& rStrm )
 {
-    DateTime aDateTime;
+    css::util::DateTime aDateTime;
     aDateTime.Year = rStrm.readuInt16();
     aDateTime.Month = rStrm.readuInt16();
     aDateTime.Day = rStrm.readuInt8();
@@ -541,8 +541,8 @@ void PivotCacheField::importFieldGroup( const AttributeList& rAttribs )
 
 void PivotCacheField::importRangePr( const AttributeList& rAttribs )
 {
-    maFieldGroupModel.maStartDate    = rAttribs.getDateTime( XML_startDate, DateTime() );
-    maFieldGroupModel.maEndDate      = rAttribs.getDateTime( XML_endDate, DateTime() );
+    maFieldGroupModel.maStartDate    = rAttribs.getDateTime( XML_startDate, css::util::DateTime() );
+    maFieldGroupModel.maEndDate      = rAttribs.getDateTime( XML_endDate, css::util::DateTime() );
     maFieldGroupModel.mfStartValue   = rAttribs.getDouble( XML_startNum, 0.0 );
     maFieldGroupModel.mfEndValue     = rAttribs.getDouble( XML_endNum, 0.0 );
     maFieldGroupModel.mfInterval     = rAttribs.getDouble( XML_groupInterval, 1.0 );
@@ -723,8 +723,8 @@ void PivotCacheField::importPCDFRangePr( BiffInputStream& rStrm )
             OSL_ENSURE( bHasTypes, "PivotCacheField::importPCDFRangePr - wrong data types in grouping items" );
             if( bHasTypes )
             {
-                maFieldGroupModel.maStartDate = pStartValue->getValue().get< DateTime >();
-                maFieldGroupModel.maEndDate   = pEndValue->getValue().get< DateTime >();
+                maFieldGroupModel.maStartDate = pStartValue->getValue().get< css::util::DateTime >();
+                maFieldGroupModel.maEndDate   = pEndValue->getValue().get< css::util::DateTime >();
                 maFieldGroupModel.mfInterval  = pInterval->getValue().get< sal_Int16 >();
             }
         }
@@ -1023,7 +1023,7 @@ void PivotCacheField::writeItemToSourceDataCell( WorksheetHelper& rSheetHelper,
             case XML_s: rSheetData.setStringCell( aModel, rItem.getValue().get< OUString >() );                             break;
             case XML_n: rSheetData.setValueCell( aModel, rItem.getValue().get< double >() );                                break;
             case XML_i: rSheetData.setValueCell( aModel, rItem.getValue().get< sal_Int16 >() );                             break;
-            case XML_d: rSheetData.setDateTimeCell( aModel, rItem.getValue().get< DateTime >() );                           break;
+            case XML_d: rSheetData.setDateTimeCell( aModel, rItem.getValue().get< css::util::DateTime >() );                           break;
             case XML_b: rSheetData.setBooleanCell( aModel, rItem.getValue().get< bool >() );                                break;
             case XML_e: rSheetData.setErrorCell( aModel, static_cast< sal_uInt8 >( rItem.getValue().get< sal_Int32 >() ) ); break;
             default:    OSL_FAIL( "PivotCacheField::writeItemToSourceDataCell - unexpected item data type" );

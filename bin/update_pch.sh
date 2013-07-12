@@ -131,10 +131,13 @@ function filter_ignore()
 # - sores.hxx provides BMP_PLUGIN, which is redefined
 # - some sources play ugly #define tricks with editeng/eeitemid.hxx
 # - jerror.h and jpeglib.h are not self-contained
+# - service1.hxx/service2.hxx are inside comments in frameworks/
     grep -e '\.h[">]$' -e '\.hpp[">]$' -e '\.hdl[">]$' -e '\.hxx[">]$' -e '^[^\.]*>$' | \
     grep -v -F -e '#include "gperffasttoken.hxx"' | \
     grep -v -F -e '#include <svtools/sores.hxx>' | \
     grep -v -F -e '#include <editeng/eeitemid.hxx>' | \
+    grep -v -F -e '#include <service1.hxx>' | \
+    grep -v -F -e '#include <service2.hxx>' | \
     grep -v -F -e '#include "jerror.h"' | \
     grep -v -F -e '#include "jpeglib.h"'
 )

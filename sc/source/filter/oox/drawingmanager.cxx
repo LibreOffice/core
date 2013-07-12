@@ -209,7 +209,7 @@ BiffDrawingObjectContainer::BiffDrawingObjectContainer()
 {
 }
 
-void BiffDrawingObjectContainer::convertAndInsert( BiffDrawingBase& rDrawing, const Reference< XShapes >& rxShapes, const Rectangle* pParentRect ) const
+void BiffDrawingObjectContainer::convertAndInsert( BiffDrawingBase& rDrawing, const Reference< XShapes >& rxShapes, const css::awt::Rectangle* pParentRect ) const
 {
     maObjects.forEachMem( &BiffDrawingObjectBase::convertAndInsert, ::boost::ref( rDrawing ), ::boost::cref( rxShapes ), pParentRect );
 }
@@ -237,14 +237,14 @@ BiffDrawingObjectBase::~BiffDrawingObjectBase()
 }
 
 Reference< XShape > BiffDrawingObjectBase::convertAndInsert( BiffDrawingBase& rDrawing,
-        const Reference< XShapes >& rxShapes, const Rectangle* pParentRect ) const
+        const Reference< XShapes >& rxShapes, const css::awt::Rectangle* pParentRect ) const
 {
     Reference< XShape > xShape;
     if( rxShapes.is() && mbProcessShape && !mbHidden )  // TODO: support for hidden objects?
     {
         // base class 'ShapeAnchor' calculates the shape rectangle in 1/100 mm
         // in BIFF3-BIFF5, all shapes have absolute anchor (also children of group shapes)
-        Rectangle aShapeRect = maAnchor.calcAnchorRectHmm( getDrawPageSize() );
+        css::awt::Rectangle aShapeRect = maAnchor.calcAnchorRectHmm( getDrawPageSize() );
 
         // convert the shape, if the calculated rectangle is not empty
         bool bHasWidth = aShapeRect.Width > 0;
@@ -495,7 +495,7 @@ BiffSheetDrawing::BiffSheetDrawing( const WorksheetHelper& rHelper ) :
 {
 }
 
-void BiffSheetDrawing::notifyShapeInserted( const Reference< XShape >& /*rxShape*/, const Rectangle& rShapeRect )
+void BiffSheetDrawing::notifyShapeInserted( const Reference< XShape >& /*rxShape*/, const css::awt::Rectangle& rShapeRect )
 {
     // collect all shape positions in the WorksheetHelper base class
     extendShapeBoundingBox( rShapeRect );

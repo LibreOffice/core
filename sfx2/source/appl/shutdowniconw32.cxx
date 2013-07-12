@@ -1,4 +1,3 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -34,6 +33,9 @@
 
 #include <unotools/moduleoptions.hxx>
 #include <unotools/dynamicmenuoptions.hxx>
+
+#undef WB_LEFT
+#undef WB_RIGHT
 
 #include "shutdownicon.hxx"
 #include "app.hrc"

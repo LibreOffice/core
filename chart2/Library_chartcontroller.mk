@@ -15,6 +15,8 @@ $(eval $(call gb_Library_set_include,chartcontroller,\
     -I$(SRCDIR)/chart2/source/inc \
 ))
 
+$(eval $(call gb_Library_set_precompiled_header,chartcontroller,$(SRCDIR)/chart2/inc/pch/precompiled_chartcontroller))
+
 $(eval $(call gb_Library_use_external,chartcontroller,boost_headers))
 
 $(eval $(call gb_Library_use_sdk_api,chartcontroller))

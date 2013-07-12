@@ -112,7 +112,7 @@ throw (::com::sun::star::uno::RuntimeException)
         ( m_eStyle == STYLE_TOGGLE_DROPDOWNBUTTON ))
     {
         // create popup menu
-        PopupMenu aPopup;
+        ::PopupMenu aPopup;
         const sal_uInt32 nCount = m_aDropdownMenuList.size();
         for ( sal_uInt32 i = 0; i < nCount; i++ )
         {

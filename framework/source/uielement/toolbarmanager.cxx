@@ -1619,11 +1619,11 @@ void ToolBarManager::ImplClearPopupMenu( ToolBox *pToolBar )
     if ( m_bDisposed )
         return;
 
-    PopupMenu *pMenu = pToolBar->GetMenu();
+    ::PopupMenu *pMenu = pToolBar->GetMenu();
 
     // remove config entries from menu, so we have a clean menu to start with
     // remove submenu first
-    PopupMenu*  pItemMenu = pMenu->GetPopupMenu( 1 );
+    ::PopupMenu*  pItemMenu = pMenu->GetPopupMenu( 1 );
     if( pItemMenu )
     {
         pItemMenu->Clear();
@@ -1692,12 +1692,12 @@ bool ToolBarManager::MenuItemAllowed( sal_uInt16 ) const
     return true;
 }
 
-PopupMenu * ToolBarManager::GetToolBarCustomMenu(ToolBox* pToolBar)
+::PopupMenu * ToolBarManager::GetToolBarCustomMenu(ToolBox* pToolBar)
 {
     // update the list of hidden tool items first
     pToolBar->UpdateCustomMenu();
 
-    PopupMenu *pMenu = pToolBar->GetMenu();
+    ::PopupMenu *pMenu = pToolBar->GetMenu();
     // remove all entries before inserting new ones
     ImplClearPopupMenu( pToolBar );
     // No config menu entries if command ".uno:ConfigureDialog" is not enabled
@@ -1717,12 +1717,12 @@ PopupMenu * ToolBarManager::GetToolBarCustomMenu(ToolBox* pToolBar)
 
     // popup menu for quick customization
     sal_Bool bHideDisabledEntries = !SvtMenuOptions().IsEntryHidingEnabled();
-    PopupMenu aPopupMenu( FwkResId( POPUPMENU_TOOLBAR_QUICKCUSTOMIZATION ));
+    ::PopupMenu aPopupMenu( FwkResId( POPUPMENU_TOOLBAR_QUICKCUSTOMIZATION ));
 
     if ( m_pToolBar->IsCustomize() )
     {
         sal_uInt16      nPos( 0 );
-        PopupMenu*  pItemMenu( aPopupMenu.GetPopupMenu( 1 ));
+        ::PopupMenu*  pItemMenu( aPopupMenu.GetPopupMenu( 1 ));
 
         sal_Bool    bIsFloating( sal_False );
 
@@ -1794,7 +1794,7 @@ PopupMenu * ToolBarManager::GetToolBarCustomMenu(ToolBox* pToolBar)
     if( aPopupMenu.GetPopupMenu( 1 ) )
     {
         // create an own submenu to avoid auto-delete when resource menu is deleted
-        PopupMenu *pItemMenu = new PopupMenu();
+        ::PopupMenu *pItemMenu = new ::PopupMenu();
 
         for( i=0; i< aPopupMenu.GetPopupMenu( 1 )->GetItemCount(); i++)
             pItemMenu->CopyItem( *aPopupMenu.GetPopupMenu( 1 ), i, MENU_APPEND );
@@ -1817,7 +1817,7 @@ IMPL_LINK( ToolBarManager, Command, CommandEvent*, pCmdEvt )
     if ( pCmdEvt->GetCommand() != COMMAND_CONTEXTMENU )
         return 0;
 
-    PopupMenu * pMenu = GetToolBarCustomMenu(m_pToolBar);
+    ::PopupMenu * pMenu = GetToolBarCustomMenu(m_pToolBar);
     if (pMenu)
     {
         // make sure all disabled entries will be shown

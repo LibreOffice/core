@@ -31,7 +31,6 @@ namespace xls {
 
 // ============================================================================
 
-using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::table;
 using namespace ::oox::drawingml;
 
@@ -181,7 +180,7 @@ void ShapeAnchor::importVmlAnchor( const OUString& rAnchor )
     }
 }
 
-EmuRectangle ShapeAnchor::calcAnchorRectEmu( const Size& rPageSizeHmm ) const
+EmuRectangle ShapeAnchor::calcAnchorRectEmu( const css::awt::Size& rPageSizeHmm ) const
 {
     AddressConverter& rAddrConv = getAddressConverter();
     EmuSize aPageSize( lclHmmToEmu( rPageSizeHmm.Width ), lclHmmToEmu( rPageSizeHmm.Height ) );
@@ -259,16 +258,16 @@ EmuRectangle ShapeAnchor::calcAnchorRectEmu( const Size& rPageSizeHmm ) const
     return aAnchorRect;
 }
 
-Rectangle ShapeAnchor::calcAnchorRectHmm( const Size& rPageSizeHmm ) const
+css::awt::Rectangle ShapeAnchor::calcAnchorRectHmm( const css::awt::Size& rPageSizeHmm ) const
 {
     EmuRectangle aAnchorRect = calcAnchorRectEmu( rPageSizeHmm );
-    return Rectangle( lclEmuToHmm( aAnchorRect.X ), lclEmuToHmm( aAnchorRect.Y ), lclEmuToHmm( aAnchorRect.Width ), lclEmuToHmm( aAnchorRect.Height ) );
+    return css::awt::Rectangle( lclEmuToHmm( aAnchorRect.X ), lclEmuToHmm( aAnchorRect.Y ), lclEmuToHmm( aAnchorRect.Width ), lclEmuToHmm( aAnchorRect.Height ) );
 }
 
 EmuPoint ShapeAnchor::calcCellAnchorEmu( const CellAnchorModel& rModel ) const
 {
     // calculate position of top-left edge of the cell
-    Point aPoint = getCellPosition( rModel.mnCol, rModel.mnRow );
+    css::awt::Point aPoint = getCellPosition( rModel.mnCol, rModel.mnRow );
     EmuPoint aEmuPoint( lclHmmToEmu( aPoint.X ), lclHmmToEmu( aPoint.Y ) );
 
     // add the offset inside the cell
@@ -289,7 +288,7 @@ EmuPoint ShapeAnchor::calcCellAnchorEmu( const CellAnchorModel& rModel ) const
 
         case CELLANCHOR_COLROW:
         {
-            Size aCellSize = getCellSize( rModel.mnCol, rModel.mnRow );
+            css::awt::Size aCellSize = getCellSize( rModel.mnCol, rModel.mnRow );
             EmuSize aEmuSize( lclHmmToEmu( aCellSize.Width ), lclHmmToEmu( aCellSize.Height ) );
             // X offset is given in 1/1024 of column width
             aEmuPoint.X += static_cast< sal_Int64 >( aEmuSize.Width * getLimitedValue< double >( static_cast< double >( rModel.mnColOffset ) / 1024.0, 0.0, 1.0 ) + 0.5 );

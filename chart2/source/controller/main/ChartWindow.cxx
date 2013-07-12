@@ -176,7 +176,7 @@ void ChartWindow::KeyInput( const KeyEvent& rKEvt )
         Window::KeyInput( rKEvt );
 }
 
-uno::Reference< accessibility::XAccessible > ChartWindow::CreateAccessible()
+uno::Reference< css::accessibility::XAccessible > ChartWindow::CreateAccessible()
 {
     if( m_pWindowController )
         return m_pWindowController->CreateAccessible();

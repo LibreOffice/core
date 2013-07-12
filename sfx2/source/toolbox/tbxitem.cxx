@@ -926,7 +926,7 @@ void SfxToolBoxControl::StateChanged
 
     sal_uInt16 nItemBits = pImpl->pBox->GetItemBits( GetId() );
     nItemBits &= ~TIB_CHECKABLE;
-    TriState eTri = STATE_NOCHECK;
+    ::TriState eTri = STATE_NOCHECK;
     switch ( eState )
     {
         case SFX_ITEM_AVAILABLE:

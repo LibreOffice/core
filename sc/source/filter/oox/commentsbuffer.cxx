@@ -40,8 +40,6 @@
 
 using ::com::sun::star::text::XText;
 using ::com::sun::star::text::XTextRange;
-using ::com::sun::star::awt::Size;
-using ::com::sun::star::awt::Point;
 
 namespace oox {
 namespace xls {
@@ -175,8 +173,8 @@ void Comment::finalizeImport()
                     aCommentPr.setProperty( PROP_TextVerticalAdjust, lcl_ToVertAlign( maModel.mnTVA ) );
                     if( maModel.maAnchor.Width > 0 && maModel.maAnchor.Height > 0 )
                     {
-                        xAnnoShape->setPosition( Point( maModel.maAnchor.X, maModel.maAnchor.Y ) );
-                        xAnnoShape->setSize( Size( maModel.maAnchor.Width, maModel.maAnchor.Height ) );
+                        xAnnoShape->setPosition( css::awt::Point( maModel.maAnchor.X, maModel.maAnchor.Y ) );
+                        xAnnoShape->setSize( css::awt::Size( maModel.maAnchor.Width, maModel.maAnchor.Height ) );
                     }
 
                     // convert shape formatting and visibility

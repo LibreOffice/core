@@ -20,6 +20,8 @@
 #if defined _MSC_VER
 #pragma warning(push, 1)
 #endif
+#undef WB_LEFT
+#undef WB_RIGHT
 #include <windows.h>
 #if defined _MSC_VER
 #pragma warning(pop)

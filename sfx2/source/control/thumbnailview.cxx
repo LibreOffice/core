@@ -836,8 +836,8 @@ void ThumbnailView::Paint( const Rectangle &aRect)
     size_t      nItemCount = mItemList.size();
 
     // Draw background
-    Primitive2DSequence aSeq(1);
-    aSeq[0] = Primitive2DReference( new PolyPolygonColorPrimitive2D(
+    drawinglayer::primitive2d::Primitive2DSequence aSeq(1);
+    aSeq[0] = drawinglayer::primitive2d::Primitive2DReference( new PolyPolygonColorPrimitive2D(
                                         B2DPolyPolygon(Polygon(aRect,5,5).getB2DPolygon()),
                                         maColor.getBColor()));
 

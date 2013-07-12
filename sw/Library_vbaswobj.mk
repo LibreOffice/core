@@ -21,6 +21,8 @@ $(eval $(call gb_Library_Library,vbaswobj))
 
 $(eval $(call gb_Library_set_componentfile,vbaswobj,sw/util/vbaswobj))
 
+$(eval $(call gb_Library_set_precompiled_header,vbaswobj,$(SRCDIR)/sw/inc/pch/precompiled_vbaswobj))
+
 $(eval $(call gb_Library_set_include,vbaswobj,\
     -I$(SRCDIR)/sw/source/core/inc \
     -I$(SRCDIR)/sw/source/filter/inc \

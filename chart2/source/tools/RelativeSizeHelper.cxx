@@ -23,7 +23,7 @@
 #include <vector>
 #include <algorithm>
 
-using namespace ::com::sun::star::awt;
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
 using namespace ::std;
 
@@ -36,8 +36,8 @@ namespace chart
 
 double RelativeSizeHelper::calculate(
     double fValue,
-    const Size & rOldReferenceSize,
-    const Size & rNewReferenceSize )
+    const awt::Size & rOldReferenceSize,
+    const awt::Size & rNewReferenceSize )
 {
     if( rOldReferenceSize.Width <= 0 ||
         rOldReferenceSize.Height <= 0 )
@@ -51,8 +51,8 @@ double RelativeSizeHelper::calculate(
 
 void RelativeSizeHelper::adaptFontSizes(
     const Reference< XPropertySet > & xTargetProperties,
-    const Size & rOldReferenceSize,
-    const Size & rNewReferenceSize )
+    const awt::Size & rOldReferenceSize,
+    const awt::Size & rNewReferenceSize )
 {
     if( ! xTargetProperties.is())
         return;

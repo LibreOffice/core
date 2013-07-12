@@ -324,7 +324,7 @@ MenuToolbarController::~MenuToolbarController()
 
 }
 
-class Toolbarmenu : public PopupMenu
+class Toolbarmenu : public ::PopupMenu
 {
     public:
     Toolbarmenu();

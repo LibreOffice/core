@@ -19,6 +19,8 @@ $(eval $(call gb_Library_set_include,scfilt,\
 	$$(INCLUDE) \
 ))
 
+$(eval $(call gb_Library_set_precompiled_header,scfilt,$(SRCDIR)/sc/inc/pch/precompiled_scfilt))
+
 $(eval $(call gb_Library_use_sdk_api,scfilt))
 
 $(eval $(call gb_Library_use_custom_headers,scfilt,\

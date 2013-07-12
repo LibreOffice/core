@@ -25,6 +25,8 @@ $(eval $(call gb_Library_add_defs,slideshow,\
 ))
 endif
 
+$(eval $(call gb_Library_set_precompiled_header,slideshow,$(SRCDIR)/slideshow/inc/pch/precompiled_slideshow))
+
 $(eval $(call gb_Library_use_external,slideshow,boost_headers))
 
 $(eval $(call gb_Library_use_sdk_api,slideshow))
