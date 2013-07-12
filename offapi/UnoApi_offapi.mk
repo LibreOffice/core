@@ -72,7 +72,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/awt/tab,\
 	UnoControlTabPageModel \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/awt/tree,\
-	DefaultTreeDataModel \
 	MutableTreeDataModel \
 	MutableTreeNode \
 	TreeControl \
