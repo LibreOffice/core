@@ -18,15 +18,13 @@
 #ifndef SVX_SIDEBAR_INSERT_PROPERTY_PAGE_HXX
 #define SVX_SIDEBAR_INSERT_PROPERTY_PAGE_HXX
 
-#include <boost/scoped_ptr.hpp>
-
 #include <vcl/ctrl.hxx>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/XToolbarController.hpp>
 
 #include <map>
-
+#include <svx/sidebar/PanelLayout.hxx>
 
 namespace css = ::com::sun::star;
 namespace cssu = ::com::sun::star::uno;
@@ -38,7 +36,7 @@ namespace svx { namespace sidebar {
 /** This panel provides buttons for inserting shapes into a document.
 */
 class InsertPropertyPanel
-    : public Control
+    : public PanelLayout
 {
 public:
     InsertPropertyPanel (
@@ -47,10 +45,8 @@ public:
     virtual ~InsertPropertyPanel (void);
 
 private:
-    ::boost::scoped_ptr<Window> mpStandardShapesBackground;
-    ::boost::scoped_ptr<ToolBox> mpStandardShapesToolBox;
-    ::boost::scoped_ptr<Window> mpCustomShapesBackground;
-    ::boost::scoped_ptr<ToolBox> mpCustomShapesToolBox;
+    ToolBox*        mpStandardShapesToolBox;
+    ToolBox*        mpCustomShapesToolBox;
     const cssu::Reference<css::frame::XFrame> mxFrame;
 
     DECL_LINK(WindowEventListener, VclSimpleEvent*);
