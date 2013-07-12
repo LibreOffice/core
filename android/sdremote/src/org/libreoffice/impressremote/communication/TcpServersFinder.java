@@ -46,10 +46,14 @@ public class TcpServersFinder implements ServersFinder, Runnable {
         mContext = aContext;
 
         mServers = new HashMap<String, Server>();
+
+        mSearchService = Executors.newSingleThreadScheduledExecutor();
     }
 
     @Override
     public void startSearch() {
+        stopSearch();
+
         mSearchService = Executors.newSingleThreadScheduledExecutor();
         mSearchService.scheduleAtFixedRate(this, 0, SEARCH_DELAY_IN_SECONDS, TimeUnit.SECONDS);
     }
