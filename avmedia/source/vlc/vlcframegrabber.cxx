@@ -16,6 +16,7 @@ SAL_CALL VLCFrameGrabber::VLCFrameGrabber()
 
 ::uno::Reference< css::graphic::XGraphic > SAL_CALL VLCFrameGrabber::grabFrame( double fMediaTime )
 {
+    std::cout << __PRETTY_FUNCTION__ << std::endl;
     return ::uno::Reference< css::graphic::XGraphic >();
 }
 

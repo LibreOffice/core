@@ -119,7 +119,7 @@ void SAL_CALL VLCPlayer::setMute( ::sal_Bool bSet )
 
 css::awt::Size SAL_CALL VLCPlayer::getPreferredPlayerWindowSize()
 {
-    return css::awt::Size( 1, 1 );
+    return css::awt::Size( 480, 360 );
 }
 
 namespace

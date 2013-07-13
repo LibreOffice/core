@@ -70,6 +70,7 @@ void SAL_CALL VLCWindow::setPosSize( sal_Int32 X, sal_Int32 Y, sal_Int32 Width, 
 awt::Rectangle SAL_CALL VLCWindow::getPosSize()
     throw (uno::RuntimeException)
 {
+    return awt::Rectangle();
 }
 
 void SAL_CALL VLCWindow::setVisible( sal_Bool Visible )

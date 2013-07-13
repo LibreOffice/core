@@ -20,10 +20,10 @@
 #ifndef _VLCFRAMEGRABBER_HXX
 #define _VLCFRAMEGRABBER_HXX
 
-#include "vlccommon.hxx"
 #include <boost/noncopyable.hpp>
 #include <com/sun/star/media/XFrameGrabber.hpp>
 #include <cppuhelper/implbase2.hxx>
+#include "vlccommon.hxx"
 
 namespace avmedia {
 namespace vlc {
