@@ -23,7 +23,6 @@
 
 #include <rtl/math.hxx>
 #include <rtl/ustrbuf.hxx>
-#include "gauss.hxx"
 
 using namespace ::com::sun::star;
 
