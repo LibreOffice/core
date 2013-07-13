@@ -18,7 +18,6 @@
  */
 
 
-#include <rtl/logfile.hxx>
 
 #include <tools/debug.hxx>
 #include <tools/rc.h>
@@ -1642,7 +1641,7 @@ ToolBox::ToolBox( Window* pParent, WinBits nStyle ) :
 ToolBox::ToolBox( Window* pParent, const ResId& rResId ) :
     DockingWindow( WINDOW_TOOLBOX )
 {
-    RTL_LOGFILE_CONTEXT( aLog, "vcl: ToolBox::ToolBox( Window* pParent, const ResId& rResId )" );
+    SAL_INFO( "vcl.window", "vcl: ToolBox::ToolBox( Window* pParent, const ResId& rResId )" );
 
     rResId.SetRT( RSC_TOOLBOX );
     WinBits nStyle = ImplInitRes( rResId );
