@@ -54,41 +54,54 @@ const sal_uInt16 SC_DP_LEAPYEAR = 1648;     // arbitrary leap year for date calc
 class ScDPGroupNumFilter : public ScDPFilteredCache::FilterBase
 {
 public:
-    ScDPGroupNumFilter(const ScDPItemData& rValue, const ScDPNumGroupInfo& rInfo);
+    ScDPGroupNumFilter(const std::vector<ScDPItemData>& rValues, const ScDPNumGroupInfo& rInfo);
     virtual ~ScDPGroupNumFilter() {}
     virtual bool match(const ScDPItemData &rCellData) const;
+    virtual std::vector<ScDPItemData> getMatchValues() const;
 private:
-    ScDPItemData maValue;
+    std::vector<ScDPItemData> maValues;
     ScDPNumGroupInfo maNumInfo;
 };
 
-ScDPGroupNumFilter::ScDPGroupNumFilter(const ScDPItemData& rValue, const ScDPNumGroupInfo& rInfo) :
-    maValue(rValue), maNumInfo(rInfo) {}
+ScDPGroupNumFilter::ScDPGroupNumFilter(const std::vector<ScDPItemData>& rValues, const ScDPNumGroupInfo& rInfo) :
+    maValues(rValues), maNumInfo(rInfo) {}
 
 bool ScDPGroupNumFilter::match(const ScDPItemData& rCellData) const
 {
     if (rCellData.GetType() != ScDPItemData::Value)
         return false;
 
-    double fVal = maValue.GetValue();
-    if (rtl::math::isInf(fVal))
+    std::vector<ScDPItemData>::const_iterator it = maValues.begin(), itEnd = maValues.end();
+    for (; it != itEnd; ++it)
     {
-        if (rtl::math::isSignBitSet(fVal))
+        double fVal = it->GetValue();
+        if (rtl::math::isInf(fVal))
         {
-            // Less than the min value.
-            return rCellData.GetValue() < maNumInfo.mfStart;
+            if (rtl::math::isSignBitSet(fVal))
+            {
+                // Less than the min value.
+                return rCellData.GetValue() < maNumInfo.mfStart;
+            }
+
+            // Greater than the max value.
+            return maNumInfo.mfEnd < rCellData.GetValue();
         }
 
-        // Greater than the max value.
-        return maNumInfo.mfEnd < rCellData.GetValue();
+        double low = fVal;
+        double high = low + maNumInfo.mfStep;
+        if (maNumInfo.mbIntegerOnly)
+            high += 1.0;
+
+        if (low <= rCellData.GetValue() && rCellData.GetValue() < high)
+            return true;
     }
 
-    double low = fVal;
-    double high = low + maNumInfo.mfStep;
-    if (maNumInfo.mbIntegerOnly)
-        high += 1.0;
+    return false;
+}
 
-    return low <= rCellData.GetValue() && rCellData.GetValue() < high;
+std::vector<ScDPItemData> ScDPGroupNumFilter::getMatchValues() const
+{
+    return std::vector<ScDPItemData>();
 }
 
 class ScDPGroupDateFilter : public ScDPFilteredCache::FilterBase
@@ -96,14 +109,15 @@ class ScDPGroupDateFilter : public ScDPFilteredCache::FilterBase
 public:
     virtual ~ScDPGroupDateFilter() {}
     ScDPGroupDateFilter(
-        const ScDPItemData& rValue, const Date& rNullDate, const ScDPNumGroupInfo& rNumInfo);
+        const std::vector<ScDPItemData>& rValues, const Date& rNullDate, const ScDPNumGroupInfo& rNumInfo);
 
     virtual bool match(const ScDPItemData & rCellData) const;
+    virtual std::vector<ScDPItemData> getMatchValues() const;
 
 private:
     ScDPGroupDateFilter(); // disabled
 
-    ScDPItemData     maValue;
+    std::vector<ScDPItemData> maValues;
     Date             maNullDate;
     ScDPNumGroupInfo maNumInfo;
 };
@@ -111,8 +125,8 @@ private:
 // ----------------------------------------------------------------------------
 
 ScDPGroupDateFilter::ScDPGroupDateFilter(
-    const ScDPItemData& rItem, const Date& rNullDate, const ScDPNumGroupInfo& rNumInfo) :
-    maValue(rItem),
+    const std::vector<ScDPItemData>& rValues, const Date& rNullDate, const ScDPNumGroupInfo& rNumInfo) :
+    maValues(rValues),
     maNullDate(rNullDate),
     maNumInfo(rNumInfo)
 {
@@ -127,92 +141,120 @@ bool ScDPGroupDateFilter::match( const ScDPItemData & rCellData ) const
     if ( !rCellData.IsValue() )
         return false;
 
-    if (maValue.GetType() != ScDPItemData::GroupValue)
-        return false;
-
-    sal_Int32 nGroupType = maValue.GetGroupValue().mnGroupType;
-    sal_Int32 nValue = maValue.GetGroupValue().mnValue;
-
-    // Start and end dates are inclusive.  (An end date without a time value
-    // is included, while an end date with a time value is not.)
-
-    if ( rCellData.GetValue() < maNumInfo.mfStart && !approxEqual(rCellData.GetValue(), maNumInfo.mfStart) )
+    std::vector<ScDPItemData>::const_iterator it = maValues.begin(), itEnd = maValues.end();
+    for (; it != itEnd; ++it)
     {
-        return nValue == ScDPItemData::DateFirst;
-    }
+        const ScDPItemData& rValue = *it;
+        if (rValue.GetType() != ScDPItemData::GroupValue)
+            continue;
 
-    if ( rCellData.GetValue() > maNumInfo.mfEnd && !approxEqual(rCellData.GetValue(), maNumInfo.mfEnd) )
-    {
-        return nValue == ScDPItemData::DateLast;
-    }
+        sal_Int32 nGroupType = rValue.GetGroupValue().mnGroupType;
+        sal_Int32 nValue = rValue.GetGroupValue().mnValue;
 
+        // Start and end dates are inclusive.  (An end date without a time value
+        // is included, while an end date with a time value is not.)
 
-    if (nGroupType == DataPilotFieldGroupBy::HOURS || nGroupType == DataPilotFieldGroupBy::MINUTES ||
-        nGroupType == DataPilotFieldGroupBy::SECONDS)
-    {
-        // handle time
-        // (as in the cell functions, ScInterpreter::ScGetHour etc.: seconds are rounded)
+        if (rCellData.GetValue() < maNumInfo.mfStart && !approxEqual(rCellData.GetValue(), maNumInfo.mfStart))
+        {
+            if (nValue == ScDPItemData::DateFirst)
+                return true;
+            continue;
+        }
 
-        double time = rCellData.GetValue() - approxFloor(rCellData.GetValue());
-        long seconds = static_cast<long>(approxFloor(time*DATE_TIME_FACTOR + 0.5));
+        if (rCellData.GetValue() > maNumInfo.mfEnd && !approxEqual(rCellData.GetValue(), maNumInfo.mfEnd))
+        {
+            if (nValue == ScDPItemData::DateLast)
+                return true;
+            continue;
+        }
 
+        if (nGroupType == DataPilotFieldGroupBy::HOURS || nGroupType == DataPilotFieldGroupBy::MINUTES ||
+            nGroupType == DataPilotFieldGroupBy::SECONDS)
+        {
+            // handle time
+            // (as in the cell functions, ScInterpreter::ScGetHour etc.: seconds are rounded)
+
+            double time = rCellData.GetValue() - approxFloor(rCellData.GetValue());
+            long seconds = static_cast<long>(approxFloor(time*DATE_TIME_FACTOR + 0.5));
+
+            switch (nGroupType)
+            {
+                case DataPilotFieldGroupBy::HOURS:
+                {
+                    sal_Int32 hrs = seconds / 3600;
+                    if (hrs == nValue)
+                        return true;
+                }
+                break;
+                case DataPilotFieldGroupBy::MINUTES:
+                {
+                    sal_Int32 minutes = (seconds % 3600) / 60;
+                    if (minutes == nValue)
+                        return true;
+                }
+                break;
+                case DataPilotFieldGroupBy::SECONDS:
+                {
+                    sal_Int32 sec = seconds % 60;
+                    if (sec == nValue)
+                        return true;
+                }
+                break;
+                default:
+                    OSL_FAIL("invalid time part");
+            }
+
+            continue;
+        }
+
+        Date date = maNullDate + static_cast<long>(approxFloor(rCellData.GetValue()));
         switch (nGroupType)
         {
-            case DataPilotFieldGroupBy::HOURS:
+            case DataPilotFieldGroupBy::YEARS:
             {
-                sal_Int32 hrs = seconds / 3600;
-                return hrs == nValue;
+                sal_Int32 year = static_cast<sal_Int32>(date.GetYear());
+                if (year == nValue)
+                    return true;
             }
-            case DataPilotFieldGroupBy::MINUTES:
+            break;
+            case DataPilotFieldGroupBy::QUARTERS:
             {
-                sal_Int32 minutes = (seconds % 3600) / 60;
-                return minutes == nValue;
+                sal_Int32 qtr =  1 + (static_cast<sal_Int32>(date.GetMonth()) - 1) / 3;
+                if (qtr == nValue)
+                    return true;
             }
-            case DataPilotFieldGroupBy::SECONDS:
+            break;
+            case DataPilotFieldGroupBy::MONTHS:
             {
-                sal_Int32 sec = seconds % 60;
-                return sec == nValue;
+                sal_Int32 month = static_cast<sal_Int32>(date.GetMonth());
+                if (month == nValue)
+                    return true;
             }
+            break;
+            case DataPilotFieldGroupBy::DAYS:
+            {
+                Date yearStart(1, 1, date.GetYear());
+                sal_Int32 days = (date - yearStart) + 1;       // Jan 01 has value 1
+                if (days >= 60 && !date.IsLeapYear())
+                {
+                    // This is not a leap year.  Adjust the value accordingly.
+                    ++days;
+                }
+                if (days == nValue)
+                    return true;
+            }
+            break;
             default:
-                OSL_FAIL("invalid time part");
+                OSL_FAIL("invalid date part");
         }
-        return false;
-    }
-
-    Date date = maNullDate + static_cast<long>(approxFloor(rCellData.GetValue()));
-    switch (nGroupType)
-    {
-        case DataPilotFieldGroupBy::YEARS:
-        {
-            sal_Int32 year = static_cast<sal_Int32>(date.GetYear());
-            return year == nValue;
-        }
-        case DataPilotFieldGroupBy::QUARTERS:
-        {
-            sal_Int32 qtr =  1 + (static_cast<sal_Int32>(date.GetMonth()) - 1) / 3;
-            return qtr == nValue;
-        }
-        case DataPilotFieldGroupBy::MONTHS:
-        {
-            sal_Int32 month = static_cast<sal_Int32>(date.GetMonth());
-            return month == nValue;
-        }
-        case DataPilotFieldGroupBy::DAYS:
-        {
-            Date yearStart(1, 1, date.GetYear());
-            sal_Int32 days = (date - yearStart) + 1;       // Jan 01 has value 1
-            if (days >= 60 && !date.IsLeapYear())
-            {
-                // This is not a leap year.  Adjust the value accordingly.
-                ++days;
-            }
-            return days == nValue;
-        }
-        default:
-            OSL_FAIL("invalid date part");
     }
 
     return false;
+}
+
+std::vector<ScDPItemData> ScDPGroupDateFilter::getMatchValues() const
+{
+    return std::vector<ScDPItemData>();
 }
 
 namespace {
@@ -616,14 +658,34 @@ void ScDPGroupTableData::CreateCacheTable()
     pSourceData->CreateCacheTable();
 }
 
+namespace {
+
+class FindCaseInsensitive : std::unary_function<ScDPItemData, bool>
+{
+    ScDPItemData maValue;
+public:
+    FindCaseInsensitive(const ScDPItemData& rVal) : maValue(rVal) {}
+
+    bool operator() (const ScDPItemData& rItem) const
+    {
+        return maValue.IsCaseInsEqual(rItem);
+    }
+};
+
+}
+
 void ScDPGroupTableData::ModifyFilterCriteria(vector<ScDPFilteredCache::Criterion>& rCriteria)
 {
+    // Build dimension ID to object map for group dimensions.
     typedef boost::unordered_map<long, const ScDPGroupDimension*> GroupFieldMapType;
     GroupFieldMapType aGroupFieldIds;
     {
         ScDPGroupDimensionVec::const_iterator itr = aGroups.begin(), itrEnd = aGroups.end();
         for (; itr != itrEnd; ++itr)
-            aGroupFieldIds.insert( boost::unordered_map<long, const ScDPGroupDimension*>::value_type(itr->GetGroupDim(), &(*itr)) );
+        {
+            aGroupFieldIds.insert(
+                GroupFieldMapType::value_type(itr->GetGroupDim(), &(*itr)));
+        }
     }
 
     vector<ScDPFilteredCache::Criterion> aNewCriteria;
@@ -636,10 +698,7 @@ void ScDPGroupTableData::ModifyFilterCriteria(vector<ScDPFilteredCache::Criterio
     GroupFieldMapType::const_iterator itrGrpEnd = aGroupFieldIds.end();
     for (vector<ScDPFilteredCache::Criterion>::const_iterator itr = rCriteria.begin(); itr != itrEnd; ++itr)
     {
-        ScDPFilteredCache::SingleFilter* pFilter = dynamic_cast<ScDPFilteredCache::SingleFilter*>(itr->mpFilter.get());
-        if (!pFilter)
-            // We expect this to be a single filter.
-            continue;
+        std::vector<ScDPItemData> aMatchValues = itr->mpFilter->getMatchValues();
 
         GroupFieldMapType::const_iterator itrGrp = aGroupFieldIds.find(itr->mnFieldIndex);
         if (itrGrp == itrGrpEnd)
@@ -647,26 +706,27 @@ void ScDPGroupTableData::ModifyFilterCriteria(vector<ScDPFilteredCache::Criterio
             if (IsNumGroupDimension(itr->mnFieldIndex))
             {
                 // internal number group field
+                const ScDPNumGroupInfo* pNumInfo = pCache->GetNumGroupInfo(itr->mnFieldIndex);
+                if (!pNumInfo)
+                    // Number group dimension without num info?  Something is wrong...
+                    continue;
+
                 ScDPFilteredCache::Criterion aCri;
                 aCri.mnFieldIndex = itr->mnFieldIndex;
                 const ScDPNumGroupDimension& rNumGrpDim = pNumGroups[itr->mnFieldIndex];
-                const ScDPNumGroupInfo* pNumInfo = pCache->GetNumGroupInfo(itr->mnFieldIndex);
 
-                if (pNumInfo)
+                if (rNumGrpDim.IsDateDimension())
                 {
-                    if (rNumGrpDim.IsDateDimension())
-                    {
-                        // grouped by dates.
-                        aCri.mpFilter.reset(
-                            new ScDPGroupDateFilter(
-                                pFilter->getMatchValue(), *pDoc->GetFormatTable()->GetNullDate(), *pNumInfo));
-                    }
-                    else
-                    {
-                        // This dimension is grouped by numeric ranges.
-                        aCri.mpFilter.reset(
-                            new ScDPGroupNumFilter(pFilter->getMatchValue(), *pNumInfo));
-                    }
+                    // grouped by dates.
+                    aCri.mpFilter.reset(
+                        new ScDPGroupDateFilter(
+                            aMatchValues, *pDoc->GetFormatTable()->GetNullDate(), *pNumInfo));
+                }
+                else
+                {
+                    // This dimension is grouped by numeric ranges.
+                    aCri.mpFilter.reset(
+                        new ScDPGroupNumFilter(aMatchValues, *pNumInfo));
                 }
 
                 aNewCriteria.push_back(aCri);
@@ -693,7 +753,7 @@ void ScDPGroupTableData::ModifyFilterCriteria(vector<ScDPFilteredCache::Criterio
                 aCri.mnFieldIndex = nSrcDim;  // use the source dimension, not the group dimension.
                 aCri.mpFilter.reset(
                     new ScDPGroupDateFilter(
-                        pFilter->getMatchValue(), *pDoc->GetFormatTable()->GetNullDate(), *pNumInfo));
+                        aMatchValues, *pDoc->GetFormatTable()->GetNullDate(), *pNumInfo));
 
                 aNewCriteria.push_back(aCri);
             }
@@ -701,25 +761,31 @@ void ScDPGroupTableData::ModifyFilterCriteria(vector<ScDPFilteredCache::Criterio
             {
                 // normal group
 
-                // Note that each group dimension may have multiple group names!
+                ScDPFilteredCache::Criterion aCri;
+                aCri.mnFieldIndex = nSrcDim;
+                aCri.mpFilter.reset(new ScDPFilteredCache::GroupFilter());
+                ScDPFilteredCache::GroupFilter* pGrpFilter =
+                    static_cast<ScDPFilteredCache::GroupFilter*>(aCri.mpFilter.get());
+
                 size_t nGroupItemCount = pGrpDim->GetItemCount();
                 for (size_t i = 0; i < nGroupItemCount; ++i)
                 {
                     const ScDPGroupItem* pGrpItem = pGrpDim->GetGroupByIndex(i);
-                    ScDPItemData aName = pFilter->getMatchValue();
-
-                    if (!pGrpItem || !pGrpItem->GetName().IsCaseInsEqual(aName))
+                    if (!pGrpItem)
                         continue;
 
-                    ScDPFilteredCache::Criterion aCri;
-                    aCri.mnFieldIndex = nSrcDim;
-                    aCri.mpFilter.reset(new ScDPFilteredCache::GroupFilter());
-                    ScDPFilteredCache::GroupFilter* pGrpFilter =
-                        static_cast<ScDPFilteredCache::GroupFilter*>(aCri.mpFilter.get());
+                    // Make sure this group name equals one of the match values.
+                    std::vector<ScDPItemData>::iterator it =
+                        std::find_if(
+                            aMatchValues.begin(), aMatchValues.end(), FindCaseInsensitive(pGrpItem->GetName()));
+
+                    if (it == aMatchValues.end())
+                        continue;
 
                     pGrpItem->FillGroupFilter(*pGrpFilter);
-                    aNewCriteria.push_back(aCri);
                 }
+
+                aNewCriteria.push_back(aCri);
             }
         }
     }
