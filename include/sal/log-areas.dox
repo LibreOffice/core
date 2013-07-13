@@ -80,6 +80,7 @@ certain functionality.
 @li @c sc
 @li @c sc.core
 @li @c sc.ui - Calc UI
+@li @c sc.filter - Calc filter
 
 @section desktop
 

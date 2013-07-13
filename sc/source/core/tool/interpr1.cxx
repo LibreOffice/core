@@ -33,7 +33,6 @@
 #include <unotools/collatorwrapper.hxx>
 #include <unotools/transliterationwrapper.hxx>
 #include <rtl/ustring.hxx>
-#include <rtl/logfile.hxx>
 #include <unicode/uchar.h>
 
 #include "patattr.hxx"
@@ -118,7 +117,6 @@ private:
 
 void ScInterpreter::ScIfJump()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScIfJump" );
     const short* pJump = pCur->GetJump();
     short nJumpCount = pJump[ 0 ];
     MatrixDoubleRefToMatrix();
@@ -270,7 +268,6 @@ static void lcl_storeJumpMatResult( const ScMatrix* pMat, ScMatrix* pResMat, SCS
 
 void ScInterpreter::ScIfError( bool bNAonly )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Donkers/erAck", "ScInterpreter::ScIfError" );
     const short* pJump = pCur->GetJump();
     short nJumpCount = pJump[ 0 ];
     if (!sp)
@@ -432,7 +429,6 @@ void ScInterpreter::ScIfError( bool bNAonly )
 
 void ScInterpreter::ScChoseJump()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScChoseJump" );
     // We have to set a jump, if there was none chosen because of an error set
     // it to endpoint.
     bool bHaveJump = false;
@@ -560,7 +556,6 @@ static void lcl_AdjustJumpMatrix( ScJumpMatrix* pJumpM, ScMatrixRef& pResMat, SC
 
 bool ScInterpreter::JumpMatrix( short nStackLevel )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::JumpMatrix" );
     pJumpMatrix = static_cast<ScToken*>(pStack[sp-nStackLevel])->GetJumpMatrix();
     ScMatrixRef pResMat = pJumpMatrix->GetResultMatrix();
     SCSIZE nC, nR;
@@ -843,7 +838,6 @@ ScCompareOptions::ScCompareOptions( ScDocument* pDoc, const ScQueryEntry& rEntry
 
 double ScInterpreter::CompareFunc( const ScCompare& rComp, ScCompareOptions* pOptions )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::CompareFunc" );
     // Keep DoubleError if encountered
     // #i40539# if bEmpty is set, bVal/nVal are uninitialized
     if ( !rComp.bEmpty[0] && rComp.bVal[0] && !::rtl::math::isFinite( rComp.nVal[0]))
@@ -1000,7 +994,6 @@ double ScInterpreter::CompareFunc( const ScCompare& rComp, ScCompareOptions* pOp
 
 double ScInterpreter::Compare()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::Compare" );
     String aVal1, aVal2;
     ScCompare aComp( &aVal1, &aVal2 );
     for( short i = 1; i >= 0; i-- )
@@ -1090,7 +1083,6 @@ double ScInterpreter::Compare()
 
 ScMatrixRef ScInterpreter::CompareMat( ScCompareOptions* pOptions )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::CompareMat" );
     String aVal1, aVal2;
     ScCompare aComp( &aVal1, &aVal2 );
     ScMatrixRef pMat[2];
@@ -1275,7 +1267,6 @@ ScMatrixRef ScInterpreter::QueryMat( const ScMatrixRef& pMat, ScCompareOptions& 
 
 void ScInterpreter::ScEqual()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScEqual" );
     if ( GetStackType(1) == svMatrix || GetStackType(2) == svMatrix )
     {
         ScMatrixRef pMat = CompareMat();
@@ -1294,7 +1285,6 @@ void ScInterpreter::ScEqual()
 
 void ScInterpreter::ScNotEqual()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScNotEqual" );
     if ( GetStackType(1) == svMatrix || GetStackType(2) == svMatrix )
     {
         ScMatrixRef pMat = CompareMat();
@@ -1313,7 +1303,6 @@ void ScInterpreter::ScNotEqual()
 
 void ScInterpreter::ScLess()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScLess" );
     if ( GetStackType(1) == svMatrix || GetStackType(2) == svMatrix )
     {
         ScMatrixRef pMat = CompareMat();
@@ -1332,7 +1321,6 @@ void ScInterpreter::ScLess()
 
 void ScInterpreter::ScGreater()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScGreater" );
     if ( GetStackType(1) == svMatrix || GetStackType(2) == svMatrix )
     {
         ScMatrixRef pMat = CompareMat();
@@ -1351,7 +1339,6 @@ void ScInterpreter::ScGreater()
 
 void ScInterpreter::ScLessEqual()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScLessEqual" );
     if ( GetStackType(1) == svMatrix || GetStackType(2) == svMatrix )
     {
         ScMatrixRef pMat = CompareMat();
@@ -1370,7 +1357,6 @@ void ScInterpreter::ScLessEqual()
 
 void ScInterpreter::ScGreaterEqual()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScGreaterEqual" );
     if ( GetStackType(1) == svMatrix || GetStackType(2) == svMatrix )
     {
         ScMatrixRef pMat = CompareMat();
@@ -1389,7 +1375,6 @@ void ScInterpreter::ScGreaterEqual()
 
 void ScInterpreter::ScAnd()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScAnd" );
     nFuncFmtType = NUMBERFORMAT_LOGICAL;
     short nParamCount = GetByte();
     if ( MustHaveParamCountMin( nParamCount, 1 ) )
@@ -1490,7 +1475,6 @@ void ScInterpreter::ScAnd()
 
 void ScInterpreter::ScOr()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScOr" );
     nFuncFmtType = NUMBERFORMAT_LOGICAL;
     short nParamCount = GetByte();
     if ( MustHaveParamCountMin( nParamCount, 1 ) )
@@ -1592,7 +1576,6 @@ void ScInterpreter::ScOr()
 
 void ScInterpreter::ScXor()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScXor" );
 
     nFuncFmtType = NUMBERFORMAT_LOGICAL;
     short nParamCount = GetByte();
@@ -1697,7 +1680,6 @@ void ScInterpreter::ScXor()
 
 void ScInterpreter::ScNeg()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScNeg" );
     // Simple negation doesn't change current format type to number, keep
     // current type.
     nFuncFmtType = nCurFmtType;
@@ -1741,7 +1723,6 @@ void ScInterpreter::ScNeg()
 
 void ScInterpreter::ScPercentSign()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScPercentSign" );
     nFuncFmtType = NUMBERFORMAT_PERCENT;
     const FormulaToken* pSaveCur = pCur;
     sal_uInt8 nSavePar = cPar;
@@ -1757,7 +1738,6 @@ void ScInterpreter::ScPercentSign()
 
 void ScInterpreter::ScNot()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScNot" );
     nFuncFmtType = NUMBERFORMAT_LOGICAL;
     switch ( GetStackType() )
     {
@@ -1799,7 +1779,6 @@ void ScInterpreter::ScNot()
 
 void ScInterpreter::ScBitAnd()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "pechlaner", "ScInterpreter::ScBitAnd" );
 
     if ( !MustHaveParamCount( GetByte(), 2 ) )
         return;
@@ -1816,7 +1795,6 @@ void ScInterpreter::ScBitAnd()
 
 void ScInterpreter::ScBitOr()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "pechlaner", "ScInterpreter::ScBitOr" );
 
     if ( !MustHaveParamCount( GetByte(), 2 ) )
         return;
@@ -1833,7 +1811,6 @@ void ScInterpreter::ScBitOr()
 
 void ScInterpreter::ScBitXor()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "pechlaner", "ScInterpreter::ScBitXor" );
 
     if ( !MustHaveParamCount( GetByte(), 2 ) )
         return;
@@ -1850,7 +1827,6 @@ void ScInterpreter::ScBitXor()
 
 void ScInterpreter::ScBitLshift()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "pechlaner", "ScInterpreter::ScBitLshift" );
 
     if ( !MustHaveParamCount( GetByte(), 2 ) )
         return;
@@ -1875,7 +1851,6 @@ void ScInterpreter::ScBitLshift()
 
 void ScInterpreter::ScBitRshift()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "pechlaner", "ScInterpreter::ScBitRshift" );
 
     if ( !MustHaveParamCount( GetByte(), 2 ) )
         return;
@@ -1900,21 +1875,18 @@ void ScInterpreter::ScBitRshift()
 
 void ScInterpreter::ScPi()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScPi" );
     PushDouble(F_PI);
 }
 
 
 void ScInterpreter::ScRandom()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScRandom" );
     PushDouble(sc::rng::uniform());
 }
 
 
 void ScInterpreter::ScTrue()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScTrue" );
     nFuncFmtType = NUMBERFORMAT_LOGICAL;
     PushInt(1);
 }
@@ -1922,7 +1894,6 @@ void ScInterpreter::ScTrue()
 
 void ScInterpreter::ScFalse()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScFalse" );
     nFuncFmtType = NUMBERFORMAT_LOGICAL;
     PushInt(0);
 }
@@ -1930,111 +1901,95 @@ void ScInterpreter::ScFalse()
 
 void ScInterpreter::ScDeg()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScDeg" );
     PushDouble((GetDouble() / F_PI) * 180.0);
 }
 
 
 void ScInterpreter::ScRad()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScRad" );
     PushDouble(GetDouble() * (F_PI / 180));
 }
 
 
 void ScInterpreter::ScSin()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScSin" );
     PushDouble(::rtl::math::sin(GetDouble()));
 }
 
 
 void ScInterpreter::ScCos()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScCos" );
     PushDouble(::rtl::math::cos(GetDouble()));
 }
 
 
 void ScInterpreter::ScTan()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScTan" );
     PushDouble(::rtl::math::tan(GetDouble()));
 }
 
 
 void ScInterpreter::ScCot()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScCot" );
     PushDouble(1.0 / ::rtl::math::tan(GetDouble()));
 }
 
 
 void ScInterpreter::ScArcSin()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScArcSin" );
     PushDouble(asin(GetDouble()));
 }
 
 
 void ScInterpreter::ScArcCos()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScArcCos" );
     PushDouble(acos(GetDouble()));
 }
 
 
 void ScInterpreter::ScArcTan()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScArcTan" );
     PushDouble(atan(GetDouble()));
 }
 
 
 void ScInterpreter::ScArcCot()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScArcCot" );
     PushDouble((F_PI2) - atan(GetDouble()));
 }
 
 
 void ScInterpreter::ScSinHyp()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScSinHyp" );
     PushDouble(sinh(GetDouble()));
 }
 
 
 void ScInterpreter::ScCosHyp()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScCosHyp" );
     PushDouble(cosh(GetDouble()));
 }
 
 
 void ScInterpreter::ScTanHyp()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScTanHyp" );
     PushDouble(tanh(GetDouble()));
 }
 
 
 void ScInterpreter::ScCotHyp()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScCotHyp" );
     PushDouble(1.0 / tanh(GetDouble()));
 }
 
 
 void ScInterpreter::ScArcSinHyp()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScArcSinHyp" );
     PushDouble( ::rtl::math::asinh( GetDouble()));
 }
 
 void ScInterpreter::ScArcCosHyp()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScArcCosHyp" );
     double fVal = GetDouble();
     if (fVal < 1.0)
         PushIllegalArgument();
@@ -2044,7 +1999,6 @@ void ScInterpreter::ScArcCosHyp()
 
 void ScInterpreter::ScArcTanHyp()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScArcTanHyp" );
     double fVal = GetDouble();
     if (fabs(fVal) >= 1.0)
         PushIllegalArgument();
@@ -2055,7 +2009,6 @@ void ScInterpreter::ScArcTanHyp()
 
 void ScInterpreter::ScArcCotHyp()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScArcCotHyp" );
     double nVal = GetDouble();
     if (fabs(nVal) <= 1.0)
         PushIllegalArgument();
@@ -2065,39 +2018,33 @@ void ScInterpreter::ScArcCotHyp()
 
 void ScInterpreter::ScCosecant()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "regina", "ScInterpreter::ScCosecant" );
     PushDouble(1.0 / ::rtl::math::sin(GetDouble()));
 }
 
 void ScInterpreter::ScSecant()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "regina", "ScInterpreter::ScSecant" );
     PushDouble(1.0 / ::rtl::math::cos(GetDouble()));
 }
 
 void ScInterpreter::ScCosecantHyp()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "regina", "ScInterpreter::ScCosecantHyp" );
     PushDouble(1.0 / sinh(GetDouble()));
 }
 
 void ScInterpreter::ScSecantHyp()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "regina", "ScInterpreter::ScSecantHyp" );
     PushDouble(1.0 / cosh(GetDouble()));
 }
 
 
 void ScInterpreter::ScExp()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScExp" );
     PushDouble(exp(GetDouble()));
 }
 
 
 void ScInterpreter::ScSqrt()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScSqrt" );
     double fVal = GetDouble();
     if (fVal >= 0.0)
         PushDouble(sqrt(fVal));
@@ -2108,7 +2055,6 @@ void ScInterpreter::ScSqrt()
 
 void ScInterpreter::ScIsEmpty()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScIsEmpty" );
     short nRes = 0;
     nFuncFmtType = NUMBERFORMAT_LOGICAL;
     switch ( GetRawStackType() )
@@ -2165,7 +2111,6 @@ void ScInterpreter::ScIsEmpty()
 
 short ScInterpreter::IsString()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::IsString" );
     nFuncFmtType = NUMBERFORMAT_LOGICAL;
     short nRes = 0;
     switch ( GetRawStackType() )
@@ -2227,21 +2172,18 @@ short ScInterpreter::IsString()
 
 void ScInterpreter::ScIsString()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScIsString" );
     PushInt( IsString() );
 }
 
 
 void ScInterpreter::ScIsNonString()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScIsNonString" );
     PushInt( !IsString() );
 }
 
 
 void ScInterpreter::ScIsLogical()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScIsLogical" );
     short nRes = 0;
     switch ( GetStackType() )
     {
@@ -2281,7 +2223,6 @@ void ScInterpreter::ScIsLogical()
 
 void ScInterpreter::ScType()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScType" );
     short nType = 0;
     switch ( GetStackType() )
     {
@@ -2754,7 +2695,6 @@ void ScInterpreter::ScCellExternal()
 
 void ScInterpreter::ScIsRef()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScCell" );
     nFuncFmtType = NUMBERFORMAT_LOGICAL;
     short nRes = 0;
     switch ( GetStackType() )
@@ -2792,7 +2732,6 @@ void ScInterpreter::ScIsRef()
 
 void ScInterpreter::ScIsValue()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScIsValue" );
     nFuncFmtType = NUMBERFORMAT_LOGICAL;
     short nRes = 0;
     switch ( GetRawStackType() )
@@ -2857,7 +2796,6 @@ void ScInterpreter::ScIsValue()
 
 void ScInterpreter::ScIsFormula()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScIsFormula" );
     nFuncFmtType = NUMBERFORMAT_LOGICAL;
     short nRes = 0;
     switch ( GetStackType() )
@@ -2882,7 +2820,6 @@ void ScInterpreter::ScIsFormula()
 
 void ScInterpreter::ScFormula()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScFormula" );
     OUString aFormula;
     switch ( GetStackType() )
     {
@@ -2916,7 +2853,6 @@ void ScInterpreter::ScFormula()
 
 void ScInterpreter::ScIsNV()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScIsNV" );
     nFuncFmtType = NUMBERFORMAT_LOGICAL;
     short nRes = 0;
     switch ( GetStackType() )
@@ -2966,7 +2902,6 @@ void ScInterpreter::ScIsNV()
 
 void ScInterpreter::ScIsErr()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScIsErr" );
     nFuncFmtType = NUMBERFORMAT_LOGICAL;
     short nRes = 0;
     switch ( GetStackType() )
@@ -3022,7 +2957,6 @@ void ScInterpreter::ScIsErr()
 
 void ScInterpreter::ScIsError()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScIsError" );
     nFuncFmtType = NUMBERFORMAT_LOGICAL;
     short nRes = 0;
     switch ( GetStackType() )
@@ -3075,7 +3009,6 @@ void ScInterpreter::ScIsError()
 
 short ScInterpreter::IsEven()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::IsEven" );
     nFuncFmtType = NUMBERFORMAT_LOGICAL;
     short nRes = 0;
     double fVal = 0.0;
@@ -3160,20 +3093,17 @@ short ScInterpreter::IsEven()
 
 void ScInterpreter::ScIsEven()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScIsEven" );
     PushInt( IsEven() );
 }
 
 
 void ScInterpreter::ScIsOdd()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScIsOdd" );
     PushInt( !IsEven() );
 }
 
 void ScInterpreter::ScN()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScN" );
     sal_uInt16 nErr = nGlobalError;
     nGlobalError = 0;
     // Temporarily override the ConvertStringToValue() error for
@@ -3208,7 +3138,6 @@ void ScInterpreter::ScTrim()
 
 void ScInterpreter::ScUpper()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScTrim" );
     String aString = ScGlobal::pCharClass->uppercase(GetString());
     PushString(aString);
 }
@@ -3216,7 +3145,6 @@ void ScInterpreter::ScUpper()
 
 void ScInterpreter::ScPropper()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScPropper" );
 //2do: what to do with I18N-CJK ?!?
     String aStr( GetString() );
     const xub_StrLen nLen = aStr.Len();
@@ -3248,7 +3176,6 @@ void ScInterpreter::ScPropper()
 
 void ScInterpreter::ScLower()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScLower" );
     String aString = ScGlobal::pCharClass->lowercase(GetString());
     PushString(aString);
 }
@@ -3256,7 +3183,6 @@ void ScInterpreter::ScLower()
 
 void ScInterpreter::ScLen()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScLen" );
     String aStr( GetString() );
     PushDouble( aStr.Len() );
 }
@@ -3264,7 +3190,6 @@ void ScInterpreter::ScLen()
 
 void ScInterpreter::ScT()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScT" );
     switch ( GetStackType() )
     {
         case svDoubleRef :
@@ -3333,7 +3258,6 @@ void ScInterpreter::ScT()
 
 void ScInterpreter::ScValue()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScValue" );
     OUString aInputString;
     double fVal;
 
@@ -3411,7 +3335,6 @@ void ScInterpreter::ScValue()
 // fdo#57180
 void ScInterpreter::ScNumberValue()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScNumberValue" );
 
     sal_uInt8 nParamCount = GetByte();
     if ( !MustHaveParamCount( nParamCount, 1, 3 ) )
@@ -3514,7 +3437,6 @@ static inline bool lcl_ScInterpreter_IsPrintable( sal_Unicode c )
 
 void ScInterpreter::ScClean()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScClean" );
     String aStr( GetString() );
     for ( xub_StrLen i = 0; i < aStr.Len(); i++ )
     {
@@ -3527,7 +3449,6 @@ void ScInterpreter::ScClean()
 
 void ScInterpreter::ScCode()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScCode" );
 //2do: make it full range unicode?
     const String& rStr = GetString();
     //"classic" ByteString conversion flags
@@ -3544,7 +3465,6 @@ void ScInterpreter::ScCode()
 
 void ScInterpreter::ScChar()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScChar" );
 //2do: make it full range unicode?
     double fVal = GetDouble();
     if (fVal < 0.0 || fVal >= 256.0)
@@ -3610,7 +3530,6 @@ static OUString lcl_convertIntoFullWidth( const OUString & rStr )
  */
 void ScInterpreter::ScJis()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScJis" );
     if (MustHaveParamCount( GetByte(), 1))
         PushString( lcl_convertIntoFullWidth( GetString()));
 }
@@ -3624,14 +3543,12 @@ void ScInterpreter::ScJis()
  */
 void ScInterpreter::ScAsc()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScAsc" );
     if (MustHaveParamCount( GetByte(), 1))
         PushString( lcl_convertIntoHalfWidth( GetString()));
 }
 
 void ScInterpreter::ScUnicode()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScUnicode" );
     if ( MustHaveParamCount( GetByte(), 1 ) )
     {
         const OUString& rStr = GetString();
@@ -3647,7 +3564,6 @@ void ScInterpreter::ScUnicode()
 
 void ScInterpreter::ScUnichar()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScUnichar" );
     if ( MustHaveParamCount( GetByte(), 1 ) )
     {
         double dVal = ::rtl::math::approxFloor( GetDouble() );
@@ -3665,7 +3581,6 @@ void ScInterpreter::ScUnichar()
 
 void ScInterpreter::ScMin( bool bTextAsZero )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScMin" );
     short nParamCount = GetByte();
     if (!MustHaveParamCountMin( nParamCount, 1))
         return;
@@ -3757,7 +3672,6 @@ void ScInterpreter::ScMin( bool bTextAsZero )
 
 void ScInterpreter::ScMax( bool bTextAsZero )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScMax" );
     short nParamCount = GetByte();
     if (!MustHaveParamCountMin( nParamCount, 1))
         return;
@@ -3853,7 +3767,6 @@ void ScInterpreter::ScMax( bool bTextAsZero )
 void ScInterpreter::GetStVarParams( double& rVal, double& rValCount,
                 bool bTextAsZero )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::GetStVarParams" );
     short nParamCount = GetByte();
 
     std::vector<double> values;
@@ -3970,7 +3883,6 @@ void ScInterpreter::GetStVarParams( double& rVal, double& rValCount,
 
 void ScInterpreter::ScVar( bool bTextAsZero )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScVar" );
     double nVal;
     double nValCount;
     GetStVarParams( nVal, nValCount, bTextAsZero );
@@ -3984,7 +3896,6 @@ void ScInterpreter::ScVar( bool bTextAsZero )
 
 void ScInterpreter::ScVarP( bool bTextAsZero )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScVarP" );
     double nVal;
     double nValCount;
     GetStVarParams( nVal, nValCount, bTextAsZero );
@@ -3995,7 +3906,6 @@ void ScInterpreter::ScVarP( bool bTextAsZero )
 
 void ScInterpreter::ScStDev( bool bTextAsZero )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScStDev" );
     double nVal;
     double nValCount;
     GetStVarParams( nVal, nValCount, bTextAsZero );
@@ -4008,7 +3918,6 @@ void ScInterpreter::ScStDev( bool bTextAsZero )
 
 void ScInterpreter::ScStDevP( bool bTextAsZero )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScStDevP" );
     double nVal;
     double nValCount;
     GetStVarParams( nVal, nValCount, bTextAsZero );
@@ -4038,7 +3947,6 @@ void ScInterpreter::ScStDevP( bool bTextAsZero )
 
 void ScInterpreter::ScColumns()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScColumns" );
     sal_uInt8 nParamCount = GetByte();
     sal_uLong nVal = 0;
     SCCOL nCol1;
@@ -4096,7 +4004,6 @@ void ScInterpreter::ScColumns()
 
 void ScInterpreter::ScRows()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScRows" );
     sal_uInt8 nParamCount = GetByte();
     sal_uLong nVal = 0;
     SCCOL nCol1;
@@ -4153,7 +4060,6 @@ void ScInterpreter::ScRows()
 
 void ScInterpreter::ScTables()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScTables" );
     sal_uInt8 nParamCount = GetByte();
     sal_uLong nVal;
     if ( nParamCount == 0 )
@@ -4208,7 +4114,6 @@ void ScInterpreter::ScTables()
 
 void ScInterpreter::ScColumn()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScColumn" );
     sal_uInt8 nParamCount = GetByte();
     if ( MustHaveParamCount( nParamCount, 0, 1 ) )
     {
@@ -4291,7 +4196,6 @@ void ScInterpreter::ScColumn()
 
 void ScInterpreter::ScRow()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScRow" );
     sal_uInt8 nParamCount = GetByte();
     if ( MustHaveParamCount( nParamCount, 0, 1 ) )
     {
@@ -4373,7 +4277,6 @@ void ScInterpreter::ScRow()
 
 void ScInterpreter::ScTable()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScTable" );
     sal_uInt8 nParamCount = GetByte();
     if ( MustHaveParamCount( nParamCount, 0, 1 ) )
     {
@@ -4571,7 +4474,6 @@ static void lcl_GetLastMatch( SCSIZE& rIndex, const VectorMatrixAccessor& rMat,
 
 void ScInterpreter::ScMatch()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScMatch" );
 
     sal_uInt8 nParamCount = GetByte();
     if ( MustHaveParamCount( nParamCount, 2, 3 ) )
@@ -4887,7 +4789,6 @@ void ScInterpreter::ScMatch()
 
 void ScInterpreter::ScCountEmptyCells()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScCountEmptyCells" );
     if ( MustHaveParamCount( GetByte(), 1 ) )
     {
         sal_uLong nMaxCount = 0, nCount = 0;
@@ -5350,19 +5251,16 @@ double ScInterpreter::IterateParametersIf( ScIterFuncIf eFunc )
 
 void ScInterpreter::ScSumIf()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScSumIf" );
     PushDouble( IterateParametersIf( ifSUMIF));
 }
 
 void ScInterpreter::ScAverageIf()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "makkica", "ScInterpreter::ScAverageIf" );
     PushDouble( IterateParametersIf( ifAVERAGEIF));
 }
 
 void ScInterpreter::ScCountIf()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScCountIf" );
     if ( MustHaveParamCount( GetByte(), 2 ) )
     {
         OUString aString;
@@ -5965,25 +5863,21 @@ double ScInterpreter::IterateParametersIfs( ScIterFuncIfs eFunc )
 
 void ScInterpreter::ScSumIfs()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "makkica", "ScInterpreter::ScSumIfs" );
     PushDouble( IterateParametersIfs( ifSUMIFS));
 }
 
 void ScInterpreter::ScAverageIfs()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "makkica", "ScInterpreter::ScAverageIfs" );
     PushDouble( IterateParametersIfs( ifAVERAGEIFS));
 }
 
 void ScInterpreter::ScCountIfs()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "makkica", "ScInterpreter::ScCountIfs" );
     PushDouble( IterateParametersIfs( ifCOUNTIFS));
 }
 
 void ScInterpreter::ScLookup()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScLookup" );
     sal_uInt8 nParamCount = GetByte();
     if ( !MustHaveParamCount( nParamCount, 2, 3 ) )
         return ;
@@ -6542,12 +6436,10 @@ void ScInterpreter::ScLookup()
 
 void ScInterpreter::ScHLookup()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScHLookup" );
     CalculateLookup(true);
 }
 void ScInterpreter::CalculateLookup(bool HLookup)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::CalculateLookup" );
     sal_uInt8 nParamCount = GetByte();
     if ( MustHaveParamCount( nParamCount, 3, 4 ) )
     {
@@ -6780,7 +6672,6 @@ void ScInterpreter::CalculateLookup(bool HLookup)
 
 bool ScInterpreter::FillEntry(ScQueryEntry& rEntry)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::FillEntry" );
     ScQueryEntry::Item& rItem = rEntry.GetQueryItem();
     switch ( GetStackType() )
     {
@@ -6841,13 +6732,11 @@ bool ScInterpreter::FillEntry(ScQueryEntry& rEntry)
 }
 void ScInterpreter::ScVLookup()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScVLookup" );
     CalculateLookup(false);
 }
 
 void ScInterpreter::ScSubTotal()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScSubTotal" );
     sal_uInt8 nParamCount = GetByte();
     if ( MustHaveParamCountMin( nParamCount, 2 ) )
     {
@@ -6897,7 +6786,6 @@ void ScInterpreter::ScSubTotal()
 
 ScDBQueryParamBase* ScInterpreter::GetDBParams( bool& rMissingField )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::GetDBParams" );
     bool bAllowMissingField = false;
     if ( rMissingField )
     {
@@ -7044,7 +6932,6 @@ ScDBQueryParamBase* ScInterpreter::GetDBParams( bool& rMissingField )
 
 void ScInterpreter::DBIterator( ScIterFunc eFunc )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::DBIterator" );
     double nErg = 0.0;
     double fMem = 0.0;
     bool bNull = true;
@@ -7112,14 +6999,12 @@ void ScInterpreter::DBIterator( ScIterFunc eFunc )
 
 void ScInterpreter::ScDBSum()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScDBSum" );
     DBIterator( ifSUM );
 }
 
 
 void ScInterpreter::ScDBCount()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScDBCount" );
     bool bMissingField = true;
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
     auto_ptr<ScDBQueryParamBase> pQueryParam( GetDBParams(bMissingField) );
@@ -7181,7 +7066,6 @@ void ScInterpreter::ScDBCount()
 
 void ScInterpreter::ScDBCount2()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScDBCount2" );
     bool bMissingField = true;
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
     auto_ptr<ScDBQueryParamBase> pQueryParam( GetDBParams(bMissingField) );
@@ -7215,35 +7099,30 @@ void ScInterpreter::ScDBCount2()
 
 void ScInterpreter::ScDBAverage()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScDBAverage" );
     DBIterator( ifAVERAGE );
 }
 
 
 void ScInterpreter::ScDBMax()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScDBMax" );
     DBIterator( ifMAX );
 }
 
 
 void ScInterpreter::ScDBMin()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScDBMin" );
     DBIterator( ifMIN );
 }
 
 
 void ScInterpreter::ScDBProduct()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScDBProduct" );
     DBIterator( ifPRODUCT );
 }
 
 
 void ScInterpreter::GetDBStVarParams( double& rVal, double& rValCount )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::GetDBStVarParams" );
     std::vector<double> values;
     double vSum    = 0.0;
     double vMean    = 0.0;
@@ -7289,7 +7168,6 @@ void ScInterpreter::GetDBStVarParams( double& rVal, double& rValCount )
 
 void ScInterpreter::ScDBStdDev()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScDBStdDev" );
     double fVal, fCount;
     GetDBStVarParams( fVal, fCount );
     PushDouble( sqrt(fVal/(fCount-1)));
@@ -7298,7 +7176,6 @@ void ScInterpreter::ScDBStdDev()
 
 void ScInterpreter::ScDBStdDevP()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScDBStdDevP" );
     double fVal, fCount;
     GetDBStVarParams( fVal, fCount );
     PushDouble( sqrt(fVal/fCount));
@@ -7307,7 +7184,6 @@ void ScInterpreter::ScDBStdDevP()
 
 void ScInterpreter::ScDBVar()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScDBVar" );
     double fVal, fCount;
     GetDBStVarParams( fVal, fCount );
     PushDouble(fVal/(fCount-1));
@@ -7316,7 +7192,6 @@ void ScInterpreter::ScDBVar()
 
 void ScInterpreter::ScDBVarP()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScDBVarP" );
     double fVal, fCount;
     GetDBStVarParams( fVal, fCount );
     PushDouble(fVal/fCount);
@@ -7324,7 +7199,6 @@ void ScInterpreter::ScDBVarP()
 
 void ScInterpreter::ScIndirect()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScIndirect" );
     sal_uInt8 nParamCount = GetByte();
     if ( MustHaveParamCount( nParamCount, 1, 2 )  )
     {
@@ -7406,7 +7280,6 @@ void ScInterpreter::ScIndirect()
 
 void ScInterpreter::ScAddressFunc()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScAddressFunc" );
     String  sTabStr;
 
     sal_uInt8    nParamCount = GetByte();
@@ -7499,7 +7372,6 @@ void ScInterpreter::ScAddressFunc()
 
 void ScInterpreter::ScOffset()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScOffset" );
     sal_uInt8 nParamCount = GetByte();
     if ( MustHaveParamCount( nParamCount, 3, 5 ) )
     {
@@ -7647,7 +7519,6 @@ void ScInterpreter::ScOffset()
 
 void ScInterpreter::ScIndex()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScIndex" );
     sal_uInt8 nParamCount = GetByte();
     if ( MustHaveParamCount( nParamCount, 1, 4 ) )
     {
@@ -7855,7 +7726,6 @@ void ScInterpreter::ScIndex()
 
 void ScInterpreter::ScMultiArea()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScMultiArea" );
     // Legacy support, convert to RefList
     sal_uInt8 nParamCount = GetByte();
     if (MustHaveParamCountMin( nParamCount, 1))
@@ -7870,7 +7740,6 @@ void ScInterpreter::ScMultiArea()
 
 void ScInterpreter::ScAreas()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScAreas" );
     sal_uInt8 nParamCount = GetByte();
     if (MustHaveParamCount( nParamCount, 1))
     {
@@ -7908,7 +7777,6 @@ void ScInterpreter::ScAreas()
 
 void ScInterpreter::ScCurrency()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScCurrency" );
     sal_uInt8 nParamCount = GetByte();
     if ( MustHaveParamCount( nParamCount, 1, 2 ) )
     {
@@ -7968,7 +7836,6 @@ void ScInterpreter::ScCurrency()
 
 void ScInterpreter::ScReplace()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScReplace" );
     if ( MustHaveParamCount( GetByte(), 4 ) )
     {
         String aNewStr( GetString() );
@@ -7998,7 +7865,6 @@ void ScInterpreter::ScReplace()
 
 void ScInterpreter::ScFixed()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScFixed" );
     sal_uInt8 nParamCount = GetByte();
     if ( MustHaveParamCount( nParamCount, 1, 3 ) )
     {
@@ -8057,7 +7923,6 @@ void ScInterpreter::ScFixed()
 
 void ScInterpreter::ScFind()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScFind" );
     sal_uInt8 nParamCount = GetByte();
     if ( MustHaveParamCount( nParamCount, 2, 3 ) )
     {
@@ -8083,7 +7948,6 @@ void ScInterpreter::ScFind()
 
 void ScInterpreter::ScExact()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScExact" );
     nFuncFmtType = NUMBERFORMAT_LOGICAL;
     if ( MustHaveParamCount( GetByte(), 2 ) )
     {
@@ -8096,7 +7960,6 @@ void ScInterpreter::ScExact()
 
 void ScInterpreter::ScLeft()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScLeft" );
     sal_uInt8 nParamCount = GetByte();
     if ( MustHaveParamCount( nParamCount, 1, 2 ) )
     {
@@ -8172,7 +8035,6 @@ sal_Int32 getLengthB(String &str)
 }
 void ScInterpreter::ScLenB()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "luzhang", "ScInterpreter::ScLenB" );
     String aStr( GetString() );
     PushDouble( getLengthB(aStr) );
 }
@@ -8203,7 +8065,6 @@ void lcl_RightB(String &aStr, sal_Int32 n)
 }
 void ScInterpreter::ScRightB()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "luzhang", "ScInterpreter::ScRightB" );
     sal_uInt8 nParamCount = GetByte();
     if ( MustHaveParamCount( nParamCount, 1, 2 ) )
     {
@@ -8253,7 +8114,6 @@ void lcl_LeftB(String &aStr, sal_Int32 n)
 }
 void ScInterpreter::ScLeftB()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "luzhang", "ScInterpreter::ScLeftB" );
     sal_uInt8 nParamCount = GetByte();
     if ( MustHaveParamCount( nParamCount, 1, 2 ) )
     {
@@ -8278,7 +8138,6 @@ void ScInterpreter::ScLeftB()
 }
 void ScInterpreter::ScMidB()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "luzhang", "ScInterpreter::ScMidB" );
     if ( MustHaveParamCount( GetByte(), 3 ) )
     {
         double fAnz    = ::rtl::math::approxFloor(GetDouble());
@@ -8299,7 +8158,6 @@ void ScInterpreter::ScMidB()
 
 void ScInterpreter::ScRight()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScRight" );
     sal_uInt8 nParamCount = GetByte();
     if ( MustHaveParamCount( nParamCount, 1, 2 ) )
     {
@@ -8327,7 +8185,6 @@ void ScInterpreter::ScRight()
 
 void ScInterpreter::ScSearch()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScSearch" );
     sal_uInt8 nParamCount = GetByte();
     if ( MustHaveParamCount( nParamCount, 2, 3 ) )
     {
@@ -8368,7 +8225,6 @@ void ScInterpreter::ScSearch()
 
 void ScInterpreter::ScMid()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScMid" );
     if ( MustHaveParamCount( GetByte(), 3 ) )
     {
         double fAnz    = ::rtl::math::approxFloor(GetDouble());
@@ -8384,7 +8240,6 @@ void ScInterpreter::ScMid()
 
 void ScInterpreter::ScText()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScText" );
     if ( MustHaveParamCount( GetByte(), 2 ) )
     {
         OUString sFormatString = GetString();
@@ -8459,7 +8314,6 @@ void ScInterpreter::ScText()
 
 void ScInterpreter::ScSubstitute()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScSubstitute" );
     sal_uInt8 nParamCount = GetByte();
     if ( MustHaveParamCount( nParamCount, 3, 4 ) )
     {
@@ -8514,7 +8368,6 @@ void ScInterpreter::ScSubstitute()
 
 void ScInterpreter::ScRept()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScRept" );
     if ( MustHaveParamCount( GetByte(), 2 ) )
     {
         double fAnz = ::rtl::math::approxFloor(GetDouble());
@@ -8542,7 +8395,6 @@ void ScInterpreter::ScRept()
 
 void ScInterpreter::ScConcat()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScConcat" );
     sal_uInt8 nParamCount = GetByte();
     String aRes;
     while( nParamCount-- > 0)
@@ -8556,7 +8408,6 @@ void ScInterpreter::ScConcat()
 
 void ScInterpreter::ScErrorType()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScErrorType" );
     sal_uInt16 nErr;
     sal_uInt16 nOldError = nGlobalError;
     nGlobalError = 0;
@@ -8638,7 +8489,6 @@ void ScInterpreter::ScErrorType()
 
 bool ScInterpreter::MayBeRegExp( const OUString& rStr, const ScDocument* pDoc  )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::MayBeRegExp" );
     if ( pDoc && !pDoc->GetDocOptions().IsFormulaRegexEnabled() )
         return false;
     if ( rStr.isEmpty() || (rStr.getLength() == 1 && rStr[0] != '.') )
@@ -8688,7 +8538,6 @@ static bool lcl_LookupQuery( ScAddress & o_rResultPos, ScDocument * pDoc,
 bool ScInterpreter::LookupQueryWithCache( ScAddress & o_rResultPos,
         const ScQueryParam & rParam ) const
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::LookupQueryWithCache" );
     bool bFound = false;
     const ScQueryEntry& rEntry = rParam.GetEntry(0);
     bool bColumnsMatch = (rParam.nCol1 == rEntry.nField);
