@@ -2833,7 +2833,7 @@ void OutputDevice::ImplInitFontList() const
     {
         if( mpGraphics || ImplGetGraphics() )
         {
-            RTL_LOGFILE_CONTEXT( aLog, "OutputDevice::ImplInitFontList()" );
+            SAL_INFO( "vcl.gdi", "OutputDevice::ImplInitFontList()" );
             mpGraphics->GetDevFontList( mpFontList );
         }
     }

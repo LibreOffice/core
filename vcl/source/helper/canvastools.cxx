@@ -18,7 +18,6 @@
  */
 
 
-#include <rtl/logfile.hxx>
 #include <cppuhelper/compbase1.hxx>
 
 #include <com/sun/star/geometry/RealSize2D.hpp>
@@ -73,7 +72,7 @@ namespace vcl
         uno::Reference< rendering::XBitmap > xBitmapFromBitmapEx( const uno::Reference< rendering::XGraphicDevice >&    /*xGraphicDevice*/,
                                                                   const ::BitmapEx&                                     inputBitmap )
         {
-            RTL_LOGFILE_CONTEXT( aLog, "::vcl::unotools::xBitmapFromBitmapEx()" );
+            SAL_INFO( "vcl.helper", "::vcl::unotools::xBitmapFromBitmapEx()" );
 
             return new vcl::unotools::VclCanvasBitmap( inputBitmap );
         }
@@ -189,7 +188,7 @@ namespace vcl
 
         ::BitmapEx VCL_DLLPUBLIC bitmapExFromXBitmap( const uno::Reference< rendering::XIntegerReadOnlyBitmap >& xInputBitmap )
         {
-            RTL_LOGFILE_CONTEXT( aLog, "::vcl::unotools::bitmapExFromXBitmap()" );
+            SAL_INFO( "vcl.helper", "::vcl::unotools::bitmapExFromXBitmap()" );
 
             if( !xInputBitmap.is() )
                 return ::BitmapEx();

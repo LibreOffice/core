@@ -20,7 +20,6 @@
 #include <boost/scoped_ptr.hpp>
 #include <boost/scoped_array.hpp>
 
-#include <rtl/logfile.hxx>
 
 #include <tools/debug.hxx>
 #include <tools/stream.hxx>
@@ -296,7 +295,7 @@ ImageList::ImageList( const ResId& rResId ) :
     mnInitSize( 1 ),
     mnGrowSize( 4 )
 {
-    RTL_LOGFILE_CONTEXT( aLog, "vcl: ImageList::ImageList( const ResId& rResId )" );
+    SAL_INFO( "vcl.gdi", "vcl: ImageList::ImageList( const ResId& rResId )" );
 
     DBG_CTOR( ImageList, NULL );
 
@@ -346,7 +345,7 @@ ImageList::ImageList( const ::std::vector< OUString >& rNameVector,
     mnInitSize( 1 ),
     mnGrowSize( 4 )
 {
-    RTL_LOGFILE_CONTEXT( aLog, "vcl: ImageList::ImageList(const vector< OUString >& ..." );
+    SAL_INFO( "vcl.gdi", "vcl: ImageList::ImageList(const vector< OUString >& ..." );
 
     DBG_CTOR( ImageList, NULL );
 
@@ -675,7 +674,7 @@ OUString ImageList::GetImageName( sal_uInt16 nPos ) const
 
 void ImageList::GetImageNames( ::std::vector< OUString >& rNames ) const
 {
-    RTL_LOGFILE_CONTEXT( aLog, "vcl: ImageList::GetImageNames" );
+    SAL_INFO( "vcl.gdi", "vcl: ImageList::GetImageNames" );
 
     DBG_CHKTHIS( ImageList, NULL );
 

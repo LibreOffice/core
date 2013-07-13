@@ -2112,7 +2112,7 @@ static bool ImplGetFontAttrFromFile( const String& rFontFileURL,
 bool WinSalGraphics::AddTempDevFont( ImplDevFontList* pFontList,
     const OUString& rFontFileURL, const OUString& rFontName )
 {
-    RTL_LOGFILE_TRACE1( "WinSalGraphics::AddTempDevFont(): %s", OUStringToOString( rFontFileURL, RTL_TEXTENCODING_UTF8 ).getStr() );
+    SAL_INFO( "vcl.gdi", "WinSalGraphics::AddTempDevFont(): " << OUStringToOString( rFontFileURL, RTL_TEXTENCODING_UTF8 ).getStr() );
 
     ImplDevFontAttributes aDFA;
     aDFA.SetFamilyName(rFontName);
@@ -2703,7 +2703,6 @@ sal_Bool WinSalGraphics::CreateFontSubset( const OUString& rToFile,
     return (nRC == SF_OK);
 }
 
-//--------------------------------------------------------------------------
 
 const void* WinSalGraphics::GetEmbedFontData( const PhysicalFontFace* pFont,
     const sal_Unicode* pUnicodes, sal_Int32* pCharWidths,
@@ -2760,14 +2759,12 @@ const void* WinSalGraphics::GetEmbedFontData( const PhysicalFontFace* pFont,
     return (void*)pData;
 }
 
-//--------------------------------------------------------------------------
 
 void WinSalGraphics::FreeEmbedFontData( const void* pData, long /*nLen*/ )
 {
     delete[] reinterpret_cast<char*>(const_cast<void*>(pData));
 }
 
-//--------------------------------------------------------------------------
 
 const Ucs2SIntMap* WinSalGraphics::GetFontEncodingVector( const PhysicalFontFace* pFont, const Ucs2OStrMap** pNonEncoded )
 {
@@ -2794,7 +2791,6 @@ const Ucs2SIntMap* WinSalGraphics::GetFontEncodingVector( const PhysicalFontFace
     return pEncoding;
 }
 
-//--------------------------------------------------------------------------
 
 void WinSalGraphics::GetGlyphWidths( const PhysicalFontFace* pFont,
                                      bool bVertical,
@@ -2888,12 +2884,10 @@ void WinSalGraphics::GetGlyphWidths( const PhysicalFontFace* pFont,
     }
 }
 
-//--------------------------------------------------------------------------
 
 void WinSalGraphics::DrawServerFontLayout( const ServerFontLayout& )
 {}
 
-//--------------------------------------------------------------------------
 
 SystemFontData WinSalGraphics::GetSysFontData( int nFallbacklevel ) const
 {
@@ -2910,6 +2904,5 @@ SystemFontData WinSalGraphics::GetSysFontData( int nFallbacklevel ) const
     return aSysFontData;
 }
 
-//--------------------------------------------------------------------------
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

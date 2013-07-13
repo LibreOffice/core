@@ -57,7 +57,6 @@
 #include <unotools/localfilehelper.hxx>
 #include <rtl/bootstrap.hxx>
 #include <rtl/instance.hxx>
-#include <rtl/logfile.hxx>
 #include <vcl/metaact.hxx>
 #include <vector>
 
@@ -1739,7 +1738,7 @@ sal_uInt16 GraphicFilter::ExportGraphic( const Graphic& rGraphic, const INetURLO
 
     return GRFILTER_FORMATERROR;
 #else
-    RTL_LOGFILE_CONTEXT( aLog, "GraphicFilter::ExportGraphic() (thb)" );
+    SAL_INFO( "vcl.filter", "GraphicFilter::ExportGraphic() (thb)" );
     sal_uInt16  nRetValue = GRFILTER_FORMATERROR;
     DBG_ASSERT( rPath.GetProtocol() != INET_PROT_NOT_VALID, "GraphicFilter::ExportGraphic() : ProtType == INET_PROT_NOT_VALID" );
     bool bAlreadyExists = DirEntryExists( rPath );
@@ -1789,7 +1788,7 @@ sal_uInt16 GraphicFilter::ExportGraphic( const Graphic& rGraphic, const String& 
 
     return GRFILTER_FORMATERROR;
 #else
-    RTL_LOGFILE_CONTEXT( aLog, "GraphicFilter::ExportGraphic() (thb)" );
+    SAL_INFO( "vcl.filter", "GraphicFilter::ExportGraphic() (thb)" );
     sal_uInt16 nFormatCount = GetExportFormatCount();
 
     ResetLastError();

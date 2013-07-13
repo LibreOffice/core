@@ -145,7 +145,7 @@ oslSignalAction SAL_CALL VCLExceptionSignal_impl( void* /*pData*/, oslSignalInfo
 int ImplSVMain()
 {
     // The 'real' SVMain()
-    RTL_LOGFILE_CONTEXT( aLog, "vcl (ss112471) ::SVMain" );
+    SAL_INFO( "vcl.app", "vcl (ss112471) ::SVMain" );
 
     ImplSVData* pSVData = ImplGetSVData();
 
@@ -241,7 +241,7 @@ uno::Any SAL_CALL DesktopEnvironmentContext::getValueByName( const OUString& Nam
 
 bool InitVCL()
 {
-    RTL_LOGFILE_CONTEXT( aLog, "vcl (ss112471) ::InitVCL" );
+    SAL_INFO( "vcl.app", "vcl (ss112471) ::InitVCL" );
 
     if( pExceptionHandler != NULL )
         return false;
@@ -266,11 +266,11 @@ bool InitVCL()
     pSVData->mnMainThreadId = ::osl::Thread::getCurrentIdentifier();
 
     // Initialize Sal
-    RTL_LOGFILE_CONTEXT_TRACE( aLog, "{ ::CreateSalInstance" );
+    SAL_INFO( "vcl.app", "{ ::CreateSalInstance" );
     pSVData->mpDefInst = CreateSalInstance();
     if ( !pSVData->mpDefInst )
         return false;
-    RTL_LOGFILE_CONTEXT_TRACE( aLog, "} ::CreateSalInstance" );
+    SAL_INFO( "vcl.app", "} ::CreateSalInstance" );
 
     // Desktop Environment context (to be able to get value of "system.desktop-environment" as soon as possible)
     com::sun::star::uno::setCurrentContext(

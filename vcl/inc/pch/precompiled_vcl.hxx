@@ -321,7 +321,6 @@
 #include <rtl/crc.h>
 #include <rtl/digest.h>
 #include <rtl/instance.hxx>
-#include <rtl/logfile.hxx>
 #include <rtl/math.h>
 #include <rtl/math.hxx>
 #include <rtl/process.h>
