@@ -56,6 +56,8 @@ public:
         /** returns true if the matching condition is met for a single cell
             value, or false otherwise. */
         virtual bool match( const  ScDPItemData& rCellData ) const = 0;
+
+        virtual std::vector<ScDPItemData> getMatchValues() const = 0;
     };
 
     /** ordinary single-item filter. */
@@ -66,7 +68,7 @@ public:
         virtual ~SingleFilter() {}
 
         virtual bool match(const ScDPItemData& rCellData) const;
-
+        virtual std::vector<ScDPItemData> getMatchValues() const;
         const ScDPItemData& getMatchValue() const;
 
     private:
@@ -82,6 +84,7 @@ public:
         GroupFilter();
         virtual ~GroupFilter() {}
         virtual bool match(const ScDPItemData& rCellData) const;
+        virtual std::vector<ScDPItemData> getMatchValues() const;
         void addMatchItem(const ScDPItemData& rItem);
         size_t getMatchItemCount() const;
 

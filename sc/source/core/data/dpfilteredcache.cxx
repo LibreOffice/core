@@ -63,6 +63,13 @@ bool ScDPFilteredCache::SingleFilter::match(const ScDPItemData& rCellData) const
     return maItem == rCellData;
 }
 
+std::vector<ScDPItemData> ScDPFilteredCache::SingleFilter::getMatchValues() const
+{
+    std::vector<ScDPItemData> aValues;
+    aValues.push_back(maItem);
+    return aValues;
+}
+
 const ScDPItemData& ScDPFilteredCache::SingleFilter::getMatchValue() const
 {
     return maItem;
@@ -82,6 +89,11 @@ bool ScDPFilteredCache::GroupFilter::match(const ScDPItemData& rCellData) const
             return true;
     }
     return false;
+}
+
+std::vector<ScDPItemData> ScDPFilteredCache::GroupFilter::getMatchValues() const
+{
+    return maItems;
 }
 
 void ScDPFilteredCache::GroupFilter::addMatchItem(const ScDPItemData& rItem)
