@@ -917,9 +917,13 @@ BitmapEx SvxBitmapCtl::GetBitmapEx()
     return BitmapEx(aRetval);
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeColorLB(Window *pParent, VclBuilder::stringmap &)
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeColorLB(Window *pParent, VclBuilder::stringmap &rMap)
 {
-    ColorLB *pListBox = new ColorLB(pParent, WB_LEFT|WB_DROPDOWN|WB_VCENTER|WB_3DLOOK|WB_SIMPLEMODE);
+    bool bDropdown = VclBuilder::extractDropdown(rMap);
+    WinBits nWinBits = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_SIMPLEMODE|WB_TABSTOP;
+    if (bDropdown)
+        nWinBits |= WB_DROPDOWN;
+    ColorLB *pListBox = new ColorLB(pParent, nWinBits);
     pListBox->EnableAutoSize(true);
     return pListBox;
 }

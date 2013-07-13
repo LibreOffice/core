@@ -34,27 +34,15 @@
 
 #include "cfgchart.hxx"
 
-class ChartColorLB : public ColorLB
-{
-public:
-    ChartColorLB( Window* pParent, ResId Id ) : ColorLB( pParent, Id ) {}
-    ChartColorLB( Window* pParent, WinBits aWB ) : ColorLB( pParent, aWB ) {}
-
-    void FillBox( const SvxChartColorTable & rTab );
-};
-
-
 class SvxDefaultColorOptPage : public SfxTabPage
 {
 
 private:
-    FixedLine                           aGbChartColors;
-    ChartColorLB                        aLbChartColors;
-    FixedLine                           aGbColorBox;
-    ValueSet                            aValSetColorBox;
-    PushButton                          aPBDefault;
-    PushButton                          aPBAdd;
-    PushButton                          aPBRemove;
+    ColorLB*                m_pLbChartColors;
+    ValueSet*               m_pValSetColorBox;
+    PushButton*             m_pPBDefault;
+    PushButton*             m_pPBAdd;
+    PushButton*             m_pPBRemove;
 
     SvxChartOptions*        pChartOptions;
     SvxChartColorTableItem* pColorConfig;
@@ -63,7 +51,7 @@ private:
     DECL_LINK( ResetToDefaults, void * );
     DECL_LINK( AddChartColor, void * );
     DECL_LINK( RemoveChartColor, PushButton * );
-    DECL_LINK( ListClickedHdl, ChartColorLB * );
+    DECL_LINK( ListClickedHdl, ColorLB * );
     DECL_LINK(BoxClickedHdl, void *);
 
     void FillColorBox();

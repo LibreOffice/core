@@ -77,7 +77,11 @@
 
     <glade-widget-class title="Other Color ListBox" name="svxlo-ColorLB"
                         generic-name="Other Color ListBox" parent="GtkComboBox"
-                        icon-name="widget-gtk-combobox"/>
+                        icon-name="widget-gtk-combobox">
+      <properties>
+        <property id="dropdown" default="True" common="True"/>
+      </properties>
+    </glade-widget-class>
 
     <glade-widget-class title="Font Name ListBox" name="svtlo-FontNameBox"
                         generic-name="Font name ListBox" parent="GtkComboBox"

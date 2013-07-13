@@ -4,7 +4,7 @@
   <object class="GtkMessageDialog" id="QueryDeleteChartColorDialog">
     <property name="can_focus">False</property>
     <property name="border_width">12</property>
-    <property name="title" translatable="yes">Show changes?</property>
+    <property name="title" translatable="yes">Delete Color?</property>
     <property name="resizable">False</property>
     <property name="type_hint">dialog</property>
     <property name="skip_taskbar_hint">True</property>

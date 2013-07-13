@@ -20,56 +20,47 @@
 #include <unotools/pathoptions.hxx>
 #include <cuires.hrc>
 #include "optchart.hxx"
-#include "optchart.hrc"
 #include <dialmgr.hxx>
 #include <vcl/msgbox.hxx>
 #include <svx/svxids.hrc> // for SID_SCH_EDITOPTIONS
 
-// ====================
-// class ChartColorLB
-// ====================
-void ChartColorLB::FillBox( const SvxChartColorTable & rTab )
+namespace
 {
-    long nCount = rTab.size();
-    SetUpdateMode( sal_False );
-
-    for( long i = 0; i < nCount; i++ )
+    void FillBoxChartColorLB(ColorLB *pLB, const SvxChartColorTable & rTab)
     {
-        Append( rTab[ i ] );
+        pLB->SetUpdateMode(false);
+        pLB->Clear();
+        long nCount = rTab.size();
+        for(long i = 0; i < nCount; ++i)
+        {
+            pLB->Append(rTab[i]);
+        }
+        pLB->SetUpdateMode(true);
     }
-    SetUpdateMode( sal_True );
 }
 
-
-// ====================
-// class SvxDefaultColorOptPage
-// ====================
-SvxDefaultColorOptPage::SvxDefaultColorOptPage( Window* pParent, const SfxItemSet& rInAttrs ) :
-
-    SfxTabPage( pParent, CUI_RES( RID_OPTPAGE_CHART_DEFCOLORS ), rInAttrs ),
-
-    aGbChartColors  ( this, CUI_RES( FL_CHART_COLOR_LIST ) ),
-    aLbChartColors  ( this, CUI_RES( LB_CHART_COLOR_LIST ) ),
-    aGbColorBox     ( this, CUI_RES( FL_COLOR_BOX ) ),
-    aValSetColorBox ( this, CUI_RES( CT_COLOR_BOX ) ),
-    aPBDefault      ( this, CUI_RES( PB_RESET_TO_DEFAULT ) ),
-    aPBAdd              ( this, CUI_RES( PB_ADD_CHART_COLOR ) ),
-    aPBRemove           ( this, CUI_RES( PB_REMOVE_CHART_COLOR ) )
+SvxDefaultColorOptPage::SvxDefaultColorOptPage(Window* pParent, const SfxItemSet& rInAttrs)
+    : SfxTabPage(pParent, "OptChartColorsPage","cui/ui/optchartcolorspage.ui", rInAttrs)
 {
-    FreeResource();
+    get(m_pPBRemove, "delete");
+    get(m_pPBAdd, "add");
+    get(m_pPBDefault, "default");
+    get(m_pValSetColorBox, "table");
+    get(m_pLbChartColors, "colors");
+    m_pLbChartColors->set_height_request(m_pLbChartColors->GetTextHeight()*16);
 
-    aPBDefault.SetClickHdl( LINK( this, SvxDefaultColorOptPage, ResetToDefaults ) );
-    aPBAdd.SetClickHdl( LINK( this, SvxDefaultColorOptPage, AddChartColor ) );
-    aPBRemove.SetClickHdl( LINK( this, SvxDefaultColorOptPage, RemoveChartColor ) );
-    aLbChartColors.SetSelectHdl( LINK( this, SvxDefaultColorOptPage, ListClickedHdl ) );
-    aValSetColorBox.SetSelectHdl( LINK( this, SvxDefaultColorOptPage, BoxClickedHdl ) );
+    m_pPBDefault->SetClickHdl( LINK( this, SvxDefaultColorOptPage, ResetToDefaults ) );
+    m_pPBAdd->SetClickHdl( LINK( this, SvxDefaultColorOptPage, AddChartColor ) );
+    m_pPBRemove->SetClickHdl( LINK( this, SvxDefaultColorOptPage, RemoveChartColor ) );
+    m_pLbChartColors->SetSelectHdl( LINK( this, SvxDefaultColorOptPage, ListClickedHdl ) );
+    m_pValSetColorBox->SetSelectHdl( LINK( this, SvxDefaultColorOptPage, BoxClickedHdl ) );
 
-    aValSetColorBox.SetStyle( aValSetColorBox.GetStyle()
+    m_pValSetColorBox->SetStyle( m_pValSetColorBox->GetStyle()
                                     | WB_ITEMBORDER | WB_NAMEFIELD );
-    aValSetColorBox.SetColCount( 8 );
-    aValSetColorBox.SetLineCount( 13 );
-    aValSetColorBox.SetExtraSpacing( 0 );
-    aValSetColorBox.Show();
+    m_pValSetColorBox->SetColCount( 8 );
+    m_pValSetColorBox->SetLineCount( 13 );
+    m_pValSetColorBox->SetExtraSpacing( 0 );
+    m_pValSetColorBox->Show();
 
     pChartOptions = new SvxChartOptions;
     pColorList = XColorList::CreateStdColorList();
@@ -103,12 +94,12 @@ SvxDefaultColorOptPage::~SvxDefaultColorOptPage()
 void SvxDefaultColorOptPage::Construct()
 {
     if( pColorConfig )
-        aLbChartColors.FillBox( pColorConfig->GetColorList() );
+        FillBoxChartColorLB(m_pLbChartColors, pColorConfig->GetColorList());
 
     FillColorBox();
 
-    aLbChartColors.SelectEntryPos( 0 );
-    ListClickedHdl( &aLbChartColors );
+    m_pLbChartColors->SelectEntryPos( 0 );
+    ListClickedHdl(m_pLbChartColors);
 }
 
 
@@ -127,8 +118,8 @@ sal_Bool SvxDefaultColorOptPage::FillItemSet( SfxItemSet& rOutAttrs )
 
 void SvxDefaultColorOptPage::Reset( const SfxItemSet& )
 {
-    aLbChartColors.SelectEntryPos( 0 );
-    ListClickedHdl( &aLbChartColors );
+    m_pLbChartColors->SelectEntryPos( 0 );
+    ListClickedHdl(m_pLbChartColors);
 }
 
 void SvxDefaultColorOptPage::FillColorBox()
@@ -139,12 +130,12 @@ void SvxDefaultColorOptPage::FillColorBox()
     XColorEntry* pColorEntry;
 
     if( nCount > 104 )
-        aValSetColorBox.SetStyle( aValSetColorBox.GetStyle() | WB_VSCROLL );
+        m_pValSetColorBox->SetStyle( m_pValSetColorBox->GetStyle() | WB_VSCROLL );
 
     for( long i = 0; i < nCount; i++ )
     {
         pColorEntry = pColorList->GetColor( i );
-        aValSetColorBox.InsertItem( (sal_uInt16) i + 1, pColorEntry->GetColor(), pColorEntry->GetName() );
+        m_pValSetColorBox->InsertItem( (sal_uInt16) i + 1, pColorEntry->GetColor(), pColorEntry->GetName() );
     }
 }
 
@@ -181,12 +172,11 @@ IMPL_LINK_NOARG(SvxDefaultColorOptPage, ResetToDefaults)
     {
         pColorConfig->GetColorList().useDefault();
 
-        aLbChartColors.Clear();
-        aLbChartColors.FillBox( pColorConfig->GetColorList() );
+        FillBoxChartColorLB(m_pLbChartColors, pColorConfig->GetColorList());
 
-        aLbChartColors.GetFocus();
-        aLbChartColors.SelectEntryPos( 0 );
-        aPBRemove.Enable( sal_True );
+        m_pLbChartColors->GetFocus();
+        m_pLbChartColors->SelectEntryPos( 0 );
+        m_pPBRemove->Enable( sal_True );
     }
 
     return 0L;
@@ -203,12 +193,11 @@ IMPL_LINK_NOARG(SvxDefaultColorOptPage, AddChartColor)
 
         pColorConfig->GetColorList().append (XColorEntry ( black, pColorConfig->GetColorList().getDefaultName(pColorConfig->GetColorList().size())));
 
-        aLbChartColors.Clear();
-        aLbChartColors.FillBox( pColorConfig->GetColorList() );
+        FillBoxChartColorLB(m_pLbChartColors, pColorConfig->GetColorList());
 
-        aLbChartColors.GetFocus();
-        aLbChartColors.SelectEntryPos( pColorConfig->GetColorList().size() - 1 );
-        aPBRemove.Enable( sal_True );
+        m_pLbChartColors->GetFocus();
+        m_pLbChartColors->SelectEntryPos( pColorConfig->GetColorList().size() - 1 );
+        m_pPBRemove->Enable( sal_True );
     }
 
     return 0L;
@@ -219,9 +208,9 @@ IMPL_LINK_NOARG(SvxDefaultColorOptPage, AddChartColor)
 
 IMPL_LINK( SvxDefaultColorOptPage, RemoveChartColor, PushButton*, pButton )
 {
-    size_t nIndex = aLbChartColors.GetSelectEntryPos();
+    size_t nIndex = m_pLbChartColors->GetSelectEntryPos();
 
-    if (aLbChartColors.GetSelectEntryCount() == 0)
+    if (m_pLbChartColors->GetSelectEntryCount() == 0)
         return 0L;
 
     if( pColorConfig )
@@ -234,48 +223,47 @@ IMPL_LINK( SvxDefaultColorOptPage, RemoveChartColor, PushButton*, pButton )
         {
             pColorConfig->GetColorList().remove( nIndex  );
 
-            aLbChartColors.Clear();
-            aLbChartColors.FillBox( pColorConfig->GetColorList() );
+            FillBoxChartColorLB(m_pLbChartColors, pColorConfig->GetColorList());
 
-            aLbChartColors.GetFocus();
+            m_pLbChartColors->GetFocus();
 
-            if (nIndex == aLbChartColors.GetEntryCount() && aLbChartColors.GetEntryCount() > 0)
-                aLbChartColors.SelectEntryPos( pColorConfig->GetColorList().size() - 1 );
-            else if (aLbChartColors.GetEntryCount() > 0)
-                aLbChartColors.SelectEntryPos( nIndex );
+            if (nIndex == m_pLbChartColors->GetEntryCount() && m_pLbChartColors->GetEntryCount() > 0)
+                m_pLbChartColors->SelectEntryPos( pColorConfig->GetColorList().size() - 1 );
+            else if (m_pLbChartColors->GetEntryCount() > 0)
+                m_pLbChartColors->SelectEntryPos( nIndex );
             else
-                aPBRemove.Enable(true);
+                m_pPBRemove->Enable(true);
         }
     }
 
     return 0L;
 }
 
-IMPL_LINK( SvxDefaultColorOptPage, ListClickedHdl, ChartColorLB*, _pColorList )
+IMPL_LINK( SvxDefaultColorOptPage, ListClickedHdl, ColorLB*, _pColorList )
 {
     Color aCol = _pColorList->GetSelectEntryColor();
 
     long nIndex = GetColorIndex( aCol );
 
     if( nIndex == -1 )      // not found
-        aValSetColorBox.SetNoSelection();
+        m_pValSetColorBox->SetNoSelection();
     else
-        aValSetColorBox.SelectItem( (sal_uInt16)nIndex + 1 );       // ValueSet is 1-based
+        m_pValSetColorBox->SelectItem( (sal_uInt16)nIndex + 1 );       // ValueSet is 1-based
 
     return 0L;
 }
 
 IMPL_LINK_NOARG(SvxDefaultColorOptPage, BoxClickedHdl)
 {
-    sal_uInt16 nIdx = aLbChartColors.GetSelectEntryPos();
+    sal_uInt16 nIdx = m_pLbChartColors->GetSelectEntryPos();
     if( nIdx != LISTBOX_ENTRY_NOTFOUND )
     {
-        const XColorEntry aEntry( aValSetColorBox.GetItemColor( aValSetColorBox.GetSelectItemId() ), aLbChartColors.GetSelectEntry() );
+        const XColorEntry aEntry( m_pValSetColorBox->GetItemColor( m_pValSetColorBox->GetSelectItemId() ), m_pLbChartColors->GetSelectEntry() );
 
-        aLbChartColors.Modify( aEntry, nIdx );
+        m_pLbChartColors->Modify( aEntry, nIdx );
         pColorConfig->ReplaceColorByIndex( nIdx, aEntry );
 
-        aLbChartColors.SelectEntryPos( nIdx );  // reselect entry
+        m_pLbChartColors->SelectEntryPos( nIdx );  // reselect entry
     }
 
     return 0L;

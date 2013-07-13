@@ -17,66 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "optchart.hrc"
 #include <cuires.hrc>
 #include "helpid.hrc"
 
 // tab page for setting the default colors used for new charts
-
-TabPage RID_OPTPAGE_CHART_DEFCOLORS
-{
-    HelpID  = HID_OPTIONS_CHART_DEFCOLORS;
-    Size    = MAP_APPFONT ( TP_WIDTH , TP_HEIGHT ) ;
-    Hide    = TRUE;
-    Text [ en-US ] = "Default Colors";
-    FixedLine FL_CHART_COLOR_LIST
-    {
-        Pos = MAP_APPFONT ( 6 , 3  ) ;
-        Size    = MAP_APPFONT ( 80 , 8 ) ;
-        Text [ en-US ] = "Chart colors";
-    };
-    ListBox LB_CHART_COLOR_LIST
-    {
-        HelpID = "cui:ListBox:RID_OPTPAGE_CHART_DEFCOLORS:LB_CHART_COLOR_LIST";
-        Border      = TRUE;
-        Pos     = MAP_APPFONT ( 12 , 15  );
-        Size        = MAP_APPFONT ( 68 , 152 );
-        DropDown    = FALSE;
-        TabStop     = TRUE ;
-    };
-    FixedLine FL_COLOR_BOX
-    {
-        Pos     = MAP_APPFONT ( 92 , 3  ) ;
-        Size            = MAP_APPFONT ( 106 , 8 ) ;
-        Text [ en-US ]  = "Color table" ;
-    };
-    Control CT_COLOR_BOX
-    {
-        Border      = TRUE;
-        Pos     = MAP_APPFONT ( 98 , 15  );
-        Size        = MAP_APPFONT ( 94 , 152 );
-        TabStop     = TRUE ;
-    };
-    PushButton PB_ADD_CHART_COLOR
-    {
-        Pos = MAP_APPFONT ( 204 , 15 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ en-US ] = "~Add";
-    };
-    PushButton PB_REMOVE_CHART_COLOR
-    {
-        Pos = MAP_APPFONT ( 204 , 32 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ en-US ] = "~Remove";
-    };
-    PushButton PB_RESET_TO_DEFAULT
-    {
-        HelpID = "cui:PushButton:RID_OPTPAGE_CHART_DEFCOLORS:PB_RESET_TO_DEFAULT";
-        Pos = MAP_APPFONT ( 204 , 165 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ en-US ] = "~Default";
-    };
-};
 
 String RID_SVXSTR_DIAGRAM_ROW
 {
