@@ -62,7 +62,7 @@ sub read_args($)
     my @lst;
     open ($fh, $file) || die "can't open file: $file";
     while (<$fh>) {
-        chomp();
+        s/\R$//;
         # migrate from the old system
         if ( substr($_, 0, 1) eq "'" ) {
             print "Migrating options from the old autogen.lastrun format, using:\n";
