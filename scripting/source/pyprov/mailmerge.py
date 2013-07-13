@@ -182,7 +182,10 @@ class PyMailSMTPService(unohelper.Base, XSmtpService):
 					textmsg['Content-Type'] = mimeEncoding
 					textmsg['MIME-Version'] = '1.0'
 
-					textbody = textbody.encode('utf-8')
+					try:
+						textbody = textbody.encode('utf-8')
+					except:
+						textbody = str(textbody.value).encode('utf-8')
 					if sys.version >= '3':
 						#http://stackoverflow.com/questions/9403265/how-do-i-use-python-3-2-email-module-to-send-unicode-messages-encoded-in-utf-8-w
 						textbody = textbody.decode('iso8859-1')
