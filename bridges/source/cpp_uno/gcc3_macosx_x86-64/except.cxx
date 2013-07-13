@@ -107,7 +107,6 @@ std::type_info * create_FAKE_si_class_type_info(
 
 #endif
 
-//==================================================================================================
 static OUString toUNOname( char const * p ) SAL_THROW(())
 {
 #if OSL_DEBUG_LEVEL > 1
@@ -145,7 +144,6 @@ static OUString toUNOname( char const * p ) SAL_THROW(())
 #endif
 }
 
-//==================================================================================================
 class RTTI
 {
     typedef boost::unordered_map< OUString, type_info *, OUStringHash > t_rtti_map;
@@ -162,7 +160,6 @@ public:
 
     type_info * getRTTI( typelib_CompoundTypeDescription * ) SAL_THROW(());
 };
-//__________________________________________________________________________________________________
 RTTI::RTTI() SAL_THROW(())
 #if defined(FREEBSD) && __FreeBSD_version < 702104
     : m_hApp( dlopen( 0, RTLD_NOW | RTLD_GLOBAL ) )
@@ -171,13 +168,11 @@ RTTI::RTTI() SAL_THROW(())
 #endif
 {
 }
-//__________________________________________________________________________________________________
 RTTI::~RTTI() SAL_THROW(())
 {
     dlclose( m_hApp );
 }
 
-//__________________________________________________________________________________________________
 type_info * RTTI::getRTTI( typelib_CompoundTypeDescription *pTypeDescr ) SAL_THROW(())
 {
     type_info * rtti;
@@ -275,7 +270,6 @@ type_info * RTTI::getRTTI( typelib_CompoundTypeDescription *pTypeDescr ) SAL_THR
 }
 
 
-//--------------------------------------------------------------------------------------------------
 extern "C" {
 static void _GLIBCXX_CDTOR_CALLABI deleteException( void * pExc )
 {
@@ -297,7 +291,6 @@ namespace
     struct theRTTI : public rtl::Static<RTTI, theRTTI> {};
 }
 
-//==================================================================================================
 void raiseException( uno_Any * pUnoExc, uno_Mapping * pUno2Cpp )
 {
 #if OSL_DEBUG_LEVEL > 1
@@ -359,7 +352,6 @@ void raiseException( uno_Any * pUnoExc, uno_Mapping * pUno2Cpp )
     __cxa_throw( pCppExc, rtti, deleteException );
 }
 
-//==================================================================================================
 void fillUnoException( __cxa_exception * header, uno_Any * pUnoExc, uno_Mapping * pCpp2Uno )
 {
     if (! header)

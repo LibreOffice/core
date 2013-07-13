@@ -49,7 +49,6 @@ void dummy_can_throw_anything( char const * )
 {
 }
 
-//==================================================================================================
 static OUString toUNOname( char const * p ) SAL_THROW(())
 {
 #if defined BRIDGES_DEBUG
@@ -87,7 +86,6 @@ static OUString toUNOname( char const * p ) SAL_THROW(())
 #endif
 }
 
-//==================================================================================================
 class RTTI
 {
     typedef boost::unordered_map< OUString, type_info *, OUStringHash > t_rtti_map;
@@ -104,18 +102,15 @@ public:
 
     type_info * getRTTI( typelib_CompoundTypeDescription * ) SAL_THROW(());
 };
-//__________________________________________________________________________________________________
 RTTI::RTTI() SAL_THROW(())
     : m_hApp( dlopen( 0, RTLD_LAZY ) )
 {
 }
-//__________________________________________________________________________________________________
 RTTI::~RTTI() SAL_THROW(())
 {
     dlclose( m_hApp );
 }
 
-//__________________________________________________________________________________________________
 type_info * RTTI::getRTTI( typelib_CompoundTypeDescription *pTypeDescr ) SAL_THROW(())
 {
     type_info * rtti;
@@ -194,7 +189,6 @@ type_info * RTTI::getRTTI( typelib_CompoundTypeDescription *pTypeDescr ) SAL_THR
     return rtti;
 }
 
-//--------------------------------------------------------------------------------------------------
 static void deleteException( void * pExc )
 {
     __cxa_exception const * header = ((__cxa_exception const *)pExc - 1);
@@ -209,7 +203,6 @@ static void deleteException( void * pExc )
     }
 }
 
-//==================================================================================================
 void raiseException( uno_Any * pUnoExc, uno_Mapping * pUno2Cpp )
 {
 #if defined BRIDGES_DEBUG
@@ -270,7 +263,6 @@ void raiseException( uno_Any * pUnoExc, uno_Mapping * pUno2Cpp )
     __cxa_throw( pCppExc, rtti, deleteException );
 }
 
-//==================================================================================================
 void fillUnoException( __cxa_exception * header, uno_Any * pUnoExc, uno_Mapping * pCpp2Uno )
 {
     if (! header)

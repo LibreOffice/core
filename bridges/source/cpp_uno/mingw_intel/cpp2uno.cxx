@@ -37,7 +37,6 @@ using namespace ::com::sun::star::uno;
 namespace
 {
 
-//==================================================================================================
 void cpp2uno_call(
     bridges::cpp_uno::shared::CppInterfaceProxy * pThis,
     const typelib_TypeDescription * pMemberTypeDescr,
@@ -221,7 +220,6 @@ void cpp2uno_call(
 }
 
 
-//==================================================================================================
 extern "C" void cpp_vtable_call(
     int nFunctionIndex, int nVtableOffset, void** pCallStack,
     void * pReturnValue )
@@ -345,7 +343,6 @@ extern "C" void cpp_vtable_call(
     }
 }
 
-//==================================================================================================
 extern "C" void privateSnippetExecutorGeneral();
 extern "C" void privateSnippetExecutorVoid();
 extern "C" void privateSnippetExecutorHyper();

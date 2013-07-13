@@ -36,7 +36,6 @@ namespace
 extern "C"
 {
 
-//------------------------------------------------------------------------------
 void SAL_CALL Mapping_acquire( uno_Mapping * mapping )
     SAL_THROW_EXTERN_C()
 {
@@ -44,7 +43,6 @@ void SAL_CALL Mapping_acquire( uno_Mapping * mapping )
     that->m_bridge->acquire();
 }
 
-//------------------------------------------------------------------------------
 void SAL_CALL Mapping_release( uno_Mapping * mapping )
     SAL_THROW_EXTERN_C()
 {
@@ -52,7 +50,6 @@ void SAL_CALL Mapping_release( uno_Mapping * mapping )
     that->m_bridge->release();
 }
 
-//------------------------------------------------------------------------------
 void SAL_CALL Mapping_map_to_uno(
     uno_Mapping * mapping, void ** ppOut,
     void * pIn, typelib_InterfaceTypeDescription * td )
@@ -117,7 +114,6 @@ void SAL_CALL Mapping_map_to_uno(
     }
 }
 
-//------------------------------------------------------------------------------
 void SAL_CALL Mapping_map_to_java(
     uno_Mapping * mapping, void ** ppOut,
     void * pIn, typelib_InterfaceTypeDescription * td )
@@ -184,7 +180,6 @@ void SAL_CALL Mapping_map_to_java(
     }
 }
 
-//______________________________________________________________________________
 void SAL_CALL Bridge_free( uno_Mapping * mapping )
     SAL_THROW_EXTERN_C()
 {
@@ -199,7 +194,6 @@ void SAL_CALL Bridge_free( uno_Mapping * mapping )
 namespace jni_uno
 {
 
-//______________________________________________________________________________
 void Bridge::acquire() const SAL_THROW(())
 {
     if (1 == osl_atomic_increment( &m_ref ))
@@ -221,7 +215,6 @@ void Bridge::acquire() const SAL_THROW(())
     }
 }
 
-//______________________________________________________________________________
 void Bridge::release() const SAL_THROW(())
 {
     if (! osl_atomic_decrement( &m_ref ))
@@ -233,7 +226,6 @@ void Bridge::release() const SAL_THROW(())
     }
 }
 
-//______________________________________________________________________________
 Bridge::Bridge(
     uno_Environment * java_env, uno_ExtEnvironment * uno_env,
     bool registered_java2uno )
@@ -263,7 +255,6 @@ Bridge::Bridge(
     m_uno2java.m_bridge = this;
 }
 
-//______________________________________________________________________________
 Bridge::~Bridge() SAL_THROW(())
 {
     (*m_java_env->release)( m_java_env );
@@ -271,7 +262,6 @@ Bridge::~Bridge() SAL_THROW(())
 }
 
 
-//______________________________________________________________________________
 void JNI_context::java_exc_occurred() const
 {
     // !don't rely on JNI_info!
@@ -340,7 +330,6 @@ void JNI_context::java_exc_occurred() const
     throw BridgeRuntimeError( message + get_stack_trace( jo_exc.get() ) );
 }
 
-//______________________________________________________________________________
 void JNI_context::getClassForName(
     jclass * classClass, jmethodID * methodForName) const
 {
@@ -353,7 +342,6 @@ void JNI_context::getClassForName(
     *classClass = c;
 }
 
-//______________________________________________________________________________
 jclass JNI_context::findClass(
     char const * name, jclass classClass, jmethodID methodForName,
     bool inException) const
@@ -374,7 +362,6 @@ jclass JNI_context::findClass(
     return c;
 }
 
-//______________________________________________________________________________
 OUString JNI_context::get_stack_trace( jobject jo_exc ) const
 {
     JLocalAutoRef jo_JNI_proxy(
@@ -428,7 +415,6 @@ extern "C"
 namespace
 {
 
-//------------------------------------------------------------------------------
 void SAL_CALL java_env_disposing( uno_Environment * java_env )
     SAL_THROW_EXTERN_C()
 {
@@ -444,7 +430,6 @@ void SAL_CALL java_env_disposing( uno_Environment * java_env )
 #define uno_initEnvironment java_uno_initEnvironment
 #endif
 
-//------------------------------------------------------------------------------
 SAL_DLLPUBLIC_EXPORT void SAL_CALL uno_initEnvironment( uno_Environment * java_env )
     SAL_THROW_EXTERN_C()
 {
@@ -462,7 +447,6 @@ SAL_DLLPUBLIC_EXPORT void SAL_CALL uno_initEnvironment( uno_Environment * java_e
 #define uno_ext_getMapping java_uno_ext_getMapping
 #endif
 
-//------------------------------------------------------------------------------
 SAL_DLLPUBLIC_EXPORT void SAL_CALL uno_ext_getMapping(
     uno_Mapping ** ppMapping, uno_Environment * pFrom, uno_Environment * pTo )
     SAL_THROW_EXTERN_C()

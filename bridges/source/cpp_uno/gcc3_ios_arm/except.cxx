@@ -48,7 +48,6 @@ void dummy_can_throw_anything( char const * )
 {
 }
 
-//==================================================================================================
 static OUString toUNOname( char const * p ) SAL_THROW(())
 {
     // example: N3com3sun4star4lang24IllegalArgumentExceptionE
@@ -77,7 +76,6 @@ static OUString toUNOname( char const * p ) SAL_THROW(())
     return result;
 }
 
-//==================================================================================================
 class RTTI
 {
     typedef boost::unordered_map< OUString, const type_info *, OUStringHash > t_rtti_map;
@@ -94,7 +92,6 @@ public:
 
     const type_info * getRTTI( typelib_CompoundTypeDescription * ) SAL_THROW(());
 };
-//__________________________________________________________________________________________________
 RTTI::RTTI() SAL_THROW(())
     : m_hApp( dlopen( 0, RTLD_LAZY ) )
 {
@@ -103,13 +100,11 @@ RTTI::RTTI() SAL_THROW(())
     m_rttis.insert( t_rtti_map::value_type( "com.sun.star.ucb.InteractiveAugmentedIOException",
                                             &typeid( com::sun::star::ucb::InteractiveAugmentedIOException ) ) );
 }
-//__________________________________________________________________________________________________
 RTTI::~RTTI() SAL_THROW(())
 {
     dlclose( m_hApp );
 }
 
-//__________________________________________________________________________________________________
 const type_info * RTTI::getRTTI( typelib_CompoundTypeDescription *pTypeDescr ) SAL_THROW(())
 {
     const type_info * rtti;
@@ -193,7 +188,6 @@ const type_info * RTTI::getRTTI( typelib_CompoundTypeDescription *pTypeDescr ) S
     return rtti;
 }
 
-//--------------------------------------------------------------------------------------------------
 static void deleteException( void * pExc )
 {
     __cxa_exception const * header = ((__cxa_exception const *)pExc - 1);
@@ -208,7 +202,6 @@ static void deleteException( void * pExc )
     }
 }
 
-//==================================================================================================
 void raiseException( uno_Any * pUnoExc, uno_Mapping * pUno2Cpp )
 {
     SAL_INFO( "bridges.ios", "raiseException: " << *reinterpret_cast< OUString const * >( &pUnoExc->pType->pTypeName ) );
@@ -265,7 +258,6 @@ void raiseException( uno_Any * pUnoExc, uno_Mapping * pUno2Cpp )
     __cxa_throw( pCppExc, (type_info *) rtti, deleteException );
 }
 
-//==================================================================================================
 void fillUnoException( __cxa_exception * header, uno_Any * pUnoExc, uno_Mapping * pCpp2Uno )
 {
     if (! header)
