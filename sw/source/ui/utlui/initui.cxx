@@ -146,7 +146,7 @@ ShellResource::ShellResource()
     aTOXObjectsName(        SW_RES(STR_TOX_OBJ)),
     aTOXTablesName(         SW_RES(STR_TOX_TBL)),
     aTOXAuthoritiesName(    SW_RES(STR_TOX_AUTH)),
-    aHyperlinkClick( SW_RES( STR_HYPERLINK_CLICK)),
+    aHyperlinkClick(SW_RESSTR(STR_HYPERLINK_CLICK)),
     pAutoFmtNameLst(0),
     sPageDescFirstName(     SW_RES(STR_PAGEDESC_FIRSTNAME)),
     sPageDescFollowName(    SW_RES(STR_PAGEDESC_FOLLOWNAME)),
@@ -156,10 +156,10 @@ ShellResource::ShellResource()
 
     KeyCode aCode( KEY_SPACE );
     KeyCode aModifiedCode( KEY_SPACE, KEY_MOD1 );
-    String aModStr( aModifiedCode.GetName() );
-    aModStr.SearchAndReplace( aCode.GetName(), String() );
-    aModStr.SearchAndReplaceAllAscii( "+", String() );
-    aHyperlinkClick.SearchAndReplaceAllAscii( "%s", aModStr );
+    OUString aModStr( aModifiedCode.GetName() );
+    aModStr = aModStr.replaceFirst(aCode.GetName(), OUString());
+    aModStr = aModStr.replaceAll("+", OUString());
+    aHyperlinkClick = aHyperlinkClick.replaceAll("%s", aModStr);
 
     for(sal_uInt16 i = 0; i < nCount; ++i)
         aDocInfoLst.push_back(String(SW_RESSTR(FLD_DOCINFO_BEGIN + i)));

@@ -33,7 +33,7 @@ namespace dp_misc {
 ResId getResId( sal_uInt16 id );
 
 //==============================================================================
-DESKTOP_DEPLOYMENTMISC_DLLPUBLIC String getResourceString( sal_uInt16 id );
+DESKTOP_DEPLOYMENTMISC_DLLPUBLIC OUString getResourceString( sal_uInt16 id );
 
 template <typename Unique, sal_uInt16 id>
 struct StaticResourceString :

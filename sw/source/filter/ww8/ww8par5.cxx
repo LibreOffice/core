@@ -418,20 +418,22 @@ long SwWW8ImplReader::Read_Book(WW8PLCFManResult*)
 // ConvertFFileName uebersetzt FeldParameter-Namen u. ae. in den
 // System-Zeichensatz.
 // Gleichzeitig werden doppelte Backslashes in einzelne uebersetzt.
-void SwWW8ImplReader::ConvertFFileName( String& rName, const String& rOrg )
+OUString SwWW8ImplReader::ConvertFFileName(const OUString& rOrg)
 {
-    rName = rOrg;
-    rName.SearchAndReplaceAllAscii( "\\\\", OUString( '\\' ));
-    rName.SearchAndReplaceAllAscii( "%20", OUString( ' ' ));
+    OUString aName = rOrg;
+    aName = aName.replaceAll("\\\\", OUString('\\'));
+    aName = aName.replaceAll("%20", OUString(' '));
 
     // ggfs. anhaengende Anfuehrungszeichen entfernen
-    if( rName.Len() &&  '"' == rName.GetChar( rName.Len()-1 ))
-        rName.Erase( rName.Len()-1, 1);
+    if (!aName.isEmpty() &&  '"' == aName[aName.getLength()-1])
+        aName = aName.copy(0, aName.getLength()-1);
 
-    // Need the more sophisticated url converter. cmc
-    if (rName.Len())
-        rName = URIHelper::SmartRel2Abs(
-            INetURLObject(sBaseURL), rName, Link(), false);
+    // Need the more sophisticated url converter.
+    if (!aName.isEmpty())
+        aName = URIHelper::SmartRel2Abs(
+            INetURLObject(sBaseURL), aName, Link(), false);
+
+    return aName;
 }
 
 // ConvertUFNneme uebersetzt FeldParameter-Namen u. ae. in den
@@ -2409,7 +2411,7 @@ eF_ResT SwWW8ImplReader::Read_F_IncludePicture( WW8FieldDesc*, String& rStr )
         {
         case -2:
             if (!aGrfName.Len())
-                ConvertFFileName(aGrfName, aReadParam.GetResult());
+                aGrfName = ConvertFFileName(aReadParam.GetResult());
             break;
 
         case 'd':
@@ -2485,7 +2487,7 @@ eF_ResT SwWW8ImplReader::Read_F_IncludeText( WW8FieldDesc* /*pF*/, String& rStr 
                 break;
         }
     }
-    ConvertFFileName(aPara, aPara);
+    aPara = ConvertFFileName(aPara);
 
     if (aBook.Len() && aBook.GetChar( 0 ) != '\\')
     {
@@ -3540,7 +3542,7 @@ eF_ResT SwWW8ImplReader::Read_F_Hyperlink( WW8FieldDesc* /*pF*/, String& rStr )
             {
                 case -2:
                     if (!sURL.Len() && !bOptions)
-                        ConvertFFileName(sURL, aReadParam.GetResult());
+                        sURL = ConvertFFileName(aReadParam.GetResult());
                     break;
 
                 case 'n':

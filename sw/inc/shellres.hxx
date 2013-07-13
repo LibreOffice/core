@@ -64,7 +64,7 @@ struct SW_DLLPUBLIC ShellResource : public Resource
     String          aTOXTablesName;
     String          aTOXAuthoritiesName;
 
-    String          aHyperlinkClick;
+    OUString        aHyperlinkClick;
 
     std::vector<String> aDocInfoLst;
 

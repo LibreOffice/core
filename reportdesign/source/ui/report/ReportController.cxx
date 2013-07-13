@@ -2925,8 +2925,8 @@ uno::Reference<frame::XModel> OReportController::executeReport()
 
                 // our first message says: we caught an exception
                 sdb::SQLContext aFirstMessage;
-                String sInfo = String( ModuleRes( RID_STR_CAUGHT_FOREIGN_EXCEPTION ) );
-                sInfo.SearchAndReplaceAllAscii( "$type$", aCaughtException.getValueTypeName() );
+                OUString sInfo(ModuleRes(RID_STR_CAUGHT_FOREIGN_EXCEPTION).toString());
+                sInfo = sInfo.replaceAll("$type$", aCaughtException.getValueTypeName());
                 aFirstMessage.Message = sInfo;
 
                 // our second message: the message of the exception we caught

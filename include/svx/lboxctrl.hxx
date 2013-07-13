@@ -33,7 +33,7 @@ class SvxPopupWindowListBox;
 class SvxListBoxControl : public SfxToolBoxControl
 {
 protected:
-    String                  aActionStr;
+    OUString                aActionStr;
     SvxPopupWindowListBox * pPopupWin;
 
     void    Impl_SetInfo( sal_uInt16 nCount );

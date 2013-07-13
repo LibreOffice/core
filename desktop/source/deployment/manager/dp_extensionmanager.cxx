@@ -1307,14 +1307,14 @@ sal_Bool ExtensionManager::synchronize(
     try
     {
         ::osl::MutexGuard guard(getMutex());
-        String sSynchronizingShared(StrSyncRepository::get());
-        sSynchronizingShared.SearchAndReplaceAllAscii( "%NAME", OUString("shared"));
+        OUString sSynchronizingShared(StrSyncRepository::get());
+        sSynchronizingShared = sSynchronizingShared.replaceAll("%NAME", "shared");
         dp_misc::ProgressLevel progressShared(xCmdEnv, sSynchronizingShared);
         sal_Bool bModified = getSharedRepository()->synchronize(xAbortChannel, xCmdEnv);
         progressShared.update("\n\n");
 
-        String sSynchronizingBundled(StrSyncRepository::get());
-        sSynchronizingBundled.SearchAndReplaceAllAscii( "%NAME", OUString("bundled"));
+        OUString sSynchronizingBundled(StrSyncRepository::get());
+        sSynchronizingBundled = sSynchronizingBundled.replaceAll("%NAME", "bundled");
         dp_misc::ProgressLevel progressBundled(xCmdEnv, sSynchronizingBundled);
         bModified |= getBundledRepository()->synchronize(xAbortChannel, xCmdEnv);
         progressBundled.update("\n\n");

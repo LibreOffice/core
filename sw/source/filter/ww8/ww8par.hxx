@@ -1535,7 +1535,7 @@ private:
     String GetFieldResult( WW8FieldDesc* pF );
     void MakeTagString( String& rStr, const String& rOrg );
     void UpdateFields();
-    void ConvertFFileName( String& rName, const String& rRaw );
+    OUString ConvertFFileName(const OUString& rRaw);
     long Read_F_Tag( WW8FieldDesc* pF );
     void InsertTagField( const sal_uInt16 nId, const String& rTagText );
     long ImportExtSprm(WW8PLCFManResult* pRes);

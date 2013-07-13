@@ -390,8 +390,7 @@ static OUString lcl_CreateNodeName(Sequence<OUString>& rAssignments )
 static void lcl_ConvertToNumbers(OUString& rBlock, const ResStringArray& rHeaders )
 {
     //convert the strings used for UI to numbers used for the configuration
-    String sBlock(rBlock);
-    sBlock.SearchAndReplaceAllAscii("\n", OUString("\\n"));
+    OUString sBlock(rBlock.replaceAll("\n", OUString("\\n")));
     for(sal_uInt16 i = 0; i < rHeaders.Count(); ++i)
     {
         String sHeader = rHeaders.GetString( i );
@@ -399,7 +398,7 @@ static void lcl_ConvertToNumbers(OUString& rBlock, const ResStringArray& rHeader
         sHeader += '>';
         String sReplace("<>");
         sReplace.Insert('0' + i, 1);
-        sBlock.SearchAndReplaceAll(sHeader, sReplace);
+        sBlock = sBlock.replaceAll(sHeader, sReplace);
     }
     rBlock = sBlock;
 }
@@ -408,10 +407,9 @@ static void lcl_ConvertFromNumbers(OUString& rBlock, const ResStringArray& rHead
 {
     //convert the numbers used for the configuration to strings used for UI to numbers
     //doesn't use ReplaceAll to prevent expansion of numbers inside of the headers
-    String sBlock(rBlock);
-    sBlock.SearchAndReplaceAllAscii("\\n", OUString('\n'));
+    OUString sBlock(rBlock.replaceAll("\\n", OUString('\n')));
     SwAddressIterator aGreetingIter(sBlock);
-    sBlock.Erase();
+    sBlock = OUString();
     while(aGreetingIter.HasMore())
     {
         SwMergeAddressItem aNext = aGreetingIter.Next();
@@ -421,11 +419,11 @@ static void lcl_ConvertFromNumbers(OUString& rBlock, const ResStringArray& rHead
             sal_Unicode cChar = aNext.sText.GetChar(0);
             if(cChar >= '0' && cChar <= 'c')
             {
-                sBlock += '<';
+                sBlock += "<";
                 sal_uInt16 nHeader = cChar - '0';
                 if(nHeader < rHeaders.Count())
                     sBlock += rHeaders.GetString( nHeader );
-                sBlock += '>';
+                sBlock += ">";
             }
             else
             {

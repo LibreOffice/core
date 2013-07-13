@@ -224,14 +224,12 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
             }
             case SwContentAtPos::SW_SMARTTAG:
             {
-                sTxt = SW_RESSTR(STR_SMARTTAG_CLICK);
-
                 KeyCode aCode( KEY_SPACE );
                 KeyCode aModifiedCode( KEY_SPACE, KEY_MOD1 );
-                String aModStr( aModifiedCode.GetName() );
-                aModStr.SearchAndReplace( aCode.GetName(), String() );
-                aModStr.SearchAndReplaceAllAscii( "+", String() );
-                sTxt.SearchAndReplaceAllAscii( "%s", aModStr );
+                OUString aModStr( aModifiedCode.GetName() );
+                aModStr = aModStr.replaceFirst(aCode.GetName(), OUString());
+                aModStr = aModStr.replaceAll("+", OUString());
+                sTxt = SW_RESSTR(STR_SMARTTAG_CLICK).replaceAll("%s", aModStr);
             }
             break;
 

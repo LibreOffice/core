@@ -81,7 +81,7 @@ public:
     virtual void    checkEntries() = 0;
 
     static ResId    getResId( sal_uInt16 nId );
-    static String   getResourceString( sal_uInt16 id );
+    static OUString getResourceString( sal_uInt16 id );
     static bool     IsSharedPkgMgr( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &);
     static bool     continueOnSharedExtension( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &,
                                                Window *pParent,

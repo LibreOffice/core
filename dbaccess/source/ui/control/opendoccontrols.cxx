@@ -182,10 +182,8 @@ namespace dbaui
         m_sModule = OUString::createFromAscii( _pAsciiModuleName );
 
         // our label should equal the UI text of the "Open" command
-        String sLabel( GetCommandText( ".uno:Open", m_sModule ) );
-        sLabel.SearchAndReplaceAllAscii( "~", String() );
-        sLabel.Insert( (sal_Unicode)' ', 0 );
-        SetText( sLabel );
+        OUString sLabel(GetCommandText(".uno:Open", m_sModule));
+        SetText(OUString(' ') + sLabel.replaceAll("~", OUString()));
 
         // Place icon left of text and both centered in the button.
         SetModeImage( GetCommandIcon( ".uno:Open", m_sModule ) );

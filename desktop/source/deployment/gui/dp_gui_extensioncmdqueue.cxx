@@ -456,7 +456,7 @@ void ProgressCmdEnv::handle( uno::Reference< task::XInteractionRequest > const &
         {
             SolarMutexGuard guard;
             WarningBox box( m_pDialogHelper? m_pDialogHelper->getWindow() : NULL, ResId(id, *DeploymentGuiResMgr::get()));
-            String s;
+            OUString s;
             if (bEqualNames)
             {
                 s = box.GetMessText();
@@ -466,20 +466,20 @@ void ProgressCmdEnv::handle( uno::Reference< task::XInteractionRequest > const &
                 //hypothetical: requires two instances of an extension with the same
                 //version to have different display names. Probably the developer forgot
                 //to change the version.
-                s = String(ResId(RID_STR_WARNINGBOX_VERSION_EQUAL_DIFFERENT_NAMES, *DeploymentGuiResMgr::get()));
+                s = ResId(RID_STR_WARNINGBOX_VERSION_EQUAL_DIFFERENT_NAMES, *DeploymentGuiResMgr::get()).toString();
             }
             else if (id == RID_WARNINGBOX_VERSION_LESS)
             {
-                s = String(ResId(RID_STR_WARNINGBOX_VERSION_LESS_DIFFERENT_NAMES, *DeploymentGuiResMgr::get()));
+                s = ResId(RID_STR_WARNINGBOX_VERSION_LESS_DIFFERENT_NAMES, *DeploymentGuiResMgr::get()).toString();
             }
             else if (id == RID_WARNINGBOX_VERSION_GREATER)
             {
-               s = String(ResId(RID_STR_WARNINGBOX_VERSION_GREATER_DIFFERENT_NAMES, *DeploymentGuiResMgr::get()));
+               s = ResId(RID_STR_WARNINGBOX_VERSION_GREATER_DIFFERENT_NAMES, *DeploymentGuiResMgr::get()).toString();
             }
-            s.SearchAndReplaceAllAscii( "$NAME", verExc.NewDisplayName);
-            s.SearchAndReplaceAllAscii( "$OLDNAME", verExc.Deployed->getDisplayName());
-            s.SearchAndReplaceAllAscii( "$NEW", getVersion(verExc.NewVersion) );
-            s.SearchAndReplaceAllAscii( "$DEPLOYED", getVersion(verExc.Deployed) );
+            s = s.replaceAll("$NAME", verExc.NewDisplayName);
+            s = s.replaceAll("$OLDNAME", verExc.Deployed->getDisplayName());
+            s = s.replaceAll("$NEW", getVersion(verExc.NewVersion));
+            s = s.replaceAll("$DEPLOYED", getVersion(verExc.Deployed));
             box.SetMessText(s);
             approve = box.Execute() == RET_OK;
             abort = !approve;
@@ -507,8 +507,8 @@ void ProgressCmdEnv::handle( uno::Reference< task::XInteractionRequest > const &
     else if (request >>= platExc)
     {
         SolarMutexGuard guard;
-        String sMsg( ResId( RID_STR_UNSUPPORTED_PLATFORM, *DeploymentGuiResMgr::get() ) );
-        sMsg.SearchAndReplaceAllAscii( "%Name", platExc.package->getDisplayName() );
+        OUString sMsg(ResId(RID_STR_UNSUPPORTED_PLATFORM, *DeploymentGuiResMgr::get()).toString());
+        sMsg = sMsg.replaceAll("%Name", platExc.package->getDisplayName());
         ErrorBox box( m_pDialogHelper? m_pDialogHelper->getWindow() : NULL, WB_OK, sMsg );
         box.Execute();
         approve = true;

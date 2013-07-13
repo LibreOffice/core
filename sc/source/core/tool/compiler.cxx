@@ -633,14 +633,15 @@ static bool lcl_parseExternalName(
     return true;
 }
 
-static String lcl_makeExternalNameStr( const String& rFile, const String& rName,
+static OUString lcl_makeExternalNameStr(const OUString& rFile, const OUString& rName,
         const sal_Unicode cSep, bool bODF )
 {
-    String aFile( rFile), aName( rName), aEscQuote( "''");
-    aFile.SearchAndReplaceAllAscii( "'", aEscQuote);
+    OUString aEscQuote("''");
+    OUString aFile(rFile.replaceAll("'", aEscQuote));
+    OUString aName(rName);
     if (bODF)
-        aName.SearchAndReplaceAllAscii( "'", aEscQuote);
-    OUStringBuffer aBuf( aFile.Len() + aName.Len() + 9);
+        aName = aName.replaceAll("'", aEscQuote);
+    OUStringBuffer aBuf(aFile.getLength() + aName.getLength() + 9);
     if (bODF)
         aBuf.append( sal_Unicode( '['));
     aBuf.append( sal_Unicode( '\''));
@@ -652,7 +653,7 @@ static String lcl_makeExternalNameStr( const String& rFile, const String& rName,
     aBuf.append( aName);
     if (bODF)
         aBuf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "']"));
-    return String( aBuf.makeStringAndClear());
+    return aBuf.makeStringAndClear();
 }
 
 static bool lcl_getLastTabName( OUString& rTabName2, const OUString& rTabName1,
@@ -879,7 +880,7 @@ struct ConventionOOO_A1 : public Convention_A1
     {
         if (bDisplayTabName)
         {
-            String aFile;
+            OUString aFile;
             const OUString* p = pRefMgr->getExternalFileName(nFileId);
             if (p)
             {
@@ -888,10 +889,9 @@ struct ConventionOOO_A1 : public Convention_A1
                 else
                     aFile = INetURLObject::decode(*p, INET_HEX_ESCAPE, INetURLObject::DECODE_UNAMBIGUOUS);
             }
-            aFile.SearchAndReplaceAllAscii("'", OUString("''"));
 
             rBuffer.append(sal_Unicode('\''));
-            rBuffer.append(aFile);
+            rBuffer.append(aFile.replaceAll("'", "''"));
             rBuffer.append(sal_Unicode('\''));
             rBuffer.append(sal_Unicode('#'));
 

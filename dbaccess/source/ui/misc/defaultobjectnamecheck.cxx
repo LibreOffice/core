@@ -72,12 +72,11 @@ namespace dbaui
     //====================================================================
     namespace
     {
-        void    lcl_fillNameExistsError( const OUString& _rObjectName, SQLExceptionInfo& _out_rErrorToDisplay )
+        void lcl_fillNameExistsError( const OUString& _rObjectName, SQLExceptionInfo& _out_rErrorToDisplay )
         {
-            String sErrorMessage = String( ModuleRes( STR_NAMED_OBJECT_ALREADY_EXISTS ) );
-            sErrorMessage.SearchAndReplaceAllAscii( "$#$", _rObjectName );
             SQLException aError;
-            aError.Message = sErrorMessage;
+            OUString sErrorMessage = ModuleRes(STR_NAMED_OBJECT_ALREADY_EXISTS).toString();
+            aError.Message = sErrorMessage.replaceAll("$#$", _rObjectName);
             _out_rErrorToDisplay = aError;
         }
 

@@ -1574,9 +1574,8 @@ bool FmXFormView::createControlLabelPair( OutputDevice& _rOutDev, sal_Int32 _nXO
                 sLabel = sFieldName;
 
             xLabelModel->setPropertyValue( FM_PROP_LABEL, makeAny( sLabel + _rFieldPostfix ) );
-            String sObjectLabel( SVX_RES( RID_STR_OBJECT_LABEL ) );
-            sObjectLabel.SearchAndReplaceAllAscii( "#object#", sFieldName );
-            xLabelModel->setPropertyValue( FM_PROP_NAME, makeAny( OUString( sObjectLabel ) ) );
+            OUString sObjectLabel(SVX_RESSTR(RID_STR_OBJECT_LABEL).replaceAll("#object#", sFieldName));
+            xLabelModel->setPropertyValue(FM_PROP_NAME, makeAny(sObjectLabel));
         }
 
         pLabel->SetLogicRect( ::Rectangle(

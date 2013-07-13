@@ -89,9 +89,8 @@ OUString AquaSalSystem::GetDisplayScreenName( unsigned int nScreen )
         ResMgr* pMgr = ImplGetResMgr();
         if( pMgr )
         {
-            String aScreenName( ResId( SV_MAC_SCREENNNAME, *pMgr ) );
-            aScreenName.SearchAndReplaceAllAscii( "%d", OUString::number( nScreen ) );
-            aRet = aScreenName;
+            OUString aScreenName(ResId(SV_MAC_SCREENNNAME, *pMgr).toString());
+            aRet = aScreenName.replaceAll("%d", OUString::number(nScreen));
         }
    }
    return aRet;

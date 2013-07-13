@@ -526,20 +526,4 @@ xub_StrLen UniString::SearchAndReplaceAscii( const sal_Char* pAsciiStr, const Un
     return nSPos;
 }
 
-void UniString::SearchAndReplaceAllAscii( const sal_Char* pAsciiStr, const UniString& rRepStr )
-{
-    DBG_CHKTHIS( UniString, DbgCheckUniString );
-    DBG_ASSERT( ImplDbgCheckAsciiStr( pAsciiStr, STRING_LEN ),
-                "UniString::SearchAndReplaceAllAscii() - pAsciiStr include characters > 127" );
-
-    xub_StrLen nCharLen = ImplStringLen( pAsciiStr );
-    xub_StrLen nSPos = SearchAscii( pAsciiStr, 0 );
-    while ( nSPos != STRING_NOTFOUND )
-    {
-        Replace( nSPos, nCharLen, rRepStr );
-        nSPos = nSPos + rRepStr.Len();
-        nSPos = SearchAscii( pAsciiStr, nSPos );
-    }
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

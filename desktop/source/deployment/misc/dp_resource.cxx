@@ -66,13 +66,11 @@ ResId getResId( sal_uInt16 id )
 }
 
 //==============================================================================
-String getResourceString( sal_uInt16 id )
+OUString getResourceString( sal_uInt16 id )
 {
-    const osl::MutexGuard guard( theResourceMutex::get() );
-    String ret( ResId( id, *DeploymentResMgr::get() ) );
-    ret.SearchAndReplaceAllAscii(
-        "%PRODUCTNAME", utl::ConfigManager::getProductName() );
-    return ret;
+    const osl::MutexGuard guard(theResourceMutex::get());
+    OUString ret(ResId(id, *DeploymentResMgr::get()).toString());
+    return ret.replaceAll("%PRODUCTNAME", utl::ConfigManager::getProductName());
 }
 
 //==============================================================================

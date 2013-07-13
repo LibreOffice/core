@@ -213,11 +213,10 @@ void SvxListBoxControl::Impl_SetInfo( sal_uInt16 nCount )
     else
         nId = SID_UNDO == GetSlotId() ? RID_SVXSTR_NUM_UNDO_ACTIONS : RID_SVXSTR_NUM_REDO_ACTIONS;
 
-    aActionStr = String(SVX_RES(nId));
+    aActionStr = SVX_RESSTR(nId);
 
-    String aText( aActionStr );
-    aText.SearchAndReplaceAllAscii( "$(ARG1)", OUString::number( nCount ) );
-    pPopupWin->SetText( aText );
+    OUString aText = aActionStr.replaceAll("$(ARG1)", OUString::number(nCount));
+    pPopupWin->SetText(aText);
 }
 
 
@@ -310,8 +309,8 @@ SfxPopupWindow* SvxUndoRedoControl::CreatePopupWindow()
         rListBox.InsertEntry( String( aUndoRedoList[n] ));
 
     rListBox.SelectEntryPos( 0 );
-    aActionStr = String( SVX_RES( SID_UNDO == GetSlotId() ?
-                                  RID_SVXSTR_NUM_UNDO_ACTIONS : RID_SVXSTR_NUM_REDO_ACTIONS ) );
+    aActionStr = SVX_RESSTR(SID_UNDO == GetSlotId() ?
+                                  RID_SVXSTR_NUM_UNDO_ACTIONS : RID_SVXSTR_NUM_REDO_ACTIONS);
     Impl_SetInfo( rListBox.GetSelectEntryCount() );
 
     // move focus in floating window without

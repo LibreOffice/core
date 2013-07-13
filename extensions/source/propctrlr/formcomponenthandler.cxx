@@ -2425,12 +2425,10 @@ namespace pcr
                 OSL_FAIL( "FormComponentPropertyHandler::impl_ensureRowsetConnection_nothrow: caught an exception during error handling!" );
             }
             // additional info about what happended
-            String sInfo( PcrRes( RID_STR_UNABLETOCONNECT ) );
             INetURLObject aParser( sDataSourceName );
             if ( aParser.GetProtocol() != INET_PROT_NOT_VALID )
                 sDataSourceName = aParser.getBase( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
-            sInfo.SearchAndReplaceAllAscii( "$name$", sDataSourceName );
-
+            OUString sInfo(PcrRes(RID_STR_UNABLETOCONNECT).toString().replaceAll("$name$", sDataSourceName));
             SQLContext aContext;
             aContext.Message = sInfo;
             aContext.NextException = aError.get();

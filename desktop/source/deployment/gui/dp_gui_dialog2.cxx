@@ -573,13 +573,13 @@ ResId DialogHelper::getResId( sal_uInt16 nId )
 }
 
 //------------------------------------------------------------------------------
-String DialogHelper::getResourceString( sal_uInt16 id )
+OUString DialogHelper::getResourceString(sal_uInt16 id)
 {
     const SolarMutexGuard guard;
-    String ret( ResId( id, *DeploymentGuiResMgr::get() ) );
-    if (ret.SearchAscii( "%PRODUCTNAME" ) != STRING_NOTFOUND) {
-        ret.SearchAndReplaceAllAscii(
-            "%PRODUCTNAME", utl::ConfigManager::getProductName() );
+    OUString ret(ResId(id, *DeploymentGuiResMgr::get()).toString());
+    if (ret.indexOf("%PRODUCTNAME" ) != -1)
+    {
+        ret = ret.replaceAll("%PRODUCTNAME", utl::ConfigManager::getProductName());
     }
     return ret;
 }
@@ -603,9 +603,9 @@ bool DialogHelper::continueOnSharedExtension( const uno::Reference< deployment::
     {
         const SolarMutexGuard guard;
         WarningBox aInfoBox( pParent, getResId( nResID ) );
-        String aMsgText = aInfoBox.GetMessText();
-        aMsgText.SearchAndReplaceAllAscii(
-            "%PRODUCTNAME", utl::ConfigManager::getProductName() );
+        OUString aMsgText = aInfoBox.GetMessText();
+        aMsgText = aMsgText.replaceAll(
+            "%PRODUCTNAME", utl::ConfigManager::getProductName());
         aInfoBox.SetMessText( aMsgText );
 
         bHadWarning = true;
@@ -649,9 +649,9 @@ bool DialogHelper::installExtensionWarn( const OUString &rExtensionName ) const
     const SolarMutexGuard guard;
     WarningBox aInfo( m_pVCLWindow, getResId( RID_WARNINGBOX_INSTALL_EXTENSION ) );
 
-    String sText( aInfo.GetMessText() );
-    sText.SearchAndReplaceAllAscii( "%NAME", rExtensionName );
-    aInfo.SetMessText( sText );
+    OUString sText(aInfo.GetMessText());
+    sText = sText.replaceAll("%NAME", rExtensionName);
+    aInfo.SetMessText(sText);
 
     return ( RET_OK == aInfo.Execute() );
 }
@@ -662,10 +662,10 @@ bool DialogHelper::installForAllUsers( bool &bInstallForAll ) const
     const SolarMutexGuard guard;
     QueryBox aQuery( m_pVCLWindow, getResId( RID_QUERYBOX_INSTALL_FOR_ALL ) );
 
-    String sMsgText = aQuery.GetMessText();
-    sMsgText.SearchAndReplaceAllAscii(
-        "%PRODUCTNAME", utl::ConfigManager::getProductName() );
-    aQuery.SetMessText( sMsgText );
+    OUString sMsgText(aQuery.GetMessText());
+    sMsgText = sMsgText.replaceAll(
+        "%PRODUCTNAME", utl::ConfigManager::getProductName());
+    aQuery.SetMessText(sMsgText);
 
     sal_uInt16 nYesBtnID = aQuery.GetButtonId( 0 );
     sal_uInt16 nNoBtnID = aQuery.GetButtonId( 1 );
@@ -808,9 +808,9 @@ bool ExtMgrDialog::removeExtensionWarn( const OUString &rExtensionName ) const
     const SolarMutexGuard guard;
     WarningBox aInfo( const_cast< ExtMgrDialog* >(this), getResId( RID_WARNINGBOX_REMOVE_EXTENSION ) );
 
-    String sText( aInfo.GetMessText() );
-    sText.SearchAndReplaceAllAscii( "%NAME", rExtensionName );
-    aInfo.SetMessText( sText );
+    OUString sText(aInfo.GetMessText());
+    sText = sText.replaceAll("%NAME", rExtensionName);
+    aInfo.SetMessText(sText);
 
     return ( RET_OK == aInfo.Execute() );
 }
@@ -1224,10 +1224,10 @@ UpdateRequiredDialog::UpdateRequiredDialog( Window *pParent, TheExtensionManager
     m_aCloseBtn.SetClickHdl( LINK( this, UpdateRequiredDialog, HandleCloseBtn ) );
     m_aCancelBtn.SetClickHdl( LINK( this, UpdateRequiredDialog, HandleCancelBtn ) );
 
-    String aText = m_aUpdateNeeded.GetText();
-    aText.SearchAndReplaceAllAscii(
-        "%PRODUCTNAME", utl::ConfigManager::getProductName() );
-    m_aUpdateNeeded.SetText( aText );
+    OUString aText = m_aUpdateNeeded.GetText();
+    aText = aText.replaceAll(
+        "%PRODUCTNAME", utl::ConfigManager::getProductName());
+    m_aUpdateNeeded.SetText(aText);
 
     // resize update button
     Size aBtnSize = m_aUpdateBtn.GetSizePixel();

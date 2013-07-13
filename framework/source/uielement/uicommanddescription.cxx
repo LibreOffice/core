@@ -303,12 +303,10 @@ throw ( RuntimeException )
 
 void ConfigurationAccess_UICommand::fillInfoFromResult( CmdToInfoMap& rCmdInfo, const OUString& aLabel )
 {
-    String rStr( aLabel );
-    rStr.SearchAndReplaceAllAscii(
-        "%PRODUCTNAME", utl::ConfigManager::getProductName() );
-    rCmdInfo.aLabel       = OUString( rStr );
-    rStr = comphelper::string::stripEnd(rStr, '.'); // Remove "..." from string
-    rCmdInfo.aCommandName = OUString( MnemonicGenerator::EraseAllMnemonicChars( rStr ));
+    OUString aStr(aLabel.replaceAll("%PRODUCTNAME", utl::ConfigManager::getProductName()));
+    rCmdInfo.aLabel = aStr;
+    aStr = comphelper::string::stripEnd(aStr, '.'); // Remove "..." from string
+    rCmdInfo.aCommandName = MnemonicGenerator::EraseAllMnemonicChars(aStr);
     rCmdInfo.bCommandNameCreated = sal_True;
 }
 

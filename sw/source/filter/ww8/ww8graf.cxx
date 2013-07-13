@@ -951,13 +951,14 @@ OutlinerParaObject* SwWW8ImplReader::ImportAsOutliner(String &rString, WW8_CP nS
         //Strip out fields, leaving the result
         long nDummy(0);
         lcl_StripFields(rString, nDummy);
+        OUString aString(rString);
         //Strip out word's special characters for the simple string
-        rString = comphelper::string::remove(rString, 0x1);
-        rString = comphelper::string::remove(rString, 0x5);
-        rString = comphelper::string::remove(rString, 0x8);
-        rString.SearchAndReplaceAllAscii("\007\007", OUString("\007\012"));
-        rString.SearchAndReplaceAll(0x7, ' ');
-
+        aString = comphelper::string::remove(aString, 0x1);
+        aString = comphelper::string::remove(aString, 0x5);
+        aString = comphelper::string::remove(aString, 0x8);
+        aString = aString.replaceAll(OUString("\007\007"), OUString("\007\012"));
+        aString = aString.replace(0x7, ' ');
+        rString = aString;
     }
 
     return pRet;

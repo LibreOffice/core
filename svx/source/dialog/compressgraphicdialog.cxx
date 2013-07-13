@@ -155,24 +155,24 @@ void CompressGraphicsDialog::Update()
     Size aPixelSize = m_aGraphic.GetSizePixel();
     Size aOriginalSize100mm( pDummyVDev->PixelToLogic( m_aGraphic.GetSizePixel(), MAP_100TH_MM ) );
 
-    String aBitmapSizeString = String(SVX_RES(STR_IMAGE_ORIGINAL_SIZE));
+    OUString aBitmapSizeString = SVX_RESSTR(STR_IMAGE_ORIGINAL_SIZE);
     OUString aWidthString  = GetUnitString( aOriginalSize100mm.Width(),  eFieldUnit, cSeparator );
     OUString aHeightString = GetUnitString( aOriginalSize100mm.Height(), eFieldUnit, cSeparator );
-    aBitmapSizeString.SearchAndReplaceAllAscii( "$(WIDTH)",  aWidthString );
-    aBitmapSizeString.SearchAndReplaceAllAscii( "$(HEIGHT)", aHeightString );
-    aBitmapSizeString.SearchAndReplaceAllAscii( "$(WIDTH_IN_PX)",  OUString::valueOf(aPixelSize.Width()) );
-    aBitmapSizeString.SearchAndReplaceAllAscii( "$(HEIGHT_IN_PX)", OUString::valueOf(aPixelSize.Height()) );
+    aBitmapSizeString = aBitmapSizeString.replaceAll("$(WIDTH)",  aWidthString);
+    aBitmapSizeString = aBitmapSizeString.replaceAll("$(HEIGHT)", aHeightString);
+    aBitmapSizeString = aBitmapSizeString.replaceAll("$(WIDTH_IN_PX)",  OUString::valueOf(aPixelSize.Width()));
+    aBitmapSizeString = aBitmapSizeString.replaceAll("$(HEIGHT_IN_PX)", OUString::valueOf(aPixelSize.Height()));
     m_pFixedText2->SetText(aBitmapSizeString);
 
     int aValX = (int) (aPixelSize.Width() / GetViewWidthInch());
 
-    String aViewSizeString = String(SVX_RES(STR_IMAGE_VIEW_SIZE));
+    OUString aViewSizeString = SVX_RESSTR(STR_IMAGE_VIEW_SIZE);
 
     aWidthString  = GetUnitString( m_aViewSize100mm.Width(),  eFieldUnit, cSeparator );
     aHeightString = GetUnitString( m_aViewSize100mm.Height(), eFieldUnit, cSeparator );
-    aViewSizeString.SearchAndReplaceAllAscii( "$(WIDTH)",  aWidthString );
-    aViewSizeString.SearchAndReplaceAllAscii( "$(HEIGHT)", aHeightString );
-    aViewSizeString.SearchAndReplaceAllAscii( "$(DPI)", OUString::number( aValX) );
+    aViewSizeString = aViewSizeString.replaceAll("$(WIDTH)",  aWidthString);
+    aViewSizeString = aViewSizeString.replaceAll("$(HEIGHT)", aHeightString);
+    aViewSizeString = aViewSizeString.replaceAll("$(DPI)", OUString::number(aValX));
     m_pFixedText3->SetText(aViewSizeString);
 
     SvMemoryStream aMemStream;
@@ -181,8 +181,8 @@ void CompressGraphicsDialog::Update()
     aMemStream.Seek( STREAM_SEEK_TO_END );
     sal_Int32 aNativeSize = aMemStream.Tell();
 
-    String aNativeSizeString = String(SVX_RES(STR_IMAGE_CAPACITY));
-    aNativeSizeString.SearchAndReplaceAllAscii( "$(CAPACITY)",  OUString::valueOf(aNativeSize / 1024) );
+    OUString aNativeSizeString = SVX_RESSTR(STR_IMAGE_CAPACITY);
+    aNativeSizeString = aNativeSizeString.replaceAll("$(CAPACITY)",  OUString::valueOf(aNativeSize / 1024));
     m_pFixedText5->SetText(aNativeSizeString);
 
     m_pFixedText6->SetText(String("??"));
@@ -328,8 +328,8 @@ IMPL_LINK_NOARG( CompressGraphicsDialog, CalculateClickHdl )
     {
         OUString aSizeAsString = OUString::valueOf(aSize / 1024);
 
-        String aNewSizeString = String(SVX_RES(STR_IMAGE_CAPACITY));
-        aNewSizeString.SearchAndReplaceAllAscii( "$(CAPACITY)",  aSizeAsString );
+        OUString aNewSizeString = SVX_RESSTR(STR_IMAGE_CAPACITY);
+        aNewSizeString = aNewSizeString.replaceAll("$(CAPACITY)", aSizeAsString);
         m_pFixedText6->SetText(aNewSizeString);
     }
     return 0L;
