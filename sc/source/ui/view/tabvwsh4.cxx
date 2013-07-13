@@ -33,7 +33,6 @@
 #include <sfx2/dispatch.hxx>
 #include <svl/whiter.hxx>
 #include <unotools/moduleoptions.hxx>
-#include <rtl/logfile.hxx>
 #include <tools/urlobj.hxx>
 #include <sfx2/docfile.hxx>
 
@@ -1675,7 +1674,7 @@ ScTabViewShell::ScTabViewShell( SfxViewFrame* pViewFrame,
     ScDBFunc( &pViewFrame->GetWindow(), (ScDocShell&)*pViewFrame->GetObjectShell(), this ),
     __INIT_ScTabViewShell
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "sc", "nn93723", "ScTabViewShell::ScTabViewShell" );
+    SAL_INFO ( "sc.view", "ScTabViewShell::ScTabViewShell" );
 
     const ScAppOptions& rAppOpt = SC_MOD()->GetAppOptions();
 

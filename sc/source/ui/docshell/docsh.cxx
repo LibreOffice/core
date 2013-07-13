@@ -108,7 +108,6 @@
 
 #include "docshimp.hxx"
 #include "sizedev.hxx"
-#include <rtl/logfile.hxx>
 
 #include <officecfg/Office/Calc.hxx>
 #include <comphelper/processfactory.hxx>
@@ -488,7 +487,7 @@ sal_Bool ScDocShell::LoadXML( SfxMedium* pLoadMedium, const ::com::sun::star::un
 
 sal_Bool ScDocShell::SaveXML( SfxMedium* pSaveMedium, const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStor )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "sc", "sb99857", "ScDocShell::SaveXML" );
+    SAL_INFO ( "sc.docshell", "ScDocShell::SaveXML" );
 
     aDocument.EnableIdle(false);
 
@@ -529,7 +528,7 @@ bool ScDocShell::SaveCurrentChart( SfxMedium& rMedium )
 
 sal_Bool ScDocShell::Load( SfxMedium& rMedium )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "sc", "nn93723", "ScDocShell::Load" );
+    SAL_INFO ( "sc.docshell", "ScDocShell::Load" );
     LoadMediumGuard aLoadGuard(&aDocument);
     ScRefreshTimerProtector aProt( aDocument.GetRefreshTimerControlAddress() );
 
@@ -955,7 +954,7 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
 sal_Bool ScDocShell::LoadFrom( SfxMedium& rMedium )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "sc", "nn93723", "ScDocShell::LoadFrom" );
+    SAL_INFO ( "sc.docshell", "ScDocShell::LoadFrom" );
     LoadMediumGuard aLoadGuard(&aDocument);
     ScRefreshTimerProtector aProt( aDocument.GetRefreshTimerControlAddress() );
 
@@ -1011,7 +1010,7 @@ static void lcl_parseHtmlFilterOption(const OUString& rOption, LanguageType& rLa
 
 sal_Bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "sc", "nn93723", "ScDocShell::ConvertFrom" );
+    SAL_INFO ( "sc.docshell", "ScDocShell::ConvertFrom" );
 
     LoadMediumGuard aLoadGuard(&aDocument);
 
@@ -1574,7 +1573,7 @@ ScDocShell::PrepareSaveGuard::~PrepareSaveGuard()
 
 sal_Bool ScDocShell::Save()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "sc", "nn93723", "ScDocShell::Save" );
+    SAL_INFO ( "sc.docshell", "ScDocShell::Save" );
 
     ScRefreshTimerProtector aProt( aDocument.GetRefreshTimerControlAddress() );
 
@@ -2158,7 +2157,7 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt 
 
 sal_Bool ScDocShell::ConvertTo( SfxMedium &rMed )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "sc", "nn93723", "ScDocShell::ConvertTo" );
+    SAL_INFO ( "sc.docshell", "ScDocShell::ConvertTo" );
 
     ScRefreshTimerProtector aProt( aDocument.GetRefreshTimerControlAddress() );
 
@@ -2621,7 +2620,7 @@ ScDocShell::ScDocShell( const ScDocShell& rShell ) :
     , mpCollaboration( new ScCollaboration( this ) )
 #endif
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "sc", "nn93723", "ScDocShell::ScDocShell" );
+    SAL_INFO ( "sc.docshell", "ScDocShell::ScDocShell" );
 
     SetPool( &SC_MOD()->GetPool() );
 
@@ -2670,7 +2669,7 @@ ScDocShell::ScDocShell( const sal_uInt64 i_nSfxCreationFlags ) :
     , mpCollaboration( new ScCollaboration( this ) )
 #endif
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "sc", "nn93723", "ScDocShell::ScDocShell" );
+    SAL_INFO ( "sc.docshell", "ScDocShell::ScDocShell" );
 
     SetPool( &SC_MOD()->GetPool() );
 

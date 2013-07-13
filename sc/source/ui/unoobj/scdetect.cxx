@@ -44,7 +44,6 @@
 
 #include <svtools/parhtml.hxx>
 #include <rtl/ustring.h>
-#include <rtl/logfile.hxx>
 #include <svl/itemset.hxx>
 #include <vcl/window.hxx>
 #include <svl/eitem.hxx>

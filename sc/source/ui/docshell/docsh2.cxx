@@ -22,7 +22,6 @@
 #include <svl/asiancfg.hxx>
 #include <editeng/forbiddencharacterstable.hxx>
 #include <editeng/unolingu.hxx>
-#include <rtl/logfile.hxx>
 
 #include "drwlayer.hxx"
 #include "stlpool.hxx"
@@ -37,7 +36,7 @@ using namespace com::sun::star;
 
 sal_Bool ScDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "sc", "nn93723", "ScDocShell::InitNew" );
+    SAL_INFO ( "sc.docshell", "ScDocShell::InitNew" );
 
     sal_Bool bRet = SfxObjectShell::InitNew( xStor );
 
@@ -181,7 +180,7 @@ ScDrawLayer* ScDocShell::MakeDrawLayer()
     ScDrawLayer* pDrawLayer = aDocument.GetDrawLayer();
     if (!pDrawLayer)
     {
-        RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "sc", "nn93723", "ScDocShell::MakeDrawLayer" );
+        SAL_INFO ( "sc.docshell", "ScDocShell::MakeDrawLayer" );
 
         aDocument.InitDrawLayer(this);
         pDrawLayer = aDocument.GetDrawLayer();

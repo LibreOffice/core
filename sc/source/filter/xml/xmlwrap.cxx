@@ -56,7 +56,6 @@
 #include <sfx2/DocumentMetadataAccess.hxx>
 #include <comphelper/documentconstants.hxx>
 #include <svx/xmleohlp.hxx>
-#include <rtl/logfile.hxx>
 #include <rtl/strbuf.hxx>
 #include <unotools/saveopt.hxx>
 
@@ -314,7 +313,7 @@ sal_uInt32 ScXMLImportWrapper::ImportFromComponent(const uno::Reference<uno::XCo
 
 sal_Bool ScXMLImportWrapper::Import(sal_Bool bStylesOnly, ErrCode& nError)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "sc", "sb99857", "ScXMLImportWrapper::Import" );
+    SAL_INFO ( "sc.xml", "ScXMLImportWrapper::Import" );
 
     uno::Reference<uno::XComponentContext> xContext = comphelper::getProcessComponentContext();
 
@@ -459,7 +458,7 @@ sal_Bool ScXMLImportWrapper::Import(sal_Bool bStylesOnly, ErrCode& nError)
         uno::Any* pMetaArgs = aMetaArgs.getArray();
         pMetaArgs[0] <<= xInfoSet;
 
-        RTL_LOGFILE_CONTEXT_TRACE( aLog, "meta import start" );
+        SAL_INFO( "sc.xml", "meta import start" );
 
         nMetaRetval = ImportFromComponent(
                                 xContext, xModel, xXMLParser, aParserInput,
@@ -467,7 +466,7 @@ sal_Bool ScXMLImportWrapper::Import(sal_Bool bStylesOnly, ErrCode& nError)
                                 : OUString("com.sun.star.comp.Calc.XMLMetaImporter"),
                                 "meta.xml", "Meta.xml", aMetaArgs, false);
 
-        RTL_LOGFILE_CONTEXT_TRACE( aLog, "meta import end" );
+        SAL_INFO( "sc.xml", "meta import end" );
 
         SvXMLGraphicHelper* pGraphicHelper = NULL;
         uno::Reference< document::XGraphicObjectResolver > xGrfContainer;
@@ -503,7 +502,7 @@ sal_Bool ScXMLImportWrapper::Import(sal_Bool bStylesOnly, ErrCode& nError)
             uno::Any* pSettingsArgs = aSettingsArgs.getArray();
             pSettingsArgs[0] <<= xInfoSet;
 
-            RTL_LOGFILE_CONTEXT_TRACE( aLog, "settings import start" );
+            SAL_INFO( "sc.xml", "settings import start" );
 
             nSettingsRetval = ImportFromComponent(
                                 xContext, xModel, xXMLParser, aParserInput,
@@ -511,12 +510,12 @@ sal_Bool ScXMLImportWrapper::Import(sal_Bool bStylesOnly, ErrCode& nError)
                                        : OUString("com.sun.star.comp.Calc.XMLSettingsImporter"),
                                 "settings.xml", sEmpty, aSettingsArgs, false);
 
-            RTL_LOGFILE_CONTEXT_TRACE( aLog, "settings import end" );
+            SAL_INFO( "sc.xml", "settings import end" );
         }
 
         sal_uInt32 nStylesRetval(0);
         {
-            RTL_LOGFILE_CONTEXT_TRACE( aLog, "styles import start" );
+            SAL_INFO( "sc.xml", "styles import start" );
 
             nStylesRetval = ImportFromComponent(xContext, xModel, xXMLParser, aParserInput,
                 bOasis ? OUString("com.sun.star.comp.Calc.XMLOasisStylesImporter")
@@ -524,7 +523,7 @@ sal_Bool ScXMLImportWrapper::Import(sal_Bool bStylesOnly, ErrCode& nError)
                 OUString("styles.xml"),
                 sEmpty, aStylesArgs, sal_True);
 
-            RTL_LOGFILE_CONTEXT_TRACE( aLog, "styles import end" );
+            SAL_INFO( "sc.xml", "styles import end" );
         }
 
         sal_uInt32 nDocRetval(0);
@@ -537,7 +536,7 @@ sal_Bool ScXMLImportWrapper::Import(sal_Bool bStylesOnly, ErrCode& nError)
             pDocArgs[2] <<= xStatusIndicator;
             pDocArgs[3] <<= xObjectResolver;
 
-            RTL_LOGFILE_CONTEXT_TRACE( aLog, "content import start" );
+            SAL_INFO( "sc.xml", "content import start" );
 
             nDocRetval = ImportFromComponent(xContext, xModel, xXMLParser, aParserInput,
                 bOasis ? OUString("com.sun.star.comp.Calc.XMLOasisContentImporter")
@@ -546,7 +545,7 @@ sal_Bool ScXMLImportWrapper::Import(sal_Bool bStylesOnly, ErrCode& nError)
                 OUString("Content.xml"), aDocArgs,
                 sal_True);
 
-            RTL_LOGFILE_CONTEXT_TRACE( aLog, "content import end" );
+            SAL_INFO( "sc.xml", "content import end" );
         }
         if( pGraphicHelper )
             SvXMLGraphicHelper::Destroy( pGraphicHelper );
@@ -766,7 +765,7 @@ sal_Bool ScXMLImportWrapper::ExportToComponent(const uno::Reference<uno::XCompon
 
 sal_Bool ScXMLImportWrapper::Export(sal_Bool bStylesOnly)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "sc", "sb99857", "ScXMLImportWrapper::Export" );
+    SAL_INFO ( "sc.xml", "ScXMLImportWrapper::Export" );
 
     uno::Reference<uno::XComponentContext> xContext(comphelper::getProcessComponentContext());
 
@@ -887,7 +886,7 @@ sal_Bool ScXMLImportWrapper::Export(sal_Bool bStylesOnly)
             pMetaArgs[1] <<= xWriter;
             pMetaArgs[2] <<= xStatusIndicator;
 
-            RTL_LOGFILE_CONTEXT_TRACE( aLog, "meta export start" );
+            SAL_INFO( "sc.xml", "meta export start" );
 
             bMetaRet = ExportToComponent(xContext, xModel, xWriter, aDescriptor,
                 OUString("meta.xml"),
@@ -896,7 +895,7 @@ sal_Bool ScXMLImportWrapper::Export(sal_Bool bStylesOnly)
                        : OUString("com.sun.star.comp.Calc.XMLMetaExporter"),
                 aMetaArgs, pSharedData);
 
-            RTL_LOGFILE_CONTEXT_TRACE( aLog, "meta export end" );
+            SAL_INFO( "sc.xml", "meta export end" );
         }
 
         uno::Reference< document::XEmbeddedObjectResolver > xObjectResolver;
@@ -928,7 +927,7 @@ sal_Bool ScXMLImportWrapper::Export(sal_Bool bStylesOnly)
             pStylesArgs[3] <<= xWriter;
             pStylesArgs[4] <<= xObjectResolver;
 
-            RTL_LOGFILE_CONTEXT_TRACE( aLog, "styles export start" );
+            SAL_INFO( "sc.xml", "styles export start" );
 
             bStylesRet = ExportToComponent(xContext, xModel, xWriter, aDescriptor,
                 OUString("styles.xml"),
@@ -937,7 +936,7 @@ sal_Bool ScXMLImportWrapper::Export(sal_Bool bStylesOnly)
                        : OUString("com.sun.star.comp.Calc.XMLStylesExporter"),
                 aStylesArgs, pSharedData);
 
-            RTL_LOGFILE_CONTEXT_TRACE( aLog, "styles export end" );
+            SAL_INFO( "sc.xml", "styles export end" );
         }
 
         // content export
@@ -952,7 +951,7 @@ sal_Bool ScXMLImportWrapper::Export(sal_Bool bStylesOnly)
             pDocArgs[3] <<= xWriter;
             pDocArgs[4] <<= xObjectResolver;
 
-            RTL_LOGFILE_CONTEXT_TRACE( aLog, "content export start" );
+            SAL_INFO( "sc.xml", "content export start" );
 
             bDocRet = ExportToComponent(xContext, xModel, xWriter, aDescriptor,
                 OUString("content.xml"),
@@ -961,7 +960,7 @@ sal_Bool ScXMLImportWrapper::Export(sal_Bool bStylesOnly)
                        : OUString("com.sun.star.comp.Calc.XMLContentExporter"),
                 aDocArgs, pSharedData);
 
-            RTL_LOGFILE_CONTEXT_TRACE( aLog, "content export end" );
+            SAL_INFO( "sc.xml", "content export end" );
         }
 
         if( pGraphicHelper )
@@ -980,7 +979,7 @@ sal_Bool ScXMLImportWrapper::Export(sal_Bool bStylesOnly)
             pSettingsArgs[1] <<= xWriter;
             pSettingsArgs[2] <<= xStatusIndicator;
 
-            RTL_LOGFILE_CONTEXT_TRACE( aLog, "settings export start" );
+            SAL_INFO( "sc.xml", "settings export start" );
 
             bSettingsRet = ExportToComponent(xContext, xModel, xWriter, aDescriptor,
                 OUString("settings.xml"),
@@ -989,7 +988,7 @@ sal_Bool ScXMLImportWrapper::Export(sal_Bool bStylesOnly)
                        : OUString("com.sun.star.comp.Calc.XMLSettingsExporter"),
                 aSettingsArgs, pSharedData);
 
-            RTL_LOGFILE_CONTEXT_TRACE( aLog, "settings export end" );
+            SAL_INFO( "sc.xml", "settings export end" );
         }
 
         if (pSharedData)

@@ -27,7 +27,6 @@
 #include "mtvcellfunc.hxx"
 
 #include "formula/token.hxx"
-#include <rtl/logfile.hxx>
 
 using namespace formula;
 
@@ -42,7 +41,7 @@ double const fHalfMachEps = 0.5 * ::std::numeric_limits<double>::epsilon();
     uses continued fraction with odd items */
 double ScInterpreter::GetGammaContFraction( double fA, double fX )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::GetGammaContFraction" );
+    SAL_INFO( "sc.tool", "ScInterpreter::GetGammaContFraction" );
 
     double const fBigInv = ::std::numeric_limits<double>::epsilon();
     double const fBig = 1.0/fBigInv;
@@ -99,7 +98,7 @@ double ScInterpreter::GetGammaContFraction( double fA, double fX )
     uses power series */
 double ScInterpreter::GetGammaSeries( double fA, double fX )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::GetGammaSeries" );
+    SAL_INFO( "sc.tool", "ScInterpreter::GetGammaSeries" );
     double fDenomfactor = fA;
     double fSummand = 1.0/fA;
     double fSum = fSummand;
@@ -123,7 +122,7 @@ double ScInterpreter::GetGammaSeries( double fA, double fX )
 /** You must ensure fA>0.0 && fX>0.0) */
 double ScInterpreter::GetLowRegIGamma( double fA, double fX )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::GetLowRegIGamma" );
+    SAL_INFO( "sc.tool", "ScInterpreter::GetLowRegIGamma" );
     double fLnFactor = fA * log(fX) - fX - GetLogGamma(fA);
     double fFactor = exp(fLnFactor);    // Do we need more accuracy than exp(ln()) has?
     if (fX>fA+1.0)  // includes fX>1.0; 1-GetUpRegIGamma, continued fraction
@@ -135,7 +134,7 @@ double ScInterpreter::GetLowRegIGamma( double fA, double fX )
 /** You must ensure fA>0.0 && fX>0.0) */
 double ScInterpreter::GetUpRegIGamma( double fA, double fX )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::GetUpRegIGamma" );
+    SAL_INFO( "sc.tool", "ScInterpreter::GetUpRegIGamma" );
 
     double fLnFactor= fA*log(fX)-fX-GetLogGamma(fA);
     double fFactor = exp(fLnFactor); //Do I need more accuracy than exp(ln()) has?;
@@ -150,7 +149,7 @@ double ScInterpreter::GetUpRegIGamma( double fA, double fX )
     You must ensure fAlpha>0.0 and fLambda>0.0 */
 double ScInterpreter::GetGammaDistPDF( double fX, double fAlpha, double fLambda )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::GetGammaDistPDF" );
+    SAL_INFO( "sc.tool", "ScInterpreter::GetGammaDistPDF" );
     if (fX < 0.0)
         return 0.0;     // see ODFF
     else if (fX == 0)
@@ -205,7 +204,7 @@ double ScInterpreter::GetGammaDistPDF( double fX, double fAlpha, double fLambda 
     You must ensure fAlpha>0.0 and fLambda>0.0 */
 double ScInterpreter::GetGammaDist( double fX, double fAlpha, double fLambda )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::GetGammaDist" );
+    SAL_INFO( "sc.tool", "ScInterpreter::GetGammaDist" );
     if (fX <= 0.0)
         return 0.0;
     else
@@ -386,7 +385,7 @@ void IterateMatrix(
 
 double ScInterpreter::IterateParameters( ScIterFunc eFunc, bool bTextAsZero )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::IterateParameters" );
+    SAL_INFO( "sc.tool", "ScInterpreter::IterateParameters" );
     short nParamCount = GetByte();
     double fRes = ( eFunc == ifPRODUCT ) ? 1.0 : 0.0;
     double fVal = 0.0;
@@ -729,7 +728,7 @@ double ScInterpreter::IterateParameters( ScIterFunc eFunc, bool bTextAsZero )
 
 void ScInterpreter::ScSumSQ()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScSumSQ" );
+    SAL_INFO( "sc.tool", "ScInterpreter::ScSumSQ" );
     PushDouble( IterateParameters( ifSUMSQ ) );
 }
 
@@ -867,14 +866,14 @@ void ScInterpreter::ScSum()
 
 void ScInterpreter::ScProduct()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScProduct" );
+    SAL_INFO( "sc.tool", "ScInterpreter::ScProduct" );
     PushDouble( IterateParameters( ifPRODUCT ) );
 }
 
 
 void ScInterpreter::ScAverage( bool bTextAsZero )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScAverage" );
+    SAL_INFO( "sc.tool", "ScInterpreter::ScAverage" );
     PushDouble( IterateParameters( ifAVERAGE, bTextAsZero ) );
 }
 
@@ -1032,7 +1031,7 @@ void ScInterpreter::ScCount()
 
 void ScInterpreter::ScCount2()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScCount2" );
+    SAL_INFO( "sc.tool", "ScInterpreter::ScCount2" );
     PushDouble( IterateParameters( ifCOUNT2 ) );
 }
 

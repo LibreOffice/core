@@ -112,7 +112,6 @@
 
 #include "editutil.hxx"
 #include <svx/svdfield.hxx>     //  SdrRegisterFieldClasses
-#include <rtl/logfile.hxx>
 
 #include "dwfunctr.hxx"
 #include "acredlin.hxx"
@@ -131,7 +130,7 @@ ScResId::ScResId( sal_uInt16 nId ) :
 
 void ScDLL::Init()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "sc", "nn93723", "ScDLL::Init" );
+    SAL_INFO ( "sc.app", "ScDLL::Init" );
 
     ScModule **ppShlPtr = (ScModule**) GetAppData(SHL_CALC);
     if ( *ppShlPtr )
