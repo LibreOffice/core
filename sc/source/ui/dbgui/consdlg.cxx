@@ -122,7 +122,6 @@ ScConsolidateDlg::ScConsolidateDlg( SfxBindings* pB, SfxChildWindow* pCW, Window
 }
 
 
-//----------------------------------------------------------------------------
 
 ScConsolidateDlg::~ScConsolidateDlg()
 {
@@ -131,7 +130,6 @@ ScConsolidateDlg::~ScConsolidateDlg()
 }
 
 
-//----------------------------------------------------------------------------
 
 void ScConsolidateDlg::Init()
 {
@@ -194,7 +192,6 @@ void ScConsolidateDlg::Init()
     else
         aEdDestArea.SetText( EMPTY_STRING );
 
-    //----------------------------------------------------------
 
     /*
      * Aus den RangeNames und Datenbankbereichen werden sich
@@ -239,7 +236,6 @@ void ScConsolidateDlg::Init()
 }
 
 
-//----------------------------------------------------------------------------
 void ScConsolidateDlg::FillAreaLists()
 {
     aLbDataArea.Clear();
@@ -262,7 +258,6 @@ void ScConsolidateDlg::FillAreaLists()
 }
 
 
-//----------------------------------------------------------------------------
 // Uebergabe eines mit der Maus selektierten Tabellenbereiches, der dann als
 //  neue Selektion im Referenz-Fenster angezeigt wird.
 
@@ -293,7 +288,6 @@ void ScConsolidateDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
 }
 
 
-//----------------------------------------------------------------------------
 
 sal_Bool ScConsolidateDlg::Close()
 {
@@ -301,7 +295,6 @@ sal_Bool ScConsolidateDlg::Close()
 }
 
 
-//----------------------------------------------------------------------------
 
 void ScConsolidateDlg::SetActive()
 {
@@ -322,7 +315,6 @@ void ScConsolidateDlg::SetActive()
 }
 
 
-//----------------------------------------------------------------------------
 
 void ScConsolidateDlg::Deactivate()
 {
@@ -330,7 +322,6 @@ void ScConsolidateDlg::Deactivate()
 }
 
 
-//----------------------------------------------------------------------------
 
 sal_Bool ScConsolidateDlg::VerifyEdit( formula::RefEdit* pEd )
 {
@@ -364,7 +355,6 @@ sal_Bool ScConsolidateDlg::VerifyEdit( formula::RefEdit* pEd )
 }
 
 
-//----------------------------------------------------------------------------
 // Handler:
 // ========
 
@@ -387,7 +377,6 @@ IMPL_LINK( ScConsolidateDlg, GetFocusHdl, Control*, pCtr )
 }
 
 
-//----------------------------------------------------------------------------
 
 IMPL_LINK_NOARG(ScConsolidateDlg, OkHdl)
 {
@@ -449,7 +438,6 @@ IMPL_LINK_NOARG(ScConsolidateDlg, OkHdl)
 }
 
 
-//----------------------------------------------------------------------------
 
 IMPL_LINK( ScConsolidateDlg, ClickHdl, PushButton*, pBtn )
 {
@@ -517,7 +505,6 @@ IMPL_LINK( ScConsolidateDlg, ClickHdl, PushButton*, pBtn )
 }
 
 
-//----------------------------------------------------------------------------
 
 IMPL_LINK( ScConsolidateDlg, SelectHdl, ListBox*, pLb )
 {
@@ -562,7 +549,6 @@ IMPL_LINK( ScConsolidateDlg, SelectHdl, ListBox*, pLb )
 }
 
 
-//----------------------------------------------------------------------------
 
 IMPL_LINK( ScConsolidateDlg, ModifyHdl, formula::RefEdit*, pEd )
 {
@@ -584,7 +570,6 @@ IMPL_LINK( ScConsolidateDlg, ModifyHdl, formula::RefEdit*, pEd )
 }
 
 
-//----------------------------------------------------------------------------
 // Verallgemeinern!!! :
 // Resource der ListBox und diese beiden Umrechnungsmethoden gibt es
 // auch noch in tpsubt bzw. ueberall, wo StarCalc-Funktionen
@@ -611,7 +596,6 @@ ScSubTotalFunc ScConsolidateDlg::LbPosToFunc( sal_uInt16 nPos )
 }
 
 
-//----------------------------------------------------------------------------
 
 sal_uInt16 ScConsolidateDlg::FuncToLbPos( ScSubTotalFunc eFunc )
 {

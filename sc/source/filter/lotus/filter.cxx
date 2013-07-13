@@ -20,7 +20,6 @@
 //  Das geht:   Versionserkennung WKS, WK1 und WK3
 //              ...Rest steht in op.cpp
 
-//------------------------------------------------------------------------
 
 #include <tools/solar.h>
 #include <string.h>

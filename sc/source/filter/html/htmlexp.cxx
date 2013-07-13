@@ -352,7 +352,6 @@ void ScHTMLExport::WriteHeader()
             sIndent, eDestEnc, &aNonConvertibleChars );
         OUT_LF();
 
-        //----------------------------------------------------------
         if (!xDocProps->getPrintedBy().isEmpty())
         {
             OUT_COMMENT( GLOBSTR( STR_DOC_INFO ) );
@@ -362,7 +361,6 @@ void ScHTMLExport::WriteHeader()
                 xDocProps->getPrintDate(), *ScGlobal::pLocaleData );
             OUT_COMMENT( aStrOut );
         }
-        //----------------------------------------------------------
     }
     OUT_LF();
 

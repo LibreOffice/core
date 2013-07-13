@@ -56,9 +56,7 @@ using namespace formula;
 
 #define SCdEpsilon                1.0E-7
 
-//-----------------------------------------------------------------------------
 // Datum und Zeit
-//-----------------------------------------------------------------------------
 
 double ScInterpreter::GetDateSerial( sal_Int16 nYear, sal_Int16 nMonth, sal_Int16 nDay,
         bool bStrict, bool bCheckGregorian )
@@ -97,9 +95,7 @@ double ScInterpreter::GetDateSerial( sal_Int16 nYear, sal_Int16 nMonth, sal_Int1
     }
 }
 
-//-----------------------------------------------------------------------------
 // Funktionen
-//-----------------------------------------------------------------------------
 
 void ScInterpreter::ScGetActDate()
 {
@@ -967,7 +963,6 @@ void ScInterpreter::ScISPMT()
 }
 
 
-//----------------------- Finanzfunktionen ------------------------------------
 
 double ScInterpreter::ScGetBw(double fZins, double fZzr, double fRmz,
                               double fZw, double fF)

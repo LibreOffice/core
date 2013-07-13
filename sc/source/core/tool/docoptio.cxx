@@ -35,17 +35,14 @@
 using namespace utl;
 using namespace com::sun::star::uno;
 
-//------------------------------------------------------------------------
 
 TYPEINIT1(ScTpCalcItem, SfxPoolItem);
 
-//------------------------------------------------------------------------
 
 using sc::HMMToTwips;
 using sc::TwipsToHMM;
 using sc::TwipsToEvenHMM;
 
-//------------------------------------------------------------------------
 
 static sal_uInt16 lcl_GetDefaultTabDist()
 {
@@ -64,7 +61,6 @@ ScDocOptions::ScDocOptions()
     ResetDocOptions();
 }
 
-//------------------------------------------------------------------------
 
 ScDocOptions::ScDocOptions( const ScDocOptions& rCpy )
         :   fIterEps( rCpy.fIterEps ),
@@ -85,13 +81,11 @@ ScDocOptions::ScDocOptions( const ScDocOptions& rCpy )
 {
 }
 
-//------------------------------------------------------------------------
 
 ScDocOptions::~ScDocOptions()
 {
 }
 
-//------------------------------------------------------------------------
 
 void ScDocOptions::ResetDocOptions()
 {
@@ -116,7 +110,6 @@ void ScDocOptions::ResetDocOptions()
 //      ScTpCalcItem - Daten fuer die CalcOptions-TabPage
 //========================================================================
 
-//------------------------------------------------------------------------
 
 ScTpCalcItem::ScTpCalcItem( sal_uInt16 nWhichP, const ScDocOptions& rOpt )
     :   SfxPoolItem ( nWhichP ),
@@ -124,7 +117,6 @@ ScTpCalcItem::ScTpCalcItem( sal_uInt16 nWhichP, const ScDocOptions& rOpt )
 {
 }
 
-//------------------------------------------------------------------------
 
 ScTpCalcItem::ScTpCalcItem( const ScTpCalcItem& rItem )
     :   SfxPoolItem ( rItem ),
@@ -132,20 +124,17 @@ ScTpCalcItem::ScTpCalcItem( const ScTpCalcItem& rItem )
 {
 }
 
-//------------------------------------------------------------------------
 
 ScTpCalcItem::~ScTpCalcItem()
 {
 }
 
-//------------------------------------------------------------------------
 
 OUString ScTpCalcItem::GetValueText() const
 {
     return OUString("ScTpCalcItem");
 }
 
-//------------------------------------------------------------------------
 
 int ScTpCalcItem::operator==( const SfxPoolItem& rItem ) const
 {
@@ -156,7 +145,6 @@ int ScTpCalcItem::operator==( const SfxPoolItem& rItem ) const
     return ( theOptions == rPItem.theOptions );
 }
 
-//------------------------------------------------------------------------
 
 SfxPoolItem* ScTpCalcItem::Clone( SfxItemPool * ) const
 {

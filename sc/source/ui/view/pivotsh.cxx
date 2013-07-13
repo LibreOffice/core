@@ -38,12 +38,10 @@
 #include "dbdocfun.hxx"
 #include "uiitems.hxx"
 #include "scabstdlg.hxx"
-//------------------------------------------------------------------------
 
 #define ScPivotShell
 #include "scslots.hxx"
 
-//------------------------------------------------------------------------
 
 TYPEINIT1( ScPivotShell, SfxShell );
 
@@ -53,7 +51,6 @@ SFX_IMPL_INTERFACE(ScPivotShell, SfxShell, ScResId(SCSTR_PIVOTSHELL))
 }
 
 
-//------------------------------------------------------------------------
 
 ScPivotShell::ScPivotShell( ScTabViewShell* pViewSh ) :
     SfxShell(pViewSh),
@@ -72,12 +69,10 @@ ScPivotShell::ScPivotShell( ScTabViewShell* pViewSh ) :
     SfxShell::SetContextName(sfx2::sidebar::EnumContext::GetContextName(sfx2::sidebar::EnumContext::Context_Pivot));
 }
 
-//------------------------------------------------------------------------
 ScPivotShell::~ScPivotShell()
 {
 }
 
-//------------------------------------------------------------------------
 void ScPivotShell::Execute( SfxRequest& rReq )
 {
     switch ( rReq.GetSlot() )
@@ -140,7 +135,6 @@ void ScPivotShell::Execute( SfxRequest& rReq )
     }
 }
 
-//------------------------------------------------------------------------
 void ScPivotShell::GetState( SfxItemSet& rSet )
 {
     ScDocShell* pDocSh = pViewShell->GetViewData()->GetDocShell();
@@ -176,7 +170,6 @@ void ScPivotShell::GetState( SfxItemSet& rSet )
 }
 
 
-//------------------------------------------------------------------------
 
 ScDPObject* ScPivotShell::GetCurrDPObject()
 {

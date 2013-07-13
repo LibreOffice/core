@@ -22,7 +22,6 @@
 
 
 
-//------------------------------------------------------------------
 
 #include "strindlg.hxx"
 #include "scresid.hxx"
@@ -53,7 +52,6 @@ ScStringInputDlg::ScStringInputDlg( Window*         pParent,
     FreeResource();
 }
 
-//------------------------------------------------------------------------
 
 void ScStringInputDlg::GetInputString( OUString& rString ) const
 {

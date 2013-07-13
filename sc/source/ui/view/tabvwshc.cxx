@@ -63,8 +63,6 @@
 
 #include "RandomNumberGeneratorDialog.hxx"
 
-//------------------------------------------------------------------
-
 void ScTabViewShell::SetCurRefDlgId( sal_uInt16 nNew )
 {
     //  CurRefDlgId is stored in ScModule to find if a ref dialog is open,

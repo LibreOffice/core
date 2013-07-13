@@ -40,7 +40,6 @@
 //============================================================================
 //  class ScHighlightChgDlg
 
-//----------------------------------------------------------------------------
 ScHighlightChgDlg::ScHighlightChgDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
                       ScViewData*       ptrViewData)
 
@@ -144,7 +143,6 @@ void ScHighlightChgDlg::Init()
     HighLightHandle(&aHighlightBox);
 }
 
-//----------------------------------------------------------------------------
 // Uebergabe eines mit der Maus selektierten Tabellenbereiches, der dann als
 // neue Selektion im Referenz-Edit angezeigt wird.
 
@@ -161,7 +159,6 @@ void ScHighlightChgDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
     }
 }
 
-//----------------------------------------------------------------------------
 sal_Bool ScHighlightChgDlg::Close()
 {
     return DoClose( ScHighlightChgDlgWrapper::GetChildWindowId() );

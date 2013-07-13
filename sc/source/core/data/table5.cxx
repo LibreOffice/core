@@ -140,7 +140,6 @@ void ScTable::UpdatePageBreaks( const ScRange* pUserArea )
             bSkipRowBreaks = true;
     }
 
-    //--------------------------------------------------------------------------
 
     long nPageSizeX = aPageSizeTwips.Width();
     long nPageSizeY = aPageSizeTwips.Height();

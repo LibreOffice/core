@@ -39,7 +39,6 @@ TYPEINIT2(ScDdeLink,::sfx2::SvBaseLink,SfxBroadcaster);
 
 bool ScDdeLink::bIsInUpdate = false;
 
-//------------------------------------------------------------------------
 
 ScDdeLink::ScDdeLink( ScDocument* pD, const String& rA, const String& rT, const String& rI,
                         sal_uInt8 nM ) :

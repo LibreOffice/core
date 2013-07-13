@@ -79,7 +79,6 @@
 #define GET_USHORT(set,which) ((const SfxUInt16Item&)(set)->Get((which))).GetValue()
 #define GET_SHOW(set,which)   ( VOBJ_MODE_SHOW == ScVObjMode( ((const ScViewObjectModeItem&)(set)->Get((which))).GetValue()) )
 
-//------------------------------------------------------------------------
 
 ScPageRowEntry::ScPageRowEntry(const ScPageRowEntry& r)
 {
@@ -161,7 +160,6 @@ size_t ScPageRowEntry::CountVisible() const
         return nPagesX;
 }
 
-//------------------------------------------------------------------------
 
 static long lcl_LineTotal(const ::editeng::SvxBorderLine* pLine)
 {
@@ -846,9 +844,7 @@ void ScPrintFunc::InitParam( const ScPrintOptions* pOptions )
     }
     lcl_FillHFParam( aFtr, pFooterSet );
 
-    //------------------------------------------------------
     // Compile Table-/Area-Params from single Items
-    //------------------------------------------------------
     // TabPage "Table"
 
     const SfxUInt16Item*     pScaleItem          = NULL;
@@ -924,9 +920,7 @@ void ScPrintFunc::InitParam( const ScPrintOptions* pOptions )
     // If pPageData is set, only the breaks are interesting for the
     // pagebreak preview, empty pages are not addressed separately.
 
-    //------------------------------------------------------
     // TabPage "Parts":
-    //------------------------------------------------------
 
     //! walk throuch all PrintAreas of the table !!!
     const ScRange*  pPrintArea = pDoc->GetPrintRange( nPrintTab, 0 );
@@ -2556,7 +2550,6 @@ void ScPrintFunc::InitModes()               // set MapModes from  nZoom etc.
     aTwipMode = MapMode( MAP_TWIP, aTwipsOfs, aHorFract, aZoomFract );
 }
 
-//--------------------------------------------------------------------
 
 void ScPrintFunc::ApplyPrintSettings()
 {
@@ -2596,7 +2589,6 @@ void ScPrintFunc::ApplyPrintSettings()
     }
 }
 
-//--------------------------------------------------------------------
 //  rPageRanges   = range for all tables
 //  nStartPage    = rPageRanges starts at nStartPage
 //  nDisplayStart = continious number for displaying the page number
@@ -2612,7 +2604,6 @@ long ScPrintFunc::DoPrint( const MultiSelection& rPageRanges,
     if ( pPrinter && bDoPrint )
         ApplyPrintSettings();
 
-    //--------------------------------------------------------------------
 
     InitModes();
     if ( pLocationData )
@@ -2623,7 +2614,6 @@ long ScPrintFunc::DoPrint( const MultiSelection& rPageRanges,
 
     MakeTableString();
 
-    //--------------------------------------------------------------------
 
     long nPageNo = 0;
     long nPrinted = 0;

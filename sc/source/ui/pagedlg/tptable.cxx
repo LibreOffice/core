@@ -22,7 +22,6 @@
 
 
 
-//------------------------------------------------------------------
 
 #include "scitems.hxx"
 
@@ -93,7 +92,6 @@ static sal_Bool lcl_PutBoolItem( sal_uInt16            nWhich,
                       sal_Bool              bIsChecked,
                       sal_Bool              bSavedValue );
 
-//------------------------------------------------------------------------
 
 #define PAGENO_HDL          LINK(this,ScTablePage,PageNoHdl)
 #define PAGEDIR_HDL         LINK(this,ScTablePage,PageDirHdl)
@@ -163,7 +161,6 @@ ScTablePage::~ScTablePage()
 {
 }
 
-//------------------------------------------------------------------------
 
 sal_uInt16* ScTablePage::GetRanges()
 {
@@ -384,7 +381,6 @@ sal_Bool ScTablePage::FillItemSet( SfxItemSet& rCoreSet )
     return bDataChanged;
 }
 
-//------------------------------------------------------------------------
 
 int ScTablePage::DeactivatePage( SfxItemSet* pSetP )
 {
@@ -394,7 +390,6 @@ int ScTablePage::DeactivatePage( SfxItemSet* pSetP )
     return LEAVE_PAGE;
 }
 
-//------------------------------------------------------------------------
 
 void ScTablePage::DataChanged( const DataChangedEvent& rDCEvt )
 {
@@ -403,9 +398,7 @@ void ScTablePage::DataChanged( const DataChangedEvent& rDCEvt )
     SfxTabPage::DataChanged( rDCEvt );
 }
 
-//------------------------------------------------------------------------
 // Handler:
-//------------------------------------------------------------------------
 
 IMPL_LINK_NOARG(ScTablePage, PageDirHdl)
 {
@@ -413,7 +406,6 @@ IMPL_LINK_NOARG(ScTablePage, PageDirHdl)
     return 0;
 }
 
-//------------------------------------------------------------------------
 
 IMPL_LINK( ScTablePage, PageNoHdl, CheckBox*, pBtn )
 {
@@ -429,7 +421,6 @@ IMPL_LINK( ScTablePage, PageNoHdl, CheckBox*, pBtn )
     return 0;
 }
 
-//------------------------------------------------------------------------
 
 IMPL_LINK_NOARG(ScTablePage, ScaleHdl)
 {
@@ -466,7 +457,6 @@ static sal_Bool lcl_PutBoolItem( sal_uInt16            nWhich,
     return bDataChanged;
 }
 
-//------------------------------------------------------------------------
 
 static sal_Bool lcl_PutVObjModeItem( sal_uInt16            nWhich,
                          SfxItemSet&        rCoreSet,
@@ -487,7 +477,6 @@ static sal_Bool lcl_PutVObjModeItem( sal_uInt16            nWhich,
     return bDataChanged;
 }
 
-//------------------------------------------------------------------------
 
 static sal_Bool lcl_PutScaleItem( sal_uInt16               nWhich,
                       SfxItemSet&           rCoreSet,

@@ -675,7 +675,6 @@ void ScDocument::FillInfo(
 
     if(pCondFormList)
         pCondFormList->endRendering();
-    //-------------------------------------------------------------------------
     //  bedingte Formatierung auswerten
 
     if (bAnyCondition)
@@ -723,7 +722,6 @@ void ScDocument::FillInfo(
     }
 
     //  bedingte Formatierung Ende
-    //-------------------------------------------------------------------------
 
                 //
                 //      Daten von zusammengefassten Zellen anpassen

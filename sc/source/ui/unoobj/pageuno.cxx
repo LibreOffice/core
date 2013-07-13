@@ -23,7 +23,6 @@
 
 using namespace ::com::sun::star;
 
-//------------------------------------------------------------------------
 
 ScPageObj::ScPageObj( SdrPage* pPage ) :
     SvxFmDrawPage( pPage )

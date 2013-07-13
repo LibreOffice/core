@@ -63,7 +63,6 @@ static const xub_StrLen SCNAV_COLLETTERS = ::ScColToAlpha(SCNAV_MAXCOL).Len();  
 
 #define SCNAV_MAXROW        (MAXROWCOUNT)
 
-//------------------------------------------------------------------------
 
 void ScNavigatorDlg::ReleaseFocus()
 {
@@ -90,13 +89,11 @@ ColumnEdit::ColumnEdit( ScNavigatorDlg* pParent, const ResId& rResId )
     SetMaxTextLen( SCNAV_COLDIGITS );   // 1...256...18278 or A...IV...ZZZ
 }
 
-//------------------------------------------------------------------------
 
 ColumnEdit::~ColumnEdit()
 {
 }
 
-//------------------------------------------------------------------------
 
 long ColumnEdit::Notify( NotifyEvent& rNEvt )
 {
@@ -128,7 +125,6 @@ long ColumnEdit::Notify( NotifyEvent& rNEvt )
     return nHandled;
 }
 
-//------------------------------------------------------------------------
 
 void ColumnEdit::LoseFocus()
 {
@@ -136,7 +132,6 @@ void ColumnEdit::LoseFocus()
 }
 
 
-//------------------------------------------------------------------------
 
 void ColumnEdit::Up()
 {
@@ -148,7 +143,6 @@ void ColumnEdit::Up()
         nCol--;
 }
 
-//------------------------------------------------------------------------
 
 void ColumnEdit::Down()
 {
@@ -156,7 +150,6 @@ void ColumnEdit::Down()
         SetCol( nCol-1 );
 }
 
-//------------------------------------------------------------------------
 
 void ColumnEdit::First()
 {
@@ -164,7 +157,6 @@ void ColumnEdit::First()
     SetText(OUString('A'));
 }
 
-//------------------------------------------------------------------------
 
 void ColumnEdit::Last()
 {
@@ -174,7 +166,6 @@ void ColumnEdit::Last()
 }
 
 
-//------------------------------------------------------------------------
 
 void ColumnEdit::EvalText()
 {
@@ -196,7 +187,6 @@ void ColumnEdit::EvalText()
     nKeyGroup = KEYGROUP_ALPHA;
 }
 
-//------------------------------------------------------------------------
 
 void ColumnEdit::ExecuteCol()
 {
@@ -208,7 +198,6 @@ void ColumnEdit::ExecuteCol()
         rDlg.SetCurrentCell( nCol-1, nRow-1 );
 }
 
-//------------------------------------------------------------------------
 
 void ColumnEdit::SetCol( SCCOL nColNo )
 {
@@ -227,7 +216,6 @@ void ColumnEdit::SetCol( SCCOL nColNo )
     }
 }
 
-//------------------------------------------------------------------------
 
 SCCOL ColumnEdit::AlphaToNum( String& rStr )
 {
@@ -252,7 +240,6 @@ SCCOL ColumnEdit::AlphaToNum( String& rStr )
     return nColumn;
 }
 
-//------------------------------------------------------------------------
 
 SCCOL ColumnEdit::NumStrToAlpha( String& rStr )
 {
@@ -266,7 +253,6 @@ SCCOL ColumnEdit::NumStrToAlpha( String& rStr )
     return nColumn;
 }
 
-//------------------------------------------------------------------------
 
 SCCOL ColumnEdit::NumToAlpha( SCCOL nColNo, String& rStr )
 {
@@ -292,13 +278,11 @@ RowEdit::RowEdit( ScNavigatorDlg* pParent, const ResId& rResId )
     SetLast( SCNAV_MAXROW);
 }
 
-//------------------------------------------------------------------------
 
 RowEdit::~RowEdit()
 {
 }
 
-//------------------------------------------------------------------------
 
 long RowEdit::Notify( NotifyEvent& rNEvt )
 {
@@ -319,13 +303,11 @@ long RowEdit::Notify( NotifyEvent& rNEvt )
     return nHandled;
 }
 
-//------------------------------------------------------------------------
 
 void RowEdit::LoseFocus()
 {
 }
 
-//------------------------------------------------------------------------
 
 void RowEdit::ExecuteRow()
 {
@@ -346,13 +328,11 @@ ScDocListBox::ScDocListBox( ScNavigatorDlg* pParent, const ResId& rResId )
 {
 }
 
-//------------------------------------------------------------------------
 
 ScDocListBox::~ScDocListBox()
 {
 }
 
-//------------------------------------------------------------------------
 
 void ScDocListBox::Select()
 {
@@ -377,13 +357,11 @@ CommandToolBox::CommandToolBox( ScNavigatorDlg* pParent, const ResId& rResId )
     SetItemBits( IID_DROPMODE, GetItemBits( IID_DROPMODE ) | TIB_DROPDOWNONLY );
 }
 
-//------------------------------------------------------------------------
 
 CommandToolBox::~CommandToolBox()
 {
 }
 
-//------------------------------------------------------------------------
 
 void CommandToolBox::Select( sal_uInt16 nSelId )
 {
@@ -435,13 +413,11 @@ void CommandToolBox::Select()
     Select( GetCurItemId() );
 }
 
-//------------------------------------------------------------------------
 
 void CommandToolBox::Click()
 {
 }
 
-//------------------------------------------------------------------------
 
 IMPL_LINK_NOARG(CommandToolBox, ToolBoxDropdownClickHdl)
 {
@@ -469,7 +445,6 @@ IMPL_LINK_NOARG(CommandToolBox, ToolBoxDropdownClickHdl)
     return 1;
 }
 
-//------------------------------------------------------------------------
 
 void CommandToolBox::UpdateButtons()
 {
@@ -685,12 +660,10 @@ ScNavigatorDlg::ScNavigatorDlg( SfxBindings* pB, SfxChildWindowContext* pCW, Win
     ppBoundItems = new ScNavigatorControllerItem* [CTRL_ITEMS];
 
     rBindings.ENTERREGISTRATIONS();
-    //-----------------------------
     REGISTER_SLOT( 0, SID_CURRENTCELL       );
     REGISTER_SLOT( 1, SID_CURRENTTAB        );
     REGISTER_SLOT( 2, SID_CURRENTDOC        );
     REGISTER_SLOT( 3, SID_SELECT_SCENARIO   );
-    //-----------------------------
     rBindings.LEAVEREGISTRATIONS();
 
     StartListening( *(SFX_APP()) );
@@ -743,7 +716,6 @@ ScNavigatorDlg::ScNavigatorDlg( SfxBindings* pB, SfxChildWindowContext* pCW, Win
     }
 }
 
-//------------------------------------------------------------------------
 
 ScNavigatorDlg::~ScNavigatorDlg()
 {
@@ -760,7 +732,6 @@ ScNavigatorDlg::~ScNavigatorDlg()
     EndListening( rBindings );
 }
 
-//------------------------------------------------------------------------
 
 void ScNavigatorDlg::Resizing( Size& rNewSize )  // Size = Outputsize?
 {
@@ -816,14 +787,12 @@ void ScNavigatorDlg::DataChanged( const DataChangedEvent& rDCEvt )
     Window::DataChanged( rDCEvt );
 }
 
-//------------------------------------------------------------------------
 
 void ScNavigatorDlg::Resize()
 {
     DoResize();
 }
 
-//------------------------------------------------------------------------
 
 void ScNavigatorDlg::DoResize()
 {
@@ -882,7 +851,6 @@ void ScNavigatorDlg::DoResize()
     }
 }
 
-//------------------------------------------------------------------------
 
 void ScNavigatorDlg::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
@@ -951,7 +919,6 @@ void ScNavigatorDlg::Notify( SfxBroadcaster&, const SfxHint& rHint )
     }
 }
 
-//------------------------------------------------------------------------
 
 IMPL_LINK( ScNavigatorDlg, TimeHdl, Timer*, pTimer )
 {
@@ -962,7 +929,6 @@ IMPL_LINK( ScNavigatorDlg, TimeHdl, Timer*, pTimer )
     return 0;
 }
 
-//------------------------------------------------------------------------
 
 void ScNavigatorDlg::SetDropMode(sal_uInt16 nNew)
 {
@@ -973,7 +939,6 @@ void ScNavigatorDlg::SetDropMode(sal_uInt16 nNew)
     rCfg.SetDragMode(nDropMode);
 }
 
-//------------------------------------------------------------------------
 
 void ScNavigatorDlg::CursorPosChanged()
 {
@@ -983,7 +948,6 @@ void ScNavigatorDlg::CursorPosChanged()
 //  if ( GetAreaAtCursor( aStrAreaName ) )
 }
 
-//------------------------------------------------------------------------
 
 void ScNavigatorDlg::SetCurrentCell( SCCOL nColNo, SCROW nRowNo )
 {
@@ -1020,7 +984,6 @@ void ScNavigatorDlg::SetCurrentCellStr( const String rName )
                               &aNameItem, 0L );
 }
 
-//------------------------------------------------------------------------
 
 void ScNavigatorDlg::SetCurrentTable( SCTAB nTabNo )
 {
@@ -1053,7 +1016,6 @@ void ScNavigatorDlg::SetCurrentTableStr( const OUString& rName )
     }
 }
 
-//------------------------------------------------------------------------
 
 void ScNavigatorDlg::SetCurrentObject( const String rName )
 {
@@ -1063,7 +1025,6 @@ void ScNavigatorDlg::SetCurrentObject( const String rName )
                               &aNameItem, 0L );
 }
 
-//------------------------------------------------------------------------
 
 void ScNavigatorDlg::SetCurrentDoc( const String& rDocName )        // aktivieren
 {
@@ -1073,14 +1034,12 @@ void ScNavigatorDlg::SetCurrentDoc( const String& rDocName )        // aktiviere
                               &aDocItem, 0L );
 }
 
-//------------------------------------------------------------------------
 
 ScTabViewShell* ScNavigatorDlg::GetTabViewShell() const
 {
     return PTR_CAST( ScTabViewShell, SfxViewShell::Current() );
 }
 
-//------------------------------------------------------------------------
 
 ScNavigatorSettings* ScNavigatorDlg::GetNavigatorSettings()
 {
@@ -1093,7 +1052,6 @@ ScNavigatorSettings* ScNavigatorDlg::GetNavigatorSettings()
     return pViewSh ? pViewSh->GetNavigatorSettings() : NULL;
 }
 
-//------------------------------------------------------------------------
 
 sal_Bool ScNavigatorDlg::GetViewData()
 {
@@ -1103,7 +1061,6 @@ sal_Bool ScNavigatorDlg::GetViewData()
     return ( pViewData != NULL );
 }
 
-//------------------------------------------------------------------------
 
 void ScNavigatorDlg::UpdateColumn( const SCCOL* pCol )
 {
@@ -1116,7 +1073,6 @@ void ScNavigatorDlg::UpdateColumn( const SCCOL* pCol )
     CheckDataArea();
 }
 
-//------------------------------------------------------------------------
 
 void ScNavigatorDlg::UpdateRow( const SCROW* pRow )
 {
@@ -1129,7 +1085,6 @@ void ScNavigatorDlg::UpdateRow( const SCROW* pRow )
     CheckDataArea();
 }
 
-//------------------------------------------------------------------------
 
 void ScNavigatorDlg::UpdateTable( const SCTAB* pTab )
 {
@@ -1141,7 +1096,6 @@ void ScNavigatorDlg::UpdateTable( const SCTAB* pTab )
     CheckDataArea();
 }
 
-//------------------------------------------------------------------------
 
 void ScNavigatorDlg::UpdateAll()
 {
@@ -1164,7 +1118,6 @@ void ScNavigatorDlg::UpdateAll()
     aContentTimer.Stop();       // dann nicht nochmal
 }
 
-//------------------------------------------------------------------------
 
 void ScNavigatorDlg::SetListMode( NavListMode eMode, sal_Bool bSetSize )
 {
@@ -1206,7 +1159,6 @@ void ScNavigatorDlg::SetListMode( NavListMode eMode, sal_Bool bSetSize )
         UnmarkDataArea();
 }
 
-//------------------------------------------------------------------------
 
 void ScNavigatorDlg::ShowList( sal_Bool bShow, sal_Bool bSetSize )
 {
@@ -1254,7 +1206,6 @@ void ScNavigatorDlg::ShowList( sal_Bool bShow, sal_Bool bSetSize )
     }
 }
 
-//------------------------------------------------------------------------
 
 void ScNavigatorDlg::ShowScenarios( sal_Bool bShow, sal_Bool bSetSize )
 {
@@ -1303,11 +1254,9 @@ void ScNavigatorDlg::ShowScenarios( sal_Bool bShow, sal_Bool bSetSize )
 }
 
 
-//------------------------------------------------------------------------
 //
 //      Dokumente fuer Dropdown-Listbox
 //
-//------------------------------------------------------------------------
 
 void ScNavigatorDlg::GetDocNames( const String* pManualSel )
 {
@@ -1356,7 +1305,6 @@ void ScNavigatorDlg::GetDocNames( const String* pManualSel )
     aLbDocuments.SelectEntry( aSelEntry );
 }
 
-//------------------------------------------------------------------------
 
 void ScNavigatorDlg::MarkDataArea()
 {
@@ -1378,7 +1326,6 @@ void ScNavigatorDlg::MarkDataArea()
     }
 }
 
-//------------------------------------------------------------------------
 
 void ScNavigatorDlg::UnmarkDataArea()
 {
@@ -1391,7 +1338,6 @@ void ScNavigatorDlg::UnmarkDataArea()
     }
 }
 
-//------------------------------------------------------------------------
 
 void ScNavigatorDlg::CheckDataArea()
 {
@@ -1409,7 +1355,6 @@ void ScNavigatorDlg::CheckDataArea()
     }
 }
 
-//------------------------------------------------------------------------
 
 void ScNavigatorDlg::StartOfDataArea()
 {
@@ -1429,7 +1374,6 @@ void ScNavigatorDlg::StartOfDataArea()
     }
 }
 
-//------------------------------------------------------------------------
 
 void ScNavigatorDlg::EndOfDataArea()
 {
@@ -1449,7 +1393,6 @@ void ScNavigatorDlg::EndOfDataArea()
     }
 }
 
-//------------------------------------------------------------------------
 
 SfxChildAlignment ScNavigatorDlg::CheckAlignment(
                             SfxChildAlignment eActAlign, SfxChildAlignment eAlign )

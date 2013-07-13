@@ -405,7 +405,6 @@ ScParameterClassification::GetExternalParameterType( const formula::FormulaToken
     return eRet;
 }
 
-//-----------------------------------------------------------------------------
 
 #if OSL_DEBUG_LEVEL > 1
 

@@ -185,12 +185,10 @@ SC_SIMPLE_SERVICE_INFO( ScDataPilotFieldGroupsObj, "ScDataPilotFieldGroupsObj", 
 SC_SIMPLE_SERVICE_INFO( ScDataPilotFieldGroupObj, "ScDataPilotFieldGroupObj", "com.sun.star.sheet.DataPilotFieldGroup" )
 SC_SIMPLE_SERVICE_INFO( ScDataPilotFieldGroupItemObj, "ScDataPilotFieldGroupItemObj", "com.sun.star.sheet.DataPilotFieldGroupItem" )
 
-//------------------------------------------------------------------------
 
 // name that is used in the API for the data layout field
 #define SC_DATALAYOUT_NAME  "Data"
 
-//------------------------------------------------------------------------
 
 GeneralFunction ScDataPilotConversion::FirstFunc( sal_uInt16 nBits )
 {
@@ -244,7 +242,6 @@ void ScDataPilotConversion::FillGroupInfo( DataPilotFieldGroupInfo& rInfo, const
     rInfo.Step          = rGroupInfo.mfStep;
 }
 
-//------------------------------------------------------------------------
 
 static ScDPObject* lcl_GetDPObject( ScDocShell* pDocShell, SCTAB nTab, const OUString& rName )
 {
@@ -296,7 +293,6 @@ static sal_Int32 lcl_GetObjectIndex( ScDPObject* pDPObj, const ScFieldIdentifier
     return -1;  // none
 }
 
-//------------------------------------------------------------------------
 
 ScDataPilotTablesObj::ScDataPilotTablesObj(ScDocShell* pDocSh, SCTAB nT) :
     pDocShell( pDocSh ),
@@ -593,7 +589,6 @@ sal_Bool SAL_CALL ScDataPilotTablesObj::hasByName( const OUString& aName )
     return false;
 }
 
-//------------------------------------------------------------------------
 
 ScDataPilotDescriptorBase::ScDataPilotDescriptorBase(ScDocShell* pDocSh) :
     maPropSet( lcl_GetDataPilotDescriptorBaseMap() ),
@@ -1103,7 +1098,6 @@ ScDataPilotDescriptorBase* ScDataPilotDescriptorBase::getImplementation(
     return pRet;
 }
 
-//------------------------------------------------------------------------
 
 ScDataPilotTableObj::ScDataPilotTableObj(ScDocShell* pDocSh, SCTAB nT, const String& rN) :
     ScDataPilotDescriptorBase( pDocSh ),
@@ -1823,7 +1817,6 @@ sal_Bool SAL_CALL ScDataPilotFieldsObj::hasByName( const OUString& aName )
     return GetObjectByName_Impl(aName) != NULL;
 }
 
-//------------------------------------------------------------------------
 
 ScDataPilotFieldObj::ScDataPilotFieldObj(
         ScDataPilotDescriptorBase& rParent, const ScFieldIdentifier& rFieldId ) :
@@ -3362,7 +3355,6 @@ sal_Bool SAL_CALL ScDataPilotItemsObj::hasElements() throw(RuntimeException)
     return ( getCount() != 0 );
 }
 
-//------------------------------------------------------------------------
 
 ScDataPilotItemObj::ScDataPilotItemObj( ScDataPilotDescriptorBase& rParent, const ScFieldIdentifier& rFieldId, sal_Int32 nIndex ) :
     ScDataPilotChildObjBase( rParent, rFieldId ),
@@ -3544,7 +3536,6 @@ void SAL_CALL ScDataPilotItemObj::removeVetoableChangeListener(
 {
 }
 
-//------------------------------------------------------------------------
 
 
 

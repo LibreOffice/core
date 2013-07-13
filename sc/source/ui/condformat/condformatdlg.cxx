@@ -349,9 +349,7 @@ IMPL_LINK_NOARG( ScCondFormatList, ScrollHdl )
     return 0;
 }
 
-//---------------------------------------------------
 //ScCondFormatDlg
-//---------------------------------------------------
 
 ScCondFormatDlg::ScCondFormatDlg(Window* pParent, ScDocument* pDoc, const ScConditionalFormat* pFormat, const ScRangeList& rRange,
                                     const ScAddress& rPos, condformat::dialog::ScCondFormatDialogType eType):

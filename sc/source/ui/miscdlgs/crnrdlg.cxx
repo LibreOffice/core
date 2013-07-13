@@ -482,7 +482,6 @@ void ScColRowNameRangesDlg::SetActive()
 void ScColRowNameRangesDlg::UpdateNames()
 {
     aLbRange.SetUpdateMode( false );
-    //-----------------------------------------------------------
     aLbRange.Clear();
     aRangeMap.clear();
     aEdAssign.SetText( EMPTY_STRING );
@@ -594,7 +593,6 @@ void ScColRowNameRangesDlg::UpdateNames()
         }
         delete [] ppSortArray;
     }
-    //-----------------------------------------------------------
     aLbRange.SetUpdateMode( sal_True );
     aLbRange.Invalidate();
 }
@@ -671,7 +669,6 @@ sal_Bool ScColRowNameRangesDlg::IsRefInputMode() const
     return (pEdActive != NULL);
 }
 
-//------------------------------------------------------------------------
 // Handler:
 // ========
 

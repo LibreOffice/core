@@ -22,7 +22,6 @@
 #include "editutil.hxx"
 
 
-//------------------------------------------------------------------
 
 #if defined(UNX)
 const sal_Char ScExportBase::sNewLine = '\012';

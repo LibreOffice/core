@@ -26,7 +26,6 @@
 #include "global.hxx"
 #include "adiasync.hxx"
 
-//------------------------------------------------------------------------
 
 extern "C" {
 
@@ -97,7 +96,6 @@ public:
     void            FreeInstance() { delete pInstance; pInstance = 0; }
 };
 
-//------------------------------------------------------------------------
 
 FuncData::FuncData(const ModuleData*pModule,
                    const OUString& rIName,
@@ -117,7 +115,6 @@ FuncData::FuncData(const ModuleData*pModule,
         eParamType[i] = peType[i];
 }
 
-//------------------------------------------------------------------------
 
 FuncData::FuncData(const FuncData& rData) :
     pModuleData     (rData.pModuleData),
@@ -257,14 +254,12 @@ bool InitExternalFunc(const OUString& rModuleName)
 #endif
 }
 
-//------------------------------------------------------------------------
 
 void ExitExternalFunc()
 {
     aModuleCollection.clear();
 }
 
-//------------------------------------------------------------------------
 
 bool FuncData::Call(void** ppParam) const
 {
@@ -364,7 +359,6 @@ bool FuncData::Call(void** ppParam) const
 #endif
 }
 
-//------------------------------------------------------------------------
 
 bool FuncData::Unadvice( double nHandle )
 {
@@ -384,7 +378,6 @@ bool FuncData::Unadvice( double nHandle )
 #endif
 }
 
-//------------------------------------------------------------------------
 
 const OUString& FuncData::GetModuleName() const
 {

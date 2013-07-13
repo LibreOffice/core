@@ -45,7 +45,6 @@ ScSubTotalDlg::ScSubTotalDlg( Window*           pParent,
     FreeResource();
 }
 
-//------------------------------------------------------------------------
 
 IMPL_LINK_INLINE_START( ScSubTotalDlg, RemoveHdl, PushButton *, pBtn )
 {

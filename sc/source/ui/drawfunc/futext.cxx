@@ -46,7 +46,6 @@
 //! fusel,fuconstr,futext - zusammenfassen!
 #define SC_MAXDRAGMOVE  3
 
-//------------------------------------------------------------------
 
 static void lcl_InvalidateAttribs( SfxBindings& rBindings )
 {

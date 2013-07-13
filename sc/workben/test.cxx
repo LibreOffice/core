@@ -84,7 +84,6 @@ public:
         DECL_LINK(ViewHdl, PushButton*);
 };
 
-//-----------------------------------------------------------------------
 
 class ScTestListener : public XSelectionChangeListener, public UsrObject
 {
@@ -106,13 +105,11 @@ public:
     virtual void            selectionChanged(const EventObject& aEvent);
 };
 
-//-----------------------------------------------------------------------
 
 static long nBla = 0;
 
 static XCellRef xGlobalCell;
 
-//-----------------------------------------------------------------------
 
 ScTestListener::ScTestListener(FixedText* pF) :
     pFixedText( pF )
@@ -165,7 +162,6 @@ void ScTestListener::selectionChanged(const EventObject& aEvent)
 }
 
 
-//-----------------------------------------------------------------------
 
 extern "C" Window* SAL_CALL CreateWindow( Window *pParent, const String& rParam )
 {
@@ -246,7 +242,6 @@ MyWindow::MyWindow( Window *pParent ) :
     aViewButton.Show();
 }
 
-//-----------------------------------------------------------------------
 
 XSpreadsheetDocumentRef lcl_GetDocument()
 {
@@ -290,7 +285,6 @@ XInterfaceRef lcl_GetView()
     return xView;
 }
 
-//-----------------------------------------------------------------------
 
 void lcl_OutputNames( const XInterfaceRef& xSource,     // XNameAccess
                         const XSpreadsheetDocumentRef& xDoc,
@@ -324,7 +318,6 @@ void lcl_OutputNames( const XInterfaceRef& xSource,     // XNameAccess
     }
 }
 
-//-----------------------------------------------------------------------
 
 void lcl_SetText( const XTextRef& xText )
 {
@@ -353,7 +346,6 @@ void lcl_SetText( const XTextRef& xText )
         xProp->setPropertyValue(L"Bold", UsrAny((sal_Bool)true));
 }
 
-//-----------------------------------------------------------------------
 
 void lcl_DoCount()
 {
@@ -1634,7 +1626,6 @@ IMPL_LINK_NOARG(MyWindow, CountHdl)
     return 0;
 }
 
-//-----------------------------------------------------------------------
 
 IMPL_LINK_NOARG(MyWindow, TextHdl)
 {
@@ -1683,7 +1674,6 @@ IMPL_LINK_NOARG(MyWindow, TextHdl)
     return 0;
 }
 
-//-----------------------------------------------------------------------
 
 IMPL_LINK_NOARG(MyWindow, BlaHdl)
 {
@@ -1757,7 +1747,6 @@ IMPL_LINK_NOARG(MyWindow, BlaHdl)
 }
 
 
-//-----------------------------------------------------------------------
 
 IMPL_LINK_NOARG(MyWindow, TabHdl)
 {
@@ -1830,7 +1819,6 @@ IMPL_LINK_NOARG(MyWindow, TabHdl)
     return 0;
 }
 
-//-----------------------------------------------------------------------
 
 void lcl_FillCells(XCellCollectionRef xColl)
 {

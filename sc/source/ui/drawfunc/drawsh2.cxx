@@ -56,7 +56,6 @@ sal_uInt16 ScGetFontWorkId();       // in drtxtob
 using namespace com::sun::star;
 
 
-//------------------------------------------------------------------
 
 ScDrawShell::ScDrawShell( ScViewData* pData ) :
     SfxShell(pData->GetViewShell()),

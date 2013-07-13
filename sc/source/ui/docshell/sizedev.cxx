@@ -25,7 +25,6 @@
 #include "scmod.hxx"
 #include "inputopt.hxx"
 
-//------------------------------------------------------------------
 
 ScSizeDeviceProvider::ScSizeDeviceProvider( ScDocShell* pDocSh )
 {

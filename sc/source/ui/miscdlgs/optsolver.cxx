@@ -47,7 +47,6 @@
 
 using namespace com::sun::star;
 
-//----------------------------------------------------------------------------
 
 ScSolverProgressDialog::ScSolverProgressDialog( Window* pParent )
     : ModelessDialog( pParent, ScResId( RID_SCDLG_SOLVER_PROGRESS ) ),
@@ -76,7 +75,6 @@ void ScSolverProgressDialog::SetTimeLimit( sal_Int32 nSeconds )
     maFtTime.SetText( aNew );
 }
 
-//----------------------------------------------------------------------------
 
 ScSolverNoSolutionDialog::ScSolverNoSolutionDialog( Window* pParent, const String& rErrorText )
     : ModalDialog( pParent, ScResId( RID_SCDLG_SOLVER_NOSOLUTION ) ),
@@ -93,7 +91,6 @@ ScSolverNoSolutionDialog::~ScSolverNoSolutionDialog()
 {
 }
 
-//----------------------------------------------------------------------------
 
 ScSolverSuccessDialog::ScSolverSuccessDialog( Window* pParent, const String& rSolution )
     : ModalDialog( pParent, ScResId( RID_SCDLG_SOLVER_SUCCESS ) ),
@@ -115,7 +112,6 @@ ScSolverSuccessDialog::~ScSolverSuccessDialog()
 {
 }
 
-//----------------------------------------------------------------------------
 
 ScCursorRefEdit::ScCursorRefEdit( Window* pParent, Window *pLabel )
     : formula::RefEdit( pParent, pLabel )
@@ -150,7 +146,6 @@ void ScCursorRefEdit::KeyInput( const KeyEvent& rKEvt )
         formula::RefEdit::KeyInput( rKEvt );
 }
 
-//----------------------------------------------------------------------------
 
 ScOptSolverSave::ScOptSolverSave( const String& rObjective, sal_Bool bMax, sal_Bool bMin, sal_Bool bValue,
                              const String& rTarget, const String& rVariable,
@@ -171,7 +166,6 @@ ScOptSolverSave::ScOptSolverSave( const String& rObjective, sal_Bool bMax, sal_B
 
 //============================================================================
 //  class ScOptSolverDlg
-//----------------------------------------------------------------------------
 
 ScOptSolverDlg::ScOptSolverDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
                           ScDocShell* pDocSh, ScAddress aCursorPos )
@@ -293,13 +287,11 @@ ScOptSolverDlg::ScOptSolverDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pP
     Init( aCursorPos );
 }
 
-//----------------------------------------------------------------------------
 
 ScOptSolverDlg::~ScOptSolverDlg()
 {
 }
 
-//----------------------------------------------------------------------------
 
 void ScOptSolverDlg::Init(const ScAddress& rCursorPos)
 {
@@ -408,7 +400,6 @@ void ScOptSolverDlg::Init(const ScAddress& rCursorPos)
     mpEdActive = m_pEdObjectiveCell;
 }
 
-//----------------------------------------------------------------------------
 
 void ScOptSolverDlg::ReadConditions()
 {
@@ -467,14 +458,12 @@ void ScOptSolverDlg::EnableButtons()
     }
 }
 
-//----------------------------------------------------------------------------
 
 sal_Bool ScOptSolverDlg::Close()
 {
     return DoClose( ScOptSolverDlgWrapper::GetChildWindowId() );
 }
 
-//----------------------------------------------------------------------------
 
 void ScOptSolverDlg::SetActive()
 {
@@ -491,7 +480,6 @@ void ScOptSolverDlg::SetActive()
     RefInputDone();
 }
 
-//----------------------------------------------------------------------------
 
 void ScOptSolverDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
 {
@@ -545,14 +533,12 @@ void ScOptSolverDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
     }
 }
 
-//----------------------------------------------------------------------------
 
 sal_Bool ScOptSolverDlg::IsRefInputMode() const
 {
     return mpEdActive != NULL;
 }
 
-//----------------------------------------------------------------------------
 // Handler:
 
 IMPL_LINK( ScOptSolverDlg, BtnHdl, PushButton*, pBtn )
@@ -600,7 +586,6 @@ IMPL_LINK( ScOptSolverDlg, BtnHdl, PushButton*, pBtn )
     return 0;
 }
 
-//----------------------------------------------------------------------------
 
 IMPL_LINK( ScOptSolverDlg, GetFocusHdl, Control*, pCtrl )
 {
@@ -631,7 +616,6 @@ IMPL_LINK( ScOptSolverDlg, GetFocusHdl, Control*, pCtrl )
     return 0;
 }
 
-//----------------------------------------------------------------------------
 
 IMPL_LINK_NOARG(ScOptSolverDlg, LoseFocusHdl)
 {
@@ -639,7 +623,6 @@ IMPL_LINK_NOARG(ScOptSolverDlg, LoseFocusHdl)
     return 0;
 }
 
-//----------------------------------------------------------------------------
 
 IMPL_LINK( ScOptSolverDlg, DelBtnHdl, PushButton*, pBtn )
 {
@@ -669,7 +652,6 @@ IMPL_LINK( ScOptSolverDlg, DelBtnHdl, PushButton*, pBtn )
     return 0;
 }
 
-//----------------------------------------------------------------------------
 
 IMPL_LINK_NOARG(ScOptSolverDlg, TargetModifyHdl)
 {
@@ -770,7 +752,6 @@ IMPL_LINK( ScOptSolverDlg, CursorDownHdl, ScCursorRefEdit*, pEdit )
     return 0;
 }
 
-//----------------------------------------------------------------------------
 
 void ScOptSolverDlg::ShowError( bool bCondition, formula::RefEdit* pFocus )
 {
@@ -783,7 +764,6 @@ void ScOptSolverDlg::ShowError( bool bCondition, formula::RefEdit* pFocus )
     }
 }
 
-//----------------------------------------------------------------------------
 
 bool ScOptSolverDlg::ParseRef( ScRange& rRange, const String& rInput, bool bAllowRange )
 {

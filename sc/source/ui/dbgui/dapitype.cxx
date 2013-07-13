@@ -22,7 +22,6 @@
 
 
 
-//------------------------------------------------------------------
 
 #include "dapitype.hxx"
 #include "scresid.hxx"
@@ -31,7 +30,6 @@
 
 using namespace com::sun::star;
 
-//-------------------------------------------------------------------------
 
 ScDataPilotSourceTypeDlg::ScDataPilotSourceTypeDlg(Window* pParent, bool bEnableExternal)
     : ModalDialog( pParent, "SelectSourceDialog", "modules/scalc/ui/selectsource.ui" )
@@ -101,7 +99,6 @@ IMPL_LINK( ScDataPilotSourceTypeDlg, RadioClickHdl, RadioButton*, pBtn )
     return 0;
 }
 
-//-------------------------------------------------------------------------
 
 ScDataPilotServiceDlg::ScDataPilotServiceDlg( Window* pParent,
                                 const uno::Sequence<OUString>& rServices ) :

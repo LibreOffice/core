@@ -2445,7 +2445,6 @@ void ScInputHandler::SetMode( ScInputMode eNewMode )
     bInOwnChange = false;
 }
 
-//----------------------------------------------------------------------------------------
 
 //  lcl_IsNumber - true, wenn nur Ziffern (dann keine Autokorrektur)
 
@@ -3800,10 +3799,8 @@ bool ScInputHandler::GetTextAndFields( ScEditEngineDefaulter& rDestEngine )
     return bRet;
 }
 
-//------------------------------------------------------------------------
 // Methoden fuer FunktionsAutopiloten:
 // InputGetSelection, InputSetSelection, InputReplaceSelection, InputGetFormulaStr
-//------------------------------------------------------------------------
 
 void ScInputHandler::InputGetSelection( xub_StrLen& rStart, xub_StrLen& rEnd )
 {
@@ -3811,7 +3808,6 @@ void ScInputHandler::InputGetSelection( xub_StrLen& rStart, xub_StrLen& rEnd )
     rEnd = nFormSelEnd;
 }
 
-//------------------------------------------------------------------------
 
 EditView* ScInputHandler::GetFuncEditView()
 {
@@ -3839,7 +3835,6 @@ EditView* ScInputHandler::GetFuncEditView()
     return pView;
 }
 
-//------------------------------------------------------------------------
 
 void ScInputHandler::InputSetSelection( xub_StrLen nStart, xub_StrLen nEnd )
 {
@@ -3861,7 +3856,6 @@ void ScInputHandler::InputSetSelection( xub_StrLen nStart, xub_StrLen nEnd )
     bModified = true;
 }
 
-//------------------------------------------------------------------------
 
 void ScInputHandler::InputReplaceSelection( const OUString& rStr )
 {
@@ -3911,7 +3905,6 @@ ScInputHdlState::ScInputHdlState( const ScAddress& rCurPos,
 {
 }
 
-//------------------------------------------------------------------------
 
 ScInputHdlState::ScInputHdlState( const ScInputHdlState& rCpy )
     :   pEditData   ( NULL )
@@ -3919,14 +3912,12 @@ ScInputHdlState::ScInputHdlState( const ScInputHdlState& rCpy )
     *this = rCpy;
 }
 
-//------------------------------------------------------------------------
 
 ScInputHdlState::~ScInputHdlState()
 {
     delete pEditData;
 }
 
-//------------------------------------------------------------------------
 
 int ScInputHdlState::operator==( const ScInputHdlState& r ) const
 {
@@ -3937,7 +3928,6 @@ int ScInputHdlState::operator==( const ScInputHdlState& r ) const
              && ScGlobal::EETextObjEqual( pEditData, r.pEditData ) );
 }
 
-//------------------------------------------------------------------------
 
 ScInputHdlState& ScInputHdlState::operator=( const ScInputHdlState& r )
 {

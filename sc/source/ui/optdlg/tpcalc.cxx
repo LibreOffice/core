@@ -19,7 +19,6 @@
 
 #undef SC_DLLIMPLEMENTATION
 
-//------------------------------------------------------------------
 
 #include "scitems.hxx"
 #include <vcl/msgbox.hxx>
@@ -69,7 +68,6 @@ ScTpCalcOptions::ScTpCalcOptions(Window* pParent, const SfxItemSet& rCoreAttrs)
     SetExchangeSupport();
 }
 
-//-----------------------------------------------------------------------
 
 ScTpCalcOptions::~ScTpCalcOptions()
 {
@@ -77,7 +75,6 @@ ScTpCalcOptions::~ScTpCalcOptions()
     delete pLocalOptions;
 }
 
-//-----------------------------------------------------------------------
 
 void ScTpCalcOptions::Init()
 {
@@ -88,14 +85,12 @@ void ScTpCalcOptions::Init()
     m_pBtnDate1904->SetClickHdl( LINK( this, ScTpCalcOptions, RadioClickHdl ) );
 }
 
-//-----------------------------------------------------------------------
 
 SfxTabPage* ScTpCalcOptions::Create( Window* pParent, const SfxItemSet& rAttrSet )
 {
     return ( new ScTpCalcOptions( pParent, rAttrSet ) );
 }
 
-//-----------------------------------------------------------------------
 
 void ScTpCalcOptions::Reset( const SfxItemSet& /* rCoreAttrs */ )
 {
@@ -146,7 +141,6 @@ void ScTpCalcOptions::Reset( const SfxItemSet& /* rCoreAttrs */ )
 }
 
 
-//-----------------------------------------------------------------------
 
 sal_Bool ScTpCalcOptions::FillItemSet( SfxItemSet& rCoreAttrs )
 {
@@ -173,7 +167,6 @@ sal_Bool ScTpCalcOptions::FillItemSet( SfxItemSet& rCoreAttrs )
         return false;
 }
 
-//------------------------------------------------------------------------
 
 int ScTpCalcOptions::DeactivatePage( SfxItemSet* pSetP )
 {
@@ -201,7 +194,6 @@ int ScTpCalcOptions::DeactivatePage( SfxItemSet* pSetP )
     return nReturn;
 }
 
-//-----------------------------------------------------------------------
 // Handler:
 
 IMPL_LINK( ScTpCalcOptions, RadioClickHdl, RadioButton*, pBtn )
@@ -222,7 +214,6 @@ IMPL_LINK( ScTpCalcOptions, RadioClickHdl, RadioButton*, pBtn )
     return 0;
 }
 
-//-----------------------------------------------------------------------
 
 IMPL_LINK( ScTpCalcOptions, CheckClickHdl, CheckBox*, pBtn )
 {

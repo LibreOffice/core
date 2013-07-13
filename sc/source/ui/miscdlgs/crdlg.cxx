@@ -22,7 +22,6 @@
 
 
 
-//------------------------------------------------------------------
 
 #include "crdlg.hxx"
 #include "scresid.hxx"
@@ -58,13 +57,11 @@ ScColOrRowDlg::ScColOrRowDlg( Window*       pParent,
     FreeResource();
 }
 
-//------------------------------------------------------------------------
 
 ScColOrRowDlg::~ScColOrRowDlg()
 {
 }
 
-//------------------------------------------------------------------------
 
 IMPL_LINK_NOARG_INLINE_START(ScColOrRowDlg, OkHdl)
 {

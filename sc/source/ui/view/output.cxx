@@ -104,7 +104,6 @@ public:
     ColorData   GetColor() const    { return nColor; }
 };
 
-//------------------------------------------------------------------
 
 ScActionColorChanger::ScActionColorChanger( const ScChangeTrack& rTrack ) :
     rOpt( SC_MOD()->GetAppOptions() ),

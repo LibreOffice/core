@@ -84,7 +84,6 @@ using namespace ::oox;
 
 using ::com::sun::star::uno::Sequence;
 
-//--------------------------------------------------------- class ExcDummy_00 -
 const sal_uInt8     ExcDummy_00::pMyData[] = {
     0x5c, 0x00, 0x20, 0x00, 0x04, 'C',  'a',  'l',  'c',    // WRITEACCESS
     0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20,
@@ -93,7 +92,6 @@ const sal_uInt8     ExcDummy_00::pMyData[] = {
 };
 const sal_Size ExcDummy_00::nMyLen = sizeof( ExcDummy_00::pMyData );
 
-//-------------------------------------------------------- class ExcDummy_04x -
 const sal_uInt8     ExcDummy_040::pMyData[] = {
     0x40, 0x00, 0x02, 0x00, 0x00, 0x00,                     // BACKUP
     0x8d, 0x00, 0x02, 0x00, 0x00, 0x00,                     // HIDEOBJ
@@ -106,7 +104,6 @@ const sal_uInt8     ExcDummy_041::pMyData[] = {
 };
 const sal_Size ExcDummy_041::nMyLen = sizeof( ExcDummy_041::pMyData );
 
-//-------------------------------------------------------- class ExcDummy_02a -
 const sal_uInt8      ExcDummy_02a::pMyData[] = {
     0x0d, 0x00, 0x02, 0x00, 0x01, 0x00,                     // CALCMODE
     0x0c, 0x00, 0x02, 0x00, 0x64, 0x00,                     // CALCCOUNT
@@ -118,7 +115,6 @@ const sal_uInt8      ExcDummy_02a::pMyData[] = {
 };
 const sal_Size ExcDummy_02a::nMyLen = sizeof( ExcDummy_02a::pMyData );
 
-//----------------------------------------------------------- class ExcRecord -
 
 void ExcRecord::Save( XclExpStream& rStrm )
 {
@@ -140,7 +136,6 @@ void ExcRecord::SaveXml( XclExpXmlStream& /*rStrm*/ )
 }
 
 
-//--------------------------------------------------------- class ExcEmptyRec -
 
 void ExcEmptyRec::Save( XclExpStream& /*rStrm*/ )
 {
@@ -158,7 +153,6 @@ sal_Size ExcEmptyRec::GetLen() const
     return 0;
 }
 
-//--------------------------------------------------------- class ExcDummyRec -
 
 void ExcDummyRec::Save( XclExpStream& rStrm )
 {
@@ -171,7 +165,6 @@ sal_uInt16 ExcDummyRec::GetNum( void ) const
     return 0x0000;
 }
 
-//------------------------------------------------------- class ExcBoolRecord -
 
 void ExcBoolRecord::SaveCont( XclExpStream& rStrm )
 {
@@ -187,7 +180,6 @@ sal_Size ExcBoolRecord::GetLen( void ) const
 
 
 
-//--------------------------------------------------------- class ExcBof_Base -
 
 ExcBof_Base::ExcBof_Base() :
     nRupBuild( 0x096C ),    // copied from Excel
@@ -197,7 +189,6 @@ ExcBof_Base::ExcBof_Base() :
 
 
 
-//-------------------------------------------------------------- class ExcBof -
 
 ExcBof::ExcBof( void )
 {
@@ -225,7 +216,6 @@ sal_Size ExcBof::GetLen( void ) const
 
 
 
-//------------------------------------------------------------- class ExcBofW -
 
 ExcBofW::ExcBofW( void )
 {
@@ -255,7 +245,6 @@ sal_Size ExcBofW::GetLen( void ) const
 
 
 
-//-------------------------------------------------------------- class ExcEof -
 
 sal_uInt16 ExcEof::GetNum( void ) const
 {
@@ -270,7 +259,6 @@ sal_Size ExcEof::GetLen( void ) const
 
 
 
-//--------------------------------------------------------- class ExcDummy_00 -
 
 sal_Size ExcDummy_00::GetLen( void ) const
 {
@@ -285,7 +273,6 @@ const sal_uInt8* ExcDummy_00::GetData( void ) const
 
 
 
-//-------------------------------------------------------- class ExcDummy_04x -
 
 sal_Size ExcDummy_040::GetLen( void ) const
 {
@@ -314,7 +301,6 @@ const sal_uInt8* ExcDummy_041::GetData( void ) const
 
 
 
-//------------------------------------------------------------- class Exc1904 -
 
 Exc1904::Exc1904( ScDocument& rDoc )
 {
@@ -351,7 +337,6 @@ void Exc1904::SaveXml( XclExpXmlStream& rStrm )
 
 
 
-//------------------------------------------------------ class ExcBundlesheet -
 
 ExcBundlesheetBase::ExcBundlesheetBase( RootData& rRootData, SCTAB nTabNum ) :
     nStrPos( STREAM_SEEK_TO_END ),
@@ -412,7 +397,6 @@ sal_Size ExcBundlesheet::GetLen() const
 }
 
 
-//--------------------------------------------------------- class ExcDummy_02 -
 
 sal_Size ExcDummy_02a::GetLen( void ) const
 {
@@ -423,7 +407,6 @@ const sal_uInt8* ExcDummy_02a::GetData( void ) const
 {
     return pMyData;
 }
-//--------------------------------------------------------- class ExcDummy_02 -
 
 XclExpCountry::XclExpCountry( const XclExpRoot& rRoot ) :
     XclExpRecord( EXC_ID_COUNTRY, 4 )

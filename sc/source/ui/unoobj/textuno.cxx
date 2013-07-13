@@ -49,7 +49,6 @@
 
 using namespace com::sun::star;
 
-//------------------------------------------------------------------------
 
 static const SvxItemPropertySet * lcl_GetHdFtPropertySet()
 {
@@ -87,12 +86,10 @@ static const SvxItemPropertySet * lcl_GetHdFtPropertySet()
     return &aHdFtPropertySet_Impl;
 }
 
-//------------------------------------------------------------------------
 
 SC_SIMPLE_SERVICE_INFO( ScHeaderFooterContentObj, "ScHeaderFooterContentObj", "com.sun.star.sheet.HeaderFooterContent" )
 SC_SIMPLE_SERVICE_INFO( ScHeaderFooterTextObj, "ScHeaderFooterTextObj", "stardiv.one.Text.Text" )
 
-//------------------------------------------------------------------------
 
 ScHeaderFooterContentObj::ScHeaderFooterContentObj( const EditTextObject* pLeft,
                                                     const EditTextObject* pCenter,
@@ -181,7 +178,6 @@ ScHeaderFooterContentObj* ScHeaderFooterContentObj::getImplementation(
 }
 
 
-//------------------------------------------------------------------------
 
 ScHeaderFooterTextData::ScHeaderFooterTextData(
     ScHeaderFooterContentObj& rContent, sal_uInt16 nP, const EditTextObject* pTextObj) :
@@ -266,7 +262,6 @@ const EditTextObject* ScHeaderFooterTextData::GetTextObject() const
     return mpTextObj;
 }
 
-//------------------------------------------------------------------------
 
 ScHeaderFooterTextObj::ScHeaderFooterTextObj(
     ScHeaderFooterContentObj& rContent, sal_uInt16 nP, const EditTextObject* pTextObj) :
@@ -578,7 +573,6 @@ sal_Bool SAL_CALL ScHeaderFooterTextObj::hasElements() throw(uno::RuntimeExcepti
     return mxUnoText->hasElements();
 }
 
-//------------------------------------------------------------------------
 
 ScCellTextCursor::ScCellTextCursor(const ScCellTextCursor& rOther) :
     SvxUnoTextCursor( rOther ),
@@ -674,7 +668,6 @@ ScCellTextCursor* ScCellTextCursor::getImplementation( const uno::Reference<uno:
     return pRet;
 }
 
-//------------------------------------------------------------------------
 
 ScHeaderFooterTextCursor::ScHeaderFooterTextCursor(const ScHeaderFooterTextCursor& rOther) :
     SvxUnoTextCursor( rOther ),
@@ -771,7 +764,6 @@ ScHeaderFooterTextCursor* ScHeaderFooterTextCursor::getImplementation(
     return pRet;
 }
 
-//------------------------------------------------------------------------
 
 ScDrawTextCursor::ScDrawTextCursor(const ScDrawTextCursor& rOther) :
     SvxUnoTextCursor( rOther ),
@@ -866,7 +858,6 @@ ScDrawTextCursor* ScDrawTextCursor::getImplementation( const uno::Reference<uno:
     return pRet;
 }
 
-//------------------------------------------------------------------------
 
 ScSimpleEditSourceHelper::ScSimpleEditSourceHelper()
 {
@@ -911,7 +902,6 @@ EditTextObject* ScEditEngineTextObj::CreateTextObject()
     return GetEditEngine()->CreateTextObject();
 }
 
-//------------------------------------------------------------------------
 
 ScCellTextData::ScCellTextData(ScDocShell* pDocSh, const ScAddress& rP) :
     pDocShell( pDocSh ),

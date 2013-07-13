@@ -21,7 +21,6 @@
 
 #include "invmerge.hxx"
 
-//------------------------------------------------------------------
 
 ScInvertMerger::ScInvertMerger( ::std::vector< Rectangle >* pRectangles ) :
     pRects( pRectangles )

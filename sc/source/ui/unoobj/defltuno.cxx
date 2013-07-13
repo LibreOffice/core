@@ -38,7 +38,6 @@
 
 using namespace ::com::sun::star;
 
-//------------------------------------------------------------------------
 
 static const SfxItemPropertyMapEntry* lcl_GetDocDefaultsMap()
 {
@@ -73,11 +72,9 @@ using sc::HMMToTwips;
 using sc::TwipsToHMM;
 using sc::TwipsToEvenHMM;
 
-//------------------------------------------------------------------------
 
 SC_SIMPLE_SERVICE_INFO( ScDocDefaultsObj, "ScDocDefaultsObj", "com.sun.star.sheet.Defaults" )
 
-//------------------------------------------------------------------------
 
 ScDocDefaultsObj::ScDocDefaultsObj(ScDocShell* pDocSh) :
     pDocShell( pDocSh ),

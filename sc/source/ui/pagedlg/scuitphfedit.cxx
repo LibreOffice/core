@@ -22,7 +22,6 @@
 
 
 
-//------------------------------------------------------------------
 
 #define _TPHFEDIT_CXX
 #include "scitems.hxx"
@@ -750,9 +749,7 @@ void ScHFEditPage::ClearTextAreas()
     m_pWndRight->Invalidate();
 }
 
-//-----------------------------------------------------------------------
 // Handler:
-//-----------------------------------------------------------------------
 
 IMPL_LINK( ScHFEditPage, ListHdl_Impl, ListBox*, pList )
 {

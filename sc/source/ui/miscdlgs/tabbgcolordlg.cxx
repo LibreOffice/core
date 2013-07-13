@@ -20,7 +20,6 @@
 
 #undef SC_DLLIMPLEMENTATION
 
-//------------------------------------------------------------------
 
 #include "tabbgcolordlg.hxx"
 #include "scresid.hxx"
@@ -67,7 +66,6 @@ ScTabBgColorDlg::ScTabBgColorDlg( Window*         pParent,
     FreeResource();
 }
 
-//------------------------------------------------------------------------
 
 void ScTabBgColorDlg::GetSelectedColor( Color& rColor ) const
 {

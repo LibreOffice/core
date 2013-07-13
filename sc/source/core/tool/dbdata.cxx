@@ -40,7 +40,6 @@ using ::std::find_if;
 using ::std::remove_if;
 using ::std::pair;
 
-//---------------------------------------------------------------------------------------
 
 bool ScDBData::less::operator() (const ScDBData& left, const ScDBData& right) const
 {

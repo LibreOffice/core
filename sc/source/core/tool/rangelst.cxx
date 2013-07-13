@@ -1181,7 +1181,6 @@ ScRangePairList::~ScRangePairList()
     maPairs.clear();
 }
 
-//-----------------------------------------------------------------------------
 ScRangePair* ScRangePairList::Remove(size_t nPos)
 {
     if (maPairs.size() <= nPos)
@@ -1195,7 +1194,6 @@ ScRangePair* ScRangePairList::Remove(size_t nPos)
     return p;
 }
 
-//-----------------------------------------------------------------------------
 ScRangePair* ScRangePairList::Remove( ScRangePair* Adr)
 {
     ScRangePair* p = NULL;
@@ -1285,7 +1283,6 @@ bool ScRangePairList::UpdateReference( UpdateRefMode eUpdateRefMode,
     return bChanged;
 }
 
-//-----------------------------------------------------------------------------
 // Delete entries that have the labels (first range) on nTab
 void ScRangePairList::DeleteOnTab( SCTAB nTab )
 {
@@ -1306,7 +1303,6 @@ void ScRangePairList::DeleteOnTab( SCTAB nTab )
     }
 }
 
-//-----------------------------------------------------------------------------
 ScRangePair* ScRangePairList::Find( const ScAddress& rAdr ) const
 {
     for ( size_t j = 0, nListCount = maPairs.size(); j < nListCount; j++ )
@@ -1318,7 +1314,6 @@ ScRangePair* ScRangePairList::Find( const ScAddress& rAdr ) const
     return NULL;
 }
 
-//-----------------------------------------------------------------------------
 ScRangePair* ScRangePairList::Find( const ScRange& rRange ) const
 {
     for ( size_t j = 0, nListCount = maPairs.size(); j < nListCount; j++ )
@@ -1331,7 +1326,6 @@ ScRangePair* ScRangePairList::Find( const ScRange& rRange ) const
 }
 
 
-//-----------------------------------------------------------------------------
 ScRangePairList* ScRangePairList::Clone() const
 {
     ScRangePairList* pNew = new ScRangePairList;
@@ -1342,14 +1336,12 @@ ScRangePairList* ScRangePairList::Clone() const
     return pNew;
 }
 
-//-----------------------------------------------------------------------------
 struct ScRangePairNameSort
 {
     ScRangePair*    pPair;
     ScDocument*     pDoc;
 };
 
-//-----------------------------------------------------------------------------
 extern "C"
 int SAL_CALL ScRangePairList_QsortNameCompare( const void* p1, const void* p2 )
 {
@@ -1428,7 +1420,6 @@ int SAL_CALL ScRangePairList_QsortNameCompare( const void* p1, const void* p2 )
 #endif
 }
 
-//-----------------------------------------------------------------------------
 void ScRangePairList::Join( const ScRangePair& r, bool bIsInList )
 {
     if ( maPairs.empty() )
@@ -1548,7 +1539,6 @@ void ScRangePairList::Join( const ScRangePair& r, bool bIsInList )
         Append( r );
 }
 
-//-----------------------------------------------------------------------------
 ScRangePair** ScRangePairList::CreateNameSortedArray( size_t& nListCount,
         ScDocument* pDoc ) const
 {

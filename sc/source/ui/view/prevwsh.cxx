@@ -93,7 +93,6 @@ SFX_IMPL_NAMED_VIEWFACTORY( ScPreviewShell, "PrintPreview" )
     SFX_VIEW_REGISTRATION(ScDocShell);
 }
 
-//------------------------------------------------------------------
 
 void ScPreviewShell::Construct( Window* pParent )
 {
@@ -204,7 +203,6 @@ void ScPreviewShell::InitStartTable(SCTAB nTab)
     pPreview->SetPageNo( pPreview->GetFirstPage(nTab) );
 }
 
-//------------------------------------------------------------------
 
 String ScPreviewShell::GetDescription() const
 {
@@ -567,7 +565,6 @@ void ScPreviewShell::Deactivate(sal_Bool bMDI)
     }
 }
 
-//------------------------------------------------------------------------
 
 void ScPreviewShell::Execute( SfxRequest& rReq )
 {

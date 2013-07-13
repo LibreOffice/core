@@ -716,7 +716,6 @@ void ScFormulaReferenceHelper::EnableSpreadsheets(bool bFlag, bool bChildren)
     }
 }
 
-//----------------------------------------------------------------------------
 
 
 
@@ -751,7 +750,6 @@ static void lcl_InvalidateWindows()
         pDocShell = (ScDocShell*)SfxObjectShell::GetNext(*pDocShell, &aType);
     }
 }
-//----------------------------------------------------------------------------
 
 static void lcl_HideAllReferences()
 {
@@ -767,7 +765,6 @@ static void lcl_HideAllReferences()
 //============================================================================
 //The class of ScAnyRefDlg is rewritten by PengYunQuan for Validity Cell Range Picker
 //  class ScRefHandler
-//----------------------------------------------------------------------------
 
 ScRefHandler::ScRefHandler( Window &rWindow, SfxBindings* pB, bool bBindRef ):
         m_rWindow( rWindow ),
@@ -834,7 +831,6 @@ bool ScRefHandler::EnterRefMode()
     return m_bInRefMode = true;
 }
 
-//----------------------------------------------------------------------------
 
 ScRefHandler::~ScRefHandler()
 {
@@ -861,7 +857,6 @@ bool ScRefHandler::LeaveRefMode()
     return true;
 }
 
-//----------------------------------------------------------------------------
 
 void ScRefHandler::SwitchToDocument()
 {
@@ -891,7 +886,6 @@ void ScRefHandler::SwitchToDocument()
     }
 }
 
-//----------------------------------------------------------------------------
 
 sal_Bool ScRefHandler::IsDocAllowed(SfxObjectShell* pDocSh) const   // pDocSh may be 0
 {
@@ -904,14 +898,12 @@ sal_Bool ScRefHandler::IsDocAllowed(SfxObjectShell* pDocSh) const   // pDocSh ma
     return ( aDocName.Len() == 0 || aDocName == aCmpName );
 }
 
-//----------------------------------------------------------------------------
 
 sal_Bool ScRefHandler::IsRefInputMode() const
 {
     return m_rWindow.IsVisible(); // nur wer sichtbar ist kann auch Referenzen bekommen
 }
 
-//----------------------------------------------------------------------------
 
 sal_Bool ScRefHandler::DoClose( sal_uInt16 nId )
 {
@@ -924,21 +916,18 @@ void ScRefHandler::SetDispatcherLock( bool bLock )
     m_aHelper.SetDispatcherLock( bLock );
 }
 
-//----------------------------------------------------------------------------
 
 void ScRefHandler::ViewShellChanged()
 {
     m_aHelper.ViewShellChanged();
 }
 
-//----------------------------------------------------------------------------
 
 void ScRefHandler::AddRefEntry()
 {
     //  wenn nicht ueberladen, gibt es keine Mehrfach-Referenzen
 }
 
-//----------------------------------------------------------------------------
 
 sal_Bool ScRefHandler::IsTableLocked() const
 {
@@ -947,12 +936,10 @@ sal_Bool ScRefHandler::IsTableLocked() const
     return false;
 }
 
-//----------------------------------------------------------------------------
 //
 //  RefInputStart/Done: Zoom-In (AutoHide) auf einzelnes Feld
 //  (per Button oder Bewegung)
 //
-//----------------------------------------------------------------------------
 
 void ScRefHandler::RefInputStart( formula::RefEdit* pEdit, formula::RefButton* pButton )
 {
@@ -1026,13 +1013,11 @@ void ScRefHandler::ReleaseFocus( formula::RefEdit* pEdit, formula::RefButton* pB
 {
     m_aHelper.ReleaseFocus( pEdit,pButton );
 }
-//----------------------------------------------------------------------------
 void ScRefHandler::RefInputDone( sal_Bool bForced )
 {
     m_aHelper.RefInputDone( bForced );
 }
 
-//-------------------------------------------------------------------------------
 
 ScRefHdlModalImpl::ScRefHdlModalImpl( Window* pParent, ResId& rResId ):
     ModalDialog( pParent, rResId ),

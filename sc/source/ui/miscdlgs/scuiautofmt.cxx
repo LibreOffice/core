@@ -22,7 +22,6 @@
 
 
 
-//------------------------------------------------------------------
 
 #include "scitems.hxx"
 #include <svx/algitem.hxx>
@@ -99,14 +98,12 @@ ScAutoFormatDlg::ScAutoFormatDlg( Window*                   pParent,
     FreeResource();
 }
 
-//------------------------------------------------------------------------
 
 ScAutoFormatDlg::~ScAutoFormatDlg()
 {
     delete pWndPreview;
 }
 
-//------------------------------------------------------------------------
 
 void ScAutoFormatDlg::Init()
 {
@@ -155,7 +152,6 @@ void ScAutoFormatDlg::Init()
     }
 }
 
-//------------------------------------------------------------------------
 
 void ScAutoFormatDlg::UpdateChecks()
 {
@@ -169,7 +165,6 @@ void ScAutoFormatDlg::UpdateChecks()
     aBtnAdjust   .Check( pData->GetIncludeWidthHeight() );
 }
 
-//------------------------------------------------------------------------
 // Handler:
 //---------
 
@@ -185,7 +180,6 @@ IMPL_LINK( ScAutoFormatDlg, CloseHdl, PushButton *, pBtn )
     return 0;
 }
 
-//------------------------------------------------------------------------
 
 IMPL_LINK_NOARG_INLINE_START(ScAutoFormatDlg, DblClkHdl)
 {
@@ -197,7 +191,6 @@ IMPL_LINK_NOARG_INLINE_START(ScAutoFormatDlg, DblClkHdl)
 }
 IMPL_LINK_NOARG_INLINE_END(ScAutoFormatDlg, DblClkHdl)
 
-//------------------------------------------------------------------------
 
 IMPL_LINK( ScAutoFormatDlg, CheckHdl, Button *, pBtn )
 {
@@ -228,7 +221,6 @@ IMPL_LINK( ScAutoFormatDlg, CheckHdl, Button *, pBtn )
     return 0;
 }
 
-//------------------------------------------------------------------------
 
 IMPL_LINK_NOARG(ScAutoFormatDlg, AddHdl)
 {
@@ -302,7 +294,6 @@ IMPL_LINK_NOARG(ScAutoFormatDlg, AddHdl)
     return 0;
 }
 
-//------------------------------------------------------------------------
 
 IMPL_LINK_NOARG(ScAutoFormatDlg, RemoveHdl)
 {
@@ -427,7 +418,6 @@ IMPL_LINK_NOARG(ScAutoFormatDlg, RenameHdl)
     return 0;
 }
 
-//------------------------------------------------------------------------
 
 IMPL_LINK_NOARG(ScAutoFormatDlg, SelFmtHdl)
 {
@@ -451,7 +441,6 @@ IMPL_LINK_NOARG(ScAutoFormatDlg, SelFmtHdl)
     return 0;
 }
 
-//------------------------------------------------------------------------
 
 OUString ScAutoFormatDlg::GetCurrFormatName()
 {

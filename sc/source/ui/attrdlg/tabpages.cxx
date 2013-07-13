@@ -75,7 +75,6 @@ SfxTabPage* ScTabPageProtection::Create( Window* pParent, const SfxItemSet& rAtt
     return ( new ScTabPageProtection( pParent, rAttrSet ) );
 }
 
-//------------------------------------------------------------------------
 
 void ScTabPageProtection::Reset( const SfxItemSet& rCoreAttrs )
 {
@@ -144,7 +143,6 @@ sal_Bool ScTabPageProtection::FillItemSet( SfxItemSet& rCoreAttrs )
             bAttrsChanged = !pOldItem || !( aProtAttr == *(const ScProtectionAttr*)pOldItem );
     }
 
-    //--------------------------------------------------
 
     if ( bAttrsChanged )
         rCoreAttrs.Put( aProtAttr );
@@ -154,7 +152,6 @@ sal_Bool ScTabPageProtection::FillItemSet( SfxItemSet& rCoreAttrs )
     return bAttrsChanged;
 }
 
-//------------------------------------------------------------------------
 
 int ScTabPageProtection::DeactivatePage( SfxItemSet* pSetP )
 {
@@ -164,7 +161,6 @@ int ScTabPageProtection::DeactivatePage( SfxItemSet* pSetP )
     return LEAVE_PAGE;
 }
 
-//------------------------------------------------------------------------
 
 IMPL_LINK( ScTabPageProtection, ButtonClickHdl, TriStateBox*, pBox )
 {
@@ -195,7 +191,6 @@ IMPL_LINK( ScTabPageProtection, ButtonClickHdl, TriStateBox*, pBox )
     return 0;
 }
 
-//------------------------------------------------------------------------
 
 void ScTabPageProtection::UpdateButtons()
 {

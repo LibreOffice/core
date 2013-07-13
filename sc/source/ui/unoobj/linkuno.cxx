@@ -48,7 +48,6 @@ using ::com::sun::star::lang::IllegalArgumentException;
 using ::com::sun::star::uno::RuntimeException;
 using ::std::vector;
 
-//------------------------------------------------------------------------
 
 //  fuer Sheet- und Area-Links benutzt:
 static const SfxItemPropertyMapEntry* lcl_GetSheetLinkMap()
@@ -65,7 +64,6 @@ static const SfxItemPropertyMapEntry* lcl_GetSheetLinkMap()
     return aSheetLinkMap_Impl;
 }
 
-//------------------------------------------------------------------------
 
 SC_SIMPLE_SERVICE_INFO( ScAreaLinkObj, "ScAreaLinkObj", "com.sun.star.sheet.CellAreaLink" )
 SC_SIMPLE_SERVICE_INFO( ScAreaLinksObj, "ScAreaLinksObj", "com.sun.star.sheet.CellAreaLinks" )
@@ -74,7 +72,6 @@ SC_SIMPLE_SERVICE_INFO( ScDDELinksObj, "ScDDELinksObj", "com.sun.star.sheet.DDEL
 SC_SIMPLE_SERVICE_INFO( ScSheetLinkObj, "ScSheetLinkObj", "com.sun.star.sheet.SheetLink" )
 SC_SIMPLE_SERVICE_INFO( ScSheetLinksObj, "ScSheetLinksObj", "com.sun.star.sheet.SheetLinks" )
 
-//------------------------------------------------------------------------
 
 ScSheetLinkObj::ScSheetLinkObj(ScDocShell* pDocSh, const String& rName) :
     aPropSet( lcl_GetSheetLinkMap() ),
@@ -374,7 +371,6 @@ void ScSheetLinkObj::setRefreshDelay(sal_Int32 nRefreshDelay)
     ModifyRefreshDelay_Impl( nRefreshDelay );
 }
 
-//------------------------------------------------------------------------
 
 ScSheetLinksObj::ScSheetLinksObj(ScDocShell* pDocSh) :
     pDocShell( pDocSh )
@@ -580,7 +576,6 @@ uno::Sequence<OUString> SAL_CALL ScSheetLinksObj::getElementNames() throw(uno::R
     return aSeq;
 }
 
-//------------------------------------------------------------------------
 
 static ScAreaLink* lcl_GetAreaLink( ScDocShell* pDocShell, size_t nPos )
 {
@@ -919,7 +914,6 @@ void SAL_CALL ScAreaLinkObj::setDestArea( const table::CellRangeAddress& aDestAr
     Modify_Impl( NULL, NULL, NULL, NULL, &aDestArea );
 }
 
-//------------------------------------------------------------------------
 
 ScAreaLinksObj::ScAreaLinksObj(ScDocShell* pDocSh) :
     pDocShell( pDocSh )
@@ -1043,7 +1037,6 @@ sal_Bool SAL_CALL ScAreaLinksObj::hasElements() throw(uno::RuntimeException)
     return ( getCount() != 0 );
 }
 
-//------------------------------------------------------------------------
 
 ScDDELinkObj::ScDDELinkObj(ScDocShell* pDocSh, const String& rA,
                             const String& rT, const String& rI) :
@@ -1258,7 +1251,6 @@ void ScDDELinkObj::Refreshed_Impl()
         aRefreshListeners[n]->refreshed( aEvent );
 }
 
-//------------------------------------------------------------------------
 
 ScDDELinksObj::ScDDELinksObj(ScDocShell* pDocSh) :
     pDocShell( pDocSh )

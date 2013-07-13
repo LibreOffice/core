@@ -22,7 +22,6 @@
 
 
 
-//------------------------------------------------------------------
 
 #define _TPHF_CXX
 #include "scitems.hxx"
@@ -86,13 +85,11 @@ ScHFPage::ScHFPage( Window* pParent, const SfxItemSet& rSet, sal_uInt16 nSetId )
         m_pBtnEdit->SetHelpId( HID_SC_FOOTER_EDIT );
 }
 
-//------------------------------------------------------------------
 
 ScHFPage::~ScHFPage()
 {
 }
 
-//------------------------------------------------------------------
 
 void ScHFPage::Reset( const SfxItemSet& rSet )
 {
@@ -100,7 +97,6 @@ void ScHFPage::Reset( const SfxItemSet& rSet )
     TurnOnHdl( 0 );
 }
 
-//------------------------------------------------------------------
 
 sal_Bool ScHFPage::FillItemSet( SfxItemSet& rOutSet )
 {
@@ -120,7 +116,6 @@ sal_Bool ScHFPage::FillItemSet( SfxItemSet& rOutSet )
     return bResult;
 }
 
-//------------------------------------------------------------------
 
 void ScHFPage::ActivatePage( const SfxItemSet& rSet )
 {
@@ -138,7 +133,6 @@ void ScHFPage::ActivatePage( const SfxItemSet& rSet )
     SvxHFPage::ActivatePage( rSet );
 }
 
-//------------------------------------------------------------------
 
 int ScHFPage::DeactivatePage( SfxItemSet* pSetP )
 {
@@ -149,7 +143,6 @@ int ScHFPage::DeactivatePage( SfxItemSet* pSetP )
     return LEAVE_PAGE;
 }
 
-//------------------------------------------------------------------
 
 void ScHFPage::ActivatePage()
 {
@@ -159,9 +152,7 @@ void ScHFPage::DeactivatePage()
 {
 }
 
-//------------------------------------------------------------------
 // Handler:
-//------------------------------------------------------------------
 
 IMPL_LINK_NOARG(ScHFPage, TurnOnHdl)
 {
@@ -176,7 +167,6 @@ IMPL_LINK_NOARG(ScHFPage, TurnOnHdl)
 }
 
 
-//------------------------------------------------------------------
 
 IMPL_LINK_NOARG(ScHFPage, BtnHdl)
 {
@@ -273,14 +263,12 @@ ScHeaderPage::ScHeaderPage( Window* pParent, const SfxItemSet& rSet )
 {
 }
 
-//------------------------------------------------------------------
 
 SfxTabPage* ScHeaderPage::Create( Window* pParent, const SfxItemSet& rCoreSet )
 {
     return ( new ScHeaderPage( pParent, rCoreSet ) );
 }
 
-//------------------------------------------------------------------
 
 sal_uInt16* ScHeaderPage::GetRanges()
 {
@@ -296,14 +284,12 @@ ScFooterPage::ScFooterPage( Window* pParent, const SfxItemSet& rSet )
 {
 }
 
-//------------------------------------------------------------------
 
 SfxTabPage* ScFooterPage::Create( Window* pParent, const SfxItemSet& rCoreSet )
 {
     return ( new ScFooterPage( pParent, rCoreSet ) );
 }
 
-//------------------------------------------------------------------
 
 sal_uInt16* ScFooterPage::GetRanges()
 {

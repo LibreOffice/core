@@ -150,7 +150,6 @@ sal_Int16 lcl_SvxToUnoFileFormat( SvxFileFormat nSvxValue )
 SC_SIMPLE_SERVICE_INFO( ScCellFieldsObj, "ScCellFieldsObj", "com.sun.star.text.TextFields" )
 SC_SIMPLE_SERVICE_INFO( ScHeaderFieldsObj, "ScHeaderFieldsObj", "com.sun.star.text.TextFields" )
 
-//------------------------------------------------------------------------
 
 //  ScUnoEditEngine nur um aus einer EditEngine die Felder herauszubekommen...
 
@@ -280,7 +279,6 @@ SvxFieldData* ScUnoEditEngine::FindByPos(sal_Int32 nPar, xub_StrLen nPos, sal_In
     return pFound;
 }
 
-//------------------------------------------------------------------------
 
 ScCellFieldsObj::ScCellFieldsObj(
     const uno::Reference<text::XTextRange>& xContent,

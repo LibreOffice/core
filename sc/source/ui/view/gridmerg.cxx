@@ -21,7 +21,6 @@
 
 #include "gridmerg.hxx"
 
-//------------------------------------------------------------------
 
 ScGridMerger::ScGridMerger( OutputDevice* pOutDev, long nOnePixelX, long nOnePixelY ) :
     pDev( pOutDev ),

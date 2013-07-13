@@ -19,7 +19,6 @@
 
 #undef SC_DLLIMPLEMENTATION
 
-//------------------------------------------------------------------
 
 #include <scmod.hxx>
 #include <svl/eitem.hxx>

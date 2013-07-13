@@ -43,21 +43,18 @@ ScAppOptions::ScAppOptions() : pLRUList( NULL )
     SetDefaults();
 }
 
-//------------------------------------------------------------------------
 
 ScAppOptions::ScAppOptions( const ScAppOptions& rCpy ) : pLRUList( NULL )
 {
     *this = rCpy;
 }
 
-//------------------------------------------------------------------------
 
 ScAppOptions::~ScAppOptions()
 {
     delete [] pLRUList;
 }
 
-//------------------------------------------------------------------------
 
 void ScAppOptions::SetDefaults()
 {
@@ -117,7 +114,6 @@ const ScAppOptions& ScAppOptions::operator=( const ScAppOptions& rCpy )
     meKeyBindingType  = rCpy.meKeyBindingType;
      return *this;
 }
-//------------------------------------------------------------------------
 
 void ScAppOptions::SetLRUFuncList( const sal_uInt16* pList, const sal_uInt16 nCount )
 {
@@ -221,7 +217,6 @@ static void lcl_GetSortList( Any& rDest )
         rDest <<= Sequence<OUString>(0);    // empty
 }
 
-//------------------------------------------------------------------
 
 #define CFGPATH_LAYOUT      "Office.Calc/Layout"
 

@@ -23,7 +23,6 @@
 #include "global.hxx"       // for pSysLocale
 #include <unotools/syslocale.hxx>
 
-//------------------------------------------------------------------
 
 sal_Bool ScOptionsUtil::IsMetricSystem()
 {
@@ -34,7 +33,6 @@ sal_Bool ScOptionsUtil::IsMetricSystem()
     return ( eSys == MEASURE_METRIC );
 }
 
-//------------------------------------------------------------------
 
 ScLinkConfigItem::ScLinkConfigItem( const OUString& rSubTree ) :
     ConfigItem( rSubTree )

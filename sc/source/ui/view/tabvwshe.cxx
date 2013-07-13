@@ -121,7 +121,6 @@ String ScTabViewShell::GetSelectionText( sal_Bool bWholeWord )
     return aStrSelection;
 }
 
-//------------------------------------------------------------------------
 
 void ScTabViewShell::InsertURL( const String& rName, const String& rURL, const String& rTarget,
                                 sal_uInt16 nMode )
@@ -156,7 +155,6 @@ void ScTabViewShell::InsertURL( const String& rName, const String& rURL, const S
     }
 }
 
-//------------------------------------------------------------------------
 
 static void lcl_SelectFieldAfterInsert( EditView& rView )
 {
@@ -315,7 +313,6 @@ void ScTabViewShell::ExecSearch( SfxRequest& rReq )
     }
 }
 
-//--------------------------------------------------------------------
 
 
 

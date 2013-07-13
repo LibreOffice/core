@@ -65,20 +65,17 @@ ScStyleSheetPool::ScStyleSheetPool( SfxItemPool&    rPoolP,
 {
 }
 
-//------------------------------------------------------------------------
 
 ScStyleSheetPool::~ScStyleSheetPool()
 {
 }
 
-//------------------------------------------------------------------------
 
 void ScStyleSheetPool::SetDocument( ScDocument* pDocument )
 {
     pDoc = pDocument;
 }
 
-//------------------------------------------------------------------------
 
 SfxStyleSheetBase& ScStyleSheetPool::Make( const OUString& rName,
                                            SfxStyleFamily eFam, sal_uInt16 mask, sal_uInt16 nPos )
@@ -105,7 +102,6 @@ SfxStyleSheetBase& ScStyleSheetPool::Make( const OUString& rName,
     return SfxStyleSheetPool::Make( rName, eFam, mask, nPos );
 }
 
-//------------------------------------------------------------------------
 
 SfxStyleSheetBase* ScStyleSheetPool::Create( const OUString&   rName,
                                              SfxStyleFamily  eFamily,
@@ -118,7 +114,6 @@ SfxStyleSheetBase* ScStyleSheetPool::Create( const OUString&   rName,
     return pSheet;
 }
 
-//------------------------------------------------------------------------
 
 SfxStyleSheetBase* ScStyleSheetPool::Create( const SfxStyleSheetBase& rStyle )
 {
@@ -126,7 +121,6 @@ SfxStyleSheetBase* ScStyleSheetPool::Create( const SfxStyleSheetBase& rStyle )
     return new ScStyleSheet( (const ScStyleSheet&) rStyle );
 }
 
-//------------------------------------------------------------------------
 
 void ScStyleSheetPool::Remove( SfxStyleSheetBase* pStyle )
 {
@@ -140,7 +134,6 @@ void ScStyleSheetPool::Remove( SfxStyleSheetBase* pStyle )
     }
 }
 
-//------------------------------------------------------------------------
 
 void ScStyleSheetPool::CopyStyleFrom( ScStyleSheetPool* pSrcPool,
                                       const OUString& rName, SfxStyleFamily eFamily )
@@ -196,11 +189,9 @@ void ScStyleSheetPool::CopyStyleFrom( ScStyleSheetPool* pSrcPool,
     }
 }
 
-//------------------------------------------------------------------------
 //
 //                      Standard-Vorlagen
 //
-//------------------------------------------------------------------------
 
 #define SCSTR(id)   ScGlobal::GetRscString(id)
 
@@ -217,7 +208,6 @@ void ScStyleSheetPool::CopyStdStylesFrom( ScStyleSheetPool* pSrcPool )
     CopyStyleFrom( pSrcPool, SCSTR(STR_STYLENAME_REPORT),       SFX_STYLE_FAMILY_PAGE );
 }
 
-//------------------------------------------------------------------------
 
 static void lcl_CheckFont( SfxItemSet& rSet, LanguageType eLang, sal_uInt16 nFontType, sal_uInt16 nItemId )
 {
@@ -370,10 +360,8 @@ void ScStyleSheetPool::CreateStandardStyles()
     pSet->Put( *pHFSetItem, ATTR_PAGE_FOOTERSET );
     DELETEZ( pHFSetItem );
 
-    //----------------------------------------
     // Kopfzeile:
     // [leer][\TABELLE\][leer]
-    //----------------------------------------
     pEdEngine->SetText(EMPTY_STRING);
     pEdEngine->QuickInsertField( SvxFieldItem(SvxTableField(), EE_FEATURE_FIELD), ESelection() );
     pTxtObj = pEdEngine->CreateTextObject();
@@ -383,10 +371,8 @@ void ScStyleSheetPool::CreateStandardStyles()
     pSet->Put( *pHeaderItem );
     DELETEZ( pTxtObj );
 
-    //----------------------------------------
     // Fusszeile:
     // [leer][Seite \SEITE\][leer]
-    //----------------------------------------
     aStr = SCSTR( STR_PAGE ) + " ";
     pEdEngine->SetText( aStr );
     nStrLen = aStr.getLength();
@@ -432,10 +418,8 @@ void ScStyleSheetPool::CreateStandardStyles()
     pSet->Put( *pHFSetItem, ATTR_PAGE_FOOTERSET );
     DELETEZ( pHFSetItem );
 
-    //----------------------------------------
     // Kopfzeile:
     // [\TABELLE\ (\DATEI\)][leer][\DATUM\, \ZEIT\]
-    //----------------------------------------
     aStr = " ()";
     pEdEngine->SetText( aStr );
     pEdEngine->QuickInsertField( SvxFieldItem(SvxFileField(), EE_FEATURE_FIELD), ESelection(0,2,0,2) );
@@ -454,10 +438,8 @@ void ScStyleSheetPool::CreateStandardStyles()
     DELETEZ( pTxtObj );
     pSet->Put( *pHeaderItem );
 
-    //----------------------------------------
     // Fusszeile:
     // [leer][Seite: \SEITE\ / \SEITEN\][leer]
-    //----------------------------------------
     aStr = SCSTR( STR_PAGE ) + " ";
     nStrLen = aStr.getLength();
     aStr += " / ";
@@ -472,14 +454,12 @@ void ScStyleSheetPool::CreateStandardStyles()
     pSet->Put( *pFooterItem );
     DELETEZ( pTxtObj );
 
-    //----------------------------------------------------
     DELETEZ( pEmptyTxtObj );
     DELETEZ( pHeaderItem );
     DELETEZ( pFooterItem );
     DELETEZ( pEdEngine );
 }
 
-//------------------------------------------------------------------------
 
 
 ScStyleSheet* ScStyleSheetPool::FindCaseIns( const OUString& rName, SfxStyleFamily eFam )

@@ -460,7 +460,6 @@ void ScTabViewShell::GetState( SfxItemSet& rSet )
     } // while ( nWitch )
 }
 
-//------------------------------------------------------------------
 void ScTabViewShell::ExecuteCellFormatDlg(SfxRequest& rReq, const OString &rName)
 {
     SfxAbstractTabDialog * pDlg = NULL;
@@ -538,7 +537,6 @@ void ScTabViewShell::ExecuteCellFormatDlg(SfxRequest& rReq, const OString &rName
     delete pDlg;
 }
 
-//------------------------------------------------------------------
 
 bool ScTabViewShell::IsRefInputMode() const
 {
@@ -585,7 +583,6 @@ bool ScTabViewShell::IsRefInputMode() const
     return false;
 }
 
-//------------------------------------------------------------------
 
 void ScTabViewShell::ExecuteInputDirect()
 {
@@ -599,7 +596,6 @@ void ScTabViewShell::ExecuteInputDirect()
     }
 }
 
-//------------------------------------------------------------------
 
 void ScTabViewShell::UpdateInputHandler( sal_Bool bForce /* = sal_False */, sal_Bool bStopEditing /* = sal_True */ )
 {
@@ -699,7 +695,6 @@ void ScTabViewShell::UpdateInputHandlerCellAdjust( SvxCellHorJustify eJust )
         pHdl->UpdateCellAdjust( eJust );
 }
 
-//------------------------------------------------------------------
 
 void ScTabViewShell::ExecuteSave( SfxRequest& rReq )
 {

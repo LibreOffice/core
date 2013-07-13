@@ -60,7 +60,6 @@
 // in fuins1.cxx
 extern void ScLimitSizeOnDrawPage( Size& rSize, Point& rPos, const Size& rPage );
 
-//------------------------------------------------------------------------
 
 ScEEImport::ScEEImport( ScDocument* pDocP, const ScRange& rRange ) :
     maRange( rRange ),

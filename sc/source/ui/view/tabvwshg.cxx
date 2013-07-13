@@ -36,7 +36,6 @@ using namespace com::sun::star;
 #include "globstr.hrc"
 #include <avmedia/mediawindow.hxx>
 
-//------------------------------------------------------------------------
 
 void ScTabViewShell::InsertURLButton( const String& rName, const String& rURL,
                                         const String& rTarget,

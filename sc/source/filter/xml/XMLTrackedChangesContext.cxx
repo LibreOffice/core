@@ -39,7 +39,6 @@ using namespace com::sun::star;
 using namespace xmloff::token;
 
 
-//-----------------------------------------------------------------------------
 
 class ScXMLChangeInfoContext : public SvXMLImportContext
 {
@@ -68,7 +67,6 @@ public:
     virtual void EndElement();
 };
 
-//-----------------------------------------------------------------------------
 
 class ScXMLBigRangeContext : public SvXMLImportContext
 {
@@ -92,7 +90,6 @@ public:
     virtual void EndElement();
 };
 
-//-----------------------------------------------------------------------------
 
 class ScXMLCellContentDeletionContext : public SvXMLImportContext
 {
@@ -131,7 +128,6 @@ public:
     virtual void EndElement();
 };
 
-//-----------------------------------------------------------------------------
 
 class ScXMLDependenceContext : public SvXMLImportContext
 {
@@ -155,7 +151,6 @@ public:
     virtual void EndElement();
 };
 
-//-----------------------------------------------------------------------------
 
 class ScXMLDependingsContext : public SvXMLImportContext
 {
@@ -179,7 +174,6 @@ public:
     virtual void EndElement();
 };
 
-//-----------------------------------------------------------------------------
 
 class ScXMLChangeDeletionContext : public SvXMLImportContext
 {
@@ -203,7 +197,6 @@ public:
     virtual void EndElement();
 };
 
-//-----------------------------------------------------------------------------
 
 class ScXMLDeletionsContext : public SvXMLImportContext
 {
@@ -227,7 +220,6 @@ public:
     virtual void EndElement();
 };
 
-//-----------------------------------------------------------------------------
 
 class ScXMLChangeCellContext;
 
@@ -263,7 +255,6 @@ public:
     virtual void EndElement();
 };
 
-//-----------------------------------------------------------------------------
 
 class ScXMLChangeCellContext : public SvXMLImportContext
 {
@@ -306,7 +297,6 @@ public:
     virtual void EndElement();
 };
 
-//-----------------------------------------------------------------------------
 
 class ScXMLPreviousContext : public SvXMLImportContext
 {
@@ -342,7 +332,6 @@ public:
     virtual void EndElement();
 };
 
-//-----------------------------------------------------------------------------
 
 class ScXMLContentChangeContext : public SvXMLImportContext
 {
@@ -366,7 +355,6 @@ public:
     virtual void EndElement();
 };
 
-//-----------------------------------------------------------------------------
 
 class ScXMLInsertionContext : public SvXMLImportContext
 {
@@ -389,7 +377,6 @@ public:
     virtual void EndElement();
 };
 
-//-----------------------------------------------------------------------------
 
 class ScXMLInsertionCutOffContext : public SvXMLImportContext
 {
@@ -412,7 +399,6 @@ public:
     virtual void EndElement();
 };
 
-//-----------------------------------------------------------------------------
 
 class ScXMLMovementCutOffContext : public SvXMLImportContext
 {
@@ -435,7 +421,6 @@ public:
     virtual void EndElement();
 };
 
-//-----------------------------------------------------------------------------
 
 class ScXMLCutOffsContext : public SvXMLImportContext
 {
@@ -458,7 +443,6 @@ public:
     virtual void EndElement();
 };
 
-//-----------------------------------------------------------------------------
 
 class ScXMLDeletionContext : public SvXMLImportContext
 {
@@ -481,7 +465,6 @@ public:
     virtual void EndElement();
 };
 
-//-----------------------------------------------------------------------------
 
 class ScXMLMovementContext : public SvXMLImportContext
 {
@@ -506,7 +489,6 @@ public:
     virtual void EndElement();
 };
 
-//-----------------------------------------------------------------------------
 
 class ScXMLRejectionContext : public SvXMLImportContext
 {
@@ -529,7 +511,6 @@ public:
     virtual void EndElement();
 };
 
-//------------------------------------------------------------------
 
 ScXMLTrackedChangesContext::ScXMLTrackedChangesContext( ScXMLImport& rImport,
                                               sal_uInt16 nPrfx,

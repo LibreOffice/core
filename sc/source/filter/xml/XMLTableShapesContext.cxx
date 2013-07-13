@@ -25,7 +25,6 @@
 
 using namespace com::sun::star;
 
-//------------------------------------------------------------------
 
 ScXMLTableShapesContext::ScXMLTableShapesContext( ScXMLImport& rImport,
                                       sal_uInt16 nPrfx,

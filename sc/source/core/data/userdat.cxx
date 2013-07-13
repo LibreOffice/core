@@ -52,7 +52,6 @@ IMPL_LINK_INLINE_START( ScDrawObjFactory, MakeUserData, SdrObjFactory *, pObjFac
 }
 IMPL_LINK_INLINE_END( ScDrawObjFactory, MakeUserData, SdrObjFactory *, pObjFactory )
 
-//------------------------------------------------------------------------
 
 ScDrawObjData::ScDrawObjData() :
     SdrObjUserData( SC_DRAWLAYER, SC_UD_OBJDATA, 0 ),
@@ -67,7 +66,6 @@ ScDrawObjData* ScDrawObjData::Clone( SdrObject* ) const
     return new ScDrawObjData( *this );
 }
 
-//------------------------------------------------------------------------
 
 ScIMapInfo::ScIMapInfo() :
     SdrObjUserData( SC_DRAWLAYER, SC_UD_IMAPDATA, 0 )
@@ -95,7 +93,6 @@ SdrObjUserData* ScIMapInfo::Clone( SdrObject* ) const
     return new ScIMapInfo( *this );
 }
 
-//------------------------------------------------------------------------
 
 ScMacroInfo::ScMacroInfo() :
     SdrObjUserData( SC_DRAWLAYER, SC_UD_MACRODATA, 0 )

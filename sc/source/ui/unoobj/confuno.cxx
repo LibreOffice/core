@@ -82,7 +82,6 @@ static const SfxItemPropertyMapEntry* lcl_GetConfigPropertyMap()
     return aConfigPropertyMap_Impl;
 }
 
-//------------------------------------------------------------------------
 
 ScDocumentConfiguration::ScDocumentConfiguration(ScDocShell* pDocSh)
     : pDocShell(pDocSh) ,
@@ -488,6 +487,5 @@ uno::Sequence<OUString> SAL_CALL ScDocumentConfiguration::getSupportedServiceNam
     return aRet;
 }
 
-//-------------------------------------------------------------------------
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

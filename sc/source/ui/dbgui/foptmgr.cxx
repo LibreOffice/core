@@ -32,7 +32,6 @@
 #include "foptmgr.hxx"
 #undef _FOPTMGR_CXX
 
-//----------------------------------------------------------------------------
 
 ScFilterOptionsMgr::ScFilterOptionsMgr(
                                 ScViewData*         ptrViewData,
@@ -74,7 +73,6 @@ ScFilterOptionsMgr::ScFilterOptionsMgr(
 }
 
 
-//----------------------------------------------------------------------------
 
 ScFilterOptionsMgr::~ScFilterOptionsMgr()
 {
@@ -86,7 +84,6 @@ ScFilterOptionsMgr::~ScFilterOptionsMgr()
 }
 
 
-//----------------------------------------------------------------------------
 
 void ScFilterOptionsMgr::Init()
 {
@@ -190,7 +187,6 @@ void ScFilterOptionsMgr::Init()
             rFtDbArea.SetText( OUString() );
         }
 
-        //------------------------------------------------------
         // Kopierposition:
 
         if ( !rQueryData.bInplace )
@@ -225,7 +221,6 @@ void ScFilterOptionsMgr::Init()
 }
 
 
-//----------------------------------------------------------------------------
 
 sal_Bool ScFilterOptionsMgr::VerifyPosStr( const String& rPosStr ) const
 {
@@ -241,10 +236,8 @@ sal_Bool ScFilterOptionsMgr::VerifyPosStr( const String& rPosStr ) const
 }
 
 
-//----------------------------------------------------------------------------
 // Handler:
 
-//----------------------------------------------------------------------------
 
 IMPL_LINK( ScFilterOptionsMgr, LbPosSelHdl, ListBox*, pLb )
 {
@@ -263,7 +256,6 @@ IMPL_LINK( ScFilterOptionsMgr, LbPosSelHdl, ListBox*, pLb )
 }
 
 
-//----------------------------------------------------------------------------
 
 IMPL_LINK( ScFilterOptionsMgr, EdPosModifyHdl, Edit*, pEd )
 {
@@ -298,7 +290,6 @@ IMPL_LINK( ScFilterOptionsMgr, EdPosModifyHdl, Edit*, pEd )
 }
 
 
-//----------------------------------------------------------------------------
 
 IMPL_LINK( ScFilterOptionsMgr, BtnCopyResultHdl, CheckBox*, pBox )
 {

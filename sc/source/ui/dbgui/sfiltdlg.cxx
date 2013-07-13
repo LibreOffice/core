@@ -47,7 +47,6 @@
 //============================================================================
 //  class ScSpecialFilterDialog
 
-//----------------------------------------------------------------------------
 
 ScSpecialFilterDlg::ScSpecialFilterDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
                                         const SfxItemSet&   rArgSet )
@@ -106,7 +105,6 @@ ScSpecialFilterDlg::ScSpecialFilterDlg( SfxBindings* pB, SfxChildWindow* pCW, Wi
 }
 
 
-//----------------------------------------------------------------------------
 
 ScSpecialFilterDlg::~ScSpecialFilterDlg()
 {
@@ -127,7 +125,6 @@ ScSpecialFilterDlg::~ScSpecialFilterDlg()
 }
 
 
-//----------------------------------------------------------------------------
 
 void ScSpecialFilterDlg::Init( const SfxItemSet& rArgSet )
 {
@@ -212,7 +209,6 @@ void ScSpecialFilterDlg::Init( const SfxItemSet& rArgSet )
 }
 
 
-//----------------------------------------------------------------------------
 
 sal_Bool ScSpecialFilterDlg::Close()
 {
@@ -223,7 +219,6 @@ sal_Bool ScSpecialFilterDlg::Close()
 }
 
 
-//----------------------------------------------------------------------------
 // Uebergabe eines mit der Maus selektierten Tabellenbereiches, der dann als
 // neue Selektion im Referenz-Edit angezeigt wird.
 
@@ -247,7 +242,6 @@ void ScSpecialFilterDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
 }
 
 
-//----------------------------------------------------------------------------
 
 void ScSpecialFilterDlg::SetActive()
 {
@@ -272,7 +266,6 @@ void ScSpecialFilterDlg::SetActive()
 }
 
 
-//----------------------------------------------------------------------------
 
 ScQueryItem* ScSpecialFilterDlg::GetOutputItem( const ScQueryParam& rParam,
                                                 const ScRange& rSource )
@@ -285,7 +278,6 @@ ScQueryItem* ScSpecialFilterDlg::GetOutputItem( const ScQueryParam& rParam,
 }
 
 
-//----------------------------------------------------------------------------
 
 sal_Bool ScSpecialFilterDlg::IsRefInputMode() const
 {
@@ -293,7 +285,6 @@ sal_Bool ScSpecialFilterDlg::IsRefInputMode() const
 }
 
 
-//----------------------------------------------------------------------------
 // Handler:
 // ========
 
@@ -414,7 +405,6 @@ IMPL_LINK( ScSpecialFilterDlg, EndDlgHdl, Button*, pBtn )
 }
 
 
-//----------------------------------------------------------------------------
 
 IMPL_LINK( ScSpecialFilterDlg, TimeOutHdl, Timer*, _pTimer )
 {
@@ -445,7 +435,6 @@ IMPL_LINK( ScSpecialFilterDlg, TimeOutHdl, Timer*, _pTimer )
 }
 
 
-//----------------------------------------------------------------------------
 
 IMPL_LINK( ScSpecialFilterDlg, FilterAreaSelHdl, ListBox*, pLb )
 {
@@ -464,7 +453,6 @@ IMPL_LINK( ScSpecialFilterDlg, FilterAreaSelHdl, ListBox*, pLb )
 }
 
 
-//----------------------------------------------------------------------------
 
 IMPL_LINK( ScSpecialFilterDlg, FilterAreaModHdl, formula::RefEdit*, pEd )
 {
