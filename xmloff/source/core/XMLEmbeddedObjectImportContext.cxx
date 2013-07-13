@@ -135,7 +135,6 @@ void XMLEmbeddedObjectImportContext_Impl::Characters( const OUString& rChars )
     xHandler->characters( rChars );
 }
 
-//-----------------------------------------------------------------------------
 
 TYPEINIT1( XMLEmbeddedObjectImportContext, SvXMLImportContext );
 

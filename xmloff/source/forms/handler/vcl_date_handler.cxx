@@ -29,10 +29,8 @@
 #include <tools/diagnose_ex.h>
 #include <tools/date.hxx>
 
-//......................................................................................................................
 namespace xmloff
 {
-//......................................................................................................................
 
     using ::com::sun::star::uno::Any;
     using ::com::sun::star::uno::makeAny;
@@ -41,19 +39,16 @@ namespace xmloff
     //==================================================================================================================
     //= VCLDateHandler
     //==================================================================================================================
-    //------------------------------------------------------------------------------------------------------------------
     VCLDateHandler::VCLDateHandler()
     {
     }
 
-    //------------------------------------------------------------------------------------------------------------------
     OUString VCLDateHandler::getAttributeValue( const PropertyValues& /*i_propertyValues*/ ) const
     {
         OSL_ENSURE( false, "VCLDateHandler::getAttributeValue: unexpected call!" );
         return OUString();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
     OUString VCLDateHandler::getAttributeValue( const Any& i_propertyValue ) const
     {
         sal_Int32 nVCLDate(0);
@@ -70,7 +65,6 @@ namespace xmloff
         return aBuffer.makeStringAndClear();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
     bool VCLDateHandler::getPropertyValues( const OUString i_attributeValue, PropertyValues& o_propertyValues ) const
     {
         sal_Int32 nVCLDate(0);
@@ -104,8 +98,6 @@ namespace xmloff
         return true;
     }
 
-//......................................................................................................................
 } // namespace xmloff
-//......................................................................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -40,7 +40,6 @@
 using namespace ::xmloff::token;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
-//------------------------------------------------------------------------------
 
 static sal_uInt16 aAttrActionMaps[XML_PROP_TYPE_END] =
 {
@@ -60,7 +59,6 @@ static sal_uInt16 aAttrActionMaps[XML_PROP_TYPE_END] =
     PROP_OASIS_CHART_ATTR_ACTIONS
 };
 
-//------------------------------------------------------------------------------
 
 class XMLPropertiesTContext_Impl : public XMLPersElemContentTContext
 {
@@ -744,7 +742,6 @@ OUString XMLPropertiesTContext_Impl::MergeLineThrough(
     return GetXMLToken( eLineThrough );
 }
 
-//------------------------------------------------------------------------------
 
 TYPEINIT1( XMLStyleOASISTContext, XMLPersElemContentTContext );
 

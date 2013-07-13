@@ -31,7 +31,6 @@ using ::com::sun::star::uno::Reference;
 using namespace com::sun::star;
 using namespace ::xmloff::token;
 
-//-------------------------------------------------
 class SchXMLListItemContext : public SvXMLImportContext
 {
 public:
@@ -81,7 +80,6 @@ SvXMLImportContext* SchXMLListItemContext::CreateChildContext(
     return pContext;
 }
 
-//-------------------------------------------------
 
 SchXMLTextListContext::SchXMLTextListContext(
         SvXMLImport& rImport

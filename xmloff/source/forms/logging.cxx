@@ -20,22 +20,18 @@
 #include "logging.hxx"
 #include <rtl/logfile.hxx>
 
-//.........................................................................
 namespace xmloff
 {
-//.........................................................................
 
 #ifdef TIMELOG
     //=====================================================================
     //= OStackedLogging
     //=====================================================================
-    //---------------------------------------------------------------------
     void OStackedLogging::enterContext( const sal_Char* _pContextName )
     {
         m_aLogger.push( new ::rtl::Logfile( _pContextName ) );
     }
 
-    //---------------------------------------------------------------------
     void OStackedLogging::leaveTopContext( )
     {
         delete m_aLogger.top();
@@ -43,9 +39,7 @@ namespace xmloff
     }
 #endif
 
-//.........................................................................
 }   // namespace xmloff
-//.........................................................................
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

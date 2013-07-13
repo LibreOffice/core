@@ -1309,7 +1309,6 @@ void XMLTextFrameContext_Impl::SetDesc( const OUString& rDesc )
     }
 }
 
-//-----------------------------------------------------------------------------------------------------
 
 TYPEINIT1( XMLTextFrameContext, SvXMLImportContext );
 

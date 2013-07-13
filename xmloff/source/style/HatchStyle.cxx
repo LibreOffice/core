@@ -60,9 +60,7 @@ SvXMLEnumMapEntry const pXML_HatchStyle_Enum[] =
 };
 
 
-//-------------------------------------------------------------
 // Import
-//-------------------------------------------------------------
 
 XMLHatchStyleImport::XMLHatchStyleImport( SvXMLImport& rImp )
     : rImport(rImp)
@@ -176,9 +174,7 @@ sal_Bool XMLHatchStyleImport::importXML(
 }
 
 
-//-------------------------------------------------------------
 // Export
-//-------------------------------------------------------------
 
 XMLHatchStyleExport::XMLHatchStyleExport( SvXMLExport& rExp )
     : rExport(rExp)

@@ -63,10 +63,8 @@
 #include <stdio.h>
 #include <algorithm>
 
-//.........................................................................
 namespace xmloff
 {
-//.........................................................................
 
     #if OSL_DEBUG_LEVEL > 0
         #define RESET_BIT( bitfield, bit ) \
@@ -101,13 +99,11 @@ namespace xmloff
     {
     }
 
-    //---------------------------------------------------------------------
     OElementExport::~OElementExport()
     {
         implEndElement();
     }
 
-    //---------------------------------------------------------------------
     void OElementExport::doExport()
     {
         // collect some general information about the element
@@ -128,19 +124,16 @@ namespace xmloff
         implEndElement();
     }
 
-    //---------------------------------------------------------------------
     void OElementExport::examine()
     {
         // nothing to do here
     }
 
-    //---------------------------------------------------------------------
     void OElementExport::exportAttributes()
     {
         // nothing to do here
     }
 
-    //---------------------------------------------------------------------
     void OElementExport::exportSubTags()
     {
         // the properties which where not exported 'til now
@@ -150,20 +143,17 @@ namespace xmloff
         exportEvents();
     }
 
-    //---------------------------------------------------------------------
     void OElementExport::implStartElement(const sal_Char* _pName)
     {
         m_pXMLElement = new SvXMLElementExport(m_rContext.getGlobalContext(), XML_NAMESPACE_FORM, _pName, sal_True, sal_True);
     }
 
-    //---------------------------------------------------------------------
     void OElementExport::implEndElement()
     {
         delete m_pXMLElement;
         m_pXMLElement = NULL;
     }
 
-    //---------------------------------------------------------------------
     void OElementExport::exportServiceNameAttribute()
     {
         Reference< XPersistObject > xPersistence(m_xProps, UNO_QUERY);
@@ -231,7 +221,6 @@ namespace xmloff
             sToWriteServiceName);
     }
 
-    //---------------------------------------------------------------------
     void OElementExport::exportEvents()
     {
         if (!m_aEvents.getLength())
@@ -245,7 +234,6 @@ namespace xmloff
     //=====================================================================
     //= OControlExport
     //=====================================================================
-    //---------------------------------------------------------------------
     OControlExport::OControlExport(IFormsExportContext& _rContext,  const Reference< XPropertySet >& _rxControl,
         const OUString& _rControlId, const OUString& _rReferringControls,
         const Sequence< ScriptEventDescriptor >& _rEvents)
@@ -264,13 +252,11 @@ namespace xmloff
         OSL_ENSURE(m_xProps.is(), "OControlExport::OControlExport: invalid arguments!");
     }
 
-    //---------------------------------------------------------------------
     OControlExport::~OControlExport()
     {
         implEndElement();
     }
 
-    //---------------------------------------------------------------------
     void OControlExport::exportOuterAttributes()
     {
         // the control id
@@ -298,7 +284,6 @@ namespace xmloff
         }
     }
 
-    //---------------------------------------------------------------------
     void OControlExport::exportInnerAttributes()
     {
         // the control id
@@ -332,13 +317,11 @@ namespace xmloff
         flagStyleProperties();
     }
 
-    //---------------------------------------------------------------------
     void OControlExport::exportAttributes()
     {
         exportOuterAttributes();
     }
 
-    //---------------------------------------------------------------------
     void OControlExport::exportSubTags() throw (Exception)
     {
         // for the upcoming exportRemainingProperties:
@@ -468,7 +451,6 @@ namespace xmloff
         }
     }
 
-    //---------------------------------------------------------------------
     void OControlExport::exportGenericHandlerAttributes()
     {
         const Sequence< Property > aProperties = m_xPropertyInfo->getProperties();
@@ -549,7 +531,6 @@ namespace xmloff
         }
     }
 
-    //---------------------------------------------------------------------
     void OControlExport::exportCommonControlAttributes()
     {
         size_t i=0;
@@ -855,7 +836,6 @@ namespace xmloff
             // be 0 now ...
     }
 
-    //---------------------------------------------------------------------
     void OControlExport::exportDatabaseAttributes()
     {
 #if OSL_DEBUG_LEVEL > 0
@@ -934,7 +914,6 @@ namespace xmloff
 #endif
     }
 
-    //---------------------------------------------------------------------
     void OControlExport::exportBindingAtributes()
     {
 #if OSL_DEBUG_LEVEL > 0
@@ -1276,7 +1255,6 @@ namespace xmloff
             // be 0 now ...
     }
 
-    //---------------------------------------------------------------------
     OUString OControlExport::getScalarListSourceValue() const
     {
         OUString sListSource;
@@ -1291,7 +1269,6 @@ namespace xmloff
         return sListSource;
     }
 
-    //---------------------------------------------------------------------
     void OControlExport::exportListSourceAsAttribute()
     {
         // DA_LIST_SOURCE needs some special handling
@@ -1309,7 +1286,6 @@ namespace xmloff
         exportedProperty( PROPERTY_LISTSOURCE );
     }
 
-    //---------------------------------------------------------------------
     void OControlExport::getSequenceInt16PropertyAsSet(const OUString& _rPropertyName, Int16Set& _rOut)
     {
         Sequence< sal_Int16 > aValueSequence;
@@ -1321,7 +1297,6 @@ namespace xmloff
             _rOut.insert(*pValues);
     }
 
-    //---------------------------------------------------------------------
     void OControlExport::exportListSourceAsElements()
     {
         // the string lists
@@ -1445,7 +1420,6 @@ namespace xmloff
         }
     }
 
-    //---------------------------------------------------------------------
     void OControlExport::implStartElement(const sal_Char* _pName)
     {
         // before we let the base class start it's outer element, we add a wrapper element
@@ -1465,7 +1439,6 @@ namespace xmloff
         OElementExport::implStartElement(_pName);
     }
 
-    //---------------------------------------------------------------------
     void OControlExport::implEndElement()
     {
         // end the inner element
@@ -1476,19 +1449,16 @@ namespace xmloff
         m_pOuterElement = NULL;
     }
 
-    //---------------------------------------------------------------------
     const sal_Char* OControlExport::getOuterXMLElementName() const
     {
         return 0;
     }
 
-    //---------------------------------------------------------------------
     const sal_Char* OControlExport::getXMLElementName() const
     {
         return getElementName(m_eType);
     }
 
-    //---------------------------------------------------------------------
     void OControlExport::examine()
     {
         OSL_ENSURE( ( m_nIncludeCommon == 0 ) && ( m_nIncludeSpecial == 0 ) && ( m_nIncludeDatabase == 0 )
@@ -1821,7 +1791,6 @@ namespace xmloff
         }
     }
 
-    //---------------------------------------------------------------------
     void OControlExport::exportCellBindingAttributes( bool _bIncludeListLinkageType )
     {
         try
@@ -1865,25 +1834,21 @@ namespace xmloff
         }
     }
 
-    //---------------------------------------------------------------------
     void OControlExport::exportXFormsBindAttributes()
     {
         OUString sBindName = getXFormsBindName( m_xProps );
         AddAttribute( XML_NAMESPACE_XFORMS, XML_BIND, sBindName );
     }
-    //---------------------------------------------------------------------
     void OControlExport::exportXFormsListAttributes()
     {
         OUString sBindName = getXFormsListBindName( m_xProps );
         AddAttribute( XML_NAMESPACE_FORM, XML_XFORMS_LIST_SOURCE, sBindName );
     }
-    //---------------------------------------------------------------------
     void OControlExport::exportXFormsSubmissionAttributes()
     {
         OUString sSubmission = getXFormsSubmissionName( m_xProps );
         AddAttribute( XML_NAMESPACE_FORM, XML_XFORMS_SUBMISSION, sSubmission );
     }
-    //---------------------------------------------------------------------
     void OControlExport::exportCellListSourceRange( )
     {
         try
@@ -1910,7 +1875,6 @@ namespace xmloff
         }
     }
 
-    //---------------------------------------------------------------------
     void OControlExport::exportImagePositionAttributes()
     {
         try
@@ -1958,7 +1922,6 @@ namespace xmloff
         }
     }
 
-    //---------------------------------------------------------------------
     bool OControlExport::controlHasActiveDataBinding() const
     {
         try
@@ -1986,7 +1949,6 @@ namespace xmloff
         return false;
     }
 
-    //---------------------------------------------------------------------
     bool OControlExport::controlHasUserSuppliedListEntries() const
     {
         try
@@ -2022,20 +1984,17 @@ namespace xmloff
     //=====================================================================
     //= OColumnExport
     //=====================================================================
-    //---------------------------------------------------------------------
     OColumnExport::OColumnExport(IFormsExportContext& _rContext, const Reference< XPropertySet >& _rxControl, const OUString& _rControlId,
         const Sequence< ScriptEventDescriptor >& _rEvents)
         :OControlExport(_rContext, _rxControl, _rControlId, OUString(), _rEvents)
     {
     }
 
-    //---------------------------------------------------------------------
     OColumnExport::~OColumnExport()
     {
         implEndElement();
     }
 
-    //---------------------------------------------------------------------
     void OColumnExport::exportServiceNameAttribute()
     {
         // the attribute "service name" (which has a slightly different meaning for columns
@@ -2060,13 +2019,11 @@ namespace xmloff
 
     }
 
-    //---------------------------------------------------------------------
     const sal_Char* OColumnExport::getOuterXMLElementName() const
     {
         return "column";
     }
 
-    //---------------------------------------------------------------------
     void OColumnExport::exportAttributes()
     {
         OControlExport::exportAttributes();
@@ -2089,7 +2046,6 @@ namespace xmloff
         }
     }
 
-    //---------------------------------------------------------------------
     void OColumnExport::examine()
     {
         OControlExport::examine();
@@ -2106,7 +2062,6 @@ namespace xmloff
     //=====================================================================
     //= OFormExport
     //=====================================================================
-    //---------------------------------------------------------------------
     OFormExport::OFormExport(IFormsExportContext& _rContext, const Reference< XPropertySet >& _rxForm,
         const Sequence< ScriptEventDescriptor >& _rEvents)
         :OElementExport(_rContext, _rxForm, _rEvents)
@@ -2115,13 +2070,11 @@ namespace xmloff
         OSL_ENSURE(m_xProps.is(), "OFormExport::OFormExport: invalid arguments!");
     }
 
-    //---------------------------------------------------------------------
     const sal_Char* OFormExport::getXMLElementName() const
     {
         return "form";
     }
 
-    //---------------------------------------------------------------------
     void OFormExport::exportSubTags()
     {
         if ( m_bCreateConnectionResourceElement && m_xProps.is() )
@@ -2152,7 +2105,6 @@ namespace xmloff
             m_rContext.exportCollectionElements(xCollection);
     }
 
-    //---------------------------------------------------------------------
     void OFormExport::exportAttributes()
     {
         sal_Int32 i=0;
@@ -2297,8 +2249,6 @@ namespace xmloff
             OAttributeMetaData::getFormAttributeName(faDetailFiels),
             PROPERTY_DETAILFIELDS);
     }
-//.........................................................................
 }   // namespace xmloff
-//.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

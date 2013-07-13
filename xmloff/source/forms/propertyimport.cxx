@@ -42,10 +42,8 @@
     #include <osl/thread.h>
 #endif
 
-//.........................................................................
 namespace xmloff
 {
-//.........................................................................
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::beans;
@@ -64,7 +62,6 @@ namespace xmloff
 //=====================================================================
 namespace
 {
-    //---------------------------------------------------------------------
     ::com::sun::star::util::Time lcl_getTime(double _nValue)
     {
         ::com::sun::star::util::Time aTime;
@@ -81,7 +78,6 @@ namespace
         return aTime;
     }
 
-    //---------------------------------------------------------------------
     static ::com::sun::star::util::Date lcl_getDate( double _nValue )
     {
         Date aToolsDate((sal_uInt32)_nValue);
@@ -91,7 +87,6 @@ namespace
     }
 }
 
-//---------------------------------------------------------------------
 Any PropertyConversion::convertString( SvXMLImport& _rImporter, const ::com::sun::star::uno::Type& _rExpectedType,
     const OUString& _rReadCharacters, const SvXMLEnumMapEntry* _pEnumMap, const sal_Bool _bInvertBoolean )
 {
@@ -242,7 +237,6 @@ Any PropertyConversion::convertString( SvXMLImport& _rImporter, const ::com::sun
     return aReturn;
 }
 
-//---------------------------------------------------------------------
 Type PropertyConversion::xmlTypeToUnoType( const OUString& _rType )
 {
     Type aUnoType( ::getVoidCppuType() );
@@ -267,7 +261,6 @@ Type PropertyConversion::xmlTypeToUnoType( const OUString& _rType )
 //=====================================================================
 //= OPropertyImport
 //=====================================================================
-//---------------------------------------------------------------------
 OPropertyImport::OPropertyImport(OFormLayerXMLImport_Impl& _rImport, sal_uInt16 _nPrefix, const OUString& _rName)
     :SvXMLImportContext(_rImport.getGlobalContext(), _nPrefix, _rName)
     ,m_rContext(_rImport)
@@ -275,7 +268,6 @@ OPropertyImport::OPropertyImport(OFormLayerXMLImport_Impl& _rImport, sal_uInt16 
 {
 }
 
-//---------------------------------------------------------------------
 SvXMLImportContext* OPropertyImport::CreateChildContext(sal_uInt16 _nPrefix, const OUString& _rLocalName,
     const Reference< XAttributeList >& _rxAttrList)
 {
@@ -293,7 +285,6 @@ SvXMLImportContext* OPropertyImport::CreateChildContext(sal_uInt16 _nPrefix, con
     }
 }
 
-//---------------------------------------------------------------------
 void OPropertyImport::StartElement(const Reference< XAttributeList >& _rxAttrList)
 {
     OSL_ENSURE(_rxAttrList.is(), "OPropertyImport::StartElement: invalid attribute list!");
@@ -320,14 +311,12 @@ void OPropertyImport::StartElement(const Reference< XAttributeList >& _rxAttrLis
     // default
 }
 
-//---------------------------------------------------------------------
 sal_Bool OPropertyImport::encounteredAttribute(const OUString& _rAttributeName) const
 {
     OSL_ENSURE(m_bTrackAttributes, "OPropertyImport::encounteredAttribute: attribute tracking not enabled!");
     return m_aEncounteredAttributes.end() != m_aEncounteredAttributes.find(_rAttributeName);
 }
 
-//---------------------------------------------------------------------
 void OPropertyImport::Characters(const OUString&
 #if OSL_DEBUG_LEVEL > 0
 _rChars
@@ -338,7 +327,6 @@ _rChars
     OSL_ENSURE(_rChars.trim().isEmpty(), "OPropertyImport::Characters: non-whitespace characters!");
 }
 
-//---------------------------------------------------------------------
 bool OPropertyImport::handleAttribute(sal_uInt16 /*_nNamespaceKey*/, const OUString& _rLocalName, const OUString& _rValue)
 {
     const OAttribute2Property::AttributeAssignment* pProperty = m_rContext.getAttributeMap().getAttributeTranslation(_rLocalName);
@@ -371,7 +359,6 @@ bool OPropertyImport::handleAttribute(sal_uInt16 /*_nNamespaceKey*/, const OUStr
 //=====================================================================
 //= OPropertyElementsContext
 //=====================================================================
-//---------------------------------------------------------------------
 OPropertyElementsContext::OPropertyElementsContext(SvXMLImport& _rImport, sal_uInt16 _nPrefix, const OUString& _rName,
         const OPropertyImportRef& _rPropertyImporter)
     :SvXMLImportContext(_rImport, _nPrefix, _rName)
@@ -379,7 +366,6 @@ OPropertyElementsContext::OPropertyElementsContext(SvXMLImport& _rImport, sal_uI
 {
 }
 
-//---------------------------------------------------------------------
 SvXMLImportContext* OPropertyElementsContext::CreateChildContext(sal_uInt16 _nPrefix, const OUString& _rLocalName,
     const Reference< XAttributeList >&)
 {
@@ -401,14 +387,12 @@ SvXMLImportContext* OPropertyElementsContext::CreateChildContext(sal_uInt16 _nPr
 }
 
 #if OSL_DEBUG_LEVEL > 0
-    //---------------------------------------------------------------------
     void OPropertyElementsContext::StartElement(const Reference< XAttributeList >& _rxAttrList)
     {
         OSL_ENSURE(0 == _rxAttrList->getLength(), "OPropertyElementsContext::StartElement: the form:properties element should not have attributes!");
         SvXMLImportContext::StartElement(_rxAttrList);
     }
 
-    //---------------------------------------------------------------------
     void OPropertyElementsContext::Characters(const OUString& _rChars)
     {
         OSL_ENSURE(0 == _rChars.trim(), "OPropertyElementsContext::Characters: non-whitespace characters detected!");
@@ -420,7 +404,6 @@ SvXMLImportContext* OPropertyElementsContext::CreateChildContext(sal_uInt16 _nPr
 //=====================================================================
 //= OSinglePropertyContext
 //=====================================================================
-//---------------------------------------------------------------------
 OSinglePropertyContext::OSinglePropertyContext(SvXMLImport& _rImport, sal_uInt16 _nPrefix, const OUString& _rName,
         const OPropertyImportRef& _rPropertyImporter)
     :SvXMLImportContext(_rImport, _nPrefix, _rName)
@@ -428,7 +411,6 @@ OSinglePropertyContext::OSinglePropertyContext(SvXMLImport& _rImport, sal_uInt16
 {
 }
 
-//---------------------------------------------------------------------
 SvXMLImportContext* OSinglePropertyContext::CreateChildContext(sal_uInt16 _nPrefix, const OUString& _rLocalName,
         const Reference< XAttributeList >&)
 {
@@ -438,7 +420,6 @@ SvXMLImportContext* OSinglePropertyContext::CreateChildContext(sal_uInt16 _nPref
     return new SvXMLImportContext(GetImport(), _nPrefix, _rLocalName);
 }
 
-//---------------------------------------------------------------------
 void OSinglePropertyContext::StartElement(const Reference< XAttributeList >& _rxAttrList)
 {
     ::com::sun::star::beans::PropertyValue aPropValue;      // the property the instance imports currently
@@ -499,7 +480,6 @@ void OSinglePropertyContext::StartElement(const Reference< XAttributeList >& _rx
 //=====================================================================
 //= OListPropertyContext
 //=====================================================================
-//---------------------------------------------------------------------
 OListPropertyContext::OListPropertyContext( SvXMLImport& _rImport, sal_uInt16 _nPrefix, const OUString& _rName,
     const OPropertyImportRef& _rPropertyImporter )
     :SvXMLImportContext( _rImport, _nPrefix, _rName )
@@ -507,7 +487,6 @@ OListPropertyContext::OListPropertyContext( SvXMLImport& _rImport, sal_uInt16 _n
 {
 }
 
-//---------------------------------------------------------------------
 void OListPropertyContext::StartElement( const Reference< XAttributeList >& _rxAttrList )
 {
     sal_Int32 nAttributeCount = _rxAttrList->getLength();
@@ -539,7 +518,6 @@ void OListPropertyContext::StartElement( const Reference< XAttributeList >& _rxA
     }
 }
 
-//---------------------------------------------------------------------
 void OListPropertyContext::EndElement()
 {
     OSL_ENSURE( !m_sPropertyName.isEmpty() && !m_sPropertyType.isEmpty(),
@@ -566,7 +544,6 @@ void OListPropertyContext::EndElement()
     m_xPropertyImporter->implPushBackGenericPropertyValue( aSequenceValue );
 }
 
-//---------------------------------------------------------------------
 SvXMLImportContext* OListPropertyContext::CreateChildContext( sal_uInt16 _nPrefix, const OUString& _rLocalName, const Reference< XAttributeList >& /*_rxAttrList*/ )
 {
     if ( token::IsXMLToken( _rLocalName, token::XML_LIST_VALUE ) )
@@ -586,14 +563,12 @@ SvXMLImportContext* OListPropertyContext::CreateChildContext( sal_uInt16 _nPrefi
 //=====================================================================
 //= OListValueContext
 //=====================================================================
-//---------------------------------------------------------------------
 OListValueContext::OListValueContext( SvXMLImport& _rImport, sal_uInt16 _nPrefix, const OUString& _rName, OUString& _rListValueHolder )
     :SvXMLImportContext( _rImport, _nPrefix, _rName )
     ,m_rListValueHolder( _rListValueHolder )
 {
 }
 
-//---------------------------------------------------------------------
 void OListValueContext::StartElement( const Reference< XAttributeList >& _rxAttrList )
 {
     const sal_Int32 nAttributeCount = _rxAttrList->getLength();
@@ -622,8 +597,6 @@ void OListValueContext::StartElement( const Reference< XAttributeList >& _rxAttr
     }
 }
 
-//.........................................................................
 }   // namespace xmloff
-//.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -53,11 +53,9 @@ using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 using namespace ::svt;
 
-//-------------------------------------------------------------------------
 
 #define XMLNUM_MAX_PARTS    3
 
-//-------------------------------------------------------------------------
 
 struct LessuInt32
 {
@@ -93,7 +91,6 @@ public:
     void SetWasUsed(const uno::Sequence<sal_Int32>& rWasUsed);
 };
 
-//-------------------------------------------------------------------------
 
 struct SvXMLEmbeddedTextEntry
 {
@@ -107,7 +104,6 @@ struct SvXMLEmbeddedTextEntry
 
 class SvXMLEmbeddedTextEntryArr : public boost::ptr_vector<SvXMLEmbeddedTextEntry> {};
 
-//-------------------------------------------------------------------------
 
 //
 //! SvXMLNumUsedList_Impl should be optimized!
@@ -216,7 +212,6 @@ void SvXMLNumUsedList_Impl::SetWasUsed(const uno::Sequence<sal_Int32>& rWasUsed)
     }
 }
 
-//-------------------------------------------------------------------------
 
 SvXMLNumFmtExport::SvXMLNumFmtExport(
             SvXMLExport& rExp,
@@ -293,7 +288,6 @@ SvXMLNumFmtExport::~SvXMLNumFmtExport()
     delete pCharClass;
 }
 
-//-------------------------------------------------------------------------
 
 //
 //  helper methods
@@ -345,7 +339,6 @@ void SvXMLNumFmtExport::AddLanguageAttr_Impl( sal_Int32 nLang )
     }
 }
 
-//-------------------------------------------------------------------------
 
 //
 //  methods to write individual elements within a format
@@ -752,7 +745,6 @@ void SvXMLNumFmtExport::WriteMapElement_Impl( sal_Int32 nOp, double fLimit,
     }
 }
 
-//-------------------------------------------------------------------------
 //  for old (automatic) currency formats: parse currency symbol from text
 
 sal_Int32 lcl_FindSymbol( const OUString& sUpperStr, const OUString& sCurString )
@@ -837,7 +829,6 @@ sal_Bool SvXMLNumFmtExport::WriteTextWithCurrency_Impl( const OUString& rString,
     return bRet;        // sal_True: currency element written
 }
 
-//-------------------------------------------------------------------------
 
 static OUString lcl_GetDefaultCalendar( SvNumberFormatter* pFormatter, LanguageType nLang )
 {
@@ -864,7 +855,6 @@ static OUString lcl_GetDefaultCalendar( SvNumberFormatter* pFormatter, LanguageT
     return aCalendar;
 }
 
-//-------------------------------------------------------------------------
 
 static sal_Bool lcl_IsInEmbedded( const SvXMLEmbeddedTextEntryArr& rEmbeddedEntries, sal_uInt16 nPos )
 {
@@ -1656,7 +1646,6 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
     }
 }
 
-//-------------------------------------------------------------------------
 
 //
 //  export one format
@@ -1690,7 +1679,6 @@ void SvXMLNumFmtExport::ExportFormat_Impl( const SvNumberformat& rFormat, sal_uI
     }
 }
 
-//-------------------------------------------------------------------------
 
 //
 //  export method called by application

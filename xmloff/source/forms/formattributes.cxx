@@ -26,10 +26,8 @@
 #include <xmloff/xmluconv.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/logfile.hxx>
-//.........................................................................
 namespace xmloff
 {
-//.........................................................................
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
@@ -39,7 +37,6 @@ namespace xmloff
     //=====================================================================
     //= OAttributeMetaData
     //=====================================================================
-    //---------------------------------------------------------------------
     const sal_Char* OAttributeMetaData::getCommonControlAttributeName(sal_Int32 _nId)
     {
         switch (_nId)
@@ -75,7 +72,6 @@ namespace xmloff
         return "";
     }
 
-    //---------------------------------------------------------------------
     sal_uInt16 OAttributeMetaData::getCommonControlAttributeNamespace(sal_Int32 _nId)
     {
         if (CCA_TARGET_LOCATION == _nId)
@@ -87,7 +83,6 @@ namespace xmloff
         return XML_NAMESPACE_FORM;
     }
 
-    //---------------------------------------------------------------------
     const sal_Char* OAttributeMetaData::getFormAttributeName(FormAttributes _eAttrib)
     {
         switch (_eAttrib)
@@ -120,7 +115,6 @@ namespace xmloff
         return "";
     }
 
-    //---------------------------------------------------------------------
     sal_uInt16 OAttributeMetaData::getFormAttributeNamespace(FormAttributes _eAttrib)
     {
         if (faAction == _eAttrib)
@@ -132,7 +126,6 @@ namespace xmloff
         return XML_NAMESPACE_FORM;
     }
 
-    //---------------------------------------------------------------------
     const sal_Char* OAttributeMetaData::getDatabaseAttributeName(sal_Int32 _nId)
     {
         switch (_nId)
@@ -149,14 +142,12 @@ namespace xmloff
         return "";
     }
 
-    //---------------------------------------------------------------------
     sal_uInt16 OAttributeMetaData::getDatabaseAttributeNamespace(sal_Int32 /*_nId*/)
     {
         // nothing special here
         return XML_NAMESPACE_FORM;
     }
 
-    //---------------------------------------------------------------------
     const sal_Char* OAttributeMetaData::getBindingAttributeName(sal_Int32 _nId)
     {
         switch (_nId)
@@ -170,14 +161,12 @@ namespace xmloff
         return "";
     }
 
-    //---------------------------------------------------------------------
     sal_uInt16 OAttributeMetaData::getBindingAttributeNamespace(sal_Int32)
     {
         // nothing special here
         return XML_NAMESPACE_FORM;
     }
 
-    //---------------------------------------------------------------------
     const sal_Char* OAttributeMetaData::getSpecialAttributeName(sal_Int32 _nId)
     {
         switch (_nId)
@@ -206,7 +195,6 @@ namespace xmloff
         return "";
     }
 
-    //---------------------------------------------------------------------
     sal_uInt16 OAttributeMetaData::getSpecialAttributeNamespace(sal_Int32 _nId)
     {
         switch( _nId )
@@ -216,7 +204,6 @@ namespace xmloff
         return XML_NAMESPACE_FORM;
     }
 
-    //---------------------------------------------------------------------
     const sal_Char* OAttributeMetaData::getOfficeFormsAttributeName(OfficeFormsAttributes _eAttrib)
     {
         switch (_eAttrib)
@@ -229,7 +216,6 @@ namespace xmloff
         return "";
     }
 
-    //---------------------------------------------------------------------
     sal_uInt16 OAttributeMetaData::getOfficeFormsAttributeNamespace(OfficeFormsAttributes /* _eAttrib */)
     {
         // nothing special here
@@ -239,17 +225,14 @@ namespace xmloff
     //=====================================================================
     //= OAttribute2Property
     //=====================================================================
-    //---------------------------------------------------------------------
     OAttribute2Property::OAttribute2Property()
     {
     }
 
-    //---------------------------------------------------------------------
     OAttribute2Property::~OAttribute2Property()
     {
     }
 
-    //---------------------------------------------------------------------
     const OAttribute2Property::AttributeAssignment* OAttribute2Property::getAttributeTranslation(
             const OUString& _rAttribName)
     {
@@ -259,7 +242,6 @@ namespace xmloff
         return NULL;
     }
 
-    //---------------------------------------------------------------------
     void OAttribute2Property::addStringProperty(
         const sal_Char* _pAttributeName, const OUString& _rPropertyName,
         const sal_Char* _pAttributeDefault)
@@ -268,7 +250,6 @@ namespace xmloff
             _pAttributeDefault ? OUString::createFromAscii(_pAttributeDefault) : OUString());
     }
 
-    //---------------------------------------------------------------------
     void OAttribute2Property::addBooleanProperty(
         const sal_Char* _pAttributeName, const OUString& _rPropertyName,
         const sal_Bool _bAttributeDefault, const sal_Bool _bInverseSemantics)
@@ -279,7 +260,6 @@ namespace xmloff
         aAssignment.bInverseSemantics = _bInverseSemantics;
     }
 
-    //---------------------------------------------------------------------
     void OAttribute2Property::addInt16Property(
         const sal_Char* _pAttributeName, const OUString& _rPropertyName,
         const sal_Int16 _nAttributeDefault)
@@ -289,7 +269,6 @@ namespace xmloff
         implAdd(_pAttributeName, _rPropertyName, ::getCppuType( static_cast< sal_Int16* >(NULL) ), aDefault.makeStringAndClear());
     }
 
-    //---------------------------------------------------------------------
     void OAttribute2Property::addInt32Property(
         const sal_Char* _pAttributeName, const OUString& _rPropertyName,
         const sal_Int32 _nAttributeDefault)
@@ -299,7 +278,6 @@ namespace xmloff
         implAdd( _pAttributeName, _rPropertyName, ::getCppuType( static_cast< sal_Int32* >(NULL) ), aDefault.makeStringAndClear() );
     }
 
-    //---------------------------------------------------------------------
     void OAttribute2Property::addEnumProperty(
             const sal_Char* _pAttributeName, const OUString& _rPropertyName,
             const sal_uInt16 _nAttributeDefault, const SvXMLEnumMapEntry* _pValueMap,
@@ -314,7 +292,6 @@ namespace xmloff
         aAssignment.pEnumMap = _pValueMap;
     }
 
-    //---------------------------------------------------------------------
     OAttribute2Property::AttributeAssignment& OAttribute2Property::implAdd(
             const sal_Char* _pAttributeName, const OUString& _rPropertyName,
             const ::com::sun::star::uno::Type& _rType, const OUString& /*_rDefaultString*/)
@@ -333,8 +310,6 @@ namespace xmloff
         return m_aKnownProperties[sAttributeName] = aAssignment;
     }
 
-//.........................................................................
 }   // namespace xmloff
-//.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -138,7 +138,6 @@ sal_Bool XMLFormPropValueTContext_Impl::IsPersistent() const
     return m_bPersistent;
 }
 
-//------------------------------------------------------------------------------
 
 TYPEINIT1( XMLFormPropOOoTransformerContext, XMLTransformerContext );
 

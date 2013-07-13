@@ -68,9 +68,7 @@ SvXMLEnumMapEntry const pXML_GradientStyle_Enum[] =
 };
 
 
-//-------------------------------------------------------------
 // Import
-//-------------------------------------------------------------
 
 XMLTransGradientStyleImport::XMLTransGradientStyleImport( SvXMLImport& rImp )
     : rImport(rImp)
@@ -217,9 +215,7 @@ sal_Bool XMLTransGradientStyleImport::importXML(
 }
 
 
-//-------------------------------------------------------------
 // Export
-//-------------------------------------------------------------
 
 XMLTransGradientStyleExport::XMLTransGradientStyleExport( SvXMLExport& rExp )
     : rExport(rExp)
