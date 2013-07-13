@@ -25,10 +25,8 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Any;
 using namespace ::com::sun::star;
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 namespace wrapper
 {
 
@@ -57,7 +55,6 @@ Any WrappedAddInProperty::getPropertyValue( const Reference< beans::XPropertySet
     return uno::makeAny( m_rChartDocumentWrapper.getAddIn() );
 }
 
-//.............................................................................
 
 WrappedBaseDiagramProperty::WrappedBaseDiagramProperty( ChartDocumentWrapper& rChartDocumentWrapper )
     : ::chart::WrappedProperty( "BaseDiagram" , OUString() )
@@ -84,7 +81,6 @@ Any WrappedBaseDiagramProperty::getPropertyValue( const Reference< beans::XPrope
     return uno::makeAny( m_rChartDocumentWrapper.getBaseDiagram() );
 }
 
-//.............................................................................
 
 WrappedAdditionalShapesProperty::WrappedAdditionalShapesProperty( ChartDocumentWrapper& rChartDocumentWrapper )
     : ::chart::WrappedProperty( "AdditionalShapes" , OUString() )
@@ -107,7 +103,6 @@ Any WrappedAdditionalShapesProperty::getPropertyValue( const Reference< beans::X
     return uno::makeAny( m_rChartDocumentWrapper.getAdditionalShapes() );
 }
 
-//.............................................................................
 
 WrappedRefreshAddInAllowedProperty::WrappedRefreshAddInAllowedProperty( ChartDocumentWrapper& rChartDocumentWrapper )
     : ::chart::WrappedProperty( "RefreshAddInAllowed" , OUString() )

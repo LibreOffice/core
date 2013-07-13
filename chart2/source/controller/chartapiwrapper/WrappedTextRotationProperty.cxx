@@ -26,7 +26,6 @@ using namespace ::com::sun::star;
 using ::com::sun::star::uno::Any;
 
 
-//.............................................................................
 namespace chart
 {
 
@@ -71,6 +70,5 @@ Any WrappedTextRotationProperty::convertOuterToInnerValue( const Any& rOuterValu
 }
 
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -26,10 +26,8 @@
 
 #include <com/sun/star/chart/DataLabelPlacement.hpp>
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 
@@ -122,7 +120,6 @@ awt::Point PolarLabelPositionHelper::getLabelScreenPositionAndAlignmentForUnitCi
                 fAngleDegree = 270.0;
         }
     }
-    //------------------------------
     //set LabelAlignment
     if( !bCenter )
     {
@@ -173,8 +170,6 @@ awt::Point PolarLabelPositionHelper::getLabelScreenPositionAndAlignmentForUnitCi
     return aRet;
 }
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

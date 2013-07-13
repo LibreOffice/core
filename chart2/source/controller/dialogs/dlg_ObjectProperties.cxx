@@ -66,18 +66,13 @@
 
 #include <svl/cjkoptions.hxx>
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 using ::com::sun::star::uno::Reference;
 
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
 
 ObjectPropertiesDialogParameter::ObjectPropertiesDialogParameter( const OUString& rObjectCID )
         : m_aObjectCID( rObjectCID )
@@ -323,9 +318,6 @@ bool ObjectPropertiesDialogParameter::IsComplexCategoriesAxis() const
 
 const sal_uInt16 nNoArrowNoShadowDlg    = 1101;
 
-//-------------------------------------------------------------------
-//-------------------------------------------------------------------
-//-------------------------------------------------------------------
 
 void SchAttribTabDlg::setSymbolInformation( SfxItemSet* pSymbolShapeProperties,
                 Graphic* pAutoSymbolGraphic )
@@ -656,8 +648,6 @@ bool SchAttribTabDlg::DialogWasClosedWithOK() const
     return m_bOKPressed;
 }
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

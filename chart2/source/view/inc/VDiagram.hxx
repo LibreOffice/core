@@ -25,14 +25,11 @@
 #include "ShapeFactory.hxx"
 #include <basegfx/range/b2irectangle.hxx>
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 
 class ShapeFactory;
 
-//-----------------------------------------------------------------------------
 /** The VDiagram is responsible to generate the visible parts of the Diagram
 that is wall, floor, axes and data series.
 The axes and data series are subobjects which are created and managed by the
@@ -117,9 +114,7 @@ private: //members
     ::com::sun::star::awt::Size     m_aCurrentSizeWithoutAxes;
 };
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 #endif
 
 

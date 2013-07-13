@@ -32,10 +32,8 @@
 #include "ChartTypeTemplateProvider.hxx"
 #include "DialogModel.hxx"
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 using namespace ::com::sun::star;
 
 #define PATH_FULL   1
@@ -222,8 +220,6 @@ String CreationWizard::getStateDisplayName( WizardState nState ) const
     return String(SchResId(nResId));
 }
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

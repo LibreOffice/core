@@ -32,10 +32,8 @@
 #include "NoWarningThisInCTOR.hxx"
 #include "ControllerLockGuard.hxx"
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 
@@ -169,8 +167,6 @@ bool TitlesAndObjectsTabPage::canAdvance() const
 }
 
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

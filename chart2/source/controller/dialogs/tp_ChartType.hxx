@@ -36,12 +36,9 @@
 #include <vcl/lstbox.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 
-//-----------------------------------------------------------------------------
 class AxisTypeResourceGroup;
 class Dim3DLookResourceGroup;
 class StackingResourceGroup;
@@ -108,9 +105,7 @@ protected:
     TimerTriggeredControllerLock   m_aTimerTriggeredControllerLock;
 };
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

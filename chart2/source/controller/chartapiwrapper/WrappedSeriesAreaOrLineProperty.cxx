@@ -25,7 +25,6 @@
 using ::com::sun::star::uno::Any;
 
 
-//.............................................................................
 namespace chart
 {
 namespace wrapper
@@ -56,6 +55,5 @@ OUString WrappedSeriesAreaOrLineProperty::getInnerName() const
 
 } //namespace wrapper
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -23,16 +23,11 @@
 #include <rtl/math.hxx>
 #include <com/sun/star/chart2/DataPointLabel.hpp>
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
 
 PlotterBase::PlotterBase( sal_Int32 nDimensionCount )
         : m_xLogicTarget(NULL)
@@ -116,8 +111,6 @@ bool PlotterBase::isValidPosition( const drawing::Position3D& rPos )
     return true;
 }
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

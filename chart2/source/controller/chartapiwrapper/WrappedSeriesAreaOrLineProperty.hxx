@@ -21,7 +21,6 @@
 
 #include "WrappedProperty.hxx"
 
-//.............................................................................
 namespace chart
 {
 namespace wrapper
@@ -46,7 +45,6 @@ protected:
 
 } //namespace wrapper
 } //namespace chart
-//.............................................................................
 
 // CHART_WRAPPED_SERIES_AREA_OR_LINE_PROPERTY_HXX
 #endif

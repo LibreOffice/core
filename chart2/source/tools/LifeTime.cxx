@@ -28,7 +28,6 @@ using namespace ::com::sun::star;
 
 namespace apphelper
 {
-//--------------------------
 
 LifeTimeManager::LifeTimeManager( lang::XComponent* pComponent, sal_Bool bLongLastingCallsCancelable )
     : m_aListenerContainer( m_aAccessMutex )
@@ -163,7 +162,6 @@ bool LifeTimeManager::impl_isDisposed( bool bAssert )
     //--release all resources and references after calling this method successful
 }
 
-//-----------------------------------------------------------------
 
 CloseableLifeTimeManager::CloseableLifeTimeManager( ::com::sun::star::util::XCloseable* pCloseable
         , ::com::sun::star::lang::XComponent* pComponent
@@ -217,7 +215,6 @@ bool CloseableLifeTimeManager::impl_isDisposedOrClosed( bool bAssert )
         impl_registerApiCall(sal_False);
     }
 
-    //------------------------------------------------
     //no mutex is acquired
 
     //only remove listener calls will be worked on until end of tryclose
@@ -346,7 +343,6 @@ bool CloseableLifeTimeManager::impl_isDisposedOrClosed( bool bAssert )
     if( m_bDisposed || m_bInDispose )
         return; //behave as passive as possible, if disposed or closed already
 
-    //--------
     m_bClosed = sal_True;
 
     NegativeGuard< osl::Mutex > aNegativeGuard( m_aAccessMutex );
@@ -435,7 +431,6 @@ bool CloseableLifeTimeManager::impl_isDisposedOrClosed( bool bAssert )
     return sal_True;
 }
 
-//--------------------------
 
     sal_Bool LifeTimeGuard
 ::startApiCall(sal_Bool bLongLastingCall)

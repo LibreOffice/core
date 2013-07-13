@@ -29,10 +29,8 @@
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::Reference;
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 
 
 Reference< chart2::XLegend > LegendHelper::showLegend( const Reference< frame::XModel >& xModel
@@ -126,8 +124,6 @@ bool LegendHelper::hasLegend( const uno::Reference< chart2::XDiagram > & xDiagra
     return bReturn;
 }
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

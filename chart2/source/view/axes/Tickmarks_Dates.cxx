@@ -22,10 +22,8 @@
 #include <rtl/math.hxx>
 #include "DateHelper.hxx"
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 using namespace ::rtl::math;
@@ -155,8 +153,6 @@ void DateTickFactory::getAllTicksShifted( ::std::vector< ::std::vector< TickInfo
     getAllTicks( rAllTickInfos, true );
 }
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

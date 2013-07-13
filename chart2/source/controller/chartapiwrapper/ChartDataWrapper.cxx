@@ -112,7 +112,6 @@ namespace chart
 namespace wrapper
 {
 
-//--------------------------------------------------------------------------------------
 
 struct lcl_Operator
 {
@@ -130,7 +129,6 @@ struct lcl_Operator
     }
 };
 
-//--------------------------------------------------------------------------
 
 struct lcl_AllOperator : public lcl_Operator
 {
@@ -179,7 +177,6 @@ struct lcl_AllOperator : public lcl_Operator
     Reference< XChartData > m_xDataToApply;
 };
 
-//--------------------------------------------------------------------------
 
 struct lcl_DataOperator : public lcl_Operator
 {
@@ -198,7 +195,6 @@ struct lcl_DataOperator : public lcl_Operator
     const Sequence< Sequence< double > >& m_rData;
 };
 
-//--------------------------------------------------------------------------
 
 struct lcl_RowDescriptionsOperator : public lcl_Operator
 {
@@ -232,7 +228,6 @@ struct lcl_RowDescriptionsOperator : public lcl_Operator
     bool m_bDataInColumns;
 };
 
-//--------------------------------------------------------------------------
 
 struct lcl_ComplexRowDescriptionsOperator : public lcl_Operator
 {
@@ -265,7 +260,6 @@ struct lcl_ComplexRowDescriptionsOperator : public lcl_Operator
     Reference< chart2::XChartDocument > m_xChartDoc;
     bool m_bDataInColumns;
 };
-//--------------------------------------------------------------------------
 
 struct lcl_AnyRowDescriptionsOperator : public lcl_Operator
 {
@@ -289,7 +283,6 @@ struct lcl_AnyRowDescriptionsOperator : public lcl_Operator
     const Sequence< Sequence< uno::Any > >& m_rAnyRowDescriptions;
 };
 
-//--------------------------------------------------------------------------
 
 struct lcl_ColumnDescriptionsOperator : public lcl_Operator
 {
@@ -323,7 +316,6 @@ struct lcl_ColumnDescriptionsOperator : public lcl_Operator
     bool m_bDataInColumns;
 };
 
-//--------------------------------------------------------------------------
 
 struct lcl_ComplexColumnDescriptionsOperator : public lcl_Operator
 {
@@ -357,7 +349,6 @@ struct lcl_ComplexColumnDescriptionsOperator : public lcl_Operator
     bool m_bDataInColumns;
 };
 
-//--------------------------------------------------------------------------
 
 struct lcl_AnyColumnDescriptionsOperator : public lcl_Operator
 {
@@ -381,7 +372,6 @@ struct lcl_AnyColumnDescriptionsOperator : public lcl_Operator
     const Sequence< Sequence< uno::Any > >& m_rAnyColumnDescriptions;
 };
 
-//--------------------------------------------------------------------------
 
 struct lcl_DateCategoriesOperator : public lcl_Operator
 {
@@ -406,7 +396,6 @@ struct lcl_DateCategoriesOperator : public lcl_Operator
     const Sequence< double >& m_rDates;
 };
 
-//--------------------------------------------------------------------------
 
 ChartDataWrapper::ChartDataWrapper( ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact ) :
         m_spChart2ModelContact( spChart2ModelContact ),
@@ -559,7 +548,6 @@ void SAL_CALL ChartDataWrapper::setDateCategories( const Sequence< double >& rDa
     DiagramHelper::switchToDateCategories( xChartDoc );
 }
 
-//--------------------------------------------------------------------------------------
 
 // ____ XChartData (base of XChartDataArray) ____
 void SAL_CALL ChartDataWrapper::addChartDataChangeEventListener(

@@ -38,10 +38,8 @@ using ::com::sun::star::uno::Reference;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 
 InsertErrorBarsDialog::InsertErrorBarsDialog(
     Window* pParent, const SfxItemSet& rMyAttrs,
@@ -119,8 +117,6 @@ double InsertErrorBarsDialog::getAxisMinorStepWidthForErrorBarDecimals(
     return fStepWidth;
 }
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

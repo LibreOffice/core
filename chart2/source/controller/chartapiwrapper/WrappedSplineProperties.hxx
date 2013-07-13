@@ -25,13 +25,11 @@
 #include <boost/shared_ptr.hpp>
 #include <vector>
 
-//.............................................................................
 namespace chart
 {
 namespace wrapper
 {
 
-//-----------------------------------------------------------------------------------------------------------------
 
 class WrappedSplineProperties
 {
@@ -43,7 +41,6 @@ public:
 
 } //namespace wrapper
 } //namespace chart
-//.............................................................................
 
 // CHART_WRAPPED_SPLINE_PROPERTIES_HXX
 #endif

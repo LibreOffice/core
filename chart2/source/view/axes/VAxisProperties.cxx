@@ -30,10 +30,8 @@
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 
@@ -156,7 +154,6 @@ TickmarkProperties AxisProperties::getBiggestTickmarkProperties()
     return aTickmarkProperties;
 }
 
-//--------------------------------------------------------------------------
 
 AxisProperties::AxisProperties( const uno::Reference< XAxis >& xAxisModel
                               , ExplicitCategoriesProvider* pExplicitCategoriesProvider )
@@ -375,7 +372,6 @@ void AxisProperties::init( bool bCartesian )
     }
 }
 
-//-----------------------------------------------------------------------------
 
 AxisLabelProperties::AxisLabelProperties()
                         : m_aFontReferenceSize( ChartModelHelper::getDefaultPageSize() )
@@ -435,8 +431,6 @@ bool AxisLabelProperties::getIsStaggered() const
     return ( STAGGER_ODD == eStaggering || STAGGER_EVEN == eStaggering );
 }
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -32,10 +32,8 @@
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <basegfx/matrix/b3dhommatrix.hxx>
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 
 class ShapeFactory;
 
@@ -406,9 +404,7 @@ inline bool PlottingPositionHelper::maySkipPointsInRegressionCalculation() const
     return m_bMaySkipPointsInRegressionCalculation;
 }
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

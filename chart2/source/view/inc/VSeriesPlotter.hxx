@@ -157,9 +157,7 @@ public:
     virtual void addSecondaryValueScale( const ExplicitScaleData& rScale, sal_Int32 nAxisIndex )
                 throw (::com::sun::star::uno::RuntimeException);
 
-    //-------------------------------------------------------------------------
     // MinimumAndMaximumSupplier
-    //-------------------------------------------------------------------------
 
     virtual double getMinimumX();
     virtual double getMaximumX();
@@ -184,8 +182,6 @@ public:
     void getMinimumAndMaximiumX( double& rfMinimum, double& rfMaximum ) const;
     void getMinimumAndMaximiumYInContinuousXRange( double& rfMinY, double& rfMaxY, double fMinX, double fMaxX, sal_Int32 nAxisIndex ) const;
 
-    //-------------------------------------------------------------------------
-    //-------------------------------------------------------------------------
 
     virtual std::vector< ViewLegendEntry > createLegendEntries(
             const ::com::sun::star::awt::Size& rEntryKeyAspectRatio,

@@ -203,6 +203,5 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL chartcore_component_getFactory(
     return pResult;
 }
 }
-//=========================================================================
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

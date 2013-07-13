@@ -29,10 +29,8 @@
 #include <rtl/instance.hxx>
 
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 using namespace ::com::sun::star;
 
 namespace
@@ -105,8 +103,6 @@ namespace ConfigurationAccess
     }
 } //namespace ConfigurationAccess
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

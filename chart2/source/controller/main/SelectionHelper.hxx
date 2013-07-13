@@ -27,14 +27,11 @@ class SdrObject;
 #include <svx/svdtypes.hxx>
 #include <com/sun/star/drawing/XShape.hpp>
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 
 class ObjectIdentifier;
 
-//-----------------------------------------------------------------------------
 
 class Selection
 {
@@ -124,9 +121,7 @@ private:
     SdrObject*      m_pMarkObj;//object that is marked instead to have more pretty handles
 };
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

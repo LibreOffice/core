@@ -28,10 +28,8 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 
 class ChartTypeTabPage;
 class ChartTypeDialog : public ModalDialog
@@ -58,9 +56,7 @@ private:
                        ::com::sun::star::uno::XComponentContext>    m_xCC;
 };
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 #endif
 

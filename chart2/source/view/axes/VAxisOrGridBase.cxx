@@ -23,10 +23,8 @@
 #include "CommonConverters.hxx"
 #include "Tickmarks.hxx"
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 using ::com::sun::star::uno::Reference;
@@ -71,8 +69,6 @@ TickFactory* VAxisOrGridBase::createTickFactory()
     return new TickFactory( m_aScale, m_aIncrement );
 }
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

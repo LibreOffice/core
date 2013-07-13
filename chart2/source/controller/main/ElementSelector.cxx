@@ -51,7 +51,6 @@ namespace
 static const OUString lcl_aServiceName( "com.sun.star.comp.chart.ElementSelectorToolbarController" );
 }
 
-//------------------------------------------------------------------------------
 
 SelectorListBox::SelectorListBox( Window* pParent, WinBits nStyle )
     : ListBox( pParent, nStyle )
@@ -251,7 +250,6 @@ Reference< ::com::sun::star::accessibility::XAccessible > SelectorListBox::Creat
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
 APPHELPER_XSERVICEINFO_IMPL( ElementSelectorToolbarController, lcl_aServiceName );
 
-//------------------------------------------------------------------------------
 Sequence< OUString > ElementSelectorToolbarController::getSupportedServiceNames_Static()
 {
     Sequence< OUString > aServices(1);
@@ -328,8 +326,6 @@ uno::Reference< awt::XWindow > SAL_CALL ElementSelectorToolbarController::create
     return xItemWindow;
 }
 
-//..........................................................................
 } // chart2
-//..........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

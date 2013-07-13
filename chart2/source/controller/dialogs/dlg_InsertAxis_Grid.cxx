@@ -28,10 +28,8 @@
 // header for class SfxBoolItem
 #include <svl/eitem.hxx>
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 
 InsertAxisOrGridDialogData::InsertAxisOrGridDialogData()
         : aPossibilityList(6)
@@ -44,11 +42,9 @@ InsertAxisOrGridDialogData::InsertAxisOrGridDialogData()
         aExistenceList[nN]=false;
 }
 
-//==============================
 //
 // SchAxisDlg
 //
-//==============================
 
 SchAxisDlg::SchAxisDlg(Window* pWindow,
     const InsertAxisOrGridDialogData& rInput, bool bAxisDlg)
@@ -112,9 +108,7 @@ SchGridDlg::~SchGridDlg()
 {
 }
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 
 

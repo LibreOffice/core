@@ -28,10 +28,8 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 
 class LegendPositionResources;
 class SchLegendDlg : public ModalDialog
@@ -54,9 +52,7 @@ public:
                        ::com::sun::star::frame::XModel >& xChartModel ) const;
 };
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 #endif
 

@@ -82,10 +82,8 @@ void lcl_setShadeModeAtModel( uno::Reference< frame::XModel > & xModel, drawing:
 
 } // anonymous namespace
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 
 #define POS_3DSCHEME_SIMPLE    0
 #define POS_3DSCHEME_REALISTIC 1
@@ -346,8 +344,6 @@ IMPL_LINK( ThreeD_SceneAppearance_TabPage, SelectRoundedEdgeOrObjectLines, Check
     return 0;
 }
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -24,10 +24,8 @@
 
 #include <vector>
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 
 class OOO_DLLPUBLIC_CHARTTOOLS WrappedIgnoreProperty : public WrappedProperty
 {
@@ -65,9 +63,7 @@ public:
     SAL_DLLPRIVATE static void addIgnoreFillProperties_only_BitmapProperties( std::vector< WrappedProperty* >& rList );
 };
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 // CHART_WRAPPED_IGNORE_PROPERTY_HXX
 #endif

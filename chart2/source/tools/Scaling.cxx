@@ -31,10 +31,8 @@ static const OUString lcl_aServiceName_Power( "com.sun.star.chart2.PowerScaling"
 
 }
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 
@@ -244,8 +242,6 @@ uno::Sequence< OUString > PowerScaling::getSupportedServiceNames_Static()
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
 APPHELPER_XSERVICEINFO_IMPL( PowerScaling, lcl_aServiceName_Power )
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -27,10 +27,8 @@ using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Any;
 
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 
 uno::Reference< container::XNameContainer > createNameContainer(
         const ::com::sun::star::uno::Type& rType, const OUString& rServicename, const OUString& rImplementationName )
@@ -88,9 +86,6 @@ Sequence< OUString > SAL_CALL NameContainer::getSupportedServiceNames()
     return aSNS;
 }
 
-//-----------------------------------------------------------------
-//-----------------------------------------------------------------
-//-----------------------------------------------------------------
 
 // XNameContainer
 void SAL_CALL NameContainer::insertByName( const OUString& rName, const Any& rElement )
@@ -169,8 +164,6 @@ uno::Reference< util::XCloneable > SAL_CALL NameContainer::createClone()
     return uno::Reference< util::XCloneable >( new NameContainer( *this ));
 }
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

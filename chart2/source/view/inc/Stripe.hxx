@@ -23,12 +23,9 @@
 #include <com/sun/star/drawing/Direction3D.hpp>
 #include <com/sun/star/uno/Any.h>
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 
-//-----------------------------------------------------------------------------
 /** A Stripe represents a 2 dimensional foursquare plane in a 3 dimaensional room.
 
 @todo could: it is not necessary to have 4 point members here; it would be sufficient to have one point and 2 directions
@@ -75,9 +72,7 @@ private:
     ::com::sun::star::drawing::Direction3D m_aManualNormal;
 };
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

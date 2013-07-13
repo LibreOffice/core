@@ -26,10 +26,8 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/chart2/XDiagram.hpp>
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 
 class OOO_DLLPUBLIC_CHARTTOOLS TitleHelper
 {
@@ -87,9 +85,7 @@ public:
                         ::com::sun::star::frame::XModel >& xModel );
 };
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

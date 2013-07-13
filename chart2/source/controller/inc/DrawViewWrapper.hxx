@@ -25,12 +25,9 @@
 
 class SdrModel;
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 
-//-----------------------------------------------------------------------------
 /** The DrawViewWrapper should help us to reduce effort if the underlying DrawingLayer changes.
 Another task is to hide functionality we do not need, for example more than one page.
 */
@@ -71,7 +68,6 @@ public:
     //void MarkObj(SdrObject* pObj, SdrPageView* pPV, sal_Bool bUnmark=sal_False, sal_Bool bImpNoSetMarkHdl=sal_False);
     void MarkObject( SdrObject* pObj );
 
-    //----------------------
     //pMarkHandleProvider can be NULL; ownership is not taken
     void setMarkHandleProvider( MarkHandleProvider* pMarkHandleProvider );
     void CompleteRedraw(OutputDevice* pOut, const Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector = 0);
@@ -100,9 +96,7 @@ private:
     MapMode m_aMapModeToRestore;
 };
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

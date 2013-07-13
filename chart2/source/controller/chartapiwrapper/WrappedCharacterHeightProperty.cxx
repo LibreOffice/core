@@ -27,7 +27,6 @@ using namespace ::com::sun::star;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Any;
 
-//.............................................................................
 
 namespace chart
 {
@@ -116,7 +115,6 @@ Any WrappedCharacterHeightProperty_Base::convertOuterToInnerValue( const Any& rO
     return rOuterValue;
 }
 
-//-----------------------------------------------------------------------------
 
 WrappedCharacterHeightProperty::WrappedCharacterHeightProperty( ReferenceSizePropertyProvider* pRefSizePropProvider )
         : WrappedCharacterHeightProperty_Base( "CharHeight", pRefSizePropProvider )
@@ -126,7 +124,6 @@ WrappedCharacterHeightProperty::~WrappedCharacterHeightProperty()
 {
 }
 
-//-----------------------------------------------------------------------------
 
 WrappedAsianCharacterHeightProperty::WrappedAsianCharacterHeightProperty( ReferenceSizePropertyProvider* pRefSizePropProvider )
         : WrappedCharacterHeightProperty_Base( "CharHeightAsian", pRefSizePropProvider )
@@ -136,7 +133,6 @@ WrappedAsianCharacterHeightProperty::~WrappedAsianCharacterHeightProperty()
 {
 }
 
-//-----------------------------------------------------------------------------
 
 WrappedComplexCharacterHeightProperty::WrappedComplexCharacterHeightProperty( ReferenceSizePropertyProvider* pRefSizePropProvider )
         : WrappedCharacterHeightProperty_Base( "CharHeightComplex", pRefSizePropProvider )
@@ -148,6 +144,5 @@ WrappedComplexCharacterHeightProperty::~WrappedComplexCharacterHeightProperty()
 
 } //namespace wrapper
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

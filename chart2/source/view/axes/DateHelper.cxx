@@ -22,10 +22,8 @@
 #include <rtl/math.hxx>
 #include <com/sun/star/chart/TimeUnit.hpp>
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 using namespace ::com::sun::star;
 
 bool DateHelper::IsInSameYear( const Date& rD1, const Date& rD2 )
@@ -102,8 +100,6 @@ double DateHelper::RasterizeDateValue( double fValue, const Date& rNullDate, lon
     return aDate - rNullDate;
 }
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -27,10 +27,8 @@ using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Reference;
 
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 
 WrappedProperty::WrappedProperty( const OUString& rOuterName, const OUString& rInnerName)
                          : m_aOuterName( rOuterName )
@@ -133,8 +131,6 @@ beans::PropertyState WrappedProperty::getPropertyState( const Reference< beans::
     return aState;
 }
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

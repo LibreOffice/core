@@ -231,7 +231,6 @@ void ChartView::impl_deleteCoordinateSystems()
 }
 
 
-//-----------------------------------------------------------------
 // datatransfer::XTransferable
 namespace
 {
@@ -352,7 +351,6 @@ uno::Sequence< datatransfer::DataFlavor > SAL_CALL ChartView::getTransferDataFla
              aFlavor.MimeType.equals(lcl_aGDIMetaFileMIMETypeHighContrast) );
 }
 
-//-----------------------------------------------------------------
 // ____ XUnoTunnel ___
 ::sal_Int64 SAL_CALL ChartView::getSomething( const uno::Sequence< ::sal_Int8 >& aIdentifier )
         throw( uno::RuntimeException)
@@ -366,7 +364,6 @@ uno::Sequence< datatransfer::DataFlavor > SAL_CALL ChartView::getTransferDataFla
     return 0;
 }
 
-//-----------------------------------------------------------------
 // lang::XServiceInfo
 
 APPHELPER_XSERVICEINFO_IMPL(ChartView,CHART_VIEW_SERVICE_IMPLEMENTATION_NAME)
@@ -379,8 +376,6 @@ APPHELPER_XSERVICEINFO_IMPL(ChartView,CHART_VIEW_SERVICE_IMPLEMENTATION_NAME)
     return aSNS;
 }
 
-//-----------------------------------------------------------------
-//-----------------------------------------------------------------
 
 ::basegfx::B3DHomMatrix createTransformationSceneToScreen(
     const ::basegfx::B2IRectangle& rDiagramRectangleWithoutAxes )
@@ -528,7 +523,6 @@ sal_Int32 AxisUsage::getMaxAxisIndexForDimension( sal_Int32 nDimensionIndex )
     return nRet;
 }
 
-//-----------------------------------------------------
 
 class SeriesPlotterContainer
 {
@@ -594,7 +588,6 @@ std::vector< LegendEntryProvider* > SeriesPlotterContainer::getLegendEntryProvid
 void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(
               const uno::Reference< frame::XModel >& xChartModel )
 {
-    //------------ get model series from model
     sal_Int32 nDiagramIndex = 0;//todo if more than one diagram is supported
     uno::Reference< XDiagram > xDiagram( ChartModelHelper::findDiagram( xChartModel ) );
     if( !xDiagram.is())
@@ -638,7 +631,6 @@ void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(
         ASSERT_EXCEPTION( ex );
     }
 
-    //---------------------------------------------------------------------
     //prepare for autoscaling and shape creation
     // - create plotter for charttypes (for each first scale group at each plotter, as they are independent)
     // - add series to plotter (thus each charttype can provide minimum and maximum values for autoscaling)
@@ -700,7 +692,6 @@ void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(
             if(pVCooSys)
                 pVCooSys->addMinimumAndMaximumSupplier(pPlotter);
 
-            //------------ add series to plotter and thus prepare him(it) for providing minimum and maximum values
             uno::Reference< XDataSeriesContainer > xDataSeriesContainer( xChartType, uno::UNO_QUERY );
             OSL_ASSERT( xDataSeriesContainer.is());
             if( !xDataSeriesContainer.is() )
@@ -1181,7 +1172,6 @@ drawing::Direction3D SeriesPlotterContainer::getPreferredAspectRatio()
     return aPreferredAspectRatio;
 }
 
-//-----------------------------------------------------
 
 namespace
 {
@@ -1343,7 +1333,6 @@ sal_Int16 lcl_getDefaultWritingModeFromPool( ::boost::shared_ptr< DrawModelWrapp
 
 } //end anonymous namespace
 
-//------------ create complete diagram shape (inclusive axis and series)
 
 awt::Rectangle ChartView::impl_createDiagramAndContent( SeriesPlotterContainer& rSeriesPlotterContainer
             , const uno::Reference< drawing::XShapes>& xDiagramPlusAxes_Shapes
@@ -1402,10 +1391,8 @@ awt::Rectangle ChartView::impl_createDiagramAndContent( SeriesPlotterContainer& 
     rSeriesPlotterContainer.setScalesFromCooSysToPlotter();
     rSeriesPlotterContainer.setNumberFormatsFromAxes();
 
-    //---------------------------------------------------------------------
     //create shapes
 
-    //------------ create diagram shapes
     //aspect ratio
     drawing::Direction3D aPreferredAspectRatio(
         rSeriesPlotterContainer.getPreferredAspectRatio() );
@@ -1503,7 +1490,6 @@ awt::Rectangle ChartView::impl_createDiagramAndContent( SeriesPlotterContainer& 
     const ::std::vector< VSeriesPlotter* >::const_iterator aPlotterEnd  = rSeriesPlotterList.end();
     for( aPlotterIter = rSeriesPlotterList.begin(); aPlotterIter != aPlotterEnd; ++aPlotterIter )
     {
-        //------------ set transformation to plotter / create series
         VSeriesPlotter* pSeriesPlotter = *aPlotterIter;
         OUString aCID; //III
         uno::Reference< drawing::XShapes > xSeriesTarget(0);
@@ -1563,7 +1549,6 @@ awt::Rectangle ChartView::impl_createDiagramAndContent( SeriesPlotterContainer& 
         // - create data series for all charttypes
         for( aPlotterIter = rSeriesPlotterList.begin(); aPlotterIter != aPlotterEnd; ++aPlotterIter )
         {
-            //------------ set transformation to plotter / create series
             VSeriesPlotter* pSeriesPlotter = *aPlotterIter;
             VCoordinateSystem* pVCooSys = lcl_getCooSysForPlotter( rVCooSysList, pSeriesPlotter );
             if(2==nDimensionCount)
@@ -1635,9 +1620,6 @@ awt::Rectangle ChartView::impl_createDiagramAndContent( SeriesPlotterContainer& 
     return aUsedOuterRect;
 }
 
-//-------------------------------------------------------------
-//-------------------------------------------------------------
-//-------------------------------------------------------------
 
 sal_Bool ChartView::getExplicitValuesForAxis(
                      uno::Reference< XAxis > xAxis
@@ -2468,7 +2450,6 @@ void ChartView::createShapes()
     {
         SolarMutexGuard aSolarGuard;
 
-        //------------ apply fill properties to page
         // todo: it would be nicer to just pass the page m_xDrawPage and format it,
         // but the draw page does not support XPropertySet
         formatPage( m_xChartModel, aPageSize, xPageShapes, m_xShapeFactory );
@@ -2493,24 +2474,20 @@ void ChartView::createShapes()
 
         bool bAutoPositionDummy = true;
 
-        //------------ create main title shape
         lcl_createTitle( TitleHelper::MAIN_TITLE, xPageShapes, m_xShapeFactory, m_xChartModel
                     , aRemainingSpace, aPageSize, ALIGN_TOP, bAutoPositionDummy );
         if(aRemainingSpace.Width<=0||aRemainingSpace.Height<=0)
             return;
 
-        //------------ create sub title shape
         lcl_createTitle( TitleHelper::SUB_TITLE, xPageShapes, m_xShapeFactory, m_xChartModel
                     , aRemainingSpace, aPageSize, ALIGN_TOP, bAutoPositionDummy );
         if(aRemainingSpace.Width<=0||aRemainingSpace.Height<=0)
             return;
 
 
-        //------------ prepare series to give input to the legend (create categories and symbols etc.)
         SeriesPlotterContainer aSeriesPlotterContainer( m_aVCooSysList );
         aSeriesPlotterContainer.initializeCooSysAndSeriesPlotter( m_xChartModel );
 
-        //------------ create legend
         lcl_createLegend( LegendHelper::getLegend( m_xChartModel ), xPageShapes, m_xShapeFactory, m_xCC
                     , aRemainingSpace, aPageSize, m_xChartModel, aSeriesPlotterContainer.getLegendEntryProviderList()
                     , lcl_getDefaultWritingModeFromPool( m_pDrawModelWrapper ) );
@@ -2520,7 +2497,6 @@ void ChartView::createShapes()
         Reference< chart2::XChartType > xChartType( DiagramHelper::getChartTypeByIndex( xDiagram, 0 ) );
         sal_Int32 nDimension = DiagramHelper::getDimension( xDiagram );
 
-        //------------ create x axis title
         bool bAutoPosition_XTitle = true;
         boost::shared_ptr<VTitle> apVTitle_X;
         if( ChartTypeHelper::isSupportingMainAxis( xChartType, nDimension, 0 ) )
@@ -2529,7 +2505,6 @@ void ChartView::createShapes()
         if(aRemainingSpace.Width<=0||aRemainingSpace.Height<=0)
             return;
 
-        //------------ create y axis title
         bool bAutoPosition_YTitle = true;
         boost::shared_ptr<VTitle> apVTitle_Y;
         if( ChartTypeHelper::isSupportingMainAxis( xChartType, nDimension, 1 ) )
@@ -2538,7 +2513,6 @@ void ChartView::createShapes()
         if(aRemainingSpace.Width<=0||aRemainingSpace.Height<=0)
             return;
 
-        //------------ create z axis title
         bool bAutoPosition_ZTitle = true;
         boost::shared_ptr<VTitle> apVTitle_Z;
         if( ChartTypeHelper::isSupportingMainAxis( xChartType, nDimension, 2 ) )
@@ -2550,7 +2524,6 @@ void ChartView::createShapes()
         bool bDummy = false;
         bool bIsVertical = DiagramHelper::getVertical( xDiagram, bDummy, bDummy );
 
-        //------------ create secondary x axis title
         bool bAutoPosition_SecondXTitle = true;
         boost::shared_ptr<VTitle> apVTitle_SecondX;
         if( ChartTypeHelper::isSupportingSecondaryAxis( xChartType, nDimension, 0 ) )
@@ -2559,7 +2532,6 @@ void ChartView::createShapes()
         if(aRemainingSpace.Width<=0||aRemainingSpace.Height<=0)
             return;
 
-        //------------ create secondary y axis title
         bool bAutoPosition_SecondYTitle = true;
         boost::shared_ptr<VTitle> apVTitle_SecondY;
         if( ChartTypeHelper::isSupportingSecondaryAxis( xChartType, nDimension, 1 ) )
@@ -2568,7 +2540,6 @@ void ChartView::createShapes()
         if(aRemainingSpace.Width<=0||aRemainingSpace.Height<=0)
             return;
 
-        //------------ create complete diagram shape (inclusive axis and series)
         awt::Point aAvailablePosDia;
         awt::Size  aAvailableSizeForDiagram;
         bool bUseFixedInnerSize = false;
@@ -2618,9 +2589,7 @@ void ChartView::createShapes()
 #endif
 }
 
-//-----------------------------------------------------------------
 // util::XEventListener (base of XCloseListener)
-//-----------------------------------------------------------------
 void SAL_CALL ChartView::disposing( const lang::EventObject& /* rSource */ )
         throw(uno::RuntimeException)
 {
@@ -3032,8 +3001,6 @@ OUString ChartView::dump() throw (uno::RuntimeException)
 
 }
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

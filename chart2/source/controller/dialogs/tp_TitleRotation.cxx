@@ -29,10 +29,8 @@
 // header for class SfxInt32Item
 #include <svl/intitem.hxx>
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 
 SchAlignmentTabPage::SchAlignmentTabPage(Window* pWindow,
                                          const SfxItemSet& rInAttrs, bool bWithRotation) :
@@ -109,9 +107,7 @@ void SchAlignmentTabPage::Reset(const SfxItemSet& rInAttrs)
         aLbTextDirection.SelectEntryValue( SvxFrameDirection(((const SvxFrameDirectionItem*)pItem)->GetValue()) );
 }
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

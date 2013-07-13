@@ -22,10 +22,8 @@
 #include "WrappedProperty.hxx"
 #include "ChartDocumentWrapper.hxx"
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 namespace wrapper
 {
 

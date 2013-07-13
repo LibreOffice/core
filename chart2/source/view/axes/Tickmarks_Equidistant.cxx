@@ -24,10 +24,8 @@
 #include <limits>
 #include <memory>
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 using namespace ::rtl::math;
@@ -420,9 +418,6 @@ void EquidistantTickFactory::getAllTicksShifted( ::std::vector< ::std::vector< T
     EquidistantTickFactory( m_rScale, aShiftedIncrement ).getAllTicks(rAllTickInfos);
 }
 
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
 
 EquidistantTickIter::EquidistantTickIter( const uno::Sequence< uno::Sequence< double > >& rTicks
                    , const ExplicitIncrementData& rIncrement
@@ -638,8 +633,6 @@ TickInfo* EquidistantTickIter::nextInfo()
     return NULL;
 }
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

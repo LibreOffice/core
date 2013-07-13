@@ -168,7 +168,6 @@ sal_Int32 Chart2ModelContact::getExplicitNumberFormatKeyForSeries(
         );
 }
 
-//-----------------------------------------------------------------------------
 
 awt::Size Chart2ModelContact::GetPageSize() const
 {
