@@ -54,23 +54,23 @@ OFileTable::OFileTable(sdbcx::OCollection* _pTables,OConnection* _pConnection)
 }
 // -------------------------------------------------------------------------
 OFileTable::OFileTable( sdbcx::OCollection* _pTables,OConnection* _pConnection,
-                    const OUString& _Name,
-                    const OUString& _Type,
-                    const OUString& _Description ,
-                    const OUString& _SchemaName,
-                    const OUString& _CatalogName
-                ) : OTable_TYPEDEF(_pTables,_pConnection->getMetaData()->supportsMixedCaseQuotedIdentifiers(),
-                                  _Name,
-                                  _Type,
-                                  _Description,
-                                  _SchemaName,
-                                  _CatalogName)
-                ,m_pConnection(_pConnection)
-                ,m_pFileStream(NULL)
-                ,m_nFilePos(0)
-                ,m_pBuffer(NULL)
-                ,m_nBufferSize(0)
-                ,m_bWriteable(sal_False)
+                        const OUString& _Name,
+                        const OUString& _Type,
+                        const OUString& _Description ,
+                        const OUString& _SchemaName,
+                        const OUString& _CatalogName )
+    : OTable_TYPEDEF(_pTables,_pConnection->getMetaData()->supportsMixedCaseQuotedIdentifiers(),
+                     _Name,
+                     _Type,
+                     _Description,
+                     _SchemaName,
+                     _CatalogName)
+    , m_pConnection(_pConnection)
+    , m_pFileStream(NULL)
+    , m_nFilePos(0)
+    , m_pBuffer(NULL)
+    , m_nBufferSize(0)
+    , m_bWriteable(sal_False)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OFileTable::OFileTable" );
     DBG_CTOR( file_OFileTable, NULL );
@@ -88,8 +88,8 @@ void OFileTable::refreshColumns()
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OFileTable::refreshColumns" );
     TStringVector aVector;
-        Reference< XResultSet > xResult = m_pConnection->getMetaData()->getColumns(Any(),
-                                                    m_SchemaName,m_Name,OUString("%"));
+    Reference< XResultSet > xResult = m_pConnection->getMetaData()->getColumns(Any(),
+                                                                               m_SchemaName,m_Name, OUString("%"));
 
     if(xResult.is())
     {
@@ -222,11 +222,11 @@ void OFileTable::dropColumn(sal_Int32 /*_nPos*/)
 }
 
 // -----------------------------------------------------------------------------
-SvStream* OFileTable::createStream_simpleError( const String& _rFileName, StreamMode _eOpenMode)
+SvStream* OFileTable::createStream_simpleError( const OUString& _rFileName, StreamMode _eOpenMode)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OFileTable::createStream_simpleError" );
-    utl::UcbLockBytesHandler* p_null_dummy=NULL;
-    SvStream* pReturn = ::utl::UcbStreamHelper::CreateStream( _rFileName, _eOpenMode, (_eOpenMode & STREAM_NOCREATE) == STREAM_NOCREATE ,p_null_dummy);
+    utl::UcbLockBytesHandler* p_null_dummy = NULL;
+    SvStream* pReturn = ::utl::UcbStreamHelper::CreateStream( _rFileName, _eOpenMode, (_eOpenMode & STREAM_NOCREATE) == STREAM_NOCREATE, p_null_dummy);
     if (pReturn && (ERRCODE_NONE != pReturn->GetErrorCode()))
     {
         delete pReturn;

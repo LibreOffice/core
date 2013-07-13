@@ -375,16 +375,15 @@ OUString ODbaseIndex::getCompletePath()
 void ODbaseIndex::createINFEntry()
 {
     // synchronize inf-file
-    String sEntry = m_Name;
-    sEntry += OUString(".ndx");
+    OUString sEntry = m_Name + ".ndx";
 
-    OUString sCfgFile(m_pTable->getConnection()->getURL());
-    sCfgFile += OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DELIMITER);
-    sCfgFile += m_pTable->getName();
-    sCfgFile += OUString(".inf");
+    OUString sCfgFile(m_pTable->getConnection()->getURL() +
+                      OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DELIMITER) +
+                      m_pTable->getName() +
+                      ".inf");
 
     OUString sPhysicalPath;
-    LocalFileHelper::ConvertURLToPhysicalName(sCfgFile,sPhysicalPath);
+    LocalFileHelper::ConvertURLToPhysicalName(sCfgFile, sPhysicalPath);
 
     Config aInfFile(sPhysicalPath);
     aInfFile.SetGroup(dBASE_III_GROUP);
@@ -394,7 +393,7 @@ void ODbaseIndex::createINFEntry()
     sal_Bool bCase = isCaseSensitive();
     while (aNewEntry.isEmpty())
     {
-        aNewEntry = OString(RTL_CONSTASCII_STRINGPARAM("NDX"));
+        aNewEntry = OString("NDX");
         aNewEntry += OString::number(++nSuffix);
         for (sal_uInt16 i = 0; i < aInfFile.GetKeyCount(); i++)
         {
@@ -434,17 +433,16 @@ sal_Bool ODbaseIndex::DropImpl()
     aInfFile.SetGroup(dBASE_III_GROUP);
     sal_uInt16 nKeyCnt = aInfFile.GetKeyCount();
     OString aKeyName;
-    String sEntry = m_Name;
-    sEntry += OUString(".ndx");
+    OUString sEntry = m_Name + (".ndx");
 
     // delete entries from the inf file
     for (sal_uInt16 nKey = 0; nKey < nKeyCnt; nKey++)
     {
         // References the Key to an Index-file?
         aKeyName = aInfFile.GetKeyName( nKey );
-        if (aKeyName.copy(0,3).equalsL(RTL_CONSTASCII_STRINGPARAM("NDX")))
+        if (aKeyName.copy(0,3).equals("NDX"))
         {
-            if(sEntry == String(OStringToOUString(aInfFile.ReadKey(aKeyName),m_pTable->getConnection()->getTextEncoding())))
+            if(sEntry == OStringToOUString(aInfFile.ReadKey(aKeyName),m_pTable->getConnection()->getTextEncoding()))
             {
                 aInfFile.DeleteKey(aKeyName);
                 break;
@@ -501,26 +499,15 @@ sal_Bool ODbaseIndex::CreateImpl()
     // firstly the result must be sorted
     utl::SharedUNOComponent<XStatement> xStmt;
     utl::SharedUNOComponent<XResultSet> xSet;
-    String aName;
+    OUString aName;
     try
     {
         xStmt.set( m_pTable->getConnection()->createStatement(), UNO_SET_THROW);
 
         aName = getString(xCol->getFastPropertyValue(PROPERTY_ID_NAME));
 
-        const String aQuote(m_pTable->getConnection()->getMetaData()->getIdentifierQuoteString());
-        OUString aStatement( "SELECT " );
-        aStatement += aQuote;
-        aStatement += aName;
-        aStatement += aQuote;
-        aStatement += " FROM ";
-        aStatement += aQuote;
-        aStatement += m_pTable->getName().getStr();
-        aStatement += aQuote;
-        aStatement += " ORDER BY ";
-        aStatement += aQuote;
-        aStatement += aName;
-        aStatement += aQuote;
+        const OUString aQuote(m_pTable->getConnection()->getMetaData()->getIdentifierQuoteString());
+        OUString aStatement( "SELECT " + aQuote + aName + aQuote +" FROM " + aQuote + m_pTable->getName() + aQuote + " ORDER BY " + aQuote + aName + aQuote);
 
         xSet.set( xStmt->executeQuery(aStatement),UNO_SET_THROW );
     }

@@ -180,6 +180,8 @@ sal_Int32 SAL_CALL OResultSet::findColumn( const OUString& columnName ) throw(SQ
         if(xMeta->isCaseSensitive(i) ? columnName == xMeta->getColumnName(i) :
                 columnName.equalsIgnoreAsciiCase(xMeta->getColumnName(i)))
             break;
+    /* FIXME should throw in case of not found ? or at least return -1 */
+
     return i;
 }
 // -------------------------------------------------------------------------

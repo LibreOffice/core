@@ -737,41 +737,42 @@ sal_Bool ONDXKey::IsText(sal_Int32 eType)
 }
 
 //------------------------------------------------------------------
-StringCompare ONDXKey::Compare(const ONDXKey& rKey) const
+int ONDXKey::Compare(const ONDXKey& rKey) const
 {
-    StringCompare eResult;
+    sal_Int32 nRes;
 
     if (getValue().isNull())
     {
         if (rKey.getValue().isNull() || (rKey.IsText(getDBType()) && rKey.getValue().getString().isEmpty()))
-            eResult = COMPARE_EQUAL;
+            nRes = 0;
         else
-            eResult = COMPARE_LESS;
+            nRes = -1;
     }
     else if (rKey.getValue().isNull())
     {
         if (getValue().isNull() || (IsText(getDBType()) && getValue().getString().isEmpty()))
-            eResult = COMPARE_EQUAL;
+            nRes = 0;
         else
-            eResult = COMPARE_GREATER;
+            nRes = 1;
     }
     else if (IsText(getDBType()))
     {
-        sal_Int32 nRes = getValue().getString().compareTo(rKey.getValue());
-        eResult = (nRes > 0) ? COMPARE_GREATER : (nRes == 0) ? COMPARE_EQUAL : COMPARE_LESS;
+        nRes = getValue().getString().compareTo(rKey.getValue());
     }
     else
     {
-        double m = getValue(),n = rKey.getValue();
-        eResult = (m > n) ? COMPARE_GREATER : (n == m) ? COMPARE_EQUAL : COMPARE_LESS;
+        double m = getValue();
+        double n = rKey.getValue();
+        nRes = (m > n) ? 1 : ( m < n) ? -1 : 0;
     }
 
     // compare record, if index !Unique
-    if (eResult == COMPARE_EQUAL && nRecord && rKey.nRecord)
-        eResult = (nRecord > rKey.nRecord) ? COMPARE_GREATER :
-                  (nRecord == rKey.nRecord) ? COMPARE_EQUAL : COMPARE_LESS;
-
-    return eResult;
+    if (nRes == 0 && nRecord && rKey.nRecord)
+    {
+        nRes = (nRecord > rKey.nRecord) ? 1 :
+            (nRecord == rKey.nRecord) ? 0 : -1;
+    }
+    return nRes;
 }
 // -----------------------------------------------------------------------------
 void ONDXKey::setValue(const ORowSetValue& _rVal)

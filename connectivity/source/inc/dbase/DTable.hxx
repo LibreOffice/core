@@ -97,7 +97,7 @@ namespace connectivity
                              const ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XDataDescriptorFactory>& xOldColumn );
             void readHeader();
             void fillColumns();
-            String createTempFile();
+            OUString createTempFile();
             void copyData(ODbaseTable* _pNewTable,sal_Int32 _nPos);
             sal_Bool CreateFile(const INetURLObject& aFile, sal_Bool& bCreateMemo);
             sal_Bool CreateMemoFile(const INetURLObject& aFile);
@@ -164,7 +164,7 @@ namespace connectivity
             virtual void addColumn(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& descriptor);
             virtual void dropColumn(sal_Int32 _nPos);
 
-            static String   getEntry(file::OConnection* _pConnection,const OUString& _sURL );
+            static OUString   getEntry(file::OConnection* _pConnection,const OUString& _sURL );
             static sal_Bool     Drop_Static(const OUString& _sUrl,sal_Bool _bHasMemoFields,sdbcx::OCollection* _pIndexes );
 
             virtual void refreshHeader();

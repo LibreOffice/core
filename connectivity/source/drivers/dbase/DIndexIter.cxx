@@ -47,7 +47,7 @@ sal_uIntPtr OIndexIterator::Next()
 //------------------------------------------------------------------
 sal_uIntPtr OIndexIterator::Find(sal_Bool bFirst)
 {
-    sal_uIntPtr nRes = STRING_NOTFOUND;
+    sal_uIntPtr nRes = -1;
 
     if (bFirst)
     {
@@ -68,7 +68,7 @@ sal_uIntPtr OIndexIterator::Find(sal_Bool bFirst)
             m_nCurNode = NODE_NOTFOUND;
         }
         ONDXKey* pKey = GetNextKey();
-        nRes = pKey ? pKey->GetRecord() : STRING_NOTFOUND;
+        nRes = pKey ? pKey->GetRecord() : -1;
     }
     else if (m_pOperator->IsA(TYPE(OOp_ISNOTNULL)))
         nRes = GetNotNull(bFirst);
@@ -195,7 +195,7 @@ sal_uIntPtr OIndexIterator::GetCompare(sal_Bool bFirst)
         }
     }
 
-    return pKey ? pKey->GetRecord() : STRING_NOTFOUND;
+    return pKey ? pKey->GetRecord() : -1;
 }
 
 //------------------------------------------------------------------
@@ -215,7 +215,7 @@ sal_uIntPtr OIndexIterator::GetLike(sal_Bool bFirst)
     ONDXKey* pKey;
     while ( ( ( pKey = GetNextKey() ) != NULL ) && !m_pOperator->operate(pKey,m_pOperand))
         ;
-    return pKey ? pKey->GetRecord() : STRING_NOTFOUND;
+    return pKey ? pKey->GetRecord() : -1;
 }
 
 //------------------------------------------------------------------
@@ -237,7 +237,7 @@ sal_uIntPtr OIndexIterator::GetNull(sal_Bool bFirst)
         pKey = NULL;
         m_aCurLeaf = NULL;
     }
-    return pKey ? pKey->GetRecord() : STRING_NOTFOUND;
+    return pKey ? pKey->GetRecord() : -1;
 }
 
 //------------------------------------------------------------------
@@ -248,7 +248,7 @@ sal_uIntPtr OIndexIterator::GetNotNull(sal_Bool bFirst)
     {
         // go through all NULL values first
         for (sal_uIntPtr nRec = GetNull(bFirst);
-             nRec != STRING_NOTFOUND;
+             nRec >- 0;
              nRec = GetNull(sal_False))
                  ;
         pKey = m_aCurLeaf.Is() ? &(*m_aCurLeaf)[m_nCurNode].GetKey() : NULL;
@@ -256,7 +256,7 @@ sal_uIntPtr OIndexIterator::GetNotNull(sal_Bool bFirst)
     else
         pKey = GetNextKey();
 
-    return pKey ? pKey->GetRecord() : STRING_NOTFOUND;
+    return pKey ? pKey->GetRecord() : -1;
 }
 
 //------------------------------------------------------------------

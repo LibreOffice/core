@@ -123,14 +123,14 @@ namespace connectivity
 
             void disposeResultSet();
             void GetAssignValues();
-            void SetAssignValue(const String& aColumnName,
-                                   const String& aValue,
+            void SetAssignValue(const OUString& aColumnName,
+                                   const OUString& aValue,
                                    sal_Bool bSetNull = sal_False,
                                    sal_uInt32 nParameter=SQL_NO_PARAMETER);
-            void ParseAssignValues( const ::std::vector< String>& aColumnNameList,
+            void ParseAssignValues( const ::std::vector< OUString>& aColumnNameList,
                                     connectivity::OSQLParseNode* pRow_Value_Constructor_Elem,xub_StrLen nIndex);
 
-            virtual void parseParamterElem(const String& _sColumnName,OSQLParseNode* pRow_Value_Constructor_Elem);
+            virtual void parseParamterElem(const OUString& _sColumnName,OSQLParseNode* pRow_Value_Constructor_Elem);
             // factory method for resultset's
             virtual OResultSet* createResultSet() = 0;
             // OPropertyArrayUsageHelper

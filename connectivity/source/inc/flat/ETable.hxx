@@ -61,7 +61,7 @@ namespace connectivity
             bool readLine(sal_Int32 *pEndPos = NULL, sal_Int32 *pStartPos = NULL, bool nonEmpty = false);
             void setRowPos(::std::vector<TRowPositionInFile>::size_type rowNum, const TRowPositionInFile &rowPos);
             void impl_fillColumnInfo_nothrow(QuotedTokenizedString& aFirstLine, sal_Int32& nStartPosFirstLine, sal_Int32& nStartPosFirstLine2,
-                                             sal_Int32& io_nType, sal_Int32& io_nPrecisions, sal_Int32& io_nScales, String& o_sTypeName,
+                                             sal_Int32& io_nType, sal_Int32& io_nPrecisions, sal_Int32& io_nScales, OUString& o_sTypeName,
                                              const sal_Unicode cDecimalDelimiter, const sal_Unicode cThousandDelimiter, const CharClass& aCharClass);
             OFlatConnection* getFlatConnection()
             {
@@ -101,7 +101,7 @@ namespace connectivity
             virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);
             static ::com::sun::star::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();
 
-            String getEntry();
+            OUString getEntry();
         };
     }
 }

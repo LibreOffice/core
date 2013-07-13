@@ -20,7 +20,7 @@
 #ifndef CONNECTIVITY_QUOTED_STRING_HXX
 #define CONNECTIVITY_QUOTED_STRING_HXX
 
-#include <tools/string.hxx>
+#include <rtl/ustring.hxx>
 #include "file/filedllapi.hxx"
 
 namespace connectivity

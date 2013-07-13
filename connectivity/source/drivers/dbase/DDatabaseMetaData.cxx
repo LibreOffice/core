@@ -332,7 +332,7 @@ OUString SAL_CALL ODbaseDatabaseMetaData::getURL(  ) throw(SQLException, Runtime
 sal_Int32 SAL_CALL ODbaseDatabaseMetaData::getMaxBinaryLiteralLength(  ) throw(SQLException, RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "dbase Ocke.Janssen@sun.com ODbaseDatabaseMetaData::getMaxBinaryLiteralLength" );
-    return STRING_MAXLEN;
+    return 65535;
 }
 // -------------------------------------------------------------------------
 sal_Int32 SAL_CALL ODbaseDatabaseMetaData::getMaxCharLiteralLength(  ) throw(SQLException, RuntimeException)

@@ -252,7 +252,7 @@ OUString SAL_CALL OCalcDatabaseMetaData::getURL(  ) throw(SQLException, RuntimeE
 sal_Int32 SAL_CALL OCalcDatabaseMetaData::getMaxBinaryLiteralLength(  ) throw(SQLException, RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "calc Ocke.Janssen@sun.com OCalcDatabaseMetaData::getMaxBinaryLiteralLength" );
-    return STRING_MAXLEN;
+    return 65535;
 }
 
 // -------------------------------------------------------------------------
@@ -260,13 +260,13 @@ sal_Int32 SAL_CALL OCalcDatabaseMetaData::getMaxBinaryLiteralLength(  ) throw(SQ
 sal_Int32 SAL_CALL OCalcDatabaseMetaData::getMaxCharLiteralLength(  ) throw(SQLException, RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "calc Ocke.Janssen@sun.com OCalcDatabaseMetaData::getMaxCharLiteralLength" );
-    return STRING_MAXLEN;
+    return 65535;
 }
 // -------------------------------------------------------------------------
 sal_Int32 SAL_CALL OCalcDatabaseMetaData::getMaxColumnNameLength(  ) throw(SQLException, RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "calc Ocke.Janssen@sun.com OCalcDatabaseMetaData::getMaxColumnNameLength" );
-    return STRING_MAXLEN;
+    return 65535;
 }
 // -------------------------------------------------------------------------
 sal_Int32 SAL_CALL OCalcDatabaseMetaData::getMaxColumnsInIndex(  ) throw(SQLException, RuntimeException)

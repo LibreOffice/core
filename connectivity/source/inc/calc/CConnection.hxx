@@ -36,8 +36,8 @@ namespace connectivity
         {
             // the spreadsheet document:
             ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XSpreadsheetDocument > m_xDoc;
-            OUString     m_sPassword;
-            String              m_aFileName;
+            OUString m_sPassword;
+            OUString m_aFileName;
             oslInterlockedCount m_nDocCount;
 
         public:

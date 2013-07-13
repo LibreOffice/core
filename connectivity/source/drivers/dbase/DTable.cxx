@@ -317,8 +317,7 @@ void ODbaseTable::fillColumns()
     m_aPrecisions.reserve(nFieldCount);
     m_aScales.reserve(nFieldCount);
 
-    String aStrFieldName;
-    aStrFieldName.AssignAscii("Column");
+    OUString aStrFieldName("Column");
     OUString aTypeName;
     const sal_Bool bCase = getConnection()->getMetaData()->supportsMixedCaseQuotedIdentifiers();
     const bool bFoxPro = m_aHeader.db_typ == VisualFoxPro || m_aHeader.db_typ == VisualFoxProAuto || m_aHeader.db_typ == FoxProMemo;
@@ -332,7 +331,7 @@ void ODbaseTable::fillColumns()
             break;
 
         sal_Bool bIsRowVersion = bFoxPro && ( aDBFColumn.db_frei2[0] & 0x01 ) == 0x01;
-        const String aColumnName((const char *)aDBFColumn.db_fnm,m_eEncoding);
+        const OUString aColumnName((const char *)aDBFColumn.db_fnm, strlen((const char *)aDBFColumn.db_fnm), m_eEncoding);
 
         m_aRealFieldLengths.push_back(aDBFColumn.db_flng);
         sal_Int32 nPrecision = aDBFColumn.db_flng;
@@ -347,77 +346,77 @@ void ODbaseTable::fillColumns()
 
         switch (aDBFColumn.db_typ)
         {
-            case 'C':
-                eType = DataType::VARCHAR;
-                aTypeName = "VARCHAR";
-                break;
-            case 'F':
-            case 'N':
-                aTypeName = "DECIMAL";
-                if ( aDBFColumn.db_typ == 'N' )
-                    aTypeName = "NUMERIC";
-                eType = DataType::DECIMAL;
+        case 'C':
+            eType = DataType::VARCHAR;
+            aTypeName = "VARCHAR";
+            break;
+        case 'F':
+        case 'N':
+            aTypeName = "DECIMAL";
+            if ( aDBFColumn.db_typ == 'N' )
+                aTypeName = "NUMERIC";
+            eType = DataType::DECIMAL;
 
-                // for numeric fields two characters more are written, than the precision of the column description predescribes,
-                // to keep room for the possible sign and the comma. This has to be considered...
-                nPrecision = SvDbaseConverter::ConvertPrecisionToOdbc(nPrecision,aDBFColumn.db_dez);
-                // This is not true for older versions ....
-                break;
-            case 'L':
-                eType = DataType::BIT;
-                aTypeName = "BOOLEAN";
-                break;
-            case 'Y':
-                bIsCurrency = sal_True;
-                eType = DataType::DOUBLE;
+            // for numeric fields two characters more are written, than the precision of the column description predescribes,
+            // to keep room for the possible sign and the comma. This has to be considered...
+            nPrecision = SvDbaseConverter::ConvertPrecisionToOdbc(nPrecision,aDBFColumn.db_dez);
+            // This is not true for older versions ....
+            break;
+        case 'L':
+            eType = DataType::BIT;
+            aTypeName = "BOOLEAN";
+            break;
+        case 'Y':
+            bIsCurrency = sal_True;
+            eType = DataType::DOUBLE;
+            aTypeName = "DOUBLE";
+            break;
+        case 'D':
+            eType = DataType::DATE;
+            aTypeName = "DATE";
+            break;
+        case 'T':
+            eType = DataType::TIMESTAMP;
+            aTypeName = "TIMESTAMP";
+            break;
+        case 'I':
+            eType = DataType::INTEGER;
+            aTypeName = "INTEGER";
+            break;
+        case 'M':
+            if ( bFoxPro && ( aDBFColumn.db_frei2[0] & 0x04 ) == 0x04 )
+            {
+                eType = DataType::LONGVARBINARY;
+                aTypeName = "LONGVARBINARY";
+            }
+            else
+            {
+                aTypeName = "LONGVARCHAR";
+                eType = DataType::LONGVARCHAR;
+            }
+            nPrecision = 2147483647;
+            break;
+        case 'P':
+            aTypeName = "LONGVARBINARY";
+            eType = DataType::LONGVARBINARY;
+            nPrecision = 2147483647;
+            break;
+        case '0':
+        case 'B':
+            if ( m_aHeader.db_typ == VisualFoxPro || m_aHeader.db_typ == VisualFoxProAuto )
+            {
                 aTypeName = "DOUBLE";
-                break;
-            case 'D':
-                eType = DataType::DATE;
-                aTypeName = "DATE";
-                break;
-            case 'T':
-                eType = DataType::TIMESTAMP;
-                aTypeName = "TIMESTAMP";
-                break;
-            case 'I':
-                eType = DataType::INTEGER;
-                aTypeName = "INTEGER";
-                break;
-            case 'M':
-                if ( bFoxPro && ( aDBFColumn.db_frei2[0] & 0x04 ) == 0x04 )
-                {
-                    eType = DataType::LONGVARBINARY;
-                    aTypeName = "LONGVARBINARY";
-                }
-                else
-                {
-                    aTypeName = "LONGVARCHAR";
-                    eType = DataType::LONGVARCHAR;
-                }
-                nPrecision = 2147483647;
-                break;
-            case 'P':
+                eType = DataType::DOUBLE;
+            }
+            else
+            {
                 aTypeName = "LONGVARBINARY";
                 eType = DataType::LONGVARBINARY;
                 nPrecision = 2147483647;
-                break;
-            case '0':
-            case 'B':
-                if ( m_aHeader.db_typ == VisualFoxPro || m_aHeader.db_typ == VisualFoxProAuto )
-                {
-                    aTypeName = "DOUBLE";
-                    eType = DataType::DOUBLE;
-                }
-                else
-                {
-                    aTypeName = "LONGVARBINARY";
-                    eType = DataType::LONGVARBINARY;
-                    nPrecision = 2147483647;
-                }
-                break;
-            default:
-                eType = DataType::OTHER;
+            }
+            break;
+        default:
+            eType = DataType::OTHER;
         }
 
         m_aTypes.push_back(eType);
@@ -485,7 +484,7 @@ void ODbaseTable::construct()
     m_aHeader.db_slng   = 0;
     m_aMemoHeader.db_size = 0;
 
-    String sFileName(getEntry(m_pConnection,m_Name));
+    OUString sFileName(getEntry(m_pConnection, m_Name));
 
     INetURLObject aURL;
     aURL.SetURL(sFileName);
@@ -608,7 +607,7 @@ sal_Bool ODbaseTable::ReadMemoHeader()
     return sal_True;
 }
 // -------------------------------------------------------------------------
-String ODbaseTable::getEntry(OConnection* _pConnection,const OUString& _sName )
+OUString ODbaseTable::getEntry(OConnection* _pConnection,const OUString& _sName )
 {
     SAL_INFO( "connectivity.drivers", "dbase Ocke.Janssen@sun.com ODbaseTable::getEntry" );
     OUString sURL;
@@ -625,7 +624,7 @@ String ODbaseTable::getEntry(OConnection* _pConnection,const OUString& _sName )
         {
             sName = xRow->getString(1);
             aURL.SetSmartProtocol(INET_PROT_FILE);
-            String sUrl = _pConnection->getURL() +  s_sSeparator + sName;
+            OUString sUrl = _pConnection->getURL() +  s_sSeparator + sName;
             aURL.SetSmartURL( sUrl );
 
             // cut the extension
@@ -634,7 +633,7 @@ String ODbaseTable::getEntry(OConnection* _pConnection,const OUString& _sName )
             // name and extension have to coincide
             if ( _pConnection->matchesExtension( sExt ) )
             {
-                sName = sName.replaceAt(sName.getLength()-(sExt.getLength()+1),sExt.getLength()+1,OUString());
+                sName = sName.replaceAt(sName.getLength() - (sExt.getLength() + 1), sExt.getLength() + 1, OUString());
                 if ( sName == _sName )
                 {
                     Reference< XContentAccess > xContentAccess( xDir, UNO_QUERY );
@@ -689,7 +688,7 @@ void ODbaseTable::refreshIndexes()
             // Refences the key an index-file?
             aKeyName = aInfFile.GetKeyName( nKey );
             //...if yes, add the index list of the table
-            if (aKeyName.copy(0,3).equalsL(RTL_CONSTASCII_STRINGPARAM("NDX")))
+            if (aKeyName.copy(0,3).equals("NDX"))
             {
                 OString aIndexName = aInfFile.ReadKey(aKeyName);
                 aURL.setName(OStringToOUString(aIndexName, m_eEncoding));
@@ -1036,8 +1035,8 @@ sal_Bool ODbaseTable::CreateImpl()
 
     INetURLObject aURL;
     aURL.SetSmartProtocol(INET_PROT_FILE);
-    String aName = getEntry(m_pConnection,m_Name);
-    if(!aName.Len())
+    OUString aName = getEntry(m_pConnection, m_Name);
+    if(aName.isEmpty())
     {
         OUString aIdent = m_pConnection->getContent()->getIdentifier()->getContentIdentifier();
         if ( aIdent.lastIndexOf('/') != (aIdent.getLength()-1) )
@@ -1090,7 +1089,7 @@ sal_Bool ODbaseTable::CreateImpl()
 
     if (bMemoFile)
     {
-        String aExt = aURL.getExtension();
+        OUString aExt = aURL.getExtension();
         aURL.setExtension("dbt");                      // extension for memo file
         Content aMemo1Content(aURL.GetMainURL(INetURLObject::NO_DECODE),Reference<XCommandEnvironment>(), comphelper::getProcessComponentContext());
 
@@ -2191,11 +2190,11 @@ void ODbaseTable::alterColumn(sal_Int32 index,
 
         // creates a temp file
 
-        String sTempName = createTempFile();
+        OUString sTempName = createTempFile();
 
         pNewTable = new ODbaseTable(m_pTables,static_cast<ODbaseConnection*>(m_pConnection));
         Reference<XPropertySet> xHoldTable = pNewTable;
-        pNewTable->setPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME),makeAny(OUString(sTempName)));
+        pNewTable->setPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME),makeAny(sTempName));
         Reference<XAppend> xAppend(pNewTable->getColumns(),UNO_QUERY);
         OSL_ENSURE(xAppend.is(),"ODbaseTable::alterColumn: No XAppend interface!");
 
@@ -2302,10 +2301,10 @@ void SAL_CALL ODbaseTable::rename( const OUString& newName ) throw(::com::sun::s
 namespace
 {
     void renameFile(OConnection* _pConenction,const OUString& oldName,
-                    const OUString& newName,const String& _sExtension)
+                    const OUString& newName,const OUString& _sExtension)
     {
-        String aName = ODbaseTable::getEntry(_pConenction,oldName);
-        if(!aName.Len())
+        OUString aName = ODbaseTable::getEntry(_pConenction,oldName);
+        if(aName.isEmpty())
         {
             OUString aIdent = _pConenction->getContent()->getIdentifier()->getContentIdentifier();
             if ( aIdent.lastIndexOf('/') != (aIdent.getLength()-1) )
@@ -2317,9 +2316,7 @@ namespace
         aURL.SetURL(aName);
 
         aURL.setExtension( _sExtension );
-        OUString sNewName(newName);
-        sNewName += ".";
-        sNewName += _sExtension;
+        OUString sNewName(newName + "." + _sExtension);
 
         try
         {
@@ -2328,7 +2325,7 @@ namespace
             Sequence< PropertyValue > aProps( 1 );
             aProps[0].Name      = "Title";
             aProps[0].Handle    = -1; // n/a
-            aProps[0].Value     = makeAny( OUString(sNewName) );
+            aProps[0].Value     = makeAny( sNewName );
             Sequence< Any > aValues;
             aContent.executeCommand( "setPropertyValues",makeAny(aProps) ) >>= aValues;
             if(aValues.getLength() && aValues[0].hasValue())
@@ -2360,11 +2357,11 @@ void SAL_CALL ODbaseTable::renameImpl( const OUString& newName ) throw(::com::su
 void ODbaseTable::addColumn(const Reference< XPropertySet >& _xNewColumn)
 {
     SAL_INFO( "connectivity.drivers", "dbase Ocke.Janssen@sun.com ODbaseTable::addColumn" );
-    String sTempName = createTempFile();
+    OUString sTempName = createTempFile();
 
     ODbaseTable* pNewTable = new ODbaseTable(m_pTables,static_cast<ODbaseConnection*>(m_pConnection));
     Reference< XPropertySet > xHold = pNewTable;
-    pNewTable->setPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME),makeAny(OUString(sTempName)));
+    pNewTable->setPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME),makeAny(sTempName));
     {
         Reference<XAppend> xAppend(pNewTable->getColumns(),UNO_QUERY);
         sal_Bool bCase = getConnection()->getMetaData()->supportsMixedCaseQuotedIdentifiers();
@@ -2433,11 +2430,11 @@ void ODbaseTable::addColumn(const Reference< XPropertySet >& _xNewColumn)
 void ODbaseTable::dropColumn(sal_Int32 _nPos)
 {
     SAL_INFO( "connectivity.drivers", "dbase Ocke.Janssen@sun.com ODbaseTable::dropColumn" );
-    String sTempName = createTempFile();
+    OUString sTempName = createTempFile();
 
     ODbaseTable* pNewTable = new ODbaseTable(m_pTables,static_cast<ODbaseConnection*>(m_pConnection));
     Reference< XPropertySet > xHold = pNewTable;
-    pNewTable->setPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME),makeAny(OUString(sTempName)));
+    pNewTable->setPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME),makeAny(sTempName));
     {
         Reference<XAppend> xAppend(pNewTable->getColumns(),UNO_QUERY);
         sal_Bool bCase = getConnection()->getMetaData()->supportsMixedCaseQuotedIdentifiers();
@@ -2486,7 +2483,7 @@ void ODbaseTable::dropColumn(sal_Int32 _nPos)
     construct();
 }
 // -----------------------------------------------------------------------------
-String ODbaseTable::createTempFile()
+OUString ODbaseTable::createTempFile()
 {
     SAL_INFO( "connectivity.drivers", "dbase Ocke.Janssen@sun.com ODbaseTable::createTempFile" );
     OUString aIdent = m_pConnection->getContent()->getIdentifier()->getContentIdentifier();
@@ -2496,16 +2493,16 @@ String ODbaseTable::createTempFile()
     OUString sTempName(aIdent);
     OUString sExt(OUString(".") + m_pConnection->getExtension());
     OUString sName(m_Name);
-    TempFile aTempFile(sName,&sExt,&sTempName);
+    TempFile aTempFile(sName, &sExt, &sTempName);
     if(!aTempFile.IsValid())
-        getConnection()->throwGenericSQLException(STR_COULD_NOT_ALTER_TABLE,*this);
+        getConnection()->throwGenericSQLException(STR_COULD_NOT_ALTER_TABLE, *this);
 
     INetURLObject aURL;
     aURL.SetSmartProtocol(INET_PROT_FILE);
     aURL.SetURL(aTempFile.GetURL());
 
-    String sNewName(aURL.getName());
-    sNewName.Erase(sNewName.Len() - sExt.getLength());
+    OUString sNewName(aURL.getName().copy(0, aURL.getName().getLength() - sExt.getLength()));
+
     return sNewName;
 }
 // -----------------------------------------------------------------------------

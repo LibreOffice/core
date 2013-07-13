@@ -128,6 +128,7 @@ sal_Int32 SAL_CALL ODatabaseMetaDataResultSet::findColumn( const OUString& colum
         if(xMeta->isCaseSensitive(i) ? columnName == xMeta->getColumnName(i) :
             columnName.equalsIgnoreAsciiCase(xMeta->getColumnName(i)))
             break;
+    /* FIXME: should throw in case of not found ? */
     return i;
 }
 #define BLOCK_SIZE 256

@@ -46,7 +46,7 @@ class VCL_DLLPUBLIC GraphicReader
 {
 protected:
 
-    String          maUpperName;
+    OUString        maUpperName;
     ReaderData*     mpReaderData;
     sal_Bool            mbIsReading;
 
@@ -58,7 +58,7 @@ public:
 
     virtual         ~GraphicReader();
 
-    const String&   GetUpperFilterName() const { return maUpperName; }
+    const OUString&   GetUpperFilterName() const { return maUpperName; }
     ReaderData*     GetReaderData() const { return mpReaderData; }
     sal_Bool            IsReading() const { return mbIsReading; }
 

@@ -77,7 +77,7 @@ namespace connectivity
             static sal_Bool IsText(sal_Int32 eType);
 
         private:
-            StringCompare Compare(const ONDXKey& rKey) const;
+            int Compare(const ONDXKey& rKey) const;
         };
 
 
@@ -299,7 +299,7 @@ namespace connectivity
         {
             if(&rKey == this)
                 return sal_True;
-            return Compare(rKey) == COMPARE_EQUAL;
+            return Compare(rKey) == 0;
         }
         inline sal_Bool ONDXKey::operator != (const ONDXKey& rKey) const
         {
@@ -307,11 +307,11 @@ namespace connectivity
         }
         inline sal_Bool ONDXKey::operator <  (const ONDXKey& rKey) const
         {
-            return Compare(rKey) == COMPARE_LESS;
+            return Compare(rKey) < 0;
         }
         inline sal_Bool ONDXKey::operator >  (const ONDXKey& rKey) const
         {
-            return Compare(rKey) == COMPARE_GREATER;
+            return Compare(rKey) > 0;
         }
         inline sal_Bool ONDXKey::operator <= (const ONDXKey& rKey) const
         {

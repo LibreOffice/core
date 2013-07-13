@@ -215,6 +215,9 @@ sal_Int32 SAL_CALL OResultSet::findColumn( const OUString& columnName ) throw(SQ
         if(xMeta->isCaseSensitive(i) ? columnName == xMeta->getColumnName(i) :
                 columnName.equalsIgnoreAsciiCase(xMeta->getColumnName(i)))
             break;
+    /* FIXME ? should this check for non found. iow return i instead of break, and exception
+     * if we get out of the for loop
+     */
     return i;
 }
 // -----------------------------------------------------------------------------

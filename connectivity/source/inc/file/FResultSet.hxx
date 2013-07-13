@@ -142,7 +142,7 @@ namespace connectivity
                                 sal_Bool bRetrieveData = sal_True);
 
             OKeyValue* GetOrderbyKeyValue(OValueRefRow& _rRow);
-            sal_Bool IsSorted() const { return !m_aOrderbyColumnNumber.empty() && m_aOrderbyColumnNumber[0] != SQL_COLUMN_NOTFOUND;}
+            sal_Bool IsSorted() const { return !m_aOrderbyColumnNumber.empty() && m_aOrderbyColumnNumber[0] >= 0;}
 
             // return true when the select statement is "select count(*) from table"
             inline sal_Bool isCount() const { return m_bIsCount; }

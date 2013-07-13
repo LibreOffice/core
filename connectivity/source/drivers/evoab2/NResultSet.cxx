@@ -1125,6 +1125,7 @@ sal_Int32 SAL_CALL OEvoabResultSet::findColumn( const OUString& columnName ) thr
         if(xMeta->isCaseSensitive(i) ? columnName == xMeta->getColumnName(i) :
                 columnName.equalsIgnoreAsciiCase(xMeta->getColumnName(i)))
             break;
+    /* FXIME ? should trow when not found no? */
     return i;
 }
 // -------------------------------------------------------------------------

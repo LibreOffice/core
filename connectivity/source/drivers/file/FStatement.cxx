@@ -563,7 +563,7 @@ void OStatement_Base::GetAssignValues()
         m_aParameterIndexes.resize(nCount+1,SQL_NO_PARAMETER);
 
         // List of Column-Names, that exist in the column_commalist (separated by ;):
-        ::std::vector<String> aColumnNameList;
+        ::std::vector<OUString> aColumnNameList;
 
         OSL_ENSURE(m_pParseTree->count() >= 4,"OResultSet: Fehler im Parse Tree");
 
@@ -658,7 +658,7 @@ void OStatement_Base::GetAssignValues()
         OSL_ENSURE(pAssignmentCommalist->count() > 0,"OResultSet: pAssignmentCommalist->count() <= 0");
 
         // work on all assignments (commalist) ...
-        ::std::vector< String> aList(1);
+        ::std::vector< OUString> aList(1);
         for (sal_uInt32 i = 0; i < pAssignmentCommalist->count(); i++)
         {
             OSQLParseNode * pAssignment = pAssignmentCommalist->getChild(i);
@@ -686,11 +686,11 @@ void OStatement_Base::GetAssignValues()
     }
 }
 // -------------------------------------------------------------------------
-void OStatement_Base::ParseAssignValues(const ::std::vector< String>& aColumnNameList,OSQLParseNode* pRow_Value_Constructor_Elem,xub_StrLen nIndex)
+void OStatement_Base::ParseAssignValues(const ::std::vector< OUString>& aColumnNameList,OSQLParseNode* pRow_Value_Constructor_Elem,xub_StrLen nIndex)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OStatement_Base::ParseAssignValues" );
     OSL_ENSURE(nIndex <= aColumnNameList.size(),"SdbFileCursor::ParseAssignValues: nIndex > aColumnNameList.GetTokenCount()");
-    String aColumnName(aColumnNameList[nIndex]);
+    OUString aColumnName(aColumnNameList[nIndex]);
     OSL_ENSURE(aColumnName.Len() > 0,"OResultSet: Column-Name nicht gefunden");
     OSL_ENSURE(pRow_Value_Constructor_Elem != NULL,"OResultSet: pRow_Value_Constructor_Elem darf nicht NULL sein!");
 
@@ -704,7 +704,7 @@ void OStatement_Base::ParseAssignValues(const ::std::vector< String>& aColumnNam
     else if (SQL_ISTOKEN(pRow_Value_Constructor_Elem,NULL))
     {
         // set NULL
-        SetAssignValue(aColumnName, String(), sal_True);
+        SetAssignValue(aColumnName, OUString(), sal_True);
     }
     else if (SQL_ISRULE(pRow_Value_Constructor_Elem,parameter))
         parseParamterElem(aColumnName,pRow_Value_Constructor_Elem);
@@ -714,10 +714,10 @@ void OStatement_Base::ParseAssignValues(const ::std::vector< String>& aColumnNam
     }
 }
 //------------------------------------------------------------------
-void OStatement_Base::SetAssignValue(const String& aColumnName,
-                                   const String& aValue,
-                                   sal_Bool bSetNull,
-                                   sal_uInt32 nParameter)
+void OStatement_Base::SetAssignValue(const OUString& aColumnName,
+                                     const OUString& aValue,
+                                     sal_Bool bSetNull,
+                                     sal_uInt32 nParameter)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OStatement_Base::SetAssignValue" );
     Reference<XPropertySet> xCol;
@@ -741,40 +741,35 @@ void OStatement_Base::SetAssignValue(const String& aColumnName,
         switch (::comphelper::getINT32(xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE))))
         {
             // put criteria depending on the Type as String or double in the variable
-            case DataType::CHAR:
-            case DataType::VARCHAR:
-            case DataType::LONGVARCHAR:
-                *(m_aAssignValues->get())[nId] = ORowSetValue(aValue);
-                //Characterset is already converted, since the entire statement was converted
-                break;
+        case DataType::CHAR:
+        case DataType::VARCHAR:
+        case DataType::LONGVARCHAR:
+            *(m_aAssignValues->get())[nId] = ORowSetValue(aValue);
+            //Characterset is already converted, since the entire statement was converted
+            break;
 
-            case DataType::BIT:
-                {
-                    if (aValue.EqualsIgnoreCaseAscii("TRUE")  || aValue.GetChar(0) == '1')
-                        *(m_aAssignValues->get())[nId] = sal_True;
-                    else if (aValue.EqualsIgnoreCaseAscii("FALSE") || aValue.GetChar(0) == '0')
-                        *(m_aAssignValues->get())[nId] = sal_False;
-                    else
-                    {
-                        throwFunctionSequenceException(*this);
-                    }
-                }
-                break;
-            case DataType::TINYINT:
-            case DataType::SMALLINT:
-            case DataType::INTEGER:
-            case DataType::DECIMAL:
-            case DataType::NUMERIC:
-            case DataType::REAL:
-            case DataType::DOUBLE:
-            case DataType::DATE:
-            case DataType::TIME:
-            case DataType::TIMESTAMP:
-            {
-                *(m_aAssignValues->get())[nId] = ORowSetValue(aValue);
-            }   break;
-            default:
+        case DataType::BIT:
+            if (aValue.equalsIgnoreAsciiCase("TRUE")  || aValue[0] == '1')
+                *(m_aAssignValues->get())[nId] = sal_True;
+            else if (aValue.equalsIgnoreAsciiCase("FALSE") || aValue[0] == '0')
+                *(m_aAssignValues->get())[nId] = sal_False;
+            else
                 throwFunctionSequenceException(*this);
+            break;
+        case DataType::TINYINT:
+        case DataType::SMALLINT:
+        case DataType::INTEGER:
+        case DataType::DECIMAL:
+        case DataType::NUMERIC:
+        case DataType::REAL:
+        case DataType::DOUBLE:
+        case DataType::DATE:
+        case DataType::TIME:
+        case DataType::TIMESTAMP:
+            *(m_aAssignValues->get())[nId] = ORowSetValue(aValue);
+            break;
+        default:
+            throwFunctionSequenceException(*this);
         }
     }
 
@@ -785,7 +780,7 @@ void OStatement_Base::SetAssignValue(const String& aColumnName,
         m_aParameterIndexes[nParameter] = nId;
 }
 // -----------------------------------------------------------------------------
-void OStatement_Base::parseParamterElem(const String& /*_sColumnName*/,OSQLParseNode* /*pRow_Value_Constructor_Elem*/)
+void OStatement_Base::parseParamterElem(const OUString& /*_sColumnName*/,OSQLParseNode* /*pRow_Value_Constructor_Elem*/)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OStatement_Base::parseParamterElem" );
     // do nothing here
