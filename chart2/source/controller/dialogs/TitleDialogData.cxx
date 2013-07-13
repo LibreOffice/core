@@ -23,10 +23,8 @@
 #include "ChartModelHelper.hxx"
 #include "AxisHelper.hxx"
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 
@@ -109,8 +107,6 @@ bool TitleDialogData::writeDifferenceToModel(
     return bChanged;
 }
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

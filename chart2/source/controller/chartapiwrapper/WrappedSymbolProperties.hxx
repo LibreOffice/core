@@ -25,13 +25,11 @@
 #include <boost/shared_ptr.hpp>
 #include <vector>
 
-//.............................................................................
 namespace chart
 {
 namespace wrapper
 {
 
-//-----------------------------------------------------------------------------------------------------------------
 
 class WrappedSymbolProperties
 {
@@ -45,7 +43,6 @@ public:
 
 } //namespace wrapper
 } //namespace chart
-//.............................................................................
 
 // CHART_WRAPPED_SYMBOL_PROPERTIES_HXX
 #endif

@@ -24,10 +24,8 @@
 #include "NoWarningThisInCTOR.hxx"
 #include "ObjectNameProvider.hxx"
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 
 SchTitleDlg::SchTitleDlg(Window* pWindow, const TitleDialogData& rInput )
     : ModalDialog(pWindow, SchResId(DLG_TITLE))
@@ -51,8 +49,6 @@ void SchTitleDlg::getResult( TitleDialogData& rOutput )
     m_apTitleResources->readFromResources( rOutput );
 }
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

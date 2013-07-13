@@ -34,10 +34,8 @@ using namespace com::sun::star;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 
 OUString ShapeToolbarController::getImplementationName() throw (uno::RuntimeException)
 {
@@ -283,8 +281,6 @@ void ShapeToolbarController::updateImage() throw (uno::RuntimeException)
     }
 }
 
-//.............................................................................
 } //  namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

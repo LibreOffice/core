@@ -22,10 +22,8 @@
 #include "ShapeFactory.hxx"
 #include "macros.hxx"
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 using namespace ::com::sun::star;
 
 uno::Reference< drawing::XShapes > DataPointSymbolSupplier::create2DSymbolList(
@@ -50,8 +48,6 @@ uno::Reference< drawing::XShapes > DataPointSymbolSupplier::create2DSymbolList(
     return xGroupShapes;
 }
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

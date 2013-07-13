@@ -23,10 +23,8 @@
 #include "PropertyHelper.hxx"
 #include <com/sun/star/chart2/FormattedString.hpp>
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
@@ -61,8 +59,6 @@ Sequence< Reference< chart2::XFormattedString2 > >
     return Sequence< Reference< XFormattedString2 > >( & xFormStr, 1 );
 }
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

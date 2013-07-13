@@ -29,10 +29,8 @@
 
 #include <map>
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 
 OOO_DLLPUBLIC_CHARTTOOLS ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > createNameContainer(
     const ::com::sun::star::uno::Type& rType, const OUString& rServicename, const OUString& rImplementationName );
@@ -90,9 +88,7 @@ private: //member
     tContentMap m_aMap;
 };
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

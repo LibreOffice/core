@@ -31,10 +31,8 @@
 #include <editeng/unoprnms.hxx>
 #include <com/sun/star/drawing/ProjectionMode.hpp>
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 
 using namespace ::com::sun::star;
 
@@ -282,8 +280,6 @@ IMPL_LINK_NOARG(ThreeD_SceneGeometry_TabPage, RightAngledAxesToggled)
     return 0;
 }
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

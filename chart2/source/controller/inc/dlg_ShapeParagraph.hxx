@@ -21,10 +21,8 @@
 
 #include <sfx2/tabdlg.hxx>
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 
 /** dialog for paragraph properties of shapes
  */
@@ -38,9 +36,7 @@ private:
     virtual void PageCreated( sal_uInt16 nId, SfxTabPage& rPage );
 };
 
-//.............................................................................
 } //  namespace chart
-//.............................................................................
 
 // CHART2_DLG_SHAPEPARAGRAPH_HXX
 #endif

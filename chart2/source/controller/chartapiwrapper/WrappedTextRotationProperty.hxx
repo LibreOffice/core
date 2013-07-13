@@ -21,7 +21,6 @@
 
 #include "WrappedProperty.hxx"
 
-//.............................................................................
 namespace chart
 {
 
@@ -42,7 +41,6 @@ protected:
 };
 
 } //namespace chart
-//.............................................................................
 
 // CHART_WRAPPED_TEXTROTATION_PROPERTY_HXX
 #endif

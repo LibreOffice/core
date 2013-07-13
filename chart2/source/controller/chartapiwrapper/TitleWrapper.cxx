@@ -109,7 +109,6 @@ Any WrappedTitleStringProperty::getPropertyDefault( const Reference< beans::XPro
     return uno::makeAny( OUString() );//default title is a empty String
 }
 
-//-----------------------------------------------------------------------------
 
 class WrappedStackedTextProperty : public WrappedProperty
 {
@@ -128,7 +127,6 @@ WrappedStackedTextProperty::~WrappedStackedTextProperty()
 
 }// end namespace chart
 
-//-----------------------------------------------------------------------------
 
 namespace
 {

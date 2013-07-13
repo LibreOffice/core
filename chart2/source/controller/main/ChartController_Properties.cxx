@@ -62,10 +62,8 @@
 #include <osl/mutex.hxx>
 #include <svx/ActionDescriptionProvider.hxx>
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 using ::com::sun::star::uno::Reference;
@@ -86,7 +84,6 @@ SAL_WNODEPRECATED_DECLARATIONS_PUSH
 {
     ::comphelper::ItemConverter* pItemConverter=NULL;
 
-    //-------------------------------------------------------------
     //get type of selected object
     ObjectType eObjectType = ObjectIdentifier::getObjectType( aObjectCID );
     if( OBJECTTYPE_UNKNOWN==eObjectType )
@@ -97,7 +94,6 @@ SAL_WNODEPRECATED_DECLARATIONS_PUSH
 
     OUString aParticleID = ObjectIdentifier::getParticleID( aObjectCID );
     bool bAffectsMultipleObjects = aParticleID == "ALLELEMENTS";
-    //-------------------------------------------------------------
     if( !bAffectsMultipleObjects )
     {
         uno::Reference< beans::XPropertySet > xObjectProperties =
@@ -435,14 +431,12 @@ OUString lcl_getObjectCIDForCommand( const OString& rDispatchCommand, const uno:
     uno::Reference< XDataSeries > xSeries = ObjectIdentifier::getDataSeriesForCID( rSelectedCID, xChartModel );
     uno::Reference< chart2::XRegressionCurveContainer > xRegCurveCnt( xSeries, uno::UNO_QUERY );
 
-    //-------------------------------------------------------------------------
     //legend
     if( rDispatchCommand.equals("Legend") || rDispatchCommand.equals("FormatLegend") )
     {
         eObjectType = OBJECTTYPE_LEGEND;
         //@todo set particular aParticleID if we have more than one legend
     }
-    //-------------------------------------------------------------------------
     //wall floor area
     else if( rDispatchCommand.equals("DiagramWall") || rDispatchCommand.equals("FormatWall") )
     {
@@ -459,7 +453,6 @@ OUString lcl_getObjectCIDForCommand( const OString& rDispatchCommand, const uno:
     {
         eObjectType = OBJECTTYPE_PAGE;
     }
-    //-------------------------------------------------------------------------
     //title
     else if( rDispatchCommand.equals("MainTitle")
         || rDispatchCommand.equals("SubTitle")
@@ -473,7 +466,6 @@ OUString lcl_getObjectCIDForCommand( const OString& rDispatchCommand, const uno:
     {
         return lcl_getTitleCIDForCommand( rDispatchCommand, xChartModel );
     }
-    //-------------------------------------------------------------------------
     //axis
     else if( rDispatchCommand.equals("DiagramAxisX")
         || rDispatchCommand.equals("DiagramAxisY")
@@ -485,7 +477,6 @@ OUString lcl_getObjectCIDForCommand( const OString& rDispatchCommand, const uno:
     {
         return lcl_getAxisCIDForCommand( rDispatchCommand, xChartModel );
     }
-    //-------------------------------------------------------------------------
     //grid
     else if( rDispatchCommand.equals("DiagramGridYMain")
         || rDispatchCommand.equals("DiagramGridXMain")
@@ -498,7 +489,6 @@ OUString lcl_getObjectCIDForCommand( const OString& rDispatchCommand, const uno:
     {
         return lcl_getGridCIDForCommand( rDispatchCommand, xChartModel );
     }
-    //-------------------------------------------------------------------------
     //data series
     else if( rDispatchCommand.equals("FormatDataSeries") )
     {
@@ -508,13 +498,11 @@ OUString lcl_getObjectCIDForCommand( const OString& rDispatchCommand, const uno:
             return ObjectIdentifier::createClassifiedIdentifier(
                 OBJECTTYPE_DATA_SERIES, ObjectIdentifier::getSeriesParticleFromCID( rSelectedCID ) );
     }
-    //-------------------------------------------------------------------------
     //data point
     else if( rDispatchCommand.equals("FormatDataPoint") )
     {
         return rSelectedCID;
     }
-    //-------------------------------------------------------------------------
     //data labels
     else if( rDispatchCommand.equals("FormatDataLabels") )
     {
@@ -524,7 +512,6 @@ OUString lcl_getObjectCIDForCommand( const OString& rDispatchCommand, const uno:
             return ObjectIdentifier::createClassifiedIdentifierWithParent(
                 OBJECTTYPE_DATA_LABELS, OUString(), rSelectedCID );
     }
-    //-------------------------------------------------------------------------
     //data labels
     else if( rDispatchCommand.equals("FormatDataLabel") )
     {
@@ -545,7 +532,6 @@ OUString lcl_getObjectCIDForCommand( const OString& rDispatchCommand, const uno:
             }
         }
     }
-    //-------------------------------------------------------------------------
     //mean value line
     else if( rDispatchCommand.equals("FormatMeanValue") )
     {
@@ -557,7 +543,6 @@ OUString lcl_getObjectCIDForCommand( const OString& rDispatchCommand, const uno:
                     RegressionCurveHelper::getRegressionCurveIndex( xRegCurveCnt,
                         RegressionCurveHelper::getMeanValueLine( xRegCurveCnt ) ), true );
     }
-    //-------------------------------------------------------------------------
     //trend line
     else if( rDispatchCommand.equals("FormatTrendline") )
     {
@@ -569,7 +554,6 @@ OUString lcl_getObjectCIDForCommand( const OString& rDispatchCommand, const uno:
                     RegressionCurveHelper::getRegressionCurveIndex( xRegCurveCnt,
                         RegressionCurveHelper::getFirstCurveNotMeanValueLine( xRegCurveCnt ) ), false );
     }
-    //-------------------------------------------------------------------------
     //trend line equation
     else if( rDispatchCommand.equals("FormatTrendlineEquation") )
     {
@@ -581,19 +565,16 @@ OUString lcl_getObjectCIDForCommand( const OString& rDispatchCommand, const uno:
                     RegressionCurveHelper::getRegressionCurveIndex( xRegCurveCnt,
                         RegressionCurveHelper::getFirstCurveNotMeanValueLine( xRegCurveCnt ) ) );
     }
-    //-------------------------------------------------------------------------
     // y error bars
     else if( rDispatchCommand.equals("FormatXErrorBars") )
     {
         return lcl_getErrorCIDForCommand(OBJECTTYPE_DATA_ERRORS_X, eSelectedType, rSelectedCID );
     }
-    //-------------------------------------------------------------------------
     // y error bars
     else if( rDispatchCommand.equals("FormatYErrorBars") )
     {
         return lcl_getErrorCIDForCommand(OBJECTTYPE_DATA_ERRORS_Y, eSelectedType, rSelectedCID );
     }
-    //-------------------------------------------------------------------------
     // axis
     else if( rDispatchCommand.equals("FormatAxis") )
     {
@@ -605,7 +586,6 @@ OUString lcl_getObjectCIDForCommand( const OString& rDispatchCommand, const uno:
             return ObjectIdentifier::createClassifiedIdentifierForObject( xAxis , xChartModel );
         }
     }
-    //-------------------------------------------------------------------------
     // major grid
     else if( rDispatchCommand.equals("FormatMajorGrid") )
     {
@@ -618,7 +598,6 @@ OUString lcl_getObjectCIDForCommand( const OString& rDispatchCommand, const uno:
         }
 
     }
-    //-------------------------------------------------------------------------
     // minor grid
     else if( rDispatchCommand.equals("FormatMinorGrid") )
     {
@@ -630,14 +609,12 @@ OUString lcl_getObjectCIDForCommand( const OString& rDispatchCommand, const uno:
             return ObjectIdentifier::createClassifiedIdentifierForGrid( xAxis, xChartModel, 0 /*sub grid index*/ );
         }
     }
-    //-------------------------------------------------------------------------
     // title
     else if( rDispatchCommand.equals("FormatTitle") )
     {
         if( eSelectedType == OBJECTTYPE_TITLE )
             return rSelectedCID;
     }
-    //-------------------------------------------------------------------------
     // stock loss
     else if( rDispatchCommand.equals("FormatStockLoss") )
     {
@@ -646,7 +623,6 @@ OUString lcl_getObjectCIDForCommand( const OString& rDispatchCommand, const uno:
         else
             return ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_DATA_STOCK_LOSS, OUString());
     }
-    //-------------------------------------------------------------------------
     // stock gain
     else if( rDispatchCommand.equals("FormatStockGain") )
     {
@@ -726,7 +702,6 @@ bool ChartController::executeDlg_ObjectProperties_withoutUndoGuard( const OUStri
     }
     try
     {
-        //-------------------------------------------------------------
         //get type of object
         ObjectType eObjectType = ObjectIdentifier::getObjectType( rObjectCID );
         if( OBJECTTYPE_UNKNOWN==eObjectType )
@@ -739,7 +714,6 @@ bool ChartController::executeDlg_ObjectProperties_withoutUndoGuard( const OUStri
                 return bRet;
         }
 
-        //-------------------------------------------------------------
         //convert properties to ItemSet
 
         SAL_WNODEPRECATED_DECLARATIONS_PUSH
@@ -761,7 +735,6 @@ bool ChartController::executeDlg_ObjectProperties_withoutUndoGuard( const OUStri
 
         apItemConverter->FillItemSet( aItemSet );
 
-        //-------------------------------------------------------------
         //prepare dialog
         ObjectPropertiesDialogParameter aDialogParameter = ObjectPropertiesDialogParameter( rObjectCID );
         aDialogParameter.init( getModel() );
@@ -797,7 +770,6 @@ bool ChartController::executeDlg_ObjectProperties_withoutUndoGuard( const OUStri
                 InsertErrorBarsDialog::getAxisMinorStepWidthForErrorBarDecimals( getModel(), m_xChartView, rObjectCID ) );
         }
 
-        //-------------------------------------------------------------
         //open the dialog
         if( aDlg.Execute() == RET_OK || (bOkClickOnUnchangedDialogSouldBeRatedAsSuccessAlso && aDlg.DialogWasClosedWithOK()) )
         {
@@ -840,8 +812,6 @@ void SAL_CALL ChartController::executeDispatch_View3D()
     }
 }
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

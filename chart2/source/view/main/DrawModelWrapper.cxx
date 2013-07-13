@@ -59,7 +59,6 @@
 
 using namespace ::com::sun::star;
 
-//.............................................................................
 namespace
 {
 // this code is copied from sfx2/source/doc/objembed.cxx
@@ -104,7 +103,6 @@ OutputDevice * lcl_GetParentRefDevice( const uno::Reference< frame::XModel > & x
 //..    ...........................................................................
 namespace chart
 {
-//.............................................................................
 
 DrawModelWrapper::DrawModelWrapper(
         uno::Reference<uno::XComponentContext> const & xContext )
@@ -394,8 +392,6 @@ bool DrawModelWrapper::removeShape( const uno::Reference< drawing::XShape >& xSh
     return false;
 }
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

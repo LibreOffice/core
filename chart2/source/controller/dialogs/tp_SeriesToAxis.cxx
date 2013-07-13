@@ -33,10 +33,8 @@
 
 #include <com/sun/star/chart/MissingValueTreatment.hpp>
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 
 SchOptionTabPage::SchOptionTabPage(Window* pWindow,const SfxItemSet& rInAttrs) :
     SfxTabPage(pWindow,
@@ -257,8 +255,6 @@ void SchOptionTabPage::AdaptControlPositionsAndVisibility()
          m_pGrpBar->Show(sal_False);
      }
 }
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

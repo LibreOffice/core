@@ -67,10 +67,8 @@ void lcl_shiftControlY( Control & rControl, long nYOffset )
 }
 } // anonymous namespace
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 
@@ -397,8 +395,6 @@ void RangeChooserTabPage::setDirty()
         m_bIsDirty = true;
 }
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

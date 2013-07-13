@@ -27,10 +27,8 @@
 #include <vcl/vclevent.hxx>
 
 #include <svtools/genericunodialog.hxx>
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 typedef ::svt::OGenericUnoDialog ChartTypeUnoDlg_BASE;
 class ChartTypeUnoDlg : public ChartTypeUnoDlg_BASE
                         ,public ::comphelper::OPropertyArrayUsageHelper< ChartTypeUnoDlg >
@@ -71,9 +69,7 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >           m_xChartModel;
 };
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

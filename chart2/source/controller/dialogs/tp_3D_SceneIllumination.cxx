@@ -40,10 +40,8 @@
 #include <svx/svx3ditems.hxx>
 #include <svx/svddef.hxx>
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
@@ -90,7 +88,6 @@ bool LightButton::isLightOn() const
     return m_bLightOn;
 }
 
-//-----------------------------------------------------------------------------
 
 ColorButton::ColorButton( Window* pParent, const ResId& rResId )
             : ImageButton( pParent, rResId )
@@ -103,7 +100,6 @@ ColorButton::~ColorButton()
 {
 }
 
-//-----------------------------------------------------------------------------
 
 struct LightSource
 {
@@ -145,7 +141,6 @@ void LightSourceInfo::initButtonFromSource()
     ) ) );
 }
 
-//-----------------------------------------------------------------------------
 
 namespace
 {
@@ -265,7 +260,6 @@ namespace
     }
 }
 
-//-----------------------------------------------------------------------------
 
 ThreeD_SceneIllumination_TabPage::ThreeD_SceneIllumination_TabPage( Window* pWindow
                 , const uno::Reference< beans::XPropertySet > & xSceneProperties
@@ -634,8 +628,6 @@ void ThreeD_SceneIllumination_TabPage::updatePreview()
     }
 }
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

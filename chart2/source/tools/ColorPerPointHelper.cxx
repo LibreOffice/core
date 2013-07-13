@@ -25,10 +25,8 @@
 
 #include <algorithm>
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 
@@ -80,8 +78,6 @@ bool ColorPerPointHelper::hasPointOwnProperties(
     return false;
 }
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

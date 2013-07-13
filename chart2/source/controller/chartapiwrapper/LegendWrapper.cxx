@@ -51,7 +51,6 @@ using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 
-//-----------------------------------------------------------------------------
 
 namespace chart
 {
@@ -209,7 +208,6 @@ Any WrappedLegendAlignmentProperty::convertOuterToInnerValue( const Any& rOuterV
     return uno::makeAny( eNewPos );
 }
 }
-//-----------------------------------------------------------------------------
 
 namespace
 {

@@ -24,10 +24,8 @@
 #include <svx/dlgctrl.hxx>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 
 class ObjectPropertiesDialogParameter
 {
@@ -141,9 +139,7 @@ public:
     bool DialogWasClosedWithOK() const;
 };
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 #endif
 

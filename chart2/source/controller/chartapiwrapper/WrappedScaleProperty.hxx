@@ -25,7 +25,6 @@
 #include <boost/shared_ptr.hpp>
 #include <vector>
 
-//.............................................................................
 namespace chart
 {
 namespace wrapper
@@ -81,7 +80,6 @@ private: //member
 
 } //  namespace wrapper
 } //  namespace chart
-//.............................................................................
 
 // CHART_WRAPPED_SCALE_PROPERTY_HXX
 #endif

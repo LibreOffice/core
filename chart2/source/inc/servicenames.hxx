@@ -19,10 +19,8 @@
 #ifndef _CHART_SERVICENAMES_HXX
 #define _CHART_SERVICENAMES_HXX
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 
 #define CHART_MODEL_SERVICE_IMPLEMENTATION_NAME OUString( "com.sun.star.comp.chart2.ChartModel" )
 #define CHART_MODEL_SERVICE_NAME OUString( "com.sun.star.chart2.ChartDocument" )
@@ -52,9 +50,7 @@ namespace chart
 #define CHART_ACCESSIBLE_TEXT_IMPLEMENTATION_NAME OUString( "com.sun.star.comp.chart2.AccessibleTextComponent" )
 #define CHART_ACCESSIBLE_TEXT_SERVICE_NAME OUString( "com.sun.star.accessibility.AccessibleTextComponent" )
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 #endif
 

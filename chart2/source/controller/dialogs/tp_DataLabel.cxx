@@ -22,10 +22,8 @@
 #include "TabPages.hrc"
 #include "ResId.hxx"
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 
 DataLabelsTabPage::DataLabelsTabPage(Window* pWindow, const SfxItemSet& rInAttrs) :
         SfxTabPage(pWindow, SchResId(TP_DATA_DESCR), rInAttrs),
@@ -59,8 +57,6 @@ void DataLabelsTabPage::SetNumberFormatter( SvNumberFormatter* pFormatter )
     m_aDataLabelResources.SetNumberFormatter( pFormatter );
 }
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

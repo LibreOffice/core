@@ -41,10 +41,8 @@
 
 #include <rtl/math.hxx>
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 using ::com::sun::star::uno::Reference;
@@ -587,8 +585,6 @@ sal_Int32 VCoordinateSystem::getNumberFormatKeyForAxis(
                 xAxis, m_xCooSysModel, xNumberFormatsSupplier );
 }
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -30,10 +30,8 @@
 using ::com::sun::star::uno::Reference;
 using namespace ::com::sun::star;
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 
 ShapeParagraphDialog::ShapeParagraphDialog( Window* pParent, const SfxItemSet* pAttr )
     :SfxTabDialog( pParent, SchResId( DLG_SHAPE_PARAGRAPH ), pAttr )
@@ -78,8 +76,6 @@ void ShapeParagraphDialog::PageCreated( sal_uInt16 nId, SfxTabPage& rPage )
     }
 }
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

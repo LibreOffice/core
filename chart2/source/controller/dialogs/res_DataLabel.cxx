@@ -47,10 +47,8 @@
 #include <svtools/controldims.hrc>
 
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 
 namespace
 {
@@ -405,8 +403,6 @@ void DataLabelResources::Reset(const SfxItemSet& rInAttrs)
     EnableControls();
 }
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

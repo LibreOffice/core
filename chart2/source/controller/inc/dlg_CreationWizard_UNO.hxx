@@ -36,10 +36,8 @@
 #include <tools/link.hxx>
 #include <vcl/vclevent.hxx>
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 
 class CreationWizard;
 class CreationWizardUnoDlg : public MutexContainer
@@ -115,9 +113,7 @@ private:
     sal_Bool            m_bUnlockControllersOnExecute;
 };
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

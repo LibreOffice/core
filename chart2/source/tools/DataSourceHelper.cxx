@@ -37,10 +37,8 @@
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
 #include <com/sun/star/chart/ErrorBarStyle.hpp>
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 using ::com::sun::star::uno::Reference;
@@ -517,8 +515,6 @@ Sequence< OUString > DataSourceHelper::getRangesFromDataSource( const Reference<
     return ContainerHelper::ContainerToSequence( aResult );
 }
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

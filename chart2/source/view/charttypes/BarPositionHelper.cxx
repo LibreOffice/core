@@ -25,10 +25,8 @@
 #include "DateHelper.hxx"
 #include <com/sun/star/chart/TimeUnit.hpp>
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 
@@ -76,8 +74,6 @@ void BarPositionHelper::setScaledCategoryWidth( double fScaledCategoryWidth )
     m_fScaledCategoryWidth = fScaledCategoryWidth;
     CategoryPositionHelper::setCategoryWidth( m_fScaledCategoryWidth );
 }
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -22,12 +22,9 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include "charttoolsdllapi.hxx"
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 
-//-----------------------------------------------------------------------------
 /**
 */
 
@@ -37,9 +34,7 @@ public:
     static void setViewToDirtyState( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xChartModel );
 };
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

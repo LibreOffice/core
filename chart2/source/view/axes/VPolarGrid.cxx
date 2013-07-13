@@ -31,10 +31,8 @@
 #include <vector>
 #include <memory>
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 using ::com::sun::star::uno::Reference;
@@ -230,18 +228,15 @@ void VPolarGrid::createShapes()
     if(!m_aGridPropertiesList.getLength())
         return;
 
-    //-----------------------------------------
     //create all scaled tickmark values
     ::std::vector< ::std::vector< TickInfo > > aAngleTickInfos;
     ::std::vector< ::std::vector< TickInfo > > aRadiusTickInfos;
     getAllTickInfos( 0, aAngleTickInfos );
     getAllTickInfos( 1, aRadiusTickInfos );
 
-    //-----------------------------------------
     ::std::vector<VLineProperties> aLinePropertiesList;
     VCartesianGrid::fillLinePropertiesFromGridModel( aLinePropertiesList, m_aGridPropertiesList );
 
-    //-----------------------------------------
     //create tick mark line shapes
     if(2==m_nDimension)
     {
@@ -252,8 +247,6 @@ void VPolarGrid::createShapes()
     }
 }
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -60,14 +60,12 @@ bool operator!=( const awt::Size & rSize1, const awt::Size & rSize2 )
 
 } } } }
 
-//.............................................................................
 namespace chart
 {
 namespace wrapper
 {
 
 
-//-----------------------------------------------------------------------------
 
 class WrappedSymbolTypeProperty : public WrappedSeriesOrDiagramProperty< sal_Int32 >
 {
@@ -190,7 +188,6 @@ void lcl_addWrappedProperties( std::vector< WrappedProperty* >& rList
 
 }//anonymous namespace
 
-//-----------------------------------------------------------------------------
 void WrappedSymbolProperties::addProperties( ::std::vector< Property > & rOutProperties )
 {
     rOutProperties.push_back(
@@ -222,21 +219,18 @@ void WrappedSymbolProperties::addProperties( ::std::vector< Property > & rOutPro
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 }
 
-//-----------------------------------------------------------------------------
 void WrappedSymbolProperties::addWrappedPropertiesForSeries( std::vector< WrappedProperty* >& rList
                                     , ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact )
 {
     lcl_addWrappedProperties( rList, spChart2ModelContact, DATA_SERIES );
 }
 
-//-----------------------------------------------------------------------------
 void WrappedSymbolProperties::addWrappedPropertiesForDiagram( std::vector< WrappedProperty* >& rList
                                     , ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact )
 {
     lcl_addWrappedProperties( rList, spChart2ModelContact, DIAGRAM );
 }
 
-//-----------------------------------------------------------------------------
 
 WrappedSymbolTypeProperty::WrappedSymbolTypeProperty(
     ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact,
@@ -324,7 +318,6 @@ beans::PropertyState WrappedSymbolTypeProperty::getPropertyState( const Referenc
     return WrappedProperty::getPropertyState( xInnerPropertyState );
 }
 
-//-----------------------------------------------------------------------------
 
 WrappedSymbolBitmapURLProperty::WrappedSymbolBitmapURLProperty(
     ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact,
@@ -395,7 +388,6 @@ void WrappedSymbolBitmapURLProperty::setValueToSeries(
 }
 
 
-//-----------------------------------------------------------------------------
 
 namespace
 {
@@ -519,7 +511,6 @@ beans::PropertyState WrappedSymbolSizeProperty::getPropertyState( const Referenc
     return beans::PropertyState_DEFAULT_VALUE;
 }
 
-//-----------------------------------------------------------------------------
 
 WrappedSymbolAndLinesProperty::WrappedSymbolAndLinesProperty(
     ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact,
@@ -570,6 +561,5 @@ beans::PropertyState WrappedSymbolAndLinesProperty::getPropertyState( const Refe
 
 } //namespace wrapper
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

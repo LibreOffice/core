@@ -196,9 +196,7 @@ Reference< document::XFilter > ChartModel::impl_createFilter(
     return xFilter;
 }
 
-//-----------------------------------------------------------------
 // frame::XStorable2
-//-----------------------------------------------------------------
 
 void SAL_CALL ChartModel::storeSelf( const Sequence< beans::PropertyValue >& rMediaDescriptor )
     throw (lang::IllegalArgumentException,
@@ -212,9 +210,7 @@ void SAL_CALL ChartModel::storeSelf( const Sequence< beans::PropertyValue >& rMe
     impl_store( rMediaDescriptor, m_xStorage );
 }
 
-//-----------------------------------------------------------------
 // frame::XStorable (base of XStorable2)
-//-----------------------------------------------------------------
 sal_Bool SAL_CALL ChartModel::hasLocation()
     throw(uno::RuntimeException)
 {
@@ -385,9 +381,7 @@ void ChartModel::impl_store(
     }
 }
 
-//-----------------------------------------------------------------
 // frame::XLoadable
-//-----------------------------------------------------------------
 void SAL_CALL ChartModel::initNew()
     throw (frame::DoubleInitializationException,
            io::IOException,
@@ -656,9 +650,7 @@ void ChartModel::impl_loadGraphics(
     }
 }
 
-//-----------------------------------------------------------------
 // util::XModifiable
-//-----------------------------------------------------------------
 void SAL_CALL ChartModel::impl_notifyModifiedListeners()
     throw( uno::RuntimeException)
 {
@@ -712,9 +704,7 @@ void SAL_CALL ChartModel::setModified( sal_Bool bModified )
         impl_notifyModifiedListeners();
 }
 
-//-----------------------------------------------------------------
 // util::XModifyBroadcaster (base of XModifiable)
-//-----------------------------------------------------------------
 void SAL_CALL ChartModel::addModifyListener(
     const uno::Reference< util::XModifyListener >& xListener )
     throw(uno::RuntimeException)
@@ -737,9 +727,7 @@ void SAL_CALL ChartModel::removeModifyListener(
         ::getCppuType((const uno::Reference< util::XModifyListener >*)0), xListener );
 }
 
-//-----------------------------------------------------------------
 // util::XModifyListener
-//-----------------------------------------------------------------
 void SAL_CALL ChartModel::modified( const lang::EventObject& )
     throw (uno::RuntimeException)
 {
@@ -747,9 +735,7 @@ void SAL_CALL ChartModel::modified( const lang::EventObject& )
         setModified( sal_True );
 }
 
-//-----------------------------------------------------------------
 // lang::XEventListener (base of util::XModifyListener)
-//-----------------------------------------------------------------
 void SAL_CALL ChartModel::disposing( const lang::EventObject& )
     throw (uno::RuntimeException)
 {
@@ -757,9 +743,7 @@ void SAL_CALL ChartModel::disposing( const lang::EventObject& )
 }
 
 
-//-----------------------------------------------------------------
 // document::XStorageBasedDocument
-//-----------------------------------------------------------------
 void SAL_CALL ChartModel::loadFromStorage(
     const Reference< embed::XStorage >& xStorage,
     const Sequence< beans::PropertyValue >& rMediaDescriptor )

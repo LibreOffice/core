@@ -41,7 +41,6 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::beans::Property;
 
-//.............................................................................
 namespace chart
 {
 namespace wrapper
@@ -57,7 +56,6 @@ Any lcl_getRegressionDefault()
     return aRet;
 }
 
-//-----------------------------------------------------------------------------
 
 ::com::sun::star::chart::ChartRegressionCurveType lcl_getRegressionCurveType( RegressionCurveHelper::tRegressionType eRegressionType )
 {
@@ -89,7 +87,6 @@ Any lcl_getRegressionDefault()
     return eRet;
 }
 
-//-----------------------------------------------------------------------------
 
 RegressionCurveHelper::tRegressionType lcl_getRegressionType( ::com::sun::star::chart::ChartRegressionCurveType eRegressionCurveType )
 {
@@ -173,7 +170,6 @@ void lcl_ConvertRangeToXML(
 
 }//anonymous namespace
 
-//-----------------------------------------------------------------------------
 
 template< typename PROPERTYTYPE >
 class WrappedStatisticProperty : public WrappedSeriesOrDiagramProperty< PROPERTYTYPE >
@@ -209,7 +205,6 @@ protected:
 
 };
 
-//-----------------------------------------------------------------------------
 //PROP_CHART_STATISTIC_CONST_ERROR_LOW
 class WrappedConstantErrorLowProperty : public WrappedStatisticProperty< double >
 {
@@ -264,7 +259,6 @@ void WrappedConstantErrorLowProperty::setValueToSeries( const Reference< beans::
     }
 }
 
-//-----------------------------------------------------------------------------
 //PROP_CHART_STATISTIC_CONST_ERROR_HIGH
 class WrappedConstantErrorHighProperty : public WrappedStatisticProperty< double >
 {
@@ -319,7 +313,6 @@ void WrappedConstantErrorHighProperty::setValueToSeries( const Reference< beans:
     }
 }
 
-//-----------------------------------------------------------------------------
 //PROP_CHART_STATISTIC_MEAN_VALUE
 class WrappedMeanValueProperty : public WrappedStatisticProperty< sal_Bool >
 {
@@ -363,7 +356,6 @@ void WrappedMeanValueProperty::setValueToSeries( const Reference< beans::XProper
     }
 }
 
-//-----------------------------------------------------------------------------
 //PROP_CHART_STATISTIC_ERROR_CATEGORY
 // deprecated, replaced by ErrorBarStyle
 class WrappedErrorCategoryProperty : public WrappedStatisticProperty< ::com::sun::star::chart::ChartErrorCategory >
@@ -463,7 +455,6 @@ void WrappedErrorCategoryProperty::setValueToSeries( const Reference< beans::XPr
     }
 }
 
-//-----------------------------------------------------------------------------
 //PROP_CHART_STATISTIC_PERCENT_ERROR
 class WrappedPercentageErrorProperty : public WrappedStatisticProperty< double >
 {
@@ -518,7 +509,6 @@ void WrappedPercentageErrorProperty::setValueToSeries( const Reference< beans::X
     }
 }
 
-//-----------------------------------------------------------------------------
 //PROP_CHART_STATISTIC_ERROR_MARGIN
 class WrappedErrorMarginProperty : public WrappedStatisticProperty< double >
 {
@@ -573,7 +563,6 @@ void WrappedErrorMarginProperty::setValueToSeries( const Reference< beans::XProp
     }
 }
 
-//-----------------------------------------------------------------------------
 //PROP_CHART_STATISTIC_ERROR_INDICATOR
 class WrappedErrorIndicatorProperty : public WrappedStatisticProperty< ::com::sun::star::chart::ChartErrorIndicatorType >
 {
@@ -647,7 +636,6 @@ void WrappedErrorIndicatorProperty::setValueToSeries( const Reference< beans::XP
 }
 
 
-//-----------------------------------------------------------------------------
 //PROP_CHART_STATISTIC_ERROR_BAR_STYLE
 // this is the new constant group that replaces the deprecated enum ChartErrorCategory
 class WrappedErrorBarStyleProperty : public WrappedStatisticProperty< sal_Int32 >
@@ -695,7 +683,6 @@ void WrappedErrorBarStyleProperty::setValueToSeries( const Reference< beans::XPr
     }
 }
 
-//-----------------------------------------------------------------------------
 //PROP_CHART_STATISTIC_ERROR_RANGE_POSITIVE
 class WrappedErrorBarRangePositiveProperty : public WrappedStatisticProperty< OUString >
 {
@@ -762,7 +749,6 @@ void WrappedErrorBarRangePositiveProperty::setValueToSeries( const Reference< be
     }
 }
 
-//-----------------------------------------------------------------------------
 //PROP_CHART_STATISTIC_ERROR_RANGE_NEGATIVE
 class WrappedErrorBarRangeNegativeProperty : public WrappedStatisticProperty< OUString >
 {
@@ -829,7 +815,6 @@ void WrappedErrorBarRangeNegativeProperty::setValueToSeries( const Reference< be
     }
 }
 
-//-----------------------------------------------------------------------------
 //PROP_CHART_STATISTIC_REGRESSION_CURVES
 class WrappedRegressionCurvesProperty : public WrappedStatisticProperty< ::com::sun::star::chart::ChartRegressionCurveType >
 {
@@ -882,7 +867,6 @@ void WrappedRegressionCurvesProperty::setValueToSeries( const Reference< beans::
     }
 }
 
-//-----------------------------------------------------------------------------
 //PROP_CHART_STATISTIC_REGRESSION_PROPERTIES
 //PROP_CHART_STATISTIC_ERROR_PROPERTIES
 //PROP_CHART_STATISTIC_MEAN_VALUE_PROPERTIES
@@ -957,7 +941,6 @@ void WrappedStatisticPropertySetProperty::setValueToSeries(
 {
 }
 
-//-----------------------------------------------------------------------------
 
 namespace
 {
@@ -1101,14 +1084,12 @@ void WrappedStatisticProperties::addProperties( ::std::vector< Property > & rOut
                   | beans::PropertyAttribute::MAYBEVOID ));
 }
 
-//-----------------------------------------------------------------------------
 void WrappedStatisticProperties::addWrappedPropertiesForSeries( std::vector< WrappedProperty* >& rList
                                     , ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact )
 {
     lcl_addWrappedProperties( rList, spChart2ModelContact, DATA_SERIES );
 }
 
-//-----------------------------------------------------------------------------
 void WrappedStatisticProperties::addWrappedPropertiesForDiagram( std::vector< WrappedProperty* >& rList
                                     , ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact )
 {
@@ -1117,6 +1098,5 @@ void WrappedStatisticProperties::addWrappedPropertiesForDiagram( std::vector< Wr
 
 } //namespace wrapper
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

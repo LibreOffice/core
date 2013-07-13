@@ -29,11 +29,9 @@
 #include <com/sun/star/chart2/XDataSeriesContainer.hpp>
 #include <com/sun/star/chart/MissingValueTreatment.hpp>
 
-//.............................................................................
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 
-//.............................................................................
 namespace chart
 {
 
@@ -688,8 +686,6 @@ bool ChartTypeHelper::isSupportingOnlyDeepStackingFor3D( const uno::Reference< X
     return bRet;
 }
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

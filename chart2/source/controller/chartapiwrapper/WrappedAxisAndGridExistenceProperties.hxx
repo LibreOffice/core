@@ -25,7 +25,6 @@
 #include <boost/shared_ptr.hpp>
 #include <vector>
 
-//.............................................................................
 namespace chart
 {
 namespace wrapper
@@ -38,7 +37,6 @@ public:
         , ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact );
 };
 
-//---------------------------------------------------------------------------------------------------------------
 
 class WrappedAxisTitleExistenceProperties
 {
@@ -47,7 +45,6 @@ public:
         , ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact );
 };
 
-//---------------------------------------------------------------------------------------------------------------
 
 class WrappedAxisLabelExistenceProperties
 {
@@ -58,7 +55,6 @@ public:
 
 } //namespace wrapper
 } //namespace chart
-//.............................................................................
 
 // CHART_WRAPPED_SCALE_PROPERTY_HXX
 #endif

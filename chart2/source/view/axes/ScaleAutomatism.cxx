@@ -28,10 +28,8 @@
 #include <rtl/math.hxx>
 #include <limits>
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 using ::com::sun::star::chart::TimeUnit::DAY;
@@ -61,7 +59,6 @@ void lcl_ensureMaximumSubIncrementCount( sal_Int32& rnSubIntervalCount )
 }//end anonymous namespace
 
 
-//.............................................................................
 
 ExplicitScaleData::ExplicitScaleData()
     : Minimum(0.0)
@@ -93,7 +90,6 @@ ExplicitIncrementData::ExplicitIncrementData()
 {
 }
 
-//.............................................................................
 
 ScaleAutomatism::ScaleAutomatism( const ScaleData& rSourceScale, const Date& rNullDate )
                     : m_aSourceScale( rSourceScale )
@@ -202,7 +198,6 @@ void ScaleAutomatism::calculateExplicitScaleAndIncrement(
             rExplicitScale.Maximum = m_fValueMaximum;
     }
 
-    //---------------------------------------------------------------
     //fill explicit increment
 
     rExplicitScale.ShiftedCategoryPosition = m_aSourceScale.ShiftedCategoryPosition;
@@ -284,7 +279,6 @@ void ScaleAutomatism::calculateExplicitIncrementAndScaleForCategory(
         rExplicitIncrement.Distance = ::rtl::math::approxCeil( (fMaximumCeil - fMinimumFloor) / MAXIMUM_MANUAL_INCREMENT_COUNT );
     }
 
-    //---------------------------------------------------------------
     //fill explicit sub increment
     sal_Int32 nSubCount = m_aSourceScale.IncrementData.SubIncrements.getLength();
     for( sal_Int32 nN=0; nN<nSubCount; nN++ )
@@ -307,7 +301,6 @@ void ScaleAutomatism::calculateExplicitIncrementAndScaleForCategory(
     }
 }
 
-//-----------------------------------------------------------------------------------------
 
 void ScaleAutomatism::calculateExplicitIncrementAndScaleForLogarithmic(
         ExplicitScaleData& rExplicitScale,
@@ -548,7 +541,6 @@ void ScaleAutomatism::calculateExplicitIncrementAndScaleForLogarithmic(
             ::std::swap( rExplicitScale.Maximum, rExplicitScale.Minimum );
     }
 
-    //---------------------------------------------------------------
     //fill explicit sub increment
     sal_Int32 nSubCount = m_aSourceScale.IncrementData.SubIncrements.getLength();
     for( sal_Int32 nN=0; nN<nSubCount; nN++ )
@@ -571,7 +563,6 @@ void ScaleAutomatism::calculateExplicitIncrementAndScaleForLogarithmic(
     }
 }
 
-//-----------------------------------------------------------------------------------------
 
 void ScaleAutomatism::calculateExplicitIncrementAndScaleForDateTimeAxis(
         ExplicitScaleData& rExplicitScale,
@@ -766,7 +757,6 @@ void ScaleAutomatism::calculateExplicitIncrementAndScaleForDateTimeAxis(
 
 }
 
-//-----------------------------------------------------------------------------------------
 
 void ScaleAutomatism::calculateExplicitIncrementAndScaleForLinear(
         ExplicitScaleData& rExplicitScale,
@@ -996,7 +986,6 @@ void ScaleAutomatism::calculateExplicitIncrementAndScaleForLinear(
             bAutoDistance = true;
     }
 
-    //---------------------------------------------------------------
     //fill explicit sub increment
     sal_Int32 nSubCount = m_aSourceScale.IncrementData.SubIncrements.getLength();
     for( sal_Int32 nN=0; nN<nSubCount; nN++ )
@@ -1019,8 +1008,6 @@ void ScaleAutomatism::calculateExplicitIncrementAndScaleForLinear(
     }
 }
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

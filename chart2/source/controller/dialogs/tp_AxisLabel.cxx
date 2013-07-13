@@ -32,10 +32,8 @@
 #include <editeng/eeitem.hxx>
 #include <editeng/frmdiritem.hxx>
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 
 SchAxisLabelTabPage::SchAxisLabelTabPage( Window* pParent, const SfxItemSet& rInAttrs ) :
         SfxTabPage( pParent, SchResId( TP_AXIS_LABEL ), rInAttrs ),
@@ -313,8 +311,6 @@ IMPL_LINK_NOARG(SchAxisLabelTabPage, ToggleShowLabel)
 
     return 0L;
 }
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

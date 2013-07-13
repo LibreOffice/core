@@ -27,10 +27,8 @@
 #include <vcl/fixed.hxx>
 #include "TextDirectionListBox.hxx"
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 
 class SchAlignmentTabPage : public SfxTabPage
 {
@@ -54,9 +52,7 @@ public:
     virtual void Reset(const SfxItemSet& rInAttrs);
 };
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 #endif
 

@@ -32,13 +32,11 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::beans::Property;
 
-//.............................................................................
 namespace chart
 {
 namespace wrapper
 {
 
-//-----------------------------------------------------------------------------
 
 class WrappedDataCaptionProperty : public WrappedSeriesOrDiagramProperty< sal_Int32 >
 {
@@ -103,7 +101,6 @@ void lcl_addWrappedProperties( std::vector< WrappedProperty* >& rList
 
 }//anonymous namespace
 
-//-----------------------------------------------------------------------------
 
 void WrappedDataCaptionProperties::addProperties( ::std::vector< Property > & rOutProperties )
 {
@@ -115,7 +112,6 @@ void WrappedDataCaptionProperties::addProperties( ::std::vector< Property > & rO
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 }
 
-//-----------------------------------------------------------------------------
 
 void WrappedDataCaptionProperties::addWrappedPropertiesForSeries( std::vector< WrappedProperty* >& rList
                                     , ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact )
@@ -123,7 +119,6 @@ void WrappedDataCaptionProperties::addWrappedPropertiesForSeries( std::vector< W
     lcl_addWrappedProperties( rList, spChart2ModelContact, DATA_SERIES );
 }
 
-//-----------------------------------------------------------------------------
 
 void WrappedDataCaptionProperties::addWrappedPropertiesForDiagram( std::vector< WrappedProperty* >& rList
                                     , ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact )
@@ -131,7 +126,6 @@ void WrappedDataCaptionProperties::addWrappedPropertiesForDiagram( std::vector< 
     lcl_addWrappedProperties( rList, spChart2ModelContact, DIAGRAM );
 }
 
-//-----------------------------------------------------------------------------
 
 WrappedDataCaptionProperty::WrappedDataCaptionProperty(
       ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact
@@ -163,10 +157,8 @@ void WrappedDataCaptionProperty::setValueToSeries( const Reference< beans::XProp
     xSeriesPropertySet->setPropertyValue( "Label", uno::makeAny( aLabel ) );
 }
 
-//-----------------------------------------------------------------------------
 
 } //namespace wrapper
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

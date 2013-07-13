@@ -29,7 +29,6 @@ using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 
-//.............................................................................
 namespace chart
 {
 namespace wrapper
@@ -202,7 +201,6 @@ Any WrappedAxisAndGridExistenceProperty::getPropertyDefault( const Reference< be
     return aRet;
 }
 
-//---------------------------------------------------------------------------------------------------------------
 
 class WrappedAxisTitleExistenceProperty : public WrappedProperty
 {
@@ -318,7 +316,6 @@ Any WrappedAxisTitleExistenceProperty::getPropertyDefault( const Reference< bean
     return aRet;
 }
 
-//---------------------------------------------------------------------------------------------------------------
 
 class WrappedAxisLabelExistenceProperty : public WrappedProperty
 {
@@ -427,6 +424,5 @@ Any WrappedAxisLabelExistenceProperty::getPropertyDefault( const Reference< bean
 
 } //namespace wrapper
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

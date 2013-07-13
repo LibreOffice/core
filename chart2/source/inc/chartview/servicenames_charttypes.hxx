@@ -19,10 +19,8 @@
 #ifndef _CHART2_SERVICENAMES_CHARTTYPES_HXX
 #define _CHART2_SERVICENAMES_CHARTTYPES_HXX
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 
 #define CHART2_VIEW_BARCHART_SERVICE_IMPLEMENTATION_NAME "com.sun.star.chart2.view.BarChart_Impl"
 #define CHART2_VIEW_BARCHART_SERVICE_NAME "com.sun.star.chart2.view.BarChart"
@@ -33,9 +31,7 @@ namespace chart
 #define CHART2_VIEW_AREACHART_SERVICE_IMPLEMENTATION_NAME "com.sun.star.chart2.view.AreaChart_Impl"
 #define CHART2_VIEW_AREACHART_SERVICE_NAME "com.sun.star.chart2.view.AreaChart"
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

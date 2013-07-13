@@ -33,10 +33,8 @@
 
 #include "ControllerLockGuard.hxx"
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 class ThreeD_SceneGeometry_TabPage;
 class ThreeD_SceneAppearance_TabPage;
 class ThreeD_SceneIllumination_TabPage;
@@ -67,9 +65,7 @@ private:
     static sal_uInt16 m_nLastPageId;
 };
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 #endif
 

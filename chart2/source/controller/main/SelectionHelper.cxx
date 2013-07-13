@@ -34,10 +34,8 @@
 #include <basegfx/point/b2dpoint.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 using namespace ::com::sun::star;
 
 namespace
@@ -334,9 +332,6 @@ bool Selection::isAdditionalShapeSelected() const
     return m_aSelectedOID.isAdditionalShape();
 }
 
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
 bool SelectionHelper::findNamedParent( SdrObject*& pInOutObject
                                       , OUString& rOutName
                                       , bool bGivenObjectMayBeResult )
@@ -673,8 +668,6 @@ bool SelectionHelper::getMarkHandles( SdrHdlList& rHdlList )
     return true;
 }
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

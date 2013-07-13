@@ -42,7 +42,6 @@ namespace chart
 namespace wrapper
 {
 
-//-----------------------------------------------------------------------------
 
 SAL_WNODEPRECATED_DECLARATIONS_PUSH
 AllAxisItemConverter::AllAxisItemConverter(
@@ -81,7 +80,6 @@ const sal_uInt16 * AllAxisItemConverter::GetWhichPairs() const
     return nAllAxisWhichPairs;
 }
 
-//-----------------------------------------------------------------------------
 
 AllGridItemConverter::AllGridItemConverter(
     const uno::Reference< frame::XModel > & xChartModel,
@@ -111,7 +109,6 @@ const sal_uInt16 * AllGridItemConverter::GetWhichPairs() const
     return nGridWhichPairs;
 }
 
-//-----------------------------------------------------------------------------
 SAL_WNODEPRECATED_DECLARATIONS_PUSH
 AllDataLabelItemConverter::AllDataLabelItemConverter(
     const uno::Reference< frame::XModel > & xChartModel,
@@ -160,7 +157,6 @@ const sal_uInt16 * AllDataLabelItemConverter::GetWhichPairs() const
     return nDataLabelWhichPairs;
 }
 
-//-----------------------------------------------------------------------------
 SAL_WNODEPRECATED_DECLARATIONS_PUSH
 AllTitleItemConverter::AllTitleItemConverter(
     const uno::Reference< frame::XModel > & xChartModel,
@@ -195,7 +191,6 @@ const sal_uInt16 * AllTitleItemConverter::GetWhichPairs() const
     return nTitleWhichPairs;
 }
 
-//-----------------------------------------------------------------------------
 
 AllSeriesStatisticsConverter::AllSeriesStatisticsConverter(
     const uno::Reference< frame::XModel > & xChartModel,

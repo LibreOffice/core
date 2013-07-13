@@ -34,10 +34,8 @@
 
 #include <rtl/math.hxx>
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 
@@ -323,9 +321,6 @@ drawing::Direction3D PlottingPositionHelper::getScaledLogicWidth() const
     return aRet;
 }
 
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
 
 PolarPlottingPositionHelper::PolarPlottingPositionHelper( NormalAxis eNormalAxis )
     : m_fRadiusOffset(0.0)

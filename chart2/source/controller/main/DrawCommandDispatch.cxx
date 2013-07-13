@@ -53,10 +53,8 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 
 
-//.............................................................................
 namespace
 {
-//.............................................................................
 
     // comparing two PropertyValue instances
     struct PropertyValueCompare : public ::std::binary_function< beans::PropertyValue, OUString, bool >
@@ -71,15 +69,11 @@ namespace
         }
     };
 
-//.............................................................................
 } // anonymous namespace
-//.............................................................................
 
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 
 DrawCommandDispatch::DrawCommandDispatch( const Reference< uno::XComponentContext >& rxContext,
     ChartController* pController )
@@ -659,8 +653,6 @@ bool DrawCommandDispatch::parseCommandURL( const OUString& rCommandURL, sal_uInt
     return bFound;
 }
 
-//.............................................................................
 } //  namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

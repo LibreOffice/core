@@ -38,10 +38,8 @@
 #include <svx/sdr/contact/viewcontactofe3dscene.hxx>
 #include <drawinglayer/geometry/viewinformation3d.hxx>
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::Reference;
@@ -221,8 +219,6 @@ void DragMethod_RotateDiagram::CreateOverlayGeometry(sdr::overlay::OverlayManage
         addToOverlayObjectList(*pNew);
     }
 }
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

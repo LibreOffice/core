@@ -23,7 +23,6 @@
 
 #include <vector>
 
-//.............................................................................
 namespace chart
 {
 namespace wrapper
@@ -57,7 +56,6 @@ protected:
     ReferenceSizePropertyProvider*  m_pRefSizePropProvider;
 };
 
-//-----------------------------------------------------------------------------
 
 class WrappedCharacterHeightProperty : public WrappedCharacterHeightProperty_Base
 {
@@ -68,7 +66,6 @@ public:
     static void addWrappedProperties( std::vector< WrappedProperty* >& rList, ReferenceSizePropertyProvider* pRefSizePropProvider );
 };
 
-//-----------------------------------------------------------------------------
 
 class WrappedAsianCharacterHeightProperty : public WrappedCharacterHeightProperty_Base
 {
@@ -77,7 +74,6 @@ public:
     virtual ~WrappedAsianCharacterHeightProperty();
 };
 
-//-----------------------------------------------------------------------------
 
 class WrappedComplexCharacterHeightProperty : public WrappedCharacterHeightProperty_Base
 {
@@ -88,7 +84,6 @@ public:
 
 } //namespace wrapper
 } //namespace chart
-//.............................................................................
 
 // CHART_WRAPPED_CHARACTERHEIGHT_PROPERTY_HXX
 #endif

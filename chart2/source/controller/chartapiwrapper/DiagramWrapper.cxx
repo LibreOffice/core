@@ -1168,7 +1168,6 @@ void SAL_CALL DiagramWrapper::removeEventListener(
     m_aEventListenerContainer.removeInterface( aListener );
 }
 
-//-----------------------------------------------------------------------------------------------------------------
 
 //PROP_DIAGRAM_DATAROW_SOURCE
 class WrappedDataRowSourceProperty : public WrappedProperty
@@ -1270,7 +1269,6 @@ Any WrappedDataRowSourceProperty::getPropertyDefault( const Reference< beans::XP
     return aRet;
 }
 
-//-----------------------------------------------------------------------------------------------------------------
 
 //PROP_DIAGRAM_STACKED
 //PROP_DIAGRAM_DEEP
@@ -1386,7 +1384,6 @@ Any WrappedStackingProperty::getPropertyDefault( const Reference< beans::XProper
     return aRet;
 }
 
-//-----------------------------------------------------------------------------------------------------------------
 
 //PROP_DIAGRAM_THREE_D
 class WrappedDim3DProperty : public WrappedProperty
@@ -1459,7 +1456,6 @@ Any WrappedDim3DProperty::getPropertyDefault( const Reference< beans::XPropertyS
     return aRet;
 }
 
-//-----------------------------------------------------------------------------------------------------------------
 
 //PROP_DIAGRAM_VERTICAL
 class WrappedVerticalProperty : public WrappedProperty
@@ -1537,7 +1533,6 @@ Any WrappedVerticalProperty::getPropertyDefault( const Reference< beans::XProper
     return aRet;
 }
 
-//-----------------------------------------------------------------------------------------------------------------
 
 //PROP_DIAGRAM_NUMBER_OF_LINES
 class WrappedNumberOfLinesProperty : public WrappedProperty
@@ -1693,7 +1688,6 @@ Any WrappedNumberOfLinesProperty::getPropertyDefault( const Reference< beans::XP
     return aRet;
 }
 
-//-----------------------------------------------------------------------------------------------------------------
 
 //PROP_DIAGRAM_ATTRIBUTED_DATA_POINTS
 class WrappedAttributedDataPointsProperty : public WrappedProperty
@@ -1812,7 +1806,6 @@ Any WrappedAttributedDataPointsProperty::getPropertyDefault( const Reference< be
     return aRet;
 }
 
-//-----------------------------------------------------------------------------------------------------------------
 
 //PROP_DIAGRAM_SOLIDTYPE
 class WrappedSolidTypeProperty : public WrappedProperty
@@ -1888,7 +1881,6 @@ Any WrappedSolidTypeProperty::getPropertyDefault( const Reference< beans::XPrope
     return uno::makeAny( ::com::sun::star::chart::ChartSolidType::RECTANGULAR_SOLID );
 }
 
-//-----------------------------------------------------------------------------------------------------------------
 
 class WrappedAutomaticSizeProperty : public WrappedProperty
 {
@@ -1961,7 +1953,6 @@ Any WrappedAutomaticSizeProperty::getPropertyDefault( const Reference< beans::XP
     return aRet;
 }
 
-//-----------------------------------------------------------------------------------------------------------------
 
 //PROP_DIAGRAM_INCLUDE_HIDDEN_CELLS
 class WrappedIncludeHiddenCellsProperty : public WrappedProperty
@@ -1997,7 +1988,6 @@ void WrappedIncludeHiddenCellsProperty::setPropertyValue( const Any& rOuterValue
     ChartModelHelper::setIncludeHiddenCells( bNewValue, m_spChart2ModelContact->getChartModel() );
 }
 
-//-----------------------------------------------------------------------------------------------------------------
 
 // ____ XDiagramProvider ____
 Reference< chart2::XDiagram > SAL_CALL DiagramWrapper::getDiagram()

@@ -55,7 +55,6 @@
 #include <com/sun/star/chart/ErrorBarStyle.hpp>
 #include <svx/ActionDescriptionProvider.hxx>
 
-//--------------------------------------
 
 // header for define RET_OK
 #include <vcl/msgbox.hxx>
@@ -72,7 +71,6 @@ using namespace ::com::sun::star::chart2;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 
-//.............................................................................
 
 namespace
 {
@@ -100,10 +98,8 @@ private:
 
 } // anonymous namespace
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 
 void ChartController::executeDispatch_InsertAxes()
 {
@@ -177,8 +173,6 @@ void ChartController::executeDispatch_InsertGrid()
     }
 }
 
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
 
 void ChartController::executeDispatch_InsertTitles()
 {
@@ -261,8 +255,6 @@ void ChartController::executeDispatch_OpenLegendDialog()
     }
 }
 
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
 
 void ChartController::executeDispatch_InsertMenu_DataLabels()
 {
@@ -890,8 +882,6 @@ void ChartController::executeDispatch_DeleteMinorGrid()
     }
 }
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -265,7 +265,6 @@ namespace chart
 {
 namespace wrapper
 {
-//-----------------------------------------------------------------------------------------------------------------
 
 
 //PROP_DOCUMENT_LABELS_IN_FIRST_ROW
@@ -366,7 +365,6 @@ Any WrappedDataSourceLabelsInFirstRowProperty::getPropertyDefault( const Referen
     return aRet;
 }
 
-//-----------------------------------------------------------------------------------------------------------------
 
 
 //PROP_DOCUMENT_LABELS_IN_FIRST_COLUMN
@@ -467,7 +465,6 @@ Any WrappedDataSourceLabelsInFirstColumnProperty::getPropertyDefault( const Refe
     return aRet;
 }
 
-//-----------------------------------------------------------------------------------------------------------------
 
 
 //PROP_DOCUMENT_HAS_LEGEND
@@ -554,7 +551,6 @@ Any WrappedHasLegendProperty::getPropertyDefault( const Reference< beans::XPrope
     return aRet;
 }
 
-//-----------------------------------------------------------------------------------------------------------------
 
 
 //PROP_DOCUMENT_HAS_MAIN_TITLE
@@ -630,7 +626,6 @@ Any WrappedHasMainTitleProperty::getPropertyDefault( const Reference< beans::XPr
     return aRet;
 }
 
-//-----------------------------------------------------------------------------------------------------------------
 
 
 //PROP_DOCUMENT_HAS_SUB_TITLE
@@ -707,7 +702,6 @@ Any WrappedHasSubTitleProperty::getPropertyDefault( const Reference< beans::XPro
     return aRet;
 }
 
-//-----------------------------------------------------------------------------------------------------------------
 
 ChartDocumentWrapper::ChartDocumentWrapper(
     const Reference< uno::XComponentContext > & xContext ) :

@@ -23,10 +23,8 @@
 #include "Strings.hrc"
 #include "ResId.hxx"
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 
 RangeSelectionButton::RangeSelectionButton( Window *pParent, const ResId& rResId ) :
     ImageButton( pParent, rResId )
@@ -39,8 +37,6 @@ RangeSelectionButton::~RangeSelectionButton()
 {
 }
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

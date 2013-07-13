@@ -23,10 +23,8 @@
 #include "AxisIndexDefines.hxx"
 #include "AxisHelper.hxx"
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 using ::com::sun::star::uno::Reference;
@@ -181,8 +179,6 @@ void VPolarCoordinateSystem::createGridShapes()
     }
 }
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

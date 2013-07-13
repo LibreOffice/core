@@ -24,10 +24,8 @@
 class Window;
 class SfxItemSet;
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 
 class NumberFormatDialog : public SfxSingleTabDialog
 {
@@ -38,9 +36,7 @@ public:
     static SfxItemSet CreateEmptyItemSetForNumberFormatDialog( SfxItemPool& rItemPool );
 };
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 #endif
 

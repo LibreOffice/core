@@ -25,13 +25,11 @@
 #include <boost/shared_ptr.hpp>
 #include <vector>
 
-//.............................................................................
 namespace chart
 {
 namespace wrapper
 {
 
-//-----------------------------------------------------------------------------------------------------------------
 class WrappedSceneProperty
 {
 public:
@@ -39,7 +37,6 @@ public:
         , ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact );
 };
 
-//----------------------------------------------------------------------------------------------------------------------
 class WrappedD3DTransformMatrixProperty : public WrappedProperty
 {
 public:
@@ -62,7 +59,6 @@ private:
 
 } //namespace wrapper
 } //namespace chart
-//.............................................................................
 
 // CHART_WRAPPED_SCENE_PROPERTY_HXX
 #endif

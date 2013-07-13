@@ -38,12 +38,9 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/scoped_ptr.hpp>
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 
-//-----------------------------------------------------------------------------
 /**
 */
 class VAxisBase;
@@ -196,9 +193,7 @@ private:
     boost::scoped_ptr< ExplicitCategoriesProvider > m_apExplicitCategoriesProvider;
 };
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

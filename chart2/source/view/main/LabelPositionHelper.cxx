@@ -28,10 +28,8 @@
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
 #include <com/sun/star/drawing/TextHorizontalAdjust.hpp>
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 
@@ -102,7 +100,6 @@ void LabelPositionHelper::doDynamicFontResize( tAnySequence& rPropValues
                     , const awt::Size& rNewReferenceSize
                     )
 {
-    //-------------------------
     //handle dynamic font resize:
     awt::Size aOldReferenceSize;
     if( xAxisModelProps->getPropertyValue( "ReferencePageSize") >>= aOldReferenceSize )
@@ -470,8 +467,6 @@ void LabelPositionHelper::correctPositionForRotation( const uno::Reference< draw
         , static_cast<sal_Int32>(aOldPos.Y + fYCorrection ) ) );
 }
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

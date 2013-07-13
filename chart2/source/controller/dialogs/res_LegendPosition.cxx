@@ -36,10 +36,8 @@
 #include <svl/intitem.hxx>
 #include <svl/eitem.hxx>
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
@@ -258,8 +256,6 @@ void LegendPositionResources::SetAccessibleRelationMemberOf(Window* pMemberOf)
     m_aRbtBottom.SetAccessibleRelationMemberOf(pMemberOf);
 }
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

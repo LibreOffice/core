@@ -75,10 +75,8 @@ sal_uInt16 lcl_getLbEntryPosByErrorKind( SvxChartKindError eErrorKind )
 } // anonymous namespace
 
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 
 ErrorBarResources::ErrorBarResources( Window* pParent, Dialog * pParentDialog,
                                       const SfxItemSet& rInAttrs, bool bNoneAvailable,
@@ -751,8 +749,6 @@ bool ErrorBarResources::isRangeFieldContentValid( Edit & rEdit )
     return bIsValid;
 }
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

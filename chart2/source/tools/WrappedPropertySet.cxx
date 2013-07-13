@@ -24,10 +24,8 @@
 // header for define DELETEZ
 #include <tools/solar.h>
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::Reference;
@@ -422,8 +420,6 @@ Sequence< Any > SAL_CALL WrappedPropertySet::getPropertyDefaults( const Sequence
     return aRetSeq;
 }
 
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
 
 ::cppu::IPropertyArrayHelper& WrappedPropertySet::getInfoHelper()
 {
@@ -446,7 +442,6 @@ Sequence< Any > SAL_CALL WrappedPropertySet::getPropertyDefaults( const Sequence
     return *m_pPropertyArrayHelper;
 }
 
-//-----------------------------------------------------------------------------
 
 tWrappedPropertyMap& WrappedPropertySet::getWrappedPropertyMap()
 {
@@ -494,8 +489,6 @@ tWrappedPropertyMap& WrappedPropertySet::getWrappedPropertyMap()
     return *m_pWrappedPropertyMap;
 }
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

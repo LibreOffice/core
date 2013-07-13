@@ -24,17 +24,13 @@
 #include <basegfx/vector/b2dvector.hxx>
 #include <basegfx/range/b2irectangle.hxx>
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 class PiePositionHelper;
 
 class PieChart : public VSeriesPlotter
 {
-    //-------------------------------------------------------------------------
     // public methods
-    //-------------------------------------------------------------------------
 public:
     PieChart( const ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::XChartType >& xChartTypeModel
@@ -47,7 +43,6 @@ public:
     virtual void setScales( const ::std::vector< ExplicitScaleData >& rScales, bool bSwapXAndYAxis );
     virtual void addSeries( VDataSeries* pSeries, sal_Int32 zSlot = -1, sal_Int32 xSlot = -1,sal_Int32 ySlot = -1 );
 
-    //-------------------
     virtual ::com::sun::star::drawing::Direction3D  getPreferredDiagramAspectRatio() const;
     virtual bool keepAspectRatio() const;
     virtual bool shouldSnapRectToUsedArea();
@@ -64,9 +59,6 @@ public:
     virtual bool isExpandNarrowValuesTowardZero( sal_Int32 nDimensionIndex );
     virtual bool isSeparateStackingForDifferentSigns( sal_Int32 nDimensionIndex );
 
-    //-------------------------------------------------------------------------
-    //-------------------------------------------------------------------------
-    //-------------------------------------------------------------------------
 private: //methods
     //no default constructor
     PieChart();
@@ -117,9 +109,7 @@ private: //member
 
     double m_fMaxOffset;    /// cached max offset value (init'ed to NaN)
 };
-//.............................................................................
 } //namespace chart
-//.............................................................................
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

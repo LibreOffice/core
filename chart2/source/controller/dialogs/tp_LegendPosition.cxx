@@ -27,10 +27,8 @@
 #include <editeng/eeitem.hxx>
 #include <editeng/frmdiritem.hxx>
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 
 SchLegendPosTabPage::SchLegendPosTabPage(Window* pWindow,
                                          const SfxItemSet& rInAttrs)
@@ -74,8 +72,6 @@ void SchLegendPosTabPage::Reset(const SfxItemSet& rInAttrs)
         m_aLbTextDirection.SelectEntryValue( SvxFrameDirection(((const SvxFrameDirectionItem*)pPoolItem)->GetValue()) );
 }
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

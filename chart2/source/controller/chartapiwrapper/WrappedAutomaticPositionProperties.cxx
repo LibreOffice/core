@@ -30,7 +30,6 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::beans::Property;
 
-//.............................................................................
 namespace chart
 {
 namespace wrapper
@@ -118,7 +117,6 @@ void lcl_addWrappedProperties( std::vector< WrappedProperty* >& rList )
 
 }//anonymous namespace
 
-//-----------------------------------------------------------------------------
 
 void WrappedAutomaticPositionProperties::addProperties( ::std::vector< Property > & rOutProperties )
 {
@@ -130,7 +128,6 @@ void WrappedAutomaticPositionProperties::addProperties( ::std::vector< Property 
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 }
 
-//-----------------------------------------------------------------------------
 
 void WrappedAutomaticPositionProperties::addWrappedProperties( std::vector< WrappedProperty* >& rList )
 {
@@ -139,6 +136,5 @@ void WrappedAutomaticPositionProperties::addWrappedProperties( std::vector< Wrap
 
 } //namespace wrapper
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

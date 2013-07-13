@@ -26,10 +26,8 @@
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/frame/XLoadable.hpp>
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 
 using namespace ::com::sun::star;
 
@@ -56,9 +54,7 @@ ChartFrameLoader::~ChartFrameLoader()
     return sal_False;
 }
 
-//-----------------------------------------------------------------
 // lang::XServiceInfo
-//-----------------------------------------------------------------
 
 APPHELPER_XSERVICEINFO_IMPL(ChartFrameLoader,CHART_FRAMELOADER_SERVICE_IMPLEMENTATION_NAME)
 
@@ -70,9 +66,7 @@ APPHELPER_XSERVICEINFO_IMPL(ChartFrameLoader,CHART_FRAMELOADER_SERVICE_IMPLEMENT
     return aSNS;
 }
 
-//-----------------------------------------------------------------
 // frame::XFrameLoader
-//-----------------------------------------------------------------
 
     sal_Bool SAL_CALL ChartFrameLoader
 ::load( const uno::Sequence< beans::PropertyValue >& rMediaDescriptor
@@ -193,8 +187,6 @@ APPHELPER_XSERVICEINFO_IMPL(ChartFrameLoader,CHART_FRAMELOADER_SERVICE_IMPLEMENT
     m_bCancelRequired = sal_False;
 }
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

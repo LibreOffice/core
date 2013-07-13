@@ -34,7 +34,6 @@ using ::com::sun::star::uno::Sequence;
 namespace chart
 {
 
-//-----------------------------------------------------------------------------
 
 UndoGuard::UndoGuard( const OUString& i_undoString, const uno::Reference< document::XUndoManager > & i_undoManager,
                                const ModelFacet i_facet )
@@ -47,7 +46,6 @@ UndoGuard::UndoGuard( const OUString& i_undoString, const uno::Reference< docume
     m_pDocumentSnapshot.reset( new ChartModelClone( m_xChartModel, i_facet ) );
 }
 
-//-----------------------------------------------------------------------------
 
 UndoGuard::~UndoGuard()
 {
@@ -55,7 +53,6 @@ UndoGuard::~UndoGuard()
         discardSnapshot();
 }
 
-//-----------------------------------------------------------------------------
 
 void UndoGuard::commit()
 {
@@ -75,7 +72,6 @@ void UndoGuard::commit()
     m_bActionPosted = true;
 }
 
-//-----------------------------------------------------------------------------
 
 void UndoGuard::rollback()
 {
@@ -84,7 +80,6 @@ void UndoGuard::rollback()
     discardSnapshot();
 }
 
-//-----------------------------------------------------------------------------
 void UndoGuard::discardSnapshot()
 {
     ENSURE_OR_RETURN_VOID( !!m_pDocumentSnapshot, "no snapshot!" );
@@ -92,7 +87,6 @@ void UndoGuard::discardSnapshot()
     m_pDocumentSnapshot.reset();
 }
 
-//-----------------------------------------------------------------------------
 
 UndoLiveUpdateGuard::UndoLiveUpdateGuard( const OUString& i_undoString, const uno::Reference< document::XUndoManager >& i_undoManager )
     :UndoGuard( i_undoString, i_undoManager, E_MODEL )
@@ -105,7 +99,6 @@ UndoLiveUpdateGuard::~UndoLiveUpdateGuard()
         rollback();
 }
 
-//-----------------------------------------------------------------------------
 
 UndoLiveUpdateGuardWithData::UndoLiveUpdateGuardWithData(
         const OUString& i_undoString, const uno::Reference< document::XUndoManager >& i_undoManager )
@@ -119,7 +112,6 @@ UndoLiveUpdateGuardWithData::~UndoLiveUpdateGuardWithData()
         rollback();
 }
 
-//-----------------------------------------------------------------------------
 
 UndoGuardWithSelection::UndoGuardWithSelection(
         const OUString& i_undoString, const uno::Reference< document::XUndoManager >& i_undoManager )
@@ -127,7 +119,6 @@ UndoGuardWithSelection::UndoGuardWithSelection(
 {
 }
 
-//-----------------------------------------------------------------------------
 
 UndoGuardWithSelection::~UndoGuardWithSelection()
 {
@@ -151,7 +142,6 @@ HiddenUndoContext::HiddenUndoContext( const Reference< document::XUndoManager > 
     }
 }
 
-//-----------------------------------------------------------------------------
 
 HiddenUndoContext::~HiddenUndoContext()
 {

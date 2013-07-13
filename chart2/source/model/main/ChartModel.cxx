@@ -81,9 +81,7 @@ const OUString lcl_aGDIMetaFileMIMETypeHighContrast(
 
 } // anonymous namespace
 
-//-----------------------------------------------------------------
 // ChartModel Constructor and Destructor
-//-----------------------------------------------------------------
 
 namespace chart
 {
@@ -198,9 +196,7 @@ void SAL_CALL ChartModel::initialize( const Sequence< Any >& /*rArguments*/ )
     //support argument "DocumentRecoverySupport"?
 }
 
-//-----------------------------------------------------------------
 // private methods
-//-----------------------------------------------------------------
 
 OUString ChartModel::impl_g_getLocation()
 {
@@ -303,9 +299,7 @@ void ChartModel::impl_adjustAdditionalShapesPositionAndSize( const awt::Size& aV
     }
 }
 
-//-----------------------------------------------------------------
 // lang::XServiceInfo
-//-----------------------------------------------------------------
 
 APPHELPER_XSERVICEINFO_IMPL(ChartModel,CHART_MODEL_SERVICE_IMPLEMENTATION_NAME)
 
@@ -319,9 +313,7 @@ uno::Sequence< OUString > ChartModel::getSupportedServiceNames_Static()
     return aSNS;
 }
 
-//-----------------------------------------------------------------
 // frame::XModel (required interface)
-//-----------------------------------------------------------------
 
 sal_Bool SAL_CALL ChartModel::attachResource( const OUString& rURL
         , const uno::Sequence< beans::PropertyValue >& rMediaDescriptor )
@@ -516,9 +508,7 @@ uno::Reference< uno::XInterface > SAL_CALL ChartModel::getCurrentSelection() thr
 }
 
 
-//-----------------------------------------------------------------
 // lang::XComponent (base of XModel)
-//-----------------------------------------------------------------
 void SAL_CALL ChartModel::dispose() throw(uno::RuntimeException)
 {
     Reference< XInterface > xKeepAlive( *this );
@@ -589,9 +579,7 @@ void SAL_CALL ChartModel::removeEventListener( const uno::Reference< lang::XEven
     return;
 }
 
-//-----------------------------------------------------------------
 // util::XCloseBroadcaster (base of XCloseable)
-//-----------------------------------------------------------------
 void SAL_CALL ChartModel::addCloseListener( const uno::Reference<   util::XCloseListener > & xListener )
         throw(uno::RuntimeException)
 {
@@ -608,9 +596,7 @@ void SAL_CALL ChartModel::removeCloseListener( const uno::Reference< util::XClos
     return;
 }
 
-//-----------------------------------------------------------------
 // util::XCloseable
-//-----------------------------------------------------------------
 void SAL_CALL ChartModel::close( sal_Bool bDeliverOwnership )
             throw( util::CloseVetoException,
                    uno::RuntimeException )
@@ -664,9 +650,7 @@ void SAL_CALL ChartModel::close( sal_Bool bDeliverOwnership )
     impl_notifyCloseListeners();
 }
 
-//-----------------------------------------------------------------
 // lang::XTypeProvider
-//-----------------------------------------------------------------
 uno::Sequence< uno::Type > SAL_CALL ChartModel::getTypes()
         throw (uno::RuntimeException)
 {
@@ -688,9 +672,7 @@ uno::Sequence< uno::Type > SAL_CALL ChartModel::getTypes()
     return impl::ChartModel_Base::getTypes();
 }
 
-//-----------------------------------------------------------------
 // document::XDocumentPropertiesSupplier
-//-----------------------------------------------------------------
 uno::Reference< document::XDocumentProperties > SAL_CALL
         ChartModel::getDocumentProperties() throw (uno::RuntimeException)
 {
@@ -702,9 +684,7 @@ uno::Reference< document::XDocumentProperties > SAL_CALL
     return m_xDocumentProperties;
 }
 
-//-----------------------------------------------------------------
 // document::XDocumentPropertiesSupplier
-//-----------------------------------------------------------------
 Reference< document::XUndoManager > SAL_CALL ChartModel::getUndoManager(  ) throw (RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aModelMutex );
@@ -713,9 +693,7 @@ Reference< document::XUndoManager > SAL_CALL ChartModel::getUndoManager(  ) thro
     return m_pUndoManager.get();
 }
 
-//-----------------------------------------------------------------
 // chart2::XChartDocument
-//-----------------------------------------------------------------
 
 uno::Reference< chart2::XDiagram > SAL_CALL ChartModel::getFirstDiagram()
             throw (uno::RuntimeException)

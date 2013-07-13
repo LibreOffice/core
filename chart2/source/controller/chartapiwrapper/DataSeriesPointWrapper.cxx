@@ -210,7 +210,6 @@ struct StaticPointWrapperPropertyArray : public rtl::StaticAggregate< Sequence< 
 {
 };
 
-//----------------------------------------------------------------------------------------------------------------------
 
 
 //PROP_SERIES_ATTACHED_AXIS
@@ -286,7 +285,6 @@ void WrappedAttachedAxisProperty::setPropertyValue( const Any& rOuterValue, cons
     }
 }
 
-//----------------------------------------------------------------------------------------------------------------------
 
 class WrappedSegmentOffsetProperty : public ::chart::WrappedProperty
 {
@@ -330,7 +328,6 @@ Any WrappedSegmentOffsetProperty::convertOuterToInnerValue( const Any& rOuterVal
     return aResult;
 }
 
-//----------------------------------------------------------------------------------------------------------------------
 
 class WrappedLineColorProperty : public WrappedSeriesAreaOrLineProperty
 {
@@ -393,7 +390,6 @@ Any WrappedLineColorProperty::getPropertyDefault( const Reference< beans::XPrope
         return WrappedSeriesAreaOrLineProperty::getPropertyDefault( xInnerPropertyState );
 }
 
-//----------------------------------------------------------------------------------------------------------------------
 
 class WrappedLineStyleProperty : public WrappedSeriesAreaOrLineProperty
 {

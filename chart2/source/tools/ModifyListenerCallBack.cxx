@@ -98,7 +98,6 @@ void ModifyListenerCallBack_impl::stopListening()
     }
 }
 
-//-------------------------------------------
 
 ModifyListenerCallBack::ModifyListenerCallBack( const Link& rCallBack )
                         : pModifyListener_impl( new ModifyListenerCallBack_impl(rCallBack) )

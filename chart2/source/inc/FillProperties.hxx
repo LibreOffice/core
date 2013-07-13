@@ -47,7 +47,6 @@ public:
 //        , PROP_FILL_GRADIENT   //optional
         , PROP_FILL_HATCH_NAME
 //        , PROP_FILL_HATCH  //optional
-        //------------------------
         // bitmap properties start
         , PROP_FILL_BITMAP_NAME
 //        , PROP_FILL_BITMAP //optional
@@ -62,7 +61,6 @@ public:
         , PROP_FILL_BITMAP_SIZEY
         , PROP_FILL_BITMAP_MODE
         // bitmap properties end
-        //------------------------
         , PROP_FILL_BACKGROUND
     };
 

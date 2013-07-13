@@ -37,10 +37,8 @@
 //for auto_ptr
 #include <memory>
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 
@@ -70,7 +68,6 @@ namespace
     }
 }
 
-//--------------------------------------------------------------------------
 class AxisTypeResourceGroup : public ChangingResource
 {
 public:
@@ -129,7 +126,6 @@ IMPL_LINK_NOARG(AxisTypeResourceGroup, AxisTypeCheckHdl)
         m_pChangeListener->stateChanged(this);
     return 0;
 }
-//--------------------------------------------------------------------------
 
 #define POS_3DSCHEME_SIMPLE    0
 #define POS_3DSCHEME_REALISTIC 1
@@ -229,7 +225,6 @@ IMPL_LINK_NOARG(Dim3DLookResourceGroup, SelectSchemeHdl)
     return 0;
 }
 
-//--------------------------------------------------------------------------
 
 class SortByXValuesResourceGroup : public ChangingResource
 {
@@ -285,7 +280,6 @@ IMPL_LINK_NOARG(SortByXValuesResourceGroup, SortByXValuesCheckHdl)
         m_pChangeListener->stateChanged(this);
     return 0;
 }
-//--------------------------------------------------------------------------
 class StackingResourceGroup : public ChangingResource
 {
 public:
@@ -425,7 +419,6 @@ IMPL_LINK_NOARG(StackingResourceGroup, StackingEnableHdl)
         m_pChangeListener->stateChanged(this);
     return 0;
 }
-//--------------------------------------------------------------------------
 class SplinePropertiesDialog : public ModalDialog
 {
 public:
@@ -513,7 +506,6 @@ IMPL_LINK_NOARG(SplinePropertiesDialog, SplineTypeListBoxHdl)
     return 0;
 }
 
-//--------------------------------------------------------------------------
 class SteppedPropertiesDialog : public ModalDialog
 {
 public:
@@ -586,7 +578,6 @@ void SteppedPropertiesDialog::fillParameter( ChartTypeParameter& rParameter, boo
         rParameter.eCurveStyle=CurveStyle_STEP_CENTER_X;
 }
 
-//--------------------------------------------------------------------------
 
 #define POS_LINETYPE_STRAIGHT    0
 #define POS_LINETYPE_SMOOTH      1
@@ -798,7 +789,6 @@ IMPL_LINK_NOARG(SplineResourceGroup, SteppedDetailsDialogHdl)
     return 0;
 }
 
-//--------------------------------------------------------------------------
 
 class GeometryResourceGroup : public ChangingResource
 {
@@ -860,9 +850,6 @@ IMPL_LINK_NOARG(GeometryResourceGroup, GeometryChangeHdl)
     return 0;
 }
 
-//--------------------------------------------------------------------------
-//--------------------------------------------------------------------------
-//--------------------------------------------------------------------------
 
 ChartTypeTabPage::ChartTypeTabPage( Window* pParent
         , const uno::Reference< XChartDocument >& xChartModel
@@ -1250,8 +1237,6 @@ uno::Reference< XChartTypeTemplate > ChartTypeTabPage::getCurrentTemplate() cons
     return 0;
 }
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
