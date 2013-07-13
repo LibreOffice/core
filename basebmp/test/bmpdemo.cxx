@@ -1196,9 +1196,7 @@ USHORT TestApp::Exception( USHORT nError )
 
 void TestApp::Main()
 {
-    //-------------------------------------------------
     // create the global service-manager
-    //-------------------------------------------------
     uno::Reference< lang::XMultiServiceFactory > xFactory;
     try
     {

@@ -26,7 +26,6 @@
 namespace basebmp
 {
     // metafunctions to retrieve correct POD from/to basebmp::Color
-    //------------------------------------------------------------------------
 
     /// type-safe conversion from RgbValue to packed int32
     template< class RgbVal > struct UInt32FromRgbValue
