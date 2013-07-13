@@ -25,7 +25,6 @@
 #include "tabvwsh.hxx"
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
-//------------------------------------------------------------------------
 
 ScRedComDialog::ScRedComDialog( Window* pParent, const SfxItemSet& rCoreSet,
                     ScDocShell *pShell,ScChangeAction *pAction,sal_Bool bPrevNext)

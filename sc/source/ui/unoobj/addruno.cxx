@@ -31,7 +31,6 @@
 
 using namespace com::sun::star;
 
-//------------------------------------------------------------------------
 
 ScAddressConversionObj::ScAddressConversionObj(ScDocShell* pDocSh, sal_Bool bForRange) :
     pDocShell( pDocSh ),

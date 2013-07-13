@@ -40,7 +40,6 @@
 //============================================================================
 //  class ScSimpleRefDlg
 
-//----------------------------------------------------------------------------
 ScSimpleRefDlg::ScSimpleRefDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
                           ScViewData*   ptrViewData )
 
@@ -67,26 +66,22 @@ ScSimpleRefDlg::ScSimpleRefDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pP
     SetDispatcherLock( sal_True ); // Modal-Modus einschalten
 }
 
-//----------------------------------------------------------------------------
 ScSimpleRefDlg::~ScSimpleRefDlg()
 {
     SetDispatcherLock( false ); // Modal-Modus einschalten
 }
 
-//----------------------------------------------------------------------------
 void ScSimpleRefDlg::FillInfo(SfxChildWinInfo& rWinInfo) const
 {
     ScAnyRefDlg::FillInfo(rWinInfo);
     rWinInfo.bVisible=bAutoReOpen;
 }
 
-//----------------------------------------------------------------------------
 void ScSimpleRefDlg::SetRefString(const String &rStr)
 {
     aEdAssign.SetText(rStr);
 }
 
-//----------------------------------------------------------------------------
 void ScSimpleRefDlg::Init()
 {
     aBtnOk.SetClickHdl      ( LINK( this, ScSimpleRefDlg, OkBtnHdl ) );
@@ -94,7 +89,6 @@ void ScSimpleRefDlg::Init()
     bCloseFlag=false;
 }
 
-//----------------------------------------------------------------------------
 // Uebergabe eines mit der Maus selektierten Tabellenbereiches, der dann als
 //  neue Selektion im Referenz-Fenster angezeigt wird.
 void ScSimpleRefDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
@@ -133,14 +127,12 @@ void ScSimpleRefDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
 }
 
 
-//----------------------------------------------------------------------------
 sal_Bool ScSimpleRefDlg::Close()
 {
     CancelBtnHdl(&aBtnCancel);
     return sal_True;
 }
 
-//------------------------------------------------------------------------
 void ScSimpleRefDlg::SetActive()
 {
     aEdAssign.GrabFocus();
@@ -151,7 +143,6 @@ void ScSimpleRefDlg::SetActive()
 
     RefInputDone();
 }
-//------------------------------------------------------------------------
 sal_Bool ScSimpleRefDlg::IsRefInputMode() const
 {
     return sal_True;
@@ -200,7 +191,6 @@ void ScSimpleRefDlg::RefInputDone( sal_Bool bForced)
     if ( (bForced || bCloseOnButtonUp) && bCloseFlag )
         OkBtnHdl(&aBtnOk);
 }
-//------------------------------------------------------------------------
 // Handler:
 // ========
 IMPL_LINK_NOARG(ScSimpleRefDlg, OkBtnHdl)
@@ -214,7 +204,6 @@ IMPL_LINK_NOARG(ScSimpleRefDlg, OkBtnHdl)
     return 0;
 }
 
-//------------------------------------------------------------------------
 IMPL_LINK_NOARG(ScSimpleRefDlg, CancelBtnHdl)
 {
     bAutoReOpen=false;
@@ -228,6 +217,5 @@ IMPL_LINK_NOARG(ScSimpleRefDlg, CancelBtnHdl)
 
 
 
-//------------------------------------------------------------------------
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

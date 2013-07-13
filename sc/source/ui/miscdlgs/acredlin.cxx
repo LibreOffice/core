@@ -54,7 +54,6 @@
 
 //============================================================================
 //  class ScRedlinData
-//----------------------------------------------------------------------------
 ScRedlinData::ScRedlinData()
     :RedlinData()
 {
@@ -81,7 +80,6 @@ ScRedlinData::~ScRedlinData()
 
 //============================================================================
 //  class ScAcceptChgDlg
-//----------------------------------------------------------------------------
 ScAcceptChgDlg::ScAcceptChgDlg(SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
     ScViewData* ptrViewData)
     : SfxModelessDialog(pB, pCW, pParent,
@@ -1829,7 +1827,6 @@ void ScAcceptChgDlg::Initialize(SfxChildWinInfo *pInfo)
     }
 }
 
-//-------------------------------------------------------------------------
 
 void ScAcceptChgDlg::FillInfo(SfxChildWinInfo& rInfo) const
 {

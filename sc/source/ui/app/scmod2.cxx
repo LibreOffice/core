@@ -29,11 +29,9 @@ using namespace com::sun::star;
 
 #include "scmod.hxx"
 
-//------------------------------------------------------------------
 
 #define LINGUPROP_AUTOSPELL         "IsSpellAuto"
 
-//------------------------------------------------------------------
 
 void ScModule::GetSpellSettings( sal_uInt16& rDefLang, sal_uInt16& rCjkLang, sal_uInt16& rCtlLang,
                                     sal_Bool& rAutoSpell )

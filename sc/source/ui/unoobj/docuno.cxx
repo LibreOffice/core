@@ -98,7 +98,6 @@ using namespace com::sun::star;
 // #i111553# provides the name of the VBA constant for this document type (e.g. 'ThisExcelDoc' for Calc)
 #define SC_UNO_VBAGLOBNAME "VBAGlobalConstantName"
 
-//------------------------------------------------------------------------
 
 //  alles ohne Which-ID, Map nur fuer PropertySetInfo
 
@@ -190,7 +189,6 @@ static const SfxItemPropertyMapEntry* lcl_GetRowsPropertyMap()
 using sc::HMMToTwips;
 using sc::TwipsToHMM;
 
-//------------------------------------------------------------------------
 
 #define SCMODELOBJ_SERVICE          "com.sun.star.sheet.SpreadsheetDocument"
 #define SCDOCSETTINGS_SERVICE       "com.sun.star.sheet.SpreadsheetDocumentSettings"
@@ -204,7 +202,6 @@ SC_SIMPLE_SERVICE_INFO( ScTableColumnsObj, "ScTableColumnsObj", "com.sun.star.ta
 SC_SIMPLE_SERVICE_INFO( ScTableRowsObj, "ScTableRowsObj", "com.sun.star.table.TableRows" )
 SC_SIMPLE_SERVICE_INFO( ScTableSheetsObj, "ScTableSheetsObj", "com.sun.star.sheet.Spreadsheets" )
 
-//------------------------------------------------------------------------
 
 class ScPrintUIOptions : public vcl::PrinterOptionsHelper
 {
@@ -2262,7 +2259,6 @@ void ScModelObj::HandleCalculateEvents()
     }
 }
 
-//------------------------------------------------------------------------
 
 ScDrawPagesObj::ScDrawPagesObj(ScDocShell* pDocSh) :
     pDocShell( pDocSh )
@@ -2374,7 +2370,6 @@ sal_Bool SAL_CALL ScDrawPagesObj::hasElements() throw(uno::RuntimeException)
     return ( getCount() != 0 );
 }
 
-//------------------------------------------------------------------------
 
 ScTableSheetsObj::ScTableSheetsObj(ScDocShell* pDocSh) :
     pDocShell( pDocSh )
@@ -2781,7 +2776,6 @@ sal_Bool SAL_CALL ScTableSheetsObj::hasByName( const OUString& aName )
     return false;
 }
 
-//------------------------------------------------------------------------
 
 ScTableColumnsObj::ScTableColumnsObj(ScDocShell* pDocSh, SCTAB nT, SCCOL nSC, SCCOL nEC) :
     pDocShell( pDocSh ),
@@ -3051,7 +3045,6 @@ uno::Any SAL_CALL ScTableColumnsObj::getPropertyValue( const OUString& aProperty
 
 SC_IMPL_DUMMY_PROPERTY_LISTENER( ScTableColumnsObj )
 
-//------------------------------------------------------------------------
 
 ScTableRowsObj::ScTableRowsObj(ScDocShell* pDocSh, SCTAB nT, SCROW nSR, SCROW nER) :
     pDocShell( pDocSh ),
@@ -3339,7 +3332,6 @@ uno::Any SAL_CALL ScTableRowsObj::getPropertyValue( const OUString& aPropertyNam
 
 SC_IMPL_DUMMY_PROPERTY_LISTENER( ScTableRowsObj )
 
-//------------------------------------------------------------------------
 
 ScSpreadsheetSettingsObj::~ScSpreadsheetSettingsObj()
 {
@@ -3386,7 +3378,6 @@ uno::Any SAL_CALL ScSpreadsheetSettingsObj::getPropertyValue( const OUString& /*
 
 SC_IMPL_DUMMY_PROPERTY_LISTENER( ScSpreadsheetSettingsObj )
 
-//------------------------------------------------------------------------
 
 ScAnnotationsObj::ScAnnotationsObj(ScDocShell* pDocSh, SCTAB nT) :
     pDocShell( pDocSh ),
@@ -3524,7 +3515,6 @@ sal_Bool SAL_CALL ScAnnotationsObj::hasElements() throw(uno::RuntimeException)
     return ( getCount() != 0 );
 }
 
-//------------------------------------------------------------------------
 
 ScScenariosObj::ScScenariosObj(ScDocShell* pDocSh, SCTAB nT) :
     pDocShell( pDocSh ),

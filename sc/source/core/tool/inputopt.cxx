@@ -41,20 +41,17 @@ ScInputOptions::ScInputOptions()
     SetDefaults();
 }
 
-//------------------------------------------------------------------------
 
 ScInputOptions::ScInputOptions( const ScInputOptions& rCpy )
 {
     *this = rCpy;
 }
 
-//------------------------------------------------------------------------
 
 ScInputOptions::~ScInputOptions()
 {
 }
 
-//------------------------------------------------------------------------
 
 void ScInputOptions::SetDefaults()
 {
@@ -70,7 +67,6 @@ void ScInputOptions::SetDefaults()
     bReplCellsWarn  = sal_True;
 }
 
-//------------------------------------------------------------------------
 
 const ScInputOptions& ScInputOptions::operator=( const ScInputOptions& rCpy )
 {

@@ -19,11 +19,9 @@
 
 #include "navicfg.hxx"
 
-//------------------------------------------------------------------
 
 //! #define CFGPATH_NAVIPI          "Office.Calc/Navigator"
 
-//------------------------------------------------------------------
 
 ScNavipiCfg::ScNavipiCfg() :
 //! ConfigItem( OUString( CFGPATH_NAVIPI ) ),
@@ -33,7 +31,6 @@ ScNavipiCfg::ScNavipiCfg() :
 {
 }
 
-//------------------------------------------------------------------------
 
 void ScNavipiCfg::SetListMode(sal_uInt16 nNew)
 {

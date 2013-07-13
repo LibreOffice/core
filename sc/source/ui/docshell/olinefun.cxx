@@ -43,7 +43,6 @@ static void lcl_InvalidateOutliner( SfxBindings* pBindings )
     }
 }
 
-//------------------------------------------------------------------------
 
 //! PaintWidthHeight zur DocShell verschieben?
 
@@ -78,7 +77,6 @@ static void lcl_PaintWidthHeight( ScDocShell& rDocShell, SCTAB nTab,
     rDocShell.PostPaint( nStartCol,nStartRow,nTab, MAXCOL,MAXROW,nTab, nParts );
 }
 
-//------------------------------------------------------------------------
 
 sal_Bool ScOutlineDocFunc::MakeOutline( const ScRange& rRange, sal_Bool bColumns, sal_Bool bRecord, sal_Bool bApi )
 {
@@ -265,7 +263,6 @@ sal_Bool ScOutlineDocFunc::RemoveAllOutlines( SCTAB nTab, sal_Bool bRecord, sal_
     return bSuccess;
 }
 
-//------------------------------------------------------------------------
 
 sal_Bool ScOutlineDocFunc::AutoOutline( const ScRange& rRange, sal_Bool bRecord, sal_Bool bApi )
 {
@@ -331,7 +328,6 @@ sal_Bool ScOutlineDocFunc::AutoOutline( const ScRange& rRange, sal_Bool bRecord,
     return sal_True;
 }
 
-//------------------------------------------------------------------------
 
 sal_Bool ScOutlineDocFunc::SelectLevel( SCTAB nTab, sal_Bool bColumns, sal_uInt16 nLevel,
                                     sal_Bool bRecord, sal_Bool bPaint, sal_Bool /* bApi */ )
@@ -427,7 +423,6 @@ sal_Bool ScOutlineDocFunc::SelectLevel( SCTAB nTab, sal_Bool bColumns, sal_uInt1
     return sal_True;
 }
 
-//------------------------------------------------------------------------
 
 sal_Bool ScOutlineDocFunc::ShowMarkedOutlines( const ScRange& rRange, sal_Bool bRecord )
 {
@@ -630,7 +625,6 @@ sal_Bool ScOutlineDocFunc::HideMarkedOutlines( const ScRange& rRange, sal_Bool b
     return bDone;
 }
 
-//------------------------------------------------------------------------
 
 sal_Bool ScOutlineDocFunc::ShowOutline( SCTAB nTab, sal_Bool bColumns, sal_uInt16 nLevel, sal_uInt16 nEntry,
                                     sal_Bool bRecord, sal_Bool bPaint, sal_Bool /* bApi */ )

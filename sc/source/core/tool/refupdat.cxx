@@ -23,7 +23,6 @@
 #include "bigrange.hxx"
 #include "chgtrack.hxx"
 
-//------------------------------------------------------------------------
 
 template< typename R, typename S, typename U >
 static bool lcl_MoveStart( R& rRef, U nStart, S nDelta, U nMask )
@@ -840,7 +839,6 @@ void ScRefUpdate::MoveRelWrap( ScDocument* pDoc, const ScAddress& rPos,
     rRef.CalcRelFromAbs( rPos );
 }
 
-//------------------------------------------------------------------
 
 void ScRefUpdate::DoTranspose( SCsCOL& rCol, SCsROW& rRow, SCsTAB& rTab,
                         ScDocument* pDoc, const ScRange& rSource, const ScAddress& rDest )
@@ -883,7 +881,6 @@ ScRefUpdateRes ScRefUpdate::UpdateTranspose( ScDocument* pDoc,
     return eRet;
 }
 
-//------------------------------------------------------------------
 
 //  UpdateGrow - erweitert Referenzen, die genau auf den Bereich zeigen
 //  kommt ohne Dokument aus

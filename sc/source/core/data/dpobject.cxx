@@ -2421,7 +2421,6 @@ bool ScDPObject::GetMembersNA( sal_Int32 nDim, sal_Int32 nHier, uno::Reference< 
     return bRet;
 }
 
-//------------------------------------------------------------------------
 //  convert old pivot tables into new datapilot tables
 
 namespace {

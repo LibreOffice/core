@@ -22,7 +22,6 @@
 
 
 
-//------------------------------------------------------------------
 
 #include <vcl/msgbox.hxx>
 
@@ -72,13 +71,11 @@ ScMoveTableDlg::ScMoveTableDlg(Window* pParent, const OUString& rDefault)
     FreeResource();
 }
 
-//------------------------------------------------------------------------
 
 ScMoveTableDlg::~ScMoveTableDlg()
 {
 }
 
-//------------------------------------------------------------------------
 
 sal_uInt16 ScMoveTableDlg::GetSelectedDocument () const { return nDocument;  }
 
@@ -212,7 +209,6 @@ bool ScMoveTableDlg::IsCurrentDocSelected() const
     return aLbDoc.GetSelectEntryPos() == mnCurrentDocPos;
 }
 
-//------------------------------------------------------------------------
 
 void ScMoveTableDlg::Init()
 {
@@ -229,7 +225,6 @@ void ScMoveTableDlg::Init()
     SelHdl( &aLbDoc );
 }
 
-//------------------------------------------------------------------------
 
 void ScMoveTableDlg::InitDocListBox()
 {
@@ -270,7 +265,6 @@ void ScMoveTableDlg::InitDocListBox()
     aLbDoc.SelectEntryPos( nSelPos );
 }
 
-//------------------------------------------------------------------------
 // Handler:
 
 IMPL_LINK( ScMoveTableDlg, CheckBtnHdl, void *, pBtn )

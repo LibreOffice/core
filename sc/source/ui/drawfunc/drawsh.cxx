@@ -59,7 +59,6 @@
 #include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 
-//------------------------------------------------------------------
 
 TYPEINIT1( ScDrawShell, SfxShell );
 

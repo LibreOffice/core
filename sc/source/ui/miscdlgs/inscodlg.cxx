@@ -22,7 +22,6 @@
 
 
 
-//------------------------------------------------------------------
 
 #include "inscodlg.hxx"
 #include "scresid.hxx"
@@ -39,7 +38,6 @@ sal_uInt16 ScInsertContentsDlg::nPreviousFormulaChecks = PASTE_NOFUNC;
 sal_uInt16 ScInsertContentsDlg::nPreviousChecks2 = 0;
 sal_uInt16 ScInsertContentsDlg::nPreviousMoveMode = INS_NONE;   // enum InsCellCmd
 
-//-----------------------------------------------------------------------
 
 ScInsertContentsDlg::ScInsertContentsDlg( Window*       pParent,
                                           sal_uInt16        nCheckDefaults,
@@ -139,7 +137,6 @@ ScInsertContentsDlg::ScInsertContentsDlg( Window*       pParent,
     FreeResource();
 }
 
-//------------------------------------------------------------------------
 
 sal_uInt16 ScInsertContentsDlg::GetInsContentsCmdBits() const
 {
@@ -167,7 +164,6 @@ sal_uInt16 ScInsertContentsDlg::GetInsContentsCmdBits() const
                 : ScInsertContentsDlg::nPreviousChecks );
 }
 
-//------------------------------------------------------------------------
 
 InsCellCmd ScInsertContentsDlg::GetMoveMode()
 {
@@ -179,7 +175,6 @@ InsCellCmd ScInsertContentsDlg::GetMoveMode()
     return INS_NONE;
 }
 
-//------------------------------------------------------------------------
 
 void ScInsertContentsDlg::DisableChecks( sal_Bool bInsAllChecked )
 {
@@ -306,7 +301,6 @@ void ScInsertContentsDlg::SetCellShiftDisabled( int nDisable )
 }
 
 
-//------------------------------------------------------------------------
 
 IMPL_LINK_NOARG(ScInsertContentsDlg, InsAllHdl)
 {

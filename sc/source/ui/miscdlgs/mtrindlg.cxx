@@ -22,7 +22,6 @@
 
 
 
-//------------------------------------------------------------------
 
 #include "mtrindlg.hxx"
 #include "scresid.hxx"
@@ -74,13 +73,11 @@ ScMetricInputDlg::ScMetricInputDlg( Window*         pParent,
     FreeResource();
 }
 
-//------------------------------------------------------------------------
 
 ScMetricInputDlg::~ScMetricInputDlg()
 {
 }
 
-//------------------------------------------------------------------------
 
 long ScMetricInputDlg::GetInputValue( FieldUnit eUnit ) const
 {
@@ -106,7 +103,6 @@ long ScMetricInputDlg::GetInputValue( FieldUnit eUnit ) const
     return sal::static_int_cast<long>( aEdValue.Denormalize( aEdValue.GetValue( eUnit ) ) );
 }
 
-//------------------------------------------------------------------------
 
 void ScMetricInputDlg::CalcPositions()
 {
@@ -148,7 +144,6 @@ void ScMetricInputDlg::CalcPositions()
     SetMapMode( oldMode );
 }
 
-//------------------------------------------------------------------------
 // Handler:
 
 IMPL_LINK_NOARG(ScMetricInputDlg, SetDefValHdl)
@@ -163,7 +158,6 @@ IMPL_LINK_NOARG(ScMetricInputDlg, SetDefValHdl)
     return 0;
 }
 
-//------------------------------------------------------------------------
 
 IMPL_LINK_NOARG_INLINE_START(ScMetricInputDlg, ModifyHdl)
 {

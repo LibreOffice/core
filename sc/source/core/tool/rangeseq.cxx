@@ -31,7 +31,6 @@
 
 using namespace com::sun::star;
 
-//------------------------------------------------------------------------
 
 static bool lcl_HasErrors( ScDocument* pDoc, const ScRange& rRange )
 {
@@ -113,7 +112,6 @@ sal_Bool ScRangeToSequence::FillLongArray( uno::Any& rAny, const ScMatrix* pMatr
     return sal_True;
 }
 
-//------------------------------------------------------------------------
 
 sal_Bool ScRangeToSequence::FillDoubleArray( uno::Any& rAny, ScDocument* pDoc, const ScRange& rRange )
 {
@@ -169,7 +167,6 @@ sal_Bool ScRangeToSequence::FillDoubleArray( uno::Any& rAny, const ScMatrix* pMa
     return sal_True;
 }
 
-//------------------------------------------------------------------------
 
 sal_Bool ScRangeToSequence::FillStringArray( uno::Any& rAny, ScDocument* pDoc, const ScRange& rRange )
 {
@@ -333,7 +330,6 @@ sal_Bool ScRangeToSequence::FillMixedArray( uno::Any& rAny, const ScMatrix* pMat
     return sal_True;
 }
 
-//------------------------------------------------------------------------
 
 bool ScApiTypeConversion::ConvertAnyToDouble( double & o_fVal,
         com::sun::star::uno::TypeClass & o_eClass,
@@ -365,7 +361,6 @@ bool ScApiTypeConversion::ConvertAnyToDouble( double & o_fVal,
     return bRet;
 }
 
-//------------------------------------------------------------------------
 
 ScMatrixRef ScSequenceToMatrix::CreateMixedMatrix( const com::sun::star::uno::Any & rAny )
 {
@@ -442,7 +437,6 @@ ScMatrixRef ScSequenceToMatrix::CreateMixedMatrix( const com::sun::star::uno::An
 }
 
 
-//------------------------------------------------------------------------
 
 sal_Bool ScByteSequenceToString::GetString( String& rString, const uno::Any& rAny,
                                         sal_uInt16 nEncoding )
@@ -458,6 +452,5 @@ sal_Bool ScByteSequenceToString::GetString( String& rString, const uno::Any& rAn
     return false;
 }
 
-//------------------------------------------------------------------------
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

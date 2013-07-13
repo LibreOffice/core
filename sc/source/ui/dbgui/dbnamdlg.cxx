@@ -41,7 +41,6 @@
                         | SCA_COL2_ABSOLUTE | SCA_ROW2_ABSOLUTE | SCA_TAB2_ABSOLUTE
 #define ABS_DREF3D      ABS_DREF | SCA_TAB_3D
 
-//----------------------------------------------------------------------------
 
 class DBSaveData;
 
@@ -82,7 +81,6 @@ private:
 
 
 
-//----------------------------------------------------------------------------
 
 void DBSaveData::Save()
 {
@@ -96,7 +94,6 @@ void DBSaveData::Save()
 }
 
 
-//----------------------------------------------------------------------------
 
 void DBSaveData::Restore()
 {
@@ -116,7 +113,6 @@ void DBSaveData::Restore()
 //============================================================================
 //  class ScDbNameDlg
 
-//----------------------------------------------------------------------------
 
 ScDbNameDlg::ScDbNameDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
                           ScViewData*   ptrViewData )
@@ -171,7 +167,6 @@ ScDbNameDlg::ScDbNameDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
 }
 
 
-//----------------------------------------------------------------------------
 
 ScDbNameDlg::~ScDbNameDlg()
 {
@@ -179,7 +174,6 @@ ScDbNameDlg::~ScDbNameDlg()
 }
 
 
-//----------------------------------------------------------------------------
 
 void ScDbNameDlg::Init()
 {
@@ -285,7 +279,6 @@ void ScDbNameDlg::SetInfoStrings( const ScDBData* pDBData )
     aFTOperations.SetText(aBuf.makeStringAndClear());
 }
 
-//----------------------------------------------------------------------------
 // Uebergabe eines mit der Maus selektierten Tabellenbereiches, der dann als
 //  neue Selektion im Referenz-Fenster angezeigt wird.
 
@@ -314,14 +307,12 @@ void ScDbNameDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
 }
 
 
-//----------------------------------------------------------------------------
 
 sal_Bool ScDbNameDlg::Close()
 {
     return DoClose( ScDbNameDlgWrapper::GetChildWindowId() );
 }
 
-//------------------------------------------------------------------------
 
 void ScDbNameDlg::SetActive()
 {
@@ -334,7 +325,6 @@ void ScDbNameDlg::SetActive()
     RefInputDone();
 }
 
-//------------------------------------------------------------------------
 
 void ScDbNameDlg::UpdateNames()
 {
@@ -343,7 +333,6 @@ void ScDbNameDlg::UpdateNames()
     const DBsType& rDBs = aLocalDbCol.getNamedDBs();
 
     aEdName.SetUpdateMode( false );
-    //-----------------------------------------------------------
     aEdName.Clear();
     aEdAssign.SetText( EMPTY_STRING );
 
@@ -359,12 +348,10 @@ void ScDbNameDlg::UpdateNames()
         aBtnAdd.Disable();
         aBtnRemove.Disable();
     }
-    //-----------------------------------------------------------
     aEdName.SetUpdateMode( sal_True );
     aEdName.Invalidate();
 }
 
-//------------------------------------------------------------------------
 
 void ScDbNameDlg::UpdateDBData( const String& rStrName )
 {
@@ -404,7 +391,6 @@ void ScDbNameDlg::UpdateDBData( const String& rStrName )
     aFTOperations.Enable();
 }
 
-//------------------------------------------------------------------------
 
 
 sal_Bool ScDbNameDlg::IsRefInputMode() const
@@ -412,7 +398,6 @@ sal_Bool ScDbNameDlg::IsRefInputMode() const
     return bRefInputMode;
 }
 
-//------------------------------------------------------------------------
 // Handler:
 // ========
 
@@ -431,7 +416,6 @@ IMPL_LINK_NOARG(ScDbNameDlg, OkBtnHdl)
     return 0;
 }
 
-//------------------------------------------------------------------------
 
 IMPL_LINK_NOARG_INLINE_START(ScDbNameDlg, CancelBtnHdl)
 {
@@ -440,7 +424,6 @@ IMPL_LINK_NOARG_INLINE_START(ScDbNameDlg, CancelBtnHdl)
 }
 IMPL_LINK_NOARG_INLINE_END(ScDbNameDlg, CancelBtnHdl)
 
-//------------------------------------------------------------------------
 
 IMPL_LINK_NOARG(ScDbNameDlg, AddBtnHdl)
 {
@@ -589,7 +572,6 @@ IMPL_LINK_NOARG(ScDbNameDlg, RemoveBtnHdl)
     return 0;
 }
 
-//------------------------------------------------------------------------
 
 IMPL_LINK_NOARG(ScDbNameDlg, NameModifyHdl)
 {
@@ -674,7 +656,6 @@ IMPL_LINK_NOARG(ScDbNameDlg, NameModifyHdl)
     return 0;
 }
 
-//------------------------------------------------------------------------
 
 IMPL_LINK_NOARG(ScDbNameDlg, AssModifyHdl)
 {

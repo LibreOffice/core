@@ -60,12 +60,10 @@
 
 using namespace ::com::sun::star;
 
-//------------------------------------------------------------------------
 
 //  ein AutoFormat hat immer 16 Eintraege
 #define SC_AF_FIELD_COUNT 16
 
-//------------------------------------------------------------------------
 
 //  AutoFormat-Map nur fuer PropertySetInfo, ohne Which-IDs
 
@@ -143,7 +141,6 @@ static const SfxItemPropertyMapEntry* lcl_GetAutoFieldMap()
     return aAutoFieldMap_Impl;
 }
 
-//------------------------------------------------------------------------
 
 #define SCAUTOFORMATSOBJ_SERVICE    "com.sun.star.sheet.TableAutoFormats"
 
@@ -151,7 +148,6 @@ SC_SIMPLE_SERVICE_INFO( ScAutoFormatFieldObj, "ScAutoFormatFieldObj", "com.sun.s
 SC_SIMPLE_SERVICE_INFO( ScAutoFormatObj, "ScAutoFormatObj", "com.sun.star.sheet.TableAutoFormat" )
 SC_SIMPLE_SERVICE_INFO( ScAutoFormatsObj, "ScAutoFormatsObj", SCAUTOFORMATSOBJ_SERVICE )
 
-//------------------------------------------------------------------------
 
 static bool lcl_FindAutoFormatIndex( const ScAutoFormat& rFormats, const OUString& rName, sal_uInt16& rOutIndex )
 {
@@ -170,7 +166,6 @@ static bool lcl_FindAutoFormatIndex( const ScAutoFormat& rFormats, const OUStrin
     return false;       // is nich
 }
 
-//------------------------------------------------------------------------
 
 ScAutoFormatsObj::ScAutoFormatsObj()
 {
@@ -391,7 +386,6 @@ sal_Bool SAL_CALL ScAutoFormatsObj::hasByName( const OUString& aName )
         *ScGlobal::GetOrCreateAutoFormat(), aString, nDummy );
 }
 
-//------------------------------------------------------------------------
 
 ScAutoFormatObj::ScAutoFormatObj(sal_uInt16 nIndex) :
     aPropSet( lcl_GetAutoFormatMap() ),
@@ -657,7 +651,6 @@ uno::Any SAL_CALL ScAutoFormatObj::getPropertyValue( const OUString& aPropertyNa
 
 SC_IMPL_DUMMY_PROPERTY_LISTENER( ScAutoFormatObj )
 
-//------------------------------------------------------------------------
 
 ScAutoFormatFieldObj::ScAutoFormatFieldObj(sal_uInt16 nFormat, sal_uInt16 nField) :
     aPropSet( lcl_GetAutoFieldMap() ),
@@ -854,7 +847,6 @@ uno::Any SAL_CALL ScAutoFormatFieldObj::getPropertyValue( const OUString& aPrope
 
 SC_IMPL_DUMMY_PROPERTY_LISTENER( ScAutoFormatFieldObj )
 
-//------------------------------------------------------------------------
 
 
 

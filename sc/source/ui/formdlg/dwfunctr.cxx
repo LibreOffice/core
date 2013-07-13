@@ -801,7 +801,6 @@ void ScFunctionDockWin::UpdateFunctionList()
     }
 
 
-    //------------------------------------------------------
     pAllFuncList->SetUpdateMode( sal_True );
 
     if ( pAllFuncList->GetEntryCount() > 0 )
@@ -1100,7 +1099,6 @@ void ScFunctionDockWin::Initialize(SfxChildWinInfo *pInfo)
     }
 }
 
-//-------------------------------------------------------------------------
 
 void ScFunctionDockWin::FillInfo(SfxChildWinInfo& rInfo) const
 {

@@ -97,7 +97,6 @@ using namespace ::com::sun::star;
 #include "conditio.hxx"
 #include "sheetevents.hxx"
 
-//------------------------------------------------------------------
 
 #define IS_SHARE_HEADER(set) \
     ((SfxBoolItem&) \
@@ -113,7 +112,6 @@ using namespace ::com::sun::star;
 #define SC_PREVIEW_SIZE_Y   12400
 
 
-//------------------------------------------------------------------
 
 void ScDocShell::Execute( SfxRequest& rReq )
 {
@@ -1101,7 +1099,6 @@ void ScDocShell::Execute( SfxRequest& rReq )
 }
 
 
-//------------------------------------------------------------------
 
 void UpdateAcceptChangesDialog()
 {
@@ -1116,7 +1113,6 @@ void UpdateAcceptChangesDialog()
     }
 }
 
-//------------------------------------------------------------------
 
 bool ScDocShell::ExecuteChangeProtectionDialog( Window* _pParent, sal_Bool bJustQueryIfProtected )
 {
@@ -1182,7 +1178,6 @@ bool ScDocShell::ExecuteChangeProtectionDialog( Window* _pParent, sal_Bool bJust
 }
 
 
-//------------------------------------------------------------------
 
 void ScDocShell::DoRecalc( bool bApi )
 {
@@ -1259,7 +1254,6 @@ void ScDocShell::DoHardRecalc( bool /* bApi */ )
     PostPaintGridAll();
 }
 
-//------------------------------------------------------------------
 
 void ScDocShell::DoAutoStyle( const ScRange& rRange, const String& rStyle )
 {
@@ -1284,7 +1278,6 @@ void ScDocShell::DoAutoStyle( const ScRange& rRange, const String& rStyle )
     }
 }
 
-//------------------------------------------------------------------
 
 void ScDocShell::NotifyStyle( const SfxStyleSheetHint& rHint )
 {
@@ -2050,7 +2043,6 @@ void ScDocShell::GetPageOnFromPageStyleSet( const SfxItemSet* pStyleSet,
 
     OSL_ENSURE( pStyleSet, "PageStyle-Set not found! :-(" );
 
-    //--------------------------------------------------------------------
 
     const SvxSetItem*   pSetItem = NULL;
     const SfxItemSet*   pSet     = NULL;
@@ -2189,7 +2181,6 @@ long ScDocShell::DdeSetData( const OUString& rItem,
     return pObj;
 }
 
-//------------------------------------------------------------------
 
 ScViewData* ScDocShell::GetViewData()
 {
@@ -2198,7 +2189,6 @@ ScViewData* ScDocShell::GetViewData()
     return pViewSh ? pViewSh->GetViewData() : NULL;
 }
 
-//------------------------------------------------------------------
 
 SCTAB ScDocShell::GetCurTab()
 {
@@ -2239,7 +2229,6 @@ SfxBindings* ScDocShell::GetViewBindings()
         return NULL;
 }
 
-//------------------------------------------------------------------
 
 ScDocShell* ScDocShell::GetShellByNum( sal_uInt16 nDocNo )      // static
 {
@@ -2262,7 +2251,6 @@ ScDocShell* ScDocShell::GetShellByNum( sal_uInt16 nDocNo )      // static
     return pFound;
 }
 
-//------------------------------------------------------------------
 
 IMPL_LINK( ScDocShell, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg )
 {

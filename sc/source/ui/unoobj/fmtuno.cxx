@@ -40,7 +40,6 @@
 using namespace ::com::sun::star;
 using namespace ::formula;
 
-//------------------------------------------------------------------------
 
 //  Map nur fuer PropertySetInfo
 
@@ -63,13 +62,11 @@ static const SfxItemPropertyMapEntry* lcl_GetValidatePropertyMap()
     return aValidatePropertyMap_Impl;
 }
 
-//------------------------------------------------------------------------
 
 SC_SIMPLE_SERVICE_INFO( ScTableConditionalEntry, "ScTableConditionalEntry", "com.sun.star.sheet.TableConditionalEntry" )
 SC_SIMPLE_SERVICE_INFO( ScTableConditionalFormat, "ScTableConditionalFormat", "com.sun.star.sheet.TableConditionalFormat" )
 SC_SIMPLE_SERVICE_INFO( ScTableValidationObj, "ScTableValidationObj", "com.sun.star.sheet.TableValidation" )
 
-//------------------------------------------------------------------------
 
 static sal_Int32 lcl_ConditionModeToOperatorNew( ScConditionMode eMode )
 {
@@ -138,7 +135,6 @@ static ScConditionMode lcl_ConditionOperatorToMode( sheet::ConditionOperator eOp
     return eMode;
 }
 
-//------------------------------------------------------------------------
 
 ScCondFormatEntryItem::ScCondFormatEntryItem() :
     meGrammar1( FormulaGrammar::GRAM_UNSPECIFIED ),
@@ -147,7 +143,6 @@ ScCondFormatEntryItem::ScCondFormatEntryItem() :
 {
 }
 
-//------------------------------------------------------------------------
 
 ScTableConditionalFormat::ScTableConditionalFormat(
         ScDocument* pDoc, sal_uLong nKey, SCTAB nTab, FormulaGrammar::Grammar eGrammar)
@@ -511,7 +506,6 @@ ScTableConditionalFormat* ScTableConditionalFormat::getImplementation(
     return pRet;
 }
 
-//------------------------------------------------------------------------
 
 ScTableConditionalEntry::ScTableConditionalEntry(const ScCondFormatEntryItem& aItem) :
     aData( aItem )
@@ -616,7 +610,6 @@ void SAL_CALL ScTableConditionalEntry::setStyleName( const OUString& aStyleName 
     aData.maStyle = ScStyleNameConversion::ProgrammaticToDisplayName( aStyleName, SFX_STYLE_FAMILY_PARA );
 }
 
-//------------------------------------------------------------------------
 
 ScTableValidationObj::ScTableValidationObj(ScDocument* pDoc, sal_uLong nKey,
                                             const formula::FormulaGrammar::Grammar eGrammar) :
@@ -1041,7 +1034,6 @@ ScTableValidationObj* ScTableValidationObj::getImplementation(
     return pRet;
 }
 
-//------------------------------------------------------------------------
 
 
 

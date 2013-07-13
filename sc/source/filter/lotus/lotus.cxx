@@ -27,7 +27,6 @@
 #include "filtopt.hxx"
 #include "ftools.hxx"
 
-//------------------------------------------------------------------------
 
 extern FltError ScImportLotus123old( SvStream&, ScDocument*, CharSet eSrc );
         // alter Krempel in filter.cxx!

@@ -27,7 +27,6 @@
 #include <osl/thread.h>
 
 
-//------------------------------------------------------------------------
 
 ScAddInAsyncs theAddInAsyncTbl;
 static ScAddInAsync aSeekObj;

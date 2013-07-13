@@ -130,7 +130,6 @@ void lclAppendProperty( ::std::vector< PropertyValue >& orProps, const OUString&
     orProps.back().Value <<= rValue;
 }
 
-//------------------------------------------------------------------------------
 
 void SetCfvoData( ColorScaleRuleModelEntry* pEntry, const AttributeList& rAttribs )
 {

@@ -157,7 +157,6 @@ using ::std::vector;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::UNO_QUERY;
 
-//----------------------------------------------------------------------------
 
 namespace
 {
@@ -211,7 +210,6 @@ OUString lcl_GetRawString( ScDocument* pDoc, const ScAddress& rPos )
 
 } // anonymous namespace
 
-//----------------------------------------------------------------------------
 
 OUString SAL_CALL ScXMLOOoExport_getImplementationName() throw()
 {
@@ -389,7 +387,6 @@ uno::Reference< uno::XInterface > SAL_CALL ScXMLOasisExport_Settings_createInsta
 {
     return (cppu::OWeakObject*)new ScXMLExport(comphelper::getComponentContext(rSMgr), EXPORT_SETTINGS|EXPORT_OASIS);
 }
-//----------------------------------------------------------------------------
 
 class ScXMLShapeExport : public XMLShapeExport
 {
@@ -416,7 +413,6 @@ void ScXMLShapeExport::onExport( const uno::Reference < drawing::XShape >& xShap
     }
 }
 
-//----------------------------------------------------------------------------
 
 sal_Int16 ScXMLExport::GetFieldUnit()
 {

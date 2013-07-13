@@ -34,12 +34,10 @@
 
 using namespace com::sun::star;
 
-//------------------------------------------------------------------------
 
 static const char* cURLInsertColumns = ".uno:DataSourceBrowser/InsertColumns"; //data into text
 static const char* cURLDocDataSource = ".uno:DataSourceBrowser/DocumentDataSource";
 
-//------------------------------------------------------------------------
 
 static uno::Reference<view::XSelectionSupplier> lcl_GetSelectionSupplier( SfxViewShell* pViewShell )
 {
@@ -54,7 +52,6 @@ static uno::Reference<view::XSelectionSupplier> lcl_GetSelectionSupplier( SfxVie
     return uno::Reference<view::XSelectionSupplier>();
 }
 
-//------------------------------------------------------------------------
 
 
 ScDispatchProviderInterceptor::ScDispatchProviderInterceptor(ScTabViewShell* pViewSh) :
@@ -194,7 +191,6 @@ void SAL_CALL ScDispatchProviderInterceptor::disposing( const lang::EventObject&
     m_xIntercepted = NULL;
 }
 
-//------------------------------------------------------------------------
 
 ScDispatch::ScDispatch(ScTabViewShell* pViewSh) :
     pViewShell( pViewSh ),

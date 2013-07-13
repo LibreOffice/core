@@ -40,7 +40,6 @@
 using namespace com::sun::star;
 using namespace xmloff::token;
 
-//------------------------------------------------------------------
 
 ScXMLTableColContext::ScXMLTableColContext( ScXMLImport& rImport,
                                       sal_uInt16 nPrfx,

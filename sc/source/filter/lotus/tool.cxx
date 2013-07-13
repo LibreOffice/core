@@ -37,11 +37,9 @@
 
 #include <math.h>
 
-//--------------------------------------------------------- EXTERNE VARIABLEN -
 extern WKTYP                eTyp;           // -> filter.cxx, aktueller Dateityp
 extern ScDocument*          pDoc;           // -> filter.cxx, Aufhaenger zum Dokumentzugriff
 
-//--------------------------------------------------------- GLOBALE VARIABLEN -
 sal_uInt8                       nDefaultFormat; // -> op.cpp, Standard-Zellenformat
 
 extern SvxHorJustifyItem    *pAttrRight, *pAttrLeft, *pAttrCenter, *pAttrRepeat, *pAttrStandard;

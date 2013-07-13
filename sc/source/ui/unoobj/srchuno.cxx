@@ -33,7 +33,6 @@
 
 using namespace com::sun::star;
 
-//------------------------------------------------------------------------
 
 //! SearchWords sucht in ganzen Zellen - umbenennen ???
 
@@ -60,12 +59,10 @@ static const SfxItemPropertyMapEntry* lcl_GetSearchPropertyMap()
     return aSearchPropertyMap_Impl;
 }
 
-//------------------------------------------------------------------------
 
 #define SCSEARCHDESCRIPTOR_SERVICE      "com.sun.star.util.SearchDescriptor"
 #define SCREPLACEDESCRIPTOR_SERVICE     "com.sun.star.util.ReplaceDescriptor"
 
-//------------------------------------------------------------------------
 
 ScCellSearchObj::ScCellSearchObj() :
     aPropSet(lcl_GetSearchPropertyMap())
@@ -249,7 +246,6 @@ ScCellSearchObj* ScCellSearchObj::getImplementation(
 }
 
 
-//------------------------------------------------------------------------
 
 
 

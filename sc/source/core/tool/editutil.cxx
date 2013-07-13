@@ -57,7 +57,6 @@ using namespace com::sun::star;
 const sal_Char ScEditUtil::pCalcDelimiters[] = "=()+-*/^&<>";
 
 
-//------------------------------------------------------------------------
 
 OUString ScEditUtil::ModifyDelimiters( const OUString& rOld )
 {
@@ -163,7 +162,6 @@ EditTextObject* ScEditUtil::Clone( const EditTextObject& rObj, ScDocument& rDest
     return pNew;
 }
 
-//------------------------------------------------------------------------
 
 Rectangle ScEditUtil::GetEditArea( const ScPatternAttr* pPattern, sal_Bool bForceToTop )
 {
@@ -256,7 +254,6 @@ Rectangle ScEditUtil::GetEditArea( const ScPatternAttr* pPattern, sal_Bool bForc
     return Rectangle( aStartPos, Size(nCellX-1,nCellY-1) );
 }
 
-//------------------------------------------------------------------------
 
 ScEditAttrTester::ScEditAttrTester( ScEditEngineDefaulter* pEng ) :
     pEngine( pEng ),
@@ -321,7 +318,6 @@ ScEditAttrTester::~ScEditAttrTester()
 }
 
 
-//------------------------------------------------------------------------
 
 ScEnginePoolHelper::ScEnginePoolHelper( SfxItemPool* pEnginePoolP,
                 sal_Bool bDeleteEnginePoolP )
@@ -353,7 +349,6 @@ ScEnginePoolHelper::~ScEnginePoolHelper()
 }
 
 
-//------------------------------------------------------------------------
 
 ScEditEngineDefaulter::ScEditEngineDefaulter( SfxItemPool* pEnginePoolP,
                 sal_Bool bDeleteEnginePoolP )
@@ -597,7 +592,6 @@ void ScEditEngineDefaulter::RemoveParaAttribs()
         SetUpdateMode( sal_True );
 }
 
-//------------------------------------------------------------------------
 
 ScTabEditEngine::ScTabEditEngine( ScDocument* pDoc )
         : ScEditEngineDefaulter( pDoc->GetEnginePool() )
@@ -625,9 +619,7 @@ void ScTabEditEngine::Init( const ScPatternAttr& rPattern )
     SetControlWord( GetControlWord() & ~EE_CNTRL_RTFSTYLESHEETS );
 }
 
-//------------------------------------------------------------------------
 //      Feldbefehle fuer Kopf- und Fusszeilen
-//------------------------------------------------------------------------
 
 //
 //      Zahlen aus \sw\source\core\doc\numbers.cxx
@@ -757,11 +749,9 @@ OUString ScHeaderEditEngine::CalcFieldValue( const SvxFieldItem& rField,
     return aRet;
 }
 
-//------------------------------------------------------------------------
 //
 //                          Feld-Daten
 //
-//------------------------------------------------------------------------
 
 ScFieldEditEngine::ScFieldEditEngine(
     ScDocument* pDoc, SfxItemPool* pEnginePoolP,
@@ -865,7 +855,6 @@ void ScFieldEditEngine::FieldClicked( const SvxFieldItem& rField, sal_Int32, sal
     }
 }
 
-//------------------------------------------------------------------------
 
 ScNoteEditEngine::ScNoteEditEngine( SfxItemPool* pEnginePoolP,
             SfxItemPool* pTextObjectPool, sal_Bool bDeleteEnginePoolP ) :

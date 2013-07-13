@@ -55,7 +55,6 @@ struct ScSolverOptionsEntry
     }
 };
 
-//------------------------------------------------------------------
 
 class ScSolverOptionsString : public SvLBoxString
 {
@@ -106,7 +105,6 @@ void ScSolverOptionsString::Paint( const Point& rPos, SvTreeListBox& rDev, const
     rDev.SetFont( aOldFont );
 }
 
-//------------------------------------------------------------------
 
 ScSolverOptionsDialog::ScSolverOptionsDialog( Window* pParent,
                         const uno::Sequence<OUString>& rImplNames,
@@ -399,7 +397,6 @@ IMPL_LINK_NOARG(ScSolverOptionsDialog, SettingsSelHdl)
     return 0;
 }
 
-//------------------------------------------------------------------
 
 ScSolverIntegerDialog::ScSolverIntegerDialog( Window * pParent )
     : ModalDialog( pParent, ScResId( RID_SCDLG_SOLVER_INTEGER ) ),
@@ -436,7 +433,6 @@ sal_Int32 ScSolverIntegerDialog::GetValue() const
     return (sal_Int32) nValue;
 }
 
-//------------------------------------------------------------------
 
 ScSolverValueDialog::ScSolverValueDialog( Window * pParent )
     : ModalDialog( pParent, ScResId( RID_SCDLG_SOLVER_DOUBLE ) ),

@@ -45,7 +45,6 @@ SvxIMapDlg*     ScGetIMapDlg();
 const void*     ScIMapDlgGetObj( SvxIMapDlg* pDlg );
 const ImageMap& ScIMapDlgGetMap( SvxIMapDlg* pDlg );
 
-//------------------------------------------------------------------
 
 void ScTabViewShell::ExecChildWin(SfxRequest& rReq)
 {
@@ -72,7 +71,6 @@ void ScTabViewShell::GetChildWinState( SfxItemSet& rSet )
     }
 }
 
-//------------------------------------------------------------------
 
 void ScTabViewShell::ExecGallery( SfxRequest& rReq )
 {
@@ -112,14 +110,12 @@ void ScTabViewShell::GetGalleryState( SfxItemSet& /* rSet */ )
 {
 }
 
-//------------------------------------------------------------------
 
 ScInputHandler* ScTabViewShell::GetInputHandler() const
 {
     return pInputHandler;
 }
 
-//------------------------------------------------------------------
 
 String ScTabViewShell::GetDescription() const
 {

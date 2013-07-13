@@ -102,7 +102,6 @@ ScViewFunc::~ScViewFunc()
 {
 }
 
-//------------------------------------------------------------------------------------
 
 void ScViewFunc::StartFormatArea()
 {
@@ -226,7 +225,6 @@ void ScViewFunc::DoAutoAttributes( SCCOL nCol, SCROW nRow, SCTAB nTab,
         aFormatSource.Set( nCol, nRow, nTab );      // then set a new source
 }
 
-//------------------------------------------------------------------------------------
 
 //      additional routines
 

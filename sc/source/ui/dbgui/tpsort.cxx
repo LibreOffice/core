@@ -427,7 +427,6 @@ void ScTabPageSortFields::FillFieldLists( sal_uInt16 nStartField )
     }
 }
 
-//------------------------------------------------------------------------
 
 sal_uInt16 ScTabPageSortFields::GetFieldSelPos( SCCOLROW nField )
 {

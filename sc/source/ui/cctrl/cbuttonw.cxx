@@ -115,7 +115,6 @@ void ScDDComboBoxButton::Draw( const Point& rAt,
         pOut->SetFillColor();
 }
 
-//------------------------------------------------------------------------
 
 void ScDDComboBoxButton::ImpDrawArrow( const Rectangle& rRect,
                                        sal_Bool             bState )

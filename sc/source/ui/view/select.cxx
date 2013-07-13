@@ -736,7 +736,6 @@ void ScViewFunctionSet::DeselectAll()
     bAnchor = false;
 }
 
-//------------------------------------------------------------------------
 
 ScViewSelectionEngine::ScViewSelectionEngine( Window* pWindow, ScTabView* pView,
                                                 ScSplitPos eSplitPos ) :
@@ -748,7 +747,6 @@ ScViewSelectionEngine::ScViewSelectionEngine( Window* pWindow, ScTabView* pView,
 }
 
 
-//------------------------------------------------------------------------
 
 //
 //                  column and row headers
@@ -930,7 +928,6 @@ void ScHeaderFunctionSet::DeselectAll()
     bAnchor = false;
 }
 
-//------------------------------------------------------------------------
 
 ScHeaderSelectionEngine::ScHeaderSelectionEngine( Window* pWindow, ScHeaderFunctionSet* pFuncSet ) :
         SelectionEngine( pWindow, pFuncSet )

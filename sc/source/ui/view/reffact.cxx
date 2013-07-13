@@ -96,90 +96,62 @@ namespace { ScTabViewShell * lcl_GetTabViewShell( SfxBindings *pBindings ); }
 
 //=========================================================================
 
-//-------------------------------------------------------------------------
 // ScNameDlgWrapper
-//-------------------------------------------------------------------------
 
 IMPL_CHILD_CTOR( ScNameDlgWrapper, FID_DEFINE_NAME )
 
-//-------------------------------------------------------------------------
 // ScNameDlgWrapper
-//-------------------------------------------------------------------------
 
 IMPL_CHILD_CTOR( ScNameDefDlgWrapper, FID_ADD_NAME )
 
-//-------------------------------------------------------------------------
 // ScSolverDlgWrapper
-//-------------------------------------------------------------------------
 
 IMPL_CHILD_CTOR( ScSolverDlgWrapper, SID_OPENDLG_SOLVE )
 
-//-------------------------------------------------------------------------
 // ScOptSolverDlgWrapper
-//-------------------------------------------------------------------------
 
 IMPL_CHILD_CTOR( ScOptSolverDlgWrapper, SID_OPENDLG_OPTSOLVER )
 
 IMPL_CHILD_CTOR(ScXMLSourceDlgWrapper, SID_MANAGE_XML_SOURCE)
 
-//-------------------------------------------------------------------------
 // ScPivotLayoutWrapper
-//-------------------------------------------------------------------------
 
 IMPL_CHILD_CTOR( ScPivotLayoutWrapper, SID_OPENDLG_PIVOTTABLE )
 
-//-------------------------------------------------------------------------
 // ScTabOpDlgWrapper
-//-------------------------------------------------------------------------
 
 IMPL_CHILD_CTOR( ScTabOpDlgWrapper, SID_OPENDLG_TABOP )
 
-//-------------------------------------------------------------------------
 // ScFilterDlgWrapper
-//-------------------------------------------------------------------------
 
 IMPL_CHILD_CTOR( ScFilterDlgWrapper, SID_FILTER )
 
-//-------------------------------------------------------------------------
 // ScSpecialFilterDlgWrapper
-//-------------------------------------------------------------------------
 
 IMPL_CHILD_CTOR( ScSpecialFilterDlgWrapper, SID_SPECIAL_FILTER )
 
-//-------------------------------------------------------------------------
 // ScDbNameDlgWrapper
-//-------------------------------------------------------------------------
 
 IMPL_CHILD_CTOR( ScDbNameDlgWrapper, SID_DEFINE_DBNAME )
 
-//-------------------------------------------------------------------------
 // ScColRowNameRangesDlgWrapper
-//-------------------------------------------------------------------------
 
 IMPL_CHILD_CTOR( ScColRowNameRangesDlgWrapper, SID_DEFINE_COLROWNAMERANGES )
 
-//-------------------------------------------------------------------------
 // ScConsolidateDlgWrapper
-//-------------------------------------------------------------------------
 
 IMPL_CHILD_CTOR( ScConsolidateDlgWrapper, SID_OPENDLG_CONSOLIDATE )
 
-//-------------------------------------------------------------------------
 // ScPrintAreasDlgWrapper
-//-------------------------------------------------------------------------
 
 IMPL_CHILD_CTOR( ScPrintAreasDlgWrapper, SID_OPENDLG_EDIT_PRINTAREA )
 
-//-------------------------------------------------------------------------
 // ScFormulaDlgWrapper
-//-------------------------------------------------------------------------
 
 IMPL_CHILD_CTOR( ScFormulaDlgWrapper, SID_OPENDLG_FUNCTION )
 
 
-//-------------------------------------------------------------------------
 // ScSimpleRefDlgWrapper
-//-------------------------------------------------------------------------
 
 static sal_Bool     bScSimpleRefFlag;
 static long     nScSimpleRefHeight;
@@ -295,9 +267,7 @@ void ScSimpleRefDlgWrapper::StartRefInput()
 
 
 
-//-------------------------------------------------------------------------
 // ScAcceptChgDlgWrapper //FIXME: should be moved into ViewShell
-//-------------------------------------------------------------------------
 
 ScAcceptChgDlgWrapper::ScAcceptChgDlgWrapper(   Window* pParentP,
                                             sal_uInt16 nId,
@@ -331,9 +301,7 @@ void ScAcceptChgDlgWrapper::ReInitDlg()
     }
 }
 
-//-------------------------------------------------------------------------
 // ScHighlightChgDlgWrapper
-//-------------------------------------------------------------------------
 
 IMPL_CHILD_CTOR( ScHighlightChgDlgWrapper, FID_CHG_SHOW )
 

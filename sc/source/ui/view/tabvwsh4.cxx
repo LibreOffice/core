@@ -308,7 +308,6 @@ sal_uInt16 ScTabViewShell::PrepareClose(sal_Bool bUI, sal_Bool bForBrowsing)
     return SfxViewShell::PrepareClose(bUI,bForBrowsing);
 }
 
-//------------------------------------------------------------------
 
 //  Zoom fuer In-Place berechnen
 //  aus Verhaeltnis von VisArea und Fenstergroesse des GridWin
@@ -449,7 +448,6 @@ void ScTabViewShell::QueryObjAreaPixel( Rectangle& rRect ) const
     rRect.SetSize( pWin->LogicToPixel( aLogicRect.GetSize() ) );
 }
 
-//------------------------------------------------------------------
 
 void ScTabViewShell::Move()
 {
@@ -462,7 +460,6 @@ void ScTabViewShell::Move()
     }
 }
 
-//------------------------------------------------------------------
 
 void ScTabViewShell::ShowCursor(bool /* bOn */)
 {
@@ -476,7 +473,6 @@ void ScTabViewShell::ShowCursor(bool /* bOn */)
 */
 }
 
-//------------------------------------------------------------------
 
 void ScTabViewShell::WriteUserData(String& rData, sal_Bool /* bBrowse */)
 {
@@ -568,7 +564,6 @@ void ScTabViewShell::DoReadUserData( const String& rData )
     //! if ViewData has more tables than document, remove tables in ViewData
 }
 
-//------------------------------------------------------------------
 
 void ScTabViewShell::UpdateDrawShell()
 {
@@ -1050,14 +1045,12 @@ void ScTabViewShell::SetDrawTextUndo( ::svl::IUndoManager* pNewUndoMgr )
     }
 }
 
-//------------------------------------------------------------------
 
 ScTabViewShell* ScTabViewShell::GetActiveViewShell()
 {
     return PTR_CAST(ScTabViewShell,Current());
 }
 
-//------------------------------------------------------------------
 
 SfxPrinter* ScTabViewShell::GetPrinter( sal_Bool bCreate )
 {
@@ -1091,7 +1084,6 @@ void ScTabViewShell::StopEditShell()
         SetEditShell(NULL, false );
 }
 
-//------------------------------------------------------------------
 
 // close handler to ensure function of dialog:
 
@@ -1199,7 +1191,6 @@ void ScTabViewShell::StopSimpleRefDialog()
     }
 }
 
-//------------------------------------------------------------------
 
 sal_Bool ScTabViewShell::TabKeyInput(const KeyEvent& rKEvt)
 {
@@ -1420,7 +1411,6 @@ bool ScTabViewShell::KeyInput( const KeyEvent &rKeyEvent )
     return TabKeyInput( rKeyEvent );
 }
 
-//------------------------------------------------------------------
 
 #define __INIT_ScTabViewShell \
     eCurOST(OST_NONE),          \
@@ -1469,7 +1459,6 @@ bool ScTabViewShell::KeyInput( const KeyEvent &rKeyEvent )
     mbInSwitch(false)
 
 
-//------------------------------------------------------------------
 
 void ScTabViewShell::Construct( sal_uInt8 nForceDesignMode )
 {
@@ -1664,10 +1653,8 @@ void ScTabViewShell::Construct( sal_uInt8 nForceDesignMode )
     SetBorderPixel( aBorder );
 }
 
-//------------------------------------------------------------------
 
 
-//------------------------------------------------------------------
 
 ScTabViewShell::ScTabViewShell( SfxViewFrame* pViewFrame,
                                 SfxViewShell* pOldSh ) :
@@ -1723,7 +1710,6 @@ ScTabViewShell::ScTabViewShell( SfxViewFrame* pViewFrame,
 
 #undef __INIT_ScTabViewShell
 
-//------------------------------------------------------------------
 
 ScTabViewShell::~ScTabViewShell()
 {
@@ -1764,7 +1750,6 @@ ScTabViewShell::~ScTabViewShell()
     DELETEZ(pAccessibilityBroadcaster);
 }
 
-//------------------------------------------------------------------
 
 void ScTabViewShell::SetDialogDPObject( const ScDPObject* pObj )
 {
@@ -1775,7 +1760,6 @@ void ScTabViewShell::SetDialogDPObject( const ScDPObject* pObj )
         pDialogDPObject = NULL;
 }
 
-//------------------------------------------------------------------
 
 void ScTabViewShell::FillFieldData( ScHeaderFieldData& rData )
 {
@@ -1803,7 +1787,6 @@ void ScTabViewShell::FillFieldData( ScHeaderFieldData& rData )
     //  eNumType kennt der Dialog selber
 }
 
-//------------------------------------------------------------------
 
 void ScTabViewShell::SetChartArea( const ScRangeListRef& rSource, const Rectangle& rDest )
 {
@@ -1829,7 +1812,6 @@ ScNavigatorSettings* ScTabViewShell::GetNavigatorSettings()
 }
 
 
-//------------------------------------------------------------------
 
 void ScTabViewShell::ExecTbx( SfxRequest& rReq )
 {

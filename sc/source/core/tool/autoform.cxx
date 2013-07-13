@@ -823,8 +823,6 @@ bool ScAutoFormatData::Save(SvStream& rStream, sal_uInt16 fileVersion)
     return bRet;
 }
 
-//---------------------------------------------------------------------------------------
-//---------------------------------------------------------------------------------------
 
 ScAutoFormat::ScAutoFormat() :
     mbSaveLater(false)
@@ -1104,7 +1102,6 @@ bool ScAutoFormat::Save()
 
         bRet &= (rStream.GetError() == 0);
 
-        //-----------------------------------------------------------
         rStream << (sal_uInt16)(maData.size() - 1);
         bRet &= (rStream.GetError() == 0);
         MapType::iterator it = maData.begin(), itEnd = maData.end();

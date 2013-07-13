@@ -43,7 +43,6 @@
 #include "tokenarray.hxx"
 
 
-//------------------------------------------------------------------------
 
 FltError ScFormatFilterPluginImpl::ScImportHTML( SvStream &rStream, const String& rBaseURL, ScDocument *pDoc,
         ScRange& rRange, double nOutputFactor, bool bCalcWidthHeight, SvNumberFormatter* pFormatter,

@@ -48,7 +48,6 @@ using namespace ::com::sun::star;
 using namespace rtl;
 using namespace com::sun::star::uno;
 
-//------------------------------------------------------------------------
 
 #define SCFILTEROPTIONSOBJ_SERVICE      "com.sun.star.ui.dialogs.FilterOptionsDialog"
 #define SCFILTEROPTIONSOBJ_IMPLNAME     "com.sun.star.comp.Calc.FilterOptionsDialog"
@@ -65,7 +64,6 @@ SC_SIMPLE_SERVICE_INFO( ScFilterOptionsObj, SCFILTEROPTIONSOBJ_IMPLNAME, SCFILTE
 #define DBF_SEP_PATH_IMPORT         "Office.Calc/Dialogs/DBFImport"
 #define DBF_SEP_PATH_EXPORT         "Office.Calc/Dialogs/DBFExport"
 
-//------------------------------------------------------------------------
 
 static void load_CharSet( rtl_TextEncoding &nCharSet, bool bExport )
 {
@@ -111,7 +109,6 @@ static void save_CharSet( rtl_TextEncoding nCharSet, bool bExport )
     aItem.PutProperties(aNames, aValues);
 }
 
-//------------------------------------------------------------------------
 
 ScFilterOptionsObj::ScFilterOptionsObj() :
     bExport( false )

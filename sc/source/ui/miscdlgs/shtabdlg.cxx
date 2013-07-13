@@ -22,7 +22,6 @@
 
 
 
-//------------------------------------------------------------------
 
 #include <vcl/msgbox.hxx>
 
@@ -48,7 +47,6 @@ ScShowTabDlg::ScShowTabDlg( Window* pParent ) :
     FreeResource();
 }
 
-//------------------------------------------------------------------------
 
 void ScShowTabDlg::SetDescription(
         const String& rTitle, const String& rFixedText,
@@ -67,7 +65,6 @@ void ScShowTabDlg::Insert( const String& rString, sal_Bool bSelected )
         aLb.SelectEntryPos( aLb.GetEntryCount() - 1 );
 }
 
-//------------------------------------------------------------------------
 
 sal_uInt16 ScShowTabDlg::GetSelectEntryCount() const
 {
@@ -84,7 +81,6 @@ sal_uInt16 ScShowTabDlg::GetSelectEntryPos(sal_uInt16 nPos) const
     return aLb.GetSelectEntryPos(nPos);
 }
 
-//------------------------------------------------------------------------
 
 IMPL_LINK_NOARG_INLINE_START(ScShowTabDlg, DblClkHdl)
 {

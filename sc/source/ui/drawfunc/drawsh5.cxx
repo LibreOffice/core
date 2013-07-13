@@ -60,7 +60,6 @@
 
 using namespace com::sun::star;
 
-//------------------------------------------------------------------
 
 void ScDrawShell::GetHLinkState( SfxItemSet& rSet )             //  Hyperlink
 {
@@ -242,7 +241,6 @@ void ScDrawShell::ExecuteHLink( SfxRequest& rReq )
 
 sal_uInt16 ScGetFontWorkId();
 
-//------------------------------------------------------------------
 
 //
 //          Funktionen auf Drawing-Objekten
@@ -651,7 +649,6 @@ IMPL_LINK( ScDrawShell, NameObjectHdl, AbstractSvxNameDialog*, pDialog )
     return 1;   // name is valid
 }
 
-//------------------------------------------------------------------
 
 void ScDrawShell::ExecFormText(SfxRequest& rReq)
 {
@@ -669,7 +666,6 @@ void ScDrawShell::ExecFormText(SfxRequest& rReq)
     }
 }
 
-//------------------------------------------------------------------
 
 void ScDrawShell::ExecFormatPaintbrush( SfxRequest& rReq )
 {

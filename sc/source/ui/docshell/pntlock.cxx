@@ -19,7 +19,6 @@
 
 #include "pntlock.hxx"
 
-//------------------------------------------------------------------------
 
 ScPaintLockData::ScPaintLockData() :
     nLevel( 0 ),

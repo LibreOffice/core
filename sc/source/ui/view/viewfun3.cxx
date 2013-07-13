@@ -77,7 +77,6 @@ using namespace com::sun::star;
 
 //  GlobalName der Writer-DocShell kommt jetzt aus comphelper/classids.hxx
 
-//----------------------------------------------------------------------------
 //      C U T
 
 void ScViewFunc::CutToClip( ScDocument* pClipDoc, sal_Bool bIncludeObjects )
@@ -153,7 +152,6 @@ void ScViewFunc::CutToClip( ScDocument* pClipDoc, sal_Bool bIncludeObjects )
 }
 
 
-//----------------------------------------------------------------------------
 //      C O P Y
 
 sal_Bool ScViewFunc::CopyToClip( ScDocument* pClipDoc, sal_Bool bCut, sal_Bool bApi, sal_Bool bIncludeObjects, sal_Bool bStopEdit )
@@ -438,7 +436,6 @@ ScTransferObj* ScViewFunc::CopyToTransferable()
     return NULL;
 }
 
-//----------------------------------------------------------------------------
 //      P A S T E
 
 void ScViewFunc::PasteDraw()
@@ -691,7 +688,6 @@ sal_Bool ScViewFunc::PasteFromSystem( sal_uLong nFormatId, sal_Bool bApi )
 }
 
 
-//----------------------------------------------------------------------------
 //      P A S T E
 
 sal_Bool ScViewFunc::PasteOnDrawObject( const uno::Reference<datatransfer::XTransferable>& rxTransferable,
@@ -1722,7 +1718,6 @@ void ScViewFunc::PostPasteFromClip(const ScRangeList& rPasteRanges, const ScMark
 }
 
 
-//----------------------------------------------------------------------------
 //      D R A G   A N D   D R O P
 //
 //  innerhalb des Dokuments

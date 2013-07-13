@@ -154,7 +154,6 @@ sal_Bool ScGlobal::HasAttrChanged( const SfxItemSet&  rNewAttrs,
     const SfxItemState  eNewState   = rNewAttrs.GetItemState( nWhich );
     const SfxItemState  eOldState   = rOldAttrs.GetItemState( nWhich );
 
-    //----------------------------------------------------------
 
     if ( eNewState == eOldState )
     {
@@ -219,7 +218,6 @@ SvNumberFormatter* ScGlobal::GetEnglishFormatter()
 }
 
 
-//------------------------------------------------------------------------
 
 sal_Bool ScGlobal::CheckWidthInvalidate( bool& bNumFormatChanged,
                                      const SfxItemSet& rNewAttrs,
@@ -691,7 +689,6 @@ void ScGlobal::Clear()
     DELETEZ(pEmptyOUString);
 }
 
-//------------------------------------------------------------------------
 
 CharSet ScGlobal::GetCharsetValue( const String& rCharSet )
 {
@@ -716,7 +713,6 @@ CharSet ScGlobal::GetCharsetValue( const String& rCharSet )
     else return osl_getThreadTextEncoding();
 }
 
-//------------------------------------------------------------------------
 
 String ScGlobal::GetCharsetString( CharSet eVal )
 {
@@ -741,7 +737,6 @@ String ScGlobal::GetCharsetString( CharSet eVal )
     return OUString::createFromAscii(pChar);
 }
 
-//------------------------------------------------------------------------
 
 bool ScGlobal::HasStarCalcFunctionList()
 {
@@ -756,7 +751,6 @@ ScFunctionList* ScGlobal::GetStarCalcFunctionList()
     return pStarCalcFunctionList;
 }
 
-//------------------------------------------------------------------------
 
 ScFunctionMgr* ScGlobal::GetStarCalcFunctionMgr()
 {
@@ -774,7 +768,6 @@ void ScGlobal::ResetFunctionList()
     DELETEZ( pStarCalcFunctionList );
 }
 
-//------------------------------------------------------------------------
 
 ScUnitConverter* ScGlobal::GetUnitConverter()
 {
@@ -785,7 +778,6 @@ ScUnitConverter* ScGlobal::GetUnitConverter()
 }
 
 
-//------------------------------------------------------------------------
 
 const sal_Unicode* ScGlobal::UnicodeStrChr( const sal_Unicode* pStr,
             sal_Unicode c )
@@ -893,7 +885,6 @@ const sal_Unicode* ScGlobal::FindUnquoted( const sal_Unicode* pString, sal_Unico
     return NULL;
 }
 
-//------------------------------------------------------------------------
 
 sal_Bool ScGlobal::EETextObjEqual( const EditTextObject* pObj1,
                                const EditTextObject* pObj2 )
@@ -975,7 +966,6 @@ void ScGlobal::OpenURL( const String& rURL, const String& rTarget )
                                     0L );
 }
 
-//------------------------------------------------------------------------
 
 sal_Bool ScGlobal::IsSystemRTL()
 {
@@ -1087,7 +1077,6 @@ sal_uInt16 ScGlobal::GetScriptedWhichID( sal_uInt8 nScriptType, sal_uInt16 nWhic
     return nWhich;
 }
 
-//------------------------------------------------------------------------
 
 void ScGlobal::AddLanguage( SfxItemSet& rSet, SvNumberFormatter& rFormatter )
 {
@@ -1113,11 +1102,9 @@ void ScGlobal::AddLanguage( SfxItemSet& rSet, SvNumberFormatter& rFormatter )
 }
 
 
-//--------------------------------------------------------------------
 
 
 
-//------------------------------------------------------------------------
 
 utl::TransliterationWrapper* ScGlobal::GetpTransliteration()
 {

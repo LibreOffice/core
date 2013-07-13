@@ -47,7 +47,6 @@
 
 using namespace com::sun::star;
 
-//------------------------------------------------------------------------
 
 //  registered as implementation for service FunctionAccess,
 //  also supports service SpreadsheetDocumentSettings (to set null date etc.)
@@ -55,7 +54,6 @@ using namespace com::sun::star;
 #define SCFUNCTIONACCESS_SERVICE    "com.sun.star.sheet.FunctionAccess"
 #define SCDOCSETTINGS_SERVICE       "com.sun.star.sheet.SpreadsheetDocumentSettings"
 
-//------------------------------------------------------------------------
 
 // helper to use cached document if not in use, temporary document otherwise
 
@@ -74,7 +72,6 @@ public:
     ScDocument*     GetDocument();
 };
 
-//------------------------------------------------------------------------
 
 ScDocument* ScTempDocSource::CreateDocument()
 {
@@ -113,7 +110,6 @@ ScDocument* ScTempDocSource::GetDocument()
         return rCache.GetDocument();
 }
 
-//------------------------------------------------------------------------
 
 ScTempDocCache::ScTempDocCache() :
     pDoc( NULL ),
@@ -140,7 +136,6 @@ void ScTempDocCache::Clear()
     pDoc = NULL;
 }
 
-//------------------------------------------------------------------------
 
 //  copy results from one document into another
 //! merge this with ScAreaLink::Refresh
@@ -182,7 +177,6 @@ static sal_Bool lcl_CopyData( ScDocument* pSrcDoc, const ScRange& rSrcRange,
     return sal_True;
 }
 
-//------------------------------------------------------------------------
 
 ScFunctionAccess::ScFunctionAccess() :
     pOptions( NULL ),

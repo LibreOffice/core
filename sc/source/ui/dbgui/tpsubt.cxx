@@ -121,7 +121,6 @@ bool ScTpSubTotalGroup::DoReset( sal_uInt16             nGroupNo,
     else
         nGroupIdx = nGroupNo-1;
 
-    //----------------------------------------------------------
 
     // first we have to clear the listboxes...
     for ( sal_uInt16 nLbEntry = 0; nLbEntry < aLbColumns.GetEntryCount(); ++nLbEntry )
@@ -192,7 +191,6 @@ bool ScTpSubTotalGroup::DoFillItemSet( sal_uInt16       nGroupNo,
     else
         nGroupIdx = nGroupNo-1;
 
-    //----------------------------------------------------------
 
     ScSubTotalParam theSubTotalData;            // auslesen, wenn schon teilweise gefuellt
     SfxTabDialog* pDlg = GetTabDialog();

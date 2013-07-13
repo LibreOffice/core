@@ -2030,7 +2030,6 @@ String ScRefAddress::GetRefString( ScDocument* pDoc, SCTAB nActTab,
     return aString;
 }
 
-//------------------------------------------------------------------------
 
 void ScColToAlpha( OUStringBuffer& rBuf, SCCOL nCol )
 {

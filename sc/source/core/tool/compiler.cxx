@@ -288,7 +288,6 @@ String ScCompiler::FindAddInFunction( const String& rUpperName, bool bLocalFirst
 }
 
 
-//-----------------------------------------------------------------------------
 
 ScCompiler::Convention::~Convention()
 {
@@ -419,7 +418,6 @@ ScCompiler::Convention::Convention( FormulaGrammar::AddressConvention eConv )
     }
 }
 
-//-----------------------------------------------------------------------------
 
 static bool lcl_isValidQuotedText( const String& rFormula, xub_StrLen nSrcPos, ParseResult& rRes )
 {
@@ -730,7 +728,6 @@ void Convention_A1::MakeRowStr( OUStringBuffer& rBuffer, SCROW nRow )
         rBuffer.append(sal_Int32(nRow + 1));
 }
 
-//-----------------------------------------------------------------------------
 
 struct ConventionOOO_A1 : public Convention_A1
 {
@@ -1021,7 +1018,6 @@ struct ConventionOOO_A1 : public Convention_A1
 static const ConventionOOO_A1 ConvOOO_A1;
 const ScCompiler::Convention * const ScCompiler::pConvOOO_A1 = &ConvOOO_A1;
 
-//-----------------------------------------------------------------------------
 
 struct ConventionOOO_A1_ODF : public ConventionOOO_A1
 {
@@ -1057,7 +1053,6 @@ struct ConventionOOO_A1_ODF : public ConventionOOO_A1
 static const ConventionOOO_A1_ODF ConvOOO_A1_ODF;
 const ScCompiler::Convention * const ScCompiler::pConvOOO_A1_ODF = &ConvOOO_A1_ODF;
 
-//-----------------------------------------------------------------------------
 
 struct ConventionXL
 {
@@ -1446,7 +1441,6 @@ static const ConventionXL_OOX ConvXL_OOX;
 const ScCompiler::Convention * const ScCompiler::pConvXL_OOX = &ConvXL_OOX;
 
 
-//-----------------------------------------------------------------------------
 
 static void
 r1c1_add_col( OUStringBuffer &rBuf, const ScSingleRefData& rRef )
@@ -1673,7 +1667,6 @@ struct ConventionXL_R1C1 : public ScCompiler::Convention, public ConventionXL
 static const ConventionXL_R1C1 ConvXL_R1C1;
 const ScCompiler::Convention * const ScCompiler::pConvXL_R1C1 = &ConvXL_R1C1;
 
-//-----------------------------------------------------------------------------
 ScCompiler::ScCompiler( ScDocument* pDocument, const ScAddress& rPos,ScTokenArray& rArr)
         : FormulaCompiler(rArr),
         pDoc( pDocument ),
@@ -1760,7 +1753,6 @@ xub_StrLen ScCompiler::GetDocTabPos( const String& rString )
     return nPos;
 }
 
-//---------------------------------------------------------------------------
 
 void ScCompiler::SetRefConvention( FormulaGrammar::AddressConvention eConv )
 {
@@ -1803,12 +1795,9 @@ static sal_Unicode* lcl_UnicodeStrNCpy( sal_Unicode* pDst, const sal_Unicode* pS
 }
 
 
-//---------------------------------------------------------------------------
 // NextSymbol
-//---------------------------------------------------------------------------
 // Zerlegt die Formel in einzelne Symbole fuer die weitere
 // Verarbeitung (Turing-Maschine).
-//---------------------------------------------------------------------------
 // Ausgangs Zustand = GetChar
 //---------------+-------------------+-----------------------+---------------
 // Alter Zustand | gelesenes Zeichen | Aktion                | Neuer Zustand
@@ -2426,9 +2415,7 @@ Label_MaskStateMachine:
     return nSpaces;
 }
 
-//---------------------------------------------------------------------------
 // Convert symbol to token
-//---------------------------------------------------------------------------
 
 bool ScCompiler::IsOpCode( const String& rName, bool bInArray )
 {
@@ -3286,7 +3273,6 @@ bool ScCompiler::IsErrorConstant( const String& rName ) const
         return false;
 }
 
-//---------------------------------------------------------------------------
 
 void ScCompiler::AutoCorrectParsedSymbol()
 {
@@ -4082,23 +4068,16 @@ bool ScCompiler::HandleExternalReference(const FormulaToken& _aToken)
 }
 
 
-//---------------------------------------------------------------------------
 
 
-//---------------------------------------------------------------------------
 // Append token to RPN code
-//---------------------------------------------------------------------------
 
 
-//-----------------------------------------------------------------------------
 
-//---------------------------------------------------------------------------
 // RPN creation by recursion
-//---------------------------------------------------------------------------
 
 
 
-//-----------------------------------------------------------------------------
 
 bool ScCompiler::HasModifiedRange()
 {
@@ -4123,7 +4102,6 @@ bool ScCompiler::HasModifiedRange()
 }
 
 
-//---------------------------------------------------------------------------
 
 template< typename T, typename S >
 static S lcl_adjval( S& n, T pos, T max, bool bRel )

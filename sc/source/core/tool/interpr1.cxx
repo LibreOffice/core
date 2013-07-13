@@ -111,9 +111,7 @@ private:
      ScCompareOptions&  operator=( const ScCompareOptions & );
 };
 
-//-----------------------------------------------------------------------------
 // Functions
-//-----------------------------------------------------------------------------
 
 
 void ScInterpreter::ScIfJump()

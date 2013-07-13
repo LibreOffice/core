@@ -225,7 +225,6 @@ void ScUnoAddInFuncData::SetCallerPos( long nNewPos )
     nCallerPos = nNewPos;
 }
 
-//------------------------------------------------------------------------
 
 ScUnoAddInCollection::ScUnoAddInCollection() :
     nFuncCount( 0 ),
@@ -1302,7 +1301,6 @@ bool ScUnoAddInCollection::FillFunctionDescFromData( const ScUnoAddInFuncData& r
 }
 
 
-//------------------------------------------------------------------------
 
 ScUnoAddInCall::ScUnoAddInCall( ScUnoAddInCollection& rColl, const OUString& rName,
                                 long nParamCount ) :

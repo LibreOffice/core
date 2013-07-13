@@ -111,7 +111,6 @@
 
 static sal_uInt16 nIdleCount = 0;
 
-//------------------------------------------------------------------
 
 SFX_IMPL_INTERFACE( ScModule, SfxShell, ScResId(RID_APPTITLE) )
 {
@@ -120,7 +119,6 @@ SFX_IMPL_INTERFACE( ScModule, SfxShell, ScResId(RID_APPTITLE) )
     SFX_STATUSBAR_REGISTRATION( ScResId(SCCFG_STATUSBAR) );     // nur ID wichtig
 }
 
-//------------------------------------------------------------------
 
 ScModule::ScModule( SfxObjectFactory* pFact ) :
     SfxModule( SfxApplication::CreateResManager( "sc" ), false, pFact, NULL ),
@@ -203,7 +201,6 @@ ScModule::~ScModule()
     DeleteCfg();            // wurde mal aus Exit() gerufen
 }
 
-//------------------------------------------------------------------
 void ScModule::ConfigurationChanged( utl::ConfigurationBroadcaster* p, sal_uInt32 )
 {
     if ( p == pColorConfig || p == pAccessOptions )
@@ -330,7 +327,6 @@ void ScModule::Notify( SfxBroadcaster&, const SfxHint& rHint )
     }
 }
 
-//------------------------------------------------------------------
 
 void ScModule::DeleteCfg()
 {
@@ -365,11 +361,9 @@ void ScModule::DeleteCfg()
     }
 }
 
-//------------------------------------------------------------------
 //
 //      von der Applikation verschoben:
 //
-//------------------------------------------------------------------
 
 void ScModule::Execute( SfxRequest& rReq )
 {
@@ -639,7 +633,6 @@ void ScModule::HideDisabledSlots( SfxItemSet& rSet )
 }
 
 
-//------------------------------------------------------------------
 
 void ScModule::ResetDragObject()
 {
@@ -708,14 +701,12 @@ ScDocument* ScModule::GetClipDoc()
     return NULL;
 }
 
-//------------------------------------------------------------------
 
 void ScModule::SetSelectionTransfer( ScSelectionTransferObj* pNew )
 {
     pSelTransfer = pNew;
 }
 
-//------------------------------------------------------------------
 
 void ScModule::InitFormEditData()
 {
@@ -727,7 +718,6 @@ void ScModule::ClearFormEditData()
     DELETEZ( pFormEditData );
 }
 
-//------------------------------------------------------------------
 
 void ScModule::SetViewOptions( const ScViewOptions& rOpt )
 {
@@ -967,11 +957,9 @@ sal_uInt16 ScModule::GetOptDigitLanguage()
                                                              LANGUAGE_SYSTEM;
 }
 
-//------------------------------------------------------------------
 //
 //                          Optionen
 //
-//------------------------------------------------------------------
 
 //
 //      ModifyOptions - Items aus Calc-Options-Dialog
@@ -992,7 +980,6 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
         GetInputOptions();
     OSL_ENSURE( pInputCfg, "InputOptions not initialised :-(" );
 
-    //--------------------------------------------------------------
 
     SfxViewFrame* pViewFrm = SfxViewFrame::Current();
     SfxBindings* pBindings = pViewFrm ? &pViewFrm->GetBindings() : NULL;
@@ -1009,7 +996,6 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
     bool bSaveInputOptions = false;
     bool bCompileErrorCells = false;
 
-    //--------------------------------------------------------------------------
 
     //  SFX_APP()->SetOptions( rOptSet );
 
@@ -1317,7 +1303,6 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
         SFX_APP()->Broadcast( SfxSimpleHint( SID_SCPRINTOPTIONS ) );
     }
 
-    //----------------------------------------------------------
 
     if ( bSaveAppOptions )
         pAppCfg->OptionsChanged();
@@ -1413,11 +1398,9 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
     }
 }
 
-//------------------------------------------------------------------
 //
 //                      Input-Handler
 //
-//------------------------------------------------------------------
 
 ScInputHandler* ScModule::GetInputHdl( ScTabViewShell* pViewSh, sal_Bool bUseRef )
 {
@@ -1524,7 +1507,6 @@ ScInputHandler* ScModule::GetRefInputHdl()
     return pRefInputHandler;
 }
 
-//------------------------------------------------------------------------
 //  Olk's Krempel:
 
 void ScModule::InputGetSelection( xub_StrLen& rStart, xub_StrLen& rEnd )
@@ -1591,11 +1573,9 @@ void ScModule::ActivateInputWindow( const String* pStrFormula, sal_Bool bMatrix 
     }
 }
 
-//------------------------------------------------------------------
 //
 //                  Referenz - Dialoge
 //
-//------------------------------------------------------------------
 
 void ScModule::SetRefDialog( sal_uInt16 nId, sal_Bool bVis, SfxViewFrame* pViewFrm )
 {
@@ -1899,11 +1879,9 @@ void ScModule::EndReference()
     }
 }
 
-//------------------------------------------------------------------
 //
 //                  Idle / Online-Spelling
 //
-//------------------------------------------------------------------
 
 void ScModule::AnythingChanged()
 {
@@ -2210,7 +2188,6 @@ SfxTabPage*  ScModule::CreateTabPage( sal_uInt16 nId, Window* pParent, const Sfx
     return pRet;
 }
 
-//------------------------------------------------------------------
 
 IMPL_LINK( ScModule, CalcFieldValueHdl, EditFieldInfo*, pInfo )
 {

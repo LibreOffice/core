@@ -31,7 +31,6 @@
 using ::formula::FormulaGrammar;
 using namespace ::com::sun::star;
 
-//------------------------------------------------------------------------
 
 sal_Bool ScRangeUtil::MakeArea( const String&   rAreaStr,
                             ScArea&         rArea,
@@ -68,7 +67,6 @@ sal_Bool ScRangeUtil::MakeArea( const String&   rAreaStr,
     return nSuccess;
 }
 
-//------------------------------------------------------------------------
 
 void ScRangeUtil::CutPosString( const String&   theAreaStr,
                                 String&         thePosStr ) const
@@ -87,7 +85,6 @@ void ScRangeUtil::CutPosString( const String&   theAreaStr,
     thePosStr = aPosStr;
 }
 
-//------------------------------------------------------------------------
 
 sal_Bool ScRangeUtil::IsAbsTabArea( const String&   rAreaStr,
                                 ScDocument*     pDoc,
@@ -176,7 +173,6 @@ sal_Bool ScRangeUtil::IsAbsTabArea( const String&   rAreaStr,
     return bStrOk;
 }
 
-//------------------------------------------------------------------------
 
 sal_Bool ScRangeUtil::IsAbsArea( const String&  rAreaStr,
                              ScDocument*    pDoc,
@@ -217,7 +213,6 @@ sal_Bool ScRangeUtil::IsAbsArea( const String&  rAreaStr,
     return bIsAbsArea;
 }
 
-//------------------------------------------------------------------------
 
 sal_Bool ScRangeUtil::IsAbsPos( const String&   rPosStr,
                             ScDocument*     pDoc,
@@ -244,7 +239,6 @@ sal_Bool ScRangeUtil::IsAbsPos( const String&   rPosStr,
     return bIsAbsPos;
 }
 
-//------------------------------------------------------------------------
 
 sal_Bool ScRangeUtil::MakeRangeFromName (
     const String&   rName,
@@ -1023,7 +1017,6 @@ ScArea::ScArea( SCTAB tab,
 {
 }
 
-//------------------------------------------------------------------------
 
 ScArea::ScArea( const ScArea& r ) :
         nTab     ( r.nTab ),
@@ -1032,7 +1025,6 @@ ScArea::ScArea( const ScArea& r ) :
 {
 }
 
-//------------------------------------------------------------------------
 
 ScArea& ScArea::operator=( const ScArea& r )
 {
@@ -1044,7 +1036,6 @@ ScArea& ScArea::operator=( const ScArea& r )
     return *this;
 }
 
-//------------------------------------------------------------------------
 
 sal_Bool ScArea::operator==( const ScArea& r ) const
 {
@@ -1055,7 +1046,6 @@ sal_Bool ScArea::operator==( const ScArea& r ) const
             && (nRowEnd     == r.nRowEnd) );
 }
 
-//------------------------------------------------------------------------
 
 ScAreaNameIterator::ScAreaNameIterator( ScDocument* pDoc ) :
     pRangeName(pDoc->GetRangeName()),

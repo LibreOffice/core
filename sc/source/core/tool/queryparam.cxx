@@ -249,7 +249,6 @@ ScQueryParam::ScQueryParam() :
     Clear();
 }
 
-//------------------------------------------------------------------------
 
 ScQueryParam::ScQueryParam( const ScQueryParam& r ) :
     ScQueryParamBase(r),
@@ -269,13 +268,11 @@ ScQueryParam::ScQueryParam( const ScDBQueryParamInternal& r ) :
 }
 
 
-//------------------------------------------------------------------------
 
 ScQueryParam::~ScQueryParam()
 {
 }
 
-//------------------------------------------------------------------------
 
 void ScQueryParam::Clear()
 {
@@ -300,7 +297,6 @@ void ScQueryParam::ClearDestParams()
     nDestRow = 0;
 }
 
-//------------------------------------------------------------------------
 
 ScQueryParam& ScQueryParam::operator=( const ScQueryParam& r )
 {
@@ -325,7 +321,6 @@ ScQueryParam& ScQueryParam::operator=( const ScQueryParam& r )
     return *this;
 }
 
-//------------------------------------------------------------------------
 
 bool ScQueryParam::operator==( const ScQueryParam& rOther ) const
 {
@@ -365,7 +360,6 @@ bool ScQueryParam::operator==( const ScQueryParam& rOther ) const
     return bEqual;
 }
 
-//------------------------------------------------------------------------
 
 void ScQueryParam::MoveToDest()
 {

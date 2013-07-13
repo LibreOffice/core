@@ -22,7 +22,6 @@
 
 
 
-//------------------------------------------------------------------
 
 #include <vcl/waitobj.hxx>
 #include <comphelper/processfactory.hxx>
@@ -44,7 +43,6 @@ using namespace com::sun::star;
 #include "miscuno.hxx"
 #include "dpsdbtab.hxx"         // ScImportSourceDesc
 
-//-------------------------------------------------------------------------
 
 
 //  entries in the "type" ListBox
@@ -52,7 +50,6 @@ using namespace com::sun::star;
 #define DP_TYPELIST_QUERY   1
 #define DP_TYPELIST_SQLNAT  3
 
-//-------------------------------------------------------------------------
 
 ScDataPilotDatabaseDlg::ScDataPilotDatabaseDlg( Window* pParent ) :
     ModalDialog     ( pParent, ScResId( RID_SCDLG_DAPIDATA ) ),

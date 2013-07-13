@@ -40,17 +40,14 @@
 
 using namespace com::sun::star;
 
-//------------------------------------------------------------------------
 
 
-//------------------------------------------------------------------------
 
 SMART_UNO_IMPLEMENTATION( ScTestAddIn, UsrObject );
 
 #define SCADDIN_SERVICE         L"com.sun.star.sheet.AddIn"
 #define SCTESTADDIN_SERVICE     L"stardiv.one.sheet.DemoAddIn"
 
-//------------------------------------------------------------------------
 
 extern "C" {
 
@@ -108,7 +105,6 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
 
 }   // extern C
 
-//------------------------------------------------------------------------
 
 ScTestAddIn::ScTestAddIn()
 {
@@ -565,7 +561,6 @@ sal_Bool SAL_CALL ScTestAddIn::supportsService( const OUString& ServiceName ) th
     return getSupportedServiceNames_Static();
 }
 
-//------------------------------------------------------------------------
 
 
 

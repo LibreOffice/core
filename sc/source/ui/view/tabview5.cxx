@@ -532,7 +532,6 @@ void ScTabView::DigitLanguageChanged()
             pGridWin[i]->SetDigitLanguage( eNewLang );
 }
 
-//---------------------------------------------------------------
 
 void ScTabView::ScrollToObject( SdrObject* pDrawObj )
 {
@@ -619,7 +618,6 @@ void ScTabView::MakeVisible( const Rectangle& rHMMRect )
     }
 }
 
-//---------------------------------------------------------------
 
 void ScTabView::SetBrushDocument( ScDocument* pNew, bool bLock )
 {

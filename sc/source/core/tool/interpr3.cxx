@@ -45,7 +45,6 @@ using namespace formula;
 const double ScInterpreter::fMaxGammaArgument = 171.624376956302;  // found experimental
 const double fMachEps = ::std::numeric_limits<double>::epsilon();
 
-//-----------------------------------------------------------------------------
 
 class ScDistFunc
 {
@@ -165,9 +164,7 @@ static double lcl_IterateInverse( const ScDistFunc& rFunction, double fAx, doubl
     return fRx;
 }
 
-//-----------------------------------------------------------------------------
 // Allgemeine Funktionen
-//-----------------------------------------------------------------------------
 
 void ScInterpreter::ScNoName()
 {

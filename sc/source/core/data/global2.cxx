@@ -40,7 +40,6 @@ using ::std::vector;
 
 // -----------------------------------------------------------------------
 
-//------------------------------------------------------------------------
 // struct ScImportParam:
 
 ScImportParam::ScImportParam() :
@@ -105,7 +104,6 @@ bool ScImportParam::operator==( const ScImportParam& rOther ) const
     //! nQuerySh und pConnection sind gleich ?
 }
 
-//------------------------------------------------------------------------
 // struct ScConsolidateParam:
 
 ScConsolidateParam::ScConsolidateParam() :
@@ -114,7 +112,6 @@ ScConsolidateParam::ScConsolidateParam() :
     Clear();
 }
 
-//------------------------------------------------------------------------
 
 ScConsolidateParam::ScConsolidateParam( const ScConsolidateParam& r ) :
         nCol(r.nCol),nRow(r.nRow),nTab(r.nTab),
@@ -131,14 +128,12 @@ ScConsolidateParam::ScConsolidateParam( const ScConsolidateParam& r ) :
     }
 }
 
-//------------------------------------------------------------------------
 
 ScConsolidateParam::~ScConsolidateParam()
 {
     ClearDataAreas();
 }
 
-//------------------------------------------------------------------------
 
 void ScConsolidateParam::ClearDataAreas()
 {
@@ -152,7 +147,6 @@ void ScConsolidateParam::ClearDataAreas()
     nDataAreaCount = 0;
 }
 
-//------------------------------------------------------------------------
 
 void ScConsolidateParam::Clear()
 {
@@ -165,7 +159,6 @@ void ScConsolidateParam::Clear()
     eFunction                           = SUBTOTAL_FUNC_SUM;
 }
 
-//------------------------------------------------------------------------
 
 ScConsolidateParam& ScConsolidateParam::operator=( const ScConsolidateParam& r )
 {
@@ -181,7 +174,6 @@ ScConsolidateParam& ScConsolidateParam::operator=( const ScConsolidateParam& r )
     return *this;
 }
 
-//------------------------------------------------------------------------
 
 sal_Bool ScConsolidateParam::operator==( const ScConsolidateParam& r ) const
 {
@@ -206,7 +198,6 @@ sal_Bool ScConsolidateParam::operator==( const ScConsolidateParam& r ) const
     return bEqual;
 }
 
-//------------------------------------------------------------------------
 
 void ScConsolidateParam::SetAreas( ScArea* const* ppAreas, sal_uInt16 nCount )
 {
@@ -220,7 +211,6 @@ void ScConsolidateParam::SetAreas( ScArea* const* ppAreas, sal_uInt16 nCount )
     }
 }
 
-//------------------------------------------------------------------------
 // struct ScSolveParam
 
 ScSolveParam::ScSolveParam()
@@ -228,7 +218,6 @@ ScSolveParam::ScSolveParam()
 {
 }
 
-//------------------------------------------------------------------------
 
 ScSolveParam::ScSolveParam( const ScSolveParam& r )
     :   aRefFormulaCell ( r.aRefFormulaCell ),
@@ -239,7 +228,6 @@ ScSolveParam::ScSolveParam( const ScSolveParam& r )
 {
 }
 
-//------------------------------------------------------------------------
 
 ScSolveParam::ScSolveParam( const ScAddress& rFormulaCell,
                             const ScAddress& rVariableCell,
@@ -250,14 +238,12 @@ ScSolveParam::ScSolveParam( const ScAddress& rFormulaCell,
 {
 }
 
-//------------------------------------------------------------------------
 
 ScSolveParam::~ScSolveParam()
 {
     delete pStrTargetVal;
 }
 
-//------------------------------------------------------------------------
 
 ScSolveParam& ScSolveParam::operator=( const ScSolveParam& r )
 {
@@ -271,7 +257,6 @@ ScSolveParam& ScSolveParam::operator=( const ScSolveParam& r )
     return *this;
 }
 
-//------------------------------------------------------------------------
 
 sal_Bool ScSolveParam::operator==( const ScSolveParam& r ) const
 {
@@ -291,7 +276,6 @@ sal_Bool ScSolveParam::operator==( const ScSolveParam& r ) const
     return bEqual;
 }
 
-//------------------------------------------------------------------------
 // struct ScTabOpParam
 
 ScTabOpParam::ScTabOpParam( const ScTabOpParam& r )
@@ -303,7 +287,6 @@ ScTabOpParam::ScTabOpParam( const ScTabOpParam& r )
 {
 }
 
-//------------------------------------------------------------------------
 
 ScTabOpParam::ScTabOpParam( const ScRefAddress& rFormulaCell,
                             const ScRefAddress& rFormulaEnd,
@@ -318,7 +301,6 @@ ScTabOpParam::ScTabOpParam( const ScRefAddress& rFormulaCell,
 {
 }
 
-//------------------------------------------------------------------------
 
 ScTabOpParam& ScTabOpParam::operator=( const ScTabOpParam& r )
 {
@@ -330,7 +312,6 @@ ScTabOpParam& ScTabOpParam::operator=( const ScTabOpParam& r )
     return *this;
 }
 
-//------------------------------------------------------------------------
 
 sal_Bool ScTabOpParam::operator==( const ScTabOpParam& r ) const
 {

@@ -33,7 +33,6 @@
 
 using namespace com::sun::star;
 
-//------------------------------------------------------------------
 
 sal_Bool ScDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
 {
@@ -67,7 +66,6 @@ sal_Bool ScDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
     return bRet;
 }
 
-//------------------------------------------------------------------
 
 bool ScDocShell::IsEmpty() const
 {
@@ -80,7 +78,6 @@ void ScDocShell::SetEmpty(bool bSet)
     bIsEmpty = bSet;
 }
 
-//------------------------------------------------------------------
 
 void ScDocShell::InitItems()
 {
@@ -153,7 +150,6 @@ void ScDocShell::InitItems()
     }
 }
 
-//------------------------------------------------------------------
 
 void ScDocShell::ResetDrawObjectShell()
 {
@@ -162,7 +158,6 @@ void ScDocShell::ResetDrawObjectShell()
         pDrawLayer->SetObjectShell( NULL );
 }
 
-//------------------------------------------------------------------
 
 void ScDocShell::Activate()
 {
@@ -173,7 +168,6 @@ void ScDocShell::Deactivate()
 {
 }
 
-//------------------------------------------------------------------
 
 
 ScDrawLayer* ScDocShell::MakeDrawLayer()

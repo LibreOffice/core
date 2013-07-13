@@ -61,7 +61,6 @@
 #include "condformatdlg.hxx"
 #include "xmlsourcedlg.hxx"
 
-//------------------------------------------------------------------
 
 void ScTabViewShell::SetCurRefDlgId( sal_uInt16 nNew )
 {

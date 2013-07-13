@@ -35,7 +35,6 @@ using namespace utl;
 using namespace com::sun::star::uno;
 
 
-//------------------------------------------------------------------
 
 TYPEINIT1(ScTpViewItem, SfxPoolItem);
 
@@ -69,7 +68,6 @@ void ScGridOptions::SetDefaults()
     nFldDivisionY = 1;
 }
 
-//------------------------------------------------------------------------
 
 const ScGridOptions& ScGridOptions::operator=( const ScGridOptions& rCpy )
 {
@@ -87,7 +85,6 @@ const ScGridOptions& ScGridOptions::operator=( const ScGridOptions& rCpy )
     return *this;
 }
 
-//------------------------------------------------------------------------
 
 bool ScGridOptions::operator==( const ScGridOptions& rCpy ) const
 {
@@ -113,20 +110,17 @@ ScViewOptions::ScViewOptions()
     SetDefaults();
 }
 
-//------------------------------------------------------------------------
 
 ScViewOptions::ScViewOptions( const ScViewOptions& rCpy )
 {
     *this = rCpy;
 }
 
-//------------------------------------------------------------------------
 
 ScViewOptions::~ScViewOptions()
 {
 }
 
-//------------------------------------------------------------------------
 
 void ScViewOptions::SetDefaults()
 {
@@ -156,7 +150,6 @@ void ScViewOptions::SetDefaults()
     aGridOpt.SetDefaults();
 }
 
-//------------------------------------------------------------------------
 
 Color ScViewOptions::GetGridColor( String* pStrName ) const
 {
@@ -166,7 +159,6 @@ Color ScViewOptions::GetGridColor( String* pStrName ) const
     return aGridCol;
 }
 
-//------------------------------------------------------------------------
 
 const ScViewOptions& ScViewOptions::operator=( const ScViewOptions& rCpy )
 {
@@ -182,7 +174,6 @@ const ScViewOptions& ScViewOptions::operator=( const ScViewOptions& rCpy )
     return *this;
 }
 
-//------------------------------------------------------------------------
 
 int ScViewOptions::operator==( const ScViewOptions& rOpt ) const
 {
@@ -199,7 +190,6 @@ int ScViewOptions::operator==( const ScViewOptions& rOpt ) const
     return bEqual;
 }
 
-//------------------------------------------------------------------------
 
 SvxGridItem* ScViewOptions::CreateGridItem( sal_uInt16 nId /* = SID_ATTR_GRID_OPTIONS */ ) const
 {
@@ -223,7 +213,6 @@ SvxGridItem* ScViewOptions::CreateGridItem( sal_uInt16 nId /* = SID_ATTR_GRID_OP
 //      ScTpViewItem - Daten fuer die ViewOptions-TabPage
 //========================================================================
 
-//------------------------------------------------------------------------
 
 ScTpViewItem::ScTpViewItem( sal_uInt16 nWhichP, const ScViewOptions& rOpt )
     :   SfxPoolItem ( nWhichP ),
@@ -231,7 +220,6 @@ ScTpViewItem::ScTpViewItem( sal_uInt16 nWhichP, const ScViewOptions& rOpt )
 {
 }
 
-//------------------------------------------------------------------------
 
 ScTpViewItem::ScTpViewItem( const ScTpViewItem& rItem )
     :   SfxPoolItem ( rItem ),
@@ -239,20 +227,17 @@ ScTpViewItem::ScTpViewItem( const ScTpViewItem& rItem )
 {
 }
 
-//------------------------------------------------------------------------
 
 ScTpViewItem::~ScTpViewItem()
 {
 }
 
-//------------------------------------------------------------------------
 
 OUString ScTpViewItem::GetValueText() const
 {
     return OUString("ScTpViewItem");
 }
 
-//------------------------------------------------------------------------
 
 int ScTpViewItem::operator==( const SfxPoolItem& rItem ) const
 {
@@ -263,7 +248,6 @@ int ScTpViewItem::operator==( const SfxPoolItem& rItem ) const
     return ( theOptions == rPItem.theOptions );
 }
 
-//------------------------------------------------------------------------
 
 SfxPoolItem* ScTpViewItem::Clone( SfxItemPool * ) const
 {

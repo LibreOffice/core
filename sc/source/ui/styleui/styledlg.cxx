@@ -22,7 +22,6 @@
 
 
 
-//------------------------------------------------------------------
 
 #include "scitems.hxx"
 #include <svx/numinf.hxx>
@@ -114,7 +113,6 @@ ScStyleDlg::ScStyleDlg( Window*             pParent,
             OSL_FAIL( "Family not supported" );
     }
 
-    //--------------------------------------------------------------------
     FreeResource();
 }
 

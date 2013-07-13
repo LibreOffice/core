@@ -783,7 +783,6 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
         }
     }
 
-    //------------------------------------------------------------------
 
     void ScTabViewShell::GetStateTable( SfxItemSet& rSet )
     {

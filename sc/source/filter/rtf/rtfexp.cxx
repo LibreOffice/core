@@ -42,7 +42,6 @@
 #include "stlpool.hxx"
 #include "ftools.hxx"
 
-//------------------------------------------------------------------
 
 FltError ScFormatFilterPluginImpl::ScExportRTF( SvStream& rStrm, ScDocument* pDoc,
         const ScRange& rRange, const CharSet /*eNach*/ )

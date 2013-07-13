@@ -9,7 +9,6 @@
 
 #undef SC_DLLIMPLEMENTATION
 
-//------------------------------------------------------------------
 
 #include "datafdlg.hxx"
 #include "scresid.hxx"
