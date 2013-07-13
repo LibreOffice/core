@@ -131,6 +131,9 @@ published interface XStorable: com::sun::star::uno::XInterface
             if an IO error occurred during save operation
             (may the location is unknown)
 
+        @param sURL
+            specifies the location where to store the object
+
         @param lArguments
             optional parameters for saving
             (see com::sun::star::document::MediaDescriptor for further details)
