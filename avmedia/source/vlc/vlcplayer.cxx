@@ -51,7 +51,7 @@ void SAL_CALL VLCPlayer::start()
 void SAL_CALL VLCPlayer::stop()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-    libvlc_media_player_stop( mPlayer.get() );
+    libvlc_media_player_pause( mPlayer.get() );
 }
 
 ::sal_Bool SAL_CALL VLCPlayer::isPlaying()
@@ -69,6 +69,12 @@ double SAL_CALL VLCPlayer::getDuration()
 void SAL_CALL VLCPlayer::setMediaTime( double fTime )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
+
+    if ( fTime < 0.00000001 && !libvlc_media_player_is_playing( mPlayer.get() ) )
+    {
+        libvlc_media_player_stop( mPlayer.get() );
+    }
+
     libvlc_media_player_set_time( mPlayer.get(), fTime * MS_IN_SEC );
 }
 
