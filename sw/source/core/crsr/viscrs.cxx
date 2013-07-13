@@ -55,22 +55,22 @@ MapMode* SwSelPaintRects::pMapMode = 0;
 // -----  Starting from here: classes / methods for the non-text-cursor -----
 
 SwVisCrsr::SwVisCrsr( const SwCrsrShell * pCShell )
-    : pCrsrShell( pCShell )
+    : m_pCrsrShell( pCShell )
 {
-    pCShell->GetWin()->SetCursor( &aTxtCrsr );
-    bIsVisible = aTxtCrsr.IsVisible();
-    bIsDragCrsr = false;
-    aTxtCrsr.SetWidth( 0 );
+    pCShell->GetWin()->SetCursor( &m_aTxtCrsr );
+    m_bIsVisible = m_aTxtCrsr.IsVisible();
+    m_bIsDragCrsr = false;
+    m_aTxtCrsr.SetWidth( 0 );
 }
 
 
 
 SwVisCrsr::~SwVisCrsr()
 {
-    if( bIsVisible && aTxtCrsr.IsVisible() )
-        aTxtCrsr.Hide();
+    if( m_bIsVisible && m_aTxtCrsr.IsVisible() )
+        m_aTxtCrsr.Hide();
 
-    pCrsrShell->GetWin()->SetCursor( 0 );
+    m_pCrsrShell->GetWin()->SetCursor( 0 );
 }
 
 
@@ -78,12 +78,12 @@ SwVisCrsr::~SwVisCrsr()
 
 void SwVisCrsr::Show()
 {
-    if( !bIsVisible )
+    if( !m_bIsVisible )
     {
-        bIsVisible = true;
+        m_bIsVisible = true;
 
         // display at all?
-        if( pCrsrShell->VisArea().IsOver( pCrsrShell->m_aCharRect ) )
+        if( m_pCrsrShell->VisArea().IsOver( m_pCrsrShell->m_aCharRect ) )
             _SetPosAndShow();
     }
 }
@@ -92,55 +92,55 @@ void SwVisCrsr::Show()
 
 void SwVisCrsr::Hide()
 {
-    if( bIsVisible )
+    if( m_bIsVisible )
     {
-        bIsVisible = false;
+        m_bIsVisible = false;
 
-        if( aTxtCrsr.IsVisible() )      // Shouldn't the flags be in effect?
-            aTxtCrsr.Hide();
+        if( m_aTxtCrsr.IsVisible() )      // Shouldn't the flags be in effect?
+            m_aTxtCrsr.Hide();
     }
 }
 
 void SwVisCrsr::_SetPosAndShow()
 {
     SwRect aRect;
-    long nTmpY = pCrsrShell->m_aCrsrHeight.getY();
+    long nTmpY = m_pCrsrShell->m_aCrsrHeight.getY();
     if( 0 > nTmpY )
     {
         nTmpY = -nTmpY;
-        aTxtCrsr.SetOrientation( 900 );
-        aRect = SwRect( pCrsrShell->m_aCharRect.Pos(),
-           Size( pCrsrShell->m_aCharRect.Height(), nTmpY ) );
-        aRect.Pos().setX(aRect.Pos().getX() + pCrsrShell->m_aCrsrHeight.getX());
-        if( pCrsrShell->IsOverwriteCrsr() )
+        m_aTxtCrsr.SetOrientation( 900 );
+        aRect = SwRect( m_pCrsrShell->m_aCharRect.Pos(),
+           Size( m_pCrsrShell->m_aCharRect.Height(), nTmpY ) );
+        aRect.Pos().setX(aRect.Pos().getX() + m_pCrsrShell->m_aCrsrHeight.getX());
+        if( m_pCrsrShell->IsOverwriteCrsr() )
             aRect.Pos().setY(aRect.Pos().getY() + aRect.Width());
     }
     else
     {
-        aTxtCrsr.SetOrientation( 0 );
-        aRect = SwRect( pCrsrShell->m_aCharRect.Pos(),
-           Size( pCrsrShell->m_aCharRect.Width(), nTmpY ) );
-        aRect.Pos().setY(aRect.Pos().getY() + pCrsrShell->m_aCrsrHeight.getX());
+        m_aTxtCrsr.SetOrientation( 0 );
+        aRect = SwRect( m_pCrsrShell->m_aCharRect.Pos(),
+           Size( m_pCrsrShell->m_aCharRect.Width(), nTmpY ) );
+        aRect.Pos().setY(aRect.Pos().getY() + m_pCrsrShell->m_aCrsrHeight.getX());
     }
 
     // check if cursor should show the current cursor bidi level
-    aTxtCrsr.SetDirection( CURSOR_DIRECTION_NONE );
-    const SwCursor* pTmpCrsr = pCrsrShell->_GetCrsr();
+    m_aTxtCrsr.SetDirection( CURSOR_DIRECTION_NONE );
+    const SwCursor* pTmpCrsr = m_pCrsrShell->_GetCrsr();
 
-    if ( pTmpCrsr && !pCrsrShell->IsOverwriteCrsr() )
+    if ( pTmpCrsr && !m_pCrsrShell->IsOverwriteCrsr() )
     {
         SwNode& rNode = pTmpCrsr->GetPoint()->nNode.GetNode();
         if( rNode.IsTxtNode() )
         {
             const SwTxtNode& rTNd = *rNode.GetTxtNode();
-            const SwFrm* pFrm = rTNd.getLayoutFrm( pCrsrShell->GetLayout(), 0, 0, sal_False );
+            const SwFrm* pFrm = rTNd.getLayoutFrm( m_pCrsrShell->GetLayout(), 0, 0, sal_False );
             if ( pFrm )
             {
                 const SwScriptInfo* pSI = ((SwTxtFrm*)pFrm)->GetScriptInfo();
                  // cursor level has to be shown
                 if ( pSI && pSI->CountDirChg() > 1 )
                 {
-                    aTxtCrsr.SetDirection(
+                    m_aTxtCrsr.SetDirection(
                         ( pTmpCrsr->GetCrsrBidiLevel() % 2 ) ?
                           CURSOR_DIRECTION_RTL :
                           CURSOR_DIRECTION_LTR );
@@ -148,7 +148,7 @@ void SwVisCrsr::_SetPosAndShow()
 
                 if ( pFrm->IsRightToLeft() )
                 {
-                    const OutputDevice *pOut = pCrsrShell->GetOut();
+                    const OutputDevice *pOut = m_pCrsrShell->GetOut();
                     if ( pOut )
                     {
                         long nSize = pOut->GetSettings().GetStyleSettings().GetCursorSize();
@@ -163,30 +163,30 @@ void SwVisCrsr::_SetPosAndShow()
 
     if( aRect.Height() )
     {
-        ::SwCalcPixStatics( pCrsrShell->GetOut() );
-        ::SwAlignRect( aRect, (ViewShell*)pCrsrShell );
+        ::SwCalcPixStatics( m_pCrsrShell->GetOut() );
+        ::SwAlignRect( aRect, (ViewShell*)m_pCrsrShell );
     }
-    if( !pCrsrShell->IsOverwriteCrsr() || bIsDragCrsr ||
-        pCrsrShell->IsSelection() )
+    if( !m_pCrsrShell->IsOverwriteCrsr() || m_bIsDragCrsr ||
+        m_pCrsrShell->IsSelection() )
         aRect.Width( 0 );
 
-    aTxtCrsr.SetSize( aRect.SSize() );
+    m_aTxtCrsr.SetSize( aRect.SSize() );
 
-    aTxtCrsr.SetPos( aRect.Pos() );
-    if ( !pCrsrShell->IsCrsrReadonly()  || pCrsrShell->GetViewOptions()->IsSelectionInReadonly() )
+    m_aTxtCrsr.SetPos( aRect.Pos() );
+    if ( !m_pCrsrShell->IsCrsrReadonly()  || m_pCrsrShell->GetViewOptions()->IsSelectionInReadonly() )
     {
-        if ( pCrsrShell->GetDrawView() )
-            ((SwDrawView*)pCrsrShell->GetDrawView())->SetAnimationEnabled(
-                    !pCrsrShell->IsSelection() );
+        if ( m_pCrsrShell->GetDrawView() )
+            ((SwDrawView*)m_pCrsrShell->GetDrawView())->SetAnimationEnabled(
+                    !m_pCrsrShell->IsSelection() );
 
-        sal_uInt16 nStyle = bIsDragCrsr ? CURSOR_SHADOW : 0;
-        if( nStyle != aTxtCrsr.GetStyle() )
+        sal_uInt16 nStyle = m_bIsDragCrsr ? CURSOR_SHADOW : 0;
+        if( nStyle != m_aTxtCrsr.GetStyle() )
         {
-            aTxtCrsr.SetStyle( nStyle );
-            aTxtCrsr.SetWindow( bIsDragCrsr ? pCrsrShell->GetWin() : 0 );
+            m_aTxtCrsr.SetStyle( nStyle );
+            m_aTxtCrsr.SetWindow( m_bIsDragCrsr ? m_pCrsrShell->GetWin() : 0 );
         }
 
-        aTxtCrsr.Show();
+        m_aTxtCrsr.Show();
     }
 }
 

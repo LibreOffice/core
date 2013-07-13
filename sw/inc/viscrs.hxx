@@ -34,11 +34,11 @@ class SwVisCrsr
     friend void _InitCore();
     friend void _FinitCore();
 
-    bool bIsVisible : 1;
-    bool bIsDragCrsr : 1;
+    bool m_bIsVisible;
+    bool m_bIsDragCrsr;
 
-    Cursor aTxtCrsr;
-    const SwCrsrShell* pCrsrShell;
+    Cursor m_aTxtCrsr;
+    const SwCrsrShell* m_pCrsrShell;
 
     void _SetPosAndShow();
 
@@ -49,8 +49,8 @@ public:
     void Show();
     void Hide();
 
-    bool IsVisible() const { return bIsVisible; }
-    void SetDragCrsr( bool bFlag = true ) { bIsDragCrsr = bFlag; }
+    bool IsVisible() const { return m_bIsVisible; }
+    void SetDragCrsr( bool bFlag = true ) { m_bIsDragCrsr = bFlag; }
 };
 
 
