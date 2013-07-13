@@ -205,15 +205,15 @@
                         <property name="halign">end</property>
                         <property name="entry_text_column">0</property>
                         <property name="id_column">1</property>
+                        <items>
+                          <item translatable="yes">RGB</item>
+                          <item translatable="yes">CMYK</item>
+                        </items>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="modellb-atkobject">
                             <property name="AtkObject::accessible-name" translatable="yes">Color Mode</property>
                           </object>
                         </child>
-                        <items>
-                          <item translatable="yes">RGB</item>
-                          <item translatable="yes">CMYK</item>
-                        </items>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
