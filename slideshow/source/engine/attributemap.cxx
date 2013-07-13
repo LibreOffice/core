@@ -41,7 +41,7 @@ namespace slideshow
 
                 String entries MUST BE SORTED in ascending order!
             */
-            static AnimateAttributeMap::MapEntry lcl_attributeMap[] =
+            static const AnimateAttributeMap::MapEntry lcl_attributeMap[] =
                 {
                     { "charcolor", ATTRIBUTE_CHAR_COLOR },
                     { "charfontname", ATTRIBUTE_CHAR_FONT_NAME },
@@ -69,7 +69,7 @@ namespace slideshow
                     { "y", ATTRIBUTE_POS_Y }
                 };
 
-            static AnimateAttributeMap aMap( lcl_attributeMap,
+            static const AnimateAttributeMap aMap( lcl_attributeMap,
                                              SAL_N_ELEMENTS(lcl_attributeMap),
                                              false );
 

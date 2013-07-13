@@ -102,7 +102,7 @@ OUString GetCommandContextByIndex( sal_Int16 nIndex )
 // Globals ******************************************************************
 
 
-CommandStruct SwCondCollItem::aCmds[] =
+const CommandStruct SwCondCollItem::aCmds[] =
 {
     { PARA_IN_TABLEHEAD,    0 },
     { PARA_IN_TABLEBODY,    0 },

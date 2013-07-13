@@ -175,7 +175,7 @@ namespace ww
             return stiUser;
         else
         {
-            static sti aMapping[] =
+            static const sti aMapping[] =
             {
                 stiNil, stiAtnRef, stiAtnText, stiToc8, stiToc7, stiToc6,
                 stiToc5, stiToc4, stiToc3, stiToc2, stiToc1, stiIndex7,

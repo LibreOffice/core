@@ -63,7 +63,7 @@ SwNumFmt* SwNumRule::aLabelAlignmentBaseFmts[ RULE_END ][ MAXLEVEL ] = {
 char sOutline[] = "Outline";
 char* SwNumRule::pDefOutlineName = sOutline;
 
-sal_uInt16 SwNumRule::aDefNumIndents[ MAXLEVEL ] = {
+const sal_uInt16 SwNumRule::aDefNumIndents[ MAXLEVEL ] = {
 //inch:   0,5  1,0  1,5  2,0   2,5   3,0   3,5   4,0   4,5   5,0
         1440/4, 1440/2, 1440*3/4, 1440, 1440*5/4, 1440*3/2, 1440*7/4, 1440*2,
         1440*9/4, 1440*5/2

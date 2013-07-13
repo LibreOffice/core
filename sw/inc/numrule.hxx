@@ -111,7 +111,7 @@ private:
     friend void _FinitCore();
 
     static SwNumFmt* aBaseFmts [ RULE_END ][ MAXLEVEL ];
-    static sal_uInt16 aDefNumIndents[ MAXLEVEL ];
+    static const sal_uInt16 aDefNumIndents[ MAXLEVEL ];
     /// default list level properties for position-and-space mode LABEL_ALIGNMENT
     static SwNumFmt* aLabelAlignmentBaseFmts [ RULE_END ][ MAXLEVEL ];
     static sal_uInt16 nRefCount;

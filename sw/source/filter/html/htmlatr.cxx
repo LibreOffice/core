@@ -317,7 +317,7 @@ SwHTMLFmtInfo::SwHTMLFmtInfo( const SwFmt *pF, SwDoc *pDoc, SwDoc *pTemplate,
         {
             // We have to add hard attributes for any script dependent
             // item that is not accessed by the style
-            static sal_uInt16 aWhichIds[3][4] =
+            static const sal_uInt16 aWhichIds[3][4] =
             {
                 { RES_CHRATR_FONT, RES_CHRATR_FONTSIZE,
                     RES_CHRATR_POSTURE, RES_CHRATR_WEIGHT },
@@ -419,7 +419,7 @@ SwHTMLFmtInfo::SwHTMLFmtInfo( const SwFmt *pF, SwDoc *pDoc, SwDoc *pTemplate,
             pItemSet->Put( rLang );
         }
 
-        static sal_uInt16 aWhichIds[3] =
+        static const sal_uInt16 aWhichIds[3] =
             { RES_CHRATR_LANGUAGE, RES_CHRATR_CJK_LANGUAGE,
                 RES_CHRATR_CTL_LANGUAGE };
         for( sal_uInt16 i=0; i<3; i++ )
@@ -861,7 +861,7 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
 
     if( rInfo.pItemSet )
     {
-        static sal_uInt16 aWhichIds[3] = { RES_CHRATR_LANGUAGE, RES_CHRATR_CJK_LANGUAGE, RES_CHRATR_CTL_LANGUAGE };
+        static const sal_uInt16 aWhichIds[3] = { RES_CHRATR_LANGUAGE, RES_CHRATR_CJK_LANGUAGE, RES_CHRATR_CTL_LANGUAGE };
 
         for( sal_uInt16 i=0; i<3; i++ )
         {

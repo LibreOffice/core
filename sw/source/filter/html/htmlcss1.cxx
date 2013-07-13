@@ -194,7 +194,7 @@ sal_Bool SwCSS1Parser::SetFmtBreak( SfxItemSet& rItemSet,
 static void SetCharFmtAttrs( SwCharFmt *pCharFmt, SfxItemSet& rItemSet )
 {
     const SfxPoolItem *pItem;
-    static sal_uInt16 aWhichIds[3] = { RES_CHRATR_FONTSIZE,RES_CHRATR_CJK_FONTSIZE,
+    static const sal_uInt16 aWhichIds[3] = { RES_CHRATR_FONTSIZE,RES_CHRATR_CJK_FONTSIZE,
                                    RES_CHRATR_CTL_FONTSIZE };
        for( sal_uInt16 i=0; i<3; i++ )
     {
@@ -320,7 +320,7 @@ static void SetTxtCollAttrs( SwTxtFmtColl *pColl, SfxItemSet& rItemSet,
         rItemSet.Put( aULItem );
     }
 
-    static sal_uInt16 aWhichIds[3] = { RES_CHRATR_FONTSIZE,RES_CHRATR_CJK_FONTSIZE,
+    static const sal_uInt16 aWhichIds[3] = { RES_CHRATR_FONTSIZE,RES_CHRATR_CJK_FONTSIZE,
                                    RES_CHRATR_CTL_FONTSIZE };
        for( sal_uInt16 i=0; i<3; i++ )
     {
@@ -660,7 +660,7 @@ extern bool swhtml_css1atr_equalFontItems( const SfxPoolItem& r1, const SfxPoolI
 static void RemoveScriptItems( SfxItemSet& rItemSet, sal_uInt16 nScript,
                                const SfxItemSet *pParentItemSet = 0 )
 {
-    static sal_uInt16 aWhichIds[3][5] =
+    static const sal_uInt16 aWhichIds[3][5] =
     {
         { RES_CHRATR_FONT, RES_CHRATR_FONTSIZE, RES_CHRATR_LANGUAGE,
             RES_CHRATR_POSTURE, RES_CHRATR_WEIGHT },
@@ -2340,7 +2340,7 @@ static void lcl_swcss1_setEncoding( SwFmt& rFmt, rtl_TextEncoding eEnc )
         return;
 
     const SfxItemSet& rItemSet = rFmt.GetAttrSet();
-    static sal_uInt16 aWhichIds[3] = { RES_CHRATR_FONT, RES_CHRATR_CJK_FONT,
+    static const sal_uInt16 aWhichIds[3] = { RES_CHRATR_FONT, RES_CHRATR_CJK_FONT,
                                    RES_CHRATR_CTL_FONT };
     const SfxPoolItem *pItem;
     for( sal_uInt16 i=0; i<3; i++ )
@@ -2366,7 +2366,7 @@ void SwCSS1Parser::SetDfltEncoding( rtl_TextEncoding eEnc )
         if( bIsNewDoc )
         {
             // Set new encoding as pool default
-            static sal_uInt16 aWhichIds[3] = { RES_CHRATR_FONT, RES_CHRATR_CJK_FONT,
+            static const sal_uInt16 aWhichIds[3] = { RES_CHRATR_FONT, RES_CHRATR_CJK_FONT,
                                            RES_CHRATR_CTL_FONT };
             sal_uInt16 i;
             for( i=0; i<3; i++ )

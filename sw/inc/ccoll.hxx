@@ -60,7 +60,7 @@ OUString   GetCommandContextByIndex( sal_Int16 nIndex );
 
 class SW_DLLPUBLIC SwCondCollItem : public SfxPoolItem
 {
-    static CommandStruct        aCmds[COND_COMMAND_COUNT];
+    static const CommandStruct  aCmds[COND_COMMAND_COUNT];
 
     String                      sStyles[COND_COMMAND_COUNT];
 

@@ -255,7 +255,7 @@ private:
         typedef ::canvas::tools::ValueMap< sal_Int16 > PropMapT;
 
         // fixed PropertyValue map
-        static PropMapT::MapEntry lcl_propertyMap[] =
+        static const PropMapT::MapEntry lcl_propertyMap[] =
             {
                 {"Height",               100},
                 {"MinimalFrameNumber",   50},
@@ -265,7 +265,7 @@ private:
                 {"Width",                100}
             };
 
-        static PropMapT aMap( lcl_propertyMap,
+        static const PropMapT aMap( lcl_propertyMap,
                               SAL_N_ELEMENTS(lcl_propertyMap),
                               true );
 

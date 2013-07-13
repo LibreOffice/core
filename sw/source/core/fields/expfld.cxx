@@ -872,7 +872,7 @@ xub_StrLen SwGetExpField::GetReferenceTextPos( const SwFmtFld& rFmt, SwDoc& rDoc
         // now check if sNodeText starts with a non-alphanumeric character plus blanks
         sal_uInt16 nSrcpt = g_pBreakIt->GetRealScriptOfText( sNodeText, 0 );
 
-        static sal_uInt16 nIds[] =
+        static const sal_uInt16 nIds[] =
         {
             RES_CHRATR_LANGUAGE, RES_CHRATR_LANGUAGE,
             RES_CHRATR_FONT, RES_CHRATR_FONT,

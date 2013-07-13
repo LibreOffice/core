@@ -729,7 +729,7 @@ struct value
                     }
                     else
                     {
-                        static char cvcon[] = "b\bf\fn\nr\rt\tv\v''\"\"??\\\\";
+                        static const char cvcon[] = "b\bf\fn\nr\rt\tv\v''\"\"??\\\\";
                         static size_t cvlen = sizeof(cvcon) - 1;
 
                         size_t j;

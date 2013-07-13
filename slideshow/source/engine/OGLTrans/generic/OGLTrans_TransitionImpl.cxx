@@ -292,7 +292,7 @@ void Iris::display(double nTime, double SlideWidth, double SlideHeight, double D
 
 void Iris::prepare()
 {
-    static GLubyte img[3] = { 80, 80, 80 };
+    static const GLubyte img[3] = { 80, 80, 80 };
 
     glGenTextures(1, &maTexture);
     glBindTexture(GL_TEXTURE_2D, maTexture);

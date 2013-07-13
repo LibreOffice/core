@@ -112,7 +112,7 @@ typedef std::vector<PropValData*> PropValDataArr;
 
 const SfxItemPropertySet* GetFootnoteSet()
 {
-    static SfxItemPropertyMapEntry aFootnoteMap_Impl[] =
+    static const SfxItemPropertyMapEntry aFootnoteMap_Impl[] =
     {
         { SW_PROP_NAME(UNO_NAME_ANCHOR_CHAR_STYLE_NAME),WID_ANCHOR_CHARACTER_STYLE, &::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
         { SW_PROP_NAME(UNO_NAME_BEGIN_NOTICE),          WID_BEGIN_NOTICE,       &::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
@@ -128,13 +128,13 @@ const SfxItemPropertySet* GetFootnoteSet()
         { SW_PROP_NAME(UNO_NAME_SUFFIX),                WID_SUFFIX,             &::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
         {0,0,0,0,0,0}
     };
-    static SfxItemPropertySet aFootnoteSet_Impl(aFootnoteMap_Impl);
+    static const SfxItemPropertySet aFootnoteSet_Impl(aFootnoteMap_Impl);
     return &aFootnoteSet_Impl;
 }
 
 const SfxItemPropertySet* GetEndnoteSet()
 {
-    static SfxItemPropertyMapEntry aEndnoteMap_Impl[] =
+    static const SfxItemPropertyMapEntry aEndnoteMap_Impl[] =
     {
         { SW_PROP_NAME(UNO_NAME_ANCHOR_CHAR_STYLE_NAME),WID_ANCHOR_CHARACTER_STYLE, &::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
         { SW_PROP_NAME(UNO_NAME_CHAR_STYLE_NAME),       WID_CHARACTER_STYLE,    &::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
@@ -146,13 +146,13 @@ const SfxItemPropertySet* GetEndnoteSet()
         { SW_PROP_NAME(UNO_NAME_SUFFIX),                WID_SUFFIX,     &::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
         {0,0,0,0,0,0}
     };
-    static SfxItemPropertySet aEndnoteSet_Impl(aEndnoteMap_Impl);
+    static const SfxItemPropertySet aEndnoteSet_Impl(aEndnoteMap_Impl);
     return &aEndnoteSet_Impl;
 }
 
 const SfxItemPropertySet* GetNumberingRulesSet()
 {
-    static SfxItemPropertyMapEntry aNumberingRulesMap_Impl[] =
+    static const SfxItemPropertyMapEntry aNumberingRulesMap_Impl[] =
     {
         { SW_PROP_NAME(UNO_NAME_IS_ABSOLUTE_MARGINS),       WID_IS_ABS_MARGINS, &::getBooleanCppuType(),            PROPERTY_NONE,     0},
         { SW_PROP_NAME(UNO_NAME_IS_AUTOMATIC),              WID_IS_AUTOMATIC,   &::getBooleanCppuType(),            PROPERTY_NONE,     0},
@@ -162,7 +162,7 @@ const SfxItemPropertySet* GetNumberingRulesSet()
         { SW_PROP_NAME(UNO_NAME_DEFAULT_LIST_ID),           WID_DEFAULT_LIST_ID, &::getCppuType((const OUString*)0), PropertyAttribute::READONLY, 0},
         {0,0,0,0,0,0}
     };
-    static SfxItemPropertySet  aNumberingRulesSet_Impl( aNumberingRulesMap_Impl );
+    static const SfxItemPropertySet  aNumberingRulesSet_Impl( aNumberingRulesMap_Impl );
     return &aNumberingRulesSet_Impl;
 }
 
@@ -179,7 +179,7 @@ const SfxItemPropertySet* GetNumberingRulesSet()
 
 const SfxItemPropertySet* GetLineNumberingSet()
 {
-    static SfxItemPropertyMapEntry aLineNumberingMap_Impl[] =
+    static const SfxItemPropertyMapEntry aLineNumberingMap_Impl[] =
     {
         { SW_PROP_NAME(UNO_NAME_CHAR_STYLE_NAME),         WID_CHARACTER_STYLE,    &::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
         { SW_PROP_NAME(UNO_NAME_COUNT_EMPTY_LINES),       WID_COUNT_EMPTY_LINES , &::getBooleanCppuType(),PROPERTY_NONE,     0},
@@ -194,7 +194,7 @@ const SfxItemPropertySet* GetLineNumberingSet()
         { SW_PROP_NAME(UNO_NAME_SEPARATOR_INTERVAL),      WID_SEPARATOR_INTERVAL, &::getCppuType((const sal_Int16*)0),PROPERTY_NONE,     0},
         {0,0,0,0,0,0}
     };
-    static SfxItemPropertySet aLineNumberingSet_Impl(aLineNumberingMap_Impl);
+    static const SfxItemPropertySet aLineNumberingSet_Impl(aLineNumberingMap_Impl);
     return &aLineNumberingSet_Impl;
 }
 

@@ -736,7 +736,7 @@ IMAGE_SETEVENT:
 
         {
             const SvxMacro *pMacro;
-            static sal_uInt16 aEvents[] = {
+            static const sal_uInt16 aEvents[] = {
                 SFX_EVENT_MOUSEOVER_OBJECT,
                 SFX_EVENT_MOUSECLICK_OBJECT,
                 SFX_EVENT_MOUSEOUT_OBJECT,
@@ -944,7 +944,7 @@ void SwHTMLParser::InsertBodyOptions()
                                        &aItemSet );
 
         const SfxPoolItem *pItem;
-        static sal_uInt16 aWhichIds[3] = { RES_CHRATR_FONTSIZE,
+        static const sal_uInt16 aWhichIds[3] = { RES_CHRATR_FONTSIZE,
                                        RES_CHRATR_CJK_FONTSIZE,
                                        RES_CHRATR_CTL_FONTSIZE };
         for( sal_uInt16 i=0; i<3; i++ )

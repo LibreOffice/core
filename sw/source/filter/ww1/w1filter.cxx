@@ -1347,7 +1347,7 @@ SvxFontItem Ww1Fonts::GetFont(sal_uInt16 nFCode)
             aName = String( (sal_Char*)pF->szFfnGet(),
                             RTL_TEXTENCODING_MS_1252 );
         // Pitch .............................................
-            static FontPitch ePitchA[] =
+            static const FontPitch ePitchA[] =
             {
                 PITCH_DONTKNOW, PITCH_FIXED, PITCH_VARIABLE, PITCH_DONTKNOW
             };
@@ -1361,7 +1361,7 @@ SvxFontItem Ww1Fonts::GetFont(sal_uInt16 nFCode)
                 eCharSet = RTL_TEXTENCODING_SYMBOL;
         // FontFamily ........................................
             sal_uInt16 b = pF->ffGet();
-            static FontFamily eFamilyA[] =
+            static const FontFamily eFamilyA[] =
             {
                 FAMILY_DONTKNOW, FAMILY_ROMAN, FAMILY_SWISS, FAMILY_MODERN,
                 FAMILY_SCRIPT, FAMILY_DECORATIVE

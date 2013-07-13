@@ -1243,7 +1243,7 @@ void SwHTMLWriter::PrepareFontList( const SvxFontItem& rFontItem,
 sal_Bool SwHTMLWriter::HasScriptDependentItems( const SfxItemSet& rItemSet,
                                                  sal_Bool bCheckDropCap )
 {
-    static sal_uInt16 aWhichIds[] =
+    static const sal_uInt16 aWhichIds[] =
     {
         RES_CHRATR_FONT,        RES_CHRATR_CJK_FONT,        RES_CHRATR_CTL_FONT,
         RES_CHRATR_FONTSIZE,    RES_CHRATR_CJK_FONTSIZE,    RES_CHRATR_CTL_FONTSIZE,

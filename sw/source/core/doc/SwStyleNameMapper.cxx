@@ -1079,7 +1079,7 @@ const String SwStyleNameMapper::GetSpecialExtraProgName( const String& rExtraUIN
     String aRes = rExtraUIName;
     bool bChgName = false;
     const boost::ptr_vector<String>& rExtraArr(GetExtraUINameArray());
-    static sal_uInt16 nIds[] =
+    static const sal_uInt16 nIds[] =
     {
         RES_POOLCOLL_LABEL_DRAWING - RES_POOLCOLL_EXTRA_BEGIN,
         RES_POOLCOLL_LABEL_ABB - RES_POOLCOLL_EXTRA_BEGIN,
@@ -1106,7 +1106,7 @@ const String SwStyleNameMapper::GetSpecialExtraUIName( const String& rExtraProgN
     String aRes = rExtraProgName;
     bool bChgName = false;
     const boost::ptr_vector<String>& rExtraArr(GetExtraProgNameArray());
-    static sal_uInt16 nIds[] =
+    static const sal_uInt16 nIds[] =
     {
         RES_POOLCOLL_LABEL_DRAWING - RES_POOLCOLL_EXTRA_BEGIN,
         RES_POOLCOLL_LABEL_ABB - RES_POOLCOLL_EXTRA_BEGIN,
