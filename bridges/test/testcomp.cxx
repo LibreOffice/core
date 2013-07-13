@@ -254,19 +254,16 @@ void ServiceImpl::async() throw(::com::sun::star::uno::RuntimeException)
 {}
 
 // XServiceInfo
-//__________________________________________________________________________________________________
 OUString ServiceImpl::getImplementationName()
     throw (RuntimeException)
 {
     return OUString( );
 }
-//__________________________________________________________________________________________________
 sal_Bool ServiceImpl::supportsService( const OUString & /* rServiceName */)
     throw (RuntimeException)
 {
     return sal_False;
 }
-//__________________________________________________________________________________________________
 Sequence< OUString > ServiceImpl::getSupportedServiceNames()
     throw (RuntimeException)
 {
@@ -667,9 +664,7 @@ void testRemote( const Reference< XInterface > &rRemote )
     printf( "Testing exception remote ...\n" );
     testException( rRCallMe );
 
-      //--------------------
       // Test attributes
-      //----------------------
        OUString ow( "dum didel dum dideldei" );
        rLCallMe->setsAttribute( ow );
        OSL_ASSERT( rLCallMe->getsAttribute() == ow );
@@ -677,15 +672,11 @@ void testRemote( const Reference< XInterface > &rRemote )
          rRCallMe->setsAttribute( ow );
          OSL_ASSERT( rRCallMe->getsAttribute() == ow );
 
-    //-------------------
     // Performance test
-    //-------------------
     testPerformance( rRCallMe , rLCallMe );
      testOnewayPerformanceOnTwoInterfaces( rRFact->createCallMe(), rRCallMe );
 
-     //----------------
      // Test sequence
-     //----------------
        testSequenceOfCalls( rRCallMe );
 
 
@@ -735,9 +726,7 @@ void testRemote( const Reference< XInterface > &rRemote )
      // test empty references
      rRTest->setIn( Reference < XCallMe > () );
 
-       //--------------------------------
        // test thread deadlocking
-       //--------------------------------
       rLCallMe->callAgain( rRCallMe, 20 );
 
 }

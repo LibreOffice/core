@@ -51,7 +51,6 @@ namespace CPPU_CURRENT_NAMESPACE
     {
     }
 
-    //===================================================================
     static OUString toUNOname( char const * p ) SAL_THROW(())
     {
 #if OSL_DEBUG_LEVEL > 1
@@ -89,7 +88,6 @@ namespace CPPU_CURRENT_NAMESPACE
 #endif
     }
 
-    //=====================================================================
     class RTTI
     {
         typedef boost::unordered_map< OUString, type_info *, OUStringHash > t_rtti_map;
@@ -108,14 +106,12 @@ namespace CPPU_CURRENT_NAMESPACE
 
         type_info * getRTTI(typelib_CompoundTypeDescription *) SAL_THROW(());
     };
-    //____________________________________________________________________
     RTTI::RTTI() SAL_THROW(())
 #ifndef ANDROID
         : m_hApp( dlopen( 0, RTLD_LAZY ) )
 #endif
     {
     }
-    //____________________________________________________________________
     RTTI::~RTTI() SAL_THROW(())
     {
 #ifndef ANDROID
@@ -123,7 +119,6 @@ namespace CPPU_CURRENT_NAMESPACE
 #endif
     }
 
-    //____________________________________________________________________
     type_info * RTTI::getRTTI( typelib_CompoundTypeDescription *pTypeDescr ) SAL_THROW(())
     {
         type_info * rtti;
@@ -220,7 +215,6 @@ namespace CPPU_CURRENT_NAMESPACE
         return rtti;
     }
 
-    //------------------------------------------------------------------
     static void deleteException( void * pExc )
     {
         __cxa_exception const * header = ((__cxa_exception const *)pExc - 1);
@@ -235,7 +229,6 @@ namespace CPPU_CURRENT_NAMESPACE
         }
     }
 
-    //==================================================================
     void raiseException( uno_Any * pUnoExc, uno_Mapping * pUno2Cpp )
     {
 #if OSL_DEBUG_LEVEL > 1
@@ -308,7 +301,6 @@ namespace CPPU_CURRENT_NAMESPACE
     }
 #endif
 
-    //===================================================================
     void fillUnoException( __cxa_exception * header, uno_Any * pUnoExc, uno_Mapping * pCpp2Uno )
     {
         if (! header)

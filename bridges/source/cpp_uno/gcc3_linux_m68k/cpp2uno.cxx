@@ -261,7 +261,6 @@ namespace
     }
 
 
-    //=====================================================================
     static typelib_TypeClass cpp_mediate(
         sal_Int32 nFunctionIndex, sal_Int32 nVtableOffset,
         long sp, long r8,
@@ -399,7 +398,6 @@ namespace
     }
 }
 
-//=======================================================================
 /**
  * is called on incoming vtable calls
  * (called by asm snippets)

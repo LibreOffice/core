@@ -31,7 +31,6 @@ using namespace ::rtl;
 namespace jni_uno
 {
 
-//------------------------------------------------------------------------------
 inline rtl_mem * seq_allocate( sal_Int32 nElements, sal_Int32 nSize )
 {
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
@@ -44,7 +43,6 @@ inline rtl_mem * seq_allocate( sal_Int32 nElements, sal_Int32 nSize )
     return seq.release();
 }
 
-//______________________________________________________________________________
 namespace {
 
 void createDefaultUnoValue(
@@ -1212,9 +1210,7 @@ void Bridge::map_to_uno(
     }
 }
 
-//##############################################################################
 
-//______________________________________________________________________________
 void Bridge::map_to_java(
     JNI_context const & jni,
     jvalue * java_data, void const * uno_data,

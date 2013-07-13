@@ -168,7 +168,6 @@ namespace hppa
 
 
 namespace {
-//=======================================================================
 static void cpp_call(
     bridges::cpp_uno::shared::UnoInterfaceProxy * pThis,
     bridges::cpp_uno::shared::VtableSlot aVtableSlot,

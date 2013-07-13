@@ -42,7 +42,6 @@ namespace
 {
 
 
-  //==================================================================================================
   static void callVirtualMethod(
       void * pAdjustedThisPtr,
       sal_Int32 nVtableIndex,
@@ -232,7 +231,6 @@ namespace
   }
 
 
-  //==================================================================================================
   static void cpp_call(
       bridges::cpp_uno::shared::UnoInterfaceProxy * pThis,
       bridges::cpp_uno::shared::VtableSlot  aVtableSlot,
@@ -458,7 +456,6 @@ namespace
 
 namespace bridges { namespace cpp_uno { namespace shared {
 
-//==================================================================================================
 void unoInterfaceProxyDispatch(
     uno_Interface * pUnoI, const typelib_TypeDescription * pMemberDescr,
     void * pReturn, void * pArgs[], uno_Any ** ppException )

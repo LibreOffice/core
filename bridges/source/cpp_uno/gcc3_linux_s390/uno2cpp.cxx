@@ -166,7 +166,6 @@ invoke_copy_to_stack(sal_Int32 * pStackLongs, char * pPT, sal_Int32* d_ov, sal_I
      }
 }
 
-//==================================================================================================
 static void callVirtualMethod(
     void * pThis,
     sal_Int32 nVtableIndex,
@@ -272,7 +271,6 @@ static void callVirtualMethod(
 }
 
 
-//============================================================================
 static void cpp_call(
         bridges::cpp_uno::shared::UnoInterfaceProxy * pThis,
         bridges::cpp_uno::shared::VtableSlot  aVtableSlot,

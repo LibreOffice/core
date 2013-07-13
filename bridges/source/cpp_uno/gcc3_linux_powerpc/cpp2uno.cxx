@@ -349,7 +349,6 @@ static typelib_TypeClass cpp2uno_call(
 }
 
 
-//==================================================================================================
 static typelib_TypeClass cpp_mediate(
     sal_Int32 nFunctionIndex,
         sal_Int32 nVtableOffset,
@@ -485,7 +484,6 @@ static typelib_TypeClass cpp_mediate(
     return eRet;
 }
 
-//==================================================================================================
 /**
  * is called on incoming vtable calls
  * (called by asm snippets)
