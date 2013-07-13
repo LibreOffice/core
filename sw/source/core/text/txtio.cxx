@@ -636,7 +636,7 @@ SvStream &SwDropPortion::operator<<( SvStream &rOs ) const //$ ostream
     {
         rOs << " H:" << nDropHeight;
         rOs << " L:" << nLines;
-        rOs <<" Fnt:" << pPart->GetFont().GetHeight();
+        rOs << " Fnt:" << static_cast<sal_Int32>(pPart->GetFont().GetHeight());
         if( nX || nY )
             rOs << " [" << nX << '/' << nY << ']';
     }
