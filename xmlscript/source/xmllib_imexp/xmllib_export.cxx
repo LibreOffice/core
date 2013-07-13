@@ -31,10 +31,8 @@ namespace xmlscript
 const char aTrueStr[] = "true";
 const char aFalseStr[] = "false";
 
-//##################################################################################################
 
 
-//==================================================================================================
 
 void
 SAL_CALL exportLibraryContainer(
@@ -100,7 +98,6 @@ SAL_CALL exportLibraryContainer(
     xOut->endDocument();
 }
 
-//==================================================================================================
 
 void
 SAL_CALL exportLibrary(
