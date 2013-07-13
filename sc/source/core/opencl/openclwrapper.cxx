@@ -1115,9 +1115,9 @@ int OclCalc::OclHostFormulaAverage(double *srcData,int *start,int *end,double *o
     cl_mem outputCl = clCreateBuffer(kEnv.mpkContext, (cl_mem_flags) (CL_MEM_READ_WRITE),
                                      size* sizeof(float), NULL, &ret);
 
-    float * hostMapSrc = (float *)clEnqueueMapBuffer(kEnv.mpkCmdQueue,inputCl,CL_TRUE,CL_MAP_WRITE_INVALIDATE_REGION,0,alignSize * sizeof(float),0,NULL,NULL,NULL);
-    int * hostMapStart = (int *)clEnqueueMapBuffer(kEnv.mpkCmdQueue,startCl,CL_TRUE,CL_MAP_WRITE_INVALIDATE_REGION,0,size * sizeof(unsigned int),0,NULL,NULL,NULL);
-    int * hostMapEnd   = (int *)clEnqueueMapBuffer(kEnv.mpkCmdQueue,endCl,CL_TRUE,CL_MAP_WRITE_INVALIDATE_REGION,0,size * sizeof(unsigned int),0,NULL,NULL,NULL);
+    float * hostMapSrc = (float *)clEnqueueMapBuffer(kEnv.mpkCmdQueue,inputCl,CL_TRUE,OPENCLWRAPPER_CL_MAP_WRITE_FLAG,0,alignSize * sizeof(float),0,NULL,NULL,NULL);
+    int * hostMapStart = (int *)clEnqueueMapBuffer(kEnv.mpkCmdQueue,startCl,CL_TRUE,OPENCLWRAPPER_CL_MAP_WRITE_FLAG,0,size * sizeof(unsigned int),0,NULL,NULL,NULL);
+    int * hostMapEnd   = (int *)clEnqueueMapBuffer(kEnv.mpkCmdQueue,endCl,CL_TRUE,OPENCLWRAPPER_CL_MAP_WRITE_FLAG,0,size * sizeof(unsigned int),0,NULL,NULL,NULL);
 #if 1
     for(int i=0;i<size;i++)
     {
@@ -1440,11 +1440,11 @@ int OclCalc::CreateBuffer(float *&fpSrcData,uint *&npStartPos,uint *&npEndPos,in
                              nBufferSize * sizeof(unsigned int), NULL, &clStatus);
     CHECK_OPENCL(clStatus);
 
-    fpSrcData  = (float *)clEnqueueMapBuffer(kEnv.mpkCmdQueue,mpClmemSrcData,CL_TRUE,CL_MAP_WRITE_INVALIDATE_REGION,0,nBufferSize * sizeof(float),0,NULL,NULL,&clStatus);
+    fpSrcData  = (float *)clEnqueueMapBuffer(kEnv.mpkCmdQueue,mpClmemSrcData,CL_TRUE,OPENCLWRAPPER_CL_MAP_WRITE_FLAG,0,nBufferSize * sizeof(float),0,NULL,NULL,&clStatus);
     CHECK_OPENCL(clStatus);
-    npStartPos = (uint *)clEnqueueMapBuffer(kEnv.mpkCmdQueue,mpClmemStartPos,CL_TRUE,CL_MAP_WRITE_INVALIDATE_REGION,0,nBufferSize * sizeof(uint),0,NULL,NULL,&clStatus);
+    npStartPos = (uint *)clEnqueueMapBuffer(kEnv.mpkCmdQueue,mpClmemStartPos,CL_TRUE,OPENCLWRAPPER_CL_MAP_WRITE_FLAG,0,nBufferSize * sizeof(uint),0,NULL,NULL,&clStatus);
     CHECK_OPENCL(clStatus);
-    npEndPos   = (uint *)clEnqueueMapBuffer(kEnv.mpkCmdQueue,mpClmemEndPos,CL_TRUE,CL_MAP_WRITE_INVALIDATE_REGION,0,nBufferSize * sizeof(uint),0,NULL,NULL,&clStatus);
+    npEndPos   = (uint *)clEnqueueMapBuffer(kEnv.mpkCmdQueue,mpClmemEndPos,CL_TRUE,OPENCLWRAPPER_CL_MAP_WRITE_FLAG,0,nBufferSize * sizeof(uint),0,NULL,NULL,&clStatus);
     CHECK_OPENCL(clStatus);
     //printf("In CreateBuffer, pptrr is %d,%d,%d\n",fpSrcData,npStartPos,npEndPos);
     return 0;
@@ -1461,9 +1461,9 @@ int OclCalc::CreateBuffer(float *&fpLeftData,float *&fpRightData,int nBufferSize
     mpClmemRightData = clCreateBuffer(kEnv.mpkContext, (cl_mem_flags) (CL_MEM_READ_WRITE | CL_MEM_ALLOC_HOST_PTR),
                              nBufferSize * sizeof(unsigned int), NULL, &clStatus);
     CHECK_OPENCL(clStatus);
-    fpLeftData    = (float *)clEnqueueMapBuffer(kEnv.mpkCmdQueue,mpClmemLeftData,CL_TRUE,CL_MAP_WRITE_INVALIDATE_REGION,0,nBufferSize * sizeof(float),0,NULL,NULL,&clStatus);
+    fpLeftData    = (float *)clEnqueueMapBuffer(kEnv.mpkCmdQueue,mpClmemLeftData,CL_TRUE,OPENCLWRAPPER_CL_MAP_WRITE_FLAG,0,nBufferSize * sizeof(float),0,NULL,NULL,&clStatus);
     CHECK_OPENCL(clStatus);
-    fpRightData = (float *)clEnqueueMapBuffer(kEnv.mpkCmdQueue,mpClmemRightData,CL_TRUE,CL_MAP_WRITE_INVALIDATE_REGION,0,nBufferSize * sizeof(float),0,NULL,NULL,&clStatus);
+    fpRightData = (float *)clEnqueueMapBuffer(kEnv.mpkCmdQueue,mpClmemRightData,CL_TRUE,OPENCLWRAPPER_CL_MAP_WRITE_FLAG,0,nBufferSize * sizeof(float),0,NULL,NULL,&clStatus);
     CHECK_OPENCL(clStatus);
     //printf("In CreateBuffer, pptrr is %d,%d,%d\n",fpSrcData,npStartPos,npEndPos);
     return 0;

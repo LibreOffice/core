@@ -9811,15 +9811,14 @@ OPENCL_LIBS=
 OPENCL_CFLAGS=
 ENABLE_OPENCL=
 AC_MSG_CHECKING([OpenCL])
-dnl if test \( -z "$with_opencl_sdk" -o "$with_opencl_sdk" = yes \) -a $_os = Darwin; then
-dnl    # OS X
-dnl    AC_MSG_RESULT([yes, always on OS X])
-dnl    ENABLE_OPENCL=TRUE
-dnl    OPENCL_CFLAGS=
-dnl    OPENCL_LIBS="-framework OpenCL"
-dnl    AC_DEFINE(HAVE_FEATURE_OPENCL)
-dnl
-if test -z "$with_opencl_sdk" -o "$with_opencl_sdk" = no; then
+if test \( -z "$with_opencl_sdk" -o "$with_opencl_sdk" = yes \) -a $_os = Darwin; then
+   # OS X
+   AC_MSG_RESULT([yes, always on OS X])
+   ENABLE_OPENCL=TRUE
+   OPENCL_CFLAGS=
+   OPENCL_LIBS="-framework OpenCL"
+   AC_DEFINE(HAVE_FEATURE_OPENCL)
+elif test -z "$with_opencl_sdk" -o "$with_opencl_sdk" = no; then
     AC_MSG_RESULT([no])
 else
     if test -d "$with_opencl_sdk/include"; then

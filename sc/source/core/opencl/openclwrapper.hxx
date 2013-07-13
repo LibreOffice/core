@@ -20,6 +20,20 @@
 #include <CL/cl.h>
 #endif
 
+// CL_MAP_WRITE_INVALIDATE_REGION is new in OpenCL 1.2.
+
+// When compiling against an older OpenCL, use CL_MAP_WRITE.
+
+// FIXME: But what if this code has been compiled against OpenCL 1.2
+// headers but then runs against an OpenCL 1.1 implementation?
+// Probably the code should check at run-time the version of the
+// OpenCL implementation and choose which flag to use based on that.
+#ifdef CL_MAP_WRITE_INVALIDATE_REGION
+#define OPENCLWRAPPER_CL_MAP_WRITE_FLAG CL_MAP_WRITE_INVALIDATE_REGION
+#else
+#define OPENCLWRAPPER_CL_MAP_WRITE_FLAG CL_MAP_WRITE
+#endif
+
 #if defined(_MSC_VER)
 #ifndef strcasecmp
 #define strcasecmp strcmp
