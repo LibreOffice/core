@@ -84,12 +84,7 @@ String RID_SVXSTR_DIAGRAM_ROW
 
     Text [ en-US ] = "Data Series $(ROW)" ;
 };
-QueryBox RID_OPTQB_COLOR_CHART_DELETE
-{
-    Buttons = WB_YES_NO ;
-    DefButton = WB_DEF_NO ;
-    Message [ en-US ] = "Do you really want to delete the chart color?" ;
-};
+
 String RID_OPTSTR_COLOR_CHART_DELETE
 {
    Text [ en-US ] = "Chart Color Deletion" ;

@@ -227,11 +227,11 @@ IMPL_LINK( SvxDefaultColorOptPage, RemoveChartColor, PushButton*, pButton )
     if( pColorConfig )
     {
         OSL_ENSURE(pColorConfig->GetColorList().size() > 1, "don't delete the last chart color");
-        QueryBox aQuery(pButton, CUI_RES(RID_OPTQB_COLOR_CHART_DELETE));
-        aQuery.SetText(String(CUI_RES(RID_OPTSTR_COLOR_CHART_DELETE)));
-        if(RET_YES == aQuery.Execute())
-        {
 
+        MessageDialog aQuery(pButton, "QueryDeleteChartColorDialog",
+            "cui/ui/querydeletechartcolordialog.ui");
+        if (RET_YES == aQuery.Execute())
+        {
             pColorConfig->GetColorList().remove( nIndex  );
 
             aLbChartColors.Clear();
@@ -244,7 +244,7 @@ IMPL_LINK( SvxDefaultColorOptPage, RemoveChartColor, PushButton*, pButton )
             else if (aLbChartColors.GetEntryCount() > 0)
                 aLbChartColors.SelectEntryPos( nIndex );
             else
-                aPBRemove.Enable( sal_False );
+                aPBRemove.Enable(true);
         }
     }
 
