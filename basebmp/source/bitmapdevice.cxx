@@ -126,7 +126,6 @@ namespace
 
 
     // Actual BitmapDevice implementation (templatized by accessor and iterator)
-    //--------------------------------------------------------------------------
 
     /** Implementation of the BitmapDevice interface
 
@@ -1666,7 +1665,6 @@ void BitmapDevice::drawMaskedBitmap( const BitmapDeviceSharedPtr& rSrcBitmap,
 }
 
 
-//----------------------------------------------------------------------------------
 
 /** Standard clip and alpha masks
  */
@@ -1682,7 +1680,6 @@ struct StdMasks
     static const bool alphamask_polarity = true;
 };
 
-//----------------------------------------------------------------------------------
 
 // Some compilers don't like the nested template wrap_accessor
 // reference in the parameter list - being slightly less type safe,
@@ -1823,7 +1820,6 @@ BitmapDeviceSharedPtr createRenderer(
                                       pDamage);
 }
 
-//----------------------------------------------------------------------------------
 
 // TODO(Q3): consolidate with canvas/canvastools.hxx! Best move this
 // to o3tl or sal/bithacks.hxx ...
@@ -1847,7 +1843,6 @@ inline sal_uInt32 nextPow2( sal_uInt32 x )
     return ++x;
 }
 
-//----------------------------------------------------------------------------------
 
 namespace
 {
@@ -2149,7 +2144,6 @@ BitmapDeviceSharedPtr cloneBitmapDevice( const basegfx::B2IVector&    rSize,
                                    rProto->getDamageTracker() );
 }
 
-//----------------------------------------------------------------------------------
 
 /// Clone our device, with GenericImageAccessor to handle all formats
 BitmapDeviceSharedPtr BitmapDevice::getGenericRenderer() const
