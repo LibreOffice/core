@@ -45,7 +45,6 @@
 #include <sax/tools/converter.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/diagnose_ex.h>
-#include <rtl/logfile.hxx>
 #include <rtl/strbuf.hxx>
 #include <comphelper/extract.hxx>
 #include <comphelper/types.hxx>

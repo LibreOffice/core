@@ -35,7 +35,6 @@
 #include <com/sun/star/util/Time.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 #include <unotools/datetime.hxx>
-#include <rtl/logfile.hxx>
 #include <rtl/strbuf.hxx>
 
 #if OSL_DEBUG_LEVEL > 0

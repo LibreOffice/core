@@ -25,7 +25,6 @@
 #include <com/sun/star/embed/ElementModes.hpp>
 
 #include <osl/file.hxx>
-#include <rtl/logfile.hxx>
 #include <vcl/embeddedfontshelper.hxx>
 
 #include <xmloff/nmspmap.hxx>
