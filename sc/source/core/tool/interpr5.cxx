@@ -18,7 +18,6 @@
  */
 
 #include <rtl/math.hxx>
-#include <rtl/logfile.hxx>
 #include <string.h>
 #include <math.h>
 #include <stdio.h>
@@ -107,7 +106,6 @@ void lcl_MFastMult(ScMatrixRef pA, ScMatrixRef pB, ScMatrixRef pR,
 
 double ScInterpreter::ScGetGCD(double fx, double fy)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::div" );
     // By ODFF definition GCD(0,a) => a. This is also vital for the code in
     // ScGCD() to work correctly with a preset fy=0.0
     if (fy == 0.0)
@@ -129,7 +127,6 @@ double ScInterpreter::ScGetGCD(double fx, double fy)
 
 void ScInterpreter::ScGCD()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScGCD" );
     short nParamCount = GetByte();
     if ( MustHaveParamCountMin( nParamCount, 1 ) )
     {
@@ -319,7 +316,6 @@ void ScInterpreter:: ScLCM()
 
 ScMatrixRef ScInterpreter::GetNewMat(SCSIZE nC, SCSIZE nR, bool bEmpty)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::GetNewMat" );
     ScMatrixRef pMat;
     if (bEmpty)
         pMat = new ScMatrix(nC, nR);
@@ -388,7 +384,6 @@ ScMatrixRef ScInterpreter::CreateMatrixFromDoubleRef( const FormulaToken* pToken
 
 ScMatrixRef ScInterpreter::GetMatrix()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::GetMatrix" );
     ScMatrixRef pMat = NULL;
     switch (GetRawStackType())
     {
@@ -501,7 +496,6 @@ ScMatrixRef ScInterpreter::GetMatrix()
 
 void ScInterpreter::ScMatValue()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScMatValue" );
     if ( MustHaveParamCount( GetByte(), 3 ) )
     {
         // 0 to count-1
@@ -575,7 +569,6 @@ void ScInterpreter::ScMatValue()
 }
 void ScInterpreter::CalculateMatrixValue(const ScMatrix* pMat,SCSIZE nC,SCSIZE nR)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::CalculateMatrixValue" );
     if (pMat)
     {
         SCSIZE nCl, nRw;
@@ -599,7 +592,6 @@ void ScInterpreter::CalculateMatrixValue(const ScMatrix* pMat,SCSIZE nC,SCSIZE n
 
 void ScInterpreter::ScEMat()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScEMat" );
     if ( MustHaveParamCount( GetByte(), 1 ) )
     {
         SCSIZE nDim = static_cast<SCSIZE>(::rtl::math::approxFloor(GetDouble()));
@@ -621,7 +613,6 @@ void ScInterpreter::ScEMat()
 
 void ScInterpreter::MEMat(const ScMatrixRef& mM, SCSIZE n)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::MEMat" );
     mM->FillDouble(0.0, 0, 0, n-1, n-1);
     for (SCSIZE i = 0; i < n; i++)
         mM->PutDouble(1.0, i, i);
@@ -789,7 +780,6 @@ static void lcl_LUP_solve( const ScMatrix* mLU, const SCSIZE n,
 
 void ScInterpreter::ScMatDet()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScMatDet" );
     if ( MustHaveParamCount( GetByte(), 1 ) )
     {
         ScMatrixRef pMat = GetMatrix();
@@ -835,7 +825,6 @@ void ScInterpreter::ScMatDet()
 
 void ScInterpreter::ScMatInv()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScMatInv" );
     if ( MustHaveParamCount( GetByte(), 1 ) )
     {
         ScMatrixRef pMat = GetMatrix();
@@ -941,7 +930,6 @@ void ScInterpreter::ScMatInv()
 
 void ScInterpreter::ScMatMult()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScMatMult" );
     if ( MustHaveParamCount( GetByte(), 2 ) )
     {
         ScMatrixRef pMat2 = GetMatrix();
@@ -991,7 +979,6 @@ void ScInterpreter::ScMatMult()
 
 void ScInterpreter::ScMatTrans()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScMatTrans" );
     if ( MustHaveParamCount( GetByte(), 1 ) )
     {
         ScMatrixRef pMat = GetMatrix();
@@ -1066,7 +1053,6 @@ static ScMatrixRef lcl_MatrixCalculation(
 
 ScMatrixRef ScInterpreter::MatConcat(const ScMatrixRef& pMat1, const ScMatrixRef& pMat2)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::MatConcat" );
     SCSIZE nC1, nC2, nMinC;
     SCSIZE nR1, nR2, nMinR;
     SCSIZE i, j;
@@ -1129,12 +1115,10 @@ static void lcl_GetDiffDateTimeFmtType( short& nFuncFmt, short nFmt1, short nFmt
 
 void ScInterpreter::ScAdd()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScAdd" );
     CalculateAddSub(false);
 }
 void ScInterpreter::CalculateAddSub(bool _bSub)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::CalculateAddSub" );
     ScMatrixRef pMat1 = NULL;
     ScMatrixRef pMat2 = NULL;
     double fVal1 = 0.0, fVal2 = 0.0;
@@ -1267,7 +1251,6 @@ void ScInterpreter::CalculateAddSub(bool _bSub)
 
 void ScInterpreter::ScAmpersand()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScAmpersand" );
     ScMatrixRef pMat1 = NULL;
     ScMatrixRef pMat2 = NULL;
     String sStr1, sStr2;
@@ -1361,13 +1344,11 @@ void ScInterpreter::ScAmpersand()
 
 void ScInterpreter::ScSub()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScSub" );
     CalculateAddSub(true);
 }
 
 void ScInterpreter::ScMul()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScMul" );
     ScMatrixRef pMat1 = NULL;
     ScMatrixRef pMat2 = NULL;
     double fVal1 = 0.0, fVal2 = 0.0;
@@ -1445,7 +1426,6 @@ void ScInterpreter::ScMul()
 
 void ScInterpreter::ScDiv()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScDiv" );
     ScMatrixRef pMat1 = NULL;
     ScMatrixRef pMat2 = NULL;
     double fVal1 = 0.0, fVal2 = 0.0;
@@ -1535,14 +1515,12 @@ void ScInterpreter::ScDiv()
 
 void ScInterpreter::ScPower()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScPower" );
     if ( MustHaveParamCount( GetByte(), 2 ) )
         ScPow();
 }
 
 void ScInterpreter::ScPow()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScPow" );
     ScMatrixRef pMat1 = NULL;
     ScMatrixRef pMat2 = NULL;
     double fVal1 = 0.0, fVal2 = 0.0;
@@ -1628,7 +1606,6 @@ public:
 
 void ScInterpreter::ScSumProduct()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScSumProduct" );
     sal_uInt8 nParamCount = GetByte();
     if ( !MustHaveParamCount( nParamCount, 1, 30 ) )
         return;
@@ -1672,12 +1649,10 @@ void ScInterpreter::ScSumProduct()
 
 void ScInterpreter::ScSumX2MY2()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScSumX2MY2" );
     CalculateSumX2MY2SumX2DY2(false);
 }
 void ScInterpreter::CalculateSumX2MY2SumX2DY2(bool _bSumX2DY2)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::CalculateSumX2MY2SumX2DY2" );
     if ( !MustHaveParamCount( GetByte(), 2 ) )
         return;
 
@@ -1718,13 +1693,11 @@ void ScInterpreter::CalculateSumX2MY2SumX2DY2(bool _bSumX2DY2)
 
 void ScInterpreter::ScSumX2DY2()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScSumX2DY2" );
     CalculateSumX2MY2SumX2DY2(true);
 }
 
 void ScInterpreter::ScSumXMY2()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScSumXMY2" );
     if ( !MustHaveParamCount( GetByte(), 2 ) )
         return;
 
@@ -1767,7 +1740,6 @@ void ScInterpreter::ScSumXMY2()
 
 void ScInterpreter::ScFrequency()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScFrequency" );
     if ( !MustHaveParamCount( GetByte(), 2 ) )
         return;
 
@@ -2301,14 +2273,12 @@ bool ScInterpreter::CheckMatrix(bool _bLOG, sal_uInt8& nCase, SCSIZE& nCX,
 // LINEST
 void ScInterpreter::ScRGP()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScRGP" );
     CalulateRGPRKP(false);
 }
 
 // LOGEST
 void ScInterpreter::ScRKP()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScRKP" );
     CalulateRGPRKP(true);
 }
 
@@ -2833,13 +2803,11 @@ void ScInterpreter::CalulateRGPRKP(bool _bRKP)
 
 void ScInterpreter::ScTrend()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScTrend" );
     CalculateTrendGrowth(false);
 }
 
 void ScInterpreter::ScGrowth()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScGrowth" );
     CalculateTrendGrowth(true);
 }
 
@@ -3145,7 +3113,6 @@ void ScInterpreter::CalculateTrendGrowth(bool _bGrowth)
 
 void ScInterpreter::ScMatRef()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScMatRef" );
     // Falls Deltarefs drin sind...
     Push( (FormulaToken&)*pCur );
     ScAddress aAdr;
@@ -3219,7 +3186,6 @@ void ScInterpreter::ScMatRef()
 
 void ScInterpreter::ScInfo()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScInfo" );
     if( MustHaveParamCount( GetByte(), 1 ) )
     {
         String aStr = GetString();

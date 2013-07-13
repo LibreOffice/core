@@ -800,8 +800,6 @@ void SAL_CALL SvXMLExport::initialize( const uno::Sequence< uno::Any >& aArgumen
 // XFilter
 sal_Bool SAL_CALL SvXMLExport::filter( const uno::Sequence< beans::PropertyValue >& aDescriptor ) throw(uno::RuntimeException)
 {
-    SAL_INFO( "xmloff.core", "mb93740 SvXMLExport::filter" );
-
     // check for xHandler first... should have been supplied in initialize
     if( !mxHandler.is() )
         return sal_False;

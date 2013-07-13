@@ -41,7 +41,6 @@
 #include <com/sun/star/script/XEventAttacherManager.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
-#include <rtl/logfile.hxx>
 #include <sfx2/objsh.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <unotools/fltrcfg.hxx>
@@ -4259,7 +4258,7 @@ XclImpSheetDrawing& XclImpObjectManager::GetSheetDrawing( SCTAB nScTab )
 
 void XclImpObjectManager::ConvertObjects()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "sc", "dr104026", "XclImpObjectManager::ConvertObjects" );
+    SAL_INFO( "sc.excel", "XclImpObjectManager::ConvertObjects" );
 
     // do nothing if the document does not contain a drawing layer
     if( !GetDoc().GetDrawLayer() )
