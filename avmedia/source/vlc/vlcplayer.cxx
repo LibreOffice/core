@@ -96,13 +96,13 @@ void SAL_CALL VLCPlayer::setPlaybackLoop( ::sal_Bool bSet )
 void SAL_CALL VLCPlayer::setVolumeDB( ::sal_Int16 nDB )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-    libvlc_audio_set_volume( mPlayer.get(), nDB );
+    libvlc_audio_set_volume( mPlayer.get(), static_cast<sal_Int16>( ( nDB + 40 ) * 10.0  / 4 ) );
 }
 
 ::sal_Int16 SAL_CALL VLCPlayer::getVolumeDB()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-    return libvlc_audio_get_volume( mPlayer.get() );
+    return static_cast<sal_Int16>( libvlc_audio_get_volume( mPlayer.get() ) / 10.0 * 4 - 40 );
 }
 
 void SAL_CALL VLCPlayer::setMute( ::sal_Bool bSet )
@@ -168,7 +168,7 @@ uno::Reference< css::media::XPlayerWindow > SAL_CALL VLCPlayer::createPlayerWind
 uno::Reference< css::media::XFrameGrabber > SAL_CALL VLCPlayer::createFrameGrabber()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-    return uno::Reference< css::media::XFrameGrabber >(new VLCFrameGrabber());
+    return uno::Reference< css::media::XFrameGrabber >( new VLCFrameGrabber() );
 }
 
 ::rtl::OUString SAL_CALL VLCPlayer::getImplementationName()
