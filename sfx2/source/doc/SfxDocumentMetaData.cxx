@@ -1524,7 +1524,7 @@ void SAL_CALL
 SfxDocumentMetaData::setLanguage(const css::lang::Locale & the_value)
         throw (css::uno::RuntimeException)
 {
-    OUString text( LanguageTag( the_value).getBcp47( false));
+    OUString text( LanguageTag::convertToBcp47( the_value, false));
     setMetaTextAndNotify("dc:language", text);
 }
 

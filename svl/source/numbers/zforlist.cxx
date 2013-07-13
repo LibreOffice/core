@@ -3704,7 +3704,7 @@ void SvNumberFormatter::ImpInitCurrencyTable()
     sal_uInt16 nLegacyOnlyCurrencyPos = 0;
     for ( sal_Int32 nLocale = 0; nLocale < nLocaleCount; nLocale++ )
     {
-        LanguageType eLang = LanguageTag( pLocales[nLocale]).getLanguageType( false);
+        LanguageType eLang = LanguageTag::convertToLanguageType( pLocales[nLocale], false);
         rInstalledLocales.insert( eLang);
         pLocaleData->setLanguageTag( LanguageTag( pLocales[nLocale]) );
         Sequence< Currency2 > aCurrSeq = pLocaleData->getAllCurrencies();

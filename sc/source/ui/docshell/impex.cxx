@@ -1293,7 +1293,7 @@ bool ScImportExport::ExtText2Doc( SvStream& rStrm )
     aTransliteration.loadModuleIfNeeded( eDocLang );
     CalendarWrapper aCalendar( comphelper::getProcessComponentContext() );
     aCalendar.loadDefaultCalendar(
-        LanguageTag( eDocLang ).getLocale() );
+        LanguageTag::convertToLocale( eDocLang ) );
     boost::scoped_ptr< ::utl::TransliterationWrapper > pEnglishTransliteration;
     boost::scoped_ptr< CalendarWrapper > pEnglishCalendar;
     if ( eDocLang != LANGUAGE_ENGLISH_US )
@@ -1303,7 +1303,7 @@ bool ScImportExport::ExtText2Doc( SvStream& rStrm )
         aTransliteration.loadModuleIfNeeded( LANGUAGE_ENGLISH_US );
         pEnglishCalendar.reset(new CalendarWrapper ( comphelper::getProcessComponentContext() ));
         pEnglishCalendar->loadDefaultCalendar(
-            LanguageTag( LANGUAGE_ENGLISH_US ).getLocale() );
+            LanguageTag::convertToLocale( LANGUAGE_ENGLISH_US ) );
     }
 
     OUString aLine;

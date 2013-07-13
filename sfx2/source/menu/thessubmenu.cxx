@@ -53,7 +53,7 @@ void SfxThesSubMenuHelper::GetLocale(
     xub_StrLen nDelimPos  )
 {
     String aIsoLang( rLookUpString.Copy( nDelimPos + 1) );
-    rLocale = LanguageTag( aIsoLang).getLocale();
+    rLocale = LanguageTag::convertToLocale( aIsoLang);
 }
 
 

@@ -472,7 +472,7 @@ sal_uLong DictionaryNeo::saveEntries(const OUString &rURL)
     else
     {
         OStringBuffer aLine(RTL_CONSTASCII_STRINGPARAM("lang: "));
-        aLine.append(OUStringToOString(LanguageTag(nLanguage).getBcp47(), eEnc));
+        aLine.append(OUStringToOString(LanguageTag::convertToBcp47(nLanguage), eEnc));
         pStream->WriteLine(aLine.makeStringAndClear());
     }
     if (0 != (nErr = pStream->GetError()))
@@ -818,7 +818,7 @@ Locale SAL_CALL DictionaryNeo::getLocale(  )
         throw(RuntimeException)
 {
     MutexGuard  aGuard( GetLinguMutex() );
-    return LanguageTag( nLanguage ).getLocale();
+    return LanguageTag::convertToLocale( nLanguage );
 }
 
 void SAL_CALL DictionaryNeo::setLocale( const Locale& aLocale )

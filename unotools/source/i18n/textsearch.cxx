@@ -128,7 +128,7 @@ TextSearch::TextSearch(const SearchParam & rParam, LanguageType eLang )
 {
     if( LANGUAGE_NONE == eLang )
         eLang = LANGUAGE_SYSTEM;
-    ::com::sun::star::lang::Locale aLocale( LanguageTag( eLang ).getLocale() );
+    ::com::sun::star::lang::Locale aLocale( LanguageTag::convertToLocale( eLang ) );
 
     Init( rParam, aLocale);
 }

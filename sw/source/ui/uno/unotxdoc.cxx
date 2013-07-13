@@ -3329,7 +3329,7 @@ uno::Sequence< lang::Locale > SAL_CALL SwXTextDocument::getDocumentLanguages(
                 break;
             if (LANGUAGE_NONE != *it)
             {
-                pLanguage[nCount] = LanguageTag( *it ).getLocale();
+                pLanguage[nCount] = LanguageTag::convertToLocale( *it );
                 pLanguage[nCount].Language = aLangTab.GetString( *it );
                 nCount += 1;
             }

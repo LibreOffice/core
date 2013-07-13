@@ -165,7 +165,7 @@ Sequence< Locale > SAL_CALL Hyphenator::getLocales()
             k = 0;
             for (aItB = aLocaleNamesSet.begin();  aItB != aLocaleNamesSet.end();  ++aItB)
             {
-                Locale aTmp( LanguageTag( *aItB ).getLocale());
+                Locale aTmp( LanguageTag::convertToLocale( *aItB ));
                 aSuppLocales[k++] = aTmp;
             }
 

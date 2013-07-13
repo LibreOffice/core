@@ -228,7 +228,7 @@ sal_Int16 SvxSpellWrapper::CheckHyphLang(
     if (SVX_LANG_NEED_CHECK == ((nVal >> 8) & 0x00FF))
     {
         sal_uInt16 nTmpVal = SVX_LANG_MISSING_DO_WARN;
-        if (xHyph.is()  &&  xHyph->hasLocale( LanguageTag( nLang ).getLocale() ))
+        if (xHyph.is()  &&  xHyph->hasLocale( LanguageTag::convertToLocale( nLang ) ))
             nTmpVal = SVX_LANG_OK;
         nVal &= 0x00FF;
         nVal |= nTmpVal << 8;

@@ -490,7 +490,7 @@ sExplanationLink( ),
 bGrammarResults( true ),
 aInfo16( SW_RES(IMG_INFO_16) )
 {
-    nCheckedLanguage = LanguageTag( rResult.aLocale ).getLanguageType();
+    nCheckedLanguage = LanguageTag::convertToLanguageType( rResult.aLocale );
     nGrammarError = nErrorInResult;
     bool bUseImagesInMenus = Application::GetSettings().GetStyleSettings().GetUseImagesInMenus();
 

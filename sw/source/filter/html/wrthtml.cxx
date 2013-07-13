@@ -1180,7 +1180,7 @@ void SwHTMLWriter::OutLanguage( LanguageType nLang )
         sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_lang)
             .append("=\"");
         Strm() << sOut.makeStringAndClear().getStr();
-        HTMLOutFuncs::Out_String( Strm(), LanguageTag(nLang).getBcp47(),
+        HTMLOutFuncs::Out_String( Strm(), LanguageTag::convertToBcp47(nLang),
                                   eDestEnc, &aNonConvertableCharacters ) << '"';
     }
 }

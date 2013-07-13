@@ -83,7 +83,7 @@ Locale SAL_CALL HyphenatedWord::getLocale()
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-    return LanguageTag( nLanguage ).getLocale();
+    return LanguageTag::convertToLocale( nLanguage );
 }
 
 
@@ -149,7 +149,7 @@ Locale SAL_CALL PossibleHyphens::getLocale()
         throw(RuntimeException)
 {
     MutexGuard  aGuard( GetLinguMutex() );
-    return LanguageTag( nLanguage ).getLocale();
+    return LanguageTag::convertToLocale( nLanguage );
 }
 
 

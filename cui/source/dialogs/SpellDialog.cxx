@@ -304,7 +304,7 @@ void SpellDialog::UpdateBoxes_Impl()
     bool bIsGrammarError = false;
     if( pSpellErrorDescription )
     {
-        nAltLanguage    = LanguageTag( pSpellErrorDescription->aLocale ).getLanguageType();
+        nAltLanguage    = LanguageTag::convertToLanguageType( pSpellErrorDescription->aLocale );
         aNewWords       = pSpellErrorDescription->aSuggestions;
         bIsGrammarError = pSpellErrorDescription->bIsGrammarError;
         m_pExplainLink->SetURL( pSpellErrorDescription->sExplanationURL );
@@ -1125,7 +1125,7 @@ bool SpellDialog::GetNextSentence_Impl(bool bUseSavedSentence, bool bRecheck)
                     uno::Reference< lang::XServiceInfo > xInfo( aStart->xGrammarChecker, uno::UNO_QUERY );
                     SpellErrorDescription aDesc( true,
                         aStart->sText,
-                        LanguageTag( aStart->eLanguage ).getLocale(),
+                        LanguageTag::convertToLocale( aStart->eLanguage ),
                         aStart->aGrammarError.aSuggestions,
                         aStart->xGrammarChecker,
                         xInfo->getImplementationName(),
@@ -1599,7 +1599,7 @@ bool SentenceEditWindow_Impl::MarkNextError( bool bIgnoreCurrentError )
 
             String sReplacement(getDotReplacementString(GetErrorText(), xEntry->getReplacementText()));
 
-            ChangeMarkedWord(sReplacement, LanguageTag( pSpellErrorDescription->aLocale ).getLanguageType());
+            ChangeMarkedWord(sReplacement, LanguageTag::convertToLanguageType( pSpellErrorDescription->aLocale ));
 
             aCursor.GetIndex() = aCursor.GetIndex() + (sal_uInt16)(xEntry->getReplacementText().getLength());
         }
@@ -1738,7 +1738,7 @@ void SentenceEditWindow_Impl::RestoreCurrentError()
     {
         const SpellErrorDescription& rDesc = pAttrib->GetErrorDescription();
         if( !rDesc.sErrorText.equals( GetErrorText() ) )
-            ChangeMarkedWord(rDesc.sErrorText, LanguageTag( rDesc.aLocale ).getLanguageType());
+            ChangeMarkedWord(rDesc.sErrorText, LanguageTag::convertToLanguageType( rDesc.aLocale ));
     }
 }
 

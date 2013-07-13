@@ -137,7 +137,7 @@ static uno::Sequence< lang::Locale > GetAvailLocales(
         for (i = 0;  aIt != aLanguages.end();  ++aIt, ++i)
         {
             LanguageType nLang = *aIt;
-            pRes[i] = LanguageTag( nLang ).getLocale();
+            pRes[i] = LanguageTag::convertToLocale( nLang );
         }
     }
 
@@ -612,7 +612,7 @@ namespace
     {
         Sequence< OUString > aRes;
 
-        OUString aCfgLocaleStr( LanguageTag( rAvailLocale ).getBcp47() );
+        OUString aCfgLocaleStr( LanguageTag::convertToBcp47( rAvailLocale ) );
 
         Sequence< OUString > aNodeNames( rCfg.GetNodeNames(rLastFoundList) );
         sal_Bool bFound = lcl_FindEntry( aCfgLocaleStr, aNodeNames);
@@ -880,10 +880,10 @@ void LngSvcMgr::Notify( const uno::Sequence< OUString > &rPropertyNames )
 
                 LanguageType nLang = LANGUAGE_NONE;
                 if (!aKeyText.isEmpty())
-                    nLang = LanguageTag( aKeyText ).getLanguageType();
+                    nLang = LanguageTag::convertToLanguageType( aKeyText );
 
                 GetSpellCheckerDsp_Impl( sal_False );     // don't set service list, it will be done below
-                pSpellDsp->SetServiceList( LanguageTag(nLang).getLocale(), aSvcImplNames );
+                pSpellDsp->SetServiceList( LanguageTag::convertToLocale(nLang), aSvcImplNames );
             }
         }
         else if (rName.startsWith( aGrammarCheckerList ))
@@ -905,12 +905,12 @@ void LngSvcMgr::Notify( const uno::Sequence< OUString > &rPropertyNames )
 
                 LanguageType nLang = LANGUAGE_NONE;
                 if (!aKeyText.isEmpty())
-                    nLang = LanguageTag( aKeyText ).getLanguageType();
+                    nLang = LanguageTag::convertToLanguageType( aKeyText );
 
                 if (SvtLinguConfig().HasGrammarChecker())
                 {
                     GetGrammarCheckerDsp_Impl( sal_False );   // don't set service list, it will be done below
-                    pGrammarDsp->SetServiceList( LanguageTag(nLang).getLocale(), aSvcImplNames );
+                    pGrammarDsp->SetServiceList( LanguageTag::convertToLocale(nLang), aSvcImplNames );
                 }
             }
         }
@@ -933,10 +933,10 @@ void LngSvcMgr::Notify( const uno::Sequence< OUString > &rPropertyNames )
 
                 LanguageType nLang = LANGUAGE_NONE;
                 if (!aKeyText.isEmpty())
-                    nLang = LanguageTag( aKeyText ).getLanguageType();
+                    nLang = LanguageTag::convertToLanguageType( aKeyText );
 
                 GetHyphenatorDsp_Impl( sal_False );   // don't set service list, it will be done below
-                pHyphDsp->SetServiceList( LanguageTag(nLang).getLocale(), aSvcImplNames );
+                pHyphDsp->SetServiceList( LanguageTag::convertToLocale(nLang), aSvcImplNames );
             }
         }
         else if (rName.startsWith( aThesaurusList ))
@@ -958,10 +958,10 @@ void LngSvcMgr::Notify( const uno::Sequence< OUString > &rPropertyNames )
 
                 LanguageType nLang = LANGUAGE_NONE;
                 if (!aKeyText.isEmpty())
-                    nLang = LanguageTag( aKeyText ).getLanguageType();
+                    nLang = LanguageTag::convertToLanguageType( aKeyText );
 
                 GetThesaurusDsp_Impl( sal_False );  // don't set service list, it will be done below
-                pThesDsp->SetServiceList( LanguageTag(nLang).getLocale(), aSvcImplNames );
+                pThesDsp->SetServiceList( LanguageTag::convertToLocale(nLang), aSvcImplNames );
             }
         }
         else
@@ -1312,7 +1312,7 @@ void LngSvcMgr::SetCfgServiceLists( SpellCheckerDispatcher &rSpellDsp )
                 String aLocaleStr( pNames[i] );
                 xub_StrLen nSeparatorPos = aLocaleStr.SearchBackward( sal_Unicode( '/' ) );
                 aLocaleStr = aLocaleStr.Copy( nSeparatorPos + 1 );
-                rSpellDsp.SetServiceList( LanguageTag(aLocaleStr).getLocale(), aSvcImplNames );
+                rSpellDsp.SetServiceList( LanguageTag::convertToLocale(aLocaleStr), aSvcImplNames );
             }
         }
     }
@@ -1354,7 +1354,7 @@ void LngSvcMgr::SetCfgServiceLists( GrammarCheckingIterator &rGrammarDsp )
                 String aLocaleStr( pNames[i] );
                 xub_StrLen nSeparatorPos = aLocaleStr.SearchBackward( sal_Unicode( '/' ) );
                 aLocaleStr = aLocaleStr.Copy( nSeparatorPos + 1 );
-                rGrammarDsp.SetServiceList( LanguageTag(aLocaleStr).getLocale(), aSvcImplNames );
+                rGrammarDsp.SetServiceList( LanguageTag::convertToLocale(aLocaleStr), aSvcImplNames );
             }
         }
     }
@@ -1396,7 +1396,7 @@ void LngSvcMgr::SetCfgServiceLists( HyphenatorDispatcher &rHyphDsp )
                 String aLocaleStr( pNames[i] );
                 xub_StrLen nSeparatorPos = aLocaleStr.SearchBackward( sal_Unicode( '/' ) );
                 aLocaleStr = aLocaleStr.Copy( nSeparatorPos + 1 );
-                rHyphDsp.SetServiceList( LanguageTag(aLocaleStr).getLocale(), aSvcImplNames );
+                rHyphDsp.SetServiceList( LanguageTag::convertToLocale(aLocaleStr), aSvcImplNames );
             }
         }
     }
@@ -1434,7 +1434,7 @@ void LngSvcMgr::SetCfgServiceLists( ThesaurusDispatcher &rThesDsp )
                 String aLocaleStr( pNames[i] );
                 xub_StrLen nSeparatorPos = aLocaleStr.SearchBackward( sal_Unicode( '/' ) );
                 aLocaleStr = aLocaleStr.Copy( nSeparatorPos + 1 );
-                rThesDsp.SetServiceList( LanguageTag(aLocaleStr).getLocale(), aSvcImplNames );
+                rThesDsp.SetServiceList( LanguageTag::convertToLocale(aLocaleStr), aSvcImplNames );
             }
         }
     }
@@ -1904,7 +1904,7 @@ uno::Sequence< OUString > SAL_CALL
 
     uno::Sequence< OUString > aSvcImplNames;
 
-    OUString aCfgLocale( LanguageTag( rLocale).getBcp47() );
+    OUString aCfgLocale( LanguageTag::convertToBcp47( rLocale) );
 
     uno::Sequence< uno::Any > aValues;
     uno::Sequence< OUString > aNames( 1 );

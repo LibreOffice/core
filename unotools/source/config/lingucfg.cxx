@@ -60,7 +60,7 @@ static sal_Bool lcl_SetLocale( sal_Int16 &rLanguage, const uno::Any &rVal )
     lang::Locale aNew;
     if (rVal >>= aNew)  // conversion successful?
     {
-        sal_Int16 nNew = LanguageTag( aNew ).getLanguageType( false);
+        sal_Int16 nNew = LanguageTag::convertToLanguageType( aNew, false);
         if (nNew != rLanguage)
         {
             rLanguage = nNew;
@@ -74,7 +74,7 @@ static inline const OUString lcl_LanguageToCfgLocaleStr( sal_Int16 nLanguage )
 {
     OUString aRes;
     if (LANGUAGE_SYSTEM != nLanguage)
-        aRes = LanguageTag( nLanguage ).getBcp47();
+        aRes = LanguageTag::convertToBcp47( nLanguage );
     return aRes;
 }
 
@@ -82,7 +82,7 @@ static sal_Int16 lcl_CfgAnyToLanguage( const uno::Any &rVal )
 {
     OUString aTmp;
     rVal >>= aTmp;
-    return (aTmp.isEmpty()) ? LANGUAGE_SYSTEM : LanguageTag( aTmp ).getLanguageType();
+    return (aTmp.isEmpty()) ? LANGUAGE_SYSTEM : LanguageTag::convertToLanguageType( aTmp );
 }
 
 SvtLinguOptions::SvtLinguOptions()
@@ -364,19 +364,19 @@ uno::Any SvtLinguConfigItem::GetProperty( sal_Int32 nPropertyHandle ) const
         }
         case UPH_DEFAULT_LOCALE :
         {
-            lang::Locale aLocale( LanguageTag( rOpt.nDefaultLanguage ).getLocale( false ) );
+            lang::Locale aLocale( LanguageTag::convertToLocale( rOpt.nDefaultLanguage, false) );
             aRes.setValue( &aLocale, ::getCppuType((lang::Locale*)0 ));
             break;
         }
         case UPH_DEFAULT_LOCALE_CJK :
         {
-            lang::Locale aLocale( LanguageTag( rOpt.nDefaultLanguage_CJK ).getLocale( false ) );
+            lang::Locale aLocale( LanguageTag::convertToLocale( rOpt.nDefaultLanguage_CJK, false) );
             aRes.setValue( &aLocale, ::getCppuType((lang::Locale*)0 ));
             break;
         }
         case UPH_DEFAULT_LOCALE_CTL :
         {
-            lang::Locale aLocale( LanguageTag( rOpt.nDefaultLanguage_CTL ).getLocale( false ) );
+            lang::Locale aLocale( LanguageTag::convertToLocale( rOpt.nDefaultLanguage_CTL, false) );
             aRes.setValue( &aLocale, ::getCppuType((lang::Locale*)0 ));
             break;
         }

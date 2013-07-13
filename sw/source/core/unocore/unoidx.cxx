@@ -638,7 +638,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
             {
                 throw lang::IllegalArgumentException();
             }
-            rTOXBase.SetLanguage( LanguageTag(aLocale).getLanguageType());
+            rTOXBase.SetLanguage( LanguageTag::convertToLanguageType(aLocale));
         }
         break;
         case WID_IDX_SORT_ALGORITHM:

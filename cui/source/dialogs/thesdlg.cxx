@@ -289,7 +289,7 @@ uno::Sequence< uno::Reference< linguistic2::XMeaning > > SvxThesaurusDialog::que
 
 bool SvxThesaurusDialog::UpdateAlternativesBox_Impl()
 {
-    lang::Locale aLocale( LanguageTag( nLookUpLanguage ).getLocale() );
+    lang::Locale aLocale( LanguageTag::convertToLocale( nLookUpLanguage ) );
     uno::Sequence< uno::Reference< linguistic2::XMeaning > > aMeanings = queryMeanings_Impl(
             aLookUpText, aLocale, uno::Sequence< beans::PropertyValue >() );
     const sal_Int32 nMeanings = aMeanings.getLength();
@@ -344,7 +344,7 @@ IMPL_LINK( SvxThesaurusDialog, LanguageHdl_Impl, ListBox*, pLB )
     String aLangText( pLB->GetSelectEntry() );
     LanguageType nLang = SvtLanguageTable().GetType( aLangText );
     DBG_ASSERT( nLang != LANGUAGE_NONE && nLang != LANGUAGE_DONTKNOW, "failed to get language" );
-    if (xThesaurus->hasLocale( LanguageTag( nLang ).getLocale() ))
+    if (xThesaurus->hasLocale( LanguageTag::convertToLocale( nLang ) ))
         nLookUpLanguage = nLang;
     SetWindowTitle( nLang );
     LookUp_Impl();
@@ -496,7 +496,7 @@ SvxThesaurusDialog::SvxThesaurusDialog(
     std::vector< OUString > aLangVec;
     for (sal_Int32 i = 0;  i < nLocales; ++i)
     {
-        const LanguageType nLang = LanguageTag( pLocales[i] ).getLanguageType();
+        const LanguageType nLang = LanguageTag::convertToLanguageType( pLocales[i] );
         DBG_ASSERT( nLang != LANGUAGE_NONE && nLang != LANGUAGE_DONTKNOW, "failed to get language" );
         aLangVec.push_back( aLangTab.GetString( nLang ) );
     }

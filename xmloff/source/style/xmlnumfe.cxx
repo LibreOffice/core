@@ -847,7 +847,7 @@ static OUString lcl_GetDefaultCalendar( SvNumberFormatter* pFormatter, LanguageT
     CalendarWrapper* pCalendar = pFormatter->GetCalendar();
     if (pCalendar)
     {
-        lang::Locale aLocale( LanguageTag( nLang ).getLocale() );
+        lang::Locale aLocale( LanguageTag::convertToLocale( nLang ) );
 
         uno::Sequence<OUString> aCals = pCalendar->getAllCalendars( aLocale );
         sal_Int32 nCnt = aCals.getLength();
@@ -1325,7 +1325,7 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
                             //  automatic currency symbol is implemented as part of
                             //  normal text -> search for the symbol
                             bCurrencyWritten = WriteTextWithCurrency_Impl( *pElemStr,
-                                LanguageTag( nLang ).getLocale() );
+                                LanguageTag::convertToLocale( nLang ) );
                             bAnyContent = sal_True;
                         }
                         else

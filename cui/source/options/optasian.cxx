@@ -201,7 +201,7 @@ sal_Bool SvxAsianLayoutPage::FillItemSet( SfxItemSet& )
             for( itElem = pImpl->aChangedLanguagesMap.begin();
                 itElem != pImpl->aChangedLanguagesMap.end(); ++itElem )
             {
-                Locale aLocale( LanguageTag( itElem->first ).getLocale());
+                Locale aLocale( LanguageTag::convertToLocale( itElem->first ));
                 if(itElem->second->bRemoved)
                     pImpl->xForbidden->removeForbiddenCharacters( aLocale );
                 else if(itElem->second->pCharacters)
@@ -378,7 +378,7 @@ IMPL_LINK(SvxAsianLayoutPage, ChangeStandardHdl, CheckBox*, pBox)
 IMPL_LINK(SvxAsianLayoutPage, ModifyHdl, Edit*, pEdit)
 {
     LanguageType eSelectLanguage = aLanguageLB.GetSelectLanguage();
-    Locale aLocale( LanguageTag( eSelectLanguage ).getLocale());
+    Locale aLocale( LanguageTag::convertToLocale( eSelectLanguage ));
     OUString sStart = aStartED.GetText();
     OUString sEnd = aEndED.GetText();
     sal_Bool bEnable = pEdit->IsEnabled();

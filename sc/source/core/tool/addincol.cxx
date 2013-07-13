@@ -114,7 +114,7 @@ const ::std::vector<ScUnoAddInFuncData::LocalizedName>& ScUnoAddInFuncData::GetC
                     for (sal_Int32 i=0; i<nSeqLen; i++)
                     {
                         maCompNames.push_back( LocalizedName(
-                                    LanguageTag( pArray[i].Locale).getBcp47( false),
+                                    LanguageTag::convertToBcp47( pArray[i].Locale, false),
                                     pArray[i].Name));
                     }
                 }

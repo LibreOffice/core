@@ -1037,7 +1037,7 @@ namespace svx
                 try
                 {
                     Reference< XConversionDictionary >  xDic =
-                        m_xConversionDictionaryList->addNewDictionary( aName, LanguageTag( LANGUAGE_KOREAN ).getLocale(), ConversionDictionaryType::HANGUL_HANJA );
+                        m_xConversionDictionaryList->addNewDictionary( aName, LanguageTag::convertToLocale( LANGUAGE_KOREAN ), ConversionDictionaryType::HANGUL_HANJA );
 
                     if( xDic.is() )
                     {

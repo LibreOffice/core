@@ -1575,7 +1575,7 @@ bool EDITENG_DLLPUBLIC GetStatusValueForThesaurusFromContext(
     aText = pEditEngine->GetText( aTextSel );
     aTextSel.Adjust();
     LanguageType nLang = pEditEngine->GetLanguage( aTextSel.nStartPara, aTextSel.nStartPos );
-    OUString aLangText( LanguageTag( nLang ).getBcp47() );
+    OUString aLangText( LanguageTag::convertToBcp47( nLang ) );
 
     // set word and locale to look up as status value
     OUString aStatusVal= aText + "#" + aLangText;

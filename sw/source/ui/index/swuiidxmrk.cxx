@@ -346,7 +346,7 @@ String  SwIndexMarkPane::GetDefaultPhoneticReading( const String& rText )
     if( !bIsPhoneticReadingEnabled )
         return aEmptyStr;
 
-    return xExtendedIndexEntrySupplier->getPhoneticCandidate(rText, LanguageTag( nLangForPhoneticReading ).getLocale());
+    return xExtendedIndexEntrySupplier->getPhoneticCandidate(rText, LanguageTag::convertToLocale( nLangForPhoneticReading ));
 }
 
 /* --------------------------------------------------

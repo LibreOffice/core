@@ -183,7 +183,7 @@ void SAL_CALL ScDocDefaultsObj::setPropertyValue(
         {
             LanguageType eNew;
             if (!aLocale.Language.isEmpty() || !aLocale.Country.isEmpty())
-                eNew = LanguageTag( aLocale ).getLanguageType( false);
+                eNew = LanguageTag::convertToLanguageType( aLocale, false);
             else
                 eNew = LANGUAGE_NONE;
 

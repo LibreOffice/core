@@ -50,7 +50,7 @@ OUString toString(css::lang::Locale const & locale) {
             "Locale language \"" << locale.Language << "\" contains \"-\"");
     SAL_WARN_IF( locale.Country.indexOf('-') != -1, "svl",
             "Locale country \"" << locale.Country << "\" contains \"-\"");
-    return LanguageTag( locale).getBcp47( false);
+    return LanguageTag::convertToBcp47( locale, false);
 }
 
 }
@@ -105,7 +105,7 @@ css::uno::Sequence< css::lang::Locale > SvxAsianConfig::GetStartEndCharLocales()
         getElementNames());
     css::uno::Sequence< css::lang::Locale > ls(ns.getLength());
     for (sal_Int32 i = 0; i < ns.getLength(); ++i) {
-        ls[i] = LanguageTag( ns[i]).getLocale( false);
+        ls[i] = LanguageTag::convertToLocale( ns[i], false);
     }
     return ls;
 }

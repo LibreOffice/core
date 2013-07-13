@@ -409,7 +409,7 @@ void SAL_CALL OOXMLDocPropHandler::characters( const OUString& aChars )
 
                 case DC_TOKEN( language ):
                     if ( aChars.getLength() >= 2 )
-                        m_xDocProp->setLanguage( LanguageTag( aChars).getLocale() );
+                        m_xDocProp->setLanguage( LanguageTag::convertToLocale( aChars) );
                     break;
 
                 case COREPR_TOKEN( lastModifiedBy ):

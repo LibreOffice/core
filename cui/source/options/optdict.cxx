@@ -151,7 +151,7 @@ IMPL_LINK_NOARG(SvxNewDictionaryDialog, OKHdl_Impl)
                 DictionaryType_NEGATIVE : DictionaryType_POSITIVE;
         if (xDicList.is())
         {
-            lang::Locale aLocale( LanguageTag(nLang).getLocale() );
+            lang::Locale aLocale( LanguageTag::convertToLocale(nLang) );
             String aURL( linguistic::GetWritableDictionaryURL( sDict ) );
             xNewDic = Reference< XDictionary > (
                     xDicList->createDictionary( sDict, aLocale, eType, aURL ) , UNO_QUERY );
@@ -451,7 +451,7 @@ IMPL_LINK_NOARG(SvxEditDictionaryDialog, SelectLangHdl_Impl)
 
         if ( aBox.Execute() == RET_YES )
         {
-            xDic->setLocale( LanguageTag( nLang ).getLocale() );
+            xDic->setLocale( LanguageTag::convertToLocale( nLang ) );
             bool bNegativ = xDic->getDictionaryType() == DictionaryType_NEGATIVE;
 
             const String sName(

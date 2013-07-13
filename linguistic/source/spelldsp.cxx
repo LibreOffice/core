@@ -167,7 +167,7 @@ sal_Bool SvcListHasLanguage(
         if (pRef[k].is())
         {
             if (aTmpLocale.Language.isEmpty())
-                aTmpLocale = LanguageTag( nLanguage ).getLocale();
+                aTmpLocale = LanguageTag::convertToLocale( nLanguage );
             bHasLanguage = pRef[k]->hasLocale( aTmpLocale );
         }
     }
@@ -209,7 +209,7 @@ Sequence< Locale > SAL_CALL SpellCheckerDispatcher::getLocales()
     SpellSvcByLangMap_t::const_iterator aIt;
     for (aIt = aSvcMap.begin();  aIt != aSvcMap.end();  ++aIt)
     {
-        *pLocales++ = LanguageTag( aIt->first ).getLocale();
+        *pLocales++ = LanguageTag::convertToLocale( aIt->first );
     }
     return aLocales;
 }
@@ -299,7 +299,7 @@ sal_Bool SpellCheckerDispatcher::isValid_Impl(
     if (pEntry)
     {
         OUString aChkWord( rWord );
-        Locale aLocale( LanguageTag( nLanguage ).getLocale() );
+        Locale aLocale( LanguageTag::convertToLocale( nLanguage ) );
 
         // replace typographical apostroph by ascii apostroph
         String aSingleQuote( GetLocaleDataWrapper( nLanguage ).getQuotationMarkEnd() );
@@ -466,7 +466,7 @@ Reference< XSpellAlternatives > SpellCheckerDispatcher::spell_Impl(
     if (pEntry)
     {
         OUString aChkWord( rWord );
-        Locale aLocale( LanguageTag( nLanguage ).getLocale() );
+        Locale aLocale( LanguageTag::convertToLocale( nLanguage ) );
 
         // replace typographical apostroph by ascii apostroph
         String aSingleQuote( GetLocaleDataWrapper( nLanguage ).getQuotationMarkEnd() );
@@ -728,7 +728,7 @@ sal_Bool SAL_CALL SpellCheckerDispatcher::hasLanguage(
 throw (uno::RuntimeException)
 {
     MutexGuard  aGuard( GetLinguMutex() );
-    return hasLocale( LanguageTag( nLanguage).getLocale() );
+    return hasLocale( LanguageTag::convertToLocale( nLanguage) );
 }
 
 
@@ -739,7 +739,7 @@ sal_Bool SAL_CALL SpellCheckerDispatcher::isValid(
 throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
     MutexGuard  aGuard( GetLinguMutex() );
-    return isValid( rWord, LanguageTag( nLanguage ).getLocale(), rProperties);
+    return isValid( rWord, LanguageTag::convertToLocale( nLanguage ), rProperties);
 }
 
 
@@ -750,7 +750,7 @@ uno::Reference< linguistic2::XSpellAlternatives > SAL_CALL SpellCheckerDispatche
 throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
     MutexGuard  aGuard( GetLinguMutex() );
-    return spell( rWord, LanguageTag( nLanguage).getLocale(), rProperties);
+    return spell( rWord, LanguageTag::convertToLocale( nLanguage), rProperties);
 }
 
 

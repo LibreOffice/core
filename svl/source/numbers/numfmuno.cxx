@@ -101,7 +101,7 @@ static LanguageType lcl_GetLanguage( const lang::Locale& rLocale )
     if ( rLocale.Language.isEmpty() )
         return LANGUAGE_SYSTEM;
 
-    LanguageType eRet = LanguageTag( rLocale ).getLanguageType( false );
+    LanguageType eRet = LanguageTag::convertToLanguageType( rLocale, false);
     if ( eRet == LANGUAGE_NONE )
         eRet = LANGUAGE_SYSTEM; //! or throw an exception?
 

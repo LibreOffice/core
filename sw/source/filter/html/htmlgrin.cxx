@@ -987,7 +987,7 @@ void SwHTMLParser::InsertBodyOptions()
     }
     if( aLang.Len() )
     {
-        LanguageType eLang = LanguageTag( aLang ).getLanguageType();
+        LanguageType eLang = LanguageTag::convertToLanguageType( aLang );
         if( LANGUAGE_DONTKNOW != eLang )
         {
             sal_uInt16 nWhich = 0;

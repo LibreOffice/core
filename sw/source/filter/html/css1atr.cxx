@@ -2754,7 +2754,7 @@ static Writer& OutCSS1_SvxLanguage( Writer& rWrt, const SfxPoolItem& rHt )
     if( LANGUAGE_DONTKNOW == eLang )
         return rWrt;
 
-    String sOut = LanguageTag( eLang ).getBcp47();
+    String sOut = LanguageTag::convertToBcp47( eLang );
 
     rHTMLWrt.OutCSS1_Property( sCSS1_P_so_language, sOut );
 

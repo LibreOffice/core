@@ -432,7 +432,7 @@ bool SvxSearchItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMembe
         {
             sal_Int16 nLocale;
             if (!aSearchOpt.Locale.Language.isEmpty() || !aSearchOpt.Locale.Country.isEmpty() )
-                nLocale = LanguageTag( aSearchOpt.Locale ).getLanguageType();
+                nLocale = LanguageTag::convertToLanguageType( aSearchOpt.Locale );
             else
                 nLocale = LANGUAGE_NONE;
             rVal <<= nLocale;
@@ -581,7 +581,7 @@ bool SvxSearchItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nM
                 }
                 else
                 {
-                    aSearchOpt.Locale = LanguageTag( nInt).getLocale();
+                    aSearchOpt.Locale = LanguageTag::convertToLocale( nInt);
                 }
             }
             break;

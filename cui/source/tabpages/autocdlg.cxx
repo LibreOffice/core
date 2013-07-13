@@ -1366,7 +1366,7 @@ OfaAutocorrExceptPage::OfaAutocorrExceptPage(Window* pParent, const SfxItemSet& 
     get(m_pDelDoublePB, "deldouble");
     get(m_pAutoCapsCB, "autodouble");
 
-    ::com::sun::star::lang::Locale aLcl( LanguageTag(eLastDialogLanguage ).getLocale());
+    ::com::sun::star::lang::Locale aLcl( LanguageTag::convertToLocale(eLastDialogLanguage ));
     pCompareClass = new CollatorWrapper( comphelper::getProcessComponentContext() );
     pCompareClass->loadDefaultCollator( aLcl, 0 );
 
@@ -1537,7 +1537,7 @@ void OfaAutocorrExceptPage::SetLanguage(LanguageType eSet)
         eLastDialogLanguage = eSet;
         delete pCompareClass;
         pCompareClass = new CollatorWrapper( comphelper::getProcessComponentContext() );
-        pCompareClass->loadDefaultCollator( LanguageTag( eLastDialogLanguage ).getLocale(), 0 );
+        pCompareClass->loadDefaultCollator( LanguageTag::convertToLocale( eLastDialogLanguage ), 0 );
         ModifyHdl(m_pAbbrevED);
         ModifyHdl(m_pDoubleCapsED);
     }
@@ -2425,7 +2425,7 @@ void OfaSmartTagOptionsTabPage::FillListBox( const SmartTagMgr& rSmartTagMgr )
 
     // fill list box:
     const sal_uInt32 nNumberOfRecognizers = rSmartTagMgr.NumberOfRecognizers();
-    const lang::Locale aLocale( LanguageTag( eLastDialogLanguage ).getLocale() );
+    const lang::Locale aLocale( LanguageTag::convertToLocale( eLastDialogLanguage ) );
 
     for ( sal_uInt32 i = 0; i < nNumberOfRecognizers; ++i )
     {
@@ -2468,7 +2468,7 @@ IMPL_LINK_NOARG(OfaSmartTagOptionsTabPage, ClickHdl)
     uno::Reference< smarttags::XSmartTagRecognizer > xRec = pUserData->mxRec;
     const sal_Int32 nSmartTagIdx = pUserData->mnSmartTagIdx;
 
-     const lang::Locale aLocale( LanguageTag( eLastDialogLanguage ).getLocale() );
+     const lang::Locale aLocale( LanguageTag::convertToLocale( eLastDialogLanguage ) );
     if ( xRec->hasPropertyPage( nSmartTagIdx, aLocale ) )
         xRec->displayPropertyPage( nSmartTagIdx, aLocale );
 
@@ -2507,7 +2507,7 @@ IMPL_LINK_NOARG(OfaSmartTagOptionsTabPage, SelectHdl)
     uno::Reference< smarttags::XSmartTagRecognizer > xRec = pUserData->mxRec;
     const sal_Int32 nSmartTagIdx = pUserData->mnSmartTagIdx;
 
-    const lang::Locale aLocale( LanguageTag( eLastDialogLanguage ).getLocale() );
+    const lang::Locale aLocale( LanguageTag::convertToLocale( eLastDialogLanguage ) );
     if ( xRec->hasPropertyPage( nSmartTagIdx, aLocale ) )
         m_aPropertiesPB.Enable( sal_True );
     else

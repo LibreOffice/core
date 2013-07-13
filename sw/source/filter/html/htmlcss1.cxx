@@ -1942,7 +1942,7 @@ sal_Bool SwHTMLParser::ParseStyleOptions( const String &rStyle,
 
     if( pLang && pLang->Len() )
     {
-        LanguageType eLang = LanguageTag( *pLang ).getLanguageType();
+        LanguageType eLang = LanguageTag::convertToLanguageType( *pLang );
         if( LANGUAGE_DONTKNOW != eLang )
         {
             SvxLanguageItem aLang( eLang, RES_CHRATR_LANGUAGE );

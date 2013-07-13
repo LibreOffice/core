@@ -82,7 +82,7 @@ void SwSortElement::Init( SwDoc* pD, const SwSortOptions& rOpt,
         nLang = GetAppLanguage();
         break;
     }
-    pLocale = new lang::Locale( LanguageTag( nLang ).getLocale() );
+    pLocale = new lang::Locale( LanguageTag::convertToLocale( nLang ) );
 
     pSortCollator = new CollatorWrapper( ::comphelper::getProcessComponentContext() );
 }

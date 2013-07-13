@@ -545,7 +545,7 @@ void FormattedFieldElement::endElement()
             sal_Int32 semi0 = sLocale.indexOf( ';' );
             if (semi0 < 0) // no semi at all, try new BCP47 or just language
             {
-                locale = LanguageTag( sLocale).getLocale( false);
+                locale = LanguageTag::convertToLocale( sLocale, false);
             }
             else
             {

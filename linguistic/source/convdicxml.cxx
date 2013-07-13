@@ -223,7 +223,7 @@ void ConvDicXMLDictionaryContext_Impl::StartElement(
         OUString aValue = rxAttrList->getValueByIndex(i);
 
         if ( nPrefix == XML_NAMESPACE_TCD && aLocalName == "lang" )
-            nLanguage = LanguageTag( aValue ).getLanguageType();
+            nLanguage = LanguageTag::convertToLanguageType( aValue );
         else if ( nPrefix == XML_NAMESPACE_TCD && aLocalName == "conversion-type" )
             nConversionType = GetConversionTypeFromText( aValue );
     }
@@ -325,7 +325,7 @@ sal_uInt32 ConvDicXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum /*eCl
                   _GetNamespaceMap().GetNameByKey( XML_NAMESPACE_TCD ) );
     AddAttributeASCII( XML_NAMESPACE_TCD, "package", "org.openoffice.Office" );
 
-    OUString aIsoLang( LanguageTag( rDic.nLanguage ).getBcp47() );
+    OUString aIsoLang( LanguageTag::convertToBcp47( rDic.nLanguage ) );
     AddAttribute( XML_NAMESPACE_TCD, "lang", aIsoLang );
     OUString aConvType( ConversionTypeToText( rDic.nConversionType ) );
     AddAttribute( XML_NAMESPACE_TCD, "conversion-type", aConvType );

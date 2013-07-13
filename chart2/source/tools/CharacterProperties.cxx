@@ -409,11 +409,11 @@ void CharacterProperties::AddDefaultsToMap(
 
     using namespace ::com::sun::star::i18n::ScriptType;
     LanguageType nLang;
-    nLang = MsLangId::resolveSystemLanguageByScriptType(LanguageTag(aDefaultLocale).getLanguageType( false), LATIN);
+    nLang = MsLangId::resolveSystemLanguageByScriptType(LanguageTag::convertToLanguageType( aDefaultLocale, false), LATIN);
     Font aFont = OutputDevice::GetDefaultFont( DEFAULTFONT_LATIN_SPREADSHEET, nLang, DEFAULTFONT_FLAGS_ONLYONE, 0 );
-    nLang = MsLangId::resolveSystemLanguageByScriptType(LanguageTag( aDefaultLocale_CJK).getLanguageType( false), ASIAN);
+    nLang = MsLangId::resolveSystemLanguageByScriptType(LanguageTag::convertToLanguageType( aDefaultLocale_CJK, false), ASIAN);
     Font aFontCJK = OutputDevice::GetDefaultFont( DEFAULTFONT_CJK_SPREADSHEET, nLang, DEFAULTFONT_FLAGS_ONLYONE, 0 );
-    nLang = MsLangId::resolveSystemLanguageByScriptType(LanguageTag( aDefaultLocale_CTL).getLanguageType( false), COMPLEX);
+    nLang = MsLangId::resolveSystemLanguageByScriptType(LanguageTag::convertToLanguageType( aDefaultLocale_CTL, false), COMPLEX);
     Font aFontCTL = OutputDevice::GetDefaultFont( DEFAULTFONT_CTL_SPREADSHEET, nLang, DEFAULTFONT_FLAGS_ONLYONE, 0 );
 
     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_FONT_NAME, OUString( aFont.GetName() ) );

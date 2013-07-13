@@ -403,7 +403,7 @@ namespace drawinglayer
             aRetval.SetItalic(rFontAttribute.getItalic() ? ITALIC_NORMAL : ITALIC_NONE);
             aRetval.SetOutline(rFontAttribute.getOutline());
             aRetval.SetPitch(rFontAttribute.getMonospaced() ? PITCH_FIXED : PITCH_VARIABLE);
-            aRetval.SetLanguage(LanguageTag(rLocale).getLanguageType(false));
+            aRetval.SetLanguage(LanguageTag::convertToLanguageType( rLocale, false));
 
 #ifdef WIN32
             // for WIN32 systems, correct the FontWidth if FontScaling is used

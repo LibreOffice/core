@@ -74,7 +74,7 @@ sal_Bool ScModule::HasThesaurusLanguage( sal_uInt16 nLang )
     {
         uno::Reference< linguistic2::XThesaurus > xThes(LinguMgr::GetThesaurus());
         if ( xThes.is() )
-            bHasLang = xThes->hasLocale( LanguageTag( nLang ).getLocale() );
+            bHasLang = xThes->hasLocale( LanguageTag::convertToLocale( nLang ) );
     }
     catch( uno::Exception& )
     {

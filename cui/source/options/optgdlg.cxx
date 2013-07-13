@@ -1045,7 +1045,7 @@ OfaLanguagesTabPage::OfaLanguagesTabPage( Window* pParent, const SfxItemSet& rSe
         LanguageType aLang = LANGUAGE_DONTKNOW;
         for (sal_IntPtr i=0; i<seqInstalledLanguages.getLength(); i++)
         {
-            aLang = LanguageTag(seqInstalledLanguages[i]).getLanguageType();
+            aLang = LanguageTag::convertToLanguageType(seqInstalledLanguages[i]);
             if (aLang != LANGUAGE_DONTKNOW)
             {
                 //sal_uInt16 p = m_pUserInterfaceLB->InsertLanguage(aLang);
@@ -1245,14 +1245,14 @@ sal_Bool OfaLanguagesTabPage::FillItemSet( SfxItemSet& rSet )
 
     OUString sLang = pLangConfig->aSysLocaleOptions.GetLocaleConfigString();
     LanguageType eOldLocale = (!sLang.isEmpty() ?
-        LanguageTag( sLang ).getLanguageType() : LANGUAGE_SYSTEM);
+        LanguageTag::convertToLanguageType( sLang ) : LANGUAGE_SYSTEM);
     LanguageType eNewLocale = m_pLocaleSettingLB->GetSelectLanguage();
     if ( eOldLocale != eNewLocale )
     {
         // an empty string denotes SYSTEM locale
         OUString sNewLang;
         if ( eNewLocale != LANGUAGE_SYSTEM )
-            sNewLang = LanguageTag( eNewLocale).getBcp47();
+            sNewLang = LanguageTag::convertToBcp47( eNewLocale);
 
         // locale nowadays get to AppSettings via notification
         // this will happen after releasing the lock on the ConfigurationBroadcaster at
@@ -1303,7 +1303,7 @@ sal_Bool OfaLanguagesTabPage::FillItemSet( SfxItemSet& rSet )
         if(!bCurrentDocCBChecked)
         {
             Any aValue;
-            Locale aLocale = LanguageTag( eSelectLang).getLocale( false );
+            Locale aLocale = LanguageTag::convertToLocale( eSelectLang, false);
             aValue <<= aLocale;
             OUString aPropName( "DefaultLocale" );
             pLangConfig->aLinguConfig.SetProperty( aPropName, aValue );
@@ -1323,7 +1323,7 @@ sal_Bool OfaLanguagesTabPage::FillItemSet( SfxItemSet& rSet )
         if(!bCurrentDocCBChecked)
         {
             Any aValue;
-            Locale aLocale = LanguageTag( eSelectLang).getLocale( false );
+            Locale aLocale = LanguageTag::convertToLocale( eSelectLang, false);
             aValue <<= aLocale;
             OUString aPropName( "DefaultLocale_CJK" );
             pLangConfig->aLinguConfig.SetProperty( aPropName, aValue );
@@ -1343,7 +1343,7 @@ sal_Bool OfaLanguagesTabPage::FillItemSet( SfxItemSet& rSet )
         if(!bCurrentDocCBChecked)
         {
             Any aValue;
-            Locale aLocale = LanguageTag( eSelectLang).getLocale( false );
+            Locale aLocale = LanguageTag::convertToLocale( eSelectLang, false);
             aValue <<= aLocale;
             OUString aPropName( "DefaultLocale_CTL" );
             pLangConfig->aLinguConfig.SetProperty( aPropName, aValue );
@@ -1407,7 +1407,7 @@ void OfaLanguagesTabPage::Reset( const SfxItemSet& rSet )
 {
     OUString sLang = pLangConfig->aSysLocaleOptions.GetLocaleConfigString();
     if ( !sLang.isEmpty() )
-        m_pLocaleSettingLB->SelectLanguage(LanguageTag(sLang).getLanguageType());
+        m_pLocaleSettingLB->SelectLanguage(LanguageTag::convertToLanguageType(sLang));
     else
         m_pLocaleSettingLB->SelectLanguage( LANGUAGE_USER_SYSTEM_CONFIG );
     sal_Bool bReadonly = pLangConfig->aSysLocaleOptions.IsReadOnly(SvtSysLocaleOptions::E_LOCALE);
@@ -1473,17 +1473,17 @@ void OfaLanguagesTabPage::Reset( const SfxItemSet& rSet )
         Locale aLocale;
         aWestLang >>= aLocale;
 
-        eCurLang = LanguageTag( aLocale ).getLanguageType( false);
+        eCurLang = LanguageTag::convertToLanguageType( aLocale, false);
 
         aCJKLang = pLangConfig->aLinguConfig.GetProperty("DefaultLocale_CJK");
         aLocale = Locale();
         aCJKLang >>= aLocale;
-        eCurLangCJK = LanguageTag( aLocale ).getLanguageType( false);
+        eCurLangCJK = LanguageTag::convertToLanguageType( aLocale, false);
 
         aCTLLang = pLangConfig->aLinguConfig.GetProperty("DefaultLocale_CTL");
         aLocale = Locale();
         aCTLLang >>= aLocale;
-        eCurLangCTL = LanguageTag( aLocale ).getLanguageType( false);
+        eCurLangCTL = LanguageTag::convertToLanguageType( aLocale, false);
     }
     catch (const Exception&)
     {

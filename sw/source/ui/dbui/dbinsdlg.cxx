@@ -1670,7 +1670,7 @@ void SwInsertDBColAutoPilot::Commit()
 
         if( eLang != ePrevLang )
         {
-            sPrevLang = LanguageTag( eLang ).getBcp47();
+            sPrevLang = LanguageTag::convertToBcp47( eLang );
             ePrevLang = eLang;
         }
 
@@ -1761,7 +1761,7 @@ void SwInsertDBColAutoPilot::Load()
                  * case-insensitive equal language/country combos that may have
                  * worked, for all others not. FIXME if you need to read old
                  * data that you were never able to read before. */
-                pInsDBColumn->eUsrNumFmtLng = LanguageTag( sNumberFormatLocale ).getLanguageType();
+                pInsDBColumn->eUsrNumFmtLng = LanguageTag::convertToLanguageType( sNumberFormatLocale );
 
                 pInsDBColumn->nUsrNumFmt = rNFmtr.GetEntryKey( pInsDBColumn->sUsrNumFmt,
                                                         pInsDBColumn->eUsrNumFmtLng );

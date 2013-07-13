@@ -401,7 +401,7 @@ void SfxDocTplService_Impl::init_Impl()
         getDefaultLocale();
 
     // convert locale to string
-    OUString aLang = LanguageTag( maLocale).getBcp47();
+    OUString aLang = LanguageTag::convertToBcp47( maLocale);
 
     // set maRootContent to the root of the templates hierarchy. Create the
     // entry if necessary

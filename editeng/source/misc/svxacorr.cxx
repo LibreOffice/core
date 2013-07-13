@@ -1847,7 +1847,7 @@ sal_Bool SvxAutoCorrect::FindInCplSttExceptList(LanguageType eLang,
 OUString SvxAutoCorrect::GetAutoCorrFileName( LanguageType eLang,
                                             sal_Bool bNewFile, sal_Bool bTst ) const
 {
-    OUString sRet, sExt( LanguageTag( eLang ).getBcp47() );
+    OUString sRet, sExt( LanguageTag::convertToBcp47( eLang ) );
 
     sExt = "_" + sExt + ".dat";
     if( bNewFile )

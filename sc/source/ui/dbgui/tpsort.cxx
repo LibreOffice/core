@@ -695,7 +695,7 @@ void ScTabPageSortOptions::Reset( const SfxItemSet& /* rArgSet */ )
         m_pBtnHeader->SetText( aStrRowLabel );
     }
 
-    LanguageType eLang = LanguageTag( aSortData.aCollatorLocale ).getLanguageType( false);
+    LanguageType eLang = LanguageTag::convertToLanguageType( aSortData.aCollatorLocale, false);
     if ( eLang == LANGUAGE_DONTKNOW )
         eLang = LANGUAGE_SYSTEM;
     m_pLbLanguage->SelectLanguage( eLang );
@@ -762,7 +762,7 @@ sal_Bool ScTabPageSortOptions::FillItemSet( SfxItemSet& rArgSet )
 
     // get locale
     LanguageType eLang = m_pLbLanguage->GetSelectLanguage();
-    aNewSortData.aCollatorLocale = LanguageTag( eLang ).getLocale( false );
+    aNewSortData.aCollatorLocale = LanguageTag::convertToLocale( eLang, false);
 
     // get algorithm
     OUString sAlg;
@@ -989,7 +989,7 @@ IMPL_LINK_NOARG(ScTabPageSortOptions, FillAlgorHdl)
     }
     else
     {
-        lang::Locale aLocale( LanguageTag( eLang ).getLocale());
+        lang::Locale aLocale( LanguageTag::convertToLocale( eLang ));
         uno::Sequence<OUString> aAlgos = pColWrap->listCollatorAlgorithms( aLocale );
 
         long nCount = aAlgos.getLength();

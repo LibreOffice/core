@@ -59,7 +59,7 @@ namespace vclcanvas
                 rFontRequest.FontDescription.FontDescription.Proportion == rendering::PanoseProportion::MONO_SPACED
                     ? PITCH_FIXED : PITCH_VARIABLE);
 
-        maFont->SetLanguage( LanguageTag( rFontRequest.Locale).getLanguageType( false));
+        maFont->SetLanguage( LanguageTag::convertToLanguageType( rFontRequest.Locale, false));
 
         // adjust to stretched/shrinked font
         if( !::rtl::math::approxEqual( rFontMatrix.m00, rFontMatrix.m11) )

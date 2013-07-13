@@ -445,7 +445,7 @@ bool    SwAuthorityFieldType::PutValue( const Any& rAny, sal_uInt16 nWhichId )
         {
             com::sun::star::lang::Locale aLocale;
             if( 0 != (bRet = rAny >>= aLocale ))
-                SetLanguage( LanguageTag( aLocale ).getLanguageType());
+                SetLanguage( LanguageTag::convertToLanguageType( aLocale ));
         }
         break;
 

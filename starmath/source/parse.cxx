@@ -2467,7 +2467,7 @@ void SmParser::Error(SmParseError eError)
 
 
 SmParser::SmParser()
-    : m_aDotLoc( LanguageTag( LANGUAGE_ENGLISH_US ).getLocale() )
+    : m_aDotLoc( LanguageTag::convertToLocale( LANGUAGE_ENGLISH_US ) )
 {
     m_eConversion = CONVERT_NONE;
     bImportSymNames = m_bExportSymNames = false;

@@ -52,7 +52,7 @@ ForbiddenCharacters SvxUnoForbiddenCharsTable::getForbiddenCharacters( const Loc
     if(!mxForbiddenChars.is())
         throw RuntimeException();
 
-    const LanguageType eLang = LanguageTag( rLocale ).getLanguageType();
+    const LanguageType eLang = LanguageTag::convertToLanguageType( rLocale );
     const ForbiddenCharacters* pForbidden = mxForbiddenChars->GetForbiddenCharacters( eLang, sal_False );
     if(!pForbidden)
         throw NoSuchElementException();
@@ -68,7 +68,7 @@ sal_Bool SvxUnoForbiddenCharsTable::hasForbiddenCharacters( const Locale& rLocal
     if(!mxForbiddenChars.is())
         return sal_False;
 
-    const LanguageType eLang = LanguageTag( rLocale ).getLanguageType();
+    const LanguageType eLang = LanguageTag::convertToLanguageType( rLocale );
     const ForbiddenCharacters* pForbidden = mxForbiddenChars->GetForbiddenCharacters( eLang, sal_False );
 
     return NULL != pForbidden;
@@ -82,7 +82,7 @@ void SvxUnoForbiddenCharsTable::setForbiddenCharacters(const Locale& rLocale, co
     if(!mxForbiddenChars.is())
         throw RuntimeException();
 
-    const LanguageType eLang = LanguageTag( rLocale ).getLanguageType();
+    const LanguageType eLang = LanguageTag::convertToLanguageType( rLocale );
     mxForbiddenChars->SetForbiddenCharacters( eLang, rForbiddenCharacters );
 
     onChange();
@@ -96,7 +96,7 @@ void SvxUnoForbiddenCharsTable::removeForbiddenCharacters( const Locale& rLocale
     if(!mxForbiddenChars.is())
         throw RuntimeException();
 
-    const LanguageType eLang = LanguageTag( rLocale ).getLanguageType();
+    const LanguageType eLang = LanguageTag::convertToLanguageType( rLocale );
     mxForbiddenChars->ClearForbiddenCharacters( eLang );
 
     onChange();

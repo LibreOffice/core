@@ -165,7 +165,7 @@ Sequence< Locale > SAL_CALL SpellChecker::getLocales()
             k = 0;
             for (aItB = aLocaleNamesSet.begin();  aItB != aLocaleNamesSet.end();  ++aItB)
             {
-                Locale aTmp( LanguageTag( *aItB ).getLocale());
+                Locale aTmp( LanguageTag::convertToLocale( *aItB ));
                 aSuppLocales[k++] = aTmp;
             }
 
@@ -199,7 +199,7 @@ Sequence< Locale > SAL_CALL SpellChecker::getLocales()
                     {
                         aDicts[k]  = NULL;
                         aDEncs[k]  = RTL_TEXTENCODING_DONTKNOW;
-                        aDLocs[k]  = LanguageTag( aLocaleNames[i] ).getLocale();
+                        aDLocs[k]  = LanguageTag::convertToLocale( aLocaleNames[i] );
                         // also both files have to be in the same directory and the
                         // file names must only differ in the extension (.aff/.dic).
                         // Thus we use the first location only and strip the extension part.

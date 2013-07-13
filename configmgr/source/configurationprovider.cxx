@@ -330,14 +330,14 @@ void Service::setLocale(css::lang::Locale const & eLocale)
     throw (css::uno::RuntimeException)
 {
     osl::MutexGuard guard(*lock_);
-    locale_ = LanguageTag( eLocale).getBcp47();
+    locale_ = LanguageTag::convertToBcp47( eLocale);
 }
 
 css::lang::Locale Service::getLocale() throw (css::uno::RuntimeException) {
     osl::MutexGuard guard(*lock_);
     css::lang::Locale loc;
     if (! locale_.isEmpty()) {
-        loc = LanguageTag( locale_).getLocale( false);
+        loc = LanguageTag::convertToLocale( locale_, false);
     }
     return loc;
 }

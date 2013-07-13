@@ -209,7 +209,7 @@ void SvxHyphenWordDialog::InitControls_Impl()
     xPossHyph = NULL;
     if (xHyphenator.is())
     {
-        lang::Locale aLocale( LanguageTag(nActLanguage).getLocale() );
+        lang::Locale aLocale( LanguageTag::convertToLocale(nActLanguage) );
         xPossHyph = xHyphenator->createPossibleHyphens( aActWord, aLocale,
                                                         uno::Sequence< beans::PropertyValue >() );
         if (xPossHyph.is())

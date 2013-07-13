@@ -241,7 +241,7 @@ void LanguageSelection::setDefaultLanguage(const OUString& sLocale)
     // See #i42730# for rules for determining source of settings
 
     // determine script type of locale
-    LanguageType nLang = LanguageTag(sLocale).getLanguageType();
+    LanguageType nLang = LanguageTag::convertToLanguageType(sLocale);
     sal_uInt16 nScriptType = SvtLanguageOptions::GetScriptTypeOfLanguage(nLang);
 
     switch (nScriptType)

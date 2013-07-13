@@ -2808,7 +2808,7 @@ sal_Bool SwUnoCursorHelper::ConvertSortProperties(
             lang::Locale aLocale;
             if (aValue >>= aLocale)
             {
-                rSortOpt.nLanguage = LanguageTag( aLocale).getLanguageType();
+                rSortOpt.nLanguage = LanguageTag::convertToLanguageType( aLocale);
             }
             else
             {
@@ -2917,7 +2917,7 @@ sal_Bool SwUnoCursorHelper::ConvertSortProperties(
                     {
                         rSortOpt.bIgnoreCase = !pFields[i].IsCaseSensitive;
                         rSortOpt.nLanguage =
-                            LanguageTag( pFields[i].CollatorLocale ).getLanguageType();
+                            LanguageTag::convertToLanguageType( pFields[i].CollatorLocale );
                         aKeys[i]->sSortType = pFields[i].CollatorAlgorithm;
                         aKeys[i]->nColumnId =
                             static_cast<sal_uInt16>(pFields[i].Field);

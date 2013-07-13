@@ -1144,7 +1144,7 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
         case NS_ooxml::LN_CT_Language_eastAsia: //90315
         case NS_ooxml::LN_CT_Language_bidi: //90316
         {
-            lang::Locale aLocale( LanguageTag( sStringValue).getLocale());
+            lang::Locale aLocale( LanguageTag::convertToLocale( sStringValue));
             if (m_pImpl->GetTopContext())
                 m_pImpl->GetTopContext()->Insert(NS_ooxml::LN_CT_Language_val== nName ? PROP_CHAR_LOCALE :
                              NS_ooxml::LN_CT_Language_eastAsia == nName ? PROP_CHAR_LOCALE_ASIAN : PROP_CHAR_LOCALE_COMPLEX,

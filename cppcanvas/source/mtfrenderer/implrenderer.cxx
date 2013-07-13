@@ -785,7 +785,7 @@ namespace cppcanvas
                     : rendering::PanoseProportion::ANYTHING;
 
             LanguageType aLang = rFont.GetLanguage();
-            aFontRequest.Locale = LanguageTag( aLang).getLocale( false);
+            aFontRequest.Locale = LanguageTag::convertToLocale( aLang, false);
 
             // setup state-local text transformation,
             // if the font be rotated

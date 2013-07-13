@@ -623,7 +623,7 @@ void SwAsciiOptions::ReadUserData( const String& rStr )
                                 sFont = sToken;
                                 break;
                         case 3:         // Language
-                nLanguage = LanguageTag( sToken ).getLanguageType();
+                nLanguage = LanguageTag::convertToLanguageType( sToken );
                                 break;
                         }
                 }
@@ -659,7 +659,7 @@ void SwAsciiOptions::WriteUserData( String& rStr )
         // 4. Language
         if (nLanguage)
         {
-        OUString sTmp = LanguageTag( nLanguage ).getBcp47();
+        OUString sTmp = LanguageTag::convertToBcp47( nLanguage );
         rStr += (String)sTmp;
         }
         rStr += ',';

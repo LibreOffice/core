@@ -1504,7 +1504,7 @@ sal_Bool ImpEditEngine::HasConvertibleTextPortion( LanguageType nSrcLang )
                 ++nStart;
             LanguageType nLangFound = pEditEngine->GetLanguage( k, nStart );
 #ifdef DEBUG
-            lang::Locale aLocale( LanguageTag( nLangFound ).getLocale() );
+            lang::Locale aLocale( LanguageTag::convertToLocale( nLangFound ) );
 #endif
             bHasConvTxt =   (nSrcLang == nLangFound) ||
                             (editeng::HangulHanjaConversion::IsChinese( nLangFound ) &&
@@ -1569,8 +1569,8 @@ void ImpEditEngine::Convert( EditView* pEditView,
 
     TextConvWrapper aWrp( Application::GetDefDialogParent(),
                           ::comphelper::getProcessComponentContext(),
-                          LanguageTag( nSrcLang ).getLocale(),
-                          LanguageTag( nDestLang ).getLocale(),
+                          LanguageTag::convertToLocale( nSrcLang ),
+                          LanguageTag::convertToLocale( nDestLang ),
                           pDestFont,
                           nOptions, bIsInteractive,
                           bIsStart, pEditView );
@@ -1696,7 +1696,7 @@ void ImpEditEngine::ImpConvert( OUString &rConvTxt, LanguageType &rConvTxtLang,
             sal_uInt16 nLangIdx = nEnd > nStart ? nStart + 1 : nStart;
             LanguageType nLangFound = pEditEngine->GetLanguage( aCurStart.nPara, nLangIdx );
 #ifdef DEBUG
-            lang::Locale aLocale( LanguageTag( nLangFound ).getLocale() );
+            lang::Locale aLocale( LanguageTag::convertToLocale( nLangFound ) );
 #endif
             sal_Bool bLangOk =  (nLangFound == nSrcLang) ||
                                 (editeng::HangulHanjaConversion::IsChinese( nLangFound ) &&

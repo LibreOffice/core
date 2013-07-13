@@ -176,7 +176,7 @@ namespace svxform
                 }
 
                 // retrieve a default font for this locale, and set it at the control
-                Font aFont = OutputDevice::GetDefaultFont( DEFAULTFONT_SANS, LanguageTag( aDocumentCharLocale ).getLanguageType(), DEFAULTFONT_FLAGS_ONLYONE );
+                Font aFont = OutputDevice::GetDefaultFont( DEFAULTFONT_SANS, LanguageTag::convertToLanguageType( aDocumentCharLocale ), DEFAULTFONT_FLAGS_ONLYONE );
                 FontDescriptor aFontDesc = VCLUnoHelper::CreateFontDescriptor( aFont );
                 _rxModel->setPropertyValue(
                     OUString( "FontDescriptor" ),

@@ -1059,7 +1059,7 @@ void OutlineViewShell::GetMenuState( SfxItemSet &rSet )
             LanguageType            eLang = GetDoc()->GetLanguage( EE_CHAR_LANGUAGE );
             Reference< XThesaurus > xThesaurus( LinguMgr::GetThesaurus() );
 
-            if (!xThesaurus.is() || eLang == LANGUAGE_NONE || !xThesaurus->hasLocale( LanguageTag( eLang).getLocale()))
+            if (!xThesaurus.is() || eLang == LANGUAGE_NONE || !xThesaurus->hasLocale( LanguageTag::convertToLocale( eLang)))
                 rSet.DisableItem( SID_THESAURUS );
         }
     }

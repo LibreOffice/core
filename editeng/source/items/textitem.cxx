@@ -2631,7 +2631,7 @@ bool SvxLanguageItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             if(!(rVal >>= aLocale))
                 return sal_False;
 
-            SetValue( LanguageTag( aLocale ).getLanguageType( false));
+            SetValue( LanguageTag::convertToLanguageType( aLocale, false));
         }
         break;
     }

@@ -845,7 +845,7 @@ void OFormattedModel::write(const Reference<XObjectOutputStream>& _rxOutStream) 
             if (isA(aLocale, static_cast<Locale*>(NULL)))
             {
                 Locale* pLocale = (Locale*)aLocale.getValue();
-                eFormatLanguage = LanguageTag( *pLocale ).getLanguageType( false);
+                eFormatLanguage = LanguageTag::convertToLanguageType( *pLocale, false);
             }
         }
 
@@ -928,7 +928,7 @@ void OFormattedModel::read(const Reference<XObjectInputStream>& _rxInStream) thr
 
                 if (xFormats.is())
                 {
-                    Locale aDescriptionLanguage( LanguageTag(eDescriptionLanguage).getLocale());
+                    Locale aDescriptionLanguage( LanguageTag::convertToLocale(eDescriptionLanguage));
 
                     nKey = xFormats->queryKey(sFormatDescription, aDescriptionLanguage, sal_False);
                     if (nKey == (sal_Int32)-1)

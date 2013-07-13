@@ -80,7 +80,7 @@ static Sequence< sal_Int16 > lcl_LocaleSeqToLangSeq( Sequence< Locale > &rSeq )
     sal_Int16 *pLang = aLangs.getArray();
     for (sal_Int32 i = 0;  i < nCount;  ++i)
     {
-        pLang[i] = LanguageTag( pLocale[i] ).getLanguageType();
+        pLang[i] = LanguageTag::convertToLanguageType( pLocale[i] );
 
     }
 

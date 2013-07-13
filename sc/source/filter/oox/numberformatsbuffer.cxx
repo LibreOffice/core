@@ -2023,7 +2023,7 @@ void NumberFormatsBuffer::insertBuiltinFormats()
         aBuiltinMap[ OUString::createFromAscii( pTable->mpcLocale ) ] = pTable;
 
     // convert locale string to locale struct
-    Locale aSysLocale( LanguageTag( maLocaleStr).getLocale());
+    Locale aSysLocale( LanguageTag::convertToLocale( maLocaleStr));
 
     // build a list of table pointers for the current locale, with all parent tables
     typedef ::std::vector< const BuiltinFormatTable* > BuiltinVec;

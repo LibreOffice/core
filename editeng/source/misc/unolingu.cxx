@@ -130,7 +130,7 @@ void ThesDummy_Impl::GetCfgLocales()
         Locale *pLocale = pLocaleSeq->getArray();
         for (sal_Int32 i = 0;  i < nLen;  ++i)
         {
-            pLocale[i] = LanguageTag( pNodeNames[i] ).getLocale();
+            pLocale[i] = LanguageTag::convertToLocale( pNodeNames[i] );
         }
     }
 }
@@ -677,7 +677,7 @@ uno::Reference< XDictionary > LinguMgr::GetChangeAll()
         xChangeAll = uno::Reference< XDictionary > (
                         _xDicList->createDictionary(
                             "ChangeAllList",
-                            LanguageTag( LANGUAGE_NONE ).getLocale(),
+                            LanguageTag::convertToLocale( LANGUAGE_NONE ),
                             DictionaryType_NEGATIVE, String() ), UNO_QUERY );
     }
     return xChangeAll;
@@ -705,7 +705,7 @@ uno::Reference< XDictionary > LinguMgr::GetStandard()
         try
         {
             xTmp =  xTmpDicList->createDictionary( aDicName,
-                        LanguageTag( LANGUAGE_NONE ).getLocale(),
+                        LanguageTag::convertToLocale( LANGUAGE_NONE ),
                         DictionaryType_POSITIVE,
                         linguistic::GetWritableDictionaryURL( aDicName ) );
         }

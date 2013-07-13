@@ -88,7 +88,7 @@ LanguageType LinguLocaleToLanguage( const ::com::sun::star::lang::Locale& rLocal
 {
     if ( rLocale.Language.isEmpty() )
         return LANGUAGE_NONE;
-    return LanguageTag( rLocale ).getLanguageType();
+    return LanguageTag::convertToLanguageType( rLocale );
 }
 
 
@@ -96,7 +96,7 @@ LanguageType LinguLocaleToLanguage( const ::com::sun::star::lang::Locale& rLocal
 {
     if (nLanguage == LANGUAGE_NONE)
         return ::com::sun::star::lang::Locale();
-    return LanguageTag( nLanguage).getLocale();
+    return LanguageTag::convertToLocale( nLanguage);
 }
 
 

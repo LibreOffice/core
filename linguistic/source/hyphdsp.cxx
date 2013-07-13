@@ -224,7 +224,7 @@ Sequence< Locale > SAL_CALL HyphenatorDispatcher::getLocales()
     HyphSvcByLangMap_t::const_iterator aIt;
     for (aIt = aSvcMap.begin();  aIt != aSvcMap.end();  ++aIt)
     {
-        *pLocales++ = LanguageTag( aIt->first ).getLocale();
+        *pLocales++ = LanguageTag::convertToLocale( aIt->first );
     }
     return aLocales;
 }

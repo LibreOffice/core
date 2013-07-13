@@ -35,7 +35,7 @@ LanguageType SdUnoGetLanguage( const lang::Locale& rLocale )
     if ( rLocale.Language.getLength() == 0 )
         return LANGUAGE_SYSTEM;
 
-    LanguageType eRet = LanguageTag( rLocale ).getLanguageType( false);
+    LanguageType eRet = LanguageTag::convertToLanguageType( rLocale, false);
     if ( eRet == LANGUAGE_NONE )
         eRet = LANGUAGE_SYSTEM;         //! or throw an exception?
 

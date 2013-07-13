@@ -125,7 +125,7 @@ namespace dxcanvas
                     rFontRequest.FontDescription.FontDescription.Proportion == rendering::PanoseProportion::MONO_SPACED
                     ? PITCH_FIXED : PITCH_VARIABLE);
 
-            aFont.SetLanguage(LanguageTag(rFontRequest.Locale).getLanguageType());
+            aFont.SetLanguage(LanguageTag::convertToLanguageType(rFontRequest.Locale));
 
             // setup font color
             aFont.SetColor( aColor );

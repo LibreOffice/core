@@ -676,7 +676,7 @@ void SvtSysLocaleOptions::GetCurrencyAbbrevAndLanguage( OUString& rAbbrev,
     {
         rAbbrev = rConfigString.copy( 0, nDelim );
         OUString aIsoStr( rConfigString.copy( nDelim+1 ) );
-        eLang = LanguageTag( aIsoStr ).getLanguageType();
+        eLang = LanguageTag::convertToLanguageType( aIsoStr );
     }
     else
     {
@@ -690,7 +690,7 @@ void SvtSysLocaleOptions::GetCurrencyAbbrevAndLanguage( OUString& rAbbrev,
 OUString SvtSysLocaleOptions::CreateCurrencyConfigString(
         const OUString& rAbbrev, LanguageType eLang )
 {
-    OUString aIsoStr( LanguageTag( eLang ).getBcp47() );
+    OUString aIsoStr( LanguageTag::convertToBcp47( eLang ) );
     if ( !aIsoStr.isEmpty() )
     {
         OUStringBuffer aStr( rAbbrev.getLength() + 1 + aIsoStr.getLength() );

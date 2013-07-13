@@ -212,7 +212,7 @@ Locale SAL_CALL SpellAlternatives::getLocale()
         throw(RuntimeException)
 {
     MutexGuard  aGuard( GetLinguMutex() );
-    return LanguageTag( nLanguage ).getLocale();
+    return LanguageTag::convertToLocale( nLanguage );
 }
 
 

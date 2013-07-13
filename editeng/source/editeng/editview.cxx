@@ -129,10 +129,10 @@ LanguageType EditView::CheckLanguage(
         // en-US
         aLangList[3] = LANGUAGE_ENGLISH_US;
 #ifdef DEBUG
-        lang::Locale a0( LanguageTag( aLangList[0] ).getLocale() );
-        lang::Locale a1( LanguageTag( aLangList[1] ).getLocale() );
-        lang::Locale a2( LanguageTag( aLangList[2] ).getLocale() );
-        lang::Locale a3( LanguageTag( aLangList[3] ).getLocale() );
+        lang::Locale a0( LanguageTag::convertToLocale( aLangList[0] ) );
+        lang::Locale a1( LanguageTag::convertToLocale( aLangList[1] ) );
+        lang::Locale a2( LanguageTag::convertToLocale( aLangList[2] ) );
+        lang::Locale a3( LanguageTag::convertToLocale( aLangList[3] ) );
 #endif
 
         sal_Int32 nCount = sizeof (aLangList) / sizeof (aLangList[0]);

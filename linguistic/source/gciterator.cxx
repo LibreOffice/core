@@ -444,7 +444,7 @@ uno::Reference< linguistic2::XProofreader > GrammarCheckingIterator::GetGrammarC
         m_bGCServicesChecked = sal_True;
     }
 
-    const LanguageType nLang = LanguageTag( rLocale ).getLanguageType( false);
+    const LanguageType nLang = LanguageTag::convertToLanguageType( rLocale, false);
     GCImplNames_t::const_iterator aLangIt( m_aGCImplNamesByLang.find( nLang ) );
     if (aLangIt != m_aGCImplNamesByLang.end())  // matching configured language found?
     {
@@ -1012,7 +1012,7 @@ void GrammarCheckingIterator::GetConfiguredGCSvcs_Impl()
                 {
                     // only the first entry is used, there should be only one grammar checker per language
                     const OUString aImplName( aImplNames[0] );
-                    const LanguageType nLang = LanguageTag( pElementNames[i] ).getLanguageType();
+                    const LanguageType nLang = LanguageTag::convertToLanguageType( pElementNames[i] );
                     aTmpGCImplNamesByLang[ nLang ] = aImplName;
                 }
             }

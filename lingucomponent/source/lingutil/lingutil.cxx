@@ -198,7 +198,7 @@ void MergeNewStyleDicsAndOldStyleDics(
         sal_Int32 nLocaleNames = aLocaleNames.getLength();
         for (sal_Int32 k = 0;  k < nLocaleNames; ++k)
         {
-            LanguageType nLang = LanguageTag( aLocaleNames[k] ).getLanguageType();
+            LanguageType nLang = LanguageTag::convertToLanguageType( aLocaleNames[k] );
             aNewStyleLanguages.insert( nLang );
         }
     }
@@ -214,7 +214,7 @@ void MergeNewStyleDicsAndOldStyleDics(
         DBG_ASSERT( nOldStyleDics, "old style dictionary with more then one language found!");
         if (nOldStyleDics > 0)
         {
-            LanguageType nLang = LanguageTag( aIt2->aLocaleNames[0] ).getLanguageType();
+            LanguageType nLang = LanguageTag::convertToLanguageType( aIt2->aLocaleNames[0] );
 
             if (nLang == LANGUAGE_DONTKNOW || linguistic::LinguIsUnspecified( nLang))
             {

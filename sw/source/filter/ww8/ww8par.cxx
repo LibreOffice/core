@@ -2424,7 +2424,7 @@ CharSet SwWW8ImplReader::GetCurrentCharSet()
             */
             const SvxLanguageItem *pLang = (const SvxLanguageItem*)GetFmtAttr(RES_CHRATR_LANGUAGE);
             LanguageType eLang = pLang ? pLang->GetLanguage() : LANGUAGE_SYSTEM;
-            ::com::sun::star::lang::Locale aLocale(LanguageTag(eLang).getLocale());
+            ::com::sun::star::lang::Locale aLocale(LanguageTag::convertToLocale(eLang));
             eSrcCharSet = msfilter::util::getBestTextEncodingFromLocale(aLocale);
         }
     }
