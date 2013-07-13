@@ -49,7 +49,6 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/bindings.hxx>
 #include <vcl/help.hxx>
-#include <rtl/logfile.hxx>
 
 #include "tabview.hxx"
 #include "tabvwsh.hxx"
@@ -256,8 +255,6 @@ ScTabView::ScTabView( Window* pParent, ScDocShell& rDocSh, ScTabViewShell* pView
     bBlockCols( false ),
     bBlockRows( false )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "sc", "nn93723", "ScTabView::ScTabView" );
-
     Init();
 }
 

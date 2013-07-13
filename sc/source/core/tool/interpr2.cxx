@@ -25,7 +25,6 @@
 #include <sfx2/objsh.hxx>
 #include <svl/stritem.hxx>
 #include <svl/zforlist.hxx>
-#include <rtl/logfile.hxx>
 #include <sal/macros.h>
 
 #include "attrib.hxx"
@@ -63,7 +62,6 @@ using namespace formula;
 double ScInterpreter::GetDateSerial( sal_Int16 nYear, sal_Int16 nMonth, sal_Int16 nDay,
         bool bStrict, bool bCheckGregorian )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::GetDateSerial" );
     if ( nYear < 100 && !bStrict )
         nYear = pFormatter->ExpandTwoDigitYear( nYear );
     // Do not use a default Date ctor here because it asks system time with a
@@ -103,7 +101,6 @@ double ScInterpreter::GetDateSerial( sal_Int16 nYear, sal_Int16 nMonth, sal_Int1
 
 void ScInterpreter::ScGetActDate()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScGetActDate" );
     nFuncFmtType = NUMBERFORMAT_DATE;
     Date aActDate( Date::SYSTEM );
     long nDiff = aActDate - *(pFormatter->GetNullDate());
@@ -112,7 +109,6 @@ void ScInterpreter::ScGetActDate()
 
 void ScInterpreter::ScGetActTime()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScGetActTime" );
     nFuncFmtType = NUMBERFORMAT_DATETIME;
     Date aActDate( Date::SYSTEM );
     long nDiff = aActDate - *(pFormatter->GetNullDate());
@@ -126,7 +122,6 @@ void ScInterpreter::ScGetActTime()
 
 void ScInterpreter::ScGetYear()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScGetYear" );
     Date aDate = *(pFormatter->GetNullDate());
     aDate += (long) ::rtl::math::approxFloor(GetDouble());
     PushDouble( (double) aDate.GetYear() );
@@ -134,7 +129,6 @@ void ScInterpreter::ScGetYear()
 
 void ScInterpreter::ScGetMonth()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScGetMonth" );
     Date aDate = *(pFormatter->GetNullDate());
     aDate += (long) ::rtl::math::approxFloor(GetDouble());
     PushDouble( (double) aDate.GetMonth() );
@@ -142,7 +136,6 @@ void ScInterpreter::ScGetMonth()
 
 void ScInterpreter::ScGetDay()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScGetDay" );
     Date aDate = *(pFormatter->GetNullDate());
     aDate += (long)::rtl::math::approxFloor(GetDouble());
     PushDouble((double) aDate.GetDay());
@@ -150,7 +143,6 @@ void ScInterpreter::ScGetDay()
 
 void ScInterpreter::ScGetMin()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScGetMin" );
     double fTime = GetDouble();
     fTime -= ::rtl::math::approxFloor(fTime);       // Datumsanteil weg
     long nVal = (long)::rtl::math::approxFloor(fTime*DATE_TIME_FACTOR+0.5) % ::Time::secondPerHour;
@@ -159,7 +151,6 @@ void ScInterpreter::ScGetMin()
 
 void ScInterpreter::ScGetSec()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScGetSec" );
     double fTime = GetDouble();
     fTime -= ::rtl::math::approxFloor(fTime);       // Datumsanteil weg
     long nVal = (long)::rtl::math::approxFloor(fTime*DATE_TIME_FACTOR+0.5) % ::Time::secondPerMinute;
@@ -168,7 +159,6 @@ void ScInterpreter::ScGetSec()
 
 void ScInterpreter::ScGetHour()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScGetHour" );
     double fTime = GetDouble();
     fTime -= ::rtl::math::approxFloor(fTime);       // Datumsanteil weg
     long nVal = (long)::rtl::math::approxFloor(fTime*DATE_TIME_FACTOR+0.5) / ::Time::secondPerHour;
@@ -177,7 +167,6 @@ void ScInterpreter::ScGetHour()
 
 void ScInterpreter::ScGetDateValue()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScGetDateValue" );
     String aInputString = GetString();
     sal_uInt32 nFIndex = 0;                 // damit default Land/Spr.
     double fVal;
@@ -195,7 +184,6 @@ void ScInterpreter::ScGetDateValue()
 
 void ScInterpreter::ScGetDayOfWeek()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScGetDayOfWeek" );
     sal_uInt8 nParamCount = GetByte();
     if ( MustHaveParamCount( nParamCount, 1, 2 ) )
     {
@@ -223,7 +211,6 @@ void ScInterpreter::ScGetDayOfWeek()
 
 void ScInterpreter::ScGetWeekOfYear()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScGetWeekOfYear" );
     if ( MustHaveParamCount( GetByte(), 2 ) )
     {
         short nFlag = (short) ::rtl::math::approxFloor(GetDouble());
@@ -236,7 +223,6 @@ void ScInterpreter::ScGetWeekOfYear()
 
 void ScInterpreter::ScEasterSunday()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScEasterSunday" );
     nFuncFmtType = NUMBERFORMAT_DATE;
     if ( MustHaveParamCount( GetByte(), 1 ) )
     {
@@ -267,7 +253,6 @@ void ScInterpreter::ScEasterSunday()
 
 void ScInterpreter::ScGetDate()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScGetDate" );
     nFuncFmtType = NUMBERFORMAT_DATE;
     if ( MustHaveParamCount( GetByte(), 3 ) )
     {
@@ -285,7 +270,6 @@ void ScInterpreter::ScGetDate()
 
 void ScInterpreter::ScGetTime()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScGetTime" );
     nFuncFmtType = NUMBERFORMAT_TIME;
     if ( MustHaveParamCount( GetByte(), 3 ) )
     {
@@ -302,7 +286,6 @@ void ScInterpreter::ScGetTime()
 
 void ScInterpreter::ScGetDiffDate()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScGetDiffDate" );
     if ( MustHaveParamCount( GetByte(), 2 ) )
     {
         double nDate2 = GetDouble();
@@ -313,7 +296,6 @@ void ScInterpreter::ScGetDiffDate()
 
 void ScInterpreter::ScGetDiffDate360()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScGetDiffDate360" );
     /* Implementation follows
      * http://www.bondmarkets.com/eCommerce/SMD_Fields_030802.pdf
      * Appendix B: Day-Count Bases, there are 7 different ways to calculate the
@@ -409,7 +391,6 @@ void ScInterpreter::ScGetDiffDate360()
 // fdo#44456 function DATEDIF as defined in ODF1.2 (Par. 6.10.3)
 void ScInterpreter::ScGetDateDif()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScGetDateDif" );
     if ( MustHaveParamCount( GetByte(), 3 ) )
     {
         String aInterval = GetString();
@@ -555,7 +536,6 @@ void ScInterpreter::ScGetDateDif()
 
 void ScInterpreter::ScGetTimeValue()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScGetTimeValue" );
     String aInputString = GetString();
     sal_uInt32 nFIndex = 0;                 // damit default Land/Spr.
     double fVal;
@@ -577,7 +557,6 @@ void ScInterpreter::ScGetTimeValue()
 
 void ScInterpreter::ScPlusMinus()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScPlusMinus" );
     double nVal = GetDouble();
     short n = 0;
     if (nVal < 0.0)
@@ -589,20 +568,17 @@ void ScInterpreter::ScPlusMinus()
 
 void ScInterpreter::ScAbs()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScAbs" );
     PushDouble(fabs(GetDouble()));
 }
 
 void ScInterpreter::ScInt()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScInt" );
     PushDouble(::rtl::math::approxFloor(GetDouble()));
 }
 
 
 void ScInterpreter::RoundNumber( rtl_math_RoundingMode eMode )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::RoundNumber" );
     sal_uInt8 nParamCount = GetByte();
     if ( MustHaveParamCount( nParamCount, 1, 2 ) )
     {
@@ -623,25 +599,21 @@ void ScInterpreter::RoundNumber( rtl_math_RoundingMode eMode )
 
 void ScInterpreter::ScRound()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScRound" );
     RoundNumber( rtl_math_RoundingMode_Corrected );
 }
 
 void ScInterpreter::ScRoundDown()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScRoundDown" );
     RoundNumber( rtl_math_RoundingMode_Down );
 }
 
 void ScInterpreter::ScRoundUp()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScRoundUp" );
     RoundNumber( rtl_math_RoundingMode_Up );
 }
 
 void ScInterpreter::ScCeil()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScCeil" );
     sal_uInt8 nParamCount = GetByte();
     if ( MustHaveParamCount( nParamCount, 2, 3 ) )
     {
@@ -664,7 +636,6 @@ void ScInterpreter::ScCeil()
 
 void ScInterpreter::ScFloor()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScFloor" );
     sal_uInt8 nParamCount = GetByte();
     if ( MustHaveParamCount( nParamCount, 2, 3 ) )
     {
@@ -687,7 +658,6 @@ void ScInterpreter::ScFloor()
 
 void ScInterpreter::ScEven()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScEven" );
     double fVal = GetDouble();
     if (fVal < 0.0)
         PushDouble(::rtl::math::approxFloor(fVal/2.0) * 2.0);
@@ -697,7 +667,6 @@ void ScInterpreter::ScEven()
 
 void ScInterpreter::ScOdd()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScOdd" );
     double fVal = GetDouble();
     if (fVal >= 0.0)
     {
@@ -716,7 +685,6 @@ void ScInterpreter::ScOdd()
 
 void ScInterpreter::ScArcTan2()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScArcTan2" );
     if ( MustHaveParamCount( GetByte(), 2 ) )
     {
         double nVal2 = GetDouble();
@@ -727,7 +695,6 @@ void ScInterpreter::ScArcTan2()
 
 void ScInterpreter::ScLog()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScLog" );
     sal_uInt8 nParamCount = GetByte();
     if ( MustHaveParamCount( nParamCount, 1, 2 ) )
     {
@@ -746,7 +713,6 @@ void ScInterpreter::ScLog()
 
 void ScInterpreter::ScLn()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScLn" );
     double fVal = GetDouble();
     if (fVal > 0.0)
         PushDouble(log(fVal));
@@ -756,7 +722,6 @@ void ScInterpreter::ScLn()
 
 void ScInterpreter::ScLog10()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScLog10" );
     double fVal = GetDouble();
     if (fVal > 0.0)
         PushDouble(log10(fVal));
@@ -766,7 +731,6 @@ void ScInterpreter::ScLog10()
 
 void ScInterpreter::ScNPV()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScNPV" );
     nFuncFmtType = NUMBERFORMAT_CURRENCY;
     short nParamCount = GetByte();
     if ( MustHaveParamCount( nParamCount, 2, 31 ) )
@@ -834,7 +798,6 @@ void ScInterpreter::ScNPV()
 
 void ScInterpreter::ScIRR()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScIRR" );
     double fSchaetzwert;
     nFuncFmtType = NUMBERFORMAT_PERCENT;
     sal_uInt8 nParamCount = GetByte();
@@ -972,7 +935,6 @@ void ScInterpreter::ScISPMT()
 double ScInterpreter::ScGetBw(double fZins, double fZzr, double fRmz,
                               double fZw, double fF)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScMIRR" );
     double fBw;
     if (fZins == 0.0)
         fBw = fZw + fRmz * fZzr;
@@ -988,7 +950,6 @@ double ScInterpreter::ScGetBw(double fZins, double fZzr, double fRmz,
 
 void ScInterpreter::ScBW()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScBW" );
     nFuncFmtType = NUMBERFORMAT_CURRENCY;
     double nRmz, nZzr, nZins, nZw = 0, nFlag = 0;
     sal_uInt8 nParamCount = GetByte();
@@ -1006,7 +967,6 @@ void ScInterpreter::ScBW()
 
 void ScInterpreter::ScDIA()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScDIA" );
     nFuncFmtType = NUMBERFORMAT_CURRENCY;
     if ( MustHaveParamCount( GetByte(), 4 ) )
     {
@@ -1023,7 +983,6 @@ void ScInterpreter::ScDIA()
 double ScInterpreter::ScGetGDA(double fWert, double fRest, double fDauer,
                 double fPeriode, double fFaktor)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScGetGDA" );
     double fGda, fZins, fAlterWert, fNeuerWert;
     fZins = fFaktor / fDauer;
     if (fZins >= 1.0)
@@ -1049,7 +1008,6 @@ double ScInterpreter::ScGetGDA(double fWert, double fRest, double fDauer,
 
 void ScInterpreter::ScGDA()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScGDA" );
     nFuncFmtType = NUMBERFORMAT_CURRENCY;
     sal_uInt8 nParamCount = GetByte();
     if ( MustHaveParamCount( nParamCount, 4, 5 ) )
@@ -1073,7 +1031,6 @@ void ScInterpreter::ScGDA()
 
 void ScInterpreter::ScGDA2()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScGDA2" );
     nFuncFmtType = NUMBERFORMAT_CURRENCY;
     sal_uInt8 nParamCount = GetByte();
     if ( !MustHaveParamCount( nParamCount, 4, 5 ) )
@@ -1120,7 +1077,6 @@ void ScInterpreter::ScGDA2()
 double ScInterpreter::ScInterVDB(double fWert,double fRest,double fDauer,
                              double fDauer1,double fPeriode,double fFaktor)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScInterVDB" );
     double fVdb=0;
     double fIntEnd   = ::rtl::math::approxCeil(fPeriode);
     sal_uLong nLoopEnd   = (sal_uLong) fIntEnd;
@@ -1171,7 +1127,6 @@ inline double DblMin( double a, double b )
 
 void ScInterpreter::ScVDB()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScVDB" );
     nFuncFmtType = NUMBERFORMAT_CURRENCY;
     sal_uInt8 nParamCount = GetByte();
     if ( MustHaveParamCount( nParamCount, 5, 7 ) )
@@ -1247,7 +1202,6 @@ void ScInterpreter::ScVDB()
 
 void ScInterpreter::ScLaufz()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScLaufz" );
     if ( MustHaveParamCount( GetByte(), 3 ) )
     {
         double nZukunft = GetDouble();
@@ -1259,7 +1213,6 @@ void ScInterpreter::ScLaufz()
 
 void ScInterpreter::ScLIA()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScLIA" );
     nFuncFmtType = NUMBERFORMAT_CURRENCY;
     if ( MustHaveParamCount( GetByte(), 3 ) )
     {
@@ -1273,7 +1226,6 @@ void ScInterpreter::ScLIA()
 double ScInterpreter::ScGetRmz(double fRate, double fNper, double fPv,
                        double fFv, double fPaytype)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScGetRmz" );
     double fPayment;
     if (fRate == 0.0)
         fPayment = (fPv + fFv) / fNper;
@@ -1291,7 +1243,6 @@ double ScInterpreter::ScGetRmz(double fRate, double fNper, double fPv,
 
 void ScInterpreter::ScRMZ()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScRMZ" );
     double nZins, nZzr, nBw, nZw = 0, nFlag = 0;
     nFuncFmtType = NUMBERFORMAT_CURRENCY;
     sal_uInt8 nParamCount = GetByte();
@@ -1309,7 +1260,6 @@ void ScInterpreter::ScRMZ()
 
 void ScInterpreter::ScZGZ()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScZGZ" );
     nFuncFmtType = NUMBERFORMAT_PERCENT;
     if ( MustHaveParamCount( GetByte(), 3 ) )
     {
@@ -1323,7 +1273,6 @@ void ScInterpreter::ScZGZ()
 double ScInterpreter::ScGetZw(double fZins, double fZzr, double fRmz,
                               double fBw, double fF)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScGetZw" );
     double fZw;
     if (fZins == 0.0)
         fZw = fBw + fRmz * fZzr;
@@ -1340,7 +1289,6 @@ double ScInterpreter::ScGetZw(double fZins, double fZzr, double fRmz,
 
 void ScInterpreter::ScZW()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScZW" );
     double nZins, nZzr, nRmz, nBw = 0, nFlag = 0;
     nFuncFmtType = NUMBERFORMAT_CURRENCY;
     sal_uInt8 nParamCount = GetByte();
@@ -1358,7 +1306,6 @@ void ScInterpreter::ScZW()
 
 void ScInterpreter::ScZZR()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScZZR" );
     double nZins, nRmz, nBw, nZw = 0, nFlag = 0;
     sal_uInt8 nParamCount = GetByte();
     if ( !MustHaveParamCount( nParamCount, 3, 5 ) )
@@ -1382,7 +1329,6 @@ void ScInterpreter::ScZZR()
 bool ScInterpreter::RateIteration( double fNper, double fPayment, double fPv,
                                    double fFv, double fPayType, double & fGuess )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::RateIteration" );
     // See also #i15090#
     // Newton-Raphson method: x(i+1) = x(i) - f(x(i)) / f'(x(i))
     // This solution handles integer and non-integer values of Nper different.
@@ -1479,7 +1425,6 @@ bool ScInterpreter::RateIteration( double fNper, double fPayment, double fPv,
 // In Calc UI it is the function RATE(Nper;Pmt;Pv;Fv;Type;Guess)
 void ScInterpreter::ScZins()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScZins" );
     double fPv, fPayment, fNper;
     // defaults for missing arguments, see ODFF spec
     double fFv = 0, fPayType = 0, fGuess = 0.1, fOrigGuess = 0.1;
@@ -1544,7 +1489,6 @@ void ScInterpreter::ScZins()
 double ScInterpreter::ScGetZinsZ(double fZins, double fZr, double fZzr, double fBw,
                                  double fZw, double fF, double& fRmz)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScGetZinsZ" );
     fRmz = ScGetRmz(fZins, fZzr, fBw, fZw, fF);     // fuer kapz auch bei fZr == 1
     double fZinsZ;
     nFuncFmtType = NUMBERFORMAT_CURRENCY;
@@ -1567,7 +1511,6 @@ double ScInterpreter::ScGetZinsZ(double fZins, double fZr, double fZzr, double f
 
 void ScInterpreter::ScZinsZ()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScZinsZ" );
     double nZins, nZr, nZzr, nBw, nZw = 0, nFlag = 0;
     nFuncFmtType = NUMBERFORMAT_CURRENCY;
     sal_uInt8 nParamCount = GetByte();
@@ -1592,7 +1535,6 @@ void ScInterpreter::ScZinsZ()
 
 void ScInterpreter::ScKapz()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScKapz" );
     double nZins, nZr, nZzr, nBw, nZw = 0, nFlag = 0;
     nFuncFmtType = NUMBERFORMAT_CURRENCY;
     sal_uInt8 nParamCount = GetByte();
@@ -1618,7 +1560,6 @@ void ScInterpreter::ScKapz()
 
 void ScInterpreter::ScKumZinsZ()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScKumZinsZ" );
     nFuncFmtType = NUMBERFORMAT_CURRENCY;
     if ( MustHaveParamCount( GetByte(), 6 ) )
     {
@@ -1659,7 +1600,6 @@ void ScInterpreter::ScKumZinsZ()
 
 void ScInterpreter::ScKumKapZ()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScKumKapZ" );
     nFuncFmtType = NUMBERFORMAT_CURRENCY;
     if ( MustHaveParamCount( GetByte(), 6 ) )
     {
@@ -1701,7 +1641,6 @@ void ScInterpreter::ScKumKapZ()
 
 void ScInterpreter::ScEffektiv()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScEffektiv" );
     nFuncFmtType = NUMBERFORMAT_PERCENT;
     if ( MustHaveParamCount( GetByte(), 2 ) )
     {
@@ -1719,7 +1658,6 @@ void ScInterpreter::ScEffektiv()
 
 void ScInterpreter::ScNominal()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScNominal" );
     nFuncFmtType = NUMBERFORMAT_PERCENT;
     if ( MustHaveParamCount( GetByte(), 2 ) )
     {
@@ -1737,7 +1675,6 @@ void ScInterpreter::ScNominal()
 
 void ScInterpreter::ScMod()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScMod" );
     if ( MustHaveParamCount( GetByte(), 2 ) )
     {
         double fVal2 = GetDouble(); // Denominator
@@ -1775,7 +1712,6 @@ void ScInterpreter::ScMod()
 */
 void ScInterpreter::ScBackSolver()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScBackSolver" );
     if ( MustHaveParamCount( GetByte(), 3 ) )
     {
         bool bDoneIteration = false;
@@ -1959,7 +1895,6 @@ void ScInterpreter::ScBackSolver()
 
 void ScInterpreter::ScIntersect()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScIntersect" );
     formula::FormulaTokenRef p2nd = PopToken();
     formula::FormulaTokenRef p1st = PopToken();
 
@@ -2107,7 +2042,6 @@ void ScInterpreter::ScIntersect()
 
 void ScInterpreter::ScRangeFunc()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScRangeFunc" );
     formula::FormulaTokenRef x2 = PopToken();
     formula::FormulaTokenRef x1 = PopToken();
 
@@ -2126,7 +2060,6 @@ void ScInterpreter::ScRangeFunc()
 
 void ScInterpreter::ScUnionFunc()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScUnionFunc" );
     formula::FormulaTokenRef p2nd = PopToken();
     formula::FormulaTokenRef p1st = PopToken();
 
@@ -2204,7 +2137,6 @@ void ScInterpreter::ScUnionFunc()
 
 void ScInterpreter::ScCurrent()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScCurrent" );
     FormulaTokenRef xTok( PopToken());
     if (xTok)
     {
@@ -2217,7 +2149,6 @@ void ScInterpreter::ScCurrent()
 
 void ScInterpreter::ScStyle()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScStyle" );
     sal_uInt8 nParamCount = GetByte();
     if (nParamCount >= 1 && nParamCount <= 3)
     {
@@ -2278,7 +2209,6 @@ static ScDdeLink* lcl_GetDdeLink( sfx2::LinkManager* pLinkMgr,
 
 void ScInterpreter::ScDde()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScDde" );
     //  Applikation, Datei, Bereich
     //  Application, Topic, Item
 
@@ -2659,7 +2589,6 @@ void ScInterpreter::ScRoman()
 
 static bool lcl_GetArabicValue( sal_Unicode cChar, sal_uInt16& rnValue, bool& rbIsDec )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScBase" );
     switch( cChar )
     {
         case 'M':   rnValue = 1000; rbIsDec = true;     break;
@@ -2677,7 +2606,6 @@ static bool lcl_GetArabicValue( sal_Unicode cChar, sal_uInt16& rnValue, bool& rb
 
 void ScInterpreter::ScArabic()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScArabic" );
     String aRoman( GetString() );
     if( nGlobalError )
         PushError( nGlobalError);
@@ -2736,7 +2664,6 @@ void ScInterpreter::ScArabic()
 
 void ScInterpreter::ScHyperLink()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScHyperLink" );
     sal_uInt8 nParamCount = GetByte();
     if ( MustHaveParamCount( nParamCount, 1, 2 ) )
     {
@@ -3040,7 +2967,6 @@ void lclAppendBlock( OStringBuffer& rText, sal_Int32 nValue )
 
 void ScInterpreter::ScBahtText()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScBahtText" );
     sal_uInt8 nParamCount = GetByte();
     if ( MustHaveParamCount( nParamCount, 1 ) )
     {
@@ -3112,7 +3038,6 @@ void ScInterpreter::ScBahtText()
 
 void ScInterpreter::ScGetPivotData()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScGetPivotData" );
     sal_uInt8 nParamCount = GetByte();
 
     if (!MustHaveParamCount(nParamCount, 2, 30) || (nParamCount % 2) == 1)

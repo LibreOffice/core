@@ -108,7 +108,6 @@
 
 #include "docshimp.hxx"
 #include "sizedev.hxx"
-#include <rtl/logfile.hxx>
 
 #include <officecfg/Office/Calc.hxx>
 #include <comphelper/processfactory.hxx>
@@ -488,8 +487,6 @@ sal_Bool ScDocShell::LoadXML( SfxMedium* pLoadMedium, const ::com::sun::star::un
 
 sal_Bool ScDocShell::SaveXML( SfxMedium* pSaveMedium, const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStor )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "sc", "sb99857", "ScDocShell::SaveXML" );
-
     aDocument.EnableIdle(false);
 
     ScXMLImportWrapper aImport( aDocument, pSaveMedium, xStor );
@@ -529,7 +526,6 @@ bool ScDocShell::SaveCurrentChart( SfxMedium& rMedium )
 
 sal_Bool ScDocShell::Load( SfxMedium& rMedium )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "sc", "nn93723", "ScDocShell::Load" );
     LoadMediumGuard aLoadGuard(&aDocument);
     ScRefreshTimerProtector aProt( aDocument.GetRefreshTimerControlAddress() );
 
@@ -955,7 +951,6 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
 sal_Bool ScDocShell::LoadFrom( SfxMedium& rMedium )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "sc", "nn93723", "ScDocShell::LoadFrom" );
     LoadMediumGuard aLoadGuard(&aDocument);
     ScRefreshTimerProtector aProt( aDocument.GetRefreshTimerControlAddress() );
 
@@ -1011,8 +1006,6 @@ static void lcl_parseHtmlFilterOption(const OUString& rOption, LanguageType& rLa
 
 sal_Bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "sc", "nn93723", "ScDocShell::ConvertFrom" );
-
     LoadMediumGuard aLoadGuard(&aDocument);
 
     sal_Bool bRet = false;              // sal_False heisst Benutzerabbruch !!
@@ -1574,8 +1567,6 @@ ScDocShell::PrepareSaveGuard::~PrepareSaveGuard()
 
 sal_Bool ScDocShell::Save()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "sc", "nn93723", "ScDocShell::Save" );
-
     ScRefreshTimerProtector aProt( aDocument.GetRefreshTimerControlAddress() );
 
     PrepareSaveGuard aPrepareGuard( *this);
@@ -2158,8 +2149,6 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt 
 
 sal_Bool ScDocShell::ConvertTo( SfxMedium &rMed )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "sc", "nn93723", "ScDocShell::ConvertTo" );
-
     ScRefreshTimerProtector aProt( aDocument.GetRefreshTimerControlAddress() );
 
     //  #i6500# don't call DoEnterHandler here (doesn't work with AutoSave),
@@ -2621,8 +2610,6 @@ ScDocShell::ScDocShell( const ScDocShell& rShell ) :
     , mpCollaboration( new ScCollaboration( this ) )
 #endif
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "sc", "nn93723", "ScDocShell::ScDocShell" );
-
     SetPool( &SC_MOD()->GetPool() );
 
     bIsInplace = rShell.bIsInplace;
@@ -2670,8 +2657,6 @@ ScDocShell::ScDocShell( const sal_uInt64 i_nSfxCreationFlags ) :
     , mpCollaboration( new ScCollaboration( this ) )
 #endif
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "sc", "nn93723", "ScDocShell::ScDocShell" );
-
     SetPool( &SC_MOD()->GetPool() );
 
     bIsInplace = (GetCreateMode() == SFX_CREATE_MODE_EMBEDDED);
