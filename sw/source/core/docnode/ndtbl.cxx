@@ -134,77 +134,16 @@ static void lcl_SetDfltBoxAttr( SwFrmFmt& rFmt, sal_uInt8 nId )
     rFmt.SetFmtAttr( aBox );
 }
 
-typedef std::map<SwFrmFmt *, SwTableBoxFmt *> DfltBoxAttrMap_t;
-typedef std::vector<DfltBoxAttrMap_t *> DfltBoxAttrList_t;
-
-static void
-lcl_SetDfltBoxAttr(SwTableBox& rBox, DfltBoxAttrList_t & rBoxFmtArr,
-        sal_uInt8 const nId, SwTableAutoFmt const*const pAutoFmt = 0)
+static void lcl_SetDfltBorders( SwTableFmt* pFmt )
 {
-    DfltBoxAttrMap_t * pMap = rBoxFmtArr[ nId ];
-    if (!pMap)
+    for( sal_uInt8 n = 0; n < 4; ++n )
     {
-        pMap = new DfltBoxAttrMap_t;
-        rBoxFmtArr[ nId ] = pMap;
+        for( sal_uInt8 i = 0; i < 4; i++ )
+        {
+            sal_uInt8 nId = (i < 3 ? 0 : 1) + (n ? 2 : 0);
+            ::lcl_SetDfltBoxAttr( *pFmt->GetBoxFmt( 4 * n + i ), nId );
+        }
     }
-
-    SwTableBoxFmt* pNewTableBoxFmt = 0;
-    SwFrmFmt* pBoxFrmFmt = rBox.GetFrmFmt();
-    DfltBoxAttrMap_t::iterator const iter(pMap->find(pBoxFrmFmt));
-    if (pMap->end() != iter)
-    {
-        pNewTableBoxFmt = iter->second;
-    }
-    else
-    {
-        SwDoc* pDoc = pBoxFrmFmt->GetDoc();
-        // format does not exist, so create it
-        pNewTableBoxFmt = pDoc->MakeTableBoxFmt();
-        pNewTableBoxFmt->SetFmtAttr( pBoxFrmFmt->GetAttrSet().Get( RES_FRM_SIZE ) );
-
-        if( pAutoFmt )
-            pAutoFmt->UpdateToSet( nId, (SfxItemSet&)pNewTableBoxFmt->GetAttrSet(),
-                                    SwTableAutoFmt::UPDATE_BOX,
-                                    pDoc->GetNumberFormatter( sal_True ) );
-        else
-            ::lcl_SetDfltBoxAttr( *pNewTableBoxFmt, nId );
-
-        (*pMap)[pBoxFrmFmt] = pNewTableBoxFmt;
-    }
-    rBox.ChgFrmFmt( pNewTableBoxFmt );
-}
-
-static SwTableBoxFmt *lcl_CreateDfltBoxFmt( SwDoc &rDoc, std::vector<SwTableBoxFmt*> &rBoxFmtArr,
-                                    sal_uInt16 nCols, sal_uInt8 nId )
-{
-    if ( !rBoxFmtArr[nId] )
-    {
-        SwTableBoxFmt* pBoxFmt = rDoc.MakeTableBoxFmt();
-        if( USHRT_MAX != nCols )
-            pBoxFmt->SetFmtAttr( SwFmtFrmSize( ATT_VAR_SIZE,
-                                            USHRT_MAX / nCols, 0 ));
-        ::lcl_SetDfltBoxAttr( *pBoxFmt, nId );
-        rBoxFmtArr[ nId ] = pBoxFmt;
-    }
-    return rBoxFmtArr[nId];
-}
-
-static SwTableBoxFmt *lcl_CreateAFmtBoxFmt( SwDoc &rDoc, std::vector<SwTableBoxFmt*> &rBoxFmtArr,
-                                    const SwTableAutoFmt& rAutoFmt,
-                                    sal_uInt16 nCols, sal_uInt8 nId )
-{
-    if( !rBoxFmtArr[nId] )
-    {
-        SwTableBoxFmt* pBoxFmt = rDoc.MakeTableBoxFmt();
-        rAutoFmt.UpdateToSet( nId, (SfxItemSet&)pBoxFmt->GetAttrSet(),
-                                SwTableAutoFmt::UPDATE_BOX,
-                                rDoc.GetNumberFormatter( sal_True ) );
-        if( USHRT_MAX != nCols )
-            pBoxFmt->SetFmtAttr( SwFmtFrmSize( ATT_VAR_SIZE,
-                                            USHRT_MAX / nCols, 0 ));
-        rBoxFmtArr[ nId ] = pBoxFmt;
-    }
-    return rBoxFmtArr[nId];
 }
 
 SwTableNode* SwDoc::IsIdxInTbl(const SwNodeIndex& rIdx)
@@ -390,7 +329,8 @@ const SwTable* SwDoc::InsertTable( const SwInsertTableOptions& rInsTblOpts,
 
     // Create the Box/Line/Table construct
     SwTableLineFmt* pLineFmt = MakeTableLineFmt();
-    SwTableFmt* pTableFmt = MakeTblFrmFmt( aTblName, GetDfltFrmFmt() );
+    SwTableFmt* pTableFmt = pTAFmt ? pTAFmt->GetTableStyle()
+                        : MakeTblFrmFmt( aTblName, GetDfltFrmFmt() );
 
     /* If the node to insert the table at is a context node and has a
        non-default FRAMEDIR propagate it to the table. */
@@ -409,7 +349,11 @@ const SwTable* SwDoc::InsertTable( const SwInsertTableOptions& rInsTblOpts,
     // Set Orientation at the Table's Fmt
     pTableFmt->SetFmtAttr( SwFmtHoriOrient( 0, eAdjust ) );
     // All lines use the left-to-right Fill-Order!
-    pLineFmt->SetFmtAttr( SwFmtFillOrder( ATT_LEFT_TO_RIGHT ));
+    pLineFmt->SetFmtAttr( SwFmtFillOrder( ATT_LEFT_TO_RIGHT ) );
+    pTableFmt->GetFirstLineFmt()->SetFmtAttr( SwFmtFillOrder( ATT_LEFT_TO_RIGHT ) );
+    pTableFmt->GetOddLineFmt()->SetFmtAttr( SwFmtFillOrder( ATT_LEFT_TO_RIGHT ) );
+    pTableFmt->GetEvenLineFmt()->SetFmtAttr( SwFmtFillOrder( ATT_LEFT_TO_RIGHT ) );
+    pTableFmt->GetLastLineFmt()->SetFmtAttr( SwFmtFillOrder( ATT_LEFT_TO_RIGHT ) );
 
     // Set USHRT_MAX as the Table's default SSize
     SwTwips nWidth = USHRT_MAX;
@@ -456,25 +400,14 @@ const SwTable* SwDoc::InsertTable( const SwInsertTableOptions& rInsTblOpts,
         }
     }
 
+    if( !pTAFmt && bDfltBorders )
+        ::lcl_SetDfltBorders( pTableFmt );
+
     SwTable * pNdTbl = &pTblNd->GetTable();
     pNdTbl->RegisterToFormat( *pTableFmt );
 
     pNdTbl->SetRowsToRepeat( nRowsToRepeat );
     pNdTbl->SetTableModel( bNewModel );
-
-    std::vector<SwTableBoxFmt*> aBoxFmtArr;
-    SwTableBoxFmt* pBoxFmt = 0;
-    if( !bDfltBorders && !pTAFmt )
-    {
-        pBoxFmt = MakeTableBoxFmt();
-        pBoxFmt->SetFmtAttr( SwFmtFrmSize( ATT_VAR_SIZE, USHRT_MAX / nCols, 0 ));
-    }
-    else
-    {
-        const sal_uInt16 nBoxArrLen = pTAFmt ? 16 : 4;
-        aBoxFmtArr.resize( nBoxArrLen, NULL );
-    }
-    SfxItemSet aCharSet( GetAttrPool(), RES_CHRATR_BEGIN, RES_PARATR_LIST_END-1 );
 
     SwNodeIndex aNdIdx( *pTblNd, 1 ); // Set to StartNode of first Box
     SwTableLines& rLines = pNdTbl->GetTabLines();
@@ -485,34 +418,10 @@ const SwTable* SwDoc::InsertTable( const SwInsertTableOptions& rInsTblOpts,
         SwTableBoxes& rBoxes = pLine->GetTabBoxes();
         for( sal_uInt16 i = 0; i < nCols; ++i )
         {
-            SwTableBoxFmt *pBoxF;
-            if( pTAFmt )
-            {
-                sal_uInt8 nId = static_cast<sal_uInt8>(!n ? 0 : (( n+1 == nRows )
-                                        ? 12 : (4 * (1 + ((n-1) & 1 )))));
-                nId = nId + static_cast<sal_uInt8>( !i ? 0 :
-                            ( i+1 == nCols ? 3 : (1 + ((i-1) & 1))));
-                pBoxF = ::lcl_CreateAFmtBoxFmt( *this, aBoxFmtArr, *pTAFmt,
-                                                nCols, nId );
-
-                // Set the Paragraph/Character Attributes if needed
-                if( pTAFmt->IsFont() || pTAFmt->IsJustify() )
-                {
-                    aCharSet.ClearItem();
-                    pTAFmt->UpdateToSet( nId, aCharSet,
-                                        SwTableAutoFmt::UPDATE_CHAR, 0 );
-                    if( aCharSet.Count() )
-                        GetNodes()[ aNdIdx.GetIndex()+1 ]->GetCntntNode()->
-                            SetAttr( aCharSet );
-                }
-            }
-            else if( bDfltBorders )
-            {
-                sal_uInt8 nBoxId = (i < nCols - 1 ? 0 : 1) + (n ? 2 : 0 );
-                pBoxF = ::lcl_CreateDfltBoxFmt( *this, aBoxFmtArr, nCols, nBoxId);
-            }
-            else
-                pBoxF = pBoxFmt;
+            SwTableBoxFmt *pBoxF = MakeTableBoxFmt();
+            if( USHRT_MAX != nCols )
+                pBoxF->SetFmtAttr( SwFmtFrmSize( ATT_VAR_SIZE,
+                                            USHRT_MAX / nCols, 0 ) );
 
             // For AutoFormat on input: the columns are set when inserting the Table
             // The Array contains the columns positions and not their widths!
@@ -694,10 +603,15 @@ const SwTable* SwDoc::TextToTable( const SwInsertTableOptions& rInsTblOpts,
     // Create the Box/Line/Table construct
     SwTableBoxFmt* pBoxFmt = MakeTableBoxFmt();
     SwTableLineFmt* pLineFmt = MakeTableLineFmt();
-    SwTableFmt* pTableFmt = MakeTblFrmFmt( GetUniqueTblName(), GetDfltFrmFmt() );
+    SwTableFmt* pTableFmt = pTAFmt ? pTAFmt->GetTableStyle()
+                        : MakeTblFrmFmt( GetUniqueTblName(), GetDfltFrmFmt() );
 
     // All Lines have a left-to-right Fill Order
     pLineFmt->SetFmtAttr( SwFmtFillOrder( ATT_LEFT_TO_RIGHT ));
+    pTableFmt->GetFirstLineFmt()->SetFmtAttr( SwFmtFillOrder( ATT_LEFT_TO_RIGHT ));
+    pTableFmt->GetOddLineFmt()->SetFmtAttr( SwFmtFillOrder( ATT_LEFT_TO_RIGHT ));
+    pTableFmt->GetEvenLineFmt()->SetFmtAttr( SwFmtFillOrder( ATT_LEFT_TO_RIGHT ));
+    pTableFmt->GetLastLineFmt()->SetFmtAttr( SwFmtFillOrder( ATT_LEFT_TO_RIGHT ));
     // The Table's SSize is USHRT_MAX
     pTableFmt->SetFmtAttr( SwFmtFrmSize( ATT_VAR_SIZE, USHRT_MAX ));
     if( !(rInsTblOpts.mnInsMode & tabopts::SPLIT_LAYOUT) )
@@ -746,26 +660,12 @@ const SwTable* SwDoc::TextToTable( const SwInsertTableOptions& rInsTblOpts,
     pTableFmt->SetFmtAttr( SwFmtHoriOrient( 0, eAdjust ) );
     pNdTbl->RegisterToFormat( *pTableFmt );
 
-    if( pTAFmt || ( rInsTblOpts.mnInsMode & tabopts::DEFAULT_BORDER) )
+    if( rInsTblOpts.mnInsMode & tabopts::DEFAULT_BORDER )
     {
-        sal_uInt8 nBoxArrLen = pTAFmt ? 16 : 4;
-        boost::scoped_ptr< DfltBoxAttrList_t > aBoxFmtArr1;
-        boost::scoped_ptr< std::vector<SwTableBoxFmt*> > aBoxFmtArr2;
-        if( bUseBoxFmt )
-        {
-            aBoxFmtArr1.reset(new DfltBoxAttrList_t( nBoxArrLen, NULL ));
-        }
-        else
-        {
-            aBoxFmtArr2.reset(new std::vector<SwTableBoxFmt*>( nBoxArrLen, NULL ));
-        }
+        if( !pTAFmt )
+            ::lcl_SetDfltBorders( pTableFmt );
 
-
-        SfxItemSet aCharSet( GetAttrPool(), RES_CHRATR_BEGIN, RES_PARATR_LIST_END-1 );
-
-        SwHistory* pHistory = pUndo ? &pUndo->GetHistory() : 0;
-
-        SwTableBoxFmt *pBoxF = 0;
+        SwTableBoxFmt *pBoxF = MakeTableBoxFmt();
         SwTableLines& rLines = pNdTbl->GetTabLines();
         sal_uInt16 nRows = rLines.size();
         for( sal_uInt16 n = 0; n < nRows; ++n )
@@ -775,77 +675,12 @@ const SwTable* SwDoc::TextToTable( const SwInsertTableOptions& rInsTblOpts,
             for( sal_uInt16 i = 0; i < nCols; ++i )
             {
                 SwTableBox* pBox = rBoxes[ i ];
-                bool bChgSz = false;
-
-                if( pTAFmt )
-                {
-                    sal_uInt8 nId = static_cast<sal_uInt8>(!n ? 0 : (( n+1 == nRows )
-                                            ? 12 : (4 * (1 + ((n-1) & 1 )))));
-                    nId = nId + static_cast<sal_uInt8>(!i ? 0 :
-                                ( i+1 == nCols ? 3 : (1 + ((i-1) & 1))));
-                    if( bUseBoxFmt )
-                        ::lcl_SetDfltBoxAttr( *pBox, *aBoxFmtArr1, nId, pTAFmt );
-                    else
-                    {
-                        bChgSz = 0 == (*aBoxFmtArr2)[ nId ];
-                        pBoxF = ::lcl_CreateAFmtBoxFmt( *this, *aBoxFmtArr2,
-                                                *pTAFmt, USHRT_MAX, nId );
-                    }
-
-                    // Set Paragraph/Character Attributes if needed
-                    if( pTAFmt->IsFont() || pTAFmt->IsJustify() )
-                    {
-                        aCharSet.ClearItem();
-                        pTAFmt->UpdateToSet( nId, aCharSet,
-                                            SwTableAutoFmt::UPDATE_CHAR, 0 );
-                        if( aCharSet.Count() )
-                        {
-                            sal_uLong nSttNd = pBox->GetSttIdx()+1;
-                            sal_uLong nEndNd = pBox->GetSttNd()->EndOfSectionIndex();
-                            for( ; nSttNd < nEndNd; ++nSttNd )
-                            {
-                                SwCntntNode* pNd = GetNodes()[ nSttNd ]->GetCntntNode();
-                                if( pNd )
-                                {
-                                    if( pHistory )
-                                    {
-                                        SwRegHistory aReg( pNd, *pNd, pHistory );
-                                        pNd->SetAttr( aCharSet );
-                                    }
-                                    else
-                                        pNd->SetAttr( aCharSet );
-                                }
-                            }
-                        }
-                    }
-                }
-                else
-                {
-                    sal_uInt8 nId = (i < nCols - 1 ? 0 : 1) + (n ? 2 : 0 );
-                    if( bUseBoxFmt )
-                        ::lcl_SetDfltBoxAttr( *pBox, *aBoxFmtArr1, nId );
-                    else
-                    {
-                        bChgSz = 0 == (*aBoxFmtArr2)[ nId ];
-                        pBoxF = ::lcl_CreateDfltBoxFmt( *this, *aBoxFmtArr2,
-                                                        USHRT_MAX, nId );
-                    }
-                }
 
                 if( !bUseBoxFmt )
                 {
-                    if( bChgSz )
-                        pBoxF->SetFmtAttr( pBox->GetFrmFmt()->GetFrmSize() );
+                    pBoxF->SetFmtAttr( pBox->GetFrmFmt()->GetFrmSize() );
                     pBox->ChgFrmFmt( pBoxF );
                 }
-            }
-        }
-
-        if( bUseBoxFmt )
-        {
-            for( sal_uInt8 i = 0; i < nBoxArrLen; ++i )
-            {
-                delete (*aBoxFmtArr1)[ i ];
             }
         }
     }
