@@ -603,8 +603,6 @@ SvXMLImportContext* SchXMLTableRowContext::CreateChildContext(
     return pContext;
 }
 
-//---------------------------------------------------------------------------------------------------
-//---------------------------------------------------------------------------------------------------
 
 class SchXMLRangeSomewhereContext : public SvXMLImportContext
 {
@@ -631,8 +629,6 @@ public:
     virtual void EndElement();
 };
 
-//---------------------------------------------------------------------------------------------------
-//---------------------------------------------------------------------------------------------------
 
 // ========================================
 // classes for cells and their content
@@ -1155,7 +1151,6 @@ void SchXMLTableHelper::switchRangesFromOuterToInternalIfNecessary(
     }
 }
 
-//---------------------------------------------------------------------------------------------------
 
 SchXMLRangeSomewhereContext::SchXMLRangeSomewhereContext( SvXMLImport& rImport,
                                                 sal_uInt16 nPrefix,

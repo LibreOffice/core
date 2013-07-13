@@ -121,7 +121,6 @@ SvXMLImportContext *XMLTextShapePropertySetContext_Impl::CreateChildContext(
     return pContext;
 }
 
-//-----------------------------------------------------------------------------
 
 void XMLTextShapeStyleContext::SetAttribute( sal_uInt16 nPrefixKey,
                                         const OUString& rLocalName,

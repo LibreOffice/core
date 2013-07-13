@@ -70,9 +70,7 @@ SvXMLEnumMapEntry const pXML_GradientStyle_Enum[] =
     { XML_TOKEN_INVALID, 0 }
 };
 
-//-------------------------------------------------------------
 // Import
-//-------------------------------------------------------------
 XMLGradientStyleImport::XMLGradientStyleImport(
     SvXMLImport& rImp )
     : rImport(rImp)
@@ -219,9 +217,7 @@ sal_Bool XMLGradientStyleImport::importXML(
 }
 
 
-//-------------------------------------------------------------
 // Export
-//-------------------------------------------------------------
 
 XMLGradientStyleExport::XMLGradientStyleExport(
     SvXMLExport& rExp )

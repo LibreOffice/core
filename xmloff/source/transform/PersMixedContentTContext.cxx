@@ -24,7 +24,6 @@
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
 
-//------------------------------------------------------------------------------
 class XMLPersTextTContext_Impl : public XMLTransformerContext
 {
     OUString m_aCharacters;
@@ -99,7 +98,6 @@ void XMLPersTextTContext_Impl::Export()
     GetTransformer().GetDocHandler()->characters( m_aCharacters );
 }
 
-//------------------------------------------------------------------------------
 
 TYPEINIT1( XMLPersMixedContentTContext, XMLPersElemContentTContext );
 

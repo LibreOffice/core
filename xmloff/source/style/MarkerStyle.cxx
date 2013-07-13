@@ -35,9 +35,7 @@ using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 
 
-//-------------------------------------------------------------
 // Import
-//-------------------------------------------------------------
 
 XMLMarkerStyleImport::XMLMarkerStyleImport( SvXMLImport& rImp )
     : rImport( rImp )
@@ -147,9 +145,7 @@ sal_Bool XMLMarkerStyleImport::importXML(
 }
 
 
-//-------------------------------------------------------------
 // Export
-//-------------------------------------------------------------
 
 XMLMarkerStyleExport::XMLMarkerStyleExport( SvXMLExport& rExp )
     : rExport( rExp )

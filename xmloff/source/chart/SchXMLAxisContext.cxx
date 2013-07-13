@@ -52,8 +52,6 @@ using namespace com::sun::star;
 
 using com::sun::star::uno::Reference;
 
-//----------------------------------------
-//----------------------------------------
 
 static SvXMLEnumMapEntry aXMLAxisDimensionMap[] =
 {
@@ -71,8 +69,6 @@ static SvXMLEnumMapEntry aXMLAxisTypeMap[] =
     { XML_TOKEN_INVALID, 0 }
 };
 
-//----------------------------------------
-//----------------------------------------
 
 class SchXMLCategoriesContext : public SvXMLImportContext
 {
@@ -88,8 +84,6 @@ public:
     virtual void StartElement( const Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
 };
 
-//----------------------------------------
-//----------------------------------------
 
 
 class DateScaleContext : public SvXMLImportContext
@@ -107,8 +101,6 @@ private:
 };
 
 
-//----------------------------------------
-//----------------------------------------
 
 SchXMLAxisContext::SchXMLAxisContext( SchXMLImportHelper& rImpHelper,
                                       SvXMLImport& rImport, const OUString& rLocalName,
@@ -607,7 +599,6 @@ void SchXMLAxisContext::SetAxisTitle()
     }
 }
 
-//-----------------------------------------------------------------------
 namespace
 {
 enum AxisChildTokens

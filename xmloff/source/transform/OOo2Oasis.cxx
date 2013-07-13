@@ -1082,7 +1082,6 @@ static XMLTokenEnum aTokenMap[] =
     XML_TOKEN_END
 };
 
-//-----------------------------------------------------------------------------
 
 class XMLDocumentTransformerContext_Impl : public XMLTransformerContext
 {
@@ -1234,7 +1233,6 @@ void XMLDocumentTransformerContext_Impl::EndElement()
     GetTransformer().SetClass( m_aOldClass );
 }
 
-//-----------------------------------------------------------------------------
 
 class XMLBodyTransformerContext_Impl : public XMLTransformerContext
 {
@@ -1300,7 +1298,6 @@ void XMLBodyTransformerContext_Impl::EndElement()
     XMLTransformerContext::EndElement();
 }
 
-//-----------------------------------------------------------------------------
 
 class XMLTabStopOOoTContext_Impl : public XMLPersElemContentTContext
 {
@@ -1554,7 +1551,6 @@ void XMLTableOOoTransformerContext_Impl::EndElement()
 }
 
 
-//-----------------------------------------------------------------------------
 
 XMLTransformerContext *OOo2OasisTransformer::CreateUserDefinedContext(
                               const TransformerAction_Impl& rAction,

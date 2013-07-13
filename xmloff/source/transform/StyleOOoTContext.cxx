@@ -142,7 +142,6 @@ static sal_uInt16 aElemActionMaps[XML_PROP_TYPE_END] =
 };
 
 
-//------------------------------------------------------------------------------
 
 class XMLTypedPropertiesOOoTContext_Impl : public XMLPersElemContentTContext
 {
@@ -218,7 +217,6 @@ void XMLTypedPropertiesOOoTContext_Impl::Export()
     }
 }
 
-//------------------------------------------------------------------------------
 
 class XMLPropertiesOOoTContext_Impl : public XMLTransformerContext
 {
@@ -1058,7 +1056,6 @@ sal_Bool XMLPropertiesOOoTContext_Impl::IsPersistent() const
 }
 
 
-//------------------------------------------------------------------------------
 
 TYPEINIT1( XMLStyleOOoTContext, XMLPersElemContentTContext );
 

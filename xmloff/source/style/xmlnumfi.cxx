@@ -51,7 +51,6 @@
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 
-//-------------------------------------------------------------------------
 
 struct SvXMLNumFmtEntry
 {
@@ -80,7 +79,6 @@ struct SvXMLEmbeddedElement
 
 typedef boost::ptr_set<SvXMLEmbeddedElement> SvXMLEmbeddedElementArr;
 
-//-------------------------------------------------------------------------
 
 class SvXMLNumImpData
 {
@@ -234,7 +232,6 @@ public:
 };
 
 
-//-------------------------------------------------------------------------
 
 enum SvXMLStyleTokens
 {
@@ -301,7 +298,6 @@ enum SvXMLStyleElemAttrTokens
     XML_TOK_ELEM_ATTR_CALENDAR
 };
 
-//-------------------------------------------------------------------------
 
 //
 //  standard colors
@@ -343,7 +339,6 @@ static SvXMLEnumMapEntry aFormatSourceMap[] =
     { XML_TOKEN_INVALID,    0 }
 };
 
-//-------------------------------------------------------------------------
 
 struct SvXMLDefaultDateFormat
 {
@@ -378,7 +373,6 @@ static SvXMLDefaultDateFormat aDefaultDateFormats[] =
     { NF_DATETIME_SYS_DDMMYYYY_HHMMSS,  XML_DEA_NONE,   XML_DEA_ANY,    XML_DEA_ANY,        XML_DEA_ANY,    XML_DEA_ANY,    XML_DEA_ANY,    XML_DEA_ANY,    sal_False }
 };
 
-//-------------------------------------------------------------------------
 
 //
 //  SvXMLNumImpData
@@ -617,7 +611,6 @@ const LocaleDataWrapper& SvXMLNumImpData::GetLocaleData( LanguageType nLang )
     return *pLocaleData;
 }
 
-//-------------------------------------------------------------------------
 
 //
 //  SvXMLNumFmtMapContext
@@ -668,7 +661,6 @@ void SvXMLNumFmtMapContext::EndElement()
     rParent.AddCondition( sCondition, sName );
 }
 
-//-------------------------------------------------------------------------
 
 //
 //  SvXMLNumFmtPropContext
@@ -718,7 +710,6 @@ void SvXMLNumFmtPropContext::EndElement()
         rParent.AddColor( m_nColor );
 }
 
-//-------------------------------------------------------------------------
 
 //
 //  SvXMLNumFmtEmbeddedTextContext
@@ -771,7 +762,6 @@ void SvXMLNumFmtEmbeddedTextContext::EndElement()
     rParent.AddEmbeddedElement( nTextPosition, aContent.makeStringAndClear() );
 }
 
-//-------------------------------------------------------------------------
 
 static sal_Bool lcl_ValidChar( sal_Unicode cChar, const SvXMLNumFormatContext& rParent )
 {
@@ -1259,7 +1249,6 @@ void SvXMLNumFmtElementContext::EndElement()
     }
 }
 
-//-------------------------------------------------------------------------
 
 sal_uInt16 SvXMLNumFmtDefaults::GetDefaultDateFormat( SvXMLDateElementAttributes eDOW,
                 SvXMLDateElementAttributes eDay, SvXMLDateElementAttributes eMonth,
@@ -1287,7 +1276,6 @@ sal_uInt16 SvXMLNumFmtDefaults::GetDefaultDateFormat( SvXMLDateElementAttributes
     return NF_INDEX_TABLE_ENTRIES;  // invalid
 }
 
-//-------------------------------------------------------------------------
 
 //
 //  SvXMLNumFormatContext
@@ -2173,7 +2161,6 @@ sal_Bool SvXMLNumFormatContext::IsSystemLanguage()
     return nFormatLang == LANGUAGE_SYSTEM;
 }
 
-//-------------------------------------------------------------------------
 
 //
 //  SvXMLNumFmtHelper

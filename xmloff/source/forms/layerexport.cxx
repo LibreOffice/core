@@ -52,10 +52,8 @@
 
 #include <numeric>
 
-//.........................................................................
 namespace xmloff
 {
-//.........................................................................
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::awt;
@@ -73,14 +71,12 @@ namespace xmloff
     //=====================================================================
     //= OFormLayerXMLExport_Impl
     //=====================================================================
-    //---------------------------------------------------------------------
     const OUString& OFormLayerXMLExport_Impl::getControlNumberStyleNamePrefix()
     {
         static const OUString s_sControlNumberStyleNamePrefix("C");
         return s_sControlNumberStyleNamePrefix;
     }
 
-    //---------------------------------------------------------------------
     OFormLayerXMLExport_Impl::OFormLayerXMLExport_Impl(SvXMLExport& _rContext)
         :m_rContext(_rContext)
         ,m_pControlNumberStyles(NULL)
@@ -109,7 +105,6 @@ namespace xmloff
     {
     }
 
-    //---------------------------------------------------------------------
     sal_Bool OFormLayerXMLExport_Impl::impl_isFormPageContainingForms(const Reference< XDrawPage >& _rxDrawPage, Reference< XIndexAccess >& _rxForms)
     {
         Reference< XFormsSupplier2 > xFormsSupp(_rxDrawPage, UNO_QUERY);
@@ -136,7 +131,6 @@ namespace xmloff
         return sal_True;
     }
 
-    //---------------------------------------------------------------------
     void OFormLayerXMLExport_Impl::exportGridColumn(const Reference< XPropertySet >& _rxColumn,
         const Sequence< ScriptEventDescriptor >& _rEvents)
     {
@@ -145,7 +139,6 @@ namespace xmloff
         aExportImpl.doExport();
     }
 
-    //---------------------------------------------------------------------
     void OFormLayerXMLExport_Impl::exportControl(const Reference< XPropertySet >& _rxControl,
         const Sequence< ScriptEventDescriptor >& _rEvents)
     {
@@ -163,7 +156,6 @@ namespace xmloff
         aExportImpl.doExport();
     }
 
-    //---------------------------------------------------------------------
     void OFormLayerXMLExport_Impl::exportForm(const Reference< XPropertySet >& _rxProps,
         const Sequence< ScriptEventDescriptor >& _rEvents)
     {
@@ -172,19 +164,16 @@ namespace xmloff
         aAttributeHandler.doExport();
     }
 
-    //---------------------------------------------------------------------
     ::rtl::Reference< SvXMLExportPropertyMapper > OFormLayerXMLExport_Impl::getStylePropertyMapper()
     {
         return m_xStyleExportMapper;
     }
 
-    //---------------------------------------------------------------------
     SvXMLExport& OFormLayerXMLExport_Impl::getGlobalContext()
     {
         return m_rContext;
     }
 
-    //---------------------------------------------------------------------
     void OFormLayerXMLExport_Impl::exportCollectionElements(const Reference< XIndexAccess >& _rxCollection)
     {
         // step through all the elements of the collection
@@ -240,7 +229,6 @@ namespace xmloff
         }
     }
 
-    //---------------------------------------------------------------------
     OUString OFormLayerXMLExport_Impl::getObjectStyleName( const Reference< XPropertySet >& _rxObject )
     {
         OUString aObjectStyle;
@@ -251,7 +239,6 @@ namespace xmloff
         return aObjectStyle;
     }
 
-    //---------------------------------------------------------------------
     void OFormLayerXMLExport_Impl::clear()
     {
         m_aControlIds.clear();
@@ -265,14 +252,12 @@ namespace xmloff
         m_aIgnoreList.clear();
     }
 
-    //---------------------------------------------------------------------
     void OFormLayerXMLExport_Impl::exportAutoControlNumberStyles()
     {
         if ( m_pControlNumberStyles )
             m_pControlNumberStyles->Export( sal_True );
     }
 
-    //---------------------------------------------------------------------
     void OFormLayerXMLExport_Impl::exportAutoStyles()
     {
         m_rContext.GetAutoStylePool()->exportXML(
@@ -283,7 +268,6 @@ namespace xmloff
         );
     }
 
-    //---------------------------------------------------------------------
     void OFormLayerXMLExport_Impl::exportForms(const Reference< XDrawPage >& _rxDrawPage)
     {
         // get the forms collection of the page
@@ -301,14 +285,12 @@ namespace xmloff
         exportCollectionElements(xCollectionIndex);
     }
 
-    //---------------------------------------------------------------------
     void OFormLayerXMLExport_Impl::exportXForms() const
     {
         // export XForms models
         ::exportXForms( m_rContext );
     }
 
-    //---------------------------------------------------------------------
     bool OFormLayerXMLExport_Impl::pageContainsForms( const Reference< XDrawPage >& _rxDrawPage ) const
     {
         Reference< XFormsSupplier2 > xFormsSupp( _rxDrawPage, UNO_QUERY );
@@ -316,7 +298,6 @@ namespace xmloff
         return xFormsSupp.is() && xFormsSupp->hasForms();
     }
 
-    //---------------------------------------------------------------------
     bool OFormLayerXMLExport_Impl::documentContainsXForms() const
     {
         Reference< XXFormsSupplier > xXFormSupp( m_rContext.GetModel(), UNO_QUERY );
@@ -326,7 +307,6 @@ namespace xmloff
         return xForms.is() && xForms->hasElements();
     }
 
-    //---------------------------------------------------------------------
     sal_Bool OFormLayerXMLExport_Impl::implMoveIterators(const Reference< XDrawPage >& _rxDrawPage, sal_Bool _bClear)
     {
         if (!_rxDrawPage.is())
@@ -364,7 +344,6 @@ namespace xmloff
         return bKnownPage;
     }
 
-    //---------------------------------------------------------------------
     sal_Bool OFormLayerXMLExport_Impl::seekPage(const Reference< XDrawPage >& _rxDrawPage)
     {
         sal_Bool bKnownPage = implMoveIterators( _rxDrawPage, sal_False );
@@ -388,7 +367,6 @@ namespace xmloff
         return sal_False;
     }
 
-    //---------------------------------------------------------------------
     OUString OFormLayerXMLExport_Impl::getControlId(const Reference< XPropertySet >& _rxControl)
     {
         if (m_aCurrentPageIds == m_aControlIds.end())
@@ -399,7 +377,6 @@ namespace xmloff
         return m_aCurrentPageIds->second[_rxControl];
     }
 
-    //---------------------------------------------------------------------
     OUString OFormLayerXMLExport_Impl::getImmediateNumberStyle( const Reference< XPropertySet >& _rxObject )
     {
         OUString sNumberStyle;
@@ -411,7 +388,6 @@ namespace xmloff
         return sNumberStyle;
     }
 
-    //---------------------------------------------------------------------
     OUString OFormLayerXMLExport_Impl::getControlNumberStyle( const Reference< XPropertySet >& _rxControl )
     {
         OUString sNumberStyle;
@@ -428,7 +404,6 @@ namespace xmloff
         return sNumberStyle;
     }
 
-    //---------------------------------------------------------------------
     void OFormLayerXMLExport_Impl::examineForms(const Reference< XDrawPage >& _rxDrawPage)
     {
         // get the forms collection of the page
@@ -492,7 +467,6 @@ namespace xmloff
         while (xLoop.is());
     }
 
-    //---------------------------------------------------------------------
     namespace
     {
         struct AccumulateSize : public ::std::binary_function< size_t, MapPropertySet2Map::value_type, size_t >
@@ -532,7 +506,6 @@ namespace xmloff
         }
     }
 
-    //---------------------------------------------------------------------
     sal_Bool OFormLayerXMLExport_Impl::checkExamineControl(const Reference< XPropertySet >& _rxObject)
     {
         Reference< XPropertySetInfo > xCurrentInfo = _rxObject->getPropertySetInfo();
@@ -593,7 +566,6 @@ namespace xmloff
         return bIsControl;
     }
 
-    //---------------------------------------------------------------------
     void OFormLayerXMLExport_Impl::collectGridColumnStylesAndIds( const Reference< XPropertySet >& _rxControl )
     {
         // loop through all columns of the grid
@@ -671,7 +643,6 @@ namespace xmloff
         }
     }
 
-    //---------------------------------------------------------------------
     sal_Int32 OFormLayerXMLExport_Impl::implExamineControlNumberFormat( const Reference< XPropertySet >& _rxObject )
     {
         // get the format key relative to our own formats supplier
@@ -684,7 +655,6 @@ namespace xmloff
         return nOwnFormatKey;
     }
 
-    //---------------------------------------------------------------------
     void OFormLayerXMLExport_Impl::examineControlNumberFormat( const Reference< XPropertySet >& _rxControl )
     {
         sal_Int32 nOwnFormatKey = implExamineControlNumberFormat( _rxControl );
@@ -699,7 +669,6 @@ namespace xmloff
         m_aControlNumberFormats[_rxControl] = nOwnFormatKey;
     }
 
-    //---------------------------------------------------------------------
     sal_Int32 OFormLayerXMLExport_Impl::ensureTranslateFormat(const Reference< XPropertySet >& _rxFormattedControl)
     {
         ensureControlNumberStyleExport();
@@ -747,7 +716,6 @@ namespace xmloff
         return nOwnFormatKey;
     }
 
-    //---------------------------------------------------------------------
     void OFormLayerXMLExport_Impl::ensureControlNumberStyleExport()
     {
         if (!m_pControlNumberStyles)
@@ -780,14 +748,12 @@ namespace xmloff
         }
     }
 
-    //---------------------------------------------------------------------
     SvXMLNumFmtExport* OFormLayerXMLExport_Impl::getControlNumberStyleExport()
     {
         ensureControlNumberStyleExport();
         return m_pControlNumberStyles;
     }
 
-    //---------------------------------------------------------------------
     void OFormLayerXMLExport_Impl::excludeFromExport( const Reference< XControlModel > _rxControl )
     {
         Reference< XPropertySet > xProps( _rxControl, UNO_QUERY );
@@ -799,9 +765,7 @@ namespace xmloff
         OSL_ENSURE( aPos.second, "OFormLayerXMLExport_Impl::excludeFromExport: element already exists in the ignore list!" );
     }
 
-//.........................................................................
 }   // namespace xmloff
-//.........................................................................
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

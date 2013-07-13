@@ -21,10 +21,8 @@
 #include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmlevent.hxx>
 
-//.........................................................................
 namespace xmloff
 {
-//.........................................................................
 
     //=====================================================================
     //= event translation table
@@ -69,8 +67,6 @@ namespace xmloff
 
     const XMLEventNameTranslation* g_pFormsEventTranslation = aEventTranslations;
 
-//.........................................................................
 }   // namespace xmloff
-//.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

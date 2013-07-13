@@ -1312,7 +1312,6 @@ void XMLBodyOASISTransformerContext_Impl::EndElement()
     XMLTransformerContext::EndElement();
 }
 
-//-----------------------------------------------------------------------------
 
 class XMLTabStopOASISTContext_Impl : public XMLPersElemContentTContext
 {

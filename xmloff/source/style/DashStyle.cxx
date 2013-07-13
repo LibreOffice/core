@@ -75,9 +75,7 @@ SvXMLEnumMapEntry const pXML_DashStyle_Enum[] =
     { XML_TOKEN_INVALID, 0 }
 };
 
-//-------------------------------------------------------------
 // Import
-//-------------------------------------------------------------
 
 XMLDashStyleImport::XMLDashStyleImport( SvXMLImport& rImp )
     : rImport(rImp)
@@ -211,9 +209,7 @@ sal_Bool XMLDashStyleImport::importXML(
 }
 
 
-//-------------------------------------------------------------
 // Export
-//-------------------------------------------------------------
 
 XMLDashStyleExport::XMLDashStyleExport( SvXMLExport& rExp )
     : rExport(rExp)

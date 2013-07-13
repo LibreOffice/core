@@ -40,10 +40,8 @@
 #include <tools/date.hxx>
 #include <tools/datetime.hxx>
 
-//.........................................................................
 namespace xmloff
 {
-//.........................................................................
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
@@ -57,7 +55,6 @@ namespace xmloff
     //=====================================================================
     //= OPropertyExport
     //=====================================================================
-    //---------------------------------------------------------------------
     OPropertyExport::OPropertyExport(IFormsExportContext& _rContext, const Reference< XPropertySet >& _rxProps)
         :m_rContext(_rContext)
         ,m_xProps(_rxProps)
@@ -77,7 +74,6 @@ namespace xmloff
         examinePersistence();
     }
 
-    //---------------------------------------------------------------------
     bool OPropertyExport::shouldExportProperty( const OUString& i_propertyName ) const
     {
         // if the property state is DEFAULT, it does not need to be written - at least
@@ -235,7 +231,6 @@ namespace xmloff
         delete pPropertiesTag;
     }
 
-    //---------------------------------------------------------------------
     void OPropertyExport::examinePersistence()
     {
         m_aRemainingProps.clear();
@@ -255,7 +250,6 @@ namespace xmloff
         }
     }
 
-    //---------------------------------------------------------------------
     void OPropertyExport::exportStringPropertyAttribute( const sal_uInt16 _nNamespaceKey, const sal_Char* _pAttributeName,
             const OUString& _rPropertyName )
     {
@@ -278,7 +272,6 @@ namespace xmloff
         exportedProperty( _rPropertyName );
     }
 
-    //---------------------------------------------------------------------
     void OPropertyExport::exportBooleanPropertyAttribute(const sal_uInt16 _nNamespaceKey, const sal_Char* _pAttributeName,
             const OUString& _rPropertyName, const sal_Int8 _nBooleanAttributeFlags)
     {
@@ -317,7 +310,6 @@ namespace xmloff
         exportedProperty( _rPropertyName );
     }
 
-    //---------------------------------------------------------------------
     void OPropertyExport::exportInt16PropertyAttribute(const sal_uInt16 _nNamespaceKey, const sal_Char* _pAttributeName,
         const OUString& _rPropertyName, const sal_Int16 _nDefault, bool force)
     {
@@ -341,7 +333,6 @@ namespace xmloff
         exportedProperty( _rPropertyName );
     }
 
-    //---------------------------------------------------------------------
     void OPropertyExport::exportInt32PropertyAttribute( const sal_uInt16 _nNamespaceKey, const sal_Char* _pAttributeName,
         const OUString& _rPropertyName, const sal_Int32 _nDefault )
     {
@@ -365,7 +356,6 @@ namespace xmloff
         exportedProperty( _rPropertyName );
     }
 
-    //---------------------------------------------------------------------
     void OPropertyExport::exportEnumPropertyAttribute(
             const sal_uInt16 _nNamespaceKey, const sal_Char* _pAttributeName,
             const OUString &rPropertyName, const SvXMLEnumMapEntry* _pValueMap,
@@ -400,7 +390,6 @@ namespace xmloff
         exportedProperty(rPropertyName);
     }
 
-    //---------------------------------------------------------------------
     void OPropertyExport::exportTargetFrameAttribute()
     {
         DBG_CHECK_PROPERTY( PROPERTY_TARGETFRAME, OUString );
@@ -416,7 +405,6 @@ namespace xmloff
         exportedProperty(PROPERTY_TARGETFRAME);
     }
 
-    //---------------------------------------------------------------------
     void OPropertyExport::exportRelativeTargetLocation(const OUString& _sPropertyName,sal_Int32 _nProperty,bool _bAddType)
     {
         DBG_CHECK_PROPERTY( _sPropertyName, OUString );
@@ -436,7 +424,6 @@ namespace xmloff
 
         exportedProperty(_sPropertyName);
     }
-    //---------------------------------------------------------------------
     void OPropertyExport::flagStyleProperties()
     {
         // flag all the properties which are part of the style as "handled"
@@ -461,7 +448,6 @@ namespace xmloff
         exportedProperty( "WritingMode" );
     }
 
-    //---------------------------------------------------------------------
     void OPropertyExport::exportGenericPropertyAttribute(
             const sal_uInt16 _nAttributeNamespaceKey, const sal_Char* _pAttributeName, const sal_Char* _pPropertyName)
     {
@@ -490,7 +476,6 @@ namespace xmloff
         AddAttribute(_nAttributeNamespaceKey, _pAttributeName, sValue);
     }
 
-    //---------------------------------------------------------------------
     void OPropertyExport::exportStringSequenceAttribute(const sal_uInt16 _nAttributeNamespaceKey, const sal_Char* _pAttributeName,
         const OUString& _rPropertyName,
         const sal_Unicode _aQuoteCharacter, const sal_Unicode _aListSeparator)
@@ -538,7 +523,6 @@ namespace xmloff
         exportedProperty( _rPropertyName );
     }
 
-    //---------------------------------------------------------------------
     OUString OPropertyExport::implConvertAny(const Any& _rValue)
     {
         OUStringBuffer aBuffer;
@@ -625,7 +609,6 @@ namespace xmloff
     }
 
 
-    //---------------------------------------------------------------------
     token::XMLTokenEnum OPropertyExport::implGetPropertyXMLType(const ::com::sun::star::uno::Type& _rType)
     {
         // handle the type description
@@ -649,7 +632,6 @@ namespace xmloff
     }
 
 #ifdef DBG_UTIL
-    //---------------------------------------------------------------------
     void OPropertyExport::AddAttribute(sal_uInt16 _nPrefix, const sal_Char* _pName, const OUString& _rValue)
     {
         OSL_ENSURE(m_rContext.getGlobalContext().GetXAttrList()->getValueByName(OUString::createFromAscii(_pName)).isEmpty(),
@@ -658,7 +640,6 @@ namespace xmloff
         m_rContext.getGlobalContext().AddAttribute(_nPrefix, _pName, _rValue);
     }
 
-    //---------------------------------------------------------------------
     void OPropertyExport::AddAttribute( sal_uInt16 _nPrefix, const OUString& _rName, const OUString& _rValue )
     {
         OSL_ENSURE(m_rContext.getGlobalContext().GetXAttrList()->getValueByName( _rName ).isEmpty(),
@@ -667,7 +648,6 @@ namespace xmloff
         m_rContext.getGlobalContext().AddAttribute( _nPrefix, _rName, _rValue );
     }
 
-    //---------------------------------------------------------------------
     void OPropertyExport::AddAttributeASCII(sal_uInt16 _nPrefix, const sal_Char* _pName, const sal_Char *pValue)
     {
         OSL_ENSURE(m_rContext.getGlobalContext().GetXAttrList()->getValueByName(OUString::createFromAscii(_pName)).isEmpty(),
@@ -676,7 +656,6 @@ namespace xmloff
         m_rContext.getGlobalContext().AddAttributeASCII(_nPrefix, _pName, pValue);
     }
 
-    //---------------------------------------------------------------------
     void OPropertyExport::AddAttribute(sal_uInt16 _nPrefix, ::xmloff::token::XMLTokenEnum _eName, const OUString& _rValue)
     {
         OSL_ENSURE(m_rContext.getGlobalContext().GetXAttrList()->getValueByName(::xmloff::token::GetXMLToken(_eName)).isEmpty(),
@@ -685,7 +664,6 @@ namespace xmloff
         m_rContext.getGlobalContext().AddAttribute(_nPrefix, _eName, _rValue);
     }
 
-    //---------------------------------------------------------------------
     void OPropertyExport::AddAttribute(sal_uInt16 _nPrefix, ::xmloff::token::XMLTokenEnum _eName, ::xmloff::token::XMLTokenEnum _eValue )
     {
         OSL_ENSURE(m_rContext.getGlobalContext().GetXAttrList()->getValueByName(::xmloff::token::GetXMLToken(_eName)).isEmpty(),
@@ -694,7 +672,6 @@ namespace xmloff
         m_rContext.getGlobalContext().AddAttribute(_nPrefix, _eName, _eValue);
     }
 
-    //---------------------------------------------------------------------
     void OPropertyExport::dbg_implCheckProperty(const OUString& _rPropertyName, const Type* _pType)
     {
         try
@@ -722,9 +699,7 @@ namespace xmloff
     }
 #endif // DBG_UTIL - dbg_implCheckProperty
 
-//.........................................................................
 }   // namespace xmloff
-//.........................................................................
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
