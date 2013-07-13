@@ -37,7 +37,6 @@ using namespace ::com::sun::star::frame;
 namespace xmlscript
 {
 
-//==================================================================================================
 class InputStreamProvider
     : public ::cppu::WeakImplHelper1< io::XInputStreamProvider >
 {
@@ -52,14 +51,12 @@ public:
     virtual Reference< io::XInputStream > SAL_CALL createInputStream()
         throw (RuntimeException);
 };
-//__________________________________________________________________________________________________
 Reference< io::XInputStream > InputStreamProvider::createInputStream()
     throw (RuntimeException)
 {
     return ::xmlscript::createInputStream( _bytes );
 }
 
-//==================================================================================================
 Reference< io::XInputStreamProvider > SAL_CALL exportDialogModel(
     Reference< container::XNameContainer > const & xDialogModel,
     Reference< XComponentContext > const & xContext,
@@ -77,7 +74,6 @@ Reference< io::XInputStreamProvider > SAL_CALL exportDialogModel(
     return new InputStreamProvider( aBytes );
 }
 
-//==================================================================================================
 void SAL_CALL importDialogModel(
     Reference< io::XInputStream > const & xInput,
     Reference< container::XNameContainer > const & xDialogModel,

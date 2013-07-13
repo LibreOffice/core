@@ -70,7 +70,6 @@ Reference< xml::input::XElement > Frame::startChildElement(
         throw     xml::sax::SAXException("expected event element!", Reference< XInterface >(), Any() );
     }
 }
-//__________________________________________________________________________________________________
 
 void Frame::endElement()
     throw (xml::sax::SAXException, RuntimeException)
@@ -132,7 +131,6 @@ Reference< xml::input::XElement > MultiPage::startChildElement(
         throw xml::sax::SAXException( "expected event element!", Reference< XInterface >(), Any() );
     }
 }
-//__________________________________________________________________________________________________
 
 void MultiPage::endElement()
     throw (xml::sax::SAXException, RuntimeException)
@@ -186,7 +184,6 @@ Reference< xml::input::XElement > Page::startChildElement(
         throw xml::sax::SAXException("expected event element!", Reference< XInterface >(), Any() );
     }
 }
-//__________________________________________________________________________________________________
 
 void Page::endElement()
     throw (xml::sax::SAXException, RuntimeException)
@@ -216,7 +213,6 @@ void Page::endElement()
 }
 
 // progessmeter
-//__________________________________________________________________________________________________
 Reference< xml::input::XElement > ProgressBarElement::startChildElement(
     sal_Int32 nUid, OUString const & rLocalName,
     Reference< xml::input::XAttributes > const & xAttributes )
@@ -235,7 +231,6 @@ Reference< xml::input::XElement > ProgressBarElement::startChildElement(
             Reference< XInterface >(), Any() );
     }
 }
-//__________________________________________________________________________________________________
 void ProgressBarElement::endElement()
     throw (xml::sax::SAXException, RuntimeException)
 {
@@ -261,10 +256,8 @@ void ProgressBarElement::endElement()
     _events.clear();
 }
 
-//##################################################################################################
 
 // scrollbar
-//__________________________________________________________________________________________________
 Reference< xml::input::XElement > ScrollBarElement::startChildElement(
     sal_Int32 nUid, OUString const & rLocalName,
     Reference< xml::input::XAttributes > const & xAttributes )
@@ -280,7 +273,6 @@ Reference< xml::input::XElement > ScrollBarElement::startChildElement(
         throw xml::sax::SAXException("expected event element!", Reference< XInterface >(), Any() );
     }
 }
-//__________________________________________________________________________________________________
 void ScrollBarElement::endElement()
     throw (xml::sax::SAXException, RuntimeException)
 {
@@ -315,10 +307,8 @@ void ScrollBarElement::endElement()
     _events.clear();
 }
 
-//##################################################################################################
 
 // spinbutton
-//__________________________________________________________________________________________________
 Reference< xml::input::XElement > SpinButtonElement::startChildElement(
     sal_Int32 nUid, OUString const & rLocalName,
     Reference< xml::input::XAttributes > const & xAttributes )
@@ -334,7 +324,6 @@ Reference< xml::input::XElement > SpinButtonElement::startChildElement(
         throw xml::sax::SAXException("expected event element!", Reference< XInterface >(), Any() );
     }
 }
-//__________________________________________________________________________________________________
 void SpinButtonElement::endElement()
     throw (xml::sax::SAXException, RuntimeException)
 {
@@ -366,10 +355,8 @@ void SpinButtonElement::endElement()
     _events.clear();
 }
 
-//##################################################################################################
 
 // fixedline
-//__________________________________________________________________________________________________
 Reference< xml::input::XElement > FixedLineElement::startChildElement(
     sal_Int32 nUid, OUString const & rLocalName,
     Reference< xml::input::XAttributes > const & xAttributes )
@@ -385,7 +372,6 @@ Reference< xml::input::XElement > FixedLineElement::startChildElement(
         throw xml::sax::SAXException("expected event element!", Reference< XInterface >(), Any() );
     }
 }
-//__________________________________________________________________________________________________
 void FixedLineElement::endElement()
     throw (xml::sax::SAXException, RuntimeException)
 {
@@ -410,10 +396,8 @@ void FixedLineElement::endElement()
     _events.clear();
 }
 
-//##################################################################################################
 
 // patternfield
-//__________________________________________________________________________________________________
 Reference< xml::input::XElement > PatternFieldElement::startChildElement(
     sal_Int32 nUid, OUString const & rLocalName,
     Reference< xml::input::XAttributes > const & xAttributes )
@@ -429,7 +413,6 @@ Reference< xml::input::XElement > PatternFieldElement::startChildElement(
         throw xml::sax::SAXException("expected event element!", Reference< XInterface >(), Any() );
     }
 }
-//__________________________________________________________________________________________________
 void PatternFieldElement::endElement()
     throw (xml::sax::SAXException, RuntimeException)
 {
@@ -462,10 +445,8 @@ void PatternFieldElement::endElement()
     _events.clear();
 }
 
-//##################################################################################################
 
 // formattedfield
-//__________________________________________________________________________________________________
 Reference< xml::input::XElement > FormattedFieldElement::startChildElement(
     sal_Int32 nUid, OUString const & rLocalName,
     Reference< xml::input::XAttributes > const & xAttributes )
@@ -481,7 +462,6 @@ Reference< xml::input::XElement > FormattedFieldElement::startChildElement(
         throw xml::sax::SAXException("expected event element!", Reference< XInterface >(), Any() );
     }
 }
-//__________________________________________________________________________________________________
 void FormattedFieldElement::endElement()
     throw (xml::sax::SAXException, RuntimeException)
 {
@@ -593,10 +573,8 @@ void FormattedFieldElement::endElement()
     _events.clear();
 }
 
-//##################################################################################################
 
 // timefield
-//__________________________________________________________________________________________________
 Reference< xml::input::XElement > TimeFieldElement::startChildElement(
     sal_Int32 nUid, OUString const & rLocalName,
     Reference< xml::input::XAttributes > const & xAttributes )
@@ -612,7 +590,6 @@ Reference< xml::input::XElement > TimeFieldElement::startChildElement(
         throw xml::sax::SAXException("expected event element!", Reference< XInterface >(), Any() );
     }
 }
-//__________________________________________________________________________________________________
 void TimeFieldElement::endElement()
     throw (xml::sax::SAXException, RuntimeException)
 {
@@ -651,10 +628,8 @@ void TimeFieldElement::endElement()
     _events.clear();
 }
 
-//##################################################################################################
 
 // numericfield
-//__________________________________________________________________________________________________
 Reference< xml::input::XElement > NumericFieldElement::startChildElement(
     sal_Int32 nUid, OUString const & rLocalName,
     Reference< xml::input::XAttributes > const & xAttributes )
@@ -670,7 +645,6 @@ Reference< xml::input::XElement > NumericFieldElement::startChildElement(
         throw xml::sax::SAXException( "expected event element!", Reference< XInterface >(), Any() );
     }
 }
-//__________________________________________________________________________________________________
 void NumericFieldElement::endElement()
     throw (xml::sax::SAXException, RuntimeException)
 {
@@ -709,10 +683,8 @@ void NumericFieldElement::endElement()
     _events.clear();
 }
 
-//##################################################################################################
 
 // datefield
-//__________________________________________________________________________________________________
 Reference< xml::input::XElement > DateFieldElement::startChildElement(
     sal_Int32 nUid, OUString const & rLocalName,
     Reference< xml::input::XAttributes > const & xAttributes )
@@ -728,7 +700,6 @@ Reference< xml::input::XElement > DateFieldElement::startChildElement(
         throw xml::sax::SAXException("expected event element!", Reference< XInterface >(), Any() );
     }
 }
-//__________________________________________________________________________________________________
 void DateFieldElement::endElement()
     throw (xml::sax::SAXException, RuntimeException)
 {
@@ -768,10 +739,8 @@ void DateFieldElement::endElement()
     _events.clear();
 }
 
-//##################################################################################################
 
 // currencyfield
-//__________________________________________________________________________________________________
 Reference< xml::input::XElement > CurrencyFieldElement::startChildElement(
     sal_Int32 nUid, OUString const & rLocalName,
     Reference< xml::input::XAttributes > const & xAttributes )
@@ -787,7 +756,6 @@ Reference< xml::input::XElement > CurrencyFieldElement::startChildElement(
         throw xml::sax::SAXException( "expected event element!" , Reference< XInterface >(), Any() );
     }
 }
-//__________________________________________________________________________________________________
 void CurrencyFieldElement::endElement()
     throw (xml::sax::SAXException, RuntimeException)
 {
@@ -828,10 +796,8 @@ void CurrencyFieldElement::endElement()
     _events.clear();
 }
 
-//##################################################################################################
 
 // filecontrol
-//__________________________________________________________________________________________________
 Reference< xml::input::XElement > FileControlElement::startChildElement(
     sal_Int32 nUid, OUString const & rLocalName,
     Reference< xml::input::XAttributes > const & xAttributes )
@@ -847,7 +813,6 @@ Reference< xml::input::XElement > FileControlElement::startChildElement(
         throw xml::sax::SAXException( "expected event element!", Reference< XInterface >(), Any() );
     }
 }
-//__________________________________________________________________________________________________
 void FileControlElement::endElement()
     throw (xml::sax::SAXException, RuntimeException)
 {
@@ -875,10 +840,8 @@ void FileControlElement::endElement()
     // vector< event elements > holding event elements holding this (via _pParent)
     _events.clear();
 }
-//##################################################################################################
 
 // treecontrol
-//__________________________________________________________________________________________________
 Reference< xml::input::XElement > TreeControlElement::startChildElement(
     sal_Int32 nUid, OUString const & rLocalName,
     Reference< xml::input::XAttributes > const & xAttributes )
@@ -894,7 +857,6 @@ Reference< xml::input::XElement > TreeControlElement::startChildElement(
         throw xml::sax::SAXException( "expected event element!", Reference< XInterface >(), Any() );
     }
 }
-//__________________________________________________________________________________________________
 void TreeControlElement::endElement()
     throw (xml::sax::SAXException, RuntimeException)
 {
@@ -925,10 +887,8 @@ void TreeControlElement::endElement()
     _events.clear();
 }
 
-//##################################################################################################
 
 // imagecontrol
-//__________________________________________________________________________________________________
 Reference< xml::input::XElement > ImageControlElement::startChildElement(
     sal_Int32 nUid, OUString const & rLocalName,
     Reference< xml::input::XAttributes > const & xAttributes )
@@ -944,7 +904,6 @@ Reference< xml::input::XElement > ImageControlElement::startChildElement(
         throw xml::sax::SAXException( "expected event element!" , Reference< XInterface >(), Any() );
     }
 }
-//__________________________________________________________________________________________________
 void ImageControlElement::endElement()
     throw (xml::sax::SAXException, RuntimeException)
 {
@@ -971,10 +930,8 @@ void ImageControlElement::endElement()
     _events.clear();
 }
 
-//##################################################################################################
 
 // textfield
-//__________________________________________________________________________________________________
 Reference< xml::input::XElement > TextElement::startChildElement(
     sal_Int32 nUid, OUString const & rLocalName,
     Reference< xml::input::XAttributes > const & xAttributes )
@@ -990,7 +947,6 @@ Reference< xml::input::XElement > TextElement::startChildElement(
         throw xml::sax::SAXException( "expected event element!", Reference< XInterface >(), Any() );
     }
 }
-//__________________________________________________________________________________________________
 void TextElement::endElement()
     throw (xml::sax::SAXException, RuntimeException)
 {
@@ -1021,9 +977,7 @@ void TextElement::endElement()
     _events.clear();
 }
 
-//##################################################################################################
 // FixedHyperLink
-//__________________________________________________________________________________________________
 Reference< xml::input::XElement > FixedHyperLinkElement::startChildElement(
     sal_Int32 nUid, OUString const & rLocalName,
     Reference< xml::input::XAttributes > const & xAttributes )
@@ -1039,7 +993,6 @@ Reference< xml::input::XElement > FixedHyperLinkElement::startChildElement(
         throw xml::sax::SAXException( "expected event element!" , Reference< XInterface >(), Any() );
     }
 }
-//__________________________________________________________________________________________________
 void FixedHyperLinkElement::endElement()
     throw (xml::sax::SAXException, RuntimeException)
 {
@@ -1073,10 +1026,8 @@ void FixedHyperLinkElement::endElement()
     _events.clear();
 }
 
-//##################################################################################################
 
 // edit
-//__________________________________________________________________________________________________
 Reference< xml::input::XElement > TextFieldElement::startChildElement(
     sal_Int32 nUid, OUString const & rLocalName,
     Reference< xml::input::XAttributes > const & xAttributes )
@@ -1092,7 +1043,6 @@ Reference< xml::input::XElement > TextFieldElement::startChildElement(
         throw xml::sax::SAXException( "expected event element!", Reference< XInterface >(), Any() );
     }
 }
-//__________________________________________________________________________________________________
 void TextFieldElement::endElement()
     throw (xml::sax::SAXException, RuntimeException)
 {
@@ -1136,10 +1086,8 @@ void TextFieldElement::endElement()
     _events.clear();
 }
 
-//##################################################################################################
 
 // titledbox
-//__________________________________________________________________________________________________
 Reference< xml::input::XElement > TitledBoxElement::startChildElement(
     sal_Int32 nUid, OUString const & rLocalName,
     Reference< xml::input::XAttributes > const & xAttributes )
@@ -1181,7 +1129,6 @@ Reference< xml::input::XElement > TitledBoxElement::startChildElement(
         return BulletinBoardElement::startChildElement( nUid, rLocalName, xAttributes );
     }
 }
-//__________________________________________________________________________________________________
 void TitledBoxElement::endElement()
     throw (xml::sax::SAXException, RuntimeException)
 {
@@ -1261,10 +1208,8 @@ void TitledBoxElement::endElement()
     _radios.clear();
 }
 
-//##################################################################################################
 
 // radio
-//__________________________________________________________________________________________________
 Reference< xml::input::XElement > RadioElement::startChildElement(
     sal_Int32 nUid, OUString const & rLocalName,
     Reference< xml::input::XAttributes > const & xAttributes )
@@ -1281,10 +1226,8 @@ Reference< xml::input::XElement > RadioElement::startChildElement(
     }
 }
 
-//##################################################################################################
 
 // radiogroup
-//__________________________________________________________________________________________________
 Reference< xml::input::XElement > RadioGroupElement::startChildElement(
     sal_Int32 nUid, OUString const & rLocalName,
     Reference< xml::input::XAttributes > const & xAttributes )
@@ -1309,7 +1252,6 @@ Reference< xml::input::XElement > RadioGroupElement::startChildElement(
         throw xml::sax::SAXException( "expected radio element!", Reference< XInterface >(), Any() );
     }
 }
-//__________________________________________________________________________________________________
 void RadioGroupElement::endElement()
     throw (xml::sax::SAXException, RuntimeException)
 {
@@ -1364,10 +1306,8 @@ void RadioGroupElement::endElement()
     _radios.clear();
 }
 
-//##################################################################################################
 
 // menupopup
-//__________________________________________________________________________________________________
 Reference< xml::input::XElement > MenuPopupElement::startChildElement(
     sal_Int32 nUid, OUString const & rLocalName,
     Reference< xml::input::XAttributes > const & xAttributes )
@@ -1399,7 +1339,6 @@ Reference< xml::input::XElement > MenuPopupElement::startChildElement(
         throw xml::sax::SAXException("expected menuitem!" , Reference< XInterface >(), Any() );
     }
 }
-//__________________________________________________________________________________________________
 Sequence< OUString > MenuPopupElement::getItemValues()
 {
     Sequence< OUString > aRet( _itemValues.size() );
@@ -1410,7 +1349,6 @@ Sequence< OUString > MenuPopupElement::getItemValues()
     }
     return aRet;
 }
-//__________________________________________________________________________________________________
 Sequence< sal_Int16 > MenuPopupElement::getSelectedItems()
 {
     Sequence< sal_Int16 > aRet( _itemSelected.size() );
@@ -1422,10 +1360,8 @@ Sequence< sal_Int16 > MenuPopupElement::getSelectedItems()
     return aRet;
 }
 
-//##################################################################################################
 
 // menulist
-//__________________________________________________________________________________________________
 Reference< xml::input::XElement > MenuListElement::startChildElement(
     sal_Int32 nUid, OUString const & rLocalName,
     Reference< xml::input::XAttributes > const & xAttributes )
@@ -1451,7 +1387,6 @@ Reference< xml::input::XElement > MenuListElement::startChildElement(
         throw xml::sax::SAXException( "expected event or menupopup element!", Reference< XInterface >(), Any() );
     }
 }
-//__________________________________________________________________________________________________
 void MenuListElement::endElement()
     throw (xml::sax::SAXException, RuntimeException)
 {
@@ -1493,10 +1428,8 @@ void MenuListElement::endElement()
     _events.clear();
 }
 
-//##################################################################################################
 
 // combobox
-//__________________________________________________________________________________________________
 Reference< xml::input::XElement > ComboBoxElement::startChildElement(
     sal_Int32 nUid, OUString const & rLocalName,
     Reference< xml::input::XAttributes > const & xAttributes )
@@ -1522,7 +1455,6 @@ Reference< xml::input::XElement > ComboBoxElement::startChildElement(
         throw xml::sax::SAXException( "expected event or menupopup element!", Reference< XInterface >(), Any() );
     }
 }
-//__________________________________________________________________________________________________
 void ComboBoxElement::endElement()
     throw (xml::sax::SAXException, RuntimeException)
 {
@@ -1564,10 +1496,8 @@ void ComboBoxElement::endElement()
     _events.clear();
 }
 
-//##################################################################################################
 
 // checkbox
-//__________________________________________________________________________________________________
 Reference< xml::input::XElement > CheckBoxElement::startChildElement(
     sal_Int32 nUid, OUString const & rLocalName,
     Reference< xml::input::XAttributes > const & xAttributes )
@@ -1583,7 +1513,6 @@ Reference< xml::input::XElement > CheckBoxElement::startChildElement(
         throw xml::sax::SAXException( "expected event element!", Reference< XInterface >(), Any() );
     }
 }
-//__________________________________________________________________________________________________
 void CheckBoxElement::endElement()
     throw (xml::sax::SAXException, RuntimeException)
 {
@@ -1635,10 +1564,8 @@ void CheckBoxElement::endElement()
     _events.clear();
 }
 
-//##################################################################################################
 
 // button
-//__________________________________________________________________________________________________
 Reference< xml::input::XElement > ButtonElement::startChildElement(
     sal_Int32 nUid, OUString const & rLocalName,
     Reference< xml::input::XAttributes > const & xAttributes )
@@ -1654,7 +1581,6 @@ Reference< xml::input::XElement > ButtonElement::startChildElement(
         throw xml::sax::SAXException( "expected event element!",  Reference< XInterface >(), Any() );
     }
 }
-//__________________________________________________________________________________________________
 void ButtonElement::endElement()
     throw (xml::sax::SAXException, RuntimeException)
 {
@@ -1702,10 +1628,8 @@ void ButtonElement::endElement()
     _events.clear();
 }
 
-//##################################################################################################
 
 // bulletinboard
-//__________________________________________________________________________________________________
 Reference< xml::input::XElement > BulletinBoardElement::startChildElement(
     sal_Int32 nUid, OUString const & rLocalName,
     Reference< xml::input::XAttributes > const & xAttributes )
@@ -1846,7 +1770,6 @@ Reference< xml::input::XElement > BulletinBoardElement::startChildElement(
         throw xml::sax::SAXException( "expected styles, bulletinboard or bulletinboard element, not: " + rLocalName, Reference< XInterface >(), Any() );
     }
 }
-//__________________________________________________________________________________________________
 BulletinBoardElement::BulletinBoardElement(
     OUString const & rLocalName,
     Reference< xml::input::XAttributes > const & xAttributes,
@@ -1866,10 +1789,8 @@ BulletinBoardElement::BulletinBoardElement(
     }
 }
 
-//##################################################################################################
 
 // style
-//__________________________________________________________________________________________________
 Reference< xml::input::XElement > StyleElement::startChildElement(
     sal_Int32 /*nUid*/, OUString const & /*rLocalName*/,
     Reference< xml::input::XAttributes > const & /*xAttributes*/ )
@@ -1877,7 +1798,6 @@ Reference< xml::input::XElement > StyleElement::startChildElement(
 {
     throw xml::sax::SAXException( "unexpected sub elements of style!", Reference< XInterface >(), Any() );
 }
-//__________________________________________________________________________________________________
 void StyleElement::endElement()
     throw (xml::sax::SAXException, RuntimeException)
 {
@@ -1893,10 +1813,8 @@ void StyleElement::endElement()
     }
 }
 
-//##################################################################################################
 
 // styles
-//__________________________________________________________________________________________________
 Reference< xml::input::XElement > StylesElement::startChildElement(
     sal_Int32 nUid, OUString const & rLocalName,
     Reference< xml::input::XAttributes > const & xAttributes )
@@ -1917,10 +1835,8 @@ Reference< xml::input::XElement > StylesElement::startChildElement(
     }
 }
 
-//##################################################################################################
 
 // window
-//__________________________________________________________________________________________________
 Reference< xml::input::XElement > WindowElement::startChildElement(
     sal_Int32 nUid, OUString const & rLocalName,
     Reference< xml::input::XAttributes > const & xAttributes )
@@ -1950,7 +1866,6 @@ Reference< xml::input::XElement > WindowElement::startChildElement(
         throw xml::sax::SAXException( "expected styles ot bulletinboard element!", Reference< XInterface >(), Any() );
     }
 }
-//__________________________________________________________________________________________________
 void WindowElement::endElement()
     throw (xml::sax::SAXException, RuntimeException)
 {

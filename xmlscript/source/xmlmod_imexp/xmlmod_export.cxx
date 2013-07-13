@@ -28,7 +28,6 @@ using namespace com::sun::star;
 namespace xmlscript
 {
 
-//==================================================================================================
 
 void
 SAL_CALL exportScriptModule(
