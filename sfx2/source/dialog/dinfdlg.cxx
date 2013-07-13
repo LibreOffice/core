@@ -2572,7 +2572,7 @@ void CmisPropertiesWindow::AddLine( const OUString& sId, const OUString& sName,
     SvtSysLocale aSysLocale;
     const LocaleDataWrapper& rLocaleWrapper = aSysLocale.GetLocaleData();
     pNewLine->m_aName.SetText( sName );
-    OUString sType = CMIS_TYPE_ANY;
+    OUString sType = CMIS_TYPE_STRING;
     OUString sValue;
 
     if ( rAny >>= nTmpValue )
