@@ -583,6 +583,7 @@
         <it>https://&lt;host&gt;/cmis/atom</it>
         <it>http://ec2-184-72-233-127.compute-1.amazonaws.com/ot-cmis/services/RepositoryService?wsdl</it>
         <it>http://&lt;host&gt;/_vti_bin/CMISSoapwsdl.aspx</it>
+        <it>https://www.googleapis.com/drive/v2</it>
       </value>
     </prop>
     <prop oor:name="CmisServersNames">
@@ -595,6 +596,7 @@
         <it>OpenDataSpace</it>
         <it>OpenText ELS 10.2.0</it>
         <it>SharePoint 2010</it>
+        <it>Google Drive</it>
       </value>
     </prop>
   </node>
