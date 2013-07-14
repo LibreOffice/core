@@ -79,7 +79,7 @@ void SAL_CALL PolynomialRegressionCurveCalculator::recalculateRegression(
         for(sal_Int32 i = 0; i < aNoValues; i++)
         {
             double xValue = aValues.first[i];
-            aQRTransposed[i + aColumnIndex] = std::pow(xValue, aPower);
+            aQRTransposed[i + aColumnIndex] = std::pow(xValue, (int) aPower);
         }
     }
 
