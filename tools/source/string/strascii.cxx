@@ -329,63 +329,6 @@ UniString& UniString::InsertAscii( const char* pAsciiStr, xub_StrLen nIndex )
     return *this;
 }
 
-UniString& UniString::ReplaceAscii( xub_StrLen nIndex, xub_StrLen nCount,
-                                    const sal_Char* pAsciiStr, xub_StrLen nStrLen )
-{
-    DBG_CHKTHIS( UniString, DbgCheckUniString );
-    DBG_ASSERT( pAsciiStr, "UniString::ReplaceAscii() - pAsciiStr is NULL" );
-
-    // Use append if index >= length
-    if ( nIndex >= mpData->mnLen )
-    {
-        AppendAscii( pAsciiStr, nStrLen );
-        return *this;
-    }
-
-    // Use assign if index = 0 and count >= length
-    if ( (nIndex == 0) && (nCount >= mpData->mnLen) )
-    {
-        AssignAscii( pAsciiStr, nStrLen );
-        return *this;
-    }
-
-    // Use erase if length is equal
-    if ( nStrLen == STRING_LEN )
-        nStrLen = ImplStringLen( pAsciiStr );
-    if ( !nStrLen )
-        return Erase( nIndex, nCount );
-
-    // nCount must not exceed string length
-    if ( nCount > mpData->mnLen - nIndex )
-        nCount = static_cast< xub_StrLen >(mpData->mnLen-nIndex);
-
-    // Use assign if length matches
-    if ( nCount == nStrLen )
-    {
-        ImplCopyData();
-        ImplCopyAsciiStr( mpData->maStr+nIndex, pAsciiStr, nStrLen );
-        return *this;
-    }
-
-    // detect overflow
-    sal_Int32 n = ImplGetCopyLen( mpData->mnLen-nCount, nStrLen );
-
-    // allocate new string
-    STRINGDATA* pNewData = ImplAllocData( mpData->mnLen-nCount+n );
-
-    // copy string data
-    memcpy( pNewData->maStr, mpData->maStr, nIndex*sizeof( STRCODE ) );
-    ImplCopyAsciiStr( pNewData->maStr+nIndex, pAsciiStr, n );
-    memcpy( pNewData->maStr+nIndex+n, mpData->maStr+nIndex+nCount,
-            (mpData->mnLen-nIndex-nCount+1)*sizeof( STRCODE ) );
-
-    // release old string
-    STRING_RELEASE((STRING_TYPE *)mpData);
-    mpData = pNewData;
-
-    return *this;
-}
-
 StringCompare UniString::CompareToAscii( const sal_Char* pAsciiStr,
                                          xub_StrLen nLen ) const
 {

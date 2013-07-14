@@ -1468,56 +1468,34 @@ void SwInsertDBColAutoPilot::SetTabSet()
 
 _DB_ColumnConfigData::~_DB_ColumnConfigData() {}
 
-static Sequence<OUString> lcl_createSourceNames(const String& rNodeName)
+static Sequence<OUString> lcl_createSourceNames(const OUString& rNodeName)
 {
     Sequence<OUString> aSourceNames(11);
     OUString* pNames = aSourceNames.getArray();
-
-    String sTmp( rNodeName );
-    const xub_StrLen nPos = sTmp.Len();
-    pNames[0] = sTmp.ReplaceAscii( nPos, STRING_MAXLEN,
-                            RTL_CONSTASCII_STRINGPARAM( "/DataSource" ));
-    pNames[1] = sTmp.ReplaceAscii( nPos, STRING_MAXLEN,
-                            RTL_CONSTASCII_STRINGPARAM( "/Command" ));
-    pNames[2] = sTmp.ReplaceAscii( nPos, STRING_MAXLEN,
-                            RTL_CONSTASCII_STRINGPARAM( "/CommandType" ));
-    pNames[3] = sTmp.ReplaceAscii( nPos, STRING_MAXLEN,
-                            RTL_CONSTASCII_STRINGPARAM( "/ColumnsToText" ));
-    pNames[4] = sTmp.ReplaceAscii( nPos, STRING_MAXLEN,
-                            RTL_CONSTASCII_STRINGPARAM( "/ColumnsToTable" ));
-    pNames[5] = sTmp.ReplaceAscii( nPos, STRING_MAXLEN,
-                            RTL_CONSTASCII_STRINGPARAM( "/ParaStyle" ));
-    pNames[6] = sTmp.ReplaceAscii( nPos, STRING_MAXLEN,
-                            RTL_CONSTASCII_STRINGPARAM( "/TableAutoFormat" ));
-    pNames[7] = sTmp.ReplaceAscii( nPos, STRING_MAXLEN,
-                            RTL_CONSTASCII_STRINGPARAM( "/IsTable" ));
-    pNames[8] = sTmp.ReplaceAscii( nPos, STRING_MAXLEN,
-                            RTL_CONSTASCII_STRINGPARAM( "/IsField" ));
-    pNames[9] = sTmp.ReplaceAscii( nPos, STRING_MAXLEN,
-                            RTL_CONSTASCII_STRINGPARAM( "/IsHeadlineOn" ));
-    pNames[10] = sTmp.ReplaceAscii( nPos, STRING_MAXLEN,
-                            RTL_CONSTASCII_STRINGPARAM( "/IsEmptyHeadline" ));
+    pNames[0] = rNodeName + "/DataSource";
+    pNames[1] = rNodeName + "/Command";
+    pNames[2] = rNodeName + "/CommandType";
+    pNames[3] = rNodeName + "/ColumnsToText";
+    pNames[4] = rNodeName + "/ColumnsToTable";
+    pNames[5] = rNodeName + "/ParaStyle";
+    pNames[6] = rNodeName + "/TableAutoFormat";
+    pNames[7] = rNodeName + "/IsTable";
+    pNames[8] = rNodeName + "/IsField";
+    pNames[9] = rNodeName + "/IsHeadlineOn";
+    pNames[10] = rNodeName + "/IsEmptyHeadline";
     return aSourceNames;
 }
 
-static Sequence<OUString> lcl_CreateSubNames( const String& rSubNodeName )
+static Sequence<OUString> lcl_CreateSubNames(const OUString& rSubNodeName)
 {
     Sequence<OUString> aSubSourceNames(6);
     OUString* pNames = aSubSourceNames.getArray();
-    String sTmp( rSubNodeName );
-    const xub_StrLen nPos = sTmp.Len();
-    pNames[0] = sTmp.ReplaceAscii( nPos, STRING_MAXLEN,
-                            RTL_CONSTASCII_STRINGPARAM( "/ColumnName" ));
-    pNames[1] = sTmp.ReplaceAscii( nPos, STRING_MAXLEN,
-                            RTL_CONSTASCII_STRINGPARAM( "/ColumnIndex" ));
-    pNames[2] = sTmp.ReplaceAscii( nPos, STRING_MAXLEN,
-                            RTL_CONSTASCII_STRINGPARAM( "/IsNumberFormat" ));
-    pNames[3] = sTmp.ReplaceAscii( nPos, STRING_MAXLEN,
-                            RTL_CONSTASCII_STRINGPARAM( "/IsNumberFormatFromDataBase" ));
-    pNames[4] = sTmp.ReplaceAscii( nPos, STRING_MAXLEN,
-                            RTL_CONSTASCII_STRINGPARAM( "/NumberFormat" ));
-    pNames[5] = sTmp.ReplaceAscii( nPos, STRING_MAXLEN,
-                            RTL_CONSTASCII_STRINGPARAM( "/NumberFormatLocale" ));
+    pNames[0] = rSubNodeName + "/ColumnName";
+    pNames[1] = rSubNodeName + "/ColumnIndex";
+    pNames[2] = rSubNodeName + "/IsNumberFormat";
+    pNames[3] = rSubNodeName + "/IsNumberFormatFromDataBase";
+    pNames[4] = rSubNodeName + "/NumberFormat";
+    pNames[5] = rSubNodeName + "/NumberFormatLocale";
     return aSubSourceNames;
 }
 

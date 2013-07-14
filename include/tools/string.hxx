@@ -221,8 +221,6 @@ public:
     UniString&          Insert( sal_Unicode c, xub_StrLen nIndex = STRING_LEN );
     UniString&          InsertAscii( const sal_Char* pAsciiStr, xub_StrLen nIndex = STRING_LEN );
     UniString&          Replace( xub_StrLen nIndex, xub_StrLen nLen, const UniString& rStr );
-    UniString&          ReplaceAscii( xub_StrLen nIndex, xub_StrLen nLen,
-                                      const sal_Char* pAsciiStr, xub_StrLen nStrLen = STRING_LEN );
     UniString&          Erase( xub_StrLen nIndex = 0, xub_StrLen nCount = STRING_LEN );
     UniString           Copy( xub_StrLen nIndex = 0, xub_StrLen nCount = STRING_LEN ) const;
 
