@@ -32,7 +32,6 @@ struct SfxImageItem_Impl
             { return nAngle == rOther.nAngle && bMirrored == rOther.bMirrored; }
 };
 
-//---------------------------------------------------------
 
 SfxImageItem::SfxImageItem( sal_uInt16 which, sal_uInt16 nImage )
     : SfxInt16Item( which, nImage )
@@ -48,20 +47,17 @@ SfxImageItem::SfxImageItem( const SfxImageItem& rItem )
     pImp = new SfxImageItem_Impl( *(rItem.pImp) );
 }
 
-//---------------------------------------------------------
 SfxImageItem::~SfxImageItem()
 {
     delete pImp;
 }
 
-//---------------------------------------------------------
 
 SfxPoolItem* SfxImageItem::Clone( SfxItemPool* ) const
 {
     return new SfxImageItem( *this );
 }
 
-//---------------------------------------------------------
 
 int SfxImageItem::operator==( const SfxPoolItem& rItem ) const
 {

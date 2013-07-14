@@ -28,7 +28,6 @@
 
 DBG_NAME(SfxItemPoolCache)
 
-//------------------------------------------------------------------------
 
 SfxItemPoolCache::SfxItemPoolCache( SfxItemPool *pItemPool,
                                     const SfxPoolItem *pPutItem ):
@@ -41,7 +40,6 @@ SfxItemPoolCache::SfxItemPoolCache( SfxItemPool *pItemPool,
     DBG_ASSERT(pItemPool, "kein Pool angegeben");
 }
 
-//------------------------------------------------------------------------
 
 SfxItemPoolCache::SfxItemPoolCache( SfxItemPool *pItemPool,
                                     const SfxItemSet *pPutSet ):
@@ -54,7 +52,6 @@ SfxItemPoolCache::SfxItemPoolCache( SfxItemPool *pItemPool,
     DBG_ASSERT(pItemPool, "kein Pool angegeben");
 }
 
-//------------------------------------------------------------------------
 
 SfxItemPoolCache::~SfxItemPoolCache()
 {
@@ -69,7 +66,6 @@ SfxItemPoolCache::~SfxItemPoolCache()
         pPool->Remove( *pItemToPut );
 }
 
-//------------------------------------------------------------------------
 
 const SfxSetItem& SfxItemPoolCache::ApplyTo( const SfxSetItem &rOrigItem, sal_Bool bNew )
 {

@@ -28,13 +28,10 @@
 #include <svl/brdcst.hxx>
 #include <algorithm>
 
-//====================================================================
 DBG_NAME(SfxBroadcaster)
 TYPEINIT0(SfxBroadcaster);
 
-//====================================================================
 
-//====================================================================
 // broadcast immediately
 
 void SfxBroadcaster::Broadcast( const SfxHint &rHint )
@@ -69,7 +66,6 @@ SfxBroadcaster::~SfxBroadcaster()
     }
 }
 
-//--------------------------------------------------------------------
 
 // simple ctor of class SfxBroadcaster
 
@@ -78,7 +74,6 @@ SfxBroadcaster::SfxBroadcaster()
     DBG_CTOR(SfxBroadcaster, 0);
 }
 
-//--------------------------------------------------------------------
 
 // copy ctor of class SfxBroadcaster
 
@@ -96,7 +91,6 @@ SfxBroadcaster::SfxBroadcaster( const SfxBroadcaster &rBC )
     }
 }
 
-//--------------------------------------------------------------------
 
 // add a new SfxListener to the list
 
@@ -115,7 +109,6 @@ void SfxBroadcaster::AddListener( SfxListener& rListener )
     m_Listeners.push_back(&rListener);
 }
 
-//--------------------------------------------------------------------
 
 // called, if no more listeners exists
 
@@ -124,7 +117,6 @@ void SfxBroadcaster::ListenersGone()
     DBG_CHKTHIS(SfxBroadcaster,0);
 }
 
-//--------------------------------------------------------------------
 
 // forward a notification to all registered listeners
 
@@ -139,7 +131,6 @@ void SfxBroadcaster::Forward(SfxBroadcaster& rBC, const SfxHint& rHint)
     }
 }
 
-//--------------------------------------------------------------------
 
 // remove one SfxListener from the list
 

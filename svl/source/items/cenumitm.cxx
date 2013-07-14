@@ -24,18 +24,14 @@
 
 #include <comphelper/extract.hxx>
 
-//============================================================================
 //
 //  class SfxEnumItemInterface
 //
-//============================================================================
 
 DBG_NAME(SfxEnumItemInterface)
 
-//============================================================================
 TYPEINIT1(SfxEnumItemInterface, SfxPoolItem)
 
-//============================================================================
 // virtual
 int SfxEnumItemInterface::operator ==(const SfxPoolItem & rItem) const
 {
@@ -45,7 +41,6 @@ int SfxEnumItemInterface::operator ==(const SfxPoolItem & rItem) const
                       GetEnumValue();
 }
 
-//============================================================================
 // virtual
 SfxItemPresentation
 SfxEnumItemInterface::GetPresentation(SfxItemPresentation, SfxMapUnit,
@@ -56,7 +51,6 @@ SfxEnumItemInterface::GetPresentation(SfxItemPresentation, SfxMapUnit,
     return SFX_ITEM_PRESENTATION_NAMELESS;
 }
 
-//============================================================================
 // virtual
 bool SfxEnumItemInterface::QueryValue(com::sun::star::uno::Any& rVal, sal_uInt8)
     const
@@ -65,7 +59,6 @@ bool SfxEnumItemInterface::QueryValue(com::sun::star::uno::Any& rVal, sal_uInt8)
     return true;
 }
 
-//============================================================================
 // virtual
 bool SfxEnumItemInterface::PutValue(const com::sun::star::uno::Any& rVal,
                                     sal_uInt8)
@@ -81,21 +74,18 @@ bool SfxEnumItemInterface::PutValue(const com::sun::star::uno::Any& rVal,
     return false;
 }
 
-//============================================================================
 OUString SfxEnumItemInterface::GetValueTextByPos(sal_uInt16) const
 {
     DBG_WARNING("SfxEnumItemInterface::GetValueTextByPos(): Pure virtual");
     return OUString();
 }
 
-//============================================================================
 // virtual
 sal_uInt16 SfxEnumItemInterface::GetValueByPos(sal_uInt16 nPos) const
 {
     return nPos;
 }
 
-//============================================================================
 // virtual
 sal_uInt16 SfxEnumItemInterface::GetPosByValue(sal_uInt16 nValue) const
 {
@@ -111,34 +101,28 @@ sal_Bool SfxEnumItemInterface::IsEnabled(sal_uInt16) const
     return sal_True;
 }
 
-//============================================================================
 // virtual
 int SfxEnumItemInterface::HasBoolValue() const
 {
     return false;
 }
 
-//============================================================================
 // virtual
 sal_Bool SfxEnumItemInterface::GetBoolValue() const
 {
     return false;
 }
 
-//============================================================================
 // virtual
 void SfxEnumItemInterface::SetBoolValue(sal_Bool)
 {}
 
-//============================================================================
 //
 //  class CntEnumItem
 //
-//============================================================================
 
 DBG_NAME(CntEnumItem)
 
-//============================================================================
 CntEnumItem::CntEnumItem(sal_uInt16 which, SvStream & rStream):
     SfxEnumItemInterface(which)
 {
@@ -146,10 +130,8 @@ CntEnumItem::CntEnumItem(sal_uInt16 which, SvStream & rStream):
     rStream >> m_nValue;
 }
 
-//============================================================================
 TYPEINIT1(CntEnumItem, SfxEnumItemInterface)
 
-//============================================================================
 // virtual
 SvStream & CntEnumItem::Store(SvStream & rStream, sal_uInt16) const
 {
@@ -157,32 +139,26 @@ SvStream & CntEnumItem::Store(SvStream & rStream, sal_uInt16) const
     return rStream;
 }
 
-//============================================================================
 // virtual
 sal_uInt16 CntEnumItem::GetEnumValue() const
 {
     return GetValue();
 }
 
-//============================================================================
 // virtual
 void CntEnumItem::SetEnumValue(sal_uInt16 nTheValue)
 {
     SetValue(nTheValue);
 }
 
-//============================================================================
 //
 //  class CntBoolItem
 //
-//============================================================================
 
 DBG_NAME(CntBoolItem)
 
-//============================================================================
 TYPEINIT1_AUTOFACTORY(CntBoolItem, SfxPoolItem)
 
-//============================================================================
 CntBoolItem::CntBoolItem(sal_uInt16 which, SvStream & rStream):
     SfxPoolItem(which)
 {
@@ -190,7 +166,6 @@ CntBoolItem::CntBoolItem(sal_uInt16 which, SvStream & rStream):
     rStream >> m_bValue;
 }
 
-//============================================================================
 // virtual
 int CntBoolItem::operator ==(const SfxPoolItem & rItem) const
 {
@@ -199,7 +174,6 @@ int CntBoolItem::operator ==(const SfxPoolItem & rItem) const
     return m_bValue == static_cast< CntBoolItem const * >(&rItem)->m_bValue;
 }
 
-//============================================================================
 // virtual
 int CntBoolItem::Compare(const SfxPoolItem & rWith) const
 {
@@ -208,7 +182,6 @@ int CntBoolItem::Compare(const SfxPoolItem & rWith) const
                0 : m_bValue ? -1 : 1;
 }
 
-//============================================================================
 // virtual
 SfxItemPresentation CntBoolItem::GetPresentation(SfxItemPresentation,
                                                  SfxMapUnit, SfxMapUnit,
@@ -219,7 +192,6 @@ SfxItemPresentation CntBoolItem::GetPresentation(SfxItemPresentation,
     return SFX_ITEM_PRESENTATION_NAMELESS;
 }
 
-//============================================================================
 // virtual
 bool CntBoolItem::QueryValue(com::sun::star::uno::Any& rVal, sal_uInt8) const
 {
@@ -227,7 +199,6 @@ bool CntBoolItem::QueryValue(com::sun::star::uno::Any& rVal, sal_uInt8) const
     return true;
 }
 
-//============================================================================
 // virtual
 bool CntBoolItem::PutValue(const com::sun::star::uno::Any& rVal, sal_uInt8)
 {
@@ -241,14 +212,12 @@ bool CntBoolItem::PutValue(const com::sun::star::uno::Any& rVal, sal_uInt8)
     return false;
 }
 
-//============================================================================
 // virtual
 SfxPoolItem * CntBoolItem::Create(SvStream & rStream, sal_uInt16) const
 {
     return new CntBoolItem(Which(), rStream);
 }
 
-//============================================================================
 // virtual
 SvStream & CntBoolItem::Store(SvStream & rStream, sal_uInt16) const
 {
@@ -256,21 +225,18 @@ SvStream & CntBoolItem::Store(SvStream & rStream, sal_uInt16) const
     return rStream;
 }
 
-//============================================================================
 // virtual
 SfxPoolItem * CntBoolItem::Clone(SfxItemPool *) const
 {
     return new CntBoolItem(*this);
 }
 
-//============================================================================
 // virtual
 sal_uInt16 CntBoolItem::GetValueCount() const
 {
     return 2;
 }
 
-//============================================================================
 // virtual
 OUString CntBoolItem::GetValueTextByVal(sal_Bool bTheValue) const
 {

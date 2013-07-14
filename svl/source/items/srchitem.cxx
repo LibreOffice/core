@@ -258,7 +258,6 @@ int SvxSearchItem::operator==( const SfxPoolItem& rItem ) const
 }
 
 
-//------------------------------------------------------------------------
 
 SfxItemPresentation SvxSearchItem::GetPresentation
 (

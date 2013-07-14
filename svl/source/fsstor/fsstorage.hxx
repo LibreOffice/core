@@ -66,9 +66,7 @@ public:
 
     static sal_Bool MakeFolderNoUI( const OUString& rFolder );
 
-    //____________________________________________________________________________________________________
     //  XInterface
-    //____________________________________________________________________________________________________
 
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& rType )
         throw( ::com::sun::star::uno::RuntimeException );
@@ -77,9 +75,7 @@ public:
 
     virtual void SAL_CALL release() throw();
 
-    //____________________________________________________________________________________________________
     //  XTypeProvider
-    //____________________________________________________________________________________________________
 
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes()
         throw( ::com::sun::star::uno::RuntimeException );
@@ -87,9 +83,7 @@ public:
     virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId()
         throw( ::com::sun::star::uno::RuntimeException );
 
-    //____________________________________________________________________________________________________
     //  XStorage
-    //____________________________________________________________________________________________________
 
     virtual void SAL_CALL copyToStorage( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xDest )
         throw ( ::com::sun::star::embed::InvalidStorageException,
@@ -212,9 +206,7 @@ public:
                 ::com::sun::star::embed::StorageWrappedTargetException,
                 ::com::sun::star::uno::RuntimeException );
 
-    //____________________________________________________________________________________________________
     //  XNameAccess
-    //____________________________________________________________________________________________________
 
     virtual ::com::sun::star::uno::Any SAL_CALL getByName( const OUString& aName )
         throw ( ::com::sun::star::container::NoSuchElementException,
@@ -233,9 +225,7 @@ public:
     virtual sal_Bool SAL_CALL hasElements()
         throw ( ::com::sun::star::uno::RuntimeException );
 
-    //____________________________________________________________________________________________________
     //  XComponent
-    //____________________________________________________________________________________________________
 
     virtual void SAL_CALL dispose()
         throw ( ::com::sun::star::uno::RuntimeException );
@@ -248,9 +238,7 @@ public:
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& xListener )
         throw ( ::com::sun::star::uno::RuntimeException );
 
-    //____________________________________________________________________________________________________
     //  XPropertySet
-    //____________________________________________________________________________________________________
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo()
         throw ( ::com::sun::star::uno::RuntimeException );
@@ -293,9 +281,7 @@ public:
                 ::com::sun::star::lang::WrappedTargetException,
                 ::com::sun::star::uno::RuntimeException );
 
-    //____________________________________________________________________________________________________
     //  XHierarchicalStorageAccess
-    //____________________________________________________________________________________________________
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::embed::XExtendedStorageStream > SAL_CALL openStreamElementByHierarchicalName( const OUString& sStreamPath, ::sal_Int32 nOpenMode )
         throw ( ::com::sun::star::embed::InvalidStorageException,

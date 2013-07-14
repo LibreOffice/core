@@ -112,7 +112,6 @@ SvStream& SfxLockBytesItem::Store(SvStream &rStream, sal_uInt16 ) const
     return rStream;
 }
 
-//----------------------------------------------------------------------------
 // virtual
 bool SfxLockBytesItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 )
 {
@@ -137,7 +136,6 @@ bool SfxLockBytesItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8
     return true;
 }
 
-//----------------------------------------------------------------------------
 // virtual
 bool SfxLockBytesItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 ) const
 {

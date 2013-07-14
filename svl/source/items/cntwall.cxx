@@ -103,7 +103,6 @@ int CntWallpaperItem::operator==( const SfxPoolItem& rItem ) const
         return sal_False;
 }
 
-//============================================================================
 // virtual
 sal_uInt16 CntWallpaperItem::GetVersion(sal_uInt16) const
 {
@@ -136,7 +135,6 @@ SfxPoolItem* CntWallpaperItem::Clone( SfxItemPool* ) const
     return new CntWallpaperItem( *this );
 }
 
-//----------------------------------------------------------------------------
 // virtual
 bool CntWallpaperItem::QueryValue( com::sun::star::uno::Any&, sal_uInt8) const
 {
@@ -144,7 +142,6 @@ bool CntWallpaperItem::QueryValue( com::sun::star::uno::Any&, sal_uInt8) const
     return false;
 }
 
-//----------------------------------------------------------------------------
 // virtual
 bool CntWallpaperItem::PutValue( const com::sun::star::uno::Any&, sal_uInt8)
 {

@@ -21,18 +21,14 @@
 #include <tools/stream.hxx>
 #include <svl/cintitem.hxx>
 
-//============================================================================
 //
 //  class CntByteItem
 //
-//============================================================================
 
 DBG_NAME(CntByteItem)
 
-//============================================================================
 TYPEINIT1_AUTOFACTORY(CntByteItem, SfxPoolItem);
 
-//============================================================================
 // virtual
 int CntByteItem::operator ==(const SfxPoolItem & rItem) const
 {
@@ -42,7 +38,6 @@ int CntByteItem::operator ==(const SfxPoolItem & rItem) const
     return m_nValue == (static_cast< const CntByteItem * >(&rItem))->m_nValue;
 }
 
-//============================================================================
 // virtual
 int CntByteItem::Compare(const SfxPoolItem & rWith) const
 {
@@ -55,7 +50,6 @@ int CntByteItem::Compare(const SfxPoolItem & rWith) const
             0 : 1;
 }
 
-//============================================================================
 // virtual
 SfxItemPresentation CntByteItem::GetPresentation(SfxItemPresentation,
                                                  SfxMapUnit, SfxMapUnit,
@@ -67,7 +61,6 @@ SfxItemPresentation CntByteItem::GetPresentation(SfxItemPresentation,
     return SFX_ITEM_PRESENTATION_NAMELESS;
 }
 
-//============================================================================
 // virtual
 bool CntByteItem::QueryValue(com::sun::star::uno::Any& rVal, sal_uInt8) const
 {
@@ -76,7 +69,6 @@ bool CntByteItem::QueryValue(com::sun::star::uno::Any& rVal, sal_uInt8) const
     return true;
 }
 
-//============================================================================
 // virtual
 bool CntByteItem::PutValue(const com::sun::star::uno::Any& rVal, sal_uInt8)
 {
@@ -91,7 +83,6 @@ bool CntByteItem::PutValue(const com::sun::star::uno::Any& rVal, sal_uInt8)
     return false;
 }
 
-//============================================================================
 // virtual
 SfxPoolItem * CntByteItem::Create(SvStream & rStream, sal_uInt16) const
 {
@@ -101,7 +92,6 @@ SfxPoolItem * CntByteItem::Create(SvStream & rStream, sal_uInt16) const
     return new CntByteItem(Which(), sal_uInt8(nTheValue));
 }
 
-//============================================================================
 // virtual
 SvStream & CntByteItem::Store(SvStream & rStream, sal_uInt16) const
 {
@@ -110,7 +100,6 @@ SvStream & CntByteItem::Store(SvStream & rStream, sal_uInt16) const
     return rStream;
 }
 
-//============================================================================
 // virtual
 SfxPoolItem * CntByteItem::Clone(SfxItemPool *) const
 {
@@ -118,7 +107,6 @@ SfxPoolItem * CntByteItem::Clone(SfxItemPool *) const
     return new CntByteItem(*this);
 }
 
-//============================================================================
 // virtual
 sal_uInt8 CntByteItem::GetMin() const
 {
@@ -126,7 +114,6 @@ sal_uInt8 CntByteItem::GetMin() const
     return 0;
 }
 
-//============================================================================
 // virtual
 sal_uInt8 CntByteItem::GetMax() const
 {
@@ -134,7 +121,6 @@ sal_uInt8 CntByteItem::GetMax() const
     return 255;
 }
 
-//============================================================================
 // virtual
 SfxFieldUnit CntByteItem::GetUnit() const
 {
@@ -142,18 +128,14 @@ SfxFieldUnit CntByteItem::GetUnit() const
     return SFX_FUNIT_NONE;
 }
 
-//============================================================================
 //
 //  class CntUInt16Item
 //
-//============================================================================
 
 DBG_NAME(CntUInt16Item);
 
-//============================================================================
 TYPEINIT1_AUTOFACTORY(CntUInt16Item, SfxPoolItem);
 
-//============================================================================
 CntUInt16Item::CntUInt16Item(sal_uInt16 which, SvStream & rStream) :
     SfxPoolItem(which)
 {
@@ -163,7 +145,6 @@ CntUInt16Item::CntUInt16Item(sal_uInt16 which, SvStream & rStream) :
     m_nValue = nTheValue;
 }
 
-//============================================================================
 // virtual
 int CntUInt16Item::operator ==(const SfxPoolItem & rItem) const
 {
@@ -174,7 +155,6 @@ int CntUInt16Item::operator ==(const SfxPoolItem & rItem) const
                         m_nValue;
 }
 
-//============================================================================
 // virtual
 int CntUInt16Item::Compare(const SfxPoolItem & rWith) const
 {
@@ -189,7 +169,6 @@ int CntUInt16Item::Compare(const SfxPoolItem & rWith) const
             0 : 1;
 }
 
-//============================================================================
 // virtual
 SfxItemPresentation CntUInt16Item::GetPresentation(SfxItemPresentation,
                                                    SfxMapUnit, SfxMapUnit,
@@ -202,7 +181,6 @@ SfxItemPresentation CntUInt16Item::GetPresentation(SfxItemPresentation,
     return SFX_ITEM_PRESENTATION_NAMELESS;
 }
 
-//============================================================================
 // virtual
 bool CntUInt16Item::QueryValue(com::sun::star::uno::Any& rVal, sal_uInt8) const
 {
@@ -211,7 +189,6 @@ bool CntUInt16Item::QueryValue(com::sun::star::uno::Any& rVal, sal_uInt8) const
     return true;
 }
 
-//============================================================================
 // virtual
 bool CntUInt16Item::PutValue(const com::sun::star::uno::Any& rVal, sal_uInt8)
 {
@@ -227,7 +204,6 @@ bool CntUInt16Item::PutValue(const com::sun::star::uno::Any& rVal, sal_uInt8)
     return false;
 }
 
-//============================================================================
 // virtual
 SfxPoolItem * CntUInt16Item::Create(SvStream & rStream, sal_uInt16) const
 {
@@ -235,7 +211,6 @@ SfxPoolItem * CntUInt16Item::Create(SvStream & rStream, sal_uInt16) const
     return new CntUInt16Item(Which(), rStream);
 }
 
-//============================================================================
 // virtual
 SvStream & CntUInt16Item::Store(SvStream &rStream, sal_uInt16) const
 {
@@ -244,7 +219,6 @@ SvStream & CntUInt16Item::Store(SvStream &rStream, sal_uInt16) const
     return rStream;
 }
 
-//============================================================================
 // virtual
 SfxPoolItem * CntUInt16Item::Clone(SfxItemPool *) const
 {
@@ -252,7 +226,6 @@ SfxPoolItem * CntUInt16Item::Clone(SfxItemPool *) const
     return new CntUInt16Item(*this);
 }
 
-//============================================================================
 // virtual
 sal_uInt16 CntUInt16Item::GetMin() const
 {
@@ -260,7 +233,6 @@ sal_uInt16 CntUInt16Item::GetMin() const
     return 0;
 }
 
-//============================================================================
 // virtual
 sal_uInt16 CntUInt16Item::GetMax() const
 {
@@ -268,7 +240,6 @@ sal_uInt16 CntUInt16Item::GetMax() const
     return 65535;
 }
 
-//============================================================================
 // virtual
 SfxFieldUnit CntUInt16Item::GetUnit() const
 {
@@ -276,18 +247,14 @@ SfxFieldUnit CntUInt16Item::GetUnit() const
     return SFX_FUNIT_NONE;
 }
 
-//============================================================================
 //
 //  class CntInt32Item
 //
-//============================================================================
 
 DBG_NAME(CntInt32Item);
 
-//============================================================================
 TYPEINIT1_AUTOFACTORY(CntInt32Item, SfxPoolItem);
 
-//============================================================================
 CntInt32Item::CntInt32Item(sal_uInt16 which, SvStream & rStream) :
     SfxPoolItem(which)
 {
@@ -296,7 +263,6 @@ CntInt32Item::CntInt32Item(sal_uInt16 which, SvStream & rStream) :
     rStream >> m_nValue;
 }
 
-//============================================================================
 // virtual
 int CntInt32Item::operator ==(const SfxPoolItem & rItem) const
 {
@@ -307,7 +273,6 @@ int CntInt32Item::operator ==(const SfxPoolItem & rItem) const
                         m_nValue;
 }
 
-//============================================================================
 // virtual
 int CntInt32Item::Compare(const SfxPoolItem & rWith) const
 {
@@ -321,7 +286,6 @@ int CntInt32Item::Compare(const SfxPoolItem & rWith) const
             0 : 1;
 }
 
-//============================================================================
 // virtual
 SfxItemPresentation CntInt32Item::GetPresentation(SfxItemPresentation,
                                                   SfxMapUnit, SfxMapUnit,
@@ -333,7 +297,6 @@ SfxItemPresentation CntInt32Item::GetPresentation(SfxItemPresentation,
     return SFX_ITEM_PRESENTATION_NAMELESS;
 }
 
-//============================================================================
 // virtual
 bool CntInt32Item::QueryValue(com::sun::star::uno::Any& rVal, sal_uInt8) const
 {
@@ -342,7 +305,6 @@ bool CntInt32Item::QueryValue(com::sun::star::uno::Any& rVal, sal_uInt8) const
     return true;
 }
 
-//============================================================================
 // virtual
 bool CntInt32Item::PutValue(const com::sun::star::uno::Any& rVal, sal_uInt8)
 {
@@ -357,7 +319,6 @@ bool CntInt32Item::PutValue(const com::sun::star::uno::Any& rVal, sal_uInt8)
     return false;
 }
 
-//============================================================================
 // virtual
 SfxPoolItem * CntInt32Item::Create(SvStream & rStream, sal_uInt16) const
 {
@@ -365,7 +326,6 @@ SfxPoolItem * CntInt32Item::Create(SvStream & rStream, sal_uInt16) const
     return new CntInt32Item(Which(), rStream);
 }
 
-//============================================================================
 // virtual
 SvStream & CntInt32Item::Store(SvStream &rStream, sal_uInt16) const
 {
@@ -375,7 +335,6 @@ SvStream & CntInt32Item::Store(SvStream &rStream, sal_uInt16) const
     return rStream;
 }
 
-//============================================================================
 // virtual
 SfxPoolItem * CntInt32Item::Clone(SfxItemPool *) const
 {
@@ -383,7 +342,6 @@ SfxPoolItem * CntInt32Item::Clone(SfxItemPool *) const
     return new CntInt32Item(*this);
 }
 
-//============================================================================
 // virtual
 sal_Int32 CntInt32Item::GetMin() const
 {
@@ -391,7 +349,6 @@ sal_Int32 CntInt32Item::GetMin() const
     return sal_Int32(0x80000000);
 }
 
-//============================================================================
 // virtual
 sal_Int32 CntInt32Item::GetMax() const
 {
@@ -399,7 +356,6 @@ sal_Int32 CntInt32Item::GetMax() const
     return 0x7FFFFFFF;
 }
 
-//============================================================================
 // virtual
 SfxFieldUnit CntInt32Item::GetUnit() const
 {
@@ -407,18 +363,14 @@ SfxFieldUnit CntInt32Item::GetUnit() const
     return SFX_FUNIT_NONE;
 }
 
-//============================================================================
 //
 //  class CntUInt32Item
 //
-//============================================================================
 
 DBG_NAME(CntUInt32Item);
 
-//============================================================================
 TYPEINIT1_AUTOFACTORY(CntUInt32Item, SfxPoolItem);
 
-//============================================================================
 CntUInt32Item::CntUInt32Item(sal_uInt16 which, SvStream & rStream) :
     SfxPoolItem(which)
 {
@@ -428,7 +380,6 @@ CntUInt32Item::CntUInt32Item(sal_uInt16 which, SvStream & rStream) :
     m_nValue = nTheValue;
 }
 
-//============================================================================
 // virtual
 int CntUInt32Item::operator ==(const SfxPoolItem & rItem) const
 {
@@ -439,7 +390,6 @@ int CntUInt32Item::operator ==(const SfxPoolItem & rItem) const
                         m_nValue;
 }
 
-//============================================================================
 // virtual
 int CntUInt32Item::Compare(const SfxPoolItem & rWith) const
 {
@@ -454,7 +404,6 @@ int CntUInt32Item::Compare(const SfxPoolItem & rWith) const
             0 : 1;
 }
 
-//============================================================================
 // virtual
 SfxItemPresentation CntUInt32Item::GetPresentation(SfxItemPresentation,
                                                    SfxMapUnit, SfxMapUnit,
@@ -467,7 +416,6 @@ SfxItemPresentation CntUInt32Item::GetPresentation(SfxItemPresentation,
     return SFX_ITEM_PRESENTATION_NAMELESS;
 }
 
-//============================================================================
 // virtual
 bool CntUInt32Item::QueryValue(com::sun::star::uno::Any& rVal, sal_uInt8) const
 {
@@ -477,7 +425,6 @@ bool CntUInt32Item::QueryValue(com::sun::star::uno::Any& rVal, sal_uInt8) const
     return true;
 }
 
-//============================================================================
 // virtual
 bool CntUInt32Item::PutValue(const com::sun::star::uno::Any& rVal, sal_uInt8)
 {
@@ -493,7 +440,6 @@ bool CntUInt32Item::PutValue(const com::sun::star::uno::Any& rVal, sal_uInt8)
     return false;
 }
 
-//============================================================================
 // virtual
 SfxPoolItem * CntUInt32Item::Create(SvStream & rStream, sal_uInt16) const
 {
@@ -501,7 +447,6 @@ SfxPoolItem * CntUInt32Item::Create(SvStream & rStream, sal_uInt16) const
     return new CntUInt32Item(Which(), rStream);
 }
 
-//============================================================================
 // virtual
 SvStream & CntUInt32Item::Store(SvStream &rStream, sal_uInt16) const
 {
@@ -510,7 +455,6 @@ SvStream & CntUInt32Item::Store(SvStream &rStream, sal_uInt16) const
     return rStream;
 }
 
-//============================================================================
 // virtual
 SfxPoolItem * CntUInt32Item::Clone(SfxItemPool *) const
 {
@@ -518,7 +462,6 @@ SfxPoolItem * CntUInt32Item::Clone(SfxItemPool *) const
     return new CntUInt32Item(*this);
 }
 
-//============================================================================
 // virtual
 sal_uInt32 CntUInt32Item::GetMin() const
 {
@@ -526,7 +469,6 @@ sal_uInt32 CntUInt32Item::GetMin() const
     return 0;
 }
 
-//============================================================================
 // virtual
 sal_uInt32 CntUInt32Item::GetMax() const
 {
@@ -534,7 +476,6 @@ sal_uInt32 CntUInt32Item::GetMax() const
     return 0xFFFFFFFF;
 }
 
-//============================================================================
 // virtual
 SfxFieldUnit CntUInt32Item::GetUnit() const
 {

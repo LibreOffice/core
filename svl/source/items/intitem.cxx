@@ -24,15 +24,12 @@
 #include <tools/stream.hxx>
 #include <svl/metitem.hxx>
 
-//============================================================================
 //
 //  class SfxByteItem
 //
-//============================================================================
 
 TYPEINIT1_AUTOFACTORY(SfxByteItem, CntByteItem);
 
-//============================================================================
 // virtual
 SfxPoolItem * SfxByteItem::Create(SvStream & rStream, sal_uInt16) const
 {
@@ -41,18 +38,14 @@ SfxPoolItem * SfxByteItem::Create(SvStream & rStream, sal_uInt16) const
     return new SfxByteItem(Which(), sal_uInt8(nValue));
 }
 
-//============================================================================
 //
 //  class SfxInt16Item
 //
-//============================================================================
 
 DBG_NAME(SfxInt16Item);
 
-//============================================================================
 TYPEINIT1_AUTOFACTORY(SfxInt16Item, SfxPoolItem);
 
-//============================================================================
 SfxInt16Item::SfxInt16Item(sal_uInt16 which, SvStream & rStream):
     SfxPoolItem(which)
 {
@@ -62,7 +55,6 @@ SfxInt16Item::SfxInt16Item(sal_uInt16 which, SvStream & rStream):
     m_nValue = nTheValue;
 }
 
-//============================================================================
 // virtual
 int SfxInt16Item::operator ==(const SfxPoolItem & rItem) const
 {
@@ -72,7 +64,6 @@ int SfxInt16Item::operator ==(const SfxPoolItem & rItem) const
                         m_nValue;
 }
 
-//============================================================================
 // virtual
 int SfxInt16Item::Compare(const SfxPoolItem & rWith) const
 {
@@ -86,7 +77,6 @@ int SfxInt16Item::Compare(const SfxPoolItem & rWith) const
             0 : 1;
 }
 
-//============================================================================
 // virtual
 SfxItemPresentation SfxInt16Item::GetPresentation(SfxItemPresentation,
                                                   SfxMapUnit, SfxMapUnit,
@@ -99,7 +89,6 @@ SfxItemPresentation SfxInt16Item::GetPresentation(SfxItemPresentation,
 }
 
 
-//============================================================================
 // virtual
 bool SfxInt16Item::QueryValue(com::sun::star::uno::Any& rVal, sal_uInt8) const
 {
@@ -108,7 +97,6 @@ bool SfxInt16Item::QueryValue(com::sun::star::uno::Any& rVal, sal_uInt8) const
     return true;
 }
 
-//============================================================================
 // virtual
 bool SfxInt16Item::PutValue(const com::sun::star::uno::Any& rVal, sal_uInt8 )
 {
@@ -123,7 +111,6 @@ bool SfxInt16Item::PutValue(const com::sun::star::uno::Any& rVal, sal_uInt8 )
     return false;
 }
 
-//============================================================================
 // virtual
 SfxPoolItem * SfxInt16Item::Create(SvStream & rStream, sal_uInt16) const
 {
@@ -131,7 +118,6 @@ SfxPoolItem * SfxInt16Item::Create(SvStream & rStream, sal_uInt16) const
     return new SfxInt16Item(Which(), rStream);
 }
 
-//============================================================================
 // virtual
 SvStream & SfxInt16Item::Store(SvStream & rStream, sal_uInt16) const
 {
@@ -140,94 +126,77 @@ SvStream & SfxInt16Item::Store(SvStream & rStream, sal_uInt16) const
     return rStream;
 }
 
-//============================================================================
 SfxPoolItem * SfxInt16Item::Clone(SfxItemPool *) const
 {
     DBG_CHKTHIS(SfxInt16Item, 0);
     return new SfxInt16Item(*this);
 }
 
-//============================================================================
 sal_Int16 SfxInt16Item::GetMin() const
 {
     DBG_CHKTHIS(SfxInt16Item, 0);
     return -32768;
 }
 
-//============================================================================
 sal_Int16 SfxInt16Item::GetMax() const
 {
     DBG_CHKTHIS(SfxInt16Item, 0);
     return 32767;
 }
 
-//============================================================================
 SfxFieldUnit SfxInt16Item::GetUnit() const
 {
     DBG_CHKTHIS(SfxInt16Item, 0);
     return SFX_FUNIT_NONE;
 }
 
-//============================================================================
 //
 //  class SfxUInt16Item
 //
-//============================================================================
 
 TYPEINIT1_AUTOFACTORY(SfxUInt16Item, CntUInt16Item);
 
 
-//============================================================================
 //
 //  class SfxInt32Item
 //
-//============================================================================
 
 TYPEINIT1_AUTOFACTORY(SfxInt32Item, CntInt32Item);
 
 
-//============================================================================
 //
 //  class SfxUInt32Item
 //
-//============================================================================
 
 TYPEINIT1_AUTOFACTORY(SfxUInt32Item, CntUInt32Item);
 
 
-//============================================================================
 //
 //  class SfxMetricItem
 //
-//============================================================================
 
 DBG_NAME(SfxMetricItem);
 
-//============================================================================
 TYPEINIT1_AUTOFACTORY(SfxMetricItem, SfxInt32Item);
 
-//============================================================================
 SfxMetricItem::SfxMetricItem(sal_uInt16 which, sal_uInt32 nValue):
     SfxInt32Item(which, nValue)
 {
     DBG_CTOR(SfxMetricItem, 0);
 }
 
-//============================================================================
 SfxMetricItem::SfxMetricItem(sal_uInt16 which, SvStream & rStream):
     SfxInt32Item(which, rStream)
 {
     DBG_CTOR(SfxMetricItem, 0);
 }
 
-//============================================================================
 SfxMetricItem::SfxMetricItem(const SfxMetricItem & rItem):
     SfxInt32Item(rItem)
 {
     DBG_CTOR(SfxMetricItem, 0);
 }
 
-//============================================================================
 // virtual
 bool SfxMetricItem::ScaleMetrics(long nMult, long nDiv)
 {
@@ -239,7 +208,6 @@ bool SfxMetricItem::ScaleMetrics(long nMult, long nDiv)
     return true;
 }
 
-//============================================================================
 // virtual
 bool SfxMetricItem::HasMetrics() const
 {

@@ -23,18 +23,14 @@
 #include <tools/stream.hxx>
 #include <svl/custritm.hxx>
 
-//============================================================================
 //
 //  class CntUnencodedStringItem
 //
-//============================================================================
 
 DBG_NAME(CntUnencodedStringItem)
 
-//============================================================================
 TYPEINIT1_AUTOFACTORY(CntUnencodedStringItem, SfxPoolItem)
 
-//============================================================================
 // virtual
 int CntUnencodedStringItem::operator ==(const SfxPoolItem & rItem) const
 {
@@ -46,7 +42,6 @@ int CntUnencodedStringItem::operator ==(const SfxPoolItem & rItem) const
                 m_aValue;
 }
 
-//============================================================================
 // virtual
 int CntUnencodedStringItem::Compare(SfxPoolItem const & rWith) const
 {
@@ -59,7 +54,6 @@ int CntUnencodedStringItem::Compare(SfxPoolItem const & rWith) const
     return (nCmp == 0) ? 0 : (nCmp < 0) ? -1 : 1;
 }
 
-//============================================================================
 // virtual
 int CntUnencodedStringItem::Compare(SfxPoolItem const & rWith,
                                     IntlWrapper const & rIntlWrapper)
@@ -72,7 +66,6 @@ int CntUnencodedStringItem::Compare(SfxPoolItem const & rWith,
         static_cast< CntUnencodedStringItem const * >(&rWith)->m_aValue );
 }
 
-//============================================================================
 // virtual
 SfxItemPresentation
 CntUnencodedStringItem::GetPresentation(SfxItemPresentation, SfxMapUnit,
@@ -84,7 +77,6 @@ CntUnencodedStringItem::GetPresentation(SfxItemPresentation, SfxMapUnit,
     return SFX_ITEM_PRESENTATION_NAMELESS;
 }
 
-//============================================================================
 // virtual
 bool CntUnencodedStringItem::QueryValue(com::sun::star::uno::Any& rVal, sal_uInt8)
     const
@@ -93,7 +85,6 @@ bool CntUnencodedStringItem::QueryValue(com::sun::star::uno::Any& rVal, sal_uInt
     return true;
 }
 
-//============================================================================
 // virtual
 bool CntUnencodedStringItem::PutValue(const com::sun::star::uno::Any& rVal,
                                          sal_uInt8)
@@ -108,7 +99,6 @@ bool CntUnencodedStringItem::PutValue(const com::sun::star::uno::Any& rVal,
     return false;
 }
 
-//============================================================================
 // virtual
 SfxPoolItem * CntUnencodedStringItem::Clone(SfxItemPool *) const
 {

@@ -33,7 +33,6 @@
 
 DBG_NAME(SfxItemPool);
 
-//========================================================================
 
 const SfxItemPool* SfxItemPool::GetStoringPool()
 
@@ -50,7 +49,6 @@ const SfxItemPool* SfxItemPool::GetStoringPool()
     return pStoringPool_;
 }
 
-//-------------------------------------------------------------------------
 
 SvStream &SfxItemPool::Store(SvStream &rStream) const
 
@@ -361,7 +359,6 @@ bool SfxItemPool::IsInRange( sal_uInt16 nWhich ) const
     return nWhich >= pImp->mnStart && nWhich <= pImp->mnEnd;
 }
 
-//============================================================================
 // This had to be moved to a method of its own to keep Solaris GCC happy:
 void SfxItemPool_Impl::readTheItems (
     SvStream & rStream, sal_uInt32 nItemCount, sal_uInt16 nVer,
@@ -1143,7 +1140,6 @@ const SfxPoolItem* SfxItemPool::LoadSurrogate
     return 0;
 }
 
-//-------------------------------------------------------------------------
 
 
 bool SfxItemPool::StoreSurrogate
@@ -1226,7 +1222,6 @@ bool SfxItemPool::IsInStoringRange( sal_uInt16 nWhich ) const
            nWhich <= pImp->nStoringEnd;
 }
 
-//------------------------------------------------------------------------
 
 void SfxItemPool::SetStoringRange( sal_uInt16 nFrom, sal_uInt16 nTo )
 
@@ -1466,7 +1461,6 @@ bool SfxItemPool::IsCurrentVersionLoading() const
            ( !pImp->mpSecondary || pImp->mpSecondary->IsCurrentVersionLoading() );
 }
 
-//-------------------------------------------------------------------------
 
 
 bool SfxItemPool::StoreItem( SvStream &rStream, const SfxPoolItem &rItem,
@@ -1532,7 +1526,6 @@ bool SfxItemPool::StoreItem( SvStream &rStream, const SfxPoolItem &rItem,
     return sal_True;
 }
 
-//-------------------------------------------------------------------------
 
 
 const SfxPoolItem* SfxItemPool::LoadItem( SvStream &rStream, bool bDirect,

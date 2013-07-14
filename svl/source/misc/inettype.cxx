@@ -29,7 +29,6 @@
 namespace
 {
 
-//============================================================================
 struct MediaTypeEntry
 {
     sal_Char const * m_pTypeName;
@@ -37,7 +36,6 @@ struct MediaTypeEntry
     sal_Char const * m_pExtension;
 };
 
-//============================================================================
 struct TypeIDMapEntry
 {
     OUString m_aTypeName;
@@ -45,7 +43,6 @@ struct TypeIDMapEntry
     OUString m_aSystemFileType;
 };
 
-//============================================================================
 struct TypeNameMapEntry
 {
     OUString m_aExtension;
@@ -55,7 +52,6 @@ struct TypeNameMapEntry
         m_eTypeID(CONTENT_TYPE_UNKNOWN) {}
 };
 
-//============================================================================
 struct ExtensionMapEntry
 {
     INetContentType m_eTypeID;
@@ -64,7 +60,6 @@ struct ExtensionMapEntry
         m_eTypeID(CONTENT_TYPE_UNKNOWN) {}
 };
 
-//============================================================================
 class Registration
 {
     typedef boost::ptr_map<OUString, TypeNameMapEntry>  TypeNameMap;
@@ -118,11 +113,9 @@ inline TypeIDMapEntry * Registration::getEntry(INetContentType eTypeID)
         return NULL;
 }
 
-//============================================================================
 MediaTypeEntry const * seekEntry(OUString const & rTypeName,
                                  MediaTypeEntry const * pMap, sal_Size nSize);
 
-//============================================================================
 /** A mapping from type names to type ids and extensions.  Sorted by type
     name.
  */
@@ -252,7 +245,6 @@ MediaTypeEntry const aStaticTypeNameMap[CONTENT_TYPE_LAST + 1]
         { CONTENT_TYPE_STR_X_VRML, CONTENT_TYPE_X_VRML, "wrl" }
 };
 
-//============================================================================
 /** A mapping from type IDs to presentation resource IDs.  Sorted by type ID.
  */
 sal_uInt16 const aStaticResourceIDMap[CONTENT_TYPE_LAST + 1]
@@ -357,7 +349,6 @@ sal_uInt16 const aStaticResourceIDMap[CONTENT_TYPE_LAST + 1]
         STR_SVT_MIMETYPE_APP_SXIPACKED, // CONTENT_TYPE_APP_VND_SUN_XML_IMPRESSPACKED
  };
 
-//============================================================================
 /** A mapping from extensions to type IDs.  Sorted by extension.
  */
 MediaTypeEntry const aStaticExtensionMap[]
@@ -442,7 +433,6 @@ MediaTypeEntry const aStaticExtensionMap[]
         { "xpm", CONTENT_TYPE_IMAGE_GENERIC, "" },
         { "zip", CONTENT_TYPE_APP_ZIP, "" } };
 
-//============================================================================
 /** A mapping from presentations to type IDs.  Sorted by presentations.
  */
 MediaTypeEntry const aStaticPresentationMap[]
@@ -504,20 +494,16 @@ MediaTypeEntry const aStaticPresentationMap[]
 
 }
 
-//============================================================================
 //
 //  Registration
 //
-//============================================================================
 
-//============================================================================
 Registration::~Registration()
 {
     for ( TypeIDMap::iterator it = m_aTypeIDMap.begin(); it != m_aTypeIDMap.end(); ++it )
         delete it->second;
 }
 
-//============================================================================
 // static
 TypeNameMapEntry * Registration::getExtensionEntry(OUString const & rTypeName)
 {
@@ -529,7 +515,6 @@ TypeNameMapEntry * Registration::getExtensionEntry(OUString const & rTypeName)
     return 0;
 }
 
-//============================================================================
 // static
 INetContentType Registration::RegisterContentType(OUString const & rTypeName,
                                                   OUString const & rPresentation,
@@ -567,7 +552,6 @@ INetContentType Registration::RegisterContentType(OUString const & rTypeName,
     return eTypeID;
 }
 
-//============================================================================
 // static
 INetContentType Registration::GetContentType(OUString const & rTypeName)
 {
@@ -580,7 +564,6 @@ INetContentType Registration::GetContentType(OUString const & rTypeName)
         : CONTENT_TYPE_UNKNOWN;
 }
 
-//============================================================================
 // static
 OUString Registration::GetContentType(INetContentType eTypeID)
 {
@@ -592,7 +575,6 @@ OUString Registration::GetContentType(INetContentType eTypeID)
     return OUString();
 }
 
-//============================================================================
 // static
 OUString Registration::GetPresentation(INetContentType eTypeID)
 {
@@ -605,7 +587,6 @@ OUString Registration::GetPresentation(INetContentType eTypeID)
         return  OUString();
 }
 
-//============================================================================
 // static
 INetContentType Registration::GetContentType4Extension(OUString const & rExtension)
 {
@@ -617,11 +598,9 @@ INetContentType Registration::GetContentType4Extension(OUString const & rExtensi
         : CONTENT_TYPE_UNKNOWN;
 }
 
-//============================================================================
 //
 //  seekEntry
 //
-//============================================================================
 
 namespace
 {
@@ -688,7 +667,6 @@ INetContentType INetContentTypes::RegisterContentType(OUString const & rTypeName
     return eTypeID;
 }
 
-//============================================================================
 // static
 INetContentType INetContentTypes::GetContentType(OUString const & rTypeName)
 {
@@ -708,7 +686,6 @@ INetContentType INetContentTypes::GetContentType(OUString const & rTypeName)
             // the content type "x-starmail" has no sub type
 }
 
-//============================================================================
 //static
 OUString INetContentTypes::GetContentType(INetContentType eTypeID)
 {
@@ -734,7 +711,6 @@ OUString INetContentTypes::GetContentType(INetContentType eTypeID)
     return aTypeName;
 }
 
-//============================================================================
 //static
 OUString INetContentTypes::GetPresentation(INetContentType eTypeID,
                                             const LanguageTag& aLocale)
@@ -753,7 +729,6 @@ OUString INetContentTypes::GetPresentation(INetContentType eTypeID,
     return svl::getStringResource(nResID, aLocale);
 }
 
-//============================================================================
 //static
 INetContentType INetContentTypes::GetContentType4Extension(OUString const & rExtension)
 {
@@ -766,7 +741,6 @@ INetContentType INetContentTypes::GetContentType4Extension(OUString const & rExt
                                            : eTypeID;
 }
 
-//============================================================================
 //static
 INetContentType INetContentTypes::GetContentTypeFromURL(OUString const & rURL)
 {
@@ -876,7 +850,6 @@ INetContentType INetContentTypes::GetContentTypeFromURL(OUString const & rURL)
     return eTypeID;
 }
 
-//============================================================================
 //static
 bool INetContentTypes::GetExtensionFromURL(OUString const & rURL,
                                            OUString & rExtension)
@@ -903,7 +876,6 @@ bool INetContentTypes::GetExtensionFromURL(OUString const & rURL,
     return false;
 }
 
-//============================================================================
 // static
 bool INetContentTypes::parse(OUString const & rMediaType,
                              OUString & rType, OUString & rSubType,
