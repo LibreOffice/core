@@ -24,10 +24,8 @@
 #include <svl/smplhint.hxx>
 
 
-//====================================================================
 TYPEINIT0(SvtBroadcaster);
 
-//====================================================================
 
 // simple ctor of class SvtBroadcaster
 
@@ -36,7 +34,6 @@ SvtBroadcaster::SvtBroadcaster()
 {
 }
 
-//--------------------------------------------------------------------
 
 // copy ctor of class SvtBroadcaster
 
@@ -51,7 +48,6 @@ SvtBroadcaster::SvtBroadcaster( const SvtBroadcaster &rBC )
         } while( 0 != ( pLast = aIter.GoNext() ));
 }
 
-//--------------------------------------------------------------------
 
 // unregister all listeners
 
@@ -69,7 +65,6 @@ SvtBroadcaster::~SvtBroadcaster()
         } while( 0 != ( pLast = aIter.GoNext() ));
 }
 
-//--------------------------------------------------------------------
 
 // broadcast immedeately
 
@@ -95,7 +90,6 @@ void SvtBroadcaster::Broadcast( const SfxHint &rHint )
     }
 }
 
-//--------------------------------------------------------------------
 
 
 // called, if no more listeners exists

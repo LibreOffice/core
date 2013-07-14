@@ -49,7 +49,6 @@ SvtLanguageOptions::SvtLanguageOptions( sal_Bool _bDontLoad )
     m_pCTLOptions->AddListener(this);
     m_pCJKOptions->AddListener(this);
 }
-//------------------------------------------------------------------------------
 SvtLanguageOptions::~SvtLanguageOptions()
 {
     // Global access, must be guarded (multithreading)
@@ -61,51 +60,40 @@ SvtLanguageOptions::~SvtLanguageOptions()
     delete m_pCJKOptions;
     delete m_pCTLOptions;
 }
-//------------------------------------------------------------------------------
 // CJK options -----------------------------------------------------------------
-//------------------------------------------------------------------------------
 sal_Bool SvtLanguageOptions::IsCJKFontEnabled() const
 {
     return m_pCJKOptions->IsCJKFontEnabled();
 }
-//------------------------------------------------------------------------------
 sal_Bool SvtLanguageOptions::IsVerticalTextEnabled() const
 {
     return m_pCJKOptions->IsVerticalTextEnabled();
 }
-//------------------------------------------------------------------------------
 sal_Bool SvtLanguageOptions::IsAsianTypographyEnabled() const
 {
     return m_pCJKOptions->IsAsianTypographyEnabled();
 }
-//------------------------------------------------------------------------------
 sal_Bool SvtLanguageOptions::IsJapaneseFindEnabled() const
 {
     return m_pCJKOptions->IsJapaneseFindEnabled();
 }
-//------------------------------------------------------------------------------
 void SvtLanguageOptions::SetAll( sal_Bool _bSet )
 {
     m_pCJKOptions->SetAll( _bSet );
 }
-//------------------------------------------------------------------------------
 sal_Bool SvtLanguageOptions::IsAnyEnabled() const
 {
     return m_pCJKOptions->IsAnyEnabled();
 }
-//------------------------------------------------------------------------------
 // CTL options -----------------------------------------------------------------
-//------------------------------------------------------------------------------
 void SvtLanguageOptions::SetCTLFontEnabled( sal_Bool _bEnabled )
 {
     m_pCTLOptions->SetCTLFontEnabled( _bEnabled );
 }
-//------------------------------------------------------------------------------
 sal_Bool SvtLanguageOptions::IsCTLFontEnabled() const
 {
     return m_pCTLOptions->IsCTLFontEnabled();
 }
-//------------------------------------------------------------------------------
 void SvtLanguageOptions::SetCTLSequenceChecking( sal_Bool _bEnabled )
 {
     m_pCTLOptions->SetCTLSequenceChecking( _bEnabled );
@@ -121,7 +109,6 @@ void SvtLanguageOptions::SetCTLSequenceCheckingTypeAndReplace( sal_Bool _bEnable
     m_pCTLOptions->SetCTLSequenceCheckingTypeAndReplace( _bEnable );
 }
 
-//------------------------------------------------------------------------------
 sal_Bool SvtLanguageOptions::IsReadOnly(SvtLanguageOptions::EOption eOption) const
 {
     sal_Bool bReadOnly = sal_False;

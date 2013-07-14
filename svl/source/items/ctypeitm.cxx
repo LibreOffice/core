@@ -23,36 +23,30 @@
 #include <tools/stream.hxx>
 #include <svl/ctypeitm.hxx>
 
-//============================================================================
 // The following defines are copied from chaos/source/items/cstritem.cxx:
 #define CNTSTRINGITEM_STREAM_MAGIC   ( (sal_uInt32)0xfefefefe )
 #define CNTSTRINGITEM_STREAM_SEEKREL (-( (long)( sizeof( sal_uInt32 ) ) ) )
 
-//============================================================================
 //
 // class CntContentTypeItem Implementation.
 //
-//============================================================================
 
 TYPEINIT1_AUTOFACTORY( CntContentTypeItem, CntUnencodedStringItem );
 
 #define CONTENT_TYPE_NOT_INIT ( (INetContentType)-1 )
 
-//----------------------------------------------------------------------------
 CntContentTypeItem::CntContentTypeItem()
 : CntUnencodedStringItem(),
   _eType( CONTENT_TYPE_NOT_INIT )
 {
 }
 
-//----------------------------------------------------------------------------
 CntContentTypeItem::CntContentTypeItem( sal_uInt16 which, const OUString& rType )
 : CntUnencodedStringItem( which, rType ),
   _eType( CONTENT_TYPE_NOT_INIT )
 {
 }
 
-//----------------------------------------------------------------------------
 CntContentTypeItem::CntContentTypeItem( const CntContentTypeItem& rOrig )
 : CntUnencodedStringItem( rOrig ),
   _eType( rOrig._eType ),
@@ -60,14 +54,12 @@ CntContentTypeItem::CntContentTypeItem( const CntContentTypeItem& rOrig )
 {
 }
 
-//============================================================================
 // virtual
 sal_uInt16 CntContentTypeItem::GetVersion(sal_uInt16) const
 {
     return 1; // because it uses SfxPoolItem::read/writeUnicodeString()
 }
 
-//----------------------------------------------------------------------------
 // virtual
 SfxPoolItem* CntContentTypeItem::Create( SvStream& rStream,
                                          sal_uInt16 nItemVersion ) const
@@ -90,7 +82,6 @@ SfxPoolItem* CntContentTypeItem::Create( SvStream& rStream,
     return new CntContentTypeItem(Which(), aValue);
 }
 
-//----------------------------------------------------------------------------
 // virtual
 SvStream & CntContentTypeItem::Store(SvStream & rStream, sal_uInt16) const
 {
@@ -101,7 +92,6 @@ SvStream & CntContentTypeItem::Store(SvStream & rStream, sal_uInt16) const
     return rStream;
 }
 
-//----------------------------------------------------------------------------
 // virtual
 int CntContentTypeItem::operator==( const SfxPoolItem& rOrig ) const
 {
@@ -114,14 +104,12 @@ int CntContentTypeItem::operator==( const SfxPoolItem& rOrig ) const
         return CntUnencodedStringItem::operator==( rOther );
 }
 
-//----------------------------------------------------------------------------
 // virtual
 SfxPoolItem* CntContentTypeItem::Clone( SfxItemPool* /* pPool */ ) const
 {
     return new CntContentTypeItem( *this );
 }
 
-//----------------------------------------------------------------------------
 void CntContentTypeItem::SetValue( const OUString& rNewVal )
 {
     // De-initialize enum type and presentation.
@@ -131,7 +119,6 @@ void CntContentTypeItem::SetValue( const OUString& rNewVal )
     CntUnencodedStringItem::SetValue( rNewVal );
 }
 
-//----------------------------------------------------------------------------
 int CntContentTypeItem::Compare( const SfxPoolItem &rWith, const IntlWrapper& rIntlWrapper ) const
 {
     OUString aOwnText, aWithText;
@@ -142,7 +129,6 @@ int CntContentTypeItem::Compare( const SfxPoolItem &rWith, const IntlWrapper& rI
     return rIntlWrapper.getCollator()->compareString( aOwnText, aWithText );
 }
 
-//----------------------------------------------------------------------------
 SfxItemPresentation CntContentTypeItem::GetPresentation(
     SfxItemPresentation ePres,
     SfxMapUnit          eCoreMetric,
@@ -170,7 +156,6 @@ SfxItemPresentation CntContentTypeItem::GetPresentation(
                                                        pIntlWrapper);
 }
 
-//----------------------------------------------------------------------------
 INetContentType CntContentTypeItem::GetEnumValue() const
 {
     if ( _eType == CONTENT_TYPE_NOT_INIT )
@@ -185,7 +170,6 @@ INetContentType CntContentTypeItem::GetEnumValue() const
     return _eType;
 }
 
-//----------------------------------------------------------------------------
 void CntContentTypeItem::SetValue( const INetContentType eType )
 {
     SetValue( INetContentTypes::GetContentType( eType ) );
@@ -195,7 +179,6 @@ void CntContentTypeItem::SetValue( const INetContentType eType )
     _eType = eType;
 }
 
-//----------------------------------------------------------------------------
 // virtual
 bool CntContentTypeItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8) const
 {
@@ -203,7 +186,6 @@ bool CntContentTypeItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8) 
     return true;
 }
 
-//----------------------------------------------------------------------------
 // virtual
 bool CntContentTypeItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8)
 {

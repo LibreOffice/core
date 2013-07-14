@@ -147,7 +147,6 @@ SfxItemPresentation SfxDateTimeItem::GetPresentation
     return SFX_ITEM_PRESENTATION_NAMELESS;
 }
 
-//----------------------------------------------------------------------------
 // virtual
 bool SfxDateTimeItem::PutValue( const com::sun::star::uno::Any& rVal,
                                    sal_uInt8 nMemberId )
@@ -170,7 +169,6 @@ bool SfxDateTimeItem::PutValue( const com::sun::star::uno::Any& rVal,
     return false;
 }
 
-//----------------------------------------------------------------------------
 // virtual
 bool SfxDateTimeItem::QueryValue( com::sun::star::uno::Any& rVal,
                                    sal_uInt8 nMemberId ) const

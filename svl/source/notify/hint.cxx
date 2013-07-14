@@ -20,11 +20,9 @@
 
 #include <svl/hint.hxx>
 
-//====================================================================
 
 TYPEINIT0(SfxHint);
 
-//====================================================================
 // virtual dtor for the typical base-class Hint
 
 SfxHint::~SfxHint()

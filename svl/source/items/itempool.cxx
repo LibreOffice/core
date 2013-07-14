@@ -27,7 +27,6 @@
 #include <svl/smplhint.hxx>
 #include "poolio.hxx"
 
-//========================================================================
 
 
 void SfxItemPool::AddSfxItemPoolUser(SfxItemPoolUser& rNewUser)

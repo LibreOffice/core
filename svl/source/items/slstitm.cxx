@@ -42,7 +42,6 @@ public:
             ~SfxImpStringList();
 };
 
-//------------------------------------------------------------------------
 
 SfxImpStringList::~SfxImpStringList()
 {
@@ -57,7 +56,6 @@ SfxStringListItem::SfxStringListItem() :
 {
 }
 
-//------------------------------------------------------------------------
 
 SfxStringListItem::SfxStringListItem( sal_uInt16 which, const std::vector<OUString>* pList ) :
     SfxPoolItem( which ),
@@ -74,7 +72,6 @@ SfxStringListItem::SfxStringListItem( sal_uInt16 which, const std::vector<OUStri
     }
 }
 
-//------------------------------------------------------------------------
 
 SfxStringListItem::SfxStringListItem( sal_uInt16 which, SvStream& rStream ) :
     SfxPoolItem( which ),
@@ -96,7 +93,6 @@ SfxStringListItem::SfxStringListItem( sal_uInt16 which, SvStream& rStream ) :
     }
 }
 
-//------------------------------------------------------------------------
 
 SfxStringListItem::SfxStringListItem( const SfxStringListItem& rItem ) :
     SfxPoolItem( rItem ),
@@ -109,7 +105,6 @@ SfxStringListItem::SfxStringListItem( const SfxStringListItem& rItem ) :
     }
 }
 
-//------------------------------------------------------------------------
 
 SfxStringListItem::~SfxStringListItem()
 {
@@ -123,7 +118,6 @@ SfxStringListItem::~SfxStringListItem()
     }
 }
 
-//------------------------------------------------------------------------
 
 std::vector<OUString>& SfxStringListItem::GetList()
 {
@@ -138,7 +132,6 @@ const std::vector<OUString>& SfxStringListItem::GetList () const
     return (const_cast< SfxStringListItem * >(this))->GetList();
 }
 
-//------------------------------------------------------------------------
 
 int SfxStringListItem::operator==( const SfxPoolItem& rItem ) const
 {
@@ -149,7 +142,6 @@ int SfxStringListItem::operator==( const SfxPoolItem& rItem ) const
     return pImp == pItem->pImp;
 }
 
-//------------------------------------------------------------------------
 
 SfxItemPresentation SfxStringListItem::GetPresentation
 (
@@ -164,7 +156,6 @@ SfxItemPresentation SfxStringListItem::GetPresentation
     return SFX_ITEM_PRESENTATION_NONE;
 }
 
-//------------------------------------------------------------------------
 
 SfxPoolItem* SfxStringListItem::Clone( SfxItemPool *) const
 {
@@ -178,14 +169,12 @@ SfxPoolItem* SfxStringListItem::Clone( SfxItemPool *) const
 
 }
 
-//------------------------------------------------------------------------
 
 SfxPoolItem* SfxStringListItem::Create( SvStream & rStream, sal_uInt16 ) const
 {
     return new SfxStringListItem( Which(), rStream );
 }
 
-//------------------------------------------------------------------------
 
 SvStream& SfxStringListItem::Store( SvStream & rStream, sal_uInt16 ) const
 {
@@ -207,7 +196,6 @@ SvStream& SfxStringListItem::Store( SvStream & rStream, sal_uInt16 ) const
     return rStream;
 }
 
-//------------------------------------------------------------------------
 
 void SfxStringListItem::SetString( const OUString& rStr )
 {
@@ -241,7 +229,6 @@ void SfxStringListItem::SetString( const OUString& rStr )
     }
 }
 
-//------------------------------------------------------------------------
 
 OUString SfxStringListItem::GetString()
 {
@@ -265,7 +252,6 @@ OUString SfxStringListItem::GetString()
     return convertLineEnd(aStr, GetSystemLineEnd());
 }
 
-//------------------------------------------------------------------------
 
 void SfxStringListItem::SetStringList( const com::sun::star::uno::Sequence< OUString >& rList )
 {
@@ -285,7 +271,6 @@ void SfxStringListItem::SetStringList( const com::sun::star::uno::Sequence< OUSt
     }
 }
 
-//----------------------------------------------------------------------------
 void SfxStringListItem::GetStringList( com::sun::star::uno::Sequence< OUString >& rList ) const
 {
     long nCount = pImp->aList.size();
@@ -295,7 +280,6 @@ void SfxStringListItem::GetStringList( com::sun::star::uno::Sequence< OUString >
         rList[i] = pImp->aList[i];
 }
 
-//----------------------------------------------------------------------------
 // virtual
 bool SfxStringListItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 )
 {
@@ -310,7 +294,6 @@ bool SfxStringListItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt
     return false;
 }
 
-//----------------------------------------------------------------------------
 // virtual
 bool SfxStringListItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 ) const
 {

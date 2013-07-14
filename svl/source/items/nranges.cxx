@@ -21,7 +21,6 @@
 #include <vector>
 // compiled via include from itemset.cxx only!
 
-//========================================================================
 
 #ifdef DBG_UTIL
 
@@ -39,7 +38,6 @@
 
 #endif
 
-//============================================================================
 inline void Swap_Impl(const sal_uInt16 *& rp1, const sal_uInt16 *& rp2)
 {
     const sal_uInt16 * pTemp = rp1;
@@ -47,7 +45,6 @@ inline void Swap_Impl(const sal_uInt16 *& rp1, const sal_uInt16 *& rp2)
     rp2 = pTemp;
 }
 
-//========================================================================
 
 sal_uInt16 InitializeRanges_Impl( sal_uInt16 *&rpRanges, va_list pArgs,
                                sal_uInt16 nWh1, sal_uInt16 nWh2, sal_uInt16 nNull )
@@ -96,7 +93,6 @@ sal_uInt16 InitializeRanges_Impl( sal_uInt16 *&rpRanges, va_list pArgs,
     return nSize;
 }
 
-//------------------------------------------------------------------------
 
 sal_uInt16 Count_Impl( const sal_uInt16 *pRanges )
 
@@ -116,7 +112,6 @@ sal_uInt16 Count_Impl( const sal_uInt16 *pRanges )
     return nCount;
 }
 
-//------------------------------------------------------------------------
 
 sal_uInt16 Capacity_Impl( const sal_uInt16 *pRanges )
 
@@ -140,7 +135,6 @@ sal_uInt16 Capacity_Impl( const sal_uInt16 *pRanges )
     return nCount;
 }
 
-//------------------------------------------------------------------------
 
 SfxUShortRanges::SfxUShortRanges( const SfxUShortRanges &rOrig )
 
@@ -160,7 +154,6 @@ SfxUShortRanges::SfxUShortRanges( const SfxUShortRanges &rOrig )
         _pRanges = 0;
 }
 
-//------------------------------------------------------------------------
 
 SfxUShortRanges::SfxUShortRanges( sal_uInt16 nWhich1, sal_uInt16 nWhich2 )
 
@@ -179,7 +172,6 @@ SfxUShortRanges::SfxUShortRanges( sal_uInt16 nWhich1, sal_uInt16 nWhich2 )
     _pRanges[2] = 0;
 }
 
-//------------------------------------------------------------------------
 
 SfxUShortRanges::SfxUShortRanges( const sal_uInt16* pArr )
 
@@ -199,7 +191,6 @@ SfxUShortRanges::SfxUShortRanges( const sal_uInt16* pArr )
     memcpy( _pRanges, pArr, sizeof(sal_uInt16) * nCount );
 }
 
-//------------------------------------------------------------------------
 
 bool SfxUShortRanges::operator==( const SfxUShortRanges &rOther ) const
 {
@@ -230,7 +221,6 @@ bool SfxUShortRanges::operator==( const SfxUShortRanges &rOther ) const
     return true;
 }
 
-//------------------------------------------------------------------------
 
 SfxUShortRanges& SfxUShortRanges::operator =
 (
@@ -262,7 +252,6 @@ SfxUShortRanges& SfxUShortRanges::operator =
     return *this;
 }
 
-//------------------------------------------------------------------------
 
 SfxUShortRanges& SfxUShortRanges::operator +=
 (
@@ -422,7 +411,6 @@ copy_rest:
     return *this;
 }
 
-//------------------------------------------------------------------------
 
 SfxUShortRanges& SfxUShortRanges::operator -=
 (
@@ -565,7 +553,6 @@ SfxUShortRanges& SfxUShortRanges::operator -=
     return *this;
 }
 
-//------------------------------------------------------------------------
 
 SfxUShortRanges& SfxUShortRanges::operator /=
 (
@@ -685,7 +672,6 @@ SfxUShortRanges& SfxUShortRanges::operator /=
     return *this;
 }
 
-//------------------------------------------------------------------------
 
 sal_uInt16 SfxUShortRanges::Count() const
 

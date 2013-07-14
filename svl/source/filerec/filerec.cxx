@@ -20,7 +20,6 @@
 #include <svl/filerec.hxx>
 #include <osl/endian.h>
 
-//========================================================================
 
 /*  Die folgenden Makros extrahieren Teilbereiche aus einem sal_uInt32 Wert.
     Diese sal_uInt32-Werte werden anstelle der einzelnen Werte gestreamt,
@@ -36,7 +35,6 @@
 #define SFX_REC_CONTENT_VER(n) ( ((n) & 0x000000FF) )
 #define SFX_REC_CONTENT_OFS(n) ( ((n) & 0xFFFFFF00) >> 8 )
 
-//-------------------------------------------------------------------------
 
 /*  Die folgenden Makros setzen Teilbereiche zu einem sal_uInt32 Wert zusammen.
     Diese sal_uInt32-Werte werden anstelle der einzelnen Werte gestreamt,
@@ -56,7 +54,6 @@
                     ( sal_uInt32(nContentVer) | \
                       sal_uInt32( nCurStartPos - n1StStartPos ) << 8 )
 
-//=========================================================================
 
 sal_uInt32 SfxMiniRecordWriter::Close
 (
@@ -227,7 +224,6 @@ SfxMiniRecordReader::SfxMiniRecordReader
     }
 }
 
-//=========================================================================
 
 SfxSingleRecordWriter::SfxSingleRecordWriter
 (
@@ -248,7 +244,6 @@ SfxSingleRecordWriter::SfxSingleRecordWriter
     *pStream << SFX_REC_HEADER(nRecordType, nContentTag, nContentVer);
 }
 
-//=========================================================================
 
 inline bool SfxSingleRecordReader::ReadHeader_Impl( sal_uInt16 nTypes )
 
@@ -282,7 +277,6 @@ inline bool SfxSingleRecordReader::ReadHeader_Impl( sal_uInt16 nTypes )
     return bRet;
 }
 
-//-------------------------------------------------------------------------
 
 bool SfxSingleRecordReader::FindHeader_Impl
 (
@@ -348,7 +342,6 @@ bool SfxSingleRecordReader::FindHeader_Impl
     return sal_False;
 }
 
-//=========================================================================
 
 SfxMultiFixRecordWriter::SfxMultiFixRecordWriter
 (
@@ -370,7 +363,6 @@ SfxMultiFixRecordWriter::SfxMultiFixRecordWriter
     pStream->SeekRel( + SFX_REC_HEADERSIZE_MULTI );
 }
 
-//------------------------------------------------------------------------
 
 sal_uInt32 SfxMultiFixRecordWriter::Close( bool bSeekToEndOfRec )
 
@@ -397,7 +389,6 @@ sal_uInt32 SfxMultiFixRecordWriter::Close( bool bSeekToEndOfRec )
     return 0;
 }
 
-//=========================================================================
 
 SfxMultiVarRecordWriter::SfxMultiVarRecordWriter
 (
@@ -417,7 +408,6 @@ SfxMultiVarRecordWriter::SfxMultiVarRecordWriter
 {
 }
 
-//-------------------------------------------------------------------------
 
 SfxMultiVarRecordWriter::SfxMultiVarRecordWriter
 (
@@ -445,7 +435,6 @@ SfxMultiVarRecordWriter::SfxMultiVarRecordWriter
 {
 }
 
-//-------------------------------------------------------------------------
 
 SfxMultiVarRecordWriter::~SfxMultiVarRecordWriter()
 
@@ -462,7 +451,6 @@ SfxMultiVarRecordWriter::~SfxMultiVarRecordWriter()
         Close();
 }
 
-//-------------------------------------------------------------------------
 
 void SfxMultiVarRecordWriter::FlushContent_Impl()
 
@@ -480,7 +468,6 @@ void SfxMultiVarRecordWriter::FlushContent_Impl()
             SFX_REC_CONTENT_HEADER(_nContentVer,_nStartPos,_nContentStartPos));
 }
 
-//-------------------------------------------------------------------------
 
 void SfxMultiVarRecordWriter::NewContent()
 
@@ -496,7 +483,6 @@ void SfxMultiVarRecordWriter::NewContent()
     ++_nContentCount;
 }
 
-//-------------------------------------------------------------------------
 
 sal_uInt32 SfxMultiVarRecordWriter::Close( bool bSeekToEndOfRec )
 
@@ -537,7 +523,6 @@ sal_uInt32 SfxMultiVarRecordWriter::Close( bool bSeekToEndOfRec )
     return 0;
 }
 
-//=========================================================================
 
 void SfxMultiMixRecordWriter::NewContent
 (
@@ -564,7 +549,6 @@ void SfxMultiMixRecordWriter::NewContent
     _nContentVer = nContentVer;
 }
 
-//=========================================================================
 
 bool SfxMultiRecordReader::ReadHeader_Impl()
 
@@ -607,7 +591,6 @@ bool SfxMultiRecordReader::ReadHeader_Impl()
     return !_pStream->GetError();
 }
 
-//-------------------------------------------------------------------------
 
 SfxMultiRecordReader::SfxMultiRecordReader( SvStream *pStream, sal_uInt16 nTag )
     : _pContentOfs(0)
@@ -632,14 +615,12 @@ SfxMultiRecordReader::SfxMultiRecordReader( SvStream *pStream, sal_uInt16 nTag )
     }
 }
 
-//-------------------------------------------------------------------------
 
 SfxMultiRecordReader::~SfxMultiRecordReader()
 {
     delete[] _pContentOfs;
 }
 
-//-------------------------------------------------------------------------
 
 bool SfxMultiRecordReader::GetContent()
 

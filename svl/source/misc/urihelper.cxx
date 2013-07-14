@@ -46,11 +46,9 @@
 
 using namespace com::sun::star;
 
-//============================================================================
 //
 //  SmartRel2Abs
 //
-//============================================================================
 
 OUString URIHelper::SmartRel2Abs(INetURLObject const & rTheBaseURIRef,
                                  OUString const & rTheRelURIRef,
@@ -106,11 +104,9 @@ OUString URIHelper::SmartRel2Abs(INetURLObject const & rTheBaseURIRef,
     return aAbsURIRef.GetMainURL(eDecodeMechanism, eCharset);
 }
 
-//============================================================================
 //
 //  SetMaybeFileHdl
 //
-//============================================================================
 
 namespace { struct MaybeFileHdl : public rtl::Static< Link, MaybeFileHdl > {}; }
 
@@ -119,11 +115,9 @@ void URIHelper::SetMaybeFileHdl(Link const & rTheMaybeFileHdl)
     MaybeFileHdl::get() = rTheMaybeFileHdl;
 }
 
-//============================================================================
 //
 //  GetMaybeFileHdl
 //
-//============================================================================
 
 Link URIHelper::GetMaybeFileHdl()
 {
@@ -290,11 +284,9 @@ OUString URIHelper::simpleNormalizedMakeRelative(
     return rel.is() ? rel->getUriReference() : uriReference;
 }
 
-//============================================================================
 //
 //  FindFirstURLInText
 //
-//============================================================================
 
 namespace {
 
@@ -735,11 +727,9 @@ OUString URIHelper::FindFirstURLInText(OUString const & rText,
     return OUString();
 }
 
-//============================================================================
 //
 //  removePassword
 //
-//============================================================================
 
 OUString URIHelper::removePassword(OUString const & rURI,
                                    INetURLObject::EncodeMechanism eEncodeMechanism,

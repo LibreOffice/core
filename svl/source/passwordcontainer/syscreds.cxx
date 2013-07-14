@@ -98,7 +98,6 @@ void SysCredentialsConfigItem::setSystemCredentialsURLs(
     m_bInited = true;
 }
 
-//============================================================================
 
 namespace
 {

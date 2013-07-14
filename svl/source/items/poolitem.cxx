@@ -175,21 +175,18 @@ SvStream& SfxPoolItem::Store(SvStream &rStream, sal_uInt16 ) const
     return rStream;
 }
 
-//============================================================================
 // static
 OUString SfxPoolItem::readByteString(SvStream& rStream)
 {
     return rStream.ReadUniOrByteString(rStream.GetStreamCharSet());
 }
 
-//============================================================================
 // static
 void SfxPoolItem::writeByteString(SvStream & rStream, const OUString& rString)
 {
     rStream.WriteUniOrByteString(rString, rStream.GetStreamCharSet());
 }
 
-//============================================================================
 // static
 OUString SfxPoolItem::readUnicodeString(SvStream & rStream, bool bUnicode)
 {
@@ -197,7 +194,6 @@ OUString SfxPoolItem::readUnicodeString(SvStream & rStream, bool bUnicode)
                                       rStream.GetStreamCharSet());
 }
 
-//============================================================================
 // static
 void SfxPoolItem::writeUnicodeString(SvStream & rStream, const OUString& rString)
 {
