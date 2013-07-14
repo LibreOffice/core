@@ -54,8 +54,8 @@ using namespace ::com::sun::star::beans;
      remark: in case of error sal_True is returned
  --------------------------------------------------------------------*/
 
-sal_Bool SwFldMgr::IsDBNumeric( const String& rDBName, const String& rTblQryName,
-                            sal_Bool bIsTable, const String& rFldName)
+sal_Bool SwFldMgr::IsDBNumeric( const OUString& rDBName, const OUString& rTblQryName,
+                            sal_Bool bIsTable, const OUString& rFldName)
 {
     sal_Bool bNumeric = sal_True;
 

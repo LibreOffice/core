@@ -110,13 +110,13 @@ void    SwAuthorityFieldType::RemoveField(sal_IntPtr nHandle)
 #endif
 }
 
-sal_IntPtr SwAuthorityFieldType::AddField(const String& rFieldContents)
+sal_IntPtr SwAuthorityFieldType::AddField(const OUString& rFieldContents)
 {
     sal_IntPtr nRet = 0;
     SwAuthEntry* pEntry = new SwAuthEntry;
     for( sal_uInt16 i = 0; i < AUTH_FIELD_END; ++i )
         pEntry->SetAuthorField( (ToxAuthorityField)i,
-                        rFieldContents.GetToken( i, TOX_STYLE_DELIMITER ));
+                        rFieldContents.getToken( i, TOX_STYLE_DELIMITER ));
 
     for(sal_uInt16 j = 0; j < m_DataArr.size() && pEntry; j++)
     {
@@ -178,7 +178,7 @@ const SwAuthEntry*  SwAuthorityFieldType::GetEntryByHandle(sal_IntPtr nHandle) c
 }
 
 void SwAuthorityFieldType::GetAllEntryIdentifiers(
-    std::vector<String>& rToFill )const
+    std::vector<OUString>& rToFill )const
 {
     for(sal_uInt16 j = 0; j < m_DataArr.size(); j++)
     {
@@ -188,7 +188,7 @@ void SwAuthorityFieldType::GetAllEntryIdentifiers(
 }
 
 const SwAuthEntry*  SwAuthorityFieldType::GetEntryByIdentifier(
-                                const String& rIdentifier)const
+                                const OUString& rIdentifier)const
 {
     const SwAuthEntry* pRet = 0;
     for( sal_uInt16 j = 0; j < m_DataArr.size(); ++j )
@@ -373,7 +373,7 @@ bool SwAuthorityFieldType::QueryValue( Any& rVal, sal_uInt16 nWhichId ) const
         }
         break;
     case FIELD_PROP_PAR3:
-        rVal <<= OUString(GetSortAlgorithm());
+        rVal <<= GetSortAlgorithm();
         break;
 
     case FIELD_PROP_BOOL1:
@@ -416,14 +416,14 @@ bool SwAuthorityFieldType::QueryValue( Any& rVal, sal_uInt16 nWhichId ) const
 bool    SwAuthorityFieldType::PutValue( const Any& rAny, sal_uInt16 nWhichId )
 {
     bool bRet = true;
-    String sTmp;
     switch( nWhichId )
     {
     case FIELD_PROP_PAR1:
     case FIELD_PROP_PAR2:
     {
-        ::GetString( rAny, sTmp );
-        sal_Unicode uSet = sTmp.GetChar(0);
+        OUString sTmp;
+        rAny >>= sTmp;
+        const sal_Unicode uSet = !sTmp.isEmpty() ? sTmp[0] : 0;
         if( FIELD_PROP_PAR1 == nWhichId )
             m_cPrefix = uSet;
         else
@@ -431,9 +431,12 @@ bool    SwAuthorityFieldType::PutValue( const Any& rAny, sal_uInt16 nWhichId )
     }
     break;
     case FIELD_PROP_PAR3:
-        SetSortAlgorithm( ::GetString( rAny, sTmp ));
+    {
+        OUString sTmp;
+        rAny >>= sTmp;
+        SetSortAlgorithm(sTmp);
         break;
-
+    }
     case FIELD_PROP_BOOL1:
         m_bIsSequence = *(sal_Bool*)rAny.getValue();
         break;
@@ -516,7 +519,7 @@ void SwAuthorityFieldType::SetSortKeys(sal_uInt16 nKeyCount, SwTOXSortKey aKeys[
 }
 
 SwAuthorityField::SwAuthorityField( SwAuthorityFieldType* pInitType,
-                                    const String& rFieldContents )
+                                    const OUString& rFieldContents )
     : SwField(pInitType),
     m_nTempSequencePos( -1 )
 {
@@ -537,12 +540,12 @@ SwAuthorityField::~SwAuthorityField()
     ((SwAuthorityFieldType* )GetTyp())->RemoveField(m_nHandle);
 }
 
-String  SwAuthorityField::Expand() const
+OUString SwAuthorityField::Expand() const
 {
     SwAuthorityFieldType* pAuthType = (SwAuthorityFieldType*)GetTyp();
-    String sRet;
+    OUString sRet;
     if(pAuthType->GetPrefix())
-        sRet.Assign(pAuthType->GetPrefix());
+        sRet = OUString(pAuthType->GetPrefix());
 
     if( pAuthType->IsSequence() )
     {
@@ -559,7 +562,7 @@ String  SwAuthorityField::Expand() const
             sRet += pEntry->GetAuthorField(AUTH_FIELD_IDENTIFIER);
     }
     if(pAuthType->GetSuffix())
-        sRet += pAuthType->GetSuffix();
+        sRet += OUString(pAuthType->GetSuffix());
     return sRet;
 }
 
@@ -569,7 +572,7 @@ SwField* SwAuthorityField::Copy() const
     return new SwAuthorityField(pAuthType, m_nHandle);
 }
 
-const String&   SwAuthorityField::GetFieldText(ToxAuthorityField eField) const
+OUString SwAuthorityField::GetFieldText(ToxAuthorityField eField) const
 {
     SwAuthorityFieldType* pAuthType = (SwAuthorityFieldType*)GetTyp();
     const SwAuthEntry* pEntry = pAuthType->GetEntryByHandle( m_nHandle );
@@ -583,7 +586,7 @@ void    SwAuthorityField::SetPar1(const OUString& rStr)
     m_nHandle = pInitType->AddField(rStr);
 }
 
-String SwAuthorityField::GetDescription() const
+OUString SwAuthorityField::GetDescription() const
 {
     return SW_RES(STR_AUTHORITY_ENTRY);
 }
@@ -635,11 +638,11 @@ bool    SwAuthorityField::QueryValue( Any& rAny, sal_uInt16 /*nWhichId*/ ) const
     for(sal_Int16 i = 0; i < AUTH_FIELD_END; i++)
     {
         pValues[i].Name = OUString::createFromAscii(aFieldNames[i]);
-        const String& rField = pAuthEntry->GetAuthorField((ToxAuthorityField) i);
+        const OUString sField = pAuthEntry->GetAuthorField((ToxAuthorityField) i);
         if(i == AUTH_FIELD_AUTHORITY_TYPE)
-            pValues[i].Value <<= sal_Int16(rField.ToInt32());
+            pValues[i].Value <<= sal_Int16(sField.toInt32());
         else
-            pValues[i].Value <<= OUString(rField);
+            pValues[i].Value <<= sField;
     }
     rAny <<= aRet;
     /* FIXME: it is weird that we always return false here */

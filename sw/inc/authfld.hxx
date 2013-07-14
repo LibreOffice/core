@@ -27,16 +27,16 @@
 
 class SwAuthEntry
 {
-    String      aAuthFields[AUTH_FIELD_END];
+    OUString        aAuthFields[AUTH_FIELD_END];
     sal_uInt16      nRefCount;
 public:
     SwAuthEntry() : nRefCount(0){}
     SwAuthEntry( const SwAuthEntry& rCopy );
     sal_Bool            operator==(const SwAuthEntry& rComp);
 
-    inline const String&    GetAuthorField(ToxAuthorityField ePos)const;
+    inline OUString         GetAuthorField(ToxAuthorityField ePos) const;
     inline void             SetAuthorField(ToxAuthorityField ePos,
-                                            const String& rField);
+                                            const OUString& rField);
 
     void            AddRef()                { ++nRefCount; }
     void            RemoveRef()             { --nRefCount; }
@@ -67,7 +67,7 @@ class SW_DLLPUBLIC SwAuthorityFieldType : public SwFieldType
     sal_Bool                m_bIsSequence :1;
     sal_Bool                m_bSortByDocument :1;
     LanguageType            m_eLanguage;
-    String                  m_sSortAlgorithm;
+    OUString                m_sSortAlgorithm;
 
 protected:
 virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew );
@@ -84,7 +84,7 @@ public:
     inline void         SetDoc(SwDoc* pNewDoc)              { m_pDoc = pNewDoc; }
     SwDoc*              GetDoc(){ return m_pDoc; }
     void                RemoveField(sal_IntPtr nHandle);
-    sal_IntPtr          AddField(const String& rFieldContents);
+    sal_IntPtr          AddField(const OUString& rFieldContents);
     sal_Bool            AddField(sal_IntPtr nHandle);
     void                DelSequenceArray()
                         {
@@ -93,8 +93,8 @@ public:
 
     const SwAuthEntry*  GetEntryByHandle(sal_IntPtr nHandle) const;
 
-    void                GetAllEntryIdentifiers( std::vector<String>& rToFill )const;
-    const SwAuthEntry*  GetEntryByIdentifier(const String& rIdentifier)const;
+    void                GetAllEntryIdentifiers( std::vector<OUString>& rToFill ) const;
+    const SwAuthEntry*  GetEntryByIdentifier(const OUString& rIdentifier) const;
 
     bool                ChangeEntryContent(const SwAuthEntry* pNewEntry);
     // import interface
@@ -130,14 +130,14 @@ public:
     void                SetSortKeys(sal_uInt16 nKeyCount, SwTOXSortKey nKeys[]);
 
     //initui.cxx
-    static const String&    GetAuthFieldName(ToxAuthorityField eType);
-    static const String&    GetAuthTypeName(ToxAuthorityType eType);
+    static OUString     GetAuthFieldName(ToxAuthorityField eType);
+    static OUString     GetAuthTypeName(ToxAuthorityType eType);
 
     LanguageType    GetLanguage() const {return m_eLanguage;}
     void            SetLanguage(LanguageType nLang)  {m_eLanguage = nLang;}
 
-    const String&   GetSortAlgorithm()const {return m_sSortAlgorithm;}
-    void            SetSortAlgorithm(const String& rSet) {m_sSortAlgorithm = rSet;}
+    OUString        GetSortAlgorithm() const {return m_sSortAlgorithm;}
+    void            SetSortAlgorithm(const OUString& rSet) {m_sSortAlgorithm = rSet;}
 
 };
 
@@ -146,15 +146,15 @@ class SwAuthorityField : public SwField
     sal_IntPtr          m_nHandle;
     mutable sal_IntPtr  m_nTempSequencePos;
 
-    virtual String      Expand() const;
+    virtual OUString    Expand() const;
     virtual SwField*    Copy() const;
 
 public:
-    SwAuthorityField(SwAuthorityFieldType* pType, const String& rFieldContents);
+    SwAuthorityField(SwAuthorityFieldType* pType, const OUString& rFieldContents);
     SwAuthorityField(SwAuthorityFieldType* pType, sal_IntPtr nHandle);
     ~SwAuthorityField();
 
-    const String&       GetFieldText(ToxAuthorityField eField) const;
+    OUString            GetFieldText(ToxAuthorityField eField) const;
 
     virtual void        SetPar1(const OUString& rStr);
     virtual SwFieldType* ChgTyp( SwFieldType* );
@@ -164,16 +164,16 @@ public:
 
     sal_IntPtr          GetHandle() const       { return m_nHandle; }
 
-    virtual String GetDescription() const;
+    virtual OUString GetDescription() const;
 };
 
 // --- inlines -----------------------------------------------------------
-inline const String&    SwAuthEntry::GetAuthorField(ToxAuthorityField ePos)const
+inline OUString SwAuthEntry::GetAuthorField(ToxAuthorityField ePos) const
 {
     OSL_ENSURE(AUTH_FIELD_END > ePos, "wrong index");
     return aAuthFields[ePos];
 }
-inline void SwAuthEntry::SetAuthorField(ToxAuthorityField ePos, const String& rField)
+inline void SwAuthEntry::SetAuthorField(ToxAuthorityField ePos, const OUString& rField)
 {
     OSL_ENSURE(AUTH_FIELD_END > ePos, "wrong index");
     if(AUTH_FIELD_END > ePos)

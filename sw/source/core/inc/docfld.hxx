@@ -133,8 +133,8 @@ struct SwCalcFldType : public SwHash
 };
 
 // search for the string that was saved under rName in the hash table
-void LookString( SwHash** ppTbl, sal_uInt16 nSize, const String& rName,
-                    String& rRet, sal_uInt16* pPos = 0 );
+OUString LookString( SwHash** ppTbl, sal_uInt16 nSize, const OUString& rName,
+                     sal_uInt16* pPos = 0 );
 
 const int GETFLD_ALL        = 3;        // combine flags via OR
 const int GETFLD_CALC       = 1;

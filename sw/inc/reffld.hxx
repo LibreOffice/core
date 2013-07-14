@@ -72,7 +72,7 @@ public:
 
     void MergeWithOtherDoc( SwDoc& rDestDoc );
 
-    static SwTxtNode* FindAnchor( SwDoc* pDoc, const String& rRefMark,
+    static SwTxtNode* FindAnchor( SwDoc* pDoc, const OUString& rRefMark,
                                         sal_uInt16 nSubType, sal_uInt16 nSeqNo,
                                         sal_uInt16* pStt, sal_uInt16* pEnd = 0 );
 };
@@ -82,27 +82,27 @@ class SW_DLLPUBLIC SwGetRefField : public SwField
 {
 private:
     OUString sSetRefName;
-    String sTxt;
+    OUString sTxt;
     sal_uInt16 nSubType;
     sal_uInt16 nSeqNo;
 
-    virtual String      Expand() const;
+    virtual OUString    Expand() const;
     virtual SwField*    Copy() const;
 
     // #i81002#
-    String MakeRefNumStr( const SwTxtNode& rTxtNodeOfField,
+    OUString MakeRefNumStr( const SwTxtNode& rTxtNodeOfField,
                           const SwTxtNode& rTxtNodeOfReferencedItem,
                           const sal_uInt32 nRefNumFormat ) const;
 
 public:
-    SwGetRefField( SwGetRefFieldType*, const String& rSetRef,
+    SwGetRefField( SwGetRefFieldType*, const OUString& rSetRef,
                     sal_uInt16 nSubType, sal_uInt16 nSeqNo, sal_uLong nFmt );
 
     virtual ~SwGetRefField();
 
-    virtual String      GetFieldName() const;
+    virtual OUString GetFieldName() const;
 
-    const OUString& GetSetRefName() const { return sSetRefName; }
+    OUString GetSetRefName() const { return sSetRefName; }
 
     // #i81002#
     /** The <SwTxtFld> instance, which represents the text attribute for the
@@ -113,7 +113,7 @@ public:
        no update for these reference format types. */
     void                UpdateField( const SwTxtFld* pFldTxtAttr );
 
-    void                SetExpand( const String& rStr ) { sTxt = rStr; }
+    void                SetExpand( const OUString& rStr ) { sTxt = rStr; }
 
     /// Get/set sub type.
     virtual sal_uInt16      GetSubType() const;
@@ -124,7 +124,7 @@ public:
     bool IsRefToNumItemCrossRefBookmark() const;
     const SwTxtNode* GetReferencedTxtNode() const;
     // #i85090#
-    String GetExpandedTxtOfReferencedTxtNode() const;
+    OUString GetExpandedTxtOfReferencedTxtNode() const;
 
 
     /// Get/set SequenceNo (of interest only for REF_SEQUENCEFLD).
@@ -132,7 +132,7 @@ public:
     void                SetSeqNo( sal_uInt16 n )    { nSeqNo = n; }
 
     // Name of reference.
-    virtual const OUString& GetPar1() const;
+    virtual OUString    GetPar1() const;
     virtual void        SetPar1(const OUString& rStr);
 
     virtual OUString GetPar2() const;
@@ -141,7 +141,7 @@ public:
 
     void                ConvertProgrammaticToUIName();
 
-    virtual String GetDescription() const;
+    virtual OUString GetDescription() const;
 };
 
 

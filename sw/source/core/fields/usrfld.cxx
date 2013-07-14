@@ -41,13 +41,12 @@ SwUserField::SwUserField(SwUserFieldType* pTyp, sal_uInt16 nSub, sal_uInt32 nFmt
 {
 }
 
-String SwUserField::Expand() const
+OUString SwUserField::Expand() const
 {
-    String sStr;
     if(!(nSubType & nsSwExtendedSubType::SUB_INVISIBLE))
-        sStr = ((SwUserFieldType*)GetTyp())->Expand(GetFormat(), nSubType, GetLanguage());
+        return ((SwUserFieldType*)GetTyp())->Expand(GetFormat(), nSubType, GetLanguage());
 
-    return sStr;
+    return OUString();
 }
 
 SwField* SwUserField::Copy() const
@@ -57,14 +56,11 @@ SwField* SwUserField::Copy() const
     return pTmp;
 }
 
-String SwUserField::GetFieldName() const
+OUString SwUserField::GetFieldName() const
 {
-    String aStr(SwFieldType::GetTypeStr(TYP_USERFLD));
-    aStr += ' ';
-    aStr += GetTyp()->GetName();
-    aStr.AppendAscii(" = ");
-    aStr += static_cast<SwUserFieldType*>(GetTyp())->GetContent();
-    return aStr;
+    return SwFieldType::GetTypeStr(TYP_USERFLD) +
+        " " + GetTyp()->GetName() + " = " +
+        static_cast<SwUserFieldType*>(GetTyp())->GetContent();
 }
 
 double SwUserField::GetValue() const
@@ -78,7 +74,7 @@ void SwUserField::SetValue( const double& rVal )
 }
 
 /// Get name
-const OUString& SwUserField::GetPar1() const
+OUString SwUserField::GetPar1() const
 {
     return ((const SwUserFieldType*)GetTyp())->GetName();
 }
@@ -159,7 +155,7 @@ bool SwUserField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
     return true;
 }
 
-SwUserFieldType::SwUserFieldType( SwDoc* pDocPtr, const String& aNam )
+SwUserFieldType::SwUserFieldType( SwDoc* pDocPtr, const OUString& aNam )
     : SwValueFieldType( pDocPtr, RES_USERFLD ),
     nValue( 0 ),
     nType(nsSwGetSetExpType::GSE_STRING)
@@ -171,18 +167,16 @@ SwUserFieldType::SwUserFieldType( SwDoc* pDocPtr, const String& aNam )
         EnableFormat(sal_False);    // Do not use a Numberformatter
 }
 
-String SwUserFieldType::Expand(sal_uInt32 nFmt, sal_uInt16 nSubType, sal_uInt16 nLng)
+OUString SwUserFieldType::Expand(sal_uInt32 nFmt, sal_uInt16 nSubType, sal_uInt16 nLng)
 {
-    String aStr(aContent);
     if((nType & nsSwGetSetExpType::GSE_EXPR) && !(nSubType & nsSwExtendedSubType::SUB_CMD))
     {
         EnableFormat(sal_True);
-        aStr = ExpandValue(nValue, nFmt, nLng);
+        return ExpandValue(nValue, nFmt, nLng);
     }
-    else
-        EnableFormat(sal_False);    // Do not use a Numberformatter
 
-    return aStr;
+    EnableFormat(sal_False);    // Do not use a Numberformatter
+    return aContent;
 }
 
 SwFieldType* SwUserFieldType::Copy() const
@@ -197,7 +191,7 @@ SwFieldType* SwUserFieldType::Copy() const
     return pTmp;
 }
 
-const OUString& SwUserFieldType::GetName() const
+OUString SwUserFieldType::GetName() const
 {
     return aName;
 }
@@ -233,7 +227,7 @@ double SwUserFieldType::GetValue( SwCalc& rCalc )
     return nValue;
 }
 
-String SwUserFieldType::GetContent( sal_uInt32 nFmt )
+OUString SwUserFieldType::GetContent( sal_uInt32 nFmt )
 {
     if (nFmt && nFmt != SAL_MAX_UINT32)
     {
@@ -245,11 +239,11 @@ String SwUserFieldType::GetContent( sal_uInt32 nFmt )
         pFormatter->GetOutputString(GetValue(), nFmt, sFormattedValue, &pCol);
         return sFormattedValue;
     }
-    else
-        return aContent;
+
+    return aContent;
 }
 
-void SwUserFieldType::SetContent( const String& rStr, sal_uInt32 nFmt )
+void SwUserFieldType::SetContent( const OUString& rStr, sal_uInt32 nFmt )
 {
     if( aContent != rStr )
     {
@@ -285,7 +279,7 @@ bool SwUserFieldType::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
         rAny <<= (double) nValue;
         break;
     case FIELD_PROP_PAR2:
-        rAny <<= OUString(aContent);
+        rAny <<= aContent;
         break;
     case FIELD_PROP_BOOL1:
         {
@@ -316,7 +310,7 @@ bool SwUserFieldType::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
         }
         break;
     case FIELD_PROP_PAR2:
-        ::GetString( rAny, aContent );
+        rAny >>= aContent;
         break;
     case FIELD_PROP_BOOL1:
         if(*(sal_Bool*)rAny.getValue())

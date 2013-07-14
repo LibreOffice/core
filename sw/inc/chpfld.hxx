@@ -51,9 +51,12 @@ class SW_DLLPUBLIC SwChapterField : public SwField
 {
     friend class SwChapterFieldType;
     sal_uInt8 nLevel;
-    String sTitle, sNumber, sPre, sPost;
+    OUString sTitle;
+    OUString sNumber;
+    OUString sPre;
+    OUString sPost;
 
-    virtual String   Expand() const;
+    virtual OUString Expand() const;
     virtual SwField* Copy() const;
 
 public:
@@ -68,16 +71,16 @@ public:
     inline sal_uInt8 GetLevel() const;
     inline void SetLevel(sal_uInt8);
 
-    inline const String& GetNumber() const;
-    inline const String& GetTitle() const;
+    inline OUString      GetNumber() const;
+    inline OUString      GetTitle() const;
     virtual bool         QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) const;
     virtual bool         PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich );
 };
 
 inline sal_uInt8 SwChapterField::GetLevel() const   { return nLevel; }
 inline void SwChapterField::SetLevel(sal_uInt8 nLev) { nLevel = nLev; }
-inline const String& SwChapterField::GetNumber() const { return sNumber; }
-inline const String& SwChapterField::GetTitle() const { return sTitle; }
+inline OUString SwChapterField::GetNumber() const { return sNumber; }
+inline OUString SwChapterField::GetTitle() const { return sTitle; }
 
 #endif // SW_CHPFLD_HXX
 

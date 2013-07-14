@@ -90,7 +90,7 @@ class SW_DLLPUBLIC SwDropDownField : public SwField
 
        @return the expanded value of the field
     */
-    virtual String Expand() const;
+    virtual OUString Expand() const;
 
     /**
        Creates a copy of this field.
@@ -126,7 +126,7 @@ public:
 
        @return the selected value
     */
-    virtual const OUString & GetPar1() const;
+    virtual OUString GetPar1() const;
 
     /**
        Returns the name of the field.
@@ -181,28 +181,28 @@ public:
 
        @return the selected item
     */
-    const OUString & GetSelectedItem() const;
+    OUString GetSelectedItem() const;
 
     /**
        Returns the name of the field.
 
        @return the name of the field
     */
-    const OUString & GetName() const;
+    OUString GetName() const;
 
     /**
        Returns the help text of the field.
 
        @return the help text of the field
     */
-    const OUString & GetHelp() const;
+    OUString GetHelp() const;
 
     /**
        Returns the tool tip of the field.
 
        @return the tool tip of the field
      */
-    const OUString & GetToolTip() const;
+    OUString GetToolTip() const;
 
     /**
        Sets the selected item.

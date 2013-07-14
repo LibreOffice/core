@@ -284,7 +284,7 @@ IMPL_LINK_NOARG(SwFldFuncPage, TypeHdl)
         {
             case TYP_MACROFLD:
                 bMacro = sal_True;
-                if (GetFldMgr().GetMacroPath().Len())
+                if (!GetFldMgr().GetMacroPath().isEmpty())
                     bValue = sal_True;
                 else
                     bInsert = sal_False;
@@ -507,7 +507,7 @@ void SwFldFuncPage::UpdateSubType()
 
     if (nTypeId == TYP_MACROFLD)
     {
-        sal_Bool bHasMacro = GetFldMgr().GetMacroPath().Len() != 0;
+        const bool bHasMacro = !GetFldMgr().GetMacroPath().isEmpty();
 
         if (bHasMacro)
         {

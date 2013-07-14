@@ -1807,7 +1807,8 @@ void WW8Export::OutputField( const SwField* pFld, ww::eField eFldType,
             if ( nSubType == REF_SETREFATTR ||
                  nSubType == REF_BOOKMARK )
             {
-                aLinkStr = GetBookmarkName( nSubType, &rRFld.GetSetRefName(), 0 );
+                const OUString aRefName(rRFld.GetSetRefName());
+                aLinkStr = GetBookmarkName( nSubType, &aRefName, 0 );
             }
             else if ( nSubType == REF_FOOTNOTE ||
                       nSubType == REF_ENDNOTE )
@@ -2808,9 +2809,11 @@ void AttributeOutputBase::TextField( const SwFmtFld& rField )
                             eFld = ww::eREF;
                             break;
                     }
-                    sStr = FieldString(eFld);
-                    sStr += GetExport().GetBookmarkName(nSubType,
-                        &rRFld.GetSetRefName(), 0);
+                    {
+                        const OUString aRefName(rRFld.GetSetRefName());
+                        sStr = FieldString(eFld);
+                        sStr += GetExport().GetBookmarkName(nSubType, &aRefName, 0);
+                    }
                     switch (pFld->GetFormat())
                     {
                         case REF_NUMBER:

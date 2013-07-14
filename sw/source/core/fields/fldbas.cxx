@@ -68,7 +68,7 @@ static sal_uInt16 lcl_GetLanguageOfFormat( sal_uInt16 nLng, sal_uLong nFmt,
 // Globals
 
 /// field names
-std::vector<String>* SwFieldType::pFldNames = 0;
+std::vector<OUString>* SwFieldType::pFldNames = 0;
 
 namespace
 {
@@ -118,15 +118,14 @@ namespace
 
 }
 
-const String& SwFieldType::GetTypeStr(sal_uInt16 nTypeId)
+OUString SwFieldType::GetTypeStr(sal_uInt16 nTypeId)
 {
     if( !pFldNames )
         _GetFldName();
 
     if( nTypeId < SwFieldType::pFldNames->size() )
         return (*SwFieldType::pFldNames)[nTypeId];
-    else
-        return aEmptyStr;
+    return OUString();
 }
 
 // each field refences a field type that is unique for each document
@@ -136,9 +135,9 @@ SwFieldType::SwFieldType( sal_uInt16 nWhichId )
 {
 }
 
-const OUString& SwFieldType::GetName() const
+OUString SwFieldType::GetName() const
 {
-    return aEmptyOUStr;
+    return OUString();
 }
 
 bool SwFieldType::QueryValue( uno::Any&, sal_uInt16 ) const
@@ -221,7 +220,7 @@ sal_uInt16 SwField::GetTypeId() const
 }
 
 /// get name or content
-String SwField::GetFieldName() const
+OUString SwField::GetFieldName() const
 {
     sal_uInt16 nTypeId = GetTypeId();
     if (RES_DATETIMEFLD == GetTyp()->Which())
@@ -229,18 +228,17 @@ String SwField::GetFieldName() const
         nTypeId = static_cast<sal_uInt16>(
             ((GetSubType() & DATEFLD) != 0) ? TYP_DATEFLD : TYP_TIMEFLD);
     }
-    String sRet = SwFieldType::GetTypeStr( nTypeId );
+    OUString sRet = SwFieldType::GetTypeStr( nTypeId );
     if (IsFixed())
     {
-        sRet += ' ';
-        sRet += ViewShell::GetShellRes()->aFixedStr;
+        sRet += " " + OUString(ViewShell::GetShellRes()->aFixedStr);
     }
     return sRet;
 }
 
-const OUString& SwField::GetPar1() const
+OUString SwField::GetPar1() const
 {
-    return aEmptyOUStr;
+    return OUString();
 }
 
 OUString SwField::GetPar2() const
@@ -248,7 +246,7 @@ OUString SwField::GetPar2() const
     return OUString();
 }
 
-String SwField::GetFormula() const
+OUString SwField::GetFormula() const
 {
     return GetPar2();
 }
@@ -380,7 +378,7 @@ sal_Bool SwField::IsFixed() const
     return bRet;
 }
 
-String SwField::ExpandField(bool const bCached) const
+OUString SwField::ExpandField(bool const bCached) const
 {
     if (!bCached) // #i85766# do not expand fields in clipboard documents
     {
@@ -399,7 +397,7 @@ SwField * SwField::CopyField() const
 }
 
 /// expand numbering
-String FormatNumber(sal_uInt32 nNum, sal_uInt32 nFormat)
+OUString FormatNumber(sal_uInt32 nNum, sal_uInt32 nFormat)
 {
     if(SVX_NUM_PAGEDESC == nFormat)
         return  OUString::number( nNum );
@@ -426,7 +424,7 @@ SwValueFieldType::SwValueFieldType( const SwValueFieldType& rTyp )
 }
 
 /// return value formatted as string
-String SwValueFieldType::ExpandValue( const double& rVal,
+OUString SwValueFieldType::ExpandValue( const double& rVal,
                                         sal_uInt32 nFmt, sal_uInt16 nLng) const
 {
     if (rVal >= DBL_MAX) // error string for calculator
@@ -477,19 +475,19 @@ String SwValueFieldType::ExpandValue( const double& rVal,
     return sExpand;
 }
 
-String SwValueFieldType::DoubleToString(const double &rVal,
+OUString SwValueFieldType::DoubleToString(const double &rVal,
                                         sal_uInt32 nFmt) const
 {
     SvNumberFormatter* pFormatter = pDoc->GetNumberFormatter();
     const SvNumberformat* pEntry = pFormatter->GetEntry(nFmt);
 
     if (!pEntry)
-        return String();
+        return OUString();
 
     return DoubleToString(rVal, pEntry->GetLanguage());
 }
 
-String SwValueFieldType::DoubleToString( const double &rVal,
+OUString SwValueFieldType::DoubleToString( const double &rVal,
                                         sal_uInt16 nLng ) const
 {
     SvNumberFormatter* pFormatter = pDoc->GetNumberFormatter();
@@ -639,12 +637,12 @@ SwFormulaField::SwFormulaField( const SwFormulaField& rFld )
 {
 }
 
-String SwFormulaField::GetFormula() const
+OUString SwFormulaField::GetFormula() const
 {
     return sFormula;
 }
 
-void SwFormulaField::SetFormula(const String& rStr)
+void SwFormulaField::SetFormula(const OUString& rStr)
 {
     sFormula = rStr;
 
@@ -659,7 +657,7 @@ void SwFormulaField::SetFormula(const String& rStr)
     }
 }
 
-void SwFormulaField::SetExpandedFormula( const String& rStr )
+void SwFormulaField::SetExpandedFormula( const OUString& rStr )
 {
     sal_uInt32 nFmt(GetFormat());
 
@@ -680,7 +678,7 @@ void SwFormulaField::SetExpandedFormula( const String& rStr )
     sFormula = rStr;
 }
 
-String SwFormulaField::GetExpandedFormula() const
+OUString SwFormulaField::GetExpandedFormula() const
 {
     sal_uInt32 nFmt(GetFormat());
 
@@ -694,9 +692,7 @@ String SwFormulaField::GetExpandedFormula() const
         if (pFormatter->IsTextFormat(nFmt))
         {
             OUString sTempIn(((SwValueFieldType *)GetTyp())->DoubleToString(GetValue(), nFmt));
-            OUString sTempOut(sFormattedValue);
-            pFormatter->GetOutputString(sTempIn, nFmt, sTempOut, &pCol);
-            sFormattedValue = sTempOut;
+            pFormatter->GetOutputString(sTempIn, nFmt, sFormattedValue, &pCol);
         }
         else
         {
@@ -708,7 +704,7 @@ String SwFormulaField::GetExpandedFormula() const
         return GetFormula();
 }
 
-String SwField::GetDescription() const
+OUString SwField::GetDescription() const
 {
     return SW_RES(STR_FIELD);
 }

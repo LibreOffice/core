@@ -19,7 +19,6 @@
 #ifndef _FLDMGR_HXX
 #define _FLDMGR_HXX
 
-#include <tools/string.hxx>
 #include "swdllapi.h"
 #include "swtypes.hxx"
 #include <com/sun/star/uno/Reference.h>
@@ -71,8 +70,8 @@ struct SwInsertFld_Data
 {
     sal_uInt16 nTypeId;
     sal_uInt16 nSubType;
-    const String sPar1;
-    const String sPar2;
+    const OUString sPar1;
+    const OUString sPar2;
     sal_uLong nFormatId;
     SwWrtShell* pSh;
     sal_Unicode cSeparator;
@@ -82,7 +81,7 @@ struct SwInsertFld_Data
     ::com::sun::star::uno::Any aDBColumn;
     Window* pParent; // parent dialog used for SwWrtShell::StartInputFldDlg()
 
-    SwInsertFld_Data(sal_uInt16 nType, sal_uInt16 nSub, const String& rPar1, const String& rPar2,
+    SwInsertFld_Data(sal_uInt16 nType, sal_uInt16 nSub, const OUString& rPar1, const OUString& rPar2,
                     sal_uLong nFmtId, SwWrtShell* pShell = NULL, sal_Unicode cSep = ' ', sal_Bool bIsAutoLanguage = sal_True) :
         nTypeId(nType),
         nSubType(nSub),
@@ -108,12 +107,12 @@ private:
     SbModule*           pModule;
     const SvxMacroItem* pMacroItem;
     SwWrtShell*         pWrtShell; // can be ZERO too!
-    String          aCurPar1;
-    String          aCurPar2;
-    String          sCurFrame;
+    OUString          aCurPar1;
+    OUString          aCurPar2;
+    OUString          sCurFrame;
 
-    String          sMacroPath;
-    String          sMacroName;
+    OUString          sMacroPath;
+    OUString          sMacroName;
 
     sal_uLong           nCurFmt;
     sal_Bool            bEvalExp;
@@ -136,12 +135,12 @@ public:
 
     // change the current field directly
     void            UpdateCurFld(sal_uLong nFormat,
-                                 const String& rPar1,
-                                 const String& rPar2,
+                                 const OUString& rPar1,
+                                 const OUString& rPar2,
                                  SwField * _pField = 0); // #111840#
 
-    inline const String& GetCurFldPar1() const;
-    inline const String& GetCurFldPar2() const;
+    OUString        GetCurFldPar1() const { return aCurPar1; }
+    OUString        GetCurFldPar2() const { return aCurPar2; }
     inline sal_uLong   GetCurFldFmt() const;
 
     // determine a field
@@ -149,10 +148,10 @@ public:
 
     void            InsertFldType(SwFieldType& rType);
 
-    sal_Bool            ChooseMacro(const String &rSelMacro = aEmptyStr);
-    void            SetMacroPath(const String& rPath);
-    inline const String& GetMacroPath() const         { return (sMacroPath); }
-    inline const String& GetMacroName() const         { return (sMacroName); }
+    sal_Bool            ChooseMacro(const OUString &rSelMacro = OUString());
+    void            SetMacroPath(const OUString& rPath);
+    inline OUString GetMacroPath() const         { return sMacroPath; }
+    inline OUString GetMacroName() const         { return sMacroName; }
     inline void     SetMacroModule(SbModule* pMod)    { pModule = pMod; }
 
     // previous and next of the same type
@@ -162,19 +161,19 @@ public:
 
     // query values from database fields (BASIC )
 //  String          GetDataBaseFieldValue(const String &rDBName, const String &rFieldName, SwWrtShell* pSh);
-    sal_Bool            IsDBNumeric(const String& rDBName, const String& rTblQryName,
-                                        sal_Bool bIsTable, const String& rFldName);
+    sal_Bool            IsDBNumeric(const OUString& rDBName, const OUString& rTblQryName,
+                                    sal_Bool bIsTable, const OUString& rFldName);
 
     // organise RefMark with names
-    bool            CanInsertRefMark( const String& rStr );
+    bool            CanInsertRefMark( const OUString& rStr );
 
 
     // access to field types via ResId
     sal_uInt16          GetFldTypeCount(sal_uInt16 nResId = USHRT_MAX) const;
     SwFieldType*    GetFldType(sal_uInt16 nResId, sal_uInt16 nId = 0) const;
-    SwFieldType*    GetFldType(sal_uInt16 nResId, const String& rName) const;
+    SwFieldType*    GetFldType(sal_uInt16 nResId, const OUString& rName) const;
 
-    void            RemoveFldType(sal_uInt16 nResId, const String& rName);
+    void            RemoveFldType(sal_uInt16 nResId, const OUString& rName);
 
     // access via TypeId from the dialog
     // Ids for a range of fields
@@ -187,7 +186,7 @@ public:
     // TypeId for a concrete position in the list
     static sal_uInt16   GetTypeId(sal_uInt16 nPos);
     // name of the type in the list of fields
-    static const String&  GetTypeStr(sal_uInt16 nPos);
+    static OUString     GetTypeStr(sal_uInt16 nPos);
 
     // Pos in the list of fields
     static sal_uInt16   GetPos(sal_uInt16 nTypeId);
@@ -197,7 +196,7 @@ public:
 
     // format to a type
     sal_uInt16          GetFormatCount(sal_uInt16 nTypeId, bool bIsText, sal_Bool bHtmlMode = sal_False) const;
-    String          GetFormatStr(sal_uInt16 nTypeId, sal_uLong nFormatId) const;
+    OUString            GetFormatStr(sal_uInt16 nTypeId, sal_uLong nFormatId) const;
     sal_uInt16          GetFormatId(sal_uInt16 nTypeId, sal_uLong nFormatId) const;
     sal_uLong           GetDefaultFormat(sal_uInt16 nTypeId, bool bIsText, SvNumberFormatter* pFormatter, double* pVal = 0L);
 
@@ -210,12 +209,6 @@ public:
 
 inline void SwFldMgr::SetEvalExpFlds(sal_Bool bEval)
     { bEvalExp = bEval; }
-
-inline const String& SwFldMgr::GetCurFldPar1() const
-    { return aCurPar1; }
-
-inline const String& SwFldMgr::GetCurFldPar2() const
-    { return aCurPar2; }
 
 inline sal_uLong SwFldMgr::GetCurFldFmt() const
     { return nCurFmt; }

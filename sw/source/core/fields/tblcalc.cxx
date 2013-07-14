@@ -51,7 +51,7 @@ void SwTblField::CalcField( SwTblCalcPara& rCalcPara )
     ChgValid( !rCalcPara.IsStackOverFlow() ); // is the value again valid?
 }
 
-SwTblField::SwTblField( SwTblFieldType* pInitType, const String& rFormel,
+SwTblField::SwTblField( SwTblFieldType* pInitType, const OUString& rFormel,
                         sal_uInt16 nType, sal_uLong nFmt )
     : SwValueField( pInitType, nFmt ), SwTableFormula( rFormel ),
     nSubType(nType)
@@ -70,12 +70,9 @@ SwField* SwTblField::Copy() const
     return pTmp;
 }
 
-String SwTblField::GetFieldName() const
+OUString SwTblField::GetFieldName() const
 {
-    String aStr(GetTyp()->GetName());
-    aStr += ' ';
-    aStr += const_cast<SwTblField *>(this)->GetCommand();
-    return aStr;
+    return GetTyp()->GetName() + " " + const_cast<SwTblField *>(this)->GetCommand();
 }
 
 /// search TextNode containing this field
@@ -91,7 +88,7 @@ const SwNode* SwTblField::GetNodeOfFormula() const
     return 0;
 }
 
-String SwTblField::GetCommand()
+OUString SwTblField::GetCommand()
 {
     if (EXTRNL_NAME != GetNameType())
     {
@@ -103,29 +100,24 @@ String SwTblField::GetCommand()
         }
     }
     return (EXTRNL_NAME == GetNameType())
-        ? SwTableFormula::GetFormula()
-        : String();
+        ? OUString(SwTableFormula::GetFormula())
+        : OUString();
 }
 
-String SwTblField::Expand() const
+OUString SwTblField::Expand() const
 {
-    String aStr;
     if (nSubType & nsSwExtendedSubType::SUB_CMD)
     {
-        aStr = const_cast<SwTblField *>(this)->GetCommand();
+        return const_cast<SwTblField *>(this)->GetCommand();
     }
-    else
+
+    if(nSubType & nsSwGetSetExpType::GSE_STRING)
     {
-        aStr = sExpand;
-        if(nSubType & nsSwGetSetExpType::GSE_STRING)
-        {
-            // es ist ein String
-            aStr = sExpand;
-            aStr.Erase( 0,1 );
-            aStr.Erase( aStr.Len()-1, 1 );
-        }
+        // es ist ein String
+        return sExpand.copy(1, sExpand.getLength()-2);
     }
-    return aStr;
+
+    return sExpand;
 }
 
 sal_uInt16 SwTblField::GetSubType() const
@@ -165,7 +157,7 @@ bool SwTblField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
             sal_uInt16 nOldSubType = nSubType;
             SwTblField* pThis = (SwTblField*)this;
             pThis->nSubType |= nsSwExtendedSubType::SUB_CMD;
-            rAny <<= OUString( Expand() );
+            rAny <<= Expand();
             pThis->nSubType = nOldSubType;
         }
         break;
@@ -176,7 +168,7 @@ bool SwTblField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
         }
         break;
     case FIELD_PROP_PAR1:
-        rAny <<= OUString(GetExpStr());
+        rAny <<= GetExpStr();
         break;
     case FIELD_PROP_FORMAT:
         rAny <<= (sal_Int32)GetFormat();
@@ -190,11 +182,14 @@ bool SwTblField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
 bool SwTblField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 {
     bool bRet = true;
-    String sTmp;
     switch ( nWhichId )
     {
     case FIELD_PROP_PAR2:
-        SetFormula( ::GetString( rAny, sTmp ));
+        {
+            OUString sTmp;
+            rAny >>= sTmp;
+            SetFormula( sTmp );
+        }
         break;
     case FIELD_PROP_BOOL1:
         if(*(sal_Bool*)rAny.getValue())
@@ -203,7 +198,11 @@ bool SwTblField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
             nSubType = nsSwGetSetExpType::GSE_FORMULA;
         break;
     case FIELD_PROP_PAR1:
-        ChgExpStr( ::GetString( rAny, sTmp ));
+        {
+            OUString sTmp;
+            rAny >>= sTmp;
+            ChgExpStr( sTmp );
+        }
         break;
     case FIELD_PROP_FORMAT:
         {

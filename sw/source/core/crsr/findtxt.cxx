@@ -134,8 +134,8 @@ static String& lcl_CleanStr( const SwTxtNode& rNd, xub_StrLen nStart, xub_StrLen
                         // replacement and remove afterwards all at a string's
                         // end (might be normal 0x7f).
                         bool bEmpty = RES_TXTATR_FIELD != pHt->Which() ||
-                            !(static_cast<SwTxtFld const*>(pHt)
-                                ->GetFld().GetFld()->ExpandField(true).Len());
+                            (static_cast<SwTxtFld const*>(pHt)
+                                ->GetFld().GetFld()->ExpandField(true).isEmpty());
                         if ( bEmpty && nStart == nAkt )
                            {
                             rArr.push_back( nAkt );

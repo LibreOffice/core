@@ -32,7 +32,7 @@ class SwDoc;
 class SW_DLLPUBLIC SwDDEFieldType : public SwFieldType
 {
     OUString aName;
-    String aExpansion;
+    OUString aExpansion;
 
     ::sfx2::SvBaseLinkRef refLink;
     SwDoc* pDoc;
@@ -44,22 +44,22 @@ class SW_DLLPUBLIC SwDDEFieldType : public SwFieldType
     SW_DLLPRIVATE void _RefCntChgd();
 
 public:
-    SwDDEFieldType( const String& rName, const String& rCmd,
+    SwDDEFieldType( const OUString& rName, const OUString& rCmd,
                     sal_uInt16 = sfx2::LINKUPDATE_ONCALL );
     ~SwDDEFieldType();
 
-    const String& GetExpansion() const          { return aExpansion; }
-    void SetExpansion( const String& rStr )     { aExpansion = rStr,
+    OUString GetExpansion() const               { return aExpansion; }
+    void SetExpansion( const OUString& rStr )   { aExpansion = rStr;
                                                   bCRLFFlag = sal_False; }
 
     virtual SwFieldType* Copy() const;
-    virtual const OUString& GetName() const;
+    virtual OUString GetName() const;
 
     virtual bool QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) const;
     virtual bool PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich );
 
-    String GetCmd() const;
-    void SetCmd( const String& rStr );
+    OUString GetCmd() const;
+    void SetCmd( OUString aStr );
 
     sal_uInt16 GetType() const          { return refLink->GetUpdateMode();  }
     void SetType( sal_uInt16 nType )    { refLink->SetUpdateMode( nType );  }
@@ -90,7 +90,7 @@ public:
 class SwDDEField : public SwField
 {
 private:
-    virtual String   Expand() const;
+    virtual OUString Expand() const;
     virtual SwField* Copy() const;
 
 public:
@@ -99,7 +99,7 @@ public:
 
     /** Get parameter via types.
      Name cannot be changed. */
-    virtual const OUString& GetPar1() const;
+    virtual OUString  GetPar1() const;
 
     // Command
     virtual OUString  GetPar2() const;

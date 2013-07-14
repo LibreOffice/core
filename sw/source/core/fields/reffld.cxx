@@ -195,7 +195,7 @@ bool IsFrameBehind( const SwTxtNode& rMyNd, sal_uInt16 nMySttPos,
 
 /// get references
 SwGetRefField::SwGetRefField( SwGetRefFieldType* pFldType,
-                              const String& rSetRef, sal_uInt16 nSubTyp,
+                              const OUString& rSetRef, sal_uInt16 nSubTyp,
                               sal_uInt16 nSeqenceNo, sal_uLong nFmt )
     : SwField( pFldType, nFmt ),
       sSetRefName( rSetRef ),
@@ -208,7 +208,7 @@ SwGetRefField::~SwGetRefField()
 {
 }
 
-String SwGetRefField::GetDescription() const
+OUString SwGetRefField::GetDescription() const
 {
     return SW_RES(STR_REFERENCE);
 }
@@ -244,36 +244,33 @@ const SwTxtNode* SwGetRefField::GetReferencedTxtNode() const
 }
 
 // #i85090#
-String SwGetRefField::GetExpandedTxtOfReferencedTxtNode() const
+OUString SwGetRefField::GetExpandedTxtOfReferencedTxtNode() const
 {
     const SwTxtNode* pReferencedTxtNode( GetReferencedTxtNode() );
     return pReferencedTxtNode
-           ? pReferencedTxtNode->GetExpandTxt( 0, STRING_LEN, true, true )
-           : aEmptyStr;
+           ? OUString(pReferencedTxtNode->GetExpandTxt( 0, STRING_LEN, true, true ))
+           : OUString();
 }
 
-String SwGetRefField::Expand() const
+OUString SwGetRefField::Expand() const
 {
     return sTxt;
 }
 
-String SwGetRefField::GetFieldName() const
+OUString SwGetRefField::GetFieldName() const
 {
-    if ( GetTyp()->GetName().getLength() > 0 || sSetRefName.getLength() > 0 )
+    const OUString aName = GetTyp()->GetName();
+    if ( !aName.isEmpty() || !sSetRefName.isEmpty() )
     {
-        String aStr(GetTyp()->GetName());
-        aStr += ' ';
-        aStr += sSetRefName;
-        return aStr;
+        return aName + " " + sSetRefName;
     }
-    else
-        return Expand();
+    return Expand();
 }
 
 // #i81002# - parameter <pFldTxtAttr> added
 void SwGetRefField::UpdateField( const SwTxtFld* pFldTxtAttr )
 {
-    sTxt.Erase();
+    sTxt = OUString();
 
     SwDoc* pDoc = ((SwGetRefFieldType*)GetTyp())->GetDoc();
     // finding the reference target (the number)
@@ -396,16 +393,23 @@ void SwGetRefField::UpdateField( const SwTxtFld* pFldTxtAttr )
                 sTxt = pTxtNd->GetExpandTxt( nStart, nEnd - nStart );
 
                 // alle Sonderzeichen entfernen (durch Blanks ersetzen):
-                if( sTxt.Len() )
+                if( !sTxt.isEmpty() )
                 {
                     sTxt = comphelper::string::remove(sTxt, 0xad);
-                    for( sal_Unicode* p = sTxt.GetBufferAccess(); *p; ++p )
+                    OUStringBuffer aBuf(sTxt);
+                    const sal_Int32 l = aBuf.getLength();
+                    for (sal_Int32 i=0; i<l; ++i)
                     {
-                        if( *p < 0x20 )
-                            *p = 0x20;
-                        else if(*p == 0x2011)
-                            *p = '-';
+                        if (aBuf[i]<' ')
+                        {
+                            aBuf[i]=' ';
+                        }
+                        else if (aBuf[i]==0x2011)
+                        {
+                            aBuf[i]='-';
+                        }
                     }
+                    sTxt = aBuf.makeStringAndClear();
                 }
             }
         }
@@ -491,7 +495,7 @@ void SwGetRefField::UpdateField( const SwTxtFld* pFldTxtAttr )
 }
 
 // #i81002#
-String SwGetRefField::MakeRefNumStr( const SwTxtNode& rTxtNodeOfField,
+OUString SwGetRefField::MakeRefNumStr( const SwTxtNode& rTxtNodeOfField,
                                      const SwTxtNode& rTxtNodeOfReferencedItem,
                                      const sal_uInt32 nRefNumFormat ) const
 {
@@ -562,7 +566,7 @@ String SwGetRefField::MakeRefNumStr( const SwTxtNode& rTxtNodeOfField,
                                             nRestrictInclToThisLevel );
     }
 
-    return String();
+    return OUString();
 }
 
 SwField* SwGetRefField::Copy() const
@@ -575,7 +579,7 @@ SwField* SwGetRefField::Copy() const
 }
 
 /// get reference name
-const OUString& SwGetRefField::GetPar1() const
+OUString SwGetRefField::GetPar1() const
 {
     return sSetRefName;
 }
@@ -651,7 +655,7 @@ bool SwGetRefField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
     }
     break;
     case FIELD_PROP_PAR3:
-        rAny <<= OUString(Expand());
+        rAny <<= Expand();
         break;
     case FIELD_PROP_SHORT1:
         rAny <<= (sal_Int16)nSeqNo;
@@ -720,7 +724,11 @@ bool SwGetRefField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
     }
     break;
     case FIELD_PROP_PAR3:
-        SetExpand( ::GetString( rAny, sTmp ));
+        {
+            OUString sTmpStr;
+            rAny >>= sTmpStr;
+            SetExpand( sTmpStr );
+        }
         break;
     case FIELD_PROP_SHORT1:
         {
@@ -741,7 +749,7 @@ void SwGetRefField::ConvertProgrammaticToUIName()
     if(GetTyp() && REF_SEQUENCEFLD == nSubType)
     {
         SwDoc* pDoc = ((SwGetRefFieldType*)GetTyp())->GetDoc();
-        const String& rPar1 = GetPar1();
+        const OUString rPar1 = GetPar1();
         // don't convert when the name points to an existing field type
         if(!pDoc->GetFldType(RES_SETEXPFLD, rPar1, false))
         {
@@ -805,7 +813,7 @@ void SwGetRefFieldType::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew
     NotifyClients( pOld, pNew );
 }
 
-SwTxtNode* SwGetRefFieldType::FindAnchor( SwDoc* pDoc, const String& rRefMark,
+SwTxtNode* SwGetRefFieldType::FindAnchor( SwDoc* pDoc, const OUString& rRefMark,
                                         sal_uInt16 nSubType, sal_uInt16 nSeqNo,
                                         sal_uInt16* pStt, sal_uInt16* pEnd )
 {
@@ -916,7 +924,7 @@ SwTxtNode* SwGetRefFieldType::FindAnchor( SwDoc* pDoc, const String& rRefMark,
 struct _RefIdsMap
 {
 private:
-    String aName;
+    OUString aName;
     std::set<sal_uInt16> aIds;
     std::set<sal_uInt16> aDstIds;
     std::map<sal_uInt16, sal_uInt16> sequencedIds; /// ID numbers sorted by sequence number.
@@ -929,11 +937,11 @@ private:
     sal_uInt16 GetFirstUnusedId( std::set<sal_uInt16> &rIds );
 
 public:
-    _RefIdsMap( const String& rName ) : aName( rName ), bInit( false ) {}
+    _RefIdsMap( const OUString& rName ) : aName( rName ), bInit( false ) {}
 
     void Check( SwDoc& rDoc, SwDoc& rDestDoc, SwGetRefField& rFld, bool bField );
 
-    String GetName() { return aName; }
+    OUString GetName() { return aName; }
 };
 
 typedef boost::ptr_vector<_RefIdsMap> _RefIdsMaps;
@@ -1093,7 +1101,7 @@ void SwGetRefFieldType::MergeWithOtherDoc( SwDoc& rDestDoc )
                     _RefIdsMap* pMap = 0;
                     for( sal_uInt16 n = aFldMap.size(); n; )
                     {
-                        if( aFldMap[ --n ].GetName().Equals(rRefFld.GetSetRefName()) )
+                        if( aFldMap[ --n ].GetName()==rRefFld.GetSetRefName() )
                         {
                             pMap = &aFldMap[ n ];
                             break;

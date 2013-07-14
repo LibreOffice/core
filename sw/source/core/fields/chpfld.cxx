@@ -29,6 +29,28 @@
 
 using namespace ::com::sun::star;
 
+namespace
+{
+
+OUString removeControlChars(OUString sIn)
+{
+    OUStringBuffer aBuf(sIn);
+    sal_Int32 nLen = aBuf.getLength();
+    for (sal_Int32 i = 0; i < nLen; ++i)
+    {
+        if (aBuf[i] < ' ')
+        {
+            sal_Int32 j = i+1;
+            while (j<nLen && aBuf[j]<' ') ++j;
+            aBuf.remove(i, j-i);
+            nLen = aBuf.getLength();
+        }
+    }
+    return aBuf.makeStringAndClear();
+}
+
+}
+
 // SwChapterFieldType
 
 SwChapterFieldType::SwChapterFieldType()
@@ -47,23 +69,21 @@ SwChapterField::SwChapterField(SwChapterFieldType* pTyp, sal_uInt32 nFmt)
     : SwField(pTyp, nFmt), nLevel( 0 )
 {}
 
-String SwChapterField::Expand() const
+OUString SwChapterField::Expand() const
 {
-    String sStr( sNumber );
     switch( GetFormat() )
     {
-        case CF_TITLE:      sStr = sTitle;  break;
-
+        case CF_TITLE:
+            return sTitle;
         case CF_NUMBER:
-        case CF_NUM_TITLE:  sStr.Insert( sPre, 0 );
-                            sStr += sPost;
-                            if( CF_NUM_TITLE == GetFormat() )
-                                sStr += sTitle;
-                            break;
-
-        case CF_NUM_NOPREPST_TITLE: sStr += sTitle; break;
+            return sPre + sNumber + sPost;
+        case CF_NUM_TITLE:
+            return sPre + sNumber + sPost + sTitle;
+        case CF_NUM_NOPREPST_TITLE:
+            return sNumber + sTitle;
     }
-    return sStr;
+    // CF_NUMBER_NOPREPST
+    return sNumber;
 }
 
 SwField* SwChapterField::Copy() const
@@ -104,10 +124,10 @@ void SwChapterField::ChangeExpansion(const SwTxtNode &rTxtNd, sal_Bool bSrchNum)
 {
     //i120759,this function is for both the reference chapter field and normal chapter field
     //bSrchNum can distinguish the two types,to the latter type,the outline num rule is must...
-    sNumber = aEmptyStr;
-    sTitle = aEmptyStr;
-    sPost = aEmptyStr;
-    sPre = aEmptyStr;
+    sNumber = OUString();
+    sTitle = OUString();
+    sPost = OUString();
+    sPre = OUString();
     //The reference chapter field of normal num rule will be handled in this code segment
     if (bSrchNum && !rTxtNd.IsOutline())
     {
@@ -121,13 +141,9 @@ void SwChapterField::ChangeExpansion(const SwTxtNode &rTxtNd, sal_Bool bSrchNum)
         }
         else
         {
-            sNumber = String("??", RTL_TEXTENCODING_ASCII_US);
+            sNumber = "??";
         }
-        sTitle = rTxtNd.GetExpandTxt();
-
-        for( xub_StrLen i = 0; i < sTitle.Len(); ++i )
-            if( ' ' > sTitle.GetChar( i ) )
-                sTitle.Erase( i--, 1 );
+        sTitle = removeControlChars(rTxtNd.GetExpandTxt());
     }
     else
     {
@@ -185,14 +201,11 @@ void SwChapterField::ChangeExpansion(const SwTxtNode &rTxtNd, sal_Bool bSrchNum)
         }
         else
         {
-            sNumber = String("??", RTL_TEXTENCODING_ASCII_US);
+            sNumber = "??";
         }
 
-        sTitle = pTxtNd->GetExpandTxt();
+        sTitle = removeControlChars(pTxtNd->GetExpandTxt());
 
-        for( xub_StrLen i = 0; i < sTitle.Len(); ++i )
-            if( ' ' > sTitle.GetChar( i ) )
-                sTitle.Erase( i--, 1 );
     }
     }
 }

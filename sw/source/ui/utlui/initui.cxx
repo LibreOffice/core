@@ -75,8 +75,13 @@ void SetCurrGlosGroup(String* pStr)
 
 std::vector<String>* pDBNameList = 0;
 
-std::vector<String>*  pAuthFieldNameList = 0;
-std::vector<String>*  pAuthFieldTypeList = 0;
+namespace
+{
+
+std::vector<OUString>* pAuthFieldNameList = 0;
+std::vector<OUString>* pAuthFieldTypeList = 0;
+
+}
 
 // Finish UI
 
@@ -253,26 +258,26 @@ ImpAutoFmtNameListLoader::ImpAutoFmtNameListLoader( std::vector<String>& rLst )
     FreeResource();
 }
 
-const String&   SwAuthorityFieldType::GetAuthFieldName(ToxAuthorityField eType)
+OUString SwAuthorityFieldType::GetAuthFieldName(ToxAuthorityField eType)
 {
     if(!pAuthFieldNameList)
     {
-        pAuthFieldNameList = new std::vector<String>;
+        pAuthFieldNameList = new std::vector<OUString>;
         pAuthFieldNameList->reserve(AUTH_FIELD_END);
         for(sal_uInt16 i = 0; i < AUTH_FIELD_END; ++i)
-            pAuthFieldNameList->push_back(String(SW_RES(STR_AUTH_FIELD_START + i)));
+            pAuthFieldNameList->push_back(SW_RES(STR_AUTH_FIELD_START + i));
     }
     return (*pAuthFieldNameList)[static_cast< sal_uInt16 >(eType)];
 }
 
-const String&   SwAuthorityFieldType::GetAuthTypeName(ToxAuthorityType eType)
+OUString SwAuthorityFieldType::GetAuthTypeName(ToxAuthorityType eType)
 {
     if(!pAuthFieldTypeList)
     {
-        pAuthFieldTypeList = new std::vector<String>;
+        pAuthFieldTypeList = new std::vector<OUString>;
         pAuthFieldTypeList->reserve(AUTH_TYPE_END);
         for(sal_uInt16 i = 0; i < AUTH_TYPE_END; ++i)
-            pAuthFieldTypeList->push_back(String(SW_RES(STR_AUTH_TYPE_START + i)));
+            pAuthFieldTypeList->push_back(SW_RES(STR_AUTH_TYPE_START + i));
     }
     return (*pAuthFieldTypeList)[static_cast< sal_uInt16 >(eType)];
 }

@@ -39,14 +39,14 @@ class SwEditShell;
 const SwTxtNode* GetBodyTxtNode( const SwDoc& pDoc, SwPosition& rPos,
                                  const SwFrm& rFrm );
 
-void ReplacePoint(String& sTmpName, bool bWithCommandType = false);
+OUString ReplacePoint(OUString sTmpName, bool bWithCommandType = false);
 
 struct _SeqFldLstElem
 {
-    String sDlgEntry;
+    OUString sDlgEntry;
     sal_uInt16 nSeqNo;
 
-    _SeqFldLstElem( const String& rStr, sal_uInt16 nNo )
+    _SeqFldLstElem( const OUString& rStr, sal_uInt16 nNo )
         : sDlgEntry( rStr ), nSeqNo( nNo )
     {}
 };
@@ -84,24 +84,24 @@ protected:
 
 class SW_DLLPUBLIC SwGetExpField : public SwFormulaField
 {
-    String          sExpand;
+    OUString        sExpand;
     bool            bIsInBodyTxt;
     sal_uInt16          nSubType;
 
     bool            bLateInitialization; // #i82544#
 
-    virtual String              Expand() const;
+    virtual OUString            Expand() const;
     virtual SwField*            Copy() const;
 
 public:
-    SwGetExpField( SwGetExpFieldType*, const String& rFormel,
+    SwGetExpField( SwGetExpFieldType*, const OUString& rFormel,
                    sal_uInt16 nSubType = nsSwGetSetExpType::GSE_EXPR, sal_uLong nFmt = 0);
 
     virtual void                SetValue( const double& rVal );
     virtual void                SetLanguage(sal_uInt16 nLng);
 
-    inline const String&        GetExpStr() const;
-    inline void                 ChgExpStr(const String& rExpand);
+    inline OUString             GetExpStr() const;
+    inline void                 ChgExpStr(const OUString& rExpand);
 
     /// Called by formating.
     inline bool                 IsInBodyTxt() const;
@@ -113,7 +113,7 @@ public:
      Only called by formating!! */
     void                        ChangeExpansion( const SwFrm&, const SwTxtFld& );
 
-    virtual String      GetFieldName() const;
+    virtual OUString    GetFieldName() const;
 
     /// Change formula.
     virtual OUString GetPar2() const;
@@ -129,10 +129,10 @@ public:
     void                SetLateInitialization() { bLateInitialization = true;}
 };
 
-inline void SwGetExpField::ChgExpStr(const String& rExpand)
+inline void SwGetExpField::ChgExpStr(const OUString& rExpand)
     { sExpand = rExpand;}
 
-inline const String& SwGetExpField::GetExpStr() const
+inline OUString SwGetExpField::GetExpStr() const
     { return sExpand;   }
 
  /// Called by formating.
@@ -149,7 +149,7 @@ class SW_DLLPUBLIC SwSetExpFieldType : public SwValueFieldType
 {
     OUString sName;
     const SwNode* pOutlChgNd;
-    String      sDelim;
+    OUString      sDelim;
     sal_uInt16      nType;
     sal_uInt8       nLevel;
     sal_Bool        bDeleted;
@@ -158,10 +158,10 @@ protected:
    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew );
 
 public:
-    SwSetExpFieldType( SwDoc* pDoc, const String& rName,
+    SwSetExpFieldType( SwDoc* pDoc, const OUString& rName,
                         sal_uInt16 nType = nsSwGetSetExpType::GSE_EXPR );
     virtual SwFieldType*    Copy() const;
-    virtual const OUString&   GetName() const;
+    virtual OUString        GetName() const;
 
     inline void             SetType(sal_uInt16 nTyp);
     inline sal_uInt16       GetType() const;
@@ -173,16 +173,16 @@ public:
     void                    SetDeleted( sal_Bool b )    { bDeleted = b; }
 
     /// Overlay, because set-field takes care for its being updated by itself.
-    inline const OUString& GetSetRefName() const;
+    inline OUString         GetSetRefName() const;
 
     sal_uInt16 SetSeqRefNo( SwSetExpField& rFld );
 
     sal_uInt16 GetSeqFldList( SwSeqFldList& rList );
-    String MakeSeqName( sal_uInt16 nSeqNo );
+    OUString MakeSeqName( sal_uInt16 nSeqNo );
 
     /// Number sequence fields chapterwise if required.
-    const String& GetDelimiter() const      { return sDelim; }
-    void SetDelimiter( const String& s )    { sDelim = s; }
+    OUString GetDelimiter() const             { return sDelim; }
+    void SetDelimiter( const OUString& s )    { sDelim = s; }
     sal_uInt8 GetOutlineLvl() const                 { return nLevel; }
     void SetOutlineLvl( sal_uInt8 n )           { nLevel = n; }
     void SetChapter( SwSetExpField& rFld, const SwNode& rNd );
@@ -205,38 +205,38 @@ inline void SwSetExpFieldType::SetType( sal_uInt16 nTyp )
 inline sal_uInt16 SwSetExpFieldType::GetType() const
     { return nType;   }
 
-inline const OUString& SwSetExpFieldType::GetSetRefName() const
+inline OUString SwSetExpFieldType::GetSetRefName() const
     { return sName; }
 
 
 class SW_DLLPUBLIC SwSetExpField : public SwFormulaField
 {
-    String          sExpand;
-    String          aPText;
-    String          aSeqText;
+    OUString        sExpand;
+    OUString        aPText;
+    OUString        aSeqText;
     sal_Bool            bInput;
     sal_uInt16          nSeqNo;
     sal_uInt16          nSubType;
 
-    virtual String              Expand() const;
+    virtual OUString            Expand() const;
     virtual SwField*            Copy() const;
 
 public:
-    SwSetExpField(SwSetExpFieldType*, const String& rFormel, sal_uLong nFmt = 0);
+    SwSetExpField(SwSetExpFieldType*, const OUString& rFormel, sal_uLong nFmt = 0);
 
     virtual void                SetValue( const double& rVal );
 
-    inline const String&        GetExpStr() const;
+    inline OUString             GetExpStr() const;
 
-    inline void                 ChgExpStr( const String& rExpand );
+    inline void                 ChgExpStr( const OUString& rExpand );
 
-    inline void                 SetPromptText(const String& rStr);
-    inline const                String& GetPromptText() const;
+    inline void                 SetPromptText(const OUString& rStr);
+    inline OUString             GetPromptText() const;
 
     inline void                 SetInputFlag(sal_Bool bInp);
     inline sal_Bool                 GetInputFlag() const;
 
-    virtual String              GetFieldName() const;
+    virtual OUString            GetFieldName() const;
 
     virtual sal_uInt16              GetSubType() const;
     virtual void                SetSubType(sal_uInt16 nType);
@@ -248,7 +248,7 @@ public:
     inline sal_uInt16           GetSeqNumber() const        { return nSeqNo; }
 
     /// Query name only.
-    virtual const OUString& GetPar1()   const;
+    virtual OUString       GetPar1()   const;
 
     /// Query formula.
     virtual OUString       GetPar2()   const;
@@ -257,16 +257,16 @@ public:
     virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich );
 };
 
-inline const String& SwSetExpField::GetExpStr() const
+inline OUString SwSetExpField::GetExpStr() const
     { return sExpand;       }
 
-inline void SwSetExpField::ChgExpStr( const String& rExpand )
+inline void SwSetExpField::ChgExpStr( const OUString& rExpand )
     { sExpand = rExpand;    }
 
-inline void  SwSetExpField::SetPromptText(const String& rStr)
+inline void  SwSetExpField::SetPromptText(const OUString& rStr)
     { aPText = rStr;        }
 
-inline const String& SwSetExpField::GetPromptText() const
+inline OUString SwSetExpField::GetPromptText() const
     { return aPText;        }
 
 inline void SwSetExpField::SetInputFlag(sal_Bool bInp)
@@ -294,35 +294,35 @@ public:
 class SW_DLLPUBLIC SwInputField : public SwField
 {
     OUString aContent;
-    String  aPText;
-    String  aHelp;
-    String  aToolTip;
+    OUString aPText;
+    OUString aHelp;
+    OUString aToolTip;
     sal_uInt16  nSubType;
 
-    virtual String          Expand() const;
+    virtual OUString        Expand() const;
     virtual SwField*        Copy() const;
 
 public:
     /// Direct input via dialog; delete old value.
-    SwInputField(SwInputFieldType*, const String& rContent ,
-                 const String& rPrompt, sal_uInt16 nSubType = 0,
+    SwInputField(SwInputFieldType*, const OUString& rContent,
+                 const OUString& rPrompt, sal_uInt16 nSubType = 0,
                  sal_uLong nFmt = 0);
 
-    virtual String          GetFieldName() const;
+    virtual OUString        GetFieldName() const;
 
     /// Content
-    virtual const OUString&   GetPar1() const;
+    virtual OUString        GetPar1() const;
     virtual void            SetPar1(const OUString& rStr);
 
     /// aPromptText
     virtual OUString   GetPar2() const;
     virtual void            SetPar2(const OUString& rStr);
 
-    virtual String          GetHelp() const;
-    virtual void            SetHelp(const String & rStr);
+    virtual OUString        GetHelp() const;
+    virtual void            SetHelp(const OUString & rStr);
 
-    virtual String          GetToolTip() const;
-    virtual void            SetToolTip(const String & rStr);
+    virtual OUString        GetToolTip() const;
+    virtual void            SetToolTip(const OUString & rStr);
 
     virtual sal_Bool            isFormField() const;
 
@@ -373,31 +373,31 @@ public:
 
 class SwTblField : public SwValueField, public SwTableFormula
 {
-    String      sExpand;
+    OUString      sExpand;
     sal_uInt16      nSubType;
 
-    virtual String      Expand() const;
+    virtual OUString    Expand() const;
     virtual SwField*    Copy() const;
 
     /// Search TextNode containing the field.
     virtual const SwNode* GetNodeOfFormula() const;
 
-    String GetCommand();
+    OUString GetCommand();
 
 public:
-    SwTblField( SwTblFieldType*, const String& rFormel,
+    SwTblField( SwTblFieldType*, const OUString& rFormel,
                 sal_uInt16 nSubType = 0, sal_uLong nFmt = 0);
 
     virtual void        SetValue( const double& rVal );
     virtual sal_uInt16      GetSubType() const;
     virtual void        SetSubType(sal_uInt16 nType);
 
-    const String&       GetExpStr() const               { return sExpand; }
-    void                ChgExpStr(const String& rStr)   { sExpand = rStr; }
+    OUString            GetExpStr() const               { return sExpand; }
+    void                ChgExpStr(const OUString& rStr) { sExpand = rStr; }
 
     void                CalcField( SwTblCalcPara& rCalcPara );
 
-    virtual String      GetFieldName() const;
+    virtual OUString    GetFieldName() const;
 
     /// The formula.
     virtual OUString GetPar2()   const;
