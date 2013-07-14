@@ -37,6 +37,16 @@
         <item name="displayOptions">showTitle|showHome|useLogo</item>
     </style>
 
+    <style name="Theme.ImpressRemote.ComputerCreation" parent="Theme.ImpressRemote">
+        <item name="android:actionBarStyle">@style/Theme.ImpressRemote.ComputerCreation.ActionBar</item>
+        <item name="actionBarStyle">@style/Theme.ImpressRemote.ComputerCreation.ActionBar</item>
+    </style>
+
+    <style name="Theme.ImpressRemote.ComputerCreation.ActionBar" parent="Theme.ImpressRemote.ActionBar">
+        <item name="android:displayOptions">showCustom</item>
+        <item name="displayOptions">showCustom</item>
+    </style>
+
     <style name="Theme.ImpressRemote.ActionBarWidget" parent="android:style/Widget.Holo.Light">
         <item name="android:background">@color/orange</item>
         <item name="android:textColor">@color/white</item>

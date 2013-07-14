@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="horizontal"
+              android:divider="?android:attr/dividerVertical"
+              android:showDividers="middle"
+              android:dividerPadding="@dimen/padding_horizontal_action_bar_divider"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <FrameLayout
+        android:id="@+id/button_cancel"
+        style="?android:actionButtonStyle"
+        android:layout_weight="1"
+        android:layout_width="0dp"
+        android:layout_height="match_parent">
+
+        <TextView
+            style="?android:actionBarTabTextStyle"
+            android:text="@string/button_cancel"
+            android:drawableLeft="@drawable/ic_action_cancel"
+            android:drawablePadding="@dimen/padding_action_bar_button_drawable"
+            android:paddingRight="@dimen/padding_horizontal_action_bar_button"
+            android:gravity="center_vertical"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/button_save"
+        style="?android:actionButtonStyle"
+        android:layout_weight="1"
+        android:layout_width="0dp"
+        android:layout_height="match_parent">
+
+        <TextView
+            style="?android:actionBarTabTextStyle"
+            android:text="@string/button_save"
+            android:drawableLeft="@drawable/ic_action_save"
+            android:drawablePadding="@dimen/padding_action_bar_button_drawable"
+            android:paddingRight="@dimen/padding_horizontal_action_bar_button"
+            android:gravity="center_vertical"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    </FrameLayout>
+
+</LinearLayout>

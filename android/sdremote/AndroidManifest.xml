@@ -37,6 +37,12 @@
         </activity>
 
         <activity
+            android:name=".ComputerCreationActivity"
+            android:label="Creation"
+            android:theme="@style/Theme.ImpressRemote.ComputerCreation">
+        </activity>
+
+        <activity
             android:name=".SelectorActivity"
             android:label="@string/selector_choose_a_computer"
             android:uiOptions="splitActionBarWhenNarrow">

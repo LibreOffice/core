@@ -75,7 +75,7 @@ public class ComputersActivity extends SherlockFragmentActivity {
     }
 
     private void callLicensesActivity() {
-        Intent aIntent = new Intent(this, LicensesActivity.class);
+        Intent aIntent = Intents.buildLicensesIntent(this);
         startActivity(aIntent);
     }
 }

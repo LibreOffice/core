@@ -36,8 +36,17 @@ public final class Intents {
         public static final String PIN = "PIN";
 
         public static final String SERVER = "SERVER";
+        public static final String SERVER_ADDRESS = "SERVER_ADDRESS";
+        public static final String SERVER_NAME = "SERVER_NAME";
 
         public static final String SLIDE_INDEX = "SLIDE_INDEX";
+    }
+
+    public static final class RequestCodes {
+        private RequestCodes() {
+        }
+
+        public static final int CREATE_SERVER = 1;
     }
 
     public static Intent buildServersListChangedIntent() {
@@ -93,5 +102,21 @@ public final class Intents {
         aIntent.putExtra(Extras.SERVER, aServer);
 
         return aIntent;
+    }
+
+    public static Intent buildComputerCreationIntent(Context aContext) {
+        return new Intent(aContext, ComputerCreationActivity.class);
+    }
+
+    public static Intent buildComputerCreationResultIntent(String aAddress, String aName) {
+        Intent aIntent = new Intent();
+        aIntent.putExtra(Extras.SERVER_ADDRESS, aAddress);
+        aIntent.putExtra(Extras.SERVER_NAME, aName);
+
+        return aIntent;
+    }
+
+    public static Intent buildLicensesIntent(Context aContext) {
+        return new Intent(aContext, LicensesActivity.class);
     }
 }

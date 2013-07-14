@@ -3,6 +3,8 @@
 
     <color name="background_action_bar">#e46f1f</color>
 
+    <color name="background_action_bar_divider">#55ffffff</color>
+
     <color name="orange">#EE4400</color>
     <color name="grey">#303030</color>
     <color name="white">#FFFFFF</color>

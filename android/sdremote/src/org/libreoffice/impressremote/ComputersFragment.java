@@ -11,6 +11,7 @@ package org.libreoffice.impressremote;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -20,10 +21,14 @@ import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.content.LocalBroadcastManager;
+import android.view.ContextMenu;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.actionbarsherlock.app.SherlockListFragment;
+import com.actionbarsherlock.internal.view.menu.ActionMenu;
+import com.actionbarsherlock.view.MenuItem;
 import org.libreoffice.impressremote.communication.CommunicationService;
 import org.libreoffice.impressremote.communication.Server;
 
@@ -58,6 +63,12 @@ public class ComputersFragment extends SherlockListFragment implements ServiceCo
         super.onCreate(savedInstanceState);
 
         mType = (Type) getArguments().getSerializable("TYPE");
+
+        setUpActionBar();
+    }
+
+    private void setUpActionBar() {
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -226,6 +237,87 @@ public class ComputersFragment extends SherlockListFragment implements ServiceCo
 
         Intent aIntent = Intents.buildComputerConnectionIntent(getActivity(), aComputer);
         startActivity(aIntent);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        setUpContextMenu();
+    }
+
+    private void setUpContextMenu() {
+        registerForContextMenu(getListView());
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu aMenu, View aView, ContextMenu.ContextMenuInfo aMenuInfo) {
+        super.onCreateContextMenu(aMenu, aView, aMenuInfo);
+
+        getActivity().getMenuInflater().inflate(R.menu.menu_context_computers, aMenu);
+    }
+
+    @Override
+    public boolean onContextItemSelected(android.view.MenuItem aMenuItem) {
+        int aComputerPosition = getListItemPosition(aMenuItem);
+        Server aComputer = getComputersAdapter().getItem(aComputerPosition);
+
+        removeComputer(aComputer);
+
+        return true;
+    }
+
+    private int getListItemPosition(android.view.MenuItem aMenuItem) {
+        AdapterView.AdapterContextMenuInfo aMenuItemInfo = (AdapterView.AdapterContextMenuInfo) aMenuItem.getMenuInfo();
+
+        return aMenuItemInfo.position;
+    }
+
+    private void removeComputer(Server aComputer) {
+        mCommunicationService.removeServer(aComputer);
+
+        Intent aIntent = Intents.buildServersListChangedIntent();
+        LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(aIntent);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem aMenuItem) {
+        switch (aMenuItem.getItemId()) {
+            case R.id.menu_add_computer:
+                callComputerCreationActivity();
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(aMenuItem);
+        }
+    }
+
+    private void callComputerCreationActivity() {
+        Intent aIntent = new Intent(getActivity(), ComputerCreationActivity.class);
+        startActivityForResult(aIntent, Intents.RequestCodes.CREATE_SERVER);
+    }
+
+    @Override
+    public void onActivityResult(int aRequestCode, int aResultCode, Intent aIntent) {
+        if (aRequestCode != Intents.RequestCodes.CREATE_SERVER) {
+            return;
+        }
+
+        if (aResultCode != Activity.RESULT_OK) {
+            return;
+        }
+
+        String aServerAddress = aIntent.getStringExtra(Intents.Extras.SERVER_ADDRESS);
+        String aServerName = aIntent.getStringExtra(Intents.Extras.SERVER_NAME);
+
+        addServer(aServerAddress, aServerName);
+    }
+
+    private void addServer(String aAddress, String aName) {
+        mCommunicationService.addServer(aAddress, aName);
+
+        Intent aIntent = Intents.buildServersListChangedIntent();
+        LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(aIntent);
     }
 }
 

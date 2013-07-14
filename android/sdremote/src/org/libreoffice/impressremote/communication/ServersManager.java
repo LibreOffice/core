@@ -86,13 +86,23 @@ public class ServersManager {
     }
 
     public void removeServer(Server aServer) {
-        if (getManualAddedTcpServers().contains(aServer)) {
+        if (getServersAddresses(getManualAddedTcpServers()).contains(aServer.getAddress())) {
             removeManualAddedServer(aServer);
 
             return;
         }
 
         blacklistServer(aServer);
+    }
+
+    private List<String> getServersAddresses(List<Server> aServers) {
+        List<String> aServersAddresses = new ArrayList<String>();
+
+        for (Server aServer : aServers) {
+            aServersAddresses.add(aServer.getAddress());
+        }
+
+        return aServersAddresses;
     }
 
     private void removeManualAddedServer(Server aServer) {
