@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <comphelper/string.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <doc.hxx>
 #include <editsh.hxx>
@@ -228,8 +227,8 @@ sal_Bool SwIntrnlRefLink::IsInRange( sal_uLong nSttNd, sal_uLong nEndNd,
     return sal_False;
 }
 
-SwDDEFieldType::SwDDEFieldType(const String& rName,
-                                const String& rCmd, sal_uInt16 nUpdateType )
+SwDDEFieldType::SwDDEFieldType(const OUString& rName,
+                               const OUString& rCmd, sal_uInt16 nUpdateType )
     : SwFieldType( RES_DDEFLD ),
     aName( rName ), pDoc( 0 ), nRefCnt( 0 )
 {
@@ -255,21 +254,22 @@ SwFieldType* SwDDEFieldType::Copy() const
     return pType;
 }
 
-const OUString& SwDDEFieldType::GetName() const
+OUString SwDDEFieldType::GetName() const
 {
     return aName;
 }
 
-void SwDDEFieldType::SetCmd( const String& rStr )
+void SwDDEFieldType::SetCmd( OUString aStr )
 {
-    String sCmd( rStr );
-    xub_StrLen nPos;
-    while( STRING_NOTFOUND != (nPos = sCmd.SearchAscii( "  " )) )
-        sCmd.Erase( nPos, 1 );
-    refLink->SetLinkSourceName( sCmd );
+    sal_Int32 nIndex = 0;
+    do
+    {
+        aStr = aStr.replaceFirst("  ", " ", &nIndex);
+    } while (nIndex>=0);
+    refLink->SetLinkSourceName( aStr );
 }
 
-String SwDDEFieldType::GetCmd() const
+OUString SwDDEFieldType::GetCmd() const
 {
     return refLink->GetLinkSourceName();
 }
@@ -312,12 +312,12 @@ void SwDDEFieldType::_RefCntChgd()
 
 bool SwDDEFieldType::QueryValue( uno::Any& rVal, sal_uInt16 nWhichId ) const
 {
-    sal_uInt8 nPart = 0;
+    sal_Int32 nPart = -1;
     switch( nWhichId )
     {
-    case FIELD_PROP_PAR2:      nPart = 3; break;
-    case FIELD_PROP_PAR4:      nPart = 2; break;
-    case FIELD_PROP_SUBTYPE:   nPart = 1; break;
+    case FIELD_PROP_PAR2:      nPart = 2; break;
+    case FIELD_PROP_PAR4:      nPart = 1; break;
+    case FIELD_PROP_SUBTYPE:   nPart = 0; break;
     case FIELD_PROP_BOOL1:
         {
             sal_Bool bSet = GetType() == sfx2::LINKUPDATE_ALWAYS ? sal_True : sal_False;
@@ -325,46 +325,50 @@ bool SwDDEFieldType::QueryValue( uno::Any& rVal, sal_uInt16 nWhichId ) const
         }
         break;
     case FIELD_PROP_PAR5:
-        rVal <<= OUString(aExpansion);
-    break;
+        rVal <<= aExpansion;
+        break;
     default:
         OSL_FAIL("illegal property");
     }
-    if( nPart )
-        rVal <<= OUString(GetCmd().GetToken(nPart-1, sfx2::cTokenSeparator));
+    if ( nPart>=0 )
+        rVal <<= GetCmd().getToken(nPart, sfx2::cTokenSeparator);
     return true;
 }
 
 bool SwDDEFieldType::PutValue( const uno::Any& rVal, sal_uInt16 nWhichId )
 {
-    sal_uInt8 nPart = 0;
+    sal_Int32 nPart = -1;
     switch( nWhichId )
     {
-    case FIELD_PROP_PAR2:      nPart = 3; break;
-    case FIELD_PROP_PAR4:      nPart = 2; break;
-    case FIELD_PROP_SUBTYPE:   nPart = 1; break;
+    case FIELD_PROP_PAR2:      nPart = 2; break;
+    case FIELD_PROP_PAR4:      nPart = 1; break;
+    case FIELD_PROP_SUBTYPE:   nPart = 0; break;
     case FIELD_PROP_BOOL1:
         SetType( static_cast<sal_uInt16>(*(sal_Bool*)rVal.getValue() ?
                                      sfx2::LINKUPDATE_ALWAYS :
                                      sfx2::LINKUPDATE_ONCALL ) );
         break;
     case FIELD_PROP_PAR5:
-    {
-        OUString sTemp;
-        rVal >>= sTemp;
-        aExpansion = sTemp;
-    }
-    break;
+        rVal >>= aExpansion;
+        break;
     default:
         OSL_FAIL("illegal property");
     }
-    if( nPart )
+    if( nPart>=0 )
     {
-        String sTmp, sCmd( GetCmd() );
-        while(3 > comphelper::string::getTokenCount(sCmd, sfx2::cTokenSeparator))
-            sCmd += sfx2::cTokenSeparator;
-        sCmd.SetToken( nPart-1, sfx2::cTokenSeparator, ::GetString( rVal, sTmp ) );
-        SetCmd( sCmd );
+        const OUString sOldCmd( GetCmd() );
+        OUString sNewCmd;
+        sal_Int32 nIndex = 0;
+        for (sal_Int32 i=0; i<3; ++i)
+        {
+            OUString sToken = sOldCmd.getToken(0, sfx2::cTokenSeparator, nIndex);
+            if (i==nPart)
+            {
+                rVal >>= sToken;
+            }
+            sNewCmd += sToken + OUString(sfx2::cTokenSeparator);
+        }
+        SetCmd( sNewCmd );
     }
     return true;
 }
@@ -380,17 +384,16 @@ SwDDEField::~SwDDEField()
         ((SwDDEFieldType*)GetTyp())->Disconnect();
 }
 
-String SwDDEField::Expand() const
+OUString SwDDEField::Expand() const
 {
-    xub_StrLen nPos;
-    String aStr(comphelper::string::remove(((SwDDEFieldType*)GetTyp())->GetExpansion(), '\r'));
-
-    while( (nPos = aStr.Search( '\t' )) != STRING_NOTFOUND )
-        aStr.SetChar( nPos, ' ' );
-    while( (nPos = aStr.Search( '\n' )) != STRING_NOTFOUND )
-        aStr.SetChar( nPos, '|' );
-    if( aStr.Len() && ( aStr.GetChar( aStr.Len()-1 ) == '|') )
-        aStr.Erase( aStr.Len()-1, 1 );
+    OUString aStr = ((SwDDEFieldType*)GetTyp())->GetExpansion();
+    aStr = aStr.replaceAll("\r", OUString());
+    aStr = aStr.replaceAll("\t", " ");
+    aStr = aStr.replaceAll("\n", "|");
+    if (aStr.endsWith("|"))
+    {
+        return aStr.copy(0, aStr.getLength()-1);
+    }
     return aStr;
 }
 
@@ -400,7 +403,7 @@ SwField* SwDDEField::Copy() const
 }
 
 /// get field type name
-const OUString& SwDDEField::GetPar1() const
+OUString SwDDEField::GetPar1() const
 {
     return ((const SwDDEFieldType*)GetTyp())->GetName();
 }

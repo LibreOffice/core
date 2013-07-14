@@ -34,18 +34,18 @@ SwFieldType* SwScriptFieldType::Copy() const
 }
 
 SwScriptField::SwScriptField( SwScriptFieldType* pInitType,
-                                const String& rType, const String& rCode,
+                                const OUString& rType, const OUString& rCode,
                                 sal_Bool bURL )
     : SwField( pInitType ), sType( rType ), sCode( rCode ), bCodeURL( bURL )
 {
 }
 
-String SwScriptField::GetDescription() const
+OUString SwScriptField::GetDescription() const
 {
     return SW_RES(STR_SCRIPT);
 }
 
-String SwScriptField::Expand() const
+OUString SwScriptField::Expand() const
 {
     return aEmptyStr;
 }
@@ -61,7 +61,7 @@ void SwScriptField::SetPar1( const OUString& rStr )
     sType = rStr;
 }
 
-const OUString& SwScriptField::GetPar1() const
+OUString SwScriptField::GetPar1() const
 {
     return sType;
 }
@@ -82,10 +82,10 @@ bool SwScriptField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
     switch( nWhichId )
     {
     case FIELD_PROP_PAR1:
-        rAny <<= OUString( sType );
+        rAny <<= sType;
         break;
     case FIELD_PROP_PAR2:
-        rAny <<= OUString( sCode );
+        rAny <<= sCode;
         break;
     case FIELD_PROP_BOOL1:
         rAny.setValue(&bCodeURL, ::getBooleanCppuType());

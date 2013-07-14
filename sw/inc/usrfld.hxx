@@ -33,19 +33,19 @@ class SW_DLLPUBLIC SwUserFieldType : public SwValueFieldType
     bool    bDeleted : 1;
     double  nValue;
     OUString  aName;
-    String  aContent;
+    OUString  aContent;
     sal_uInt16  nType;
 
 public:
-    SwUserFieldType( SwDoc* pDocPtr, const String& );
+    SwUserFieldType( SwDoc* pDocPtr, const OUString& );
 
-    virtual const OUString&   GetName() const;
+    virtual OUString        GetName() const;
     virtual SwFieldType*    Copy() const;
 
-    String                  Expand(sal_uInt32 nFmt, sal_uInt16 nSubType, sal_uInt16 nLng);
+    OUString                Expand(sal_uInt32 nFmt, sal_uInt16 nSubType, sal_uInt16 nLng);
 
-    String                  GetContent( sal_uInt32 nFmt = 0 );
-           void             SetContent( const String& rStr, sal_uInt32 nFmt = 0 );
+    OUString                GetContent( sal_uInt32 nFmt = 0 );
+           void             SetContent( const OUString& rStr, sal_uInt32 nFmt = 0 );
 
     inline bool             IsValid() const;
     inline void             ChgValid( bool bNew );
@@ -93,7 +93,7 @@ class SW_DLLPUBLIC SwUserField : public SwValueField
 {
     sal_uInt16  nSubType;
 
-    virtual String          Expand() const;
+    virtual OUString        Expand() const;
     virtual SwField*        Copy() const;
 
 public:
@@ -105,10 +105,10 @@ public:
     virtual double          GetValue() const;
     virtual void            SetValue( const double& rVal );
 
-    virtual String          GetFieldName() const;
+    virtual OUString        GetFieldName() const;
 
     // Name cannot be changed.
-    virtual const OUString& GetPar1() const;
+    virtual OUString   GetPar1() const;
 
     // Content.
     virtual OUString   GetPar2() const;

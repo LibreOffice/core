@@ -274,7 +274,7 @@ SwFldMgr::~SwFldMgr()
     Description: organise RefMark by names
  --------------------------------------------------------------------*/
 
-bool  SwFldMgr::CanInsertRefMark( const String& rStr )
+bool  SwFldMgr::CanInsertRefMark( const OUString& rStr )
 {
     bool bRet = false;
     SwWrtShell *pSh = pWrtShell ? pWrtShell : lcl_GetShell();
@@ -296,7 +296,7 @@ bool  SwFldMgr::CanInsertRefMark( const String& rStr )
     Description: access over ResIds
  --------------------------------------------------------------------*/
 
-void SwFldMgr::RemoveFldType(sal_uInt16 nResId, const String& rName )
+void SwFldMgr::RemoveFldType(sal_uInt16 nResId, const OUString& rName )
 {
     SwWrtShell * pSh = pWrtShell ? pWrtShell : lcl_GetShell();
     OSL_ENSURE(pSh, "no SwWrtShell found");
@@ -320,7 +320,7 @@ SwFieldType* SwFldMgr::GetFldType(sal_uInt16 nResId, sal_uInt16 nId) const
 }
 
 
-SwFieldType* SwFldMgr::GetFldType(sal_uInt16 nResId, const String& rName) const
+SwFieldType* SwFldMgr::GetFldType(sal_uInt16 nResId, const OUString& rName) const
 {
     SwWrtShell * pSh = pWrtShell ? pWrtShell : lcl_GetShell();
     OSL_ENSURE(pSh, "no SwWrtShell found");
@@ -340,9 +340,9 @@ SwField* SwFldMgr::GetCurFld()
         pCurFld = NULL;
 
     // initialise strings and format
-    aCurPar1.Erase();
-    aCurPar2.Erase();
-    sCurFrame.Erase();
+    aCurPar1 = OUString();
+    aCurPar2 = OUString();
+    sCurFrame = OUString();
     nCurFmt = 0;
 
     if(!pCurFld)
@@ -444,7 +444,7 @@ sal_uInt16 SwFldMgr::GetTypeId(sal_uInt16 nPos)
 }
 
 
-const String& SwFldMgr::GetTypeStr(sal_uInt16 nPos)
+OUString SwFldMgr::GetTypeStr(sal_uInt16 nPos)
 {
     OSL_ENSURE(nPos < ::GetPackCount(), "forbidden TypeId");
 
@@ -453,12 +453,12 @@ const String& SwFldMgr::GetTypeStr(sal_uInt16 nPos)
     // special treatment for date/time fields (without var/fix)
     if( TYP_DATEFLD == nFldWh )
     {
-        static String g_aDate( SW_RES( STR_DATEFLD ) );
+        static OUString g_aDate( SW_RES( STR_DATEFLD ) );
         return g_aDate;
     }
     if( TYP_TIMEFLD == nFldWh )
     {
-        static String g_aTime( SW_RES( STR_TIMEFLD ) );
+        static OUString g_aTime( SW_RES( STR_TIMEFLD ) );
         return g_aTime;
     }
 
@@ -515,7 +515,7 @@ bool SwFldMgr::GetSubTypes(sal_uInt16 nTypeId, std::vector<OUString>& rToFill)
             }
             case TYP_INPUTFLD:
             {
-                rToFill.push_back(String(SW_RESSTR(aSwFlds[nPos].nSubTypeStart)));
+                rToFill.push_back(SW_RES(aSwFlds[nPos].nSubTypeStart));
                 // move on at generic types
             }
             case TYP_DDEFLD:
@@ -574,18 +574,18 @@ bool SwFldMgr::GetSubTypes(sal_uInt16 nTypeId, std::vector<OUString>& rToFill)
 
                     for(sal_uInt16 i = 0; i < nCount; ++i)
                     {
-                        String pNew;
+                        OUString sNew;
                         if (nTypeId == TYP_DOCINFOFLD)
                         {
                             if ( i == DI_CUSTOM )
-                                pNew = String(SW_RES( STR_CUSTOM ));
+                                sNew = SW_RES( STR_CUSTOM );
                             else
-                                pNew = ViewShell::GetShellRes()->aDocInfoLst[i];
+                                sNew = ViewShell::GetShellRes()->aDocInfoLst[i];
                         }
                         else
-                            pNew = SW_RESSTR(aSwFlds[nPos].nSubTypeStart + i);
+                            sNew = SW_RES(aSwFlds[nPos].nSubTypeStart + i);
 
-                        rToFill.push_back(pNew);
+                        rToFill.push_back(sNew);
                     }
                 }
             }
@@ -658,15 +658,14 @@ sal_uInt16 SwFldMgr::GetFormatCount(sal_uInt16 nTypeId, bool bIsText, sal_Bool b
  --------------------------------------------------------------------*/
 
 
-String SwFldMgr::GetFormatStr(sal_uInt16 nTypeId, sal_uLong nFormatId) const
+OUString SwFldMgr::GetFormatStr(sal_uInt16 nTypeId, sal_uLong nFormatId) const
 {
-    String aRet;
     OSL_ENSURE(nTypeId < TYP_END, "forbidden TypeId");
 
     const sal_uInt16 nPos = GetPos(nTypeId);
 
     if(nPos == USHRT_MAX)
-        return aRet;
+        return OUString();
 
     sal_uLong nStart;
 
@@ -676,8 +675,10 @@ String SwFldMgr::GetFormatStr(sal_uInt16 nTypeId, sal_uLong nFormatId) const
         nFormatId &= ~FF_FIXED;     // mask out Fixed-Flag
 
     if((nStart + nFormatId) < aSwFlds[nPos].nFmtEnd)
-        aRet = SW_RESSTR((sal_uInt16)(nStart + nFormatId));
-    else if( FMT_NUM_BEGIN == nStart)
+        return SW_RES((sal_uInt16)(nStart + nFormatId));
+
+    OUString aRet;
+    if( FMT_NUM_BEGIN == nStart)
     {
         if(xNumberingInfo.is())
         {
@@ -931,7 +932,7 @@ sal_Bool SwFldMgr::InsertFld(  const SwInsertFld_Data& rData, SwPaM *pPam )
         }
         case TYP_CHAPTERFLD:
         {
-            sal_uInt16 nByte = (sal_uInt16)rData.sPar2.ToInt32();
+            sal_uInt16 nByte = (sal_uInt16)rData.sPar2.toInt32();
             SwChapterFieldType* pTyp =
                 (SwChapterFieldType*)pCurShell->GetFldType(0, RES_CHAPTERFLD);
             pFld = new SwChapterField(pTyp, nFormatId);
@@ -945,7 +946,7 @@ sal_Bool SwFldMgr::InsertFld(  const SwInsertFld_Data& rData, SwPaM *pPam )
         case TYP_PREVPAGEFLD:
         case TYP_PAGENUMBERFLD:
         {
-            short nOff  = (short)rData.sPar2.ToInt32();
+            short nOff = (short)rData.sPar2.toInt32();
 
             if(rData.nTypeId == TYP_NEXTPAGEFLD)
             {
@@ -1006,7 +1007,7 @@ sal_Bool SwFldMgr::InsertFld(  const SwInsertFld_Data& rData, SwPaM *pPam )
         }
         case TYP_SETREFFLD:
         {
-            if( rData.sPar1.Len() > 0 && CanInsertRefMark( rData.sPar1 ) )
+            if( !rData.sPar1.isEmpty() && CanInsertRefMark( rData.sPar1 ) )
             {
                 pCurShell->SetAttr( SwFmtRefMark( rData.sPar1 ) );
                 return sal_True;
@@ -1017,7 +1018,7 @@ sal_Bool SwFldMgr::InsertFld(  const SwInsertFld_Data& rData, SwPaM *pPam )
         {
             SwGetRefFieldType* pTyp =
                 (SwGetRefFieldType*)pCurShell->GetFldType(0, RES_GETREFFLD);
-            sal_uInt16 nSeqNo = (sal_uInt16)rData.sPar2.ToInt32();
+            sal_uInt16 nSeqNo = (sal_uInt16)rData.sPar2.toInt32();
             pFld = new SwGetRefField(pTyp, rData.sPar1, nSubType, nSeqNo, nFormatId);
             bExp = true;
             break;
@@ -1026,9 +1027,12 @@ sal_Bool SwFldMgr::InsertFld(  const SwInsertFld_Data& rData, SwPaM *pPam )
         {
             //JP 28.08.95: DDE-Topics/-Items can have blanks in their names!
             //              That's not yet considered here.
-            String sCmd( rData.sPar2 );
-            sal_uInt16 nTmpPos = sCmd.SearchAndReplace( ' ', sfx2::cTokenSeparator );
-            sCmd.SearchAndReplace( ' ', sfx2::cTokenSeparator, nTmpPos );
+            sal_Int32 nIndex = 0;
+            OUString sCmd = rData.sPar2.replaceFirst(OUString(' '), OUString(sfx2::cTokenSeparator), &nIndex);
+            if (nIndex>=0 && ++nIndex<sCmd.getLength())
+            {
+                sCmd = sCmd.replaceFirst(OUString(' '), OUString(sfx2::cTokenSeparator), &nIndex);
+            }
 
             SwDDEFieldType aType( rData.sPar1, sCmd, (sal_uInt16) nFormatId );
             SwDDEFieldType* pTyp = (SwDDEFieldType*) pCurShell->InsertFldType( aType );
@@ -1076,19 +1080,19 @@ sal_Bool SwFldMgr::InsertFld(  const SwInsertFld_Data& rData, SwPaM *pPam )
         case TYP_DBFLD:
         {
             SwDBData aDBData;
-            String sPar1;
+            OUString sPar1;
 
-            if (rData.sPar1.Search(DB_DELIM) == STRING_NOTFOUND)
+            if (rData.sPar1.indexOf(DB_DELIM)<0)
             {
                 aDBData = pCurShell->GetDBData();
                 sPar1 = rData.sPar1;
             }
             else
             {
-                aDBData.sDataSource = rData.sPar1.GetToken(0, DB_DELIM);
-                aDBData.sCommand = rData.sPar1.GetToken(1, DB_DELIM);
-                aDBData.nCommandType = rData.sPar1.GetToken(2, DB_DELIM).ToInt32();
-                sPar1 = rData.sPar1.GetToken(3, DB_DELIM);
+                aDBData.sDataSource = rData.sPar1.getToken(0, DB_DELIM);
+                aDBData.sCommand = rData.sPar1.getToken(1, DB_DELIM);
+                aDBData.nCommandType = rData.sPar1.getToken(2, DB_DELIM).toInt32();
+                sPar1 = rData.sPar1.getToken(3, DB_DELIM);
             }
 
             if(!aDBData.sDataSource.isEmpty() && pCurShell->GetDBData() != aDBData)
@@ -1127,28 +1131,35 @@ sal_Bool SwFldMgr::InsertFld(  const SwInsertFld_Data& rData, SwPaM *pPam )
         case TYP_DBNEXTSETFLD:
         case TYP_DBNAMEFLD:
         {
-            sal_uInt16 nPos, nTablePos, nCmdTypePos, nExpPos;
-            String sPar1;
             SwDBData aDBData;
 
             // excract DBName from rData.sPar1. Format: DBName.TableName.CommandType.ExpStrg
-            if ((nTablePos = rData.sPar1.Search(DB_DELIM)) != STRING_NOTFOUND)
-                aDBData.sDataSource = rData.sPar1.Copy(0, nTablePos++);
-            if ((nCmdTypePos = rData.sPar1.Search(DB_DELIM, nTablePos)) != STRING_NOTFOUND)
+            sal_Int32 nTablePos = rData.sPar1.indexOf(DB_DELIM);
+            sal_Int32 nCmdTypePos = -1;
+            sal_Int32 nExpPos = -1;
+
+            if (nTablePos>=0)
             {
-                aDBData.sCommand = rData.sPar1.Copy(nTablePos, nCmdTypePos++ - nTablePos);
+                aDBData.sDataSource = rData.sPar1.copy(0, nTablePos++);
+                nCmdTypePos = rData.sPar1.indexOf(DB_DELIM, nTablePos);
+                if (nCmdTypePos>=0)
+                {
+                    aDBData.sCommand = rData.sPar1.copy(nTablePos, nCmdTypePos++ - nTablePos);
+                    nExpPos = rData.sPar1.indexOf(DB_DELIM, nCmdTypePos);
+                    if (nExpPos>=0)
+                    {
+                        aDBData.nCommandType = rData.sPar1.copy(nCmdTypePos, nExpPos++ - nCmdTypePos).toInt32();
+                    }
+                }
             }
-            if ((nExpPos = rData.sPar1.Search(DB_DELIM, nCmdTypePos)) != STRING_NOTFOUND)
-            {
-                aDBData.nCommandType = rData.sPar1.Copy(nCmdTypePos, nExpPos++ - nCmdTypePos).ToInt32();
-            }
-            if (nExpPos != STRING_NOTFOUND)
+
+            sal_Int32 nPos = 0;
+            if (nExpPos>=0)
                 nPos = nExpPos;
-            else if (nTablePos != STRING_NOTFOUND)
+            else if (nTablePos>=0)
                 nPos = nTablePos;
-            else
-                nPos = 0;
-            sPar1 = rData.sPar1.Copy(nPos);
+
+            OUString sPar1 = rData.sPar1.copy(nPos);
 
             if (!aDBData.sDataSource.isEmpty() && pCurShell->GetDBData() != aDBData)
                 pCurShell->ChgDBData(aDBData);
@@ -1250,7 +1261,7 @@ sal_Bool SwFldMgr::InsertFld(  const SwInsertFld_Data& rData, SwPaM *pPam )
         }
         case TYP_SETFLD:
         {
-            if (!rData.sPar2.Len())   // empty variables are not allowed
+            if (rData.sPar2.isEmpty())   // empty variables are not allowed
                 return sal_False;
 
             SwSetExpFieldType* pTyp = (SwSetExpFieldType*)pCurShell->InsertFldType(
@@ -1318,10 +1329,11 @@ sal_Bool SwFldMgr::InsertFld(  const SwInsertFld_Data& rData, SwPaM *pPam )
                 SfxItemSet aBoxSet( pCurShell->GetAttrPool(),
                                 RES_BOXATR_FORMULA, RES_BOXATR_FORMULA );
 
-                String sFml(comphelper::string::stripStart(rData.sPar2, ' '));
-                if( sFml.Len() &&
-                    '=' == sFml.GetChar( 0 ) )
-                    sFml.Erase( 0, 1 );
+                OUString sFml(comphelper::string::stripStart(rData.sPar2, ' '));
+                if ( sFml.startsWith("=") )
+                {
+                    sFml = sFml.copy(1);
+                }
 
                 aBoxSet.Put( SwTblBoxFormula( sFml ));
                 pCurShell->SetTblBoxFormulaAttrs( aBoxSet );
@@ -1344,7 +1356,7 @@ sal_Bool SwFldMgr::InsertFld(  const SwInsertFld_Data& rData, SwPaM *pPam )
         case TYP_SETREFPAGEFLD:
             pFld = new SwRefPageSetField( (SwRefPageSetFieldType*)
                                 pCurShell->GetFldType( 0, RES_REFPAGESETFLD ),
-                                (short)rData.sPar2.ToInt32(), 0 != nSubType  );
+                                (short)rData.sPar2.toInt32(), 0 != nSubType  );
             bPageVar = true;
             break;
 
@@ -1356,11 +1368,11 @@ sal_Bool SwFldMgr::InsertFld(  const SwInsertFld_Data& rData, SwPaM *pPam )
         case TYP_DROPDOWN :
         {
             pFld = new SwDropDownField(pCurShell->GetFldType( 0, RES_DROPDOWN ));
-            xub_StrLen nTokenCount = comphelper::string::getTokenCount(rData.sPar2, DB_DELIM);
+            const sal_Int32 nTokenCount = comphelper::string::getTokenCount(rData.sPar2, DB_DELIM);
             Sequence<OUString> aEntries(nTokenCount);
             OUString* pArray = aEntries.getArray();
-            for(xub_StrLen nToken = 0; nToken < nTokenCount; nToken++)
-                pArray[nToken] = rData.sPar2.GetToken(nToken, DB_DELIM);
+            for(sal_Int32 nToken = 0; nToken < nTokenCount; nToken++)
+                pArray[nToken] = rData.sPar2.getToken(nToken, DB_DELIM);
             ((SwDropDownField*)pFld)->SetItems(aEntries);
             ((SwDropDownField*)pFld)->SetName(rData.sPar1);
         }
@@ -1417,8 +1429,8 @@ sal_Bool SwFldMgr::InsertFld(  const SwInsertFld_Data& rData, SwPaM *pPam )
 
 
 void SwFldMgr::UpdateCurFld(sal_uLong nFormat,
-                            const String& rPar1,
-                            const String& rPar2,
+                            const OUString& rPar1,
+                            const OUString& rPar2,
                             SwField * _pTmpFld) // #111840#
 {
     // change format
@@ -1447,8 +1459,8 @@ void SwFldMgr::UpdateCurFld(sal_uLong nFormat,
 
     bool bSetPar2 = true;
     bool bSetPar1 = true;
-    String sPar1( rPar1 );
-    String sPar2( rPar2 );
+    OUString sPar1( rPar1 );
+    OUString sPar2( rPar2 );
 
     // Order to Format
     switch( nTypeId )
@@ -1457,14 +1469,18 @@ void SwFldMgr::UpdateCurFld(sal_uLong nFormat,
         {
             // DDE-Topics/-Items can have blanks in their names!
             //  That's not yet considered here!
-            sal_uInt16 nTmpPos = sPar2.SearchAndReplace( ' ', sfx2::cTokenSeparator );
-            sPar2.SearchAndReplace( ' ', sfx2::cTokenSeparator, nTmpPos );
+            sal_Int32 nIndex = 0;
+            sPar2 = sPar2.replaceFirst(OUString(' '), OUString(sfx2::cTokenSeparator), &nIndex );
+            if (nIndex>=0 && ++nIndex<sPar2.getLength())
+            {
+                sPar2 = sPar2.replaceFirst(OUString(' '), OUString(sfx2::cTokenSeparator), &nIndex);
+            }
             break;
         }
 
         case TYP_CHAPTERFLD:
         {
-            sal_uInt16 nByte = (sal_uInt16)rPar2.ToInt32();
+            sal_uInt16 nByte = (sal_uInt16)rPar2.toInt32();
             nByte = std::max(sal_uInt16(1), nByte);
             nByte = std::min(nByte, sal_uInt16(MAXLEVEL));
             nByte -= 1;
@@ -1481,13 +1497,13 @@ void SwFldMgr::UpdateCurFld(sal_uLong nFormat,
             if( SVX_NUM_CHAR_SPECIAL == nFormat )
             {
                 ((SwPageNumberField*)pCurFld)->SetUserString( sPar2 );
-                sPar2 = '1';
+                sPar2 = OUString('1');
             }
             else
             {
                 if( nFormat + 2 == SVX_NUM_PAGEDESC )
                     nFormat = SVX_NUM_PAGEDESC;
-                short nOff = (short)sPar2.ToInt32();
+                short nOff = (short)sPar2.toInt32();
                 nOff += 1;
                 sPar2 = OUString::number(nOff);
             }
@@ -1503,7 +1519,7 @@ void SwFldMgr::UpdateCurFld(sal_uLong nFormat,
             {
                 if( nFormat + 2 == SVX_NUM_PAGEDESC )
                     nFormat = SVX_NUM_PAGEDESC;
-                short nOff = (short)sPar2.ToInt32();
+                short nOff = (short)sPar2.toInt32();
                 nOff -= 1;
                 sPar2 = OUString::number(nOff);
             }
@@ -1518,10 +1534,10 @@ void SwFldMgr::UpdateCurFld(sal_uLong nFormat,
         case TYP_GETREFFLD:
             {
                 bSetPar2 = false;
-                ((SwGetRefField*)pTmpFld)->SetSubType( (sal_uInt16)rPar2.ToInt32() );
-                sal_uInt16 nPos = rPar2.Search( '|' );
-                if( STRING_NOTFOUND != nPos )
-                    ((SwGetRefField*)pTmpFld)->SetSeqNo( (sal_uInt16)rPar2.Copy( nPos + 1 ).ToInt32());
+                ((SwGetRefField*)pTmpFld)->SetSubType( (sal_uInt16)rPar2.toInt32() );
+                const sal_Int32 nPos = rPar2.indexOf( '|' );
+                if( nPos>=0 )
+                    ((SwGetRefField*)pTmpFld)->SetSeqNo( (sal_uInt16)rPar2.copy( nPos + 1 ).toInt32());
             }
             break;
         case TYP_DROPDOWN:
@@ -1530,7 +1546,7 @@ void SwFldMgr::UpdateCurFld(sal_uLong nFormat,
             Sequence<OUString> aEntries(nTokenCount);
             OUString* pArray = aEntries.getArray();
             for(xub_StrLen nToken = 0; nToken < nTokenCount; nToken++)
-                pArray[nToken] = sPar2.GetToken(nToken, DB_DELIM);
+                pArray[nToken] = sPar2.getToken(nToken, DB_DELIM);
             ((SwDropDownField*)pTmpFld)->SetItems(aEntries);
             ((SwDropDownField*)pTmpFld)->SetName(sPar1);
             bSetPar1 = bSetPar2 = false;
@@ -1544,7 +1560,7 @@ void SwFldMgr::UpdateCurFld(sal_uLong nFormat,
             SwAuthEntry aTempEntry;
             for( sal_uInt16 i = 0; i < AUTH_FIELD_END; ++i )
                 aTempEntry.SetAuthorField( (ToxAuthorityField)i,
-                                rPar1.GetToken( i, TOX_STYLE_DELIMITER ));
+                                rPar1.getToken( i, TOX_STYLE_DELIMITER ));
             if( pAuthorityType->ChangeEntryContent( &aTempEntry ) )
             {
                 pType->UpdateFlds();
@@ -1661,17 +1677,16 @@ void SwFieldType::_GetFldName()
     };
 
     // insert infos for fields
-    SwFieldType::pFldNames = new std::vector<String>;
+    SwFieldType::pFldNames = new std::vector<OUString>;
     SwFieldType::pFldNames->reserve(SAL_N_ELEMENTS(coFldNms));
     for( sal_uInt16 nIdx = 0; nIdx < SAL_N_ELEMENTS(coFldNms); ++nIdx )
     {
-        String aTmp(SW_RESSTR( coFldNms[ nIdx ] ));
-        aTmp.Assign( MnemonicGenerator::EraseAllMnemonicChars( aTmp ) );
-        SwFieldType::pFldNames->push_back(aTmp);
+        const OUString aTmp(SW_RES( coFldNms[ nIdx ] ));
+        SwFieldType::pFldNames->push_back(MnemonicGenerator::EraseAllMnemonicChars( aTmp ));
     }
 }
 
-sal_Bool SwFldMgr::ChooseMacro(const String&)
+sal_Bool SwFldMgr::ChooseMacro(const OUString&)
 {
     sal_Bool bRet = sal_False;
 
@@ -1688,7 +1703,7 @@ sal_Bool SwFldMgr::ChooseMacro(const String&)
     return bRet;
 }
 
-void SwFldMgr::SetMacroPath(const String& rPath)
+void SwFldMgr::SetMacroPath(const OUString& rPath)
 {
     sMacroPath = rPath;
     sMacroName = rPath;

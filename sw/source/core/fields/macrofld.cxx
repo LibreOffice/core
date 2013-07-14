@@ -42,13 +42,13 @@ SwFieldType* SwMacroFieldType::Copy() const
 
 
 SwMacroField::SwMacroField(SwMacroFieldType* pInitType,
-                           const String& rLibAndName, const String& rTxt) :
+                           const OUString& rLibAndName, const OUString& rTxt) :
     SwField(pInitType), aMacro(rLibAndName), aText(rTxt), bIsScriptURL(sal_False)
 {
     bIsScriptURL = isScriptURL(aMacro);
 }
 
-String SwMacroField::Expand() const
+OUString SwMacroField::Expand() const
 {
     return aText ;
 }
@@ -58,20 +58,17 @@ SwField* SwMacroField::Copy() const
     return new SwMacroField((SwMacroFieldType*)GetTyp(), aMacro, aText);
 }
 
-String SwMacroField::GetFieldName() const
+OUString SwMacroField::GetFieldName() const
 {
-    String aStr(GetTyp()->GetName());
-    aStr += ' ';
-    aStr += aMacro;
-    return aStr;
+    return GetTyp()->GetName() + " " + aMacro;
 }
 
-String SwMacroField::GetLibName() const
+OUString SwMacroField::GetLibName() const
 {
     // if it is a Scripting Framework macro return an empty string
     if (bIsScriptURL)
     {
-        return String();
+        return OUString();
     }
 
     if (!aMacro.isEmpty())
@@ -84,11 +81,11 @@ String SwMacroField::GetLibName() const
         return aMacro.copy(0, nPos);
     }
 
-    OSL_FAIL("No MacroName");
-    return aEmptyStr;
+    OSL_FAIL("No LibName");
+    return OUString();
 }
 
-String SwMacroField::GetMacroName() const
+OUString SwMacroField::GetMacroName() const
 {
     if (!aMacro.isEmpty())
     {
@@ -108,14 +105,14 @@ String SwMacroField::GetMacroName() const
     }
 
     OSL_FAIL("No MacroName");
-    return aEmptyStr;
+    return OUString();
 }
 
 SvxMacro SwMacroField::GetSvxMacro() const
 {
-  if (bIsScriptURL)
+    if (bIsScriptURL)
     {
-        return SvxMacro(aMacro, String(), EXTENDED_STYPE);
+        return SvxMacro(aMacro, OUString(), EXTENDED_STYPE);
     }
     else
     {
@@ -131,7 +128,7 @@ void SwMacroField::SetPar1(const OUString& rStr)
 }
 
 /// Get macro
-const OUString& SwMacroField::GetPar1() const
+OUString SwMacroField::GetPar1() const
 {
     return aMacro;
 }
@@ -153,16 +150,16 @@ bool SwMacroField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
     switch( nWhichId )
     {
     case FIELD_PROP_PAR1:
-        rAny <<= OUString(GetMacroName());
+        rAny <<= GetMacroName();
         break;
     case FIELD_PROP_PAR2:
-        rAny <<= OUString(aText);
+        rAny <<= aText;
         break;
     case FIELD_PROP_PAR3:
-        rAny <<= OUString(GetLibName());
+        rAny <<= GetLibName();
         break;
     case FIELD_PROP_PAR4:
-        rAny <<= bIsScriptURL ? OUString(GetMacroName()): OUString();
+        rAny <<= bIsScriptURL ? GetMacroName() : OUString();
         break;
     default:
         OSL_FAIL("illegal property");
@@ -200,17 +197,17 @@ bool SwMacroField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 /// create an internally used macro name from the library and macro name parts
 void SwMacroField::CreateMacroString(
     OUString& rMacro,
-    const String& rMacroName,
-    const String& rLibraryName )
+    const OUString& rMacroName,
+    const OUString& rLibraryName )
 {
     // concatenate library and name; use dot only if both strings have content
     rMacro = rLibraryName;
-    if ( rLibraryName.Len() > 0 && rMacroName.Len() > 0 )
+    if ( !rLibraryName.isEmpty() && !rMacroName.isEmpty() )
         rMacro += OUString('.');
     rMacro += rMacroName;
 }
 
-sal_Bool SwMacroField::isScriptURL( const String& str )
+sal_Bool SwMacroField::isScriptURL( const OUString& str )
 {
     uno::Reference< uno::XComponentContext > xContext =
         ::comphelper::getProcessComponentContext();

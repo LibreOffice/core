@@ -20,7 +20,6 @@
 #define SW_FLDBAS_HXX
 
 #include <i18nlangtag/lang.h>
-#include <tools/string.hxx>
 #include "swdllapi.h"
 #include <calbck.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -219,9 +218,9 @@ enum SwDateTimeSubType
 
 
 /// General tools.
-String  GetResult(double nVal, sal_uInt32 nNumFmt, sal_uInt16 nLang = LANGUAGE_SYSTEM);
-void    SetErrorStr(const String& rStr);
-String  FormatNumber(sal_uInt32 nNum, sal_uInt32 nFormat);
+OUString  GetResult(double nVal, sal_uInt32 nNumFmt, sal_uInt16 nLang = LANGUAGE_SYSTEM);
+void      SetErrorStr(const OUString& rStr);
+OUString  FormatNumber(sal_uInt32 nNum, sal_uInt32 nFormat);
 
 /** Instances of SwFields and those derived from it occur 0 to n times.
  For each class there is one instance of the associated type class.
@@ -235,7 +234,7 @@ class SW_DLLPUBLIC SwFieldType : public SwModify
     sal_uInt16 nWhich;
 
     friend void _FinitUI();     ///< In order to delete pointer!
-    static  std::vector<String>* pFldNames;
+    static  std::vector<OUString>* pFldNames;
 
     static void _GetFldName();  ///< Sets up FldNames; fldmgr.cxx!
 
@@ -252,10 +251,10 @@ public:
                     ::com::sun::star::beans::XPropertySet> const& xFieldMaster)
             { m_wXFieldMaster = xFieldMaster; }
 
-    static  const String&   GetTypeStr( sal_uInt16 nTypeId );
+    static OUString    GetTypeStr( sal_uInt16 nTypeId );
 
     /// Only in derived classes.
-    virtual const OUString&   GetName() const;
+    virtual OUString        GetName() const;
     virtual SwFieldType*    Copy()    const = 0;
     virtual bool QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) const;
     virtual bool PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich );
@@ -276,14 +275,14 @@ inline void SwFieldType::UpdateFlds() const
 class SW_DLLPUBLIC SwField
 {
 private:
-    mutable String      m_Cache;     ///< Cached expansion (for clipboard).
+    mutable OUString    m_Cache;     ///< Cached expansion (for clipboard).
     sal_uInt16              nLang;   ///< Always change via SetLanguage!
     sal_Bool                bIsAutomaticLanguage;
     sal_uInt32          nFormat;
 
     SwFieldType*        pType;
 
-    virtual String      Expand() const = 0;
+    virtual OUString    Expand() const = 0;
     virtual SwField*    Copy() const = 0;
 
 protected:
@@ -307,10 +306,10 @@ public:
                     SwTxtFormatter::NewFldPortion() sets things up properly.
         @return     the generated text (suitable for display)
       */
-    String              ExpandField(bool const bCached) const;
+    OUString            ExpandField(bool const bCached) const;
 
     /// @return name or content.
-    virtual String      GetFieldName() const;
+    virtual OUString    GetFieldName() const;
 
     SwField *           CopyField() const;
 
@@ -333,10 +332,10 @@ public:
 
     /// Query parameters for dialog and for BASIC.
     inline sal_uInt32   GetFormat() const;
-    virtual const OUString& GetPar1() const;
-    virtual OUString GetPar2()   const;
+    virtual OUString GetPar1() const;
+    virtual OUString GetPar2() const;
 
-    virtual String      GetFormula() const;
+    virtual OUString    GetFormula() const;
 
     virtual void        ChangeFormat(sal_uInt32 n);
     virtual void        SetPar1(const OUString& rStr);
@@ -352,7 +351,7 @@ public:
     sal_Bool                IsAutomaticLanguage() const { return bIsAutomaticLanguage;}
     void                SetAutomaticLanguage(sal_Bool bSet){bIsAutomaticLanguage = bSet;}
 
-    virtual String      GetDescription() const;
+    virtual OUString    GetDescription() const;
     /// Is this field clickable?
     bool IsClickable() const;
 };
@@ -384,9 +383,9 @@ public:
     inline sal_Bool     UseFormat() const                   { return bUseFormat; }
     inline void     EnableFormat(sal_Bool bFormat = sal_True)   { bUseFormat = bFormat; }
 
-    String          ExpandValue(const double& rVal, sal_uInt32 nFmt, sal_uInt16 nLng=0) const;
-    String          DoubleToString(const double &rVal, LanguageType eLng) const;
-    String          DoubleToString(const double &rVal, sal_uInt32 nFmt) const;
+    OUString        ExpandValue(const double& rVal, sal_uInt32 nFmt, sal_uInt16 nLng=0) const;
+    OUString        DoubleToString(const double &rVal, LanguageType eLng) const;
+    OUString        DoubleToString(const double &rVal, sal_uInt32 nFmt) const;
 };
 
 class SW_DLLPUBLIC SwValueField : public SwField
@@ -408,7 +407,7 @@ public:
     virtual double          GetValue() const;
     virtual void            SetValue( const double& rVal );
 
-    inline String   ExpandValue(const double& rVal, sal_uInt32 nFmt, sal_uInt16 nLng=0) const
+    inline OUString ExpandValue(const double& rVal, sal_uInt32 nFmt, sal_uInt16 nLng=0) const
         { return ((SwValueFieldType*)GetTyp())->ExpandValue(rVal, nFmt, nLng); }
 
     static sal_uInt32       GetSystemFormat(SvNumberFormatter* pFormatter, sal_uInt32 nFmt);
@@ -416,18 +415,18 @@ public:
 
 class SW_DLLPUBLIC SwFormulaField : public SwValueField
 {
-    String sFormula;
+    OUString sFormula;
 
 protected:
     SwFormulaField( SwValueFieldType* pFldType, sal_uInt32 nFmt = 0, const double fVal = 0.0 );
     SwFormulaField( const SwFormulaField& rFld );
 
 public:
-    virtual String          GetFormula() const;
-    void                    SetFormula(const String& rStr);
+    virtual OUString        GetFormula() const;
+    void                    SetFormula(const OUString& rStr);
 
-    void                    SetExpandedFormula(const String& rStr);
-    String                  GetExpandedFormula() const;
+    void                    SetExpandedFormula(const OUString& rStr);
+    OUString                GetExpandedFormula() const;
 };
 
 #endif // SW_FLDBAS_HXX

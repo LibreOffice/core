@@ -51,9 +51,6 @@ SW_DLLPUBLIC void SetCurrGlosGroup(String* pStr);
 
 extern std::vector<String>*   pDBNameList;
 
-extern std::vector<String>*   pAuthFieldNameList;
-extern std::vector<String>*   pAuthFieldTypeList;
-
 // provides textblock management
 class SwGlossaries;
 SW_DLLPUBLIC SwGlossaries* GetGlossaries();

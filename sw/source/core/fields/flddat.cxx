@@ -57,7 +57,7 @@ SwDateTimeField::SwDateTimeField(SwDateTimeFieldType* pInitType, sal_uInt16 nSub
     }
 }
 
-String SwDateTimeField::Expand() const
+OUString SwDateTimeField::Expand() const
 {
     double fVal;
 

@@ -96,30 +96,35 @@ static sal_Int32 lcl_APIToSubType(const uno::Any& rAny)
         return nSet;
 }
 
-void ReplacePoint( String& rTmpName, bool bWithCommandType )
+OUString ReplacePoint( OUString rTmpName, bool bWithCommandType )
 {
     // replace first and last (if bWithCommandType: last two) dot
     // since table names may contain dots
 
-    xub_StrLen nLen = rTmpName.Len();
-    sal_Unicode *pStr = rTmpName.GetBufferAccess(), *pBackStr = pStr + nLen;
+    sal_Int32 nIndex = rTmpName.lastIndexOf('.');
+    if (nIndex<0)
+    {
+        return rTmpName;
+    }
 
-    long nBackCount = bWithCommandType ? 2 : 1;
-    xub_StrLen i;
+    OUString sRes = rTmpName.replaceAt(nIndex, 1, OUString(DB_DELIM));
 
-    for( i = nLen; i; --i, pBackStr-- )
-        if( '.' == *pBackStr )
+    if (bWithCommandType)
+    {
+        nIndex = sRes.lastIndexOf('.', nIndex);
+        if (nIndex<0)
         {
-            *pBackStr = DB_DELIM;
-            if(!--nBackCount)
-                break;
+            return sRes;
         }
-    for( i = 0; i < nLen; ++i, ++pStr )
-        if( '.' == *pStr )
-        {
-            *pStr = DB_DELIM;
-            break;
-        }
+        sRes = sRes.replaceAt(nIndex, 1, OUString(DB_DELIM));
+    }
+
+    nIndex = sRes.indexOf('.');
+    if (nIndex>=0)
+    {
+        sRes = sRes.replaceAt(nIndex, 1, OUString(DB_DELIM));
+    }
+    return sRes;
 }
 
 SwTxtNode* GetFirstTxtNode( const SwDoc& rDoc, SwPosition& rPos,
@@ -267,7 +272,7 @@ void SwGetExpFieldType::Modify( const SfxPoolItem*, const SfxPoolItem* pNew )
     // do not expand anything else
 }
 
-SwGetExpField::SwGetExpField(SwGetExpFieldType* pTyp, const String& rFormel,
+SwGetExpField::SwGetExpField(SwGetExpFieldType* pTyp, const OUString& rFormel,
                             sal_uInt16 nSub, sal_uLong nFmt)
     : SwFormulaField( pTyp, nFmt, 0.0 ),
     bIsInBodyTxt( sal_True ),
@@ -277,23 +282,22 @@ SwGetExpField::SwGetExpField(SwGetExpFieldType* pTyp, const String& rFormel,
     SetFormula( rFormel );
 }
 
-String SwGetExpField::Expand() const
+OUString SwGetExpField::Expand() const
 {
     if(nSubType & nsSwExtendedSubType::SUB_CMD)
         return GetFormula();
-    else
-        return sExpand;
+
+    return sExpand;
 }
 
-String SwGetExpField::GetFieldName() const
+OUString SwGetExpField::GetFieldName() const
 {
-    String aStr( SwFieldType::GetTypeStr(
-        static_cast<sal_uInt16>(((nsSwGetSetExpType::GSE_FORMULA & nSubType) != 0)
-                                            ? TYP_FORMELFLD
-                                            : TYP_GETFLD ) ));
-    aStr += ' ';
-    aStr += GetFormula();
-    return aStr;
+    const sal_uInt16 nType = static_cast<sal_uInt16>(
+        (nsSwGetSetExpType::GSE_FORMULA & nSubType)
+        ? TYP_FORMELFLD
+        : TYP_GETFLD);
+
+    return SwFieldType::GetTypeStr(nType) + " " + GetFormula();
 }
 
 SwField* SwGetExpField::Copy() const
@@ -349,7 +353,7 @@ void SwGetExpField::ChangeExpansion( const SwFrm& rFrm, const SwTxtFld& rFld )
         SwHash** ppHashTbl;
         sal_uInt16 nSize;
         rDoc.FldsToExpand( ppHashTbl, nSize, aEndFld );
-        LookString( ppHashTbl, nSize, GetFormula(), sExpand );
+        sExpand = LookString( ppHashTbl, nSize, GetFormula() );
         ::DeleteHashTable( ppHashTbl, nSize );
     }
     else
@@ -409,7 +413,7 @@ bool SwGetExpField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
          rAny <<= (sal_Int16)nSubType;
         break;
     case FIELD_PROP_PAR1:
-         rAny <<= OUString( GetFormula() );
+         rAny <<= GetFormula();
         break;
     case FIELD_PROP_SUBTYPE:
         {
@@ -424,7 +428,7 @@ bool SwGetExpField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
         }
         break;
     case FIELD_PROP_PAR4:
-        rAny <<= OUString(GetExpStr());
+        rAny <<= GetExpStr();
         break;
     default:
         return SwField::QueryValue(rAny, nWhichId);
@@ -435,7 +439,6 @@ bool SwGetExpField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
 bool SwGetExpField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 {
     sal_Int32 nTmp = 0;
-    String sTmp;
     switch( nWhichId )
     {
     case FIELD_PROP_DOUBLE:
@@ -450,8 +453,12 @@ bool SwGetExpField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
          nSubType = static_cast<sal_uInt16>(nTmp);
         break;
     case FIELD_PROP_PAR1:
-         SetFormula( ::GetString( rAny, sTmp ));
+    {
+        OUString sTmp;
+        rAny >>= sTmp;
+        SetFormula(sTmp);
         break;
+    }
     case FIELD_PROP_SUBTYPE:
         nTmp = lcl_APIToSubType(rAny);
         if( nTmp >=0 )
@@ -464,19 +471,23 @@ bool SwGetExpField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
             nSubType &= (~nsSwExtendedSubType::SUB_CMD);
         break;
     case FIELD_PROP_PAR4:
-        ChgExpStr(::GetString( rAny, sTmp ));
+    {
+        OUString sTmp;
+        rAny >>= sTmp;
+        ChgExpStr(sTmp);
         break;
+    }
     default:
         return SwField::PutValue(rAny, nWhichId);
     }
     return true;
 }
 
-SwSetExpFieldType::SwSetExpFieldType( SwDoc* pDc, const String& rName, sal_uInt16 nTyp )
+SwSetExpFieldType::SwSetExpFieldType( SwDoc* pDc, const OUString& rName, sal_uInt16 nTyp )
     : SwValueFieldType( pDc, RES_SETEXPFLD ),
     sName( rName ),
     pOutlChgNd( 0 ),
-    sDelim( OUString(".") ),
+    sDelim( "." ),
     nType(nTyp), nLevel( UCHAR_MAX ),
     bDeleted( sal_False )
 {
@@ -494,7 +505,7 @@ SwFieldType* SwSetExpFieldType::Copy() const
     return pNew;
 }
 
-const OUString& SwSetExpFieldType::GetName() const
+OUString SwSetExpFieldType::GetName() const
 {
     return sName;
 }
@@ -598,10 +609,10 @@ void SwSetExpFieldType::SetChapter( SwSetExpField& rFld, const SwNode& rNd )
                 const SwNodeNum & aNum = *(pTxtNd->GetNum());
 
                 // nur die Nummer besorgen, ohne Pre-/Post-fixstrings
-                String sNumber( pRule->MakeNumString(aNum, sal_False ));
+                OUString sNumber( pRule->MakeNumString(aNum, sal_False ));
 
-                if( sNumber.Len() )
-                    rFld.ChgExpStr(  ( sNumber += sDelim ) += rFld.GetExpStr() );
+                if( !sNumber.isEmpty() )
+                    rFld.ChgExpStr( sNumber + sDelim + rFld.GetExpStr() );
             }
             else
             {
@@ -622,7 +633,7 @@ bool SwSetExpFieldType::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
         }
         break;
     case FIELD_PROP_PAR2:
-        rAny <<= OUString(GetDelimiter());
+        rAny <<= GetDelimiter();
         break;
     case FIELD_PROP_SHORT1:
         {
@@ -649,11 +660,12 @@ bool SwSetExpFieldType::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
         break;
     case FIELD_PROP_PAR2:
         {
-            String sTmp;
-            if( ::GetString( rAny, sTmp ).Len() )
+            OUString sTmp;
+            rAny >>= sTmp;
+            if( !sTmp.isEmpty() )
                 SetDelimiter( sTmp );
             else
-                SetDelimiter(OUString(" "));
+                SetDelimiter( " " );
         }
         break;
     case FIELD_PROP_SHORT1:
@@ -674,13 +686,16 @@ bool SwSetExpFieldType::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 
 bool SwSeqFldList::InsertSort( _SeqFldLstElem* pNew )
 {
-    sal_Unicode* p = pNew->sDlgEntry.GetBufferAccess();
-    while( *p )
+    OUStringBuffer aBuf(pNew->sDlgEntry);
+    const sal_Int32 nLen = aBuf.getLength();
+    for (sal_Int32 i = 0; i < nLen; ++i)
     {
-        if( *p < 0x20 )
-            *p = 0x20;
-        ++p;
+        if (aBuf[i]<' ')
+        {
+            aBuf[i]=' ';
+        }
     }
+    pNew->sDlgEntry = aBuf.makeStringAndClear();
 
     sal_uInt16 nPos;
     bool bRet = SeekEntry( *pNew, &nPos );
@@ -699,11 +714,11 @@ bool SwSeqFldList::SeekEntry( const _SeqFldLstElem& rNew, sal_uInt16* pP ) const
         const CharClass& rCC = GetAppCharClass();
 
         //#59900# Sorting should sort number correctly (e.g. "10" after "9" not after "1")
-        const String& rTmp2 = rNew.sDlgEntry;
+        const OUString rTmp2 = rNew.sDlgEntry;
         sal_Int32 nFndPos2 = 0;
-        String sNum2( rTmp2.GetToken( 0, ' ', nFndPos2 ));
+        const OUString sNum2( rTmp2.getToken( 0, ' ', nFndPos2 ));
         sal_Bool bIsNum2IsNumeric = rCC.isAsciiNumeric( sNum2 );
-        sal_Int32 nNum2 = bIsNum2IsNumeric ? sNum2.ToInt32() : 0;
+        sal_Int32 nNum2 = bIsNum2IsNumeric ? sNum2.toInt32() : 0;
 
         nO--;
         while( nU <= nO )
@@ -711,18 +726,18 @@ bool SwSeqFldList::SeekEntry( const _SeqFldLstElem& rNew, sal_uInt16* pP ) const
             nM = nU + ( nO - nU ) / 2;
 
             //#59900# Sorting should sort number correctly (e.g. "10" after "9" not after "1")
-            const String& rTmp1 = maData[nM]->sDlgEntry;
+            const OUString rTmp1 = maData[nM]->sDlgEntry;
             sal_Int32 nFndPos1 = 0;
-            String sNum1( rTmp1.GetToken( 0, ' ', nFndPos1 ));
+            const OUString sNum1( rTmp1.getToken( 0, ' ', nFndPos1 ));
             sal_Int32 nCmp;
 
             if( bIsNum2IsNumeric && rCC.isNumeric( sNum1 ) )
             {
-                sal_Int32 nNum1 = sNum1.ToInt32();
+                sal_Int32 nNum1 = sNum1.toInt32();
                 nCmp = nNum2 - nNum1;
                 if( 0 == nCmp )
-                    nCmp = rCaseColl.compareString( rTmp2.Copy( nFndPos2 ),
-                                                       rTmp1.Copy( nFndPos1 ));
+                    nCmp = rCaseColl.compareString( rTmp2.copy( nFndPos2 ),
+                                                    rTmp1.copy( nFndPos1 ));
             }
             else
                 nCmp = rColl.compareString( rTmp2, rTmp1 );
@@ -744,7 +759,7 @@ bool SwSeqFldList::SeekEntry( const _SeqFldLstElem& rNew, sal_uInt16* pP ) const
     return false;
 }
 
-SwSetExpField::SwSetExpField(SwSetExpFieldType* pTyp, const String& rFormel,
+SwSetExpField::SwSetExpField(SwSetExpFieldType* pTyp, const OUString& rFormel,
                                         sal_uLong nFmt)
     : SwFormulaField( pTyp, nFmt, 0.0 ), nSeqNo( USHRT_MAX ),
     nSubType(0)
@@ -755,35 +770,28 @@ SwSetExpField::SwSetExpField(SwSetExpFieldType* pTyp, const String& rFormel,
     if( IsSequenceFld() )
     {
         SwValueField::SetValue(1.0);
-        if( !rFormel.Len() )
+        if( rFormel.isEmpty() )
         {
-            String sFormel(rFormel);
-            sFormel += pTyp->GetName();
-            sFormel += '+';
-            sFormel += '1';
-            SetFormula(sFormel);
+            SetFormula(pTyp->GetName() + "+1");
         }
     }
 }
 
-String SwSetExpField::Expand() const
+OUString SwSetExpField::Expand() const
 {
-    String aStr;
     if (nSubType & nsSwExtendedSubType::SUB_CMD)
     {   // we need the CommandString
-        aStr = GetTyp()->GetName();
-        aStr.AppendAscii( RTL_CONSTASCII_STRINGPARAM( " = " ));
-        aStr += GetFormula();
+        return GetTyp()->GetName() + " = " + GetFormula();
     }
-    else if(!(nSubType & nsSwExtendedSubType::SUB_INVISIBLE))
+    if(!(nSubType & nsSwExtendedSubType::SUB_INVISIBLE))
     {   // value is visible
-        aStr = sExpand;
+        return sExpand;
     }
-    return aStr;
+    return OUString();
 }
 
 /// @return the field name
-String SwSetExpField::GetFieldName() const
+OUString SwSetExpField::GetFieldName() const
 {
     SwFldTypesEnum const nStrType( (IsSequenceFld())
                             ? TYP_SEQFLD
@@ -791,15 +799,15 @@ String SwSetExpField::GetFieldName() const
                                 ? TYP_SETINPFLD
                                 : TYP_SETFLD   );
 
-    String aStr( SwFieldType::GetTypeStr( static_cast<sal_uInt16>(nStrType) ) );
-    aStr += ' ';
-    aStr += GetTyp()->GetName();
+    OUString aStr(
+        SwFieldType::GetTypeStr( static_cast<sal_uInt16>(nStrType) )
+        + " "
+        + GetTyp()->GetName() );
 
     // Sequence: without formula
     if (TYP_SEQFLD != nStrType)
     {
-        aStr.AppendAscii( RTL_CONSTASCII_STRINGPARAM( " = " ) );
-        aStr += GetFormula();
+        aStr += " = " + GetFormula();
     }
     return aStr;
 }
@@ -865,10 +873,12 @@ xub_StrLen SwGetExpField::GetReferenceTextPos( const SwFmtFld& rFmt, SwDoc& rDoc
     const SwTxtNode& rTxtNode = pTxtFld->GetTxtNode();
     //
     xub_StrLen nRet = nHint ? nHint : *pTxtFld->GetStart() + 1;
-    String sNodeText = rTxtNode.GetTxt();
-    sNodeText.Erase(0, nRet);
-    if(sNodeText.Len())
+    OUString sNodeText = rTxtNode.GetTxt();
+
+    if(nRet<sNodeText.getLength())
     {
+        sNodeText = sNodeText.copy(nRet);
+
         // now check if sNodeText starts with a non-alphanumeric character plus blanks
         sal_uInt16 nSrcpt = g_pBreakIt->GetRealScriptOfText( sNodeText, 0 );
 
@@ -892,26 +902,26 @@ xub_StrLen SwGetExpField::GetReferenceTextPos( const SwFmtFld& rFmt, SwDoc& rDoc
                 GetWhichOfScript( RES_CHRATR_LANGUAGE, nSrcpt )) ).GetLanguage();
             LanguageTag aLanguageTag( eLang);
             CharClass aCC( aLanguageTag);
-            sal_Unicode c0 = sNodeText.GetChar(0);
+            sal_Unicode c0 = sNodeText[0];
             sal_Bool bIsAlphaNum = aCC.isAlphaNumeric( sNodeText, 0 );
             if( !bIsAlphaNum ||
                 (c0 == ' ' || c0 == '\t'))
             {
                 // ignoring blanks
                 nRet++;
-                unsigned i = 1;
-                while (i < sNodeText.Len() &&
-                    (sNodeText.GetChar(i) == ' ' ||
-                     sNodeText.GetChar(i) == '\t')
+                const sal_Int32 nLen = sNodeText.getLength();
+                for (sal_Int32 i = 1;
+                     i<nLen && (sNodeText[i]==' ' || sNodeText[i]=='\t');
+                     ++i
                 )
-                    nRet++, i++;
+                    ++nRet;
             }
         }
     }
     return nRet;
 }
 
-const OUString& SwSetExpField::GetPar1() const
+OUString SwSetExpField::GetPar1() const
 {
     return ((const SwSetExpFieldType*)GetTyp())->GetName();
 }
@@ -949,20 +959,18 @@ SwFieldType* SwInputFieldType::Copy() const
     return pType;
 }
 
-SwInputField::SwInputField(SwInputFieldType* pTyp, const String& rContent,
-                           const String& rPrompt, sal_uInt16 nSub, sal_uLong nFmt) :
+SwInputField::SwInputField(SwInputFieldType* pTyp, const OUString& rContent,
+                           const OUString& rPrompt, sal_uInt16 nSub, sal_uLong nFmt) :
     SwField(pTyp, nFmt), aContent(rContent), aPText(rPrompt), nSubType(nSub)
 {
 }
 
-String SwInputField::GetFieldName() const
+OUString SwInputField::GetFieldName() const
 {
-    String aStr(SwField::GetFieldName());
+    OUString aStr(SwField::GetFieldName());
     if ((nSubType & 0x00ff) == INP_USR)
     {
-        aStr += GetTyp()->GetName();
-        aStr += ' ';
-        aStr += aContent;
+        aStr += GetTyp()->GetName() + " " + aContent;
     }
     return aStr;
 }
@@ -979,21 +987,21 @@ SwField* SwInputField::Copy() const
     return pFld;
 }
 
-String SwInputField::Expand() const
+OUString SwInputField::Expand() const
 {
-    String sRet;
     if((nSubType & 0x00ff) == INP_TXT)
-        sRet = aContent;
+        return aContent;
 
-    else if( (nSubType & 0x00ff) == INP_USR )
+    if( (nSubType & 0x00ff) == INP_USR )
     {
         SwUserFieldType* pUserTyp = (SwUserFieldType*)
                             ((SwInputFieldType*)GetTyp())->GetDoc()->
                             GetFldType( RES_USERFLD, aContent, false );
         if( pUserTyp )
-            sRet = pUserTyp->GetContent();
+            return pUserTyp->GetContent();
     }
-    return sRet;
+
+    return OUString();
 }
 
 bool SwInputField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
@@ -1001,16 +1009,16 @@ bool SwInputField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
     switch( nWhichId )
     {
     case FIELD_PROP_PAR1:
-         rAny <<= OUString( aContent );
+         rAny <<= aContent;
         break;
     case FIELD_PROP_PAR2:
-        rAny <<= OUString( aPText );
+        rAny <<= aPText;
         break;
     case FIELD_PROP_PAR3:
-        rAny <<= OUString( aHelp );
+        rAny <<= aHelp;
         break;
     case FIELD_PROP_PAR4:
-        rAny <<= OUString( aToolTip );
+        rAny <<= aToolTip;
         break;
     default:
         OSL_FAIL("illegal property");
@@ -1023,16 +1031,16 @@ bool SwInputField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
     switch( nWhichId )
     {
     case FIELD_PROP_PAR1:
-         rAny >>= aContent;
+        rAny >>= aContent;
         break;
     case FIELD_PROP_PAR2:
-        ::GetString( rAny, aPText );
+        rAny >>= aPText;
         break;
     case FIELD_PROP_PAR3:
-        ::GetString( rAny, aHelp );
+        rAny >>= aHelp;
         break;
     case FIELD_PROP_PAR4:
-        ::GetString( rAny, aToolTip );
+        rAny >>= aToolTip;
         break;
     default:
         OSL_FAIL("illegal property");
@@ -1046,7 +1054,7 @@ void SwInputField::SetPar1(const OUString& rStr)
     aContent = rStr;
 }
 
-const OUString& SwInputField::GetPar1() const
+OUString SwInputField::GetPar1() const
 {
     return aContent;
 }
@@ -1062,29 +1070,29 @@ OUString SwInputField::GetPar2() const
     return aPText;
 }
 
-void SwInputField::SetHelp(const String & rStr)
+void SwInputField::SetHelp(const OUString & rStr)
 {
     aHelp = rStr;
 }
 
-String SwInputField::GetHelp() const
+OUString SwInputField::GetHelp() const
 {
     return aHelp;
 }
 
-void SwInputField::SetToolTip(const String & rStr)
+void SwInputField::SetToolTip(const OUString & rStr)
 {
     aToolTip = rStr;
 }
 
-String SwInputField::GetToolTip() const
+OUString SwInputField::GetToolTip() const
 {
     return aToolTip;
 }
 
 sal_Bool SwInputField::isFormField() const
 {
-    return aHelp.Len() > 0 || aToolTip.Len() > 0;
+    return !aHelp.isEmpty() || !aToolTip.isEmpty();
 }
 
 sal_uInt16 SwInputField::GetSubType() const
@@ -1120,13 +1128,10 @@ bool SwSetExpField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
         rAny <<= OUString ( SwStyleNameMapper::GetProgName(GetPar1(), nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL ) );
         break;
     case FIELD_PROP_PAR2:
-        {
-            //I18N - if the formula contains only "TypeName+1"
-            //and it's one of the initially created sequence fields
-            //then the localized names has to be replaced by a programmatic name
-            OUString sMyFormula = SwXFieldMaster::LocalizeFormula(*this, GetFormula(), sal_True);
-            rAny <<= OUString( sMyFormula );
-        }
+        //I18N - if the formula contains only "TypeName+1"
+        //and it's one of the initially created sequence fields
+        //then the localized names has to be replaced by a programmatic name
+        rAny <<= SwXFieldMaster::LocalizeFormula(*this, GetFormula(), sal_True);
         break;
     case FIELD_PROP_DOUBLE:
         rAny <<= (double)GetValue();
@@ -1139,7 +1144,7 @@ bool SwSetExpField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
         }
         break;
     case FIELD_PROP_PAR3:
-        rAny <<= OUString( aPText );
+        rAny <<= aPText;
         break;
     case FIELD_PROP_BOOL3:
         {
@@ -1154,7 +1159,7 @@ bool SwSetExpField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
         }
         break;
     case FIELD_PROP_PAR4:
-        rAny <<= OUString(GetExpStr());
+        rAny <<= GetExpStr();
         break;
     default:
         return SwField::QueryValue(rAny, nWhichId);
@@ -1166,7 +1171,6 @@ bool SwSetExpField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 {
     sal_Int32 nTmp32 = 0;
     sal_Int16 nTmp16 = 0;
-    String sTmp;
     switch( nWhichId )
     {
     case FIELD_PROP_BOOL2:
@@ -1193,8 +1197,11 @@ bool SwSetExpField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
         nSeqNo = nTmp16;
         break;
     case FIELD_PROP_PAR1:
-        SetPar1( SwStyleNameMapper::GetUIName(
-                            ::GetString( rAny, sTmp ), nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL ) );
+        {
+            OUString sTmp;
+            rAny >>= sTmp;
+            SetPar1( SwStyleNameMapper::GetUIName( sTmp, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL ) );
+        }
         break;
     case FIELD_PROP_PAR2:
         {
@@ -1203,8 +1210,7 @@ bool SwSetExpField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
             //I18N - if the formula contains only "TypeName+1"
             //and it's one of the initially created sequence fields
             //then the localized names has to be replaced by a programmatic name
-            OUString sMyFormula = SwXFieldMaster::LocalizeFormula(*this, uTmp, sal_False);
-            SetFormula( sMyFormula );
+            SetFormula( SwXFieldMaster::LocalizeFormula(*this, uTmp, sal_False) );
         }
         break;
     case FIELD_PROP_DOUBLE:
@@ -1220,7 +1226,7 @@ bool SwSetExpField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
             SetSubType(static_cast<sal_uInt16>((GetSubType() & 0xff00) | nTmp32));
         break;
     case FIELD_PROP_PAR3:
-        ::GetString( rAny, aPText );
+        rAny >>= aPText;
         break;
     case FIELD_PROP_BOOL3:
         if(*(sal_Bool*) rAny.getValue())
@@ -1232,7 +1238,11 @@ bool SwSetExpField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
         SetInputFlag(*(sal_Bool*) rAny.getValue());
         break;
     case FIELD_PROP_PAR4:
-        ChgExpStr( ::GetString( rAny, sTmp ));
+        {
+            OUString sTmp;
+            rAny >>= sTmp;
+            ChgExpStr( sTmp );
+        }
         break;
     default:
         return SwField::PutValue(rAny, nWhichId);

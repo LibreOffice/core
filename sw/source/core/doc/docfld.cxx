@@ -984,15 +984,14 @@ _HashStr::_HashStr( const String& rName, const String& rText,
 }
 
 /// Look up the Name, if it is present, return it's String, otherwise return an empty String
-void LookString( SwHash** ppTbl, sal_uInt16 nSize, const String& rName,
-                    String& rRet, sal_uInt16* pPos )
+OUString LookString( SwHash** ppTbl, sal_uInt16 nSize, const OUString& rName,
+                     sal_uInt16* pPos )
 {
-    rRet = comphelper::string::strip(rName, ' ');
-    SwHash* pFnd = Find( rRet, ppTbl, nSize, pPos );
+    SwHash* pFnd = Find( comphelper::string::strip(rName, ' '), ppTbl, nSize, pPos );
     if( pFnd )
-        rRet = ((_HashStr*)pFnd)->aSetStr;
-    else
-        rRet.Erase();
+        return ((_HashStr*)pFnd)->aSetStr;
+
+    return OUString();
 }
 
 static String lcl_GetDBVarName( SwDoc& rDoc, SwDBNameInfField& rDBFld )
@@ -1145,8 +1144,7 @@ void SwDoc::FldsToExpand( SwHash**& ppHashTbl, sal_uInt16& rTblSize,
                 // set the new value in the hash table
                 // is the formula a field?
                 SwSetExpField* pSFld = (SwSetExpField*)pFld;
-                String aNew;
-                LookString( ppHashTbl, rTblSize, pSFld->GetFormula(), aNew );
+                String aNew = LookString( ppHashTbl, rTblSize, pSFld->GetFormula() );
 
                 if( !aNew.Len() )               // nothing found, then the formula is
                     aNew = pSFld->GetFormula(); // the new value
@@ -1392,8 +1390,8 @@ void SwDoc::UpdateExpFlds( SwTxtFld* pUpdtFld, bool bUpdRefFlds )
                     if( (!pUpdtFld || pUpdtFld == pTxtFld )
                         && pGFld->IsInBodyTxt() )
                     {
-                        LookString( pHashStrTbl, nStrFmtCnt,
-                                    pGFld->GetFormula(), aNew );
+                        aNew = LookString( pHashStrTbl, nStrFmtCnt,
+                                    pGFld->GetFormula() );
                         pGFld->ChgExpStr( aNew );
                     }
                 }
@@ -1401,8 +1399,8 @@ void SwDoc::UpdateExpFlds( SwTxtFld* pUpdtFld, bool bUpdRefFlds )
                 {
                     SwSetExpField* pSFld = (SwSetExpField*)pFld;
                     // is the "formula" a field?
-                    LookString( pHashStrTbl, nStrFmtCnt,
-                                pSFld->GetFormula(), aNew );
+                    aNew = LookString( pHashStrTbl, nStrFmtCnt,
+                                pSFld->GetFormula() );
 
                     if( !aNew.Len() )               // nothing found then the formula is the new value
                         aNew = pSFld->GetFormula();
@@ -2261,11 +2259,11 @@ void SwDocUpdtFld::_MakeFldList( SwDoc& rDoc, int eGetMode )
         }
     }
 
-    OUString sTrue("TRUE"), sFalse("FALSE");
+    const OUString sTrue("TRUE");
+    const OUString sFalse("FALSE");
 
     bool bIsDBMgr = 0 != rDoc.GetNewDBMgr();
     sal_uInt16 nWhich, n;
-    const OUString* pFormel = 0;
     const SfxPoolItem* pItem;
     sal_uInt32 nMaxItems = rDoc.GetAttrPool().GetItemCount2( RES_TXTATR_FIELD );
     for( n = 0; n < nMaxItems; ++n )
@@ -2278,40 +2276,41 @@ void SwDocUpdtFld::_MakeFldList( SwDoc& rDoc, int eGetMode )
         if( !pTxtFld || !pTxtFld->GetTxtNode().GetNodes().IsDocNodes() )
             continue;
 
+        OUString sFormel;
         const SwField* pFld = pFmtFld->GetFld();
         switch( nWhich = pFld->GetTyp()->Which() )
         {
             case RES_DBSETNUMBERFLD:
             case RES_GETEXPFLD:
                 if( GETFLD_ALL == eGetMode )
-                    pFormel = &sTrue;
+                    sFormel = sTrue;
                 break;
 
             case RES_DBFLD:
                 if( GETFLD_EXPAND & eGetMode )
-                    pFormel = &sTrue;
+                    sFormel = sTrue;
                 break;
 
             case RES_SETEXPFLD:
                 if ( !(eGetMode == GETFLD_EXPAND) ||
                      (nsSwGetSetExpType::GSE_STRING & pFld->GetSubType()) )
                 {
-                    pFormel = &sTrue;
+                    sFormel = sTrue;
                 }
                 break;
 
             case RES_HIDDENPARAFLD:
                 if( GETFLD_ALL == eGetMode )
                 {
-                    pFormel = &pFld->GetPar1();
-                    if (pFormel->isEmpty() || pFormel->equals(sFalse))
+                    sFormel = pFld->GetPar1();
+                    if (sFormel.isEmpty() || sFormel==sFalse)
                         ((SwHiddenParaField*)pFld)->SetHidden( sal_False );
-                    else if (pFormel->equals(sTrue))
+                    else if (sFormel==sTrue)
                         ((SwHiddenParaField*)pFld)->SetHidden( sal_True );
                     else
                         break;
 
-                    pFormel = 0;
+                    sFormel = OUString();
                     // trigger formatting
                     ((SwFmtFld*)pFmtFld)->ModifyNotification( 0, 0 );
                 }
@@ -2320,15 +2319,15 @@ void SwDocUpdtFld::_MakeFldList( SwDoc& rDoc, int eGetMode )
             case RES_HIDDENTXTFLD:
                 if( GETFLD_ALL == eGetMode )
                 {
-                    pFormel = &pFld->GetPar1();
-                    if (pFormel->isEmpty() || pFormel->equals(sFalse))
+                    sFormel = pFld->GetPar1();
+                    if (sFormel.isEmpty() || sFormel==sFalse)
                         ((SwHiddenTxtField*)pFld)->SetValue( sal_True );
-                    else if (pFormel->equals(sTrue))
+                    else if (sFormel==sTrue)
                         ((SwHiddenTxtField*)pFld)->SetValue( sal_False );
                     else
                         break;
 
-                    pFormel = 0;
+                    sFormel = OUString();
 
                     // evaluate field
                     ((SwHiddenTxtField*)pFld)->Evaluate(&rDoc);
@@ -2346,7 +2345,7 @@ void SwDocUpdtFld::_MakeFldList( SwDoc& rDoc, int eGetMode )
                      (GETFLD_ALL == eGetMode || (GETFLD_CALC & eGetMode && ((SwDBNumSetField*)pFld)->IsCondValid()))
                    )
                 {
-                    pFormel = &pFld->GetPar1();
+                    sFormel = pFld->GetPar1();
                 }
             }
             break;
@@ -2359,16 +2358,15 @@ void SwDocUpdtFld::_MakeFldList( SwDoc& rDoc, int eGetMode )
                      (GETFLD_ALL == eGetMode || (GETFLD_CALC & eGetMode && ((SwDBNextSetField*)pFld)->IsCondValid()))
                    )
                 {
-                    pFormel = &pFld->GetPar1();
+                    sFormel = pFld->GetPar1();
                 }
             }
             break;
         }
 
-        if (pFormel && !pFormel->isEmpty())
+        if (!sFormel.isEmpty())
         {
             GetBodyNode( *pTxtFld, nWhich );
-            pFormel = 0;
         }
     }
     nFldLstGetMode = static_cast<sal_uInt8>( eGetMode );

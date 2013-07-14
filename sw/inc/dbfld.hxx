@@ -35,21 +35,21 @@ class SW_DLLPUBLIC SwDBFieldType : public SwValueFieldType
 {
     SwDBData    aDBData;        //
     OUString sName;          ///< only used in ::GetName() !
-    String      sColumn;
+    OUString sColumn;
     long        nRefCnt;
 
 public:
 
-    SwDBFieldType(SwDoc* pDocPtr, const String& rColumnName, const SwDBData& rDBData);
+    SwDBFieldType(SwDoc* pDocPtr, const OUString& rColumnName, const SwDBData& rDBData);
     ~SwDBFieldType();
 
-    virtual const OUString& GetName() const;
+    virtual OUString GetName() const;
     virtual SwFieldType*  Copy() const;
 
     inline void     AddRef() { nRefCnt++; }
     void            ReleaseRef();
 
-    const String&   GetColumnName() const {return sColumn;}
+    OUString        GetColumnName() const {return sColumn;}
     const SwDBData& GetDBData() const {return aDBData;}
 
     virtual bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) const;
@@ -70,7 +70,7 @@ class SW_DLLPUBLIC SwDBField : public SwValueField
     bool    bValidValue     : 1;
     bool    bInitialized    : 1;
 
-    virtual String      Expand() const;
+    virtual OUString    Expand() const;
     virtual SwField*    Copy() const;
 
 public:
@@ -80,12 +80,12 @@ public:
     virtual SwFieldType*    ChgTyp( SwFieldType* );
 
     /// Current text.
-    inline  void        SetExpansion(const String& rStr);
+    inline  void        SetExpansion(const OUString& rStr);
 
     virtual sal_uInt16      GetSubType() const;
     virtual void        SetSubType(sal_uInt16 nType);
 
-    virtual String      GetFieldName() const;
+    virtual OUString    GetFieldName() const;
 
     /// For calculations in expressions.
     void                ChgValue( double d, bool bVal );
@@ -96,7 +96,7 @@ public:
     /// Evaluation for header and footer.
     void                ChangeExpansion( const SwFrm*, const SwTxtFld* );
     void                InitContent();
-    void                InitContent(const String& rExpansion);
+    void                InitContent(const OUString& rExpansion);
 
     inline void         ChgBodyTxtFlag( bool bIsInBody );
 
@@ -105,10 +105,10 @@ public:
     inline void         SetInitialized()        { bInitialized = true; }
 
     /// Get name.
-    virtual const OUString& GetPar1() const;
+    virtual OUString    GetPar1() const;
 
     /// access to the command string
-    const OUString& GetFieldCode() const { return sFieldCode;}
+    OUString            GetFieldCode() const { return sFieldCode;}
     void                SetFieldCode(const OUString& rStr) { sFieldCode = rStr; }
 
     /// DBName
@@ -117,7 +117,7 @@ public:
     virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich );
 };
 
-inline  void SwDBField::SetExpansion(const String& rStr)
+inline  void SwDBField::SetExpansion(const OUString& rStr)
     { aContent = rStr; }
 
 /// set from UpdateExpFlds (the Node-Position is known there)
@@ -146,7 +146,7 @@ public:
     SwDBData                GetDBData(SwDoc* pDoc);
     void                    SetDBData(const SwDBData& rDBData);
 
-    virtual String          GetFieldName() const;
+    virtual OUString        GetFieldName() const;
 
     virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) const;
     virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich );
@@ -177,9 +177,9 @@ class SW_DLLPUBLIC SwDBNextSetField : public SwDBNameInfField
 
 public:
     SwDBNextSetField( SwDBNextSetFieldType*,
-                      const String& rCond, const String& rDummy, const SwDBData& rDBData);
+                      const OUString& rCond, const OUString& rDummy, const SwDBData& rDBData);
 
-    virtual String          Expand() const;
+    virtual OUString        Expand() const;
     virtual SwField*        Copy() const;
 
     void                    Evaluate(SwDoc*);
@@ -187,7 +187,7 @@ public:
     inline bool             IsCondValid() const;
 
     // Condition
-    virtual const OUString&   GetPar1() const;
+    virtual OUString    GetPar1() const;
     virtual void        SetPar1(const OUString& rStr);
     virtual bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) const;
     virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich );
@@ -219,13 +219,13 @@ public:
 class SwDBNumSetField : public SwDBNameInfField
 {
     OUString  aCond;
-    String  aPar2;
+    OUString  aPar2;
     bool    bCondValid;
 
 public:
-    SwDBNumSetField(SwDBNumSetFieldType*, const String& rCond, const String& rDBNum, const SwDBData& rDBData);
+    SwDBNumSetField(SwDBNumSetFieldType*, const OUString& rCond, const OUString& rDBNum, const SwDBData& rDBData);
 
-    virtual String          Expand() const;
+    virtual OUString        Expand() const;
     virtual SwField*        Copy() const;
 
     inline bool             IsCondValid() const;
@@ -233,7 +233,7 @@ public:
     void                    Evaluate(SwDoc*);
 
     // Condition
-    virtual const OUString&   GetPar1() const;
+    virtual OUString        GetPar1() const;
     virtual void            SetPar1(const OUString& rStr);
 
     // Number of data record.
@@ -261,7 +261,7 @@ class SwDBNameFieldType : public SwFieldType
 public:
     SwDBNameFieldType(SwDoc*);
 
-    String                  Expand(sal_uLong) const;
+    OUString                Expand(sal_uLong) const;
     virtual SwFieldType*    Copy() const;
 };
 
@@ -274,7 +274,7 @@ class SW_DLLPUBLIC SwDBNameField : public SwDBNameInfField
 public:
     SwDBNameField(SwDBNameFieldType*, const SwDBData& rDBData, sal_uLong nFmt = 0);
 
-    virtual String   Expand() const;
+    virtual OUString Expand() const;
     virtual SwField* Copy() const;
     virtual bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) const;
     virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich );
@@ -303,7 +303,7 @@ class SW_DLLPUBLIC SwDBSetNumberField : public SwDBNameInfField
 public:
     SwDBSetNumberField(SwDBSetNumberFieldType*, const SwDBData& rDBData, sal_uLong nFmt = 0);
 
-    virtual String  Expand() const;
+    virtual OUString Expand() const;
     virtual         SwField* Copy() const;
     void            Evaluate(SwDoc*);
 

@@ -20,8 +20,6 @@
 #ifndef SW_FLDDAT_HXX
 #define SW_FLDDAT_HXX
 
-#include <tools/string.hxx>
-
 #include "fldbas.hxx"
 
 class DateTime;
@@ -98,7 +96,7 @@ class SW_DLLPUBLIC SwDateTimeField : public SwValueField
         sal_uInt16              nSubType;
         long                nOffset;    // Offset in minutes.
 
-        virtual String      Expand() const;
+        virtual OUString    Expand() const;
         virtual SwField*    Copy() const;
 
 public:

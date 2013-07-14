@@ -1214,7 +1214,7 @@ IMPL_LINK( SwAuthorMarkPane, CompEntryHdl, ListBox*, pBox)
             const SwAuthEntry*  pEntry = pFType ? pFType->GetEntryByIdentifier(sEntry) : 0;
             for(sal_uInt16 i = 0; i < AUTH_FIELD_END; i++)
                 m_sFields[i] = pEntry ?
-                            pEntry->GetAuthorField((ToxAuthorityField)i) : aEmptyStr;
+                            pEntry->GetAuthorField((ToxAuthorityField)i) : OUString();
         }
     }
     if(!pBox->GetSelectEntry().Len())
@@ -1376,7 +1376,7 @@ IMPL_LINK(SwAuthorMarkPane, ChangeSourceHdl, RadioButton*, pButton)
                                     pSh->GetFldType(RES_AUTHORITY, aEmptyStr);
         if(pFType)
         {
-            std::vector<String> aIds;
+            std::vector<OUString> aIds;
             pFType->GetAllEntryIdentifiers( aIds );
             for(size_t n = 0; n < aIds.size(); ++n)
                 m_pEntryLB->InsertEntry(aIds[n]);
@@ -1523,7 +1523,7 @@ SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(Window* pParent,
                                         rSh.GetFldType(RES_AUTHORITY, aEmptyStr);
             if(pFType)
             {
-                std::vector<String> aIds;
+                std::vector<OUString> aIds;
                 pFType->GetAllEntryIdentifiers( aIds );
                 for(size_t n = 0; n < aIds.size(); ++n)
                     pIdentifierBox->InsertEntry(aIds[n]);
