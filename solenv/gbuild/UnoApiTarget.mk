@@ -114,7 +114,13 @@ $(if $(UNOAPI_FILES),,$(error No IDL files have been set for the rdb file))
 $(if $(UNOAPI_ROOT),,$(error No root has been set for the rdb file))
 endef
 
+# This recipe actually also builds the dep-target as a side-effect, which
+# is an optimization to reduce incremental build time.
+# Note this requires the variable UNOAPI_DEPFILES to be in sync on both targets.
 $(call gb_UnoApiTarget_get_target,%) :
+ifeq ($(gb_FULLDEPS),$(true))
+	$(call gb_UnoApiTarget__command_dep,$(call gb_UnoApiTarget_get_dep_target,$*),$*)
+endif
 	$(call gb_UnoApiTarget__check_mode)
 	$(call gb_UnoApiTarget__command,$@,$*)
 
@@ -134,7 +140,7 @@ $(call gb_Output_announce,IDL:$(2),$(true),DEP,1)
 $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) && \
 	RESPONSEFILE=$(call var2file,$(shell $(gb_MKTEMP)),200,\
-		$(foreach idl,$(patsubst %.idl,%,$(3)),$(call gb_UnoApiPartTarget_get_dep_target,$(idl)))) && \
+		$(foreach idl,$(UNOAPI_DEPFILES),$(call gb_UnoApiPartTarget_get_dep_target,$(idl)))) && \
 	$(call gb_Executable_get_command,concat-deps) $${RESPONSEFILE} > $(1)) && \
 	rm -f $${RESPONSEFILE}
 
@@ -148,7 +154,7 @@ $(dir $(call gb_UnoApiTarget_get_dep_target,%))%/.dir :
 	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
 
 $(call gb_UnoApiTarget_get_dep_target,%) : $(call gb_Executable_get_runtime_dependencies,concat-deps)
-	$(call gb_UnoApiTarget__command_dep,$@,$*,$(UNOAPI_IDLFILES))
+	$(call gb_UnoApiTarget__command_dep,$@,$*)
 
 endif
 
@@ -160,7 +166,8 @@ $(call gb_UnoApiTarget_get_target,$(1)) : UNOAPI_ROOT :=
 $(call gb_UnoApiTarget_get_target,$(1)) : UNOAPI_DEPRDBS :=
 
 ifeq ($(gb_FULLDEPS),$(true))
-$(call gb_UnoApiTarget_get_dep_target,$(1)) : UNOAPI_IDLFILES :=
+$(call gb_UnoApiTarget_get_target,$(1)) : UNOAPI_DEPFILES :=
+$(call gb_UnoApiTarget_get_dep_target,$(1)) : UNOAPI_DEPFILES :=
 -include $(call gb_UnoApiTarget_get_dep_target,$(1))
 $(call gb_UnoApiTarget_get_dep_target,$(1)) :| $(dir $(call gb_UnoApiTarget_get_dep_target,$(1))).dir
 endif
@@ -182,7 +189,8 @@ $(call gb_UnoApiPartTarget_get_target,$(2)/$(3).urd) \
 	| $(call gb_UnoApiPartTarget_get_target,$(2)/.dir)
 
 ifeq ($(gb_FULLDEPS),$(true))
-$(call gb_UnoApiTarget_get_dep_target,$(1)) : UNOAPI_IDLFILES += $(2)/$(3).idl
+$(call gb_UnoApiTarget_get_target,$(1)) : UNOAPI_DEPFILES += $(2)/$(3)
+$(call gb_UnoApiTarget_get_dep_target,$(1)) : UNOAPI_DEPFILES += $(2)/$(3)
 $(call gb_UnoApiTarget_get_dep_target,$(1)) : \
 	$(call gb_UnoApiPartTarget_get_dep_target,$(2)/$(3))
 $(call gb_UnoApiPartTarget_get_dep_target,$(2)/$(3)) :| $(dir $(call gb_UnoApiPartTarget_get_dep_target,$(2)/$(3))).dir

@@ -227,7 +227,8 @@ define gb_SrsTarget__command_dep
 $(call gb_Output_announce,SRS:$(2),$(true),DEP,1)
 $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) && \
-	RESPONSEFILE=$(call var2file,$(shell $(gb_MKTEMP)),200,$(3)) && \
+	RESPONSEFILE=$(call var2file,$(shell $(gb_MKTEMP)),200,\
+		$(foreach part,$(PARTS),$(call gb_SrsPartTarget_get_dep_target,$(part)))) && \
 	$(call gb_Executable_get_command,concat-deps) $${RESPONSEFILE} > $(1)) && \
 	rm -f $${RESPONSEFILE}
 endef
@@ -237,7 +238,12 @@ $(call gb_SrsTarget_get_headers_target,%) :
 	$(call gb_Helper_abbreviate_dirs,\
 	    mkdir -p $(dir $@) && touch $@)
 
+# This recipe actually also builds the dep-target as a side-effect, which
+# is an optimization to reduce incremental build time.
 $(call gb_SrsTarget_get_target,%) :
+ifeq ($(gb_FULLDEPS),$(true))
+	$(call gb_SrsTarget__command_dep,$(call gb_SrsTarget_get_dep_target,$*),$*)
+endif
 	$(call gb_Output_announce,$*,$(true),SRS,1)
 	$(call gb_Helper_abbreviate_dirs,\
 		mkdir -p $(dir $@) && \
@@ -246,7 +252,7 @@ $(call gb_SrsTarget_get_target,%) :
 ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_SrsTarget_get_dep_target,%) : \
 		$(call gb_Executable_get_runtime_dependencies,concat-deps)
-	$(call gb_SrsTarget__command_dep,$@,$*,$^)
+	$(call gb_SrsTarget__command_dep,$@,$*)
 endif
 
 define gb_SrsTarget_SrsTarget
@@ -258,6 +264,7 @@ $(call gb_SrsTarget_get_target,$(1)) : PARTS :=
 $(call gb_SrsTarget_get_target,$(1)) : $(call gb_SrsTemplateTarget_get_target,$(1))
 $(call gb_SrsTarget_get_clean_target,$(1)) : $(call gb_SrsTemplateTarget_get_clean_target,$(1))
 ifeq ($(gb_FULLDEPS),$(true))
+$(call gb_SrsTarget_get_dep_target,$(1)) : PARTS :=
 -include $(call gb_SrsTarget_get_dep_target,$(1))
 endif
 
@@ -289,6 +296,9 @@ $(call gb_SrsPartTarget_get_target,$(2)) :| $(call gb_SrsTarget_get_headers_targ
 $(call gb_SrsPartTarget_get_target,$(2)) :| $(call gb_SrsTemplateTarget_get_target,$(1))
 $(call gb_SrsTarget_get_clean_target,$(1)) : PARTS += $(2)
 $(call gb_SrsTarget_get_target,$(1)) : PARTS += $(2)
+ifeq ($(gb_FULLDEPS),$(true))
+$(call gb_SrsTarget_get_dep_target,$(1)) : PARTS += $(2)
+endif
 
 endef
 

@@ -395,13 +395,13 @@ $(call gb_Output_announce,LNK:$(2),$(true),DEP,1)
 $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) && \
 	RESPONSEFILE=$(call var2file,$(shell $(gb_MKTEMP)),200,\
-		$(foreach object,$(3),$(call gb_CObject_get_dep_target,$(object))) \
-		$(foreach object,$(4),$(call gb_CxxObject_get_dep_target,$(object))) \
-		$(foreach object,$(5),$(call gb_ObjCObject_get_dep_target,$(object)))\
-		$(foreach object,$(6),$(call gb_ObjCxxObject_get_dep_target,$(object)))\
-		$(foreach object,$(7),$(call gb_AsmObject_get_dep_target,$(object)))\
-		$(foreach object,$(8),$(call gb_GenCObject_get_dep_target,$(object))) \
-		$(foreach object,$(9),$(call gb_GenCxxObject_get_dep_target,$(object))) \
+		$(foreach object,$(COBJECTS),$(call gb_CObject_get_dep_target,$(object))) \
+		$(foreach object,$(CXXOBJECTS),$(call gb_CxxObject_get_dep_target,$(object))) \
+		$(foreach object,$(OBJCOBJECTS),$(call gb_ObjCObject_get_dep_target,$(object)))\
+		$(foreach object,$(OBJCXXOBJECTS),$(call gb_ObjCxxObject_get_dep_target,$(object)))\
+		$(foreach object,$(ASMOBJECTS),$(call gb_AsmObject_get_dep_target,$(object)))\
+		$(foreach object,$(GENCOBJECTS),$(call gb_GenCObject_get_dep_target,$(object))) \
+		$(foreach object,$(GENCXXOBJECTS),$(call gb_GenCxxObject_get_dep_target,$(object))) \
 		) && \
 	$(call gb_Executable_get_command,concat-deps) $${RESPONSEFILE} > $(1)) && \
 	rm -f $${RESPONSEFILE}
@@ -431,7 +431,14 @@ endef
 $(call gb_LinkTarget_get_target,Library/%.exports) : $(gb_Library_OUTDIRLOCATION)/%
 	$(if $(wildcard $@),,mkdir -p $(dir $@) && touch $@)
 
+# This recipe actually also builds the dep-target as a side-effect, which
+# is an optimization to reduce incremental build time.
+# (with exception for concat-dep executable itself which does not exist yet...)
 $(call gb_LinkTarget_get_target,%) : $(call gb_LinkTarget_get_headers_target,%) $(gb_Helper_MISCDUMMY)
+ifeq ($(gb_FULLDEPS),$(true))
+	$(if $(findstring concat-deps,$*),,\
+		$(call gb_LinkTarget__command_dep,$(call gb_LinkTarget_get_dep_target,$*),$*))
+endif
 	$(if $(filter $*,$(foreach lib,$(gb_MERGEDLIBS) $(gb_URELIBS),$(call gb_Library_get_linktargetname,$(lib)))),\
 		$(if $(filter $(true),$(call gb_LinkTarget__is_build_lib,$*)),\
 			$(call gb_LinkTarget__command,$@,$*),\
@@ -442,8 +449,7 @@ $(call gb_LinkTarget_get_target,%) : $(call gb_LinkTarget_get_headers_target,%) 
 
 ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_LinkTarget_get_dep_target,%) : $(call gb_Executable_get_runtime_dependencies,concat-deps)
-
-	$(call gb_LinkTarget__command_dep,$@,$*,$(COBJECTS),$(CXXOBJECTS),$(OBJCOBJECTS),$(OBJCXXOBJECTS),$(ASMOBJECTS),$(GENCOBJECTS),$(GENCXXOBJECTS))
+	$(call gb_LinkTarget__command_dep,$@,$*)
 endif
 
 # Ok, this is some dark voodoo: When declaring a linktarget with
