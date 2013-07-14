@@ -39,15 +39,11 @@ Module gid_Module_Prg_Base_Bin
         gid_File_Share_Registry_Base_Xcd
 /* This should be conditional, but the condition is not working!! */
 /* #if defined ENABLE_FIREBIRD_SDBC */
-        ,gid_File_Lib_FirebirdSdbc
         ,gid_File_FirebirdSdbc_Rdb
         ,gid_File_FirebirdSdbc_Xcd
 /* #endif */
     );
 End
-
-/* This could be moved to a std location */
-STD_LIB_FILE(gid_File_Lib_FirebirdSdbc, firebird_sdbc)
 
 File gid_File_FirebirdSdbc_Rdb
     TXT_FILE_BODY;
