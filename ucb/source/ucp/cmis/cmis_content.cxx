@@ -46,6 +46,7 @@
 #include "cmis_content.hxx"
 #include "cmis_provider.hxx"
 #include "cmis_resultset.hxx"
+#include "cmis_oauth2_providers.hxx"
 
 #define OUSTR_TO_STDSTR(s) string( OUStringToOString( s, RTL_TEXTENCODING_UTF8 ).getStr() )
 #define STD_TO_OUSTR( str ) OUString( str.c_str(), str.length( ), RTL_TEXTENCODING_UTF8 )
@@ -313,9 +314,16 @@ namespace cmis
             if ( authProvider.authenticationQuery( rUsername, rPassword ) )
             {
                 // Initiate a CMIS session and register it as we found nothing
+                libcmis::OAuth2DataPtr oauth2Data = NULL;
+                if ( m_aURL.getBindingUrl( ) == GDRIVE_BASE_URL )
+                    oauth2Data.reset( new libcmis::OAuth2Data(
+                        GDRIVE_AUTH_URL, GDRIVE_TOKEN_URL,
+                        GDRIVE_SCOPE, GDRIVE_REDIRECT_URI,
+                        GDRIVE_CLIENT_ID, GDRIVE_CLIENT_SECRET ) );
+
                 m_pSession = libcmis::SessionFactory::createSession(
                         OUSTR_TO_STDSTR( m_aURL.getBindingUrl( ) ),
-                        rUsername, rPassword, OUSTR_TO_STDSTR( m_aURL.getRepositoryId( ) ) );
+                        rUsername, rPassword, OUSTR_TO_STDSTR( m_aURL.getRepositoryId( ) ), oauth2Data );
                 if ( m_pSession == NULL )
                     ucbhelper::cancelCommandExecution(
                                         ucb::IOErrorCode_INVALID_DEVICE,
@@ -1770,6 +1778,8 @@ namespace cmis
                     if ( sPath[sPath.getLength( ) - 1] != '/' )
                         sPath += "/";
                     sPath += STD_TO_OUSTR( ( *it )->getName( ) );
+                    OUString sId = STD_TO_OUSTR( ( *it )->getId( ) );
+                    aUrl.setObjectId( sId );
                     aUrl.setObjectPath( sPath );
                     uno::Reference< ucb::XContentIdentifier > xId = new ucbhelper::ContentIdentifier( aUrl.asString( ) );
                     uno::Reference< ucb::XContent > xContent = new Content( m_xContext, m_pProvider, xId, *it );

@@ -12,6 +12,7 @@
 #include <rtl/uri.hxx>
 
 #include "cmis_url.hxx"
+#include "cmis_oauth2_providers.hxx"
 
 using namespace std;
 
@@ -31,7 +32,11 @@ namespace cmis
         m_sPass = aUrl.GetPass( INetURLObject::DECODE_WITH_CHARSET );
 
         // Store the path to the object
-        m_sPath = aUrl.GetURLPath( INetURLObject::DECODE_WITH_CHARSET );
+        // Google Drive doesn't support getObjectByPath
+        if ( m_sBindingUrl == GDRIVE_BASE_URL )
+            m_sPath = OUString( );
+        else
+            m_sPath = aUrl.GetURLPath( INetURLObject::DECODE_WITH_CHARSET );
         m_sId = aUrl.GetMark( INetURLObject::DECODE_WITH_CHARSET );
 
         if ( !m_sId.isEmpty( ) )
@@ -61,12 +66,10 @@ namespace cmis
     void URL::setObjectPath( OUString sPath )
     {
         m_sPath = sPath;
-        m_sId = OUString( );
     }
 
     void URL::setObjectId( OUString sId )
     {
-        m_sPath = OUString( );
         m_sId = sId;
     }
 
@@ -80,7 +83,15 @@ namespace cmis
                 RTL_TEXTENCODING_UTF8 );
         sUrl = "vnd.libreoffice.cmis://" + sEncodedBinding;
 
-        if ( !m_sPath.isEmpty( ) )
+        // Prefer get object by ID
+        if ( !m_sId.isEmpty( ) )
+        {
+            sUrl += "#" + rtl::Uri::encode( m_sId,
+                rtl_UriCharClassRelSegment,
+                rtl_UriEncodeKeepEscapes,
+                RTL_TEXTENCODING_UTF8 );
+        }
+        else if ( !m_sPath.isEmpty( ) )
         {
             sal_Int32 nPos = -1;
             OUString sEncodedPath;
@@ -103,13 +114,6 @@ namespace cmis
             }
             while ( nPos != -1 );
             sUrl += sEncodedPath;
-        }
-        else if ( !m_sId.isEmpty( ) )
-        {
-            sUrl += "#" + rtl::Uri::encode( m_sId,
-                rtl_UriCharClassRelSegment,
-                rtl_UriEncodeKeepEscapes,
-                RTL_TEXTENCODING_UTF8 );
         }
 
         return sUrl;
