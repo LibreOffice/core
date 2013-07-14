@@ -50,6 +50,9 @@ SFX_IMPL_MODELESSDIALOG_WITHID(ScFormulaDlgWrapper, SID_OPENDLG_FUNCTION )
 SFX_IMPL_MODELESSDIALOG_WITHID(ScAcceptChgDlgWrapper, FID_CHG_ACCEPT )
 SFX_IMPL_MODELESSDIALOG_WITHID(ScHighlightChgDlgWrapper, FID_CHG_SHOW )
 SFX_IMPL_MODELESSDIALOG_WITHID(ScSimpleRefDlgWrapper, WID_SIMPLE_REF )
+
+SFX_IMPL_MODELESSDIALOG_WITHID(ScRandomNumberGeneratorDialogWrapper, SID_OPENDLG_RANDOM_NUMBER_GENERATOR )
+
 SFX_IMPL_CHILDWINDOW_WITHID(ScValidityRefChildWin, SID_VALIDITY_REFERENCE)
 
 SfxChildWinInfo ScValidityRefChildWin::GetInfo() const
@@ -176,6 +179,8 @@ IMPL_CHILD_CTOR( ScPrintAreasDlgWrapper, SID_OPENDLG_EDIT_PRINTAREA )
 
 IMPL_CHILD_CTOR( ScFormulaDlgWrapper, SID_OPENDLG_FUNCTION )
 
+
+IMPL_CHILD_CTOR( ScRandomNumberGeneratorDialogWrapper, SID_OPENDLG_RANDOM_NUMBER_GENERATOR )
 
 //-------------------------------------------------------------------------
 // ScSimpleRefDlgWrapper

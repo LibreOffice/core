@@ -61,6 +61,8 @@
 #include "condformatdlg.hxx"
 #include "xmlsourcedlg.hxx"
 
+#include "RandomNumberGeneratorDialog.hxx"
+
 //------------------------------------------------------------------
 
 void ScTabViewShell::SetCurRefDlgId( sal_uInt16 nNew )
@@ -308,6 +310,13 @@ SfxModelessDialog* ScTabViewShell::CreateRefDialog(
                                 pViewData->GetCurY(),
                                 pViewData->GetTabNo());
             pResult = new ScSolverDlg( pB, pCW, pParent, pViewData->GetDocument(), aCurPos );
+        }
+        break;
+
+        case SID_OPENDLG_RANDOM_NUMBER_GENERATOR:
+        {
+            ScViewData*  pViewData  = GetViewData();
+            pResult = new ScRandomNumberGeneratorDialog( pB, pCW, pParent, pViewData );
         }
         break;
 

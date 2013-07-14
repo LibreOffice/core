@@ -270,6 +270,8 @@ void ScDLL::Init()
     ScColRowNameRangesDlgWrapper::RegisterChildWindow(false, pMod);
     ScFormulaDlgWrapper         ::RegisterChildWindow(false, pMod);
 
+    ScRandomNumberGeneratorDialogWrapper::RegisterChildWindow(false, pMod);
+
     // First docking Window for Calc
     ScFunctionChildWindow       ::RegisterChildWindow(false, pMod);
 

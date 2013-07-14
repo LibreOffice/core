@@ -99,6 +99,7 @@
                     <menu:menuitem menu:id=".uno:FillLeft"/>
                     <menu:menuitem menu:id=".uno:FillTable"/>
                     <menu:menuitem menu:id=".uno:FillSeries"/>
+                    <menu:menuitem menu:id=".uno:RandomNumberGeneratorDialog"/>
                 </menu:menupopup>
             </menu:menu>
             <menu:menuitem menu:id=".uno:Delete"/>

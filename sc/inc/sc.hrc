@@ -29,7 +29,7 @@
 #include "helpids.h"
 
 #define VAR_ARGS                30 // variable Parameter in scfuncs.src
-#define PAIRED_VAR_ARGS			(VAR_ARGS + VAR_ARGS)
+#define PAIRED_VAR_ARGS         (VAR_ARGS + VAR_ARGS)
 
 // areas
 
@@ -251,6 +251,8 @@
 #define SID_OPENDLG_DATABAR         (SC_MESSAGE_START + 67)
 #define SID_OPENDLG_ICONSET         (SC_MESSAGE_START + 68)
 #define SID_OPENDLG_CONDDATE        (SC_MESSAGE_START + 69)
+
+#define SID_OPENDLG_RANDOM_NUMBER_GENERATOR (SC_MESSAGE_START + 70)
 
 // functions
 

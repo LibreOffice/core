@@ -624,6 +624,14 @@
           <value xml:lang="en-US">S~eries...</value>
         </prop>
       </node>
+      <node oor:name=".uno:RandomNumberGeneratorDialog" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Fill R~andom Number...</value>
+        </prop>
+        <prop oor:name="ContextLabel" oor:type="xs:string">
+          <value xml:lang="en-US">R~andom Number...</value>
+        </prop>
+      </node>
       <node oor:name=".uno:EditHeaderAndFooter" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">~Headers &amp; Footers...</value>

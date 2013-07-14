@@ -50,6 +50,8 @@ DECL_WRAPPER_WITHID(ScColRowNameRangesDlgWrapper)
 DECL_WRAPPER_WITHID(ScFormulaDlgWrapper)
 DECL_WRAPPER_WITHID(ScHighlightChgDlgWrapper)
 
+DECL_WRAPPER_WITHID(ScRandomNumberGeneratorDialogWrapper)
+
 class ScAcceptChgDlgWrapper: public SfxChildWindow
 {
     public:

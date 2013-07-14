@@ -903,7 +903,15 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 }
             }
             break;
+        case SID_OPENDLG_RANDOM_NUMBER_GENERATOR:
+            {
+                sal_uInt16          nId  = ScRandomNumberGeneratorDialogWrapper::GetChildWindowId();
+                SfxViewFrame* pViewFrm = pTabViewShell->GetViewFrame();
+                SfxChildWindow* pWnd = pViewFrm->GetChildWindow( nId );
 
+                pScMod->SetRefDialog( nId, pWnd ? false : sal_True );
+            }
+            break;
         //
         //  disposal (Outlines)
         //  SID_AUTO_OUTLINE, SID_OUTLINE_DELETEALL in Execute (in docsh.idl)

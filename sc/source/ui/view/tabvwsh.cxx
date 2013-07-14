@@ -80,6 +80,8 @@ SFX_IMPL_INTERFACE(ScTabViewShell,SfxViewShell,ScResId(SCSTR_TABVIEWSHELL))
     SFX_CHILDWINDOW_REGISTRATION(GalleryChildWindow::GetChildWindowId());
     SFX_CHILDWINDOW_REGISTRATION(ScSpellDialogChildWindow::GetChildWindowId());
     SFX_CHILDWINDOW_REGISTRATION(ScValidityRefChildWin::GetChildWindowId());
+
+    SFX_CHILDWINDOW_REGISTRATION(ScRandomNumberGeneratorDialogWrapper::GetChildWindowId());
 }
 
 SFX_IMPL_NAMED_VIEWFACTORY( ScTabViewShell, "Default" )

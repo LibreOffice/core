@@ -2942,6 +2942,32 @@ SfxVoidItem GoalSeekDialog SID_OPENDLG_SOLVE
     GroupId = GID_OPTIONS;
 ]
 
+SfxVoidItem RandomNumberGeneratorDialog SID_OPENDLG_RANDOM_NUMBER_GENERATOR
+()
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = TRUE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_OPTIONS;
+]
+
+
+
 //--------------------------------------------------------------------------
 SfxVoidItem SolverDialog SID_OPENDLG_OPTSOLVER
 ()
