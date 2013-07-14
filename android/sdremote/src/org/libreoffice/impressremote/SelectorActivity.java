@@ -27,6 +27,7 @@ import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.content.LocalBroadcastManager;
@@ -229,7 +230,7 @@ public class SelectorActivity extends SherlockActivity {
                         String aFormat = getResources().getString(
                                 R.string.selector_dialog_connectionfailed);
                         String aDialogText = MessageFormat.format(aFormat,
-                                mCommunicationService.getPairingDeviceName());
+                                Build.MODEL);
 
                         AlertDialog.Builder builder = new AlertDialog.Builder(
                                 SelectorActivity.this);

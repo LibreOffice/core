@@ -31,37 +31,48 @@ public class CommunicationService extends Service implements Runnable, MessagesL
      */
     private final Object mConnectionVariableMutex = new Object();
 
-    private State mState = State.DISCONNECTED;
-    private State mStateDesired = State.DISCONNECTED;
+    private State mState;
+    private State mStateDesired;
 
-    private Server mServerDesired = null;
+    private Server mServerDesired;
 
-    private final IBinder mBinder = new CBinder();
+    private IBinder mBinder;
 
-    private final ServersManager mServersManager = new ServersManager(this);
+    private ServersManager mServersManager;
 
-    private Thread mThread = null;
+    private ServerConnection mServerConnection;
 
-    /**
-     * Get the publicly visible device name -- generally the bluetooth name,
-     * however for bluetoothless devices the device model name is used.
-     *
-     * @return The device name.
-     */
-    public static String getDeviceName() {
-        if (BluetoothAdapter.getDefaultAdapter() == null) {
-            return Build.MODEL;
-        }
+    private MessagesReceiver mMessagesReceiver;
+    private CommandsTransmitter mCommandsTransmitter;
 
-        if (BluetoothAdapter.getDefaultAdapter().getName() == null) {
-            return Build.MODEL;
-        }
+    private SlideShow mSlideShow;
 
-        return BluetoothAdapter.getDefaultAdapter().getName();
+    private Thread mThread;
+
+    @Override
+    public void onCreate() {
+        mState = State.DISCONNECTED;
+        mStateDesired = State.DISCONNECTED;
+
+        mServerDesired = null;
+
+        mBinder = new CBinder();
+
+        mServersManager = new ServersManager(this);
+
+        mThread = new Thread(this);
+        mThread.start();
     }
 
-    public String getPairingDeviceName() {
-        return getDeviceName();
+    public class CBinder extends Binder {
+        public CommunicationService getService() {
+            return CommunicationService.this;
+        }
+    }
+
+    @Override
+    public IBinder onBind(Intent intent) {
+        return mBinder;
     }
 
     @Override
@@ -101,11 +112,6 @@ public class CommunicationService extends Service implements Runnable, MessagesL
         }
     }
 
-    private ServerConnection mServerConnection;
-
-    private MessagesReceiver mMessagesReceiver;
-    private CommandsTransmitter mCommandsTransmitter;
-
     private void closeConnection() {
         mServerConnection.close();
 
@@ -118,7 +124,7 @@ public class CommunicationService extends Service implements Runnable, MessagesL
         mMessagesReceiver = new MessagesReceiver(mServerConnection, this);
         mCommandsTransmitter = new CommandsTransmitter(mServerConnection);
 
-        if (isPairingNecessary()) {
+        if (PairingProvider.isPairingNecessary(mServerDesired)) {
             pair();
         }
 
@@ -138,29 +144,11 @@ public class CommunicationService extends Service implements Runnable, MessagesL
         }
     }
 
-    private boolean isPairingNecessary() {
-        return mServerDesired.getProtocol() == Server.Protocol.TCP;
-    }
-
     private void pair() {
-        mCommandsTransmitter.pair(getDeviceName(), loadPin());
-    }
+        String aPairingDeviceName = PairingProvider.getPairingDeviceName(this);
+        String aPairingPin = PairingProvider.getPairingPin(this, mServerDesired);
 
-    private String loadPin() {
-        if (Preferences.doContain(this,
-            Preferences.Locations.AUTHORIZED_REMOTES,
-            mServerDesired.getAddress())) {
-            return Preferences
-                .getString(this, Preferences.Locations.AUTHORIZED_REMOTES,
-                    mServerDesired.getAddress());
-        }
-
-        String aPin = Protocol.Pin.generate();
-
-        Preferences.set(this, Preferences.Locations.AUTHORIZED_REMOTES,
-            mServerDesired.getAddress(), aPin);
-
-        return aPin;
+        mCommandsTransmitter.pair(aPairingDeviceName, aPairingPin);
     }
 
     private void connectionFailed() {
@@ -188,6 +176,10 @@ public class CommunicationService extends Service implements Runnable, MessagesL
         }
     }
 
+    public List<Server> getServers() {
+        return mServersManager.getServers();
+    }
+
     public void connectTo(Server aServer) {
         synchronized (mConnectionVariableMutex) {
             if (mState == State.SEARCHING) {
@@ -213,47 +205,20 @@ public class CommunicationService extends Service implements Runnable, MessagesL
         }
     }
 
-    public class CBinder extends Binder {
-        public CommunicationService getService() {
-            return CommunicationService.this;
-        }
-    }
-
-    @Override
-    public IBinder onBind(Intent intent) {
-        return mBinder;
-    }
-
-    @Override
-    public void onCreate() {
-        mThread = new Thread(this);
-        mThread.start();
-    }
-
-    @Override
-    public void onDestroy() {
-        stopSearch();
-
-        mThread.interrupt();
-        mThread = null;
-    }
-
     public CommandsTransmitter getTransmitter() {
         return mCommandsTransmitter;
-    }
-
-    public List<Server> getServers() {
-        return mServersManager.getServers();
     }
 
     public SlideShow getSlideShow() {
         return mSlideShow;
     }
 
-    /**
-     * Manually add a new (network) server to the list of servers.
-     */
+    @Deprecated
     public void addServer(String aAddress, String aName, boolean aRemember) {
+        mServersManager.addTcpServer(aAddress, aName);
+    }
+
+    public void addServer(String aAddress, String aName) {
         mServersManager.addTcpServer(aAddress, aName);
     }
 
@@ -263,7 +228,9 @@ public class CommunicationService extends Service implements Runnable, MessagesL
 
     @Override
     public void onPinValidation() {
-        Intent aIntent = Intents.buildPairingValidationIntent(loadPin());
+        String aPin = PairingProvider.getPairingPin(this, mServerDesired);
+
+        Intent aIntent = Intents.buildPairingValidationIntent(aPin);
         LocalBroadcastManager.getInstance(this).sendBroadcast(aIntent);
     }
 
@@ -272,8 +239,6 @@ public class CommunicationService extends Service implements Runnable, MessagesL
         Intent aIntent = Intents.buildPairingSuccessfulIntent();
         LocalBroadcastManager.getInstance(this).sendBroadcast(aIntent);
     }
-
-    private SlideShow mSlideShow;
 
     @Override
     public void onSlideShowStart(int aSlidesCount, int aCurrentSlideIndex) {
@@ -316,6 +281,14 @@ public class CommunicationService extends Service implements Runnable, MessagesL
 
         Intent aIntent = Intents.buildSlideNotesIntent(aSlideIndex);
         LocalBroadcastManager.getInstance(this).sendBroadcast(aIntent);
+    }
+
+    @Override
+    public void onDestroy() {
+        stopSearch();
+
+        mThread.interrupt();
+        mThread = null;
     }
 }
 
