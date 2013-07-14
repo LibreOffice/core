@@ -88,13 +88,11 @@ public:
 
     bool            IsReadOnly(SvtCTLOptions::EOption eOption) const;
 };
-//------------------------------------------------------------------------------
 namespace
 {
     struct PropertyNames
         : public rtl::Static< Sequence< OUString >, PropertyNames > {};
 }
-//------------------------------------------------------------------------------
 bool SvtCTLOptions_Impl::IsReadOnly(SvtCTLOptions::EOption eOption) const
 {
     bool bReadOnly = CFG_READONLY_DEFAULT;
@@ -110,7 +108,6 @@ bool SvtCTLOptions_Impl::IsReadOnly(SvtCTLOptions::EOption eOption) const
     }
     return bReadOnly;
 }
-//------------------------------------------------------------------------------
 SvtCTLOptions_Impl::SvtCTLOptions_Impl() :
 
     utl::ConfigItem("Office.Common/I18N/CTL"),
@@ -131,7 +128,6 @@ SvtCTLOptions_Impl::SvtCTLOptions_Impl() :
     m_bROCTLTextNumerals    ( CFG_READONLY_DEFAULT )
 {
 }
-//------------------------------------------------------------------------------
 SvtCTLOptions_Impl::~SvtCTLOptions_Impl()
 {
     if ( IsModified() == sal_True )
@@ -329,7 +325,6 @@ void SvtCTLOptions_Impl::Load()
 
     m_bIsLoaded = sal_True;
 }
-//------------------------------------------------------------------------------
 void SvtCTLOptions_Impl::SetCTLFontEnabled( bool _bEnabled )
 {
     if(!m_bROCTLFontEnabled && m_bCTLFontEnabled != _bEnabled)
@@ -339,7 +334,6 @@ void SvtCTLOptions_Impl::SetCTLFontEnabled( bool _bEnabled )
         NotifyListeners(0);
     }
 }
-//------------------------------------------------------------------------------
 void SvtCTLOptions_Impl::SetCTLSequenceChecking( bool _bEnabled )
 {
     if(!m_bROCTLSequenceChecking && m_bCTLSequenceChecking != _bEnabled)
@@ -349,7 +343,6 @@ void SvtCTLOptions_Impl::SetCTLSequenceChecking( bool _bEnabled )
         NotifyListeners(0);
     }
 }
-//------------------------------------------------------------------------------
 void SvtCTLOptions_Impl::SetCTLSequenceCheckingRestricted( bool _bEnabled )
 {
     if(!m_bROCTLRestricted && m_bCTLRestricted != _bEnabled)
@@ -359,7 +352,6 @@ void SvtCTLOptions_Impl::SetCTLSequenceCheckingRestricted( bool _bEnabled )
         NotifyListeners(0);
     }
 }
-//------------------------------------------------------------------------------
 void  SvtCTLOptions_Impl::SetCTLSequenceCheckingTypeAndReplace( bool _bEnabled )
 {
     if(!m_bROCTLTypeAndReplace && m_bCTLTypeAndReplace != _bEnabled)
@@ -369,7 +361,6 @@ void  SvtCTLOptions_Impl::SetCTLSequenceCheckingTypeAndReplace( bool _bEnabled )
         NotifyListeners(0);
     }
 }
-//------------------------------------------------------------------------------
 void SvtCTLOptions_Impl::SetCTLCursorMovement( SvtCTLOptions::CursorMovement _eMovement )
 {
     if (!m_bROCTLCursorMovement && m_eCTLCursorMovement != _eMovement )
@@ -379,7 +370,6 @@ void SvtCTLOptions_Impl::SetCTLCursorMovement( SvtCTLOptions::CursorMovement _eM
         NotifyListeners(0);
     }
 }
-//------------------------------------------------------------------------------
 void SvtCTLOptions_Impl::SetCTLTextNumerals( SvtCTLOptions::TextNumerals _eNumerals )
 {
     if (!m_bROCTLTextNumerals && m_eCTLTextNumerals != _eNumerals )

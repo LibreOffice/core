@@ -23,7 +23,6 @@
 
 using namespace ::com::sun::star;
 
-//-----------------------------------------------
 OFSInputStreamContainer::OFSInputStreamContainer( const uno::Reference< io::XInputStream >& xStream )
 : m_xInputStream( xStream )
 , m_xSeekable( xStream, uno::UNO_QUERY )
@@ -34,7 +33,6 @@ OFSInputStreamContainer::OFSInputStreamContainer( const uno::Reference< io::XInp
     m_bSeekable = m_xSeekable.is();
 }
 
-//-----------------------------------------------
 OFSInputStreamContainer::~OFSInputStreamContainer()
 {
     if ( m_pListenersContainer )
@@ -44,7 +42,6 @@ OFSInputStreamContainer::~OFSInputStreamContainer()
     }
 }
 
-//-----------------------------------------------
 uno::Sequence< uno::Type > SAL_CALL OFSInputStreamContainer::getTypes()
         throw ( uno::RuntimeException )
 {
@@ -80,7 +77,6 @@ uno::Sequence< uno::Type > SAL_CALL OFSInputStreamContainer::getTypes()
 
 }
 
-//-----------------------------------------------
 uno::Any SAL_CALL OFSInputStreamContainer::queryInterface( const uno::Type& rType )
         throw( uno::RuntimeException )
 {
@@ -104,21 +100,18 @@ uno::Any SAL_CALL OFSInputStreamContainer::queryInterface( const uno::Type& rTyp
     return ::cppu::OWeakObject::queryInterface( rType ) ;
 }
 
-//-----------------------------------------------
 void SAL_CALL OFSInputStreamContainer::acquire()
         throw()
 {
     ::cppu::OWeakObject::acquire();
 }
 
-//-----------------------------------------------
 void SAL_CALL OFSInputStreamContainer::release()
         throw()
 {
     ::cppu::OWeakObject::release();
 }
 
-//-----------------------------------------------
 sal_Int32 SAL_CALL OFSInputStreamContainer::readBytes( uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead )
         throw ( io::NotConnectedException,
                 io::BufferSizeExceededException,
@@ -136,7 +129,6 @@ sal_Int32 SAL_CALL OFSInputStreamContainer::readBytes( uno::Sequence< sal_Int8 >
     return m_xInputStream->readBytes( aData, nBytesToRead );
 }
 
-//-----------------------------------------------
 sal_Int32 SAL_CALL OFSInputStreamContainer::readSomeBytes( uno::Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead )
         throw ( io::NotConnectedException,
                 io::BufferSizeExceededException,
@@ -154,7 +146,6 @@ sal_Int32 SAL_CALL OFSInputStreamContainer::readSomeBytes( uno::Sequence< sal_In
     return m_xInputStream->readSomeBytes( aData, nMaxBytesToRead );
 }
 
-//-----------------------------------------------
 void SAL_CALL OFSInputStreamContainer::skipBytes( sal_Int32 nBytesToSkip )
         throw ( io::NotConnectedException,
                 io::BufferSizeExceededException,
@@ -172,7 +163,6 @@ void SAL_CALL OFSInputStreamContainer::skipBytes( sal_Int32 nBytesToSkip )
     m_xInputStream->skipBytes( nBytesToSkip );
 }
 
-//-----------------------------------------------
 sal_Int32 SAL_CALL OFSInputStreamContainer::available(  )
         throw ( io::NotConnectedException,
                 io::IOException,
@@ -189,7 +179,6 @@ sal_Int32 SAL_CALL OFSInputStreamContainer::available(  )
     return m_xInputStream->available();
 }
 
-//-----------------------------------------------
 void SAL_CALL OFSInputStreamContainer::closeInput(  )
         throw ( io::NotConnectedException,
                 io::IOException,
@@ -206,7 +195,6 @@ void SAL_CALL OFSInputStreamContainer::closeInput(  )
     dispose();
 }
 
-//-----------------------------------------------
 uno::Reference< io::XInputStream > SAL_CALL OFSInputStreamContainer::getInputStream()
         throw ( uno::RuntimeException )
 {
@@ -221,7 +209,6 @@ uno::Reference< io::XInputStream > SAL_CALL OFSInputStreamContainer::getInputStr
     return uno::Reference< io::XInputStream >( static_cast< io::XInputStream* >( this ), uno::UNO_QUERY );
 }
 
-//-----------------------------------------------
 uno::Reference< io::XOutputStream > SAL_CALL OFSInputStreamContainer::getOutputStream()
         throw ( uno::RuntimeException )
 {
@@ -233,7 +220,6 @@ uno::Reference< io::XOutputStream > SAL_CALL OFSInputStreamContainer::getOutputS
     return uno::Reference< io::XOutputStream >();
 }
 
-//-----------------------------------------------
 void SAL_CALL OFSInputStreamContainer::seek( sal_Int64 location )
         throw ( lang::IllegalArgumentException,
                 io::IOException,
@@ -250,7 +236,6 @@ void SAL_CALL OFSInputStreamContainer::seek( sal_Int64 location )
     m_xSeekable->seek( location );
 }
 
-//-----------------------------------------------
 sal_Int64 SAL_CALL OFSInputStreamContainer::getPosition()
         throw ( io::IOException,
                 uno::RuntimeException)
@@ -266,7 +251,6 @@ sal_Int64 SAL_CALL OFSInputStreamContainer::getPosition()
     return m_xSeekable->getPosition();
 }
 
-//-----------------------------------------------
 sal_Int64 SAL_CALL OFSInputStreamContainer::getLength()
         throw ( io::IOException,
                 uno::RuntimeException )
@@ -282,7 +266,6 @@ sal_Int64 SAL_CALL OFSInputStreamContainer::getLength()
     return m_xSeekable->getLength();
 }
 
-//-----------------------------------------------
 void SAL_CALL OFSInputStreamContainer::dispose(  )
         throw ( uno::RuntimeException )
 {
@@ -305,7 +288,6 @@ void SAL_CALL OFSInputStreamContainer::dispose(  )
     m_bDisposed = true;
 }
 
-//-----------------------------------------------
 void SAL_CALL OFSInputStreamContainer::addEventListener( const uno::Reference< lang::XEventListener >& xListener )
         throw ( uno::RuntimeException )
 {
@@ -320,7 +302,6 @@ void SAL_CALL OFSInputStreamContainer::addEventListener( const uno::Reference< l
     m_pListenersContainer->addInterface( xListener );
 }
 
-//-----------------------------------------------
 void SAL_CALL OFSInputStreamContainer::removeEventListener( const uno::Reference< lang::XEventListener >& xListener )
         throw ( uno::RuntimeException )
 {

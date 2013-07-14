@@ -26,18 +26,15 @@
 #include <svl/lstner.hxx>
 #include <algorithm>
 
-//====================================================================
 DBG_NAME(SfxListener)
 TYPEINIT0(SfxListener);
 
-//====================================================================
 // simple ctor of class SfxListener
 
 SfxListener::SfxListener()
 {
     DBG_CTOR(SfxListener, 0);
 }
-//--------------------------------------------------------------------
 
 // copy ctor of class SfxListener
 
@@ -48,7 +45,6 @@ SfxListener::SfxListener( const SfxListener &rListener )
     for ( sal_uInt16 n = 0; n < rListener.aBCs.size(); ++n )
         StartListening( *rListener.aBCs[n] );
 }
-//--------------------------------------------------------------------
 
 // unregisters the SfxListener from its SfxBroadcasters
 
@@ -64,7 +60,6 @@ SfxListener::~SfxListener()
     }
 }
 
-//--------------------------------------------------------------------
 
 // unregisters a specific SfxBroadcaster
 
@@ -75,7 +70,6 @@ void SfxListener::RemoveBroadcaster_Impl( SfxBroadcaster& rBroadcaster )
     aBCs.erase( std::find( aBCs.begin(), aBCs.end(), &rBroadcaster ) );
 }
 
-//--------------------------------------------------------------------
 
 // registers a specific SfxBroadcaster
 
@@ -95,7 +89,6 @@ sal_Bool SfxListener::StartListening( SfxBroadcaster& rBroadcaster, sal_Bool bPr
     return sal_False;
 }
 
-//--------------------------------------------------------------------
 
 // unregisters a specific SfxBroadcaster
 
@@ -115,7 +108,6 @@ sal_Bool SfxListener::EndListening( SfxBroadcaster& rBroadcaster, sal_Bool bAllD
     return sal_True;
 }
 
-//--------------------------------------------------------------------
 
 // unregisters all Broadcasters
 
@@ -132,14 +124,12 @@ void SfxListener::EndListeningAll()
     }
 }
 
-//--------------------------------------------------------------------
 
 sal_Bool SfxListener::IsListening( SfxBroadcaster& rBroadcaster ) const
 {
     return aBCs.end() != std::find( aBCs.begin(), aBCs.end(), &rBroadcaster );
 }
 
-//--------------------------------------------------------------------
 
 // base implementation of notification handler
 

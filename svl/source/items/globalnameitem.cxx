@@ -68,7 +68,6 @@ SfxPoolItem* SfxGlobalNameItem::Clone(SfxItemPool *) const
     return new SfxGlobalNameItem( *this );
 }
 
-//----------------------------------------------------------------------------
 // virtual
 bool SfxGlobalNameItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 )
 {
@@ -90,7 +89,6 @@ bool SfxGlobalNameItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt
     return true;
 }
 
-//----------------------------------------------------------------------------
 // virtual
 bool SfxGlobalNameItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 ) const
 {

@@ -27,13 +27,11 @@
 class ItemHolder2 : private ItemHolderMutexBase
                   , public  ::cppu::WeakImplHelper1< css::lang::XEventListener >
 {
-    //...........................................
     // member
     private:
 
         TItems m_lItems;
 
-    //...........................................
     // c++ interface
     public:
 
@@ -41,14 +39,12 @@ class ItemHolder2 : private ItemHolderMutexBase
         virtual ~ItemHolder2();
         static void holdConfigItem(EItem eItem);
 
-    //...........................................
     // uno interface
     public:
 
         virtual void SAL_CALL disposing(const css::lang::EventObject& aEvent)
             throw(css::uno::RuntimeException);
 
-    //...........................................
     // helper
     private:
 

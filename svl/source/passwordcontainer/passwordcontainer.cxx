@@ -44,8 +44,6 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::task;
 using namespace com::sun::star::ucb;
 
-//-------------------------------------------------------------------------
-//-------------------------------------------------------------------------
 
 static OUString createIndex( vector< OUString > lines )
 {
@@ -78,7 +76,6 @@ static OUString createIndex( vector< OUString > lines )
     return OUString::createFromAscii( aResult.getStr() );
 }
 
-//-------------------------------------------------------------------------
 
 static vector< OUString > getInfoFromInd( OUString aInd )
 {
@@ -131,7 +128,6 @@ static vector< OUString > getInfoFromInd( OUString aInd )
     return aResult;
 }
 
-//-------------------------------------------------------------------------
 
 static sal_Bool shorterUrl( OUString& aURL )
 {
@@ -145,7 +141,6 @@ static sal_Bool shorterUrl( OUString& aURL )
     return sal_False;
 }
 
-//-------------------------------------------------------------------------
 
 static OUString getAsciiLine( const ::rtl::ByteSequence& buf )
 {
@@ -165,7 +160,6 @@ static OUString getAsciiLine( const ::rtl::ByteSequence& buf )
     return aResult;
 }
 
-//-------------------------------------------------------------------------
 
 static ::rtl::ByteSequence getBufFromAsciiLine( OUString line )
 {
@@ -181,7 +175,6 @@ static ::rtl::ByteSequence getBufFromAsciiLine( OUString line )
     return aResult;
 }
 
-//-------------------------------------------------------------------------
 
 static Sequence< OUString > copyVectorToSequence( const vector< OUString >& original )
 {
@@ -201,8 +194,6 @@ static vector< OUString > copySequenceToVector( const Sequence< OUString >& orig
     return newOne;
 }
 
-//-------------------------------------------------------------------------
-//-------------------------------------------------------------------------
 
 PassMap StorageItem::getInfo()
 {
@@ -258,7 +249,6 @@ PassMap StorageItem::getInfo()
     return aResult;
 }
 
-//-------------------------------------------------------------------------
 
 void StorageItem::setUseStorage( bool bUse )
 {
@@ -273,7 +263,6 @@ void StorageItem::setUseStorage( bool bUse )
     ConfigItem::PutProperties( sendNames, sendVals );
 }
 
-//-------------------------------------------------------------------------
 
 bool StorageItem::useStorage()
 {
@@ -294,7 +283,6 @@ bool StorageItem::useStorage()
     return aResult;
 }
 
-//-------------------------------------------------------------------------
 
 bool StorageItem::getEncodedMP( OUString& aResult )
 {
@@ -324,7 +312,6 @@ bool StorageItem::getEncodedMP( OUString& aResult )
     return hasEncoded;
 }
 
-//-------------------------------------------------------------------------
 
 void StorageItem::setEncodedMP( const OUString& aEncoded, bool bAcceptEmpty )
 {
@@ -345,7 +332,6 @@ void StorageItem::setEncodedMP( const OUString& aEncoded, bool bAcceptEmpty )
     mEncoded = aEncoded;
 }
 
-//-------------------------------------------------------------------------
 
 void StorageItem::remove( const OUString& aURL, const OUString& aName )
 {
@@ -360,7 +346,6 @@ void StorageItem::remove( const OUString& aURL, const OUString& aName )
     ConfigItem::ClearNodeElements( OUString("Store"), sendSeq );
 }
 
-//-------------------------------------------------------------------------
 
 void StorageItem::clear()
 {
@@ -369,7 +354,6 @@ void StorageItem::clear()
     ConfigItem::ClearNodeSet( OUString("Store") );
 }
 
-//-------------------------------------------------------------------------
 
 void StorageItem::update( const OUString& aURL, const NamePassRecord& aRecord )
 {
@@ -395,7 +379,6 @@ void StorageItem::update( const OUString& aURL, const NamePassRecord& aRecord )
     ConfigItem::SetSetProperties( OUString("Store"), sendSeq );
 }
 
-//-------------------------------------------------------------------------
 
 void StorageItem::Notify( const Sequence< OUString >& )
 {
@@ -404,15 +387,12 @@ void StorageItem::Notify( const Sequence< OUString >& )
         mainCont->Notify();
 }
 
-//-------------------------------------------------------------------------
 
 void StorageItem::Commit()
 {
     // Do nothing, we stored everything we want already
 }
 
-//-------------------------------------------------------------------------
-//-------------------------------------------------------------------------
 
 PasswordContainer::PasswordContainer( const Reference<XMultiServiceFactory>& xServiceFactory ):
     m_pStorageFile( NULL )
@@ -429,7 +409,6 @@ PasswordContainer::PasswordContainer( const Reference<XMultiServiceFactory>& xSe
             m_aContainer = m_pStorageFile->getInfo();
 }
 
-//-------------------------------------------------------------------------
 
 PasswordContainer::~PasswordContainer()
 {
@@ -448,7 +427,6 @@ PasswordContainer::~PasswordContainer()
     }
 }
 
-//-------------------------------------------------------------------------
 
 void SAL_CALL PasswordContainer::disposing( const EventObject& ) throw(RuntimeException)
 {
@@ -467,7 +445,6 @@ void SAL_CALL PasswordContainer::disposing( const EventObject& ) throw(RuntimeEx
     }
 }
 
-//-------------------------------------------------------------------------
 
 vector< OUString > PasswordContainer::DecodePasswords( const OUString& aLine, const OUString& aMasterPasswd ) throw(RuntimeException)
 {
@@ -519,7 +496,6 @@ vector< OUString > PasswordContainer::DecodePasswords( const OUString& aLine, co
 }
 
 
-//-------------------------------------------------------------------------
 
 OUString PasswordContainer::EncodePasswords( vector< OUString > lines, const OUString& aMasterPasswd ) throw(RuntimeException)
 {
@@ -598,7 +574,6 @@ OUString PasswordContainer::EncodePasswords( vector< OUString > lines, const OUS
     throw RuntimeException("Can't encode!", Reference< XInterface >() );
 }
 
-//-------------------------------------------------------------------------
 
 void PasswordContainer::UpdateVector( const OUString& aURL, list< NamePassRecord >& toUpdate, NamePassRecord& aRecord, bool writeFile ) throw(RuntimeException)
 {
@@ -632,7 +607,6 @@ void PasswordContainer::UpdateVector( const OUString& aURL, list< NamePassRecord
     toUpdate.insert( toUpdate.begin(), aRecord );
 }
 
-//-------------------------------------------------------------------------
 
 UserRecord PasswordContainer::CopyToUserRecord( const NamePassRecord& aRecord, bool& io_bTryToDecode, const Reference< XInteractionHandler >& aHandler )
 {
@@ -657,7 +631,6 @@ UserRecord PasswordContainer::CopyToUserRecord( const NamePassRecord& aRecord, b
     return UserRecord( aRecord.GetUserName(), copyVectorToSequence( aPasswords ) );
 }
 
-//-------------------------------------------------------------------------
 
 Sequence< UserRecord > PasswordContainer::CopyToUserRecordSequence( const list< NamePassRecord >& original, const Reference< XInteractionHandler >& aHandler ) throw(RuntimeException)
 {
@@ -675,7 +648,6 @@ Sequence< UserRecord > PasswordContainer::CopyToUserRecordSequence( const list< 
     return aResult;
 }
 
-//-------------------------------------------------------------------------
 
 void SAL_CALL PasswordContainer::add( const OUString& Url, const OUString& UserName, const Sequence< OUString >& Passwords, const Reference< XInteractionHandler >& aHandler ) throw(RuntimeException)
 {
@@ -684,7 +656,6 @@ void SAL_CALL PasswordContainer::add( const OUString& Url, const OUString& UserN
     PrivateAdd( Url, UserName, Passwords, MEMORY_RECORD, aHandler );
 }
 
-//-------------------------------------------------------------------------
 
 void SAL_CALL PasswordContainer::addPersistent( const OUString& Url, const OUString& UserName, const Sequence< OUString >& Passwords, const Reference< XInteractionHandler >& aHandler  ) throw(RuntimeException)
 {
@@ -693,7 +664,6 @@ void SAL_CALL PasswordContainer::addPersistent( const OUString& Url, const OUStr
     PrivateAdd( Url, UserName, Passwords, PERSISTENT_RECORD, aHandler );
 }
 
-//-------------------------------------------------------------------------
 
 void PasswordContainer::PrivateAdd( const OUString& Url, const OUString& UserName, const Sequence< OUString >& Passwords, char Mode, const Reference< XInteractionHandler >& aHandler ) throw(RuntimeException)
 {
@@ -729,7 +699,6 @@ void PasswordContainer::PrivateAdd( const OUString& Url, const OUString& UserNam
 
 }
 
-//-------------------------------------------------------------------------
 
 
 UrlRecord SAL_CALL PasswordContainer::find( const OUString& aURL, const Reference< XInteractionHandler >& aHandler  ) throw(RuntimeException)
@@ -737,14 +706,12 @@ UrlRecord SAL_CALL PasswordContainer::find( const OUString& aURL, const Referenc
     return find( aURL, OUString(), false, aHandler );
 }
 
-//-------------------------------------------------------------------------
 
 UrlRecord SAL_CALL PasswordContainer::findForName( const OUString& aURL, const OUString& aName, const Reference< XInteractionHandler >& aHandler  ) throw(RuntimeException)
 {
     return find( aURL, aName, true, aHandler );
 }
 
-//-------------------------------------------------------------------------
 
 Sequence< UserRecord > PasswordContainer::FindUsr( const list< NamePassRecord >& userlist, const OUString& aName, const Reference< XInteractionHandler >& aHandler ) throw(RuntimeException)
 {
@@ -766,7 +733,6 @@ Sequence< UserRecord > PasswordContainer::FindUsr( const list< NamePassRecord >&
     return Sequence< UserRecord >();
 }
 
-//-------------------------------------------------------------------------
 
 bool PasswordContainer::createUrlRecord(
     const PassMap::iterator & rIter,
@@ -796,7 +762,6 @@ bool PasswordContainer::createUrlRecord(
     return false;
 }
 
-//-------------------------------------------------------------------------
 
 UrlRecord PasswordContainer::find(
     const OUString& aURL,
@@ -843,7 +808,6 @@ UrlRecord PasswordContainer::find(
     return UrlRecord();
 }
 
-//-------------------------------------------------------------------------
 OUString PasswordContainer::GetDefaultMasterPassword()
 {
     OUString aResult;
@@ -853,7 +817,6 @@ OUString PasswordContainer::GetDefaultMasterPassword()
     return aResult;
 }
 
-//-------------------------------------------------------------------------
 OUString PasswordContainer::RequestPasswordFromUser( PasswordRequestMode aRMode, const uno::Reference< task::XInteractionHandler >& xHandler )
 {
     // empty string means that the call was cancelled or just failed
@@ -883,7 +846,6 @@ OUString PasswordContainer::RequestPasswordFromUser( PasswordRequestMode aRMode,
     return aResult;
 }
 
-//-------------------------------------------------------------------------
 
 OUString PasswordContainer::GetMasterPassword( const Reference< XInteractionHandler >& aHandler ) throw(RuntimeException)
 {
@@ -943,7 +905,6 @@ OUString PasswordContainer::GetMasterPassword( const Reference< XInteractionHand
     return m_aMasterPasswd;
 }
 
-//-------------------------------------------------------------------------
 
 void SAL_CALL PasswordContainer::remove( const OUString& aURL, const OUString& aName ) throw(RuntimeException)
 {
@@ -985,7 +946,6 @@ void SAL_CALL PasswordContainer::remove( const OUString& aURL, const OUString& a
     }
 }
 
-//-------------------------------------------------------------------------
 
 void SAL_CALL PasswordContainer::removePersistent( const OUString& aURL, const OUString& aName ) throw(RuntimeException)
 {
@@ -1032,7 +992,6 @@ void SAL_CALL PasswordContainer::removePersistent( const OUString& aURL, const O
         }
     }
 }
-//-------------------------------------------------------------------------
 
 void SAL_CALL PasswordContainer::removeAllPersistent() throw(RuntimeException)
 {
@@ -1074,7 +1033,6 @@ void SAL_CALL PasswordContainer::removeAllPersistent() throw(RuntimeException)
             ++aIter;
     }
 }
-//-------------------------------------------------------------------------
 
 Sequence< UrlRecord > SAL_CALL PasswordContainer::getAllPersistent( const Reference< XInteractionHandler >& xHandler ) throw(RuntimeException)
 {
@@ -1103,7 +1061,6 @@ Sequence< UrlRecord > SAL_CALL PasswordContainer::getAllPersistent( const Refere
     return aResult;
 }
 
-//-------------------------------------------------------------------------
 sal_Bool SAL_CALL PasswordContainer::authorizateWithMasterPassword( const uno::Reference< task::XInteractionHandler >& xHandler )
     throw (uno::RuntimeException)
 {
@@ -1158,7 +1115,6 @@ sal_Bool SAL_CALL PasswordContainer::authorizateWithMasterPassword( const uno::R
     return bResult;
 }
 
-//-------------------------------------------------------------------------
 sal_Bool SAL_CALL PasswordContainer::changeMasterPassword( const uno::Reference< task::XInteractionHandler >& xHandler )
     throw (uno::RuntimeException)
 {
@@ -1216,7 +1172,6 @@ sal_Bool SAL_CALL PasswordContainer::changeMasterPassword( const uno::Reference<
     return bResult;
 }
 
-//-------------------------------------------------------------------------
 void SAL_CALL PasswordContainer::removeMasterPassword()
     throw (uno::RuntimeException)
 {
@@ -1231,7 +1186,6 @@ void SAL_CALL PasswordContainer::removeMasterPassword()
     }
 }
 
-//-------------------------------------------------------------------------
 ::sal_Bool SAL_CALL PasswordContainer::hasMasterPassword(  )
     throw (::com::sun::star::uno::RuntimeException)
 {
@@ -1244,7 +1198,6 @@ void SAL_CALL PasswordContainer::removeMasterPassword()
     return ( m_pStorageFile->useStorage() && m_pStorageFile->getEncodedMP( aEncodedMP ) );
 }
 
-//-------------------------------------------------------------------------
 ::sal_Bool SAL_CALL PasswordContainer::allowPersistentStoring( ::sal_Bool bAllow )
     throw (::com::sun::star::uno::RuntimeException)
 {
@@ -1263,7 +1216,6 @@ void SAL_CALL PasswordContainer::removeMasterPassword()
     return !bAllow;
 }
 
-//-------------------------------------------------------------------------
 ::sal_Bool SAL_CALL PasswordContainer::isPersistentStoringAllowed()
     throw (::com::sun::star::uno::RuntimeException)
 {
@@ -1275,7 +1227,6 @@ void SAL_CALL PasswordContainer::removeMasterPassword()
     return m_pStorageFile->useStorage();
 }
 
-//-------------------------------------------------------------------------
 ::sal_Bool SAL_CALL PasswordContainer::useDefaultMasterPassword( const uno::Reference< task::XInteractionHandler >& xHandler )
     throw ( uno::RuntimeException )
 {
@@ -1331,7 +1282,6 @@ void SAL_CALL PasswordContainer::removeMasterPassword()
 
 }
 
-//-------------------------------------------------------------------------
 ::sal_Bool SAL_CALL PasswordContainer::isDefaultMasterPasswordUsed()
     throw ( uno::RuntimeException )
 {
@@ -1345,35 +1295,30 @@ void SAL_CALL PasswordContainer::removeMasterPassword()
 }
 
 
-//-------------------------------------------------------------------------
 void SAL_CALL PasswordContainer::addUrl( const OUString& Url, ::sal_Bool MakePersistent )
     throw (uno::RuntimeException)
 {
     mUrlContainer.add( Url, MakePersistent );
 }
 
-//-------------------------------------------------------------------------
 OUString SAL_CALL PasswordContainer::findUrl( const OUString& Url )
     throw (uno::RuntimeException)
 {
     return mUrlContainer.find( Url );
 }
 
-//-------------------------------------------------------------------------
 void SAL_CALL PasswordContainer::removeUrl( const OUString& Url )
     throw (uno::RuntimeException)
 {
     mUrlContainer.remove( Url );
 }
 
-//-------------------------------------------------------------------------
 uno::Sequence< OUString > SAL_CALL PasswordContainer::getUrls( ::sal_Bool OnlyPersistent )
     throw (uno::RuntimeException)
 {
     return mUrlContainer.list( OnlyPersistent );
 }
 
-//-------------------------------------------------------------------------
 
 void PasswordContainer::Notify()
 {
@@ -1420,14 +1365,12 @@ void PasswordContainer::Notify()
     }
 }
 
-//-------------------------------------------------------------------------
 
 OUString SAL_CALL PasswordContainer::getImplementationName(  ) throw(uno::RuntimeException)
 {
     return impl_getStaticImplementationName();
 }
 
-//-------------------------------------------------------------------------
 
 sal_Bool SAL_CALL PasswordContainer::supportsService( const OUString& ServiceName ) throw(uno::RuntimeException)
 {
@@ -1437,14 +1380,12 @@ sal_Bool SAL_CALL PasswordContainer::supportsService( const OUString& ServiceNam
         return sal_False;
 }
 
-//-------------------------------------------------------------------------
 
 Sequence< OUString > SAL_CALL PasswordContainer::getSupportedServiceNames(  ) throw(uno::RuntimeException)
 {
     return impl_getStaticSupportedServiceNames();
 }
 
-//-------------------------------------------------------------------------
 
 Sequence< OUString > SAL_CALL PasswordContainer::impl_getStaticSupportedServiceNames(  ) throw(uno::RuntimeException)
 {
@@ -1453,21 +1394,18 @@ Sequence< OUString > SAL_CALL PasswordContainer::impl_getStaticSupportedServiceN
     return aRet;
 }
 
-//-------------------------------------------------------------------------
 
 OUString SAL_CALL PasswordContainer::impl_getStaticImplementationName() throw(uno::RuntimeException)
 {
     return OUString("stardiv.svl.PasswordContainer");
 }
 
-//-------------------------------------------------------------------------
 
 Reference< XInterface > SAL_CALL PasswordContainer::impl_createInstance( const Reference< XMultiServiceFactory >& xServiceManager ) throw( RuntimeException )
 {
     return Reference< XInterface >( *new PasswordContainer( xServiceManager ) );
 }
 
-//-------------------------------------------------------------------------
 
 Reference< XSingleServiceFactory > SAL_CALL PasswordContainer::impl_createFactory( const Reference< XMultiServiceFactory >& ServiceManager ) throw(RuntimeException)
 {
@@ -1479,8 +1417,6 @@ Reference< XSingleServiceFactory > SAL_CALL PasswordContainer::impl_createFactor
 
 }
 
-//-------------------------------------------------------------------------
-//-------------------------------------------------------------------------
 
 MasterPasswordRequest_Impl::MasterPasswordRequest_Impl( PasswordRequestMode Mode )
 {
@@ -1519,8 +1455,6 @@ MasterPasswordRequest_Impl::MasterPasswordRequest_Impl( PasswordRequestMode Mode
     setContinuations( aContinuations );
 }
 
-//-------------------------------------------------------------------------
-//-------------------------------------------------------------------------
 
 extern "C"
 {

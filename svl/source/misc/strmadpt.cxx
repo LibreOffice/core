@@ -32,7 +32,6 @@
 
 using namespace com::sun::star;
 
-//============================================================================
 class SvDataPipe_Impl
 {
 public:
@@ -132,15 +131,12 @@ inline sal_uInt32 SvDataPipe_Impl::getReadPosition() const
                                          - m_pReadPage->m_aBuffer);
 }
 
-//============================================================================
 //
 //  SvOutputStreamOpenLockBytes
 //
-//============================================================================
 
 TYPEINIT1(SvOutputStreamOpenLockBytes, SvOpenLockBytes)
 
-//============================================================================
 // virtual
 ErrCode SvOutputStreamOpenLockBytes::ReadAt(sal_uLong, void *, sal_uLong, sal_uLong *)
     const
@@ -148,7 +144,6 @@ ErrCode SvOutputStreamOpenLockBytes::ReadAt(sal_uLong, void *, sal_uLong, sal_uL
     return ERRCODE_IO_CANTREAD;
 }
 
-//============================================================================
 // virtual
 ErrCode SvOutputStreamOpenLockBytes::WriteAt(sal_uLong nPos, void const * pBuffer,
                                              sal_uLong nCount, sal_uLong * pWritten)
@@ -158,7 +153,6 @@ ErrCode SvOutputStreamOpenLockBytes::WriteAt(sal_uLong nPos, void const * pBuffe
     return FillAppend(pBuffer, nCount, pWritten);
 }
 
-//============================================================================
 // virtual
 ErrCode SvOutputStreamOpenLockBytes::Flush() const
 {
@@ -175,14 +169,12 @@ ErrCode SvOutputStreamOpenLockBytes::Flush() const
     return ERRCODE_NONE;
 }
 
-//============================================================================
 // virtual
 ErrCode SvOutputStreamOpenLockBytes::SetSize(sal_uLong)
 {
     return ERRCODE_IO_NOTSUPPORTED;
 }
 
-//============================================================================
 // virtual
 ErrCode SvOutputStreamOpenLockBytes::Stat(SvLockBytesStat * pStat,
                                           SvLockBytesStatFlag) const
@@ -192,7 +184,6 @@ ErrCode SvOutputStreamOpenLockBytes::Stat(SvLockBytesStat * pStat,
     return ERRCODE_NONE;
 }
 
-//============================================================================
 // virtual
 ErrCode SvOutputStreamOpenLockBytes::FillAppend(void const * pBuffer,
                                                 sal_uLong nCount,
@@ -223,21 +214,18 @@ ErrCode SvOutputStreamOpenLockBytes::FillAppend(void const * pBuffer,
     return ERRCODE_NONE;
 }
 
-//============================================================================
 // virtual
 sal_uLong SvOutputStreamOpenLockBytes::Tell() const
 {
     return m_nPosition;
 }
 
-//============================================================================
 // virtual
 sal_uLong SvOutputStreamOpenLockBytes::Seek(sal_uLong)
 {
     return m_nPosition;
 }
 
-//============================================================================
 // virtual
 void SvOutputStreamOpenLockBytes::Terminate()
 {
@@ -253,11 +241,9 @@ void SvOutputStreamOpenLockBytes::Terminate()
     }
 }
 
-//============================================================================
 //
 //  SvLockBytesInputStream
 //
-//============================================================================
 
 // virtual
 uno::Any SAL_CALL SvLockBytesInputStream::queryInterface(uno::Type const &
@@ -271,21 +257,18 @@ uno::Any SAL_CALL SvLockBytesInputStream::queryInterface(uno::Type const &
     return aReturn.hasValue() ? aReturn : OWeakObject::queryInterface(rType);
 }
 
-//============================================================================
 // virtual
 void SAL_CALL SvLockBytesInputStream::acquire() throw ()
 {
     OWeakObject::acquire();
 }
 
-//============================================================================
 // virtual
 void SAL_CALL SvLockBytesInputStream::release() throw ()
 {
     OWeakObject::release();
 }
 
-//============================================================================
 // virtual
 sal_Int32 SAL_CALL
 SvLockBytesInputStream::readBytes(uno::Sequence< sal_Int8 > & rData,
@@ -325,7 +308,6 @@ SvLockBytesInputStream::readBytes(uno::Sequence< sal_Int8 > & rData,
     return nSize;
 }
 
-//============================================================================
 // virtual
 sal_Int32 SAL_CALL
 SvLockBytesInputStream::readSomeBytes(uno::Sequence< sal_Int8 > & rData,
@@ -360,7 +342,6 @@ SvLockBytesInputStream::readSomeBytes(uno::Sequence< sal_Int8 > & rData,
     return sal_Int32(nCount);
 }
 
-//============================================================================
 // virtual
 void SAL_CALL SvLockBytesInputStream::skipBytes(sal_Int32 nBytesToSkip)
     throw (io::IOException, uno::RuntimeException)
@@ -374,7 +355,6 @@ void SAL_CALL SvLockBytesInputStream::skipBytes(sal_Int32 nBytesToSkip)
     m_nPosition += nBytesToSkip;
 }
 
-//============================================================================
 // virtual
 sal_Int32 SAL_CALL SvLockBytesInputStream::available()
     throw (io::IOException, uno::RuntimeException)
@@ -393,7 +373,6 @@ sal_Int32 SAL_CALL SvLockBytesInputStream::available()
                SAL_MAX_INT32;
 }
 
-//============================================================================
 // virtual
 void SAL_CALL SvLockBytesInputStream::closeInput()
     throw (io::IOException, uno::RuntimeException)
@@ -403,7 +382,6 @@ void SAL_CALL SvLockBytesInputStream::closeInput()
     m_xLockBytes = 0;
 }
 
-//============================================================================
 // virtual
 void SAL_CALL SvLockBytesInputStream::seek(sal_Int64 nLocation)
     throw (lang::IllegalArgumentException, io::IOException,
@@ -416,7 +394,6 @@ void SAL_CALL SvLockBytesInputStream::seek(sal_Int64 nLocation)
     m_nPosition = nLocation;
 }
 
-//============================================================================
 // virtual
 sal_Int64 SAL_CALL SvLockBytesInputStream::getPosition()
     throw (io::IOException, uno::RuntimeException)
@@ -426,7 +403,6 @@ sal_Int64 SAL_CALL SvLockBytesInputStream::getPosition()
     return m_nPosition;
 }
 
-//============================================================================
 // virtual
 sal_Int64 SAL_CALL SvLockBytesInputStream::getLength()
     throw (io::IOException, uno::RuntimeException)
@@ -443,11 +419,9 @@ sal_Int64 SAL_CALL SvLockBytesInputStream::getLength()
     return aStat.nSize;
 }
 
-//============================================================================
 //
 //  SvInputStream
 //
-//============================================================================
 
 bool SvInputStream::open()
 {
@@ -468,7 +442,6 @@ bool SvInputStream::open()
     return true;
 }
 
-//============================================================================
 // virtual
 sal_uLong SvInputStream::GetData(void * pData, sal_uLong nSize)
 {
@@ -563,7 +536,6 @@ sal_uLong SvInputStream::GetData(void * pData, sal_uLong nSize)
     return nRead;
 }
 
-//============================================================================
 // virtual
 sal_uLong SvInputStream::PutData(void const *, sal_uLong)
 {
@@ -571,12 +543,10 @@ sal_uLong SvInputStream::PutData(void const *, sal_uLong)
     return 0;
 }
 
-//============================================================================
 // virtual
 void SvInputStream::FlushData()
 {}
 
-//============================================================================
 // virtual
 sal_uLong SvInputStream::SeekPos(sal_uLong nPos)
 {
@@ -644,14 +614,12 @@ sal_uLong SvInputStream::SeekPos(sal_uLong nPos)
     return Tell();
 }
 
-//============================================================================
 // virtual
 void SvInputStream::SetSize(sal_uLong)
 {
     SetError(ERRCODE_IO_NOTSUPPORTED);
 }
 
-//============================================================================
 SvInputStream::SvInputStream(
         com::sun::star::uno::Reference< com::sun::star::io::XInputStream >
                 const &
@@ -663,7 +631,6 @@ SvInputStream::SvInputStream(
     SetBufferSize(0);
 }
 
-//============================================================================
 // virtual
 SvInputStream::~SvInputStream()
 {
@@ -680,14 +647,12 @@ SvInputStream::~SvInputStream()
     delete m_pPipe;
 }
 
-//============================================================================
 // virtual
 sal_uInt16 SvInputStream::IsA() const
 {
     return 0;
 }
 
-//============================================================================
 // virtual
 void SvInputStream::AddMark(sal_uLong nPos)
 {
@@ -695,7 +660,6 @@ void SvInputStream::AddMark(sal_uLong nPos)
         m_pPipe->addMark(nPos);
 }
 
-//============================================================================
 // virtual
 void SvInputStream::RemoveMark(sal_uLong nPos)
 {
@@ -703,11 +667,9 @@ void SvInputStream::RemoveMark(sal_uLong nPos)
         m_pPipe->removeMark(nPos);
 }
 
-//============================================================================
 //
 //  SvOutputStream
 //
-//============================================================================
 
 // virtual
 sal_uLong SvOutputStream::GetData(void *, sal_uLong)
@@ -716,7 +678,6 @@ sal_uLong SvOutputStream::GetData(void *, sal_uLong)
     return 0;
 }
 
-//============================================================================
 // virtual
 sal_uLong SvOutputStream::PutData(void const * pData, sal_uLong nSize)
 {
@@ -751,7 +712,6 @@ sal_uLong SvOutputStream::PutData(void const * pData, sal_uLong nSize)
     return nWritten;
 }
 
-//============================================================================
 // virtual
 sal_uLong SvOutputStream::SeekPos(sal_uLong)
 {
@@ -759,7 +719,6 @@ sal_uLong SvOutputStream::SeekPos(sal_uLong)
     return 0;
 }
 
-//============================================================================
 // virtual
 void SvOutputStream::FlushData()
 {
@@ -777,14 +736,12 @@ void SvOutputStream::FlushData()
     }
 }
 
-//============================================================================
 // virtual
 void SvOutputStream::SetSize(sal_uLong)
 {
     SetError(ERRCODE_IO_NOTSUPPORTED);
 }
 
-//============================================================================
 SvOutputStream::SvOutputStream(uno::Reference< io::XOutputStream > const &
                                    rTheStream):
     m_xStream(rTheStream)
@@ -792,7 +749,6 @@ SvOutputStream::SvOutputStream(uno::Reference< io::XOutputStream > const &
     SetBufferSize(0);
 }
 
-//============================================================================
 // virtual
 SvOutputStream::~SvOutputStream()
 {
@@ -808,18 +764,15 @@ SvOutputStream::~SvOutputStream()
     }
 }
 
-//============================================================================
 // virtual
 sal_uInt16 SvOutputStream::IsA() const
 {
     return 0;
 }
 
-//============================================================================
 //
 //  SvDataPipe_Impl
 //
-//============================================================================
 
 bool SvDataPipe_Impl::remove(Page * pPage)
 {
@@ -848,7 +801,6 @@ bool SvDataPipe_Impl::remove(Page * pPage)
     return true;
 }
 
-//============================================================================
 SvDataPipe_Impl::~SvDataPipe_Impl()
 {
     if (m_pFirstPage != 0)
@@ -862,7 +814,6 @@ SvDataPipe_Impl::~SvDataPipe_Impl()
         }
 }
 
-//============================================================================
 sal_uInt32 SvDataPipe_Impl::read()
 {
     if (m_pReadBuffer == 0 || m_nReadBufferSize == 0 || m_pReadPage == 0)
@@ -901,7 +852,6 @@ sal_uInt32 SvDataPipe_Impl::read()
     return nSize - nRemain;
 }
 
-//============================================================================
 sal_uInt32 SvDataPipe_Impl::write(sal_Int8 const * pBuffer, sal_uInt32 nSize)
 {
     if (nSize == 0)
@@ -1000,7 +950,6 @@ sal_uInt32 SvDataPipe_Impl::write(sal_Int8 const * pBuffer, sal_uInt32 nSize)
     return nSize - nRemain;
 }
 
-//============================================================================
 bool SvDataPipe_Impl::addMark(sal_uInt32 nPosition)
 {
     if (m_pFirstPage != 0 && m_pFirstPage->m_nOffset > nPosition)
@@ -1009,7 +958,6 @@ bool SvDataPipe_Impl::addMark(sal_uInt32 nPosition)
     return true;
 }
 
-//============================================================================
 bool SvDataPipe_Impl::removeMark(sal_uInt32 nPosition)
 {
     std::multiset< sal_uInt32 >::iterator t = m_aMarks.find(nPosition);
@@ -1020,7 +968,6 @@ bool SvDataPipe_Impl::removeMark(sal_uInt32 nPosition)
     return true;
 }
 
-//============================================================================
 SvDataPipe_Impl::SeekResult SvDataPipe_Impl::setReadPosition(sal_uInt32
                                                                  nPosition)
 {

@@ -25,9 +25,6 @@
 
 using namespace com::sun::star;
 
-//=========================================================================
-//============== SvCommandList ============================================
-//=========================================================================
 
 static OUString parseString(const OUString & rCmd, sal_Int32 * pIndex)
 {
@@ -65,7 +62,6 @@ static void eatSpace(const OUString & rCmd, sal_Int32 * pIndex)
 }
 
 
-//=========================================================================
 bool SvCommandList::AppendCommands
 (
  const OUString & rCmd,    /* Dieser Text wird in Kommandos umgesetzt */
@@ -107,7 +103,6 @@ bool SvCommandList::AppendCommands
     return true;
 }
 
-//=========================================================================
 SvCommand & SvCommandList::Append
 (
  const OUString & rCommand,    /* das Kommando */

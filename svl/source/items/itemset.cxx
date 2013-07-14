@@ -41,11 +41,9 @@ static sal_uLong nRangesCopyCount = 0;   // wie oft wurden Ranges kopiert
 
 DBG_NAME(SfxItemSet)
 
-//========================================================================
 
 #include "nranges.cxx"
 
-//========================================================================
 
 #ifdef DBG_UTIL
 
@@ -459,7 +457,6 @@ void SfxItemSet::ClearInvalidItems( sal_Bool bHardDefault )
         }
 }
 
-//------------------------------------------------------------------------
 
 
 void SfxItemSet::InvalidateAllItems()
@@ -914,7 +911,6 @@ int SfxItemSet::Set
     return bRet;
 }
 
-//------------------------------------------------------------------------
 
 const SfxPoolItem* SfxItemSet::GetItem
 (
@@ -959,7 +955,6 @@ const SfxPoolItem* SfxItemSet::GetItem
 }
 
 
-//------------------------------------------------------------------------
 
 
 const SfxPoolItem& SfxItemSet::Get( sal_uInt16 nWhich, sal_Bool bSrchInParent) const

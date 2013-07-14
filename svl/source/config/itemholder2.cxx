@@ -31,7 +31,6 @@
 
 #include <tools/debug.hxx>
 
-//-----------------------------------------------
 ItemHolder2::ItemHolder2()
     : ItemHolderMutexBase()
 {
@@ -64,27 +63,23 @@ ItemHolder2::ItemHolder2()
 #endif
 }
 
-//-----------------------------------------------
 ItemHolder2::~ItemHolder2()
 {
     impl_releaseAllItems();
 }
 
-//-----------------------------------------------
 void ItemHolder2::holdConfigItem(EItem eItem)
 {
     static ItemHolder2* pHolder = new ItemHolder2();
     pHolder->impl_addItem(eItem);
 }
 
-//-----------------------------------------------
 void SAL_CALL ItemHolder2::disposing(const css::lang::EventObject&)
     throw(css::uno::RuntimeException)
 {
     impl_releaseAllItems();
 }
 
-//-----------------------------------------------
 void ItemHolder2::impl_addItem(EItem eItem)
 {
     ::osl::ResettableMutexGuard aLock(m_aLock);
@@ -106,7 +101,6 @@ void ItemHolder2::impl_addItem(EItem eItem)
         m_lItems.push_back(aNewItem);
 }
 
-//-----------------------------------------------
 void ItemHolder2::impl_releaseAllItems()
 {
     ::osl::ResettableMutexGuard aLock(m_aLock);
@@ -122,7 +116,6 @@ void ItemHolder2::impl_releaseAllItems()
     m_lItems.clear();
 }
 
-//-----------------------------------------------
 void ItemHolder2::impl_newItem(TItemInfo& rItem)
 {
     switch(rItem.eItem)
@@ -145,7 +138,6 @@ void ItemHolder2::impl_newItem(TItemInfo& rItem)
     }
 }
 
-//-----------------------------------------------
 void ItemHolder2::impl_deleteItem(TItemInfo& rItem)
 {
     if (rItem.pItem)

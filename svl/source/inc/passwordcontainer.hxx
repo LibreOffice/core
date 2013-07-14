@@ -45,7 +45,6 @@
 #define MEMORY_RECORD         0
 #define PERSISTENT_RECORD     1
 
-//----------------------------------------------------------------------------------
 
 class NamePassRecord
 {
@@ -184,12 +183,10 @@ public:
 
 };
 
-//----------------------------------------------------------------------------------
 
 typedef ::std::pair< const OUString, ::std::list< NamePassRecord > > PairUrlRecord;
 typedef ::std::map< OUString, ::std::list< NamePassRecord > > PassMap;
 
-//----------------------------------------------------------------------------------
 
 class PasswordContainer;
 
@@ -223,7 +220,6 @@ public:
     virtual void            Commit();
 };
 
-//----------------------------------------------------------------------------------
 
 enum PasswordState {
     no_password,
@@ -381,7 +377,6 @@ public:
     void            Notify();
 };
 
-//----------------------------------------------------------------------------------
 
 class MasterPasswordRequest_Impl : public ucbhelper::InteractionRequest
 {
@@ -395,7 +390,6 @@ public:
 
 };
 
-//----------------------------------------------------------------------------------
 
 class RW_SvMemoryStream : public SvMemoryStream {
 public:

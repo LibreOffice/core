@@ -25,17 +25,14 @@
 #include <svl/listeneriter.hxx>
 
 
-//====================================================================
 TYPEINIT0(SvtListener);
 
-//====================================================================
 // simple ctor of class SvtListener
 
 SvtListener::SvtListener()
     : pBrdCastLst( 0 )
 {
 }
-//--------------------------------------------------------------------
 
 // copy ctor of class SvtListener
 
@@ -49,7 +46,6 @@ SvtListener::SvtListener( const SvtListener &rListener )
         pLst = pLst->GetNext();
     }
 }
-//--------------------------------------------------------------------
 
 // unregisteres the SvtListener from its SvtBroadcasters
 
@@ -58,7 +54,6 @@ SvtListener::~SvtListener()
     EndListeningAll();
 }
 
-//--------------------------------------------------------------------
 
 // registeres at a specific SvtBroadcaster
 
@@ -78,7 +73,6 @@ sal_Bool SvtListener::StartListening( SvtBroadcaster& rBroadcaster )
     return sal_True;
 }
 
-//--------------------------------------------------------------------
 
 // unregisteres at a specific SvtBroadcaster
 
@@ -103,7 +97,6 @@ sal_Bool SvtListener::EndListening( SvtBroadcaster& rBroadcaster )
     return sal_False;
 }
 
-//--------------------------------------------------------------------
 
 // unregisteres all Broadcasters
 
@@ -120,7 +113,6 @@ void SvtListener::EndListeningAll()
     pBrdCastLst = 0;
 }
 
-//--------------------------------------------------------------------
 
 sal_Bool SvtListener::IsListening( SvtBroadcaster& rBroadcaster ) const
 {
@@ -134,7 +126,6 @@ sal_Bool SvtListener::IsListening( SvtBroadcaster& rBroadcaster ) const
     return 0 != pLst;
 }
 
-//--------------------------------------------------------------------
 
 // base implementation of notification handler
 

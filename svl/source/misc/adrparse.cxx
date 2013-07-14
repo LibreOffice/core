@@ -26,7 +26,6 @@ namespace
 
 enum ElementType { ELEMENT_START, ELEMENT_DELIM, ELEMENT_ITEM, ELEMENT_END };
 
-//============================================================================
 struct ParsedAddrSpec
 {
     sal_Unicode const * m_pBegin;
@@ -65,7 +64,6 @@ inline void ParsedAddrSpec::finish()
 
 }
 
-//============================================================================
 class SvAddressParser_Impl
 {
     enum State { BEFORE_COLON, BEFORE_LESS, AFTER_LESS, AFTER_GREATER };
@@ -163,11 +161,9 @@ inline void SvAddressParser_Impl::addTokenToRealName()
     }
 }
 
-//============================================================================
 //
 //  SvAddressParser_Impl
 //
-//============================================================================
 
 bool SvAddressParser_Impl::readToken()
 {
@@ -316,7 +312,6 @@ bool SvAddressParser_Impl::readToken()
     }
 }
 
-//============================================================================
 // static
 OUString SvAddressParser_Impl::reparse(sal_Unicode const * pBegin,
                                        sal_Unicode const * pEnd, bool bAddrSpec)
@@ -429,7 +424,6 @@ OUString SvAddressParser_Impl::reparse(sal_Unicode const * pBegin,
     return aResult.makeStringAndClear();
 }
 
-//============================================================================
 // static
 OUString SvAddressParser_Impl::reparseComment(sal_Unicode const * pBegin,
                                               sal_Unicode const * pEnd)
@@ -445,7 +439,6 @@ OUString SvAddressParser_Impl::reparseComment(sal_Unicode const * pBegin,
     return aResult.makeStringAndClear();
 }
 
-//============================================================================
 SvAddressParser_Impl::SvAddressParser_Impl(SvAddressParser * pParser,
                                            const OUString& rInput)
 {
@@ -725,11 +718,9 @@ SvAddressParser_Impl::SvAddressParser_Impl(SvAddressParser * pParser,
     }
 }
 
-//============================================================================
 //
 //  SvAddressParser
 //
-//============================================================================
 
 SvAddressParser::SvAddressParser(const OUString& rInput)
     : m_bHasFirst(false)
@@ -737,7 +728,6 @@ SvAddressParser::SvAddressParser(const OUString& rInput)
     SvAddressParser_Impl aDoParse(this, rInput);
 }
 
-//============================================================================
 SvAddressParser::~SvAddressParser()
 {
     for ( size_t i = m_aRest.size(); i > 0; )

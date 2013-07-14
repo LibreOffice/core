@@ -21,10 +21,8 @@
 #include <cppuhelper/weakref.hxx>
 #include <vector>
 
-//.........................................................................
 namespace svt
 {
-//.........................................................................
     using namespace ::com::sun::star::uno;
 
     namespace
@@ -52,7 +50,6 @@ namespace svt
             if ( !_rxPicker.is() )
                 return;
 
-            //=============================================================
             // first, check which of the objects we hold in s_aHistory can be removed
             {
                 InterfaceArray aCleanedHistory;
@@ -73,26 +70,21 @@ namespace svt
                 _rHistory.swap( aCleanedHistory );
             }
 
-            //=============================================================
             // then push_back the picker
             _rHistory.push_back( InterfaceAdapter( _rxPicker ) );
         }
     }
 
-    //---------------------------------------------------------------------
     void addFolderPicker( const Reference< XInterface >& _rxPicker )
     {
         implPushBackPicker( getFolderPickerHistory(), _rxPicker );
     }
 
-    //---------------------------------------------------------------------
     void addFilePicker( const Reference< XInterface >& _rxPicker )
     {
         implPushBackPicker( getFilePickerHistory(), _rxPicker );
     }
 
-//.........................................................................
 }   // namespace svt
-//.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -21,18 +21,14 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <tools/stream.hxx>
 
-//============================================================================
 //
 //  class SfxVisibilityItem
 //
-//============================================================================
 
 DBG_NAME(SfxVisibilityItem)
 
-//============================================================================
 TYPEINIT1_AUTOFACTORY(SfxVisibilityItem, SfxPoolItem);
 
-//============================================================================
 SfxVisibilityItem::SfxVisibilityItem(sal_uInt16 which, SvStream & rStream):
     SfxPoolItem(which)
 {
@@ -42,7 +38,6 @@ SfxVisibilityItem::SfxVisibilityItem(sal_uInt16 which, SvStream & rStream):
     m_nValue.bVisible = bValue;
 }
 
-//============================================================================
 // virtual
 int SfxVisibilityItem::operator ==(const SfxPoolItem & rItem) const
 {
@@ -52,7 +47,6 @@ int SfxVisibilityItem::operator ==(const SfxPoolItem & rItem) const
                         m_nValue.bVisible;
 }
 
-//============================================================================
 // virtual
 int SfxVisibilityItem::Compare(const SfxPoolItem & rWith) const
 {
@@ -61,7 +55,6 @@ int SfxVisibilityItem::Compare(const SfxPoolItem & rWith) const
                0 : m_nValue.bVisible ? -1 : 1;
 }
 
-//============================================================================
 // virtual
 SfxItemPresentation SfxVisibilityItem::GetPresentation(SfxItemPresentation,
                                                   SfxMapUnit, SfxMapUnit,
@@ -73,7 +66,6 @@ SfxItemPresentation SfxVisibilityItem::GetPresentation(SfxItemPresentation,
 }
 
 
-//============================================================================
 // virtual
 bool SfxVisibilityItem::QueryValue(com::sun::star::uno::Any& rVal, sal_uInt8) const
 {
@@ -81,7 +73,6 @@ bool SfxVisibilityItem::QueryValue(com::sun::star::uno::Any& rVal, sal_uInt8) co
     return true;
 }
 
-//============================================================================
 // virtual
 bool SfxVisibilityItem::PutValue(const com::sun::star::uno::Any& rVal, sal_uInt8)
 {
@@ -92,7 +83,6 @@ bool SfxVisibilityItem::PutValue(const com::sun::star::uno::Any& rVal, sal_uInt8
     return false;
 }
 
-//============================================================================
 // virtual
 SfxPoolItem * SfxVisibilityItem::Create(SvStream & rStream, sal_uInt16) const
 {
@@ -100,7 +90,6 @@ SfxPoolItem * SfxVisibilityItem::Create(SvStream & rStream, sal_uInt16) const
     return new SfxVisibilityItem(Which(), rStream);
 }
 
-//============================================================================
 // virtual
 SvStream & SfxVisibilityItem::Store(SvStream & rStream, sal_uInt16) const
 {
@@ -109,7 +98,6 @@ SvStream & SfxVisibilityItem::Store(SvStream & rStream, sal_uInt16) const
     return rStream;
 }
 
-//============================================================================
 // virtual
 SfxPoolItem * SfxVisibilityItem::Clone(SfxItemPool *) const
 {
@@ -117,14 +105,12 @@ SfxPoolItem * SfxVisibilityItem::Clone(SfxItemPool *) const
     return new SfxVisibilityItem(*this);
 }
 
-//============================================================================
 // virtual
 sal_uInt16 SfxVisibilityItem::GetValueCount() const
 {
     return 2;
 }
 
-//============================================================================
 // virtual
 OUString SfxVisibilityItem::GetValueTextByVal(sal_Bool bTheValue) const
 {

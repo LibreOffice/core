@@ -36,33 +36,28 @@ using ::com::sun::star::uno::Exception;
 
 DBG_NAME(SfxUndoAction)
 
-//========================================================================
 
 TYPEINIT0(SfxUndoAction);
 TYPEINIT0(SfxListUndoAction);
 TYPEINIT0(SfxLinkUndoAction);
 TYPEINIT0(SfxRepeatTarget);
 
-//------------------------------------------------------------------------
 
 SfxRepeatTarget::~SfxRepeatTarget()
 {
 }
 
-//------------------------------------------------------------------------
 
 SfxUndoContext::~SfxUndoContext()
 {
 }
 
-//------------------------------------------------------------------------
 
 void SfxUndoAction::SetLinkToSfxLinkUndoAction(SfxLinkUndoAction* pSfxLinkUndoAction)
 {
     mpSfxLinkUndoAction = pSfxLinkUndoAction;
 }
 
-//------------------------------------------------------------------------
 
 SfxUndoAction::~SfxUndoAction()
 {
@@ -82,7 +77,6 @@ SfxUndoAction::SfxUndoAction()
     DBG_CTOR(SfxUndoAction, 0);
 }
 
-//------------------------------------------------------------------------
 
 bool SfxUndoAction::Merge( SfxUndoAction * )
 {
@@ -90,7 +84,6 @@ bool SfxUndoAction::Merge( SfxUndoAction * )
     return false;
 }
 
-//------------------------------------------------------------------------
 
 OUString SfxUndoAction::GetComment() const
 {
@@ -98,7 +91,6 @@ OUString SfxUndoAction::GetComment() const
     return OUString();
 }
 
-//------------------------------------------------------------------------
 
 
 sal_uInt16 SfxUndoAction::GetId() const
@@ -107,7 +99,6 @@ sal_uInt16 SfxUndoAction::GetId() const
     return 0;
 }
 
-//------------------------------------------------------------------------
 
 OUString SfxUndoAction::GetRepeatComment(SfxRepeatTarget&) const
 {
@@ -115,7 +106,6 @@ OUString SfxUndoAction::GetRepeatComment(SfxRepeatTarget&) const
     return GetComment();
 }
 
-//------------------------------------------------------------------------
 
 void SfxUndoAction::Undo()
 {
@@ -123,7 +113,6 @@ void SfxUndoAction::Undo()
     OSL_FAIL( "pure virtual function called: SfxUndoAction::Undo()" );
 }
 
-//------------------------------------------------------------------------
 
 void SfxUndoAction::UndoWithContext( SfxUndoContext& i_context )
 {
@@ -131,7 +120,6 @@ void SfxUndoAction::UndoWithContext( SfxUndoContext& i_context )
     Undo();
 }
 
-//------------------------------------------------------------------------
 
 void SfxUndoAction::Redo()
 {
@@ -139,7 +127,6 @@ void SfxUndoAction::Redo()
     OSL_FAIL( "pure virtual function called: SfxUndoAction::Redo()" );
 }
 
-//------------------------------------------------------------------------
 
 void SfxUndoAction::RedoWithContext( SfxUndoContext& i_context )
 {
@@ -147,7 +134,6 @@ void SfxUndoAction::RedoWithContext( SfxUndoContext& i_context )
     Redo();
 }
 
-//------------------------------------------------------------------------
 
 void SfxUndoAction::Repeat(SfxRepeatTarget&)
 {
@@ -155,7 +141,6 @@ void SfxUndoAction::Repeat(SfxRepeatTarget&)
     OSL_FAIL( "pure virtual function called: SfxUndoAction::Repeat()" );
 }
 
-//------------------------------------------------------------------------
 
 
 bool SfxUndoAction::CanRepeat(SfxRepeatTarget&) const
@@ -163,7 +148,6 @@ bool SfxUndoAction::CanRepeat(SfxRepeatTarget&) const
     return true;
 }
 
-//========================================================================
 
 typedef ::std::vector< SfxUndoListener* >   UndoListeners;
 
@@ -201,11 +185,9 @@ struct SVL_DLLPRIVATE SfxUndoManager_Data
     }
 };
 
-//========================================================================
 
 namespace svl { namespace undo { namespace impl
 {
-    //--------------------------------------------------------------------
     class SVL_DLLPRIVATE LockGuard
     {
     public:
@@ -224,11 +206,9 @@ namespace svl { namespace undo { namespace impl
         SfxUndoManager& m_manager;
     };
 
-    //--------------------------------------------------------------------
     typedef void ( SfxUndoListener::*UndoListenerVoidMethod )();
     typedef void ( SfxUndoListener::*UndoListenerStringMethod )( const OUString& );
 
-    //--------------------------------------------------------------------
     struct SVL_DLLPRIVATE NotifyUndoListener : public ::std::unary_function< SfxUndoListener*, void >
     {
         NotifyUndoListener()
@@ -276,7 +256,6 @@ namespace svl { namespace undo { namespace impl
         OUString                    m_sActionComment;
     };
 
-    //--------------------------------------------------------------------
     class SVL_DLLPRIVATE UndoManagerGuard
     {
     public:
@@ -375,14 +354,12 @@ namespace svl { namespace undo { namespace impl
 
 using namespace ::svl::undo::impl;
 
-//========================================================================
 
 SfxUndoManager::SfxUndoManager( size_t nMaxUndoActionCount )
     :m_pData( new SfxUndoManager_Data( nMaxUndoActionCount ) )
 {
 }
 
-//------------------------------------------------------------------------
 
 SfxUndoManager::~SfxUndoManager()
 {
@@ -396,7 +373,6 @@ SfxUndoManager::~SfxUndoManager()
         NotifyUndoListener( &SfxUndoListener::undoManagerDying ) );
 }
 
-//------------------------------------------------------------------------
 
 void SfxUndoManager::EnableUndo( bool i_enable )
 {
@@ -405,7 +381,6 @@ void SfxUndoManager::EnableUndo( bool i_enable )
 
 }
 
-//------------------------------------------------------------------------
 
 void SfxUndoManager::ImplEnableUndo_Lock( bool const i_enable )
 {
@@ -414,7 +389,6 @@ void SfxUndoManager::ImplEnableUndo_Lock( bool const i_enable )
     m_pData->mbUndoEnabled = i_enable;
 }
 
-//------------------------------------------------------------------------
 
 bool SfxUndoManager::IsUndoEnabled() const
 {
@@ -422,14 +396,12 @@ bool SfxUndoManager::IsUndoEnabled() const
     return ImplIsUndoEnabled_Lock();
 }
 
-//------------------------------------------------------------------------
 
 bool SfxUndoManager::ImplIsUndoEnabled_Lock() const
 {
     return m_pData->mbUndoEnabled;
 }
 
-//------------------------------------------------------------------------
 
 void SfxUndoManager::SetMaxUndoActionCount( size_t nMaxUndoActionCount )
 {
@@ -468,7 +440,6 @@ void SfxUndoManager::SetMaxUndoActionCount( size_t nMaxUndoActionCount )
     m_pData->pActUndoArray->nMaxUndoActions = nMaxUndoActionCount;
 }
 
-//------------------------------------------------------------------------
 
 size_t SfxUndoManager::GetMaxUndoActionCount() const
 {
@@ -476,7 +447,6 @@ size_t SfxUndoManager::GetMaxUndoActionCount() const
     return m_pData->pActUndoArray->nMaxUndoActions;
 }
 
-//------------------------------------------------------------------------
 
 void SfxUndoManager::ImplClearCurrentLevel_NoNotify( UndoManagerGuard& i_guard )
 {
@@ -495,7 +465,6 @@ void SfxUndoManager::ImplClearCurrentLevel_NoNotify( UndoManagerGuard& i_guard )
     m_pData->mnEmptyMark = MARK_INVALID;
 }
 
-//------------------------------------------------------------------------
 
 void SfxUndoManager::Clear()
 {
@@ -508,7 +477,6 @@ void SfxUndoManager::Clear()
     aGuard.scheduleNotification( &SfxUndoListener::cleared );
 }
 
-//------------------------------------------------------------------------
 
 void SfxUndoManager::ClearAllLevels()
 {
@@ -525,7 +493,6 @@ void SfxUndoManager::ClearAllLevels()
     }
 }
 
-//------------------------------------------------------------------------
 
 void SfxUndoManager::ImplClearRedo_NoLock( bool const i_currentLevel )
 {
@@ -533,7 +500,6 @@ void SfxUndoManager::ImplClearRedo_NoLock( bool const i_currentLevel )
     ImplClearRedo( aGuard, i_currentLevel );
 }
 
-//------------------------------------------------------------------------
 
 void SfxUndoManager::ClearRedo()
 {
@@ -541,7 +507,6 @@ void SfxUndoManager::ClearRedo()
     ImplClearRedo_NoLock( CurrentLevel );
 }
 
-//------------------------------------------------------------------------
 
 void SfxUndoManager::Reset()
 {
@@ -566,7 +531,6 @@ void SfxUndoManager::Reset()
     aGuard.scheduleNotification( &SfxUndoListener::resetAll );
 }
 
-//------------------------------------------------------------------------
 
 void SfxUndoManager::ImplClearUndo( UndoManagerGuard& i_guard )
 {
@@ -580,7 +544,6 @@ void SfxUndoManager::ImplClearUndo( UndoManagerGuard& i_guard )
     // TODO: notifications? We don't have clearedUndo, only cleared and clearedRedo at the SfxUndoListener
 }
 
-//------------------------------------------------------------------------
 
 void SfxUndoManager::ImplClearRedo( UndoManagerGuard& i_guard, bool const i_currentLevel )
 {
@@ -600,7 +563,6 @@ void SfxUndoManager::ImplClearRedo( UndoManagerGuard& i_guard, bool const i_curr
         i_guard.scheduleNotification( &SfxUndoListener::clearedRedo );
 }
 
-//------------------------------------------------------------------------
 
 bool SfxUndoManager::ImplAddUndoAction_NoNotify( SfxUndoAction *pAction, bool bTryMerge, bool bClearRedo, UndoManagerGuard& i_guard )
 {
@@ -646,7 +608,6 @@ bool SfxUndoManager::ImplAddUndoAction_NoNotify( SfxUndoAction *pAction, bool bT
     return true;
 }
 
-//------------------------------------------------------------------------
 
 void SfxUndoManager::AddUndoAction( SfxUndoAction *pAction, bool bTryMerge )
 {
@@ -660,7 +621,6 @@ void SfxUndoManager::AddUndoAction( SfxUndoAction *pAction, bool bTryMerge )
     }
 }
 
-//------------------------------------------------------------------------
 
 size_t SfxUndoManager::GetUndoActionCount( bool const i_currentLevel ) const
 {
@@ -669,7 +629,6 @@ size_t SfxUndoManager::GetUndoActionCount( bool const i_currentLevel ) const
     return pUndoArray->nCurUndoAction;
 }
 
-//------------------------------------------------------------------------
 
 OUString SfxUndoManager::GetUndoActionComment( size_t nNo, bool const i_currentLevel ) const
 {
@@ -683,7 +642,6 @@ OUString SfxUndoManager::GetUndoActionComment( size_t nNo, bool const i_currentL
     return sComment;
 }
 
-//------------------------------------------------------------------------
 
 sal_uInt16 SfxUndoManager::GetUndoActionId() const
 {
@@ -695,7 +653,6 @@ sal_uInt16 SfxUndoManager::GetUndoActionId() const
     return m_pData->pActUndoArray->aUndoActions[m_pData->pActUndoArray->nCurUndoAction-1].pAction->GetId();
 }
 
-//------------------------------------------------------------------------
 
 SfxUndoAction* SfxUndoManager::GetUndoAction( size_t nNo ) const
 {
@@ -707,7 +664,6 @@ SfxUndoAction* SfxUndoManager::GetUndoAction( size_t nNo ) const
     return m_pData->pActUndoArray->aUndoActions[m_pData->pActUndoArray->nCurUndoAction-1-nNo].pAction;
 }
 
-//------------------------------------------------------------------------
 
 /** clears the redo stack and removes the top undo action */
 void SfxUndoManager::RemoveLastUndoAction()
@@ -729,7 +685,6 @@ void SfxUndoManager::RemoveLastUndoAction()
         m_pData->pActUndoArray->aUndoActions.size() - m_pData->pActUndoArray->nCurUndoAction );
 }
 
-//------------------------------------------------------------------------
 
 bool SfxUndoManager::IsDoing() const
 {
@@ -737,21 +692,18 @@ bool SfxUndoManager::IsDoing() const
     return m_pData->mbDoing;
 }
 
-//------------------------------------------------------------------------
 
 bool SfxUndoManager::Undo()
 {
     return ImplUndo( NULL );
 }
 
-//------------------------------------------------------------------------
 
 bool SfxUndoManager::UndoWithContext( SfxUndoContext& i_context )
 {
     return ImplUndo( &i_context );
 }
 
-//------------------------------------------------------------------------
 
 bool SfxUndoManager::ImplUndo( SfxUndoContext* i_contextOrNull )
 {
@@ -812,7 +764,6 @@ bool SfxUndoManager::ImplUndo( SfxUndoContext* i_contextOrNull )
     return sal_True;
 }
 
-//------------------------------------------------------------------------
 
 size_t SfxUndoManager::GetRedoActionCount( bool const i_currentLevel ) const
 {
@@ -820,7 +771,6 @@ size_t SfxUndoManager::GetRedoActionCount( bool const i_currentLevel ) const
     return ImplGetRedoActionCount_Lock( i_currentLevel );
 }
 
-//------------------------------------------------------------------------
 
 size_t SfxUndoManager::ImplGetRedoActionCount_Lock( bool const i_currentLevel ) const
 {
@@ -828,7 +778,6 @@ size_t SfxUndoManager::ImplGetRedoActionCount_Lock( bool const i_currentLevel ) 
     return pUndoArray->aUndoActions.size() - pUndoArray->nCurUndoAction;
 }
 
-//------------------------------------------------------------------------
 
 SfxUndoAction* SfxUndoManager::GetRedoAction( size_t nNo, bool const i_currentLevel ) const
 {
@@ -842,7 +791,6 @@ SfxUndoAction* SfxUndoManager::GetRedoAction( size_t nNo, bool const i_currentLe
     return pUndoArray->aUndoActions[ pUndoArray->nCurUndoAction + nNo ].pAction;
 }
 
-//------------------------------------------------------------------------
 
 OUString SfxUndoManager::GetRedoActionComment( size_t nNo, bool const i_currentLevel ) const
 {
@@ -856,21 +804,18 @@ OUString SfxUndoManager::GetRedoActionComment( size_t nNo, bool const i_currentL
     return sComment;
 }
 
-//------------------------------------------------------------------------
 
 bool SfxUndoManager::Redo()
 {
     return ImplRedo( NULL );
 }
 
-//------------------------------------------------------------------------
 
 bool SfxUndoManager::RedoWithContext( SfxUndoContext& i_context )
 {
     return ImplRedo( &i_context );
 }
 
-//------------------------------------------------------------------------
 
 bool SfxUndoManager::ImplRedo( SfxUndoContext* i_contextOrNull )
 {
@@ -932,7 +877,6 @@ bool SfxUndoManager::ImplRedo( SfxUndoContext* i_contextOrNull )
     return sal_True;
 }
 
-//------------------------------------------------------------------------
 
 size_t SfxUndoManager::GetRepeatActionCount() const
 {
@@ -940,7 +884,6 @@ size_t SfxUndoManager::GetRepeatActionCount() const
     return m_pData->pActUndoArray->aUndoActions.size();
 }
 
-//------------------------------------------------------------------------
 
 OUString SfxUndoManager::GetRepeatActionComment(SfxRepeatTarget &rTarget) const
 {
@@ -949,7 +892,6 @@ OUString SfxUndoManager::GetRepeatActionComment(SfxRepeatTarget &rTarget) const
         ->GetRepeatComment(rTarget);
 }
 
-//------------------------------------------------------------------------
 
 bool SfxUndoManager::Repeat( SfxRepeatTarget &rTarget )
 {
@@ -966,7 +908,6 @@ bool SfxUndoManager::Repeat( SfxRepeatTarget &rTarget )
     return false;
 }
 
-//------------------------------------------------------------------------
 
 bool SfxUndoManager::CanRepeat( SfxRepeatTarget &rTarget ) const
 {
@@ -979,7 +920,6 @@ bool SfxUndoManager::CanRepeat( SfxRepeatTarget &rTarget ) const
     return false;
 }
 
-//------------------------------------------------------------------------
 
 void SfxUndoManager::AddUndoListener( SfxUndoListener& i_listener )
 {
@@ -987,7 +927,6 @@ void SfxUndoManager::AddUndoListener( SfxUndoListener& i_listener )
     m_pData->aListeners.push_back( &i_listener );
 }
 
-//------------------------------------------------------------------------
 
 void SfxUndoManager::RemoveUndoListener( SfxUndoListener& i_listener )
 {
@@ -1005,7 +944,6 @@ void SfxUndoManager::RemoveUndoListener( SfxUndoListener& i_listener )
     }
 }
 
-//------------------------------------------------------------------------
 
 void SfxUndoManager::EnterListAction( const OUString& rComment,
                                       const OUString &rRepeatComment, sal_uInt16 nId )
@@ -1034,7 +972,6 @@ void SfxUndoManager::EnterListAction( const OUString& rComment,
     aGuard.scheduleNotification( &SfxUndoListener::listActionEntered, rComment );
 }
 
-//------------------------------------------------------------------------
 
 bool SfxUndoManager::IsInListAction() const
 {
@@ -1042,14 +979,12 @@ bool SfxUndoManager::IsInListAction() const
     return ImplIsInListAction_Lock();
 }
 
-//------------------------------------------------------------------------
 
 bool SfxUndoManager::ImplIsInListAction_Lock() const
 {
     return ( m_pData->pActUndoArray != m_pData->pUndoArray );
 }
 
-//------------------------------------------------------------------------
 
 size_t SfxUndoManager::GetListActionDepth() const
 {
@@ -1066,7 +1001,6 @@ size_t SfxUndoManager::GetListActionDepth() const
     return nDepth;
 }
 
-//------------------------------------------------------------------------
 
 size_t SfxUndoManager::LeaveListAction()
 {
@@ -1087,7 +1021,6 @@ size_t SfxUndoManager::LeaveListAction()
     return nCount;
 }
 
-//------------------------------------------------------------------------
 
 size_t SfxUndoManager::LeaveAndMergeListAction()
 {
@@ -1095,7 +1028,6 @@ size_t SfxUndoManager::LeaveAndMergeListAction()
     return ImplLeaveListAction( true, aGuard );
 }
 
-//------------------------------------------------------------------------
 
 size_t SfxUndoManager::ImplLeaveListAction( const bool i_merge, UndoManagerGuard& i_guard )
 {
@@ -1175,7 +1107,6 @@ size_t SfxUndoManager::ImplLeaveListAction( const bool i_merge, UndoManagerGuard
     return nListActionElements;
 }
 
-//------------------------------------------------------------------------
 UndoStackMark SfxUndoManager::MarkTopUndoAction()
 {
     UndoManagerGuard aGuard( *m_pData );
@@ -1197,7 +1128,6 @@ UndoStackMark SfxUndoManager::MarkTopUndoAction()
     return m_pData->mnMarks;
 }
 
-//------------------------------------------------------------------------
 void SfxUndoManager::RemoveMark( UndoStackMark const i_mark )
 {
     UndoManagerGuard aGuard( *m_pData );
@@ -1233,7 +1163,6 @@ void SfxUndoManager::RemoveMark( UndoStackMark const i_mark )
         // about this.
 }
 
-//------------------------------------------------------------------------
 bool SfxUndoManager::HasTopUndoActionMark( UndoStackMark const i_mark )
 {
     UndoManagerGuard aGuard( *m_pData );
@@ -1258,7 +1187,6 @@ bool SfxUndoManager::HasTopUndoActionMark( UndoStackMark const i_mark )
     return false;
 }
 
-//------------------------------------------------------------------------
 
 void SfxUndoManager::RemoveOldestUndoActions( size_t const i_count )
 {
@@ -1282,28 +1210,24 @@ void SfxUndoManager::RemoveOldestUndoActions( size_t const i_count )
     }
 }
 
-//------------------------------------------------------------------------
 
 sal_uInt16 SfxListUndoAction::GetId() const
 {
     return nId;
 }
 
-//------------------------------------------------------------------------
 
 OUString SfxListUndoAction::GetComment() const
 {
     return aComment;
 }
 
-//------------------------------------------------------------------------
 
 void SfxListUndoAction::SetComment(const OUString& rComment)
 {
     aComment = rComment;
 }
 
-//------------------------------------------------------------------------
 
 OUString SfxListUndoAction::GetRepeatComment(SfxRepeatTarget &) const
 {
@@ -1311,7 +1235,6 @@ OUString SfxListUndoAction::GetRepeatComment(SfxRepeatTarget &) const
 }
 
 
-//------------------------------------------------------------------------
 
 SfxListUndoAction::SfxListUndoAction
 (
@@ -1326,7 +1249,6 @@ SfxListUndoAction::SfxListUndoAction
     nMaxUndoActions = USHRT_MAX;
 }
 
-//------------------------------------------------------------------------
 
 void SfxListUndoAction::Undo()
 {
@@ -1335,7 +1257,6 @@ void SfxListUndoAction::Undo()
     nCurUndoAction=0;
 }
 
-//------------------------------------------------------------------------
 
 void SfxListUndoAction::UndoWithContext( SfxUndoContext& i_context )
 {
@@ -1344,7 +1265,6 @@ void SfxListUndoAction::UndoWithContext( SfxUndoContext& i_context )
     nCurUndoAction=0;
 }
 
-//------------------------------------------------------------------------
 
 void SfxListUndoAction::Redo()
 {
@@ -1353,7 +1273,6 @@ void SfxListUndoAction::Redo()
     nCurUndoAction = aUndoActions.size();
 }
 
-//------------------------------------------------------------------------
 
 void SfxListUndoAction::RedoWithContext( SfxUndoContext& i_context )
 {
@@ -1362,7 +1281,6 @@ void SfxListUndoAction::RedoWithContext( SfxUndoContext& i_context )
     nCurUndoAction = aUndoActions.size();
 }
 
-//------------------------------------------------------------------------
 
 void SfxListUndoAction::Repeat(SfxRepeatTarget&rTarget)
 {
@@ -1370,7 +1288,6 @@ void SfxListUndoAction::Repeat(SfxRepeatTarget&rTarget)
         aUndoActions[i].pAction->Repeat(rTarget);
 }
 
-//------------------------------------------------------------------------
 
 bool SfxListUndoAction::CanRepeat(SfxRepeatTarget&r)  const
 {
@@ -1382,14 +1299,12 @@ bool SfxListUndoAction::CanRepeat(SfxRepeatTarget&r)  const
     return true;
 }
 
-//------------------------------------------------------------------------
 
 bool SfxListUndoAction::Merge( SfxUndoAction *pNextAction )
 {
     return !aUndoActions.empty() && aUndoActions[aUndoActions.size()-1].pAction->Merge( pNextAction );
 }
 
-//------------------------------------------------------------------------
 
 SfxLinkUndoAction::SfxLinkUndoAction(::svl::IUndoManager *pManager)
 /*  [Beschreibung]
@@ -1416,7 +1331,6 @@ SfxLinkUndoAction::SfxLinkUndoAction(::svl::IUndoManager *pManager)
         pAction = 0;
 }
 
-//------------------------------------------------------------------------
 
 void SfxLinkUndoAction::Undo()
 {
@@ -1424,7 +1338,6 @@ void SfxLinkUndoAction::Undo()
         pUndoManager->Undo();
 }
 
-//------------------------------------------------------------------------
 
 void SfxLinkUndoAction::Redo()
 {
@@ -1432,7 +1345,6 @@ void SfxLinkUndoAction::Redo()
         pUndoManager->Redo();
 }
 
-//------------------------------------------------------------------------
 
 
 bool SfxLinkUndoAction::CanRepeat(SfxRepeatTarget& r) const
@@ -1441,7 +1353,6 @@ bool SfxLinkUndoAction::CanRepeat(SfxRepeatTarget& r) const
 }
 
 
-//------------------------------------------------------------------------
 
 
 void SfxLinkUndoAction::Repeat(SfxRepeatTarget&r)
@@ -1451,7 +1362,6 @@ void SfxLinkUndoAction::Repeat(SfxRepeatTarget&r)
 }
 
 
-//------------------------------------------------------------------------
 
 OUString SfxLinkUndoAction::GetComment() const
 {
@@ -1461,7 +1371,6 @@ OUString SfxLinkUndoAction::GetComment() const
 }
 
 
-//------------------------------------------------------------------------
 
 OUString SfxLinkUndoAction::GetRepeatComment(SfxRepeatTarget&r) const
 {
@@ -1470,7 +1379,6 @@ OUString SfxLinkUndoAction::GetRepeatComment(SfxRepeatTarget&r) const
     return OUString();
 }
 
-//------------------------------------------------------------------------
 
 SfxLinkUndoAction::~SfxLinkUndoAction()
 {
@@ -1478,7 +1386,6 @@ SfxLinkUndoAction::~SfxLinkUndoAction()
         pAction->SetLinkToSfxLinkUndoAction(0);
 }
 
-//------------------------------------------------------------------------
 
 void SfxLinkUndoAction::LinkedSfxUndoActionDestructed(const SfxUndoAction& rCandidate)
 {
@@ -1488,7 +1395,6 @@ void SfxLinkUndoAction::LinkedSfxUndoActionDestructed(const SfxUndoAction& rCand
     pAction = 0;
 }
 
-//------------------------------------------------------------------------
 
 SfxUndoArray::~SfxUndoArray()
 {

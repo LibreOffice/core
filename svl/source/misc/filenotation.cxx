@@ -22,21 +22,15 @@
 #include <osl/diagnose.h>
 #include <tools/urlobj.hxx>
 
-//.........................................................................
 namespace svt
 {
-//.........................................................................
 
-    //=====================================================================
     //= OFileNotation
-    //=====================================================================
-    //---------------------------------------------------------------------
     OFileNotation::OFileNotation( const OUString& _rUrlOrPath )
     {
         construct( _rUrlOrPath );
     }
 
-    //---------------------------------------------------------------------
     OFileNotation::OFileNotation( const OUString& _rUrlOrPath, NOTATION _eInputNotation )
     {
         if ( _eInputNotation == N_URL )
@@ -51,7 +45,6 @@ namespace svt
             implInitWithSystemNotation( _rUrlOrPath );
     }
 
-    //---------------------------------------------------------------------
     bool OFileNotation::implInitWithSystemNotation( const OUString& _rSystemPath )
     {
         bool bSuccess = false;
@@ -78,7 +71,6 @@ namespace svt
         return bSuccess;
     }
 
-    //---------------------------------------------------------------------
     bool OFileNotation::implInitWithURLNotation( const OUString& _rURL )
     {
         m_sFileURL = _rURL;
@@ -86,7 +78,6 @@ namespace svt
         return true;
     }
 
-    //---------------------------------------------------------------------
     void OFileNotation::construct( const OUString& _rUrlOrPath )
     {
         bool bSuccess = false;
@@ -116,7 +107,6 @@ namespace svt
         (void)bSuccess;
     }
 
-    //---------------------------------------------------------------------
     OUString OFileNotation::get(NOTATION _eOutputNotation)
     {
         switch (_eOutputNotation)
@@ -129,8 +119,6 @@ namespace svt
         return OUString();
     }
 
-//.........................................................................
 }   // namespace svt
-//.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -36,7 +36,6 @@
 
 using namespace ::com::sun::star;
 
-//-------------------------------------------------------------------------
 uno::Sequence< OUString > SAL_CALL FSStorageFactory::impl_staticGetSupportedServiceNames()
 {
     uno::Sequence< OUString > aRet(2);
@@ -45,20 +44,17 @@ uno::Sequence< OUString > SAL_CALL FSStorageFactory::impl_staticGetSupportedServ
     return aRet;
 }
 
-//-------------------------------------------------------------------------
 OUString SAL_CALL FSStorageFactory::impl_staticGetImplementationName()
 {
     return OUString("com.sun.star.comp.embed.FileSystemStorageFactory");
 }
 
-//-------------------------------------------------------------------------
 uno::Reference< uno::XInterface > SAL_CALL FSStorageFactory::impl_staticCreateSelfInstance(
             const uno::Reference< lang::XMultiServiceFactory >& xServiceManager )
 {
     return uno::Reference< uno::XInterface >( *new FSStorageFactory( comphelper::getComponentContext(xServiceManager) ) );
 }
 
-//-------------------------------------------------------------------------
 uno::Reference< uno::XInterface > SAL_CALL FSStorageFactory::createInstance()
     throw ( uno::Exception,
             uno::RuntimeException )
@@ -82,7 +78,6 @@ uno::Reference< uno::XInterface > SAL_CALL FSStorageFactory::createInstance()
         uno::UNO_QUERY );
 }
 
-//-------------------------------------------------------------------------
 uno::Reference< uno::XInterface > SAL_CALL FSStorageFactory::createInstanceWithArguments(
             const uno::Sequence< uno::Any >& aArguments )
     throw ( uno::Exception,
@@ -164,14 +159,12 @@ uno::Reference< uno::XInterface > SAL_CALL FSStorageFactory::createInstanceWithA
         uno::UNO_QUERY );
 }
 
-//-------------------------------------------------------------------------
 OUString SAL_CALL FSStorageFactory::getImplementationName()
     throw ( uno::RuntimeException )
 {
     return impl_staticGetImplementationName();
 }
 
-//-------------------------------------------------------------------------
 sal_Bool SAL_CALL FSStorageFactory::supportsService( const OUString& ServiceName )
     throw ( uno::RuntimeException )
 {
@@ -184,14 +177,12 @@ sal_Bool SAL_CALL FSStorageFactory::supportsService( const OUString& ServiceName
     return sal_False;
 }
 
-//-------------------------------------------------------------------------
 uno::Sequence< OUString > SAL_CALL FSStorageFactory::getSupportedServiceNames()
     throw ( uno::RuntimeException )
 {
     return impl_staticGetSupportedServiceNames();
 }
 
-//-------------------------------------------------------------------------
 
 extern "C"
 {

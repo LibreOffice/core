@@ -229,7 +229,6 @@ SfxPoolItem* SvxMacroItem::Clone( SfxItemPool* ) const
     return new SvxMacroItem( *this );
 }
 
-//------------------------------------------------------------------------
 
 SfxItemPresentation SvxMacroItem::GetPresentation
 (

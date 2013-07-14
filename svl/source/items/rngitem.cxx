@@ -112,14 +112,12 @@ SvStream& SfxRangeItem::Store(SvStream &rStream, sal_uInt16) const
     return rStream;
 }
 
-//=========================================================================
 
 SfxUShortRangesItem::SfxUShortRangesItem()
 :   _pRanges(0)
 {
 }
 
-//-------------------------------------------------------------------------
 
 SfxUShortRangesItem::SfxUShortRangesItem( sal_uInt16 nWID, SvStream &rStream )
 :   SfxPoolItem( nWID )
@@ -132,7 +130,6 @@ SfxUShortRangesItem::SfxUShortRangesItem( sal_uInt16 nWID, SvStream &rStream )
     _pRanges[nCount] = 0;
 }
 
-//-------------------------------------------------------------------------
 
 SfxUShortRangesItem::SfxUShortRangesItem( const SfxUShortRangesItem& rItem )
 :   SfxPoolItem( rItem )
@@ -142,14 +139,12 @@ SfxUShortRangesItem::SfxUShortRangesItem( const SfxUShortRangesItem& rItem )
     memcpy( _pRanges, rItem._pRanges, sizeof(sal_uInt16) * nCount );
 }
 
-//-------------------------------------------------------------------------
 
 SfxUShortRangesItem::~SfxUShortRangesItem()
 {
     delete _pRanges;
 }
 
-//-------------------------------------------------------------------------
 
 int SfxUShortRangesItem::operator==( const SfxPoolItem &rItem ) const
 {
@@ -167,7 +162,6 @@ int SfxUShortRangesItem::operator==( const SfxPoolItem &rItem ) const
     return !_pRanges[n] && !rOther._pRanges[n];
 }
 
-//-------------------------------------------------------------------------
 
 SfxItemPresentation SfxUShortRangesItem::GetPresentation( SfxItemPresentation /*ePres*/,
                                     SfxMapUnit /*eCoreMetric*/,
@@ -179,21 +173,18 @@ SfxItemPresentation SfxUShortRangesItem::GetPresentation( SfxItemPresentation /*
     return SFX_ITEM_PRESENTATION_NONE;
 }
 
-//-------------------------------------------------------------------------
 
 SfxPoolItem* SfxUShortRangesItem::Clone( SfxItemPool * ) const
 {
     return new SfxUShortRangesItem( *this );
 }
 
-//-------------------------------------------------------------------------
 
 SfxPoolItem* SfxUShortRangesItem::Create( SvStream &rStream, sal_uInt16 ) const
 {
     return new SfxUShortRangesItem( Which(), rStream );
 }
 
-//-------------------------------------------------------------------------
 
 SvStream& SfxUShortRangesItem::Store( SvStream &rStream, sal_uInt16 ) const
 {

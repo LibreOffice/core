@@ -19,15 +19,12 @@
 
 #include <svl/stritem.hxx>
 
-//============================================================================
 //
 //  class SfxStringItem
 //
-//============================================================================
 
 TYPEINIT1_AUTOFACTORY(SfxStringItem, CntUnencodedStringItem)
 
-//============================================================================
 // virtual
 SfxStringItem::SfxStringItem(sal_uInt16 which, SvStream & rStream):
     CntUnencodedStringItem(which)
@@ -36,14 +33,12 @@ SfxStringItem::SfxStringItem(sal_uInt16 which, SvStream & rStream):
 }
 
 
-//============================================================================
 // virtual
 SfxPoolItem * SfxStringItem::Create(SvStream & rStream, sal_uInt16) const
 {
     return new SfxStringItem(Which(), rStream);
 }
 
-//============================================================================
 // virtual
 SvStream & SfxStringItem::Store(SvStream & rStream, sal_uInt16) const
 {
@@ -51,7 +46,6 @@ SvStream & SfxStringItem::Store(SvStream & rStream, sal_uInt16) const
     return rStream;
 }
 
-//============================================================================
 // virtual
 SfxPoolItem * SfxStringItem::Clone(SfxItemPool *) const
 {

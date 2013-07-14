@@ -21,11 +21,9 @@
 #include <svl/isethint.hxx>
 #include <svl/itemset.hxx>
 
-//====================================================================
 
 TYPEINIT1(SfxItemSetHint, SfxHint);
 
-//====================================================================
 
 SfxItemSetHint::SfxItemSetHint( const SfxItemSet &rItemSet )
 
@@ -38,13 +36,11 @@ SfxItemSetHint::SfxItemSetHint( const SfxItemSet &rItemSet )
 {
 }
 
-//--------------------------------------------------------------------
 
 SfxItemSetHint::~SfxItemSetHint()
 {
     delete _pItemSet;
 }
 
-//--------------------------------------------------------------------
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
