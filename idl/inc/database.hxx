@@ -68,7 +68,7 @@ class SvIdlDataBase
     SvMetaClassMemberList       aClassList;
     SvMetaModuleMemberList      aModuleList;
     SvMetaAttributeMemberList   aAttrList;
-    SvMetaTypeMemberList        aTmpTypeList; // not persistent
+    SvMetaTypeMemberList        aTmpTypeList; ///< not persistent
 
 protected:
     ::std::set< OUString > m_DepFiles;
@@ -95,7 +95,7 @@ public:
     SvMetaModuleMemberList &  GetModuleList() { return aModuleList; }
     SvMetaModule *            GetModule( const OString& rName );
 
-    // list of used types while writing
+    /// list of used types while writing
     SvMetaTypeMemberList    aUsedTypes;
     OString            aIFaceName;
     SvNumberIdentifier      aStructSlotId;

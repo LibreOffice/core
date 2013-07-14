@@ -26,16 +26,16 @@
 
 class SvHashTable
 {
-    sal_uInt32       nMax;                 // size of hash-tabel
-    sal_uInt32       nFill;                // elements in hash-tabel
-    sal_uInt32       lAsk;                 // number of requests
-    sal_uInt32       lTry;                 // number of tries
+    sal_uInt32       nMax;                 ///< size of hash-tabel
+    sal_uInt32       nFill;                ///< elements in hash-tabel
+    sal_uInt32       lAsk;                 ///< number of requests
+    sal_uInt32       lTry;                 ///< number of tries
 protected:
     sal_Bool        Test_Insert( const OString&, sal_Bool bInsert, sal_uInt32 * pInsertPos );
 
-                            // compare element with entry
+                            /// compare element with entry
     virtual bool equals( const OString& , sal_uInt32 ) const = 0;
-                            // get hash value from subclass
+                            /// get hash value from subclass
     virtual sal_uInt32          HashFunc( const OString& ) const = 0;
 public:
                 SvHashTable( sal_uInt32 nMaxEntries );
@@ -95,15 +95,16 @@ protected:
     virtual sal_uInt32          HashFunc( const OString& rElement ) const;
     virtual bool equals( const OString &rElement, sal_uInt32 nIndex ) const;
 public:
-            SvStringHashTable( sal_uInt32 nMaxEntries );   // max size of hash-tabel
+            SvStringHashTable( sal_uInt32 nMaxEntries );   ///< max size of hash-tabel
             virtual ~SvStringHashTable();
 
     OString GetNearString( const OString& rName ) const;
     virtual sal_Bool    IsEntry( sal_uInt32 nIndex ) const;
 
-    sal_Bool    Insert( const OString& rStr, sal_uInt32 * pHash ); // insert string
-    sal_Bool    Test( const OString& rStr, sal_uInt32 * pHash ) const; // test of insert string
-    SvStringHashEntry * Get ( sal_uInt32 nIndex ) const; // return pointer to string
+    sal_Bool    Insert( const OString& rStr, sal_uInt32 * pHash ); ///< insert string
+    sal_Bool    Test( const OString& rStr, sal_uInt32 * pHash ) const; ///< test of insert string
+    /// @return pointer to string
+    SvStringHashEntry * Get ( sal_uInt32 nIndex ) const;
     SvStringHashEntry & operator []( sal_uInt32 nPos ) const
             { return pEntries[ nPos ]; }
 

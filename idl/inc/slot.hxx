@@ -37,15 +37,15 @@ class SvMetaSlot : public SvMetaAttribute
     SvBOOL          aGet;
     SvBOOL          aSet;
 
-    SvBOOL          aCachable;  // exclusive
+    SvBOOL          aCachable;      ///< exclusive
     SvBOOL          aVolatile;
     SvBOOL          aToggle;
     SvBOOL          aAutoUpdate;
 
-    SvBOOL          aSynchron;  // exclusive
+    SvBOOL          aSynchron;      ///< exclusive
     SvBOOL          aAsynchron;
 
-    SvBOOL          aRecordPerItem;// exclusive
+    SvBOOL          aRecordPerItem; ///< exclusive
     SvBOOL          aRecordPerSet;
     SvBOOL          aRecordManual;
     SvBOOL          aNoRecord;

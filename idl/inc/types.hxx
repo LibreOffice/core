@@ -128,8 +128,8 @@ enum { TYPE_METHOD, TYPE_STRUCT, TYPE_BASE, TYPE_ENUM, TYPE_UNION,
       TYPE_CLASS, TYPE_POINTER };
 class SvMetaType : public SvMetaExtern
 {
-    SvBOOL                      aIn;    // input parameter
-    SvBOOL                      aOut;   // return parameter
+    SvBOOL                      aIn;    ///< input parameter
+    SvBOOL                      aOut;   ///< return parameter
     Svint                       aCall0, aCall1;
     Svint                       aSbxDataType;
     SvIdentifier                aSvName;

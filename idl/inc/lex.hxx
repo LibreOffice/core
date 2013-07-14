@@ -122,8 +122,8 @@ class SvTokenStream
 {
     sal_uLong       nLine, nColumn;
     int         nBufPos;
-    int         c;          // next character
-    sal_uInt16      nTabSize;   // length of tabulator
+    int         c;              ///< next character
+    sal_uInt16      nTabSize;   ///< length of tabulator
     OString    aStrTrue;
     OString    aStrFalse;
     sal_uLong       nMaxPos;
@@ -155,7 +155,7 @@ class SvTokenStream
                     }
     void            CalcColumn()
                     {
-                        // if end of line spare calculation
+                        /// if end of line spare calculation
                         if( 0 != c )
                         {
                             sal_uInt16 n = 0;
@@ -180,7 +180,7 @@ public:
     {
         boost::ptr_vector<SvToken>::iterator pRetToken = pCurToken;
 
-        // current iterator always valid
+        /// current iterator always valid
         if(pCurToken != aTokList.begin())
             --pCurToken;
 
@@ -201,7 +201,7 @@ public:
 
     SvToken* GetToken_Next()
     {
-        // comments get removed initially
+        /// comments get removed initially
         return GetToken_NextAll();
     }
 
