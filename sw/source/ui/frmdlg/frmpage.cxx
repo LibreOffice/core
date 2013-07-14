@@ -2752,6 +2752,7 @@ SwFrmAddPage::SwFrmAddPage(Window *pParent, const SfxItemSet &rSet ) :
     get(pProtectFrameCB,"protectframe");
     get(pProtectSizeCB,"protectsize");
 
+    get(pPropertiesFrame,"properties");
     get(pEditInReadonlyCB,"editinreadonly");
     get(pPrintFrameCB,"printframe");
     get(pTextFlowFT,"textflow_label");
@@ -2782,6 +2783,10 @@ void SwFrmAddPage::Reset(const SfxItemSet &rSet )
     if ( DLG_FRM_GRF == nDlgType || DLG_FRM_OLE == nDlgType )
     {
         pEditInReadonlyCB->Hide();
+        if (bHtmlMode)
+        {
+            pPropertiesFrame->Hide();
+        }
     }
 
     if(SFX_ITEM_SET == rSet.GetItemState(FN_SET_FRM_ALT_NAME, sal_False, &pItem))

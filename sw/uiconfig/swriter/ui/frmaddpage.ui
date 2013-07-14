@@ -271,7 +271,7 @@
       </packing>
     </child>
     <child>
-      <object class="GtkFrame" id="frame3">
+      <object class="GtkFrame" id="properties">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="hexpand">True</property>
