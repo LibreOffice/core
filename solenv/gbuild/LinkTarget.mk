@@ -433,10 +433,11 @@ $(call gb_LinkTarget_get_target,Library/%.exports) : $(gb_Library_OUTDIRLOCATION
 
 $(call gb_LinkTarget_get_target,%) : $(call gb_LinkTarget_get_headers_target,%) $(gb_Helper_MISCDUMMY)
 	$(if $(filter $*,$(foreach lib,$(gb_MERGEDLIBS) $(gb_URELIBS),$(call gb_Library_get_linktargetname,$(lib)))),\
-	$(if $(filter $(true),$(call gb_LinkTarget__is_build_lib,$*)),\
-	$(call gb_LinkTarget__command,$@,$*),\
-	mkdir -p $(dir $@) && echo invalid > $@ \
-	$(if $(SOVERSION),&& echo invalid > $@.$(SOVERSION))),$(call gb_LinkTarget__command,$@,$*))
+		$(if $(filter $(true),$(call gb_LinkTarget__is_build_lib,$*)),\
+			$(call gb_LinkTarget__command,$@,$*),\
+			mkdir -p $(dir $@) && echo invalid > $@ \
+			$(if $(SOVERSION),&& echo invalid > $@.$(SOVERSION))),\
+		$(call gb_LinkTarget__command,$@,$*))
 	$(call gb_LinkTarget__command_objectlist,$@,$*)
 
 ifeq ($(gb_FULLDEPS),$(true))
