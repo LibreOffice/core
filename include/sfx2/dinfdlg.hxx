@@ -101,6 +101,7 @@ public:
             ::com::sun::star::document::XDocumentProperties> & i_xDocProps,
         bool i_bDoNotUpdateUserDefined = false)
         const;
+    sal_Bool    isCmisDocument() const { return m_aCmisProperties.size() > 0;}
 
     sal_Bool    isAutoloadEnabled() const { return m_isAutoloadEnabled; }
     void        setAutoloadEnabled(sal_Bool i_val) { m_isAutoloadEnabled = i_val; }
@@ -697,6 +698,7 @@ class SfxCmisPropertiesPage : public SfxTabPage
 private:
     CmisPropertiesControl* m_pPropertiesCtrl;
     using TabPage::DeactivatePage;
+    DECL_LINK(UpdateHdl, void *);
 
 protected:
     SfxCmisPropertiesPage( Window* pParent, const SfxItemSet& );

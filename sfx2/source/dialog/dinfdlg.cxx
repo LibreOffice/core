@@ -578,10 +578,8 @@ std::vector< CmisProperty* > SfxDocumentInfoItem::GetCmisProperties() const
 
 uno::Sequence< document::CmisProperty > SfxDocumentInfoItem::GetCmisPropertiesSeq() const
 {
-
-    sal_Int32 i = 0;
     std::vector< CmisProperty* >::const_iterator pIter;
-    sal_Int32 updatableCount = 0, nCount = 0;
+    sal_Int32 i=0, updatableCount = 0, nCount = 0;
 
     for ( pIter = m_aCmisProperties.begin();
         pIter != m_aCmisProperties.end(); ++pIter, ++i )
@@ -2225,6 +2223,14 @@ sal_Bool SfxCustomPropertiesPage::FillItemSet( SfxItemSet& rSet )
 
     if ( pInfo )
     {
+        // If it's a CMIS document, we can't save custom properties
+        if ( pInfo->isCmisDocument( ) )
+        {
+            if ( bMustDelete )
+                delete pInfo;
+            return sal_False;
+        }
+
         pInfo->ClearCustomProperties();
         Sequence< beans::PropertyValue > aPropertySeq = m_pPropertiesCtrl->GetCustomProperties();
         sal_Int32 i = 0, nCount = aPropertySeq.getLength();
