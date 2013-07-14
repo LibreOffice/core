@@ -80,11 +80,15 @@ bool ScDPGroupNumFilter::match(const ScDPItemData& rCellData) const
             if (rtl::math::isSignBitSet(fVal))
             {
                 // Less than the min value.
-                return rCellData.GetValue() < maNumInfo.mfStart;
+                if (rCellData.GetValue() < maNumInfo.mfStart)
+                    return true;
             }
 
             // Greater than the max value.
-            return maNumInfo.mfEnd < rCellData.GetValue();
+            if (maNumInfo.mfEnd < rCellData.GetValue())
+                return true;
+
+            continue;
         }
 
         double low = fVal;
