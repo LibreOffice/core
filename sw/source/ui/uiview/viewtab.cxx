@@ -46,8 +46,8 @@
 #include "cmdid.h"
 #include "viewopt.hxx"
 #include "tabcol.hxx"
-#include "frmfmt.hxx"       // FrameFormat
-#include "pagedesc.hxx"     // Aktuelles Seitenformat
+#include "frmfmt.hxx"       // Current format
+#include "pagedesc.hxx"     // Current page format
 #include "wview.hxx"
 #include "fmtcol.hxx"
 #include "section.hxx"
@@ -59,14 +59,10 @@
 
 using namespace ::com::sun::star;
 
+// Debug Method
 
-/*--------------------------------------------------------------------
-    Beschreibung:   Debug-Methode
- --------------------------------------------------------------------*/
+// Pack columns
 
-/*--------------------------------------------------------------------
-    Beschreibung:   Columns eintueten
- --------------------------------------------------------------------*/
 static void lcl_FillSvxColumn(const SwFmtCol& rCol,
                           sal_uInt16 nTotalWidth,
                           SvxColumnItem& rColItem,
@@ -105,9 +101,8 @@ static void lcl_FillSvxColumn(const SwFmtCol& rCol,
     }
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:   ColumnItem in ColumnInfo ueberfuehren
- --------------------------------------------------------------------*/
+// Transfer ColumnItem in ColumnInfo
+
 static void lcl_ConvertToCols(const SvxColumnItem& rColItem,
                           sal_uInt16 nTotalWidth,
                           SwFmtCol& rCols)
@@ -119,11 +114,11 @@ static void lcl_ConvertToCols(const SvxColumnItem& rColItem,
         return;
 
     sal_uInt16 nLeft    = 0;
-    SwTwips nSumAll= 0;  // Summiere alle Spalten und Raender auf
+    SwTwips nSumAll= 0;  // Sum up all columns and margins
 
     SwColumns& rArr = rCols.GetColumns();
 
-    // Tabcols der Reihe nach
+    // Tabcols sequentially
     for( sal_uInt16 i=0; i < rColItem.Count()-1; ++i )
     {
         OSL_ENSURE(rColItem[i+1].nStart >= rColItem[i].nEnd,"overlapping columns" );
@@ -148,22 +143,21 @@ static void lcl_ConvertToCols(const SvxColumnItem& rColItem,
     }
     rArr[rColItem.Count()-1].SetLeft( nLeft );
 
-    //Die Differenz aus der Gesamtwunschbreite und der Summe der bisher berechneten
-    // Spalten und Raender sollte die Breite der letzten Spalte ergeben.
+    // The difference between the total sum of the desired width and the so far
+    // calculated columns and margins should result in the width of the last column.
     rArr[rColItem.Count()-1].SetWishWidth( rCols.GetWishWidth() - (sal_uInt16)nSumAll );
 
     rCols.SetOrtho(sal_False, 0, 0 );
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:   Tabs loeschen
- --------------------------------------------------------------------*/
+// Delete tabs
+
 static void lcl_EraseDefTabs(SvxTabStopItem& rTabStops)
 {
-    // Def Tabs loeschen
+    // Delete DefTabs
     for ( sal_uInt16 i = 0; i < rTabStops.Count(); )
     {
-        // Hier auch den DefTab auf Null rausschmeissen
+        // Here also throw out the DefTab to zero
         if ( SVX_TAB_ADJUST_DEFAULT == rTabStops[i].GetAdjustment() ||
             rTabStops[i].GetTabPos() == 0 )
         {
@@ -174,9 +168,8 @@ static void lcl_EraseDefTabs(SvxTabStopItem& rTabStops)
     }
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:   Seitenrand umdrehen
- --------------------------------------------------------------------*/
+// Flip page margin
+
 void SwView::SwapPageMargin(const SwPageDesc& rDesc, SvxLRSpaceItem& rLRSpace)
 {
     sal_uInt16 nPhyPage, nVirPage;
@@ -190,10 +183,9 @@ void SwView::SwapPageMargin(const SwPageDesc& rDesc, SvxLRSpaceItem& rLRSpace)
     }
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:   Wenn der Rahmenrand verschoben wird, sollen die
-                    Spaltentrenner an der gleichen absoluten Position bleiben
- --------------------------------------------------------------------*/
+// If the frame border is moved, the column separator
+// should stay in the same absolute position.
+
 static void lcl_Scale(long& nVal, long nScale)
 {
     nVal *= nScale;
@@ -211,7 +203,7 @@ void ResizeFrameCols(SwFmtCol& rCol,
     long nNewWishWidth = nWishSum + nWishDiff;
     if(nNewWishWidth > 0xffffl)
     {
-        // wenn die Wunschbreite zu gross wird, dann muessen alle Werte passend skaliert werden
+        // If the desired width is getting too large, then all values ​​must be scaled appropriately.
         long nScale = (0xffffl << 8)/ nNewWishWidth;
         for(sal_uInt16 i = 0; i < rArr.size(); i++)
         {
@@ -235,14 +227,12 @@ void ResizeFrameCols(SwFmtCol& rCol,
         rArr.front().SetWishWidth(rArr.front().GetWishWidth() + (sal_uInt16)nWishDiff);
     else
         rArr.back().SetWishWidth(rArr.back().GetWishWidth() + (sal_uInt16)nWishDiff);
-    //reset auto width
+    // Reset auto width
     rCol.SetOrtho(sal_False, 0, 0 );
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:   Hier werden alle Aenderungen der Tableiste
-                    wieder in das Modell geschossen
- --------------------------------------------------------------------*/
+// Here all changes to the tab bar will be shot again into the model.
+
 void SwView::ExecTabWin( SfxRequest& rReq )
 {
     SwWrtShell &rSh         = GetWrtShell();
@@ -345,7 +335,7 @@ void SwView::ExecTabWin( SfxRequest& rReq )
                 rSh.StartAction();
                 rSh.Push();
                 rSh.SetFlyFrmAttr( aSet );
-                //die Rahmenselektion wieder aufheben
+                // Cancel the frame selection
                 if(!bFrmSelection && rSh.IsFrmSelected())
                 {
                     rSh.UnSelectFrm();
@@ -356,7 +346,7 @@ void SwView::ExecTabWin( SfxRequest& rReq )
             }
             else if ( nFrmType & ( FRMTYPE_HEADER | FRMTYPE_FOOTER ))
             {
-                // Seitenraender rausrechnen
+                // Subtract out page margins
                 long nOld = rDesc.GetMaster().GetLRSpace().GetLeft();
                 aLongLR.SetLeft( nOld > aLongLR.GetLeft() ? 0 : aLongLR.GetLeft() - nOld );
 
@@ -406,7 +396,7 @@ void SwView::ExecTabWin( SfxRequest& rReq )
                 rSh.UpdateSection(rSh.GetSectionFmtPos(*pSectFmt), aData, &aSet);
             }
             else
-            {   // Seitenraender einstellen
+            {   // Adjust page margins
                 aLR.SetLeft((sal_uInt16)aLongLR.GetLeft());
                 aLR.SetRight((sal_uInt16)aLongLR.GetRight());
                 SwapPageMargin( rDesc, aLR );
@@ -646,7 +636,7 @@ void SwView::ExecTabWin( SfxRequest& rReq )
              const SvxTabStopItem& rDefTabs =
                         (const SvxTabStopItem&)rSh.GetDefault(RES_PARATR_TABSTOP);
 
-            // Default-Tab an Pos 0
+            // Default tab at pos 0
             SfxItemSet aSet( GetPool(), RES_LR_SPACE, RES_LR_SPACE );
             rSh.GetCurAttr( aSet );
             const SvxLRSpaceItem& rLR = (const SvxLRSpaceItem&)aSet.Get(RES_LR_SPACE);
@@ -657,7 +647,7 @@ void SwView::ExecTabWin( SfxRequest& rReq )
                 aTabStops.Insert( aSwTabStop );
             }
 
-            // auffuellen mit Default-Tabs
+            // Populate with default tabs.
             sal_uInt16 nDef = ::GetTabDist( rDefTabs );
             ::MakeDefTabs( nDef, aTabStops );
 
@@ -718,7 +708,7 @@ void SwView::ExecTabWin( SfxRequest& rReq )
                 rSh.GetCurAttr( aSet );
                 const SvxTabStopItem&  rTabStops = (const SvxTabStopItem&)aSet.Get(RES_PARATR_TABSTOP);
 
-                // Haben wir einen Tab an Stelle Null
+                // Do we have a tab at position zero?
                 sal_uInt16 i;
 
                 for ( i = 0; i < rTabStops.Count(); ++i )
@@ -727,7 +717,7 @@ void SwView::ExecTabWin( SfxRequest& rReq )
 
                 if ( i >= rTabStops.Count() )
                 {
-                    // Kein DefTab
+                    // No DefTab
                     SvxTabStopItem aTabStops( RES_PARATR_TABSTOP );
                     aTabStops = rTabStops;
 
@@ -796,7 +786,7 @@ void SwView::ExecTabWin( SfxRequest& rReq )
                 else
                     rSh.GetTabCols(aTabCols);
 
-                // linker Tabellenrand
+                // left table border
                 long nBorder = (long)(aColItem.GetLeft() - aTabCols.GetLeftMin());
                 aTabCols.SetLeft( nBorder );
 
@@ -805,9 +795,9 @@ void SwView::ExecTabWin( SfxRequest& rReq )
                 if ( aColItem.GetRight() > 0 )
                     aTabCols.SetRight( nBorder );
 
-                // Tabcols der Reihe nach
-                // Die letzte Col wird durch den Rand definiert
-                //columns in right-to-left tables need to be mirrored
+                // Tabcols sequentially
+                // The last column is defined by the edge.
+                // Columns in right-to-left tables need to be mirrored
                 sal_Bool bIsTableRTL =
                     IsTabColFromDoc() ?
                           rSh.IsMouseTableRightToLeft(m_aTabColFromDocPos)
@@ -877,7 +867,7 @@ void SwView::ExecTabWin( SfxRequest& rReq )
                         rSh.StartAction();
                         rSh.Push();
                         rSh.SetFlyFrmAttr( aSet );
-                        //die Rahmenselektion wieder aufheben
+                        // Cancel the frame selection again
                         if(!bFrmSelection && rSh.IsFrmSelected())
                         {
                             rSh.UnSelectFrm();
@@ -979,11 +969,10 @@ void SwView::ExecTabWin( SfxRequest& rReq )
     SetNumRuleNodeFromDoc(NULL);
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:   Hier wird der Status der Tableiste ermittelt
-                    sprich alle relevanten Attribute an der CursorPos
-                    werden der Tableiste uebermittelt
- --------------------------------------------------------------------*/
+// Here the status of the tab bar will be determined.
+// This means that all relevant attributes at the CursorPos
+// will be submittet to the tab bar.
+
 void SwView::StateTabWin(SfxItemSet& rSet)
 {
     SwWrtShell &rSh         = GetWrtShell();
@@ -995,7 +984,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
 
     const sal_Bool  bFrmSelection = rSh.IsFrmSelected();
     const sal_Bool bBrowse = rSh.GetViewOptions()->getBrowseMode();
-    // PageOffset/Begrenzer
+    // PageOffset/limiter
     const SwRect& rPageRect = rSh.GetAnyCurRect( RECT_PAGE, pPt );
     const SwRect& rPagePrtRect = rSh.GetAnyCurRect( RECT_PAGE_PRT, pPt );
     const long nPageWidth  = rPageRect.Width();
@@ -1150,7 +1139,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
 
         case SID_ATTR_LONG_ULSPACE:
         {
-            // Rand Seite Oben Unten
+            // Page margin top bottom
             SvxULSpaceItem aUL( rDesc.GetMaster().GetULSpace() );
             SvxLongULSpaceItem aLongUL( (long)aUL.GetUpper(),
                                         (long)aUL.GetLower(),
@@ -1158,7 +1147,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
 
             if ( bFrmSelection || nFrmType & FRMTYPE_FLY_ANY )
             {
-                // Dokumentkoordinaten Frame auf Seitenkoordinaten umbrechen
+                // Convert document coordinates into page coordinates.
                 const SwRect &rRect = rSh.GetAnyCurRect(RECT_FLY_EMBEDDED, pPt);
                 aLongUL.SetUpper((sal_uInt16)(rRect.Top() - rPageRect.Top() ));
                 aLongUL.SetLower((sal_uInt16)(rPageRect.Bottom() - rRect.Bottom() ));
@@ -1522,7 +1511,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
             }
             else if ( bFrmSelection || nFrmType & ( FRMTYPE_COLUMN | FRMTYPE_COLSECT ) )
             {
-                // Aus Rahmen oder Seite ?
+                // Out of frame or page?
                 sal_uInt16 nNum = 0;
                 if(bFrmSelection)
                 {
@@ -1534,7 +1523,8 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                     nNum = rSh.GetCurColNum();
 
                 if(
-                    //eigentlich sollte FRMTYPE_COLSECT nicht enthalten sein, wenn der Rahmen selektiert ist!
+                    // For that matter FRMTYPE_COLSECT should not be included
+                    // if the border is selected!
                     !bFrmSelection &&
                      nFrmType & FRMTYPE_COLSECT )
                 {
@@ -1576,7 +1566,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                 }
                 else if( bFrmSelection || nFrmType & FRMTYPE_FLY_ANY )
                 {
-                    // Spalten in Rahmen
+                    // Columns in frame
                     if ( nNum  )
                     {
                         const SwFrmFmt* pFmt = rSh.GetFlyFrmFmt() ;
@@ -1617,7 +1607,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                         rSet.DisableItem(nWhich);
                 }
                 else
-                {   // Spalten auf der Seite
+                {   // Columns on the page
                     const SwFrmFmt& rMaster = rDesc.GetMaster();
                     SwFmtCol aCol(rMaster.GetCol());
                     if(rFrameDir.GetValue() == FRMDIR_HORI_RIGHT_TOP)
@@ -1795,9 +1785,9 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                                                     ? RECT_FLY_EMBEDDED
                                                     : RECT_PAGE, pPt ));
 
-                    //die Breite im Rahmen bzw. innerhalbe der Seitenraender
+                    // The width of the frame or within the page margins.
                     const sal_uInt16 nTotalWidth = (sal_uInt16)aRect.Width();
-                    //die gesamte Rahmenbreite - die Differenz ist der doppelte Abstand zum Rand
+                    // The entire frame width - The difference is twice the distance to the edge.
                     const sal_uInt16 nOuterWidth = (sal_uInt16)aAbsRect.Width();
                     int nWidth = 0,
                         nStart = 0,
@@ -1820,14 +1810,14 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                         aRectangle.Left() += MINLAY;
                         aRectangle.Left() += aRect.Left();
                     }
-                    if(pFmt) //Bereich in Rahmen - hier darf man bis zum Rand
+                    if(pFmt) // Range in frame - here you may up to the edge
                         aRectangle.Left()  = aRectangle.Right() = 0;
                     else
                     {
-                        // das Rechteck an die richtige absolute Position verschieben
+                        // Move the rectangle to the correct absolute position.
                         aRectangle.Left() += aAbsRect.Left();
                         aRectangle.Right() -= aAbsRect.Left();
-                        // Abstand zur Umrandung mit einbeziehen
+                        // Include distance to the border.
                         aRectangle.Right() -= (nOuterWidth - nTotalWidth) / 2;
                     }
 
@@ -1836,7 +1826,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                         aRectangle.Right() += MINLAY;
                     }
                     else
-                        // rechts ist jetzt nur noch der Seitenrand
+                        // Right is only the margin now.
                         aRectangle.Right() = 0;
 
 
@@ -1877,15 +1867,14 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                     }
                 }
                 else
-                {   //hier nur fuer Tabelle in mehrspaltigen Seiten und Rahmen
+                {   // Here only for table in multi-column pages and borders.
                     sal_Bool bSectOutTbl = (nFrmType & FRMTYPE_TABLE) ? sal_True : sal_False;
                     bool bFrame = (nFrmType & FRMTYPE_FLY_ANY);
                     bool bColSct =  (nFrmType & ( bSectOutTbl
                                                     ? FRMTYPE_COLSECTOUTTAB
                                                     : FRMTYPE_COLSECT )
                                                 );
-                    //Damit man auch mit der Mouse ziehen kann,
-                    //ohne in der Tabelle zu stehen
+                    //So you can also drag with the mouse, without being in the table.
                     CurRectType eRecType = RECT_PAGE_PRT;
                     sal_uInt16 nNum = IsTabColFromDoc() ?
                                 rSh.GetCurMouseColNum( m_aTabColFromDocPos ):
@@ -1911,17 +1900,16 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                     const sal_uInt16 nBorder = pFmt ? pFmt->GetBox().GetDistance() :
                                                   rDesc.GetMaster().GetBox().GetDistance();
 
-                    /* RECT_FLY_PRT_EMBEDDED returns the relative position to
-                        RECT_FLY_EMBEDDED
-                        the absolute position must be added here
-                    */
+                    // RECT_FLY_PRT_EMBEDDED returns the relative position to RECT_FLY_EMBEDDED
+                    // the absolute position must be added here
+
                     SwRect aRect( rSh.GetAnyCurRect( eRecType, pPt ) );
                     if(RECT_FLY_PRT_EMBEDDED == eRecType)
                         aRect.Pos() += rSh.GetAnyCurRect( RECT_FLY_EMBEDDED,
                                                                 pPt ).Pos();
 
                     const sal_uInt16 nTotalWidth = (sal_uInt16)aRect.Width();
-                    //nStart und nEnd initialisieren fuer nNum == 0
+                    // Initialize nStart and nEnd initialisieren for nNum == 0
                     int nWidth = 0,
                         nStart = 0,
                         nEnd = nTotalWidth;
