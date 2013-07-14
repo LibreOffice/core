@@ -293,7 +293,7 @@ public class ComputersFragment extends SherlockListFragment implements ServiceCo
     }
 
     private void callComputerCreationActivity() {
-        Intent aIntent = new Intent(getActivity(), ComputerCreationActivity.class);
+        Intent aIntent = Intents.buildComputerCreationIntent(getActivity());
         startActivityForResult(aIntent, Intents.RequestCodes.CREATE_SERVER);
     }
 
