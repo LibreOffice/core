@@ -61,7 +61,6 @@ $(eval $(call gb_SrsTarget_add_files,chart2/res,\
     chart2/source/controller/dialogs/tp_PolarOptions.src \
     chart2/source/controller/dialogs/tp_RangeChooser.src \
     chart2/source/controller/dialogs/tp_Scale.src \
-    chart2/source/controller/dialogs/tp_SeriesToAxis.src \
     chart2/source/controller/dialogs/tp_TitleRotation.src \
     chart2/source/controller/dialogs/tp_Trendline.src \
     chart2/source/controller/dialogs/tp_Wizard_TitlesAndObjects.src \

@@ -18,7 +18,6 @@
  */
 
 #include "tp_SeriesToAxis.hxx"
-#include "tp_SeriesToAxis.hrc"
 
 #include "ResId.hxx"
 #include "chartview/ChartSfxItemIds.hxx"
@@ -40,31 +39,31 @@ namespace chart
 //.............................................................................
 
 SchOptionTabPage::SchOptionTabPage(Window* pWindow,const SfxItemSet& rInAttrs) :
-    SfxTabPage(pWindow, SchResId(TP_OPTIONS), rInAttrs),
-    aGrpAxis(this, SchResId(GRP_OPT_AXIS)),
-    aRbtAxis1(this,SchResId(RBT_OPT_AXIS_1)),
-    aRbtAxis2(this,SchResId(RBT_OPT_AXIS_2)),
-
-    aGrpBar(this, SchResId(GB_BAR)),
-    aFTGap(this,SchResId(FT_GAP)),
-    aMTGap(this,SchResId(MT_GAP)),
-    aFTOverlap(this,SchResId(FT_OVERLAP)),
-    aMTOverlap(this,SchResId(MT_OVERLAP)),
-    aCBConnect(this,SchResId(CB_CONNECTOR)),
-    aCBAxisSideBySide(this,SchResId(CB_BARS_SIDE_BY_SIDE)),
-    m_aFL_PlotOptions(this,SchResId(FL_PLOT_OPTIONS)),
-    m_aFT_MissingValues(this,SchResId(FT_MISSING_VALUES)),
-    m_aRB_DontPaint(this,SchResId(RB_DONT_PAINT)),
-    m_aRB_AssumeZero(this,SchResId(RB_ASSUME_ZERO)),
-    m_aRB_ContinueLine(this,SchResId(RB_CONTINUE_LINE)),
-    m_aCBIncludeHiddenCells(this,SchResId(CB_INCLUDE_HIDDEN_CELLS)),
+    SfxTabPage(pWindow,
+               "TP_OPTIONS",
+               "modules/schart/ui/tp_SeriesToAxis.ui",
+               rInAttrs),
     m_bProvidesSecondaryYAxis(true),
     m_bProvidesOverlapAndGapWidth(false)
 {
-    FreeResource();
+    get(m_pGrpAxis,"frameGrpAxis");
+    get(m_pRbtAxis1,"RBT_OPT_AXIS_1");
+    get(m_pRbtAxis2,"RBT_OPT_AXIS_2");
 
-    aRbtAxis1.SetClickHdl( LINK( this, SchOptionTabPage, EnableHdl ));
-    aRbtAxis2.SetClickHdl( LINK( this, SchOptionTabPage, EnableHdl ));
+    get(m_pGrpBar,"frameSettings");
+    get(m_pMTGap,"MT_GAP");
+    get(m_pMTOverlap,"MT_OVERLAP");
+    get(m_pCBConnect,"CB_CONNECTOR");
+    get(m_pCBAxisSideBySide,"CB_BARS_SIDE_BY_SIDE");
+
+    get(m_pGridPlotOptions,"gridPLOT_OPTIONS");
+    get(m_pRB_DontPaint,"RB_DONT_PAINT");
+    get(m_pRB_AssumeZero,"RB_ASSUME_ZERO");
+    get(m_pRB_ContinueLine,"RB_CONTINUE_LINE");
+    get(m_pCBIncludeHiddenCells,"CB_INCLUDE_HIDDEN_CELLS");
+
+    m_pRbtAxis1->SetClickHdl( LINK( this, SchOptionTabPage, EnableHdl ));
+    m_pRbtAxis2->SetClickHdl( LINK( this, SchOptionTabPage, EnableHdl ));
 }
 
 SchOptionTabPage::~SchOptionTabPage()
@@ -74,9 +73,9 @@ SchOptionTabPage::~SchOptionTabPage()
 IMPL_LINK_NOARG(SchOptionTabPage, EnableHdl)
 {
     if( m_nAllSeriesAxisIndex == 0 )
-        aCBAxisSideBySide.Enable( aRbtAxis2.IsChecked());
+        m_pCBAxisSideBySide->Enable( m_pRbtAxis2->IsChecked());
     else if( m_nAllSeriesAxisIndex == 1 )
-        aCBAxisSideBySide.Enable( aRbtAxis1.IsChecked());
+        m_pCBAxisSideBySide->Enable( m_pRbtAxis1->IsChecked());
 
     return 0;
 }
@@ -88,34 +87,34 @@ SfxTabPage* SchOptionTabPage::Create(Window* pWindow,const SfxItemSet& rOutAttrs
 
 sal_Bool SchOptionTabPage::FillItemSet(SfxItemSet& rOutAttrs)
 {
-    if(aRbtAxis2.IsChecked())
+    if(m_pRbtAxis2->IsChecked())
         rOutAttrs.Put(SfxInt32Item(SCHATTR_AXIS,CHART_AXIS_SECONDARY_Y));
     else
         rOutAttrs.Put(SfxInt32Item(SCHATTR_AXIS,CHART_AXIS_PRIMARY_Y));
 
-    if(aMTGap.IsVisible())
-        rOutAttrs.Put(SfxInt32Item(SCHATTR_BAR_GAPWIDTH,static_cast< sal_Int32 >( aMTGap.GetValue())));
+    if(m_pMTGap->IsVisible())
+        rOutAttrs.Put(SfxInt32Item(SCHATTR_BAR_GAPWIDTH,static_cast< sal_Int32 >( m_pMTGap->GetValue())));
 
-    if(aMTOverlap.IsVisible())
-        rOutAttrs.Put(SfxInt32Item(SCHATTR_BAR_OVERLAP,static_cast< sal_Int32 >( aMTOverlap.GetValue())));
+    if(m_pMTOverlap->IsVisible())
+        rOutAttrs.Put(SfxInt32Item(SCHATTR_BAR_OVERLAP,static_cast< sal_Int32 >( m_pMTOverlap->GetValue())));
 
-    if(aCBConnect.IsVisible())
-        rOutAttrs.Put(SfxBoolItem(SCHATTR_BAR_CONNECT,aCBConnect.IsChecked()));
+    if(m_pCBConnect->IsVisible())
+        rOutAttrs.Put(SfxBoolItem(SCHATTR_BAR_CONNECT,m_pCBConnect->IsChecked()));
 
     // model property is "group bars per axis", UI feature is the other way
     // round: "show bars side by side"
-    if(aCBAxisSideBySide.IsVisible())
-        rOutAttrs.Put(SfxBoolItem(SCHATTR_GROUP_BARS_PER_AXIS, ! aCBAxisSideBySide.IsChecked()));
+    if(m_pCBAxisSideBySide->IsVisible())
+        rOutAttrs.Put(SfxBoolItem(SCHATTR_GROUP_BARS_PER_AXIS, ! m_pCBAxisSideBySide->IsChecked()));
 
-    if(m_aRB_DontPaint.IsChecked())
+    if(m_pRB_DontPaint->IsChecked())
         rOutAttrs.Put(SfxInt32Item(SCHATTR_MISSING_VALUE_TREATMENT,::com::sun::star::chart::MissingValueTreatment::LEAVE_GAP));
-    else if(m_aRB_AssumeZero.IsChecked())
+    else if(m_pRB_AssumeZero->IsChecked())
         rOutAttrs.Put(SfxInt32Item(SCHATTR_MISSING_VALUE_TREATMENT,::com::sun::star::chart::MissingValueTreatment::USE_ZERO));
-    else if(m_aRB_ContinueLine.IsChecked())
+    else if(m_pRB_ContinueLine->IsChecked())
         rOutAttrs.Put(SfxInt32Item(SCHATTR_MISSING_VALUE_TREATMENT,::com::sun::star::chart::MissingValueTreatment::CONTINUE));
 
-    if (m_aCBIncludeHiddenCells.IsVisible())
-        rOutAttrs.Put(SfxBoolItem(SCHATTR_INCLUDE_HIDDEN_CELLS, m_aCBIncludeHiddenCells.IsChecked()));
+    if (m_pCBIncludeHiddenCells->IsVisible())
+        rOutAttrs.Put(SfxBoolItem(SCHATTR_INCLUDE_HIDDEN_CELLS, m_pCBIncludeHiddenCells->IsChecked()));
 
     return sal_True;
 }
@@ -124,15 +123,15 @@ void SchOptionTabPage::Reset(const SfxItemSet& rInAttrs)
 {
     const SfxPoolItem *pPoolItem = NULL;
 
-    aRbtAxis1.Check(sal_True);
-    aRbtAxis2.Check(sal_False);
+    m_pRbtAxis1->Check(sal_True);
+    m_pRbtAxis2->Check(sal_False);
     if (rInAttrs.GetItemState(SCHATTR_AXIS,sal_True, &pPoolItem) == SFX_ITEM_SET)
     {
         long nVal=((const SfxInt32Item*)pPoolItem)->GetValue();
         if(nVal==CHART_AXIS_SECONDARY_Y)
         {
-            aRbtAxis2.Check(sal_True);
-            aRbtAxis1.Check(sal_False);
+            m_pRbtAxis2->Check(sal_True);
+            m_pRbtAxis1->Check(sal_False);
         }
     }
 
@@ -140,36 +139,36 @@ void SchOptionTabPage::Reset(const SfxItemSet& rInAttrs)
     if (rInAttrs.GetItemState(SCHATTR_BAR_GAPWIDTH, sal_True, &pPoolItem) == SFX_ITEM_SET)
     {
         nTmp = (long)((const SfxInt32Item*)pPoolItem)->GetValue();
-        aMTGap.SetValue(nTmp);
+        m_pMTGap->SetValue(nTmp);
     }
 
     if (rInAttrs.GetItemState(SCHATTR_BAR_OVERLAP, sal_True, &pPoolItem) == SFX_ITEM_SET)
     {
         nTmp = (long)((const SfxInt32Item*)pPoolItem)->GetValue();
-        aMTOverlap.SetValue(nTmp);
+        m_pMTOverlap->SetValue(nTmp);
     }
 
     if (rInAttrs.GetItemState(SCHATTR_BAR_CONNECT, sal_True, &pPoolItem) == SFX_ITEM_SET)
     {
         sal_Bool bCheck = static_cast< const SfxBoolItem * >( pPoolItem )->GetValue();
-        aCBConnect.Check(bCheck);
+        m_pCBConnect->Check(bCheck);
     }
 
     if (rInAttrs.GetItemState(SCHATTR_AXIS_FOR_ALL_SERIES, sal_True, &pPoolItem) == SFX_ITEM_SET)
     {
         m_nAllSeriesAxisIndex = static_cast< const SfxInt32Item * >( pPoolItem )->GetValue();
-        aCBAxisSideBySide.Disable();
+        m_pCBAxisSideBySide->Disable();
     }
     if (rInAttrs.GetItemState(SCHATTR_GROUP_BARS_PER_AXIS, sal_True, &pPoolItem) == SFX_ITEM_SET)
     {
         // model property is "group bars per axis", UI feature is the other way
         // round: "show bars side by side"
         sal_Bool bCheck = ! static_cast< const SfxBoolItem * >( pPoolItem )->GetValue();
-        aCBAxisSideBySide.Check( bCheck );
+        m_pCBAxisSideBySide->Check( bCheck );
     }
     else
     {
-        aCBAxisSideBySide.Show(sal_False);
+        m_pCBAxisSideBySide->Show(sal_False);
     }
 
 
@@ -181,35 +180,32 @@ void SchOptionTabPage::Reset(const SfxItemSet& rInAttrs)
 
         if ( aMissingValueTreatments.getLength()>1 && rInAttrs.GetItemState(SCHATTR_MISSING_VALUE_TREATMENT,sal_True, &pPoolItem) == SFX_ITEM_SET)
         {
-            m_aRB_DontPaint.Enable(sal_False);
-            m_aRB_AssumeZero.Enable(sal_False);
-            m_aRB_ContinueLine.Enable(sal_False);
+            m_pRB_DontPaint->Enable(sal_False);
+            m_pRB_AssumeZero->Enable(sal_False);
+            m_pRB_ContinueLine->Enable(sal_False);
 
             for( sal_Int32 nN =0; nN<aMissingValueTreatments.getLength(); nN++ )
             {
                 sal_Int32 nVal = aMissingValueTreatments[nN];
                 if(nVal==::com::sun::star::chart::MissingValueTreatment::LEAVE_GAP)
-                    m_aRB_DontPaint.Enable(sal_True);
+                    m_pRB_DontPaint->Enable(sal_True);
                 else if(nVal==::com::sun::star::chart::MissingValueTreatment::USE_ZERO)
-                    m_aRB_AssumeZero.Enable(sal_True);
+                    m_pRB_AssumeZero->Enable(sal_True);
                 else if(nVal==::com::sun::star::chart::MissingValueTreatment::CONTINUE)
-                    m_aRB_ContinueLine.Enable(sal_True);
+                    m_pRB_ContinueLine->Enable(sal_True);
             }
 
             long nVal=((const SfxInt32Item*)pPoolItem)->GetValue();
             if(nVal==::com::sun::star::chart::MissingValueTreatment::LEAVE_GAP)
-                m_aRB_DontPaint.Check(sal_True);
+                m_pRB_DontPaint->Check(sal_True);
             else if(nVal==::com::sun::star::chart::MissingValueTreatment::USE_ZERO)
-                m_aRB_AssumeZero.Check(sal_True);
+                m_pRB_AssumeZero->Check(sal_True);
             else if(nVal==::com::sun::star::chart::MissingValueTreatment::CONTINUE)
-                m_aRB_ContinueLine.Check(sal_True);
+                m_pRB_ContinueLine->Check(sal_True);
         }
         else
         {
-            m_aFT_MissingValues.Show(sal_False);
-            m_aRB_DontPaint.Show(sal_False);
-            m_aRB_AssumeZero.Show(sal_False);
-            m_aRB_ContinueLine.Show(sal_False);
+            m_pGridPlotOptions->Show(sal_False);
         }
     }
 
@@ -217,13 +213,12 @@ void SchOptionTabPage::Reset(const SfxItemSet& rInAttrs)
     if (rInAttrs.GetItemState(SCHATTR_INCLUDE_HIDDEN_CELLS, sal_True, &pPoolItem) == SFX_ITEM_SET)
     {
         bool bVal = static_cast<const SfxBoolItem*>(pPoolItem)->GetValue();
-        m_aCBIncludeHiddenCells.Check(bVal);
+        m_pCBIncludeHiddenCells->Check(bVal);
     }
     else
     {
-        m_aCBIncludeHiddenCells.Show(sal_False);
-        if(!m_aFT_MissingValues.IsVisible())
-            m_aFL_PlotOptions.Show(sal_False);
+        m_pCBIncludeHiddenCells->Show(sal_False);
+        m_pGridPlotOptions->Show(sal_False);
     }
 
     AdaptControlPositionsAndVisibility();
@@ -251,52 +246,16 @@ void lcl_optimzeRadioButtonSize( RadioButton& rCtrl )
 
 void SchOptionTabPage::AdaptControlPositionsAndVisibility()
 {
-    aRbtAxis1.Show(m_bProvidesSecondaryYAxis);
-    aRbtAxis2.Show(m_bProvidesSecondaryYAxis);
-    aGrpAxis.Show(m_bProvidesSecondaryYAxis);
+    m_pGrpAxis->Show(m_bProvidesSecondaryYAxis);
 
-    aMTGap.Show(m_bProvidesOverlapAndGapWidth);
-    aFTGap.Show(m_bProvidesOverlapAndGapWidth);
+    m_pGrpBar->Show(m_bProvidesOverlapAndGapWidth);
 
-    aMTOverlap.Show(m_bProvidesOverlapAndGapWidth);
-    aFTOverlap.Show(m_bProvidesOverlapAndGapWidth);
+    m_pCBConnect->Show(m_bProvidesBarConnectors);
 
-    aCBConnect.Show(m_bProvidesBarConnectors);
-
-    if( !aMTGap.IsVisible() && !aMTOverlap.IsVisible() )
-    {
-        aGrpBar.Show(sal_False);
-        Point aPos;
-        if( !aRbtAxis1.IsVisible() && !aRbtAxis2.IsVisible() )
-            aPos = aGrpAxis.GetPosPixel();
-        else
-            aPos = aGrpBar.GetPosPixel();
-
-        long nYOffset = aPos.getY() - m_aFL_PlotOptions.GetPosPixel().getY();
-        lcl_offsetControl(m_aFL_PlotOptions,       0, nYOffset);
-        lcl_offsetControl(m_aFT_MissingValues,     0, nYOffset);
-        lcl_offsetControl(m_aRB_DontPaint,         0, nYOffset);
-        lcl_offsetControl(m_aRB_AssumeZero,        0, nYOffset);
-        lcl_offsetControl(m_aRB_ContinueLine,      0, nYOffset);
-        lcl_offsetControl(m_aCBIncludeHiddenCells, 0, nYOffset);
-    }
-
-    m_aFT_MissingValues.SetSizePixel( m_aFT_MissingValues.CalcMinimumSize() );
-    lcl_optimzeRadioButtonSize( m_aRB_DontPaint );
-    lcl_optimzeRadioButtonSize( m_aRB_AssumeZero );
-    lcl_optimzeRadioButtonSize( m_aRB_ContinueLine );
-
-    Size aControlDistance( m_aFT_MissingValues.LogicToPixel( Size(RSC_SP_CTRL_DESC_X,RSC_SP_CTRL_GROUP_Y), MapMode(MAP_APPFONT) ) );
-    long nXOffset = m_aFT_MissingValues.GetPosPixel().getX() + m_aFT_MissingValues.GetSizePixel().getWidth() + aControlDistance.getWidth() - m_aRB_DontPaint.GetPosPixel().getX();
-    lcl_offsetControl(m_aRB_DontPaint,         nXOffset, 0);
-    lcl_offsetControl(m_aRB_AssumeZero,        nXOffset, 0);
-    lcl_offsetControl(m_aRB_ContinueLine,      nXOffset, 0);
-
-    if( !m_aFT_MissingValues.IsVisible() )
-    {
-        //for example for stock charts
-        m_aCBIncludeHiddenCells.SetPosPixel( m_aFT_MissingValues.GetPosPixel() );
-    }
+     if( !m_pMTGap->IsVisible() && !m_pMTOverlap->IsVisible() )
+     {
+         m_pGrpBar->Show(sal_False);
+     }
 }
 //.............................................................................
 } //namespace chart
