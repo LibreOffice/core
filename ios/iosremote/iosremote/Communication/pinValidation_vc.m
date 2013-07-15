@@ -7,7 +7,6 @@
  */
 
 #import "pinValidation_vc.h"
-#import "slideShowPreview_vc.h"
 #import "SlideShow.h"
 #import "CommandInterpreter.h"
 #import "CommunicationManager.h"

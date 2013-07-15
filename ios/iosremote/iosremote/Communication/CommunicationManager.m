@@ -59,13 +59,14 @@
         if (self.state != DISCONNECTED) {
             NSLog(@"Connection Failed");
             self.state = DISCONNECTED;
-            [self.client disconnect];
-            UIAlertView *message = [[UIAlertView alloc] initWithTitle:@"Failed to reach server"
-                                                              message:@"Please verify the IP address and try again later"
-                                                             delegate:nil
-                                                    cancelButtonTitle:@"OK"
-                                                    otherButtonTitles:@"Help", nil];
-            [message show];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                UIAlertView *message = [[UIAlertView alloc] initWithTitle:@"Failed to reach server"
+                                                                  message:@"Please verify the IP address and try again later"
+                                                                 delegate:nil
+                                                        cancelButtonTitle:@"OK"
+                                                        otherButtonTitles:@"Help", nil];
+                [message show];
+            });
         }
     }
 }
