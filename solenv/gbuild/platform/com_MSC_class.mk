@@ -443,6 +443,17 @@ endef
 gb_defaultlangiso := en-US
 gb_smoketest_instset := $(SRCDIR)/instsetoo_native/$(INPATH)/OpenOffice/archive/install/$(gb_defaultlangiso)/OOo_*_install-arc_$(gb_defaultlangiso).zip
 
+ifneq ($(OOO_TEST_SOFFICE),)
+gb_JunitTest_SOFFICEARG:=$(OOO_TEST_SOFFICE)
+else
+ifneq ($(gb_JunitTest_DEBUGRUN),)
+gb_JunitTest_SOFFICEARG:=connect:pipe,name=$(USER)
+else
+gb_JunitTest_SOFFICEARG:=path:$(gb_DEVINSTALLROOT)/program/soffice
+endif
+endif
+
+
 define gb_JunitTest_JunitTest_platform
 $(call gb_JunitTest_get_target,$(1)) : DEFS := \
 	-Dorg.openoffice.test.arg.soffice="$$$${OOO_TEST_SOFFICE:-path:$(gb_DEVINSTALLROOT)/program/soffice.exe}" \
