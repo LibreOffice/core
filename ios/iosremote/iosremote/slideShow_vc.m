@@ -186,8 +186,8 @@
 }
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
+    UITouch *touch = [[event allTouches] anyObject];
     if (!self.touchPointerImage.isHidden){
-        UITouch *touch = [[event allTouches] anyObject];
         CGPoint loc = [touch locationInView:self.touchPointerImage];
         if (loc.x >= 0 && loc.x <= self.touchPointerImage.frame.size.width
             && loc.y >= 0 && loc.y <= self.touchPointerImage.frame.size.height){
@@ -197,6 +197,12 @@
             self.movingPointer.center = p;
             [self.movingPointer setHidden:NO];
         }
+    }
+    
+    if ([touch view] == self.secondarySlideView)
+    {
+        // Change to the next slide when secondary slide is clicked
+        [self nextSlideAction:nil];
     }
 }
 
