@@ -33,7 +33,7 @@ public class SlideShow {
     }
 
     public void setSlidesCount(int aSlidesCount) {
-        this.mSlidesCount = aSlidesCount;
+        mSlidesCount = aSlidesCount;
     }
 
     public int getSlidesCount() {
@@ -41,7 +41,7 @@ public class SlideShow {
     }
 
     public void setCurrentSlideIndex(int aCurrentSlideIndex) {
-        this.mCurrentSlideIndex = aCurrentSlideIndex;
+        mCurrentSlideIndex = aCurrentSlideIndex;
     }
 
     public int getCurrentSlideIndex() {
@@ -75,6 +75,14 @@ public class SlideShow {
 
     public Timer getTimer() {
         return mTimer;
+    }
+
+    public void cleanUp() {
+        mSlidesCount = 0;
+        mCurrentSlideIndex = 0;
+
+        mSlidePreviews.clear();
+        mSlideNotes.clear();
     }
 }
 

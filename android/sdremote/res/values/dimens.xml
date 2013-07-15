@@ -3,6 +3,8 @@
 
     <dimen name="padding_action_bar_button_drawable">8dp</dimen>
     <dimen name="padding_creation_layout">16dp</dimen>
+    <dimen name="padding_slides_grid">4dp</dimen>
+    <dimen name="padding_slide">4dp</dimen>
 
     <dimen name="padding_horizontal_list_item">8dp</dimen>
     <dimen name="padding_horizontal_connection_layout">40dp</dimen>
@@ -16,9 +18,12 @@
     <dimen name="margin_vertical_action_bar_divider">12dp</dimen>
 
     <dimen name="width_action_bar_divider">0.5dp</dimen>
+    <dimen name="width_slides_grid_column">90dp</dimen>
 
     <dimen name="text_size_list_item">18sp</dimen>
     <dimen name="text_size_pin">35sp</dimen>
     <dimen name="text_size_error_title">20sp</dimen>
+
+    <dimen name="spacing_slides_grid">4dp</dimen>
 
 </resources>

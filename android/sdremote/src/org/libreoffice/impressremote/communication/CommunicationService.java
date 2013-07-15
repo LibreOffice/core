@@ -58,6 +58,8 @@ public class CommunicationService extends Service implements Runnable, MessagesL
 
         mServersManager = new ServersManager(this);
 
+        mSlideShow = new SlideShow();
+
         mThread = new Thread(this);
         mThread.start();
     }
@@ -240,7 +242,7 @@ public class CommunicationService extends Service implements Runnable, MessagesL
 
     @Override
     public void onSlideShowStart(int aSlidesCount, int aCurrentSlideIndex) {
-        mSlideShow = new SlideShow();
+        mSlideShow.cleanUp();
         mSlideShow.setSlidesCount(aSlidesCount);
 
         Intent aIntent = Intents.buildSlideShowRunningIntent();
@@ -251,7 +253,7 @@ public class CommunicationService extends Service implements Runnable, MessagesL
 
     @Override
     public void onSlideShowFinish() {
-        mSlideShow = new SlideShow();
+        mSlideShow.cleanUp();
 
         Intent aIntent = Intents.buildSlideShowStoppedIntent();
         LocalBroadcastManager.getInstance(this).sendBroadcast(aIntent);
