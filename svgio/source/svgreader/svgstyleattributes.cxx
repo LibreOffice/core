@@ -988,12 +988,9 @@ namespace svgio
             const basegfx::B2DPolyPolygon& rPath,
             drawinglayer::primitive2d::Primitive2DSequence& rTarget) const
         {
-            const bool bIsLine(1 == rPath.count()
-                && !rPath.areControlPointsUsed()
-                && 2 == rPath.getB2DPolygon(0).count());
-
             if(!rPath.count())
             {
+                // no geometry at all
                 return;
             }
 
@@ -1001,13 +998,7 @@ namespace svgio
 
             if(aGeoRange.isEmpty())
             {
-                return;
-            }
-
-            if(!bIsLine && // not for lines
-                (basegfx::fTools::equalZero(aGeoRange.getWidth())
-                || basegfx::fTools::equalZero(aGeoRange.getHeight())))
-            {
+                // no geometry range
                 return;
             }
 
@@ -1015,11 +1006,21 @@ namespace svgio
 
             if(basegfx::fTools::equalZero(fOpacity))
             {
+                // not visible
                 return;
             }
 
+            // check if it's a line
+            const bool bNoWidth(basegfx::fTools::equalZero(aGeoRange.getWidth()));
+            const bool bNoHeight(basegfx::fTools::equalZero(aGeoRange.getHeight()));
+            const bool bIsTwoPointLine(1 == rPath.count()
+                && !rPath.areControlPointsUsed()
+                && 2 == rPath.getB2DPolygon(0).count());
+            const bool bIsLine(bIsTwoPointLine || bNoWidth || bNoHeight);
+
             if(!bIsLine)
             {
+                // create fill
                 basegfx::B2DPolyPolygon aPath(rPath);
                 const bool bNeedToCheckClipRule(SVGTokenPath == mrOwner.getType() || SVGTokenPolygon == mrOwner.getType());
                 const bool bClipPathIsNonzero(!bIsLine && bNeedToCheckClipRule && mbIsClipPathContent && FillRule_nonzero == maClipRule);
@@ -1034,6 +1035,7 @@ namespace svgio
                 add_fill(aPath, rTarget, aGeoRange);
             }
 
+            // create stroke
             add_stroke(rPath, rTarget, aGeoRange);
 
             // Svg supports markers for path, polygon, polyline and line
