@@ -24,5 +24,12 @@
         <value>false</value>
       </prop>
     </node>
+
+    <!-- show Sidebar child window by default (when enabled via the Experimental settings) - oor:name == SID_SIDEBAR -->
+    <node oor:name="10336" oor:op="replace">
+      <prop oor:name="Visible" oor:type="xs:boolean">
+        <value>true</value>
+      </prop>
+    </node>
   </node>
 </oor:component-data>
