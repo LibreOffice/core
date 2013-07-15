@@ -631,7 +631,7 @@ OUString lclGetErrorMessage( XML_Error xmlE, const OUString& sSystemId, sal_Int3
     aBuffer.append( " line " );
     aBuffer.append( nLine );
     aBuffer.append( "]: " );
-    aBuffer.append( pMessage );
+    aBuffer.appendAscii( pMessage );
     aBuffer.append( " error" );
     return aBuffer.makeStringAndClear();
 }
