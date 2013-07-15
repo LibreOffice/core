@@ -35,7 +35,6 @@
 #include "com/sun/star/configuration/theDefaultProvider.hpp"
 #include "com/sun/star/container/XNameAccess.hpp"
 #include "com/sun/star/datatransfer/XTransferable.hpp"
-#include "com/sun/star/datatransfer/clipboard/SystemClipboard.hpp"
 #include "com/sun/star/datatransfer/clipboard/XClipboard.hpp"
 #include "com/sun/star/datatransfer/clipboard/XClipboardEx.hpp"
 #include "com/sun/star/datatransfer/clipboard/XClipboardListener.hpp"
