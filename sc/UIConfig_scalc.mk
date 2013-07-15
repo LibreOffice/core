@@ -91,6 +91,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/scalc,\
 	sc/uiconfig/scalc/ui/printareasdialog \
 	sc/uiconfig/scalc/ui/printeroptions \
 	sc/uiconfig/scalc/ui/protectsheetdlg \
+	sc/uiconfig/scalc/ui/randomnumbergenerator \
 	sc/uiconfig/scalc/ui/rightfooterdialog \
 	sc/uiconfig/scalc/ui/rightheaderdialog \
 	sc/uiconfig/scalc/ui/scgeneralpage \
