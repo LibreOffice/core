@@ -29,6 +29,13 @@
 #include <com/sun/star/drawing/framework/XPane.hpp>
 #include <com/sun/star/rendering/CompositeOperation.hpp>
 
+//////////
+#include <iostream>
+#include <sot/formats.hxx>
+#include "PresenterScrollBar.hxx"
+#include "PresenterBitmapContainer.hxx"
+//////////
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing::framework;
@@ -96,7 +103,13 @@ PresenterSlidePreview::PresenterSlidePreview (
                 OUString("com.sun.star.drawing.SlideRenderer"),
                 rxContext),
             UNO_QUERY);
-
+//////////////////////////////------------------------------//////////////////////////////
+    mpBitmaps.reset(new PresenterBitmapContainer(
+            OUString("PresenterScreenSettings/ScrollBar/Bitmaps"),
+            ::boost::shared_ptr<PresenterBitmapContainer>(),
+            rxContext,
+            mxCanvas));
+//////////////////////////////------------------------------//////////////////////////////
     Resize();
 }
 
@@ -252,6 +265,18 @@ void PresenterSlidePreview::Paint (const awt::Rectangle& rBoundingBox)
 
     // Make sure that a preview in the correct size exists.
     awt::Rectangle aWindowBox (mxWindow->getPosSize());
+//////////////////////////////------------------------------//////////////////////////////
+    sal_uInt16 TransitionType = 0;
+    //sal_uLong proba2;
+    if( mxCurrentSlide.is() )
+    {
+        Reference<beans::XPropertySet> xPropertySet (mxCurrentSlide, UNO_QUERY);
+        xPropertySet->getPropertyValue("TransitionType") >>= TransitionType;
+        //Reference<beans::XPropertySet> xxPropertySet (mxCurrentSlide, UNO_QUERY);
+        //xxPropertySet->getPropertyValue("Effect") >>= proba2;
+        //std::cout << " TR " << proba << " CA " << proba2 << " "<< std::endl;
+    }
+//////////////////////////////------------------------------//////////////////////////////
 
     if ( ! mxPreview.is() && mxCurrentSlide.is())
     {
@@ -311,6 +336,20 @@ void PresenterSlidePreview::Paint (const awt::Rectangle& rBoundingBox)
     if (mxPreview.is())
     {
         mxCanvas->drawBitmap(mxPreview, aViewState, aRenderState);
+//////////////////////////////------------------------------//////////////////////////////
+        if( TransitionType > 0 )
+        {
+            const awt::Rectangle TransitionPreviewBox(5, aWindowBox.Height-20, 0, 0);
+            SharedBitmapDescriptor mnTransitionDescriptor = mpBitmaps->GetBitmap("Animation");
+            Reference<rendering::XBitmap> TransitionIcon (mnTransitionDescriptor->GetNormalBitmap());
+            rendering::RenderState TransitionRenderState (
+                geometry::AffineMatrix2D(1, 0, TransitionPreviewBox.X, 0, 1, TransitionPreviewBox.Y),
+                NULL,
+                aBackgroundColor,
+                rendering::CompositeOperation::SOURCE);
+            mxCanvas->drawBitmap(TransitionIcon, aViewState, TransitionRenderState);
+        }
+//////////////////////////////------------------------------//////////////////////////////
     }
     else
     {
