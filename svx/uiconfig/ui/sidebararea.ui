@@ -93,6 +93,9 @@
                   <object class="svxlo-SvxFillAttrBox" id="fillattr">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="has_tooltip">True</property>
+                    <property name="tooltip_markup" translatable="yes">Select the effect to apply.</property>
+                    <property name="tooltip_text" translatable="yes">Select the effect to apply.</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>

@@ -60,16 +60,6 @@ Image IMG_ROT_RIGHT
     ImageBitmap = Bitmap{File = "symphony/rotate_right.png";};
 };
 
-Control RID_SIDEBAR_AREA_PANEL
-{
-    OutputSize = TRUE;
-    DialogControl = TRUE;
-    Border = FALSE;
-    Size = MAP_APPFONT( PROPERTYPAGE_WIDTH, SECTIONPAGE_MARGIN_VERTICAL_TOP + SECTIONPAGE_MARGIN_VERTICAL_BOT + 2*( FIXED_TEXT_HEIGHT + TEXT_CONTROL_SPACING_VERTICAL + CBOX_HEIGHT) + CONTROL_SPACING_VERTICAL );
-    HelpID = HID_PROPERTYPANEL_AREA_SECTION ;
-    Text [ en-US ] = "Area";
-};
-
 Control RID_POPUPPANEL_AREAPAGE_TRGR
 {
     OutputSize = TRUE;

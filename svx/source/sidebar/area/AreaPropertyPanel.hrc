@@ -15,17 +15,15 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-//  RID_SIDEBAR_AREA_PANEL--------------------------------------------------------------
 
 #include "svx/dialogs.hrc"
 
 #define TBI_LEFT                            1
 #define TBI_RIGHT                           1
-#define TBI_BTX_GRADIENT                    51
 
-#define LB_TRGR_TYPES   6
+#define VS_COLOR            1
+
 #define MTR_TRANSPARENT 7
-#define BTN_GRADIENT    8
 
 #define FT_TRGR_CENTER_X    9
 #define MTR_TRGR_CENTER_X   10
@@ -56,10 +54,6 @@
 
 #define IMG_ROT_LEFT    (RID_SVX_SIDEBAR_BEGIN +  37)
 #define IMG_ROT_RIGHT   (RID_SVX_SIDEBAR_BEGIN +  38)
-
-#define STR_HELP_TYPE   (RID_SVX_SIDEBAR_BEGIN +  39)
-#define STR_HELP_ATTR   (RID_SVX_SIDEBAR_BEGIN +  40)
-#define VS_COLOR        (RID_SVX_SIDEBAR_BEGIN +  41)
 
 #define STR_HELP_COLOR          41
 

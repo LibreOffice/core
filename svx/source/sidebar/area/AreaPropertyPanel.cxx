@@ -100,8 +100,6 @@ AreaPropertyPanel::AreaPropertyPanel(
       maImgSquare(SVX_RES(IMG_SQUARE)),
       maImgLinear(SVX_RES(IMG_LINEAR)),
       maImgColor(SVX_RES(IMG_COLOR)),
-      msHelpFillType(SVX_RES(STR_HELP_TYPE)),
-      msHelpFillAttr(SVX_RES(STR_HELP_ATTR)),
       maTrGrPopup(this, ::boost::bind(&AreaPropertyPanel::CreateTransparencyGradientControl, this, _1)),
       maColorPopup(this, ::boost::bind(&AreaPropertyPanel::CreateColorPopupControl, this, _1)),
       mpFloatTransparenceItem(),
