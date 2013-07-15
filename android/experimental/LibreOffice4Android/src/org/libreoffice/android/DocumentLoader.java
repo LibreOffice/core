@@ -32,6 +32,7 @@ package org.libreoffice.android;
 import org.libreoffice.R;
 
 import android.app.Activity;
+import android.graphics.PointF;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.graphics.Color;
@@ -41,10 +42,12 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.FloatMath;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.Gravity;
 import android.view.MotionEvent;
+import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
@@ -52,6 +55,7 @@ import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.ImageView.ScaleType;
 import android.widget.ViewFlipper;
 import android.widget.ViewSwitcher;
 import android.view.MenuItem;
@@ -129,6 +133,7 @@ public class DocumentLoader
     XRenderable renderable;
 
     GestureDetector gestureDetector;
+    ScaleListener scaleDetector;
 
     ViewGroup.LayoutParams matchParent;
 
@@ -149,15 +154,19 @@ public class DocumentLoader
                                float velocityY)
         {
             Log.i(TAG, "onFling: " + event1 + " " + event2);
+            if (scaleDetector.inZoom())
+                return false;
             ViewFlipper flipper = documentViewer.getFlipper();
             if (event1.getX() - event2.getX() > 120) {
                 if (((PageViewer)flipper.getCurrentView()).currentPageNumber == pageCount-1)
                     return false;
+                scaleDetector.reset();
                 documentViewer.nextPage();
                 return true;
             } else if (event2.getX() - event1.getX() > 120) {
                 if (((PageViewer)flipper.getCurrentView()).currentPageNumber == 0)
                     return false;
+                scaleDetector.reset();
                 documentViewer.prevPage();
                 return true;
             }
@@ -186,6 +195,127 @@ public class DocumentLoader
         }
         
         
+    }
+
+    class ScaleListener implements OnTouchListener
+    {
+        public ScaleListener()
+        {
+            reset();
+        }
+
+        public boolean onTouch(View v, MotionEvent event)
+        {
+            PageViewer pageViewer = (PageViewer)v;
+            ImageView view = (ImageView)pageViewer.getCurrentView();
+            if (view.getScaleType() == ScaleType.FIT_CENTER)
+            {
+                origValues = new float[9];
+                view.getImageMatrix().getValues(origValues);
+                matrix.setValues(origValues);
+                view.setScaleType(ScaleType.MATRIX);
+            }
+
+            switch (event.getAction() & MotionEvent.ACTION_MASK)
+            {
+            case MotionEvent.ACTION_DOWN:
+                if (inZoom())
+                {
+                    savedMatrix.set(matrix);
+                    start.set(event.getX(), event.getY());
+                    mode = DRAG;
+                }
+                break;
+            case MotionEvent.ACTION_POINTER_DOWN:
+                oldDist = spacing(event);
+                if (oldDist > 10f) {
+                    savedMatrix.set(matrix);
+                    midPoint(mid, event);
+                    mode = ZOOM;
+                }
+                break;
+            case MotionEvent.ACTION_UP:
+            case MotionEvent.ACTION_POINTER_UP:
+                mode = NONE;
+                float[] values = new float[9];
+                view.getImageMatrix().getValues(values);
+                currentScaleX = values[Matrix.MSCALE_X];
+                currentScaleY = values[Matrix.MSCALE_Y];
+                if (currentScaleX < origValues[Matrix.MSCALE_X])
+                    matrix.setValues(origValues);
+                break;
+            case MotionEvent.ACTION_MOVE:
+                if (mode == DRAG) {
+                    matrix.set(savedMatrix);
+                    matrix.postTranslate(event.getX() - start.x, -1 * (event.getY() - start.y));
+                }
+                else if (mode == ZOOM) {
+                    float newDist = spacing(event);
+                    if (newDist > 10f) {
+                        matrix.set(savedMatrix);
+                        float scale = newDist / oldDist;
+                        matrix.postScale(scale, scale, mid.x, mid.y);
+                    }
+                }
+                break;
+            }
+
+            view.setImageMatrix(matrix);
+            return true;
+        }
+
+        private float spacing(MotionEvent event)
+        {
+            float x = event.getX(0) - event.getX(1);
+            float y = event.getY(0) - event.getY(1);
+            return FloatMath.sqrt(x * x + y * y);
+        }
+
+        private void midPoint(PointF point, MotionEvent event)
+        {
+            float x = event.getX(0) + event.getX(1);
+            float y = event.getY(0) + event.getY(1);
+            point.set(x / 2, y / 2);
+        }
+
+        public void reset()
+        {
+            if (documentViewer != null)
+            {
+                PageViewer pageViewer = (PageViewer)documentViewer.viewFlipper.getCurrentView();
+                ((ImageView)pageViewer.getCurrentView()).setScaleType(ScaleType.FIT_CENTER);
+            }
+            matrix = new Matrix();
+            savedMatrix = new Matrix();
+            mode = NONE;
+            start = new PointF();
+            mid = new PointF();
+            oldDist = 1f;
+            origValues = null;
+            currentScaleX = 0;
+            currentScaleY = 0;
+        }
+
+        public boolean inZoom()
+        {
+            return origValues != null && origValues[Matrix.MSCALE_X] < currentScaleX;
+        }
+
+        Matrix matrix; // Matrix of the current view
+        Matrix savedMatrix; // Matrix when the user started the touch.
+
+        static final int NONE = 0;
+        static final int DRAG = 1;
+        static final int ZOOM = 2;
+        int mode;
+
+        PointF start;
+        PointF mid;
+        float oldDist;
+
+        float[] origValues;
+        float currentScaleX;
+        float currentScaleY;
     }
 
     class MyXController
@@ -950,6 +1080,7 @@ public class DocumentLoader
 		extras = getIntent().getExtras();
 
         gestureDetector = new GestureDetector(this, new GestureListener());
+        scaleDetector = new ScaleListener();
 
         try {
             long t0 = System.currentTimeMillis();
@@ -1092,7 +1223,11 @@ public class DocumentLoader
     @Override
     public boolean onTouchEvent(MotionEvent event)
     {
-        return gestureDetector.onTouchEvent(event);
+        if (gestureDetector.onTouchEvent(event))
+            return true;
+        if (scaleDetector.onTouch(documentViewer.viewFlipper.getCurrentView(), event))
+            return true;
+        return false;
     }
     
     @Override
