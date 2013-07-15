@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXn//+qo\u003d",
+        "filename": "sc/source/filter/excel/xiescher.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 4261,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-07-15T20:31:01Z",
+      "side": 1,
+      "message": "This was also a RTL_LOGFILE_CONTEXT_AUTHOR so can be removed without replacing. Additionally, please don\u0027t make up log areas like \"sc.excel\" if they are not defined in include/sal/log-areas.dox; if you think a new log area is needed for some reason (i.e. lots of files would use it and distinguishing areas would help) add it to include/sal/log-areas.dox",
+      "revId": "b8602f265bd0188d8244ea119e03296703f0807b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//+qk\u003d",
+        "filename": "sc/source/filter/xml/xmlwrap.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 459,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-07-15T20:31:01Z",
+      "side": 1,
+      "message": "See comment about new log areas in sc/source/filter/excel/xiescher.cxx",
+      "revId": "b8602f265bd0188d8244ea119e03296703f0807b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//+qg\u003d",
+        "filename": "sc/source/ui/view/tabvwsh4.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1677,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-07-15T20:31:01Z",
+      "side": 1,
+      "message": "This was just a RTL_LOGFILE_CONTEXT_AUTHOR and can be removed. Also see comment about log areas in sc/source/filter/excel/xiescher.cxx",
+      "revId": "b8602f265bd0188d8244ea119e03296703f0807b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
