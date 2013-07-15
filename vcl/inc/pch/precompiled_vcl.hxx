@@ -39,7 +39,6 @@
 #include "com/sun/star/datatransfer/clipboard/XClipboardEx.hpp"
 #include "com/sun/star/datatransfer/clipboard/XClipboardListener.hpp"
 #include "com/sun/star/datatransfer/clipboard/XClipboardNotifier.hpp"
-#include "com/sun/star/datatransfer/clipboard/XSystemClipboard.hpp"
 #include "com/sun/star/datatransfer/dnd/DNDConstants.hpp"
 #include "com/sun/star/datatransfer/dnd/XDragSource.hpp"
 #include "com/sun/star/datatransfer/dnd/XDropTarget.hpp"
