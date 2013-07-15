@@ -40,7 +40,7 @@ ENABLE_EXCEPTIONS=TRUE
 
 .INCLUDE :  target.mk
 
-#ALLTAR : $(MISC)$/test_0_succeeded $(MISC)$/test_1_succeeded
+#ALLTAR : $(MISC)$/test_0_succeeded
 
 $(MISC)$/test_0_succeeded: $(BIN)$/xpdfimport$(EXECPOST) binary_0_out.def text_0_out.def testinput.pdf
     $(BIN)$/xpdfimport -f $(MISC)$/binary_0_out testinput.pdf > $(MISC)$/text_0_out
@@ -48,8 +48,18 @@ $(MISC)$/test_0_succeeded: $(BIN)$/xpdfimport$(EXECPOST) binary_0_out.def text_0
     diff --strip-trailing-cr $(MISC)$/text_0_out text_0_out.def
     $(TOUCH) $@
 
-$(MISC)$/test_1_succeeded: $(BIN)$/xpdfimport$(EXECPOST) binary_1_out.def text_1_out.def book.pdf
-    $(BIN)$/xpdfimport -f $(MISC)$/binary_1_out book.pdf > $(MISC)$/text_1_out
-    diff --strip-trailing-cr $(MISC)$/binary_1_out binary_1_out.def
-    diff --strip-trailing-cr $(MISC)$/text_1_out text_1_out.def
-    $(TOUCH) $@
+# This test is disabled because
+# - the PDF import extension is not part of the AOO build #i118592#
+# - the test files are too huge (75MB + 5MB + 500kB) to remain in the tree
+# The test files are still available at
+#   http://svn.apache.org/repos/asf/openoffice/trunk/main/sdext/source/pdfimport/xpdftest/binary_1_out.def
+#   http://svn.apache.org/repos/asf/openoffice/trunk/main/sdext/source/pdfimport/xpdftest/text_1_out.def
+#   http://svn.apache.org/repos/asf/openoffice/trunk/main/sdext/source/pdfimport/xpdftest/book.pdf
+# if you download them you can enable the test below:
+
+#$(MISC)$/test_1_succeeded: $(BIN)$/xpdfimport$(EXECPOST) binary_1_out.def text_1_out.def book.pdf
+#	$(BIN)$/xpdfimport -f $(MISC)$/binary_1_out book.pdf > $(MISC)$/text_1_out
+#	diff --strip-trailing-cr $(MISC)$/binary_1_out binary_1_out.def
+#	diff --strip-trailing-cr $(MISC)$/text_1_out text_1_out.def
+#	$(TOUCH) $@
+
