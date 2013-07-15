@@ -84,7 +84,6 @@ License::License( const Reference< XComponentContext >& rxContext )
         //      we must garant right initialization and a valid value of this! First initialize
         //      baseclasses and then members. And we need the mutex for other baseclasses !!!
         :   ThreadHelpBase  ( &Application::GetSolarMutex() )
-        ,   OWeakObject     (                               )
         // Init member
         ,   m_xContext      ( rxContext                     )
         ,   m_bTerminate    ( sal_False                     )
@@ -101,21 +100,6 @@ License::~License()
 //*****************************************************************************************************************
 //  XInterface, XTypeProvider, XServiceInfo
 //*****************************************************************************************************************
-
-DEFINE_XINTERFACE_4                 (   License                        ,
-                                        OWeakObject                    ,
-                                        DIRECT_INTERFACE(XTypeProvider ),
-                                        DIRECT_INTERFACE(XServiceInfo  ),
-                                        DIRECT_INTERFACE(XJob          ),
-                                        DIRECT_INTERFACE(XCloseable    )
-                                    )
-
-DEFINE_XTYPEPROVIDER_4              (   License ,
-                                        XTypeProvider   ,
-                                        XServiceInfo    ,
-                                        XJob            ,
-                                        XCloseable
-                                    )
 
 DEFINE_XSERVICEINFO_MULTISERVICE_2  (   License,
                                         OWeakObject                 ,

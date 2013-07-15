@@ -43,20 +43,18 @@
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/util/CloseVetoException.hpp>
 
+#include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/propshlp.hxx>
-#include <cppuhelper/interfacecontainer.hxx>
-#include <cppuhelper/weak.hxx>
 
 namespace framework
 {
-    class License : public  css::lang::XTypeProvider            ,
-                    public  css::lang::XServiceInfo             ,
-                    public  css::task::XJob                     ,
-                    public  css::util::XCloseable               ,
-                    // base classes
+    class License : // base classes
                     // Order is necessary for right initialization!
                     private ThreadHelpBase                      , // Struct for right initalization of mutex member! Must be first of baseclasses.
-                    public  ::cppu::OWeakObject                   // => XWeak, XInterface
+                    public cppu::WeakImplHelper3<
+                               css::lang::XServiceInfo,
+                               css::task::XJob,
+                               css::util::XCloseable>             // => XWeak, XInterface
     {
     private:
         css::uno::Reference< css::uno::XComponentContext > m_xContext;
@@ -66,8 +64,6 @@ namespace framework
         virtual ~License();
 
         /** declaration of XInterface, XTypeProvider, XServiceInfo */
-        FWK_DECLARE_XINTERFACE
-        FWK_DECLARE_XTYPEPROVIDER
         DECLARE_XSERVICEINFO
 
         virtual css::uno::Any SAL_CALL execute(const css::uno::Sequence<css::beans::NamedValue>& args)

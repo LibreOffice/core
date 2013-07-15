@@ -36,25 +36,6 @@
 
 namespace framework{
 
-DEFINE_XINTERFACE_6( JobDispatch                                     ,
-                     OWeakObject                                     ,
-                     DIRECT_INTERFACE(css::lang::XTypeProvider      ),
-                     DIRECT_INTERFACE(css::frame::XDispatchProvider ),
-                     DIRECT_INTERFACE(css::lang::XInitialization ),
-                     DIRECT_INTERFACE(css::lang::XServiceInfo),
-                     DIRECT_INTERFACE(css::frame::XNotifyingDispatch),
-                     DIRECT_INTERFACE(css::frame::XDispatch         )
-                   )
-
-DEFINE_XTYPEPROVIDER_6( JobDispatch                   ,
-                        css::lang::XTypeProvider      ,
-                        css::frame::XDispatchProvider ,
-                        css::frame::XNotifyingDispatch,
-                        css::lang::XInitialization,
-                        css::lang::XServiceInfo,
-                        css::frame::XDispatch
-                      )
-
 DEFINE_XSERVICEINFO_MULTISERVICE_2( JobDispatch                   ,
                                     ::cppu::OWeakObject           ,
                                     SERVICENAME_PROTOCOLHANDLER   ,
@@ -81,7 +62,6 @@ DEFINE_INIT_SERVICE( JobDispatch,
 */
 JobDispatch::JobDispatch( /*IN*/ const css::uno::Reference< css::uno::XComponentContext >& xContext )
     : ThreadHelpBase(&Application::GetSolarMutex())
-    , OWeakObject   (                             )
     , m_xContext    (xContext                        )
 {
 }

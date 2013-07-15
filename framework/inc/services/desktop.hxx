@@ -58,8 +58,7 @@
 
 #include <unotools/cmdoptions.hxx>
 #include <cppuhelper/propshlp.hxx>
-#include <cppuhelper/interfacecontainer.hxx>
-#include <cppuhelper/weak.hxx>
+#include <cppuhelper/implbase6.hxx>
 
 #include <comphelper/numberedcollection.hxx>
 
@@ -103,21 +102,22 @@ enum ELoadState
     @devstatus  ready to use
     @threadsafe yes
 *//*-*************************************************************************************************************/
-class Desktop   :   // interfaces
-                    public  css::lang::XTypeProvider             ,
-                    public  css::lang::XServiceInfo              ,
-                    public  css::frame::XDesktop2                ,
-                    public  css::frame::XTasksSupplier           ,
-                    public  css::frame::XDispatchResultListener  ,   // => XEventListener
-                    public  css::task::XInteractionHandler       ,
-                    public  css::frame::XUntitledNumbers         ,
-                    // base classes
+typedef ::cppu::WeakImplHelper6<
+           css::lang::XServiceInfo              ,
+           css::frame::XDesktop2                ,
+           css::frame::XTasksSupplier           ,
+           css::frame::XDispatchResultListener  ,   // => XEventListener
+           css::task::XInteractionHandler       ,
+           css::frame::XUntitledNumbers > Desktop_BASE;
+
+class Desktop   :   // base classes
                     // Order is necessary for right initialization!
                     private ThreadHelpBase                       ,
                     private TransactionBase                      ,
                     public  ::cppu::OBroadcastHelper             ,
                     public  ::cppu::OPropertySetHelper           ,
-                    public  ::cppu::OWeakObject
+                    // interfaces
+                    public  Desktop_BASE
 {
     // internal used types, const etcpp.
     private:
@@ -133,10 +133,18 @@ class Desktop   :   // interfaces
                  Desktop( const css::uno::Reference< css::uno::XComponentContext >& xContext );
         virtual ~Desktop(                                                                    );
 
-        //  XInterface, XTypeProvider, XServiceInfo
-        FWK_DECLARE_XINTERFACE
-        FWK_DECLARE_XTYPEPROVIDER
+        //  XServiceInfo
         DECLARE_XSERVICEINFO
+
+        // XInterface
+        virtual void SAL_CALL acquire() throw ()
+            { OWeakObject::acquire(); }
+        virtual void SAL_CALL release() throw ()
+            { OWeakObject::release(); }
+        virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& type) throw ( ::com::sun::star::uno::RuntimeException );
+
+        // XTypeProvider
+        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException);
 
         //---------------------------------------------------------------------
         /**

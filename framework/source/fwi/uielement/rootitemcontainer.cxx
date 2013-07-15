@@ -20,6 +20,7 @@
 #include <string.h>
 
 #include <comphelper/servicehelper.hxx>
+#include <comphelper/sequence.hxx>
 #include <uielement/rootitemcontainer.hxx>
 #include <uielement/itemcontainer.hxx>
 #include <uielement/constitemcontainer.hxx>
@@ -44,41 +45,10 @@ const char PROPNAME_UINAME[]    = "UIName";
 namespace framework
 {
 
-//*****************************************************************************************************************
-//  XInterface, XTypeProvider
-//*****************************************************************************************************************
-DEFINE_XINTERFACE_10     (  RootItemContainer                                                   ,
-                            OWeakObject                                                         ,
-                            DIRECT_INTERFACE( ::com::sun::star::lang::XTypeProvider             ),
-                            DIRECT_INTERFACE( ::com::sun::star::container::XIndexContainer      ),
-                            DIRECT_INTERFACE( ::com::sun::star::lang::XUnoTunnel                ),
-                            DIRECT_INTERFACE( ::com::sun::star::lang::XSingleComponentFactory   ),
-                            DIRECT_INTERFACE( ::com::sun::star::beans::XMultiPropertySet        ),
-                            DIRECT_INTERFACE( ::com::sun::star::beans::XFastPropertySet         ),
-                            DIRECT_INTERFACE( ::com::sun::star::beans::XPropertySet             ),
-                            DERIVED_INTERFACE( ::com::sun::star::container::XIndexReplace, com::sun::star::container::XIndexContainer ),
-                            DERIVED_INTERFACE( ::com::sun::star::container::XIndexAccess, com::sun::star::container::XIndexReplace    ),
-                            DERIVED_INTERFACE( ::com::sun::star::container::XElementAccess, ::com::sun::star::container::XIndexAccess )
-                        )
-
-DEFINE_XTYPEPROVIDER_10 (   RootItemContainer                               ,
-                            ::com::sun::star::lang::XTypeProvider           ,
-                            ::com::sun::star::container::XIndexContainer    ,
-                            ::com::sun::star::container::XIndexReplace      ,
-                            ::com::sun::star::container::XIndexAccess       ,
-                            ::com::sun::star::container::XElementAccess     ,
-                            ::com::sun::star::beans::XMultiPropertySet      ,
-                            ::com::sun::star::beans::XFastPropertySet       ,
-                            ::com::sun::star::beans::XPropertySet           ,
-                            ::com::sun::star::lang::XUnoTunnel              ,
-                            ::com::sun::star::lang::XSingleComponentFactory
-                        )
-
 RootItemContainer::RootItemContainer()
     :   ThreadHelpBase              ( )
     ,   ::cppu::OBroadcastHelperVar< ::cppu::OMultiTypeInterfaceContainerHelper, ::cppu::OMultiTypeInterfaceContainerHelper::keyType >( m_aLock.getShareableOslMutex() )
     ,   ::cppu::OPropertySetHelper  ( *(static_cast< ::cppu::OBroadcastHelper* >(this)) )
-    ,   ::cppu::OWeakObject()
 {
 }
 
@@ -86,7 +56,6 @@ RootItemContainer::RootItemContainer( const Reference< XIndexAccess >& rSourceCo
     :   ThreadHelpBase              ( )
     ,   ::cppu::OBroadcastHelperVar< ::cppu::OMultiTypeInterfaceContainerHelper, ::cppu::OMultiTypeInterfaceContainerHelper::keyType >( m_aLock.getShareableOslMutex() )
     ,   ::cppu::OPropertySetHelper  ( *(static_cast< ::cppu::OBroadcastHelper* >(this)) )
-    ,   ::cppu::OWeakObject()
 {
     // We also have to copy the UIName property
     try
@@ -138,6 +107,22 @@ RootItemContainer::RootItemContainer( const Reference< XIndexAccess >& rSourceCo
 
 RootItemContainer::~RootItemContainer()
 {
+}
+
+Any SAL_CALL RootItemContainer::queryInterface( const Type& _rType ) throw(RuntimeException)
+{
+    Any aRet = RootItemContainer_BASE::queryInterface( _rType );
+    if ( !aRet.hasValue() )
+        aRet = OPropertySetHelper::queryInterface( _rType );
+    return aRet;
+}
+//------------------------------------------------------------------------------
+Sequence< Type > SAL_CALL RootItemContainer::getTypes(  ) throw(RuntimeException)
+{
+    return comphelper::concatSequences(
+        RootItemContainer_BASE::getTypes(),
+        ::cppu::OPropertySetHelper::getTypes()
+    );
 }
 
 Reference< XIndexAccess > RootItemContainer::deepCopyContainer( const Reference< XIndexAccess >& rSubContainer )

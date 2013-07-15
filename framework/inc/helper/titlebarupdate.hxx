@@ -21,33 +21,19 @@
 #define __FRAMEWORK_HELPER_TITLEBARUPDATE_HXX_
 
 #include <threadhelp/threadhelpbase.hxx>
-
 #include <macros/debug.hxx>
-
 #include <macros/xinterface.hxx>
-
 #include <macros/xtypeprovider.hxx>
-
 #include <general.h>
-
 #include <com/sun/star/uno/XComponentContext.hpp>
-
 #include <com/sun/star/lang/XInitialization.hpp>
-
 #include <com/sun/star/frame/XFrame.hpp>
-
 #include <com/sun/star/frame/XTitle.hpp>
-
 #include <com/sun/star/frame/XFrameActionListener.hpp>
-
 #include <com/sun/star/frame/XTitleChangeListener.hpp>
-
 #include <com/sun/star/lang/XEventListener.hpp>
-
 #include <unotools/moduleoptions.hxx>
-
-#include <cppuhelper/weak.hxx>
-
+#include <cppuhelper/implbase3.hxx>
 #include <rtl/ustrbuf.hxx>
 
 namespace framework{
@@ -58,14 +44,13 @@ namespace framework{
     @devstatus      draft
     @threadsafe     yes
 *//*-*************************************************************************************************************/
-class TitleBarUpdate : // interfaces
-                       public css::lang::XTypeProvider
-                     , public css::lang::XInitialization
-                     , public css::frame::XTitleChangeListener // => XEventListener
-                     , public css::frame::XFrameActionListener // => XEventListener
-                       // baseclasses (order necessary for right initialization!)
-                     , private ThreadHelpBase
-                     , public  ::cppu::OWeakObject
+class TitleBarUpdate : // baseclasses (order necessary for right initialization!)
+                       private ThreadHelpBase
+                        // interfaces
+                     , public  ::cppu::WeakImplHelper3<
+                                   css::lang::XInitialization
+                                 , css::frame::XTitleChangeListener // => XEventListener
+                                 , css::frame::XFrameActionListener > // => XEventListener
 {
     //________________________________
     // structs, types
@@ -105,8 +90,6 @@ class TitleBarUpdate : // interfaces
 
         //____________________________
         // XInterface, XTypeProvider
-        FWK_DECLARE_XINTERFACE
-        FWK_DECLARE_XTYPEPROVIDER
 
         //____________________________
         // XInitialization

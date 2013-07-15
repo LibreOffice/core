@@ -45,22 +45,6 @@ namespace framework{
 
 
 //*****************************************************************************************************************
-//  XInterface, XTypeProvider
-
-DEFINE_XINTERFACE_4(PersistentWindowState                                                       ,
-                    OWeakObject                                                                 ,
-                    DIRECT_INTERFACE (css::lang::XTypeProvider                                  ),
-                    DIRECT_INTERFACE (css::lang::XInitialization                                ),
-                    DIRECT_INTERFACE (css::frame::XFrameActionListener                          ),
-                    DERIVED_INTERFACE(css::lang::XEventListener,css::frame::XFrameActionListener))
-
-DEFINE_XTYPEPROVIDER_4(PersistentWindowState           ,
-                       css::lang::XTypeProvider        ,
-                       css::lang::XInitialization      ,
-                       css::frame::XFrameActionListener,
-                       css::lang::XEventListener       )
-
-//*****************************************************************************************************************
 PersistentWindowState::PersistentWindowState(const css::uno::Reference< css::uno::XComponentContext >& xContext)
     : ThreadHelpBase          (&Application::GetSolarMutex())
     , m_xContext              (xContext                     )

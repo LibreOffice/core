@@ -34,7 +34,7 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 
 #include <rtl/ustring.hxx>
-#include <cppuhelper/weak.hxx>
+#include <cppuhelper/implbase4.hxx>
 #include <cppuhelper/propshlp.hxx>
 
 #include <vector>
@@ -45,12 +45,11 @@ namespace framework
 
 class RootItemContainer;
 class ItemContainer;
-class FWI_DLLPUBLIC ConstItemContainer :    public ::com::sun::star::lang::XTypeProvider    ,
-                            public com::sun::star::container::XIndexAccess  ,
-                            public ::com::sun::star::lang::XUnoTunnel       ,
-                            public ::com::sun::star::beans::XFastPropertySet,
-                            public ::com::sun::star::beans::XPropertySet    ,
-                            public ::cppu::OWeakObject
+class FWI_DLLPUBLIC ConstItemContainer : public ::cppu::WeakImplHelper4<
+                                                    css::container::XIndexAccess,
+                                                    css::lang::XUnoTunnel       ,
+                                                    css::beans::XFastPropertySet,
+                                                    css::beans::XPropertySet >
 {
     friend class RootItemContainer;
     friend class ItemContainer;
@@ -60,12 +59,6 @@ class FWI_DLLPUBLIC ConstItemContainer :    public ::com::sun::star::lang::XType
         ConstItemContainer( const ItemContainer& rtemContainer );
         ConstItemContainer( const com::sun::star::uno::Reference< com::sun::star::container::XIndexAccess >& rSourceContainer, sal_Bool bFastCopy = sal_False );
         virtual ~ConstItemContainer();
-
-        //---------------------------------------------------------------------------------------------------------
-        //  XInterface, XTypeProvider
-        //---------------------------------------------------------------------------------------------------------
-        FWK_DECLARE_XINTERFACE
-        FWK_DECLARE_XTYPEPROVIDER
 
         // XUnoTunnel
         static const ::com::sun::star::uno::Sequence< sal_Int8 >&   GetUnoTunnelId() throw();

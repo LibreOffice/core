@@ -28,6 +28,7 @@
 
 #include <vcl/svapp.hxx>
 #include <rtl/logfile.hxx>
+#include <comphelper/sequence.hxx>
 
 const int UIELEMENT_PROPHANDLE_RESOURCEURL  = 1;
 const int UIELEMENT_PROPHANDLE_TYPE         = 2;
@@ -44,37 +45,10 @@ using namespace ::com::sun::star::frame;
 namespace framework
 {
 
-//*****************************************************************************************************************
-//  XInterface, XTypeProvider
-//*****************************************************************************************************************
-DEFINE_XINTERFACE_8     (   UIElementWrapperBase                                            ,
-                            OWeakObject                                                     ,
-                            DIRECT_INTERFACE( ::com::sun::star::lang::XTypeProvider         ),
-                            DIRECT_INTERFACE( ::com::sun::star::ui::XUIElement      ),
-                            DIRECT_INTERFACE( ::com::sun::star::beans::XMultiPropertySet    ),
-                            DIRECT_INTERFACE( ::com::sun::star::beans::XFastPropertySet     ),
-                            DIRECT_INTERFACE( ::com::sun::star::beans::XPropertySet         ),
-                            DIRECT_INTERFACE( ::com::sun::star::lang::XInitialization       ),
-                            DIRECT_INTERFACE( ::com::sun::star::util::XUpdatable            ),
-                            DIRECT_INTERFACE( ::com::sun::star::lang::XComponent            )
-                        )
-
-DEFINE_XTYPEPROVIDER_8  (   UIElementWrapperBase                        ,
-                            ::com::sun::star::lang::XTypeProvider       ,
-                            ::com::sun::star::ui::XUIElement    ,
-                            ::com::sun::star::beans::XMultiPropertySet  ,
-                            ::com::sun::star::beans::XFastPropertySet   ,
-                            ::com::sun::star::beans::XPropertySet       ,
-                            ::com::sun::star::lang::XInitialization     ,
-                            ::com::sun::star::util::XUpdatable          ,
-                            ::com::sun::star::lang::XComponent
-                        )
-
 UIElementWrapperBase::UIElementWrapperBase( sal_Int16 nType )
     :   ThreadHelpBase              ( &Application::GetSolarMutex()                      )
     ,   ::cppu::OBroadcastHelperVar< ::cppu::OMultiTypeInterfaceContainerHelper, ::cppu::OMultiTypeInterfaceContainerHelper::keyType >( m_aLock.getShareableOslMutex() )
     ,   ::cppu::OPropertySetHelper  ( *(static_cast< ::cppu::OBroadcastHelper* >(this)) )
-    ,   ::cppu::OWeakObject         (                                                   )
     ,   m_aListenerContainer        ( m_aLock.getShareableOslMutex()                    )
     ,   m_nType                     ( nType                                             )
     ,   m_bInitialized              ( sal_False                                         )
@@ -84,6 +58,22 @@ UIElementWrapperBase::UIElementWrapperBase( sal_Int16 nType )
 
 UIElementWrapperBase::~UIElementWrapperBase()
 {
+}
+
+Any SAL_CALL UIElementWrapperBase::queryInterface( const Type& _rType ) throw(RuntimeException)
+{
+    Any aRet = UIElementWrapperBase_BASE::queryInterface( _rType );
+    if ( !aRet.hasValue() )
+        aRet = OPropertySetHelper::queryInterface( _rType );
+    return aRet;
+}
+
+Sequence< Type > SAL_CALL UIElementWrapperBase::getTypes(  ) throw(RuntimeException)
+{
+    return comphelper::concatSequences(
+        UIElementWrapperBase_BASE::getTypes(),
+        ::cppu::OPropertySetHelper::getTypes()
+    );
 }
 
 void SAL_CALL UIElementWrapperBase::addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& xListener ) throw (::com::sun::star::uno::RuntimeException)

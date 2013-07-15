@@ -82,29 +82,6 @@ namespace framework
 //-----------------------------------------------------------------------------
 // XInterface, XTypeProvider, XServiceInfo
 
-DEFINE_XINTERFACE_8                     (   PathSettings                                             ,
-                                            OWeakObject                                              ,
-                                            DIRECT_INTERFACE ( css::lang::XTypeProvider              ),
-                                            DIRECT_INTERFACE ( css::lang::XServiceInfo               ),
-                                            DERIVED_INTERFACE( css::lang::XEventListener, css::util::XChangesListener),
-                                            DIRECT_INTERFACE ( css::util::XChangesListener           ),
-                                            DIRECT_INTERFACE ( css::util::XPathSettings              ),
-                                            DERIVED_INTERFACE( css::beans::XPropertySet, css::util::XPathSettings),
-                                            DIRECT_INTERFACE ( css::beans::XFastPropertySet          ),
-                                            DIRECT_INTERFACE ( css::beans::XMultiPropertySet        )
-                                        )
-
-DEFINE_XTYPEPROVIDER_8                  (   PathSettings                                            ,
-                                            css::lang::XTypeProvider                                ,
-                                            css::lang::XServiceInfo                                 ,
-                                            css::lang::XEventListener                               ,
-                                            css::util::XChangesListener                             ,
-                                            css::util::XPathSettings                                ,
-                                            css::beans::XPropertySet                            ,
-                                            css::beans::XFastPropertySet                            ,
-                                            css::beans::XMultiPropertySet
-                                        )
-
 DEFINE_XSERVICEINFO_ONEINSTANCESERVICE_2(   PathSettings                                            ,
                                             ::cppu::OWeakObject                                     ,
                                             SERVICENAME_PATHSETTINGS                                ,
@@ -133,7 +110,6 @@ PathSettings::PathSettings( const css::uno::Reference< css::uno::XComponentConte
     :   ThreadHelpBase()
     ,   ::cppu::OBroadcastHelperVar< ::cppu::OMultiTypeInterfaceContainerHelper, ::cppu::OMultiTypeInterfaceContainerHelper::keyType >(m_aLock.getShareableOslMutex())
     ,   ::cppu::OPropertySetHelper(*(static_cast< ::cppu::OBroadcastHelper* >(this)))
-    ,   ::cppu::OWeakObject()
     // Init member
     ,   m_xContext (xContext)
     ,   m_pPropHelp(0    )
@@ -150,6 +126,26 @@ PathSettings::~PathSettings()
         xBroadcaster->removeChangesListener(m_xCfgNewListener);
     if (m_pPropHelp)
        delete m_pPropHelp;
+}
+
+//------------------------------------------------------------------
+css::uno::Any SAL_CALL PathSettings::queryInterface( const css::uno::Type& _rType )
+    throw(css::uno::RuntimeException)
+{
+    css::uno::Any aRet = PathSettings_BASE::queryInterface( _rType );
+    if ( !aRet.hasValue() )
+        aRet = OPropertySetHelper::queryInterface( _rType );
+    return aRet;
+}
+
+//------------------------------------------------------------------------------
+css::uno::Sequence< css::uno::Type > SAL_CALL PathSettings::getTypes(  )
+    throw(css::uno::RuntimeException)
+{
+    return comphelper::concatSequences(
+        PathSettings_BASE::getTypes(),
+        ::cppu::OPropertySetHelper::getTypes()
+    );
 }
 
 //-----------------------------------------------------------------------------

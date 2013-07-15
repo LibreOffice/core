@@ -33,21 +33,21 @@
 
 #include <rtl/ustring.hxx>
 #include <cppuhelper/propshlp.hxx>
-#include <cppuhelper/interfacecontainer.hxx>
-#include <cppuhelper/weak.hxx>
+#include <cppuhelper/implbase4.hxx>
 
 namespace framework
 {
 
-class UIElementWrapperBase : public ::com::sun::star::lang::XTypeProvider       ,
-                             public ::com::sun::star::ui::XUIElement    ,
-                             public ::com::sun::star::lang::XInitialization     ,
-                             public ::com::sun::star::lang::XComponent          ,
-                             public ::com::sun::star::util::XUpdatable          ,
-                             protected ThreadHelpBase                           ,
+typedef ::cppu::WeakImplHelper4<
+           ::com::sun::star::ui::XUIElement,
+           ::com::sun::star::lang::XInitialization,
+           ::com::sun::star::lang::XComponent,
+           ::com::sun::star::util::XUpdatable > UIElementWrapperBase_BASE;
+
+class UIElementWrapperBase : protected ThreadHelpBase                           ,
                              public ::cppu::OBroadcastHelper                    ,
                              public ::cppu::OPropertySetHelper                  ,
-                             public ::cppu::OWeakObject
+                             public UIElementWrapperBase_BASE
 {
     //-------------------------------------------------------------------------------------------------------------
     //  public methods
@@ -56,14 +56,15 @@ class UIElementWrapperBase : public ::com::sun::star::lang::XTypeProvider       
          UIElementWrapperBase( sal_Int16 nType );
         virtual  ~UIElementWrapperBase();
 
-        //  XInterface
-        virtual  ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType ) throw( ::com::sun::star::uno::RuntimeException );
-        virtual  void SAL_CALL acquire() throw();
-        virtual  void SAL_CALL release() throw();
+        // XInterface
+        virtual void SAL_CALL acquire() throw ()
+            { OWeakObject::acquire(); }
+        virtual void SAL_CALL release() throw ()
+            { OWeakObject::release(); }
+        virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& type) throw ( ::com::sun::star::uno::RuntimeException );
 
         // XTypeProvider
-        virtual  ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >  SAL_CALL getTypes() throw( ::com::sun::star::uno::RuntimeException );
-        virtual  ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw( ::com::sun::star::uno::RuntimeException );
+        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException);
 
         // XComponent
         virtual  void SAL_CALL dispose() throw (::com::sun::star::uno::RuntimeException) = 0;

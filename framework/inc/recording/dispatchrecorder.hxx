@@ -43,7 +43,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/script/XTypeConverter.hpp>
-#include <cppuhelper/weak.hxx>
+#include <cppuhelper/implbase3.hxx>
 
 namespace framework{
 
@@ -51,11 +51,10 @@ typedef ::std::vector < com::sun::star::frame::DispatchStatement > DispatchState
 
 class DispatchRecorder
     : private ThreadHelpBase
-    , public  css::lang::XTypeProvider
-    , public  css::lang::XServiceInfo
-    , public  css::frame::XDispatchRecorder
-    , public  css::container::XIndexReplace
-    , public  ::cppu::OWeakObject
+    , public  ::cppu::WeakImplHelper3<
+                css::lang::XServiceInfo
+              , css::frame::XDispatchRecorder
+              , css::container::XIndexReplace >
 {
     // private member
     private:
@@ -69,8 +68,6 @@ class DispatchRecorder
         ~DispatchRecorder();
 
         // XInterface, XTypeProvider, XServiceInfo
-        FWK_DECLARE_XINTERFACE
-        FWK_DECLARE_XTYPEPROVIDER
         DECLARE_XSERVICEINFO
 
         // XDispatchRecorder
@@ -80,15 +77,15 @@ class DispatchRecorder
         virtual void SAL_CALL            endRecording           () throw( css::uno::RuntimeException );
         virtual OUString SAL_CALL getRecordedMacro       () throw( css::uno::RuntimeException );
 
-    virtual com::sun::star::uno::Type SAL_CALL getElementType() throw (::com::sun::star::uno::RuntimeException);
+        virtual com::sun::star::uno::Type SAL_CALL getElementType() throw (::com::sun::star::uno::RuntimeException);
 
-    virtual sal_Bool SAL_CALL hasElements()  throw (::com::sun::star::uno::RuntimeException);
+        virtual sal_Bool SAL_CALL hasElements()  throw (::com::sun::star::uno::RuntimeException);
 
-    virtual sal_Int32 SAL_CALL getCount() throw (::com::sun::star::uno::RuntimeException);
+        virtual sal_Int32 SAL_CALL getCount() throw (::com::sun::star::uno::RuntimeException);
 
-    virtual com::sun::star::uno::Any SAL_CALL getByIndex(sal_Int32)  throw (com::sun::star::uno::RuntimeException, com::sun::star::lang::WrappedTargetException, com::sun::star::lang::IndexOutOfBoundsException);
+        virtual com::sun::star::uno::Any SAL_CALL getByIndex(sal_Int32)  throw (com::sun::star::uno::RuntimeException, com::sun::star::lang::WrappedTargetException, com::sun::star::lang::IndexOutOfBoundsException);
 
-    virtual void SAL_CALL replaceByIndex(sal_Int32, const com::sun::star::uno::Any&)  throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL replaceByIndex(sal_Int32, const com::sun::star::uno::Any&)  throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 
     // private functions
     private:

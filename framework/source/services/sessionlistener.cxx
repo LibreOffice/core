@@ -69,24 +69,6 @@ namespace framework{
 //***********************************************
 // XInterface, XTypeProvider, XServiceInfo
 
-DEFINE_XINTERFACE_6(
-        SessionListener,
-        OWeakObject,
-        DIRECT_INTERFACE(css::lang::XTypeProvider),
-        DIRECT_INTERFACE(css::lang::XInitialization),
-        DIRECT_INTERFACE(css::frame::XSessionManagerListener),
-        DIRECT_INTERFACE(css::frame::XSessionManagerListener2),
-        DIRECT_INTERFACE(css::frame::XStatusListener),
-        DIRECT_INTERFACE(css::lang::XServiceInfo))
-
-DEFINE_XTYPEPROVIDER_5(
-        SessionListener,
-        css::lang::XTypeProvider,
-        css::lang::XInitialization,
-        css::frame::XSessionManagerListener2,
-        css::frame::XStatusListener,
-        css::lang::XServiceInfo)
-
 DEFINE_XSERVICEINFO_ONEINSTANCESERVICE_2(
        SessionListener,
        cppu::OWeakObject,
@@ -102,7 +84,6 @@ DEFINE_INIT_SERVICE(SessionListener,
 
 SessionListener::SessionListener(const css::uno::Reference< css::uno::XComponentContext >& rxContext )
         : ThreadHelpBase      (&Application::GetSolarMutex())
-        , OWeakObject         (                             )
         , m_xContext          (rxContext                    )
         , m_bRestored( sal_False )
         , m_bSessionStoreRequested( sal_False )

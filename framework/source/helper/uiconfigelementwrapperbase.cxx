@@ -31,6 +31,7 @@
 
 #include <vcl/svapp.hxx>
 #include <rtl/logfile.hxx>
+#include <comphelper/sequence.hxx>
 
 const int UIELEMENT_PROPHANDLE_CONFIGSOURCE     = 1;
 const int UIELEMENT_PROPHANDLE_FRAME            = 2;
@@ -59,41 +60,10 @@ using namespace ::com::sun::star::ui;
 namespace framework
 {
 
-//*****************************************************************************************************************
-//  XInterface, XTypeProvider
-//*****************************************************************************************************************
-DEFINE_XINTERFACE_10    (   UIConfigElementWrapperBase                                               ,
-                            OWeakObject                                                              ,
-                            DIRECT_INTERFACE( ::com::sun::star::lang::XTypeProvider                  ),
-                            DIRECT_INTERFACE( ::com::sun::star::ui::XUIElement               ),
-                            DIRECT_INTERFACE( ::com::sun::star::ui::XUIElementSettings       ),
-                            DIRECT_INTERFACE( ::com::sun::star::beans::XMultiPropertySet             ),
-                            DIRECT_INTERFACE( ::com::sun::star::beans::XFastPropertySet              ),
-                            DIRECT_INTERFACE( ::com::sun::star::beans::XPropertySet                  ),
-                            DIRECT_INTERFACE( ::com::sun::star::lang::XInitialization                ),
-                            DIRECT_INTERFACE( ::com::sun::star::lang::XComponent                     ),
-                            DIRECT_INTERFACE( ::com::sun::star::util::XUpdatable                     ),
-                            DIRECT_INTERFACE( ::com::sun::star::ui::XUIConfigurationListener )
-                        )
-
-DEFINE_XTYPEPROVIDER_10 (   UIConfigElementWrapperBase                              ,
-                            ::com::sun::star::lang::XTypeProvider                   ,
-                            ::com::sun::star::ui::XUIElement                ,
-                            ::com::sun::star::ui::XUIElementSettings        ,
-                            ::com::sun::star::beans::XMultiPropertySet              ,
-                            ::com::sun::star::beans::XFastPropertySet               ,
-                            ::com::sun::star::beans::XPropertySet                   ,
-                            ::com::sun::star::lang::XInitialization                 ,
-                            ::com::sun::star::lang::XComponent                      ,
-                            ::com::sun::star::util::XUpdatable                      ,
-                            ::com::sun::star::ui::XUIConfigurationListener
-                        )
-
 UIConfigElementWrapperBase::UIConfigElementWrapperBase( sal_Int16 nType )
     :   ThreadHelpBase              ( &Application::GetSolarMutex()                      )
     ,   ::cppu::OBroadcastHelperVar< ::cppu::OMultiTypeInterfaceContainerHelper, ::cppu::OMultiTypeInterfaceContainerHelper::keyType >( m_aLock.getShareableOslMutex() )
     ,   ::cppu::OPropertySetHelper  ( *(static_cast< ::cppu::OBroadcastHelper* >(this)) )
-    ,   ::cppu::OWeakObject         (                                                   )
     ,   m_nType                     ( nType                                             )
     ,   m_bPersistent               ( sal_True                                          )
     ,   m_bInitialized              ( sal_False                                         )
@@ -107,6 +77,22 @@ UIConfigElementWrapperBase::UIConfigElementWrapperBase( sal_Int16 nType )
 
 UIConfigElementWrapperBase::~UIConfigElementWrapperBase()
 {
+}
+
+Any SAL_CALL UIConfigElementWrapperBase::queryInterface( const Type& _rType ) throw(RuntimeException)
+{
+    Any aRet = UIConfigElementWrapperBase_BASE::queryInterface( _rType );
+    if ( !aRet.hasValue() )
+        aRet = OPropertySetHelper::queryInterface( _rType );
+    return aRet;
+}
+
+Sequence< Type > SAL_CALL UIConfigElementWrapperBase::getTypes(  ) throw(RuntimeException)
+{
+    return comphelper::concatSequences(
+        UIConfigElementWrapperBase_BASE::getTypes(),
+        ::cppu::OPropertySetHelper::getTypes()
+    );
 }
 
 // XComponent

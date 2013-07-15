@@ -36,8 +36,7 @@
 #include <com/sun/star/util/XPathSettings.hpp>
 
 #include <cppuhelper/propshlp.hxx>
-#include <cppuhelper/interfacecontainer.hxx>
-#include <cppuhelper/weak.hxx>
+#include <cppuhelper/implbase3.hxx>
 #include <unotools/configitem.hxx>
 #include <comphelper/sequenceasvector.hxx>
 
@@ -48,16 +47,18 @@
 namespace framework
 {
 
-class PathSettings : public  css::lang::XTypeProvider             ,
-                     public  css::lang::XServiceInfo              ,
-                     public  css::util::XChangesListener          , // => XEventListener
-                     public css::util::XPathSettings              , // => XPropertySet
-                     // base classes
+typedef ::cppu::WeakImplHelper3<
+                         css::lang::XServiceInfo,
+                         css::util::XChangesListener,               // => XEventListener
+                         css::util::XPathSettings>                  // => XPropertySet
+        PathSettings_BASE;
+
+class PathSettings : // base classes
                      // Order is necessary for right initialization!
                      private ThreadHelpBase                       ,
                      public  ::cppu::OBroadcastHelper             ,
                      public  ::cppu::OPropertySetHelper           , // => XPropertySet / XFastPropertySet / XMultiPropertySet
-                     public  ::cppu::OWeakObject                    // => XWeak, XInterface
+                     public  PathSettings_BASE
 {
     struct PathInfo
     {
@@ -162,9 +163,17 @@ class PathSettings : public  css::lang::XTypeProvider             ,
         virtual ~PathSettings();
 
         /** declaration of XInterface, XTypeProvider, XServiceInfo */
-        FWK_DECLARE_XINTERFACE
-        FWK_DECLARE_XTYPEPROVIDER
         DECLARE_XSERVICEINFO
+
+        // XInterface
+        virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& type) throw ( ::com::sun::star::uno::RuntimeException );
+        virtual void SAL_CALL acquire() throw ()
+            { OWeakObject::acquire(); }
+        virtual void SAL_CALL release() throw ()
+            { OWeakObject::release(); }
+
+        // XTypeProvider
+        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException);
 
         // css::util::XChangesListener
         virtual void SAL_CALL changesOccurred(const css::util::ChangesEvent& aEvent) throw (css::uno::RuntimeException);

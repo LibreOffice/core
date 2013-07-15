@@ -114,29 +114,7 @@ sal_Bool OPropertySetHelperInfo_Impl::hasPropertyByName( const OUString & Proper
     return pR != NULL;
 }
 
-//*****************************************************************************************************************
-//  XInterface, XTypeProvider
-//*****************************************************************************************************************
-DEFINE_XINTERFACE_6     (   ConstItemContainer                                              ,
-                            OWeakObject                                                     ,
-                            DIRECT_INTERFACE( ::com::sun::star::lang::XTypeProvider         ),
-                            DIRECT_INTERFACE( ::com::sun::star::container::XElementAccess   ),
-                            DIRECT_INTERFACE( ::com::sun::star::container::XIndexAccess     ),
-                            DIRECT_INTERFACE( ::com::sun::star::beans::XFastPropertySet     ),
-                            DIRECT_INTERFACE( ::com::sun::star::beans::XPropertySet         ),
-                            DIRECT_INTERFACE( ::com::sun::star::lang::XUnoTunnel            )
-                        )
-
-DEFINE_XTYPEPROVIDER_6  (   ConstItemContainer                          ,
-                            ::com::sun::star::lang::XTypeProvider       ,
-                            ::com::sun::star::container::XIndexAccess   ,
-                            ::com::sun::star::container::XElementAccess ,
-                            ::com::sun::star::beans::XFastPropertySet   ,
-                            ::com::sun::star::beans::XPropertySet       ,
-                            ::com::sun::star::lang::XUnoTunnel
-                        )
-
-ConstItemContainer::ConstItemContainer() : ::cppu::OWeakObject()
+ConstItemContainer::ConstItemContainer()
 {
 }
 

@@ -54,24 +54,6 @@ static const ::sal_Int32 DEFAULT_ICON_ID =  0;
 
 
 //*****************************************************************************************************************
-//  XInterface, XTypeProvider
-
-DEFINE_XINTERFACE_5(TitleBarUpdate                                                              ,
-                    OWeakObject                                                                 ,
-                    DIRECT_INTERFACE (css::lang::XTypeProvider                                  ),
-                    DIRECT_INTERFACE (css::lang::XInitialization                                ),
-                    DIRECT_INTERFACE (css::frame::XFrameActionListener                          ),
-                    DIRECT_INTERFACE (css::frame::XTitleChangeListener                          ),
-                    DERIVED_INTERFACE(css::lang::XEventListener,css::frame::XFrameActionListener))
-
-DEFINE_XTYPEPROVIDER_5(TitleBarUpdate                  ,
-                       css::lang::XTypeProvider        ,
-                       css::lang::XInitialization      ,
-                       css::frame::XFrameActionListener,
-                       css::frame::XTitleChangeListener,
-                       css::lang::XEventListener       )
-
-//*****************************************************************************************************************
 TitleBarUpdate::TitleBarUpdate(const css::uno::Reference< css::uno::XComponentContext >& xContext)
     : ThreadHelpBase          (&Application::GetSolarMutex())
     , m_xContext              (xContext                     )

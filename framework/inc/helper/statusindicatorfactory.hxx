@@ -55,7 +55,7 @@
 //_______________________________________________
 // include others
 #include <vcl/status.hxx>
-#include <cppuhelper/weak.hxx>
+#include <cppuhelper/implbase4.hxx>
 #include <osl/thread.hxx>
 
 
@@ -154,13 +154,12 @@ typedef ::std::vector< IndicatorInfo > IndicatorStack;
     @devstatus      ready to use
     @threadsafe     yes
  */
-class StatusIndicatorFactory : public  css::lang::XTypeProvider
-                             , public  css::lang::XServiceInfo
-                             , public  css::lang::XInitialization
-                             , public  css::task::XStatusIndicatorFactory
-                             , public  css::util::XUpdatable
-                             , private ThreadHelpBase
-                             , public  ::cppu::OWeakObject                   // => XInterface
+class StatusIndicatorFactory : private ThreadHelpBase
+                             , public  ::cppu::WeakImplHelper4<
+                                             css::lang::XServiceInfo
+                                           , css::lang::XInitialization
+                                           , css::task::XStatusIndicatorFactory
+                                           , css::util::XUpdatable >
 {
     //-------------------------------------------
     // member
@@ -217,8 +216,6 @@ class StatusIndicatorFactory : public  css::lang::XTypeProvider
 
         //---------------------------------------
         // XInterface, XTypeProvider, XServiceInfo
-        FWK_DECLARE_XINTERFACE
-        FWK_DECLARE_XTYPEPROVIDER
         DECLARE_XSERVICEINFO
 
         //---------------------------------------

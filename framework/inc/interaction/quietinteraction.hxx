@@ -28,7 +28,7 @@
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/task/XInteractionRequest.hpp>
 
-#include <cppuhelper/weak.hxx>
+#include <cppuhelper/implbase1.hxx>
 
 namespace framework{
 
@@ -46,10 +46,9 @@ namespace framework{
 
     @by         Andreas Schlüns
  */
-class QuietInteraction : public  css::lang::XTypeProvider
-                       , public  css::task::XInteractionHandler
-                       , private ThreadHelpBase
-                       , public  ::cppu::OWeakObject
+class QuietInteraction : private ThreadHelpBase
+                       , public  ::cppu::WeakImplHelper1<
+                                    css::task::XInteractionHandler >
 {
     //_____________________________________
     // member
@@ -63,8 +62,6 @@ class QuietInteraction : public  css::lang::XTypeProvider
     public:
 
         // XInterface, XTypeProvider
-        FWK_DECLARE_XINTERFACE
-        FWK_DECLARE_XTYPEPROVIDER
 
         //_________________________________
         /**

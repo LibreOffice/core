@@ -41,8 +41,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Any.hxx>
 
-#include <cppuhelper/weak.hxx>
-#include <cppuhelper/interfacecontainer.h>
+#include <cppuhelper/implbase4.hxx>
 
 namespace framework{
 
@@ -67,16 +66,16 @@ namespace framework{
                 </ul>
  */
 
-class SessionListener :   // interfaces
-                        public css::lang::XTypeProvider,
-                        public css::lang::XInitialization,
-                        public css::frame::XSessionManagerListener2,
-                        public css::frame::XStatusListener,
-                        public css::lang::XServiceInfo,
+class SessionListener :
                         // baseclasses (order important for initialization!)
                         // Struct for right initalization of mutex member! Must be the first one of baseclasses!
                         private ThreadHelpBase,
-                        public  ::cppu::OWeakObject
+                        // interfaces
+                        public cppu::WeakImplHelper4<
+                            css::lang::XInitialization,
+                            css::frame::XSessionManagerListener2,
+                            css::frame::XStatusListener,
+                            css::lang::XServiceInfo>
 {
     //-------------------------------------------
     // member
@@ -109,8 +108,6 @@ class SessionListener :   // interfaces
         //---------------------------------------
         // XInterface, XTypeProvider, XServiceInfo
 
-        FWK_DECLARE_XINTERFACE
-        FWK_DECLARE_XTYPEPROVIDER
         DECLARE_XSERVICEINFO
 
         //---------------------------------------

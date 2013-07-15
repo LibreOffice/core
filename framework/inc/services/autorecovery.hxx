@@ -44,9 +44,8 @@
 #include <comphelper/mediadescriptor.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/evntpost.hxx>
-#include <cppuhelper/interfacecontainer.hxx>
+#include <cppuhelper/implbase5.hxx>
 #include <cppuhelper/propshlp.hxx>
-#include <cppuhelper/weak.hxx>
 
 //_______________________________________________
 // definition
@@ -116,17 +115,19 @@ struct DispatchParams
     of documents - including features of an EmergencySave in
     case a GPF occures.
  */
-class AutoRecovery  : public  css::lang::XTypeProvider
-                    , public  css::lang::XServiceInfo
-                    , public  css::frame::XDispatch
-                    , public  css::document::XEventListener         // => css.lang.XEventListener
-                    , public  css::util::XChangesListener           // => css.lang.XEventListener
-                    , public  css::util::XModifyListener            // => css.lang.XEventListener
-                    // attention! Must be the first base class to guarentee right initialize lock ...
-                    , private ThreadHelpBase
+typedef ::cppu::WeakImplHelper5<
+            css::lang::XServiceInfo,
+            css::frame::XDispatch,
+            css::document::XEventListener,    // => css.lang.XEventListener
+            css::util::XChangesListener,      // => css.lang.XEventListener
+            css::util::XModifyListener >      // => css.lang.XEventListener
+         AutoRecovery_BASE;
+
+class AutoRecovery  : // attention! Must be the first base class to guarentee right initialize lock ...
+                      private ThreadHelpBase
                     , public  ::cppu::OBroadcastHelper
                     , public  ::cppu::OPropertySetHelper            // => XPropertySet, XFastPropertySet, XMultiPropertySet
-                    , public  ::cppu::OWeakObject
+                    , public  AutoRecovery_BASE
 {
     //___________________________________________
     // types
@@ -442,10 +443,18 @@ class AutoRecovery  : public  css::lang::XTypeProvider
                  AutoRecovery(const css::uno::Reference< css::uno::XComponentContext >& xContext);
         virtual ~AutoRecovery(                                                                   );
 
-        // XInterface, XTypeProvider, XServiceInfo
-        FWK_DECLARE_XINTERFACE
-        FWK_DECLARE_XTYPEPROVIDER
+        // XServiceInfo
         DECLARE_XSERVICEINFO
+
+        // XInterface
+        virtual void SAL_CALL acquire() throw ()
+            { OWeakObject::acquire(); }
+        virtual void SAL_CALL release() throw ()
+            { OWeakObject::release(); }
+        virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& type) throw ( ::com::sun::star::uno::RuntimeException );
+
+        // XTypeProvider
+        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException);
 
         //---------------------------------------
         // css.frame.XDispatch

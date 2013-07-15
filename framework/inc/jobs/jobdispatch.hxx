@@ -45,7 +45,7 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 
 #include <unotools/configpaths.hxx>
-#include <cppuhelper/weak.hxx>
+#include <cppuhelper/implbase4.hxx>
 #include <rtl/ustring.hxx>
 
 
@@ -63,13 +63,12 @@ namespace framework{
             real job. We do it, control the life cycle of this internal
             wrapped job and inform any interested listener if it finish.
  */
-class JobDispatch : public  css::lang::XTypeProvider
-                  , public  css::lang::XServiceInfo
-                  , public  css::lang::XInitialization
-                  , public  css::frame::XDispatchProvider
-                  , public  css::frame::XNotifyingDispatch      // => XDispatch
-                  , private ThreadHelpBase
-                  , public  ::cppu::OWeakObject
+class JobDispatch : private ThreadHelpBase
+                  , public  ::cppu::WeakImplHelper4<
+                            css::lang::XServiceInfo
+                          , css::lang::XInitialization
+                          , css::frame::XDispatchProvider
+                          , css::frame::XNotifyingDispatch >      // => XDispatch
 {
     //___________________________________
     // member
@@ -109,8 +108,6 @@ class JobDispatch : public  css::lang::XTypeProvider
     public:
 
         // XInterface, XTypeProvider, XServiceInfo
-        FWK_DECLARE_XINTERFACE
-        FWK_DECLARE_XTYPEPROVIDER
         DECLARE_XSERVICEINFO
 
         // Xinitialization

@@ -33,7 +33,7 @@
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/frame/XFrameActionListener.hpp>
 
-#include <cppuhelper/weak.hxx>
+#include <cppuhelper/implbase3.hxx>
 
 namespace framework{
 
@@ -51,14 +51,13 @@ namespace framework{
     @devstatus      draft
     @threadsafe     yes
 *//*-*************************************************************************************************************/
-class TagWindowAsModified :   // interfaces
-                              public css::lang::XTypeProvider,
-                              public css::lang::XInitialization,
-                              public css::frame::XFrameActionListener, // => XEventListener
-                              public css::util::XModifyListener,       // => XEventListener
-                              // baseclasses (order necessary for right initialization!)
+class TagWindowAsModified :   // baseclasses (order necessary for right initialization!)
                               private ThreadHelpBase,
-                              public  ::cppu::OWeakObject
+                              // interfaces
+                              public  ::cppu::WeakImplHelper3<
+                                          css::lang::XInitialization,
+                                          css::frame::XFrameActionListener, // => XEventListener
+                                          css::util::XModifyListener >       // => XEventListener
 {
     //________________________________
     // member
@@ -86,8 +85,6 @@ class TagWindowAsModified :   // interfaces
 
         //____________________________
         // XInterface, XTypeProvider
-        FWK_DECLARE_XINTERFACE
-        FWK_DECLARE_XTYPEPROVIDER
 
         //____________________________
         // XInitialization

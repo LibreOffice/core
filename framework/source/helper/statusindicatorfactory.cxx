@@ -54,20 +54,6 @@ sal_Int32 StatusIndicatorFactory::m_nInReschedule = 0;  /// static counter for r
 const char PROGRESS_RESOURCE[] = "private:resource/progressbar/progressbar";
 
 //-----------------------------------------------
-DEFINE_XINTERFACE_5(StatusIndicatorFactory                              ,
-                    OWeakObject                                         ,
-                    DIRECT_INTERFACE(css::lang::XTypeProvider          ),
-                    DIRECT_INTERFACE(css::lang::XServiceInfo           ),
-                    DIRECT_INTERFACE(css::lang::XInitialization        ),
-                    DIRECT_INTERFACE(css::task::XStatusIndicatorFactory),
-                    DIRECT_INTERFACE(css::util::XUpdatable             ))
-
-DEFINE_XTYPEPROVIDER_5(StatusIndicatorFactory            ,
-                       css::lang::XTypeProvider          ,
-                       css::lang::XServiceInfo           ,
-                       css::lang::XInitialization        ,
-                       css::task::XStatusIndicatorFactory,
-                       css::util::XUpdatable             )
 
 DEFINE_XSERVICEINFO_MULTISERVICE_2(StatusIndicatorFactory                   ,
                                    ::cppu::OWeakObject                      ,
@@ -87,7 +73,6 @@ DEFINE_INIT_SERVICE(StatusIndicatorFactory,
 //-----------------------------------------------
 StatusIndicatorFactory::StatusIndicatorFactory(const css::uno::Reference< css::uno::XComponentContext >& xContext)
     : ThreadHelpBase      (         )
-    , ::cppu::OWeakObject (         )
     , m_xContext          (xContext )
     , m_pWakeUp           (0        )
     , m_bAllowReschedule  (sal_False)

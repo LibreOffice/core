@@ -29,7 +29,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
 
-#include <cppuhelper/weak.hxx>
+#include <cppuhelper/implbase1.hxx>
 #include <vcl/status.hxx>
 
 
@@ -38,9 +38,8 @@ namespace framework {
 //-----------------------------------------------
 // declaration
 
-class VCLStatusIndicator : public  css::task::XStatusIndicator
-                         , private ThreadHelpBase // must be the first real base class!
-                         , public  ::cppu::OWeakObject
+class VCLStatusIndicator : private ThreadHelpBase, // must be the first real base class!
+                           public  ::cppu::WeakImplHelper1< css::task::XStatusIndicator >
 {
     //-------------------------------------------
     // member
@@ -72,8 +71,6 @@ class VCLStatusIndicator : public  css::task::XStatusIndicator
     // interface
 
     public:
-
-        FWK_DECLARE_XINTERFACE
 
         /// ctor
         VCLStatusIndicator(const css::uno::Reference< css::awt::XWindow >&               xParentWindow);

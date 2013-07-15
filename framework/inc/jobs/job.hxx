@@ -38,7 +38,7 @@
 #include <com/sun/star/util/XCloseListener.hpp>
 #include <com/sun/star/frame/DispatchResultEvent.hpp>
 
-#include <cppuhelper/weak.hxx>
+#include <cppuhelper/implbase3.hxx>
 #include <rtl/ustring.hxx>
 
 
@@ -54,12 +54,11 @@ namespace framework{
             synchronously or asynchronous, control it's lifetime
             and differe between jobs with and without configuration.
  */
-class Job : public  css::lang::XTypeProvider
-          , public  css::task::XJobListener
-          , public  css::frame::XTerminateListener
-          , public  css::util::XCloseListener
-          , private ThreadHelpBase
-          , public  ::cppu::OWeakObject
+class Job : private ThreadHelpBase
+          , public  ::cppu::WeakImplHelper3<
+                        css::task::XJobListener
+                      , css::frame::XTerminateListener
+                      , css::util::XCloseListener >
 {
     //___________________________________
     // structs
@@ -200,8 +199,6 @@ class Job : public  css::lang::XTypeProvider
 
     public:
 
-        FWK_DECLARE_XINTERFACE
-        FWK_DECLARE_XTYPEPROVIDER
 
         // XJobListener
         virtual void SAL_CALL jobFinished( const css::uno::Reference< css::task::XAsyncJob >& xJob,

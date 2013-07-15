@@ -35,7 +35,7 @@
 #include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 
-#include <cppuhelper/weak.hxx>
+#include <cppuhelper/implbase2.hxx>
 
 namespace framework{
 
@@ -46,14 +46,13 @@ namespace framework{
 
     @threadsafe     yes
  */
-class DispatchRecorderSupplier  :   // interfaces
-                                    public  css::lang::XTypeProvider                ,
-                                    public  css::lang::XServiceInfo                 ,
-                                    public  css::frame::XDispatchRecorderSupplier   ,
-                                    // baseclasses
+class DispatchRecorderSupplier  :   // baseclasses
                                     // Order is necessary for right initialization!
                                     private ThreadHelpBase                          ,
-                                    public  ::cppu::OWeakObject
+                                    // interfaces
+                                    public  ::cppu::WeakImplHelper2<
+                                                css::lang::XServiceInfo             ,
+                                                css::frame::XDispatchRecorderSupplier >
 {
     //___________________________________________
     // member
@@ -82,8 +81,6 @@ class DispatchRecorderSupplier  :   // interfaces
         //_______________________________________
         // XInterface, XTypeProvider, XServiceInfo
 
-        FWK_DECLARE_XINTERFACE
-        FWK_DECLARE_XTYPEPROVIDER
         DECLARE_XSERVICEINFO
 
         //_______________________________________

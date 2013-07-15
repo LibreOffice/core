@@ -42,25 +42,6 @@
 
 namespace framework{
 
-DEFINE_XINTERFACE_6( JobExecutor                                                               ,
-                     OWeakObject                                                               ,
-                     DIRECT_INTERFACE(css::lang::XTypeProvider                                ),
-                     DIRECT_INTERFACE(css::lang::XServiceInfo                                 ),
-                     DIRECT_INTERFACE(css::task::XJobExecutor                                 ),
-                     DIRECT_INTERFACE(css::container::XContainerListener                      ),
-                     DIRECT_INTERFACE(css::document::XEventListener                           ),
-                     DERIVED_INTERFACE(css::lang::XEventListener,css::document::XEventListener)
-                   )
-
-DEFINE_XTYPEPROVIDER_6( JobExecutor                       ,
-                        css::lang::XTypeProvider          ,
-                        css::lang::XServiceInfo           ,
-                        css::task::XJobExecutor           ,
-                        css::container::XContainerListener,
-                        css::document::XEventListener     ,
-                        css::lang::XEventListener
-                      )
-
 DEFINE_XSERVICEINFO_ONEINSTANCESERVICE_2( JobExecutor                   ,
                                           ::cppu::OWeakObject           ,
                                           "com.sun.star.task.JobExecutor",
@@ -113,7 +94,6 @@ DEFINE_INIT_SERVICE( JobExecutor,
  */
 JobExecutor::JobExecutor( /*IN*/ const css::uno::Reference< css::uno::XComponentContext >& xContext )
     : ThreadHelpBase      (&Application::GetSolarMutex()                                   )
-    , ::cppu::OWeakObject (                                                                )
     , m_xContext          (xContext                                                        )
     , m_xModuleManager    (                                                                )
     , m_aConfig           (xContext, OUString::createFromAscii(JobData::EVENTCFG_ROOT) )

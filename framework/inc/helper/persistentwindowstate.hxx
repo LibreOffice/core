@@ -33,7 +33,7 @@
 #include <com/sun/star/lang/XEventListener.hpp>
 
 #include <unotools/moduleoptions.hxx>
-#include <cppuhelper/weak.hxx>
+#include <cppuhelper/implbase2.hxx>
 
 namespace framework{
 
@@ -56,13 +56,12 @@ namespace framework{
     @devstatus      ready
     @threadsafe     yes
 *//*-*************************************************************************************************************/
-class PersistentWindowState :   // interfaces
-                                public css::lang::XTypeProvider,
-                                public css::lang::XInitialization,
-                                public css::frame::XFrameActionListener, // => XEventListener
-                                // baseclasses (order necessary for right initialization!)
+class PersistentWindowState :   // baseclasses (order necessary for right initialization!)
                                 private ThreadHelpBase,
-                                public  ::cppu::OWeakObject
+                                // interfaces
+                                public  ::cppu::WeakImplHelper2<
+                                           css::lang::XInitialization,
+                                           css::frame::XFrameActionListener > // => XEventListener
 {
     //________________________________
     // member
@@ -87,11 +86,6 @@ class PersistentWindowState :   // interfaces
         // ctor/dtor
                  PersistentWindowState(const css::uno::Reference< css::uno::XComponentContext >& xContext);
         virtual ~PersistentWindowState(                                                                   );
-
-        //____________________________
-        // XInterface, XTypeProvider
-        FWK_DECLARE_XINTERFACE
-        FWK_DECLARE_XTYPEPROVIDER
 
         //____________________________
         // XInitialization

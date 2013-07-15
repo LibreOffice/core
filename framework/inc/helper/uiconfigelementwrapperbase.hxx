@@ -37,23 +37,23 @@
 
 #include <rtl/ustring.hxx>
 #include <cppuhelper/propshlp.hxx>
-#include <cppuhelper/interfacecontainer.hxx>
-#include <cppuhelper/weak.hxx>
+#include <cppuhelper/implbase6.hxx>
 
 namespace framework
 {
 
-class UIConfigElementWrapperBase : public ::com::sun::star::lang::XTypeProvider                  ,
-                                   public ::com::sun::star::ui::XUIElement               ,
-                                   public ::com::sun::star::ui::XUIElementSettings       ,
-                                   public ::com::sun::star::lang::XInitialization                ,
-                                   public ::com::sun::star::lang::XComponent                     ,
-                                   public ::com::sun::star::util::XUpdatable                     ,
-                                   public ::com::sun::star::ui::XUIConfigurationListener ,
-                                   protected ThreadHelpBase                                      ,
+typedef ::cppu::WeakImplHelper6<
+           ::com::sun::star::ui::XUIElement,
+           ::com::sun::star::ui::XUIElementSettings,
+           ::com::sun::star::lang::XInitialization,
+           ::com::sun::star::lang::XComponent,
+           ::com::sun::star::util::XUpdatable,
+           ::com::sun::star::ui::XUIConfigurationListener > UIConfigElementWrapperBase_BASE;
+
+class UIConfigElementWrapperBase : protected ThreadHelpBase                                      ,
                                    public ::cppu::OBroadcastHelper                               ,
                                    public ::cppu::OPropertySetHelper                             ,
-                                   public ::cppu::OWeakObject
+                                   public UIConfigElementWrapperBase_BASE
 {
     //-------------------------------------------------------------------------------------------------------------
     //  public methods
@@ -63,13 +63,14 @@ class UIConfigElementWrapperBase : public ::com::sun::star::lang::XTypeProvider 
         virtual  ~UIConfigElementWrapperBase();
 
         //  XInterface
-        virtual  ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType ) throw( ::com::sun::star::uno::RuntimeException );
-        virtual  void SAL_CALL acquire() throw();
-        virtual  void SAL_CALL release() throw();
+        virtual void SAL_CALL acquire() throw ()
+            { OWeakObject::acquire(); }
+        virtual void SAL_CALL release() throw ()
+            { OWeakObject::release(); }
+        virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& type) throw ( ::com::sun::star::uno::RuntimeException );
 
         // XTypeProvider
-        virtual  ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >  SAL_CALL getTypes() throw( ::com::sun::star::uno::RuntimeException );
-        virtual  ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw( ::com::sun::star::uno::RuntimeException );
+        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException);
 
         // XComponent
         virtual  void SAL_CALL dispose() throw (::com::sun::star::uno::RuntimeException) = 0;

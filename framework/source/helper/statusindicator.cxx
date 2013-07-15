@@ -29,22 +29,8 @@ namespace framework{
 
 
 //***********************************************
-// XInterface
-DEFINE_XINTERFACE_2(StatusIndicator                              ,
-                    OWeakObject                                  ,
-                    DIRECT_INTERFACE(css::lang::XTypeProvider   ),
-                    DIRECT_INTERFACE(css::task::XStatusIndicator))
-
-//***********************************************
-// XInterface
-DEFINE_XTYPEPROVIDER_2(StatusIndicator            ,
-                       css::lang::XTypeProvider   ,
-                       css::task::XStatusIndicator)
-
-//***********************************************
 StatusIndicator::StatusIndicator(StatusIndicatorFactory* pFactory)
     : ThreadHelpBase     (        )
-    , ::cppu::OWeakObject(        )
     , m_xFactory         (pFactory)
 {
 }

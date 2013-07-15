@@ -37,7 +37,7 @@
 #include <com/sun/star/document/XEventListener.hpp>
 #include <com/sun/star/frame/XModuleManager2.hpp>
 
-#include <cppuhelper/weak.hxx>
+#include <cppuhelper/implbase4.hxx>
 #include <rtl/ustring.hxx>
 
 
@@ -51,13 +51,12 @@ namespace framework{
             inside the configuration and execute it. Of course it controls the
             liftime of such jobs too.
  */
-class JobExecutor : public  css::lang::XTypeProvider
-                  , public  css::lang::XServiceInfo
-                  , public  css::task::XJobExecutor
-                  , public  css::container::XContainerListener // => lang.XEventListener
-                  , public  css::document::XEventListener
-                  , private ThreadHelpBase
-                  , public  ::cppu::OWeakObject
+class JobExecutor : private ThreadHelpBase
+                  , public  ::cppu::WeakImplHelper4<
+                                css::lang::XServiceInfo
+                              , css::task::XJobExecutor
+                              , css::container::XContainerListener // => lang.XEventListener
+                              , css::document::XEventListener >
 {
     //___________________________________
     // member
@@ -93,8 +92,6 @@ class JobExecutor : public  css::lang::XTypeProvider
     public:
 
         // XInterface, XTypeProvider, XServiceInfo
-        FWK_DECLARE_XINTERFACE
-        FWK_DECLARE_XTYPEPROVIDER
         DECLARE_XSERVICEINFO
 
         // task.XJobExecutor

@@ -78,44 +78,6 @@ namespace framework{
 //*****************************************************************************************************************
 //  XInterface, XTypeProvider, XServiceInfo
 //*****************************************************************************************************************
-DEFINE_XINTERFACE_16                    (   Desktop                                                  ,
-                                            OWeakObject                                              ,
-                                            DIRECT_INTERFACE( css::lang::XTypeProvider              ),
-                                            DIRECT_INTERFACE( css::lang::XServiceInfo               ),
-                                            DIRECT_INTERFACE( css::frame::XDesktop2                 ),
-                                            DIRECT_INTERFACE( css::frame::XDesktop                  ),
-                                            DIRECT_INTERFACE( css::frame::XComponentLoader          ),
-                                            DIRECT_INTERFACE( css::frame::XTasksSupplier            ),
-                                            DIRECT_INTERFACE( css::frame::XDispatchProvider         ),
-                                            DIRECT_INTERFACE( css::frame::XDispatchProviderInterception),
-                                            DIRECT_INTERFACE( css::frame::XFramesSupplier           ),
-                                            DIRECT_INTERFACE( css::frame::XFrame                    ),
-                                            DIRECT_INTERFACE( css::lang::XComponent                 ),
-                                            DIRECT_INTERFACE( css::frame::XDispatchResultListener   ),
-                                            DIRECT_INTERFACE( css::lang::XEventListener             ),
-                                            DIRECT_INTERFACE( css::task::XInteractionHandler        ),
-                                            DIRECT_INTERFACE( css::beans::XPropertySet              ),
-                                            DIRECT_INTERFACE( css::frame::XUntitledNumbers          )
-                                        )
-
-DEFINE_XTYPEPROVIDER_16                 (   Desktop                                                 ,
-                                            css::lang::XTypeProvider                                ,
-                                            css::lang::XServiceInfo                                 ,
-                                            css::frame::XDesktop2                                   ,
-                                            css::frame::XDesktop                                    ,
-                                            css::frame::XComponentLoader                            ,
-                                            css::frame::XTasksSupplier                              ,
-                                            css::frame::XDispatchProvider                           ,
-                                            css::frame::XDispatchProviderInterception               ,
-                                            css::frame::XFramesSupplier                             ,
-                                            css::frame::XFrame                                      ,
-                                            css::lang::XComponent                                   ,
-                                            css::frame::XDispatchResultListener                     ,
-                                            css::lang::XEventListener                               ,
-                                            css::task::XInteractionHandler                          ,
-                                            css::beans::XPropertySet                                ,
-                                            css::frame::XUntitledNumbers
-                                        )
 
 DEFINE_XSERVICEINFO_ONEINSTANCESERVICE_2(   Desktop                                                 ,
                                             ::cppu::OWeakObject                                     ,
@@ -204,7 +166,6 @@ Desktop::Desktop( const css::uno::Reference< css::uno::XComponentContext >& xCon
         ,   TransactionBase         (                                               )
         ,   ::cppu::OBroadcastHelperVar< ::cppu::OMultiTypeInterfaceContainerHelper, ::cppu::OMultiTypeInterfaceContainerHelper::keyType >           ( m_aLock.getShareableOslMutex()         )
         ,   ::cppu::OPropertySetHelper  ( *(static_cast< ::cppu::OBroadcastHelper* >(this)) )
-        ,   ::cppu::OWeakObject     (                                               )
         // Init member
         #ifdef ENABLE_ASSERTIONS
         ,   m_bIsTerminated         ( sal_False                                     )   // see dispose() for further information!
@@ -255,6 +216,22 @@ Desktop::~Desktop()
                  "but it is probably not a real problem.\n" );
 #endif
     LOG_ASSERT2( m_aTransactionManager.getWorkingMode()!=E_CLOSE  , "Desktop::~Desktop()", "Who forgot to dispose this service?"          )
+}
+
+css::uno::Any SAL_CALL Desktop::queryInterface( const css::uno::Type& _rType ) throw(css::uno::RuntimeException)
+{
+    css::uno::Any aRet = Desktop_BASE::queryInterface( _rType );
+    if ( !aRet.hasValue() )
+        aRet = OPropertySetHelper::queryInterface( _rType );
+    return aRet;
+}
+
+css::uno::Sequence< css::uno::Type > SAL_CALL Desktop::getTypes(  ) throw(css::uno::RuntimeException)
+{
+    return comphelper::concatSequences(
+        Desktop_BASE::getTypes(),
+        ::cppu::OPropertySetHelper::getTypes()
+    );
 }
 
 //=============================================================================

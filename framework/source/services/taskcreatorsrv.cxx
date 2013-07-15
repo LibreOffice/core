@@ -49,19 +49,6 @@
 namespace framework
 {
 //-----------------------------------------------
-DEFINE_XINTERFACE_3(TaskCreatorService                                ,
-                    OWeakObject                                       ,
-                    DIRECT_INTERFACE(css::lang::XTypeProvider        ),
-                    DIRECT_INTERFACE(css::lang::XServiceInfo         ),
-                    DIRECT_INTERFACE(css::lang::XSingleServiceFactory))
-
-//-----------------------------------------------
-DEFINE_XTYPEPROVIDER_3(TaskCreatorService              ,
-                       css::lang::XTypeProvider        ,
-                       css::lang::XServiceInfo         ,
-                       css::lang::XSingleServiceFactory)
-
-//-----------------------------------------------
 DEFINE_XSERVICEINFO_ONEINSTANCESERVICE_2(TaskCreatorService                ,
                                        ::cppu::OWeakObject               ,
                                        "com.sun.star.frame.TaskCreator",
@@ -82,7 +69,6 @@ DEFINE_INIT_SERVICE(
 //-----------------------------------------------
 TaskCreatorService::TaskCreatorService(const css::uno::Reference< css::uno::XComponentContext >& xContext)
     : ThreadHelpBase     (&Application::GetSolarMutex())
-    , ::cppu::OWeakObject(                             )
     , m_xContext         (xContext                     )
 {
 }

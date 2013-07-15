@@ -31,18 +31,6 @@ namespace framework{
 //*****************************************************************************************************************
 //  XInterface, XTypeProvider
 //*****************************************************************************************************************
-DEFINE_XINTERFACE_3(
-    DispatchRecorderSupplier,
-    OWeakObject,
-    DIRECT_INTERFACE(css::lang::XTypeProvider),
-    DIRECT_INTERFACE(css::lang::XServiceInfo),
-    DIRECT_INTERFACE(css::frame::XDispatchRecorderSupplier))
-
-DEFINE_XTYPEPROVIDER_3(
-    DispatchRecorderSupplier,
-    css::lang::XTypeProvider,
-    css::lang::XServiceInfo,
-    css::frame::XDispatchRecorderSupplier)
 
 DEFINE_XSERVICEINFO_MULTISERVICE(
     DispatchRecorderSupplier,
@@ -71,7 +59,6 @@ DispatchRecorderSupplier::DispatchRecorderSupplier( const css::uno::Reference< c
         //  init baseclasses first!
         //  Attention: Don't change order of initialization!
         : ThreadHelpBase     ( &Application::GetSolarMutex() )
-        , ::cppu::OWeakObject(                               )
         //  init member
         , m_xDispatchRecorder( NULL                          )
         , m_xFactory         ( xFactory                      )

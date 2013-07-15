@@ -42,20 +42,10 @@
 
 namespace framework{
 
-DEFINE_XINTERFACE_2( QuietInteraction                                 ,
-                     OWeakObject                                      ,
-                     DIRECT_INTERFACE(css::lang::XTypeProvider      ) ,
-                     DIRECT_INTERFACE(css::task::XInteractionHandler) )
-
-DEFINE_XTYPEPROVIDER_2( QuietInteraction               ,
-                        css::lang::XTypeProvider       ,
-                        css::task::XInteractionHandler )
-
 //_________________________________________________________________________________________________________________
 
 QuietInteraction::QuietInteraction()
     : ThreadHelpBase     ( &Application::GetSolarMutex() )
-    , ::cppu::OWeakObject(                               )
     , m_aRequest         (                               )
 {
 }

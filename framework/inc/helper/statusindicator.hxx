@@ -36,7 +36,7 @@
 
 //_______________________________________________
 // include all others
-#include <cppuhelper/weak.hxx>
+#include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/weakref.hxx>
 
 
@@ -60,10 +60,8 @@ namespace framework{
     @devstatus      ready to use
     @threadsafe     yes
 */
-class StatusIndicator : public  css::lang::XTypeProvider
-                      , public  css::task::XStatusIndicator
-                      , private ThreadHelpBase                  // Order of baseclasses is necessary for right initializaton!
-                      , public  ::cppu::OWeakObject             // => XInterface
+class StatusIndicator : private ThreadHelpBase                  // Order of baseclasses is necessary for right initializaton!
+                      , public  ::cppu::WeakImplHelper1< css::task::XStatusIndicator >
 {
     //-------------------------------------------
     // member
@@ -99,11 +97,6 @@ class StatusIndicator : public  css::lang::XTypeProvider
     //-------------------------------------------
     // uno interface
     public:
-
-        //---------------------------------------
-        // XInterface, XTypeProvider
-        FWK_DECLARE_XINTERFACE
-        FWK_DECLARE_XTYPEPROVIDER
 
         //---------------------------------------
         // XStatusIndicator

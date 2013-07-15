@@ -43,22 +43,6 @@ namespace framework{
 
 
 //*****************************************************************************************************************
-//  XInterface, XTypeProvider
-
-DEFINE_XINTERFACE_4(TagWindowAsModified                                                     ,
-                    OWeakObject                                                             ,
-                    DIRECT_INTERFACE (css::lang::XTypeProvider                             ),
-                    DIRECT_INTERFACE (css::lang::XInitialization                           ),
-                    DIRECT_INTERFACE (css::util::XModifyListener                           ),
-                    DERIVED_INTERFACE(css::lang::XEventListener, css::util::XModifyListener))
-
-DEFINE_XTYPEPROVIDER_4(TagWindowAsModified        ,
-                       css::lang::XTypeProvider   ,
-                       css::lang::XInitialization ,
-                       css::util::XModifyListener ,
-                       css::lang::XEventListener  )
-
-//*****************************************************************************************************************
 TagWindowAsModified::TagWindowAsModified()
     : ThreadHelpBase          (&Application::GetSolarMutex())
 {

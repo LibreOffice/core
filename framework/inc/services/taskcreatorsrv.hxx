@@ -35,7 +35,7 @@
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>
 
-#include <cppuhelper/weak.hxx>
+#include <cppuhelper/implbase2.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 
 //_______________________________________________
@@ -82,12 +82,11 @@ namespace framework
 /**
  *  TODO document me
  */
-class TaskCreatorService : public  css::lang::XTypeProvider
-                         , public  css::lang::XServiceInfo
-                         , public  css::lang::XSingleServiceFactory
-                           // attention! Must be the first base class to guarentee right initialize lock ...
-                         , private ThreadHelpBase
-                         , public  ::cppu::OWeakObject
+class TaskCreatorService : // attention! Must be the first base class to guarentee right initialize lock ...
+                           private ThreadHelpBase,
+                           public ::cppu::WeakImplHelper2<
+                               css::lang::XServiceInfo,
+                               css::lang::XSingleServiceFactory>
 {
     //___________________________________________
     // member
@@ -109,8 +108,6 @@ class TaskCreatorService : public  css::lang::XTypeProvider
         virtual ~TaskCreatorService(                                                                   );
 
         // XInterface, XTypeProvider, XServiceInfo
-        FWK_DECLARE_XINTERFACE
-        FWK_DECLARE_XTYPEPROVIDER
         DECLARE_XSERVICEINFO
 
         // XSingleServiceFactory

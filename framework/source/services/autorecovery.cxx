@@ -393,29 +393,6 @@ void DispatchParams::forget()
 };
 
 //-----------------------------------------------
-DEFINE_XINTERFACE_10(AutoRecovery                                                               ,
-                     OWeakObject                                                                ,
-                     DIRECT_INTERFACE (css::lang::XTypeProvider                                ),
-                     DIRECT_INTERFACE (css::lang::XServiceInfo                                 ),
-                     DIRECT_INTERFACE (css::frame::XDispatch                                   ),
-                     DIRECT_INTERFACE (css::beans::XMultiPropertySet                           ),
-                     DIRECT_INTERFACE (css::beans::XFastPropertySet                            ),
-                     DIRECT_INTERFACE (css::beans::XPropertySet                                ),
-                     DIRECT_INTERFACE (css::document::XEventListener                           ),
-                     DIRECT_INTERFACE (css::util::XChangesListener                             ),
-                     DIRECT_INTERFACE (css::util::XModifyListener                              ),
-                     DERIVED_INTERFACE(css::lang::XEventListener, css::document::XEventListener))
-
-//-----------------------------------------------
-DEFINE_XTYPEPROVIDER_6(AutoRecovery                 ,
-                       css::lang::XTypeProvider     ,
-                       css::lang::XServiceInfo      ,
-                       css::frame::XDispatch        ,
-                       css::beans::XMultiPropertySet,
-                       css::beans::XFastPropertySet ,
-                       css::beans::XPropertySet     )
-
-//-----------------------------------------------
 DEFINE_XSERVICEINFO_ONEINSTANCESERVICE_2(AutoRecovery                   ,
                                          ::cppu::OWeakObject            ,
                                          "com.sun.star.frame.AutoRecovery",
@@ -447,7 +424,6 @@ AutoRecovery::AutoRecovery(const css::uno::Reference< css::uno::XComponentContex
     : ThreadHelpBase            (&Application::GetSolarMutex()                      )
     , ::cppu::OBroadcastHelper  ( m_aLock.getShareableOslMutex()                    )
     , ::cppu::OPropertySetHelper( *(static_cast< ::cppu::OBroadcastHelper* >(this)) )
-    , ::cppu::OWeakObject       (                                                   )
     , m_xContext                (xContext                                           )
     , m_bListenForDocEvents     (sal_False                                          )
     , m_bListenForConfigChanges (sal_False                                          )
@@ -471,6 +447,22 @@ AutoRecovery::AutoRecovery(const css::uno::Reference< css::uno::XComponentContex
 AutoRecovery::~AutoRecovery()
 {
     implts_stopTimer();
+}
+
+Any SAL_CALL AutoRecovery::queryInterface( const css::uno::Type& _rType ) throw(css::uno::RuntimeException)
+{
+    Any aRet = AutoRecovery_BASE::queryInterface( _rType );
+    if ( !aRet.hasValue() )
+        aRet = OPropertySetHelper::queryInterface( _rType );
+    return aRet;
+}
+
+Sequence< css::uno::Type > SAL_CALL AutoRecovery::getTypes(  ) throw(css::uno::RuntimeException)
+{
+    return comphelper::concatSequences(
+        AutoRecovery_BASE::getTypes(),
+        ::cppu::OPropertySetHelper::getTypes()
+    );
 }
 
 //-----------------------------------------------

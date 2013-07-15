@@ -30,14 +30,8 @@ namespace framework {
 
 
 //-----------------------------------------------
-DEFINE_XINTERFACE_1(VCLStatusIndicator                           ,
-                    OWeakObject                                  ,
-                    DIRECT_INTERFACE(css::task::XStatusIndicator))
-
-//-----------------------------------------------
 VCLStatusIndicator::VCLStatusIndicator(const css::uno::Reference< css::awt::XWindow >&               xParentWindow)
     : ThreadHelpBase     (&Application::GetSolarMutex())
-    , ::cppu::OWeakObject(                             )
     , m_xParentWindow    (xParentWindow                )
     , m_pStatusBar       (0                            )
     , m_nRange           (0                            )

@@ -34,9 +34,8 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 
 #include <rtl/ustring.hxx>
-#include <cppuhelper/weak.hxx>
+#include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/propshlp.hxx>
-#include <cppuhelper/interfacecontainer.hxx>
 
 #include <vector>
 #include <fwidllapi.h>
@@ -44,14 +43,16 @@
 namespace framework
 {
 class ConstItemContainer;
-class RootItemContainer : public ::com::sun::star::lang::XTypeProvider            ,
-                            public ::com::sun::star::container::XIndexContainer     ,
-                            public ::com::sun::star::lang::XSingleComponentFactory  ,
-                            public ::com::sun::star::lang::XUnoTunnel               ,
-                            protected ThreadHelpBase                                ,
+
+typedef ::cppu::WeakImplHelper3<
+            css::container::XIndexContainer,
+            css::lang::XSingleComponentFactory,
+            css::lang::XUnoTunnel > RootItemContainer_BASE;
+
+class RootItemContainer :   protected ThreadHelpBase                                ,
                             public ::cppu::OBroadcastHelper                         ,
                             public ::cppu::OPropertySetHelper                       ,
-                            public ::cppu::OWeakObject
+                            public RootItemContainer_BASE
 {
     friend class ConstItemContainer;
 
@@ -61,10 +62,15 @@ class RootItemContainer : public ::com::sun::star::lang::XTypeProvider          
         virtual FWI_DLLPUBLIC ~RootItemContainer();
 
         //---------------------------------------------------------------------------------------------------------
-        //  XInterface, XTypeProvider
-        //---------------------------------------------------------------------------------------------------------
-        FWK_DECLARE_XINTERFACE
-        FWK_DECLARE_XTYPEPROVIDER
+        // XInterface
+        virtual void SAL_CALL acquire() throw ()
+            { OWeakObject::acquire(); }
+        virtual void SAL_CALL release() throw ()
+            { OWeakObject::release(); }
+        virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& type) throw ( ::com::sun::star::uno::RuntimeException );
+
+        // XTypeProvider
+        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException);
 
         // XUnoTunnel
         static FWI_DLLPUBLIC const ::com::sun::star::uno::Sequence< sal_Int8 >&   GetUnoTunnelId() throw();

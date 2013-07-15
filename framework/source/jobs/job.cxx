@@ -36,21 +36,6 @@
 
 namespace framework{
 
-DEFINE_XINTERFACE_4( Job                                             ,
-                     OWeakObject                                     ,
-                     DIRECT_INTERFACE(css::lang::XTypeProvider      ),
-                     DIRECT_INTERFACE(css::task::XJobListener       ),
-                     DIRECT_INTERFACE(css::frame::XTerminateListener),
-                     DIRECT_INTERFACE(css::util::XCloseListener     )
-                   )
-
-DEFINE_XTYPEPROVIDER_4( Job                           ,
-                        css::lang::XTypeProvider      ,
-                        css::task::XJobListener       ,
-                        css::frame::XTerminateListener,
-                        css::util::XCloseListener
-                      )
-
 //________________________________
 /**
     @short      standard ctor
@@ -68,7 +53,6 @@ DEFINE_XTYPEPROVIDER_4( Job                           ,
 Job::Job( /*IN*/ const css::uno::Reference< css::uno::XComponentContext >& xContext  ,
           /*IN*/ const css::uno::Reference< css::frame::XFrame >&              xFrame )
     : ThreadHelpBase       (&Application::GetSolarMutex())
-    , ::cppu::OWeakObject  (                             )
     , m_aJobCfg            (xContext                     )
     , m_xContext           (xContext                     )
     , m_xFrame             (xFrame                       )
@@ -98,7 +82,6 @@ Job::Job( /*IN*/ const css::uno::Reference< css::uno::XComponentContext >& xCont
 Job::Job( /*IN*/ const css::uno::Reference< css::uno::XComponentContext >& xContext  ,
           /*IN*/ const css::uno::Reference< css::frame::XModel >&              xModel )
     : ThreadHelpBase       (&Application::GetSolarMutex())
-    , ::cppu::OWeakObject  (                             )
     , m_aJobCfg            (xContext                     )
     , m_xContext           (xContext                     )
     , m_xModel             (xModel                       )
