@@ -48,6 +48,7 @@
 #include "globstr.hrc"
 #include "xestring.hxx"
 #include "conditio.hxx"
+#include "dbdata.hxx"
 
 #include <oox/token/tokens.hxx>
 #include <boost/ptr_container/ptr_vector.hpp>
@@ -2876,16 +2877,17 @@ XclExpDxfs::XclExpDxfs( const XclExpRoot& rRoot )
     (*mpKeywordTable)[ NF_KEY_NNNN ] = "DDDD";
     // Export the Thai T NatNum modifier.
     (*mpKeywordTable)[ NF_KEY_THAI_T ] = "T";
+    sal_Int32 nIndex = 0;
 
     SCTAB nTables = rRoot.GetDoc().GetTableCount();
     for(SCTAB nTab = 0; nTab < nTables; ++nTab)
     {
         ScConditionalFormatList* pList = rRoot.GetDoc().GetCondFormList(nTab);
-        if (pList)
+        if (pList)//Yes found some conditional formats to look at
         {
-            sal_Int32 nIndex = 0;
+            nIndex = 0;
             for (ScConditionalFormatList::const_iterator itr = pList->begin();
-                    itr != pList->end(); ++itr)
+                    itr != pList->end(); ++itr)//Now iterate through each item in the list
             {
                 size_t nEntryCount = itr->size();
                 for (size_t nFormatEntry = 0; nFormatEntry < nEntryCount; ++nFormatEntry)
@@ -2899,15 +2901,15 @@ XclExpDxfs::XclExpDxfs( const XclExpRoot& rRoot )
                     if(pFormatEntry->GetType() == condformat::CONDITION)
                     {
                         const ScCondFormatEntry* pEntry = static_cast<const ScCondFormatEntry*>(pFormatEntry);
-                        aStyleName= pEntry->GetStyle();
+                        aStyleName= pEntry->GetStyle();//getting the stylename in aStyleName
                     }
                     else
                     {
                         const ScCondDateFormatEntry* pEntry = static_cast<const ScCondDateFormatEntry*>(pFormatEntry);
                         aStyleName = pEntry->GetStyleName();
-                    }
+                    }//here we finish with loading the concerned style names
 
-                    if (maStyleNameToDxfId.find(aStyleName) == maStyleNameToDxfId.end())
+                    if (maStyleNameToDxfId.find(aStyleName) == maStyleNameToDxfId.end())//If not already in
                     {
                         maStyleNameToDxfId.insert(std::pair<OUString, sal_Int32>(aStyleName, nIndex));
 
@@ -2915,7 +2917,7 @@ XclExpDxfs::XclExpDxfs( const XclExpRoot& rRoot )
                         if(!pStyle)
                             continue;
 
-                        SfxItemSet& rSet = pStyle->GetItemSet();
+                        SfxItemSet& rSet = pStyle->GetItemSet();//Get each item set
 
                         XclExpCellBorder* pBorder = new XclExpCellBorder;
                         if (!pBorder->FillFromItemSet( rSet, GetPalette(), GetBiff()) )
@@ -2966,6 +2968,97 @@ XclExpDxfs::XclExpDxfs( const XclExpRoot& rRoot )
                         ++nIndex;
                     }
 
+                }
+            }
+        }
+    }//Conditional Formatting ends
+    //Add support for Dxf styles involved in ScDBDataFormatting.
+    //Get the ScDBDataCollection
+    ScDBCollection* pDBCollection = rRoot.GetDoc().GetDBCollection();
+    //Now iterate through this collection gathering style names
+    if( pDBCollection )
+    {
+        ScDBCollection::NamedDBs& aNamedDBs = pDBCollection->getNamedDBs();
+        ScDBCollection::NamedDBs::iterator itr = aNamedDBs.begin();
+        ScDBCollection::NamedDBs::iterator itrEnd = aNamedDBs.end();
+        for(; itr!= itrEnd; ++itr)
+        {
+            ScDBDataFormatting aDBFormatting;
+            (*itr).GetTableFormatting( aDBFormatting );
+            //Load all referenced stylenames into a list
+            std::vector <OUString> aStyleNameVector;
+            OUString aFRStyleName = aDBFormatting.GetFirstRowStripeStyle();
+            if( !aFRStyleName.isEmpty() )
+                aStyleNameVector.push_back( aFRStyleName );
+            OUString aSRStyleName = aDBFormatting.GetSecondRowStripeStyle();
+            if( !aSRStyleName.isEmpty() )
+                aStyleNameVector.push_back( aSRStyleName );
+            OUString aFCStyleName = aDBFormatting.GetFirstColStripeStyle();
+            if( !aFCStyleName.isEmpty() )
+                aStyleNameVector.push_back( aFCStyleName );
+            OUString aSCStyleName = aDBFormatting.GetSecondColStripeStyle();
+            if( !aSCStyleName.isEmpty() )
+                aStyleNameVector.push_back( aSCStyleName );
+            //Now iterate through each of these names adding their dxf one by one
+            for( std::vector<OUString>::iterator vit = aStyleNameVector.begin(); vit != aStyleNameVector.end(); ++vit )
+            {
+                if (maStyleNameToDxfId.find(*vit) == maStyleNameToDxfId.end())//If not already in
+                {
+                    maStyleNameToDxfId.insert(std::pair<OUString, sal_Int32>(*vit, nIndex));
+
+                    SfxStyleSheetBase* pStyle = rRoot.GetDoc().GetStyleSheetPool()->Find( *vit );
+                    if(!pStyle)
+                        continue;
+
+                    SfxItemSet& rSet = pStyle->GetItemSet();//Get each item set
+
+                    XclExpCellBorder* pBorder = new XclExpCellBorder;
+                    if (!pBorder->FillFromItemSet( rSet, GetPalette(), GetBiff()) )
+                    {
+                        delete pBorder;
+                        pBorder = NULL;
+                    }
+
+                    XclExpCellAlign* pAlign = new XclExpCellAlign;
+                    if (!pAlign->FillFromItemSet( rSet, false, GetBiff()))
+                    {
+                        delete pAlign;
+                        pAlign = NULL;
+                    }
+
+                    XclExpCellProt* pCellProt = new XclExpCellProt;
+                    if (!pCellProt->FillFromItemSet( rSet ))
+                    {
+                        delete pCellProt;
+                        pCellProt = NULL;
+                    }
+
+                    XclExpColor* pColor = new XclExpColor();
+                    if(!pColor->FillFromItemSet( rSet ))
+                    {
+                        delete pColor;
+                        pColor = NULL;
+                    }
+
+                    XclExpFont* pFont = NULL;
+                    // check if non default font is set and only export then
+                    if (rSet.GetItemState(rSet.GetPool()->GetWhich( SID_ATTR_CHAR_FONT )) == SFX_ITEM_SET )
+                    {
+                        Font aFont = XclExpFontHelper::GetFontFromItemSet( GetRoot(), rSet, com::sun::star::i18n::ScriptType::WEAK );
+                        pFont = new XclExpFont( GetRoot(), XclFontData( aFont ), EXC_COLOR_CELLTEXT );
+                    }
+
+                    XclExpNumFmt* pNumFormat = NULL;
+                    const SfxPoolItem *pPoolItem = NULL;
+                    if( rSet.GetItemState( ATTR_VALUE_FORMAT, sal_True, &pPoolItem ) == SFX_ITEM_SET )
+                    {
+                        sal_uLong nScNumFmt = static_cast< sal_uInt32 >( static_cast< const SfxInt32Item* >(pPoolItem)->GetValue());
+                        sal_Int32 nXclNumFmt = GetRoot().GetNumFmtBuffer().Insert(nScNumFmt);
+                        pNumFormat = new XclExpNumFmt( nScNumFmt, nXclNumFmt, GetNumberFormatCode( *this, nScNumFmt, mxFormatter.get(), mpKeywordTable.get() ));
+                    }
+
+                    maDxf.push_back(new XclExpDxf( rRoot, pAlign, pBorder, pFont, pNumFormat, pCellProt, pColor ));
+                    ++nIndex;
                 }
             }
         }
