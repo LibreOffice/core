@@ -50,7 +50,11 @@ published interface XToolkit: com::sun::star::uno::XInterface
     com::sun::star::awt::XWindowPeer getDesktopWindow();
 
 
-    /** returns the complete work area for this toolkit.
+    /**
+     * For LibreOffice versions < 4.1, this method just returned an empty rectangle.
+     * After that, it started returning a valid value.
+     *
+     * @returns the size and position of the primary display
      */
     com::sun::star::awt::Rectangle getWorkArea();
 
