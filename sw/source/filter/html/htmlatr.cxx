@@ -2522,8 +2522,8 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
                     // #i120442#: if c is outside the unicode base plane output it as "&#******;"
                     else if( c > 0xffff)
                     {
-                        OUString sOut("&#");
-                        sOut += OUString::number( (sal_uInt64)c );
+                        OString sOut("&#");
+                        sOut += OString::number( (sal_uInt64)c );
                         sOut += ";";
                         rWrt.Strm() << sOut.getStr();
                     }
