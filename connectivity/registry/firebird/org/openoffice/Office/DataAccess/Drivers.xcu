@@ -32,10 +32,10 @@
  *
  ************************************************************************ -->
 <oor:component-data oor:name="Drivers" oor:package="org.openoffice.Office.DataAccess" xmlns:install="http://openoffice.org/2004/installation" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema">
-  <node oor:name="Installed" install:module="firebird">
+  <node oor:name="Installed" install:module="firebird_sdbc">
     <node oor:name="sdbc:embedded:firebird" oor:op="replace">
       <prop oor:name="Driver">
-        <value>com.sun.star.comp.sdbc.FirebirdDriver</value>
+        <value>com.sun.star.comp.sdbc.firebird.Driver</value>
       </prop>
       <prop oor:name="DriverTypeDisplayName" oor:type="xs:string">
         <value xml:lang="en-US">Firebird</value>
@@ -63,7 +63,7 @@
     </node>
     <node oor:name="sdbc:firebird:*" oor:op="replace">
       <prop oor:name="Driver">
-        <value>com.sun.star.comp.sdbc.FirebirdDriver</value>
+        <value>com.sun.star.comp.sdbc.firebird.Driver</value>
       </prop>
       <prop oor:name="DriverTypeDisplayName" oor:type="xs:string">
         <value xml:lang="en-US">Firebird</value>

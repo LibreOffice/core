@@ -339,6 +339,11 @@ postprocess_FILES_main += \
 	$(postprocess_MOD)/org/openoffice/Office/DataAccess/Drivers-jdbc.xcu
 postprocess_DRIVERS += hsqldb jdbc
 endif
+ifeq ($(ENABLE_FIREBIRD_SDBC),TRUE)
+postprocess_FILES_main += \
+	$(postprocess_MOD)/org/openoffice/Office/DataAccess/Drivers-firebird.xcu
+postprocess_DRIVERS += firebird_sdbc
+endif
 ifeq ($(ENABLE_TDEAB),TRUE)
 postprocess_FILES_main += $(postprocess_MOD)/org/openoffice/Office/DataAccess/Drivers-tdeab.xcu
 endif
@@ -424,13 +429,6 @@ postprocess_XCDS += postgresqlsdbc.xcd
 postprocess_DEPS_postgresqlsdbc := main
 postprocess_FILES_postgresqlsdbc := $(postprocess_MOD)/org/openoffice/Office/DataAccess/Drivers-postgresql.xcu
 postprocess_DRIVERS += postgresql
-endif
-
-ifeq ($(ENABLE_FIREBIRD_SDBC),TRUE)
-postprocess_XCDS += firebirdsdbc.xcd
-postprocess_DEPS_firebirdsdbc := main
-postprocess_FILES_firebirdsdbc := $(postprocess_MOD)/org/openoffice/Office/DataAccess/Drivers-firebird.xcu
-postprocess_DRIVERS += firebird
 endif
 
 ifeq (unx,$(GUIBASE))

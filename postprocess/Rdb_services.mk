@@ -240,6 +240,9 @@ $(eval $(call gb_Rdb_add_components,services,\
 		wizards/com/sun/star/wizards/report/report \
 		wizards/com/sun/star/wizards/table/table \
 	) \
+	$(if $(filter $(ENABLE_FIREBIRD_SDBC),TRUE), \
+		connectivity/source/drivers/firebird/firebird_sdbc \
+	) \
 ))
 
 ifeq (DBCONNECTIVITY,$(filter DBCONNECTIVITY,$(BUILD_TYPE)))

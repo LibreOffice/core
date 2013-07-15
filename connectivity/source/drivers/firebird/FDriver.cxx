@@ -89,7 +89,7 @@ void FirebirdDriver::disposing()
 //------------------------------------------------------------------------------
 rtl::OUString FirebirdDriver::getImplementationName_Static(  ) throw(RuntimeException)
 {
-    return rtl::OUString("com.sun.star.comp.sdbc.FirebirdDriver");
+    return rtl::OUString("com.sun.star.comp.sdbc.firebird.Driver");
         // this name is referenced in the configuration and in the firebird.xml
         // Please take care when changing it.
 }

@@ -300,9 +300,7 @@ Sequence<PropertyValue> ODsnTypeCollection::getDefaultDBSettings( const OUString
 //-------------------------------------------------------------------------
 bool ODsnTypeCollection::isEmbeddedDatabase( const OUString& _sURL ) const
 {
-    const OUString sEmbeddedDatabaseURL = getEmbeddedDatabase();
-    WildCard aWildCard(sEmbeddedDatabaseURL);
-    return aWildCard.Matches(_sURL);
+    return _sURL.startsWith( "sdbc:embedded:" );
 }
 // -----------------------------------------------------------------------------
 OUString ODsnTypeCollection::getEmbeddedDatabase() const
