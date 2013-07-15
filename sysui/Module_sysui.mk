@@ -10,6 +10,7 @@
 $(eval $(call gb_Module_Module,sysui))
 
 ifneq ($(OS),WNT)
+ifneq ($(OS),MACOSX)
 $(eval $(call gb_Module_add_targets,sysui,\
 	CustomTarget_share \
 	CustomTarget_slackware \
@@ -20,7 +21,7 @@ $(eval $(call gb_Module_add_targets,sysui,\
 	$(if $(filter SOLARIS,$(OS)),CustomTarget_solaris) \
 ))
 
-ifeq ($(OS),MACOSX)
+else # OS=MACOSX
 $(eval $(call gb_Module_add_targets,sysui,\
 	Package_osxicons \
 	CustomTarget_infoplist \
