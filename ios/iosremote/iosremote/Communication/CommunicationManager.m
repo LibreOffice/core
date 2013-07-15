@@ -18,7 +18,7 @@
 
 #define ExistingServersKey @"CommunicationManager.ExistingServers"
 
-@interface CommunicationManager()
+@interface CommunicationManager() <UIAlertViewDelegate>
 @end
 
 // Singlton Pattern
@@ -49,7 +49,7 @@
     if([[note name] isEqualToString:@"connection.status.connected"]){
         if (self.state!=CONNECTED){
             NSLog(@"Connected, waiting for pairing response");
-            // A 5 seconds timer waiting for pairing response. 
+            // A 5 seconds timer waiting for pairing response.
             [self.client startConnectionTimeoutTimerwithInterval:5.0];
             self.transmitter = [[CommandTransmitter alloc] initWithClient:self.client];
         }
@@ -61,13 +61,31 @@
             self.state = DISCONNECTED;
             dispatch_async(dispatch_get_main_queue(), ^{
                 UIAlertView *message = [[UIAlertView alloc] initWithTitle:@"Failed to reach server"
-                                                                  message:@"Please verify the IP address and try again later"
-                                                                 delegate:nil
+                                                                  message:@"Please verify your IP address and make sure that LibreOffice Impress is running with impress remote feature enabled. "
+                                                                 delegate:self
                                                         cancelButtonTitle:@"OK"
                                                         otherButtonTitles:@"Help", nil];
                 [message show];
             });
         }
+    }
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
+    if (buttonIndex == 0){
+        [alertView dismissWithClickedButtonIndex:0 animated:YES];
+    }else if (buttonIndex == 1){
+        [alertView dismissWithClickedButtonIndex:0 animated:YES];
+        UIAlertView *message = [[UIAlertView alloc] initWithTitle:@"Pairing instructions"
+                                                          message:@"1. Launch your LibreOffice Impress on your Computer\n\n"
+                                @"2. Enable Preferences - LibreOffice Impress - General - Enable remote control\n\n"
+                                @"3. Enable Preferences - LibreOffice Impress - Advanced - Enable Experimental Features\n\n"
+                                @"4. Make sure your Computer and your device are connected to the same WiFi network and Enter your Computer's IP address\n\n"
+                                @"5. Connect and Enjoy!\n\n"
+                                                         delegate:nil
+                                                cancelButtonTitle:@"OK"
+                                                otherButtonTitles:nil];
+        [message show];
     }
 }
 
@@ -108,7 +126,7 @@
             self.servers = [[NSMutableArray alloc] initWithArray:oldSavedArray];
         else
             self.servers = [[NSMutableArray alloc] init];
-    } 
+    }
     return self;
 }
 
@@ -117,12 +135,12 @@
     if (self.state == CONNECTING) {
         return;
     } else {
-            [self.client disconnect];
-            self.state = CONNECTING;
-            // initialise it with a given server
-            self.client = [[Client alloc]initWithServer:server managedBy:self interpretedBy:self.interpreter];
-            self.transmitter = [[CommandTransmitter alloc] initWithClient:self.client];
-            [self.client connect];
+        [self.client disconnect];
+        self.state = CONNECTING;
+        // initialise it with a given server
+        self.client = [[Client alloc]initWithServer:server managedBy:self interpretedBy:self.interpreter];
+        self.transmitter = [[CommandTransmitter alloc] initWithClient:self.client];
+        [self.client connect];
     }
 }
 
