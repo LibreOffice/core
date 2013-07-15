@@ -341,7 +341,7 @@ int CTLayout::GetNextGlyphs( int nLen, sal_GlyphId* pGlyphIDs, Point& rPos, int&
             // convert glyph details for VCL
             *(pGlyphIDs++) = pCGGlyphIdx[ nSubIndex ];
             if( pGlyphAdvances )
-                *(pGlyphAdvances++) = pCGGlyphAdvs[ nSubIndex ].width;
+                *(pGlyphAdvances++) = lrint(pCGGlyphAdvs[ nSubIndex ].width);
             if( pCharIndexes )
                 *(pCharIndexes++) = pCGGlyphStrIdx[ nSubIndex] + mnMinCharPos;
             if( pFallbackFonts )
@@ -406,7 +406,7 @@ long CTLayout::FillDXArray( sal_Int32* pDXArray ) const
             CTRunGetStringIndices( pGlyphRun, aFullRange, &aIndexVec[0] );
             for( int i = 0; i != nGlyphCount; ++i ) {
                 const int nRelIdx = aIndexVec[i];
-                pDXArray[ nRelIdx ] += aSizeVec[i].width;
+                pDXArray[ nRelIdx ] += lrint(aSizeVec[i].width);
             }
         }
     }
@@ -500,10 +500,10 @@ bool CTLayout::GetBoundRect( SalGraphics& rGraphics, Rectangle& rVCLRect ) const
 
     CGContextRestoreGState( rAquaGraphics.mrContext );
 
-    rVCLRect.Left()   = aVclPos.x + aMacRect.origin.x;
-    rVCLRect.Right()  = aVclPos.x + (aMacRect.origin.x + aMacRect.size.width);
-    rVCLRect.Bottom() = aVclPos.x - (aMacRect.origin.y);
-    rVCLRect.Top()    = aVclPos.x - (aMacRect.origin.y + aMacRect.size.height);
+    rVCLRect.Left()   = aVclPos.x + lrint(aMacRect.origin.x);
+    rVCLRect.Right()  = aVclPos.x + lrint(aMacRect.origin.x + aMacRect.size.width);
+    rVCLRect.Bottom() = aVclPos.x - lrint(aMacRect.origin.y);
+    rVCLRect.Top()    = aVclPos.x - lrint(aMacRect.origin.y + aMacRect.size.height);
 
     return true;
 }
