@@ -50,15 +50,12 @@ namespace linguistic2{
 class SvxNewDictionaryDialog : public ModalDialog
 {
 private:
-    FixedLine            aNewDictBox;
-    FixedText           aNameText;
-    Edit                aNameEdit;
-    FixedText           aLanguageText;
-    SvxLanguageBox      aLanguageLB;
-    CheckBox            aExceptBtn;
-    OKButton            aOKBtn;
-    CancelButton        aCancelBtn;
-    HelpButton          aHelpBtn;
+    Edit*                pNameEdit;
+    SvxLanguageBox*      pLanguageLB;
+    CheckBox*            pExceptBtn;
+    OKButton*            pOKBtn;
+    CancelButton*        pCancelBtn;
+    HelpButton*          pHelpBtn;
     ::com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XSpellChecker1 >     xSpell;
     ::com::sun::star::uno::Reference<
