@@ -345,13 +345,4 @@ TabPage RID_SFXPAGE_LINGU
 };
 // end: TabPage RID_SFXPAGE_LINGU
 
- // RID_SFXQB_DELDICT --------------------------------------------------------
-QueryBox RID_SFXQB_DELDICT
-{
-    Buttons = WB_YES_NO ;
-    DefButton = WB_DEF_NO ;
-    Message [ en-US ] = "Do you want to delete the dictionary?" ;
-};
- // ******************************************************************* EOF
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

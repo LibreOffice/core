@@ -75,6 +75,7 @@ $(eval $(call gb_UIConfig_add_uifiles,cui,\
 	cui/uiconfig/ui/pickoutlinepage \
 	cui/uiconfig/ui/positionpage \
 	cui/uiconfig/ui/querydeletechartcolordialog \
+	cui/uiconfig/ui/querydeletedictionarydialog \
 	cui/uiconfig/ui/scriptorganizer \
 	cui/uiconfig/ui/securityoptionsdialog \
 	cui/uiconfig/ui/select_persona_dialog \

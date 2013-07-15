@@ -1698,8 +1698,9 @@ IMPL_LINK( SvxLinguTabPage, ClickHdl_Impl, PushButton *, pBtn )
     }
     else if (&aLinguDicsDelPB == pBtn)
     {
-        if ( RET_NO ==
-             QueryBox( this, CUI_RES( RID_SFXQB_DELDICT ) ).Execute() )
+        MessageDialog aQuery(this, "QueryDeleteDictionaryDialog",
+            "cui/ui/querydeletedictionarydialog.ui");
+        if (RET_NO == aQuery.Execute())
             return 0;
 
         SvTreeListEntry *pEntry = aLinguDicsCLB.GetCurEntry();
