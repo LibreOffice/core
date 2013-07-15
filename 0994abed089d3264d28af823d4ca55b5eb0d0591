@@ -1,0 +1,157 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXn//+qY\u003d",
+        "filename": "sw/source/ui/uiview/viewling.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 414,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2013-07-15T20:57:05Z",
+      "side": 1,
+      "message": "nitpick: shouldnt this read \"Interactive hyphenation\"",
+      "revId": "0994abed089d3264d28af823d4ca55b5eb0d0591",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//+qU\u003d",
+        "filename": "sw/source/ui/uiview/viewmdi.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2013-07-15T20:57:05Z",
+      "side": 1,
+      "message": "nitpick: The \"OS\" here is an author hint to \"Oliver Specht\" -- usually its nice to remove those too -- thats what DSCMs are for ...",
+      "revId": "0994abed089d3264d28af823d4ca55b5eb0d0591",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//+qM\u003d",
+        "filename": "sw/source/ui/uiview/viewport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2013-07-15T20:57:05Z",
+      "side": 1,
+      "message": "fields-\u003espace?",
+      "revId": "0994abed089d3264d28af823d4ca55b5eb0d0591",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//+qQ\u003d",
+        "filename": "sw/source/ui/uiview/viewport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 295,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2013-07-15T20:57:05Z",
+      "side": 1,
+      "message": "nitpick: remove MA \u003cdate\u003e too, see previous comments",
+      "revId": "0994abed089d3264d28af823d4ca55b5eb0d0591",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//+qI\u003d",
+        "filename": "sw/source/ui/uiview/viewport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 426,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2013-07-15T20:57:05Z",
+      "side": 1,
+      "message": "Is there room below at all?",
+      "revId": "0994abed089d3264d28af823d4ca55b5eb0d0591",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//+qE\u003d",
+        "filename": "sw/source/ui/uiview/viewport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 498,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2013-07-15T20:57:05Z",
+      "side": 1,
+      "message": "\"if the rectangle protrudes over the right or left of the VisArea\"",
+      "revId": "0994abed089d3264d28af823d4ca55b5eb0d0591",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//+qA\u003d",
+        "filename": "sw/source/ui/uiview/viewport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 877,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2013-07-15T20:57:05Z",
+      "side": 1,
+      "message": "VCL calls no resize on invisible windows",
+      "revId": "0994abed089d3264d28af823d4ca55b5eb0d0591",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//+p8\u003d",
+        "filename": "sw/source/ui/uiview/viewport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1113,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2013-07-15T20:57:05Z",
+      "side": 1,
+      "message": "Never set EditWin!",
+      "revId": "0994abed089d3264d28af823d4ca55b5eb0d0591",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//+p4\u003d",
+        "filename": "sw/source/ui/uiview/viewport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1135,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2013-07-15T20:57:05Z",
+      "side": 1,
+      "message": "Do no infinite loops.\nIf possible stop when the (auto-) scroll bars are visible.",
+      "revId": "0994abed089d3264d28af823d4ca55b5eb0d0591",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
