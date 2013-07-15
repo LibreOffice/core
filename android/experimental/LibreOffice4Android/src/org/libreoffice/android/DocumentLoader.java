@@ -574,6 +574,7 @@ public class DocumentLoader
         static final String TAG = "PAGE_VIEWER";
         int width ;
         int height;
+        double zoomFactor;
 
         class PageLoadTask
             extends AsyncTask<Integer, Void, Integer>
@@ -588,11 +589,17 @@ public class DocumentLoader
 
                 state = PageState.LOADING;
                 currentPageNumber = number;
-                ByteBuffer bb = renderPage(currentPageNumber , params[1] , params[2]);//
-                bm = Bitmap.createBitmap( width, height, Bitmap.Config.ARGB_8888);
+                ByteBuffer bb = renderPage(currentPageNumber, getZoomed(params[1]), getZoomed(params[2]));//
+                bm = Bitmap.createBitmap(getZoomed(width), getZoomed(height), Bitmap.Config.ARGB_8888);
                 bm.copyPixelsFromBuffer(bb);
 
                 return currentPageNumber;
+            }
+
+            int getZoomed(int in)
+            {
+                double zoomed = in * zoomFactor;
+                return (int)zoomed;
             }
 
             protected void onPostExecute(Integer result)
@@ -651,6 +658,8 @@ public class DocumentLoader
             	return;
             this.width = width ;
             this.height = height;
+            // Render in a bit better quality, so it makes sense to zoom.
+            zoomFactor = Math.sqrt(2);
             waitView = new TextView(DocumentLoader.this);
             waitView.setTextSize(24);
             waitView.setGravity(Gravity.CENTER);
