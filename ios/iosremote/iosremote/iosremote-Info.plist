@@ -17,8 +17,6 @@
 				<string>ic_launcher.png</string>
 				<string>ic_launcher@2x.png</string>
 			</array>
-			<key>UIPrerenderedIcon</key>
-			<true/>
 		</dict>
 	</dict>
 	<key>CFBundleIdentifier</key>
@@ -39,8 +37,6 @@
 	<true/>
 	<key>UIMainStoryboardFile</key>
 	<string>iPhone_autoSize</string>
-	<key>UIPrerenderedIcon</key>
-	<true/>
 	<key>UIRequiredDeviceCapabilities</key>
 	<array>
 		<string>armv7</string>

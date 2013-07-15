@@ -11,6 +11,9 @@
 		5711026D1794127E007D343B /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 571102691794127E007D343B /* README.md */; };
 		5711026E1794127E007D343B /* release_notes.md in Resources */ = {isa = PBXBuildFile; fileRef = 5711026A1794127E007D343B /* release_notes.md */; };
 		571102701794128E007D343B /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 5711026F1794128E007D343B /* libz.dylib */; };
+		5711027B17946186007D343B /* UIImage+Alpha.m in Sources */ = {isa = PBXBuildFile; fileRef = 5711027617946185007D343B /* UIImage+Alpha.m */; };
+		5711027C17946186007D343B /* UIImage+Resize.m in Sources */ = {isa = PBXBuildFile; fileRef = 5711027817946186007D343B /* UIImage+Resize.m */; };
+		5711027D17946186007D343B /* UIImage+RoundedCorner.m in Sources */ = {isa = PBXBuildFile; fileRef = 5711027A17946186007D343B /* UIImage+RoundedCorner.m */; };
 		571BFAD1178AADA200EF1BDB /* more_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 571BFAD0178AADA200EF1BDB /* more_icon.png */; };
 		571D4807178B2F080063D93B /* timer_clear_btn.png in Resources */ = {isa = PBXBuildFile; fileRef = 571D4805178B2F080063D93B /* timer_clear_btn.png */; };
 		571D4808178B2F080063D93B /* timer_start_btn.png in Resources */ = {isa = PBXBuildFile; fileRef = 571D4806178B2F080063D93B /* timer_start_btn.png */; };
@@ -65,6 +68,12 @@
 		5711026A1794127E007D343B /* release_notes.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = release_notes.md; sourceTree = "<group>"; };
 		5711026B1794127E007D343B /* TestFlight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestFlight.h; sourceTree = "<group>"; };
 		5711026F1794128E007D343B /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
+		5711027517946185007D343B /* UIImage+Alpha.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Alpha.h"; sourceTree = "<group>"; };
+		5711027617946185007D343B /* UIImage+Alpha.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Alpha.m"; sourceTree = "<group>"; };
+		5711027717946186007D343B /* UIImage+Resize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Resize.h"; sourceTree = "<group>"; };
+		5711027817946186007D343B /* UIImage+Resize.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Resize.m"; sourceTree = "<group>"; };
+		5711027917946186007D343B /* UIImage+RoundedCorner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+RoundedCorner.h"; sourceTree = "<group>"; };
+		5711027A17946186007D343B /* UIImage+RoundedCorner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+RoundedCorner.m"; sourceTree = "<group>"; };
 		571BFAD0178AADA200EF1BDB /* more_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = more_icon.png; path = iosremote/more_icon.png; sourceTree = "<group>"; };
 		571D4805178B2F080063D93B /* timer_clear_btn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = timer_clear_btn.png; path = iosremote/timer_clear_btn.png; sourceTree = "<group>"; };
 		571D4806178B2F080063D93B /* timer_start_btn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = timer_start_btn.png; path = iosremote/timer_start_btn.png; sourceTree = "<group>"; };
@@ -163,6 +172,19 @@
 				5711026B1794127E007D343B /* TestFlight.h */,
 			);
 			path = TestFlightSDK1.2.6;
+			sourceTree = "<group>";
+		};
+		5711027417946185007D343B /* UIImage-categories */ = {
+			isa = PBXGroup;
+			children = (
+				5711027517946185007D343B /* UIImage+Alpha.h */,
+				5711027617946185007D343B /* UIImage+Alpha.m */,
+				5711027717946186007D343B /* UIImage+Resize.h */,
+				5711027817946186007D343B /* UIImage+Resize.m */,
+				5711027917946186007D343B /* UIImage+RoundedCorner.h */,
+				5711027A17946186007D343B /* UIImage+RoundedCorner.m */,
+			);
+			path = "UIImage-categories";
 			sourceTree = "<group>";
 		};
 		571BFAD2178AB7BA00EF1BDB /* slideShow */ = {
@@ -277,6 +299,7 @@
 		57C6E3F9175E06E800E8BC5F /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				5711027417946185007D343B /* UIImage-categories */,
 				57701736178AC83E00B99793 /* SWRevealViewController */,
 				57B152971764703500EECC67 /* Base64.h */,
 				57B152981764703500EECC67 /* Base64.m */,
@@ -428,6 +451,9 @@
 				57701742178B0A6900B99793 /* slideShowSwipeInList.m in Sources */,
 				57DC700F178E03330050FC58 /* touchPointer_vc.m in Sources */,
 				57DC7012178E16A40050FC58 /* UIViewTransitionCategory.m in Sources */,
+				5711027B17946186007D343B /* UIImage+Alpha.m in Sources */,
+				5711027C17946186007D343B /* UIImage+Resize.m in Sources */,
+				5711027D17946186007D343B /* UIImage+RoundedCorner.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -497,7 +523,8 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				COPY_PHASE_STRIP = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
@@ -505,6 +532,8 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				PROVISIONING_PROFILE = "";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
@@ -517,7 +546,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "iosremote/iosremote-Prefix.pch";
 				INFOPLIST_FILE = "iosremote/iosremote-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/../../../../../../Downloads/TestFlightSDK1.2.6\"",
@@ -535,7 +564,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "iosremote/iosremote-Prefix.pch";
 				INFOPLIST_FILE = "iosremote/iosremote-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/../../../../../../Downloads/TestFlightSDK1.2.6\"",

@@ -203,8 +203,12 @@ int count = 0;
                 }
             }
             //            NSLog(@"Command:%@", str);
-            NSArray *commands = [str componentsSeparatedByString:@"\n"];
-            [self.receiver parse:commands];
+            
+            backgroundQueue = dispatch_queue_create("com.libreoffice.iosremote", DISPATCH_QUEUE_CONCURRENT);
+            dispatch_async(backgroundQueue, ^(void) {
+                NSArray *commands = [str componentsSeparatedByString:@"\n"];
+                [self.receiver parse:commands];
+            });
             data = nil;
             str = nil;
         } break;
@@ -222,15 +226,16 @@ int count = 0;
         return;
     [self stopConnectionTimeoutTimer];
 //    NSLog(@"stream status i:%u o:%u", self.inputStream.streamStatus, self.outputStream.streamStatus);
-    if ([self.inputStream streamStatus] != NSStreamStatusClosed && [self.inputStream streamStatus] != NSStreamStatusError) {
+    if ([self.inputStream streamStatus] != NSStreamStatusClosed) {
 //        NSLog(@"ci");
         [self.inputStream close];
-    }
+    } else
+        [self.inputStream removeFromRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
     
-    if ([self.outputStream streamStatus] != NSStreamStatusClosed && [self.outputStream streamStatus] != NSStreamStatusError) {
-//        NSLog(@"co");
+    if ([self.outputStream streamStatus] != NSStreamStatusClosed) {
         [self.outputStream close];
-    }
+    } else
+        [self.outputStream removeFromRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
     self.inputStream = nil;
     self.outputStream = nil;
     self.connected = NO;
@@ -238,7 +243,7 @@ int count = 0;
 
 - (void) connect
 {
-    [self startConnectionTimeoutTimerwithInterval:3.0];
+    [self startConnectionTimeoutTimerwithInterval:5.0];
     backgroundQueue = dispatch_queue_create("com.libreoffice.iosremote", NULL);
     dispatch_async(backgroundQueue, ^(void) {
         [self streamOpenWithIp:self.server.serverAddress withPortNumber:self.mPort];

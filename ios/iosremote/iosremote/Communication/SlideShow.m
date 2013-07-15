@@ -10,6 +10,7 @@
 #import "SlideShow.h"
 #import "Base64.h"
 #import "slideShow_vc.h"
+#import "UIImage+Resize.h"
 #import <dispatch/dispatch.h>
 
 @interface SlideShow()
@@ -41,7 +42,7 @@ NSLock *dictLock;
     _size = 0;
     _currentSlide = 0;
     
-    backgroundQueue = dispatch_queue_create("org.libreoffice.iosremote.bgqueue", NULL);
+    backgroundQueue = dispatch_queue_create("org.libreoffice.iosremote.bgqueue", DISPATCH_QUEUE_CONCURRENT);
     NSOperationQueue *mainQueue = [NSOperationQueue mainQueue];
     
     /**
@@ -69,6 +70,7 @@ NSLock *dictLock;
                                                                   if ([view isKindOfClass:[UIImageView class]]){
                                                                       UIImage *image = [self.imagesDictionary objectForKey:[self.loadBuffer objectForKey:tag]];
                                                                       if (image) {
+                                                                          image = [image resizedImage:view.frame.size interpolationQuality:kCGInterpolationDefault];
                                                                           dispatch_async(dispatch_get_main_queue(), ^{
                                                                              [(UIImageView *)view setImage:image];
                                                                           });
@@ -88,6 +90,7 @@ NSLock *dictLock;
                                                                       UIImage *image = [self.imagesDictionary objectForKey:[self.loadBuffer objectForKey:tag]];
                                                                       if (image){
                                                                           UIImageView *imageView = (UIImageView *)[view viewWithTag:1];
+                                                                          image = [image resizedImage:imageView.frame.size interpolationQuality:kCGInterpolationDefault];
                                                                           dispatch_async(dispatch_get_main_queue(), ^{
                                                                               [imageView setImage:image];
                                                                           });

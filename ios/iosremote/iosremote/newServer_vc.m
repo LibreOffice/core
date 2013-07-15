@@ -185,7 +185,7 @@
     EditableTableViewCell *cell = nil;
     NSString *text = nil;
     NSString *placeholder = nil;
-    UIKeyboardType keyboardType;
+    UIKeyboardType keyboardType = UIKeyboardTypeDefault;
     
     //  Pick the editable cell and the values for its textField
     //
