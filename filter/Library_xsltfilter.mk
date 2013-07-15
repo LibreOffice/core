@@ -38,6 +38,7 @@ $(eval $(call gb_Library_use_libraries,xsltfilter,\
 ))
 
 $(eval $(call gb_Library_use_externals,xsltfilter,\
+	boost_headers \
 	libxml2 \
 	libxslt \
 	libexslt \

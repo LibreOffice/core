@@ -21,6 +21,8 @@ $(eval $(call gb_Library_Library,placeware))
 
 $(eval $(call gb_Library_set_componentfile,placeware,filter/source/placeware/placeware))
 
+$(eval $(call gb_Library_use_external,placeware,boost_headers))
+
 $(eval $(call gb_Library_use_sdk_api,placeware))
 
 $(eval $(call gb_Library_use_libraries,placeware,\
