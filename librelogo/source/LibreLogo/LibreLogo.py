@@ -697,10 +697,13 @@ def __cs__(select = True):
         if select:
             _.doc.CurrentController.select(_.drawpage)
 
-def __dispatcher__(s, properties = ()):
+def __dispatcher__(s, properties = (), doc = 0):
     ctx = XSCRIPTCONTEXT.getComponentContext()
     d = ctx.ServiceManager.createInstanceWithContext("com.sun.star.frame.DispatchHelper", ctx)
-    d.executeDispatch(_.doc.CurrentController.Frame, s, "", 0, properties)
+    if doc != 0:
+      d.executeDispatch(doc.CurrentController.Frame, s, "", 0, properties)
+    else:
+      d.executeDispatch(_.doc.CurrentController.Frame, s, "", 0, properties)
 
 def __getshape__(shapename):
     try:
@@ -1195,15 +1198,17 @@ def position(n = -1):
             pos.X, pos.Y = pos.X + turtle.BoundRect.Width / 2.0, pos.Y + turtle.BoundRect.Height / 2.0
             return [ pos.X * __MM10_TO_TWIP__ / __PT_TO_TWIP__, pos.Y * __MM10_TO_TWIP__ / __PT_TO_TWIP__ ]
 
-def __groupstart__():
+def __groupstart__(name = ""):
     global __group__, __grouplefthang__, __groupstack__
     __removeshape__(__ACTUAL__)
     __groupstack__.append(__group__)
+    if name != "": # store pic name (for correct repcount)
+      __groupstack__.append(name)
     __groupstack__.append(__grouplefthang__)
     __group__ = uno.getComponentContext().ServiceManager.createInstance('com.sun.star.drawing.ShapeCollection')
     __grouplefthang__ = 0
 
-def __groupend__():
+def __groupend__(name = ""):
     global __group__, __grouplefthang__, __groupstack__
     g = 0
     if __group__.getCount() > 1:
@@ -1223,6 +1228,26 @@ def __groupend__():
     elif __group__.getCount() == 1:
         g = __group__.getByIndex(0)
     __grouplefthang__ = min(__groupstack__.pop(), __grouplefthang__)
+    if name != "":
+      name = __groupstack__.pop()
+    if name and ".SVG" == name[-4:].upper() and g:
+      _.doc.CurrentController.select(g)
+      __dispatcher__(".uno:Copy")
+      ctx = XSCRIPTCONTEXT.getComponentContext()
+      d = ctx.ServiceManager.createInstanceWithContext("com.sun.star.frame.Desktop", ctx)
+      draw = d.loadComponentFromURL("private:factory/sdraw", "_blank", 0, ())
+      drawpage = draw.getDrawPages().getByIndex(0)
+      __dispatcher__(".uno:Paste", (), draw)
+      pic = drawpage.getByIndex(0)
+      pic.setPosition(__Point__((g.BoundRect.Width - g.Size.Width)//2, (g.BoundRect.Height - g.Size.Height)//2))
+      drawpage.Height, drawpage.Width = g.BoundRect.Height, g.BoundRect.Width
+      __time__.sleep(1) # avoid writing problem
+      if not os.path.isabs(name):
+        name = os.path.expanduser('~') + os.path.sep + name
+      __dispatcher__(".uno:ExportTo", (__getprop__("URL", unohelper.systemPathToFileUrl(name)), __getprop__("FilterName", "draw_svg_Export")), draw)
+      __time__.sleep(1)
+      draw.dispose()
+
     __group__ = __groupstack__.pop()
     if __group__ and g:
         __group__.add(g)
@@ -1255,7 +1280,8 @@ def __loadlang__(lang, a):
         { "i": repcount + str(next(loopi)), "j": repcount, "orig": re.sub( r"(?ui)(?<!:)\b%s\b" % repcount, repcount + str(next(loopi)-1), r.group(0)) }
     __comp__[lang] = [
     [r"(?i)(?<!:)(\b|(?=[-:]))(?:%s)\b" % "|".join([a[i].lower() for i in a if not "_" in i and i != "DECIMAL"]), lambda s: s.group().upper()], # uppercase all native commands in the source code
-    [r"(?<!:)\b(?:%s) [[]" % a['GROUP'], "\n__groupstart__()\nfor __groupindex__ in range(2):\n[\nif __groupindex__ == 1:\n[\n__groupend__()\nbreak\n]\n"],
+    [r"(?<!:)\b(?:%s) \[(?= |\n)" % a['GROUP'], "\n__groupstart__()\nfor __groupindex__ in range(2):\n[\nif __groupindex__ == 1:\n[\n__groupend__()\nbreak\n]\n"],
+    [r"(?<!:)\b(?:%s) (%s[^[]*)\[(?= |\n)" % (a['GROUP'], __DECODE_STRING_REGEX__), "\n__groupstart__(\\1)\nfor __groupindex__ in range(2):\n[\nif __groupindex__ == 1:\n[\n__groupend__(\\1)\nbreak\n]\n"],
     [r"(?<!:)\b(?:%s)\b" % a['GROUP'], "\n__removeshape__(__ACTUAL__)\n"],
     [r"(\n| )][ \n]*\[(\n| )", "\n]\nelse:\n[\n"], # if/else block
     [r"(?<!\n)\[(?= |\n)", ":\n[\n"], # start block
@@ -1353,7 +1379,7 @@ def __loadlang__(lang, a):
     [r"\b([0-9]+([,.][0-9]+)?)(%s)(?!\w)" % a['INCH'], "\\1*72"],
     [r"\b([0-9]+([,.][0-9]+)?)(%s)\b" % a['MM'], "\\1*%s" % __MM_TO_PT__],
     [r"\b([0-9]+([,.][0-9]+)?)(%s)\b" % a['CM'], "\\1*%s*10" % __MM_TO_PT__],
-    [r"\b(__(?:int|float|string)__len|round|abs|sin|cos|sqrt|set|list|tuple|sorted)\b ((?:\w|\d+([,.]\d+)?|[-+*/]| )+)\)" , "\\1(\\2))" ], # fix parsing: (1 + sqrt x) -> (1 + sqrt(x))
+    [r"\b(__(?:int|float|string)__len|round|abs|sin|cos|sqrt|set|list|tuple|sorted)\b ((?:\w|\d+([,.]\d+)?|0[xX][0-9a-fA-F]+|[-+*/]| )+)\)" , "\\1(\\2))" ], # fix parsing: (1 + sqrt x) -> (1 + sqrt(x))
     [r"(?<=[-*/=+,]) ?\n\)(\w+)\(", "\\1()"], # read attributes, eg. x = fillcolor
     [r"(?<=return) ?\n\)(\w+)\(", "\\1()"], # return + user function
     [r"(?<=(?:Print|label)\() ?\n\)(\w+)\(", "\\1()\n"] # Print/label + user function
@@ -1450,11 +1476,11 @@ def __compil__(s):
     expr = r"""(?iu)(?<!def[ ])(?<![:\w])%(name)s(?!\w)(?!\()(?![ ]\()
         (
             ([ ]+\[*([-+]|\([ ]?)*((%(functions)s)\b[ ]*\(*)*
-            (?:[0-9]+([,.][0-9]+)?|:?\w+(?:[.]\w+[\(]?[\)]?)?]*|\[])]*[\)]*
+            (?:0x[0-9a-f]+|[0-9]+([,.][0-9]+)?|:?\w+(?:[.]\w+[\(]?[\)]?)?]*|\[])]*[\)]*
             (
                 (?:[ ]*([+*/,<>]|//|==|<=|>=|<>|!=)[ ]*|[ ]*-[ ]+|-|[ ]*[*][*][ ]*) # operators, eg. "**", " - ", "-", "- "
                 \[*([-+]|\([ ]?)* # minus sign, parenthesis
-                ((%(functions)s)\b[ ]*\(*)*([0-9]+([.,][0-9]+)?|:?\w+(?:[.]\w+[\(]?[\)]?)?)]*
+                ((%(functions)s)\b[ ]*\(*)*(0x[0-9a-f]+|[0-9]+([.,][0-9]+)?|:?\w+(?:[.]\w+[\(]?[\)]?)?)]*
             ([ ]?\))*)*
         [\)]*){,%(repeat)s}
     )
