@@ -609,6 +609,11 @@ SvxFillTypeBox::SvxFillTypeBox( Window* pParent, WinBits nBits ) :
     Show();
 }
 
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxFillTypeBox(Window *pParent, VclBuilder::stringmap &)
+{
+    return new SvxFillTypeBox(pParent);
+}
+
 // -----------------------------------------------------------------------
 
 SvxFillTypeBox::~SvxFillTypeBox()
@@ -695,6 +700,11 @@ SvxFillAttrBox::SvxFillAttrBox( Window* pParent, WinBits nBits ) :
     SetPosPixel( Point( 90, 0 ) );
     SetSizePixel( LogicToPixel( Size(50, 80 ), MAP_APPFONT ));
     Show();
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxFillAttrBox(Window *pParent, VclBuilder::stringmap &)
+{
+    return new SvxFillAttrBox(pParent);
 }
 
 // -----------------------------------------------------------------------

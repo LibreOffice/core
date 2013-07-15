@@ -77,8 +77,6 @@ AreaPropertyPanel::AreaPropertyPanel(
       maGradientElliptical(),
       maGradientSquare(),
       maGradientRect(),
-      mpLbFillType(new SvxFillTypeBox(this)),
-      mpLbFillAttr(new SvxFillAttrBox(this)),
       mpStyleItem(),
       mpColorItem(),
       mpFillGradientItem(),
@@ -113,11 +111,13 @@ AreaPropertyPanel::AreaPropertyPanel(
       mbColorAvail(true)
 {
     get(mpColorTextFT,    "filllabel");
+    get(mpLbFillType,     "fillstyle");
+    get(mpLbFillAttr,     "fillattr");
     get(mpTrspTextFT,     "transparencylabel");
     get(mpToolBoxColor,   "selectcolor");
     get(mpLBTransType,    "transtype");
-    get(mpMTRTransparent, "settransparency");   // GtkSpinButton
-    get(mpBTNGradient,    "selectgradient");    // GtkToolbar
+    get(mpMTRTransparent, "settransparency");
+    get(mpBTNGradient,    "selectgradient");
 
     const sal_uInt16 nIdColor = mpToolBoxColor->GetItemId(UNO_SIDEBARCOLOR);
     mpColorUpdater.reset(new ::svx::ToolboxButtonColorUpdater(SID_ATTR_FILL_COLOR, nIdColor, mpToolBoxColor)),
@@ -158,27 +158,6 @@ void AreaPropertyPanel::Initialize()
     maGradientRect = maGradientLinear;
     maGradientRect.SetGradientStyle(XGRAD_RECT);
 
-    Size aLogicalFillSize(MBOX_WIDTH,LISTBOX_HEIGHT);
-    Size aLogicalAttrSize(MBOX_WIDTH + 1,LISTBOX_HEIGHT);
-
-    Point aPoint(SECTIONPAGE_MARGIN_HORIZONTAL,SECTIONPAGE_MARGIN_VERTICAL_TOP + FIXED_TEXT_HEIGHT + TEXT_CONTROL_SPACING_VERTICAL);
-    Point aPoint_Picker(SECTIONPAGE_MARGIN_HORIZONTAL + MBOX_WIDTH + CONTROL_SPACING_HORIZONTAL,SECTIONPAGE_MARGIN_VERTICAL_TOP + FIXED_TEXT_HEIGHT + TEXT_CONTROL_SPACING_VERTICAL);
-
-    Size aTypeSize(LogicToPixel(aLogicalFillSize, MAP_APPFONT));
-    Size aAttrSize(LogicToPixel(aLogicalAttrSize, MAP_APPFONT));
-
-    Point aTypePoint(LogicToPixel(aPoint, MAP_APPFONT));
-    Point aAttrPoint(LogicToPixel(aPoint_Picker, MAP_APPFONT));
-
-    mpLbFillType->SetPosSizePixel(aTypePoint,aTypeSize);
-    mpLbFillAttr->SetPosSizePixel(aAttrPoint,aAttrSize);
-
-    mpLbFillType->SetHelpId(HID_PPROPERTYPANEL_AREA_LB_FILL_TYPES);
-    mpLbFillAttr->SetHelpId(HID_PPROPERTYPANEL_AREA_LB_FILL_ATTR);
-
-    mpLbFillType->SetQuickHelpText(msHelpFillType);
-    mpLbFillAttr->SetQuickHelpText(msHelpFillAttr);
-
     mpLbFillType->SetAccessibleName(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Fill")));    //wj acc
     mpLbFillAttr->SetAccessibleName(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Fill")));    //wj acc
 
@@ -194,12 +173,6 @@ void AreaPropertyPanel::Initialize()
     mpToolBoxColor->SetItemImage(nIdColor, maImgColor);
     mpToolBoxColor->SetItemBits( nIdColor, mpToolBoxColor->GetItemBits( nIdColor ) | TIB_DROPDOWNONLY );
     mpToolBoxColor->SetItemText(nIdColor, msHelpFillAttr);
-
-    long aHeightLBStyle = mpLbFillType->GetSizePixel().getHeight();
-    long aLBPosY = mpLbFillType->GetPosPixel().getY();
-    long aHeightTBAttr = mpToolBoxColor->GetSizePixel().getHeight();
-    Point aPointTBAttr = mpToolBoxColor->GetPosPixel();
-    aPointTBAttr.setY( aLBPosY + aHeightLBStyle / 2 - aHeightTBAttr / 2);
 
     aLink = LINK(this, AreaPropertyPanel, ToolBoxColorDropHdl);
     mpToolBoxColor->SetDropdownClickHdl ( aLink );
@@ -221,19 +194,8 @@ void AreaPropertyPanel::Initialize()
     mpBTNGradient->SetItemImage(nIdGradient,maImgLinear);
     mpBTNGradient->Hide();
 
-    long aHeightLBTrans = mpLBTransType->GetSizePixel().getHeight();
-    Point aPointLB = mpLBTransType->GetPosPixel();
-    long aPosY = aPointLB.getY();
-
-    Point aPointMetric = mpMTRTransparent->GetPosPixel();
-    Point aPointTB = mpMTRTransparent->GetPosPixel();
-    long aHeightMetric = mpMTRTransparent->GetSizePixel().getHeight();
-    long aHeightTool = mpBTNGradient->GetSizePixel().getHeight();
-    aPointMetric.setY(aPosY+aHeightLBTrans/2-aHeightMetric/2);
-    aPointTB.setY(aPosY+aHeightLBTrans/2-aHeightTool/2);
-    aPointTB.setX(aPointTB.getX()+3);
     mpLbFillType->SetAccessibleRelationLabeledBy(mpColorTextFT);
-    mpLbFillAttr->SetAccessibleRelationLabeledBy(mpLbFillAttr.get());
+    mpLbFillAttr->SetAccessibleRelationLabeledBy(mpLbFillAttr);
     mpToolBoxColor->SetAccessibleRelationLabeledBy(mpToolBoxColor);
     mpLBTransType->SetAccessibleRelationLabeledBy(mpTrspTextFT);
     mpMTRTransparent->SetAccessibleRelationLabeledBy(mpMTRTransparent);

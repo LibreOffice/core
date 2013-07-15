@@ -99,14 +99,14 @@ private:
     XGradient                                           maGradientRect;
 
     //ui controls
-    FixedText*                              mpColorTextFT;
-    ::boost::scoped_ptr< SvxFillTypeBox >   mpLbFillType;
-    ::boost::scoped_ptr< SvxFillAttrBox >   mpLbFillAttr;
-    ToolBox*                                mpToolBoxColor; // for new color picker
-    FixedText*                              mpTrspTextFT;
-    ListBox*                                mpLBTransType;
-    MetricField*                            mpMTRTransparent;
-    ToolBox*                                mpBTNGradient;
+    FixedText*                                          mpColorTextFT;
+    SvxFillTypeBox*                                     mpLbFillType;
+    SvxFillAttrBox*                                     mpLbFillAttr;
+    ToolBox*                                            mpToolBoxColor; // for new color picker
+    FixedText*                                          mpTrspTextFT;
+    ListBox*                                            mpLBTransType;
+    MetricField*                                        mpMTRTransparent;
+    ToolBox*                                            mpBTNGradient;
 
     ::boost::scoped_ptr< ::svx::ToolboxButtonColorUpdater > mpColorUpdater;
 
