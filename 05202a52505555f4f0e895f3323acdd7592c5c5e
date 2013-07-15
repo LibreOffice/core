@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXn//+w8\u003d",
+        "filename": "sw/source/core/unocore/unosett.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1986,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2013-07-15T08:57:26Z",
+      "side": 1,
+      "message": "The old code made sure a bullet char is always set. It\u0027s OK to change it, but if you test when happens when you save the import result as ODF (and load it back), the bullets will re-appear.\n\nSo if you want to allow empty bullet char, please also make the code under xmloff deal with this. Without that, the ODF filter is loosing data, which is a no-go.",
+      "revId": "05202a52505555f4f0e895f3323acdd7592c5c5e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
