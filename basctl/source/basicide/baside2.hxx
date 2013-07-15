@@ -51,6 +51,9 @@ class SvxSearchItem;
 #include <set>
 #include <boost/scoped_ptr.hpp>
 
+#include <vcl/floatwin.hxx>
+#include <vcl/textdata.hxx>
+
 namespace com { namespace sun { namespace star { namespace beans {
     class XMultiPropertySet;
 } } } }
@@ -60,6 +63,7 @@ namespace basctl
 
 class ObjectCatalog;
 class CodeCompleteListBox;
+class CodeCompleteFloatWindow;
 
 DBG_NAMEEX( ModulWindow )
 
@@ -112,7 +116,8 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >
     GetComponentInterface(sal_Bool bCreate = true);
     std::vector< CodeCompleteData > aCodeCompleteCache;
-    CodeCompleteListBox* aListBox;
+    CodeCompleteFloatWindow* pCodeCompleteWnd;
+    //CodeCompleteListBox* aListBox;
     OUString GetActualSubName( sal_uLong nLine ); // gets the actual subroutine name according to line number
     std::vector< OUString > Split( const OUString& sStr, const sal_Unicode& aChar );
 
@@ -467,6 +472,29 @@ private:
         EditorWindow* pEditor;
 
     } aSyntaxColors;
+};
+
+class CodeCompleteFloatWindow: public Window
+{
+private:
+    EditorWindow* pParent; // parent window
+    TextSelection aTextSelection;
+    ListBox* pListBox;
+
+    void InitListBox(); // initialize the ListBox
+    DECL_LINK(ImplDoubleClickHdl, void*);
+
+public:
+    CodeCompleteFloatWindow( EditorWindow* pPar );
+    virtual ~CodeCompleteFloatWindow();
+
+    void InsertEntry( const OUString& aStr );
+    void ClearListBox();
+    void SetTextSelection( const TextSelection& aSel );
+    void ResizeListBox();
+
+protected:
+    virtual void KeyInput( const KeyEvent& rKeyEvt );
 };
 
 class CodeCompleteListBox: public ListBox

@@ -250,7 +250,9 @@ EditorWindow::EditorWindow (Window* pParent, ModulWindow* pModulWindow) :
     s[0] = OUString( "FontHeight" );
     s[1] = OUString( "FontName" );
     n->addPropertiesChangeListener(s, listener_.get());
-    aListBox = new CodeCompleteListBox(this);
+    //aListBox = new CodeCompleteListBox(this);
+    //pCodeCopleteWnd = new CodeCompleteFloatWindow(this);
+    pCodeCompleteWnd = new CodeCompleteFloatWindow( this );
 }
 
 
@@ -272,7 +274,9 @@ EditorWindow::~EditorWindow()
         EndListening( *pEditEngine );
         pEditEngine->RemoveView(pEditView.get());
     }
-    delete aListBox;
+
+    //delete aListBox;
+    delete pCodeCompleteWnd;
 }
 
 OUString EditorWindow::GetWordAtCursor()
@@ -576,17 +580,21 @@ void EditorWindow::KeyInput( const KeyEvent& rKEvt )
                         if( aMethods.getLength() != 0 )
                         {
                             Rectangle aRect = ( (TextEngine*) GetEditEngine() )->PaMtoEditCursor( aSel.GetEnd() , false );
-                            aListBox->SetPosPixel( aRect.TopLeft() );
-                            aListBox->SetSizePixel( Size(150,150) );
+                            GetEditView()->EnableCursor( false );
 
+                            aSel.GetStart().GetIndex() += 1;
+                            aSel.GetEnd().GetIndex() += 1;
+                            pCodeCompleteWnd->ClearListBox();
+                            pCodeCompleteWnd->SetTextSelection(aSel);
+
+                            pCodeCompleteWnd->SetPosPixel( aRect.BottomRight() );
                             for(sal_Int32 l = 0; l < aMethods.getLength(); ++l)
                             {
-                                aListBox->InsertEntry( OUString(aMethods[l]->getName()) );
-                                std::cerr << aMethods[l]->getName() << std::endl;
+                                pCodeCompleteWnd->InsertEntry( OUString(aMethods[l]->getName()) );
                             }
-
-                            aListBox->GetFocus();
-                            aListBox->ToggleDropDown();
+                            pCodeCompleteWnd->ResizeListBox();
+                            pCodeCompleteWnd->Show();
+                            pCodeCompleteWnd->GrabFocus();
                         }
                     }
                 }
@@ -2377,10 +2385,11 @@ void WatchTreeListBox::UpdateWatches( bool bBasicStopped )
 }
 
 CodeCompleteListBox::CodeCompleteListBox(EditorWindow* pPar)
-: ListBox(pPar, WB_DROPDOWN),
+: ListBox(pPar, WB_DROPDOWN | WB_BORDER),
 pParent(pPar)
 {
     SetSelectHdl( LINK(this, CodeCompleteListBox, ImplSelectHdl) );
+    SetDropDownLineCount( 8 );
 }
 
 CodeCompleteListBox::~CodeCompleteListBox()
@@ -2393,6 +2402,73 @@ IMPL_LINK_NOARG(CodeCompleteListBox, ImplSelectHdl)
     pParent->GetEditEngine()->ReplaceText(aSel, (OUString) GetEntry(GetSelectEntryPos()) );
     Clear();
     return 0;
+}
+
+CodeCompleteFloatWindow::CodeCompleteFloatWindow( EditorWindow* pPar )
+: Window( pPar, WB_BORDER | WB_SYSTEMWINDOW | WB_NOSHADOW  ),
+pParent(pPar)
+{
+    InitListBox();
+    SetSizePixel( Size(150,150) );
+}
+
+void CodeCompleteFloatWindow::InitListBox()
+{
+    pListBox = new ListBox( this );
+    pListBox->SetSizePixel( Size(150,150) ); //default, this will adopt the line length
+    pListBox->SetDoubleClickHdl(LINK(this, CodeCompleteFloatWindow, ImplDoubleClickHdl));
+    pListBox->Show();
+}
+
+CodeCompleteFloatWindow::~CodeCompleteFloatWindow()
+{
+    delete pListBox;
+}
+
+void CodeCompleteFloatWindow::InsertEntry( const OUString& aStr )
+{
+    pListBox->InsertEntry( aStr );
+}
+
+void CodeCompleteFloatWindow::ClearListBox()
+{
+    pListBox->Clear();
+}
+
+IMPL_LINK_NOARG(CodeCompleteFloatWindow, ImplDoubleClickHdl)
+{
+    if( pListBox->GetEntry( pListBox->GetSelectEntryPos() ) != OUString("") )
+    {
+        pParent->GetEditView()->SetSelection( aTextSelection );
+        pParent->GetEditView()->InsertText( (OUString) pListBox->GetEntry(pListBox->GetSelectEntryPos()) );
+        pParent->GetEditView()->EnableCursor( true );
+        LoseFocus();
+        Hide();
+    }
+    return 0;
+}
+
+void CodeCompleteFloatWindow::KeyInput( const KeyEvent& rKeyEvt )
+{
+    if( rKeyEvt.GetKeyCode().GetCode() == KEY_ESCAPE )
+    {// ESC key closes the window: does not modify anything
+        pParent->GetEditView()->EnableCursor( true );
+        Hide();
+    }
+}
+
+void CodeCompleteFloatWindow::SetTextSelection( const TextSelection& aSel )
+{
+    aTextSelection = aSel;
+}
+
+void CodeCompleteFloatWindow::ResizeListBox()
+{
+    Size aSize = pListBox->CalcMinimumSize();
+    const Font& aFont = pListBox->GetUnzoomedControlPointFont();
+    aSize.setHeight( aFont.GetSize().getHeight() * 16 );
+    pListBox->SetSizePixel( aSize );
+    SetSizePixel( aSize );
 }
 
 } // namespace basctl
