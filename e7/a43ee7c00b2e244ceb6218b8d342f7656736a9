@@ -1,0 +1,10 @@
+Code-Review+2: David Tardon <dtardon@redhat.com>
+Code-Review+1: Petr Mladek <pmladek@suse.cz>
+Verified+1: Petr Mladek <pmladek@suse.cz>
+Code-Review+2: Lionel Elie Mamane <lionel@mamane.lu>
+Verified+1: Lionel Elie Mamane <lionel@mamane.lu>
+Submitted-by: David Tardon <dtardon@redhat.com>
+Submitted-at: Mon, 15 Jul 2013 10:45:21 +0000
+Reviewed-on: https://gerrit.libreoffice.org/4877
+Project: core
+Branch: refs/heads/libreoffice-4-1-0
