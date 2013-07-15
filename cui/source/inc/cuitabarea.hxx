@@ -110,33 +110,29 @@ class SvxTransparenceTabPage : public SvxTabPage
     sal_uInt16          nDlgType;
 
     // main selection
-    FixedLine           aFlProp;
-    RadioButton         aRbtTransOff;
-    RadioButton         aRbtTransLinear;
-    RadioButton         aRbtTransGradient;
+    RadioButton*        m_pRbtTransOff;
+    RadioButton*        m_pRbtTransLinear;
+    RadioButton*        m_pRbtTransGradient;
 
     /// linear transparency
-    MetricField         aMtrTransparent;
+    MetricField*        m_pMtrTransparent;
 
     // gradient transparency
-    FixedText           aFtTrgrType;
-    ListBox             aLbTrgrGradientType;
-    FixedText           aFtTrgrCenterX;
-    MetricField         aMtrTrgrCenterX;
-    FixedText           aFtTrgrCenterY;
-    MetricField         aMtrTrgrCenterY;
-    FixedText           aFtTrgrAngle;
-    MetricField         aMtrTrgrAngle;
-    FixedText           aFtTrgrBorder;
-    MetricField         aMtrTrgrBorder;
-    FixedText           aFtTrgrStartValue;
-    MetricField         aMtrTrgrStartValue;
-    FixedText           aFtTrgrEndValue;
-    MetricField         aMtrTrgrEndValue;
+    VclGrid*            m_pGridGradient;
+    ListBox*            m_pLbTrgrGradientType;
+    FixedText*          m_pFtTrgrCenterX;
+    MetricField*        m_pMtrTrgrCenterX;
+    FixedText*          m_pFtTrgrCenterY;
+    MetricField*        m_pMtrTrgrCenterY;
+    FixedText*          m_pFtTrgrAngle;
+    MetricField*        m_pMtrTrgrAngle;
+    MetricField*        m_pMtrTrgrBorder;
+    MetricField*        m_pMtrTrgrStartValue;
+    MetricField*        m_pMtrTrgrEndValue;
 
     // preview
-    SvxXRectPreview     aCtlBitmapPreview;
-    SvxXRectPreview     aCtlXRectPreview;
+    SvxXRectPreview*    m_pCtlBitmapPreview;
+    SvxXRectPreview*    m_pCtlXRectPreview;
     sal_Bool                bBitmap;
 
     XOutdevItemPool*    pXPool;

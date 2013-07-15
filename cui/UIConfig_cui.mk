@@ -85,6 +85,7 @@ $(eval $(call gb_UIConfig_add_uifiles,cui,\
 	cui/uiconfig/ui/storedwebconnectiondialog \
 	cui/uiconfig/ui/textflowpage \
 	cui/uiconfig/ui/thesaurus \
+	cui/uiconfig/ui/transparencytabpage \
 	cui/uiconfig/ui/twolinespage \
 	cui/uiconfig/ui/zoomdialog \
 ))
