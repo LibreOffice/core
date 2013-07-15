@@ -22,7 +22,9 @@ $(eval $(call gb_Module_add_targets,sysui,\
 ))
 
 else # OS=MACOSX
+# CustomTarget_share builds documents.ulf which is needed in infoplist...
 $(eval $(call gb_Module_add_targets,sysui,\
+	CustomTarget_share \
 	Package_osxicons \
 	CustomTarget_infoplist \
 	Package_infoplist \
