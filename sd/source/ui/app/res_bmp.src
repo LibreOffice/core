@@ -385,6 +385,16 @@ Bitmap BMP_PRESENTERSCREEN_BACKGROUND
     File = "presenterscreen-Background.png";
 };
 
+Bitmap BMP_PRESENTERSCREEN_ANIMATION
+{
+    File = "presenterscreen-Animation.png";
+};
+
+Bitmap BMP_PRESENTERSCREEN_TRANSITION
+{
+    File = "presenterscreen-Transition.png";
+};
+
 Bitmap BMP_PRESENTERSCREEN_BORDER_RIGHT
 {
     File = "presenterscreen-BorderRight.png";

@@ -651,6 +651,34 @@
             <value>bitmaps/ScrollbarArrowDownDisabled.png</value>
           </prop>
         </node>
+        <node oor:name="animation" oor:op="replace">
+          <prop oor:name="Name">
+            <value>Animation</value>
+          </prop>
+          <prop oor:name="NormalFileName">
+            <value>bitmaps/Animation.png</value>
+          </prop>
+          <prop oor:name="MouseOverFileName">
+            <value>bitmaps/Animation.png</value>
+          </prop>
+          <prop oor:name="DisabledFileName">
+            <value>bitmaps/Animation.png</value>
+          </prop>
+        </node>
+        <node oor:name="Transition" oor:op="replace">
+          <prop oor:name="Name">
+            <value>Transition</value>
+          </prop>
+          <prop oor:name="NormalFileName">
+            <value>bitmaps/Transition.png</value>
+          </prop>
+          <prop oor:name="MouseOverFileName">
+            <value>bitmaps/Transition.png</value>
+          </prop>
+          <prop oor:name="DisabledFileName">
+            <value>bitmaps/Transition.png</value>
+          </prop>
+        </node>
         <node oor:name="pagervertical" oor:op="replace">
           <prop oor:name="Name">
             <value>PagerVertical</value>
