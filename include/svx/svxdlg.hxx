@@ -397,8 +397,7 @@ public:
                                                             sal_Int32 nInitialFlags )=0;
     virtual AbstractFmInputRecordNoDialog * CreateFmInputRecordNoDialog( Window* pParent ) = 0;
     virtual AbstractSvxNewDictionaryDialog* CreateSvxNewDictionaryDialog( Window* pParent,
-                                            ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XSpellChecker1 >  &xSpl,
-                                            sal_uInt32 nResId ) = 0; //add for SvxNewDictionaryDialog
+                                            ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XSpellChecker1 >  &xSpl ) = 0;
     virtual VclAbstractDialog *     CreateSvxEditDictionaryDialog( Window* pParent,
                                             const String& rName,
                                             ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XSpellChecker1> &xSpl,

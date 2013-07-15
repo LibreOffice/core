@@ -1651,7 +1651,7 @@ IMPL_LINK( SvxLinguTabPage, ClickHdl_Impl, PushButton *, pBtn )
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         if(pFact)
         {
-            AbstractSvxNewDictionaryDialog* aDlg = pFact->CreateSvxNewDictionaryDialog( this, xSpellChecker1, RID_SFXDLG_NEWDICT );
+            AbstractSvxNewDictionaryDialog* aDlg = pFact->CreateSvxNewDictionaryDialog( this, xSpellChecker1 );
             DBG_ASSERT(aDlg, "Dialogdiet fail!");
             uno::Reference< XDictionary >  xNewDic;
             if ( aDlg->Execute() == RET_OK )

@@ -1420,22 +1420,10 @@ AbstractFmInputRecordNoDialog * AbstractDialogFactory_Impl::CreateFmInputRecordN
 }
 
 AbstractSvxNewDictionaryDialog * AbstractDialogFactory_Impl::CreateSvxNewDictionaryDialog( Window* pParent,
-                                            ::Reference< ::com::sun::star::linguistic2::XSpellChecker1 >  &xSpl,
-                                            sal_uInt32 nResId )
+                                            ::Reference< ::com::sun::star::linguistic2::XSpellChecker1 >  &xSpl )
 {
-    SvxNewDictionaryDialog* pDlg=NULL;
-    switch ( nResId )
-    {
-        case RID_SFXDLG_NEWDICT :
-            pDlg = new SvxNewDictionaryDialog( pParent, xSpl );
-            break;
-        default:
-            break;
-    }
-
-    if ( pDlg )
-        return new AbstractSvxNewDictionaryDialog_Impl( pDlg );
-    return 0;
+    SvxNewDictionaryDialog* pDlg = new SvxNewDictionaryDialog( pParent, xSpl );
+    return new AbstractSvxNewDictionaryDialog_Impl( pDlg );
 }
 
 VclAbstractDialog*      AbstractDialogFactory_Impl::CreateSvxEditDictionaryDialog( Window* pParent,
