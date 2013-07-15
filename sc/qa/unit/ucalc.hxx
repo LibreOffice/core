@@ -257,10 +257,6 @@ public:
     void testAnchoredRotatedShape();
     void testCellTextWidth();
 
-    /**
-     * Test formula & formula grouping
-     */
-    void testFormulaGrouping();
     void testCondFormatINSDEL();
 
     CPPUNIT_TEST_SUITE(Test);
@@ -345,7 +341,6 @@ public:
     CPPUNIT_TEST(testDeleteCol);
     CPPUNIT_TEST(testAnchoredRotatedShape);
     CPPUNIT_TEST(testCellTextWidth);
-    CPPUNIT_TEST(testFormulaGrouping);
     CPPUNIT_TEST(testCondFormatINSDEL);
     CPPUNIT_TEST_SUITE_END();
 

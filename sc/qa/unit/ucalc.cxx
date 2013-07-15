@@ -3935,68 +3935,6 @@ void Test::testCellTextWidth()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testFormulaGrouping()
-{
-    if ( !getenv("SC_FORMULAGROUP") )
-        return;
-
-    static const struct {
-        const char *pFormula[3];
-        bool  bGroup[3];
-    } aGroupTests[] = {
-        { { "=B1", "=B2", "" }, // relative reference
-          { true, true, false } },
-        { { "=B1", "=B2", "=B3" },
-          { true, true, true } },
-        { { "=B1", "", "=B3" }, // a gap
-          { false, false, false } },
-        { { "=$B$1", "=$B$1", "" }, // absolute reference
-          { true, true, false } },
-        { { "=$Z$10", "=$Z$10", "=$Z$10" },
-          { true, true, true } },
-        { { "=C1+$Z$10", "=C2+$Z$10", "=C3+$Z$10" }, // mixture
-          { true, true, true } },
-        { { "=C1+$Z$11", "=C2+$Z$12", "=C3+$Z$12" }, // mixture
-          { false, true, true } },
-        { { "=SUM(B1)",  "", "=SUM(B3)" },    // a gap
-          { false, false, false } },
-    };
-
-    m_pDoc->InsertTab( 0, "sheet" );
-
-    for (size_t i = 0; i < SAL_N_ELEMENTS(aGroupTests); ++i)
-    {
-        for (size_t j = 0; j < SAL_N_ELEMENTS(aGroupTests[0].pFormula); ++j)
-        {
-            OUString aFormula = OUString::createFromAscii(aGroupTests[i].pFormula[j]);
-            m_pDoc->SetString(0, static_cast<SCROW>(j), 0, aFormula);
-        }
-        m_pDoc->RebuildFormulaGroups();
-
-        for (size_t j = 0; j < SAL_N_ELEMENTS(aGroupTests[0].pFormula); ++j)
-        {
-            ScRefCellValue aCell;
-            aCell.assign(*m_pDoc, ScAddress(0, static_cast<SCROW>(j), 0));
-            if (aCell.isEmpty())
-            {
-                CPPUNIT_ASSERT_MESSAGE("invalid empty cell", !aGroupTests[i].bGroup[j]);
-                continue;
-            }
-            CPPUNIT_ASSERT_MESSAGE("Cell expected, but not there.", !aCell.isEmpty());
-            CPPUNIT_ASSERT_MESSAGE("Cell wrong type.",
-                                   aCell.meType == CELLTYPE_FORMULA);
-            ScFormulaCell *pCur = aCell.mpFormula;
-
-            if( !!pCur->GetCellGroup().get() ^ aGroupTests[i].bGroup[j] )
-            {
-                cout << "expected group test " << i << " at row " << j << " to be "
-                    << aGroupTests[i].bGroup[j] << " but is " << !!pCur->GetCellGroup().get() << endl;
-                CPPUNIT_FAIL("Failed");
-            }
-        }
-    }
-}
-
 void Test::testCondFormatINSDEL()
 {
     // fdo#62206
