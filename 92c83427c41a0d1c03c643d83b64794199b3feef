@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXn//+sg\u003d",
+        "filename": "xmloff/source/core/xmlexp.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 803,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2013-07-15T15:43:55Z",
+      "side": 1,
+      "message": "As per https://bugs.freedesktop.org/show_bug.cgi?id\u003d63690#c6 Eike wants RTL_LOGFILE_CONTEXT_AUTHOR killed without any replacement -- and yeah, that probably makes sense. Could you adjust?",
+      "revId": "92c83427c41a0d1c03c643d83b64794199b3feef",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
