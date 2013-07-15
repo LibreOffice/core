@@ -54,8 +54,6 @@ private:
     SvxLanguageBox*      pLanguageLB;
     CheckBox*            pExceptBtn;
     OKButton*            pOKBtn;
-    CancelButton*        pCancelBtn;
-    HelpButton*          pHelpBtn;
     ::com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XSpellChecker1 >     xSpell;
     ::com::sun::star::uno::Reference<
