@@ -14,6 +14,8 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    [TestFlight takeOff:@"cb645cf2-a557-481e-993a-6ad3aaeb06d0"];
+    
     // Override point for customization after application launch.
     /**
      * If ever we need some iOS6-only storyboard based features and we want to keep backward compatibility, we should uncomment these code to pick the right storyboard based on the existence on certains classes.

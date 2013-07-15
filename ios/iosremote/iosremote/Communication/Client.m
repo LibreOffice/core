@@ -221,7 +221,7 @@ int count = 0;
     if(self.inputStream == nil && self.outputStream == nil)
         return;
     [self stopConnectionTimeoutTimer];
-    NSLog(@"stream status i:%u o:%u", self.inputStream.streamStatus, self.outputStream.streamStatus);
+//    NSLog(@"stream status i:%u o:%u", self.inputStream.streamStatus, self.outputStream.streamStatus);
     if ([self.inputStream streamStatus] != NSStreamStatusClosed && [self.inputStream streamStatus] != NSStreamStatusError) {
 //        NSLog(@"ci");
         [self.inputStream close];

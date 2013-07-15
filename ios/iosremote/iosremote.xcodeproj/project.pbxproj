@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5711026C1794127E007D343B /* libTestFlight.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 571102681794127E007D343B /* libTestFlight.a */; };
+		5711026D1794127E007D343B /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 571102691794127E007D343B /* README.md */; };
+		5711026E1794127E007D343B /* release_notes.md in Resources */ = {isa = PBXBuildFile; fileRef = 5711026A1794127E007D343B /* release_notes.md */; };
+		571102701794128E007D343B /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 5711026F1794128E007D343B /* libz.dylib */; };
 		571BFAD1178AADA200EF1BDB /* more_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 571BFAD0178AADA200EF1BDB /* more_icon.png */; };
 		571D4807178B2F080063D93B /* timer_clear_btn.png in Resources */ = {isa = PBXBuildFile; fileRef = 571D4805178B2F080063D93B /* timer_clear_btn.png */; };
 		571D4808178B2F080063D93B /* timer_start_btn.png in Resources */ = {isa = PBXBuildFile; fileRef = 571D4806178B2F080063D93B /* timer_start_btn.png */; };
@@ -56,6 +60,11 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		571102681794127E007D343B /* libTestFlight.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libTestFlight.a; sourceTree = "<group>"; };
+		571102691794127E007D343B /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.md; sourceTree = "<group>"; };
+		5711026A1794127E007D343B /* release_notes.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = release_notes.md; sourceTree = "<group>"; };
+		5711026B1794127E007D343B /* TestFlight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestFlight.h; sourceTree = "<group>"; };
+		5711026F1794128E007D343B /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		571BFAD0178AADA200EF1BDB /* more_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = more_icon.png; path = iosremote/more_icon.png; sourceTree = "<group>"; };
 		571D4805178B2F080063D93B /* timer_clear_btn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = timer_clear_btn.png; path = iosremote/timer_clear_btn.png; sourceTree = "<group>"; };
 		571D4806178B2F080063D93B /* timer_start_btn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = timer_start_btn.png; path = iosremote/timer_start_btn.png; sourceTree = "<group>"; };
@@ -132,17 +141,30 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				571102701794128E007D343B /* libz.dylib in Frameworks */,
 				57DC7007178D84490050FC58 /* CoreMotion.framework in Frameworks */,
 				BE9EBD071765BF0800283FD2 /* CoreImage.framework in Frameworks */,
 				57C6E3F3175E06E800E8BC5F /* UIKit.framework in Frameworks */,
 				57C6E3F5175E06E800E8BC5F /* Foundation.framework in Frameworks */,
 				57C6E3F7175E06E800E8BC5F /* CoreGraphics.framework in Frameworks */,
+				5711026C1794127E007D343B /* libTestFlight.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		571102671794127E007D343B /* TestFlightSDK1.2.6 */ = {
+			isa = PBXGroup;
+			children = (
+				571102681794127E007D343B /* libTestFlight.a */,
+				571102691794127E007D343B /* README.md */,
+				5711026A1794127E007D343B /* release_notes.md */,
+				5711026B1794127E007D343B /* TestFlight.h */,
+			);
+			path = TestFlightSDK1.2.6;
+			sourceTree = "<group>";
+		};
 		571BFAD2178AB7BA00EF1BDB /* slideShow */ = {
 			isa = PBXGroup;
 			children = (
@@ -203,6 +225,8 @@
 		57C6E3E6175E06E800E8BC5F = {
 			isa = PBXGroup;
 			children = (
+				5711026F1794128E007D343B /* libz.dylib */,
+				571102671794127E007D343B /* TestFlightSDK1.2.6 */,
 				57DC7006178D84490050FC58 /* CoreMotion.framework */,
 				57DC7004178D82940050FC58 /* ic_launcher@2x.png */,
 				57DC7002178D82610050FC58 /* ic_launcher.png */,
@@ -371,6 +395,8 @@
 				57DC7003178D82610050FC58 /* ic_launcher.png in Resources */,
 				57DC7005178D82940050FC58 /* ic_launcher@2x.png in Resources */,
 				57DF0A85178FFFAB008B2D3D /* iPhone_autosize.storyboard in Resources */,
+				5711026D1794127E007D343B /* README.md in Resources */,
+				5711026E1794127E007D343B /* release_notes.md in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -492,6 +518,11 @@
 				GCC_PREFIX_HEADER = "iosremote/iosremote-Prefix.pch";
 				INFOPLIST_FILE = "iosremote/iosremote-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/../../../../../../Downloads/TestFlightSDK1.2.6\"",
+					"\"$(SRCROOT)/TestFlightSDK1.2.6\"",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
@@ -505,6 +536,11 @@
 				GCC_PREFIX_HEADER = "iosremote/iosremote-Prefix.pch";
 				INFOPLIST_FILE = "iosremote/iosremote-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/../../../../../../Downloads/TestFlightSDK1.2.6\"",
+					"\"$(SRCROOT)/TestFlightSDK1.2.6\"",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
