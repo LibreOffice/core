@@ -26,7 +26,6 @@
 #include <com/sun/star/sdbc/XRowSet.hpp>
 #include <com/sun/star/sdbc/XResultSetMetaData.hpp>
 #include "IUpdateHelper.hxx"
-#include <rtl/logfile.hxx>
 
 namespace dbaui
 {
@@ -93,37 +92,30 @@ namespace dbaui
         virtual ~OParameterUpdateHelper() {}
         virtual void updateString(sal_Int32 _nPos, const OUString& _sValue)
         {
-            RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OParameterUpdateHelper::updateString" );
             m_xParameters->setString(_nPos, _sValue);
         }
         virtual void updateDouble(sal_Int32 _nPos,const double& _nValue)
         {
-            RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OParameterUpdateHelper::updateDouble" );
             m_xParameters->setDouble(_nPos, _nValue);
         }
         virtual void updateDate(sal_Int32 _nPos,const ::com::sun::star::util::Date& _nValue)
         {
-            RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OParameterUpdateHelper::updateDouble" );
             m_xParameters->setDate(_nPos, _nValue);
         }
         virtual void updateTime(sal_Int32 _nPos,const ::com::sun::star::util::Time& _nValue)
         {
-            RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OParameterUpdateHelper::updateDouble" );
             m_xParameters->setTime(_nPos, _nValue);
         }
         virtual void updateTimestamp(sal_Int32 _nPos,const ::com::sun::star::util::DateTime& _nValue)
         {
-            RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OParameterUpdateHelper::updateDouble" );
             m_xParameters->setTimestamp(_nPos, _nValue);
         }
         virtual void updateInt(sal_Int32 _nPos,const sal_Int32& _nValue)
         {
-            RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OParameterUpdateHelper::updateInt" );
             m_xParameters->setInt(_nPos, _nValue);
         }
         virtual void updateNull(sal_Int32 _nPos, ::sal_Int32 sqlType)
         {
-            RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OParameterUpdateHelper::updateNull" );
             m_xParameters->setNull(_nPos,sqlType);
         }
         virtual void moveToInsertRow()
@@ -131,7 +123,6 @@ namespace dbaui
         }
         virtual void insertRow()
         {
-            RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OParameterUpdateHelper::insertRow" );
             m_xPrepared->executeUpdate();
         }
     };
