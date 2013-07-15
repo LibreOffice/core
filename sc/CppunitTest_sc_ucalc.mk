@@ -13,6 +13,7 @@ $(eval $(call gb_CppunitTest_CppunitTest,sc_ucalc))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,sc_ucalc, \
     sc/qa/unit/ucalc \
+    sc/qa/unit/ucalc_formula \
     sc/qa/unit/ucalc_pivottable \
     sc/qa/unit/ucalc_sharedformula \
 ))
