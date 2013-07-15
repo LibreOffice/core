@@ -48,6 +48,7 @@
 #include <com/sun/star/drawing/framework/XControllerManager.hpp>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
+#include <com/sun/star/presentation/AnimationEffect.hpp>
 #include <com/sun/star/presentation/XPresentation.hpp>
 #include <com/sun/star/presentation/XPresentationSupplier.hpp>
 #include <com/sun/star/rendering/CompositeOperation.hpp>
@@ -575,6 +576,47 @@ Reference<drawing::framework::XConfigurationController>
 Reference<drawing::XDrawPage> PresenterController::GetCurrentSlide (void) const
 {
     return mxCurrentSlide;
+}
+
+bool PresenterController::HasTransition (Reference<drawing::XDrawPage>& rxPage)
+{
+    bool bTransition = false;
+    sal_uInt16 aTransitionType = 0;
+    if( rxPage.is() )
+    {
+        Reference<beans::XPropertySet> xSlidePropertySet (rxPage, UNO_QUERY);
+        xSlidePropertySet->getPropertyValue("TransitionType") >>= aTransitionType;
+        if( aTransitionType > 0 )
+        {
+            bTransition = true;
+        }
+    }
+    return bTransition;
+}
+
+bool PresenterController::HasCustomAnimation (Reference<drawing::XDrawPage>& rxPage)
+{
+    bool bCustomAnimation = false;
+    presentation::AnimationEffect aEffect = presentation::AnimationEffect_NONE;
+    presentation::AnimationEffect aTextEffect = presentation::AnimationEffect_NONE;
+    if( rxPage.is() )
+    {
+        sal_uInt32 i, nCount = rxPage->getCount();
+        for ( i = 0; i < nCount; i++ )
+        {
+            Reference<drawing::XShape> xShape(rxPage->getByIndex(i), UNO_QUERY);
+            Reference<beans::XPropertySet> xShapePropertySet(xShape, UNO_QUERY);
+            xShapePropertySet->getPropertyValue("Effect") >>= aEffect;
+            xShapePropertySet->getPropertyValue("TextEffect") >>= aTextEffect;
+            if( aEffect != presentation::AnimationEffect_NONE ||
+                aTextEffect != presentation::AnimationEffect_NONE )
+            {
+                bCustomAnimation = true;
+                break;
+            }
+        }
+    }
+    return bCustomAnimation;
 }
 
 void PresenterController::SetAccessibilityActiveState (const bool bIsActive)

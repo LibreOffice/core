@@ -123,6 +123,7 @@ private:
         size.
     */
     css::uno::Reference<css::rendering::XBitmap> mxPreview;
+    boost::shared_ptr<PresenterBitmapContainer> mpBitmaps;
 
     /**  The current slide for which a preview is displayed.  This may or
         may not be the same as the current slide of the PresenterView.

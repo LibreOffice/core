@@ -21,6 +21,8 @@
 #include "PresenterCanvasHelper.hxx"
 #include "PresenterGeometryHelper.hxx"
 #include "PresenterPaintManager.hxx"
+#include "PresenterScrollBar.hxx"
+#include "PresenterBitmapContainer.hxx"
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/awt/XWindowPeer.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -96,7 +98,11 @@ PresenterSlidePreview::PresenterSlidePreview (
                 OUString("com.sun.star.drawing.SlideRenderer"),
                 rxContext),
             UNO_QUERY);
-
+    mpBitmaps.reset(new PresenterBitmapContainer(
+            OUString("PresenterScreenSettings/ScrollBar/Bitmaps"),
+            ::boost::shared_ptr<PresenterBitmapContainer>(),
+            rxContext,
+            mxCanvas));
     Resize();
 }
 
@@ -253,6 +259,14 @@ void PresenterSlidePreview::Paint (const awt::Rectangle& rBoundingBox)
     // Make sure that a preview in the correct size exists.
     awt::Rectangle aWindowBox (mxWindow->getPosSize());
 
+    bool bCustomAnimation = false;
+    bool bTransition = false;
+    if( mxCurrentSlide.is() )
+    {
+        bCustomAnimation = mpPresenterController->HasCustomAnimation(mxCurrentSlide);
+        bTransition = mpPresenterController->HasTransition(mxCurrentSlide);
+    }
+
     if ( ! mxPreview.is() && mxCurrentSlide.is())
     {
         // Create a new preview bitmap.
@@ -311,6 +325,30 @@ void PresenterSlidePreview::Paint (const awt::Rectangle& rBoundingBox)
     if (mxPreview.is())
     {
         mxCanvas->drawBitmap(mxPreview, aViewState, aRenderState);
+        if( bTransition )
+        {
+            const awt::Rectangle aTransitionPreviewBox(5, aWindowBox.Height-20, 0, 0);
+            SharedBitmapDescriptor aTransitionDescriptor = mpBitmaps->GetBitmap("Transition");
+            Reference<rendering::XBitmap> xTransitionIcon (aTransitionDescriptor->GetNormalBitmap());
+            rendering::RenderState aTransitionRenderState (
+                geometry::AffineMatrix2D(1, 0, aTransitionPreviewBox.X, 0, 1, aTransitionPreviewBox.Y),
+                NULL,
+                aBackgroundColor,
+                rendering::CompositeOperation::SOURCE);
+            mxCanvas->drawBitmap(xTransitionIcon, aViewState, aTransitionRenderState);
+        }
+        if( bCustomAnimation )
+        {
+            const awt::Rectangle aAnimationPreviewBox(5, aWindowBox.Height-40, 0, 0);
+            SharedBitmapDescriptor aAnimationDescriptor = mpBitmaps->GetBitmap("Animation");
+            Reference<rendering::XBitmap> xAnimationIcon (aAnimationDescriptor->GetNormalBitmap());
+            rendering::RenderState aAnimationRenderState (
+                geometry::AffineMatrix2D(1, 0, aAnimationPreviewBox.X, 0, 1, aAnimationPreviewBox.Y),
+                NULL,
+                aBackgroundColor,
+                rendering::CompositeOperation::SOURCE);
+            mxCanvas->drawBitmap(xAnimationIcon, aViewState, aAnimationRenderState);
+        }
     }
     else
     {

@@ -903,6 +903,17 @@ void PresenterSlideSorter::PaintPreview (
                                           mpLayout->GetWindowPosition(
                                                                       mpLayout->GetPoint(nSlideIndex, isRTL?1:-1, -1)));
 
+    PresenterBitmapContainer aContainer (
+        "PresenterScreenSettings/ScrollBar/Bitmaps",
+        ::boost::shared_ptr<PresenterBitmapContainer>(),
+        mxComponentContext,
+        rxCanvas);
+    Reference<container::XIndexAccess> xIndexAccess(mxSlideShowController, UNO_QUERY);
+    Reference<drawing::XDrawPage> xPage = Reference<drawing::XDrawPage>(
+        xIndexAccess->getByIndex(nSlideIndex), UNO_QUERY);
+    bool bTransition = mpPresenterController->HasTransition(xPage);
+    bool bCustomAnimation = mpPresenterController->HasCustomAnimation(xPage);
+
     // Create clip rectangle as intersection of the current update area and
     // the bounding box of all previews.
     geometry::RealRectangle2D aBoundingBox (mpLayout->maBoundingBox);
@@ -950,6 +961,34 @@ void PresenterSlideSorter::PaintPreview (
         if (aSize.Width > 0 && aSize.Height > 0)
         {
             rxCanvas->drawBitmap(xPreview, aViewState, aRenderState);
+            if( bCustomAnimation )
+            {
+                const awt::Rectangle aAnimationPreviewBox(aTopLeft.X+3, aTopLeft.Y+aSize.Height-40, 0, 0);
+                SharedBitmapDescriptor aAnimationDescriptor = aContainer.GetBitmap("Animation");
+                Reference<rendering::XBitmap> xAnimationIcon (aAnimationDescriptor->GetNormalBitmap());
+                rendering::RenderState aAnimationRenderState (
+                    geometry::AffineMatrix2D(
+                    1, 0, aAnimationPreviewBox.X,
+                    0, 1, aAnimationPreviewBox.Y),
+                    NULL,
+                    Sequence<double>(4),
+                    rendering::CompositeOperation::SOURCE);
+                    rxCanvas->drawBitmap(xAnimationIcon, aViewState, aAnimationRenderState);
+            }
+            if( bTransition )
+            {
+                const awt::Rectangle aTransitionPreviewBox(aTopLeft.X+3, aTopLeft.Y+aSize.Height-20, 0, 0);
+                SharedBitmapDescriptor aTransitionDescriptor = aContainer.GetBitmap("Transition");
+                Reference<rendering::XBitmap> xTransitionIcon (aTransitionDescriptor->GetNormalBitmap());
+                rendering::RenderState aTransitionRenderState (
+                    geometry::AffineMatrix2D(
+                    1, 0, aTransitionPreviewBox.X,
+                    0, 1, aTransitionPreviewBox.Y),
+                    NULL,
+                    Sequence<double>(4),
+                    rendering::CompositeOperation::SOURCE);
+                    rxCanvas->drawBitmap(xTransitionIcon, aViewState, aTransitionRenderState);
+            }
         }
     }
 
