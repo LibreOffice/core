@@ -19,7 +19,7 @@ module com {  module sun {  module star {  module util {
 
     @since LibreOffice 4.1
  */
-struct DateTimeWithTimeZone
+struct DateTimeWithTimezone
 {
     /** the date and time (in TimeZone)
     */
