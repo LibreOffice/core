@@ -82,41 +82,29 @@ static CDE_RESULT cmpDicEntry_Impl( const String &rText1, const String &rText2 )
 SvxNewDictionaryDialog::SvxNewDictionaryDialog( Window* pParent,
         Reference< XSpellChecker1 >  &xSpl ) :
 
-    ModalDialog( pParent, CUI_RES( RID_SFXDLG_NEWDICT ) ),
+    ModalDialog( pParent, "OptNewDictionaryDialog" , "cui/ui/optnewdictionarydialog.ui" ),
 
-    aNewDictBox     ( this, CUI_RES( GB_NEWDICT ) ),
-    aNameText       ( this, CUI_RES( FT_DICTNAME ) ),
-    aNameEdit       ( this, CUI_RES( ED_DICTNAME ) ),
-    aLanguageText   ( this, CUI_RES( FT_DICTLANG ) ),
-    aLanguageLB     ( this, CUI_RES( LB_DICTLANG ) ),
-    aExceptBtn      ( this, CUI_RES( BTN_EXCEPT ) ),
-    aOKBtn          ( this, CUI_RES( BTN_NEWDICT_OK ) ),
-    aCancelBtn      ( this, CUI_RES( BTN_NEWDICT_ESC ) ),
-    aHelpBtn        ( this, CUI_RES( BTN_NEWDICT_HLP ) ),
     xSpell( xSpl )
 {
+    get(pNameEdit,"nameedit");
+    get(pLanguageLB,"language");
+    get(pExceptBtn,"except");
+    get(pOKBtn,"ok");
     // install handler
-    aNameEdit.SetModifyHdl(
+    pNameEdit->SetModifyHdl(
         LINK( this, SvxNewDictionaryDialog, ModifyHdl_Impl ) );
-    aOKBtn.SetClickHdl( LINK( this, SvxNewDictionaryDialog, OKHdl_Impl ) );
+    pOKBtn->SetClickHdl( LINK( this, SvxNewDictionaryDialog, OKHdl_Impl ) );
 
     // display languages
-    aLanguageLB.SetLanguageList( LANG_LIST_ALL, sal_True, sal_True );
-    aLanguageLB.SelectEntryPos(0);
-
-    aNameText.SetAccessibleRelationMemberOf( &aNewDictBox );
-    aNameEdit.SetAccessibleRelationMemberOf( &aNewDictBox );
-    aLanguageText.SetAccessibleRelationMemberOf( &aNewDictBox );
-    aLanguageLB.SetAccessibleRelationMemberOf( &aNewDictBox );
-
-    FreeResource();
+    pLanguageLB->SetLanguageList( LANG_LIST_ALL, sal_True, sal_True );
+    pLanguageLB->SelectEntryPos(0);
 }
 
 // -----------------------------------------------------------------------
 
 IMPL_LINK_NOARG(SvxNewDictionaryDialog, OKHdl_Impl)
 {
-    OUString sDict = comphelper::string::stripEnd(aNameEdit.GetText(), ' ');
+    OUString sDict = comphelper::string::stripEnd(pNameEdit->GetText(), ' ');
     // add extension for personal dictionaries
     sDict += ".dic";
 
@@ -138,16 +126,16 @@ IMPL_LINK_NOARG(SvxNewDictionaryDialog, OKHdl_Impl)
     {
         // duplicate names?
         InfoBox( this, CUI_RESSTR( RID_SVXSTR_OPT_DOUBLE_DICTS ) ).Execute();
-        aNameEdit.GrabFocus();
+        pNameEdit->GrabFocus();
         return 0;
     }
 
     // create and add
-    sal_uInt16 nLang = aLanguageLB.GetSelectLanguage();
+    sal_uInt16 nLang = pLanguageLB->GetSelectLanguage();
     try
     {
         // create new dictionary
-        DictionaryType eType = aExceptBtn.IsChecked() ?
+        DictionaryType eType = pExceptBtn->IsChecked() ?
                 DictionaryType_NEGATIVE : DictionaryType_POSITIVE;
         if (xDicList.is())
         {
@@ -192,10 +180,10 @@ IMPL_LINK_NOARG(SvxNewDictionaryDialog, OKHdl_Impl)
 
 IMPL_LINK_NOARG_INLINE_START(SvxNewDictionaryDialog, ModifyHdl_Impl)
 {
-    if ( !aNameEdit.GetText().isEmpty() )
-        aOKBtn.Enable();
+    if ( !pNameEdit->GetText().isEmpty() )
+        pOKBtn->Enable();
     else
-        aOKBtn.Disable();
+        pOKBtn->Disable();
     return 0;
 }
 IMPL_LINK_NOARG_INLINE_END(SvxNewDictionaryDialog, ModifyHdl_Impl)

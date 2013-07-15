@@ -55,6 +55,7 @@ $(eval $(call gb_UIConfig_add_uifiles,cui,\
 	cui/uiconfig/ui/optjsearchpage \
 	cui/uiconfig/ui/optlanguagespage \
 	cui/uiconfig/ui/optmemorypage \
+	cui/uiconfig/ui/optnewdictionarydialog \
 	cui/uiconfig/ui/optonlineupdatepage \
 	cui/uiconfig/ui/optpathspage \
 	cui/uiconfig/ui/optproxypage \
