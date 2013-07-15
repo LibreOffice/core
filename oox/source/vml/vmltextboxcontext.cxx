@@ -171,18 +171,27 @@ TextBoxContext::TextBoxContext( ContextHandler2Helper& rParent, TextBox& rTextBo
     {
         OUString inset = rAttribs.getString( XML_inset ).get();
         OUString value;
-        ConversionHelper::separatePair( value, inset, inset, ',' );
+        OUString remainingStr;
+
+        ConversionHelper::separatePair( value, remainingStr, inset, ',' );
         rTextBox.borderDistanceLeft = ConversionHelper::decodeMeasureToHmm( graphicHelper,
             value.isEmpty() ? "0.1in" : value, 0, false, false );
-        ConversionHelper::separatePair( value, inset, inset, ',' );
+
+        inset = remainingStr;
+        ConversionHelper::separatePair( value, remainingStr, inset, ',' );
         rTextBox.borderDistanceTop = ConversionHelper::decodeMeasureToHmm( graphicHelper,
             value.isEmpty() ? "0.05in" : value, 0, false, false );
-        ConversionHelper::separatePair( value, inset, inset, ',' );
+
+        inset = remainingStr;
+        ConversionHelper::separatePair( value, remainingStr, inset, ',' );
         rTextBox.borderDistanceRight = ConversionHelper::decodeMeasureToHmm( graphicHelper,
             value.isEmpty() ? "0.1in" : value, 0, false, false );
-        ConversionHelper::separatePair( value, inset, inset, ',' );
+
+        inset = remainingStr;
+        ConversionHelper::separatePair( value, remainingStr, inset, ',' );
         rTextBox.borderDistanceBottom = ConversionHelper::decodeMeasureToHmm( graphicHelper,
             value.isEmpty() ? "0.05in" : value, 0, false, false );
+
         rTextBox.borderDistanceSet = true;
     }
 

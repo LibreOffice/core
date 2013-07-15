@@ -95,6 +95,7 @@ public:
     void testFdo66773();
     void testFdo58577();
     void testBnc581614();
+    void testFdo66929();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -160,6 +161,7 @@ void Test::run()
         {"fdo66773.docx", &Test::testFdo66773},
         {"fdo58577.odt", &Test::testFdo58577},
         {"bnc581614.doc", &Test::testBnc581614},
+        {"fdo66929.docx", &Test::testFdo66929},
     };
     // Don't test the first import of these, for some reason those tests fail
     const char* aBlacklist[] = {
@@ -951,6 +953,20 @@ void Test::testBnc581614()
     uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xFrame(xDraws->getByIndex(0), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_NONE, getProperty<drawing::FillStyle>(xFrame, "FillStyle"));
+}
+
+void Test::testFdo66929()
+{
+    // The problem was that the default 'inset' attribute of the 'textbox' node was exported incorrectly.
+    // A node like '<v:textbox inset="0">' was exported back as '<v:textbox inset="0pt,0pt,0pt,0pt">'
+    // This is wrong because the original node denotes a specific 'left' inset, and a default 'top','right','bottom' inset
+    uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xFrame(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL( sal_Int32( 0 )  , getProperty< sal_Int32 >( xFrame, "LeftBorderDistance" ) );
+    CPPUNIT_ASSERT_EQUAL( sal_Int32( 127 ), getProperty< sal_Int32 >( xFrame, "TopBorderDistance" ) );
+    CPPUNIT_ASSERT_EQUAL( sal_Int32( 254 ), getProperty< sal_Int32 >( xFrame, "RightBorderDistance" ) );
+    CPPUNIT_ASSERT_EQUAL( sal_Int32( 127 ), getProperty< sal_Int32 >( xFrame, "BottomBorderDistance" ) );
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
