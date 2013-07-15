@@ -3030,16 +3030,8 @@ uno::Sequence< beans::PropertyState > SAL_CALL SvxShape::getPropertyStates( cons
     uno::Sequence< beans::PropertyState > aRet( nCount );
     beans::PropertyState* pState = aRet.getArray();
 
-    if( mpImpl->mpMaster )
-    {
-        for( sal_Int32 nIdx = 0; nIdx < nCount; nIdx++ )
-            pState[nIdx] = mpImpl->mpMaster->getPropertyState( pNames[nIdx] );
-    }
-    else
-    {
-        for( sal_Int32 nIdx = 0; nIdx < nCount; nIdx++ )
-            pState[nIdx] = _getPropertyState( pNames[nIdx] );
-    }
+    for( sal_Int32 nIdx = 0; nIdx < nCount; nIdx++ )
+        pState[nIdx] = getPropertyState( pNames[nIdx] );
 
     return aRet;
 }
