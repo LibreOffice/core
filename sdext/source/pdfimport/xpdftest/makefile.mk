@@ -52,9 +52,9 @@ $(MISC)$/test_0_succeeded: $(BIN)$/xpdfimport$(EXECPOST) binary_0_out.def text_0
 # - the PDF import extension is not part of the AOO build #i118592#
 # - the test files are too huge (75MB + 5MB + 500kB) to remain in the tree
 # The test files are still available at
-#   http://svn.apache.org/repos/asf/openoffice/trunk/main/sdext/source/pdfimport/xpdftest/binary_1_out.def
-#   http://svn.apache.org/repos/asf/openoffice/trunk/main/sdext/source/pdfimport/xpdftest/text_1_out.def
-#   http://svn.apache.org/repos/asf/openoffice/trunk/main/sdext/source/pdfimport/xpdftest/book.pdf
+#   http://svn.apache.org/repos/asf/!svn/bc/1500000/openoffice/tags/AOO341/main/sdext/source/pdfimport/xpdftest/binary_1_out.def
+#   http://svn.apache.org/repos/asf/!svn/bc/1500000/openoffice/tags/AOO341/main/sdext/source/pdfimport/xpdftest/text_1_out.def
+#   http://svn.apache.org/repos/asf/!svn/bc/1500000/openoffice/tags/AOO341/main/sdext/source/pdfimport/xpdftest/book.pdf
 # if you download them you can enable the test below:
 
 #$(MISC)$/test_1_succeeded: $(BIN)$/xpdfimport$(EXECPOST) binary_1_out.def text_1_out.def book.pdf
