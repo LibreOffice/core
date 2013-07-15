@@ -29,7 +29,7 @@ namespace connectivity
     //==========================================================================
     /** special node for avoiding memory leaks
     */
-    class OSQLInternalNode : public OSQLParseNode
+    class OOO_DLLPUBLIC_DBTOOLS OSQLInternalNode : public OSQLParseNode
     {
     public:
         OSQLInternalNode(const sal_Char* pNewValue,

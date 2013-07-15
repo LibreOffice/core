@@ -31,7 +31,9 @@
 //==================================================================================
 //= various typedefs
 //==================================================================================
+namespace {
 DECLARE_STL_VECTOR(::com::sun::star::uno::WeakReferenceHelper, OWeakRefArray);
+}
 
 //==================================================================================
 //= OSubComponent - a component which holds a hard ref to it's parent
