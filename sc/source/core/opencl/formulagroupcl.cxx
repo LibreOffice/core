@@ -57,9 +57,43 @@ public:
                            const ScFormulaCellGroupRef& xGroup, ScTokenArray& rCode);
 };
 
-ScMatrixRef FormulaGroupInterpreterOpenCL::inverseMatrix(const ScMatrix& /* rMat */)
+ScMatrixRef FormulaGroupInterpreterOpenCL::inverseMatrix(const ScMatrix& rMat)
 {
-    return ScMatrixRef();
+    SCSIZE nC, nR;
+    rMat.GetDimensions(nC, nR);
+    if (nC != nR || nC == 0)
+        // Input matrix must be square. Return an empty matrix on failure and
+        // the caller will calculate it via CPU.
+        return ScMatrixRef();
+
+    // This vector will contain a series of doubles from the first column to
+    // the last, chained together in a single array.
+    std::vector<double> aDoubles;
+    rMat.GetDoubleArray(aDoubles);
+
+    // TODO: Inverse this matrix and put the result back into xInv. Right now,
+    // I'll just put the original, non-inversed matrix values back, just to
+    // demonstrate how to put the values back after inversion.  There are two
+    // ways to put the values back (depending on what the GPU output is).
+    ScMatrixRef xInv(new ScMatrix(nR, nR, 0.0));
+
+#if 0
+    // One way is to put the whole value as one array. This method assumes
+    // that the array size equals column x row, and is oriented column-wise.
+    // This method is slightly more efficient than the second, but I wouldn't
+    // expect too much of a difference.
+    xInv->PutDouble(&aDoubles[0], aDoubles.size(), 0, 0);
+#else
+    // Another way is to put the values one column at a time.
+    const double* p = &aDoubles[0];
+    for (SCSIZE i = 0; i < nC; ++i)
+    {
+        xInv->PutDouble(p, nR, i, 0);
+        p += nR;
+    }
+#endif
+
+    return xInv;
 }
 
 bool FormulaGroupInterpreterOpenCL::interpret(ScDocument& rDoc, const ScAddress& rTopPos,
