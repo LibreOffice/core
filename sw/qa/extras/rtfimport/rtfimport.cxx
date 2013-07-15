@@ -18,6 +18,7 @@
 #include <com/sun/star/style/CaseMap.hpp>
 #include <com/sun/star/style/LineSpacing.hpp>
 #include <com/sun/star/style/LineSpacingMode.hpp>
+#include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/table/BorderLineStyle.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
@@ -153,6 +154,7 @@ public:
     void testFdo39001();
     void testGroupshape();
     void testFdo66565();
+    void testFdo54900();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -291,6 +293,7 @@ void Test::run()
         {"fdo39001.rtf", &Test::testFdo39001},
         {"groupshape.rtf", &Test::testGroupshape},
         {"fdo66565.rtf", &Test::testFdo66565},
+        {"fdo54900.rtf", &Test::testFdo54900},
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -1417,6 +1420,16 @@ void Test::testFdo66565()
     // Cell width of A2 was 554, should be 453/14846*10000
     uno::Reference<table::XTableRows> xTableRows(xTable->getRows(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int16(304), getProperty< uno::Sequence<text::TableColumnSeparator> >(xTableRows->getByIndex(1), "TableColumnSeparators")[0].Position);
+}
+
+void Test::testFdo54900()
+{
+    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(), uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xCell(xTable->getCellByName("A1"), uno::UNO_QUERY);
+    // Paragraph was aligned to left, should be center.
+    CPPUNIT_ASSERT_EQUAL(style::ParagraphAdjust_CENTER, static_cast<style::ParagraphAdjust>(getProperty<sal_Int16>(getParagraphOfText(1, xCell->getText()), "ParaAdjust")));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

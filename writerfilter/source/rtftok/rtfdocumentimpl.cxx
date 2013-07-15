@@ -2027,6 +2027,7 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
     {
         RTFValue::Pointer_t pValue(new RTFValue(nParam));
         m_aStates.top().aParagraphSprms.set(NS_sprm::LN_PJc, pValue);
+        m_bNeedPap = true;
         return 0;
     }
 
