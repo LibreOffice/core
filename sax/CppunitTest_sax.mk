@@ -14,6 +14,8 @@ $(eval $(call gb_CppunitTest_use_api,sax_cpputest,\
     udkapi \
 ))
 
+$(eval $(call gb_CppunitTest_use_external,sax_cpputest,boost_headers))
+
 $(eval $(call gb_CppunitTest_use_libraries,sax_cpputest, \
     sax \
     sal \
