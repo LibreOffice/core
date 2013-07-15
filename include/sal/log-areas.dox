@@ -290,15 +290,18 @@ certain functionality.
 
 @li @c vcl
 @li @c vcl.a11y
+@li @c vcl.app
 @li @c vcl.atsui - ATSUI (obsolete) -using code for Mac OS X
 @li @c vcl.control
 @li @c vcl.coretext - CoreText-using code for Mac OS X and iOS
 @li @c vcl.emf - EMF/EMF+ processing
+@li @c vcl.filter
 @li @c vcl.fonts - font-specific code
 @li @c vcl.gdi - the GDI part of VCL, devices, bitmaps, etc.
 @li @c vcl.gtk - Gtk+ 2/3 plugin
 @li @c vcl.harfbuzz - HarfBuzz text layout
 @li @c vcl.headless - bitmap-based backend
+@li @c vcl.helper
 @li @c vcl.kde - KDE
 @li @c vcl.kde4 - KDE4
 @li @c vcl.layout - Widget layout
