@@ -504,11 +504,11 @@ bool ScToken::TextEqual( const FormulaToken& _rToken ) const
         return aTemp1.Ref1.nCol   == aTemp2.Ref1.nCol   &&
                aTemp1.Ref1.nRow   == aTemp2.Ref1.nRow   &&
                aTemp1.Ref1.nTab   == aTemp2.Ref1.nTab   &&
-               aTemp1.Ref1.bFlags == aTemp2.Ref1.bFlags &&
+               aTemp1.Ref1.mnFlagValue == aTemp2.Ref1.mnFlagValue &&
                aTemp1.Ref2.nCol   == aTemp2.Ref2.nCol   &&
                aTemp1.Ref2.nRow   == aTemp2.Ref2.nRow   &&
                aTemp1.Ref2.nTab   == aTemp2.Ref2.nTab   &&
-               aTemp1.Ref2.bFlags == aTemp2.Ref2.bFlags;
+               aTemp1.Ref2.mnFlagValue == aTemp2.Ref2.mnFlagValue;
     }
     else
         return *this == _rToken;     // else normal operator==

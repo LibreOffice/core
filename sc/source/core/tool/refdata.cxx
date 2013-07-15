@@ -19,7 +19,7 @@
 
 #include "refdata.hxx"
 
-sal_Bool ScSingleRefData::IsDeleted() const
+bool ScSingleRefData::IsDeleted() const
 {
     return IsColDeleted() || IsRowDeleted() || IsTabDeleted();
 }
@@ -86,9 +86,9 @@ void ScSingleRefData::CalcAbsIfRel( const ScAddress& rPos )
 
 
 
-sal_Bool ScSingleRefData::operator==( const ScSingleRefData& r ) const
+bool ScSingleRefData::operator==( const ScSingleRefData& r ) const
 {
-    return bFlags == r.bFlags &&
+    return mnFlagValue == r.mnFlagValue &&
         (Flags.bColRel ? nRelCol == r.nRelCol : nCol == r.nCol) &&
         (Flags.bRowRel ? nRelRow == r.nRelRow : nRow == r.nRow) &&
         (Flags.bTabRel ? nRelTab == r.nRelTab : nTab == r.nTab);
@@ -104,7 +104,7 @@ static void lcl_putInOrder( ScSingleRefData & rRef1, ScSingleRefData & rRef2 )
     SCCOL nCol1, nCol2;
     SCROW nRow1, nRow2;
     SCTAB nTab1, nTab2;
-    sal_Bool bTmp;
+    bool bTmp;
     sal_uInt8 nRelState1, nRelState2;
     if ( rRef1.Flags.bRelName )
         nRelState1 =
