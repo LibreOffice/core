@@ -432,8 +432,8 @@ public:
     const String&   GetCorrectedFormula() { return aCorrectedFormula; }
 
     // Use convention from this->aPos by default
-    ScTokenArray* CompileString( const String& rFormula );
-    ScTokenArray* CompileString( const String& rFormula, const String& rFormulaNmsp );
+    ScTokenArray* CompileString( const OUString& rFormula );
+    ScTokenArray* CompileString( const OUString& rFormula, const OUString& rFormulaNmsp );
     const ScDocument* GetDoc() const { return pDoc; }
     const ScAddress& GetPos() const { return aPos; }
 

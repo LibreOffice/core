@@ -11,6 +11,12 @@
 #include "markdata.hxx"
 #include "calcconfig.hxx"
 #include "interpre.hxx"
+#include "compiler.hxx"
+#include "tokenarray.hxx"
+
+#include <boost/scoped_ptr.hpp>
+
+using namespace formula;
 
 void Test::testFormulaHashAndTag()
 {
@@ -101,6 +107,36 @@ void Test::testFormulaHashAndTag()
     }
 
     m_pDoc->DeleteTab(0);
+}
+
+void Test::testFormulaCompiler()
+{
+    struct {
+        const char* pInput; FormulaGrammar::Grammar eInputGram;
+        const char* pOutput; FormulaGrammar::Grammar eOutputGram;
+    } aTests[] = {
+        { "=B1-$C2+D$3-$E$4", FormulaGrammar::GRAM_NATIVE, "[.B1]-[.$C2]+[.D$3]-[.$E$4]", FormulaGrammar::GRAM_ODFF },
+    };
+
+    for (size_t i = 0, n = SAL_N_ELEMENTS(aTests); i < n; ++i)
+    {
+        boost::scoped_ptr<ScTokenArray> pArray;
+        {
+            ScCompiler aComp(m_pDoc, ScAddress());
+            aComp.SetGrammar(aTests[i].eInputGram);
+            pArray.reset(aComp.CompileString(OUString::createFromAscii(aTests[i].pInput)));
+            CPPUNIT_ASSERT_MESSAGE("Token array shouldn't be NULL!", pArray.get());
+        }
+
+        {
+            ScCompiler aComp(m_pDoc, ScAddress(), *pArray);
+            aComp.SetGrammar(aTests[i].eOutputGram);
+            OUStringBuffer aBuf;
+            aComp.CreateStringFromTokenArray(aBuf);
+            OUString aFormula = aBuf.makeStringAndClear();
+            CPPUNIT_ASSERT_EQUAL(OUString::createFromAscii(aTests[i].pOutput), aFormula);
+        }
+    }
 }
 
 void Test::testFuncSUM()

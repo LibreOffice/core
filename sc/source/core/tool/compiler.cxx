@@ -3714,7 +3714,7 @@ public:
 
 }
 
-ScTokenArray* ScCompiler::CompileString( const String& rFormula )
+ScTokenArray* ScCompiler::CompileString( const OUString& rFormula )
 {
     OSL_ENSURE( meGrammar != FormulaGrammar::GRAM_EXTERNAL, "ScCompiler::CompileString - unexpected grammar GRAM_EXTERNAL" );
     if( meGrammar == FormulaGrammar::GRAM_EXTERNAL )
@@ -3755,8 +3755,8 @@ ScTokenArray* ScCompiler::CompileString( const String& rFormula )
     bool bPODF = FormulaGrammar::isPODF( meGrammar);
     const size_t nAlloc = 512;
     FunctionStack aFuncs[ nAlloc ];
-    FunctionStack* pFunctionStack = (bPODF && rFormula.Len() > nAlloc ?
-            new FunctionStack[ rFormula.Len() ] : &aFuncs[0]);
+    FunctionStack* pFunctionStack =
+        (bPODF && static_cast<size_t>(rFormula.getLength()) > nAlloc ? new FunctionStack[rFormula.getLength()] : &aFuncs[0]);
     pFunctionStack[0].eOp = ocNone;
     pFunctionStack[0].nPar = 0;
     size_t nFunction = 0;
@@ -3935,9 +3935,9 @@ ScTokenArray* ScCompiler::CompileString( const String& rFormula )
 }
 
 
-ScTokenArray* ScCompiler::CompileString( const String& rFormula, const String& rFormulaNmsp )
+ScTokenArray* ScCompiler::CompileString( const OUString& rFormula, const OUString& rFormulaNmsp )
 {
-    OSL_ENSURE( (GetGrammar() == FormulaGrammar::GRAM_EXTERNAL) || (rFormulaNmsp.Len() == 0),
+    OSL_ENSURE( (GetGrammar() == FormulaGrammar::GRAM_EXTERNAL) || rFormulaNmsp.isEmpty(),
         "ScCompiler::CompileString - unexpected formula namespace for internal grammar" );
     if( GetGrammar() == FormulaGrammar::GRAM_EXTERNAL ) try
     {
