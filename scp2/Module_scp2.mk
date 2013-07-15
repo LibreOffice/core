@@ -17,7 +17,9 @@ $(eval $(call gb_Module_add_targets,scp2,\
 	InstallModule_calc \
 	InstallModule_draw \
 	InstallModule_extensions \
-	InstallModule_firebird \
+	$(if $(filter TRUE,$(ENABLE_FIREBIRD_SDBC)),\
+		InstallModule_firebird \
+	) \
 	InstallModule_graphicfilter \
 	InstallModule_impress \
 	InstallModule_math \
