@@ -21,16 +21,8 @@
 
 // defines ------------------------------------------------------------------
 
-#define FT_DICTNAME     10
-#define ED_DICTNAME     11
 #define FT_DICTLANG     12
 #define LB_DICTLANG     13
-#define BTN_EXCEPT      14
-#define GB_NEWDICT      15
-
-#define BTN_NEWDICT_OK  20
-#define BTN_NEWDICT_ESC 21
-#define BTN_NEWDICT_HLP 22
 
 #define FT_BOOK             30
 #define FT_CONTENT          31
