@@ -189,8 +189,14 @@ class PyMailSMTPService(unohelper.Base, XSmtpService):
 						#it's a bytesequence, get raw bytes
 						textbody = textbody.value
 					if sys.version >= '3':
-						#http://stackoverflow.com/questions/9403265/how-do-i-use-python-3-2-email-module-to-send-unicode-messages-encoded-in-utf-8-w
-						textbody = textbody.decode('iso8859-1')
+						if sys.version_info.minor < 3 or (sys.version_info.minor == 3 and sys.version_info.micro <= 1):
+							#http://stackoverflow.com/questions/9403265/how-do-i-use-python-3-2-email-module-to-send-unicode-messages-encoded-in-utf-8-w
+							#see http://bugs.python.org/16564, etc. basically it now *seems* to be all ok
+							#in python 3.3.2 onwards, but a little busted in 3.3.0
+
+							textbody = textbody.decode('iso8859-1')
+						else:
+							textbody = textbody.decode('utf-8')
 						c = Charset('utf-8')
 						c.body_encoding = QP
 						textmsg.set_payload(textbody, c)
@@ -472,15 +478,15 @@ class PyMailMessage(unohelper.Base, XMailMessage):
 		self.bccrecipients.append(bccrecipient)
 	def getRecipients( self ):
 		if dbg:
-			print("PyMailMessage.getRecipients: " + self.recipients, file=dbgout)
+			print("PyMailMessage.getRecipients: " + str(self.recipients), file=dbgout)
 		return tuple(self.recipients)
 	def getCcRecipients( self ):
 		if dbg:
-			print("PyMailMessage.getCcRecipients: " + self.ccrecipients, file=dbgout)
+			print("PyMailMessage.getCcRecipients: " + str(self.ccrecipients), file=dbgout)
 		return tuple(self.ccrecipients)
 	def getBccRecipients( self ):
 		if dbg:
-			print("PyMailMessage.getBccRecipients: " + self.bccrecipients, file=dbgout)
+			print("PyMailMessage.getBccRecipients: " + str(self.bccrecipients), file=dbgout)
 		return tuple(self.bccrecipients)
 	def addAttachment( self, aMailAttachment ):
 		if dbg:
