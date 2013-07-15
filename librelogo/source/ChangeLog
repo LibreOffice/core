@@ -1,4 +1,18 @@
-2012-02-24 László Németh:
+2013-07-15 László Németh:
+    * optional named PICTURE blocks: PICTURE "name" [ CIRCLE 5 ]
+    * save PICTURE as cropped SVG file using path names, for example:
+      PICTURE "example.svg" [ CIRCLE 5 CIRCLE 20 ] ; save in the home directory
+      PICTURE "/home/user/example.svg" [ CIRCLE 10 ] ; absolute path (on Linux)
+      PICTURE "tmp/example.svg" [ CIRCLE 10 ] ; relative to the home directory
+    * support hexadecimal arguments
+
+2013-06-26 László Németh
+    * clockwise HEADING
+
+2013-04-30 László Németh
+    * fix hide/show turtle
+
+2013-02-24 László Németh:
     * fix Asian and CTL language support. Language recognition depends from the
       UI language of LibreOffice and the language(s) of the document.
     * fix turtle shape, the problem with the old arrow-like turtle shape
