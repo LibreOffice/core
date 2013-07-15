@@ -486,6 +486,7 @@ public:
     void DeleteBroadcasters( sc::ColumnBlockPosition& rBlockPos, SCROW nRow1, SCROW nRow2 );
     bool HasBroadcaster() const;
 
+    void Broadcast( SCROW nRow );
     void BroadcastCells( const std::vector<SCROW>& rRows );
 
     void InterpretDirtyCells( SCROW nRow1, SCROW nRow2 );

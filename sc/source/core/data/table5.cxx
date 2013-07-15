@@ -1182,7 +1182,7 @@ void ScTable::InvalidateTextWidth( const ScAddress* pAdrFrom, const ScAddress* p
             switch (aCell.meType)
             {
                 case CELLTYPE_VALUE :
-                    pDocument->Broadcast(ScHint(SC_HINT_DATACHANGED, ScAddress(nCol, nRow, nTab)));
+                    rCol.Broadcast(nRow);
                     break;
                 case CELLTYPE_FORMULA :
                     aCell.mpFormula->SetDirty();
@@ -1222,8 +1222,7 @@ void ScTable::InvalidateTextWidth( const ScAddress* pAdrFrom, const ScAddress* p
                 switch (aCell.meType)
                 {
                     case CELLTYPE_VALUE :
-                        pDocument->Broadcast(
-                            ScHint(SC_HINT_DATACHANGED, ScAddress(nCol, nRow, nTab)));
+                        aCol[nCol].Broadcast(nRow);
                         break;
                     case CELLTYPE_FORMULA :
                         aCell.mpFormula->SetDirty();

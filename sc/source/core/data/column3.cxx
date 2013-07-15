@@ -67,6 +67,12 @@ using ::com::sun::star::i18n::LocaleDataItem;
 extern const ScFormulaCell* pLastFormulaTreeTop; // in cellform.cxx
 using namespace formula;
 
+void ScColumn::Broadcast( SCROW nRow )
+{
+    ScHint aHint(SC_HINT_DATACHANGED, ScAddress(nCol, nRow, nTab));
+    pDocument->Broadcast(aHint);
+}
+
 void ScColumn::BroadcastCells( const std::vector<SCROW>& rRows )
 {
     if (rRows.empty())
@@ -113,9 +119,7 @@ void ScColumn::Delete( SCROW nRow )
     maCells.set_empty(nRow, nRow);
     maCellTextAttrs.set_empty(nRow, nRow);
 
-    pDocument->Broadcast(
-        ScHint(SC_HINT_DATACHANGED, ScAddress(nCol, nRow, nTab)));
-
+    Broadcast(nRow);
     CellStorageModified();
 }
 
@@ -411,8 +415,7 @@ void ScColumn::BroadcastNewCell( SCROW nRow )
     if (pDocument->IsClipOrUndo() || pDocument->IsInsertingFromOtherDoc() || pDocument->IsCalcingAfterLoad())
         return;
 
-    ScHint aHint(SC_HINT_DATACHANGED, ScAddress(nCol, nRow, nTab));
-    pDocument->Broadcast(aHint);
+    Broadcast(nRow);
 }
 
 bool ScColumn::UpdateScriptType( sc::CellTextAttr& rAttr, SCROW nRow )
