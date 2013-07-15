@@ -22,8 +22,8 @@
 #include <com/sun/star/i18n/UnicodeType.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/util/Date.hpp>
-#include <com/sun/star/util/DateTimeWithTimeZone.hpp>
-#include <com/sun/star/util/DateWithTimeZone.hpp>
+#include <com/sun/star/util/DateTimeWithTimezone.hpp>
+#include <com/sun/star/util/DateWithTimezone.hpp>
 #include <com/sun/star/util/Duration.hpp>
 #include <com/sun/star/util/Time.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
@@ -1224,13 +1224,13 @@ lcl_AppendTimezone(OUStringBuffer & i_rBuffer, sal_Int16 const nOffset)
 }
 
 void Converter::convertDateTZ( OUStringBuffer& rBuffer,
-                com::sun::star::util::DateWithTimeZone const& rDate)
+                com::sun::star::util::DateWithTimezone const& rDate)
 {
     convertDate(rBuffer, rDate.DateInTZ, &rDate.Timezone);
 }
 
 void Converter::convertDateTimeTZ( OUStringBuffer& rBuffer,
-            com::sun::star::util::DateTimeWithTimeZone const& rDateTime)
+            com::sun::star::util::DateTimeWithTimezone const& rDateTime)
 {
     convertDateTime(rBuffer, rDateTime.DateTimeInTZ, &rDateTime.Timezone);
 }

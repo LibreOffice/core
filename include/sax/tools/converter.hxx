@@ -38,8 +38,8 @@ namespace com { namespace sun { namespace star {
     namespace util {
         struct Date;
         struct DateTime;
-        struct DateWithTimeZone;
-        struct DateTimeWithTimeZone;
+        struct DateWithTimezone;
+        struct DateTimeWithTimezone;
         struct Duration;
     }
 } } }
@@ -167,10 +167,10 @@ public:
                                    bool bAddTimeIf0AM = false );
 
     static void convertDateTZ( OUStringBuffer& rBuffer,
-                    com::sun::star::util::DateWithTimeZone const& rDate );
+                    com::sun::star::util::DateWithTimezone const& rDate );
 
     static void convertDateTimeTZ( OUStringBuffer& rBuffer,
-                com::sun::star::util::DateTimeWithTimeZone const& rDateTime );
+                com::sun::star::util::DateTimeWithTimezone const& rDateTime );
 
     /** convert ISO "date" or "dateTime" string to util::DateTime */
     static bool parseDateTime( com::sun::star::util::DateTime& rDateTime,
