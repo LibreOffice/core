@@ -259,6 +259,10 @@ Reference<rendering::XBitmap> SAL_CALL PresenterHelper::loadBitmap (
 
     static IdMapEntry const map[] = {
         { "bitmaps/Background.png", BMP_PRESENTERSCREEN_BACKGROUND },
+        { "bitmaps/Animation.png",
+          BMP_PRESENTERSCREEN_ANIMATION },
+        { "bitmaps/Transition.png",
+          BMP_PRESENTERSCREEN_TRANSITION },
         { "bitmaps/BorderActiveBottom.png",
           BMP_PRESENTERSCREEN_BORDER_ACTIVE_BOTTOM },
         { "bitmaps/BorderActiveBottomCallout.png",
