@@ -559,7 +559,7 @@ getDateFromUnix (time_t t)
 
     if ( osl_getDateTimeFromTimeValue( &tv, &dt ) )
         return util::DateTime( 0, dt.Seconds, dt.Minutes, dt.Hours,
-                               dt.Day, dt.Month, dt.Year);
+                               dt.Day, dt.Month, dt.Year, false);
     else
         return util::DateTime();
 }
