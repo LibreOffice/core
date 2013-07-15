@@ -94,6 +94,7 @@ public:
     void testFdo66688();
     void testFdo66773();
     void testFdo58577();
+    void testBnc581614();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -158,6 +159,7 @@ void Test::run()
         {"fdo66688.docx", &Test::testFdo66688},
         {"fdo66773.docx", &Test::testFdo66773},
         {"fdo58577.odt", &Test::testFdo58577},
+        {"bnc581614.doc", &Test::testBnc581614},
     };
     // Don't test the first import of these, for some reason those tests fail
     const char* aBlacklist[] = {
@@ -941,6 +943,14 @@ void Test::testFdo58577()
     uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xIndexAccess->getCount());
+}
+
+void Test::testBnc581614()
+{
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xFrame(xDraws->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_NONE, getProperty<drawing::FillStyle>(xFrame, "FillStyle"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
