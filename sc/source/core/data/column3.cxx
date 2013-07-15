@@ -66,11 +66,8 @@ using ::com::sun::star::i18n::LocaleDataItem;
 // Err527 Workaroand
 extern const ScFormulaCell* pLastFormulaTreeTop; // in cellform.cxx
 using namespace formula;
-// STATIC DATA -----------------------------------------------------------
 
-namespace {
-
-void broadcastCells(ScDocument& rDoc, SCCOL nCol, SCROW nTab, const std::vector<SCROW>& rRows)
+void ScColumn::BroadcastCells( const std::vector<SCROW>& rRows )
 {
     if (rRows.empty())
         return;
@@ -81,15 +78,8 @@ void broadcastCells(ScDocument& rDoc, SCCOL nCol, SCROW nTab, const std::vector<
     for (; itRow != itRowEnd; ++itRow)
     {
         aHint.GetAddress().SetRow(*itRow);
-        rDoc.Broadcast(aHint);
+        pDocument->Broadcast(aHint);
     }
-}
-
-}
-
-void ScColumn::BroadcastCells( const std::vector<SCROW>& rRows )
-{
-    broadcastCells(*pDocument, nCol, nTab, rRows);
 }
 
 struct DirtyCellInterpreter
