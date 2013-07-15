@@ -535,14 +535,14 @@ private:
 };
 
 SteppedPropertiesDialog::SteppedPropertiesDialog( Window* pParent )
-        : ModalDialog( pParent, "SteppedLinesDialog", "modules/schart/ui/steppedlinesdlg.ui")
+    : ModalDialog( pParent, "SteppedLinesDialog", "modules/schart/ui/steppedlinesdlg.ui")
 {
     get(m_pRB_Start, "step_start_rb");
     get(m_pRB_End, "step_end_rb");
     get(m_pRB_CenterX, "step_center_x_rb");
     get(m_pRB_CenterY, "step_center_y_rb");
 
-    this->SetText( String( SchResId( STR_DLG_STEPPED_LINE_PROPERTIES ) ) );
+    SetText(SCH_RESSTR(STR_DLG_STEPPED_LINE_PROPERTIES));
 }
 
 SteppedPropertiesDialog::~SteppedPropertiesDialog()

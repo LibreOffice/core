@@ -115,7 +115,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="row_spacing">6</property>
-                    <property name="column_spacing">6</property>
+                    <property name="column_spacing">12</property>
                     <child>
                       <object class="GtkLabel" id="FT_GAP">
                         <property name="visible">True</property>
@@ -257,13 +257,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="row_spacing">6</property>
-                    <property name="column_spacing">6</property>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
+                    <property name="column_spacing">12</property>
                     <child>
                       <object class="GtkLabel" id="FT_MISSING_VALUES">
                         <property name="visible">True</property>
@@ -334,6 +328,12 @@
                         <property name="width">1</property>
                         <property name="height">1</property>
                       </packing>
+                    </child>
+                    <child>
+                      <placeholder/>
+                    </child>
+                    <child>
+                      <placeholder/>
                     </child>
                   </object>
                   <packing>
