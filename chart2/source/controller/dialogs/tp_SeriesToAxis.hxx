@@ -49,25 +49,22 @@ private: //methods
     void AdaptControlPositionsAndVisibility();
 
 private: //member
-    FixedLine   aGrpAxis;
-    RadioButton aRbtAxis1;
-    RadioButton aRbtAxis2;
+    VclFrame*    m_pGrpAxis;
+    RadioButton* m_pRbtAxis1;
+    RadioButton* m_pRbtAxis2;
 
-    FixedLine   aGrpBar;
-    FixedText   aFTGap;
-    MetricField aMTGap;
-    FixedText   aFTOverlap;
-    MetricField aMTOverlap;
-    CheckBox    aCBConnect;
-    CheckBox    aCBAxisSideBySide;
+    VclFrame*    m_pGrpBar;
+    MetricField* m_pMTGap;
+    MetricField* m_pMTOverlap;
+    CheckBox*    m_pCBConnect;
+    CheckBox*    m_pCBAxisSideBySide;
 
-    FixedLine   m_aFL_PlotOptions;
-    FixedText   m_aFT_MissingValues;
-    RadioButton m_aRB_DontPaint;
-    RadioButton m_aRB_AssumeZero;
-    RadioButton m_aRB_ContinueLine;
+    VclGrid*     m_pGridPlotOptions;
+    RadioButton* m_pRB_DontPaint;
+    RadioButton* m_pRB_AssumeZero;
+    RadioButton* m_pRB_ContinueLine;
 
-    CheckBox    m_aCBIncludeHiddenCells;
+    CheckBox*    m_pCBIncludeHiddenCells;
 
     DECL_LINK(EnableHdl, void * );
 

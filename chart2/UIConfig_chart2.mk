@@ -34,6 +34,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/schart,\
 	chart2/uiconfig/ui/insertgriddlg \
 	chart2/uiconfig/ui/smoothlinesdlg \
 	chart2/uiconfig/ui/steppedlinesdlg \
+	chart2/uiconfig/ui/tp_SeriesToAxis \
 ))
 
 # vim: set noet sw=4 ts=4:
