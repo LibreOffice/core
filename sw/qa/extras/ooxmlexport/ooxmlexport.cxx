@@ -93,6 +93,7 @@ public:
     void testN822175();
     void testFdo66688();
     void testFdo66773();
+    void testFdo66929();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -156,6 +157,7 @@ void Test::run()
         {"n822175.odt", &Test::testN822175},
         {"fdo66688.docx", &Test::testFdo66688},
         {"fdo66773.docx", &Test::testFdo66773},
+        {"fdo66929.docx", &Test::testFdo66929},
     };
     // Don't test the first import of these, for some reason those tests fail
     const char* aBlacklist[] = {
@@ -931,6 +933,20 @@ void Test::testFdo66773()
     style::LineSpacing alineSpacing = getProperty<style::LineSpacing>(xParaEnum->nextElement(), "ParaLineSpacing");
     CPPUNIT_ASSERT_EQUAL(style::LineSpacingMode::PROP, alineSpacing.Mode);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(100), static_cast<sal_Int32>(alineSpacing.Height));
+}
+
+void Test::testFdo66929()
+{
+    // The problem was that the default 'inset' attribute of the 'textbox' node was exported incorrectly.
+    // A node like '<v:textbox inset="0">' was exported back as '<v:textbox inset="0pt,0pt,0pt,0pt">'
+    // This is wrong because the original node denotes a specific 'left' inset, and a default 'top','right','bottom' inset
+    uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xFrame(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL( sal_Int32( 0 )  , getProperty< sal_Int32 >( xFrame, "LeftBorderDistance" ) );
+    CPPUNIT_ASSERT_EQUAL( sal_Int32( 127 ), getProperty< sal_Int32 >( xFrame, "TopBorderDistance" ) );
+    CPPUNIT_ASSERT_EQUAL( sal_Int32( 254 ), getProperty< sal_Int32 >( xFrame, "RightBorderDistance" ) );
+    CPPUNIT_ASSERT_EQUAL( sal_Int32( 127 ), getProperty< sal_Int32 >( xFrame, "BottomBorderDistance" ) );
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
