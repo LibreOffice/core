@@ -457,10 +457,6 @@ public:
     static SwPaM * NewSwPaM(SwDoc & rDoc,
                             sal_uLong const nStartIdx, sal_uLong const nEndIdx);
 
-    // If applicable copy a local file into internet.
-    sal_Bool CopyLocalFileToINet( String& rFileNm );
-
-
     // Stream-specific routines. Do not use in storage-writer!
 
     // Optimizing output on stream.

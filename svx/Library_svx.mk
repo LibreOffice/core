@@ -189,7 +189,6 @@ $(eval $(call gb_Library_add_exception_objects,svx,\
     svx/source/sidebar/area/AreaTransparencyGradientPopup \
     svx/source/sidebar/graphic/GraphicPropertyPanel \
     svx/source/sidebar/line/LinePropertyPanel \
-    svx/source/sidebar/line/LineStyleValueSet \
     svx/source/sidebar/line/LineWidthControl \
     svx/source/sidebar/line/LineWidthValueSet \
     svx/source/sidebar/line/LineWidthPopup \

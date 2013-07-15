@@ -1656,14 +1656,6 @@ FontSizeBox::FontSizeBox( Window* pParent, WinBits nWinSize ) :
     ImplInit();
 }
 
-// -----------------------------------------------------------------------
-
-FontSizeBox::FontSizeBox( Window* pParent, const ResId& rResId ) :
-    MetricBox( pParent, rResId )
-{
-    ImplInit();
-}
-
 extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeFontSizeBox(Window *pParent, VclBuilder::stringmap &rMap)
 {
     bool bDropdown = VclBuilder::extractDropdown(rMap);

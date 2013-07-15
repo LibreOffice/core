@@ -187,15 +187,6 @@ IMPL_LINK( SmFontPickListBox, SelectHdl, ListBox *, /*pListBox*/ )
     return 0;
 }
 
-
-SmFontPickListBox::SmFontPickListBox(Window* pParent, const ResId& rResId) :
-    SmFontPickList(4),
-    ListBox(pParent, rResId)
-{
-    SetSelectHdl(LINK(this, SmFontPickListBox, SelectHdl));
-}
-
-
 SmFontPickListBox& SmFontPickListBox::operator=(const SmFontPickList& rList)
 {
     sal_uInt16 nPos;

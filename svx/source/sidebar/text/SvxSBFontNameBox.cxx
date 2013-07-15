@@ -80,19 +80,6 @@ namespace {
     }
 }
 
-
-
-
-SvxSBFontNameBox::SvxSBFontNameBox( Window* pParent,  const ResId& rResId  ) :
-    FontNameBox ( pParent, rResId )
-,   pFontList   ( NULL )
-,   nFtCount    ( 0 )
-,   pBindings(NULL)
-{
-    EnableControls_Impl();
-//  StartListening( *SFX_APP() );
-}
-
 SvxSBFontNameBox::SvxSBFontNameBox( Window* pParent ) :
     FontNameBox ( pParent, WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_TABSTOP|WB_DROPDOWN )
 ,   pFontList   ( NULL )

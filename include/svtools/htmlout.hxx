@@ -109,8 +109,6 @@ struct HTMLOutFuncs
                 SvNumberFormatter& rFormatter,
                 rtl_TextEncoding eDestEnc = RTL_TEXTENCODING_MS_1252,
                 String *pNonConvertableChars = 0);
-
-    SVT_DLLPUBLIC static sal_Bool PrivateURLToInternalImg( String& rURL );
 };
 
 #endif

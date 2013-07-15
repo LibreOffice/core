@@ -470,23 +470,6 @@ Convert::Any_t Convert::toAny( const OUString& rValue,
 }
 
 //------------------------------------------------------------------------
-OUString Convert::replaceWhitespace( const OUString& _rString )
-{
-    OUStringBuffer aBuffer( _rString );
-    sal_Int32 nLength = aBuffer.getLength();
-    const sal_Unicode* pBuffer = aBuffer.getStr();
-    for( sal_Int32 i = 0; i < nLength; i++ )
-    {
-        sal_Unicode c = pBuffer[i];
-        if( c == sal_Unicode(0x08) ||
-            c == sal_Unicode(0x0A) ||
-            c == sal_Unicode(0x0D) )
-            aBuffer[i] = sal_Unicode(0x20);
-    }
-    return aBuffer.makeStringAndClear();
-}
-
-//------------------------------------------------------------------------
 OUString Convert::collapseWhitespace( const OUString& _rString )
 {
     sal_Int32 nLength = _rString.getLength();

@@ -507,7 +507,6 @@ protected:
 
 public:
                     FontSizeBox( Window* pParent, WinBits nWinStyle = 0 );
-                    FontSizeBox( Window* pParent, const ResId& rResId );
     virtual         ~FontSizeBox();
 
     void            Reformat();

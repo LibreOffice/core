@@ -72,10 +72,6 @@ public:
     /// convert XML representation to Any of given type
     Any_t toAny( const OUString&, const Type_t& );
 
-    /** replace all occurrences 0x08, 0x0A, 0x0D with 0x20
-    */
-    static OUString replaceWhitespace( const OUString& _rString );
-
     /** replace all sequences of 0x08, 0x0A, 0x0D, 0x20 with a single 0x20.
         also strip leading/trailing whitespace.
     */

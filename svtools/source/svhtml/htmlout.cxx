@@ -977,17 +977,4 @@ OString HTMLOutFuncs::CreateTableDataOptionsValNum(
     return aStrTD.makeStringAndClear();
 }
 
-sal_Bool HTMLOutFuncs::PrivateURLToInternalImg( String& rURL )
-{
-    if( rURL.Len() > 14UL &&
-        rURL.CompareToAscii( OOO_STRING_SVTOOLS_HTML_private_image, 14UL ) == COMPARE_EQUAL )
-    {
-        rURL.Erase( 0UL, 14UL );
-        return sal_True;
-    }
-
-    return sal_False;
-}
-
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -296,59 +296,6 @@ sal_uLong Writer::Write( SwPaM&, const uno::Reference < embed::XStorage >&, cons
     return ERR_SWG_WRITE_ERROR;
 }
 
-sal_Bool Writer::CopyLocalFileToINet( String& rFileNm )
-{
-    if( !pOrigFileName )                // can be happen, by example if we
-        return sal_False;                   // write into the clipboard
-
-    sal_Bool bRet = sal_False;
-    INetURLObject aFileUrl( rFileNm ), aTargetUrl( *pOrigFileName );
-
-// this is our old without the Mail-Export
-    if( ! ( INET_PROT_FILE == aFileUrl.GetProtocol() &&
-            INET_PROT_FILE != aTargetUrl.GetProtocol() &&
-            INET_PROT_FTP <= aTargetUrl.GetProtocol() &&
-            INET_PROT_NEWS >= aTargetUrl.GetProtocol() ) )
-        return bRet;
-
-    if (m_pImpl->pFileNameMap)
-    {
-        // has the file been moved?
-        std::map<String, String>::iterator it = m_pImpl->pFileNameMap->find( rFileNm );
-        if ( it != m_pImpl->pFileNameMap->end() )
-        {
-            rFileNm = it->second;
-            return sal_True;
-        }
-    }
-    else
-    {
-        m_pImpl->pFileNameMap.reset( new std::map<String, String>() );
-    }
-
-    String aSrc  = rFileNm;
-    String aDest = aTargetUrl.GetPartBeforeLastName();
-    aDest += String(aFileUrl.GetName());
-
-    SfxMedium aSrcFile( aSrc, STREAM_READ );
-    SfxMedium aDstFile( aDest, STREAM_WRITE | STREAM_SHARE_DENYNONE );
-
-    *aDstFile.GetOutStream() << *aSrcFile.GetInStream();
-
-    aSrcFile.Close();
-    aDstFile.Commit();
-
-    bRet = 0 == aDstFile.GetError();
-
-    if( bRet )
-    {
-        m_pImpl->pFileNameMap->insert( std::make_pair( aSrc, aDest ) );
-        rFileNm = aDest;
-    }
-
-    return bRet;
-}
-
 void Writer::PutNumFmtFontsInAttrPool()
 {
     // then there are a few fonts in the NumRules

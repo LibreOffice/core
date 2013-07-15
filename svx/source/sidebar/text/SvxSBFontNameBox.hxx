@@ -22,22 +22,6 @@
 #include <svtools/ctrlbox.hxx>
 #include <svtools/ctrltool.hxx>
 
-/*
-#include <sfx2/sectionpage.hxx>
-#include <svx/svxdllapi.h>
-#include <vcl/fixed.hxx>
-
-#include <vcl/button.hxx>
-#include <svl/lstner.hxx>
-#include <vcl/toolbox.hxx>
-
-#include <svx/tbxcolorupdate.hxx>
-#include <svx/svxenum.hxx>
-#include <svx/fhgtitem.hxx>
-
-#define FONT_COLOR          1
-#define BACK_COLOR          2
-*/
 namespace svx
 {
     class ToolboxButtonColorUpdater;
@@ -58,10 +42,9 @@ protected:
     virtual void    Select();
 
 public:
-    SvxSBFontNameBox( Window* pParent, const ResId& rResId );
-    SvxSBFontNameBox( Window* pParent );
+    SvxSBFontNameBox(Window* pParent);
     void            FillList();
-    sal_uInt16 GetListCount() { return nFtCount; }
+    sal_uInt16 GetListCount() const { return nFtCount; }
     void            Clear() { FontNameBox::Clear(); nFtCount = 0; }
     void            Fill( const FontList* pList )
                         { FontNameBox::Fill( pList );
