@@ -3580,16 +3580,6 @@ bool SwDoc::SetTableAutoFormat( const SwSelBoxes& rBoxes, const SwTableAutoForma
     SwTable &table = pTableNd->GetTable();
     table.SetHTMLTableLayout( 0 );
 
-    _FndBox* pFndBox = &aFndBox;
-    while( 1 == pFndBox->GetLines().size() &&
-            1 == pFndBox->GetLines().front()->GetBoxes().size())
-    {
-        pFndBox = pFndBox->GetLines().front()->GetBoxes()[0].get();
-    }
-
-    if( pFndBox->GetLines().empty() ) // One too far? (only one sel. Box)
-        pFndBox = pFndBox->GetUpper()->GetUpper();
-
     // Disable Undo, but first store parameters
     SwUndoTableAutoFormat* pUndo = 0;
     bool const bUndo(GetIDocumentUndoRedo().DoesUndo());
@@ -3600,37 +3590,7 @@ bool SwDoc::SetTableAutoFormat( const SwSelBoxes& rBoxes, const SwTableAutoForma
         GetIDocumentUndoRedo().DoUndo(false);
     }
 
-    rNew.RestoreTableProperties(table);
-
-    _SetAFormatTabPara aPara( rNew );
-    FndLines_t& rFLns = pFndBox->GetLines();
-
-    for (FndLines_t::size_type n = 0; n < rFLns.size(); ++n)
-    {
-        _FndLine* pLine = rFLns[n].get();
-
-        // Set Upper to 0 (thus simulate BaseLine)
-        _FndBox* pSaveBox = pLine->GetUpper();
-        pLine->SetUpper( 0 );
-
-        if( !n )
-            aPara.nAFormatLine = 0;
-        else if (static_cast<size_t>(n+1) == rFLns.size())
-            aPara.nAFormatLine = 3;
-        else
-            aPara.nAFormatLine = (sal_uInt8)(1 + ((n-1) & 1 ));
-
-        aPara.nAFormatBox = 0;
-        aPara.nCurBox = 0;
-        aPara.nEndBox = pLine->GetBoxes().size()-1;
-        aPara.pUndo = pUndo;
-        for (auto const& it : pLine->GetBoxes())
-        {
-            lcl_SetAFormatBox(*it, &aPara);
-        }
-
-        pLine->SetUpper( pSaveBox );
-    }
+    rNew.GetTableStyle()->RestoreTableProperties(table);
 
     if( pUndo )
     {
@@ -3664,57 +3624,7 @@ bool SwDoc::GetTableAutoFormat( const SwSelBoxes& rBoxes, SwTableAutoFormat& rGe
 
     // Store table properties
     SwTable &table = pTableNd->GetTable();
-    rGet.StoreTableProperties(table);
-
-    _FndBox* pFndBox = &aFndBox;
-    while( 1 == pFndBox->GetLines().size() &&
-            1 == pFndBox->GetLines().front()->GetBoxes().size())
-    {
-        pFndBox = pFndBox->GetLines().front()->GetBoxes()[0].get();
-    }
-
-    if( pFndBox->GetLines().empty() ) // One too far? (only one sel. Box)
-        pFndBox = pFndBox->GetUpper()->GetUpper();
-
-    FndLines_t& rFLns = pFndBox->GetLines();
-
-    sal_uInt16 aLnArr[4];
-    aLnArr[0] = 0;
-    aLnArr[1] = 1 < rFLns.size() ? 1 : 0;
-    aLnArr[2] = 2 < rFLns.size() ? 2 : aLnArr[1];
-    aLnArr[3] = rFLns.size() - 1;
-
-    for( sal_uInt8 nLine = 0; nLine < 4; ++nLine )
-    {
-        _FndLine& rLine = *rFLns[ aLnArr[ nLine ] ];
-
-        sal_uInt16 aBoxArr[4];
-        aBoxArr[0] = 0;
-        aBoxArr[1] = 1 < rLine.GetBoxes().size() ? 1 : 0;
-        aBoxArr[2] = 2 < rLine.GetBoxes().size() ? 2 : aBoxArr[1];
-        aBoxArr[3] = rLine.GetBoxes().size() - 1;
-
-        for( sal_uInt8 nBox = 0; nBox < 4; ++nBox )
-        {
-            SwTableBox* pFBox = rLine.GetBoxes()[ aBoxArr[ nBox ] ]->GetBox();
-            // Always apply to the first ones
-            while( !pFBox->GetSttNd() )
-                pFBox = pFBox->GetTabLines()[0]->GetTabBoxes()[0];
-
-            sal_uInt8 nPos = nLine * 4 + nBox;
-            SwNodeIndex aIdx( *pFBox->GetSttNd(), 1 );
-            SwContentNode* pCNd = aIdx.GetNode().GetContentNode();
-            if( !pCNd )
-                pCNd = GetNodes().GoNext( &aIdx );
-
-            if( pCNd )
-                rGet.UpdateFromSet( nPos, pCNd->GetSwAttrSet(),
-                                    SwTableAutoFormat::UPDATE_CHAR, 0 );
-            rGet.UpdateFromSet( nPos, pFBox->GetFrameFormat()->GetAttrSet(),
-                                SwTableAutoFormat::UPDATE_BOX,
-                                GetNumberFormatter() );
-        }
-    }
+    rGet.GetTableStyle()->StoreTableProperties(table);
 
     return true;
 }
