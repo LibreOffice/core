@@ -560,9 +560,14 @@ void SAL_CALL VCLXToolkit::disposing()
 
 ::com::sun::star::awt::Rectangle VCLXToolkit::getWorkArea(  ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::com::sun::star::awt::Rectangle aRect;
-    // 07/00: AppWindow doesn't exist anymore...
-    return aRect;
+    sal_Int32 nDisplay = Application::GetDisplayBuiltInScreen();
+    Rectangle aWorkRect = Application::GetScreenPosSizePixel( nDisplay );
+    com::sun::star::awt::Rectangle aNotherRect;
+    aNotherRect.X = aWorkRect.getX();
+    aNotherRect.Y = aWorkRect.getY();
+    aNotherRect.Width = aWorkRect.getWidth();
+    aNotherRect.Height = aWorkRect.getHeight();
+    return aNotherRect;
 }
 
 ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer > VCLXToolkit::createWindow( const ::com::sun::star::awt::WindowDescriptor& rDescriptor ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
