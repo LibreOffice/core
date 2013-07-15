@@ -9,6 +9,7 @@ my $gnumake;
 my $src_root;
 my $makefile_build;
 my $verbose = 0;
+my $no_leaf;
 my $from_file;
 my $to_file;
 my $graph_file;
@@ -251,6 +252,33 @@ sub collapse_lib_to_module($)
     return optimize_tree(\%digraph);
 }
 
+sub prune_leaves($)
+{
+    my $tree = shift;
+    my %newtree;
+    my %name_has_deps;
+
+    # we like a few leaves around:
+    for my $nonleaf ('desktop', 'sw', 'sc', 'sd', 'starmath') {
+        $name_has_deps{$nonleaf} = 1;
+    }
+
+    # find which modules are depended on by others
+    for my $name (keys %{$tree}) {
+        for my $dep (@{$tree->{$name}->{deps}}) {
+            $name_has_deps{$dep} = 1;
+        }
+    }
+
+    # prune modules with no deps
+    for my $name (keys %{$tree}) {
+        delete $tree->{$name} if (!defined $name_has_deps{$name});
+    }
+
+    return optimize_tree($tree);
+}
+
+
 sub dump_graphviz($)
 {
     my $tree = shift;
@@ -300,6 +328,7 @@ sub parse_options()
         'preserve-libs|p' => \$preserve_libs,
         'write-dep-file|w=s' => \$to_file,
         'read-dep-file|f=s' => \$from_file,
+        'no-leaf|l' => \$no_leaf,
         'graph-file|o=s' => \$graph_file);
     GetOptions(%h) or pod2usage(2);
     pod2usage(1) if $help;
@@ -319,6 +348,9 @@ sub main()
     optimize_tree($tree);
     if (!$preserve_libs && !defined($ENV{PRESERVE_LIBS})) {
         $tree = collapse_lib_to_module($tree);
+    }
+    if ($no_leaf) {
+        $tree = prune_leaves($tree);
     }
     dump_graphviz($tree);
 }
