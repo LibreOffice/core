@@ -100,11 +100,23 @@ bool ParentBuilder::VisitFunctionDecl( const FunctionDecl* function )
     {
 //    if( ignoreLocation( declaration ))
 //        return true; ???
-    if( !function->doesThisDeclarationHaveABody())
-        return true;
-    const Stmt* body = function->getBody();
-    (*parents)[ body ] = NULL; // no parent
-    walk( body );
+    if( function->doesThisDeclarationHaveABody())
+        {
+        const Stmt* body = function->getBody();
+        (*parents)[ body ] = NULL; // no parent
+        walk( body );
+        }
+    if( const CXXConstructorDecl* ctor = dyn_cast< CXXConstructorDecl >( function ))
+        {
+        for( CXXConstructorDecl::init_const_iterator it = ctor->init_begin();
+             it != ctor->init_end();
+             ++it )
+            {
+            const Expr* init_expression = (*it)->getInit();
+            (*parents)[ init_expression ] = NULL;
+            walk( init_expression );
+            }
+        }
     return true;
     }
 
