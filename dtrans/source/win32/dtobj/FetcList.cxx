@@ -131,10 +131,11 @@ sal_uInt32 SAL_CALL CFormatEtcContainer::nextFormatEtc( LPFORMATETC lpFetc,
 
     sal_uInt32 nFetched = 0;
 
-    if ( m_EnumIterator != m_FormatMap.end( ) )
+    for ( sal_uInt32 i = 0; i < aNum; i++, nFetched++, lpFetc++, ++m_EnumIterator )
     {
-        for ( sal_uInt32 i = 0; i < aNum; i++, nFetched++, lpFetc++, ++m_EnumIterator )
-            CopyFormatEtc( lpFetc, *m_EnumIterator );
+        if ( m_EnumIterator == m_FormatMap.end() )
+            break;
+        CopyFormatEtc( lpFetc, *m_EnumIterator );
     }
 
     return nFetched;
