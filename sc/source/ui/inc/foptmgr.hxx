@@ -99,4 +99,80 @@ private:
 
 #endif // SC_FOPTMGR_HXX
 
+
+#ifndef SC_NEWFOPTMGR_HXX
+#define SC_NEWFOPTMGR_HXX
+
+#include <vcl/fixed.hxx>
+#include <vcl/edit.hxx>
+#include <vcl/lstbox.hxx>
+#include <vcl/button.hxx>
+//#include <vcl/layout.hxx>
+
+//----------------------------------------------------------------------------
+
+namespace formula
+{
+    class RefButton;
+}
+struct ScQueryParam;
+class ScDocument;
+class ScViewData;
+
+//----------------------------------------------------------------------------
+
+class ScNewFilterOptionsMgr
+{
+public:
+            ScNewFilterOptionsMgr( ScViewData*         ptrViewData,
+                                const ScQueryParam& refQueryData,
+                                CheckBox*           refBtnCase,
+                                CheckBox*           refBtnRegExp,
+                                CheckBox*           refBtnHeader,
+                                CheckBox*           refBtnUnique,
+                                CheckBox*           refBtnCopyResult,
+                                CheckBox*           refBtnDestPers,
+                                ListBox*            refLbCopyArea,
+                                Edit*               refEdCopyArea,
+                                formula::RefButton*     refRbCopyArea,
+                                FixedText*          refFtDbAreaLabel,
+                                FixedText*          refFtDbArea,
+                                const String&       refStrUndefined );
+            ~ScNewFilterOptionsMgr();
+
+private:
+    ScViewData*     pViewData;
+    ScDocument*     pDoc;
+
+    CheckBox*       pBtnCase;
+    CheckBox*       pBtnRegExp;
+    CheckBox*       pBtnHeader;
+    CheckBox*       pBtnUnique;
+    CheckBox*       pBtnCopyResult;
+    CheckBox*       pBtnDestPers;
+    ListBox*        pLbCopyArea;
+    Edit*           pEdCopyArea;
+    formula::RefButton* pRbCopyArea;
+    FixedText*      pFtDbAreaLabel;
+    FixedText*      pFtDbArea;
+
+    const String&   rStrUndefined;
+
+    const ScQueryParam& rQueryData;
+
+#ifdef _NEWFOPTMGR_CXX
+private:
+    void Init();
+
+    // Handler:
+    DECL_LINK( EdAreaModifyHdl,     Edit* );
+    DECL_LINK( LbAreaSelHdl,        ListBox* );
+    DECL_LINK( BtnCopyResultHdl,    CheckBox* );
+#endif
+};
+
+
+#endif // SC_NEWFOPTMGR_HXX
+
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

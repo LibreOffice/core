@@ -29,7 +29,9 @@
 #include "globalnames.hxx"
 
 #define _FOPTMGR_CXX
+#define _NEWFOPTMGR_CXX
 #include "foptmgr.hxx"
+#undef _NEWFOPTMGR_CXX
 #undef _FOPTMGR_CXX
 
 //----------------------------------------------------------------------------
@@ -318,6 +320,265 @@ IMPL_LINK( ScFilterOptionsMgr, BtnCopyResultHdl, CheckBox*, pBox )
             rLbCopyPos.Disable();
             rEdCopyPos.Disable();
             rRbCopyPos.Disable();
+        }
+    }
+
+    return 0;
+}
+//----------------------------------------------------------------------------
+// ScNewFilterOptionsMgr (.ui's option helper)
+//----------------------------------------------------------------------------
+
+ScNewFilterOptionsMgr::ScNewFilterOptionsMgr(
+                                ScViewData*         ptrViewData,
+                                const ScQueryParam& refQueryData,
+                                CheckBox*           refBtnCase,
+                                CheckBox*           refBtnRegExp,
+                                CheckBox*           refBtnHeader,
+                                CheckBox*           refBtnUnique,
+                                CheckBox*           refBtnCopyResult,
+                                CheckBox*           refBtnDestPers,
+                                ListBox*            refLbCopyArea,
+                                Edit*               refEdCopyArea,
+                                formula::RefButton*     refRbCopyArea,
+                                FixedText*          refFtDbAreaLabel,
+                                FixedText*          refFtDbArea,
+                                const String&       refStrUndefined )
+
+    :   pViewData       ( ptrViewData ),
+        pDoc            ( ptrViewData ? ptrViewData->GetDocument() : NULL ),
+        pBtnCase        ( refBtnCase ),
+        pBtnRegExp      ( refBtnRegExp ),
+        pBtnHeader      ( refBtnHeader ),
+        pBtnUnique      ( refBtnUnique ),
+        pBtnCopyResult  ( refBtnCopyResult ),
+        pBtnDestPers    ( refBtnDestPers ),
+        pLbCopyArea      ( refLbCopyArea ),
+        pEdCopyArea      ( refEdCopyArea ),
+        pRbCopyArea      ( refRbCopyArea ),
+        pFtDbAreaLabel  ( refFtDbAreaLabel ),
+        pFtDbArea       ( refFtDbArea ),
+        rStrUndefined   ( refStrUndefined ),
+        rQueryData      ( refQueryData )
+{
+    Init();
+}
+
+
+//----------------------------------------------------------------------------
+
+ScNewFilterOptionsMgr::~ScNewFilterOptionsMgr()
+{
+    sal_uInt16 nEntries = pLbCopyArea->GetEntryCount();
+    sal_uInt16 i;
+
+    for ( i=2; i<nEntries; i++ )
+        delete (String*)pLbCopyArea->GetEntryData( i );
+}
+
+
+//----------------------------------------------------------------------------
+
+void ScNewFilterOptionsMgr::Init()
+{
+//moggi:TODO
+    OSL_ENSURE( pViewData && pDoc, "Init failed :-/" );
+
+    pLbCopyArea->SetSelectHdl  ( LINK( this, ScNewFilterOptionsMgr, LbAreaSelHdl ) );
+    pEdCopyArea->SetModifyHdl  ( LINK( this, ScNewFilterOptionsMgr, EdAreaModifyHdl ) );
+    pBtnCopyResult->SetToggleHdl ( LINK( this, ScNewFilterOptionsMgr, BtnCopyResultHdl ) );
+
+    pBtnCase   ->Check( rQueryData.bCaseSens );
+    pBtnHeader ->Check( rQueryData.bHasHeader );
+    pBtnRegExp ->Check( rQueryData.bRegExp );
+    pBtnUnique ->Check( !rQueryData.bDuplicate );
+
+    if ( pViewData && pDoc )
+    {
+        OUString theAreaStr;
+        ScRange         theCurArea ( ScAddress( rQueryData.nCol1,
+                                                rQueryData.nRow1,
+                                                pViewData->GetTabNo() ),
+                                     ScAddress( rQueryData.nCol2,
+                                                rQueryData.nRow2,
+                                                pViewData->GetTabNo() ) );
+        ScDBCollection* pDBColl     = pDoc->GetDBCollection();
+        OUStringBuffer theDbArea;
+        OUString   theDbName(STR_DB_LOCAL_NONAME);
+        const formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
+
+        theCurArea.Format( theAreaStr, SCR_ABS_3D, pDoc, eConv );
+
+        // Zielbereichsliste fuellen
+
+        pLbCopyArea->Clear();
+        pLbCopyArea->InsertEntry( rStrUndefined, 0 );
+
+        ScAreaNameIterator aIter( pDoc );
+        String aName;
+        ScRange aRange;
+        String aRefStr;
+        while ( aIter.Next( aName, aRange ) )
+        {
+            sal_uInt16 nInsert = pLbCopyArea->InsertEntry( aName );
+
+            aRange.aStart.Format( aRefStr, SCA_ABS_3D, pDoc, eConv );
+            pLbCopyArea->SetEntryData( nInsert, new String( aRefStr ) );
+        }
+
+        pBtnDestPers->Check( sal_True );         // beim Aufruf immer an
+        pLbCopyArea->SelectEntryPos( 0 );
+        pEdCopyArea->SetText( EMPTY_STRING );
+
+        /*
+         * Ueberpruefen, ob es sich bei dem uebergebenen
+         * Bereich um einen Datenbankbereich handelt:
+         */
+
+        theDbArea = theAreaStr;
+
+        if ( pDBColl )
+        {
+            ScAddress&  rStart  = theCurArea.aStart;
+            ScAddress&  rEnd    = theCurArea.aEnd;
+            const ScDBData* pDBData = pDBColl->GetDBAtArea(
+                rStart.Tab(), rStart.Col(), rStart.Row(), rEnd.Col(), rEnd.Row());
+
+            if ( pDBData )
+            {
+                pBtnHeader->Check( pDBData->HasHeader() );
+                theDbName = pDBData->GetName();
+
+                if ( theDbName == STR_DB_LOCAL_NONAME )
+                    pBtnHeader->Enable();
+                else
+                    pBtnHeader->Disable();
+            }
+        }
+
+        if ( !theDbName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(STR_DB_LOCAL_NONAME)) )
+        {
+            theDbArea.appendAscii(RTL_CONSTASCII_STRINGPARAM(" ("));
+            theDbArea.append(theDbName).append(')');
+            pFtDbArea->SetText( theDbArea.makeStringAndClear() );
+        }
+        else
+        {
+            pFtDbAreaLabel->SetText( OUString() );
+            pFtDbArea->SetText( OUString() );
+        }
+
+        //------------------------------------------------------
+        // Kopierposition:
+
+        if ( !rQueryData.bInplace )
+        {
+            String aString;
+
+            ScAddress( rQueryData.nDestCol,
+                       rQueryData.nDestRow,
+                       rQueryData.nDestTab
+                     ).Format( aString, SCA_ABS_3D, pDoc, eConv );
+
+            pBtnCopyResult->Check( sal_True );
+            pEdCopyArea->SetText( aString );
+            EdAreaModifyHdl( pEdCopyArea );
+            pLbCopyArea->Enable();
+            pEdCopyArea->Enable();
+            pRbCopyArea->Enable();
+            pBtnDestPers->Enable();
+        }
+        else
+        {
+            pBtnCopyResult->Check( false );
+            pEdCopyArea->SetText( EMPTY_STRING );
+            pLbCopyArea->Disable();
+            pEdCopyArea->Disable();
+            pRbCopyArea->Disable();
+            pBtnDestPers->Disable();
+        }
+    }
+    else
+        pEdCopyArea->SetText( EMPTY_STRING );
+}
+
+//----------------------------------------------------------------------------
+// Handler:
+
+//----------------------------------------------------------------------------
+
+IMPL_LINK( ScNewFilterOptionsMgr, LbAreaSelHdl, ListBox*, pLb )
+{
+    if ( pLb == pLbCopyArea )
+    {
+        String aString;
+        sal_uInt16 nSelPos = pLbCopyArea->GetSelectEntryPos();
+
+        if ( nSelPos > 0 )
+            aString = *(String*)pLbCopyArea->GetEntryData( nSelPos );
+
+        pEdCopyArea->SetText( aString );
+    }
+
+    return 0;
+}
+
+
+//----------------------------------------------------------------------------
+
+IMPL_LINK( ScNewFilterOptionsMgr, EdAreaModifyHdl, Edit*, pEd )
+{
+    if ( pEd == pEdCopyArea )
+    {
+        String  theCurPosStr = pEd->GetText();
+        sal_uInt16  nResult = ScAddress().Parse( theCurPosStr, pDoc, pDoc->GetAddressConvention() );
+
+        if ( SCA_VALID == (nResult & SCA_VALID) )
+        {
+            String* pStr    = NULL;
+            sal_Bool    bFound  = false;
+            sal_uInt16  i       = 0;
+            sal_uInt16  nCount  = pLbCopyArea->GetEntryCount();
+
+            for ( i=2; i<nCount && !bFound; i++ )
+            {
+                pStr = (String*)pLbCopyArea->GetEntryData( i );
+                bFound = (theCurPosStr == *pStr);
+            }
+
+            if ( bFound )
+                pLbCopyArea->SelectEntryPos( --i );
+            else
+                pLbCopyArea->SelectEntryPos( 0 );
+        }
+        else
+            pLbCopyArea->SelectEntryPos( 0 );
+    }
+
+    return 0;
+}
+
+
+//----------------------------------------------------------------------------
+
+IMPL_LINK( ScNewFilterOptionsMgr, BtnCopyResultHdl, CheckBox*, pBox )
+{
+    if ( pBox == pBtnCopyResult )
+    {
+        if ( pBox->IsChecked() )
+        {
+            pBtnDestPers->Enable();
+            pLbCopyArea->Enable();
+            pEdCopyArea->Enable();
+            pRbCopyArea->Enable();
+            pEdCopyArea->GrabFocus();
+        }
+        else
+        {
+            pBtnDestPers->Disable();
+            pLbCopyArea->Disable();
+            pEdCopyArea->Disable();
+            pRbCopyArea->Disable();
         }
     }
 
