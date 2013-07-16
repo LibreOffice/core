@@ -170,7 +170,11 @@ namespace pdfi
         virtual void setDefaultCTM(double *ctm) SAL_OVERRIDE;
 
         // Start a page.
-        virtual void startPage(int pageNum, GfxState *state) SAL_OVERRIDE;
+        virtual void startPage(int pageNum, GfxState *state
+#if POPPLER_CHECK_VERSION(0, 23, 0)
+                               , XRef *xref
+#endif
+        ) SAL_OVERRIDE;
 
         // End a page.
         virtual void endPage() SAL_OVERRIDE;
