@@ -115,6 +115,7 @@
 #include <svtools/templdlg.hxx>
 #include <dbconfig.hxx>
 #include <dbmgr.hxx>
+#include <reffld.hxx>
 
 #include <PostItMgr.hxx>
 
@@ -1867,7 +1868,7 @@ bool SwView::JumpToSwMark( const String& rMark )
 
         if( sCmp.Len() )
         {
-            String sName( sMark.Copy( 0, nPos ) );
+            rtl::OUString sName( sMark.Copy( 0, nPos ) );
             sCmp.ToLowerAscii();
             FlyCntType eFlyType = FLYCNTTYPE_ALL;
 
@@ -1891,6 +1892,17 @@ bool SwView::JumpToSwMark( const String& rMark )
             {
                 pWrtShell->EnterStdMode();
                 bRet = pWrtShell->GotoTable( sName );
+            }
+            else if( COMPARE_EQUAL == sCmp.CompareToAscii( pMarkToSequence ) )
+            {
+                pWrtShell->EnterStdMode();
+                sal_Int32 nNoPos = sName.indexOf( cSequenceMarkSeparator );
+                if ( nNoPos != -1 )
+                {
+                    sal_uInt16 nSeqNo = sName.copy( nNoPos + 1 ).toInt32();
+                    sName = sName.copy( 0, nNoPos );
+                    pWrtShell->GotoRefMark( sName, REF_SEQUENCEFLD, nSeqNo );
+                }
             }
             else if( COMPARE_EQUAL == sCmp.CompareToAscii( pMarkToText ) )
             {
