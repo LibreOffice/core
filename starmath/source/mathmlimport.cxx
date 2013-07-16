@@ -555,7 +555,7 @@ void SmXMLImport::endDocument(void)
             SmDocShell *pDocShell =
                 static_cast<SmDocShell*>(pModel->GetObjectShell());
             pDocShell->SetFormulaTree(pTree);
-            if (0 == aText.Len())  //If we picked up no annotation text
+            if (aText.isEmpty())  //If we picked up no annotation text
             {
                 // Get text from imported formula
                 pTree->CreateTextFromNode(aText);
@@ -1194,7 +1194,7 @@ void SmXMLAnnotationContext_Impl::StartElement(const uno::Reference<
 void SmXMLAnnotationContext_Impl::Characters(const OUString &rChars)
 {
     if (bIsStarMath)
-        GetSmImport().GetText().Append(String(rChars));
+        GetSmImport().GetText() + rChars;
 }
 
 ////////////////////////////////////////////////////////////

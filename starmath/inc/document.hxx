@@ -92,7 +92,7 @@ class SmDocShell : public SfxObjectShell, public SfxListener
     friend class SmModel;
     friend class SmCursor;
 
-    String              aText;
+    OUString            aText;
     SmFormat            aFormat;
     SmParser            aInterpreter;
     OUString            aAccText;
@@ -186,7 +186,7 @@ public:
 
     void        UpdateText();
     void        SetText(const OUString& rBuffer);
-    OUString    GetText() { return (OUString(aText)); }
+    OUString    GetText() { return (aText); }
     void        SetFormat(SmFormat& rFormat);
     const SmFormat&  GetFormat() { return (aFormat); }
 

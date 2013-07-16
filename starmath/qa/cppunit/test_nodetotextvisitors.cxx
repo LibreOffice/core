@@ -519,11 +519,11 @@ void Test::ParseAndCompare(const char *formula1, const char *formula2, const cha
 
 void Test::testBinomInBinHor()
 {
-    String sInput, sExpected;
+    OUString sInput, sExpected;
     SmNode* pTree;
 
     // set up a binom (table) node
-    sInput.AppendAscii("binom a b + c");
+    sInput += "binom a b + c";
     pTree = SmParser().Parse(sInput);
     pTree->Prepare(xDocShRef->GetFormat(), *xDocShRef);
 
@@ -539,19 +539,19 @@ void Test::testBinomInBinHor()
     aCursor.InsertElement(PlusElement);
     aCursor.InsertText("d");
 
-    sExpected.AppendAscii(" { { binom a b + c } + d } ");
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Binom Node in BinHor Node", sExpected, String(xDocShRef->GetText()));
+    sExpected += " { { binom a b + c } + d } ";
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Binom Node in BinHor Node", sExpected, xDocShRef->GetText());
 
     delete pTree;
 }
 
 void Test::testBinVerInUnary()
 {
-    String sInput, sExpected;
+    OUString sInput, sExpected;
     SmNode* pTree;
 
     // set up a unary operator with operand
-    sInput.AppendAscii("- 1");
+    sInput += "- 1";
     pTree = SmParser().Parse(sInput);
     pTree->Prepare(xDocShRef->GetFormat(), *xDocShRef);
 
@@ -570,19 +570,19 @@ void Test::testBinVerInUnary()
     aCursor.Move(&aOutputDevice, MoveDown);
     aCursor.InsertText("2");
 
-    sExpected.AppendAscii(" - { 1 over 2 } ");
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Binary Vertical in Unary Operator", sExpected, String(xDocShRef->GetText()));
+    sExpected += " - { 1 over 2 } ";
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Binary Vertical in Unary Operator", sExpected, xDocShRef->GetText());
 
     delete pTree;
 }
 
 void Test::testBinHorInSubSup()
 {
-    String sInput, sExpected;
+    OUString sInput, sExpected;
     SmNode* pTree;
 
     // set up a blank formula
-    sInput.AppendAscii("");
+    sInput += "";
     pTree = SmParser().Parse(sInput);
     pTree->Prepare(xDocShRef->GetFormat(), *xDocShRef);
 
@@ -601,7 +601,7 @@ void Test::testBinHorInSubSup()
     aCursor.InsertElement(PlusElement);
     aCursor.InsertText("d");
 
-    sExpected.AppendAscii(" { a rsup { b + c } + d } ");
+    sExpected += " { a rsup { b + c } + d } ";
 //FIXME    CPPUNIT_ASSERT_EQUAL_MESSAGE("BinHor in SubSup", sExpected, xDocShRef->GetText());
 
     delete pTree;
@@ -609,11 +609,11 @@ void Test::testBinHorInSubSup()
 
 void Test::testUnaryInMixedNumberAsNumerator()
 {
-    String sInput, sExpected;
+    OUString sInput, sExpected;
     SmNode* pTree;
 
     // set up a unary operator
-    sInput.AppendAscii("- 1");
+    sInput += "- 1";
     pTree = SmParser().Parse(sInput);
     pTree->Prepare(xDocShRef->GetFormat(), *xDocShRef);
 
@@ -648,8 +648,8 @@ void Test::testUnaryInMixedNumberAsNumerator()
     aCursor.InsertElement(PlusElement);
     aCursor.InsertText("4");
 
-    sExpected.AppendAscii(" { 2 { - 1 over 2 } + 4 } ");
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Unary in mixed number as Numerator", sExpected, String(xDocShRef->GetText()));
+    sExpected += " { 2 { - 1 over 2 } + 4 } ";
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Unary in mixed number as Numerator", sExpected, xDocShRef->GetText());
 
     delete pTree;
 }

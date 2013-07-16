@@ -73,7 +73,7 @@ void MathType::Init()
  between math symbols and ordinary text e.g. 1=2 rather
  than 1 = 2
  */
-sal_Bool MathType::LookupChar(sal_Unicode nChar,String &rRet,sal_uInt8 nVersion,
+sal_Bool MathType::LookupChar(sal_Unicode nChar,OUString &rRet,sal_uInt8 nVersion,
     sal_uInt8 nTypeFace)
 {
     bool bRet=false;
@@ -109,56 +109,56 @@ sal_Bool MathType::LookupChar(sal_Unicode nChar,String &rRet,sal_uInt8 nVersion,
                 pC = " rightarrow ";
             else
             {
-                rRet.Append(nChar);
+                rRet += OUString( nChar );
                 bRet=true;
             }
             break;
         case 0x00fb:
             if ((nVersion < 3) && (nTypeFace == 0x81))
                 nChar = 0xDF;
-            rRet.Append(nChar);
+            rRet += OUString( nChar );
             bRet=true;
             break;
         case 'a':
             if ((nVersion < 3) && (nTypeFace == 0x84))
                 nChar = 0x3b1;
-            rRet.Append(nChar);
+            rRet += OUString( nChar );
             bRet=true;
             break;
         case 'b':
             if ((nVersion < 3) && (nTypeFace == 0x84))
                 nChar = 0x3b2;
-            rRet.Append(nChar);
+            rRet += OUString( nChar );
             bRet=true;
             break;
         case 'l':
             if ((nVersion < 3) && (nTypeFace == 0x84))
                 nChar = 0x3bb;
-            rRet.Append(nChar);
+            rRet += OUString( nChar );
             bRet=true;
             break;
         case 'n':
             if ((nVersion < 3) && (nTypeFace == 0x84))
                 nChar = 0x3bd;
-            rRet.Append(nChar);
+            rRet += OUString( nChar );
             bRet=true;
             break;
         case 'r':
             if ((nVersion < 3) && (nTypeFace == 0x84))
                 nChar = 0x3c1;
-            rRet.Append(nChar);
+            rRet += OUString( nChar );
             bRet=true;
             break;
         case 'D':
             if ((nVersion < 3) && (nTypeFace == 0x84))
                 nChar = 0x394;
-            rRet.Append(nChar);
+            rRet += OUString( nChar );
             bRet=true;
             break;
         case 0xa9:
             if ((nVersion < 3) && (nTypeFace == 0x82))
                 nChar = '\'';
-            rRet.Append(nChar);
+            rRet += OUString( nChar );
             bRet=true;
             break;
         case 0x00f1:
@@ -166,7 +166,7 @@ sal_Bool MathType::LookupChar(sal_Unicode nChar,String &rRet,sal_uInt8 nVersion,
                 pC = " \\rangle ";
             else
             {
-                rRet.Append(nChar);
+                rRet += OUString( nChar );
                 bRet=true;
             }
             break;
@@ -175,7 +175,7 @@ sal_Bool MathType::LookupChar(sal_Unicode nChar,String &rRet,sal_uInt8 nVersion,
                 pC = " <= ";
             else
             {
-                rRet.Append(nChar);
+                rRet += OUString( nChar );
                 bRet=true;
             }
             break;
@@ -184,7 +184,7 @@ sal_Bool MathType::LookupChar(sal_Unicode nChar,String &rRet,sal_uInt8 nVersion,
                 pC = " drarrow ";
             else
             {
-                rRet.Append(nChar);
+                rRet += OUString( nChar );
                 bRet=true;
             }
             break;
@@ -193,7 +193,7 @@ sal_Bool MathType::LookupChar(sal_Unicode nChar,String &rRet,sal_uInt8 nVersion,
                 pC = " %OMEGA ";
             else
             {
-                rRet.Append(nChar);
+                rRet += OUString( nChar );
                 bRet=true;
             }
             break;
@@ -441,9 +441,7 @@ sal_Bool MathType::LookupChar(sal_Unicode nChar,String &rRet,sal_uInt8 nVersion,
             break;
         case 0x22b2:
         case 0x22b3:
-            rRet += ' ';
-            rRet.Append(nChar);
-            rRet += ' ';
+            rRet += " " + OUString( nChar ) + " ";
             break;
         case 0x22a5:
             pC = " ortho ";
@@ -478,7 +476,7 @@ sal_Bool MathType::LookupChar(sal_Unicode nChar,String &rRet,sal_uInt8 nVersion,
             pC = " rdbracket ";
             break;
         case 0xe083:
-            rRet.Append('+');
+            rRet += "+";
             bRet=true;
             break;
         case '^':
@@ -505,25 +503,25 @@ sal_Bool MathType::LookupChar(sal_Unicode nChar,String &rRet,sal_uInt8 nVersion,
         case 0xef05:    //tiny space
         case 0xeb02:    //small space
         case 0xeb04:    //medium space
-            rRet.Append('`');
+            rRet += "`";
             break;
         case 0xeb05:    //large space
-            rRet.Append('~');
+            rRet += "~";
             break;
         case 0x3a9:
             pC = " %OMEGA ";
             break;
         default:
-            rRet.Append(nChar);
+            rRet += OUString( nChar );
             bRet=true;
             break;
     }
     if (pC)
-        rRet.AppendAscii(pC);
+        rRet += OUString::createFromAscii( pC );
     return bRet;
 }
 
-void MathTypeFont::AppendStyleToText(String &rRet)
+void MathTypeFont::AppendStyleToText(OUString &rRet)
 {
     const char *pC = NULL;
     switch (nStyle)
@@ -542,10 +540,10 @@ void MathTypeFont::AppendStyleToText(String &rRet)
             break;
     }
     if (pC)
-        rRet.AppendAscii(pC);
+        rRet += OUString::createFromAscii( pC );
 }
 
-void MathType::TypeFaceToString(String &rTxt,sal_uInt8 nFace)
+void MathType::TypeFaceToString(OUString &rTxt,sal_uInt8 nFace)
 {
     MathTypeFont aFont(nFace);
     MathTypeFontSet::iterator aItr = aUserStyles.find(aFont);
@@ -606,28 +604,28 @@ int MathType::Parse(SotStorage *pStor)
     return nRet;
 }
 
-static void lcl_PrependDummyTerm(String &rRet, xub_StrLen &rTextStart)
+static void lcl_PrependDummyTerm(OUString &rRet, sal_Int32 &rTextStart)
 {
-    if ((rRet.GetChar(rTextStart) == '=') &&
+    if ((rRet[rTextStart] == '=') &&
         ((rTextStart == 0) ||
-        (rRet.GetChar(rTextStart-1) == '{'))
+        (rRet[ rTextStart-1 ] == '{'))
        )
     {
-        rRet.InsertAscii(" {}",rTextStart);
+        rRet = rRet.replaceAt(rTextStart,0," {}");
         rTextStart+=3;
     }
 }
 
-static void lcl_AppendDummyTerm(String &rRet)
+static void lcl_AppendDummyTerm(OUString &rRet)
 {
     bool bOk=false;
-    for(int nI=rRet.Len()-1;nI >= 0; nI--)
+    for(int nI=rRet.getLength()-1;nI >= 0; nI--)
     {
-        xub_StrLen nIdx = sal::static_int_cast< xub_StrLen >(nI);
-        sal_Unicode nChar = rRet.GetChar(nIdx);
+        sal_Int32 nIdx = sal::static_int_cast< sal_Int32 >(nI);
+        sal_Unicode nChar = rRet[nIdx];
         if (nChar == ' ')
             continue;
-        if (rRet.GetChar(nIdx) != '{')
+        if (rRet[nIdx] != '{')
             bOk=true;
         break;
     }
@@ -664,9 +662,9 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
     int nSetSize=0,nSetAlign=0;
     int nCurRow=0,nCurCol=0;
     bool bOpenString=false;
-    xub_StrLen nTextStart = 0;
-    xub_StrLen nSubSupStartPos = 0;
-    xub_StrLen nLastTemplateBracket=STRING_NOTFOUND;
+    sal_Int32 nTextStart = 0;
+    sal_Int32 nSubSupStartPos = 0;
+    sal_Int32 nLastTemplateBracket=STRING_NOTFOUND;
 
     do
     {
@@ -687,24 +685,24 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
         if ((nRecord == CHAR) && (!bIsSilent) && (!bOpenString))
         {
             bOpenString=true;
-            nTextStart = rRet.Len();
+            nTextStart = rRet.getLength();
         }
         else if ((nRecord != CHAR) && (bOpenString))
         {
             bOpenString=false;
-            if ((rRet.Len() - nTextStart) > 1)
+            if ((rRet.getLength() - nTextStart) > 1)
             {
-                String aStr;
+                OUString aStr;
                 TypeFaceToString(aStr,nTypeFace);
-                aStr += '\"';
-                rRet.Insert(aStr,nTextStart);
-                rRet += '\"';
+                aStr += "\"";
+                rRet = rRet.replaceAt(nTextStart,0,aStr);
+                rRet += "\"";
             }
-            else if (nRecord == END && rRet.Len() > 0)
+            else if (nRecord == END && !rRet.isEmpty())
             {
                 sal_Unicode cChar = 0;
-                xub_StrLen nI = rRet.Len()-1;
-                while (nI && ((cChar = rRet.GetChar(nI)) == ' '))
+                sal_Int32 nI = rRet.getLength()-1;
+                while (nI && ((cChar = rRet[nI]) == ' '))
                     --nI;
                 if ((cChar == '=') || (cChar == '+') || (cChar == '-'))
                     rRet += "{}";
@@ -792,7 +790,7 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                                 {
                                     rRet += " nroot";
                                     sPush = rRet;
-                                    rRet.Erase();
+                                    rRet = OUString();
                                 }
                             }
                             rRet += " {";
@@ -807,7 +805,7 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                             rRet += " {";
                             break;
                         case 0xf:
-                            nSubSupStartPos = rRet.Len();
+                            nSubSupStartPos = rRet.getLength();
                             if ((nVariation == 0) ||
                                     ((nVariation == 2) && (nPart==1)))
                             {
@@ -876,7 +874,7 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                                 if ( (nVariation != 0) && (nVariation != 3))
                                 {
                                     sPush = rRet;
-                                    rRet.Erase();
+                                    rRet = OUString();
                                 }
                             }
                             if (((nVariation == 1) ||
@@ -898,7 +896,7 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                                 if ( (nVariation != 0) && (nVariation != 2))
                                 {
                                     sPush = rRet;
-                                    rRet.Erase();
+                                    rRet = OUString();
                                 }
                             }
                             if (((nVariation == 1) ||
@@ -916,7 +914,7 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                                 if ( (nVariation != 0) && (nVariation != 2))
                                 {
                                     sPush = rRet;
-                                    rRet.Erase();
+                                    rRet = OUString();
                                 }
                             }
                             if (((nVariation == 1) ||
@@ -932,7 +930,7 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                                 else
                                     rRet += " Int";
                                 sPush = rRet;
-                                rRet.Erase();
+                                rRet = OUString();
                             }
                             if (((nVariation == 1) ||
                                     (nVariation == 2)) && (nPart==1))
@@ -951,7 +949,7 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                                 else
                                     rRet += " iInt";
                                 sPush = rRet;
-                                rRet.Erase();
+                                rRet = OUString();
                             }
                             if (nPart==1)
                                 rRet += " cSub";
@@ -965,7 +963,7 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                                 else
                                     rRet += " iiInt";
                                 sPush = rRet;
-                                rRet.Erase();
+                                rRet = OUString();
                             }
                             if (nPart==1)
                                 rRet += " cSub";
@@ -982,7 +980,7 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                                 if (nVariation != 2)
                                 {
                                     sPush = rRet;
-                                    rRet.Erase();
+                                    rRet = OUString();
                                 }
                             }
                             if ((nVariation == 0) && (nPart==1))
@@ -998,7 +996,7 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                             {
                                 rRet += " Sum";
                                 sPush = rRet;
-                                rRet.Erase();
+                                rRet = OUString();
                             }
                             if ((nVariation == 0) && (nPart==1))
                                 rRet += " rSub";
@@ -1015,7 +1013,7 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                                 if (nVariation != 2)
                                 {
                                     sPush = rRet;
-                                    rRet.Erase();
+                                    rRet = OUString();
                                 }
                             }
                             if ((nVariation == 0) && (nPart==1))
@@ -1031,7 +1029,7 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                             {
                                 rRet += " Prod";
                                 sPush = rRet;
-                                rRet.Erase();
+                                rRet = OUString();
                             }
                             if ((nVariation == 0) && (nPart==1))
                                 rRet += " rSub";
@@ -1048,7 +1046,7 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                                 if (nVariation != 2)
                                 {
                                     sPush = rRet;
-                                    rRet.Erase();
+                                    rRet = OUString();
                                 }
                             }
                             if ((nVariation == 0) && (nPart==1))
@@ -1064,7 +1062,7 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                             {
                                 rRet += " coProd";
                                 sPush = rRet;
-                                rRet.Erase();
+                                rRet = OUString();
                             }
                             if ((nVariation == 0) && (nPart==1))
                                 rRet += " rSub";
@@ -1081,7 +1079,7 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                                 if (nVariation != 2)
                                 {
                                     sPush = rRet;
-                                    rRet.Erase();
+                                    rRet = OUString();
                                 }
                             }
                             if ((nVariation == 0) && (nPart==1))
@@ -1097,7 +1095,7 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                             {
                                 rRet += " union"; //union
                                 sPush = rRet;
-                                rRet.Erase();
+                                rRet = OUString();
                             }
                             if ((nVariation == 0) && (nPart==1))
                                 rRet += " rSub";
@@ -1114,7 +1112,7 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                                 if (nVariation != 2)
                                 {
                                     sPush = rRet;
-                                    rRet.Erase();
+                                    rRet = OUString();
                                 }
                             }
                             if ((nVariation == 0) && (nPart==1))
@@ -1130,7 +1128,7 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                             {
                                 rRet += " intersect"; //intersect
                                 sPush = rRet;
-                                rRet.Erase();
+                                rRet = OUString();
                             }
                             if ((nVariation == 0) && (nPart==1))
                                 rRet += " rSub";
@@ -1157,7 +1155,7 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                                 if (nPart == 0)
                                 {
                                     sPush = rRet;
-                                    rRet.Erase();
+                                    rRet = OUString();
                                 }
                             }
                             rRet += " {";
@@ -1178,7 +1176,7 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                             if (nPart == 0)
                             {
                                 sPush = rRet;
-                                rRet.Erase();
+                                rRet = OUString();
                             }
                             if ((nVariation == 0) && (nPart==0))
                                 rRet += " rSup";
@@ -1194,7 +1192,7 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                             if (nPart == 0)
                             {
                                 sPush = rRet;
-                                rRet.Erase();
+                                rRet = OUString();
                             }
                             if ((nVariation == 0) && (nPart==0))
                                 rRet += " cSup";
@@ -1256,17 +1254,17 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                             break;
                         }
                         sal_Int16 nOldCurSize=nCurSize;
-                        xub_StrLen nSizeStartPos = rRet.Len();
+                        sal_Int32 nSizeStartPos = rRet.getLength();
                         HandleSize(nLSize,nDSize,nSetSize);
                         nRet = HandleRecords(nLevel+1);
                         while (nSetSize)
                         {
                             bool bOk=false;
-                            xub_StrLen nI = rRet.SearchBackward('{');
+                            sal_Int32 nI = rRet.lastIndexOf('{');
                             if (nI != STRING_NOTFOUND)
                             {
-                                for(nI=nI+1;nI<rRet.Len();nI++)
-                                    if (rRet.GetChar(nI) != ' ')
+                                for(nI=nI+1;nI<rRet.getLength();nI++)
+                                    if (rRet[nI] != ' ')
                                     {
                                         bOk=true;
                                         break;
@@ -1278,7 +1276,7 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                             if (bOk)
                                 rRet += "} ";
                             else
-                                rRet.Erase(nSizeStartPos);
+                                rRet = rRet.replaceAt( nSizeStartPos, rRet.getLength(), "" );
                             nSetSize--;
                             nCurSize=nOldCurSize;
                         }
@@ -1353,7 +1351,7 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                                 {
                                     newline--;
                                     sMainTerm = rRet;
-                                    rRet.Erase();
+                                    rRet = OUString();
                                 }
                                 else
                                 {
@@ -1387,11 +1385,11 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                                 newline--;
 
                             bool bOk=false;
-                            xub_StrLen nI = rRet.SearchBackward('{');
+                            sal_Int32 nI = rRet.lastIndexOf('{');
                             if (nI != STRING_NOTFOUND)
                             {
-                                for(nI=nI+1;nI<rRet.Len();nI++)
-                                    if (rRet.GetChar(nI) != ' ')
+                                for(nI=nI+1;nI<rRet.getLength();nI++)
+                                    if (rRet[nI] != ' ')
                                     {
                                         bOk=true;
                                         break;
@@ -1403,7 +1401,7 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                             if (bOk)
                                 rRet += "} ";
                             else
-                                rRet.Erase(nSubSupStartPos);
+                                rRet = rRet.replaceAt(nSubSupStartPos, rRet.getLength(), "");
                             nPart++;
                             }
                             break;
@@ -1466,7 +1464,7 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                                 if (nPart == 0)
                                 {
                                     sMainTerm = rRet;
-                                    rRet.Erase();
+                                    rRet = OUString();
                                 }
                                 else
                                 {
@@ -1513,7 +1511,7 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                                 if (nVariation != 2)
                                 {
                                     sMainTerm = rRet;
-                                    rRet.Erase();
+                                    rRet = OUString();
                                 }
                                 newline--;
                             }
@@ -1542,7 +1540,7 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                                 if ((nVariation != 0) && (nVariation != 3))
                                 {
                                     sMainTerm = rRet;
-                                    rRet.Erase();
+                                    rRet = OUString();
                                 }
                                 newline--;
                             }
@@ -1573,7 +1571,7 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                                 if ((nVariation != 0) && (nVariation != 2))
                                 {
                                     sMainTerm = rRet;
-                                    rRet.Erase();
+                                    rRet = OUString();
                                 }
                                 newline--;
                             }
@@ -1592,7 +1590,7 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                             if (nPart == 0)
                             {
                                 sMainTerm = rRet;
-                                rRet.Erase();
+                                rRet = OUString();
                                 newline--;
                             }
                             else if ((nPart == 1) &&
@@ -1620,7 +1618,7 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                             if (nPart == 0)
                             {
                                 sMainTerm = rRet;
-                                rRet.Erase();
+                                rRet = OUString();
                                 newline--;
                             }
                             else if (nPart == 1)
@@ -1640,7 +1638,7 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                                     ((nVariation == 0) || (nVariation == 1)))
                             {
                                 sMainTerm = rRet;
-                                rRet.Erase();
+                                rRet = OUString();
                                 newline--;
                             }
                             else if ((nPart == 0) && (nVariation == 2))
@@ -1648,7 +1646,7 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                             else if ((nPart == 1) && (nVariation == 2))
                             {
                                 sMainTerm = rRet;
-                                rRet.Erase();
+                                rRet = OUString();
                                 newline--;
                             }
                             else if ((nPart == 2) || ((((nPart == 1) &&
@@ -1771,7 +1769,7 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
     while (nRecord != END && !pS->IsEof());
     while (nSetSize)
     {
-        rRet += '}';
+        rRet += "}";
         nSetSize--;
     }
     return nRet;
@@ -1805,7 +1803,7 @@ void MathType::HandleMatrixSeparator(int nMatrixRows,int nMatrixCols,
             if (nMatrixRows!=-1)
                 rCurCol++;
             else
-                rRet += '\n';
+                rRet += "\n";
         }
     }
 }
@@ -1842,7 +1840,7 @@ sal_Bool MathType::HandleSize(sal_Int16 nLstSize,sal_Int16 nDefSize, int &rSetSi
             if (rSetSize)
             {
                 rSetSize--;
-                rRet += '}';
+                rRet += "}";
                 bRet=true;
             }
             if (-nLstSize/32 != nLastSize)
@@ -1850,7 +1848,7 @@ sal_Bool MathType::HandleSize(sal_Int16 nLstSize,sal_Int16 nDefSize, int &rSetSi
                 nLastSize = nCurSize;
                 rRet += " size ";
                 rRet += OUString::number(-nLstSize/32);
-                rRet += '{';
+                rRet += "{";
                 bRet=true;
                 rSetSize++;
             }
@@ -1871,7 +1869,7 @@ sal_Bool MathType::HandleSize(sal_Int16 nLstSize,sal_Int16 nDefSize, int &rSetSi
             if (rSetSize)
             {
                 rSetSize--;
-                rRet += '}';
+                rRet += "}";
                 bRet=true;
             }
             if (nLstSize != nLastSize)
@@ -1879,7 +1877,7 @@ sal_Bool MathType::HandleSize(sal_Int16 nLstSize,sal_Int16 nDefSize, int &rSetSi
                 nLastSize = nCurSize;
                 rRet += " size ";
                 rRet += OUString::number(nLstSize);
-                rRet += '{';
+                rRet += "{";
                 bRet=true;
                 rSetSize++;
             }
@@ -2664,7 +2662,7 @@ int MathType::HandlePile(int &rSetAlign,int nLevel,sal_uInt8 nSelector,
 
     rRet += " stack {\n";
     int nRet = HandleRecords(nLevel+1,nSelector,nVariation,-1,-1);
-    rRet.Erase(rRet.Len()-3,2);
+    rRet = rRet.replaceAt(rRet.getLength()-3,2,"");
     rRet += "} ";
 
     while (rSetAlign)
@@ -2695,9 +2693,9 @@ int MathType::HandleMatrix(int nLevel,sal_uInt8 nSelector,
     rRet += " matrix {\n";
     int nRet = HandleRecords(nLevel+1,nSelector,nVariation,nRows,nCols);
 
-    xub_StrLen nI = rRet.SearchBackward('#');
+    sal_Int32 nI = rRet.lastIndexOf('#');
     if ((nI != STRING_NOTFOUND) && (nI > 0))
-        if (rRet.GetChar(nI-1) != '#')  //missing column
+        if (rRet[nI-1] != '#')  //missing column
             rRet += "{}";
 
     rRet += "\n} ";
@@ -2705,7 +2703,7 @@ int MathType::HandleMatrix(int nLevel,sal_uInt8 nSelector,
 }
 
 int MathType::HandleTemplate(int nLevel,sal_uInt8 &rSelector,
-    sal_uInt8 &rVariation, xub_StrLen &rLastTemplateBracket)
+    sal_uInt8 &rVariation, sal_Int32 &rLastTemplateBracket)
 {
     sal_uInt8 nOption; //This appears utterly unused
     *pS >> rSelector;
@@ -2728,8 +2726,8 @@ int MathType::HandleTemplate(int nLevel,sal_uInt8 &rSelector,
     if ( (rSelector == 0xf) && (rLastTemplateBracket != STRING_NOTFOUND) )
     {
         bRemove=true;
-        for (xub_StrLen nI = rLastTemplateBracket+1; nI < rRet.Len(); nI++ )
-            if (rRet.GetChar(nI) != ' ')
+        for (sal_Int32 nI = rLastTemplateBracket+1; nI < rRet.getLength(); nI++ )
+            if (rRet[nI] != ' ')
             {
                 bRemove=false;
                 break;
@@ -2741,12 +2739,12 @@ int MathType::HandleTemplate(int nLevel,sal_uInt8 &rSelector,
 
     if (bRemove)
     {
-        rRet.Erase(rLastTemplateBracket,1);
+        rRet = rRet.replaceAt(rLastTemplateBracket,1,"");
         rRet += "} ";
         rLastTemplateBracket = STRING_NOTFOUND;
     }
     if (rSelector == 0xf)
-        rLastTemplateBracket = rRet.SearchBackward('}');
+        rLastTemplateBracket = rRet.lastIndexOf('}');
     else
         rLastTemplateBracket = STRING_NOTFOUND;
 
@@ -2772,30 +2770,30 @@ void MathType::HandleEmblishments()
             rRet += " dddot ";
             break;
         case 0x05:
-            if (nPostSup == 0)
+            if (!nPostSup)
             {
                 sPost += " sup {}";
-                nPostSup = sPost.Len();
+                nPostSup = sPost.getLength();
             }
-            sPost.InsertAscii(" ' ",nPostSup-1);
+            sPost = sPost.replaceAt(nPostSup-1,0," ' ");
             nPostSup += 3;
             break;
         case 0x06:
-            if (nPostSup == 0)
+            if (!nPostSup)
             {
                 sPost += " sup {}";
-                nPostSup = sPost.Len();
+                nPostSup = sPost.getLength();
             }
-            sPost.InsertAscii(" '' ",nPostSup-1);
+            sPost = sPost.replaceAt(nPostSup-1,0," '' ");
             nPostSup += 4;
             break;
         case 0x07:
-            if (nPostlSup == 0)
+            if (!nPostlSup)
             {
                 sPost += " lsup {}";
-                nPostlSup = sPost.Len();
+                nPostlSup = sPost.getLength();
             }
-            sPost.InsertAscii(" ' ",nPostlSup-1);
+            sPost = sPost.replaceAt(nPostlSup-1,0," ' ");
             nPostlSup += 3;
             break;
         case 0x08:
@@ -2814,12 +2812,12 @@ void MathType::HandleEmblishments()
             rRet += " bar ";
             break;
         case 0x12:
-            if (nPostSup == 0)
+            if (!nPostSup)
             {
                 sPost += " sup {}";
-                nPostSup = sPost.Len();
+                nPostSup = sPost.getLength();
             }
-            sPost.InsertAscii(" ''' ",nPostSup-1);
+            sPost = sPost.replaceAt(nPostSup-1,0," ''' ");
             nPostSup += 5;
             break;
         case 0x14:
@@ -2857,7 +2855,7 @@ void MathType::HandleSetSize()
     }
 }
 
-int MathType::HandleChar(xub_StrLen &rTextStart,int &rSetSize,int nLevel,
+int MathType::HandleChar(sal_Int32 &rTextStart,int &rSetSize,int nLevel,
     sal_uInt8 nTag,sal_uInt8 nSelector,sal_uInt8 nVariation, sal_Bool bSilent)
 {
     sal_Unicode nChar;
@@ -2897,36 +2895,35 @@ int MathType::HandleChar(xub_StrLen &rTextStart,int &rSetSize,int nLevel,
         //follows the char and nPostSup and nPostlSup are the
         //indexes at which this class of emblishment is
         //collated together
-        sPost.Erase();
+        sPost = OUString();
         nPostSup = nPostlSup = 0;
-        int nOriglen=rRet.Len()-rTextStart;
+        int nOriglen=rRet.getLength()-rTextStart;
         rRet += " {";  // #i24340# make what would be "vec {A}_n" become "{vec {A}}_n"
         if ((!bSilent) && ((nOriglen) > 1))
-            rRet += '\"';
+            rRet += "\"";
         nRet = HandleRecords(nLevel+1,nSelector,nVariation);
         if (!bSilent)
         {
             if (nOriglen > 1)
             {
-                String aStr;
+                OUString aStr;
                 TypeFaceToString(aStr,nOldTypeFace);
-                aStr += '\"';
-                rRet.Insert(aStr,rTextStart);
+                aStr += "\"";
+                rRet.replaceAt(rTextStart,0,aStr);
 
-                aStr.Erase();
+                aStr = OUString();
                 TypeFaceToString(aStr,nTypeFace);
-                rRet.Append(aStr);
-                rRet += '{';
+                rRet += aStr + "{";
             }
             else
                 rRet += " {";
-            rTextStart = rRet.Len();
+            rTextStart = rRet.getLength();
         }
     }
 
     if (!bSilent)
     {
-        xub_StrLen nOldLen = rRet.Len();
+        sal_Int32 nOldLen = rRet.getLength();
         if (
             HandleSize(nLSize,nDSize,rSetSize) ||
             (nOldTypeFace != nTypeFace)
@@ -2934,36 +2931,34 @@ int MathType::HandleChar(xub_StrLen &rTextStart,int &rSetSize,int nLevel,
         {
             if ((nOldLen - rTextStart) > 1)
             {
-                rRet.InsertAscii("\"",nOldLen);
-                String aStr;
+                rRet = rRet.replaceAt(nOldLen, 0, "\"");
+                OUString aStr;
                 TypeFaceToString(aStr,nOldTypeFace);
-                aStr += '\"';
-                rRet.Insert(aStr,rTextStart);
+                aStr += "\"";
+                rRet = rRet.replaceAt(rTextStart,0,aStr);
             }
-            rTextStart = rRet.Len();
+            rTextStart = rRet.getLength();
         }
-        nOldLen = rRet.Len();
+        nOldLen = rRet.getLength();
         if (!LookupChar(nChar,rRet,nVersion,nTypeFace))
         {
             if (nOldLen - rTextStart > 1)
             {
-                rRet.InsertAscii("\"",nOldLen);
-                String aStr;
+                rRet = rRet.replaceAt(nOldLen,0,"\"");
+                OUString aStr;
                 TypeFaceToString(aStr,nOldTypeFace);
-                aStr += '\"';
-                rRet.Insert(aStr,rTextStart);
+                aStr += "\"";
+                rRet = rRet.replaceAt(rTextStart, 0, aStr);
             }
-            rTextStart = rRet.Len();
+            rTextStart = rRet.getLength();
         }
         lcl_PrependDummyTerm(rRet, rTextStart);
     }
 
     if ((xfEMBELL(nTag)) && (!bSilent))
     {
-        rRet += '}';    // #i24340# make what would be "vec {A}_n" become "{vec {A}}_n"
-        rRet += '}';
-        rRet += sPost;
-        rTextStart = rRet.Len();
+        rRet += "}}" + sPost;  // #i24340# make what would be "vec {A}_n" become "{vec {A}}_n"
+        rTextStart = rRet.getLength();
     }
     return nRet;
 }

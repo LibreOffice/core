@@ -83,7 +83,7 @@ class SmXMLImport : public SvXMLImport
 
         SmNodeStack aNodeStack;
         sal_Bool bSuccess;
-        String aText;
+        OUString aText;
 
 public:
     SmXMLImport(
@@ -256,7 +256,7 @@ public:
     }
 
     sal_Bool GetSuccess()           { return bSuccess; }
-    String &GetText()               { return aText; }
+    OUString &GetText()             { return aText; }
 
     virtual void SetViewSettings(const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aViewProps);
     virtual void SetConfigurationSettings(const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aViewProps);

@@ -155,7 +155,7 @@ public:
     virtual void Move(const Point &rPosition);
     void MoveTo(const Point &rPosition) { Move(rPosition - GetTopLeft()); }
     virtual void Arrange(const OutputDevice &rDev, const SmFormat &rFormat);
-    virtual void CreateTextFromNode(String &rText);
+    virtual void CreateTextFromNode(OUString &rText);
 
     virtual void    GetAccessibleText( OUStringBuffer &rText ) const;
     sal_Int32       GetAccessibleIndex() const { return nAccIndex; }
@@ -403,7 +403,7 @@ public:
 
     virtual void Arrange(const OutputDevice &rDev, const SmFormat &rFormat);
 
-    void CreateTextFromNode(String &rText);
+    void CreateTextFromNode(OUString &rText);
     void Accept(SmVisitor* pVisitor);
 };
 
@@ -489,7 +489,7 @@ public:
 
     virtual void Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell);
     virtual void Arrange(const OutputDevice &rDev, const SmFormat &rFormat);
-    virtual void CreateTextFromNode(String &rText);
+    virtual void CreateTextFromNode(OUString &rText);
 
     virtual void  GetAccessibleText( OUStringBuffer &rText ) const;
     void Accept(SmVisitor* pVisitor);
@@ -575,7 +575,7 @@ public:
 
     virtual void Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell);
     virtual void Arrange(const OutputDevice &rDev, const SmFormat &rFormat);
-    void CreateTextFromNode(String &rText);
+    void CreateTextFromNode(OUString &rText);
     void Accept(SmVisitor* pVisitor);
 };
 
@@ -741,7 +741,7 @@ public:
     {}
 
     virtual void Arrange(const OutputDevice &rDev, const SmFormat &rFormat);
-    void CreateTextFromNode(String &rText);
+    void CreateTextFromNode(OUString &rText);
     void Accept(SmVisitor* pVisitor);
 };
 
@@ -794,7 +794,7 @@ public:
     }
 
     virtual void Arrange(const OutputDevice &rDev, const SmFormat &rFormat);
-    void CreateTextFromNode(String &rText);
+    void CreateTextFromNode(OUString &rText);
     void Accept(SmVisitor* pVisitor);
 
     SmNode* Argument();
@@ -867,7 +867,7 @@ public:
     virtual SmNode * GetLeftMost();
 
     virtual void Arrange(const OutputDevice &rDev, const SmFormat &rFormat);
-    void CreateTextFromNode(String &rText);
+    void CreateTextFromNode(OUString &rText);
     void Accept(SmVisitor* pVisitor);
 };
 
@@ -979,7 +979,7 @@ public:
     void SetSubSup(SmSubSup eSubSup, SmNode* pScript) { SetSubNode( 1 + eSubSup, pScript); }
 
     virtual void Arrange(const OutputDevice &rDev, const SmFormat &rFormat);
-    void CreateTextFromNode(String &rText);
+    void CreateTextFromNode(OUString &rText);
     void Accept(SmVisitor* pVisitor);
 
 };
@@ -1017,7 +1017,7 @@ public:
     const SmMathSymbolNode* ClosingBrace() const;
 
     virtual void Arrange(const OutputDevice &rDev, const SmFormat &rFormat);
-    void CreateTextFromNode(String &rText);
+    void CreateTextFromNode(OUString &rText);
     void Accept(SmVisitor* pVisitor);
 };
 
@@ -1162,7 +1162,7 @@ public:
     {}
 
     virtual void Arrange(const OutputDevice &rDev, const SmFormat &rFormat);
-    void CreateTextFromNode(String &rText);
+    void CreateTextFromNode(OUString &rText);
     void Accept(SmVisitor* pVisitor);
 
     SmNode* Attribute();
@@ -1197,7 +1197,7 @@ public:
 
     virtual void Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell);
     virtual void Arrange(const OutputDevice &rDev, const SmFormat &rFormat);
-    void CreateTextFromNode(String &rText);
+    void CreateTextFromNode(OUString &rText);
     void Accept(SmVisitor* pVisitor);
 };
 
@@ -1229,7 +1229,7 @@ public:
     virtual SmNode * GetLeftMost();
 
     virtual void Arrange(const OutputDevice &rDev, const SmFormat &rFormat);
-    void CreateTextFromNode(String &rText);
+    void CreateTextFromNode(OUString &rText);
     void Accept(SmVisitor* pVisitor);
 };
 
