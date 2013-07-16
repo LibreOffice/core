@@ -1,0 +1,10 @@
+Code-Review+2: Andras Timar <atimar@suse.com>
+Code-Review+1: Petr Mladek <pmladek@suse.cz>
+Verified+1: Petr Mladek <pmladek@suse.cz>
+Code-Review+1: Caolán McNamara <caolanm@redhat.com>
+Verified+1: Caolán McNamara <caolanm@redhat.com>
+Submitted-by: Andras Timar <atimar@suse.com>
+Submitted-at: Tue, 16 Jul 2013 07:18:41 +0000
+Reviewed-on: https://gerrit.libreoffice.org/4927
+Project: core
+Branch: refs/heads/libreoffice-4-1-0
