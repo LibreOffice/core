@@ -481,7 +481,11 @@ PDFOutDev::PDFOutDev( PDFDoc* pDoc ) :
 {
 }
 
-void PDFOutDev::startPage(int /*pageNum*/, GfxState* state)
+void PDFOutDev::startPage(int /*pageNum*/, GfxState* state
+#if POPPLER_CHECK_VERSION(0, 23, 0)
+                          , XRef* /*xref*/
+#endif
+)
 {
     assert(state);
     printf("startPage %f %f\n",
