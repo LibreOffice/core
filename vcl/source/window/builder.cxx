@@ -754,6 +754,25 @@ namespace
         return sUnit;
     }
 
+    int extractDecimalDigits(const OString& sPattern)
+    {
+        int nDigits = 0;
+        bool bAfterPoint = false;
+        for (sal_Int32 i = 0; i < sPattern.getLength(); ++i)
+        {
+            if (sPattern[i] == '.' || sPattern[i] == ',')
+                bAfterPoint = true;
+            else if (sPattern[i] == '0')
+            {
+                if (bAfterPoint)
+                    ++nDigits;
+            }
+            else
+                break;
+        }
+        return nDigits;
+    }
+
     FieldUnit detectMetricUnit(OString sUnit)
     {
         FieldUnit eUnit = FUNIT_NONE;
@@ -1199,6 +1218,7 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
             MetricBox *pBox = new MetricBox(pParent, nBits);
             pBox->EnableAutoSize(true);
             pBox->SetUnit(eUnit);
+            pBox->SetDecimalDigits(extractDecimalDigits(sPattern));
             if (eUnit == FUNIT_CUSTOM)
                 pBox->SetCustomUnitText(OStringToOUString(sUnit, RTL_TEXTENCODING_UTF8));
             pWindow = pBox;
