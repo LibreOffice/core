@@ -228,7 +228,9 @@ enum SmModelPropertyHandles
     HANDLE_RUNTIME_UID,
     HANDLE_LOAD_READONLY,     // Security Options
     HANDLE_DIALOG_LIBRARIES,  // #i73329#
-    HANDLE_BASELINE
+    HANDLE_BASELINE,
+    HANDLE_EMBED_FONTS,
+    HANDLE_EMBED_SYSTEM_FONTS
 };
 
 static PropertySetInfo * lcl_createModelPropertyInfo ()
@@ -302,6 +304,8 @@ static PropertySetInfo * lcl_createModelPropertyInfo ()
         { RTL_CONSTASCII_STRINGPARAM( "LoadReadonly" ), HANDLE_LOAD_READONLY, &::getBooleanCppuType(), PROPERTY_NONE, 0 },
         // #i972#
         { RTL_CONSTASCII_STRINGPARAM( "BaseLine"), HANDLE_BASELINE, &::getCppuType((const sal_Int16*)0), PROPERTY_NONE, 0},
+        { RTL_CONSTASCII_STRINGPARAM("EmbedFonts"), HANDLE_EMBED_FONTS, &::getBooleanCppuType(), 0, 0},
+        { RTL_CONSTASCII_STRINGPARAM("EmbedSystemFonts"), HANDLE_EMBED_SYSTEM_FONTS, &::getBooleanCppuType(), 0, 0},
         { NULL, 0, 0, NULL, 0, 0 }
     };
     PropertySetInfo *pInfo = new PropertySetInfo ( aModelPropertyInfoMap );
@@ -608,6 +612,10 @@ void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* 
                     throw IllegalArgumentException();
                 aFormat.SetDistance((*ppEntries)->mnMemberId, nVal);
             }
+            break;
+            case HANDLE_EMBED_FONTS:
+                pDocSh->SetEmbeddedFonts(*(bool*)(*pValues).getValue());
+                printf("Teste %d\n", pDocSh->EmbeddedFonts());
             break;
             case HANDLE_IS_SCALE_ALL_BRACKETS              :
                 aFormat.SetScaleNormalBrackets(*(sal_Bool*)(*pValues).getValue());

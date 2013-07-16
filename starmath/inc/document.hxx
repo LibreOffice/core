@@ -108,6 +108,8 @@ class SmDocShell : public SfxObjectShell, public SfxListener
                         nBottomBorder;
     sal_uInt16          nModifyCount;
     bool                bIsFormulaArranged;
+    bool                mbEmbedFonts;
+    bool                mbEmbedSystemFonts;
     SmCursor           *pCursor;
     std::set< OUString >    aUsedSymbols;   // to export used symbols only when saving
 
@@ -117,6 +119,9 @@ class SmDocShell : public SfxObjectShell, public SfxListener
                         const SfxHint& rHint, const TypeId& rHintType);
 
     bool        WriteAsMathType3( SfxMedium& );
+
+    /// Make DocInfo known to the Doc.
+    virtual SfxDocumentInfoDialog* CreateDocumentInfoDialog(Window *pParent, const SfxItemSet &);
 
     virtual void        Draw(OutputDevice *pDevice,
                              const JobSetup & rSetup,
@@ -146,6 +151,12 @@ class SmDocShell : public SfxObjectShell, public SfxListener
 
     bool                IsFormulaArranged() const { return bIsFormulaArranged; }
     void                SetFormulaArranged(bool bVal) { bIsFormulaArranged = bVal; }
+
+    bool EmbeddedFonts() const { return mbEmbedFonts; }
+    void SetEmbeddedFonts(bool bVal) { mbEmbedFonts = bVal; }
+
+    bool SetEmbeddedSystemFonts() const { return mbEmbedSystemFonts; }
+    void EmbeddedSystemFonts(bool bVal) { mbEmbedSystemFonts = bVal; }
 
     virtual sal_Bool        ConvertFrom(SfxMedium &rMedium);
 
