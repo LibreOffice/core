@@ -73,10 +73,8 @@ public:
     static void MoveRelWrap( ScDocument* pDoc, const ScAddress& rPos,
                              SCCOL nMaxCol, SCROW nMaxRow, ScComplexRefData& rRef );
 
-    /// Before calling, the absolute references must be up-to-date!
-    static ScRefUpdateRes UpdateTranspose( ScDocument* pDoc,
-                                const ScRange& rSource, const ScAddress& rDest,
-                                ScComplexRefData& rRef );
+    static ScRefUpdateRes UpdateTranspose(
+        ScDocument* pDoc, const ScRange& rSource, const ScAddress& rDest, ScRange& rRef );
 
     static void DoTranspose( SCsCOL& rCol, SCsROW& rRow, SCsTAB& rTab, ScDocument* pDoc,
                                 const ScRange& rSource, const ScAddress& rDest );

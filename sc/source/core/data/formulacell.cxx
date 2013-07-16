@@ -2631,17 +2631,13 @@ void ScFormulaCell::UpdateTranspose( const ScRange& rSource, const ScAddress& rD
         }
         else if( t->GetType() != svIndex )
         {
-            t->CalcAbsIfRel( aOldPos );
-            bool bMod;
-            {   // Own scope for SingleDoubleRefModifier dtor if SingleRef
-                SingleDoubleRefModifier aMod( *t );
-                ScComplexRefData& rRef = aMod.Ref();
-                bMod = (ScRefUpdate::UpdateTranspose( pDocument, rSource,
-                    rDest, rRef ) != UR_NOTHING || bPosChanged);
-            }
-            if ( bMod )
+            SingleDoubleRefModifier aMod(*t);
+            ScComplexRefData& rRef = aMod.Ref();
+            ScRange aAbs = rRef.toAbs(aOldPos);
+            bool bMod = (ScRefUpdate::UpdateTranspose(pDocument, rSource, rDest, aAbs) != UR_NOTHING || bPosChanged);
+            if (bMod)
             {
-                t->CalcRelFromAbs( aPos );
+                rRef.SetRange(aAbs, aPos); // based on the new anchor position.
                 bRefChanged = true;
             }
         }
@@ -2658,16 +2654,12 @@ void ScFormulaCell::UpdateTranspose( const ScRange& rSource, const ScAddress& rD
         {
             if( t->GetType() != svIndex )
             {
-                t->CalcAbsIfRel( aOldPos );
-                bool bMod;
-                {   // Own scope for SingleDoubleRefModifier dtor if SingleRef
-                    SingleDoubleRefModifier aMod( *t );
-                    ScComplexRefData& rRef = aMod.Ref();
-                    bMod = (ScRefUpdate::UpdateTranspose( pDocument, rSource,
-                        rDest, rRef ) != UR_NOTHING || bPosChanged);
-                }
-                if ( bMod )
-                    t->CalcRelFromAbs( aPos );
+                SingleDoubleRefModifier aMod(*t);
+                ScComplexRefData& rRef = aMod.Ref();
+                ScRange aAbs = rRef.toAbs(aOldPos);
+                bool bMod = (ScRefUpdate::UpdateTranspose(pDocument, rSource, rDest, aAbs) != UR_NOTHING || bPosChanged);
+                if (bMod)
+                    rRef.SetRange(aAbs, aPos); // based on the new anchor position.
             }
         }
     }

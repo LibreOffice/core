@@ -866,18 +866,22 @@ void ScRefUpdate::DoTranspose( SCsCOL& rCol, SCsROW& rRow, SCsTAB& rTab,
             static_cast<SCsCOLROW>(nRelX));
 }
 
-
-ScRefUpdateRes ScRefUpdate::UpdateTranspose( ScDocument* pDoc,
-                                const ScRange& rSource, const ScAddress& rDest,
-                                ScComplexRefData& rRef )
+ScRefUpdateRes ScRefUpdate::UpdateTranspose(
+    ScDocument* pDoc, const ScRange& rSource, const ScAddress& rDest, ScRange& rRef )
 {
     ScRefUpdateRes eRet = UR_NOTHING;
-    if ( rRef.Ref1.nCol >= rSource.aStart.Col() && rRef.Ref2.nCol <= rSource.aEnd.Col() &&
-         rRef.Ref1.nRow >= rSource.aStart.Row() && rRef.Ref2.nRow <= rSource.aEnd.Row() &&
-         rRef.Ref1.nTab >= rSource.aStart.Tab() && rRef.Ref2.nTab <= rSource.aEnd.Tab() )
+    if (rRef.aStart.Col() >= rSource.aStart.Col() && rRef.aEnd.Col() <= rSource.aEnd.Col() &&
+        rRef.aStart.Row() >= rSource.aStart.Row() && rRef.aEnd.Row() <= rSource.aEnd.Row() &&
+        rRef.aStart.Tab() >= rSource.aStart.Tab() && rRef.aEnd.Tab() <= rSource.aEnd.Tab())
     {
-        DoTranspose( rRef.Ref1.nCol, rRef.Ref1.nRow, rRef.Ref1.nTab, pDoc, rSource, rDest );
-        DoTranspose( rRef.Ref2.nCol, rRef.Ref2.nRow, rRef.Ref2.nTab, pDoc, rSource, rDest );
+        // Source range contains the reference range.
+        SCCOL nCol1 = rRef.aStart.Col(), nCol2 = rRef.aEnd.Col();
+        SCROW nRow1 = rRef.aStart.Row(), nRow2 = rRef.aEnd.Row();
+        SCTAB nTab1 = rRef.aStart.Tab(), nTab2 = rRef.aEnd.Tab();
+        DoTranspose(nCol1, nRow1, nTab1, pDoc, rSource, rDest);
+        DoTranspose(nCol2, nRow2, nTab2, pDoc, rSource, rDest);
+        rRef.aStart = ScAddress(nCol1, nRow1, nTab1);
+        rRef.aEnd = ScAddress(nCol2, nRow2, nTab2);
         eRet = UR_UPDATED;
     }
     return eRet;

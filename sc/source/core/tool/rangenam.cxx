@@ -317,8 +317,12 @@ void ScRangeData::UpdateTranspose( const ScRange& rSource, const ScAddress& rDes
                 (!rRef.Ref2.IsColRel() && !rRef.Ref2.IsRowRel() &&
                     (!rRef.Ref2.IsFlag3D() || !rRef.Ref2.IsTabRel()))))
             {
-                if ( ScRefUpdate::UpdateTranspose( pDoc, rSource, rDest, rRef ) != UR_NOTHING )
+                ScRange aAbs = rRef.toAbs(aPos);
+                if (ScRefUpdate::UpdateTranspose(pDoc, rSource, rDest, aAbs) != UR_NOTHING)
+                {
+                    rRef.SetRange(aAbs, aPos);
                     bChanged = true;
+                }
             }
         }
     }
