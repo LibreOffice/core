@@ -20,9 +20,10 @@
 #ifndef SC_FILTDLG_HXX
 #define SC_FILTDLG_HXX
 
-#include <vcl/morebtn.hxx>
 #include <vcl/combobox.hxx>
 #include <vcl/lstbox.hxx>
+#include <vcl/layout.hxx>
+#include <vcl/morebtn.hxx>
 #include <svtools/stdctrl.hxx>
 #include "global.hxx" // -> ScQueryParam
 #include "address.hxx"
@@ -40,6 +41,7 @@
 //----------------------------------------------------------------------------
 
 class ScFilterOptionsMgr;
+class ScNewFilterOptionsMgr;
 class ScViewData;
 class ScDocument;
 class ScQueryItem;
@@ -186,33 +188,30 @@ public:
     virtual sal_Bool    Close();
 
 private:
-    FixedText   aFtFilterArea;
-    ListBox     aLbFilterArea;
-    formula::RefEdit aEdFilterArea;
-    formula::RefButton aRbFilterArea;
+    ListBox*         pLbFilterArea;
+    formula::RefEdit*   pEdFilterArea;
+    formula::RefButton* pRbFilterArea;
 
-    FixedLine       aFlOptions;
-
-    CheckBox        aBtnCase;
-    CheckBox        aBtnRegExp;
-    CheckBox        aBtnHeader;
-    CheckBox        aBtnUnique;
-    CheckBox        aBtnCopyResult;
-    ListBox         aLbCopyArea;
-    formula::RefEdit aEdCopyArea;
-    formula::RefButton aRbCopyArea;
-    CheckBox        aBtnDestPers;
-    FixedText       aFtDbAreaLabel;
-    FixedInfo       aFtDbArea;
+    VclExpander*     pExpander;
+    CheckBox*        pBtnCase;
+    CheckBox*        pBtnRegExp;
+    CheckBox*        pBtnHeader;
+    CheckBox*        pBtnUnique;
+    CheckBox*        pBtnCopyResult;
+    ListBox*         pLbCopyArea;
+    formula::RefEdit* pEdCopyArea;
+    formula::RefButton* pRbCopyArea;
+    CheckBox*        pBtnDestPers;
+    FixedText*       pFtDbAreaLabel;
+    FixedText*       pFtDbArea;
     const OUString aStrUndefined;
     const OUString aStrNoName;
 
-    OKButton        aBtnOk;
-    CancelButton    aBtnCancel;
-    HelpButton      aBtnHelp;
-    MoreButton      aBtnMore;
+    OKButton*        pBtnOk;
+    CancelButton*    pBtnCancel;
+    HelpButton*      pBtnHelp;
 
-    ScFilterOptionsMgr* pOptionsMgr;
+    ScNewFilterOptionsMgr* pOptionsMgr;
 
     const sal_uInt16    nWhichQuery;
     const ScQueryParam  theQueryData;
