@@ -37,4 +37,10 @@ $(info_WORKDIR)/InfoPlist_%/InfoPlist.strings: $(info_WORKDIR)/Info.plist $(call
 	$(PERL) -w $(info_SRCDIR)/gen_strings.pl -l $* -p $^ | \
 	iconv -f UTF-8 -t UTF-16 >$@
 
+$(eval $(call gb_CustomTarget_ulfex_rule,\
+	$(info_WORKDIR)/documents.ulf,\
+	$(share_SRCDIR)/share/documents.ulf,\
+	$(foreach lang,$(gb_TRANS_LANGS),\
+		$(gb_POLOCATION)/$(lang)/sysui/desktop/share.po)))
+
 # vim: set noet sw=4 ts=4:
