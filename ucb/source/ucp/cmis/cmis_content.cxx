@@ -1449,7 +1449,11 @@ namespace cmis
             {
                 libcmis::Folder* folder = dynamic_cast< libcmis::Folder* >( pObj.get( ) );
                 if ( NULL != folder )
-                    parentPath = folder->getFolderParent( )->getPath( );
+                {
+                    libcmis::FolderPtr parentFolder = folder->getFolderParent( );
+                    if ( NULL != parentFolder )
+                        parentPath = parentFolder->getPath( );
+                }
             }
         }
         catch ( const libcmis::Exception & )

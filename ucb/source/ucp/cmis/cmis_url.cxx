@@ -32,11 +32,7 @@ namespace cmis
         m_sPass = aUrl.GetPass( INetURLObject::DECODE_WITH_CHARSET );
 
         // Store the path to the object
-        // Google Drive doesn't support getObjectByPath
-        if ( m_sBindingUrl == GDRIVE_BASE_URL )
-            m_sPath = OUString( );
-        else
-            m_sPath = aUrl.GetURLPath( INetURLObject::DECODE_WITH_CHARSET );
+        m_sPath = aUrl.GetURLPath( INetURLObject::DECODE_WITH_CHARSET );
         m_sId = aUrl.GetMark( INetURLObject::DECODE_WITH_CHARSET );
 
         if ( !m_sId.isEmpty( ) )
