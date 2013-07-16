@@ -20,7 +20,7 @@
 
 #include <sot/storinfo.hxx>
 #include <osl/file.hxx>
-#include <tools/tempfile.hxx>
+#include <unotools/tempfile.hxx>
 #include <tools/stream.hxx>
 #include <tools/debug.hxx>
 
@@ -371,7 +371,7 @@ Storage::Storage( const OUString& rFile, StreamMode m, bool bDirect )
     if( aName.isEmpty() )
     {
         // no name = temporary name!
-        aName = TempFile::CreateTempName();
+        aName = utl::TempFile::CreateTempName();
         bTemp = true;
     }
     // the root storage creates the I/O system

@@ -33,7 +33,7 @@
 #include <vcl/virdev.hxx>
 #include <vcl/cvtgrf.hxx>
 #include <vcl/bmpacc.hxx>
-#include <tools/tempfile.hxx>
+#include <unotools/tempfile.hxx>
 #include <osl/process.h>
 #include <osl/file.hxx>
 
@@ -189,14 +189,14 @@ static oslProcessError runProcessWithPathSearch(const OUString &rProgName,
 
 static bool RenderAsEMF(const sal_uInt8* pBuf, sal_uInt32 nBytesRead, Graphic &rGraphic)
 {
-    TempFile aTemp;
+    utl::TempFile aTemp;
     aTemp.EnableKillingFile();
     OUString fileName("pstoedit" EXESUFFIX);
     OUString arg1("-f");
     OUString arg2("emf:-OO");
     OUString arg3("-");
     OUString output;
-    osl::FileBase::getSystemPathFromFileURL(aTemp.GetName(), output);
+    osl::FileBase::getSystemPathFromFileURL(aTemp.GetURL(), output);
     rtl_uString *args[] =
     {
         arg1.pData, arg2.pData, arg3.pData, output.pData

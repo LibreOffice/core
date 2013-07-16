@@ -22,7 +22,7 @@
 #include <string.h>     // memcpy()
 #include <sal/log.hxx>
 #include <osl/file.hxx>
-#include <tools/tempfile.hxx>
+#include <unotools/tempfile.hxx>
 
 #include "sot/stg.hxx"
 #include "stgelem.hxx"
@@ -1186,7 +1186,7 @@ void StgTmpStrm::SetSize( sal_uLong n )
     {
         if( n > THRESHOLD )
         {
-            aName = TempFile::CreateTempName();
+            aName = utl::TempFile::CreateTempName();
             SvFileStream* s = new SvFileStream( aName, STREAM_READWRITE );
             sal_uLong nCur = Tell();
             sal_uLong i = nEndOfData;

@@ -27,6 +27,7 @@ $(eval $(call gb_Library_use_libraries,ips,\
 	vcl \
 	tl \
 	sal \
+	utl \
 	$(gb_UWINAPI) \
 ))
 

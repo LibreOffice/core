@@ -977,7 +977,6 @@
 #include <tools/solar.h>
 #include <tools/stream.hxx>
 #include <tools/string.hxx>
-#include <tools/tempfile.hxx>
 #include <tools/time.hxx>
 #include <tools/urlobj.hxx>
 #include <ucbhelper/content.hxx>

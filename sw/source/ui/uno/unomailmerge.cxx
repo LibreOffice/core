@@ -23,7 +23,7 @@
 #include <svl/urihelper.hxx>
 #include <svx/dataaccessdescriptor.hxx>
 #include <tools/shl.hxx>    // GetAppData
-#include <tools/tempfile.hxx>
+#include <unotools/tempfile.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
@@ -755,8 +755,8 @@ uno::Any SAL_CALL SwXMailMerge::execute(
             OUString( FILTER_XML ),
             SwDocShell::Factory().GetFilterContainer() );
     OUString aExtension(comphelper::string::stripStart(pSfxFlt->GetDefaultExtension(), '*'));
-    TempFile aTempFile( OUString("SwMM"), &aExtension );
-    aTmpFileName = aTempFile.GetName();
+    utl::TempFile aTempFile( OUString("SwMM"), &aExtension );
+    aTmpFileName = aTempFile.GetURL();
 
     Reference< XStorable > xStorable( xCurModel, UNO_QUERY );
     bool bStoredAsTemporary = false;
