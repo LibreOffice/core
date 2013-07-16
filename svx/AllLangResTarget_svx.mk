@@ -70,7 +70,6 @@ $(eval $(call gb_SrsTarget_add_files,svx/res,\
     svx/source/items/svxitems.src \
     svx/source/sidebar/EmptyPanel.src \
     svx/source/sidebar/area/AreaPropertyPanel.src \
-    svx/source/sidebar/graphic/GraphicPropertyPanel.src \
     svx/source/sidebar/line/LinePropertyPanel.src \
     svx/source/sidebar/text/TextPropertyPanel.src \
     svx/source/sidebar/paragraph/ParaPropertyPanel.src \

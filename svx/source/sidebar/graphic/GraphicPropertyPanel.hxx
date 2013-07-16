@@ -21,6 +21,7 @@
 #include <vcl/ctrl.hxx>
 #include <sfx2/sidebar/SidebarPanelBase.hxx>
 #include <sfx2/sidebar/ControllerItem.hxx>
+#include <svx/sidebar/PanelLayout.hxx>
 #include <vcl/fixed.hxx>
 #include <boost/scoped_ptr.hpp>
 
@@ -33,7 +34,7 @@ class FloatingWindow;
 namespace svx { namespace sidebar {
 
 class GraphicPropertyPanel
-:   public Control,
+:   public PanelLayout,
     public ::sfx2::sidebar::ControllerItem::ItemUpdateReceiverInterface
 {
 public:
@@ -55,18 +56,14 @@ public:
 
 private:
     //ui controls
-    ::boost::scoped_ptr< FixedText >                    mpFtBrightness;
-    ::boost::scoped_ptr< MetricField >                  mpMtrBrightness;
-    ::boost::scoped_ptr< FixedText >                    mpFtContrast;
-    ::boost::scoped_ptr< MetricField >                  mpMtrContrast;
-    ::boost::scoped_ptr< FixedText >                    mpFtColorMode;
-    ::boost::scoped_ptr< ListBox >                      mpLBColorMode;
-    ::boost::scoped_ptr< FixedText >                    mpFtTrans;
-    ::boost::scoped_ptr< MetricField >                  mpMtrTrans;
-    ::boost::scoped_ptr< MetricField >                  mpMtrRed;
-    ::boost::scoped_ptr< MetricField >                  mpMtrGreen;
-    ::boost::scoped_ptr< MetricField >                  mpMtrBlue;
-    ::boost::scoped_ptr< MetricField >                  mpMtrGamma;
+    MetricField*                                        mpMtrBrightness;
+    MetricField*                                        mpMtrContrast;
+    ListBox*                                            mpLBColorMode;
+    MetricField*                                        mpMtrTrans;
+    MetricField*                                        mpMtrRed;
+    MetricField*                                        mpMtrGreen;
+    MetricField*                                        mpMtrBlue;
+    MetricField*                                        mpMtrGamma;
 
     ::sfx2::sidebar::ControllerItem                     maBrightControl;
     ::sfx2::sidebar::ControllerItem                     maContrastControl;
@@ -76,16 +73,6 @@ private:
     ::sfx2::sidebar::ControllerItem                     maBlueControl;
     ::sfx2::sidebar::ControllerItem                     maGammaControl;
     ::sfx2::sidebar::ControllerItem                     maModeControl;
-
-    Image                                               maImgNormal;
-    Image                                               maImgBW;
-    Image                                               maImgGray;
-    Image                                               maImgWater;
-
-    FixedImage                                          maImgRed;
-    FixedImage                                          maImgGreen;
-    FixedImage                                          maImgBlue;
-    FixedImage                                          maImgGamma;
 
     String                                              msNormal;
     String                                              msBW;
