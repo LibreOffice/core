@@ -78,7 +78,7 @@ public:
     virtual ~StreamInterface() {}
     virtual unsigned long sread (unsigned char* vuf, unsigned long size) = 0;
     virtual long stell () = 0;
-    virtual long sseek (unsigned long offset, int origin) = 0;
+    virtual long sseek (long offset, int origin) = 0;
 };
 
 #endif
