@@ -1460,7 +1460,7 @@ void VclExpander::setAllocation(const Size &rAllocation)
 bool VclExpander::set_property(const OString &rKey, const OString &rValue)
 {
     if (rKey == "expanded")
-        m_aDisclosureButton.Check(toBool(rValue));
+        set_expanded(toBool(rValue));
     else if (rKey == "resize-toplevel")
         m_bResizeTopLevel = toBool(rValue);
     else

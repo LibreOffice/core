@@ -516,6 +516,14 @@ public:
     virtual Window *get_child();
     virtual const Window *get_child() const;
     virtual bool set_property(const OString &rKey, const OString &rValue);
+    bool get_expanded() const
+    {
+        return m_aDisclosureButton.IsChecked();
+    }
+    void set_expanded(bool bExpanded)
+    {
+        m_aDisclosureButton.Check(bExpanded);
+    }
     virtual void StateChanged(StateChangedType nType);
 protected:
     virtual Size calculateRequisition() const;
