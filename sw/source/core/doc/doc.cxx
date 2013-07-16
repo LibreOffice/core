@@ -1120,11 +1120,11 @@ const SwDocStat& SwDoc::GetDocStat() const
     return *mpDocStat;
 }
 
-const SwDocStat& SwDoc::GetUpdatedDocStat( bool bCompleteAsync )
+const SwDocStat& SwDoc::GetUpdatedDocStat( bool bCompleteAsync, bool bFields )
 {
     if( mpDocStat->bModified )
     {
-        UpdateDocStat( bCompleteAsync );
+        UpdateDocStat( bCompleteAsync, bFields );
     }
     return *mpDocStat;
 }
@@ -1644,7 +1644,7 @@ void SwDoc::CalculatePagePairsForProspectPrinting(
 }
 
 // returns true while there is more to do
-bool SwDoc::IncrementalDocStatCalculate( long nTextNodes )
+bool SwDoc::IncrementalDocStatCalculate( long nTextNodes, bool bFields )
 {
     mpDocStat->Reset();
     mpDocStat->nPara = 0; // default is 1!
@@ -1728,8 +1728,11 @@ bool SwDoc::IncrementalDocStatCalculate( long nTextNodes )
     }
 
     // optionally update stat. fields
-    SwFieldType *pType = GetSysFldType(RES_DOCSTATFLD);
-    pType->UpdateFlds();
+    if (bFields)
+    {
+        SwFieldType *pType = GetSysFldType(RES_DOCSTATFLD);
+        pType->UpdateFlds();
+    }
 
     return nTextNodes <= 0;
 }
@@ -1746,16 +1749,16 @@ IMPL_LINK( SwDoc, DoIdleStatsUpdate, Timer *, pTimer )
     return 0;
 }
 
-void SwDoc::UpdateDocStat( bool bCompleteAsync )
+void SwDoc::UpdateDocStat( bool bCompleteAsync, bool bFields )
 {
     if( mpDocStat->bModified )
     {
         if (!bCompleteAsync)
         {
-            while (IncrementalDocStatCalculate()) {}
+            while (IncrementalDocStatCalculate(250, bFields)) {}
             maStatsUpdateTimer.Stop();
         }
-        else if (IncrementalDocStatCalculate())
+        else if (IncrementalDocStatCalculate(250, bFields))
             maStatsUpdateTimer.Start();
     }
 }

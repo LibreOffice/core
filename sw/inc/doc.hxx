@@ -910,9 +910,9 @@ public:
     */
     virtual void DocInfoChgd();
     virtual const SwDocStat &GetDocStat() const;
-    virtual const SwDocStat &GetUpdatedDocStat(bool bCompleteAsync = false);
+    virtual const SwDocStat &GetUpdatedDocStat(bool bCompleteAsync = false, bool bFields = true);
     virtual void SetDocStat(const SwDocStat& rStat);
-    virtual void UpdateDocStat(bool bCompleteAsync = false);
+    virtual void UpdateDocStat(bool bCompleteAsync = false, bool bFields = true);
 
     /** IDocumentState
     */
@@ -2082,10 +2082,11 @@ private:
     /** continue computing a chunk of document statistics
       * \param nTextNodes number of paragraphs to calculate before
       * exiting
+      * \param bFields if stat. fields should be updated
       *
       * returns false when there is no more to calculate
       */
-    bool IncrementalDocStatCalculate(long nTextNodes = 250);
+    bool IncrementalDocStatCalculate(long nTextNodes = 250, bool bFields = true);
 
     /// Our own 'StatsUpdateTimer' calls the following method
     DECL_LINK( DoIdleStatsUpdate, Timer * );
