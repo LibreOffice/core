@@ -70,11 +70,15 @@
     <string name="title_wifi" translatable="false">WiFi</string>
     <string name="title_licenses">Open source licenses</string>
     <string name="title_connection">Connection</string>
+    <string name="title_creation">Creation</string>
+    <string name="title_slide_show">Slide Show</string>
 
     <string name="menu_licenses">Open source licenses</string>
     <string name="menu_reconnect">Reconnect</string>
     <string name="menu_add_computer">Add computer</string>
     <string name="menu_remove_computer">Remove</string>
+    <string name="menu_slides_grid">Slides grid</string>
+    <string name="menu_slides_pager">Slides pager</string>
 
     <string name="button_cancel">Cancel</string>
     <string name="button_save">Save</string>

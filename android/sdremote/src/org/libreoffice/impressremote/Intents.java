@@ -124,6 +124,10 @@ public final class Intents {
         return aIntent;
     }
 
+    public static Intent buildSlideShowIntent(Context aContext) {
+        return new Intent(aContext, SlideShowActivity.class);
+    }
+
     public static Intent buildLicensesIntent(Context aContext) {
         return new Intent(aContext, LicensesActivity.class);
     }

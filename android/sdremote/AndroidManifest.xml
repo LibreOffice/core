@@ -38,8 +38,13 @@
 
         <activity
             android:name=".ComputerCreationActivity"
-            android:label="Creation"
+            android:label="@string/title_creation"
             android:theme="@style/Theme.ImpressRemote.ComputerCreation">
+        </activity>
+
+        <activity
+            android:name=".SlideShowActivity"
+            android:label="@string/title_slide_show">
         </activity>
 
         <activity

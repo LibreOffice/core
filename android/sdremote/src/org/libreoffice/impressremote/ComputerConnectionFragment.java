@@ -184,6 +184,9 @@ public class ComputerConnectionFragment extends SherlockFragment implements Serv
     }
 
     public void setUpPresentation() {
+        Intent aIntent = Intents.buildSlideShowIntent(getActivity());
+        startActivity(aIntent);
+
         getActivity().finish();
     }
 
