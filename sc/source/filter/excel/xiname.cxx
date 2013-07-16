@@ -174,7 +174,7 @@ XclImpName::XclImpName( XclImpStream& rStrm, sal_uInt16 nXclNameIdx ) :
         if( (GetBiff() == EXC_BIFF8) && pTokArr && bBuiltIn )
         {
             ScRange aRange;
-            if( pTokArr->IsReference( aRange ) )
+            if (pTokArr->IsReference(aRange, ScAddress()))
             {
                 switch( mcBuiltIn )
                 {
@@ -186,7 +186,7 @@ XclImpName::XclImpName( XclImpStream& rStrm, sal_uInt16 nXclNameIdx ) :
                         meNameType |= RT_CRITERIA;
                     break;
                     case EXC_BUILTIN_EXTRACT:
-                        if( pTokArr->IsValidReference( aRange ) )
+                        if (pTokArr->IsValidReference(aRange, ScAddress()))
                             GetFilterManager().AddExtractPos( aRange );
                     break;
                 }

@@ -1364,7 +1364,7 @@ void ScTokenArray::CheckToken( const FormulaToken& r )
     }
 }
 
-bool ScTokenArray::ImplGetReference( ScRange& rRange, bool bValidOnly ) const
+bool ScTokenArray::ImplGetReference( ScRange& rRange, const ScAddress& rPos, bool bValidOnly ) const
 {
     bool bIs = false;
     if ( pCode && nLen == 1 )
@@ -1375,17 +1375,17 @@ bool ScTokenArray::ImplGetReference( ScRange& rRange, bool bValidOnly ) const
             if ( pToken->GetType() == svSingleRef )
             {
                 const ScSingleRefData& rRef = ((const ScSingleRefToken*)pToken)->GetSingleRef();
-                rRange.aStart = rRange.aEnd = ScAddress( rRef.nCol, rRef.nRow, rRef.nTab );
-                bIs = !bValidOnly || !rRef.IsDeleted();
+                rRange.aStart = rRange.aEnd = rRef.toAbs(rPos);
+                bIs = !bValidOnly || ValidAddress(rRange.aStart);
             }
             else if ( pToken->GetType() == svDoubleRef )
             {
                 const ScComplexRefData& rCompl = ((const ScDoubleRefToken*)pToken)->GetDoubleRef();
                 const ScSingleRefData& rRef1 = rCompl.Ref1;
                 const ScSingleRefData& rRef2 = rCompl.Ref2;
-                rRange.aStart = ScAddress( rRef1.nCol, rRef1.nRow, rRef1.nTab );
-                rRange.aEnd   = ScAddress( rRef2.nCol, rRef2.nRow, rRef2.nTab );
-                bIs = !bValidOnly || (!rRef1.IsDeleted() && !rRef2.IsDeleted());
+                rRange.aStart = rRef1.toAbs(rPos);
+                rRange.aEnd   = rRef2.toAbs(rPos);
+                bIs = !bValidOnly || ValidRange(rRange);
             }
         }
     }
@@ -1489,14 +1489,14 @@ ScFormulaVectorState ScTokenArray::GetVectorState() const
     return meVectorState;
 }
 
-bool ScTokenArray::IsReference( ScRange& rRange ) const
+bool ScTokenArray::IsReference( ScRange& rRange, const ScAddress& rPos ) const
 {
-    return ImplGetReference( rRange, false );
+    return ImplGetReference(rRange, rPos, false);
 }
 
-bool ScTokenArray::IsValidReference( ScRange& rRange ) const
+bool ScTokenArray::IsValidReference( ScRange& rRange, const ScAddress& rPos ) const
 {
-    return ImplGetReference( rRange, true );
+    return ImplGetReference(rRange, rPos, true);
 }
 
 ////////////////////////////////////////////////////////////////////////////

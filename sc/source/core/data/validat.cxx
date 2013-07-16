@@ -704,8 +704,7 @@ bool ScValidationData::GetSelectionFromFormula(
         }
         else if (t->GetType() != svIndex)
         {
-            t->CalcAbsIfRel(rPos);
-            if (pArr->IsValidReference(aRange))
+            if (pArr->IsValidReference(aRange, rPos))
             {
                 bRef = true;
             }

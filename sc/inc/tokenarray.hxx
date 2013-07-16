@@ -34,7 +34,7 @@ class SC_DLLPUBLIC ScTokenArray : public formula::FormulaTokenArray
 {
     friend class ScCompiler;
 
-    bool                    ImplGetReference( ScRange& rRange, bool bValidOnly ) const;
+    bool ImplGetReference( ScRange& rRange, const ScAddress& rPos, bool bValidOnly ) const;
 
     size_t mnHashValue;
     ScFormulaVectorState meVectorState;
@@ -52,9 +52,9 @@ public:
     ScFormulaVectorState GetVectorState() const;
 
     /// Exactly and only one range (valid or deleted)
-    bool    IsReference( ScRange& rRange ) const;
+    bool IsReference( ScRange& rRange, const ScAddress& rPos ) const;
     /// Exactly and only one valid range (no #REF!s)
-    bool    IsValidReference( ScRange& rRange ) const;
+    bool IsValidReference( ScRange& rRange, const ScAddress& rPos ) const;
 
 
                             /** Determines the extent of direct adjacent

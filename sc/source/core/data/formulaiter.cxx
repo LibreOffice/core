@@ -32,17 +32,17 @@ ScDetectiveRefIter::ScDetectiveRefIter( ScFormulaCell* pCell )
     aPos = pCell->aPos;
 }
 
-static bool lcl_ScDetectiveRefIter_SkipRef( ScToken* p )
+static bool lcl_ScDetectiveRefIter_SkipRef( ScToken* p, const ScAddress& rPos )
 {
     ScSingleRefData& rRef1 = p->GetSingleRef();
-    if ( rRef1.IsColDeleted() || rRef1.IsRowDeleted() || rRef1.IsTabDeleted()
-            || !rRef1.Valid() )
+    ScAddress aAbs1 = rRef1.toAbs(rPos);
+    if (!ValidAddress(aAbs1))
         return true;
     if ( p->GetType() == svDoubleRef || p->GetType() == svExternalDoubleRef )
     {
         ScSingleRefData& rRef2 = p->GetDoubleRef().Ref2;
-        if ( rRef2.IsColDeleted() || rRef2.IsRowDeleted() || rRef2.IsTabDeleted()
-                || !rRef2.Valid() )
+        ScAddress aAbs2 = rRef2.toAbs(rPos);
+        if (!ValidAddress(aAbs2))
             return true;
     }
     return false;
@@ -66,14 +66,9 @@ bool ScDetectiveRefIter::GetNextRef( ScRange& rRange )
 ScToken* ScDetectiveRefIter::GetNextRefToken()
 {
     ScToken* p = static_cast<ScToken*>(pCode->GetNextReferenceRPN());
-    if (p)
-        p->CalcAbsIfRel( aPos );
-
-    while ( p && lcl_ScDetectiveRefIter_SkipRef( p ) )
+    while (p && lcl_ScDetectiveRefIter_SkipRef(p, aPos))
     {
         p = static_cast<ScToken*>(pCode->GetNextReferenceRPN());
-        if (p)
-            p->CalcAbsIfRel( aPos );
     }
     return p;
 }

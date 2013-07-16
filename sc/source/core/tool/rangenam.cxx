@@ -387,7 +387,7 @@ bool ScRangeData::IsRangeAtBlock( const ScRange& rBlock ) const
 bool ScRangeData::IsReference( ScRange& rRange ) const
 {
     if ( (eType & ( RT_ABSAREA | RT_REFAREA | RT_ABSPOS )) && pCode )
-        return pCode->IsReference( rRange );
+        return pCode->IsReference(rRange, aPos);
 
     return false;
 }
@@ -395,15 +395,7 @@ bool ScRangeData::IsReference( ScRange& rRange ) const
 bool ScRangeData::IsReference( ScRange& rRange, const ScAddress& rPos ) const
 {
     if ( (eType & ( RT_ABSAREA | RT_REFAREA | RT_ABSPOS ) ) && pCode )
-    {
-        SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        ::std::auto_ptr<ScTokenArray> pTemp( pCode->Clone() );
-        SAL_WNODEPRECATED_DECLARATIONS_POP
-        ScCompiler aComp( pDoc, rPos, *pTemp);
-        aComp.SetGrammar(pDoc->GetGrammar());
-        aComp.MoveRelWrap(MAXCOL, MAXROW);
-        return pTemp->IsReference( rRange );
-    }
+        return pCode->IsReference(rRange, rPos);
 
     return false;
 }
@@ -411,7 +403,7 @@ bool ScRangeData::IsReference( ScRange& rRange, const ScAddress& rPos ) const
 bool ScRangeData::IsValidReference( ScRange& rRange ) const
 {
     if ( (eType & ( RT_ABSAREA | RT_REFAREA | RT_ABSPOS ) ) && pCode )
-        return pCode->IsValidReference( rRange );
+        return pCode->IsValidReference(rRange, aPos);
 
     return false;
 }

@@ -163,7 +163,7 @@ ScVbaNames::Add( const css::uno::Any& Name ,
             {
                 ScRange aRange;
                 ScDocShell* pDocSh = excel::getDocShell(getModel());
-                if ( pTokens->IsValidReference( aRange ) )
+                if (pTokens->IsValidReference(aRange, aBlank))
                     xUnoRange =  new ScCellRangeObj( pDocSh, aRange );
                 else
                 {
