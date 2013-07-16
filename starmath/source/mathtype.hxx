@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
- #ifndef MATHTYPE_HXX
+#ifndef MATHTYPE_HXX
 #define MATHTYPE_HXX
 
 #include "node.hxx"
@@ -36,7 +36,7 @@ public:
     sal_uInt8 nStyle;
     MathTypeFont() : nTface(0),nStyle(0) {}
     MathTypeFont(sal_uInt8 nFace) : nTface(nFace),nStyle(0) {}
-    void AppendStyleToText(String &rS);
+    void AppendStyleToText(OUString &rS);
 };
 
 struct LessMathTypeFont
@@ -53,7 +53,7 @@ typedef ::std::set< MathTypeFont, LessMathTypeFont > MathTypeFontSet;
 class MathType
 {
 public:
-    MathType(String &rIn) :
+    MathType(OUString &rIn) :
         rRet(rIn), nHAlign(0), nVAlign(0), nDefaultSize(12),
         nLSize(0), nDSize(0), nCurSize(0), nLastSize(0), bIsSilent(sal_False),
         nTypeFace(0)
@@ -61,7 +61,7 @@ public:
         Init();
     }
 
-    MathType(String &rIn,SmNode *pIn) :
+    MathType(OUString &rIn,SmNode *pIn) :
         rRet(rIn), pTree(pIn), nHAlign(2), nVAlign(0), nInsertion(0), nDefaultSize(12),
         nLSize(0), nDSize(0), nCurSize(0), nLastSize(0), nSpec(0), bIsSilent(sal_False),
         nTypeFace(0)
@@ -94,10 +94,10 @@ private:
     void HandleMatrixSeparator(int nMatrixRows,int nMatrixCols,int &rCurCol,
         int &rCurRow);
     int HandleTemplate(int nLevel,sal_uInt8 &rSelector,sal_uInt8 &rVariation,
-        xub_StrLen &rLastTemplateBracket);
+        sal_Int32 &rLastTemplateBracket);
     void HandleEmblishments();
     void HandleSetSize();
-    int HandleChar(xub_StrLen &rTextStart,int &rSetSize,int nLevel,
+    int HandleChar(sal_Int32 &rTextStart,int &rSetSize,int nLevel,
         sal_uInt8 nTag,sal_uInt8 nSelector,sal_uInt8 nVariation,
         sal_Bool bSilent);
     void HandleNudge();
@@ -126,9 +126,9 @@ private:
     void HandleMath(SmNode *pNode,int nLevel);
     void HandleText(SmNode *pNode,int nLevel);
     void HandleAttributes(SmNode *pNode,int nLevel);
-    void TypeFaceToString(String &rRet,sal_uInt8 nFace);
+    void TypeFaceToString(OUString &rRet,sal_uInt8 nFace);
 
-    String &rRet;
+    OUString &rRet;
     SmNode *pTree;
 
     sal_uInt8 nHAlign;
@@ -144,10 +144,10 @@ private:
     sal_Int16 nCurSize;
     sal_Int16 nLastSize;
     sal_uInt8 nSpec;
-    sal_Bool bIsSilent, bIsReInterpBrace;
-    String sPost;
-    xub_StrLen nPostSup;
-    xub_StrLen nPostlSup;
+    sal_Bool  bIsSilent, bIsReInterpBrace;
+    OUString  sPost;
+    sal_Int32 nPostSup;
+    sal_Int32 nPostlSup;
     sal_uInt8 nTypeFace;
     MathTypeFontSet aUserStyles;
 
@@ -160,7 +160,7 @@ private:
         tmDSINT,tmTSINT,tmUHBRACE,tmLHBRACE,tmSUM
     };
 public:
-    static sal_Bool LookupChar(sal_Unicode nChar,String &rRet,
+    static sal_Bool LookupChar(sal_Unicode nChar,OUString &rRet,
         sal_uInt8 nVersion=3,sal_uInt8 nTypeFace=0);
 };
 

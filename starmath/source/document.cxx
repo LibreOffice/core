@@ -154,7 +154,7 @@ void SmDocShell::SetText(const OUString& rBuffer)
 {
     SAL_INFO( "starmath", "starmath: SmDocShell::SetText" );
 
-    if (rBuffer != OUString(aText))
+    if (rBuffer != aText)
     {
         bool bIsEnabled = IsEnableSetModified();
         if( bIsEnabled )
@@ -656,7 +656,7 @@ void SmDocShell::OnDocumentPrinterChanged( Printer *pPrt )
     SetFormulaArranged(false);
     Size aOldSize = GetVisArea().GetSize();
     Repaint();
-    if( aOldSize != GetVisArea().GetSize() && aText.Len() )
+    if( aOldSize != GetVisArea().GetSize() && !aText.isEmpty() )
         SetModified( true );
     pTmpPrinter = 0;
 }
