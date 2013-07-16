@@ -50,4 +50,31 @@ $(foreach target,$(2),$(call gb_CustomTarget_register_target,$(1),$(target)))
 
 endef
 
+ifneq ($(WITH_LANG),)
+
+# $(call gb_CustomTarget_ulfex__command,ulftarget,ulfsource,pofiles)
+define gb_CustomTarget_ulfex__command
+$(call gb_Output_announce,$(1),$(true),ULF,1)
+MERGEINPUT=`$(gb_MKTEMP)` && \
+echo $(3) > $${MERGEINPUT} && \
+$(call gb_Helper_abbreviate_dirs,\
+	$(call gb_Executable_get_command,ulfex) -i $(2) -o $(1) -m $${MERGEINPUT} -l all) && \
+rm -rf $${MERGEINPUT}
+endef
+
+else
+
+define gb_CustomTarget_ulfex__command
+cp $(2) $(1)
+endef
+
+endif
+
+# $(call gb_CustomTarget_ulfex_rule,ulftargetpattern,ulfsource,pofiles)
+define gb_CustomTarget_ulfex_rule
+$(1) : $(2) $(if $(WITH_LANG),$(call gb_Executable_get_runtime_dependencies,ulfex))
+	$$(call gb_CustomTarget_ulfex__command,$$@,$(subst %,$$*,$(strip $(2))),$(strip $(3)))
+
+endef
+
 # vim: set noet sw=4:

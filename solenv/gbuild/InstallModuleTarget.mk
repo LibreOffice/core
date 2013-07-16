@@ -97,26 +97,15 @@ endef
 
 # ScpMergeTarget class
 
-gb_ScpMergeTarget_DEPS := $(call gb_Executable_get_runtime_dependencies,ulfex)
-gb_ScpMergeTarget_COMMAND := $(call gb_Executable_get_command,ulfex)
-
 gb_ScpMergeTarget_get_source = $(SRCDIR)/$(1).ulf
-
-define gb_ScpMergeTarget__command
-$(call gb_Output_announce,$(2),$(true),SUM,1)
-MERGEINPUT=`$(gb_MKTEMP)` && \
-echo $(SCP_POFILES) > $${MERGEINPUT} && \
-$(call gb_Helper_abbreviate_dirs,\
-	$(gb_ScpMergeTarget_COMMAND) -i $(SCP_SOURCE) -o $(1) -m $${MERGEINPUT} -l all ) && \
-rm -rf $${MERGEINPUT}
-
-endef
 
 $(dir $(call gb_ScpMergeTarget_get_target,%))%/.dir :
 	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
 
-$(call gb_ScpMergeTarget_get_target,%) : $(gb_ScpMergeTarget_DEPS)
-	$(call gb_ScpMergeTarget__command,$@,$*)
+$(eval $(call gb_CustomTarget_ulfex_rule,\
+	$(call gb_ScpMergeTarget_get_target,%),\
+	$(call gb_ScpMergeTarget_get_source,%),\
+	$$(SCP_POFILES)))
 
 .PHONY : $(call gb_ScpMergeTarget_get_clean_target,%)
 $(call gb_ScpMergeTarget_get_clean_target,%) :
@@ -125,8 +114,6 @@ $(call gb_ScpMergeTarget_get_clean_target,%) :
 
 # gb_ScpMergeTarget_ScpMergeTarget(<target>)
 define gb_ScpMergeTarget_ScpMergeTarget
-$(call gb_ScpMergeTarget_get_target,$(1)) : SCP_SOURCE := $(call gb_ScpMergeTarget_get_source,$(1))
-$(call gb_ScpMergeTarget_get_target,$(1)) : $(call gb_ScpMergeTarget_get_source,$(1))
 $(call gb_ScpMergeTarget_get_target,$(1)) :| $(dir $(call gb_ScpMergeTarget_get_target,$(1))).dir
 $(call gb_ScpMergeTarget_get_target,$(1)) : \
 	SCP_POFILES := $(foreach lang,$(gb_TRANS_LANGS),$(gb_POLOCATION)/$(lang)/$(patsubst %/,%,$(dir $(1))).po)
