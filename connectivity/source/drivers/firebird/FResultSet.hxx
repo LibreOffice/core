@@ -49,7 +49,7 @@
 #include <com/sun/star/sdbcx/XDeleteRows.hpp>
 #include <cppuhelper/compbase12.hxx>
 #include "FStatement.hxx"
-#include "OSubComponent.hxx"
+#include "connectivity/OSubComponent.hxx"
 
 #include <ibase.h>
 

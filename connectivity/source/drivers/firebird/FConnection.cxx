@@ -591,6 +591,7 @@ void SAL_CALL OConnection::documentEventOccured( const DocumentEvent& _Event )
 // XEventListener
 void SAL_CALL OConnection::disposing( const EventObject& Source ) throw (RuntimeException)
 {
+    (void) Source;
 }
 //--------------------------------------------------------------------
 void OConnection::buildTypeInfo() throw( SQLException)

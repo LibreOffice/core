@@ -46,7 +46,7 @@
 #include <cppuhelper/compbase5.hxx>
 #include "FConnection.hxx"
 #include <list>
-#include "OSubComponent.hxx"
+#include "connectivity/OSubComponent.hxx"
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
 namespace connectivity

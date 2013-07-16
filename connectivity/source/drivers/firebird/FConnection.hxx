@@ -41,7 +41,10 @@
 #include <com/sun/star/document/DocumentEvent.hpp>
 #include <com/sun/star/document/XDocumentEventListener.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
-#include "OSubComponent.hxx"
+#include "connectivity/OSubComponent.hxx"
+#include "connectivity/CommonTools.hxx"
+#include "FSubComponent.hxx"
+
 #include "OTypeInfo.hxx"
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -50,7 +53,6 @@
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <cppuhelper/compbase4.hxx>
 #include <cppuhelper/weakref.hxx>
-
 #include <map>
 
 #include <ibase.h>
@@ -77,9 +79,9 @@ namespace connectivity
 
         class OConnection : public OBase_Mutex,
                             public OConnection_BASE,
-                            public connectivity::firebird::OSubComponent<OConnection, OConnection_BASE>
+                            public connectivity::OSubComponent<OConnection, OConnection_BASE>
         {
-            friend class connectivity::firebird::OSubComponent<OConnection, OConnection_BASE>;
+            friend class connectivity::OSubComponent<OConnection, OConnection_BASE>;
 
         protected:
             static const OUString sDBLocation; // Location within .odb container
