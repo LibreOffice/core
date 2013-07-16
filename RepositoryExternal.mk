@@ -2118,9 +2118,7 @@ define gb_LinkTarget__use_libfbembed
 $(call gb_LinkTarget_use_package,$(1),firebird)
 $(call gb_LinkTarget_set_include,$(1),\
 	$$(INCLUDE) \
-	-I$(call gb_UnpackedTarball_get_dir,firebird)/src/include \
-	-I$(call gb_UnpackedTarball_get_dir,firebird)/src/include/gen \
-	-I$(call gb_UnpackedTarball_get_dir,firebird)/src/jrd \
+	-I$(call gb_UnpackedTarball_get_dir,firebird)/gen/firebird/include \
 )
 $(call gb_LinkTarget_use_libraries,$(1),\
     fbembed \

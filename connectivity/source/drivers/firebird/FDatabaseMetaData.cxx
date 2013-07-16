@@ -42,9 +42,7 @@
 #include <com/sun/star/sdbc/XParameters.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 
-#include <gen/autoconfig.h>
-#include <fb_types.h>
-#include <constants.h>
+#include <ibase.h>
 
 using namespace connectivity::firebird;
 using namespace com::sun::star::uno;
@@ -127,34 +125,34 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsCatalogsInPrivilegeDefinitions() th
 //----- Max Sizes/Lengths -----------------------------------------------------
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxBinaryLiteralLength() throw(SQLException, RuntimeException)
 {
-    return MAX_COLUMN_SIZE;
+    return 32767;
 }
 
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxRowSize() throw(SQLException, RuntimeException)
 {
-    return MAX_COLUMN_SIZE;
+    return 32767;
 }
 
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxCharLiteralLength() throw(SQLException, RuntimeException)
 {
-    return MAX_COLUMN_SIZE;
+    return 32767;
 }
 
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxColumnNameLength() throw(SQLException, RuntimeException)
 {
-    return MAX_SQL_IDENTIFIER_SIZE;
+    return 32;
 }
 
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxColumnsInIndex() throw(SQLException, RuntimeException)
 {
     // No idea.
     // See: http://www.firebirdsql.org/en/firebird-technical-specifications/
-    return MAX_INDEX_SEGMENTS;
+    return 16;
 }
 
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxCursorNameLength() throw(SQLException, RuntimeException)
 {
-    return MAX_SQL_IDENTIFIER_SIZE;
+    return 32;
 }
 
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxConnections() throw(SQLException, RuntimeException)
@@ -166,17 +164,17 @@ sal_Int32 SAL_CALL ODatabaseMetaData::getMaxColumnsInTable() throw(SQLException,
 {
     // May however be smaller.
     // See: http://www.firebirdsql.org/en/firebird-technical-specifications/
-    return MAX_COLUMN_SIZE;
+    return 32767;
 }
 
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxStatementLength() throw(SQLException, RuntimeException)
 {
-    return MAX_COLUMN_SIZE;
+    return 32767;
 }
 
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxTableNameLength() throw(SQLException, RuntimeException)
 {
-    return MAX_SQL_IDENTIFIER_SIZE;
+    return 32;
 }
 // -------------------------------------------------------------------------
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxTablesInSelect(  ) throw(SQLException, RuntimeException)
@@ -697,7 +695,7 @@ sal_Int32 SAL_CALL ODatabaseMetaData::getMaxColumnsInSelect(  ) throw(SQLExcepti
 // -------------------------------------------------------------------------
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxUserNameLength(  ) throw(SQLException, RuntimeException)
 {
-    return USERNAME_LENGTH;
+    return 31;
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ODatabaseMetaData::supportsResultSetType( sal_Int32 setType ) throw(SQLException, RuntimeException)
