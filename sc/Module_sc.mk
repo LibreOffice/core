@@ -16,9 +16,14 @@ $(eval $(call gb_Module_add_targets,sc,\
 	Library_scd \
 	Library_scfilt \
 	Library_scui \
-	Library_scqahelper \
 	UIConfig_scalc \
 ))
+
+ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))
+$(eval $(call gb_Module_add_targets,sc,\
+	Library_scqahelper \
+))
+endif
 
 ifeq ($(ENABLE_TELEPATHY),TRUE)
 
