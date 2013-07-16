@@ -4966,33 +4966,33 @@ void DocxAttributeOutput::FormatBox( const SvxBoxItem& rBox )
         }
 
         // v:textbox's inset attribute: inner margin values for textbox text - write only non-default values
-        double aDistanceLeftTwips = double(rBox.GetDistance(BOX_LINE_LEFT));
-        double aDistanceTopTwips = double(rBox.GetDistance(BOX_LINE_TOP));
-        double aDistanceRightTwips = double(rBox.GetDistance(BOX_LINE_RIGHT));
-        double aDistanceBottomTwips = double(rBox.GetDistance(BOX_LINE_BOTTOM));
+        double fDistanceLeftTwips = double(rBox.GetDistance(BOX_LINE_LEFT));
+        double fDistanceTopTwips = double(rBox.GetDistance(BOX_LINE_TOP));
+        double fDistanceRightTwips = double(rBox.GetDistance(BOX_LINE_RIGHT));
+        double fDistanceBottomTwips = double(rBox.GetDistance(BOX_LINE_BOTTOM));
 
         // Convert 'TWIPS' to 'INCH' (because in Word the default values are in Inches)
-        double aDistanceLeftInch = aDistanceLeftTwips / 1440;
-        double aDistanceTopInch = aDistanceTopTwips / 1440;
-        double aDistanceRightInch = aDistanceRightTwips / 1440;
-        double aDistanceBottomInch = aDistanceBottomTwips / 1440;
+        double fDistanceLeftInch = fDistanceLeftTwips / 1440;
+        double fDistanceTopInch = fDistanceTopTwips / 1440;
+        double fDistanceRightInch = fDistanceRightTwips / 1440;
+        double fDistanceBottomInch = fDistanceBottomTwips / 1440;
 
         // This code will write ONLY the non-default values. The values are in 'left','top','right','bottom' order.
         // so 'bottom' is checked if it is default and if it is non-default - all the values will be written
         // otherwise - 'right' is checked if it is default and if it is non-default - all the values except for 'bottom' will be written
         // and so on.
         OStringBuffer aInset;
-        if(!aInset.isEmpty() || aDistanceBottomInch != double(0.05))
-            aInset.insert(0, "," + OString::number(aDistanceBottomInch) + "in");
+        if(!aInset.isEmpty() || fDistanceBottomInch != double(0.05))
+            aInset.insert(0, "," + OString::number(fDistanceBottomInch) + "in");
 
-        if(!aInset.isEmpty() || aDistanceRightInch != double(0.1))
-            aInset.insert(0, "," + OString::number(aDistanceRightInch) + "in");
+        if(!aInset.isEmpty() || fDistanceRightInch != double(0.1))
+            aInset.insert(0, "," + OString::number(fDistanceRightInch) + "in");
 
-        if(!aInset.isEmpty() || aDistanceTopInch != double(0.05))
-            aInset.insert(0, "," + OString::number(aDistanceTopInch) + "in");
+        if(!aInset.isEmpty() || fDistanceTopInch != double(0.05))
+            aInset.insert(0, "," + OString::number(fDistanceTopInch) + "in");
 
-        if(!aInset.isEmpty() || aDistanceLeftInch != double(0.1))
-            aInset.insert(0, OString::number(aDistanceLeftInch) + "in");
+        if(!aInset.isEmpty() || fDistanceLeftInch != double(0.1))
+            aInset.insert(0, OString::number(fDistanceLeftInch) + "in");
 
         if (!aInset.isEmpty())
             m_pTextboxAttrList->add(XML_inset, aInset.makeStringAndClear());
