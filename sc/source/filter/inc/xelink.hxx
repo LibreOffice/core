@@ -170,9 +170,9 @@ public:
     /** Stores all cells in the given range in a CRN record list. */
     void                StoreCellRange( const ScComplexRefData& rRef );
 
-    void                StoreCell( sal_uInt16 nFileId, const String& rTabName, const ScSingleRefData& rRef );
+    void StoreCell( sal_uInt16 nFileId, const String& rTabName, const ScAddress& rPos );
 
-    void                StoreCellRange( sal_uInt16 nFileId, const String& rTabName, const ScComplexRefData& rRef );
+    void StoreCellRange( sal_uInt16 nFileId, const String& rTabName, const ScRange& rRange );
 
     /** Finds or inserts an EXTERNNAME record for an add-in function name.
         @param rnExtSheet  (out-param) Returns the index of the EXTSHEET structure for the add-in function name.

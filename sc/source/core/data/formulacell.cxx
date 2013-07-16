@@ -643,10 +643,9 @@ void ScFormulaCell::GetFormula( OUStringBuffer& rBuffer,
              * Can we live without in all cases? */
             ScFormulaCell* pCell = NULL;
             ScSingleRefData& rRef = p->GetSingleRef();
-            rRef.CalcAbsIfRel( aPos );
-            if ( rRef.Valid() )
-                pCell = pDocument->GetFormulaCell(
-                    ScAddress(rRef.nCol, rRef.nRow, rRef.nTab));
+            ScAddress aAbs = rRef.toAbs(aPos);
+            if (ValidAddress(aAbs))
+                pCell = pDocument->GetFormulaCell(aAbs);
 
             if (pCell)
             {
@@ -1842,10 +1841,10 @@ bool ScFormulaCell::GetMatrixOrigin( ScAddress& rPos ) const
             if( t )
             {
                 ScSingleRefData& rRef = t->GetSingleRef();
-                rRef.CalcAbsIfRel( aPos );
-                if ( rRef.Valid() )
+                ScAddress aAbs = rRef.toAbs(aPos);
+                if (ValidAddress(aAbs))
                 {
-                    rPos.Set( rRef.nCol, rRef.nRow, rRef.nTab );
+                    rPos = aAbs;
                     return true;
                 }
             }
@@ -2229,8 +2228,7 @@ bool ScFormulaCell::UpdateReference(
                 ScSingleRefData& rRef = t->GetSingleRef();
                 if ( nDy > 0 && rRef.IsColRel() )
                 {   // ColName
-                    rRef.CalcAbsIfRel( aPos );
-                    ScAddress aAdr( rRef.nCol, rRef.nRow, rRef.nTab );
+                    ScAddress aAdr = rRef.toAbs(aPos);
                     ScRangePair* pR = pColList->Find( aAdr );
                     if ( pR )
                     {   // defined
@@ -2239,14 +2237,13 @@ bool ScFormulaCell::UpdateReference(
                     }
                     else
                     {   // on the fly
-                        if ( rRef.nRow + 1 == nRow1 )
+                        if (aAdr.Row() + 1 == nRow1)
                             bColRowNameCompile = true;
                     }
                 }
                 if ( nDx > 0 && rRef.IsRowRel() )
                 {   // RowName
-                    rRef.CalcAbsIfRel( aPos );
-                    ScAddress aAdr( rRef.nCol, rRef.nRow, rRef.nTab );
+                    ScAddress aAdr = rRef.toAbs(aPos);
                     ScRangePair* pR = pRowList->Find( aAdr );
                     if ( pR )
                     {   // defined
@@ -2255,7 +2252,7 @@ bool ScFormulaCell::UpdateReference(
                     }
                     else
                     {   // on the fly
-                        if ( rRef.nCol + 1 == nCol1 )
+                        if (aAdr.Col() + 1 == nCol1)
                             bColRowNameCompile = true;
                     }
                 }
@@ -2275,11 +2272,10 @@ bool ScFormulaCell::UpdateReference(
                 while ( t && !bColRowNameCompile )
                 {
                     ScSingleRefData& rRef = t->GetSingleRef();
-                    rRef.CalcAbsIfRel( aPos );
-                    if ( rRef.Valid() )
+                    ScAddress aAbs = rRef.toAbs(aPos);
+                    if (ValidAddress(aAbs))
                     {
-                        ScAddress aAdr( rRef.nCol, rRef.nRow, rRef.nTab );
-                        if ( rRange.In( aAdr ) )
+                        if (rRange.In(aAbs))
                             bColRowNameCompile = true;
                     }
                     t = static_cast<ScToken*>(pCode->GetNextColRowName());

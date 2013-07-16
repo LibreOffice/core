@@ -283,9 +283,6 @@ void LotusToSc::LotusRelToScRel( sal_uInt16 nCol, sal_uInt16 nRow, ScSingleRefDa
         rSRD.nRelRow = static_cast< SCsROW >( static_cast< sal_Int16 >( nRow ) );
     else
         rSRD.nRow = static_cast< SCsROW >( nRow );
-
-    if( rSRD.IsRowRel() || rSRD.IsColRel() )
-        rSRD.CalcAbsIfRel( aEingPos );
 }
 
 

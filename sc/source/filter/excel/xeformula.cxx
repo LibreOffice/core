@@ -2005,7 +2005,7 @@ void XclExpFmlaCompImpl::ProcessExternalCellRef( const XclExpScToken& rTokData )
         sal_uInt16 nFileId = rTokData.mpScToken->GetIndex();
         const String& rTabName = rTokData.mpScToken->GetString();
         if( mxData->mrCfg.mbFromCell && mxData->mpScBasePos )
-            mxData->mpLinkMgr->StoreCell( nFileId, rTabName, aRefData );
+            mxData->mpLinkMgr->StoreCell(nFileId, rTabName, aRefData.toAbs(*mxData->mpScBasePos));
 
         // 1-based EXTERNSHEET index and 0-based Excel sheet indexes
         sal_uInt16 nExtSheet, nFirstSBTab, nLastSBTab;
@@ -2041,7 +2041,7 @@ void XclExpFmlaCompImpl::ProcessExternalRangeRef( const XclExpScToken& rTokData 
         sal_uInt16 nFileId = rTokData.mpScToken->GetIndex();
         const String& rTabName = rTokData.mpScToken->GetString();
         if( mxData->mrCfg.mbFromCell && mxData->mpScBasePos )
-            mxData->mpLinkMgr->StoreCellRange( nFileId, rTabName, aRefData );
+            mxData->mpLinkMgr->StoreCellRange(nFileId, rTabName, aRefData.toAbs(*mxData->mpScBasePos));
 
         // 1-based EXTERNSHEET index and 0-based Excel sheet indexes
         sal_uInt16 nExtSheet, nFirstSBTab, nLastSBTab;
@@ -2119,15 +2119,15 @@ void XclExpFmlaCompImpl::ProcessExternalName( const XclExpScToken& rTokData )
                             case svExternalSingleRef:
                             {
                                 ScSingleRefData aRefData = static_cast< ScToken* >( pScToken )->GetSingleRef();
-                                aRefData.CalcAbsIfRel( *mxData->mpScBasePos );
-                                mxData->mpLinkMgr->StoreCell( nFileId, pScToken->GetString(), aRefData );
+                                mxData->mpLinkMgr->StoreCell(
+                                    nFileId, pScToken->GetString(), aRefData.toAbs(*mxData->mpScBasePos));
                             }
                             break;
                             case svExternalDoubleRef:
                             {
                                 ScComplexRefData aRefData = static_cast< ScToken* >( pScToken )->GetDoubleRef();
-                                aRefData.CalcAbsIfRel( *mxData->mpScBasePos );
-                                mxData->mpLinkMgr->StoreCellRange( nFileId, pScToken->GetString(), aRefData );
+                                mxData->mpLinkMgr->StoreCellRange(
+                                    nFileId, pScToken->GetString(), aRefData.toAbs(*mxData->mpScBasePos));
                             }
                             default:
                                 ;   // nothing, avoid compiler warning

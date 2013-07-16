@@ -472,8 +472,8 @@ public:
     /** Derived classes store all cells in the given range in a CRN record list. */
     virtual void        StoreCellRange( const ScSingleRefData& rRef1, const ScSingleRefData& rRef2 ) = 0;
 
-    virtual void        StoreCell( sal_uInt16 nFileId, const String& rTabName, const ScSingleRefData& rRef ) = 0;
-    virtual void        StoreCellRange( sal_uInt16 nFileId, const String& rTabName, const ScSingleRefData& rRef1, const ScSingleRefData& rRef2 ) = 0;
+    virtual void StoreCell( sal_uInt16 nFileId, const String& rTabName, const ScAddress& rPos ) = 0;
+    virtual void StoreCellRange( sal_uInt16 nFileId, const String& rTabName, const ScRange& rRange ) = 0;
 
     /** Derived classes find or insert an EXTERNNAME record for an add-in function name. */
     virtual bool        InsertAddIn(
@@ -520,8 +520,8 @@ public:
 
     virtual void        StoreCellRange( const ScSingleRefData& rRef1, const ScSingleRefData& rRef2 );
 
-    virtual void        StoreCell( sal_uInt16 nFileId, const String& rTabName, const ScSingleRefData& rRef );
-    virtual void        StoreCellRange( sal_uInt16 nFileId, const String& rTabName, const ScSingleRefData& rRef1, const ScSingleRefData& rRef2 );
+    virtual void StoreCell( sal_uInt16 nFileId, const String& rTabName, const ScAddress& rPos );
+    virtual void StoreCellRange( sal_uInt16 nFileId, const String& rTabName, const ScRange& rRange );
 
     virtual bool        InsertAddIn(
                             sal_uInt16& rnExtSheet, sal_uInt16& rnExtName,
@@ -590,8 +590,8 @@ public:
 
     virtual void        StoreCellRange( const ScSingleRefData& rRef1, const ScSingleRefData& rRef2 );
 
-    virtual void        StoreCell( sal_uInt16 nFileId, const String& rTabName, const ScSingleRefData& rRef );
-    virtual void        StoreCellRange( sal_uInt16 nFileId, const String& rTabName, const ScSingleRefData& rRef1, const ScSingleRefData& rRef2 );
+    virtual void StoreCell( sal_uInt16 nFileId, const String& rTabName, const ScAddress& rPos );
+    virtual void StoreCellRange( sal_uInt16 nFileId, const String& rTabName, const ScRange& rRange );
 
     virtual bool        InsertAddIn(
                             sal_uInt16& rnExtSheet, sal_uInt16& rnExtName,
@@ -1964,12 +1964,12 @@ void XclExpLinkManagerImpl5::StoreCellRange( const ScSingleRefData& /*rRef1*/, c
     // not implemented
 }
 
-void XclExpLinkManagerImpl5::StoreCell( sal_uInt16 /*nFileId*/, const String& /*rTabName*/, const ScSingleRefData& /*rRef*/ )
+void XclExpLinkManagerImpl5::StoreCell( sal_uInt16 /*nFileId*/, const String& /*rTabName*/, const ScAddress& /*rPos*/ )
 {
     // not implemented
 }
 
-void XclExpLinkManagerImpl5::StoreCellRange( sal_uInt16 /*nFileId*/, const String& /*rTabName*/, const ScSingleRefData& /*rRef1*/, const ScSingleRefData& /*rRef2*/ )
+void XclExpLinkManagerImpl5::StoreCellRange( sal_uInt16 /*nFileId*/, const String& /*rTabName*/, const ScRange& /*rRange*/ )
 {
     // not implemented
 }
@@ -2162,17 +2162,14 @@ void XclExpLinkManagerImpl8::StoreCellRange( const ScSingleRefData& rRef1, const
     }
 }
 
-void XclExpLinkManagerImpl8::StoreCell( sal_uInt16 nFileId, const String& rTabName, const ScSingleRefData& rRef )
+void XclExpLinkManagerImpl8::StoreCell( sal_uInt16 nFileId, const String& rTabName, const ScAddress& rPos )
 {
-    ScAddress aAddr(rRef.nCol, rRef.nRow, rRef.nTab);
-    maSBBuffer.StoreCell(nFileId, rTabName, aAddr);
+    maSBBuffer.StoreCell(nFileId, rTabName, rPos);
 }
 
-void XclExpLinkManagerImpl8::StoreCellRange( sal_uInt16 nFileId, const String& rTabName, const ScSingleRefData& rRef1, const ScSingleRefData& rRef2 )
+void XclExpLinkManagerImpl8::StoreCellRange( sal_uInt16 nFileId, const String& rTabName, const ScRange& rRange )
 {
-    ScRange aRange(static_cast<SCCOL>(rRef1.nCol), static_cast<SCROW>(rRef1.nRow), static_cast<SCTAB>(rRef1.nTab),
-                   static_cast<SCCOL>(rRef2.nCol), static_cast<SCROW>(rRef2.nRow), static_cast<SCTAB>(rRef2.nTab));
-    maSBBuffer.StoreCellRange(nFileId, rTabName, aRange);
+    maSBBuffer.StoreCellRange(nFileId, rTabName, rRange);
 }
 
 bool XclExpLinkManagerImpl8::InsertAddIn(
@@ -2310,14 +2307,14 @@ void XclExpLinkManager::StoreCellRange( const ScComplexRefData& rRef )
     mxImpl->StoreCellRange( rRef.Ref1, rRef.Ref2 );
 }
 
-void XclExpLinkManager::StoreCell( sal_uInt16 nFileId, const String& rTabName, const ScSingleRefData& rRef )
+void XclExpLinkManager::StoreCell( sal_uInt16 nFileId, const String& rTabName, const ScAddress& rPos )
 {
-    mxImpl->StoreCell( nFileId, rTabName, rRef );
+    mxImpl->StoreCell(nFileId, rTabName, rPos);
 }
 
-void XclExpLinkManager::StoreCellRange( sal_uInt16 nFileId, const String& rTabName, const ScComplexRefData& rRef )
+void XclExpLinkManager::StoreCellRange( sal_uInt16 nFileId, const String& rTabName, const ScRange& rRange )
 {
-    mxImpl->StoreCellRange( nFileId, rTabName, rRef.Ref1, rRef.Ref2 );
+    mxImpl->StoreCellRange(nFileId, rTabName, rRange);
 }
 
 bool XclExpLinkManager::InsertAddIn(
