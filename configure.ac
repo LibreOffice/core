@@ -8108,21 +8108,26 @@ if test "x$enable_firebird_sdbc" = "xyes"; then
         SYSTEM_FIREBIRD=YES
         AC_PATH_PROG(FIREBIRDCONFIG, [fb_config])
         if test -z "$FIREBIRDCONFIG"; then
-            AC_MSG_ERROR([fb_config is missing. Install Firebird package.])
+            AC_MSG_NOTICE([No fb_config -- using pkg-config])
+            FIREBIRD_VERSION=`pkg-config --modversion fbembed`
+            AC_MSG_CHECKING([for Firebird Client library])
+            FIREBIRD_CFLAGS=`pkg-config --cflags fbembed`
+            FIREBIRD_LIBS=`pkg-config --libs fbembed`
+        else
+            AC_MSG_NOTICE([fb_config found])
+            FIREBIRD_VERSION=`$FIREBIRDCONFIG --version`
+            AC_MSG_CHECKING([for Firebird Client library])
+            FIREBIRD_CFLAGS=`$FIREBIRDCONFIG --cflags`
+            FIREBIRD_LIBS=`$FIREBIRDCONFIG --embedlibs`
         fi
         AC_MSG_CHECKING([Firebird version])
-        FIREBIRD_VERSION=`$FIREBIRDCONFIG --version`
-        FIREBIRD_MAJOR=`$FIREBIRDCONFIG --version | cut -d"." -f1`
-        FIREBIRD_MINOR=`$FIREBIRDCONFIG --version | cut -d"." -f2`
+        FIREBIRD_MAJOR=`echo $FIREBIRD_VERSION | cut -d"." -f1`
+        FIREBIRD_MINOR=`echo $FIREBIRD_VERSION | cut -d"." -f2`
         if test "$FIREBIRD_MAJOR" -eq "2" -a "$FIREBIRD_MINOR" -eq "5"; then
             AC_MSG_RESULT([OK])
         else
-            AC_MSG_ERROR([use 2.5.x])
+            AC_MSG_ERROR([Ensure firebird 2.5.x is installed])
         fi
-        AC_MSG_CHECKING([for Firebird Client library])
-        FIREBIRD_CFLAGS=`$FIREBIRDCONFIG --cflags`
-        FIREBIRD_LIBS=`$FIREBIRDCONFIG --embedlibs`
-        dnl FIREBIRD_LIBS=`$FIREBIRDCONFIG --libs`
         AC_MSG_RESULT([includes $FIREBIRD_CFLAGS, libraries $FIREBIRD_LIBS])
     else
         AC_MSG_RESULT([internal])
