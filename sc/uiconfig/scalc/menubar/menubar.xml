@@ -474,6 +474,7 @@
                     <menu:menuitem menu:id=".uno:DeletePivotTable"/>
                 </menu:menupopup>
             </menu:menu>
+            <menu:menuitem menu:id=".uno:SamplingDialog"/>
         </menu:menupopup>
     </menu:menu>
     <menu:menu menu:id=".uno:WindowList">

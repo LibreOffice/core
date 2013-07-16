@@ -52,6 +52,7 @@ SFX_IMPL_MODELESSDIALOG_WITHID(ScHighlightChgDlgWrapper, FID_CHG_SHOW )
 SFX_IMPL_MODELESSDIALOG_WITHID(ScSimpleRefDlgWrapper, WID_SIMPLE_REF )
 
 SFX_IMPL_MODELESSDIALOG_WITHID(ScRandomNumberGeneratorDialogWrapper, SID_OPENDLG_RANDOM_NUMBER_GENERATOR )
+SFX_IMPL_MODELESSDIALOG_WITHID(ScSamplingDialogWrapper, SID_SAMPLING_DIALOG )
 
 SFX_IMPL_CHILDWINDOW_WITHID(ScValidityRefChildWin, SID_VALIDITY_REFERENCE)
 
@@ -71,7 +72,10 @@ SfxChildWinInfo ScValidityRefChildWin::GetInfo() const
     return anInfo;
 }
 
-namespace { ScTabViewShell * lcl_GetTabViewShell( SfxBindings *pBindings ); }
+namespace
+{
+    ScTabViewShell* lcl_GetTabViewShell( SfxBindings* pBindings );
+}
 
 #define IMPL_CHILD_CTOR(Class,sid) \
     Class::Class( Window*               pParentP,                   \
@@ -96,101 +100,47 @@ namespace { ScTabViewShell * lcl_GetTabViewShell( SfxBindings *pBindings ); }
             pViewShell->GetViewFrame()->SetChildWindow( nId, false );           \
     }
 
-
-//=========================================================================
-
-//-------------------------------------------------------------------------
-// ScNameDlgWrapper
-//-------------------------------------------------------------------------
-
 IMPL_CHILD_CTOR( ScNameDlgWrapper, FID_DEFINE_NAME )
-
-//-------------------------------------------------------------------------
-// ScNameDlgWrapper
-//-------------------------------------------------------------------------
 
 IMPL_CHILD_CTOR( ScNameDefDlgWrapper, FID_ADD_NAME )
 
-//-------------------------------------------------------------------------
-// ScSolverDlgWrapper
-//-------------------------------------------------------------------------
-
 IMPL_CHILD_CTOR( ScSolverDlgWrapper, SID_OPENDLG_SOLVE )
-
-//-------------------------------------------------------------------------
-// ScOptSolverDlgWrapper
-//-------------------------------------------------------------------------
 
 IMPL_CHILD_CTOR( ScOptSolverDlgWrapper, SID_OPENDLG_OPTSOLVER )
 
-IMPL_CHILD_CTOR(ScXMLSourceDlgWrapper, SID_MANAGE_XML_SOURCE)
-
-//-------------------------------------------------------------------------
-// ScPivotLayoutWrapper
-//-------------------------------------------------------------------------
+IMPL_CHILD_CTOR( ScXMLSourceDlgWrapper, SID_MANAGE_XML_SOURCE)
 
 IMPL_CHILD_CTOR( ScPivotLayoutWrapper, SID_OPENDLG_PIVOTTABLE )
 
-//-------------------------------------------------------------------------
-// ScTabOpDlgWrapper
-//-------------------------------------------------------------------------
-
 IMPL_CHILD_CTOR( ScTabOpDlgWrapper, SID_OPENDLG_TABOP )
-
-//-------------------------------------------------------------------------
-// ScFilterDlgWrapper
-//-------------------------------------------------------------------------
 
 IMPL_CHILD_CTOR( ScFilterDlgWrapper, SID_FILTER )
 
-//-------------------------------------------------------------------------
-// ScSpecialFilterDlgWrapper
-//-------------------------------------------------------------------------
-
 IMPL_CHILD_CTOR( ScSpecialFilterDlgWrapper, SID_SPECIAL_FILTER )
-
-//-------------------------------------------------------------------------
-// ScDbNameDlgWrapper
-//-------------------------------------------------------------------------
 
 IMPL_CHILD_CTOR( ScDbNameDlgWrapper, SID_DEFINE_DBNAME )
 
-//-------------------------------------------------------------------------
-// ScColRowNameRangesDlgWrapper
-//-------------------------------------------------------------------------
-
 IMPL_CHILD_CTOR( ScColRowNameRangesDlgWrapper, SID_DEFINE_COLROWNAMERANGES )
-
-//-------------------------------------------------------------------------
-// ScConsolidateDlgWrapper
-//-------------------------------------------------------------------------
 
 IMPL_CHILD_CTOR( ScConsolidateDlgWrapper, SID_OPENDLG_CONSOLIDATE )
 
-//-------------------------------------------------------------------------
-// ScPrintAreasDlgWrapper
-//-------------------------------------------------------------------------
-
 IMPL_CHILD_CTOR( ScPrintAreasDlgWrapper, SID_OPENDLG_EDIT_PRINTAREA )
-
-//-------------------------------------------------------------------------
-// ScFormulaDlgWrapper
-//-------------------------------------------------------------------------
 
 IMPL_CHILD_CTOR( ScFormulaDlgWrapper, SID_OPENDLG_FUNCTION )
 
-
 IMPL_CHILD_CTOR( ScRandomNumberGeneratorDialogWrapper, SID_OPENDLG_RANDOM_NUMBER_GENERATOR )
+
+IMPL_CHILD_CTOR( ScSamplingDialogWrapper, SID_SAMPLING_DIALOG )
 
 //-------------------------------------------------------------------------
 // ScSimpleRefDlgWrapper
 //-------------------------------------------------------------------------
 
 static sal_Bool     bScSimpleRefFlag;
-static long     nScSimpleRefHeight;
-static long     nScSimpleRefWidth;
-static long     nScSimpleRefX;
-static long     nScSimpleRefY;
+static long         nScSimpleRefHeight;
+static long         nScSimpleRefWidth;
+static long         nScSimpleRefX;
+static long         nScSimpleRefY;
 static sal_Bool     bAutoReOpen=sal_True;
 
 ScSimpleRefDlgWrapper::ScSimpleRefDlgWrapper( Window* pParentP,

@@ -95,6 +95,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/scalc,\
 	sc/uiconfig/scalc/ui/randomnumbergenerator \
 	sc/uiconfig/scalc/ui/rightfooterdialog \
 	sc/uiconfig/scalc/ui/rightheaderdialog \
+	sc/uiconfig/scalc/ui/samplingdialog \
 	sc/uiconfig/scalc/ui/standardfilterdialog \
 	sc/uiconfig/scalc/ui/scgeneralpage \
 	sc/uiconfig/scalc/ui/selectrange \

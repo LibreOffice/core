@@ -268,6 +268,7 @@ void ScDLL::Init()
     ScFormulaDlgWrapper         ::RegisterChildWindow(false, pMod);
 
     ScRandomNumberGeneratorDialogWrapper::RegisterChildWindow(false, pMod);
+    ScSamplingDialogWrapper             ::RegisterChildWindow(false, pMod);
 
     // First docking Window for Calc
     ScFunctionChildWindow       ::RegisterChildWindow(false, pMod);
