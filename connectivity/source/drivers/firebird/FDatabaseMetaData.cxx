@@ -312,6 +312,7 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsOpenCursorsAcrossRollback(  ) throw
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ODatabaseMetaData::supportsTransactionIsolationLevel( sal_Int32 level ) throw(SQLException, RuntimeException)
 {
+    (void) level;
     return sal_False;
 }
 // -------------------------------------------------------------------------
@@ -430,6 +431,8 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsTableCorrelationNames(  ) throw(SQL
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ODatabaseMetaData::supportsConvert( sal_Int32 fromType, sal_Int32 toType ) throw(SQLException, RuntimeException)
 {
+    (void) fromType;
+    (void) toType;
     return sal_False;
 }
 // -------------------------------------------------------------------------
@@ -699,56 +702,68 @@ sal_Int32 SAL_CALL ODatabaseMetaData::getMaxUserNameLength(  ) throw(SQLExceptio
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ODatabaseMetaData::supportsResultSetType( sal_Int32 setType ) throw(SQLException, RuntimeException)
 {
+    (void) setType;
     return sal_False;
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ODatabaseMetaData::supportsResultSetConcurrency( sal_Int32 setType, sal_Int32 concurrency ) throw(SQLException, RuntimeException)
 {
+    (void) setType;
+    (void) concurrency;
     return sal_False;
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ODatabaseMetaData::ownUpdatesAreVisible( sal_Int32 setType ) throw(SQLException, RuntimeException)
 {
+    (void) setType;
     return sal_False;
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ODatabaseMetaData::ownDeletesAreVisible( sal_Int32 setType ) throw(SQLException, RuntimeException)
 {
+    (void) setType;
     return sal_False;
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ODatabaseMetaData::ownInsertsAreVisible( sal_Int32 setType ) throw(SQLException, RuntimeException)
 {
+    (void) setType;
     return sal_False;
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ODatabaseMetaData::othersUpdatesAreVisible( sal_Int32 setType ) throw(SQLException, RuntimeException)
 {
+    (void) setType;
     return sal_False;
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ODatabaseMetaData::othersDeletesAreVisible( sal_Int32 setType ) throw(SQLException, RuntimeException)
 {
+    (void) setType;
     return sal_False;
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ODatabaseMetaData::othersInsertsAreVisible( sal_Int32 setType ) throw(SQLException, RuntimeException)
 {
+    (void) setType;
     return sal_False;
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ODatabaseMetaData::updatesAreDetected( sal_Int32 setType ) throw(SQLException, RuntimeException)
 {
+    (void) setType;
     return sal_False;
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ODatabaseMetaData::deletesAreDetected( sal_Int32 setType ) throw(SQLException, RuntimeException)
 {
+    (void) setType;
     return sal_False;
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ODatabaseMetaData::insertsAreDetected( sal_Int32 setType ) throw(SQLException, RuntimeException)
 {
+    (void) setType;
     return sal_False;
 }
 // -------------------------------------------------------------------------
@@ -823,6 +838,10 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getColumnPrivileges(
     const Any& catalog, const ::rtl::OUString& schema, const ::rtl::OUString& table,
     const ::rtl::OUString& columnNamePattern ) throw(SQLException, RuntimeException)
 {
+    (void) catalog;
+    (void) schema;
+    (void) table;
+    (void) columnNamePattern;
     return NULL;
 }
 // -------------------------------------------------------------------------
@@ -830,6 +849,10 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getColumns(
     const Any& catalog, const ::rtl::OUString& schemaPattern, const ::rtl::OUString& tableNamePattern,
     const ::rtl::OUString& columnNamePattern ) throw(SQLException, RuntimeException)
 {
+    (void) catalog;
+    (void) schemaPattern;
+    (void) tableNamePattern;
+    (void) columnNamePattern;
     return NULL;
 }
 // -------------------------------------------------------------------------
@@ -837,6 +860,8 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
     const Any& catalog, const ::rtl::OUString& schemaPattern,
     const ::rtl::OUString& tableNamePattern, const Sequence< ::rtl::OUString >& types ) throw(SQLException, RuntimeException)
 {
+    (void) catalog;
+    (void) types;
     SAL_INFO("connectivity.firebird", "=> ODatabaseMetaData::getTables(). "
              "Got called with schemaPattern: " << schemaPattern << " , "
              "TableNamePattern: " << tableNamePattern);
@@ -942,6 +967,10 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getProcedureColumns(
     const Any& catalog, const ::rtl::OUString& schemaPattern,
     const ::rtl::OUString& procedureNamePattern, const ::rtl::OUString& columnNamePattern ) throw(SQLException, RuntimeException)
 {
+    (void) catalog;
+    (void) schemaPattern;
+    (void) procedureNamePattern;
+    (void) columnNamePattern;
     return NULL;
 }
 // -------------------------------------------------------------------------
@@ -949,30 +978,45 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getProcedures(
     const Any& catalog, const ::rtl::OUString& schemaPattern,
     const ::rtl::OUString& procedureNamePattern ) throw(SQLException, RuntimeException)
 {
+    (void) catalog;
+    (void) schemaPattern;
+    (void) procedureNamePattern;
     return NULL;
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getVersionColumns(
     const Any& catalog, const ::rtl::OUString& schema, const ::rtl::OUString& table ) throw(SQLException, RuntimeException)
 {
+    (void) catalog;
+    (void) schema;
+    (void) table;
     return NULL;
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getExportedKeys(
     const Any& catalog, const ::rtl::OUString& schema, const ::rtl::OUString& table ) throw(SQLException, RuntimeException)
 {
+    (void) catalog;
+    (void) schema;
+    (void) table;
     return NULL;
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getImportedKeys(
     const Any& catalog, const ::rtl::OUString& schema, const ::rtl::OUString& table ) throw(SQLException, RuntimeException)
 {
+    (void) catalog;
+    (void) schema;
+    (void) table;
     return NULL;
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getPrimaryKeys(
     const Any& catalog, const ::rtl::OUString& schema, const ::rtl::OUString& table ) throw(SQLException, RuntimeException)
 {
+    (void) catalog;
+    (void) schema;
+    (void) table;
     return NULL;
 }
 // -------------------------------------------------------------------------
@@ -980,6 +1024,11 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getIndexInfo(
     const Any& catalog, const ::rtl::OUString& schema, const ::rtl::OUString& table,
     sal_Bool unique, sal_Bool approximate ) throw(SQLException, RuntimeException)
 {
+    (void) catalog;
+    (void) schema;
+    (void) table;
+    (void) unique;
+    (void) approximate;
     return NULL;
 }
 // -------------------------------------------------------------------------
@@ -987,12 +1036,20 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getBestRowIdentifier(
     const Any& catalog, const ::rtl::OUString& schema, const ::rtl::OUString& table, sal_Int32 scope,
     sal_Bool nullable ) throw(SQLException, RuntimeException)
 {
+    (void) catalog;
+    (void) schema;
+    (void) table;
+    (void) scope;
+    (void) nullable;
     return NULL;
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTablePrivileges(
     const Any& catalog, const ::rtl::OUString& schemaPattern, const ::rtl::OUString& tableNamePattern ) throw(SQLException, RuntimeException)
 {
+    (void) catalog;
+    (void) schemaPattern;
+    (void) tableNamePattern;
     return NULL;
 }
 // -------------------------------------------------------------------------
@@ -1001,11 +1058,21 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getCrossReference(
     const ::rtl::OUString& primaryTable, const Any& foreignCatalog,
     const ::rtl::OUString& foreignSchema, const ::rtl::OUString& foreignTable ) throw(SQLException, RuntimeException)
 {
+    (void) primaryCatalog;
+    (void) primarySchema;
+    (void) primaryTable;
+    (void) foreignCatalog;
+    (void) foreignSchema;
+    (void) foreignTable;
     return NULL;
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getUDTs( const Any& catalog, const ::rtl::OUString& schemaPattern, const ::rtl::OUString& typeNamePattern, const Sequence< sal_Int32 >& types ) throw(SQLException, RuntimeException)
 {
+    (void) catalog;
+    (void) schemaPattern;
+    (void) typeNamePattern;
+    (void) types;
     OSL_FAIL("Not implemented yet!");
     throw SQLException();
     return NULL;

@@ -33,8 +33,8 @@
  *
  *************************************************************************/
 
-#ifndef _CONNECTIVITY_OSUBCOMPONENT_HXX_
-#define _CONNECTIVITY_OSUBCOMPONENT_HXX_
+#ifndef _CONNECTIVITY_FSUBCOMPONENT_HXX_
+#define _CONNECTIVITY_FSUBCOMPONENT_HXX_
 
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/interfacecontainer.h>
@@ -219,36 +219,9 @@ namespace connectivity
         }
 
 
-#define DECLARE_SERVICE_INFO()  \
-    virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException); \
-    virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException); \
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException) \
-
-#define IMPLEMENT_SERVICE_INFO(classname, implasciiname, serviceasciiname)  \
-    ::rtl::OUString SAL_CALL classname::getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException)   \
-    {   \
-        return ::rtl::OUString::createFromAscii(implasciiname); \
-    }   \
-    ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL classname::getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException)  \
-    {   \
-        ::com::sun::star::uno::Sequence< ::rtl::OUString > aSupported(1);   \
-        aSupported[0] = ::rtl::OUString::createFromAscii(serviceasciiname); \
-        return aSupported;  \
-    }   \
-    sal_Bool SAL_CALL classname::supportsService( const ::rtl::OUString& _rServiceName ) throw(::com::sun::star::uno::RuntimeException) \
-    {   \
-        Sequence< ::rtl::OUString > aSupported(getSupportedServiceNames());             \
-        const ::rtl::OUString* pSupported = aSupported.getConstArray();                 \
-        const ::rtl::OUString* pEnd = pSupported + aSupported.getLength();              \
-        for (;pSupported != pEnd && !pSupported->equals(_rServiceName); ++pSupported)   \
-            ;                                                                           \
-                                                                                        \
-        return pSupported != pEnd;                                                      \
-    }   \
-
 
     }
 }
-#endif // _CONNECTIVITY_OSUBCOMPONENT_HXX_
+#endif // _CONNECTIVITY_FSUBCOMPONENT_HXX_
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

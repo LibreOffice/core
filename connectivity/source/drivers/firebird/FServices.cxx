@@ -74,7 +74,7 @@ void REGISTER_PROVIDER(
     Reference< ::com::sun::star::registry::XRegistryKey >  xNewKey( xKey->createKey(aMainKeyName) );
     OSL_ENSURE(xNewKey.is(), "FIREBIRD::component_writeInfo : could not create a registry key !");
 
-    for (sal_uInt32 i=0; i<Services.getLength(); ++i)
+    for (sal_Int32 i=0; i<Services.getLength(); ++i)
         xNewKey->createKey(Services[i]);
 }
 
@@ -123,6 +123,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL firebird_sdbc_component_getFactor
                     void* pServiceManager,
                     void* pRegistryKey)
 {
+    (void) pRegistryKey;
     void* pRet = 0;
     if (pServiceManager)
     {
