@@ -2708,17 +2708,13 @@ void ScFormulaCell::UpdateGrow( const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY
         }
         else if( t->GetType() != svIndex )
         {
-            t->CalcAbsIfRel( aPos );
-            bool bMod;
-            {   // Own scope for SingleDoubleRefModifier dtor if SingleRef
-                SingleDoubleRefModifier aMod( *t );
-                ScComplexRefData& rRef = aMod.Ref();
-                bMod = (ScRefUpdate::UpdateGrow( rArea,nGrowX,nGrowY,
-                    rRef ) != UR_NOTHING);
-            }
-            if ( bMod )
+            SingleDoubleRefModifier aMod(*t);
+            ScComplexRefData& rRef = aMod.Ref();
+            ScRange aAbs = rRef.toAbs(aPos);
+            bool bMod = (ScRefUpdate::UpdateGrow(rArea, nGrowX, nGrowY, aAbs) != UR_NOTHING);
+            if (bMod)
             {
-                t->CalcRelFromAbs( aPos );
+                rRef.SetRange(aAbs, aPos);
                 bRefChanged = true;
             }
         }
@@ -2736,15 +2732,12 @@ void ScFormulaCell::UpdateGrow( const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY
             if( t->GetType() != svIndex )
             {
                 t->CalcAbsIfRel( aPos );
-                bool bMod;
-                {   // Own scope for SingleDoubleRefModifier dtor if SingleRef
-                    SingleDoubleRefModifier aMod( *t );
-                    ScComplexRefData& rRef = aMod.Ref();
-                    bMod = (ScRefUpdate::UpdateGrow( rArea,nGrowX,nGrowY,
-                        rRef ) != UR_NOTHING);
-                }
-                if ( bMod )
-                    t->CalcRelFromAbs( aPos );
+                SingleDoubleRefModifier aMod(*t);
+                ScComplexRefData& rRef = aMod.Ref();
+                ScRange aAbs = rRef.toAbs(aPos);
+                bool bMod = (ScRefUpdate::UpdateGrow(rArea, nGrowX, nGrowY, aAbs) != UR_NOTHING);
+                if (bMod)
+                    rRef.SetRange(aAbs, aPos);
             }
         }
     }

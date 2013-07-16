@@ -893,8 +893,8 @@ ScRefUpdateRes ScRefUpdate::UpdateTranspose(
 //  kommt ohne Dokument aus
 
 
-ScRefUpdateRes ScRefUpdate::UpdateGrow( const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY,
-                                        ScComplexRefData& rRef )
+ScRefUpdateRes ScRefUpdate::UpdateGrow(
+    const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY, ScRange& rRef )
 {
     ScRefUpdateRes eRet = UR_NOTHING;
 
@@ -902,23 +902,23 @@ ScRefUpdateRes ScRefUpdate::UpdateGrow( const ScRange& rArea, SCCOL nGrowX, SCRO
     //  falls ein Bereich Spaltenkoepfe enthaelt
 
     bool bUpdateX = ( nGrowX &&
-            rRef.Ref1.nCol == rArea.aStart.Col() && rRef.Ref2.nCol == rArea.aEnd.Col() &&
-            rRef.Ref1.nRow >= rArea.aStart.Row() && rRef.Ref2.nRow <= rArea.aEnd.Row() &&
-            rRef.Ref1.nTab >= rArea.aStart.Tab() && rRef.Ref2.nTab <= rArea.aEnd.Tab() );
+            rRef.aStart.Col() == rArea.aStart.Col() && rRef.aEnd.Col() == rArea.aEnd.Col() &&
+            rRef.aStart.Row() >= rArea.aStart.Row() && rRef.aEnd.Row() <= rArea.aEnd.Row() &&
+            rRef.aStart.Tab() >= rArea.aStart.Tab() && rRef.aEnd.Tab() <= rArea.aEnd.Tab() );
     bool bUpdateY = ( nGrowY &&
-            rRef.Ref1.nCol >= rArea.aStart.Col() && rRef.Ref2.nCol <= rArea.aEnd.Col() &&
-            ( rRef.Ref1.nRow == rArea.aStart.Row() || rRef.Ref1.nRow == rArea.aStart.Row()+1 ) &&
-                rRef.Ref2.nRow == rArea.aEnd.Row() &&
-            rRef.Ref1.nTab >= rArea.aStart.Tab() && rRef.Ref2.nTab <= rArea.aEnd.Tab() );
+        rRef.aStart.Col() >= rArea.aStart.Col() && rRef.aEnd.Col() <= rArea.aEnd.Col() &&
+        (rRef.aStart.Row() == rArea.aStart.Row() || rRef.aStart.Row() == rArea.aStart.Row()+1) &&
+        rRef.aEnd.Row() == rArea.aEnd.Row() &&
+        rRef.aStart.Tab() >= rArea.aStart.Tab() && rRef.aEnd.Tab() <= rArea.aEnd.Tab() );
 
     if ( bUpdateX )
     {
-        rRef.Ref2.nCol = sal::static_int_cast<SCsCOL>( rRef.Ref2.nCol + nGrowX );
+        rRef.aEnd.SetCol(sal::static_int_cast<SCsCOL>(rRef.aEnd.Col() + nGrowX));
         eRet = UR_UPDATED;
     }
     if ( bUpdateY )
     {
-        rRef.Ref2.nRow = sal::static_int_cast<SCsROW>( rRef.Ref2.nRow + nGrowY );
+        rRef.aEnd.SetRow(sal::static_int_cast<SCsROW>(rRef.aEnd.Row() + nGrowY));
         eRet = UR_UPDATED;
     }
 

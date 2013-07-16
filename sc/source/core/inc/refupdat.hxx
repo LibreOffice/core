@@ -79,10 +79,8 @@ public:
     static void DoTranspose( SCsCOL& rCol, SCsROW& rRow, SCsTAB& rTab, ScDocument* pDoc,
                                 const ScRange& rSource, const ScAddress& rDest );
 
-    /// Before calling, the absolute references must be up-to-date!
     static ScRefUpdateRes UpdateGrow(
-                                const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY,
-                                ScComplexRefData& rRef );
+        const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY, ScRange& rRef );
 };
 
 
