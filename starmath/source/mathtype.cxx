@@ -2909,7 +2909,7 @@ int MathType::HandleChar(sal_Int32 &rTextStart,int &rSetSize,int nLevel,
                 OUString aStr;
                 TypeFaceToString(aStr,nOldTypeFace);
                 aStr += "\"";
-                rRet.replaceAt(rTextStart,0,aStr);
+                rRet = rRet.replaceAt(rTextStart,0,aStr);
 
                 aStr = OUString();
                 TypeFaceToString(aStr,nTypeFace);
