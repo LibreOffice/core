@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAXn//+pM\u003d",
+        "filename": "connectivity/source/drivers/calc/CDatabaseMetaData.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 263,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2013-07-16T07:42:03Z",
+      "side": 1,
+      "message": "right this minute it is still probably limitd a 64K because, likely, calc is still not String() free.\n\nThere is no good predifined value for that afaict... SAL_MAX_INT32 would not be more useful than a a magic number here... I guess of all solution returning 0 may be the more sensible i n the long run... but for right now, to not create trouble until sc is String() free and by doing so, what the limit will end-up being (it may still be 64K for some other reasons than String() limitation)\n\nNote: I\u0027am trying to remove STRING_* as I gi, because I\u0027m also removing include \u003ctools/strings.h\u003e\nAnd furthermore. I go about these clean-up my #if /endif tools/strings.h and work on a module until it is happy... \n\nNote2: but sure I can re-introduce the STRING_ for now....",
+      "parentUuid": "AAAAXn//+pg\u003d",
+      "revId": "59c8fb4f3d92f656703880821ba25c3314cc6d4c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAXn//+po\u003d",
         "filename": "connectivity/source/drivers/dbase/DResultSet.cxx",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2013-07-16T05:00:14Z",
       "side": 1,
       "message": "Since nRec is unsigned, this comparison will always succeed, and this loop becomes an infinite loop. Didn\u0027t you get a compiler warning about the comparison?\n\nNote that pIter-\u003eFirst() returns a sal_uIntPtr, which may be bigger than a sal_uInt32. Since it ultimately comes from pKey-\u003eGetRecord() which is a sal_uInt32, be bold and change OIndexIterator::First (and all its friends) to return a sal_uInt32 instead (but please separate that into a different commit than truly boring String-\u003eOUString). Unless you evaluate that they should return a sal_Int64 so that they can return negative as error value (just like POSIX getc() return an int and not a char). Or unless you evaluate that connectivity::dbase::ONDXKey::nRecord should really be a sal_uIntPtr or a foo* or whatnot (from a cursory glance, I don\u0027t think so).",
+      "revId": "59c8fb4f3d92f656703880821ba25c3314cc6d4c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//+pA\u003d",
+        "filename": "connectivity/source/drivers/dbase/DResultSet.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2013-07-16T07:42:03Z",
+      "side": 1,
+      "message": "Yes you are clearly right... this is unsigned... and I missed the warning... because I\u0027m an idiot and did not have --enable-werror\n\nNow, the part that confuse me... SQL_COLUMN_NOTFOUND is defined somewhere to be 0xFFFF and used _only_ here afaict...\nI try (unsuccessfully apparently) to follow the code and concluded that that thing was populated using ultimately findColumn().\n some of which return -1, which is the only value that seems to be possibly put there that _could_ match 0xFFFF module some sign extension by the compiler when promoting 0xFFFF)",
+      "parentUuid": "AAAAXn//+po\u003d",
       "revId": "59c8fb4f3d92f656703880821ba25c3314cc6d4c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
