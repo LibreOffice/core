@@ -28,6 +28,7 @@
 #include <unotools/eventcfg.hxx>
 #include <sfx2/event.hxx>
 #include <sfx2/app.hxx>
+#include <sfx2/dialogs.hrc>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
@@ -37,6 +38,7 @@
 #include <sfx2/printer.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>
+#include <sfx2/dinfdlg.hxx>
 #include <comphelper/classids.hxx>
 #include <sot/exchange.hxx>
 #include <sot/formats.hxx>
@@ -1338,6 +1340,15 @@ void SmDocShell::SaveSymbols()
     pp->GetSymbolManager().Save();
 }
 
+SfxDocumentInfoDialog* SmDocShell::CreateDocumentInfoDialog(Window *pParent, const SfxItemSet &rSet)
+{
+    SfxDocumentInfoDialog* pDlg = new SfxDocumentInfoDialog(pParent, rSet);
+    SmDocShell* pDocSh = (SmDocShell*) SfxObjectShell::Current();
+    if( pDocSh == this )
+            pDlg->AddFontTabPage();
+
+    return pDlg;
+}
 
 void SmDocShell::Draw(OutputDevice *pDevice,
                       const JobSetup &,

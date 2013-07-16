@@ -118,6 +118,9 @@ class SmDocShell : public SfxObjectShell, public SfxListener
 
     bool        WriteAsMathType3( SfxMedium& );
 
+    /// Make DocInfo known to the Doc.
+    virtual SfxDocumentInfoDialog* CreateDocumentInfoDialog(Window *pParent, const SfxItemSet &);
+
     virtual void        Draw(OutputDevice *pDevice,
                              const JobSetup & rSetup,
                              sal_uInt16 nAspect = ASPECT_CONTENT);
