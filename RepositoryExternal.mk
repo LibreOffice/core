@@ -2094,7 +2094,7 @@ ifeq ($(ENABLE_FIREBIRD_SDBC),TRUE)
 
 ifeq ($(SYSTEM_FIREBIRD),YES)
 
-define gb_LinkTarget__use_firebird
+define gb_LinkTarget__use_libfbembed
 $(call gb_LinkTarget_set_include,$(1),\
 	$(FIREBIRD_CFLAGS) \
 	$$(INCLUDE) \
