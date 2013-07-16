@@ -78,15 +78,6 @@ $(call gb_Helper_abbreviate_dirs,\
 )
 endef
 
-define gb_Gallery__command_ulf
-$(call gb_Output_announce,$(2),$(true),ULF,1)
-MERGEINPUT=`$(gb_MKTEMP)` && \
-echo $(foreach lang,$(gb_TRANS_LANGS),$(gb_POLOCATION)/$(lang)/extras/source/gallery/share.po) > $${MERGEINPUT} && \
-$(call gb_Helper_abbreviate_dirs,\
-	$(call gb_Executable_get_command,ulfex) -i $(GALLERY_ULFFILE) -o $(1) -m $${MERGEINPUT} -l all) && \
-rm -rf $${MERGEINPUT}
-endef
-
 define gb_Gallery__command_str
 $(call gb_Output_announce,$(2),$(true),STR,1)
 cp -f $(GALLERY_STRFILE) $@ && \
@@ -112,14 +103,12 @@ $(call gb_Gallery_get_target,%) : \
 $(call gb_Gallery__get_final_target,%) :
 	touch $@
 
-ifneq ($(WITH_LANG),)
-$(call gb_Gallery_get_workdir,%).ulf : $(call gb_Executable_get_runtime_dependencies,ulfex)
-	$(call gb_Gallery__command_ulf,$@,$*)
-else
-$(call gb_Gallery_get_workdir,%).ulf :
-	$(call gb_Output_announce,$*,$(true),CPY,1)
-	cp $(GALLERY_ULFFILE) $@
-endif
+# difficult to determine source dep for this one...
+$(call gb_Gallery_get_workdir,%).ulf : \
+		$(call gb_Executable_get_runtime_dependencies,ulfex)
+	$(call gb_CustomTarget_ulfex__command,$@,$(GALLERY_ULFFILE),\
+		$(foreach lang,$(gb_TRANS_LANGS),\
+			$(gb_POLOCATION)/$(lang)/extras/source/gallery/share.po))
 
 $(call gb_Gallery_get_workdir,%).str : $(gb_Gallery_TRANSLATE)
 	$(call gb_Gallery__command_str,$@,$*)

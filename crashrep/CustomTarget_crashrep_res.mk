@@ -33,12 +33,10 @@ $(call gb_CustomTarget_get_workdir,crashrep/source/win32)/crashrep_impl.rc :
 			-rch rcheader.txt \
 			-rcf rcfooter.txt)
 
-$(call gb_CustomTarget_get_workdir,crashrep/source/win32)/crashrep.ulf : \
-		$(SRCDIR)/crashrep/source/win32/crashrep.ulf \
-		$(call gb_Executable_get_runtime_dependencies,ulfex)
-	MERGEINPUT=`$(gb_MKTEMP)` && \
-	echo $(foreach lang,$(gb_TRANS_LANGS),$(gb_POLOCATION)/$(lang)/$(patsubst %/,%,$(subst $(SRCDIR)/,,$(dir $<))).po) > $${MERGEINPUT} && \
-	$(call gb_Executable_get_command,ulfex) -i $< -o $@ -m $${MERGEINPUT} -l all && \
-	rm -f $${MERGEINPUT}
+$(eval $(call gb_CustomTarget_ulfex_rule,\
+	$(call gb_CustomTarget_get_workdir,crashrep/source/win32)/crashrep.ulf,\
+	$(SRCDIR)/crashrep/source/win32/crashrep.ulf,\
+	$(foreach lang,$(gb_TRANS_LANGS),\
+		$(gb_POLOCATION)/$(lang)/crashrep/source/win32.po)))
 
 # vim: set shiftwidth=4 tabstop=4 noexpandtab:

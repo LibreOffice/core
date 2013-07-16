@@ -31,10 +31,17 @@ $(info_WORKDIR)/InfoPlist_%.zip: $(info_WORKDIR)/InfoPlist_%/InfoPlist.strings
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ZIP,1)
 	zip -j $@ $<
 
-$(info_WORKDIR)/InfoPlist_%/InfoPlist.strings: $(info_WORKDIR)/Info.plist $(call gb_CustomTarget_get_workdir,sysui/share)/documents.ulf
+$(info_WORKDIR)/InfoPlist_%/InfoPlist.strings: \
+		$(info_WORKDIR)/Info.plist $(info_WORKDIR)/documents.ulf
 	mkdir -p $(dir $@)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),PRL,1)
 	$(PERL) -w $(info_SRCDIR)/gen_strings.pl -l $* -p $^ | \
 	iconv -f UTF-8 -t UTF-16 >$@
+
+$(eval $(call gb_CustomTarget_ulfex_rule,\
+	$(info_WORKDIR)/documents.ulf,\
+	$(SRCDIR)/sysui/desktop/share/documents.ulf,\
+	$(foreach lang,$(gb_TRANS_LANGS),\
+		$(gb_POLOCATION)/$(lang)/sysui/desktop/share.po)))
 
 # vim: set noet sw=4 ts=4:
