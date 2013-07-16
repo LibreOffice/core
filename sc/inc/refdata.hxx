@@ -83,6 +83,9 @@ struct SC_DLLPUBLIC ScSingleRefData
 
     ScAddress toAbs( const ScAddress& rPos ) const;
     void SetAddress( const ScAddress& rAddr, const ScAddress& rPos );
+    SCROW GetRow() const;
+    SCCOL GetCol() const;
+    SCTAB GetTab() const;
 
             void CalcRelFromAbs( const ScAddress& rPos );
             void CalcAbsIfRel( const ScAddress& rPos );

@@ -61,6 +61,27 @@ void ScSingleRefData::SetAddress( const ScAddress& rAddr, const ScAddress& rPos 
         nTab = rAddr.Tab();
 }
 
+SCROW ScSingleRefData::GetRow() const
+{
+    if (Flags.bRowDeleted)
+        return -1;
+    return Flags.bRowRel ? nRelRow : nRow;
+}
+
+SCCOL ScSingleRefData::GetCol() const
+{
+    if (Flags.bColDeleted)
+        return -1;
+    return Flags.bColRel ? nRelCol : nCol;
+}
+
+SCTAB ScSingleRefData::GetTab() const
+{
+    if (Flags.bTabDeleted)
+        return -1;
+    return Flags.bTabRel ? nRelTab : nTab;
+}
+
 void ScSingleRefData::CalcAbsIfRel( const ScAddress& rPos )
 {
     if ( Flags.bColRel )
