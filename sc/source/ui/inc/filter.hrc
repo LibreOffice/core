@@ -66,12 +66,12 @@
 #define LB_OP4              42
 
 // Special filter
-
+/*
 #define FT_CRITERIA_AREA    50
 #define LB_CRITERIA_AREA    51
 #define ED_CRITERIA_AREA    52
 #define RB_CRITERIA_AREA    53
-
+*/
 #define STR_COPY_AREA_TO 5054
 #define RID_FILTER_OPERATOR 5055
 #define RID_FILTER_FIELDNAME 5056

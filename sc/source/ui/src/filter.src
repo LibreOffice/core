@@ -438,7 +438,7 @@ ModelessDialog RID_SCDLG_FILTER
     };
 };
  //============================================================================
-ModelessDialog RID_SCDLG_SPEC_FILTER
+/*ModelessDialog RID_SCDLG_SPEC_FILTER
 {
     OutputSize = TRUE ;
     HelpId = CMD_SID_SPECIAL_FILTER ;
@@ -610,7 +610,7 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         MapUnit = MAP_APPFONT ;
         Delta = 32 ;
     };
-};
+};*/
  //============================================================================
 ModalDialog RID_SCDLG_PIVOTFILTER
 {

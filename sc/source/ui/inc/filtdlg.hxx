@@ -186,31 +186,30 @@ public:
     virtual sal_Bool    Close();
 
 private:
-    FixedText   aFtFilterArea;
-    ListBox     aLbFilterArea;
-    formula::RefEdit aEdFilterArea;
-    formula::RefButton aRbFilterArea;
+    ListBox*         pLbFilterArea;
+    formula::RefEdit*   pEdFilterArea;
+    formula::RefButton* pRbFilterArea;
 
-    FixedLine       aFlOptions;
+    FixedLine*       pFlOptions;
 
-    CheckBox        aBtnCase;
-    CheckBox        aBtnRegExp;
-    CheckBox        aBtnHeader;
-    CheckBox        aBtnUnique;
-    CheckBox        aBtnCopyResult;
-    ListBox         aLbCopyArea;
-    formula::RefEdit aEdCopyArea;
-    formula::RefButton aRbCopyArea;
-    CheckBox        aBtnDestPers;
-    FixedText       aFtDbAreaLabel;
-    FixedInfo       aFtDbArea;
+    CheckBox*        pBtnCase;
+    CheckBox*        pBtnRegExp;
+    CheckBox*        pBtnHeader;
+    CheckBox*        pBtnUnique;
+    CheckBox*        pBtnCopyResult;
+    ListBox*         pLbCopyArea;
+    formula::RefEdit* pEdCopyArea;
+    formula::RefButton* pRbCopyArea;
+    CheckBox*        pBtnDestPers;
+    FixedText*       pFtDbAreaLabel;
+    FixedInfo*       pFtDbArea;
     const OUString aStrUndefined;
     const OUString aStrNoName;
 
-    OKButton        aBtnOk;
-    CancelButton    aBtnCancel;
-    HelpButton      aBtnHelp;
-    MoreButton      aBtnMore;
+    OKButton*        pBtnOk;
+    CancelButton*    pBtnCancel;
+    HelpButton*      pBtnHelp;
+    MoreButton*      pBtnMore;
 
     ScFilterOptionsMgr* pOptionsMgr;
 
