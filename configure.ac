@@ -9137,7 +9137,7 @@ the  Windows SDK are installed.])
     if test -z "$WINDOWS_SDK_WILANGID" -a -n "$WINDOWS_SDK_HOME"; then
         WINDOWS_SDK_WILANGID=$WINDOWS_SDK_HOME/Samples/sysmgmt/msi/scripts/WiLangId.vbs
         if ! test -e "$WINDOWS_SDK_WILANGID" ; then
-            WINDOWS_SDK_WILANGID=$WINDOWS_SDK_HOME/bin/$vsarch/WiLangId.vbs
+            WINDOWS_SDK_WILANGID=$WINDOWS_SDK_HOME/bin/$WINDOWS_SDK_ARCH/WiLangId.vbs
         fi
         if ! test -e "$WINDOWS_SDK_WILANGID" ; then
             AC_MSG_WARN([WiLangId.vbs not found - building translated packages will fail])
