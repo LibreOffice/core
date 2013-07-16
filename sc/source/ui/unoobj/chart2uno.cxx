@@ -196,7 +196,7 @@ vector<ScTokenRef>* TokenTable::getColRanges(SCCOL nCol) const
             continue;
 
         ScTokenRef pCopy(static_cast<ScToken*>(p->Clone()));
-        ScRefTokenHelper::join(*pTokens, pCopy);
+        ScRefTokenHelper::join(*pTokens, pCopy, ScAddress());
     }
     return pTokens.release();
 }
@@ -219,7 +219,7 @@ vector<ScTokenRef>* TokenTable::getRowRanges(SCROW nRow) const
             continue;
 
         ScTokenRef p2(static_cast<ScToken*>(p->Clone()));
-        ScRefTokenHelper::join(*pTokens, p2);
+        ScRefTokenHelper::join(*pTokens, p2, ScAddress());
     }
     return pTokens.release();
 }
@@ -237,7 +237,7 @@ vector<ScTokenRef>* TokenTable::getAllRanges() const
             continue;
 
         ScTokenRef p2(static_cast<ScToken*>(p->Clone()));
-        ScRefTokenHelper::join(*pTokens, p2);
+        ScRefTokenHelper::join(*pTokens, p2, ScAddress());
     }
     return pTokens.release();
 }
@@ -1348,12 +1348,12 @@ bool lcl_addUpperLeftCornerIfMissing(vector<ScTokenRef>& rRefTokens,
         {
             ScTokenRef pCorner(
                 new ScExternalSingleRefToken(nFileId, aExtTabName, aData));
-            ScRefTokenHelper::join(rRefTokens, pCorner);
+            ScRefTokenHelper::join(rRefTokens, pCorner, ScAddress());
         }
         else
         {
             ScTokenRef pCorner(new ScSingleRefToken(aData));
-            ScRefTokenHelper::join(rRefTokens, pCorner);
+            ScRefTokenHelper::join(rRefTokens, pCorner, ScAddress());
         }
     }
     else
@@ -1368,12 +1368,12 @@ bool lcl_addUpperLeftCornerIfMissing(vector<ScTokenRef>& rRefTokens,
         {
             ScTokenRef pCorner(
                 new ScExternalDoubleRefToken(nFileId, aExtTabName, r));
-            ScRefTokenHelper::join(rRefTokens, pCorner);
+            ScRefTokenHelper::join(rRefTokens, pCorner, ScAddress());
         }
         else
         {
             ScTokenRef pCorner(new ScDoubleRefToken(r));
-            ScRefTokenHelper::join(rRefTokens, pCorner);
+            ScRefTokenHelper::join(rRefTokens, pCorner, ScAddress());
         }
     }
 
@@ -1822,9 +1822,9 @@ uno::Sequence< beans::PropertyValue > SAL_CALL ScChart2DataProvider::detectArgum
                     vector<ScTokenRef>::const_iterator itr = aTokens.begin(), itrEnd = aTokens.end();
                     for (; itr != itrEnd; ++itr)
                     {
-                        ScRefTokenHelper::join(aAllTokens, *itr);
+                        ScRefTokenHelper::join(aAllTokens, *itr, ScAddress());
                         if(!bThisIsCategories)
-                            ScRefTokenHelper::join(aAllSeriesLabelTokens, *itr);
+                            ScRefTokenHelper::join(aAllSeriesLabelTokens, *itr, ScAddress());
                     }
                     if(bThisIsCategories)
                         bHasCategoriesLabels=true;
@@ -1841,9 +1841,9 @@ uno::Sequence< beans::PropertyValue > SAL_CALL ScChart2DataProvider::detectArgum
                     vector<ScTokenRef>::const_iterator itr = aTokens.begin(), itrEnd = aTokens.end();
                     for (; itr != itrEnd; ++itr)
                     {
-                        ScRefTokenHelper::join(aAllTokens, *itr);
+                        ScRefTokenHelper::join(aAllTokens, *itr, ScAddress());
                         if(bThisIsCategories)
-                            ScRefTokenHelper::join(aAllCategoriesValuesTokens, *itr);
+                            ScRefTokenHelper::join(aAllCategoriesValuesTokens, *itr, ScAddress());
                     }
                 }
                 //detect row source

@@ -3176,7 +3176,7 @@ void Test::testFormulaPosition()
 
 namespace {
 
-bool hasRange(const std::vector<ScTokenRef>& rRefTokens, const ScRange& rRange)
+bool hasRange(const std::vector<ScTokenRef>& rRefTokens, const ScRange& rRange, const ScAddress& rPos)
 {
     std::vector<ScTokenRef>::const_iterator it = rRefTokens.begin(), itEnd = rRefTokens.end();
     for (; it != itEnd; ++it)
@@ -3193,7 +3193,7 @@ bool hasRange(const std::vector<ScTokenRef>& rRefTokens, const ScRange& rRange)
                 if (rRange.aStart != rRange.aEnd)
                     break;
 
-                ScAddress aThis(aData.nCol, aData.nRow, aData.nTab);
+                ScAddress aThis = aData.toAbs(rPos);
                 if (aThis == rRange.aStart)
                     return true;
             }
@@ -3201,7 +3201,7 @@ bool hasRange(const std::vector<ScTokenRef>& rRefTokens, const ScRange& rRange)
             case formula::svDoubleRef:
             {
                 ScComplexRefData aData = p->GetDoubleRef();
-                ScRange aThis(aData.Ref1.nCol, aData.Ref1.nRow, aData.Ref1.nTab, aData.Ref2.nCol, aData.Ref2.nRow, aData.Ref2.nTab);
+                ScRange aThis = aData.toAbs(rPos);
                 if (aThis == rRange)
                     return true;
             }
@@ -3230,30 +3230,33 @@ void Test::testJumpToPrecedentsDependents()
 
     {
         // C1's precedent should be A1:A2,B3.
-        ScRangeList aRange(ScRange(2, 0, 0));
+        ScAddress aC1(2, 0, 0);
+        ScRangeList aRange(aC1);
         rDocFunc.DetectiveCollectAllPreds(aRange, aRefTokens);
         CPPUNIT_ASSERT_MESSAGE("A1:A2 should be a precedent of C1.",
-                               hasRange(aRefTokens, ScRange(0, 0, 0, 0, 1, 0)));
+                               hasRange(aRefTokens, ScRange(0, 0, 0, 0, 1, 0), aC1));
         CPPUNIT_ASSERT_MESSAGE("B3 should be a precedent of C1.",
-                               hasRange(aRefTokens, ScRange(1, 2, 0)));
+                               hasRange(aRefTokens, ScRange(1, 2, 0), aC1));
     }
 
     {
         // C2's precedent should be A1 only.
-        ScRangeList aRange(ScRange(2, 1, 0));
+        ScAddress aC2(2, 1, 0);
+        ScRangeList aRange(aC2);
         rDocFunc.DetectiveCollectAllPreds(aRange, aRefTokens);
         CPPUNIT_ASSERT_EQUAL_MESSAGE("there should only be one reference token.",
                                aRefTokens.size(), static_cast<size_t>(1));
         CPPUNIT_ASSERT_MESSAGE("A1 should be a precedent of C1.",
-                               hasRange(aRefTokens, ScRange(0, 0, 0)));
+                               hasRange(aRefTokens, ScRange(0, 0, 0), aC2));
     }
 
     {
         // A1's dependent should be C1:C2.
-        ScRangeList aRange(ScRange(0, 0, 0));
+        ScAddress aA1(0, 0, 0);
+        ScRangeList aRange(aA1);
         rDocFunc.DetectiveCollectAllSuccs(aRange, aRefTokens);
         CPPUNIT_ASSERT_MESSAGE("C1:C2 should be the only dependent of A1.",
-                               aRefTokens.size() == 1 && hasRange(aRefTokens, ScRange(2, 0, 0, 2, 1, 0)));
+                               aRefTokens.size() == 1 && hasRange(aRefTokens, ScRange(2, 0, 0, 2, 1, 0), aA1));
     }
 
     m_pDoc->DeleteTab(0);

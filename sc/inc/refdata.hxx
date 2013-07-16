@@ -167,6 +167,7 @@ struct ScComplexRefData
     inline  bool ValidExternal() const;
 
     SC_DLLPUBLIC ScRange toAbs( const ScAddress& rPos ) const;
+    void SetRange( const ScRange& rRange, const ScAddress& rPos );
 
     /// Absolute references have to be up-to-date when calling this!
     void PutInOrder();

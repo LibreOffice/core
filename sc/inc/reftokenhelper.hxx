@@ -62,7 +62,7 @@ public:
     static bool SC_DLLPUBLIC intersects(
         const ::std::vector<ScTokenRef>& rTokens, const ScTokenRef& pToken, const ScAddress& rPos);
 
-    static void SC_DLLPUBLIC join(::std::vector<ScTokenRef>& rTokens, const ScTokenRef& pToken);
+    static void SC_DLLPUBLIC join(::std::vector<ScTokenRef>& rTokens, const ScTokenRef& pToken, const ScAddress& rPos);
 
     static bool getDoubleRefDataFromToken(ScComplexRefData& rData, const ScTokenRef& pToken);
 

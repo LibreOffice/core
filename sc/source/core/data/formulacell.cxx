@@ -2032,14 +2032,9 @@ bool ScFormulaCell::HasOneReference( ScRange& r ) const
     ScToken* p = static_cast<ScToken*>(pCode->GetNextReferenceRPN());
     if( p && !pCode->GetNextReferenceRPN() )        // only one!
     {
-        p->CalcAbsIfRel( aPos );
         SingleDoubleRefProvider aProv( *p );
-        r.aStart.Set( aProv.Ref1.nCol,
-                      aProv.Ref1.nRow,
-                      aProv.Ref1.nTab );
-        r.aEnd.Set( aProv.Ref2.nCol,
-                    aProv.Ref2.nRow,
-                    aProv.Ref2.nTab );
+        r.aStart = aProv.Ref1.toAbs(aPos);
+        r.aEnd = aProv.Ref2.toAbs(aPos);
         return true;
     }
     else

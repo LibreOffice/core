@@ -1401,8 +1401,7 @@ void ScDetectiveFunc::GetAllPreds(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW n
         for (ScToken* p = aRefIter.GetNextRefToken(); p; p = aRefIter.GetNextRefToken())
         {
             ScTokenRef pRef(static_cast<ScToken*>(p->Clone()));
-            pRef->CalcAbsIfRel(aIter.GetPos());
-            ScRefTokenHelper::join(rRefTokens, pRef);
+            ScRefTokenHelper::join(rRefTokens, pRef, aIter.GetPos());
         }
     }
 }
@@ -1430,7 +1429,7 @@ void ScDetectiveFunc::GetAllSuccs(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW n
             {
                 // This address is absolute.
                 pRef = ScRefTokenHelper::createRefToken(aPos);
-                ScRefTokenHelper::join(rRefTokens, pRef);
+                ScRefTokenHelper::join(rRefTokens, pRef, ScAddress());
             }
         }
     }

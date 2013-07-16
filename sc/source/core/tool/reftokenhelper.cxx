@@ -287,9 +287,9 @@ public:
      * @param rTokens existing list of reference tokens
      * @param rToken new token
      */
-    void operator() (vector<ScTokenRef>& rTokens, const ScTokenRef& pToken)
+    void operator() (vector<ScTokenRef>& rTokens, const ScTokenRef& pToken, const ScAddress& rPos)
     {
-        join(rTokens, pToken);
+        join(rTokens, pToken, rPos);
     }
 
 private:
@@ -322,15 +322,7 @@ private:
         return true;
     }
 
-    bool isContained(const ScComplexRefData& aOldData, const ScComplexRefData& aData) const
-    {
-        // Check for containment.
-        bool bRowsContained = (aOldData.Ref1.nRow <= aData.Ref1.nRow) && (aData.Ref2.nRow <= aOldData.Ref2.nRow);
-        bool bColsContained = (aOldData.Ref1.nCol <= aData.Ref1.nCol) && (aData.Ref2.nCol <= aOldData.Ref2.nCol);
-        return (bRowsContained && bColsContained);
-    }
-
-    void join(vector<ScTokenRef>& rTokens, const ScTokenRef& pToken)
+    void join(vector<ScTokenRef>& rTokens, const ScTokenRef& pToken, const ScAddress& rPos)
     {
         // Normalize the token to a double reference.
         ScComplexRefData aData;
@@ -376,25 +368,42 @@ private:
                 // Sheet ranges differ.
                 continue;
 
-            if (isContained(aOldData, aData))
+            ScRange aOld = aOldData.toAbs(rPos), aNew = aData.toAbs(rPos);
+            if (aOld.In(aNew))
                 // This new range is part of an existing range.  Skip it.
                 return;
 
-            bool bSameRows = (aData.Ref1.nRow == aOldData.Ref1.nRow) && (aData.Ref2.nRow == aOldData.Ref2.nRow);
-            bool bSameCols = (aData.Ref1.nCol == aOldData.Ref1.nCol) && (aData.Ref2.nCol == aOldData.Ref2.nCol);
+            bool bSameRows = (aNew.aStart.Row() == aOld.aStart.Row()) && (aNew.aEnd.Row() == aOld.aEnd.Row());
+            bool bSameCols = (aNew.aStart.Col() == aOld.aStart.Col()) && (aNew.aEnd.Col() == aOld.aEnd.Col());
             ScComplexRefData aNewData = aOldData;
             bool bJoinRanges = false;
             if (bSameRows)
             {
+                SCCOL nNewMin, nNewMax;
                 bJoinRanges = overlaps(
-                    aData.Ref1.nCol, aData.Ref2.nCol, aOldData.Ref1.nCol, aOldData.Ref2.nCol,
-                    aNewData.Ref1.nCol, aNewData.Ref2.nCol);
+                    aNew.aStart.Col(), aNew.aEnd.Col(), aOld.aStart.Col(), aOld.aEnd.Col(),
+                    nNewMin, nNewMax);
+
+                if (bJoinRanges)
+                {
+                    aNew.aStart.SetCol(nNewMin);
+                    aNew.aEnd.SetCol(nNewMax);
+                    aNewData.SetRange(aNew, rPos);
+                }
             }
             else if (bSameCols)
             {
+                SCROW nNewMin, nNewMax;
                 bJoinRanges = overlaps(
-                    aData.Ref1.nRow, aData.Ref2.nRow, aOldData.Ref1.nRow, aOldData.Ref2.nRow,
-                    aNewData.Ref1.nRow, aNewData.Ref2.nRow);
+                    aNew.aStart.Row(), aNew.aEnd.Row(), aOld.aStart.Row(), aOld.aEnd.Row(),
+                    nNewMin, nNewMax);
+
+                if (bJoinRanges)
+                {
+                    aNew.aStart.SetRow(nNewMin);
+                    aNew.aEnd.SetRow(nNewMax);
+                    aNewData.SetRange(aNew, rPos);
+                }
             }
 
             if (bJoinRanges)
@@ -418,7 +427,7 @@ private:
             // Pop the last token from the list, and keep joining recursively.
             ScTokenRef p = rTokens.back();
             rTokens.pop_back();
-            join(rTokens, p);
+            join(rTokens, p, rPos);
         }
         else
             rTokens.push_back(pToken);
@@ -427,10 +436,10 @@ private:
 
 }
 
-void ScRefTokenHelper::join(vector<ScTokenRef>& rTokens, const ScTokenRef& pToken)
+void ScRefTokenHelper::join(vector<ScTokenRef>& rTokens, const ScTokenRef& pToken, const ScAddress& rPos)
 {
     JoinRefTokenRanges join;
-    join(rTokens, pToken);
+    join(rTokens, pToken, rPos);
 }
 
 bool ScRefTokenHelper::getDoubleRefDataFromToken(ScComplexRefData& rData, const ScTokenRef& pToken)

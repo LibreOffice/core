@@ -294,4 +294,10 @@ ScRange ScComplexRefData::toAbs( const ScAddress& rPos ) const
     return ScRange(Ref1.toAbs(rPos), Ref2.toAbs(rPos));
 }
 
+void ScComplexRefData::SetRange( const ScRange& rRange, const ScAddress& rPos )
+{
+    Ref1.SetAddress(rRange.aStart, rPos);
+    Ref2.SetAddress(rRange.aEnd, rPos);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4243,10 +4243,18 @@ ScRangeData* ScCompiler::UpdateReference(UpdateRefMode eUpdateRefMode,
                          t->GetDoubleRef().Ref2.IsRelName()));
                 if (bRelName)
                 {
-                    t->CalcAbsIfRel( rOldPos);
-                    bool bValid = (t->GetType() == svSingleRef ?
-                            t->GetSingleRef().Valid() :
-                            t->GetDoubleRef().Valid());
+                    bool bValid = false;
+                    if (t->GetType() == svSingleRef)
+                    {
+                        ScAddress aAbs = t->GetSingleRef().toAbs(rOldPos);
+                        bValid = ValidAddress(aAbs);
+                    }
+                    else
+                    {
+                        ScRange aAbs = t->GetDoubleRef().toAbs(rOldPos);
+                        bValid = ValidRange(aAbs);
+                    }
+
                     // If the reference isn't valid, copying the formula
                     // wrapped it. Replace SharedFormula.
                     if (!bValid)
@@ -4276,7 +4284,6 @@ ScRangeData* ScCompiler::UpdateReference(UpdateRefMode eUpdateRefMode,
         }
         else if( t->GetType() != svIndex )  // it may be a DB area!!!
         {
-            t->CalcAbsIfRel( rOldPos );
             switch (t->GetType())
             {
                 case svExternalSingleRef:
@@ -4286,10 +4293,10 @@ ScRangeData* ScCompiler::UpdateReference(UpdateRefMode eUpdateRefMode,
                     // In fact, calling ScRefUpdate::Update() for URM_MOVE
                     // may have negative side effects. Simply adapt
                     // relative references to the new position.
-                    t->CalcRelFromAbs( aPos);
                     break;
                 case svSingleRef:
                 {
+                    t->CalcAbsIfRel( rOldPos );
                     if ( ScRefUpdate::Update( pDoc, eUpdateRefMode,
                                 aPos, r, nDx, nDy, nDz,
                                 SingleDoubleRefModifier(
@@ -4301,9 +4308,11 @@ ScRangeData* ScCompiler::UpdateReference(UpdateRefMode eUpdateRefMode,
                 default:
                 {
                     ScComplexRefData& rRef = t->GetDoubleRef();
-                    SCCOL nCols = rRef.Ref2.nCol - rRef.Ref1.nCol;
-                    SCROW nRows = rRef.Ref2.nRow - rRef.Ref1.nRow;
-                    SCTAB nTabs = rRef.Ref2.nTab - rRef.Ref1.nTab;
+                    ScRange aAbs = rRef.toAbs(rOldPos);
+                    SCCOL nCols = aAbs.aEnd.Col() - aAbs.aStart.Col();
+                    SCROW nRows = aAbs.aEnd.Row() - aAbs.aStart.Row();
+                    SCTAB nTabs = aAbs.aEnd.Tab() - aAbs.aStart.Tab();
+                    t->CalcAbsIfRel( rOldPos );
                     if ( ScRefUpdate::Update( pDoc, eUpdateRefMode,
                                 aPos, r, nDx, nDy, nDz,
                                 t->GetDoubleRef()) != UR_NOTHING)
