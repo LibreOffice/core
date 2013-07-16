@@ -657,9 +657,9 @@ static OUString lcl_makeExternalNameStr(const OUString& rFile, const OUString& r
 }
 
 static bool lcl_getLastTabName( OUString& rTabName2, const OUString& rTabName1,
-                                const vector<OUString>& rTabNames, const ScComplexRefData& rRef )
+                                const vector<OUString>& rTabNames, const ScRange& rRef )
 {
-    SCsTAB nTabSpan = rRef.Ref2.nTab - rRef.Ref1.nTab;
+    SCsTAB nTabSpan = rRef.aEnd.Tab() - rRef.aStart.Tab();
     if (nTabSpan > 0)
     {
         size_t nCount = rTabNames.size();
@@ -764,15 +764,14 @@ struct ConventionOOO_A1 : public Convention_A1
     }
 
 
-    void MakeOneRefStrImpl( OUStringBuffer&    rBuffer,
-                            const ScCompiler&       rComp,
-                            const ScSingleRefData&  rRef,
-                            bool                    bForceTab,
-                            bool                    bODF ) const
+    void MakeOneRefStrImpl(
+        OUStringBuffer& rBuffer, const ScCompiler& rComp,
+        const ScSingleRefData& rRef, const ScAddress& rAbsRef,
+        bool bForceTab, bool bODF ) const
     {
         if( rRef.IsFlag3D() || bForceTab )
         {
-            if (rRef.IsTabDeleted())
+            if (!ValidTab(rAbsRef.Tab()))
             {
                 if (!rRef.IsTabRel())
                     rBuffer.append(sal_Unicode('$'));
@@ -782,7 +781,7 @@ struct ConventionOOO_A1 : public Convention_A1
             else
             {
                 String aDoc;
-                String aRefStr( MakeTabStr( rComp, rRef.nTab, aDoc ) );
+                String aRefStr(MakeTabStr(rComp, rAbsRef.Tab(), aDoc));
                 rBuffer.append(aDoc);
                 if (!rRef.IsTabRel())
                     rBuffer.append(sal_Unicode('$'));
@@ -793,16 +792,16 @@ struct ConventionOOO_A1 : public Convention_A1
             rBuffer.append(sal_Unicode('.'));
         if (!rRef.IsColRel())
             rBuffer.append(sal_Unicode('$'));
-        if ( rRef.IsColDeleted() )
+        if (!ValidCol(rAbsRef.Col()))
             rBuffer.append( rComp.GetCurrentOpCodeMap()->getSymbol( ocErrRef));
         else
-            MakeColStr(rBuffer, rRef.nCol );
+            MakeColStr(rBuffer, rAbsRef.Col());
         if (!rRef.IsRowRel())
             rBuffer.append(sal_Unicode('$'));
-        if ( rRef.IsRowDeleted() )
+        if (!ValidRow(rAbsRef.Row()))
             rBuffer.append( rComp.GetCurrentOpCodeMap()->getSymbol( ocErrRef));
         else
-            MakeRowStr( rBuffer, rRef.nRow );
+            MakeRowStr(rBuffer, rAbsRef.Row());
     }
 
 
@@ -817,23 +816,24 @@ struct ConventionOOO_A1 : public Convention_A1
         ScComplexRefData aRef( rRef );
         // In case absolute/relative positions weren't separately available:
         // transform relative to absolute!
-        aRef.Ref1.CalcAbsIfRel( rComp.GetPos() );
+        ScAddress aAbs1 = aRef.Ref1.toAbs(rComp.GetPos()), aAbs2;
         if( !bSingleRef )
-            aRef.Ref2.CalcAbsIfRel( rComp.GetPos() );
-        if (bODF && FormulaGrammar::isODFF( rComp.GetGrammar()) &&
-                (aRef.Ref1.IsColDeleted() || aRef.Ref1.IsRowDeleted() || aRef.Ref1.IsTabDeleted() ||
-                 aRef.Ref2.IsColDeleted() || aRef.Ref2.IsRowDeleted() || aRef.Ref2.IsTabDeleted()))
+            aAbs2 = aRef.Ref2.toAbs(rComp.GetPos());
+
+        if (bODF && FormulaGrammar::isODFF( rComp.GetGrammar()) && (!ValidAddress(aAbs1) || !ValidAddress(aAbs2)))
+        {
             rBuffer.append( rComp.GetCurrentOpCodeMap()->getSymbol( ocErrRef));
             // For ODFF write [#REF!], but not for PODF so apps reading ODF
             // 1.0/1.1 may have a better chance if they implemented the old
             // form.
+        }
         else
         {
-            MakeOneRefStrImpl( rBuffer, rComp, aRef.Ref1, false, bODF);
+            MakeOneRefStrImpl(rBuffer, rComp, aRef.Ref1, aAbs1, false, bODF);
             if (!bSingleRef)
             {
                 rBuffer.append(sal_Unicode(':'));
-                MakeOneRefStrImpl( rBuffer, rComp, aRef.Ref2, (aRef.Ref2.nTab != aRef.Ref1.nTab), bODF);
+                MakeOneRefStrImpl(rBuffer, rComp, aRef.Ref2, aAbs2, (aRef.Ref2.nTab != aRef.Ref1.nTab), bODF);
             }
         }
         if (bODF)
@@ -874,10 +874,12 @@ struct ConventionOOO_A1 : public Convention_A1
         return lcl_makeExternalNameStr( rFile, rName, sal_Unicode('#'), false);
     }
 
-    bool makeExternalSingleRefStr( OUStringBuffer& rBuffer, sal_uInt16 nFileId,
-                                   const String& rTabName, const ScSingleRefData& rRef,
-                                   ScExternalRefManager* pRefMgr, bool bDisplayTabName, bool bEncodeUrl ) const
+    bool makeExternalSingleRefStr(
+        OUStringBuffer& rBuffer, sal_uInt16 nFileId,
+        const String& rTabName, const ScSingleRefData& rRef, const ScAddress& rPos,
+        ScExternalRefManager* pRefMgr, bool bDisplayTabName, bool bEncodeUrl ) const
     {
+        ScAddress aAbsRef = rRef.toAbs(rPos);
         if (bDisplayTabName)
         {
             OUString aFile;
@@ -904,10 +906,10 @@ struct ConventionOOO_A1 : public Convention_A1
 
         if (!rRef.IsColRel())
             rBuffer.append(sal_Unicode('$'));
-        MakeColStr( rBuffer, rRef.nCol);
+        MakeColStr( rBuffer, aAbsRef.Col());
         if (!rRef.IsRowRel())
             rBuffer.append(sal_Unicode('$'));
-        MakeRowStr( rBuffer, rRef.nRow);
+        MakeRowStr( rBuffer, aAbsRef.Row());
 
         return true;
     }
@@ -916,9 +918,6 @@ struct ConventionOOO_A1 : public Convention_A1
                                      sal_uInt16 nFileId, const String& rTabName, const ScSingleRefData& rRef,
                                      ScExternalRefManager* pRefMgr, bool bODF ) const
     {
-        ScSingleRefData aRef(rRef);
-        aRef.CalcAbsIfRel(rCompiler.GetPos());
-
         if (bODF)
             rBuffer.append( sal_Unicode('['));
 
@@ -937,7 +936,7 @@ struct ConventionOOO_A1 : public Convention_A1
             default:
                 ;
         }
-        makeExternalSingleRefStr(rBuffer, nFileId, rTabName, aRef, pRefMgr, true, bEncodeUrl);
+        makeExternalSingleRefStr(rBuffer, nFileId, rTabName, rRef, rCompiler.GetPos(), pRefMgr, true, bEncodeUrl);
         if (bODF)
             rBuffer.append( sal_Unicode(']'));
     }
@@ -953,8 +952,7 @@ struct ConventionOOO_A1 : public Convention_A1
                                      sal_uInt16 nFileId, const String& rTabName, const ScComplexRefData& rRef,
                                      ScExternalRefManager* pRefMgr, bool bODF ) const
     {
-        ScComplexRefData aRef(rRef);
-        aRef.CalcAbsIfRel(rCompiler.GetPos());
+        ScRange aAbsRange = rRef.toAbs(rCompiler.GetPos());
 
         if (bODF)
             rBuffer.append( sal_Unicode('['));
@@ -977,13 +975,13 @@ struct ConventionOOO_A1 : public Convention_A1
 
         do
         {
-            if (!makeExternalSingleRefStr(rBuffer, nFileId, rTabName, aRef.Ref1, pRefMgr, true, bEncodeUrl))
+            if (!makeExternalSingleRefStr(rBuffer, nFileId, rTabName, rRef.Ref1, rCompiler.GetPos(), pRefMgr, true, bEncodeUrl))
                 break;
 
             rBuffer.append(sal_Unicode(':'));
 
             OUString aLastTabName;
-            bool bDisplayTabName = (aRef.Ref1.nTab != aRef.Ref2.nTab);
+            bool bDisplayTabName = (aAbsRange.aStart.Tab() != aAbsRange.aEnd.Tab());
             if (bDisplayTabName)
             {
                 // Get the name of the last table.
@@ -994,7 +992,7 @@ struct ConventionOOO_A1 : public Convention_A1
                     OSL_TRACE( "ConventionOOO_A1::makeExternalRefStrImpl: no sheet names for document ID %d", nFileId);
                 }
 
-                if (!lcl_getLastTabName(aLastTabName, rTabName, aTabNames, aRef))
+                if (!lcl_getLastTabName(aLastTabName, rTabName, aTabNames, aAbsRange))
                 {
                     OSL_FAIL( "ConventionOOO_A1::makeExternalRefStrImpl: sheet name not found");
                     // aLastTabName contains #REF!, proceed.
@@ -1003,7 +1001,7 @@ struct ConventionOOO_A1 : public Convention_A1
             else if (bODF)
                 rBuffer.append( sal_Unicode('.'));      // need at least the sheet separator in ODF
             makeExternalSingleRefStr( rBuffer, nFileId, aLastTabName,
-                    aRef.Ref2, pRefMgr, bDisplayTabName, bEncodeUrl);
+                    rRef.Ref2, rCompiler.GetPos(), pRefMgr, bDisplayTabName, bEncodeUrl);
         } while (0);
         if (bODF)
             rBuffer.append( sal_Unicode(']'));
@@ -1196,7 +1194,7 @@ struct ConventionXL
 
     static void makeExternalTabNameRange( OUStringBuffer& rBuf, const OUString& rTabName,
                                           const vector<OUString>& rTabNames,
-                                          const ScComplexRefData& rRef )
+                                          const ScRange& rRef )
     {
         OUString aLastTabName;
         if (!lcl_getLastTabName(aLastTabName, rTabName, rTabNames, rRef))
@@ -1272,14 +1270,14 @@ struct ConventionXL_A1 : public Convention_A1, public ConventionXL
     ConventionXL_A1() : Convention_A1( FormulaGrammar::CONV_XL_A1 ) { }
     ConventionXL_A1( FormulaGrammar::AddressConvention eConv ) : Convention_A1( eConv ) { }
 
-    void makeSingleCellStr( OUStringBuffer& rBuf, const ScSingleRefData& rRef ) const
+    void makeSingleCellStr( OUStringBuffer& rBuf, const ScSingleRefData& rRef, const ScAddress& rAbs ) const
     {
         if (!rRef.IsColRel())
             rBuf.append(sal_Unicode('$'));
-        MakeColStr(rBuf, rRef.nCol);
+        MakeColStr(rBuf, rAbs.Col());
         if (!rRef.IsRowRel())
             rBuf.append(sal_Unicode('$'));
-        MakeRowStr(rBuf, rRef.nRow);
+        MakeRowStr(rBuf, rAbs.Row());
     }
 
     void MakeRefStr( OUStringBuffer&   rBuf,
@@ -1291,11 +1289,11 @@ struct ConventionXL_A1 : public Convention_A1, public ConventionXL
 
         // Play fast and loose with invalid refs.  There is not much point in producing
         // Foo!A1:#REF! versus #REF! at this point
-        aRef.Ref1.CalcAbsIfRel( rComp.GetPos() );
+        ScAddress aAbs1 = aRef.Ref1.toAbs(rComp.GetPos()), aAbs2;
 
         MakeDocStr( rBuf, rComp, aRef, bSingleRef );
 
-        if( aRef.Ref1.IsColDeleted() || aRef.Ref1.IsRowDeleted() )
+        if (!ValidAddress(aAbs1))
         {
             rBuf.append(ScGlobal::GetRscString(STR_NO_REF_TABLE));
             return;
@@ -1303,22 +1301,22 @@ struct ConventionXL_A1 : public Convention_A1, public ConventionXL
 
         if( !bSingleRef )
         {
-            aRef.Ref2.CalcAbsIfRel( rComp.GetPos() );
-            if( aRef.Ref2.IsColDeleted() || aRef.Ref2.IsRowDeleted() )
+            aAbs2 = aRef.Ref2.toAbs(rComp.GetPos());
+            if (!ValidAddress(aAbs2))
             {
                 rBuf.append(ScGlobal::GetRscString(STR_NO_REF_TABLE));
                 return;
             }
 
-            if( aRef.Ref1.nCol == 0 && aRef.Ref2.nCol >= MAXCOL )
+            if (aAbs1.Col() == 0 && aAbs2.Col() >= MAXCOL)
             {
                 if (!aRef.Ref1.IsRowRel())
                     rBuf.append(sal_Unicode( '$' ));
-                MakeRowStr( rBuf, aRef.Ref1.nRow );
+                MakeRowStr(rBuf, aAbs1.Row());
                 rBuf.append(sal_Unicode( ':' ));
                 if (!aRef.Ref2.IsRowRel())
                     rBuf.append(sal_Unicode( '$' ));
-                MakeRowStr( rBuf, aRef.Ref2.nRow );
+                MakeRowStr(rBuf, aAbs2.Row());
                 return;
             }
 
@@ -1326,20 +1324,20 @@ struct ConventionXL_A1 : public Convention_A1, public ConventionXL
             {
                 if (!aRef.Ref1.IsColRel())
                     rBuf.append(sal_Unicode( '$' ));
-                MakeColStr(rBuf, aRef.Ref1.nCol );
+                MakeColStr(rBuf, aAbs1.Col());
                 rBuf.append(sal_Unicode( ':' ));
                 if (!aRef.Ref2.IsColRel())
                     rBuf.append(sal_Unicode( '$' ));
-                MakeColStr(rBuf, aRef.Ref2.nCol );
+                MakeColStr(rBuf, aAbs2.Col());
                 return;
             }
         }
 
-        makeSingleCellStr(rBuf, aRef.Ref1);
+        makeSingleCellStr(rBuf, aRef.Ref1, aAbs1);
         if (!bSingleRef)
         {
             rBuf.append(sal_Unicode( ':' ));
-            makeSingleCellStr(rBuf, aRef.Ref2);
+            makeSingleCellStr(rBuf, aRef.Ref2, aAbs2);
         }
     }
 
@@ -1392,15 +1390,12 @@ struct ConventionXL_A1 : public Convention_A1, public ConventionXL
         if (!pFullName)
             return;
 
-        ScSingleRefData aRef(rRef);
-        aRef.CalcAbsIfRel(rCompiler.GetPos());
-
         ConventionXL::makeExternalDocStr(
             rBuffer, *pFullName, rCompiler.GetEncodeUrlMode() == ScCompiler::ENCODE_ALWAYS);
         ScRangeStringConverter::AppendTableName(rBuffer, rTabName);
         rBuffer.append(sal_Unicode('!'));
 
-        makeSingleCellStr(rBuffer, aRef);
+        makeSingleCellStr(rBuffer, rRef, rRef.toAbs(rCompiler.GetPos()));
     }
 
     virtual void makeExternalRefStr( OUStringBuffer& rBuffer, const ScCompiler& rCompiler,
@@ -1416,19 +1411,18 @@ struct ConventionXL_A1 : public Convention_A1, public ConventionXL
         if (aTabNames.empty())
             return;
 
-        ScComplexRefData aRef(rRef);
-        aRef.CalcAbsIfRel(rCompiler.GetPos());
+        ScRange aAbsRef = rRef.toAbs(rCompiler.GetPos());
 
         ConventionXL::makeExternalDocStr(
             rBuffer, *pFullName, rCompiler.GetEncodeUrlMode() == ScCompiler::ENCODE_ALWAYS);
-        ConventionXL::makeExternalTabNameRange(rBuffer, rTabName, aTabNames, aRef);
+        ConventionXL::makeExternalTabNameRange(rBuffer, rTabName, aTabNames, aAbsRef);
         rBuffer.append(sal_Unicode('!'));
 
-        makeSingleCellStr(rBuffer, aRef.Ref1);
-        if (aRef.Ref1 != aRef.Ref2)
+        makeSingleCellStr(rBuffer, rRef.Ref1, aAbsRef.aStart);
+        if (aAbsRef.aStart != aAbsRef.aEnd)
         {
             rBuffer.append(sal_Unicode(':'));
-            makeSingleCellStr(rBuffer, aRef.Ref2);
+            makeSingleCellStr(rBuffer, rRef.Ref2, aAbsRef.aEnd);
         }
     }
 };
@@ -1449,7 +1443,7 @@ const ScCompiler::Convention * const ScCompiler::pConvXL_OOX = &ConvXL_OOX;
 //-----------------------------------------------------------------------------
 
 static void
-r1c1_add_col( OUStringBuffer &rBuf, const ScSingleRefData& rRef )
+r1c1_add_col( OUStringBuffer &rBuf, const ScSingleRefData& rRef, const ScAddress& rAbsRef )
 {
     rBuf.append( sal_Unicode( 'C' ) );
     if( rRef.IsColRel() )
@@ -1458,10 +1452,10 @@ r1c1_add_col( OUStringBuffer &rBuf, const ScSingleRefData& rRef )
             rBuf.append("[").append( OUString::number( rRef.nRelCol ) ).append("]");
     }
     else
-        rBuf.append( OUString::number( rRef.nCol + 1 ) );
+        rBuf.append( OUString::number( rAbsRef.Col() + 1 ) );
 }
 static void
-r1c1_add_row( OUStringBuffer &rBuf, const ScSingleRefData& rRef )
+r1c1_add_row( OUStringBuffer &rBuf, const ScSingleRefData& rRef, const ScAddress& rAbsRef )
 {
     rBuf.append( sal_Unicode( 'R' ) );
     if( rRef.IsRowRel() )
@@ -1472,7 +1466,7 @@ r1c1_add_row( OUStringBuffer &rBuf, const ScSingleRefData& rRef )
         }
     }
     else
-        rBuf.append( OUString::number( rRef.nRow + 1 ) );
+        rBuf.append( OUString::number( rAbsRef.Row() + 1 ) );
 }
 
 struct ConventionXL_R1C1 : public ScCompiler::Convention, public ConventionXL
@@ -1483,14 +1477,14 @@ struct ConventionXL_R1C1 : public ScCompiler::Convention, public ConventionXL
                      const ScComplexRefData& rRef,
                      bool bSingleRef ) const
     {
+        ScRange aAbsRef = rRef.toAbs(rComp.GetPos());
         ScComplexRefData aRef( rRef );
 
         MakeDocStr( rBuf, rComp, aRef, bSingleRef );
 
         // Play fast and loose with invalid refs.  There is not much point in producing
         // Foo!A1:#REF! versus #REF! at this point
-        aRef.Ref1.CalcAbsIfRel( rComp.GetPos() );
-        if( aRef.Ref1.IsColDeleted() || aRef.Ref1.IsRowDeleted() )
+        if (!ValidCol(aAbsRef.aStart.Col()) || !ValidRow(aAbsRef.aStart.Row()))
         {
             rBuf.append(ScGlobal::GetRscString(STR_NO_REF_TABLE));
             return;
@@ -1498,45 +1492,45 @@ struct ConventionXL_R1C1 : public ScCompiler::Convention, public ConventionXL
 
         if( !bSingleRef )
         {
-            aRef.Ref2.CalcAbsIfRel( rComp.GetPos() );
-            if( aRef.Ref2.IsColDeleted() || aRef.Ref2.IsRowDeleted() )
+            if (!ValidCol(aAbsRef.aEnd.Col()) || !ValidRow(aAbsRef.aEnd.Row()))
             {
                 rBuf.append(ScGlobal::GetRscString(STR_NO_REF_TABLE));
                 return;
             }
 
-            if( aRef.Ref1.nCol == 0 && aRef.Ref2.nCol >= MAXCOL )
+            if (aAbsRef.aStart.Col() == 0 && aAbsRef.aEnd.Col() >= MAXCOL)
             {
-                r1c1_add_row( rBuf,  rRef.Ref1 );
-                if( rRef.Ref1.nRow != rRef.Ref2.nRow ||
-                    rRef.Ref1.IsRowRel() != rRef.Ref2.IsRowRel() ) {
+                r1c1_add_row(rBuf,  rRef.Ref1, aAbsRef.aStart);
+                if (aAbsRef.aStart.Row() != aAbsRef.aEnd.Row() ||
+                    rRef.Ref1.IsRowRel() != rRef.Ref2.IsRowRel() )
+                {
                     rBuf.append (sal_Unicode ( ':' ) );
-                    r1c1_add_row( rBuf,  rRef.Ref2 );
+                    r1c1_add_row(rBuf,  rRef.Ref2, aAbsRef.aEnd);
                 }
                 return;
 
             }
 
-            if( aRef.Ref1.nRow == 0 && aRef.Ref2.nRow >= MAXROW )
+            if (aAbsRef.aStart.Row() == 0 && aAbsRef.aEnd.Row() >= MAXROW)
             {
-                r1c1_add_col( rBuf, rRef.Ref1 );
-                if( rRef.Ref1.nCol != rRef.Ref2.nCol ||
-                    rRef.Ref1.IsColRel() != rRef.Ref2.IsColRel() )
+                r1c1_add_col(rBuf, rRef.Ref1, aAbsRef.aStart);
+                if (aAbsRef.aStart.Col() != aAbsRef.aEnd.Col() ||
+                    rRef.Ref1.IsColRel() != rRef.Ref2.IsColRel())
                 {
                     rBuf.append (sal_Unicode ( ':' ) );
-                    r1c1_add_col( rBuf,  rRef.Ref2 );
+                    r1c1_add_col(rBuf, rRef.Ref2, aAbsRef.aEnd);
                 }
                 return;
             }
         }
 
-        r1c1_add_row( rBuf, rRef.Ref1 );
-        r1c1_add_col( rBuf, rRef.Ref1 );
+        r1c1_add_row(rBuf, rRef.Ref1, aAbsRef.aStart);
+        r1c1_add_col(rBuf, rRef.Ref1, aAbsRef.aStart);
         if (!bSingleRef)
         {
             rBuf.append (sal_Unicode ( ':' ) );
-            r1c1_add_row( rBuf, rRef.Ref2 );
-            r1c1_add_col( rBuf, rRef.Ref2 );
+            r1c1_add_row(rBuf, rRef.Ref2, aAbsRef.aEnd);
+            r1c1_add_col(rBuf, rRef.Ref2, aAbsRef.aEnd);
         }
     }
 
@@ -1592,16 +1586,15 @@ struct ConventionXL_R1C1 : public ScCompiler::Convention, public ConventionXL
         if (!pFullName)
             return;
 
-        ScSingleRefData aRef(rRef);
-        aRef.CalcAbsIfRel(rCompiler.GetPos());
+        ScAddress aAbsRef = rRef.toAbs(rCompiler.GetPos());
 
         ConventionXL::makeExternalDocStr(
             rBuffer, *pFullName, rCompiler.GetEncodeUrlMode() == ScCompiler::ENCODE_ALWAYS);
         ScRangeStringConverter::AppendTableName(rBuffer, rTabName);
         rBuffer.append(sal_Unicode('!'));
 
-        r1c1_add_row(rBuffer, aRef);
-        r1c1_add_col(rBuffer, aRef);
+        r1c1_add_row(rBuffer, rRef, aAbsRef);
+        r1c1_add_col(rBuffer, rRef, aAbsRef);
     }
 
     virtual void makeExternalRefStr( OUStringBuffer& rBuffer, const ScCompiler& rCompiler,
@@ -1617,47 +1610,46 @@ struct ConventionXL_R1C1 : public ScCompiler::Convention, public ConventionXL
         if (aTabNames.empty())
             return;
 
-        ScComplexRefData aRef(rRef);
-        aRef.CalcAbsIfRel(rCompiler.GetPos());
+        ScRange aAbsRef = rRef.toAbs(rCompiler.GetPos());
 
         ConventionXL::makeExternalDocStr(
             rBuffer, *pFullName, rCompiler.GetEncodeUrlMode() == ScCompiler::ENCODE_ALWAYS);
-        ConventionXL::makeExternalTabNameRange(rBuffer, rTabName, aTabNames, aRef);
+        ConventionXL::makeExternalTabNameRange(rBuffer, rTabName, aTabNames, aAbsRef);
         rBuffer.append(sal_Unicode('!'));
 
-        if (aRef.Ref2.IsColDeleted() || aRef.Ref2.IsRowDeleted())
+        if (!ValidCol(aAbsRef.aEnd.Col()) || !ValidRow(aAbsRef.aEnd.Row()))
         {
             rBuffer.append(ScGlobal::GetRscString(STR_NO_REF_TABLE));
             return;
         }
 
-        if (aRef.Ref1.nCol == 0 && aRef.Ref2.nCol >= MAXCOL)
+        if (aAbsRef.aStart.Col() == 0 && aAbsRef.aEnd.Col() >= MAXCOL)
         {
-            r1c1_add_row(rBuffer, rRef.Ref1);
-            if (rRef.Ref1.nRow != rRef.Ref2.nRow || rRef.Ref1.IsRowRel() != rRef.Ref2.IsRowRel())
+            r1c1_add_row(rBuffer, rRef.Ref1, aAbsRef.aStart);
+            if (aAbsRef.aStart.Row() != aAbsRef.aEnd.Row() || rRef.Ref1.IsRowRel() != rRef.Ref2.IsRowRel())
             {
                 rBuffer.append (sal_Unicode(':'));
-                r1c1_add_row(rBuffer, rRef.Ref2);
+                r1c1_add_row(rBuffer, rRef.Ref2, aAbsRef.aEnd);
             }
             return;
         }
 
-        if (aRef.Ref1.nRow == 0 && aRef.Ref2.nRow >= MAXROW)
+        if (aAbsRef.aStart.Row() == 0 && aAbsRef.aEnd.Row() >= MAXROW)
         {
-            r1c1_add_col(rBuffer, aRef.Ref1);
-            if (aRef.Ref1.nCol != aRef.Ref2.nCol || aRef.Ref1.IsColRel() != aRef.Ref2.IsColRel())
+            r1c1_add_col(rBuffer, rRef.Ref1, aAbsRef.aStart);
+            if (aAbsRef.aStart.Col() != aAbsRef.aEnd.Col() || rRef.Ref1.IsColRel() != rRef.Ref2.IsColRel())
             {
                 rBuffer.append (sal_Unicode(':'));
-                r1c1_add_col(rBuffer, aRef.Ref2);
+                r1c1_add_col(rBuffer, rRef.Ref2, aAbsRef.aEnd);
             }
             return;
         }
 
-        r1c1_add_row(rBuffer, aRef.Ref1);
-        r1c1_add_col(rBuffer, aRef.Ref1);
+        r1c1_add_row(rBuffer, rRef.Ref1, aAbsRef.aStart);
+        r1c1_add_col(rBuffer, rRef.Ref1, aAbsRef.aStart);
         rBuffer.append (sal_Unicode (':'));
-        r1c1_add_row(rBuffer, aRef.Ref2);
-        r1c1_add_col(rBuffer, aRef.Ref2);
+        r1c1_add_row(rBuffer, rRef.Ref2, aAbsRef.aEnd);
+        r1c1_add_col(rBuffer, rRef.Ref2, aAbsRef.aEnd);
     }
 
     virtual sal_uLong getCharTableFlags( sal_Unicode c, sal_Unicode cLast ) const
@@ -4209,8 +4201,10 @@ ScRangeData* ScCompiler::UpdateReference(UpdateRefMode eUpdateRefMode,
         while( (t = static_cast<ScToken*>(pArr->GetNextColRowName())) != NULL )
         {
             ScSingleRefData& rRef = t->GetSingleRef();
-            rRef.CalcAbsIfRel( rOldPos );
-            ScAddress aNewRef( rRef.nCol + nDx, rRef.nRow + nDy, rRef.nTab + nDz );
+            ScAddress aNewRef = rRef.toAbs(rOldPos);
+            aNewRef.IncCol(nDx);
+            aNewRef.IncRow(nDy);
+            aNewRef.IncTab(nDz);
             if ( r.In( aNewRef ) )
             {   // yes, this is URM_MOVE
                 if ( ScRefUpdate::Update( pDoc, URM_MOVE, aPos,

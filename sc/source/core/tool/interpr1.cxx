@@ -7431,10 +7431,10 @@ void ScInterpreter::ScOffset()
             String aTabName;
             ScSingleRefData aRef;
             PopExternalSingleRef(nFileId, aTabName, aRef);
-            aRef.CalcAbsIfRel(aPos);
-            nCol1 = aRef.nCol;
-            nRow1 = aRef.nRow;
-            nTab1 = aRef.nTab;
+            ScAddress aAbsRef = aRef.toAbs(aPos);
+            nCol1 = aAbsRef.Col();
+            nRow1 = aAbsRef.Row();
+            nTab1 = aAbsRef.Tab();
 
             if (nParamCount == 3 || (nColNew < 0 && nRowNew < 0))
             {

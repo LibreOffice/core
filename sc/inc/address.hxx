@@ -420,6 +420,10 @@ struct ScAddressEqualFunctor
     }
 };
 
+inline bool ValidAddress( const ScAddress& rAddr )
+{
+    return ValidCol(rAddr.Col()) && ValidRow(rAddr.Row()) && ValidTab(rAddr.Tab());
+}
 
 // === ScRange ===============================================================
 
@@ -616,6 +620,10 @@ struct ScRangeEqualFunctor
     }
 };
 
+inline bool ValidRange( const ScRange& rRange )
+{
+    return ValidAddress(rRange.aStart) && ValidAddress(rRange.aEnd);
+}
 
 // === ScRangePair ===========================================================
 

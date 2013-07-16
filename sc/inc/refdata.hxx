@@ -82,6 +82,7 @@ struct SC_DLLPUBLIC ScSingleRefData
     inline  bool ValidExternal() const;
 
     ScAddress toAbs( const ScAddress& rPos ) const;
+    void SetAddress( const ScAddress& rAddr, const ScAddress& rPos );
 
             void CalcRelFromAbs( const ScAddress& rPos );
             void CalcAbsIfRel( const ScAddress& rPos );

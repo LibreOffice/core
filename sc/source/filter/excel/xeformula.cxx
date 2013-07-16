@@ -1817,23 +1817,24 @@ void XclExpFmlaCompImpl::ConvertRefData(
     if( mxData->mpScBasePos )
     {
         // *** reference position exists (cell, matrix) - convert to absolute ***
-        rRefData.CalcAbsIfRel( *mxData->mpScBasePos );
+        ScAddress aAbs = rRefData.toAbs(*mxData->mpScBasePos);
 
         // convert column index
-        SCsCOL& rnScCol = rRefData.nCol;
-        if( bTruncMaxCol && (rnScCol == mnMaxScCol) )
-            rnScCol = mnMaxAbsCol;
-        else if( (rnScCol < 0) || (rnScCol > mnMaxAbsCol) )
-            rRefData.SetColDeleted( sal_True );
-        rXclPos.mnCol = static_cast< sal_uInt16 >( rnScCol ) & mnMaxColMask;
+        if (bTruncMaxCol && (aAbs.Col() == mnMaxScCol))
+            aAbs.SetCol(mnMaxAbsCol);
+        else if ((aAbs.Col() < 0) || (aAbs.Col() > mnMaxAbsCol))
+            rRefData.SetColDeleted(true);
+        rXclPos.mnCol = static_cast<sal_uInt16>(aAbs.Col()) & mnMaxColMask;
 
         // convert row index
-        SCsROW& rnScRow = rRefData.nRow;
-        if( bTruncMaxRow && (rnScRow == mnMaxScRow) )
-            rnScRow = mnMaxAbsRow;
-        else if( (rnScRow < 0) || (rnScRow > mnMaxAbsRow) )
-            rRefData.SetRowDeleted( sal_True );
-        rXclPos.mnRow = static_cast< sal_uInt32 >( rnScRow ) & mnMaxRowMask;
+        if (bTruncMaxRow && (aAbs.Row() == mnMaxScRow))
+            aAbs.SetRow(mnMaxAbsRow);
+        else if ((aAbs.Row() < 0) || (aAbs.Row() > mnMaxAbsRow))
+            rRefData.SetRowDeleted(true);
+        rXclPos.mnRow = static_cast<sal_uInt32>(aAbs.Row()) & mnMaxRowMask;
+
+        // Update the reference.
+        rRefData.SetAddress(aAbs, *mxData->mpScBasePos);
     }
     else
     {

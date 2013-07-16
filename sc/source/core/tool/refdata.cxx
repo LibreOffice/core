@@ -43,6 +43,24 @@ ScAddress ScSingleRefData::toAbs( const ScAddress& rPos ) const
     return ScAddress(nRetCol, nRetRow, nRetTab);
 }
 
+void ScSingleRefData::SetAddress( const ScAddress& rAddr, const ScAddress& rPos )
+{
+    if (Flags.bColRel)
+        nRelCol = rAddr.Col() - rPos.Col();
+    else
+        nCol = rAddr.Col();
+
+    if (Flags.bRowRel)
+        nRelRow = rAddr.Row() - rPos.Row();
+    else
+        nRow = rAddr.Row();
+
+    if (Flags.bTabRel)
+        nRelTab = rAddr.Tab() - rPos.Tab();
+    else
+        nTab = rAddr.Tab();
+}
+
 void ScSingleRefData::CalcAbsIfRel( const ScAddress& rPos )
 {
     if ( Flags.bColRel )

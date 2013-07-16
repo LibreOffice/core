@@ -210,15 +210,12 @@ void ScFormulaReferenceHelper::ShowFormulaReference( const XubString& rStr )
                         if(bDoubleRef)
                         {
                             ScComplexRefData aRef( pToken->GetDoubleRef() );
-                            aRef.CalcAbsIfRel( aPos );
-                            aRange.aStart.Set( aRef.Ref1.nCol, aRef.Ref1.nRow, aRef.Ref1.nTab );
-                            aRange.aEnd.Set( aRef.Ref2.nCol, aRef.Ref2.nRow, aRef.Ref2.nTab );
+                            aRange = aRef.toAbs(aPos);
                         }
                         else
                         {
                             ScSingleRefData aRef( pToken->GetSingleRef() );
-                            aRef.CalcAbsIfRel( aPos );
-                            aRange.aStart.Set( aRef.nCol, aRef.nRow, aRef.nTab );
+                            aRange.aStart = aRef.toAbs(aPos);
                             aRange.aEnd = aRange.aStart;
                         }
                         ColorData aColName=ScRangeFindList::GetColorName(nIndex++);
