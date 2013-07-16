@@ -70,84 +70,68 @@ SwWrapDlg::~SwWrapDlg()
 {
 }
 
-SwWrapTabPage::SwWrapTabPage(Window *pParent, const SfxItemSet &rSet) :
-    SfxTabPage(pParent, SW_RES(TP_FRM_WRAP), rSet),
-
-    aWrapFLC           (this, SW_RES(C_WRAP_FL)),
-    aNoWrapRB           (this, SW_RES(RB_NO_WRAP)),
-    aWrapLeftRB         (this, SW_RES(RB_WRAP_LEFT)),
-    aWrapRightRB        (this, SW_RES(RB_WRAP_RIGHT)),
-    aWrapParallelRB     (this, SW_RES(RB_WRAP_PARALLEL)),
-    aWrapThroughRB      (this, SW_RES(RB_WRAP_THROUGH)),
-    aIdealWrapRB        (this, SW_RES(RB_WRAP_IDEAL)),
-
-    aMarginFL           (this, SW_RES(FL_MARGIN)),
-    aLeftMarginFT       (this, SW_RES(FT_LEFT_MARGIN)),
-    aLeftMarginED       (this, SW_RES(ED_LEFT_MARGIN)),
-    aRightMarginFT      (this, SW_RES(FT_RIGHT_MARGIN)),
-    aRightMarginED      (this, SW_RES(ED_RIGHT_MARGIN)),
-    aTopMarginFT        (this, SW_RES(FT_TOP_MARGIN)),
-    aTopMarginED        (this, SW_RES(ED_TOP_MARGIN)),
-    aBottomMarginFT     (this, SW_RES(FT_BOTTOM_MARGIN)),
-    aBottomMarginED     (this, SW_RES(ED_BOTTOM_MARGIN)),
-
-    aOptionsSepFL       (this, SW_RES(FL_OPTION_SEP)),
-    aOptionsFL          (this, SW_RES(FL_OPTION)),
-    aWrapAnchorOnlyCB   (this, SW_RES(CB_ANCHOR_ONLY)),
-    aWrapTransparentCB  (this, SW_RES(CB_TRANSPARENT)),
-    aWrapOutlineCB      (this, SW_RES(CB_OUTLINE)),
-    aWrapOutsideCB      (this, SW_RES(CB_ONLYOUTSIDE)),
-
-    aWrapIL             (SW_RES(IL_WRAP)),
-
-    nAnchorId(FLY_AT_PARA),
-    nHtmlMode(0),
-
-    pWrtSh(0),
-
-    bFormat(sal_False),
-    bNew(sal_True),
-    bHtmlMode(sal_False),
-    bContourImage(sal_False)
+SwWrapTabPage::SwWrapTabPage(Window *pParent, const SfxItemSet &rSet)
+    : SfxTabPage(pParent, "WrapPage" , "modules/swriter/ui/wrappage.ui", rSet)
+    , nAnchorId(FLY_AT_PARA)
+    , nHtmlMode(0)
+    , pWrtSh(0)
+    , bFormat(false)
+    , bNew(true)
+    , bHtmlMode(false)
+    , bContourImage(false)
 
 {
-    FreeResource();
+    get(m_pNoWrapRB, "none");
+    get(m_pWrapLeftRB, "before");
+    get(m_pWrapRightRB, "after");
+    get(m_pWrapParallelRB, "parallel");
+    get(m_pWrapThroughRB, "through");
+    get(m_pIdealWrapRB, "optimal");
+    get(m_pLeftMarginED, "left");
+    get(m_pRightMarginED, "right");
+    get(m_pTopMarginED, "top");
+    get(m_pBottomMarginED, "bottom");
+    get(m_pWrapAnchorOnlyCB, "anchoronly");
+    get(m_pWrapTransparentCB, "transparent");
+    get(m_pWrapOutlineCB, "outline");
+    get(m_pWrapOutsideCB, "outside");
+
     SetExchangeSupport();
 
     Link aLk = LINK(this, SwWrapTabPage, RangeModifyHdl);
-    aLeftMarginED.SetUpHdl(aLk);
-    aLeftMarginED.SetDownHdl(aLk);
-    aLeftMarginED.SetFirstHdl(aLk);
-    aLeftMarginED.SetLastHdl(aLk);
-    aLeftMarginED.SetLoseFocusHdl(aLk);
+    m_pLeftMarginED->SetUpHdl(aLk);
+    m_pLeftMarginED->SetDownHdl(aLk);
+    m_pLeftMarginED->SetFirstHdl(aLk);
+    m_pLeftMarginED->SetLastHdl(aLk);
+    m_pLeftMarginED->SetLoseFocusHdl(aLk);
 
-    aRightMarginED.SetUpHdl(aLk);
-    aRightMarginED.SetDownHdl(aLk);
-    aRightMarginED.SetFirstHdl(aLk);
-    aRightMarginED.SetLastHdl(aLk);
-    aRightMarginED.SetLoseFocusHdl(aLk);
+    m_pRightMarginED->SetUpHdl(aLk);
+    m_pRightMarginED->SetDownHdl(aLk);
+    m_pRightMarginED->SetFirstHdl(aLk);
+    m_pRightMarginED->SetLastHdl(aLk);
+    m_pRightMarginED->SetLoseFocusHdl(aLk);
 
-    aTopMarginED.SetUpHdl(aLk);
-    aTopMarginED.SetDownHdl(aLk);
-    aTopMarginED.SetFirstHdl(aLk);
-    aTopMarginED.SetLastHdl(aLk);
-    aTopMarginED.SetLoseFocusHdl(aLk);
+    m_pTopMarginED->SetUpHdl(aLk);
+    m_pTopMarginED->SetDownHdl(aLk);
+    m_pTopMarginED->SetFirstHdl(aLk);
+    m_pTopMarginED->SetLastHdl(aLk);
+    m_pTopMarginED->SetLoseFocusHdl(aLk);
 
-    aBottomMarginED.SetUpHdl(aLk);
-    aBottomMarginED.SetDownHdl(aLk);
-    aBottomMarginED.SetFirstHdl(aLk);
-    aBottomMarginED.SetLastHdl(aLk);
-    aBottomMarginED.SetLoseFocusHdl(aLk);
+    m_pBottomMarginED->SetUpHdl(aLk);
+    m_pBottomMarginED->SetDownHdl(aLk);
+    m_pBottomMarginED->SetFirstHdl(aLk);
+    m_pBottomMarginED->SetLastHdl(aLk);
+    m_pBottomMarginED->SetLoseFocusHdl(aLk);
 
     aLk = LINK(this, SwWrapTabPage, WrapTypeHdl);
-    aNoWrapRB.SetClickHdl(aLk);
-    aWrapLeftRB.SetClickHdl(aLk);
-    aWrapRightRB.SetClickHdl(aLk);
-    aWrapParallelRB.SetClickHdl(aLk);
-    aWrapThroughRB.SetClickHdl(aLk);
-    aIdealWrapRB.SetClickHdl(aLk);
+    m_pNoWrapRB->SetClickHdl(aLk);
+    m_pWrapLeftRB->SetClickHdl(aLk);
+    m_pWrapRightRB->SetClickHdl(aLk);
+    m_pWrapParallelRB->SetClickHdl(aLk);
+    m_pWrapThroughRB->SetClickHdl(aLk);
+    m_pIdealWrapRB->SetClickHdl(aLk);
     ApplyImageList();
-    aWrapOutlineCB.SetClickHdl(LINK(this, SwWrapTabPage, ContourHdl));
+    m_pWrapOutlineCB->SetClickHdl(LINK(this, SwWrapTabPage, ContourHdl));
 }
 
 SwWrapTabPage::~SwWrapTabPage()
@@ -164,12 +148,12 @@ void SwWrapTabPage::Reset(const SfxItemSet &rSet)
     // contour for Draw, Graphic and OLE (Insert/Graphic/Properties still missing!)
     if( bDrawMode )
     {
-        aWrapOutlineCB.Show();
-        aWrapOutsideCB.Show();
+        m_pWrapOutlineCB->Show();
+        m_pWrapOutsideCB->Show();
 
-        aWrapTransparentCB.Check( 0 == ((const SfxInt16Item&)rSet.Get(
+        m_pWrapTransparentCB->Check( 0 == ((const SfxInt16Item&)rSet.Get(
                                         FN_DRAW_WRAP_DLG)).GetValue() );
-        aWrapTransparentCB.SaveValue();
+        m_pWrapTransparentCB->SaveValue();
     }
     else
     {
@@ -184,8 +168,8 @@ void SwWrapTabPage::Reset(const SfxItemSet &rSet)
         }
         if( bShowCB )
         {
-            aWrapOutlineCB.Show();
-            aWrapOutsideCB.Show();
+            m_pWrapOutlineCB->Show();
+            m_pWrapOutsideCB->Show();
         }
     }
 
@@ -193,10 +177,10 @@ void SwWrapTabPage::Reset(const SfxItemSet &rSet)
     bHtmlMode = nHtmlMode & HTMLMODE_ON ? sal_True : sal_False;
 
     FieldUnit aMetric = ::GetDfltMetric(bHtmlMode);
-    SetMetric( aLeftMarginED  , aMetric );
-    SetMetric( aRightMarginED , aMetric );
-    SetMetric( aTopMarginED   , aMetric );
-    SetMetric( aBottomMarginED, aMetric );
+    SetMetric(*m_pLeftMarginED, aMetric);
+    SetMetric(*m_pRightMarginED, aMetric);
+    SetMetric(*m_pTopMarginED, aMetric);
+    SetMetric(*m_pBottomMarginED, aMetric);
 
     const SwFmtSurround& rSurround = (const SwFmtSurround&)rSet.Get(RES_SURROUND);
 
@@ -207,60 +191,60 @@ void SwWrapTabPage::Reset(const SfxItemSet &rSet)
     if (((nAnchorId == FLY_AT_PARA) || (nAnchorId == FLY_AT_CHAR))
         && (nSur != SURROUND_NONE))
     {
-        aWrapAnchorOnlyCB.Check( rSurround.IsAnchorOnly() );
+        m_pWrapAnchorOnlyCB->Check( rSurround.IsAnchorOnly() );
     }
     else
     {
-        aWrapAnchorOnlyCB.Enable( sal_False );
+        m_pWrapAnchorOnlyCB->Enable( sal_False );
     }
 
     sal_Bool bContour = rSurround.IsContour();
-    aWrapOutlineCB.Check( bContour );
-    aWrapOutsideCB.Check( rSurround.IsOutside() );
-    aWrapThroughRB.Enable(!aWrapOutlineCB.IsChecked());
+    m_pWrapOutlineCB->Check( bContour );
+    m_pWrapOutsideCB->Check( rSurround.IsOutside() );
+    m_pWrapThroughRB->Enable(!m_pWrapOutlineCB->IsChecked());
     bContourImage = !bContour;
 
-    ImageRadioButton* pBtn = NULL;
+    RadioButton* pBtn = NULL;
 
     switch (nSur)
     {
         case SURROUND_NONE:
         {
-            pBtn = &aNoWrapRB;
+            pBtn = m_pNoWrapRB;
             break;
         }
 
         case SURROUND_THROUGHT:
         {
             // transparent ?
-            pBtn = &aWrapThroughRB;
+            pBtn = m_pWrapThroughRB;
 
             if (!bDrawMode)
             {
                 const SvxOpaqueItem& rOpaque = (const SvxOpaqueItem&)rSet.Get(RES_OPAQUE);
-                aWrapTransparentCB.Check(!rOpaque.GetValue());
+                m_pWrapTransparentCB->Check(!rOpaque.GetValue());
             }
             break;
         }
 
         case SURROUND_PARALLEL:
         {
-            pBtn = &aWrapParallelRB;
+            pBtn = m_pWrapParallelRB;
             break;
         }
 
         case SURROUND_IDEAL:
         {
-            pBtn = &aIdealWrapRB;
+            pBtn = m_pIdealWrapRB;
             break;
         }
 
         default:
         {
             if (nSur == SURROUND_LEFT)
-                pBtn = &aWrapLeftRB;
+                pBtn = m_pWrapLeftRB;
             else if (nSur == SURROUND_RIGHT)
-                pBtn = &aWrapRightRB;
+                pBtn = m_pWrapRightRB;
         }
     }
     if (pBtn)
@@ -270,19 +254,19 @@ void SwWrapTabPage::Reset(const SfxItemSet &rSet)
         // For character objects that currently are in passage, the default
         // "contour on" is prepared here, in case we switch to any other
         // passage later.
-        if (bDrawMode && !aWrapOutlineCB.IsEnabled())
-            aWrapOutlineCB.Check();
+        if (bDrawMode && !m_pWrapOutlineCB->IsEnabled())
+            m_pWrapOutlineCB->Check();
     }
-    aWrapTransparentCB.Enable( pBtn == &aWrapThroughRB && !bHtmlMode );
+    m_pWrapTransparentCB->Enable( pBtn == m_pWrapThroughRB && !bHtmlMode );
 
     const SvxULSpaceItem& rUL = (const SvxULSpaceItem&)rSet.Get(RES_UL_SPACE);
     const SvxLRSpaceItem& rLR = (const SvxLRSpaceItem&)rSet.Get(RES_LR_SPACE);
 
     // gap to text
-    aLeftMarginED.SetValue(aLeftMarginED.Normalize(rLR.GetLeft()), FUNIT_TWIP);
-    aRightMarginED.SetValue(aRightMarginED.Normalize(rLR.GetRight()), FUNIT_TWIP);
-    aTopMarginED.SetValue(aTopMarginED.Normalize(rUL.GetUpper()), FUNIT_TWIP);
-    aBottomMarginED.SetValue(aBottomMarginED.Normalize(rUL.GetLower()), FUNIT_TWIP);
+    m_pLeftMarginED->SetValue(m_pLeftMarginED->Normalize(rLR.GetLeft()), FUNIT_TWIP);
+    m_pRightMarginED->SetValue(m_pRightMarginED->Normalize(rLR.GetRight()), FUNIT_TWIP);
+    m_pTopMarginED->SetValue(m_pTopMarginED->Normalize(rUL.GetUpper()), FUNIT_TWIP);
+    m_pBottomMarginED->SetValue(m_pBottomMarginED->Normalize(rUL.GetLower()), FUNIT_TWIP);
 
     ContourHdl(0);
     ActivatePage( rSet );
@@ -308,29 +292,29 @@ sal_Bool SwWrapTabPage::FillItemSet(SfxItemSet &rSet)
         aOp.SetValue(sal_True);
     }
 
-    if (aNoWrapRB.IsChecked())
+    if (m_pNoWrapRB->IsChecked())
         aSur.SetSurround(SURROUND_NONE);
-    else if (aWrapLeftRB.IsChecked())
+    else if (m_pWrapLeftRB->IsChecked())
         aSur.SetSurround(SURROUND_LEFT);
-    else if (aWrapRightRB.IsChecked())
+    else if (m_pWrapRightRB->IsChecked())
         aSur.SetSurround(SURROUND_RIGHT);
-    else if (aWrapParallelRB.IsChecked())
+    else if (m_pWrapParallelRB->IsChecked())
         aSur.SetSurround(SURROUND_PARALLEL);
-    else if (aWrapThroughRB.IsChecked())
+    else if (m_pWrapThroughRB->IsChecked())
     {
         aSur.SetSurround(SURROUND_THROUGHT);
-        if (aWrapTransparentCB.IsChecked() && !bDrawMode)
+        if (m_pWrapTransparentCB->IsChecked() && !bDrawMode)
             aOp.SetValue(sal_False);
     }
-    else if (aIdealWrapRB.IsChecked())
+    else if (m_pIdealWrapRB->IsChecked())
         aSur.SetSurround(SURROUND_IDEAL);
 
-    aSur.SetAnchorOnly( aWrapAnchorOnlyCB.IsChecked() );
-    sal_Bool bContour = aWrapOutlineCB.IsChecked() && aWrapOutlineCB.IsEnabled();
+    aSur.SetAnchorOnly( m_pWrapAnchorOnlyCB->IsChecked() );
+    sal_Bool bContour = m_pWrapOutlineCB->IsChecked() && m_pWrapOutlineCB->IsEnabled();
     aSur.SetContour( bContour );
 
     if ( bContour )
-        aSur.SetOutside(aWrapOutsideCB.IsChecked());
+        aSur.SetOutside(m_pWrapOutsideCB->IsChecked());
 
     if(0 == (pOldItem = GetOldItem( rSet, RES_SURROUND )) ||
                 aSur != *pOldItem )
@@ -349,12 +333,12 @@ sal_Bool SwWrapTabPage::FillItemSet(SfxItemSet &rSet)
         }
     }
 
-    sal_Bool bTopMod = aTopMarginED.IsValueModified();
-    sal_Bool bBottomMod = aBottomMarginED.IsValueModified();
+    sal_Bool bTopMod = m_pTopMarginED->IsValueModified();
+    sal_Bool bBottomMod = m_pBottomMarginED->IsValueModified();
 
     SvxULSpaceItem aUL( RES_UL_SPACE );
-    aUL.SetUpper((sal_uInt16)aTopMarginED.Denormalize(aTopMarginED.GetValue(FUNIT_TWIP)));
-    aUL.SetLower((sal_uInt16)aBottomMarginED.Denormalize(aBottomMarginED.GetValue(FUNIT_TWIP)));
+    aUL.SetUpper((sal_uInt16)m_pTopMarginED->Denormalize(m_pTopMarginED->GetValue(FUNIT_TWIP)));
+    aUL.SetLower((sal_uInt16)m_pBottomMarginED->Denormalize(m_pBottomMarginED->GetValue(FUNIT_TWIP)));
 
     if ( bTopMod || bBottomMod )
     {
@@ -366,12 +350,12 @@ sal_Bool SwWrapTabPage::FillItemSet(SfxItemSet &rSet)
         }
     }
 
-    sal_Bool bLeftMod = aLeftMarginED.IsValueModified();
-    sal_Bool bRightMod = aRightMarginED.IsValueModified();
+    sal_Bool bLeftMod = m_pLeftMarginED->IsValueModified();
+    sal_Bool bRightMod = m_pRightMarginED->IsValueModified();
 
     SvxLRSpaceItem aLR( RES_LR_SPACE );
-    aLR.SetLeft((sal_uInt16)aLeftMarginED.Denormalize(aLeftMarginED.GetValue(FUNIT_TWIP)));
-    aLR.SetRight((sal_uInt16)aRightMarginED.Denormalize(aRightMarginED.GetValue(FUNIT_TWIP)));
+    aLR.SetLeft((sal_uInt16)m_pLeftMarginED->Denormalize(m_pLeftMarginED->GetValue(FUNIT_TWIP)));
+    aLR.SetRight((sal_uInt16)m_pRightMarginED->Denormalize(m_pRightMarginED->GetValue(FUNIT_TWIP)));
 
     if ( bLeftMod || bRightMod )
     {
@@ -385,8 +369,8 @@ sal_Bool SwWrapTabPage::FillItemSet(SfxItemSet &rSet)
 
     if ( bDrawMode )
     {
-        sal_Bool bChecked = aWrapTransparentCB.IsChecked() & aWrapTransparentCB.IsEnabled();
-        if (aWrapTransparentCB.GetSavedValue() != bChecked)
+        sal_Bool bChecked = m_pWrapTransparentCB->IsChecked() & m_pWrapTransparentCB->IsEnabled();
+        if (m_pWrapTransparentCB->GetSavedValue() != bChecked)
             bModified |= 0 != rSet.Put(SfxInt16Item(FN_DRAW_WRAP_DLG, bChecked ? 0 : 1));
     }
 
@@ -488,94 +472,94 @@ void SwWrapTabPage::ActivatePage(const SfxItemSet& rSet)
             nRight = nLeft;
         }
 
-        aLeftMarginED.SetMax(aLeftMarginED.Normalize(nLeft), FUNIT_TWIP);
-        aRightMarginED.SetMax(aRightMarginED.Normalize(nRight), FUNIT_TWIP);
+        m_pLeftMarginED->SetMax(m_pLeftMarginED->Normalize(nLeft), FUNIT_TWIP);
+        m_pRightMarginED->SetMax(m_pRightMarginED->Normalize(nRight), FUNIT_TWIP);
 
-        aTopMarginED.SetMax(aTopMarginED.Normalize(nTop), FUNIT_TWIP);
-        aBottomMarginED.SetMax(aBottomMarginED.Normalize(nBottom), FUNIT_TWIP);
+        m_pTopMarginED->SetMax(m_pTopMarginED->Normalize(nTop), FUNIT_TWIP);
+        m_pBottomMarginED->SetMax(m_pBottomMarginED->Normalize(nBottom), FUNIT_TWIP);
 
-        RangeModifyHdl(&aLeftMarginED);
-        RangeModifyHdl(&aTopMarginED);
+        RangeModifyHdl(m_pLeftMarginED);
+        RangeModifyHdl(m_pTopMarginED);
     }
 
     const SwFmtSurround& rSurround = (const SwFmtSurround&)rSet.Get(RES_SURROUND);
     SwSurround nSur = rSurround.GetSurround();
 
-    aWrapTransparentCB.Enable( bEnable && !bHtmlMode && nSur == SURROUND_THROUGHT );
+    m_pWrapTransparentCB->Enable( bEnable && !bHtmlMode && nSur == SURROUND_THROUGHT );
     if(bHtmlMode)
     {
         const SwFmtHoriOrient& rHori = (const SwFmtHoriOrient&)rSet.Get(RES_HORI_ORIENT);
         sal_Int16 eHOrient = rHori.GetHoriOrient();
         sal_Int16 eHRelOrient = rHori.GetRelationOrient();
-        aWrapOutlineCB.Hide();
+        m_pWrapOutlineCB->Hide();
         const bool bAllHtmlModes =
             ((nAnchorId == FLY_AT_PARA) || (nAnchorId == FLY_AT_CHAR)) &&
                             (eHOrient == text::HoriOrientation::RIGHT || eHOrient == text::HoriOrientation::LEFT);
-        aWrapAnchorOnlyCB.Enable( bAllHtmlModes && nSur != SURROUND_NONE );
-        aWrapOutsideCB.Hide();
-        aIdealWrapRB.Enable( sal_False );
+        m_pWrapAnchorOnlyCB->Enable( bAllHtmlModes && nSur != SURROUND_NONE );
+        m_pWrapOutsideCB->Hide();
+        m_pIdealWrapRB->Enable( sal_False );
 
 
-        aWrapTransparentCB.Enable( sal_False );
-        aNoWrapRB.Enable( FLY_AT_PARA == nAnchorId );
-        aWrapParallelRB.Enable( sal_False  );
-        aWrapLeftRB       .Enable
+        m_pWrapTransparentCB->Enable( sal_False );
+        m_pNoWrapRB->Enable( FLY_AT_PARA == nAnchorId );
+        m_pWrapParallelRB->Enable( sal_False  );
+        m_pWrapLeftRB->Enable
                     (  (FLY_AT_PARA == nAnchorId)
                     || (   (FLY_AT_CHAR == nAnchorId)
                         && (eHOrient == text::HoriOrientation::RIGHT)
                         && (eHRelOrient == text::RelOrientation::PRINT_AREA)));
-        aWrapRightRB      .Enable
+        m_pWrapRightRB->Enable
                     (  (FLY_AT_PARA == nAnchorId)
                     || (   (FLY_AT_CHAR == nAnchorId)
                         && (eHOrient == text::HoriOrientation::LEFT)
                         && (eHRelOrient == text::RelOrientation::PRINT_AREA)));
 
-        aWrapThroughRB.Enable
+        m_pWrapThroughRB->Enable
                 (   (  (FLY_AT_PAGE == nAnchorId)
                     || (   (FLY_AT_CHAR == nAnchorId)
                         && (eHRelOrient != text::RelOrientation::PRINT_AREA))
                     || (FLY_AT_PARA == nAnchorId))
                 && (eHOrient != text::HoriOrientation::RIGHT));
-        if(aNoWrapRB.IsChecked() && !aNoWrapRB.IsEnabled())
+        if(m_pNoWrapRB->IsChecked() && !m_pNoWrapRB->IsEnabled())
         {
-            if(aWrapThroughRB.IsEnabled())
-                aWrapThroughRB.Check(sal_True);
-            else if(aWrapLeftRB.IsEnabled())
-                aWrapLeftRB.Check();
-            else if(aWrapRightRB.IsEnabled())
-                aWrapRightRB.Check();
+            if(m_pWrapThroughRB->IsEnabled())
+                m_pWrapThroughRB->Check(sal_True);
+            else if(m_pWrapLeftRB->IsEnabled())
+                m_pWrapLeftRB->Check();
+            else if(m_pWrapRightRB->IsEnabled())
+                m_pWrapRightRB->Check();
 
         }
-        if(aWrapLeftRB.IsChecked() && !aWrapLeftRB.IsEnabled())
+        if(m_pWrapLeftRB->IsChecked() && !m_pWrapLeftRB->IsEnabled())
         {
-            if(aWrapRightRB.IsEnabled())
-                aWrapRightRB.Check();
-            else if(aWrapThroughRB.IsEnabled())
-                aWrapThroughRB.Check();
+            if(m_pWrapRightRB->IsEnabled())
+                m_pWrapRightRB->Check();
+            else if(m_pWrapThroughRB->IsEnabled())
+                m_pWrapThroughRB->Check();
         }
-        if(aWrapRightRB.IsChecked() && !aWrapRightRB.IsEnabled())
+        if(m_pWrapRightRB->IsChecked() && !m_pWrapRightRB->IsEnabled())
         {
-            if(aWrapLeftRB.IsEnabled())
-                aWrapLeftRB.Check();
-            else if(aWrapThroughRB.IsEnabled())
-                aWrapThroughRB.Check();
+            if(m_pWrapLeftRB->IsEnabled())
+                m_pWrapLeftRB->Check();
+            else if(m_pWrapThroughRB->IsEnabled())
+                m_pWrapThroughRB->Check();
         }
-        if(aWrapThroughRB.IsChecked() && !aWrapThroughRB.IsEnabled())
-            if(aNoWrapRB.IsEnabled())
-                aNoWrapRB.Check();
+        if(m_pWrapThroughRB->IsChecked() && !m_pWrapThroughRB->IsEnabled())
+            if(m_pNoWrapRB->IsEnabled())
+                m_pNoWrapRB->Check();
 
-        if(aWrapParallelRB.IsChecked() && !aWrapParallelRB.IsEnabled())
-            aWrapThroughRB.Check();
+        if(m_pWrapParallelRB->IsChecked() && !m_pWrapParallelRB->IsEnabled())
+            m_pWrapThroughRB->Check();
     }
     else
     {
-        aNoWrapRB.Enable( bEnable );
-        aWrapLeftRB.Enable( bEnable );
-        aWrapRightRB.Enable( bEnable );
-        aIdealWrapRB.Enable( bEnable );
-        aWrapThroughRB.Enable( bEnable );
-        aWrapParallelRB.Enable( bEnable );
-        aWrapAnchorOnlyCB.Enable(
+        m_pNoWrapRB->Enable( bEnable );
+        m_pWrapLeftRB->Enable( bEnable );
+        m_pWrapRightRB->Enable( bEnable );
+        m_pIdealWrapRB->Enable( bEnable );
+        m_pWrapThroughRB->Enable( bEnable );
+        m_pWrapParallelRB->Enable( bEnable );
+        m_pWrapAnchorOnlyCB->Enable(
                 ((nAnchorId == FLY_AT_PARA) || (nAnchorId == FLY_AT_CHAR))
                 && nSur != SURROUND_NONE );
     }
@@ -598,14 +582,14 @@ IMPL_LINK( SwWrapTabPage, RangeModifyHdl, MetricField *, pEdit )
         sal_Int64 nValue = pEdit->GetValue();
         MetricField *pOpposite = 0;
 
-        if (pEdit == &aLeftMarginED)
-            pOpposite = &aRightMarginED;
-        else if (pEdit == &aRightMarginED)
-            pOpposite = &aLeftMarginED;
-        else if (pEdit == &aTopMarginED)
-            pOpposite = &aBottomMarginED;
-        else if (pEdit == &aBottomMarginED)
-            pOpposite = &aTopMarginED;
+        if (pEdit == m_pLeftMarginED)
+            pOpposite = m_pRightMarginED;
+        else if (pEdit == m_pRightMarginED)
+            pOpposite = m_pLeftMarginED;
+        else if (pEdit == m_pTopMarginED)
+            pOpposite = m_pBottomMarginED;
+        else if (pEdit == m_pBottomMarginED)
+            pOpposite = m_pTopMarginED;
 
         OSL_ASSERT(pOpposite);
 
@@ -620,16 +604,16 @@ IMPL_LINK( SwWrapTabPage, RangeModifyHdl, MetricField *, pEdit )
     return 0;
 }
 
-IMPL_LINK( SwWrapTabPage, WrapTypeHdl, ImageRadioButton *, pBtn )
+IMPL_LINK( SwWrapTabPage, WrapTypeHdl, RadioButton *, pBtn )
 {
-    sal_Bool bWrapThrough = (pBtn == &aWrapThroughRB);
-    aWrapTransparentCB.Enable( bWrapThrough && !bHtmlMode );
+    sal_Bool bWrapThrough = (pBtn == m_pWrapThroughRB);
+    m_pWrapTransparentCB->Enable( bWrapThrough && !bHtmlMode );
     bWrapThrough |= ( nAnchorId == FLY_AS_CHAR );
-    aWrapOutlineCB.Enable( !bWrapThrough && pBtn != &aNoWrapRB);
-    aWrapOutsideCB.Enable( !bWrapThrough && aWrapOutlineCB.IsChecked() );
-    aWrapAnchorOnlyCB.Enable(
+    m_pWrapOutlineCB->Enable( !bWrapThrough && pBtn != m_pNoWrapRB);
+    m_pWrapOutsideCB->Enable( !bWrapThrough && m_pWrapOutlineCB->IsChecked() );
+    m_pWrapAnchorOnlyCB->Enable(
         ((nAnchorId == FLY_AT_PARA) || (nAnchorId == FLY_AT_CHAR)) &&
-        (pBtn != &aNoWrapRB) );
+        (pBtn != m_pNoWrapRB) );
 
     ContourHdl(0);
     return 0;
@@ -637,11 +621,11 @@ IMPL_LINK( SwWrapTabPage, WrapTypeHdl, ImageRadioButton *, pBtn )
 
 IMPL_LINK_NOARG(SwWrapTabPage, ContourHdl)
 {
-    sal_Bool bEnable = !(aWrapOutlineCB.IsChecked() && aWrapOutlineCB.IsEnabled());
+    sal_Bool bEnable = !(m_pWrapOutlineCB->IsChecked() && m_pWrapOutlineCB->IsEnabled());
 
-    aWrapOutsideCB.Enable(!bEnable);
+    m_pWrapOutsideCB->Enable(!bEnable);
 
-    bEnable =  !aWrapOutlineCB.IsChecked();
+    bEnable =  !m_pWrapOutlineCB->IsChecked();
     if (bEnable == bContourImage) // so that it doesn't always flicker
     {
         bContourImage = !bEnable;
@@ -667,25 +651,23 @@ void SwWrapTabPage::DataChanged( const DataChangedEvent& rDCEvt )
 
 void SwWrapTabPage::ApplyImageList()
 {
-    ImageList& rImgLst = aWrapIL;
-
-    aWrapThroughRB.SetModeRadioImage(rImgLst.GetImage(IMG_THROUGH));
-    sal_Bool bWrapOutline =  !aWrapOutlineCB.IsChecked();
+    m_pWrapThroughRB->SetModeRadioImage(get<FixedImage>("imgthrough")->GetImage());
+    sal_Bool bWrapOutline =  !m_pWrapOutlineCB->IsChecked();
     if(bWrapOutline)
     {
-        aNoWrapRB.SetModeRadioImage(       rImgLst.GetImage( IMG_NONE     ));
-        aWrapLeftRB.SetModeRadioImage(     rImgLst.GetImage( IMG_LEFT     ));
-        aWrapRightRB.SetModeRadioImage(    rImgLst.GetImage( IMG_RIGHT    ));
-        aWrapParallelRB.SetModeRadioImage( rImgLst.GetImage( IMG_PARALLEL ));
-        aIdealWrapRB.SetModeRadioImage(    rImgLst.GetImage( IMG_IDEAL    ));
+        m_pNoWrapRB->SetModeRadioImage(get<FixedImage>("imgnone")->GetImage());
+        m_pWrapLeftRB->SetModeRadioImage(get<FixedImage>("imgleft")->GetImage());
+        m_pWrapRightRB->SetModeRadioImage(get<FixedImage>("imgright")->GetImage());
+        m_pWrapParallelRB->SetModeRadioImage(get<FixedImage>("imgparallel")->GetImage());
+        m_pIdealWrapRB->SetModeRadioImage(get<FixedImage>("imgideal")->GetImage());
     }
     else
     {
-        aNoWrapRB.SetModeRadioImage(       rImgLst.GetImage( IMG_KON_NONE     ));
-        aWrapLeftRB.SetModeRadioImage(     rImgLst.GetImage( IMG_KON_LEFT     ));
-        aWrapRightRB.SetModeRadioImage(    rImgLst.GetImage( IMG_KON_RIGHT    ));
-        aWrapParallelRB.SetModeRadioImage( rImgLst.GetImage( IMG_KON_PARALLEL ));
-        aIdealWrapRB.SetModeRadioImage(    rImgLst.GetImage( IMG_KON_IDEAL    ));
+        m_pNoWrapRB->SetModeRadioImage(get<FixedImage>("imgkonnone")->GetImage());
+        m_pWrapLeftRB->SetModeRadioImage(get<FixedImage>("imgkonleft")->GetImage());
+        m_pWrapRightRB->SetModeRadioImage(get<FixedImage>("imgkonright")->GetImage());
+        m_pWrapParallelRB->SetModeRadioImage(get<FixedImage>("imgkonparallel")->GetImage());
+        m_pIdealWrapRB->SetModeRadioImage(get<FixedImage>("imgkonideal")->GetImage());
     }
 }
 

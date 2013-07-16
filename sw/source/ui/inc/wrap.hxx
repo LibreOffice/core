@@ -48,34 +48,24 @@ public:
 class SwWrapTabPage: public SfxTabPage
 {
     // WRAPPING
-    FixedLine           aWrapFLC;
-    ImageRadioButton    aNoWrapRB;
-    ImageRadioButton    aWrapLeftRB;
-    ImageRadioButton    aWrapRightRB;
-    ImageRadioButton    aWrapParallelRB;
-    ImageRadioButton    aWrapThroughRB;
-    ImageRadioButton    aIdealWrapRB;
+    RadioButton*   m_pNoWrapRB;
+    RadioButton*   m_pWrapLeftRB;
+    RadioButton*   m_pWrapRightRB;
+    RadioButton*   m_pWrapParallelRB;
+    RadioButton*   m_pWrapThroughRB;
+    RadioButton*   m_pIdealWrapRB;
 
     // MARGIN
-    FixedLine           aMarginFL;
-    FixedText           aLeftMarginFT;
-    MetricField         aLeftMarginED;
-    FixedText           aRightMarginFT;
-    MetricField         aRightMarginED;
-    FixedText           aTopMarginFT;
-    MetricField         aTopMarginED;
-    FixedText           aBottomMarginFT;
-    MetricField         aBottomMarginED;
+    MetricField*   m_pLeftMarginED;
+    MetricField*   m_pRightMarginED;
+    MetricField*   m_pTopMarginED;
+    MetricField*   m_pBottomMarginED;
 
     // OPTIONS
-    FixedLine           aOptionsSepFL;
-    FixedLine           aOptionsFL;
-    CheckBox            aWrapAnchorOnlyCB;
-    CheckBox            aWrapTransparentCB;
-    CheckBox            aWrapOutlineCB;
-    CheckBox            aWrapOutsideCB;
-
-    ImageList           aWrapIL;
+    CheckBox*      m_pWrapAnchorOnlyCB;
+    CheckBox*      m_pWrapTransparentCB;
+    CheckBox*      m_pWrapOutlineCB;
+    CheckBox*      m_pWrapOutsideCB;
 
     sal_uInt16              nOldLeftMargin;
     sal_uInt16              nOldRightMargin;
@@ -104,7 +94,7 @@ class SwWrapTabPage: public SfxTabPage
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );
 
     DECL_LINK( RangeModifyHdl, MetricField * );
-    DECL_LINK( WrapTypeHdl, ImageRadioButton * );
+    DECL_LINK( WrapTypeHdl, RadioButton * );
     DECL_LINK(ContourHdl, void *);
 
     using SfxTabPage::ActivatePage;
