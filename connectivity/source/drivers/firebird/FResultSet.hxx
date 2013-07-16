@@ -109,6 +109,7 @@ namespace connectivity
                                     const ::com::sun::star::uno::Any& rValue
                                      )
                                      throw (::com::sun::star::uno::Exception);
+            using cppu::OPropertySetHelper::getFastPropertyValue;
             virtual void SAL_CALL getFastPropertyValue(
                                     ::com::sun::star::uno::Any& rValue,
                                     sal_Int32 nHandle
