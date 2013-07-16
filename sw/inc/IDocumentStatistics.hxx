@@ -43,8 +43,9 @@
       * modified and returns a reference to the result.
       * \param bCompleteAsync if true will return a partial result,
       * and potentially trigger a timeout to complete the work.
+      * \param bFields if stat. fields should be updated
       */
-    virtual const SwDocStat &GetUpdatedDocStat(bool bCompleteAsync) = 0;
+    virtual const SwDocStat &GetUpdatedDocStat(bool bCompleteAsync, bool bFields) = 0;
 
     /// Set the document statistics
     virtual void SetDocStat(const SwDocStat& rStat) = 0;
@@ -53,8 +54,9 @@
       * Updates the internal document's statistics
       * \param bCompleteAsync if true it may do part of the
       * work and trigger a timeout to complete it.
+      * \param bFields if stat. fields should be updated
       */
-    virtual void UpdateDocStat(bool bCompleteAsync) = 0;
+    virtual void UpdateDocStat(bool bCompleteAsync, bool bFields) = 0;
 
 protected:
     virtual ~IDocumentStatistics() {};

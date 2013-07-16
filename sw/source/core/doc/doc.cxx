@@ -1157,11 +1157,11 @@ const SwDocStat& SwDoc::GetDocStat() const
     return *pDocStat;
 }
 
-const SwDocStat& SwDoc::GetUpdatedDocStat( bool bCompleteAsync )
+const SwDocStat& SwDoc::GetUpdatedDocStat( bool bCompleteAsync, bool bFields )
 {
     if( pDocStat->bModified )
     {
-        UpdateDocStat( bCompleteAsync );
+        UpdateDocStat( bCompleteAsync, bFields );
     }
     return *pDocStat;
 }
@@ -1684,7 +1684,7 @@ void SwDoc::CalculatePagePairsForProspectPrinting(
 }
 
 // returns true while there is more to do
-bool SwDoc::IncrementalDocStatCalculate(long nChars)
+bool SwDoc::IncrementalDocStatCalculate( long nChars, bool bFields )
 {
     pDocStat->Reset();
     pDocStat->nPara = 0; // default is 1!
@@ -1771,8 +1771,11 @@ bool SwDoc::IncrementalDocStatCalculate(long nChars)
     }
 
     // optionally update stat. fields
-    SwFieldType *pType = GetSysFldType(RES_DOCSTATFLD);
-    pType->UpdateFlds();
+    if (bFields)
+    {
+        SwFieldType *pType = GetSysFldType(RES_DOCSTATFLD);
+        pType->UpdateFlds();
+    }
 
     return nChars <= 0;
 }
@@ -1780,7 +1783,7 @@ bool SwDoc::IncrementalDocStatCalculate(long nChars)
 IMPL_LINK( SwDoc, DoIdleStatsUpdate, Timer *, pTimer )
 {
     (void)pTimer;
-    if (IncrementalDocStatCalculate(32000))
+    if (IncrementalDocStatCalculate(32000, true))
         aStatsUpdateTimer.Start();
 
     SwView* pView = GetDocShell() ? GetDocShell()->GetView() : NULL;
@@ -1789,16 +1792,16 @@ IMPL_LINK( SwDoc, DoIdleStatsUpdate, Timer *, pTimer )
     return 0;
 }
 
-void SwDoc::UpdateDocStat( bool bCompleteAsync )
+void SwDoc::UpdateDocStat( bool bCompleteAsync, bool bFields )
 {
     if( pDocStat->bModified )
     {
         if (!bCompleteAsync)
         {
-            while (IncrementalDocStatCalculate(5000)) {}
+            while (IncrementalDocStatCalculate(5000, bFields)) {}
             aStatsUpdateTimer.Stop();
         }
-        else if (IncrementalDocStatCalculate(5000))
+        else if (IncrementalDocStatCalculate(5000, bFields))
             aStatsUpdateTimer.Start();
     }
 }
