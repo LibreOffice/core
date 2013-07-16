@@ -40,7 +40,7 @@ public:
     ~BufferStream();
     unsigned long sread (unsigned char *vuf, unsigned long size);
     long stell ();
-    long sseek (unsigned long offset, int origin);
+    long sseek (long offset, int origin);
 private:
     IStream *stream;
 };
@@ -52,7 +52,7 @@ public:
     ~FileStream();
     unsigned long sread (unsigned char *buf, unsigned long size);
     long stell ();
-    long sseek (unsigned long offset, int origin);
+    long sseek (long offset, int origin);
 private:
     FILE *file;
 };
