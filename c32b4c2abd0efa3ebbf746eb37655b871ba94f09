@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXn//+pI\u003d",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4969,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2013-07-16T07:39:15Z",
+      "side": 1,
+      "message": "\"a\" prefix is used for class instances, just use \"n\" for numbers.",
+      "revId": "c32b4c2abd0efa3ebbf746eb37655b871ba94f09",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
