@@ -245,7 +245,7 @@ void ScChartListener::Update()
 ScRangeListRef ScChartListener::GetRangeList() const
 {
     ScRangeListRef aRLRef(new ScRangeList);
-    ScRefTokenHelper::getRangeListFromTokens(*aRLRef, *mpTokens);
+    ScRefTokenHelper::getRangeListFromTokens(*aRLRef, *mpTokens, ScAddress());
     return aRLRef;
 }
 
@@ -289,7 +289,7 @@ public:
         else
         {
             ScRange aRange;
-            ScRefTokenHelper::getRangeFromToken(aRange, pToken, bExternal);
+            ScRefTokenHelper::getRangeFromToken(aRange, pToken, ScAddress(), bExternal);
             if (mbStart)
                 startListening(aRange);
             else
@@ -365,7 +365,7 @@ void ScChartListener::UpdateChartIntersecting( const ScRange& rRange )
     ScTokenRef pToken;
     ScRefTokenHelper::getTokenFromRange(pToken, rRange);
 
-    if (ScRefTokenHelper::intersects(*mpTokens, pToken))
+    if (ScRefTokenHelper::intersects(*mpTokens, pToken, ScAddress()))
     {
         // force update (chart has to be loaded), don't use ScChartListener::Update
         mpDoc->UpdateChart(GetName());
@@ -376,7 +376,7 @@ void ScChartListener::UpdateChartIntersecting( const ScRange& rRange )
 void ScChartListener::UpdateSeriesRanges()
 {
     ScRangeListRef pRangeList(new ScRangeList);
-    ScRefTokenHelper::getRangeListFromTokens(*pRangeList, *mpTokens);
+    ScRefTokenHelper::getRangeListFromTokens(*pRangeList, *mpTokens, ScAddress());
     mpDoc->SetChartRangeList(GetName(), pRangeList);
 }
 

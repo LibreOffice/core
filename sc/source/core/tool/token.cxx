@@ -2060,8 +2060,7 @@ bool SkipReference(ScToken* pToken, const ScAddress& rPos, const ScDocument* pOl
 {
     ScRange aRange;
 
-    pToken->CalcAbsIfRel(rPos);
-    if (!ScRefTokenHelper::getRangeFromToken(aRange, pToken))
+    if (!ScRefTokenHelper::getRangeFromToken(aRange, pToken, rPos))
         return true;
 
     if (bRangeName && aRange.aStart.Tab() == rPos.Tab())

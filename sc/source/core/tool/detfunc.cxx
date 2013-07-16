@@ -1426,8 +1426,7 @@ void ScDetectiveFunc::GetAllSuccs(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW n
         {
             const ScAddress& aPos = aIter.GetPos();
             ScTokenRef pRef(static_cast<ScToken*>(p->Clone()));
-            pRef->CalcAbsIfRel(aPos);
-            if (ScRefTokenHelper::intersects(aSrcRange, pRef))
+            if (ScRefTokenHelper::intersects(aSrcRange, pRef, aPos))
             {
                 // This address is absolute.
                 pRef = ScRefTokenHelper::createRefToken(aPos);

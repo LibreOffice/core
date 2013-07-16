@@ -315,7 +315,7 @@ Chart2PositionMap::Chart2PositionMap(SCCOL nAllColCount,  SCROW nAllRowCount,
                         if( eType==svExternal || eType==svExternalSingleRef || eType==svExternalDoubleRef || eType==svExternalName )
                             bExternal = true;//lllll todo correct?
                         ScTokenRef pSharedToken(static_cast<ScToken*>(pToken->Clone()));
-                        ScRefTokenHelper::getRangeFromToken(aRange, pSharedToken, bExternal );
+                        ScRefTokenHelper::getRangeFromToken(aRange, pSharedToken, ScAddress(), bExternal);
                         SCCOL nCol1=0, nCol2=0;
                         SCROW nRow1=0, nRow2=0;
                         SCTAB nTab1=0, nTab2=0;
@@ -2529,7 +2529,7 @@ void ScChart2DataSequence::RefChanged()
             for (; itr != itrEnd; ++itr)
             {
                 ScRange aRange;
-                if (!ScRefTokenHelper::getRangeFromToken(aRange, *itr))
+                if (!ScRefTokenHelper::getRangeFromToken(aRange, *itr, ScAddress()))
                     continue;
 
                 m_pDocument->StartListeningArea(aRange, m_pValueListener);
@@ -2569,7 +2569,7 @@ void ScChart2DataSequence::BuildDataCache()
         else
         {
             ScRange aRange;
-            if (!ScRefTokenHelper::getRangeFromToken(aRange, *itr))
+            if (!ScRefTokenHelper::getRangeFromToken(aRange, *itr, ScAddress()))
                 continue;
 
             SCCOL nLastCol = -1;
@@ -2658,7 +2658,7 @@ sal_Int32 ScChart2DataSequence::FillCacheFromExternalRef(const ScTokenRef& pToke
 {
     ScExternalRefManager* pRefMgr = m_pDocument->GetExternalRefManager();
     ScRange aRange;
-    if (!ScRefTokenHelper::getRangeFromToken(aRange, pToken, true))
+    if (!ScRefTokenHelper::getRangeFromToken(aRange, pToken, ScAddress(), true))
         return 0;
 
     sal_uInt16 nFileId = pToken->GetIndex();
@@ -2866,7 +2866,7 @@ void ScChart2DataSequence::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint
             if (!ScRefTokenHelper::isExternalRef(*itr))
             {
                 ScRange aRange;
-                ScRefTokenHelper::getRangeFromToken(aRange, *itr);
+                ScRefTokenHelper::getRangeFromToken(aRange, *itr, ScAddress());
                 aRanges.Append(aRange);
                 sal_uInt32 nPos = distance(itrBeg, itr);
                 m_pRangeIndices->push_back(nPos);
@@ -3115,7 +3115,7 @@ public:
     {
         ScRange r;
         bool bExternal = ScRefTokenHelper::isExternalRef(pToken);
-        ScRefTokenHelper::getRangeFromToken(r, pToken, bExternal);
+        ScRefTokenHelper::getRangeFromToken(r, pToken, ScAddress(), bExternal);
         r.Justify();
         mnCols += r.aEnd.Col() - r.aStart.Col() + 1;
         mnRows += r.aEnd.Row() - r.aStart.Row() + 1;
@@ -3151,7 +3151,7 @@ public:
     {
         bool bExternal = ScRefTokenHelper::isExternalRef(pToken);
         ScRange aRange;
-        ScRefTokenHelper::getRangeFromToken(aRange, pToken, bExternal);
+        ScRefTokenHelper::getRangeFromToken(aRange, pToken, ScAddress(), bExternal);
         OUString* pArr = mpLabels->getArray();
         if (mbColumn)
         {
@@ -3276,7 +3276,7 @@ sal_uLong getDisplayNumberFormat(ScDocument* pDoc, const ScAddress& rPos)
     sal_Int32 nCount = 0;
 
     ScRangeList aRanges;
-    ScRefTokenHelper::getRangeListFromTokens(aRanges, *m_pTokens);
+    ScRefTokenHelper::getRangeListFromTokens(aRanges, *m_pTokens, ScAddress());
     for (size_t i = 0, n = aRanges.size(); i < n; ++i)
     {
         ScRange* p = aRanges[i];
@@ -3376,7 +3376,7 @@ void SAL_CALL ScChart2DataSequence::addModifyListener( const uno::Reference< uti
         return;
 
     ScRangeList aRanges;
-    ScRefTokenHelper::getRangeListFromTokens(aRanges, *m_pTokens);
+    ScRefTokenHelper::getRangeListFromTokens(aRanges, *m_pTokens, ScAddress());
     uno::Reference<util::XModifyListener> *pObj =
             new uno::Reference<util::XModifyListener>( aListener );
     m_aValueListeners.push_back( pObj );
@@ -3396,7 +3396,7 @@ void SAL_CALL ScChart2DataSequence::addModifyListener( const uno::Reference< uti
             for (; itr != itrEnd; ++itr)
             {
                 ScRange aRange;
-                if (!ScRefTokenHelper::getRangeFromToken(aRange, *itr))
+                if (!ScRefTokenHelper::getRangeFromToken(aRange, *itr, ScAddress()))
                     continue;
 
                 m_pDocument->StartListeningArea( aRange, m_pValueListener );

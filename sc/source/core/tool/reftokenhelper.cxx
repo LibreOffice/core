@@ -121,19 +121,8 @@ void ScRefTokenHelper::compileRangeRepresentation(
         rRefTokens.clear();
 }
 
-namespace {
-
-//may return a relative address
-void singleRefToAddr(const ScSingleRefData& rRef, ScAddress& rAddr)
-{
-    rAddr.SetCol(rRef.nCol);
-    rAddr.SetRow(rRef.nRow);
-    rAddr.SetTab(rRef.nTab);
-}
-
-}
-
-bool ScRefTokenHelper::getRangeFromToken(ScRange& rRange, const ScTokenRef& pToken, bool bExternal)
+bool ScRefTokenHelper::getRangeFromToken(
+    ScRange& rRange, const ScTokenRef& pToken, const ScAddress& rPos, bool bExternal)
 {
     StackVar eType = pToken->GetType();
     switch (pToken->GetType())
@@ -146,7 +135,7 @@ bool ScRefTokenHelper::getRangeFromToken(ScRange& rRange, const ScTokenRef& pTok
                 return false;
 
             const ScSingleRefData& rRefData = pToken->GetSingleRef();
-            singleRefToAddr(rRefData, rRange.aStart);
+            rRange.aStart = rRefData.toAbs(rPos);
             rRange.aEnd = rRange.aStart;
             return true;
         }
@@ -158,8 +147,7 @@ bool ScRefTokenHelper::getRangeFromToken(ScRange& rRange, const ScTokenRef& pTok
                 return false;
 
             const ScComplexRefData& rRefData = pToken->GetDoubleRef();
-            singleRefToAddr(rRefData.Ref1, rRange.aStart);
-            singleRefToAddr(rRefData.Ref2, rRange.aEnd);
+            rRange = rRefData.toAbs(rPos);
             return true;
         }
         default:
@@ -168,13 +156,14 @@ bool ScRefTokenHelper::getRangeFromToken(ScRange& rRange, const ScTokenRef& pTok
     return false;
 }
 
-void ScRefTokenHelper::getRangeListFromTokens(ScRangeList& rRangeList, const vector<ScTokenRef>& rTokens)
+void ScRefTokenHelper::getRangeListFromTokens(
+    ScRangeList& rRangeList, const vector<ScTokenRef>& rTokens, const ScAddress& rPos)
 {
     vector<ScTokenRef>::const_iterator itr = rTokens.begin(), itrEnd = rTokens.end();
     for (; itr != itrEnd; ++itr)
     {
         ScRange aRange;
-        getRangeFromToken(aRange, *itr);
+        getRangeFromToken(aRange, *itr, rPos);
         rRangeList.Append(aRange);
     }
 }
@@ -251,7 +240,8 @@ bool ScRefTokenHelper::isExternalRef(const ScTokenRef& pToken)
     return false;
 }
 
-bool ScRefTokenHelper::intersects(const vector<ScTokenRef>& rTokens, const ScTokenRef& pToken)
+bool ScRefTokenHelper::intersects(
+    const vector<ScTokenRef>& rTokens, const ScTokenRef& pToken, const ScAddress& rPos)
 {
     if (!isRef(pToken))
         return false;
@@ -260,7 +250,7 @@ bool ScRefTokenHelper::intersects(const vector<ScTokenRef>& rTokens, const ScTok
     sal_uInt16 nFileId = bExternal ? pToken->GetIndex() : 0;
 
     ScRange aRange;
-    getRangeFromToken(aRange, pToken, bExternal);
+    getRangeFromToken(aRange, pToken, rPos, bExternal);
 
     vector<ScTokenRef>::const_iterator itr = rTokens.begin(), itrEnd = rTokens.end();
     for (; itr != itrEnd; ++itr)
@@ -273,7 +263,7 @@ bool ScRefTokenHelper::intersects(const vector<ScTokenRef>& rTokens, const ScTok
             continue;
 
         ScRange aRange2;
-        getRangeFromToken(aRange2, p, bExternal);
+        getRangeFromToken(aRange2, p, rPos, bExternal);
 
         if (bExternal && nFileId != p->GetIndex())
             // different external file

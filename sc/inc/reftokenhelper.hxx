@@ -45,9 +45,9 @@ public:
         ::std::vector<ScTokenRef>& rRefTokens, const OUString& rRangeStr, ScDocument* pDoc,
         const sal_Unicode cSep, ::formula::FormulaGrammar::Grammar eGrammar, bool bOnly3DRef = false);
 
-    static bool getRangeFromToken(ScRange& rRange, const ScTokenRef& pToken, bool bExternal = false);
+    static bool getRangeFromToken(ScRange& rRange, const ScTokenRef& pToken, const ScAddress& rPos, bool bExternal = false);
 
-    static void getRangeListFromTokens(ScRangeList& rRangeList, const ::std::vector<ScTokenRef>& pTokens);
+    static void getRangeListFromTokens(ScRangeList& rRangeList, const ::std::vector<ScTokenRef>& pTokens, const ScAddress& rPos);
 
     /**
      * Create a double reference token from a range object.
@@ -59,7 +59,8 @@ public:
     static bool SC_DLLPUBLIC isRef(const ScTokenRef& pToken);
     static bool SC_DLLPUBLIC isExternalRef(const ScTokenRef& pToken);
 
-    static bool SC_DLLPUBLIC intersects(const ::std::vector<ScTokenRef>& rTokens, const ScTokenRef& pToken);
+    static bool SC_DLLPUBLIC intersects(
+        const ::std::vector<ScTokenRef>& rTokens, const ScTokenRef& pToken, const ScAddress& rPos);
 
     static void SC_DLLPUBLIC join(::std::vector<ScTokenRef>& rTokens, const ScTokenRef& pToken);
 
