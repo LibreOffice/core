@@ -490,8 +490,17 @@ BitmapEx SdrExchangeView::GetMarkedObjBitmapEx(bool bNoVDevIfOneBmpMarked) const
 
                 for(sal_uInt32 a(0); a < nCount; a++)
                 {
+                    SdrObject* pCandidate = aSdrObjects[a];
+                    SdrGrafObj* pSdrGrafObj = dynamic_cast< SdrGrafObj* >(pCandidate);
+
+                    if(pSdrGrafObj)
+                    {
+                        // #122753# To ensure existance of graphic content, force swap in
+                        pSdrGrafObj->ForceSwapIn();
+                    }
+
                     xPrimitives[a] = new drawinglayer::primitive2d::GroupPrimitive2D(
-                        aSdrObjects[a]->GetViewContact().getViewIndependentPrimitive2DSequence());
+                        pCandidate->GetViewContact().getViewIndependentPrimitive2DSequence());
                 }
 
                 // get logic range
