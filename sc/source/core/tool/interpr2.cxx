@@ -1940,8 +1940,6 @@ void ScInterpreter::ScIntersect()
         }
         x1 = xt[0], x2 = xt[1];
 
-        x1->CalcAbsIfRel( aPos);
-        x2->CalcAbsIfRel( aPos);
         ScTokenRef xRes = new ScRefListToken;
         ScRefList* pRefList = xRes->GetRefList();
         ScRefList::const_iterator end1( x1->GetRefList()->end());
@@ -1949,19 +1947,19 @@ void ScInterpreter::ScIntersect()
         for (ScRefList::const_iterator it1( x1->GetRefList()->begin());
                 it1 != end1; ++it1)
         {
-            const ScSingleRefData& r11 = (*it1).Ref1;
-            const ScSingleRefData& r12 = (*it1).Ref2;
+            const ScAddress& r11 = (*it1).Ref1.toAbs(aPos);
+            const ScAddress& r12 = (*it1).Ref2.toAbs(aPos);
             for (ScRefList::const_iterator it2( x2->GetRefList()->begin());
                     it2 != end2; ++it2)
             {
-                const ScSingleRefData& r21 = (*it2).Ref1;
-                const ScSingleRefData& r22 = (*it2).Ref2;
-                SCCOL nCol1 = ::std::max( r11.nCol, r21.nCol);
-                SCROW nRow1 = ::std::max( r11.nRow, r21.nRow);
-                SCTAB nTab1 = ::std::max( r11.nTab, r21.nTab);
-                SCCOL nCol2 = ::std::min( r12.nCol, r22.nCol);
-                SCROW nRow2 = ::std::min( r12.nRow, r22.nRow);
-                SCTAB nTab2 = ::std::min( r12.nTab, r22.nTab);
+                const ScAddress& r21 = (*it2).Ref1.toAbs(aPos);
+                const ScAddress& r22 = (*it2).Ref2.toAbs(aPos);
+                SCCOL nCol1 = ::std::max( r11.Col(), r21.Col());
+                SCROW nRow1 = ::std::max( r11.Row(), r21.Row());
+                SCTAB nTab1 = ::std::max( r11.Tab(), r21.Tab());
+                SCCOL nCol2 = ::std::min( r12.Col(), r22.Col());
+                SCROW nRow2 = ::std::min( r12.Row(), r22.Row());
+                SCTAB nTab2 = ::std::min( r12.Tab(), r22.Tab());
                 if (nCol2 < nCol1 || nRow2 < nRow1 || nTab2 < nTab1)
                     ;   // nothing
                 else
@@ -1999,19 +1997,19 @@ void ScInterpreter::ScIntersect()
             {
                 case svSingleRef:
                 case svDoubleRef:
-                    pt[i]->CalcAbsIfRel( aPos);
+                {
                     {
-                        const ScSingleRefData& r = pt[i]->GetSingleRef();
-                        nC1[i] = r.nCol;
-                        nR1[i] = r.nRow;
-                        nT1[i] = r.nTab;
+                        const ScAddress& r = pt[i]->GetSingleRef().toAbs(aPos);
+                        nC1[i] = r.Col();
+                        nR1[i] = r.Row();
+                        nT1[i] = r.Tab();
                     }
                     if (sv[i] == svDoubleRef)
                     {
-                        const ScSingleRefData& r = pt[i]->GetSingleRef2();
-                        nC2[i] = r.nCol;
-                        nR2[i] = r.nRow;
-                        nT2[i] = r.nTab;
+                        const ScAddress& r = pt[i]->GetSingleRef2().toAbs(aPos);
+                        nC2[i] = r.Col();
+                        nR2[i] = r.Row();
+                        nT2[i] = r.Tab();
                     }
                     else
                     {
@@ -2019,7 +2017,8 @@ void ScInterpreter::ScIntersect()
                         nR2[i] = nR1[i];
                         nT2[i] = nT1[i];
                     }
-                    break;
+                }
+                break;
                 default:
                     ;   // nothing, prevent compiler warning
             }
