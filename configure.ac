@@ -2896,6 +2896,13 @@ if test "$GCC" = "yes"; then
 fi
 AC_SUBST(COM_GCC_IS_CLANG)
 
+if test "$CCACHE" != "" -a "$COM_GCC_IS_CLANG" = TRUE; then
+    if test -z "$CCACHE_CPP2"; then
+            AC_MSG_WARN([Using ccache with Clang without CCACHE_CPP2 set causes spurious warnings.])
+            add_warning "Using ccache with Clang without CCACHE_CPP2 set causes spurious warnings."
+    fi
+fi
+
 # ===================================================================
 # check various GCC options that Clang does not support now but maybe
 # will somewhen in the future, check them even for GCC, so that the
