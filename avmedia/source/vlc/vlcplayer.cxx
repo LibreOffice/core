@@ -36,8 +36,8 @@ namespace
 VLCPlayer::VLCPlayer( const rtl::OUString& url )
     : VLC_Base(m_aMutex)
     , mInstance( libvlc_new( sizeof( VLC_ARGS ) / sizeof( VLC_ARGS[0] ), VLC_ARGS ), libvlc_release )
-    , mPlayer( libvlc_media_player_new(mInstance.get()), libvlc_media_player_release )
-    , mMedia( InitMedia( url, mInstance), libvlc_media_release )
+    , mPlayer( libvlc_media_player_new( mInstance.get() ), libvlc_media_player_release )
+    , mMedia( InitMedia( url, mInstance ), libvlc_media_release )
 {
     libvlc_media_player_set_media( mPlayer.get(), mMedia.get() );
 }
@@ -165,7 +165,11 @@ uno::Reference< css::media::XPlayerWindow > SAL_CALL VLCPlayer::createPlayerWind
 
     if (winID != -1)
     {
+#if defined(WIN32) && !defined(UNIX)
+        libvlc_media_player_set_hwnd( mPlayer.get(), winID );
+#else
         libvlc_media_player_set_xwindow( mPlayer.get(), winID );
+#endif
     }
 
     return uno::Reference< css::media::XPlayerWindow >( window );
