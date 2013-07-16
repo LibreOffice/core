@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXn//+pg\u003d",
+        "filename": "connectivity/source/drivers/calc/CDatabaseMetaData.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 263,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2013-07-16T05:00:14Z",
+      "side": 1,
+      "message": "I fail to see the interest of replacing a #define by a hard-coded magic constant everywhere. This refers to the maximum length a string can have for this combination of driver and \"database\". Here, the \"Database\" is a Calc sheet, so the question is how long a text can fit in a Calc cell.\n\nSince this commit moves the driver itself to OUString, my guess is that the driver supports SAL_MAX_INT32.\n\nCalc itself may have a lower limit, which may very well be 0xFFFF, but really I don\u0027t know. With some chance, Calc has a #define for that value, and we can reuse it?\n\nNote that if there is no limit, then this function (and friends) should return 0. Whether calling code is properly prepared for that is another issue...",
+      "revId": "59c8fb4f3d92f656703880821ba25c3314cc6d4c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//+po\u003d",
+        "filename": "connectivity/source/drivers/dbase/DResultSet.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2013-07-16T05:00:14Z",
+      "side": 1,
+      "message": "Since nRec is unsigned, this comparison will always succeed, and this loop becomes an infinite loop. Didn\u0027t you get a compiler warning about the comparison?\n\nNote that pIter-\u003eFirst() returns a sal_uIntPtr, which may be bigger than a sal_uInt32. Since it ultimately comes from pKey-\u003eGetRecord() which is a sal_uInt32, be bold and change OIndexIterator::First (and all its friends) to return a sal_uInt32 instead (but please separate that into a different commit than truly boring String-\u003eOUString). Unless you evaluate that they should return a sal_Int64 so that they can return negative as error value (just like POSIX getc() return an int and not a char). Or unless you evaluate that connectivity::dbase::ONDXKey::nRecord should really be a sal_uIntPtr or a foo* or whatnot (from a cursory glance, I don\u0027t think so).",
+      "revId": "59c8fb4f3d92f656703880821ba25c3314cc6d4c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
