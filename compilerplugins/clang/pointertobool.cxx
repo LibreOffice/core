@@ -26,9 +26,10 @@ and potentially mistakes.
 So far the only places that are checked are passing arguments to functions, as those
 could easily choose a different overload.
 
-The original idea was that the only conversions that are considered safe are
-in conditions (which in turn means also in ||, && and ! operators) and places
-where it's considered unlikely for it to be a problem (or rather, less of a problem
+The original idea was that to follow the explicit bool feature from C++11, where
+the only conversions that would be considered safe are in conditions (which
+in turn means also in ||, && and ! operators) and places where it's considered
+unlikely for it to be a problem (or rather, less of a problem
 than explicitly avoiding the warning in the code). The code for this is currently
 commented out (there are a couple of places such as 'bool foo = returns_pointer();'
 that would need modification), possibly enable those later.
