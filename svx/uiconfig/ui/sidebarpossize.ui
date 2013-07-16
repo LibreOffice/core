@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <!-- interface-requires gtk+ 3.0 -->
+  <!-- interface-requires LibreOffice 1.0 -->
+  <object class="GtkAdjustment" id="adjustment1">
+    <property name="lower">-180</property>
+    <property name="upper">359.99</property>
+    <property name="step_increment">5</property>
+    <property name="page_increment">20</property>
+  </object>
   <object class="GtkGrid" id="PosSizePropertyPanel">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -14,13 +21,84 @@
         <property name="orientation">vertical</property>
         <property name="spacing">12</property>
         <child>
-          <object class="GtkGrid" id="grid1">
+          <object class="GtkBox" id="box9">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="orientation">vertical</property>
+            <property name="spacing">6</property>
             <child>
-              <object class="GtkBox" id="box2">
+              <object class="GtkGrid" id="grid3">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="hexpand">True</property>
+                <property name="row_spacing">6</property>
+                <property name="column_spacing">6</property>
+                <child>
+                  <object class="GtkLabel" id="horizontallabel">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="hexpand">True</property>
+                    <property name="xalign">0</property>
+                    <property name="label" translatable="yes">_Horizontal:</property>
+                    <property name="use_underline">True</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">0</property>
+                    <property name="width">1</property>
+                    <property name="height">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkSpinButton" id="horizontalpos: FUNIT_MM">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="has_tooltip">True</property>
+                    <property name="tooltip_markup" translatable="yes">Enter the value for the horizontal position.</property>
+                    <property name="tooltip_text" translatable="yes">Enter the value for the horizontal position.</property>
+                    <property name="invisible_char">•</property>
+                    <property name="invisible_char_set">True</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">1</property>
+                    <property name="width">1</property>
+                    <property name="height">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="verticallabel">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="hexpand">True</property>
+                    <property name="xalign">0</property>
+                    <property name="label" translatable="yes">_Vertical:</property>
+                    <property name="use_underline">True</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">0</property>
+                    <property name="width">1</property>
+                    <property name="height">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkSpinButton" id="verticalpos: FUNIT_MM">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="has_tooltip">True</property>
+                    <property name="tooltip_markup" translatable="yes">Enter the value for the vertical position.</property>
+                    <property name="tooltip_text" translatable="yes">Enter the value for the vertical position.</property>
+                    <property name="invisible_char">•</property>
+                    <property name="invisible_char_set">True</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">1</property>
+                    <property name="width">1</property>
+                    <property name="height">1</property>
+                  </packing>
+                </child>
                 <child>
                   <object class="GtkLabel" id="widthlabel">
                     <property name="visible">True</property>
@@ -31,52 +109,44 @@
                     <property name="use_underline">True</property>
                   </object>
                   <packing>
-                    <property name="expand">True</property>
-                    <property name="fill">True</property>
-                    <property name="position">0</property>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">2</property>
+                    <property name="width">1</property>
+                    <property name="height">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkSpinButton" id="selectwidth: FUNIT_INCH">
+                    <property name="width_request">120</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="has_tooltip">True</property>
+                    <property name="tooltip_markup" translatable="yes">Enter a width for the selected object.</property>
+                    <property name="tooltip_text" translatable="yes">Enter a width for the selected object.</property>
+                    <property name="invisible_char">•</property>
+                    <property name="invisible_char_set">True</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">3</property>
+                    <property name="width">1</property>
+                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkLabel" id="heightlabel">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="margin_left">25</property>
                     <property name="hexpand">True</property>
                     <property name="xalign">0</property>
                     <property name="label" translatable="yes">H_eight:</property>
                     <property name="use_underline">True</property>
                   </object>
                   <packing>
-                    <property name="expand">True</property>
-                    <property name="fill">True</property>
-                    <property name="position">1</property>
-                  </packing>
-                </child>
-              </object>
-              <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">2</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkBox" id="box3">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <child>
-                  <object class="GtkSpinButton" id="selectwidth: FUNIT_INCH">
-                    <property name="width_request">120</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="tooltip_markup" translatable="yes">Enter a width for the selected object.</property>
-                    <property name="tooltip_text" translatable="yes">Enter a width for the selected object.</property>
-                    <property name="invisible_char">•</property>
-                  </object>
-                  <packing>
-                    <property name="expand">True</property>
-                    <property name="fill">True</property>
-                    <property name="position">0</property>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">2</property>
+                    <property name="width">1</property>
+                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
@@ -84,24 +154,24 @@
                     <property name="width_request">120</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="has_tooltip">True</property>
                     <property name="tooltip_markup" translatable="yes">Enter a height for the selected object.</property>
                     <property name="tooltip_text" translatable="yes">Enter a height for the selected object.</property>
-                    <property name="margin_left">15</property>
                     <property name="invisible_char">•</property>
+                    <property name="invisible_char_set">True</property>
                   </object>
                   <packing>
-                    <property name="expand">True</property>
-                    <property name="fill">True</property>
-                    <property name="pack_type">end</property>
-                    <property name="position">1</property>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">3</property>
+                    <property name="width">1</property>
+                    <property name="height">1</property>
                   </packing>
                 </child>
               </object>
               <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">3</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
               </packing>
             </child>
             <child>
@@ -110,20 +180,17 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
+                <property name="has_tooltip">True</property>
                 <property name="tooltip_markup" translatable="yes">Maintain proportions when you resize the selected object.</property>
                 <property name="tooltip_text" translatable="yes">Maintain proportions when you resize the selected object.</property>
-                <property name="margin_top">2</property>
-                <property name="margin_bottom">2</property>
-                <property name="action_name">.uno:keepratiocheck</property>
                 <property name="use_underline">True</property>
                 <property name="xalign">0</property>
                 <property name="draw_indicator">True</property>
               </object>
               <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">4</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
               </packing>
             </child>
             <child>
@@ -135,53 +202,46 @@
                 <property name="use_underline">True</property>
               </object>
               <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">5</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">2</property>
               </packing>
             </child>
             <child>
-              <object class="GtkBox" id="box4">
+              <object class="GtkBox" id="box10">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="hexpand">True</property>
+                <property name="spacing">6</property>
+                <property name="homogeneous">True</property>
                 <child>
-                  <object class="GtkBox" id="box6">
+                  <object class="svxlo-SidebarDialControl" id="orientationcontrol">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="orientation">vertical</property>
-                    <child>
-                      <object class="svxlo-SidebarDialControl" id="orientationcontrol">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="hexpand">True</property>
-                        <property name="vexpand">True</property>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">0</property>
-                      </packing>
-                    </child>
+                    <property name="vexpand">True</property>
                   </object>
                   <packing>
-                    <property name="expand">True</property>
+                    <property name="expand">False</property>
                     <property name="fill">True</property>
                     <property name="position">0</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkBox" id="box5">
+                  <object class="GtkBox" id="box11">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="hexpand">True</property>
                     <property name="orientation">vertical</property>
+                    <property name="spacing">6</property>
                     <child>
                       <object class="GtkComboBox" id="rotation:0degrees">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="has_tooltip">True</property>
                         <property name="tooltip_markup" translatable="yes">Select the angle for rotation.</property>
                         <property name="tooltip_text" translatable="yes">Select the angle for rotation.</property>
-                        <property name="margin_left">26</property>
+                        <property name="hexpand">True</property>
+                        <property name="adjustment">adjustment1</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -190,14 +250,16 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkBox" id="flipbox">
+                      <object class="GtkBox" id="box12">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="spacing">6</property>
                         <child>
                           <object class="GtkLabel" id="fliplabel">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="hexpand">True</property>
+                            <property name="xalign">0</property>
                             <property name="label" translatable="yes">_Flip:</property>
                             <property name="use_underline">True</property>
                             <property name="justify">right</property>
@@ -212,10 +274,12 @@
                           <object class="GtkToolbar" id="selectrotationtype">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="halign">end</property>
                             <child>
                               <object class="GtkToolButton" id="flipvertical">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
+                                <property name="has_tooltip">True</property>
                                 <property name="tooltip_markup" translatable="yes">Flip the selected object vertically.</property>
                                 <property name="tooltip_text" translatable="yes">Flip the selected object vertically.</property>
                                 <property name="action_name">.uno:FlipVertical</property>
@@ -230,6 +294,7 @@
                               <object class="GtkToolButton" id="fliphorizontal">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
+                                <property name="has_tooltip">True</property>
                                 <property name="tooltip_markup" translatable="yes">Flip the selected object horizontally.</property>
                                 <property name="tooltip_text" translatable="yes">Flip the selected object horizontally.</property>
                                 <property name="action_name">.uno:FlipHorizontal</property>
@@ -250,54 +315,12 @@
                       </object>
                       <packing>
                         <property name="expand">False</property>
-                        <property name="fill">False</property>
+                        <property name="fill">True</property>
                         <property name="position">1</property>
                       </packing>
                     </child>
                   </object>
                   <packing>
-                    <property name="expand">True</property>
-                    <property name="fill">True</property>
-                    <property name="position">1</property>
-                  </packing>
-                </child>
-              </object>
-              <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">6</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkBox" id="box7">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <child>
-                  <object class="GtkLabel" id="horizontallabel">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="hexpand">True</property>
-                    <property name="xalign">0</property>
-                    <property name="label" translatable="yes">_Horizontal:</property>
-                    <property name="use_underline">True</property>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="verticallabel">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="hexpand">True</property>
-                    <property name="xalign">0</property>
-                    <property name="label" translatable="yes">_Vertical:</property>
-                    <property name="use_underline">True</property>
-                  </object>
-                  <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
                     <property name="position">1</property>
@@ -305,52 +328,9 @@
                 </child>
               </object>
               <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">0</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkBox" id="box8">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <child>
-                  <object class="GtkSpinButton" id="horizontalpos: FUNIT_MM">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="tooltip_markup" translatable="yes">Enter the value for the horizontal position.</property>
-                    <property name="tooltip_text" translatable="yes">Enter the value for the horizontal position.</property>
-                    <property name="invisible_char">•</property>
-                  </object>
-                  <packing>
-                    <property name="expand">True</property>
-                    <property name="fill">True</property>
-                    <property name="position">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkSpinButton" id="verticalpos: FUNIT_MM">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="tooltip_markup" translatable="yes">Enter the value for the vertical position.</property>
-                    <property name="tooltip_text" translatable="yes">Enter the value for the vertical position.</property>
-                    <property name="margin_left">10</property>
-                    <property name="invisible_char">•</property>
-                  </object>
-                  <packing>
-                    <property name="expand">True</property>
-                    <property name="fill">True</property>
-                    <property name="pack_type">end</property>
-                    <property name="position">1</property>
-                  </packing>
-                </child>
-              </object>
-              <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">1</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">3</property>
               </packing>
             </child>
           </object>
