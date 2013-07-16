@@ -229,7 +229,7 @@ private:
 
 struct SwTOXPara : public SwTOXSortTabBase
 {
-    SwTOXPara( const SwCntntNode&, SwTOXElement, sal_uInt16 nLevel = FORM_ALPHA_DELIMITTER );
+    SwTOXPara( const SwCntntNode&, SwTOXElement, sal_uInt16 nLevel = FORM_ALPHA_DELIMITTER, OUString sSeqName = OUString() );
     virtual ~SwTOXPara() {}
 
     void    SetStartIndex( xub_StrLen nSet)     { nStartIndex = nSet;}
@@ -246,6 +246,7 @@ private:
     sal_uInt16 m_nLevel;
     xub_StrLen nStartIndex;
     xub_StrLen nEndIndex;
+    OUString m_sSequenceName;
 };
 
 struct SwTOXTable : public SwTOXSortTabBase
