@@ -48,14 +48,16 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::sdbc;
 
+using namespace ::osl;
+
 using namespace connectivity::firebird;
 
 namespace connectivity
 {
     namespace firebird
     {
-        //------------------------------------------------------------------
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  SAL_CALL FirebirdDriver_CreateInstance(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory) throw( ::com::sun::star::uno::Exception )
+        Reference< XInterface >  SAL_CALL FirebirdDriver_CreateInstance(
+            const Reference< XMultiServiceFactory >& _rxFactory) throw( Exception )
         {
             SAL_INFO("connectivity.firebird", "=> ODriver_BASE::FirebirdDriver_CreateInstance()" );
             (void) _rxFactory;
@@ -63,15 +65,15 @@ namespace connectivity
         }
     }
 }
-// --------------------------------------------------------------------------------
+
 FirebirdDriver::FirebirdDriver()
     : ODriver_BASE(m_aMutex)
 {
 }
-// --------------------------------------------------------------------------------
+
 void FirebirdDriver::disposing()
 {
-    ::osl::MutexGuard aGuard(m_aMutex);
+    MutexGuard aGuard(m_aMutex);
 
     // when driver will be destroied so all our connections have to be destroied as well
     for (OWeakRefArray::iterator i = m_xConnections.begin(); m_xConnections.end() != i; ++i)
@@ -85,56 +87,53 @@ void FirebirdDriver::disposing()
     ODriver_BASE::disposing();
 }
 
-// static ServiceInfo
-//------------------------------------------------------------------------------
-rtl::OUString FirebirdDriver::getImplementationName_Static(  ) throw(RuntimeException)
+//----- static ServiceInfo ---------------------------------------------------
+rtl::OUString FirebirdDriver::getImplementationName_Static() throw(RuntimeException)
 {
     return rtl::OUString("com.sun.star.comp.sdbc.firebird.Driver");
-        // this name is referenced in the configuration and in the firebird.xml
-        // Please take care when changing it.
 }
-//------------------------------------------------------------------------------
-Sequence< ::rtl::OUString > FirebirdDriver::getSupportedServiceNames_Static(  ) throw (RuntimeException)
+
+Sequence< OUString > FirebirdDriver::getSupportedServiceNames_Static() throw (RuntimeException)
 {
-    // which service is supported
-    // for more information @see com.sun.star.sdbc.Driver
-    Sequence< ::rtl::OUString > aSNS( 1 );
-    aSNS[0] = ::rtl::OUString("com.sun.star.sdbc.Driver");
+    // TODO: add com.sun.star.sdbcx.Driver once all sdbc functionality is implemented
+    Sequence< OUString > aSNS( 1 );
+    aSNS[0] = OUString("com.sun.star.sdbc.Driver");
     return aSNS;
 }
 
-//------------------------------------------------------------------
-::rtl::OUString SAL_CALL FirebirdDriver::getImplementationName(  ) throw(RuntimeException)
+OUString SAL_CALL FirebirdDriver::getImplementationName() throw(RuntimeException)
 {
     return getImplementationName_Static();
 }
 
-//------------------------------------------------------------------
-sal_Bool SAL_CALL FirebirdDriver::supportsService( const ::rtl::OUString& _rServiceName ) throw(RuntimeException)
+sal_Bool SAL_CALL FirebirdDriver::supportsService(const OUString& _rServiceName)
+    throw(RuntimeException)
 {
-    Sequence< ::rtl::OUString > aSupported(getSupportedServiceNames());
-    const ::rtl::OUString* pSupported = aSupported.getConstArray();
-    const ::rtl::OUString* pEnd = pSupported + aSupported.getLength();
+    Sequence< OUString > aSupported(getSupportedServiceNames());
+    const OUString* pSupported = aSupported.getConstArray();
+    const OUString* pEnd = pSupported + aSupported.getLength();
     for (;pSupported != pEnd && !pSupported->equals(_rServiceName); ++pSupported)
         ;
 
     return pSupported != pEnd;
 }
 
-//------------------------------------------------------------------
-Sequence< ::rtl::OUString > SAL_CALL FirebirdDriver::getSupportedServiceNames(  ) throw(RuntimeException)
+Sequence< OUString > SAL_CALL FirebirdDriver::getSupportedServiceNames()
+    throw(RuntimeException)
 {
     return getSupportedServiceNames_Static();
 }
 
-// --------------------------------------------------------------------------------
-Reference< XConnection > SAL_CALL FirebirdDriver::connect( const ::rtl::OUString& url, const Sequence< PropertyValue >& info ) throw(SQLException, RuntimeException)
+// ----  XDriver -------------------------------------------------------------
+Reference< XConnection > SAL_CALL FirebirdDriver::connect(
+    const OUString& url, const Sequence< PropertyValue >& info )
+    throw(SQLException, RuntimeException)
 {
     Reference< XConnection > xConnection;
 
     SAL_INFO("connectivity.firebird", "=> ODriver_BASE::connect(), URL: " << url );
 
-    ::osl::MutexGuard aGuard( m_aMutex );
+    MutexGuard aGuard( m_aMutex );
     if (ODriver_BASE::rBHelper.bDisposed)
        throw DisposedException();
 
@@ -149,14 +148,16 @@ Reference< XConnection > SAL_CALL FirebirdDriver::connect( const ::rtl::OUString
 
     return xCon;
 }
-// --------------------------------------------------------------------------------
-sal_Bool SAL_CALL FirebirdDriver::acceptsURL( const ::rtl::OUString& url )
-        throw(SQLException, RuntimeException)
+
+sal_Bool SAL_CALL FirebirdDriver::acceptsURL( const OUString& url )
+    throw(SQLException, RuntimeException)
 {
     return url.equals("sdbc:embedded:firebird") || url.startsWith("sdbc:firebird:");
 }
-// --------------------------------------------------------------------------------
-Sequence< DriverPropertyInfo > SAL_CALL FirebirdDriver::getPropertyInfo( const ::rtl::OUString& url, const Sequence< PropertyValue >& info ) throw(SQLException, RuntimeException)
+
+Sequence< DriverPropertyInfo > SAL_CALL FirebirdDriver::getPropertyInfo(
+    const OUString& url, const Sequence< PropertyValue >& info )
+    throw(SQLException, RuntimeException)
 {
     (void) info;
     if ( ! acceptsURL(url) )
@@ -164,34 +165,31 @@ Sequence< DriverPropertyInfo > SAL_CALL FirebirdDriver::getPropertyInfo( const :
         ::connectivity::SharedResources aResources;
         const OUString sMessage = aResources.getResourceString(STR_URI_SYNTAX_ERROR);
         ::dbtools::throwGenericSQLException(sMessage ,*this);
-    } // if ( ! acceptsURL(url) )
+    }
 
-    // if you have somthing special to say, return it here :-)
     return Sequence< DriverPropertyInfo >();
 }
-// --------------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL FirebirdDriver::getMajorVersion(  ) throw(RuntimeException)
 {
-    return 0; // depends on you
+    // The major and minor version are sdbc driver specific. Must begin with 1.0
+    // as per http://api.libreoffice.org/docs/common/ref/com/sun/star/sdbc/XDriver.html
+    return 1;
 }
-// --------------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL FirebirdDriver::getMinorVersion(  ) throw(RuntimeException)
 {
-    return 1; // depends on you
+    return 0;
 }
-// --------------------------------------------------------------------------------
 
-//.........................................................................
+
 namespace connectivity
 {
     namespace firebird
     {
-//.........................................................................
 
-        void release(oslInterlockedCount& _refCount,
-                     ::cppu::OBroadcastHelper& rBHelper,
-                     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xInterface,
-                     ::com::sun::star::lang::XComponent* _pObject)
+        void release(oslInterlockedCount& _refCount, ::cppu::OBroadcastHelper& rBHelper,
+                     Reference< XInterface >& _xInterface, XComponent* _pObject)
         {
             if (osl_atomic_decrement( &_refCount ) == 0)
             {
@@ -200,9 +198,9 @@ namespace connectivity
                 if (!rBHelper.bDisposed && !rBHelper.bInDispose)
                 {
                     // remember the parent
-                    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xParent;
+                    Reference< XInterface > xParent;
                     {
-                        ::osl::MutexGuard aGuard( rBHelper.rMutex );
+                        MutexGuard aGuard( rBHelper.rMutex );
                         xParent = _xInterface;
                         _xInterface = NULL;
                     }
@@ -216,7 +214,7 @@ namespace connectivity
                     // release the parent in the ~
                     if (xParent.is())
                     {
-                        ::osl::MutexGuard aGuard( rBHelper.rMutex );
+                        MutexGuard aGuard( rBHelper.rMutex );
                         _xInterface = xParent;
                     }
                 }
@@ -231,9 +229,9 @@ namespace connectivity
                 throw DisposedException();
 
         }
-//.........................................................................
+
     }
 } // namespace connectivity
-//.........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
