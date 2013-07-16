@@ -48,7 +48,6 @@
 #include "types.hxx"
 #include "scopetools.hxx"
 
-#include <boost/bind.hpp>
 #include <boost/scoped_ptr.hpp>
 
 using namespace formula;
@@ -70,24 +69,24 @@ const sal_uInt16 MAXRECURSION = 400;
 
 using std::deque;
 
-typedef SCCOLROW(*DimensionSelector)(const ScSingleRefData&);
+typedef SCCOLROW(*DimensionSelector)(const ScAddress&, const ScSingleRefData&);
 
 
-static SCCOLROW lcl_GetCol(const ScSingleRefData& rData)
+static SCCOLROW lcl_GetCol(const ScAddress& rPos, const ScSingleRefData& rData)
 {
-    return rData.nCol;
+    return rData.toAbs(rPos).Col();
 }
 
 
-static SCCOLROW lcl_GetRow(const ScSingleRefData& rData)
+static SCCOLROW lcl_GetRow(const ScAddress& rPos, const ScSingleRefData& rData)
 {
-    return rData.nRow;
+    return rData.toAbs(rPos).Row();
 }
 
 
-static SCCOLROW lcl_GetTab(const ScSingleRefData& rData)
+static SCCOLROW lcl_GetTab(const ScAddress& rPos, const ScSingleRefData& rData)
 {
-    return rData.nTab;
+    return rData.toAbs(rPos).Tab();
 }
 
 
@@ -95,25 +94,22 @@ static SCCOLROW lcl_GetTab(const ScSingleRefData& rData)
  */
 static bool
 lcl_checkRangeDimension(
-        const SingleDoubleRefProvider& rRef1,
-        const SingleDoubleRefProvider& rRef2,
-        const DimensionSelector aWhich)
+    const ScAddress& rPos, const SingleDoubleRefProvider& rRef1, const SingleDoubleRefProvider& rRef2,
+    const DimensionSelector aWhich)
 {
-    return
-        aWhich(rRef1.Ref1) == aWhich(rRef2.Ref1)
-        && aWhich(rRef1.Ref2) == aWhich(rRef2.Ref2);
+    return aWhich(rPos, rRef1.Ref1) == aWhich(rPos, rRef2.Ref1) &&
+        aWhich(rPos, rRef1.Ref2) == aWhich(rPos, rRef2.Ref2);
 }
 
 
 static bool
 lcl_checkRangeDimensions(
-        const SingleDoubleRefProvider& rRef1,
-        const SingleDoubleRefProvider& rRef2,
-        bool& bCol, bool& bRow, bool& bTab)
+    const ScAddress& rPos, const SingleDoubleRefProvider& rRef1, const SingleDoubleRefProvider& rRef2,
+    bool& bCol, bool& bRow, bool& bTab)
 {
-    const bool bSameCols(lcl_checkRangeDimension(rRef1, rRef2, lcl_GetCol));
-    const bool bSameRows(lcl_checkRangeDimension(rRef1, rRef2, lcl_GetRow));
-    const bool bSameTabs(lcl_checkRangeDimension(rRef1, rRef2, lcl_GetTab));
+    const bool bSameCols(lcl_checkRangeDimension(rPos, rRef1, rRef2, lcl_GetCol));
+    const bool bSameRows(lcl_checkRangeDimension(rPos, rRef1, rRef2, lcl_GetRow));
+    const bool bSameTabs(lcl_checkRangeDimension(rPos, rRef1, rRef2, lcl_GetTab));
 
     // Test if exactly two dimensions are equal
     if (!(bSameCols ^ bSameRows ^ bSameTabs)
@@ -133,9 +129,10 @@ lcl_checkRangeDimensions(
  */
 static bool
 lcl_checkRangeDimensions(
-        const deque<ScToken*>::const_iterator aBegin,
-        const deque<ScToken*>::const_iterator aEnd,
-        bool& bCol, bool& bRow, bool& bTab)
+    const ScAddress& rPos,
+    const deque<ScToken*>::const_iterator aBegin,
+    const deque<ScToken*>::const_iterator aEnd,
+    bool& bCol, bool& bRow, bool& bTab)
 {
     deque<ScToken*>::const_iterator aCur(aBegin);
     ++aCur;
@@ -143,7 +140,7 @@ lcl_checkRangeDimensions(
     bool bOk(false);
     {
         const SingleDoubleRefProvider aRefCur(**aCur);
-        bOk = lcl_checkRangeDimensions(aRef, aRefCur, bCol, bRow, bTab);
+        bOk = lcl_checkRangeDimensions(rPos, aRef, aRefCur, bCol, bRow, bTab);
     }
     while (bOk && aCur != aEnd)
     {
@@ -151,7 +148,7 @@ lcl_checkRangeDimensions(
         bool bColTmp(false);
         bool bRowTmp(false);
         bool bTabTmp(false);
-        bOk = lcl_checkRangeDimensions(aRef, aRefCur, bColTmp, bRowTmp, bTabTmp);
+        bOk = lcl_checkRangeDimensions(rPos, aRef, aRefCur, bColTmp, bRowTmp, bTabTmp);
         bOk = bOk && (bCol == bColTmp && bRow == bRowTmp && bTab == bTabTmp);
         ++aCur;
     }
@@ -163,81 +160,84 @@ lcl_checkRangeDimensions(
     return false;
 }
 
-
-bool
-lcl_lessReferenceBy(
-        const ScToken* const pRef1, const ScToken* const pRef2,
-        const DimensionSelector aWhich)
+class LessByReference : std::binary_function<const ScToken*, const ScToken*, bool>
 {
-    const SingleDoubleRefProvider rRef1(*pRef1);
-    const SingleDoubleRefProvider rRef2(*pRef2);
-    return aWhich(rRef1.Ref1) < aWhich(rRef2.Ref1);
-}
+    ScAddress maPos;
+    DimensionSelector maFunc;
+public:
+    LessByReference(const ScAddress& rPos, const DimensionSelector& rFunc) :
+        maPos(rPos), maFunc(rFunc) {}
 
+    bool operator() (const ScToken* pRef1, const ScToken* pRef2)
+    {
+        const SingleDoubleRefProvider aRef1(*pRef1);
+        const SingleDoubleRefProvider aRef2(*pRef2);
+        return maFunc(maPos, aRef1.Ref1) < maFunc(maPos, aRef2.Ref1);
+    }
+};
 
-/** Returns true if range denoted by token pRef2 starts immediately after
-    range denoted by token pRef1. Dimension, in which the comparison takes
-    place, is given by aWhich.
+/**
+ * Returns true if range denoted by token p2 starts immediately after range
+ * denoted by token p1. Dimension, in which the comparison takes place, is
+ * given by maFunc.
  */
-bool
-lcl_isImmediatelyFollowing(
-        const ScToken* const pRef1, const ScToken* const pRef2,
-        const DimensionSelector aWhich)
+class AdjacentByReference : std::binary_function<const ScToken*, const ScToken*, bool>
 {
-    const SingleDoubleRefProvider rRef1(*pRef1);
-    const SingleDoubleRefProvider rRef2(*pRef2);
-    return aWhich(rRef2.Ref1) - aWhich(rRef1.Ref2) == 1;
-}
+    ScAddress maPos;
+    DimensionSelector maFunc;
+public:
+    AdjacentByReference(const ScAddress& rPos, DimensionSelector aFunc) :
+        maPos(rPos), maFunc(aFunc) {}
 
+    bool operator() (const ScToken* p1, const ScToken* p2)
+    {
+        const SingleDoubleRefProvider aRef1(*p1);
+        const SingleDoubleRefProvider aRef2(*p2);
+        return maFunc(maPos, aRef2.Ref1) - maFunc(maPos, aRef1.Ref2) == 1;
+    }
+};
 
 static bool
 lcl_checkIfAdjacent(
-        const deque<ScToken*>& rReferences,
-        const DimensionSelector aWhich)
+    const ScAddress& rPos, const deque<ScToken*>& rReferences, const DimensionSelector aWhich)
 {
     typedef deque<ScToken*>::const_iterator Iter;
     Iter aBegin(rReferences.begin());
     Iter aEnd(rReferences.end());
     Iter aBegin1(aBegin);
     ++aBegin1, --aEnd;
-    return std::equal(
-            aBegin, aEnd, aBegin1,
-            boost::bind(lcl_isImmediatelyFollowing, _1, _2, aWhich));
+    return std::equal(aBegin, aEnd, aBegin1, AdjacentByReference(rPos, aWhich));
 }
 
 
 static void
 lcl_fillRangeFromRefList(
-        const deque<ScToken*>& rReferences, ScRange& rRange)
+    const ScAddress& aPos, const deque<ScToken*>& rReferences, ScRange& rRange)
 {
     const ScSingleRefData aStart(
             SingleDoubleRefProvider(*rReferences.front()).Ref1);
-    rRange.aStart.Set(aStart.nCol, aStart.nRow, aStart.nTab);
+    rRange.aStart = aStart.toAbs(aPos);
     const ScSingleRefData aEnd(
             SingleDoubleRefProvider(*rReferences.back()).Ref2);
-    rRange.aEnd.Set(aEnd.nCol, aEnd.nRow, aEnd.nTab);
+    rRange.aEnd = aEnd.toAbs(aPos);
 }
 
 
 static bool
 lcl_refListFormsOneRange(
-        const ScAddress& aPos, deque<ScToken*>& rReferences,
+        const ScAddress& rPos, deque<ScToken*>& rReferences,
         ScRange& rRange)
 {
-    std::for_each(
-            rReferences.begin(), rReferences.end(),
-            bind(&ScToken::CalcAbsIfRel, _1, aPos))
-        ;
-    if (rReferences.size() == 1) {
-        lcl_fillRangeFromRefList(rReferences, rRange);
+    if (rReferences.size() == 1)
+    {
+        lcl_fillRangeFromRefList(rPos, rReferences, rRange);
         return true;
     }
 
     bool bCell(false);
     bool bRow(false);
     bool bTab(false);
-    if (lcl_checkRangeDimensions(rReferences.begin(), rReferences.end(),
-            bCell, bRow, bTab))
+    if (lcl_checkRangeDimensions(rPos, rReferences.begin(), rReferences.end(), bCell, bRow, bTab))
     {
         DimensionSelector aWhich;
         if (bCell)
@@ -257,12 +257,12 @@ lcl_refListFormsOneRange(
             OSL_FAIL( "lcl_checkRangeDimensions shouldn't allow that!");
             aWhich = lcl_GetRow;    // initialize to avoid warning
         }
+
         // Sort the references by start of range
-        std::sort(rReferences.begin(), rReferences.end(),
-                boost::bind(lcl_lessReferenceBy, _1, _2, aWhich));
-        if (lcl_checkIfAdjacent(rReferences, aWhich))
+        std::sort(rReferences.begin(), rReferences.end(), LessByReference(rPos, aWhich));
+        if (lcl_checkIfAdjacent(rPos, rReferences, aWhich))
         {
-            lcl_fillRangeFromRefList(rReferences, rRange);
+            lcl_fillRangeFromRefList(rPos, rReferences, rRange);
             return true;
         }
     }
