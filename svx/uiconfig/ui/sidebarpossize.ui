@@ -50,7 +50,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkSpinButton" id="horizontalpos: FUNIT_MM">
+                  <object class="GtkSpinButton" id="horizontalpos:0in">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="has_tooltip">True</property>
@@ -83,7 +83,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkSpinButton" id="verticalpos: FUNIT_MM">
+                  <object class="GtkSpinButton" id="verticalpos:0in">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="has_tooltip">True</property>
@@ -116,7 +116,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkSpinButton" id="selectwidth: FUNIT_INCH">
+                  <object class="GtkSpinButton" id="selectwidth:0in">
                     <property name="width_request">120</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
@@ -150,7 +150,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkSpinButton" id="selectheight: FUNIT_INCH">
+                  <object class="GtkSpinButton" id="selectheight:0in">
                     <property name="width_request">120</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
