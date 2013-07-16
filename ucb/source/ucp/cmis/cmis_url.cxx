@@ -83,15 +83,7 @@ namespace cmis
                 RTL_TEXTENCODING_UTF8 );
         sUrl = "vnd.libreoffice.cmis://" + sEncodedBinding;
 
-        // Prefer get object by ID
-        if ( !m_sId.isEmpty( ) )
-        {
-            sUrl += "#" + rtl::Uri::encode( m_sId,
-                rtl_UriCharClassRelSegment,
-                rtl_UriEncodeKeepEscapes,
-                RTL_TEXTENCODING_UTF8 );
-        }
-        else if ( !m_sPath.isEmpty( ) )
+        if ( !m_sPath.isEmpty( ) )
         {
             sal_Int32 nPos = -1;
             OUString sEncodedPath;
@@ -114,6 +106,13 @@ namespace cmis
             }
             while ( nPos != -1 );
             sUrl += sEncodedPath;
+        }
+        else if ( !m_sId.isEmpty( ) )
+        {
+            sUrl += "#" + rtl::Uri::encode( m_sId,
+                rtl_UriCharClassRelSegment,
+                rtl_UriEncodeKeepEscapes,
+                RTL_TEXTENCODING_UTF8 );
         }
 
         return sUrl;
