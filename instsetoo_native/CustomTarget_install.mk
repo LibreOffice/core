@@ -35,23 +35,14 @@ $(call gb_CustomTarget_get_workdir,instsetoo_native/install)/bin/find-requires-%
 	cat $< | tr -d "\015" > $@
 	chmod a+x $@
 
-ifneq ($(WITH_LANG),)
 $(call gb_CustomTarget_get_workdir,instsetoo_native/install)/win_ulffiles/%.ulf: \
-		$(SRCDIR)/instsetoo_native/inc_openoffice/windows/msi_languages/%.ulf | \
-		$(call gb_Executable_get_runtime_dependencies,ulfex) \
-		$(call gb_Postprocess_get_target,AllModulesButInstsetNative)
-	$(call gb_Output_announce,$@,$(true),SUM,1)
-	MERGEINPUT=`$(gb_MKTEMP)` && \
-	echo $(foreach lang,$(gb_TRANS_LANGS),$(gb_POLOCATION)/$(lang)/instsetoo_native/inc_openoffice/windows/msi_languages.po) > $${MERGEINPUT} && \
-	$(call gb_Helper_abbreviate_dirs,\
-	$(call gb_Executable_get_command,ulfex) -i $< -o $@ -m $${MERGEINPUT} -l all ) && \
-	rm -rf $${MERGEINPUT}
-else
-$(call gb_CustomTarget_get_workdir,instsetoo_native/install)/win_ulffiles/%.ulf: \
-		$(SRCDIR)/instsetoo_native/inc_openoffice/windows/msi_languages/%.ulf \
-		$(call gb_Postprocess_get_target,AllModulesButInstsetNative)
-	cp $< $@
-endif
+		| $(call gb_Postprocess_get_target,AllModulesButInstsetNative)
+
+$(eval $(call gb_CustomTarget_ulfex_rule,\
+	$(call gb_CustomTarget_get_workdir,instsetoo_native/install)/win_ulffiles/%.ulf,\
+	$(SRCDIR)/instsetoo_native/inc_openoffice/windows/msi_languages/%.ulf,\
+	$(foreach lang,$(gb_TRANS_LANGS),\
+		$(gb_POLOCATION)/$(lang)/instsetoo_native/inc_openoffice/windows/msi_languages.po)))
 
 export ENABLE_DOWNLOADSETS ?= TRUE
 ifeq ($(OS),LINUX)

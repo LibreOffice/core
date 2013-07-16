@@ -212,17 +212,10 @@ $(share_WORKDIR)/%/build.flag: $(share_SRCDIR)/share/brand.pl $(LAUNCHERS) \
 		--ext "desktop" --key "UnityQuickList" $(share_WORKDIR)/launcher_unityquicklist.ulf
 	touch $@
 
-ifneq ($(WITH_LANG),)
-$(share_WORKDIR)/%.ulf: $(share_SRCDIR)/share/%.ulf | $(call gb_Executable_get_runtime_dependencies,ulfex)
-	$(call gb_Output_announce,$@,$(true),SUM,1)
-	MERGEINPUT=`$(gb_MKTEMP)` && \
-	echo $(foreach lang,$(gb_TRANS_LANGS),$(gb_POLOCATION)/$(lang)/sysui/desktop/share.po) > $${MERGEINPUT} && \
-	$(call gb_Helper_abbreviate_dirs,\
-	$(call gb_Executable_get_command,ulfex) -i $< -o $@ -m $${MERGEINPUT} -l all ) && \
-	rm -rf $${MERGEINPUT}
-else
-$(share_WORKDIR)/%.ulf: $(share_SRCDIR)/share/%.ulf
-	cp $< $@
-endif
+$(eval $(call gb_CustomTarget_ulfex_rule,\
+	$(share_WORKDIR)/%.ulf,\
+	$(share_SRCDIR)/share/%.ulf,\
+	$(foreach lang,$(gb_TRANS_LANGS),\
+		$(gb_POLOCATION)/$(lang)/sysui/desktop/share.po)))
 
 # vim: set noet sw=4 ts=4:
