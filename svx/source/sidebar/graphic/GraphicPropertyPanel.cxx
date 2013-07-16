@@ -19,7 +19,6 @@
 #include <sfx2/sidebar/Theme.hxx>
 #include <sfx2/sidebar/ControlFactory.hxx>
 #include <GraphicPropertyPanel.hxx>
-#include <GraphicPropertyPanel.hrc>
 #include <svx/dialogs.hrc>
 #include <svx/dialmgr.hxx>
 #include <vcl/field.hxx>
@@ -46,21 +45,7 @@ GraphicPropertyPanel::GraphicPropertyPanel(
     Window* pParent,
     const cssu::Reference<css::frame::XFrame>& rxFrame,
     SfxBindings* pBindings)
-:   Control(
-        pParent,
-        SVX_RES(RID_SIDEBAR_GRAPHIC_PANEL)),
-    mpFtBrightness(new FixedText(this, SVX_RES(FT_BRIGHTNESS))),
-    mpMtrBrightness(new MetricField(this, SVX_RES(MTR_BRIGHTNESS))),
-    mpFtContrast(new FixedText(this, SVX_RES(FT_CONTRAST))),
-    mpMtrContrast(new MetricField(this, SVX_RES(MTR_CONTRAST))),
-    mpFtColorMode(new FixedText(this, SVX_RES(FT_COLOR_MODE))),
-    mpLBColorMode(new ListBox(this, SVX_RES(LB_COLOR_MODE))),
-    mpFtTrans(new FixedText(this, SVX_RES(FT_TRANSPARENT))),
-    mpMtrTrans(new MetricField(this, SVX_RES(MTR_TRANSPARENT))),
-    mpMtrRed(new MetricField(this, SVX_RES(MF_RED))),
-    mpMtrGreen(new MetricField(this, SVX_RES(MF_GREEN))),
-    mpMtrBlue(new MetricField(this, SVX_RES(MF_BLUE))),
-    mpMtrGamma(new MetricField(this, SVX_RES(MF_GAMMA))),
+:   PanelLayout(pParent, "GraphicPropertyPanel", "svx/ui/sidebargraphic.ui", rxFrame),
     maBrightControl(SID_ATTR_GRAF_LUMINANCE, *pBindings, *this),
     maContrastControl(SID_ATTR_GRAF_CONTRAST, *pBindings, *this),
     maTransparenceControl(SID_ATTR_GRAF_TRANSPARENCE, *pBindings, *this),
@@ -69,15 +54,18 @@ GraphicPropertyPanel::GraphicPropertyPanel(
     maBlueControl(SID_ATTR_GRAF_BLUE, *pBindings, *this),
     maGammaControl(SID_ATTR_GRAF_GAMMA, *pBindings, *this),
     maModeControl(SID_ATTR_GRAF_MODE, *pBindings, *this),
-    maImgRed(this, SVX_RES(IMG_RED)),
-    maImgGreen(this, SVX_RES(IMG_GREEN)),
-    maImgBlue(this, SVX_RES(IMG_BLUE)),
-    maImgGamma(this, SVX_RES(IMG_GAMMA)),
     mxFrame(rxFrame),
     mpBindings(pBindings)
 {
+    get(mpMtrBrightness, "setbrightness");
+    get(mpMtrContrast, "setcontrast");
+    get(mpLBColorMode, "setcolormode");
+    get(mpMtrTrans, "settransparency");
+    get(mpMtrRed, "setred");
+    get(mpMtrGreen, "setgreen");
+    get(mpMtrBlue, "setblue");
+    get(mpMtrGamma, "setgamma");
     Initialize();
-    FreeResource();
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -90,11 +78,6 @@ GraphicPropertyPanel::~GraphicPropertyPanel()
 
 void GraphicPropertyPanel::Initialize()
 {
-    mpFtBrightness->SetBackground(Wallpaper());
-    mpFtContrast->SetBackground(Wallpaper());
-    mpFtColorMode->SetBackground(Wallpaper());
-    mpFtTrans->SetBackground(Wallpaper());
-
     mpMtrBrightness->SetModifyHdl( LINK( this, GraphicPropertyPanel, ModifyBrightnessHdl ) );
     mpMtrBrightness->SetAccessibleName(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Brightness")));
     mpMtrContrast->SetModifyHdl( LINK( this, GraphicPropertyPanel, ModifyContrastHdl ) );
@@ -118,14 +101,10 @@ void GraphicPropertyPanel::Initialize()
     mpMtrBlue->SetAccessibleName(mpMtrBlue->GetQuickHelpText());
     mpMtrGamma->SetAccessibleName(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Gamma value")));
 
-    mpMtrRed->SetAccessibleRelationLabeledBy(mpMtrRed.get());
-    mpMtrGreen->SetAccessibleRelationLabeledBy(mpMtrGreen.get());
-    mpMtrBlue->SetAccessibleRelationLabeledBy(mpMtrBlue.get());
-    mpMtrGamma->SetAccessibleRelationLabeledBy(mpMtrGamma.get());
-    mpMtrBrightness->SetAccessibleRelationLabeledBy(mpFtBrightness.get());
-    mpMtrContrast->SetAccessibleRelationLabeledBy(mpFtContrast.get());
-    mpMtrTrans->SetAccessibleRelationLabeledBy(mpFtTrans.get());
-    mpLBColorMode->SetAccessibleRelationLabeledBy(mpFtColorMode.get());
+    mpMtrRed->SetAccessibleRelationLabeledBy(mpMtrRed);
+    mpMtrGreen->SetAccessibleRelationLabeledBy(mpMtrGreen);
+    mpMtrBlue->SetAccessibleRelationLabeledBy(mpMtrBlue);
+    mpMtrGamma->SetAccessibleRelationLabeledBy(mpMtrGamma);
 
     // Fix left position of some controls that may be wrong due to
     // rounding errors.
