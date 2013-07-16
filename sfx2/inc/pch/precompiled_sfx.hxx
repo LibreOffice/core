@@ -730,7 +730,6 @@
 #include <toolkit/awt/vclxwindow.hxx>
 #include <toolkit/helper/convert.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-#include <tools/cachestr.hxx>
 #include <tools/config.hxx>
 #include <tools/datetime.hxx>
 #include <tools/debug.hxx>
