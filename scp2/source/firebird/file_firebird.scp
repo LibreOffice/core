@@ -59,7 +59,7 @@ File gid_File_Firebird_Lib
     Dir = SCP2_OOO_BIN_DIR;
   #ifdef UNX
     #ifdef MACOSX
-       Name = STRING(CONCAT3(libfbembed,.,UNXSUFFIX));
+       Name = STRING(CONCAT2(libfbembed,UNXSUFFIX));
     #else
        Name = STRING(CONCAT2(libfbembed,UNXSUFFIX));
     #endif
