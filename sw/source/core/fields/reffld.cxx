@@ -668,7 +668,6 @@ bool SwGetRefField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
 
 bool SwGetRefField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 {
-    String sTmp;
     switch( nWhichId )
     {
     case FIELD_PROP_USHORT1:
