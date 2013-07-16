@@ -2091,6 +2091,7 @@ void SwTOXEntryTabPage::ActivatePage( const SfxItemSet& /*rSet*/)
         sal_Bool bToxIsAuthorities = TOX_AUTHORITIES == aCurType.eType;
         sal_Bool bToxIsIndex =       TOX_INDEX == aCurType.eType;
         sal_Bool bToxIsContent =     TOX_CONTENT == aCurType.eType;
+        sal_Bool bToxIsSequence =    TOX_ILLUSTRATIONS == aCurType.eType;
 
         aLevelLB.Clear();
         for(sal_uInt16 i = 1; i < m_pCurrentForm->GetFormMax(); i++)
@@ -2223,7 +2224,7 @@ void SwTOXEntryTabPage::ActivatePage( const SfxItemSet& /*rSet*/)
 
         //show or hide controls
         aEntryNoPB.Show(        bToxIsContent );
-        aHyperLinkPB.Show(      bToxIsContent );
+        aHyperLinkPB.Show(      bToxIsContent || bToxIsSequence );
         aRelToStyleCB.Show(    !bToxIsAuthorities );
         aChapterInfoPB.Show(    !bToxIsContent && !bToxIsAuthorities);
         aEntryPB.Show(         !bToxIsAuthorities );
