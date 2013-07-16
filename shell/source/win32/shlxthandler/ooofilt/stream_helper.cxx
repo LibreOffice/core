@@ -74,7 +74,7 @@ long BufferStream::stell ()
         return -1;
 }
 
-long BufferStream::sseek (unsigned long offset, int origin)
+long BufferStream::sseek (long offset, int origin)
 {
     HRESULT hr;
     LARGE_INTEGER Move;
@@ -129,7 +129,7 @@ long FileStream::stell ()
     return -1L;
 }
 
-long FileStream::sseek (unsigned long offset, int origin)
+long FileStream::sseek (long offset, int origin)
 {
     if (file)
         return fseek(file, offset, origin);
