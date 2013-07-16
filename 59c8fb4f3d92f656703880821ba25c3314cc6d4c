@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAXn//+oo\u003d",
+        "filename": "connectivity/source/drivers/calc/CDatabaseMetaData.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 263,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2013-07-16T07:53:31Z",
+      "side": 1,
+      "message": "If Calc does not export a constant or #define for that limit (and also does not allow it to be queried at runtime), then please make it a #define local to connectivity/source/drivers/calc, rather than a hardcoded 65535 in several places.",
+      "parentUuid": "AAAAXn//+pM\u003d",
+      "revId": "59c8fb4f3d92f656703880821ba25c3314cc6d4c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAXn//+po\u003d",
         "filename": "connectivity/source/drivers/dbase/DResultSet.cxx",
         "patchSetId": 1
