@@ -105,7 +105,7 @@ Color WW8TransCol(SVBT32 nWC)
     // ( Damit bei der Writer-UI die Farbnamen stimmen )
     // Die Tabelle int im *3er-System* aufgeteilt. Die Grauwerte fehlen,
     // da sie nicht ins 3er-System passen ( 4 Werte: sw, ws, 2 * grau )
-    static ColorData eColA[] = {                    //  B G R  B G R  B G R
+    static const ColorData eColA[] = {              //  B G R  B G R  B G R
         COL_BLACK, COL_RED, COL_LIGHTRED,           //  0 0 0, 0 0 1, 0 0 2
         COL_GREEN, COL_BROWN, COL_BLACK,            //  0 1 0, 0 1 1, 0 1 2
         COL_LIGHTGREEN, COL_BLACK, COL_YELLOW,      //  0 2 0, 0 2 1, 0 2 2
@@ -244,7 +244,7 @@ static void SetStdAttr( SfxItemSet& rSet, WW8_DP_LINETYPE& rL,
 
 static void SetFill( SfxItemSet& rSet, WW8_DP_FILL& rFill )
 {
-    static sal_uInt8 nPatA[] =
+    static const sal_uInt8 nPatA[] =
     {
              0,  0,  5, 10, 20, 25, 30, 40, 50, 60, 70, 75, 80,
             90, 50, 50, 50, 50, 50, 50, 33, 33, 33, 33, 33, 33
@@ -1234,7 +1234,7 @@ SdrObject* SwWW8ImplReader::ReadTxtBox( WW8_DPHEAD* pHd, const WW8_DO* pDo,
 SdrObject* SwWW8ImplReader::ReadCaptionBox( WW8_DPHEAD* pHd, const WW8_DO* pDo,
     SfxAllItemSet &rSet)
 {
-    static SdrCaptionType aCaptA[] = { SDRCAPT_TYPE1, SDRCAPT_TYPE2,
+    static const SdrCaptionType aCaptA[] = { SDRCAPT_TYPE1, SDRCAPT_TYPE2,
                                        SDRCAPT_TYPE3, SDRCAPT_TYPE4 };
 
     WW8_DP_CALLOUT_TXTBOX aCallB;

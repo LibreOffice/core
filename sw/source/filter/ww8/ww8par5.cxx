@@ -880,7 +880,7 @@ long SwWW8ImplReader::Read_Field(WW8PLCFManResult* pRes)
 {
     typedef eF_ResT (SwWW8ImplReader:: *FNReadField)( WW8FieldDesc*, String& );
     enum Limits {eMax = 96};
-    static FNReadField aWW8FieldTab[eMax+1] =
+    static const FNReadField aWW8FieldTab[eMax+1] =
     {
         0,
         &SwWW8ImplReader::Read_F_Input,

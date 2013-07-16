@@ -542,7 +542,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
         }
         else
         {
-            static sal_uInt16 aFrmAttrRange[] =
+            static const sal_uInt16 aFrmAttrRange[] =
             {
                 RES_FRMATR_BEGIN,       RES_FRMATR_END-1,
                 SID_ATTR_BORDER_INNER,  SID_ATTR_BORDER_INNER,

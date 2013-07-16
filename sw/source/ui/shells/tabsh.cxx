@@ -400,7 +400,7 @@ void ItemSetToTableParam( const SfxItemSet& rSet,
         rSh.SetTableName( *pFmt, ((const SfxStringItem*)pItem)->GetValue() );
 
     // Copy the chosen attributes in the ItemSet.
-    static sal_uInt16 aIds[] =
+    static const sal_uInt16 aIds[] =
         {
             RES_PAGEDESC,
             RES_BREAK,

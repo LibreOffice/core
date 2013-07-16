@@ -2393,7 +2393,7 @@ void WW8AttributeOutput::TableDefaultBorders( ww8::WW8TableNodeInfoInner::Pointe
 
     //Set Default, just taken from the first cell of the first
     //row
-    static sal_uInt16 aBorders[] =
+    static const sal_uInt16 aBorders[] =
     {
         BOX_LINE_TOP, BOX_LINE_LEFT,
         BOX_LINE_BOTTOM, BOX_LINE_RIGHT

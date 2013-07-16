@@ -562,12 +562,12 @@ void WW8Export::OutputOlst( const SwNumRule& rRule )
     if ( bWrtWW8 )
         return;
 
-    static sal_uInt8 aAnlvBase[] = { // Defaults
+    static const sal_uInt8 aAnlvBase[] = { // Defaults
                                 1,0,0,          // Upper Roman
                                 0x0C,           // Hanging Indent, fPrev
                                 0,0,1,0x80,0,0,1,0,0x1b,1,0,0 };
 
-    static sal_uInt8 aSprmOlstHdr[] = { 133, 212 };
+    static const sal_uInt8 aSprmOlstHdr[] = { 133, 212 };
 
     pO->insert( pO->end(), aSprmOlstHdr, aSprmOlstHdr+sizeof( aSprmOlstHdr ) );
     WW8_OLST aOlst;
@@ -797,7 +797,7 @@ void WW8Export::BuildAnlvBase(WW8_ANLV& rAnlv, sal_uInt8*& rpCh,
 void WW8Export::Out_NumRuleAnld( const SwNumRule& rRul, const SwNumFmt& rFmt,
                                    sal_uInt8 nSwLevel )
 {
-    static sal_uInt8 aSprmAnldDefault[54] = {
+    static const sal_uInt8 aSprmAnldDefault[54] = {
                          12, 52,
                          1,0,0,0x0c,0,0,1,0x80,0,0,1,0,0x1b,1,0,0,0x2e,
                          0,0,0,

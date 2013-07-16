@@ -1443,7 +1443,7 @@ void SwInsertDBColAutoPilot::SetTabSet()
     {
         // remove the defaults again, it makes no sense to set them
         SvxBrushItem aBrush( RES_BACKGROUND );
-        static sal_uInt16 aIds[3] =
+        static const sal_uInt16 aIds[3] =
             { RES_BACKGROUND, SID_ATTR_BRUSH_ROW, SID_ATTR_BRUSH_TABLE };
         for( int i = 0; i < 3; ++i )
             if( SFX_ITEM_SET == pTblSet->GetItemState( aIds[ i ],

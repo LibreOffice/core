@@ -104,7 +104,7 @@ TYPEINIT1(SwPagePreView,SfxViewShell)
 
 static sal_uInt16 lcl_GetNextZoomStep(sal_uInt16 nCurrentZoom, sal_Bool bZoomIn)
 {
-    static sal_uInt16 aZoomArr[] =
+    static const sal_uInt16 aZoomArr[] =
     {
         25, 50, 75, 100, 150, 200, 400, 600
     };

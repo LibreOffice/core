@@ -1613,7 +1613,7 @@ sal_uInt16 SwFldMgr::GetCurrLanguage() const
 
 void SwFieldType::_GetFldName()
 {
-    static sal_uInt16 coFldNms[] = {
+    static const sal_uInt16 coFldNms[] = {
         FLD_DATE_STD,
         FLD_TIME_STD,
         STR_FILENAMEFLD,

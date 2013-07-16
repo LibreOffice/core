@@ -704,7 +704,7 @@ sal_uLong SwView::FUNC_Search( const SwSearchOptions& rOptions )
 
     m_pWrtShell->SttSelect();
 
-    static sal_uInt16 aSearchAttrRange[] = {
+    static const sal_uInt16 aSearchAttrRange[] = {
         RES_FRMATR_BEGIN, RES_FRMATR_END-1,
         RES_CHRATR_BEGIN, RES_CHRATR_END-1,
         RES_PARATR_BEGIN, RES_PARATR_END-1,

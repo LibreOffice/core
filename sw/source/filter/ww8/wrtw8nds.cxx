@@ -2688,7 +2688,7 @@ void WW8AttributeOutput::Redline( const SwRedlineData* pRedline )
     if ( pRedline->Next() )
         Redline( pRedline->Next() );
 
-    static sal_uInt16 aSprmIds[ 2 * 2 * 3 ] =
+    static const sal_uInt16 aSprmIds[ 2 * 2 * 3 ] =
     {
         // Ids for insert
             NS_sprm::LN_CFRMark, NS_sprm::LN_CIbstRMark, NS_sprm::LN_CDttmRMark,         // for WW8
