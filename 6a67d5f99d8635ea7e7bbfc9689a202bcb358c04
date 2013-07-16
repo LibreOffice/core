@@ -1,0 +1,191 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXn//+kw\u003d",
+        "filename": "sdext/source/presenter/PresenterSlidePreview.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000028
+      },
+      "writtenOn": "2013-07-16T14:20:56Z",
+      "side": 1,
+      "message": "\u003csot/formats.hxx\u003e not needed!",
+      "revId": "6a67d5f99d8635ea7e7bbfc9689a202bcb358c04",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//+lY\u003d",
+        "filename": "sdext/source/presenter/PresenterSlidePreview.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 264,
+      "author": {
+        "id": 1000028
+      },
+      "writtenOn": "2013-07-16T14:20:56Z",
+      "side": 1,
+      "message": "sal_Int16 aTransitionType \u003d 0;",
+      "revId": "6a67d5f99d8635ea7e7bbfc9689a202bcb358c04",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//+lg\u003d",
+        "filename": "sdext/source/presenter/PresenterSlidePreview.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 265,
+      "author": {
+        "id": 1000028
+      },
+      "writtenOn": "2013-07-16T14:20:56Z",
+      "side": 1,
+      "message": "presentation::AnimationEffect aEffect \u003d presentation::AnimationEffect_NONE;",
+      "revId": "6a67d5f99d8635ea7e7bbfc9689a202bcb358c04",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//+ls\u003d",
+        "filename": "sdext/source/presenter/PresenterSlidePreview.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 268,
+      "author": {
+        "id": 1000028
+      },
+      "writtenOn": "2013-07-16T14:20:56Z",
+      "side": 1,
+      "message": "call this xSlidePropertySet",
+      "revId": "6a67d5f99d8635ea7e7bbfc9689a202bcb358c04",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//+lo\u003d",
+        "filename": "sdext/source/presenter/PresenterSlidePreview.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 274,
+      "author": {
+        "id": 1000028
+      },
+      "writtenOn": "2013-07-16T14:20:56Z",
+      "side": 1,
+      "message": "call this xShapePropertySet",
+      "revId": "6a67d5f99d8635ea7e7bbfc9689a202bcb358c04",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//+lQ\u003d",
+        "filename": "sdext/source/presenter/PresenterSlidePreview.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 343,
+      "author": {
+        "id": 1000028
+      },
+      "writtenOn": "2013-07-16T14:20:56Z",
+      "side": 1,
+      "message": "aTransitionPreviewBox",
+      "revId": "6a67d5f99d8635ea7e7bbfc9689a202bcb358c04",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//+lI\u003d",
+        "filename": "sdext/source/presenter/PresenterSlidePreview.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 345,
+      "author": {
+        "id": 1000028
+      },
+      "writtenOn": "2013-07-16T14:20:56Z",
+      "side": 1,
+      "message": "xTransitionIcon",
+      "revId": "6a67d5f99d8635ea7e7bbfc9689a202bcb358c04",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//+lM\u003d",
+        "filename": "sdext/source/presenter/PresenterSlidePreview.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 346,
+      "author": {
+        "id": 1000028
+      },
+      "writtenOn": "2013-07-16T14:20:56Z",
+      "side": 1,
+      "message": "aTransitionRenderState",
+      "revId": "6a67d5f99d8635ea7e7bbfc9689a202bcb358c04",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//+lA\u003d",
+        "filename": "sdext/source/presenter/PresenterSlidePreview.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 355,
+      "author": {
+        "id": 1000028
+      },
+      "writtenOn": "2013-07-16T14:20:56Z",
+      "side": 1,
+      "message": "aAnimationPreviewBox",
+      "revId": "6a67d5f99d8635ea7e7bbfc9689a202bcb358c04",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//+k8\u003d",
+        "filename": "sdext/source/presenter/PresenterSlidePreview.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 357,
+      "author": {
+        "id": 1000028
+      },
+      "writtenOn": "2013-07-16T14:20:56Z",
+      "side": 1,
+      "message": "xAnimationIcon",
+      "revId": "6a67d5f99d8635ea7e7bbfc9689a202bcb358c04",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//+k0\u003d",
+        "filename": "sdext/source/presenter/PresenterSlidePreview.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 358,
+      "author": {
+        "id": 1000028
+      },
+      "writtenOn": "2013-07-16T14:20:56Z",
+      "side": 1,
+      "message": "aAnimationRenderState",
+      "revId": "6a67d5f99d8635ea7e7bbfc9689a202bcb358c04",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
