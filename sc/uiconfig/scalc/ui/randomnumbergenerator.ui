@@ -2,12 +2,6 @@
 <interface>
   <!-- interface-requires gtk+ 3.0 -->
   <!-- interface-requires LibreOffice 1.0 -->
-  <object class="GtkAdjustment" id="parameter1-adjustment">
-    <property name="upper">100</property>
-    <property name="value">1</property>
-    <property name="step_increment">1</property>
-    <property name="page_increment">10</property>
-  </object>
   <object class="GtkDialog" id="RandomNumberGeneratorDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
@@ -289,7 +283,7 @@
                           </object>
                         </child>
                         <child type="label">
-                          <object class="GtkLabel" id="label1">
+                          <object class="GtkLabel" id="parameters-section-label">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="label" translatable="yes">Parameters</property>
@@ -396,6 +390,12 @@
         <col id="1">7</col>
       </row>
     </data>
+  </object>
+  <object class="GtkAdjustment" id="parameter1-adjustment">
+    <property name="upper">100</property>
+    <property name="value">1</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
   </object>
   <object class="GtkAdjustment" id="parameter2-adjustment">
     <property name="upper">100</property>

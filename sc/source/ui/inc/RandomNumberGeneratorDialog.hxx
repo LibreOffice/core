@@ -35,9 +35,9 @@ public:
 
 private:
     // Widgets
-    FixedText*          mpFtVariableCell;
-    formula::RefEdit*   mpEdVariableCell;
-    formula::RefButton* mpRBVariableCell;
+    FixedText*          mpInputRangeText;
+    formula::RefEdit*   mpInputRangeEdit;
+    formula::RefButton* mpInputRangeButton;
     ListBox*            mpDistributionCombo;
     FixedText*          mpParameter1Text;
     NumericField*       mpParameter1Value;
@@ -53,7 +53,7 @@ private:
     ScViewData*         mViewData;
     ScDocument*         mDocument;
 
-    ScRange             mCurrentRange;
+    ScRange             mInputRange;
     ScAddress::Details  mAddressDetails;
 
     bool                mDialogLostFocus;

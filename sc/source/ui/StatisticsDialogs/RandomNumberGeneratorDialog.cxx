@@ -65,11 +65,11 @@ ScRandomNumberGeneratorDialog::ScRandomNumberGeneratorDialog(
     mAddressDetails ( mDocument->GetAddressConvention(), 0, 0 ),
     mDialogLostFocus( false )
 {
-    get(mpFtVariableCell, "cell-range-label");
-    get(mpEdVariableCell, "cell-range-edit");
-    mpEdVariableCell->SetReferences(this, mpFtVariableCell);
-    get(mpRBVariableCell, "cell-range-button");
-    mpRBVariableCell->SetReferences(this, mpEdVariableCell);
+    get(mpInputRangeText, "cell-range-label");
+    get(mpInputRangeEdit, "cell-range-edit");
+    mpInputRangeEdit->SetReferences(this, mpInputRangeText);
+    get(mpInputRangeButton, "cell-range-button");
+    mpInputRangeButton->SetReferences(this, mpInputRangeEdit);
 
     get(mpButtonOk,     "ok");
     get(mpButtonApply,  "apply");
@@ -96,12 +96,12 @@ void ScRandomNumberGeneratorDialog::Init()
     mpButtonApply->SetClickHdl( LINK( this, ScRandomNumberGeneratorDialog, ApplyClicked ) );
 
     Link aLink = LINK( this, ScRandomNumberGeneratorDialog, GetFocusHandler );
-    mpEdVariableCell->SetGetFocusHdl( aLink );
-    mpRBVariableCell->SetGetFocusHdl( aLink );
+    mpInputRangeEdit->SetGetFocusHdl( aLink );
+    mpInputRangeButton->SetGetFocusHdl( aLink );
 
     aLink = LINK( this, ScRandomNumberGeneratorDialog, LoseFocusHandler );
-    mpEdVariableCell->SetLoseFocusHdl ( aLink );
-    mpRBVariableCell->SetLoseFocusHdl ( aLink );
+    mpInputRangeEdit->SetLoseFocusHdl ( aLink );
+    mpInputRangeButton->SetLoseFocusHdl ( aLink );
 
     mpParameter1Value->SetModifyHdl( LINK( this, ScRandomNumberGeneratorDialog, Parameter1ValueModified ));
     mpParameter2Value->SetModifyHdl( LINK( this, ScRandomNumberGeneratorDialog, Parameter2ValueModified ));
@@ -110,49 +110,28 @@ void ScRandomNumberGeneratorDialog::Init()
 
     mpEnableSeed->SetToggleHdl( LINK( this, ScRandomNumberGeneratorDialog, SeedCheckChanged ));
 
-    mpParameter1Value->SetMin( SAL_MIN_INT64 );
-    mpParameter1Value->SetMax( SAL_MAX_INT64 );
-    mpParameter2Value->SetMin( SAL_MIN_INT64 );
-    mpParameter2Value->SetMax( SAL_MAX_INT64 );
-
     DistributionChanged(NULL);
     SeedCheckChanged(NULL);
 }
 
 void ScRandomNumberGeneratorDialog::GetRangeFromSelection()
 {
-    String  aCurrentString;
-
-    SCCOL   nStartCol   = 0;
-    SCROW   nStartRow   = 0;
-    SCTAB   nStartTab   = 0;
-    SCCOL   nEndCol     = 0;
-    SCROW   nEndRow     = 0;
-    SCTAB   nEndTab     = 0;
-
-    mViewData->GetSimpleArea( nStartCol, nStartRow, nStartTab,
-                              nEndCol,   nEndRow,  nEndTab );
-
-    mCurrentRange = ScRange( ScAddress( nStartCol, nStartRow, nStartTab ),
-                            ScAddress( nEndCol,   nEndRow,   nEndTab ) );
-
-    mCurrentRange.Format( aCurrentString, ABS_DREF3D, mDocument, mAddressDetails );
-
-    mpEdVariableCell->SetText( aCurrentString );
+    OUString aCurrentString;
+    mViewData->GetSimpleArea(mInputRange);
+    mInputRange.Format( aCurrentString, ABS_DREF3D, mDocument, mAddressDetails );
+    mpInputRangeEdit->SetText( aCurrentString );
 }
-
 
 ScRandomNumberGeneratorDialog::~ScRandomNumberGeneratorDialog()
-{
-}
+{}
 
 void ScRandomNumberGeneratorDialog::SetActive()
 {
     if ( mDialogLostFocus )
     {
         mDialogLostFocus = false;
-        if( mpEdVariableCell )
-            mpEdVariableCell->GrabFocus();
+        if( mpInputRangeEdit )
+            mpInputRangeEdit->GrabFocus();
     }
     else
     {
@@ -168,16 +147,16 @@ sal_Bool ScRandomNumberGeneratorDialog::Close()
 
 void ScRandomNumberGeneratorDialog::SetReference( const ScRange& rReferenceRange, ScDocument* pDocument )
 {
-    if ( mpEdVariableCell->IsEnabled() )
+    if ( mpInputRangeEdit->IsEnabled() )
     {
         if ( rReferenceRange.aStart != rReferenceRange.aEnd )
-            RefInputStart( mpEdVariableCell );
+            RefInputStart( mpInputRangeEdit );
 
-        mCurrentRange = rReferenceRange;
+        mInputRange = rReferenceRange;
 
         String aReferenceString;
-        mCurrentRange.Format( aReferenceString, ABS_DREF3D, pDocument, mAddressDetails );
-        mpEdVariableCell->SetRefString( aReferenceString );
+        mInputRange.Format( aReferenceString, ABS_DREF3D, pDocument, mAddressDetails );
+        mpInputRangeEdit->SetRefString( aReferenceString );
     }
 }
 
@@ -285,12 +264,12 @@ void ScRandomNumberGeneratorDialog::GenerateNumbers(RNG randomGenerator, OUStrin
     svl::IUndoManager* pUndoManager = pDocShell->GetUndoManager();
     pUndoManager->EnterListAction( aUndo, aUndo );
 
-    SCROW nRowStart = mCurrentRange.aStart.Row();
-    SCROW nRowEnd   = mCurrentRange.aEnd.Row();
-    SCCOL nColStart = mCurrentRange.aStart.Col();
-    SCCOL nColEnd   = mCurrentRange.aEnd.Col();
-    SCTAB nTabStart = mCurrentRange.aStart.Tab();
-    SCTAB nTabEnd   = mCurrentRange.aEnd.Tab();
+    SCROW nRowStart = mInputRange.aStart.Row();
+    SCROW nRowEnd   = mInputRange.aEnd.Row();
+    SCCOL nColStart = mInputRange.aStart.Col();
+    SCCOL nColEnd   = mInputRange.aEnd.Col();
+    SCTAB nTabStart = mInputRange.aStart.Tab();
+    SCTAB nTabEnd   = mInputRange.aEnd.Tab();
 
     for (SCROW nTab = nTabStart; nTab <= nTabEnd; nTab++)
     {
@@ -305,7 +284,7 @@ void ScRandomNumberGeneratorDialog::GenerateNumbers(RNG randomGenerator, OUStrin
 
     pUndoManager->LeaveListAction();
 
-    pDocShell->PostPaint( mCurrentRange, PAINT_GRID );
+    pDocShell->PostPaint( mInputRange, PAINT_GRID );
 }
 
 IMPL_LINK( ScRandomNumberGeneratorDialog, OkClicked, PushButton*, /*pButton*/ )
@@ -332,8 +311,8 @@ IMPL_LINK( ScRandomNumberGeneratorDialog, GetFocusHandler, Control*, pCtrl )
 {
     Edit* pEdit = NULL;
 
-    if( (pCtrl == (Control*)mpEdVariableCell) || (pCtrl == (Control*)mpRBVariableCell) )
-        pEdit = mpEdVariableCell;
+    if( (pCtrl == (Control*) mpInputRangeEdit) || (pCtrl == (Control*) mpInputRangeButton) )
+        pEdit = mpInputRangeEdit;
 
     if( pEdit )
         pEdit->SetSelection( Selection( 0, SELECTION_MAX ) );
@@ -483,6 +462,5 @@ IMPL_LINK_NOARG(ScRandomNumberGeneratorDialog, DistributionChanged)
     }
     return 0;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
