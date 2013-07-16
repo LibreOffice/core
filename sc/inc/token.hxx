@@ -74,7 +74,6 @@ public:
     virtual const ScSingleRefData&    GetSingleRef2() const;
     virtual ScSingleRefData&      GetSingleRef2();
     virtual void                CalcAbsIfRel( const ScAddress& );
-    virtual void                CalcRelFromAbs( const ScAddress& );
     virtual const ScMatrix*     GetMatrix() const;
     virtual ScMatrix*           GetMatrix();
     virtual ScJumpMatrix*       GetJumpMatrix() const;
@@ -121,7 +120,6 @@ public:
     virtual const ScSingleRefData&    GetSingleRef() const;
     virtual ScSingleRefData&      GetSingleRef();
     virtual void                CalcAbsIfRel( const ScAddress& );
-    virtual void                CalcRelFromAbs( const ScAddress& );
     virtual bool                operator==( const formula::FormulaToken& rToken ) const;
     virtual FormulaToken*       Clone() const { return new ScSingleRefToken(*this); }
 
@@ -150,7 +148,6 @@ public:
     virtual const ScSingleRefData&    GetSingleRef2() const;
     virtual ScSingleRefData&      GetSingleRef2();
     virtual void                CalcAbsIfRel( const ScAddress& );
-    virtual void                CalcRelFromAbs( const ScAddress& );
     virtual bool                operator==( const formula::FormulaToken& rToken ) const;
     virtual FormulaToken*       Clone() const { return new ScDoubleRefToken(*this); }
 
@@ -190,7 +187,6 @@ public:
     virtual const ScSingleRefData&  GetSingleRef() const;
     virtual ScSingleRefData&          GetSingleRef();
     virtual void                CalcAbsIfRel( const ScAddress& );
-    virtual void                CalcRelFromAbs( const ScAddress& );
     virtual bool                operator==( const formula::FormulaToken& rToken ) const;
     virtual FormulaToken*       Clone() const { return new ScExternalSingleRefToken(*this); }
 };
@@ -218,7 +214,6 @@ public:
     virtual const ScComplexRefData&    GetDoubleRef() const;
     virtual ScComplexRefData&      GetDoubleRef();
     virtual void                CalcAbsIfRel( const ScAddress& );
-    virtual void                CalcRelFromAbs( const ScAddress& );
     virtual bool                operator==( const formula::FormulaToken& rToken ) const;
     virtual FormulaToken*       Clone() const { return new ScExternalDoubleRefToken(*this); }
 };
@@ -271,7 +266,6 @@ public:
                                 ScRefListToken( const ScRefListToken & r ) :
                                     ScToken( r ), aRefList( r.aRefList ) {}
     virtual void                CalcAbsIfRel( const ScAddress& );
-    virtual void                CalcRelFromAbs( const ScAddress& );
     virtual const ScRefList*    GetRefList() const;
     virtual       ScRefList*    GetRefList();
     virtual bool                operator==( const formula::FormulaToken& rToken ) const;

@@ -2732,7 +2732,6 @@ void ScFormulaCell::UpdateGrow( const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY
         {
             if( t->GetType() != svIndex )
             {
-                t->CalcAbsIfRel( aPos );
                 SingleDoubleRefModifier aMod(*t);
                 ScComplexRefData& rRef = aMod.Ref();
                 ScRange aAbs = rRef.toAbs(aPos);

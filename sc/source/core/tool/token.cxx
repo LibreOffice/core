@@ -701,11 +701,6 @@ void ScToken::CalcAbsIfRel( const ScAddress& /* rPos */ )
     OSL_FAIL( "ScToken::CalcAbsIfRel: virtual dummy called" );
 }
 
-void ScToken::CalcRelFromAbs( const ScAddress& /* rPos */ )
-{
-    OSL_FAIL( "ScToken::CalcRelFromAbs: virtual dummy called" );
-}
-
 const ScMatrix* ScToken::GetMatrix() const
 {
     OSL_FAIL( "ScToken::GetMatrix: virtual dummy called" );
@@ -746,8 +741,6 @@ const ScSingleRefData&    ScSingleRefToken::GetSingleRef() const  { return aSing
 ScSingleRefData&          ScSingleRefToken::GetSingleRef()        { return aSingleRef; }
 void                    ScSingleRefToken::CalcAbsIfRel( const ScAddress& rPos )
                             { aSingleRef.CalcAbsIfRel( rPos ); }
-void                    ScSingleRefToken::CalcRelFromAbs( const ScAddress& rPos )
-                            { aSingleRef.CalcRelFromAbs( rPos ); }
 bool ScSingleRefToken::operator==( const FormulaToken& r ) const
 {
     return FormulaToken::operator==( r ) && aSingleRef == static_cast<const ScToken&>(r).GetSingleRef();
@@ -762,8 +755,6 @@ const ScSingleRefData&    ScDoubleRefToken::GetSingleRef2() const { return aDoub
 ScSingleRefData&          ScDoubleRefToken::GetSingleRef2()       { return aDoubleRef.Ref2; }
 void                    ScDoubleRefToken::CalcAbsIfRel( const ScAddress& rPos )
                             { aDoubleRef.CalcAbsIfRel( rPos ); }
-void                    ScDoubleRefToken::CalcRelFromAbs( const ScAddress& rPos )
-                            { aDoubleRef.CalcRelFromAbs( rPos ); }
 bool ScDoubleRefToken::operator==( const FormulaToken& r ) const
 {
     return FormulaToken::operator==( r ) && aDoubleRef == static_cast<const ScToken&>(r).GetDoubleRef();
@@ -776,11 +767,6 @@ void                    ScRefListToken::CalcAbsIfRel( const ScAddress& rPos )
 {
     for (ScRefList::iterator it( aRefList.begin()); it != aRefList.end(); ++it)
         (*it).CalcAbsIfRel( rPos);
-}
-void                    ScRefListToken::CalcRelFromAbs( const ScAddress& rPos )
-{
-    for (ScRefList::iterator it( aRefList.begin()); it != aRefList.end(); ++it)
-        (*it).CalcRelFromAbs( rPos);
 }
 bool ScRefListToken::operator==( const FormulaToken& r ) const
 {
@@ -845,11 +831,6 @@ ScSingleRefData& ScExternalSingleRefToken::GetSingleRef()
 void ScExternalSingleRefToken::CalcAbsIfRel( const ScAddress& rPos )
 {
     maSingleRef.CalcAbsIfRel( rPos );
-}
-
-void ScExternalSingleRefToken::CalcRelFromAbs( const ScAddress& rPos )
-{
-    maSingleRef.CalcRelFromAbs( rPos );
 }
 
 bool ScExternalSingleRefToken::operator ==( const FormulaToken& r ) const
@@ -931,11 +912,6 @@ ScComplexRefData& ScExternalDoubleRefToken::GetDoubleRef()
 void ScExternalDoubleRefToken::CalcAbsIfRel( const ScAddress& rPos )
 {
     maDoubleRef.CalcAbsIfRel( rPos );
-}
-
-void ScExternalDoubleRefToken::CalcRelFromAbs( const ScAddress& rPos )
-{
-    maDoubleRef.CalcRelFromAbs( rPos );
 }
 
 bool ScExternalDoubleRefToken::operator ==( const FormulaToken& r ) const
