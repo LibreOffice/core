@@ -29,6 +29,7 @@
 #include "cmis_provider.hxx"
 #include "cmis_repo_content.hxx"
 #include "cmis_resultset.hxx"
+#include "cmis_oauth2_providers.hxx"
 
 #define OUSTR_TO_STDSTR(s) string( OUStringToOString( s, RTL_TEXTENCODING_UTF8 ).getStr() )
 #define STD_TO_OUSTR( str ) OUString( str.c_str(), str.length( ), RTL_TEXTENCODING_UTF8 )
@@ -139,14 +140,25 @@ namespace cmis
             string rPassword = OUSTR_TO_STDSTR( m_aURL.getPassword( ) );
             if ( authProvider.authenticationQuery( rUsername, rPassword ) )
             {
-                try
-                {
-                    m_aRepositories = libcmis::SessionFactory::getRepositories(
-                           OUSTR_TO_STDSTR( m_aURL.getBindingUrl( ) ), rUsername, rPassword );
-                }
-                catch (const libcmis::Exception&)
-                {
-                }
+                // Create a session to get repositories
+                libcmis::OAuth2DataPtr oauth2Data = NULL;
+                if ( m_aURL.getBindingUrl( ) == GDRIVE_BASE_URL )
+                    oauth2Data.reset( new libcmis::OAuth2Data(
+                        GDRIVE_AUTH_URL, GDRIVE_TOKEN_URL,
+                        GDRIVE_SCOPE, GDRIVE_REDIRECT_URI,
+                        GDRIVE_CLIENT_ID, GDRIVE_CLIENT_SECRET ) );
+
+                libcmis::Session* session = libcmis::SessionFactory::createSession(
+                        OUSTR_TO_STDSTR( m_aURL.getBindingUrl( ) ),
+                        rUsername, rPassword, "", sal_False, oauth2Data );
+                if (session == NULL )
+                    ucbhelper::cancelCommandExecution(
+                                        ucb::IOErrorCode_INVALID_DEVICE,
+                                        uno::Sequence< uno::Any >( 0 ),
+                                        xEnv,
+                                        OUString( ) );
+                m_aRepositories = session->getRepositories( );
+                delete session;
             }
             else
             {
@@ -176,6 +188,8 @@ namespace cmis
                     repo = *it;
             }
         }
+        else
+            repo = m_aRepositories.front( );
         return repo;
     }
 
