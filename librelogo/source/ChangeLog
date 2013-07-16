@@ -1,9 +1,9 @@
 2013-07-15 László Németh:
-    * optional named PICTURE blocks: PICTURE "name" [ CIRCLE 5 ]
+    * optional named PICTURE blocks: PICTURE 'name' [ CIRCLE 5 ]
     * save PICTURE as cropped SVG file using path names, for example:
-      PICTURE "example.svg" [ CIRCLE 5 CIRCLE 20 ] ; save in the home directory
-      PICTURE "/home/user/example.svg" [ CIRCLE 10 ] ; absolute path (on Linux)
-      PICTURE "tmp/example.svg" [ CIRCLE 10 ] ; relative to the home directory
+      PICTURE 'example.svg' [ CIRCLE 5 CIRCLE 20 ] ; save in the home directory
+      PICTURE '/home/user/example.svg' [ CIRCLE 10 ] ; absolute path (on Linux)
+      PICTURE 'tmp/example.svg' [ CIRCLE 10 ] ; relative to the home directory
     * support hexadecimal arguments
 
 2013-06-26 László Németh
