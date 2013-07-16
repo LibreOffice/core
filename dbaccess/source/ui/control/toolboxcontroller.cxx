@@ -200,8 +200,6 @@ namespace dbaui
                 Reference<XUIConfigurationManager> xUIConfigMgr = xModuleCfgMgrSupplier->getUIConfigurationManager( OUString("com.sun.star.sdb.OfficeDatabaseDocument") );
                 Reference<XImageManager> xImageMgr(xUIConfigMgr->getImageManager(),UNO_QUERY);
 
-                short nImageType = hasBigImages() ? ImageType::SIZE_LARGE : ImageType::SIZE_DEFAULT;
-
                 Sequence< OUString> aSeq(1);
                 sal_uInt16 nCount = pMenu->GetItemCount();
                 for (sal_uInt16 nPos = 0; nPos < nCount; ++nPos)
@@ -211,7 +209,7 @@ namespace dbaui
 
                     sal_uInt16 nItemId = pMenu->GetItemId(nPos);
                     aSeq[0] = pMenu->GetItemCommand(nItemId);
-                    Sequence< Reference<XGraphic> > aImages = xImageMgr->getImages(nImageType,aSeq);
+                    Sequence< Reference<XGraphic> > aImages = xImageMgr->getImages(ImageType::SIZE_DEFAULT, aSeq);
 
                     Image aImage(aImages[0]);
                     pMenu->SetItemImage(nItemId,aImage);

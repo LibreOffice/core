@@ -634,11 +634,6 @@ sal_Bool ToolboxController::isBound() const
     return sal_False;
 }
 
-sal_Bool ToolboxController::hasBigImages() const
-{
-    return SvtMiscOptions().AreCurrentSymbolsLarge();
-}
-
 void ToolboxController::updateStatus()
 {
     bindListener();

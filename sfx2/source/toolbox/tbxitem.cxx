@@ -773,6 +773,11 @@ throw (::com::sun::star::uno::RuntimeException)
     return aToolboxSize;
 }
 
+bool SfxToolBoxControl::hasBigImages() const
+{
+    return (GetToolBox().GetToolboxButtonSize() == TOOLBOX_BUTTONSIZE_LARGE);
+}
+
 void SfxToolBoxControl::createAndPositionSubToolBar( const OUString& rSubToolBarResName )
 {
     SolarMutexGuard aGuard;

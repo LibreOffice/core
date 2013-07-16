@@ -252,6 +252,7 @@ protected:
     // helper methods
     void    createAndPositionSubToolBar( const OUString& rSubToolBarResName );
     ::Size  getPersistentFloatingSize( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame, const OUString& rSubToolBarResName );
+    bool    hasBigImages() const;
 
 public:
                                SFX_DECL_TOOLBOX_CONTROL();

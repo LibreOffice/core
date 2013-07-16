@@ -153,21 +153,12 @@ OUString SAL_CALL SvxTbxCtlCustomShapes::getSubToolbarName() throw (::com::sun::
 
 void SAL_CALL SvxTbxCtlCustomShapes::functionSelected( const OUString& rCommand ) throw (::com::sun::star::uno::RuntimeException)
 {
-    // remind the new command
+    // remember the new command
     m_aCommand = rCommand;
+
     // Our sub-toolbar wants to execute a function.
     // We have to change the image of our toolbar button to reflect the new function.
-    SolarMutexGuard aGuard;
-    if ( !m_bDisposed )
-    {
-        if ( !m_aCommand.isEmpty() )
-        {
-            ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > xFrame( getFrameInterface());
-            Image aImage = GetImage( xFrame, m_aCommand, hasBigImages() );
-            if ( !!aImage )
-                GetToolBox().SetItemImage( GetId(), aImage );
-        }
-    }
+    updateImage();
 }
 
 void SAL_CALL SvxTbxCtlCustomShapes::updateImage(  ) throw (::com::sun::star::uno::RuntimeException)

@@ -98,19 +98,12 @@ OUString SAL_CALL SvxTbxCtlAlign::getSubToolbarName() throw (::com::sun::star::u
 
 void SAL_CALL SvxTbxCtlAlign::functionSelected( const OUString& aCommand ) throw (::com::sun::star::uno::RuntimeException)
 {
-    // Our sub-toolbar wants to executes a function. We have to change
-    // the image of our toolbar button to reflect the new function.
-    SolarMutexGuard aGuard;
-    if ( !m_bDisposed )
-    {
-        if ( !aCommand.isEmpty() )
-        {
-            ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > xFrame( getFrameInterface());
-            Image aImage = GetImage( xFrame, aCommand, hasBigImages() );
-            if ( !!aImage )
-                GetToolBox().SetItemImage( GetId(), aImage );
-        }
-    }
+    // remember the new command
+    m_aCommand = aCommand;
+
+    // Our sub-toolbar wants to execute a function.
+    // We have to change the image of our toolbar button to reflect the new function.
+    updateImage();
 }
 
 void SAL_CALL SvxTbxCtlAlign::updateImage() throw (::com::sun::star::uno::RuntimeException)
