@@ -64,7 +64,7 @@ using namespace com::sun::star::util;
  *    Print the status, the SQLCODE, and exit.
  *    Also, indicate which operation the error occured on.
  */
-static int pr_error (const ISC_STATUS* status, char* operation)
+static int pr_error (const ISC_STATUS* status, const char* operation)
 {
     printf("[\n");
     printf("PROBLEM ON \"%s\".\n", operation);
@@ -82,8 +82,8 @@ static int pr_error (const ISC_STATUS* status, char* operation)
 OStatement_Base::OStatement_Base(OConnection* _pConnection )
     : OStatement_BASE(m_aMutex),
     OPropertySetHelper(OStatement_BASE::rBHelper),
-    rBHelper(OStatement_BASE::rBHelper),
-    m_pConnection(_pConnection)
+    m_pConnection(_pConnection),
+    rBHelper(OStatement_BASE::rBHelper)
 {
     m_pConnection->acquire();
 
@@ -102,7 +102,7 @@ OStatement_Base::OStatement_Base(OConnection* _pConnection )
     m_INsqlda->sqln = 10;
     m_INsqlda->sqld = 0;
 
-    m_STMTHandler = NULL;          // Set handle to NULL before allocation.
+    m_STMTHandler = 0;          // Set handle to NULL before allocation.
     if (isc_dsql_allocate_statement(status, &db, &m_STMTHandler))
         if (pr_error(status, "allocate statement"))
             return;
@@ -235,7 +235,7 @@ sal_Bool SAL_CALL OStatement_Base::execute( const ::rtl::OUString& sql ) throw(S
 
     if (isc_commit_transaction(status, &m_TRANSHandler))
         if (pr_error(status, "commit transaction"))
-            return NULL;
+            return sal_False;
 
     // returns true when a resultset is available
     return sal_False;
@@ -435,6 +435,7 @@ Sequence< sal_Int32 > SAL_CALL OStatement::executeBatch(  ) throw(SQLException, 
 
 sal_Int32 SAL_CALL OStatement_Base::executeUpdate( const ::rtl::OUString& sql ) throw(SQLException, RuntimeException)
 {
+    (void) sql;
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
 
@@ -520,6 +521,10 @@ sal_Bool OStatement_Base::convertFastPropertyValue(
                             const Any& rValue )
                                 throw (::com::sun::star::lang::IllegalArgumentException)
 {
+    (void) rConvertedValue;
+    (void) rOldValue;
+    (void) nHandle;
+    (void) rValue;
     sal_Bool bConverted = sal_False;
     // here we have to try to convert
     return bConverted;
@@ -527,6 +532,7 @@ sal_Bool OStatement_Base::convertFastPropertyValue(
 // -------------------------------------------------------------------------
 void OStatement_Base::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& rValue) throw (Exception)
 {
+    (void) rValue;
     // set the value to what ever is necessary
     switch(nHandle)
     {
@@ -547,6 +553,7 @@ void OStatement_Base::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const A
 // -------------------------------------------------------------------------
 void OStatement_Base::getFastPropertyValue(Any& rValue,sal_Int32 nHandle) const
 {
+    (void) rValue;
     switch(nHandle)
     {
         case PROPERTY_ID_QUERYTIMEOUT:
