@@ -1232,7 +1232,7 @@ IMPL_LINK_NOARG(SwAuthorMarkPane, InsertHdl)
     //insert or update the SwAuthorityField...
     if(pSh)
     {
-        sal_Bool bDifferent = sal_False;
+        bool bDifferent = false;
         OSL_ENSURE(m_sFields[AUTH_FIELD_IDENTIFIER].Len() , "No Id is set!");
         OSL_ENSURE(m_sFields[AUTH_FIELD_AUTHORITY_TYPE].Len() , "No authority type is set!");
         //check if the entry already exists with different content
