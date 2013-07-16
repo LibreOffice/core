@@ -43,25 +43,6 @@ ScAddress ScSingleRefData::toAbs( const ScAddress& rPos ) const
     return ScAddress(nRetCol, nRetRow, nRetTab);
 }
 
-void ScSingleRefData::SmartRelAbs( const ScAddress& rPos )
-{
-    if ( Flags.bColRel )
-        nCol = nRelCol + rPos.Col();
-    else
-        nRelCol = nCol - rPos.Col();
-
-    if ( Flags.bRowRel )
-        nRow = nRelRow + rPos.Row();
-    else
-        nRelRow = nRow - rPos.Row();
-
-    if ( Flags.bTabRel )
-        nTab = nRelTab + rPos.Tab();
-    else
-        nRelTab = nTab - rPos.Tab();
-}
-
-
 void ScSingleRefData::CalcAbsIfRel( const ScAddress& rPos )
 {
     if ( Flags.bColRel )
@@ -267,6 +248,11 @@ ScComplexRefData& ScComplexRefData::Extend( const ScSingleRefData & rRef, const 
 ScComplexRefData& ScComplexRefData::Extend( const ScComplexRefData & rRef, const ScAddress & rPos )
 {
     return Extend( rRef.Ref1, rPos).Extend( rRef.Ref2, rPos);
+}
+
+ScRange ScComplexRefData::toAbs( const ScAddress& rPos ) const
+{
+    return ScRange(Ref1.toAbs(rPos), Ref2.toAbs(rPos));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

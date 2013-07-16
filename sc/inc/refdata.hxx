@@ -83,7 +83,6 @@ struct SC_DLLPUBLIC ScSingleRefData
 
     ScAddress toAbs( const ScAddress& rPos ) const;
 
-            void SmartRelAbs( const ScAddress& rPos );
             void CalcRelFromAbs( const ScAddress& rPos );
             void CalcAbsIfRel( const ScAddress& rPos );
             bool operator==( const ScSingleRefData& ) const;
@@ -151,8 +150,6 @@ struct ScComplexRefData
             Ref1.InitAddress( nCol1, nRow1, nTab1 );
             Ref2.InitAddress( nCol2, nRow2, nTab2 );
         }
-    inline void SmartRelAbs( const ScAddress& rPos )
-        { Ref1.SmartRelAbs( rPos ); Ref2.SmartRelAbs( rPos ); }
     inline void CalcRelFromAbs( const ScAddress& rPos )
         { Ref1.CalcRelFromAbs( rPos ); Ref2.CalcRelFromAbs( rPos ); }
     inline void CalcAbsIfRel( const ScAddress& rPos )
@@ -164,6 +161,8 @@ struct ScComplexRefData
     /** In external references nTab is -1 for the start tab and -1 for the end
         tab if one sheet, or >=0 if more than one sheets. */
     inline  bool ValidExternal() const;
+
+    ScRange toAbs( const ScAddress& rPos ) const;
 
     /// Absolute references have to be up-to-date when calling this!
     void PutInOrder();

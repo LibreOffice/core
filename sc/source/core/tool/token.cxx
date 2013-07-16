@@ -496,19 +496,11 @@ bool ScToken::TextEqual( const FormulaToken& _rToken ) const
             aTemp2 = rToken.GetDoubleRef();
 
         ScAddress aPos;
-        aTemp1.SmartRelAbs(aPos);
-        aTemp2.SmartRelAbs(aPos);
+        ScRange aRange1 = aTemp1.toAbs(aPos), aRange2 = aTemp2.toAbs(aPos);
 
         //  memcmp doesn't work because of the alignment byte after bFlags.
         //  After SmartRelAbs only absolute parts have to be compared.
-        return aTemp1.Ref1.nCol   == aTemp2.Ref1.nCol   &&
-               aTemp1.Ref1.nRow   == aTemp2.Ref1.nRow   &&
-               aTemp1.Ref1.nTab   == aTemp2.Ref1.nTab   &&
-               aTemp1.Ref1.mnFlagValue == aTemp2.Ref1.mnFlagValue &&
-               aTemp1.Ref2.nCol   == aTemp2.Ref2.nCol   &&
-               aTemp1.Ref2.nRow   == aTemp2.Ref2.nRow   &&
-               aTemp1.Ref2.nTab   == aTemp2.Ref2.nTab   &&
-               aTemp1.Ref2.mnFlagValue == aTemp2.Ref2.mnFlagValue;
+        return aRange1 == aRange2 && aTemp1.Ref1.mnFlagValue == aTemp2.Ref1.mnFlagValue && aTemp1.Ref2.mnFlagValue == aTemp2.Ref2.mnFlagValue;
     }
     else
         return *this == _rToken;     // else normal operator==
