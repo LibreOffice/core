@@ -1851,6 +1851,7 @@ bool ScFormulaCell::GetMatrixOrigin( ScAddress& rPos ) const
         }
         break;
     }
+    fprintf(stdout, "ScFormulaCell::GetMatrixOrigin:   failed\n");
     return false;
 }
 

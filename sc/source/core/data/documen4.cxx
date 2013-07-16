@@ -155,45 +155,47 @@ void ScDocument::InsertMatrixFormula(SCCOL nCol1, SCROW nRow1,
                     *pCell, *this, ScAddress(nCol1, nRow1, *itr), SC_CLONECELL_STARTLISTENING));
     }
 
+    ScAddress aBasePos(nCol1, nRow1, nTab1);
     ScSingleRefData aRefData;
     aRefData.InitFlags();
-    aRefData.nCol = nCol1;
-    aRefData.nRow = nRow1;
-    aRefData.nTab = nTab1;
     aRefData.SetColRel( true );
     aRefData.SetRowRel( true );
     aRefData.SetTabRel( true );
-    aRefData.CalcRelFromAbs( ScAddress( nCol1, nRow1, nTab1 ) );
+    aRefData.SetAddress(aBasePos, aBasePos);
 
-    ScTokenArray aArr;
+    ScTokenArray aArr; // consists only of one single reference token.
     ScToken* t = static_cast<ScToken*>(aArr.AddMatrixSingleReference( aRefData));
 
     itr = rMark.begin();
     for (; itr != itrEnd && *itr < nMax; ++itr)
     {
-        if (maTabs[*itr])
+        SCTAB nTab = *itr;
+        ScTable* pTab = FetchTable(nTab);
+        if (!pTab)
+            continue;
+
+        if (nTab != nTab1)
         {
-            if (*itr != nTab1)
+            aRefData.nRelTab = nTab - aBasePos.Tab();
+            t->GetSingleRef() = aRefData;
+        }
+
+        for (SCCOL nCol = nCol1; nCol <= nCol2; ++nCol)
+        {
+            for (SCROW nRow = nRow1; nRow <= nRow2; ++nRow)
             {
-                aRefData.nTab = *itr;
-                aRefData.nRelTab = *itr - nTab1;
+                if (nCol == nCol1 && nRow == nRow1)
+                    // Skip the base position.
+                    continue;
+
+                // Token array must be cloned so that each formula cell receives its own copy.
+                aPos = ScAddress(nCol, nRow, nTab);
+                // Reference in each cell must point to the origin cell relative to the current cell.
+                aRefData.SetAddress(aBasePos, aPos);
                 t->GetSingleRef() = aRefData;
-            }
-            for (SCCOL j = nCol1; j <= nCol2; j++)
-            {
-                for (SCROW k = nRow1; k <= nRow2; k++)
-                {
-                    if (j != nCol1 || k != nRow1)       // nicht in der ersten Zelle
-                    {
-                        // Array muss geklont werden, damit jede
-                        // Zelle ein eigenes Array erhaelt!
-                        aPos = ScAddress( j, k, *itr );
-                        t->CalcRelFromAbs( aPos );
-                        boost::scoped_ptr<ScTokenArray> pTokArr(aArr.Clone());
-                        pCell = new ScFormulaCell( this, aPos, pTokArr.get(), eGram, MM_REFERENCE );
-                        maTabs[*itr]->SetFormulaCell(j, k, pCell);
-                    }
-                }
+                boost::scoped_ptr<ScTokenArray> pTokArr(aArr.Clone());
+                pCell = new ScFormulaCell( this, aPos, pTokArr.get(), eGram, MM_REFERENCE );
+                pTab->SetFormulaCell(nCol, nRow, pCell);
             }
         }
     }
