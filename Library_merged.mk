@@ -47,8 +47,8 @@ $(eval $(call gb_Library_use_externals,merged,\
 	icuuc \
 	jpeg \
 	lcms2 \
-	libatomic_ops \
-	libfbembed \
+	$(call gb_Helper_optional,LIBATOMIC_OPS,libatomic_ops) \
+	$(call gb_Helper_optional,FIREBIRD,libfbembed) \
 	liblangtag \
 	libxml2 \
 	libxslt \
