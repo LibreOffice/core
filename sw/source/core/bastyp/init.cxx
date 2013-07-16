@@ -425,6 +425,7 @@ const sal_Char* pMarkToText     = "text";
 const sal_Char* pMarkToOutline  = "outline";
 const sal_Char* pMarkToGraphic  = "graphic";
 const sal_Char* pMarkToOLE      = "ole";
+const sal_Char* pMarkToSequence = "sequence";
 
 std::vector<SvGlobalName*> *pGlobalOLEExcludeList = 0;
 
