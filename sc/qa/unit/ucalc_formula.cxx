@@ -13,6 +13,7 @@
 #include "interpre.hxx"
 #include "compiler.hxx"
 #include "tokenarray.hxx"
+#include "refdata.hxx"
 
 #include <boost/scoped_ptr.hpp>
 
@@ -107,6 +108,25 @@ void Test::testFormulaHashAndTag()
     }
 
     m_pDoc->DeleteTab(0);
+}
+
+void Test::testFormulaRefData()
+{
+    ScAddress aAddr(4,5,3), aPos(2,2,2);
+    ScSingleRefData aRefData;
+    aRefData.InitAddress(aAddr);
+    CPPUNIT_ASSERT_MESSAGE("Wrong ref data state.", !aRefData.IsRowRel() && !aRefData.IsColRel() && !aRefData.IsTabRel());
+    ASSERT_EQUAL_TYPE(SCCOL, 4, aRefData.GetCol());
+    ASSERT_EQUAL_TYPE(SCROW, 5, aRefData.GetRow());
+    ASSERT_EQUAL_TYPE(SCTAB, 3, aRefData.GetTab());
+
+    aRefData.SetRowRel(true);
+    aRefData.SetColRel(true);
+    aRefData.SetTabRel(true);
+    aRefData.SetAddress(aAddr, aPos);
+    ASSERT_EQUAL_TYPE(SCCOL, 2, aRefData.GetCol());
+    ASSERT_EQUAL_TYPE(SCROW, 3, aRefData.GetRow());
+    ASSERT_EQUAL_TYPE(SCTAB, 1, aRefData.GetTab());
 }
 
 void Test::testFormulaCompiler()

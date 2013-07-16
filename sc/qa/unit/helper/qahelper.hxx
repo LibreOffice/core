@@ -162,6 +162,9 @@ public:
 #define ASSERT_DOUBLES_EQUAL_MESSAGE( message, expected, result )   \
     CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE( (message), (expected), (result), 1e-14 )
 
+#define ASSERT_EQUAL_TYPE( type, expected, result ) \
+    CPPUNIT_ASSERT_EQUAL( static_cast<type>(expected), static_cast<type>(result) );
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
