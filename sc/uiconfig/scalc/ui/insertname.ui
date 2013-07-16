@@ -85,7 +85,7 @@
           </packing>
         </child>
         <child>
-          <object class="svxcorelo-SvxSimpleTableContainer" id="ctrl">
+          <object class="svtlo-SvSimpleTableContainer" id="ctrl">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="hexpand">True</property>

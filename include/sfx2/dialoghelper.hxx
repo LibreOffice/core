@@ -11,8 +11,11 @@
 #define _SFX_DIALOGHELPER_HXX
 
 #include "sfx2/dllapi.h"
+#include <rtl/ustring.hxx>
 #include <tools/gen.hxx>
 
+class DateTime;
+class LocaleDataWrapper;
 class Window;
 class VclBuilderContainer;
 
@@ -26,6 +29,10 @@ class VclBuilderContainer;
 void SFX2_DLLPUBLIC setPreviewsToSamePlace(Window *pParent, VclBuilderContainer *pPage);
 
 Size SFX2_DLLPUBLIC getParagraphPreviewOptimalSize(const Window *pReference);
+
+OUString SFX2_DLLPUBLIC getWidestTime(const LocaleDataWrapper& rWrapper);
+
+OUString SFX2_DLLPUBLIC formatTime(const DateTime& rDateTime, const LocaleDataWrapper& rWrapper);
 
 #endif
 

@@ -23,11 +23,12 @@
 #include <ucbhelper/content.hxx>
 #include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
+#include <vcl/lstbox.hxx>
 #include <vcl/timer.hxx>
 #include <sfx2/tabdlg.hxx>
-#include <svx/simptabl.hxx>
 #include <com/sun/star/ui/dialogs/XFolderPicker2.hpp>
 #include <svtools/dialogclosedlistener.hxx>
+#include <svtools/simptabl.hxx>
 #include "radiobtnbox.hxx"
 
 // forward ---------------------------------------------------------------
@@ -81,7 +82,7 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::ui::dialogs::XFolderPicker2 > xFolderPicker;
 
     DECL_LINK(EnableHdl_Impl, void *);
-    DECL_LINK(              CheckHdl_Impl, SvxSimpleTable * );
+    DECL_LINK(              CheckHdl_Impl, SvSimpleTable * );
     DECL_LINK(SelectHdl_Impl, void *);
     DECL_LINK(AddHdl_Impl, void *);
     DECL_LINK(ParameterHdl_Impl, void *);

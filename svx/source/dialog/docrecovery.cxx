@@ -892,8 +892,8 @@ void RecovDocListEntry::Paint(
     }
 }
 //===============================================
-RecovDocList::RecovDocList(SvxSimpleTableContainer& rParent, ResMgr &rResMgr)
-    : SvxSimpleTable      ( rParent )
+RecovDocList::RecovDocList(SvSimpleTableContainer& rParent, ResMgr &rResMgr)
+    : SvSimpleTable      ( rParent )
     , m_aGreenCheckImg    ( ResId(IMG_GREENCHECK, rResMgr ) )
     , m_aYellowCheckImg   ( ResId(IMG_YELLOWCHECK, rResMgr ) )
     , m_aRedCrossImg      ( ResId(IMG_REDCROSS, rResMgr ) )

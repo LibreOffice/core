@@ -17,42 +17,41 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svx/simptabl.hxx>
+#include <comphelper/processfactory.hxx>
+#include <svtools/simptabl.hxx>
+#include <svtools/svlbitm.hxx>
+#include <svtools/treelistentry.hxx>
+#include <unotools/intlwrapper.hxx>
 #include <vcl/builder.hxx>
 #include <vcl/svapp.hxx>
 
-#include <comphelper/processfactory.hxx>
-#include <unotools/intlwrapper.hxx>
-#include <svtools/svlbitm.hxx>
-#include "svtools/treelistentry.hxx"
+// SvSimpleTableContainer  ------------------------------------------------------
 
-// SvxSimpleTableContainer  ------------------------------------------------------
-
-SvxSimpleTableContainer::SvxSimpleTableContainer(Window* pParent, const ResId& rResId)
+SvSimpleTableContainer::SvSimpleTableContainer(Window* pParent, const ResId& rResId)
     : Control(pParent, rResId)
     , m_pTable(NULL)
 {
     SetBorderStyle(WINDOW_BORDER_NOBORDER);
 }
 
-SvxSimpleTableContainer::SvxSimpleTableContainer(Window* pParent, WinBits nBits)
+SvSimpleTableContainer::SvSimpleTableContainer(Window* pParent, WinBits nBits)
     : Control(pParent, nBits)
     , m_pTable(NULL)
 {
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxSimpleTableContainer(Window *pParent,
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvSimpleTableContainer(Window *pParent,
     VclBuilder::stringmap &)
 {
-    return new SvxSimpleTableContainer(pParent);
+    return new SvSimpleTableContainer(pParent, WB_TABSTOP);
 }
 
-void SvxSimpleTableContainer::SetTable(SvxSimpleTable* pTable)
+void SvSimpleTableContainer::SetTable(SvSimpleTable* pTable)
 {
     m_pTable = pTable;
 }
 
-long SvxSimpleTableContainer::PreNotify( NotifyEvent& rNEvt )
+long SvSimpleTableContainer::PreNotify( NotifyEvent& rNEvt )
 {
     long nResult = sal_True;
     if ( rNEvt.GetType() == EVENT_KEYINPUT )
@@ -72,23 +71,23 @@ long SvxSimpleTableContainer::PreNotify( NotifyEvent& rNEvt )
     return nResult;
 }
 
-void SvxSimpleTableContainer::Resize()
+void SvSimpleTableContainer::Resize()
 {
     Control::Resize();
     if (m_pTable)
         m_pTable->UpdateViewSize();
 }
 
-void SvxSimpleTableContainer::GetFocus()
+void SvSimpleTableContainer::GetFocus()
 {
     Control::GetFocus();
     if (m_pTable)
         m_pTable->GrabFocus();
 }
 
-// SvxSimpleTable ------------------------------------------------------------
+// SvSimpleTable ------------------------------------------------------------
 
-SvxSimpleTable::SvxSimpleTable(SvxSimpleTableContainer& rParent, WinBits nBits):
+SvSimpleTable::SvSimpleTable(SvSimpleTableContainer& rParent, WinBits nBits):
         SvHeaderTabListBox(&rParent, nBits | WB_CLIPCHILDREN | WB_HSCROLL | WB_TABSTOP),
         m_rParentTableContainer(rParent),
         aHeaderBar(&rParent,WB_BUTTONSTYLE | WB_BORDER | WB_TABSTOP),
@@ -102,11 +101,11 @@ SvxSimpleTable::SvxSimpleTable(SvxSimpleTableContainer& rParent, WinBits nBits):
     nSortCol=0xFFFF;
     nOldPos=0;
 
-    aHeaderBar.SetStartDragHdl(LINK( this, SvxSimpleTable, StartDragHdl));
-    aHeaderBar.SetDragHdl(LINK( this, SvxSimpleTable, DragHdl));
-    aHeaderBar.SetEndDragHdl(LINK( this, SvxSimpleTable, EndDragHdl));
-    aHeaderBar.SetSelectHdl(LINK( this, SvxSimpleTable, HeaderBarClick));
-    aHeaderBar.SetDoubleClickHdl(LINK( this, SvxSimpleTable, HeaderBarDblClick));
+    aHeaderBar.SetStartDragHdl(LINK( this, SvSimpleTable, StartDragHdl));
+    aHeaderBar.SetDragHdl(LINK( this, SvSimpleTable, DragHdl));
+    aHeaderBar.SetEndDragHdl(LINK( this, SvSimpleTable, EndDragHdl));
+    aHeaderBar.SetSelectHdl(LINK( this, SvSimpleTable, HeaderBarClick));
+    aHeaderBar.SetDoubleClickHdl(LINK( this, SvSimpleTable, HeaderBarDblClick));
 
     EnableCellFocus();
     DisableTransientChildren();
@@ -118,12 +117,12 @@ SvxSimpleTable::SvxSimpleTable(SvxSimpleTableContainer& rParent, WinBits nBits):
     SvHeaderTabListBox::Show();
 }
 
-SvxSimpleTable::~SvxSimpleTable()
+SvSimpleTable::~SvSimpleTable()
 {
     m_rParentTableContainer.SetTable(NULL);
 }
 
-void SvxSimpleTable::UpdateViewSize()
+void SvSimpleTable::UpdateViewSize()
 {
     Size theWinSize=m_rParentTableContainer.GetOutputSizePixel();
     Size HbSize=aHeaderBar.GetSizePixel();
@@ -141,7 +140,7 @@ void SvxSimpleTable::UpdateViewSize()
     Invalidate();
 }
 
-void SvxSimpleTable::NotifyScrolled()
+void SvSimpleTable::NotifyScrolled()
 {
     long nOffset=-GetXOffset();
     if(nOldPos!=nOffset)
@@ -154,7 +153,7 @@ void SvxSimpleTable::NotifyScrolled()
     SvHeaderTabListBox::NotifyScrolled();
 }
 
-void SvxSimpleTable::SetTabs()
+void SvSimpleTable::SetTabs()
 {
     SvHeaderTabListBox::SetTabs();
 
@@ -176,12 +175,12 @@ void SvxSimpleTable::SetTabs()
     }
 }
 
-void SvxSimpleTable::SetTabs( long* pTabs, MapUnit eMapUnit)
+void SvSimpleTable::SetTabs( long* pTabs, MapUnit eMapUnit)
 {
     SvHeaderTabListBox::SetTabs(pTabs,eMapUnit);
 }
 
-void SvxSimpleTable::Paint( const Rectangle& rRect )
+void SvSimpleTable::Paint( const Rectangle& rRect )
 {
     SvHeaderTabListBox::Paint(rRect );
 
@@ -209,7 +208,7 @@ void SvxSimpleTable::Paint( const Rectangle& rRect )
     }
     bPaintFlag=sal_True;
 }
-void SvxSimpleTable::InsertHeaderEntry(const OUString& rText,
+void SvSimpleTable::InsertHeaderEntry(const OUString& rText,
     sal_uInt16 nCol, HeaderBarItemBits nBits)
 {
     sal_Int32 nEnd = rText.indexOf( sal_Unicode( '\t' ) );
@@ -230,47 +229,47 @@ void SvxSimpleTable::InsertHeaderEntry(const OUString& rText,
     SetTabs();
 }
 
-void SvxSimpleTable::ClearHeader()
+void SvSimpleTable::ClearHeader()
 {
     aHeaderBar.Clear();
 }
 
-void SvxSimpleTable::ShowTable()
+void SvSimpleTable::ShowTable()
 {
     m_rParentTableContainer.Show();
 }
 
-void SvxSimpleTable::HideTable()
+void SvSimpleTable::HideTable()
 {
     m_rParentTableContainer.Hide();
 }
 
-sal_Bool SvxSimpleTable::IsVisible() const
+sal_Bool SvSimpleTable::IsVisible() const
 {
     return m_rParentTableContainer.IsVisible();
 }
 
-void SvxSimpleTable::EnableTable()
+void SvSimpleTable::EnableTable()
 {
     m_rParentTableContainer.Enable();
 }
 
-void SvxSimpleTable::DisableTable()
+void SvSimpleTable::DisableTable()
 {
     m_rParentTableContainer.Disable();
 }
 
-sal_Bool SvxSimpleTable::IsEnabled() const
+sal_Bool SvSimpleTable::IsEnabled() const
 {
     return m_rParentTableContainer.IsEnabled();
 }
 
-sal_uInt16 SvxSimpleTable::GetSelectedCol()
+sal_uInt16 SvSimpleTable::GetSelectedCol()
 {
     return (aHeaderBar.GetCurItemId()-1);
 }
 
-void SvxSimpleTable::SortByCol(sal_uInt16 nCol,sal_Bool bDir)
+void SvSimpleTable::SortByCol(sal_uInt16 nCol,sal_Bool bDir)
 {
     bSortDirection=bDir;
     if(nSortCol!=0xFFFF)
@@ -289,7 +288,7 @@ void SvxSimpleTable::SortByCol(sal_uInt16 nCol,sal_Bool bDir)
             GetModel()->SetSortMode(SortDescending);
         }
         nSortCol=nCol;
-        GetModel()->SetCompareHdl( LINK( this, SvxSimpleTable, CompareHdl));
+        GetModel()->SetCompareHdl( LINK( this, SvSimpleTable, CompareHdl));
         GetModel()->Resort();
     }
     else
@@ -297,7 +296,7 @@ void SvxSimpleTable::SortByCol(sal_uInt16 nCol,sal_Bool bDir)
     nSortCol=nCol;
 }
 
-void SvxSimpleTable::HBarClick()
+void SvSimpleTable::HBarClick()
 {
     sal_uInt16 nId=aHeaderBar.GetCurItemId();
 
@@ -316,12 +315,12 @@ void SvxSimpleTable::HBarClick()
     }
 }
 
-void SvxSimpleTable::HBarDblClick()
+void SvSimpleTable::HBarDblClick()
 {
     aHeaderBarDblClickLink.Call(this);
 }
 
-void SvxSimpleTable::HBarStartDrag()
+void SvSimpleTable::HBarStartDrag()
 {
     if(!aHeaderBar.IsItemMode())
     {
@@ -332,7 +331,7 @@ void SvxSimpleTable::HBarStartDrag()
         ShowTracking( aSizeRect, SHOWTRACK_SPLIT );
     }
 }
-void SvxSimpleTable::HBarDrag()
+void SvSimpleTable::HBarDrag()
 {
     HideTracking();
     if(!aHeaderBar.IsItemMode())
@@ -344,7 +343,7 @@ void SvxSimpleTable::HBarDrag()
         ShowTracking( aSizeRect, SHOWTRACK_SPLIT );
     }
 }
-void SvxSimpleTable::HBarEndDrag()
+void SvSimpleTable::HBarEndDrag()
 {
     HideTracking();
     sal_uInt16 nPrivTabCount=TabCount();
@@ -368,19 +367,19 @@ void SvxSimpleTable::HBarEndDrag()
     Update();
 }
 
-CommandEvent SvxSimpleTable::GetCommandEvent() const
+CommandEvent SvSimpleTable::GetCommandEvent() const
 {
     return aCEvt;
 }
 
-void SvxSimpleTable::Command( const CommandEvent& rCEvt )
+void SvSimpleTable::Command( const CommandEvent& rCEvt )
 {
     aCEvt=rCEvt;
     aCommandLink.Call(this);
     SvHeaderTabListBox::Command(rCEvt);
 }
 
-IMPL_LINK( SvxSimpleTable, StartDragHdl, HeaderBar*, pCtr)
+IMPL_LINK( SvSimpleTable, StartDragHdl, HeaderBar*, pCtr)
 {
     if(pCtr==&aHeaderBar)
     {
@@ -389,7 +388,7 @@ IMPL_LINK( SvxSimpleTable, StartDragHdl, HeaderBar*, pCtr)
     return 0;
 }
 
-IMPL_LINK( SvxSimpleTable, DragHdl, HeaderBar*, pCtr)
+IMPL_LINK( SvSimpleTable, DragHdl, HeaderBar*, pCtr)
 {
     if(pCtr==&aHeaderBar)
     {
@@ -398,7 +397,7 @@ IMPL_LINK( SvxSimpleTable, DragHdl, HeaderBar*, pCtr)
     return 0;
 }
 
-IMPL_LINK( SvxSimpleTable, EndDragHdl, HeaderBar*, pCtr)
+IMPL_LINK( SvSimpleTable, EndDragHdl, HeaderBar*, pCtr)
 {
     if(pCtr==&aHeaderBar)
     {
@@ -407,7 +406,7 @@ IMPL_LINK( SvxSimpleTable, EndDragHdl, HeaderBar*, pCtr)
     return 0;
 }
 
-IMPL_LINK( SvxSimpleTable, HeaderBarClick, HeaderBar*, pCtr)
+IMPL_LINK( SvSimpleTable, HeaderBarClick, HeaderBar*, pCtr)
 {
     if(pCtr==&aHeaderBar)
     {
@@ -416,7 +415,7 @@ IMPL_LINK( SvxSimpleTable, HeaderBarClick, HeaderBar*, pCtr)
     return 0;
 }
 
-IMPL_LINK( SvxSimpleTable, HeaderBarDblClick, HeaderBar*, pCtr)
+IMPL_LINK( SvSimpleTable, HeaderBarDblClick, HeaderBar*, pCtr)
 {
     if(pCtr==&aHeaderBar)
     {
@@ -425,7 +424,7 @@ IMPL_LINK( SvxSimpleTable, HeaderBarDblClick, HeaderBar*, pCtr)
     return 0;
 }
 
-SvLBoxItem* SvxSimpleTable::GetEntryAtPos( SvTreeListEntry* pEntry, sal_uInt16 nPos ) const
+SvLBoxItem* SvSimpleTable::GetEntryAtPos( SvTreeListEntry* pEntry, sal_uInt16 nPos ) const
 {
     DBG_ASSERT(pEntry,"GetEntryText:Invalid Entry");
     SvLBoxItem* pItem = NULL;
@@ -446,7 +445,7 @@ SvLBoxItem* SvxSimpleTable::GetEntryAtPos( SvTreeListEntry* pEntry, sal_uInt16 n
     return pItem;
 }
 
-StringCompare SvxSimpleTable::ColCompare(SvTreeListEntry* pLeft,SvTreeListEntry* pRight)
+StringCompare SvSimpleTable::ColCompare(SvTreeListEntry* pLeft,SvTreeListEntry* pRight)
 {
     StringCompare eCompare=COMPARE_EQUAL;
 
@@ -474,12 +473,11 @@ StringCompare SvxSimpleTable::ColCompare(SvTreeListEntry* pLeft,SvTreeListEntry*
     return eCompare;
 }
 
-IMPL_LINK( SvxSimpleTable, CompareHdl, SvSortData*, pData)
+IMPL_LINK( SvSimpleTable, CompareHdl, SvSortData*, pData)
 {
     SvTreeListEntry* pLeft = (SvTreeListEntry*)(pData->pLeft );
     SvTreeListEntry* pRight = (SvTreeListEntry*)(pData->pRight );
     return (long) ColCompare(pLeft,pRight);
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

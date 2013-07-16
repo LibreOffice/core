@@ -20,7 +20,7 @@
 #define _SVX_OPTPATH_HXX
 
 #include <sfx2/tabdlg.hxx>
-#include <svx/simptabl.hxx>
+#include <svtools/simptabl.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/group.hxx>
 #include "ControlFocusHelper.hxx"
@@ -42,7 +42,7 @@ class SvxPathTabPage;
 class SvxPathTabPage : public SfxTabPage
 {
 private:
-    SvxSimpleTableContainer* m_pPathCtrl;
+    SvSimpleTableContainer* m_pPathCtrl;
     PushButton*         m_pStandardBtn;
     PushButton*         m_pPathBtn;
 

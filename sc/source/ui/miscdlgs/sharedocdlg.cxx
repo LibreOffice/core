@@ -18,6 +18,7 @@
  */
 
 #include <osl/security.hxx>
+#include <sfx2/dialoghelper.hxx>
 #include <svl/sharecontrolfile.hxx>
 #include <unotools/useroptions.hxx>
 
@@ -35,24 +36,19 @@
 
 using namespace ::com::sun::star;
 
-class ScShareTable : public SvxSimpleTable
+class ScShareTable : public SvSimpleTable
 {
 private:
     OUString m_sWidestAccessString;
 public:
-    ScShareTable(SvxSimpleTableContainer& rParent)
-        : SvxSimpleTable(rParent)
+    ScShareTable(SvSimpleTableContainer& rParent)
+        : SvSimpleTable(rParent)
     {
-        Date aDate(22, 12, 2000);
-        Time aTime(22, 59);
-        DateTime aDateTime(aDate, aTime);
-        m_sWidestAccessString += ScGlobal::pLocaleData->getDate(aDateTime);
-        m_sWidestAccessString += OUString(' ');
-        m_sWidestAccessString += ScGlobal::pLocaleData->getTime(aDateTime, false);
+        m_sWidestAccessString = getWidestTime(*ScGlobal::pLocaleData);
     }
     virtual void Resize()
     {
-        SvxSimpleTable::Resize();
+        SvSimpleTable::Resize();
         if (isInitialLayout(this))
             setColWidths();
     }
@@ -70,7 +66,7 @@ public:
             GetSizePixel().Width() - nAccessedWidth);
         long aStaticTabs[]= { 2, 0, 0 };
         aStaticTabs[2] = nWebSiteWidth;
-        SvxSimpleTable::SetTabs(aStaticTabs, MAP_PIXEL);
+        SvSimpleTable::SetTabs(aStaticTabs, MAP_PIXEL);
     }
 };
 
@@ -90,7 +86,7 @@ ScShareDocumentDlg::ScShareDocumentDlg( Window* pParent, ScViewData* pViewData )
     get(m_pCbShare, "share");
     get(m_pFtWarning, "warning");
 
-    SvxSimpleTableContainer *pCtrl = get<SvxSimpleTableContainer>("users");
+    SvSimpleTableContainer *pCtrl = get<SvSimpleTableContainer>("users");
     pCtrl->set_height_request(pCtrl->GetTextHeight()*9);
     m_pLbUsers = new ScShareTable(*pCtrl);
 
@@ -188,9 +184,7 @@ void ScShareDocumentDlg::UpdateView()
 
                         String aString( aUser );
                         aString += '\t';
-                        aString += ScGlobal::pLocaleData->getDate( aDateTime );
-                        aString += ' ';
-                        aString += ScGlobal::pLocaleData->getTime( aDateTime, false );
+                        aString += formatTime(aDateTime, *ScGlobal::pLocaleData);
 
                         m_pLbUsers->InsertEntry( aString, NULL );
                     }
@@ -244,7 +238,7 @@ void ScShareDocumentDlg::UpdateView()
         Time t(uDT.Hours, uDT.Minutes, uDT.Seconds, uDT.NanoSeconds);
         DateTime aDateTime(d,t);
 
-        aString += ScGlobal::pLocaleData->getDate( aDateTime );
+        aString += formatTime(aDateTime, *ScGlobal::pLocaleData);
         aString += ' ';
         aString += ScGlobal::pLocaleData->getTime( aDateTime, false );
 

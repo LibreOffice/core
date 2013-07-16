@@ -194,7 +194,7 @@ SvxMultiPathDialog::SvxMultiPathDialog( Window* pParent, sal_Bool bEmptyAllowed 
 
 {
     static long aStaticTabs[]= { 2, 0, 12 };
-    aRadioLB.SvxSimpleTable::SetTabs( aStaticTabs );
+    aRadioLB.SvSimpleTable::SetTabs( aStaticTabs );
     String sHeader( CUI_RES( STR_HEADER_PATHS ) );
     aRadioLB.SetQuickHelpText( sHeader );
     sHeader.Insert( '\t', 0 );

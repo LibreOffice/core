@@ -11,7 +11,7 @@
 #define _CUI_CERTPATH_HXX
 
 #include <sfx2/basedlgs.hxx>
-#include <svx/simptabl.hxx>
+#include <svtools/simptabl.hxx>
 #include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
 #include "radiobtnbox.hxx"
@@ -21,7 +21,7 @@ class CertPathDialog : public ModalDialog
 private:
     FixedLine       m_aCertPathFL;
     FixedText       m_aCertPathFT;
-    SvxSimpleTableContainer m_aCertPathListContainer;
+    SvSimpleTableContainer m_aCertPathListContainer;
     svx::SvxRadioButtonListBox m_aCertPathList;
     PushButton      m_aAddBtn;
     FixedLine       m_aButtonsFL;
@@ -31,7 +31,7 @@ private:
     OUString   m_sAddDialogText;
     OUString    m_sManual;
 
-    DECL_LINK(CheckHdl_Impl, SvxSimpleTable *);
+    DECL_LINK(CheckHdl_Impl, SvSimpleTable *);
     DECL_LINK(AddHdl_Impl, void *);
     DECL_LINK(OKHdl_Impl, void *);
 

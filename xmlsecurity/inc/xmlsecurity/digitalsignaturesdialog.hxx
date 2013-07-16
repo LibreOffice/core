@@ -23,8 +23,8 @@
 #include <vcl/dialog.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/button.hxx>
+#include <svtools/simptabl.hxx>
 #include <svtools/stdctrl.hxx>
-#include <svx/simptabl.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 
 #include <xmlsecurity/documentsignaturehelper.hxx>
@@ -70,7 +70,7 @@ private:
     FixedText*          m_pHintDocFT;
     FixedText*          m_pHintBasicFT;
     FixedText*          m_pHintPackageFT;
-    SvxSimpleTable*     m_pSignaturesLB;
+    SvSimpleTable*     m_pSignaturesLB;
     FixedImage*         m_pSigsValidImg;
     FixedText*          m_pSigsValidFI;
     FixedImage*         m_pSigsInvalidImg;

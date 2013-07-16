@@ -447,7 +447,7 @@ OfaSwAutoFmtOptionsPage::OfaSwAutoFmtOptionsPage( Window* pParent,
         3, 0, 20, 40
     };
 
-    aCheckLB.SvxSimpleTable::SetTabs(aStaticTabs);
+    aCheckLB.SvSimpleTable::SetTabs(aStaticTabs);
     String sHeader( sHeader1 );
     sHeader += '\t';
     sHeader += sHeader2;
@@ -742,7 +742,7 @@ IMPL_LINK_NOARG(OfaSwAutoFmtOptionsPage, EditHdl)
 
 void OfaACorrCheckListBox::SetTabs()
 {
-    SvxSimpleTable::SetTabs();
+    SvSimpleTable::SetTabs();
     sal_uInt16 nAdjust = SV_LBOXTAB_ADJUST_RIGHT|SV_LBOXTAB_ADJUST_LEFT|SV_LBOXTAB_ADJUST_CENTER|SV_LBOXTAB_ADJUST_NUMERIC|SV_LBOXTAB_FORCE;
 
     if( aTabs.size() > 1 )
@@ -843,7 +843,7 @@ void    OfaACorrCheckListBox::KeyInput( const KeyEvent& rKEvt )
         }
     }
     else
-        SvxSimpleTable::KeyInput(rKEvt);
+        SvSimpleTable::KeyInput(rKEvt);
 }
 
 OfaAutocorrReplacePage::OfaAutocorrReplacePage( Window* pParent,
@@ -1801,7 +1801,7 @@ OfaQuoteTabPage::OfaQuoteTabPage( Window* pParent, const SfxItemSet& rSet ) :
 
         aSwCheckLB.SetStyle(aSwCheckLB.GetStyle() | WB_HSCROLL| WB_VSCROLL);
 
-        aSwCheckLB.SvxSimpleTable::SetTabs(aStaticTabs);
+        aSwCheckLB.SvSimpleTable::SetTabs(aStaticTabs);
         String sHeader( sHeader1 );
         sHeader += '\t';
         sHeader += sHeader2;

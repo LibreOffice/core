@@ -8,6 +8,7 @@
  */
 
 #include <sfx2/dialoghelper.hxx>
+#include <tools/datetime.hxx>
 #include <vcl/builder.hxx>
 #include <vcl/layout.hxx>
 #include <vector>
@@ -54,6 +55,22 @@ void setPreviewsToSamePlace(Window *pParent, VclBuilderContainer *pPage)
 Size getParagraphPreviewOptimalSize(const Window *pReference)
 {
     return pReference->LogicToPixel(Size(68 , 112), MAP_APPFONT);
+}
+
+OUString SFX2_DLLPUBLIC getWidestTime(const LocaleDataWrapper& rWrapper)
+{
+    Date aDate(22, 12, 2000);
+    Time aTime(22, 59, 59);
+    DateTime aDateTime(aDate, aTime);
+    return formatTime(aDateTime, rWrapper);
+}
+
+OUString SFX2_DLLPUBLIC formatTime(const DateTime& rDateTime, const LocaleDataWrapper& rWrapper)
+{
+    OUString sString = rWrapper.getDate(rDateTime);
+    sString += OUString(' ');
+    sString += rWrapper.getTime(rDateTime, false);
+    return sString;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

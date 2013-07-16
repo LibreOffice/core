@@ -37,8 +37,8 @@ String createEntryString(const ScRangeNameLine& rLine)
     return aRet;
 }
 
-ScRangeManagerTable::ScRangeManagerTable( SvxSimpleTableContainer& rParent, boost::ptr_map<OUString, ScRangeName>& rRangeMap, const ScAddress& rPos ):
-    SvxSimpleTable( rParent, WB_SORT | WB_HSCROLL | WB_CLIPCHILDREN | WB_TABSTOP ),
+ScRangeManagerTable::ScRangeManagerTable( SvSimpleTableContainer& rParent, boost::ptr_map<OUString, ScRangeName>& rRangeMap, const ScAddress& rPos ):
+    SvSimpleTable( rParent, WB_SORT | WB_HSCROLL | WB_CLIPCHILDREN | WB_TABSTOP ),
     maGlobalString( ScGlobal::GetRscString(STR_GLOBAL_SCOPE)),
     mrRangeMap( rRangeMap ),
     maPos( rPos )
@@ -73,7 +73,7 @@ ScRangeManagerTable::ScRangeManagerTable( SvxSimpleTableContainer& rParent, boos
 
 void ScRangeManagerTable::Resize()
 {
-    SvxSimpleTable::Resize();
+    SvSimpleTable::Resize();
     if (isInitialLayout(this))
         setColWidths();
 }

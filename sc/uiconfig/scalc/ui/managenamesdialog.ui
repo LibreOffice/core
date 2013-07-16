@@ -81,7 +81,7 @@
                 <property name="can_focus">False</property>
                 <property name="orientation">vertical</property>
                 <child>
-                  <object class="svxcorelo-SvxSimpleTableContainer" id="names">
+                  <object class="svtlo-SvSimpleTableContainer" id="names">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="hexpand">True</property>

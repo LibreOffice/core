@@ -127,8 +127,8 @@ void SvLBoxColorString::Paint(
 //  class SvxRedlinTable
 //----------------------------------------------------------------------------
 
-SvxRedlinTable::SvxRedlinTable(SvxSimpleTableContainer& rParent,WinBits nBits)
-    : SvxSimpleTable(rParent,nBits),
+SvxRedlinTable::SvxRedlinTable(SvSimpleTableContainer& rParent,WinBits nBits)
+    : SvSimpleTable(rParent,nBits),
     aDaTiFirst( DateTime::EMPTY ),
     aDaTiLast( DateTime::EMPTY ),
     aDaTiFilterFirst( DateTime::EMPTY ),
@@ -178,11 +178,11 @@ StringCompare SvxRedlinTable::ColCompare(SvTreeListEntry* pLeft,SvTreeListEntry*
                 }
             }
             else
-                eCompare=SvxSimpleTable::ColCompare(pLeft,pRight);
+                eCompare=SvSimpleTable::ColCompare(pLeft,pRight);
         }
         else
         {
-            eCompare=SvxSimpleTable::ColCompare(pLeft,pRight);
+            eCompare=SvSimpleTable::ColCompare(pLeft,pRight);
         }
 
     }
@@ -392,7 +392,7 @@ SvTreeListEntry* SvxRedlinTable::InsertEntry(const String& rStr,RedlinData *pUse
     else
         aCurEntry.Erase();
 
-    return SvxSimpleTable::InsertEntry( aFirstStr, pParent, sal_False, nPos, pUserData );
+    return SvSimpleTable::InsertEntry( aFirstStr, pParent, sal_False, nPos, pUserData );
 
 }
 
@@ -414,7 +414,7 @@ SvTreeListEntry* SvxRedlinTable::InsertEntry(const String& rStr,RedlinData *pUse
     else
         aCurEntry.Erase();
 
-    return SvxSimpleTable::InsertEntry( aFirstStr, pParent, sal_False, nPos, pUserData );
+    return SvSimpleTable::InsertEntry( aFirstStr, pParent, sal_False, nPos, pUserData );
 }
 
 SvTreeListEntry* SvxRedlinTable::CreateEntry() const
@@ -483,7 +483,7 @@ SvxTPView::SvxTPView(Window * pParent)
     pTopLevel->get(m_pRejectAll, "rejectall");
     pTopLevel->get(m_pUndo, "undo");
 
-    SvxSimpleTableContainer* pTable = get<SvxSimpleTableContainer>("changes");
+    SvSimpleTableContainer* pTable = get<SvSimpleTableContainer>("changes");
     Size aControlSize(221, 65);
     aControlSize = LogicToPixel(aControlSize, MAP_APPFONT);
     pTable->set_width_request(aControlSize.Width());

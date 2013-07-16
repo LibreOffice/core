@@ -147,7 +147,7 @@ OfaMSFilterTabPage2::OfaMSFilterTabPage2( Window* pParent,
     FreeResource();
 
     static long aStaticTabs[] = { 3, 0, 20, 40 };
-    aCheckLB.SvxSimpleTable::SetTabs( aStaticTabs );
+    aCheckLB.SvSimpleTable::SetTabs( aStaticTabs );
 
     String sHeader( sHeader1 );
     (( sHeader += '\t' ) += sHeader2 ) += '\t';
@@ -309,7 +309,7 @@ SvTreeListEntry* OfaMSFilterTabPage2::GetEntry4Type( sal_IntPtr _nType ) const
 
 void OfaMSFilterTabPage2::MSFltrSimpleTable::SetTabs()
 {
-    SvxSimpleTable::SetTabs();
+    SvSimpleTable::SetTabs();
     sal_uInt16 nAdjust = SV_LBOXTAB_ADJUST_RIGHT|SV_LBOXTAB_ADJUST_LEFT|SV_LBOXTAB_ADJUST_CENTER|SV_LBOXTAB_ADJUST_NUMERIC|SV_LBOXTAB_FORCE;
 
     if( aTabs.size() > 1 )
@@ -409,7 +409,7 @@ void OfaMSFilterTabPage2::MSFltrSimpleTable::KeyInput( const KeyEvent& rKEvt )
         }
     }
     else
-        SvxSimpleTable::KeyInput(rKEvt);
+        SvSimpleTable::KeyInput(rKEvt);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

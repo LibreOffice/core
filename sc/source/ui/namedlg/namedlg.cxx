@@ -114,7 +114,7 @@ void ScNameDlg::Init()
     //init UI
     m_pFtInfo->SetStyle(WB_VCENTER);
 
-    SvxSimpleTableContainer *pCtrl = get<SvxSimpleTableContainer>("names");
+    SvSimpleTableContainer *pCtrl = get<SvSimpleTableContainer>("names");
     pCtrl->set_height_request(pCtrl->GetTextHeight()*12);
 
     m_pRangeManagerTable = new ScRangeManagerTable(*pCtrl, maRangeMap, maCursorPos);

@@ -193,7 +193,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="svxcorelo-SvxSimpleTableContainer" id="users">
+                          <object class="svtlo-SvSimpleTableContainer" id="users">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="hexpand">True</property>

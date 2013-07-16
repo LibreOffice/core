@@ -44,7 +44,7 @@ CertPathDialog::CertPathDialog( Window* pParent ) :
         3, 0, 15, 75
     };
 
-    m_aCertPathList.SvxSimpleTable::SetTabs( aStaticTabs );
+    m_aCertPathList.SvSimpleTable::SetTabs( aStaticTabs );
 
     OUString sProfile(CUI_RESSTR(STR_PROFILE));
     OUString sDirectory(CUI_RESSTR(STR_DIRECTORY));
@@ -157,7 +157,7 @@ CertPathDialog::~CertPathDialog()
     }
 }
 
-IMPL_LINK( CertPathDialog, CheckHdl_Impl, SvxSimpleTable *, pList )
+IMPL_LINK( CertPathDialog, CheckHdl_Impl, SvSimpleTable *, pList )
 {
     SvTreeListEntry* pEntry = pList ? m_aCertPathList.GetEntry(m_aCertPathList.GetCurMousePoint())
                                 : m_aCertPathList.FirstSelected();

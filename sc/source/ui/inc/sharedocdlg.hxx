@@ -23,7 +23,7 @@
 #include <vcl/button.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/fixed.hxx>
-#include <svx/simptabl.hxx>
+#include <svtools/simptabl.hxx>
 
 class ScViewData;
 class ScDocShell;
@@ -38,7 +38,7 @@ class ScShareDocumentDlg : public ModalDialog
 private:
     CheckBox*           m_pCbShare;
     FixedText*          m_pFtWarning;
-    SvxSimpleTable*     m_pLbUsers;
+    SvSimpleTable*      m_pLbUsers;
 
     OUString            m_aStrNoUserData;
     OUString            m_aStrUnknownUser;

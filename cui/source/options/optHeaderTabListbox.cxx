@@ -21,7 +21,7 @@
 #include <vcl/svapp.hxx>
 #include <svtools/headbar.hxx>
 #include <svtools/svlbitm.hxx>
-#include "svtools/treelistentry.hxx"
+#include <svtools/treelistentry.hxx>
 
 namespace svx
 {
@@ -53,8 +53,8 @@ void OptLBoxString_Impl::Paint(
 }
 // -----------------------------------------------------------------------------
 
-OptHeaderTabListBox::OptHeaderTabListBox(SvxSimpleTableContainer& rParent, WinBits nWinStyle)
-    : SvxSimpleTable(rParent, nWinStyle)
+OptHeaderTabListBox::OptHeaderTabListBox(SvSimpleTableContainer& rParent, WinBits nWinStyle)
+    : SvSimpleTable(rParent, nWinStyle)
 {
 }
 

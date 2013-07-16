@@ -28,11 +28,13 @@
 #include <vcl/tabpage.hxx>
 #include <vcl/toolbox.hxx>
 #include <svtools/inettbc.hxx>
+#include <svtools/simptabl.hxx>
 #include <svtools/svmedit.hxx>
 #include <svtools/treelistbox.hxx>
 #include <sfx2/dockwin.hxx>
+#include <sfx2/childwin.hxx>
 #include <sfx2/ctrlitem.hxx>
-#include <svx/simptabl.hxx>
+#include <svx/svxdllapi.h>
 #include <rtl/ref.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XContainer.hpp>
@@ -408,8 +410,8 @@ namespace svxform
         typedef std::vector< OUString > PrefixList;
 
         FixedText           m_aNamespacesFT;
-        SvxSimpleTableContainer m_aNamespacesListContainer;
-        SvxSimpleTable      m_aNamespacesList;
+        SvSimpleTableContainer m_aNamespacesListContainer;
+        SvSimpleTable      m_aNamespacesList;
         PushButton          m_aAddNamespaceBtn;
         PushButton          m_aEditNamespaceBtn;
         PushButton          m_aDeleteNamespaceBtn;
@@ -423,7 +425,7 @@ namespace svxform
 
         XNameContainer_ref& m_rNamespaces;
 
-        DECL_LINK(          SelectHdl, SvxSimpleTable * );
+        DECL_LINK(          SelectHdl, SvSimpleTable * );
         DECL_LINK(          ClickHdl, PushButton * );
         DECL_LINK(OKHdl, void *);
 

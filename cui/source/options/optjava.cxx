@@ -90,7 +90,7 @@ class SvxJavaListBox : public svx::SvxRadioButtonListBox
 private:
     const OUString m_sAccessibilityText;
 public:
-    SvxJavaListBox(SvxSimpleTableContainer& rParent, const OUString &rAccessibilityText)
+    SvxJavaListBox(SvSimpleTableContainer& rParent, const OUString &rAccessibilityText)
         : SvxRadioButtonListBox(rParent, 0)
         , m_sAccessibilityText(rAccessibilityText)
     {
@@ -116,7 +116,7 @@ public:
         aStaticTabs[2] = nCheckWidth;
         aStaticTabs[3] = aStaticTabs[2] + nVendorWidth;
         aStaticTabs[4] = aStaticTabs[3] + nVersionWidth;
-        SvxSimpleTable::SetTabs(aStaticTabs, MAP_PIXEL);
+        SvSimpleTable::SetTabs(aStaticTabs, MAP_PIXEL);
     }
     virtual void Resize()
     {
@@ -153,7 +153,7 @@ SvxJavaOptionsPage::SvxJavaOptionsPage( Window* pParent, const SfxItemSet& rSet 
     m_sAccessibilityText = get<FixedText>("a11y")->GetText();
     m_sAddDialogText = get<FixedText>("selectruntime")->GetText();
 
-    SvxSimpleTableContainer *pJavaListContainer = get<SvxSimpleTableContainer>("javas");
+    SvSimpleTableContainer *pJavaListContainer = get<SvSimpleTableContainer>("javas");
     Size aControlSize(177, 60);
     aControlSize = LogicToPixel(aControlSize, MAP_APPFONT);
     pJavaListContainer->set_width_request(aControlSize.Width());
@@ -162,7 +162,7 @@ SvxJavaOptionsPage::SvxJavaOptionsPage( Window* pParent, const SfxItemSet& rSet 
 
     long aStaticTabs[]= { 4, 0, 0, 0, 0 };
 
-    m_pJavaList->SvxSimpleTable::SetTabs( aStaticTabs );
+    m_pJavaList->SvSimpleTable::SetTabs( aStaticTabs );
 
     OUStringBuffer sHeader;
     sHeader.append("\t").append(get<FixedText>("vendor")->GetText())
@@ -223,7 +223,7 @@ IMPL_LINK_NOARG(SvxJavaOptionsPage, EnableHdl_Impl)
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SvxJavaOptionsPage, CheckHdl_Impl, SvxSimpleTable *, pList )
+IMPL_LINK( SvxJavaOptionsPage, CheckHdl_Impl, SvSimpleTable *, pList )
 {
     SvTreeListEntry* pEntry = pList ? m_pJavaList->GetEntry( m_pJavaList->GetCurMousePoint() )
                                 : m_pJavaList->FirstSelected();

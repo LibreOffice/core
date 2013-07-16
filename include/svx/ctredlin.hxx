@@ -20,23 +20,19 @@
 #ifndef _SVX_CTREDLIN_HXX
 #define _SVX_CTREDLIN_HXX
 
-#include <vcl/morebtn.hxx>
-#include <vcl/combobox.hxx>
 #include <svtools/headbar.hxx>
+#include <svtools/simptabl.hxx>
+#include <svtools/svlbitm.hxx>
 #include <svtools/svtabbx.hxx>
-#include "svtools/svlbitm.hxx"
-#include <vcl/lstbox.hxx>
-#include <vcl/tabpage.hxx>
+#include <svtools/treelistentry.hxx>
+#include <tools/datetime.hxx>
+#include <vcl/combobox.hxx>
 #include <vcl/field.hxx>
 #include <vcl/fixed.hxx>
-
-#ifndef _SVX_SIMPTABL
-#include <svx/simptabl.hxx>
-#endif
+#include <vcl/lstbox.hxx>
+#include <vcl/tabpage.hxx>
 #include <vcl/tabctrl.hxx>
-#include <tools/datetime.hxx>
 #include <unotools/textsearch.hxx>
-#include "svtools/treelistentry.hxx"
 #include "svx/svxdllapi.h"
 
 #define FLT_DATE_BEFORE     0
@@ -85,7 +81,7 @@ public:
     SvLBoxItem*     Create() const;
 };
 
-class SVX_DLLPUBLIC SvxRedlinTable : public SvxSimpleTable
+class SVX_DLLPUBLIC SvxRedlinTable : public SvSimpleTable
 {
     using SvTabListBox::InsertEntry;
 
@@ -116,7 +112,7 @@ protected:
 
 public:
 
-    SvxRedlinTable(SvxSimpleTableContainer& rParent, WinBits nBits = WB_BORDER);
+    SvxRedlinTable(SvSimpleTableContainer& rParent, WinBits nBits = WB_BORDER);
     ~SvxRedlinTable();
 
     // For FilterPage only {

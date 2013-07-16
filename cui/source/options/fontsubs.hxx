@@ -20,18 +20,18 @@
 #define _SVX_FONT_SUBSTITUTION_HXX
 
 #include <sfx2/tabdlg.hxx>
-#include <vcl/fixed.hxx>
-#include <svx/simptabl.hxx>
-#include <vcl/toolbox.hxx>
 #include <svtools/ctrlbox.hxx>
-#include "svtools/treelistentry.hxx"
+#include <svtools/simptabl.hxx>
+#include <svtools/treelistentry.hxx>
+#include <vcl/fixed.hxx>
+#include <vcl/toolbox.hxx>
 
 // class SvxFontSubstCheckListBox ------------------------------------------
 
-class SvxFontSubstCheckListBox : public SvxSimpleTable
+class SvxFontSubstCheckListBox : public SvSimpleTable
 {
     friend class SvxFontSubstTabPage;
-    using SvxSimpleTable::SetTabs;
+    using SvSimpleTable::SetTabs;
     using SvTreeListBox::GetCheckButtonState;
     using SvTreeListBox::SetCheckButtonState;
 
@@ -41,8 +41,8 @@ class SvxFontSubstCheckListBox : public SvxSimpleTable
         virtual void    Resize();
 
     public:
-        SvxFontSubstCheckListBox(SvxSimpleTableContainer& rParent, WinBits nBits)
-            : SvxSimpleTable(rParent, nBits)
+        SvxFontSubstCheckListBox(SvSimpleTableContainer& rParent, WinBits nBits)
+            : SvSimpleTable(rParent, nBits)
         {
         }
 

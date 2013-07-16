@@ -198,11 +198,11 @@ DigitalSignaturesDialog::DigitalSignaturesDialog(
     Size aControlSize(275, 109);
     const long nControlWidth = aControlSize.Width();
     aControlSize = LogicToPixel(aControlSize, MAP_APPFONT);
-    SvxSimpleTableContainer *pSignatures = get<SvxSimpleTableContainer>("signatures");
+    SvSimpleTableContainer *pSignatures = get<SvSimpleTableContainer>("signatures");
     pSignatures->set_width_request(aControlSize.Width());
     pSignatures->set_height_request(aControlSize.Height());
 
-    m_pSignaturesLB = new SvxSimpleTable(*pSignatures);
+    m_pSignaturesLB = new SvSimpleTable(*pSignatures);
     // #i48253# the tablistbox needs its own unique id
     m_pSignaturesLB->Window::SetUniqueId( HID_XMLSEC_TREE_SIGNATURESDLG );
     static long aTabs[] = { 4, 0, 6*nControlWidth/100, 36*nControlWidth/100, 74*nControlWidth/100 };

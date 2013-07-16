@@ -24,6 +24,7 @@ $(eval $(call gb_UIConfig_add_uifiles,sfx,\
 	sfx2/uiconfig/ui/querysavedialog \
 	sfx2/uiconfig/ui/securityinfopage \
 	sfx2/uiconfig/ui/singletabdialog \
+	sfx2/uiconfig/ui/versionsofdialog \
 	sfx2/uiconfig/ui/versioncommentdialog \
 ))
 

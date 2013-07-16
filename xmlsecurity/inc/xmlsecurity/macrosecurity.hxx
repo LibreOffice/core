@@ -26,8 +26,8 @@
 #include <vcl/tabdlg.hxx>
 #include <vcl/tabctrl.hxx>
 #include <vcl/tabpage.hxx>
+#include <svtools/simptabl.hxx>
 #include <svtools/stdctrl.hxx>
-#include <svx/simptabl.hxx>
 #include <unotools/securityoptions.hxx>
 
 namespace com {
@@ -112,7 +112,7 @@ class MacroSecurityTrustedSourcesTP : public MacroSecurityTP
 {
 private:
     FixedImage*         m_pTrustCertROFI;
-    SvxSimpleTable*     m_pTrustCertLB;
+    SvSimpleTable*     m_pTrustCertLB;
     PushButton*         m_pViewCertPB;
     PushButton*         m_pRemoveCertPB;
     FixedImage*         m_pTrustFileROFI;

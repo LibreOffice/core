@@ -151,7 +151,7 @@ DbRegistrationOptionsPage::DbRegistrationOptionsPage( Window* pParent, const Sfx
     pPathBox->SetSelectionMode( SINGLE_SELECTION );
     pPathBox->SetPosSizePixel( Point( 0, aHeadSize.Height() ),
                                Size( aBoxSize.Width(), aBoxSize.Height() - aHeadSize.Height() ) );
-    pPathBox->SvxSimpleTable::SetTabs( aTabs, MAP_APPFONT );
+    pPathBox->SvSimpleTable::SetTabs( aTabs, MAP_APPFONT );
     pPathBox->SetHighlightRange();
 
     pPathBox->SetHelpId( HID_DBPATH_CTL_PATH );

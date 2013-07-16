@@ -23,9 +23,7 @@
 #include <vcl/group.hxx>
 #include <vcl/fixed.hxx>
 #include <sfx2/tabdlg.hxx>
-#include <svx/simptabl.hxx>
-
-
+#include <svtools/simptabl.hxx>
 
 class OfaMSFilterTabPage : public SfxTabPage
 {
@@ -54,11 +52,11 @@ public:
 
 class OfaMSFilterTabPage2 : public SfxTabPage
 {
-    class MSFltrSimpleTable : public SvxSimpleTable
+    class MSFltrSimpleTable : public SvSimpleTable
     {
         using SvTreeListBox::GetCheckButtonState;
         using SvTreeListBox::SetCheckButtonState;
-        using SvxSimpleTable::SetTabs;
+        using SvSimpleTable::SetTabs;
 
         void            CheckEntryPos(sal_uLong nPos, sal_uInt16 nCol, sal_Bool bChecked);
         SvButtonState   GetCheckButtonState( SvTreeListEntry*, sal_uInt16 nCol ) const;
@@ -69,13 +67,13 @@ class OfaMSFilterTabPage2 : public SfxTabPage
         virtual void    KeyInput( const KeyEvent& rKEvt );
 
     public:
-        MSFltrSimpleTable(SvxSimpleTableContainer& rParent, WinBits nBits = WB_BORDER)
-            : SvxSimpleTable(rParent, nBits)
+        MSFltrSimpleTable(SvSimpleTableContainer& rParent, WinBits nBits = WB_BORDER)
+            : SvSimpleTable(rParent, nBits)
         {
         }
     };
 
-    SvxSimpleTableContainer m_aCheckLBContainer;
+    SvSimpleTableContainer m_aCheckLBContainer;
     MSFltrSimpleTable aCheckLB;
     FixedText aHeader1FT, aHeader2FT;
     String sHeader1, sHeader2;

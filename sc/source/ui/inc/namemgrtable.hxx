@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <svx/simptabl.hxx>
+#include <svtools/simptabl.hxx>
 #include <vcl/ctrl.hxx>
 
 #include "scresid.hxx"
@@ -30,7 +30,7 @@ struct ScRangeNameLine
 //TODO: cache the lines for performance improvements
 //otherwise handling of a large set of range names might get extremely slow
 //Need some sort of a filter to handle several range names
-class SC_DLLPUBLIC ScRangeManagerTable : public SvxSimpleTable
+class SC_DLLPUBLIC ScRangeManagerTable : public SvSimpleTable
 {
 private:
     OUString maGlobalString;
@@ -51,7 +51,7 @@ private:
     void setColWidths();
 
 public:
-    ScRangeManagerTable( SvxSimpleTableContainer& rParent, boost::ptr_map<OUString, ScRangeName>& aTabRangeNames, const ScAddress& rPos );
+    ScRangeManagerTable( SvSimpleTableContainer& rParent, boost::ptr_map<OUString, ScRangeName>& aTabRangeNames, const ScAddress& rPos );
     virtual ~ScRangeManagerTable();
 
     virtual void Resize();

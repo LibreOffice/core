@@ -325,21 +325,21 @@ void MacroSecurityTrustedSourcesTP::FillCertLB( void )
     }
 }
 
-class TrustCertLB : public SvxSimpleTable
+class TrustCertLB : public SvSimpleTable
 {
 public:
-    TrustCertLB(SvxSimpleTableContainer &rContainer)
-        : SvxSimpleTable(rContainer, 0)
+    TrustCertLB(SvSimpleTableContainer &rContainer)
+        : SvSimpleTable(rContainer, 0)
     {
     }
     virtual void Resize()
     {
-        SvxSimpleTable::Resize();
+        SvSimpleTable::Resize();
         if (isInitialLayout(this))
         {
             const long nControlWidth = GetSizePixel().Width();
             long aTabLocs[] = { 3, 0, 35*nControlWidth/100, 70*nControlWidth/100 };
-            SvxSimpleTable::SetTabs(aTabLocs, MAP_PIXEL);
+            SvSimpleTable::SetTabs(aTabLocs, MAP_PIXEL);
         }
     }
 };
@@ -356,7 +356,7 @@ MacroSecurityTrustedSourcesTP::MacroSecurityTrustedSourcesTP(Window* _pParent, M
     get(m_pAddLocPB, "addfile");
     get(m_pRemoveLocPB, "removefile");
 
-    SvxSimpleTableContainer *pCertificates = get<SvxSimpleTableContainer>("certificates");
+    SvSimpleTableContainer *pCertificates = get<SvSimpleTableContainer>("certificates");
     m_pTrustCertLB = new TrustCertLB(*pCertificates);
     static long aTabs[] = { 3, 0, 0, 0 };
     m_pTrustCertLB->SetTabs( aTabs );

@@ -19,20 +19,19 @@
 #ifndef _OFA_AUTOCDLG_HXX
 #define _OFA_AUTOCDLG_HXX
 
-#include <svtools/langtab.hxx>
 #include <sfx2/tabdlg.hxx>
+#include <svtools/langtab.hxx>
+#include <svtools/simptabl.hxx>
+#include <svtools/svtabbx.hxx>
+#include <svtools/treelistentry.hxx>
 #include <svx/checklbx.hxx>
+#include <svx/langbox.hxx>
+#include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/field.hxx>
-#include <vcl/metric.hxx>
-#include <svx/langbox.hxx>
-#include "svtools/treelistentry.hxx"
-
 #include <vcl/group.hxx>
-#include <vcl/button.hxx>
 #include <vcl/lstbox.hxx>
-#include <svtools/svtabbx.hxx>
-#include <svx/simptabl.hxx>
+#include <vcl/metric.hxx>
 
 class CharClass;
 class CollatorWrapper;
@@ -60,9 +59,9 @@ public:
 
 // class OfaACorrCheckListBox ------------------------------------------
 
-class OfaACorrCheckListBox : public SvxSimpleTable
+class OfaACorrCheckListBox : public SvSimpleTable
 {
-    using SvxSimpleTable::SetTabs;
+    using SvSimpleTable::SetTabs;
     using SvTreeListBox::GetCheckButtonState;
     using SvTreeListBox::SetCheckButtonState;
 
@@ -72,8 +71,8 @@ class OfaACorrCheckListBox : public SvxSimpleTable
         virtual void    KeyInput( const KeyEvent& rKEvt );
 
     public:
-        OfaACorrCheckListBox(SvxSimpleTableContainer& rParent, WinBits nBits = WB_BORDER)
-            : SvxSimpleTable(rParent, nBits)
+        OfaACorrCheckListBox(SvSimpleTableContainer& rParent, WinBits nBits = WB_BORDER)
+            : SvSimpleTable(rParent, nBits)
         {
         }
 
@@ -127,7 +126,7 @@ class OfaSwAutoFmtOptionsPage : public SfxTabPage
 {
     using TabPage::ActivatePage;
 
-    SvxSimpleTableContainer m_aCheckLBContainer;
+    SvSimpleTableContainer m_aCheckLBContainer;
     OfaACorrCheckListBox    aCheckLB;
     PushButton      aEditPB;
     FixedText       aHeader1Expl;
@@ -349,7 +348,7 @@ private:
     SvxCheckListBox aCheckLB;
 
     /// Just for writer
-    SvxSimpleTableContainer m_aSwCheckLBContainer;
+    SvSimpleTableContainer m_aSwCheckLBContainer;
     OfaACorrCheckListBox    aSwCheckLB;
     String          sHeader1;
     String          sHeader2;

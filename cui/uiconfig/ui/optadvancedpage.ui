@@ -232,7 +232,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="svxcorelo-SvxSimpleTableContainer" id="javas">
+                                  <object class="svtlo-SvSimpleTableContainer" id="javas">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="hexpand">True</property>

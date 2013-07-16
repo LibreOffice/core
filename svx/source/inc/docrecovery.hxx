@@ -20,15 +20,16 @@
 #ifndef _SVX_DOCRECOVERY_HXX
 #define _SVX_DOCRECOVERY_HXX
 
-#include <vcl/tabpage.hxx>
-#include <vcl/tabdlg.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
+#include <vcl/lstbox.hxx>
+#include <vcl/tabdlg.hxx>
+#include <vcl/tabpage.hxx>
+#include <svtools/simptabl.hxx>
+#include <svtools/svlbitm.hxx>
 #include <svtools/svmedit2.hxx>
 #include <svtools/treelistbox.hxx>
-#include <svtools/svlbitm.hxx>
-#include <svx/simptabl.hxx>
 
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase2.hxx>
@@ -556,7 +557,7 @@ public:
 };
 
 //===============================================
-class RecovDocList : public SvxSimpleTable
+class RecovDocList : public SvSimpleTable
 {
     //-------------------------------------------
     // member
@@ -578,7 +579,7 @@ class RecovDocList : public SvxSimpleTable
 
         //---------------------------------------
         /** @short TODO */
-        RecovDocList(SvxSimpleTableContainer& rParent, ResMgr& rResMgr);
+        RecovDocList(SvSimpleTableContainer& rParent, ResMgr& rResMgr);
         //---------------------------------------
         /** @short TODO */
         virtual ~RecovDocList();
@@ -606,7 +607,7 @@ class RecoveryDialog : public IExtendedTabPage
         FixedText       m_aProgressFT;
         Window          m_aProgrParent;
         FixedText       m_aFileListFT;
-        SvxSimpleTableContainer m_aFileListLBContainer;
+        SvSimpleTableContainer m_aFileListLBContainer;
         RecovDocList    m_aFileListLB;
         FixedLine       m_aBottomFL;
         PushButton      m_aNextBtn;

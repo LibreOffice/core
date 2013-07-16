@@ -33,7 +33,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 
 
-#include <svx/simptabl.hxx>
+#include <svtools/simptabl.hxx>
 #include <svx/langbox.hxx>
 
 namespace com{namespace sun{namespace star{

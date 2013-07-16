@@ -96,6 +96,7 @@ $(eval $(call gb_Library_add_exception_objects,svt,\
     svtools/source/contnr/imivctl1 \
     svtools/source/contnr/imivctl2 \
     svtools/source/contnr/ivctrl \
+    svtools/source/contnr/simptabl \
     svtools/source/contnr/svimpbox \
     svtools/source/contnr/svlbitm \
     svtools/source/contnr/svtabbx \

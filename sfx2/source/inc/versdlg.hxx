@@ -20,56 +20,52 @@
 #ifndef _VERSDLG_HXX
 #define _VERSDLG_HXX
 
+#include <sfx2/basedlgs.hxx>
+#include <svtools/simptabl.hxx>
+#include <svtools/svmedit.hxx>
+#include <svtools/svtabbx.hxx>
 #include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
-#include <svtools/svtabbx.hxx>
-#include <svtools/svmedit.hxx>
-#include <sfx2/basedlgs.hxx>
 
 class SfxViewFrame;
 struct SfxVersionInfo;
 
-class SfxVersionsTabListBox_Impl  : public SvTabListBox
+class SfxVersionsTabListBox_Impl : public SvSimpleTable
 {
-    virtual void                KeyInput( const KeyEvent& rKeyEvent );
-
 public:
-                                SfxVersionsTabListBox_Impl(
-                                    Window* pParent, const ResId& );
+    SfxVersionsTabListBox_Impl(SvSimpleTableContainer& rParent, WinBits nBits)
+        : SvSimpleTable(rParent, nBits)
+    {
+    }
+    void setColSizes();
+    virtual void Resize();
+    virtual void KeyInput(const KeyEvent& rKeyEvent);
 };
 
 class SfxVersionTableDtor;
 class SfxVersionDialog : public SfxModalDialog
 {
-    FixedLine                   aNewGroup;
-    PushButton                  aSaveButton;
-    CheckBox                    aSaveCheckBox;
-    FixedLine                   aExistingGroup;
-    FixedText                   aDateTimeText;
-    FixedText                   aSavedByText;
-    FixedText                   aCommentText;
-    SfxVersionsTabListBox_Impl  aVersionBox;
-    CancelButton                aCloseButton;
-    PushButton                  aOpenButton;
-    PushButton                  aViewButton;
-    PushButton                  aDeleteButton;
-    PushButton                  aCompareButton;
-    HelpButton                  aHelpButton;
+    PushButton*                 m_pSaveButton;
+    CheckBox*                   m_pSaveCheckBox;
+    SfxVersionsTabListBox_Impl* m_pVersionBox;
+    PushButton*                 m_pOpenButton;
+    PushButton*                 m_pViewButton;
+    PushButton*                 m_pDeleteButton;
+    PushButton*                 m_pCompareButton;
     SfxViewFrame*               pViewFrame;
-    SfxVersionTableDtor*        mpTable;
-    sal_Bool                    mbIsSaveVersionOnClose;
+    SfxVersionTableDtor*        m_pTable;
+    bool                        m_bIsSaveVersionOnClose;
 
     DECL_LINK(DClickHdl_Impl, void *);
     DECL_LINK(SelectHdl_Impl, void *);
     DECL_LINK(                  ButtonHdl_Impl, Button* );
     void                        Init_Impl();
     void                        Open_Impl();
-    void                        RecalcDateColumn();
 
 public:
                                 SfxVersionDialog ( SfxViewFrame* pFrame, sal_Bool );
     virtual                     ~SfxVersionDialog ();
-    sal_Bool                    IsSaveVersionOnClose() const { return mbIsSaveVersionOnClose; }
+    bool                        IsSaveVersionOnClose() const { return m_bIsSaveVersionOnClose; }
 };
 
 class SfxViewVersionDialog_Impl : public SfxModalDialog

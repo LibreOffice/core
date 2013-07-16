@@ -3148,7 +3148,7 @@ namespace svxform
 
     {
         static long aStaticTabs[]= { 3, 0, 35, 200 };
-        m_aNamespacesList.SvxSimpleTable::SetTabs( aStaticTabs );
+        m_aNamespacesList.SvSimpleTable::SetTabs( aStaticTabs );
         String sHeader = String( SVX_RES( STR_HEADER_PREFIX ) );
         sHeader += '\t';
         sHeader += String( SVX_RES( STR_HEADER_URL ) );
@@ -3174,7 +3174,7 @@ namespace svxform
     }
 
     //------------------------------------------------------------------------
-    IMPL_LINK( NamespaceItemDialog, SelectHdl, SvxSimpleTable *,  EMPTYARG )
+    IMPL_LINK( NamespaceItemDialog, SelectHdl, SvSimpleTable *,  EMPTYARG )
     {
         sal_Bool bEnable = ( m_aNamespacesList.FirstSelected() != NULL );
         m_aEditNamespaceBtn.Enable( bEnable );

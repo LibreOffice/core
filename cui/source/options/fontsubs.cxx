@@ -57,7 +57,7 @@ SvxFontSubstTabPage::SvxFontSubstTabPage( Window* pParent,
     get(m_pNonPropFontsOnlyCB, "nonpropfontonly");
     get(m_pFontHeightLB, "fontheight");
 
-    SvxSimpleTableContainer *pCheckLBContainer = get<SvxSimpleTableContainer>("checklb");
+    SvSimpleTableContainer *pCheckLBContainer = get<SvSimpleTableContainer>("checklb");
     Size aControlSize(248, 75);
     aControlSize = LogicToPixel(aControlSize, MAP_APPFONT);
     pCheckLBContainer->set_width_request(aControlSize.Width());
@@ -70,7 +70,7 @@ SvxFontSubstTabPage::SvxFontSubstTabPage( Window* pParent,
     m_pCheckLB->SetSelectionMode(MULTIPLE_SELECTION);
     m_pCheckLB->SortByCol(2);
     long aStaticTabs[] = { 4, 0, 0, 0, 0 };
-    m_pCheckLB->SvxSimpleTable::SetTabs(&aStaticTabs[0]);
+    m_pCheckLB->SvSimpleTable::SetTabs(&aStaticTabs[0]);
 
     OUString sHeader1(get<FixedText>("always")->GetText());
     OUString sHeader2(get<FixedText>("screenonly")->GetText());
@@ -404,18 +404,18 @@ void SvxFontSubstCheckListBox::setColSizes()
     aStaticTabs[2] = nMax;
     aStaticTabs[3] = nDoubleMax;
     aStaticTabs[4] = nDoubleMax + nRest/2;
-    SvxSimpleTable::SetTabs(aStaticTabs, MAP_PIXEL);
+    SvSimpleTable::SetTabs(aStaticTabs, MAP_PIXEL);
 }
 
 void SvxFontSubstCheckListBox::Resize()
 {
-    SvxSimpleTable::Resize();
+    SvSimpleTable::Resize();
     setColSizes();
 }
 
 void SvxFontSubstCheckListBox::SetTabs()
 {
-    SvxSimpleTable::SetTabs();
+    SvSimpleTable::SetTabs();
     sal_uInt16 nAdjust = SV_LBOXTAB_ADJUST_RIGHT|SV_LBOXTAB_ADJUST_LEFT|SV_LBOXTAB_ADJUST_CENTER|SV_LBOXTAB_ADJUST_NUMERIC|SV_LBOXTAB_FORCE;
 
     SvLBoxTab* pTab = aTabs[1];
@@ -451,7 +451,7 @@ void    SvxFontSubstCheckListBox::KeyInput( const KeyEvent& rKEvt )
         }
     }
     else
-        SvxSimpleTable::KeyInput(rKEvt);
+        SvSimpleTable::KeyInput(rKEvt);
 }
 
 void SvxFontSubstCheckListBox::CheckEntryPos(sal_uLong nPos, sal_uInt16 nCol, sal_Bool bChecked)

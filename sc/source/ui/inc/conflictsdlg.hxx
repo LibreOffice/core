@@ -138,7 +138,7 @@ class ScConflictsDlg : public ModalDialog
 {
 private:
     FixedText           maFtConflicts;
-    SvxSimpleTableContainer m_aLbConflictsContainer;
+    SvSimpleTableContainer m_aLbConflictsContainer;
     SvxRedlinTable      maLbConflicts;
     PushButton          maBtnKeepMine;
     PushButton          maBtnKeepOther;

@@ -126,6 +126,11 @@ String SV_BUTTONTEXT_SAVE
     Text [ en-US ] = "~Save";
 };
 
+String SV_BUTTONTEXT_OPEN
+{
+    Text [ en-US ] = "~Open";
+};
+
 String SV_BUTTONTEXT_UNDO
 {
     Text [ en-US ] = "~Undo" ;

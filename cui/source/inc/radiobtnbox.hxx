@@ -19,15 +19,15 @@
 #ifndef _SVX_RADIOBTNBOX_HXX
 #define _SVX_RADIOBTNBOX_HXX
 
-#include <svx/simptabl.hxx>
+#include <svtools/simptabl.hxx>
 
 namespace svx {
 
 // class SvxRadioButtonListBox -------------------------------------------
 
-class SvxRadioButtonListBox : public SvxSimpleTable
+class SvxRadioButtonListBox : public SvSimpleTable
 {
-    using SvxSimpleTable::SetTabs;
+    using SvSimpleTable::SetTabs;
 
 private:
     Point               m_aCurMousePoint;
@@ -38,7 +38,7 @@ protected:
     virtual void        KeyInput( const KeyEvent& rKEvt );
 
 public:
-    SvxRadioButtonListBox(SvxSimpleTableContainer& rParent, WinBits nBits);
+    SvxRadioButtonListBox(SvSimpleTableContainer& rParent, WinBits nBits);
     ~SvxRadioButtonListBox();
 
     void                HandleEntryChecked( SvTreeListEntry* _pEntry );

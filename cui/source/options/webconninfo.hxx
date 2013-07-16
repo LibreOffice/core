@@ -22,18 +22,18 @@
 #include <vcl/button.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/fixed.hxx>
+#include <svtools/simptabl.hxx>
 #include <svtools/stdctrl.hxx>
-#include <svx/simptabl.hxx>
 
 //........................................................................
 namespace svx
 {
 //........................................................................
 
-    class PasswordTable : public SvxSimpleTable
+    class PasswordTable : public SvSimpleTable
     {
     public:
-        PasswordTable(SvxSimpleTableContainer& rParent, WinBits nBits);
+        PasswordTable(SvSimpleTableContainer& rParent, WinBits nBits);
 
         void InsertHeaderItem(sal_uInt16 nColumn, const OUString& rText, HeaderBarItemBits nBits);
         void setColWidths();
@@ -53,7 +53,7 @@ namespace svx
         PushButton*    m_pChangeBtn;
         sal_Int32      m_nPos;
 
-    DECL_LINK( HeaderBarClickedHdl, SvxSimpleTable* );
+    DECL_LINK( HeaderBarClickedHdl, SvSimpleTable* );
     DECL_LINK(RemovePasswordHdl, void *);
     DECL_LINK(RemoveAllPasswordsHdl, void *);
     DECL_LINK(ChangePasswordHdl, void *);

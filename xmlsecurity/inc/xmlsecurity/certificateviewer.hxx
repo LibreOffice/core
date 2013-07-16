@@ -26,8 +26,8 @@
 #include <vcl/tabdlg.hxx>
 #include <vcl/tabctrl.hxx>
 #include <vcl/tabpage.hxx>
+#include <svtools/simptabl.hxx>
 #include <svtools/stdctrl.hxx>
-#include <svx/simptabl.hxx>
 #include <svtools/svmedit.hxx>
 
 namespace com {
@@ -101,8 +101,8 @@ public:
 class CertificateViewerDetailsTP : public CertificateViewerTP
 {
 private:
-    SvxSimpleTableContainer m_aElementsLBContainer;
-    SvxSimpleTable      maElementsLB;
+    SvSimpleTableContainer m_aElementsLBContainer;
+    SvSimpleTable      maElementsLB;
     MultiLineEdit       maElementML;
     Font                maStdFont;
     Font                maFixedWidthFont;

@@ -17,43 +17,37 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVX_SIMPTABL_HXX
-#define _SVX_SIMPTABL_HXX
+#ifndef _SV_SIMPTABL_HXX
+#define _SV_SIMPTABL_HXX
 
-#include <vcl/morebtn.hxx>
-
-#include <vcl/combobox.hxx>
-
-#include <vcl/group.hxx>
+#include "svtools/svtdllapi.h"
 #include <svtools/headbar.hxx>
 #include <svtools/svtabbx.hxx>
-#include <vcl/lstbox.hxx>
-#include "svx/svxdllapi.h"
 
-class SvxSimpleTable;
-class SVX_DLLPUBLIC SvxSimpleTableContainer : public Control
+class SvSimpleTable;
+class SVT_DLLPUBLIC SvSimpleTableContainer : public Control
 {
 private:
-    SvxSimpleTable*     m_pTable;
+    SvSimpleTable*     m_pTable;
 
 protected:
     virtual long PreNotify( NotifyEvent& rNEvt );
 
 public:
-    SvxSimpleTableContainer( Window* pParent, const ResId& rResId );
-    SvxSimpleTableContainer( Window* pParent, WinBits nBits = WB_BORDER );
+    SvSimpleTableContainer( Window* pParent, const ResId& rResId );
+    SvSimpleTableContainer( Window* pParent, WinBits nBits = WB_BORDER );
 
-    void SetTable(SvxSimpleTable* pTable);
+    void SetTable(SvSimpleTable* pTable);
 
     virtual void Resize();
 
     virtual void GetFocus();
 };
 
-class SVX_DLLPUBLIC SvxSimpleTable : public SvHeaderTabListBox
+class SVT_DLLPUBLIC SvSimpleTable : public SvHeaderTabListBox
 {
 private:
-    SvxSimpleTableContainer& m_rParentTableContainer;
+    SvSimpleTableContainer& m_rParentTableContainer;
 
     Link                aHeaderBarClickLink;
     Link                aHeaderBarDblClickLink;
@@ -92,8 +86,8 @@ protected:
     virtual StringCompare   ColCompare(SvTreeListEntry*,SvTreeListEntry*);
 public:
 
-    SvxSimpleTable(SvxSimpleTableContainer& rParent, WinBits nBits = WB_BORDER);
-    ~SvxSimpleTable();
+    SvSimpleTable(SvSimpleTableContainer& rParent, WinBits nBits = WB_BORDER);
+    ~SvSimpleTable();
 
     void UpdateViewSize();
 
@@ -152,6 +146,6 @@ public:
 };
 
 
-#endif // _SVX_SIMPTABL_HXX
+#endif // _SV_SIMPTABL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

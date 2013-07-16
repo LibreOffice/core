@@ -47,7 +47,7 @@ class SvxMultiPathDialog : public ModalDialog
 protected:
     FixedLine                   aPathFL;
     ListBox                     aPathLB;
-    SvxSimpleTableContainer m_aRadioLBContainer;
+    SvSimpleTableContainer m_aRadioLBContainer;
     svx::SvxRadioButtonListBox  aRadioLB;
     FixedText                   aRadioFT;
     PushButton                  aAddBtn;

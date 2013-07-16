@@ -39,8 +39,8 @@ namespace svx
 
 // class PasswordTable ---------------------------------------------------
 
-PasswordTable::PasswordTable(SvxSimpleTableContainer& rParent, WinBits nBits)
-    : SvxSimpleTable(rParent, nBits | WB_NOINITIALSELECTION)
+PasswordTable::PasswordTable(SvSimpleTableContainer& rParent, WinBits nBits)
+    : SvSimpleTable(rParent, nBits | WB_NOINITIALSELECTION)
 {
 }
 
@@ -78,7 +78,7 @@ void PasswordTable::Resort( bool bForced )
 
 void PasswordTable::Resize()
 {
-    SvxSimpleTable::Resize();
+    SvSimpleTable::Resize();
     if (isInitialLayout(this))
         setColWidths();
 }
@@ -96,7 +96,7 @@ void PasswordTable::setColWidths()
         GetSizePixel().Width() - nUserNameWidth);
     long aStaticTabs[]= { 2, 0, 0 };
     aStaticTabs[2] = nWebSiteWidth;
-    SvxSimpleTable::SetTabs(aStaticTabs, MAP_PIXEL);
+    SvSimpleTable::SetTabs(aStaticTabs, MAP_PIXEL);
 }
 
 // class WebConnectionInfoDialog -----------------------------------------
@@ -110,7 +110,7 @@ WebConnectionInfoDialog::WebConnectionInfoDialog(Window* pParent)
     get(m_pRemoveAllBtn, "removeall");
     get(m_pChangeBtn, "change");
 
-    SvxSimpleTableContainer *pPasswordsLBContainer = get<SvxSimpleTableContainer>("logins");
+    SvSimpleTableContainer *pPasswordsLBContainer = get<SvSimpleTableContainer>("logins");
     m_pPasswordsLB = new PasswordTable(*pPasswordsLBContainer, 0);
 
     long aStaticTabs[]= { 2, 0, 0 };
@@ -146,7 +146,7 @@ WebConnectionInfoDialog::~WebConnectionInfoDialog()
 }
 
 // -----------------------------------------------------------------------
-IMPL_LINK( WebConnectionInfoDialog, HeaderBarClickedHdl, SvxSimpleTable*, pTable )
+IMPL_LINK( WebConnectionInfoDialog, HeaderBarClickedHdl, SvSimpleTable*, pTable )
 {
     m_pPasswordsLB->Resort( NULL == pTable );
     return 0;

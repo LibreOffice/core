@@ -53,7 +53,7 @@ ScNamePasteDlg::ScNamePasteDlg( Window * pParent, ScDocShell* pShell, bool )
 
     ScViewData* pViewData = pShell->GetViewData();
     ScAddress aPos(pViewData->GetCurX(), pViewData->GetCurY(), pViewData->GetTabNo());
-    SvxSimpleTableContainer *pContainer = get<SvxSimpleTableContainer>("ctrl");
+    SvSimpleTableContainer *pContainer = get<SvSimpleTableContainer>("ctrl");
     Size aControlSize(210, 0);
     aControlSize = LogicToPixel(aControlSize, MAP_APPFONT);
     pContainer->set_width_request(aControlSize.Width());

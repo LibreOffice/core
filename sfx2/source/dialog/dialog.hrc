@@ -47,8 +47,6 @@
 
 #define MN_CONTEXT_TEMPLDLG             ( RC_DIALOG_BEGIN + 46)
 
-#define DLG_VERSIONS                    ( RC_DIALOG_BEGIN + 69 )
-
 #define STR_VIEWVERSIONCOMMENT          ( RC_DIALOG_BEGIN + 71 )
 
 #define MSG_ERROR_WRONG_CONFIRM         ( RC_DIALOG_BEGIN + 76 )

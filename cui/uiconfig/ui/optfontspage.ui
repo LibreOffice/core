@@ -162,7 +162,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="svxcorelo-SvxSimpleTableContainer" id="checklb">
+                      <object class="svtlo-SvSimpleTableContainer" id="checklb">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="vexpand">True</property>

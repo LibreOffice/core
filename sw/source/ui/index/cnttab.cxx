@@ -28,15 +28,15 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/docfile.hxx>
+#include <svtools/simptabl.hxx>
+#include <svtools/treelistentry.hxx>
 #include <svx/dialogs.hrc>
 #include <svx/svxdlg.hxx>
 #include <svx/flagsdef.hxx>
-#include <svx/simptabl.hxx>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/ui/dialogs/XFilePicker.hpp>
 #include <com/sun/star/ui/dialogs/XFilterManager.hpp>
 #include <svtools/indexentryres.hxx>
-#include "svtools/treelistentry.hxx"
 #include <editeng/unolingu.hxx>
 #include <column.hxx>
 #include <fmtfsize.hxx>

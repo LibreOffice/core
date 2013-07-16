@@ -20,10 +20,10 @@
 #ifndef _XMLSECURITY_CERTIFICATECHOOSER_HXX
 #define _XMLSECURITY_CERTIFICATECHOOSER_HXX
 
+#include <svtools/simptabl.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/button.hxx>
-#include <svx/simptabl.hxx>
 
 namespace com {
 namespace sun {
@@ -47,7 +47,7 @@ private:
     css::uno::Sequence< css::uno::Reference< css::security::XCertificate > > maCerts;
     SignatureInformations maCertsToIgnore;
 
-    SvxSimpleTable*     m_pCertLB;
+    SvSimpleTable*     m_pCertLB;
     PushButton*         m_pViewBtn;
     OKButton*           m_pOKBtn;
 

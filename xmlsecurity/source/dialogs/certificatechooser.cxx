@@ -58,11 +58,11 @@ CertificateChooser::CertificateChooser( Window* _pParent, uno::Reference< uno::X
     Size aControlSize(275, 122);
     const long nControlWidth = aControlSize.Width();
     aControlSize = LogicToPixel(aControlSize, MAP_APPFONT);
-    SvxSimpleTableContainer *pSignatures = get<SvxSimpleTableContainer>("signatures");
+    SvSimpleTableContainer *pSignatures = get<SvSimpleTableContainer>("signatures");
     pSignatures->set_width_request(aControlSize.Width());
     pSignatures->set_height_request(aControlSize.Height());
 
-    m_pCertLB = new SvxSimpleTable(*pSignatures);
+    m_pCertLB = new SvSimpleTable(*pSignatures);
     static long nTabs[] = { 3, 0, 30*nControlWidth/100, 60*nControlWidth/100 };
     m_pCertLB->SetTabs( &nTabs[0] );
     OUStringBuffer sHeader;
