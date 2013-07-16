@@ -498,6 +498,7 @@ SfxViewVersionDialog_Impl::SfxViewVersionDialog_Impl(Window *pParent, SfxVersion
 IMPL_LINK(SfxViewVersionDialog_Impl, ButtonHdl, Button*, pButton)
 {
     assert(pButton == m_pOKButton);
+    (void)pButton;
     m_rInfo.aComment = m_pEdit->GetText();
     EndDialog(RET_OK);
     return 0L;
