@@ -451,7 +451,8 @@ namespace drawinglayer
 #if defined(MACOSX)
                 const AlphaMask aMaskBmp( aContent.GetSizePixel());
 #else
-                const Bitmap aMaskBmp( aContent.GetSizePixel(), 1);
+                Bitmap aMaskBmp( aContent.GetSizePixel(), 1);
+                aMaskBmp.Erase(Color(COL_BLACK)); // #122758# Initialize to non-transparent
 #endif
                 aBitmapEx = BitmapEx(aContent, aMaskBmp);
             }
