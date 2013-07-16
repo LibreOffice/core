@@ -3555,82 +3555,82 @@ void ScInterpreter::ScDBArea()
 void ScInterpreter::ScColRowNameAuto()
 {
     ScComplexRefData aRefData( static_cast<const ScToken*>(pCur)->GetDoubleRef() );
-    aRefData.CalcAbsIfRel( aPos );
-    if ( aRefData.Valid() )
+    ScRange aAbs = aRefData.toAbs(aPos);
+    if (!ValidRange(aAbs))
     {
-        SCsCOL nStartCol;
-        SCsROW nStartRow;
-        SCsCOL nCol2;
-        SCsROW nRow2;
-        // evtl. Begrenzung durch definierte ColRowNameRanges merken
-        nCol2 = aRefData.Ref2.nCol;
-        nRow2 = aRefData.Ref2.nRow;
-        // DataArea der ersten Zelle
-        nStartCol = aRefData.Ref2.nCol = aRefData.Ref1.nCol;
-        nStartRow = aRefData.Ref2.nRow = aRefData.Ref1.nRow;
-        aRefData.Ref2.nTab = aRefData.Ref1.nTab;
-        pDok->GetDataArea(  (SCTAB&) aRefData.Ref1.nTab,
-                            (SCCOL&) aRefData.Ref1.nCol,
-                            (SCROW&) aRefData.Ref1.nRow,
-                            (SCCOL&) aRefData.Ref2.nCol,
-                            (SCROW&) aRefData.Ref2.nRow,
-                            true, false );
-        // DataArea im Ursprung begrenzen
-        aRefData.Ref1.nCol = nStartCol;
-        aRefData.Ref1.nRow = nStartRow;
+        PushError( errNoRef );
+        return;
+    }
 
-        //! korrespondiert mit ScCompiler::GetToken
-        if ( aRefData.Ref1.IsColRel() )
-        {   // ColName
-            aRefData.Ref2.nCol = nStartCol;
-            // evtl. vorherige Begrenzung durch definierte ColRowNameRanges erhalten
-            if ( aRefData.Ref2.nRow > nRow2 )
-                aRefData.Ref2.nRow = nRow2;
-            SCROW nMyRow;
-            if ( aPos.Col() == nStartCol
-              && nStartRow <= (nMyRow = aPos.Row()) && nMyRow <= aRefData.Ref2.nRow )
-            {   // Formel in gleicher Spalte und innerhalb des Range
-                if ( nMyRow == nStartRow )
-                {   // direkt unter dem Namen den Rest nehmen
-                    nStartRow++;
-                    if ( nStartRow > MAXROW )
-                        nStartRow = MAXROW;
-                    aRefData.Ref1.nRow = nStartRow;
-                }
-                else
-                {   // weiter unten vom Namen bis zur Formelzelle
-                    aRefData.Ref2.nRow = nMyRow - 1;
-                }
+    SCsCOL nStartCol;
+    SCsROW nStartRow;
+
+    // evtl. Begrenzung durch definierte ColRowNameRanges merken
+    SCsCOL nCol2 = aAbs.aEnd.Col();
+    SCsROW nRow2 = aAbs.aEnd.Row();
+    // DataArea of the first cell
+    nStartCol = aAbs.aStart.Col();
+    nStartRow = aAbs.aStart.Row();
+    aAbs.aEnd = aAbs.aStart; // Shrink to the top-left cell.
+
+    {
+        // Expand to the data area. Only modify the end position.
+        SCCOL nDACol1 = aAbs.aStart.Col(), nDACol2 = aAbs.aEnd.Col();
+        SCROW nDARow1 = aAbs.aStart.Row(), nDARow2 = aAbs.aEnd.Row();
+        pDok->GetDataArea(aAbs.aStart.Tab(), nDACol1, nDARow1, nDACol2, nDARow2, true, false);
+        aAbs.aEnd.SetCol(nDACol2);
+        aAbs.aEnd.SetRow(nDARow2);
+    }
+
+    //! korrespondiert mit ScCompiler::GetToken
+    if ( aRefData.Ref1.IsColRel() )
+    {   // ColName
+        aAbs.aEnd.SetCol(nStartCol);
+        // evtl. vorherige Begrenzung durch definierte ColRowNameRanges erhalten
+        if (aAbs.aEnd.Row() > nRow2)
+            aAbs.aEnd.SetRow(nRow2);
+        SCROW nMyRow;
+        if ( aPos.Col() == nStartCol
+          && nStartRow <= (nMyRow = aPos.Row()) && nMyRow <= aAbs.aEnd.Row())
+        {   // Formel in gleicher Spalte und innerhalb des Range
+            if ( nMyRow == nStartRow )
+            {   // direkt unter dem Namen den Rest nehmen
+                nStartRow++;
+                if ( nStartRow > MAXROW )
+                    nStartRow = MAXROW;
+                aAbs.aStart.SetRow(nStartRow);
+            }
+            else
+            {   // weiter unten vom Namen bis zur Formelzelle
+                aAbs.aEnd.SetRow(nMyRow - 1);
             }
         }
-        else
-        {   // RowName
-            aRefData.Ref2.nRow = nStartRow;
-            // evtl. vorherige Begrenzung durch definierte ColRowNameRanges erhalten
-            if ( aRefData.Ref2.nCol > nCol2 )
-                aRefData.Ref2.nCol = nCol2;
-            SCCOL nMyCol;
-            if ( aPos.Row() == nStartRow
-              && nStartCol <= (nMyCol = aPos.Col()) && nMyCol <= aRefData.Ref2.nCol )
-            {   // Formel in gleicher Zeile und innerhalb des Range
-                if ( nMyCol == nStartCol )
-                {   // direkt neben dem Namen den Rest nehmen
-                    nStartCol++;
-                    if ( nStartCol > MAXCOL )
-                        nStartCol = MAXCOL;
-                    aRefData.Ref1.nCol = nStartCol;
-                }
-                else
-                {   // weiter rechts vom Namen bis zur Formelzelle
-                    aRefData.Ref2.nCol = nMyCol - 1;
-                }
-            }
-        }
-        aRefData.CalcRelFromAbs( aPos );
-        PushTempToken( new ScDoubleRefToken( aRefData ) );
     }
     else
-        PushError( errNoRef );
+    {   // RowName
+        aAbs.aEnd.SetRow(nStartRow);
+        // evtl. vorherige Begrenzung durch definierte ColRowNameRanges erhalten
+        if (aAbs.aEnd.Col() > nCol2)
+            aAbs.aEnd.SetCol(nCol2);
+        SCCOL nMyCol;
+        if ( aPos.Row() == nStartRow
+          && nStartCol <= (nMyCol = aPos.Col()) && nMyCol <= aAbs.aEnd.Col())
+        {   // Formel in gleicher Zeile und innerhalb des Range
+            if ( nMyCol == nStartCol )
+            {   // direkt neben dem Namen den Rest nehmen
+                nStartCol++;
+                if ( nStartCol > MAXCOL )
+                    nStartCol = MAXCOL;
+                aAbs.aStart.SetCol(nStartCol);
+            }
+            else
+            {   // weiter rechts vom Namen bis zur Formelzelle
+                aAbs.aEnd.SetCol(nMyCol - 1);
+            }
+        }
+    }
+    aRefData.SetRange(aAbs, aPos);
+    PushTempToken( new ScDoubleRefToken( aRefData ) );
 }
 
 // --- internals ------------------------------------------------------------
