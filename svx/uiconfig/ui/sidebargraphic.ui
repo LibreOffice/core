@@ -1,0 +1,334 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <!-- interface-requires gtk+ 3.0 -->
+  <object class="GtkGrid" id="GraphicPropertyPanel">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="row_homogeneous">True</property>
+    <property name="column_homogeneous">True</property>
+    <child>
+      <object class="GtkBox" id="box1">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="border_width">6</property>
+        <property name="orientation">vertical</property>
+        <property name="spacing">12</property>
+        <child>
+          <object class="GtkBox" id="box2">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="orientation">vertical</property>
+            <child>
+              <object class="GtkBox" id="box3">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <child>
+                  <object class="GtkLabel" id="brightnesslabel">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="xalign">0</property>
+                    <property name="label" translatable="yes">_Brightness:</property>
+                    <property name="use_underline">True</property>
+                  </object>
+                  <packing>
+                    <property name="expand">True</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="contrastlabel">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="margin_left">10</property>
+                    <property name="xalign">0</property>
+                    <property name="label" translatable="yes">_Contrast:</property>
+                    <property name="use_underline">True</property>
+                  </object>
+                  <packing>
+                    <property name="expand">True</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkBox" id="box4">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="margin_bottom">10</property>
+                <child>
+                  <object class="GtkSpinButton" id="setbrightness:%">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="tooltip_markup" translatable="yes">Specify the luminance of the graphic.</property>
+                    <property name="tooltip_text" translatable="yes">Specify the luminance of the graphic.</property>
+                    <property name="invisible_char">•</property>
+                  </object>
+                  <packing>
+                    <property name="expand">True</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkSpinButton" id="setcontrast:%">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="tooltip_markup" translatable="yes">Specify the degree of difference between the lightest and darkest parts of the graphic.</property>
+                    <property name="tooltip_text" translatable="yes">Specify the degree of difference between the lightest and darkest parts of the graphic.</property>
+                    <property name="margin_left">10</property>
+                    <property name="invisible_char">•</property>
+                  </object>
+                  <packing>
+                    <property name="expand">True</property>
+                    <property name="fill">True</property>
+                    <property name="pack_type">end</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkBox" id="box5">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <child>
+                  <object class="GtkLabel" id="colorlmodelabel">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="xalign">0</property>
+                    <property name="label" translatable="yes">Color _mode:</property>
+                    <property name="use_underline">True</property>
+                  </object>
+                  <packing>
+                    <property name="expand">True</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="transparencylabel">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="margin_left">30</property>
+                    <property name="xalign">0</property>
+                    <property name="label" translatable="yes">_Transparency:</property>
+                    <property name="use_underline">True</property>
+                  </object>
+                  <packing>
+                    <property name="expand">True</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkBox" id="box6">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="margin_bottom">10</property>
+                <child>
+                  <object class="GtkComboBoxText" id="setcolormode">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="margin_right">10</property>
+                    <property name="wrap_width">1</property>
+                    <property name="row_span_column">0</property>
+                    <property name="entry_text_column">0</property>
+                    <property name="id_column">1</property>
+                  </object>
+                  <packing>
+                    <property name="expand">True</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkSpinButton" id="settransparency:%">
+                    <property name="width_request">120</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="tooltip_markup" translatable="yes">Specify the percentage of transparency; 0% is fully opaque and 100% is fully transparent.</property>
+                    <property name="tooltip_text" translatable="yes">Specify the percentage of transparency; 0% is fully opaque and 100% is fully transparent.</property>
+                    <property name="invisible_char">•</property>
+                  </object>
+                  <packing>
+                    <property name="expand">True</property>
+                    <property name="fill">True</property>
+                    <property name="pack_type">end</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">3</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkBox" id="box7">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <child>
+                  <object class="GtkImage" id="image1">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="pixbuf">svx/res/symphony/AdjustColorRed_16x16.png</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkSpinButton" id="setred:%">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="tooltip_markup" translatable="yes">Red</property>
+                    <property name="tooltip_text" translatable="yes">Red</property>
+                    <property name="invisible_char">•</property>
+                  </object>
+                  <packing>
+                    <property name="expand">True</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkImage" id="image2">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="margin_left">10</property>
+                    <property name="pixbuf">svx/res/symphony/AdjustColorGreen_16x16.png</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkSpinButton" id="setgreen:%">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="tooltip_markup" translatable="yes">Green</property>
+                    <property name="tooltip_text" translatable="yes">Green</property>
+                    <property name="invisible_char">•</property>
+                  </object>
+                  <packing>
+                    <property name="expand">True</property>
+                    <property name="fill">True</property>
+                    <property name="pack_type">end</property>
+                    <property name="position">3</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">4</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkBox" id="box8">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <child>
+                  <object class="GtkImage" id="image3">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="pixbuf">svx/res/symphony/AdjustColorBlue_16x16.png</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkSpinButton" id="setblue:%">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="tooltip_markup" translatable="yes">Blue</property>
+                    <property name="tooltip_text" translatable="yes">Blue</property>
+                    <property name="invisible_char">•</property>
+                  </object>
+                  <packing>
+                    <property name="expand">True</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkImage" id="image4">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="margin_left">10</property>
+                    <property name="pixbuf">svx/res/symphony/AdjustColorGamma_16x16.png</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkSpinButton" id="setgamma:0">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="tooltip_markup" translatable="yes">Specify the gamma value that affects the brightness of the midtone values.</property>
+                    <property name="tooltip_text" translatable="yes">Specify the gamma value that affects the brightness of the midtone values.</property>
+                    <property name="invisible_char">•</property>
+                    <property name="digits">2</property>
+                  </object>
+                  <packing>
+                    <property name="expand">True</property>
+                    <property name="fill">True</property>
+                    <property name="pack_type">end</property>
+                    <property name="position">3</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">5</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+      </object>
+      <packing>
+        <property name="left_attach">0</property>
+        <property name="top_attach">0</property>
+        <property name="width">1</property>
+        <property name="height">1</property>
+      </packing>
+    </child>
+  </object>
+</interface>
