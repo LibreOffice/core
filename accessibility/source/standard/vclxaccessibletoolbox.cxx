@@ -484,21 +484,24 @@ void VCLXAccessibleToolBox::HandleSubToolBarEvent( const VclWindowEvent& rVclWin
 void VCLXAccessibleToolBox::ReleaseSubToolBox( ToolBox* _pSubToolBox )
 {
     ToolBox* pToolBox = static_cast< ToolBox* >( GetWindow() );
-    if ( pToolBox )
+    if ( !pToolBox )
+        return;
+
+    sal_Int32 nIndex = pToolBox->GetItemPos( pToolBox->GetCurItemId() );
+    if ( nIndex == SAL_MAX_UINT16 )
+        return; // not found
+
+    Reference< XAccessible > xItem = getAccessibleChild( nIndex );
+    if ( !xItem.is() )
+        return;
+
+    Reference< XAccessible > xChild = _pSubToolBox->GetAccessible();
+    VCLXAccessibleToolBoxItem* pItem =
+        static_cast< VCLXAccessibleToolBoxItem* >( xItem.get() );
+    if ( pItem->GetChild() == xChild )
     {
-        sal_Int32 nIndex = pToolBox->GetItemPos( pToolBox->GetCurItemId() );
-        Reference< XAccessible > xItem = getAccessibleChild( nIndex );
-        if ( xItem.is() )
-        {
-            Reference< XAccessible > xChild = _pSubToolBox->GetAccessible();
-            VCLXAccessibleToolBoxItem* pItem =
-                static_cast< VCLXAccessibleToolBoxItem* >( xItem.get() );
-            if ( pItem->GetChild() == xChild )
-            {
-                pItem->SetChild( Reference< XAccessible >() );
-                pItem->NotifyChildEvent( xChild, false );
-            }
-        }
+        pItem->SetChild( Reference< XAccessible >() );
+        pItem->NotifyChildEvent( xChild, false );
     }
 }
 // -----------------------------------------------------------------------------
