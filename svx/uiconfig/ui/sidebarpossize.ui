@@ -176,7 +176,7 @@
                     <property name="can_focus">False</property>
                     <property name="orientation">vertical</property>
                     <child>
-                      <object class="GtkComboBox" id="rotation: degrees">
+                      <object class="GtkComboBox" id="rotation:0degrees">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="tooltip_markup" translatable="yes">Select the angle for rotation.</property>
@@ -218,7 +218,7 @@
                                 <property name="can_focus">False</property>
                                 <property name="tooltip_markup" translatable="yes">Flip the selected object vertically.</property>
                                 <property name="tooltip_text" translatable="yes">Flip the selected object vertically.</property>
-                                <property name="action_name">.uno:FlipVertical </property>
+                                <property name="action_name">.uno:FlipVertical</property>
                                 <property name="use_underline">True</property>
                               </object>
                               <packing>

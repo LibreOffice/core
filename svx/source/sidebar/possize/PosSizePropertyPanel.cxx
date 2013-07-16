@@ -36,7 +36,6 @@
 #include <vcl/toolbox.hxx>
 #include <svl/aeitem.hxx>
 #include <svx/svdview.hxx>
-//#include <svx/uiconfig/ui/sidebarpossize.ui>
 
 using namespace css;
 using namespace cssu;
@@ -45,9 +44,7 @@ using ::sfx2::sidebar::Theme;
 const char UNO_FLIPHORIZONTAL[] = ".uno:FlipHorizontal";
 const char UNO_FLIPVERTICAL[]   = ".uno:FlipVertical";
 
-#define A2S(pString) (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(pString)))
-#define USERITEM_NAME rtl::OUString::createFromAscii("FitItem")
-
+const char USERITEM_NAME[]      = "FitItem";
 
 namespace svx { namespace sidebar {
 
@@ -192,16 +189,6 @@ void PosSizePropertyPanel::Initialize()
     //flip:
     mpFlipTbx->SetSelectHdl( LINK( this, PosSizePropertyPanel, FlipHdl) );
 
-    const sal_uInt16 nIdFlipHorizontal = mpFlipTbx->GetItemId(UNO_FLIPHORIZONTAL);
-    const sal_uInt16 nIdFlipVertical   = mpFlipTbx->GetItemId(UNO_FLIPVERTICAL);
-
-    mpFlipTbx->SetItemImage(
-        nIdFlipHorizontal,
-        GetImage(mxFrame, A2S(".uno:FlipHorizontal"), sal_False));
-    mpFlipTbx->SetItemImage(
-        nIdFlipVertical,
-        GetImage(mxFrame, A2S(".uno:FlipVertical"), sal_False));
-
     mpMtrPosX->SetAccessibleRelationLabeledBy(mpFtPosX);
     mpMtrPosY->SetAccessibleRelationLabeledBy(mpFtPosY);
     mpMtrWidth->SetAccessibleRelationLabeledBy(mpFtWidth);
@@ -265,11 +252,11 @@ PosSizePropertyPanel* PosSizePropertyPanel::Create (
     const cssu::Reference<css::ui::XSidebar>& rxSidebar)
 {
     if (pParent == NULL)
-        throw lang::IllegalArgumentException(A2S("no parent Window given to PosSizePropertyPanel::Create"), NULL, 0);
+        throw lang::IllegalArgumentException("no parent Window given to PosSizePropertyPanel::Create", NULL, 0);
     if ( ! rxFrame.is())
-        throw lang::IllegalArgumentException(A2S("no XFrame given to PosSizePropertyPanel::Create"), NULL, 1);
+        throw lang::IllegalArgumentException("no XFrame given to PosSizePropertyPanel::Create", NULL, 1);
     if (pBindings == NULL)
-        throw lang::IllegalArgumentException(A2S("no SfxBindings given to PosSizePropertyPanel::Create"), NULL, 2);
+        throw lang::IllegalArgumentException("no SfxBindings given to PosSizePropertyPanel::Create", NULL, 2);
 
     return new PosSizePropertyPanel(
         pParent,
@@ -572,20 +559,20 @@ IMPL_LINK( PosSizePropertyPanel, RotationHdl, void *, EMPTYARG )
 IMPL_LINK( PosSizePropertyPanel, FlipHdl, ToolBox*, pBox )
 {
     const OUString aCommand(pBox->GetItemCommand(pBox->GetCurItemId()));
+
+    if(aCommand == UNO_FLIPHORIZONTAL)
     {
-        if(aCommand == UNO_FLIPHORIZONTAL)
-        {
-            SfxVoidItem aHoriItem (SID_FLIP_HORIZONTAL);
-            GetBindings()->GetDispatcher()->Execute(
+        SfxVoidItem aHoriItem(SID_FLIP_HORIZONTAL);
+        GetBindings()->GetDispatcher()->Execute(
                 SID_FLIP_HORIZONTAL, SFX_CALLMODE_RECORD, &aHoriItem, 0L );
-        }
-        else if(aCommand == UNO_FLIPVERTICAL)
-        {
-            SfxVoidItem aVertItem (SID_FLIP_VERTICAL );
-            GetBindings()->GetDispatcher()->Execute(
-                SID_FLIP_VERTICAL, SFX_CALLMODE_RECORD, &aVertItem, 0L );
-        }
     }
+    else if(aCommand == UNO_FLIPVERTICAL)
+    {
+        SfxVoidItem aVertItem(SID_FLIP_VERTICAL);
+        GetBindings()->GetDispatcher()->Execute(
+                SID_FLIP_VERTICAL, SFX_CALLMODE_RECORD, &aVertItem, 0L );
+    }
+
     return 0;
 }
 
@@ -1186,5 +1173,3 @@ void PosSizePropertyPanel::DisableControls()
 
 
 } } // end of namespace svx::sidebar
-
-// eof
