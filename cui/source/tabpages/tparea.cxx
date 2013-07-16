@@ -256,12 +256,6 @@ SvxTransparenceTabPage::SvxTransparenceTabPage(Window* pParent, const SfxItemSet
     get(m_pCtlBitmapPreview,"CTL_BITMAP_PREVIEW");
     get(m_pCtlXRectPreview,"CTL_TRANS_PREVIEW");
 
-
-//     String accName = String(CUI_RES(STR_EXAMPLE));
-//     aCtlBitmapPreview.SetAccessibleName(accName);
-//     aCtlXRectPreview.SetAccessibleName(accName);
-//     aMtrTransparent.SetAccessibleRelationLabeledBy( &aRbtTransLinear );
-
     // main selection
     m_pRbtTransOff->SetClickHdl(LINK(this, SvxTransparenceTabPage, ClickTransOffHdl_Impl));
     m_pRbtTransLinear->SetClickHdl(LINK(this, SvxTransparenceTabPage, ClickTransLinearHdl_Impl));
