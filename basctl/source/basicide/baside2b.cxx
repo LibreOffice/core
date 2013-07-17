@@ -275,7 +275,6 @@ EditorWindow::~EditorWindow()
         pEditEngine->RemoveView(pEditView.get());
     }
 
-    //delete aListBox;
     delete pCodeCompleteWnd;
 }
 
@@ -438,8 +437,8 @@ void EditorWindow::MouseButtonUp( const MouseEvent &rEvt )
         pEditView->MouseButtonUp( rEvt );
         if (SfxBindings* pBindings = GetBindingsPtr())
         {
-            pBindings->Invalidate( SID_COPY );
-            pBindings->Invalidate( SID_CUT );
+            /*pBindings->Invalidate( SID_COPY );
+            pBindings->Invalidate( SID_CUT );*/
             pBindings->Invalidate( SID_BASICIDE_STAT_POS );
         }
     }
@@ -490,25 +489,6 @@ bool EditorWindow::ImpCanModify()
     return bCanModify;
 }
 
-std::vector< OUString > EditorWindow::Split( const OUString& sStr, const sal_Unicode& aChar )
-{
-    std::vector< OUString > aRet;
-    OUString sTmp;
-    for( sal_Int32 i = 0; i < sStr.getLength(); ++i )
-    {
-        if( sStr[i] != aChar)
-            sTmp += OUString(sStr[i]);
-        else
-        {
-            aRet.push_back(sTmp);
-            sTmp = OUString("");
-        }
-    }
-    if(sTmp != OUString(""))
-        aRet.push_back(sTmp);
-    return aRet;
-}
-
 void EditorWindow::KeyInput( const KeyEvent& rKEvt )
 {
     SvtMiscOptions aMiscOptions;
@@ -534,7 +514,7 @@ void EditorWindow::KeyInput( const KeyEvent& rKEvt )
         OUString aLine( pEditEngine->GetText( nLine ) ); // the line being modified
         OUString aStr = aLine.copy( std::max(aLine.lastIndexOf(" "), aLine.lastIndexOf("\t"))+1 ); // variable name
         OUString sActSub = GetActualSubName( nLine );
-        std::vector< OUString > aVect; //= Split( aStr, '.' );
+        std::vector< OUString > aVect;
 
         HighlightPortions aPortions;
         aHighlighter.getHighlightPortions( nLine, aLine, aPortions );
@@ -595,7 +575,8 @@ void EditorWindow::KeyInput( const KeyEvent& rKEvt )
                             }
                             pCodeCompleteWnd->ResizeListBox();
                             pCodeCompleteWnd->Show();
-                            pCodeCompleteWnd->GrabFocus();
+                            //pCodeCompleteWnd->GrabFocus();
+                            pCodeCompleteWnd->SelectFirstEntry();
                         }
                     }
                 }
@@ -2399,6 +2380,12 @@ CodeCompleteListBox::~CodeCompleteListBox()
 
 IMPL_LINK_NOARG(CodeCompleteListBox, ImplDoubleClickHdl)
 {
+    InsertSelectedEntry();
+    return 0;
+}
+
+void CodeCompleteListBox::InsertSelectedEntry()
+{
     if( GetEntry( GetSelectEntryPos() ) != OUString("") )
     {
         pCodeCompleteWindow->pParent->GetEditView()->SetSelection( pCodeCompleteWindow->GetTextSelection() );
@@ -2407,7 +2394,6 @@ IMPL_LINK_NOARG(CodeCompleteListBox, ImplDoubleClickHdl)
         pCodeCompleteWindow->LoseFocus();
         pCodeCompleteWindow->Hide();
     }
-    return 0;
 }
 
 long CodeCompleteListBox::PreNotify( NotifyEvent& rNEvt )
@@ -2419,12 +2405,15 @@ long CodeCompleteListBox::PreNotify( NotifyEvent& rNEvt )
         {
             case KEY_ESCAPE:
                 pCodeCompleteWindow->pParent->GetEditView()->EnableCursor( true );
+                pCodeCompleteWindow->LoseFocus();
                 pCodeCompleteWindow->Hide();
                 return 0;
-            default:
-                return ListBox::PreNotify( rNEvt );
+            case KEY_RETURN:
+                InsertSelectedEntry();
+                return 0;
         }
     }
+    return ListBox::PreNotify( rNEvt );
 }
 
 CodeCompleteWindow::CodeCompleteWindow( EditorWindow* pPar )
@@ -2432,7 +2421,7 @@ CodeCompleteWindow::CodeCompleteWindow( EditorWindow* pPar )
 pParent(pPar)
 {
     InitListBox();
-    SetSizePixel( Size(150,150) );
+    SetSizePixel( Size(150,150) ); //default, later it changes
 }
 
 void CodeCompleteWindow::InitListBox()
@@ -2497,6 +2486,15 @@ void CodeCompleteWindow::ResizeListBox()
 
         pListBox->SetSizePixel( aSize );
         SetSizePixel( aSize );
+    }
+}
+
+void CodeCompleteWindow::SelectFirstEntry()
+{
+    if( pListBox->GetEntryCount() > 0 )
+    {
+         pListBox->SelectEntryPos( 0 );
+         pListBox->GrabFocus();
     }
 }
 
