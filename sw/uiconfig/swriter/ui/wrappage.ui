@@ -301,7 +301,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkImage" id="image1">
+                      <object class="GtkImage" id="imgthrough">
                         <property name="can_focus">False</property>
                         <property name="no_show_all">True</property>
                         <property name="pixbuf">sw/imglst/wr05.png</property>
