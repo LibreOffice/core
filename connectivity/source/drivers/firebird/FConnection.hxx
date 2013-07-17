@@ -77,13 +77,13 @@ namespace connectivity
         typedef ::std::vector< ::connectivity::OTypeInfo>   TTypeInfoVector;
         typedef std::vector< ::com::sun::star::uno::WeakReferenceHelper > OWeakRefArray;
 
-        class OConnection : public OBase_Mutex,
-                            public OConnection_BASE,
+        class OConnection : public OConnection_BASE,
                             public connectivity::OSubComponent<OConnection, OConnection_BASE>
         {
             friend class connectivity::OSubComponent<OConnection, OConnection_BASE>;
 
         protected:
+            ::osl::Mutex                    m_aMutex;
             static const OUString sDBLocation; // Location within .odb container
             rtl_TextEncoding                        m_nTextEncoding; // the encoding which is used for all text conversions
             //====================================================================

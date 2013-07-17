@@ -85,7 +85,7 @@ using namespace ::com::sun::star::uno;
 const OUString OConnection::sDBLocation( "firebird.fdb" );
 
 OConnection::OConnection(FirebirdDriver*    _pDriver)
-                        :OMetaConnection_BASE(m_aMutex),
+                        :OConnection_BASE(m_aMutex),
                          OSubComponent<OConnection, OConnection_BASE>((::cppu::OWeakObject*)_pDriver, this),
                          m_xMetaData(NULL),
                          m_bIsEmbedded(sal_False),
