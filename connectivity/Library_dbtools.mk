@@ -48,7 +48,7 @@ endif
 
 #connectivity/source/commontools/RowFunctionParser.cxx disable optimization?
 
-$(eval $(call gb_Library_add_noexception_objects,dbtools,\
+$(eval $(call gb_Library_add_exception_objects,dbtools,\
 	connectivity/source/simpledbt/refbase \
 ))
 
