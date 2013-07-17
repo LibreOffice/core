@@ -209,6 +209,8 @@ DomainMapper_Impl::DomainMapper_Impl(
     m_bUsingEnhancedFields = lcl_IsUsingEnhancedFields( m_xComponentContext );
 
     m_pSdtHelper = new SdtHelper(*this);
+
+    m_aRedlines.push(std::vector<RedlineParamsPtr>());
 }
 
 
@@ -1482,6 +1484,9 @@ void DomainMapper_Impl::PushFootOrEndnote( bool bIsFootnote )
 {
     try
     {
+        // Redlines outside the footnote should not affect footnote content
+        m_aRedlines.push(std::vector< RedlineParamsPtr >());
+
         PropertyMapPtr pTopContext = GetTopContext();
         uno::Reference< text::XText > xFootnoteText;
         if (GetTextFactory().is())
@@ -1573,9 +1578,9 @@ void DomainMapper_Impl::CheckParaRedline( uno::Reference< text::XTextRange > xRa
 
 void DomainMapper_Impl::CheckRedline( uno::Reference< text::XTextRange > xRange )
 {
-    vector<RedlineParamsPtr>::iterator pIt = m_aRedlines.begin( );
+    vector<RedlineParamsPtr>::iterator pIt = m_aRedlines.top().begin( );
     vector< RedlineParamsPtr > aCleaned;
-    for (; pIt != m_aRedlines.end( ); ++pIt )
+    for (; pIt != m_aRedlines.top().end( ); ++pIt )
     {
         CreateRedline( xRange, *pIt );
 
@@ -1586,7 +1591,7 @@ void DomainMapper_Impl::CheckRedline( uno::Reference< text::XTextRange > xRange 
         }
     }
 
-    m_aRedlines.swap( aCleaned );
+    m_aRedlines.top().swap( aCleaned );
 }
 
 void DomainMapper_Impl::StartParaChange( )
@@ -1629,6 +1634,8 @@ void DomainMapper_Impl::PopFootOrEndnote()
     RemoveLastParagraph();
     if (!m_aTextAppendStack.empty())
         m_aTextAppendStack.pop();
+
+    m_aRedlines.pop();
 }
 
 
@@ -3760,7 +3767,7 @@ void DomainMapper_Impl::AddNewRedline(  )
     pNew->m_nToken = ooxml::OOXML_mod;
     if ( !m_bIsParaChange )
     {
-        m_aRedlines.push_back( pNew );
+        m_aRedlines.top().push_back( pNew );
     }
     else
     {
@@ -3771,8 +3778,8 @@ void DomainMapper_Impl::AddNewRedline(  )
 RedlineParamsPtr DomainMapper_Impl::GetTopRedline(  )
 {
     RedlineParamsPtr pResult;
-    if ( !m_bIsParaChange && m_aRedlines.size(  ) > 0 )
-        pResult = m_aRedlines.back(  );
+    if ( !m_bIsParaChange && m_aRedlines.top().size(  ) > 0 )
+        pResult = m_aRedlines.top().back(  );
     else if ( m_bIsParaChange )
         pResult = m_pParaRedline;
     return pResult;
@@ -3835,9 +3842,9 @@ void DomainMapper_Impl::SetCurrentRedlineToken( sal_Int32 nToken )
 
 void DomainMapper_Impl::RemoveCurrentRedline( )
 {
-    if ( m_aRedlines.size( ) > 0 )
+    if ( m_aRedlines.top().size( ) > 0 )
     {
-        m_aRedlines.pop_back( );
+        m_aRedlines.top().pop_back( );
     }
 }
 

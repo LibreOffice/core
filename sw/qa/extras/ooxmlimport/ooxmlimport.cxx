@@ -124,6 +124,7 @@ public:
     void testFdo43641();
     void testTableAutoColumnFixedSize();
     void testFdo46361();
+    void testFdo65632();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -213,6 +214,7 @@ void Test::run()
         {"fdo43641.docx", &Test::testFdo43641},
         {"table-auto-column-fixed-size.docx", &Test::testTableAutoColumnFixedSize},
         {"fdo46361.docx", &Test::testFdo46361},
+        {"fdo65632.docx", &Test::testFdo65632},
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -1501,6 +1503,17 @@ void Test::testFdo46361()
     CPPUNIT_ASSERT_EQUAL(OUString("text\ntext"), uno::Reference<text::XTextRange>(xGroupShape->getByIndex(1), uno::UNO_QUERY)->getString());
     // \n chars were missing, due to unhandled multiple w:p tags.
     CPPUNIT_ASSERT_EQUAL(OUString("text\ntext\n"), uno::Reference<text::XTextRange>(xGroupShape->getByIndex(2), uno::UNO_QUERY)->getString());
+}
+
+void Test::testFdo65632()
+{
+    // The problem was that the footnote text had fake redline: only the body
+    // text has redline in fact.
+    uno::Reference<text::XFootnotesSupplier> xFootnotesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xFootnotes(xFootnotesSupplier->getFootnotes(), uno::UNO_QUERY);
+    uno::Reference<text::XText> xText(xFootnotes->getByIndex(0), uno::UNO_QUERY);
+    //uno::Reference<text::XTextRange> xParagraph = getParagraphOfText(1, xText);
+    CPPUNIT_ASSERT_EQUAL(OUString("Text"), getProperty<OUString>(getRun(getParagraphOfText(1, xText), 1), "TextPortionType"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
