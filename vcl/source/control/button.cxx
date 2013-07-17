@@ -2084,90 +2084,90 @@ void RadioButton::ImplDrawRadioButtonState()
 
     }
 
-if ( bNativeOK == sal_False )
-{
-    // kein Image-RadioButton
-    if ( !maImage )
+    if ( bNativeOK == sal_False )
     {
-        sal_uInt16 nStyle = ImplGetButtonState();
-        if ( !IsEnabled() )
-            nStyle |= BUTTON_DRAW_DISABLED;
-        if ( mbChecked )
-            nStyle |= BUTTON_DRAW_CHECKED;
-        Image aImage = GetRadioImage( GetSettings(), nStyle );
-        if ( IsZoom() )
-            DrawImage( maStateRect.TopLeft(), maStateRect.GetSize(), aImage );
-        else
-            DrawImage( maStateRect.TopLeft(), aImage );
-    }
-    else
-    {
-        HideFocus();
-
-        DecorationView          aDecoView( this );
-        const StyleSettings&    rStyleSettings = GetSettings().GetStyleSettings();
-        Rectangle               aImageRect  = maStateRect;
-        Size                    aImageSize  = maImage.GetSizePixel();
-        sal_Bool                    bEnabled    = IsEnabled();
-        sal_uInt16 nButtonStyle = FRAME_DRAW_DOUBLEIN;
-
-        aImageSize.Width()  = CalcZoom( aImageSize.Width() );
-        aImageSize.Height() = CalcZoom( aImageSize.Height() );
-
-        // display border and selection status
-        aImageRect = aDecoView.DrawFrame( aImageRect, nButtonStyle );
-        if ( (ImplGetButtonState() & BUTTON_DRAW_PRESSED) || !bEnabled )
-            SetFillColor( rStyleSettings.GetFaceColor() );
-        else
-            SetFillColor( rStyleSettings.GetFieldColor() );
-        SetLineColor();
-        DrawRect( aImageRect );
-
-        // display image
-        nButtonStyle = 0;
-        if ( !bEnabled )
-            nButtonStyle |= IMAGE_DRAW_DISABLE;
-
-        Image *pImage = &maImage;
-
-        Point aImagePos( aImageRect.TopLeft() );
-        aImagePos.X() += (aImageRect.GetWidth()-aImageSize.Width())/2;
-        aImagePos.Y() += (aImageRect.GetHeight()-aImageSize.Height())/2;
-        if ( IsZoom() )
-            DrawImage( aImagePos, aImageSize, *pImage, nButtonStyle );
-        else
-            DrawImage( aImagePos, *pImage, nButtonStyle );
-
-        aImageRect.Left()++;
-        aImageRect.Top()++;
-        aImageRect.Right()--;
-        aImageRect.Bottom()--;
-
-        ImplSetFocusRect( aImageRect );
-
-        if ( mbChecked )
+        // kein Image-RadioButton
+        if ( !maImage )
         {
-            SetLineColor( rStyleSettings.GetHighlightColor() );
-            SetFillColor();
-            if ( (aImageSize.Width() >= 20) || (aImageSize.Height() >= 20) )
-            {
-                aImageRect.Left()++;
-                aImageRect.Top()++;
-                aImageRect.Right()--;
-                aImageRect.Bottom()--;
-            }
+            sal_uInt16 nStyle = ImplGetButtonState();
+            if ( !IsEnabled() )
+                nStyle |= BUTTON_DRAW_DISABLED;
+            if ( mbChecked )
+                nStyle |= BUTTON_DRAW_CHECKED;
+            Image aImage = GetRadioImage( GetSettings(), nStyle );
+            if ( IsZoom() )
+                DrawImage( maStateRect.TopLeft(), maStateRect.GetSize(), aImage );
+            else
+                DrawImage( maStateRect.TopLeft(), aImage );
+        }
+        else
+        {
+            HideFocus();
+
+            DecorationView          aDecoView( this );
+            const StyleSettings&    rStyleSettings = GetSettings().GetStyleSettings();
+            Rectangle               aImageRect  = maStateRect;
+            Size                    aImageSize  = maImage.GetSizePixel();
+            sal_Bool                    bEnabled    = IsEnabled();
+            sal_uInt16 nButtonStyle = FRAME_DRAW_DOUBLEIN;
+
+            aImageSize.Width()  = CalcZoom( aImageSize.Width() );
+            aImageSize.Height() = CalcZoom( aImageSize.Height() );
+
+            // display border and selection status
+            aImageRect = aDecoView.DrawFrame( aImageRect, nButtonStyle );
+            if ( (ImplGetButtonState() & BUTTON_DRAW_PRESSED) || !bEnabled )
+                SetFillColor( rStyleSettings.GetFaceColor() );
+            else
+                SetFillColor( rStyleSettings.GetFieldColor() );
+            SetLineColor();
             DrawRect( aImageRect );
+
+            // display image
+            nButtonStyle = 0;
+            if ( !bEnabled )
+                nButtonStyle |= IMAGE_DRAW_DISABLE;
+
+            Image *pImage = &maImage;
+
+            Point aImagePos( aImageRect.TopLeft() );
+            aImagePos.X() += (aImageRect.GetWidth()-aImageSize.Width())/2;
+            aImagePos.Y() += (aImageRect.GetHeight()-aImageSize.Height())/2;
+            if ( IsZoom() )
+                DrawImage( aImagePos, aImageSize, *pImage, nButtonStyle );
+            else
+                DrawImage( aImagePos, *pImage, nButtonStyle );
+
             aImageRect.Left()++;
             aImageRect.Top()++;
             aImageRect.Right()--;
             aImageRect.Bottom()--;
-            DrawRect( aImageRect );
-        }
 
-        if ( HasFocus() )
-            ShowFocus( ImplGetFocusRect() );
+            ImplSetFocusRect( aImageRect );
+
+            if ( mbChecked )
+            {
+                SetLineColor( rStyleSettings.GetHighlightColor() );
+                SetFillColor();
+                if ( (aImageSize.Width() >= 20) || (aImageSize.Height() >= 20) )
+                {
+                    aImageRect.Left()++;
+                    aImageRect.Top()++;
+                    aImageRect.Right()--;
+                    aImageRect.Bottom()--;
+                }
+                DrawRect( aImageRect );
+                aImageRect.Left()++;
+                aImageRect.Top()++;
+                aImageRect.Right()--;
+                aImageRect.Bottom()--;
+                DrawRect( aImageRect );
+            }
+
+            if ( HasFocus() )
+                ShowFocus( ImplGetFocusRect() );
+        }
     }
-}
 }
 
 // -----------------------------------------------------------------------
