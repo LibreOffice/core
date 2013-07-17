@@ -103,77 +103,50 @@ unchanged:
  
  # Here we have definitions for using the preprocessor.
  
-@@ -69,6 +69,13 @@
- JRD_GPRE_FLAGS = -n -z -gds_cxx -raw -ids
- DSQL_GPRE_FLAGS = -r -m -z -n
- 
-+ifeq ($(PLATFORM),win32)
-+CC_OUTPUT_FLAG = -Fo
-+EXECUTABLE_OUTPUT_FLAG = -Fe
-+else
-+CC_OUTPUT_FLAG = -o
-+EXECUTABLE_OUTPUT_FLAG = -o
-+endif
- 
- .SUFFIXES: .c .e .epp .cpp
- 
 @@ -89,27 +96,27 @@
  .SUFFIXES: .lo .o .cpp .c
  
  $(OBJ)/jrd/%.o: $(SRC_ROOT)/jrd/$(PLATFORM_PATH)/%.cpp
 -	$(CXX) $(WCXXFLAGS) -c $(firstword $<) -o $@
-+	$(CXX)  -c $(firstword $<) $(CC_OUTPUT_FLAG)$@ $(WCXXFLAGS)
++	$(CXX)  -c $(firstword $<) -o $@ $(WCXXFLAGS)
  
  $(OBJ)/utilities/ntrace/%.o: $(SRC_ROOT)/utilities/ntrace/$(PLATFORM_PATH)/%.cpp
 -	$(CXX) $(WCXXFLAGS) -c $(firstword $<) -o $@
-+	$(CXX) -c $(firstword $<) $(CC_OUTPUT_FLAG)$@ $(WCXXFLAGS)
++	$(CXX) -c $(firstword $<) -o $@ $(WCXXFLAGS)
  
  ifneq ($(strip $(PLATFORM_FALLBACK)),)
  $(OBJ)/jrd/%.o: $(SRC_ROOT)/jrd/$(PLATFORM_FALLBACK)/%.cpp
 -	$(CXX) $(WCXXFLAGS) -c $(firstword $<) -o $@
-+	$(CXX) -c $(firstword $<) $(CC_OUTPUT_FLAG)$@ $(WCXXFLAGS)
++	$(CXX) -c $(firstword $<) -o $@ $(WCXXFLAGS)
  
  $(OBJ)/utilities/ntrace/%.o: $(SRC_ROOT)/utilities/ntrace/$(PLATFORM_FALLBACK)/%.cpp
 -	$(CXX) $(WCXXFLAGS) -c $(firstword $<) -o $@
-+	$(CXX) -c $(firstword $<) $(CC_OUTPUT_FLAG)$@ $(WCXXFLAGS)
++	$(CXX) -c $(firstword $<) -o $@ $(WCXXFLAGS)
  endif
  
  $(OBJ)/%.o: $(SRC_ROOT)/%.c 
 -	$(CC) $(WCFLAGS) -c $(firstword $<) -o $@
-+	$(CC) -c $(firstword $<) $(CC_OUTPUT_FLAG)$@ $(WCFLAGS)
++	$(CC) -c $(firstword $<) -o $@ $(WCFLAGS)
  
  $(OBJ)/%.o: $(OBJ)/%.cpp 
 -	$(CXX) $(WCXXFLAGS) -c $(firstword $<) -o $@
-+	$(CXX) -c $(firstword $<) $(CC_OUTPUT_FLAG)$@ $(WCXXFLAGS)
++	$(CXX) -c $(firstword $<) -o $@ $(WCXXFLAGS)
  
  $(OBJ)/%.o: $(SRC_ROOT)/%.cpp 
 -	$(CXX) $(WCXXFLAGS) -c $(firstword $<) -o $@
-+	$(CXX) -c $(firstword $<) $(CC_OUTPUT_FLAG)$@ $(WCXXFLAGS)
++	$(CXX) -c $(firstword $<) -o $@ $(WCXXFLAGS)
  
  .SUFFIXES: .epp .e
  
 unchanged:
 --- firebird.org/builds/posix/make.shared.targets	2013-06-26 10:05:19.351343000 +0100
 +++ firebird/builds/posix/make.shared.targets	2013-07-01 10:55:25.435124900 +0100
-@@ -29,7 +29,11 @@
- #
- #
- 
--
-+ifeq ($(PLATFORM),win32)
-+EXECUTABLE_OUTPUT_FLAG = -Fe
-+else
-+EXECUTABLE_OUTPUT_FLAG = -o
-+endif
- #-----------------------------------------------------------
- # Amongst a number of makefiles some of the targets have
- # specific rules. Rather than duplicate the rules in a 
 @@ -89,7 +93,7 @@
  	$(BLRTABLE) > $(SRC_ROOT)/include/gen/blrtable.h
  
  $(BLRTABLE): $(BLRTABLE_Objects)
 -	$(STATICEXE_LINK) $(LINK_OPTS) $^ -o $@ -L$(LIB) $(LINK_LIBS)
-+	@CXX@ $^ $(EXECUTABLE_OUTPUT_FLAG)$@ $(LINK_OPTS) $(GLOB_OPTIONS) $(CXXFLAGS) -L$(LIB) $(LINK_LIBS)
++	@CXX@ $^ -o $@ $(LINK_OPTS) $(GLOB_OPTIONS) $(CXXFLAGS) -L$(LIB) $(LINK_LIBS)
  
  # Adding resources as prerequisite for some files
  
@@ -198,7 +171,7 @@ unchanged:
  
  $(GPRE_BOOT):	$(GPREBOOT_Objects)
 -	$(STATICEXE_LINK) $(LINK_OPTS) $^ -o $@ -L$(LIB) $(LINK_LIBS)
-+	$(LD) $(EXECUTABLE_OUTPUT_FLAG) -Fe$@ $^ -L$(LIB) -doff $(GLOB_OPTIONS) $(CXXFLAGS) $(LINK_OPTS) $(LINK_LIBS)
++	$(LD) -o $@ $^ -L$(LIB) -doff $(GLOB_OPTIONS) $(CXXFLAGS) $(LINK_OPTS) $(LINK_LIBS)
  	-$(RM) $(GPRE_CURRENT)
  	(cd $(@D); $(LN) $(@F) $(notdir $(GPRE_CURRENT)))
  
@@ -210,55 +183,55 @@ unchanged:
  
  $(NBACKUP):	$(NBACKUP_Objects) $(CLUMPLETS_Objects) $(COMMON_Objects)
 -	$(EXE_LINK) $(LINK_EMPTY_SYMBOLS) $(LINK_OPTS) $^ -o $@ -L$(LIB) -lfbclient $(LINK_LIBS)
-+	$(EXE_LINK) $^ $(EXECUTABLE_OUTPUT_FLAG) $@ $(LINK_EMPTY_SYMBOLS) $(LINK_OPTS) -L$(LIB) -lfbclient $(LINK_LIBS)
++	$(EXE_LINK) $^ -o $@ $(LINK_EMPTY_SYMBOLS) $(LINK_OPTS) -L$(LIB) -lfbclient $(LINK_LIBS)
  
  fb_lock_print: $(LIBFBCLIENT_SO) $(LOCKPRINT)
  
  $(LOCKPRINT):	$(LOCKPRINT_Objects) $(COMMON_Objects)
 -	$(EXE_LINK) $(LINK_EMPTY_SYMBOLS) $(LINK_OPTS) $^ -o $@ -L$(LIB) -lfbclient $(LINK_LIBS)
-+	$(EXE_LINK) $^ $(EXECUTABLE_OUTPUT_FLAG) $@ $(LINK_EMPTY_SYMBOLS) $(LINK_OPTS) -L$(LIB) -lfbclient $(LINK_LIBS)
++	$(EXE_LINK) $^ -o $@ $(LINK_EMPTY_SYMBOLS) $(LINK_OPTS) -L$(LIB) -lfbclient $(LINK_LIBS)
  
  
  gstat : $(LIBFBCLIENT_SO) $(GSTAT)
  
  $(GSTAT):	$(GSTAT_Objects) $(CLUMPLETS_Objects) $(COMMON_Objects) $(FBCONFIG_Objects)
 -	$(EXE_LINK) $(LINK_EMPTY_SYMBOLS) $(LINK_OPTS) $^ -o $@ -L$(LIB) -lfbclient $(LINK_LIBS)
-+	$(EXE_LINK) $^ $(EXECUTABLE_OUTPUT_FLAG) $@ $(LINK_EMPTY_SYMBOLS) $(LINK_OPTS) -L$(LIB) -lfbclient $(LINK_LIBS)
++	$(EXE_LINK) $^ -o $@ $(LINK_EMPTY_SYMBOLS) $(LINK_OPTS) -L$(LIB) -lfbclient $(LINK_LIBS)
  
  
  gds_drop: $(GDS_DROP)
  
  $(GDS_DROP):	$(DROP_Objects) $(LIBFBCLIENT_SO)  
 -	$(EXE_LINK) $(LINK_EMPTY_SYMBOLS) $(LINK_OPTS) $(DROP_Objects) -o $@ -L$(LIB) -lfbclient $(LINK_LIBS)
-+	$(EXE_LINK) $(DROP_Objects) $(EXECUTABLE_OUTPUT_FLAG) $@ $(LINK_EMPTY_SYMBOLS) $(LINK_OPTS) -L$(LIB) -lfbclient $(LINK_LIBS)
++	$(EXE_LINK) $(DROP_Objects) -o $@ $(LINK_EMPTY_SYMBOLS) $(LINK_OPTS) -L$(LIB) -lfbclient $(LINK_LIBS)
  
  
  fbsvcmgr: $(FBSVCMGR)
  
  $(FBSVCMGR):	$(FBSVCMGR_Objects) $(LIBFBCLIENT_SO)
 -	$(EXE_LINK) $(LINK_EMPTY_SYMBOLS) $(LINK_OPTS) $^ -o $@ -L$(LIB) $(LINK_LIBS)
-+	$(EXE_LINK) $^ $(EXECUTABLE_OUTPUT_FLAG) $@ $(LINK_EMPTY_SYMBOLS) $(LINK_OPTS) -L$(LIB) $(LINK_LIBS)
++	$(EXE_LINK) $^ -o $@ $(LINK_EMPTY_SYMBOLS) $(LINK_OPTS) -L$(LIB) $(LINK_LIBS)
  
  
  fbtracemgr: $(FBTRACEMGR)
  
  $(FBTRACEMGR):	$(FBTRACEMGR_Objects) $(LIBFBCLIENT_SO)
 -	$(EXE_LINK) $(LINK_EMPTY_SYMBOLS) $(LINK_OPTS) $^ -o $@ -L$(LIB) $(LINK_LIBS)
-+	$(EXE_LINK) $^ $(EXECUTABLE_OUTPUT_FLAG) $@ $(LINK_EMPTY_SYMBOLS) $(LINK_OPTS) -L$(LIB) $(LINK_LIBS)
++	$(EXE_LINK) $^ -o $@ $(LINK_EMPTY_SYMBOLS) $(LINK_OPTS) -L$(LIB) $(LINK_LIBS)
  
  
  fbguard: $(LIBFBCLIENT_SO) $(FBGUARD)
  
  $(FBGUARD):	$(FBGUARD_Objects) $(FBCOMMON_Objects) $(FBCLASSES_Objects)
 -	$(EXE_LINK) $(LINK_EMPTY_SYMBOLS) $(LINK_OPTS) $^ -o $@ -L$(LIB) -lfbclient $(LIB_GUI) $(LINK_LIBS)
-+	$(EXE_LINK) $^ $(EXECUTABLE_OUTPUT_FLAG) $@ $(LINK_EMPTY_SYMBOLS) $(LINK_OPTS) -L$(LIB) -lfbclient $(LIB_GUI) $(LINK_LIBS)
++	$(EXE_LINK) $^ -o $@ $(LINK_EMPTY_SYMBOLS) $(LINK_OPTS) -L$(LIB) -lfbclient $(LIB_GUI) $(LINK_LIBS)
  
  
  ibguard: $(LIBFBCLIENT_SO) $(IBGUARD)
  
  $(IBGUARD):	$(IBGUARD_A_Objects) $(IBGUARD_B_Objects)
 -	$(EXE_LINK) $(LINK_EMPTY_SYMBOLS) $(LINK_OPTS) $^ -o $@ -L$(LIB) $(FBCLASSES_Objects) $(FBCOMMON_Objects) -lfbclient \
-+	$(EXE_LINK) $^ $(EXECUTABLE_OUTPUT_FLAG) $@ -L$(LIB) $(FBCLASSES_Objects) $(LINK_EMPTY_SYMBOLS) $(LINK_OPTS)$(FBCOMMON_Objects) -lfbclient \
++	$(EXE_LINK) $^ -o $@ -L$(LIB) $(FBCLASSES_Objects) $(LINK_EMPTY_SYMBOLS) $(LINK_OPTS)$(FBCOMMON_Objects) -lfbclient \
  $(LIB_GUI) $(LINK_LIBS)
  
  
@@ -266,7 +239,7 @@ unchanged:
  
  $(FBMGR_BIN):	$(FBMGR_Objects)
 -	$(EXE_LINK) $(LINK_EMPTY_SYMBOLS) $(LINK_OPTS) $^ -o $@ -L$(LIB) $(FBCLASSES_Objects) $(FBCOMMON_Objects) -lfbclient \
-+	$(EXE_LINK) $(LINK_EMPTY_SYMBOLS) $(LINK_OPTS) $^ $(EXECUTABLE_OUTPUT_FLAG) $@ -L$(LIB) $(LINK_EMPTY_SYMBOLS) $(LINK_OPTS) $(FBCLASSES_Objects) $(FBCOMMON_Objects) -lfbclient \
++	$(EXE_LINK) $(LINK_EMPTY_SYMBOLS) $(LINK_OPTS) $^ -o $@ -L$(LIB) $(LINK_EMPTY_SYMBOLS) $(LINK_OPTS) $(FBCLASSES_Objects) $(FBCOMMON_Objects) -lfbclient \
  $(LINK_LIBS)
  
  
@@ -274,14 +247,14 @@ unchanged:
  
  $(INSTREG):	$(INSTREG_Objects) 
 -	$(EXE_LINK) $(LINK_EMPTY_SYMBOLS) $(LINK_OPTS) $^ -o $@ -L$(LIB) $(LINK_LIBS) 
-+	$(EXE_LINK) $^ $(EXECUTABLE_OUTPUT_FLAG) $@ -L$(LIB) $(LINK_LIBS) $(LINK_EMPTY_SYMBOLS) $(LINK_OPTS)
++	$(EXE_LINK) $^ -o $@ -L$(LIB) $(LINK_LIBS) $(LINK_EMPTY_SYMBOLS) $(LINK_OPTS)
  
  
  instsvc: $(INSTSVC)
  
  $(INSTSVC):	$(INSTSVC_Objects)
 -	$(EXE_LINK) $(LINK_EMPTY_SYMBOLS) $(LINK_OPTS) $^ -o $@ -L$(LIB) $(LINK_LIBS) 
-+	$(EXE_LINK) $^ $(EXECUTABLE_OUTPUT_FLAG) $@ -L$(LIB)  $(LINK_EMPTY_SYMBOLS) $(LINK_OPTS) $(LINK_LIBS) 
++	$(EXE_LINK) $^ -o $@ -L$(LIB)  $(LINK_EMPTY_SYMBOLS) $(LINK_OPTS) $(LINK_LIBS) 
  
  # This one needs a bit of work.
  
@@ -289,7 +262,7 @@ unchanged:
  
  $(GDS_REBUILD):	$(REBUILD_Objects) $(LIBFBCLIENT_SO)  
 -	$(EXE_LINK) $(LINK_EMPTY_SYMBOLS) $(LINK_OPTS) $(REBUILD_Objects) -o $@ -L$(LIB) -lfbclient $(LINK_LIBS)
-+	$(EXE_LINK) $(REBUILD_Objects) $(EXECUTABLE_OUTPUT_FLAG) $@ $(LINK_EMPTY_SYMBOLS) $(LINK_OPTS) -L$(LIB) -lfbclient $(LINK_LIBS)
++	$(EXE_LINK) $(REBUILD_Objects) -o $@ $(LINK_EMPTY_SYMBOLS) $(LINK_OPTS) -L$(LIB) -lfbclient $(LINK_LIBS)
  
  include $(ROOT)/gen/make.shared.targets
  
@@ -301,7 +274,7 @@ unchanged:
  
  $(BIN)/codes$(EXEC_EXT): $(CODES_Objects) $(COMMON_Objects) $(LIBFBSTATIC_A)
 -	$(STATICEXE_LINK) $(LINK_OPTS) $^ -o $@ -L$(LIB) $(LINK_LIBS) $(ICU_LIBS)
-+	@CXX@ $^ $(EXECUTABLE_OUTPUT_FLAG)$@ -L$(LIB) $(GLOB_OPTIONS) $(CXXFLAGS) $(LINK_OPTS) $(LINK_LIBS) $(ICU_LIBS)
++	@CXX@ $^ -o $@ -L$(LIB) $(GLOB_OPTIONS) $(CXXFLAGS) $(LINK_OPTS) $(LINK_LIBS) $(ICU_LIBS)
  
  
  # Rebuild ids.h
@@ -313,7 +286,7 @@ unchanged:
  
  $(GDEF): $(GDEF_Objects) $(CLUMPLETS_Objects) $(FBCOMMON_Objects) $(FBCLASSES_Objects)
 -	$(EXE_LINK) $(LINK_EMPTY_SYMBOLS) $(LINK_OPTS) $^ -o $@ $(FBEMBED_LINK) $(LINK_LIBS)
-+	$(EXE_LINK)  $^ $(EXECUTABLE_OUTPUT_FLAGS) $@ $(LINK_EMPTY_SYMBOLS) $(LINK_OPTS) $(FBEMBED_LINK) $(LINK_LIBS)
++	$(EXE_LINK)  $^ -o $@ $(LINK_EMPTY_SYMBOLS) $(LINK_OPTS) $(FBEMBED_LINK) $(LINK_LIBS)
  
  
  
@@ -325,7 +298,7 @@ unchanged:
  
  $(GFIX):	$(AllObjects)
 -	$(EXE_LINK) $(LINK_EMPTY_SYMBOLS) $(LINK_OPTS) $^ -o $@ $(FBEMBED_LINK) $(LINK_LIBS)
-+	$(EXE_LINK) $^ $(EXECUTABLE_OUTPUT_FLAGS) $@ $(LINK_EMPTY_SYMBOLS) $(LINK_OPTS) $(FBEMBED_LINK) $(LINK_LIBS)
++	$(EXE_LINK) $^ -o $@ $(LINK_EMPTY_SYMBOLS) $(LINK_OPTS) $(FBEMBED_LINK) $(LINK_LIBS)
  
  
  include $(ROOT)/gen/make.shared.targets
@@ -337,7 +310,7 @@ unchanged:
  
  $(GPRE):	$(GPRE_Objects) $(CLUMPLETS_Objects) $(FBCOMMON_Objects) $(FBCLASSES_Objects)
 -	$(EXE_LINK) $(LINK_EMPTY_SYMBOLS) $(LINK_OPTS) $^ -o $@ $(FBEMBED_LINK) $(LINK_LIBS)
-+	$(EXE_LINK) $^ $(EXECUTABLE_OUTPUT_FLAGS) $@ $(LINK_EMPTY_SYMBOLS) $(LINK_OPTS) $(FBEMBED_LINK) $(LINK_LIBS)
++	$(EXE_LINK) $^ -o $@ $(LINK_EMPTY_SYMBOLS) $(LINK_OPTS) $(FBEMBED_LINK) $(LINK_LIBS)
  
  
  include $(ROOT)/gen/make.shared.targets
@@ -349,7 +322,7 @@ unchanged:
  
  $(ISQL):	$(ISQL_Objects) $(CLUMPLETS_Objects) $(FBCOMMON_Objects) $(FBCLASSES_Objects)
 -	$(EXE_LINK) $(LINK_EMPTY_SYMBOLS) $(LINK_OPTS) $^ -o $@ $(FBEMBED_LINK) $(LIBEDITLINE) $(LINK_LIBS)
-+	$(EXE_LINK)  $^ $(EXECUTABLE_OUTPUT_FLAGS) $@ $(LINK_EMPTY_SYMBOLS) $(LINK_OPTS) $(FBEMBED_LINK) $(LIBEDITLINE) $(LINK_LIBS)
++	$(EXE_LINK)  $^ -o $@ $(LINK_EMPTY_SYMBOLS) $(LINK_OPTS) $(FBEMBED_LINK) $(LIBEDITLINE) $(LINK_LIBS)
  
  
  include $(ROOT)/gen/make.shared.targets
@@ -361,7 +334,7 @@ unchanged:
  
  $(QLI): $(QLI_Objects) $(CLUMPLETS_Objects) $(FBCOMMON_Objects) $(FBCLASSES_Objects)
 -	$(EXE_LINK) $(LINK_EMPTY_SYMBOLS) $(LINK_OPTS) $^ -o $@ $(FBEMBED_LINK) $(LINK_LIBS)
-+	$(EXE_LINK)  $^ $(EXECUTABLE_OUTPUT_FLAGS) $@ $(LINK_EMPTY_SYMBOLS) $(LINK_OPTS) $(FBEMBED_LINK) $(LINK_LIBS)
++	$(EXE_LINK)  $^ -o $@ $(LINK_EMPTY_SYMBOLS) $(LINK_OPTS) $(FBEMBED_LINK) $(LINK_LIBS)
  
  # EKU: At this point yachts.lnk is a link to empty.fdb, but gpre will fail
  #      with it. metadata.fdb is what is needed here.
@@ -373,70 +346,70 @@ unchanged:
  
  $(NBACKUP):	$(NBACKUP_Objects) $(CLUMPLETS_Objects) $(COMMON_Objects)
 -	$(EXE_LINK) $(LINK_EMPTY_SYMBOLS) $(LINK_OPTS) $^ -o $@ $(FBEMBED_LINK) $(LINK_LIBS)
-+	$(EXE_LINK) $^ $(EXECUTABLE_OUTPUT_FLAG) $@ $(LINK_EMPTY_SYMBOLS) $(LINK_OPTS) $(FBEMBED_LINK) $(LINK_LIBS)
++	$(EXE_LINK) $^ -o $@ $(LINK_EMPTY_SYMBOLS) $(LINK_OPTS) $(FBEMBED_LINK) $(LINK_LIBS)
  
  
  fb_lock_print: $(LIBFBEMBED_SO) $(LOCKPRINT)
  
  $(LOCKPRINT):	$(LOCKPRINT_Objects) $(COMMON_Objects)
 -	$(EXE_LINK) $(LINK_EMPTY_SYMBOLS) $(LINK_OPTS) $^ -o $@ $(FBEMBED_LINK) $(LINK_LIBS)
-+	$(EXE_LINK) $^ $(EXECUTABLE_OUTPUT_FLAG) $@ $(LINK_EMPTY_SYMBOLS) $(LINK_OPTS) $(FBEMBED_LINK) $(LINK_LIBS)
++	$(EXE_LINK) $^ -o $@ $(LINK_EMPTY_SYMBOLS) $(LINK_OPTS) $(FBEMBED_LINK) $(LINK_LIBS)
  
  
  gstat : $(LIBFBEMBED_SO) $(GSTAT)
  
  $(GSTAT):	$(GSTAT_Objects) $(CLUMPLETS_Objects) $(COMMON_Objects) $(FBCONFIG_Objects)
 -	$(EXE_LINK) $(LINK_EMPTY_SYMBOLS) $(LINK_OPTS) $^ -o $@ $(FBEMBED_LINK) $(LINK_LIBS)
-+	$(EXE_LINK) $^ $(EXECUTABLE_OUTPUT_FLAG) $@ $(LINK_EMPTY_SYMBOLS) $(LINK_OPTS) $(FBEMBED_LINK) $(LINK_LIBS)
++	$(EXE_LINK) $^ -o $@ $(LINK_EMPTY_SYMBOLS) $(LINK_OPTS) $(FBEMBED_LINK) $(LINK_LIBS)
  
  
  gds_drop: $(GDS_DROP)
  
  $(GDS_DROP):	$(DROP_Objects) $(FBCOMMON_Objects) $(FBCLASSES_Objects)
 -	$(EXE_LINK) $(LINK_EMPTY_SYMBOLS) $(LINK_OPTS) $^ -o $@ $(FBEMBED_LINK) $(LINK_LIBS)
-+	$(EXE_LINK) $^ $(EXECUTABLE_OUTPUT_FLAG) $@ $(LINK_EMPTY_SYMBOLS) $(LINK_OPTS) $(FBEMBED_LINK) $(LINK_LIBS)
++	$(EXE_LINK) $^ -o $@ $(LINK_EMPTY_SYMBOLS) $(LINK_OPTS) $(FBEMBED_LINK) $(LINK_LIBS)
  
  
  fbsvcmgr: $(FBSVCMGR)
  
  $(FBSVCMGR):	$(FBSVCMGR_Objects) $(LIBFBEMBED_SO)
 -	$(EXE_LINK) $(LINK_EMPTY_SYMBOLS) $(LINK_OPTS) $^ -o $@ $(FBEMBED_LINK) $(LINK_LIBS)
-+	$(EXE_LINK) $^ $(EXECUTABLE_OUTPUT_FLAG) $@ $(LINK_EMPTY_SYMBOLS) $(LINK_OPTS) $(FBEMBED_LINK) $(LINK_LIBS)
++	$(EXE_LINK) $^ -o $@ $(LINK_EMPTY_SYMBOLS) $(LINK_OPTS) $(FBEMBED_LINK) $(LINK_LIBS)
  
  
  fbtracemgr: $(FBTRACEMGR)
  
  $(FBTRACEMGR):	$(FBTRACEMGR_Objects) $(LIBFBEMBED_SO)
 -	$(EXE_LINK) $(LINK_EMPTY_SYMBOLS) $(LINK_OPTS) $^ -o $@ $(FBEMBED_LINK) $(LINK_LIBS)
-+	$(EXE_LINK) $^ $(EXECUTABLE_OUTPUT_FLAG) $@ $(LINK_EMPTY_SYMBOLS) $(LINK_OPTS) $(FBEMBED_LINK) $(LINK_LIBS)
++	$(EXE_LINK) $^ -o $@ $(LINK_EMPTY_SYMBOLS) $(LINK_OPTS) $(FBEMBED_LINK) $(LINK_LIBS)
  
  
  gds_relay: $(GDS_RELAY)
  
  $(GDS_RELAY):	$(RELAY_Objects) $(LIBFBEMBED_SO)
 -	$(EXE_LINK) $(LINK_EMPTY_SYMBOLS) $(LINK_OPTS) $(RELAY_Objects) -o $@ $(FBEMBED_LINK) $(LINK_LIBS)
-+	$(EXE_LINK) $(RELAY_Objects) $^ $(EXECUTABLE_OUTPUT_FLAG) $@ $(LINK_EMPTY_SYMBOLS) $(LINK_OPTS)  $(FBEMBED_LINK) $(LINK_LIBS)
++	$(EXE_LINK) $(RELAY_Objects) $^ -o $@ $(LINK_EMPTY_SYMBOLS) $(LINK_OPTS)  $(FBEMBED_LINK) $(LINK_LIBS)
  
  
  gsec: $(GSEC)
  
  $(GSEC):	$(GSEC_Objects) $(CLUMPLETS_Objects) $(COMMON_Objects)
 -	$(EXE_LINK) $(LINK_EMPTY_SYMBOLS) $(LINK_OPTS) $^ -o $@ $(FBEMBED_LINK) $(LINK_LIBS)
-+	$(EXE_LINK) $^ $(EXECUTABLE_OUTPUT_FLAGS) $@ $(LINK_EMPTY_SYMBOLS) $(LINK_OPTS) $(FBEMBED_LINK) $(LINK_LIBS)
++	$(EXE_LINK) $^ -o $@ $(LINK_EMPTY_SYMBOLS) $(LINK_OPTS) $(FBEMBED_LINK) $(LINK_LIBS)
  
  
  fbguard: $(LIBFBCLIENT_SO) $(FBGUARD)
  
  $(FBGUARD):	$(FBGUARD_Objects) $(FBCOMMON_Objects) $(FBCLASSES_Objects)
 -	$(EXE_LINK) $(LINK_EMPTY_SYMBOLS) $(LINK_OPTS) $^ -o $@ -L$(LIB) -lfbclient $(LIB_GUI) $(LINK_LIBS)
-+	$(EXE_LINK)  $^ $(EXECUTABLE_OUTPUT_FLAGS) $@ $(LINK_EMPTY_SYMBOLS) $(LINK_OPTS) -L$(LIB) -lfbclient $(LIB_GUI) $(LINK_LIBS)
++	$(EXE_LINK)  $^ -o $@ $(LINK_EMPTY_SYMBOLS) $(LINK_OPTS) -L$(LIB) -lfbclient $(LIB_GUI) $(LINK_LIBS)
  
  
  ibmgr_bin: $(IBMGR_BIN)
  
  $(IBMGR_BIN):	$(IBMGR_Objects) $(LIBFBEMBED_SO)  
 -	$(EXE_LINK) $(LINK_EMPTY_SYMBOLS) $(LINK_OPTS) $(IBMGR_Objects) -o $@ $(FBEMBED_LINK) $(LINK_LIBS)
-+	$(EXE_LINK) $(IBMGR_Objects) $(EXECUTABLE_OUTPUT_FLAGS) $@ $(LINK_EMPTY_SYMBOLS) $(LINK_OPTS) $(FBEMBED_LINK) $(LINK_LIBS)
++	$(EXE_LINK) $(IBMGR_Objects) -o $@ $(LINK_EMPTY_SYMBOLS) $(LINK_OPTS) $(FBEMBED_LINK) $(LINK_LIBS)
  
  # This one needs a bit of work.
  
@@ -444,7 +417,7 @@ unchanged:
  
  $(GDS_REBUILD):	$(REBUILD_Objects) $(LIBFBEMBED_SO)  
 -	$(EXE_LINK) $(LINK_EMPTY_SYMBOLS) $(LINK_OPTS) $(REBUILD_Objects) -o $@ $(FBEMBED_LINK) $(LINK_LIBS)
-+	$(EXE_LINK) $(REBUILD_Objects) $^ $(EXECUTABLE_OUTPUT_FLAGS) $@ $(LINK_EMPTY_SYMBOLS) $(LINK_OPTS) $(FBEMBED_LINK) $(LINK_LIBS)
++	$(EXE_LINK) $(REBUILD_Objects) $^ -o $@ $(LINK_EMPTY_SYMBOLS) $(LINK_OPTS) $(FBEMBED_LINK) $(LINK_LIBS)
  
  include $(ROOT)/gen/make.shared.targets
  
@@ -472,7 +445,7 @@ unchanged:
  
  $(EXAMPLES_DEST)/empbuild$(EXEC_EXT): $(EMPBLD_Objects) $(COMMON_Objects) $(LIBFBSTATIC_A) 
 +ifeq (@PLATFORM@,win32)
-+	@CXX@ $ $(EMPBLD_Objects) $(COMMON_Objects) $(EXECUTABLE_OUTPUT_FLAG)$@ -L$(LIB) -lfbstatic $(LINK_LIBS) $(ICU_LIBS) $(GLOB_OPTIONS) $(CXXFLAGS) $(LINK_OPTS)
++	@CXX@ $ $(EMPBLD_Objects) $(COMMON_Objects) -o $@ -L$(LIB) -lfbstatic $(LINK_LIBS) $(ICU_LIBS) $(GLOB_OPTIONS) $(CXXFLAGS) $(LINK_OPTS)
 +else
  	$(EXE_LINK) $(LINK_OPTS) $(EMPBLD_Objects) $(COMMON_Objects) -o $@ -L$(LIB) -lfbstatic $(LINK_LIBS) $(ICU_LIBS)
 +endif
@@ -484,7 +457,7 @@ unchanged:
  
  $(EXAMPLES_DEST)/intlbld$(EXEC_EXT): $(INTLBLD_Objects) $(COMMON_Objects) $(LIBFBSTATIC_A) 
 +ifeq (@PLATFORM@,win32)
-+	@CXX@ $(INTLBLD_Objects) $(COMMON_Objects) $(EXECUTABLE_OUTPUT_FLAG)$@ -L$(LIB) -lfbstatic $(LINK_LIBS) $(ICU_LIBS) $(GLOB_OPTIONS) $(CXXFLAGS) $(LINK_OPTS)
++	@CXX@ $(INTLBLD_Objects) $(COMMON_Objects) -o $@ -L$(LIB) -lfbstatic $(LINK_LIBS) $(ICU_LIBS) $(GLOB_OPTIONS) $(CXXFLAGS) $(LINK_OPTS)
 +else
  	$(EXE_LINK) $(LINK_OPTS) $(INTLBLD_Objects) $(COMMON_Objects) -o $@ -L$(LIB) -lfbstatic $(LINK_LIBS) $(ICU_LIBS)
 +endif
@@ -504,7 +477,7 @@ unchanged:
  
  $(UDF)/ib_udf.$(SHRLIB_EXT): $(UDF_Objects)
 -	$(call LINK_UDF,ib_udf) -o $@ $^ $(LINK_UDF_LIBS)
-+	@CXX@ $^ -o @ -LD -L$(LIB) $(GLOB_OPTIONS) $(CXXFLAGS) -lib_util \
++	@CXX@ $^ -o $@ -LD -L$(LIB) $(GLOB_OPTIONS) $(CXXFLAGS) -lib_util \
 +	$(LINK_UDF_LIBS) $(LIB_LINK_OPTIONS) $(call LIB_LINK_SONAME,ib_udf.$(SHRLIB_EXT))\
 +	$(call LIB_LINK_RPATH,lib) \
 +	/link /dll
@@ -552,7 +525,7 @@ unchanged:
  
  $(INCLUDE_DEST)/ibase.h: $(SRC_IBASE_ExtraFiles)
 +ifeq (@PLATFORM@,win32)
-+	@CXX@ $(MAKE_HEADER_Src) $(EXECUTABLE_OUTPUT_FLAG)$(MAKE_HEADER_Bin) $(GLOB_OPTIONS) $(CXXFLAGS)
++	@CXX@ $(MAKE_HEADER_Src) -o $(MAKE_HEADER_Bin).exe $(GLOB_OPTIONS) $(CXXFLAGS)
 +else
  	$(STATICEXE_LINK) -o $(MAKE_HEADER_Bin) $(MAKE_HEADER_Src)
 +endif
@@ -625,7 +598,7 @@ unchanged:
  
  $(CHECK_MESSAGES):	$(CHECK_Objects) $(COMMON_Objects) $(LIBFBSTATIC_A)
 -	$(STATICEXE_LINK) $(LINK_OPTS) $(CHECK_Objects) $(COMMON_Objects) -o $@ -L$(LIB) -lfbstatic $(LINK_LIBS) $(ICU_LIBS)
-+	@CXX@ $(CHECK_Objects) $(COMMON_Objects) $(EXECUTABLE_OUTPUT_FLAG)$@ -L$(LIB) -lfbstatic $(LINK_LIBS) $(ICU_LIBS) $(GLOB_OPTIONS) $(CXXFLAGS) $(LINK_OPTS)
++	@CXX@ $(CHECK_Objects) $(COMMON_Objects) -o $@ -L$(LIB) -lfbstatic $(LINK_LIBS) $(ICU_LIBS) $(GLOB_OPTIONS) $(CXXFLAGS) $(LINK_OPTS)
  	$(CHMOD_7) $@
  
  
@@ -633,7 +606,7 @@ unchanged:
  
  $(BUILD_FILE):	$(BUILD_Objects) $(COMMON_Objects) $(LIBFBSTATIC_A)
 -	$(STATICEXE_LINK) $(LINK_OPTS) $(BUILD_Objects) $(COMMON_Objects) -o $@ -L$(LIB) -lfbstatic $(LINK_LIBS) $(ICU_LIBS)
-+	@CXX@  $(BUILD_Objects) $(COMMON_Objects) $(EXECUTABLE_OUTPUT_FLAG)$@ -L$(LIB) -lfbstatic $(LINK_LIBS) $(ICU_LIBS) $(GLOB_OPTIONS) $(CXXFLAGS) $(LINK_OPTS)
++	@CXX@  $(BUILD_Objects) $(COMMON_Objects) -o $@ -L$(LIB) -lfbstatic $(LINK_LIBS) $(ICU_LIBS) $(GLOB_OPTIONS) $(CXXFLAGS) $(LINK_OPTS)
  	$(CHMOD_7) $@
  
  
@@ -641,7 +614,7 @@ unchanged:
  
  $(ENTER_MESSAGES):	$(ENTER_Objects) $(LIBFBSTATIC_A)
 -	$(STATICEXE_LINK) $(LINK_OPTS) $(ENTER_Objects) $(COMMON_Objects) -o $@ -L$(LIB) -lfbstatic $(LINK_LIBS) $(ICU_LIBS)
-+	@CXX@ $(ENTER_Objects) $(EXECUTABLE_OUTPUT_FLAG)$@ -L$(LIB) -lfbstatic $(GLOB_OPTIONS) $(CXXFLAGS) $(LINK_OPTS) $(LINK_LIBS) $(ICU_LIBS)
++	@CXX@ $(ENTER_Objects) -o $@ -L$(LIB) -lfbstatic $(GLOB_OPTIONS) $(CXXFLAGS) $(LINK_OPTS) $(LINK_LIBS) $(ICU_LIBS)
  	$(CHMOD_7) $@
  
  
@@ -649,7 +622,7 @@ unchanged:
  
  $(MODIFY_MESSAGES):	$(MODIFY_Objects) $(LIBFBSTATIC_A) 
 -	$(STATICEXE_LINK) $(LINK_OPTS) $(MODIFY_Objects) $(COMMON_Objects) -o $@ -L$(LIB) -lfbstatic $(LINK_LIBS) $(ICU_LIBS)
-+	@CXX@  $(MODIFY_Objects) $(COMMON_Objects) $(EXECUTABLE_OUTPUT_FLAG)$@ -L$(LIB) -lfbstatic $(GLOB_OPTIONS) $(CXXFLAGS) $(LINK_OPTS) $(LINK_LIBS) $(ICU_LIBS)
++	@CXX@  $(MODIFY_Objects) $(COMMON_Objects) -o $@ -L$(LIB) -lfbstatic $(GLOB_OPTIONS) $(CXXFLAGS) $(LINK_OPTS) $(LINK_LIBS) $(ICU_LIBS)
  	$(CHMOD_7) $@
  
  
@@ -661,7 +634,7 @@ unchanged:
  
  $(CREATE_DB):	$(CREATEDB_Objects) $(COMMON_Objects) $(LIBFBSTATIC_A)
 -	$(STATICEXE_LINK) $(LINK_OPTS) $^ -o $@ -L$(LIB) $(LINK_LIBS) $(ICU_LIBS)
-+	@CXX@ $^ $(EXECUTABLE_OUTPUT_FLAG)$@ -L$(LIB) $(GLOB_OPTIONS) $(CXXFLAGS) $(LINK_OPTS) $(LINK_LIBS) $(ICU_LIBS)
++	@CXX@ $^ -o $@ -L$(LIB) $(GLOB_OPTIONS) $(CXXFLAGS) $(LINK_OPTS) $(LINK_LIBS) $(ICU_LIBS)
  
  
  include $(ROOT)/gen/make.shared.targets
@@ -673,7 +646,7 @@ unchanged:
  
  $(GBAK_STATIC) : $(AllObjects) $(LIBFBSTATIC_A) 
 -	$(STATICEXE_LINK) $(LINK_OPTS) $^ -o $@ -L$(LIB) $(LINK_LIBS) $(ICU_LIBS)
-+	@CXX@ $^ $(EXECUTABLE_OUTPUT_FLAG)$@ -L$(LIB) $(GLOB_OPTIONS) $(CXXFLAGS) $(LINK_OPTS) $(LINK_LIBS) $(ICU_LIBS)
++	@CXX@ $^ -o $@ -L$(LIB) $(GLOB_OPTIONS) $(CXXFLAGS) $(LINK_OPTS) $(LINK_LIBS) $(ICU_LIBS)
  
  
  include $(ROOT)/gen/make.shared.targets
@@ -685,7 +658,7 @@ unchanged:
  
  $(GPRE_STATIC):	$(GPRESTATIC_Objects) $(COMMON_Objects) $(LIBFBSTATIC_A)
 -	$(STATICEXE_LINK) $(LINK_OPTS) $^ -o $@ -L$(LIB) $(LINK_LIBS) $(ICU_LIBS)
-+	@CXX@ $^ $(EXECUTABLE_OUTPUT_FLAG)$@ -L$(LIB) $(GLOB_OPTIONS) $(CXXFLAGS) $(LINK_OPTS) $(LINK_LIBS) $(ICU_LIBS)
++	@CXX@ $^ -o $@ -L$(LIB) $(GLOB_OPTIONS) $(CXXFLAGS) $(LINK_OPTS) $(LINK_LIBS) $(ICU_LIBS)
  	-$(RM) $(GPRE_CURRENT)
  	(cd $(@D); $(LN) $(@F) $(notdir $(GPRE_CURRENT)))
  
@@ -699,7 +672,7 @@ unchanged:
 -$(ISQL_STATIC):	$(ISQL_Objects) $(COMMON_Objects) $(LIBFBSTATIC_A) 
 -	$(STATICEXE_LINK) $(LINK_OPTS) $(ISQL_Objects) $(COMMON_Objects) -o $@ -L$(LIB) -lfbstatic $(LIBEDITLINE) $(LINK_LIBS) $(ICU_LIBS)
 +$(ISQL_STATIC):	$(ISQL_Objects) $(COMMON_Objects) $(LIBFBSTATIC_A)
-+	@CXX@ $^ $(EXECUTABLE_OUTPUT_FLAG)$@ -L$(LIB) $(LIBEDITLINE) $(GLOB_OPTIONS) $(CXXFLAGS) $(LINK_OPTS) $(LINK_LIBS) $(ICU_LIBS) 
++	@CXX@ $^ -o $@ -L$(LIB) $(LIBEDITLINE) $(GLOB_OPTIONS) $(CXXFLAGS) $(LINK_OPTS) $(LINK_LIBS) $(ICU_LIBS) 
  
  
  include $(ROOT)/gen/make.shared.targets
@@ -1224,7 +1197,7 @@ unchanged:
  
  $(PROGRAM):     $(OBJS) $(LIBS)
 -		$(CC) $(LDFLAGS) -o $(PROGRAM) $(OBJS) $(LIBS)
-+		$(CC) -Fe$(PROGRAM) $(OBJS) $(LIBS) $(LDFLAGS)
++		$(CC) -o $(PROGRAM).exe $(OBJS) $(LIBS) $(LDFLAGS)
 +
 +%.o: %.c
 +	$(CC)  -c $< -Fo$@ $(CCFLAGS)
