@@ -2290,6 +2290,12 @@ CmisPropertiesYesNoButton::CmisPropertiesYesNoButton( Window* pParent, const Res
     m_aNoButton.SetBackground( aWall );
 }
 
+void CmisPropertiesYesNoButton::SetReadOnly( )
+{
+    m_aNoButton.Enable( sal_False );
+    m_aYesButton.Enable( sal_False );
+}
+
 CmisPropertiesEditButton::CmisPropertiesEditButton( Window* pParent, const ResId& rResId, CmisPropertyLine* pLine ) :
         PushButton( pParent, rResId ), m_pLine( pLine )
 {
@@ -2541,6 +2547,8 @@ void CmisPropertiesWindow::AddLine( const OUString& sId, const OUString& sName,
     pNewLine->m_aValueEdit.SetReadOnly( !bUpdatable );
     pNewLine->m_aDateField.SetReadOnly( !bUpdatable );
     pNewLine->m_aTimeField.SetReadOnly( !bUpdatable );
+    if ( !bUpdatable)
+        pNewLine->m_aYesNoButton.SetReadOnly( );
 
     m_nLineHeight = m_aValueEdit.GetSizePixel().Height() ;
 
@@ -2571,7 +2579,8 @@ void CmisPropertiesWindow::AddLine( const OUString& sId, const OUString& sName,
     pNewLine->m_aTimePos = pNewLine->m_aTimeField.GetPosPixel();
     pNewLine->m_aDateTimeSize = pNewLine->m_aDateField.GetSizePixel();
 
-    double nTmpValue = 0;
+    sal_Int32 nTmpValue = 0;
+    double  dTmpValue = 0.0;
     bool bTmpValue = false;
     OUString sTmpValue;
     util::DateTime aTmpDateTime;
@@ -2585,6 +2594,13 @@ void CmisPropertiesWindow::AddLine( const OUString& sId, const OUString& sName,
     {
         sal_uInt32 nIndex = m_aNumberFormatter.GetFormatIndex( NF_NUMBER_SYSTEM );
         m_aNumberFormatter.GetInputLineString( nTmpValue, nIndex, sValue );
+        pNewLine->m_aValueEdit.SetText( sValue );
+        sType = CMIS_TYPE_NUMBER;
+    }
+    else if ( rAny >>= dTmpValue )
+    {
+        sal_uInt32 nIndex = m_aNumberFormatter.GetFormatIndex( NF_NUMBER_SYSTEM );
+        m_aNumberFormatter.GetInputLineString( dTmpValue, nIndex, sValue );
         pNewLine->m_aValueEdit.SetText( sValue );
         sType = CMIS_TYPE_NUMBER;
     }
@@ -2628,7 +2644,6 @@ void CmisPropertiesWindow::AddLine( const OUString& sId, const OUString& sName,
         pNewLine->m_aDateField.SetPosSizePixel(pNewLine->m_aDatePos, pNewLine->m_aDateTimeSize );
         pNewLine->m_aTimeField.SetPosSizePixel(pNewLine->m_aTimePos, pNewLine->m_aDateTimeSize );
     }
-
     pNewLine->m_aName.GrabFocus();
 }
 
