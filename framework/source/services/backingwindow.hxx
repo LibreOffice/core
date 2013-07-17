@@ -29,8 +29,10 @@
 #include <vcl/toolbox.hxx>
 #include <vcl/layout.hxx>
 
-#include <svtools/acceleratorexecute.hxx>
-#include <unotools/moduleoptions.hxx>
+#include <sfx2/recentdocsview.hxx>
+
+#include "unotools/moduleoptions.hxx"
+#include "svtools/acceleratorexecute.hxx"
 
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/frame/XUIControllerFactory.hpp>
@@ -78,6 +80,8 @@ namespace framework
         PushButton*                     mpTplRepButton;
 
         VclGrid*                        mpStartCenterContainer;
+
+        RecentDocsView*        mpRecentFilesThumbnails;
 
         BitmapEx                        maBackgroundLeft;
         BitmapEx                        maBackgroundMiddle;

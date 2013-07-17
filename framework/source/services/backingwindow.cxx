@@ -62,23 +62,13 @@ const int nItemId_Extensions = 1;
 const int nItemId_Info = 3;
 const int nItemId_TplRep = 4;
 
-const int nShadowTop = 30;
-const int nShadowLeft = 30;
-const int nShadowRight = 30;
-const int nShadowBottom = 30;
-
-const int nPaddingTop = 30;
-const int nPaddingLeft = 50;
-const int nPaddingRight = 50;
-const int nPaddingBottom = 30;
-
-const int nLogoHeight = 150;
-
 BackingWindow::BackingWindow( Window* i_pParent ) :
     Window( i_pParent ),
     mbInitControls( false ),
     mnHideExternalLinks( 0 ),
-    mpAccExec( NULL )
+    mpAccExec( NULL ),
+    mnSCWidth(600),
+    mnSCHeight(400)
 {
     m_pUIBuilder = new VclBuilder(this, getUIRootDir(),
       "modules/StartModule/ui/startcenter.ui",
@@ -97,6 +87,23 @@ BackingWindow::BackingWindow( Window* i_pParent ) :
     get(mpTplRepButton,     "add_temp");
 
     get(mpStartCenterContainer, "sccontainer");
+
+    get( mpRecentFilesThumbnails,  "recent_thumbnails");
+
+
+#define TEMPLATE_ITEM_MAX_WIDTH 160
+#define TEMPLATE_ITEM_MAX_HEIGHT 148
+#define TEMPLATE_ITEM_PADDING 0
+#define TEMPLATE_ITEM_MAX_TEXT_LENGTH 20
+#define TEMPLATE_ITEM_THUMBNAIL_MAX_HEIGHT 96
+#define TEMPLATE_ITEM_MAX_HEIGHT_SUB 160
+
+    mpRecentFilesThumbnails->SetStyle(mpRecentFilesThumbnails->GetStyle() | WB_VSCROLL);
+    mpRecentFilesThumbnails->setItemMaxTextLength(TEMPLATE_ITEM_MAX_TEXT_LENGTH);
+    //mpRecentFilesThumbnails->setItemDimensions(TEMPLATE_ITEM_MAX_WIDTH, TEMPLATE_ITEM_THUMBNAIL_MAX_HEIGHT, TEMPLATE_ITEM_MAX_HEIGHT - TEMPLATE_ITEM_THUMBNAIL_MAX_HEIGHT, TEMPLATE_ITEM_PADDING);
+    mpRecentFilesThumbnails->setItemDimensions(100,50,50,0);
+    mpRecentFilesThumbnails->Show();
+    mpRecentFilesThumbnails->loadRecentDocs();
 
     try
     {
@@ -131,9 +138,6 @@ BackingWindow::BackingWindow( Window* i_pParent ) :
     {
         SAL_WARN( "fwk", "BackingWindow - caught an exception! " << e.Message );
     }
-
-    // clean up resource stack
-    //FreeResource();
 
     // fdo#34392: we do the layout dynamically, the layout depends on the font,
     // so we should handle data changed events (font changing) of the last child
@@ -243,37 +247,6 @@ void BackingWindow::prepareRecentFileMenu()
 void BackingWindow::initBackground()
 {
     SetBackground();
-
-    // scale middle segment
-    Size aMiddleSize;
-    if( !! maBackgroundMiddle )
-        aMiddleSize = maBackgroundMiddle.GetSizePixel();
-
-    // load middle segment
-    Application::LoadBrandBitmap ("shell/backing_space", maBackgroundMiddle);
-
-    // and scale it to previous size
-    if( aMiddleSize.Width() && aMiddleSize.Height() )
-        maBackgroundMiddle.Scale( aMiddleSize );
-
-    if( GetSettings().GetLayoutRTL() )
-    {
-        // replace images by RTL versions
-        Application::LoadBrandBitmap ("shell/backing_rtl_right", maBackgroundLeft);
-        Application::LoadBrandBitmap ("shell/backing_rtl_left", maBackgroundRight);
-    }
-    else
-    {
-        Application::LoadBrandBitmap ("shell/backing_left", maBackgroundLeft);
-        Application::LoadBrandBitmap ("shell/backing_right", maBackgroundRight);
-    }
-
-    mpOpenButton->SetMenuMode( MENUBUTTON_MENUMODE_TIMED );
-    mpOpenButton->SetActivateHdl( LINK( this, BackingWindow, ActivateHdl ) );
-
-    // this will be moved to somewhere saner later
-    mnSCWidth = 780;
-    mnSCHeight = maBackgroundLeft.GetSizePixel().Height();
 }
 
 void BackingWindow::initControls()
@@ -322,6 +295,9 @@ void BackingWindow::initControls()
     setupExternalLink( mpInfoButton );
     setupExternalLink( mpTplRepButton );
 
+    mpOpenButton->SetMenuMode( MENUBUTTON_MENUMODE_TIMED );
+    mpOpenButton->SetActivateHdl( LINK( this, BackingWindow, ActivateHdl ) );
+
     Resize();
 
     mpWriterButton->GrabFocus();
@@ -364,11 +340,7 @@ void BackingWindow::Paint( const Rectangle& )
 
     Wallpaper aBack( svtools::ColorConfig().GetColorValue(::svtools::APPBACKGROUND).nColor );
     Region aClip( Rectangle( Point( 0, 0 ), GetOutputSizePixel() ) );
-
-    Rectangle aBmpRect(Point((GetOutputSizePixel().Width()-mnSCWidth)/2,
-                             (GetOutputSizePixel().Height()-mnSCHeight)/2),
-                       Size(mnSCWidth,mnSCHeight));
-    aClip.Exclude( aBmpRect );
+    aClip.Exclude( maStartCentButtons );
 
     Push( PUSH_CLIPREGION );
     IntersectClipRegion( aClip );
@@ -377,28 +349,12 @@ void BackingWindow::Paint( const Rectangle& )
 
     VirtualDevice aDev( *this );
     aDev.EnableRTL( IsRTLEnabled() );
-    aDev.SetOutputSizePixel( aBmpRect.GetSize() );
-    Point aOffset( Point( 0, 0 ) - aBmpRect.TopLeft());
+    aDev.SetOutputSizePixel( maStartCentButtons.GetSize() );
+    Point aOffset( Point( 0, 0 ) - maStartCentButtons.TopLeft());
     aDev.DrawWallpaper( Rectangle( aOffset, GetOutputSizePixel() ), aBack );
 
-    maBackgroundMiddle.Scale(
-        Size(mnSCWidth - maBackgroundLeft.GetSizePixel().Width() - maBackgroundRight.GetSizePixel().Width(),
-        maBackgroundMiddle.GetSizePixel().Height()),
-        BMP_SCALE_FAST);
-
-    // draw bitmap
-    Point aTL( 0, 0 );
-    aDev.DrawBitmapEx( aTL, maBackgroundLeft );
-    aTL.X() += maBackgroundLeft.GetSizePixel().Width();
-    if( !!maBackgroundMiddle )
-    {
-        aDev.DrawBitmapEx( aTL, maBackgroundMiddle );
-        aTL.X() += maBackgroundMiddle.GetSizePixel().Width();
-    }
-    aDev.DrawBitmapEx( aTL, maBackgroundRight );
-
-    DrawOutDev( aBmpRect.TopLeft(), aBmpRect.GetSize(),
-                Point( 0, 0 ), aBmpRect.GetSize(),
+    DrawOutDev( maStartCentButtons.TopLeft(), maStartCentButtons.GetSize(),
+                Point( 0, 0 ), maStartCentButtons.GetSize(),
                 aDev );
 }
 
@@ -497,10 +453,10 @@ void BackingWindow::setOwningFrame( const com::sun::star::uno::Reference< com::s
 void BackingWindow::Resize()
 {
     maStartCentButtons = Rectangle(
-                        Point((GetOutputSizePixel().Width()-mnSCWidth)/2 + nShadowTop + nPaddingTop,
-                              (GetOutputSizePixel().Height()-mnSCHeight)/2 + nShadowLeft + nPaddingLeft + nLogoHeight),
-                        Size(mnSCWidth - nShadowLeft - nShadowRight - nPaddingLeft - nPaddingRight,
-                             mnSCHeight - nShadowTop - nShadowBottom - nPaddingTop - nPaddingBottom - nLogoHeight));
+        Point((GetOutputSizePixel().Width() - mnSCWidth) / 2,
+              (GetOutputSizePixel().Height() - mnSCHeight) / 2),
+        Size(mnSCWidth, mnSCHeight));
+
     if (isLayoutEnabled(this))
         VclContainer::setLayoutAllocation(*GetWindow(WINDOW_FIRSTCHILD),
             maStartCentButtons.TopLeft(), maStartCentButtons.GetSize());
