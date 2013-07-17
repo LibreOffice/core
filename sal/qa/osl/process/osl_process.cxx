@@ -138,16 +138,18 @@ public:
     void osl_joinProcessWithTimeout_timeout_failure()
     {
         oslProcess process;
+        oslSecurity security = osl_getCurrentSecurity();
         oslProcessError osl_error = osl_executeProcess(
             suExecutableFileURL.pData,
             parameters_,
             parameters_count_,
             osl_Process_NORMAL,
-            osl_getCurrentSecurity(),
+            security,
             suCWD.pData,
             NULL,
             0,
             &process);
+        osl_freeSecurityHandle(security);
 
         CPPUNIT_ASSERT_EQUAL_MESSAGE
         (
@@ -188,16 +190,18 @@ public:
     void osl_joinProcessWithTimeout_without_timeout_failure()
     {
         oslProcess process;
+        oslSecurity security = osl_getCurrentSecurity ();
         oslProcessError osl_error = osl_executeProcess(
             suExecutableFileURL.pData,
             parameters_,
             parameters_count_,
             osl_Process_NORMAL,
-            osl_getCurrentSecurity(),
+            security,
             suCWD.pData,
             NULL,
             0,
             &process);
+        osl_freeSecurityHandle(security);
 
         CPPUNIT_ASSERT_EQUAL_MESSAGE
         (
@@ -228,16 +232,18 @@ public:
     void osl_joinProcessWithTimeout_infinite()
     {
         oslProcess process;
+        oslSecurity security = osl_getCurrentSecurity ();
         oslProcessError osl_error = osl_executeProcess(
             suExecutableFileURL.pData,
             parameters_,
             parameters_count_,
             osl_Process_NORMAL,
-            osl_getCurrentSecurity(),
+            security,
             suCWD.pData,
             NULL,
             0,
             &process);
+        osl_freeSecurityHandle(security);
 
         CPPUNIT_ASSERT_EQUAL_MESSAGE
         (
@@ -264,16 +270,18 @@ public:
      void osl_joinProcess()
     {
         oslProcess process;
+        oslSecurity security = osl_getCurrentSecurity ();
         oslProcessError osl_error = osl_executeProcess(
             suExecutableFileURL.pData,
             parameters_,
             parameters_count_,
             osl_Process_NORMAL,
-            osl_getCurrentSecurity(),
+            security,
             suCWD.pData,
             NULL,
             0,
             &process);
+        osl_freeSecurityHandle(security);
 
         CPPUNIT_ASSERT_EQUAL_MESSAGE
         (

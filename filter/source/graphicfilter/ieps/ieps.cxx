@@ -149,6 +149,8 @@ static oslProcessError runProcessWithPathSearch(const OUString &rProgName,
     rtl_uString* pArgs[], sal_uInt32 nArgs, oslProcess *pProcess,
     oslFileHandle *pIn, oslFileHandle *pOut, oslFileHandle *pErr)
 {
+    oslProcessError result;
+    oslSecurity pSecurity = osl_getCurrentSecurity();
 #ifdef WNT
     /*
      * ooo#72096
@@ -171,14 +173,17 @@ static oslProcessError runProcessWithPathSearch(const OUString &rProgName,
     oslFileError err = osl_searchFileURL(rProgName.pData, path.pData, &url.pData);
     if (err != osl_File_E_None)
         return osl_Process_E_NotFound;
-    return osl_executeProcess_WithRedirectedIO(url.pData,
+
+    result = osl_executeProcess_WithRedirectedIO(url.pData,
     pArgs, nArgs, osl_Process_HIDDEN,
-        osl_getCurrentSecurity(), 0, 0, 0, pProcess, pIn, pOut, pErr);
+        pSecurity, 0, 0, 0, pProcess, pIn, pOut, pErr);
 #else
-    return osl_executeProcess_WithRedirectedIO(rProgName.pData,
+    result = osl_executeProcess_WithRedirectedIO(rProgName.pData,
         pArgs, nArgs, osl_Process_SEARCHPATH | osl_Process_HIDDEN,
-        osl_getCurrentSecurity(), 0, 0, 0, pProcess, pIn, pOut, pErr);
+        pSecurity, 0, 0, 0, pProcess, pIn, pOut, pErr);
 #endif
+    osl_freeSecurityHandle( pSecurity );
+    return result;
 }
 
 #if defined(WNT)
