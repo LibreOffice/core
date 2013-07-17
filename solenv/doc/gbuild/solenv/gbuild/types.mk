@@ -111,9 +111,6 @@ namespace gb { namespace types
             void add_linked_libs(List<Library> linked_libs);
             /// Add libraries to link against statically.
             void add_linked_static_libs(List<StaticLibrary> linked_static_libs);
-            /// Add multiple CxxObject s to be compiled and linked (without exceptions enabled).
-            /// @deprecated We should not care about disabling exception.
-            void add_noexception_objects(List<CxxObject> cobject);
             /// Set auxiliary files that are produced by linking (for cleanup and copying).
             void set_auxtargets(List<Path> auxtargets);
             /// Set the location for the produced DLL (used on Windows only).
