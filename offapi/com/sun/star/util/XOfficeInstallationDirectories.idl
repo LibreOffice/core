@@ -39,7 +39,7 @@ module com { module sun { module star { module util {
 published interface XOfficeInstallationDirectories : com::sun::star::uno::XInterface
 {
     /** returns the absolute URL containing the directory of the current office
-        installation (e.g. "file:///opt/OpenOffice.org".)
+        installation (for example "file:///opt/LibreOffice")
 
         @returns
         the absolute URL containing the directory of the current office
@@ -48,8 +48,8 @@ published interface XOfficeInstallationDirectories : com::sun::star::uno::XInter
     string getOfficeInstallationDirectoryURL();
 
     /** returns the absolute URL containing the directory where the current
-        office installation expects its user data (e.g.
-        "file:///home/kso/.openoffice.org".)
+        office installation expects its user data (for example
+        "file:///home/kso/.config/libreoffice/4")
 
         @returns
         the absolute URL containing the directory of the current office

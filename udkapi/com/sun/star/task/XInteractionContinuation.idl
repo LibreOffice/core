@@ -34,8 +34,8 @@ published interface XInteractionContinuation: com::sun::star::uno::XInterface
 {
     /** Select this way of continuing from an
         com::sun::star::task::XInteractionRequest (given a
-        choice of various
-        com::sun::star::task::XInteractionContinuations).
+        choice of various instances of
+        com::sun::star::task::XInteractionContinuation).
      */
     void select();
 

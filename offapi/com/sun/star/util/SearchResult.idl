@@ -26,13 +26,19 @@ module com { module sun { module star { module util {
 
 
 published  struct SearchResult  {
-    /** Number of subexpressions,
-    if it is 0, then no match found; this value is 1 for ABSOLUTE and APPROXIMATE match.
+
+    /** Number of subexpressions.
+
+    If it is 0, then no match found; this value is 1 for ABSOLUTE
+    and APPROXIMATE match.
     The start and endOffset are always dependent on the search direction.
-    For example:
-    if you search "X" in the text "-X-" the offset are:
-        for forward:     start = 1, end = 2
+
+    For example, if you search "X" in the text "-X-" the offsets are:
+
+        for forward:    start = 1, end = 2
+
         for backward:   start = 2, end = 1
+
     Forward, the startOffset is inclusive, the endOffset exclusive.
     Backward, the startOffset is exclusive, the endOffset inclusive.
 
@@ -42,8 +48,8 @@ published  struct SearchResult  {
     startoffset[i] and endoffset[i] points to the matching substring of i th matching substring.
     */
     long subRegExpressions;
-    sequence<long> startOffset;        // inclusive
-    sequence<long> endOffset;          // exclusive
+    sequence<long> startOffset;
+    sequence<long> endOffset;
 };
 
 }; }; }; };

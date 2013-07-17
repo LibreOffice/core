@@ -40,8 +40,8 @@ module com {  module sun {  module star {  module util {
     @code{.bas}
     xSearchDescr = xDocument.createSearchDescriptor()
     xSearchDescr.SearchString = "search for"
-    xSearchDescr.SearchCaseSensitive = `TRUE`
-    xSearchDescr.SearchWords = `TRUE`
+    xSearchDescr.SearchCaseSensitive = true
+    xSearchDescr.SearchWords = true
     xFound = xDocument.findFirst( xSearchDescr )
     do while not IsNull(xFound)
     xFound.CharWeight = com.sun.star.awt.FontWeight.BOLD

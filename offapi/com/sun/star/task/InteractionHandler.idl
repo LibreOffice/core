@@ -39,7 +39,6 @@ module com { module sun { module star { module task {
     <UL>
         <LI>com::sun::star::ucb::AuthenticationRequest</LI>
         <LI>com::sun::star::ucb::CertificateValidationRequest</LI>
-        <LI>com::sun::star::ucb::HandleCookiesRequest</LI>
         <LI>com::sun::star::ucb::InteractiveAugmentedIOException*</LI>
         <LI>com::sun::star::ucb::InteractiveFileIOException*</LI>
         <LI>com::sun::star::ucb::InteractiveIOException*</LI>

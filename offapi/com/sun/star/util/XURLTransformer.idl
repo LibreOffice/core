@@ -70,8 +70,8 @@ published interface XURLTransformer: com::sun::star::uno::XInterface
 
         @param sSmartProtocol
                 optional information which protocol specification should be used to parse
-                memberURL::Complete. If empty the implementation can use a
-                protocol which fit best.
+                URL::Complete. If empty the implementation can use a
+                protocol which fits best.
 
         @returns
                 `TRUE` if parsing was successful (means if URL::Complete could
@@ -87,8 +87,8 @@ published interface XURLTransformer: com::sun::star::uno::XInterface
         @param aURL
                 the URL which contains alls necessary information in a structured form. The
                 member URL::Complete contains the URL in string notation after
-                the operation finished successfully. Otherwise the content of URL::complete()
-                is not defined.
+                the operation finished successfully. Otherwise the content of
+                URL::Complete is not defined.
 
         @returns
             `TRUE` if assembling was successfully or `FALSE` otherwise.

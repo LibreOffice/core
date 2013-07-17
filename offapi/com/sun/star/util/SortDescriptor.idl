@@ -44,10 +44,10 @@ published service SortDescriptor
 
     /** specifies the sorting order.
 
-            The sorting order may be defined for separate keys in specific
-            implementations. For those this property may not need to be set.
+        The sorting order may be defined for separate keys in specific
+        implementations. For those this property may not need to be set.
 
-            @see com::sun::star::text::TextSortDescriptor
+        @see com::sun::star::text::TextSortDescriptor
      */
         [optional, property] boolean SortAscending;
 
@@ -75,12 +75,12 @@ published service SortDescriptor
 
     /** specifies the algorithm for the compare operator (collator).
 
-            The collator algorithm may be defined for separate keys in specific
-            implementations. For those this property may not need to be set.
+        The collator algorithm may be defined for separate keys in specific
+        implementations. For those this property may not need to be set.
 
-            @see com::sun::star::text::TextSortDescriptor
+        @see com::sun::star::text::TextSortDescriptor
 
-            @see com::sun::star::i18n::XCollator
+        @see com::sun::star::i18n::XCollator
      */
         [optional, property] string CollatorAlgorithm;
 };

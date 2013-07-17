@@ -25,7 +25,7 @@
 module com {  module sun {  module star {  module util {
 
 
-/** represents the information that describes a revision of something, f.e. a document
+/** represents the information that describes a revision of something.
  */
 struct RevisionTag
 {
