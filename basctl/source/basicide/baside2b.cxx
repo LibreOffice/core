@@ -449,6 +449,12 @@ void EditorWindow::Command( const CommandEvent& rCEvt )
              ( rCEvt.GetCommand() == COMMAND_AUTOSCROLL ) )
         {
             HandleScrollCommand( rCEvt, rModulWindow.GetHScrollBar(), &rModulWindow.GetEditVScrollBar() );
+        } else if ( rCEvt.GetCommand() == COMMAND_CONTEXTMENU ) {
+            SfxDispatcher* pDispatcher = GetDispatcher();
+            if ( pDispatcher )
+            {
+                pDispatcher->ExecutePopup();
+            }
         }
     }
 }
