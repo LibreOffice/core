@@ -3075,32 +3075,46 @@ Size RadioButton::CalcMinimumSize( long nMaxWidth ) const
     if ( !maImage )
         aSize = ImplGetRadioImageSize();
     else
+    {
         aSize = maImage.GetSizePixel();
-
-    nMaxWidth -= aSize.Width();
+        aSize.Width() += 8;
+        aSize.Height() += 8;
+    }
 
     OUString aText = GetText();
     if ( !aText.isEmpty() && ! (ImplGetButtonState() & BUTTON_DRAW_NOTEXT) )
     {
+        bool bTopImage = (GetStyle() & WB_TOP) != 0;
+
+        if (!bTopImage)
+        {
+            nMaxWidth -= aSize.Width();
+            nMaxWidth -= ImplGetImageToTextDistance();
+        }
+
         // subtract what will be added later
         nMaxWidth-=2;
-        nMaxWidth -= ImplGetImageToTextDistance();
 
         Size aTextSize = GetTextRect( Rectangle( Point(), Size( nMaxWidth > 0 ? nMaxWidth : 0x7fffffff, 0x7fffffff ) ),
                                       aText, FixedText::ImplGetTextStyle( GetStyle() ) ).GetSize();
+
         aSize.Width()+=2;   // for focus rect
-        aSize.Width() += ImplGetImageToTextDistance();
-        aSize.Width() += aTextSize.Width();
-        if ( aSize.Height() < aTextSize.Height() )
-            aSize.Height() = aTextSize.Height();
+
+        if (!bTopImage)
+        {
+            aSize.Width() += ImplGetImageToTextDistance();
+            aSize.Width() += aTextSize.Width();
+            if ( aSize.Height() < aTextSize.Height() )
+                aSize.Height() = aTextSize.Height();
+        }
+        else
+        {
+            aSize.Height() += 6;
+            aSize.Height() += GetTextHeight();
+            if ( aSize.Width() < aTextSize.Width() )
+                aSize.Width() = aTextSize.Width();
+        }
     }
-//  else if ( !maImage )
-//  {
-/* da ansonsten im Writer die Control zu weit oben haengen
-        aSize.Width() += 2;
-        aSize.Height() += 2;
-*/
-//  }
 
     return CalcWindowSize( aSize );
 }
