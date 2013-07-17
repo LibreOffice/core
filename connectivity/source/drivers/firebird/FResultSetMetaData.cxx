@@ -44,7 +44,7 @@ using namespace com::sun::star::sdbc;
 // -------------------------------------------------------------------------
 OResultSetMetaData::~OResultSetMetaData()
 {
-    (void) m_pConnection; // To remove warning until the rest of the class is implemented..
+    (void) m_xConnection; // To remove warning until the rest of the class is implemented..
 }
 // -------------------------------------------------------------------------
 // -------------------------------------------------------------------------

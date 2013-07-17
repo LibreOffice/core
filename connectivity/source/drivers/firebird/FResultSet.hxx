@@ -83,13 +83,12 @@ namespace connectivity
                             public  OPropertyArrayUsageHelper<OResultSet>
         {
         protected:
-            OStatement_Base*                            m_pStatement;
-            ::com::sun::star::uno::WeakReferenceHelper  m_aStatement;
+            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XStatement >& m_xStatement;
+
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData>        m_xMetaData;
 
             XSQLDA*                                     m_pSqlda;
 
-            rtl_TextEncoding                            m_nTextEncoding;
             sal_Bool                                    m_bWasNull;
             sal_Int32                                   m_row;
             sal_Int32                                   m_rowCount;
@@ -127,7 +126,8 @@ namespace connectivity
         public:
             DECLARE_SERVICE_INFO();
 
-            OResultSet(OStatement_Base* pStmt,
+            OResultSet(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XStatement >& xStatement,
+                       isc_stmt_handle& aStatementHandle,
                        XSQLDA* aSqlda);
 
 

@@ -224,7 +224,8 @@ Reference< XResultSet > SAL_CALL OPreparedStatement::executeQuery(  ) throw(SQLE
 //         if (pr_error(status, "execute query"))
 //             return NULL;
 
-    Reference< OResultSet > pResult( new OResultSet( this, 0) );
+    isc_stmt_handle aHandle = 0;
+    Reference< OResultSet > pResult( new OResultSet( this, aHandle, 0) );
     //initializeResultSet( pResult.get() );
     Reference< XResultSet > xRS = pResult.get();
 

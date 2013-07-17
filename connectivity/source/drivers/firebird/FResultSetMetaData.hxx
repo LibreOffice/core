@@ -51,13 +51,15 @@ namespace connectivity
 
         class OResultSetMetaData :  public  OResultSetMetaData_BASE
         {
-            OConnection*    m_pConnection;
+            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& m_xConnection;
 
         protected:
             virtual ~OResultSetMetaData();
         public:
             // a constructor, which is required for returning objects:
-            OResultSetMetaData(OConnection* _pConnection) : m_pConnection(_pConnection){}
+            OResultSetMetaData(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& xConnection)
+            : m_xConnection( xConnection )
+            {}
 
             /// Avoid ambigous cast error from the compiler.
             inline operator ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData > () throw()

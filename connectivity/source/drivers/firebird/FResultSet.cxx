@@ -35,83 +35,56 @@
 
 #include "FResultSet.hxx"
 #include "FResultSetMetaData.hxx"
-#include <rtl/ustrbuf.hxx>
-#include <com/sun/star/sdbc/DataType.hpp>
-#include <com/sun/star/beans/PropertyAttribute.hpp>
-#include <com/sun/star/sdbcx/CompareBookmark.hpp>
-#include <cppuhelper/typeprovider.hxx>
-#include <com/sun/star/lang/DisposedException.hpp>
 #include "propertyids.hxx"
+
 #include <comphelper/sequence.hxx>
+#include <cppuhelper/typeprovider.hxx>
+#include <rtl/ustrbuf.hxx>
+
+#include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <com/sun/star/lang/DisposedException.hpp>
+#include <com/sun/star/sdbc/DataType.hpp>
+#include <com/sun/star/sdbcx/CompareBookmark.hpp>
 
 using namespace ::comphelper;
-using namespace connectivity::firebird;
-using namespace cppu;
-using namespace com::sun::star::uno;
-using namespace com::sun::star::lang;
-using namespace com::sun::star::beans;
-using namespace com::sun::star::sdbc;
-using namespace com::sun::star::sdbcx;
-using namespace com::sun::star::container;
-using namespace com::sun::star::io;
-using namespace com::sun::star::util;
+using namespace ::connectivity::firebird;
+using namespace ::cppu;
+using namespace ::rtl;
 
-//------------------------------------------------------------------------------
-//  IMPLEMENT_SERVICE_INFO(OResultSet,"com.sun.star.sdbcx.OResultSet","com.sun.star.sdbc.ResultSet");
-::rtl::OUString SAL_CALL OResultSet::getImplementationName(  ) throw ( RuntimeException)    \
-{
-    return ::rtl::OUString("com.sun.star.sdbcx.firebird.ResultSet");
-}
-// -------------------------------------------------------------------------
- Sequence< ::rtl::OUString > SAL_CALL OResultSet::getSupportedServiceNames(  ) throw( RuntimeException)
-{
-     Sequence< ::rtl::OUString > aSupported(2);
-    aSupported[0] = ::rtl::OUString("com.sun.star.sdbc.ResultSet");
-    aSupported[1] = ::rtl::OUString("com.sun.star.sdbcx.ResultSet");
-    return aSupported;
-}
-// -------------------------------------------------------------------------
-sal_Bool SAL_CALL OResultSet::supportsService( const ::rtl::OUString& _rServiceName ) throw( RuntimeException)
-{
-    Sequence< ::rtl::OUString > aSupported(getSupportedServiceNames());
-    const ::rtl::OUString* pSupported = aSupported.getConstArray();
-    const ::rtl::OUString* pEnd = pSupported + aSupported.getLength();
-    for (;pSupported != pEnd && !pSupported->equals(_rServiceName); ++pSupported)
-        ;
+using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::sdbc;
+using namespace ::com::sun::star::sdbcx;
+using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::io;
+using namespace ::com::sun::star::util;
 
-    return pSupported != pEnd;
-}
-
-// -------------------------------------------------------------------------
-OResultSet::OResultSet(OStatement_Base* pStmt,
+OResultSet::OResultSet(const uno::Reference< XStatement >& xStatement,
+                       isc_stmt_handle& aStatementHandle,
                        XSQLDA* pSqlda)
     : OResultSet_BASE(m_aMutex)
-    ,OPropertySetHelper(OResultSet_BASE::rBHelper)
-    ,m_pStatement(pStmt)
-    ,m_aStatement((OWeakObject*)pStmt)
-    ,m_xMetaData(NULL)
-    ,m_pSqlda(pSqlda)
-    ,m_nTextEncoding(pStmt->getOwnConnection()->getTextEncoding())
-    ,m_bWasNull(sal_True)
-    ,m_row(-1)
+    , OPropertySetHelper(OResultSet_BASE::rBHelper)
+    , m_xStatement(xStatement)
+    , m_xMetaData(NULL)
+    , m_pSqlda(pSqlda)
+    , m_bWasNull(sal_True)
+    , m_row(-1)
+    , m_rowCount(0)
+    , m_fieldCount(0)
 {
     SAL_INFO("connectivity.firebird", "=> OResultSet::OResultSet().");
 
-    isc_stmt_handle stmt = 0;// m_pStatement->getSTMTHandler();
+    if (!pSqlda)
+        return; // TODO: what?
 
-    if (pSqlda == NULL)
-    {
-        m_rowCount = 0;
-        m_fieldCount = 0;
-    } else {
-        m_rowCount = 0;
-        m_fieldCount = pSqlda->sqld;
-    }
+    m_fieldCount = pSqlda->sqld;
 
     ISC_STATUS_ARRAY status;  // status vector
     ISC_STATUS retcode;
     int j = 0;
-    while ((retcode = isc_dsql_fetch(status, &stmt, 1, pSqlda)) == 0)
+    while ((retcode = isc_dsql_fetch(status, &aStatementHandle, 1, pSqlda)) == 0)
     {
         m_rowCount++;
 
@@ -134,7 +107,7 @@ OResultSet::OResultSet(OStatement_Base* pStmt,
 //         if (pr_error(status, "free statement"))
 //             return;
 }
-// -------------------------------------------------------------------------
+
 OResultSet::~OResultSet()
 {
 }
@@ -147,7 +120,6 @@ void OResultSet::disposing(void)
 
     ::osl::MutexGuard aGuard(m_aMutex);
 
-    m_aStatement    = NULL;
     m_xMetaData     = NULL;
 }
 // -------------------------------------------------------------------------
@@ -162,15 +134,15 @@ Any SAL_CALL OResultSet::queryInterface( const Type & rType ) throw(RuntimeExcep
  Sequence<  Type > SAL_CALL OResultSet::getTypes(  ) throw( RuntimeException)
 {
     OTypeCollection aTypes(
-        ::cppu::UnoType< Reference< ::com::sun::star::beans::XMultiPropertySet > >::get(),
-        ::cppu::UnoType< Reference< ::com::sun::star::beans::XFastPropertySet > >::get(),
-        ::cppu::UnoType< Reference< ::com::sun::star::beans::XPropertySet > >::get());
+        ::cppu::UnoType< uno::Reference< ::com::sun::star::beans::XMultiPropertySet > >::get(),
+        ::cppu::UnoType< uno::Reference< ::com::sun::star::beans::XFastPropertySet > >::get(),
+        ::cppu::UnoType< uno::Reference< ::com::sun::star::beans::XPropertySet > >::get());
 
     return concatSequences(aTypes.getTypes(),OResultSet_BASE::getTypes());
 }
 // -------------------------------------------------------------------------
 
-sal_Int32 SAL_CALL OResultSet::findColumn( const ::rtl::OUString& columnName ) throw(SQLException, RuntimeException)
+sal_Int32 SAL_CALL OResultSet::findColumn( const OUString& columnName ) throw(SQLException, RuntimeException)
 {
 
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
@@ -179,7 +151,7 @@ sal_Int32 SAL_CALL OResultSet::findColumn( const ::rtl::OUString& columnName ) t
 
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    Reference< XResultSetMetaData > xMeta = getMetaData();
+    uno::Reference< XResultSetMetaData > xMeta = getMetaData();
     sal_Int32 nLen = xMeta->getColumnCount();
     sal_Int32 i = 1;
     for(;i<=nLen;++i)
@@ -189,7 +161,7 @@ sal_Int32 SAL_CALL OResultSet::findColumn( const ::rtl::OUString& columnName ) t
     return i;
 }
 // -------------------------------------------------------------------------
-Reference< XInputStream > SAL_CALL OResultSet::getBinaryStream( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+uno::Reference< XInputStream > SAL_CALL OResultSet::getBinaryStream( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     (void) columnIndex;
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -199,7 +171,7 @@ Reference< XInputStream > SAL_CALL OResultSet::getBinaryStream( sal_Int32 column
     return NULL;
 }
 // -------------------------------------------------------------------------
-Reference< XInputStream > SAL_CALL OResultSet::getCharacterStream( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+uno::Reference< XInputStream > SAL_CALL OResultSet::getCharacterStream( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     (void) columnIndex;
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -308,18 +280,18 @@ sal_Int64 SAL_CALL OResultSet::getLong( sal_Int32 columnIndex ) throw(SQLExcepti
 }
 // -------------------------------------------------------------------------
 
-Reference< XResultSetMetaData > SAL_CALL OResultSet::getMetaData(  ) throw(SQLException, RuntimeException)
+uno::Reference< XResultSetMetaData > SAL_CALL OResultSet::getMetaData(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
 
     if(!m_xMetaData.is())
-        m_xMetaData = new OResultSetMetaData(m_pStatement->getOwnConnection());
+        m_xMetaData = new OResultSetMetaData(m_xStatement->getConnection());
     return m_xMetaData;
 }
 // -------------------------------------------------------------------------
-Reference< XArray > SAL_CALL OResultSet::getArray( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+uno::Reference< XArray > SAL_CALL OResultSet::getArray( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     (void) columnIndex;
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -330,7 +302,7 @@ Reference< XArray > SAL_CALL OResultSet::getArray( sal_Int32 columnIndex ) throw
 
 // -------------------------------------------------------------------------
 
-Reference< XClob > SAL_CALL OResultSet::getClob( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+uno::Reference< XClob > SAL_CALL OResultSet::getClob( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     (void) columnIndex;
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -339,17 +311,7 @@ Reference< XClob > SAL_CALL OResultSet::getClob( sal_Int32 columnIndex ) throw(S
     return NULL;
 }
 // -------------------------------------------------------------------------
-Reference< XBlob > SAL_CALL OResultSet::getBlob( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
-{
-    (void) columnIndex;
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-
-    return NULL;
-}
-// -------------------------------------------------------------------------
-
-Reference< XRef > SAL_CALL OResultSet::getRef( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+uno::Reference< XBlob > SAL_CALL OResultSet::getBlob( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     (void) columnIndex;
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -359,7 +321,17 @@ Reference< XRef > SAL_CALL OResultSet::getRef( sal_Int32 columnIndex ) throw(SQL
 }
 // -------------------------------------------------------------------------
 
-Any SAL_CALL OResultSet::getObject( sal_Int32 columnIndex, const Reference< ::com::sun::star::container::XNameAccess >& typeMap ) throw(SQLException, RuntimeException)
+uno::Reference< XRef > SAL_CALL OResultSet::getRef( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+{
+    (void) columnIndex;
+    ::osl::MutexGuard aGuard( m_aMutex );
+    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
+
+    return NULL;
+}
+// -------------------------------------------------------------------------
+
+Any SAL_CALL OResultSet::getObject( sal_Int32 columnIndex, const uno::Reference< ::com::sun::star::container::XNameAccess >& typeMap ) throw(SQLException, RuntimeException)
 {
     (void) columnIndex;
     (void) typeMap;
@@ -382,7 +354,7 @@ sal_Int16 SAL_CALL OResultSet::getShort( sal_Int32 columnIndex ) throw(SQLExcept
 }
 // -------------------------------------------------------------------------
 
-::rtl::OUString SAL_CALL OResultSet::getString( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+OUString SAL_CALL OResultSet::getString( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
@@ -548,14 +520,13 @@ sal_Bool SAL_CALL OResultSet::previous(  ) throw(SQLException, RuntimeException)
         m_row --;
     return bRet;
 }
-// -------------------------------------------------------------------------
-Reference< XInterface > SAL_CALL OResultSet::getStatement(  ) throw(SQLException, RuntimeException)
+
+uno::Reference< XInterface > SAL_CALL OResultSet::getStatement() throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
-
-    return m_aStatement.get();
+    return m_xStatement;
 }
 // -------------------------------------------------------------------------
 
@@ -744,7 +715,7 @@ void SAL_CALL OResultSet::updateDouble( sal_Int32 columnIndex, double x ) throw(
 
 }
 // -------------------------------------------------------------------------
-void SAL_CALL OResultSet::updateString( sal_Int32 columnIndex, const ::rtl::OUString& x ) throw(SQLException, RuntimeException)
+void SAL_CALL OResultSet::updateString( sal_Int32 columnIndex, const OUString& x ) throw(SQLException, RuntimeException)
 {
     (void) columnIndex;
     (void) x;
@@ -792,7 +763,7 @@ void SAL_CALL OResultSet::updateTimestamp( sal_Int32 columnIndex, const DateTime
 }
 // -------------------------------------------------------------------------
 
-void SAL_CALL OResultSet::updateBinaryStream( sal_Int32 columnIndex, const Reference< XInputStream >& x, sal_Int32 length ) throw(SQLException, RuntimeException)
+void SAL_CALL OResultSet::updateBinaryStream( sal_Int32 columnIndex, const uno::Reference< XInputStream >& x, sal_Int32 length ) throw(SQLException, RuntimeException)
 {
     (void) columnIndex;
     (void) x;
@@ -802,7 +773,7 @@ void SAL_CALL OResultSet::updateBinaryStream( sal_Int32 columnIndex, const Refer
 
 }
 // -------------------------------------------------------------------------
-void SAL_CALL OResultSet::updateCharacterStream( sal_Int32 columnIndex, const Reference< XInputStream >& x, sal_Int32 length ) throw(SQLException, RuntimeException)
+void SAL_CALL OResultSet::updateCharacterStream( sal_Int32 columnIndex, const uno::Reference< XInputStream >& x, sal_Int32 length ) throw(SQLException, RuntimeException)
 {
     (void) columnIndex;
     (void) x;
@@ -905,7 +876,7 @@ IPropertyArrayHelper* OResultSet::createArrayHelper( ) const
     Sequence< Property > aProps(6);
     Property* pProperties = aProps.getArray();
     sal_Int32 nPos = 0;
-    DECL_PROP1IMPL(CURSORNAME,          ::rtl::OUString) PropertyAttribute::READONLY);
+    DECL_PROP1IMPL(CURSORNAME,          OUString) PropertyAttribute::READONLY);
     DECL_PROP0(FETCHDIRECTION,          sal_Int32);
     DECL_PROP0(FETCHSIZE,               sal_Int32);
     DECL_BOOL_PROP1IMPL(ISBOOKMARKABLE) PropertyAttribute::READONLY);
@@ -998,7 +969,7 @@ void SAL_CALL OResultSet::release() throw()
     OResultSet_BASE::release();
 }
 // -----------------------------------------------------------------------------
-::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL OResultSet::getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException)
+uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL OResultSet::getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException)
 {
     return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
 }
@@ -1047,5 +1018,31 @@ void SAL_CALL OResultSet::checkRowIndex( sal_Bool mustBeOnValidRow )
     }
 }
 
+// ---- XServiceInfo -----------------------------------------------------------
+OUString SAL_CALL OResultSet::getImplementationName() throw ( RuntimeException)
+{
+    return OUString("com.sun.star.sdbcx.firebird.ResultSet");
+}
+
+Sequence< OUString > SAL_CALL OResultSet::getSupportedServiceNames()
+    throw( RuntimeException)
+{
+     Sequence< OUString > aSupported(2);
+    aSupported[0] = OUString("com.sun.star.sdbc.ResultSet");
+    aSupported[1] = OUString("com.sun.star.sdbcx.ResultSet");
+    return aSupported;
+}
+
+sal_Bool SAL_CALL OResultSet::supportsService(const OUString& _rServiceName)
+    throw( RuntimeException)
+{
+    Sequence< OUString > aSupported(getSupportedServiceNames());
+    const OUString* pSupported = aSupported.getConstArray();
+    const OUString* pEnd = pSupported + aSupported.getLength();
+    for (;pSupported != pEnd && !pSupported->equals(_rServiceName); ++pSupported)
+        ;
+
+    return pSupported != pEnd;
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
