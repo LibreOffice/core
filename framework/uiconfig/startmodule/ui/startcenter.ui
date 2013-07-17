@@ -26,15 +26,15 @@
     <property name="can_focus">False</property>
     <property name="pixbuf">framework/res/extension.png</property>
   </object>
-  <object class="GtkImage" id="impress_image">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="pixbuf">res/odp_32_8.png</property>
-  </object>
   <object class="GtkImage" id="info_image">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="pixbuf">framework/res/info_26.png</property>
+  </object>
+  <object class="GtkImage" id="impress_image">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="pixbuf">res/odp_32_8.png</property>
   </object>
   <object class="GtkImage" id="math_image">
     <property name="visible">True</property>
@@ -46,26 +46,40 @@
     <property name="can_focus">False</property>
     <property name="pixbuf">framework/res/folder_32.png</property>
   </object>
+  <object class="GtkImage" id="writer_image">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="pixbuf">res/odt_32_8.png</property>
+  </object>
   <object class="GtkBox" id="StartCenter">
     <property name="can_focus">False</property>
     <child>
       <object class="GtkGrid" id="sccontainer">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="hexpand">True</property>
+        <property name="vexpand">True</property>
+        <property name="border_width">12</property>
+        <property name="row_spacing">12</property>
+        <property name="column_spacing">12</property>
         <property name="column_homogeneous">True</property>
         <child>
           <object class="GtkGrid" id="grid2">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="hexpand">True</property>
+            <property name="row_spacing">12</property>
+            <property name="column_spacing">12</property>
             <property name="column_homogeneous">True</property>
             <child>
               <object class="GtkButton" id="writer">
-                <property name="label" translatable="yes">Text Document</property>
+                <property name="label" translatable="yes">Text _Document</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="image">writer_image</property>
                 <property name="relief">none</property>
+                <property name="use_underline">True</property>
                 <property name="xalign">0</property>
               </object>
               <packing>
@@ -77,12 +91,13 @@
             </child>
             <child>
               <object class="GtkButton" id="draw">
-                <property name="label" translatable="yes">Drawing</property>
+                <property name="label" translatable="yes">D_rawing</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="image">draw_image</property>
                 <property name="relief">none</property>
+                <property name="use_underline">True</property>
                 <property name="xalign">0</property>
               </object>
               <packing>
@@ -94,12 +109,13 @@
             </child>
             <child>
               <object class="GtkButton" id="calc">
-                <property name="label" translatable="yes">Spreadsheet</property>
+                <property name="label" translatable="yes">_Spreadsheet</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="image">calc_image</property>
                 <property name="relief">none</property>
+                <property name="use_underline">True</property>
                 <property name="xalign">0</property>
               </object>
               <packing>
@@ -111,12 +127,13 @@
             </child>
             <child>
               <object class="GtkButton" id="database">
-                <property name="label" translatable="yes">Database</property>
+                <property name="label" translatable="yes">D_atabase</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="image">database_image</property>
                 <property name="relief">none</property>
+                <property name="use_underline">True</property>
                 <property name="xalign">0</property>
               </object>
               <packing>
@@ -128,12 +145,13 @@
             </child>
             <child>
               <object class="GtkButton" id="impress">
-                <property name="label" translatable="yes">Presentation</property>
+                <property name="label" translatable="yes">_Presentation</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="image">impress_image</property>
                 <property name="relief">none</property>
+                <property name="use_underline">True</property>
                 <property name="xalign">0</property>
               </object>
               <packing>
@@ -145,12 +163,13 @@
             </child>
             <child>
               <object class="GtkButton" id="math">
-                <property name="label" translatable="yes">Formula</property>
+                <property name="label" translatable="yes">F_ormula</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="image">math_image</property>
                 <property name="relief">none</property>
+                <property name="use_underline">True</property>
                 <property name="xalign">0</property>
               </object>
               <packing>
@@ -162,12 +181,13 @@
             </child>
             <child>
               <object class="GtkButton" id="open">
-                <property name="label" translatable="yes">Open...</property>
+                <property name="label" translatable="yes">Ope_n...</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="image">open_image</property>
                 <property name="relief">none</property>
+                <property name="use_underline">True</property>
                 <property name="xalign">0</property>
               </object>
               <packing>
@@ -179,12 +199,13 @@
             </child>
             <child>
               <object class="GtkButton" id="templates">
-                <property name="label" translatable="yes">Templates...</property>
+                <property name="label" translatable="yes">Te_mplates...</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="image">templates_image</property>
                 <property name="relief">none</property>
+                <property name="use_underline">True</property>
                 <property name="xalign">0</property>
               </object>
               <packing>
@@ -206,6 +227,10 @@
           <object class="GtkGrid" id="grid1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="valign">end</property>
+            <property name="vexpand">True</property>
+            <property name="row_spacing">12</property>
+            <property name="column_spacing">12</property>
             <child>
               <object class="GtkButton" id="extension">
                 <property name="visible">True</property>
@@ -213,6 +238,7 @@
                 <property name="receives_default">True</property>
                 <property name="image">extension_image</property>
                 <property name="relief">none</property>
+                <property name="always_show_image">True</property>
               </object>
               <packing>
                 <property name="left_attach">1</property>
@@ -228,6 +254,7 @@
                 <property name="receives_default">True</property>
                 <property name="image">info_image</property>
                 <property name="relief">none</property>
+                <property name="always_show_image">True</property>
               </object>
               <packing>
                 <property name="left_attach">2</property>
@@ -243,6 +270,7 @@
                 <property name="receives_default">True</property>
                 <property name="image">add_temp_image</property>
                 <property name="relief">none</property>
+                <property name="always_show_image">True</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -271,10 +299,5 @@
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="pixbuf">framework/res/templates_32.png</property>
-  </object>
-  <object class="GtkImage" id="writer_image">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="pixbuf">res/odt_32_8.png</property>
   </object>
 </interface>
