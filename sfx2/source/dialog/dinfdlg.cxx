@@ -2579,7 +2579,7 @@ void CmisPropertiesWindow::AddLine( const OUString& sId, const OUString& sName,
     pNewLine->m_aTimePos = pNewLine->m_aTimeField.GetPosPixel();
     pNewLine->m_aDateTimeSize = pNewLine->m_aDateField.GetSizePixel();
 
-    sal_Int32 nTmpValue = 0;
+    sal_Int64 nTmpValue = 0;
     double  dTmpValue = 0.0;
     bool bTmpValue = false;
     OUString sTmpValue;
