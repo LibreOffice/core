@@ -29,7 +29,6 @@
 #include "cmis_provider.hxx"
 #include "cmis_repo_content.hxx"
 #include "cmis_resultset.hxx"
-#include "cmis_oauth2_providers.hxx"
 
 #define OUSTR_TO_STDSTR(s) string( OUStringToOString( s, RTL_TEXTENCODING_UTF8 ).getStr() )
 #define STD_TO_OUSTR( str ) OUString( str.c_str(), str.length( ), RTL_TEXTENCODING_UTF8 )
@@ -142,11 +141,6 @@ namespace cmis
             {
                 // Create a session to get repositories
                 libcmis::OAuth2DataPtr oauth2Data = NULL;
-                if ( m_aURL.getBindingUrl( ) == GDRIVE_BASE_URL )
-                    oauth2Data.reset( new libcmis::OAuth2Data(
-                        GDRIVE_AUTH_URL, GDRIVE_TOKEN_URL,
-                        GDRIVE_SCOPE, GDRIVE_REDIRECT_URI,
-                        GDRIVE_CLIENT_ID, GDRIVE_CLIENT_SECRET ) );
 
                 libcmis::Session* session = libcmis::SessionFactory::createSession(
                         OUSTR_TO_STDSTR( m_aURL.getBindingUrl( ) ),
