@@ -664,8 +664,8 @@ OUString lcl_ExtracUIName(const Sequence<PropertyValue> rProperties)
     {
         if(!pProperties[nProp].Name.compareToAscii("UIName"))
         {
-            pProperties[nProp].Value >>= sRet;
-//!            break;
+            if ( pProperties[nProp].Value >>= sRet )
+                break;
         }
         else if(!pProperties[nProp].Name.compareToAscii("Flags"))
         {
@@ -676,7 +676,8 @@ OUString lcl_ExtracUIName(const Sequence<PropertyValue> rProperties)
         }
         else if(!pProperties[nProp].Name.compareToAscii("Name"))
         {
-            pProperties[nProp].Value >>= sRet;
+            if ( !sRet.getLength() )
+                pProperties[nProp].Value >>= sRet;
         }
     }
     return sRet;
