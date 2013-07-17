@@ -14,7 +14,7 @@ $(eval $(call gb_StaticLibrary_add_defs,winlauncher,\
     -DUNICODE \
 ))
 
-$(eval $(call gb_StaticLibrary_add_noexception_objects,winlauncher,\
+$(eval $(call gb_StaticLibrary_add_exception_objects,winlauncher,\
     desktop/win32/source/applauncher/launcher \
 ))
 
