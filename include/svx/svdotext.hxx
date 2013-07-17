@@ -336,7 +336,9 @@ public:
     bool IsFitToSize() const;
     SdrObjKind GetTextKind() const { return eTextKind; }
 
+    // #i121917#
     virtual bool HasText() const;
+
     bool HasEditText() const;
     sal_Bool IsTextEditActive() const { return (pEdtOutl != 0L); }
 

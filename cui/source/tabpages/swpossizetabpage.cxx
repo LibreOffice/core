@@ -1832,9 +1832,7 @@ void SvxSwPosSizeTabPage::SetView( const SdrView* pSdrView )
         SdrObjKind eKind = (SdrObjKind) pObj->GetObjIdentifier();
         if( ( pObj->GetObjInventor() == SdrInventor ) &&
             ( eKind==OBJ_TEXT || eKind==OBJ_TITLETEXT || eKind==OBJ_OUTLINETEXT) &&
-            // #i121917# The original ((SdrTextObj*)pObj)->HasText() will fail badly with SdrVirtObjs from Writer
-            0 != dynamic_cast< const SdrTextObj* >(pObj) &&
-            static_cast< const SdrTextObj* >(pObj)->HasText() )
+            pObj->HasText() )
         {
             OSL_FAIL("AutoWidth/AutoHeight should be enabled");
         }

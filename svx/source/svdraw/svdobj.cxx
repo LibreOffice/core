@@ -3270,6 +3270,11 @@ bool SdrObject::IsDoNotInsertIntoPageAutomatically() const
     return mbDoNotInsertIntoPageAutomatically;
 }
 
+// #i121917#
+bool SdrObject::HasText() const
+{
+    return false;
+}
 
 SdrObjFactory::SdrObjFactory(sal_uInt32 nInvent, sal_uInt16 nIdent, SdrPage* pNewPage, SdrModel* pNewModel)
 {

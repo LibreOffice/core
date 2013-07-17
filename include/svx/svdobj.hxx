@@ -1050,6 +1050,9 @@ public:
     /// @see mbDoNotInsertIntoPageAutomatically
     bool IsDoNotInsertIntoPageAutomatically() const;
 
+    // #i121917#
+    virtual bool HasText() const;
+
 protected:
     /** Sets a new UNO shape
       *

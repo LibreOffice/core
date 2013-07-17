@@ -788,9 +788,7 @@ void SvxPositionSizeTabPage::Construct()
 
         if((pObj->GetObjInventor() == SdrInventor) &&
             (OBJ_TEXT == eKind || OBJ_TITLETEXT == eKind || OBJ_OUTLINETEXT == eKind) &&
-            // #i121917# The original ((SdrTextObj*)pObj)->HasText() will fail badly with SdrVirtObjs from Writer
-            0 != dynamic_cast< const SdrTextObj* >(pObj) &&
-            static_cast< const SdrTextObj* >(pObj)->HasText())
+            pObj->HasText())
         {
             mbAdjustDisabled = false;
             maFlAdjust.Enable();

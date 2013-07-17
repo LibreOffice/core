@@ -172,7 +172,9 @@ public:
     /** returns the index of the text that contains the given point or -1 */
     virtual sal_Int32 CheckTextHit(const Point& rPnt) const;
 
+    // #i121917#
     virtual bool HasText() const;
+
     sal_Bool IsTextEditActive() const { return (pEdtOutl != 0L); }
     bool IsTextEditActive( const sdr::table::CellPos& rPos );
 
