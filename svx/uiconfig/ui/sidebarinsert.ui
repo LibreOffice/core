@@ -19,7 +19,7 @@
             <property name="can_focus">False</property>
             <property name="orientation">vertical</property>
             <child>
-              <object class="GtkToolbar" id="standardshapes">
+              <object class="sfxlo-SidebarToolBox" id="standardshapes">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <child>
@@ -142,7 +142,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkToolbar" id="customshapes">
+              <object class="sfxlo-SidebarToolBox" id="customshapes">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="margin_top">6</property>
