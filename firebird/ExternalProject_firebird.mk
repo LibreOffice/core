@@ -24,21 +24,22 @@ $(eval $(call gb_ExternalProject_register_targets,firebird,\
 # note: this can intentionally only build against internal atomic_op
 # note: this can intentionally only build against internal tommath
 
+# do not set LDFLAGS - it is mysteriously not used by firebird on MacOSX
 $(call gb_ExternalProject_get_state_target,firebird,build):
 	$(call gb_ExternalProject_run,build,\
 		unset MAKEFLAGS \
 		&& export PKG_CONFIG="" \
 		&& export CXXFLAGS=" \
-			$(if $(filter NO,$(SYSTEM_BOOST)),-I$(call gb_UnpackedTarball_get_dir,boost),$(BOOST_CPPFLAGS)) \
+			$(if $(filter NO,$(SYSTEM_BOOST)), \
+				-I$(call gb_UnpackedTarball_get_dir,boost),$(BOOST_CPPFLAGS) \
+				-L$(call gb_UnpackedTarball_get_dir,boost)/source/lib) \
 			$(if $(filter NO,$(SYSTEM_ICU)), \
 				-I$(call gb_UnpackedTarball_get_dir,icu)/source \
 				-I$(call gb_UnpackedTarball_get_dir,icu)/source/i18n \
 				-I$(call gb_UnpackedTarball_get_dir,icu)/source/common \
-				,$(ICU_CPPFLAGS))" \
-		&& export LDFLAGS=" \
-				-L$(OUTDIR)/lib \
-				$(if $(filter NO,$(SYSTEM_BOOST)), \
-					-L$(call gb_UnpackedTarball_get_dir,boost)/source/lib)" \
+				,$(ICU_CPPFLAGS)) \
+			-L$(OUTDIR)/lib \
+			" \
 		&& export LD_LIBRARY_PATH="$(OUTDIR)/lib:$(call gb_UnpackedTarball_get_dir,boost)/source/lib" \
 		&& export DYLD_LIBRARY_PATH="$(OUTDIR)/lib:$(call gb_UnpackedTarball_get_dir,boost)/source/lib" \
 		$(if $(filter WNT-MSC,$(OS)-$(COM)), && export PATH="$(PATH):$(shell cygpath $(OUTDIR)/lib):$(shell cygpath $(call gb_UnpackedTarball_get_dir,icu)/source/lib)") \
