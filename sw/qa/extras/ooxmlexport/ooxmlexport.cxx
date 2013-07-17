@@ -96,6 +96,7 @@ public:
     void testFdo58577();
     void testBnc581614();
     void testFdo66929();
+    void testPageBorderSpacingExportCase2();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -162,6 +163,7 @@ void Test::run()
         {"fdo58577.odt", &Test::testFdo58577},
         {"bnc581614.doc", &Test::testBnc581614},
         {"fdo66929.docx", &Test::testFdo66929},
+        {"page-borders-export-case-2.docx", &Test::testPageBorderSpacingExportCase2},
     };
     // Don't test the first import of these, for some reason those tests fail
     const char* aBlacklist[] = {
@@ -967,6 +969,91 @@ void Test::testFdo66929()
     CPPUNIT_ASSERT_EQUAL( sal_Int32( 127 ), getProperty< sal_Int32 >( xFrame, "TopBorderDistance" ) );
     CPPUNIT_ASSERT_EQUAL( sal_Int32( 254 ), getProperty< sal_Int32 >( xFrame, "RightBorderDistance" ) );
     CPPUNIT_ASSERT_EQUAL( sal_Int32( 127 ), getProperty< sal_Int32 >( xFrame, "BottomBorderDistance" ) );
+}
+
+void Test::testPageBorderSpacingExportCase2()
+{
+    /*
+     * The problem was that the exporter didn't mirror the workaround of the
+     * importer, regarding the page border's spacing : the <w:pgBorders w:offsetFrom="page">
+     * and the inner nodes like <w:top w:space="24" .... />
+     *
+     * The exporter ALWAYS exported 'w:offsetFrom="text"' even when the spacing values where too large
+     * for Word to handle (larger than 31 points)
+     *
+     * Given that this doesn't affect the result in the importer, we test the
+     * resulting file directly, by opening the zip file, parsing an xml stream,
+     * and asserting an XPath expression. This can be extracted to a helper
+     * method, once it's clear what is common in such tests.
+     */
+
+    // Create the zip file
+    utl::TempFile aTempFile;
+    save("Office Open XML Text", aTempFile);
+
+    // Read the XML stream we're interested in
+    uno::Reference<packages::zip::XZipFileAccess2> xNameAccess = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory), aTempFile.GetURL());
+    uno::Reference<io::XInputStream> xInputStream(xNameAccess->getByName("word/document.xml"), uno::UNO_QUERY);
+    boost::shared_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(xInputStream, sal_True));
+    pStream->Seek(STREAM_SEEK_TO_END);
+    sal_Size nSize = pStream->Tell();
+    pStream->Seek(0);
+    OStringBuffer aDocument(nSize);
+
+    char ch;
+    for (sal_Size i = 0; i < nSize; ++i)
+    {
+        *pStream >> ch;
+        aDocument.append(ch);
+    }
+
+    xmlDocPtr pXmlDoc;
+    xmlXPathContextPtr pXmlXpathContext;
+    OString aXPath;
+    xmlXPathObjectPtr pXmlXpathObj;
+    xmlNodeSetPtr pXmlNodes;
+    xmlNodePtr pXmlNode;
+    OString aAttributeName;
+    OUString aAttributeValue;
+
+    // Parse the XML
+    pXmlDoc = xmlParseMemory((const char*)aDocument.getStr(), aDocument.getLength());
+
+    // Assert the XPath expression - page borders
+    pXmlXpathContext = xmlXPathNewContext(pXmlDoc);
+    xmlXPathRegisterNs(pXmlXpathContext, BAD_CAST("w"), BAD_CAST("http://schemas.openxmlformats.org/wordprocessingml/2006/main"));
+    aXPath = "/w:document/w:body/w:sectPr/w:pgBorders";
+    pXmlXpathObj = xmlXPathEvalExpression(BAD_CAST(aXPath.getStr()), pXmlXpathContext);
+    pXmlNodes = pXmlXpathObj->nodesetval;
+    CPPUNIT_ASSERT_EQUAL(1, xmlXPathNodeSetGetLength(pXmlNodes));
+    pXmlNode = pXmlNodes->nodeTab[0];
+    aAttributeName = "offsetFrom";
+    aAttributeValue = OUString::createFromAscii((const char*)xmlGetProp(pXmlNode, BAD_CAST(aAttributeName.getStr())));
+    CPPUNIT_ASSERT_EQUAL(OUString("page"), aAttributeValue);
+
+    // Assert the XPath expression - 'left' border
+    pXmlXpathContext = xmlXPathNewContext(pXmlDoc);
+    xmlXPathRegisterNs(pXmlXpathContext, BAD_CAST("w"), BAD_CAST("http://schemas.openxmlformats.org/wordprocessingml/2006/main"));
+    aXPath = "/w:document/w:body/w:sectPr/w:pgBorders/w:left";
+    pXmlXpathObj = xmlXPathEvalExpression(BAD_CAST(aXPath.getStr()), pXmlXpathContext);
+    pXmlNodes = pXmlXpathObj->nodesetval;
+    CPPUNIT_ASSERT_EQUAL(1, xmlXPathNodeSetGetLength(pXmlNodes));
+    pXmlNode = pXmlNodes->nodeTab[0];
+    aAttributeName = "space";
+    aAttributeValue = OUString::createFromAscii((const char*)xmlGetProp(pXmlNode, BAD_CAST(aAttributeName.getStr())));
+    CPPUNIT_ASSERT_EQUAL(OUString("24"), aAttributeValue);
+
+    // Assert the XPath expression - 'right' border
+    pXmlXpathContext = xmlXPathNewContext(pXmlDoc);
+    xmlXPathRegisterNs(pXmlXpathContext, BAD_CAST("w"), BAD_CAST("http://schemas.openxmlformats.org/wordprocessingml/2006/main"));
+    aXPath = "/w:document/w:body/w:sectPr/w:pgBorders/w:right";
+    pXmlXpathObj = xmlXPathEvalExpression(BAD_CAST(aXPath.getStr()), pXmlXpathContext);
+    pXmlNodes = pXmlXpathObj->nodesetval;
+    CPPUNIT_ASSERT_EQUAL(1, xmlXPathNodeSetGetLength(pXmlNodes));
+    pXmlNode = pXmlNodes->nodeTab[0];
+    aAttributeName = "space";
+    aAttributeValue = OUString::createFromAscii((const char*)xmlGetProp(pXmlNode, BAD_CAST(aAttributeName.getStr())));
+    CPPUNIT_ASSERT_EQUAL(OUString("24"), aAttributeValue);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

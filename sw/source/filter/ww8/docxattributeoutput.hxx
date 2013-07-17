@@ -78,8 +78,23 @@ struct OutputBorderOptions
     bool         bWriteTag;
     bool         bWriteInsideHV;
     bool         bWriteDistance;
+    bool         bCheckDistanceSize;
 
-    OutputBorderOptions() : tag(0), bUseStartEnd(false), bWriteTag(true), bWriteInsideHV(false), bWriteDistance(false) {}
+    OutputBorderOptions() : tag(0), bUseStartEnd(false), bWriteTag(true), bWriteInsideHV(false), bWriteDistance(false), bCheckDistanceSize(false) {}
+};
+
+/**
+ * A structure that holds information about the page margins.
+ *
+ */
+struct PageMargins
+{
+    sal_uInt16 nPageMarginLeft;
+    sal_uInt16 nPageMarginRight;
+    sal_uInt16 nPageMarginTop;
+    sal_uInt16 nPageMarginBottom;
+
+    PageMargins() : nPageMarginLeft(0), nPageMarginRight(0), nPageMarginTop(0), nPageMarginBottom(0) {}
 };
 
 /// The class that has handlers for various resource types when exporting as DOCX.
@@ -677,6 +692,8 @@ private:
 
     /// Is fake rotation detected, so rotation with 90 degrees should be ignored in this cell?
     bool m_bBtLr;
+
+    PageMargins m_pageMargins;
 
 public:
     DocxAttributeOutput( DocxExport &rExport, ::sax_fastparser::FSHelperPtr pSerializer, oox::drawingml::DrawingML* pDrawingML );
