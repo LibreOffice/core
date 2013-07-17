@@ -26,7 +26,7 @@ $(eval $(call gb_Executable_add_libs,scalc,\
 $(call gb_Executable_get_target,scalc) : \
     $(call gb_CxxObject_get_target,desktop/win32/source/applauncher/launcher)
 
-$(eval $(call gb_Executable_add_noexception_objects,scalc,\
+$(eval $(call gb_Executable_add_exception_objects,scalc,\
     desktop/win32/source/applauncher/scalc \
 ))
 

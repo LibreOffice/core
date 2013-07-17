@@ -16,7 +16,7 @@ $(eval $(call gb_Executable_use_static_libraries,unopkg,\
     winextendloaderenv \
 ))
 
-$(eval $(call gb_Executable_add_noexception_objects,unopkg,\
+$(eval $(call gb_Executable_add_exception_objects,unopkg,\
     desktop/win32/source/guiloader/genericloader \
 ))
 

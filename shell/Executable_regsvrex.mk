@@ -9,7 +9,7 @@
 
 $(eval $(call gb_Executable_Executable,regsvrex))
 
-$(eval $(call gb_Executable_add_noexception_objects,regsvrex,\
+$(eval $(call gb_Executable_add_exception_objects,regsvrex,\
     shell/source/tools/regsvrex/regsvrex \
 ))
 

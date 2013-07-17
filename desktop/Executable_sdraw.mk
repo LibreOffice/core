@@ -26,7 +26,7 @@ $(eval $(call gb_Executable_add_libs,sdraw,\
 $(call gb_Executable_get_target,sdraw) : \
     $(call gb_CxxObject_get_target,desktop/win32/source/applauncher/launcher)
 
-$(eval $(call gb_Executable_add_noexception_objects,sdraw,\
+$(eval $(call gb_Executable_add_exception_objects,sdraw,\
     desktop/win32/source/applauncher/sdraw \
 ))
 
