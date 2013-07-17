@@ -605,6 +605,47 @@ bool Button::IsSmallSymbol () const
     return mpButtonData->mbSmallSymbol;
 }
 
+bool Button::set_property(const OString &rKey, const OString &rValue)
+{
+    if (rKey == "image-position")
+    {
+        ImageAlign eAlign = IMAGEALIGN_LEFT;
+        WinBits nBits = GetStyle();
+        if (rValue == "left")
+        {
+            nBits &= ~(WB_CENTER | WB_RIGHT);
+            nBits |= WB_LEFT;
+            eAlign = IMAGEALIGN_LEFT;
+        }
+        else if (rValue == "right")
+        {
+            nBits &= ~(WB_CENTER | WB_LEFT);
+            nBits |= WB_RIGHT;
+            eAlign = IMAGEALIGN_RIGHT;
+        }
+        else if (rValue == "top")
+        {
+            nBits &= ~(WB_VCENTER | WB_BOTTOM);
+            nBits |= WB_TOP;
+            eAlign = IMAGEALIGN_TOP;
+        }
+        else if (rValue == "bottom")
+        {
+            nBits &= ~(WB_VCENTER | WB_TOP);
+            nBits |= WB_BOTTOM;
+            eAlign = IMAGEALIGN_BOTTOM;
+        }
+        SetImageAlign(eAlign);
+        //Its rather mad to have to set these bits when there is the other
+        //image align. Looks like e.g. the radiobuttons etc weren't converted
+        //over to image align fully.
+        SetStyle(nBits);
+    }
+    else
+        return Control::set_property(rKey, rValue);
+    return true;
+}
+
 // =======================================================================
 
 void PushButton::ImplInitPushButtonData()
@@ -1720,21 +1761,8 @@ bool PushButton::set_property(const OString &rKey, const OString &rValue)
             nBits |= WB_DEFBUTTON;
         SetStyle(nBits);
     }
-    else if (rKey == "image-position")
-    {
-        ImageAlign eAlign = IMAGEALIGN_LEFT;
-        if (rValue == "left")
-            eAlign = IMAGEALIGN_LEFT;
-        else if (rValue == "right")
-            eAlign = IMAGEALIGN_RIGHT;
-        else if (rValue == "top")
-            eAlign = IMAGEALIGN_TOP;
-        else if (rValue == "bottom")
-            eAlign = IMAGEALIGN_BOTTOM;
-        SetImageAlign(eAlign);
-    }
     else
-        return Control::set_property(rKey, rValue);
+        return Button::set_property(rKey, rValue);
     return true;
 }
 
@@ -2859,7 +2887,7 @@ bool RadioButton::set_property(const OString &rKey, const OString &rValue)
     if (rKey == "active")
         SetState(toBool(rValue));
     else
-        return Window::set_property(rKey, rValue);
+        return Button::set_property(rKey, rValue);
     return true;
 }
 
@@ -3805,7 +3833,7 @@ bool CheckBox::set_property(const OString &rKey, const OString &rValue)
     if (rKey == "active")
         SetState(toBool(rValue) ? STATE_CHECK : STATE_NOCHECK);
     else
-        return Window::set_property(rKey, rValue);
+        return Button::set_property(rKey, rValue);
     return true;
 }
 

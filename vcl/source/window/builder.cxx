@@ -1138,7 +1138,9 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
         OString sWrap = extractCustomProperty(rMap);
         if (!sWrap.isEmpty())
             nBits |= WB_WORDBREAK;
-        pWindow = new RadioButton(pParent, nBits);
+        RadioButton *pButton = new RadioButton(pParent, nBits);
+        pButton->SetImageAlign(IMAGEALIGN_LEFT); //default to left
+        pWindow = pButton;
     }
     else if (name == "GtkCheckButton")
     {
@@ -1153,6 +1155,7 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
             new CheckBox(pParent, nBits);
         if (bIsTriState)
             pCheckBox->SetState(STATE_DONTKNOW);
+        pCheckBox->SetImageAlign(IMAGEALIGN_LEFT); //default to left
         pWindow = pCheckBox;
     }
     else if (name == "GtkSpinButton")

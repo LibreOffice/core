@@ -86,6 +86,7 @@ public:
     void                SetFocusRect( const Rectangle& rFocusRect );
     bool IsSmallSymbol() const;
     void SetSmallSymbol(bool bSmall = true);
+    virtual bool set_property(const OString &rKey, const OString &rValue);
 };
 
 // --------------------
