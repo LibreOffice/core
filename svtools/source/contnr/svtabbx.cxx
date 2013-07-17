@@ -204,7 +204,7 @@ SvTreeListEntry* SvTabListBox::InsertEntry( const XubString& rText,
                                 pParent, nPos, 0xffff, pUserData );
 }
 
-SvTreeListEntry* SvTabListBox::InsertEntryToColumn(const XubString& rStr,SvTreeListEntry* pParent,sal_uLong nPos,sal_uInt16 nCol,
+SvTreeListEntry* SvTabListBox::InsertEntryToColumn(const OUString& rStr,SvTreeListEntry* pParent,sal_uLong nPos,sal_uInt16 nCol,
     void* pUser )
 {
     XubString aStr;
@@ -230,7 +230,7 @@ SvTreeListEntry* SvTabListBox::InsertEntryToColumn(const XubString& rStr,SvTreeL
     return SvTreeListBox::InsertEntry( aFirstStr, pParent, sal_False, nPos, pUser );
 }
 
-SvTreeListEntry* SvTabListBox::InsertEntryToColumn( const XubString& rStr,
+SvTreeListEntry* SvTabListBox::InsertEntryToColumn( const OUString& rStr,
     const Image& rExpandedEntryBmp, const Image& rCollapsedEntryBmp,
     SvTreeListEntry* pParent,sal_uLong nPos,sal_uInt16 nCol, void* pUser )
 {
@@ -261,7 +261,7 @@ SvTreeListEntry* SvTabListBox::InsertEntryToColumn( const XubString& rStr,
         pParent, sal_False, nPos, pUser );
 }
 
-SvTreeListEntry* SvTabListBox::InsertEntryToColumn( const XubString& rStr, sal_uLong nPos,
+SvTreeListEntry* SvTabListBox::InsertEntryToColumn( const OUString& rStr, sal_uLong nPos,
     sal_uInt16 nCol, void* pUser )
 {
     return InsertEntryToColumn( rStr,0,nPos, nCol, pUser );
@@ -636,7 +636,7 @@ sal_Bool SvHeaderTabListBox::IsItemChecked( SvTreeListEntry* pEntry, sal_uInt16 
 // -----------------------------------------------------------------------
 
 SvTreeListEntry* SvHeaderTabListBox::InsertEntryToColumn(
-    const XubString& rStr, sal_uLong nPos, sal_uInt16 nCol, void* pUserData )
+    const OUString& rStr, sal_uLong nPos, sal_uInt16 nCol, void* pUserData )
 {
     SvTreeListEntry* pEntry = SvTabListBox::InsertEntryToColumn( rStr, nPos, nCol, pUserData );
     RecalculateAccessibleChildren();
@@ -646,7 +646,7 @@ SvTreeListEntry* SvHeaderTabListBox::InsertEntryToColumn(
 // -----------------------------------------------------------------------
 
 SvTreeListEntry* SvHeaderTabListBox::InsertEntryToColumn(
-    const XubString& rStr, SvTreeListEntry* pParent, sal_uLong nPos, sal_uInt16 nCol, void* pUserData )
+    const OUString& rStr, SvTreeListEntry* pParent, sal_uLong nPos, sal_uInt16 nCol, void* pUserData )
 {
     SvTreeListEntry* pEntry = SvTabListBox::InsertEntryToColumn( rStr, pParent, nPos, nCol, pUserData );
     RecalculateAccessibleChildren();
@@ -656,7 +656,7 @@ SvTreeListEntry* SvHeaderTabListBox::InsertEntryToColumn(
 // -----------------------------------------------------------------------
 
 SvTreeListEntry* SvHeaderTabListBox::InsertEntryToColumn(
-    const XubString& rStr, const Image& rExpandedEntryBmp, const Image& rCollapsedEntryBmp,
+    const OUString& rStr, const Image& rExpandedEntryBmp, const Image& rCollapsedEntryBmp,
     SvTreeListEntry* pParent, sal_uLong nPos, sal_uInt16 nCol, void* pUserData )
 {
     SvTreeListEntry* pEntry = SvTabListBox::InsertEntryToColumn(

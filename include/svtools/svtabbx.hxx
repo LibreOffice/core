@@ -86,11 +86,11 @@ public:
                                          sal_uLong nPos = LIST_APPEND, void* pUserData = 0,
                                          SvLBoxButtonKind eButtonKind = SvLBoxButtonKind_enabledCheckbox );
 
-    virtual SvTreeListEntry* InsertEntryToColumn( const XubString&, sal_uLong nPos = LIST_APPEND,
+    virtual SvTreeListEntry* InsertEntryToColumn( const OUString&, sal_uLong nPos = LIST_APPEND,
                                  sal_uInt16 nCol = 0xffff, void* pUserData = NULL );
-    virtual SvTreeListEntry* InsertEntryToColumn( const XubString&, SvTreeListEntry* pParent,
+    virtual SvTreeListEntry* InsertEntryToColumn( const OUString&, SvTreeListEntry* pParent,
                                  sal_uLong nPos, sal_uInt16 nCol, void* pUserData = NULL );
-    virtual SvTreeListEntry* InsertEntryToColumn( const XubString&, const Image& rExpandedEntryBmp,
+    virtual SvTreeListEntry* InsertEntryToColumn( const OUString&, const Image& rExpandedEntryBmp,
                                  const Image& rCollapsedEntryBmp, SvTreeListEntry* pParent = NULL,
                                  sal_uLong nPos = LIST_APPEND, sal_uInt16 nCol = 0xffff, void* pUserData = NULL );
 
@@ -148,11 +148,11 @@ public:
     void            InitHeaderBar( HeaderBar* pHeaderBar );
     sal_Bool        IsItemChecked( SvTreeListEntry* pEntry, sal_uInt16 nCol ) const;
 
-    virtual SvTreeListEntry* InsertEntryToColumn( const XubString&, sal_uLong nPos = LIST_APPEND,
+    virtual SvTreeListEntry* InsertEntryToColumn( const OUString&, sal_uLong nPos = LIST_APPEND,
                                  sal_uInt16 nCol = 0xffff, void* pUserData = NULL );
-    virtual SvTreeListEntry* InsertEntryToColumn( const XubString&, SvTreeListEntry* pParent,
+    virtual SvTreeListEntry* InsertEntryToColumn( const OUString&, SvTreeListEntry* pParent,
                                  sal_uLong nPos, sal_uInt16 nCol, void* pUserData = NULL );
-    virtual SvTreeListEntry* InsertEntryToColumn( const XubString&, const Image& rExpandedEntryBmp,
+    virtual SvTreeListEntry* InsertEntryToColumn( const OUString&, const Image& rExpandedEntryBmp,
                                  const Image& rCollapsedEntryBmp, SvTreeListEntry* pParent = NULL,
                                  sal_uLong nPos = LIST_APPEND, sal_uInt16 nCol = 0xffff, void* pUserData = NULL );
     virtual sal_uLong Insert( SvTreeListEntry* pEnt,SvTreeListEntry* pPar,sal_uLong nPos=LIST_APPEND);
