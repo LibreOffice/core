@@ -26,7 +26,7 @@ $(eval $(call gb_Executable_use_static_libraries,soffice,\
     winextendloaderenv \
 ))
 
-$(eval $(call gb_Executable_add_noexception_objects,soffice,\
+$(eval $(call gb_Executable_add_exception_objects,soffice,\
     desktop/win32/source/officeloader/officeloader \
 ))
 

@@ -26,7 +26,7 @@ $(eval $(call gb_Executable_add_libs,simpress,\
 $(call gb_Executable_get_target,simpress) : \
     $(call gb_CxxObject_get_target,desktop/win32/source/applauncher/launcher)
 
-$(eval $(call gb_Executable_add_noexception_objects,simpress,\
+$(eval $(call gb_Executable_add_exception_objects,simpress,\
     desktop/win32/source/applauncher/simpress \
 ))
 

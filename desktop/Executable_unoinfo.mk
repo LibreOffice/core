@@ -13,7 +13,7 @@ $(eval $(call gb_Executable_use_static_libraries,unoinfo,\
     ooopathutils \
 ))
 
-$(eval $(call gb_Executable_add_noexception_objects,unoinfo,\
+$(eval $(call gb_Executable_add_exception_objects,unoinfo,\
     desktop/win32/source/unoinfo \
 ))
 

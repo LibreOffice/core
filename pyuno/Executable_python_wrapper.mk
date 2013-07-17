@@ -17,7 +17,7 @@ $(eval $(call gb_Executable_use_static_libraries,pyuno/python,\
     ooopathutils \
 ))
 
-$(eval $(call gb_Executable_add_noexception_objects,pyuno/python,\
+$(eval $(call gb_Executable_add_exception_objects,pyuno/python,\
     pyuno/zipcore/python \
 ))
 
