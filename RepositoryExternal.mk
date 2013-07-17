@@ -667,11 +667,6 @@ gb_ExternalProject__use_libatomic_ops :=
 
 else # !SYSTEM_LIBATOMIC_OPS
 
-$(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
-    libatomic-ops-7.2d \
-))
-
-
 define gb_LinkTarget__use_libatomic_ops
 $(call gb_LinkTarget_set_include,$(1),\
 $(LIBATOMIC_OPS_CFLAGS) \
