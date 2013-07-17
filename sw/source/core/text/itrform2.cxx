@@ -758,10 +758,8 @@ void SwTxtFormatter::CalcAscent( SwTxtFormatInfo &rInf, SwLinePortion *pPor )
     {
         // Numbering + InterNetFlds can keep an own font, then their size is
         // independent from hard attribute values
-        SwFont* pFldFnt = ((SwFldPortion*)pPor)->pFnt;
-        SwFontSave aSave( rInf, pFldFnt );
-        ((SwFldPortion*)pPor)->Height( pFldFnt->GetHeight( rInf.GetVsh(), *rInf.GetOut() ) );
-        ((SwFldPortion*)pPor)->SetAscent( pFldFnt->GetAscent( rInf.GetVsh(), *rInf.GetOut() ) );
+        pPor->Height( rInf.GetTxtHeight() );
+        pPor->SetAscent( rInf.GetAscent() );
     }
     // #i89179#
     // tab portion representing the list tab of a list label gets the
@@ -810,7 +808,7 @@ void SwTxtFormatter::CalcAscent( SwTxtFormatInfo &rInf, SwLinePortion *pPor )
                 bChg = SeekAndChg( rInf );
         }
         if( bChg || bFirstPor || !pPor->GetAscent()
-            || !rInf.GetLast()->InTxtGrp() )
+            || !pLast->InTxtGrp() )
         {
             pPor->SetAscent( rInf.GetAscent()  );
             pPor->Height( rInf.GetTxtHeight() );
