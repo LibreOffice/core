@@ -698,19 +698,18 @@ void SAL_CALL OConnection::evaluateStatusVector( ISC_STATUS_ARRAY& aStatusVector
     if (aStatusVector[0]==1 && aStatusVector[1]) // indicates error
     {
         OUStringBuffer buf;
-        buf.appendAscii( "firebird_sdbc error: ");
-
-        char msg[512];
+        char msg[512]; // Size is based on suggestion in docs.
         const ISC_STATUS* pStatus = (const ISC_STATUS*) &aStatusVector;
 
+        buf.appendAscii("firebird_sdbc error:");
         while(fb_interpret(msg, sizeof(msg), &pStatus))
         {
             // TODO: verify encoding
+            buf.appendAscii("\n*");
             buf.append(OUString(msg, strlen(msg), RTL_TEXTENCODING_UTF8));
         }
-        buf.appendAscii( " (caused by '" );
-        buf.append( aCause );
-        buf.appendAscii( "')" );
+        buf.appendAscii("\ncaused by\n'").append(aCause).appendAscii("'\n");
+
         OUString error = buf.makeStringAndClear();
         SAL_WARN( "connectivity.firebird", error );
 
