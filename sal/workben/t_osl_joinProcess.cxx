@@ -46,16 +46,18 @@ public:
     void test_osl_joinProcessWithTimeout_timeout_failure()
     {
         oslProcess process;
+        oslSecurity security = osl_getCurrentSecurity();
         oslProcessError osl_error = osl_executeProcess(
             IMAGE_NAME.pData,
             NULL,
             0,
             osl_Process_NORMAL,
-            osl_getCurrentSecurity(),
+            security,
             CWD.pData,
             NULL,
             0,
             &process);
+        osl_freeSecurityHandle(security);
 
         CPPUNIT_ASSERT_MESSAGE
         (
@@ -96,16 +98,18 @@ public:
     void test_osl_joinProcessWithTimeout_without_timeout_failure()
     {
         oslProcess process;
+        oslSecurity security = osl_getCurrentSecurity();
         oslProcessError osl_error = osl_executeProcess(
             IMAGE_NAME.pData,
             NULL,
             0,
             osl_Process_NORMAL,
-            osl_getCurrentSecurity(),
+            security,
             CWD.pData,
             NULL,
             0,
             &process);
+        osl_freeSecurityHandle(security);
 
         CPPUNIT_ASSERT_MESSAGE
         (
@@ -136,16 +140,18 @@ public:
     void test_osl_joinProcessWithTimeout_infinite()
     {
         oslProcess process;
+        oslSecurity security = osl_getCurrentSecurity();
         oslProcessError osl_error = osl_executeProcess(
             IMAGE_NAME.pData,
             NULL,
             0,
             osl_Process_NORMAL,
-            osl_getCurrentSecurity(),
+            security,
             CWD.pData,
             NULL,
             0,
             &process);
+        osl_freeSecurityHandle(security);
 
         CPPUNIT_ASSERT_MESSAGE
         (
@@ -172,16 +178,18 @@ public:
      void test_osl_joinProcess()
     {
         oslProcess process;
+        oslSecurity security = osl_getCurrentSecurity();
         oslProcessError osl_error = osl_executeProcess(
             IMAGE_NAME.pData,
             NULL,
             0,
             osl_Process_NORMAL,
-            osl_getCurrentSecurity(),
+            security,
             CWD.pData,
             NULL,
             0,
             &process);
+        osl_freeSecurityHandle(security);
 
         CPPUNIT_ASSERT_MESSAGE
         (

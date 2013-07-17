@@ -1083,14 +1083,16 @@ bool xpdf_ImportFromFile( const OUString&                             rURL,
     oslFileHandle pIn  = NULL;
     oslFileHandle pOut = NULL;
     oslFileHandle pErr = NULL;
+    oslSecurity pSecurity = osl_getCurrentSecurity ();
     const oslProcessError eErr =
         osl_executeProcess_WithRedirectedIO(converterURL.pData,
                                             args,
                                             nArgs,
                                             osl_Process_SEARCHPATH|osl_Process_HIDDEN,
-                                            osl_getCurrentSecurity(),
+                                            pSecurity,
                                             0, ppEnv, nEnv,
                                             &aProcess, &pIn, &pOut, &pErr);
+    osl_freeSecurityHandle(pSecurity);
 
     bool bRet=true;
     try
