@@ -578,31 +578,22 @@ std::vector< CmisProperty* > SfxDocumentInfoItem::GetCmisProperties() const
 
 uno::Sequence< document::CmisProperty > SfxDocumentInfoItem::GetCmisPropertiesSeq() const
 {
+    Sequence< document::CmisProperty > aPropertiesSeq( m_aCmisProperties.size( ) );
     std::vector< CmisProperty* >::const_iterator pIter;
-    sal_Int32 i=0, updatableCount = 0, nCount = 0;
 
+    sal_Int32 i = 0;
     for ( pIter = m_aCmisProperties.begin();
-        pIter != m_aCmisProperties.end(); ++pIter, ++i )
-    {
-        if ( ( *pIter )->m_bUpdatable ) updatableCount++;
-    }
-    Sequence< document::CmisProperty > aPropertiesSeq( updatableCount );
-
-    for ( pIter = m_aCmisProperties.begin();
-        pIter != m_aCmisProperties.end(); ++pIter, ++i )
-        if (( *pIter )->m_bUpdatable )
+        pIter != m_aCmisProperties.end(); ++pIter, i++ )
     {
         CmisProperty* aProp = *pIter;
-        aPropertiesSeq[nCount].Id = aProp->m_sId;
-        aPropertiesSeq[nCount].Name = aProp->m_sName;
-        aPropertiesSeq[nCount].Updatable = aProp->m_bUpdatable;
-        aPropertiesSeq[nCount].Required = aProp->m_bRequired;
-        aPropertiesSeq[nCount].MultiValued = aProp->m_bMultiValued;
-        aPropertiesSeq[nCount].OpenChoice = aProp->m_bOpenChoice;
-        aPropertiesSeq[nCount].Choices = aProp->m_aChoices;
-        aPropertiesSeq[nCount].Value = aProp->m_aValue;
-
-        nCount++;
+        aPropertiesSeq[i].Id = aProp->m_sId;
+        aPropertiesSeq[i].Name = aProp->m_sName;
+        aPropertiesSeq[i].Updatable = aProp->m_bUpdatable;
+        aPropertiesSeq[i].Required = aProp->m_bRequired;
+        aPropertiesSeq[i].MultiValued = aProp->m_bMultiValued;
+        aPropertiesSeq[i].OpenChoice = aProp->m_bOpenChoice;
+        aPropertiesSeq[i].Choices = aProp->m_aChoices;
+        aPropertiesSeq[i].Value = aProp->m_aValue;
     }
 
     return aPropertiesSeq;
@@ -2868,7 +2859,7 @@ SfxCmisPropertiesPage::SfxCmisPropertiesPage( Window* pParent, const SfxItemSet&
 
 sal_Bool SfxCmisPropertiesPage::FillItemSet( SfxItemSet& rSet )
 {
-    sal_Bool bModified = sal_True;
+    sal_Bool bModified = sal_False;
     const SfxPoolItem* pItem = NULL;
     SfxDocumentInfoItem* pInfo = NULL;
     bool bMustDelete = false;
@@ -2887,12 +2878,20 @@ sal_Bool SfxCmisPropertiesPage::FillItemSet( SfxItemSet& rSet )
 
     if ( pInfo )
     {
+        Sequence< document::CmisProperty > aOldProps = pInfo->GetCmisPropertiesSeq( );
         pInfo->ClearCmisProperties();
         Sequence< document::CmisProperty > aPropertySeq = m_pPropertiesCtrl->GetCmisProperties();
-        sal_Int32 i = 0, nCount = aPropertySeq.getLength();
-        for ( ; i < nCount; ++i )
+
+        for ( sal_Int32 i = 0; i< aPropertySeq.getLength( ); i++  )
         {
-            if ( !aPropertySeq[i].Id.isEmpty() )
+            OUString oldValue;
+            aOldProps[i].Value >>= oldValue;
+            OUString newValue;
+            aPropertySeq[i].Value >>= newValue;
+            if ( !aPropertySeq[i].Id.isEmpty() &&
+                  aPropertySeq[i].Updatable &&
+                  oldValue != newValue )
+            {
                 pInfo->AddCmisProperty( aPropertySeq[i].Id,
                                         aPropertySeq[i].Name,
                                         aPropertySeq[i].Updatable,
@@ -2901,6 +2900,8 @@ sal_Bool SfxCmisPropertiesPage::FillItemSet( SfxItemSet& rSet )
                                         aPropertySeq[i].OpenChoice,
                                         aPropertySeq[i].Choices,
                                         aPropertySeq[i].Value );
+                bModified = true;
+            }
         }
     }
 
