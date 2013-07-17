@@ -199,34 +199,6 @@ $(call gb_Helper_abbreviate_dirs,\
 		)
 endef
 
-# NoexPrecompiledHeader class
-
-ifeq ($(COM_GCC_IS_CLANG),TRUE)
-gb_NoexPrecompiledHeader_get_enableflags = -include-pch $(call gb_NoexPrecompiledHeader_get_target,$(1))
-else
-gb_NoexPrecompiledHeader_get_enableflags = -include $(notdir $(subst .gch,,$(call gb_NoexPrecompiledHeader_get_target,$(1)))) \
-				       -I $(dir $(call gb_NoexPrecompiledHeader_get_target,$(1)))
-endif
-
-gb_NoexPrecompiledHeader_get_objectfile =
-
-define gb_NoexPrecompiledHeader__command
-$(call gb_Output_announce,$(2),$(true),PCH,1)
-$(call gb_Helper_abbreviate_dirs,\
-	mkdir -p $(dir $(1)) $(dir $(call gb_NoexPrecompiledHeader_get_dep_target,$(2))) && \
-	$(gb_CXX) \
-		-x c++-header \
-		$(4) $(5) \
-		$(gb_COMPILERDEPFLAGS) \
-		$(if $(VISIBILITY),,$(gb_VISIBILITY_FLAGS)) \
-		$(6) \
-		$(call gb_cxx_dep_generation_options,$(1),$(call gb_NoexPrecompiledHeader_get_dep_target,$(2))) \
-		-c $(patsubst %.cxx,%.hxx,$(3)) \
-		-o$(1) \
-		$(call gb_cxx_dep_copy,$(call gb_NoexPrecompiledHeader_get_dep_target,$(2))) \
-		)
-endef
-
 define gb_Library_get_exports_target
 $(call gb_LinkTarget_get_target,$(call gb_Library_get_linktargetname,$(1))).exports
 endef

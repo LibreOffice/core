@@ -148,9 +148,6 @@ gb_Module_get_check_target = $(WORKDIR)/Module/check/$(1)
 gb_Module_get_slowcheck_target = $(WORKDIR)/Module/slowcheck/$(1)
 gb_Module_get_subsequentcheck_target = $(WORKDIR)/Module/subsequentcheck/$(1)
 gb_Module_get_target = $(WORKDIR)/Module/$(1)
-gb_NoexPrecompiledHeader_get_dep_target = $(WORKDIR)/Dep/NoexPrecompiledHeader/$(gb_NoexPrecompiledHeader_DEBUGDIR)/$(1).hxx.gch.d
-gb_NoexPrecompiledHeader_get_target = $(WORKDIR)/NoexPrecompiledHeader/$(gb_NoexPrecompiledHeader_DEBUGDIR)/$(1).hxx.gch
-gb_NoexPrecompiledHeader_get_timestamp = $(WORKDIR)/NoexPrecompiledHeader/$(gb_NoexPrecompiledHeader_DEBUGDIR)/Timestamps/$(1)
 gb_ObjCxxObject_get_target = $(WORKDIR)/ObjCxxObject/$(1).o
 gb_ObjCObject_get_target = $(WORKDIR)/ObjCObject/$(1).o
 gb_Pagein_get_target = $(WORKDIR)/Pagein/$(1)
@@ -273,7 +270,6 @@ $(eval $(call gb_Helper_make_clean_targets,\
 	JunitTest \
 	LinkTarget \
 	Module \
-	NoexPrecompiledHeader \
 	PackagePart \
 	Package \
 	PackageSet \
