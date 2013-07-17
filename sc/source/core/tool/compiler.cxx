@@ -4206,13 +4206,16 @@ ScRangeData* ScCompiler::UpdateReference(UpdateRefMode eUpdateRefMode,
             aNewRef.IncRow(nDy);
             aNewRef.IncTab(nDz);
             if ( r.In( aNewRef ) )
-            {   // yes, this is URM_MOVE
-                if ( ScRefUpdate::Update( pDoc, URM_MOVE, aPos,
-                        r, nDx, nDy, nDz,
-                        SingleDoubleRefModifier( rRef ).Ref() )
-                        != UR_NOTHING
-                    )
+            {
+                SingleDoubleRefModifier aMod(rRef);
+                ScComplexRefData& rRef2 = aMod.Ref();
+                ScRange aRefRange = rRef2.toAbs(rOldPos);
+                // yes, this is URM_MOVE
+                if (ScRefUpdate::Update(pDoc, URM_MOVE, aPos, r, nDx, nDy, nDz, rRef2, aRefRange) != UR_NOTHING)
+                {
+                    rRef2.SetRange(aRefRange, rOldPos);
                     rChanged = true;
+                }
             }
         }
         // Check for SharedFormulas.
@@ -4296,29 +4299,30 @@ ScRangeData* ScCompiler::UpdateReference(UpdateRefMode eUpdateRefMode,
                     break;
                 case svSingleRef:
                 {
-                    t->CalcAbsIfRel( rOldPos );
                     SingleDoubleRefModifier aRefMod(t->GetSingleRef());
                     ScComplexRefData& rRef = aRefMod.Ref();
-                    if (ScRefUpdate::Update(pDoc, eUpdateRefMode, aPos, r, nDx, nDy, nDz, rRef) != UR_NOTHING)
+                    ScRange aRefRange = rRef.toAbs(rOldPos);
+                    if (ScRefUpdate::Update(pDoc, eUpdateRefMode, aPos, r, nDx, nDy, nDz, rRef, aRefRange) != UR_NOTHING)
+                    {
+                        rRef.SetRange(aRefRange, rOldPos);
                         rChanged = true;
+                    }
                 }
                 break;
                 default:
                 {
                     ScComplexRefData& rRef = t->GetDoubleRef();
-                    ScRange aAbs = rRef.toAbs(rOldPos);
-                    SCCOL nCols = aAbs.aEnd.Col() - aAbs.aStart.Col();
-                    SCROW nRows = aAbs.aEnd.Row() - aAbs.aStart.Row();
-                    SCTAB nTabs = aAbs.aEnd.Tab() - aAbs.aStart.Tab();
-                    t->CalcAbsIfRel( rOldPos );
-                    if ( ScRefUpdate::Update( pDoc, eUpdateRefMode,
-                                aPos, r, nDx, nDy, nDz,
-                                t->GetDoubleRef()) != UR_NOTHING)
+                    ScRange aRefRange = rRef.toAbs(rOldPos);
+                    SCCOL nCols = aRefRange.aEnd.Col() - aRefRange.aStart.Col();
+                    SCROW nRows = aRefRange.aEnd.Row() - aRefRange.aStart.Row();
+                    SCTAB nTabs = aRefRange.aEnd.Tab() - aRefRange.aStart.Tab();
+                    if (ScRefUpdate::Update(pDoc, eUpdateRefMode, aPos, r, nDx, nDy, nDz, rRef, aRefRange) != UR_NOTHING)
                     {
+                        rRef.SetRange(aRefRange, rOldPos);
                         rChanged = true;
-                        if (rRef.Ref2.nCol - rRef.Ref1.nCol != nCols ||
-                                rRef.Ref2.nRow - rRef.Ref1.nRow != nRows ||
-                                rRef.Ref2.nTab - rRef.Ref1.nTab != nTabs)
+                        if (aRefRange.aEnd.Col() - aRefRange.aStart.Col() != nCols ||
+                            aRefRange.aEnd.Row() - aRefRange.aStart.Row() != nRows ||
+                            aRefRange.aEnd.Tab() - aRefRange.aStart.Tab() != nTabs)
                             rRefSizeChanged = true;
                     }
                 }
@@ -4335,38 +4339,35 @@ ScRangeData* ScCompiler::UpdateReference(UpdateRefMode eUpdateRefMode,
         {
             ScSingleRefData& rRef = t->GetSingleRef();
             SingleDoubleRefModifier aMod( rRef );
-            if ( rRef.IsRelName() )
+            if (!rRef.IsRelName())
             {
-                ScRefUpdate::MoveRelWrap( pDoc, aPos, MAXCOL, MAXROW, aMod.Ref() );
-                rChanged = true;
-            }
-            else
-            {
-                aMod.Ref().CalcAbsIfRel( rOldPos );
-                if ( ScRefUpdate::Update( pDoc, eUpdateRefMode, aPos,
-                            r, nDx, nDy, nDz, aMod.Ref() )
-                        != UR_NOTHING
-                    )
+                ScComplexRefData& rRef2 = aMod.Ref();
+                ScRange aRefRange = rRef2.toAbs(rOldPos);
+                if (ScRefUpdate::Update(pDoc, eUpdateRefMode, aPos, r, nDx, nDy, nDz, rRef2, aRefRange) != UR_NOTHING)
+                {
+                    rRef2.SetRange(aRefRange, rOldPos);
                     rChanged = true;
+                }
             }
         }
         else
         {
             ScComplexRefData& rRef = t->GetDoubleRef();
-            SCCOL nCols = rRef.Ref2.nCol - rRef.Ref1.nCol;
-            SCROW nRows = rRef.Ref2.nRow - rRef.Ref1.nRow;
-            SCTAB nTabs = rRef.Ref2.nTab - rRef.Ref1.nTab;
+            ScRange aRefRange = rRef.toAbs(rOldPos);
+            SCCOL nCols = aRefRange.aEnd.Col() - aRefRange.aStart.Col();
+            SCROW nRows = aRefRange.aEnd.Row() - aRefRange.aStart.Row();
+            SCTAB nTabs = aRefRange.aEnd.Tab() - aRefRange.aStart.Tab();
             if ( rRef.Ref1.IsRelName() || rRef.Ref2.IsRelName() )
             {
-                ScRefUpdate::MoveRelWrap( pDoc, aPos, MAXCOL, MAXROW, rRef );
-                rChanged = true;
+                // do nothing
             }
-            else if (ScRefUpdate::Update(pDoc, eUpdateRefMode, aPos, r, nDx, nDy, nDz, rRef) != UR_NOTHING)
+            else if (ScRefUpdate::Update(pDoc, eUpdateRefMode, aPos, r, nDx, nDy, nDz, rRef, aRefRange) != UR_NOTHING)
             {
+                rRef.SetRange(aRefRange, rOldPos);
                 rChanged = true;
-                if (rRef.Ref2.nCol - rRef.Ref1.nCol != nCols ||
-                        rRef.Ref2.nRow - rRef.Ref1.nRow != nRows ||
-                        rRef.Ref2.nTab - rRef.Ref1.nTab != nTabs)
+                if (aRefRange.aEnd.Col() - aRefRange.aStart.Col() != nCols ||
+                    aRefRange.aEnd.Row() - aRefRange.aStart.Row() != nRows ||
+                    aRefRange.aEnd.Tab() - aRefRange.aStart.Tab() != nTabs)
                 {
                     rRefSizeChanged = true;
                 }
@@ -4410,11 +4411,12 @@ bool ScCompiler::UpdateNameReference(UpdateRefMode eUpdateRefMode,
         }
         if (bUpdate)
         {
-            rRef.CalcAbsIfRel( aPos);
-            if (ScRefUpdate::Update( pDoc, eUpdateRefMode, aPos, r,
-                        nDx, nDy, nDz, rRef, ScRefUpdate::ABSOLUTE)
-                    != UR_NOTHING )
+            ScRange aRefRange = rRef.toAbs(aPos);
+            if (ScRefUpdate::Update(pDoc, eUpdateRefMode, aPos, r, nDx, nDy, nDz, rRef, aRefRange, ScRefUpdate::ABSOLUTE) != UR_NOTHING)
+            {
+                rRef.SetRange(aRefRange, aPos);
                 rChanged = true;
+            }
         }
     }
     return bRelRef;
@@ -4435,52 +4437,48 @@ void ScCompiler::UpdateSharedFormulaReference( UpdateRefMode eUpdateRefMode,
         {
             if( t->GetType() != svIndex )   // it may be a DB area!!!
             {
-                t->CalcAbsIfRel( rOldPos );
                 // Absolute references have been already adjusted in the named
                 // shared formula itself prior to breaking the shared formula
                 // and calling this function. Don't readjust them again.
                 SingleDoubleRefModifier aMod( *t );
                 ScComplexRefData& rRef = aMod.Ref();
                 ScComplexRefData aBkp = rRef;
-                ScRefUpdate::Update( pDoc, eUpdateRefMode, aPos,
-                                            r, nDx, nDy, nDz, rRef );
+                ScRange aRefRange = rRef.toAbs(rOldPos);
+                ScRange aBkpRange = aRefRange;
+                ScRefUpdate::Update(pDoc, eUpdateRefMode, aPos, r, nDx, nDy, nDz, rRef, aRefRange);
+                rRef.SetRange(aRefRange, rOldPos);
+
                 // restore absolute parts
                 if ( !aBkp.Ref1.IsColRel() )
                 {
-                    rRef.Ref1.nCol = aBkp.Ref1.nCol;
-                    rRef.Ref1.nRelCol = aBkp.Ref1.nRelCol;
+                    rRef.Ref1.nCol = aBkpRange.aStart.Col();
                     rRef.Ref1.SetColDeleted( aBkp.Ref1.IsColDeleted() );
                 }
                 if ( !aBkp.Ref1.IsRowRel() )
                 {
-                    rRef.Ref1.nRow = aBkp.Ref1.nRow;
-                    rRef.Ref1.nRelRow = aBkp.Ref1.nRelRow;
+                    rRef.Ref1.nRow = aBkpRange.aStart.Row();
                     rRef.Ref1.SetRowDeleted( aBkp.Ref1.IsRowDeleted() );
                 }
                 if ( !aBkp.Ref1.IsTabRel() )
                 {
-                    rRef.Ref1.nTab = aBkp.Ref1.nTab;
-                    rRef.Ref1.nRelTab = aBkp.Ref1.nRelTab;
+                    rRef.Ref1.nTab = aBkpRange.aStart.Tab();
                     rRef.Ref1.SetTabDeleted( aBkp.Ref1.IsTabDeleted() );
                 }
                 if ( t->GetType() == svDoubleRef )
                 {
                     if ( !aBkp.Ref2.IsColRel() )
                     {
-                        rRef.Ref2.nCol = aBkp.Ref2.nCol;
-                        rRef.Ref2.nRelCol = aBkp.Ref2.nRelCol;
+                        rRef.Ref2.nCol = aBkpRange.aEnd.Col();
                         rRef.Ref2.SetColDeleted( aBkp.Ref2.IsColDeleted() );
                     }
                     if ( !aBkp.Ref2.IsRowRel() )
                     {
-                        rRef.Ref2.nRow = aBkp.Ref2.nRow;
-                        rRef.Ref2.nRelRow = aBkp.Ref2.nRelRow;
+                        rRef.Ref2.nRow = aBkpRange.aEnd.Row();
                         rRef.Ref2.SetRowDeleted( aBkp.Ref2.IsRowDeleted() );
                     }
                     if ( !aBkp.Ref2.IsTabRel() )
                     {
-                        rRef.Ref2.nTab = aBkp.Ref2.nTab;
-                        rRef.Ref2.nRelTab = aBkp.Ref2.nRelTab;
+                        rRef.Ref2.nTab = aBkpRange.aEnd.Tab();
                         rRef.Ref2.SetTabDeleted( aBkp.Ref2.IsTabDeleted() );
                     }
                 }

@@ -481,20 +481,20 @@ ScRefUpdateRes ScRefUpdate::Update( UpdateRefMode eUpdateRefMode,
 }
 
 
-ScRefUpdateRes ScRefUpdate::Update( ScDocument* pDoc, UpdateRefMode eMode,
-                                    const ScAddress& rPos, const ScRange& r,
-                                    SCsCOL nDx, SCsROW nDy, SCsTAB nDz,
-                                    ScComplexRefData& rRef, WhatType eWhat )
+ScRefUpdateRes ScRefUpdate::Update(
+    ScDocument* pDoc, UpdateRefMode eMode, const ScAddress& rPos, const ScRange& rRange,
+    SCsCOL nDx, SCsROW nDy, SCsTAB nDz, ScComplexRefData& rRef, ScRange& rRefRange,
+    WhatType eWhat )
 {
     ScRefUpdateRes eRet = UR_NOTHING;
 
     // Range that shifted.
-    SCCOL nCol1 = r.aStart.Col();
-    SCROW nRow1 = r.aStart.Row();
-    SCTAB nTab1 = r.aStart.Tab();
-    SCCOL nCol2 = r.aEnd.Col();
-    SCROW nRow2 = r.aEnd.Row();
-    SCTAB nTab2 = r.aEnd.Tab();
+    SCCOL nCol1 = rRange.aStart.Col();
+    SCROW nRow1 = rRange.aStart.Row();
+    SCTAB nTab1 = rRange.aStart.Tab();
+    SCCOL nCol2 = rRange.aEnd.Col();
+    SCROW nRow2 = rRange.aEnd.Row();
+    SCTAB nTab2 = rRange.aEnd.Tab();
 
     if( eMode == URM_INSDEL )
     {
@@ -506,12 +506,12 @@ ScRefUpdateRes ScRefUpdate::Update( ScDocument* pDoc, UpdateRefMode eMode,
             ( pChangeTrack ? pChangeTrack->IsInDeleteUndo() : false );
 
         // Store the old reference range.
-        SCCOL nOldCol1 = rRef.Ref1.nCol;
-        SCROW nOldRow1 = rRef.Ref1.nRow;
-        SCTAB nOldTab1 = rRef.Ref1.nTab;
-        SCCOL nOldCol2 = rRef.Ref2.nCol;
-        SCROW nOldRow2 = rRef.Ref2.nRow;
-        SCTAB nOldTab2 = rRef.Ref2.nTab;
+        SCCOL nOldCol1 = rRefRange.aStart.Col();
+        SCROW nOldRow1 = rRefRange.aStart.Row();
+        SCTAB nOldTab1 = rRefRange.aStart.Tab();
+        SCCOL nOldCol2 = rRefRange.aEnd.Col();
+        SCROW nOldRow2 = rRefRange.aEnd.Row();
+        SCTAB nOldTab2 = rRefRange.aEnd.Tab();
 
         bool bRef1ColDel = rRef.Ref1.IsColDeleted();
         bool bRef2ColDel = rRef.Ref2.IsColDeleted();
@@ -521,30 +521,31 @@ ScRefUpdateRes ScRefUpdate::Update( ScDocument* pDoc, UpdateRefMode eMode,
         bool bRef2TabDel = rRef.Ref2.IsTabDeleted();
 
         if (nDx &&
-            ((nRow1 <= rRef.Ref1.nRow && rRef.Ref2.nRow <= nRow2) || (bRef1RowDel || bRef2RowDel)) &&
-            ((nTab1 <= rRef.Ref1.nTab && rRef.Ref2.nTab <= nTab2) || (bRef1TabDel || bRef2TabDel)))
+            ((nRow1 <= rRefRange.aStart.Row() && rRefRange.aEnd.Row() <= nRow2) || (bRef1RowDel || bRef2RowDel)) &&
+            ((nTab1 <= rRefRange.aStart.Tab() && rRefRange.aEnd.Tab() <= nTab2) || (bRef1TabDel || bRef2TabDel)))
         {
             // Shift in the column direction, reference range has at least one
             // deleted row or sheet, and the reference range is within the
             // shifted region.
-            bool bExp = (bExpand && !bInDeleteUndo && IsExpand( rRef.Ref1.nCol,
-                rRef.Ref2.nCol, nCol1, nDx ));
-            bool bDo1 = (eWhat == ScRefUpdate::ALL || (eWhat ==
-                        ScRefUpdate::ABSOLUTE && !rRef.Ref1.IsColRel()));
-            bool bDo2 = (eWhat == ScRefUpdate::ALL || (eWhat ==
-                        ScRefUpdate::ABSOLUTE && !rRef.Ref2.IsColRel()));
-            if ( lcl_MoveRefPart( rRef.Ref1.nCol, bRef1ColDel, bDo1,
-                                  rRef.Ref2.nCol, bRef2ColDel, bDo2,
+            bool bExp = (bExpand && !bInDeleteUndo && IsExpand(rRefRange.aStart.Col(), rRefRange.aEnd.Col(), nCol1, nDx));
+            bool bDo1 = (eWhat == ScRefUpdate::ALL || (eWhat == ScRefUpdate::ABSOLUTE && !rRef.Ref1.IsColRel()));
+            bool bDo2 = (eWhat == ScRefUpdate::ALL || (eWhat == ScRefUpdate::ABSOLUTE && !rRef.Ref2.IsColRel()));
+            SCCOL nRefCol1 = rRefRange.aStart.Col(), nRefCol2 = rRefRange.aEnd.Col();
+            if ( lcl_MoveRefPart(nRefCol1, bRef1ColDel, bDo1,
+                                 nRefCol2, bRef2ColDel, bDo2,
                                   nCol1, nCol2, nDx, MAXCOL ) )
             {
+                rRefRange.aStart.SetCol(nRefCol1);
+                rRefRange.aEnd.SetCol(nRefCol2);
+
                 eRet = UR_UPDATED;
                 if ( bInDeleteUndo && (bRef1ColDel || bRef2ColDel) )
                 {
-                    if ( bRef1ColDel && nCol1 <= rRef.Ref1.nCol &&
-                            rRef.Ref1.nCol <= nCol1 + nDx )
+                    if (bRef1ColDel &&
+                        nCol1 <= rRefRange.aStart.Col() && rRefRange.aStart.Col() <= nCol1 + nDx)
                         rRef.Ref1.SetColDeleted( false );
-                    if ( bRef2ColDel && nCol1 <= rRef.Ref2.nCol &&
-                            rRef.Ref2.nCol <= nCol1 + nDx )
+                    if (bRef2ColDel &&
+                        nCol1 <= rRefRange.aEnd.Col() && rRefRange.aEnd.Col() <= nCol1 + nDx)
                         rRef.Ref2.SetColDeleted( false );
                 }
                 else
@@ -557,36 +558,39 @@ ScRefUpdateRes ScRefUpdate::Update( ScDocument* pDoc, UpdateRefMode eMode,
             }
             if ( bExp )
             {
-                Expand( rRef.Ref1.nCol, rRef.Ref2.nCol, nCol1, nDx );
+                nRefCol1 = rRefRange.aStart.Col();
+                nRefCol2 = rRefRange.aEnd.Col();
+                Expand(nRefCol1, nRefCol2, nCol1, nDx);
+                rRefRange.aStart.SetCol(nRefCol1);
+                rRefRange.aEnd.SetCol(nRefCol2);
+
                 eRet = UR_UPDATED;
             }
         }
 
         if (nDy &&
-            ((nCol1 <= rRef.Ref1.nCol && rRef.Ref2.nCol <= nCol2) || (bRef1ColDel || bRef2ColDel)) &&
-            ((nTab1 <= rRef.Ref1.nTab && rRef.Ref2.nTab <= nTab2) || (bRef1TabDel || bRef2TabDel)))
+            ((nCol1 <= rRefRange.aStart.Col() && rRefRange.aEnd.Col() <= nCol2) || (bRef1ColDel || bRef2ColDel)) &&
+            ((nTab1 <= rRefRange.aStart.Tab() && rRefRange.aEnd.Tab() <= nTab2) || (bRef1TabDel || bRef2TabDel)))
         {
             // Shift in the row direction, reference range has at least one
             // deleted column or sheet, and the reference range is within the
             // shifted region.
-            bool bExp = (bExpand && !bInDeleteUndo && IsExpand( rRef.Ref1.nRow,
-                rRef.Ref2.nRow, nRow1, nDy ));
+            bool bExp = (bExpand && !bInDeleteUndo && IsExpand(rRefRange.aStart.Row(), rRefRange.aEnd.Row(), nRow1, nDy));
             bool bDo1 = (eWhat == ScRefUpdate::ALL || (eWhat ==
                         ScRefUpdate::ABSOLUTE && !rRef.Ref1.IsRowRel()));
             bool bDo2 = (eWhat == ScRefUpdate::ALL || (eWhat ==
                         ScRefUpdate::ABSOLUTE && !rRef.Ref2.IsRowRel()));
-            if ( lcl_MoveRefPart( rRef.Ref1.nRow, bRef1RowDel, bDo1,
-                                rRef.Ref2.nRow, bRef2RowDel, bDo2,
-                                nRow1, nRow2, nDy, MAXROW ) )
+            SCROW nRefRow1 = rRefRange.aStart.Row(), nRefRow2 = rRefRange.aEnd.Row();
+            if (lcl_MoveRefPart(nRefRow1, bRef1RowDel, bDo1, nRefRow2, bRef2RowDel, bDo2, nRow1, nRow2, nDy, MAXROW))
             {
+                rRefRange.aStart.SetRow(nRefRow1);
+                rRefRange.aEnd.SetRow(nRefRow2);
                 eRet = UR_UPDATED;
                 if ( bInDeleteUndo && (bRef1RowDel || bRef2RowDel) )
                 {
-                    if ( bRef1RowDel && nRow1 <= rRef.Ref1.nRow &&
-                            rRef.Ref1.nRow <= nRow1 + nDy )
+                    if (bRef1RowDel && nRow1 <= rRefRange.aStart.Row() && rRefRange.aStart.Row() <= nRow1 + nDy)
                         rRef.Ref1.SetRowDeleted( false );
-                    if ( bRef2RowDel && nRow1 <= rRef.Ref2.nRow &&
-                            rRef.Ref2.nRow <= nRow1 + nDy )
+                    if (bRef2RowDel && nRow1 <= rRefRange.aEnd.Row() && rRefRange.aEnd.Row() <= nRow1 + nDy)
                         rRef.Ref2.SetRowDeleted( false );
                 }
                 else
@@ -599,37 +603,40 @@ ScRefUpdateRes ScRefUpdate::Update( ScDocument* pDoc, UpdateRefMode eMode,
             }
             if ( bExp )
             {
-                Expand( rRef.Ref1.nRow, rRef.Ref2.nRow, nRow1, nDy );
+                nRefRow1 = rRefRange.aStart.Row();
+                nRefRow2 = rRefRange.aEnd.Row();
+                Expand(nRefRow1, nRefRow2, nRow1, nDy);
+                rRefRange.aStart.SetRow(nRefRow1);
+                rRefRange.aEnd.SetRow(nRefRow2);
                 eRet = UR_UPDATED;
             }
         }
 
         if (nDz &&
-            ((nCol1 <= rRef.Ref1.nCol && rRef.Ref2.nCol <= nCol2) || (bRef1ColDel || bRef2ColDel)) &&
-            ((nRow1 <= rRef.Ref1.nRow && rRef.Ref2.nRow <= nRow2) || (bRef1RowDel || bRef2RowDel)))
+            ((nCol1 <= rRefRange.aStart.Col() && rRefRange.aEnd.Col() <= nCol2) || (bRef1ColDel || bRef2ColDel)) &&
+            ((nRow1 <= rRefRange.aStart.Row() && rRefRange.aEnd.Row() <= nRow2) || (bRef1RowDel || bRef2RowDel)))
         {
             // Shift in the sheet direction, reference range has at least one
             // deleted column or row, and the reference range is within the
             // shifted region.
-            bool bExp = (bExpand && !bInDeleteUndo && IsExpand( rRef.Ref1.nTab,
-                rRef.Ref2.nTab, nTab1, nDz ));
+            bool bExp = (bExpand && !bInDeleteUndo && IsExpand(rRefRange.aStart.Tab(), rRefRange.aEnd.Tab(), nTab1, nDz));
             SCTAB nMaxTab = pDoc->GetTableCount() - 1;
             bool bDo1 = (eWhat == ScRefUpdate::ALL || (eWhat ==
                         ScRefUpdate::ABSOLUTE && !rRef.Ref1.IsTabRel()));
             bool bDo2 = (eWhat == ScRefUpdate::ALL || (eWhat ==
                         ScRefUpdate::ABSOLUTE && !rRef.Ref2.IsTabRel()));
-            if ( lcl_MoveRefPart( rRef.Ref1.nTab, bRef1TabDel, bDo1,
-                                  rRef.Ref2.nTab, bRef2TabDel, bDo2,
-                                  nTab1, nTab2, nDz, nMaxTab ) )
+
+            SCTAB nRefTab1 = rRefRange.aStart.Tab(), nRefTab2 = rRefRange.aEnd.Tab();
+            if (lcl_MoveRefPart(nRefTab1, bRef1TabDel, bDo1, nRefTab2, bRef2TabDel, bDo2, nTab1, nTab2, nDz, nMaxTab))
             {
+                rRefRange.aStart.SetTab(nRefTab1);
+                rRefRange.aEnd.SetTab(nRefTab2);
                 eRet = UR_UPDATED;
                 if ( bInDeleteUndo && (bRef1TabDel || bRef2TabDel) )
                 {
-                    if ( bRef1TabDel && nTab1 <= rRef.Ref1.nTab &&
-                            rRef.Ref1.nTab <= nTab1 + nDz )
+                    if (bRef1TabDel && nTab1 <= rRefRange.aStart.Tab() && rRefRange.aStart.Tab() <= nTab1 + nDz)
                         rRef.Ref1.SetTabDeleted( false );
-                    if ( bRef2TabDel && nTab1 <= rRef.Ref2.nTab &&
-                            rRef.Ref2.nTab <= nTab1 + nDz )
+                    if (bRef2TabDel && nTab1 <= rRefRange.aEnd.Tab() && rRefRange.aEnd.Tab() <= nTab1 + nDz)
                         rRef.Ref2.SetTabDeleted( false );
                 }
                 else
@@ -642,73 +649,68 @@ ScRefUpdateRes ScRefUpdate::Update( ScDocument* pDoc, UpdateRefMode eMode,
             }
             if ( bExp )
             {
-                Expand( rRef.Ref1.nTab, rRef.Ref2.nTab, nTab1, nDz );
+                nRefTab1 = rRefRange.aStart.Tab();
+                nRefTab2 = rRefRange.aEnd.Tab();
+                Expand(nRefTab1, nRefTab2, nTab1, nDz);
+                rRefRange.aStart.SetTab(nRefTab1);
+                rRefRange.aEnd.SetTab(nRefTab2);
                 eRet = UR_UPDATED;
             }
         }
         if ( eRet == UR_NOTHING )
         {
-            if (nOldCol1 != rRef.Ref1.nCol
-             || nOldRow1 != rRef.Ref1.nRow
-             || nOldTab1 != rRef.Ref1.nTab
-             || nOldCol2 != rRef.Ref2.nCol
-             || nOldRow2 != rRef.Ref2.nRow
-             || nOldTab2 != rRef.Ref2.nTab
+            if (nOldCol1 != rRefRange.aStart.Col()
+             || nOldRow1 != rRefRange.aStart.Row()
+             || nOldTab1 != rRefRange.aStart.Tab()
+             || nOldCol2 != rRefRange.aEnd.Col()
+             || nOldRow2 != rRefRange.aEnd.Row()
+             || nOldTab2 != rRefRange.aEnd.Tab()
                 )
                 // Reference has changed, but the flag has not been set !?
                 eRet = UR_UPDATED;
         }
-        if (eWhat != ScRefUpdate::ABSOLUTE)
-            rRef.CalcRelFromAbs( rPos );
     }
     else if( eMode == URM_MOVE )
     {
         // Move
-        if ( rRef.Ref1.nCol >= nCol1-nDx
-          && rRef.Ref1.nRow >= nRow1-nDy
-          && rRef.Ref1.nTab >= nTab1-nDz
-          && rRef.Ref2.nCol <= nCol2-nDx
-          && rRef.Ref2.nRow <= nRow2-nDy
-          && rRef.Ref2.nTab <= nTab2-nDz )
+        if ( rRefRange.aStart.Col() >= nCol1-nDx
+          && rRefRange.aStart.Row() >= nRow1-nDy
+          && rRefRange.aStart.Tab() >= nTab1-nDz
+          && rRefRange.aEnd.Col() <= nCol2-nDx
+          && rRefRange.aEnd.Row() <= nRow2-nDy
+          && rRefRange.aEnd.Tab() <= nTab2-nDz )
         {
-            eRet = Move( pDoc, rPos, nDx, nDy, nDz, rRef, false, true );        // immer verschieben
+            eRet = Move(pDoc, rPos, nDx, nDy, nDz, rRef, rRefRange, false, true);        // immer verschieben
         }
-        else if ( nDz && r.In( rPos ) )
+        else if ( nDz && rRange.In( rPos ) )
         {
             rRef.Ref1.SetFlag3D( true );
             rRef.Ref2.SetFlag3D( true );
             eRet = UR_UPDATED;
-            if (eWhat != ScRefUpdate::ABSOLUTE)
-                rRef.CalcRelFromAbs( rPos );
         }
-        else if (eWhat != ScRefUpdate::ABSOLUTE)
-            rRef.CalcRelFromAbs( rPos );
     }
-    else if( eMode == URM_COPY && r.In( rPos ) )
+    else if( eMode == URM_COPY && rRange.In( rPos ) )
     {
-        eRet = Move( pDoc, rPos, nDx, nDy, nDz, rRef, false, false );       // nur relative
+        eRet = Move(pDoc, rPos, nDx, nDy, nDz, rRef, rRefRange, false, false);       // nur relative
         // sollte nicht mehr verwendet werden muessen
     }
-    else if (eWhat != ScRefUpdate::ABSOLUTE)
-    {
-        rRef.CalcRelFromAbs( rPos );
-    }
+
     return eRet;
 }
 
 
-ScRefUpdateRes ScRefUpdate::Move( ScDocument* pDoc, const ScAddress& rPos,
-                                  SCsCOL nDx, SCsROW nDy, SCsTAB nDz,
-                                  ScComplexRefData& rRef, bool bWrap, bool bAbsolute )
+ScRefUpdateRes ScRefUpdate::Move(
+    ScDocument* pDoc, const ScAddress& rPos, SCsCOL nDx, SCsROW nDy, SCsTAB nDz,
+    ScComplexRefData& rRef, ScRange& rRefRange, bool bWrap, bool bAbsolute )
 {
     ScRefUpdateRes eRet = UR_NOTHING;
 
-    SCCOL oldCol1 = rRef.Ref1.nCol;
-    SCROW oldRow1 = rRef.Ref1.nRow;
-    SCTAB oldTab1 = rRef.Ref1.nTab;
-    SCCOL oldCol2 = rRef.Ref2.nCol;
-    SCROW oldRow2 = rRef.Ref2.nRow;
-    SCTAB oldTab2 = rRef.Ref2.nTab;
+    SCCOL nOldCol1 = rRef.Ref1.nCol;
+    SCROW nOldRow1 = rRef.Ref1.nRow;
+    SCTAB nOldTab1 = rRef.Ref1.nTab;
+    SCCOL nOldCol2 = rRef.Ref2.nCol;
+    SCROW nOldRow2 = rRef.Ref2.nRow;
+    SCTAB nOldTab2 = rRef.Ref2.nTab;
 
     bool bCut1, bCut2;
     if ( nDx )
@@ -716,17 +718,25 @@ ScRefUpdateRes ScRefUpdate::Move( ScDocument* pDoc, const ScAddress& rPos,
         bCut1 = bCut2 = false;
         if( bAbsolute || rRef.Ref1.IsColRel() )
         {
+            SCCOL nRefCol1 = rRefRange.aStart.Col();
             if( bWrap )
-                lcl_MoveItWrap( rRef.Ref1.nCol, nDx, MAXCOL );
+            {
+                lcl_MoveItWrap(nRefCol1, nDx, MAXCOL);
+            }
             else
-                bCut1 = lcl_MoveItCut( rRef.Ref1.nCol, nDx, MAXCOL );
+            {
+                bCut1 = lcl_MoveItCut(nRefCol1, nDx, MAXCOL);
+            }
+            rRefRange.aStart.SetCol(nRefCol1);
         }
         if( bAbsolute || rRef.Ref2.IsColRel() )
         {
+            SCCOL nRefCol2 = rRefRange.aEnd.Col();
             if( bWrap )
-                lcl_MoveItWrap( rRef.Ref2.nCol, nDx, MAXCOL );
+                lcl_MoveItWrap(nRefCol2, nDx, MAXCOL);
             else
-                bCut2 = lcl_MoveItCut( rRef.Ref2.nCol, nDx, MAXCOL );
+                bCut2 = lcl_MoveItCut(nRefCol2, nDx, MAXCOL);
+            rRefRange.aEnd.SetCol(nRefCol2);
         }
         if ( bCut1 || bCut2 )
             eRet = UR_UPDATED;
@@ -741,17 +751,21 @@ ScRefUpdateRes ScRefUpdate::Move( ScDocument* pDoc, const ScAddress& rPos,
         bCut1 = bCut2 = false;
         if( bAbsolute || rRef.Ref1.IsRowRel() )
         {
+            SCROW nRefRow1 = rRefRange.aStart.Row();
             if( bWrap )
-                lcl_MoveItWrap( rRef.Ref1.nRow, nDy, MAXROW );
+                lcl_MoveItWrap(nRefRow1, nDy, MAXROW);
             else
-                bCut1 = lcl_MoveItCut( rRef.Ref1.nRow, nDy, MAXROW );
+                bCut1 = lcl_MoveItCut(nRefRow1, nDy, MAXROW);
+            rRefRange.aStart.SetRow(nRefRow1);
         }
         if( bAbsolute || rRef.Ref2.IsRowRel() )
         {
+            SCROW nRefRow2 = rRefRange.aEnd.Row();
             if( bWrap )
-                lcl_MoveItWrap( rRef.Ref2.nRow, nDy, MAXROW );
+                lcl_MoveItWrap(nRefRow2, nDy, MAXROW);
             else
-                bCut2 = lcl_MoveItCut( rRef.Ref2.nRow, nDy, MAXROW );
+                bCut2 = lcl_MoveItCut(nRefRow2, nDy, MAXROW);
+            rRefRange.aEnd.SetRow(nRefRow2);
         }
         if ( bCut1 || bCut2 )
             eRet = UR_UPDATED;
@@ -767,19 +781,23 @@ ScRefUpdateRes ScRefUpdate::Move( ScDocument* pDoc, const ScAddress& rPos,
         SCsTAB nMaxTab = (SCsTAB) pDoc->GetTableCount() - 1;
         if( bAbsolute || rRef.Ref1.IsTabRel() )
         {
+            SCTAB nRefTab1 = rRefRange.aStart.Tab();
             if( bWrap )
-                lcl_MoveItWrap( rRef.Ref1.nTab, nDz, static_cast<SCTAB>(nMaxTab) );
+                lcl_MoveItWrap(nRefTab1, nDz, static_cast<SCTAB>(nMaxTab));
             else
-                bCut1 = lcl_MoveItCut( rRef.Ref1.nTab, nDz, static_cast<SCTAB>(nMaxTab) );
-            rRef.Ref1.SetFlag3D( rPos.Tab() != rRef.Ref1.nTab );
+                bCut1 = lcl_MoveItCut(nRefTab1, nDz, static_cast<SCTAB>(nMaxTab));
+            rRefRange.aStart.SetTab(nRefTab1);
+            rRef.Ref1.SetFlag3D(rPos.Tab() != rRefRange.aStart.Tab());
         }
         if( bAbsolute || rRef.Ref2.IsTabRel() )
         {
+            SCTAB nRefTab2 = rRefRange.aEnd.Tab();
             if( bWrap )
-                lcl_MoveItWrap( rRef.Ref2.nTab, nDz, static_cast<SCTAB>(nMaxTab) );
+                lcl_MoveItWrap(nRefTab2, nDz, static_cast<SCTAB>(nMaxTab));
             else
-                bCut2 = lcl_MoveItCut( rRef.Ref2.nTab, nDz, static_cast<SCTAB>(nMaxTab) );
-            rRef.Ref2.SetFlag3D( rPos.Tab() != rRef.Ref2.nTab );
+                bCut2 = lcl_MoveItCut(nRefTab2, nDz, static_cast<SCTAB>(nMaxTab));
+            rRefRange.aEnd.SetTab(nRefTab2);
+            rRef.Ref2.SetFlag3D(rPos.Tab() != rRefRange.aEnd.Tab());
         }
         if ( bCut1 || bCut2 )
             eRet = UR_UPDATED;
@@ -792,18 +810,20 @@ ScRefUpdateRes ScRefUpdate::Move( ScDocument* pDoc, const ScAddress& rPos,
 
     if ( eRet == UR_NOTHING )
     {
-        if (oldCol1 != rRef.Ref1.nCol
-         || oldRow1 != rRef.Ref1.nRow
-         || oldTab1 != rRef.Ref1.nTab
-         || oldCol2 != rRef.Ref2.nCol
-         || oldRow2 != rRef.Ref2.nRow
-         || oldTab2 != rRef.Ref2.nTab
+        if (nOldCol1 != rRef.Ref1.nCol
+         || nOldRow1 != rRef.Ref1.nRow
+         || nOldTab1 != rRef.Ref1.nTab
+         || nOldCol2 != rRef.Ref2.nCol
+         || nOldRow2 != rRef.Ref2.nRow
+         || nOldTab2 != rRef.Ref2.nTab
             )
             eRet = UR_UPDATED;
     }
     if ( bWrap && eRet != UR_NOTHING )
+    {
         rRef.PutInOrder();
-    rRef.CalcRelFromAbs( rPos );
+        rRefRange.PutInOrder();
+    }
     return eRet;
 }
 

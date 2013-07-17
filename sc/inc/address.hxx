@@ -507,6 +507,7 @@ public:
     SC_DLLPUBLIC void Justify();
     SC_DLLPUBLIC void ExtendTo( const ScRange& rRange );
     SC_DLLPUBLIC bool Intersects( const ScRange& ) const;    // do two ranges intersect?
+    void PutInOrder();
     inline bool operator==( const ScRange& r ) const;
     inline bool operator!=( const ScRange& r ) const;
     inline bool operator<( const ScRange& r ) const;

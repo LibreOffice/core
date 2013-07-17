@@ -58,17 +58,31 @@ public:
                                 sal_Int32 nDx, sal_Int32 nDy, sal_Int32 nDz,
                                 ScBigRange& rWhat );
 
-    /// Before calling, the absolute references must be up-to-date!
-    static ScRefUpdateRes Update( ScDocument* pDoc,
-                                  UpdateRefMode eUpdateRefMode,
-                                  const ScAddress& rPos, const ScRange& rRange,
-                                  SCsCOL nDx, SCsROW nDy, SCsTAB nDz,
-                                  ScComplexRefData& rRef, WhatType eWhat = ALL );
+    /**
+     * Update range reference in response to row / column insertion / removal,
+     * copy-n-pasting of formula cell, moving of cells etc.
+     *
+     * @param pDoc
+     * @param eUpdateRefMode
+     * @param rPos position of formula cell that has the range reference.
+     * @param rRange range of cells being shifted.
+     * @param nDx
+     * @param nDy
+     * @param nDz
+     * @param rRef range reference object
+     * @param eWhat
+     *
+     * @return ScRefUpdateRes
+     */
+    static ScRefUpdateRes Update(
+        ScDocument* pDoc, UpdateRefMode eUpdateRefMode, const ScAddress& rPos,
+        const ScRange& rRange, SCsCOL nDx, SCsROW nDy, SCsTAB nDz,
+        ScComplexRefData& rRef, ScRange& rRefRange, WhatType eWhat = ALL );
 
     /// Before calling, the absolute references must be up-to-date!
-    static ScRefUpdateRes Move( ScDocument* pDoc, const ScAddress& rPos,
-                                SCsCOL nDx, SCsROW nDy, SCsTAB nDz,
-                                ScComplexRefData& rRef, bool bWrap, bool bAbsolute );
+    static ScRefUpdateRes Move(
+        ScDocument* pDoc, const ScAddress& rPos, SCsCOL nDx, SCsROW nDy, SCsTAB nDz,
+        ScComplexRefData& rRef, ScRange& rRefRange, bool bWrap, bool bAbsolute );
 
     static void MoveRelWrap( ScDocument* pDoc, const ScAddress& rPos,
                              SCCOL nMaxCol, SCROW nMaxRow, ScComplexRefData& rRef );

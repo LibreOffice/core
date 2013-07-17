@@ -1337,6 +1337,24 @@ bool ScRange::Intersects( const ScRange& r ) const
         );
 }
 
+void ScRange::PutInOrder()
+{
+    SCCOL nCol1 = aStart.Col(), nCol2 = aEnd.Col();
+    SCROW nRow1 = aStart.Row(), nRow2 = aEnd.Row();
+    SCTAB nTab1 = aStart.Tab(), nTab2 = aEnd.Tab();
+
+    ::PutInOrder(nCol1, nCol2);
+    ::PutInOrder(nRow1, nRow2);
+    ::PutInOrder(nTab1, nTab2);
+
+    aStart.SetCol(nCol1);
+    aStart.SetRow(nRow1);
+    aStart.SetTab(nTab1);
+
+    aEnd.SetCol(nCol2);
+    aEnd.SetRow(nRow2);
+    aEnd.SetTab(nTab2);
+}
 
 void ScRange::Justify()
 {
