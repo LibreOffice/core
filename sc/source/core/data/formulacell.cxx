@@ -2117,6 +2117,93 @@ bool ScFormulaCell::HasColRowName() const
     return (pCode->GetNextColRowName() != NULL);
 }
 
+namespace {
+
+/**
+ * Check if we need to re-compile column or row names.
+ */
+bool checkCompileColRowName(
+    const sc::RefUpdateContext& rCxt, ScDocument& rDoc, ScTokenArray& rCode,
+    const ScAddress& aOldPos, const ScAddress& aPos, bool bValChanged)
+{
+    switch (rCxt.meMode)
+    {
+        case URM_INSDEL:
+        {
+            if (rCxt.mnColDelta <= 0 && rCxt.mnRowDelta <= 0)
+                return false;
+
+            ScToken* t;
+            ScRangePairList* pColList = rDoc.GetColNameRanges();
+            ScRangePairList* pRowList = rDoc.GetRowNameRanges();
+            rCode.Reset();
+            while ((t = static_cast<ScToken*>(rCode.GetNextColRowName())) != NULL)
+            {
+                ScSingleRefData& rRef = t->GetSingleRef();
+                if (rCxt.mnRowDelta > 0 && rRef.IsColRel())
+                {   // ColName
+                    ScAddress aAdr = rRef.toAbs(aPos);
+                    ScRangePair* pR = pColList->Find( aAdr );
+                    if ( pR )
+                    {   // defined
+                        if (pR->GetRange(1).aStart.Row() == rCxt.maRange.aStart.Row())
+                            return true;
+                    }
+                    else
+                    {   // on the fly
+                        if (aAdr.Row() + 1 == rCxt.maRange.aStart.Row())
+                            return true;
+                    }
+                }
+                if (rCxt.mnColDelta > 0 && rRef.IsRowRel())
+                {   // RowName
+                    ScAddress aAdr = rRef.toAbs(aPos);
+                    ScRangePair* pR = pRowList->Find( aAdr );
+                    if ( pR )
+                    {   // defined
+                        if ( pR->GetRange(1).aStart.Col() == rCxt.maRange.aStart.Col())
+                            return true;
+                    }
+                    else
+                    {   // on the fly
+                        if (aAdr.Col() + 1 == rCxt.maRange.aStart.Col())
+                            return true;
+                    }
+                }
+            }
+        }
+        case URM_MOVE:
+        {   // Recomplie for Move/D&D when ColRowName was moved or this Cell
+            // points to one and was moved.
+            bool bMoved = (aPos != aOldPos);
+            if (bMoved)
+                return true;
+
+            rCode.Reset();
+            const ScToken* t = static_cast<const ScToken*>(rCode.GetNextColRowName());
+            for (; t; t = static_cast<const ScToken*>(rCode.GetNextColRowName()))
+            {
+                const ScSingleRefData& rRef = t->GetSingleRef();
+                ScAddress aAbs = rRef.toAbs(aPos);
+                if (ValidAddress(aAbs))
+                {
+                    if (rCxt.maRange.In(aAbs))
+                        return true;
+                }
+            }
+        }
+        break;
+        case URM_COPY:
+            return bValChanged;
+        default:
+            ;
+    }
+
+    return false;
+}
+
+}
+
 bool ScFormulaCell::UpdateReference(
     const sc::RefUpdateContext& rCxt, ScDocument* pUndoDoc, const ScAddress* pUndoCellPos )
 {
@@ -2126,8 +2213,6 @@ bool ScFormulaCell::UpdateReference(
     SCCOL nDx = rCxt.mnColDelta;
     SCROW nDy = rCxt.mnRowDelta;
     SCTAB nDz = rCxt.mnTabDelta;
-    SCCOL nCol1 = rRange.aStart.Col();
-    SCROW nRow1 = rRange.aStart.Row();
     SCCOL nCol = aPos.Col();
     SCROW nRow = aPos.Row();
     SCTAB nTab = aPos.Tab();
@@ -2213,79 +2298,8 @@ bool ScFormulaCell::UpdateReference(
     {
         // Upon Insert ColRowNames have to be recompiled in case the
         // insertion occurs right in front of the range.
-        bColRowNameCompile =
-            (eUpdateRefMode == URM_INSDEL && (nDx > 0 || nDy > 0));
-
-        if ( bColRowNameCompile )
-        {
-            bColRowNameCompile = false;
-            ScToken* t;
-            ScRangePairList* pColList = pDocument->GetColNameRanges();
-            ScRangePairList* pRowList = pDocument->GetRowNameRanges();
-            pCode->Reset();
-            while ( !bColRowNameCompile && (t = static_cast<ScToken*>(pCode->GetNextColRowName())) != NULL )
-            {
-                ScSingleRefData& rRef = t->GetSingleRef();
-                if ( nDy > 0 && rRef.IsColRel() )
-                {   // ColName
-                    ScAddress aAdr = rRef.toAbs(aPos);
-                    ScRangePair* pR = pColList->Find( aAdr );
-                    if ( pR )
-                    {   // defined
-                        if ( pR->GetRange(1).aStart.Row() == nRow1 )
-                            bColRowNameCompile = true;
-                    }
-                    else
-                    {   // on the fly
-                        if (aAdr.Row() + 1 == nRow1)
-                            bColRowNameCompile = true;
-                    }
-                }
-                if ( nDx > 0 && rRef.IsRowRel() )
-                {   // RowName
-                    ScAddress aAdr = rRef.toAbs(aPos);
-                    ScRangePair* pR = pRowList->Find( aAdr );
-                    if ( pR )
-                    {   // defined
-                        if ( pR->GetRange(1).aStart.Col() == nCol1 )
-                            bColRowNameCompile = true;
-                    }
-                    else
-                    {   // on the fly
-                        if (aAdr.Col() + 1 == nCol1)
-                            bColRowNameCompile = true;
-                    }
-                }
-            }
-        }
-        else if ( eUpdateRefMode == URM_MOVE )
-        {   // Recomplie for Move/D&D when ColRowName was moved or this Cell
-            // points to one and was moved.
-            bColRowNameCompile = bCompile;      // Possibly from Copy ctor
-            if ( !bColRowNameCompile )
-            {
-                bool bMoved = (aPos != aOldPos);
-                pCode->Reset();
-                ScToken* t = static_cast<ScToken*>(pCode->GetNextColRowName());
-                if ( t && bMoved )
-                    bColRowNameCompile = true;
-                while ( t && !bColRowNameCompile )
-                {
-                    ScSingleRefData& rRef = t->GetSingleRef();
-                    ScAddress aAbs = rRef.toAbs(aPos);
-                    if (ValidAddress(aAbs))
-                    {
-                        if (rRange.In(aAbs))
-                            bColRowNameCompile = true;
-                    }
-                    t = static_cast<ScToken*>(pCode->GetNextColRowName());
-                }
-            }
-        }
-        else if ( eUpdateRefMode == URM_COPY && bHasColRowNames && bValChanged )
-        {
-            bColRowNameCompile = true;
-        }
+        if (bHasColRowNames)
+            bColRowNameCompile = checkCompileColRowName(rCxt, *pDocument, *pCode, aOldPos, aPos, bValChanged);
 
         ScChangeTrack* pChangeTrack = pDocument->GetChangeTrack();
         bInDeleteUndo = (pChangeTrack && pChangeTrack->IsInDeleteUndo());
