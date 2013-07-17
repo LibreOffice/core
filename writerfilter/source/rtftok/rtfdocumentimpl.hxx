@@ -399,6 +399,7 @@ namespace writerfilter {
 
                 /// If we're inside a \listpicture group.
                 bool bInListpicture;
+                bool bStartedTrackchange; ///< Track change is started, need to end it before popping.
         };
 
         class RTFTokenizer;
