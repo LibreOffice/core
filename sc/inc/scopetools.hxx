@@ -26,6 +26,15 @@ public:
     ~AutoCalcSwitch();
 };
 
+class ExpandRefsSwitch
+{
+    ScDocument& mrDoc;
+    bool mbOldValue;
+public:
+    ExpandRefsSwitch(ScDocument& rDoc, bool bExpandRefs);
+    ~ExpandRefsSwitch();
+};
+
 }
 
 #endif

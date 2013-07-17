@@ -55,6 +55,7 @@ namespace sc {
     class CopyFromClipContext;
     class ColumnSpanSet;
     struct ColumnBlockPosition;
+    struct RefUpdateContext;
 }
 class SvxFontItem;
 
@@ -1230,11 +1231,9 @@ public:
 
     SC_DLLPUBLIC void           CopyUpdated( ScDocument* pPosDoc, ScDocument* pDestDoc );
 
-    void            UpdateReference( UpdateRefMode eUpdateRefMode, SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
-                                     SCCOL nCol2, SCROW nRow2, SCTAB nTab2,
-                                     SCsCOL nDx, SCsROW nDy, SCsTAB nDz,
-                                     ScDocument* pUndoDoc = NULL, bool bIncludeDraw = true,
-                                     bool bUpdateNoteCaptionPos = true );
+    void UpdateReference(
+        const sc::RefUpdateContext& rCxt,  ScDocument* pUndoDoc = NULL, bool bIncludeDraw = true,
+        bool bUpdateNoteCaptionPos = true );
 
     SC_DLLPUBLIC void           UpdateTranspose( const ScAddress& rDestPos, ScDocument* pClipDoc,
                                         const ScMarkData& rMark, ScDocument* pUndoDoc = NULL );

@@ -47,6 +47,7 @@
 #include "types.hxx"
 #include "editutil.hxx"
 #include "mtvcellfunc.hxx"
+#include "refupdatecontext.hxx"
 
 #include "scitems.hxx"
 #include <editeng/boxitem.hxx>
@@ -3511,10 +3512,13 @@ void ScTable::CopyData( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW n
 
             if (aCell.meType == CELLTYPE_FORMULA)
             {
-                aCell.mpFormula->UpdateReference( URM_COPY, aRange,
-                                ((SCsCOL) nDestCol) - ((SCsCOL) nStartCol),
-                                ((SCsROW) nDestRow) - ((SCsROW) nStartRow),
-                                ((SCsTAB) nDestTab) - ((SCsTAB) nTab) );
+                sc::RefUpdateContext aCxt;
+                aCxt.meMode = URM_COPY;
+                aCxt.maRange = aRange;
+                aCxt.mnColDelta = nDestCol - nStartCol;
+                aCxt.mnRowDelta = nDestRow - nStartRow;
+                aCxt.mnTabDelta = nDestTab - nTab;
+                aCell.mpFormula->UpdateReference(aCxt);
                 aCell.mpFormula->aPos = aDest;
             }
 

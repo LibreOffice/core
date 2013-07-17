@@ -47,6 +47,7 @@ namespace sc {
     class ColumnSpanSet;
     struct ColumnBlockPosition;
     class SingleColumnSpanSet;
+    struct RefUpdateContext;
 }
 
 class Fraction;
@@ -310,33 +311,16 @@ public:
 
     void        ResetChanged( SCROW nStartRow, SCROW nEndRow );
 
-    bool UpdateReferenceOnCopy(
-        const ScRange& rRange, SCCOL nDx, SCROW nDy, SCTAB nDz, ScDocument* pUndoDoc = NULL );
+    bool UpdateReferenceOnCopy( const sc::RefUpdateContext& rCxt, ScDocument* pUndoDoc = NULL );
 
     /**
      * Update reference addresses in formula cell in response to mass cell
      * movement.
      *
-     * @param eUpdateRefMode update mode - insert/delete, copy, or move. The
-     *                       reorder mode (which corresponds with the
-     *                       reordering of sheets) is not used with this
-     *                       method.
-     *
-     * @param rRange range of cells that are about to be moved for
-     *               insert/delete/move modes. For copy mode, it's the
-     *               destination range of cells that are about to be copied.
-     *
-     * @param nDx moved by how many cells in the column direction.
-     * @param nDy moved by how many cells in the row direction.
-     * @param nDz moved by how many sheets in the sheet direction.
-     * @param pUndoDoc undo document instance.
-     *
      * @return true if reference of at least one formula cell has been
      *         updated, false otherwise.
      */
-    bool UpdateReference(
-        UpdateRefMode eUpdateRefMode, const ScRange& rRange, SCsCOL nDx, SCsROW nDy, SCsTAB nDz,
-        ScDocument* pUndoDoc = NULL );
+    bool UpdateReference( const sc::RefUpdateContext& rCxt, ScDocument* pUndoDoc = NULL );
 
     void UpdateInsertTab(SCTAB nInsPos, SCTAB nNewSheets = 1);
     void UpdateInsertTabOnlyCells(SCTAB nInsPos, SCTAB nNewSheets = 1);

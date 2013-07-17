@@ -32,6 +32,7 @@
 #include "globstr.hrc"
 #include "editutil.hxx"
 #include "tokenarray.hxx"
+#include "refupdatecontext.hxx"
 
 #include <tools/shl.hxx>        // SHL_CALC
 #include <tools/rtti.hxx>
@@ -1302,12 +1303,13 @@ bool ScChangeActionMove::Reject( ScDocument* pDoc )
     pDoc->DeleteAreaTab( aToRange, IDF_ALL );
     pDoc->DeleteAreaTab( aFrmRange, IDF_ALL );
     // Formeln im Dokument anpassen
-    pDoc->UpdateReference( URM_MOVE,
-        aFrmRange.aStart.Col(), aFrmRange.aStart.Row(), aFrmRange.aStart.Tab(),
-        aFrmRange.aEnd.Col(), aFrmRange.aEnd.Row(), aFrmRange.aEnd.Tab(),
-        (SCsCOL) aFrmRange.aStart.Col() - aToRange.aStart.Col(),
-        (SCsROW) aFrmRange.aStart.Row() - aToRange.aStart.Row(),
-        (SCsTAB) aFrmRange.aStart.Tab() - aToRange.aStart.Tab(), NULL );
+    sc::RefUpdateContext aCxt;
+    aCxt.meMode = URM_MOVE;
+    aCxt.maRange = aFrmRange;
+    aCxt.mnColDelta = aFrmRange.aStart.Col() - aToRange.aStart.Col();
+    aCxt.mnRowDelta = aFrmRange.aStart.Row() - aToRange.aStart.Row();
+    aCxt.mnTabDelta = aFrmRange.aStart.Tab() - aToRange.aStart.Tab();
+    pDoc->UpdateReference(aCxt, NULL);
 
     // LinkDependent freigeben, nachfolgendes UpdateReference-Undo setzt
     // ToRange->FromRange Dependents
@@ -2095,12 +2097,19 @@ void ScChangeActionContent::UpdateReference( const ScChangeTrack* pTrack,
             }
         }
         ScRange aRange( aTmpRange.MakeRange() );
+
+        sc::RefUpdateContext aRefCxt;
+        aRefCxt.meMode = eMode;
+        aRefCxt.maRange = aRange;
+        aRefCxt.mnColDelta = nDx;
+        aRefCxt.mnRowDelta = nDy;
+        aRefCxt.mnTabDelta = nDz;
+
         if ( bOldFormula )
-            maOldCell.mpFormula->UpdateReference( eMode, aRange,
-                (SCsCOL) nDx, (SCsROW) nDy, (SCsTAB) nDz, NULL );
+            maOldCell.mpFormula->UpdateReference(aRefCxt, NULL);
         if ( bNewFormula )
-            maNewCell.mpFormula->UpdateReference( eMode, aRange,
-                (SCsCOL) nDx, (SCsROW) nDy, (SCsTAB) nDz, NULL );
+            maNewCell.mpFormula->UpdateReference(aRefCxt, NULL);
+
         if ( !aBigRange.aStart.IsValid( pTrack->GetDocument() ) )
         {   //! HACK!
             //! UpdateReference kann nicht mit Positionen ausserhalb des

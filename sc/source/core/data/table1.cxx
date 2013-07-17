@@ -47,6 +47,7 @@
 #include "globalnames.hxx"
 #include "cellvalue.hxx"
 #include "scmatrix.hxx"
+#include "refupdatecontext.hxx"
 
 #include <vector>
 
@@ -1446,17 +1447,16 @@ void ScTable::UpdateDrawRef( UpdateRefMode eUpdateRefMode, SCCOL nCol1, SCROW nR
     }
 }
 
-void ScTable::UpdateReference( UpdateRefMode eUpdateRefMode, SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
-                     SCCOL nCol2, SCROW nRow2, SCTAB nTab2, SCsCOL nDx, SCsROW nDy, SCsTAB nDz,
-                     ScDocument* pUndoDoc, bool bIncludeDraw, bool bUpdateNoteCaptionPos )
+void ScTable::UpdateReference(
+    const sc::RefUpdateContext& rCxt, ScDocument* pUndoDoc, bool bIncludeDraw, bool bUpdateNoteCaptionPos )
 {
     bool bUpdated = false;
     SCCOL i;
     SCCOL iMax;
-    if ( eUpdateRefMode == URM_COPY )
+    if (rCxt.meMode == URM_COPY )
     {
-        i = nCol1;
-        iMax = nCol2;
+        i = rCxt.maRange.aStart.Col();
+        iMax = rCxt.maRange.aEnd.Col();
     }
     else
     {
@@ -1464,14 +1464,21 @@ void ScTable::UpdateReference( UpdateRefMode eUpdateRefMode, SCCOL nCol1, SCROW 
         iMax = MAXCOL;
     }
 
-    ScRange aRange(nCol1, nRow1, nTab1, nCol2, nRow2, nTab2);
+    ScRange aRange = rCxt.maRange;
+    UpdateRefMode eUpdateRefMode = rCxt.meMode;
+    SCCOL nDx = rCxt.mnColDelta;
+    SCROW nDy = rCxt.mnRowDelta;
+    SCTAB nDz = rCxt.mnTabDelta;
+    SCCOL nCol1 = rCxt.maRange.aStart.Col(), nCol2 = rCxt.maRange.aEnd.Col();
+    SCROW nRow1 = rCxt.maRange.aStart.Row(), nRow2 = rCxt.maRange.aEnd.Row();
+    SCTAB nTab1 = rCxt.maRange.aStart.Tab(), nTab2 = rCxt.maRange.aEnd.Tab();
 
     // Named expressions need to be updated before formulas acessing them.
     if (mpRangeName)
         mpRangeName->UpdateReference( eUpdateRefMode, aRange, nDx, nDy, nDz, true );
 
     for ( ; i<=iMax; i++)
-        bUpdated |= aCol[i].UpdateReference(eUpdateRefMode, aRange, nDx, nDy, nDz, pUndoDoc);
+        bUpdated |= aCol[i].UpdateReference(rCxt, pUndoDoc);
 
     if ( bIncludeDraw )
         UpdateDrawRef( eUpdateRefMode, nCol1, nRow1, nTab1, nCol2, nRow2, nTab2, nDx, nDy, nDz, bUpdateNoteCaptionPos );
@@ -1557,7 +1564,7 @@ void ScTable::UpdateReference( UpdateRefMode eUpdateRefMode, SCCOL nCol1, SCROW 
         SetStreamValid(false);
 
     if(mpCondFormatList)
-        mpCondFormatList->UpdateReference( eUpdateRefMode, ScRange(nCol1, nRow1, nTab1, nCol2, nRow2, nTab2), nDx, nDy, nDz);
+        mpCondFormatList->UpdateReference(eUpdateRefMode, rCxt.maRange, nDx, nDy, nDz);
 }
 
 void ScTable::UpdateTranspose( const ScRange& rSource, const ScAddress& rDest,

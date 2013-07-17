@@ -40,6 +40,7 @@
 #include "columnspanset.hxx"
 #include "scopetools.hxx"
 #include "sharedformula.hxx"
+#include "refupdatecontext.hxx"
 
 #include <svl/poolcach.hxx>
 #include <svl/zforlist.hxx>
@@ -1120,9 +1121,12 @@ namespace {
  */
 void updateRefInFormulaCell( ScFormulaCell& rCell, SCCOL nCol, SCTAB nTab, SCCOL nColDiff )
 {
-    ScRange aRange(ScAddress(nCol, 0, nTab), ScAddress(nCol, MAXROW, nTab));
     rCell.aPos.SetCol(nCol);
-    rCell.UpdateReference(URM_MOVE, aRange, nColDiff, 0, 0);
+    sc::RefUpdateContext aCxt;
+    aCxt.meMode = URM_MOVE;
+    aCxt.maRange = ScRange(ScAddress(nCol, 0, nTab), ScAddress(nCol, MAXROW, nTab));
+    aCxt.mnColDelta = nColDiff;
+    rCell.UpdateReference(aCxt);
 }
 
 }
@@ -2032,8 +2036,11 @@ void ScColumn::CopyScenarioFrom( const ScColumn& rSrcCol )
 
             //  UpdateUsed not needed, already done in TestCopyScenario (obsolete comment ?)
 
-            SCsTAB nDz = nTab - rSrcCol.nTab;
-            UpdateReferenceOnCopy(ScRange(nCol, nStart, nTab, nCol, nEnd, nTab), 0, 0, nDz, NULL);
+            sc::RefUpdateContext aRefCxt;
+            aRefCxt.meMode = URM_COPY;
+            aRefCxt.maRange = ScRange(nCol, nStart, nTab, nCol, nEnd, nTab);
+            aRefCxt.mnTabDelta = nTab - rSrcCol.nTab;
+            UpdateReferenceOnCopy(aRefCxt, NULL);
             UpdateCompile();
         }
 
@@ -2060,10 +2067,11 @@ void ScColumn::CopyScenarioTo( ScColumn& rDestCol ) const
 
             //  UpdateUsed not needed, is already done in TestCopyScenario (obsolete comment ?)
 
-            SCsTAB nDz = rDestCol.nTab - nTab;
-            rDestCol.UpdateReferenceOnCopy(
-                ScRange(rDestCol.nCol, nStart, rDestCol.nTab, rDestCol.nCol, nEnd, rDestCol.nTab),
-                0, 0, nDz, NULL);
+            sc::RefUpdateContext aRefCxt;
+            aRefCxt.meMode = URM_COPY;
+            aRefCxt.maRange = ScRange(rDestCol.nCol, nStart, rDestCol.nTab, rDestCol.nCol, nEnd, rDestCol.nTab);
+            aRefCxt.mnTabDelta = rDestCol.nTab - nTab;
+            rDestCol.UpdateReferenceOnCopy(aRefCxt, NULL);
             rDestCol.UpdateCompile();
         }
 
@@ -2239,17 +2247,13 @@ namespace {
 
 class UpdateRefOnCopy
 {
-protected:
-    ScRange maRange;
-    SCCOL mnDx;
-    SCROW mnDy;
-    SCTAB mnDz;
+    const sc::RefUpdateContext& mrCxt;
     ScDocument* mpUndoDoc;
     bool mbUpdated;
 
 public:
-    UpdateRefOnCopy(const ScRange& rRange, SCCOL nDx, SCROW nDy, SCTAB nDz, ScDocument* pUndoDoc) :
-        maRange(rRange), mnDx(nDx), mnDy(nDy), mnDz(nDz), mpUndoDoc(pUndoDoc), mbUpdated(false) {}
+    UpdateRefOnCopy(const sc::RefUpdateContext& rCxt, ScDocument* pUndoDoc) :
+        mrCxt(rCxt), mpUndoDoc(pUndoDoc), mbUpdated(false) {}
 
     bool isUpdated() const { return mbUpdated; }
 
@@ -2266,7 +2270,7 @@ public:
         for (; it != itEnd; ++it)
         {
             ScFormulaCell& rCell = **it;
-            mbUpdated |= rCell.UpdateReference(URM_COPY, maRange, mnDx, mnDy, mnDz, mpUndoDoc);
+            mbUpdated |= rCell.UpdateReference(mrCxt, mpUndoDoc);
         }
     }
 };
@@ -2275,26 +2279,21 @@ class UpdateRefOnNonCopy
 {
     SCCOL mnCol;
     SCROW mnTab;
-    ScRange maRange;
-    SCCOL mnDx;
-    SCROW mnDy;
-    SCTAB mnDz;
-    UpdateRefMode meMode;
+    const sc::RefUpdateContext& mrCxt;
     ScDocument* mpUndoDoc;
     bool mbUpdated;
 
 public:
     UpdateRefOnNonCopy(
-        SCCOL nCol, SCTAB nTab, const ScRange& rRange,
-        SCCOL nDx, SCROW nDy, SCTAB nDz, UpdateRefMode eMode,
+        SCCOL nCol, SCTAB nTab, const sc::RefUpdateContext& rCxt,
         ScDocument* pUndoDoc) :
-        mnCol(nCol), mnTab(nTab), maRange(rRange),
-        mnDx(nDx), mnDy(nDy), mnDz(nDz), meMode(eMode), mpUndoDoc(pUndoDoc), mbUpdated(false) {}
+        mnCol(nCol), mnTab(nTab), mrCxt(rCxt),
+        mpUndoDoc(pUndoDoc), mbUpdated(false) {}
 
     void operator() (size_t nRow, ScFormulaCell* pCell)
     {
         ScAddress aUndoPos(mnCol, nRow, mnTab);
-        mbUpdated |= pCell->UpdateReference(meMode, maRange, mnDx, mnDy, mnDz, mpUndoDoc, &aUndoPos);
+        mbUpdated |= pCell->UpdateReference(mrCxt, mpUndoDoc, &aUndoPos);
     }
 
     bool isUpdated() const { return mbUpdated; }
@@ -2302,47 +2301,45 @@ public:
 
 }
 
-bool ScColumn::UpdateReferenceOnCopy(
-    const ScRange& rRange, SCsCOL nDx, SCsROW nDy, SCsTAB nDz, ScDocument* pUndoDoc )
+bool ScColumn::UpdateReferenceOnCopy( const sc::RefUpdateContext& rCxt, ScDocument* pUndoDoc )
 {
     // When copying, the range equals the destination range where cells
     // are pasted, and the dx, dy, dz refer to the distance from the
     // source range.
 
-    UpdateRefOnCopy aHandler(rRange, nDx, nDy, nDz, pUndoDoc);
-    sc::CellStoreType::position_type aPos = maCells.position(rRange.aStart.Row());
-    sc::ProcessBlock(aPos.first, maCells, aHandler, rRange.aStart.Row(), rRange.aEnd.Row());
+    UpdateRefOnCopy aHandler(rCxt, pUndoDoc);
+    sc::CellStoreType::position_type aPos = maCells.position(rCxt.maRange.aStart.Row());
+    sc::ProcessBlock(aPos.first, maCells, aHandler, rCxt.maRange.aStart.Row(), rCxt.maRange.aEnd.Row());
 
     // The formula groups at the top and bottom boundaries are expected to
     // have been split prior to this call. Here, we only do the joining.
     sc::SharedFormulaUtil::joinFormulaCellAbove(aPos);
-    if (rRange.aEnd.Row() < MAXROW)
+    if (rCxt.maRange.aEnd.Row() < MAXROW)
     {
-        aPos = maCells.position(aPos.first, rRange.aEnd.Row()+1);
+        aPos = maCells.position(aPos.first, rCxt.maRange.aEnd.Row()+1);
         sc::SharedFormulaUtil::joinFormulaCellAbove(aPos);
     }
 
     return aHandler.isUpdated();
 }
 
-bool ScColumn::UpdateReference(
-    UpdateRefMode eUpdateRefMode, const ScRange& rRange, SCsCOL nDx, SCsROW nDy, SCsTAB nDz,
-    ScDocument* pUndoDoc )
+bool ScColumn::UpdateReference( const sc::RefUpdateContext& rCxt, ScDocument* pUndoDoc )
 {
-    if (eUpdateRefMode == URM_COPY)
-        return UpdateReferenceOnCopy(rRange, nDx, nDy, nDz, pUndoDoc);
+    if (rCxt.meMode == URM_COPY)
+        return UpdateReferenceOnCopy(rCxt, pUndoDoc);
 
-    bool bThisColShifted = (rRange.aStart.Tab() <= nTab && nTab <= rRange.aEnd.Tab() && rRange.aStart.Col() <= nCol && nCol <= rRange.aEnd.Col());
+    bool bThisColShifted = (rCxt.maRange.aStart.Tab() <= nTab && nTab <= rCxt.maRange.aEnd.Tab() &&
+                            rCxt.maRange.aStart.Col() <= nCol && nCol <= rCxt.maRange.aEnd.Col());
     if (bThisColShifted)
     {
         // Cells in this column is being shifted.  Split formula grouping at
         // the top and bottom boundaries before they get shifted.
-        SCROW nSplitPos = rRange.aStart.Row();
+        SCROW nSplitPos = rCxt.maRange.aStart.Row();
         if (ValidRow(nSplitPos))
         {
             sc::CellStoreType::position_type aPos = maCells.position(nSplitPos);
             sc::SharedFormulaUtil::splitFormulaCellGroup(aPos);
-            nSplitPos = rRange.aEnd.Row() + 1;
+            nSplitPos = rCxt.maRange.aEnd.Row() + 1;
             if (ValidRow(nSplitPos))
             {
                 aPos = maCells.position(aPos.first, nSplitPos);
@@ -2351,7 +2348,7 @@ bool ScColumn::UpdateReference(
         }
     }
 
-    UpdateRefOnNonCopy aHandler(nCol, nTab, rRange, nDx, nDy, nDz, eUpdateRefMode, pUndoDoc);
+    UpdateRefOnNonCopy aHandler(nCol, nTab, rCxt, pUndoDoc);
     sc::ProcessFormula(maCells, aHandler);
     return aHandler.isUpdated();
 }

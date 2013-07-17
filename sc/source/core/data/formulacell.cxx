@@ -47,6 +47,7 @@
 #include "listenercontext.hxx"
 #include "types.hxx"
 #include "scopetools.hxx"
+#include "refupdatecontext.hxx"
 
 #include <boost/scoped_ptr.hpp>
 
@@ -2117,11 +2118,14 @@ bool ScFormulaCell::HasColRowName() const
 }
 
 bool ScFormulaCell::UpdateReference(
-    UpdateRefMode eUpdateRefMode, const ScRange& rRange, SCsCOL nDx, SCsROW nDy, SCsTAB nDz,
-    ScDocument* pUndoDoc, const ScAddress* pUndoCellPos )
+    const sc::RefUpdateContext& rCxt, ScDocument* pUndoDoc, const ScAddress* pUndoCellPos )
 {
     bool bCellStateChanged = false;
-
+    UpdateRefMode eUpdateRefMode = rCxt.meMode;
+    const ScRange& rRange = rCxt.maRange;
+    SCCOL nDx = rCxt.mnColDelta;
+    SCROW nDy = rCxt.mnRowDelta;
+    SCTAB nDz = rCxt.mnTabDelta;
     SCCOL nCol1 = rRange.aStart.Col();
     SCROW nRow1 = rRange.aStart.Row();
     SCCOL nCol = aPos.Col();

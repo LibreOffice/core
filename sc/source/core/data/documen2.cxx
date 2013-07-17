@@ -86,6 +86,7 @@
 #include "macromgr.hxx"
 #include "formulacell.hxx"
 #include "clipcontext.hxx"
+#include "refupdatecontext.hxx"
 
 using namespace com::sun::star;
 
@@ -841,14 +842,18 @@ bool ScDocument::CopyTab( SCTAB nOldPos, SCTAB nNewPos, const ScMarkData* pOnlyM
     if (bValid)
     {
         sc::CopyToDocContext aCxt(*this);
+
         SetNoListening( true );     // noch nicht bei CopyToTable/Insert
         maTabs[nOldPos]->CopyToTable(aCxt, 0, 0, MAXCOL, MAXROW, IDF_ALL, (pOnlyMarked != NULL),
                                         maTabs[nNewPos], pOnlyMarked );
         maTabs[nNewPos]->SetTabBgColor(maTabs[nOldPos]->GetTabBgColor());
 
-        SCsTAB nDz = (static_cast<SCsTAB>(nNewPos)) - static_cast<SCsTAB>(nOldPos);
-        maTabs[nNewPos]->UpdateReference(URM_COPY, 0, 0, nNewPos , MAXCOL, MAXROW,
-                                        nNewPos, 0, 0, nDz, NULL);
+        SCTAB nDz = nNewPos - nOldPos;
+        sc::RefUpdateContext aRefCxt;
+        aRefCxt.meMode = URM_COPY;
+        aRefCxt.maRange = ScRange(0, 0, nNewPos, MAXCOL, MAXROW, nNewPos);
+        aRefCxt.mnTabDelta = nDz;
+        maTabs[nNewPos]->UpdateReference(aRefCxt, NULL);
 
         maTabs[nNewPos]->UpdateInsertTabAbs(nNewPos); // alle abs. um eins hoch!!
         maTabs[nOldPos]->UpdateInsertTab(nNewPos);
@@ -963,11 +968,12 @@ sal_uLong ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
 
         if ( !bResultsOnly )
         {
+            sc::RefUpdateContext aRefCxt;
+            aRefCxt.meMode = URM_COPY;
+            aRefCxt.maRange = ScRange(0, 0, nDestPos, MAXCOL, MAXROW, nDestPos);
+            aRefCxt.mnTabDelta = nDestPos - nSrcPos;
+            maTabs[nDestPos]->UpdateReference(aRefCxt, NULL);
 
-            SCsTAB nDz = ((SCsTAB)nDestPos) - (SCsTAB)nSrcPos;
-            maTabs[nDestPos]->UpdateReference(URM_COPY, 0, 0, nDestPos,
-                                                     MAXCOL, MAXROW, nDestPos,
-                                                     0, 0, nDz, NULL);
             // Readjust self-contained absolute references to this sheet
             maTabs[nDestPos]->TestTabRefAbs(nSrcPos);
             maTabs[nDestPos]->CompileAll();

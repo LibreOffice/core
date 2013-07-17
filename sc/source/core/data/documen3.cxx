@@ -69,9 +69,12 @@
 #include "colorscale.hxx"
 #include "queryentry.hxx"
 #include "formulacell.hxx"
+#include "refupdatecontext.hxx"
+#include "scopetools.hxx"
 
 #include "globalnames.hxx"
 #include <memory>
+#include <boost/scoped_ptr.hpp>
 
 using namespace com::sun::star;
 
@@ -971,85 +974,100 @@ sal_Int64 ScDocument::GetNewUnoId()
     return ++nUnoObjectId;
 }
 
-void ScDocument::UpdateReference( UpdateRefMode eUpdateRefMode,
-                                    SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
-                                    SCCOL nCol2, SCROW nRow2, SCTAB nTab2,
-                                    SCsCOL nDx, SCsROW nDy, SCsTAB nDz,
-                                    ScDocument* pUndoDoc, bool bIncludeDraw,
-                                    bool bUpdateNoteCaptionPos )
+void ScDocument::UpdateReference(
+    const sc::RefUpdateContext& rCxt, ScDocument* pUndoDoc, bool bIncludeDraw, bool bUpdateNoteCaptionPos )
 {
-    PutInOrder( nCol1, nCol2 );
-    PutInOrder( nRow1, nRow2 );
-    PutInOrder( nTab1, nTab2 );
-    if (ValidTab(nTab1) && ValidTab(nTab2))
+    if (!ValidRange(rCxt.maRange))
+        return;
+
+    boost::scoped_ptr<sc::ExpandRefsSwitch> pExpandRefsSwitch;
+    if (rCxt.meMode == URM_INSDEL && rCxt.hasDelta())
+        pExpandRefsSwitch.reset(new sc::ExpandRefsSwitch(*this, SC_MOD()->GetInputOptions().GetExpandRefs()));
+
+    size_t nFirstTab, nLastTab;
+    if (rCxt.meMode == URM_COPY)
     {
-        bool bExpandRefsOld = IsExpandRefs();
-        if ( eUpdateRefMode == URM_INSDEL && (nDx > 0 || nDy > 0 || nDz > 0) )
-            SetExpandRefs( SC_MOD()->GetInputOptions().GetExpandRefs() );
-        SCTAB i;
-        SCTAB iMax;
-        if ( eUpdateRefMode == URM_COPY )
-        {
-            i = nTab1;
-            iMax = nTab2;
-        }
-        else
-        {
-            ScRange aRange( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );
-            xColNameRanges->UpdateReference( eUpdateRefMode, this, aRange, nDx, nDy, nDz );
-            xRowNameRanges->UpdateReference( eUpdateRefMode, this, aRange, nDx, nDy, nDz );
-            pDBCollection->UpdateReference( eUpdateRefMode, nCol1, nRow1, nTab1, nCol2, nRow2, nTab2, nDx, nDy, nDz );
-            if (pRangeName)
-                pRangeName->UpdateReference( eUpdateRefMode, aRange, nDx, nDy, nDz );
-            if ( pDPCollection )
-                pDPCollection->UpdateReference( eUpdateRefMode, aRange, nDx, nDy, nDz );
-            UpdateChartRef( eUpdateRefMode, nCol1, nRow1, nTab1, nCol2, nRow2, nTab2, nDx, nDy, nDz );
-            UpdateRefAreaLinks( eUpdateRefMode, aRange, nDx, nDy, nDz );
-            if ( pValidationList )
-                pValidationList->UpdateReference( eUpdateRefMode, aRange, nDx, nDy, nDz );
-            if ( pDetOpList )
-                pDetOpList->UpdateReference( this, eUpdateRefMode, aRange, nDx, nDy, nDz );
-            if ( pUnoBroadcaster )
-                pUnoBroadcaster->Broadcast( ScUpdateRefHint(
-                                    eUpdateRefMode, aRange, nDx, nDy, nDz ) );
-            i = 0;
-            iMax = static_cast<SCTAB>(maTabs.size())-1;
-        }
-        for ( ; i<=iMax && i < static_cast<SCTAB>(maTabs.size()); i++)
-            if (maTabs[i])
-                maTabs[i]->UpdateReference(
-                    eUpdateRefMode, nCol1, nRow1, nTab1, nCol2, nRow2, nTab2,
-                    nDx, nDy, nDz, pUndoDoc, bIncludeDraw, bUpdateNoteCaptionPos );
+        nFirstTab = rCxt.maRange.aStart.Tab();
+        nLastTab = rCxt.maRange.aEnd.Tab();
+    }
+    else
+    {
+        // TODO: Have these methods use the context object directly.
+        ScRange aRange = rCxt.maRange;
+        UpdateRefMode eUpdateRefMode = rCxt.meMode;
+        SCCOL nDx = rCxt.mnColDelta;
+        SCROW nDy = rCxt.mnRowDelta;
+        SCTAB nDz = rCxt.mnTabDelta;
+        SCCOL nCol1 = rCxt.maRange.aStart.Col(), nCol2 = rCxt.maRange.aEnd.Col();
+        SCROW nRow1 = rCxt.maRange.aStart.Row(), nRow2 = rCxt.maRange.aEnd.Row();
+        SCTAB nTab1 = rCxt.maRange.aStart.Tab(), nTab2 = rCxt.maRange.aEnd.Tab();
 
-        if ( bIsEmbedded )
-        {
-            SCCOL theCol1;
-            SCROW theRow1;
-            SCTAB theTab1;
-            SCCOL theCol2;
-            SCROW theRow2;
-            SCTAB theTab2;
-            theCol1 = aEmbedRange.aStart.Col();
-            theRow1 = aEmbedRange.aStart.Row();
-            theTab1 = aEmbedRange.aStart.Tab();
-            theCol2 = aEmbedRange.aEnd.Col();
-            theRow2 = aEmbedRange.aEnd.Row();
-            theTab2 = aEmbedRange.aEnd.Tab();
-            if ( ScRefUpdate::Update( this, eUpdateRefMode, nCol1,nRow1,nTab1, nCol2,nRow2,nTab2,
-                                        nDx,nDy,nDz, theCol1,theRow1,theTab1, theCol2,theRow2,theTab2 ) )
-            {
-                aEmbedRange = ScRange( theCol1,theRow1,theTab1, theCol2,theRow2,theTab2 );
-            }
-        }
-        SetExpandRefs( bExpandRefsOld );
+        xColNameRanges->UpdateReference( eUpdateRefMode, this, aRange, nDx, nDy, nDz );
+        xRowNameRanges->UpdateReference( eUpdateRefMode, this, aRange, nDx, nDy, nDz );
+        pDBCollection->UpdateReference( eUpdateRefMode, nCol1, nRow1, nTab1, nCol2, nRow2, nTab2, nDx, nDy, nDz );
+        if (pRangeName)
+            pRangeName->UpdateReference( eUpdateRefMode, aRange, nDx, nDy, nDz );
+        if ( pDPCollection )
+            pDPCollection->UpdateReference( eUpdateRefMode, aRange, nDx, nDy, nDz );
+        UpdateChartRef( eUpdateRefMode, nCol1, nRow1, nTab1, nCol2, nRow2, nTab2, nDx, nDy, nDz );
+        UpdateRefAreaLinks( eUpdateRefMode, aRange, nDx, nDy, nDz );
+        if ( pValidationList )
+            pValidationList->UpdateReference( eUpdateRefMode, aRange, nDx, nDy, nDz );
+        if ( pDetOpList )
+            pDetOpList->UpdateReference( this, eUpdateRefMode, aRange, nDx, nDy, nDz );
+        if ( pUnoBroadcaster )
+            pUnoBroadcaster->Broadcast( ScUpdateRefHint(
+                                eUpdateRefMode, aRange, nDx, nDy, nDz ) );
 
-        // after moving, no clipboard move ref-updates are possible
-        if ( eUpdateRefMode != URM_COPY && IsClipboardSource() )
+        nFirstTab = 0;
+        nLastTab = maTabs.size()-1;
+    }
+
+    for (size_t i = nFirstTab, n = maTabs.size() ; i <= nLastTab && i < n; ++i)
+    {
+        if (!maTabs[i])
+            continue;
+
+        maTabs[i]->UpdateReference(rCxt, pUndoDoc, bIncludeDraw, bUpdateNoteCaptionPos);
+    }
+
+    if ( bIsEmbedded )
+    {
+        SCCOL theCol1;
+        SCROW theRow1;
+        SCTAB theTab1;
+        SCCOL theCol2;
+        SCROW theRow2;
+        SCTAB theTab2;
+        theCol1 = aEmbedRange.aStart.Col();
+        theRow1 = aEmbedRange.aStart.Row();
+        theTab1 = aEmbedRange.aStart.Tab();
+        theCol2 = aEmbedRange.aEnd.Col();
+        theRow2 = aEmbedRange.aEnd.Row();
+        theTab2 = aEmbedRange.aEnd.Tab();
+
+        // TODO: Have ScRefUpdate::Update() use the context object directly.
+        UpdateRefMode eUpdateRefMode = rCxt.meMode;
+        SCCOL nDx = rCxt.mnColDelta;
+        SCROW nDy = rCxt.mnRowDelta;
+        SCTAB nDz = rCxt.mnTabDelta;
+        SCCOL nCol1 = rCxt.maRange.aStart.Col(), nCol2 = rCxt.maRange.aEnd.Col();
+        SCROW nRow1 = rCxt.maRange.aStart.Row(), nRow2 = rCxt.maRange.aEnd.Row();
+        SCTAB nTab1 = rCxt.maRange.aStart.Tab(), nTab2 = rCxt.maRange.aEnd.Tab();
+
+        if ( ScRefUpdate::Update( this, eUpdateRefMode, nCol1,nRow1,nTab1, nCol2,nRow2,nTab2,
+                                    nDx,nDy,nDz, theCol1,theRow1,theTab1, theCol2,theRow2,theTab2 ) )
         {
-            ScDocument* pClipDoc = SC_MOD()->GetClipDoc();
-            if (pClipDoc)
-                pClipDoc->GetClipParam().mbCutMode = false;
+            aEmbedRange = ScRange( theCol1,theRow1,theTab1, theCol2,theRow2,theTab2 );
         }
+    }
+
+    // after moving, no clipboard move ref-updates are possible
+    if (rCxt.meMode != URM_COPY && IsClipboardSource())
+    {
+        ScDocument* pClipDoc = SC_MOD()->GetClipDoc();
+        if (pClipDoc)
+            pClipDoc->GetClipParam().mbCutMode = false;
     }
 }
 

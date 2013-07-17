@@ -93,6 +93,7 @@
 #include "clipcontext.hxx"
 #include "listenercontext.hxx"
 #include "scopetools.hxx"
+#include "refupdatecontext.hxx"
 
 #include <map>
 #include <limits>
@@ -1162,11 +1163,14 @@ bool ScDocument::InsertRow( SCCOL nStartCol, SCTAB nStartTab,
         while ( lcl_GetNextTabRange( nTabRangeStart, nTabRangeEnd, pTabMark, static_cast<SCTAB>(maTabs.size()) ) );
 
         lcl_GetFirstTabRange( nTabRangeStart, nTabRangeEnd, pTabMark, static_cast<SCTAB>(maTabs.size()) );
+
+        sc::RefUpdateContext aCxt;
+        aCxt.meMode = URM_INSDEL;
+        aCxt.maRange = ScRange(nStartCol, nStartRow, nTabRangeStart, nEndCol, MAXROW, nTabRangeEnd);
+        aCxt.mnRowDelta = nSize;
         do
         {
-            UpdateReference( URM_INSDEL, nStartCol, nStartRow, nTabRangeStart,
-                             nEndCol, MAXROW, nTabRangeEnd,
-                             0, static_cast<SCsROW>(nSize), 0, pRefUndoDoc, false );        // without drawing objects
+            UpdateReference(aCxt, pRefUndoDoc, false);        // without drawing objects
         }
         while ( lcl_GetNextTabRange( nTabRangeStart, nTabRangeEnd, pTabMark, static_cast<SCTAB>(maTabs.size()) ) );
 
@@ -1263,11 +1267,13 @@ void ScDocument::DeleteRow( SCCOL nStartCol, SCTAB nStartTab,
     if ( ValidRow(nStartRow+nSize) )
     {
         lcl_GetFirstTabRange( nTabRangeStart, nTabRangeEnd, pTabMark, static_cast<SCTAB>(maTabs.size()) );
+        sc::RefUpdateContext aCxt;
+        aCxt.meMode = URM_INSDEL;
+        aCxt.maRange = ScRange(nStartCol, nStartRow+nSize, nTabRangeStart, nEndCol, MAXROW, nTabRangeEnd);
+        aCxt.mnRowDelta = -(static_cast<SCROW>(nSize));
         do
         {
-            UpdateReference( URM_INSDEL, nStartCol, nStartRow+nSize, nTabRangeStart,
-                             nEndCol, MAXROW, nTabRangeEnd,
-                             0, -(static_cast<SCsROW>(nSize)), 0, pRefUndoDoc, true, false );
+            UpdateReference(aCxt, pRefUndoDoc, true, false);
         }
         while ( lcl_GetNextTabRange( nTabRangeStart, nTabRangeEnd, pTabMark, static_cast<SCTAB>(maTabs.size()) ) );
     }
@@ -1366,11 +1372,14 @@ bool ScDocument::InsertCol( SCROW nStartRow, SCTAB nStartTab,
         while ( lcl_GetNextTabRange( nTabRangeStart, nTabRangeEnd, pTabMark, static_cast<SCTAB>(maTabs.size()) ) );
 
         lcl_GetFirstTabRange( nTabRangeStart, nTabRangeEnd, pTabMark, static_cast<SCTAB>(maTabs.size()) );
+
+        sc::RefUpdateContext aCxt;
+        aCxt.meMode = URM_INSDEL;
+        aCxt.maRange = ScRange(nStartCol, nStartRow, nTabRangeStart, MAXCOL, nEndRow, nTabRangeEnd);
+        aCxt.mnColDelta = nSize;
         do
         {
-            UpdateReference( URM_INSDEL, nStartCol, nStartRow, nTabRangeStart,
-                             MAXCOL, nEndRow, nTabRangeEnd,
-                             static_cast<SCsCOL>(nSize), 0, 0, pRefUndoDoc, true, false );
+            UpdateReference(aCxt, pRefUndoDoc, true, false);
         }
         while ( lcl_GetNextTabRange( nTabRangeStart, nTabRangeEnd, pTabMark, static_cast<SCTAB>(maTabs.size()) ) );
 
@@ -1457,11 +1466,13 @@ void ScDocument::DeleteCol(SCROW nStartRow, SCTAB nStartTab, SCROW nEndRow, SCTA
     if ( ValidCol(sal::static_int_cast<SCCOL>(nStartCol+nSize)) )
     {
         lcl_GetFirstTabRange( nTabRangeStart, nTabRangeEnd, pTabMark, static_cast<SCTAB>(maTabs.size()) );
+        sc::RefUpdateContext aCxt;
+        aCxt.meMode = URM_INSDEL;
+        aCxt.maRange = ScRange(sal::static_int_cast<SCCOL>(nStartCol+nSize), nStartRow, nTabRangeStart, MAXCOL, nEndRow, nTabRangeEnd);
+        aCxt.mnColDelta = -(static_cast<SCCOL>(nSize));
         do
         {
-            UpdateReference( URM_INSDEL, sal::static_int_cast<SCCOL>(nStartCol+nSize), nStartRow, nTabRangeStart,
-                             MAXCOL, nEndRow, nTabRangeEnd,
-                             -static_cast<SCsCOL>(nSize), 0, 0, pRefUndoDoc, true, false );
+            UpdateReference(aCxt, pRefUndoDoc, true, false);
         }
         while ( lcl_GetNextTabRange( nTabRangeStart, nTabRangeEnd, pTabMark, static_cast<SCTAB>(maTabs.size()) ) );
     }
@@ -2435,19 +2446,24 @@ void ScDocument::CopyBlockFromClip(
                         && rClipTabs[(nClipTab + nFollow + 1) % static_cast<SCTAB>(rClipTabs.size())] )
                     ++nFollow;
 
+                sc::RefUpdateContext aRefCxt;
+                aRefCxt.maRange = ScRange(nCol1, nRow1, i, nCol2, nRow2, i+nFollow);
+                aRefCxt.mnColDelta = nDx;
+                aRefCxt.mnRowDelta = nDy;
+                aRefCxt.mnTabDelta = nDz;
                 if (rCxt.getClipDoc()->GetClipParam().mbCutMode)
                 {
                     bool bOldInserting = IsInsertingFromOtherDoc();
                     SetInsertingFromOtherDoc( true);
-                    UpdateReference( URM_MOVE,
-                        nCol1, nRow1, i, nCol2, nRow2, i+nFollow,
-                        nDx, nDy, nDz, rCxt.getUndoDoc(), false );
+                    aRefCxt.meMode = URM_MOVE;
+                    UpdateReference(aRefCxt, rCxt.getUndoDoc(), false);
                     SetInsertingFromOtherDoc( bOldInserting);
                 }
                 else
-                    UpdateReference( URM_COPY,
-                        nCol1, nRow1, i, nCol2, nRow2, i+nFollow,
-                        nDx, nDy, nDz, rCxt.getUndoDoc(), false );
+                {
+                    aRefCxt.meMode = URM_COPY;
+                    UpdateReference(aRefCxt, rCxt.getUndoDoc(), false);
+                }
 
                 nClipTab = (nClipTab+nFollow+1) % (static_cast<SCTAB>(rClipTabs.size()));
                 i = sal::static_int_cast<SCTAB>( i + nFollow );

@@ -32,6 +32,7 @@ namespace sc {
 
 class StartListeningContext;
 class EndListeningContext;
+struct RefUpdateContext;
 
 }
 
@@ -182,9 +183,7 @@ public:
     bool            HasColRowName() const;
 
     bool UpdateReference(
-        UpdateRefMode eUpdateRefMode, const ScRange& rRange,
-        SCsCOL nDx, SCsROW nDy, SCsTAB nDz, ScDocument* pUndoDoc = NULL,
-        const ScAddress* pUndoCellPos = NULL );
+        const sc::RefUpdateContext& rCxt, ScDocument* pUndoDoc = NULL, const ScAddress* pUndoCellPos = NULL );
 
     void            TransposeReference();
     void            UpdateTranspose( const ScRange& rSource, const ScAddress& rDest,

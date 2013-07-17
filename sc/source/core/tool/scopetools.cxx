@@ -23,6 +23,17 @@ AutoCalcSwitch::~AutoCalcSwitch()
     mrDoc.SetAutoCalc(mbOldValue);
 }
 
+ExpandRefsSwitch::ExpandRefsSwitch(ScDocument& rDoc, bool bExpandRefs) :
+    mrDoc(rDoc), mbOldValue(rDoc.IsExpandRefs())
+{
+    mrDoc.SetExpandRefs(bExpandRefs);
+}
+
+ExpandRefsSwitch::~ExpandRefsSwitch()
+{
+    mrDoc.SetExpandRefs(mbOldValue);
+}
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

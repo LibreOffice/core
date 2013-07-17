@@ -59,6 +59,7 @@ namespace sc {
     class MixDocContext;
     class ColumnSpanSet;
     struct ColumnBlockPosition;
+    struct RefUpdateContext;
 }
 
 class SfxItemSet;
@@ -500,10 +501,9 @@ public:
 
     bool CompileErrorCells(sal_uInt16 nErrCode);
 
-    void        UpdateReference( UpdateRefMode eUpdateRefMode, SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
-                                    SCCOL nCol2, SCROW nRow2, SCTAB nTab2,
-                                    SCsCOL nDx, SCsROW nDy, SCsTAB nDz,
-                                    ScDocument* pUndoDoc = NULL, bool bIncludeDraw = true, bool bUpdateNoteCaptionPos = true );
+    void UpdateReference(
+        const sc::RefUpdateContext& rCxt, ScDocument* pUndoDoc = NULL,
+        bool bIncludeDraw = true, bool bUpdateNoteCaptionPos = true );
 
     void        UpdateDrawRef( UpdateRefMode eUpdateRefMode, SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                                     SCCOL nCol2, SCROW nRow2, SCTAB nTab2,

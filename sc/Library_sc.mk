@@ -163,6 +163,7 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
 	sc/source/core/data/pivot2 \
 	sc/source/core/data/poolhelp \
 	sc/source/core/data/postit \
+	sc/source/core/data/refupdatecontext \
 	sc/source/core/data/segmenttree \
 	sc/source/core/data/sheetevents \
 	sc/source/core/data/simpleformulacalc \
