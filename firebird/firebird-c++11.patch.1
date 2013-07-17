@@ -1,0 +1,215 @@
+# -*- Mode: Diff -*-
+--- firebird/src/gpre/c_cxx.cpp
++++ firebird/src/gpre/c_cxx.cpp
+@@ -876,7 +876,7 @@
+ 		if (based_on->bas_flags & BAS_segment)
+ 		{
+ 			if (*variable != '*')
+-				fprintf(gpreGlob.out_file, "[%"SLONGFORMAT"]", length);
++				fprintf(gpreGlob.out_file, "[%" SLONGFORMAT "]", length);
+ 		}
+ 		else if (field->fld_array_info)
+ 		{
+@@ -885,7 +885,7 @@
+ 			for (const dim* dimension = field->fld_array_info->ary_dimension;
+ 				dimension; dimension = dimension->dim_next)
+ 			{
+-				fprintf(gpreGlob.out_file, " [%"SLONGFORMAT"]", dimension->dim_upper - dimension->dim_lower + 1);
++				fprintf(gpreGlob.out_file, " [%" SLONGFORMAT "]", dimension->dim_upper - dimension->dim_lower + 1);
+ 			}
+ 
+ 			if (field->fld_array_info->ary_dtype <= dtype_varying && field->fld_length > 1)
+@@ -1577,7 +1577,7 @@
+ 	const gpre_dbb* db = (gpre_dbb*) action->act_object;
+ 	align(column);
+ 
+-	fprintf(gpreGlob.out_file, "isc_drop_database (%s, %"SIZEFORMAT", \"%s\", rdb$k_db_type_gds);",
++	fprintf(gpreGlob.out_file, "isc_drop_database (%s, %" SIZEFORMAT ", \"%s\", rdb$k_db_type_gds);",
+ 			   status_vector(action),
+ 			   strlen(db->dbb_filename), db->dbb_filename);
+ 	set_sqlcode(action, column);
+@@ -3471,7 +3471,7 @@
+ 
+ static void gen_type( const act* action, int column)
+ {
+-	printa(column, "%"SLONGFORMAT, (SLONG)(IPTR)action->act_object);
++	printa(column, "%" SLONGFORMAT, (SLONG)(IPTR)action->act_object);
+ }
+ 
+ 
+@@ -3623,7 +3623,7 @@
+ 	for (const dim* dimension = field->fld_array_info->ary_dimension; dimension;
+ 		 dimension = dimension->dim_next)
+ 	{
+-		fprintf(gpreGlob.out_file, " [%"SLONGFORMAT"]", dimension->dim_upper - dimension->dim_lower + 1);
++		fprintf(gpreGlob.out_file, " [%" SLONGFORMAT "]", dimension->dim_upper - dimension->dim_lower + 1);
+ 	}
+ 
+ 	if (field->fld_array_info->ary_dtype <= dtype_varying)
+--- firebird/src/gpre/exp.cpp
++++ firebird/src/gpre/exp.cpp
+@@ -398,7 +398,7 @@
+ 	if (gpreGlob.token_global.tok_type != tok_number)
+ 		CPR_s_error("<number>");
+ 
+-	const char format[8] = "%"SQUADFORMAT;
++	const char format[8] = "%" SQUADFORMAT;
+ 	SINT64 n;
+ 	sscanf(gpreGlob.token_global.tok_string, format, &n);
+ 
+@@ -428,7 +428,7 @@
+ 
+ 	const SLONG n = atoi(gpreGlob.token_global.tok_string);
+ 	char buffer[32];
+-	sprintf(buffer, "%"SLONGFORMAT, n);
++	sprintf(buffer, "%" SLONGFORMAT, n);
+ 	if (strcmp(buffer, gpreGlob.token_global.tok_string) != 0)
+ 		PAR_error("Numeric value out of range");
+ 
+@@ -478,7 +478,7 @@
+ 
+ 	const ULONG n = atoi(gpreGlob.token_global.tok_string);
+ 	char buffer[32];
+-	sprintf(buffer, "%"ULONGFORMAT, n);
++	sprintf(buffer, "%" ULONGFORMAT, n);
+ 	if (strcmp(buffer, gpreGlob.token_global.tok_string) != 0)
+ 		PAR_error("Numeric value out of range");
+ 
+--- firebird/src/gpre/gpre.cpp
++++ firebird/src/gpre/gpre.cpp
+@@ -2525,9 +2525,9 @@
+ 				if (line_pending)
+ 				{
+ 					if (line == 1)
+-						fprintf(gpreGlob.out_file, "#line %"SLONGFORMAT" \"%s\"\n", line, backlash_fixed_file_name);
++						fprintf(gpreGlob.out_file, "#line %" SLONGFORMAT " \"%s\"\n", line, backlash_fixed_file_name);
+ 					else
+-						fprintf(gpreGlob.out_file, "\n#line %"SLONGFORMAT" \"%s\"", line, backlash_fixed_file_name);
++						fprintf(gpreGlob.out_file, "\n#line %" SLONGFORMAT " \"%s\"", line, backlash_fixed_file_name);
+ 
+ 					line_pending = false;
+ 				}
+@@ -2668,7 +2668,7 @@
+ 	{
+ 		if (c == '\n' && line_pending)
+ 		{
+-			fprintf(gpreGlob.out_file, "\n#line %"SLONGFORMAT" \"%s\"", line + 1, backlash_fixed_file_name);
++			fprintf(gpreGlob.out_file, "\n#line %" SLONGFORMAT " \"%s\"", line + 1, backlash_fixed_file_name);
+ 			line_pending = false;
+ 		}
+ 		if (c == EOF)
+--- firebird/src/gpre/int_cxx.cpp
++++ firebird/src/gpre/int_cxx.cpp
+@@ -290,7 +290,7 @@
+ 	fprintf(gpreGlob.out_file, "if (!%s)", request->req_handle);
+ 	align(column);
+ 	fprintf(gpreGlob.out_file,
+-		"%s = CMP_compile2 (tdbb, (UCHAR*) jrd_%"ULONGFORMAT", sizeof(jrd_%"ULONGFORMAT"), true);",
++		"%s = CMP_compile2 (tdbb, (UCHAR*) jrd_%" ULONGFORMAT ", sizeof(jrd_%" ULONGFORMAT "), true);",
+ 			   request->req_handle, request->req_ident, request->req_ident);
+ }
+ 
+@@ -478,7 +478,7 @@
+ {
+ 
+ 	fprintf(gpreGlob.out_file,
+-			   "EXE_receive (tdbb, %s, %d, %d, (UCHAR*) &jrd_%"ULONGFORMAT");",
++			   "EXE_receive (tdbb, %s, %d, %d, (UCHAR*) &jrd_%" ULONGFORMAT ");",
+ 			   request->req_handle, port->por_msg_number, port->por_length,
+ 			   port->por_ident);
+ }
+@@ -495,7 +495,7 @@
+ 	if (!(request->req_flags & REQ_exp_hand))
+ 		fprintf(gpreGlob.out_file, "static void\t*%s;\t// request handle \n", request->req_handle);
+ 
+-	fprintf(gpreGlob.out_file, "static const UCHAR\tjrd_%"ULONGFORMAT" [%d] =",
++	fprintf(gpreGlob.out_file, "static const UCHAR\tjrd_%" ULONGFORMAT " [%d] =",
+ 			   request->req_ident, request->req_length);
+ 	align(INDENT);
+ 	fprintf(gpreGlob.out_file, "{\t// blr string \n");
+@@ -588,7 +588,7 @@
+ 	}
+ 	align(column);
+ 
+-	fprintf(gpreGlob.out_file, "EXE_send (tdbb, %s, %d, %d, (UCHAR*) &jrd_%"ULONGFORMAT");",
++	fprintf(gpreGlob.out_file, "EXE_send (tdbb, %s, %d, %d, (UCHAR*) &jrd_%" ULONGFORMAT ");",
+ 			   request->req_handle, port->por_msg_number, port->por_length, port->por_ident);
+ }
+ 
+@@ -716,7 +716,7 @@
+ 			fprintf(gpreGlob.out_file, fmtstr, reference->ref_ident, name);
+ 	}
+ 	align(column);
+-	fprintf(gpreGlob.out_file, "} jrd_%"ULONGFORMAT";", port->por_ident);
++	fprintf(gpreGlob.out_file, "} jrd_%" ULONGFORMAT ";", port->por_ident);
+ }
+ 
+ 
+--- firebird/src/gpre/pat.cpp
++++ firebird/src/gpre/pat.cpp
+@@ -417,7 +417,7 @@
+ 			}
+ 		}
+ 		else if (long_flag) {
+-			sprintf(p, "%"SLONGFORMAT, long_value);
++			sprintf(p, "%" SLONGFORMAT , long_value);
+ 		}
+ 		else {
+ 			sprintf(p, "%d", value);
+--- firebird/src/common/classes/alloc.cpp
++++ firebird/src/common/classes/alloc.cpp
+@@ -1100,7 +1100,7 @@
+ 				if (blk->mbk_flags & MBK_LAST)
+ 					break;
+ 			}
+-			fprintf(file, "Blocks %"SIZEFORMAT" min %"SIZEFORMAT" max %"SIZEFORMAT" size %"SIZEFORMAT" \n\n",
++			fprintf(file, "Blocks %" SIZEFORMAT " min %" SIZEFORMAT " max %" SIZEFORMAT " size %" SIZEFORMAT " \n\n",
+ 					cnt, min, max, sum);
+ 		}
+ 
+@@ -1303,7 +1303,7 @@
+ 		FreeMemoryBlock* freeBlock = blockToPtr<FreeMemoryBlock*>(blk);
+ 		freeBlock->fbk_next_fragment = NULL;
+ 
+-		BlockInfo temp = {blockLength, freeBlock};
++		BlockInfo temp = {static_cast<size_t>(blockLength), freeBlock};
+ 		pool->freeBlocks.add(temp);
+ 		if (!pool->parent_redirect)
+ 		{
+--- firebird/src/common/cvt.cpp
++++ firebird/src/common/cvt.cpp
+@@ -144,7 +144,7 @@
+ 
+ #ifndef NATIVE_QUAD
+ #ifndef WORDS_BIGENDIAN
+-static const SQUAD quad_min_int = { 0, SLONG_MIN };
++static const SQUAD quad_min_int = { 0, static_cast<ULONG>(SLONG_MIN) };
+ static const SQUAD quad_max_int = { -1, SLONG_MAX };
+ #else
+ static const SQUAD quad_min_int = { SLONG_MIN, 0 };
+--- firebird/src/jrd/perf.cpp
++++ firebird/src/jrd/perf.cpp
+@@ -164,20 +164,20 @@
+ 			case 'b':
+ 			case 'c':
+ 			case 'x':
+-				sprintf(p, "%"SQUADFORMAT, delta);
++				sprintf(p, "%" SQUADFORMAT , delta);
+ 				while (*p)
+ 					p++;
+ 				break;
+ 
+ 			case 'u':
+ 			case 's':
+-				sprintf(p, "%"SQUADFORMAT".%.2"SQUADFORMAT, delta / TICK, (delta % TICK) * 100 / TICK);
++				sprintf(p, "%" SQUADFORMAT ".%.2" SQUADFORMAT , delta / TICK, (delta % TICK) * 100 / TICK);
+ 				while (*p)
+ 					p++;
+ 				break;
+ 
+ 			case 'e':
+-				sprintf(p, "%"SQUADFORMAT".%.2"SQUADFORMAT, delta / 100, delta % 100);
++				sprintf(p, "%" SQUADFORMAT ".%.2" SQUADFORMAT , delta / 100, delta % 100);
+ 				while (*p)
+ 					p++;
+ 				break;

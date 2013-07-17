@@ -15,6 +15,10 @@ $(eval $(call gb_UnpackedTarball_add_patches,firebird,\
 	firebird/firebird-icu.patch.1 \
 ))
 
+$(eval $(call gb_UnpackedTarball_add_patches,firebird,\
+	firebird/firebird-c++11.patch.1 \
+))
+
 ifeq ($(OS)-$(COM),WNT-MSC)
 $(eval $(call gb_UnpackedTarball_add_patches,firebird,\
 	firebird/firebird-cygwin-msvc.patch.1 \
