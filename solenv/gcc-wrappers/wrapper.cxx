@@ -81,17 +81,37 @@ string processccargs(vector<string> rawargs) {
     args.append(" -Zc:wchar_t-");
     args.append(" -Ob1 -Oxs -Oy-");
 
+    // apparently these must be at the end
+    // otherwise configure tests may fail
+    string linkargs(" -link");
+
     for(vector<string>::iterator i = rawargs.begin(); i != rawargs.end(); ++i) {
         args.append(" ");
         if(*i == "-o") {
             // TODO: handle more than just exe output
             ++i;
             size_t dot=(*i).find_last_of(".");
-            if(!(*i).compare(dot+1,3,"obj"))
+            if(!(*i).compare(dot+1,3,"obj") || !(*i).compare(dot+1,1,"o"))
+            {
                 args.append("-Fo");
+                args.append(*i);
+            }
             else if(!(*i).compare(dot+1,3,"exe"))
+            {
                 args.append("-Fe");
-            args.append(*i);
+                args.append(*i);
+            }
+            else if(!(*i).compare(dot+1,3,"dll"))
+            {   // apparently cl.exe has no flag for dll?
+                linkargs.append(" -dll -out:");
+                linkargs.append(*i);
+            }
+            else
+            {
+                cerr << "unknonwn -o argument - please adapt gcc-wrapper for \""
+                     << (*i) << "\"";
+                exit(1);
+            }
         }
         else if(*i == "-g")
             args.append("-Zi");
@@ -104,12 +124,20 @@ string processccargs(vector<string> rawargs) {
             args.append(*i);
         }
         else if(!(*i).compare(0,2,"-L")) {
-            args.append("-link -LIBPATH:"+(*i).substr(2));
+            linkargs.append(" -LIBPATH:"+(*i).substr(2));
         }
         else if(!(*i).compare(0,2,"-l")) {
-            args.append((*i).substr(2)+".lib");
+            linkargs.append(" "+(*i).substr(2)+".lib");
+        }
+        else if(!(*i).compare(0,5,"-def:") || !(*i).compare(0,5,"/def:")) {
+            // why are we invoked with /def:? cl.exe should handle plain
+            // "foo.def" by itself
+            linkargs.append(" " + *i);
         }
         else if(!(*i).compare(0,12,"-fvisibility")) {
+            //TODO: drop other gcc-specific options
+        }
+        else if(!(*i).compare(0,4,"-Wl,")) {
             //TODO: drop other gcc-specific options
         }
         else if(*i == "-Werror")
@@ -117,6 +145,7 @@ string processccargs(vector<string> rawargs) {
         else
             args.append(*i);
     }
+    args.append(linkargs);
     return args;
 }
 
