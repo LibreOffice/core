@@ -221,7 +221,7 @@ uno::Sequence< beans::Property > HierarchyContent::getProperties(
 
         if ( isReadOnly() )
         {
-            static beans::Property aFolderPropertyInfoTable[] =
+            static const beans::Property aFolderPropertyInfoTable[] =
             {
                 ///////////////////////////////////////////////////////////
                 // Required properties
@@ -273,7 +273,7 @@ uno::Sequence< beans::Property > HierarchyContent::getProperties(
         }
         else
         {
-            static beans::Property aFolderPropertyInfoTable[] =
+            static const beans::Property aFolderPropertyInfoTable[] =
             {
                 ///////////////////////////////////////////////////////////
                 // Required properties
@@ -334,7 +334,7 @@ uno::Sequence< beans::Property > HierarchyContent::getProperties(
         // Currently no difference between reonly /read-write
         // -> all props ar read-only
 
-        static beans::Property aRootFolderPropertyInfoTable[] =
+        static const beans::Property aRootFolderPropertyInfoTable[] =
         {
             ///////////////////////////////////////////////////////////////
             // Required properties

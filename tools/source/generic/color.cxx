@@ -256,7 +256,7 @@ SvStream& operator>>( SvStream& rIStream, Color& rColor )
     }
     else
     {
-        static ColorData aColAry[] =
+        static const ColorData aColAry[] =
         {
             COL_BLACK,                          // COL_BLACK
             COL_BLUE,                           // COL_BLUE

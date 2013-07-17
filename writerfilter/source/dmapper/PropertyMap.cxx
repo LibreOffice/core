@@ -667,7 +667,7 @@ void SectionPropertyMap::CopyLastHeaderFooter( bool bFirstPage, DomainMapper_Imp
 
         try {
             // Loop over the Header and Footer properties to copy them
-            static PropertyIds aProperties[] =
+            static const PropertyIds aProperties[] =
             {
                 PROP_HEADER_TEXT,
                 PROP_FOOTER_TEXT,

@@ -375,7 +375,7 @@ namespace
         sal_Int32                nLen;
     };
 
-    static MessageBoxTypeInfo aMessageBoxTypeInfo[] =
+    static const MessageBoxTypeInfo aMessageBoxTypeInfo[] =
     {
         { css::awt::MessageBoxType_MESSAGEBOX,      RTL_CONSTASCII_STRINGPARAM("messbox") },
         { css::awt::MessageBoxType_INFOBOX,         RTL_CONSTASCII_STRINGPARAM("infobox") },

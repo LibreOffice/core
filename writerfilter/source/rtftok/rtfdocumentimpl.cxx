@@ -4922,7 +4922,7 @@ RTFSprms RTFFrame::getSprms()
 {
     RTFSprms sprms;
 
-    static Id pNames[] =
+    static const Id pNames[] =
     {
         NS_ooxml::LN_CT_FramePr_x,
         NS_ooxml::LN_CT_FramePr_y,

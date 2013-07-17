@@ -1029,7 +1029,7 @@ void ListsManager::lcl_sprm( Sprm& rSprm )
             break;
             case NS_ooxml::LN_CT_Lvl_lvlJc:
             {
-                static sal_Int16 aWWAlignments[ ] =
+                static const sal_Int16 aWWAlignments[ ] =
                 {
                     text::HoriOrientation::LEFT,
                     text::HoriOrientation::CENTER,

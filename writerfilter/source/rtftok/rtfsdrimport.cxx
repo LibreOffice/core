@@ -530,7 +530,7 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose)
         }
         else
         {
-            static OUString aBorders[] = {
+            static const OUString aBorders[] = {
                 OUString("TopBorder"), OUString("LeftBorder"), OUString("BottomBorder"), OUString("RightBorder")
             };
             for (unsigned int i = 0; i < SAL_N_ELEMENTS(aBorders); ++i)

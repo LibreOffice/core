@@ -73,7 +73,7 @@ void PositionHandler::lcl_attribute( Id aName, Value& rVal )
         case NS_ooxml::LN_CT_PosV_relativeFrom:
             {
                 // TODO There are some other unhandled values
-                static Id pVertRelValues[] =
+                static const Id pVertRelValues[] =
                 {
                     NS_ooxml::LN_Value_wordprocessingDrawing_ST_RelFromV_margin,
                     NS_ooxml::LN_Value_wordprocessingDrawing_ST_RelFromV_page,
@@ -81,7 +81,7 @@ void PositionHandler::lcl_attribute( Id aName, Value& rVal )
                     NS_ooxml::LN_Value_wordprocessingDrawing_ST_RelFromV_line
                 };
 
-                static sal_Int16 pVertRelations[] =
+                static const sal_Int16 pVertRelations[] =
                 {
                     text::RelOrientation::PAGE_PRINT_AREA,
                     text::RelOrientation::PAGE_FRAME,
@@ -99,7 +99,7 @@ void PositionHandler::lcl_attribute( Id aName, Value& rVal )
         case NS_ooxml::LN_CT_PosH_relativeFrom:
             {
                 // TODO There are some other unhandled values
-                static Id pHoriRelValues[] =
+                static const Id pHoriRelValues[] =
                 {
                     NS_ooxml::LN_Value_wordprocessingDrawing_ST_RelFromH_margin,
                     NS_ooxml::LN_Value_wordprocessingDrawing_ST_RelFromH_page,
@@ -107,7 +107,7 @@ void PositionHandler::lcl_attribute( Id aName, Value& rVal )
                     NS_ooxml::LN_Value_wordprocessingDrawing_ST_RelFromH_character
                 };
 
-                static sal_Int16 pHoriRelations[] =
+                static const sal_Int16 pHoriRelations[] =
                 {
                     text::RelOrientation::PAGE_PRINT_AREA,
                     text::RelOrientation::PAGE_FRAME,
