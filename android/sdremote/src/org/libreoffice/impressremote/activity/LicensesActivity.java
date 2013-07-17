@@ -6,7 +6,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-package org.libreoffice.impressremote;
+package org.libreoffice.impressremote.activity;
 
 import android.content.ContentResolver;
 import android.os.Bundle;
@@ -14,6 +14,7 @@ import android.webkit.WebView;
 
 import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.MenuItem;
+import org.libreoffice.impressremote.R;
 
 public class LicensesActivity extends SherlockActivity {
     private static final String SCHEME = ContentResolver.SCHEME_FILE;

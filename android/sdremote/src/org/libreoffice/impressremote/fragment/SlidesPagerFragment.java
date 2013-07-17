@@ -6,7 +6,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-package org.libreoffice.impressremote;
+package org.libreoffice.impressremote.fragment;
 
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -24,6 +24,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.actionbarsherlock.app.SherlockFragment;
+import org.libreoffice.impressremote.util.Intents;
+import org.libreoffice.impressremote.R;
+import org.libreoffice.impressremote.adapter.SlidesPagerAdapter;
 import org.libreoffice.impressremote.communication.CommunicationService;
 
 public class SlidesPagerFragment extends SherlockFragment implements ServiceConnection, ViewPager.OnPageChangeListener {

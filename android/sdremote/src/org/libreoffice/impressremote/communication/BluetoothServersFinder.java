@@ -22,7 +22,7 @@ import android.content.IntentFilter;
 import android.os.Handler;
 import android.support.v4.content.LocalBroadcastManager;
 
-import org.libreoffice.impressremote.Intents;
+import org.libreoffice.impressremote.util.Intents;
 import org.libreoffice.impressremote.communication.Server.Protocol;
 
 public class BluetoothServersFinder extends BroadcastReceiver implements ServersFinder, Runnable {

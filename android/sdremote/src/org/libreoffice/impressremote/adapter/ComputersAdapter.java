@@ -6,7 +6,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-package org.libreoffice.impressremote;
+package org.libreoffice.impressremote.adapter;
 
 import java.util.List;
 
@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import org.libreoffice.impressremote.R;
 import org.libreoffice.impressremote.communication.Server;
 
 public class ComputersAdapter extends ArrayAdapter<Server> {

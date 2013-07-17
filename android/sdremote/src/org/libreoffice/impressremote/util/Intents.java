@@ -6,11 +6,15 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-package org.libreoffice.impressremote;
+package org.libreoffice.impressremote.util;
 
 import android.content.Context;
 import android.content.Intent;
 
+import org.libreoffice.impressremote.activity.ComputerConnectionActivity;
+import org.libreoffice.impressremote.activity.ComputerCreationActivity;
+import org.libreoffice.impressremote.activity.LicensesActivity;
+import org.libreoffice.impressremote.activity.SlideShowActivity;
 import org.libreoffice.impressremote.communication.Server;
 
 public final class Intents {

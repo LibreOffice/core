@@ -6,7 +6,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-package org.libreoffice.impressremote;
+package org.libreoffice.impressremote.activity;
 
 import android.app.Activity;
 import android.content.Context;
@@ -21,6 +21,8 @@ import android.widget.EditText;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
+import org.libreoffice.impressremote.util.Intents;
+import org.libreoffice.impressremote.R;
 
 public class ComputerCreationActivity extends SherlockFragmentActivity implements View.OnClickListener {
     @Override
@@ -118,7 +120,8 @@ public class ComputerCreationActivity extends SherlockFragmentActivity implement
     }
 
     private void finish(String aIpAddress, String aName) {
-        Intent aIntent = Intents.buildComputerCreationResultIntent(aIpAddress, aName);
+        Intent aIntent = Intents
+            .buildComputerCreationResultIntent(aIpAddress, aName);
         setResult(Activity.RESULT_OK, aIntent);
 
         finish();

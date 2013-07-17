@@ -6,7 +6,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-package org.libreoffice.impressremote;
+package org.libreoffice.impressremote.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -16,6 +16,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import org.libreoffice.impressremote.R;
 import org.libreoffice.impressremote.communication.SlideShow;
 
 public class SlidesGridAdapter extends BaseAdapter {
@@ -56,7 +57,8 @@ public class SlidesGridAdapter extends BaseAdapter {
         if (isSlidePreviewAvailable(aPosition)) {
             aSlideViewHolder.aSlidePreview.setImageBitmap(mSlideShow.getSlidePreview(aPosition));
         } else {
-            aSlideViewHolder.aSlidePreview.setImageResource(R.drawable.slide_unknown);
+            aSlideViewHolder.aSlidePreview.setImageResource(
+                R.drawable.slide_unknown);
         }
 
         aSlideViewHolder.aSlideIndex.setText(buildSlideIndex(aPosition));

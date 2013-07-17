@@ -20,7 +20,7 @@
         android:theme="@style/Theme.ImpressRemote">
 
         <activity
-            android:name=".ComputersActivity"
+            android:name=".activity.ComputersActivity"
             android:label="@string/title_computers"
             android:theme="@style/Theme.ImpressRemote.Computers">
 
@@ -32,23 +32,23 @@
         </activity>
 
         <activity
-            android:name=".ComputerConnectionActivity"
+            android:name=".activity.ComputerConnectionActivity"
             android:label="@string/title_connection">
         </activity>
 
         <activity
-            android:name=".ComputerCreationActivity"
+            android:name=".activity.ComputerCreationActivity"
             android:label="@string/title_creation"
             android:theme="@style/Theme.ImpressRemote.ComputerCreation">
         </activity>
 
         <activity
-            android:name=".SlideShowActivity"
+            android:name=".activity.SlideShowActivity"
             android:label="@string/title_slide_show">
         </activity>
 
         <activity
-            android:name=".LicensesActivity"
+            android:name=".activity.LicensesActivity"
             android:label="@string/title_licenses">
         </activity>
 

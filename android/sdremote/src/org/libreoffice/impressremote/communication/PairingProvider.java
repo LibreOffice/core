@@ -4,7 +4,7 @@ import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.os.Build;
 
-import org.libreoffice.impressremote.Preferences;
+import org.libreoffice.impressremote.util.Preferences;
 
 public final class PairingProvider {
     private Context mContext;

@@ -1,4 +1,4 @@
-package org.libreoffice.impressremote;
+package org.libreoffice.impressremote.activity;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -7,6 +7,9 @@ import android.support.v4.app.FragmentTransaction;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
+import org.libreoffice.impressremote.R;
+import org.libreoffice.impressremote.fragment.SlidesGridFragment;
+import org.libreoffice.impressremote.fragment.SlidesPagerFragment;
 
 public class SlideShowActivity extends SherlockFragmentActivity {
     private static enum Mode {

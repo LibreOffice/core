@@ -6,7 +6,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-package org.libreoffice.impressremote;
+package org.libreoffice.impressremote.fragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,8 +27,10 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.actionbarsherlock.app.SherlockListFragment;
-import com.actionbarsherlock.internal.view.menu.ActionMenu;
 import com.actionbarsherlock.view.MenuItem;
+import org.libreoffice.impressremote.adapter.ComputersAdapter;
+import org.libreoffice.impressremote.util.Intents;
+import org.libreoffice.impressremote.R;
 import org.libreoffice.impressremote.communication.CommunicationService;
 import org.libreoffice.impressremote.communication.Server;
 

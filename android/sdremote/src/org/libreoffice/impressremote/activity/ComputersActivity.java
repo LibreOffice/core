@@ -6,7 +6,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-package org.libreoffice.impressremote;
+package org.libreoffice.impressremote.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,6 +16,10 @@ import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
+import org.libreoffice.impressremote.util.ActionBarTabListener;
+import org.libreoffice.impressremote.fragment.ComputersFragment;
+import org.libreoffice.impressremote.util.Intents;
+import org.libreoffice.impressremote.R;
 
 public class ComputersActivity extends SherlockFragmentActivity {
     @Override

@@ -17,7 +17,7 @@ import android.os.Binder;
 import android.os.IBinder;
 import android.support.v4.content.LocalBroadcastManager;
 
-import org.libreoffice.impressremote.Intents;
+import org.libreoffice.impressremote.util.Intents;
 
 public class CommunicationService extends Service implements Runnable, MessagesListener {
     public static enum State {

@@ -17,7 +17,7 @@ import java.util.Set;
 
 import android.content.Context;
 
-import org.libreoffice.impressremote.Preferences;
+import org.libreoffice.impressremote.util.Preferences;
 
 public class ServersManager {
     private final Context mContext;

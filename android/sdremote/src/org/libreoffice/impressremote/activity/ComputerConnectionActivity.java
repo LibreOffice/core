@@ -6,13 +6,15 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-package org.libreoffice.impressremote;
+package org.libreoffice.impressremote.activity;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.MenuItem;
+import org.libreoffice.impressremote.fragment.ComputerConnectionFragment;
+import org.libreoffice.impressremote.util.Intents;
 import org.libreoffice.impressremote.communication.Server;
 
 public class ComputerConnectionActivity extends SherlockFragmentActivity {
@@ -32,7 +34,8 @@ public class ComputerConnectionActivity extends SherlockFragmentActivity {
     private void setUpComputerConnectionFragment(Server aComputer) {
         FragmentTransaction aTransaction = getSupportFragmentManager().beginTransaction();
 
-        aTransaction.replace(android.R.id.content, ComputerConnectionFragment.newInstance(aComputer));
+        aTransaction.replace(android.R.id.content, ComputerConnectionFragment
+            .newInstance(aComputer));
 
         aTransaction.commit();
     }
