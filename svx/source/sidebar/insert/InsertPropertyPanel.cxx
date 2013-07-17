@@ -57,6 +57,14 @@ InsertPropertyPanel::InsertPropertyPanel (
     mpCustomShapesToolBox->Show();
 
     // Listen to all tool box selection events.
+    // FIXME: This is an incredibly ugly hack that we should kill at some
+    // stage.  It is needed because the mpCustomShapesToolBox somehow does not
+    // get the right controller, and so the images there are not updated when
+    // the user selects eg. a callout.  But using the help id's to get/update
+    // it (that is what functionSelected() does) is not the way to go in
+    // general ;-)
+    // In other words, we should find the underlying problem, and remove the
+    // WindowEventListener for good.
     Window* pTopWindow = pParent;
     while (pTopWindow->GetParent() != NULL)
         pTopWindow = pTopWindow->GetParent();
