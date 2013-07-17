@@ -138,3 +138,29 @@ diff -ur firebird.org/builds/posix/postfix.darwin firebird/builds/posix/postfix.
  	cp -r ../gen/firebird/help $(FB_FW)/Resources/English.lproj/var/help
  	cp ../gen/firebird/security2.fdb $(FB_FW)/Resources/English.lproj/var
  	mkdir -p $(FB_FW)/Resources/doc
+--- firebird.org/builds/posix/prefix.darwin_i386
++++ firebird/builds/posix/prefix.darwin_i386
+@@ -32,8 +32,8 @@
+ 
+ OS_ServerFiles=inet_server.cpp
+ 
+-PROD_FLAGS=-O1 -DDARWIN -pipe -p -MMD -fPIC -fno-common -arch i386 -mmacosx-version-min=10.6
+-DEV_FLAGS=-ggdb -DDARWIN -pipe -p -MMD -fPIC -fno-common -Wall -arch i386 -mmacosx-version-min=10.6
++PROD_FLAGS=-O1 -DDARWIN -pipe -p -MMD -fPIC -fno-common
++DEV_FLAGS=-ggdb -DDARWIN -pipe -p -MMD -fPIC -fno-common -Wall
+ CXXFLAGS:=$(CXXFLAGS) -fvisibility-inlines-hidden -fvisibility=hidden -fno-weak
+ EMBED_UTIL_TARGETS=gstat gds_relay gsec fbguard nbackup fb_lock_print fbsvcmgr fbtracemgr
+ CLIENT_UTIL_TARGETS=gds_relay gstat gsec fbguard fbmgr_bin nbackup fb_lock_print fbsvcmgr \
+--- firebird.org/builds/posix/prefix.darwin_x86_64
++++ firebird/builds/posix/prefix.darwin_x86_64
+@@ -27,8 +27,8 @@
+ 
+ OS_ServerFiles=inet_server.cpp
+ 
+-PROD_FLAGS=-O1 -DDARWIN -pipe -p -MMD -fPIC -fno-common -mmacosx-version-min=10.6
+-DEV_FLAGS=-ggdb -DDARWIN -pipe -p -MMD -fPIC -fno-common -Wall -mmacosx-version-min=10.6
++PROD_FLAGS=-O1 -DDARWIN -pipe -p -MMD -fPIC -fno-common
++DEV_FLAGS=-ggdb -DDARWIN -pipe -p -MMD -fPIC -fno-common -Wall
+ CXXFLAGS:=$(CXXFLAGS) -fvisibility-inlines-hidden -fvisibility=hidden -fno-weak
+ EMBED_UTIL_TARGETS=gstat gds_relay gsec fbguard nbackup fb_lock_print fbsvcmgr fbtracemgr
+ CLIENT_UTIL_TARGETS=gds_relay gstat gsec fbguard fbmgr_bin nbackup fb_lock_print fbsvcmgr \
