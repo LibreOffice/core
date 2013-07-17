@@ -8085,7 +8085,6 @@ dnl Check for Firebird stuff
 dnl ===================================================================
 ENABLE_FIREBIRD_SDBC=""
 if test "x$enable_firebird_sdbc" = "xyes"; then
-
     SCPDEFS="$SCPDEFS -DWITH_FIREBIRD_SDBC"
 
     dnl ===================================================================
@@ -8118,16 +8117,19 @@ if test "x$enable_firebird_sdbc" = "xyes"; then
             AC_MSG_ERROR([Ensure firebird 2.5.x is installed])
         fi
         AC_MSG_RESULT([includes $FIREBIRD_CFLAGS, libraries $FIREBIRD_LIBS])
+        ENABLE_FIREBIRD_SDBC="TRUE"
+    elif test "$enable_database_connectivity" != yes; then
+        AC_MSG_RESULT([none])
     else
-	dnl ===================================================================
-	dnl Check for system libatomic-ops
-	dnl ===================================================================
-	libo_CHECK_SYSTEM_MODULE([libatomic_ops],[ATOMIC_OPS],[atomic_ops >= 0.7.2])
-	if test "$with_system_libatomic_ops" = "yes"; then
-		SYSTEM_LIBATOMIC_OPS=YES
-	    AC_CHECK_HEADERS(atomic_ops.h, [],
-	       [AC_MSG_ERROR(atomic_ops.h not found. install libatomic-ops)], [])
-	fi
+        dnl ===================================================================
+        dnl Check for system libatomic-ops
+        dnl ===================================================================
+        libo_CHECK_SYSTEM_MODULE([libatomic_ops],[ATOMIC_OPS],[atomic_ops >= 0.7.2])
+        if test "$with_system_libatomic_ops" = "yes"; then
+            SYSTEM_LIBATOMIC_OPS=YES
+            AC_CHECK_HEADERS(atomic_ops.h, [],
+            [AC_MSG_ERROR(atomic_ops.h not found. install libatomic-ops)], [])
+        fi
 
         AC_MSG_RESULT([internal])
         SYSTEM_FIREBIRD=NO
@@ -8149,9 +8151,9 @@ if test "x$enable_firebird_sdbc" = "xyes"; then
         dnl LIBS=$save_LIBS
 
         BUILD_TYPE="$BUILD_TYPE FIREBIRD"
+        ENABLE_FIREBIRD_SDBC="TRUE"
     fi
 
-    ENABLE_FIREBIRD_SDBC="TRUE"
 fi
 AC_SUBST(ENABLE_FIREBIRD_SDBC)
 AC_SUBST(SYSTEM_FIREBIRD)
