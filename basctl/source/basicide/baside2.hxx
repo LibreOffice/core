@@ -51,7 +51,6 @@ class SvxSearchItem;
 #include <set>
 #include <boost/scoped_ptr.hpp>
 
-#include <vcl/floatwin.hxx>
 #include <vcl/textdata.hxx>
 
 namespace com { namespace sun { namespace star { namespace beans {
@@ -63,7 +62,7 @@ namespace basctl
 
 class ObjectCatalog;
 class CodeCompleteListBox;
-class CodeCompleteFloatWindow;
+class CodeCompleteWindow;
 
 DBG_NAMEEX( ModulWindow )
 
@@ -116,7 +115,7 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >
     GetComponentInterface(sal_Bool bCreate = true);
     std::vector< CodeCompleteData > aCodeCompleteCache;
-    CodeCompleteFloatWindow* pCodeCompleteWnd;
+    CodeCompleteWindow* pCodeCompleteWnd;
     //CodeCompleteListBox* aListBox;
     OUString GetActualSubName( sal_uLong nLine ); // gets the actual subroutine name according to line number
     std::vector< OUString > Split( const OUString& sStr, const sal_Unicode& aChar );
@@ -474,23 +473,25 @@ private:
     } aSyntaxColors;
 };
 
-class CodeCompleteFloatWindow: public Window
+class CodeCompleteWindow: public Window
 {
+friend class CodeCompleteListBox;
 private:
     EditorWindow* pParent; // parent window
     TextSelection aTextSelection;
-    ListBox* pListBox;
+    CodeCompleteListBox* pListBox;
 
     void InitListBox(); // initialize the ListBox
-    DECL_LINK(ImplDoubleClickHdl, void*);
+    //DECL_LINK(ImplDoubleClickHdl, void*);
 
 public:
-    CodeCompleteFloatWindow( EditorWindow* pPar );
-    virtual ~CodeCompleteFloatWindow();
+    CodeCompleteWindow( EditorWindow* pPar );
+    virtual ~CodeCompleteWindow();
 
     void InsertEntry( const OUString& aStr );
     void ClearListBox();
     void SetTextSelection( const TextSelection& aSel );
+    const TextSelection& GetTextSelection() const;
     void ResizeListBox();
 
 protected:
@@ -500,12 +501,15 @@ protected:
 class CodeCompleteListBox: public ListBox
 {
 private:
-    EditorWindow* pParent; // parent window
+    CodeCompleteWindow* pCodeCompleteWindow; // parent window
 
 public:
-    CodeCompleteListBox(EditorWindow* pPar);
+    CodeCompleteListBox(CodeCompleteWindow* pPar);
     virtual ~CodeCompleteListBox();
-    DECL_LINK(ImplSelectHdl, void*);
+    //DECL_LINK(ImplSelectHdl, void*);
+    DECL_LINK(ImplDoubleClickHdl, void*);
+
+    virtual long PreNotify( NotifyEvent& rNEvt );
 };
 
 } // namespace basctl
