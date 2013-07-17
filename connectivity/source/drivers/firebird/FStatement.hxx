@@ -103,7 +103,11 @@ namespace connectivity
                                                                 ::com::sun::star::uno::Any& rValue,
                                                                 sal_Int32 nHandle) const;
             virtual ~OStatement_Base();
-
+            int prepareAndDescribeStatement(const OUString& sqlIn,
+                                                  isc_stmt_handle& aStatementHandle,
+                                                  XSQLDA*& pOutSqlda,
+                                                  XSQLVAR*& pVar);
+            ::rtl::OUString sanitizeSqlString(const OUString& sqlIn);
         public:
             ::cppu::OBroadcastHelper& rBHelper;
             OStatement_Base(OConnection* _pConnection);
@@ -123,7 +127,7 @@ namespace connectivity
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
             // XStatement
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet > SAL_CALL executeQuery( const ::rtl::OUString& sql ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException) ;
-            virtual sal_Int32 SAL_CALL executeUpdate( const ::rtl::OUString& sql ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException) ;
+            virtual sal_Int32 SAL_CALL executeUpdate( const ::rtl::OUString& sqlIn ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException) ;
             virtual sal_Bool SAL_CALL execute( const ::rtl::OUString& sql ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException) ;
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > SAL_CALL getConnection(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException) ;
 
@@ -145,11 +149,6 @@ namespace connectivity
 
             inline XSQLDA * getOUTsqlda()            const { return m_OUTsqlda; }
             inline XSQLDA * getINsqlda()             const { return m_INsqlda; }
-
-            int prepareAndDescribeStatement(const OUString& sql,
-                                                  isc_stmt_handle& aStatementHandle,
-                                                  XSQLDA*& pOutSqlda,
-                                                  XSQLVAR*& pVar);
         };
 
         class OStatement_BASE2  :public OStatement_Base

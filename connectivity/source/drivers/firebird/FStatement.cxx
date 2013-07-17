@@ -182,11 +182,13 @@ Any SAL_CALL OStatement::queryInterface( const Type & rType ) throw(RuntimeExcep
 }
 
 // ---- XStatement -----------------------------------------------------------
-sal_Int32 SAL_CALL OStatement_Base::executeUpdate(const OUString& sql)
+sal_Int32 SAL_CALL OStatement_Base::executeUpdate(const OUString& sqlIn)
     throw(SQLException, RuntimeException)
 {
     MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+
+    const OUString sql = sanitizeSqlString(sqlIn);
 
     int aErr = isc_dsql_execute_immediate(m_statusVector,
                                           &m_pConnection->getDBHandle(),
@@ -205,11 +207,23 @@ sal_Int32 SAL_CALL OStatement_Base::executeUpdate(const OUString& sql)
     return 0;
 }
 
-int OStatement_Base::prepareAndDescribeStatement(const OUString& sql,
+OUString OStatement_Base::sanitizeSqlString(const OUString& sqlIn)
+{
+    // TODO: verify this is all we need.
+    static const sal_Unicode pattern('"');
+    static const sal_Unicode empty(' ');
+    return sqlIn.replace(pattern, empty);
+}
+
+int OStatement_Base::prepareAndDescribeStatement(const OUString& sqlIn,
                                                  isc_stmt_handle& aStatementHandle,
                                                  XSQLDA*& pOutSqlda,
                                                  XSQLVAR*& pVar)
 {
+    MutexGuard aGuard( m_aMutex );
+
+    const OUString sql = sanitizeSqlString(sqlIn);
+
     if (!pOutSqlda)
     {
         pOutSqlda = (XSQLDA*) malloc(XSQLDA_LENGTH(10));
@@ -358,7 +372,9 @@ uno::Reference< XResultSet > SAL_CALL OStatement_Base::executeQuery(const OUStri
             SAL_WARN("connectivity.firebird", "isc_dsql_execute failed" );
     }
 
-    uno::Reference< OResultSet > pResult(new OResultSet(this, pOutSqlda));
+    uno::Reference< OResultSet > pResult(new OResultSet(uno::Reference< XStatement >(this),
+                                                        aStatementHandle,
+                                                        pOutSqlda));
     //initializeResultSet( pResult.get() );
      m_xResultSet = pResult.get();
 
@@ -370,15 +386,8 @@ uno::Reference< XResultSet > SAL_CALL OStatement_Base::executeQuery(const OUStri
 
 sal_Bool SAL_CALL OStatement_Base::execute(const OUString& sql) throw(SQLException, RuntimeException)
 {
-    // TODO: is this needed, and for all execute methods>
-    static const sal_Unicode pattern('"');
-    static const sal_Unicode empty(' ');
-    OUString query = sql.replace(pattern, empty);
-
-    // TODO: use the isc_ validation functions?
-
     SAL_INFO("connectivity.firebird", "=> OStatement_Base::executeQuery(). "
-             "Got called with sql: " << query);
+             "Got called with sql: " << sql);
 
     MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
@@ -396,7 +405,7 @@ sal_Bool SAL_CALL OStatement_Base::execute(const OUString& sql) throw(SQLExcepti
 
     if (aErr)
     {
-        SAL_WARN("connectivity.firebird", "isc_dsql_execute failed" );
+        SAL_WARN("connectivity.firebird", "prepareAndDescribeStatement failed" );
     }
     else
     {
