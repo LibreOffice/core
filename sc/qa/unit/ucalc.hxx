@@ -86,6 +86,7 @@ public:
     void testFormulaHashAndTag();
     void testFormulaRefData();
     void testFormulaCompiler();
+    void testFormulaRefUpdate();
     void testFuncSUM();
     void testFuncPRODUCT();
     void testFuncN();
@@ -272,6 +273,7 @@ public:
     CPPUNIT_TEST(testFormulaHashAndTag);
     CPPUNIT_TEST(testFormulaRefData);
     CPPUNIT_TEST(testFormulaCompiler);
+    CPPUNIT_TEST(testFormulaRefUpdate);
     CPPUNIT_TEST(testFuncSUM);
     CPPUNIT_TEST(testFuncPRODUCT);
     CPPUNIT_TEST(testFuncN);

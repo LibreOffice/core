@@ -14,6 +14,8 @@
 #include "compiler.hxx"
 #include "tokenarray.hxx"
 #include "refdata.hxx"
+#include "scopetools.hxx"
+#include "formulacell.hxx"
 
 #include <boost/scoped_ptr.hpp>
 
@@ -129,6 +131,48 @@ void Test::testFormulaRefData()
     ASSERT_EQUAL_TYPE(SCTAB, 1, aRefData.GetTab());
 }
 
+namespace {
+
+OUString toString(
+    ScDocument& rDoc, const ScAddress& rPos, ScTokenArray& rArray, FormulaGrammar::Grammar eGram = FormulaGrammar::GRAM_NATIVE)
+{
+    ScCompiler aComp(&rDoc, rPos, rArray);
+    aComp.SetGrammar(eGram);
+    OUStringBuffer aBuf;
+    aComp.CreateStringFromTokenArray(aBuf);
+    return aBuf.makeStringAndClear();
+}
+
+ScTokenArray* getTokens(ScDocument& rDoc, const ScAddress& rPos)
+{
+    ScFormulaCell* pCell = rDoc.GetFormulaCell(rPos);
+    if (!pCell)
+        return NULL;
+
+    return pCell->GetCode();
+}
+
+bool checkFormula(ScDocument& rDoc, const ScAddress& rPos, const char* pExpected)
+{
+    ScTokenArray* pCode = getTokens(rDoc, rPos);
+    if (!pCode)
+    {
+        cerr << "Empty token array." << endl;
+        return false;
+    }
+
+    OUString aFormula = toString(rDoc, rPos, *pCode);
+    if (aFormula != OUString::createFromAscii(pExpected))
+    {
+        cerr << "Formula '" << pExpected << "' expected, but '" << aFormula << "' found" << endl;
+        return false;
+    }
+
+    return true;
+}
+
+}
+
 void Test::testFormulaCompiler()
 {
     struct {
@@ -151,15 +195,54 @@ void Test::testFormulaCompiler()
             CPPUNIT_ASSERT_MESSAGE("Token array shouldn't be NULL!", pArray.get());
         }
 
-        {
-            ScCompiler aComp(m_pDoc, ScAddress(), *pArray);
-            aComp.SetGrammar(aTests[i].eOutputGram);
-            OUStringBuffer aBuf;
-            aComp.CreateStringFromTokenArray(aBuf);
-            OUString aFormula = aBuf.makeStringAndClear();
-            CPPUNIT_ASSERT_EQUAL(OUString::createFromAscii(aTests[i].pOutput), aFormula);
-        }
+        OUString aFormula = toString(*m_pDoc, ScAddress(), *pArray, aTests[i].eOutputGram);
+        CPPUNIT_ASSERT_EQUAL(OUString::createFromAscii(aTests[i].pOutput), aFormula);
     }
+}
+
+void Test::testFormulaRefUpdate()
+{
+    m_pDoc->InsertTab(0, "Formula");
+
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
+
+    m_pDoc->SetValue(ScAddress(0,0,0), 2.0);
+    m_pDoc->SetString(ScAddress(2,2,0), "=A1");   // C3
+    m_pDoc->SetString(ScAddress(2,3,0), "=$A$1"); // C4
+
+    ScAddress aPos(2,2,0);
+    if (!checkFormula(*m_pDoc, aPos, "A1"))
+        CPPUNIT_FAIL("Wrong formula in C3.");
+
+    aPos = ScAddress(2,3,0);
+    if (!checkFormula(*m_pDoc, aPos, "$A$1"))
+        CPPUNIT_FAIL("Wrong formula in C4.");
+
+    // Delete row 2 to push formula cells up (to C2:C3).
+    m_pDoc->DeleteRow(ScRange(0,1,0,MAXCOL,1,0));
+
+    aPos = ScAddress(2,1,0);
+    if (!checkFormula(*m_pDoc, aPos, "A1"))
+        CPPUNIT_FAIL("Wrong formula in C2.");
+
+    aPos = ScAddress(2,2,0);
+    if (!checkFormula(*m_pDoc, aPos, "$A$1"))
+        CPPUNIT_FAIL("Wrong formula in C3.");
+
+    // Insert one row at row 2 to move them back.
+    m_pDoc->InsertRow(ScRange(0,1,0,MAXCOL,1,0));
+
+    aPos = ScAddress(2,2,0);
+    if (!checkFormula(*m_pDoc, aPos, "A1"))
+        CPPUNIT_FAIL("Wrong formula in C3.");
+
+    aPos = ScAddress(2,3,0);
+    if (!checkFormula(*m_pDoc, aPos, "$A$1"))
+        CPPUNIT_FAIL("Wrong formula in C4.");
+
+    m_pDoc->DeleteTab(0);
+
+    CPPUNIT_ASSERT_MESSAGE("All looks good!", false);
 }
 
 void Test::testFuncSUM()
