@@ -41,20 +41,6 @@
 #define STR_BACKING_INFOHELP                5
 #define STR_BACKING_TPLREP                  6
 
-#define RES_BACKING_IMAGES                  (DLG_BACKING+1)
-
-#define BMP_BACKING_EXT                     6
-#define BMP_BACKING_INFO                    8
-#define BMP_BACKING_TPLREP                  9
-#define BMP_BACKING_WRITER                  10
-#define BMP_BACKING_CALC                    11
-#define BMP_BACKING_IMPRESS                 12
-#define BMP_BACKING_DRAW                    13
-#define BMP_BACKING_DATABASE                14
-#define BMP_BACKING_FORMULA                 15
-#define BMP_BACKING_OPENFILE                16
-#define BMP_BACKING_OPENTEMPLATE            17
-
 // Ids of TabWindow
 #define WIN_TABWINDOW                       (RID_FWK_DIALOG_START_CORRECT+101)
 #define TC_TABCONTROL                        1

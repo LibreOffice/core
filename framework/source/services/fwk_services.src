@@ -51,54 +51,6 @@ Window DLG_BACKING
     };
 };
 
-Resource RES_BACKING_IMAGES
-{
-    Bitmap BMP_BACKING_EXT
-    {
-        File = "extension.png";
-    };
-    Bitmap BMP_BACKING_INFO
-    {
-        File = "info_26.png";
-    };
-    Bitmap BMP_BACKING_TPLREP
-    {
-        File = "addtemplate_32.png";
-    };
-    Bitmap BMP_BACKING_WRITER
-    {
-        File = "odt_32_8.png";
-    };
-    Bitmap BMP_BACKING_CALC
-    {
-        File = "ods_32_8.png";
-    };
-    Bitmap BMP_BACKING_IMPRESS
-    {
-        File = "odp_32_8.png";
-    };
-    Bitmap BMP_BACKING_DRAW
-    {
-        File = "odg_32_8.png";
-    };
-    Bitmap BMP_BACKING_DATABASE
-    {
-        File = "odb_32_8.png";
-    };
-    Bitmap BMP_BACKING_FORMULA
-    {
-        File = "odf_32_8.png";
-    };
-    Bitmap BMP_BACKING_OPENFILE
-    {
-        File = "folder_32.png";
-    };
-    Bitmap BMP_BACKING_OPENTEMPLATE
-    {
-        File = "templates_32.png";
-    };
-};
-
 Window WIN_TABWINDOW
 {
     OutputSize = TRUE ;

@@ -209,14 +209,6 @@ void BackingWindow::GetFocus()
 }
 
 
-class ImageContainerRes : public Resource
-{
-    public:
-    ImageContainerRes( const ResId& i_rId ) : Resource( i_rId ) {}
-    ~ImageContainerRes() { FreeResource(); }
-};
-
-
 IMPL_LINK( BackingWindow, WindowEventListener, VclSimpleEvent*, pEvent )
 {
     VclWindowEvent* pWinEvent = dynamic_cast<VclWindowEvent*>( pEvent );
@@ -278,9 +270,6 @@ void BackingWindow::prepareRecentFileMenu()
 void BackingWindow::initBackground()
 {
     SetBackground();
-
-    // select image set
-    ImageContainerRes aRes( FwkResId( RES_BACKING_IMAGES ) );
 
     // scale middle segment
     Size aMiddleSize;
