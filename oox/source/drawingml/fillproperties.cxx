@@ -149,6 +149,8 @@ void BlipFillProperties::assignUsed( const BlipFillProperties& rSourceProps )
     moContrast.assignIfUsed( rSourceProps.moContrast );
     maColorChangeFrom.assignIfUsed( rSourceProps.maColorChangeFrom );
     maColorChangeTo.assignIfUsed( rSourceProps.maColorChangeTo );
+    maDuotoneColors[0].assignIfUsed( rSourceProps.maDuotoneColors[0] );
+    maDuotoneColors[1].assignIfUsed( rSourceProps.maDuotoneColors[1] );
 }
 
 // ============================================================================
@@ -372,9 +374,23 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
                 // do not start complex graphic transformation if property is not supported...
                 if( maBlipProps.mxGraphic.is() && rPropMap.supportsProperty( SHAPEPROP_FillBitmapUrl ) )
                 {
+                    Reference< XGraphic > xGraphic = maBlipProps.mxGraphic;
+                    if( maBlipProps.maDuotoneColors[0].isUsed() && maBlipProps.maDuotoneColors[1].isUsed() )
+                    {
+                        sal_Int32 nColor1 = maBlipProps.maDuotoneColors[0].getColor( rGraphicHelper, nPhClr );
+                        sal_Int32 nColor2 = maBlipProps.maDuotoneColors[1].getColor( rGraphicHelper, nPhClr );
+                        try
+                        {
+                            Reference< XGraphicTransformer > xTransformer( maBlipProps.mxGraphic, UNO_QUERY_THROW );
+                            xGraphic = xTransformer->applyDuotone( maBlipProps.mxGraphic, nColor1, nColor2 );
+                        }
+                        catch( Exception& )
+                        {
+                        }
+                    }
                     // TODO: "rotate with shape" is not possible with our current core
 
-                    OUString aGraphicUrl = rGraphicHelper.createGraphicObject( maBlipProps.mxGraphic );
+                    OUString aGraphicUrl = rGraphicHelper.createGraphicObject( xGraphic );
                     // push bitmap or named bitmap to property map
                     if( !aGraphicUrl.isEmpty() && rPropMap.setProperty( SHAPEPROP_FillBitmapUrl, aGraphicUrl ) )
                         eFillStyle = FillStyle_BITMAP;

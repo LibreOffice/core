@@ -30,6 +30,14 @@
 #define MNMX5(a,b,c,d,e)    S2(a,b); S2(c,d); MN3(a,c,e); MX3(b,d,e);
 #define MNMX6(a,b,c,d,e,f)  S2(a,d); S2(b,e); S2(c,f); MN3(a,b,c); MX3(d,e,f);
 
+static inline sal_uInt8 lcl_getDuotoneColorComponent( sal_uInt8 base, sal_uInt16 color1, sal_uInt16 color2 )
+{
+    color2 = color2*base/0xFF;
+    color1 = color1*(0xFF-base)/0xFF;
+
+    return (sal_uInt8) (color1+color2);
+}
+
 sal_Bool Bitmap::Filter( BmpFilter eFilter, const BmpFilterParam* pFilterParam, const Link* pProgress )
 {
     sal_Bool bRet = sal_False;
@@ -88,6 +96,10 @@ sal_Bool Bitmap::Filter( BmpFilter eFilter, const BmpFilterParam* pFilterParam, 
 
         case( BMP_FILTER_POPART ):
             bRet = ImplPopArt( pFilterParam, pProgress );
+        break;
+
+        case( BMP_FILTER_DUOTONE ):
+            bRet = ImplDuotoneFilter( pFilterParam->mnProgressStart, pFilterParam->mnProgressEnd );
         break;
 
         default:
@@ -1159,6 +1171,37 @@ bool Bitmap::ImplSeparableUnsharpenFilter(const double radius) {
     ReleaseAccess( pWriteAcc );
     ReleaseAccess( pReadAcc );
     ReleaseAccess( pReadAccBlur );
+    ImplAssignWithSize ( aResultBitmap );
+    return true;
+}
+
+
+bool Bitmap::ImplDuotoneFilter( const sal_uLong nColorOne, const sal_uLong nColorTwo )
+{
+    const long  nWidth = GetSizePixel().Width();
+    const long  nHeight = GetSizePixel().Height();
+
+    Bitmap aResultBitmap( GetSizePixel(), 24);
+    BitmapReadAccess* pReadAcc = AcquireReadAccess();
+    BitmapWriteAccess* pWriteAcc = aResultBitmap.AcquireWriteAccess();
+    const BitmapColor aColorOne( static_cast< sal_uInt8 >( nColorOne >> 16 ), static_cast< sal_uInt8 >( nColorOne >> 8 ), static_cast< sal_uInt8 >( nColorOne ) );
+    const BitmapColor aColorTwo( static_cast< sal_uInt8 >( nColorTwo >> 16 ), static_cast< sal_uInt8 >( nColorTwo >> 8 ), static_cast< sal_uInt8 >( nColorTwo ) );
+
+    for( int x = 0; x < nWidth; x++ )
+    {
+        for( int y = 0; y < nHeight; y++ )
+        {
+            BitmapColor aColor = pReadAcc->GetColor( y, x );
+            BitmapColor aResultColor(
+                    lcl_getDuotoneColorComponent( aColor.GetRed(), aColorOne.GetRed(), aColorTwo.GetRed() ) ,
+                    lcl_getDuotoneColorComponent( aColor.GetGreen(), aColorOne.GetGreen(), aColorTwo.GetGreen() ) ,
+                    lcl_getDuotoneColorComponent( aColor.GetBlue(), aColorOne.GetBlue(), aColorTwo.GetBlue() ) );
+            pWriteAcc->SetPixel( y, x, aResultColor );
+        }
+    }
+
+    ReleaseAccess( pWriteAcc );
+    ReleaseAccess( pReadAcc );
     ImplAssignWithSize ( aResultBitmap );
     return true;
 }

@@ -120,6 +120,7 @@ enum BmpFilter
     BMP_FILTER_SEPIA = 6,
     BMP_FILTER_MOSAIC = 7,
     BMP_FILTER_POPART = 8,
+    BMP_FILTER_DUOTONE = 9,
 
     BMP_FILTER_UNKNOWN = 65535
 };
@@ -362,6 +363,7 @@ public:
 
     SAL_DLLPRIVATE bool                 ImplSeparableBlurFilter( const double aRadius = 0.7 );
     SAL_DLLPRIVATE bool                 ImplSeparableUnsharpenFilter( const double aRadius = 0.7 );
+    SAL_DLLPRIVATE bool                 ImplDuotoneFilter( const sal_uLong nColorOne,  sal_uLong nColorTwo );
     SAL_DLLPRIVATE void                 ImplBlurContributions( const int aSize, const int aNumberOfContributions,
                                                 double* pBlurVector, double*& pWeights, int*& pPixels, int*& pCount );
 public:

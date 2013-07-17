@@ -139,6 +139,25 @@ uno::Reference< graphic::XGraphic > SAL_CALL GraphicTransformer::colorChange(
     return xRet;
 }
 
+uno::Reference< graphic::XGraphic > SAL_CALL GraphicTransformer::applyDuotone(
+    const uno::Reference< graphic::XGraphic >& rxGraphic, sal_Int32 nColorOne, sal_Int32 nColorTwo )
+        throw ( lang::IllegalArgumentException, uno::RuntimeException)
+{
+    const uno::Reference< uno::XInterface > xIFace( rxGraphic, uno::UNO_QUERY );
+    ::Graphic aGraphic( *::unographic::Graphic::getImplementation( xIFace ) );
+
+    BitmapEx    aBitmapEx( aGraphic.GetBitmapEx() );
+    Bitmap      aBitmap( aBitmapEx.GetBitmap() );
+    BmpFilterParam aFilter( (sal_uLong) nColorOne, (sal_uLong) nColorTwo );
+    aBitmap.Filter( BMP_FILTER_DUOTONE, &aFilter );
+    aGraphic = ::Graphic( BitmapEx( aBitmap ) );
+
+    ::unographic::Graphic* pUnoGraphic = new ::unographic::Graphic();
+    pUnoGraphic->init( aGraphic );
+    uno::Reference< graphic::XGraphic > xRet( pUnoGraphic );
+    return xRet;
+}
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

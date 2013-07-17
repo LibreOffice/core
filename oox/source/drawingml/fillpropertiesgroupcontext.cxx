@@ -179,11 +179,36 @@ ContextHandlerRef BlipContext::onCreateContext(
         case A_TOKEN( clrChange ):
             return new ColorChangeContext( *this, rAttribs, mrBlipProps );
 
+        case A_TOKEN( duotone ):
+            return new DuotoneContext( *this, rAttribs, mrBlipProps );
+
         case A_TOKEN( lum ):
             mrBlipProps.moBrightness = rAttribs.getInteger( XML_bright );
             mrBlipProps.moContrast = rAttribs.getInteger( XML_contrast );
         break;
     }
+    return 0;
+}
+
+DuotoneContext::DuotoneContext( ContextHandler2Helper& rParent,
+        const AttributeList& /*rAttribs*/, BlipFillProperties& rBlipProps ) :
+    ContextHandler2( rParent ),
+    mrBlipProps( rBlipProps ),
+    mnColorIndex( 0 )
+{
+    mrBlipProps.maDuotoneColors[0].setUnused();
+    mrBlipProps.maDuotoneColors[1].setUnused();
+}
+
+DuotoneContext::~DuotoneContext()
+{
+}
+
+::oox::core::ContextHandlerRef DuotoneContext::onCreateContext(
+        sal_Int32 /*nElement*/, const AttributeList& /*rAttribs*/ )
+{
+    if( mnColorIndex < 2 )
+        return new ColorValueContext( *this, mrBlipProps.maDuotoneColors[mnColorIndex++] );
     return 0;
 }
 

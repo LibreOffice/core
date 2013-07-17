@@ -76,6 +76,30 @@ private:
     PatternFillProperties& mrPatternProps;
 };
 
+ // ============================================================================
+
+/** Context handler that imports the a:duotone element containing the colors
+    of a bitmap duotone transformation. */
+class DuotoneContext : public ::oox::core::ContextHandler2
+{
+public:
+    explicit            DuotoneContext(
+                            ::oox::core::ContextHandler2Helper& rParent,
+                            const ::oox::AttributeList& rAttribs,
+                            BlipFillProperties& rBlipProps );
+    virtual             ~DuotoneContext();
+
+    virtual ::oox::core::ContextHandlerRef
+                        onCreateContext(
+                            sal_Int32 nElement,
+                            const ::oox::AttributeList& rAttribs ) SAL_OVERRIDE;
+
+private:
+    BlipFillProperties& mrBlipProps;
+    int                 mnColorIndex;
+};
+
+ // ============================================================================
 
 /** Context handler that imports the a:clrChange element containing the colors
     of a bitmap color change transformation. */
