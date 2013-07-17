@@ -42,7 +42,9 @@
 #include <cppuhelper/typeprovider.hxx>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include "propertyids.hxx"
+#include <comphelper/sequence.hxx>
 
+using namespace ::comphelper;
 using namespace connectivity::firebird;
 using namespace cppu;
 using namespace com::sun::star::uno;

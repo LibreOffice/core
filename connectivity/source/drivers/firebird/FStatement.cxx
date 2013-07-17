@@ -47,7 +47,9 @@
 #include "propertyids.hxx"
 
 #include <ibase.h>
+#include <comphelper/sequence.hxx>
 
+using namespace ::comphelper;
 using namespace connectivity::firebird;
 //------------------------------------------------------------------------------
 using namespace com::sun::star::uno;

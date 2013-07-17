@@ -66,14 +66,13 @@ namespace connectivity
                                                 ::com::sun::star::sdbc::XWarningsSupplier,
                                                 ::com::sun::star::lang::XServiceInfo,
                                                 ::com::sun::star::document::XDocumentEventListener
-                                            > OMetaConnection_BASE;
+                                            > OConnection_BASE;
 
         class OStatement_Base;
         class FirebirdDriver;
         class ODatabaseMetaData;
 
 
-        typedef OMetaConnection_BASE                OConnection_BASE; // implements basics and text encoding
         typedef ::std::vector< ::connectivity::OTypeInfo>   TTypeInfoVector;
         typedef std::vector< ::com::sun::star::uno::WeakReferenceHelper > OWeakRefArray;
 

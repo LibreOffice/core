@@ -71,41 +71,6 @@ namespace connectivity
                      ::com::sun::star::lang::XComponent* _pObject);
 
         void checkDisposed(sal_Bool _bThrow) throw ( ::com::sun::star::lang::DisposedException );
-        //************************************************************
-        // OSubComponent
-        //************************************************************
-        template <class SELF, class WEAK> class OSubComponent
-        {
-        protected:
-            // the parent must support the tunnel implementation
-            ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > m_xParent;
-            SELF*   m_pDerivedImplementation;
-
-        public:
-            OSubComponent(
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xParent,
-                    SELF* _pDerivedImplementation)
-                :m_xParent(_xParent)
-                ,m_pDerivedImplementation(_pDerivedImplementation)
-            {
-            }
-
-        protected:
-            void dispose_ChildImpl()
-            {
-                ::osl::MutexGuard aGuard( m_pDerivedImplementation->rBHelper.rMutex );
-                m_xParent = NULL;
-            }
-            void relase_ChildImpl()
-            {
-                release(m_pDerivedImplementation->m_refCount,
-                                        m_pDerivedImplementation->rBHelper,
-                                        m_xParent,
-                                        m_pDerivedImplementation);
-
-                m_pDerivedImplementation->WEAK::release();
-            }
-        };
 
 
         template <class TYPE>
@@ -182,41 +147,12 @@ namespace connectivity
             return s_pProps;
         }
 
-
-
         class OBase_Mutex
         {
         public:
             ::osl::Mutex m_aMutex;
         };
 
-        namespace internal
-        {
-            template <class T>
-            void implCopySequence(const T* _pSource, T*& _pDest, sal_Int32 _nSourceLen)
-            {
-                for (sal_Int32 i=0; i<_nSourceLen; ++i, ++_pSource, ++_pDest)
-                    *_pDest = *_pSource;
-            }
-        }
-        //-------------------------------------------------------------------------
-        /// concat two sequences
-        template <class T>
-        ::com::sun::star::uno::Sequence<T> concatSequences(const ::com::sun::star::uno::Sequence<T>& _rLeft, const ::com::sun::star::uno::Sequence<T>& _rRight)
-        {
-            sal_Int32 nLeft(_rLeft.getLength()), nRight(_rRight.getLength());
-            const T* pLeft = _rLeft.getConstArray();
-            const T* pRight = _rRight.getConstArray();
-
-            sal_Int32 nReturnLen(nLeft + nRight);
-            ::com::sun::star::uno::Sequence<T> aReturn(nReturnLen);
-            T* pReturn = aReturn.getArray();
-
-            internal::implCopySequence(pLeft, pReturn, nLeft);
-            internal::implCopySequence(pRight, pReturn, nRight);
-
-            return aReturn;
-        }
 
 
 
