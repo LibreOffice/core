@@ -338,7 +338,9 @@ public:
     FASTBOOL IsOutlText() const { return bTextFrame && (eTextKind==OBJ_OUTLINETEXT || eTextKind==OBJ_TITLETEXT); }
     SdrObjKind GetTextKind() const { return eTextKind; }
 
+    // #121917#
     virtual bool HasText() const;
+
     FASTBOOL HasEditText() const;
     sal_Bool IsTextEditActive() const { return (pEdtOutl != 0L); }
 

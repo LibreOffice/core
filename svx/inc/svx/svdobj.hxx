@@ -1125,6 +1125,9 @@ public:
     Rectangle GetBLIPSizeRectangle() const;
     void SetBLIPSizeRectangle( const Rectangle& aRect );
 
+    // #121917#
+    virtual bool HasText() const;
+
 protected:
     void    impl_setUnoShape( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxUnoShape );
 

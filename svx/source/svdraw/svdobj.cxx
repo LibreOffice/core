@@ -3179,6 +3179,12 @@ void SdrObject::SetContextWritingMode( const sal_Int16 /*_nContextWritingMode*/ 
     // this base class does not support different writing modes, so ignore the call
 }
 
+// #121917#
+bool SdrObject::HasText() const
+{
+    return false;
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 //
 //   @@@@  @@@@@  @@@@@@  @@@@@  @@@@   @@@@  @@@@@@  @@@@  @@@@@  @@  @@
