@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <integer name="thumbnail_border_width">3</integer>
-
     <style name="Theme.ImpressRemote" parent="Theme.Sherlock.Light.DarkActionBar">
         <item name="android:actionBarStyle">@style/Theme.ImpressRemote.ActionBar</item>
         <item name="actionBarStyle">@style/Theme.ImpressRemote.ActionBar</item>
@@ -45,12 +43,6 @@
     <style name="Theme.ImpressRemote.ComputerCreation.ActionBar" parent="Theme.ImpressRemote.ActionBar">
         <item name="android:displayOptions">showCustom</item>
         <item name="displayOptions">showCustom</item>
-    </style>
-
-    <style name="Theme.ImpressRemote.ActionBarWidget" parent="android:style/Widget.Holo.Light">
-        <item name="android:background">@color/orange</item>
-        <item name="android:textColor">@color/white</item>
-        <item name="android:textSize">22dp</item>
     </style>
 
 </resources>

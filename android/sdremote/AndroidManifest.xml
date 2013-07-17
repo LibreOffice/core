@@ -48,45 +48,12 @@
         </activity>
 
         <activity
-            android:name=".SelectorActivity"
-            android:label="@string/selector_choose_a_computer"
-            android:uiOptions="splitActionBarWhenNarrow">
-        </activity>
-
-        <activity
-            android:name=".PairingActivity"
-            android:noHistory="true">
-        </activity>
-
-        <activity
-            android:name=".StartPresentationActivity"
-            android:label="@string/startpresentation_title">
-        </activity>
-
-        <activity
-            android:name=".PresentationActivity"
-            android:label="@string/title_activity_presentation">
-        </activity>
-
-        <activity
-            android:name=".SettingsActivity"
-            android:icon="@drawable/icon_options"
-            android:label="@string/options">
-        </activity>
-
-        <activity
-            android:name=".communication.ReconnectionActivity"
-            android:label="@string/reconnect">
-        </activity>
-
-        <activity
             android:name=".LicensesActivity"
             android:label="@string/title_licenses">
         </activity>
 
         <service
-            android:name=".communication.CommunicationService"
-            android:label="@string/startpresentation_title">
+            android:name=".communication.CommunicationService">
         </service>
 
     </application>

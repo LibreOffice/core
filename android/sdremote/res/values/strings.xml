@@ -1,68 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="menu_settings">Settings</string>
-    <string name="title_activity_presentation">PresentationActivity</string>
-    <string name="presentation_ui_resizehandle">Handle to resize view.</string>
-    <string name="presentation_blank_screen">Blank Screen</string>
-    <string name="options">Options</string>
-    <string name="reconnect">Reconnect...</string>
-    <string name="actionbar_timeformat">h:mmaa</string>
-    <string name="actionbar_timerformat">mm:ss</string>
-    <string name="clock_timer_start">Start</string>
-    <string name="clock_timer_pause">Pause</string>
-    <string name="clock_timer_restart">Restart</string>
-    <string name="clock_timer_reset">Reset</string>
-    <string name="clock_timer_resume">Resume</string>
-    <string name="options_autodecline">Decline Calls</string>
-    <string name="help">Help</string>
-    <string name="ConnectionFailedHelp">#1 Verify Impress is running \n#2 For Bluetooth user, enable \"Preferences\"-\"LibreOffice Impress\"-\"General\"-\"Enable remote control\"\n#3 For WiFi user, tick \"Preferences\"-\"LibreOffice\"-\"Advanced\"-\"Enable Experimental Features\" \n </string>
-    <string name="options_description">Automatically decline all incoming calls.</string>
-    <string name="options_volumeswitching">Volume Switching</string>
-    <string name="options_volumeswitching_descripton">Change slides using volume buttons</string>
-    <string name="options_enablewifi">Enable wireless</string>
-    <string name="options_enablewifi_descripton">Try to connect to the computer over wireless</string>
-    <string name="options_switchcomputer">Switch computer</string>
-    <string name="blankscreen_return">Return to Slide</string>
-    <string name="bluetooth">Bluetooth</string>
-    <string name="wifi">Wi-Fi</string>
-    <string name="selector_noservers">Searching for computers…</string>
-    <string name="selector_delete">Remove computer</string>
-    <string name="selector_choose_a_computer">Choose a Computer</string>
-    <string name="selector_dialog_connecting">Attempting to connect to {0}…</string>
-    <string name="selector_dialog_connectionfailed">Impress Remote could not connect to {0}.</string>
-    <string name="selector_dialog_connectionfailed_ok">OK</string>
-    <string name="pairing_instructions_1">In Impress, click on the "Slideshow" menu and select "Impress Remote".</string>
-    <string name="pairing_instructions_2_deviceName">Choose "{0}" as your device.</string>
-    <string name="pairing_instructions_3">Then input this PIN:</string>
-    <string name="startpresentation_instruction">No presentation is currently running.</string>
-    <string name="startpresentation_button">Start Presentation</string>
-    <string name="startpresentation_title">Start Presentation</string>
-    <string name="about">About</string>
-    <string name="about_close">Close</string>
-    <string name="about_versionstring">Version: {0} (Build ID: {1})</string>
-    <string name="about_copyright">Copyright © 2012 LibreOffice Contributors and/or their affiliates.</string>
-    <string name="about_licence">This app is released under the Mozilla Public License, v. 2.0.</string>
-    <string name="about_libraries">This app uses android-coverflow\n\tCopyright © 2011, Polidea\n\tNew BSD License.\n\nThis app uses ActionBarSherlock:\n\tCopyright 2012 Jake Wharton\n\tLicensed under the Apache License, Version 2.0 (the "License")</string>
-    <string name="addserver">Add Wi-Fi Computer Manually</string>
-    <string name="addserver_entername">Computer name:</string>
-    <string name="addserver_enteraddress">Computer IP address or hostname:</string>
-    <string name="addserver_remember">Remember this computer next time</string>
-    <string name="addserver_add">Add</string>
-    <string name="addserver_cancel">Cancel</string>
-    <string name="reconnect_description1">Your connection has been dropped.</string>
-    <string name="reconnect_description2">Please try to reconnect</string>
-    <string name="wifiAlertMsg">This is still an experimental feature. You need to \"enable experimental features\" in \"Preferences\"-\"LibreOffice\"-\"Advanced\" on your computer. \nThe use over Bluetooth is recommended.</string>
-    <string-array name="countdown_values">
-        <item >5:00</item>
-        <item >10:00</item>
-        <item >15:00</item>
-        <item >20:00</item>
-        <item >30:00</item>
-        <item >45:00</item>
-    </string-array>
-    <string name="wrong_time_format">You have entered wrong time format</string>
-
     <string name="application_name">Impress Remote</string>
 
     <string name="title_computers">Computers</string>
