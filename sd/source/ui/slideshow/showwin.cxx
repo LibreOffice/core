@@ -268,6 +268,8 @@ void ShowWindow::Paint(const Rectangle& rRect)
 
         if( SHOWWINDOWMODE_END == meShowWindowMode )
         {
+            if (mpViewShell->GetDoc()->IsStartWithPresentation()) //End reached, exit (only when in autoplay mode (pps/ppsx)
+                mpViewShell->GetDoc()->SetExitAfterPresenting(true);
             DrawEndScene();
         }
         else if( SHOWWINDOWMODE_PAUSE == meShowWindowMode )
