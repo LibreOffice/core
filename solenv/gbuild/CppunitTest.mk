@@ -349,7 +349,6 @@ $(eval $(foreach method,\
 	use_libraries \
 	add_linked_static_libs \
 	use_static_libraries \
-	add_noexception_objects \
 	add_objcobject \
 	add_objcobjects \
 	add_objcxxobject \

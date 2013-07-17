@@ -34,7 +34,7 @@ for x in $headers; do
         while read line ; do
             if test "$line" = "))" ; then
                 inobjects=
-            elif echo $line | grep -q -e add_exception_objects -e add_noexception_objects -e add_cxxobject -e add_cxxobjects ; then
+            elif echo $line | grep -q -e add_exception_objects -e add_cxxobject -e add_cxxobjects ; then
                 inobjects=1
                 if test $ifstack -ne 0 ; then
                     echo Sources in a conditional, ignoring for now. >&2

@@ -201,7 +201,6 @@ $(eval $(foreach method,\
 	add_asmobjects \
 	add_exception_objects \
 	add_x64_generated_exception_objects \
-	add_noexception_objects \
 	add_generated_cobjects \
 	add_generated_cxxobjects \
 	add_generated_exception_objects \

@@ -1077,15 +1077,6 @@ $(foreach scanner,$(2),$(call gb_LinkTarget_add_scanner,$(1),$(scanner),$(4)))
 
 endef
 
-define gb_LinkTarget_add_noexception_object
-$(call gb_LinkTarget_add_cxxobject,$(1),$(2),$(gb_LinkTarget_NOEXCEPTIONFLAGS) $(call gb_LinkTarget__get_cxxflags,$(3)))
-ifeq ($(gb_ENABLE_PCH),$(true))
-# noexception objects are rare, so generate matching .pch only when needed
-$(call gb_CxxObject_get_target,$(2)) : $(call gb_NoexPrecompiledHeader_get_timestamp,$(1))
-$(call gb_LinkTarget_get_target,$(1)) : PCHOBJS = $$(PCHOBJEX) $$(PCHOBJNOEX)
-endif
-endef
-
 define gb_LinkTarget_add_exception_object
 $(call gb_LinkTarget_add_cxxobject,$(1),$(2),$(gb_LinkTarget_EXCEPTIONFLAGS) $(call gb_LinkTarget__get_cxxflags,$(3)))
 endef
@@ -1147,10 +1138,6 @@ endef
 
 define gb_LinkTarget_add_asmobjects
 $(foreach obj,$(2),$(call gb_LinkTarget_add_asmobject,$(1),$(obj),$(3)))
-endef
-
-define gb_LinkTarget_add_noexception_objects
-$(foreach obj,$(2),$(call gb_LinkTarget_add_noexception_object,$(1),$(obj),$(4)))
 endef
 
 define gb_LinkTarget_add_exception_objects

@@ -112,7 +112,6 @@ $(eval $(foreach method,\
 	add_scanner \
 	add_scanners \
 	add_exception_objects \
-	add_noexception_objects \
 	add_generated_cobjects \
 	add_generated_cxxobjects \
 	add_generated_exception_objects \
