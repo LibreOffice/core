@@ -56,23 +56,6 @@ using namespace com::sun::star::container;
 using namespace com::sun::star::io;
 using namespace com::sun::star::util;
 
-/*
- *    Print the status, the SQLCODE, and exit.
- *    Also, indicate which operation the error occured on.
- */
-static int pr_error (const ISC_STATUS* status, const char* operation)
-{
-    SAL_WARN("connectivity.firebird", "=> OResultSet static pr_error().");
-
-    isc_print_status(status);
-
-    SAL_WARN("connectivity.firebird", "=> OResultSet static pr_error(). "
-             "PROBLEM ON " << operation << ". "
-             "SQLCODE: " << isc_sqlcode(status) << ".");
-
-    return 1;
-}
-
 //------------------------------------------------------------------------------
 //  IMPLEMENT_SERVICE_INFO(OResultSet,"com.sun.star.sdbcx.OResultSet","com.sun.star.sdbc.ResultSet");
 ::rtl::OUString SAL_CALL OResultSet::getImplementationName(  ) throw ( RuntimeException)    \
@@ -100,39 +83,41 @@ sal_Bool SAL_CALL OResultSet::supportsService( const ::rtl::OUString& _rServiceN
 }
 
 // -------------------------------------------------------------------------
-OResultSet::OResultSet(OStatement_Base* pStmt)
+OResultSet::OResultSet(OStatement_Base* pStmt,
+                       XSQLDA* pSqlda)
     : OResultSet_BASE(m_aMutex)
     ,OPropertySetHelper(OResultSet_BASE::rBHelper)
     ,m_pStatement(pStmt)
     ,m_aStatement((OWeakObject*)pStmt)
     ,m_xMetaData(NULL)
+    ,m_pSqlda(pSqlda)
     ,m_nTextEncoding(pStmt->getOwnConnection()->getTextEncoding())
     ,m_bWasNull(sal_True)
     ,m_row(-1)
 {
     SAL_INFO("connectivity.firebird", "=> OResultSet::OResultSet().");
 
-    isc_stmt_handle stmt = m_pStatement->getSTMTHandler();
-    XSQLDA *sqlda = m_pStatement->getOUTsqlda();
-    if (sqlda == NULL)
+    isc_stmt_handle stmt = 0;// m_pStatement->getSTMTHandler();
+
+    if (pSqlda == NULL)
     {
         m_rowCount = 0;
         m_fieldCount = 0;
     } else {
         m_rowCount = 0;
-        m_fieldCount = sqlda->sqld;
+        m_fieldCount = pSqlda->sqld;
     }
 
     ISC_STATUS_ARRAY status;  // status vector
     ISC_STATUS retcode;
     int j = 0;
-    while ((retcode = isc_dsql_fetch(status, &stmt, 1, sqlda)) == 0)
+    while ((retcode = isc_dsql_fetch(status, &stmt, 1, pSqlda)) == 0)
     {
         m_rowCount++;
 
         TRow row(m_fieldCount);
         XSQLVAR *var = NULL;
-        for (j=0, var = sqlda->sqlvar; j < m_fieldCount; j++, var++)
+        for (j=0, var = pSqlda->sqlvar; j < m_fieldCount; j++, var++)
         {
             row[j] = OUString(var->sqldata, var->sqllen, RTL_TEXTENCODING_UTF8);
         }
@@ -142,12 +127,12 @@ OResultSet::OResultSet(OStatement_Base* pStmt)
     {
         SAL_INFO("connectivity.firebird", "=> OResultSet::OResultSet(). "
                  "Retcode: " << retcode);
-        if (pr_error(status, "fetch data"))
-            return;
+//         if (pr_error(status, "fetch data"))
+//             return;
     }
-    if (isc_dsql_free_statement(status, &stmt, DSQL_close))
-        if (pr_error(status, "free statement"))
-            return;
+//     if (isc_dsql_free_statement(status, &stmt, DSQL_close))
+//         if (pr_error(status, "free statement"))
+//             return;
 }
 // -------------------------------------------------------------------------
 OResultSet::~OResultSet()

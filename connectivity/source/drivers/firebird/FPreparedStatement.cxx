@@ -61,25 +61,10 @@ typedef struct vary {
 
 IMPLEMENT_SERVICE_INFO(OPreparedStatement,"com.sun.star.sdbcx.firebird.PreparedStatement","com.sun.star.sdbc.PreparedStatement");
 
-/*
- *    Print the status, the SQLCODE, and exit.
- *    Also, indicate which operation the error occured on.
- */
-static int pr_error (const ISC_STATUS* status, const char* operation)
-{
-    SAL_WARN("connectivity.firebird", "=> OPreparedStatement static pr_error().");
 
-    isc_print_status(status);
-
-    SAL_WARN("connectivity.firebird", "=> OPreparedStatement static pr_error(). "
-             "PROBLEM ON " << operation << ". "
-             "SQLCODE: " << isc_sqlcode(status) << ".");
-
-    return 1;
-}
-
-
-OPreparedStatement::OPreparedStatement( OConnection* _pConnection,const TTypeInfoVector& _TypeInfo,const ::rtl::OUString& sql)
+OPreparedStatement::OPreparedStatement( OConnection* _pConnection,
+                                        const TTypeInfoVector& _TypeInfo,
+                                        const OUString& sql)
     :OStatement_BASE2(_pConnection)
     ,m_aTypeInfo(_TypeInfo)
     ,m_nNumParams(0)
@@ -89,7 +74,8 @@ OPreparedStatement::OPreparedStatement( OConnection* _pConnection,const TTypeInf
     SAL_INFO("connectivity.firebird", "=> OPreparedStatement::OPreparedStatement_BASE(). "
              "sql: " << sql);
 
-    prepareQuery(m_sSqlStatement);
+//     prepareQuery(m_sSqlStatement);
+    (void) sql;
 }
 
 // -----------------------------------------------------------------------------
@@ -232,26 +218,15 @@ Reference< XResultSet > SAL_CALL OPreparedStatement::executeQuery(  ) throw(SQLE
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
 
-    ISC_STATUS_ARRAY status; /* status vector */
-    if (0 == m_TRANSHandler)
-    {
-        isc_db_handle db = m_pConnection->getDBHandler();   // database handle
-        if (isc_start_transaction(status, &m_TRANSHandler, 1, &db, 0, NULL))
-            if (pr_error(status, "start transaction"))
-                return NULL;
-    }
+//     ISC_STATUS_ARRAY status; /* status vector */
 
-    if (isc_dsql_execute(status, &m_TRANSHandler, &m_STMTHandler, 1, m_INsqlda))
-        if (pr_error(status, "execute query"))
-            return NULL;
+//     if (isc_dsql_execute(status, &m_pConnection->getTransaction(), &m_statementHandle, 1, m_INsqlda))
+//         if (pr_error(status, "execute query"))
+//             return NULL;
 
-    Reference< OResultSet > pResult( new OResultSet( this) );
+    Reference< OResultSet > pResult( new OResultSet( this, 0) );
     //initializeResultSet( pResult.get() );
     Reference< XResultSet > xRS = pResult.get();
-
-    if (isc_commit_transaction(status, &m_TRANSHandler))
-        if (pr_error(status, "commit transaction"))
-            return NULL;
 
     SAL_INFO("connectivity.firebird", "=> OPreparedStatement::executeQuery(). "
              "Query executed.");

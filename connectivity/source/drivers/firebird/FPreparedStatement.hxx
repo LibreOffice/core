@@ -97,7 +97,9 @@ namespace connectivity
         public:
             DECLARE_SERVICE_INFO();
             // a constructor, which is required for returning objects:
-            OPreparedStatement( OConnection* _pConnection,const TTypeInfoVector& _TypeInfo,const ::rtl::OUString& sql);
+            OPreparedStatement( OConnection* _pConnection,
+                                const TTypeInfoVector& _TypeInfo,
+                                const ::rtl::OUString& sql);
 
             //XInterface
             virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);

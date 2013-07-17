@@ -169,12 +169,21 @@ namespace connectivity
             virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException);
 
             inline ::rtl::OUString  getUserName()       const { return m_sUser; }
-            inline isc_db_handle    getDBHandler()      const { return m_DBHandler; }
+            inline isc_db_handle&    getDBHandle()       { return m_DBHandler; }
             inline FirebirdDriver*  getDriver()         const { return m_pDriver;}
             inline rtl_TextEncoding getTextEncoding()   const { return m_nTextEncoding; }
 
             ::rtl::OUString         getConnectionURL()  const { return m_sConnectionURL; }
             sal_Bool                isEmbedded()        const { return m_bIsEmbedded; }
+            isc_tr_handle&          getTransaction();
+
+            /**
+             * Evaluate a firebird status vector and throw exceptions as necessary.
+             * The content of the status vector is included in the thrown exception.
+             */
+            void evaluateStatusVector( ISC_STATUS_ARRAY& aStatusVector,
+                                       const ::rtl::OUString& aCause )
+                throw (::com::sun::star::sdbc::SQLException);
         };
     }
 }

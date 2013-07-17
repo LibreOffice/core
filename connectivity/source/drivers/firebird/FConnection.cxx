@@ -71,6 +71,8 @@
 using namespace connectivity::firebird;
 using namespace connectivity;
 
+using namespace ::osl;
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
@@ -289,7 +291,7 @@ Reference< XStatement > SAL_CALL OConnection::createStatement( )
 {
     SAL_INFO("connectivity.firebird", "=> OConnection::createStatement().");
 
-    ::osl::MutexGuard aGuard( m_aMutex );
+    MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
 
     // the pre
@@ -312,7 +314,7 @@ Reference< XPreparedStatement > SAL_CALL OConnection::prepareStatement(
     SAL_INFO("connectivity.firebird", "=> OConnection::prepareStatement(). "
              "Got called with sql: " << _sSql);
 
-    ::osl::MutexGuard aGuard( m_aMutex );
+    MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
 
     // the pre
@@ -324,7 +326,9 @@ Reference< XPreparedStatement > SAL_CALL OConnection::prepareStatement(
 
     // create a statement
     // the statement can only be executed more than once
-    Reference< XPreparedStatement > xReturn = new OPreparedStatement(this,m_aTypeInfo,_sSql);
+    Reference< XPreparedStatement > xReturn = new OPreparedStatement(this,
+                                                                     m_aTypeInfo,
+                                                                     _sSql);
     m_aStatements.push_back(WeakReferenceHelper(xReturn));
 
     SAL_INFO("connectivity.firebird", "=> OConnection::prepareStatement(). "
@@ -339,7 +343,7 @@ Reference< XPreparedStatement > SAL_CALL OConnection::prepareCall(
     SAL_INFO("connectivity.firebird", "=> OConnection::prepareCall(). "
              "_sSql: " << _sSql);
 
-    ::osl::MutexGuard aGuard( m_aMutex );
+    MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
 
     // not implemented yet :-) a task to do
@@ -349,7 +353,7 @@ Reference< XPreparedStatement > SAL_CALL OConnection::prepareCall(
 OUString SAL_CALL OConnection::nativeSQL( const OUString& _sSql )
                                         throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    MutexGuard aGuard( m_aMutex );
     // We do not need to adapt the SQL for Firebird atm.
     return _sSql;
 }
@@ -357,7 +361,7 @@ OUString SAL_CALL OConnection::nativeSQL( const OUString& _sSql )
 void SAL_CALL OConnection::setAutoCommit( sal_Bool autoCommit )
                                         throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
 
     m_bAutoCommit = autoCommit;
@@ -370,7 +374,7 @@ void SAL_CALL OConnection::setAutoCommit( sal_Bool autoCommit )
 
 sal_Bool SAL_CALL OConnection::getAutoCommit() throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
 
     return m_bAutoCommit;
@@ -378,6 +382,7 @@ sal_Bool SAL_CALL OConnection::getAutoCommit() throw(SQLException, RuntimeExcept
 
 void OConnection::setupTransaction()
 {
+    MutexGuard aGuard( m_aMutex );
     ISC_STATUS status_vector[20];
 
     // TODO: is this sensible? If we have changed parameters then transaction
@@ -422,9 +427,19 @@ void OConnection::setupTransaction()
 
 }
 
+isc_tr_handle& OConnection::getTransaction()
+{
+    MutexGuard aGuard( m_aMutex );
+    if (!m_transactionHandle)
+    {
+        setupTransaction();
+    }
+    return m_transactionHandle;
+}
+
 void SAL_CALL OConnection::commit() throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
 
     ISC_STATUS status_vector[20];
@@ -437,7 +452,7 @@ void SAL_CALL OConnection::commit() throw(SQLException, RuntimeException)
 
 void SAL_CALL OConnection::rollback() throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
 
     ISC_STATUS status_vector[20];
@@ -450,7 +465,7 @@ void SAL_CALL OConnection::rollback() throw(SQLException, RuntimeException)
 
 sal_Bool SAL_CALL OConnection::isClosed(  ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    MutexGuard aGuard( m_aMutex );
 
     // just simple -> we are close when we are disposed taht means someone called dispose(); (XComponent)
     return OConnection_BASE::rBHelper.bDisposed;
@@ -460,7 +475,7 @@ Reference< XDatabaseMetaData > SAL_CALL OConnection::getMetaData(  ) throw(SQLEx
 {
     SAL_INFO("connectivity.firebird", "=> OConnection::getMetaData().");
 
-    ::osl::MutexGuard aGuard( m_aMutex );
+    MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
 
     // here we have to create the class with biggest interface
@@ -478,7 +493,7 @@ Reference< XDatabaseMetaData > SAL_CALL OConnection::getMetaData(  ) throw(SQLEx
 void SAL_CALL OConnection::setReadOnly(sal_Bool readOnly)
                                             throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
 
     m_bReadOnly = readOnly;
@@ -487,7 +502,7 @@ void SAL_CALL OConnection::setReadOnly(sal_Bool readOnly)
 
 sal_Bool SAL_CALL OConnection::isReadOnly() throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
 
     return m_bReadOnly;
@@ -508,7 +523,7 @@ OUString SAL_CALL OConnection::getCatalog() throw(SQLException, RuntimeException
 
 void SAL_CALL OConnection::setTransactionIsolation( sal_Int32 level ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
 
     m_aTransactionIsolation = level;
@@ -517,7 +532,7 @@ void SAL_CALL OConnection::setTransactionIsolation( sal_Int32 level ) throw(SQLE
 
 sal_Int32 SAL_CALL OConnection::getTransactionIsolation(  ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
 
     return m_aTransactionIsolation;
@@ -543,7 +558,7 @@ void SAL_CALL OConnection::close(  ) throw(SQLException, RuntimeException)
 
     // we just dispose us
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
+        MutexGuard aGuard( m_aMutex );
         checkDisposed(OConnection_BASE::rBHelper.bDisposed);
 
     }
@@ -598,7 +613,7 @@ void OConnection::buildTypeInfo() throw( SQLException)
 {
     SAL_INFO("connectivity.firebird", "=> OConnection::buildTypeInfo().");
 
-    ::osl::MutexGuard aGuard( m_aMutex );
+    MutexGuard aGuard( m_aMutex );
 
     Reference< XResultSet> xRs = getMetaData ()->getTypeInfo ();
     Reference< XRow> xRow(xRs,UNO_QUERY);
@@ -652,7 +667,7 @@ void OConnection::disposing()
     SAL_INFO("connectivity.firebird", "=> OConnection::disposing().");
 
     // we noticed that we should be destroied in near future so we have to dispose our statements
-    ::osl::MutexGuard aGuard(m_aMutex);
+    MutexGuard aGuard(m_aMutex);
 
     for (OWeakRefArray::iterator i = m_aStatements.begin(); m_aStatements.end() != i; ++i)
     {
@@ -675,8 +690,32 @@ void OConnection::disposing()
     dispose_ChildImpl();
     cppu::WeakComponentImplHelperBase::disposing();
 }
-// -----------------------------------------------------------------------------
 
+void SAL_CALL OConnection::evaluateStatusVector( ISC_STATUS_ARRAY& aStatusVector,
+                                                 const OUString& aCause )
+    throw(SQLException)
+{
+    if (aStatusVector[0]==1 && aStatusVector[1]) // indicates error
+    {
+        OUStringBuffer buf;
+        buf.appendAscii( "firebird_sdbc error: ");
 
+        char msg[512];
+        const ISC_STATUS* pStatus = (const ISC_STATUS*) &aStatusVector;
+
+        while(fb_interpret(msg, sizeof(msg), &pStatus))
+        {
+            // TODO: verify encoding
+            buf.append(OUString(msg, strlen(msg), RTL_TEXTENCODING_UTF8));
+        }
+        buf.appendAscii( " (caused by '" );
+        buf.append( aCause );
+        buf.appendAscii( "')" );
+        OUString error = buf.makeStringAndClear();
+        SAL_WARN( "connectivity.firebird", error );
+
+        throw SQLException( error, *this, OUString(), 1, Any() );
+    }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

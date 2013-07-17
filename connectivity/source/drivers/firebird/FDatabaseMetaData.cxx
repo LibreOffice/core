@@ -764,9 +764,10 @@ sal_Bool SAL_CALL ODatabaseMetaData::insertsAreDetected( sal_Int32 setType ) thr
     (void) setType;
     return sal_False;
 }
-// -------------------------------------------------------------------------
-sal_Bool SAL_CALL ODatabaseMetaData::supportsBatchUpdates(  ) throw(SQLException, RuntimeException)
+
+sal_Bool SAL_CALL ODatabaseMetaData::supportsBatchUpdates() throw(SQLException, RuntimeException)
 {
+    // No batch support in firebird
     return sal_False;
 }
 
