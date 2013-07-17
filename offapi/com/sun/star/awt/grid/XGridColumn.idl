@@ -91,7 +91,7 @@ published interface XGridColumn
      */
     [attribute] ::com::sun::star::style::HorizontalAlignment HorizontalAlign;
 
-    /** A title is displayed in the column header row if UnoControlGridModel::ShowRowHeader() is set to `TRUE`**/
+    /** A title is displayed in the column header row if UnoControlGridModel::ShowColumnHeader() is set to `TRUE`**/
     [attribute] string Title;
 
     /** is the help text associated with the column.
