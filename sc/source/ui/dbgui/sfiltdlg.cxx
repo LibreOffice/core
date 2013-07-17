@@ -69,6 +69,7 @@ ScSpecialFilterDlg::ScSpecialFilterDlg( SfxBindings* pB, SfxChildWindow* pCW, Wi
 {
         get(pLbFilterArea,"lbfilterarea");
         get(pEdFilterArea,"edfilterarea");
+        pEdFilterArea->SetReferences(this, get<VclFrame>("filterframe")->get_label_widget());
         get(pRbFilterArea,"rbfilterarea");
         pRbFilterArea->SetReferences(this, pEdFilterArea);
         get(pBtnCase,"case");
@@ -78,6 +79,7 @@ ScSpecialFilterDlg::ScSpecialFilterDlg( SfxBindings* pB, SfxChildWindow* pCW, Wi
         get(pBtnCopyResult,"copyresult");
         get(pLbCopyArea,"lbcopyarea");
         get(pEdCopyArea,"edcopyarea");
+        pEdCopyArea->SetReferences(this, pBtnCopyResult);
         get(pRbCopyArea,"rbcopyarea");
         pRbCopyArea->SetReferences(this, pEdCopyArea);
         get(pBtnDestPers,"destpers");

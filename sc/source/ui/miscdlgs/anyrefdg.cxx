@@ -486,7 +486,7 @@ void ScFormulaReferenceHelper::RefInputStart( formula::RefEdit* pEdit, formula::
             {
                 String sNewDialogText = sOldDialogText;
                 sNewDialogText.AppendAscii(RTL_CONSTASCII_STRINGPARAM( ": " ));
-                sNewDialogText += sLabel;
+                sNewDialogText += comphelper::string::stripEnd(sLabel, ':');
                 m_pWindow->SetText( MnemonicGenerator::EraseAllMnemonicChars( sNewDialogText ) );
             }
         }
