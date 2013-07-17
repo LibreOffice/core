@@ -25,12 +25,16 @@ diff -u firebird/builds/posix/make.defaults firebird/builds/posix/make.defaults
  RANLIB=			@RANLIB@
  BTYACC=$(ROOT)/extern/btyacc/btyacc
  
-@@ -152,16 +160,28 @@
+@@ -152,16 +160,32 @@
  STATICEXE_LINK:= @CXX@ $(GLOB_OPTIONS) $(CXXFLAGS)
  
  LINK_LIBS = @LIBS@
 +ifeq ($(PLATFORM),win32)
++ifeq ($(MSVC_USE_DEBUG_RUNTIME),TRUE)
++ICU_LIBS = -licuucd -licudtd -licuind
++else
 +ICU_LIBS = -licuuc -licudt -licuin
++endif
 +else
  ICU_LIBS = -licuuc -licudata -licui18n
 +endif
