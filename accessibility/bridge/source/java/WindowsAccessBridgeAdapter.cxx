@@ -268,7 +268,7 @@ void handleWindowEvent(Window * pWindow, bool bShow)
                     // the event listener would not have been attached.
                     pJNIEnv->CallStaticVoidMethod(g_jcWindowsAccessBridgeAdapter,
                         (bShow) ? g_jmRegisterTopWindow : g_jmRevokeTopWindow,
-                        (jint) GetHWND(pWindow), joXAccessible );
+                        (jclass) GetHWND(pWindow), joXAccessible );
 
                     // Clear any exception that might have been occurred.
                     if (pJNIEnv->ExceptionCheck()) {
