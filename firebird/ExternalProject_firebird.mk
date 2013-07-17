@@ -34,9 +34,11 @@ $(call gb_ExternalProject_get_state_target,firebird,build):
 				-I$(call gb_UnpackedTarball_get_dir,icu)/source \
 				-I$(call gb_UnpackedTarball_get_dir,icu)/source/i18n \
 				-I$(call gb_UnpackedTarball_get_dir,icu)/source/common \
-				,$(ICU_CPPFLAGS)) \
+				,$(ICU_CPPFLAGS))" \
+		&& export LDFLAGS=" \
 				-L$(OUTDIR)/lib \
-				-L$(call gb_UnpackedTarball_get_dir,boost)/source/lib" \
+				$(if $(filter NO,$(SYSTEM_BOOST)), \
+					-L$(call gb_UnpackedTarball_get_dir,boost)/source/lib)" \
 		&& export LD_LIBRARY_PATH="$(OUTDIR)/lib:$(call gb_UnpackedTarball_get_dir,boost)/source/lib" \
 		&& export DYLD_LIBRARY_PATH="$(OUTDIR)/lib:$(call gb_UnpackedTarball_get_dir,boost)/source/lib" \
 		$(if $(filter WNT-MSC,$(OS)-$(COM)), && export PATH="$(PATH):$(shell cygpath $(OUTDIR)/lib):$(shell cygpath $(call gb_UnpackedTarball_get_dir,icu)/source/lib)") \
