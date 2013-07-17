@@ -92,18 +92,6 @@ diff -u firebird/builds/posix/make.defaults firebird/builds/posix/make.defaults
  ifeq ($(EDITLINE_FLG),Y)
    ifeq ($(STD_EDITLINE), true)
 unchanged:
---- firebird.org/builds/posix/make.shared.targets	2013-06-26 10:05:19.351343000 +0100
-+++ firebird/builds/posix/make.shared.targets	2013-07-01 10:55:25.435124900 +0100
-@@ -89,7 +93,7 @@
- 	$(BLRTABLE) > $(SRC_ROOT)/include/gen/blrtable.h
- 
- $(BLRTABLE): $(BLRTABLE_Objects)
--	$(STATICEXE_LINK) $(LINK_OPTS) $^ -o $@ -L$(LIB) $(LINK_LIBS)
-+	@CXX@ $^ -o $@ $(LINK_OPTS) $(GLOB_OPTIONS) $(CXXFLAGS) -L$(LIB) $(LINK_LIBS)
- 
- # Adding resources as prerequisite for some files
- 
-unchanged:
 --- firebird.org/builds/posix/make.shared.variables	2013-06-26 10:05:19.351343000 +0100
 +++ firebird/builds/posix/make.shared.variables	2013-07-04 08:12:24.432879700 +0100
 @@ -291,7 +291,8 @@
@@ -116,30 +104,6 @@ unchanged:
  
  #________________________________________________________________________
  #
-unchanged:
---- firebird.org/builds/posix/Makefile.in.boot.gpre	2013-06-26 10:05:19.351343000 +0100
-+++ firebird/builds/posix/Makefile.in.boot.gpre	2013-06-29 10:18:48.380186000 +0100
-@@ -76,7 +76,7 @@
- gpre_boot : $(GPRE_BOOT)
- 
- $(GPRE_BOOT):	$(GPREBOOT_Objects)
--	$(STATICEXE_LINK) $(LINK_OPTS) $^ -o $@ -L$(LIB) $(LINK_LIBS)
-+	$(LD) -o $@ $^ -L$(LIB) -doff $(GLOB_OPTIONS) $(CXXFLAGS) $(LINK_OPTS) $(LINK_LIBS)
- 	-$(RM) $(GPRE_CURRENT)
- 	(cd $(@D); $(LN) $(@F) $(notdir $(GPRE_CURRENT)))
- 
-unchanged:
---- firebird.org/builds/posix/Makefile.in.codes	2013-06-26 10:05:19.351343000 +0100
-+++ firebird/builds/posix/Makefile.in.codes	2013-07-03 16:29:45.287324700 +0100
-@@ -62,7 +62,7 @@
- 	$(GPRE_CURRENT) $(GPRE_FLAGS) $< $@
- 
- $(BIN)/codes$(EXEC_EXT): $(CODES_Objects) $(COMMON_Objects) $(LIBFBSTATIC_A)
--	$(STATICEXE_LINK) $(LINK_OPTS) $^ -o $@ -L$(LIB) $(LINK_LIBS) $(ICU_LIBS)
-+	@CXX@ $^ -o $@ -L$(LIB) $(GLOB_OPTIONS) $(CXXFLAGS) $(LINK_OPTS) $(LINK_LIBS) $(ICU_LIBS)
- 
- 
- # Rebuild ids.h
 unchanged:
 --- firebird/builds/posix/Makefile.in.examples	2013-07-04 14:22:42.262676600 +0100
 +++ firebird/builds/posix/Makefile.in.examples	2013-07-05 10:14:02.897675100 +0100
@@ -159,30 +123,6 @@ unchanged:
  
  INPUT_Files   =	empddl.sql empdml.sql indexoff.sql indexon.sql \
  		job.inp lang.inp proj.inp qtr.inp
-@@ -128,7 +131,11 @@
- 	-$(LN) $(ISQL_STATIC) $(EXAMPLES_DEST)/isql$(EXEC_EXT)
- 
- $(EXAMPLES_DEST)/empbuild$(EXEC_EXT): $(EMPBLD_Objects) $(COMMON_Objects) $(LIBFBSTATIC_A) 
-+ifeq (@PLATFORM@,win32)
-+	@CXX@ $ $(EMPBLD_Objects) $(COMMON_Objects) -o $@ -L$(LIB) -lfbstatic $(LINK_LIBS) $(ICU_LIBS) $(GLOB_OPTIONS) $(CXXFLAGS) $(LINK_OPTS)
-+else
- 	$(EXE_LINK) $(LINK_OPTS) $(EMPBLD_Objects) $(COMMON_Objects) -o $@ -L$(LIB) -lfbstatic $(LINK_LIBS) $(ICU_LIBS)
-+endif
- 
- $(EXAMPLES_DEST)/empbuild.c:	$(EXAMPLES_DEST)/empbuild.fdb $(EXAMPLES_DEST)/empbuild.e
- 
-@@ -146,7 +153,11 @@
- 	-$(CHMOD_6) intlemp.fdb
- 
- $(EXAMPLES_DEST)/intlbld$(EXEC_EXT): $(INTLBLD_Objects) $(COMMON_Objects) $(LIBFBSTATIC_A) 
-+ifeq (@PLATFORM@,win32)
-+	@CXX@ $(INTLBLD_Objects) $(COMMON_Objects) -o $@ -L$(LIB) -lfbstatic $(LINK_LIBS) $(ICU_LIBS) $(GLOB_OPTIONS) $(CXXFLAGS) $(LINK_OPTS)
-+else
- 	$(EXE_LINK) $(LINK_OPTS) $(INTLBLD_Objects) $(COMMON_Objects) -o $@ -L$(LIB) -lfbstatic $(LINK_LIBS) $(ICU_LIBS)
-+endif
- 
- $(EXAMPLES_DEST)/intlbld.c:	$(EXAMPLES_DEST)/intlbuild.fdb $(EXAMPLES_DEST)/intlbld.e
- 
 @@ -168,0 +180,3 @@
 +
 +$(EXAMPLES_DEST)/%.obj: $(EXAMPLES_DEST)/%.c 
@@ -227,6 +167,15 @@ unchanged:
  firebird_super firebird_server: firebird_basic super_targets fbtrace
  
  
+@@ -301,7 +301,7 @@
+ .PHONY: ref_databases msgs msgs_intl generated_headers intl extlib includes
+ 
+ basic_targets: ref_databases msgs msgs_intl generated_headers \
+-               intl extlib includes examples_cp
++               intl extlib includes
+ 
+ # hack to make code regeneration work
+ generated_headers :
 @@ -331,8 +336,9 @@
  .PHONY: libfbembed inet_server fb_smp_server embed_gfix embed_gbak embed_isql 
  .PHONY: embed_gpre embed_util
@@ -239,19 +188,15 @@ unchanged:
  
  libfbembed:
  	$(MAKE) $(CPU_OPTION) -f $(GEN_ROOT)/Makefile.libfbembed $@
-@@ -446,7 +452,11 @@
+@@ -446,7 +452,7 @@
  MAKE_HEADER_Bin = ./makeHeader
  
  $(INCLUDE_DEST)/ibase.h: $(SRC_IBASE_ExtraFiles)
-+ifeq (@PLATFORM@,win32)
-+	@CXX@ $(MAKE_HEADER_Src) -o $(MAKE_HEADER_Bin).exe $(GLOB_OPTIONS) $(CXXFLAGS)
-+else
- 	$(STATICEXE_LINK) -o $(MAKE_HEADER_Bin) $(MAKE_HEADER_Src)
-+endif
+-	$(STATICEXE_LINK) -o $(MAKE_HEADER_Bin) $(MAKE_HEADER_Src)
++	$(STATICEXE_LINK) -o $(MAKE_HEADER_Bin)$(EXEC_EXT) $(MAKE_HEADER_Src)
  	$(CP) $^ .
  	$(MAKE_HEADER_Bin) <ibase.h >$@
  	$(RM) -f ibase.h
-unchanged:
 --- firebird.org/builds/posix/Makefile.in.intl	2013-06-26 10:05:19.382231200 +0100
 +++ firebird/builds/posix/Makefile.in.intl	2013-07-04 12:26:09.029586700 +0100
 @@ -81,8 +81,13 @@
@@ -309,92 +254,6 @@ unchanged:
  	-$(RM) $@
  	$(AR) $@ $^
  	-$(RANLIB) $@
-unchanged:
---- firebird.org/builds/posix/Makefile.in.msgs	2013-06-26 10:05:19.382231200 +0100
-+++ firebird/builds/posix/Makefile.in.msgs	2013-07-03 15:57:24.494213200 +0100
-@@ -98,28 +98,28 @@
- check_messages : $(CHECK_MESSAGES) 
- 
- $(CHECK_MESSAGES):	$(CHECK_Objects) $(COMMON_Objects) $(LIBFBSTATIC_A)
--	$(STATICEXE_LINK) $(LINK_OPTS) $(CHECK_Objects) $(COMMON_Objects) -o $@ -L$(LIB) -lfbstatic $(LINK_LIBS) $(ICU_LIBS)
-+	@CXX@ $(CHECK_Objects) $(COMMON_Objects) -o $@ -L$(LIB) -lfbstatic $(LINK_LIBS) $(ICU_LIBS) $(GLOB_OPTIONS) $(CXXFLAGS) $(LINK_OPTS)
- 	$(CHMOD_7) $@
- 
- 
- build_file : $(BUILD_FILE) 
- 
- $(BUILD_FILE):	$(BUILD_Objects) $(COMMON_Objects) $(LIBFBSTATIC_A)
--	$(STATICEXE_LINK) $(LINK_OPTS) $(BUILD_Objects) $(COMMON_Objects) -o $@ -L$(LIB) -lfbstatic $(LINK_LIBS) $(ICU_LIBS)
-+	@CXX@  $(BUILD_Objects) $(COMMON_Objects) -o $@ -L$(LIB) -lfbstatic $(LINK_LIBS) $(ICU_LIBS) $(GLOB_OPTIONS) $(CXXFLAGS) $(LINK_OPTS)
- 	$(CHMOD_7) $@
- 
- 
- enter_messages : $(ENTER_MESSAGES)
- 
- $(ENTER_MESSAGES):	$(ENTER_Objects) $(LIBFBSTATIC_A)
--	$(STATICEXE_LINK) $(LINK_OPTS) $(ENTER_Objects) $(COMMON_Objects) -o $@ -L$(LIB) -lfbstatic $(LINK_LIBS) $(ICU_LIBS)
-+	@CXX@ $(ENTER_Objects) -o $@ -L$(LIB) -lfbstatic $(GLOB_OPTIONS) $(CXXFLAGS) $(LINK_OPTS) $(LINK_LIBS) $(ICU_LIBS)
- 	$(CHMOD_7) $@
- 
- 
- modify_messages: $(MODIFY_MESSAGES) 
- 
- $(MODIFY_MESSAGES):	$(MODIFY_Objects) $(LIBFBSTATIC_A) 
--	$(STATICEXE_LINK) $(LINK_OPTS) $(MODIFY_Objects) $(COMMON_Objects) -o $@ -L$(LIB) -lfbstatic $(LINK_LIBS) $(ICU_LIBS)
-+	@CXX@  $(MODIFY_Objects) $(COMMON_Objects) -o $@ -L$(LIB) -lfbstatic $(GLOB_OPTIONS) $(CXXFLAGS) $(LINK_OPTS) $(LINK_LIBS) $(ICU_LIBS)
- 	$(CHMOD_7) $@
- 
- 
-unchanged:
---- firebird.org/builds/posix/Makefile.in.static.createdb	2013-06-26 10:05:19.382231200 +0100
-+++ firebird/builds/posix/Makefile.in.static.createdb	2013-07-02 16:25:50.422666900 +0100
-@@ -58,7 +58,7 @@
- create_db: $(CREATE_DB)
- 
- $(CREATE_DB):	$(CREATEDB_Objects) $(COMMON_Objects) $(LIBFBSTATIC_A)
--	$(STATICEXE_LINK) $(LINK_OPTS) $^ -o $@ -L$(LIB) $(LINK_LIBS) $(ICU_LIBS)
-+	@CXX@ $^ -o $@ -L$(LIB) $(GLOB_OPTIONS) $(CXXFLAGS) $(LINK_OPTS) $(LINK_LIBS) $(ICU_LIBS)
- 
- 
- include $(ROOT)/gen/make.shared.targets
-unchanged:
---- firebird.org/builds/posix/Makefile.in.static.gbak	2013-06-26 10:05:19.382231200 +0100
-+++ firebird/builds/posix/Makefile.in.static.gbak	2013-07-03 15:31:36.176227100 +0100
-@@ -59,7 +59,7 @@
- gbak_static : $(GBAK_STATIC)
- 
- $(GBAK_STATIC) : $(AllObjects) $(LIBFBSTATIC_A) 
--	$(STATICEXE_LINK) $(LINK_OPTS) $^ -o $@ -L$(LIB) $(LINK_LIBS) $(ICU_LIBS)
-+	@CXX@ $^ -o $@ -L$(LIB) $(GLOB_OPTIONS) $(CXXFLAGS) $(LINK_OPTS) $(LINK_LIBS) $(ICU_LIBS)
- 
- 
- include $(ROOT)/gen/make.shared.targets
-unchanged:
---- firebird.org/builds/posix/Makefile.in.static.gpre	2013-06-26 10:05:19.382231200 +0100
-+++ firebird/builds/posix/Makefile.in.static.gpre	2013-07-02 16:17:07.248351900 +0100
-@@ -59,7 +59,7 @@
- gpre_static : $(GPRE_STATIC)
- 
- $(GPRE_STATIC):	$(GPRESTATIC_Objects) $(COMMON_Objects) $(LIBFBSTATIC_A)
--	$(STATICEXE_LINK) $(LINK_OPTS) $^ -o $@ -L$(LIB) $(LINK_LIBS) $(ICU_LIBS)
-+	@CXX@ $^ -o $@ -L$(LIB) $(GLOB_OPTIONS) $(CXXFLAGS) $(LINK_OPTS) $(LINK_LIBS) $(ICU_LIBS)
- 	-$(RM) $(GPRE_CURRENT)
- 	(cd $(@D); $(LN) $(@F) $(notdir $(GPRE_CURRENT)))
- 
-unchanged:
---- firebird.org/builds/posix/Makefile.in.static.isql	2013-06-26 10:05:19.382231200 +0100
-+++ firebird/builds/posix/Makefile.in.static.isql	2013-07-03 15:42:23.601957800 +0100
-@@ -58,8 +58,8 @@
- 
- isql_static : $(ISQL_STATIC)
- 
--$(ISQL_STATIC):	$(ISQL_Objects) $(COMMON_Objects) $(LIBFBSTATIC_A) 
--	$(STATICEXE_LINK) $(LINK_OPTS) $(ISQL_Objects) $(COMMON_Objects) -o $@ -L$(LIB) -lfbstatic $(LIBEDITLINE) $(LINK_LIBS) $(ICU_LIBS)
-+$(ISQL_STATIC):	$(ISQL_Objects) $(COMMON_Objects) $(LIBFBSTATIC_A)
-+	@CXX@ $^ -o $@ -L$(LIB) $(LIBEDITLINE) $(GLOB_OPTIONS) $(CXXFLAGS) $(LINK_OPTS) $(LINK_LIBS) $(ICU_LIBS) 
- 
- 
- include $(ROOT)/gen/make.shared.targets
 unchanged:
 --- firebird.org/builds/posix/prefix.mingw	2013-06-26 10:05:19.413119400 +0100
 +++ firebird/builds/posix/prefix.mingw	2013-07-04 18:13:52.948234400 +0100
