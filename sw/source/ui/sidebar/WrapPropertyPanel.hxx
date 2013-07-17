@@ -18,6 +18,7 @@
 #ifndef SW_SIDEBAR_WRAP_PROPERTY_PANEL_HXX
 #define SW_SIDEBAR_WRAP_PROPERTY_PANEL_HXX
 
+#include <svx/sidebar/PanelLayout.hxx>
 #include <vcl/button.hxx>
 #include <vcl/image.hxx>
 
@@ -26,11 +27,10 @@
 
 #include <boost/scoped_ptr.hpp>
 
-
 namespace sw { namespace sidebar {
 
     class WrapPropertyPanel
-        : public Control
+        : public PanelLayout
         , public ::sfx2::sidebar::ControllerItem::ItemUpdateReceiverInterface
     {
     public:
@@ -57,12 +57,12 @@ namespace sw { namespace sidebar {
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > mxFrame;
         SfxBindings* mpBindings;
 
-        ::boost::scoped_ptr<ImageRadioButton> mpRBNoWrap;
-        ::boost::scoped_ptr<ImageRadioButton> mpRBWrapLeft;
-        ::boost::scoped_ptr<ImageRadioButton> mpRBWrapRight;
-        ::boost::scoped_ptr<ImageRadioButton> mpRBWrapParallel;
-        ::boost::scoped_ptr<ImageRadioButton> mpRBWrapThrough;
-        ::boost::scoped_ptr<ImageRadioButton> mpRBIdealWrap;
+        RadioButton* mpRBNoWrap;
+        RadioButton* mpRBWrapLeft;
+        RadioButton* mpRBWrapRight;
+        RadioButton* mpRBWrapParallel;
+        RadioButton* mpRBWrapThrough;
+        RadioButton* mpRBIdealWrap;
 
         //Image resource.
         ImageList aWrapIL;

@@ -17,7 +17,6 @@
  */
 
 #include "WrapPropertyPanel.hxx"
-#include "WrapPropertyPanel.hrc"
 #include "PropertyPanel.hrc"
 
 #include <cmdid.h>
@@ -31,6 +30,13 @@
 #include <vcl/svapp.hxx>
 
 #include "com/sun/star/lang/IllegalArgumentException.hpp"
+
+const char UNO_WRAPOFF[] = ".uno:WrapOff";
+const char UNO_WRAPLEFT[] = ".uno:WrapLeft";
+const char UNO_WRAPRIGHT[] = ".uno:WrapRight";
+const char UNO_WRAPON[] = ".uno:WrapOn";
+const char UNO_WRAPTHROUGH[] = ".uno:WrapThrough";
+const char UNO_WRAPIDEAL[] = ".uno:WrapIdeal";
 
 #define A2S(pString) (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(pString)))
 
@@ -60,16 +66,9 @@ WrapPropertyPanel::WrapPropertyPanel(
     Window* pParent,
     const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rxFrame,
     SfxBindings* pBindings )
-    : Control(pParent, SW_RES(RID_PROPERTYPANEL_SWOBJWRAP_PAGE))
+    : PanelLayout(pParent, "WrapPropertyPanel", "modules/swriter/ui/sidebarwrap.ui", rxFrame)
     , mxFrame( rxFrame )
     , mpBindings(pBindings)
-    // visible controls
-    , mpRBNoWrap( ::sfx2::sidebar::ControlFactory::CreateCustomImageRadionButton( this, SW_RES(RB_NO_WRAP) ) )
-    , mpRBWrapLeft( ::sfx2::sidebar::ControlFactory::CreateCustomImageRadionButton( this, SW_RES(RB_WRAP_LEFT) ) )
-    , mpRBWrapRight( ::sfx2::sidebar::ControlFactory::CreateCustomImageRadionButton( this, SW_RES(RB_WRAP_RIGHT) ) )
-    , mpRBWrapParallel( ::sfx2::sidebar::ControlFactory::CreateCustomImageRadionButton( this, SW_RES(RB_WRAP_PARALLEL) ) )
-    , mpRBWrapThrough( ::sfx2::sidebar::ControlFactory::CreateCustomImageRadionButton( this, SW_RES(RB_WRAP_THROUGH) ) )
-    , mpRBIdealWrap( ::sfx2::sidebar::ControlFactory::CreateCustomImageRadionButton( this, SW_RES(RB_WRAP_IDEAL) ) )
     // resources
     , aWrapIL(6,2)
     // controller items
@@ -80,8 +79,14 @@ WrapPropertyPanel::WrapPropertyPanel(
     , maSwWrapThroughControl(FN_FRAME_WRAPTHRU, *pBindings, *this)
     , maSwWrapIdealControl(FN_FRAME_WRAP_IDEAL, *pBindings, *this)
 {
+    get(mpRBNoWrap, "buttonnone");
+    get(mpRBWrapLeft, "buttonbefore");
+    get(mpRBWrapRight, "buttonafter");
+    get(mpRBWrapParallel, "buttonparallel");
+    get(mpRBWrapThrough, "buttonthrough");
+    get(mpRBIdealWrap, "buttonoptimal");
+
     Initialize();
-    FreeResource();
 }
 
 
@@ -100,33 +105,33 @@ void WrapPropertyPanel::Initialize()
     mpRBWrapThrough->SetClickHdl(aLink);
     mpRBIdealWrap->SetClickHdl(aLink);
 
-    aWrapIL.AddImage( IMG_NONE,
+    aWrapIL.AddImage( UNO_WRAPOFF,
                       ::GetImage( mxFrame, A2S(".uno:WrapOff"), sal_False ) );
-    aWrapIL.AddImage( IMG_LEFT,
+    aWrapIL.AddImage( UNO_WRAPLEFT,
                       ::GetImage( mxFrame, A2S(".uno:WrapLeft"), sal_False ) );
-    aWrapIL.AddImage( IMG_RIGHT,
+    aWrapIL.AddImage( UNO_WRAPRIGHT,
                       ::GetImage( mxFrame, A2S(".uno:WrapRight"), sal_False ) );
-    aWrapIL.AddImage( IMG_PARALLEL,
+    aWrapIL.AddImage( UNO_WRAPON,
                       ::GetImage( mxFrame, A2S(".uno:WrapOn"), sal_False ) );
-    aWrapIL.AddImage( IMG_THROUGH,
+    aWrapIL.AddImage( UNO_WRAPTHROUGH,
                       ::GetImage( mxFrame, A2S(".uno:WrapThrough"), sal_False ) );
-    aWrapIL.AddImage( IMG_IDEAL,
+    aWrapIL.AddImage( UNO_WRAPIDEAL,
                       ::GetImage( mxFrame, A2S(".uno:WrapIdeal"), sal_False ) );
 
-    mpRBNoWrap->SetModeRadioImage( aWrapIL.GetImage(IMG_NONE) );
+    mpRBNoWrap->SetModeRadioImage( aWrapIL.GetImage(UNO_WRAPOFF) );
     if ( Application::GetSettings().GetLayoutRTL() )
     {
-        mpRBWrapLeft->SetModeRadioImage( aWrapIL.GetImage(IMG_RIGHT) );
-        mpRBWrapRight->SetModeRadioImage( aWrapIL.GetImage(IMG_LEFT) );
+        mpRBWrapLeft->SetModeRadioImage( aWrapIL.GetImage(UNO_WRAPRIGHT) );
+        mpRBWrapRight->SetModeRadioImage( aWrapIL.GetImage(UNO_WRAPLEFT) );
     }
     else
     {
-        mpRBWrapLeft->SetModeRadioImage( aWrapIL.GetImage(IMG_LEFT) );
-        mpRBWrapRight->SetModeRadioImage( aWrapIL.GetImage(IMG_RIGHT) );
+        mpRBWrapLeft->SetModeRadioImage( aWrapIL.GetImage(UNO_WRAPLEFT) );
+        mpRBWrapRight->SetModeRadioImage( aWrapIL.GetImage(UNO_WRAPRIGHT) );
     }
-    mpRBWrapParallel->SetModeRadioImage( aWrapIL.GetImage(IMG_PARALLEL) );
-    mpRBWrapThrough->SetModeRadioImage( aWrapIL.GetImage(IMG_THROUGH) );
-    mpRBIdealWrap->SetModeRadioImage( aWrapIL.GetImage(IMG_IDEAL) );
+    mpRBWrapParallel->SetModeRadioImage( aWrapIL.GetImage(UNO_WRAPON) );
+    mpRBWrapThrough->SetModeRadioImage( aWrapIL.GetImage(UNO_WRAPTHROUGH) );
+    mpRBIdealWrap->SetModeRadioImage( aWrapIL.GetImage(UNO_WRAPIDEAL) );
 
     mpRBNoWrap->SetAccessibleName(mpRBNoWrap->GetQuickHelpText());
     mpRBWrapLeft->SetAccessibleName(mpRBWrapLeft->GetQuickHelpText());
