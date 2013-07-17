@@ -12,11 +12,15 @@
 
 #define DEBUG_COLUMN_STORAGE 0
 #define DEBUG_PIVOT_TABLE 0
+#define DEBUG_FORMULA_COMPILER 1
 
-#if DEBUG_PIVOT_TABLE
+#if DEBUG_PIVOT_TABLE || DEBUG_COLUMN_STORAGE || DEBUG_FORMULA_COMPILER
 #include <iostream>
 #include <string>
 #include <cstdio>
+using std::cout;
+using std::cerr;
+using std::endl;
 #endif
 
 #endif

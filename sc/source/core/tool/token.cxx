@@ -527,6 +527,13 @@ bool ScToken::Is3DRef() const
     return false;
 }
 
+#if DEBUG_FORMULA_COMPILER
+void ScToken::Dump() const
+{
+    cout << "-- ScToken (base class)" << endl;
+}
+#endif
+
 FormulaTokenRef ScToken::ExtendRangeReference( FormulaToken & rTok1, FormulaToken & rTok2,
         const ScAddress & rPos, bool bReuseDoubleRef )
 {
@@ -746,6 +753,15 @@ bool ScSingleRefToken::operator==( const FormulaToken& r ) const
     return FormulaToken::operator==( r ) && aSingleRef == static_cast<const ScToken&>(r).GetSingleRef();
 }
 
+#if DEBUG_FORMULA_COMPILER
+void ScSingleRefToken::Dump() const
+{
+    cout << "-- ScSingleRefToken" << endl;
+    cout << "  relative column: " << aSingleRef.IsColRel() << "  row : " << aSingleRef.IsRowRel() << "  sheet: " << aSingleRef.IsTabRel() << endl;
+    cout << "  absolute column: " << aSingleRef.nCol << "  row: " << aSingleRef.nRow << "  sheet: " << aSingleRef.nTab << endl;
+    cout << "  relative column: " << aSingleRef.nRelCol << "  row: " << aSingleRef.nRelRow << "  sheet: " << aSingleRef.nRelTab << endl;
+}
+#endif
 
 const ScSingleRefData&    ScDoubleRefToken::GetSingleRef() const  { return aDoubleRef.Ref1; }
 ScSingleRefData&          ScDoubleRefToken::GetSingleRef()        { return aDoubleRef.Ref1; }
@@ -760,6 +776,21 @@ bool ScDoubleRefToken::operator==( const FormulaToken& r ) const
     return FormulaToken::operator==( r ) && aDoubleRef == static_cast<const ScToken&>(r).GetDoubleRef();
 }
 
+#if DEBUG_FORMULA_COMPILER
+void ScDoubleRefToken::Dump() const
+{
+    cout << "-- ScDoubleRefToken" << endl;
+    cout << "  ref 1" << endl;
+    cout << "    relative column: " << aDoubleRef.Ref1.IsColRel() << "  row: " << aDoubleRef.Ref1.IsRowRel() << "  sheet: " << aDoubleRef.Ref1.IsTabRel() << endl;
+    cout << "    absolute column: " << aDoubleRef.Ref1.nCol << "  row: " << aDoubleRef.Ref1.nRow << "  sheet: " << aDoubleRef.Ref1.nTab << endl;
+    cout << "    relative column: " << aDoubleRef.Ref1.nRelCol << "  row: " << aDoubleRef.Ref1.nRelRow << "  sheet: " << aDoubleRef.Ref1.nRelTab << endl;
+
+    cout << "  ref 2" << endl;
+    cout << "    relative column: " << aDoubleRef.Ref2.IsColRel() << "  row: " << aDoubleRef.Ref2.IsRowRel() << "  sheet: " << aDoubleRef.Ref2.IsTabRel() << endl;
+    cout << "    absolute column: " << aDoubleRef.Ref2.nCol << "  row: " << aDoubleRef.Ref2.nRow << "  sheet: " << aDoubleRef.Ref2.nTab << endl;
+    cout << "    relative column: " << aDoubleRef.Ref2.nRelCol << "  row: " << aDoubleRef.Ref2.nRelRow << "  sheet: " << aDoubleRef.Ref2.nRelTab << endl;
+}
+#endif
 
 const ScRefList*        ScRefListToken::GetRefList() const  { return &aRefList; }
       ScRefList*        ScRefListToken::GetRefList()        { return &aRefList; }
@@ -2184,6 +2215,17 @@ void ScTokenArray::AdjustAbsoluteRefs( const ScDocument* pOldDoc, const ScAddres
         }
     }
 }
+
+#if DEBUG_FORMULA_COMPILER
+void ScTokenArray::Dump() const
+{
+    for (sal_uInt16 i = 0; i < nLen; ++i)
+    {
+        const ScToken* p = static_cast<const ScToken*>(pCode[i]);
+        p->Dump();
+    }
+}
+#endif
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

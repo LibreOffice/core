@@ -31,6 +31,7 @@
 #include "formula/IFunctionDescription.hxx"
 #include "formula/token.hxx"
 #include "scmatrix.hxx"
+#include "calcmacros.hxx"
 
 class ScJumpMatrix;
 
@@ -83,6 +84,10 @@ public:
     virtual bool                TextEqual( const formula::FormulaToken& rToken ) const;
     virtual bool                Is3DRef() const;    // reference with 3D flag set
 
+#if DEBUG_FORMULA_COMPILER
+    virtual void Dump() const;
+#endif
+
     /** If rTok1 and rTok2 both are SingleRef or DoubleRef tokens, extend/merge
         ranges as needed for ocRange.
         @param rPos
@@ -123,6 +128,9 @@ public:
     virtual bool                operator==( const formula::FormulaToken& rToken ) const;
     virtual FormulaToken*       Clone() const { return new ScSingleRefToken(*this); }
 
+#if DEBUG_FORMULA_COMPILER
+    virtual void Dump() const;
+#endif
     DECL_FIXEDMEMPOOL_NEWDEL( ScSingleRefToken );
 };
 
@@ -151,6 +159,9 @@ public:
     virtual bool                operator==( const formula::FormulaToken& rToken ) const;
     virtual FormulaToken*       Clone() const { return new ScDoubleRefToken(*this); }
 
+#if DEBUG_FORMULA_COMPILER
+    virtual void Dump() const;
+#endif
     DECL_FIXEDMEMPOOL_NEWDEL( ScDoubleRefToken );
 };
 

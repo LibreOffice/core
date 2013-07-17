@@ -24,6 +24,7 @@
 #include <tools/solar.h>
 #include "scdllapi.h"
 #include "types.hxx"
+#include "calcmacros.hxx"
 #include <formula/tokenarray.hxx>
 
 struct ScRawToken;
@@ -111,6 +112,10 @@ public:
      * @param bCheckCopyArea should references pointing into the copy area be adjusted independently from being absolute, should be true only for copy&paste between documents
      */
     void AdjustAbsoluteRefs( const ScDocument* pOldDoc, const ScAddress& rOldPos, const ScAddress& rNewPos, bool bRangeName = false, bool bCheckCopyArea = false );
+
+#if DEBUG_FORMULA_COMPILER
+    void Dump() const;
+#endif
 };
 
 #endif // SC_TOKENARRAY_HXX

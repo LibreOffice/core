@@ -66,13 +66,6 @@
 
 #include <boost/scoped_ptr.hpp>
 
-#if DEBUG_COLUMN_STORAGE
-#include "columniterator.hxx"
-#include <iostream>
-using std::cout;
-using std::endl;
-#endif
-
 // -----------------------------------------------------------------------
 
 // factor from font size to optimal cell height (text width)
