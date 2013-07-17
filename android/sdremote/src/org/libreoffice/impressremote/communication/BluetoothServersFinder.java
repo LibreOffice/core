@@ -25,7 +25,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import org.libreoffice.impressremote.util.Intents;
 import org.libreoffice.impressremote.communication.Server.Protocol;
 
-public class BluetoothServersFinder extends BroadcastReceiver implements ServersFinder, Runnable {
+class BluetoothServersFinder extends BroadcastReceiver implements ServersFinder, Runnable {
     private static final int SEARCH_DELAY_IN_MILLISECONDS = 1000 * 10;
 
     private final Context mContext;

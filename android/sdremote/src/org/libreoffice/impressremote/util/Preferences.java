@@ -25,10 +25,6 @@ public final class Preferences {
     private Preferences() {
     }
 
-    public static boolean doContain(Context aContext, String aLocation, String aKey) {
-        return getPreferences(aContext, aLocation).contains(aKey);
-    }
-
     private static SharedPreferences getPreferences(Context aContext, String aLocation) {
         return aContext.getSharedPreferences(aLocation, Context.MODE_PRIVATE);
     }

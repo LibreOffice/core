@@ -32,7 +32,6 @@ public final class Intents {
 
         public static final String CONNECTION_FAILED = "CONNECTION_FAILED";
 
-        public static final String SLIDE_SHOW_STARTED = "SLIDE_SHOW_STARTED";
         public static final String SLIDE_SHOW_RUNNING = "SLIDE_SHOW_RUNNING";
         public static final String SLIDE_SHOW_STOPPED = "SLIDE_SHOW_STOPPED";
 

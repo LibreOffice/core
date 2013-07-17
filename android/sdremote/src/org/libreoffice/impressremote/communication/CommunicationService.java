@@ -213,11 +213,6 @@ public class CommunicationService extends Service implements Runnable, MessagesL
         return mSlideShow;
     }
 
-    @Deprecated
-    public void addServer(String aAddress, String aName, boolean aRemember) {
-        mServersManager.addTcpServer(aAddress, aName);
-    }
-
     public void addServer(String aAddress, String aName) {
         mServersManager.addTcpServer(aAddress, aName);
     }

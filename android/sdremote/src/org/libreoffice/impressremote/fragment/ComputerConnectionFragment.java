@@ -171,7 +171,7 @@ public class ComputerConnectionFragment extends SherlockFragment implements Serv
         return LocalBroadcastManager.getInstance(aContext);
     }
 
-    public void setUpPinValidationInstructions(String aPin) {
+    private void setUpPinValidationInstructions(String aPin) {
         TextView aPinTextView = (TextView) getView().findViewById(R.id.text_pin);
         aPinTextView.setText(aPin);
 
@@ -185,14 +185,14 @@ public class ComputerConnectionFragment extends SherlockFragment implements Serv
         aViewAnimator.setDisplayedChild(aViewAnimator.indexOfChild(aValidationLayout));
     }
 
-    public void setUpPresentation() {
+    private void setUpPresentation() {
         Intent aIntent = Intents.buildSlideShowIntent(getActivity());
         startActivity(aIntent);
 
         getActivity().finish();
     }
 
-    public void setUpErrorMessage() {
+    private void setUpErrorMessage() {
         TextView aSecondaryMessageTextView = (TextView) getView().findViewById(R.id.text_secondary_error_message);
         aSecondaryMessageTextView.setText(buildSecondaryErrorMessage());
 

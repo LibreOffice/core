@@ -21,26 +21,11 @@ public class Server implements Parcelable {
     private final Protocol mProtocol;
     private final String mAddress;
     private final String mName;
-    private final long mTimeDiscovered;
-
-    /**
-     * Signifies a Server that shouldn't be automatically removed from the list.
-     * Used e.g. for the emulator.
-     */
-    protected boolean mNoTimeout = false;
-
-    protected Server(Protocol aProtocol, String aAddress, String aName, long aTimeDiscovered) {
-        this.mProtocol = aProtocol;
-        this.mAddress = aAddress;
-        this.mName = aName;
-        this.mTimeDiscovered = aTimeDiscovered;
-    }
 
     public Server(Protocol aProtocol, String aAddress, String aName) {
         this.mProtocol = aProtocol;
         this.mAddress = aAddress;
         this.mName = aName;
-        this.mTimeDiscovered = System.currentTimeMillis();
     }
 
     public static Server newTcpInstance(String aAddress, String aName) {
@@ -59,43 +44,32 @@ public class Server implements Parcelable {
         return mName;
     }
 
-    public long getTimeDiscovered() {
-        return mTimeDiscovered;
-    }
-
-    public String toString() {
-        return getClass().getName() + '@' + Integer
-            .toHexString(hashCode()) + ":{" + mAddress + "," + mName + "}";
-    }
-
     @Override
     public int describeContents() {
         return SPECIAL_PARCELABLE_OBJECTS_BITMASK;
     }
 
     @Override
-    public void writeToParcel(Parcel parcel, int flags) {
-        parcel.writeString(mAddress);
-        parcel.writeString(mName);
-        parcel.writeString(mProtocol.name());
-        parcel.writeLong(mTimeDiscovered);
+    public void writeToParcel(Parcel aParcel, int aFlags) {
+        aParcel.writeString(mAddress);
+        aParcel.writeString(mName);
+        aParcel.writeString(mProtocol.name());
     }
 
     public static final Parcelable.Creator<Server> CREATOR = new Parcelable.Creator<Server>() {
-        public Server createFromParcel(Parcel parcel) {
-            return new Server(parcel);
+        public Server createFromParcel(Parcel aParcel) {
+            return new Server(aParcel);
         }
 
-        public Server[] newArray(int size) {
-            return new Server[size];
+        public Server[] newArray(int aSize) {
+            return new Server[aSize];
         }
     };
 
-    private Server(Parcel parcel) {
-        this.mAddress = parcel.readString();
-        this.mName = parcel.readString();
-        this.mProtocol = Protocol.valueOf(parcel.readString());
-        this.mTimeDiscovered = parcel.readLong();
+    private Server(Parcel aParcel) {
+        this.mAddress = aParcel.readString();
+        this.mName = aParcel.readString();
+        this.mProtocol = Protocol.valueOf(aParcel.readString());
     }
 }
 

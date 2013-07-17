@@ -19,7 +19,7 @@ import java.util.List;
 import android.text.TextUtils;
 import android.util.Base64;
 
-public class MessagesReceiver implements Runnable {
+class MessagesReceiver implements Runnable {
     private final BufferedReader mMessagesReader;
 
     private final MessagesListener mMessagesListener;
@@ -108,7 +108,7 @@ public class MessagesReceiver implements Runnable {
             return;
         }
 
-        if (Protocol.Messages.SLIDESHOW_STARTED.equals(aMessageType)) {
+        if (Protocol.Messages.SLIDE_SHOW_STARTED.equals(aMessageType)) {
             int aSlidesCount = parseSlidesCount(aMessage, 1);
             int aCurrentSlideIndex = parseSlideIndex(aMessage, 2);
 
@@ -116,7 +116,7 @@ public class MessagesReceiver implements Runnable {
             return;
         }
 
-        if (Protocol.Messages.SLIDESHOW_FINISHED.equals(aMessageType)) {
+        if (Protocol.Messages.SLIDE_SHOW_FINISHED.equals(aMessageType)) {
             mMessagesListener.onSlideShowFinish();
             return;
         }

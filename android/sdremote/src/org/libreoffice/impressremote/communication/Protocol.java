@@ -56,8 +56,8 @@ final class Protocol {
         public static final String VALIDATING = "LO_SERVER_VALIDATING_PIN";
         public static final String ADVERTISE = "LOREMOTE_ADVERTISE";
 
-        public static final String SLIDESHOW_STARTED = "slideshow_started";
-        public static final String SLIDESHOW_FINISHED = "slideshow_finished";
+        public static final String SLIDE_SHOW_STARTED = "slideshow_started";
+        public static final String SLIDE_SHOW_FINISHED = "slideshow_finished";
         public static final String SLIDE_UPDATED = "slide_updated";
         public static final String SLIDE_PREVIEW = "slide_preview";
         public static final String SLIDE_NOTES = "slide_notes";
@@ -72,7 +72,7 @@ final class Protocol {
 
         public static final String TRANSITION_NEXT = "transition_next";
         public static final String TRANSITION_PREVIOUS = "transition_previous";
-        public static final String GOTO_SLIDE = "goto_slide";
+        public static final String GO_TO_SLIDE = "goto_slide";
         public static final String PRESENTATION_BLANK_SCREEN = "presentation_blank_screen";
         public static final String PRESENTATION_RESUME = "presentation_resume";
         public static final String PRESENTATION_START = "presentation_start";

@@ -59,7 +59,7 @@ public class CommandsTransmitter {
 
     public void setCurrentSlide(int slideIndex) {
         writeCommand(Protocol.Commands
-            .prepareCommand(Protocol.Commands.GOTO_SLIDE,
+            .prepareCommand(Protocol.Commands.GO_TO_SLIDE,
                 Integer.toString(slideIndex)));
     }
 

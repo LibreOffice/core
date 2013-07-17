@@ -8,7 +8,7 @@
  */
 package org.libreoffice.impressremote.communication;
 
-public interface MessagesListener {
+interface MessagesListener {
     public void onPinValidation();
 
     public void onSuccessfulPairing();

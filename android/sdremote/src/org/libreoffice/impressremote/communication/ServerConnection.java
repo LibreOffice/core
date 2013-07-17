@@ -11,7 +11,7 @@ package org.libreoffice.impressremote.communication;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-public interface ServerConnection {
+interface ServerConnection {
     public InputStream buildMessagesStream();
 
     public OutputStream buildCommandsStream();

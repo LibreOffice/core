@@ -10,7 +10,7 @@ package org.libreoffice.impressremote.communication;
 
 import java.util.List;
 
-public interface ServersFinder {
+interface ServersFinder {
     public void startSearch();
 
     public void stopSearch();

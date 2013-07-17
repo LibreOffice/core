@@ -17,7 +17,7 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 
-public class BluetoothServerConnection implements ServerConnection {
+class BluetoothServerConnection implements ServerConnection {
     // Standard UUID for the Serial Port Profile.
     // https://www.bluetooth.org/en-us/specification/assigned-numbers-overview/service-discovery
     private static final String STANDARD_SPP_UUID = "00001101-0000-1000-8000-00805F9B34FB";

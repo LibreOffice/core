@@ -18,8 +18,8 @@
     </style>
 
     <style name="Theme.ImpressRemote.ActionBar.Tab" parent="Widget.Sherlock.Light.ActionBar.TabView.Inverse">
-        <item name="android:background">@drawable/actionbar_tab</item>
-        <item name="background">@drawable/actionbar_tab</item>
+        <item name="android:background">@drawable/action_bar_tab</item>
+        <item name="background">@drawable/action_bar_tab</item>
     </style>
 
     <style name="Theme.ImpressRemote.Computers" parent="Theme.ImpressRemote">

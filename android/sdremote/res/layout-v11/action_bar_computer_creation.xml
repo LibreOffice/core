@@ -4,6 +4,7 @@
               android:divider="?android:attr/dividerVertical"
               android:showDividers="middle"
               android:dividerPadding="@dimen/padding_horizontal_action_bar_divider"
+              android:baselineAligned="false"
               android:layout_width="match_parent"
               android:layout_height="match_parent">
 

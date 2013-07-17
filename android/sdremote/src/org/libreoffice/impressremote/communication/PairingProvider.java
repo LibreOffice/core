@@ -1,3 +1,11 @@
+/* -*- Mode: Java; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
 package org.libreoffice.impressremote.communication;
 
 import android.bluetooth.BluetoothAdapter;
@@ -6,8 +14,8 @@ import android.os.Build;
 
 import org.libreoffice.impressremote.util.Preferences;
 
-public final class PairingProvider {
-    private Context mContext;
+final class PairingProvider {
+    private final Context mContext;
 
     private PairingProvider(Context aContext) {
         mContext = aContext;
@@ -55,7 +63,7 @@ public final class PairingProvider {
         return new PairingProvider(aContext).getPairingDeviceName();
     }
 
-    public String getPairingDeviceName() {
+    private String getPairingDeviceName() {
         if (BluetoothAdapter.getDefaultAdapter() == null) {
             return Build.MODEL;
         }
@@ -67,3 +75,5 @@ public final class PairingProvider {
         return BluetoothAdapter.getDefaultAdapter().getName();
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

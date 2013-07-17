@@ -163,7 +163,7 @@ public class ComputersFragment extends SherlockListFragment implements ServiceCo
         return LocalBroadcastManager.getInstance(aContext);
     }
 
-    public void loadComputers() {
+    private void loadComputers() {
         if (!isServiceBound()) {
             return;
         }

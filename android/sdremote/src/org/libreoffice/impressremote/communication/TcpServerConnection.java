@@ -14,7 +14,7 @@ import java.io.OutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
-public class TcpServerConnection implements ServerConnection {
+class TcpServerConnection implements ServerConnection {
     private final Socket mServerConnection;
 
     public TcpServerConnection(Server aServer) {

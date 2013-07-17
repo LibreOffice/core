@@ -19,7 +19,7 @@ import android.content.Context;
 
 import org.libreoffice.impressremote.util.Preferences;
 
-public class ServersManager {
+class ServersManager {
     private final Context mContext;
 
     private final ServersFinder mBluetoothServersFinder;
