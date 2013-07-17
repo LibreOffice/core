@@ -142,6 +142,11 @@ Menu RID_SLIDESHOW_CONTEXTMENU
         };
         MenuItem
         {
+            Identifier = CM_EDIT_PRESENTATION ;
+            Text [ en-US ] = "E~dit Presentation" ;
+        };
+        MenuItem
+        {
             Identifier = CM_ENDSHOW ;
             Text [ en-US ] = "~End Show" ;
         };

@@ -41,6 +41,8 @@
 #define CM_WIDTH_PEN_VERY_THICK 17
 #define CM_PEN_MODE 18
 
+#define CM_EDIT_PRESENTATION 19
+
 #define CM_SLIDES       21      // this must be the last id!
 
 #endif
