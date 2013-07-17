@@ -20,9 +20,15 @@ $(eval $(call gb_UnpackedTarball_add_patches,firebird,\
 ))
 
 ifeq ($(OS)-$(COM),WNT-MSC)
+ifeq ($(ENABLE_DBGUTIL),TRUE)
+$(eval $(call gb_UnpackedTarball_add_patches,firebird,\
+	firebird/firebird-cygwin-msvc-dbgutil.patch.1 \
+))
+else
 $(eval $(call gb_UnpackedTarball_add_patches,firebird,\
 	firebird/firebird-cygwin-msvc.patch.1 \
 ))
+endif
 endif
 
 ifeq ($(OS),MACOSX)
