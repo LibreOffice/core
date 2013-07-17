@@ -39,7 +39,7 @@ $(call gb_ExternalProject_get_state_target,firebird,build):
 				-L$(call gb_UnpackedTarball_get_dir,boost)/source/lib" \
 		&& export LD_LIBRARY_PATH="$(OUTDIR)/lib:$(call gb_UnpackedTarball_get_dir,boost)/source/lib" \
 		&& export DYLD_LIBRARY_PATH="$(OUTDIR)/lib:$(call gb_UnpackedTarball_get_dir,boost)/source/lib" \
-		$(if $(filter WNT,$(OS)), && export PATH="$(PATH):$(shell cygpath $(OUTDIR)/lib):$(shell cygpath $(call gb_UnpackedTarball_get_dir,icu)/source/lib)") \
+		$(if $(filter WNT-MSC,$(OS)-$(COM)), && export PATH="$(PATH):$(shell cygpath $(OUTDIR)/lib):$(shell cygpath $(call gb_UnpackedTarball_get_dir,icu)/source/lib)") \
 		&& ./configure \
 			--without-editline \
 			--disable-superserver \
