@@ -24,7 +24,6 @@ class SbiParser;
 class SbModule;
 #include "opcodes.hxx"
 #include "buffer.hxx"
-#include <svtools/miscopt.hxx>
 
 class SbiCodeGen {
     SbiParser* pParser;         // for error messages, line, column etc.
@@ -33,7 +32,7 @@ class SbiCodeGen {
     short  nLine, nCol;         // for stmnt command
     short  nForLevel;           // #29955
     bool bStmnt;            // true: statement-opcode is pending
-    SvtMiscOptions aMiscOptions;
+
 public:
     SbiCodeGen( SbModule&, SbiParser*, short );
     SbiParser* GetParser() { return pParser; }

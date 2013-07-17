@@ -116,9 +116,7 @@ private:
     GetComponentInterface(sal_Bool bCreate = true);
     std::vector< CodeCompleteData > aCodeCompleteCache;
     CodeCompleteWindow* pCodeCompleteWnd;
-    //CodeCompleteListBox* aListBox;
     OUString GetActualSubName( sal_uLong nLine ); // gets the actual subroutine name according to line number
-    std::vector< OUString > Split( const OUString& sStr, const sal_Unicode& aChar );
 
 protected:
     virtual void    Paint( const Rectangle& );
@@ -482,7 +480,6 @@ private:
     CodeCompleteListBox* pListBox;
 
     void InitListBox(); // initialize the ListBox
-    //DECL_LINK(ImplDoubleClickHdl, void*);
 
 public:
     CodeCompleteWindow( EditorWindow* pPar );
@@ -493,6 +490,7 @@ public:
     void SetTextSelection( const TextSelection& aSel );
     const TextSelection& GetTextSelection() const;
     void ResizeListBox();
+    void SelectFirstEntry(); //selects first entry in ListBox
 
 protected:
     virtual void KeyInput( const KeyEvent& rKeyEvt );
@@ -506,7 +504,8 @@ private:
 public:
     CodeCompleteListBox(CodeCompleteWindow* pPar);
     virtual ~CodeCompleteListBox();
-    //DECL_LINK(ImplSelectHdl, void*);
+    void InsertSelectedEntry(); //insert the selected entry
+
     DECL_LINK(ImplDoubleClickHdl, void*);
 
     virtual long PreNotify( NotifyEvent& rNEvt );

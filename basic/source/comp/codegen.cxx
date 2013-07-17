@@ -46,7 +46,7 @@ sal_uInt32 SbiCodeGen::GetPC()
 
 void SbiCodeGen::Statement()
 {
-    if( aMiscOptions.IsExperimentalMode() && pParser->IsCodeCompleting() )
+    if( pParser->IsCodeCompleting() )
         return;
 
     bStmnt = true;
@@ -63,7 +63,7 @@ void SbiCodeGen::Statement()
 
 void SbiCodeGen::GenStmnt()
 {
-    if( aMiscOptions.IsExperimentalMode() && pParser->IsCodeCompleting() )
+    if( pParser->IsCodeCompleting() )
         return;
 
     if( bStmnt )
@@ -78,7 +78,7 @@ void SbiCodeGen::GenStmnt()
 
 sal_uInt32 SbiCodeGen::Gen( SbiOpcode eOpcode )
 {
-    if( aMiscOptions.IsExperimentalMode() && pParser->IsCodeCompleting() )
+    if( pParser->IsCodeCompleting() )
         return 0;
 
 #ifdef DBG_UTIL
@@ -92,7 +92,7 @@ sal_uInt32 SbiCodeGen::Gen( SbiOpcode eOpcode )
 
 sal_uInt32 SbiCodeGen::Gen( SbiOpcode eOpcode, sal_uInt32 nOpnd )
 {
-    if( aMiscOptions.IsExperimentalMode() && pParser->IsCodeCompleting() )
+    if( pParser->IsCodeCompleting() )
         return 0;
 
 #ifdef DBG_UTIL
@@ -108,7 +108,7 @@ sal_uInt32 SbiCodeGen::Gen( SbiOpcode eOpcode, sal_uInt32 nOpnd )
 
 sal_uInt32 SbiCodeGen::Gen( SbiOpcode eOpcode, sal_uInt32 nOpnd1, sal_uInt32 nOpnd2 )
 {
-    if( aMiscOptions.IsExperimentalMode() && pParser->IsCodeCompleting() )
+    if( pParser->IsCodeCompleting() )
         return 0;
 
 #ifdef DBG_UTIL
@@ -127,7 +127,7 @@ sal_uInt32 SbiCodeGen::Gen( SbiOpcode eOpcode, sal_uInt32 nOpnd1, sal_uInt32 nOp
 
 void SbiCodeGen::Save()
 {
-    if( aMiscOptions.IsExperimentalMode() && pParser->IsCodeCompleting() )
+    if( pParser->IsCodeCompleting() )
         return;
 
     SbiImage* p = new SbiImage;
