@@ -107,8 +107,8 @@ endif
 ifeq "$(DEBUG)" "yes"
 OPT_FLAGS=-Zi
 endif
-CC_FLAGS_JNI=-c $(LIBO_SDK_DETAIL_CFLAGS_MSVCRT) -Zm500 -Zc:forScope,wchar_t- -wd4251 -wd4275 -wd4290 -wd4675 -wd4786 -wd4800 -Zc:forScope -GR -EHa $(OPT_FLAGS)
-CC_FLAGS=-c $(LIBO_SDK_DETAIL_CFLAGS_MSVCRT) -Zm500 -Zc:forScope,wchar_t- -wd4251 -wd4275 -wd4290 -wd4675 -wd4786 -wd4800 -Zc:forScope -GR -EHa $(OPT_FLAGS)
+CC_FLAGS_JNI=-c $(LIBO_SDK_DETAIL_CFLAGS_MSVCRT) -Zm500 -Zc:wchar_t- -wd4251 -wd4275 -wd4290 -wd4675 -wd4786 -wd4800 -GR -EHa $(OPT_FLAGS)
+CC_FLAGS=-c $(LIBO_SDK_DETAIL_CFLAGS_MSVCRT) -Zm500 -Zc:wchar_t- -wd4251 -wd4275 -wd4290 -wd4675 -wd4786 -wd4800 -GR -EHa $(OPT_FLAGS)
 ifeq "$(CPP_MANIFEST)" "true"
 LINK_MANIFEST=mt -manifest $@.manifest "-outputresource:$@;2"
 else

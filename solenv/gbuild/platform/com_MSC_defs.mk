@@ -145,7 +145,7 @@ gb_CFLAGS := \
 	-wd4626 \
 	-wd4706 \
 	-wd4800 \
-	-Zc:forScope,wchar_t- \
+	-Zc:wchar_t- \
 	-Zm500 \
 
 gb_CXXFLAGS := \
@@ -175,7 +175,7 @@ gb_CXXFLAGS := \
 	-wd4706 \
 	-wd4800 \
 	-wd4913 \
-	-Zc:forScope,wchar_t- \
+	-Zc:wchar_t- \
 	-Zm500 \
 
 ifneq ($(MSVC_USE_DEBUG_RUNTIME),)
