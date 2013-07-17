@@ -1073,7 +1073,6 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getUDTs( const Any& catalog,
     (void) types;
     OSL_FAIL("Not implemented yet!");
     throw SQLException();
-    return NULL;
 }
 // -----------------------------------------------------------------------------
 
