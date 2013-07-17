@@ -1588,6 +1588,7 @@ static OutputBorderOptions lcl_getTableDefaultBorderOptions(bool bEcma)
     rOptions.bWriteTag = true;
     rOptions.bWriteInsideHV = true;
     rOptions.bWriteDistance = false;
+    rOptions.bCheckDistanceSize = false;
 
     return rOptions;
 }
@@ -1601,6 +1602,7 @@ static OutputBorderOptions lcl_getTableCellBorderOptions(bool bEcma)
     rOptions.bWriteTag = true;
     rOptions.bWriteInsideHV = true;
     rOptions.bWriteDistance = false;
+    rOptions.bCheckDistanceSize = false;
 
     return rOptions;
 }
@@ -1614,11 +1616,22 @@ static OutputBorderOptions lcl_getBoxBorderOptions()
     rOptions.bWriteTag = false;
     rOptions.bWriteInsideHV = false;
     rOptions.bWriteDistance = true;
+    rOptions.bCheckDistanceSize = false;
 
     return rOptions;
 }
 
-static void impl_borders( FSHelperPtr pSerializer, const SvxBoxItem& rBox, const OutputBorderOptions& rOptions)
+static bool boxHasLineLargerThan31(const SvxBoxItem& rBox)
+{
+    return  (
+                ( rBox.GetDistance( BOX_LINE_TOP ) / 20 ) > 31 ||
+                ( rBox.GetDistance( BOX_LINE_LEFT ) / 20 ) > 31 ||
+                ( rBox.GetDistance( BOX_LINE_BOTTOM ) / 20 ) > 31 ||
+                ( rBox.GetDistance( BOX_LINE_RIGHT ) / 20 ) > 31
+            );
+}
+
+static void impl_borders( FSHelperPtr pSerializer, const SvxBoxItem& rBox, const OutputBorderOptions& rOptions, PageMargins* pageMargins)
 {
     static const sal_uInt16 aBorders[] =
     {
@@ -1634,6 +1647,17 @@ static void impl_borders( FSHelperPtr pSerializer, const SvxBoxItem& rBox, const
     };
     bool tagWritten = false;
     const sal_uInt16* pBrd = aBorders;
+
+    bool bExportDistanceFromPageEdge = false;
+    if ( rOptions.bCheckDistanceSize == true && boxHasLineLargerThan31(rBox) == true )
+    {
+        // The distance is larger than '31'. This cannot be exported as 'distance from text'.
+        // Instead - it should be exported as 'distance from page edge'.
+        // This is based on http://wiki.openoffice.org/wiki/Writer/MSInteroperability/PageBorder
+        // Specifically 'export case #2'
+        bExportDistanceFromPageEdge = true;
+    }
+
     for( int i = 0; i < 4; ++i, ++pBrd )
     {
         const SvxBorderLine* pLn = rBox.GetLine( *pBrd );
@@ -1646,7 +1670,23 @@ static void impl_borders( FSHelperPtr pSerializer, const SvxBoxItem& rBox, const
         sal_uInt16 nDist = 0;
         if (rOptions.bWriteDistance)
         {
-            nDist = rBox.GetDistance( *pBrd );
+            if (bExportDistanceFromPageEdge)
+            {
+                // Export 'Distance from Page Edge'
+                if ( *pBrd == BOX_LINE_TOP)
+                    nDist = pageMargins->nPageMarginTop - rBox.GetDistance( *pBrd );
+                else if ( *pBrd == BOX_LINE_LEFT)
+                    nDist = pageMargins->nPageMarginLeft - rBox.GetDistance( *pBrd );
+                else if ( *pBrd == BOX_LINE_BOTTOM)
+                    nDist = pageMargins->nPageMarginBottom - rBox.GetDistance( *pBrd );
+                else if ( *pBrd == BOX_LINE_RIGHT)
+                    nDist = pageMargins->nPageMarginRight - rBox.GetDistance( *pBrd );
+            }
+            else
+            {
+                // Export 'Distance from text'
+                nDist = rBox.GetDistance( *pBrd );
+            }
         }
         impl_borderLine( pSerializer, aXmlElements[i], pLn, nDist );
 
@@ -1760,7 +1800,7 @@ void DocxAttributeOutput::TableCellProperties( ww8::WW8TableNodeInfoInner::Point
     const SvxBoxItem& rDefaultBox = (*tableFirstCells.rbegin())->getTableBox( )->GetFrmFmt( )->GetBox( );
     {
         // The cell borders
-        impl_borders( m_pSerializer, rBox, lcl_getTableCellBorderOptions(bEcma) );
+        impl_borders( m_pSerializer, rBox, lcl_getTableCellBorderOptions(bEcma), NULL );
     }
 
     TableBackgrounds( pTableTextNodeInfoInner );
@@ -2010,7 +2050,7 @@ void DocxAttributeOutput::TableDefaultBorders( ww8::WW8TableNodeInfoInner::Point
     bool bEcma = GetExport().GetFilter().getVersion( ) == oox::core::ECMA_DIALECT;
 
     // the defaults of the table are taken from the top-left cell
-    impl_borders( m_pSerializer, pFrmFmt->GetBox( ), lcl_getTableDefaultBorderOptions(bEcma) );
+    impl_borders( m_pSerializer, pFrmFmt->GetBox( ), lcl_getTableDefaultBorderOptions(bEcma), NULL );
 }
 
 void DocxAttributeOutput::TableDefaultCellMargins( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner )
@@ -3065,17 +3105,27 @@ void DocxAttributeOutput::SectionPageBorders( const SwFrmFmt* pFmt, const SwFrmF
 
     const SvxBoxItem& rBox = pFmt->GetBox( );
 
-    const SvxBorderLine* pBottom = rBox.GetBottom( );
-    const SvxBorderLine* pTop = rBox.GetTop( );
     const SvxBorderLine* pLeft = rBox.GetLeft( );
+    const SvxBorderLine* pTop = rBox.GetTop( );
     const SvxBorderLine* pRight = rBox.GetRight( );
+    const SvxBorderLine* pBottom = rBox.GetBottom( );
 
     if ( pBottom || pTop || pLeft || pRight )
     {
+        bool bExportDistanceFromPageEdge = false;
+        if ( boxHasLineLargerThan31(rBox) == true )
+        {
+            // The distance is larger than '31'. This cannot be exported as 'distance from text'.
+            // Instead - it should be exported as 'distance from page edge'.
+            // This is based on http://wiki.openoffice.org/wiki/Writer/MSInteroperability/PageBorder
+            // Specifically 'export case #2'
+            bExportDistanceFromPageEdge = true;
+        }
+
         // All distances are relative to the text margins
         m_pSerializer->startElementNS( XML_w, XML_pgBorders,
                FSNS( XML_w, XML_display ), "allPages",
-               FSNS( XML_w, XML_offsetFrom ), "text",
+               FSNS( XML_w, XML_offsetFrom ), bExportDistanceFromPageEdge ? "page" : "text",
                FSEND );
 
         m_pSerializer->mark();
@@ -4577,20 +4627,23 @@ void DocxAttributeOutput::FormatLRSpace( const SvxLRSpaceItem& rLRSpace )
         if ( !m_pSectionSpacingAttrList )
             m_pSectionSpacingAttrList = m_pSerializer->createAttrList();
 
-        sal_uInt16 nLDist, nRDist;
+        m_pageMargins.nPageMarginLeft = 0;
+        m_pageMargins.nPageMarginRight = 0;
+
         const SfxPoolItem* pItem = m_rExport.HasItem( RES_BOX );
         if ( pItem )
         {
-            nRDist = ((SvxBoxItem*)pItem)->CalcLineSpace( BOX_LINE_LEFT );
-            nLDist = ((SvxBoxItem*)pItem)->CalcLineSpace( BOX_LINE_RIGHT );
+            m_pageMargins.nPageMarginRight = ((SvxBoxItem*)pItem)->CalcLineSpace( BOX_LINE_LEFT );
+            m_pageMargins.nPageMarginLeft = ((SvxBoxItem*)pItem)->CalcLineSpace( BOX_LINE_RIGHT );
         }
         else
-            nLDist = nRDist = 0;
-        nLDist = nLDist + (sal_uInt16)rLRSpace.GetLeft();
-        nRDist = nRDist + (sal_uInt16)rLRSpace.GetRight();
+            m_pageMargins.nPageMarginLeft = m_pageMargins.nPageMarginRight = 0;
 
-        m_pSectionSpacingAttrList->add( FSNS( XML_w, XML_left ), OString::valueOf( sal_Int32( nLDist ) ) );
-        m_pSectionSpacingAttrList->add( FSNS( XML_w, XML_right ), OString::valueOf( sal_Int32( nRDist ) ) );
+        m_pageMargins.nPageMarginLeft = m_pageMargins.nPageMarginLeft + (sal_uInt16)rLRSpace.GetLeft();
+        m_pageMargins.nPageMarginRight = m_pageMargins.nPageMarginRight + (sal_uInt16)rLRSpace.GetRight();
+
+        m_pSectionSpacingAttrList->add( FSNS( XML_w, XML_left ), OString::valueOf( sal_Int32( m_pageMargins.nPageMarginLeft ) ) );
+        m_pSectionSpacingAttrList->add( FSNS( XML_w, XML_right ), OString::valueOf( sal_Int32( m_pageMargins.nPageMarginRight ) ) );
     }
     else
     {
@@ -4640,8 +4693,9 @@ void DocxAttributeOutput::FormatULSpace( const SvxULSpaceItem& rULSpace )
         m_pSectionSpacingAttrList->add( FSNS( XML_w, XML_header ), OString::valueOf( nHeader ) );
 
         // Page top
+        m_pageMargins.nPageMarginTop = aDistances.dyaTop;
         m_pSectionSpacingAttrList->add( FSNS( XML_w, XML_top ),
-                OString::valueOf( sal_Int32( aDistances.dyaTop ) ) );
+                OString::valueOf( sal_Int32( m_pageMargins.nPageMarginTop ) ) );
 
         sal_Int32 nFooter = 0;
         if ( aDistances.HasFooter() )
@@ -4649,13 +4703,13 @@ void DocxAttributeOutput::FormatULSpace( const SvxULSpaceItem& rULSpace )
         m_pSectionSpacingAttrList->add( FSNS( XML_w, XML_footer ), OString::valueOf( nFooter ) );
 
         // Page Bottom
+        m_pageMargins.nPageMarginBottom = aDistances.dyaBottom;
         m_pSectionSpacingAttrList->add( FSNS( XML_w, XML_bottom ),
-                OString::valueOf( sal_Int32( aDistances.dyaBottom ) ) );
+                OString::valueOf( sal_Int32( m_pageMargins.nPageMarginBottom ) ) );
 
         // FIXME Page Gutter is not handled ATM, setting to 0 as it's mandatory for OOXML
         m_pSectionSpacingAttrList->add( FSNS( XML_w, XML_gutter ),
                 OString::valueOf( sal_Int32( 0 ) ) );
-
     }
     else
     {
@@ -4940,10 +4994,11 @@ void DocxAttributeOutput::FormatBox( const SvxBoxItem& rBox )
 {
     if (m_bTextFrameSyntax)
     {
-        const SvxBorderLine* pLeft = rBox.GetLine(BOX_LINE_LEFT);
-        const SvxBorderLine* pRight = rBox.GetLine(BOX_LINE_RIGHT);
-        const SvxBorderLine* pTop = rBox.GetLine(BOX_LINE_TOP);
-        const SvxBorderLine* pBottom = rBox.GetLine(BOX_LINE_BOTTOM);
+        const SvxBorderLine* pLeft = rBox.GetLeft( );
+        const SvxBorderLine* pTop = rBox.GetTop( );
+        const SvxBorderLine* pRight = rBox.GetRight( );
+        const SvxBorderLine* pBottom = rBox.GetBottom( );
+
         if (pLeft && pRight && pTop && pBottom &&
                 *pLeft == *pRight && *pLeft == *pTop && *pLeft == *pBottom)
         {
@@ -5000,13 +5055,21 @@ void DocxAttributeOutput::FormatBox( const SvxBoxItem& rBox )
         return;
     }
 
+
+    OutputBorderOptions aOutputBorderOptions = lcl_getBoxBorderOptions();
+
     if ( !m_bOpenedSectPr )
     {
         // Normally open the borders tag for paragraphs
         m_pSerializer->startElementNS( XML_w, XML_pBdr, FSEND );
     }
+    else
+    {
+        // If inside a section - check if the distance is larger than 31 points
+        aOutputBorderOptions.bCheckDistanceSize = true;
+    }
 
-    impl_borders( m_pSerializer, rBox, lcl_getBoxBorderOptions() );
+    impl_borders( m_pSerializer, rBox, aOutputBorderOptions, &m_pageMargins );
 
     if ( m_bOpenedSectPr )
     {
