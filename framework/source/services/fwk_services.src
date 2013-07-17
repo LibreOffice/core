@@ -19,38 +19,6 @@
 
 #include "framework.hrc"
 
-Window DLG_BACKING
-{
-    OutputSize = TRUE ;
-    SVLook = TRUE ;
-    Border = FALSE;
-
-    String STR_BACKING_CREATE
-    {
-        Text [ en-US ] = "Create a new document";
-    };
-    String STR_BACKING_TEMPLATE
-    {
-        Text [ en-US ] = "~Templates...";
-    };
-    String STR_BACKING_FILE
-    {
-        Text [ en-US ] = "~Open...";
-    };
-    String STR_BACKING_EXTHELP
-    {
-        Text [ en-US ] = "Add new features to %PRODUCTNAME";
-    };
-    String STR_BACKING_INFOHELP
-    {
-        Text [ en-US ] = "Get more information about %PRODUCTNAME";
-    };
-    String STR_BACKING_TPLREP
-    {
-        Text [ en-US ] = "Get more templates for %PRODUCTNAME";
-    };
-};
-
 Window WIN_TABWINDOW
 {
     OutputSize = TRUE ;

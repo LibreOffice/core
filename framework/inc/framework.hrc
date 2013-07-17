@@ -31,16 +31,6 @@
 
 #define DLG_FILTER_SELECT                   (RID_FWK_DIALOG_START_CORRECT + 0)
 
-
-// ResIds for BackingWindow
-#define DLG_BACKING                         (RID_FWK_DIALOG_START_CORRECT+100)
-#define STR_BACKING_CREATE                  1
-#define STR_BACKING_TEMPLATE                2
-#define STR_BACKING_FILE                    3
-#define STR_BACKING_EXTHELP                 4
-#define STR_BACKING_INFOHELP                5
-#define STR_BACKING_TPLREP                  6
-
 // Ids of TabWindow
 #define WIN_TABWINDOW                       (RID_FWK_DIALOG_START_CORRECT+101)
 #define TC_TABCONTROL                        1

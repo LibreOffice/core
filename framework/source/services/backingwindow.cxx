@@ -18,9 +18,6 @@
  */
 
 #include "backingwindow.hxx"
-#include "classes/resource.hrc"
-#include "framework.hrc"
-#include "classes/fwkresid.hxx"
 #include <services.h>
 
 #include <sal/macros.h>
@@ -36,7 +33,6 @@
 #include "unotools/dynamicmenuoptions.hxx"
 #include "unotools/historyoptions.hxx"
 #include "svtools/imagemgr.hxx"
-#include "svtools/svtools.hrc"
 #include "svtools/langhelp.hxx"
 #include "svtools/colorcfg.hxx"
 
@@ -81,9 +77,7 @@ using namespace framework;
 #define OPEN_URL        ".uno:Open"
 
 BackingWindow::BackingWindow( Window* i_pParent ) :
-    Window( i_pParent , FwkResId( DLG_BACKING ) ),
-    maOpenString( FwkResId( STR_BACKING_FILE ) ),
-    maTemplateString( FwkResId( STR_BACKING_TEMPLATE ) ),
+    Window( i_pParent ),
     mbInitControls( false ),
     mnHideExternalLinks( 0 ),
     mpAccExec( NULL )
@@ -330,8 +324,6 @@ void BackingWindow::initControls()
 
     // create mnemonics on the fly, preregister the mnemonics of the menu
     MnemonicGenerator aMnemns;
-    maTemplateString = MnemonicGenerator::EraseAllMnemonicChars( maTemplateString );
-    maOpenString = MnemonicGenerator::EraseAllMnemonicChars( maOpenString );
 
     SystemWindow* pSysWin = GetSystemWindow();
     if( pSysWin )
@@ -372,10 +364,10 @@ void BackingWindow::initControls()
 
     layoutButton( NULL, aFileNewAppsAvailable,
                   aModuleOptions, SvtModuleOptions::E_SWRITER,
-                  *mpOpenButton, aMnemns, maOpenString );
+                  *mpOpenButton, aMnemns );
     layoutButton( NULL, aFileNewAppsAvailable,
                   aModuleOptions, SvtModuleOptions::E_SWRITER,
-                  *mpTemplateButton, aMnemns, maTemplateString );
+                  *mpTemplateButton, aMnemns );
 
     layoutExternalLink( *mpExtensionsButton );
     layoutExternalLink( *mpInfoButton );

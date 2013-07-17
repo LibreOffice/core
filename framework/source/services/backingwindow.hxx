@@ -86,10 +86,6 @@ namespace framework
         BitmapEx                        maBackgroundMiddle;
         BitmapEx                        maBackgroundRight;
 
-        String                          maCreateString;
-        String                          maOpenString;
-        String                          maTemplateString;
-
         Font                            maTextFont;
         Rectangle                       maControlRect;
 

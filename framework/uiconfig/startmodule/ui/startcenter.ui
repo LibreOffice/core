@@ -46,6 +46,11 @@
     <property name="can_focus">False</property>
     <property name="pixbuf">framework/res/folder_32.png</property>
   </object>
+  <object class="GtkImage" id="templates_image">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="pixbuf">framework/res/templates_32.png</property>
+  </object>
   <object class="GtkImage" id="writer_image">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -236,6 +241,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
+                <property name="tooltip_text" translatable="yes">Add new features to %PRODUCTNAME</property>
                 <property name="image">extension_image</property>
                 <property name="relief">none</property>
                 <property name="always_show_image">True</property>
@@ -252,6 +258,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
+                <property name="tooltip_text" translatable="yes">Get more information about %PRODUCTNAME</property>
                 <property name="image">info_image</property>
                 <property name="relief">none</property>
                 <property name="always_show_image">True</property>
@@ -268,6 +275,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
+                <property name="tooltip_text" translatable="yes">Get more templates for %PRODUCTNAME</property>
                 <property name="image">add_temp_image</property>
                 <property name="relief">none</property>
                 <property name="always_show_image">True</property>
@@ -294,10 +302,5 @@
         <property name="position">0</property>
       </packing>
     </child>
-  </object>
-  <object class="GtkImage" id="templates_image">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="pixbuf">framework/res/templates_32.png</property>
   </object>
 </interface>
