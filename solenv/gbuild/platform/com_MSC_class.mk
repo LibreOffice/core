@@ -113,29 +113,6 @@ $(call gb_Helper_abbreviate_dirs,\
 		-Yc$(notdir $(patsubst %.cxx,%.hxx,$(3))) -Fp$(1) -Fo$(1).obj) $(call gb_create_deps,$(call gb_PrecompiledHeader_get_dep_target,$(2)),$(1),$(3))
 endef
 
-# NoexPrecompiledHeader class
-
-gb_NoexPrecompiledHeader_get_enableflags = -Yu$(1).hxx \
-	-FI$(1).hxx \
-	-Fp$(call gb_NoexPrecompiledHeader_get_target,$(1)) \
-	$(gb_PCHWARNINGS)
-
-gb_NoexPrecompiledHeader_get_objectfile = $(1).obj
-
-define gb_NoexPrecompiledHeader__command
-$(call gb_Output_announce,$(2),$(true),PCH,1)
-$(call gb_Helper_abbreviate_dirs,\
-	mkdir -p $(dir $(1)) $(dir $(call gb_NoexPrecompiledHeader_get_dep_target,$(2))) && \
-	unset INCLUDE && \
-	$(gb_CXX) \
-		$(4) $(5) -Fd$(PDBFILE) \
-		$(gb_COMPILERDEPFLAGS) \
-		-I$(dir $(3)) \
-		$(6) \
-		-c $(3) \
-		-Yc$(notdir $(patsubst %.cxx,%.hxx,$(3))) -Fp$(1) -Fo$(1).obj) $(call gb_create_deps,$(call gb_NoexPrecompiledHeader_get_dep_target,$(2)),$(1),$(3))
-endef
-
 # AsmObject class
 
 gb_AsmObject_get_source = $(1)/$(2).asm

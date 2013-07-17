@@ -146,15 +146,10 @@ ifneq ($(strip $$(PCH_NAME)),)
 ifeq ($$(sort $$(PCH_CXXFLAGS) $$(PCH_DEFS) $$(gb_LinkTarget_EXCEPTIONFLAGS)),$$(sort $$(T_CXXFLAGS) $$(T_CXXFLAGS_APPEND) $$(DEFS)))
 $$@ : PCHFLAGS := $$(call gb_PrecompiledHeader_get_enableflags,$$(PCH_NAME))
 else
-ifeq ($$(sort $$(PCH_CXXFLAGS) $$(PCH_DEFS) $$(gb_LinkTarget_NOEXCEPTIONFLAGS)),$$(sort $$(T_CXXFLAGS) $$(T_CXXFLAGS_APPEND) $$(DEFS)))
-$$@ : PCHFLAGS := $$(call gb_NoexPrecompiledHeader_get_enableflags,$$(PCH_NAME))
-else
 $$(info No precompiled header available for $$*.cxx .)
-$$(info precompiled header flags (  ex) : $$(sort $$(PCH_CXXFLAGS) $$(PCH_DEFS) $$(gb_LinkTarget_EXCEPTIONFLAGS)))
-$$(info precompiled header flags (noex) : $$(sort $$(PCH_CXXFLAGS) $$(PCH_DEFS) $$(gb_LinkTarget_NOEXCEPTIONFLAGS)))
-$$(info .           object flags        : $$(sort $$(T_CXXFLAGS) $$(T_CXXFLAGS_APPEND) $$(DEFS)))
+$$(info precompiled header flags : $$(sort $$(PCH_CXXFLAGS) $$(PCH_DEFS) $$(gb_LinkTarget_EXCEPTIONFLAGS)))
+$$(info .           object flags : $$(sort $$(T_CXXFLAGS) $$(T_CXXFLAGS_APPEND) $$(DEFS)))
 $$@ : PCHFLAGS :=
-endif
 endif
 endif
 endif
@@ -1272,15 +1267,10 @@ define gb_LinkTarget__set_precompiled_header_impl
 $(call gb_LinkTarget_get_clean_target,$(1)) : $(call gb_PrecompiledHeader_get_clean_target,$(3))
 $(call gb_PrecompiledHeader_get_target,$(3)) : $(2).cxx
 
-$(call gb_LinkTarget_get_clean_target,$(1)) : $(call gb_NoexPrecompiledHeader_get_clean_target,$(3))
-$(call gb_NoexPrecompiledHeader_get_target,$(3)) : $(2).cxx
-
 $(call gb_PrecompiledHeader_get_target,$(3)) : $(call gb_LinkTarget_get_headers_target,$(1))
-$(call gb_NoexPrecompiledHeader_get_target,$(3)) : $(call gb_LinkTarget_get_headers_target,$(1))
 
 $(call gb_LinkTarget_get_target,$(1)) : PCH_NAME := $(3)
 $(call gb_LinkTarget_get_target,$(1)) : PCHOBJEX = $(call gb_PrecompiledHeader_get_objectfile, $(call gb_PrecompiledHeader_get_target,$(3)))
-$(call gb_LinkTarget_get_target,$(1)) : PCHOBJNOEX = $(call gb_NoexPrecompiledHeader_get_objectfile, $(call gb_NoexPrecompiledHeader_get_target,$(3)))
 $(call gb_LinkTarget_get_target,$(1)) : PCHOBJS = $$(PCHOBJEX)
 
 $(call gb_LinkTarget_get_headers_target,$(1)) \
@@ -1289,15 +1279,11 @@ $(call gb_LinkTarget_get_headers_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : PCH_CXXFLAGS := $$(T_CXXFLAGS) $(call gb_LinkTarget__get_cxxflags,$(1))
 
 $(call gb_PrecompiledHeader_get_target,$(3)) : VISIBILITY :=
-$(call gb_NoexPrecompiledHeader_get_target,$(3)) : VISIBILITY :=
 
 $(call gb_PrecompiledHeader_get_timestamp,$(1)) : $(call gb_PrecompiledHeader_get_target,$(3))
-$(call gb_NoexPrecompiledHeader_get_timestamp,$(1)) : $(call gb_NoexPrecompiledHeader_get_target,$(3))
 
 ifeq ($(gb_FULLDEPS),$(true))
--include \
-	$(call gb_PrecompiledHeader_get_dep_target,$(3)) \
-	$(call gb_NoexPrecompiledHeader_get_dep_target,$(3))
+-include $(call gb_PrecompiledHeader_get_dep_target,$(3)) 
 $(call gb_LinkTarget_get_dep_target,$(1)) : PCH_DEFS := $$(DEFS)
 $(call gb_LinkTarget_get_dep_target,$(1)) : PCH_CXXFLAGS := $$(T_CXXFLAGS) $(call gb_LinkTarget__get_cxxflags,$(1))
 endif
@@ -1372,7 +1358,6 @@ endif
 ifeq ($(gb_ENABLE_PCH),$(true))
 ifneq ($(strip $$(PCH_NAME)),)
 $(call gb_PrecompiledHeader_get_target,$$(PCH_NAME)) : VISIBILITY := default
-$(call gb_NoexPrecompiledHeader_get_target,$$(PCH_NAME)) : VISIBILITY := default
 endif
 endif
 
