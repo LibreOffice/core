@@ -318,8 +318,8 @@ IMPL_LINK( ScSpecialFilterDlg, EndDlgHdl, Button*, pBtn )
 
             if ( SCA_VALID != (nResult & SCA_VALID) )
             {
-                /*if (!pExpander->get_expanded())
-                    pExpander->set_expanded(true);*/
+                if (!pExpander->get_expanded())
+                    pExpander->set_expanded(true);
 
                 ERRORBOX( STR_INVALID_TABREF );
                 pEdCopyArea->GrabFocus();
