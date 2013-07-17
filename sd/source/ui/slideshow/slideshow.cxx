@@ -802,9 +802,9 @@ void SAL_CALL SlideShow::end() throw(RuntimeException)
                     }
                 }
 
-                if( pViewShell->GetDoc()->IsStartWithPresentation() )
+                if( pViewShell->GetDoc()->IsExitAfterPresenting() )
                 {
-                    pViewShell->GetDoc()->SetStartWithPresentation( false );
+                    pViewShell->GetDoc()->SetExitAfterPresenting( false );
 
                     Reference<frame::XDispatchProvider> xProvider(pViewShell->GetViewShellBase().GetController()->getFrame(),
                                                                   UNO_QUERY);
