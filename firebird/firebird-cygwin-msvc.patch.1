@@ -504,7 +504,7 @@ unchanged:
  
  $(UDF)/ib_udf.$(SHRLIB_EXT): $(UDF_Objects)
 -	$(call LINK_UDF,ib_udf) -o $@ $^ $(LINK_UDF_LIBS)
-+	@CXX@ $^ $(EXECUTABLE_OUTPUT_FLAG)$@ -LD -L$(LIB) $(GLOB_OPTIONS) $(CXXFLAGS) -lib_util \
++	@CXX@ $^ -o @ -LD -L$(LIB) $(GLOB_OPTIONS) $(CXXFLAGS) -lib_util \
 +	$(LINK_UDF_LIBS) $(LIB_LINK_OPTIONS) $(call LIB_LINK_SONAME,ib_udf.$(SHRLIB_EXT))\
 +	$(call LIB_LINK_RPATH,lib) \
 +	/link /dll
@@ -515,7 +515,7 @@ unchanged:
  
  $(LIBIBUTIL_SO): $(UTIL_Objects)
 -	$(LINK_IB_UTIL) -o $@ $^ $(LINK_IB_UTIL_LIBS)
-+	@CXX@ $^ $(EXECUTABLE_OUTPUT_FLAG)$@ -LD \
++	@CXX@ $^ -o $@ -LD \
 +	$(call LIB_LINK_RPATH,lib)  $(GLOB_OPTIONS) $(CXXFLAGS) $(LINK_IBUTIL_SYMBOLS) \
 +	$(LIB_LINK_OPTIONS) $(LINK_IB_UTIL_LIBS) $(call LIB_LINK_SONAME,$(IbUtilLibraryName)) \
 +	/link /dll
@@ -567,7 +567,7 @@ unchanged:
  
  $(LIBFBINTL_SO):	$(INTL_Objects) $(FBCOMMON_ClientObjects) $(FBCLASSES_ClientObjects)
 +ifeq (@PLATFORM@,win32)
-+	@CXX@ $^ $(EXECUTABLE_OUTPUT_FLAG)$@  -LD $(GLOB_OPTIONS) $(CXXFLAGS) $(LINK_INTL_LIBS)\
++	@CXX@ $^ -o $@  -LD $(GLOB_OPTIONS) $(CXXFLAGS) $(LINK_INTL_LIBS)\
 +	$(LINK_FBINTL_SYMBOLS) $(LIB_LINK_OPTIONS) -lfbstatic $(call LIB_LINK_SONAME,libintl.$(SHRLIB_EXT).1)\
 +	$(call LIB_LINK_RPATH,lib) /link /dll
 +else
@@ -585,7 +585,7 @@ diff -u firebird/builds/posix/Makefile.in.libfbembed firebird/builds/posix/Makef
  
  $(LIBFBEMBED_SO): $(LIBFBEMBED_Objects) $(SERVER_Objects) $(COMMON_Objects)
 +ifeq ($(PLATFORM),win32)
-+	@CXX@ $^ $(EXECUTABLE_OUTPUT_FLAG)$@ $(LINK_EMBED_LIBS)  $(GLOB_OPTIONS) $(CXXFLAGS)\
++	@CXX@ $^ -o $@ $(LINK_EMBED_LIBS)  $(GLOB_OPTIONS) $(CXXFLAGS)\
 +	$(LINK_FIREBIRD_EMBED_SYMBOLS) $(LIB_LINK_OPTIONS) $(LIB_EMBED_LINK_OPTIONS)\
 +	$(call LIB_LINK_SONAME,$(SharedLibrarySoName)) $(call LIB_LINK_RPATH,lib)
 +else
