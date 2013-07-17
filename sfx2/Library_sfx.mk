@@ -134,6 +134,7 @@ $(eval $(call gb_Library_add_exception_objects,sfx,\
     sfx2/source/control/msgpool \
     sfx2/source/control/objface \
     sfx2/source/control/querystatus \
+    sfx2/source/control/recentdocsview \
     sfx2/source/control/request \
     sfx2/source/control/sfxstatuslistener \
     sfx2/source/control/shell \

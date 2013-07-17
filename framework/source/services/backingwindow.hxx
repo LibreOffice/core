@@ -30,6 +30,9 @@
 #include "vcl/toolbox.hxx"
 #include "vcl/layout.hxx"
 
+
+#include <sfx2/recentdocsview.hxx>
+
 #include "unotools/moduleoptions.hxx"
 #include "svtools/acceleratorexecute.hxx"
 
@@ -81,6 +84,8 @@ namespace framework
         PushButton*                    mpTplRepButton;
 
         VclGrid*                       mpStartCenterContainer;
+
+        RecentDocsView*        mpRecentFilesThumbnails;
 
         BitmapEx                        maBackgroundLeft;
         BitmapEx                        maBackgroundMiddle;

@@ -88,7 +88,9 @@ BackingWindow::BackingWindow( Window* i_pParent ) :
     maTemplateString( FwkResId( STR_BACKING_TEMPLATE ) ),
     mbInitControls( false ),
     mnHideExternalLinks( 0 ),
-    mpAccExec( NULL )
+    mpAccExec( NULL ),
+    nSCWidth(600),
+    nSCHeight(400)
 {
     m_pUIBuilder = new VclBuilder(this, getUIRootDir(),
       "modules/StartModule/ui/startcenter.ui",
@@ -107,6 +109,11 @@ BackingWindow::BackingWindow( Window* i_pParent ) :
     get( mpTplRepButton,     "add_temp");
 
     get( mpStartCenterContainer,  "sccontainer");
+
+    get( mpRecentFilesThumbnails,  "recent_thumbnails");
+
+    mpRecentFilesThumbnails->Show();
+    mpRecentFilesThumbnails->loadRecentDocs();
 
     try
     {
@@ -141,6 +148,7 @@ BackingWindow::BackingWindow( Window* i_pParent ) :
     {
         SAL_WARN( "fwk", "BackingWindow - caught an exception! " << e.Message );
     }
+
 
     // clean up resource stack
     //FreeResource();
@@ -237,84 +245,15 @@ IMPL_LINK( BackingWindow, WindowEventListener, VclSimpleEvent*, pEvent )
     return 0;
 }
 
-/*
-void BackingWindow::prepareRecentFileMenu()
-{
-    if( ! mxPopupMenu.is() )
-        return;
 
-    if ( !mxPopupMenuController.is() )
-    {
-        uno::Sequence< uno::Any > aArgs( 2 );
-        beans::PropertyValue aProp;
-
-        aProp.Name = OUString( "Frame" );
-        aProp.Value <<= mxFrame;
-        aArgs[0] <<= aProp;
-
-        aProp.Name = OUString( "ModuleIdentifier" );
-        aProp.Value <<= OUString("com.sun.star.frame.StartModule");
-        aArgs[1] <<= aProp;
-        try
-        {
-            mxPopupMenuController.set(
-                mxPopupMenuFactory->createInstanceWithArgumentsAndContext(
-                    OUString( RECENT_FILE_LIST ), aArgs, mxContext),
-                        uno::UNO_QUERY_THROW );
-            mxPopupMenuController->setPopupMenu( mxPopupMenu );
-        }
-        catch ( const Exception &e )
-        {
-            SAL_WARN( "fwk", "BackingWindow - caught an exception! " << e.Message );
-        }
-
-        PopupMenu *pRecentMenu = NULL;
-        VCLXMenu* pTKMenu = VCLXMenu::GetImplementation( mxPopupMenu );
-        if ( pTKMenu )
-            pRecentMenu = dynamic_cast< PopupMenu * >( pTKMenu->GetMenu() );
-        mpOpenButton->SetPopupMenu( pRecentMenu );
-    }
-}
-*/
 
 void BackingWindow::initBackground()
 {
     SetBackground();
 
-    // select image set
-    ImageContainerRes aRes( FwkResId( RES_BACKING_IMAGES ) );
-
-    // scale middle segment
-    Size aMiddleSize;
-    if( !! maBackgroundMiddle )
-        aMiddleSize = maBackgroundMiddle.GetSizePixel();
-    // load middle segment
-
-    Application::LoadBrandBitmap ("shell/backing_space", maBackgroundMiddle);
-
-    // and scale it to previous size
-    if( aMiddleSize.Width() && aMiddleSize.Height() )
-        maBackgroundMiddle.Scale( aMiddleSize );
-
-    if( GetSettings().GetLayoutRTL() )
-    {
-        // replace images by RTL versions
-        Application::LoadBrandBitmap ("shell/backing_rtl_right", maBackgroundLeft);
-        Application::LoadBrandBitmap ("shell/backing_rtl_left", maBackgroundRight);
-    }
-    else
-    {
-        Application::LoadBrandBitmap ("shell/backing_left", maBackgroundLeft);
-        Application::LoadBrandBitmap ("shell/backing_right", maBackgroundRight);
-    }
-
     // CRASH
     //mpOpenButton->SetMenuMode( MENUBUTTON_MENUMODE_TIMED );
     //mpOpenButton->SetActivateHdl( LINK( this, BackingWindow, ActivateHdl ) );
-
-    // this will be moved to somewhere saner later
-    nSCWidth = 780;
-    nSCHeight = maBackgroundLeft.GetSizePixel().Height();
 }
 
 void BackingWindow::initControls()
@@ -452,10 +391,7 @@ void BackingWindow::Paint( const Rectangle& )
     Wallpaper aBack( svtools::ColorConfig().GetColorValue(::svtools::APPBACKGROUND).nColor );
     Region aClip( Rectangle( Point( 0, 0 ), GetOutputSizePixel() ) );
 
-    Rectangle aBmpRect(Point((GetOutputSizePixel().Width()-nSCWidth)/2,
-                             (GetOutputSizePixel().Height()-nSCHeight)/2),
-                       Size(nSCWidth,nSCHeight));
-    aClip.Exclude( aBmpRect );
+    aClip.Exclude( maStartCentButtons );
 
     Push( PUSH_CLIPREGION );
     IntersectClipRegion( aClip );
@@ -464,28 +400,12 @@ void BackingWindow::Paint( const Rectangle& )
 
     VirtualDevice aDev( *this );
     aDev.EnableRTL( IsRTLEnabled() );
-    aDev.SetOutputSizePixel( aBmpRect.GetSize() );
-    Point aOffset( Point( 0, 0 ) - aBmpRect.TopLeft());
+    aDev.SetOutputSizePixel( maStartCentButtons.GetSize() );
+    Point aOffset( Point( 0, 0 ) - maStartCentButtons.TopLeft());
     aDev.DrawWallpaper( Rectangle( aOffset, GetOutputSizePixel() ), aBack );
 
-    maBackgroundMiddle.Scale(
-        Size(nSCWidth - maBackgroundLeft.GetSizePixel().Width() - maBackgroundRight.GetSizePixel().Width(),
-        maBackgroundMiddle.GetSizePixel().Height()),
-        BMP_SCALE_FAST);
-
-    // draw bitmap
-    Point aTL( 0, 0 );
-    aDev.DrawBitmapEx( aTL, maBackgroundLeft );
-    aTL.X() += maBackgroundLeft.GetSizePixel().Width();
-    if( !!maBackgroundMiddle )
-    {
-        aDev.DrawBitmapEx( aTL, maBackgroundMiddle );
-        aTL.X() += maBackgroundMiddle.GetSizePixel().Width();
-    }
-    aDev.DrawBitmapEx( aTL, maBackgroundRight );
-
-    DrawOutDev( aBmpRect.TopLeft(), aBmpRect.GetSize(),
-                Point( 0, 0 ), aBmpRect.GetSize(),
+    DrawOutDev( maStartCentButtons.TopLeft(), maStartCentButtons.GetSize(),
+                Point( 0, 0 ), maStartCentButtons.GetSize(),
                 aDev );
 
 }
@@ -505,10 +425,10 @@ void BackingWindow::setOwningFrame( const com::sun::star::uno::Reference< com::s
 void BackingWindow::Resize()
 {
     maStartCentButtons = Rectangle(
-                        Point((GetOutputSizePixel().Width()-nSCWidth)/2 + nShadowTop + nPaddingTop,
-                              (GetOutputSizePixel().Height()-nSCHeight)/2 + nShadowLeft + nPaddingLeft + nLogoHeight),
-                        Size(nSCWidth - nShadowLeft - nShadowRight - nPaddingLeft - nPaddingRight,
-                             nSCHeight - nShadowTop - nShadowBottom - nPaddingTop - nPaddingBottom - nLogoHeight));
+        Point((GetOutputSizePixel().Width() - nSCWidth) / 2,
+              (GetOutputSizePixel().Height() - nSCHeight) / 2),
+        Size(nSCWidth, nSCHeight));
+
     if (isLayoutEnabled(this))
         VclContainer::setLayoutAllocation(*GetWindow(WINDOW_FIRSTCHILD),
             maStartCentButtons.TopLeft(), maStartCentButtons.GetSize());
