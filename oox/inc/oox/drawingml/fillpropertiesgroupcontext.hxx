@@ -81,6 +81,30 @@ private:
 };
 
 // ============================================================================
+
+/** Context handler that imports the a:duotone element containing the colors
+    of a bitmap duotone transformation. */
+class DuotoneContext : public ::oox::core::ContextHandler
+{
+public:
+    explicit            DuotoneContext(
+                            ::oox::core::ContextHandler& rParent,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& rxAttribs,
+                            BlipFillProperties& rBlipProps );
+    virtual             ~DuotoneContext();
+
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL
+                        createFastChildContext(
+                            sal_Int32 nElement,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& rxAttribs )
+                        throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException );
+
+private:
+    BlipFillProperties& mrBlipProps;
+    int                 mnColorIndex;
+};
+
+
 // ============================================================================
 
 /** Context handler that imports the a:clrChange element containing the colors

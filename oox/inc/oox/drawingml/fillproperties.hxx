@@ -93,6 +93,7 @@ struct BlipFillProperties
     OptValue< sal_Int32 > moContrast;           /// Contrast in the range [-100000,100000].
     Color               maColorChangeFrom;      /// Start color of color transformation.
     Color               maColorChangeTo;        /// Destination color of color transformation.
+    Color               maDuotoneColors[2];     /// Duotone Colors
 
     /** Overwrites all members that are explicitly set in rSourceProps. */
     void                assignUsed( const BlipFillProperties& rSourceProps );
