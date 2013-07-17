@@ -37,7 +37,7 @@ LINK_X64*:=$(WRAPCMD) $(LINK_X64_BINARY) $(NOLOGO) -MACHINE:X64
 LIBMGR_X64=$(WRAPCMD) $(LIBMGR_X64_BINARY) $(NOLOGO)
 IMPLIB_X64=$(WRAPCMD) $(LIBMGR_X64_BINARY)
 
-USE_CFLAGS_X64=-c -nologo -Gs $(NOLOGO) -Zm500 -Zc:forScope,wchar_t- -GR
+USE_CFLAGS_X64=-c -nologo -Gs $(NOLOGO) -Zm500 -Zc:wchar_t- -GR
 
 # Stack buffer overrun detection.
 CFLAGS+=-GS

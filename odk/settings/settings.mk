@@ -99,8 +99,8 @@ EMPTYSTRING=
 PATH_SEPARATOR=;
 
 # use this for release version
-CC_FLAGS_JNI=-c -MT -Zm500 -Zc:forScope,wchar_t- -wd4251 -wd4275 -wd4290 -wd4675 -wd4786 -wd4800 -Zc:forScope -GR -EHa
-CC_FLAGS=-c -MT -Zm500 -Zc:forScope,wchar_t- -wd4251 -wd4275 -wd4290 -wd4675 -wd4786 -wd4800 -Zc:forScope -GR -EHa
+CC_FLAGS_JNI=-c -MT -Zm500 -Zc:wchar_t- -wd4251 -wd4275 -wd4290 -wd4675 -wd4786 -wd4800 -GR -EHa
+CC_FLAGS=-c -MT -Zm500 -Zc:wchar_t- -wd4251 -wd4275 -wd4290 -wd4675 -wd4786 -wd4800 -GR -EHa
 ifeq "$(CPP_MANIFEST)" "true"
 #CC_FLAGS+=-EHa -Zc:wchar_t-
 LINK_MANIFEST=mt -manifest $@.manifest "-outputresource:$@;2"
