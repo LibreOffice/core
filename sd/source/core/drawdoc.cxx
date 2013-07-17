@@ -935,6 +935,16 @@ void SdDrawDocument::SetStartWithPresentation( bool bStartWithPresentation )
     mbStartWithPresentation = bStartWithPresentation;
 }
 
+bool SdDrawDocument::IsExitAfterPresenting() const
+{
+    return mbExitAfterPresenting;
+}
+
+void SdDrawDocument::SetExitAfterPresenting( bool bExitAfterPresenting )
+{
+    mbExitAfterPresenting = bExitAfterPresenting;
+}
+
 void SdDrawDocument::PageListChanged()
 {
     mpDrawPageListWatcher->Invalidate();

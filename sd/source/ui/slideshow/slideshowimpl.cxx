@@ -897,6 +897,11 @@ bool SlideshowImpl::startShow( PresentationSettingsEx* pPresSettings )
     if (mpParentWindow == NULL)
         return false;
 
+    // Autoplay (pps/ppsx)
+    if (mpViewShell->GetDoc()->IsStartWithPresentation()){
+        mpViewShell->GetDoc()->SetExitAfterPresenting(true);
+    }
+
     bool bRet = false;
 
     try
@@ -2158,6 +2163,7 @@ IMPL_LINK_NOARG(SlideshowImpl, ContextMenuHdl)
     const ShowWindowMode eMode = mpShowWindow->GetShowWindowMode();
     pMenu->EnableItem( CM_NEXT_SLIDE, ( mpSlideController->getNextSlideIndex() != -1 ) );
     pMenu->EnableItem( CM_PREV_SLIDE, ( mpSlideController->getPreviousSlideIndex() != -1 ) || (eMode == SHOWWINDOWMODE_END) || (eMode == SHOWWINDOWMODE_PAUSE) || (eMode == SHOWWINDOWMODE_BLANK) );
+    pMenu->EnableItem( CM_EDIT_PRESENTATION, mpViewShell->GetDoc()->IsStartWithPresentation());
 
     PopupMenu* pPageMenu = pMenu->GetPopupMenu( CM_GOTO );
 
@@ -2383,6 +2389,19 @@ IMPL_LINK( SlideshowImpl, ContextMenuSelectHdl, Menu *, pMenu )
                 setUsePen(!mbUsePen);
                 mbWasPaused = false;
             }
+            break;
+        case CM_EDIT_PRESENTATION:
+            // When in autoplay mode (pps/ppsx), offer editing of the presentation
+            // Turn autostart off, else Impress will close when exiting the Presentation
+            mpViewShell->GetDoc()->SetExitAfterPresenting(false);
+            if( mpSlideController.get() && (ANIMATIONMODE_SHOW == meAnimationMode) )
+            {
+                if( mpSlideController->getCurrentSlideNumber() != -1 )
+                {
+                    mnRestoreSlide = mpSlideController->getCurrentSlideNumber();
+                }
+            }
+            endPresentation();
             break;
         case CM_ENDSHOW:
             // in case the user cancels the presentation, switch to current slide
