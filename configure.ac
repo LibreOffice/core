@@ -8120,6 +8120,8 @@ if test "x$enable_firebird_sdbc" = "xyes"; then
         ENABLE_FIREBIRD_SDBC="TRUE"
     elif test "$enable_database_connectivity" != yes; then
         AC_MSG_RESULT([none])
+    elif test "$cross_compiling" = "yes"; then
+        AC_MSG_RESULT([none])
     else
         dnl ===================================================================
         dnl Check for system libatomic-ops
