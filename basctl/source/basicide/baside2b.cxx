@@ -251,8 +251,8 @@ EditorWindow::EditorWindow (Window* pParent, ModulWindow* pModulWindow) :
     s[1] = OUString( "FontName" );
     n->addPropertiesChangeListener(s, listener_.get());
     //aListBox = new CodeCompleteListBox(this);
-    //pCodeCopleteWnd = new CodeCompleteFloatWindow(this);
-    pCodeCompleteWnd = new CodeCompleteFloatWindow( this );
+    //pCodeCopleteWnd = new CodeCompleteWindow(this);
+    pCodeCompleteWnd = new CodeCompleteWindow( this );
 }
 
 
@@ -591,6 +591,7 @@ void EditorWindow::KeyInput( const KeyEvent& rKEvt )
                             for(sal_Int32 l = 0; l < aMethods.getLength(); ++l)
                             {
                                 pCodeCompleteWnd->InsertEntry( OUString(aMethods[l]->getName()) );
+                                //std::cerr << aMethods[l]->getName() << std::endl;
                             }
                             pCodeCompleteWnd->ResizeListBox();
                             pCodeCompleteWnd->Show();
@@ -2384,72 +2385,82 @@ void WatchTreeListBox::UpdateWatches( bool bBasicStopped )
     setBasicWatchMode( false );
 }
 
-CodeCompleteListBox::CodeCompleteListBox(EditorWindow* pPar)
-: ListBox(pPar, WB_DROPDOWN | WB_BORDER),
-pParent(pPar)
+CodeCompleteListBox::CodeCompleteListBox( CodeCompleteWindow* pPar )
+: ListBox(pPar, WB_SORT | WB_BORDER),
+pCodeCompleteWindow(pPar)
 {
-    SetSelectHdl( LINK(this, CodeCompleteListBox, ImplSelectHdl) );
-    SetDropDownLineCount( 8 );
+    SetDoubleClickHdl(LINK(this, CodeCompleteListBox, ImplDoubleClickHdl));
 }
 
 CodeCompleteListBox::~CodeCompleteListBox()
 {
+    delete pCodeCompleteWindow;
 }
 
-IMPL_LINK_NOARG(CodeCompleteListBox, ImplSelectHdl)
+IMPL_LINK_NOARG(CodeCompleteListBox, ImplDoubleClickHdl)
 {
-    TextSelection aSel = this->pParent->GetEditView()->GetSelection();
-    pParent->GetEditEngine()->ReplaceText(aSel, (OUString) GetEntry(GetSelectEntryPos()) );
-    Clear();
+    if( GetEntry( GetSelectEntryPos() ) != OUString("") )
+    {
+        pCodeCompleteWindow->pParent->GetEditView()->SetSelection( pCodeCompleteWindow->GetTextSelection() );
+        pCodeCompleteWindow->pParent->GetEditView()->InsertText( (OUString) GetEntry(GetSelectEntryPos()) );
+        pCodeCompleteWindow->pParent->GetEditView()->EnableCursor( true );
+        pCodeCompleteWindow->LoseFocus();
+        pCodeCompleteWindow->Hide();
+    }
     return 0;
 }
 
-CodeCompleteFloatWindow::CodeCompleteFloatWindow( EditorWindow* pPar )
-: Window( pPar, WB_BORDER | WB_SYSTEMWINDOW | WB_NOSHADOW  ),
+long CodeCompleteListBox::PreNotify( NotifyEvent& rNEvt )
+{
+    if( ( rNEvt.GetType() == EVENT_KEYINPUT ) )
+    {
+        KeyEvent aKeyEvt = *rNEvt.GetKeyEvent();
+        switch( aKeyEvt.GetKeyCode().GetCode() )
+        {
+            case KEY_ESCAPE:
+                pCodeCompleteWindow->pParent->GetEditView()->EnableCursor( true );
+                pCodeCompleteWindow->Hide();
+                return 0;
+            default:
+                return ListBox::PreNotify( rNEvt );
+        }
+    }
+}
+
+CodeCompleteWindow::CodeCompleteWindow( EditorWindow* pPar )
+: Window( pPar, WB_BORDER ),
 pParent(pPar)
 {
     InitListBox();
     SetSizePixel( Size(150,150) );
 }
 
-void CodeCompleteFloatWindow::InitListBox()
+void CodeCompleteWindow::InitListBox()
 {
-    pListBox = new ListBox( this );
+    pListBox = new CodeCompleteListBox( this );
     pListBox->SetSizePixel( Size(150,150) ); //default, this will adopt the line length
-    pListBox->SetDoubleClickHdl(LINK(this, CodeCompleteFloatWindow, ImplDoubleClickHdl));
     pListBox->Show();
+    pListBox->GrabFocus();
 }
 
-CodeCompleteFloatWindow::~CodeCompleteFloatWindow()
+CodeCompleteWindow::~CodeCompleteWindow()
 {
     delete pListBox;
 }
 
-void CodeCompleteFloatWindow::InsertEntry( const OUString& aStr )
+void CodeCompleteWindow::InsertEntry( const OUString& aStr )
 {
     pListBox->InsertEntry( aStr );
 }
 
-void CodeCompleteFloatWindow::ClearListBox()
+void CodeCompleteWindow::ClearListBox()
 {
     pListBox->Clear();
 }
 
-IMPL_LINK_NOARG(CodeCompleteFloatWindow, ImplDoubleClickHdl)
+void CodeCompleteWindow::KeyInput( const KeyEvent& rKeyEvt )
 {
-    if( pListBox->GetEntry( pListBox->GetSelectEntryPos() ) != OUString("") )
-    {
-        pParent->GetEditView()->SetSelection( aTextSelection );
-        pParent->GetEditView()->InsertText( (OUString) pListBox->GetEntry(pListBox->GetSelectEntryPos()) );
-        pParent->GetEditView()->EnableCursor( true );
-        LoseFocus();
-        Hide();
-    }
-    return 0;
-}
-
-void CodeCompleteFloatWindow::KeyInput( const KeyEvent& rKeyEvt )
-{
+    std::cerr << "CodeCompleteWindow::KeyInput" << std::endl;
     if( rKeyEvt.GetKeyCode().GetCode() == KEY_ESCAPE )
     {// ESC key closes the window: does not modify anything
         pParent->GetEditView()->EnableCursor( true );
@@ -2457,18 +2468,36 @@ void CodeCompleteFloatWindow::KeyInput( const KeyEvent& rKeyEvt )
     }
 }
 
-void CodeCompleteFloatWindow::SetTextSelection( const TextSelection& aSel )
+void CodeCompleteWindow::SetTextSelection( const TextSelection& aSel )
 {
     aTextSelection = aSel;
 }
 
-void CodeCompleteFloatWindow::ResizeListBox()
+const TextSelection& CodeCompleteWindow::GetTextSelection() const
 {
-    Size aSize = pListBox->CalcMinimumSize();
-    const Font& aFont = pListBox->GetUnzoomedControlPointFont();
-    aSize.setHeight( aFont.GetSize().getHeight() * 16 );
-    pListBox->SetSizePixel( aSize );
-    SetSizePixel( aSize );
+    return aTextSelection;
+}
+
+void CodeCompleteWindow::ResizeListBox()
+{
+    if( pListBox->GetEntryCount() > 0 )
+    {// if there is at least one element inside
+        OUString aLongestEntry = pListBox->GetEntry( 0 );//grab the longest one: max search
+        for( sal_uInt16 i=0; i< pListBox->GetEntryCount(); ++i )
+        {
+            if( ((OUString) pListBox->GetEntry( i )).getLength() > aLongestEntry.getLength() )
+                aLongestEntry = pListBox->GetEntry( i );
+        }
+
+        Size aSize = pListBox->GetOptimalSize();
+        const Font& aFont = pListBox->GetUnzoomedControlPointFont();
+
+        aSize.setHeight( aFont.GetSize().getHeight() * 16 );
+        aSize.setWidth( pListBox->CalcSize(aLongestEntry.getLength(),pListBox->GetEntryCount()).getWidth() );
+
+        pListBox->SetSizePixel( aSize );
+        SetSizePixel( aSize );
+    }
 }
 
 } // namespace basctl
