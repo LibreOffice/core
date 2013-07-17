@@ -71,7 +71,7 @@ static int pr_error (const ISC_STATUS* status, const char* operation)
 
     isc_print_status(status);
 
-    printf("SQLCODE:%d\n", isc_sqlcode(status));
+//    printf("SQLCODE:%d\n", isc_sqlcode(status)); Causes warning on some platforms
 
     printf("]\n");
 
