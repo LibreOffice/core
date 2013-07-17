@@ -704,6 +704,8 @@
 #define STR_RNG_PARAMETER_STANDARD_NUMBER_OF_TRIALS 571
 #define STR_RNG_PARAMETER_STANDARD_NU_VALUE         572
 
+#define STR_SAMPLING_UNDO_NAME                      573
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

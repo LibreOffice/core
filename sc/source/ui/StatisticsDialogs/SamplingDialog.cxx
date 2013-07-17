@@ -55,6 +55,12 @@ ScSamplingDialog::ScSamplingDialog(
     get(mpOutputRangeButton, "output-range-button");
     mpOutputRangeButton->SetReferences(this, mpOutputRangeEdit);
 
+    get(mpSampleSize, "sample-size-spin");
+    get(mpPeriod,     "period-spin");
+
+    get(mpRandomMethodRadio,   "random-method-radio");
+    get(mpPeriodicMethodRadio, "periodic-method-radio");
+
     get(mpButtonOk,     "ok");
     get(mpButtonApply,  "apply");
     get(mpButtonCancel, "cancel");
@@ -68,6 +74,8 @@ void ScSamplingDialog::Init()
     mpButtonOk->SetClickHdl( LINK( this, ScSamplingDialog, OkClicked ) );
     mpButtonCancel->SetClickHdl( LINK( this, ScSamplingDialog, CancelClicked ) );
     mpButtonApply->SetClickHdl( LINK( this, ScSamplingDialog, ApplyClicked ) );
+    mpButtonOk->Enable(false);
+    mpButtonApply->Enable(false);
 
     Link aLink = LINK( this, ScSamplingDialog, GetFocusHandler );
     mpInputRangeEdit->SetGetFocusHdl( aLink );
@@ -80,20 +88,31 @@ void ScSamplingDialog::Init()
     mpInputRangeButton->SetLoseFocusHdl( aLink );
     mpOutputRangeEdit->SetLoseFocusHdl( aLink );
     mpOutputRangeButton->SetLoseFocusHdl( aLink );
+
+    mpSampleSize->SetModifyHdl( LINK( this, ScSamplingDialog, SamplingSizeValueModified ));
+
+    mpPeriodicMethodRadio->SetToggleHdl( LINK( this, ScSamplingDialog, ToggleSamplingMethod ) );
+    mpRandomMethodRadio->SetToggleHdl( LINK( this, ScSamplingDialog, ToggleSamplingMethod ) );
+
+    mpSampleSize->SetMin( 0 );
+    mpSampleSize->SetMax( SAL_MAX_INT64 );
+
+    mpOutputRangeEdit->GrabFocus();
+    mpPeriodicMethodRadio->Check(true);
+
+    ToggleSamplingMethod(NULL);
 }
 
 void ScSamplingDialog::GetRangeFromSelection()
 {
     OUString aCurrentString;
     mViewData->GetSimpleArea(mInputRange);
-    mInputRange.Format( aCurrentString, ABS_DREF3D, mDocument, mAddressDetails );
-    mpInputRangeEdit->SetText( aCurrentString );
+    mInputRange.Format(aCurrentString, ABS_DREF3D, mDocument, mAddressDetails);
+    mpInputRangeEdit->SetText(aCurrentString);
 }
-
 
 ScSamplingDialog::~ScSamplingDialog()
-{
-}
+{}
 
 void ScSamplingDialog::SetActive()
 {
@@ -133,77 +152,112 @@ void ScSamplingDialog::SetReference( const ScRange& rReferenceRange, ScDocument*
         else if ( mpActiveEdit == mpOutputRangeEdit )
         {
             mOutputAddress = rReferenceRange.aStart;
-            sal_uInt16  nFormat = ( mOutputAddress.Tab() == mCurrentAddress.Tab() ) ? SCA_ABS : SCA_ABS_3D;
+
+            sal_uInt16 nFormat = ( mOutputAddress.Tab() == mCurrentAddress.Tab() ) ? SCA_ABS : SCA_ABS_3D;
             mOutputAddress.Format( aReferenceString, nFormat, pDocument, pDocument->GetAddressConvention() );
-            mpActiveEdit->SetRefString( aReferenceString );
+            mpOutputRangeEdit->SetRefString( aReferenceString );
+
+            // Change sampling size according to output range selection
+            sal_Int64 aSelectedSampleSize = rReferenceRange.aEnd.Row() - rReferenceRange.aStart.Row() + 1;
+            if (aSelectedSampleSize > 1)
+                mpSampleSize->SetValue(aSelectedSampleSize);
+            SamplingSizeValueModified(NULL);
+
+            // Enable OK, Cancel if output range is set
+            mpButtonOk->Enable(!mpOutputRangeEdit->GetText().isEmpty());
+            mpButtonApply->Enable(!mpOutputRangeEdit->GetText().isEmpty());
+
         }
     }
 }
 
 void ScSamplingDialog::PerformSampling()
 {
-    OUString aUndo("A");
+    OUString aUndo(ScResId(STR_SAMPLING_UNDO_NAME));
     ScDocShell* pDocShell = mViewData->GetDocShell();
     svl::IUndoManager* pUndoManager = pDocShell->GetUndoManager();
     pUndoManager->EnterListAction( aUndo, aUndo );
 
-    SCCOL nColStart = mInputRange.aStart.Col();
-    SCCOL nColEnd   = mInputRange.aEnd.Col();
-    SCROW nRowStart = mInputRange.aStart.Row();
-    SCROW nRowEnd   = mInputRange.aEnd.Row();
-    SCTAB nTabStart = mInputRange.aStart.Tab();
-    SCTAB nTabEnd   = mInputRange.aEnd.Tab();
+    ScAddress aStart = mInputRange.aStart;
+    ScAddress aEnd   = mInputRange.aEnd;
 
-    TimeValue now;
-    osl_getSystemTime(&now);
-    boost::mt19937 seed(now.Nanosec);
-    boost::uniform_01<boost::mt19937> rng(seed);
+    SCTAB outTab = mOutputAddress.Tab();
+    SCCOL outCol = mOutputAddress.Col();
+    SCROW outRow = mOutputAddress.Row();
 
-    SCTAB nOutTab = mOutputAddress.Tab();
-    SCCOL nOutCol = mOutputAddress.Col();
-    SCROW nOutRow = mOutputAddress.Row();
-    for (SCROW nTab = nTabStart; nTab <= nTabEnd; nTab++)
+    if (mpRandomMethodRadio->IsChecked())
     {
-        nOutCol = mOutputAddress.Col();
-        for (SCCOL nCol = nColStart; nCol <= nColEnd; nCol++)
+        TimeValue now;
+        osl_getSystemTime(&now);
+        boost::mt19937 seed(now.Nanosec);
+        boost::uniform_01<boost::mt19937> rng(seed);
+
+        SCROW inRow;
+
+        sal_Int64 aSampleSize = mpSampleSize->GetValue();
+
+        for (SCROW inTab = aStart.Tab(); inTab <= aEnd.Tab(); inTab++)
         {
-            nOutRow = mOutputAddress.Row();
-            SCROW nRow = nRowStart;
-
-            SCROW t = 0;
-            SCROW N = (nRowEnd - nRowStart) + 1;
-            int m = 0;
-            int n = 3;
-            double u;
-
-            while (m < n)
+            outCol = mOutputAddress.Col();
+            for (SCCOL inCol = aStart.Col(); inCol <= aEnd.Col(); inCol++)
             {
-                u = rng();
-                if ( (N - t)*u >= n - m )
-                {
-                    nRow++;
-                    t++;
-                }
-                else
-                {
-                    double aValue = mDocument->GetValue( ScAddress(nCol, nRow, nTab) );
-                    pDocShell->GetDocFunc().SetValueCell(ScAddress(nOutCol, nOutRow, nOutTab), aValue, true);
-                    nRow++;
-                    nOutRow++;
-                    m++;
-                    t++;
-                }
-            }
+                SCROW aPopulationSize = (aEnd.Row() - aStart.Row()) + 1;
 
-            nOutCol++;
+                outRow = mOutputAddress.Row();
+                inRow  = aStart.Row();
+
+                double aRandomValue;
+
+                while ((outRow - mOutputAddress.Row()) < aSampleSize)
+                {
+                    aRandomValue = rng();
+
+                    if ( (aPopulationSize - (inRow - aStart.Row())) * aRandomValue >= aSampleSize - (outRow - mOutputAddress.Row()) )
+                    {
+                        inRow++;
+                    }
+                    else
+                    {
+                        double aValue = mDocument->GetValue( ScAddress(inCol, inRow, inTab) );
+                        pDocShell->GetDocFunc().SetValueCell(ScAddress(outCol, outRow, outTab), aValue, true);
+                        inRow++;
+                        outRow++;
+                    }
+                }
+                outCol++;
+            }
+            outTab++;
         }
-        nOutTab++;
+    }
+    else if (mpPeriodicMethodRadio->IsChecked())
+    {
+        sal_Int64 aPeriod = mpPeriod->GetValue();
+
+        for (SCROW inTab = aStart.Tab(); inTab <= aEnd.Tab(); inTab++)
+        {
+            outCol = mOutputAddress.Col();
+            for (SCCOL inCol = aStart.Col(); inCol <= aEnd.Col(); inCol++)
+            {
+                sal_Int64 i = 0;
+                outRow = mOutputAddress.Row();
+                for (SCROW inRow = aStart.Row(); inRow <= aEnd.Row(); inRow++)
+                {
+                    if (i % aPeriod == aPeriod - 1 ) // Sample the last of period
+                    {
+                        double aValue = mDocument->GetValue(ScAddress(inCol, inRow, inTab));
+                        pDocShell->GetDocFunc().SetValueCell(ScAddress(outCol, outRow, outTab), aValue, true);
+                        outRow++;
+                    }
+                    i++;
+                }
+                outCol++;
+            }
+            outTab++;
+        }
     }
 
-    ScRange aOutputRange(mOutputAddress, ScAddress(nOutCol,   nOutRow,   nOutTab) );
-
+    ScRange aOutputRange(mOutputAddress, ScAddress(outTab, outRow, outTab) );
     pUndoManager->LeaveListAction();
-
     pDocShell->PostPaint( aOutputRange, PAINT_GRID );
 }
 
@@ -247,5 +301,29 @@ IMPL_LINK_NOARG(ScSamplingDialog, LoseFocusHandler)
     mDialogLostFocus = !IsActive();
     return 0;
 }
+
+IMPL_LINK_NOARG(ScSamplingDialog, SamplingSizeValueModified)
+{
+    sal_Int64 aPopulationSize = mInputRange.aEnd.Row() - mInputRange.aStart.Row() + 1;
+    if (mpSampleSize->GetValue() > aPopulationSize)
+        mpSampleSize->SetValue(aPopulationSize);
+    return 0;
+}
+
+IMPL_LINK_NOARG(ScSamplingDialog, ToggleSamplingMethod)
+{
+    if (mpRandomMethodRadio->IsChecked())
+    {
+        mpPeriod->Enable(false);
+        mpSampleSize->Enable(true);
+    }
+    else if (mpPeriodicMethodRadio->IsChecked())
+    {
+        mpPeriod->Enable(true);
+        mpSampleSize->Enable(false);
+    }
+    return 0;
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -42,6 +42,12 @@ private:
     formula::RefEdit*   mpOutputRangeEdit;
     formula::RefButton* mpOutputRangeButton;
 
+    NumericField*       mpSampleSize;
+    NumericField*       mpPeriod;
+
+    RadioButton*        mpRandomMethodRadio;
+    RadioButton*        mpPeriodicMethodRadio;
+
     PushButton*         mpButtonApply;
     OKButton*           mpButtonOk;
     CancelButton*       mpButtonCancel;
@@ -70,7 +76,8 @@ private:
     DECL_LINK( ApplyClicked,     PushButton* );
     DECL_LINK( GetFocusHandler,  Control* );
     DECL_LINK( LoseFocusHandler, void* );
-
+    DECL_LINK( SamplingSizeValueModified, void* );
+    DECL_LINK( ToggleSamplingMethod, void* );
 };
 
 #endif

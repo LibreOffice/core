@@ -84,6 +84,7 @@ $(eval $(call gb_SrsTarget_add_files,sc/res,\
     sc/source/ui/formdlg/dwfunctr.src \
     sc/source/ui/sidebar/CellAppearancePropertyPanel.src \
     sc/source/ui/StatisticsDialogs/RandomNumberGeneratorDialog.src \
+    sc/source/ui/StatisticsDialogs/SamplingDialog.src \
     sc/source/core/src/compiler.src \
 ))
 
