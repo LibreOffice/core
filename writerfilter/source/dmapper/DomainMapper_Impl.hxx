@@ -355,7 +355,7 @@ private:
     ::com::sun::star::uno::Reference< text::XTextRange >      m_xFrameEndRange;
 
     // Redline stack
-    std::vector< RedlineParamsPtr > m_aRedlines;
+    std::stack< std::vector< RedlineParamsPtr > > m_aRedlines;
     RedlineParamsPtr                m_pParaRedline;
     bool                            m_bIsParaChange;
 
