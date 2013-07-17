@@ -10,7 +10,7 @@
 
 $(eval $(call gb_StaticLibrary_StaticLibrary,winextendloaderenv))
 
-$(eval $(call gb_StaticLibrary_add_noexception_objects,winextendloaderenv,\
+$(eval $(call gb_StaticLibrary_add_exception_objects,winextendloaderenv,\
     desktop/win32/source/extendloaderenvironment \
 ))
 
