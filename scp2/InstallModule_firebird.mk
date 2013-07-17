@@ -14,4 +14,8 @@ $(eval $(call gb_InstallModule_add_scpfiles,scp2/firebird,\
     scp2/source/firebird/module_firebird \
 ))
 
+$(eval $(call gb_InstallModule_define_if_set,scp2/firebird,\
+        SYSTEM_FIREBIRD \
+))
+
 # vim: set shiftwidth=4 tabstop=4 noexpandtab:
