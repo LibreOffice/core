@@ -208,7 +208,7 @@ bool SvtSystemLanguageOptions::isKeyboardLayoutTypeInstalled(sal_Int16 scriptTyp
 
             for(int i = 0; i < nLayouts; ++i)
             {
-                LCID lang = MAKELCID(((WORD)((DWORD_PTR)lpList[i] & 0xffff), SORT_DEFAULT));
+                LCID lang = MAKELCID((WORD)((DWORD_PTR)lpList[i] & 0xffff), SORT_DEFAULT);
                 if (MsLangId::getScriptType(lang) == scriptType)
                 {
                     isInstalled = true;
