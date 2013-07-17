@@ -4432,10 +4432,10 @@ int RTFDocumentImpl::popState()
     RTFValue::Pointer_t pTrackchange = aState.aCharacterSprms.find(NS_ooxml::LN_trackchange);
     if (pTrackchange.get())
     {
-        RTFSprms aTCAttributes;
+        RTFSprms aTCSprms;
         RTFValue::Pointer_t pValue(new RTFValue(0));
-        aTCAttributes.set(NS_ooxml::LN_endtrackchange, pValue);
-        writerfilter::Reference<Properties>::Pointer_t const pProperties(new RTFReferenceProperties(aTCAttributes));
+        aTCSprms.set(NS_ooxml::LN_endtrackchange, pValue);
+        writerfilter::Reference<Properties>::Pointer_t const pProperties(new RTFReferenceProperties(RTFSprms(), aTCSprms));
         Mapper().props(pProperties);
     }
 

@@ -22090,7 +22090,9 @@
       <action name="start" action="tokenproperty"/>
       <action name="start" action="propagateCharacterPropertiesAsSet" sendtokenid="ooxml:trackchange"/>
       <action name="start" action="clearProps"/>
-      <action name="end" action="mark" sendtokenid="ooxml:endtrackchange"/>
+      <action name="end" action="tokenproperty"/>
+      <action name="end" action="propagateCharacterPropertiesAsSet" sendtokenid="ooxml:endtrackchange"/>
+      <action name="end" action="clearProps"/>
     </resource>
     <resource name="EG_RangeMarkupElements" resource="Properties" tag="redlines">
       <element name="bookmarkStart" tokenid="ooxml:EG_RangeMarkupElements_bookmarkStart"/>

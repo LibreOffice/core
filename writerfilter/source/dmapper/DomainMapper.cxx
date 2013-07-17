@@ -1412,9 +1412,6 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
         case NS_ooxml::LN_CT_Color_themeShade:
             //unsupported
         break;
-        case NS_ooxml::LN_endtrackchange:
-            m_pImpl->RemoveCurrentRedline( );
-        break;
         case NS_ooxml::LN_CT_DocGrid_linePitch:
         {
             //see SwWW8ImplReader::SetDocumentGrid
@@ -3297,6 +3294,9 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
         }
         m_pImpl->EndParaChange( );
     }
+    break;
+    case NS_ooxml::LN_endtrackchange:
+        m_pImpl->RemoveCurrentRedline( );
     break;
     case NS_ooxml::LN_CT_RPrChange_rPr:
     break;
