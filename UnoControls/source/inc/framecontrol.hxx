@@ -202,75 +202,75 @@ public:
     //__________________________________________________________________________________________________________
     //  overrides to remove inheritance ambiguity
     //__________________________________________________________________________________________________________
-    virtual css::uno::Reference<css::awt::XWindowPeer> getPeer() throw (css::uno::RuntimeException)
+    virtual css::uno::Reference<css::awt::XWindowPeer> SAL_CALL getPeer() throw (css::uno::RuntimeException)
         { return BaseControl::getPeer(); }
-    virtual css::awt::Rectangle getPosSize() throw (css::uno::RuntimeException)
+    virtual css::awt::Rectangle SAL_CALL getPosSize() throw (css::uno::RuntimeException)
         { return BaseControl::getPosSize(); }
-    virtual void setPosSize(sal_Int32 p1, sal_Int32 p2, sal_Int32 p3, sal_Int32 p4, sal_Int16 p5) throw (css::uno::RuntimeException)
+    virtual void SAL_CALL setPosSize(sal_Int32 p1, sal_Int32 p2, sal_Int32 p3, sal_Int32 p4, sal_Int16 p5) throw (css::uno::RuntimeException)
         { return BaseControl::setPosSize(p1, p2, p3, p4, p5); }
-    virtual void addEventListener(const css::uno::Reference<css::lang::XEventListener>& p1) throw (css::uno::RuntimeException)
+    virtual void SAL_CALL addEventListener(const css::uno::Reference<css::lang::XEventListener>& p1) throw (css::uno::RuntimeException)
         { return BaseControl::addEventListener(p1); }
-    virtual void removeEventListener(const css::uno::Reference<css::lang::XEventListener>& p1) throw (css::uno::RuntimeException)
+    virtual void SAL_CALL removeEventListener(const css::uno::Reference<css::lang::XEventListener>& p1) throw (css::uno::RuntimeException)
         { return BaseControl::removeEventListener(p1); }
-    virtual void setVisible(sal_Bool p1) throw (css::uno::RuntimeException)
+    virtual void SAL_CALL setVisible(sal_Bool p1) throw (css::uno::RuntimeException)
        { return BaseControl::setVisible(p1); }
-    virtual void setEnable(sal_Bool p1) throw (css::uno::RuntimeException)
+    virtual void SAL_CALL setEnable(sal_Bool p1) throw (css::uno::RuntimeException)
         { return BaseControl::setEnable(p1); }
-    virtual void setFocus() throw (css::uno::RuntimeException)
+    virtual void SAL_CALL setFocus() throw (css::uno::RuntimeException)
         { return BaseControl::setFocus(); }
-    virtual void addWindowListener(const css::uno::Reference<css::awt::XWindowListener>& p1) throw (css::uno::RuntimeException)
+    virtual void SAL_CALL addWindowListener(const css::uno::Reference<css::awt::XWindowListener>& p1) throw (css::uno::RuntimeException)
         { return BaseControl::addWindowListener(p1); }
-    virtual void removeWindowListener(const css::uno::Reference<css::awt::XWindowListener>& p1) throw (css::uno::RuntimeException)
+    virtual void SAL_CALL removeWindowListener(const css::uno::Reference<css::awt::XWindowListener>& p1) throw (css::uno::RuntimeException)
         { return BaseControl::removeWindowListener(p1); }
-    virtual void addFocusListener(const css::uno::Reference<css::awt::XFocusListener>& p1) throw (css::uno::RuntimeException)
+    virtual void SAL_CALL addFocusListener(const css::uno::Reference<css::awt::XFocusListener>& p1) throw (css::uno::RuntimeException)
         { return BaseControl::addFocusListener(p1); }
-    virtual void removeFocusListener(const css::uno::Reference<css::awt::XFocusListener>& p1) throw (css::uno::RuntimeException)
+    virtual void SAL_CALL removeFocusListener(const css::uno::Reference<css::awt::XFocusListener>& p1) throw (css::uno::RuntimeException)
         { return BaseControl::removeFocusListener(p1); }
-    virtual void addKeyListener(const css::uno::Reference<css::awt::XKeyListener>& p1) throw (css::uno::RuntimeException)
+    virtual void SAL_CALL addKeyListener(const css::uno::Reference<css::awt::XKeyListener>& p1) throw (css::uno::RuntimeException)
         { return BaseControl::addKeyListener(p1); }
-    virtual void removeKeyListener(const css::uno::Reference<css::awt::XKeyListener>& p1) throw (css::uno::RuntimeException)
+    virtual void SAL_CALL removeKeyListener(const css::uno::Reference<css::awt::XKeyListener>& p1) throw (css::uno::RuntimeException)
         { return BaseControl::removeKeyListener(p1); }
-    virtual void addMouseListener(const css::uno::Reference<css::awt::XMouseListener>& p1) throw (css::uno::RuntimeException)
+    virtual void SAL_CALL addMouseListener(const css::uno::Reference<css::awt::XMouseListener>& p1) throw (css::uno::RuntimeException)
         { return BaseControl::addMouseListener(p1); }
-    virtual void removeMouseListener(const css::uno::Reference<css::awt::XMouseListener>& p1) throw (css::uno::RuntimeException)
+    virtual void SAL_CALL removeMouseListener(const css::uno::Reference<css::awt::XMouseListener>& p1) throw (css::uno::RuntimeException)
         { return BaseControl::removeMouseListener(p1); }
-    virtual void addMouseMotionListener(const css::uno::Reference<css::awt::XMouseMotionListener>& p1) throw (css::uno::RuntimeException)
+    virtual void SAL_CALL addMouseMotionListener(const css::uno::Reference<css::awt::XMouseMotionListener>& p1) throw (css::uno::RuntimeException)
         { return BaseControl::addMouseMotionListener(p1); }
-    virtual void removeMouseMotionListener(const css::uno::Reference<css::awt::XMouseMotionListener>& p1) throw (css::uno::RuntimeException)
+    virtual void SAL_CALL removeMouseMotionListener(const css::uno::Reference<css::awt::XMouseMotionListener>& p1) throw (css::uno::RuntimeException)
         { return BaseControl::removeMouseMotionListener(p1); }
-    virtual void addPaintListener(const css::uno::Reference<css::awt::XPaintListener>& p1) throw (css::uno::RuntimeException)
+    virtual void SAL_CALL addPaintListener(const css::uno::Reference<css::awt::XPaintListener>& p1) throw (css::uno::RuntimeException)
         { return BaseControl::addPaintListener(p1); }
-    virtual void removePaintListener(const css::uno::Reference<css::awt::XPaintListener>& p1) throw (css::uno::RuntimeException)
+    virtual void SAL_CALL removePaintListener(const css::uno::Reference<css::awt::XPaintListener>& p1) throw (css::uno::RuntimeException)
         { return BaseControl::removePaintListener(p1); }
-    virtual css::awt::Size getSize() throw (css::uno::RuntimeException)
+    virtual css::awt::Size SAL_CALL getSize() throw (css::uno::RuntimeException)
         { return BaseControl::getSize(); }
-    virtual void draw(sal_Int32 p1, sal_Int32 p2) throw (css::uno::RuntimeException)
+    virtual void SAL_CALL draw(sal_Int32 p1, sal_Int32 p2) throw (css::uno::RuntimeException)
         { return BaseControl::draw(p1, p2); }
-    virtual void setZoom(float p1, float p2) throw (css::uno::RuntimeException)
+    virtual void SAL_CALL setZoom(float p1, float p2) throw (css::uno::RuntimeException)
         { return BaseControl::setZoom(p1, p2); }
-    virtual void setPropertyValue(const rtl::OUString& p1, const css::uno::Any& p2) throw (css::uno::RuntimeException)
+    virtual void SAL_CALL setPropertyValue(const rtl::OUString& p1, const css::uno::Any& p2) throw (css::uno::RuntimeException)
         { return ::cppu::OPropertySetHelper::setPropertyValue(p1, p2); }
-    virtual css::uno::Any getPropertyValue(const rtl::OUString& p1) throw (css::uno::RuntimeException)
+    virtual css::uno::Any SAL_CALL getPropertyValue(const rtl::OUString& p1) throw (css::uno::RuntimeException)
         { return ::cppu::OPropertySetHelper::getPropertyValue(p1); }
-    virtual void addPropertyChangeListener(const rtl::OUString& p1, const css::uno::Reference<css::beans::XPropertyChangeListener>& p2) throw (css::uno::RuntimeException)
+    virtual void SAL_CALL SAL_CALL addPropertyChangeListener(const rtl::OUString& p1, const css::uno::Reference<css::beans::XPropertyChangeListener>& p2) throw (css::uno::RuntimeException)
         { return ::cppu::OPropertySetHelper::addPropertyChangeListener(p1, p2); }
-    virtual void removePropertyChangeListener(const rtl::OUString& p1, const css::uno::Reference<css::beans::XPropertyChangeListener>& p2) throw (css::uno::RuntimeException)
+    virtual void SAL_CALL removePropertyChangeListener(const rtl::OUString& p1, const css::uno::Reference<css::beans::XPropertyChangeListener>& p2) throw (css::uno::RuntimeException)
         { return ::cppu::OPropertySetHelper::removePropertyChangeListener(p1, p2); }
-    virtual void addVetoableChangeListener(const rtl::OUString& p1, const css::uno::Reference<css::beans::XVetoableChangeListener>& p2) throw (css::uno::RuntimeException)
+    virtual void SAL_CALL addVetoableChangeListener(const rtl::OUString& p1, const css::uno::Reference<css::beans::XVetoableChangeListener>& p2) throw (css::uno::RuntimeException)
         { return ::cppu::OPropertySetHelper::addVetoableChangeListener(p1, p2); }
-    virtual void removeVetoableChangeListener(const rtl::OUString& p1, const css::uno::Reference<css::beans::XVetoableChangeListener>& p2) throw (css::uno::RuntimeException)
+    virtual void SAL_CALL removeVetoableChangeListener(const rtl::OUString& p1, const css::uno::Reference<css::beans::XVetoableChangeListener>& p2) throw (css::uno::RuntimeException)
         { return ::cppu::OPropertySetHelper::removeVetoableChangeListener(p1, p2); }
-    virtual void setContext(const css::uno::Reference<css::uno::XInterface>& p1) throw (css::uno::RuntimeException)
+    virtual void SAL_CALL setContext(const css::uno::Reference<css::uno::XInterface>& p1) throw (css::uno::RuntimeException)
         { return BaseControl::setContext(p1); }
-    virtual css::uno::Reference<css::uno::XInterface> getContext() throw (css::uno::RuntimeException)
+    virtual css::uno::Reference<css::uno::XInterface> SAL_CALL getContext() throw (css::uno::RuntimeException)
         { return BaseControl::getContext(); }
-    virtual css::uno::Reference<css::awt::XView> getView() throw (css::uno::RuntimeException)
+    virtual css::uno::Reference<css::awt::XView> SAL_CALL getView() throw (css::uno::RuntimeException)
         { return BaseControl::getView(); }
-    virtual void setDesignMode(sal_Bool p1) throw (css::uno::RuntimeException)
+    virtual void SAL_CALL setDesignMode(sal_Bool p1) throw (css::uno::RuntimeException)
         { return BaseControl::setDesignMode(p1); }
-    virtual sal_Bool isDesignMode() throw (css::uno::RuntimeException)
+    virtual sal_Bool SAL_CALL isDesignMode() throw (css::uno::RuntimeException)
         { return BaseControl::isDesignMode(); }
-    virtual sal_Bool isTransparent() throw (css::uno::RuntimeException)
+    virtual sal_Bool SAL_CALL isTransparent() throw (css::uno::RuntimeException)
         { return BaseControl::isTransparent(); }
 
     //__________________________________________________________________________________________________________
