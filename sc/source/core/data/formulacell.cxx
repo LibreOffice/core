@@ -2237,17 +2237,14 @@ bool ScFormulaCell::UpdateReferenceOnShift(
     ScAddress aUndoPos( aPos );         // position for undo cell in pUndoDoc
     if ( pUndoCellPos )
         aUndoPos = *pUndoCellPos;
-    ScAddress aOldPos( aPos );
 
     if (rRange.In(aPos))
     {
         // This formula cell itself is being shifted during cell range
         // insertion or deletion. Update its position.
         aPos.Move(nDx, nDy, nDz);
-        if (xGroup && xGroup->mnStart == aOldPos.Row())
+        if (xGroup && xGroup->mnStart == aPos.Row())
             xGroup->mnStart += nDy;
-
-        bCellStateChanged = aPos != aOldPos;
     }
 
     bool bHasRefs = false;
@@ -2286,7 +2283,7 @@ bool ScFormulaCell::UpdateReferenceOnShift(
         // Update cell or range references.
         ScCompiler aComp(pDocument, aPos, *pCode);
         aComp.SetGrammar(pDocument->GetGrammar());
-        pSharedCode = aComp.UpdateReference(URM_INSDEL, aOldPos, rRange,
+        pSharedCode = aComp.UpdateReference(URM_INSDEL, aPos, rRange,
                                          nDx, nDy, nDz,
                                          bValChanged, bRefSizeChanged);
         bRangeModified = aComp.HasModifiedRange();
@@ -2296,7 +2293,7 @@ bool ScFormulaCell::UpdateReferenceOnShift(
 
     if (bOnRefMove)
         // Cell may reference itself, e.g. ocColumn, ocRow without parameter
-        bOnRefMove = (bValChanged || (aPos != aOldPos));
+        bOnRefMove = bValChanged;
 
     bool bColRowNameCompile = false;
     bool bHasRelName = false;
@@ -2308,7 +2305,7 @@ bool ScFormulaCell::UpdateReferenceOnShift(
         // Upon Insert ColRowNames have to be recompiled in case the
         // insertion occurs right in front of the range.
         if (bHasColRowNames)
-            bColRowNameCompile = checkCompileColRowName(rCxt, *pDocument, *pCode, aOldPos, aPos, bValChanged);
+            bColRowNameCompile = checkCompileColRowName(rCxt, *pDocument, *pCode, aPos, aPos, bValChanged);
 
         ScChangeTrack* pChangeTrack = pDocument->GetChangeTrack();
         bInDeleteUndo = (pChangeTrack && pChangeTrack->IsInDeleteUndo());
@@ -2321,7 +2318,7 @@ bool ScFormulaCell::UpdateReferenceOnShift(
                 || (bValChanged && (bInDeleteUndo || bRefSizeChanged)) || bHasRelName);
 
         if ( bNewListening )
-            EndListeningTo(pDocument, pOldCode.get(), aOldPos);
+            EndListeningTo(pDocument, pOldCode.get(), aPos);
     }
 
     bool bNeedDirty = false;
@@ -2341,10 +2338,10 @@ bool ScFormulaCell::UpdateReferenceOnShift(
         delete pCode;
         pCode = pSharedCode->GetCode()->Clone();
         // #i18937# #i110008# call MoveRelWrap, but with the old position
-        ScCompiler::MoveRelWrap(*pCode, pDocument, aOldPos, pSharedCode->GetMaxCol(), pSharedCode->GetMaxRow());
+        ScCompiler::MoveRelWrap(*pCode, pDocument, aPos, pSharedCode->GetMaxCol(), pSharedCode->GetMaxRow());
         ScCompiler aComp2(pDocument, aPos, *pCode);
         aComp2.SetGrammar(pDocument->GetGrammar());
-        aComp2.UpdateSharedFormulaReference(URM_INSDEL, aOldPos, rRange, nDx, nDy, nDz);
+        aComp2.UpdateSharedFormulaReference(URM_INSDEL, aPos, rRange, nDx, nDy, nDz);
         bValChanged = true;
         bNeedDirty = true;
     }
