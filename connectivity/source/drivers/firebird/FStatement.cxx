@@ -33,8 +33,6 @@
  *
  *************************************************************************/
 
-#include <stdio.h>
-
 #include "propertyids.hxx"
 #include "FStatement.hxx"
 #include "FConnection.hxx"

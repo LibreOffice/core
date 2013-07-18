@@ -48,6 +48,7 @@
 #include <com/sun/star/sdbcx/CompareBookmark.hpp>
 
 using namespace ::comphelper;
+using namespace ::connectivity;
 using namespace ::connectivity::firebird;
 using namespace ::cppu;
 using namespace ::osl;
@@ -109,38 +110,38 @@ void OResultSet::ensureDataAvailable() throw (SQLException)
         {
             m_rowCount++;
 
-            TRow aRow(m_fieldCount);
+            m_sqlData.emplace_back(m_fieldCount);
+            TRow& rRow = m_sqlData.back();
+
             XSQLVAR* pVar = m_pSqlda->sqlvar;
             for (int i = 0; i < m_fieldCount; pVar++, i++)
             {
-//                 if ((pVar->sqltype & 1) == 0) // Cannot contain NULL
-//                 {
-//                 }
-//                 else // Can contain NULL
-//                 {
-//                 }
-//                 switch (pVar->sqltype)
-//                 {
-//                 }
-                if ( pVar->sqltype == SQL_SHORT ||
-                     pVar->sqltype == SQL_SHORT + 1 ||
-                     pVar->sqltype == SQL_LONG ||
-                     pVar->sqltype == SQL_LONG + 1 ||
-                     pVar->sqltype == SQL_INT64 ||
-                     pVar->sqltype == SQL_INT64 + 1)
+                if ((pVar->sqltype & 1) == 0) // Means: Cannot contain NULL
                 {
-                    aRow[i] = OString::valueOf((sal_Int16) *pVar->sqldata);
-                                        fprintf(stderr, "N_" );
-                    // TODO: sqlscale here.
+                    // TODO: test for null here and set as appropriate
                 }
-                else
+                else // Means: Can contain NULL
                 {
-                    // For now store as string
-                    aRow[i] = OString(pVar->sqldata, pVar->sqllen);
+                    // otherwise we need to test for SQL_TYPE and SQL_TYPE+1 below
+                    pVar->sqltype--;
+                }
+                switch (pVar->sqltype)
+                {
+                    case SQL_SHORT:
+                        rRow[i] = (sal_Int16) *pVar->sqldata;
+                        break;
+                    case SQL_LONG:
+                        rRow[i] = (sal_Int32) *pVar->sqldata;
+                        break;
+                    case SQL_INT64:
+                        rRow[i] = (sal_Int64) *pVar->sqldata;
+                        break;
+                    // TODO: remember sqlscale for decimal types
+                    default:
+                        rRow[i] = OUString(pVar->sqldata, pVar->sqllen, RTL_TEXTENCODING_UTF8);
+                        break;
                 }
             }
-            m_sqlData.push_back(aRow);
-            fprintf( stderr, "\n" );
         }
 
         ISC_STATUS aErr = isc_dsql_free_statement(m_statusVector,
@@ -162,7 +163,7 @@ void OResultSet::ensureDataAvailable() throw (SQLException)
     }
 }
 
-const OString& OResultSet::getSqlData(sal_Int32 aRow, sal_Int32 aColumn)
+const ORowSetValueDecorator& OResultSet::getSqlData(sal_Int32 aRow, sal_Int32 aColumn)
     throw(SQLException)
 {
     // Validate input (throws Exceptions as appropriate)
@@ -457,114 +458,87 @@ uno::Reference< XInputStream > SAL_CALL OResultSet::getCharacterStream( sal_Int3
     return NULL;
 }
 
+// ---- Simple Numerical types -----------------------------------------------
+const ORowSetValue& OResultSet::safelyRetrieveValue(sal_Int32 columnIndex)
+    throw(SQLException)
+{
+    MutexGuard aGuard(m_aMutex);
+    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
+    ensureDataAvailable();
+
+    return getSqlData(m_currentRow,columnIndex).getValue();
+}
+
 sal_Bool SAL_CALL OResultSet::getBoolean(sal_Int32 columnIndex)
     throw(SQLException, RuntimeException)
 {
-    MutexGuard aGuard( m_aMutex );
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-    ensureDataAvailable();
-
-    const OString& aData = getSqlData(m_currentRow,columnIndex);
-
-    if(aData.getLength())
-    {
-        switch(aData[0])
-        {
-        case '1':
-        case 't':
-        case 'T':
-        case 'y':
-        case 'Y':
-            return sal_True;
-        }
-    }
-    return sal_False;
-}
-// -------------------------------------------------------------------------
-
-sal_Int8 SAL_CALL OResultSet::getByte( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
-{
-    (void) columnIndex;
-    MutexGuard aGuard( m_aMutex );
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-    ensureDataAvailable();
-
-
-    sal_Int8 nRet = 0;
-    return nRet;
-}
-// -------------------------------------------------------------------------
-
-Sequence< sal_Int8 > SAL_CALL OResultSet::getBytes( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
-{
-    (void) columnIndex;
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-    ensureDataAvailable();
-    MutexGuard aGuard( m_aMutex );
-
-    return Sequence< sal_Int8 >();
-}
-// -------------------------------------------------------------------------
-
-Date SAL_CALL OResultSet::getDate( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
-{
-    (void) columnIndex;
-    MutexGuard aGuard( m_aMutex );
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-    ensureDataAvailable();
-
-
-    Date nRet;
-    return nRet;
+    return safelyRetrieveValue(columnIndex);
 }
 
-double SAL_CALL OResultSet::getDouble(sal_Int32 columnIndex)
+sal_Int8 SAL_CALL OResultSet::getByte( sal_Int32 columnIndex )
     throw(SQLException, RuntimeException)
 {
-    (void) columnIndex;
-    MutexGuard aGuard( m_aMutex );
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-    ensureDataAvailable();
-
-    const OString& aData = getSqlData(m_currentRow,columnIndex);
-    return aData.toDouble();
+    return safelyRetrieveValue(columnIndex);
 }
 
-float SAL_CALL OResultSet::getFloat(sal_Int32 columnIndex)
+Sequence< sal_Int8 > SAL_CALL OResultSet::getBytes(sal_Int32 columnIndex)
     throw(SQLException, RuntimeException)
 {
-    MutexGuard aGuard( m_aMutex );
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-    ensureDataAvailable();
+    return safelyRetrieveValue(columnIndex);
+}
 
-    const OString& aData = getSqlData(m_currentRow,columnIndex);
-    return aData.toFloat();
+sal_Int16 SAL_CALL OResultSet::getShort(sal_Int32 columnIndex)
+    throw(SQLException, RuntimeException)
+{
+    return safelyRetrieveValue(columnIndex);
 }
 
 sal_Int32 SAL_CALL OResultSet::getInt(sal_Int32 columnIndex)
     throw(SQLException, RuntimeException)
 {
-    MutexGuard aGuard( m_aMutex );
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-    ensureDataAvailable();
-
-    // TODO: check in the sqlda somehow?
-    const OString& aData = getSqlData(m_currentRow,columnIndex);
-    return aData.toInt32();
+    return safelyRetrieveValue(columnIndex);
 }
 
 sal_Int64 SAL_CALL OResultSet::getLong(sal_Int32 columnIndex)
     throw(SQLException, RuntimeException)
 {
-    MutexGuard aGuard( m_aMutex );
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-    ensureDataAvailable();
+    return safelyRetrieveValue(columnIndex);
+}
 
-    const OString& aData = getSqlData(m_currentRow,columnIndex);
-    return aData.toInt64();
+float SAL_CALL OResultSet::getFloat(sal_Int32 columnIndex)
+    throw(SQLException, RuntimeException)
+{
+    return safelyRetrieveValue(columnIndex);
+}
+
+double SAL_CALL OResultSet::getDouble(sal_Int32 columnIndex)
+    throw(SQLException, RuntimeException)
+{
+    return safelyRetrieveValue(columnIndex);
+}
+
+// ---- More complex types ---------------------------------------------------
+OUString SAL_CALL OResultSet::getString(sal_Int32 columnIndex)
+    throw(SQLException, RuntimeException)
+{
+    return safelyRetrieveValue(columnIndex);
+}
+
+Time SAL_CALL OResultSet::getTime( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+{
+    return safelyRetrieveValue(columnIndex);
+}
+
+DateTime SAL_CALL OResultSet::getTimestamp( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+{
+    return safelyRetrieveValue(columnIndex);
+}
+
+Date SAL_CALL OResultSet::getDate( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+{
+    return safelyRetrieveValue(columnIndex);
 }
 // -------------------------------------------------------------------------
-
 uno::Reference< XResultSetMetaData > SAL_CALL OResultSet::getMetaData(  ) throw(SQLException, RuntimeException)
 {
     MutexGuard aGuard( m_aMutex );
@@ -632,57 +606,7 @@ Any SAL_CALL OResultSet::getObject( sal_Int32 columnIndex, const uno::Reference<
     return Any();
 }
 
-sal_Int16 SAL_CALL OResultSet::getShort(sal_Int32 columnIndex)
-    throw(SQLException, RuntimeException)
-{
-    MutexGuard aGuard( m_aMutex );
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-    ensureDataAvailable();
 
-    const OString& aData = getSqlData(m_currentRow,columnIndex);
-    return aData.toInt32();
-}
-
-OUString SAL_CALL OResultSet::getString(sal_Int32 columnIndex)
-    throw(SQLException, RuntimeException)
-{
-    MutexGuard aGuard( m_aMutex );
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-    ensureDataAvailable();
-    checkColumnIndex( columnIndex );
-    checkRowIndex( sal_True /* must be on row */ );
-
-    return OStringToOUString(getSqlData(m_currentRow,columnIndex),
-                             RTL_TEXTENCODING_UTF8);
-}
-// -------------------------------------------------------------------------
-
-Time SAL_CALL OResultSet::getTime( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
-{
-    (void) columnIndex;
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-    ensureDataAvailable();
-
-    MutexGuard aGuard( m_aMutex );
-
-    Time nRet;
-    return nRet;
-}
-// -------------------------------------------------------------------------
-
-
-DateTime SAL_CALL OResultSet::getTimestamp( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
-{
-    (void) columnIndex;
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-    ensureDataAvailable();
-
-
-    MutexGuard aGuard( m_aMutex );
-
-    DateTime nRet;
-    return nRet;
-}
 
 // -------------------------------------------------------------------------
 

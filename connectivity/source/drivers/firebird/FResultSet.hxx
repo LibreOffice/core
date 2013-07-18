@@ -36,30 +36,34 @@
 #ifndef CONNECTIVITY_SRESULTSET_HXX
 #define CONNECTIVITY_SRESULTSET_HXX
 
+#include "FStatement.hxx"
+
+#include <ibase.h>
+
+#include <connectivity/FValue.hxx>
+#include <connectivity/OSubComponent.hxx>
+#include <cppuhelper/compbase12.hxx>
+
+#include <com/sun/star/util/XCancellable.hpp>
+#include <com/sun/star/sdbc/XCloseable.hpp>
+#include <com/sun/star/sdbc/XColumnLocate.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/XResultSetMetaDataSupplier.hpp>
-#include <com/sun/star/sdbc/XCloseable.hpp>
-#include <com/sun/star/sdbc/XColumnLocate.hpp>
-#include <com/sun/star/util/XCancellable.hpp>
-#include <com/sun/star/sdbc/XWarningsSupplier.hpp>
 #include <com/sun/star/sdbc/XResultSetUpdate.hpp>
 #include <com/sun/star/sdbc/XRowUpdate.hpp>
-#include <com/sun/star/sdbcx/XRowLocate.hpp>
+#include <com/sun/star/sdbc/XWarningsSupplier.hpp>
 #include <com/sun/star/sdbcx/XDeleteRows.hpp>
-#include <cppuhelper/compbase12.hxx>
-#include "FStatement.hxx"
-#include "connectivity/OSubComponent.hxx"
+#include <com/sun/star/sdbcx/XRowLocate.hpp>
 
-#include <ibase.h>
 
 namespace connectivity
 {
     namespace firebird
     {
 
-        typedef std::vector< ::rtl::OString > TRow;
-        typedef std::vector< TRow > TTable;
+        typedef ::std::vector< ::connectivity::ORowSetValueDecorator > TRow;
+        typedef ::std::vector< TRow >                  TTable;
 
         /*
         **  OResultSet
@@ -101,8 +105,11 @@ namespace connectivity
 
             void ensureDataAvailable()
                 throw (::com::sun::star::sdbc::SQLException);
-            const OString& getSqlData(sal_Int32 aRow, sal_Int32 aColumn)
+            const ORowSetValueDecorator& getSqlData(sal_Int32 aRow, sal_Int32 aColumn)
                 throw (::com::sun::star::sdbc::SQLException);
+
+            const ::connectivity::ORowSetValue& safelyRetrieveValue(sal_Int32 columnIndex)
+                throw(::com::sun::star::sdbc::SQLException);
 
             // OPropertyArrayUsageHelper
             virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const;
