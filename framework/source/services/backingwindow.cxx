@@ -221,7 +221,6 @@ IMPL_LINK( BackingWindow, WindowEventListener, VclSimpleEvent*, pEvent )
     return 0;
 }
 
-/*
 void BackingWindow::prepareRecentFileMenu()
 {
     if( ! mxPopupMenu.is() )
@@ -259,7 +258,6 @@ void BackingWindow::prepareRecentFileMenu()
         mpOpenButton->SetPopupMenu( pRecentMenu );
     }
 }
-*/
 
 void BackingWindow::initBackground()
 {
@@ -289,9 +287,8 @@ void BackingWindow::initBackground()
         Application::LoadBrandBitmap ("shell/backing_right", maBackgroundRight);
     }
 
-    // CRASH
-    //mpOpenButton->SetMenuMode( MENUBUTTON_MENUMODE_TIMED );
-    //mpOpenButton->SetActivateHdl( LINK( this, BackingWindow, ActivateHdl ) );
+    mpOpenButton->SetMenuMode( MENUBUTTON_MENUMODE_TIMED );
+    mpOpenButton->SetActivateHdl( LINK( this, BackingWindow, ActivateHdl ) );
 
     // this will be moved to somewhere saner later
     nSCWidth = 780;
@@ -582,14 +579,12 @@ IMPL_LINK( BackingWindow, ClickHdl, Button*, pButton )
     return 0;
 }
 
-/*
 IMPL_LINK( BackingWindow, ActivateHdl, Button*, pButton )
 {
     if( pButton == mpOpenButton )
         prepareRecentFileMenu();
     return 0;
 }
-*/
 
 struct ImplDelayedDispatch
 {

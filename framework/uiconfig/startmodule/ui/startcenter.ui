@@ -185,7 +185,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="open">
+              <object class="GtkButton" id="open:addmenu">
                 <property name="label" translatable="yes">Ope_n...</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>

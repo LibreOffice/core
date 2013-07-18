@@ -65,22 +65,20 @@ namespace framework
         com::sun::star::uno::Reference< com::sun::star::frame::XPopupMenuController >    mxPopupMenuController;
         com::sun::star::uno::Reference< com::sun::star::awt::XPopupMenu >                mxPopupMenu;
 
-        PushButton*                    mpWriterButton;
-        PushButton*                    mpCalcButton;
-        PushButton*                    mpImpressButton;
-        //MenuButton*                     mpOpenButton;
-        PushButton*                    mpOpenButton;
-        PushButton*                    mpDrawButton;
-        PushButton*                    mpDBButton;
-        PushButton*                    mpMathButton;
-        PushButton*                    mpTemplateButton;
+        PushButton*                     mpWriterButton;
+        PushButton*                     mpCalcButton;
+        PushButton*                     mpImpressButton;
+        MenuButton*                     mpOpenButton;
+        PushButton*                     mpDrawButton;
+        PushButton*                     mpDBButton;
+        PushButton*                     mpMathButton;
+        PushButton*                     mpTemplateButton;
 
+        PushButton*                     mpExtensionsButton;
+        PushButton*                     mpInfoButton;
+        PushButton*                     mpTplRepButton;
 
-        PushButton*                    mpExtensionsButton;
-        PushButton*                    mpInfoButton;
-        PushButton*                    mpTplRepButton;
-
-        VclGrid*                       mpStartCenterContainer;
+        VclGrid*                        mpStartCenterContainer;
 
         BitmapEx                        maBackgroundLeft;
         BitmapEx                        maBackgroundMiddle;
@@ -135,13 +133,14 @@ namespace framework
 
         DECL_LINK( ClickHdl, Button* );
         DECL_LINK( ExtLinkClickHdl, Button* );
-        //DECL_LINK( ActivateHdl, Button* );
+        DECL_LINK( ActivateHdl, Button* );
         DECL_LINK( WindowEventListener, VclSimpleEvent* );
 
         void initControls();
         void initBackground();
-        //void prepareRecentFileMenu();
-        public:
+        void prepareRecentFileMenu();
+
+    public:
         BackingWindow( Window* pParent );
         ~BackingWindow();
 
