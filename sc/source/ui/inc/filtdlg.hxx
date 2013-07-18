@@ -40,7 +40,6 @@
 
 //----------------------------------------------------------------------------
 
-class ScFilterOptionsMgr;
 class ScNewFilterOptionsMgr;
 class ScViewData;
 class ScDocument;
@@ -71,53 +70,44 @@ public:
     void            RefreshEditRow( size_t nOffset );
 
 private:
-    FixedLine       aFlCriteria;
+    ListBox*         pLbConnect1;
+    ListBox*         pLbField1;
+    ListBox*         pLbCond1;
+    ComboBox*        pEdVal1;
     //----------------------------
-    ListBox         aLbConnect1;
-    ListBox         aLbField1;
-    ListBox         aLbCond1;
-    ComboBox        aEdVal1;
+    ListBox*         pLbConnect2;
+    ListBox*         pLbField2;
+    ListBox*         pLbCond2;
+    ComboBox*        pEdVal2;
     //----------------------------
-    ListBox         aLbConnect2;
-    ListBox         aLbField2;
-    ListBox         aLbCond2;
-    ComboBox        aEdVal2;
+    ListBox*         pLbConnect3;
+    ListBox*         pLbField3;
+    ListBox*         pLbCond3;
+    ComboBox*        pEdVal3;
     //----------------------------
-    ListBox         aLbConnect3;
-    ListBox         aLbField3;
-    ListBox         aLbCond3;
-    ComboBox        aEdVal3;
+    ListBox*         pLbConnect4;
+    ListBox*         pLbField4;
+    ListBox*         pLbCond4;
+    ComboBox*        pEdVal4;
     //----------------------------
-    ListBox         aLbConnect4;
-    ListBox         aLbField4;
-    ListBox         aLbCond4;
-    ComboBox        aEdVal4;
-    //----------------------------
-    FixedText       aFtConnect;
-    FixedText       aFtField;
-    FixedText       aFtCond;
-    FixedText       aFtVal;
-    FixedLine       aFlSeparator;
+    ScrollBar*       pScrollBar;
+    VclExpander*     pExpander;
 
-    ScrollBar       aScrollBar;
+    HelpButton*      pBtnHelp;
+    OKButton*        pBtnOk;
+    CancelButton*    pBtnCancel;
 
-    FixedLine       aFlOptions;
-    MoreButton      aBtnMore;
-    HelpButton      aBtnHelp;
-    OKButton        aBtnOk;
-    CancelButton    aBtnCancel;
-
-    CheckBox        aBtnCase;
-    CheckBox        aBtnRegExp;
-    CheckBox        aBtnHeader;
-    CheckBox        aBtnUnique;
-    CheckBox        aBtnCopyResult;
-    ListBox         aLbCopyArea;
-    formula::RefEdit aEdCopyArea;
-    formula::RefButton aRbCopyArea;
-    CheckBox        aBtnDestPers;
-    FixedText       aFtDbAreaLabel;
-    FixedInfo       aFtDbArea;
+    CheckBox*        pBtnCase;
+    CheckBox*        pBtnRegExp;
+    CheckBox*        pBtnHeader;
+    CheckBox*        pBtnUnique;
+    CheckBox*        pBtnCopyResult;
+    ListBox*         pLbCopyArea;
+    formula::RefEdit* pEdCopyArea;
+    formula::RefButton* pRbCopyArea;
+    CheckBox*        pBtnDestPers;
+    FixedText*       pFtDbAreaLabel;
+    FixedText*       pFtDbArea;
     const OUString aStrUndefined;
     const OUString aStrNone;
 
@@ -126,7 +116,7 @@ private:
     const OUString aStrRow;
     const OUString aStrColumn;
 
-    ScFilterOptionsMgr* pOptionsMgr;
+    ScNewFilterOptionsMgr* pOptionsMgr;
 
     const sal_uInt16        nWhichQuery;
     ScQueryParam        theQueryData;
