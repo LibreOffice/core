@@ -74,12 +74,6 @@
     <FormatElement msgid="FixedFormatskey6" default="false" type="medium" usage="FIXED_NUMBER" formatindex="5">
       <FormatCode>#.###,00</FormatCode>
     </FormatElement>
-    <FormatElement msgid="FixedFormatskey7" default="false" type="medium" usage="FIXED_NUMBER" formatindex="50">
-      <FormatCode>#.##0,00;[RED]-#.##0,00</FormatCode>
-    </FormatElement>
-    <FormatElement msgid="FixedFormatskey8" default="false" type="medium" usage="FIXED_NUMBER" formatindex="51">
-      <FormatCode>#.###,00;[RED]-#.###,00</FormatCode>
-    </FormatElement>
     <FormatElement msgid="ScientificFormatskey1" default="true" type="medium" usage="SCIENTIFIC_NUMBER" formatindex="6">
       <FormatCode>0,00E+00</FormatCode>
     </FormatElement>
@@ -129,7 +123,7 @@
       <FormatCode>D. MMM YYYY</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey21" default="false" type="medium" usage="DATE" formatindex="24">
-      <FormatCode>D. M. YYYY.</FormatCode>
+      <FormatCode>D. M. YYYY.</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey17" default="false" type="long" usage="DATE" formatindex="25">
       <FormatCode>D. MMMM YYYY.</FormatCode>
@@ -201,8 +195,14 @@
     <FormatElement msgid="DateTimeFormatskey2" default="false" type="medium" usage="DATE_TIME" formatindex="47">
       <FormatCode>DD.MM.YYYY HH:MM:SS AM/PM</FormatCode>
     </FormatElement>
+    <FormatElement msgid="FixedFormatskey7" default="false" type="medium" usage="FIXED_NUMBER" formatindex="50">
+      <FormatCode>#.##0,00;[RED]-#.##0,00</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="FixedFormatskey8" default="false" type="medium" usage="FIXED_NUMBER" formatindex="51">
+      <FormatCode>#.###,00;[RED]-#.###,00</FormatCode>
+    </FormatElement>
     <FormatElement msgid="DateFormatskey24" default="false" type="medium" usage="DATE" formatindex="52">
-      <FormatCode>DD. MM. YYYY.</FormatCode>
+      <FormatCode>DD. MM. YYYY.</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey25" default="false" type="short" usage="DATE" formatindex="53">
       <FormatCode>MM/YY</FormatCode>
@@ -549,4 +549,3 @@
     </OutlineStyle>
   </LC_OutLineNumberingLevel>
 </Locale>
-
