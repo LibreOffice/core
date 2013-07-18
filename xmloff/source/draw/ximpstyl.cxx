@@ -246,7 +246,7 @@ void SdXMLDrawingPageStyleContext::Finish( sal_Bool bOverwrite )
 void SdXMLDrawingPageStyleContext::FillPropertySet(
     const Reference< beans::XPropertySet > & rPropSet )
 {
-    const sal_uInt16 MAX_SPECIAL_DRAW_STYLES = 7;
+    static const sal_uInt16 MAX_SPECIAL_DRAW_STYLES = 7;
     struct _ContextID_Index_Pair aContextIDs[MAX_SPECIAL_DRAW_STYLES+1] =
     {
         { CTF_DASHNAME , -1 },
@@ -258,7 +258,7 @@ void SdXMLDrawingPageStyleContext::FillPropertySet(
         { CTF_FILLBITMAPNAME , -1 },
         { -1, -1 }
     };
-    static sal_uInt16 aFamilies[MAX_SPECIAL_DRAW_STYLES] =
+    static const sal_uInt16 aFamilies[MAX_SPECIAL_DRAW_STYLES] =
     {
         XML_STYLE_FAMILY_SD_STROKE_DASH_ID,
         XML_STYLE_FAMILY_SD_MARKER_ID,

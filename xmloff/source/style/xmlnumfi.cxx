@@ -309,7 +309,7 @@ enum SvXMLStyleElemAttrTokens
 
 #define XML_NUMF_COLORCOUNT     10
 
-static ColorData aNumFmtStdColors[XML_NUMF_COLORCOUNT] =
+static const ColorData aNumFmtStdColors[XML_NUMF_COLORCOUNT] =
 {
     COL_BLACK,
     COL_LIGHTBLUE,
@@ -329,14 +329,14 @@ static ColorData aNumFmtStdColors[XML_NUMF_COLORCOUNT] =
 
 // maps for SvXMLUnitConverter::convertEnum
 
-static SvXMLEnumMapEntry aStyleValueMap[] =
+static const SvXMLEnumMapEntry aStyleValueMap[] =
 {
     { XML_SHORT,            sal_False   },
     { XML_LONG,             sal_True    },
     { XML_TOKEN_INVALID,    0 }
 };
 
-static SvXMLEnumMapEntry aFormatSourceMap[] =
+static const SvXMLEnumMapEntry aFormatSourceMap[] =
 {
     { XML_FIXED,            sal_False },
     { XML_LANGUAGE,         sal_True  },
@@ -358,7 +358,7 @@ struct SvXMLDefaultDateFormat
     sal_Bool                    bSystem;
 };
 
-static SvXMLDefaultDateFormat aDefaultDateFormats[] =
+static const SvXMLDefaultDateFormat aDefaultDateFormats[] =
 {
     // format                           day-of-week     day             month               year            hours           minutes         seconds         format-source
 
@@ -490,7 +490,7 @@ const SvXMLTokenMap& SvXMLNumImpData::GetStylesElemTokenMap()
 {
     if( !pStylesElemTokenMap )
     {
-        static SvXMLTokenMapEntry aStylesElemMap[] =
+        static const SvXMLTokenMapEntry aStylesElemMap[] =
         {
             //  style elements
             { XML_NAMESPACE_NUMBER, XML_NUMBER_STYLE,      XML_TOK_STYLES_NUMBER_STYLE      },
@@ -512,7 +512,7 @@ const SvXMLTokenMap& SvXMLNumImpData::GetStyleElemTokenMap()
 {
     if( !pStyleElemTokenMap )
     {
-        static SvXMLTokenMapEntry aStyleElemMap[] =
+        static const SvXMLTokenMapEntry aStyleElemMap[] =
         {
             //  elements in a style
             { XML_NAMESPACE_NUMBER, XML_TEXT,               XML_TOK_STYLE_TEXT              },
@@ -548,7 +548,7 @@ const SvXMLTokenMap& SvXMLNumImpData::GetStyleAttrTokenMap()
 {
     if( !pStyleAttrTokenMap )
     {
-        static SvXMLTokenMapEntry aStyleAttrMap[] =
+        static const SvXMLTokenMapEntry aStyleAttrMap[] =
         {
             //  attributes for a style
             { XML_NAMESPACE_STYLE,  XML_NAME,                  XML_TOK_STYLE_ATTR_NAME                  },
@@ -579,7 +579,7 @@ const SvXMLTokenMap& SvXMLNumImpData::GetStyleElemAttrTokenMap()
 {
     if( !pStyleElemAttrTokenMap )
     {
-        static SvXMLTokenMapEntry aStyleElemAttrMap[] =
+        static const SvXMLTokenMapEntry aStyleElemAttrMap[] =
         {
             //  attributes for an element within a style
             { XML_NAMESPACE_NUMBER, XML_DECIMAL_PLACES,          XML_TOK_ELEM_ATTR_DECIMAL_PLACES       },
@@ -1267,7 +1267,7 @@ sal_uInt16 SvXMLNumFmtDefaults::GetDefaultDateFormat( SvXMLDateElementAttributes
                 SvXMLDateElementAttributes eMins, SvXMLDateElementAttributes eSecs,
                 sal_Bool bSystem )
 {
-    const sal_uInt16 nCount = sizeof(aDefaultDateFormats) / sizeof(SvXMLDefaultDateFormat);
+    static const sal_uInt16 nCount = sizeof(aDefaultDateFormats) / sizeof(SvXMLDefaultDateFormat);
     for (sal_uInt16 nPos=0; nPos<nCount; nPos++)
     {
         const SvXMLDefaultDateFormat& rEntry = aDefaultDateFormats[nPos];

@@ -1009,7 +1009,7 @@ sal_Bool XMLTransformerBase::ReplaceInWithInch( OUString& rValue )
 
 sal_Bool XMLTransformerBase::EncodeStyleName( OUString& rName ) const
 {
-    static sal_Char aHexTab[] = "0123456789abcdef";
+    static const sal_Char aHexTab[] = "0123456789abcdef";
 
     sal_Bool bEncoded = sal_False;
 

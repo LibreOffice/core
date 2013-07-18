@@ -126,7 +126,7 @@ enum SvxXMLTextListLevelStyleAttrTokens
 
 static const SvXMLTokenMapEntry* lcl_getLevelAttrTokenMap()
 {
-    static SvXMLTokenMapEntry aLevelAttrTokenMap[] =
+    static const SvXMLTokenMapEntry aLevelAttrTokenMap[] =
     {
         { XML_NAMESPACE_TEXT, XML_LEVEL, XML_TOK_TEXT_LEVEL_ATTR_LEVEL },
         { XML_NAMESPACE_TEXT, XML_STYLE_NAME, XML_TOK_TEXT_LEVEL_ATTR_STYLE_NAME },
@@ -626,7 +626,7 @@ enum SvxXMLStyleAttributesAttrTokens
 };
 static const SvXMLTokenMapEntry* lcl_getStyleAttributesAttrTokenMap()
 {
-    static SvXMLTokenMapEntry aStyleAttributesAttrTokenMap[] =
+    static const SvXMLTokenMapEntry aStyleAttributesAttrTokenMap[] =
     {
         { XML_NAMESPACE_TEXT, XML_SPACE_BEFORE,
                 XML_TOK_STYLE_ATTRIBUTES_ATTR_SPACE_BEFORE },
@@ -949,7 +949,7 @@ enum SvxXMLStyleAttributesLabelAlignmentAttrTokens
 };
 static const SvXMLTokenMapEntry* lcl_getStyleAlignmentAttributesAttrTokenMap()
 {
-    static SvXMLTokenMapEntry aStyleAlignmentAttributesAttrTokenMap[] =
+    static const SvXMLTokenMapEntry aStyleAlignmentAttributesAttrTokenMap[] =
     {
         { XML_NAMESPACE_TEXT, XML_LABEL_FOLLOWED_BY,
                 XML_TOK_STYLE_ATTRIBUTES_ATTR_LABEL_FOLLOWED_BY },

@@ -43,7 +43,7 @@ const sal_uInt16 Animations_EnumMap_SubItem = 13;
 const sal_uInt16 Animations_EnumMap_IterateType = 14;
 const sal_uInt16 Animations_EnumMap_Command = 15;
 
-extern SvXMLEnumMapEntry* getAnimationsEnumMap( sal_uInt16 nMap );
+extern const SvXMLEnumMapEntry* getAnimationsEnumMap( sal_uInt16 nMap );
 
 struct ImplAttributeNameConversion
 {
@@ -51,7 +51,7 @@ struct ImplAttributeNameConversion
     const sal_Char* mpAPIName;
 };
 
-extern struct ImplAttributeNameConversion* getAnimationAttributeNamesConversionList();
+extern const struct ImplAttributeNameConversion* getAnimationAttributeNamesConversionList();
 
 }
 

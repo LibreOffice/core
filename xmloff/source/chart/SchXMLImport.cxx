@@ -180,7 +180,7 @@ const SvXMLTokenMap& SchXMLImportHelper::GetDocElemTokenMap()
 {
     if( ! mpChartDocElemTokenMap )
     {
-        static SvXMLTokenMapEntry aDocElemTokenMap[] =
+        static const SvXMLTokenMapEntry aDocElemTokenMap[] =
         {
             { XML_NAMESPACE_OFFICE, XML_AUTOMATIC_STYLES,   XML_TOK_DOC_AUTOSTYLES  },
             { XML_NAMESPACE_OFFICE, XML_STYLES,             XML_TOK_DOC_STYLES  },
@@ -199,7 +199,7 @@ const SvXMLTokenMap& SchXMLImportHelper::GetTableElemTokenMap()
 {
     if( ! mpTableElemTokenMap )
     {
-        static SvXMLTokenMapEntry aTableElemTokenMap[] =
+        static const SvXMLTokenMapEntry aTableElemTokenMap[] =
     {
         { XML_NAMESPACE_TABLE,  XML_TABLE_HEADER_COLUMNS,   XML_TOK_TABLE_HEADER_COLS   },
         { XML_NAMESPACE_TABLE,  XML_TABLE_COLUMNS,          XML_TOK_TABLE_COLUMNS       },
@@ -220,7 +220,7 @@ const SvXMLTokenMap& SchXMLImportHelper::GetChartElemTokenMap()
 {
     if( ! mpChartElemTokenMap )
     {
-        static SvXMLTokenMapEntry aChartElemTokenMap[] =
+        static const SvXMLTokenMapEntry aChartElemTokenMap[] =
         {
             { XML_NAMESPACE_CHART,  XML_PLOT_AREA,              XML_TOK_CHART_PLOT_AREA     },
             { XML_NAMESPACE_CHART,  XML_TITLE,                  XML_TOK_CHART_TITLE         },
@@ -240,7 +240,7 @@ const SvXMLTokenMap& SchXMLImportHelper::GetPlotAreaElemTokenMap()
 {
     if( ! mpPlotAreaElemTokenMap )
     {
-        static SvXMLTokenMapEntry aPlotAreaElemTokenMap[] =
+        static const SvXMLTokenMapEntry aPlotAreaElemTokenMap[] =
 {
     { XML_NAMESPACE_CHART_EXT,  XML_COORDINATE_REGION,      XML_TOK_PA_COORDINATE_REGION_EXT },
     { XML_NAMESPACE_CHART,  XML_COORDINATE_REGION,      XML_TOK_PA_COORDINATE_REGION },
@@ -265,7 +265,7 @@ const SvXMLTokenMap& SchXMLImportHelper::GetSeriesElemTokenMap()
 {
     if( ! mpSeriesElemTokenMap )
     {
-        static SvXMLTokenMapEntry aSeriesElemTokenMap[] =
+        static const SvXMLTokenMapEntry aSeriesElemTokenMap[] =
 {
     { XML_NAMESPACE_CHART,  XML_DATA_POINT,       XML_TOK_SERIES_DATA_POINT       },
     { XML_NAMESPACE_CHART,  XML_DOMAIN,           XML_TOK_SERIES_DOMAIN           },
@@ -287,7 +287,7 @@ const SvXMLTokenMap& SchXMLImportHelper::GetChartAttrTokenMap()
 {
     if( ! mpChartAttrTokenMap )
     {
-        static SvXMLTokenMapEntry aChartAttrTokenMap[] =
+        static const SvXMLTokenMapEntry aChartAttrTokenMap[] =
 {
     { XML_NAMESPACE_XLINK,  XML_HREF,                   XML_TOK_CHART_HREF          },
     { XML_NAMESPACE_CHART,  XML_CLASS,                  XML_TOK_CHART_CLASS         },
@@ -309,7 +309,7 @@ const SvXMLTokenMap& SchXMLImportHelper::GetPlotAreaAttrTokenMap()
 {
     if( ! mpPlotAreaAttrTokenMap )
     {
-        static SvXMLTokenMapEntry aPlotAreaAttrTokenMap[] =
+        static const SvXMLTokenMapEntry aPlotAreaAttrTokenMap[] =
 {
     { XML_NAMESPACE_SVG,    XML_X,                      XML_TOK_PA_X                 },
     { XML_NAMESPACE_SVG,    XML_Y,                      XML_TOK_PA_Y                 },
@@ -342,7 +342,7 @@ const SvXMLTokenMap& SchXMLImportHelper::GetCellAttrTokenMap()
 {
     if( ! mpCellAttrTokenMap )
     {
-        static SvXMLTokenMapEntry aCellAttrTokenMap[] =
+        static const SvXMLTokenMapEntry aCellAttrTokenMap[] =
 {
     { XML_NAMESPACE_OFFICE, XML_VALUE_TYPE,             XML_TOK_CELL_VAL_TYPE       },
     { XML_NAMESPACE_OFFICE, XML_VALUE,                  XML_TOK_CELL_VALUE          },
@@ -359,7 +359,7 @@ const SvXMLTokenMap& SchXMLImportHelper::GetSeriesAttrTokenMap()
 {
     if( ! mpSeriesAttrTokenMap )
     {
-        static SvXMLTokenMapEntry aSeriesAttrTokenMap[] =
+        static const SvXMLTokenMapEntry aSeriesAttrTokenMap[] =
 {
     { XML_NAMESPACE_CHART,  XML_VALUES_CELL_RANGE_ADDRESS,  XML_TOK_SERIES_CELL_RANGE    },
     { XML_NAMESPACE_CHART,  XML_LABEL_CELL_ADDRESS,         XML_TOK_SERIES_LABEL_ADDRESS },
@@ -379,7 +379,7 @@ const SvXMLTokenMap& SchXMLImportHelper::GetRegEquationAttrTokenMap()
 {
     if( ! mpRegEquationAttrTokenMap )
     {
-        static SvXMLTokenMapEntry aRegressionEquationAttrTokenMap[] =
+        static const SvXMLTokenMapEntry aRegressionEquationAttrTokenMap[] =
 {
     { XML_NAMESPACE_CHART,  XML_STYLE_NAME,             XML_TOK_REGEQ_STYLE_NAME         },
     { XML_NAMESPACE_CHART,  XML_DISPLAY_EQUATION,       XML_TOK_REGEQ_DISPLAY_EQUATION   },

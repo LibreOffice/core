@@ -145,7 +145,7 @@ const SvXMLTokenMap& AnimationsImportHelperImpl::getAnimationNodeTokenMap()
 {
     if( mpAnimationNodeTokenMap == NULL )
     {
-        static SvXMLTokenMapEntry aAnimationNodeTokenMap[] =
+        static const SvXMLTokenMapEntry aAnimationNodeTokenMap[] =
         {
             { XML_NAMESPACE_ANIMATION,  XML_PAR,                (sal_uInt16)AnimationNodeType::PAR },
             { XML_NAMESPACE_ANIMATION,  XML_SEQ,                (sal_uInt16)AnimationNodeType::SEQ },
@@ -224,7 +224,7 @@ const SvXMLTokenMap& AnimationsImportHelperImpl::getAnimationNodeAttributeTokenM
 {
     if( mpAnimationNodeAttributeTokenMap == NULL )
     {
-        static SvXMLTokenMapEntry aAnimationNodeAttributeTokenMap[] =
+        static const SvXMLTokenMapEntry aAnimationNodeAttributeTokenMap[] =
         {
             { XML_NAMESPACE_SMIL, XML_BEGIN,                    (sal_uInt16)ANA_Begin },
             { XML_NAMESPACE_SMIL, XML_DUR,                      (sal_uInt16)ANA_Dur },
@@ -946,7 +946,7 @@ void AnimationNodeContext::init_node(  const ::com::sun::star::uno::Reference< :
                 {
                     OUString aName( rValue );
 
-                    ImplAttributeNameConversion* p = getAnimationAttributeNamesConversionList();
+                    const struct ImplAttributeNameConversion* p = getAnimationAttributeNamesConversionList();
                     while( p->mpAPIName )
                     {
                         if( IsXMLToken( aName, p->meXMLToken ) )

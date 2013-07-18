@@ -61,7 +61,7 @@ enum XMLFontStyleAttrTokens
 
 static const SvXMLTokenMapEntry* lcl_getFontStyleAttrTokenMap()
 {
-    static SvXMLTokenMapEntry aFontStyleAttrTokenMap[] =
+    static const SvXMLTokenMapEntry aFontStyleAttrTokenMap[] =
     {
         { XML_NAMESPACE_SVG, XML_FONT_FAMILY,
                 XML_TOK_FONT_STYLE_ATTR_FAMILY },

@@ -503,7 +503,7 @@ void XMLTableExport::exportAutoStyles()
 
 const TableStyleElement* getTableStyleMap()
 {
-    static struct TableStyleElement gTableStyleElements[] =
+    static const struct TableStyleElement gTableStyleElements[] =
     {
         { XML_FIRST_ROW, OUString("first-row") },
         { XML_LAST_ROW, OUString("last-row") },

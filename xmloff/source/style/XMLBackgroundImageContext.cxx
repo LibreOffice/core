@@ -54,7 +54,7 @@ enum SvXMLTokenMapAttrs
 };
 static const SvXMLTokenMapEntry* lcl_getBGImgAttributesAttrTokenMap()
 {
-    static SvXMLTokenMapEntry aBGImgAttributesAttrTokenMap[] =
+    static const SvXMLTokenMapEntry aBGImgAttributesAttrTokenMap[] =
     {
         { XML_NAMESPACE_XLINK, XML_HREF,        XML_TOK_BGIMG_HREF      },
         { XML_NAMESPACE_XLINK, XML_TYPE,        XML_TOK_BGIMG_TYPE      },
@@ -71,14 +71,14 @@ static const SvXMLTokenMapEntry* lcl_getBGImgAttributesAttrTokenMap()
 
 
 
-static SvXMLEnumMapEntry psXML_BrushHoriPos[] =
+static const SvXMLEnumMapEntry psXML_BrushHoriPos[] =
 {
     { XML_LEFT,         GraphicLocation_LEFT_MIDDLE },
     { XML_RIGHT,        GraphicLocation_RIGHT_MIDDLE    },
     { XML_TOKEN_INVALID,                    0           }
 };
 
-static SvXMLEnumMapEntry psXML_BrushVertPos[] =
+static const SvXMLEnumMapEntry psXML_BrushVertPos[] =
 {
     { XML_TOP,          GraphicLocation_MIDDLE_TOP  },
     { XML_BOTTOM,       GraphicLocation_MIDDLE_BOTTOM   },
@@ -287,7 +287,7 @@ void XMLBackgroundImageContext::ProcessAttrs(
         case XML_TOK_BGIMG_REPEAT:
             {
                 sal_uInt16 nPos = GraphicLocation_NONE;
-                static SvXMLEnumMapEntry psXML_BrushRepeat[] =
+                static const SvXMLEnumMapEntry psXML_BrushRepeat[] =
                 {
                     { XML_BACKGROUND_REPEAT,        GraphicLocation_TILED   },
                     { XML_BACKGROUND_NO_REPEAT,     GraphicLocation_MIDDLE_MIDDLE       },

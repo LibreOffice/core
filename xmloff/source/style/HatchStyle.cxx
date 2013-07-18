@@ -93,7 +93,7 @@ sal_Bool XMLHatchStyleImport::importXML(
     aHatch.Angle = 0;
 
     {
-        static SvXMLTokenMapEntry aHatchAttrTokenMap[] =
+        static const SvXMLTokenMapEntry aHatchAttrTokenMap[] =
 {
     { XML_NAMESPACE_DRAW, XML_NAME, XML_TOK_HATCH_NAME },
     { XML_NAMESPACE_DRAW, XML_DISPLAY_NAME, XML_TOK_HATCH_DISPLAY_NAME },

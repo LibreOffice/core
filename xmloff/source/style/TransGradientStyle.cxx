@@ -100,7 +100,7 @@ sal_Bool XMLTransGradientStyleImport::importXML(
     aGradient.Border = 0;
 
     {
-        static SvXMLTokenMapEntry aTrGradientAttrTokenMap[] =
+        static const SvXMLTokenMapEntry aTrGradientAttrTokenMap[] =
 {
     { XML_NAMESPACE_DRAW, XML_NAME, XML_TOK_GRADIENT_NAME },
     { XML_NAMESPACE_DRAW, XML_DISPLAY_NAME, XML_TOK_GRADIENT_DISPLAY_NAME },

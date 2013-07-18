@@ -202,7 +202,7 @@ void XMLShapeStyleContext::FillPropertySet( const Reference< beans::XPropertySet
         { CTF_SD_OLE_VIS_AREA_IMPORT_HEIGHT, -1 },
         { -1, -1 }
     };
-    static sal_uInt16 aFamilies[] =
+    static const sal_uInt16 aFamilies[] =
     {
         XML_STYLE_FAMILY_SD_STROKE_DASH_ID,
         XML_STYLE_FAMILY_SD_MARKER_ID,

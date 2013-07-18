@@ -80,7 +80,7 @@ namespace xmloff
                 // FormSubmitEncoding
                 case epSubmitEncoding:
                 {
-                    static SvXMLEnumMapEntry aSubmitEncodingMap[] =
+                    static const SvXMLEnumMapEntry aSubmitEncodingMap[] =
                     {
                         { XML_APPLICATION_X_WWW_FORM_URLENCODED, FormSubmitEncoding_URL },
                         { XML_MULTIPART_FORMDATA, FormSubmitEncoding_MULTIPART },
@@ -93,7 +93,7 @@ namespace xmloff
                 // FormSubmitMethod
                 case epSubmitMethod:
                 {
-                    static SvXMLEnumMapEntry aSubmitMethodMap[] =
+                    static const SvXMLEnumMapEntry aSubmitMethodMap[] =
                     {
                         { XML_GET, FormSubmitMethod_GET },
                         { XML_POST, FormSubmitMethod_POST },
@@ -105,7 +105,7 @@ namespace xmloff
                 // CommandType
                 case epCommandType:
                 {
-                    static SvXMLEnumMapEntry aCommandTypeMap[] =
+                    static const SvXMLEnumMapEntry aCommandTypeMap[] =
                     {
                         { XML_TABLE, CommandType::TABLE },
                         { XML_QUERY, CommandType::QUERY },
@@ -118,7 +118,7 @@ namespace xmloff
                 // NavigationBarMode
                 case epNavigationType:
                 {
-                    static SvXMLEnumMapEntry aNavigationTypeMap[] =
+                    static const SvXMLEnumMapEntry aNavigationTypeMap[] =
                     {
                         { XML_NONE, NavigationBarMode_NONE },
                         { XML_CURRENT, NavigationBarMode_CURRENT },
@@ -131,7 +131,7 @@ namespace xmloff
                 // TabulatorCycle
                 case epTabCyle:
                 {
-                    static SvXMLEnumMapEntry aTabulytorCycleMap[] =
+                    static const SvXMLEnumMapEntry aTabulytorCycleMap[] =
                     {
                         { XML_RECORDS, TabulatorCycle_RECORDS },
                         { XML_CURRENT, TabulatorCycle_CURRENT },
@@ -144,7 +144,7 @@ namespace xmloff
                 // FormButtonType
                 case epButtonType:
                 {
-                    static SvXMLEnumMapEntry aFormButtonTypeMap[] =
+                    static const SvXMLEnumMapEntry aFormButtonTypeMap[] =
                     {
                         { XML_PUSH, FormButtonType_PUSH },
                         { XML_SUBMIT, FormButtonType_SUBMIT },
@@ -158,7 +158,7 @@ namespace xmloff
                 // ListSourceType
                 case epListSourceType:
                 {
-                    static SvXMLEnumMapEntry aListSourceTypeMap[] =
+                    static const SvXMLEnumMapEntry aListSourceTypeMap[] =
                     {
                         { XML_VALUE_LIST, ListSourceType_VALUELIST },
                         { XML_TABLE, ListSourceType_TABLE },
@@ -174,7 +174,7 @@ namespace xmloff
                 // check state of a checkbox
                 case epCheckState:
                 {
-                    static SvXMLEnumMapEntry aCheckStateMap[] =
+                    static const SvXMLEnumMapEntry aCheckStateMap[] =
                     {
                         { XML_UNCHECKED, STATE_NOCHECK },
                         { XML_CHECKED, STATE_CHECK },
@@ -186,7 +186,7 @@ namespace xmloff
                 break;
                 case epTextAlign:
                 {
-                    static SvXMLEnumMapEntry aTextAlignMap[] =
+                    static const SvXMLEnumMapEntry aTextAlignMap[] =
                     {
                         { XML_START,        awt::TextAlign::LEFT },
                         { XML_CENTER,       awt::TextAlign::CENTER },
@@ -200,7 +200,7 @@ namespace xmloff
                 break;
                 case epBorderWidth:
                 {
-                    static SvXMLEnumMapEntry aBorderTypeMap[] =
+                    static const SvXMLEnumMapEntry aBorderTypeMap[] =
                     {
                         { XML_NONE,     0 },
                         { XML_HIDDEN,   0 },
@@ -220,7 +220,7 @@ namespace xmloff
 
                 case epFontEmphasis:
                 {
-                    static SvXMLEnumMapEntry aFontEmphasisMap[] =
+                    static const SvXMLEnumMapEntry aFontEmphasisMap[] =
                     {
                         { XML_NONE,     awt::FontEmphasisMark::NONE },
                         { XML_DOT,      awt::FontEmphasisMark::DOT },
@@ -235,7 +235,7 @@ namespace xmloff
 
                 case epFontRelief:
                 {
-                    static SvXMLEnumMapEntry aFontReliefMap[] =
+                    static const SvXMLEnumMapEntry aFontReliefMap[] =
                     {
                         { XML_NONE,     FontRelief::NONE },
                         { XML_ENGRAVED, FontRelief::ENGRAVED },
@@ -248,7 +248,7 @@ namespace xmloff
 
                 case epListLinkageType:
                 {
-                    static SvXMLEnumMapEntry aListLinkageMap[] =
+                    static const SvXMLEnumMapEntry aListLinkageMap[] =
                     {
                         { XML_SELECTION,            0 },
                         { XML_SELECTION_INDEXES,    1 },
@@ -260,7 +260,7 @@ namespace xmloff
 
                 case epOrientation:
                 {
-                    static SvXMLEnumMapEntry aOrientationMap[] =
+                    static const SvXMLEnumMapEntry aOrientationMap[] =
                     {
                         { XML_HORIZONTAL,   ScrollBarOrientation::HORIZONTAL },
                         { XML_VERTICAL,     ScrollBarOrientation::VERTICAL },
@@ -272,7 +272,7 @@ namespace xmloff
 
                 case epVisualEffect:
                 {
-                    static SvXMLEnumMapEntry aVisualEffectMap[] =
+                    static const SvXMLEnumMapEntry aVisualEffectMap[] =
                     {
                         { XML_NONE, VisualEffect::NONE },
                         { XML_3D,   VisualEffect::LOOK3D },
@@ -285,7 +285,7 @@ namespace xmloff
 
                 case epImagePosition:
                 {
-                    static SvXMLEnumMapEntry aImagePositionMap[] =
+                    static const SvXMLEnumMapEntry aImagePositionMap[] =
                     {
                         { XML_START,  0 },
                         { XML_END,    1 },
@@ -300,7 +300,7 @@ namespace xmloff
 
                 case epImageAlign:
                 {
-                    static SvXMLEnumMapEntry aImageAlignMap[] =
+                    static const SvXMLEnumMapEntry aImageAlignMap[] =
                     {
                         { XML_START,  0 },
                         { XML_CENTER, 1 },

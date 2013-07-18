@@ -91,13 +91,13 @@ using ::com::sun::star::container::XEnumeration;
 namespace xmloff
 {
 
-SvXMLEnumMapEntry* getAnimationsEnumMap( sal_uInt16 nMap )
+const SvXMLEnumMapEntry* getAnimationsEnumMap( sal_uInt16 nMap )
 {
     switch( nMap )
     {
     case Animations_EnumMap_Fill:
         {
-            static SvXMLEnumMapEntry aAnimations_EnumMap_Fill[] =
+            static const SvXMLEnumMapEntry aAnimations_EnumMap_Fill[] =
             {
                 { XML_DEFAULT,      AnimationFill::DEFAULT },
                 { XML_REMOVE,       AnimationFill::REMOVE },
@@ -111,7 +111,7 @@ SvXMLEnumMapEntry* getAnimationsEnumMap( sal_uInt16 nMap )
         }
     case Animations_EnumMap_FillDefault:
         {
-            static SvXMLEnumMapEntry aAnimations_EnumMap_Fill[] =
+            static const SvXMLEnumMapEntry aAnimations_EnumMap_Fill[] =
             {
                 { XML_INHERIT,      AnimationFill::INHERIT },
                 { XML_REMOVE,       AnimationFill::REMOVE },
@@ -125,7 +125,7 @@ SvXMLEnumMapEntry* getAnimationsEnumMap( sal_uInt16 nMap )
         }
     case Animations_EnumMap_Restart:
         {
-            static SvXMLEnumMapEntry aAnimations_EnumMap_Restart[] =
+            static const SvXMLEnumMapEntry aAnimations_EnumMap_Restart[] =
             {
                 { XML_DEFAULT,      AnimationRestart::DEFAULT },
                 { XML_ALWAYS,       AnimationRestart::ALWAYS },
@@ -137,7 +137,7 @@ SvXMLEnumMapEntry* getAnimationsEnumMap( sal_uInt16 nMap )
         }
     case Animations_EnumMap_RestartDefault:
         {
-            static SvXMLEnumMapEntry aAnimations_EnumMap_RestartDefault[] =
+            static const SvXMLEnumMapEntry aAnimations_EnumMap_RestartDefault[] =
             {
                 { XML_INHERIT,      AnimationRestart::INHERIT },
                 { XML_ALWAYS,       AnimationRestart::ALWAYS },
@@ -149,7 +149,7 @@ SvXMLEnumMapEntry* getAnimationsEnumMap( sal_uInt16 nMap )
         }
     case Animations_EnumMap_Endsync:
         {
-            static SvXMLEnumMapEntry aAnimations_EnumMap_Endsync[] =
+            static const SvXMLEnumMapEntry aAnimations_EnumMap_Endsync[] =
             {
                 { XML_FIRST,        AnimationEndSync::FIRST },
                 { XML_LAST,         AnimationEndSync::LAST },
@@ -161,7 +161,7 @@ SvXMLEnumMapEntry* getAnimationsEnumMap( sal_uInt16 nMap )
         }
     case Animations_EnumMap_CalcMode:
         {
-            static SvXMLEnumMapEntry aAnimations_EnumMap_CalcMode[] =
+            static const SvXMLEnumMapEntry aAnimations_EnumMap_CalcMode[] =
             {
                 { XML_DISCRETE,     AnimationCalcMode::DISCRETE },
                 { XML_LINEAR,       AnimationCalcMode::LINEAR },
@@ -173,7 +173,7 @@ SvXMLEnumMapEntry* getAnimationsEnumMap( sal_uInt16 nMap )
         }
     case Animations_EnumMap_AdditiveMode:
         {
-            static SvXMLEnumMapEntry aAnimations_EnumMap_AdditiveMode[] =
+            static const SvXMLEnumMapEntry aAnimations_EnumMap_AdditiveMode[] =
             {
                 { XML_BASE,         AnimationAdditiveMode::BASE },
                 { XML_SUM,          AnimationAdditiveMode::SUM },
@@ -186,7 +186,7 @@ SvXMLEnumMapEntry* getAnimationsEnumMap( sal_uInt16 nMap )
         }
     case Animations_EnumMap_TransformType:
         {
-            static SvXMLEnumMapEntry aAnimations_EnumMap_TransformType[] =
+            static const SvXMLEnumMapEntry aAnimations_EnumMap_TransformType[] =
             {
                 { XML_TRANSLATE,    AnimationTransformType::TRANSLATE },
                 { XML_SCALE,        AnimationTransformType::SCALE },
@@ -199,7 +199,7 @@ SvXMLEnumMapEntry* getAnimationsEnumMap( sal_uInt16 nMap )
         }
     case Animations_EnumMap_TransitionType:
         {
-            static SvXMLEnumMapEntry aAnimations_EnumMap_TransitionType[] =
+            static const SvXMLEnumMapEntry aAnimations_EnumMap_TransitionType[] =
             {
                 { XML_BARWIPE,          TransitionType::BARWIPE },
                 { XML_BOXWIPE,          TransitionType::BOXWIPE },
@@ -250,7 +250,7 @@ SvXMLEnumMapEntry* getAnimationsEnumMap( sal_uInt16 nMap )
         }
     case Animations_EnumMap_TransitionSubType:
         {
-            static SvXMLEnumMapEntry aAnimations_EnumMap_TransitionSubType[] =
+            static const SvXMLEnumMapEntry aAnimations_EnumMap_TransitionSubType[] =
             {
                 { XML_DEFAULT,              TransitionSubType::DEFAULT },
                 { XML_LEFTTORIGHT,          TransitionSubType::LEFTTORIGHT },
@@ -375,7 +375,7 @@ SvXMLEnumMapEntry* getAnimationsEnumMap( sal_uInt16 nMap )
         }
     case Animations_EnumMap_EventTrigger:
         {
-            static SvXMLEnumMapEntry aAnimations_EnumMap_EventTrigger[] =
+            static const SvXMLEnumMapEntry aAnimations_EnumMap_EventTrigger[] =
             {
                 { XML_ONBEGIN,          EventTrigger::ON_BEGIN },
                 { XML_ONEND,            EventTrigger::ON_END },
@@ -396,7 +396,7 @@ SvXMLEnumMapEntry* getAnimationsEnumMap( sal_uInt16 nMap )
 
     case Animations_EnumMap_EffectPresetClass:
         {
-            static SvXMLEnumMapEntry aAnimations_EnumMap_EffectPresetClass[] =
+            static const SvXMLEnumMapEntry aAnimations_EnumMap_EffectPresetClass[] =
             {
                 { XML_CUSTOM,       EffectPresetClass::CUSTOM },
                 { XML_ENTRANCE,     EffectPresetClass::ENTRANCE },
@@ -412,7 +412,7 @@ SvXMLEnumMapEntry* getAnimationsEnumMap( sal_uInt16 nMap )
 
     case Animations_EnumMap_EffectNodeType:
         {
-            static SvXMLEnumMapEntry aAnimations_EnumMap_EffectNodeType[] =
+            static const SvXMLEnumMapEntry aAnimations_EnumMap_EffectNodeType[] =
             {
                 { XML_DEFAULT,                  EffectNodeType::DEFAULT },
                 { XML_ON_CLICK,                 EffectNodeType::ON_CLICK },
@@ -427,7 +427,7 @@ SvXMLEnumMapEntry* getAnimationsEnumMap( sal_uInt16 nMap )
         }
     case Animations_EnumMap_SubItem:
         {
-            static SvXMLEnumMapEntry aAnimations_EnumMap_SubItem[] =
+            static const SvXMLEnumMapEntry aAnimations_EnumMap_SubItem[] =
             {
                 { XML_WHOLE,                    ShapeAnimationSubType::AS_WHOLE },
                 { XML_BACKGROUND,               ShapeAnimationSubType::ONLY_BACKGROUND },
@@ -438,7 +438,7 @@ SvXMLEnumMapEntry* getAnimationsEnumMap( sal_uInt16 nMap )
         }
     case Animations_EnumMap_IterateType:
         {
-            static SvXMLEnumMapEntry aAnimations_EnumMap_IterateType[] =
+            static const SvXMLEnumMapEntry aAnimations_EnumMap_IterateType[] =
             {
                 { XML_BY_PARAGRAPH,             TextAnimationType::BY_PARAGRAPH },
                 { XML_BY_WORD,                  TextAnimationType::BY_WORD },
@@ -449,7 +449,7 @@ SvXMLEnumMapEntry* getAnimationsEnumMap( sal_uInt16 nMap )
         }
     case Animations_EnumMap_Command:
         {
-            static SvXMLEnumMapEntry aAnimations_EnumMap_Command[] =
+            static const SvXMLEnumMapEntry aAnimations_EnumMap_Command[] =
             {
                 { XML_CUSTOM,                   EffectCommands::CUSTOM },
                 { XML_VERB,                     EffectCommands::VERB },
@@ -467,9 +467,9 @@ SvXMLEnumMapEntry* getAnimationsEnumMap( sal_uInt16 nMap )
     return NULL;
 }
 
-struct ImplAttributeNameConversion* getAnimationAttributeNamesConversionList()
+const struct ImplAttributeNameConversion* getAnimationAttributeNamesConversionList()
 {
-    static struct ImplAttributeNameConversion gImplConversionList[] =
+    static const struct ImplAttributeNameConversion gImplConversionList[] =
     {
         { XML_X,                        "X" },
         { XML_Y,                        "Y" },
@@ -1137,7 +1137,7 @@ void AnimationsExporterImpl::exportAnimate( const Reference< XAnimate >& xAnimat
             OUString sTemp( xAnimate->getAttributeName() );
             if( !sTemp.isEmpty() )
             {
-                ImplAttributeNameConversion* p = getAnimationAttributeNamesConversionList();
+                const struct ImplAttributeNameConversion* p = getAnimationAttributeNamesConversionList();
                 while( p->mpAPIName )
                 {
                     if( sTemp.compareToAscii( p->mpAPIName ) == 0 )

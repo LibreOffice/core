@@ -81,7 +81,7 @@ XMLLineNumberingImportContext::~XMLLineNumberingImportContext()
 void XMLLineNumberingImportContext::StartElement(
     const Reference<XAttributeList> & xAttrList)
 {
-    static SvXMLTokenMapEntry aLineNumberingTokenMap[] =
+    static const SvXMLTokenMapEntry aLineNumberingTokenMap[] =
     {
         { XML_NAMESPACE_TEXT, XML_STYLE_NAME, XML_TOK_LINENUMBERING_STYLE_NAME },
         { XML_NAMESPACE_TEXT, XML_NUMBER_LINES,
