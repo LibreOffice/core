@@ -66,11 +66,15 @@
 #  include <cstdio>
 #endif
 
+#include <comphelper/processfactory.hxx>
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/XAccessibleStateSet.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/XAccessibleEditableText.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
+#include <com/sun/star/frame/XFrame.hpp>
+#include <com/sun/star/util/URLTransformer.hpp>
 
 #if GTK_CHECK_VERSION(3,0,0)
 #  include <gdk/gdkkeysyms-compat.h>
@@ -560,26 +564,46 @@ static void quit_activated(GSimpleAction *, GVariant*, gpointer)
 
 static void dialog_activated(GSimpleAction *action, GVariant*, gpointer)
 {
-    Application *pApp = GetpApp();
-    if (!pApp)
+    uno::Reference< css::uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+
+    uno::Reference< css::frame::XDesktop2 > xDesktop = css::frame::Desktop::create( xContext );
+
+    uno::Reference < css::frame::XFrame > xFrame(xDesktop->getActiveFrame());
+    if (!xFrame.is())
+        xFrame = uno::Reference < css::frame::XFrame >(xDesktop, uno::UNO_QUERY);
+
+    if (!xFrame.is())
+        return;
+
+    uno::Reference< css::frame::XDispatchProvider > xDispatchProvider(xFrame, uno::UNO_QUERY);
+    if (!xDispatchProvider.is())
         return;
 
     gchar *strval = NULL;
     g_object_get(action, "name", &strval, NULL);
-
     if (!strval)
         return;
 
-    OUString sCommand(strval, strlen(strval), RTL_TEXTENCODING_UTF8);
+    OUString sCommand(".uno:");
+    sCommand += OUString(strval, strlen(strval), RTL_TEXTENCODING_UTF8);
     g_free(strval);
 
-    ApplicationEvent aEv(ApplicationEvent::TYPE_SHOWDIALOG, sCommand);
-    GetpApp()->AppEvent(aEv);
+    css::util::URL aCommand;
+    aCommand.Complete = sCommand;
+    uno::Reference< css::util::XURLTransformer > xParser = css::util::URLTransformer::create(xContext);
+    xParser->parseStrict(aCommand);
+
+    uno::Reference< css::frame::XDispatch > xDisp = xDispatchProvider->queryDispatch(aCommand, OUString(), 0);
+
+    if (!xDisp.is())
+        return;
+
+    xDisp->dispatch(aCommand, css::uno::Sequence< css::beans::PropertyValue >());
 }
 
 static GActionEntry app_entries[] = {
-  { "PREFERENCES", dialog_activated, NULL, NULL, NULL, {0} },
-  { "ABOUT", dialog_activated, NULL, NULL, NULL, {0} },
+  { "OptionsTreeDialog", dialog_activated, NULL, NULL, NULL, {0} },
+  { "About", dialog_activated, NULL, NULL, NULL, {0} },
   { "help", help_activated, NULL, NULL, NULL, {0} },
   { "quit", quit_activated, NULL, NULL, NULL, {0} }
 };
@@ -629,12 +653,12 @@ gboolean ensure_dbus_setup( gpointer data )
         GMenuItem* item;
 
         GMenu *firstsubmenu = g_menu_new ();
-        item = g_menu_item_new("_Preferences", "app.PREFERENCES");
+        item = g_menu_item_new("_Preferences", "app.OptionsTreeDialog");
         g_menu_append_item( firstsubmenu, item );
         g_menu_append_section( menu, NULL, G_MENU_MODEL(firstsubmenu));
 
         GMenu *secondsubmenu = g_menu_new ();
-        item = g_menu_item_new("_About", "app.ABOUT");
+        item = g_menu_item_new("_About", "app.About");
         g_menu_append_item( secondsubmenu, item );
 
         item = g_menu_item_new("_Help", "app.help");
