@@ -100,7 +100,7 @@ void OStatement_Base::disposeResultSet()
 
 void OStatement_BASE2::disposing()
 {
-    SAL_INFO("connectivity.firebird", "=> OStatement_BASE2::disposing().");
+    SAL_INFO("connectivity.firebird", "disposing().");
 
     MutexGuard aGuard(m_aMutex);
 
@@ -163,7 +163,7 @@ void SAL_CALL OStatement_Base::cancel(  ) throw(RuntimeException)
 
 void SAL_CALL OStatement_Base::close(  ) throw(SQLException, RuntimeException)
 {
-    SAL_INFO("connectivity.firebird", "=> OStatement_Base::close().");
+    SAL_INFO("connectivity.firebird", "close().");
 
     {
         MutexGuard aGuard( m_aMutex );
@@ -212,7 +212,7 @@ OUString OStatement_Base::sanitizeSqlString(const OUString& sqlIn)
 {
     // TODO: verify this is all we need.
     static const sal_Unicode pattern('"');
-    static const sal_Unicode empty(' ');
+    static const sal_Unicode empty('\'');
     return sqlIn.replace(pattern, empty);
 }
 
@@ -387,7 +387,7 @@ uno::Reference< XResultSet > SAL_CALL OStatement_Base::executeQuery(const OUStri
 
 sal_Bool SAL_CALL OStatement_Base::execute(const OUString& sql) throw(SQLException, RuntimeException)
 {
-    SAL_INFO("connectivity.firebird", "=> OStatement_Base::executeQuery(). "
+    SAL_INFO("connectivity.firebird", "executeQuery(). "
              "Got called with sql: " << sql);
 
     MutexGuard aGuard( m_aMutex );

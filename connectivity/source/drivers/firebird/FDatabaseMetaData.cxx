@@ -788,7 +788,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTableTypes(  ) throw(SQLE
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTypeInfo(  ) throw(SQLException, RuntimeException)
 {
-    SAL_INFO("connectivity.firebird", "=> ODatabaseMetaData::getTypeInfo().");
+    SAL_INFO("connectivity.firebird", "getTypeInfo().");
 
     // this returns an empty resultset where the column-names are already set
     // in special the metadata of the resultset already returns the right columns
@@ -861,7 +861,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
 {
     (void) catalog;
     (void) types;
-    SAL_INFO("connectivity.firebird", "=> ODatabaseMetaData::getTables(). "
+    SAL_INFO("connectivity.firebird", "getTables(). "
              "Got called with schemaPattern: " << schemaPattern << " , "
              "TableNamePattern: " << tableNamePattern);
 
@@ -893,7 +893,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
         query = query.replaceAll(wld, tableNamePattern);
     }
 
-    SAL_INFO("connectivity.firebird", "=> ODatabaseMetaData::getTables(). "
+    SAL_INFO("connectivity.firebird", "getTables(). "
              "About to execute the query.");
 
     Reference< XResultSet > rs = statement->executeQuery(query.getStr());

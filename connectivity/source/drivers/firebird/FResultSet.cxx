@@ -78,7 +78,7 @@ OResultSet::OResultSet(const uno::Reference< XStatement >& xStatement,
     , m_rowCount(0)
     , m_fieldCount(pSqlda? pSqlda->sqld : 0)
 {
-    SAL_INFO("connectivity.firebird", "=> OResultSet::OResultSet().");
+    SAL_INFO("connectivity.firebird", "OResultSet().");
 
     if (!pSqlda)
         return; // TODO: what?
@@ -366,7 +366,7 @@ void SAL_CALL OResultSet::checkRowIndex(sal_Bool mustBeOnValidRow)
 // -------------------------------------------------------------------------
 void OResultSet::disposing(void)
 {
-    SAL_INFO("connectivity.firebird", "=> OResultSet::disposing().");
+    SAL_INFO("connectivity.firebird", "disposing().");
 
     OPropertySetHelper::disposing();
 
@@ -666,7 +666,7 @@ DateTime SAL_CALL OResultSet::getTimestamp( sal_Int32 columnIndex ) throw(SQLExc
 
 void SAL_CALL OResultSet::close(  ) throw(SQLException, RuntimeException)
 {
-    SAL_INFO("connectivity.firebird", "=> OResultSet::close().");
+    SAL_INFO("connectivity.firebird", "close().");
 
     {
         MutexGuard aGuard( m_aMutex );

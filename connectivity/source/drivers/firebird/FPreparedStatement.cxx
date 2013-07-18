@@ -71,7 +71,7 @@ OPreparedStatement::OPreparedStatement( OConnection* _pConnection,
     ,m_sSqlStatement(sql)
     ,m_bPrepared(sal_False)
 {
-    SAL_INFO("connectivity.firebird", "=> OPreparedStatement::OPreparedStatement_BASE(). "
+    SAL_INFO("connectivity.firebird", "OPreparedStatement_BASE(). "
              "sql: " << sql);
 
 //     prepareQuery(m_sSqlStatement);
@@ -120,7 +120,7 @@ Reference< XResultSetMetaData > SAL_CALL OPreparedStatement::getMetaData(  ) thr
 
 void SAL_CALL OPreparedStatement::close(  ) throw(SQLException, RuntimeException)
 {
-    SAL_INFO("connectivity.firebird", "=> OPreparedStatement::close()");
+    SAL_INFO("connectivity.firebird", "close()");
 
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
@@ -164,7 +164,7 @@ sal_Int32 SAL_CALL OPreparedStatement::executeUpdate(  ) throw(SQLException, Run
 
 void SAL_CALL OPreparedStatement::setString( sal_Int32 parameterIndex, const ::rtl::OUString& x ) throw(SQLException, RuntimeException)
 {
-    SAL_INFO("connectivity.firebird", "=> OPreparedStatement::setString(). "
+    SAL_INFO("connectivity.firebird", "setString(). "
              "parameterIndex: " << parameterIndex << " , "
              "x: " << x);
 
@@ -173,13 +173,13 @@ void SAL_CALL OPreparedStatement::setString( sal_Int32 parameterIndex, const ::r
 
     if (NULL == m_INsqlda)
     {
-        SAL_WARN("connectivity.firebird", "=> OPreparedStatement::setString(). "
+        SAL_WARN("connectivity.firebird", "setString(). "
                  "The query has not input parameters.");
         return;
     }
 
     OString str = OUStringToOString(x , RTL_TEXTENCODING_UTF8 );
-    SAL_INFO("connectivity.firebird", "=> OPreparedStatement::setString(). "
+    SAL_INFO("connectivity.firebird", "setString(). "
              "Setting parameter as: " << str);
 
     XSQLVAR *var = m_INsqlda->sqlvar + (parameterIndex - 1);
@@ -212,7 +212,7 @@ Reference< XConnection > SAL_CALL OPreparedStatement::getConnection(  ) throw(SQ
 
 Reference< XResultSet > SAL_CALL OPreparedStatement::executeQuery(  ) throw(SQLException, RuntimeException)
 {
-    SAL_INFO("connectivity.firebird", "=> OPreparedStatement::executeQuery(). "
+    SAL_INFO("connectivity.firebird", "executeQuery(). "
              "Got called with sql: " <<  m_sSqlStatement);
 
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -229,7 +229,7 @@ Reference< XResultSet > SAL_CALL OPreparedStatement::executeQuery(  ) throw(SQLE
     //initializeResultSet( pResult.get() );
     Reference< XResultSet > xRS = pResult.get();
 
-    SAL_INFO("connectivity.firebird", "=> OPreparedStatement::executeQuery(). "
+    SAL_INFO("connectivity.firebird", "executeQuery(). "
              "Query executed.");
 
     return xRS;

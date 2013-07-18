@@ -59,7 +59,7 @@ namespace connectivity
         Reference< XInterface >  SAL_CALL FirebirdDriver_CreateInstance(
             const Reference< XMultiServiceFactory >& _rxFactory) throw( Exception )
         {
-            SAL_INFO("connectivity.firebird", "=> ODriver_BASE::FirebirdDriver_CreateInstance()" );
+            SAL_INFO("connectivity.firebird", "FirebirdDriver_CreateInstance()" );
             (void) _rxFactory;
             return *(new FirebirdDriver());
         }
@@ -131,7 +131,7 @@ Reference< XConnection > SAL_CALL FirebirdDriver::connect(
 {
     Reference< XConnection > xConnection;
 
-    SAL_INFO("connectivity.firebird", "=> ODriver_BASE::connect(), URL: " << url );
+    SAL_INFO("connectivity.firebird", "connect(), URL: " << url );
 
     MutexGuard aGuard( m_aMutex );
     if (ODriver_BASE::rBHelper.bDisposed)

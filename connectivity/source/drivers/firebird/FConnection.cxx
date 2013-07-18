@@ -103,14 +103,14 @@ OConnection::OConnection(FirebirdDriver*    _pDriver)
                          m_DBHandler(0),
                          m_transactionHandle(0)
 {
-    SAL_INFO("connectivity.firebird", "=> OConnection::OConnection().");
+    SAL_INFO("connectivity.firebird", "OConnection().");
 
     m_pDriver->acquire();
 }
 
 OConnection::~OConnection()
 {
-    SAL_INFO("connectivity.firebird", "=> OConnection::~OConnection().");
+    SAL_INFO("connectivity.firebird", "~OConnection().");
 
     if(!isClosed())
         close();
@@ -120,7 +120,7 @@ OConnection::~OConnection()
 
 void SAL_CALL OConnection::release() throw()
 {
-    SAL_INFO("connectivity.firebird", "=> OConnection::release().");
+    SAL_INFO("connectivity.firebird", "release().");
 
     relase_ChildImpl();
 }
@@ -146,7 +146,7 @@ static int pr_error(const ISC_STATUS* status, const char* operation)
 void OConnection::construct(const ::rtl::OUString& url, const Sequence< PropertyValue >& info)
     throw(SQLException)
 {
-    SAL_INFO("connectivity.firebird", "=> OConnection::construct().");
+    SAL_INFO("connectivity.firebird", "construct().");
 
     osl_atomic_increment( &m_refCount );
 
@@ -289,7 +289,7 @@ IMPLEMENT_SERVICE_INFO(OConnection, "com.sun.star.sdbc.drivers.firebird.OConnect
 Reference< XStatement > SAL_CALL OConnection::createStatement( )
                                         throw(SQLException, RuntimeException)
 {
-    SAL_INFO("connectivity.firebird", "=> OConnection::createStatement().");
+    SAL_INFO("connectivity.firebird", "createStatement().");
 
     MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
@@ -298,7 +298,7 @@ Reference< XStatement > SAL_CALL OConnection::createStatement( )
     if(m_aTypeInfo.empty())
         buildTypeInfo();
 
-    SAL_INFO("connectivity.firebird", "=> OConnection::createStatement(). "
+    SAL_INFO("connectivity.firebird", "createStatement(). "
              "Creating statement.");
 
     // create a statement
@@ -311,7 +311,7 @@ Reference< XStatement > SAL_CALL OConnection::createStatement( )
 Reference< XPreparedStatement > SAL_CALL OConnection::prepareStatement(
             const ::rtl::OUString& _sSql ) throw(SQLException, RuntimeException)
 {
-    SAL_INFO("connectivity.firebird", "=> OConnection::prepareStatement(). "
+    SAL_INFO("connectivity.firebird", "prepareStatement(). "
              "Got called with sql: " << _sSql);
 
     MutexGuard aGuard( m_aMutex );
@@ -321,7 +321,7 @@ Reference< XPreparedStatement > SAL_CALL OConnection::prepareStatement(
     if(m_aTypeInfo.empty())
         buildTypeInfo();
 
-    SAL_INFO("connectivity.firebird", "=> OConnection::prepareStatement(). "
+    SAL_INFO("connectivity.firebird", "prepareStatement(). "
              "Creating prepared statement.");
 
     // create a statement
@@ -331,7 +331,7 @@ Reference< XPreparedStatement > SAL_CALL OConnection::prepareStatement(
                                                                      _sSql);
     m_aStatements.push_back(WeakReferenceHelper(xReturn));
 
-    SAL_INFO("connectivity.firebird", "=> OConnection::prepareStatement(). "
+    SAL_INFO("connectivity.firebird", "prepareStatement(). "
              "Prepared Statement created.");
 
     return xReturn;
@@ -340,7 +340,7 @@ Reference< XPreparedStatement > SAL_CALL OConnection::prepareStatement(
 Reference< XPreparedStatement > SAL_CALL OConnection::prepareCall(
                 const OUString& _sSql ) throw(SQLException, RuntimeException)
 {
-    SAL_INFO("connectivity.firebird", "=> OConnection::prepareCall(). "
+    SAL_INFO("connectivity.firebird", "prepareCall(). "
              "_sSql: " << _sSql);
 
     MutexGuard aGuard( m_aMutex );
@@ -473,7 +473,7 @@ sal_Bool SAL_CALL OConnection::isClosed(  ) throw(SQLException, RuntimeException
 // --------------------------------------------------------------------------------
 Reference< XDatabaseMetaData > SAL_CALL OConnection::getMetaData(  ) throw(SQLException, RuntimeException)
 {
-    SAL_INFO("connectivity.firebird", "=> OConnection::getMetaData().");
+    SAL_INFO("connectivity.firebird", "getMetaData().");
 
     MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
@@ -554,7 +554,7 @@ void SAL_CALL OConnection::setTypeMap(const Reference< XNameAccess >& typeMap)
 //----- XCloseable -----------------------------------------------------------
 void SAL_CALL OConnection::close(  ) throw(SQLException, RuntimeException)
 {
-    SAL_INFO("connectivity.firebird", "=> OConnection::close().");
+    SAL_INFO("connectivity.firebird", "close().");
 
     // we just dispose us
     {
@@ -611,7 +611,7 @@ void SAL_CALL OConnection::disposing( const EventObject& Source ) throw (Runtime
 //--------------------------------------------------------------------
 void OConnection::buildTypeInfo() throw( SQLException)
 {
-    SAL_INFO("connectivity.firebird", "=> OConnection::buildTypeInfo().");
+    SAL_INFO("connectivity.firebird", "buildTypeInfo().");
 
     MutexGuard aGuard( m_aMutex );
 
@@ -650,7 +650,7 @@ void OConnection::buildTypeInfo() throw( SQLException)
         m_aTypeInfo.push_back(aInfo);
     }
 
-    SAL_INFO("connectivity.firebird", "=> OConnection::buildTypeInfo(). "
+    SAL_INFO("connectivity.firebird", "buildTypeInfo(). "
              "Type info built.");
 
     // Close the result set/statement.
@@ -658,13 +658,13 @@ void OConnection::buildTypeInfo() throw( SQLException)
     Reference< XCloseable> xClose(xRs,UNO_QUERY);
     xClose->close();
 
-    SAL_INFO("connectivity.firebird", "=> OConnection::buildTypeInfo(). "
+    SAL_INFO("connectivity.firebird", "buildTypeInfo(). "
              "Closed.");
 }
 //------------------------------------------------------------------------------
 void OConnection::disposing()
 {
-    SAL_INFO("connectivity.firebird", "=> OConnection::disposing().");
+    SAL_INFO("connectivity.firebird", "disposing().");
 
     // we noticed that we should be destroied in near future so we have to dispose our statements
     MutexGuard aGuard(m_aMutex);
