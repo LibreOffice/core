@@ -106,6 +106,13 @@ public:
 
 private:
     void run();
+    /**
+     * Given that some problem doesn't affect the result in the importer, we
+     * test the resulting file directly, by opening the zip file, parsing an
+     * xml stream, and asserting an XPath expression. This method returns the
+     * xml stream, so that you can do the asserting.
+     */
+    xmlDocPtr parseExport();
 };
 
 void Test::run()
@@ -183,6 +190,31 @@ void Test::run()
         (this->*rEntry.pMethod)();
         finish();
     }
+}
+
+xmlDocPtr Test::parseExport()
+{
+    // Create the zip file.
+    utl::TempFile aTempFile;
+    save("Office Open XML Text", aTempFile);
+
+    // Read the XML stream we're interested in.
+    uno::Reference<packages::zip::XZipFileAccess2> xNameAccess = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory), aTempFile.GetURL());
+    uno::Reference<io::XInputStream> xInputStream(xNameAccess->getByName("word/document.xml"), uno::UNO_QUERY);
+    boost::shared_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(xInputStream, sal_True));
+    pStream->Seek(STREAM_SEEK_TO_END);
+    sal_Size nSize = pStream->Tell();
+    pStream->Seek(0);
+    OStringBuffer aDocument(nSize);
+    char ch;
+    for (sal_Size i = 0; i < nSize; ++i)
+    {
+        *pStream >> ch;
+        aDocument.append(ch);
+    }
+
+    // Parse the XML.
+    return xmlParseMemory((const char*)aDocument.getStr(), aDocument.getLength());
 }
 
 void Test::testZoom()
@@ -618,36 +650,10 @@ void Test::testCellBtlr()
      * The problem was that the exporter didn't mirror the workaround of the
      * importer, regarding the btLr text direction: the <w:textDirection
      * w:val="btLr"/> token was completely missing in the output.
-     *
-     * Given that this doesn't affect the result in the importer, we test the
-     * resulting file directly, by opening the zip file, parsing an xml stream,
-     * and asserting an XPath expression. This can be extracted to a helper
-     * method, once it's clear what is common in such tests.
      */
 
-    // Create the zip file.
-    utl::TempFile aTempFile;
-    save("Office Open XML Text", aTempFile);
+    xmlDocPtr pXmlDoc = parseExport();
 
-    // Read the XML stream we're interested in.
-    uno::Reference<packages::zip::XZipFileAccess2> xNameAccess = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory), aTempFile.GetURL());
-    uno::Reference<io::XInputStream> xInputStream(xNameAccess->getByName("word/document.xml"), uno::UNO_QUERY);
-    boost::shared_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(xInputStream, sal_True));
-    pStream->Seek(STREAM_SEEK_TO_END);
-    sal_Size nSize = pStream->Tell();
-    pStream->Seek(0);
-    OStringBuffer aDocument(nSize);
-    char ch;
-    for (sal_Size i = 0; i < nSize; ++i)
-    {
-        *pStream >> ch;
-        aDocument.append(ch);
-    }
-
-    // Parse the XML.
-    xmlDocPtr pXmlDoc = xmlParseMemory((const char*)aDocument.getStr(), aDocument.getLength());
-
-    // Assert the XPath expression.
     xmlXPathContextPtr pXmlXpathCtx = xmlXPathNewContext(pXmlDoc);
     xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("w"), BAD_CAST("http://schemas.openxmlformats.org/wordprocessingml/2006/main"));
     OString aXPath = "/w:document/w:body/w:tbl/w:tr/w:tc/w:tcPr/w:textDirection";
@@ -980,34 +986,9 @@ void Test::testPageBorderSpacingExportCase2()
      *
      * The exporter ALWAYS exported 'w:offsetFrom="text"' even when the spacing values where too large
      * for Word to handle (larger than 31 points)
-     *
-     * Given that this doesn't affect the result in the importer, we test the
-     * resulting file directly, by opening the zip file, parsing an xml stream,
-     * and asserting an XPath expression. This can be extracted to a helper
-     * method, once it's clear what is common in such tests.
      */
 
-    // Create the zip file
-    utl::TempFile aTempFile;
-    save("Office Open XML Text", aTempFile);
-
-    // Read the XML stream we're interested in
-    uno::Reference<packages::zip::XZipFileAccess2> xNameAccess = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory), aTempFile.GetURL());
-    uno::Reference<io::XInputStream> xInputStream(xNameAccess->getByName("word/document.xml"), uno::UNO_QUERY);
-    boost::shared_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(xInputStream, sal_True));
-    pStream->Seek(STREAM_SEEK_TO_END);
-    sal_Size nSize = pStream->Tell();
-    pStream->Seek(0);
-    OStringBuffer aDocument(nSize);
-
-    char ch;
-    for (sal_Size i = 0; i < nSize; ++i)
-    {
-        *pStream >> ch;
-        aDocument.append(ch);
-    }
-
-    xmlDocPtr pXmlDoc;
+    xmlDocPtr pXmlDoc = parseExport();
     xmlXPathContextPtr pXmlXpathContext;
     OString aXPath;
     xmlXPathObjectPtr pXmlXpathObj;
@@ -1015,9 +996,6 @@ void Test::testPageBorderSpacingExportCase2()
     xmlNodePtr pXmlNode;
     OString aAttributeName;
     OUString aAttributeValue;
-
-    // Parse the XML
-    pXmlDoc = xmlParseMemory((const char*)aDocument.getStr(), aDocument.getLength());
 
     // Assert the XPath expression - page borders
     pXmlXpathContext = xmlXPathNewContext(pXmlDoc);
