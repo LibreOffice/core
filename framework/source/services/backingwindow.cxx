@@ -77,7 +77,8 @@ const int nLogoHeight = 150;
 BackingWindow::BackingWindow( Window* i_pParent ) :
     Window( i_pParent ),
     mbInitControls( false ),
-    mnHideExternalLinks( 0 )
+    mnHideExternalLinks( 0 ),
+    mpAccExec( NULL )
 {
     m_pUIBuilder = new VclBuilder(this, getUIRootDir(),
       "modules/StartModule/ui/startcenter.ui",
@@ -412,6 +413,86 @@ void BackingWindow::Paint( const Rectangle& )
 
 long BackingWindow::Notify( NotifyEvent& rNEvt )
 {
+    if( rNEvt.GetType() == EVENT_KEYINPUT )
+    {
+        // try the 'normal' accelerators (so that eg. Ctrl+Q works)
+        if( !mpAccExec )
+        {
+            mpAccExec = svt::AcceleratorExecute::createAcceleratorHelper();
+            mpAccExec->init( comphelper::getProcessComponentContext(), mxFrame);
+        }
+
+        const KeyEvent* pEvt = rNEvt.GetKeyEvent();
+        const KeyCode& rKeyCode(pEvt->GetKeyCode());
+        if( pEvt && mpAccExec->execute(rKeyCode) )
+            return 1;
+
+        // #i110344# extrawurst: specialized arrow key control
+        if( rKeyCode.GetModifier() == 0 )
+        {
+            if( rKeyCode.GetCode() == KEY_RIGHT )
+            {
+                if( mpWriterButton->HasFocus() )
+                    mpDrawButton->GrabFocus();
+                else if( mpCalcButton->HasFocus() )
+                    mpDBButton->GrabFocus();
+                else if( mpImpressButton->HasFocus() )
+                    mpMathButton->GrabFocus();
+                else if( mpOpenButton->HasFocus() )
+                    mpTemplateButton->GrabFocus();
+                return 1;
+            }
+            else if( rKeyCode.GetCode() == KEY_LEFT )
+            {
+                if( mpDrawButton->HasFocus() )
+                    mpWriterButton->GrabFocus();
+                else if( mpDBButton->HasFocus() )
+                    mpCalcButton->GrabFocus();
+                else if( mpMathButton->HasFocus() )
+                    mpImpressButton->GrabFocus();
+                else if( mpTemplateButton->HasFocus() )
+                    mpOpenButton->GrabFocus();
+                return 1;
+            }
+            else if( rKeyCode.GetCode() == KEY_UP )
+            {
+                // first column
+                if( mpOpenButton->HasFocus() )
+                    mpImpressButton->GrabFocus();
+                else if( mpImpressButton->HasFocus() )
+                    mpCalcButton->GrabFocus();
+                else if( mpCalcButton->HasFocus() )
+                    mpWriterButton->GrabFocus();
+                // second column
+                else if( mpTemplateButton->HasFocus() )
+                    mpMathButton->GrabFocus();
+                else if( mpMathButton->HasFocus() )
+                    mpDBButton->GrabFocus();
+                else if( mpDBButton->HasFocus() )
+                    mpDrawButton->GrabFocus();
+                return 1;
+            }
+            else if( rKeyCode.GetCode() == KEY_DOWN )
+            {
+                // first column
+                if( mpWriterButton->HasFocus() )
+                    mpCalcButton->GrabFocus();
+                else if( mpCalcButton->HasFocus() )
+                    mpImpressButton->GrabFocus();
+                else if( mpImpressButton->HasFocus() )
+                    mpOpenButton->GrabFocus();
+                // second column
+                else if( mpDrawButton->HasFocus() )
+                    mpDBButton->GrabFocus();
+                else if( mpDBButton->HasFocus() )
+                    mpMathButton->GrabFocus();
+                else if( mpMathButton->HasFocus() )
+                    mpTemplateButton->GrabFocus();
+                return 1;
+            }
+        }
+    }
+
     return Window::Notify( rNEvt );
 }
 

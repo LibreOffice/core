@@ -29,6 +29,7 @@
 #include <vcl/toolbox.hxx>
 #include <vcl/layout.hxx>
 
+#include <svtools/acceleratorexecute.hxx>
 #include <unotools/moduleoptions.hxx>
 
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -86,11 +87,10 @@ namespace framework
 
         bool                            mbInitControls;
         sal_Int32                       mnHideExternalLinks;
+        svt::AcceleratorExecute*        mpAccExec;
 
         int                             mnSCWidth;
         int                             mnSCHeight;
-
-        void loadImage( const ResId& i_rId, PushButton& i_rButton );
 
         void setupButton( PushButton* pButton, const OUString& rURL, const std::set<OUString>& rURLS,
                           SvtModuleOptions& rOpt, SvtModuleOptions::EModule eMod );
