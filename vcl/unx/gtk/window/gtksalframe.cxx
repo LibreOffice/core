@@ -626,35 +626,54 @@ gboolean ensure_dbus_setup( gpointer data )
         pSalFrame->m_nHudAwarenessId = hud_awareness_register( pSessionBus, aDBusMenubarPath, hud_activated, pSalFrame, NULL, NULL );
 
         //app menu, to-do translations, block normal menus when active, honor use appmenu settings
-        GMenu *menu = g_menu_new ();
-        GMenuItem* item;
+        ResMgr* pMgr = ImplGetResMgr();
+        if( pMgr )
+        {
+            GMenu *menu = g_menu_new ();
+            GMenuItem* item;
 
-        GMenu *firstsubmenu = g_menu_new ();
-        item = g_menu_item_new("_Preferences", "app.OptionsTreeDialog");
-        g_menu_append_item( firstsubmenu, item );
-        g_menu_append_section( menu, NULL, G_MENU_MODEL(firstsubmenu));
+            GMenu *firstsubmenu = g_menu_new ();
 
-        GMenu *secondsubmenu = g_menu_new ();
-        item = g_menu_item_new("_About", "app.About");
-        g_menu_append_item( secondsubmenu, item );
+            OString sPreferences(OUStringToOString(ResId(SV_STDTEXT_PREFERENCES, *pMgr).toString(),
+                RTL_TEXTENCODING_UTF8).replaceFirst("~", "_"));
 
-        item = g_menu_item_new("_Help", "app.HelpIndex");
-        g_menu_append_item( secondsubmenu, item );
-        g_menu_append_section( menu, NULL, G_MENU_MODEL(secondsubmenu));
+            item = g_menu_item_new(sPreferences.getStr(), "app.OptionsTreeDialog");
+            g_menu_append_item( firstsubmenu, item );
+            g_menu_append_section( menu, NULL, G_MENU_MODEL(firstsubmenu));
 
-        GMenu *thirdsubmenu = g_menu_new ();
-        item = g_menu_item_new("_Quit", "app.Quit");
-        g_menu_append_item( thirdsubmenu, item );
-        g_menu_append_section( menu, NULL, G_MENU_MODEL(thirdsubmenu));
+            GMenu *secondsubmenu = g_menu_new ();
 
-        GSimpleActionGroup *group = g_simple_action_group_new ();
-        g_simple_action_group_add_entries (group, app_entries, G_N_ELEMENTS (app_entries), NULL);
-        GActionGroup* pAppActionGroup = G_ACTION_GROUP(group);
+            OString sAbout(OUStringToOString(ResId(SV_STDTEXT_ABOUT, *pMgr).toString(),
+                RTL_TEXTENCODING_UTF8).replaceFirst("~", "_"));
 
-        pSalFrame->m_nAppActionGroupExportId = g_dbus_connection_export_action_group( pSessionBus, "/org/libreoffice", pAppActionGroup, NULL);
-        g_object_unref(pAppActionGroup);
-        pSalFrame->m_nAppMenuExportId = g_dbus_connection_export_menu_model (pSessionBus, "/org/libreoffice/menus/appmenu", G_MENU_MODEL (menu), NULL);
-        g_object_unref(menu);
+            item = g_menu_item_new(sAbout.getStr(), "app.About");
+            g_menu_append_item( secondsubmenu, item );
+
+            OString sHelp(OUStringToOString(ResId(SV_BUTTONTEXT_HELP, *pMgr).toString(),
+                RTL_TEXTENCODING_UTF8).replaceFirst("~", "_"));
+
+            item = g_menu_item_new(sHelp.getStr(), "app.HelpIndex");
+            g_menu_append_item( secondsubmenu, item );
+            g_menu_append_section( menu, NULL, G_MENU_MODEL(secondsubmenu));
+
+            GMenu *thirdsubmenu = g_menu_new ();
+
+            OString sQuit(OUStringToOString(ResId(SV_MENU_MAC_QUITAPP, *pMgr).toString(),
+                RTL_TEXTENCODING_UTF8).replaceFirst("~", "_"));
+
+            item = g_menu_item_new(sQuit.getStr(), "app.Quit");
+            g_menu_append_item( thirdsubmenu, item );
+            g_menu_append_section( menu, NULL, G_MENU_MODEL(thirdsubmenu));
+
+            GSimpleActionGroup *group = g_simple_action_group_new ();
+            g_simple_action_group_add_entries (group, app_entries, G_N_ELEMENTS (app_entries), NULL);
+            GActionGroup* pAppActionGroup = G_ACTION_GROUP(group);
+
+            pSalFrame->m_nAppActionGroupExportId = g_dbus_connection_export_action_group( pSessionBus, "/org/libreoffice", pAppActionGroup, NULL);
+            g_object_unref(pAppActionGroup);
+            pSalFrame->m_nAppMenuExportId = g_dbus_connection_export_menu_model (pSessionBus, "/org/libreoffice/menus/appmenu", G_MENU_MODEL (menu), NULL);
+            g_object_unref(menu);
+        }
 
         g_free( aDBusMenubarPath );
         g_free( aDBusWindowPath );
