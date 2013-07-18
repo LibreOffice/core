@@ -1208,6 +1208,15 @@ def __groupstart__(name = ""):
     __group__ = uno.getComponentContext().ServiceManager.createInstance('com.sun.star.drawing.ShapeCollection')
     __grouplefthang__ = 0
 
+def create_valid_svg_file(filename):
+    with open(filename, "r") as f:
+        s = f.read()
+    s = re.sub('(?s)(<g\\sid="[^"]*)\(([^"]*)\)', '\\1\\2', s) # bad "(", ")" in xml:id
+    s = re.sub('(?s)<g\\sooo:[^>]*>', '', s) # remove non standard attributes
+    s = re.sub('(?s)<svg\\s+version="1.2"', '<svg version="1.1"', s) # for W3C Validator
+    with open(filename, 'w') as f:
+        f.write(s)
+
 def __groupend__(name = ""):
     global __group__, __grouplefthang__, __groupstack__
     g = 0
@@ -1246,7 +1255,8 @@ def __groupend__(name = ""):
         name = os.path.expanduser('~') + os.path.sep + name
       __dispatcher__(".uno:ExportTo", (__getprop__("URL", unohelper.systemPathToFileUrl(name)), __getprop__("FilterName", "draw_svg_Export")), draw)
       __time__.sleep(1)
-      draw.dispose()
+      create_valid_svg_file(name)
+      draw.close(True)
 
     __group__ = __groupstack__.pop()
     if __group__ and g:
