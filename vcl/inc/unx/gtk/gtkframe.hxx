@@ -309,7 +309,9 @@ public:
     GtkSalFrame( SystemParentData* pSysData );
 
     guint                           m_nMenuExportId;
+    guint                           m_nAppMenuExportId;
     guint                           m_nActionGroupExportId;
+    guint                           m_nAppActionGroupExportId;
     guint                           m_nHudAwarenessId;
 
     // dispatches an event, returns true if dispatched

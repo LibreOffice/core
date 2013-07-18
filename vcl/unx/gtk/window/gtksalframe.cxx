@@ -21,6 +21,7 @@
 #include <unx/gtk/gtkdata.hxx>
 #include <unx/gtk/gtkinst.hxx>
 #include <unx/gtk/gtkgdi.hxx>
+#include <vcl/help.hxx>
 #include <vcl/keycodes.hxx>
 #include <vcl/layout.hxx>
 #include <unx/wmadaptor.hxx>
@@ -534,6 +535,55 @@ static void hud_activated( gboolean hud_active, gpointer user_data )
     }
 }
 
+struct ImplHelp
+{
+    DECL_STATIC_LINK( ImplHelp, ImplHelpMsg, void* );
+};
+
+IMPL_STATIC_LINK_NOINSTANCE( ImplHelp, ImplHelpMsg, void*, EMPTYARG )
+{
+    Help* pHelp = Application::GetHelp();
+    if (pHelp)
+        pHelp->Start(OUString(OOO_HELP_INDEX), NULL);
+    return 0;
+}
+
+static void help_activated(GSimpleAction *, GVariant*, gpointer)
+{
+    Application::PostUserEvent(STATIC_LINK(NULL, ImplHelp, ImplHelpMsg));
+}
+
+static void quit_activated(GSimpleAction *, GVariant*, gpointer)
+{
+    Application::Quit();
+}
+
+static void dialog_activated(GSimpleAction *action, GVariant*, gpointer)
+{
+    Application *pApp = GetpApp();
+    if (!pApp)
+        return;
+
+    gchar *strval = NULL;
+    g_object_get(action, "name", &strval, NULL);
+
+    if (!strval)
+        return;
+
+    OUString sCommand(strval, strlen(strval), RTL_TEXTENCODING_UTF8);
+    g_free(strval);
+
+    ApplicationEvent aEv(ApplicationEvent::TYPE_SHOWDIALOG, sCommand);
+    GetpApp()->AppEvent(aEv);
+}
+
+static GActionEntry app_entries[] = {
+  { "PREFERENCES", dialog_activated, NULL, NULL, NULL, {0} },
+  { "ABOUT", dialog_activated, NULL, NULL, NULL, {0} },
+  { "help", help_activated, NULL, NULL, NULL, {0} },
+  { "quit", quit_activated, NULL, NULL, NULL, {0} }
+};
+
 gboolean ensure_dbus_setup( gpointer data )
 {
     GtkSalFrame* pSalFrame = reinterpret_cast< GtkSalFrame* >( data );
@@ -553,29 +603,60 @@ gboolean ensure_dbus_setup( gpointer data )
 
         // Generate menu paths.
         XLIB_Window windowId = GDK_WINDOW_XID( gdkWindow );
-        gchar* aDBusPath = g_strdup_printf("/window/%lu", windowId);
-        gchar* aDBusWindowPath = g_strdup_printf( "/window/%lu", windowId );
-        gchar* aDBusMenubarPath = g_strdup_printf( "/window/%lu/menus/menubar", windowId );
+        gchar* aDBusWindowPath = g_strdup_printf( "/org/libreoffice/window/%lu", windowId );
+        gchar* aDBusMenubarPath = g_strdup_printf( "/org/libreoffice/window/%lu/menus/menubar", windowId );
 
         // Set window properties.
         g_object_set_data_full( G_OBJECT( gdkWindow ), "g-lo-menubar", pMenuModel, ObjectDestroyedNotify );
         g_object_set_data_full( G_OBJECT( gdkWindow ), "g-lo-action-group", pActionGroup, ObjectDestroyedNotify );
 
+        gdk_x11_window_set_utf8_property( gdkWindow, "_GTK_APPLICATION_ID", "org.libreoffice" );
         gdk_x11_window_set_utf8_property( gdkWindow, "_GTK_UNIQUE_BUS_NAME", g_dbus_connection_get_unique_name( pSessionBus ) );
-        gdk_x11_window_set_utf8_property( gdkWindow, "_GTK_APPLICATION_OBJECT_PATH", "" );
+        gdk_x11_window_set_utf8_property( gdkWindow, "_GTK_APPLICATION_OBJECT_PATH", "/org/libreoffice" );
         gdk_x11_window_set_utf8_property( gdkWindow, "_GTK_WINDOW_OBJECT_PATH", aDBusWindowPath );
         gdk_x11_window_set_utf8_property( gdkWindow, "_GTK_MENUBAR_OBJECT_PATH", aDBusMenubarPath );
+        gdk_x11_window_set_utf8_property( gdkWindow, "_GTK_APP_MENU_OBJECT_PATH", "/org/libreoffice/menus/appmenu" );
 
         // Publish the menu model and the action group.
         SAL_INFO("vcl.unity", "exporting menu model at " << pMenuModel << " for window " << windowId);
         pSalFrame->m_nMenuExportId = g_dbus_connection_export_menu_model (pSessionBus, aDBusMenubarPath, pMenuModel, NULL);
         SAL_INFO("vcl.unity", "exporting action group at " << pActionGroup << " for window " << windowId);
-        pSalFrame->m_nActionGroupExportId = g_dbus_connection_export_action_group( pSessionBus, aDBusPath, pActionGroup, NULL);
+        pSalFrame->m_nActionGroupExportId = g_dbus_connection_export_action_group( pSessionBus, aDBusWindowPath, pActionGroup, NULL);
         pSalFrame->m_nHudAwarenessId = hud_awareness_register( pSessionBus, aDBusMenubarPath, hud_activated, pSalFrame, NULL, NULL );
 
-        g_free( aDBusPath );
-        g_free( aDBusWindowPath );
+        //app menu, to-do translations, block normal menus when active, honor use appmenu settings
+        GMenu *menu = g_menu_new ();
+        GMenuItem* item;
+
+        GMenu *firstsubmenu = g_menu_new ();
+        item = g_menu_item_new("_Preferences", "app.PREFERENCES");
+        g_menu_append_item( firstsubmenu, item );
+        g_menu_append_section( menu, NULL, G_MENU_MODEL(firstsubmenu));
+
+        GMenu *secondsubmenu = g_menu_new ();
+        item = g_menu_item_new("_About", "app.ABOUT");
+        g_menu_append_item( secondsubmenu, item );
+
+        item = g_menu_item_new("_Help", "app.help");
+        g_menu_append_item( secondsubmenu, item );
+        g_menu_append_section( menu, NULL, G_MENU_MODEL(secondsubmenu));
+
+        GMenu *thirdsubmenu = g_menu_new ();
+        item = g_menu_item_new("_Quit", "app.quit");
+        g_menu_append_item( thirdsubmenu, item );
+        g_menu_append_section( menu, NULL, G_MENU_MODEL(thirdsubmenu));
+
+        GSimpleActionGroup *group = g_simple_action_group_new ();
+        g_simple_action_group_add_entries (group, app_entries, G_N_ELEMENTS (app_entries), NULL);
+        GActionGroup* pAppActionGroup = G_ACTION_GROUP(group);
+
+        pSalFrame->m_nAppActionGroupExportId = g_dbus_connection_export_action_group( pSessionBus, "/org/libreoffice", pAppActionGroup, NULL);
+        g_object_unref(pAppActionGroup);
+        pSalFrame->m_nAppMenuExportId = g_dbus_connection_export_menu_model (pSessionBus, "/org/libreoffice/menus/appmenu", G_MENU_MODEL (menu), NULL);
+        g_object_unref(menu);
+
         g_free( aDBusMenubarPath );
+        g_free( aDBusWindowPath );
     }
 
     return FALSE;
@@ -707,8 +788,12 @@ GtkSalFrame::~GtkSalFrame()
                     hud_awareness_unregister( pSessionBus, m_nHudAwarenessId );
                 if ( m_nMenuExportId )
                     g_dbus_connection_unexport_menu_model( pSessionBus, m_nMenuExportId );
+                if ( m_nAppMenuExportId )
+                    g_dbus_connection_unexport_menu_model( pSessionBus, m_nAppMenuExportId );
                 if ( m_nActionGroupExportId )
                     g_dbus_connection_unexport_action_group( pSessionBus, m_nActionGroupExportId );
+                if ( m_nAppActionGroupExportId )
+                    g_dbus_connection_unexport_action_group( pSessionBus, m_nAppActionGroupExportId );
             }
 #endif
             gtk_widget_destroy( m_pWindow );
@@ -828,7 +913,9 @@ void GtkSalFrame::InitCommon()
     m_pSalMenu          = NULL;
     m_nWatcherId        = 0;
     m_nMenuExportId     = 0;
+    m_nAppMenuExportId  = 0;
     m_nActionGroupExportId = 0;
+    m_nAppActionGroupExportId = 0;
     m_nHudAwarenessId   = 0;
 
     gtk_widget_set_app_paintable( m_pWindow, TRUE );
