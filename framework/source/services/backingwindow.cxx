@@ -160,8 +160,6 @@ BackingWindow::BackingWindow( Window* i_pParent ) :
 
     // init background
     initBackground();
-
-    Window::Show();
 }
 
 
