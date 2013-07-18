@@ -1407,29 +1407,14 @@ SwUndoTableAutoFormat::SwUndoTableAutoFormat( const SwTableNode& rTableNd,
                                     const SwTableAutoFormat& rAFormat )
     : SwUndo( UNDO_TABLE_AUTOFMT ),
     nSttNode( rTableNd.GetIndex() ),
-    bSaveContentAttr( false )
-    , m_nRepeatHeading(rTableNd.GetTable().GetRowsToRepeat())
+    m_nRepeatHeading(rTableNd.GetTable().GetRowsToRepeat())
 {
-    pSaveTable = new _SaveTable( rTableNd.GetTable() );
-
-    if( rAFormat.IsFont() || rAFormat.IsJustify() )
-    {
-        // than also go over the ContentNodes of the EndBoxes and collect
-        // all paragraph attributes
-        pSaveTable->SaveContentAttrs( const_cast<SwDoc*>(rTableNd.GetDoc()) );
-        bSaveContentAttr = true;
-    }
+    pSaveFormat = new SwTableFormat( *rAFormat.GetTableStyle() );
 }
 
 SwUndoTableAutoFormat::~SwUndoTableAutoFormat()
 {
-    delete pSaveTable;
-}
-
-void SwUndoTableAutoFormat::SaveBoxContent( const SwTableBox& rBox )
-{
-    std::shared_ptr<SwUndoTableNumFormat> const p(new SwUndoTableNumFormat(rBox));
-    m_Undos.push_back(p);
+    delete pSaveFormat;
 }
 
 void
@@ -1440,25 +1425,14 @@ SwUndoTableAutoFormat::UndoRedo(bool const bUndo, ::sw::UndoRedoContext & rConte
     OSL_ENSURE( pTableNd, "no TableNode" );
 
     SwTable& table = pTableNd->GetTable();
-    _SaveTable* pOrig = new _SaveTable( table );
-    // than go also over the ContentNodes of the EndBoxes and collect
-    // all paragraph attributes
-    if( bSaveContentAttr )
-        pOrig->SaveContentAttrs( &rDoc );
+    SwTableFormat* pOrig = new SwTableFormat( *static_cast<SwTableFormat*>(table.GetFrameFormat()->GetRegisteredIn()) );
 
-    if (bUndo)
-    {
-        for (size_t n = m_Undos.size(); 0 < n; --n)
-        {
-            m_Undos.at(n-1)->UndoImpl(rContext);
-        }
+    if( bUndo )
+        table.SetRowsToRepeat( m_nRepeatHeading );
 
-        table.SetRowsToRepeat(m_nRepeatHeading);
-    }
-
-    pSaveTable->RestoreAttr( pTableNd->GetTable(), !bUndo );
-    delete pSaveTable;
-    pSaveTable = pOrig;
+    pSaveFormat->RestoreTableProperties( table );
+    delete pSaveFormat;
+    pSaveFormat = pOrig;
 }
 
 void SwUndoTableAutoFormat::UndoImpl(::sw::UndoRedoContext & rContext)

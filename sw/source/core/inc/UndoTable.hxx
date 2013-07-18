@@ -42,6 +42,7 @@ class SwTable;
 class SwTableBox;
 class SwStartNode;
 class SwTableNode;
+class SwTableFormat;
 class SwTableAutoFormat;
 class SwTableSortBoxes;
 
@@ -144,9 +145,7 @@ class SwUndoTableNumFormat;
 class SwUndoTableAutoFormat : public SwUndo
 {
     sal_uLong nSttNode;
-    _SaveTable* pSaveTable;
-    std::vector< std::shared_ptr<SwUndoTableNumFormat> > m_Undos;
-    bool bSaveContentAttr;
+    SwTableFormat* pSaveFormat;
     sal_uInt16 m_nRepeatHeading;
 
     void UndoRedo(bool const bUndo, ::sw::UndoRedoContext & rContext);
@@ -156,10 +155,8 @@ public:
 
     virtual ~SwUndoTableAutoFormat();
 
-    virtual void UndoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
-    virtual void RedoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
-
-    void SaveBoxContent( const SwTableBox& rBox );
+    virtual void UndoImpl( ::sw::UndoRedoContext & );
+    virtual void RedoImpl( ::sw::UndoRedoContext & );
 };
 
 class SwUndoTableNdsChg : public SwUndo, private boost::noncopyable
