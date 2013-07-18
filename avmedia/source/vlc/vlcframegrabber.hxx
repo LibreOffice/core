@@ -39,7 +39,6 @@ class VLCFrameGrabber : public FrameGrabber_BASE
     const rtl::OUString& mUrl;
 public:
     SAL_CALL VLCFrameGrabber( boost::shared_ptr<libvlc_media_player_t>& player, const rtl::OUString& url );
-    void setPlayer( );
 
     ::com::sun::star::uno::Reference< css::graphic::XGraphic > SAL_CALL grabFrame( double fMediaTime );
 

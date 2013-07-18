@@ -96,7 +96,7 @@ namespace
         return ::uno::Reference< css::graphic::XGraphic >();
 
     Bitmap aBmp( Size( w, h ), 24 );
-    std::cout << 1 << std::endl;
+
     sal_uInt8 *pData = frameData.buffer.data();
     BitmapWriteAccess *pWrite = aBmp.AcquireWriteAccess();
     if ( pWrite )
