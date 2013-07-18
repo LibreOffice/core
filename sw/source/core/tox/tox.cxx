@@ -338,7 +338,7 @@ SwForm::SwForm( TOXTypes eTyp ) // #i21237#
         aTokens.push_back(SwFormToken(TOKEN_PAGE_NUMS));
     }
 
-    if (TOX_CONTENT == eType || TOX_ILLUSTRATIONS)
+    if (TOX_CONTENT == eType || TOX_ILLUSTRATIONS == eType)
         aTokens.push_back(SwFormToken(TOKEN_LINK_END));
 
     SetTemplate( 0, SW_RESSTR( nPoolId++ ));
