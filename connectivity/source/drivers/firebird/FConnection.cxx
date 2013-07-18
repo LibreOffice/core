@@ -692,7 +692,8 @@ void OConnection::disposing()
 }
 
 void SAL_CALL OConnection::evaluateStatusVector( ISC_STATUS_ARRAY& aStatusVector,
-                                                 const OUString& aCause )
+                                                 const OUString& aCause,
+                                                 const uno::Reference< XInterface >& _rxContext)
     throw(SQLException)
 {
     if (aStatusVector[0]==1 && aStatusVector[1]) // indicates error
@@ -713,7 +714,7 @@ void SAL_CALL OConnection::evaluateStatusVector( ISC_STATUS_ARRAY& aStatusVector
         OUString error = buf.makeStringAndClear();
         SAL_WARN( "connectivity.firebird", error );
 
-        throw SQLException( error, *this, OUString(), 1, Any() );
+        throw SQLException( error, _rxContext, OUString(), 1, Any() );
     }
 }
 

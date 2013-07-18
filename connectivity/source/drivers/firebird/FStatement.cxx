@@ -185,6 +185,7 @@ Any SAL_CALL OStatement::queryInterface( const Type & rType ) throw(RuntimeExcep
 sal_Int32 SAL_CALL OStatement_Base::executeUpdate(const OUString& sqlIn)
     throw(SQLException, RuntimeException)
 {
+    // TODO: close ResultSet if existing -- so so in all 3 execute methods.
     MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
 
@@ -201,7 +202,7 @@ sal_Int32 SAL_CALL OStatement_Base::executeUpdate(const OUString& sqlIn)
     if (aErr)
         SAL_WARN("connectivity.firebird", "isc_dsql_execute_immediate failed" );
 
-    m_pConnection->evaluateStatusVector(m_statusVector, sql);
+    m_pConnection->evaluateStatusVector(m_statusVector, sql, *this);
     // TODO: get number of changed rows with SELECT ROW_COUNT (use executeQuery)
     //     return getUpdateCount();
     return 0;
@@ -380,7 +381,7 @@ uno::Reference< XResultSet > SAL_CALL OStatement_Base::executeQuery(const OUStri
 
     // TODO: deal with cleanup
 //    close();
-    m_pConnection->evaluateStatusVector(m_statusVector, sql);
+    m_pConnection->evaluateStatusVector(m_statusVector, sql, *this);
     return m_xResultSet;
 }
 
@@ -418,7 +419,7 @@ sal_Bool SAL_CALL OStatement_Base::execute(const OUString& sql) throw(SQLExcepti
             SAL_WARN("connectivity.firebird", "isc_dsql_execute failed" );
     }
 
-    m_pConnection->evaluateStatusVector(m_statusVector, sql);
+    m_pConnection->evaluateStatusVector(m_statusVector, sql, *this);
 
     // returns true when a resultset is available
     return sal_False;

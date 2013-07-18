@@ -88,12 +88,15 @@ namespace connectivity
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData>        m_xMetaData;
 
             XSQLDA*                                     m_pSqlda;
+            isc_stmt_handle                             m_statementHandle;
 
             sal_Bool                                    m_bWasNull;
-            sal_Int32                                   m_row;
-            sal_Int32                                   m_rowCount;
-            sal_Int32                                   m_fieldCount;
+            // Row numberign starts with 0 for "in front of first row"
+            sal_Int32                                   m_currentRow;
+            const sal_Int32                             m_rowCount;
+            const sal_Int32                             m_fieldCount;
             TTable                                      m_sqldata;
+            ISC_STATUS_ARRAY                            m_statusVector;
 
             // OPropertyArrayUsageHelper
             virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const;
