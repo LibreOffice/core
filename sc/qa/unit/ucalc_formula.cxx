@@ -392,6 +392,24 @@ void Test::testFormulaRefUpdate()
     if (!checkFormula(*m_pDoc, aPos, "SUM($B$2:$C$3)"))
         CPPUNIT_FAIL("Wrong formula in A7.");
 
+    // Check the values of the formula cells in A6:A7.
+    CPPUNIT_ASSERT_EQUAL(10.0, m_pDoc->GetValue(ScAddress(0,5,0)));
+    CPPUNIT_ASSERT_EQUAL(10.0, m_pDoc->GetValue(ScAddress(0,6,0)));
+
+    // Insert cells over B1:B2 to partially shift value range.
+    m_pDoc->InsertRow(ScRange(1,0,0,1,1,0));
+
+    // Check the values of the formula cells in A6:A7 again.
+    CPPUNIT_ASSERT_EQUAL(7.0, m_pDoc->GetValue(ScAddress(0,5,0)));
+    CPPUNIT_ASSERT_EQUAL(7.0, m_pDoc->GetValue(ScAddress(0,6,0)));
+
+    // ... and shift them back.
+    m_pDoc->DeleteRow(ScRange(1,0,0,1,1,0));
+
+    // The formula cell results should be back too.
+    CPPUNIT_ASSERT_EQUAL(10.0, m_pDoc->GetValue(ScAddress(0,5,0)));
+    CPPUNIT_ASSERT_EQUAL(10.0, m_pDoc->GetValue(ScAddress(0,6,0)));
+
     m_pDoc->DeleteTab(0);
 }
 
