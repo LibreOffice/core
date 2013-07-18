@@ -113,6 +113,7 @@ private:
      * xml stream, so that you can do the asserting.
      */
     xmlDocPtr parseExport();
+    void assertXPath(xmlDocPtr pXmlDoc, OString aXPath, OString aAttribute, OUString aExpectedValue);
 };
 
 void Test::run()
@@ -215,6 +216,18 @@ xmlDocPtr Test::parseExport()
 
     // Parse the XML.
     return xmlParseMemory((const char*)aDocument.getStr(), aDocument.getLength());
+}
+
+void Test::assertXPath(xmlDocPtr pXmlDoc, OString aXPath, OString aAttribute, OUString aExpectedValue)
+{
+    xmlXPathContextPtr pXmlXpathCtx = xmlXPathNewContext(pXmlDoc);
+    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("w"), BAD_CAST("http://schemas.openxmlformats.org/wordprocessingml/2006/main"));
+    xmlXPathObjectPtr pXmlXpathObj = xmlXPathEvalExpression(BAD_CAST(aXPath.getStr()), pXmlXpathCtx);
+    xmlNodeSetPtr pXmlNodes = pXmlXpathObj->nodesetval;
+    CPPUNIT_ASSERT_EQUAL(1, xmlXPathNodeSetGetLength(pXmlNodes));
+    xmlNodePtr pXmlNode = pXmlNodes->nodeTab[0];
+    OUString aValue = OUString::createFromAscii((const char*)xmlGetProp(pXmlNode, BAD_CAST(aAttribute.getStr())));
+    CPPUNIT_ASSERT_EQUAL(aExpectedValue, aValue);
 }
 
 void Test::testZoom()
@@ -653,17 +666,7 @@ void Test::testCellBtlr()
      */
 
     xmlDocPtr pXmlDoc = parseExport();
-
-    xmlXPathContextPtr pXmlXpathCtx = xmlXPathNewContext(pXmlDoc);
-    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("w"), BAD_CAST("http://schemas.openxmlformats.org/wordprocessingml/2006/main"));
-    OString aXPath = "/w:document/w:body/w:tbl/w:tr/w:tc/w:tcPr/w:textDirection";
-    xmlXPathObjectPtr pXmlXpathObj = xmlXPathEvalExpression(BAD_CAST(aXPath.getStr()), pXmlXpathCtx);
-    xmlNodeSetPtr pXmlNodes = pXmlXpathObj->nodesetval;
-    CPPUNIT_ASSERT_EQUAL(1, xmlXPathNodeSetGetLength(pXmlNodes));
-    xmlNodePtr pXmlNode = pXmlNodes->nodeTab[0];
-    OString aAttribute = "val";
-    OUString aValue = OUString::createFromAscii((const char*)xmlGetProp(pXmlNode, BAD_CAST(aAttribute.getStr())));
-    CPPUNIT_ASSERT_EQUAL(OUString("btLr"), aValue);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:tcPr/w:textDirection", "val", "btLr");
 }
 
 void Test::testTableStylerPrSz()
@@ -989,49 +992,15 @@ void Test::testPageBorderSpacingExportCase2()
      */
 
     xmlDocPtr pXmlDoc = parseExport();
-    xmlXPathContextPtr pXmlXpathContext;
-    OString aXPath;
-    xmlXPathObjectPtr pXmlXpathObj;
-    xmlNodeSetPtr pXmlNodes;
-    xmlNodePtr pXmlNode;
-    OString aAttributeName;
-    OUString aAttributeValue;
 
     // Assert the XPath expression - page borders
-    pXmlXpathContext = xmlXPathNewContext(pXmlDoc);
-    xmlXPathRegisterNs(pXmlXpathContext, BAD_CAST("w"), BAD_CAST("http://schemas.openxmlformats.org/wordprocessingml/2006/main"));
-    aXPath = "/w:document/w:body/w:sectPr/w:pgBorders";
-    pXmlXpathObj = xmlXPathEvalExpression(BAD_CAST(aXPath.getStr()), pXmlXpathContext);
-    pXmlNodes = pXmlXpathObj->nodesetval;
-    CPPUNIT_ASSERT_EQUAL(1, xmlXPathNodeSetGetLength(pXmlNodes));
-    pXmlNode = pXmlNodes->nodeTab[0];
-    aAttributeName = "offsetFrom";
-    aAttributeValue = OUString::createFromAscii((const char*)xmlGetProp(pXmlNode, BAD_CAST(aAttributeName.getStr())));
-    CPPUNIT_ASSERT_EQUAL(OUString("page"), aAttributeValue);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:sectPr/w:pgBorders", "offsetFrom", "page");
 
     // Assert the XPath expression - 'left' border
-    pXmlXpathContext = xmlXPathNewContext(pXmlDoc);
-    xmlXPathRegisterNs(pXmlXpathContext, BAD_CAST("w"), BAD_CAST("http://schemas.openxmlformats.org/wordprocessingml/2006/main"));
-    aXPath = "/w:document/w:body/w:sectPr/w:pgBorders/w:left";
-    pXmlXpathObj = xmlXPathEvalExpression(BAD_CAST(aXPath.getStr()), pXmlXpathContext);
-    pXmlNodes = pXmlXpathObj->nodesetval;
-    CPPUNIT_ASSERT_EQUAL(1, xmlXPathNodeSetGetLength(pXmlNodes));
-    pXmlNode = pXmlNodes->nodeTab[0];
-    aAttributeName = "space";
-    aAttributeValue = OUString::createFromAscii((const char*)xmlGetProp(pXmlNode, BAD_CAST(aAttributeName.getStr())));
-    CPPUNIT_ASSERT_EQUAL(OUString("24"), aAttributeValue);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:sectPr/w:pgBorders/w:left", "space", "24");
 
     // Assert the XPath expression - 'right' border
-    pXmlXpathContext = xmlXPathNewContext(pXmlDoc);
-    xmlXPathRegisterNs(pXmlXpathContext, BAD_CAST("w"), BAD_CAST("http://schemas.openxmlformats.org/wordprocessingml/2006/main"));
-    aXPath = "/w:document/w:body/w:sectPr/w:pgBorders/w:right";
-    pXmlXpathObj = xmlXPathEvalExpression(BAD_CAST(aXPath.getStr()), pXmlXpathContext);
-    pXmlNodes = pXmlXpathObj->nodesetval;
-    CPPUNIT_ASSERT_EQUAL(1, xmlXPathNodeSetGetLength(pXmlNodes));
-    pXmlNode = pXmlNodes->nodeTab[0];
-    aAttributeName = "space";
-    aAttributeValue = OUString::createFromAscii((const char*)xmlGetProp(pXmlNode, BAD_CAST(aAttributeName.getStr())));
-    CPPUNIT_ASSERT_EQUAL(OUString("24"), aAttributeValue);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:sectPr/w:pgBorders/w:right", "space", "24");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
