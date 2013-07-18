@@ -504,7 +504,10 @@
         <!-- OldLocation: -->
         <!-- UIHints: slide show settings display listbox -->
         <info>
-          <desc>Number of the display used for full screen slide show mode.</desc>
+          <desc>Offset number of the display used for full screen slide show mode;
+	        -1   means all screens,
+	         0   means default external screen,
+	         N>0 means real-screen number + 1.</desc>
           <label>Display for full screen slide show mode</label>
         </info>
         <value>0</value>

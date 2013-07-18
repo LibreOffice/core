@@ -448,9 +448,10 @@ void PresenterScreen::SwitchMonitors()
     }
 }
 
-// FIXME: really VCL should hold the current 'external' and 'built-in'
-// display states, and hide them behind some attractive API, and
-// the PresenterConsole should link VCL directly ...
+/**
+ * Return the real VCL screen number to show the presenter console
+ * on or -1 to not show anything.
+ */
 sal_Int32 PresenterScreen::GetPresenterScreenNumber (
     const Reference<presentation::XPresentation2>& rxPresentation) const
 {
@@ -474,6 +475,8 @@ sal_Int32 PresenterScreen::GetPresenterScreenNumber (
             // the presenter screen.
             return -1;
         }
+
+        SAL_INFO("sdext.presenter", "Display number is " << nDisplayNumber);
 
         if (nDisplayNumber > 0)
         {
@@ -518,7 +521,7 @@ sal_Int32 PresenterScreen::GetPresenterScreenNumber (
         // For some reason we can not access the screen number.  Use
         // the default instead.
     }
-
+    SAL_INFO("sdext.presenter", "Get presenter screen for screen " << nScreenNumber);
     return GetPresenterScreenFromScreen(nScreenNumber);
 }
 
@@ -538,6 +541,8 @@ sal_Int32 PresenterScreen::GetPresenterScreenFromScreen( sal_Int32 nPresentation
             break;
 
         default:
+            SAL_INFO("sdext.presenter", "Warning unexpected, out of bound screen "
+                     "mapped to 0" << nPresentationScreen);
             // When the full screen presentation is displayed on a screen
             // other than 0 or 1 then place the presenter on the first
             // available screen.

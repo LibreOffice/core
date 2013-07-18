@@ -149,6 +149,26 @@ SdStartPresentationDlg::SdStartPresentationDlg( Window* pWindow,
     ChangePauseHdl( NULL );
 }
 
+String SdStartPresentationDlg::GetDisplayName( sal_Int32 nDisplay, bool bExternal )
+{
+    String aName( bExternal ? msExternalMonitor->GetText() :
+                  msMonitor->GetText() );
+    const String aNumber( OUString::number( nDisplay ) );
+    aName.SearchAndReplace( String("%1"), aNumber );
+    return aName;
+}
+
+/// Store display index together with name in user data
+sal_Int32 SdStartPresentationDlg::InsertDisplayEntry(const rtl::OUString &aName,
+                                                     sal_Int32            nDisplay)
+{
+    maLBMonitor->InsertEntry( aName );
+    const sal_uInt32 nEntryIndex = maLBMonitor->GetEntryCount() - 1;
+    maLBMonitor->SetEntryData( nEntryIndex, (void*)(sal_IntPtr)nDisplay );
+
+    return nEntryIndex;
+}
+
 void SdStartPresentationDlg::InitMonitorSettings()
 {
     try
@@ -172,36 +192,39 @@ void SdStartPresentationDlg::InitMonitorSettings()
             sal_Int32 nDefaultExternalIndex (-1);
             const sal_Int32 nDefaultSelectedDisplay (
                 ( ( const SfxInt32Item& ) rOutAttrs.Get( ATTR_PRESENT_DISPLAY ) ).GetValue());
-            const String sPlaceHolder( "%1" );
+
+            // Un-conditionally add a version for '0' the default external display
+            sal_Int32 nInsertedEntry;
+
+            // FIXME: string-freeze this should really be 'External (display %)'
+            String aName = GetDisplayName( nExternalIndex + 1, true);
+            nInsertedEntry = InsertDisplayEntry( aName, 0 );
+            if( nDefaultSelectedDisplay == 0)
+                nSelectedIndex = nInsertedEntry;
+
+            // The user data contains the real setting
             for( sal_Int32 nDisplay = 0; nDisplay < mnMonitors; nDisplay++ )
             {
-                String aName( nDisplay == nExternalIndex ?
-                    msExternalMonitor->GetText() :
-                    msMonitor->GetText() );
-                const String aNumber( OUString::number( nDisplay + 1 ) );
-                aName.SearchAndReplace( sPlaceHolder, aNumber );
-                maLBMonitor->InsertEntry( aName );
-
-                // Store display index together with name.
-                const sal_uInt32 nEntryIndex (maLBMonitor->GetEntryCount()-1);
-                maLBMonitor->SetEntryData(nEntryIndex, (void*)(sal_IntPtr)nDisplay);
+                bool bIsExternal = nDisplay == nExternalIndex;
+                // FIXME: string-freeze, use true to denote external for now
+                bIsExternal = false;
+                aName = GetDisplayName( nDisplay + 1, bIsExternal );
+                nInsertedEntry = InsertDisplayEntry( aName, nDisplay + 1 );
 
                 // Remember the index of the default selection.
-                if (nDefaultSelectedDisplay == nDisplay)
-                    nSelectedIndex = nEntryIndex;
+                if( nDisplay + 1 == nDefaultSelectedDisplay )
+                    nSelectedIndex = nInsertedEntry;
 
                 // Remember index of the default display.
-                if (nDisplay == nExternalIndex)
-                    nDefaultExternalIndex = nEntryIndex;
+                if( nDisplay == nExternalIndex )
+                    nDefaultExternalIndex = nInsertedEntry;
             }
 
             if( bUnifiedDisplay )
             {
-                maLBMonitor->InsertEntry( msAllMonitors->GetText() );
-                const sal_uInt32 nEntryIndex (maLBMonitor->GetEntryCount()-1);
-                maLBMonitor->SetEntryData(nEntryIndex, (void*)-1);
-                if (nDefaultSelectedDisplay == -1)
-                    nSelectedIndex = nEntryIndex;
+                nInsertedEntry = InsertDisplayEntry( msAllMonitors->GetText(), -1 );
+                if( nDefaultSelectedDisplay == -1 )
+                    nSelectedIndex = nInsertedEntry;
             }
 
             if (nSelectedIndex < 0)

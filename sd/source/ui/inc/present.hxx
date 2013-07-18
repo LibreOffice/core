@@ -74,7 +74,9 @@ private:
                         DECL_LINK( ChangePauseHdl, void * );
 
     void                InitMonitorSettings();
-
+    sal_Int32           InsertDisplayEntry(const rtl::OUString &aName,
+                                           sal_Int32            nDisplay);
+    String              GetDisplayName( sal_Int32 nDisplay, bool bExternal );
 public:
                         SdStartPresentationDlg( Window* pWindow,
                                 const SfxItemSet& rInAttrs,
