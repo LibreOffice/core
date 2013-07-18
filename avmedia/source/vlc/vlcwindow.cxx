@@ -82,7 +82,6 @@ void SAL_CALL VLCWindow::setVisible( sal_Bool Visible )
 void SAL_CALL VLCWindow::setEnable( sal_Bool Enable )
     throw (uno::RuntimeException)
 {
-    std::cout << __PRETTY_FUNCTION__ << " " << Enable << std::endl;
 }
 
 void SAL_CALL VLCWindow::setFocus()
