@@ -20,35 +20,33 @@
 #ifndef FRAMEWORK_BACKINGWINDOW_HXX
 #define FRAMEWORK_BACKINGWINDOW_HXX
 
-#include "rtl/ustring.hxx"
+#include <rtl/ustring.hxx>
 
-#include "vcl/builder.hxx"
-#include "vcl/button.hxx"
-#include "vcl/menubtn.hxx"
-#include "vcl/fixed.hxx"
-#include "vcl/bitmapex.hxx"
-#include "vcl/toolbox.hxx"
-#include "vcl/layout.hxx"
+#include <vcl/builder.hxx>
+#include <vcl/button.hxx>
+#include <vcl/menubtn.hxx>
+#include <vcl/bitmapex.hxx>
+#include <vcl/toolbox.hxx>
+#include <vcl/layout.hxx>
 
-#include "unotools/moduleoptions.hxx"
-#include "svtools/acceleratorexecute.hxx"
+#include <unotools/moduleoptions.hxx>
 
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/frame/XUIControllerFactory.hpp>
 #include <com/sun/star/frame/XPopupMenuController.hpp>
 #include <com/sun/star/awt/XPopupMenu.hpp>
-#include "com/sun/star/frame/XDispatchProvider.hpp"
-#include "com/sun/star/frame/XDesktop.hpp"
-#include "com/sun/star/frame/XFrame.hpp"
-#include "com/sun/star/frame/XTerminateListener.hpp"
-#include "com/sun/star/document/XEventListener.hpp"
-#include "com/sun/star/document/XEventBroadcaster.hpp"
-#include "com/sun/star/util/XURLTransformer.hpp"
-#include "com/sun/star/ui/dialogs/XFilePicker.hpp"
-#include "com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp"
-#include "com/sun/star/ui/dialogs/XFilterManager.hpp"
-#include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
-#include "com/sun/star/ui/dialogs/ExecutableDialogResults.hpp"
+#include <com/sun/star/frame/XDispatchProvider.hpp>
+#include <com/sun/star/frame/XDesktop.hpp>
+#include <com/sun/star/frame/XFrame.hpp>
+#include <com/sun/star/frame/XTerminateListener.hpp>
+#include <com/sun/star/document/XEventListener.hpp>
+#include <com/sun/star/document/XEventBroadcaster.hpp>
+#include <com/sun/star/util/XURLTransformer.hpp>
+#include <com/sun/star/ui/dialogs/XFilePicker.hpp>
+#include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
+#include <com/sun/star/ui/dialogs/XFilterManager.hpp>
+#include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
+#include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 
 #include <set>
 
@@ -84,35 +82,13 @@ namespace framework
         BitmapEx                        maBackgroundMiddle;
         BitmapEx                        maBackgroundRight;
 
-        Font                            maTextFont;
-        Rectangle                       maControlRect;
-
         Rectangle                       maStartCentButtons;
-
-        Color                           maLabelTextColor;
-
 
         bool                            mbInitControls;
         sal_Int32                       mnHideExternalLinks;
-        svt::AcceleratorExecute*        mpAccExec;
 
-        static const int nItemId_Extensions = 1;
-        static const int nItemId_Info = 3;
-        static const int nItemId_TplRep = 4;
-
-        static const int nShadowTop = 30;
-        static const int nShadowLeft = 30;
-        static const int nShadowRight = 30;
-        static const int nShadowBottom = 30;
-
-        static const int nPaddingTop = 30;
-        static const int nPaddingLeft = 50;
-        static const int nPaddingRight = 50;
-        static const int nPaddingBottom = 30;
-
-        static const int nLogoHeight = 150;
-        int nSCWidth;
-        int nSCHeight;
+        int                             mnSCWidth;
+        int                             mnSCHeight;
 
         void loadImage( const ResId& i_rId, PushButton& i_rButton );
 

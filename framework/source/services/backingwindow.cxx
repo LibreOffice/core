@@ -20,42 +20,24 @@
 #include "backingwindow.hxx"
 #include <services.h>
 
-#include <sal/macros.h>
+#include <vcl/svapp.hxx>
+#include <vcl/virdev.hxx>
 
-#include "vcl/metric.hxx"
-#include "vcl/mnemonic.hxx"
-#include "vcl/menu.hxx"
-#include "vcl/svapp.hxx"
-#include "vcl/virdev.hxx"
+#include <unotools/dynamicmenuoptions.hxx>
+#include <svtools/langhelp.hxx>
+#include <svtools/colorcfg.hxx>
 
-#include "tools/urlobj.hxx"
-
-#include "unotools/dynamicmenuoptions.hxx"
-#include "unotools/historyoptions.hxx"
-#include "svtools/imagemgr.hxx"
-#include "svtools/langhelp.hxx"
-#include "svtools/colorcfg.hxx"
-
-#include "comphelper/processfactory.hxx"
-#include "comphelper/sequenceashashmap.hxx"
-#include "comphelper/configurationhelper.hxx"
+#include <comphelper/processfactory.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 
 #include <toolkit/awt/vclxmenu.hxx>
 
-#include "cppuhelper/implbase1.hxx"
-
-#include "rtl/strbuf.hxx"
-#include "rtl/ustrbuf.hxx"
-#include "osl/file.h"
-
-#include "com/sun/star/frame/Desktop.hpp"
-#include "com/sun/star/lang/XMultiServiceFactory.hpp"
-#include "com/sun/star/container/XNameAccess.hpp"
-#include "com/sun/star/configuration/theDefaultProvider.hpp"
-#include "com/sun/star/system/SystemShellExecute.hpp"
-#include "com/sun/star/system/SystemShellExecuteFlags.hpp"
-#include "com/sun/star/task/XJobExecutor.hpp"
-#include "com/sun/star/util/XStringWidth.hpp"
+#include <com/sun/star/frame/Desktop.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/container/XNameAccess.hpp>
+#include <com/sun/star/configuration/theDefaultProvider.hpp>
+#include <com/sun/star/system/SystemShellExecute.hpp>
+#include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/frame/PopupMenuControllerFactory.hpp>
 
@@ -76,11 +58,26 @@ const char MATH_URL[] =           "private:factory/smath";
 const char TEMPLATE_URL[] =       "slot:5500";
 const char OPEN_URL[] =           ".uno:Open";
 
+const int nItemId_Extensions = 1;
+const int nItemId_Info = 3;
+const int nItemId_TplRep = 4;
+
+const int nShadowTop = 30;
+const int nShadowLeft = 30;
+const int nShadowRight = 30;
+const int nShadowBottom = 30;
+
+const int nPaddingTop = 30;
+const int nPaddingLeft = 50;
+const int nPaddingRight = 50;
+const int nPaddingBottom = 30;
+
+const int nLogoHeight = 150;
+
 BackingWindow::BackingWindow( Window* i_pParent ) :
     Window( i_pParent ),
     mbInitControls( false ),
-    mnHideExternalLinks( 0 ),
-    mpAccExec( NULL )
+    mnHideExternalLinks( 0 )
 {
     m_pUIBuilder = new VclBuilder(this, getUIRootDir(),
       "modules/StartModule/ui/startcenter.ui",
@@ -164,18 +161,12 @@ BackingWindow::BackingWindow( Window* i_pParent ) :
     // init background
     initBackground();
 
-    // set a slighly larger font than normal labels on the texts
-    maTextFont.SetSize( Size( 0, 11 ) );
-    maTextFont.SetWeight( WEIGHT_NORMAL );
-
     Window::Show();
 }
 
 
 BackingWindow::~BackingWindow()
 {
-    delete mpAccExec;
-
     if( mxPopupMenuController.is() )
     {
         Reference< lang::XComponent > xComponent( mxPopupMenuController, UNO_QUERY );
@@ -291,8 +282,8 @@ void BackingWindow::initBackground()
     mpOpenButton->SetActivateHdl( LINK( this, BackingWindow, ActivateHdl ) );
 
     // this will be moved to somewhere saner later
-    nSCWidth = 780;
-    nSCHeight = maBackgroundLeft.GetSizePixel().Height();
+    mnSCWidth = 780;
+    mnSCHeight = maBackgroundLeft.GetSizePixel().Height();
 }
 
 void BackingWindow::initControls()
@@ -358,9 +349,13 @@ void BackingWindow::setupButton( PushButton* pButton, const OUString &rURL,
         pButton->Enable( sal_False );
     }
 
-    // setup text
-    pButton->SetFont( maTextFont );
-    pButton->SetControlFont( maTextFont );
+    // setup text - slighly larger font than normal labels on the texts
+    Font aFont;
+    aFont.SetSize( Size( 0, 11 ) );
+    aFont.SetWeight( WEIGHT_NORMAL );
+
+    pButton->SetFont( aFont );
+    pButton->SetControlFont( aFont );
 }
 
 void BackingWindow::setupExternalLink( PushButton* pButton )
@@ -380,9 +375,9 @@ void BackingWindow::Paint( const Rectangle& )
     Wallpaper aBack( svtools::ColorConfig().GetColorValue(::svtools::APPBACKGROUND).nColor );
     Region aClip( Rectangle( Point( 0, 0 ), GetOutputSizePixel() ) );
 
-    Rectangle aBmpRect(Point((GetOutputSizePixel().Width()-nSCWidth)/2,
-                             (GetOutputSizePixel().Height()-nSCHeight)/2),
-                       Size(nSCWidth,nSCHeight));
+    Rectangle aBmpRect(Point((GetOutputSizePixel().Width()-mnSCWidth)/2,
+                             (GetOutputSizePixel().Height()-mnSCHeight)/2),
+                       Size(mnSCWidth,mnSCHeight));
     aClip.Exclude( aBmpRect );
 
     Push( PUSH_CLIPREGION );
@@ -397,7 +392,7 @@ void BackingWindow::Paint( const Rectangle& )
     aDev.DrawWallpaper( Rectangle( aOffset, GetOutputSizePixel() ), aBack );
 
     maBackgroundMiddle.Scale(
-        Size(nSCWidth - maBackgroundLeft.GetSizePixel().Width() - maBackgroundRight.GetSizePixel().Width(),
+        Size(mnSCWidth - maBackgroundLeft.GetSizePixel().Width() - maBackgroundRight.GetSizePixel().Width(),
         maBackgroundMiddle.GetSizePixel().Height()),
         BMP_SCALE_FAST);
 
@@ -432,10 +427,10 @@ void BackingWindow::setOwningFrame( const com::sun::star::uno::Reference< com::s
 void BackingWindow::Resize()
 {
     maStartCentButtons = Rectangle(
-                        Point((GetOutputSizePixel().Width()-nSCWidth)/2 + nShadowTop + nPaddingTop,
-                              (GetOutputSizePixel().Height()-nSCHeight)/2 + nShadowLeft + nPaddingLeft + nLogoHeight),
-                        Size(nSCWidth - nShadowLeft - nShadowRight - nPaddingLeft - nPaddingRight,
-                             nSCHeight - nShadowTop - nShadowBottom - nPaddingTop - nPaddingBottom - nLogoHeight));
+                        Point((GetOutputSizePixel().Width()-mnSCWidth)/2 + nShadowTop + nPaddingTop,
+                              (GetOutputSizePixel().Height()-mnSCHeight)/2 + nShadowLeft + nPaddingLeft + nLogoHeight),
+                        Size(mnSCWidth - nShadowLeft - nShadowRight - nPaddingLeft - nPaddingRight,
+                             mnSCHeight - nShadowTop - nShadowBottom - nPaddingTop - nPaddingBottom - nLogoHeight));
     if (isLayoutEnabled(this))
         VclContainer::setLayoutAllocation(*GetWindow(WINDOW_FIRSTCHILD),
             maStartCentButtons.TopLeft(), maStartCentButtons.GetSize());
