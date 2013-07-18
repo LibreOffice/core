@@ -3135,7 +3135,7 @@ if test "$_os" = "WINNT"; then
                 ;;
             110)
                 COMEX=14
-                WINDOWS_SDK_ACCEPTABLE_VERSIONS="8.0"
+                WINDOWS_SDK_ACCEPTABLE_VERSIONS="8.0 7.1A"
                 ;;
             esac
 
@@ -8954,6 +8954,13 @@ the  Windows SDK are installed.])
     elif echo $WINDOWS_SDK_HOME | grep "8.0" >/dev/null 2>/dev/null; then
         WINDOWS_SDK_VERSION=80
         AC_MSG_RESULT([found Windows SDK 8.0 ($WINDOWS_SDK_HOME)])
+        # compatibility warning if usind VS 2012 and not explicitly choosing the 80 SDK
+        if test "$VCVER" = "110" -a -z "$with_windows_sdk"; then
+            AC_MSG_WARN([If a build created with VS 2012 should run on Windows XP,])
+            AC_MSG_WARN([use --with-windows-sdk=7.1A (requires VS 2012 Update 1 or newer)])
+            add_warning "If a build created with VS 2012 should run on Windows XP,"
+            add_warning "use --with-windows-sdk=7.1A (requires VS 2012 Update 1 or newer)"
+        fi
     else
         AC_MSG_ERROR([Found legacy Windows Platform SDK ($WINDOWS_SDK_HOME)])
     fi
