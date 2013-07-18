@@ -176,7 +176,7 @@ PresenterController::PresenterController (
         }
     }
 
-    UpdateCurrentSlide(0);
+    // UpdateCurrentSlide(0);
 
     maInstances[mxController->getFrame()] = this;
 
