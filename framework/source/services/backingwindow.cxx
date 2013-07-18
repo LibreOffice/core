@@ -65,16 +65,16 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
 using namespace framework;
 
-#define RECENT_FILE_LIST    ".uno:RecentFileList"
+const char RECENT_FILE_LIST[] =   ".uno:RecentFileList";
 
-#define WRITER_URL      "private:factory/swriter"
-#define CALC_URL        "private:factory/scalc"
-#define IMPRESS_WIZARD_URL     "private:factory/simpress?slot=6686"
-#define DRAW_URL        "private:factory/sdraw"
-#define BASE_URL        "private:factory/sdatabase?Interactive"
-#define MATH_URL        "private:factory/smath"
-#define TEMPLATE_URL    "slot:5500"
-#define OPEN_URL        ".uno:Open"
+const char WRITER_URL[] =         "private:factory/swriter";
+const char CALC_URL[] =           "private:factory/scalc";
+const char IMPRESS_WIZARD_URL[] = "private:factory/simpress?slot=6686";
+const char DRAW_URL[] =           "private:factory/sdraw";
+const char BASE_URL[] =           "private:factory/sdatabase?Interactive";
+const char MATH_URL[] =           "private:factory/smath";
+const char TEMPLATE_URL[] =       "slot:5500";
+const char OPEN_URL[] =           ".uno:Open";
 
 BackingWindow::BackingWindow( Window* i_pParent ) :
     Window( i_pParent ),
@@ -319,106 +319,58 @@ void BackingWindow::initControls()
             aFileNewAppsAvailable.insert( sURL );
     }
 
-    // create mnemonics on the fly, preregister the mnemonics of the menu
-    MnemonicGenerator aMnemns;
+    setupButton( mpWriterButton, WRITER_URL, aFileNewAppsAvailable,
+                 aModuleOptions, SvtModuleOptions::E_SWRITER );
+    setupButton( mpDrawButton, DRAW_URL, aFileNewAppsAvailable,
+                 aModuleOptions, SvtModuleOptions::E_SDRAW );
+    setupButton( mpCalcButton, CALC_URL, aFileNewAppsAvailable,
+                 aModuleOptions, SvtModuleOptions::E_SCALC );
+    setupButton( mpDBButton, BASE_URL, aFileNewAppsAvailable,
+                 aModuleOptions, SvtModuleOptions::E_SDATABASE );
+    setupButton( mpImpressButton, IMPRESS_WIZARD_URL, aFileNewAppsAvailable,
+                 aModuleOptions, SvtModuleOptions::E_SIMPRESS );
+    setupButton( mpMathButton, MATH_URL, aFileNewAppsAvailable,
+                 aModuleOptions, SvtModuleOptions::E_SMATH );
 
-    SystemWindow* pSysWin = GetSystemWindow();
-    if( pSysWin )
-    {
-        MenuBar* pMBar = pSysWin->GetMenuBar();
-        if( pMBar )
-        {
-            for( sal_uInt16 i = 0; i < pMBar->GetItemCount(); i++ )
-            {
-                sal_uInt16 nItemId = pMBar->GetItemId( i );
-                String aItemText( pMBar->GetItemText( nItemId ) );
-                if( aItemText.Len() )
-                    aMnemns.RegisterMnemonic( aItemText );
-            }
-        }
-    }
+    setupButton( mpOpenButton, "", aFileNewAppsAvailable,
+                 aModuleOptions, SvtModuleOptions::E_SWRITER );
+    setupButton( mpTemplateButton, "", aFileNewAppsAvailable,
+                 aModuleOptions, SvtModuleOptions::E_SWRITER );
 
-    // layout the buttons
-
-    layoutButton( WRITER_URL, aFileNewAppsAvailable,
-                  aModuleOptions, SvtModuleOptions::E_SWRITER,
-                  *mpWriterButton, aMnemns );
-    layoutButton( DRAW_URL, aFileNewAppsAvailable,
-                  aModuleOptions, SvtModuleOptions::E_SDRAW,
-                  *mpDrawButton, aMnemns );
-    layoutButton( CALC_URL, aFileNewAppsAvailable,
-                  aModuleOptions, SvtModuleOptions::E_SCALC,
-                  *mpCalcButton, aMnemns );
-    layoutButton( BASE_URL, aFileNewAppsAvailable,
-                  aModuleOptions, SvtModuleOptions::E_SDATABASE,
-                  *mpDBButton, aMnemns );
-    layoutButton( IMPRESS_WIZARD_URL, aFileNewAppsAvailable,
-                  aModuleOptions, SvtModuleOptions::E_SIMPRESS,
-                  *mpImpressButton, aMnemns );
-    layoutButton( MATH_URL, aFileNewAppsAvailable,
-                  aModuleOptions, SvtModuleOptions::E_SMATH,
-                  *mpMathButton, aMnemns );
-
-    layoutButton( NULL, aFileNewAppsAvailable,
-                  aModuleOptions, SvtModuleOptions::E_SWRITER,
-                  *mpOpenButton, aMnemns );
-    layoutButton( NULL, aFileNewAppsAvailable,
-                  aModuleOptions, SvtModuleOptions::E_SWRITER,
-                  *mpTemplateButton, aMnemns );
-
-    layoutExternalLink( *mpExtensionsButton );
-    layoutExternalLink( *mpInfoButton );
-    layoutExternalLink( *mpTplRepButton );
-
-    //SAL _DEBUG("container size: " << mpStartCenterContainer->GetSizePixel().Width()
-    //            << " " << mpStartCenterContainer->GetSizePixel().Height());
+    setupExternalLink( mpExtensionsButton );
+    setupExternalLink( mpInfoButton );
+    setupExternalLink( mpTplRepButton );
 
     Resize();
 
     mpWriterButton->GrabFocus();
 }
 
-
-void BackingWindow::layoutButton(
-                          const char* i_pURL,
-                          const std::set<OUString>& i_rURLS,
-                          SvtModuleOptions& i_rOpt, SvtModuleOptions::EModule i_eMod,
-                          PushButton& i_rBtn,
-                          MnemonicGenerator& i_rMnemns,
-                          const String& i_rStr
-                          )
+void BackingWindow::setupButton( PushButton* pButton, const OUString &rURL,
+        const std::set<OUString>& rURLS,
+        SvtModuleOptions& rOpt, SvtModuleOptions::EModule eMod )
 {
-    OUString aURL( i_pURL ? OUString::createFromAscii( i_pURL ) : OUString() );
-    // setup button
-    i_rBtn.SetPaintTransparent( sal_False );
-    i_rBtn.SetClickHdl( LINK( this, BackingWindow, ClickHdl ) );
-    if( i_pURL && (! i_rOpt.IsModuleInstalled( i_eMod ) || i_rURLS.find( aURL ) == i_rURLS.end()) )
+    pButton->SetClickHdl( LINK( this, BackingWindow, ClickHdl ) );
+
+    // disable the parts that are not installed
+    if( !rURL.isEmpty() && (!rOpt.IsModuleInstalled( eMod ) || rURLS.find( rURL ) == rURLS.end()) )
     {
-        i_rBtn.Enable( sal_False );
+        pButton->Enable( sal_False );
     }
 
     // setup text
-    i_rBtn.SetFont( maTextFont );
-    i_rBtn.SetControlFont( maTextFont );
-
-    String aText( i_rStr.Len() ? i_rStr : SvFileInformationManager::GetDescription( INetURLObject( aURL ) ) );
-    i_rMnemns.CreateMnemonic( aText );
-    i_rBtn.SetText( aText );
-
-    //without this line, imagebuttons with text don't work properly
-    i_rBtn.SetImageAlign( IMAGEALIGN_LEFT );
-
-    // show the controls
-    i_rBtn.Show();
+    pButton->SetFont( maTextFont );
+    pButton->SetControlFont( maTextFont );
 }
 
-void BackingWindow::layoutExternalLink( PushButton& i_rBtn )
+void BackingWindow::setupExternalLink( PushButton* pButton )
 {
-    i_rBtn.SetPaintTransparent( sal_False );
-    i_rBtn.SetClickHdl( LINK( this, BackingWindow, ExtLinkClickHdl ) );
-
     if( mnHideExternalLinks == 0 )
-        i_rBtn.Show();
+        pButton->Show();
+    else
+        pButton->Hide();
+
+    pButton->SetClickHdl( LINK( this, BackingWindow, ExtLinkClickHdl ) );
 }
 
 void BackingWindow::Paint( const Rectangle& )
@@ -463,7 +415,6 @@ void BackingWindow::Paint( const Rectangle& )
     DrawOutDev( aBmpRect.TopLeft(), aBmpRect.GetSize(),
                 Point( 0, 0 ), aBmpRect.GetSize(),
                 aDev );
-
 }
 
 long BackingWindow::Notify( NotifyEvent& rNEvt )
@@ -669,7 +620,7 @@ Size BackingWindow::GetOptimalSize() const
     if (isLayoutEnabled(this))
         return VclContainer::getLayoutRequisition(*GetWindow(WINDOW_FIRSTCHILD));
 
-        return Window::GetOptimalSize();
+    return Window::GetOptimalSize();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab:*/

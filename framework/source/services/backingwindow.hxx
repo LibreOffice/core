@@ -116,14 +116,10 @@ namespace framework
 
         void loadImage( const ResId& i_rId, PushButton& i_rButton );
 
-        void layoutButton( const char* i_pURL, const std::set<OUString>& i_rURLS,
-                           SvtModuleOptions& i_rOpt, SvtModuleOptions::EModule i_eMod,
-                           PushButton& i_rBtn,
-                           MnemonicGenerator& i_rMnemonicGen,
-                           const String& i_rStr = String()
-                           );
+        void setupButton( PushButton* pButton, const OUString& rURL, const std::set<OUString>& rURLS,
+                          SvtModuleOptions& rOpt, SvtModuleOptions::EModule eMod );
 
-        void layoutExternalLink( PushButton& i_rBtn );
+        void setupExternalLink( PushButton* pButton );
 
         void dispatchURL( const OUString& i_rURL,
                           const OUString& i_rTarget = OUString( "_default" ),
