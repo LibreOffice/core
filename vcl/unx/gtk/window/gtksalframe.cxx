@@ -539,30 +539,7 @@ static void hud_activated( gboolean hud_active, gpointer user_data )
     }
 }
 
-struct ImplHelp
-{
-    DECL_STATIC_LINK( ImplHelp, ImplHelpMsg, void* );
-};
-
-IMPL_STATIC_LINK_NOINSTANCE( ImplHelp, ImplHelpMsg, void*, EMPTYARG )
-{
-    Help* pHelp = Application::GetHelp();
-    if (pHelp)
-        pHelp->Start(OUString(OOO_HELP_INDEX), NULL);
-    return 0;
-}
-
-static void help_activated(GSimpleAction *, GVariant*, gpointer)
-{
-    Application::PostUserEvent(STATIC_LINK(NULL, ImplHelp, ImplHelpMsg));
-}
-
-static void quit_activated(GSimpleAction *, GVariant*, gpointer)
-{
-    Application::Quit();
-}
-
-static void dialog_activated(GSimpleAction *action, GVariant*, gpointer)
+static void activate_uno(GSimpleAction *action, GVariant*, gpointer)
 {
     uno::Reference< css::uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
 
@@ -602,10 +579,10 @@ static void dialog_activated(GSimpleAction *action, GVariant*, gpointer)
 }
 
 static GActionEntry app_entries[] = {
-  { "OptionsTreeDialog", dialog_activated, NULL, NULL, NULL, {0} },
-  { "About", dialog_activated, NULL, NULL, NULL, {0} },
-  { "help", help_activated, NULL, NULL, NULL, {0} },
-  { "quit", quit_activated, NULL, NULL, NULL, {0} }
+  { "OptionsTreeDialog", activate_uno, NULL, NULL, NULL, {0} },
+  { "About", activate_uno, NULL, NULL, NULL, {0} },
+  { "HelpIndex", activate_uno, NULL, NULL, NULL, {0} },
+  { "Quit", activate_uno, NULL, NULL, NULL, {0} }
 };
 
 gboolean ensure_dbus_setup( gpointer data )
@@ -661,12 +638,12 @@ gboolean ensure_dbus_setup( gpointer data )
         item = g_menu_item_new("_About", "app.About");
         g_menu_append_item( secondsubmenu, item );
 
-        item = g_menu_item_new("_Help", "app.help");
+        item = g_menu_item_new("_Help", "app.HelpIndex");
         g_menu_append_item( secondsubmenu, item );
         g_menu_append_section( menu, NULL, G_MENU_MODEL(secondsubmenu));
 
         GMenu *thirdsubmenu = g_menu_new ();
-        item = g_menu_item_new("_Quit", "app.quit");
+        item = g_menu_item_new("_Quit", "app.Quit");
         g_menu_append_item( thirdsubmenu, item );
         g_menu_append_section( menu, NULL, G_MENU_MODEL(thirdsubmenu));
 
