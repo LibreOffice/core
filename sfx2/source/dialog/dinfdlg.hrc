@@ -31,11 +31,11 @@
 #define CUSTOM_TYPE_DURATION    5
 #define CUSTOM_TYPE_DATETIME    6
 
-#define CMIS_TYPE_ANY         "Any"
 #define CMIS_TYPE_STRING      "String"
-#define CMIS_TYPE_NUMBER      "Number"
+#define CMIS_TYPE_INTEGER     "Integer"
+#define CMIS_TYPE_DECIMAL     "Decimal"
 #define CMIS_TYPE_DATETIME    "Datetime"
-#define CMIS_TYPE_BOOLEAN     "Boolean"
+#define CMIS_TYPE_BOOL        "Bool"
 
 // defines ---------------------------------------------------------------
 

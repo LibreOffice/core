@@ -584,6 +584,7 @@ public:
 struct CmisPropertyLine
 {
     OUString                      m_sId;
+    OUString                      m_sType;
     bool                          m_bUpdatable;
     bool                          m_bRequired;
     bool                          m_bMultiValued;
@@ -638,8 +639,9 @@ public:
     sal_uInt16          GetLineCount() const;
     inline sal_Int32    GetLineHeight() const { return m_nLineHeight; }
     void                AddLine( const OUString& sId, const OUString& sName,
-                                 const bool bUpdatable, const bool bRequired,
-                                 const bool bMultiValued, const bool bOpenChoice,
+                                 const OUString& sType, const bool bUpdatable,
+                                 const bool bRequired, const bool bMultiValued,
+                                 const bool bOpenChoice,
                                  com::sun::star::uno::Any& aChoices,
                                  com::sun::star::uno::Any& rAny );
     bool                AreAllLinesValid() const;
@@ -669,8 +671,9 @@ public:
     ~CmisPropertiesControl();
 
     void            AddLine( const OUString& sId, const OUString& sName,
-                             const bool bUpdatable, const bool bRequired,
-                             const bool bMultiValude, const bool bOpenChoice,
+                             const OUString& sType, const bool bUpdatable,
+                             const bool bRequired, const bool bMultiValude,
+                             const bool bOpenChoice,
                              com::sun::star::uno::Any& aChoices,
                              com::sun::star::uno::Any& rAny, bool bInteractive );
 

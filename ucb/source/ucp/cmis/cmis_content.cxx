@@ -47,6 +47,7 @@
 #include "cmis_provider.hxx"
 #include "cmis_resultset.hxx"
 #include "cmis_oauth2_providers.hxx"
+#include "cmis_strings.hxx"
 
 #define OUSTR_TO_STDSTR(s) string( OUStringToOString( s, RTL_TEXTENCODING_UTF8 ).getStr() )
 #define STD_TO_OUSTR( str ) OUString( str.c_str(), str.length( ), RTL_TEXTENCODING_UTF8 )
@@ -205,7 +206,17 @@ namespace
         bool bMultiValued = prop.MultiValued;
         bool bOpenChoice = prop.OpenChoice;
         uno::Any value = prop.Value;
-        libcmis::PropertyType::Type type = libcmis::PropertyType::String;
+        libcmis::PropertyType::Type type;
+        if ( prop.Type == CMIS_TYPE_STRING )
+            type = libcmis::PropertyType::String;
+        else if ( prop.Type == CMIS_TYPE_BOOL )
+            type = libcmis::PropertyType::Bool;
+       else if ( prop.Type == CMIS_TYPE_INTEGER )
+            type = libcmis::PropertyType::Integer;
+       else if ( prop.Type == CMIS_TYPE_DECIMAL )
+            type = libcmis::PropertyType::Decimal;
+       else if ( prop.Type == CMIS_TYPE_DATETIME )
+            type = libcmis::PropertyType::DateTime;
 
         propertyType->setId( OUSTR_TO_STDSTR( id ));
         propertyType->setDisplayName( OUSTR_TO_STDSTR( name ) );
@@ -682,6 +693,26 @@ namespace cmis
                             pCmisProps[i].MultiValued = bMultiValued;
                             pCmisProps[i].OpenChoice = bOpenChoice;
                             pCmisProps[i].Value = lcl_cmisPropertyToUno( it->second );
+                            switch ( it->second->getPropertyType( )->getType( ) )
+                            {
+                                default:
+                                case libcmis::PropertyType::String:
+                                    pCmisProps[i].Type = CMIS_TYPE_STRING;
+                                break;
+                                case libcmis::PropertyType::Integer:
+                                    pCmisProps[i].Type = CMIS_TYPE_INTEGER;
+                                break;
+                                case libcmis::PropertyType::Decimal:
+                                    pCmisProps[i].Type = CMIS_TYPE_DECIMAL;
+                                break;
+                                case libcmis::PropertyType::Bool:
+                                    pCmisProps[i].Type = CMIS_TYPE_BOOL;
+                                break;
+                                case libcmis::PropertyType::DateTime:
+                                    pCmisProps[i].Type = CMIS_TYPE_DATETIME;
+                                break;
+                            }
+
                         }
                         xRow->appendObject( rProp.Name, uno::makeAny( aCmisProperties ) );
                     }

@@ -33,6 +33,10 @@ struct CmisProperty
      */
     string Name;
 
+    /** type of the property
+    */
+    string Type;
+
     /** specifies if the property is updatable.
      */
     boolean Updatable;

@@ -2199,6 +2199,7 @@ void CmisPropertiesYesNoButton::Resize()
 // struct CmisPropertyLine ---------------------------------------------
 CmisPropertyLine::CmisPropertyLine( Window* pParent ) :
     m_sId           ( ),
+    m_sType         ( CMIS_TYPE_STRING ),
     m_aName         ( pParent, SfxResId( SFX_CMIS_PROPERTY_NAME ) ),
     m_aType         ( pParent, SfxResId( SFX_CMIS_PROPERTY_TYPE ) ),
     m_aValueEdit    ( pParent, SfxResId( SFX_CMIS_ED_PROPERTY_VALUE ), this ),
@@ -2261,16 +2262,16 @@ bool CmisPropertiesWindow::IsLineValid( CmisPropertyLine* pLine ) const
 {
     bool bIsValid = true;
     pLine->m_bTypeLostFocus = false;
-    OUString sType = pLine->m_aType.GetText( );
     String sValue = pLine->m_aValueEdit.GetText();
     if ( sValue.Len() == 0 )
         return true;
 
     sal_uInt32 nIndex = 0xFFFFFFFF;
-    if ( CMIS_TYPE_NUMBER == sType )
+    if ( CMIS_TYPE_INTEGER == pLine->m_sType ||
+         CMIS_TYPE_DECIMAL == pLine->m_sType )
         nIndex = const_cast< SvNumberFormatter& >(
             m_aNumberFormatter ).GetFormatIndex( NF_NUMBER_SYSTEM );
-    else if ( CMIS_TYPE_DATETIME == sType )
+    else if ( CMIS_TYPE_DATETIME == pLine->m_sType )
         nIndex = const_cast< SvNumberFormatter& >(
             m_aNumberFormatter).GetFormatIndex( NF_DATE_SYS_DDMMYYYY );
 
@@ -2398,13 +2399,14 @@ void CmisPropertiesWindow::updateLineWidth()
 }
 
 void CmisPropertiesWindow::AddLine( const OUString& sId, const OUString& sName,
-                                    const bool bUpdatable, const bool bRequired,
-                                    const bool bMultiValued, const bool bOpenChoice,
-                                    Any& /*aChoices*/, Any& rAny )
+                                    const OUString& sType, const bool bUpdatable,
+                                    const bool bRequired, const bool bMultiValued,
+                                    const bool bOpenChoice, Any& /*aChoices*/, Any& rAny )
 {
     CmisPropertyLine* pNewLine = new CmisPropertyLine( this );
 
     pNewLine->m_sId = sId;
+    pNewLine->m_sType = sType;
     pNewLine->m_bUpdatable = bUpdatable;
     pNewLine->m_bRequired = bRequired;
     pNewLine->m_bMultiValued = bMultiValued;
@@ -2412,9 +2414,6 @@ void CmisPropertiesWindow::AddLine( const OUString& sId, const OUString& sName,
 
     pNewLine->m_aValueEdit.SetLoseFocusHdl( LINK( this, CmisPropertiesWindow, EditLoseFocusHdl ) );
 
-    pNewLine->m_aName.SetAccessibleName(m_aName.GetAccessibleName());
-    pNewLine->m_aType.SetAccessibleName(m_aType.GetAccessibleName());
-    pNewLine->m_aValueEdit.SetAccessibleName(m_aValueEdit.GetAccessibleName());
     pNewLine->m_aValueEdit.SetReadOnly( !bUpdatable );
     pNewLine->m_aDateField.SetReadOnly( !bUpdatable );
     pNewLine->m_aTimeField.SetReadOnly( !bUpdatable );
@@ -2449,72 +2448,59 @@ void CmisPropertiesWindow::AddLine( const OUString& sId, const OUString& sName,
     pNewLine->m_aDatePos = pNewLine->m_aDateField.GetPosPixel();
     pNewLine->m_aTimePos = pNewLine->m_aTimeField.GetPosPixel();
     pNewLine->m_aDateTimeSize = pNewLine->m_aDateField.GetSizePixel();
+    pNewLine->m_aName.SetText( sName );
 
-    sal_Int64 nTmpValue = 0;
-    double  dTmpValue = 0.0;
-    bool bTmpValue = false;
-    OUString sTmpValue;
-    util::DateTime aTmpDateTime;
     SvtSysLocale aSysLocale;
     const LocaleDataWrapper& rLocaleWrapper = aSysLocale.GetLocaleData();
-    pNewLine->m_aName.SetText( sName );
-    OUString sType = CMIS_TYPE_STRING;
     OUString sValue;
-
-    if ( rAny >>= nTmpValue )
+    if ( sType == CMIS_TYPE_INTEGER )
     {
+        sal_Int64 nTmpValue = 0;
+        rAny >>= nTmpValue;
         sal_uInt32 nIndex = m_aNumberFormatter.GetFormatIndex( NF_NUMBER_SYSTEM );
         m_aNumberFormatter.GetInputLineString( nTmpValue, nIndex, sValue );
-        pNewLine->m_aValueEdit.SetText( sValue );
-        sType = CMIS_TYPE_NUMBER;
     }
-    else if ( rAny >>= dTmpValue )
+    else if ( sType == CMIS_TYPE_DECIMAL )
     {
+        double dTmpValue = 0.0;
+        rAny >>= dTmpValue;
         sal_uInt32 nIndex = m_aNumberFormatter.GetFormatIndex( NF_NUMBER_SYSTEM );
         m_aNumberFormatter.GetInputLineString( dTmpValue, nIndex, sValue );
-        pNewLine->m_aValueEdit.SetText( sValue );
-        sType = CMIS_TYPE_NUMBER;
     }
-    else if ( rAny >>= bTmpValue )
+    else if ( sType == CMIS_TYPE_BOOL )
     {
+        bool bTmpValue = false;
+        rAny >>= bTmpValue;
         sValue = ( bTmpValue ? rLocaleWrapper.getTrueWord() : rLocaleWrapper.getFalseWord() );
-        sType = CMIS_TYPE_BOOLEAN;
+        if ( bTmpValue )
+            pNewLine->m_aYesNoButton.CheckYes();
+        else
+            pNewLine->m_aYesNoButton.CheckNo();
     }
-    else if ( rAny >>= sTmpValue )
+    else if ( sType == CMIS_TYPE_STRING )
     {
-        pNewLine->m_aValueEdit.SetText( sTmpValue );
-        sType = CMIS_TYPE_STRING;
+        rAny >>= sValue;
     }
-    else if ( rAny >>= aTmpDateTime )
+    else if ( sType == CMIS_TYPE_DATETIME )
     {
+        util::DateTime aTmpDateTime;
+        rAny >>= aTmpDateTime;
         pNewLine->m_aDateField.SetDate( Date( aTmpDateTime.Day, aTmpDateTime.Month, aTmpDateTime.Year ) );
         pNewLine->m_aTimeField.SetTime( Time( aTmpDateTime.Hours, aTmpDateTime.Minutes, aTmpDateTime.Seconds, aTmpDateTime.NanoSeconds ) );
-
-        sType = CMIS_TYPE_DATETIME;
-    }
-
-    if ( sType != CMIS_TYPE_ANY )
-    {
-        if ( CMIS_TYPE_BOOLEAN == sType )
-        {
-            if ( bTmpValue )
-                pNewLine->m_aYesNoButton.CheckYes();
-            else
-                pNewLine->m_aYesNoButton.CheckNo();
-        }
-    }
-
-    pNewLine->m_aType.SetText( sType );
-    pNewLine->m_aValueEdit.Show(( CMIS_TYPE_STRING == sType ) || ( CMIS_TYPE_NUMBER == sType ) );
-    pNewLine->m_aDateField.Show( CMIS_TYPE_DATETIME  == sType );
-    pNewLine->m_aTimeField.Show( CMIS_TYPE_DATETIME  == sType );
-    pNewLine->m_aYesNoButton.Show( CMIS_TYPE_BOOLEAN == sType );
-
-    if ( sType == CMIS_TYPE_DATETIME )
-    {
         pNewLine->m_aDateField.SetPosSizePixel(pNewLine->m_aDatePos, pNewLine->m_aDateTimeSize );
         pNewLine->m_aTimeField.SetPosSizePixel(pNewLine->m_aTimePos, pNewLine->m_aDateTimeSize );
+
     }
+
+    pNewLine->m_aValueEdit.SetText( sValue );
+    pNewLine->m_aType.SetText( sType );
+    pNewLine->m_aValueEdit.Show( CMIS_TYPE_STRING == sType ||
+                                 CMIS_TYPE_INTEGER == sType ||
+                                 CMIS_TYPE_DECIMAL == sType );
+    pNewLine->m_aDateField.Show( CMIS_TYPE_DATETIME  == sType );
+    pNewLine->m_aTimeField.Show( CMIS_TYPE_DATETIME  == sType );
+    pNewLine->m_aYesNoButton.Show( CMIS_TYPE_BOOL == sType );
+
     pNewLine->m_aName.GrabFocus();
 }
 
@@ -2582,6 +2568,7 @@ Sequence< document::CmisProperty > CmisPropertiesWindow::GetCmisProperties() con
         CmisPropertyLine* pLine = *pIter;
 
         aPropertiesSeq[i].Id = pLine->m_sId;
+        aPropertiesSeq[i].Type = pLine->m_sType;
         aPropertiesSeq[i].Updatable = pLine->m_bUpdatable;
         aPropertiesSeq[i].Required = pLine->m_bRequired;
         aPropertiesSeq[i].OpenChoice = pLine->m_bOpenChoice;
@@ -2592,7 +2579,8 @@ Sequence< document::CmisProperty > CmisPropertiesWindow::GetCmisProperties() con
         {
             aPropertiesSeq[i].Name = sPropertyName;
             OUString sType = pLine->m_aType.GetText( );
-            if ( CMIS_TYPE_NUMBER == sType )
+            if ( CMIS_TYPE_INTEGER == sType ||
+                 CMIS_TYPE_DECIMAL == sType )
             {
                 double nValue = 0;
                 sal_uInt32 nIndex = const_cast< SvNumberFormatter& >(
@@ -2602,7 +2590,7 @@ Sequence< document::CmisProperty > CmisPropertiesWindow::GetCmisProperties() con
                 if ( bIsNum )
                     aPropertiesSeq[i].Value <<= makeAny( nValue );
             }
-            else if ( CMIS_TYPE_BOOLEAN == sType )
+            else if ( CMIS_TYPE_BOOL == sType )
             {
                 bool bValue = pLine->m_aYesNoButton.IsYesChecked();
                 aPropertiesSeq[i].Value <<= makeAny( bValue );
@@ -2717,11 +2705,12 @@ IMPL_LINK( CmisPropertiesControl, ScrollHdl, ScrollBar*, pScrollBar )
 }
 
 void CmisPropertiesControl::AddLine( const OUString& sId, const OUString& sName,
-                                     const bool bUpdatable, const bool bRequired,
-                                     const bool bMultiValued, const bool bOpenChoice,
-                                     Any& aChoices, Any& rAny, bool bInteractive )
+                                     const OUString& sType, const bool bUpdatable,
+                                     const bool bRequired, const bool bMultiValued,
+                                     const bool bOpenChoice, Any& aChoices, Any& rAny,
+                                     bool bInteractive )
 {
-    m_pPropertiesWin->AddLine( sId, sName, bUpdatable, bRequired, bMultiValued,
+    m_pPropertiesWin->AddLine( sId, sName, sType, bUpdatable, bRequired, bMultiValued,
                                bOpenChoice, aChoices, rAny );
     m_pVertScroll->SetRangeMax( m_pPropertiesWin->GetLineCount() + 1 );
     if ( bInteractive && m_pPropertiesWin->GetOutputSizePixel().Height() <
@@ -2797,10 +2786,11 @@ void SfxCmisPropertiesPage::Reset( const SfxItemSet& rItemSet )
     m_pPropertiesCtrl->ClearAllLines();
     const SfxDocumentInfoItem* m_pInfoItem = &(const SfxDocumentInfoItem &)rItemSet.Get(SID_DOCINFO);
     uno::Sequence< document::CmisProperty > aCmisProps = m_pInfoItem->GetCmisProperties();
-    for ( sal_uInt32 i = 0; i < aCmisProps.getLength(); i++ )
+    for ( sal_Int32 i = 0; i < aCmisProps.getLength(); i++ )
     {
         m_pPropertiesCtrl->AddLine( aCmisProps[i].Id,
                                     aCmisProps[i].Name,
+                                    aCmisProps[i].Type,
                                     aCmisProps[i].Updatable,
                                     aCmisProps[i].Required,
                                     aCmisProps[i].MultiValued,
@@ -2822,6 +2812,5 @@ SfxTabPage* SfxCmisPropertiesPage::Create( Window* pParent, const SfxItemSet& rI
 {
     return new SfxCmisPropertiesPage( pParent, rItemSet );
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
