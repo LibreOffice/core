@@ -43,6 +43,11 @@
     [self.client sendCommand:[NSString stringWithFormat:@"goto_slide\n%u\n\n", slide]];
 }
 
+- (void) pointerCoordination:(CGPoint) aPoint
+{
+    [self.client sendCommand:[NSString stringWithFormat:@"pointer_coordination\n%f\n%f\n\n", aPoint.x, aPoint.y]];
+}
+
 
 /**
  * Blank the screen to the default colour (set server-side), which is

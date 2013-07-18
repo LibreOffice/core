@@ -214,6 +214,11 @@
         if (loc.x >= 0 && loc.x <= self.touchPointerImage.frame.size.width
             && loc.y >= self.movingPointer.frame.size.height && loc.y <= self.touchPointerImage.frame.size.height - self.movingPointer.frame.size.height)
         {
+            CGPoint pointerInPercentage;
+            pointerInPercentage.x = loc.x / self.touchPointerImage.frame.size.width;
+            pointerInPercentage.y = loc.y / self.touchPointerImage.frame.size.height;
+            [self.comManager.transmitter pointerCoordination:pointerInPercentage];
+            
             CGPoint p;
             p.x = loc.x + self.touchPointerImage.frame.origin.x;
             p.y = loc.y + self.touchPointerImage.frame.origin.y;

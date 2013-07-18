@@ -27,4 +27,6 @@
 - (void) startPresentation;
 - (void) stopPresentation;
 
+- (void) pointerCoordination:(CGPoint) aPoint;
+
 @end

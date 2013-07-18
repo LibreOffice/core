@@ -59,14 +59,26 @@
         if (self.state != DISCONNECTED) {
             NSLog(@"Connection Failed");
             self.state = DISCONNECTED;
-            dispatch_async(dispatch_get_main_queue(), ^{
-                UIAlertView *message = [[UIAlertView alloc] initWithTitle:@"Failed to reach server"
-                                                                  message:@"Please verify your IP address and make sure that LibreOffice Impress is running with impress remote feature enabled. "
-                                                                 delegate:self
-                                                        cancelButtonTitle:@"OK"
-                                                        otherButtonTitles:@"Help", nil];
-                [message show];
-            });
+            if ([self.delegate isKindOfClass:[server_list_vc class]]){
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    UIAlertView *message = [[UIAlertView alloc] initWithTitle:@"Failed to reach server"
+                                                                      message:@"Please verify your IP address and make sure that LibreOffice Impress is running with impress remote feature enabled. "
+                                                                     delegate:self
+                                                            cancelButtonTitle:@"OK"
+                                                            otherButtonTitles:@"Help", nil];
+                    [message show];
+                });
+            } else {
+                [[self.delegate navigationController] popToRootViewControllerAnimated:YES];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    UIAlertView *message = [[UIAlertView alloc] initWithTitle:@"Connection Lost"
+                                                                      message:@"Oups, connection lost...Please try to reconnect to your computer. "
+                                                                     delegate:nil
+                                                            cancelButtonTitle:@"OK"
+                                                            otherButtonTitles:nil];
+                    [message show];
+                });
+            }
         }
     }
 }
