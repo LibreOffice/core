@@ -119,7 +119,6 @@ namespace framework
         virtual void        Paint( const Rectangle& rRect );
         virtual void        Resize();
         virtual long        Notify( NotifyEvent& rNEvt );
-        virtual void        GetFocus();
 
         virtual Size GetOptimalSize() const;
 

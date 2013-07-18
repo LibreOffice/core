@@ -184,15 +184,6 @@ BackingWindow::~BackingWindow()
     mxPopupMenu.clear();
 }
 
-void BackingWindow::GetFocus()
-{
-    // CRASH
-    //if( IsVisible() )
-    //    mpWriterButton->GrabFocus();
-    Window::GetFocus();
-}
-
-
 IMPL_LINK( BackingWindow, WindowEventListener, VclSimpleEvent*, pEvent )
 {
     VclWindowEvent* pWinEvent = dynamic_cast<VclWindowEvent*>( pEvent );
