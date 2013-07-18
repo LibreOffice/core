@@ -339,8 +339,15 @@ namespace
         {
             if( !mpDamage )
                 return;
-            basegfx::B2IPoint aEnd( rDamagePoint.getX() + 1,
-                                    rDamagePoint.getY() + 1 );
+
+            sal_Int32 nX(rDamagePoint.getX());
+            sal_Int32 nY(rDamagePoint.getY());
+            if (nX < SAL_MAX_INT32)
+                ++nX;
+            if (nY < SAL_MAX_INT32)
+                ++nY;
+
+            basegfx::B2IPoint aEnd( nX, nY );
             damaged( basegfx::B2IBox( rDamagePoint, aEnd ) );
         }
 
