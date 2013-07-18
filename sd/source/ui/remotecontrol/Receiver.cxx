@@ -119,6 +119,15 @@ void Receiver::executeCommand( const std::vector<OString> &aCommand )
             xSlideShowController->blankScreen( aColour );
         }
     }
+    // pointer_coordination
+    // x
+    // y
+    else if (aCommand[0].equals( "pointer_coordination" ))
+    {
+        float x = aCommand[1].toFloat();
+        float y = aCommand[2].toFloat();
+        std::cerr << "("<<x<<","<<y<<")"<< std::endl;
+    }
     else if ( aCommand[0].equals( "presentation_resume" ) )
     {
         if ( xSlideShowController.is() )
