@@ -17,13 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#define DLLIMPLEMENTATION
 #include "testzipimpl.hxx"
 
-vector<string> expectedContents;
-
 TestZipImpl::TestZipImpl(StreamInterface *stream) :
-    zipFile(ZipFile(stream))
+    zipFile(ZipFile(stream)), expectedContents()
 {
     expectedContents.push_back("mimetype");
     expectedContents.push_back("Configurations2/statusbar/");

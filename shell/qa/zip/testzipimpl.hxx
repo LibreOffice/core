@@ -22,20 +22,16 @@
 #include <vector>
 #include <algorithm>
 #include "sal/types.h"
-#if defined(DLLIMPLEMENTATION)
-	#define DLLPUBLIC  SAL_DLLPUBLIC_EXPORT
-#else
-	#define DLLPUBLIC  SAL_DLLPUBLIC_IMPORT
-#endif
 
 using namespace std;
 
-class DLLPUBLIC TestZipImpl
+class TestZipImpl
 {
  private:
     ZipFile zipFile;
+    vector<string> expectedContents;
  public:
-	TestZipImpl(StreamInterface *stream);
+    TestZipImpl(StreamInterface *stream);
     ~TestZipImpl();
     bool test_directory();
     bool test_hasContentCaseInSensitive();

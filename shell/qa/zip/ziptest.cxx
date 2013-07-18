@@ -17,6 +17,16 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#if defined _MSC_VER
+#pragma warning(push, 1)
+#endif
+#include <windows.h>
+#if defined _MSC_VER
+#pragma warning(pop)
+#endif
+#include <ole2.h>
+#include <stdio.h>
+
 #include "cppunit/TestAssert.h"
 #include "cppunit/TestFixture.h"
 #include "cppunit/extensions/HelperMacros.h"
@@ -30,6 +40,7 @@ class Test : public CppUnit::TestFixture
 {
 private:
     string documentName;
+    LPSTREAM pStream;
 public:
     Test();
     void setUp() {}
@@ -37,16 +48,22 @@ public:
     void test_file_directory();
     void test_file_hasContentCaseInSensitive();
     void test_file_getContent();
+    void test_stream_directory();
+    void test_stream_hasContentCaseInSensitive();
+    void test_stream_getContent();
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(test_file_directory);
     CPPUNIT_TEST(test_file_hasContentCaseInSensitive);
     CPPUNIT_TEST(test_file_getContent);
+    CPPUNIT_TEST(test_stream_directory);
+    CPPUNIT_TEST(test_stream_hasContentCaseInSensitive);
+    CPPUNIT_TEST(test_stream_getContent);
     CPPUNIT_TEST_SUITE_END();
 };
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
 
-Test::Test() : documentName()
+Test::Test() : documentName(), pStream(NULL)
 {
     const char* pSrcRoot = getenv( "SRC_ROOT" );
     if (pSrcRoot)
@@ -55,6 +72,20 @@ Test::Test() : documentName()
         documentName.append("/");
     }
     documentName.append("shell/qa/zip/simpledocument.odt");
+
+    // Create an IStream pointer from the file
+    HANDLE hFile = CreateFileA(documentName.c_str(), GENERIC_READ, 0, NULL, OPEN_EXISTING, 0, NULL);
+
+    DWORD dwFileSize = GetFileSize(hFile, NULL);
+    HGLOBAL hGlobal = GlobalAlloc(GMEM_MOVEABLE, dwFileSize);
+
+    LPVOID pvData = GlobalLock(hGlobal);
+    DWORD dwBytesRead = 0;
+    BOOL bRead = ReadFile(hFile, pvData, dwFileSize, &dwBytesRead, NULL);
+    GlobalUnlock(hGlobal);
+    CloseHandle(hFile);
+
+    HRESULT hr = CreateStreamOnHGlobal(hGlobal, TRUE, &pStream);
 }
 
 void Test::test_file_directory()
@@ -62,7 +93,7 @@ void Test::test_file_directory()
     FileStream stream(documentName.c_str());
     TestZipImpl testImpl(&stream);
     bool isPassed = testImpl.test_directory();
-    CPPUNIT_ASSERT_MESSAGE("Content does not match with expected directory names.", isPassed);
+    CPPUNIT_ASSERT_MESSAGE("FileStream: Content does not match with expected directory names.", isPassed);
 }
 
 void Test::test_file_hasContentCaseInSensitive()
@@ -70,7 +101,7 @@ void Test::test_file_hasContentCaseInSensitive()
     FileStream stream(documentName.c_str());
     TestZipImpl testImpl(&stream);
     bool isPassed = testImpl.test_hasContentCaseInSensitive();
-    CPPUNIT_ASSERT_MESSAGE("Content in zip file was not found.", isPassed);
+    CPPUNIT_ASSERT_MESSAGE("FileStream: Content in zip file was not found.", isPassed);
 }
 
 void Test::test_file_getContent()
@@ -78,7 +109,31 @@ void Test::test_file_getContent()
     FileStream stream(documentName.c_str());
     TestZipImpl testImpl(&stream);
     bool isPassed = testImpl.test_getContent();
-    CPPUNIT_ASSERT_MESSAGE("Couldn't receive content buffer form zipfile.", isPassed);
+    CPPUNIT_ASSERT_MESSAGE("FileStream: Couldn't receive content buffer form zipfile.", isPassed);
+}
+
+void Test::test_stream_directory()
+{
+    BufferStream stream(pStream);
+    TestZipImpl testImpl(&stream);
+    bool isPassed = testImpl.test_directory();
+    CPPUNIT_ASSERT_MESSAGE("BufferStream: Content does not match with expected directory names.", isPassed);
+}
+
+void Test::test_stream_hasContentCaseInSensitive()
+{
+    BufferStream stream(pStream);
+    TestZipImpl testImpl(&stream);
+    bool isPassed = testImpl.test_hasContentCaseInSensitive();
+    CPPUNIT_ASSERT_MESSAGE("BufferStream: Content in zip file was not found.", isPassed);
+}
+
+void Test::test_stream_getContent()
+{
+    BufferStream stream(pStream);
+    TestZipImpl testImpl(&stream);
+    bool isPassed = testImpl.test_getContent();
+    CPPUNIT_ASSERT_MESSAGE("BufferStream: Couldn't receive content buffer form zipfile.", isPassed);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

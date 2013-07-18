@@ -26,6 +26,7 @@ $(eval $(call gb_CppunitTest_use_externals,zip,\
 ))
 
 $(eval $(call gb_CppunitTest_use_system_win32_libs,zip, \
+	ole32 \
 	kernel32 \
 	msvcprt \
 ))
