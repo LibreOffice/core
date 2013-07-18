@@ -2229,7 +2229,6 @@ bool ScFormulaCell::UpdateReferenceOnShift(
         // Just in case...
         return false;
 
-    bool bCellStateChanged = false;
     const ScRange& rRange = rCxt.maRange;
     SCCOL nDx = rCxt.mnColDelta;
     SCROW nDy = rCxt.mnRowDelta;
@@ -2247,28 +2246,24 @@ bool ScFormulaCell::UpdateReferenceOnShift(
             xGroup->mnStart += nDy;
     }
 
-    bool bHasRefs = false;
+    // Check presence of any references or column row names.
+    pCode->Reset();
+    bool bHasRefs = (pCode->GetNextReferenceRPN() != NULL);
     bool bHasColRowNames = false;
-    bool bOnRefMove = false;
-    if ( !pDocument->IsClipOrUndo() )
+    if (!bHasRefs)
     {
-        // Check presence of any references or column row names.
         pCode->Reset();
-        bHasRefs = (pCode->GetNextReferenceRPN() != NULL);
-        if (!bHasRefs)
-        {
-            pCode->Reset();
-            bHasColRowNames = (pCode->GetNextColRowName() != NULL);
-            bHasRefs = bHasRefs || bHasColRowNames;
-        }
-        bOnRefMove = pCode->IsRecalcModeOnRefMove();
+        bHasColRowNames = (pCode->GetNextColRowName() != NULL);
+        bHasRefs = bHasRefs || bHasColRowNames;
     }
+    bool bOnRefMove = pCode->IsRecalcModeOnRefMove();
 
     if (!bHasRefs && !bOnRefMove)
         // This formula cell contains no references, nor needs recalculating
         // on reference update. Bail out.
-        return bCellStateChanged;
+        return false;
 
+    bool bCellStateChanged = false;
     boost::scoped_ptr<ScTokenArray> pOldCode;
     if (pUndoDoc)
         pOldCode.reset(pCode->Clone());
@@ -2380,7 +2375,6 @@ bool ScFormulaCell::UpdateReferenceOnMove(
     if (rCxt.meMode != URM_MOVE)
         return false;
 
-    bool bCellStateChanged = false;
     const ScRange& rRange = rCxt.maRange;
     SCCOL nDx = rCxt.mnColDelta;
     SCROW nDy = rCxt.mnRowDelta;
@@ -2402,28 +2396,25 @@ bool ScFormulaCell::UpdateReferenceOnMove(
         aOldPos.Set( nCol - nDx, nRow - nDy, nTab - nDz );
     }
 
-    bool bHasRefs = false;
+
+    // Check presence of any references or column row names.
+    pCode->Reset();
+    bool bHasRefs = (pCode->GetNextReferenceRPN() != NULL);
     bool bHasColRowNames = false;
-    bool bOnRefMove = false;
-    if ( !pDocument->IsClipOrUndo() )
+    if (!bHasRefs)
     {
-        // Check presence of any references or column row names.
         pCode->Reset();
-        bHasRefs = (pCode->GetNextReferenceRPN() != NULL);
-        if (!bHasRefs)
-        {
-            pCode->Reset();
-            bHasColRowNames = (pCode->GetNextColRowName() != NULL);
-            bHasRefs = bHasRefs || bHasColRowNames;
-        }
-        bOnRefMove = pCode->IsRecalcModeOnRefMove();
+        bHasColRowNames = (pCode->GetNextColRowName() != NULL);
+        bHasRefs = bHasRefs || bHasColRowNames;
     }
+    bool bOnRefMove = pCode->IsRecalcModeOnRefMove();
 
     if (!bHasRefs && !bOnRefMove)
         // This formula cell contains no references, nor needs recalculating
         // on reference update. Bail out.
-        return bCellStateChanged;
+        return false;
 
+    bool bCellStateChanged = false;
     boost::scoped_ptr<ScTokenArray> pOldCode;
     if (pUndoDoc)
         pOldCode.reset(pCode->Clone());
@@ -2536,7 +2527,6 @@ bool ScFormulaCell::UpdateReferenceOnCopy(
     if (rCxt.meMode != URM_COPY)
         return false;
 
-    bool bCellStateChanged = false;
     const ScRange& rRange = rCxt.maRange;
     SCCOL nDx = rCxt.mnColDelta;
     SCROW nDy = rCxt.mnRowDelta;
@@ -2558,25 +2548,20 @@ bool ScFormulaCell::UpdateReferenceOnCopy(
         aOldPos.Set( nCol - nDx, nRow - nDy, nTab - nDz );
     }
 
-    bool bHasRefs = false;
-    bool bHasColRowNames = false;
-    bool bOnRefMove = false;
-    if ( !pDocument->IsClipOrUndo() )
-    {
-        // Check presence of any references or column row names.
-        pCode->Reset();
-        bHasRefs = (pCode->GetNextReferenceRPN() != NULL);
-        pCode->Reset();
-        bHasColRowNames = (pCode->GetNextColRowName() != NULL);
-        bHasRefs = bHasRefs || bHasColRowNames;
-        bOnRefMove = pCode->IsRecalcModeOnRefMove();
-    }
+    // Check presence of any references or column row names.
+    pCode->Reset();
+    bool bHasRefs = (pCode->GetNextReferenceRPN() != NULL);
+    pCode->Reset();
+    bool bHasColRowNames = (pCode->GetNextColRowName() != NULL);
+    bHasRefs = bHasRefs || bHasColRowNames;
+    bool bOnRefMove = pCode->IsRecalcModeOnRefMove();
 
     if (!bHasRefs && !bOnRefMove)
         // This formula cell contains no references, nor needs recalculating
         // on reference update. Bail out.
-        return bCellStateChanged;
+        return false;
 
+    bool bCellStateChanged = false;
     boost::scoped_ptr<ScTokenArray> pOldCode;
     if (pUndoDoc)
         pOldCode.reset(pCode->Clone());
@@ -2678,6 +2663,9 @@ bool ScFormulaCell::UpdateReferenceOnCopy(
 bool ScFormulaCell::UpdateReference(
     const sc::RefUpdateContext& rCxt, ScDocument* pUndoDoc, const ScAddress* pUndoCellPos )
 {
+    if (pDocument->IsClipOrUndo())
+        return false;
+
     switch (rCxt.meMode)
     {
         case URM_INSDEL:
