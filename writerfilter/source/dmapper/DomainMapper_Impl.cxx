@@ -2573,6 +2573,53 @@ void DomainMapper_Impl::handleAuthor
 #undef SET_DATE
 }
 
+uno::Sequence< beans::PropertyValues > lcl_createTOXLevelHyperlinks( bool bHyperlinks, OUString sChapterNoSeparator,
+                                   uno::Sequence< beans::PropertyValues >aLevel,
+                                   PropertyNameSupplier& rPropNameSupplier )
+{
+    //create a copy of the level and add two new entries - hyperlink start and end
+    bool bChapterNoSeparator  = !sChapterNoSeparator.isEmpty();
+    sal_Int32 nAdd = (bHyperlinks && bChapterNoSeparator) ? 4 : 2;
+    uno::Sequence< beans::PropertyValues > aNewLevel( aLevel.getLength() + nAdd);
+    beans::PropertyValues* pNewLevel = aNewLevel.getArray();
+    if( bHyperlinks )
+    {
+        beans::PropertyValues aHyperlink(1);
+        aHyperlink[0].Name = rPropNameSupplier.GetName( PROP_TOKEN_TYPE );
+        aHyperlink[0].Value <<= rPropNameSupplier.GetName( PROP_TOKEN_HYPERLINK_START );
+        pNewLevel[0] = aHyperlink;
+        aHyperlink[0].Value <<= rPropNameSupplier.GetName( PROP_TOKEN_HYPERLINK_END );
+        pNewLevel[aNewLevel.getLength() -1] = aHyperlink;
+    }
+    if( bChapterNoSeparator )
+    {
+        beans::PropertyValues aChapterNo(2);
+        aChapterNo[0].Name = rPropNameSupplier.GetName( PROP_TOKEN_TYPE );
+        aChapterNo[0].Value <<= rPropNameSupplier.GetName( PROP_TOKEN_CHAPTER_INFO );
+        aChapterNo[1].Name = rPropNameSupplier.GetName( PROP_CHAPTER_FORMAT );
+        //todo: is ChapterFormat::Number correct?
+        aChapterNo[1].Value <<= (sal_Int16)text::ChapterFormat::NUMBER;
+        pNewLevel[aNewLevel.getLength() - (bHyperlinks ? 4 : 2) ] = aChapterNo;
+
+        beans::PropertyValues aChapterSeparator(2);
+        aChapterSeparator[0].Name = rPropNameSupplier.GetName( PROP_TOKEN_TYPE );
+        aChapterSeparator[0].Value <<= rPropNameSupplier.GetName( PROP_TOKEN_TEXT );
+        aChapterSeparator[1].Name = rPropNameSupplier.GetName( PROP_TEXT );
+        aChapterSeparator[1].Value <<= sChapterNoSeparator;
+        pNewLevel[aNewLevel.getLength() - (bHyperlinks ? 3 : 1)] = aChapterSeparator;
+    }
+    //copy the 'old' entries except the last (page no)
+    for( sal_Int32 nToken = 0; nToken < aLevel.getLength() - 1; ++nToken)
+    {
+        pNewLevel[nToken + 1] = aLevel[nToken];
+    }
+    //copy page no entry (last or last but one depending on bHyperlinks
+    sal_Int32 nPageNo = aNewLevel.getLength() - (bHyperlinks ? 2 : 3);
+    pNewLevel[nPageNo] = aLevel[aLevel.getLength() - 1];
+
+    return aNewLevel;
+}
+
 void DomainMapper_Impl::handleToc
     (FieldContextPtr pContext,
     PropertyNameSupplier& rPropNameSupplier,
@@ -2749,46 +2796,10 @@ void DomainMapper_Impl::handleToc
             {
                 uno::Sequence< beans::PropertyValues > aLevel;
                 xLevelFormats->getByIndex( nLevel ) >>= aLevel;
-                                //create a copy of the level and add two new entries - hyperlink start and end
-                bool bChapterNoSeparator  = !sChapterNoSeparator.isEmpty();
-                sal_Int32 nAdd = (bHyperlinks && bChapterNoSeparator) ? 4 : 2;
-                uno::Sequence< beans::PropertyValues > aNewLevel( aLevel.getLength() + nAdd);
-                beans::PropertyValues* pNewLevel = aNewLevel.getArray();
-                if( bHyperlinks )
-                {
-                    beans::PropertyValues aHyperlink(1);
-                    aHyperlink[0].Name = rPropNameSupplier.GetName( PROP_TOKEN_TYPE );
-                    aHyperlink[0].Value <<= rPropNameSupplier.GetName( PROP_TOKEN_HYPERLINK_START );
-                    pNewLevel[0] = aHyperlink;
-                    aHyperlink[0].Value <<= rPropNameSupplier.GetName( PROP_TOKEN_HYPERLINK_END );
-                    pNewLevel[aNewLevel.getLength() -1] = aHyperlink;
-                }
-                if( bChapterNoSeparator )
-                {
-                    beans::PropertyValues aChapterNo(2);
-                    aChapterNo[0].Name = rPropNameSupplier.GetName( PROP_TOKEN_TYPE );
-                    aChapterNo[0].Value <<= rPropNameSupplier.GetName( PROP_TOKEN_CHAPTER_INFO );
-                    aChapterNo[1].Name = rPropNameSupplier.GetName( PROP_CHAPTER_FORMAT );
-                                    //todo: is ChapterFormat::Number correct?
-                    aChapterNo[1].Value <<= (sal_Int16)text::ChapterFormat::NUMBER;
-                    pNewLevel[aNewLevel.getLength() - (bHyperlinks ? 4 : 2) ] = aChapterNo;
 
-                    beans::PropertyValues aChapterSeparator(2);
-                    aChapterSeparator[0].Name = rPropNameSupplier.GetName( PROP_TOKEN_TYPE );
-                    aChapterSeparator[0].Value <<= rPropNameSupplier.GetName( PROP_TOKEN_TEXT );
-                    aChapterSeparator[1].Name = rPropNameSupplier.GetName( PROP_TEXT );
-                    aChapterSeparator[1].Value <<= sChapterNoSeparator;
-                    pNewLevel[aNewLevel.getLength() - (bHyperlinks ? 3 : 1)] = aChapterSeparator;
-                }
-                                //copy the 'old' entries except the last (page no)
-                for( sal_Int32 nToken = 0; nToken < aLevel.getLength() - 1; ++nToken)
-                {
-                    pNewLevel[nToken + 1] = aLevel[nToken];
-                }
-                                //copy page no entry (last or last but one depending on bHyperlinks
-                sal_Int32 nPageNo = aNewLevel.getLength() - (bHyperlinks ? 2 : 3);
-                pNewLevel[nPageNo] = aLevel[aLevel.getLength() - 1];
-
+                uno::Sequence< beans::PropertyValues > aNewLevel = lcl_createTOXLevelHyperlinks(
+                                                    bHyperlinks, sChapterNoSeparator,
+                                                    aLevel, rPropNameSupplier );
                 xLevelFormats->replaceByIndex( nLevel, uno::makeAny( aNewLevel ) );
             }
         }
@@ -2798,6 +2809,19 @@ void DomainMapper_Impl::handleToc
         if (!sFigureSequence.isEmpty())
             xTOC->setPropertyValue(rPropNameSupplier.GetName(PROP_LABEL_CATEGORY),
                                    uno::makeAny(sFigureSequence));
+
+        if ( bHyperlinks )
+        {
+            uno::Reference< container::XIndexReplace> xLevelFormats;
+            xTOC->getPropertyValue(rPropNameSupplier.GetName(PROP_LEVEL_FORMAT)) >>= xLevelFormats;
+            uno::Sequence< beans::PropertyValues > aLevel;
+            xLevelFormats->getByIndex( 1 ) >>= aLevel;
+
+            uno::Sequence< beans::PropertyValues > aNewLevel = lcl_createTOXLevelHyperlinks(
+                                                bHyperlinks, sChapterNoSeparator,
+                                                aLevel, rPropNameSupplier );
+            xLevelFormats->replaceByIndex( 1, uno::makeAny( aNewLevel ) );
+        }
     }
     pContext->SetTOC( xTOC );
 }
