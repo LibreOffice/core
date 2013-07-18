@@ -168,9 +168,9 @@ uno::Reference< css::media::XPlayerWindow > SAL_CALL VLCPlayer::createPlayerWind
     if (winID != -1)
     {
 #if defined(WIN32) && !defined(UNIX)
-        libvlc_media_player_set_hwnd( mPlayer.get(), winID );
-#else
         //TODO: Not works, will be crashed
+#else
+        libvlc_media_player_set_xwindow( mPlayer.get(), winID );
 #endif
     }
 
