@@ -245,7 +245,7 @@ sal_uInt16 SwTableFormat::GetRepeatHeading() const
 
 void SwTableFormat::RestoreTableProperties(SwTable &table) const
 {
-    SwTableFormat *pFormat = table.GetFrameFormat();
+    SwTableFormat *pFormat = static_cast<SwTableFormat*>(table.GetFrameFormat()->GetRegisteredIn());
     if (!pFormat)
         return;
 
@@ -263,7 +263,7 @@ void SwTableFormat::RestoreTableProperties(SwTable &table) const
 
 void SwTableFormat::StoreTableProperties(const SwTable &table)
 {
-    SwTableFormat *pFormat = table.GetFrameFormat();
+    SwTableFormat *pFormat = static_cast<SwTableFormat*>(table.GetFrameFormat()->GetRegisteredIn());
     if (!pFormat)
         return;
 
