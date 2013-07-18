@@ -139,6 +139,7 @@ public:
                                 FixedText*          refFtDbArea,
                                 const String&       refStrUndefined );
             ~ScNewFilterOptionsMgr();
+    sal_Bool    VerifyPosStr ( const String& rPosStr ) const;
 
 private:
     ScViewData*     pViewData;

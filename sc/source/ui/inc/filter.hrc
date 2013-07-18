@@ -30,15 +30,9 @@
 #define BTN_UNIQUE          1
 #define BTN_CASE            2
 #define BTN_REGEXP          3
-#define BTN_HEADER          4
-#define BTN_COPY_RESULT     5
-#define LB_COPY_AREA        6
-#define ED_COPY_AREA        7
-#define RB_COPY_AREA        8
 #define FL_OPTIONS          9
 #define FT_DBAREA_LABEL     10
 #define FT_DBAREA           11
-#define BTN_DEST_PERS       12
 
 // Filter:
 #define FT_OP               20
@@ -57,13 +51,7 @@
 #define ED_VAL2             33
 #define ED_VAL3             34
 #define FL_CRITERIA         35
-#define FL_SEPARATOR        36
 #define LB_OP3              37
-#define LB_FIELD4           38
-#define LB_COND4            39
-#define ED_VAL4             40
-#define LB_SCROLL           41
-#define LB_OP4              42
 
 // Special filter
 #define STR_COPY_AREA_TO 5054

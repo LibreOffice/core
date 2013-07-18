@@ -503,6 +503,21 @@ void ScNewFilterOptionsMgr::Init()
 }
 
 //----------------------------------------------------------------------------
+
+sal_Bool ScNewFilterOptionsMgr::VerifyPosStr( const String& rPosStr ) const
+{
+    String aPosStr( rPosStr );
+    xub_StrLen nColonPos = aPosStr.Search( ':' );
+
+    if ( STRING_NOTFOUND != nColonPos )
+        aPosStr.Erase( nColonPos );
+
+    sal_uInt16 nResult = ScAddress().Parse( aPosStr, pDoc, pDoc->GetAddressConvention() );
+
+    return ( SCA_VALID == (nResult & SCA_VALID) );
+}
+
+//----------------------------------------------------------------------------
 // Handler:
 
 //----------------------------------------------------------------------------
