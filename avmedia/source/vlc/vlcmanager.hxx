@@ -37,7 +37,7 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::media::XPlayer > SAL_CALL createPlayer( const rtl::OUString& aURL ) throw (::com::sun::star::uno::RuntimeException);
 
     rtl::OUString SAL_CALL getImplementationName() throw (::com::sun::star::uno::RuntimeException);
-    sal_Bool SAL_CALL supportsService( const rtl::OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException);
+    sal_Bool SAL_CALL supportsService( const rtl::OUString& serviceName ) throw (::com::sun::star::uno::RuntimeException);
     ::com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames() throw (::com::sun::star::uno::RuntimeException);
 
 private:
