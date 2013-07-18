@@ -2229,21 +2229,17 @@ bool ScFormulaCell::UpdateReferenceOnShift(
         // Just in case...
         return false;
 
-    const ScRange& rRange = rCxt.maRange;
-    SCCOL nDx = rCxt.mnColDelta;
-    SCROW nDy = rCxt.mnRowDelta;
-    SCTAB nDz = rCxt.mnTabDelta;
     ScAddress aUndoPos( aPos );         // position for undo cell in pUndoDoc
     if ( pUndoCellPos )
         aUndoPos = *pUndoCellPos;
 
-    if (rRange.In(aPos))
+    if (rCxt.maRange.In(aPos))
     {
         // This formula cell itself is being shifted during cell range
         // insertion or deletion. Update its position.
-        aPos.Move(nDx, nDy, nDz);
+        aPos.Move(rCxt.mnColDelta, rCxt.mnRowDelta, rCxt.mnTabDelta);
         if (xGroup && xGroup->mnStart == aPos.Row())
-            xGroup->mnStart += nDy;
+            xGroup->mnStart += rCxt.mnRowDelta;
     }
 
     // Check presence of any references or column row names.
@@ -2278,9 +2274,9 @@ bool ScFormulaCell::UpdateReferenceOnShift(
         // Update cell or range references.
         ScCompiler aComp(pDocument, aPos, *pCode);
         aComp.SetGrammar(pDocument->GetGrammar());
-        pSharedCode = aComp.UpdateReference(URM_INSDEL, aPos, rRange,
-                                         nDx, nDy, nDz,
-                                         bValChanged, bRefSizeChanged);
+        pSharedCode = aComp.UpdateReference(
+            URM_INSDEL, aPos, rCxt.maRange, rCxt.mnColDelta, rCxt.mnRowDelta, rCxt.mnTabDelta,
+            bValChanged, bRefSizeChanged);
         bRangeModified = aComp.HasModifiedRange();
     }
 
@@ -2336,7 +2332,8 @@ bool ScFormulaCell::UpdateReferenceOnShift(
         ScCompiler::MoveRelWrap(*pCode, pDocument, aPos, pSharedCode->GetMaxCol(), pSharedCode->GetMaxRow());
         ScCompiler aComp2(pDocument, aPos, *pCode);
         aComp2.SetGrammar(pDocument->GetGrammar());
-        aComp2.UpdateSharedFormulaReference(URM_INSDEL, aPos, rRange, nDx, nDy, nDz);
+        aComp2.UpdateSharedFormulaReference(
+            URM_INSDEL, aPos, rCxt.maRange, rCxt.mnColDelta, rCxt.mnRowDelta, rCxt.mnTabDelta);
         bValChanged = true;
         bNeedDirty = true;
     }
@@ -2375,25 +2372,18 @@ bool ScFormulaCell::UpdateReferenceOnMove(
     if (rCxt.meMode != URM_MOVE)
         return false;
 
-    const ScRange& rRange = rCxt.maRange;
-    SCCOL nDx = rCxt.mnColDelta;
-    SCROW nDy = rCxt.mnRowDelta;
-    SCTAB nDz = rCxt.mnTabDelta;
-    SCCOL nCol = aPos.Col();
-    SCROW nRow = aPos.Row();
-    SCTAB nTab = aPos.Tab();
     ScAddress aUndoPos( aPos );         // position for undo cell in pUndoDoc
     if ( pUndoCellPos )
         aUndoPos = *pUndoCellPos;
     ScAddress aOldPos( aPos );
 
-    if (rRange.In(aPos))
+    if (rCxt.maRange.In(aPos))
     {
         // The cell is being moved or copied to a new position. I guess the
         // position has been updated prior to this call?  Determine
         // its original position before the move which will be used to adjust
         // relative references later.
-        aOldPos.Set( nCol - nDx, nRow - nDy, nTab - nDz );
+        aOldPos.Set(aPos.Col() - rCxt.mnColDelta, aPos.Row() - rCxt.mnRowDelta, aPos.Tab() - rCxt.mnTabDelta);
     }
 
 
@@ -2429,9 +2419,10 @@ bool ScFormulaCell::UpdateReferenceOnMove(
         // Update cell or range references.
         ScCompiler aComp(pDocument, aPos, *pCode);
         aComp.SetGrammar(pDocument->GetGrammar());
-        pSharedCode = aComp.UpdateReference(URM_MOVE, aOldPos, rRange,
-                                         nDx, nDy, nDz,
-                                         bValChanged, bRefSizeChanged);
+        pSharedCode = aComp.UpdateReference(
+            URM_MOVE, aOldPos, rCxt.maRange,
+            rCxt.mnColDelta, rCxt.mnRowDelta, rCxt.mnTabDelta,
+            bValChanged, bRefSizeChanged);
         bRangeModified = aComp.HasModifiedRange();
     }
 
@@ -2465,7 +2456,7 @@ bool ScFormulaCell::UpdateReferenceOnMove(
             // #i36299# Don't duplicate action during cut&paste / drag&drop
             // on a cell in the range moved, start/end listeners is done
             // via ScDocument::DeleteArea() and ScDocument::CopyFromClip().
-            && !(pDocument->IsInsertingFromOtherDoc() && rRange.In(aPos));
+            && !(pDocument->IsInsertingFromOtherDoc() && rCxt.maRange.In(aPos));
 
         if ( bNewListening )
             EndListeningTo(pDocument, pOldCode.get(), aOldPos);
@@ -2491,8 +2482,8 @@ bool ScFormulaCell::UpdateReferenceOnMove(
         ScCompiler::MoveRelWrap(*pCode, pDocument, aOldPos, pSharedCode->GetMaxCol(), pSharedCode->GetMaxRow());
         ScCompiler aComp2(pDocument, aPos, *pCode);
         aComp2.SetGrammar(pDocument->GetGrammar());
-        aComp2.UpdateSharedFormulaReference(URM_MOVE, aOldPos, rRange,
-            nDx, nDy, nDz );
+        aComp2.UpdateSharedFormulaReference(URM_MOVE, aOldPos, rCxt.maRange,
+            rCxt.mnColDelta, rCxt.mnRowDelta, rCxt.mnTabDelta );
         bValChanged = true;
         bNeedDirty = true;
     }
@@ -2527,25 +2518,18 @@ bool ScFormulaCell::UpdateReferenceOnCopy(
     if (rCxt.meMode != URM_COPY)
         return false;
 
-    const ScRange& rRange = rCxt.maRange;
-    SCCOL nDx = rCxt.mnColDelta;
-    SCROW nDy = rCxt.mnRowDelta;
-    SCTAB nDz = rCxt.mnTabDelta;
-    SCCOL nCol = aPos.Col();
-    SCROW nRow = aPos.Row();
-    SCTAB nTab = aPos.Tab();
     ScAddress aUndoPos( aPos );         // position for undo cell in pUndoDoc
     if ( pUndoCellPos )
         aUndoPos = *pUndoCellPos;
     ScAddress aOldPos( aPos );
 
-    if (rRange.In(aPos))
+    if (rCxt.maRange.In(aPos))
     {
         // The cell is being moved or copied to a new position. I guess the
         // position has been updated prior to this call?  Determine
         // its original position before the move which will be used to adjust
         // relative references later.
-        aOldPos.Set( nCol - nDx, nRow - nDy, nTab - nDz );
+        aOldPos.Set(aPos.Col() - rCxt.mnColDelta, aPos.Row() - rCxt.mnRowDelta, aPos.Tab() - rCxt.mnTabDelta);
     }
 
     // Check presence of any references or column row names.
@@ -2576,9 +2560,9 @@ bool ScFormulaCell::UpdateReferenceOnCopy(
         // Update cell or range references.
         ScCompiler aComp(pDocument, aPos, *pCode);
         aComp.SetGrammar(pDocument->GetGrammar());
-        pSharedCode = aComp.UpdateReference(URM_COPY, aOldPos, rRange,
-                                         nDx, nDy, nDz,
-                                         bValChanged, bRefSizeChanged);
+        pSharedCode = aComp.UpdateReference(
+            URM_COPY, aOldPos, rCxt.maRange, rCxt.mnColDelta, rCxt.mnRowDelta, rCxt.mnTabDelta,
+            bValChanged, bRefSizeChanged);
         bRangeModified = aComp.HasModifiedRange();
     }
 
@@ -2633,7 +2617,8 @@ bool ScFormulaCell::UpdateReferenceOnCopy(
         ScCompiler::MoveRelWrap(*pCode, pDocument, aOldPos, pSharedCode->GetMaxCol(), pSharedCode->GetMaxRow());
         ScCompiler aComp2(pDocument, aPos, *pCode);
         aComp2.SetGrammar(pDocument->GetGrammar());
-        aComp2.UpdateSharedFormulaReference(URM_COPY, aOldPos, rRange, nDx, nDy, nDz);
+        aComp2.UpdateSharedFormulaReference(
+            URM_COPY, aOldPos, rCxt.maRange, rCxt.mnColDelta, rCxt.mnRowDelta, rCxt.mnTabDelta);
         bValChanged = true;
         bNeedDirty = true;
     }
