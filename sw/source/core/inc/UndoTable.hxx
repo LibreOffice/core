@@ -43,6 +43,7 @@ class SwTable;
 class SwTableBox;
 class SwStartNode;
 class SwTableNode;
+class SwTableFmt;
 class SwTableAutoFmt;
 class SwTableSortBoxes;
 
@@ -146,9 +147,7 @@ class SwUndoTblNumFmt;
 class SwUndoTblAutoFmt : public SwUndo
 {
     sal_uLong nSttNode;
-    _SaveTable* pSaveTbl;
-    ::std::vector< ::boost::shared_ptr<SwUndoTblNumFmt> > m_Undos;
-    sal_Bool bSaveCntntAttr;
+    SwTableFmt* pSaveFmt;
     sal_uInt16 m_nRepeatHeading;
 
     void UndoRedo(bool const bUndo, ::sw::UndoRedoContext & rContext);
@@ -160,8 +159,6 @@ public:
 
     virtual void UndoImpl( ::sw::UndoRedoContext & );
     virtual void RedoImpl( ::sw::UndoRedoContext & );
-
-    void SaveBoxCntnt( const SwTableBox& rBox );
 };
 
 class SwUndoTblNdsChg : public SwUndo, private boost::noncopyable

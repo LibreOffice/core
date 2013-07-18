@@ -1410,29 +1410,14 @@ SwUndoTblAutoFmt::SwUndoTblAutoFmt( const SwTableNode& rTblNd,
                                     const SwTableAutoFmt& rAFmt )
     : SwUndo( UNDO_TABLE_AUTOFMT ),
     nSttNode( rTblNd.GetIndex() ),
-    bSaveCntntAttr( sal_False )
-    , m_nRepeatHeading(rTblNd.GetTable().GetRowsToRepeat())
+    m_nRepeatHeading(rTblNd.GetTable().GetRowsToRepeat())
 {
-    pSaveTbl = new _SaveTable( rTblNd.GetTable() );
-
-    if( rAFmt.IsFont() || rAFmt.IsJustify() )
-    {
-        // than also go over the ContentNodes of the EndBoxes and collect
-        // all paragraph attributes
-        pSaveTbl->SaveCntntAttrs( (SwDoc*)rTblNd.GetDoc() );
-        bSaveCntntAttr = sal_True;
-    }
+    pSaveFmt = new SwTableFmt( *rAFmt.GetTableStyle() );
 }
 
 SwUndoTblAutoFmt::~SwUndoTblAutoFmt()
 {
-    delete pSaveTbl;
-}
-
-void SwUndoTblAutoFmt::SaveBoxCntnt( const SwTableBox& rBox )
-{
-    ::boost::shared_ptr<SwUndoTblNumFmt> const p(new SwUndoTblNumFmt(rBox));
-    m_Undos.push_back(p);
+    delete pSaveFmt;
 }
 
 void
@@ -1443,25 +1428,14 @@ SwUndoTblAutoFmt::UndoRedo(bool const bUndo, ::sw::UndoRedoContext & rContext)
     OSL_ENSURE( pTblNd, "no TableNode" );
 
     SwTable& table = pTblNd->GetTable();
-    _SaveTable* pOrig = new _SaveTable( table );
-    // than go also over the ContentNodes of the EndBoxes and collect
-    // all paragraph attributes
-    if( bSaveCntntAttr )
-        pOrig->SaveCntntAttrs( &rDoc );
+    SwTableFmt* pOrig = new SwTableFmt( *(SwTableFmt*)table.GetTableFmt()->GetRegisteredIn() );
 
-    if (bUndo)
-    {
-        for (size_t n = m_Undos.size(); 0 < n; --n)
-        {
-            m_Undos.at(n-1)->UndoImpl(rContext);
-        }
+    if( bUndo )
+        table.SetRowsToRepeat( m_nRepeatHeading );
 
-        table.SetRowsToRepeat(m_nRepeatHeading);
-    }
-
-    pSaveTbl->RestoreAttr( pTblNd->GetTable(), !bUndo );
-    delete pSaveTbl;
-    pSaveTbl = pOrig;
+    pSaveFmt->RestoreTableProperties( table );
+    delete pSaveFmt;
+    pSaveFmt = pOrig;
 }
 
 void SwUndoTblAutoFmt::UndoImpl(::sw::UndoRedoContext & rContext)
