@@ -52,8 +52,6 @@ namespace com { namespace sun { namespace star {
 } } }
 
 struct CustomProperty;
-struct CmisProperty;
-
 
 // class SfxDocumentInfoItem ---------------------------------------------
 
@@ -81,7 +79,7 @@ private:
     sal_Bool                            m_bDeleteUserData;
     sal_Bool                            m_bUseUserData;
     std::vector< CustomProperty* >    m_aCustomProperties;
-    std::vector< CmisProperty* >      m_aCmisProperties;
+    ::com::sun::star::uno::Sequence< ::com::sun::star::document::CmisProperty > m_aCmisProperties;
 
 public:
     TYPEINFO();
@@ -101,7 +99,7 @@ public:
             ::com::sun::star::document::XDocumentProperties> & i_xDocProps,
         bool i_bDoNotUpdateUserDefined = false)
         const;
-    sal_Bool    isCmisDocument() const { return m_aCmisProperties.size() > 0;}
+    sal_Bool    isCmisDocument() const { return m_aCmisProperties.getLength() > 0;}
 
     sal_Bool    isAutoloadEnabled() const { return m_isAutoloadEnabled; }
     void        setAutoloadEnabled(sal_Bool i_val) { m_isAutoloadEnabled = i_val; }
@@ -164,18 +162,10 @@ public:
     void        AddCustomProperty(  const OUString& sName,
                                     const com::sun::star::uno::Any& rValue );
 
-    std::vector< CmisProperty* >  GetCmisProperties() const;
-
     ::com::sun::star::uno::Sequence< ::com::sun::star::document::CmisProperty >
-                        GetCmisPropertiesSeq() const;
+                        GetCmisProperties() const;
 
-    void        ClearCmisProperties();
-    void        AddCmisProperty(  const OUString& sId, const OUString& sName,
-                                  const bool bUpdatable, const bool bRequired,
-                                  const bool bMultiValued, const bool bOpenChoice,
-                                  const com::sun::star::uno::Any& Choices,
-                                  const com::sun::star::uno::Any& rValue );
-
+    void        SetCmisProperties(::com::sun::star::uno::Sequence< ::com::sun::star::document::CmisProperty > cmisProps );
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = NULL ) const;
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
