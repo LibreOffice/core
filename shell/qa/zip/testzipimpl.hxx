@@ -35,7 +35,7 @@ class DLLPUBLIC TestZipImpl
  private:
     ZipFile zipFile;
  public:
-    TestZipImpl(const char * documentName);
+	TestZipImpl(StreamInterface *stream);
     ~TestZipImpl();
     bool test_directory();
     bool test_hasContentCaseInSensitive();

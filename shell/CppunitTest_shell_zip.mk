@@ -10,7 +10,7 @@
 $(eval $(call gb_CppunitTest_CppunitTest,zip))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,zip, \
-    shell/qa/zip/testimpl/testzipimpl \
+    shell/qa/zip/testzipimpl \
     shell/qa/zip/ziptest \
 ))
 
@@ -26,14 +26,8 @@ $(eval $(call gb_CppunitTest_use_externals,zip,\
 ))
 
 $(eval $(call gb_CppunitTest_use_system_win32_libs,zip, \
-	advapi32 \
-	comctl32 \
 	kernel32 \
 	msvcprt \
-	oldnames \
-	ole32 \
-	shell32 \
-	uuid \
 ))
 
 $(eval $(call gb_CppunitTest_use_static_libraries,zip,\

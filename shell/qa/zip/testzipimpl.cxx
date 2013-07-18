@@ -22,8 +22,8 @@
 
 vector<string> expectedContents;
 
-TestZipImpl::TestZipImpl(const char * documentName) :
-    zipFile(ZipFile(string(documentName)))
+TestZipImpl::TestZipImpl(StreamInterface *stream) :
+    zipFile(ZipFile(stream))
 {
     expectedContents.push_back("mimetype");
     expectedContents.push_back("Configurations2/statusbar/");

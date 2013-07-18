@@ -22,7 +22,8 @@
 #include "cppunit/extensions/HelperMacros.h"
 #include "cppunit/plugin/TestPlugIn.h"
 #include <string>
-#include "testimpl/testzipimpl.hxx"
+#include "internal/stream_helper.hxx"
+#include "testzipimpl.hxx"
 using namespace std;
 
 class Test : public CppUnit::TestFixture
@@ -33,13 +34,13 @@ public:
     Test();
     void setUp() {}
     void tearDown() {}
-    void test_directory();
-    void test_hasContentCaseInSensitive();
-    void test_getContent();
+    void test_file_directory();
+    void test_file_hasContentCaseInSensitive();
+    void test_file_getContent();
     CPPUNIT_TEST_SUITE(Test);
-    CPPUNIT_TEST(test_directory);
-    CPPUNIT_TEST(test_hasContentCaseInSensitive);
-    CPPUNIT_TEST(test_getContent);
+    CPPUNIT_TEST(test_file_directory);
+    CPPUNIT_TEST(test_file_hasContentCaseInSensitive);
+    CPPUNIT_TEST(test_file_getContent);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -56,23 +57,26 @@ Test::Test() : documentName()
     documentName.append("shell/qa/zip/simpledocument.odt");
 }
 
-void Test::test_directory()
+void Test::test_file_directory()
 {
-    TestZipImpl testImpl(documentName.c_str());
+    FileStream stream(documentName.c_str());
+    TestZipImpl testImpl(&stream);
     bool isPassed = testImpl.test_directory();
     CPPUNIT_ASSERT_MESSAGE("Content does not match with expected directory names.", isPassed);
 }
 
-void Test::test_hasContentCaseInSensitive()
+void Test::test_file_hasContentCaseInSensitive()
 {
-    TestZipImpl testImpl(documentName.c_str());
+    FileStream stream(documentName.c_str());
+    TestZipImpl testImpl(&stream);
     bool isPassed = testImpl.test_hasContentCaseInSensitive();
     CPPUNIT_ASSERT_MESSAGE("Content in zip file was not found.", isPassed);
 }
 
-void Test::test_getContent()
+void Test::test_file_getContent()
 {
-    TestZipImpl testImpl(documentName.c_str());
+    FileStream stream(documentName.c_str());
+    TestZipImpl testImpl(&stream);
     bool isPassed = testImpl.test_getContent();
     CPPUNIT_ASSERT_MESSAGE("Couldn't receive content buffer form zipfile.", isPassed);
 }
