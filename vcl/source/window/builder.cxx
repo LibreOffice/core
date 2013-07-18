@@ -732,6 +732,8 @@ namespace
     {
         WinBits nBits = WB_CENTER|WB_VCENTER|WB_3DLOOK;
 
+        nBits |= extractRelief(rMap);
+
         Button *pWindow = new MenuButton(pParent, nBits);
 
         if (extractStock(rMap))
