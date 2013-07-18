@@ -110,7 +110,8 @@ void OResultSet::ensureDataAvailable() throw (SQLException)
         {
             m_rowCount++;
 
-            m_sqlData.emplace_back(m_fieldCount);
+            TRow aRow(m_fieldCount);
+            m_sqlData.push_back(aRow);
             TRow& rRow = m_sqlData.back();
 
             XSQLVAR* pVar = m_pSqlda->sqlvar;
