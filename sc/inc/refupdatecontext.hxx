@@ -49,6 +49,7 @@ struct RefUpdateResult
     bool mbRangeSizeModified;
 
     RefUpdateResult();
+    RefUpdateResult(const RefUpdateResult& r);
 };
 
 }

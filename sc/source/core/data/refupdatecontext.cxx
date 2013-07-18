@@ -20,6 +20,8 @@ bool RefUpdateContext::hasDelta() const
 }
 
 RefUpdateResult::RefUpdateResult() : mbValueChanged(false), mbRangeSizeModified(false) {}
+RefUpdateResult::RefUpdateResult(const RefUpdateResult& r) :
+    mbValueChanged(r.mbValueChanged), mbRangeSizeModified(r.mbRangeSizeModified) {}
 
 }
 

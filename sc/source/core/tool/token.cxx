@@ -2250,6 +2250,12 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnShift( const sc::RefUpdateCon
 
                 if (rCxt.maRange.In(aAbs))
                     aAbs.Move(rCxt.mnColDelta, rCxt.mnRowDelta, rCxt.mnTabDelta);
+                else if (rCxt.maRange.Intersects(aAbs))
+                {
+                    // Part of the referenced range is being shifted. This
+                    // will change the values of the range.
+                    aRes.mbValueChanged = true;
+                }
 
                 rRef.SetRange(aAbs, aNewPos);
             }
