@@ -60,15 +60,6 @@ ifeq (DBCONNECTIVITY,$(filter DBCONNECTIVITY,$(BUILD_TYPE)))
 postprocess_FILES_calc += \
 	$(postprocess_MOD)/org/openoffice/Office/DataAccess/Drivers-calc.xcu
 postprocess_DRIVERS += calc
-ifeq (WNT,$(OS))
-ifeq ($(WITH_MOZAB4WIN),YES)
-postprocess_FILES_main += $(postprocess_MOD)/org/openoffice/Office/DataAccess/Drivers-mozab.xcu
-postprocess_DRIVERS += mozab
-endif
-else ifeq (DESKTOP,$(filter DESKTOP,$(BUILD_TYPE)))
-postprocess_FILES_main += $(postprocess_MOD)/org/openoffice/Office/DataAccess/Drivers-mork.xcu
-postprocess_DRIVERS += mork
-endif
 endif
 
 postprocess_DEPS_cjk := main
@@ -291,6 +282,15 @@ postprocess_FILES_main += \
 	$(postprocess_MOD)/org/openoffice/Office/DataAccess/Drivers-mysql.xcu \
 	$(postprocess_MOD)/org/openoffice/Office/DataAccess/Drivers-odbc.xcu
 postprocess_DRIVERS += dbase flat mysql odbc
+ifeq (WNT,$(OS))
+ifeq ($(WITH_MOZAB4WIN),YES)
+postprocess_FILES_main += $(postprocess_MOD)/org/openoffice/Office/DataAccess/Drivers-mozab.xcu
+postprocess_DRIVERS += mozab
+endif
+else ifeq (DESKTOP,$(filter DESKTOP,$(BUILD_TYPE)))
+postprocess_FILES_main += $(postprocess_MOD)/org/openoffice/Office/DataAccess/Drivers-mork.xcu
+postprocess_DRIVERS += mork
+endif
 endif
 ifeq (MACOSX,$(OS))
 postprocess_FILES_main += \
