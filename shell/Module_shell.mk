@@ -72,6 +72,10 @@ $(eval $(call gb_Module_add_targets,shell,\
 	StaticLibrary_xmlparser \
 	WinResTarget_shlxthdl \
 ))
+
+$(eval $(call gb_Module_add_check_targets,shell,\
+    CppunitTest_shell_zip \
+))
 endif
 
 ifeq ($(BUILD_X64),TRUE)
