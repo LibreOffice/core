@@ -248,8 +248,8 @@ void BackingWindow::initBackground()
     Size aMiddleSize;
     if( !! maBackgroundMiddle )
         aMiddleSize = maBackgroundMiddle.GetSizePixel();
-    // load middle segment
 
+    // load middle segment
     Application::LoadBrandBitmap ("shell/backing_space", maBackgroundMiddle);
 
     // and scale it to previous size
