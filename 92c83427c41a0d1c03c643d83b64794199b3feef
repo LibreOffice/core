@@ -16,6 +16,23 @@
       "revId": "92c83427c41a0d1c03c643d83b64794199b3feef",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//+cI\u003d",
+        "filename": "xmloff/source/core/xmlexp.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 844,
+      "author": {
+        "id": 1000107
+      },
+      "writtenOn": "2013-07-18T18:00:13Z",
+      "side": 1,
+      "message": "Use \u003c\u003c.\n SAL_INFO( \"xmloff.core\" \u003c\u003c aUrl.getStr() );",
+      "revId": "92c83427c41a0d1c03c643d83b64794199b3feef",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
