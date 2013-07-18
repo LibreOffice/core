@@ -37,6 +37,7 @@
 #include "rangeseq.hxx"
 #include "externalrefmgr.hxx"
 #include "document.hxx"
+#include "refupdatecontext.hxx"
 
 using ::std::vector;
 
@@ -2214,6 +2215,51 @@ void ScTokenArray::AdjustAbsoluteRefs( const ScDocument* pOldDoc, const ScAddres
             }
         }
     }
+}
+
+sc::RefUpdateResult ScTokenArray::AdjustReferenceOnShift( const sc::RefUpdateContext& rCxt, const ScAddress& rOldPos )
+{
+    sc::RefUpdateResult aRes;
+    ScAddress aNewPos = rOldPos;
+    bool bCellShifted = rCxt.maRange.In(rOldPos);
+    if (bCellShifted)
+        aNewPos.Move(rCxt.mnColDelta, rCxt.mnRowDelta, rCxt.mnTabDelta);
+
+    FormulaToken** p = pCode;
+    FormulaToken** pEnd = p + static_cast<size_t>(nLen);
+    for (; p != pEnd; ++p)
+    {
+        ScToken* pToken = static_cast<ScToken*>(*p);
+        switch (pToken->GetType())
+        {
+            case svSingleRef:
+            {
+                ScSingleRefData& rRef = pToken->GetSingleRef();
+                ScAddress aAbs = rRef.toAbs(rOldPos);
+
+                if (rCxt.maRange.In(aAbs))
+                    aAbs.Move(rCxt.mnColDelta, rCxt.mnRowDelta, rCxt.mnTabDelta);
+
+                rRef.SetAddress(aAbs, aNewPos);
+            }
+            break;
+            case svDoubleRef:
+            {
+                ScComplexRefData& rRef = pToken->GetDoubleRef();
+                ScRange aAbs = rRef.toAbs(rOldPos);
+
+                if (rCxt.maRange.In(aAbs))
+                    aAbs.Move(rCxt.mnColDelta, rCxt.mnRowDelta, rCxt.mnTabDelta);
+
+                rRef.SetRange(aAbs, aNewPos);
+            }
+            break;
+            default:
+                ;
+        }
+    }
+
+    return aRes;
 }
 
 #if DEBUG_FORMULA_COMPILER

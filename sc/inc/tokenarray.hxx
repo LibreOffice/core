@@ -27,6 +27,13 @@
 #include "calcmacros.hxx"
 #include <formula/tokenarray.hxx>
 
+namespace sc {
+
+struct RefUpdateContext;
+struct RefUpdateResult;
+
+}
+
 struct ScRawToken;
 struct ScSingleRefData;
 struct ScComplexRefData;
@@ -112,6 +119,15 @@ public:
      * @param bCheckCopyArea should references pointing into the copy area be adjusted independently from being absolute, should be true only for copy&paste between documents
      */
     void AdjustAbsoluteRefs( const ScDocument* pOldDoc, const ScAddress& rOldPos, const ScAddress& rNewPos, bool bRangeName = false, bool bCheckCopyArea = false );
+
+    /**
+     * Adjust all references in response to shifting of cells during cell
+     * insertion and deletion.
+     *
+     * @param rCxt context that stores details of shifted region.
+     * @param rOldPos old cell position prior to shifting.
+     */
+    sc::RefUpdateResult AdjustReferenceOnShift( const sc::RefUpdateContext& rCxt, const ScAddress& rOldPos );
 
 #if DEBUG_FORMULA_COMPILER
     void Dump() const;

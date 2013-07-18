@@ -43,6 +43,14 @@ struct RefUpdateContext
     bool hasDelta() const;
 };
 
+struct RefUpdateResult
+{
+    bool mbValueChanged;
+    bool mbRangeSizeModified;
+
+    RefUpdateResult();
+};
+
 }
 
 #endif

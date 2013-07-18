@@ -19,6 +19,8 @@ bool RefUpdateContext::hasDelta() const
     return (mnColDelta > 0 || mnRowDelta > 0 || mnTabDelta > 0);
 }
 
+RefUpdateResult::RefUpdateResult() : mbValueChanged(false), mbRangeSizeModified(false) {}
+
 }
 
 

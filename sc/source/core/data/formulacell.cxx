@@ -1852,7 +1852,6 @@ bool ScFormulaCell::GetMatrixOrigin( ScAddress& rPos ) const
         }
         break;
     }
-    fprintf(stdout, "ScFormulaCell::GetMatrixOrigin:   failed\n");
     return false;
 }
 
@@ -2274,12 +2273,9 @@ bool ScFormulaCell::UpdateReferenceOnShift(
     if (bHasRefs)
     {
         // Update cell or range references.
-        ScCompiler aComp(pDocument, aPos, *pCode);
-        aComp.SetGrammar(pDocument->GetGrammar());
-        aComp.UpdateReference(
-            URM_INSDEL, aOldPos, rCxt.maRange, rCxt.mnColDelta, rCxt.mnRowDelta, rCxt.mnTabDelta,
-            bValChanged, bRefSizeChanged);
-        bRangeModified = aComp.HasModifiedRange();
+        sc::RefUpdateResult aRes = pCode->AdjustReferenceOnShift(rCxt, aOldPos);
+        bRangeModified = aRes.mbRangeSizeModified;
+        bValChanged = aRes.mbValueChanged;
     }
 
     bCellStateChanged |= bValChanged;
