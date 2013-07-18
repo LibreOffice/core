@@ -53,6 +53,8 @@ SFX_IMPL_MODELESSDIALOG_WITHID(ScSimpleRefDlgWrapper, WID_SIMPLE_REF )
 
 SFX_IMPL_MODELESSDIALOG_WITHID(ScRandomNumberGeneratorDialogWrapper, SID_OPENDLG_RANDOM_NUMBER_GENERATOR )
 SFX_IMPL_MODELESSDIALOG_WITHID(ScSamplingDialogWrapper, SID_SAMPLING_DIALOG )
+SFX_IMPL_MODELESSDIALOG_WITHID(ScDescriptiveStatisticsDialogWrapper, SID_DESCRIPTIVE_STATISTICS_DIALOG )
+
 
 SFX_IMPL_CHILDWINDOW_WITHID(ScValidityRefChildWin, SID_VALIDITY_REFERENCE)
 
@@ -131,6 +133,9 @@ IMPL_CHILD_CTOR( ScFormulaDlgWrapper, SID_OPENDLG_FUNCTION )
 IMPL_CHILD_CTOR( ScRandomNumberGeneratorDialogWrapper, SID_OPENDLG_RANDOM_NUMBER_GENERATOR )
 
 IMPL_CHILD_CTOR( ScSamplingDialogWrapper, SID_SAMPLING_DIALOG )
+
+IMPL_CHILD_CTOR( ScDescriptiveStatisticsDialogWrapper, SID_DESCRIPTIVE_STATISTICS_DIALOG )
+
 
 //-------------------------------------------------------------------------
 // ScSimpleRefDlgWrapper

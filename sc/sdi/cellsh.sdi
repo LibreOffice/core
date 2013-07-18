@@ -149,6 +149,7 @@ interface CellSelection
     FID_FILL_AUTO       [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
     SID_OPENDLG_RANDOM_NUMBER_GENERATOR [ ExecMethod = ExecuteEdit; StateMethod = GetBlockState; ]
     SID_SAMPLING_DIALOG                 [ ExecMethod = ExecuteEdit; StateMethod = GetBlockState; ]
+    SID_DESCRIPTIVE_STATISTICS_DIALOG   [ ExecMethod = ExecuteEdit; StateMethod = GetBlockState; ]
     SID_MARKDATAAREA    [ ExecMethod = ExecuteMove; StateMethod = GetStateCursor; ]
     SID_MARKARRAYFORMULA [ ExecMethod = ExecuteMove; StateMethod = GetStateCursor; ]
     SID_SETINPUTMODE    [ ExecMethod = ExecuteMove; StateMethod = GetStateCursor; ]

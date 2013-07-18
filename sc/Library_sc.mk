@@ -475,6 +475,7 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
 	sc/source/ui/sidebar/ScPanelFactory \
 	sc/source/ui/StatisticsDialogs/RandomNumberGeneratorDialog \
 	sc/source/ui/StatisticsDialogs/SamplingDialog \
+	sc/source/ui/StatisticsDialogs/DescriptiveStatisticsDialog \
 	sc/source/ui/undo/areasave \
 	sc/source/ui/undo/refundo \
 	sc/source/ui/undo/target \

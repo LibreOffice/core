@@ -173,6 +173,7 @@ void ScCellShell::GetBlockState( SfxItemSet& rSet )
             case FID_FILL_SERIES:       // fill block
             case SID_OPENDLG_RANDOM_NUMBER_GENERATOR:
             case SID_SAMPLING_DIALOG:
+            case SID_DESCRIPTIVE_STATISTICS_DIALOG:
             case SID_OPENDLG_TABOP:     // multiple-cell operations, are at least 2 cells marked?
                 if (pDoc->GetChangeTrack()!=NULL &&nWhich ==SID_OPENDLG_TABOP)
                     bDisable = sal_True;

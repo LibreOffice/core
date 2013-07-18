@@ -63,6 +63,7 @@
 
 #include "RandomNumberGeneratorDialog.hxx"
 #include "SamplingDialog.hxx"
+#include "DescriptiveStatisticsDialog.hxx"
 
 //------------------------------------------------------------------
 
@@ -325,6 +326,13 @@ SfxModelessDialog* ScTabViewShell::CreateRefDialog(
         {
             ScViewData*  pViewData  = GetViewData();
             pResult = new ScSamplingDialog( pB, pCW, pParent, pViewData );
+        }
+        break;
+
+        case SID_DESCRIPTIVE_STATISTICS_DIALOG:
+        {
+            ScViewData*  pViewData  = GetViewData();
+            pResult = new ScDescriptiveStatisticsDialog( pB, pCW, pParent, pViewData );
         }
         break;
 

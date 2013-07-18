@@ -921,6 +921,16 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 pScMod->SetRefDialog( nId, pWnd ? false : sal_True );
             }
             break;
+        case SID_DESCRIPTIVE_STATISTICS_DIALOG:
+            {
+                sal_uInt16 nId  = ScDescriptiveStatisticsDialogWrapper::GetChildWindowId();
+                SfxViewFrame* pViewFrm = pTabViewShell->GetViewFrame();
+                SfxChildWindow* pWnd = pViewFrm->GetChildWindow( nId );
+
+                pScMod->SetRefDialog( nId, pWnd ? false : sal_True );
+            }
+            break;
+
         //
         //  disposal (Outlines)
         //  SID_AUTO_OUTLINE, SID_OUTLINE_DELETEALL in Execute (in docsh.idl)

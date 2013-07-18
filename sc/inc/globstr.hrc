@@ -704,7 +704,24 @@
 #define STR_RNG_PARAMETER_STANDARD_NUMBER_OF_TRIALS 571
 #define STR_RNG_PARAMETER_STANDARD_NU_VALUE         572
 
-#define STR_SAMPLING_UNDO_NAME                      573
+#define STR_SAMPLING_UNDO_NAME  573
+
+#define SID_CALC_MEAN           574
+#define SID_CALC_STD_ERROR      575
+#define SID_CALC_MODE           576
+#define SID_CALC_MEDIAN         577
+#define SID_CALC_VARIANCE       578
+#define SID_CALC_STD_DEVIATION  579
+#define SID_CALC_KURTOSIS       580
+#define SID_CALC_SKEWNESS       581
+#define SID_CALC_RANGE          582
+#define SID_CALC_MIN            583
+#define SID_CALC_MAX            584
+#define SID_CALC_SUM            585
+#define SID_CALC_COUNT          586
+
+#define STR_DESCRIPTIVE_STATISTICS_UNDO_NAME  587
+
 
 #endif
 

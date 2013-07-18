@@ -477,6 +477,7 @@
             <menu:menu menu:id=".uno:StatisticsMenu">
                 <menu:menupopup>
                     <menu:menuitem menu:id=".uno:SamplingDialog"/>
+                    <menu:menuitem menu:id=".uno:DescriptiveStatisticsDialog"/>
                 </menu:menupopup>
             </menu:menu>
         </menu:menupopup>

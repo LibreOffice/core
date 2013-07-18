@@ -645,6 +645,14 @@
           <value>1</value>
         </prop>
       </node>
+      <node oor:name=".uno:DescriptiveStatisticsDialog" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">~Descriptive Statistics...</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+      </node>
       <node oor:name=".uno:EditHeaderAndFooter" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">~Headers &amp; Footers...</value>

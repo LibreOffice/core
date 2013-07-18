@@ -1,0 +1,92 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#include "globstr.hrc"
+
+String STR_DESCRIPTIVE_STATISTICS_UNDO_NAME
+{
+    Text [ en-US ] = "Descriptive Statistics";
+};
+
+String SID_CALC_MEAN
+{
+    Text [ en-US ] = "Mean";
+};
+
+String SID_CALC_STD_ERROR
+{
+    Text [ en-US ] = "Standard Error";
+};
+
+String SID_CALC_MODE
+{
+    Text [ en-US ] = "Mode";
+};
+
+String SID_CALC_MEDIAN
+{
+    Text [ en-US ] = "Median";
+};
+
+String SID_CALC_VARIANCE
+{
+    Text [ en-US ] = "Variance";
+};
+
+String SID_CALC_STD_DEVIATION
+{
+    Text [ en-US ] = "Standard Deviation";
+};
+
+String SID_CALC_KURTOSIS
+{
+    Text [ en-US ] = "Kurtosis";
+};
+
+String SID_CALC_SKEWNESS
+{
+    Text [ en-US ] = "Skewness";
+};
+
+String SID_CALC_RANGE
+{
+    Text [ en-US ] = "Range";
+};
+
+String SID_CALC_MIN
+{
+    Text [ en-US ] = "Minimum";
+};
+
+String SID_CALC_MAX
+{
+    Text [ en-US ] = "Maximum";
+};
+
+String SID_CALC_SUM
+{
+    Text [ en-US ] = "Sum";
+};
+
+String SID_CALC_COUNT
+{
+    Text [ en-US ] = "Count";
+};
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
