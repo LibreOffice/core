@@ -58,7 +58,7 @@ namespace connectivity
     namespace firebird
     {
 
-        typedef std::vector< OUString> TRow;
+        typedef std::vector< OString> TRow;
         typedef std::vector< TRow> TTable;
 
         /*
@@ -96,10 +96,13 @@ namespace connectivity
             sal_Int32                                   m_currentRow;
             sal_Int32                                   m_rowCount;
             const sal_Int32                             m_fieldCount;
-            TTable                                      m_sqldata;
+            TTable                                      m_sqlData;
             ISC_STATUS_ARRAY                            m_statusVector;
 
-            void ensureDataAvailable() throw (::com::sun::star::sdbc::SQLException);
+            void ensureDataAvailable()
+                throw (::com::sun::star::sdbc::SQLException);
+            const OString& getSqlData(sal_Int32 aRow, sal_Int32 aColumn)
+                throw (::com::sun::star::sdbc::SQLException);
 
             // OPropertyArrayUsageHelper
             virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const;
