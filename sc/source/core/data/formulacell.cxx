@@ -2202,6 +2202,24 @@ bool checkCompileColRowName(
     return false;
 }
 
+void setOldCodeToUndo(
+    ScDocument* pUndoDoc, const ScAddress& aUndoPos, ScTokenArray* pOldCode, FormulaGrammar::Grammar eTempGrammar, sal_uInt8 cMatrixFlag)
+{
+    // Copy the cell to aUndoPos, which is its current position in the document,
+    // so this works when UpdateReference is called before moving the cells
+    // (InsertCells/DeleteCells - aPos is changed above) as well as when UpdateReference
+    // is called after moving the cells (MoveBlock/PasteFromClip - aOldPos is changed).
+
+    // If there is already a formula cell in the undo document, don't overwrite it,
+    // the first (oldest) is the important cell.
+    if (pUndoDoc->GetCellType(aUndoPos) == CELLTYPE_FORMULA)
+        return;
+
+    ScFormulaCell* pFCell = new ScFormulaCell(pUndoDoc, aUndoPos, pOldCode, eTempGrammar, cMatrixFlag);
+    pFCell->SetResultToken(NULL);  // to recognize it as changed later (Cut/Paste!)
+    pUndoDoc->SetFormulaCell(aUndoPos, pFCell);
+}
+
 }
 
 bool ScFormulaCell::UpdateReferenceOnShift(
@@ -2313,22 +2331,7 @@ bool ScFormulaCell::UpdateReferenceOnShift(
         bNeedDirty = true;
 
     if (pUndoDoc && (bValChanged || pSharedCode || bOnRefMove))
-    {
-        // Copy the cell to aUndoPos, which is its current position in the document,
-        // so this works when UpdateReference is called before moving the cells
-        // (InsertCells/DeleteCells - aPos is changed above) as well as when UpdateReference
-        // is called after moving the cells (MoveBlock/PasteFromClip - aOldPos is changed).
-
-        // If there is already a formula cell in the undo document, don't overwrite it,
-        // the first (oldest) is the important cell.
-        if ( pUndoDoc->GetCellType( aUndoPos ) != CELLTYPE_FORMULA )
-        {
-            ScFormulaCell* pFCell = new ScFormulaCell( pUndoDoc, aUndoPos,
-                    pOldCode.get(), eTempGrammar, cMatrixFlag );
-            pFCell->aResult.SetToken( NULL);  // to recognize it as changed later (Cut/Paste!)
-            pUndoDoc->SetFormulaCell(aUndoPos, pFCell);
-        }
-    }
+        setOldCodeToUndo(pUndoDoc, aUndoPos, pOldCode.get(), eTempGrammar, cMatrixFlag);
 
     bValChanged = false;
 
@@ -2487,22 +2490,7 @@ bool ScFormulaCell::UpdateReferenceOnMove(
         bNeedDirty = true;
 
     if (pUndoDoc && (bValChanged || pSharedCode || bOnRefMove))
-    {
-        // Copy the cell to aUndoPos, which is its current position in the document,
-        // so this works when UpdateReference is called before moving the cells
-        // (InsertCells/DeleteCells - aPos is changed above) as well as when UpdateReference
-        // is called after moving the cells (MoveBlock/PasteFromClip - aOldPos is changed).
-
-        // If there is already a formula cell in the undo document, don't overwrite it,
-        // the first (oldest) is the important cell.
-        if ( pUndoDoc->GetCellType( aUndoPos ) != CELLTYPE_FORMULA )
-        {
-            ScFormulaCell* pFCell = new ScFormulaCell( pUndoDoc, aUndoPos,
-                    pOldCode.get(), eTempGrammar, cMatrixFlag );
-            pFCell->aResult.SetToken( NULL);  // to recognize it as changed later (Cut/Paste!)
-            pUndoDoc->SetFormulaCell(aUndoPos, pFCell);
-        }
-    }
+        setOldCodeToUndo(pUndoDoc, aUndoPos, pOldCode.get(), eTempGrammar, cMatrixFlag);
 
     bValChanged = false;
 
@@ -2650,22 +2638,7 @@ bool ScFormulaCell::UpdateReferenceOnCopy(
         bNeedDirty = true;
 
     if (pUndoDoc && (bValChanged || pSharedCode || bOnRefMove))
-    {
-        // Copy the cell to aUndoPos, which is its current position in the document,
-        // so this works when UpdateReference is called before moving the cells
-        // (InsertCells/DeleteCells - aPos is changed above) as well as when UpdateReference
-        // is called after moving the cells (MoveBlock/PasteFromClip - aOldPos is changed).
-
-        // If there is already a formula cell in the undo document, don't overwrite it,
-        // the first (oldest) is the important cell.
-        if ( pUndoDoc->GetCellType( aUndoPos ) != CELLTYPE_FORMULA )
-        {
-            ScFormulaCell* pFCell = new ScFormulaCell( pUndoDoc, aUndoPos,
-                    pOldCode.get(), eTempGrammar, cMatrixFlag );
-            pFCell->aResult.SetToken( NULL);  // to recognize it as changed later (Cut/Paste!)
-            pUndoDoc->SetFormulaCell(aUndoPos, pFCell);
-        }
-    }
+        setOldCodeToUndo(pUndoDoc, aUndoPos, pOldCode.get(), eTempGrammar, cMatrixFlag);
 
     bValChanged = false;
 
