@@ -29,10 +29,9 @@
 
 #include "DescriptiveStatisticsDialog.hxx"
 
-#define ABS_DREF3D SCA_VALID | SCA_COL_ABSOLUTE | SCA_ROW_ABSOLUTE | SCA_TAB_ABSOLUTE | SCA_COL2_ABSOLUTE | SCA_ROW2_ABSOLUTE | SCA_TAB2_ABSOLUTE | SCA_TAB_3D
-
 namespace
 {
+
 struct StatisticCalculation {
     const sal_Int16 aCalculationNameId;
     const char*     aFormula;
@@ -59,29 +58,31 @@ static const StatisticCalculation lclCalcDefinitions[] =
 }
 
 ScDescriptiveStatisticsDialog::ScDescriptiveStatisticsDialog(
-        SfxBindings* pB, SfxChildWindow* pCW, Window* pParent, ScViewData* pViewData ) :
-    ScAnyRefDlg     ( pB, pCW, pParent, "DescriptiveStatisticsDialog", "modules/scalc/ui/descriptivestatisticsdialog.ui" ),
+                    SfxBindings* pSfxBindings, SfxChildWindow* pChildWindow,
+                    Window* pParent, ScViewData* pViewData ) :
+    ScAnyRefDlg     ( pSfxBindings, pChildWindow, pParent,
+                      "DescriptiveStatisticsDialog", "modules/scalc/ui/descriptivestatisticsdialog.ui" ),
     mViewData       ( pViewData ),
     mDocument       ( pViewData->GetDocument() ),
     mAddressDetails ( mDocument->GetAddressConvention(), 0, 0 ),
     mCurrentAddress ( pViewData->GetCurX(), pViewData->GetCurY(), pViewData->GetTabNo() ),
     mDialogLostFocus( false )
 {
-    get(mpInputRangeLabel, "input-range-label");
-    get(mpInputRangeEdit, "input-range-edit");
-    mpInputRangeEdit->SetReferences(this, mpInputRangeLabel);
+    get(mpInputRangeLabel,  "input-range-label");
+    get(mpInputRangeEdit,   "input-range-edit");
     get(mpInputRangeButton, "input-range-button");
+    mpInputRangeEdit->SetReferences(this, mpInputRangeLabel);
     mpInputRangeButton->SetReferences(this, mpInputRangeEdit);
 
-    get(mpOutputRangeLabel, "output-range-label");
-    get(mpOutputRangeEdit, "output-range-edit");
-    mpOutputRangeEdit->SetReferences(this, mpOutputRangeLabel);
+    get(mpOutputRangeLabel,  "output-range-label");
+    get(mpOutputRangeEdit,   "output-range-edit");
     get(mpOutputRangeButton, "output-range-button");
+    mpOutputRangeEdit->SetReferences(this, mpOutputRangeLabel);
     mpOutputRangeButton->SetReferences(this, mpOutputRangeEdit);
 
     get(mpButtonOk,     "ok");
     get(mpButtonApply,  "apply");
-    get(mpButtonCancel, "cancel");
+    get(mpButtonClose,  "close");
 
     Init();
     GetRangeFromSelection();
@@ -90,7 +91,7 @@ ScDescriptiveStatisticsDialog::ScDescriptiveStatisticsDialog(
 void ScDescriptiveStatisticsDialog::Init()
 {
     mpButtonOk->SetClickHdl( LINK( this, ScDescriptiveStatisticsDialog, OkClicked ) );
-    mpButtonCancel->SetClickHdl( LINK( this, ScDescriptiveStatisticsDialog, CancelClicked ) );
+    mpButtonClose->SetClickHdl( LINK( this, ScDescriptiveStatisticsDialog, CloseClicked ) );
     mpButtonApply->SetClickHdl( LINK( this, ScDescriptiveStatisticsDialog, ApplyClicked ) );
     mpButtonOk->Enable(false);
     mpButtonApply->Enable(false);
@@ -114,7 +115,7 @@ void ScDescriptiveStatisticsDialog::GetRangeFromSelection()
 {
     OUString aCurrentString;
     mViewData->GetSimpleArea(mInputRange);
-    mInputRange.Format(aCurrentString, ABS_DREF3D, mDocument, mAddressDetails);
+    mInputRange.Format(aCurrentString, SCR_ABS_3D, mDocument, mAddressDetails);
     mpInputRangeEdit->SetText(aCurrentString);
 }
 
@@ -153,7 +154,7 @@ void ScDescriptiveStatisticsDialog::SetReference( const ScRange& rReferenceRange
         if ( mpActiveEdit == mpInputRangeEdit )
         {
             mInputRange = rReferenceRange;
-            mInputRange.Format( aReferenceString, ABS_DREF3D, pDocument, mAddressDetails );
+            mInputRange.Format( aReferenceString, SCR_ABS_3D, pDocument, mAddressDetails );
             mpInputRangeEdit->SetRefString( aReferenceString );
         }
         else if ( mpActiveEdit == mpOutputRangeEdit )
@@ -235,7 +236,7 @@ void ScDescriptiveStatisticsDialog::ApplyCalculationsFormulas( )
 IMPL_LINK( ScDescriptiveStatisticsDialog, OkClicked, PushButton*, /*pButton*/ )
 {
     ApplyClicked(NULL);
-    CancelClicked(NULL);
+    CloseClicked(NULL);
     return 0;
 }
 
@@ -246,7 +247,7 @@ IMPL_LINK( ScDescriptiveStatisticsDialog, ApplyClicked, PushButton*, /*pButton*/
     return 0;
 }
 
-IMPL_LINK( ScDescriptiveStatisticsDialog, CancelClicked, PushButton*, /*pButton*/ )
+IMPL_LINK( ScDescriptiveStatisticsDialog, CloseClicked, PushButton*, /*pButton*/ )
 {
     Close();
     return 0;

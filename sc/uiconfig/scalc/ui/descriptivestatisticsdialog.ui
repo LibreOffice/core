@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <!-- interface-requires gtk+ 3.0 -->
   <!-- interface-requires LibreOffice 1.0 -->
+  <!-- interface-requires gtk+ 3.0 -->
   <object class="GtkDialog" id="DescriptiveStatisticsDialog">
     <property name="can_focus">False</property>
     <property name="border_width">5</property>
@@ -49,8 +49,8 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="cancel">
-                <property name="label">gtk-cancel</property>
+              <object class="GtkButton" id="close">
+                <property name="label">gtk-close</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -164,15 +164,6 @@
                 <property name="height">1</property>
               </packing>
             </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -185,7 +176,7 @@
     <action-widgets>
       <action-widget response="0">apply</action-widget>
       <action-widget response="0">ok</action-widget>
-      <action-widget response="0">cancel</action-widget>
+      <action-widget response="0">close</action-widget>
     </action-widgets>
   </object>
 </interface>

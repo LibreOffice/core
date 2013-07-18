@@ -38,8 +38,6 @@
 
 #include "RandomNumberGeneratorDialog.hxx"
 
-#define ABS_DREF3D SCA_VALID | SCA_COL_ABSOLUTE | SCA_ROW_ABSOLUTE | SCA_TAB_ABSOLUTE | SCA_COL2_ABSOLUTE | SCA_ROW2_ABSOLUTE | SCA_TAB2_ABSOLUTE | SCA_TAB_3D
-
 namespace
 {
 
@@ -58,22 +56,20 @@ static const sal_Int64 DIGITS      = 4;
 }
 
 ScRandomNumberGeneratorDialog::ScRandomNumberGeneratorDialog(
-        SfxBindings* pB, SfxChildWindow* pCW, Window* pParent, ScViewData* pViewData ) :
-    ScAnyRefDlg     ( pB, pCW, pParent, "RandomNumberGeneratorDialog", "modules/scalc/ui/randomnumbergenerator.ui" ),
+                    SfxBindings* pSfxBindings, SfxChildWindow* pChildWindow,
+                    Window* pParent, ScViewData* pViewData ) :
+    ScAnyRefDlg     ( pSfxBindings, pChildWindow, pParent,
+                      "RandomNumberGeneratorDialog", "modules/scalc/ui/randomnumbergenerator.ui" ),
     mViewData       ( pViewData ),
     mDocument       ( pViewData->GetDocument() ),
     mAddressDetails ( mDocument->GetAddressConvention(), 0, 0 ),
     mDialogLostFocus( false )
 {
-    get(mpInputRangeText, "cell-range-label");
-    get(mpInputRangeEdit, "cell-range-edit");
-    mpInputRangeEdit->SetReferences(this, mpInputRangeText);
+    get(mpInputRangeText,   "cell-range-label");
+    get(mpInputRangeEdit,   "cell-range-edit");
     get(mpInputRangeButton, "cell-range-button");
+    mpInputRangeEdit->SetReferences(this, mpInputRangeText);
     mpInputRangeButton->SetReferences(this, mpInputRangeEdit);
-
-    get(mpButtonOk,     "ok");
-    get(mpButtonApply,  "apply");
-    get(mpButtonCancel, "cancel");
 
     get(mpParameter1Value, "parameter1-spin");
     get(mpParameter1Text,  "parameter1-label");
@@ -81,9 +77,13 @@ ScRandomNumberGeneratorDialog::ScRandomNumberGeneratorDialog(
     get(mpParameter2Text,  "parameter2-label");
 
     get(mpEnableSeed, "enable-seed-check");
-    get(mpSeed, "seed-spin");
+    get(mpSeed,       "seed-spin");
 
     get(mpDistributionCombo, "distribution-combo");
+
+    get(mpButtonOk,     "ok");
+    get(mpButtonApply,  "apply");
+    get(mpButtonClose, "close");
 
     Init();
     GetRangeFromSelection();
@@ -92,7 +92,7 @@ ScRandomNumberGeneratorDialog::ScRandomNumberGeneratorDialog(
 void ScRandomNumberGeneratorDialog::Init()
 {
     mpButtonOk->SetClickHdl( LINK( this, ScRandomNumberGeneratorDialog, OkClicked ) );
-    mpButtonCancel->SetClickHdl( LINK( this, ScRandomNumberGeneratorDialog, CancelClicked ) );
+    mpButtonClose->SetClickHdl( LINK( this, ScRandomNumberGeneratorDialog, CloseClicked ) );
     mpButtonApply->SetClickHdl( LINK( this, ScRandomNumberGeneratorDialog, ApplyClicked ) );
 
     Link aLink = LINK( this, ScRandomNumberGeneratorDialog, GetFocusHandler );
@@ -118,7 +118,7 @@ void ScRandomNumberGeneratorDialog::GetRangeFromSelection()
 {
     OUString aCurrentString;
     mViewData->GetSimpleArea(mInputRange);
-    mInputRange.Format( aCurrentString, ABS_DREF3D, mDocument, mAddressDetails );
+    mInputRange.Format( aCurrentString, SCR_ABS_3D, mDocument, mAddressDetails );
     mpInputRangeEdit->SetText( aCurrentString );
 }
 
@@ -155,7 +155,7 @@ void ScRandomNumberGeneratorDialog::SetReference( const ScRange& rReferenceRange
         mInputRange = rReferenceRange;
 
         String aReferenceString;
-        mInputRange.Format( aReferenceString, ABS_DREF3D, pDocument, mAddressDetails );
+        mInputRange.Format( aReferenceString, SCR_ABS_3D, pDocument, mAddressDetails );
         mpInputRangeEdit->SetRefString( aReferenceString );
     }
 }
@@ -289,8 +289,8 @@ void ScRandomNumberGeneratorDialog::GenerateNumbers(RNG randomGenerator, OUStrin
 
 IMPL_LINK( ScRandomNumberGeneratorDialog, OkClicked, PushButton*, /*pButton*/ )
 {
-    SelectGeneratorAndGenerateNumbers();
-    Close();
+    ApplyClicked(NULL);
+    CloseClicked(NULL);
     return 0;
 }
 
@@ -301,7 +301,7 @@ IMPL_LINK( ScRandomNumberGeneratorDialog, ApplyClicked, PushButton*, /*pButton*/
     return 0;
 }
 
-IMPL_LINK( ScRandomNumberGeneratorDialog, CancelClicked, PushButton*, /*pButton*/ )
+IMPL_LINK( ScRandomNumberGeneratorDialog, CloseClicked, PushButton*, /*pButton*/ )
 {
     Close();
     return 0;

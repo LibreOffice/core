@@ -50,7 +50,7 @@ private:
 
     PushButton*         mpButtonApply;
     OKButton*           mpButtonOk;
-    CancelButton*       mpButtonCancel;
+    CloseButton*        mpButtonClose;
 
     //
     formula::RefEdit*   mpActiveEdit;
@@ -71,8 +71,11 @@ private:
     void GetRangeFromSelection();
     void PerformSampling();
 
+    ScRange PerformRandomSampling(ScDocShell* pDocShell);
+    ScRange PerformPeriodicSampling(ScDocShell* pDocShell);
+
     DECL_LINK( OkClicked,        PushButton* );
-    DECL_LINK( CancelClicked,    PushButton* );
+    DECL_LINK( CloseClicked,     PushButton* );
     DECL_LINK( ApplyClicked,     PushButton* );
     DECL_LINK( GetFocusHandler,  Control* );
     DECL_LINK( LoseFocusHandler, void* );

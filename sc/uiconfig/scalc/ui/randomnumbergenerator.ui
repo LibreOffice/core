@@ -49,8 +49,8 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="cancel">
-                <property name="label">gtk-cancel</property>
+              <object class="GtkButton" id="close">
+                <property name="label">gtk-close</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -307,7 +307,7 @@
     <action-widgets>
       <action-widget response="0">apply</action-widget>
       <action-widget response="0">ok</action-widget>
-      <action-widget response="0">cancel</action-widget>
+      <action-widget response="0">close</action-widget>
     </action-widgets>
   </object>
   <object class="GtkListStore" id="distribution-liststore">

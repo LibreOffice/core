@@ -28,31 +28,27 @@
 
 #include "SamplingDialog.hxx"
 
-#define ABS_DREF3D SCA_VALID | SCA_COL_ABSOLUTE | SCA_ROW_ABSOLUTE | SCA_TAB_ABSOLUTE | SCA_COL2_ABSOLUTE | SCA_ROW2_ABSOLUTE | SCA_TAB2_ABSOLUTE | SCA_TAB_3D
-
-namespace
-{
-}
-
 ScSamplingDialog::ScSamplingDialog(
-        SfxBindings* pB, SfxChildWindow* pCW, Window* pParent, ScViewData* pViewData ) :
-    ScAnyRefDlg     ( pB, pCW, pParent, "SamplingDialog", "modules/scalc/ui/samplingdialog.ui" ),
+                    SfxBindings* pSfxBindings, SfxChildWindow* pChildWindow,
+                    Window* pParent, ScViewData* pViewData ) :
+    ScAnyRefDlg     ( pSfxBindings, pChildWindow, pParent,
+                      "SamplingDialog", "modules/scalc/ui/samplingdialog.ui" ),
     mViewData       ( pViewData ),
     mDocument       ( pViewData->GetDocument() ),
     mAddressDetails ( mDocument->GetAddressConvention(), 0, 0 ),
     mCurrentAddress ( pViewData->GetCurX(), pViewData->GetCurY(), pViewData->GetTabNo() ),
     mDialogLostFocus( false )
 {
-    get(mpInputRangeLabel, "input-range-label");
-    get(mpInputRangeEdit, "input-range-edit");
-    mpInputRangeEdit->SetReferences(this, mpInputRangeLabel);
+    get(mpInputRangeLabel,  "input-range-label");
+    get(mpInputRangeEdit,   "input-range-edit");
     get(mpInputRangeButton, "input-range-button");
+    mpInputRangeEdit->SetReferences(this, mpInputRangeLabel);
     mpInputRangeButton->SetReferences(this, mpInputRangeEdit);
 
-    get(mpOutputRangeLabel, "output-range-label");
-    get(mpOutputRangeEdit, "output-range-edit");
-    mpOutputRangeEdit->SetReferences(this, mpOutputRangeLabel);
+    get(mpOutputRangeLabel,  "output-range-label");
+    get(mpOutputRangeEdit,   "output-range-edit");
     get(mpOutputRangeButton, "output-range-button");
+    mpOutputRangeEdit->SetReferences(this, mpOutputRangeLabel);
     mpOutputRangeButton->SetReferences(this, mpOutputRangeEdit);
 
     get(mpSampleSize, "sample-size-spin");
@@ -63,7 +59,7 @@ ScSamplingDialog::ScSamplingDialog(
 
     get(mpButtonOk,     "ok");
     get(mpButtonApply,  "apply");
-    get(mpButtonCancel, "cancel");
+    get(mpButtonClose,  "close");
 
     Init();
     GetRangeFromSelection();
@@ -72,7 +68,7 @@ ScSamplingDialog::ScSamplingDialog(
 void ScSamplingDialog::Init()
 {
     mpButtonOk->SetClickHdl( LINK( this, ScSamplingDialog, OkClicked ) );
-    mpButtonCancel->SetClickHdl( LINK( this, ScSamplingDialog, CancelClicked ) );
+    mpButtonClose->SetClickHdl( LINK( this, ScSamplingDialog, CloseClicked ) );
     mpButtonApply->SetClickHdl( LINK( this, ScSamplingDialog, ApplyClicked ) );
     mpButtonOk->Enable(false);
     mpButtonApply->Enable(false);
@@ -107,7 +103,7 @@ void ScSamplingDialog::GetRangeFromSelection()
 {
     OUString aCurrentString;
     mViewData->GetSimpleArea(mInputRange);
-    mInputRange.Format(aCurrentString, ABS_DREF3D, mDocument, mAddressDetails);
+    mInputRange.Format(aCurrentString, SCR_ABS_3D, mDocument, mAddressDetails);
     mpInputRangeEdit->SetText(aCurrentString);
 }
 
@@ -146,7 +142,7 @@ void ScSamplingDialog::SetReference( const ScRange& rReferenceRange, ScDocument*
         if ( mpActiveEdit == mpInputRangeEdit )
         {
             mInputRange = rReferenceRange;
-            mInputRange.Format( aReferenceString, ABS_DREF3D, pDocument, mAddressDetails );
+            mInputRange.Format( aReferenceString, SCR_ABS_3D, pDocument, mAddressDetails );
             mpInputRangeEdit->SetRefString( aReferenceString );
         }
         else if ( mpActiveEdit == mpOutputRangeEdit )
@@ -166,18 +162,12 @@ void ScSamplingDialog::SetReference( const ScRange& rReferenceRange, ScDocument*
             // Enable OK, Cancel if output range is set
             mpButtonOk->Enable(!mpOutputRangeEdit->GetText().isEmpty());
             mpButtonApply->Enable(!mpOutputRangeEdit->GetText().isEmpty());
-
         }
     }
 }
 
-void ScSamplingDialog::PerformSampling()
+ScRange ScSamplingDialog::PerformPeriodicSampling(ScDocShell* pDocShell)
 {
-    OUString aUndo(ScResId(STR_SAMPLING_UNDO_NAME));
-    ScDocShell* pDocShell = mViewData->GetDocShell();
-    svl::IUndoManager* pUndoManager = pDocShell->GetUndoManager();
-    pUndoManager->EnterListAction( aUndo, aUndo );
-
     ScAddress aStart = mInputRange.aStart;
     ScAddress aEnd   = mInputRange.aEnd;
 
@@ -185,86 +175,114 @@ void ScSamplingDialog::PerformSampling()
     SCCOL outCol = mOutputAddress.Col();
     SCROW outRow = mOutputAddress.Row();
 
+    sal_Int64 aPeriod = mpPeriod->GetValue();
+
+    for (SCROW inTab = aStart.Tab(); inTab <= aEnd.Tab(); inTab++)
+    {
+        outCol = mOutputAddress.Col();
+        for (SCCOL inCol = aStart.Col(); inCol <= aEnd.Col(); inCol++)
+        {
+            sal_Int64 i = 0;
+            outRow = mOutputAddress.Row();
+            for (SCROW inRow = aStart.Row(); inRow <= aEnd.Row(); inRow++)
+            {
+                if (i % aPeriod == aPeriod - 1 ) // Sample the last of period
+                {
+                    double aValue = mDocument->GetValue(ScAddress(inCol, inRow, inTab));
+                    pDocShell->GetDocFunc().SetValueCell(ScAddress(outCol, outRow, outTab), aValue, true);
+                    outRow++;
+                }
+                i++;
+            }
+            outCol++;
+        }
+        outTab++;
+    }
+
+    return ScRange(mOutputAddress, ScAddress(outTab, outRow, outTab) );
+}
+
+ScRange ScSamplingDialog::PerformRandomSampling(ScDocShell* pDocShell)
+{
+    ScAddress aStart = mInputRange.aStart;
+    ScAddress aEnd   = mInputRange.aEnd;
+
+    SCTAB outTab = mOutputAddress.Tab();
+    SCCOL outCol = mOutputAddress.Col();
+    SCROW outRow = mOutputAddress.Row();
+
+    TimeValue now;
+    osl_getSystemTime(&now);
+    boost::mt19937 seed(now.Nanosec);
+    boost::uniform_01<boost::mt19937> rng(seed);
+
+    SCROW inRow;
+
+    sal_Int64 aSampleSize = mpSampleSize->GetValue();
+
+    for (SCROW inTab = aStart.Tab(); inTab <= aEnd.Tab(); inTab++)
+    {
+        outCol = mOutputAddress.Col();
+        for (SCCOL inCol = aStart.Col(); inCol <= aEnd.Col(); inCol++)
+        {
+            SCROW aPopulationSize = (aEnd.Row() - aStart.Row()) + 1;
+
+            outRow = mOutputAddress.Row();
+            inRow  = aStart.Row();
+
+            double aRandomValue;
+
+            while ((outRow - mOutputAddress.Row()) < aSampleSize)
+            {
+                aRandomValue = rng();
+
+                if ( (aPopulationSize - (inRow - aStart.Row())) * aRandomValue >= aSampleSize - (outRow - mOutputAddress.Row()) )
+                {
+                    inRow++;
+                }
+                else
+                {
+                    double aValue = mDocument->GetValue( ScAddress(inCol, inRow, inTab) );
+                    pDocShell->GetDocFunc().SetValueCell(ScAddress(outCol, outRow, outTab), aValue, true);
+                    inRow++;
+                    outRow++;
+                }
+            }
+            outCol++;
+        }
+        outTab++;
+    }
+
+    return ScRange(mOutputAddress, ScAddress(outTab, outRow, outTab) );
+}
+
+void ScSamplingDialog::PerformSampling()
+{
+    OUString aUndo(ScResId(STR_SAMPLING_UNDO_NAME));
+    ScDocShell* pDocShell = mViewData->GetDocShell();
+    svl::IUndoManager* pUndoManager = pDocShell->GetUndoManager();
+
+    ScRange aModifiedRange;
+
+    pUndoManager->EnterListAction( aUndo, aUndo );
+
     if (mpRandomMethodRadio->IsChecked())
     {
-        TimeValue now;
-        osl_getSystemTime(&now);
-        boost::mt19937 seed(now.Nanosec);
-        boost::uniform_01<boost::mt19937> rng(seed);
-
-        SCROW inRow;
-
-        sal_Int64 aSampleSize = mpSampleSize->GetValue();
-
-        for (SCROW inTab = aStart.Tab(); inTab <= aEnd.Tab(); inTab++)
-        {
-            outCol = mOutputAddress.Col();
-            for (SCCOL inCol = aStart.Col(); inCol <= aEnd.Col(); inCol++)
-            {
-                SCROW aPopulationSize = (aEnd.Row() - aStart.Row()) + 1;
-
-                outRow = mOutputAddress.Row();
-                inRow  = aStart.Row();
-
-                double aRandomValue;
-
-                while ((outRow - mOutputAddress.Row()) < aSampleSize)
-                {
-                    aRandomValue = rng();
-
-                    if ( (aPopulationSize - (inRow - aStart.Row())) * aRandomValue >= aSampleSize - (outRow - mOutputAddress.Row()) )
-                    {
-                        inRow++;
-                    }
-                    else
-                    {
-                        double aValue = mDocument->GetValue( ScAddress(inCol, inRow, inTab) );
-                        pDocShell->GetDocFunc().SetValueCell(ScAddress(outCol, outRow, outTab), aValue, true);
-                        inRow++;
-                        outRow++;
-                    }
-                }
-                outCol++;
-            }
-            outTab++;
-        }
+        aModifiedRange = PerformRandomSampling(pDocShell);
     }
     else if (mpPeriodicMethodRadio->IsChecked())
     {
-        sal_Int64 aPeriod = mpPeriod->GetValue();
-
-        for (SCROW inTab = aStart.Tab(); inTab <= aEnd.Tab(); inTab++)
-        {
-            outCol = mOutputAddress.Col();
-            for (SCCOL inCol = aStart.Col(); inCol <= aEnd.Col(); inCol++)
-            {
-                sal_Int64 i = 0;
-                outRow = mOutputAddress.Row();
-                for (SCROW inRow = aStart.Row(); inRow <= aEnd.Row(); inRow++)
-                {
-                    if (i % aPeriod == aPeriod - 1 ) // Sample the last of period
-                    {
-                        double aValue = mDocument->GetValue(ScAddress(inCol, inRow, inTab));
-                        pDocShell->GetDocFunc().SetValueCell(ScAddress(outCol, outRow, outTab), aValue, true);
-                        outRow++;
-                    }
-                    i++;
-                }
-                outCol++;
-            }
-            outTab++;
-        }
+        aModifiedRange = PerformPeriodicSampling(pDocShell);
     }
 
-    ScRange aOutputRange(mOutputAddress, ScAddress(outTab, outRow, outTab) );
     pUndoManager->LeaveListAction();
-    pDocShell->PostPaint( aOutputRange, PAINT_GRID );
+    pDocShell->PostPaint(aModifiedRange, PAINT_GRID);
 }
 
 IMPL_LINK( ScSamplingDialog, OkClicked, PushButton*, /*pButton*/ )
 {
-    PerformSampling();
-    Close();
+    ApplyClicked(NULL);
+    CloseClicked(NULL);
     return 0;
 }
 
@@ -275,7 +293,7 @@ IMPL_LINK( ScSamplingDialog, ApplyClicked, PushButton*, /*pButton*/ )
     return 0;
 }
 
-IMPL_LINK( ScSamplingDialog, CancelClicked, PushButton*, /*pButton*/ )
+IMPL_LINK( ScSamplingDialog, CloseClicked, PushButton*, /*pButton*/ )
 {
     Close();
     return 0;

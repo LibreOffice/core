@@ -47,7 +47,7 @@ private:
     CheckBox*           mpEnableSeed;
     PushButton*         mpButtonApply;
     OKButton*           mpButtonOk;
-    CancelButton*       mpButtonCancel;
+    CloseButton*        mpButtonClose;
 
     // Data
     ScViewData*         mViewData;
@@ -67,7 +67,7 @@ private:
     void SelectGeneratorAndGenerateNumbers();
 
     DECL_LINK( OkClicked,        PushButton* );
-    DECL_LINK( CancelClicked,    PushButton* );
+    DECL_LINK( CloseClicked,     PushButton* );
     DECL_LINK( ApplyClicked,     PushButton* );
     DECL_LINK( GetFocusHandler,  Control* );
     DECL_LINK( LoseFocusHandler, void* );
