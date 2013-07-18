@@ -403,8 +403,7 @@ void ViewShell::Deactivate(sal_Bool bIsMDIActivate)
         mpHorizontalRuler->SetActive(sal_False);
     if (mpVerticalRuler.get() != NULL)
         mpVerticalRuler->SetActive(sal_False);
-
-    SfxShell::Deactivate(bIsMDIActivate);
+    // Do not forward to SfxShell::Deactivate()
 }
 
 
