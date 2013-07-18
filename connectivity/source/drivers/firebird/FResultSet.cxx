@@ -164,7 +164,7 @@ void OResultSet::ensureDataAvailable() throw (SQLException)
     }
 }
 
-const ORowSetValueDecorator& OResultSet::getSqlData(sal_Int32 aRow, sal_Int32 aColumn)
+const ORowSetValue& OResultSet::getSqlData(sal_Int32 aRow, sal_Int32 aColumn)
     throw(SQLException)
 {
     // Validate input (throws Exceptions as appropriate)
@@ -467,7 +467,7 @@ const ORowSetValue& OResultSet::safelyRetrieveValue(sal_Int32 columnIndex)
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
     ensureDataAvailable();
 
-    return getSqlData(m_currentRow,columnIndex).getValue();
+    return getSqlData(m_currentRow,columnIndex);
 }
 
 sal_Bool SAL_CALL OResultSet::getBoolean(sal_Int32 columnIndex)
