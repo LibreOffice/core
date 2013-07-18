@@ -17,7 +17,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  -->
-<Locale versionDTD="2.0.3" allowUpdateFromCLDR="no" version="1.2">
+<Locale versionDTD="2.0.3" allowUpdateFromCLDR="no" version="1.3">
   <LC_INFO>
     <Language>
       <LangID>hr</LangID>
@@ -37,7 +37,7 @@
       <Time100SecSeparator>,</Time100SecSeparator>
       <ListSeparator>;</ListSeparator>
       <LongDateDayOfWeekSeparator>, </LongDateDayOfWeekSeparator>
-      <LongDateDaySeparator>, </LongDateDaySeparator>
+      <LongDateDaySeparator>. </LongDateDaySeparator>
       <LongDateMonthSeparator> </LongDateMonthSeparator>
       <LongDateYearSeparator> </LongDateYearSeparator>
     </Separators>
@@ -49,7 +49,7 @@
     </Markers>
     <TimeAM>AM</TimeAM>
     <TimePM>PM</TimePM>
-    <MeasurementSystem>Metric</MeasurementSystem>
+    <MeasurementSystem>metric</MeasurementSystem>
   </LC_CTYPE>
   <LC_FORMAT replaceFrom="[CURRENCY]" replaceTo="[$kn-41A]">
     <DateAcceptancePattern>D.M</DateAcceptancePattern>
@@ -73,6 +73,12 @@
     </FormatElement>
     <FormatElement msgid="FixedFormatskey6" default="false" type="medium" usage="FIXED_NUMBER" formatindex="5">
       <FormatCode>#.###,00</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="FixedFormatskey7" default="false" type="medium" usage="FIXED_NUMBER" formatindex="50">
+      <FormatCode>#.##0,00;[RED]-#.##0,00</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="FixedFormatskey8" default="false" type="medium" usage="FIXED_NUMBER" formatindex="51">
+      <FormatCode>#.###,00;[RED]-#.###,00</FormatCode>
     </FormatElement>
     <FormatElement msgid="ScientificFormatskey1" default="true" type="medium" usage="SCIENTIFIC_NUMBER" formatindex="6">
       <FormatCode>0,00E+00</FormatCode>
@@ -108,7 +114,7 @@
       <FormatCode>D.MM.YY</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey14" default="true" type="long" usage="DATE" formatindex="19">
-      <FormatCode>NNNNDD, MMMM YYYY</FormatCode>
+      <FormatCode>NNNNDD. MMMM YYYY</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey6" default="true" type="medium" usage="DATE" formatindex="20">
       <FormatCode>DD.MM.YY</FormatCode>
@@ -117,31 +123,31 @@
       <FormatCode>DD.MM.YYYY</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey15" default="false" type="long" usage="DATE" formatindex="22">
-      <FormatCode>D, MMM YY</FormatCode>
+      <FormatCode>D. MMM YY</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey16" default="false" type="long" usage="DATE" formatindex="23">
-      <FormatCode>D, MMM YYYY</FormatCode>
+      <FormatCode>D. MMM YYYY</FormatCode>
     </FormatElement>
-    <FormatElement msgid="DateFormatskey21" default="false" type="long" usage="DATE" formatindex="24">
-      <FormatCode>D, MMM YYYY</FormatCode>
+    <FormatElement msgid="DateFormatskey21" default="false" type="medium" usage="DATE" formatindex="24">
+      <FormatCode>D. M. YYYY.</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey17" default="false" type="long" usage="DATE" formatindex="25">
-      <FormatCode>D, MMMM YYYY</FormatCode>
+      <FormatCode>D. MMMM YYYY.</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey22" default="false" type="long" usage="DATE" formatindex="26">
-      <FormatCode>D, MMMM YY</FormatCode>
+      <FormatCode>D. MMMM YY</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey10" default="false" type="medium" usage="DATE" formatindex="27">
       <FormatCode>NN, DD.MMM.YY</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey18" default="false" type="long" usage="DATE" formatindex="28">
-      <FormatCode>NN, D, MMM YY</FormatCode>
+      <FormatCode>NN, D. MMM YY</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey19" default="false" type="long" usage="DATE" formatindex="29">
-      <FormatCode>NN, D, MMMM YYYY</FormatCode>
+      <FormatCode>NN, D. MMMM YYYY</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey20" default="false" type="long" usage="DATE" formatindex="30">
-      <FormatCode>NNNND, MMMM YYYY</FormatCode>
+      <FormatCode>NNNND. MMMM YYYY</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey12" default="false" type="short" usage="DATE" formatindex="31">
       <FormatCode>MM.DD</FormatCode>
@@ -195,19 +201,30 @@
     <FormatElement msgid="DateTimeFormatskey2" default="false" type="medium" usage="DATE_TIME" formatindex="47">
       <FormatCode>DD.MM.YYYY HH:MM:SS AM/PM</FormatCode>
     </FormatElement>
+    <FormatElement msgid="DateFormatskey24" default="false" type="medium" usage="DATE" formatindex="52">
+      <FormatCode>DD. MM. YYYY.</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey25" default="false" type="short" usage="DATE" formatindex="53">
+      <FormatCode>MM/YY</FormatCode>
+    </FormatElement>
   </LC_FORMAT>
-  <LC_COLLATION ref="sh_RS"/>
+  <LC_COLLATION>
+    <Collator default="true" unoid="alphanumeric">&amp;C&lt;č&lt;&lt;&lt;Č&lt;ć&lt;&lt;&lt;Ć&amp;D&lt;dž&lt;&lt;&lt;Dž&lt;&lt;&lt;DŽ&amp;DŽ&lt;đ&lt;&lt;&lt;Đ&amp;L&lt;lj&lt;&lt;&lt;Lj&lt;&lt;&lt;LJ&amp;N&lt;nj&lt;&lt;&lt;Nj&lt;&lt;&lt;NJ&amp;S&lt;š&lt;&lt;&lt;Š&amp;Z&lt;ž&lt;&lt;&lt;Ž</Collator>
+    <CollationOptions>
+      <TransliterationModules>IGNORE_CASE</TransliterationModules>
+    </CollationOptions>
+  </LC_COLLATION>
   <LC_SEARCH>
     <SearchOptions>
       <TransliterationModules>IGNORE_CASE</TransliterationModules>
     </SearchOptions>
   </LC_SEARCH>
   <LC_INDEX>
-    <IndexKey phonetic="false" default="true" unoid="alphanumeric">A-Z Č Ć Š Đ Ž</IndexKey>
+    <IndexKey phonetic="false" default="true" unoid="alphanumeric">A-C Č Ć D {DŽ} Đ E-L {LJ} M N {NJ} O P R S Š T-V Z Ž</IndexKey>
     <UnicodeScript>0</UnicodeScript>
     <UnicodeScript>1</UnicodeScript>
-    <FollowPageWord>p.</FollowPageWord>
-    <FollowPageWord>pp.</FollowPageWord>
+    <FollowPageWord>str.</FollowPageWord>
+    <FollowPageWord>str.</FollowPageWord>
   </LC_INDEX>
   <LC_CALENDAR>
     <Calendar unoid="gregorian" default="true">
@@ -375,13 +392,13 @@
       <Eras>
         <Era>
           <EraID>bc</EraID>
-          <DefaultAbbrvName>pr</DefaultAbbrvName>
-          <DefaultFullName>prije krista</DefaultFullName>
+          <DefaultAbbrvName>pr. Kr.</DefaultAbbrvName>
+          <DefaultFullName>prije Krista</DefaultFullName>
         </Era>
         <Era>
           <EraID>ad</EraID>
-          <DefaultAbbrvName>Kr</DefaultAbbrvName>
-          <DefaultFullName>poslije krista</DefaultFullName>
+          <DefaultAbbrvName>po. Kr.</DefaultAbbrvName>
+          <DefaultFullName>poslije Krista</DefaultFullName>
         </Era>
       </Eras>
       <StartDayOfWeek>
@@ -532,3 +549,4 @@
     </OutlineStyle>
   </LC_OutLineNumberingLevel>
 </Locale>
+
