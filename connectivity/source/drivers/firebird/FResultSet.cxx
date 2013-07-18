@@ -345,9 +345,6 @@ void SAL_CALL OResultSet::checkRowIndex(sal_Bool mustBeOnValidRow)
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
     ensureDataAvailable();
 
-    SAL_INFO("connectivity.firebird", "Checking if row " << m_currentRow <<
-             "/" << m_rowCount << " is valid.");
-
     if(mustBeOnValidRow)
     {
         if((m_currentRow < 1) || (m_currentRow > m_rowCount))
