@@ -52,11 +52,11 @@ $(deb_WORKDIR)/%/DEBIAN/control: $(deb_SRCDIR)/control $(call gb_CustomTarget_ge
 		-e 's/%PREFIX/$(UNIXFILENAME.$*)/' \
 		-e 's/%ICONPREFIX/$(UNIXFILENAME.$*)/' \
 		> $(deb_WORKDIR)/$*/usr/lib/menu/$*
-	echo "Package: $*" >$@
+	echo "Package: $*$(PKGVERSIONSHORT)-debian-menus" >$@
 	cat $< | tr -d "\015" | \
 		sed 's/%productname/$(PRODUCTNAME.$*) $(PRODUCTVERSION)/' \
 		>> $@
-	echo "Version: $(PKGVERSION)-$(LIBV_VERSION_PATCH)" >>$@
+	echo "Version: $(PKGVERSION)-$(LIBO_VERSION_PATCH)" >>$@
 	du -k -s $(deb_WORKDIR)/$* | awk -F ' ' '{ printf "Installed-Size: %s\n", $$1 ; }' >>$@
 
 $(deb_WORKDIR)/%$(PKGVERSIONSHORT)-debian-menus_$(PKGVERSION)-$(LIBO_VERSION_PATCH)_all.deb: $(deb_WORKDIR)/%/DEBIAN/postrm $(deb_WORKDIR)/%/DEBIAN/postinst $(deb_WORKDIR)/%/DEBIAN/prerm $(deb_WORKDIR)/%/DEBIAN/control $(call gb_Library_get_target,getuid)
