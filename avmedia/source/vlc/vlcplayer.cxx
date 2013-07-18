@@ -170,7 +170,7 @@ uno::Reference< css::media::XPlayerWindow > SAL_CALL VLCPlayer::createPlayerWind
 #if defined(WIN32) && !defined(UNIX)
         libvlc_media_player_set_hwnd( mPlayer.get(), winID );
 #else
-        libvlc_media_player_set_xwindow( mPlayer.get(), winID );
+        //TODO: Not works, will be crashed
 #endif
     }
 
