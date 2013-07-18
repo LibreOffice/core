@@ -20,10 +20,12 @@
 #ifndef _VLCFRAMEGRABBER_HXX
 #define _VLCFRAMEGRABBER_HXX
 
-#include <boost/noncopyable.hpp>
+#include <boost/shared_ptr.hpp>
 #include <com/sun/star/media/XFrameGrabber.hpp>
 #include <cppuhelper/implbase2.hxx>
 #include "vlccommon.hxx"
+
+struct libvlc_media_player_t;
 
 namespace avmedia {
 namespace vlc {
@@ -31,10 +33,13 @@ namespace vlc {
 typedef ::cppu::WeakImplHelper2< ::com::sun::star::media::XFrameGrabber,
                                  ::com::sun::star::lang::XServiceInfo > FrameGrabber_BASE;
 
-class VLCFrameGrabber : public FrameGrabber_BASE, boost::noncopyable
+class VLCFrameGrabber : public FrameGrabber_BASE
 {
+    boost::shared_ptr<libvlc_media_player_t> mPlayer;
+    const rtl::OUString& mUrl;
 public:
-    SAL_CALL VLCFrameGrabber();
+    SAL_CALL VLCFrameGrabber( boost::shared_ptr<libvlc_media_player_t>& player, const rtl::OUString& url );
+    void setPlayer( );
 
     ::com::sun::star::uno::Reference< css::graphic::XGraphic > SAL_CALL grabFrame( double fMediaTime );
 
