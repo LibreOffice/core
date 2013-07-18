@@ -89,14 +89,17 @@ namespace connectivity
 
             XSQLDA*                                     m_pSqlda;
             isc_stmt_handle                             m_statementHandle;
+            sal_Bool                                    m_bIsPopulated;
 
             sal_Bool                                    m_bWasNull;
-            // Row numberign starts with 0 for "in front of first row"
+            // Row numbering starts with 0 for "in front of first row"
             sal_Int32                                   m_currentRow;
-            const sal_Int32                             m_rowCount;
+            sal_Int32                                   m_rowCount;
             const sal_Int32                             m_fieldCount;
             TTable                                      m_sqldata;
             ISC_STATUS_ARRAY                            m_statusVector;
+
+            void ensureDataAvailable() throw (::com::sun::star::sdbc::SQLException);
 
             // OPropertyArrayUsageHelper
             virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const;
@@ -132,7 +135,6 @@ namespace connectivity
             OResultSet(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XStatement >& xStatement,
                        isc_stmt_handle& aStatementHandle,
                        XSQLDA* aSqlda);
-
 
             ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > operator *()
             {
