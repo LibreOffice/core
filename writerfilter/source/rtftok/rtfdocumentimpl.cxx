@@ -470,6 +470,15 @@ void RTFDocumentImpl::runProps()
         RTFValue::Pointer_t pValue(new RTFValue(m_aStates.top().aCharacterAttributes, m_aStates.top().aCharacterSprms));
         m_aStates.top().pCurrentBuffer->push_back(make_pair(BUFFER_PROPS, pValue));
     }
+
+    // Delete the sprm, so the trackchange range will be started only once.
+    // OTOH set a boolean flag, so we'll know we need to end the range later.
+    RTFValue::Pointer_t pTrackchange = m_aStates.top().aCharacterSprms.find(NS_ooxml::LN_trackchange);
+    if (pTrackchange.get())
+    {
+        m_aStates.top().bStartedTrackchange = true;
+        m_aStates.top().aCharacterSprms.erase(NS_ooxml::LN_trackchange);
+    }
 }
 
 void RTFDocumentImpl::runBreak()
@@ -4429,8 +4438,7 @@ int RTFDocumentImpl::popState()
     }
 
     // See if we need to end a track change
-    RTFValue::Pointer_t pTrackchange = aState.aCharacterSprms.find(NS_ooxml::LN_trackchange);
-    if (pTrackchange.get())
+    if (aState.bStartedTrackchange)
     {
         RTFSprms aTCSprms;
         RTFValue::Pointer_t pValue(new RTFValue(0));
@@ -4795,7 +4803,8 @@ RTFParserState::RTFParserState(RTFDocumentImpl *pDocumentImpl)
     bInBackground(false),
     bHadShapeText(false),
     bInShapeGroup(false),
-    bCreatedShapeGroup(false)
+    bCreatedShapeGroup(false),
+    bStartedTrackchange(false)
 {
 }
 

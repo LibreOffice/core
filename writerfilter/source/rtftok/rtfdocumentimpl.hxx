@@ -264,6 +264,7 @@ namespace writerfilter {
                 bool bHadShapeText;
                 bool bInShapeGroup; ///< If we're inside a \shpgrp group.
                 bool bCreatedShapeGroup; ///< A GroupShape was created and pushed to the parent stack.
+                bool bStartedTrackchange; ///< Track change is started, need to end it before popping.
         };
 
         class RTFTokenizer;
