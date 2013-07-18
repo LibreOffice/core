@@ -58,8 +58,8 @@ namespace connectivity
     namespace firebird
     {
 
-        typedef std::vector< OString> TRow;
-        typedef std::vector< TRow> TTable;
+        typedef std::vector< ::rtl::OString > TRow;
+        typedef std::vector< TRow > TTable;
 
         /*
         **  OResultSet

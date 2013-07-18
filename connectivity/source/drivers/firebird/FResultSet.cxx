@@ -113,9 +113,34 @@ void OResultSet::ensureDataAvailable() throw (SQLException)
             XSQLVAR* pVar = m_pSqlda->sqlvar;
             for (int i = 0; i < m_fieldCount; pVar++, i++)
             {
-                aRow[i] = OString(pVar->sqldata, pVar->sqllen);
+//                 if ((pVar->sqltype & 1) == 0) // Cannot contain NULL
+//                 {
+//                 }
+//                 else // Can contain NULL
+//                 {
+//                 }
+//                 switch (pVar->sqltype)
+//                 {
+//                 }
+                if ( pVar->sqltype == SQL_SHORT ||
+                     pVar->sqltype == SQL_SHORT + 1 ||
+                     pVar->sqltype == SQL_LONG ||
+                     pVar->sqltype == SQL_LONG + 1 ||
+                     pVar->sqltype == SQL_INT64 ||
+                     pVar->sqltype == SQL_INT64 + 1)
+                {
+                    aRow[i] = OString::valueOf((sal_Int16) *pVar->sqldata);
+                                        fprintf(stderr, "N_" );
+                    // TODO: sqlscale here.
+                }
+                else
+                {
+                    // For now store as string
+                    aRow[i] = OString(pVar->sqldata, pVar->sqllen);
+                }
             }
             m_sqlData.push_back(aRow);
+            fprintf( stderr, "\n" );
         }
 
         ISC_STATUS aErr = isc_dsql_free_statement(m_statusVector,
