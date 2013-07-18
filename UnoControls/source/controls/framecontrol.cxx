@@ -51,7 +51,6 @@ namespace unocontrols{
 #define PROPERTYNAME_LOADERARGUMENTS                    "LoaderArguments"
 #define PROPERTYNAME_COMPONENTURL                       "ComponentURL"
 #define PROPERTYNAME_FRAME                              "Frame"
-#define ERRORTEXT_VOSENSHURE                            "This is an invalid property handle."
 #define PROPERTY_COUNT                                  3                                                       // you must count the propertys
 #define PROPERTYHANDLE_COMPONENTURL                     0                                                       // Id must be the index into the array
 #define PROPERTYHANDLE_FRAME                            1
@@ -370,7 +369,7 @@ void FrameControl::setFastPropertyValue_NoBroadcast(            sal_Int32   nHan
         case PROPERTYHANDLE_LOADERARGUMENTS     :       rValue >>= m_seqLoaderArguments ;
                                                         break ;
 
-        default :                                       OSL_ENSURE ( nHandle == -1, ERRORTEXT_VOSENSHURE ) ;
+        default :                                       OSL_ENSURE ( nHandle == -1, "This is an invalid property handle." ) ;
     }
 }
 
@@ -394,7 +393,7 @@ void FrameControl::getFastPropertyValue(    Any&        rRet    ,
         case PROPERTYHANDLE_FRAME           :       rRet <<= m_xFrame ;
                                                        break ;
 
-        default :                                   OSL_ENSURE ( nHandle == -1, ERRORTEXT_VOSENSHURE ) ;
+        default :                                   OSL_ENSURE ( nHandle == -1, "This is an invalid property handle." ) ;
     }
 }
 
