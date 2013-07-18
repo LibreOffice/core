@@ -550,14 +550,6 @@ void SAL_CALL SlideShow::setPropertyValue( const OUString& aPropertyName, const 
         sal_Int32 nDisplay = 0;
         if( aValue >>= nDisplay )
         {
-            // Convert value to true display id.
-            if (nDisplay == 0)
-                nDisplay = Application::GetDisplayExternalScreen();
-            else if (nDisplay < 0)
-                nDisplay = -1;
-            else
-                --nDisplay;
-
             bIllegalArgument = false;
 
             SdOptions* pOptions = SD_MOD()->GetSdOptions(DOCUMENT_TYPE_IMPRESS);
@@ -642,14 +634,7 @@ Any SAL_CALL SlideShow::getPropertyValue( const OUString& PropertyName ) throw(U
     case ATTR_PRESENT_DISPLAY:
     {
         SdOptions* pOptions = SD_MOD()->GetSdOptions(DOCUMENT_TYPE_IMPRESS);
-        const sal_Int32 nDisplay (pOptions->GetDisplay());
-        // Convert true display id to the previously used schema.
-        if (nDisplay == (sal_Int32)Application::GetDisplayExternalScreen())
-            return Any(sal_Int32(0));
-        else if (nDisplay < 0)
-            return Any(sal_Int32(-1));
-        else
-            return Any(nDisplay+1);
+        return Any(pOptions->GetDisplay());
     }
 
     default:
@@ -1288,14 +1273,23 @@ void SlideShow::StartFullscreenPresentation( )
 
 // ---------------------------------------------------------
 
+/// convert configuration setting display concept to real screens
 sal_Int32 SlideShow::GetDisplay()
-
 {
     sal_Int32 nDisplay = 0;
 
     SdOptions* pOptions = SD_MOD()->GetSdOptions(DOCUMENT_TYPE_IMPRESS);
     if( pOptions )
         nDisplay = pOptions->GetDisplay();
+
+    if( nDisplay < 0 )
+        nDisplay = -1;
+    else if( nDisplay == 0)
+        nDisplay = (sal_Int32)Application::GetDisplayExternalScreen();
+    else
+        nDisplay--;
+
+    SAL_INFO("sd", "Presenting on real screen " << nDisplay);
 
     return nDisplay;
 }
