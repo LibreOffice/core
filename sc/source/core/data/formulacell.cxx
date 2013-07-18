@@ -2264,7 +2264,6 @@ bool ScFormulaCell::UpdateReferenceOnShift(
     if (pUndoDoc)
         pOldCode.reset(pCode->Clone());
 
-    ScRangeData* pSharedCode = NULL;
     bool bValChanged = false;
     bool bRangeModified = false;    // any range, not only shared formula
     bool bRefSizeChanged = false;
@@ -2274,7 +2273,7 @@ bool ScFormulaCell::UpdateReferenceOnShift(
         // Update cell or range references.
         ScCompiler aComp(pDocument, aPos, *pCode);
         aComp.SetGrammar(pDocument->GetGrammar());
-        pSharedCode = aComp.UpdateReference(
+        aComp.UpdateReference(
             URM_INSDEL, aPos, rCxt.maRange, rCxt.mnColDelta, rCxt.mnRowDelta, rCxt.mnTabDelta,
             bValChanged, bRefSizeChanged);
         bRangeModified = aComp.HasModifiedRange();
@@ -2305,7 +2304,7 @@ bool ScFormulaCell::UpdateReferenceOnShift(
         bHasRelName = HasRelNameReference();
         // Reference changed and new listening needed?
         // Except in Insert/Delete without specialties.
-        bNewListening = (bRangeModified || pSharedCode || bColRowNameCompile
+        bNewListening = (bRangeModified || bColRowNameCompile
                 || (bValChanged && (bInDeleteUndo || bRefSizeChanged)) || bHasRelName);
 
         if ( bNewListening )
@@ -2314,29 +2313,14 @@ bool ScFormulaCell::UpdateReferenceOnShift(
 
     bool bNeedDirty = false;
     // NeedDirty for changes except for Copy and Move/Insert without RelNames
-    if (bRangeModified || pSharedCode || bColRowNameCompile ||
+    if (bRangeModified || bColRowNameCompile ||
         (bValChanged && (bHasRelName || bInDeleteUndo || bRefSizeChanged)) || bOnRefMove)
         bNeedDirty = true;
 
-    if (pUndoDoc && (bValChanged || pSharedCode || bOnRefMove))
+    if (pUndoDoc && (bValChanged || bOnRefMove))
         setOldCodeToUndo(pUndoDoc, aUndoPos, pOldCode.get(), eTempGrammar, cMatrixFlag);
 
     bValChanged = false;
-
-    if ( pSharedCode )
-    {   // Replace shared formula with own formula
-        pDocument->RemoveFromFormulaTree( this );   // update formula count
-        delete pCode;
-        pCode = pSharedCode->GetCode()->Clone();
-        // #i18937# #i110008# call MoveRelWrap, but with the old position
-        ScCompiler::MoveRelWrap(*pCode, pDocument, aPos, pSharedCode->GetMaxCol(), pSharedCode->GetMaxRow());
-        ScCompiler aComp2(pDocument, aPos, *pCode);
-        aComp2.SetGrammar(pDocument->GetGrammar());
-        aComp2.UpdateSharedFormulaReference(
-            URM_INSDEL, aPos, rCxt.maRange, rCxt.mnColDelta, rCxt.mnRowDelta, rCxt.mnTabDelta);
-        bValChanged = true;
-        bNeedDirty = true;
-    }
 
     if ( ( bCompile = (bCompile || bValChanged || bRangeModified || bColRowNameCompile) ) != 0 )
     {
@@ -2357,7 +2341,7 @@ bool ScFormulaCell::UpdateReferenceOnShift(
         }
     }
 
-    if ( bNeedDirty && (!bHasRelName || pSharedCode) )
+    if (bNeedDirty && !bHasRelName)
     {   // Cut off references, invalid or similar?
         sc::AutoCalcSwitch(*pDocument, false);
         SetDirty();
@@ -2409,7 +2393,6 @@ bool ScFormulaCell::UpdateReferenceOnMove(
     if (pUndoDoc)
         pOldCode.reset(pCode->Clone());
 
-    ScRangeData* pSharedCode = NULL;
     bool bValChanged = false;
     bool bRangeModified = false;    // any range, not only shared formula
     bool bRefSizeChanged = false;
@@ -2419,7 +2402,7 @@ bool ScFormulaCell::UpdateReferenceOnMove(
         // Update cell or range references.
         ScCompiler aComp(pDocument, aPos, *pCode);
         aComp.SetGrammar(pDocument->GetGrammar());
-        pSharedCode = aComp.UpdateReference(
+        aComp.UpdateReference(
             URM_MOVE, aOldPos, rCxt.maRange,
             rCxt.mnColDelta, rCxt.mnRowDelta, rCxt.mnTabDelta,
             bValChanged, bRefSizeChanged);
@@ -2451,7 +2434,7 @@ bool ScFormulaCell::UpdateReferenceOnMove(
         bHasRelName = HasRelNameReference();
         // Reference changed and new listening needed?
         // Except in Insert/Delete without specialties.
-        bNewListening = (bRangeModified || pSharedCode || bColRowNameCompile
+        bNewListening = (bRangeModified || bColRowNameCompile
                 || bValChanged || bHasRelName)
             // #i36299# Don't duplicate action during cut&paste / drag&drop
             // on a cell in the range moved, start/end listeners is done
@@ -2464,29 +2447,14 @@ bool ScFormulaCell::UpdateReferenceOnMove(
 
     bool bNeedDirty = false;
     // NeedDirty for changes except for Copy and Move/Insert without RelNames
-    if ( bRangeModified || pSharedCode || bColRowNameCompile ||
+    if ( bRangeModified || bColRowNameCompile ||
          (bValChanged && bHasRelName && (bHasRelName || bInDeleteUndo || bRefSizeChanged)) || bOnRefMove)
         bNeedDirty = true;
 
-    if (pUndoDoc && (bValChanged || pSharedCode || bOnRefMove))
+    if (pUndoDoc && (bValChanged || bOnRefMove))
         setOldCodeToUndo(pUndoDoc, aUndoPos, pOldCode.get(), eTempGrammar, cMatrixFlag);
 
     bValChanged = false;
-
-    if ( pSharedCode )
-    {   // Replace shared formula with own formula
-        pDocument->RemoveFromFormulaTree( this );   // update formula count
-        delete pCode;
-        pCode = pSharedCode->GetCode()->Clone();
-        // #i18937# #i110008# call MoveRelWrap, but with the old position
-        ScCompiler::MoveRelWrap(*pCode, pDocument, aOldPos, pSharedCode->GetMaxCol(), pSharedCode->GetMaxRow());
-        ScCompiler aComp2(pDocument, aPos, *pCode);
-        aComp2.SetGrammar(pDocument->GetGrammar());
-        aComp2.UpdateSharedFormulaReference(URM_MOVE, aOldPos, rCxt.maRange,
-            rCxt.mnColDelta, rCxt.mnRowDelta, rCxt.mnTabDelta );
-        bValChanged = true;
-        bNeedDirty = true;
-    }
 
     if ( ( bCompile = (bCompile || bValChanged || bRangeModified || bColRowNameCompile) ) != 0 )
     {
@@ -2550,7 +2518,6 @@ bool ScFormulaCell::UpdateReferenceOnCopy(
     if (pUndoDoc)
         pOldCode.reset(pCode->Clone());
 
-    ScRangeData* pSharedCode = NULL;
     bool bValChanged = false;
     bool bRangeModified = false;    // any range, not only shared formula
     bool bRefSizeChanged = false;
@@ -2560,7 +2527,7 @@ bool ScFormulaCell::UpdateReferenceOnCopy(
         // Update cell or range references.
         ScCompiler aComp(pDocument, aPos, *pCode);
         aComp.SetGrammar(pDocument->GetGrammar());
-        pSharedCode = aComp.UpdateReference(
+        aComp.UpdateReference(
             URM_COPY, aOldPos, rCxt.maRange, rCxt.mnColDelta, rCxt.mnRowDelta, rCxt.mnTabDelta,
             bValChanged, bRefSizeChanged);
         bRangeModified = aComp.HasModifiedRange();
@@ -2592,7 +2559,7 @@ bool ScFormulaCell::UpdateReferenceOnCopy(
         // Reference changed and new listening needed?
         // Except in Insert/Delete without specialties.
         bNewListening =
-            (bRangeModified || pSharedCode || bColRowNameCompile || (bValChanged && (bInDeleteUndo || bRefSizeChanged)));
+            (bRangeModified || bColRowNameCompile || (bValChanged && (bInDeleteUndo || bRefSizeChanged)));
 
         if ( bNewListening )
             EndListeningTo(pDocument, pOldCode.get(), aOldPos);
@@ -2600,28 +2567,13 @@ bool ScFormulaCell::UpdateReferenceOnCopy(
 
     bool bNeedDirty = false;
     // NeedDirty for changes except for Copy and Move/Insert without RelNames
-    if ( bRangeModified || pSharedCode || bColRowNameCompile || bOnRefMove)
+    if ( bRangeModified || bColRowNameCompile || bOnRefMove)
         bNeedDirty = true;
 
-    if (pUndoDoc && (bValChanged || pSharedCode || bOnRefMove))
+    if (pUndoDoc && (bValChanged || bOnRefMove))
         setOldCodeToUndo(pUndoDoc, aUndoPos, pOldCode.get(), eTempGrammar, cMatrixFlag);
 
     bValChanged = false;
-
-    if ( pSharedCode )
-    {   // Replace shared formula with own formula
-        pDocument->RemoveFromFormulaTree( this );   // update formula count
-        delete pCode;
-        pCode = pSharedCode->GetCode()->Clone();
-        // #i18937# #i110008# call MoveRelWrap, but with the old position
-        ScCompiler::MoveRelWrap(*pCode, pDocument, aOldPos, pSharedCode->GetMaxCol(), pSharedCode->GetMaxRow());
-        ScCompiler aComp2(pDocument, aPos, *pCode);
-        aComp2.SetGrammar(pDocument->GetGrammar());
-        aComp2.UpdateSharedFormulaReference(
-            URM_COPY, aOldPos, rCxt.maRange, rCxt.mnColDelta, rCxt.mnRowDelta, rCxt.mnTabDelta);
-        bValChanged = true;
-        bNeedDirty = true;
-    }
 
     if ( ( bCompile = (bCompile || bValChanged || bRangeModified || bColRowNameCompile) ) != 0 )
     {

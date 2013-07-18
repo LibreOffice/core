@@ -4183,7 +4183,7 @@ void ScCompiler::MoveRelWrap( ScTokenArray& rArr, ScDocument* pDoc, const ScAddr
     }
 }
 
-ScRangeData* ScCompiler::UpdateReference(UpdateRefMode eUpdateRefMode,
+void ScCompiler::UpdateReference(UpdateRefMode eUpdateRefMode,
                                  const ScAddress& rOldPos, const ScRange& r,
                                  SCsCOL nDx, SCsROW nDy, SCsTAB nDz,
                                  bool& rChanged, bool& rRefSizeChanged )
@@ -4218,113 +4218,54 @@ ScRangeData* ScCompiler::UpdateReference(UpdateRefMode eUpdateRefMode,
                 }
             }
         }
-        // Check for SharedFormulas.
-        ScRangeData* pSharedCode = NULL;
-        pArr->Reset();
-        for( FormulaToken* j = pArr->GetNextName(); j && !pSharedCode;
-             j = pArr->GetNextName() )
-        {
-            if( j->GetOpCode() == ocName )
-            {
-                ScRangeData* pName = GetRangeData( *j);
-                if (pName && pName->HasType(RT_SHARED))
-                    pSharedCode = pName;
-            }
-        }
-        // Check SharedFormulas for wraps.
-        if (pSharedCode)
-        {
-            ScRangeData* pName = pSharedCode;
-            pSharedCode = NULL;
-            pArr->Reset();
-            for( t = static_cast<ScToken*>(pArr->GetNextReferenceRPN()); t && !pSharedCode;
-                 t = static_cast<ScToken*>(pArr->GetNextReferenceRPN()) )
-            {
-                bool bRelName = (t->GetType() == svSingleRef ?
-                        t->GetSingleRef().IsRelName() :
-                        (t->GetDoubleRef().Ref1.IsRelName() ||
-                         t->GetDoubleRef().Ref2.IsRelName()));
-                if (bRelName)
-                {
-                    bool bValid = false;
-                    if (t->GetType() == svSingleRef)
-                    {
-                        ScAddress aAbs = t->GetSingleRef().toAbs(rOldPos);
-                        bValid = ValidAddress(aAbs);
-                    }
-                    else
-                    {
-                        ScRange aAbs = t->GetDoubleRef().toAbs(rOldPos);
-                        bValid = ValidRange(aAbs);
-                    }
 
-                    // If the reference isn't valid, copying the formula
-                    // wrapped it. Replace SharedFormula.
-                    if (!bValid)
-                    {
-                        pSharedCode = pName;
-                        rChanged = true;
-                    }
-                }
-            }
-        }
-        return pSharedCode;
+        return;
     }
 
-    ScRangeData* pSharedCode = NULL;
     ScToken* t;
     pArr->Reset();
     while( (t = static_cast<ScToken*>(pArr->GetNextReferenceOrName())) != NULL )
     {
-        if( t->GetOpCode() == ocName )
+        if (t->GetType() == svIndex)
+            continue;
+
+        switch (t->GetType())
         {
-            ScRangeData* pName = GetRangeData( *t);
-            if (pName && pName->HasType(RT_SHAREDMOD))
-            {
-                pSharedCode = pName;     // maybe need a replacement of shared with own code
-                rChanged = true;
-            }
-        }
-        else if( t->GetType() != svIndex )  // it may be a DB area!!!
-        {
-            switch (t->GetType())
-            {
-                case svExternalSingleRef:
-                case svExternalDoubleRef:
-                    // External references never change their positioning
-                    // nor point to parts that will be removed or expanded.
-                    // In fact, calling ScRefUpdate::Update() for URM_MOVE
-                    // may have negative side effects. Simply adapt
-                    // relative references to the new position.
-                    break;
-                case svSingleRef:
-                {
-                    SingleDoubleRefModifier aRefMod(t->GetSingleRef());
-                    ScComplexRefData& rRef = aRefMod.Ref();
-                    ScRange aRefRange = rRef.toAbs(rOldPos);
-                    if (ScRefUpdate::Update(pDoc, eUpdateRefMode, aPos, r, nDx, nDy, nDz, rRef, aRefRange) != UR_NOTHING)
-                    {
-                        rRef.SetRange(aRefRange, rOldPos);
-                        rChanged = true;
-                    }
-                }
+            case svExternalSingleRef:
+            case svExternalDoubleRef:
+                // External references never change their positioning
+                // nor point to parts that will be removed or expanded.
+                // In fact, calling ScRefUpdate::Update() for URM_MOVE
+                // may have negative side effects. Simply adapt
+                // relative references to the new position.
                 break;
-                default:
+            case svSingleRef:
+            {
+                SingleDoubleRefModifier aRefMod(t->GetSingleRef());
+                ScComplexRefData& rRef = aRefMod.Ref();
+                ScRange aRefRange = rRef.toAbs(rOldPos);
+                if (ScRefUpdate::Update(pDoc, eUpdateRefMode, aPos, r, nDx, nDy, nDz, rRef, aRefRange) != UR_NOTHING)
                 {
-                    ScComplexRefData& rRef = t->GetDoubleRef();
-                    ScRange aRefRange = rRef.toAbs(rOldPos);
-                    SCCOL nCols = aRefRange.aEnd.Col() - aRefRange.aStart.Col();
-                    SCROW nRows = aRefRange.aEnd.Row() - aRefRange.aStart.Row();
-                    SCTAB nTabs = aRefRange.aEnd.Tab() - aRefRange.aStart.Tab();
-                    if (ScRefUpdate::Update(pDoc, eUpdateRefMode, aPos, r, nDx, nDy, nDz, rRef, aRefRange) != UR_NOTHING)
-                    {
-                        rRef.SetRange(aRefRange, rOldPos);
-                        rChanged = true;
-                        if (aRefRange.aEnd.Col() - aRefRange.aStart.Col() != nCols ||
-                            aRefRange.aEnd.Row() - aRefRange.aStart.Row() != nRows ||
-                            aRefRange.aEnd.Tab() - aRefRange.aStart.Tab() != nTabs)
-                            rRefSizeChanged = true;
-                    }
+                    rRef.SetRange(aRefRange, rOldPos);
+                    rChanged = true;
+                }
+            }
+            break;
+            default:
+            {
+                ScComplexRefData& rRef = t->GetDoubleRef();
+                ScRange aRefRange = rRef.toAbs(rOldPos);
+                SCCOL nCols = aRefRange.aEnd.Col() - aRefRange.aStart.Col();
+                SCROW nRows = aRefRange.aEnd.Row() - aRefRange.aStart.Row();
+                SCTAB nTabs = aRefRange.aEnd.Tab() - aRefRange.aStart.Tab();
+                if (ScRefUpdate::Update(pDoc, eUpdateRefMode, aPos, r, nDx, nDy, nDz, rRef, aRefRange) != UR_NOTHING)
+                {
+                    rRef.SetRange(aRefRange, rOldPos);
+                    rChanged = true;
+                    if (aRefRange.aEnd.Col() - aRefRange.aStart.Col() != nCols ||
+                        aRefRange.aEnd.Row() - aRefRange.aStart.Row() != nRows ||
+                        aRefRange.aEnd.Tab() - aRefRange.aStart.Tab() != nTabs)
+                        rRefSizeChanged = true;
                 }
             }
         }
@@ -4374,8 +4315,6 @@ ScRangeData* ScCompiler::UpdateReference(UpdateRefMode eUpdateRefMode,
             }
         }
     }
-
-    return pSharedCode;
 }
 
 bool ScCompiler::UpdateNameReference(UpdateRefMode eUpdateRefMode,
