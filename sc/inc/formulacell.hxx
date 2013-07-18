@@ -105,6 +105,24 @@ private:
                     };
     void            InterpretTail( ScInterpretTailParameter );
 
+    /**
+     * Update reference in response to cell insertion or deletion.
+     */
+    bool UpdateReferenceOnShift(
+        const sc::RefUpdateContext& rCxt, ScDocument* pUndoDoc, const ScAddress* pUndoCellPos );
+
+    /**
+     * Update reference in response to cell move.
+     */
+    bool UpdateReferenceOnMove(
+        const sc::RefUpdateContext& rCxt, ScDocument* pUndoDoc, const ScAddress* pUndoCellPos );
+
+    /**
+     * Update reference in response to cell copy-n-paste.
+     */
+    bool UpdateReferenceOnCopy(
+        const sc::RefUpdateContext& rCxt, ScDocument* pUndoDoc, const ScAddress* pUndoCellPos );
+
     ScFormulaCell( const ScFormulaCell& );
 public:
 

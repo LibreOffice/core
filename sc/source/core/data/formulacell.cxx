@@ -2204,25 +2204,24 @@ bool checkCompileColRowName(
 
 }
 
-bool ScFormulaCell::UpdateReference(
+bool ScFormulaCell::UpdateReferenceOnShift(
     const sc::RefUpdateContext& rCxt, ScDocument* pUndoDoc, const ScAddress* pUndoCellPos )
 {
+    if (rCxt.meMode != URM_INSDEL)
+        // Just in case...
+        return false;
+
     bool bCellStateChanged = false;
-    UpdateRefMode eUpdateRefMode = rCxt.meMode;
     const ScRange& rRange = rCxt.maRange;
     SCCOL nDx = rCxt.mnColDelta;
     SCROW nDy = rCxt.mnRowDelta;
     SCTAB nDz = rCxt.mnTabDelta;
-    SCCOL nCol = aPos.Col();
-    SCROW nRow = aPos.Row();
-    SCTAB nTab = aPos.Tab();
     ScAddress aUndoPos( aPos );         // position for undo cell in pUndoDoc
     if ( pUndoCellPos )
         aUndoPos = *pUndoCellPos;
     ScAddress aOldPos( aPos );
-    bool bIsInsert = (eUpdateRefMode == URM_INSDEL && nDx >= 0 && nDy >= 0 && nDz >= 0);
 
-    if (eUpdateRefMode == URM_INSDEL && rRange.In(aPos))
+    if (rRange.In(aPos))
     {
         // This formula cell itself is being shifted during cell range
         // insertion or deletion. Update its position.
@@ -2231,14 +2230,6 @@ bool ScFormulaCell::UpdateReference(
             xGroup->mnStart += nDy;
 
         bCellStateChanged = aPos != aOldPos;
-    }
-    else if (rRange.In(aPos))
-    {
-        // The cell is being moved or copied to a new position. I guess the
-        // position has been updated prior to this call?  Determine
-        // its original position before the move which will be used to adjust
-        // relative references later.
-        aOldPos.Set( nCol - nDx, nRow - nDy, nTab - nDz );
     }
 
     bool bHasRefs = false;
@@ -2249,7 +2240,7 @@ bool ScFormulaCell::UpdateReference(
         // Check presence of any references or column row names.
         pCode->Reset();
         bHasRefs = (pCode->GetNextReferenceRPN() != NULL);
-        if ( !bHasRefs || eUpdateRefMode == URM_COPY )
+        if (!bHasRefs)
         {
             pCode->Reset();
             bHasColRowNames = (pCode->GetNextColRowName() != NULL);
@@ -2277,7 +2268,7 @@ bool ScFormulaCell::UpdateReference(
         // Update cell or range references.
         ScCompiler aComp(pDocument, aPos, *pCode);
         aComp.SetGrammar(pDocument->GetGrammar());
-        pSharedCode = aComp.UpdateReference(eUpdateRefMode, aOldPos, rRange,
+        pSharedCode = aComp.UpdateReference(URM_INSDEL, aOldPos, rRange,
                                          nDx, nDy, nDz,
                                          bValChanged, bRefSizeChanged);
         bRangeModified = aComp.HasModifiedRange();
@@ -2309,14 +2300,7 @@ bool ScFormulaCell::UpdateReference(
         // Reference changed and new listening needed?
         // Except in Insert/Delete without specialties.
         bNewListening = (bRangeModified || pSharedCode || bColRowNameCompile
-                || (bValChanged && (eUpdateRefMode != URM_INSDEL ||
-                        bInDeleteUndo || bRefSizeChanged)) ||
-                (bHasRelName && eUpdateRefMode != URM_COPY))
-            // #i36299# Don't duplicate action during cut&paste / drag&drop
-            // on a cell in the range moved, start/end listeners is done
-            // via ScDocument::DeleteArea() and ScDocument::CopyFromClip().
-            && !(eUpdateRefMode == URM_MOVE &&
-                    pDocument->IsInsertingFromOtherDoc() && rRange.In(aPos));
+                || (bValChanged && (bInDeleteUndo || bRefSizeChanged)) || bHasRelName);
 
         if ( bNewListening )
             EndListeningTo(pDocument, pOldCode.get(), aOldPos);
@@ -2324,11 +2308,8 @@ bool ScFormulaCell::UpdateReference(
 
     bool bNeedDirty = false;
     // NeedDirty for changes except for Copy and Move/Insert without RelNames
-    if ( bRangeModified || pSharedCode || bColRowNameCompile ||
-            (bValChanged && eUpdateRefMode != URM_COPY &&
-             (eUpdateRefMode != URM_MOVE || bHasRelName) &&
-             (!bIsInsert || bHasRelName || bInDeleteUndo ||
-              bRefSizeChanged)) || bOnRefMove)
+    if (bRangeModified || pSharedCode || bColRowNameCompile ||
+        (bValChanged && (bHasRelName || bInDeleteUndo || bRefSizeChanged)) || bOnRefMove)
         bNeedDirty = true;
 
     if (pUndoDoc && (bValChanged || pSharedCode || bOnRefMove))
@@ -2360,7 +2341,181 @@ bool ScFormulaCell::UpdateReference(
         ScCompiler::MoveRelWrap(*pCode, pDocument, aOldPos, pSharedCode->GetMaxCol(), pSharedCode->GetMaxRow());
         ScCompiler aComp2(pDocument, aPos, *pCode);
         aComp2.SetGrammar(pDocument->GetGrammar());
-        aComp2.UpdateSharedFormulaReference( eUpdateRefMode, aOldPos, rRange,
+        aComp2.UpdateSharedFormulaReference(URM_INSDEL, aOldPos, rRange, nDx, nDy, nDz);
+        bValChanged = true;
+        bNeedDirty = true;
+    }
+
+    if ( ( bCompile = (bCompile || bValChanged || bRangeModified || bColRowNameCompile) ) != 0 )
+    {
+        CompileTokenArray( bNewListening ); // no Listening
+        bNeedDirty = true;
+    }
+
+    if ( !bInDeleteUndo )
+    {   // In ChangeTrack Delete-Reject listeners are established in
+        // InsertCol/InsertRow
+        if ( bNewListening )
+        {
+            // Inserts/Deletes re-establish listeners after all
+            // UpdateReference calls.
+            // All replaced shared formula listeners have to be
+            // established after an Insert or Delete. Do nothing here.
+            SetNeedsListening( true);
+        }
+    }
+
+    if ( bNeedDirty && (!bHasRelName || pSharedCode) )
+    {   // Cut off references, invalid or similar?
+        sc::AutoCalcSwitch(*pDocument, false);
+        SetDirty();
+    }
+
+    return bCellStateChanged;
+}
+
+bool ScFormulaCell::UpdateReferenceOnMove(
+    const sc::RefUpdateContext& rCxt, ScDocument* pUndoDoc, const ScAddress* pUndoCellPos )
+{
+    if (rCxt.meMode != URM_MOVE)
+        return false;
+
+    bool bCellStateChanged = false;
+    const ScRange& rRange = rCxt.maRange;
+    SCCOL nDx = rCxt.mnColDelta;
+    SCROW nDy = rCxt.mnRowDelta;
+    SCTAB nDz = rCxt.mnTabDelta;
+    SCCOL nCol = aPos.Col();
+    SCROW nRow = aPos.Row();
+    SCTAB nTab = aPos.Tab();
+    ScAddress aUndoPos( aPos );         // position for undo cell in pUndoDoc
+    if ( pUndoCellPos )
+        aUndoPos = *pUndoCellPos;
+    ScAddress aOldPos( aPos );
+
+    if (rRange.In(aPos))
+    {
+        // The cell is being moved or copied to a new position. I guess the
+        // position has been updated prior to this call?  Determine
+        // its original position before the move which will be used to adjust
+        // relative references later.
+        aOldPos.Set( nCol - nDx, nRow - nDy, nTab - nDz );
+    }
+
+    bool bHasRefs = false;
+    bool bHasColRowNames = false;
+    bool bOnRefMove = false;
+    if ( !pDocument->IsClipOrUndo() )
+    {
+        // Check presence of any references or column row names.
+        pCode->Reset();
+        bHasRefs = (pCode->GetNextReferenceRPN() != NULL);
+        if (!bHasRefs)
+        {
+            pCode->Reset();
+            bHasColRowNames = (pCode->GetNextColRowName() != NULL);
+            bHasRefs = bHasRefs || bHasColRowNames;
+        }
+        bOnRefMove = pCode->IsRecalcModeOnRefMove();
+    }
+
+    if (!bHasRefs && !bOnRefMove)
+        // This formula cell contains no references, nor needs recalculating
+        // on reference update. Bail out.
+        return bCellStateChanged;
+
+    boost::scoped_ptr<ScTokenArray> pOldCode;
+    if (pUndoDoc)
+        pOldCode.reset(pCode->Clone());
+
+    ScRangeData* pSharedCode = NULL;
+    bool bValChanged = false;
+    bool bRangeModified = false;    // any range, not only shared formula
+    bool bRefSizeChanged = false;
+
+    if (bHasRefs)
+    {
+        // Update cell or range references.
+        ScCompiler aComp(pDocument, aPos, *pCode);
+        aComp.SetGrammar(pDocument->GetGrammar());
+        pSharedCode = aComp.UpdateReference(URM_MOVE, aOldPos, rRange,
+                                         nDx, nDy, nDz,
+                                         bValChanged, bRefSizeChanged);
+        bRangeModified = aComp.HasModifiedRange();
+    }
+
+    bCellStateChanged |= bValChanged;
+
+    if (bOnRefMove)
+        // Cell may reference itself, e.g. ocColumn, ocRow without parameter
+        bOnRefMove = (bValChanged || (aPos != aOldPos));
+
+    bool bColRowNameCompile = false;
+    bool bHasRelName = false;
+    bool bNewListening = false;
+    bool bInDeleteUndo = false;
+
+    if (bHasRefs)
+    {
+        // Upon Insert ColRowNames have to be recompiled in case the
+        // insertion occurs right in front of the range.
+        if (bHasColRowNames)
+            bColRowNameCompile = checkCompileColRowName(rCxt, *pDocument, *pCode, aOldPos, aPos, bValChanged);
+
+        ScChangeTrack* pChangeTrack = pDocument->GetChangeTrack();
+        bInDeleteUndo = (pChangeTrack && pChangeTrack->IsInDeleteUndo());
+
+        // RelNameRefs are always moved
+        bHasRelName = HasRelNameReference();
+        // Reference changed and new listening needed?
+        // Except in Insert/Delete without specialties.
+        bNewListening = (bRangeModified || pSharedCode || bColRowNameCompile
+                || bValChanged || bHasRelName)
+            // #i36299# Don't duplicate action during cut&paste / drag&drop
+            // on a cell in the range moved, start/end listeners is done
+            // via ScDocument::DeleteArea() and ScDocument::CopyFromClip().
+            && !(pDocument->IsInsertingFromOtherDoc() && rRange.In(aPos));
+
+        if ( bNewListening )
+            EndListeningTo(pDocument, pOldCode.get(), aOldPos);
+    }
+
+    bool bNeedDirty = false;
+    // NeedDirty for changes except for Copy and Move/Insert without RelNames
+    if ( bRangeModified || pSharedCode || bColRowNameCompile ||
+         (bValChanged && bHasRelName && (bHasRelName || bInDeleteUndo || bRefSizeChanged)) || bOnRefMove)
+        bNeedDirty = true;
+
+    if (pUndoDoc && (bValChanged || pSharedCode || bOnRefMove))
+    {
+        // Copy the cell to aUndoPos, which is its current position in the document,
+        // so this works when UpdateReference is called before moving the cells
+        // (InsertCells/DeleteCells - aPos is changed above) as well as when UpdateReference
+        // is called after moving the cells (MoveBlock/PasteFromClip - aOldPos is changed).
+
+        // If there is already a formula cell in the undo document, don't overwrite it,
+        // the first (oldest) is the important cell.
+        if ( pUndoDoc->GetCellType( aUndoPos ) != CELLTYPE_FORMULA )
+        {
+            ScFormulaCell* pFCell = new ScFormulaCell( pUndoDoc, aUndoPos,
+                    pOldCode.get(), eTempGrammar, cMatrixFlag );
+            pFCell->aResult.SetToken( NULL);  // to recognize it as changed later (Cut/Paste!)
+            pUndoDoc->SetFormulaCell(aUndoPos, pFCell);
+        }
+    }
+
+    bValChanged = false;
+
+    if ( pSharedCode )
+    {   // Replace shared formula with own formula
+        pDocument->RemoveFromFormulaTree( this );   // update formula count
+        delete pCode;
+        pCode = pSharedCode->GetCode()->Clone();
+        // #i18937# #i110008# call MoveRelWrap, but with the old position
+        ScCompiler::MoveRelWrap(*pCode, pDocument, aOldPos, pSharedCode->GetMaxCol(), pSharedCode->GetMaxRow());
+        ScCompiler aComp2(pDocument, aPos, *pCode);
+        aComp2.SetGrammar(pDocument->GetGrammar());
+        aComp2.UpdateSharedFormulaReference(URM_MOVE, aOldPos, rRange,
             nDx, nDy, nDz );
         bValChanged = true;
         bNeedDirty = true;
@@ -2377,26 +2532,195 @@ bool ScFormulaCell::UpdateReference(
         // InsertCol/InsertRow
         if ( bNewListening )
         {
-            if ( eUpdateRefMode == URM_INSDEL )
-            {
-                // Inserts/Deletes re-establish listeners after all
-                // UpdateReference calls.
-                // All replaced shared formula listeners have to be
-                // established after an Insert or Delete. Do nothing here.
-                SetNeedsListening( true);
-            }
-            else
-                StartListeningTo( pDocument );
+            StartListeningTo( pDocument );
         }
     }
 
-    if ( bNeedDirty && (!(eUpdateRefMode == URM_INSDEL && bHasRelName) || pSharedCode) )
+    if (bNeedDirty)
     {   // Cut off references, invalid or similar?
         sc::AutoCalcSwitch(*pDocument, false);
         SetDirty();
     }
 
     return bCellStateChanged;
+}
+
+bool ScFormulaCell::UpdateReferenceOnCopy(
+    const sc::RefUpdateContext& rCxt, ScDocument* pUndoDoc, const ScAddress* pUndoCellPos )
+{
+    if (rCxt.meMode != URM_COPY)
+        return false;
+
+    bool bCellStateChanged = false;
+    const ScRange& rRange = rCxt.maRange;
+    SCCOL nDx = rCxt.mnColDelta;
+    SCROW nDy = rCxt.mnRowDelta;
+    SCTAB nDz = rCxt.mnTabDelta;
+    SCCOL nCol = aPos.Col();
+    SCROW nRow = aPos.Row();
+    SCTAB nTab = aPos.Tab();
+    ScAddress aUndoPos( aPos );         // position for undo cell in pUndoDoc
+    if ( pUndoCellPos )
+        aUndoPos = *pUndoCellPos;
+    ScAddress aOldPos( aPos );
+
+    if (rRange.In(aPos))
+    {
+        // The cell is being moved or copied to a new position. I guess the
+        // position has been updated prior to this call?  Determine
+        // its original position before the move which will be used to adjust
+        // relative references later.
+        aOldPos.Set( nCol - nDx, nRow - nDy, nTab - nDz );
+    }
+
+    bool bHasRefs = false;
+    bool bHasColRowNames = false;
+    bool bOnRefMove = false;
+    if ( !pDocument->IsClipOrUndo() )
+    {
+        // Check presence of any references or column row names.
+        pCode->Reset();
+        bHasRefs = (pCode->GetNextReferenceRPN() != NULL);
+        pCode->Reset();
+        bHasColRowNames = (pCode->GetNextColRowName() != NULL);
+        bHasRefs = bHasRefs || bHasColRowNames;
+        bOnRefMove = pCode->IsRecalcModeOnRefMove();
+    }
+
+    if (!bHasRefs && !bOnRefMove)
+        // This formula cell contains no references, nor needs recalculating
+        // on reference update. Bail out.
+        return bCellStateChanged;
+
+    boost::scoped_ptr<ScTokenArray> pOldCode;
+    if (pUndoDoc)
+        pOldCode.reset(pCode->Clone());
+
+    ScRangeData* pSharedCode = NULL;
+    bool bValChanged = false;
+    bool bRangeModified = false;    // any range, not only shared formula
+    bool bRefSizeChanged = false;
+
+    if (bHasRefs)
+    {
+        // Update cell or range references.
+        ScCompiler aComp(pDocument, aPos, *pCode);
+        aComp.SetGrammar(pDocument->GetGrammar());
+        pSharedCode = aComp.UpdateReference(URM_COPY, aOldPos, rRange,
+                                         nDx, nDy, nDz,
+                                         bValChanged, bRefSizeChanged);
+        bRangeModified = aComp.HasModifiedRange();
+    }
+
+    bCellStateChanged |= bValChanged;
+
+    if (bOnRefMove)
+        // Cell may reference itself, e.g. ocColumn, ocRow without parameter
+        bOnRefMove = (bValChanged || (aPos != aOldPos));
+
+    bool bColRowNameCompile = false;
+    bool bHasRelName = false;
+    bool bNewListening = false;
+    bool bInDeleteUndo = false;
+
+    if (bHasRefs)
+    {
+        // Upon Insert ColRowNames have to be recompiled in case the
+        // insertion occurs right in front of the range.
+        if (bHasColRowNames)
+            bColRowNameCompile = checkCompileColRowName(rCxt, *pDocument, *pCode, aOldPos, aPos, bValChanged);
+
+        ScChangeTrack* pChangeTrack = pDocument->GetChangeTrack();
+        bInDeleteUndo = (pChangeTrack && pChangeTrack->IsInDeleteUndo());
+
+        // RelNameRefs are always moved
+        bHasRelName = HasRelNameReference();
+        // Reference changed and new listening needed?
+        // Except in Insert/Delete without specialties.
+        bNewListening =
+            (bRangeModified || pSharedCode || bColRowNameCompile || (bValChanged && (bInDeleteUndo || bRefSizeChanged)));
+
+        if ( bNewListening )
+            EndListeningTo(pDocument, pOldCode.get(), aOldPos);
+    }
+
+    bool bNeedDirty = false;
+    // NeedDirty for changes except for Copy and Move/Insert without RelNames
+    if ( bRangeModified || pSharedCode || bColRowNameCompile || bOnRefMove)
+        bNeedDirty = true;
+
+    if (pUndoDoc && (bValChanged || pSharedCode || bOnRefMove))
+    {
+        // Copy the cell to aUndoPos, which is its current position in the document,
+        // so this works when UpdateReference is called before moving the cells
+        // (InsertCells/DeleteCells - aPos is changed above) as well as when UpdateReference
+        // is called after moving the cells (MoveBlock/PasteFromClip - aOldPos is changed).
+
+        // If there is already a formula cell in the undo document, don't overwrite it,
+        // the first (oldest) is the important cell.
+        if ( pUndoDoc->GetCellType( aUndoPos ) != CELLTYPE_FORMULA )
+        {
+            ScFormulaCell* pFCell = new ScFormulaCell( pUndoDoc, aUndoPos,
+                    pOldCode.get(), eTempGrammar, cMatrixFlag );
+            pFCell->aResult.SetToken( NULL);  // to recognize it as changed later (Cut/Paste!)
+            pUndoDoc->SetFormulaCell(aUndoPos, pFCell);
+        }
+    }
+
+    bValChanged = false;
+
+    if ( pSharedCode )
+    {   // Replace shared formula with own formula
+        pDocument->RemoveFromFormulaTree( this );   // update formula count
+        delete pCode;
+        pCode = pSharedCode->GetCode()->Clone();
+        // #i18937# #i110008# call MoveRelWrap, but with the old position
+        ScCompiler::MoveRelWrap(*pCode, pDocument, aOldPos, pSharedCode->GetMaxCol(), pSharedCode->GetMaxRow());
+        ScCompiler aComp2(pDocument, aPos, *pCode);
+        aComp2.SetGrammar(pDocument->GetGrammar());
+        aComp2.UpdateSharedFormulaReference(URM_COPY, aOldPos, rRange, nDx, nDy, nDz);
+        bValChanged = true;
+        bNeedDirty = true;
+    }
+
+    if ( ( bCompile = (bCompile || bValChanged || bRangeModified || bColRowNameCompile) ) != 0 )
+    {
+        CompileTokenArray( bNewListening ); // no Listening
+        bNeedDirty = true;
+    }
+
+    if ( !bInDeleteUndo )
+    {   // In ChangeTrack Delete-Reject listeners are established in
+        // InsertCol/InsertRow
+        if ( bNewListening )
+            StartListeningTo( pDocument );
+    }
+
+    if (bNeedDirty)
+    {   // Cut off references, invalid or similar?
+        sc::AutoCalcSwitch(*pDocument, false);
+        SetDirty();
+    }
+
+    return bCellStateChanged;
+}
+
+bool ScFormulaCell::UpdateReference(
+    const sc::RefUpdateContext& rCxt, ScDocument* pUndoDoc, const ScAddress* pUndoCellPos )
+{
+    switch (rCxt.meMode)
+    {
+        case URM_INSDEL:
+            return UpdateReferenceOnShift(rCxt, pUndoDoc, pUndoCellPos);
+        case URM_MOVE:
+            return UpdateReferenceOnMove(rCxt, pUndoDoc, pUndoCellPos);
+        case URM_COPY:
+            return UpdateReferenceOnCopy(rCxt, pUndoDoc, pUndoCellPos);
+        default:
+            ;
+    }
+
+    return false;
 }
 
 void ScFormulaCell::UpdateInsertTab(SCTAB nTable, SCTAB nNewSheets)
