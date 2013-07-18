@@ -28,7 +28,7 @@ Resource RID_PRICING_FUNCTION_DESCRIPTIONS
     {
         String 1    // description
         {
-            Text [ en-US ] = "pricing of a barrier option";
+            Text [ en-US ] = "Pricing of a barrier option";
         };
 
         String 2 // name of parameter 1
@@ -37,7 +37,7 @@ Resource RID_PRICING_FUNCTION_DESCRIPTIONS
         };
         String 3 // description of parameter 1
         {
-            Text [ en-US ] = "price/value of the underlying asset";
+            Text [ en-US ] = "Price/value of the underlying asset";
         };
 
         String 4 // name of parameter 2
@@ -46,7 +46,7 @@ Resource RID_PRICING_FUNCTION_DESCRIPTIONS
         };
         String 5 // description of parameter 2
         {
-            Text [ en-US ] = "annual volatility of the underlying asset";
+            Text [ en-US ] = "Annual volatility of the underlying asset";
         };
 
         String 6 // name of parameter 3
@@ -55,7 +55,7 @@ Resource RID_PRICING_FUNCTION_DESCRIPTIONS
         };
         String 7 // description of parameter 3
         {
-            Text [ en-US ] = "interest rate (continuously compounded)";
+            Text [ en-US ] = "Interest rate (continuously compounded)";
         };
 
         String 8 // name of parameter 4
@@ -64,7 +64,7 @@ Resource RID_PRICING_FUNCTION_DESCRIPTIONS
         };
         String 9 // description of parameter 4
         {
-            Text [ en-US ] = "foreign interest rate (continuously compounded)";
+            Text [ en-US ] = "Foreign interest rate (continuously compounded)";
         };
 
         String 10 // name of parameter 5
@@ -73,7 +73,7 @@ Resource RID_PRICING_FUNCTION_DESCRIPTIONS
         };
         String 11 // description of parameter 5
         {
-            Text [ en-US ] = "time to maturity of the option in years";
+            Text [ en-US ] = "Time to maturity of the option in years";
         };
 
         String 12 // name of parameter 6
@@ -82,7 +82,7 @@ Resource RID_PRICING_FUNCTION_DESCRIPTIONS
         };
         String 13 // description of parameter 6
         {
-            Text [ en-US ] = "strike level of the option";
+            Text [ en-US ] = "Strike level of the option";
         };
 
         String 14 // name of parameter 7
@@ -91,7 +91,7 @@ Resource RID_PRICING_FUNCTION_DESCRIPTIONS
         };
         String 15 // description of parameter 7
         {
-            Text [ en-US ] = "lower barrier (set to 0 for no lower barrier)";
+            Text [ en-US ] = "Lower barrier (set to 0 for no lower barrier)";
         };
 
         String 16 // name of parameter 8
@@ -100,7 +100,7 @@ Resource RID_PRICING_FUNCTION_DESCRIPTIONS
         };
         String 17 // description of parameter 8
         {
-            Text [ en-US ] = "upper barrier (set to 0 for no upper barrier)";
+            Text [ en-US ] = "Upper barrier (set to 0 for no upper barrier)";
         };
 
         String 18 // name of parameter 8
@@ -109,7 +109,7 @@ Resource RID_PRICING_FUNCTION_DESCRIPTIONS
         };
         String 19 // description of parameter 8
         {
-            Text [ en-US ] = "amount of money paid at maturity if barrier was hit";
+            Text [ en-US ] = "Amount of money paid at maturity if barrier was hit";
         };
 
         String 20 // name of parameter 10
@@ -118,7 +118,7 @@ Resource RID_PRICING_FUNCTION_DESCRIPTIONS
         };
         String 21 // description of parameter 10
         {
-            Text [ en-US ] = "string to define if the option is a (p)ut or a (c)all";
+            Text [ en-US ] = "String to define if the option is a (p)ut or a (c)all";
         };
 
         String 22 // name of parameter 11
@@ -127,7 +127,7 @@ Resource RID_PRICING_FUNCTION_DESCRIPTIONS
         };
         String 23 // description of parameter 11
         {
-            Text [ en-US ] = "string to define if the option is of type knock-(i)n or knock-(o)ut";
+            Text [ en-US ] = "String to define if the option is of type knock-(i)n or knock-(o)ut";
         };
 
         String 24 // name of parameter 12
@@ -136,7 +136,7 @@ Resource RID_PRICING_FUNCTION_DESCRIPTIONS
         };
         String 25 // description of parameter 12
         {
-            Text [ en-US ] = "string to define whether the barrier is observed (c)ontinuously or only at the (e)nd/maturity";
+            Text [ en-US ] = "String to define whether the barrier is observed (c)ontinuously or only at the (e)nd/maturity";
         };
 
         String 26 // name of parameter 13
@@ -145,7 +145,7 @@ Resource RID_PRICING_FUNCTION_DESCRIPTIONS
         };
         String 27 // description of parameter 13
         {
-            Text [ en-US ] = "optional parameter, if left out then the function simply returns the option price; if set, the function returns price sensitivities (Greeks) to one of the input parameters; possible values are (d)elta, (g)amma, (t)heta, v(e)ga, v(o)lga, v(a)nna, (r)ho, rho(f)";
+            Text [ en-US ] = "Optional parameter, if left out then the function simply returns the option price; if set, the function returns price sensitivities (Greeks) to one of the input parameters; possible values are (d)elta, (g)amma, (t)heta, v(e)ga, v(o)lga, v(a)nna, (r)ho, rho(f)";
         };
     };
 
@@ -155,7 +155,7 @@ Resource RID_PRICING_FUNCTION_DESCRIPTIONS
     {
         String 1    // description
         {
-            Text [ en-US ] = "pricing of a touch/no-touch option";
+            Text [ en-US ] = "Pricing of a touch/no-touch option";
         };
 
         String 2 // name of parameter 1
@@ -164,7 +164,7 @@ Resource RID_PRICING_FUNCTION_DESCRIPTIONS
         };
         String 3 // description of parameter 1
         {
-            Text [ en-US ] = "price/value of the underlying asset";
+            Text [ en-US ] = "Price/value of the underlying asset";
         };
 
         String 4 // name of parameter 2
@@ -173,7 +173,7 @@ Resource RID_PRICING_FUNCTION_DESCRIPTIONS
         };
         String 5 // description of parameter 2
         {
-            Text [ en-US ] = "annual volatility of the underlying asset";
+            Text [ en-US ] = "Annual volatility of the underlying asset";
         };
 
         String 6 // name of parameter 3
@@ -182,7 +182,7 @@ Resource RID_PRICING_FUNCTION_DESCRIPTIONS
         };
         String 7 // description of parameter 3
         {
-            Text [ en-US ] = "interest rate (continuously compounded)";
+            Text [ en-US ] = "Interest rate (continuously compounded)";
         };
 
         String 8 // name of parameter 4
@@ -191,7 +191,7 @@ Resource RID_PRICING_FUNCTION_DESCRIPTIONS
         };
         String 9 // description of parameter 4
         {
-            Text [ en-US ] = "foreign interest rate (continuously compounded)";
+            Text [ en-US ] = "Foreign interest rate (continuously compounded)";
         };
 
         String 10 // name of parameter 5
@@ -200,7 +200,7 @@ Resource RID_PRICING_FUNCTION_DESCRIPTIONS
         };
         String 11 // description of parameter 5
         {
-            Text [ en-US ] = "time to maturity of the option in years";
+            Text [ en-US ] = "Fime to maturity of the option in years";
         };
 
         String 12 // name of parameter 6
@@ -209,7 +209,7 @@ Resource RID_PRICING_FUNCTION_DESCRIPTIONS
         };
         String 13 // description of parameter 6
         {
-            Text [ en-US ] = "lower barrier (set to 0 for no lower barrier)";
+            Text [ en-US ] = "Lower barrier (set to 0 for no lower barrier)";
         };
 
         String 14 // name of parameter 7
@@ -218,7 +218,7 @@ Resource RID_PRICING_FUNCTION_DESCRIPTIONS
         };
         String 15 // description of parameter 7
         {
-            Text [ en-US ] = "upper barrier (set to 0 for no upper barrier)";
+            Text [ en-US ] = "Upper barrier (set to 0 for no upper barrier)";
         };
 
         String 16 // name of parameter 8
@@ -227,7 +227,7 @@ Resource RID_PRICING_FUNCTION_DESCRIPTIONS
         };
         String 17 // description of parameter 8
         {
-            Text [ en-US ] = "string to define if the option pays one unit of (d)omestic currency (cash or nothing) or (f)oreign currency (asset or nothing)";
+            Text [ en-US ] = "String to define if the option pays one unit of (d)omestic currency (cash or nothing) or (f)oreign currency (asset or nothing)";
         };
 
         String 18 // name of parameter 9
@@ -236,7 +236,7 @@ Resource RID_PRICING_FUNCTION_DESCRIPTIONS
         };
         String 19 // description of parameter 9
         {
-            Text [ en-US ] = "string to define if the option is of type knock-(i)n (touch) or knock-(o)ut (no-touch)";
+            Text [ en-US ] = "String to define if the option is of type knock-(i)n (touch) or knock-(o)ut (no-touch)";
         };
 
         String 20 // name of parameter 10
@@ -245,7 +245,7 @@ Resource RID_PRICING_FUNCTION_DESCRIPTIONS
         };
         String 21 // description of parameter 10
         {
-            Text [ en-US ] = "string to define whether the barrier is observed (c)ontinuously or only at the (e)nd/maturity";
+            Text [ en-US ] = "String to define whether the barrier is observed (c)ontinuously or only at the (e)nd/maturity";
         };
 
         String 22 // name of parameter 11
@@ -254,7 +254,7 @@ Resource RID_PRICING_FUNCTION_DESCRIPTIONS
         };
         String 23 // description of parameter 11
         {
-            Text [ en-US ] = "optional parameter, if left out then the function simply returns the option price; if set, the function returns price sensitivities (Greeks) to one of the input parameters; possible values are (d)elta, (g)amma, (t)heta, v(e)ga, v(o)lga, v(a)nna, (r)ho, rho(f)";
+            Text [ en-US ] = "Optional parameter, if left out then the function simply returns the option price; if set, the function returns price sensitivities (Greeks) to one of the input parameters; possible values are (d)elta, (g)amma, (t)heta, v(e)ga, v(o)lga, v(a)nna, (r)ho, rho(f)";
         };
     };
 
@@ -263,7 +263,7 @@ Resource RID_PRICING_FUNCTION_DESCRIPTIONS
     {
         String 1    // description
         {
-            Text [ en-US ] = "probability that an asset hits a barrier assuming it follows dS/S = mu dt + vol dW";
+            Text [ en-US ] = "Probability that an asset hits a barrier assuming it follows dS/S = mu dt + vol dW";
         };
 
         String 2 // name of parameter 1
@@ -272,7 +272,7 @@ Resource RID_PRICING_FUNCTION_DESCRIPTIONS
         };
         String 3 // description of parameter 1
         {
-            Text [ en-US ] = "price/value S of the underlying asset";
+            Text [ en-US ] = "Price/value S of the underlying asset";
         };
 
         String 4 // name of parameter 2
@@ -281,7 +281,7 @@ Resource RID_PRICING_FUNCTION_DESCRIPTIONS
         };
         String 5 // description of parameter 2
         {
-            Text [ en-US ] = "annual volatility of the underlying asset";
+            Text [ en-US ] = "Annual volatility of the underlying asset";
         };
 
         String 6 // name of parameter 3
@@ -290,7 +290,7 @@ Resource RID_PRICING_FUNCTION_DESCRIPTIONS
         };
         String 7 // description of parameter 3
         {
-            Text [ en-US ] = "parameter mu in dS/S = mu dt + vol dW";
+            Text [ en-US ] = "Parameter mu in dS/S = mu dt + vol dW";
         };
 
         String 8 // name of parameter 4
@@ -299,7 +299,7 @@ Resource RID_PRICING_FUNCTION_DESCRIPTIONS
         };
         String 9 // description of parameter 4
         {
-            Text [ en-US ] = "time to maturity";
+            Text [ en-US ] = "Time to maturity";
         };
 
         String 10 // name of parameter 5
@@ -308,7 +308,7 @@ Resource RID_PRICING_FUNCTION_DESCRIPTIONS
         };
         String 11 // description of parameter 5
         {
-            Text [ en-US ] = "lower barrier (set to 0 for no lower barrier)";
+            Text [ en-US ] = "Tower barrier (set to 0 for no lower barrier)";
         };
 
         String 12 // name of parameter 6
@@ -317,7 +317,7 @@ Resource RID_PRICING_FUNCTION_DESCRIPTIONS
         };
         String 13 // description of parameter 6
         {
-            Text [ en-US ] = "upper barrier (set to 0 for no upper barrier)";
+            Text [ en-US ] = "Upper barrier (set to 0 for no upper barrier)";
         };
     };
 
@@ -326,7 +326,7 @@ Resource RID_PRICING_FUNCTION_DESCRIPTIONS
     {
         String 1    // description
         {
-            Text [ en-US ] = "probability that an asset will at maturity end up between two barrier levels, assuming it follows dS/S = mu dt + vol dW (if the last two optional parameters (strike, put/call) are specified, the probability of S_T in [strike, upper barrier] for a call and S_T in [lower barrier, strike] for a put will be returned)";
+            Text [ en-US ] = "Probability that an asset will at maturity end up between two barrier levels, assuming it follows dS/S = mu dt + vol dW (if the last two optional parameters (strike, put/call) are specified, the probability of S_T in [strike, upper barrier] for a call and S_T in [lower barrier, strike] for a put will be returned)";
         };
 
         String 2 // name of parameter 1
@@ -335,7 +335,7 @@ Resource RID_PRICING_FUNCTION_DESCRIPTIONS
         };
         String 3 // description of parameter 1
         {
-            Text [ en-US ] = "price/value of the asset";
+            Text [ en-US ] = "Price/value of the asset";
         };
 
         String 4 // name of parameter 2
@@ -344,7 +344,7 @@ Resource RID_PRICING_FUNCTION_DESCRIPTIONS
         };
         String 5 // description of parameter 2
         {
-            Text [ en-US ] = "annual volatility of the asset";
+            Text [ en-US ] = "Annual volatility of the asset";
         };
 
         String 6 // name of parameter 3
@@ -353,7 +353,7 @@ Resource RID_PRICING_FUNCTION_DESCRIPTIONS
         };
         String 7 // description of parameter 3
         {
-            Text [ en-US ] = "parameter mu from dS/S = mu dt + vol dW";
+            Text [ en-US ] = "Parameter mu from dS/S = mu dt + vol dW";
         };
 
         String 8 // name of parameter 4
@@ -362,7 +362,7 @@ Resource RID_PRICING_FUNCTION_DESCRIPTIONS
         };
         String 9 // description of parameter 4
         {
-            Text [ en-US ] = "time to maturity in years";
+            Text [ en-US ] = "Time to maturity in years";
         };
 
         String 10 // name of parameter 5
@@ -371,7 +371,7 @@ Resource RID_PRICING_FUNCTION_DESCRIPTIONS
         };
         String 11 // description of parameter 5
         {
-            Text [ en-US ] = "lower barrier (set to 0 for no lower barrier)";
+            Text [ en-US ] = "Lower barrier (set to 0 for no lower barrier)";
         };
 
         String 12 // name of parameter 6
@@ -380,7 +380,7 @@ Resource RID_PRICING_FUNCTION_DESCRIPTIONS
         };
         String 13 // description of parameter 6
         {
-            Text [ en-US ] = "upper barrier (set to 0 for no upper barrier)";
+            Text [ en-US ] = "Upper barrier (set to 0 for no upper barrier)";
         };
 
         String 14 // name of parameter 7
@@ -389,7 +389,7 @@ Resource RID_PRICING_FUNCTION_DESCRIPTIONS
         };
         String 15 // description of parameter 7
         {
-            Text [ en-US ] = "optional (p)ut/(c)all indicator";
+            Text [ en-US ] = "Optional (p)ut/(c)all indicator";
         };
 
         String 16 // name of parameter 8
@@ -398,7 +398,7 @@ Resource RID_PRICING_FUNCTION_DESCRIPTIONS
         };
         String 17 // description of parameter 8
         {
-            Text [ en-US ] = "optional strike level";
+            Text [ en-US ] = "Optional strike level";
         };
     };
 
