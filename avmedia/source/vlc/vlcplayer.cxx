@@ -29,6 +29,7 @@ namespace
     {
         rtl::OString dest;
         url.convertToString(&dest, RTL_TEXTENCODING_UTF8, 0);
+
         return libvlc_media_new_path(instance.get(), dest.getStr());
     }
 }
@@ -37,9 +38,10 @@ VLCPlayer::VLCPlayer( const rtl::OUString& url )
     : VLC_Base(m_aMutex)
     , mInstance( libvlc_new( sizeof( VLC_ARGS ) / sizeof( VLC_ARGS[0] ), VLC_ARGS ), libvlc_release )
     , mPlayer( libvlc_media_player_new( mInstance.get() ), libvlc_media_player_release )
-    , mMedia( InitMedia( url, mInstance ), libvlc_media_release )
+    , mUrl( url )
 {
-    libvlc_media_player_set_media( mPlayer.get(), mMedia.get() );
+    boost::shared_ptr<libvlc_media_t> media( InitMedia( url, mInstance ), libvlc_media_release );
+    mPlayer.reset( libvlc_media_player_new_from_media( media.get() ), libvlc_media_player_release );
 }
 
 void SAL_CALL VLCPlayer::start()
@@ -63,7 +65,7 @@ void SAL_CALL VLCPlayer::stop()
 double SAL_CALL VLCPlayer::getDuration()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-    return static_cast<double>( libvlc_media_get_duration( mMedia.get() ) ) / MS_IN_SEC;
+    return static_cast<double>( libvlc_media_player_get_length( mPlayer.get() ) ) / MS_IN_SEC;
 }
 
 void SAL_CALL VLCPlayer::setMediaTime( double fTime )
@@ -178,7 +180,9 @@ uno::Reference< css::media::XPlayerWindow > SAL_CALL VLCPlayer::createPlayerWind
 uno::Reference< css::media::XFrameGrabber > SAL_CALL VLCPlayer::createFrameGrabber()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-    return uno::Reference< css::media::XFrameGrabber >( new VLCFrameGrabber() );
+
+    VLCFrameGrabber *frameGrabber = new VLCFrameGrabber( mPlayer, mUrl );
+    return uno::Reference< css::media::XFrameGrabber >( frameGrabber );
 }
 
 ::rtl::OUString SAL_CALL VLCPlayer::getImplementationName()
