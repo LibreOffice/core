@@ -90,6 +90,9 @@ typedef ::std::map< sal_Int16, Any, ::std::less< sal_Int16 > > OutParamMap;
 ::com::sun::star::uno::Any sbxToUnoValue( SbxVariable* pVar );
 void unoToSbxValue( SbxVariable* pVar, const ::com::sun::star::uno::Any& aValue );
 
+/*const OUString CodeCompleteDataCache::GLOB_KEY = OUString("global key");
+const OUString CodeCompleteDataCache::NOT_FOUND = OUString("not found");*/
+
 class DocObjectWrapper : public DocObjectWrapper_BASE
 {
     Reference< XAggregation >  m_xAggProxy;
@@ -1777,9 +1780,11 @@ IMPL_LINK( ErrorHdlResetter, BasicErrorHdl, StarBASIC *, /*pBasic*/)
     return 0;
 }
 
-
-std::vector< CodeCompleteData > SbModule::GetCodeCompleteDataFromParse()
+//std::vector< CodeCompleteData > SbModule::GetCodeCompleteDataFromParse()
+CodeCompleteDataCache SbModule::GetCodeCompleteDataFromParse()
 {
+    CodeCompleteDataCache aCache;
+
     ErrorHdlResetter aErrHdl;
     SbxBase::ResetError();
 
@@ -1788,37 +1793,56 @@ std::vector< CodeCompleteData > SbModule::GetCodeCompleteDataFromParse()
 
     while( pParser->Parse() ) {}
     SbiSymPool* pPool = pParser->pPool;
-    std::vector< CodeCompleteData > aRet;
+    //std::vector< CodeCompleteData > aRet;
     for( sal_uInt16 i = 0; i < pPool->GetSize(); ++i )
     {
         SbiSymDef* pSymDef = pPool->Get(i);
         if( pSymDef->GetType() == SbxOBJECT )
         {
-            CodeCompleteData aCodeCompleteData;
-            aCodeCompleteData.sVarName = pSymDef->GetName();
+            //CodeCompleteData aCodeCompleteData;
+            CodeCompleteVarTypes aVarTypes;
+            /*aCodeCompleteData.sVarName = pSymDef->GetName();
             aCodeCompleteData.sVarParent = OUString("");
             aCodeCompleteData.sVarType = pParser->aGblStrings.Find( pSymDef->GetTypeId() );
             if(!aCodeCompleteData.sVarType.isEmpty())
+            {
                 aRet.push_back(aCodeCompleteData);
+                aVarTypes.insert(CodeCompleteVarTypes::value_type( pSymDef->GetName(), pParser->aGblStrings.Find( pSymDef->GetTypeId() ) ) );
+                aCache.InsertProcedure( aCache.GLOB_KEY, aVarTypes );
+            }*/
+            if(pParser->aGblStrings.Find( pSymDef->GetTypeId() ).isEmpty() )
+            {
+                aVarTypes.insert(CodeCompleteVarTypes::value_type( pSymDef->GetName(), pParser->aGblStrings.Find( pSymDef->GetTypeId() ) ) );
+                aCache.InsertProcedure( aCache.GLOB_KEY, aVarTypes );
+            }
         }
 
         SbiSymPool& pChildPool = pSymDef->GetPool();
         for(sal_uInt16 j = 0; j < pChildPool.GetSize(); ++j )
         {
-            CodeCompleteData aCodeCompleteData;
+            //CodeCompleteData aCodeCompleteData;
+            CodeCompleteVarTypes aVarTypes;
+
             SbiSymDef* pChildSymDef = pChildPool.Get(j);
             if( pChildSymDef->GetType() == SbxOBJECT )
             {
-                aCodeCompleteData.sVarName = pChildSymDef->GetName();
+                /*aCodeCompleteData.sVarName = pChildSymDef->GetName();
                 aCodeCompleteData.sVarParent = pSymDef->GetName();
                 aCodeCompleteData.sVarType = pParser->aGblStrings.Find( pChildSymDef->GetTypeId() );
-                if(!aCodeCompleteData.sVarType.isEmpty())
-                    aRet.push_back(aCodeCompleteData);
+                if(!aCodeCompleteData.sVarType.isEmpty())*/
+                if( pParser->aGblStrings.Find( pChildSymDef->GetTypeId() ).isEmpty() )
+                {
+                    //aRet.push_back(aCodeCompleteData);
+                    aVarTypes.insert(CodeCompleteVarTypes::value_type( pChildSymDef->GetName(), pParser->aGblStrings.Find( pChildSymDef->GetTypeId() ) ) );
+                    aCache.InsertProcedure( pSymDef->GetName(), aVarTypes );
+                }
             }
         }
     }
+    //std::cerr << aCache << std::endl;
     delete pParser;
-    return aRet;
+    //return aRet;
+    return aCache;
 }
 
 SbxArrayRef SbModule::GetMethods()
