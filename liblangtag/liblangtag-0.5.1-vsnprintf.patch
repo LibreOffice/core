@@ -1,12 +1,18 @@
-diff -ru langtag.orig/liblangtag/lt-utils.c langtag/liblangtag/lt-utils.c
---- UnpackedTarball/langtag.orig/liblangtag/lt-utils.c	2013-04-22 10:06:57.000000000 +0200
-+++ UnpackedTarball/langtag/liblangtag/lt-utils.c	2013-04-26 17:58:39.817351779 +0200
-@@ -168,6 +168,8 @@
- 		va_copy(ap, args);
- 
- 		size = vsnprintf(&c, 1, format, ap) + 1;
-+		if (size == 0)  // -1 + 1
-+			abort();
+diff -ru UnpackedTarball/orig.langtag/liblangtag/lt-utils.c UnpackedTarball/langtag/liblangtag/lt-utils.c
+--- UnpackedTarball/orig.langtag/liblangtag/lt-utils.c	2013-07-19 16:47:20.310734230 +0200
++++ UnpackedTarball/langtag/liblangtag/lt-utils.c	2013-07-19 16:53:10.839914271 +0200
+@@ -173,9 +173,11 @@
  
  		va_end(ap);
  
+-		retval = malloc(sizeof (char) * size);
+-		if (retval) {
+-			vsprintf(retval, format, args);
++		if (size > 0) {
++			retval = malloc(sizeof (char) * size);
++			if (retval) {
++				vsprintf(retval, format, args);
++			}
+ 		}
+ 	} LT_STMT_END;
+ #elif HAVE_VSNPRINTF
