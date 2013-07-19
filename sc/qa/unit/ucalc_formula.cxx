@@ -306,8 +306,24 @@ void Test::testFormulaRefUpdate()
     if (!checkFormula(*m_pDoc, aPos, "$A$1"))
         CPPUNIT_FAIL("Wrong formula in C4.");
 
+    // Delete row 1 which will delete the value cell (A1).
+    m_pDoc->DeleteRow(ScRange(0,0,0,MAXCOL,0,0));
+
+    aPos = ScAddress(2,1,0);
+    ScFormulaCell* pFC = m_pDoc->GetFormulaCell(aPos);
+    CPPUNIT_ASSERT_MESSAGE("This should be a formula cell.", pFC);
+    CPPUNIT_ASSERT_EQUAL(ScErrorCodes::errNoRef, pFC->GetErrCode());
+    aPos = ScAddress(2,2,0);
+    pFC = m_pDoc->GetFormulaCell(aPos);
+    CPPUNIT_ASSERT_MESSAGE("This should be a formula cell.", pFC);
+    CPPUNIT_ASSERT_EQUAL(ScErrorCodes::errNoRef, pFC->GetErrCode());
+
     // Clear all and start over.
     clearRange(m_pDoc, ScRange(0,0,0,10,10,0));
+
+    // ------------------------------------------
+    // Test range updates
+    // ------------------------------------------
 
     // Fill B2:C3 with values.
     m_pDoc->SetValue(ScAddress(1,1,0), 1);
@@ -409,6 +425,18 @@ void Test::testFormulaRefUpdate()
     // The formula cell results should be back too.
     CPPUNIT_ASSERT_EQUAL(10.0, m_pDoc->GetValue(ScAddress(0,5,0)));
     CPPUNIT_ASSERT_EQUAL(10.0, m_pDoc->GetValue(ScAddress(0,6,0)));
+
+    // Delete rows 2:3 to completely remove the referenced range.
+    m_pDoc->DeleteRow(ScRange(0,1,0,MAXCOL,2,0));
+
+    // Both A4 and A5 should show #REF! errors.
+    pFC = m_pDoc->GetFormulaCell(ScAddress(0,3,0));
+    CPPUNIT_ASSERT_MESSAGE("This should be a formula cell.", pFC);
+    CPPUNIT_ASSERT_EQUAL(ScErrorCodes::errNoRef, pFC->GetErrCode());
+
+    pFC = m_pDoc->GetFormulaCell(ScAddress(0,4,0));
+    CPPUNIT_ASSERT_MESSAGE("This should be a formula cell.", pFC);
+    CPPUNIT_ASSERT_EQUAL(ScErrorCodes::errNoRef, pFC->GetErrCode());
 
     m_pDoc->DeleteTab(0);
 }
