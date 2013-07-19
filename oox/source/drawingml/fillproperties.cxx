@@ -52,6 +52,25 @@ namespace drawingml {
 
 namespace {
 
+Reference< XGraphic > lclCheckAndApplyDuotoneTransform( BlipFillProperties aBlipProps, Reference< XGraphic > xGraphic,
+                                                        const GraphicHelper& rGraphicHelper, const sal_Int32 nPhClr )
+{
+    if( aBlipProps.maDuotoneColors[0].isUsed() && aBlipProps.maDuotoneColors[1].isUsed() )
+    {
+        sal_Int32 nColor1 = aBlipProps.maDuotoneColors[0].getColor( rGraphicHelper, nPhClr );
+        sal_Int32 nColor2 = aBlipProps.maDuotoneColors[1].getColor( rGraphicHelper, nPhClr );
+        try
+        {
+            Reference< XGraphicTransformer > xTransformer( aBlipProps.mxGraphic, UNO_QUERY_THROW );
+            xGraphic = xTransformer->applyDuotone( xGraphic, nColor1, nColor2 );
+        }
+        catch( Exception& )
+        {
+        }
+    }
+    return xGraphic;
+}
+
 BitmapMode lclGetBitmapMode( sal_Int32 nToken )
 {
     OSL_ASSERT((nToken & sal_Int32(0xFFFF0000))==0);
@@ -374,20 +393,7 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
                 // do not start complex graphic transformation if property is not supported...
                 if( maBlipProps.mxGraphic.is() && rPropMap.supportsProperty( SHAPEPROP_FillBitmapUrl ) )
                 {
-                    Reference< XGraphic > xGraphic = maBlipProps.mxGraphic;
-                    if( maBlipProps.maDuotoneColors[0].isUsed() && maBlipProps.maDuotoneColors[1].isUsed() )
-                    {
-                        sal_Int32 nColor1 = maBlipProps.maDuotoneColors[0].getColor( rGraphicHelper, nPhClr );
-                        sal_Int32 nColor2 = maBlipProps.maDuotoneColors[1].getColor( rGraphicHelper, nPhClr );
-                        try
-                        {
-                            Reference< XGraphicTransformer > xTransformer( maBlipProps.mxGraphic, UNO_QUERY_THROW );
-                            xGraphic = xTransformer->applyDuotone( maBlipProps.mxGraphic, nColor1, nColor2 );
-                        }
-                        catch( Exception& )
-                        {
-                        }
-                    }
+                    Reference< XGraphic > xGraphic = lclCheckAndApplyDuotoneTransform( maBlipProps, maBlipProps.mxGraphic, rGraphicHelper, nPhClr );
                     // TODO: "rotate with shape" is not possible with our current core
 
                     OUString aGraphicUrl = rGraphicHelper.createGraphicObject( xGraphic );
@@ -473,7 +479,7 @@ void GraphicProperties::pushToPropMap( PropertyMap& rPropMap, const GraphicHelpe
     if( maBlipProps.mxGraphic.is() )
     {
         // created transformed graphic
-        Reference< XGraphic > xGraphic = maBlipProps.mxGraphic;
+        Reference< XGraphic > xGraphic = lclCheckAndApplyDuotoneTransform( maBlipProps, maBlipProps.mxGraphic, rGraphicHelper, nPhClr );
         if( maBlipProps.maColorChangeFrom.isUsed() && maBlipProps.maColorChangeTo.isUsed() )
         {
             sal_Int32 nFromColor = maBlipProps.maColorChangeFrom.getColor( rGraphicHelper, nPhClr );
