@@ -84,6 +84,10 @@ void SdFiltersTest::testCVEs()
             getURLFromSrc("/sd/qa/unit/data/ppt/"),
             OUString("sdfilt"));
 
+    testDir(OUString("impress8"),
+            getURLFromSrc("/sd/qa/unit/data/odp/"),
+            OUString("sdfilt"));
+
     testDir(OUString("draw8"),
             getURLFromSrc("/sd/qa/unit/data/odg/"),
             OUString("sdfilt"));
