@@ -305,7 +305,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkComboBox" id="cond1">
+                      <object class="GtkComboBoxText" id="cond1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="entry_text_column">0</property>
@@ -313,6 +313,24 @@
                         <accessibility>
                           <relation type="labelled-by" target="label4"/>
                         </accessibility>
+                        <items>
+                          <item>=</item>
+                          <item>&lt;</item>
+                          <item>&gt;</item>
+                          <item>&lt;=</item>
+                          <item>&gt;=</item>
+                          <item>&lt;&gt;</item>
+                          <item>Largest</item>
+                          <item>Smallest</item>
+                          <item>Largest %</item>
+                          <item>Smallest %</item>
+                          <item>Contains</item>
+                          <item>Does not contain</item>
+                          <item>Begins with</item>
+                          <item>Does not begin with</item>
+                          <item>Ends with</item>
+                          <item>Does not end with</item>
+                        </items>
                       </object>
                       <packing>
                         <property name="left_attach">2</property>
