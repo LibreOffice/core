@@ -568,6 +568,91 @@ void Test::testFormulaRefUpdateRange()
     CPPUNIT_ASSERT_EQUAL(10.0, m_pDoc->GetValue(ScAddress(0,1,0)));
     CPPUNIT_ASSERT_EQUAL(10.0, m_pDoc->GetValue(ScAddress(0,2,0)));
 
+    // Clear the range and start over.
+    clearRange(m_pDoc, ScRange(0,0,0,20,20,0));
+
+    // Disable expansion of range reference on insertion in adjacent areas.
+    m_pDoc->SetExpandRefs(false);
+
+    // Fill C2:D3 with values.
+    m_pDoc->SetValue(ScAddress(2,1,0), 1);
+    m_pDoc->SetValue(ScAddress(3,1,0), 2);
+    m_pDoc->SetValue(ScAddress(2,2,0), 3);
+    m_pDoc->SetValue(ScAddress(3,2,0), 4);
+
+    // Set formulas at A5 and A6.
+    m_pDoc->SetString(ScAddress(0,4,0), "=SUM(C2:D3)");
+    m_pDoc->SetString(ScAddress(0,5,0), "=SUM($C$2:$D$3)");
+
+    if (!checkFormula(*m_pDoc, ScAddress(0,4,0), "SUM(C2:D3)"))
+        CPPUNIT_FAIL("Wrong formula in A5.");
+
+    if (!checkFormula(*m_pDoc, ScAddress(0,5,0), "SUM($C$2:$D$3)"))
+        CPPUNIT_FAIL("Wrong formula in A6.");
+
+    // Insert a column at column C. This should simply shift the reference without expansion.
+    m_pDoc->InsertCol(ScRange(2,0,0,2,MAXROW,0));
+
+    if (!checkFormula(*m_pDoc, ScAddress(0,4,0), "SUM(D2:E3)"))
+        CPPUNIT_FAIL("Wrong formula in A5.");
+
+    if (!checkFormula(*m_pDoc, ScAddress(0,5,0), "SUM($D$2:$E$3)"))
+        CPPUNIT_FAIL("Wrong formula in A6.");
+
+    // Shift it back.
+    m_pDoc->DeleteCol(ScRange(2,0,0,2,MAXROW,0));
+
+    if (!checkFormula(*m_pDoc, ScAddress(0,4,0), "SUM(C2:D3)"))
+        CPPUNIT_FAIL("Wrong formula in A5.");
+
+    if (!checkFormula(*m_pDoc, ScAddress(0,5,0), "SUM($C$2:$D$3)"))
+        CPPUNIT_FAIL("Wrong formula in A6.");
+
+    // Insert at column D. This should expand the reference by one column length.
+    m_pDoc->InsertCol(ScRange(3,0,0,3,MAXROW,0));
+
+    if (!checkFormula(*m_pDoc, ScAddress(0,4,0), "SUM(C2:E3)"))
+        CPPUNIT_FAIL("Wrong formula in A5.");
+
+    if (!checkFormula(*m_pDoc, ScAddress(0,5,0), "SUM($C$2:$E$3)"))
+        CPPUNIT_FAIL("Wrong formula in A6.");
+
+    // Insert at column F. No expansion should occur since the edge expansion is turned off.
+    m_pDoc->InsertCol(ScRange(5,0,0,5,MAXROW,0));
+
+    if (!checkFormula(*m_pDoc, ScAddress(0,4,0), "SUM(C2:E3)"))
+        CPPUNIT_FAIL("Wrong formula in A5.");
+
+    if (!checkFormula(*m_pDoc, ScAddress(0,5,0), "SUM($C$2:$E$3)"))
+        CPPUNIT_FAIL("Wrong formula in A6.");
+
+    // Insert at row 2. No expansion should occur with edge expansion turned off.
+    m_pDoc->InsertRow(ScRange(0,1,0,MAXCOL,1,0));
+
+    if (!checkFormula(*m_pDoc, ScAddress(0,5,0), "SUM(C3:E4)"))
+        CPPUNIT_FAIL("Wrong formula in A6.");
+
+    if (!checkFormula(*m_pDoc, ScAddress(0,6,0), "SUM($C$3:$E$4)"))
+        CPPUNIT_FAIL("Wrong formula in A7.");
+
+    // Insert at row 4 to expand the reference range.
+    m_pDoc->InsertRow(ScRange(0,3,0,MAXCOL,3,0));
+
+    if (!checkFormula(*m_pDoc, ScAddress(0,6,0), "SUM(C3:E5)"))
+        CPPUNIT_FAIL("Wrong formula in A7.");
+
+    if (!checkFormula(*m_pDoc, ScAddress(0,7,0), "SUM($C$3:$E$5)"))
+        CPPUNIT_FAIL("Wrong formula in A8.");
+
+    // Insert at row 6. No expansion with edge expansion turned off.
+    m_pDoc->InsertRow(ScRange(0,5,0,MAXCOL,5,0));
+
+    if (!checkFormula(*m_pDoc, ScAddress(0,7,0), "SUM(C3:E5)"))
+        CPPUNIT_FAIL("Wrong formula in A8.");
+
+    if (!checkFormula(*m_pDoc, ScAddress(0,8,0), "SUM($C$3:$E$5)"))
+        CPPUNIT_FAIL("Wrong formula in A9.");
+
     m_pDoc->DeleteTab(0);
 }
 
