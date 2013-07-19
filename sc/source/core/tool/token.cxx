@@ -2248,6 +2248,37 @@ void setRefDeleted( ScComplexRefData& rRef, const sc::RefUpdateContext& rCxt )
     }
 }
 
+bool shrinkRange( const sc::RefUpdateContext& rCxt, ScRange& rRefRange, const ScRange& rDeletedRange )
+{
+    if (rCxt.mnColDelta < 0)
+    {
+        // Shifting left.
+        if (rRefRange.aStart.Row() < rDeletedRange.aStart.Row() || rDeletedRange.aEnd.Row() < rRefRange.aEnd.Row())
+            // Deleted range is only partially overlapping in vertical direction. Bail out.
+            return false;
+
+        // Move the last column position to the left.
+        SCCOL nDelta = rDeletedRange.aStart.Col() - rDeletedRange.aEnd.Col() - 1;
+        rRefRange.aEnd.IncCol(nDelta);
+        return true;
+    }
+    else if (rCxt.mnRowDelta < 0)
+    {
+        // Shifting up.
+
+        if (rRefRange.aStart.Col() < rDeletedRange.aStart.Col() || rDeletedRange.aEnd.Col() < rRefRange.aEnd.Col())
+            // Deleted range is only partially overlapping in horizontal direction. Bail out.
+            return false;
+
+        // Move the last row position up.
+        SCROW nDelta = rDeletedRange.aStart.Row() - rDeletedRange.aEnd.Row() - 1;
+        rRefRange.aEnd.IncRow(nDelta);
+        return true;
+    }
+
+    return false;
+}
+
 }
 
 sc::RefUpdateResult ScTokenArray::AdjustReferenceOnShift( const sc::RefUpdateContext& rCxt, const ScAddress& rOldPos )
@@ -2297,6 +2328,16 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnShift( const sc::RefUpdateCon
                     setRefDeleted(rRef, rCxt);
                     aRes.mbValueChanged = true;
                     break;
+                }
+                else if (aDeletedRange.Intersects(aAbs))
+                {
+                    if (shrinkRange(rCxt, aAbs, aDeletedRange))
+                    {
+                        // The reference range has been shrunk.
+                        rRef.SetRange(aAbs, aNewPos);
+                        aRes.mbValueChanged = true;
+                        break;
+                    }
                 }
 
                 if (rCxt.maRange.In(aAbs))
