@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <!-- interface-requires gtk+ 3.0 -->
+  <!-- interface-requires LibreOffice 1.0 -->
   <object class="GtkBox" id="SortOptionsPage">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -113,7 +114,7 @@
                   <object class="GtkComboBox" id="outarealb">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="margin_left">20</property>
+                    <property name="margin_left">12</property>
                     <accessibility>
                       <relation type="labelled-by" target="copyresult"/>
                       <relation type="label-for" target="outareaed"/>
@@ -167,7 +168,7 @@
                   <object class="VclComboBoxText" id="sortuserlb">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="margin_left">20</property>
+                    <property name="margin_left">12</property>
                     <property name="max_width_chars">65</property>
                     <accessibility>
                       <relation type="labelled-by" target="sortuser"/>
@@ -214,9 +215,9 @@
                 </child>
                 <child>
                   <object class="svxcorelo-SvxLanguageBox" id="language">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-              </object>
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                  </object>
                   <packing>
                     <property name="left_attach">0</property>
                     <property name="top_attach">9</property>

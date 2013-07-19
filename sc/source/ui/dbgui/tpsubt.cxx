@@ -484,9 +484,6 @@ ScTpSubTotalOptions::ScTpSubTotalOptions( Window*               pParent,
     get(pLbUserDef,"lbuserdef");
 
     Init();
-
-    pLbUserDef->SetAccessibleRelationLabeledBy(pBtnUserDef);
-    pLbUserDef->SetAccessibleName(pBtnUserDef->GetText());
 }
 
 // -----------------------------------------------------------------------

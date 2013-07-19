@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <!-- interface-requires gtk+ 3.0 -->
+  <!-- interface-requires LibreOffice 1.0 -->
   <object class="GtkBox" id="SubTotalOptionsPage">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
+    <property name="border_width">6</property>
     <property name="orientation">vertical</property>
     <property name="spacing">12</property>
-    <property name="border_width">6</property>
     <child>
       <object class="GtkFrame" id="frame1">
         <property name="visible">True</property>
@@ -195,6 +196,9 @@
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
+                    <accessibility>
+                      <relation type="label-for" target="lbuserdef"/>
+                    </accessibility>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -204,12 +208,16 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkComboBoxText" id="lbuserdef">
+                  <object class="VclComboBoxText" id="lbuserdef">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="margin_left">12</property>
                     <property name="entry_text_column">0</property>
                     <property name="id_column">1</property>
+                    <property name="max_width_chars">65</property>
+                    <accessibility>
+                      <relation type="labelled-by" target="btnuserdef"/>
+                    </accessibility>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
