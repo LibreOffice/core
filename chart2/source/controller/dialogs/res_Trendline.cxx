@@ -30,31 +30,6 @@
 #include <vector>
 #include <algorithm>
 
-namespace
-{
-
-    template< class T > long lcl_getRightEdge( T & rControl )
-    {
-        return rControl.CalcMinimumSize().Width() + rControl.GetPosPixel().X() - rControl.GetParent()->GetPosPixel().X();
-    }
-
-    template< class T > void lcl_AdjustControlSize( T & rControl )
-    {
-        Size aSize( rControl.GetSizePixel());
-        aSize.setWidth( rControl.CalcMinimumSize().Width());
-        rControl.SetSizePixel( aSize );
-    }
-
-    void lcl_AdjustControlSize( Control & rControl, long nRightEdge )
-    {
-        Size aSize( rControl.GetSizePixel());
-        Point aPosition( rControl.GetPosPixel());
-        aSize.setWidth( nRightEdge - aPosition.getX());
-        rControl.SetSizePixel( aSize );
-    }
-
-} // anonymous namespace
-
 namespace chart
 {
 
