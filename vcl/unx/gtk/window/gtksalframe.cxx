@@ -67,12 +67,14 @@
 #endif
 
 #include <comphelper/processfactory.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/XAccessibleStateSet.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/XAccessibleEditableText.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
+#include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 
@@ -561,6 +563,24 @@ static void activate_uno(GSimpleAction *action, GVariant*, gpointer)
     if (!strval)
         return;
 
+    if (strcmp(strval, "New") == 0)
+    {
+        uno::Reference<frame::XModuleManager2> xModuleManager(frame::ModuleManager::create(xContext));
+        OUString aModuleId(xModuleManager->identify(xFrame));
+        if (aModuleId.isEmpty())
+            return;
+
+        comphelper::SequenceAsHashMap lModuleDescription(xModuleManager->getByName(aModuleId));
+        OUString sFactoryService;
+        lModuleDescription[OUString("ooSetupFactoryEmptyDocumentURL")] >>= sFactoryService;
+        if (sFactoryService.isEmpty())
+            return;
+
+        uno::Sequence < css::beans::PropertyValue > args(0);
+        xDesktop->loadComponentFromURL(sFactoryService, OUString("_blank"), 0, args);
+        return;
+    }
+
     OUString sCommand(".uno:");
     sCommand += OUString(strval, strlen(strval), RTL_TEXTENCODING_UTF8);
     g_free(strval);
@@ -582,7 +602,8 @@ static GActionEntry app_entries[] = {
   { "OptionsTreeDialog", activate_uno, NULL, NULL, NULL, {0} },
   { "About", activate_uno, NULL, NULL, NULL, {0} },
   { "HelpIndex", activate_uno, NULL, NULL, NULL, {0} },
-  { "Quit", activate_uno, NULL, NULL, NULL, {0} }
+  { "Quit", activate_uno, NULL, NULL, NULL, {0} },
+  { "New", activate_uno, NULL, NULL, NULL, {0} }
 };
 
 gboolean ensure_dbus_setup( gpointer data )
@@ -634,29 +655,36 @@ gboolean ensure_dbus_setup( gpointer data )
 
             GMenu *firstsubmenu = g_menu_new ();
 
-            OString sPreferences(OUStringToOString(ResId(SV_STDTEXT_PREFERENCES, *pMgr).toString(),
+            OString sNew(OUStringToOString(ResId(SV_BUTTONTEXT_NEW, *pMgr).toString(),
                 RTL_TEXTENCODING_UTF8).replaceFirst("~", "_"));
 
-            item = g_menu_item_new(sPreferences.getStr(), "app.OptionsTreeDialog");
+            item = g_menu_item_new(sNew.getStr(), "app.New");
             g_menu_append_item( firstsubmenu, item );
+
             g_menu_append_section( menu, NULL, G_MENU_MODEL(firstsubmenu));
 
             GMenu *secondsubmenu = g_menu_new ();
 
-            OString sAbout(OUStringToOString(ResId(SV_STDTEXT_ABOUT, *pMgr).toString(),
+            OString sPreferences(OUStringToOString(ResId(SV_STDTEXT_PREFERENCES, *pMgr).toString(),
                 RTL_TEXTENCODING_UTF8).replaceFirst("~", "_"));
 
-            item = g_menu_item_new(sAbout.getStr(), "app.About");
+            item = g_menu_item_new(sPreferences.getStr(), "app.OptionsTreeDialog");
             g_menu_append_item( secondsubmenu, item );
+
+            g_menu_append_section( menu, NULL, G_MENU_MODEL(secondsubmenu));
+            GMenu *thirdsubmenu = g_menu_new ();
 
             OString sHelp(OUStringToOString(ResId(SV_BUTTONTEXT_HELP, *pMgr).toString(),
                 RTL_TEXTENCODING_UTF8).replaceFirst("~", "_"));
 
             item = g_menu_item_new(sHelp.getStr(), "app.HelpIndex");
-            g_menu_append_item( secondsubmenu, item );
-            g_menu_append_section( menu, NULL, G_MENU_MODEL(secondsubmenu));
+            g_menu_append_item( thirdsubmenu, item );
 
-            GMenu *thirdsubmenu = g_menu_new ();
+            OString sAbout(OUStringToOString(ResId(SV_STDTEXT_ABOUT, *pMgr).toString(),
+                RTL_TEXTENCODING_UTF8).replaceFirst("~", "_"));
+
+            item = g_menu_item_new(sAbout.getStr(), "app.About");
+            g_menu_append_item( thirdsubmenu, item );
 
             OString sQuit(OUStringToOString(ResId(SV_MENU_MAC_QUITAPP, *pMgr).toString(),
                 RTL_TEXTENCODING_UTF8).replaceFirst("~", "_"));
