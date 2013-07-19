@@ -2217,8 +2217,67 @@ void ScTokenArray::AdjustAbsoluteRefs( const ScDocument* pOldDoc, const ScAddres
     }
 }
 
+namespace {
+
+ScRange getDeletedRange( const sc::RefUpdateContext& rCxt )
+{
+    ScRange aDeletedRange(ScAddress::INITIALIZE_INVALID);
+    if (rCxt.mnColDelta < 0)
+    {
+        // Delete and shift to left.
+        aDeletedRange.aStart = ScAddress(rCxt.maRange.aStart.Col()+rCxt.mnColDelta, rCxt.maRange.aStart.Row(), rCxt.maRange.aStart.Tab());
+        aDeletedRange.aEnd = ScAddress(rCxt.maRange.aStart.Col()-1, rCxt.maRange.aEnd.Row(), rCxt.maRange.aEnd.Tab());
+    }
+    else if (rCxt.mnRowDelta < 0)
+    {
+        // Delete and shift up.
+        aDeletedRange.aStart = ScAddress(rCxt.maRange.aStart.Col(), rCxt.maRange.aStart.Row()+rCxt.mnRowDelta, rCxt.maRange.aStart.Tab());
+        aDeletedRange.aEnd = ScAddress(rCxt.maRange.aEnd.Col(), rCxt.maRange.aStart.Row()-1, rCxt.maRange.aEnd.Tab());
+    }
+    else if (rCxt.mnTabDelta < 0)
+    {
+        // Deleting sheets.
+        // TODO : Figure out what to do here.
+    }
+
+    return aDeletedRange;
+}
+
+void setRefDeleted( ScSingleRefData& rRef, const sc::RefUpdateContext& rCxt )
+{
+    if (rCxt.mnColDelta < 0)
+        rRef.SetColDeleted(true);
+    else if (rCxt.mnRowDelta < 0)
+        rRef.SetRowDeleted(true);
+    else if (rCxt.mnTabDelta < 0)
+        rRef.SetTabDeleted(true);
+}
+
+void setRefDeleted( ScComplexRefData& rRef, const sc::RefUpdateContext& rCxt )
+{
+    if (rCxt.mnColDelta < 0)
+    {
+        rRef.Ref1.SetColDeleted(true);
+        rRef.Ref2.SetColDeleted(true);
+    }
+    else if (rCxt.mnRowDelta < 0)
+    {
+        rRef.Ref1.SetRowDeleted(true);
+        rRef.Ref2.SetRowDeleted(true);
+    }
+    else if (rCxt.mnTabDelta < 0)
+    {
+        rRef.Ref1.SetTabDeleted(true);
+        rRef.Ref2.SetTabDeleted(true);
+    }
+}
+
+}
+
 sc::RefUpdateResult ScTokenArray::AdjustReferenceOnShift( const sc::RefUpdateContext& rCxt, const ScAddress& rOldPos )
 {
+    ScRange aDeletedRange = getDeletedRange(rCxt);
+
     sc::RefUpdateResult aRes;
     ScAddress aNewPos = rOldPos;
     bool bCellShifted = rCxt.maRange.In(rOldPos);
@@ -2237,6 +2296,14 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnShift( const sc::RefUpdateCon
                 ScSingleRefData& rRef = pToken->GetSingleRef();
                 ScAddress aAbs = rRef.toAbs(rOldPos);
 
+                if (aDeletedRange.In(aAbs))
+                {
+                    // This reference is in the deleted region.
+                    setRefDeleted(rRef, rCxt);
+                    aRes.mbValueChanged = true;
+                    break;
+                }
+
                 if (rCxt.maRange.In(aAbs))
                     aAbs.Move(rCxt.mnColDelta, rCxt.mnRowDelta, rCxt.mnTabDelta);
 
@@ -2247,6 +2314,14 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnShift( const sc::RefUpdateCon
             {
                 ScComplexRefData& rRef = pToken->GetDoubleRef();
                 ScRange aAbs = rRef.toAbs(rOldPos);
+
+                if (aDeletedRange.In(aAbs))
+                {
+                    // This reference is in the deleted region.
+                    setRefDeleted(rRef, rCxt);
+                    aRes.mbValueChanged = true;
+                    break;
+                }
 
                 if (rCxt.maRange.In(aAbs))
                     aAbs.Move(rCxt.mnColDelta, rCxt.mnRowDelta, rCxt.mnTabDelta);
