@@ -110,6 +110,7 @@ sal_Int32 SAL_CALL OResultSetMetaData::getColumnType(sal_Int32 column)
             return 0;       // TODO: verify
         default:
             assert(false); // Should never happen
+            return 0;
     }
 }
 
