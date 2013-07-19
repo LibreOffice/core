@@ -37,7 +37,6 @@ $(eval $(call gb_Library_use_libraries,firebird_sdbc, \
 $(eval $(call gb_Library_set_componentfile,firebird_sdbc,connectivity/source/drivers/firebird/firebird_sdbc))
 
 $(eval $(call gb_Library_add_exception_objects,firebird_sdbc,\
-    connectivity/source/drivers/firebird/propertyids \
     connectivity/source/drivers/firebird/FConnection \
     connectivity/source/drivers/firebird/FDatabaseMetaData \
     connectivity/source/drivers/firebird/FDriver \

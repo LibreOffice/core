@@ -33,10 +33,11 @@
  *
  *************************************************************************/
 
-#include "propertyids.hxx"
 #include "FStatement.hxx"
 #include "FConnection.hxx"
 #include "FResultSet.hxx"
+#include <propertyids.hxx>
+#include <TConnection.hxx>
 
 #include <ibase.h>
 

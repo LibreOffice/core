@@ -35,7 +35,8 @@
 
 #include "FResultSet.hxx"
 #include "FResultSetMetaData.hxx"
-#include "propertyids.hxx"
+#include <propertyids.hxx>
+#include <TConnection.hxx>
 
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/typeprovider.hxx>
