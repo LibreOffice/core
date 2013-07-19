@@ -667,6 +667,35 @@ namespace cmis
                         xRow->appendVoid( rProp );
                     }
                 }
+                else if ( rProp.Name == "IsVolume" )
+                {
+                    xRow->appendBoolean( rProp, sal_False );
+                }
+                else if ( rProp.Name == "IsRemote" )
+                {
+                    xRow->appendBoolean( rProp, sal_False );
+                }
+                else if ( rProp.Name == "IsRemoveable" )
+                {
+                    xRow->appendBoolean( rProp, sal_False );
+                }
+                else if ( rProp.Name == "IsFloppy" )
+                {
+                    xRow->appendBoolean( rProp, sal_False );
+                }
+                else if ( rProp.Name == "IsCompactDisc" )
+                {
+                    xRow->appendBoolean( rProp, sal_False );
+                }
+                else if ( rProp.Name == "IsHidden" )
+                {
+                    xRow->appendBoolean( rProp, sal_False );
+                }
+                else if ( rProp.Name == "TargetURL" )
+                {
+                    xRow->appendString( rProp, "" );
+                }
+
                 else if ( rProp.Name == "CmisProperties" )
                 {
                     try
