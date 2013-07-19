@@ -464,18 +464,8 @@ ScTpSubTotalOptions::ScTpSubTotalOptions( Window*               pParent,
                                           const SfxItemSet&     rArgSet )
 
         :   SfxTabPage      ( pParent,
-                              ScResId( RID_SCPAGE_SUBT_OPTIONS ),
+                              "SubTotalOptionsPage", "modules/scalc/ui/subtotaloptionspage.ui" ,
                               rArgSet ),
-            aFlGroup        ( this, ScResId( FL_GROUP ) ),
-            aBtnPagebreak   ( this, ScResId( BTN_PAGEBREAK ) ),
-            aBtnCase        ( this, ScResId( BTN_CASE ) ),
-            aBtnSort        ( this, ScResId( BTN_SORT ) ),
-            aFlSort         ( this, ScResId( FL_SORT ) ),
-            aBtnAscending   ( this, ScResId( BTN_ASCENDING ) ),
-            aBtnDescending  ( this, ScResId( BTN_DESCENDING ) ),
-            aBtnFormats     ( this, ScResId( BTN_FORMATS ) ),
-            aBtnUserDef     ( this, ScResId( BTN_USERDEF ) ),
-            aLbUserDef      ( this, ScResId( LB_USERDEF ) ),
             pViewData       ( NULL ),
             pDoc            ( NULL ),
             nWhichSubTotals ( rArgSet.GetPool()->GetWhich( SID_SUBTOTALS ) ),
@@ -483,11 +473,20 @@ ScTpSubTotalOptions::ScTpSubTotalOptions( Window*               pParent,
                               rArgSet.Get( nWhichSubTotals )).
                                 GetSubTotalData() )
 {
-    Init();
-    FreeResource();
+    get(pBtnPagebreak,"pagebreak");
+    get(pBtnCase,"case");
+    get(pBtnSort,"sort");
+    get(pFlSort,"label2");
+    get(pBtnAscending,"ascending");
+    get(pBtnDescending,"descending");
+    get(pBtnFormats,"formats");
+    get(pBtnUserDef,"btnuserdef");
+    get(pLbUserDef,"lbuserdef");
 
-    aLbUserDef.SetAccessibleRelationLabeledBy(&aBtnUserDef);
-    aLbUserDef.SetAccessibleName(aBtnUserDef.GetText());
+    Init();
+
+    pLbUserDef->SetAccessibleRelationLabeledBy(pBtnUserDef);
+    pLbUserDef->SetAccessibleName(pBtnUserDef->GetText());
 }
 
 // -----------------------------------------------------------------------
@@ -508,8 +507,8 @@ void ScTpSubTotalOptions::Init()
 
     OSL_ENSURE( pViewData && pDoc, "ViewData oder Document nicht gefunden!" );
 
-    aBtnSort.SetClickHdl    ( LINK( this, ScTpSubTotalOptions, CheckHdl ) );
-    aBtnUserDef.SetClickHdl ( LINK( this, ScTpSubTotalOptions, CheckHdl ) );
+    pBtnSort->SetClickHdl    ( LINK( this, ScTpSubTotalOptions, CheckHdl ) );
+    pBtnUserDef->SetClickHdl ( LINK( this, ScTpSubTotalOptions, CheckHdl ) );
 
     FillUserSortListBox();
 }
@@ -526,27 +525,27 @@ SfxTabPage* ScTpSubTotalOptions::Create( Window*                 pParent,
 
 void ScTpSubTotalOptions::Reset( const SfxItemSet& /* rArgSet */ )
 {
-    aBtnPagebreak.Check ( rSubTotalData.bPagebreak );
-    aBtnCase.Check      ( rSubTotalData.bCaseSens );
-    aBtnFormats.Check   ( rSubTotalData.bIncludePattern );
-    aBtnSort.Check      ( rSubTotalData.bDoSort );
-    aBtnAscending.Check ( rSubTotalData.bAscending );
-    aBtnDescending.Check( !rSubTotalData.bAscending );
+    pBtnPagebreak->Check ( rSubTotalData.bPagebreak );
+    pBtnCase->Check      ( rSubTotalData.bCaseSens );
+    pBtnFormats->Check   ( rSubTotalData.bIncludePattern );
+    pBtnSort->Check      ( rSubTotalData.bDoSort );
+    pBtnAscending->Check ( rSubTotalData.bAscending );
+    pBtnDescending->Check( !rSubTotalData.bAscending );
 
     if ( rSubTotalData.bUserDef )
     {
-        aBtnUserDef.Check( true );
-        aLbUserDef.Enable();
-        aLbUserDef.SelectEntryPos( rSubTotalData.nUserIndex );
+        pBtnUserDef->Check( true );
+        pLbUserDef->Enable();
+        pLbUserDef->SelectEntryPos( rSubTotalData.nUserIndex );
     }
     else
     {
-        aBtnUserDef.Check( false );
-        aLbUserDef.Disable();
-        aLbUserDef.SelectEntryPos( 0 );
+        pBtnUserDef->Check( false );
+        pLbUserDef->Disable();
+        pLbUserDef->SelectEntryPos( 0 );
     }
 
-    CheckHdl( &aBtnSort );
+    CheckHdl( pBtnSort );
 }
 
 // -----------------------------------------------------------------------
@@ -563,15 +562,15 @@ sal_Bool ScTpSubTotalOptions::FillItemSet( SfxItemSet& rArgSet )
             theSubTotalData = ((const ScSubTotalItem*)pItem)->GetSubTotalData();
     }
 
-    theSubTotalData.bPagebreak      = aBtnPagebreak.IsChecked();
+    theSubTotalData.bPagebreak      = pBtnPagebreak->IsChecked();
     theSubTotalData.bReplace        = true;
-    theSubTotalData.bCaseSens       = aBtnCase.IsChecked();
-    theSubTotalData.bIncludePattern = aBtnFormats.IsChecked();
-    theSubTotalData.bDoSort         = aBtnSort.IsChecked();
-    theSubTotalData.bAscending      = aBtnAscending.IsChecked();
-    theSubTotalData.bUserDef        = aBtnUserDef.IsChecked();
-    theSubTotalData.nUserIndex      = (aBtnUserDef.IsChecked())
-                                    ? aLbUserDef.GetSelectEntryPos()
+    theSubTotalData.bCaseSens       = pBtnCase->IsChecked();
+    theSubTotalData.bIncludePattern = pBtnFormats->IsChecked();
+    theSubTotalData.bDoSort         = pBtnSort->IsChecked();
+    theSubTotalData.bAscending      = pBtnAscending->IsChecked();
+    theSubTotalData.bUserDef        = pBtnUserDef->IsChecked();
+    theSubTotalData.nUserIndex      = (pBtnUserDef->IsChecked())
+                                    ? pLbUserDef->GetSelectEntryPos()
                                     : 0;
 
     rArgSet.Put( ScSubTotalItem( nWhichSubTotals, &theSubTotalData ) );
@@ -585,12 +584,12 @@ void ScTpSubTotalOptions::FillUserSortListBox()
 {
     ScUserList* pUserLists = ScGlobal::GetUserList();
 
-    aLbUserDef.Clear();
+    pLbUserDef->Clear();
     if ( pUserLists )
     {
         size_t nCount = pUserLists->size();
         for ( size_t i=0; i<nCount; ++i )
-            aLbUserDef.InsertEntry( (*pUserLists)[i]->GetString() );
+            pLbUserDef->InsertEntry( (*pUserLists)[i]->GetString() );
     }
 }
 
@@ -599,38 +598,38 @@ void ScTpSubTotalOptions::FillUserSortListBox()
 
 IMPL_LINK( ScTpSubTotalOptions, CheckHdl, CheckBox *, pBox )
 {
-    if ( pBox == &aBtnSort )
+    if ( pBox == pBtnSort )
     {
-        if ( aBtnSort.IsChecked() )
+        if ( pBtnSort->IsChecked() )
         {
-            aFlSort         .Enable();
-            aBtnFormats     .Enable();
-            aBtnUserDef     .Enable();
-            aBtnAscending   .Enable();
-            aBtnDescending  .Enable();
+            pFlSort->Enable();
+            pBtnFormats->Enable();
+            pBtnUserDef->Enable();
+            pBtnAscending->Enable();
+            pBtnDescending->Enable();
 
-            if ( aBtnUserDef.IsChecked() )
-                aLbUserDef.Enable();
+            if ( pBtnUserDef->IsChecked() )
+                pLbUserDef->Enable();
         }
         else
         {
-            aFlSort         .Disable();
-            aBtnFormats     .Disable();
-            aBtnUserDef     .Disable();
-            aBtnAscending   .Disable();
-            aBtnDescending  .Disable();
-            aLbUserDef      .Disable();
+            pFlSort->Disable();
+            pBtnFormats->Disable();
+            pBtnUserDef->Disable();
+            pBtnAscending->Disable();
+            pBtnDescending->Disable();
+            pLbUserDef->Disable();
         }
     }
-    else if ( pBox == &aBtnUserDef )
+    else if ( pBox == pBtnUserDef )
     {
-        if ( aBtnUserDef.IsChecked() )
+        if ( pBtnUserDef->IsChecked() )
         {
-            aLbUserDef.Enable();
-            aLbUserDef.GrabFocus();
+            pLbUserDef->Enable();
+            pLbUserDef->GrabFocus();
         }
         else
-            aLbUserDef.Disable();
+            pLbUserDef->Disable();
     }
 
     return 0;

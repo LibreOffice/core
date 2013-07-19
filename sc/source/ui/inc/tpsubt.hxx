@@ -147,16 +147,15 @@ public:
     virtual void        Reset       ( const SfxItemSet& rArgSet );
 
 private:
-    FixedLine   aFlGroup;
-    CheckBox    aBtnPagebreak;
-    CheckBox    aBtnCase;
-    CheckBox    aBtnSort;
-    FixedLine   aFlSort;
-    RadioButton aBtnAscending;
-    RadioButton aBtnDescending;
-    CheckBox    aBtnFormats;
-    CheckBox    aBtnUserDef;
-    ListBox     aLbUserDef;
+    CheckBox*    pBtnPagebreak;
+    CheckBox*    pBtnCase;
+    CheckBox*    pBtnSort;
+    FixedText*   pFlSort;
+    RadioButton* pBtnAscending;
+    RadioButton* pBtnDescending;
+    CheckBox*    pBtnFormats;
+    CheckBox*    pBtnUserDef;
+    ListBox*     pLbUserDef;
 
     ScViewData*             pViewData;
     ScDocument*             pDoc;
