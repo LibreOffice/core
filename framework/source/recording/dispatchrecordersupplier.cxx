@@ -55,13 +55,12 @@ DEFINE_INIT_SERVICE(
     @descr  Because an instance will be initialized by her interface methods
             it's not neccessary to do anything here.
  */
-DispatchRecorderSupplier::DispatchRecorderSupplier( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory )
+DispatchRecorderSupplier::DispatchRecorderSupplier( const css::uno::Reference< css::lang::XMultiServiceFactory >& )
         //  init baseclasses first!
         //  Attention: Don't change order of initialization!
         : ThreadHelpBase     ( &Application::GetSolarMutex() )
         //  init member
         , m_xDispatchRecorder( NULL                          )
-        , m_xFactory         ( xFactory                      )
 {
 }
 
@@ -74,7 +73,6 @@ DispatchRecorderSupplier::DispatchRecorderSupplier( const css::uno::Reference< c
  */
 DispatchRecorderSupplier::~DispatchRecorderSupplier()
 {
-    m_xFactory          = NULL;
     m_xDispatchRecorder = NULL;
 }
 

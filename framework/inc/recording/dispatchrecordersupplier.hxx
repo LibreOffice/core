@@ -68,11 +68,6 @@ class DispatchRecorderSupplier  :   // baseclasses
          */
         css::uno::Reference< css::frame::XDispatchRecorder > m_xDispatchRecorder;
 
-        //_______________________________________
-        /** reference to the global uno service manager
-         */
-        css::uno::Reference< css::lang::XMultiServiceFactory > m_xFactory;
-
     //___________________________________________
     // uno interface
 
