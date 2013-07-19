@@ -2,6 +2,63 @@
 <interface>
   <!-- interface-requires gtk+ 3.0 -->
   <!-- interface-requires LibreOffice 1.0 -->
+  <object class="GtkListStore" id="distribution-liststore">
+    <columns>
+      <!-- column-name value -->
+      <column type="gchararray"/>
+      <!-- column-name id -->
+      <column type="gint"/>
+    </columns>
+    <data>
+      <row>
+        <col id="0" translatable="yes">Uniform</col>
+        <col id="1">0</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Uniform Integer</col>
+        <col id="1">8</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Normal</col>
+        <col id="1">1</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Cauchy</col>
+        <col id="1">2</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Bernoulli</col>
+        <col id="1">3</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Binomial</col>
+        <col id="1">4</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Chi Squared</col>
+        <col id="1">5</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Geometric</col>
+        <col id="1">6</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Negative Binomial</col>
+        <col id="1">7</col>
+      </row>
+    </data>
+  </object>
+  <object class="GtkAdjustment" id="parameter1-adjustment">
+    <property name="upper">100</property>
+    <property name="value">1</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="parameter2-adjustment">
+    <property name="upper">100</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
   <object class="GtkDialog" id="RandomNumberGeneratorDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
@@ -53,6 +110,8 @@
                 <property name="label">gtk-close</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="can_default">True</property>
+                <property name="has_default">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_stock">True</property>
               </object>
@@ -97,6 +156,7 @@
                 <property name="valign">center</property>
                 <property name="hexpand">True</property>
                 <property name="invisible_char">•</property>
+                <property name="width_chars">30</property>
                 <property name="invisible_char_set">True</property>
               </object>
               <packing>
@@ -168,6 +228,8 @@
                 <property name="can_focus">False</property>
                 <property name="xalign">0</property>
                 <property name="label" translatable="yes">Seed</property>
+                <property name="use_underline">True</property>
+                <property name="mnemonic_widget">seed-spin</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -181,7 +243,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label_xalign">0</property>
-                <property name="shadow_type">out</property>
+                <property name="shadow_type">none</property>
                 <child>
                   <object class="GtkAlignment" id="alignment2">
                     <property name="visible">True</property>
@@ -203,6 +265,8 @@
                             <property name="hexpand">True</property>
                             <property name="xalign">0</property>
                             <property name="label" translatable="yes">...</property>
+                            <property name="use_underline">True</property>
+                            <property name="mnemonic_widget">parameter1-spin</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -218,6 +282,8 @@
                             <property name="hexpand">True</property>
                             <property name="xalign">0</property>
                             <property name="label" translatable="yes">...</property>
+                            <property name="use_underline">True</property>
+                            <property name="mnemonic_widget">parameter2-spin</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -309,62 +375,5 @@
       <action-widget response="0">ok</action-widget>
       <action-widget response="0">close</action-widget>
     </action-widgets>
-  </object>
-  <object class="GtkListStore" id="distribution-liststore">
-    <columns>
-      <!-- column-name value -->
-      <column type="gchararray"/>
-      <!-- column-name id -->
-      <column type="gint"/>
-    </columns>
-    <data>
-      <row>
-        <col id="0" translatable="yes">Uniform</col>
-        <col id="1">0</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Uniform Integer</col>
-        <col id="1">8</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Normal</col>
-        <col id="1">1</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Cauchy</col>
-        <col id="1">2</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Bernoulli</col>
-        <col id="1">3</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Binomial</col>
-        <col id="1">4</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Chi Squared</col>
-        <col id="1">5</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Geometric</col>
-        <col id="1">6</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Negative Binomial</col>
-        <col id="1">7</col>
-      </row>
-    </data>
-  </object>
-  <object class="GtkAdjustment" id="parameter1-adjustment">
-    <property name="upper">100</property>
-    <property name="value">1</property>
-    <property name="step_increment">1</property>
-    <property name="page_increment">10</property>
-  </object>
-  <object class="GtkAdjustment" id="parameter2-adjustment">
-    <property name="upper">100</property>
-    <property name="step_increment">1</property>
-    <property name="page_increment">10</property>
   </object>
 </interface>

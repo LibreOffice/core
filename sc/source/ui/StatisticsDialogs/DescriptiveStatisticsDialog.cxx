@@ -174,7 +174,7 @@ void ScDescriptiveStatisticsDialog::SetReference( const ScRange& rReferenceRange
 
 void ScDescriptiveStatisticsDialog::ApplyCalculationsFormulas( )
 {
-    OUString aUndo(ScResId(STR_DESCRIPTIVE_STATISTICS_UNDO_NAME));
+    OUString aUndo(SC_RESSTR(STR_DESCRIPTIVE_STATISTICS_UNDO_NAME));
     ScDocShell* pDocShell = mViewData->GetDocShell();
     svl::IUndoManager* pUndoManager = pDocShell->GetUndoManager();
     pUndoManager->EnterListAction( aUndo, aUndo );
@@ -196,7 +196,7 @@ void ScDescriptiveStatisticsDialog::ApplyCalculationsFormulas( )
         for(sal_Int32 i = 0; lclCalcDefinitions[i].aFormula != NULL; i++)
         {
             aAddress = ScAddress(outCol, outRow, outTab);
-            OUString aCalculationName(ScResId(lclCalcDefinitions[i].aCalculationNameId));
+            OUString aCalculationName(SC_RESSTR(lclCalcDefinitions[i].aCalculationNameId));
             pDocShell->GetDocFunc().SetStringCell(aAddress, aCalculationName, true);
             outRow++;
         }
