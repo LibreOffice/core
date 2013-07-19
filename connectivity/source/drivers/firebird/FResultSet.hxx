@@ -98,14 +98,8 @@ namespace connectivity
             const sal_Int32                             m_fieldCount;
             ISC_STATUS_ARRAY                            m_statusVector;
 
-//             void ensureDataAvailable()
-//                 throw (::com::sun::star::sdbc::SQLException);
-//             const ::connectivity::ORowSetValue& getSqlData(sal_Int32 aRow, sal_Int32 aColumn)
-//                 throw (::com::sun::star::sdbc::SQLException);
-
             bool isNull(sal_Int32 columnIndex);
             template <typename T> T     retrieveValue(sal_Int32 columnIndex);
-//             template <> ::rtl::OUString retrieveValue< ::rtl::OUString > (sal_Int32 columnIndex);
 
             template <typename T> T safelyRetrieveValue(sal_Int32 columnIndex)
                 throw(::com::sun::star::sdbc::SQLException);
@@ -248,6 +242,9 @@ namespace connectivity
             // XDeleteRows
             virtual ::com::sun::star::uno::Sequence< sal_Int32 > SAL_CALL deleteRows( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& rows ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
         };
+
+        // Specialisations have to be in the namespace and can't be within the class.
+        template <> ::rtl::OUString OResultSet::retrieveValue< ::rtl::OUString >(sal_Int32 columnIndex);
     }
 }
 #endif // CONNECTIVITY_SRESULTSET_HXX

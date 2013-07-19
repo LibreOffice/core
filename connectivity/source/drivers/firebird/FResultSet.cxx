@@ -431,16 +431,16 @@ T OResultSet::retrieveValue(sal_Int32 columnIndex)
     return *m_pSqlda->sqlvar[columnIndex-1].sqldata;
 }
 
-// template <>
-// OUString OResultSet::retrieveValue< OUString >(sal_Int32 columnIndex)
-// {
-//     if ((m_bWasNull = isNull(columnIndex)))
-//         return "";
-//
-//     return OUString(m_pSqlda->pVar[columnIndex-1].sqldata,
-//                     m_pSqlda->pVar[columnIndex-1].sqllen,
-//                     RTL_TEXTENCODING_UTF8)
-// }
+template <>
+OUString OResultSet::retrieveValue<OUString>(sal_Int32 columnIndex)
+{
+    if ((m_bWasNull = isNull(columnIndex)))
+        return OUString();
+
+    return OUString(m_pSqlda->sqlvar[columnIndex-1].sqldata,
+                    m_pSqlda->sqlvar[columnIndex-1].sqllen,
+                    RTL_TEXTENCODING_UTF8);
+}
 
 template <typename T>
 T OResultSet::safelyRetrieveValue(sal_Int32 columnIndex)
@@ -514,9 +514,7 @@ double SAL_CALL OResultSet::getDouble(sal_Int32 columnIndex)
 OUString SAL_CALL OResultSet::getString(sal_Int32 columnIndex)
     throw(SQLException, RuntimeException)
 {
-    (void) columnIndex;
-    return OUString();
-//     return safelyRetrieveValue< OUString >(columnIndex);
+    return safelyRetrieveValue< OUString >(columnIndex);
 }
 
 Time SAL_CALL OResultSet::getTime( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
