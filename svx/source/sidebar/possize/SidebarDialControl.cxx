@@ -34,14 +34,6 @@ extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSidebarDialControl(Window *
     return new SidebarDialControl(pParent, WB_TABSTOP);
 }
 
-SidebarDialControl::SidebarDialControl (
-    Window* pParent,
-    const ResId& rResId)
-    : svx::DialControl(pParent, rResId)
-{
-    Init(GetOutputSizePixel());
-}
-
 SidebarDialControl::~SidebarDialControl (void)
 {
 }

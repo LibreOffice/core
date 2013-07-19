@@ -1940,21 +1940,6 @@ MetricBox::MetricBox( Window* pParent, WinBits nWinStyle ) :
 
 // -----------------------------------------------------------------------
 
-MetricBox::MetricBox( Window* pParent, const ResId& rResId ) :
-    ComboBox( WINDOW_METRICBOX )
-{
-    rResId.SetRT( RSC_METRICBOX );
-    WinBits nStyle = ImplInitRes( rResId );
-    ComboBox::ImplInit( pParent, nStyle );
-    SetField( this );
-    Reformat();
-    ComboBox::ImplLoadRes( rResId );
-    MetricFormatter::ImplLoadRes( ResId( (RSHEADER_TYPE *)GetClassRes(), *rResId.GetResMgr() ) );
-
-    if ( !(nStyle & WB_HIDE ) )
-        Show();
-}
-
 Size MetricBox::CalcMinimumSize() const
 {
     Size aRet(calcMinimumSize(*this, *this));

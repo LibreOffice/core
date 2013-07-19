@@ -1048,14 +1048,6 @@ FontNameBox::FontNameBox( Window* pParent, WinBits nWinStyle ) :
 
 // -------------------------------------------------------------------
 
-FontNameBox::FontNameBox( Window* pParent, const ResId& rResId ) :
-    ComboBox( pParent, rResId )
-{
-    mpFontList = NULL;
-    mbWYSIWYG = sal_False;
-    InitFontMRUEntriesFile();
-}
-
 extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeFontNameBox(Window *pParent, VclBuilder::stringmap &rMap)
 {
     bool bDropdown = VclBuilder::extractDropdown(rMap);

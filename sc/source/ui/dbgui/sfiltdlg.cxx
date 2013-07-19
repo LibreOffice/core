@@ -33,9 +33,7 @@
 #include "globstr.hrc"
 #include "filter.hrc"
 
-#define _SFILTDLG_CXX
 #include "filtdlg.hxx"
-#undef _SFILTDLG_CXX
 #include <vcl/msgbox.hxx>
 
 // DEFINE --------------------------------------------------------------------
@@ -180,7 +178,7 @@ void ScSpecialFilterDlg::Init( const SfxItemSet& rArgSet )
 
     // Optionen initialisieren lassen:
 
-    pOptionsMgr  = new ScNewFilterOptionsMgr(
+    pOptionsMgr  = new ScFilterOptionsMgr(
                             pViewData,
                             theQueryData,
                             pBtnCase,

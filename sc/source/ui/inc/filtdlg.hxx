@@ -40,7 +40,7 @@
 
 //----------------------------------------------------------------------------
 
-class ScNewFilterOptionsMgr;
+class ScFilterOptionsMgr;
 class ScViewData;
 class ScDocument;
 class ScQueryItem;
@@ -116,7 +116,7 @@ private:
     const OUString aStrRow;
     const OUString aStrColumn;
 
-    ScNewFilterOptionsMgr* pOptionsMgr;
+    ScFilterOptionsMgr* pOptionsMgr;
 
     const sal_uInt16        nWhichQuery;
     ScQueryParam        theQueryData;
@@ -139,7 +139,6 @@ private:
     // Hack: RefInput control
     Timer*  pTimer;
 
-#ifdef _FILTDLG_CXX
 private:
     void            Init            ( const SfxItemSet& rArgSet );
     void            FillFieldLists  ();
@@ -155,12 +154,10 @@ private:
     DECL_LINK( ValModifyHdl, ComboBox* );
     DECL_LINK( CheckBoxHdl,  CheckBox* );
     DECL_LINK( EndDlgHdl,    Button* );
-    DECL_LINK( MoreClickHdl, void* );
     DECL_LINK( ScrollHdl, void* );
 
     // Hack: RefInput control
     DECL_LINK( TimeOutHdl,   Timer* );
-#endif
 };
 
 class ScSpecialFilterDlg : public ScAnyRefDlg
@@ -201,7 +198,7 @@ private:
     CancelButton*    pBtnCancel;
     HelpButton*      pBtnHelp;
 
-    ScNewFilterOptionsMgr* pOptionsMgr;
+    ScFilterOptionsMgr* pOptionsMgr;
 
     const sal_uInt16    nWhichQuery;
     const ScQueryParam  theQueryData;
@@ -215,7 +212,6 @@ private:
     // Hack: RefInput control
     Timer*  pTimer;
 
-#ifdef _SFILTDLG_CXX
 private:
     void            Init( const SfxItemSet& rArgSet );
     ScQueryItem*    GetOutputItem( const ScQueryParam& rParam,
@@ -229,7 +225,6 @@ private:
 
     // Hack: RefInput control
     DECL_LINK( TimeOutHdl,       Timer* );
-#endif
 };
 
 

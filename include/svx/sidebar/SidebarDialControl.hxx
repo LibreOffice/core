@@ -28,7 +28,6 @@ class SVX_DLLPUBLIC SidebarDialControl : public svx::DialControl
 {
 public:
     SidebarDialControl (Window* pParent, WinBits nBits = 0);
-    SidebarDialControl (Window* pParent, const ResId& rResId);
     virtual ~SidebarDialControl (void);
 
     virtual Size GetOptimalSize() const;

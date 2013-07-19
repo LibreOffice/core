@@ -744,7 +744,6 @@ class VCL_DLLPUBLIC MetricBox : public ComboBox, public MetricFormatter
 {
 public:
     explicit                MetricBox( Window* pParent, WinBits nWinStyle );
-    explicit                MetricBox( Window* pParent, const ResId& );
     virtual                 ~MetricBox();
 
     virtual long            PreNotify( NotifyEvent& rNEvt );

@@ -35,9 +35,7 @@
 #include "globstr.hrc"
 #include "filter.hrc"
 
-#define _FILTDLG_CXX
 #include "filtdlg.hxx"
-#undef _FILTDLG_CXX
 #include <vcl/msgbox.hxx>
 
 #include <limits>
@@ -232,7 +230,7 @@ void ScFilterDlg::Init( const SfxItemSet& rArgSet )
     maConnLbArr.push_back(pLbConnect4);
 
     // Option initialization:
-    pOptionsMgr  = new ScNewFilterOptionsMgr(
+    pOptionsMgr  = new ScFilterOptionsMgr(
                             pViewData,
                             theQueryData,
                             pBtnCase,
@@ -737,24 +735,6 @@ IMPL_LINK( ScFilterDlg, EndDlgHdl, Button*, pBtn )
 
     return 0;
 }
-
-
-//----------------------------------------------------------------------------
-
-IMPL_LINK_NOARG(ScFilterDlg, MoreClickHdl)
-{
-    if ( pExpander->get_expanded() )
-        pTimer->Start();
-    else
-    {
-        pTimer->Stop();
-        bRefInputMode = false;
-        //@BugID 54702 Enable/disable only in Basic class
-        //SFX_APPWINDOW->Disable(FALSE);        //! general method in ScAnyRefDlg
-    }
-    return 0;
-}
-
 
 //----------------------------------------------------------------------------
 

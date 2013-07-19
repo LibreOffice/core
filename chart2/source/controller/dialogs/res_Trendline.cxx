@@ -113,60 +113,6 @@ TrendlineResources::TrendlineResources( Window * pParent, const SfxItemSet& rInA
 TrendlineResources::~TrendlineResources()
 {}
 
-long TrendlineResources::adjustControlSizes()
-{
-    // calculate right edge
-    std::vector< long > aControlRightEdges;
-    aControlRightEdges.push_back( lcl_getRightEdge( m_aRBLinear ));
-    aControlRightEdges.push_back( lcl_getRightEdge( m_aRBLogarithmic ));
-    aControlRightEdges.push_back( lcl_getRightEdge( m_aRBExponential ));
-    aControlRightEdges.push_back( lcl_getRightEdge( m_aRBPower ));
-    aControlRightEdges.push_back( lcl_getRightEdge( m_aRBPolynomial ));
-    aControlRightEdges.push_back( lcl_getRightEdge( m_aRBMovingAverage ));
-
-    aControlRightEdges.push_back( lcl_getRightEdge( m_aNF_Degree ));
-    aControlRightEdges.push_back( lcl_getRightEdge( m_aNF_Period ));
-    aControlRightEdges.push_back( lcl_getRightEdge( m_aNF_ExtrapolateForward ));
-    aControlRightEdges.push_back( lcl_getRightEdge( m_aNF_ExtrapolateBackward ));
-    aControlRightEdges.push_back( lcl_getRightEdge( m_aNF_InterceptValue ));
-    aControlRightEdges.push_back( lcl_getRightEdge( m_aCB_SetIntercept ));
-
-    aControlRightEdges.push_back( lcl_getRightEdge( m_aCBShowEquation ));
-    aControlRightEdges.push_back( lcl_getRightEdge( m_aCBShowCorrelationCoeff ));
-
-    lcl_AdjustControlSize( m_aRBLinear );
-    lcl_AdjustControlSize( m_aRBLogarithmic );
-    lcl_AdjustControlSize( m_aRBExponential );
-    lcl_AdjustControlSize( m_aRBPower );
-    lcl_AdjustControlSize( m_aRBPolynomial );
-    lcl_AdjustControlSize( m_aRBMovingAverage );
-
-    lcl_AdjustControlSize( m_aNF_Degree );
-    lcl_AdjustControlSize( m_aNF_Period );
-    lcl_AdjustControlSize( m_aNF_ExtrapolateForward );
-    lcl_AdjustControlSize( m_aNF_ExtrapolateBackward );
-    lcl_AdjustControlSize( m_aNF_InterceptValue );
-    lcl_AdjustControlSize( m_aCB_SetIntercept );
-
-    lcl_AdjustControlSize( m_aCBShowEquation );
-    lcl_AdjustControlSize( m_aCBShowCorrelationCoeff );
-
-    // Note: FixedLine has no CalcMinimumSize, workaround: use a FixedText
-    FixedText aDummyTextCtrl( m_aFLType.GetParent());
-    aDummyTextCtrl.SetText( m_aFLType.GetText());
-    aControlRightEdges.push_back( lcl_getRightEdge( aDummyTextCtrl ));
-    aDummyTextCtrl.SetText( m_aFLEquation.GetText());
-    aControlRightEdges.push_back( lcl_getRightEdge( aDummyTextCtrl ));
-
-    long nRightEdgeOfControls = *(::std::max_element( aControlRightEdges.begin(), aControlRightEdges.end()));
-    // leave some more space after the longest text
-    nRightEdgeOfControls += m_aFLType.LogicToPixel( Size( 6, 0 ), MapMode( MAP_APPFONT )).getWidth();
-
-    lcl_AdjustControlSize( m_aFLType, nRightEdgeOfControls );
-    lcl_AdjustControlSize( m_aFLEquation, nRightEdgeOfControls );
-
-    return nRightEdgeOfControls;
-}
 
 IMPL_LINK( TrendlineResources, SelectTrendLine, RadioButton *, pRadioButton )
 {

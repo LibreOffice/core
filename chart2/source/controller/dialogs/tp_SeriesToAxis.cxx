@@ -233,17 +233,6 @@ void SchOptionTabPage::Init( bool bProvidesSecondaryYAxis, bool bProvidesOverlap
     AdaptControlPositionsAndVisibility();
 }
 
-void lcl_offsetControl(Control& rCtrl, long nXOffset, long nYOffset )
-{
-    Point aPos = rCtrl.GetPosPixel();
-    rCtrl.SetPosPixel( Point(aPos.getX() + nXOffset, aPos.getY() + nYOffset) );
-}
-
-void lcl_optimzeRadioButtonSize( RadioButton& rCtrl )
-{
-    rCtrl.SetSizePixel( rCtrl.CalcMinimumSize() );
-}
-
 void SchOptionTabPage::AdaptControlPositionsAndVisibility()
 {
     m_pGrpAxis->Show(m_bProvidesSecondaryYAxis);

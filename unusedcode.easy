@@ -49,7 +49,7 @@ ScDocument::GetFormulaTokens(ScAddress const&) const
 ScDocument::GetStringCell(ScAddress const&) const
 ScDocument::IsEmptyData(short, short) const
 ScExtIButton::GetSelected() const
-ScFormulaCell::GetResultDouble() const
+ScFilterDlg::LinkStubMoreClickHdl(void*, void*)
 ScFormulaCell::HasColRowName() const
 ScFormulaCell::IsSharedInvariant() const
 ScFormulaCell::SetResultToken(formula::FormulaToken const*)
@@ -120,7 +120,6 @@ basegfx::snapToNearestMultiple(double, double)
 basegfx::snapToRange(double, double, double)
 basegfx::unotools::homMatrixFromMatrix(basegfx::B2DHomMatrix&, com::sun::star::geometry::Matrix2D const&)
 canvas::createSurfaceProxyManager(boost::shared_ptr<canvas::IRenderModule> const&)
-chart::TrendlineResources::adjustControlSizes()
 comphelper::ComponentContext::ComponentContext(com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> const&)
 comphelper::ComponentContext::createComponentWithArguments(rtl::OUString const&, com::sun::star::uno::Sequence<com::sun::star::uno::Any> const&) const
 comphelper::ComponentContext::getLegacyServiceFactory() const
@@ -130,6 +129,8 @@ comphelper::detail::ConfigurationWrapper::getGroupReadWrite(boost::shared_ptr<co
 comphelper::detail::ConfigurationWrapper::getLocalizedPropertyValue(rtl::OUString const&) const
 comphelper::detail::ConfigurationWrapper::setLocalizedPropertyValue(boost::shared_ptr<comphelper::ConfigurationChanges> const&, rtl::OUString const&, com::sun::star::uno::Any const&) const
 connectivity::file::OStatement_Base::reset()
+connectivity::firebird::OPreparedStatement::checkParameterIndex(int)
+connectivity::firebird::release(int&, cppu::OBroadcastHelperVar<cppu::OMultiTypeInterfaceContainerHelper, com::sun::star::uno::Type>&, com::sun::star::uno::Reference<com::sun::star::uno::XInterface>&, com::sun::star::lang::XComponent*)
 connectivity::sdbcx::OGroup::OGroup(rtl::OUString const&, unsigned char)
 connectivity::sdbcx::OGroup::OGroup(unsigned char)
 dbtools::DBTypeConversion::getMsFromTime(com::sun::star::util::Time const&)
@@ -152,6 +153,8 @@ oox::xls::SheetDataBuffer::writeXfIdRangeListProperties(int, int, oox::xls::ApiC
 oox::xls::StylesBuffer::writeStyleXfToPropertySet(oox::PropertySet&, int) const
 oox::xls::WorksheetGlobals::getColumns(oox::ValueRange const&) const
 oox::xls::WorksheetGlobals::getRows(oox::ValueRange const&) const
+sax::Converter::convertDateTZ(rtl::OUStringBuffer&, com::sun::star::util::DateWithTimezone const&)
+sax::Converter::convertDateTimeTZ(rtl::OUStringBuffer&, com::sun::star::util::DateTimeWithTimezone const&)
 sc::CellTextAttr::CellTextAttr(unsigned short, unsigned char)
 sc::sidebar::CellLineStyleValueSet::GetSelItem()
 sc::sidebar::CellLineStyleValueSet::SetCusEnable(bool)
@@ -176,6 +179,9 @@ sdr::table::SdrTableObj::getRowCount() const
 sfx2::sidebar::AsynchronousCall::RequestCall(boost::function<void ()> const&)
 sfx2::sidebar::Context::EvaluateMatch(std::__debug::vector<sfx2::sidebar::Context, std::allocator<sfx2::sidebar::Context> > const&) const
 sfx2::sidebar::ContextList::IsEmpty()
+sfx2::sidebar::ControlFactory::CreateToolBox(Window*, ResId const&)
+sfx2::sidebar::ControlFactory::CreateToolBox(Window*, ResId const&, com::sun::star::uno::Reference<com::sun::star::frame::XFrame> const&)
+sfx2::sidebar::ControlFactory::CreateToolBoxBackground(Window*, bool)
 sfx2::sidebar::Deck::GetIconURL(bool) const
 sfx2::sidebar::Deck::PrintWindowTree(std::__debug::vector<sfx2::sidebar::Panel*, std::allocator<sfx2::sidebar::Panel*> > const&)
 sfx2::sidebar::EnumContext::EvaluateMatch(std::__debug::vector<sfx2::sidebar::EnumContext, std::allocator<sfx2::sidebar::EnumContext> > const&) const
@@ -217,3 +223,4 @@ unoidl::UnoidlProvider::getConstant(unsigned int) const
 utl::ConfigItem::getUniqueSetElementName(rtl::OUString const&, rtl::OUString&)
 utl::toISO8601(com::sun::star::util::Time const&)
 vclmain::createApplication()
+writerfilter::ooxml::OOXMLFastContextHandler::mark(unsigned int const&, boost::shared_ptr<writerfilter::ooxml::OOXMLValue>)

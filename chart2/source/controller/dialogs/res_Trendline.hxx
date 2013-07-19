@@ -40,8 +40,6 @@ public:
 
     void FillValueSets();
 
-    long adjustControlSizes();
-
 private:
     FixedLine m_aFLType;
 

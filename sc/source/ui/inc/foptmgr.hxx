@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_FOPTMGR_HXX
-#define SC_FOPTMGR_HXX
+#ifndef SC_NEWFOPTMGR_HXX
+#define SC_NEWFOPTMGR_HXX
 
 #include <vcl/fixed.hxx>
 #include <vcl/edit.hxx>
@@ -27,12 +27,10 @@
 
 //----------------------------------------------------------------------------
 
-class FixedInfo;
 namespace formula
 {
     class RefButton;
 }
-class MoreButton;
 struct ScQueryParam;
 class ScDocument;
 class ScViewData;
@@ -42,103 +40,21 @@ class ScViewData;
 class ScFilterOptionsMgr
 {
 public:
-            ScFilterOptionsMgr( ScViewData*         ptrViewData,
-                                const ScQueryParam& refQueryData,
-                                MoreButton&         refBtnMore,
-                                CheckBox&           refBtnCase,
-                                CheckBox&           refBtnRegExp,
-                                CheckBox&           refBtnHeader,
-                                CheckBox&           refBtnUnique,
-                                CheckBox&           refBtnCopyResult,
-                                CheckBox&           refBtnDestPers,
-                                ListBox&            refLbCopyArea,
-                                Edit&               refEdCopyArea,
-                                formula::RefButton&     refRbCopyArea,
-                                FixedText&          refFtDbAreaLabel,
-                                FixedInfo&          refFtDbArea,
-                                FixedLine&          refFlOptions,
-                                const String&       refStrUndefined );
-            ~ScFilterOptionsMgr();
-
-    sal_Bool    VerifyPosStr ( const String& rPosStr ) const;
-
-private:
-    ScViewData*     pViewData;
-    ScDocument*     pDoc;
-
-    MoreButton&     rBtnMore;
-    CheckBox&       rBtnCase;
-    CheckBox&       rBtnRegExp;
-    CheckBox&       rBtnHeader;
-    CheckBox&       rBtnUnique;
-    CheckBox&       rBtnCopyResult;
-    CheckBox&       rBtnDestPers;
-    ListBox&        rLbCopyPos;
-    Edit&           rEdCopyPos;
-    formula::RefButton& rRbCopyPos;
-    FixedText&      rFtDbAreaLabel;
-    FixedInfo&      rFtDbArea;
-    FixedLine&      rFlOptions;
-
-    const String&   rStrUndefined;
-
-    const ScQueryParam& rQueryData;
-
-#ifdef _FOPTMGR_CXX
-private:
-    void Init();
-
-    // Handler:
-    DECL_LINK( EdPosModifyHdl,      Edit* );
-    DECL_LINK( LbPosSelHdl,         ListBox* );
-    DECL_LINK( BtnCopyResultHdl,    CheckBox* );
-#endif
-};
-
-
-
-#endif // SC_FOPTMGR_HXX
-
-
-#ifndef SC_NEWFOPTMGR_HXX
-#define SC_NEWFOPTMGR_HXX
-
-#include <vcl/fixed.hxx>
-#include <vcl/edit.hxx>
-#include <vcl/lstbox.hxx>
-#include <vcl/button.hxx>
-//#include <vcl/layout.hxx>
-
-//----------------------------------------------------------------------------
-
-namespace formula
-{
-    class RefButton;
-}
-struct ScQueryParam;
-class ScDocument;
-class ScViewData;
-
-//----------------------------------------------------------------------------
-
-class ScNewFilterOptionsMgr
-{
-public:
-            ScNewFilterOptionsMgr( ScViewData*         ptrViewData,
-                                const ScQueryParam& refQueryData,
-                                CheckBox*           refBtnCase,
-                                CheckBox*           refBtnRegExp,
-                                CheckBox*           refBtnHeader,
-                                CheckBox*           refBtnUnique,
-                                CheckBox*           refBtnCopyResult,
-                                CheckBox*           refBtnDestPers,
-                                ListBox*            refLbCopyArea,
-                                Edit*               refEdCopyArea,
-                                formula::RefButton*     refRbCopyArea,
-                                FixedText*          refFtDbAreaLabel,
-                                FixedText*          refFtDbArea,
-                                const String&       refStrUndefined );
-            ~ScNewFilterOptionsMgr();
+    ScFilterOptionsMgr( ScViewData*         ptrViewData,
+                        const ScQueryParam& refQueryData,
+                        CheckBox*           refBtnCase,
+                        CheckBox*           refBtnRegExp,
+                        CheckBox*           refBtnHeader,
+                        CheckBox*           refBtnUnique,
+                        CheckBox*           refBtnCopyResult,
+                        CheckBox*           refBtnDestPers,
+                        ListBox*            refLbCopyArea,
+                        Edit*               refEdCopyArea,
+                        formula::RefButton*     refRbCopyArea,
+                        FixedText*          refFtDbAreaLabel,
+                        FixedText*          refFtDbArea,
+                        const String&       refStrUndefined );
+    ~ScFilterOptionsMgr();
     sal_Bool    VerifyPosStr ( const String& rPosStr ) const;
 
 private:
@@ -161,7 +77,6 @@ private:
 
     const ScQueryParam& rQueryData;
 
-#ifdef _NEWFOPTMGR_CXX
 private:
     void Init();
 
@@ -169,11 +84,9 @@ private:
     DECL_LINK( EdAreaModifyHdl,     Edit* );
     DECL_LINK( LbAreaSelHdl,        ListBox* );
     DECL_LINK( BtnCopyResultHdl,    CheckBox* );
-#endif
 };
 
 
 #endif // SC_NEWFOPTMGR_HXX
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
