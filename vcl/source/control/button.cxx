@@ -610,36 +610,15 @@ bool Button::set_property(const OString &rKey, const OString &rValue)
     if (rKey == "image-position")
     {
         ImageAlign eAlign = IMAGEALIGN_LEFT;
-        WinBits nBits = GetStyle();
         if (rValue == "left")
-        {
-            nBits &= ~(WB_CENTER | WB_RIGHT);
-            nBits |= WB_LEFT;
             eAlign = IMAGEALIGN_LEFT;
-        }
         else if (rValue == "right")
-        {
-            nBits &= ~(WB_CENTER | WB_LEFT);
-            nBits |= WB_RIGHT;
             eAlign = IMAGEALIGN_RIGHT;
-        }
         else if (rValue == "top")
-        {
-            nBits &= ~(WB_VCENTER | WB_BOTTOM);
-            nBits |= WB_TOP;
             eAlign = IMAGEALIGN_TOP;
-        }
         else if (rValue == "bottom")
-        {
-            nBits &= ~(WB_VCENTER | WB_TOP);
-            nBits |= WB_BOTTOM;
             eAlign = IMAGEALIGN_BOTTOM;
-        }
         SetImageAlign(eAlign);
-        //Its rather mad to have to set these bits when there is the other
-        //image align. Looks like e.g. the radiobuttons etc weren't converted
-        //over to image align fully.
-        SetStyle(nBits);
     }
     else
         return Control::set_property(rKey, rValue);
@@ -2886,6 +2865,36 @@ bool RadioButton::set_property(const OString &rKey, const OString &rValue)
 {
     if (rKey == "active")
         SetState(toBool(rValue));
+    else if (rKey == "image-position")
+    {
+        WinBits nBits = GetStyle();
+        if (rValue == "left")
+        {
+            nBits &= ~(WB_CENTER | WB_RIGHT);
+            nBits |= WB_LEFT;
+        }
+        else if (rValue == "right")
+        {
+            nBits &= ~(WB_CENTER | WB_LEFT);
+            nBits |= WB_RIGHT;
+        }
+        else if (rValue == "top")
+        {
+            nBits &= ~(WB_VCENTER | WB_BOTTOM);
+            nBits |= WB_TOP;
+        }
+        else if (rValue == "bottom")
+        {
+            nBits &= ~(WB_VCENTER | WB_TOP);
+            nBits |= WB_BOTTOM;
+        }
+        //Its rather mad to have to set these bits when there is the other
+        //image align. Looks like e.g. the radiobuttons etc weren't converted
+        //over to image align fully.
+        SetStyle(nBits);
+        //Deliberate to set the sane ImageAlign property
+        return Button::set_property(rKey, rValue);
+    }
     else
         return Button::set_property(rKey, rValue);
     return true;
