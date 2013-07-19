@@ -52,6 +52,7 @@ class SvxSearchItem;
 #include <boost/scoped_ptr.hpp>
 
 #include <vcl/textdata.hxx>
+#include <basic/codecompletecache.hxx>
 
 namespace com { namespace sun { namespace star { namespace beans {
     class XMultiPropertySet;
@@ -114,8 +115,10 @@ private:
     virtual
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >
     GetComponentInterface(sal_Bool bCreate = true);
-    std::vector< CodeCompleteData > aCodeCompleteCache;
-    CodeCompleteWindow* pCodeCompleteWnd;
+    //std::vector< CodeCompleteData > aCodeCompleteCache;
+    CodeCompleteDataCache aCodeCompleteCache;
+    //CodeCompleteWindow* pCodeCompleteWnd;
+    boost::scoped_ptr< CodeCompleteWindow > pCodeCompleteWnd;
     OUString GetActualSubName( sal_uLong nLine ); // gets the actual subroutine name according to line number
 
 protected:
@@ -492,8 +495,9 @@ public:
     void ResizeListBox();
     void SelectFirstEntry(); //selects first entry in ListBox
 
-protected:
-    virtual void KeyInput( const KeyEvent& rKeyEvt );
+/*protected:
+    //virtual void KeyInput( const KeyEvent& rKeyEvt );
+    virtual void LoseFocus();*/
 };
 
 class CodeCompleteListBox: public ListBox
@@ -520,6 +524,10 @@ public:
     DECL_LINK(ImplDoubleClickHdl, void*);
 
     virtual long PreNotify( NotifyEvent& rNEvt );
+
+/*protected:
+    virtual void LoseFocus();*/
+
 };
 
 } // namespace basctl

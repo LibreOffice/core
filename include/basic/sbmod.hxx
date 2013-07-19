@@ -29,6 +29,7 @@
 #include <deque>
 #include <boost/utility.hpp>
 #include "basicdllapi.h"
+#include <basic/codecompletecache.hxx>
 
 class SbMethod;
 class SbProperty;
@@ -44,6 +45,7 @@ class ModuleInitDependencyMap;
 struct ClassModuleRunInitItem;
 struct SbClassData;
 
+/*
 struct CodeCompleteData
 {
     OUString sVarName;
@@ -59,7 +61,7 @@ struct CodeCompleteData
     {
         return ( sVarParent == OUString("") );
     }
-};
+};*/
 
 class BASIC_DLLPUBLIC SbModule : public SbxObject, private ::boost::noncopyable
 {
@@ -150,7 +152,8 @@ public:
     void     RemoveVars();
     ::com::sun::star::uno::Reference< ::com::sun::star::script::XInvocation > GetUnoModule();
     bool createCOMWrapperForIface( ::com::sun::star::uno::Any& o_rRetAny, SbClassModuleObject* pProxyClassModuleObject );
-    std::vector< CodeCompleteData > GetCodeCompleteDataFromParse();
+    //std::vector< CodeCompleteData > GetCodeCompleteDataFromParse();
+    CodeCompleteDataCache GetCodeCompleteDataFromParse();
     SbxArrayRef GetMethods();
 };
 
