@@ -61,10 +61,6 @@ namespace connectivity
 {
     namespace firebird
     {
-
-        typedef ::std::vector< ::connectivity::ORowSetValue > TRow;
-        typedef ::std::vector< TRow >                  TTable;
-
         /*
         **  OResultSet
         */
@@ -93,20 +89,19 @@ namespace connectivity
 
             XSQLDA*                                     m_pSqlda;
             isc_stmt_handle                             m_statementHandle;
-            sal_Bool                                    m_bIsPopulated;
 
-            sal_Bool                                    m_bWasNull;
+            bool                                        m_bWasNull;
             // Row numbering starts with 0 for "in front of first row"
             sal_Int32                                   m_currentRow;
-            sal_Int32                                   m_rowCount;
+            bool                                        m_bIsAfterLastRow;
+
             const sal_Int32                             m_fieldCount;
-            TTable                                      m_sqlData;
             ISC_STATUS_ARRAY                            m_statusVector;
 
-            void ensureDataAvailable()
-                throw (::com::sun::star::sdbc::SQLException);
-            const ::connectivity::ORowSetValue& getSqlData(sal_Int32 aRow, sal_Int32 aColumn)
-                throw (::com::sun::star::sdbc::SQLException);
+//             void ensureDataAvailable()
+//                 throw (::com::sun::star::sdbc::SQLException);
+//             const ::connectivity::ORowSetValue& getSqlData(sal_Int32 aRow, sal_Int32 aColumn)
+//                 throw (::com::sun::star::sdbc::SQLException);
 
             const ::connectivity::ORowSetValue& safelyRetrieveValue(sal_Int32 columnIndex)
                 throw(::com::sun::star::sdbc::SQLException);
@@ -135,7 +130,8 @@ namespace connectivity
 
             virtual void SAL_CALL checkColumnIndex( sal_Int32 index )
                 throw ( com::sun::star::sdbc::SQLException, com::sun::star::uno::RuntimeException );
-            virtual void SAL_CALL checkRowIndex( sal_Bool mustBeOnValidRow );
+            virtual void SAL_CALL checkRowIndex()
+                throw ( com::sun::star::sdbc::SQLException);
 
             // you can't delete objects of this type
             virtual ~OResultSet();

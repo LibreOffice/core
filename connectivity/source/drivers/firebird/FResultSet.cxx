@@ -76,10 +76,9 @@ OResultSet::OResultSet(OConnection* pConnection,
     , m_xMetaData(NULL)
     , m_pSqlda(pSqlda)
     , m_statementHandle(aStatementHandle)
-    , m_bIsPopulated(sal_False)
-    , m_bWasNull(sal_True)
+    , m_bWasNull(false)
     , m_currentRow(0)
-    , m_rowCount(0)
+    , m_bIsAfterLastRow(false)
     , m_fieldCount(pSqlda? pSqlda->sqld : 0)
 {
     SAL_INFO("connectivity.firebird", "OResultSet().");
@@ -93,89 +92,33 @@ OResultSet::~OResultSet()
 {
 }
 
-void OResultSet::ensureDataAvailable() throw (SQLException)
-{
-    MutexGuard aGuard(m_pConnection->getMutex());
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
+// void OResultSet::ensureDataAvailable() throw (SQLException)
+// {
+//     MutexGuard aGuard(m_pConnection->getMutex());
+//     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
+//
+//     if (!m_bIsPopulated)
+//     {
+//
+//         ISC_STATUS aErr = isc_dsql_free_statement(m_statusVector,
+//                                                   &m_statementHandle,
+//                                                   DSQL_drop);
+//         // TODO: cleanup the XSQLDA, probably in the destructor?
+//
+//         // fetchstat == 100L if fetching of data completed successfully.
+//         if ((fetchStat != 100L) || aErr)
+//         {
+//             SAL_WARN("connectivity.firebird", "Error when populating data");
+//             OConnection::evaluateStatusVector(m_statusVector,
+//                                               "isc_dsql_free_statement",
+//                                               *this);
+//         }
+//
+//         SAL_INFO("connectivity.firebird", "Populated dataset with " << m_rowCount << " rows.");
+//         m_bIsPopulated = true;
+//     }
+// }
 
-    if (!m_bIsPopulated)
-    {
-        SAL_INFO("connectivity.firebird", "Iterating over data cursor");
-        ISC_STATUS fetchStat;
-
-        // Firebird doesn't support scrollable cursors so we have to load everything
-        // into memory. Can't really be done on demand as we need to determine the
-        // number of rows which can only be done by iterating over the XSQLDA
-        while ( 0 == (fetchStat = isc_dsql_fetch(m_statusVector,
-                                                 &m_statementHandle,
-                                                 1,
-                                                 m_pSqlda)))
-        {
-            m_rowCount++;
-
-            TRow aRow(m_fieldCount);
-            m_sqlData.push_back(aRow);
-            TRow& rRow = m_sqlData.back();
-
-            XSQLVAR* pVar = m_pSqlda->sqlvar;
-            for (int i = 0; i < m_fieldCount; pVar++, i++)
-            {
-                if ((pVar->sqltype & 1) == 0) // Means: Cannot contain NULL
-                {
-                    // TODO: test for null here and set as appropriate
-                }
-                else // Means: Can contain NULL
-                {
-                    // otherwise we need to test for SQL_TYPE and SQL_TYPE+1 below
-                    pVar->sqltype--;
-                }
-                switch (pVar->sqltype)
-                {
-                    case SQL_SHORT:
-                        rRow[i] = (sal_Int16) *pVar->sqldata;
-                        break;
-                    case SQL_LONG:
-                        rRow[i] = (sal_Int32) *pVar->sqldata;
-                        break;
-                    case SQL_INT64:
-                        rRow[i] = (sal_Int64) *pVar->sqldata;
-                        break;
-                    // TODO: remember sqlscale for decimal types
-                    default:
-                        rRow[i] = OUString(pVar->sqldata, pVar->sqllen, RTL_TEXTENCODING_UTF8);
-                        break;
-                }
-            }
-        }
-
-        ISC_STATUS aErr = isc_dsql_free_statement(m_statusVector,
-                                                  &m_statementHandle,
-                                                  DSQL_drop);
-        // TODO: cleanup the XSQLDA, probably in the destructor?
-
-        // fetchstat == 100L if fetching of data completed successfully.
-        if ((fetchStat != 100L) || aErr)
-        {
-            SAL_WARN("connectivity.firebird", "Error when populating data");
-            OConnection::evaluateStatusVector(m_statusVector,
-                                              "isc_dsql_free_statement",
-                                              *this);
-        }
-
-        SAL_INFO("connectivity.firebird", "Populated dataset with " << m_rowCount << " rows.");
-        m_bIsPopulated = true;
-    }
-}
-
-const ORowSetValue& OResultSet::getSqlData(sal_Int32 aRow, sal_Int32 aColumn)
-    throw(SQLException)
-{
-    // Validate input (throws Exceptions as appropriate)
-    checkRowIndex(aRow);
-    checkColumnIndex(aColumn);
-
-    return m_sqlData[aRow-1][aColumn-1];
-}
 
 // ---- XResultSet -- Row retrieval methods ------------------------------------
 sal_Int32 SAL_CALL OResultSet::getRow() throw(SQLException, RuntimeException)
@@ -190,34 +133,81 @@ sal_Bool SAL_CALL OResultSet::next() throw(SQLException, RuntimeException)
 {
     MutexGuard aGuard(m_pConnection->getMutex());
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-    ensureDataAvailable();
 
-    if (m_currentRow < m_rowCount)
+    SAL_INFO("connectivity.firebird", "Fetching row from cursor");
+
+    m_currentRow++;
+
+    ISC_STATUS fetchStat = isc_dsql_fetch(m_statusVector,
+                               &m_statementHandle,
+                               1,
+                               m_pSqlda);
+    if (fetchStat == 0)         // SUCCESSFUL
     {
-        m_currentRow++;
         return sal_True;
+    }
+    else if (fetchStat == 100L) // END OF DATASET
+    {
+        // TODO: shut the statement
+        return sal_False;
     }
     else
     {
+        SAL_WARN("connectivity.firebird", "Error when populating data");
+        // Throws sql exception as appropriate
+        OConnection::evaluateStatusVector(m_statusVector,
+                                          "isc_dsql_fetch",
+                                          *this);
         return sal_False;
     }
+
+            //         {
+//             m_rowCount++;
+//
+//             TRow aRow(m_fieldCount);
+//             m_sqlData.push_back(aRow);
+//             TRow& rRow = m_sqlData.back();
+//
+//             XSQLVAR* pVar = m_pSqlda->sqlvar;
+//             for (int i = 0; i < m_fieldCount; pVar++, i++)
+//             {
+//                 if ((pVar->sqltype & 1) == 0) // Means: Cannot contain NULL
+//                 {
+//                     // TODO: test for null here and set as appropriate
+//                 }
+//                 else // Means: Can contain NULL
+//                 {
+//                     // otherwise we need to test for SQL_TYPE and SQL_TYPE+1 below
+//                     pVar->sqltype--;
+//                 }
+//                 switch (pVar->sqltype)
+//                 {
+//                     case SQL_SHORT:
+//                         rRow[i] = (sal_Int16) *pVar->sqldata;
+//                         break;
+//                     case SQL_LONG:
+//                         rRow[i] = (sal_Int32) *pVar->sqldata;
+//                         break;
+//                     case SQL_INT64:
+//                         rRow[i] = (sal_Int64) *pVar->sqldata;
+//                         break;
+//                     // TODO: remember sqlscale for decimal types
+//                     default:
+//                         rRow[i] = OUString(pVar->sqldata, pVar->sqllen, RTL_TEXTENCODING_UTF8);
+//                         break;
+//                 }
+//             }
+//         }
 }
 
 sal_Bool SAL_CALL OResultSet::previous() throw(SQLException, RuntimeException)
 {
-    MutexGuard aGuard(m_pConnection->getMutex());
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-    ensureDataAvailable();
+    throw SQLException("Firebird doesn't support previous()", *this, OUString(), 0, Any());
+}
 
-    if (m_currentRow > 0)
-    {
-        m_currentRow--;
-        return sal_True;
-    }
-    else
-    {
-        return sal_False;
-    }
+sal_Bool SAL_CALL OResultSet::isLast() throw(SQLException, RuntimeException)
+{
+    throw SQLException("Firebird doesn't support isLast()", *this, OUString(), 0, Any());
 }
 
 sal_Bool SAL_CALL OResultSet::isBeforeFirst() throw(SQLException, RuntimeException)
@@ -232,27 +222,16 @@ sal_Bool SAL_CALL OResultSet::isAfterLast() throw(SQLException, RuntimeException
 {
     MutexGuard aGuard(m_pConnection->getMutex());
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-    ensureDataAvailable();
 
-    return m_currentRow > m_rowCount;
+    return m_bIsAfterLastRow;
 }
 
 sal_Bool SAL_CALL OResultSet::isFirst() throw(SQLException, RuntimeException)
 {
     MutexGuard aGuard(m_pConnection->getMutex());
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-    ensureDataAvailable();
 
-    return m_currentRow == 1 && m_rowCount;
-}
-
-sal_Bool SAL_CALL OResultSet::isLast() throw(SQLException, RuntimeException)
-{
-    MutexGuard aGuard(m_pConnection->getMutex());
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-    ensureDataAvailable();
-
-    return (m_currentRow > 0) && (m_currentRow == m_rowCount);
+    return m_currentRow == 1 && !m_bIsAfterLastRow;
 }
 
 // Move to front
@@ -261,77 +240,59 @@ void SAL_CALL OResultSet::beforeFirst() throw(SQLException, RuntimeException)
     MutexGuard aGuard(m_pConnection->getMutex());
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
-    m_currentRow = 0;
+    if (m_currentRow != 0)
+        throw SQLException("Firebird doesn't support beforeFirst()", *this, OUString(), 0, Any());
 }
 // Move to back
 void SAL_CALL OResultSet::afterLast() throw(SQLException, RuntimeException)
 {
     MutexGuard aGuard(m_pConnection->getMutex());
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-    ensureDataAvailable();
 
-    m_currentRow = m_rowCount + 1;
+    if (!m_bIsAfterLastRow)
+        throw SQLException("Firebird doesn't support afterLast()", *this, OUString(), 0, Any());
 }
 
 sal_Bool SAL_CALL OResultSet::first() throw(SQLException, RuntimeException)
 {
     MutexGuard aGuard(m_pConnection->getMutex());
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-    ensureDataAvailable();
 
-    if (m_rowCount > 0)
+    if (m_currentRow == 0)
     {
-        m_currentRow = 1;
-        return sal_True;
+        return next();
+    }
+    else if (m_currentRow == 1 && !m_bIsAfterLastRow)
+    {
+        return true;
     }
     else
     {
-        return sal_False;
+           throw SQLException("Firebird doesn't support first()", *this, OUString(), 0, Any());
     }
 }
 
 sal_Bool SAL_CALL OResultSet::last() throw(SQLException, RuntimeException)
 {
-    MutexGuard aGuard(m_pConnection->getMutex());
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-    ensureDataAvailable();
-
-    if (m_rowCount > 0)
-    {
-        m_currentRow = m_rowCount;
-        return sal_True;
-    }
-    else
-    {
-        return sal_False;
-    }
+    // We need to iterate past the last row to know when we've passed the last
+    // row, so we can't actually move to last.
+        throw SQLException("Firebird doesn't support last()", *this, OUString(), 0, Any());
 }
 
 sal_Bool SAL_CALL OResultSet::absolute(sal_Int32 aRow) throw(SQLException, RuntimeException)
 {
     MutexGuard aGuard(m_pConnection->getMutex());
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-    ensureDataAvailable();
 
-    if (m_rowCount > 0)
+    if (aRow > m_currentRow)
     {
-        if( aRow > 0 )
-        {
-            m_currentRow = aRow;
-            if( m_currentRow > m_rowCount )
-                m_currentRow = m_rowCount + 1;
-        }
-        else
-        {
-            m_currentRow = m_rowCount + 1 + aRow;
-            if( m_currentRow < 0 )
-                m_currentRow = 0;
-        }
-        return sal_True;
+        sal_Int32 aIterations = aRow - m_currentRow;
+        return relative(aIterations);
     }
     else
     {
-        return sal_False;
+        throw SQLException("Firebird doesn't support retrieval of rows before the current row",
+                            *this, OUString(), 0, Any());
     }
 }
 
@@ -339,26 +300,25 @@ sal_Bool SAL_CALL OResultSet::relative(sal_Int32 row) throw(SQLException, Runtim
 {
     MutexGuard aGuard(m_pConnection->getMutex());
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-    ensureDataAvailable();
 
-    if (m_rowCount > 0)
+    if (row > 0)
     {
-        m_currentRow += row;
-
-        if( m_currentRow > m_rowCount )
-            m_currentRow = m_rowCount + 1;
-        else if ( m_currentRow < -1 )
-            m_currentRow = -1;
-
+        while (row--)
+        {
+            if (!next())
+                return sal_False;
+        }
         return sal_True;
     }
     else
     {
-        return false;
+        throw SQLException("Firebird doesn't support relative() for a negative offset",
+                           *this, OUString(), 0, Any());
     }
 }
 
-void SAL_CALL OResultSet::checkColumnIndex(sal_Int32 index ) throw ( SQLException, RuntimeException )
+void SAL_CALL OResultSet::checkColumnIndex(sal_Int32 index)
+    throw (SQLException, RuntimeException)
 {
     MutexGuard aGuard(m_pConnection->getMutex());
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
@@ -369,25 +329,15 @@ void SAL_CALL OResultSet::checkColumnIndex(sal_Int32 index ) throw ( SQLExceptio
     }
 }
 
-void SAL_CALL OResultSet::checkRowIndex(sal_Bool mustBeOnValidRow)
+void SAL_CALL OResultSet::checkRowIndex()
+    throw (SQLException)
 {
     MutexGuard aGuard(m_pConnection->getMutex());
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-    ensureDataAvailable();
 
-    if(mustBeOnValidRow)
+    if((m_currentRow < 1) || m_bIsAfterLastRow)
     {
-        if((m_currentRow < 1) || (m_currentRow > m_rowCount))
-        {
-            throw SQLException( "Row index is out of valid range.", *this, OUString(),1, Any() );
-        }
-    }
-    else
-    {
-        if((m_currentRow < 0) || (m_currentRow > 1 + m_rowCount))
-        {
-            throw SQLException( "Row index is invalid", *this, OUString(),1, Any() );
-        }
+        throw SQLException( "Row index is out of valid range.", *this, OUString(),1, Any() );
     }
 }
 // -------------------------------------------------------------------------
@@ -445,8 +395,6 @@ uno::Reference< XInputStream > SAL_CALL OResultSet::getBinaryStream( sal_Int32 c
     (void) columnIndex;
     MutexGuard aGuard(m_pConnection->getMutex());
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-    ensureDataAvailable();
-
 
     return NULL;
 }
@@ -456,8 +404,6 @@ uno::Reference< XInputStream > SAL_CALL OResultSet::getCharacterStream( sal_Int3
     (void) columnIndex;
     MutexGuard aGuard(m_pConnection->getMutex());
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-    ensureDataAvailable();
-
 
     return NULL;
 }
@@ -466,11 +412,11 @@ uno::Reference< XInputStream > SAL_CALL OResultSet::getCharacterStream( sal_Int3
 const ORowSetValue& OResultSet::safelyRetrieveValue(sal_Int32 columnIndex)
     throw(SQLException)
 {
+    (void) columnIndex;
     MutexGuard aGuard(m_pConnection->getMutex());
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-    ensureDataAvailable();
-
-    return getSqlData(m_currentRow,columnIndex);
+    throw SQLException(); // Temporary until we've reimplemented everythign
+//     return getSqlData(m_currentRow,columnIndex);
 }
 
 sal_Bool SAL_CALL OResultSet::getBoolean(sal_Int32 columnIndex)
@@ -547,8 +493,6 @@ uno::Reference< XResultSetMetaData > SAL_CALL OResultSet::getMetaData(  ) throw(
 {
     MutexGuard aGuard(m_pConnection->getMutex());
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-    ensureDataAvailable();
-
 
     if(!m_xMetaData.is())
         m_xMetaData = new OResultSetMetaData(m_xStatement->getConnection());
@@ -560,7 +504,6 @@ uno::Reference< XArray > SAL_CALL OResultSet::getArray( sal_Int32 columnIndex ) 
     (void) columnIndex;
     MutexGuard aGuard(m_pConnection->getMutex());
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-    ensureDataAvailable();
 
     return NULL;
 }
@@ -572,7 +515,6 @@ uno::Reference< XClob > SAL_CALL OResultSet::getClob( sal_Int32 columnIndex ) th
     (void) columnIndex;
     MutexGuard aGuard(m_pConnection->getMutex());
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-    ensureDataAvailable();
 
     return NULL;
 }
@@ -582,7 +524,6 @@ uno::Reference< XBlob > SAL_CALL OResultSet::getBlob( sal_Int32 columnIndex ) th
     (void) columnIndex;
     MutexGuard aGuard(m_pConnection->getMutex());
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-    ensureDataAvailable();
 
     return NULL;
 }
@@ -593,7 +534,6 @@ uno::Reference< XRef > SAL_CALL OResultSet::getRef( sal_Int32 columnIndex ) thro
     (void) columnIndex;
     MutexGuard aGuard(m_pConnection->getMutex());
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-    ensureDataAvailable();
 
     return NULL;
 }
@@ -605,7 +545,6 @@ Any SAL_CALL OResultSet::getObject( sal_Int32 columnIndex, const uno::Reference<
     (void) typeMap;
     MutexGuard aGuard(m_pConnection->getMutex());
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-    ensureDataAvailable();
 
     return Any();
 }
