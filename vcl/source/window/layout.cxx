@@ -1501,6 +1501,7 @@ IMPL_LINK( VclExpander, ClickHdl, DisclosureButton*, pBtn )
         if (pResizeDialog)
             pResizeDialog->setOptimalLayoutSize();
     }
+    maExpandedHdl.Call(this);
     return 0;
 }
 

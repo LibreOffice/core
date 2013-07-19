@@ -525,12 +525,15 @@ public:
         m_aDisclosureButton.Check(bExpanded);
     }
     virtual void StateChanged(StateChangedType nType);
+    void  SetExpandedHdl( const Link& rLink ) { maExpandedHdl = rLink; }
+    const Link& GetExpandedHdl() const { return maExpandedHdl; }
 protected:
     virtual Size calculateRequisition() const;
     virtual void setAllocation(const Size &rAllocation);
 private:
     bool m_bResizeTopLevel;
     DisclosureButton m_aDisclosureButton;
+    Link maExpandedHdl;
     DECL_DLLPRIVATE_LINK(ClickHdl, DisclosureButton* pBtn);
 };
 
