@@ -163,53 +163,6 @@ TabPage RID_OFAPAGE_AUTOFMT_APPLY
     };
 };
 
-ModalDialog RID_OFADLG_PRCNT_SET
-{
-    HelpID = CMD_SID_AUTOFORMAT ;
-    OutputSize = TRUE ;
-    SVLook = TRUE ;
-    Size = MAP_APPFONT ( 155 , 43 ) ;
-    Moveable = TRUE ;
-    FixedLine FL_PRCNT
-    {
-        Pos = MAP_APPFONT ( 4 , 3 ) ;
-        Size = MAP_APPFONT ( 87 , 8 ) ;
-        Text [ en-US ] = "Minimum size" ;
-    };
-    OKButton BT_OK
-    {
-        Pos = MAP_APPFONT ( 99 , 6 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        TabStop = TRUE ;
-        DefButton = TRUE ;
-    };
-    CancelButton BT_CANCEL
-    {
-        Pos = MAP_APPFONT ( 99 , 23 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        TabStop = TRUE ;
-    };
-    MetricField ED_RIGHT_MARGIN
-    {
-        HelpID = "cui:MetricField:RID_OFADLG_PRCNT_SET:ED_RIGHT_MARGIN";
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 7 , 14 ) ;
-        Size = MAP_APPFONT ( 31 , 12 ) ;
-        TabStop = TRUE ;
-        Left = TRUE ;
-        Repeat = TRUE ;
-        Spin = TRUE ;
-        Maximum = 100 ;
-        Value = 77 ;
-        Unit = FUNIT_CUSTOM ;
-        CustomUnitText = "%" ;
-        First = 10 ;
-        Last = 100 ;
-        SpinSize = 5 ;
-    };
-    Text [ en-US ] = "Combine" ;
-};
-
 /**************************************************************************/
 /*                                                                        */
 /*  Beschreibung: Typografische Anfuehrungszeichen                        */

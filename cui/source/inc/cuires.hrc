@@ -117,7 +117,6 @@
 #define RID_OFAPAGE_AUTOFMT_APPLY       (RID_OFA_START + 110)
 
 #define RID_OFAPAGE_AUTOCORR_QUOTE      (RID_OFA_START + 109)
-#define RID_OFADLG_PRCNT_SET            (RID_OFA_START + 111)
 
 // options
 #define RID_SVXSTR_DIAGRAM_ROW                              (RID_SVX_START + 1162)

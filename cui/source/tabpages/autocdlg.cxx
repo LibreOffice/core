@@ -288,24 +288,18 @@ struct ImpUserData
 
 class OfaAutoFmtPrcntSet : public ModalDialog
 {
-    OKButton        aOKPB;
-    CancelButton    aCancelPB;
-    FixedLine       aPrcntFL;
-    MetricField     aPrcntMF;
-
-    public:
-        OfaAutoFmtPrcntSet(Window* pParent) :
-            ModalDialog(pParent, CUI_RES(RID_OFADLG_PRCNT_SET)),
-                aOKPB(this,         CUI_RES(BT_OK)),
-                aCancelPB(this,     CUI_RES(BT_CANCEL)),
-                aPrcntFL(this,      CUI_RES(FL_PRCNT)),
-                aPrcntMF(this,  CUI_RES(ED_RIGHT_MARGIN))
-            {
-                FreeResource();
-            }
-    MetricField&    GetPrcntFld(){return aPrcntMF;}
+    MetricField* m_pPrcntMF;
+public:
+    OfaAutoFmtPrcntSet(Window* pParent)
+        : ModalDialog(pParent, "PercentDialog","cui/ui/percentdialog.ui")
+    {
+        get(m_pPrcntMF, "margin");
+    }
+    MetricField& GetPrcntFld()
+    {
+        return *m_pPrcntMF;
+    }
 };
-
 
 /*********************************************************************/
 /*                                                                   */

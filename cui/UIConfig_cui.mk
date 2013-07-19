@@ -68,6 +68,7 @@ $(eval $(call gb_UIConfig_add_uifiles,cui,\
 	cui/uiconfig/ui/paraindentspacing \
 	cui/uiconfig/ui/paratabspage \
 	cui/uiconfig/ui/pastespecial \
+	cui/uiconfig/ui/percentdialog \
 	cui/uiconfig/ui/personalization_tab \
 	cui/uiconfig/ui/pickbulletpage \
 	cui/uiconfig/ui/pickgraphicpage \
