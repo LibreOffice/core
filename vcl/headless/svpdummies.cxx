@@ -64,11 +64,6 @@ Rectangle SvpSalSystem::GetDisplayScreenPosSizePixel( unsigned int nScreen )
     return aRect;
 }
 
-Rectangle SvpSalSystem::GetDisplayScreenWorkAreaPosSizePixel( unsigned int nScreen )
-{
-    return GetDisplayScreenPosSizePixel( nScreen );
-}
-
 OUString SvpSalSystem::GetDisplayScreenName( unsigned int nScreen )
 {
    return "VirtualScreen " + OUString::valueOf(sal_Int32(nScreen));

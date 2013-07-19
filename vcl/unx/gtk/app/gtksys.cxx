@@ -246,14 +246,6 @@ Rectangle GtkSalSystem::GetDisplayScreenPosSizePixel (unsigned int nScreen)
     return Rectangle (Point(aRect.x, aRect.y), Size(aRect.width, aRect.height));
 }
 
-Rectangle GtkSalSystem::GetDisplayScreenWorkAreaPosSizePixel (unsigned int nScreen)
-{
-    // FIXME: in theory we need extra code here to collect
-    // the work area, ignoring fixed panels etc. on the screen.
-    // surely gtk+ should have API to get this for us (?)
-    return GetDisplayScreenPosSizePixel( nScreen );
-}
-
 OUString GtkSalSystem::GetDisplayScreenName(unsigned int nScreen)
 {
     gchar *pStr;

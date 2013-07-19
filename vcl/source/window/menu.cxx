@@ -3710,7 +3710,7 @@ sal_uInt16 PopupMenu::ImplExecute( Window* pW, const Rectangle& rRect, sal_uLong
         if( ! pDeskW )
             pDeskW = pWindow;
         Point aDesktopTL( pDeskW->OutputToAbsoluteScreenPixel( aRect.TopLeft() ) );
-        nMaxHeight = Application::GetWorkAreaPosSizePixel(
+        nMaxHeight = Application::GetScreenPosSizePixel(
             Application::GetBestScreen( Rectangle( aDesktopTL, aRect.GetSize() ) )
             ).GetHeight();
     }

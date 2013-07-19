@@ -33,19 +33,16 @@ class WinSalSystem : public SalSystem
         OUString        m_aName;
         OUString        m_aDeviceName;
         Rectangle            m_aArea;
-        Rectangle            m_aWorkArea;
         sal_Int32            m_nStateFlags;
 
         DisplayMonitor() : m_nStateFlags( 0 ) {}
         DisplayMonitor( const OUString& rName,
                         const OUString& rDevName,
                         const Rectangle& rArea,
-                        const Rectangle& rWorkArea,
                         DWORD nStateFlags )
                         : m_aName( rName ),
                           m_aDeviceName( rDevName ),
                           m_aArea( rArea ),
-                          m_aWorkArea( rWorkArea ),
                           m_nStateFlags( nStateFlags )
         {
         }
@@ -62,7 +59,6 @@ public:
     virtual unsigned int GetDisplayScreenCount();
     virtual unsigned int GetDisplayBuiltInScreen();
     virtual Rectangle GetDisplayScreenPosSizePixel( unsigned int nScreen );
-    virtual Rectangle GetDisplayScreenWorkAreaPosSizePixel( unsigned int nScreen );
     virtual OUString GetDisplayScreenName( unsigned int nScreen );
     virtual int ShowNativeMessageBox( const OUString& rTitle,
                                       const OUString& rMessage,

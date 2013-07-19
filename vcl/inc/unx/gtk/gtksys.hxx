@@ -31,7 +31,6 @@ public:
     virtual unsigned int  GetDisplayBuiltInScreen();
     virtual OUString GetDisplayScreenName                  (unsigned int nScreen);
     virtual Rectangle     GetDisplayScreenPosSizePixel   (unsigned int nScreen);
-    virtual Rectangle     GetDisplayScreenWorkAreaPosSizePixel (unsigned int nScreen);
     virtual int           ShowNativeDialog (const OUString&              rTitle,
                                             const OUString&              rMessage,
                                             const std::list< OUString >& rButtons,

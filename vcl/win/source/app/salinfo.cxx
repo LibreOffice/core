@@ -73,10 +73,6 @@ sal_Bool WinSalSystem::handleMonitorCallback( sal_IntPtr hMonitor, sal_IntPtr, s
                                              aInfo.rcMonitor.top ),
                                       Size( aInfo.rcMonitor.right - aInfo.rcMonitor.left,
                                             aInfo.rcMonitor.bottom - aInfo.rcMonitor.top ) );
-            rMon.m_aWorkArea = Rectangle( Point( aInfo.rcWork.left,
-                                                 aInfo.rcWork.top ),
-                                          Size( aInfo.rcWork.right - aInfo.rcWork.left,
-                                                aInfo.rcWork.bottom - aInfo.rcWork.top ) );
             if( (aInfo.dwFlags & MONITORINFOF_PRIMARY) != 0 )
                 m_nPrimary = it->second;
         }
@@ -103,14 +99,9 @@ bool WinSalSystem::initMonitors()
         m_aMonitors.push_back( DisplayMonitor( OUString(),
                                                OUString(),
                                                Rectangle( Point(), Size( w, h ) ),
-                                               Rectangle( Point(), Size( w, h ) ),
                                                0 ) );
         m_aDeviceNameToMonitor[ OUString() ] = 0;
         m_nPrimary = 0;
-        RECT aWorkRect;
-        if( SystemParametersInfo( SPI_GETWORKAREA, 0, &aWorkRect, 0 ) )
-            m_aMonitors.back().m_aWorkArea =  Rectangle( aWorkRect.left, aWorkRect.top,
-                                                         aWorkRect.right, aWorkRect.bottom );
     }
     else
     {
@@ -134,7 +125,6 @@ bool WinSalSystem::initMonitors()
                 m_aDeviceNameToMonitor[ aDeviceName ] = m_aMonitors.size();
                 m_aMonitors.push_back( DisplayMonitor( aDeviceString,
                                                        aDeviceName,
-                                                       Rectangle(),
                                                        Rectangle(),
                                                        aDev.StateFlags ) );
             }
@@ -180,12 +170,6 @@ Rectangle WinSalSystem::GetDisplayScreenPosSizePixel( unsigned int nScreen )
 {
     initMonitors();
     return (nScreen < m_aMonitors.size()) ? m_aMonitors[nScreen].m_aArea : Rectangle();
-}
-
-Rectangle WinSalSystem::GetDisplayScreenWorkAreaPosSizePixel( unsigned int nScreen )
-{
-    initMonitors();
-    return (nScreen < m_aMonitors.size()) ? m_aMonitors[nScreen].m_aWorkArea : Rectangle();
 }
 
 OUString WinSalSystem::GetDisplayScreenName( unsigned int nScreen )

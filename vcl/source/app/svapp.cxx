@@ -1322,12 +1322,6 @@ Rectangle Application::GetScreenPosSizePixel( unsigned int nScreen )
     return pSys ? pSys->GetDisplayScreenPosSizePixel( nScreen ) : Rectangle();
 }
 
-Rectangle Application::GetWorkAreaPosSizePixel( unsigned int nScreen )
-{
-    SalSystem* pSys = ImplGetSalSystem();
-    return pSys ? pSys->GetDisplayScreenWorkAreaPosSizePixel( nScreen ) : Rectangle();
-}
-
 namespace {
 unsigned long calcDistSquare( const Point& i_rPoint, const Rectangle& i_rRect )
 {
