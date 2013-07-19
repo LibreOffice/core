@@ -83,6 +83,10 @@ namespace connectivity
 
         protected:
             ::osl::Mutex                    m_aMutex;
+        public:
+            ::osl::Mutex&                   getMutex()
+                                            { return m_aMutex; }
+        protected:
             static const OUString sDBLocation; // Location within .odb container
             rtl_TextEncoding                        m_nTextEncoding; // the encoding which is used for all text conversions
             //====================================================================

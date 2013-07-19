@@ -81,12 +81,12 @@ namespace connectivity
                                                         ::com::sun::star::sdbc::XColumnLocate,
                                                         ::com::sun::star::lang::XServiceInfo> OResultSet_BASE;
 
-        class OResultSet :  public  OBase_Mutex,
-                            public  OResultSet_BASE,
+        class OResultSet :  public  OResultSet_BASE,
                             public  ::cppu::OPropertySetHelper,
                             public  OPropertyArrayUsageHelper<OResultSet>
         {
         protected:
+            OConnection* m_pConnection;
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XStatement >& m_xStatement;
 
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData>        m_xMetaData;
@@ -142,7 +142,8 @@ namespace connectivity
         public:
             DECLARE_SERVICE_INFO();
 
-            OResultSet(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XStatement >& xStatement,
+            OResultSet(OConnection* pConnection,
+                       const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XStatement >& xStatement,
                        isc_stmt_handle& aStatementHandle,
                        XSQLDA* aSqlda);
 

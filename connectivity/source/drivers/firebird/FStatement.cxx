@@ -69,7 +69,7 @@ using namespace ::rtl;
 using namespace ::std;
 
 OStatement_Base::OStatement_Base(OConnection* _pConnection)
-    : OStatement_BASE(m_aMutex),
+    : OStatement_BASE(_pConnection->getMutex()),
       OPropertySetHelper(OStatement_BASE::rBHelper),
       m_pConnection(_pConnection),
       rBHelper(OStatement_BASE::rBHelper)
@@ -100,7 +100,7 @@ void OStatement_BASE2::disposing()
 {
     SAL_INFO("connectivity.firebird", "disposing().");
 
-    MutexGuard aGuard(m_aMutex);
+    MutexGuard aGuard(m_pConnection->getMutex());
 
     disposeResultSet();
 
@@ -153,7 +153,7 @@ Sequence< Type > SAL_CALL OStatement_Base::getTypes(  ) throw(RuntimeException)
 
 void SAL_CALL OStatement_Base::cancel(  ) throw(RuntimeException)
 {
-    MutexGuard aGuard( m_aMutex );
+    MutexGuard aGuard(m_pConnection->getMutex());
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
     // cancel the current sql statement
 }
@@ -164,7 +164,7 @@ void SAL_CALL OStatement_Base::close(  ) throw(SQLException, RuntimeException)
     SAL_INFO("connectivity.firebird", "close().");
 
     {
-        MutexGuard aGuard( m_aMutex );
+        MutexGuard aGuard(m_pConnection->getMutex());
         checkDisposed(OStatement_BASE::rBHelper.bDisposed);
 
     }
@@ -184,7 +184,7 @@ sal_Int32 SAL_CALL OStatement_Base::executeUpdate(const OUString& sqlIn)
     throw(SQLException, RuntimeException)
 {
     // TODO: close ResultSet if existing -- so so in all 3 execute methods.
-    MutexGuard aGuard( m_aMutex );
+    MutexGuard aGuard(m_pConnection->getMutex());
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
 
     const OUString sql = sanitizeSqlString(sqlIn);
@@ -219,7 +219,7 @@ int OStatement_Base::prepareAndDescribeStatement(const OUString& sqlIn,
                                                  XSQLDA*& pOutSqlda,
                                                  XSQLVAR*& pVar)
 {
-    MutexGuard aGuard( m_aMutex );
+    MutexGuard aGuard(m_pConnection->getMutex());
 
     const OUString sql = sanitizeSqlString(sqlIn);
 
@@ -342,7 +342,7 @@ int OStatement_Base::prepareAndDescribeStatement(const OUString& sqlIn,
 
 uno::Reference< XResultSet > SAL_CALL OStatement_Base::executeQuery(const OUString& sql) throw(SQLException, RuntimeException)
 {
-    MutexGuard aGuard( m_aMutex );
+    MutexGuard aGuard(m_pConnection->getMutex());
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
 
     XSQLDA* pOutSqlda = 0;
@@ -371,7 +371,8 @@ uno::Reference< XResultSet > SAL_CALL OStatement_Base::executeQuery(const OUStri
             SAL_WARN("connectivity.firebird", "isc_dsql_execute failed" );
     }
 
-    uno::Reference< OResultSet > pResult(new OResultSet(uno::Reference< XStatement >(this),
+    uno::Reference< OResultSet > pResult(new OResultSet(m_pConnection,
+                                                        uno::Reference< XStatement >(this),
                                                         aStatementHandle,
                                                         pOutSqlda));
     //initializeResultSet( pResult.get() );
@@ -388,7 +389,7 @@ sal_Bool SAL_CALL OStatement_Base::execute(const OUString& sql) throw(SQLExcepti
     SAL_INFO("connectivity.firebird", "executeQuery(). "
              "Got called with sql: " << sql);
 
-    MutexGuard aGuard( m_aMutex );
+    MutexGuard aGuard(m_pConnection->getMutex());
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
 
     XSQLDA* pOutSqlda = 0;
@@ -426,7 +427,7 @@ sal_Bool SAL_CALL OStatement_Base::execute(const OUString& sql) throw(SQLExcepti
 uno::Reference< XConnection > SAL_CALL OStatement_Base::getConnection()
     throw(SQLException, RuntimeException)
 {
-    MutexGuard aGuard( m_aMutex );
+    MutexGuard aGuard(m_pConnection->getMutex());
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
 
     return (uno::Reference< XConnection >)m_pConnection;

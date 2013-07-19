@@ -64,8 +64,7 @@ namespace connectivity
         //************ Class: OStatement_Base
         // is a base class for the normal statement and for the prepared statement
         //**************************************************************
-        class OStatement_Base       :   public OBase_Mutex,
-                                        public  OStatement_BASE,
+        class OStatement_Base       :   public  OStatement_BASE,
                                         public  ::cppu::OPropertySetHelper,
                                         public  OPropertyArrayUsageHelper<OStatement_Base>
 
@@ -109,6 +108,7 @@ namespace connectivity
                                                   XSQLVAR*& pVar);
             ::rtl::OUString sanitizeSqlString(const OUString& sqlIn);
         public:
+
             ::cppu::OBroadcastHelper& rBHelper;
             OStatement_Base(OConnection* _pConnection);
             using OStatement_BASE::operator ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >;
