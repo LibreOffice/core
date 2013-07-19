@@ -34,17 +34,4 @@
 #define LB_FUNCTIONS        14
 #define FT_FUNCTIONS        15
 
-// Options TabPage
-#define FL_GROUP            20
-#define BTN_PAGEBREAK       21
-#define BTN_CASE            22
-#define BTN_SORT            23
-
-#define FL_SORT             30
-#define BTN_ASCENDING       31
-#define BTN_DESCENDING      32
-#define BTN_FORMATS         33
-#define BTN_USERDEF         34
-#define LB_USERDEF          35
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
