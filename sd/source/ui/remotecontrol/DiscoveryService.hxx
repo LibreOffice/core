@@ -48,7 +48,7 @@ namespace sd
             virtual void SAL_CALL run();
 
 //             osl::DatagramSocket mSocket;
-            int mSocket;
+            // int mSocket;
 
     };
 }

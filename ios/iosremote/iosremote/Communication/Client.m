@@ -202,8 +202,6 @@ int count = 0;
                     }
                 }
             }
-            //            NSLog(@"Command:%@", str);
-            
             backgroundQueue = dispatch_queue_create("com.libreoffice.iosremote", DISPATCH_QUEUE_CONCURRENT);
             dispatch_async(backgroundQueue, ^(void) {
                 NSArray *commands = [str componentsSeparatedByString:@"\n"];

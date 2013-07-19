@@ -30,6 +30,7 @@
 @synthesize transmitter = _transmitter;
 @synthesize servers = _servers;
 @synthesize delegate = _delegate;
+@synthesize autoDiscoveryServers = _autoDiscoveryServers;
 
 + (CommunicationManager *)sharedComManager
 {
@@ -116,7 +117,7 @@
                                             selector: @selector(connectionStatusHandler:)
                                                 name: @"connection.status.disconnected"
                                               object: nil];
-    
+    self.autoDiscoveryServers = [[NSMutableArray alloc] init];
     return self;
 }
 

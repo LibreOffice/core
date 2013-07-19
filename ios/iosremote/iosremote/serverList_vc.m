@@ -12,7 +12,11 @@
 #import "Server.h"
 #import "Client.h"
 
-@interface server_list_vc ()
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+
+@interface server_list_vc () <NSNetServiceBrowserDelegate, NSNetServiceDelegate>
 
 @property (nonatomic, strong) CommunicationManager *comManager;
 @property (nonatomic, weak) NSNotificationCenter* center;
@@ -20,6 +24,7 @@
 @property (nonatomic, strong) id pinValidationObserver;
 @property (atomic, strong) NSIndexPath *lastSpinningCellIndex;
 
+@property (nonatomic, strong) NSNetServiceBrowser *serviceBrowser;
 @end
 
 @implementation server_list_vc
@@ -29,6 +34,83 @@
 @synthesize lastSpinningCellIndex = _lastSpinningCellIndex;
 @synthesize slideShowPreviewStartObserver = _slideShowPreviewStartObserver;
 @synthesize pinValidationObserver = _pinValidationObserver;
+@synthesize serviceBrowser = _serviceBrowser;
+
+#pragma mark - netservice resolve delegate
+-(void) netServiceDidResolveAddress:(NSNetService *)sender
+{
+    if ([sender.addresses count]){
+        NSData * address = [[sender addresses] objectAtIndex: 0];
+        struct sockaddr_in *socketAddress = (struct sockaddr_in *) [address bytes];
+        NSString * ipString = [NSString stringWithFormat: @"%s",inet_ntoa(socketAddress->sin_addr)];
+        int port = socketAddress->sin_port;
+        NSLog(@"Resolved at %@:%u", ipString, port);
+        
+        [self.comManager.autoDiscoveryServers replaceObjectAtIndex:[self.comManager.autoDiscoveryServers count]-1
+                                                         withObject:[[Server alloc] initWithProtocol:NETWORK atAddress:ipString ofName:sender.name]];
+        [self.tableView reloadData];
+    }
+}
+
+-(void) netService:(NSNetService *)sender didNotResolve:(NSDictionary *)errorDict
+{
+    NSLog(@"Failed to resolve");
+}
+
+#pragma mark - bonjour service discovery
+
+-(void) netServiceBrowserWillSearch:(NSNetServiceBrowser *)aNetServiceBrowser
+{
+    NSLog(@"Will search");
+    UITableViewCell * cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
+    [(UIActivityIndicatorView *)[cell viewWithTag:5] startAnimating];
+}
+
+-(void) netServiceBrowserDidStopSearch:(NSNetServiceBrowser *)aNetServiceBrowser
+{
+    NSLog(@"End search");
+    UITableViewCell * cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
+    [(UIActivityIndicatorView *)[cell viewWithTag:5] stopAnimating];
+}
+
+- (void)netServiceBrowser:(NSNetServiceBrowser *)aNetServiceBrowser didNotSearch:(NSDictionary *)errorDict
+{
+    NSLog(@"search error");
+    UITableViewCell * cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
+    [(UIActivityIndicatorView *)[cell viewWithTag:5] stopAnimating];
+}
+
+- (void)netServiceBrowser:(NSNetServiceBrowser *)aNetServiceBrowser
+           didFindService:(NSNetService *)aNetService
+               moreComing:(BOOL)moreComing
+{
+    [self.comManager.autoDiscoveryServers addObject:aNetService];
+    
+    NSLog(@"Got service %p with hostname %@\n", aNetService,
+          [aNetService name]);
+    [aNetService resolveWithTimeout:0.0];
+    
+    [aNetService setDelegate:self];
+    
+    if(!moreComing)
+    {
+        UITableViewCell * cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
+        [(UIActivityIndicatorView *)[cell viewWithTag:5] stopAnimating];
+    }
+}
+
+// Sent when a service disappears
+- (void)netServiceBrowser:(NSNetServiceBrowser *)browser
+         didRemoveService:(NSNetService *)aNetService
+               moreComing:(BOOL)moreComing
+{
+    [self.comManager.autoDiscoveryServers removeObject:aNetService];
+    
+    if(!moreComing)
+    {
+        [self.tableView reloadData];
+    }
+}
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
@@ -48,7 +130,6 @@
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
     
-//    self.lastSpinningCellIndex = [[NSIndexPath alloc] init];
     self.center = [NSNotificationCenter defaultCenter];
     self.comManager = [CommunicationManager sharedComManager];
     self.serverTable.dataSource = self;
@@ -77,6 +158,13 @@
                                                                                            [self performSegueWithIdentifier:@"SlideShowPreview" sender:self ];
                                                                                        }];
     [super viewDidAppear:animated];
+    
+    NSLog(@"Clear auto discovered servers");
+    [self.comManager.autoDiscoveryServers removeAllObjects];
+    self.serviceBrowser = [[NSNetServiceBrowser alloc] init];
+    [self.serviceBrowser setDelegate:self];
+    [self.serviceBrowser searchForServicesOfType:@"_impressRemote._tcp" inDomain:@"local"];
+    [self.serviceBrowser scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
 }
 
 - (void) viewWillDisappear:(BOOL)animated
@@ -122,6 +210,11 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+ 
+    if ([cell.detailTextLabel.text isEqualToString:@""]) {
+        [tableView deselectRowAtIndexPath:indexPath animated:YES];
+        return;
+    }
     
     if(self.comManager.state!=CONNECTING){
         self.lastSpinningCellIndex = indexPath;
@@ -130,8 +223,14 @@
         [cell setAccessoryView:activityView];
     }
 
-    NSLog(@"Connecting to %@:%@", [[self.comManager.servers objectAtIndex:indexPath.row] serverName], [[self.comManager.servers objectAtIndex:indexPath.row] serverAddress]);
-    [self.comManager connectToServer:[self.comManager.servers objectAtIndex:indexPath.row]];
+    if (indexPath.section == 1){
+        NSLog(@"Connecting to %@:%@", [[self.comManager.servers objectAtIndex:indexPath.row] serverName], [[self.comManager.servers objectAtIndex:indexPath.row] serverAddress]);
+        [self.comManager connectToServer:[self.comManager.servers objectAtIndex:indexPath.row]];
+    } else if (indexPath.section == 0){
+        NSLog(@"Connecting to %@:%@", [[self.comManager.servers objectAtIndex:indexPath.row] serverName], [[self.comManager.autoDiscoveryServers objectAtIndex:indexPath.row] serverAddress]);
+        [self.comManager connectToServer:[self.comManager.autoDiscoveryServers objectAtIndex:indexPath.row]];
+    }
+    
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
@@ -140,29 +239,125 @@
     [super viewDidUnload];
 }
 
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    
+    NSString *sectionName = nil;
+    
+    switch (section) {
+        case 0:
+            sectionName = [NSString stringWithFormat:@"Visible computers"];
+            break;
+        case 1:
+            sectionName = [NSString stringWithFormat:@"Manual computers"];
+            break;
+    }
+    
+    UILabel *sectionHeader = [[UILabel alloc] initWithFrame:CGRectMake(10, 10, 200, 40)];
+    sectionHeader.backgroundColor = [UIColor clearColor];
+    sectionHeader.font = [UIFont boldSystemFontOfSize:18];
+    sectionHeader.textColor = [UIColor darkTextColor];
+    sectionHeader.text = sectionName;
+    
+    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.bounds.size.width, [self tableView:tableView heightForHeaderInSection:section])];
+    [view addSubview:sectionHeader];
+    
+    return view;
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
+    if ([self.comManager.servers count] == 0 && section == 1) {
+        UILabel *sectionFooter = [[UILabel alloc] initWithFrame:CGRectMake(20, 10, tableView.frame.size.width - 50, 40)];
+        [sectionFooter setLineBreakMode:NSLineBreakByCharWrapping];
+        [sectionFooter setNumberOfLines:5];
+        sectionFooter.backgroundColor = [UIColor clearColor];
+        sectionFooter.font = [UIFont systemFontOfSize:14];
+        sectionFooter.textColor = [UIColor colorWithRed:0.22 green:0.33 blue:0.53 alpha:1.0];
+        sectionFooter.text = @"Please manually add a computer with its IP address.";
+        
+        UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.bounds.size.width, [self tableView:tableView heightForHeaderInSection:section])];
+        [view addSubview:sectionFooter];
+        return view;
+    }
+    return nil;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return 50.0;
+}
+
+-(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    return 2;
+}
+
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return [self.comManager.servers count];
+    switch (section) {
+        case 0:
+            return [self.comManager.autoDiscoveryServers count] == 0 ? 1 : [self.comManager.autoDiscoveryServers count];
+            break;
+        case 1:
+            return [self.comManager.servers count];
+        default:
+            return -1;
+            break;
+    }
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *cellIdentifier = @"server_item_cell";
-    
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     
-    Server *s = [self.comManager.servers objectAtIndex:indexPath.row];
-    
-    [cell.textLabel setText:[s serverName]];
-    [cell.detailTextLabel setText:[s serverAddress]];
+    if (indexPath.section == 0){
+        if ([self.comManager.autoDiscoveryServers count] == 0){
+            // Looking for one
+            UIActivityIndicatorView *spinner = [[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+            int vCenter = [cell frame].size.height / 2;
+            int hCenter = [cell frame].size.width / 2;
+            
+            int SPINNER_SIZE = spinner.frame.size.width;
+            [spinner setFrame:CGRectMake(hCenter - SPINNER_SIZE, vCenter - SPINNER_SIZE/2, SPINNER_SIZE, SPINNER_SIZE)];
+            [[cell contentView] addSubview:spinner];
+            
+            [spinner setTag:5];
+            
+            cell.textLabel.text = @"";
+            cell.detailTextLabel.text = @"";
+        } else {
+            id s = [self.comManager.autoDiscoveryServers objectAtIndex:indexPath.row];
+            
+            if ([s isKindOfClass:[Server class]]) {
+                [cell.textLabel setText:[s serverName]];
+                [cell.detailTextLabel setText:[s serverAddress]];
+            } else if ([s isKindOfClass:[NSNetService class]]){
+                [cell.textLabel setText:[s name]];
+                [cell.detailTextLabel setText:@"loading..."];
+            }
+        }
+    }
+    else {
+        Server *s = [self.comManager.servers objectAtIndex:indexPath.row];
+        
+        [cell.textLabel setText:[s serverName]];
+        [cell.detailTextLabel setText:[s serverAddress]];
+    }
     return cell;
 }
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return YES;
+    if (indexPath.section == 1)
+        return YES;
+    else
+        return NO;
 }
 
 - (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath{
-    return UITableViewCellEditingStyleDelete;
+    if (indexPath.section == 1) {
+        return UITableViewCellEditingStyleDelete;
+    } else {
+        return UITableViewCellEditingStyleNone;
+    }
 }
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath{

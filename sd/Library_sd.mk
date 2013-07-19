@@ -523,7 +523,6 @@ ifeq ($(ENABLE_SDREMOTE),YES)
 $(eval $(call gb_Library_add_exception_objects,sd,\
     sd/source/ui/remotecontrol/BufferedStreamSocket \
     sd/source/ui/remotecontrol/Communicator \
-    sd/source/ui/remotecontrol/DiscoveryService \
     sd/source/ui/remotecontrol/ImagePreparer \
     sd/source/ui/remotecontrol/Server \
     sd/source/ui/remotecontrol/Receiver \
@@ -541,13 +540,16 @@ ifeq (,$(filter IOS MACOSX,$(OS)))
 
 $(eval $(call gb_Library_add_exception_objects,sd,\
     sd/source/ui/remotecontrol/BluetoothServer \
+    sd/source/ui/remotecontrol/DiscoveryService \
 ))
 
 else
 
 $(eval $(call gb_Library_add_objcxxobjects,sd,\
     sd/source/ui/remotecontrol/BluetoothServer \
-    sd/source/ui/remotecontrol/OSXBluetooth,\
+    sd/source/ui/remotecontrol/OSXBluetooth\
+    sd/source/ui/remotecontrol/DiscoveryService \
+    sd/source/ui/remotecontrol/OSXNetworkService, \
     -Wno-error \
 ))
 
