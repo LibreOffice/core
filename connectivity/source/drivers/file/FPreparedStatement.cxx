@@ -595,7 +595,7 @@ void OPreparedStatement::initializeResultSet(OResultSet* _pResult)
     }
 }
 // -----------------------------------------------------------------------------
-void OPreparedStatement::parseParamterElem(const String& _sColumnName,OSQLParseNode* pRow_Value_Constructor_Elem)
+void OPreparedStatement::parseParamterElem(const OUString& _sColumnName, OSQLParseNode* pRow_Value_Constructor_Elem)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OPreparedStatement::parseParamterElem" );
     Reference<XPropertySet> xCol;
@@ -610,7 +610,7 @@ void OPreparedStatement::parseParamterElem(const String& _sColumnName,OSQLParseN
     if(nParameter == -1)
         nParameter = AddParameter(pRow_Value_Constructor_Elem,xCol);
     // Save number of parameter in the variable:
-    SetAssignValue(_sColumnName, String(), sal_True, nParameter);
+    SetAssignValue(_sColumnName, OUString(), sal_True, nParameter);
 }
 // -----------------------------------------------------------------------------
 

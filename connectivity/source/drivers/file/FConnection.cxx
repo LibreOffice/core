@@ -79,15 +79,13 @@ void SAL_CALL OConnection::release() throw()
 }
 
 //-----------------------------------------------------------------------------
-sal_Bool OConnection::matchesExtension( const String& _rExt ) const
+sal_Bool OConnection::matchesExtension( const OUString& _rExt ) const
 {
     if ( isCaseSensitveExtension() )
         return ( getExtension() == _rExt );
 
-    String sMyExtension( getExtension() );
-    sMyExtension.ToLowerAscii();
-    String sExt( _rExt );
-    sExt.ToLowerAscii();
+    OUString sMyExtension( getExtension().toAsciiLowerCase() );
+    OUString sExt( _rExt.toAsciiLowerCase() );
 
     return sMyExtension == sExt;
 }
@@ -131,7 +129,7 @@ void OConnection::construct(const OUString& url,const Sequence< PropertyValue >&
         nLen = url.indexOf(':',nLen+1);
         OUString aDSN(url.copy(nLen+1));
 
-        String aFileName = aDSN;
+        OUString aFileName = aDSN;
         INetURLObject aURL;
         aURL.SetSmartProtocol(INET_PROT_FILE);
         {
@@ -200,7 +198,7 @@ void OConnection::construct(const OUString& url,const Sequence< PropertyValue >&
         if(!m_xDir.is() || !m_xContent.is())
             throwUrlNotValid(getURL(),OUString());
 
-        if (m_aFilenameExtension.Search('*') != STRING_NOTFOUND || m_aFilenameExtension.Search('?') != STRING_NOTFOUND)
+        if (m_aFilenameExtension.indexOf('*') >= 0 || m_aFilenameExtension.indexOf('?') >= 0)
             throw SQLException();
     }
     catch(const Exception&)

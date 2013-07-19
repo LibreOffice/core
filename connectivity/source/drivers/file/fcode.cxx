@@ -22,7 +22,6 @@
 #include "connectivity/sqlparse.hxx"
 #include <i18nlangtag/mslangid.hxx>
 #include <tools/debug.hxx>
-#include <tools/string.hxx>
 #include "TConnection.hxx"
 #include <com/sun/star/sdb/SQLFilterOperator.hpp>
 #include <comphelper/types.hxx>
@@ -123,10 +122,10 @@ OOperandParam::OOperandParam(OSQLParseNode* pNode, sal_Int32 _nPos)
     OSL_ENSURE(pNode->count() > 0,"Fehler im Parse Tree");
     OSQLParseNode *pMark = pNode->getChild(0);
 
-    String aParameterName;
-    if (SQL_ISPUNCTUATION(pMark,"?"))
-        aParameterName = '?';
-    else if (SQL_ISPUNCTUATION(pMark,":"))
+    OUString aParameterName;
+    if (SQL_ISPUNCTUATION(pMark, "?"))
+        aParameterName = "?";
+    else if (SQL_ISPUNCTUATION(pMark, ":"))
         aParameterName = pNode->getChild(1)->getTokenValue();
     else
     {
@@ -158,29 +157,27 @@ OOperandConst::OOperandConst(const OSQLParseNode& rColumnRef, const OUString& aS
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OOperandConst::OOperandConst" );
     switch (rColumnRef.getNodeType())
     {
-        case SQL_NODE_STRING:
-            m_aValue    = aStrValue;
-            m_eDBType   = DataType::VARCHAR;
-            m_aValue.setBound(sal_True);
-            return;
-        case SQL_NODE_INTNUM:
-        case SQL_NODE_APPROXNUM:
-        {
-            m_aValue    = aStrValue.toDouble();
-            m_eDBType   = DataType::DOUBLE;
-            m_aValue.setBound(sal_True);
-            return;
-        }
-        default:
-            break;
+    case SQL_NODE_STRING:
+        m_aValue = aStrValue;
+        m_eDBType = DataType::VARCHAR;
+        m_aValue.setBound(sal_True);
+        return;
+    case SQL_NODE_INTNUM:
+    case SQL_NODE_APPROXNUM:
+        m_aValue = aStrValue.toDouble();
+        m_eDBType = DataType::DOUBLE;
+        m_aValue.setBound(sal_True);
+        return;
+    default:
+        break;
     }
 
-    if (SQL_ISTOKEN(&rColumnRef,TRUE))
+    if (SQL_ISTOKEN(&rColumnRef, TRUE))
     {
         m_aValue = 1.0;
         m_eDBType = DataType::BIT;
     }
-    else if (SQL_ISTOKEN(&rColumnRef,FALSE))
+    else if (SQL_ISTOKEN(&rColumnRef, FALSE))
     {
         m_aValue = 0.0;
         m_eDBType = DataType::BIT;

@@ -172,6 +172,8 @@ sal_Int32 SAL_CALL ODatabaseMetaDataResultSet::findColumn( const OUString& colum
             columnName.equalsIgnoreAsciiCase(xMeta->getColumnName(i))
             )
             break;
+    /* FIXME: should throw in case of not found ? */
+
     return i;
 }
 // -----------------------------------------------------------------------------

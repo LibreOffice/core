@@ -102,7 +102,7 @@ namespace connectivity
 
             // creates a stream using ::utl::UcbStreamHelper::CreateStream, but the error is simplified
             // (NULL or non-NULL is returned)
-            static SvStream* createStream_simpleError( const String& _rFileName, StreamMode _eOpenMode);
+            static SvStream* createStream_simpleError( const OUString& _rFileName, StreamMode _eOpenMode);
         };
     }
 }

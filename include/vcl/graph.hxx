@@ -172,8 +172,8 @@ public:
 
 public:
 
-    void                SetDocFileName( const String& rName, sal_uLong nFilePos );
-    const String&       GetDocFileName() const;
+    void                SetDocFileName( const OUString& rName, sal_uLong nFilePos );
+    const OUString&       GetDocFileName() const;
     sal_uLong               GetDocFilePos() const;
 
     sal_Bool                SwapOut();
