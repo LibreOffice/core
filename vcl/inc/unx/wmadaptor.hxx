@@ -185,7 +185,7 @@ public:
     { return m_aWMName; }
 
     /*
-     *  gets the number of workareas
+     *  gets the number of workareas (virtual desktops)
      */
     int getWorkAreaCount() const
     { return m_aWMWorkAreas.size(); }
@@ -205,7 +205,7 @@ public:
     { return m_aWMWorkAreas[n]; }
 
     /*
-     * attemp to switch the desktop to a certain workarea
+     * attempt to switch the desktop to a certain workarea (ie. virtual desktops)
      * if bConsiderWM is true, then on some WMs the call will not result in any action
      */
     void switchToWorkArea( int nWorkArea, bool bConsiderWM = true ) const;
