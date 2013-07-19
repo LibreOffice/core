@@ -441,6 +441,44 @@ void Test::testFormulaRefUpdate()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testFormulaRefUpdateRange()
+{
+    m_pDoc->InsertTab(0, "Formula");
+
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
+
+    // Set values to B2:C5.
+    m_pDoc->SetValue(ScAddress(1,1,0), 1);
+    m_pDoc->SetValue(ScAddress(1,2,0), 2);
+    m_pDoc->SetValue(ScAddress(1,3,0), 3);
+    m_pDoc->SetValue(ScAddress(1,4,0), 4);
+    m_pDoc->SetValue(ScAddress(2,1,0), 5);
+    m_pDoc->SetValue(ScAddress(2,2,0), 6);
+    m_pDoc->SetValue(ScAddress(2,3,0), 7);
+    m_pDoc->SetValue(ScAddress(2,4,0), 8);
+
+    // Set formula cells to A7 and A8.
+    m_pDoc->SetString(ScAddress(0,6,0), "=SUM(B2:C5)");
+    m_pDoc->SetString(ScAddress(0,7,0), "=SUM($B$2:$C$5)");
+
+    if (!checkFormula(*m_pDoc, ScAddress(0,6,0), "SUM(B2:C5)"))
+        CPPUNIT_FAIL("Wrong formula in A7.");
+
+    if (!checkFormula(*m_pDoc, ScAddress(0,7,0), "SUM($B$2:$C$5)"))
+        CPPUNIT_FAIL("Wrong formula in A8.");
+
+    // Delete row 3. This should shrink the range references by one row.
+    m_pDoc->DeleteRow(ScRange(0,2,0,MAXCOL,2,0));
+
+    if (!checkFormula(*m_pDoc, ScAddress(0,5,0), "SUM(B2:C4)"))
+        CPPUNIT_FAIL("Wrong formula in A6.");
+
+    if (!checkFormula(*m_pDoc, ScAddress(0,6,0), "SUM($B$2:$C$4)"))
+        CPPUNIT_FAIL("Wrong formula in A7.");
+
+    m_pDoc->DeleteTab(0);
+}
+
 void Test::testFuncSUM()
 {
     OUString aTabName("foo");
