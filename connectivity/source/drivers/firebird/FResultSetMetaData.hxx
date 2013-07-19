@@ -36,56 +36,84 @@
 #ifndef CONNECTIVITY_SRESULSETMETADATA_HXX
 #define CONNECTIVITY_SRESULSETMETADATA_HXX
 
-#include <com/sun/star/sdbc/XResultSetMetaData.hpp>
-#include <cppuhelper/implbase1.hxx>
 #include "FConnection.hxx"
+
+#include <ibase.h>
+
+#include <cppuhelper/implbase1.hxx>
+
+#include <com/sun/star/sdbc/XResultSetMetaData.hpp>
 
 namespace connectivity
 {
     namespace firebird
     {
-        //**************************************************************
-        //************ Class: ResultSetMetaData
-        //**************************************************************
-        typedef ::cppu::WeakImplHelper1< ::com::sun::star::sdbc::XResultSetMetaData>   OResultSetMetaData_BASE;
+        typedef ::cppu::WeakImplHelper1< ::com::sun::star::sdbc::XResultSetMetaData>
+                OResultSetMetaData_BASE;
 
         class OResultSetMetaData :  public  OResultSetMetaData_BASE
         {
-            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& m_xConnection;
-
         protected:
+            OConnection*    m_pConnection;
+            XSQLDA*         m_pSqlda;
+
             virtual ~OResultSetMetaData();
+
+            void verifyValidColumn(sal_Int32 column) throw(::com::sun::star::sdbc::SQLException);
         public:
             // a constructor, which is required for returning objects:
-            OResultSetMetaData(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& xConnection)
-            : m_xConnection( xConnection )
+            OResultSetMetaData(OConnection* pConnection,
+                               XSQLDA* pSqlda)
+                : m_pConnection(pConnection)
+                , m_pSqlda(pSqlda)
             {}
 
             /// Avoid ambigous cast error from the compiler.
             inline operator ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData > () throw()
             { return this; }
 
-            virtual sal_Int32 SAL_CALL getColumnCount(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            virtual sal_Bool SAL_CALL isAutoIncrement( sal_Int32 column ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            virtual sal_Bool SAL_CALL isCaseSensitive( sal_Int32 column ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            virtual sal_Bool SAL_CALL isSearchable( sal_Int32 column ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            virtual sal_Bool SAL_CALL isCurrency( sal_Int32 column ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            virtual sal_Int32 SAL_CALL isNullable( sal_Int32 column ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            virtual sal_Bool SAL_CALL isSigned( sal_Int32 column ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            virtual sal_Int32 SAL_CALL getColumnDisplaySize( sal_Int32 column ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            virtual ::rtl::OUString SAL_CALL getColumnLabel( sal_Int32 column ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            virtual ::rtl::OUString SAL_CALL getColumnName( sal_Int32 column ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            virtual ::rtl::OUString SAL_CALL getSchemaName( sal_Int32 column ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            virtual sal_Int32 SAL_CALL getPrecision( sal_Int32 column ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            virtual sal_Int32 SAL_CALL getScale( sal_Int32 column ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            virtual ::rtl::OUString SAL_CALL getTableName( sal_Int32 column ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            virtual ::rtl::OUString SAL_CALL getCatalogName( sal_Int32 column ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            virtual sal_Int32 SAL_CALL getColumnType( sal_Int32 column ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            virtual ::rtl::OUString SAL_CALL getColumnTypeName( sal_Int32 column ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            virtual sal_Bool SAL_CALL isReadOnly( sal_Int32 column ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            virtual sal_Bool SAL_CALL isWritable( sal_Int32 column ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            virtual sal_Bool SAL_CALL isDefinitelyWritable( sal_Int32 column ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            virtual ::rtl::OUString SAL_CALL getColumnServiceName( sal_Int32 column ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            virtual sal_Int32 SAL_CALL getColumnCount()
+                throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            virtual sal_Bool SAL_CALL isAutoIncrement(sal_Int32 column)
+                throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            virtual sal_Bool SAL_CALL isCaseSensitive(sal_Int32 column)
+                throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            virtual sal_Bool SAL_CALL isSearchable(sal_Int32 column)
+                throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            virtual sal_Bool SAL_CALL isCurrency(sal_Int32 column)
+                throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            virtual sal_Int32 SAL_CALL isNullable(sal_Int32 column)
+                throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            virtual sal_Bool SAL_CALL isSigned(sal_Int32 column)
+                throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            virtual sal_Int32 SAL_CALL getColumnDisplaySize(sal_Int32 column)
+                throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            virtual ::rtl::OUString SAL_CALL getColumnLabel(sal_Int32 column)
+                throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            virtual ::rtl::OUString SAL_CALL getColumnName(sal_Int32 column)
+                throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            virtual ::rtl::OUString SAL_CALL getSchemaName(sal_Int32 column)
+                throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            virtual sal_Int32 SAL_CALL getPrecision(sal_Int32 column)
+                throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            virtual sal_Int32 SAL_CALL getScale(sal_Int32 column)
+                throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            virtual ::rtl::OUString SAL_CALL getTableName(sal_Int32 column)
+                throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            virtual ::rtl::OUString SAL_CALL getCatalogName(sal_Int32 column)
+                throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            virtual sal_Int32 SAL_CALL getColumnType(sal_Int32 column)
+                throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            virtual ::rtl::OUString SAL_CALL getColumnTypeName(sal_Int32 column)
+                throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            virtual sal_Bool SAL_CALL isReadOnly(sal_Int32 column)
+                throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            virtual sal_Bool SAL_CALL isWritable(sal_Int32 column)
+                throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            virtual sal_Bool SAL_CALL isDefinitelyWritable(sal_Int32 column)
+                throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            virtual ::rtl::OUString SAL_CALL getColumnServiceName(sal_Int32 column)
+                throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
         };
     }
 }

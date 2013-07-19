@@ -73,7 +73,7 @@ OResultSet::OResultSet(OConnection* pConnection,
     , OPropertySetHelper(OResultSet_BASE::rBHelper)
     , m_pConnection(pConnection)
     , m_xStatement(xStatement)
-    , m_xMetaData(NULL)
+    , m_xMetaData(0)
     , m_pSqlda(pSqlda)
     , m_statementHandle(aStatementHandle)
     , m_bWasNull(false)
@@ -434,6 +434,8 @@ T OResultSet::retrieveValue(sal_Int32 columnIndex)
 template <>
 OUString OResultSet::retrieveValue<OUString>(sal_Int32 columnIndex)
 {
+    // TODO: check we don't have SQL_VARYING (first 2 bytes = short with length
+    // of string.
     if ((m_bWasNull = isNull(columnIndex)))
         return OUString();
 
@@ -544,7 +546,7 @@ uno::Reference< XResultSetMetaData > SAL_CALL OResultSet::getMetaData(  ) throw(
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
     if(!m_xMetaData.is())
-        m_xMetaData = new OResultSetMetaData(m_xStatement->getConnection());
+        m_xMetaData = new OResultSetMetaData(m_pConnection, m_pSqlda);
     return m_xMetaData;
 }
 // -------------------------------------------------------------------------

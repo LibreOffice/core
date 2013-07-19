@@ -112,8 +112,9 @@ Reference< XResultSetMetaData > SAL_CALL OPreparedStatement::getMetaData(  ) thr
     ::osl::MutexGuard aGuard( m_pConnection->getMutex() );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
 
-    if(!m_xMetaData.is())
-        m_xMetaData = new OResultSetMetaData(getOwnConnection());
+//     if(!m_xMetaData.is())
+//         m_xMetaData = new OResultSetMetaData(m_pConnection, m_pSqlda);
+    // TODO: uncomment once PreparedStatement reimplemented with SQLDA
     return m_xMetaData;
 }
 // -------------------------------------------------------------------------

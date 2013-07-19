@@ -40,7 +40,6 @@
 
 #include <ibase.h>
 
-#include <connectivity/FValue.hxx>
 #include <connectivity/OSubComponent.hxx>
 #include <cppuhelper/compbase12.hxx>
 
