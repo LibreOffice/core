@@ -256,7 +256,6 @@ public:
     // in case of IsUnifiedDisplay() == false the return value
     // will always be GetDisplayDefaultScreen()
     SAL_DLLPRIVATE static unsigned int  GetBestScreen( const Rectangle& );
-    static Rectangle     GetWorkAreaPosSizePixel( unsigned int nScreen );
     // This returns the LCD screen number for a laptop, or the primary
     // external VGA display for a desktop machine - it is where a presenter
     // console should be rendered if there are other (non-built-in) screens

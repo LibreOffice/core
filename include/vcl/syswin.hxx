@@ -228,7 +228,6 @@ public:
 
     The Display Screen number is counted the same way that
     <code>Application::GetScreenPosSizePixel</code>,
-    <code>Application::GetWorkAreaPosSizePixel</code>,
     <code>Application::GetDisplayScreenName</code>
     and of course <code>SystemWindow::SetScreenNumber</code>
     are counted in.
@@ -250,7 +249,6 @@ public:
 
     The Display Screen number is counted the same way that
     <code>Application::GetScreenPosSizePixel</code>,
-    <code>Application::GetWorkAreaPosSizePixel</code>,
     <code>Application::GetDisplayScreenName</code>
     and of course <code>SystemWindow::GetScreenNumber</code>
     are counted in.

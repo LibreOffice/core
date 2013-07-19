@@ -37,7 +37,6 @@ public:
     // get info about the display
     virtual unsigned int GetDisplayScreenCount();
     virtual Rectangle GetDisplayScreenPosSizePixel( unsigned int nScreen );
-    virtual Rectangle GetDisplayScreenWorkAreaPosSizePixel( unsigned int nScreen );
 
     virtual OUString GetDisplayScreenName( unsigned int nScreen );
     virtual int ShowNativeMessageBox( const OUString& rTitle,

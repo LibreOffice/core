@@ -2454,7 +2454,7 @@ sal_Bool LayoutManager::implts_resizeContainerWindow( const awt::Size& rContaine
 
     // calculate the maximum size we have for the container window
     sal_Int32 nDisplay = xContainerTopWindow->getDisplay();
-    Rectangle aWorkArea = Application::GetWorkAreaPosSizePixel( nDisplay );
+    Rectangle aWorkArea = Application::GetScreenPosSizePixel( nDisplay );
 
     if (( aWorkArea.GetWidth() > 0 ) && ( aWorkArea.GetHeight() > 0 ))
     {

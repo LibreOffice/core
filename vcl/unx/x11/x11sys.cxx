@@ -84,12 +84,6 @@ Rectangle X11SalSystem::GetDisplayScreenPosSizePixel( unsigned int nScreen )
     return aRet;
 }
 
-Rectangle X11SalSystem::GetDisplayScreenWorkAreaPosSizePixel( unsigned int nScreen )
-{
-    // FIXME: workareas
-    return GetDisplayScreenPosSizePixel( nScreen );
-}
-
 OUString X11SalSystem::GetDisplayScreenName( unsigned int nScreen )
 {
     OUString aScreenName;

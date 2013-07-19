@@ -78,14 +78,6 @@ public:
                  size: size of the screen
     */
     virtual Rectangle GetDisplayScreenPosSizePixel( unsigned int nScreen ) = 0;
-    /*  Gets position and size of the work area of a screen attached to the display
-
-        @param nScreen
-        The screen number to be queried
-
-        @returns position and size relative to the scree
-    */
-    virtual Rectangle GetDisplayScreenWorkAreaPosSizePixel( unsigned int nScreen ) = 0;
     /* Gets the name of a screen
 
        @param nScreen
