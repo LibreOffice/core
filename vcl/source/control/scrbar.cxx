@@ -1455,7 +1455,21 @@ Size ScrollBar::GetOptimalSize() const
 {
     if (mbCalcSize)
         const_cast<ScrollBar*>(this)->ImplCalc(sal_False);
-    return getCurrentCalcSize();
+
+    Size aRet = getCurrentCalcSize();
+
+    const long nMinThumbSize = GetSettings().GetStyleSettings().GetMinThumbSize();
+
+    if (GetStyle() & WB_HORZ)
+    {
+        aRet.Width() = maBtn1Rect.GetWidth() + nMinThumbSize + maBtn2Rect.GetWidth();
+    }
+    else
+    {
+        aRet.Height() = maBtn1Rect.GetHeight() + nMinThumbSize + maBtn2Rect.GetHeight();
+    }
+
+    return aRet;
 }
 
 Size ScrollBar::getCurrentCalcSize() const
