@@ -704,11 +704,6 @@ ScSingleRefData& ScToken::GetSingleRef2()
     return aDummySingleRef;
 }
 
-void ScToken::CalcAbsIfRel( const ScAddress& /* rPos */ )
-{
-    OSL_FAIL( "ScToken::CalcAbsIfRel: virtual dummy called" );
-}
-
 const ScMatrix* ScToken::GetMatrix() const
 {
     OSL_FAIL( "ScToken::GetMatrix: virtual dummy called" );
@@ -747,8 +742,6 @@ ScRefList* ScToken::GetRefList()
 
 const ScSingleRefData&    ScSingleRefToken::GetSingleRef() const  { return aSingleRef; }
 ScSingleRefData&          ScSingleRefToken::GetSingleRef()        { return aSingleRef; }
-void                    ScSingleRefToken::CalcAbsIfRel( const ScAddress& rPos )
-                            { aSingleRef.CalcAbsIfRel( rPos ); }
 bool ScSingleRefToken::operator==( const FormulaToken& r ) const
 {
     return FormulaToken::operator==( r ) && aSingleRef == static_cast<const ScToken&>(r).GetSingleRef();
@@ -770,8 +763,6 @@ const ScComplexRefData&     ScDoubleRefToken::GetDoubleRef() const  { return aDo
 ScComplexRefData&           ScDoubleRefToken::GetDoubleRef()        { return aDoubleRef; }
 const ScSingleRefData&    ScDoubleRefToken::GetSingleRef2() const { return aDoubleRef.Ref2; }
 ScSingleRefData&          ScDoubleRefToken::GetSingleRef2()       { return aDoubleRef.Ref2; }
-void                    ScDoubleRefToken::CalcAbsIfRel( const ScAddress& rPos )
-                            { aDoubleRef.CalcAbsIfRel( rPos ); }
 bool ScDoubleRefToken::operator==( const FormulaToken& r ) const
 {
     return FormulaToken::operator==( r ) && aDoubleRef == static_cast<const ScToken&>(r).GetDoubleRef();
@@ -795,11 +786,6 @@ void ScDoubleRefToken::Dump() const
 
 const ScRefList*        ScRefListToken::GetRefList() const  { return &aRefList; }
       ScRefList*        ScRefListToken::GetRefList()        { return &aRefList; }
-void                    ScRefListToken::CalcAbsIfRel( const ScAddress& rPos )
-{
-    for (ScRefList::iterator it( aRefList.begin()); it != aRefList.end(); ++it)
-        (*it).CalcAbsIfRel( rPos);
-}
 bool ScRefListToken::operator==( const FormulaToken& r ) const
 {
     return FormulaToken::operator==( r ) && &aRefList == static_cast<const ScToken&>(r).GetRefList();
@@ -858,11 +844,6 @@ const ScSingleRefData& ScExternalSingleRefToken::GetSingleRef() const
 ScSingleRefData& ScExternalSingleRefToken::GetSingleRef()
 {
     return maSingleRef;
-}
-
-void ScExternalSingleRefToken::CalcAbsIfRel( const ScAddress& rPos )
-{
-    maSingleRef.CalcAbsIfRel( rPos );
 }
 
 bool ScExternalSingleRefToken::operator ==( const FormulaToken& r ) const
@@ -939,11 +920,6 @@ const ScComplexRefData& ScExternalDoubleRefToken::GetDoubleRef() const
 ScComplexRefData& ScExternalDoubleRefToken::GetDoubleRef()
 {
     return maDoubleRef;
-}
-
-void ScExternalDoubleRefToken::CalcAbsIfRel( const ScAddress& rPos )
-{
-    maDoubleRef.CalcAbsIfRel( rPos );
 }
 
 bool ScExternalDoubleRefToken::operator ==( const FormulaToken& r ) const
