@@ -36,7 +36,7 @@
 #include <com/sun/star/frame/DispatchDescriptor.hpp>
 
 #include <tools/wldcrd.hxx>
-#include <cppuhelper/weak.hxx>
+#include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/weakref.hxx>
 
 #include <deque>
@@ -51,12 +51,12 @@ namespace framework{
     @attention  Don't use this class as direct member - use it dynamicly. Do not derive from this class.
                 We hold a weakreference to ouer owner not to ouer superclass.
  */
-class InterceptionHelper : public  css::frame::XDispatchProvider
-                         , public  css::frame::XDispatchProviderInterception
-                         , public  css::lang::XEventListener
-                           // order of base classes is important for right initialization of mutex member!
-                         , private ThreadHelpBase
-                         , public  ::cppu::OWeakObject
+class InterceptionHelper : // order of base classes is important for right initialization of mutex member!
+                           private ThreadHelpBase,
+                           public  ::cppu::WeakImplHelper3<
+                                     css::frame::XDispatchProvider,
+                                     css::frame::XDispatchProviderInterception,
+                                     css::lang::XEventListener >
 {
     //_____________________________________________________
     // structs, helper
@@ -194,8 +194,6 @@ class InterceptionHelper : public  css::frame::XDispatchProvider
     // uno interface
 
     public:
-
-        FWK_DECLARE_XINTERFACE
 
         //_________________________________________________
         // XDispatchProvider

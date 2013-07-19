@@ -43,7 +43,7 @@
 #include <com/sun/star/frame/FeatureStateEvent.hpp>
 #include <com/sun/star/frame/XFrameActionListener.hpp>
 
-#include <cppuhelper/weak.hxx>
+#include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <cppuhelper/interfacecontainer.h>
 
@@ -74,14 +74,13 @@ typedef ::cppu::OMultiTypeInterfaceContainerHelperVar<  OUString         ,
 
     @devstatus      ready to use
 *//*-*************************************************************************************************************/
-class MenuDispatcher   :   // interfaces
-                                public css::lang::XTypeProvider         ,
-                                public css::frame::XDispatch            ,
-                                public css::frame::XFrameActionListener ,
-                                // baseclasses
+class MenuDispatcher   :        // baseclasses
                                 // Order is necessary for right initialization!
                                 public ThreadHelpBase                       ,
-                                public cppu::OWeakObject
+                                // interfaces
+                                public  ::cppu::WeakImplHelper2<
+                                            css::frame::XDispatch           ,
+                                            css::frame::XFrameActionListener >
 {
     //-------------------------------------------------------------------------------------------------------------
     //  public methods
@@ -108,13 +107,6 @@ class MenuDispatcher   :   // interfaces
 
         MenuDispatcher(    const   css::uno::Reference< css::uno::XComponentContext >& rxContext    ,
                             const   css::uno::Reference< css::frame::XFrame >&              xOwner      );
-
-        //---------------------------------------------------------------------------------------------------------
-        //  XInterface
-        //---------------------------------------------------------------------------------------------------------
-
-        FWK_DECLARE_XINTERFACE
-        FWK_DECLARE_XTYPEPROVIDER
 
         //---------------------------------------------------------------------------------------------------------
         //  XDispatch

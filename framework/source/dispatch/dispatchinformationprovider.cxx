@@ -32,10 +32,6 @@
 
 namespace framework{
 
-DEFINE_XINTERFACE_1(DispatchInformationProvider                               ,
-                    OWeakObject                                               ,
-                    DIRECT_INTERFACE(css::frame::XDispatchInformationProvider))
-
 //_________________________________________________________________________________________________________________
 DispatchInformationProvider::DispatchInformationProvider(const css::uno::Reference< css::uno::XComponentContext >& xContext ,
                                                          const css::uno::Reference< css::frame::XFrame >&          xFrame)

@@ -95,7 +95,6 @@ MenuDispatcher::MenuDispatcher(   const   uno::Reference< XComponentContext >&  
                                   const   uno::Reference< XFrame >&             xOwner      )
         //  Init baseclasses first
         :   ThreadHelpBase          ( &Application::GetSolarMutex()  )
-        ,   OWeakObject             (                                )
         // Init member
         ,   m_xOwnerWeak            ( xOwner                         )
         ,   m_xContext              ( xContext                       )
@@ -121,25 +120,6 @@ MenuDispatcher::~MenuDispatcher()
     // We must release all our references ...
     // and a dtor isn't the best place to do that!
 }
-
-//*****************************************************************************************************************
-//  XInterface, XTypeProvider
-//*****************************************************************************************************************
-DEFINE_XINTERFACE_4     (   MenuDispatcher                     ,
-                            OWeakObject                         ,
-                            DIRECT_INTERFACE(   XTypeProvider   ),
-                            DIRECT_INTERFACE(   XDispatch       ),
-                            DIRECT_INTERFACE(   XEventListener  ),
-                            DERIVED_INTERFACE(  XFrameActionListener, XEventListener )
-                        )
-
-DEFINE_XTYPEPROVIDER_4  (   MenuDispatcher     ,
-                            XTypeProvider       ,
-                            XDispatch           ,
-                            XEventListener      ,
-                            XFrameActionListener
-                        )
-
 
 //*****************************************************************************************************************
 //  XDispatch

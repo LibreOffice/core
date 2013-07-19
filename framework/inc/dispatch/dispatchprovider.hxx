@@ -38,7 +38,7 @@
 #include <com/sun/star/frame/DispatchDescriptor.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 
-#include <cppuhelper/weak.hxx>
+#include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/weakref.hxx>
 
 namespace framework{
@@ -78,14 +78,12 @@ enum EDispatchHelper
     @devstatus      ready to use
     @threadsafe     yes
 */
-class DispatchProvider  :   // interfaces
-                            public  css::lang::XTypeProvider            ,
-                            public  css::frame::XDispatchProvider       ,
-                            // baseclasses
+class DispatchProvider  :   // baseclasses
                             // Order is necessary for right initialization!
                             private ThreadHelpBase                      ,
                             private TransactionBase                     ,
-                            public  ::cppu::OWeakObject
+                            // interfaces
+                            public  ::cppu::WeakImplHelper1< css::frame::XDispatchProvider >
 {
     /* member */
     private:
@@ -100,8 +98,6 @@ class DispatchProvider  :   // interfaces
 
     /* interface */
     public:
-        FWK_DECLARE_XINTERFACE
-        FWK_DECLARE_XTYPEPROVIDER
 
         DispatchProvider( const css::uno::Reference< css::uno::XComponentContext >&     xContext ,
                           const css::uno::Reference< css::frame::XFrame >&              xFrame   );

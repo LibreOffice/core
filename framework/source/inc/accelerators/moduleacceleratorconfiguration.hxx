@@ -28,6 +28,7 @@
 #include <macros/xserviceinfo.hxx>
 
 #include <com/sun/star/lang/XInitialization.hpp>
+#include <cppuhelper/implbase2.hxx>
 
 // definition
 
@@ -39,9 +40,12 @@ namespace framework
     implements a read/write access to a module
     dependend accelerator configuration.
  */
-class ModuleAcceleratorConfiguration : public XCUBasedAcceleratorConfiguration
-                                     , public css::lang::XServiceInfo
-                                     , public css::lang::XInitialization
+typedef ::cppu::ImplInheritanceHelper2<
+            XCUBasedAcceleratorConfiguration,
+            css::lang::XServiceInfo,
+            css::lang::XInitialization > ModuleAcceleratorConfiguration_BASE;
+
+class ModuleAcceleratorConfiguration : ModuleAcceleratorConfiguration_BASE
 {
     //______________________________________
     // member
@@ -72,8 +76,6 @@ class ModuleAcceleratorConfiguration : public XCUBasedAcceleratorConfiguration
         virtual ~ModuleAcceleratorConfiguration();
 
         // XInterface, XTypeProvider, XServiceInfo
-        FWK_DECLARE_XINTERFACE
-        FWK_DECLARE_XTYPEPROVIDER
         DECLARE_XSERVICEINFO
 
         // XInitialization

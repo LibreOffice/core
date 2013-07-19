@@ -61,7 +61,6 @@ PopupMenuDispatcher::PopupMenuDispatcher(
     const uno::Reference< XComponentContext >& xContext )
         //  Init baseclasses first
         :   ThreadHelpBase          ( &Application::GetSolarMutex()  )
-        ,   OWeakObject             (                                )
         // Init member
         ,   m_xContext              ( xContext                       )
         ,   m_aListenerContainer    ( m_aLock.getShareableOslMutex() )
@@ -79,30 +78,6 @@ PopupMenuDispatcher::~PopupMenuDispatcher()
     // We must release all our references ...
     // and a dtor isn't the best place to do that!
 }
-
-//*****************************************************************************************************************
-//  XInterface, XTypeProvider
-//*****************************************************************************************************************
-DEFINE_XINTERFACE_7     ( PopupMenuDispatcher                                     ,
-                          ::cppu::OWeakObject                                     ,
-                          DIRECT_INTERFACE( XTypeProvider                         ),
-                          DIRECT_INTERFACE( XServiceInfo                          ),
-                          DIRECT_INTERFACE( XDispatchProvider                     ),
-                          DIRECT_INTERFACE( XDispatch                             ),
-                          DIRECT_INTERFACE( XEventListener                        ),
-                          DIRECT_INTERFACE( XInitialization                       ),
-                          DERIVED_INTERFACE( XFrameActionListener, XEventListener )
-                        )
-
-DEFINE_XTYPEPROVIDER_7  (   PopupMenuDispatcher ,
-                            XTypeProvider       ,
-                            XServiceInfo        ,
-                            XDispatchProvider   ,
-                            XDispatch           ,
-                            XEventListener      ,
-                            XInitialization     ,
-                            XFrameActionListener
-                        )
 
 OUString SAL_CALL PopupMenuDispatcher::getImplementationName() throw( css::uno::RuntimeException )
 {

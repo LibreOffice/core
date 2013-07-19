@@ -57,26 +57,11 @@ const char URL_CLOSEWIN[] = ".uno:CloseWin";
 const char URL_CLOSEFRAME[] = ".uno:CloseFrame";
 
 
-DEFINE_XINTERFACE_4(CloseDispatcher                                           ,
-                    OWeakObject                                               ,
-                    DIRECT_INTERFACE(css::lang::XTypeProvider                ),
-                    DIRECT_INTERFACE(css::frame::XNotifyingDispatch          ),
-                    DIRECT_INTERFACE(css::frame::XDispatch                   ),
-                    DIRECT_INTERFACE(css::frame::XDispatchInformationProvider))
-
-// Note: XStatusListener is an implementation detail. Hide it for scripting!
-DEFINE_XTYPEPROVIDER_4(CloseDispatcher                         ,
-                       css::lang::XTypeProvider                ,
-                       css::frame::XDispatchInformationProvider,
-                       css::frame::XNotifyingDispatch          ,
-                       css::frame::XDispatch                   )
-
 //-----------------------------------------------
 CloseDispatcher::CloseDispatcher(const css::uno::Reference< css::uno::XComponentContext >& rxContext ,
                                  const css::uno::Reference< css::frame::XFrame >&          xFrame ,
                                  const OUString&                                           sTarget)
     : ThreadHelpBase     (&Application::GetSolarMutex()                   )
-    , ::cppu::OWeakObject(                                                )
     , m_xContext         (rxContext                                       )
     , m_aAsyncCallback   (LINK( this, CloseDispatcher, impl_asyncCallback))
     , m_lStatusListener  (m_aLock.getShareableOslMutex()                  )

@@ -31,17 +31,10 @@ sal_Bool InterceptionHelper::m_bPreferrFirstInterceptor = sal_True;
 
 
 
-DEFINE_XINTERFACE_3(InterceptionHelper                                         ,
-                    OWeakObject                                                ,
-                    DIRECT_INTERFACE(css::frame::XDispatchProvider            ),
-                    DIRECT_INTERFACE(css::frame::XDispatchProviderInterception),
-                    DIRECT_INTERFACE(css::lang::XEventListener                ))
-
 InterceptionHelper::InterceptionHelper(const css::uno::Reference< css::frame::XFrame >&            xOwner,
                                        const css::uno::Reference< css::frame::XDispatchProvider >& xSlave)
     //  Init baseclasses first
     : ThreadHelpBase(&Application::GetSolarMutex())
-    , OWeakObject   (                             )
     // Init member
     , m_xOwnerWeak  (xOwner                       )
     , m_xSlave      (xSlave                       )

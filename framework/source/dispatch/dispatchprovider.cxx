@@ -49,20 +49,6 @@
 
 namespace framework{
 
-//*****************************************************************************************************************
-//  XInterface, XTypeProvider
-//*****************************************************************************************************************
-DEFINE_XINTERFACE_2( DispatchProvider                               ,
-                     OWeakObject                                    ,
-                     DIRECT_INTERFACE(css::lang::XTypeProvider     ),
-                     DIRECT_INTERFACE(css::frame::XDispatchProvider)
-                   )
-
-DEFINE_XTYPEPROVIDER_2( DispatchProvider             ,
-                        css::lang::XTypeProvider     ,
-                        css::frame::XDispatchProvider
-                      )
-
 /**
     @short      standard ctor/dtor
     @descr      These initialize a new instance of this class with needed information for work.
@@ -81,7 +67,6 @@ DispatchProvider::DispatchProvider( const css::uno::Reference< css::uno::XCompon
                                     const css::uno::Reference< css::frame::XFrame >&              xFrame    )
         //  Init baseclasses first
         : ThreadHelpBase( &Application::GetSolarMutex() )
-        , OWeakObject   (                               )
         // Init member
         , m_xContext    ( rxContext                     )
         , m_xFrame      ( xFrame                        )

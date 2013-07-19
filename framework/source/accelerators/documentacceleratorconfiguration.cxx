@@ -54,17 +54,6 @@ namespace framework
 
 //-----------------------------------------------
 // XInterface, XTypeProvider, XServiceInfo
-DEFINE_XINTERFACE_2(DocumentAcceleratorConfiguration                   ,
-                    XMLBasedAcceleratorConfiguration                           ,
-                    DIRECT_INTERFACE(css::lang::XServiceInfo)          ,
-                    DIRECT_INTERFACE(css::lang::XInitialization))
-//                    DIRECT_INTERFACE(css::ui::XUIConfigurationStorage))
-
-DEFINE_XTYPEPROVIDER_2_WITH_BASECLASS(DocumentAcceleratorConfiguration ,
-                                      XMLBasedAcceleratorConfiguration         ,
-                                      css::lang::XServiceInfo          ,
-                                      css::lang::XInitialization)
-//                                      css::ui::XUIConfigurationStorage)
 
 DEFINE_XSERVICEINFO_MULTISERVICE_2(DocumentAcceleratorConfiguration                   ,
                                    ::cppu::OWeakObject                                ,
@@ -83,7 +72,7 @@ DEFINE_INIT_SERVICE(DocumentAcceleratorConfiguration,
 
 //-----------------------------------------------
 DocumentAcceleratorConfiguration::DocumentAcceleratorConfiguration(const css::uno::Reference< css::uno::XComponentContext >& xContext)
-    : XMLBasedAcceleratorConfiguration(xContext)
+    : DocumentAcceleratorConfiguration_BASE(xContext)
 {
 }
 

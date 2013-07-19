@@ -45,7 +45,7 @@
 #include <com/sun/star/uri/XUriReferenceFactory.hpp>
 #include <com/sun/star/uri/XUriReference.hpp>
 
-#include <cppuhelper/weak.hxx>
+#include <cppuhelper/implbase5.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <cppuhelper/interfacecontainer.h>
 
@@ -76,17 +76,16 @@ typedef ::cppu::OMultiTypeInterfaceContainerHelperVar<  OUString         ,
 
     @devstatus      ready to use
 *//*-*************************************************************************************************************/
-class PopupMenuDispatcher :   // interfaces
-                                public css::lang::XTypeProvider         ,
-                                public css::lang::XServiceInfo          ,
-                                public css::frame::XDispatchProvider    ,
-                                public css::frame::XDispatch            ,
-                                public css::frame::XFrameActionListener ,
-                                public css::lang::XInitialization       ,
-                                // baseclasses
+class PopupMenuDispatcher :     // baseclasses
                                 // Order is necessary for right initialization!
                                 public ThreadHelpBase                   ,
-                                public cppu::OWeakObject
+                                // interfaces
+                                public  ::cppu::WeakImplHelper5<
+                                           css::lang::XServiceInfo,
+                                           css::frame::XDispatchProvider,
+                                           css::frame::XDispatch,
+                                           css::frame::XFrameActionListener,
+                                           css::lang::XInitialization >
 {
     //-------------------------------------------------------------------------------------------------------------
     //  public methods
@@ -97,8 +96,6 @@ class PopupMenuDispatcher :   // interfaces
         PopupMenuDispatcher( const css::uno::Reference< css::uno::XComponentContext >& xContext );
 
         // XInterface, XTypeProvider, XServiceInfo
-        FWK_DECLARE_XINTERFACE
-        FWK_DECLARE_XTYPEPROVIDER
         DECLARE_XSERVICEINFO
 
         // XInitialization

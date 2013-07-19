@@ -37,7 +37,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/frame/XStatusListener.hpp>
 
-#include <cppuhelper/weak.hxx>
+#include <cppuhelper/implbase3.hxx>
 
 namespace framework{
 
@@ -57,15 +57,14 @@ namespace framework{
 
     @devstatus      ready to use
 */
-class ServiceHandler : // interfaces
-                       public  css::lang::XTypeProvider      ,
-                       public  css::lang::XServiceInfo       ,
-                       public  css::frame::XDispatchProvider ,
-                       public  css::frame::XNotifyingDispatch, // => XDispatch
-                       // baseclasses
+class ServiceHandler : // baseclasses
                        // Order is necessary for right initialization!
                        private ThreadHelpBase                ,
-                       public  cppu::OWeakObject
+                       // interfaces
+                       public  ::cppu::WeakImplHelper3<
+                                   css::lang::XServiceInfo       ,
+                                   css::frame::XDispatchProvider ,
+                                   css::frame::XNotifyingDispatch > // => XDispatch
 {
     /* member */
     private:
@@ -81,8 +80,6 @@ class ServiceHandler : // interfaces
         virtual ~ServiceHandler(                                                                        );
 
         // XInterface, XTypeProvider, XServiceInfo
-        FWK_DECLARE_XINTERFACE
-        FWK_DECLARE_XTYPEPROVIDER
         DECLARE_XSERVICEINFO
 
         // XDispatchProvider

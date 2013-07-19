@@ -47,7 +47,8 @@
 #include <com/sun/star/form/XReset.hpp>
 
 #include <cppuhelper/propshlp.hxx>
-#include <cppuhelper/weak.hxx>
+#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase4.hxx>
 #include <salhelper/singletonref.hxx>
 
 //__________________________________________
@@ -68,14 +69,13 @@ typedef PresetHandler AcceleratorPresets;
 /**
     implements a read/write access to the accelerator configuration.
  */
-class XMLBasedAcceleratorConfiguration : protected ThreadHelpBase                       // attention! Must be the first base class to guarentee right initialize lock ...
-                                       , public    IStorageListener
-                                       , public    ::cppu::OWeakObject
-                                       , public    css::lang::XTypeProvider
-                                       , public    css::form::XReset                    // TODO use XPresetHandler instead if available
-                                       , public    css::ui::XAcceleratorConfiguration  // => css::ui::XUIConfigurationPersistence
-                                                                                       //    css::ui::XUIConfigurationStorage
-                                                                                       //    css::ui::XUIConfiguration
+class XMLBasedAcceleratorConfiguration : protected ThreadHelpBase,                            // attention! Must be the first base class to guarentee right initialize lock ...
+                                         public    IStorageListener,
+                                         public    ::cppu::WeakImplHelper2<
+                                                       css::form::XReset,                    // TODO use XPresetHandler instead if available
+                                                       css::ui::XAcceleratorConfiguration >  // => css::ui::XUIConfigurationPersistence
+                                                                                             //    css::ui::XUIConfigurationStorage
+                                                                                             //    css::ui::XUIConfiguration
 {
     //______________________________________
     // member
@@ -115,10 +115,6 @@ class XMLBasedAcceleratorConfiguration : protected ThreadHelpBase               
         // uno interface!
 
     public:
-
-        // XInterface, XTypeProvider
-        FWK_DECLARE_XINTERFACE
-        FWK_DECLARE_XTYPEPROVIDER
 
         // XAcceleratorConfiguration
         virtual css::uno::Sequence< css::awt::KeyEvent > SAL_CALL getAllKeyEvents()
@@ -286,15 +282,14 @@ class XMLBasedAcceleratorConfiguration : protected ThreadHelpBase               
 
 };
 
-class XCUBasedAcceleratorConfiguration : protected ThreadHelpBase                       // attention! Must be the first base class to guarentee right initialize lock ...
-                                       , public    ::cppu::OWeakObject
-                                       , public    css::lang::XTypeProvider
-                                       , public    css::util::XChangesListener
-                                       , public    css::lang::XComponent
-                                       , public    css::form::XReset                    // TODO use XPresetHandler instead if available
-                                       , public    css::ui::XAcceleratorConfiguration  // => css::ui::XUIConfigurationPersistence
-                                                                                       //    css::ui::XUIConfigurationStorage
-                                                                                       //    css::ui::XUIConfiguration
+class XCUBasedAcceleratorConfiguration : protected ThreadHelpBase,                       // attention! Must be the first base class to guarentee right initialize lock ...
+                                         public  ::cppu::WeakImplHelper4<
+                                                     css::util::XChangesListener,
+                                                     css::lang::XComponent,
+                                                     css::form::XReset,                    // TODO use XPresetHandler instead if available
+                                                     css::ui::XAcceleratorConfiguration >  // => css::ui::XUIConfigurationPersistence
+                                                                                           //    css::ui::XUIConfigurationStorage
+                                                                                           //    css::ui::XUIConfiguration
 {
     //______________________________________
     // member
@@ -329,10 +324,6 @@ class XCUBasedAcceleratorConfiguration : protected ThreadHelpBase               
         // uno interface!
 
     public:
-
-        // XInterface, XTypeProvider
-        FWK_DECLARE_XINTERFACE
-        FWK_DECLARE_XTYPEPROVIDER
 
         // XAcceleratorConfiguration
         virtual css::uno::Sequence< css::awt::KeyEvent > SAL_CALL getAllKeyEvents()

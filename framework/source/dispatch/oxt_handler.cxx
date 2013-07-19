@@ -37,22 +37,6 @@ namespace framework{
 //*****************************************************************************************************************
 //  XInterface, XTypeProvider, XServiceInfo
 //*****************************************************************************************************************
-DEFINE_XINTERFACE_5                 (   Oxt_Handler                                                ,
-                                        OWeakObject                                                ,
-                                        DIRECT_INTERFACE( css::lang::XTypeProvider                ),
-                                        DIRECT_INTERFACE( css::lang::XServiceInfo                 ),
-                                        DIRECT_INTERFACE( css::frame::XNotifyingDispatch          ),
-                                        DIRECT_INTERFACE( css::frame::XDispatch                   ),
-                                        DIRECT_INTERFACE( css::document::XExtendedFilterDetection )
-                                    )
-
-DEFINE_XTYPEPROVIDER_5              (   Oxt_Handler                                                ,
-                                        css::lang::XTypeProvider                                   ,
-                                        css::lang::XServiceInfo                                    ,
-                                        css::frame::XNotifyingDispatch                             ,
-                                        css::frame::XDispatch                                      ,
-                                        css::document::XExtendedFilterDetection
-                                    )
 
 DEFINE_XSERVICEINFO_MULTISERVICE    (   Oxt_Handler                                                ,
                                         ::cppu::OWeakObject                                        ,
@@ -80,7 +64,6 @@ DEFINE_INIT_SERVICE                 (   Oxt_Handler,
 Oxt_Handler::Oxt_Handler( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory )
         //  Init baseclasses first
         :   ThreadHelpBase      (          )
-        ,   ::cppu::OWeakObject (          )
         // Init member
         ,   m_xFactory          ( xFactory )
 {

@@ -33,21 +33,6 @@ namespace framework{
 //_________________________________________________________________________________________________________________
 // XInterface, XTypeProvider, XServiceInfo
 
-DEFINE_XINTERFACE_5(MailToDispatcher                                ,
-                    OWeakObject                                     ,
-                    DIRECT_INTERFACE(css::lang::XTypeProvider      ),
-                    DIRECT_INTERFACE(css::lang::XServiceInfo       ),
-                    DIRECT_INTERFACE(css::frame::XDispatchProvider ),
-                    DIRECT_INTERFACE(css::frame::XNotifyingDispatch),
-                    DIRECT_INTERFACE(css::frame::XDispatch         ))
-
-DEFINE_XTYPEPROVIDER_5(MailToDispatcher              ,
-                       css::lang::XTypeProvider      ,
-                       css::lang::XServiceInfo       ,
-                       css::frame::XDispatchProvider ,
-                       css::frame::XNotifyingDispatch,
-                       css::frame::XDispatch         )
-
 DEFINE_XSERVICEINFO_MULTISERVICE_2(MailToDispatcher                   ,
                                  ::cppu::OWeakObject                ,
                                  SERVICENAME_PROTOCOLHANDLER        ,
@@ -75,7 +60,6 @@ DEFINE_INIT_SERVICE(MailToDispatcher,
 MailToDispatcher::MailToDispatcher( const css::uno::Reference< css::uno::XComponentContext >& rxContext )
         //  Init baseclasses first
         : ThreadHelpBase( &Application::GetSolarMutex() )
-        , OWeakObject   (                               )
         // Init member
         , m_xContext    ( rxContext                     )
 {

@@ -39,7 +39,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/frame/DispatchResultState.hpp>
 
-#include <cppuhelper/weak.hxx>
+#include <cppuhelper/implbase2.hxx>
 #include <vcl/evntpost.hxx>
 
 
@@ -49,12 +49,11 @@ namespace framework{
 /**
     @short          helper to handle all URLs related to the StartModule
  */
-class StartModuleDispatcher : public css::lang::XTypeProvider
-                            , public css::frame::XNotifyingDispatch             // => XDispatch
-                            , public css::frame::XDispatchInformationProvider
-                            // baseclasses ... order is necessary for right initialization!
-                            , private ThreadHelpBase
-                            , public  ::cppu::OWeakObject
+class StartModuleDispatcher : // baseclasses ... order is necessary for right initialization!
+                              private ThreadHelpBase,
+                              public  ::cppu::WeakImplHelper2<
+                                         css::frame::XNotifyingDispatch,             // => XDispatch
+                                         css::frame::XDispatchInformationProvider >
 {
     //-------------------------------------------
     // member
@@ -113,8 +112,6 @@ class StartModuleDispatcher : public css::lang::XTypeProvider
     public:
 
         //---------------------------------------
-        FWK_DECLARE_XINTERFACE
-        FWK_DECLARE_XTYPEPROVIDER
 
         //---------------------------------------
         // XNotifyingDispatch

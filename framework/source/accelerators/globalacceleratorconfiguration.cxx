@@ -43,14 +43,6 @@ namespace framework
 
 //-----------------------------------------------
 // XInterface, XTypeProvider, XServiceInfo
-DEFINE_XINTERFACE_2(GlobalAcceleratorConfiguration           ,
-                    XCUBasedAcceleratorConfiguration                 ,
-                    DIRECT_INTERFACE(css::lang::XServiceInfo),
-                    DIRECT_INTERFACE(css::lang::XInitialization))
-DEFINE_XTYPEPROVIDER_2_WITH_BASECLASS(GlobalAcceleratorConfiguration,
-                                      XCUBasedAcceleratorConfiguration      ,
-                                      css::lang::XServiceInfo       ,
-                                      css::lang::XInitialization)
 
 DEFINE_XSERVICEINFO_MULTISERVICE_2(GlobalAcceleratorConfiguration                   ,
                                    ::cppu::OWeakObject                              ,
@@ -70,7 +62,7 @@ DEFINE_INIT_SERVICE(GlobalAcceleratorConfiguration,
 
 //-----------------------------------------------
 GlobalAcceleratorConfiguration::GlobalAcceleratorConfiguration(const css::uno::Reference< css::uno::XComponentContext >& xContext)
-    : XCUBasedAcceleratorConfiguration(xContext)
+    : GlobalAcceleratorConfiguration_BASE(xContext)
 {
 }
 

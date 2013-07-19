@@ -39,9 +39,11 @@ namespace framework
     implements a read/write access to the global
     accelerator configuration.
  */
-class GlobalAcceleratorConfiguration : public XCUBasedAcceleratorConfiguration
-                                     , public css::lang::XServiceInfo
-                                     , public css::lang::XInitialization
+typedef ::cppu::ImplInheritanceHelper2<
+             XCUBasedAcceleratorConfiguration,
+             css::lang::XServiceInfo,
+             css::lang::XInitialization > GlobalAcceleratorConfiguration_BASE;
+class GlobalAcceleratorConfiguration : GlobalAcceleratorConfiguration_BASE
 {
     //______________________________________
     // interface
@@ -61,8 +63,6 @@ class GlobalAcceleratorConfiguration : public XCUBasedAcceleratorConfiguration
         virtual ~GlobalAcceleratorConfiguration();
 
         // XInterface, XTypeProvider, XServiceInfo
-        FWK_DECLARE_XINTERFACE
-        FWK_DECLARE_XTYPEPROVIDER
         DECLARE_XSERVICEINFO
 
         // XInitialization

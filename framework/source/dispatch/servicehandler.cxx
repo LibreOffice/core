@@ -35,21 +35,6 @@ namespace framework{
 //_________________________________________________________________________________________________________________
 // XInterface, XTypeProvider, XServiceInfo
 
-DEFINE_XINTERFACE_5(ServiceHandler                                  ,
-                    OWeakObject                                     ,
-                    DIRECT_INTERFACE(css::lang::XTypeProvider      ),
-                    DIRECT_INTERFACE(css::lang::XServiceInfo       ),
-                    DIRECT_INTERFACE(css::frame::XDispatchProvider ),
-                    DIRECT_INTERFACE(css::frame::XNotifyingDispatch),
-                    DIRECT_INTERFACE(css::frame::XDispatch         ))
-
-DEFINE_XTYPEPROVIDER_5(ServiceHandler                ,
-                       css::lang::XTypeProvider      ,
-                       css::lang::XServiceInfo       ,
-                       css::frame::XDispatchProvider ,
-                       css::frame::XNotifyingDispatch,
-                       css::frame::XDispatch         )
-
 DEFINE_XSERVICEINFO_MULTISERVICE(ServiceHandler                   ,
                                  ::cppu::OWeakObject              ,
                                  SERVICENAME_PROTOCOLHANDLER      ,
@@ -77,7 +62,6 @@ DEFINE_INIT_SERVICE(ServiceHandler,
 ServiceHandler::ServiceHandler( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory )
         //  Init baseclasses first
         : ThreadHelpBase( &Application::GetSolarMutex() )
-        , OWeakObject   (                               )
         // Init member
         , m_xFactory    ( xFactory                      )
 {

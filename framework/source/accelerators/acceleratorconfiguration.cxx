@@ -84,25 +84,6 @@ namespace framework
     }
 
 //-----------------------------------------------
-//  XInterface, XTypeProvider
-DEFINE_XINTERFACE_6(XMLBasedAcceleratorConfiguration                       ,
-                    OWeakObject                                            ,
-                    DIRECT_INTERFACE(css::lang::XTypeProvider             ),
-                    DIRECT_INTERFACE(css::ui::XAcceleratorConfiguration  ),
-                    DIRECT_INTERFACE(css::form::XReset                    ),
-                    DIRECT_INTERFACE(css::ui::XUIConfigurationPersistence),
-                    DIRECT_INTERFACE(css::ui::XUIConfigurationStorage    ),
-                    DIRECT_INTERFACE(css::ui::XUIConfiguration           ))
-
-DEFINE_XTYPEPROVIDER_6(XMLBasedAcceleratorConfiguration     ,
-                       css::lang::XTypeProvider             ,
-                       css::ui::XAcceleratorConfiguration  ,
-                       css::form::XReset                    ,
-                       css::ui::XUIConfigurationPersistence,
-                       css::ui::XUIConfigurationStorage    ,
-                       css::ui::XUIConfiguration           )
-
-//-----------------------------------------------
 XMLBasedAcceleratorConfiguration::XMLBasedAcceleratorConfiguration(const css::uno::Reference< css::uno::XComponentContext >& xContext)
     : ThreadHelpBase  (&Application::GetSolarMutex())
     , m_xContext      (xContext                     )
@@ -630,29 +611,6 @@ OUString XMLBasedAcceleratorConfiguration::impl_ts_getLocale() const
 * XCU based accelerator configuration
 *
 *******************************************************************************/
-
-//-----------------------------------------------
-//  XInterface, XTypeProvider
-DEFINE_XINTERFACE_8(XCUBasedAcceleratorConfiguration                       ,
-                    OWeakObject                                            ,
-                    DIRECT_INTERFACE(css::lang::XTypeProvider             ),
-                    DIRECT_INTERFACE(css::ui::XAcceleratorConfiguration  ),
-                    DIRECT_INTERFACE(css::util::XChangesListener          ),
-                    DIRECT_INTERFACE(css::form::XReset                    ),
-                    DIRECT_INTERFACE(css::lang::XComponent                ),
-                    DIRECT_INTERFACE(css::ui::XUIConfigurationPersistence),
-                    DIRECT_INTERFACE(css::ui::XUIConfigurationStorage    ),
-                    DIRECT_INTERFACE(css::ui::XUIConfiguration           ))
-
-                    DEFINE_XTYPEPROVIDER_8(XCUBasedAcceleratorConfiguration ,
-                    css::lang::XTypeProvider             ,
-                    css::ui::XAcceleratorConfiguration  ,
-                    css::util::XChangesListener          ,
-                    css::form::XReset                    ,
-                    css::lang::XComponent                ,
-                    css::ui::XUIConfigurationPersistence,
-                    css::ui::XUIConfigurationStorage    ,
-                    css::ui::XUIConfiguration           )
 
 //-----------------------------------------------
 XCUBasedAcceleratorConfiguration::XCUBasedAcceleratorConfiguration(const css::uno::Reference< css::uno::XComponentContext >& xContext)

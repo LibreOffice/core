@@ -32,7 +32,7 @@
 
 #include <cppuhelper/weakref.hxx>
 #include <rtl/ustring.hxx>
-#include <cppuhelper/weak.hxx>
+#include <cppuhelper/implbase1.hxx>
 #include <vcl/svapp.hxx>
 
 namespace framework{
@@ -40,9 +40,8 @@ namespace framework{
 /*-************************************************************************************************************//**
     @short          a helper to merge dispatch information of different sources together.
 *//*-*************************************************************************************************************/
-class DispatchInformationProvider : public  css::frame::XDispatchInformationProvider
-                                  , private ThreadHelpBase
-                                  , public  ::cppu::OWeakObject
+class DispatchInformationProvider : private ThreadHelpBase
+                                  , public  ::cppu::WeakImplHelper1< css::frame::XDispatchInformationProvider >
 {
     //_______________________
     // member
@@ -59,8 +58,6 @@ class DispatchInformationProvider : public  css::frame::XDispatchInformationProv
                                     const css::uno::Reference< css::frame::XFrame >&          xFrame);
 
         virtual ~DispatchInformationProvider();
-
-        FWK_DECLARE_XINTERFACE
 
         virtual css::uno::Sequence< sal_Int16 > SAL_CALL getSupportedCommandGroups()
             throw (css::uno::RuntimeException);

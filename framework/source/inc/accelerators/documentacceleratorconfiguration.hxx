@@ -31,6 +31,7 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/ui/XUIConfigurationStorage.hpp>
 
+#include <cppuhelper/implbase2.hxx>
 // definition
 
 namespace framework
@@ -41,10 +42,13 @@ namespace framework
     implements a read/write access to a document
     based accelerator configuration.
  */
-class DocumentAcceleratorConfiguration : public XMLBasedAcceleratorConfiguration
-                                       , public css::lang::XServiceInfo
-                                       , public css::lang::XInitialization
-//                                       , public css::ui::XUIConfigurationStorage
+
+typedef ::cppu::ImplInheritanceHelper2<
+             XMLBasedAcceleratorConfiguration,
+             css::lang::XServiceInfo,
+             css::lang::XInitialization > DocumentAcceleratorConfiguration_BASE;
+
+class DocumentAcceleratorConfiguration : public DocumentAcceleratorConfiguration_BASE
 {
     //______________________________________
     // member
@@ -71,8 +75,6 @@ class DocumentAcceleratorConfiguration : public XMLBasedAcceleratorConfiguration
         virtual ~DocumentAcceleratorConfiguration();
 
         // XInterface, XTypeProvider, XServiceInfo
-        FWK_DECLARE_XINTERFACE
-        FWK_DECLARE_XTYPEPROVIDER
         DECLARE_XSERVICEINFO
 
         // XInitialization

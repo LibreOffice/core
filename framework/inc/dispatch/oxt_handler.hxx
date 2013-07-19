@@ -39,7 +39,8 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/util/URL.hpp>
 
-#include <cppuhelper/weak.hxx>
+#include <cppuhelper/implbase3.hxx>
+
 
 namespace framework{
 
@@ -54,15 +55,14 @@ namespace framework{
     @devstatus      ready
     @threadsafe     yes
 *//*-*************************************************************************************************************/
-class Oxt_Handler  :   // interfaces
-                        public  css::lang::XTypeProvider
-                    ,   public  css::lang::XServiceInfo
-                    ,   public  css::frame::XNotifyingDispatch // => XDispatch
-                    ,   public  css::document::XExtendedFilterDetection
-                        // baseclasses
+class Oxt_Handler  :    // baseclasses
                         // Order is necessary for right initialization!
-                    ,   private ThreadHelpBase
-                    ,   public  ::cppu::OWeakObject
+                        private ThreadHelpBase
+                        // interfaces
+                    ,   public  ::cppu::WeakImplHelper3<
+                                    css::lang::XServiceInfo,
+                                    css::frame::XNotifyingDispatch, // => XDispatch
+                                    css::document::XExtendedFilterDetection >
 {
     //-------------------------------------------------------------------------------------------------------------
     //  public methods
@@ -78,9 +78,7 @@ class Oxt_Handler  :   // interfaces
         //---------------------------------------------------------------------------------------------------------
         //  XInterface, XTypeProvider, XServiceInfo
         //---------------------------------------------------------------------------------------------------------
-        FWK_DECLARE_XINTERFACE
-        FWK_DECLARE_XTYPEPROVIDER
-            DECLARE_XSERVICEINFO
+        DECLARE_XSERVICEINFO
 
         //---------------------------------------------------------------------------------------------------------
         //  XNotifyingDispatch

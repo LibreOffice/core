@@ -49,15 +49,6 @@ namespace framework
 
 //-----------------------------------------------
 // XInterface, XTypeProvider, XServiceInfo
-DEFINE_XINTERFACE_2(ModuleAcceleratorConfiguration              ,
-                    XCUBasedAcceleratorConfiguration                    ,
-                    DIRECT_INTERFACE(css::lang::XServiceInfo)   ,
-                    DIRECT_INTERFACE(css::lang::XInitialization))
-
-DEFINE_XTYPEPROVIDER_2_WITH_BASECLASS(ModuleAcceleratorConfiguration,
-                                      XCUBasedAcceleratorConfiguration      ,
-                                      css::lang::XServiceInfo       ,
-                                      css::lang::XInitialization    )
 
 DEFINE_XSERVICEINFO_MULTISERVICE_2(ModuleAcceleratorConfiguration                   ,
                                    ::cppu::OWeakObject                              ,
@@ -76,7 +67,7 @@ DEFINE_INIT_SERVICE(ModuleAcceleratorConfiguration,
 
 //-----------------------------------------------
 ModuleAcceleratorConfiguration::ModuleAcceleratorConfiguration(const css::uno::Reference< css::uno::XComponentContext >& xContext)
-    : XCUBasedAcceleratorConfiguration(xContext)
+    : ModuleAcceleratorConfiguration_BASE(xContext)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "ModuleAcceleratorConfiguration::ModuleAcceleratorConfiguration" );
 }

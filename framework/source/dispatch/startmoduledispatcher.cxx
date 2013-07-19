@@ -53,26 +53,11 @@ namespace framework{
 namespace fpf = ::framework::pattern::frame;
 
 
-DEFINE_XINTERFACE_4(StartModuleDispatcher                                     ,
-                    OWeakObject                                               ,
-                    DIRECT_INTERFACE(css::lang::XTypeProvider                ),
-                    DIRECT_INTERFACE(css::frame::XNotifyingDispatch          ),
-                    DIRECT_INTERFACE(css::frame::XDispatch                   ),
-                    DIRECT_INTERFACE(css::frame::XDispatchInformationProvider))
-
-// Note: XStatusListener is an implementation detail. Hide it for scripting!
-DEFINE_XTYPEPROVIDER_4(StartModuleDispatcher                   ,
-                       css::lang::XTypeProvider                ,
-                       css::frame::XDispatchInformationProvider,
-                       css::frame::XNotifyingDispatch          ,
-                       css::frame::XDispatch                   )
-
 //-----------------------------------------------
 StartModuleDispatcher::StartModuleDispatcher(const css::uno::Reference< css::uno::XComponentContext >&     rxContext,
                                              const css::uno::Reference< css::frame::XFrame >&              xFrame ,
                                              const OUString&                                        sTarget)
     : ThreadHelpBase     (&Application::GetSolarMutex() )
-    , ::cppu::OWeakObject(                              )
     , m_xContext         (rxContext                         )
     , m_xOwner           (xFrame                        )
     , m_sDispatchTarget  (sTarget                       )
