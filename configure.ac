@@ -8097,10 +8097,7 @@ if test "x$enable_firebird_sdbc" = "xyes"; then
         AC_PATH_PROG(FIREBIRDCONFIG, [fb_config])
         if test -z "$FIREBIRDCONFIG"; then
             AC_MSG_NOTICE([No fb_config -- using pkg-config])
-            FIREBIRD_VERSION=`pkg-config --modversion fbembed`
-            AC_MSG_CHECKING([for Firebird Client library])
-            FIREBIRD_CFLAGS=`pkg-config --cflags fbembed`
-            FIREBIRD_LIBS=`pkg-config --libs fbembed`
+            PKG_CHECK_MODULES(FIREBIRD, fbembed)
         else
             AC_MSG_NOTICE([fb_config found])
             FIREBIRD_VERSION=`$FIREBIRDCONFIG --version`
