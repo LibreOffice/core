@@ -480,7 +480,7 @@ public class RecoveryTest extends ComplexTestCase {
 
     /**
      * This function gets the current screen size and calculate the first
-     * quarter of it. This qaurter was used to postion to Office windows.
+     * quarter of it. This quarter was used to position to Office windows.
      * Further this function calculates the maximum window size so the window
      * is visible if it placed on extreme position.
      */
