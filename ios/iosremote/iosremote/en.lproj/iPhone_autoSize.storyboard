@@ -584,7 +584,6 @@
         <class className="slideShowPreviewTable_vc" superclassName="UITableViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/slideShowPreviewTable_vc.h"/>
             <relationships>
-                <relationship kind="action" name="startPresentationAction:"/>
                 <relationship kind="outlet" name="optionsTable" candidateClass="UITableView"/>
             </relationships>
         </class>
