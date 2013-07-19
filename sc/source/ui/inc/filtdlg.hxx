@@ -155,6 +155,7 @@ private:
     DECL_LINK( CheckBoxHdl,  CheckBox* );
     DECL_LINK( EndDlgHdl,    Button* );
     DECL_LINK( ScrollHdl, void* );
+    DECL_LINK( MoreExpandedHdl, void* );
 
     // Hack: RefInput control
     DECL_LINK( TimeOutHdl,   Timer* );

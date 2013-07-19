@@ -50,28 +50,25 @@
 ScFilterDlg::EntryList::EntryList() :
     mnHeaderPos(INVALID_HEADER_POS) {}
 
-ScFilterDlg::ScFilterDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
-                          const SfxItemSet& rArgSet )
-
-    :   ScAnyRefDlg ( pB, pCW, pParent, "StandardFilterDialog", "modules/scalc/ui/standardfilterdialog.ui" ),
-        //
-        aStrUndefined   ( SC_RESSTR(SCSTR_UNDEFINED) ),
-        aStrNone        ( SC_RESSTR(SCSTR_NONE) ),
-        aStrEmpty       ( SC_RESSTR(SCSTR_FILTER_EMPTY) ),
-        aStrNotEmpty    ( SC_RESSTR(SCSTR_FILTER_NOTEMPTY) ),
-        aStrRow         ( SC_RESSTR(SCSTR_ROW) ),
-        aStrColumn      ( SC_RESSTR(SCSTR_COLUMN) ),
-        //
-        pOptionsMgr     ( NULL ),
-        nWhichQuery     ( rArgSet.GetPool()->GetWhich( SID_QUERY ) ),
-        theQueryData    ( ((const ScQueryItem&)
-                           rArgSet.Get( nWhichQuery )).GetQueryData() ),
-        pOutItem        ( NULL ),
-        pViewData       ( NULL ),
-        pDoc            ( NULL ),
-        nSrcTab         ( 0 ),
-        bRefInputMode   ( false ),
-        pTimer          ( NULL )
+ScFilterDlg::ScFilterDlg(SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
+    const SfxItemSet& rArgSet)
+    : ScAnyRefDlg ( pB, pCW, pParent, "StandardFilterDialog",
+        "modules/scalc/ui/standardfilterdialog.ui" )
+    , aStrUndefined(SC_RESSTR(SCSTR_UNDEFINED))
+    , aStrNone(SC_RESSTR(SCSTR_NONE))
+    , aStrEmpty(SC_RESSTR(SCSTR_FILTER_EMPTY))
+    , aStrNotEmpty(SC_RESSTR(SCSTR_FILTER_NOTEMPTY))
+    , aStrRow(SC_RESSTR(SCSTR_ROW))
+    , aStrColumn(SC_RESSTR(SCSTR_COLUMN))
+    , pOptionsMgr(NULL)
+    , nWhichQuery(rArgSet.GetPool()->GetWhich(SID_QUERY))
+    , theQueryData(((const ScQueryItem&)rArgSet.Get(nWhichQuery)).GetQueryData())
+    , pOutItem(NULL)
+    , pViewData(NULL)
+    , pDoc(NULL)
+    , nSrcTab(0)
+    , bRefInputMode(false)
+    , pTimer(NULL)
 {
     get(pLbConnect1,"connect1");
     get(pLbField1,"field1");
@@ -91,6 +88,7 @@ ScFilterDlg::ScFilterDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
     get(pEdVal4,"val4");
     get(pScrollBar,"scrollbar");
     get(pExpander,"more");
+    pExpander->SetExpandedHdl(LINK(this, ScFilterDlg, MoreExpandedHdl));
     get(pBtnOk,"ok");
     get(pBtnCancel,"cancel");
     get(pBtnCase,"case");
@@ -100,6 +98,7 @@ ScFilterDlg::ScFilterDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
     get(pBtnCopyResult,"copyresult");
     get(pLbCopyArea,"lbcopyarea");
     get(pEdCopyArea,"edcopyarea");
+    pEdCopyArea->SetReferences(this, pBtnCopyResult);
     get(pRbCopyArea,"rbcopyarea");
     pRbCopyArea->SetReferences(this, pEdCopyArea);
     get(pBtnDestPers,"destpers");
@@ -733,6 +732,22 @@ IMPL_LINK( ScFilterDlg, EndDlgHdl, Button*, pBtn )
         Close();
     }
 
+    return 0;
+}
+
+//----------------------------------------------------------------------------
+
+IMPL_LINK_NOARG(ScFilterDlg, MoreExpandedHdl)
+{
+    if ( pExpander->get_expanded() )
+        pTimer->Start();
+    else
+    {
+        pTimer->Stop();
+        bRefInputMode = false;
+        //@BugID 54702 Enable/disable only in Basic class
+        //SFX_APPWINDOW->Disable(FALSE);        //! general method in ScAnyRefDlg
+    }
     return 0;
 }
 
