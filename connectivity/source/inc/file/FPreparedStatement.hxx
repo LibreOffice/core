@@ -65,7 +65,7 @@ namespace connectivity
             void describeColumn(OSQLParseNode* _pParameter,OSQLParseNode* _pNode,const OSQLTable& _xTable);
             void describeParameter();
 
-            virtual void parseParamterElem(const String& _sColumnName,OSQLParseNode* pRow_Value_Constructor_Elem);
+            virtual void parseParamterElem(const OUString& _sColumnName,OSQLParseNode* pRow_Value_Constructor_Elem);
             virtual void initializeResultSet(OResultSet* _pResult);
 
             virtual ~OPreparedStatement();

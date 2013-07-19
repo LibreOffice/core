@@ -158,10 +158,15 @@ sal_Int32 ResultSet::findColumn( const OUString& columnName )
 {
     MutexGuard guard( m_refMutex->mutex );
     checkClosed();
-    return PQfnumber(
-        m_result,
-        OUStringToOString( columnName, (*m_ppSettings)->encoding ).getStr())
-        +1;
+    sal_Int32 res = PQfnumber( m_result,
+                               OUStringToOString( columnName, (*m_ppSettings)->encoding ).getStr());
+    /* PQfnumber reurn -1 for not found, which is waht we want
+     * otehr than that we use col number as 1-based not 0-based */
+    if(res >= 0)
+    {
+        res += 1;
+    }
+    return res;
 }
 
 static bool isNumber( const char * data, sal_Int32 len )

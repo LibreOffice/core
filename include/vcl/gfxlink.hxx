@@ -135,7 +135,7 @@ private:
 public:
                         GfxLink();
                         GfxLink( const GfxLink& );
-                        GfxLink( const String& rPath, GfxLinkType nType );
+                        GfxLink( const OUString& rPath, GfxLinkType nType );
                         GfxLink( sal_uInt8* pBuf, sal_uInt32 nBufSize, GfxLinkType nType, sal_Bool bOwns );
                         ~GfxLink();
 

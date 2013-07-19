@@ -501,12 +501,12 @@ void Graphic::SetContext( GraphicReader* pReader )
     mpImpGraphic->ImplSetContext( pReader );
 }
 
-void Graphic::SetDocFileName( const String& rName, sal_uLong nFilePos )
+void Graphic::SetDocFileName( const OUString& rName, sal_uLong nFilePos )
 {
     mpImpGraphic->ImplSetDocFileName( rName, nFilePos );
 }
 
-const String& Graphic::GetDocFileName() const
+const OUString& Graphic::GetDocFileName() const
 {
     return mpImpGraphic->ImplGetDocFileName();
 }

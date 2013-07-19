@@ -82,7 +82,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getColumns(
 // -------------------------------------------------------------------------
 namespace
 {
-    sal_Int16 isCaseSensitiveParentFolder( const String& _rFolderOrDoc, const String& _rDocName )
+    sal_Int16 isCaseSensitiveParentFolder( const OUString& _rFolderOrDoc, const OUString& _rDocName )
     {
         sal_Int16 nIsCS = 1;
         try
@@ -215,8 +215,8 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
 
     Reference<XRow> xRow(xResultSet,UNO_QUERY);
 
-    String aFilenameExtension = m_pConnection->getExtension();
-    String sThisContentExtension;
+    OUString aFilenameExtension = m_pConnection->getExtension();
+    OUString sThisContentExtension;
     ODatabaseMetaDataResultSet::ORows aRows;
     // scan the directory for tables
     OUString aName;
@@ -231,7 +231,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
     {
         aName = xRow->getString(1);
         aURL.SetSmartProtocol(INET_PROT_FILE);
-        String sUrl = m_pConnection->getURL() + OUString("/") + aName;
+        OUString sUrl = m_pConnection->getURL() + "/" + aName;
         aURL.SetSmartURL( sUrl );
         sThisContentExtension = aURL.getExtension();
 
@@ -245,31 +245,35 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
             sal_Int16 nCase = isCaseSensitiveParentFolder( m_pConnection->getURL(), aURL.getName() );
             switch( nCase )
             {
-                case 1:
-                    bCaseSensitiveDir = sal_True;
-                    break;
-                case -1:
-                    bKnowCaseSensivity = sal_False;
-                    /** run through */
-                case 0:
-                    bCaseSensitiveDir = sal_False;
+            case 1:
+                bCaseSensitiveDir = sal_True;
+                break;
+            case -1:
+                bKnowCaseSensivity = sal_False;
+                /** run through */
+            case 0:
+                bCaseSensitiveDir = sal_False;
             }
             if ( bKnowCaseSensivity )
             {
                 m_pConnection->setCaseSensitiveExtension( bCaseSensitiveDir, OConnection::GrantAccess() );
                 if ( !bCaseSensitiveDir )
-                    aFilenameExtension.ToLowerAscii();
+                {
+                    aFilenameExtension = aFilenameExtension.toAsciiLowerCase();
+                }
             }
         }
 
-        if (aFilenameExtension.Len())
+        if (!aFilenameExtension.isEmpty())
         {
             if ( !bCaseSensitiveDir )
-                sThisContentExtension.ToLowerAscii();
+            {
+                sThisContentExtension = sThisContentExtension.toAsciiLowerCase();
+            }
 
             if ( sThisContentExtension == aFilenameExtension )
             {
-                aName = aName.replaceAt(aName.getLength()-(aFilenameExtension.Len()+1),aFilenameExtension.Len()+1,OUString());
+                aName = aName.copy(0, (aName.getLength()-(aFilenameExtension.getLength()+1)));
                 sal_Unicode nChar = aName.toChar();
                 if ( match(tableNamePattern,aName,'\0') && ( !bCheckEnabled || ( bCheckEnabled && ((nChar < '0' || nChar > '9')))) )
                 {
