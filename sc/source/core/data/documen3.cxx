@@ -981,7 +981,7 @@ void ScDocument::UpdateReference(
         return;
 
     boost::scoped_ptr<sc::ExpandRefsSwitch> pExpandRefsSwitch;
-    if (rCxt.meMode == URM_INSDEL && rCxt.hasDelta())
+    if (rCxt.isInserted())
         pExpandRefsSwitch.reset(new sc::ExpandRefsSwitch(*this, SC_MOD()->GetInputOptions().GetExpandRefs()));
 
     size_t nFirstTab, nLastTab;

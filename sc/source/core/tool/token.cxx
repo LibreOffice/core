@@ -2195,28 +2195,45 @@ void ScTokenArray::AdjustAbsoluteRefs( const ScDocument* pOldDoc, const ScAddres
 
 namespace {
 
-ScRange getDeletedRange( const sc::RefUpdateContext& rCxt )
+ScRange getSelectedRange( const sc::RefUpdateContext& rCxt )
 {
-    ScRange aDeletedRange(ScAddress::INITIALIZE_INVALID);
+    ScRange aSelectedRange(ScAddress::INITIALIZE_INVALID);
     if (rCxt.mnColDelta < 0)
     {
         // Delete and shift to left.
-        aDeletedRange.aStart = ScAddress(rCxt.maRange.aStart.Col()+rCxt.mnColDelta, rCxt.maRange.aStart.Row(), rCxt.maRange.aStart.Tab());
-        aDeletedRange.aEnd = ScAddress(rCxt.maRange.aStart.Col()-1, rCxt.maRange.aEnd.Row(), rCxt.maRange.aEnd.Tab());
+        aSelectedRange.aStart = ScAddress(rCxt.maRange.aStart.Col()+rCxt.mnColDelta, rCxt.maRange.aStart.Row(), rCxt.maRange.aStart.Tab());
+        aSelectedRange.aEnd = ScAddress(rCxt.maRange.aStart.Col()-1, rCxt.maRange.aEnd.Row(), rCxt.maRange.aEnd.Tab());
     }
     else if (rCxt.mnRowDelta < 0)
     {
         // Delete and shift up.
-        aDeletedRange.aStart = ScAddress(rCxt.maRange.aStart.Col(), rCxt.maRange.aStart.Row()+rCxt.mnRowDelta, rCxt.maRange.aStart.Tab());
-        aDeletedRange.aEnd = ScAddress(rCxt.maRange.aEnd.Col(), rCxt.maRange.aStart.Row()-1, rCxt.maRange.aEnd.Tab());
+        aSelectedRange.aStart = ScAddress(rCxt.maRange.aStart.Col(), rCxt.maRange.aStart.Row()+rCxt.mnRowDelta, rCxt.maRange.aStart.Tab());
+        aSelectedRange.aEnd = ScAddress(rCxt.maRange.aEnd.Col(), rCxt.maRange.aStart.Row()-1, rCxt.maRange.aEnd.Tab());
     }
     else if (rCxt.mnTabDelta < 0)
     {
         // Deleting sheets.
         // TODO : Figure out what to do here.
     }
+    else if (rCxt.mnColDelta > 0)
+    {
+        // Insert and shift to the right.
+        aSelectedRange.aStart = rCxt.maRange.aStart;
+        aSelectedRange.aEnd = ScAddress(rCxt.maRange.aStart.Col()+rCxt.mnColDelta-1, rCxt.maRange.aEnd.Row(), rCxt.maRange.aEnd.Tab());
+    }
+    else if (rCxt.mnRowDelta > 0)
+    {
+        // Insert and shift down.
+        aSelectedRange.aStart = rCxt.maRange.aStart;
+        aSelectedRange.aEnd = ScAddress(rCxt.maRange.aEnd.Col(), rCxt.maRange.aStart.Row()+rCxt.mnRowDelta-1, rCxt.maRange.aEnd.Tab());
+    }
+    else if (rCxt.mnTabDelta > 0)
+    {
+        // Inserting sheets.
+        // TODO : Figure out what to do here.
+    }
 
-    return aDeletedRange;
+    return aSelectedRange;
 }
 
 void setRefDeleted( ScSingleRefData& rRef, const sc::RefUpdateContext& rCxt )
@@ -2279,11 +2296,48 @@ bool shrinkRange( const sc::RefUpdateContext& rCxt, ScRange& rRefRange, const Sc
     return false;
 }
 
+bool expandRange( const sc::RefUpdateContext& rCxt, ScRange& rRefRange, const ScRange& rInsertedRange )
+{
+    if (rCxt.mnColDelta > 0)
+    {
+        // Insert and shifting right.
+        if (rRefRange.aStart.Row() < rInsertedRange.aStart.Row() || rInsertedRange.aEnd.Row() < rRefRange.aEnd.Row())
+            // Inserted range is only partially overlapping in vertical direction. Bail out.
+            return false;
+
+        if (rInsertedRange.aStart.Col() == rRefRange.aStart.Col())
+            // Inserted range is at the left end.  No expansion.
+            return false;
+
+        // Move the last column position to the right.
+        SCCOL nDelta = rInsertedRange.aEnd.Col() - rInsertedRange.aStart.Col() + 1;
+        rRefRange.aEnd.IncCol(nDelta);
+        return true;
+    }
+    else if (rCxt.mnRowDelta > 0)
+    {
+        // Insert and shifting down.
+        if (rRefRange.aStart.Col() < rInsertedRange.aStart.Col() || rInsertedRange.aEnd.Col() < rRefRange.aEnd.Col())
+            // Inserted range is only partially overlapping in horizontal direction. Bail out.
+            return false;
+
+        if (rInsertedRange.aStart.Row() == rRefRange.aStart.Row())
+            // Inserted range is at the top end.  No expansion.
+            return false;
+
+        // Move the last row position down.
+        SCROW nDelta = rInsertedRange.aEnd.Row() - rInsertedRange.aStart.Row() + 1;
+        rRefRange.aEnd.IncRow(nDelta);
+        return true;
+    }
+    return false;
+}
+
 }
 
 sc::RefUpdateResult ScTokenArray::AdjustReferenceOnShift( const sc::RefUpdateContext& rCxt, const ScAddress& rOldPos )
 {
-    ScRange aDeletedRange = getDeletedRange(rCxt);
+    ScRange aSelectedRange = getSelectedRange(rCxt);
 
     sc::RefUpdateResult aRes;
     ScAddress aNewPos = rOldPos;
@@ -2303,7 +2357,7 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnShift( const sc::RefUpdateCon
                 ScSingleRefData& rRef = pToken->GetSingleRef();
                 ScAddress aAbs = rRef.toAbs(rOldPos);
 
-                if (aDeletedRange.In(aAbs))
+                if (rCxt.isDeleted() && aSelectedRange.In(aAbs))
                 {
                     // This reference is in the deleted region.
                     setRefDeleted(rRef, rCxt);
@@ -2322,20 +2376,36 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnShift( const sc::RefUpdateCon
                 ScComplexRefData& rRef = pToken->GetDoubleRef();
                 ScRange aAbs = rRef.toAbs(rOldPos);
 
-                if (aDeletedRange.In(aAbs))
+                if (rCxt.isDeleted())
                 {
-                    // This reference is in the deleted region.
-                    setRefDeleted(rRef, rCxt);
-                    aRes.mbValueChanged = true;
-                    break;
-                }
-                else if (aDeletedRange.Intersects(aAbs))
-                {
-                    if (shrinkRange(rCxt, aAbs, aDeletedRange))
+                    if (aSelectedRange.In(aAbs))
                     {
-                        // The reference range has been shrunk.
+                        // This reference is in the deleted region.
+                        setRefDeleted(rRef, rCxt);
+                        aRes.mbValueChanged = true;
+                        break;
+                    }
+                    else if (aSelectedRange.Intersects(aAbs))
+                    {
+                        if (shrinkRange(rCxt, aAbs, aSelectedRange))
+                        {
+                            // The reference range has been shrunk.
+                            rRef.SetRange(aAbs, aNewPos);
+                            aRes.mbValueChanged = true;
+                            aRes.mbRangeSizeModified = true;
+                            break;
+                        }
+                    }
+                }
+
+                if (rCxt.isInserted() && aSelectedRange.Intersects(aAbs))
+                {
+                    if (expandRange(rCxt, aAbs, aSelectedRange))
+                    {
+                        // The reference range has been expanded.
                         rRef.SetRange(aAbs, aNewPos);
                         aRes.mbValueChanged = true;
+                        aRes.mbRangeSizeModified = true;
                         break;
                     }
                 }

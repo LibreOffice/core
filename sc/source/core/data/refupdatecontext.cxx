@@ -14,9 +14,14 @@ namespace sc {
 RefUpdateContext::RefUpdateContext() :
     meMode(URM_INSDEL), mnColDelta(0), mnRowDelta(0), mnTabDelta(0) {}
 
-bool RefUpdateContext::hasDelta() const
+bool RefUpdateContext::isInserted() const
 {
-    return (mnColDelta > 0 || mnRowDelta > 0 || mnTabDelta > 0);
+    return (meMode == URM_INSDEL) && (mnColDelta > 0 || mnRowDelta > 0 || mnTabDelta > 0);
+}
+
+bool RefUpdateContext::isDeleted() const
+{
+    return (meMode == URM_INSDEL) && (mnColDelta < 0 || mnRowDelta < 0 || mnTabDelta < 0);
 }
 
 RefUpdateResult::RefUpdateResult() : mbValueChanged(false), mbRangeSizeModified(false) {}

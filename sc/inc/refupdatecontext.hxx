@@ -40,7 +40,8 @@ struct RefUpdateContext
 
     RefUpdateContext();
 
-    bool hasDelta() const;
+    bool isInserted() const;
+    bool isDeleted() const;
 };
 
 struct RefUpdateResult
