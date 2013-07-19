@@ -3131,6 +3131,55 @@ void XclExpDxf::SaveXml( XclExpXmlStream& rStrm )
 
 // ============================================================================
 
+XclExpTableStyleElement::XclExpTableStyleElement( const XclExpRoot& rRoot, OUString& rType, int iSize, int iDxfId )
+    :XclExpRoot( rRoot),
+    maType( rType ),
+    maDxfId( iDxfId ),
+    maSize( iSize )
+{
+}
+
+XclExpTableStyleElement::~XclExpTableStyleElement()
+{
+}
+
+void XclExpTableStyleElement::SaveXml( XclExpStream& rStrm )
+{
+}
+
+// ============================================================================
+
+XclExpTableStyle::XclExpTableStyle( const XclExpRoot& rRoot, OUString& rTableStyleName )
+    :XclExpRoot( rRoot ),
+    maTableStyleName( rTableStyleName )
+{
+}
+
+XclExpTableStyle::~XclExpTableStyle()
+{
+}
+
+void XclExpTableStyle::SaveXml( XclExpXmlStream& rStrm )
+{
+}
+
+// ===========================================================================
+
+XclExpTableStyles::XclExpTableStyles( const XclExpRoot& rRoot )
+    :XclExpRoot( rRoot )
+{
+}
+
+XclExpTableStyles::~XclExpTableStyles()
+{
+}
+
+void XclExpTableStyles::SaveXml( XclExpXmlStream& rStrm )
+{
+}
+
+// ============================================================================
+
 XclExpXmlStyleSheet::XclExpXmlStyleSheet( const XclExpRoot& rRoot )
     : XclExpRoot( rRoot )
 {

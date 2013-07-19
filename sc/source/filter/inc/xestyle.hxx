@@ -42,6 +42,7 @@ const sal_uInt16 EXC_ID_FONTLIST    = 0x8031;   /// For internal use only.
 const sal_uInt16 EXC_ID_FORMATLIST  = 0x801E;   /// For internal use only.
 const sal_uInt16 EXC_ID_XFLIST      = 0x8043;   /// For internal use only.
 const sal_uInt16 EXC_ID_DXFS        = 0x9999;   /// For internal use only. TODO:moggi: find a better/correct value
+const sal_uInt16 EXC_ID_TABLESTYLES = 0x99BE;   /// Needs improvement.
 
 // PALETTE record - color information =========================================
 
@@ -762,6 +763,43 @@ private:
     DxfContainer maDxf;
     SvNumberFormatterPtr mxFormatter;   /// Special number formatter for conversion.
     boost::scoped_ptr<NfKeywordTable>   mpKeywordTable; /// Replacement table.
+};
+
+// ============================================================================
+
+class XclExpTableStyleElement : public XclExpRecordBase, protected XclExpRoot
+{
+public:
+    XclExpTableStyleElement( const XclExpRoot& rRoot, OUString& rType, int iSize, int iDxfId );
+    virtual ~XclExpTableStyleElement();
+    virtual void SaveXml( XclExpStream& rStrm );
+private:
+    OUString maType;
+    int maSize;
+    int maDxfId;
+};
+
+class XclExpTableStyle : public XclExpRecordBase, protected XclExpRoot
+{
+public:
+    XclExpTableStyle( const XclExpRoot& rRoot, OUString& rTableStyleName );
+    virtual ~XclExpTableStyle();
+    virtual void SaveXml( XclExpXmlStream& rStrm );
+private:
+    typedef boost::ptr_vector< XclExpTableStyleElement > StyleElementContainer;
+    StyleElementContainer maStyleElementContainer;
+    OUString maTableStyleName;
+};
+
+class XclExpTableStyles : public XclExpRecordBase, protected XclExpRoot
+{
+public:
+    XclExpTableStyles( const XclExpRoot& rRoot );
+    virtual ~XclExpTableStyles();
+    virtual void SaveXml( XclExpXmlStream& rStrm );
+private:
+    typedef boost::ptr_vector< XclExpTableStyle > StyleContainer;
+    StyleContainer maStyleContainer;
 };
 
 // ============================================================================

@@ -161,6 +161,12 @@ XclExpDxfs& XclExpRoot::GetDxfs() const
     return *mrExpData.mxDxfs;
 }
 
+XclExpTableStyles& XclExpRoot::GetTableStyles() const
+{
+    OSL_ENSURE( mrExpData.mxTableStyles, "XclExpRoot::GetTableStyles - missign object (wrong BIFF?)");
+    return *mrExpData.mxTableStyles;
+}
+
 XclExpPivotTableManager& XclExpRoot::GetPivotTableManager() const
 {
     OSL_ENSURE( mrExpData.mxPTableMgr, "XclExpRoot::GetPivotTableManager - missing object (wrong BIFF?)" );
@@ -206,6 +212,7 @@ void XclExpRoot::InitializeGlobals()
         // BIFF8: only one link manager for all sheets
         mrExpData.mxLocLinkMgr = mrExpData.mxGlobLinkMgr;
         mrExpData.mxDxfs.reset( new XclExpDxfs( GetRoot() ) );
+        mrExpData.mxTableStyles.reset( new XclExpTableStyles( GetRoot() ) );
     }
 
     if( GetOutput() == EXC_OUTPUT_XML_2007 )
@@ -283,6 +290,7 @@ XclExpRecordRef XclExpRoot::CreateRecord( sal_uInt16 nRecId ) const
         case EXC_ID_EXTERNSHEET:    xRec = GetLocalLinkMgrRef();    break;
         case EXC_ID_NAME:           xRec = mrExpData.mxNameMgr;     break;
         case EXC_ID_DXFS:           xRec = mrExpData.mxDxfs;        break;
+        case EXC_ID_TABLESTYLES:     xRec = mrExpData.mxTableStyles; break;
     }
     OSL_ENSURE( xRec, "XclExpRoot::CreateRecord - unknown record ID or missing object" );
     return xRec;
