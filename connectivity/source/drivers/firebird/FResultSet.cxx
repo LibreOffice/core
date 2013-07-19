@@ -408,85 +408,136 @@ uno::Reference< XInputStream > SAL_CALL OResultSet::getCharacterStream( sal_Int3
     return NULL;
 }
 
-// ---- Simple Numerical types -----------------------------------------------
-const ORowSetValue& OResultSet::safelyRetrieveValue(sal_Int32 columnIndex)
-    throw(SQLException)
+// ---- Internal Utilities ---------------------------------------------------
+bool OResultSet::isNull(sal_Int32 columnIndex)
 {
-    (void) columnIndex;
-    MutexGuard aGuard(m_pConnection->getMutex());
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-    throw SQLException(); // Temporary until we've reimplemented everythign
-//     return getSqlData(m_currentRow,columnIndex);
+    assert(columnIndex <= m_fieldCount);
+    XSQLVAR* pVar = m_pSqlda->sqlvar;
+
+    if (pVar[columnIndex-1].sqltype & 1) // Indicates column may contain null
+    {
+        if (*pVar[columnIndex-1].sqlind == -1)
+            return true;
+    }
+    return false;
 }
 
+template <typename T>
+T OResultSet::retrieveValue(sal_Int32 columnIndex)
+{
+    if ((m_bWasNull = isNull(columnIndex)))
+        return 0;
+
+    return *m_pSqlda->sqlvar[columnIndex-1].sqldata;
+}
+
+// template <>
+// OUString OResultSet::retrieveValue< OUString >(sal_Int32 columnIndex)
+// {
+//     if ((m_bWasNull = isNull(columnIndex)))
+//         return "";
+//
+//     return OUString(m_pSqlda->pVar[columnIndex-1].sqldata,
+//                     m_pSqlda->pVar[columnIndex-1].sqllen,
+//                     RTL_TEXTENCODING_UTF8)
+// }
+
+template <typename T>
+T OResultSet::safelyRetrieveValue(sal_Int32 columnIndex)
+    throw (SQLException)
+{
+    MutexGuard aGuard(m_pConnection->getMutex());
+    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
+
+    checkColumnIndex(columnIndex);
+    checkRowIndex();
+
+    return retrieveValue< T >(columnIndex);
+}
+// ---- Simple Numerical types -----------------------------------------------
 sal_Bool SAL_CALL OResultSet::getBoolean(sal_Int32 columnIndex)
     throw(SQLException, RuntimeException)
 {
-    return safelyRetrieveValue(columnIndex);
+    // TODO: maybe retrieve as string and test for "true", "t", "1" etc. instead?
+    return safelyRetrieveValue< bool >(columnIndex);
 }
 
 sal_Int8 SAL_CALL OResultSet::getByte( sal_Int32 columnIndex )
     throw(SQLException, RuntimeException)
 {
-    return safelyRetrieveValue(columnIndex);
+    return safelyRetrieveValue< sal_Int8 >(columnIndex);
 }
 
 Sequence< sal_Int8 > SAL_CALL OResultSet::getBytes(sal_Int32 columnIndex)
     throw(SQLException, RuntimeException)
 {
-    return safelyRetrieveValue(columnIndex);
+    (void) columnIndex;
+    return Sequence< sal_Int8 >(); // TODO: implement
+    //return safelyRetrieveValue(columnIndex);
 }
 
 sal_Int16 SAL_CALL OResultSet::getShort(sal_Int32 columnIndex)
     throw(SQLException, RuntimeException)
 {
-    return safelyRetrieveValue(columnIndex);
+    return safelyRetrieveValue< sal_Int16 >(columnIndex);
 }
 
 sal_Int32 SAL_CALL OResultSet::getInt(sal_Int32 columnIndex)
     throw(SQLException, RuntimeException)
 {
-    return safelyRetrieveValue(columnIndex);
+    return safelyRetrieveValue< sal_Int32 >(columnIndex);
 }
 
 sal_Int64 SAL_CALL OResultSet::getLong(sal_Int32 columnIndex)
     throw(SQLException, RuntimeException)
 {
-    return safelyRetrieveValue(columnIndex);
+    return safelyRetrieveValue< sal_Int64 >(columnIndex);
 }
 
 float SAL_CALL OResultSet::getFloat(sal_Int32 columnIndex)
     throw(SQLException, RuntimeException)
 {
-    return safelyRetrieveValue(columnIndex);
+    (void) columnIndex;
+    return 0.0f; // TODO: implement
+//     return safelyRetrieveValue(columnIndex);
 }
 
 double SAL_CALL OResultSet::getDouble(sal_Int32 columnIndex)
     throw(SQLException, RuntimeException)
 {
-    return safelyRetrieveValue(columnIndex);
+    (void) columnIndex;
+    return 0.0; // TODO: implement
+//     return safelyRetrieveValue(columnIndex);
 }
 
 // ---- More complex types ---------------------------------------------------
 OUString SAL_CALL OResultSet::getString(sal_Int32 columnIndex)
     throw(SQLException, RuntimeException)
 {
-    return safelyRetrieveValue(columnIndex);
+    (void) columnIndex;
+    return OUString();
+//     return safelyRetrieveValue< OUString >(columnIndex);
 }
 
 Time SAL_CALL OResultSet::getTime( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
-    return safelyRetrieveValue(columnIndex);
+    (void) columnIndex;
+    return Time();
+//     return safelyRetrieveValue(columnIndex);
 }
 
 DateTime SAL_CALL OResultSet::getTimestamp( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
-    return safelyRetrieveValue(columnIndex);
+    (void) columnIndex;
+    return DateTime(); // TODO: implement
+//     return safelyRetrieveValue(columnIndex);
 }
 
 Date SAL_CALL OResultSet::getDate( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
-    return safelyRetrieveValue(columnIndex);
+    (void) columnIndex;
+    return Date(); // TODO: implement
+//     return safelyRetrieveValue(columnIndex);
 }
 // -------------------------------------------------------------------------
 uno::Reference< XResultSetMetaData > SAL_CALL OResultSet::getMetaData(  ) throw(SQLException, RuntimeException)

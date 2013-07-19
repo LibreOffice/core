@@ -103,7 +103,11 @@ namespace connectivity
 //             const ::connectivity::ORowSetValue& getSqlData(sal_Int32 aRow, sal_Int32 aColumn)
 //                 throw (::com::sun::star::sdbc::SQLException);
 
-            const ::connectivity::ORowSetValue& safelyRetrieveValue(sal_Int32 columnIndex)
+            bool isNull(sal_Int32 columnIndex);
+            template <typename T> T     retrieveValue(sal_Int32 columnIndex);
+//             template <> ::rtl::OUString retrieveValue< ::rtl::OUString > (sal_Int32 columnIndex);
+
+            template <typename T> T safelyRetrieveValue(sal_Int32 columnIndex)
                 throw(::com::sun::star::sdbc::SQLException);
 
             // OPropertyArrayUsageHelper
