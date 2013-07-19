@@ -60,7 +60,7 @@ private:
     ImpSwapFile*        mpSwapFile;
     GfxLink*            mpGfxLink;
     GraphicType         meType;
-    String              maDocFileURLStr;
+    OUString            maDocFileURLStr;
     sal_uLong           mnDocFilePos;
     mutable sal_uLong   mnSizeBytes;
     sal_uLong           mnRefCount;
@@ -137,8 +137,8 @@ private:
 
 private:
 
-    void                ImplSetDocFileName( const String& rName, sal_uLong nFilePos );
-    const String&       ImplGetDocFileName() const;
+    void                ImplSetDocFileName( const OUString& rName, sal_uLong nFilePos );
+    const OUString&     ImplGetDocFileName() const;
     sal_uLong               ImplGetDocFilePos() const;
 
     sal_Bool                ImplReadEmbedded( SvStream& rIStream, sal_Bool bSwap = sal_False );

@@ -393,7 +393,7 @@ void ImpGraphic::ImplClear()
 
     mbSwapOut = sal_False;
     mnDocFilePos = 0UL;
-    maDocFileURLStr.Erase();
+    maDocFileURLStr = OUString();
 
     // cleanup
     ImplClearGraphics( sal_False );
@@ -961,17 +961,17 @@ void ImpGraphic::ImplSetContext( GraphicReader* pReader )
     mpContext = pReader;
 }
 
-void ImpGraphic::ImplSetDocFileName( const String& rName, sal_uLong nFilePos )
+void ImpGraphic::ImplSetDocFileName( const OUString& rName, sal_uLong nFilePos )
 {
     const INetURLObject aURL( rName );
 
-    DBG_ASSERT( !rName.Len() || ( aURL.GetProtocol() != INET_PROT_NOT_VALID ), "Graphic::SetDocFileName(...): invalid URL" );
+    DBG_ASSERT( rName.isEmpty() || ( aURL.GetProtocol() != INET_PROT_NOT_VALID ), "Graphic::SetDocFileName(...): invalid URL" );
 
     maDocFileURLStr = aURL.GetMainURL( INetURLObject::NO_DECODE );
     mnDocFilePos = nFilePos;
 }
 
-const String& ImpGraphic::ImplGetDocFileName() const
+const OUString& ImpGraphic::ImplGetDocFileName() const
 {
     return maDocFileURLStr;
 }
@@ -996,8 +996,8 @@ sal_Bool ImpGraphic::ImplReadEmbedded( SvStream& rIStm, sal_Bool bSwap )
 
     if( !mbSwapUnderway )
     {
-        const String        aTempURLStr( maDocFileURLStr );
-        const sal_uLong         nTempPos = mnDocFilePos;
+        const OUString aTempURLStr( maDocFileURLStr );
+        const sal_uLong nTempPos = mnDocFilePos;
 
         ImplClear();
 
@@ -1086,7 +1086,7 @@ sal_Bool ImpGraphic::ImplReadEmbedded( SvStream& rIStm, sal_Bool bSwap )
 
         if( bSwap )
         {
-            if( maDocFileURLStr.Len() )
+            if (!maDocFileURLStr.isEmpty())
             {
                 rIStm.Seek( nStartPos + nHeaderLen + nLen );
                 bRet = mbSwapOut = sal_True;
@@ -1303,7 +1303,7 @@ sal_Bool ImpGraphic::ImplSwapOut()
 
     if( !ImplIsSwapOut() )
     {
-        if( !maDocFileURLStr.Len() )
+        if (maDocFileURLStr.isEmpty())
         {
             ::utl::TempFile     aTempFile;
             const INetURLObject aTmpURL( aTempFile.GetURL() );
