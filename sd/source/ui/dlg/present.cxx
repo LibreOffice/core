@@ -67,7 +67,9 @@ SdStartPresentationDlg::SdStartPresentationDlg( Window* pWindow,
     get( maFtMonitor,           "presdisplay_label"     );
     get( maLBMonitor,           "presdisplay_cb"        );
 
-    get( msExternalMonitor,     "externalmonitor_str"   );
+    get( msMonitor,             "monitor_str"           );
+    get( msMonitorExternal,     "externalmonitor_str"   );
+    get( msExternal,            "external_str"          );
     get( msMonitor,             "monitor_str"           );
     get( msAllMonitors,         "allmonitors_str"       );
 
@@ -149,12 +151,27 @@ SdStartPresentationDlg::SdStartPresentationDlg( Window* pWindow,
     ChangePauseHdl( NULL );
 }
 
-String SdStartPresentationDlg::GetDisplayName( sal_Int32 nDisplay, bool bExternal )
+String SdStartPresentationDlg::GetDisplayName( sal_Int32   nDisplay,
+                                               DisplayType eType )
 {
-    String aName( bExternal ? msExternalMonitor->GetText() :
-                  msMonitor->GetText() );
+    String aName;
+
+    switch ( eType )
+    {
+    case EXTERNAL_IS_NUMBER:
+        aName = msExternal->GetText();
+        break;
+    case MONITOR_IS_EXTERNAL:
+        aName = msMonitorExternal->GetText();
+        break;
+    default:
+    case MONITOR_NORMAL:
+        aName = msMonitor->GetText();
+        break;
+    }
     const String aNumber( OUString::number( nDisplay ) );
     aName.SearchAndReplace( String("%1"), aNumber );
+
     return aName;
 }
 
@@ -196,8 +213,8 @@ void SdStartPresentationDlg::InitMonitorSettings()
             // Un-conditionally add a version for '0' the default external display
             sal_Int32 nInsertedEntry;
 
-            // FIXME: string-freeze this should really be 'External (display %)'
-            String aName = GetDisplayName( nExternalIndex + 1, true);
+            // Initial entry - the auto-detected external monitor
+            String aName = GetDisplayName( nExternalIndex + 1, EXTERNAL_IS_NUMBER);
             nInsertedEntry = InsertDisplayEntry( aName, 0 );
             if( nDefaultSelectedDisplay == 0)
                 nSelectedIndex = nInsertedEntry;
@@ -205,10 +222,9 @@ void SdStartPresentationDlg::InitMonitorSettings()
             // The user data contains the real setting
             for( sal_Int32 nDisplay = 0; nDisplay < mnMonitors; nDisplay++ )
             {
-                bool bIsExternal = nDisplay == nExternalIndex;
-                // FIXME: string-freeze, use true to denote external for now
-                bIsExternal = false;
-                aName = GetDisplayName( nDisplay + 1, bIsExternal );
+                aName = GetDisplayName( nDisplay + 1,
+                                        nDisplay == nExternalIndex ?
+                                        MONITOR_IS_EXTERNAL : MONITOR_NORMAL );
                 nInsertedEntry = InsertDisplayEntry( aName, nDisplay + 1 );
 
                 // Remember the index of the default selection.

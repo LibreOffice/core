@@ -65,18 +65,25 @@ private:
     const SfxItemSet&   rOutAttrs;
     sal_Int32           mnMonitors;
 
-    FixedText*          msExternalMonitor;
     FixedText*          msMonitor;
     FixedText*          msAllMonitors;
+    FixedText*          msMonitorExternal;
+    FixedText*          msExternal;
 
                         DECL_LINK( ChangeRangeHdl, void * );
                         DECL_LINK( ClickWindowPresentationHdl, void * );
                         DECL_LINK( ChangePauseHdl, void * );
 
     void                InitMonitorSettings();
+    enum DisplayType {
+        EXTERNAL_IS_NUMBER,
+        MONITOR_NORMAL,
+        MONITOR_IS_EXTERNAL,
+    };
     sal_Int32           InsertDisplayEntry(const rtl::OUString &aName,
                                            sal_Int32            nDisplay);
-    String              GetDisplayName( sal_Int32 nDisplay, bool bExternal );
+    String              GetDisplayName( sal_Int32 nDisplay,
+                                        DisplayType eType );
 public:
                         SdStartPresentationDlg( Window* pWindow,
                                 const SfxItemSet& rInAttrs,
