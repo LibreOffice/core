@@ -8239,7 +8239,6 @@ if test "x$enable_firebird_sdbc" = "xyes"; then
         dnl ===================================================================
         dnl Check for system libatomic-ops
         dnl ===================================================================
-        libo_CHECK_SYSTEM_MODULE([libatomic_ops],[ATOMIC_OPS],[atomic_ops >= 0.7.2])
         if test "$with_system_libatomic_ops" = "yes"; then
             SYSTEM_LIBATOMIC_OPS=YES
             AC_CHECK_HEADERS(atomic_ops.h, [],
