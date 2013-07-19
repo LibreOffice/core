@@ -255,7 +255,7 @@ void PresenterController::disposing (void)
 
 void PresenterController::UpdateCurrentSlide (const sal_Int32 nOffset)
 {
-    std::cerr << "Updating current Slide to " << nOffset << std::endl;
+    // std::cerr << "Updating current Slide to " << nOffset << std::endl;
     GetSlides(nOffset);
     UpdatePaneTitles();
     UpdateViews();
