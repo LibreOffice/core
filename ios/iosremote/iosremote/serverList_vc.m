@@ -227,7 +227,7 @@
         NSLog(@"Connecting to %@:%@", [[self.comManager.servers objectAtIndex:indexPath.row] serverName], [[self.comManager.servers objectAtIndex:indexPath.row] serverAddress]);
         [self.comManager connectToServer:[self.comManager.servers objectAtIndex:indexPath.row]];
     } else if (indexPath.section == 0){
-        NSLog(@"Connecting to %@:%@", [[self.comManager.servers objectAtIndex:indexPath.row] serverName], [[self.comManager.autoDiscoveryServers objectAtIndex:indexPath.row] serverAddress]);
+        NSLog(@"Connecting to %@:%@", [[self.comManager.autoDiscoveryServers objectAtIndex:indexPath.row] serverName], [[self.comManager.autoDiscoveryServers objectAtIndex:indexPath.row] serverAddress]);
         [self.comManager connectToServer:[self.comManager.autoDiscoveryServers objectAtIndex:indexPath.row]];
     }
     

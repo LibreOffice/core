@@ -774,7 +774,7 @@ void SAL_CALL PresenterController::notifyConfigurationChange (
             if (IsAccessibilityActive())
             {
                 mpAccessibleObject->UpdateAccessibilityHierarchy();
-                UpdateCurrentSlide(0);
+                // UpdateCurrentSlide(0);
             }
             break;
     }
@@ -1121,7 +1121,7 @@ void PresenterController::InitializeMainPane (const Reference<XPane>& rxPane)
     if (mxSlideShowController.is())
         mxSlideShowController->activate();
 
-    UpdateCurrentSlide(0);
+    // UpdateCurrentSlide(0);
 }
 
 void PresenterController::LoadTheme (const Reference<XPane>& rxPane)
