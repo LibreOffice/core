@@ -76,8 +76,9 @@
 - (void)netServiceBrowser:(NSNetServiceBrowser *)aNetServiceBrowser didNotSearch:(NSDictionary *)errorDict
 {
     NSLog(@"search error");
-    UITableViewCell * cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
-    [(UIActivityIndicatorView *)[cell viewWithTag:5] stopAnimating];
+//    UITableViewCell * cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
+//    [(UIActivityIndicatorView *)[cell viewWithTag:5] stopAnimating];
+    [self.serviceBrowser searchForServicesOfType:@"_impressRemote._tcp" inDomain:@"local"];
 }
 
 - (void)netServiceBrowser:(NSNetServiceBrowser *)aNetServiceBrowser
@@ -104,11 +105,34 @@
          didRemoveService:(NSNetService *)aNetService
                moreComing:(BOOL)moreComing
 {
+    NSLog(@"Did remove");
+    NSString * ipString;
+    
+    if ([[aNetService addresses] count] > 0){
+        NSData * address = [[aNetService addresses] objectAtIndex: 0];
+        struct sockaddr_in *socketAddress = (struct sockaddr_in *) [address bytes];
+        ipString = [NSString stringWithFormat: @"%s",inet_ntoa(socketAddress->sin_addr)];
+    }
+    
+    for (Server * s in self.comManager.autoDiscoveryServers) {
+        if (ipString){
+            if ([s.serverName isEqualToString:aNetService.name] && [s.serverAddress isEqualToString:ipString])
+                [self.comManager.autoDiscoveryServers removeObjectIdenticalTo:s];
+        } else {
+            if ([s.serverName isEqualToString:aNetService.name])
+                [self.comManager.autoDiscoveryServers removeObjectIdenticalTo:s];
+        }
+    }
+    // in case any residuous netServices still stay in the list
     [self.comManager.autoDiscoveryServers removeObject:aNetService];
     
     if(!moreComing)
     {
         [self.tableView reloadData];
+        if ([self.comManager.autoDiscoveryServers count] == 0) {
+            UITableViewCell * cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
+            [(UIActivityIndicatorView *)[cell viewWithTag:5] startAnimating];
+        }
     }
 }
 
@@ -170,6 +194,8 @@
 - (void) viewWillDisappear:(BOOL)animated
 {
     [self disableSpinner];
+    [self.serviceBrowser stop];
+    [self.serviceBrowser removeFromRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
     [super viewWillDisappear:animated];
 }
 
@@ -266,13 +292,13 @@
 
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
     if ([self.comManager.servers count] == 0 && section == 1) {
-        UILabel *sectionFooter = [[UILabel alloc] initWithFrame:CGRectMake(20, 10, tableView.frame.size.width - 50, 40)];
-        [sectionFooter setLineBreakMode:NSLineBreakByCharWrapping];
+        UILabel *sectionFooter = [[UILabel alloc] initWithFrame:CGRectMake(20, 10, tableView.frame.size.width - 50, 60)];
+        [sectionFooter setLineBreakMode:NSLineBreakByWordWrapping];
         [sectionFooter setNumberOfLines:5];
         sectionFooter.backgroundColor = [UIColor clearColor];
         sectionFooter.font = [UIFont systemFontOfSize:14];
         sectionFooter.textColor = [UIColor colorWithRed:0.22 green:0.33 blue:0.53 alpha:1.0];
-        sectionFooter.text = @"Please manually add a computer with its IP address.";
+        sectionFooter.text = @"In case your computer does not appear in the section above, manually add a computer with its IP address.";
         
         UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.bounds.size.width, [self tableView:tableView heightForHeaderInSection:section])];
         [view addSubview:sectionFooter];
@@ -331,7 +357,7 @@
                 [cell.detailTextLabel setText:[s serverAddress]];
             } else if ([s isKindOfClass:[NSNetService class]]){
                 [cell.textLabel setText:[s name]];
-                [cell.detailTextLabel setText:@"loading..."];
+                [cell.detailTextLabel setText:@"Resolving..."];
             }
         }
     }
