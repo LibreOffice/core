@@ -317,7 +317,6 @@ void ODbaseTable::fillColumns()
     m_aPrecisions.reserve(nFieldCount);
     m_aScales.reserve(nFieldCount);
 
-    OUString aStrFieldName("Column");
     OUString aTypeName;
     const sal_Bool bCase = getConnection()->getMetaData()->supportsMixedCaseQuotedIdentifiers();
     const bool bFoxPro = m_aHeader.db_typ == VisualFoxPro || m_aHeader.db_typ == VisualFoxProAuto || m_aHeader.db_typ == FoxProMemo;
