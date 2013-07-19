@@ -467,6 +467,9 @@ void Test::testFormulaRefUpdateRange()
     if (!checkFormula(*m_pDoc, ScAddress(0,7,0), "SUM($B$2:$C$5)"))
         CPPUNIT_FAIL("Wrong formula in A8.");
 
+    CPPUNIT_ASSERT_EQUAL(36.0, m_pDoc->GetValue(ScAddress(0,6,0)));
+    CPPUNIT_ASSERT_EQUAL(36.0, m_pDoc->GetValue(ScAddress(0,7,0)));
+
     // Delete row 3. This should shrink the range references by one row.
     m_pDoc->DeleteRow(ScRange(0,2,0,MAXCOL,2,0));
 
@@ -475,6 +478,95 @@ void Test::testFormulaRefUpdateRange()
 
     if (!checkFormula(*m_pDoc, ScAddress(0,6,0), "SUM($B$2:$C$4)"))
         CPPUNIT_FAIL("Wrong formula in A7.");
+
+    CPPUNIT_ASSERT_EQUAL(28.0, m_pDoc->GetValue(ScAddress(0,5,0)));
+    CPPUNIT_ASSERT_EQUAL(28.0, m_pDoc->GetValue(ScAddress(0,6,0)));
+
+    // Delete row 4 - bottom of range
+    m_pDoc->DeleteRow(ScRange(0,3,0,MAXCOL,3,0));
+
+    if (!checkFormula(*m_pDoc, ScAddress(0,4,0), "SUM(B2:C3)"))
+        CPPUNIT_FAIL("Wrong formula in A5.");
+
+    if (!checkFormula(*m_pDoc, ScAddress(0,5,0), "SUM($B$2:$C$3)"))
+        CPPUNIT_FAIL("Wrong formula in A6.");
+
+    CPPUNIT_ASSERT_EQUAL(16.0, m_pDoc->GetValue(ScAddress(0,4,0)));
+    CPPUNIT_ASSERT_EQUAL(16.0, m_pDoc->GetValue(ScAddress(0,5,0)));
+
+    // Delete row 2 - top of range
+    m_pDoc->DeleteRow(ScRange(0,1,0,MAXCOL,1,0));
+
+    if (!checkFormula(*m_pDoc, ScAddress(0,3,0), "SUM(B2:C2)"))
+        CPPUNIT_FAIL("Wrong formula in A4.");
+
+    if (!checkFormula(*m_pDoc, ScAddress(0,4,0), "SUM($B$2:$C$2)"))
+        CPPUNIT_FAIL("Wrong formula in A5.");
+
+    CPPUNIT_ASSERT_EQUAL(10.0, m_pDoc->GetValue(ScAddress(0,3,0)));
+    CPPUNIT_ASSERT_EQUAL(10.0, m_pDoc->GetValue(ScAddress(0,4,0)));
+
+    // Clear the range and start over.
+    clearRange(m_pDoc, ScRange(0,0,0,20,20,0));
+
+    // Fill C2:F3 with values.
+    m_pDoc->SetValue(ScAddress(2,1,0), 1);
+    m_pDoc->SetValue(ScAddress(3,1,0), 2);
+    m_pDoc->SetValue(ScAddress(4,1,0), 3);
+    m_pDoc->SetValue(ScAddress(5,1,0), 4);
+    m_pDoc->SetValue(ScAddress(2,2,0), 5);
+    m_pDoc->SetValue(ScAddress(3,2,0), 6);
+    m_pDoc->SetValue(ScAddress(4,2,0), 7);
+    m_pDoc->SetValue(ScAddress(5,2,0), 8);
+
+    // Set formulas to A2 and A3.
+    m_pDoc->SetString(ScAddress(0,1,0), "=SUM(C2:F3)");
+    m_pDoc->SetString(ScAddress(0,2,0), "=SUM($C$2:$F$3)");
+
+    if (!checkFormula(*m_pDoc, ScAddress(0,1,0), "SUM(C2:F3)"))
+        CPPUNIT_FAIL("Wrong formula in A2.");
+
+    if (!checkFormula(*m_pDoc, ScAddress(0,2,0), "SUM($C$2:$F$3)"))
+        CPPUNIT_FAIL("Wrong formula in A3.");
+
+    CPPUNIT_ASSERT_EQUAL(36.0, m_pDoc->GetValue(ScAddress(0,1,0)));
+    CPPUNIT_ASSERT_EQUAL(36.0, m_pDoc->GetValue(ScAddress(0,2,0)));
+
+    // Delete column D.
+    m_pDoc->DeleteCol(ScRange(3,0,0,3,MAXROW,0));
+
+    if (!checkFormula(*m_pDoc, ScAddress(0,1,0), "SUM(C2:E3)"))
+        CPPUNIT_FAIL("Wrong formula in A2.");
+
+    if (!checkFormula(*m_pDoc, ScAddress(0,2,0), "SUM($C$2:$E$3)"))
+        CPPUNIT_FAIL("Wrong formula in A3.");
+
+    CPPUNIT_ASSERT_EQUAL(28.0, m_pDoc->GetValue(ScAddress(0,1,0)));
+    CPPUNIT_ASSERT_EQUAL(28.0, m_pDoc->GetValue(ScAddress(0,2,0)));
+
+    // Delete column E - the right edge of reference range.
+    m_pDoc->DeleteCol(ScRange(4,0,0,4,MAXROW,0));
+
+    if (!checkFormula(*m_pDoc, ScAddress(0,1,0), "SUM(C2:D3)"))
+        CPPUNIT_FAIL("Wrong formula in A2.");
+
+    if (!checkFormula(*m_pDoc, ScAddress(0,2,0), "SUM($C$2:$D$3)"))
+        CPPUNIT_FAIL("Wrong formula in A3.");
+
+    CPPUNIT_ASSERT_EQUAL(16.0, m_pDoc->GetValue(ScAddress(0,1,0)));
+    CPPUNIT_ASSERT_EQUAL(16.0, m_pDoc->GetValue(ScAddress(0,2,0)));
+
+    // Delete column C - the left edge of reference range.
+    m_pDoc->DeleteCol(ScRange(2,0,0,2,MAXROW,0));
+
+    if (!checkFormula(*m_pDoc, ScAddress(0,1,0), "SUM(C2:C3)"))
+        CPPUNIT_FAIL("Wrong formula in A2.");
+
+    if (!checkFormula(*m_pDoc, ScAddress(0,2,0), "SUM($C$2:$C$3)"))
+        CPPUNIT_FAIL("Wrong formula in A3.");
+
+    CPPUNIT_ASSERT_EQUAL(10.0, m_pDoc->GetValue(ScAddress(0,1,0)));
+    CPPUNIT_ASSERT_EQUAL(10.0, m_pDoc->GetValue(ScAddress(0,2,0)));
 
     m_pDoc->DeleteTab(0);
 }
