@@ -196,7 +196,7 @@ OUString SAL_CALL OResultSetMetaData::getColumnTypeName(sal_Int32 column)
             return OUString("SQL_QUAD");
         default:
             assert(false); // Should never happen
-            return 0;
+            return OUString();
     }
 }
 
