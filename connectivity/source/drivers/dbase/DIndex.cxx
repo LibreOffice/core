@@ -375,7 +375,7 @@ OUString ODbaseIndex::getCompletePath()
 void ODbaseIndex::createINFEntry()
 {
     // synchronize inf-file
-    OUString sEntry = m_Name + ".ndx";
+    const OUString sEntry(m_Name + ".ndx");
 
     OUString sCfgFile(m_pTable->getConnection()->getURL() +
                       OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DELIMITER) +

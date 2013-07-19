@@ -451,7 +451,6 @@ void OCalcTable::fillColumns()
     if ( !m_xSheet.is() )
         throw SQLException();
 
-    OUString aStrFieldName("Column");
     OUString aTypeName;
     ::comphelper::UStringMixEqual aCase(m_pConnection->getMetaData()->supportsMixedCaseQuotedIdentifiers());
     const sal_Bool bStoresMixedCaseQuotedIdentifiers = getConnection()->getMetaData()->supportsMixedCaseQuotedIdentifiers();
