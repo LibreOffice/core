@@ -20,13 +20,8 @@ $(eval $(call gb_Module_add_targets,extras,\
 	Package_database \
 	Package_databasebiblio \
 	Package_fonts \
-	Package_gallbullets \
 	Package_gallhtmlexpo \
-	Package_gallmytheme \
-	Package_gallroot \
-	Package_gallsystem \
 	Package_gallwwwback \
-	Package_gallwwwgraf \
 	Package_glade \
 	Package_labels \
 	Package_newfiles \
@@ -49,6 +44,7 @@ $(eval $(call gb_Module_add_l10n_targets,extras,\
 ifeq ($(WITH_GALLERY_BUILD),YES)
 $(eval $(call gb_Module_add_targets,extras,\
 	Gallery_arrows \
+	Gallery_bullets \
 	Gallery_computers \
 	Gallery_diagrams \
 	Gallery_education \

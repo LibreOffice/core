@@ -131,13 +131,6 @@ End
 
 #endif
 
-File gid_File_Extra_Gallbullets
-    Dir = FILELIST_DIR;
-    TXT_FILE_BODY;
-    Styles = (FILELIST);
-    Name = "extras_gallbullets.filelist";
-End
-
 File gid_File_Extra_Gallhtmlexpo
     Dir = FILELIST_DIR;
     TXT_FILE_BODY;
@@ -145,16 +138,10 @@ File gid_File_Extra_Gallhtmlexpo
     Name = "extras_gallhtmlexpo.filelist";
 End
 
-File gid_File_Extra_Gallroot
-    Dir = FILELIST_DIR;
-    TXT_FILE_BODY;
-    Styles = (FILELIST);
-    Name = "extras_gallroot.filelist";
-End
-
 #if defined (WITH_GALLERY_BUILD)
 
 GALLERY_FILELIST(arrows)
+GALLERY_FILELIST(bullets)
 GALLERY_FILELIST(computers)
 GALLERY_FILELIST(diagrams)
 GALLERY_FILELIST(education)
@@ -168,20 +155,6 @@ GALLERY_FILELIST(txtshapes)
 
 #endif
 
-File gid_File_Extra_Gallmytheme
-    Dir = FILELIST_DIR;
-    USER_FILE_BODY;
-    Styles = (FILELIST, WORKSTATION, DONT_OVERWRITE);
-    Name = "extras_gallmytheme.filelist";
-End
-
-File gid_File_Extra_Gallsystem
-    Dir = FILELIST_DIR;
-    TXT_FILE_BODY;
-    Styles = (FILELIST);
-    Name = "extras_gallsystem.filelist";
-End
-
 File gid_File_Extra_Gallwwwback
     Dir = FILELIST_DIR;
     TXT_FILE_BODY;
@@ -189,12 +162,6 @@ File gid_File_Extra_Gallwwwback
     Name = "extras_gallwwwback.filelist";
 End
 
-File gid_File_Extra_Gallwwwgraf
-    Dir = FILELIST_DIR;
-    TXT_FILE_BODY;
-    Styles = (FILELIST);
-    Name = "extras_gallwwwgraf.filelist";
-End
 
 File gid_File_Extra_Palettes
     Dir = FILELIST_DIR;
