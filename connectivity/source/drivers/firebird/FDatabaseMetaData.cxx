@@ -35,6 +35,10 @@
 
 #include "FDatabaseMetaData.hxx"
 #include "FDatabaseMetaDataResultSet.hxx"
+
+#include <ibase.h>
+#include <rtl/ustrbuf.hxx>
+
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/sdbc/ResultSetType.hpp>
 #include <com/sun/star/sdbc/ResultSetConcurrency.hpp>
@@ -42,9 +46,11 @@
 #include <com/sun/star/sdbc/XParameters.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 
-#include <ibase.h>
-
 using namespace connectivity::firebird;
+
+using namespace ::rtl;
+
+using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
@@ -71,7 +77,7 @@ ODatabaseMetaData::~ODatabaseMetaData()
 {
 }
 
-//----- Catalog Info ---------------------------------------------------------
+//----- Catalog Info -- UNSUPPORTED -------------------------------------------
 OUString SAL_CALL ODatabaseMetaData::getCatalogSeparator() throw(SQLException, RuntimeException)
 {
     return OUString();
@@ -107,7 +113,7 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsCatalogsInDataManipulation(  ) thro
     return sal_False;
 }
 
-Reference< XResultSet > SAL_CALL ODatabaseMetaData::getCatalogs() throw(SQLException, RuntimeException)
+uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getCatalogs() throw(SQLException, RuntimeException)
 {
     return 0;
 }
@@ -145,7 +151,7 @@ sal_Int32 SAL_CALL ODatabaseMetaData::getMaxColumnNameLength() throw(SQLExceptio
 
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxColumnsInIndex() throw(SQLException, RuntimeException)
 {
-    // No idea.
+    // TODO: No idea.
     // See: http://www.firebirdsql.org/en/firebird-technical-specifications/
     return 16;
 }
@@ -771,9 +777,9 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsBatchUpdates() throw(SQLException, 
     return sal_False;
 }
 
-Reference< XConnection > SAL_CALL ODatabaseMetaData::getConnection() throw(SQLException, RuntimeException)
+uno::Reference< XConnection > SAL_CALL ODatabaseMetaData::getConnection() throw(SQLException, RuntimeException)
 {
-    return (Reference< XConnection >) m_pConnection;
+    return (uno::Reference< XConnection >) m_pConnection;
 }
 // -------------------------------------------------------------------------
 // here follow all methods which return a resultset
@@ -781,19 +787,19 @@ Reference< XConnection > SAL_CALL ODatabaseMetaData::getConnection() throw(SQLEx
 // of course you could implement it on your and you should do this because
 // the general way is more memory expensive
 // -------------------------------------------------------------------------
-Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTableTypes(  ) throw(SQLException, RuntimeException)
+uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTableTypes(  ) throw(SQLException, RuntimeException)
 {
     return NULL;
 }
 // -------------------------------------------------------------------------
-Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTypeInfo(  ) throw(SQLException, RuntimeException)
+uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTypeInfo(  ) throw(SQLException, RuntimeException)
 {
     SAL_INFO("connectivity.firebird", "getTypeInfo().");
 
     // this returns an empty resultset where the column-names are already set
     // in special the metadata of the resultset already returns the right columns
     ODatabaseMetaDataResultSet* pResultSet = new ODatabaseMetaDataResultSet(ODatabaseMetaDataResultSet::eTypeInfo);
-    Reference< XResultSet > xResultSet = pResultSet;
+    uno::Reference< XResultSet > xResultSet = pResultSet;
     static ODatabaseMetaDataResultSet::ORows aRows;
 
     if(aRows.empty())
@@ -828,12 +834,12 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTypeInfo(  ) throw(SQLExc
     return xResultSet;
 }
 // -----------------------------------------------------------------------------
-Reference< XResultSet > SAL_CALL ODatabaseMetaData::getSchemas(  ) throw(SQLException, RuntimeException)
+uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getSchemas(  ) throw(SQLException, RuntimeException)
 {
     return NULL;
 }
 // -------------------------------------------------------------------------
-Reference< XResultSet > SAL_CALL ODatabaseMetaData::getColumnPrivileges(
+uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getColumnPrivileges(
     const Any& catalog, const ::rtl::OUString& schema, const ::rtl::OUString& table,
     const ::rtl::OUString& columnNamePattern ) throw(SQLException, RuntimeException)
 {
@@ -844,7 +850,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getColumnPrivileges(
     return NULL;
 }
 // -------------------------------------------------------------------------
-Reference< XResultSet > SAL_CALL ODatabaseMetaData::getColumns(
+uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getColumns(
     const Any& catalog, const ::rtl::OUString& schemaPattern, const ::rtl::OUString& tableNamePattern,
     const ::rtl::OUString& columnNamePattern ) throw(SQLException, RuntimeException)
 {
@@ -855,69 +861,72 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getColumns(
     return NULL;
 }
 // -------------------------------------------------------------------------
-Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
-    const Any& catalog, const ::rtl::OUString& schemaPattern,
-    const ::rtl::OUString& tableNamePattern, const Sequence< ::rtl::OUString >& types ) throw(SQLException, RuntimeException)
+uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
+        const Any& catalog,
+        const ::rtl::OUString& schemaPattern,
+        const ::rtl::OUString& tableNamePattern,
+        const Sequence< ::rtl::OUString >& types)
+    throw(SQLException, RuntimeException)
 {
     (void) catalog;
+    (void) schemaPattern;
     (void) types;
-    SAL_INFO("connectivity.firebird", "getTables(). "
-             "Got called with schemaPattern: " << schemaPattern << " , "
+    // TODO: implement types
+    // TODO: RDB$DESCRIPTION is a BLOB column with user defined data.
+    // Blobs cannot be retrieved with DSQL queries so we need to define
+    // all the data we will be using at compile time instead -- i.e. we need
+    // to specifically do the whole isc_* stuff here with the datatypes
+    // compiled in.
+    SAL_INFO("connectivity.firebird", "getTables() with "
              "TableNamePattern: " << tableNamePattern);
 
     ODatabaseMetaDataResultSet* pResultSet = new ODatabaseMetaDataResultSet(ODatabaseMetaDataResultSet::eTables);
-    Reference< XResultSet > xResultSet = pResultSet;
-    Reference< XStatement > statement = m_pConnection->createStatement();
+    uno::Reference< XResultSet > xResultSet = pResultSet;
+    uno::Reference< XStatement > statement = m_pConnection->createStatement();
 
     static const OUString wld("%");
-    OUString query(
+    // TODO: OUStringBuf
+    OUStringBuffer queryBuf(
             "SELECT "
-            "'schema' as schema, RDB$RELATION_NAME, RDB$SYSTEM_FLAG, RDB$RELATION_TYPE, 'description' as description " // avoid duplicates
+            "RDB$RELATION_NAME, RDB$SYSTEM_FLAG, RDB$RELATION_TYPE " //, RDB$DESCRIPTION
             "FROM RDB$RELATIONS "
-            "WHERE (RDB$RELATION_TYPE = 0 OR RDB$RELATION_TYPE = 1) ");
+            "WHERE (RDB$RELATION_TYPE = 0 OR RDB$RELATION_TYPE = 1)");
 
-    if (!schemaPattern.isEmpty())
-    {
-        if (schemaPattern.match(wld))
-            query += "AND 'schema' LIKE '%' ";
-        else
-            query += "AND 'schema' = '%' ";
-        query = query.replaceAll(wld, schemaPattern);
-    }
     if (!tableNamePattern.isEmpty())
     {
+        OUString sAppend;
         if (tableNamePattern.match(wld))
-            query += "AND RDB$RELATION_NAME LIKE '%' ";
+            sAppend = "AND RDB$RELATION_NAME LIKE '%' ";
         else
-            query += "AND RDB$RELATION_NAME = '%' ";
-        query = query.replaceAll(wld, tableNamePattern);
+            sAppend = "AND RDB$RELATION_NAME = '%' ";
+
+        queryBuf.append(sAppend.replaceAll(wld, tableNamePattern));
     }
+    queryBuf.append(" ORDER BY RDB$RELATION_TYPE, RDB$RELATION_NAME");
 
-    SAL_INFO("connectivity.firebird", "getTables(). "
-             "About to execute the query.");
+    OUString query = queryBuf.makeStringAndClear();
 
-    Reference< XResultSet > rs = statement->executeQuery(query.getStr());
-    Reference< XRow > xRow( rs, UNO_QUERY_THROW );
+    uno::Reference< XResultSet > rs = statement->executeQuery(query.getStr());
+    uno::Reference< XRow > xRow( rs, UNO_QUERY_THROW );
     ODatabaseMetaDataResultSet::ORows aRows;
-    sal_Int32 rows = 0;
+
     while( rs->next() )
     {
-        ODatabaseMetaDataResultSet::ORow aRow(3);
+        ODatabaseMetaDataResultSet::ORow aCurrentRow(3);
 
-        OUString schema  = xRow->getString( 1 );
-        OUString aTableName  = xRow->getString( 2 );
-        sal_Int16 systemFlag = xRow->getShort(3);
-        sal_Int16 tableType = xRow->getShort(4);
-        OUString desc  = xRow->getString( 5 );
-
-        rows++;
+        OUString aTableName   = xRow->getString(1);
+        sal_Int16 systemFlag  = xRow->getShort(2);
+        sal_Int16 tableType   = xRow->getShort(3);
+        OUString aDescription; // xRow->getString(4);
 
         OUString aTableType;
         if( 1 == systemFlag )
         {
             aTableType = OUString::createFromAscii("SYSTEM TABLE");
 
-        } else {
+        }
+        else
+        {
             if( 0 == tableType )
             {
                 aTableType = OUString::createFromAscii("TABLE");
@@ -928,10 +937,16 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
             }
         }
 
-        aRow.push_back( new ORowSetValueDecorator( aTableName ) ); // Table name
-        aRow.push_back( new ORowSetValueDecorator( aTableType ) ); // Table type
-        aRow.push_back( ODatabaseMetaDataResultSet::getEmptyValue() ); // Remarks
-        aRows.push_back(aRow);
+        // TABLE_CAT (catalog) may be null -- thus we omit it.
+        // TABLE_SCHEM (schema) may be null -- thus we omit it.
+        // TABLE_NAME
+        aCurrentRow.push_back(new ORowSetValueDecorator(aTableName));
+        // TABLE_TYPE
+        aCurrentRow.push_back(new ORowSetValueDecorator(aTableType));
+        // REMARKS
+        aCurrentRow.push_back(new ORowSetValueDecorator(aDescription));
+
+        aRows.push_back(aCurrentRow);
     }
 
     pResultSet->setRows( aRows );
@@ -939,7 +954,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
     return xResultSet;
 }
 // -------------------------------------------------------------------------
-Reference< XResultSet > SAL_CALL ODatabaseMetaData::getProcedureColumns(
+uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getProcedureColumns(
     const Any& catalog, const ::rtl::OUString& schemaPattern,
     const ::rtl::OUString& procedureNamePattern, const ::rtl::OUString& columnNamePattern ) throw(SQLException, RuntimeException)
 {
@@ -950,7 +965,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getProcedureColumns(
     return NULL;
 }
 // -------------------------------------------------------------------------
-Reference< XResultSet > SAL_CALL ODatabaseMetaData::getProcedures(
+uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getProcedures(
     const Any& catalog, const ::rtl::OUString& schemaPattern,
     const ::rtl::OUString& procedureNamePattern ) throw(SQLException, RuntimeException)
 {
@@ -960,7 +975,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getProcedures(
     return NULL;
 }
 // -------------------------------------------------------------------------
-Reference< XResultSet > SAL_CALL ODatabaseMetaData::getVersionColumns(
+uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getVersionColumns(
     const Any& catalog, const ::rtl::OUString& schema, const ::rtl::OUString& table ) throw(SQLException, RuntimeException)
 {
     (void) catalog;
@@ -969,7 +984,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getVersionColumns(
     return NULL;
 }
 // -------------------------------------------------------------------------
-Reference< XResultSet > SAL_CALL ODatabaseMetaData::getExportedKeys(
+uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getExportedKeys(
     const Any& catalog, const ::rtl::OUString& schema, const ::rtl::OUString& table ) throw(SQLException, RuntimeException)
 {
     (void) catalog;
@@ -978,7 +993,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getExportedKeys(
     return NULL;
 }
 // -------------------------------------------------------------------------
-Reference< XResultSet > SAL_CALL ODatabaseMetaData::getImportedKeys(
+uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getImportedKeys(
     const Any& catalog, const ::rtl::OUString& schema, const ::rtl::OUString& table ) throw(SQLException, RuntimeException)
 {
     (void) catalog;
@@ -987,7 +1002,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getImportedKeys(
     return NULL;
 }
 // -------------------------------------------------------------------------
-Reference< XResultSet > SAL_CALL ODatabaseMetaData::getPrimaryKeys(
+uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getPrimaryKeys(
     const Any& catalog, const ::rtl::OUString& schema, const ::rtl::OUString& table ) throw(SQLException, RuntimeException)
 {
     (void) catalog;
@@ -996,7 +1011,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getPrimaryKeys(
     return NULL;
 }
 // -------------------------------------------------------------------------
-Reference< XResultSet > SAL_CALL ODatabaseMetaData::getIndexInfo(
+uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getIndexInfo(
     const Any& catalog, const ::rtl::OUString& schema, const ::rtl::OUString& table,
     sal_Bool unique, sal_Bool approximate ) throw(SQLException, RuntimeException)
 {
@@ -1008,7 +1023,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getIndexInfo(
     return NULL;
 }
 // -------------------------------------------------------------------------
-Reference< XResultSet > SAL_CALL ODatabaseMetaData::getBestRowIdentifier(
+uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getBestRowIdentifier(
     const Any& catalog, const ::rtl::OUString& schema, const ::rtl::OUString& table, sal_Int32 scope,
     sal_Bool nullable ) throw(SQLException, RuntimeException)
 {
@@ -1020,7 +1035,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getBestRowIdentifier(
     return NULL;
 }
 // -------------------------------------------------------------------------
-Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTablePrivileges(
+uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTablePrivileges(
     const Any& catalog, const ::rtl::OUString& schemaPattern, const ::rtl::OUString& tableNamePattern ) throw(SQLException, RuntimeException)
 {
     (void) catalog;
@@ -1029,7 +1044,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTablePrivileges(
     return NULL;
 }
 // -------------------------------------------------------------------------
-Reference< XResultSet > SAL_CALL ODatabaseMetaData::getCrossReference(
+uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getCrossReference(
     const Any& primaryCatalog, const ::rtl::OUString& primarySchema,
     const ::rtl::OUString& primaryTable, const Any& foreignCatalog,
     const ::rtl::OUString& foreignSchema, const ::rtl::OUString& foreignTable ) throw(SQLException, RuntimeException)
@@ -1043,7 +1058,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getCrossReference(
     return NULL;
 }
 // -------------------------------------------------------------------------
-Reference< XResultSet > SAL_CALL ODatabaseMetaData::getUDTs( const Any& catalog, const ::rtl::OUString& schemaPattern, const ::rtl::OUString& typeNamePattern, const Sequence< sal_Int32 >& types ) throw(SQLException, RuntimeException)
+uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getUDTs( const Any& catalog, const ::rtl::OUString& schemaPattern, const ::rtl::OUString& typeNamePattern, const Sequence< sal_Int32 >& types ) throw(SQLException, RuntimeException)
 {
     (void) catalog;
     (void) schemaPattern;

@@ -291,22 +291,23 @@ int OStatement_Base::prepareAndDescribeStatement(const OUString& sqlIn,
     }
     else
     {
+        // TODO: confirm the sizings below.
         for (int i=0; i < pOutSqlda->sqld; i++, pVar++)
         {
             int dtype = (pVar->sqltype & ~1); /* drop flag bit for now */
             switch(dtype) {
+            case SQL_TEXT:
+                pVar->sqldata = (char *)malloc(sizeof(char)*pVar->sqllen);
+                break;
             case SQL_VARYING:
                 pVar->sqltype = SQL_TEXT;
-                pVar->sqldata = (char *)malloc(sizeof(char)*pVar->sqllen + 2);
+                pVar->sqldata = (char *)malloc(sizeof(char)*pVar->sqllen);
                 break;
-            case SQL_TEXT:
+            case SQL_SHORT:
                 pVar->sqldata = (char *)malloc(sizeof(char)*pVar->sqllen);
                 break;
             case SQL_LONG:
                 pVar->sqldata = (char *)malloc(sizeof(long));
-                break;
-            case SQL_SHORT:
-                pVar->sqldata = (char *)malloc(sizeof(char)*pVar->sqllen);
                 break;
             case SQL_FLOAT:
                 pVar->sqldata = (char *)malloc(sizeof(double));
@@ -320,12 +321,30 @@ int OStatement_Base::prepareAndDescribeStatement(const OUString& sqlIn,
             case SQL_TIMESTAMP:
                 pVar->sqldata = (char *)malloc(sizeof(time_t));
                 break;
+            case SQL_BLOB:
+                assert(false); // We cannot deal with blobs in DSQL
+                break;
+            case SQL_ARRAY:
+                assert(false); // TODO: implement
+                break;
+            case SQL_TYPE_TIME:
+                assert(false); // TODO: implement
+                break;
+            case SQL_TYPE_DATE:
+                assert(false); // TODO: implement
+                break;
             case SQL_INT64:
                 pVar->sqldata = (char *)malloc(sizeof(int));
                 break;
-                /* process remaining types */
+            case SQL_NULL:
+                assert(false); // TODO: implement
+                break;
+            case SQL_QUAD:
+                assert(false); // TODO: implement
+                break;
             default:
-                OSL_ASSERT( false );
+                SAL_WARN("connectivity.firebird", "Unknown type: " << dtype);
+                assert(false);
                 break;
             }
             if (pVar->sqltype & 1)
