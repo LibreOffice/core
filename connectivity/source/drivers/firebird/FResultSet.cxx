@@ -449,14 +449,31 @@ T OResultSet::retrieveValue(sal_Int32 columnIndex)
 template <>
 OUString OResultSet::retrieveValue<OUString>(sal_Int32 columnIndex)
 {
-    // TODO: check we don't have SQL_VARYING (first 2 bytes = short with length
-    // of string.
     if ((m_bWasNull = isNull(columnIndex)))
         return OUString();
 
-    return OUString(m_pSqlda->sqlvar[columnIndex-1].sqldata,
-                    m_pSqlda->sqlvar[columnIndex-1].sqllen,
-                    RTL_TEXTENCODING_UTF8);
+    // &~1 to remove the "can contain NULL" indicator
+    int aSqlType = m_pSqlda->sqlvar[columnIndex-1].sqltype & ~1;
+    if (aSqlType == SQL_TEXT )
+    {
+        return OUString(m_pSqlda->sqlvar[columnIndex-1].sqldata,
+                        m_pSqlda->sqlvar[columnIndex-1].sqllen,
+                        RTL_TEXTENCODING_UTF8);
+    }
+    else if (aSqlType == SQL_VARYING)
+    {
+        // First 2 bytes are a short containing the length of the string
+        // No idea if sqllen is still valid here?
+        short aLength = *((short*) m_pSqlda->sqlvar[columnIndex-1].sqldata);
+        return OUString(m_pSqlda->sqlvar[columnIndex-1].sqldata + 2,
+                        aLength,
+                        RTL_TEXTENCODING_UTF8);
+    }
+    else
+    {
+        return OUString();
+        // TODO: Possibly do some sort of type conversion?
+    }
 }
 
 template <typename T>
