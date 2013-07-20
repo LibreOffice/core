@@ -3318,24 +3318,24 @@ public:
                 case svDoubleRef:
                 {
                     ScComplexRefData aRef = pToken->GetDoubleRef();
-                    aRef.CalcAbsIfRel(mrCell.aPos);
+                    ScRange aAbs = aRef.toAbs(mrCell.aPos);
 
                     // Row reference is relative.
                     bool bAbsFirst = !aRef.Ref1.IsRowRel();
                     bool bAbsLast = !aRef.Ref2.IsRowRel();
-                    ScAddress aRefPos(aRef.Ref1.nCol, aRef.Ref1.nRow, aRef.Ref1.nTab);
-                    size_t nCols = aRef.Ref2.nCol - aRef.Ref1.nCol + 1;
+                    ScAddress aRefPos = aAbs.aStart;
+                    size_t nCols = aAbs.aEnd.Col() - aAbs.aStart.Col() + 1;
                     std::vector<const double*> aArrays;
                     aArrays.reserve(nCols);
                     SCROW nArrayLength = mrCell.GetCellGroup()->mnLength;
-                    SCROW nRefRowSize = aRef.Ref2.nRow - aRef.Ref1.nRow + 1;
+                    SCROW nRefRowSize = aAbs.aEnd.Row() - aAbs.aStart.Row() + 1;
                     if (!bAbsLast)
                     {
                         // range end position is relative. Extend the array length.
                         nArrayLength += nRefRowSize - 1;
                     }
 
-                    for (SCCOL i = aRef.Ref1.nCol; i <= aRef.Ref2.nCol; ++i)
+                    for (SCCOL i = aAbs.aStart.Col(); i <= aAbs.aEnd.Col(); ++i)
                     {
                         aRefPos.SetCol(i);
                         const double* pArray = mrDoc.FetchDoubleArray(mrCxt, aRefPos, nArrayLength);
@@ -3456,8 +3456,7 @@ bool ScFormulaCell::InterpretInvariantFormulaGroup()
                 case svSingleRef:
                 {
                     ScSingleRefData aRef = pToken->GetSingleRef();
-                    aRef.CalcAbsIfRel(aPos); // column may be relative.
-                    ScAddress aRefPos(aRef.nCol, aRef.nRow, aRef.nTab);
+                    ScAddress aRefPos = aRef.toAbs(aPos);
                     formula::FormulaTokenRef pNewToken = pDocument->ResolveStaticReference(aRefPos);
                     if (!pNewToken)
                         return false;
@@ -3468,11 +3467,7 @@ bool ScFormulaCell::InterpretInvariantFormulaGroup()
                 case svDoubleRef:
                 {
                     ScComplexRefData aRef = pToken->GetDoubleRef();
-                    aRef.CalcAbsIfRel(aPos); // column may be relative.
-                    ScRange aRefRange(
-                        aRef.Ref1.nCol, aRef.Ref1.nRow, aRef.Ref1.nTab,
-                        aRef.Ref2.nCol, aRef.Ref2.nRow, aRef.Ref2.nTab);
-
+                    ScRange aRefRange = aRef.toAbs(aPos);
                     formula::FormulaTokenRef pNewToken = pDocument->ResolveStaticReference(aRefRange);
                     if (!pNewToken)
                         return false;

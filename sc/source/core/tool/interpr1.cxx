@@ -7487,13 +7487,13 @@ void ScInterpreter::ScOffset()
             String aTabName;
             ScComplexRefData aRef;
             PopExternalDoubleRef(nFileId, aTabName, aRef);
-            aRef.CalcAbsIfRel(aPos);
-            nCol1 = aRef.Ref1.nCol;
-            nRow1 = aRef.Ref1.nRow;
-            nTab1 = aRef.Ref1.nTab;
-            nCol2 = aRef.Ref2.nCol;
-            nRow2 = aRef.Ref2.nRow;
-            nTab2 = aRef.Ref2.nTab;
+            ScRange aAbs = aRef.toAbs(aPos);
+            nCol1 = aAbs.aStart.Col();
+            nRow1 = aAbs.aStart.Row();
+            nTab1 = aAbs.aStart.Tab();
+            nCol2 = aAbs.aEnd.Col();
+            nRow2 = aAbs.aEnd.Row();
+            nTab2 = aAbs.aEnd.Tab();
             if (nColNew < 0)
                 nColNew = nCol2 - nCol1 + 1;
             if (nRowNew < 0)
