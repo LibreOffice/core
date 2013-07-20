@@ -283,7 +283,7 @@ RegistryItem gid_Regitem_Soffice_Starimpressdocument_6_AppUserModelID
     ComponentCondition = "VersionNT >= 601";
     Subkey = "soffice.StarImpressDocument.6";
     Name = "AppUserModelID";
-    Value = "TheDocumentFoundation.LibreOffice";
+    Value = "TheDocumentFoundation.LibreOffice.Impress";
 End
 
 RegistryItem gid_Regitem_Soffice_Starimpressdocument_6_FriendlyTypeName
@@ -411,7 +411,7 @@ RegistryItem gid_Regitem_Soffice_Starimpresstemplate_6_AppUserModelID
     ComponentCondition = "VersionNT >= 601";
     Subkey = "soffice.StarImpressTemplate.6";
     Name = "AppUserModelID";
-    Value = "TheDocumentFoundation.LibreOffice";
+    Value = "TheDocumentFoundation.LibreOffice.Impress";
 End
 
 RegistryItem gid_Regitem_Soffice_Starimpresstemplate_6_FriendlyTypeName
@@ -719,7 +719,7 @@ RegistryItem gid_Regitem_Openoffice_Impressdocument_1_AppUserModelID
     ComponentCondition = "VersionNT >= 601";
     Subkey = "LibreOffice.ImpressDocument.1";
     Name = "AppUserModelID";
-    Value = "TheDocumentFoundation.LibreOffice";
+    Value = "TheDocumentFoundation.LibreOffice.Impress";
 End
 
 RegistryItem gid_Regitem_Openoffice_Impressdocument_1_FriendlyTypeName
@@ -939,7 +939,7 @@ RegistryItem gid_Regitem_Openoffice_Impresstemplate_1_AppUserModelID
     ComponentCondition = "VersionNT >= 601";
     Subkey = "LibreOffice.ImpressTemplate.1";
     Name = "AppUserModelID";
-    Value = "TheDocumentFoundation.LibreOffice";
+    Value = "TheDocumentFoundation.LibreOffice.Impress";
 End
 
 RegistryItem gid_Regitem_Openoffice_Impresstemplate_1_FriendlyTypeName
