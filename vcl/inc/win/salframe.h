@@ -77,10 +77,11 @@ public:
     sal_Bool                    mbCandidateMode;        // TRUE: Wir befinden uns im Candidate-Modus
     static sal_Bool             mbInReparent;           // TRUE: ignore focus lost and gain due to reparenting
 
-    RGNDATA*                mpClipRgnData;
-    RECT*                   mpNextClipRect;
+    RGNDATA*                    mpClipRgnData;
+    RECT*                       mpNextClipRect;
     sal_Bool                    mbFirstClipRect;
-    sal_Int32               mnDisplay;              // Display used for Fullscreen, 0 is primary monitor
+    sal_Int32                   mnDisplay;              // Display used for Fullscreen, 0 is primary monitor
+    sal_Bool                    mbPropertiesStored;     // has values stored in the window property store
 
     void updateScreenNumber();
 public:

@@ -172,7 +172,7 @@ void TitleBarUpdate::impl_updateApplicationID(const css::uno::Reference< css::fr
 
         OUString aModuleId = xModuleManager->identify(xFrame);
         OUString sDesktopName;
-
+#if defined(UNX) && !defined(MACOSX)
         if ( aModuleId.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.TextDocument")) ||
              aModuleId.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.GlobalDocument")) ||
              aModuleId.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.WebDocument")) ||
@@ -198,6 +198,34 @@ void TitleBarUpdate::impl_updateApplicationID(const css::uno::Reference< css::fr
         sApplicationID = utl::ConfigManager::getProductName().toAsciiLowerCase();
         sApplicationID += OUString(sal_Unicode('-'));
         sApplicationID += sDesktopName;
+#elif defined(WNT)
+        if ( aModuleId.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.TextDocument")) ||
+             aModuleId.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.GlobalDocument")) ||
+             aModuleId.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.WebDocument")) ||
+             aModuleId.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.xforms.XMLFormDocument")) )
+            sDesktopName = OUString("Writer");
+        else if ( aModuleId == "com.sun.star.sheet.SpreadsheetDocument" )
+            sDesktopName = OUString("Calc");
+        else if ( aModuleId == "com.sun.star.presentation.PresentationDocument" )
+            sDesktopName = OUString("Impress");
+        else if ( aModuleId == "com.sun.star.drawing.DrawingDocument" )
+            sDesktopName = OUString("Draw");
+        else if ( aModuleId == "com.sun.star.formula.FormulaProperties" )
+            sDesktopName = OUString("Math");
+        else if ( aModuleId.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.sdb.DatabaseDocument")) ||
+                  aModuleId.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.sdb.OfficeDatabaseDocument")) ||
+                  aModuleId.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.sdb.RelationDesign")) ||
+                  aModuleId.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.sdb.QueryDesign")) ||
+                  aModuleId.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.sdb.TableDesign")) ||
+                  aModuleId.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.sdb.DataSourceBrowser")) )
+            sDesktopName = OUString("Base");
+        else
+            sDesktopName = OUString("Startcenter");
+
+        // We use a hardcoded product name matching the registry keys so applications can be associated with file types
+        sApplicationID = "TheDocumentFoundation.LibreOffice.";
+        sApplicationID += sDesktopName;
+#endif
     }
     catch(const css::uno::Exception&)
     {
@@ -274,7 +302,7 @@ void TitleBarUpdate::impl_forceUpdate()
 
     impl_updateIcon  (xFrame);
     impl_updateTitle (xFrame);
-#if defined(UNX) && !defined(MACOSX)
+#if !defined(MACOSX)
     impl_updateApplicationID (xFrame);
 #endif
 }
