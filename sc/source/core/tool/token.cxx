@@ -1890,40 +1890,34 @@ bool ScTokenArray::GetAdjacentExtendOfOuterFuncRefs( SCCOLROW& nExtend,
                         case svSingleRef :
                         {
                             ScSingleRefData& rRef = static_cast<ScToken*>(p)->GetSingleRef();
-                            rRef.CalcAbsIfRel( rPos );
+                            ScAddress aAbs = rRef.toAbs(rPos);
                             switch ( eDir )
                             {
                                 case DIR_BOTTOM :
-                                    if ( rRef.nRow == nRow
-                                            && rRef.nRow > nExtend )
+                                    if (aAbs.Row() == nRow && aAbs.Row() > nExtend)
                                     {
-                                        nExtend = rRef.nRow;
+                                        nExtend = aAbs.Row();
                                         bRet = true;
                                     }
                                 break;
                                 case DIR_RIGHT :
-                                    if ( rRef.nCol == nCol
-                                            && static_cast<SCCOLROW>(rRef.nCol)
-                                            > nExtend )
+                                    if (aAbs.Col() == nCol && static_cast<SCCOLROW>(aAbs.Col()) > nExtend)
                                     {
-                                        nExtend = rRef.nCol;
+                                        nExtend = aAbs.Col();
                                         bRet = true;
                                     }
                                 break;
                                 case DIR_TOP :
-                                    if ( rRef.nRow == nRow
-                                            && rRef.nRow < nExtend )
+                                    if (aAbs.Row() == nRow && aAbs.Row() < nExtend)
                                     {
-                                        nExtend = rRef.nRow;
+                                        nExtend = aAbs.Row();
                                         bRet = true;
                                     }
                                 break;
                                 case DIR_LEFT :
-                                    if ( rRef.nCol == nCol
-                                            && static_cast<SCCOLROW>(rRef.nCol)
-                                            < nExtend )
+                                    if (aAbs.Col() == nCol && static_cast<SCCOLROW>(aAbs.Col()) < nExtend)
                                     {
-                                        nExtend = rRef.nCol;
+                                        nExtend = aAbs.Col();
                                         bRet = true;
                                     }
                                 break;
@@ -1933,40 +1927,34 @@ bool ScTokenArray::GetAdjacentExtendOfOuterFuncRefs( SCCOLROW& nExtend,
                         case svDoubleRef :
                         {
                             ScComplexRefData& rRef = static_cast<ScToken*>(p)->GetDoubleRef();
-                            rRef.CalcAbsIfRel( rPos );
+                            ScRange aAbs = rRef.toAbs(rPos);
                             switch ( eDir )
                             {
                                 case DIR_BOTTOM :
-                                    if ( rRef.Ref1.nRow == nRow
-                                            && rRef.Ref2.nRow > nExtend )
+                                    if (aAbs.aStart.Row() == nRow && aAbs.aEnd.Row() > nExtend)
                                     {
-                                        nExtend = rRef.Ref2.nRow;
+                                        nExtend = aAbs.aEnd.Row();
                                         bRet = true;
                                     }
                                 break;
                                 case DIR_RIGHT :
-                                    if ( rRef.Ref1.nCol == nCol &&
-                                            static_cast<SCCOLROW>(rRef.Ref2.nCol)
-                                            > nExtend )
+                                    if (aAbs.aStart.Col() == nCol && static_cast<SCCOLROW>(aAbs.aEnd.Col()) > nExtend)
                                     {
-                                        nExtend = rRef.Ref2.nCol;
+                                        nExtend = aAbs.aEnd.Col();
                                         bRet = true;
                                     }
                                 break;
                                 case DIR_TOP :
-                                    if ( rRef.Ref2.nRow == nRow
-                                            && rRef.Ref1.nRow < nExtend )
+                                    if (aAbs.aEnd.Row() == nRow && aAbs.aStart.Row() < nExtend)
                                     {
-                                        nExtend = rRef.Ref1.nRow;
+                                        nExtend = aAbs.aStart.Row();
                                         bRet = true;
                                     }
                                 break;
                                 case DIR_LEFT :
-                                    if ( rRef.Ref2.nCol == nCol &&
-                                            static_cast<SCCOLROW>(rRef.Ref1.nCol)
-                                            < nExtend )
+                                    if (aAbs.aEnd.Col() == nCol && static_cast<SCCOLROW>(aAbs.aStart.Col()) < nExtend)
                                     {
-                                        nExtend = rRef.Ref1.nCol;
+                                        nExtend = aAbs.aStart.Col();
                                         bRet = true;
                                     }
                                 break;
@@ -2000,8 +1988,8 @@ void ScTokenArray::ReadjustRelative3DReferences( const ScAddress& rOldPos,
                 // Also adjust if the reference is of the form Sheet1.A2:A3
                 if ( rRef2.IsFlag3D() || static_cast<ScToken*>(pCode[j])->GetSingleRef().IsFlag3D() )
                 {
-                    rRef2.CalcAbsIfRel( rOldPos );
-                    rRef2.CalcRelFromAbs( rNewPos );
+                    ScAddress aAbs = rRef2.toAbs(rOldPos);
+                    rRef2.SetAddress(aAbs, rNewPos);
                 }
             }
             //! fallthru
@@ -2010,8 +1998,8 @@ void ScTokenArray::ReadjustRelative3DReferences( const ScAddress& rOldPos,
                 ScSingleRefData& rRef1 = static_cast<ScToken*>(pCode[j])->GetSingleRef();
                 if ( rRef1.IsFlag3D() )
                 {
-                    rRef1.CalcAbsIfRel( rOldPos );
-                    rRef1.CalcRelFromAbs( rNewPos );
+                    ScAddress aAbs = rRef1.toAbs(rOldPos);
+                    rRef1.SetAddress(aAbs, rNewPos);
                 }
             }
             break;

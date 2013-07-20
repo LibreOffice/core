@@ -4989,10 +4989,10 @@ void ScCompiler::CreateStringFromSingleRef(OUStringBuffer& rBuffer,FormulaToken*
     aRef.Ref1 = aRef.Ref2 = rRef;
     if ( eOp == ocColRowName )
     {
-        rRef.CalcAbsIfRel( aPos );
-        if ( pDoc->HasStringData( rRef.nCol, rRef.nRow, rRef.nTab ) )
+        ScAddress aAbs = rRef.toAbs(aPos);
+        if (pDoc->HasStringData(aAbs.Col(), aAbs.Row(), aAbs.Tab()))
         {
-            String aStr = pDoc->GetString(rRef.nCol, rRef.nRow, rRef.nTab);
+            String aStr = pDoc->GetString(aAbs);
             EnQuote( aStr );
             rBuffer.append(aStr);
         }
@@ -5111,16 +5111,16 @@ void ScCompiler::fillAddInToken(::std::vector< ::com::sun::star::sheet::FormulaO
 bool ScCompiler::HandleSingleRef()
 {
     ScSingleRefData& rRef = static_cast<ScToken*>(mpToken.get())->GetSingleRef();
-    rRef.CalcAbsIfRel( aPos );
-    if ( !rRef.Valid() )
+    ScAddress aAbs = rRef.toAbs(aPos);
+    if (!ValidAddress(aAbs))
     {
         SetError( errNoRef );
         return true;
     }
-    SCCOL nCol = rRef.nCol;
-    SCROW nRow = rRef.nRow;
-    SCTAB nTab = rRef.nTab;
-    ScAddress aLook( nCol, nRow, nTab );
+    SCCOL nCol = aAbs.Col();
+    SCROW nRow = aAbs.Row();
+    SCTAB nTab = aAbs.Tab();
+    ScAddress aLook = aAbs;
     bool bColName = rRef.IsColRel();
     SCCOL nMyCol = aPos.Col();
     SCROW nMyRow = aPos.Row();
