@@ -76,6 +76,8 @@ sub read_args($)
             }
         } elsif ( substr($_, 0, 1) eq "#" ) {
             # comment
+        } elsif ( length == 0 ) {
+            # empty line
         } else {
             push @lst, $_;
         }
