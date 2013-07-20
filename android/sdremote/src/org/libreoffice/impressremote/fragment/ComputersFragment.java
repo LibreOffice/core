@@ -97,10 +97,6 @@ public class ComputersFragment extends SherlockListFragment implements ServiceCo
     }
 
     private void loadComputers() {
-        if (!isAdded()) {
-            return;
-        }
-
         if (!isServiceBound()) {
             return;
         }
@@ -196,6 +192,8 @@ public class ComputersFragment extends SherlockListFragment implements ServiceCo
         super.onResume();
 
         registerIntentsReceiver();
+
+        loadComputers();
     }
 
     private void registerIntentsReceiver() {
@@ -277,6 +275,12 @@ public class ComputersFragment extends SherlockListFragment implements ServiceCo
 
     @Override
     public boolean onContextItemSelected(android.view.MenuItem aMenuItem) {
+        if (!getUserVisibleHint()) {
+            // Wrong context menu could be dispatched.
+            // Android’s issue #20065.
+            return false;
+        }
+
         int aComputerPosition = getListItemPosition(aMenuItem);
         Server aComputer = getComputersAdapter().getItem(aComputerPosition);
 
