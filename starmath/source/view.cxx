@@ -1451,7 +1451,7 @@ void SmViewShell::PrevError()
 }
 
 
-bool SmViewShell::Insert( SfxMedium& rMedium )
+void SmViewShell::Insert( SfxMedium& rMedium )
 {
     SAL_INFO( "starmath", "starmath: SmViewShell::Insert" );
 
@@ -1489,11 +1489,9 @@ bool SmViewShell::Insert( SfxMedium& rMedium )
         rBnd.Invalidate(SID_GAPHIC_SM);
         rBnd.Invalidate(SID_TEXT);
     }
-    return bRet;
 }
 
-
-bool SmViewShell::InsertFrom(SfxMedium &rMedium)
+void SmViewShell::InsertFrom(SfxMedium &rMedium)
 {
     SAL_INFO( "starmath", "starmath: SmViewShell::InsertFrom" );
 
@@ -1528,10 +1526,7 @@ bool SmViewShell::InsertFrom(SfxMedium &rMedium)
         rBnd.Invalidate(SID_GAPHIC_SM);
         rBnd.Invalidate(SID_TEXT);
     }
-
-    return bSuccess;
 }
-
 
 void SmViewShell::Execute(SfxRequest& rReq)
 {
