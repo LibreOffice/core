@@ -20,13 +20,8 @@ $(eval $(call gb_Module_add_targets,extras,\
 	Package_database \
 	Package_databasebiblio \
 	Package_fonts \
-	Package_gallbullets \
-	Package_gallhtmlexpo \
 	Package_gallmytheme \
-	Package_gallroot \
 	Package_gallsystem \
-	Package_gallwwwback \
-	Package_gallwwwgraf \
 	Package_glade \
 	Package_labels \
 	Package_newfiles \
@@ -56,7 +51,6 @@ $(eval $(call gb_Module_add_targets,extras,\
 	Gallery_finance \
 	Gallery_people \
 	Gallery_symbols \
-	Gallery_sound \
 	Gallery_txtshapes \
 	Gallery_transportation \
 ))
