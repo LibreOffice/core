@@ -518,65 +518,57 @@ void EditorWindow::KeyInput( const KeyEvent& rKEvt )
                 aVect.push_back( aLine.copy(r.nBegin, r.nEnd - r.nBegin) );
         }
         OUString sBaseName = aVect[0];//variable name
-        OUString sVarType = aCodeCompleteCache.GetVariableType(sBaseName, sActSub);
+        OUString sVarType = aCodeCompleteCache.GetVariableType(sBaseName, aCodeCompleteCache.GLOB_KEY);
+        if( sVarType == aCodeCompleteCache.NOT_FOUND )
+            sVarType = aCodeCompleteCache.GetVariableType(sBaseName, sActSub);
 
-        /*for( unsigned int i = 0; i < aCodeCompleteCache.size(); ++i)
-        {*/
-            /*if( aCodeCompleteCache[i].sVarName.equalsIgnoreAsciiCase( sBaseName ) &&
-                ( aCodeCompleteCache[i].sVarParent == sActSub || aCodeCompleteCache[i].IsGlobal() ) )
-            {*/
-            if( sVarType != aCodeCompleteCache.NOT_FOUND )
+        Reference< lang::XMultiServiceFactory > xFactory( comphelper::getProcessServiceFactory(), UNO_SET_THROW );
+        Reference< reflection::XIdlReflection > xRefl( xFactory->createInstance("com.sun.star.reflection.CoreReflection"), UNO_QUERY_THROW );
+
+        if( xRefl.is() )
+        {
+            Reference< reflection::XIdlClass > xClass = xRefl->forName(sVarType);//get the base class for reflection
+            if( xClass != NULL )
             {
-                Reference< lang::XMultiServiceFactory > xFactory( comphelper::getProcessServiceFactory(), UNO_SET_THROW );
-                Reference< reflection::XIdlReflection > xRefl( xFactory->createInstance("com.sun.star.reflection.CoreReflection"), UNO_QUERY_THROW );
-
-                if( xRefl.is() )
+                unsigned int j = 1;
+                OUString sMethName;
+                while( j != aVect.size() )
                 {
-                    Reference< reflection::XIdlClass > xClass = xRefl->forName(sVarType);//get the base class for reflection
-                    if( xClass != NULL )
+                    sMethName = aVect[j];
+                    Reference< reflection::XIdlMethod> xMethod = xClass->getMethod( sMethName );
+                    if( xMethod != NULL ) //method OK
                     {
-                        unsigned int j = 1;
-                        OUString sMethName;
-                        while( j != aVect.size() )
-                        {
-                            sMethName = aVect[j];
-                            Reference< reflection::XIdlMethod> xMethod = xClass->getMethod( sMethName );
-                            if( xMethod != NULL ) //method OK
-                            {
-                                xClass = xMethod->getReturnType();
-                                if( xClass == NULL )
-                                    break;
-                            }
-                            else
-                            {
-                                break;
-                            }
-                            j++;
-                        }
-                        Sequence< Reference< reflection::XIdlMethod > > aMethods = xClass->getMethods();
-                        if( aMethods.getLength() != 0 )
-                        {
-                            Rectangle aRect = ( (TextEngine*) GetEditEngine() )->PaMtoEditCursor( aSel.GetEnd() , false );
-                            aSel.GetStart().GetIndex() += 1;
-                            aSel.GetEnd().GetIndex() += 1;
-                            pCodeCompleteWnd->ClearListBox();
-                            pCodeCompleteWnd->SetTextSelection(aSel);
-
-                            pCodeCompleteWnd->SetPosPixel( aRect.BottomRight() );
-                            for(sal_Int32 l = 0; l < aMethods.getLength(); ++l)
-                            {
-                                pCodeCompleteWnd->InsertEntry( OUString(aMethods[l]->getName()) );
-                            }
-                            pCodeCompleteWnd->Show();
-                            pCodeCompleteWnd->ResizeListBox();
-                            pCodeCompleteWnd->SelectFirstEntry();
-                        }
+                        xClass = xMethod->getReturnType();
+                        if( xClass == NULL )
+                            break;
                     }
+                    else
+                    {
+                        break;
+                    }
+                    j++;
+                }
+                Sequence< Reference< reflection::XIdlMethod > > aMethods = xClass->getMethods();
+                if( aMethods.getLength() != 0 )
+                {
+                    Rectangle aRect = ( (TextEngine*) GetEditEngine() )->PaMtoEditCursor( aSel.GetEnd() , false );
+                    aSel.GetStart().GetIndex() += 1;
+                    aSel.GetEnd().GetIndex() += 1;
+                    pCodeCompleteWnd->ClearListBox();
+                    pCodeCompleteWnd->SetTextSelection(aSel);
+
+                    pCodeCompleteWnd->SetPosPixel( aRect.BottomRight() );
+                    for(sal_Int32 l = 0; l < aMethods.getLength(); ++l)
+                    {
+                        pCodeCompleteWnd->InsertEntry( OUString(aMethods[l]->getName()) );
+                    }
+                    pCodeCompleteWnd->Show();
+                    pCodeCompleteWnd->ResizeListBox();
+                    pCodeCompleteWnd->SelectFirstEntry();
                 }
             }
-                /*break;
-            }*/
-        //}
+        }
+
     }
     if ( !bDone && ( !TextEngine::DoesKeyChangeText( rKEvt ) || ImpCanModify()  ) )
     {
@@ -843,6 +835,7 @@ void EditorWindow::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
         else if( rTextHint.GetId() == TEXT_HINT_PARAREMOVED )
         {
             ParagraphInsertedDeleted( rTextHint.GetValue(), false );
+            rModulWindow.UpdateModule();
             aCodeCompleteCache.SetVars(rModulWindow.GetSbModule()->GetCodeCompleteDataFromParse().GetVars());
         }
         else if( rTextHint.GetId() == TEXT_HINT_PARACONTENTCHANGED )
@@ -859,6 +852,7 @@ void EditorWindow::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
         }
         else if( rTextHint.GetId() == TEXT_HINT_MODIFIED )
         {
+            rModulWindow.UpdateModule();
             aCodeCompleteCache.SetVars(rModulWindow.GetSbModule()->GetCodeCompleteDataFromParse().GetVars());
         }
     }
@@ -878,6 +872,7 @@ OUString EditorWindow::GetActualSubName( sal_uLong nLine )
             pMeth->GetLineRange(l1,l2);
             if( (l1 <= nLine+1) && (nLine+1 <= l2) )
             {
+                //std::cerr << "sName: " << sName << std::endl;
                 return sName;
             }
         }
@@ -2362,14 +2357,9 @@ void WatchTreeListBox::UpdateWatches( bool bBasicStopped )
 
 CodeCompleteListBox::CodeCompleteListBox( CodeCompleteWindow* pPar )
 : ListBox(pPar, WB_SORT | WB_BORDER ),
-pCodeCompleteWindow(pPar)
+pCodeCompleteWindow( pPar )
 {
     SetDoubleClickHdl(LINK(this, CodeCompleteListBox, ImplDoubleClickHdl));
-}
-
-CodeCompleteListBox::~CodeCompleteListBox()
-{
-    delete pCodeCompleteWindow;
 }
 
 IMPL_LINK_NOARG(CodeCompleteListBox, ImplDoubleClickHdl)
@@ -2434,7 +2424,7 @@ long CodeCompleteListBox::PreNotify( NotifyEvent& rNEvt )
                 case KEY_ESCAPE: // hide, do nothing
                     pCodeCompleteWindow->Hide();
                     pCodeCompleteWindow->pParent->GetEditView()->SetSelection( pCodeCompleteWindow->pParent->GetEditView()->CursorEndOfLine(pCodeCompleteWindow->GetTextSelection().GetStart()) );
-                    pCodeCompleteWindow->pParent->GrabFocus();
+                    //pCodeCompleteWindow->pParent->GrabFocus();
                     return 0;
                 case KEY_TAB: case KEY_SPACE:
                 /* space, tab the user probably have typed in the whole
@@ -2462,11 +2452,6 @@ long CodeCompleteListBox::PreNotify( NotifyEvent& rNEvt )
             }
         }
     }
-    /*if( rNEvt.GetType() == EVENT_MOUSEBUTTONDOWN )
-    {
-        //MouseEvent rMEvt = *rNEvt.GetMouseEvent();
-        std::cerr << "parent active: " << (pCodeCompleteWindow->pParent->IsActive() == sal_True) << std::endl;
-    }*/
     return ListBox::PreNotify( rNEvt );
 }
 
@@ -2482,16 +2467,10 @@ void CodeCompleteListBox::SetVisibleEntries()
     }
 }
 
-/*void CodeCompleteListBox::LoseFocus()
-{
-    std::cerr << "CodeCompleteListBox::LoseFocus" << std::endl;
-    Window::LoseFocus();
-    //pCodeCompleteWindow->Hide();
-}*/
-
 CodeCompleteWindow::CodeCompleteWindow( EditorWindow* pPar )
 : Window( pPar ),
-pParent(pPar)
+pParent( pPar ),
+pListBox( new CodeCompleteListBox(this) )
 {
     SetSizePixel( Size(151,151) ); //default, later it changes
     InitListBox();
@@ -2499,15 +2478,9 @@ pParent(pPar)
 
 void CodeCompleteWindow::InitListBox()
 {
-    pListBox = new CodeCompleteListBox( this );
     pListBox->SetSizePixel( Size(150,150) ); //default, this will adopt the line length
     pListBox->Show();
-    //pListBox->GrabFocus();
-}
-
-CodeCompleteWindow::~CodeCompleteWindow()
-{
-    delete pListBox;
+    pListBox->GrabFocus();
 }
 
 void CodeCompleteWindow::InsertEntry( const OUString& aStr )
@@ -2522,14 +2495,6 @@ void CodeCompleteWindow::ClearListBox()
     pListBox->aEntryVect.clear();
     pListBox->aFuncBuffer.makeStringAndClear();
 }
-/*
-void CodeCompleteWindow::KeyInput( const KeyEvent& rKeyEvt )
-{
-    if( rKeyEvt.GetKeyCode().GetCode() == KEY_ESCAPE )
-    {// ESC key closes the window: does not modify anything
-        Hide();
-    }
-}*/
 
 void CodeCompleteWindow::SetTextSelection( const TextSelection& aSel )
 {
@@ -2563,7 +2528,6 @@ void CodeCompleteWindow::ResizeListBox()
         aSize.setHeight( aSize.getHeight() + 1 );
         SetSizePixel( aSize );
     }
-    //pListBox->GrabFocus();
 }
 
 void CodeCompleteWindow::SelectFirstEntry()
@@ -2572,14 +2536,7 @@ void CodeCompleteWindow::SelectFirstEntry()
     {
          pListBox->SelectEntryPos( 0 );
     }
-    //pListBox->GrabFocus();
 }
-
-/*void CodeCompleteWindow::LoseFocus()
-{
-    std::cerr << "CodeCompleteWindow::LoseFocus" << std::endl;
-    Window::LoseFocus();
-}*/
 
 } // namespace basctl
 
