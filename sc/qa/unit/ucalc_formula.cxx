@@ -16,6 +16,8 @@
 #include "refdata.hxx"
 #include "scopetools.hxx"
 #include "formulacell.hxx"
+#include "inputopt.hxx"
+#include "scmod.hxx"
 
 #include <boost/scoped_ptr.hpp>
 
@@ -447,6 +449,11 @@ void Test::testFormulaRefUpdateRange()
 
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
 
+    ScModule* pMod = SC_MOD();
+    ScInputOptions aOpt = pMod->GetInputOptions();
+    aOpt.SetExpandRefs(false);
+    pMod->SetInputOptions(aOpt);
+
     // Set values to B2:C5.
     m_pDoc->SetValue(ScAddress(1,1,0), 1);
     m_pDoc->SetValue(ScAddress(1,2,0), 2);
@@ -652,6 +659,65 @@ void Test::testFormulaRefUpdateRange()
 
     if (!checkFormula(*m_pDoc, ScAddress(0,8,0), "SUM($C$3:$E$5)"))
         CPPUNIT_FAIL("Wrong formula in A9.");
+
+    // Clear the range and start over.
+    clearRange(m_pDoc, ScRange(0,0,0,20,20,0));
+
+    // Turn edge expansion on.
+    aOpt.SetExpandRefs(true);
+    pMod->SetInputOptions(aOpt);
+
+    // Fill C6:D7 with values.
+    m_pDoc->SetValue(ScAddress(2,5,0), 1);
+    m_pDoc->SetValue(ScAddress(2,6,0), 2);
+    m_pDoc->SetValue(ScAddress(3,5,0), 3);
+    m_pDoc->SetValue(ScAddress(3,6,0), 4);
+
+    // Set formulas at A2 and A3.
+    m_pDoc->SetString(ScAddress(0,1,0), "=SUM(C6:D7)");
+    m_pDoc->SetString(ScAddress(0,2,0), "=SUM($C$6:$D$7)");
+
+    if (!checkFormula(*m_pDoc, ScAddress(0,1,0), "SUM(C6:D7)"))
+        CPPUNIT_FAIL("Wrong formula in A2.");
+
+    if (!checkFormula(*m_pDoc, ScAddress(0,2,0), "SUM($C$6:$D$7)"))
+        CPPUNIT_FAIL("Wrong formula in A3.");
+
+    // Insert at column E. This should expand the reference range by one column.
+    m_pDoc->InsertCol(ScRange(4,0,0,4,MAXROW,0));
+
+    if (!checkFormula(*m_pDoc, ScAddress(0,1,0), "SUM(C6:E7)"))
+        CPPUNIT_FAIL("Wrong formula in A2.");
+
+    if (!checkFormula(*m_pDoc, ScAddress(0,2,0), "SUM($C$6:$E$7)"))
+        CPPUNIT_FAIL("Wrong formula in A3.");
+
+    // Insert at column C to edge-expand the reference range.
+    m_pDoc->InsertCol(ScRange(2,0,0,2,MAXROW,0));
+
+    if (!checkFormula(*m_pDoc, ScAddress(0,1,0), "SUM(C6:F7)"))
+        CPPUNIT_FAIL("Wrong formula in A2.");
+
+    if (!checkFormula(*m_pDoc, ScAddress(0,2,0), "SUM($C$6:$F$7)"))
+        CPPUNIT_FAIL("Wrong formula in A3.");
+
+    // Insert at row 8 to edge-expand.
+    m_pDoc->InsertRow(ScRange(0,7,0,MAXCOL,7,0));
+
+    if (!checkFormula(*m_pDoc, ScAddress(0,1,0), "SUM(C6:F8)"))
+        CPPUNIT_FAIL("Wrong formula in A2.");
+
+    if (!checkFormula(*m_pDoc, ScAddress(0,2,0), "SUM($C$6:$F$8)"))
+        CPPUNIT_FAIL("Wrong formula in A3.");
+
+    // Insert at row 6 to edge-expand.
+    m_pDoc->InsertRow(ScRange(0,5,0,MAXCOL,5,0));
+
+    if (!checkFormula(*m_pDoc, ScAddress(0,1,0), "SUM(C6:F9)"))
+        CPPUNIT_FAIL("Wrong formula in A2.");
+
+    if (!checkFormula(*m_pDoc, ScAddress(0,2,0), "SUM($C$6:$F$9)"))
+        CPPUNIT_FAIL("Wrong formula in A3.");
 
     m_pDoc->DeleteTab(0);
 }
