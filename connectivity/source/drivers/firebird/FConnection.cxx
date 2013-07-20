@@ -663,12 +663,11 @@ void OConnection::buildTypeInfo() throw( SQLException)
     SAL_INFO("connectivity.firebird", "buildTypeInfo(). "
              "Closed.");
 }
-//------------------------------------------------------------------------------
+
 void OConnection::disposing()
 {
     SAL_INFO("connectivity.firebird", "disposing().");
 
-    // we noticed that we should be destroied in near future so we have to dispose our statements
     MutexGuard aGuard(m_aMutex);
 
     for (OWeakRefArray::iterator i = m_aStatements.begin(); m_aStatements.end() != i; ++i)
@@ -683,7 +682,13 @@ void OConnection::disposing()
     m_xMetaData = ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbc::XDatabaseMetaData>();
 
     ISC_STATUS_ARRAY status;            /* status vector */
-    if (isc_detach_database(status, &m_DBHandler)) // TODO: this consistently crashes
+    if (m_transactionHandle)
+    {
+        // TODO: confirm whether we need to ask the user here.
+        isc_rollback_transaction(status, &m_transactionHandle);
+    }
+
+    if (isc_detach_database(status, &m_DBHandler))
         if (pr_error(status, "dattach database"))
             return;
     // TODO: write to storage again?
