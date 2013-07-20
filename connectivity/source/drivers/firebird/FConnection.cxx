@@ -683,11 +683,18 @@ void OConnection::disposing()
     m_xMetaData = ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbc::XDatabaseMetaData>();
 
     ISC_STATUS_ARRAY status;            /* status vector */
-    if (isc_detach_database(status, &m_DBHandler))
+    if (isc_detach_database(status, &m_DBHandler)) // TODO: this consistently crashes
         if (pr_error(status, "dattach database"))
             return;
     // TODO: write to storage again?
-    // and delete temporary file.
+    if (m_bIsEmbedded)
+    {
+        uno::Reference< ucb::XSimpleFileAccess > xFileAccess(
+            ucb::SimpleFileAccess::create( comphelper::getProcessComponentContext()),
+            uno::UNO_QUERY);
+        if (xFileAccess->exists(m_sURL))
+            xFileAccess->kill(m_sURL);
+    }
 
     dispose_ChildImpl();
     cppu::WeakComponentImplHelperBase::disposing();
