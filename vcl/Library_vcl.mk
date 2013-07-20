@@ -635,6 +635,7 @@ $(eval $(call gb_Library_use_system_win32_libs,vcl,\
 	uuid \
 	version \
 	winspool \
+	shlwapi \
 ))
 
 $(eval $(call gb_Library_add_nativeres,vcl,vcl/salsrc))

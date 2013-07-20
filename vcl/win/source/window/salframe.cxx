@@ -90,6 +90,12 @@ using ::std::max;
 #include <sehandler.hxx>
 #endif
 
+#include <windows.h>
+#include <shobjidl.h>
+#include <propkey.h>
+#include <propvarutil.h>
+#include <shellapi.h>
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -881,6 +887,7 @@ WinSalFrame::WinSalFrame()
     mbFirstClipRect     = TRUE;
     mpNextClipRect      = NULL;
     mnDisplay           = 0;
+    mbPropertiesStored  = FALSE;
 
     memset( &maState, 0, sizeof( SalFrameState ) );
     maSysData.nSize     = sizeof( SystemEnvData );
@@ -970,6 +977,10 @@ WinSalFrame::~WinSalFrame()
                 pSalData->mpMouseLeaveTimer = NULL;
             }
         }
+
+        // remove windows properties
+        if ( mbPropertiesStored )
+            SetApplicationID( OUString() );
 
         // destroy system frame
         if ( !DestroyWindow( mhWnd ) )
@@ -1892,8 +1903,70 @@ void WinSalFrame::SetScreenNumber( unsigned int nNewScreen )
     }
 }
 
-void WinSalFrame::SetApplicationID( const OUString &/*rApplicationID*/ )
+void WinSalFrame::SetApplicationID( const OUString &rApplicationID )
 {
+    if( aSalShlData.maVersionInfo.dwMajorVersion >= 6 )
+    {
+        // http://msdn.microsoft.com/en-us/library/windows/desktop/dd378430(v=vs.85).aspx
+        // A window's properties must be removed before the window is closed.
+
+        WCHAR szShell32[MAX_PATH];
+        GetSystemDirectoryW( szShell32, MAX_PATH );
+        wcscat( szShell32, L"\\Shell32.dll" );
+
+        HINSTANCE hinstDll = LoadLibraryW( szShell32 );
+
+        if( hinstDll )
+        {
+            DLLVERSIONINFO dvi;
+            ZeroMemory(&dvi, sizeof(dvi));
+            dvi.cbSize = sizeof(dvi);
+
+            DLLGETVERSIONPROC pDllGetVersion;
+            pDllGetVersion = ( DLLGETVERSIONPROC )GetProcAddress( hinstDll, "DllGetVersion" );
+            HRESULT hr = (*pDllGetVersion)(&dvi);
+
+            if( SUCCEEDED(hr) )
+            {
+                #define PACKVERSION(major,minor) MAKELONG(minor,major)
+                DWORD dwVersion = PACKVERSION( dvi.dwMajorVersion, dvi.dwMinorVersion );
+                // shell32 in Windows 7 is version 6.1.
+                if( dwVersion >= PACKVERSION(6,1) )
+                {
+                    typedef HRESULT ( WINAPI *SHGETPROPERTYSTOREFORWINDOW )( HWND, REFIID, void ** );
+                    SHGETPROPERTYSTOREFORWINDOW pSHGetPropertyStoreForWindow;
+                    pSHGetPropertyStoreForWindow =
+                        ( SHGETPROPERTYSTOREFORWINDOW ) GetProcAddress( hinstDll, "SHGetPropertyStoreForWindow" );
+
+                    if( pSHGetPropertyStoreForWindow )
+                    {
+                        IPropertyStore *pps;
+                        HRESULT hr = ( *pSHGetPropertyStoreForWindow ) ( mhWnd, IID_PPV_ARGS(&pps) );
+                        if ( SUCCEEDED(hr) )
+                        {
+                            PROPVARIANT pv;
+                            if ( !rApplicationID.isEmpty() )
+                            {
+                                hr = InitPropVariantFromString( rApplicationID.getStr(), &pv );
+                                mbPropertiesStored = TRUE;
+                            }
+                            else
+                                // if rApplicationID we remove the property from the window, if present
+                                PropVariantInit( &pv );
+
+                            if ( SUCCEEDED(hr) )
+                            {
+                                hr = pps->SetValue( PKEY_AppUserModel_ID, pv );
+                                PropVariantClear( &pv );
+                            }
+                            pps->Release();
+                        }
+                    }
+                }
+            }
+        }
+        FreeLibrary( hinstDll );
+    }
 }
 
 // -----------------------------------------------------------------------

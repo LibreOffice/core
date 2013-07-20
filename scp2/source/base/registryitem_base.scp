@@ -84,7 +84,7 @@ RegistryItem gid_Regitem_Openoffice_Databasedocument_1_AppUserModelID
     ComponentCondition = "VersionNT >= 601";
     Subkey = "LibreOffice.DatabaseDocument.1";
     Name = "AppUserModelID";
-    Value = "TheDocumentFoundation.LibreOffice";
+    Value = "TheDocumentFoundation.LibreOffice.Base";
 End
 
 RegistryItem gid_Regitem_Openoffice_Databasedocument_1_FriendlyTypeName

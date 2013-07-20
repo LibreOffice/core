@@ -282,7 +282,7 @@ RegistryItem gid_Regitem_Soffice_Starmathdocument_6_AppUserModelID
     ComponentCondition = "VersionNT >= 601";
     Subkey = "soffice.StarMathDocument.6";
     Name = "AppUserModelID";
-    Value = "TheDocumentFoundation.LibreOffice";
+    Value = "TheDocumentFoundation.LibreOffice.Math";
 End
 
 RegistryItem gid_Regitem_Soffice_Starmathdocument_6_FriendlyTypeName
@@ -560,7 +560,7 @@ RegistryItem gid_Regitem_Openoffice_Mathdocument_1_AppUserModelID
     ComponentCondition = "VersionNT >= 601";
     Subkey = "LibreOffice.MathDocument.1";
     Name = "AppUserModelID";
-    Value = "TheDocumentFoundation.LibreOffice";
+    Value = "TheDocumentFoundation.LibreOffice.Math";
 End
 
 RegistryItem gid_Regitem_Openoffice_Mathdocument_1_FriendlyTypeName
