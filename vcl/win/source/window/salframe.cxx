@@ -90,6 +90,12 @@ using ::std::max;
 #include <sehandler.hxx>
 #endif
 
+#include <windows.h>
+#include <shobjidl.h>
+#include <propkey.h>
+#include <propvarutil.h>
+#include <shellapi.h>
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -885,6 +891,7 @@ WinSalFrame::WinSalFrame()
     mbFirstClipRect     = TRUE;
     mpNextClipRect      = NULL;
     mnDisplay           = 0;
+    mbPropertiesStored  = FALSE;
 
     memset( &maState, 0, sizeof( SalFrameState ) );
     maSysData.nSize     = sizeof( SystemEnvData );
@@ -974,6 +981,10 @@ WinSalFrame::~WinSalFrame()
                 pSalData->mpMouseLeaveTimer = NULL;
             }
         }
+
+        // remove windows properties
+        if ( mbPropertiesStored )
+            SetApplicationID( OUString() );
 
         // destroy system frame
         if ( !DestroyWindow( mhWnd ) )
@@ -1896,8 +1907,44 @@ void WinSalFrame::SetScreenNumber( unsigned int nNewScreen )
     }
 }
 
-void WinSalFrame::SetApplicationID( const OUString &/*rApplicationID*/ )
+void WinSalFrame::SetApplicationID( const OUString &rApplicationID )
 {
+    if( aSalShlData.maVersionInfo.dwMajorVersion >= 6 )
+    {
+        // http://msdn.microsoft.com/en-us/library/windows/desktop/dd378430(v=vs.85).aspx
+        // A window's properties must be removed before the window is closed.
+
+        typedef HRESULT ( WINAPI *SHGETPROPERTYSTOREFORWINDOW )( HWND, REFIID, void ** );
+        SHGETPROPERTYSTOREFORWINDOW pSHGetPropertyStoreForWindow;
+        pSHGetPropertyStoreForWindow = ( SHGETPROPERTYSTOREFORWINDOW )GetProcAddress(
+                                       GetModuleHandleW (L"shell32.dll"), "SHGetPropertyStoreForWindow" );
+
+        // A mere presence of the symbol means we are at least on Windows 7 or Windows Server 2008 R2
+        if( pSHGetPropertyStoreForWindow )
+        {
+            IPropertyStore *pps;
+            HRESULT hr = pSHGetPropertyStoreForWindow ( mhWnd, IID_PPV_ARGS(&pps) );
+            if ( SUCCEEDED(hr) )
+            {
+                PROPVARIANT pv;
+                if ( !rApplicationID.isEmpty() )
+                {
+                    hr = InitPropVariantFromString( rApplicationID.getStr(), &pv );
+                    mbPropertiesStored = TRUE;
+                }
+                else
+                    // if rApplicationID we remove the property from the window, if present
+                    PropVariantInit( &pv );
+
+                if ( SUCCEEDED(hr) )
+                {
+                    hr = pps->SetValue( PKEY_AppUserModel_ID, pv );
+                    PropVariantClear( &pv );
+                }
+                pps->Release();
+            }
+        }
+    }
 }
 
 // -----------------------------------------------------------------------

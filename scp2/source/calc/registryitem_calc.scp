@@ -283,7 +283,7 @@ RegistryItem gid_Regitem_Soffice_Starcalcdocument_6_AppUserModelID
     ComponentCondition = "VersionNT >= 601";
     Subkey = "soffice.StarCalcDocument.6";
     Name = "AppUserModelID";
-    Value = "TheDocumentFoundation.LibreOffice";
+    Value = "TheDocumentFoundation.LibreOffice.Calc";
 End
 
 RegistryItem gid_Regitem_Soffice_Starcalcdocument_6_FriendlyTypeName
@@ -397,7 +397,7 @@ RegistryItem gid_Regitem_Soffice_Starcalctemplate_6_AppUserModelID
     ComponentCondition = "VersionNT >= 601";
     Subkey = "soffice.StarCalcTemplate.6";
     Name = "AppUserModelID";
-    Value = "TheDocumentFoundation.LibreOffice";
+    Value = "TheDocumentFoundation.LibreOffice.Calc";
 End
 
 RegistryItem gid_Regitem_Soffice_Starcalctemplate_6_FriendlyTypeName
@@ -704,7 +704,7 @@ RegistryItem gid_Regitem_Openoffice_Calcdocument_1_AppUserModelID
     ComponentCondition = "VersionNT >= 601";
     Subkey = "LibreOffice.CalcDocument.1";
     Name = "AppUserModelID";
-    Value = "TheDocumentFoundation.LibreOffice";
+    Value = "TheDocumentFoundation.LibreOffice.Calc";
 End
 
 RegistryItem gid_Regitem_Openoffice_Calcdocument_1_FriendlyTypeName
@@ -910,7 +910,7 @@ RegistryItem gid_Regitem_Openoffice_Calctemplate_1_AppUserModelID
     ComponentCondition = "VersionNT >= 601";
     Subkey = "LibreOffice.CalcTemplate.1";
     Name = "AppUserModelID";
-    Value = "TheDocumentFoundation.LibreOffice";
+    Value = "TheDocumentFoundation.LibreOffice.Calc";
 End
 
 RegistryItem gid_Regitem_Openoffice_Calctemplate_1_FriendlyTypeName

@@ -283,7 +283,7 @@ RegistryItem gid_Regitem_Soffice_Stardrawdocument_6_AppUserModelID
     ComponentCondition = "VersionNT >= 601";
     Subkey = "soffice.StarDrawDocument.6";
     Name = "AppUserModelID";
-    Value = "TheDocumentFoundation.LibreOffice";
+    Value = "TheDocumentFoundation.LibreOffice.Draw";
 End
 
 RegistryItem gid_Regitem_Soffice_Stardrawdocument_6_FriendlyTypeName
@@ -397,7 +397,7 @@ RegistryItem gid_Regitem_Soffice_Stardrawtemplate_6_AppUserModelID
     ComponentCondition = "VersionNT >= 601";
     Subkey = "soffice.StarDrawTemplate.6";
     Name = "AppUserModelID";
-    Value = "TheDocumentFoundation.LibreOffice";
+    Value = "TheDocumentFoundation.LibreOffice.Draw";
 End
 
 RegistryItem gid_Regitem_Soffice_Stardrawtemplate_6_FriendlyTypeName
@@ -704,7 +704,7 @@ RegistryItem gid_Regitem_Openoffice_Drawdocument_1_AppUserModelID
     ComponentCondition = "VersionNT >= 601";
     Subkey = "LibreOffice.DrawDocument.1";
     Name = "AppUserModelID";
-    Value = "TheDocumentFoundation.LibreOffice";
+    Value = "TheDocumentFoundation.LibreOffice.Draw";
 End
 
 RegistryItem gid_Regitem_Openoffice_Drawdocument_1_FriendlyTypeName
@@ -910,7 +910,7 @@ RegistryItem gid_Regitem_Openoffice_Drawtemplate_1_AppUserModelID
     ComponentCondition = "VersionNT >= 601";
     Subkey = "LibreOffice.DrawTemplate.1";
     Name = "AppUserModelID";
-    Value = "TheDocumentFoundation.LibreOffice";
+    Value = "TheDocumentFoundation.LibreOffice.Draw";
 End
 
 RegistryItem gid_Regitem_Openoffice_Drawtemplate_1_FriendlyTypeName
