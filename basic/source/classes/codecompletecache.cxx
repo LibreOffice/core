@@ -19,6 +19,21 @@
 
 #include <basic/codecompletecache.hxx>
 
+std::ostream& operator<< (std::ostream& aStream, const CodeCompleteDataCache& aCache)
+{
+    for( CodeCompleteVarScopes::const_iterator aIt = aCache.aVarScopes.begin(); aIt != aCache.aVarScopes.end(); ++aIt )
+    {
+        aStream << aIt->first << std::endl;
+        CodeCompleteVarTypes aVarTypes = aIt->second;
+        for( CodeCompleteVarTypes::const_iterator aOtherIt = aVarTypes.begin(); aOtherIt != aVarTypes.end(); ++aOtherIt )
+        {
+            aStream << "\t" << aOtherIt->first << "," << aOtherIt->second << std::endl;
+        }
+    }
+    aStream << "-----------------" << std::endl;
+    return aStream;
+}
+
 const CodeCompleteVarScopes& CodeCompleteDataCache::GetVars() const
 {
     return aVarScopes;
@@ -33,7 +48,7 @@ void CodeCompleteDataCache::SetVars( const CodeCompleteVarScopes& aScopes )
     aVarScopes = aScopes;
 }
 
-const OUString& CodeCompleteDataCache::GetVariableType( const OUString& sVarName, const OUString& sProcName ) const
+OUString CodeCompleteDataCache::GetVariableType( const OUString& sVarName, const OUString& sProcName ) const
 {
     CodeCompleteVarScopes::const_iterator aIt = aVarScopes.find( sProcName );
     if( aIt == aVarScopes.end() )//procedure does not exist
@@ -45,6 +60,11 @@ const OUString& CodeCompleteDataCache::GetVariableType( const OUString& sVarName
         return NOT_FOUND;
     else
         return aOtherIt->second;
+}
+
+void CodeCompleteDataCache::print() const
+{
+    std::cerr << *this << std::endl;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

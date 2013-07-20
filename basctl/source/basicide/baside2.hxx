@@ -115,9 +115,7 @@ private:
     virtual
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >
     GetComponentInterface(sal_Bool bCreate = true);
-    //std::vector< CodeCompleteData > aCodeCompleteCache;
     CodeCompleteDataCache aCodeCompleteCache;
-    //CodeCompleteWindow* pCodeCompleteWnd;
     boost::scoped_ptr< CodeCompleteWindow > pCodeCompleteWnd;
     OUString GetActualSubName( sal_uLong nLine ); // gets the actual subroutine name according to line number
 
@@ -474,32 +472,6 @@ private:
     } aSyntaxColors;
 };
 
-class CodeCompleteWindow: public Window
-{
-friend class CodeCompleteListBox;
-private:
-    EditorWindow* pParent; // parent window
-    TextSelection aTextSelection;
-    CodeCompleteListBox* pListBox;
-
-    void InitListBox(); // initialize the ListBox
-
-public:
-    CodeCompleteWindow( EditorWindow* pPar );
-    virtual ~CodeCompleteWindow();
-
-    void InsertEntry( const OUString& aStr );
-    void ClearListBox();
-    void SetTextSelection( const TextSelection& aSel );
-    const TextSelection& GetTextSelection() const;
-    void ResizeListBox();
-    void SelectFirstEntry(); //selects first entry in ListBox
-
-/*protected:
-    //virtual void KeyInput( const KeyEvent& rKeyEvt );
-    virtual void LoseFocus();*/
-};
-
 class CodeCompleteListBox: public ListBox
 {
 friend class CodeCompleteWindow;
@@ -517,16 +489,35 @@ private:
     void SetVisibleEntries(); // sets the visible entries based on aFuncBuffer variable
 
 public:
-    CodeCompleteListBox(CodeCompleteWindow* pPar);
-    virtual ~CodeCompleteListBox();
+    CodeCompleteListBox( CodeCompleteWindow* pPar );
     void InsertSelectedEntry(); //insert the selected entry
 
     DECL_LINK(ImplDoubleClickHdl, void*);
 
     virtual long PreNotify( NotifyEvent& rNEvt );
 
-/*protected:
-    virtual void LoseFocus();*/
+};
+
+class CodeCompleteWindow: public Window
+{
+friend class CodeCompleteListBox;
+private:
+    EditorWindow* pParent; // parent window
+    TextSelection aTextSelection;
+    CodeCompleteListBox* pListBox;
+
+    void InitListBox(); // initialize the ListBox
+
+public:
+    CodeCompleteWindow( EditorWindow* pPar );
+    ~CodeCompleteWindow(){ delete pListBox; }
+
+    void InsertEntry( const OUString& aStr );
+    void ClearListBox();
+    void SetTextSelection( const TextSelection& aSel );
+    const TextSelection& GetTextSelection() const;
+    void ResizeListBox();
+    void SelectFirstEntry(); //selects first entry in ListBox
 
 };
 
