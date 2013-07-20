@@ -81,8 +81,7 @@ public class ComputersFragment extends SherlockListFragment implements ServiceCo
     }
 
     private void bindService() {
-        Intent aServiceIntent = new Intent(getActivity(), CommunicationService.class);
-
+        Intent aServiceIntent = Intents.buildCommunicationServiceIntent(getActivity());
         getActivity().bindService(aServiceIntent, this, Context.BIND_AUTO_CREATE);
     }
 
@@ -93,91 +92,46 @@ public class ComputersFragment extends SherlockListFragment implements ServiceCo
         mCommunicationService = aServiceBinder.getService();
 
         mCommunicationService.startSearch();
+
+        loadComputers();
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
+    private void loadComputers() {
+        if (!isAdded()) {
+            return;
+        }
 
-        unbindService();
-    }
-
-    private void unbindService() {
         if (!isServiceBound()) {
             return;
         }
 
-        getActivity().unbindService(this);
+        if (getComputers().isEmpty()) {
+            hideComputersList();
+        }
+        else {
+            showComputersList();
+        }
     }
 
     private boolean isServiceBound() {
         return mCommunicationService != null;
     }
 
-    @Override
-    public void onServiceDisconnected(ComponentName aComponentName) {
-        mCommunicationService = null;
+    private void hideComputersList() {
+        setListAdapter(null);
+
+        setListShown(false);
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        loadComputers();
-
-        registerIntentsReceiver();
-    }
-
-    private void registerIntentsReceiver() {
-        mIntentsReceiver = new IntentsReceiver(this);
-        IntentFilter aIntentFilter = buildIntentsReceiverFilter();
-
-        getBroadcastManager().registerReceiver(mIntentsReceiver, aIntentFilter);
-    }
-
-    private static final class IntentsReceiver extends BroadcastReceiver {
-        private final ComputersFragment mComputersFragment;
-
-        public IntentsReceiver(ComputersFragment aComputersFragment) {
-            mComputersFragment = aComputersFragment;
-        }
-
-        @Override
-        public void onReceive(Context aContext, Intent aIntent) {
-            if (Intents.Actions.SERVERS_LIST_CHANGED.equals(aIntent.getAction())) {
-                mComputersFragment.loadComputers();
-            }
-        }
-    }
-
-    private IntentFilter buildIntentsReceiverFilter() {
-        IntentFilter aIntentFilter = new IntentFilter();
-        aIntentFilter.addAction(Intents.Actions.SERVERS_LIST_CHANGED);
-
-        return aIntentFilter;
-    }
-
-    private LocalBroadcastManager getBroadcastManager() {
-        Context aContext = getActivity().getApplicationContext();
-
-        return LocalBroadcastManager.getInstance(aContext);
-    }
-
-    private void loadComputers() {
-        if (!isServiceBound()) {
-            return;
-        }
-
-        if (getComputers().isEmpty()) {
-            return;
-        }
-
+    private void showComputersList() {
         if (!isComputersAdapterExist()) {
             setUpComputersAdapter();
         }
 
         getComputersAdapter().clear();
         getComputersAdapter().add(getComputers());
+
+        setListShown(true);
     }
 
     private boolean isComputersAdapterExist() {
@@ -215,6 +169,68 @@ public class ComputersFragment extends SherlockListFragment implements ServiceCo
             default:
                 return false;
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        unbindService();
+    }
+
+    private void unbindService() {
+        if (!isServiceBound()) {
+            return;
+        }
+
+        getActivity().unbindService(this);
+    }
+
+    @Override
+    public void onServiceDisconnected(ComponentName aComponentName) {
+        mCommunicationService = null;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        registerIntentsReceiver();
+    }
+
+    private void registerIntentsReceiver() {
+        mIntentsReceiver = new IntentsReceiver(this);
+        IntentFilter aIntentFilter = buildIntentsReceiverFilter();
+
+        getBroadcastManager().registerReceiver(mIntentsReceiver, aIntentFilter);
+    }
+
+    private static final class IntentsReceiver extends BroadcastReceiver {
+        private final ComputersFragment mComputersFragment;
+
+        public IntentsReceiver(ComputersFragment aComputersFragment) {
+            mComputersFragment = aComputersFragment;
+        }
+
+        @Override
+        public void onReceive(Context aContext, Intent aIntent) {
+            if (Intents.Actions.SERVERS_LIST_CHANGED.equals(aIntent.getAction())) {
+                mComputersFragment.loadComputers();
+            }
+        }
+    }
+
+    private IntentFilter buildIntentsReceiverFilter() {
+        IntentFilter aIntentFilter = new IntentFilter();
+        aIntentFilter.addAction(Intents.Actions.SERVERS_LIST_CHANGED);
+
+        return aIntentFilter;
+    }
+
+    private LocalBroadcastManager getBroadcastManager() {
+        Context aContext = getActivity().getApplicationContext();
+
+        return LocalBroadcastManager.getInstance(aContext);
     }
 
     @Override
@@ -264,9 +280,14 @@ public class ComputersFragment extends SherlockListFragment implements ServiceCo
         int aComputerPosition = getListItemPosition(aMenuItem);
         Server aComputer = getComputersAdapter().getItem(aComputerPosition);
 
-        removeComputer(aComputer);
+        switch (aMenuItem.getItemId()) {
+            case R.id.menu_remove_computer:
+                removeComputer(aComputer);
+                return true;
 
-        return true;
+            default:
+                return super.onContextItemSelected(aMenuItem);
+        }
     }
 
     private int getListItemPosition(android.view.MenuItem aMenuItem) {
@@ -312,10 +333,11 @@ public class ComputersFragment extends SherlockListFragment implements ServiceCo
         String aServerAddress = aIntent.getStringExtra(Intents.Extras.SERVER_ADDRESS);
         String aServerName = aIntent.getStringExtra(Intents.Extras.SERVER_NAME);
 
-        addServer(aServerAddress, aServerName);
+        addComputer(aServerAddress, aServerName);
+        loadComputers();
     }
 
-    private void addServer(String aAddress, String aName) {
+    private void addComputer(String aAddress, String aName) {
         mCommunicationService.addServer(aAddress, aName);
 
         Intent aIntent = Intents.buildServersListChangedIntent();

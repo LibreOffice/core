@@ -15,6 +15,7 @@ import org.libreoffice.impressremote.activity.ComputerConnectionActivity;
 import org.libreoffice.impressremote.activity.ComputerCreationActivity;
 import org.libreoffice.impressremote.activity.LicensesActivity;
 import org.libreoffice.impressremote.activity.SlideShowActivity;
+import org.libreoffice.impressremote.communication.CommunicationService;
 import org.libreoffice.impressremote.communication.Server;
 
 public final class Intents {
@@ -133,6 +134,10 @@ public final class Intents {
 
     public static Intent buildLicensesIntent(Context aContext) {
         return new Intent(aContext, LicensesActivity.class);
+    }
+
+    public static Intent buildCommunicationServiceIntent(Context aContext) {
+        return new Intent(aContext, CommunicationService.class);
     }
 }
 
