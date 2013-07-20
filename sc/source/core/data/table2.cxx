@@ -3512,7 +3512,7 @@ void ScTable::CopyData( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW n
 
             if (aCell.meType == CELLTYPE_FORMULA)
             {
-                sc::RefUpdateContext aCxt;
+                sc::RefUpdateContext aCxt(*pDocument);
                 aCxt.meMode = URM_COPY;
                 aCxt.maRange = aRange;
                 aCxt.mnColDelta = nDestCol - nStartCol;

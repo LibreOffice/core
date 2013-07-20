@@ -849,7 +849,7 @@ bool ScDocument::CopyTab( SCTAB nOldPos, SCTAB nNewPos, const ScMarkData* pOnlyM
         maTabs[nNewPos]->SetTabBgColor(maTabs[nOldPos]->GetTabBgColor());
 
         SCTAB nDz = nNewPos - nOldPos;
-        sc::RefUpdateContext aRefCxt;
+        sc::RefUpdateContext aRefCxt(*this);
         aRefCxt.meMode = URM_COPY;
         aRefCxt.maRange = ScRange(0, 0, nNewPos, MAXCOL, MAXROW, nNewPos);
         aRefCxt.mnTabDelta = nDz;
@@ -968,7 +968,7 @@ sal_uLong ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
 
         if ( !bResultsOnly )
         {
-            sc::RefUpdateContext aRefCxt;
+            sc::RefUpdateContext aRefCxt(*this);
             aRefCxt.meMode = URM_COPY;
             aRefCxt.maRange = ScRange(0, 0, nDestPos, MAXCOL, MAXROW, nDestPos);
             aRefCxt.mnTabDelta = nDestPos - nSrcPos;

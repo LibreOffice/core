@@ -11,8 +11,8 @@
 
 namespace sc {
 
-RefUpdateContext::RefUpdateContext() :
-    meMode(URM_INSDEL), mnColDelta(0), mnRowDelta(0), mnTabDelta(0) {}
+RefUpdateContext::RefUpdateContext(ScDocument& rDoc) :
+    mrDoc(rDoc), meMode(URM_INSDEL), mnColDelta(0), mnRowDelta(0), mnTabDelta(0) {}
 
 bool RefUpdateContext::isInserted() const
 {

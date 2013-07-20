@@ -13,10 +13,14 @@
 #include "global.hxx"
 #include "address.hxx"
 
+class ScDocument;
+
 namespace sc {
 
 struct RefUpdateContext
 {
+    ScDocument& mrDoc;
+
     /**
      * update mode - insert/delete, copy, or move. The reorder mode (which
      * corresponds with the reordering of sheets) is not used with this
@@ -38,7 +42,7 @@ struct RefUpdateContext
     /** Amount and direction of movement in the sheet direction. */
     SCTAB mnTabDelta;
 
-    RefUpdateContext();
+    RefUpdateContext(ScDocument& rDoc);
 
     bool isInserted() const;
     bool isDeleted() const;

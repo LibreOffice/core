@@ -1119,10 +1119,10 @@ namespace {
 /**
  * Adjust references in formula cell with respect to column-wise relocation.
  */
-void updateRefInFormulaCell( ScFormulaCell& rCell, SCCOL nCol, SCTAB nTab, SCCOL nColDiff )
+void updateRefInFormulaCell( ScDocument* pDoc, ScFormulaCell& rCell, SCCOL nCol, SCTAB nTab, SCCOL nColDiff )
 {
     rCell.aPos.SetCol(nCol);
-    sc::RefUpdateContext aCxt;
+    sc::RefUpdateContext aCxt(*pDoc);
     aCxt.meMode = URM_MOVE;
     aCxt.maRange = ScRange(ScAddress(nCol, 0, nTab), ScAddress(nCol, MAXROW, nTab));
     aCxt.mnColDelta = nColDiff;
@@ -1139,14 +1139,14 @@ void ScColumn::SwapCell( SCROW nRow, ScColumn& rCol)
     if (aPos1.first->type == sc::element_type_formula)
     {
         ScFormulaCell& rCell = *sc::formula_block::at(*aPos1.first->data, aPos1.second);
-        updateRefInFormulaCell(rCell, rCol.nCol, nTab, rCol.nCol - nCol);
+        updateRefInFormulaCell(pDocument, rCell, rCol.nCol, nTab, rCol.nCol - nCol);
         sc::SharedFormulaUtil::unshareFormulaCell(aPos1, rCell);
     }
 
     if (aPos2.first->type == sc::element_type_formula)
     {
         ScFormulaCell& rCell = *sc::formula_block::at(*aPos2.first->data, aPos2.second);
-        updateRefInFormulaCell(rCell, nCol, nTab, nCol - rCol.nCol);
+        updateRefInFormulaCell(pDocument, rCell, nCol, nTab, nCol - rCol.nCol);
         sc::SharedFormulaUtil::unshareFormulaCell(aPos2, rCell);
     }
 
@@ -2036,7 +2036,7 @@ void ScColumn::CopyScenarioFrom( const ScColumn& rSrcCol )
 
             //  UpdateUsed not needed, already done in TestCopyScenario (obsolete comment ?)
 
-            sc::RefUpdateContext aRefCxt;
+            sc::RefUpdateContext aRefCxt(*pDocument);
             aRefCxt.meMode = URM_COPY;
             aRefCxt.maRange = ScRange(nCol, nStart, nTab, nCol, nEnd, nTab);
             aRefCxt.mnTabDelta = nTab - rSrcCol.nTab;
@@ -2067,7 +2067,7 @@ void ScColumn::CopyScenarioTo( ScColumn& rDestCol ) const
 
             //  UpdateUsed not needed, is already done in TestCopyScenario (obsolete comment ?)
 
-            sc::RefUpdateContext aRefCxt;
+            sc::RefUpdateContext aRefCxt(*pDocument);
             aRefCxt.meMode = URM_COPY;
             aRefCxt.maRange = ScRange(rDestCol.nCol, nStart, rDestCol.nTab, rDestCol.nCol, nEnd, rDestCol.nTab);
             aRefCxt.mnTabDelta = rDestCol.nTab - nTab;

@@ -2296,40 +2296,88 @@ bool shrinkRange( const sc::RefUpdateContext& rCxt, ScRange& rRefRange, const Sc
     return false;
 }
 
-bool expandRange( const sc::RefUpdateContext& rCxt, ScRange& rRefRange, const ScRange& rInsertedRange )
+bool expandRange( const sc::RefUpdateContext& rCxt, ScRange& rRefRange, const ScRange& rSelectedRange )
 {
+    if (!rSelectedRange.Intersects(rRefRange))
+        return false;
+
     if (rCxt.mnColDelta > 0)
     {
         // Insert and shifting right.
-        if (rRefRange.aStart.Row() < rInsertedRange.aStart.Row() || rInsertedRange.aEnd.Row() < rRefRange.aEnd.Row())
-            // Inserted range is only partially overlapping in vertical direction. Bail out.
+        if (rRefRange.aStart.Row() < rSelectedRange.aStart.Row() || rSelectedRange.aEnd.Row() < rRefRange.aEnd.Row())
+            // Selected range is only partially overlapping in vertical direction. Bail out.
             return false;
 
-        if (rInsertedRange.aStart.Col() == rRefRange.aStart.Col())
-            // Inserted range is at the left end.  No expansion.
+        if (!rCxt.mrDoc.IsExpandRefs() && rSelectedRange.aStart.Col() == rRefRange.aStart.Col())
+            // Selected range is at the left end and the edge expansion is turned off.  No expansion.
             return false;
 
         // Move the last column position to the right.
-        SCCOL nDelta = rInsertedRange.aEnd.Col() - rInsertedRange.aStart.Col() + 1;
+        SCCOL nDelta = rSelectedRange.aEnd.Col() - rSelectedRange.aStart.Col() + 1;
         rRefRange.aEnd.IncCol(nDelta);
         return true;
     }
     else if (rCxt.mnRowDelta > 0)
     {
         // Insert and shifting down.
-        if (rRefRange.aStart.Col() < rInsertedRange.aStart.Col() || rInsertedRange.aEnd.Col() < rRefRange.aEnd.Col())
-            // Inserted range is only partially overlapping in horizontal direction. Bail out.
+        if (rRefRange.aStart.Col() < rSelectedRange.aStart.Col() || rSelectedRange.aEnd.Col() < rRefRange.aEnd.Col())
+            // Selected range is only partially overlapping in horizontal direction. Bail out.
             return false;
 
-        if (rInsertedRange.aStart.Row() == rRefRange.aStart.Row())
-            // Inserted range is at the top end.  No expansion.
+        if (!rCxt.mrDoc.IsExpandRefs() && rSelectedRange.aStart.Row() == rRefRange.aStart.Row())
+            // Selected range is at the top end and the edge expansion is turned off.  No expansion.
             return false;
 
         // Move the last row position down.
-        SCROW nDelta = rInsertedRange.aEnd.Row() - rInsertedRange.aStart.Row() + 1;
+        SCROW nDelta = rSelectedRange.aEnd.Row() - rSelectedRange.aStart.Row() + 1;
         rRefRange.aEnd.IncRow(nDelta);
         return true;
     }
+    return false;
+}
+
+/**
+ * Check if the referenced range is expandable when the selected range is
+ * not overlapping the referenced range.
+ */
+bool expandRangeByEdge( const sc::RefUpdateContext& rCxt, ScRange& rRefRange, const ScRange& rSelectedRange )
+{
+    if (!rCxt.mrDoc.IsExpandRefs())
+        // Edge-expansion is turned off.
+        return false;
+
+    if (rCxt.mnColDelta > 0)
+    {
+        // Insert and shift right.
+        if (rRefRange.aStart.Row() < rSelectedRange.aStart.Row() || rSelectedRange.aEnd.Row() < rRefRange.aEnd.Row())
+            // Selected range is only partially overlapping in vertical direction. Bail out.
+            return false;
+
+        if (rSelectedRange.aStart.Col() - rRefRange.aEnd.Col() != 1)
+            // Selected range is not immediately adjacent. Bail out.
+            return false;
+
+        // Move the last column position to the right.
+        SCCOL nDelta = rSelectedRange.aEnd.Col() - rSelectedRange.aStart.Col() + 1;
+        rRefRange.aEnd.IncCol(nDelta);
+        return true;
+    }
+    else if (rCxt.mnRowDelta > 0)
+    {
+        if (rRefRange.aStart.Col() < rSelectedRange.aStart.Col() || rSelectedRange.aEnd.Col() < rRefRange.aEnd.Col())
+            // Selected range is only partially overlapping in horizontal direction. Bail out.
+            return false;
+
+        if (rSelectedRange.aStart.Row() - rRefRange.aEnd.Row() != 1)
+            // Selected range is not immediately adjacent. Bail out.
+            return false;
+
+        // Move the last row position down.
+        SCROW nDelta = rSelectedRange.aEnd.Row() - rSelectedRange.aStart.Row() + 1;
+        rRefRange.aEnd.IncRow(nDelta);
+        return true;
+    }
+
     return false;
 }
 
@@ -2398,11 +2446,20 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnShift( const sc::RefUpdateCon
                     }
                 }
 
-                if (rCxt.isInserted() && aSelectedRange.Intersects(aAbs))
+                if (rCxt.isInserted())
                 {
                     if (expandRange(rCxt, aAbs, aSelectedRange))
                     {
                         // The reference range has been expanded.
+                        rRef.SetRange(aAbs, aNewPos);
+                        aRes.mbValueChanged = true;
+                        aRes.mbRangeSizeModified = true;
+                        break;
+                    }
+
+                    if (expandRangeByEdge(rCxt, aAbs, aSelectedRange))
+                    {
+                        // The reference range has been expanded on the edge.
                         rRef.SetRange(aAbs, aNewPos);
                         aRes.mbValueChanged = true;
                         aRes.mbRangeSizeModified = true;

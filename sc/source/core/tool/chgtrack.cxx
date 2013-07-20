@@ -1303,7 +1303,7 @@ bool ScChangeActionMove::Reject( ScDocument* pDoc )
     pDoc->DeleteAreaTab( aToRange, IDF_ALL );
     pDoc->DeleteAreaTab( aFrmRange, IDF_ALL );
     // Formeln im Dokument anpassen
-    sc::RefUpdateContext aCxt;
+    sc::RefUpdateContext aCxt(*pDoc);
     aCxt.meMode = URM_MOVE;
     aCxt.maRange = aFrmRange;
     aCxt.mnColDelta = aFrmRange.aStart.Col() - aToRange.aStart.Col();
@@ -2098,7 +2098,7 @@ void ScChangeActionContent::UpdateReference( const ScChangeTrack* pTrack,
         }
         ScRange aRange( aTmpRange.MakeRange() );
 
-        sc::RefUpdateContext aRefCxt;
+        sc::RefUpdateContext aRefCxt(*pTrack->GetDocument());
         aRefCxt.meMode = eMode;
         aRefCxt.maRange = aRange;
         aRefCxt.mnColDelta = nDx;

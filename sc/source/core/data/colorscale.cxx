@@ -244,13 +244,14 @@ void ScColorScaleEntry::UpdateMoveTab( SCTAB nOldTab, SCTAB nNewTab, SCTAB nTabN
     }
 }
 
-void ScColorScaleEntry::UpdateReference( UpdateRefMode eUpdateRefMode,
-            const ScRange& rRange, SCsCOL nDx, SCsROW nDy, SCsTAB nDz )
+void ScColorScaleEntry::UpdateReference(
+    ScDocument* pDoc, UpdateRefMode eUpdateRefMode, const ScRange& rRange,
+    SCsCOL nDx, SCsROW nDy, SCsTAB nDz )
 {
     if (!mpCell)
         return;
 
-    sc::RefUpdateContext aCxt;
+    sc::RefUpdateContext aCxt(*pDoc);
     aCxt.meMode = eUpdateRefMode;
     aCxt.maRange = rRange;
     aCxt.mnColDelta = nDx;
@@ -586,7 +587,7 @@ void ScColorScaleFormat::UpdateReference( UpdateRefMode eUpdateRefMode,
 {
     for(iterator itr = begin(); itr != end(); ++itr)
     {
-        itr->UpdateReference(eUpdateRefMode, rRange, nDx, nDy, nDz);
+        itr->UpdateReference(mpDoc, eUpdateRefMode, rRange, nDx, nDy, nDz);
     }
 }
 
@@ -699,8 +700,8 @@ condformat::ScFormatEntryType ScDataBarFormat::GetType() const
 void ScDataBarFormat::UpdateReference( UpdateRefMode eRefMode,
             const ScRange& rRange, SCsCOL nDx, SCsROW nDy, SCsTAB nDz )
 {
-    mpFormatData->mpUpperLimit->UpdateReference( eRefMode, rRange, nDx, nDy, nDz );
-    mpFormatData->mpLowerLimit->UpdateReference( eRefMode, rRange, nDx, nDy, nDz );
+    mpFormatData->mpUpperLimit->UpdateReference( mpDoc, eRefMode, rRange, nDx, nDy, nDz );
+    mpFormatData->mpLowerLimit->UpdateReference( mpDoc, eRefMode, rRange, nDx, nDy, nDz );
 }
 
 bool ScDataBarFormat::NeedsRepaint() const
@@ -1012,7 +1013,7 @@ void ScIconSetFormat::UpdateReference( UpdateRefMode eUpdateRefMode,
 {
     for(iterator itr = begin(); itr != end(); ++itr)
     {
-        itr->UpdateReference( eUpdateRefMode, rRange, nDx, nDy, nDz );
+        itr->UpdateReference( mpDoc, eUpdateRefMode, rRange, nDx, nDy, nDz );
     }
 }
 
