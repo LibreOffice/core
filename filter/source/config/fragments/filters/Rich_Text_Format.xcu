@@ -21,7 +21,7 @@
         <prop oor:name="FilterService"><value>com.sun.star.comp.Writer.RtfFilter</value></prop>
         <prop oor:name="UserData"><value>RTF</value></prop>
         <prop oor:name="UIName">
-            <value xml:lang="x-default">Rich Text Format</value>
+            <value xml:lang="x-default">Rich Text</value>
         </prop>
         <prop oor:name="FileFormatVersion"><value>0</value></prop>
         <prop oor:name="Type"><value>writer_Rich_Text_Format</value></prop>
