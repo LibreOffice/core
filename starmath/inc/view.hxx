@@ -260,8 +260,8 @@ protected:
     virtual sal_uInt16 SetPrinter(SfxPrinter *pNewPrinter,
                               sal_uInt16     nDiffFlags = SFX_PRINTER_ALL, bool bIsAPI=false);
 
-    bool        Insert( SfxMedium& rMedium );
-    bool        InsertFrom(SfxMedium &rMedium);
+    void Insert( SfxMedium& rMedium );
+    void InsertFrom(SfxMedium &rMedium);
 
     virtual bool HasPrintOptionsPage() const;
     virtual SfxTabPage *CreatePrintOptionsPage(Window           *pParent,
