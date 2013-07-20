@@ -134,8 +134,6 @@ sal_Bool SAL_CALL OResultSet::next() throw(SQLException, RuntimeException)
     MutexGuard aGuard(m_pConnection->getMutex());
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
-    SAL_INFO("connectivity.firebird", "Fetching row from cursor");
-
     m_currentRow++;
 
     ISC_STATUS fetchStat = isc_dsql_fetch(m_statusVector,
@@ -343,7 +341,6 @@ void SAL_CALL OResultSet::checkRowIndex()
 // -------------------------------------------------------------------------
 void OResultSet::disposing(void)
 {
-    SAL_INFO("connectivity.firebird", "disposing().");
 
     OPropertySetHelper::disposing();
 

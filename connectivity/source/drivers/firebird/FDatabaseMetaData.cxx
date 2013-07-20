@@ -911,29 +911,6 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
         OUString desc  = xRow->getString( 5 );
 
         rows++;
-        if (rows < 10)
-        {
-            if ( 1 == rows )
-                SAL_DEBUG("COLUMNS | "
-                          "schema | "
-                          "TABLENAME                                                                                     | "
-                          "SF| "
-                          "TT| "
-                          "desc        |");
-            SAL_DEBUG("Row " << OUString::number(0).concat(OUString::number(rows)) << ": | "
-                      << schema << " | "
-                      << aTableName << " | "
-                      << systemFlag << " | "
-                      << tableType << " | "
-                      << desc << " |");
-        }
-        else
-            SAL_DEBUG("Row " << rows << ": | "
-                      << schema << " | "
-                      << aTableName << " | "
-                      << systemFlag << " | "
-                      << tableType << " | "
-                      << desc << " |");
 
         OUString aTableType;
         if( 1 == systemFlag )

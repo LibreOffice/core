@@ -99,8 +99,6 @@ void OStatement_Base::disposeResultSet()
 
 void OStatement_BASE2::disposing()
 {
-    SAL_INFO("connectivity.firebird", "disposing().");
-
     MutexGuard aGuard(m_pConnection->getMutex());
 
     disposeResultSet();

@@ -120,8 +120,6 @@ OConnection::~OConnection()
 
 void SAL_CALL OConnection::release() throw()
 {
-    SAL_INFO("connectivity.firebird", "release().");
-
     relase_ChildImpl();
 }
 // -----------------------------------------------------------------------------
@@ -475,8 +473,6 @@ sal_Bool SAL_CALL OConnection::isClosed(  ) throw(SQLException, RuntimeException
 // --------------------------------------------------------------------------------
 Reference< XDatabaseMetaData > SAL_CALL OConnection::getMetaData(  ) throw(SQLException, RuntimeException)
 {
-    SAL_INFO("connectivity.firebird", "getMetaData().");
-
     MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
 
