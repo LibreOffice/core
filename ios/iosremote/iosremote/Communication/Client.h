@@ -17,7 +17,7 @@
 @property BOOL connected;
 @property (nonatomic, strong) NSNumber* pin;
 @property (nonatomic, strong) NSString* name;
-@property (nonatomic, weak) Server* server;
+@property (nonatomic, strong) Server* server;
 
 - (void) connect;
 - (void) disconnect;

@@ -46,15 +46,19 @@
         int port = socketAddress->sin_port;
         NSLog(@"Resolved at %@:%u", ipString, port);
         
-        [self.comManager.autoDiscoveryServers replaceObjectAtIndex:[self.comManager.autoDiscoveryServers count]-1
-                                                         withObject:[[Server alloc] initWithProtocol:NETWORK atAddress:ipString ofName:sender.name]];
-        [self.tableView reloadData];
+        [self.comManager connectToServer:[[Server alloc] initWithProtocol:NETWORK atAddress:ipString ofName:sender.name]];
     }
 }
 
 -(void) netService:(NSNetService *)sender didNotResolve:(NSDictionary *)errorDict
 {
     NSLog(@"Failed to resolve");
+    UIAlertView *message = [[UIAlertView alloc] initWithTitle:@"Failed to reach the computer"
+                                                      message:@"Please restart your application or wait the application to refresh. "
+                                                     delegate:self
+                                            cancelButtonTitle:@"OK"
+                                            otherButtonTitles:nil];
+    [message show];
 }
 
 #pragma mark - bonjour service discovery
@@ -89,7 +93,6 @@
     
     NSLog(@"Got service %p with hostname %@\n", aNetService,
           [aNetService name]);
-    [aNetService resolveWithTimeout:0.0];
     
     [aNetService setDelegate:self];
     
@@ -97,6 +100,7 @@
     {
         UITableViewCell * cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
         [(UIActivityIndicatorView *)[cell viewWithTag:5] stopAnimating];
+        [self.tableView reloadData];
     }
 }
 
@@ -236,11 +240,6 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
- 
-    if ([cell.detailTextLabel.text isEqualToString:@""]) {
-        [tableView deselectRowAtIndexPath:indexPath animated:YES];
-        return;
-    }
     
     if(self.comManager.state!=CONNECTING){
         self.lastSpinningCellIndex = indexPath;
@@ -253,8 +252,8 @@
         NSLog(@"Connecting to %@:%@", [[self.comManager.servers objectAtIndex:indexPath.row] serverName], [[self.comManager.servers objectAtIndex:indexPath.row] serverAddress]);
         [self.comManager connectToServer:[self.comManager.servers objectAtIndex:indexPath.row]];
     } else if (indexPath.section == 0){
-        NSLog(@"Connecting to %@:%@", [[self.comManager.autoDiscoveryServers objectAtIndex:indexPath.row] serverName], [[self.comManager.autoDiscoveryServers objectAtIndex:indexPath.row] serverAddress]);
-        [self.comManager connectToServer:[self.comManager.autoDiscoveryServers objectAtIndex:indexPath.row]];
+        NSLog(@"Connecting to %@", [[self.comManager.autoDiscoveryServers objectAtIndex:indexPath.row] name]);
+        [[self.comManager.autoDiscoveryServers objectAtIndex:indexPath.row] resolveWithTimeout:0.0];
     }
     
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
@@ -357,7 +356,7 @@
                 [cell.detailTextLabel setText:[s serverAddress]];
             } else if ([s isKindOfClass:[NSNetService class]]){
                 [cell.textLabel setText:[s name]];
-                [cell.detailTextLabel setText:@"Resolving..."];
+                [cell.detailTextLabel setText:@""];
             }
         }
     }
