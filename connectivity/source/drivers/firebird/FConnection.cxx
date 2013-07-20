@@ -203,27 +203,29 @@ void OConnection::construct(const ::rtl::OUString& url, const Sequence< Property
                                                                 uno::UNO_QUERY );
             if ( !xFileAccess.is() )
             {
-                // TODO: Error
                 ::connectivity::SharedResources aResources;
                 const OUString sMessage = aResources.getResourceString(STR_ERROR_NEW_VERSION);
                 ::dbtools::throwGenericSQLException(sMessage ,*this);
             }
-            try {
-                xFileAccess->writeFile(m_sURL,xDBStream->getInputStream());
-            }
-            catch (...)
-            {
-                // TODO
-            }
-        }
 
-        if (bIsNewDatabase)
-        {
+            xFileAccess->writeFile(m_sURL,xDBStream->getInputStream());
         }
-        // Get DB properties from XML
+        // TOOO: Get DB properties from XML
 
     }
-    // else if url.begins(sdbc:firebird...)
+    // External file AND/OR remote connection
+    else if (url.startsWith("sdbc:firebird:"))
+    {
+        m_sURL = url.copy(OUString("sdbc:firebird:").getLength());
+        if (m_sURL.startsWith("file://")) // TODO: are file urls really like this?
+        {
+            uno::Reference< ucb::XSimpleFileAccess > xFileAccess(
+                ucb::SimpleFileAccess::create(comphelper::getProcessComponentContext()),
+                uno::UNO_QUERY);
+            if (!xFileAccess->exists(m_sURL))
+                bIsNewDatabase = true;
+        }
+    }
 
     ISC_STATUS_ARRAY status;            /* status vector */
 
