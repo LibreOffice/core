@@ -49,7 +49,7 @@ ScDocument::GetFormulaTokens(ScAddress const&) const
 ScDocument::GetStringCell(ScAddress const&) const
 ScDocument::IsEmptyData(short, short) const
 ScExtIButton::GetSelected() const
-ScFilterDlg::LinkStubMoreClickHdl(void*, void*)
+ScFormulaCell::GetResultDouble() const
 ScFormulaCell::HasColRowName() const
 ScFormulaCell::IsSharedInvariant() const
 ScFormulaCell::SetResultToken(formula::FormulaToken const*)
@@ -179,8 +179,6 @@ sdr::table::SdrTableObj::getRowCount() const
 sfx2::sidebar::AsynchronousCall::RequestCall(boost::function<void ()> const&)
 sfx2::sidebar::Context::EvaluateMatch(std::__debug::vector<sfx2::sidebar::Context, std::allocator<sfx2::sidebar::Context> > const&) const
 sfx2::sidebar::ContextList::IsEmpty()
-sfx2::sidebar::ControlFactory::CreateToolBox(Window*, ResId const&)
-sfx2::sidebar::ControlFactory::CreateToolBox(Window*, ResId const&, com::sun::star::uno::Reference<com::sun::star::frame::XFrame> const&)
 sfx2::sidebar::ControlFactory::CreateToolBoxBackground(Window*, bool)
 sfx2::sidebar::Deck::GetIconURL(bool) const
 sfx2::sidebar::Deck::PrintWindowTree(std::__debug::vector<sfx2::sidebar::Panel*, std::allocator<sfx2::sidebar::Panel*> > const&)

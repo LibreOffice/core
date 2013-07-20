@@ -43,35 +43,6 @@ public:
 
     static ImageRadioButton* CreateTabItem (Window* pParentWindow);
 
-    /** Create a tool box that does *not* handle its items.  The
-        caller has to register callbacks to process, among others,
-        click and selection events.
-    */
-    static SidebarToolBox* CreateToolBox (
-        Window* pParentWindow,
-        const ResId& rResId);
-
-    /** Create a tool box that *does* handle its items.  All event
-        processing is done by toolbox controllers.
-    */
-    static SidebarToolBox* CreateToolBox (
-        Window* pParentWindow,
-        const ResId& rResId,
-        const ::com::sun::star::uno::Reference<com::sun::star::frame::XFrame>& rxFrame);
-
-    /** Create a window that acts as background of a tool box.
-        In general it is slightly larger than the tool box.
-        @param pParentWindow
-            The parent window of the new background control.
-        @param bShowBorder
-            When <TRUE/> then the background control is made slightly
-            larger then its tool box child, once that is created.
-            Otherwise the background control will not be visible.
-    */
-    static Window* CreateToolBoxBackground (
-        Window* pParentWindow,
-        const bool bShowBorder = true);
-
     static ImageRadioButton* CreateCustomImageRadionButton(
         Window* pParentWindow,
         const ResId& rResId );

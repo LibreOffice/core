@@ -45,49 +45,6 @@ ImageRadioButton* ControlFactory::CreateTabItem (Window* pParentWindow)
 
 
 
-SidebarToolBox* ControlFactory::CreateToolBox (
-    Window* pParentWindow,
-    const ResId& rResId)
-{
-    SidebarToolBox* pToolBox = new SidebarToolBox(pParentWindow, rResId, NULL);
-    pToolBox->SetBorderWindow(pParentWindow);
-
-    pToolBox->Invalidate();
-
-    return pToolBox;
-}
-
-
-
-
-SidebarToolBox* ControlFactory::CreateToolBox (
-    Window* pParentWindow,
-    const ResId& rResId,
-    const cssu::Reference<css::frame::XFrame>& rxFrame)
-{
-    SidebarToolBox* pToolBox = new SidebarToolBox(pParentWindow, rResId, rxFrame);
-    pToolBox->SetBorderWindow(pParentWindow);
-
-    pToolBox->Invalidate();
-
-    return pToolBox;
-}
-
-
-
-
-Window* ControlFactory::CreateToolBoxBackground (
-    Window* pParentWindow,
-    const bool bShowBorder)
-{
-    ToolBoxBackground* pBorderWindow = new ToolBoxBackground(pParentWindow, bShowBorder);
-    pBorderWindow->Show();
-    return pBorderWindow;
-}
-
-
-
-
 ImageRadioButton* ControlFactory::CreateCustomImageRadionButton(
     Window* pParentWindow,
     const ResId& rResId )
