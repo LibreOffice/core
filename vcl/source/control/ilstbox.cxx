@@ -1870,19 +1870,16 @@ void ImplListBoxWindow::DrawEntry( sal_uInt16 nPos, sal_Bool bDrawImage, sal_Boo
             const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
             const sal_uInt16 nEdgeBlendingPercent(GetEdgeBlending() ? rStyleSettings.GetEdgeBlending() : 0);
 
-            if(nEdgeBlendingPercent)
+            if(nEdgeBlendingPercent && aImgSz.Width() && aImgSz.Height())
             {
-                const Rectangle aRect(aPtImg, aImgSz);
-                Bitmap aBitmap(GetBitmap(aRect.TopLeft(), aRect.GetSize()));
+                const Color& rTopLeft(rStyleSettings.GetEdgeBlendingTopLeftColor());
+                const Color& rBottomRight(rStyleSettings.GetEdgeBlendingBottomRightColor());
+                const sal_uInt8 nAlpha((nEdgeBlendingPercent * 255) / 100);
+                const BitmapEx aBlendFrame(createBlendFrame(aImgSz, nAlpha, rTopLeft, rBottomRight));
 
-                if(!aBitmap.IsEmpty())
+                if(!aBlendFrame.IsEmpty())
                 {
-                    const Color& rTopLeft(rStyleSettings.GetEdgeBlendingTopLeftColor());
-                    const Color& rBottomRight(rStyleSettings.GetEdgeBlendingBottomRightColor());
-                    const sal_uInt8 nAlpha((nEdgeBlendingPercent * 255) / 100);
-
-                    aBitmap.DrawBlendFrame(nAlpha, rTopLeft, rBottomRight);
-                    DrawBitmap(aRect.TopLeft(), aBitmap);
+                    DrawBitmapEx(aPtImg, aBlendFrame);
                 }
             }
         }
@@ -2963,17 +2960,14 @@ void ImplWin::DrawEntry( sal_Bool bDrawImage, sal_Bool bDrawText, sal_Bool bDraw
 
         if(nEdgeBlendingPercent)
         {
-            const Rectangle aRect(aPtImg, aImgSz);
-            Bitmap aBitmap(GetBitmap(aRect.TopLeft(), aRect.GetSize()));
+            const Color& rTopLeft(rStyleSettings.GetEdgeBlendingTopLeftColor());
+            const Color& rBottomRight(rStyleSettings.GetEdgeBlendingBottomRightColor());
+            const sal_uInt8 nAlpha((nEdgeBlendingPercent * 255) / 100);
+            const BitmapEx aBlendFrame(createBlendFrame(aImgSz, nAlpha, rTopLeft, rBottomRight));
 
-            if(!aBitmap.IsEmpty())
+            if(!aBlendFrame.IsEmpty())
             {
-                const Color& rTopLeft(rStyleSettings.GetEdgeBlendingTopLeftColor());
-                const Color& rBottomRight(rStyleSettings.GetEdgeBlendingBottomRightColor());
-                const sal_uInt8 nAlpha((nEdgeBlendingPercent * 255) / 100);
-
-                aBitmap.DrawBlendFrame(nAlpha, rTopLeft, rBottomRight);
-                DrawBitmap(aRect.TopLeft(), aBitmap);
+                DrawBitmapEx(aPtImg, aBlendFrame);
             }
         }
     }
