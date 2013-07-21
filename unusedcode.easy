@@ -177,7 +177,6 @@ sdr::table::SdrTableObj::getRowCount() const
 sfx2::sidebar::AsynchronousCall::RequestCall(boost::function<void ()> const&)
 sfx2::sidebar::Context::EvaluateMatch(std::__debug::vector<sfx2::sidebar::Context, std::allocator<sfx2::sidebar::Context> > const&) const
 sfx2::sidebar::ContextList::IsEmpty()
-sfx2::sidebar::ControlFactory::CreateToolBoxBackground(Window*, bool)
 sfx2::sidebar::Deck::GetIconURL(bool) const
 sfx2::sidebar::Deck::PrintWindowTree(std::__debug::vector<sfx2::sidebar::Panel*, std::allocator<sfx2::sidebar::Panel*> > const&)
 sfx2::sidebar::EnumContext::EvaluateMatch(std::__debug::vector<sfx2::sidebar::EnumContext, std::allocator<sfx2::sidebar::EnumContext> > const&) const
