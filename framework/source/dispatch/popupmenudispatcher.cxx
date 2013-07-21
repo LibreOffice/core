@@ -112,7 +112,6 @@ css::uno::Reference< css::uno::XInterface >
 SAL_CALL PopupMenuDispatcher::impl_createInstance( const css::uno::Reference< css::lang::XMultiServiceFactory >& xServiceManager )
 throw( css::uno::Exception )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework","Ocke.Janssen@sun.com",U2B(IMPLEMENTATIONNAME_POPUPMENUDISPATCHER).getStr());
     /* create new instance of service */
     PopupMenuDispatcher* pClass = new PopupMenuDispatcher( comphelper::getComponentContext(xServiceManager) );
     /* hold it alive by increasing his ref count!!! */

@@ -69,7 +69,6 @@
 #include <vcl/syswin.hxx>
 #include <vcl/taskpanelist.hxx>
 #include <vcl/toolbox.hxx>
-#include <rtl/logfile.hxx>
 #include <svtools/menuoptions.hxx>
 #include <boost/bind.hpp>
 #include <svtools/acceleratorexecute.hxx>
@@ -416,7 +415,6 @@ void ToolBarManager::UpdateImageOrientation()
 
 void ToolBarManager::UpdateControllers()
 {
-    RTL_LOGFILE_CONTEXT( aLog, "framework (cd100003) ::ToolBarManager::UpdateControllers" );
 
     if( SvtMiscOptions().DisableUICustomization() )
     {
@@ -461,7 +459,6 @@ void ToolBarManager::UpdateControllers()
 //for update toolbar controller via Support Visible
 void ToolBarManager::UpdateController( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XToolbarController > xController)
 {
-    RTL_LOGFILE_CONTEXT( aLog, "framework (cd100003) ::ToolBarManager::UpdateControllers" );
 
     if ( !m_bUpdateControllers )
     {
@@ -854,7 +851,6 @@ sal_Int32 ToolBarManager::RetrievePropertiesFromCommand( const OUString& aCmdURL
 
 void ToolBarManager::CreateControllers()
 {
-    RTL_LOGFILE_CONTEXT( aLog, "framework (cd100003) ::ToolBarManager::CreateControllers" );
 
     Reference< XWindow > xToolbarWindow = VCLUnoHelper::GetInterface( m_pToolBar );
 
@@ -1151,9 +1147,7 @@ sal_uInt16 ToolBarManager::ConvertStyleToToolboxItemBits( sal_Int32 nStyle )
 void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContainer )
 {
     OString aTbxName = OUStringToOString( m_aResourceName, RTL_TEXTENCODING_ASCII_US );
-
-    RTL_LOGFILE_CONTEXT( aLog, "framework (cd100003) ::ToolBarManager::FillToolbar" );
-    RTL_LOGFILE_CONTEXT_TRACE1( aLog, "framework (cd100003) ::ToolBarManager::FillToolbar %s", aTbxName.getStr() );
+    SAL_INFO( "fwk.uielement", "framework (cd100003) ::ToolBarManager::FillToolbar " << aTbxName.getStr() );
 
     ResetableGuard aGuard( m_aLock );
 
@@ -1456,7 +1450,6 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
 
 void ToolBarManager::RequestImages()
 {
-    RTL_LOGFILE_CONTEXT( aLog, "framework (cd100003) ::ToolBarManager::RequestImages" );
 
     // Request images from image manager
     Sequence< OUString > aCmdURLSeq( m_aCommandMap.size() );
@@ -2153,7 +2146,6 @@ bool ToolBarManager::impl_RetrieveShortcutsFromConfiguration(
     const OUString& rCommand,
     OUString& rShortCut )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "ToolBarManager::impl_RetrieveShortcutsFromConfiguration" );
     if ( rAccelCfg.is() )
     {
         try
@@ -2182,7 +2174,6 @@ bool ToolBarManager::impl_RetrieveShortcutsFromConfiguration(
 
 bool ToolBarManager::RetrieveShortcut( const OUString& rCommandURL, OUString& rShortCut )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "ToolBarManager::RetrieveShortcuts" );
     if ( m_bModuleIdentified )
     {
         Reference< XAcceleratorConfiguration > xDocAccelCfg( m_xDocAcceleratorManager );

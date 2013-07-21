@@ -27,7 +27,6 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 
 #include <vcl/svapp.hxx>
-#include <rtl/logfile.hxx>
 #include <comphelper/sequence.hxx>
 
 const int UIELEMENT_PROPHANDLE_RESOURCEURL  = 1;

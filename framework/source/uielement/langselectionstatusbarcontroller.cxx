@@ -92,7 +92,6 @@ LangSelectionStatusbarController::LangSelectionStatusbarController( const uno::R
 void SAL_CALL LangSelectionStatusbarController::initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments )
 throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "LangSelectionStatusbarController::initialize" );
     SolarMutexGuard aSolarMutexGuard;
 
     svt::StatusbarController::initialize( aArguments );
@@ -107,7 +106,6 @@ void LangSelectionStatusbarController::LangMenu(
     const ::com::sun::star::awt::Point& aPos )
 throw (::com::sun::star::uno::RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "LangSelectionStatusbarController::LangMenu" );
     if (!m_bShowMenu)
         return;
 
@@ -246,7 +244,6 @@ void SAL_CALL LangSelectionStatusbarController::command(
     const ::com::sun::star::uno::Any& /*aData*/ )
 throw (::com::sun::star::uno::RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "LangSelectionStatusbarController::command" );
     if ( nCommand & ::awt::Command::CONTEXTMENU )
     {
         LangMenu( aPos );
@@ -257,7 +254,6 @@ void SAL_CALL LangSelectionStatusbarController::click(
     const ::com::sun::star::awt::Point& aPos )
 throw (::com::sun::star::uno::RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "LangSelectionStatusbarController::click" );
     LangMenu( aPos );
 }
 
@@ -272,7 +268,6 @@ throw ( RuntimeException )
     //   at some later point in the member variables
     //      m_nScriptType, m_aCurLang, m_aKeyboardLang, m_aGuessedText
 
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "LangSelectionStatusbarController::statusChanged" );
     SolarMutexGuard aSolarMutexGuard;
 
     if ( m_bDisposed )

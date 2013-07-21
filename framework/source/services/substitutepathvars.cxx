@@ -569,7 +569,6 @@ SubstitutePathVariables::SubstitutePathVariables( const Reference< XComponentCon
     m_aImpl( LINK( this, SubstitutePathVariables, implts_ConfigurationNotify )),
     m_xContext( xContext )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "SubstitutePathVariables::SubstitutePathVariables" );
     int i;
 
     SetPredefinedPathVariables( m_aPreDefVars );
@@ -627,7 +626,6 @@ SubstitutePathVariables::~SubstitutePathVariables()
 OUString SAL_CALL SubstitutePathVariables::substituteVariables( const OUString& aText, sal_Bool bSubstRequired )
 throw ( NoSuchElementException, RuntimeException )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "SubstitutePathVariables::substituteVariables" );
     ResetableGuard aLock( m_aLock );
     return impl_substituteVariable( aText, bSubstRequired );
 }
@@ -635,7 +633,6 @@ throw ( NoSuchElementException, RuntimeException )
 OUString SAL_CALL SubstitutePathVariables::reSubstituteVariables( const OUString& aText )
 throw ( RuntimeException )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "SubstitutePathVariables::reSubstituteVariables" );
     ResetableGuard aLock( m_aLock );
     return impl_reSubstituteVariables( aText );
 }
@@ -643,7 +640,6 @@ throw ( RuntimeException )
 OUString SAL_CALL SubstitutePathVariables::getSubstituteVariableValue( const OUString& aVariable )
 throw ( NoSuchElementException, RuntimeException )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "SubstitutePathVariables::getSubstituteVariableValue" );
     ResetableGuard aLock( m_aLock );
     return impl_getSubstituteVariableValue( aVariable );
 }
@@ -662,7 +658,6 @@ IMPL_LINK_NOARG(SubstitutePathVariables, implts_ConfigurationNotify)
 
 OUString SubstitutePathVariables::ConvertOSLtoUCBURL( const OUString& aOSLCompliantURL ) const
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "SubstitutePathVariables::ConvertOSLtoUCBURL" );
     OUString aResult;
     OUString   aTemp;
 
@@ -678,7 +673,6 @@ OUString SubstitutePathVariables::ConvertOSLtoUCBURL( const OUString& aOSLCompli
 
 OUString SubstitutePathVariables::GetWorkPath() const
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "SubstitutePathVariables::GetWorkPath" );
         OUString aWorkPath;
 
     try
@@ -703,7 +697,6 @@ OUString SubstitutePathVariables::GetWorkPath() const
 
 OUString SubstitutePathVariables::GetWorkVariableValue() const
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "SubstitutePathVariables::GetWorkVariableValue" );
     OUString aWorkPath;
 
     try
@@ -731,7 +724,6 @@ OUString SubstitutePathVariables::GetWorkVariableValue() const
 
 OUString SubstitutePathVariables::GetHomeVariableValue() const
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "SubstitutePathVariables::GetHomeVariableValue" );
     osl::Security   aSecurity;
     OUString   aHomePath;
 
@@ -741,7 +733,6 @@ OUString SubstitutePathVariables::GetHomeVariableValue() const
 
 OUString SubstitutePathVariables::GetPathVariableValue() const
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "SubstitutePathVariables::GetPathVariableValue" );
 
     OUString aRetStr;
     const char*   pEnv = getenv( "PATH" );
@@ -778,7 +769,6 @@ OUString SubstitutePathVariables::GetPathVariableValue() const
 OUString SubstitutePathVariables::impl_substituteVariable( const OUString& rText, bool bSubstRequired )
 throw ( NoSuchElementException, RuntimeException )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "SubstitutePathVariables::impl_substituteVariable" );
     // This is maximal recursive depth supported!
     const sal_Int32 nMaxRecursiveDepth = 8;
 
@@ -1086,7 +1076,6 @@ throw ( RuntimeException )
 OUString SubstitutePathVariables::impl_getSubstituteVariableValue( const OUString& rVariable )
 throw ( NoSuchElementException, RuntimeException )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "SubstitutePathVariables::impl_getSubstituteVariableValue" );
     OUString aVariable;
 
     sal_Int32 nPos = rVariable.indexOf( m_aVarStart );
@@ -1139,7 +1128,6 @@ throw ( NoSuchElementException, RuntimeException )
 
 void SubstitutePathVariables::SetPredefinedPathVariables( PredefinedPathVariables& aPreDefPathVariables )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "SubstitutePathVariables::SetPredefinedPathVariables" );
 
     aPreDefPathVariables.m_FixedVar[PREDEFVAR_BRANDBASEURL] = OUString("$BRAND_BASE_DIR");
     rtl::Bootstrap::expandMacros(

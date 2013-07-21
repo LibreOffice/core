@@ -35,7 +35,6 @@
 #include <comphelper/processfactory.hxx>
 #include <tools/solar.h>
 #include <vcl/svapp.hxx>
-#include <rtl/logfile.hxx>
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
@@ -116,7 +115,6 @@ void SAL_CALL MenuBarWrapper::dispose() throw (::com::sun::star::uno::RuntimeExc
 // XInitialization
 void SAL_CALL MenuBarWrapper::initialize( const Sequence< Any >& aArguments ) throw ( Exception, RuntimeException )
 {
-    RTL_LOGFILE_CONTEXT( aLog, "framework (cd100003) ::MenuBarWrapper::initialize" );
 
     ResetableGuard aLock( m_aLock );
 

@@ -30,7 +30,6 @@
 #include <com/sun/star/ui/XUIConfiguration.hpp>
 
 #include <vcl/svapp.hxx>
-#include <rtl/logfile.hxx>
 #include <comphelper/sequence.hxx>
 
 const int UIELEMENT_PROPHANDLE_CONFIGSOURCE     = 1;
