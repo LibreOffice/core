@@ -96,6 +96,7 @@ public:
     void testFdo58577();
     void testBnc581614();
     void testFdo66929();
+    void testFdo66145();
     void testPageBorderSpacingExportCase2();
 
     CPPUNIT_TEST_SUITE(Test);
@@ -162,6 +163,7 @@ void Test::run()
         {"fdo43093.docx", &Test::testFdo43093},
         {"fdo64238_a.docx", &Test::testFdo64238_a},
         {"fdo64238_b.docx", &Test::testFdo64238_b},
+        {"fdo66145.docx", &Test::testFdo66145},
         {"fdo56679.docx", &Test::testFdo56679},
         {"fdo65400.docx", &Test::testFdo65400},
         {"fdo66543.docx", &Test::testFdo66543},
@@ -1001,6 +1003,13 @@ void Test::testPageBorderSpacingExportCase2()
 
     // Assert the XPath expression - 'right' border
     assertXPath(pXmlDoc, "/w:document/w:body/w:sectPr/w:pgBorders/w:right", "space", "24");
+}
+
+void Test::testFdo66145()
+{
+    // The Writer ignored the 'First Is Shared' flag
+    uno::Reference<beans::XPropertySet> xPropertySet(getStyles("PageStyles")->getByName("First Page"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(false, bool(getProperty<sal_Bool>(xPropertySet, "FirstIsShared")));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

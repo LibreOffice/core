@@ -1025,6 +1025,11 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
             if( xColumns.is() )
                 xFirstPageStyle->setPropertyValue(
                     rPropNameSupplier.GetName( PROP_TEXT_COLUMNS ), uno::makeAny( xColumns ));
+
+            // If the 'Different First Page' flag is turned on - do not ignore it
+            // If the 'Diffferent First Page' is non-checked, it must be checked - the flag should be imported (so it would look in LO like in Word)
+            xFirstPageStyle->setPropertyValue(rPropNameSupplier.GetName( PROP_FIRST_IS_SHARED ), uno::makeAny( false ));
+            xFollowPageStyle->setPropertyValue(rPropNameSupplier.GetName( PROP_FIRST_IS_SHARED ), uno::makeAny( false ));
         }
 
         ApplyBorderToPageStyles( rDM_Impl.GetPageStyles( ), rDM_Impl.GetTextFactory( ), m_nBorderParams );

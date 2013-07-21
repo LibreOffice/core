@@ -189,7 +189,15 @@ void SwDoc::CopyMasterHeader(const SwPageDesc &rChged, const SwFmtHeader &rHead,
             const SwFrmFmt *pRight = rHead.GetHeaderFmt();
             const SwFmtCntnt &aRCnt = pRight->GetCntnt();
             const SwFmtCntnt &aCnt = rFmtHead.GetHeaderFmt()->GetCntnt();
-            if( !aCnt.GetCntntIdx() )
+
+            // In case "PROP_FIRST_IS_SHARED" (writefilter) is set and headerFmt has 'cntnt' node,
+            // Already anchored node is original fmt.
+            // But at this part, change startnode(below create new pSttNd).
+            // Because of this, fdo45183.rtf(sw/qa/extras/rtfimport/data/fdo45183.rtf) cannot draw picture.
+            // Compare module is sw/source/core/layout/frmtool.cxx : AppendObjs() function.
+            // In this function, because selected node index and anchored node index aren't equal, don't draw object.
+            // So, If (aCnt.GetCntntIdx() && !bLeft) - use the original headerFmt.
+            if( !aCnt.GetCntntIdx() || !bLeft )
             {
                 const SwFrmFmt& rChgedFrmFmt = (bLeft ? rChged.GetLeft() : rChged.GetFirst());
                 rDescFrmFmt.SetFmtAttr( rChgedFrmFmt.GetHeader() );
