@@ -96,6 +96,7 @@ public:
     void testFdo58577();
     void testBnc581614();
     void testFdo66929();
+    void testFdo66145();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -162,6 +163,7 @@ void Test::run()
         {"fdo58577.odt", &Test::testFdo58577},
         {"bnc581614.doc", &Test::testBnc581614},
         {"fdo66929.docx", &Test::testFdo66929},
+        {"fdo66145.docx", &Test::testFdo66145},
     };
     // Don't test the first import of these, for some reason those tests fail
     const char* aBlacklist[] = {
@@ -967,6 +969,13 @@ void Test::testFdo66929()
     CPPUNIT_ASSERT_EQUAL( sal_Int32( 127 ), getProperty< sal_Int32 >( xFrame, "TopBorderDistance" ) );
     CPPUNIT_ASSERT_EQUAL( sal_Int32( 254 ), getProperty< sal_Int32 >( xFrame, "RightBorderDistance" ) );
     CPPUNIT_ASSERT_EQUAL( sal_Int32( 127 ), getProperty< sal_Int32 >( xFrame, "BottomBorderDistance" ) );
+}
+
+void Test::testFdo66145()
+{
+    // The Writer ignored the 'First Is Shared' flag
+    uno::Reference<beans::XPropertySet> xPropertySet(getStyles("PageStyles")->getByName("First Page"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(false, bool(getProperty<sal_Bool>(xPropertySet, "FirstIsShared")));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

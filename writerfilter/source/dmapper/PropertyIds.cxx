@@ -327,6 +327,7 @@ const OUString& PropertyNameSupplier::GetName( PropertyIds eId ) const
             case PROP_GRAPHIC_BITMAP: sName = "GraphicBitmap"; break;
             case PROP_CHAR_SHADING_VALUE: sName = "CharShadingValue"; break;
             case PROP_LABEL_CATEGORY: sName = "LabelCategory"; break;
+            case PROP_FIRST_IS_SHARED : sName = "FirstIsShared"; break;
         }
         ::std::pair<PropertyNameMap_t::iterator,bool> aInsertIt =
                 m_pImpl->aNameMap.insert( PropertyNameMap_t::value_type( eId, sName ));
