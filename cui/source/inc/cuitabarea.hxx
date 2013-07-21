@@ -179,43 +179,48 @@ class SvxAreaTabPage : public SvxTabPage
     using TabPage::DeactivatePage;
 
 private:
-    FixedLine           aFlProp;
-    ListBox             aTypeLB;
+    ListBox*            m_pTypeLB;
 
-    ColorLB             aLbColor;
-    GradientLB          aLbGradient;
-    HatchingLB          aLbHatching;
-    BitmapLB            aLbBitmap;
-    SvxXRectPreview     aCtlBitmapPreview;
+    VclBox*             m_pFillLB;
+    ColorLB*            m_pLbColor;
+    GradientLB*         m_pLbGradient;
+    HatchingLB*         m_pLbHatching;
+    BitmapLB*           m_pLbBitmap;
+    SvxXRectPreview*    m_pCtlBitmapPreview;
 
-    TriStateBox         aTsbStepCount;
-    FixedLine           aFlStepCount;
-    NumericField        aNumFldStepCount;
+    TriStateBox*        m_pTsbStepCount;
+    VclFrame*           m_pFlStepCount;
+    NumericField*       m_pNumFldStepCount;
 
-    CheckBox            aCbxHatchBckgrd;
-    ColorLB             aLbHatchBckgrdColor;
+    VclFrame*           m_pFlHatchBckgrd;
+    CheckBox*           m_pCbxHatchBckgrd;
+    ColorLB*            m_pLbHatchBckgrdColor;
 
-    FixedLine           aFlSize;
-    TriStateBox         aTsbOriginal;
-    TriStateBox         aTsbScale;
-    FixedText           aFtXSize;
-    MetricField         aMtrFldXSize;
-    FixedText           aFtYSize;
-    MetricField         aMtrFldYSize;
-    FixedLine           aFlPosition;
-    SvxRectCtl          aCtlPosition;
-    FixedText           aFtXOffset;
-    MetricField         aMtrFldXOffset;
-    FixedText           aFtYOffset;
-    MetricField         aMtrFldYOffset;
-    TriStateBox         aTsbTile;
-    TriStateBox         aTsbStretch;
-    FixedLine           aFlOffset;
-    RadioButton         aRbtRow;
-    RadioButton         aRbtColumn;
-    MetricField         aMtrFldOffset;
+    VclBox*             m_pBxBitmap;
 
-    SvxXRectPreview     aCtlXRectPreview;
+    VclFrame*           m_pFlSize;
+    TriStateBox*        m_pTsbOriginal;
+    TriStateBox*        m_pTsbScale;
+    VclGrid*            m_pGridX_Y;
+    FixedText*          m_pFtXSize;
+    MetricField*        m_pMtrFldXSize;
+    FixedText*          m_pFtYSize;
+    MetricField*        m_pMtrFldYSize;
+
+    VclFrame*           m_pFlPosition;
+    SvxRectCtl*         m_pCtlPosition;
+    VclGrid*            m_pGridOffset;
+    MetricField*        m_pMtrFldXOffset;
+    MetricField*        m_pMtrFldYOffset;
+    VclBox*             m_pBxTile;
+    TriStateBox*        m_pTsbTile;
+    TriStateBox*        m_pTsbStretch;
+    VclFrame*           m_pFlOffset;
+    RadioButton*        m_pRbtRow;
+    RadioButton*        m_pRbtColumn;
+    MetricField*        m_pMtrFldOffset;
+
+    SvxXRectPreview*    m_pCtlXRectPreview;
 
     const SfxItemSet&   rOutAttrs;
     RECT_POINT          eRP;

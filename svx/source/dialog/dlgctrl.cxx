@@ -1228,6 +1228,24 @@ BitmapLB::BitmapLB(Window* pParent, ResId Id)
 {
     SetEdgeBlending(true);
 }
+BitmapLB::BitmapLB( Window* pParent, WinBits aWB)
+:   ListBox( pParent, aWB ),
+    maBitmapEx(),
+    mpList(NULL)
+{
+    SetEdgeBlending(true);
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeBitmapLB(Window *pParent, VclBuilder::stringmap &rMap)
+{
+    WinBits nWinStyle = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_SIMPLEMODE;
+    OString sBorder = VclBuilder::extractCustomProperty(rMap);
+    if (!sBorder.isEmpty())
+        nWinStyle |= WB_BORDER;
+    BitmapLB *pListBox = new BitmapLB(pParent, nWinStyle);
+    pListBox->EnableAutoSize(true);
+    return pListBox;
+}
 
 /************************************************************************/
 

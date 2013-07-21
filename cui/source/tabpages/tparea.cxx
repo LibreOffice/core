@@ -578,47 +578,11 @@ void SvxTransparenceTabPage::PageCreated (SfxAllItemSet aSet)
 
 SvxAreaTabPage::SvxAreaTabPage( Window* pParent, const SfxItemSet& rInAttrs ) :
 
-    SvxTabPage          ( pParent, CUI_RES( RID_SVXPAGE_AREA ), rInAttrs ),
-
-    aFlProp             ( this, CUI_RES( FL_PROP ) ),
-    aTypeLB             ( this, CUI_RES( LB_AREA_TYPE ) ),
-
-    aLbColor            ( this, CUI_RES( LB_COLOR ) ),
-    aLbGradient         ( this, CUI_RES( LB_GRADIENT ) ),
-    aLbHatching         ( this, CUI_RES( LB_HATCHING ) ),
-    aLbBitmap           ( this, CUI_RES( LB_BITMAP ) ),
-    aCtlBitmapPreview   ( this, CUI_RES( CTL_BITMAP_PREVIEW ) ),
-
-    aTsbStepCount       ( this, CUI_RES( TSB_STEPCOUNT ) ),
-    aFlStepCount        ( this, CUI_RES( FL_STEPCOUNT ) ),
-    aNumFldStepCount    ( this, CUI_RES( NUM_FLD_STEPCOUNT ) ),
-
-    aCbxHatchBckgrd     ( this, CUI_RES( CB_HATCHBCKGRD ) ),
-    aLbHatchBckgrdColor ( this, CUI_RES( LB_HATCHBCKGRDCOLOR ) ),
-
-    aFlSize             ( this, CUI_RES( FL_SIZE ) ),
-    aTsbOriginal        ( this, CUI_RES( TSB_ORIGINAL ) ),
-    aTsbScale           ( this, CUI_RES( TSB_SCALE ) ),
-    aFtXSize            ( this, CUI_RES( FT_X_SIZE ) ),
-    aMtrFldXSize        ( this, CUI_RES( MTR_FLD_X_SIZE ) ),
-    aFtYSize            ( this, CUI_RES( FT_Y_SIZE ) ),
-    aMtrFldYSize        ( this, CUI_RES( MTR_FLD_Y_SIZE ) ),
-    aFlPosition         ( this, CUI_RES( FL_POSITION ) ),
-    aCtlPosition        ( this, CUI_RES( CTL_POSITION ), RP_RM, 110, 80, CS_RECT ),
-    aFtXOffset          ( this, CUI_RES( FT_X_OFFSET ) ),
-    aMtrFldXOffset      ( this, CUI_RES( MTR_FLD_X_OFFSET ) ),
-    aFtYOffset          ( this, CUI_RES( FT_Y_OFFSET ) ),
-    aMtrFldYOffset      ( this, CUI_RES( MTR_FLD_Y_OFFSET ) ),
-    aTsbTile            ( this, CUI_RES( TSB_TILE ) ),
-    aTsbStretch         ( this, CUI_RES( TSB_STRETCH ) ),
-    aFlOffset           ( this, CUI_RES( FL_OFFSET ) ),
-    aRbtRow             ( this, CUI_RES( RBT_ROW ) ),
-    aRbtColumn          ( this, CUI_RES( RBT_COLUMN ) ),
-    aMtrFldOffset       ( this, CUI_RES( MTR_FLD_OFFSET ) ),
-
-    aCtlXRectPreview    ( this, CUI_RES( CTL_COLOR_PREVIEW ) ),
-
-    rOutAttrs           ( rInAttrs ),
+    SvxTabPage( pParent,
+                "AreaTabPage",
+                "cui/ui/areatabpage.ui",
+               rInAttrs ),
+    rOutAttrs (rInAttrs ),
     eRP( RP_LT ),
 
     pColorList( NULL ),
@@ -641,46 +605,61 @@ SvxAreaTabPage::SvxAreaTabPage( Window* pParent, const SfxItemSet& rInAttrs ) :
     aXFillAttr          ( pXPool ),
     rXFSet              ( aXFillAttr.GetItemSet() )
 {
-    FreeResource();
+    get(m_pTypeLB,"LB_AREA_TYPE");
+    get(m_pFillLB,"boxLB_FILL");
+    get(m_pLbColor,"LB_COLOR");
+    get(m_pLbGradient,"LB_GRADIENT");
+    get(m_pLbHatching,"LB_HATCHING");
+    get(m_pLbBitmap,"LB_BITMAP");
+    get(m_pCtlBitmapPreview,"CTL_BITMAP_PREVIEW");
 
-    String accName = String(CUI_RES(STR_EXAMPLE));
-    aCtlXRectPreview.SetAccessibleName(accName);
-    aCtlBitmapPreview.SetAccessibleName(accName);
+    get(m_pTsbStepCount,"TSB_STEPCOUNT");
+    get(m_pFlStepCount,"FL_STEPCOUNT");
+    get(m_pNumFldStepCount,"NUM_FLD_STEPCOUNT");
+
+    get(m_pFlHatchBckgrd,"FL_HATCHCOLORS");
+    get(m_pLbHatchBckgrdColor,"LB_HATCHBCKGRDCOLOR");
+    get(m_pCbxHatchBckgrd,"CB_HATCHBCKGRD");
+
+    get(m_pBxBitmap,"boxBITMAP");
+
+    get(m_pFlSize,"FL_SIZE");
+    get(m_pGridX_Y,"gridX_Y");
+    get(m_pTsbOriginal,"TSB_ORIGINAL");
+    get(m_pTsbScale,"TSB_SCALE");
+    get(m_pFtXSize,"FT_X_SIZE");
+    get(m_pMtrFldXSize,"MTR_FLD_X_SIZE");
+    get(m_pFtYSize,"FT_Y_SIZE");
+    get(m_pMtrFldYSize,"MTR_FLD_Y_SIZE");
+
+    get(m_pFlPosition,"framePOSITION");
+    get(m_pCtlPosition,"CTL_POSITION");
+    get(m_pGridOffset,"gridOFFSET");
+    get(m_pMtrFldXOffset,"MTR_FLD_X_OFFSET");
+    get(m_pMtrFldYOffset,"MTR_FLD_Y_OFFSET");
+    get(m_pBxTile,"boxTILE");
+    get(m_pTsbTile,"TSB_TILE");
+    get(m_pTsbStretch,"TSB_STRETCH");
+
+    get(m_pFlOffset,"FL_OFFSET");
+    get(m_pRbtRow,"RBT_ROW");
+    get(m_pRbtColumn,"RBT_COLUMN");
+    get(m_pMtrFldOffset,"MTR_FLD_OFFSET");
+
+    get(m_pCtlXRectPreview,"CTL_COLOR_PREVIEW");
 
     // groups that overlay each other
-    aLbBitmap.Hide();
-    aCtlBitmapPreview.Hide();
+    m_pLbBitmap->Hide();
+    m_pCtlBitmapPreview->Hide();
 
-    aFlStepCount.Hide();
-    aTsbStepCount.Hide();
-    aNumFldStepCount.Hide();
+    m_pFlStepCount->Hide();
 
-    aTsbTile.Hide();
-    aTsbStretch.Hide();
-    aTsbScale.Hide();
-    aTsbOriginal.Hide();
-    aFtXSize.Hide();
-    aMtrFldXSize.Hide();
-    aFtYSize.Hide();
-    aMtrFldYSize.Hide();
-    aFlSize.Hide();
-    aRbtRow.Hide();
-    aRbtColumn.Hide();
-    aMtrFldOffset.Hide();
-    aFlOffset.Hide();
-    aCtlPosition.Hide();
-    aFtXOffset.Hide();
-    aMtrFldXOffset.Hide();
-    aFtYOffset.Hide();
-    aMtrFldYOffset.Hide();
-    aFlPosition.Hide();
+    m_pBxBitmap->Hide();
+
     // Controls for Hatch-Background
-    aCbxHatchBckgrd.Hide();
-    aLbHatchBckgrdColor.Hide();
+    m_pFlHatchBckgrd->Hide();
 
-
-    aTsbOriginal.EnableTriState( sal_False );
-
+    m_pTsbOriginal->EnableTriState( sal_False );
 
     // this page needs ExchangeSupport
     SetExchangeSupport();
@@ -696,8 +675,8 @@ SvxAreaTabPage::SvxAreaTabPage( Window* pParent, const SfxItemSet& rInAttrs ) :
         break;
         default: ;//prevent warning
     }
-    SetFieldUnit( aMtrFldXSize, eFUnit, sal_True );
-    SetFieldUnit( aMtrFldYSize, eFUnit, sal_True );
+    SetFieldUnit( *m_pMtrFldXSize, eFUnit, sal_True );
+    SetFieldUnit( *m_pMtrFldYSize, eFUnit, sal_True );
 
     // get PoolUnit
     SfxItemPool* pPool = rOutAttrs.GetPool();
@@ -707,58 +686,58 @@ SvxAreaTabPage::SvxAreaTabPage( Window* pParent, const SfxItemSet& rInAttrs ) :
     // setting the output device
     rXFSet.Put( XFillStyleItem( XFILL_SOLID ) );
     rXFSet.Put( XFillColorItem( String(), COL_BLACK ) );
-    aCtlXRectPreview.SetAttributes( aXFillAttr.GetItemSet() );
-    aCtlBitmapPreview.SetAttributes( aXFillAttr.GetItemSet() );
+    m_pCtlXRectPreview->SetAttributes( aXFillAttr.GetItemSet() );
+    m_pCtlBitmapPreview->SetAttributes( aXFillAttr.GetItemSet() );
 
-    aLbColor.SetSelectHdl( LINK( this, SvxAreaTabPage, ModifyColorHdl_Impl ) );
-    aLbHatchBckgrdColor.SetSelectHdl( LINK( this, SvxAreaTabPage, ModifyHatchBckgrdColorHdl_Impl ) );
-    aCbxHatchBckgrd.SetToggleHdl( LINK( this, SvxAreaTabPage, ToggleHatchBckgrdColorHdl_Impl ) );
+    m_pLbColor->SetSelectHdl( LINK( this, SvxAreaTabPage, ModifyColorHdl_Impl ) );
+    m_pLbHatchBckgrdColor->SetSelectHdl( LINK( this, SvxAreaTabPage, ModifyHatchBckgrdColorHdl_Impl ) );
+    m_pCbxHatchBckgrd->SetToggleHdl( LINK( this, SvxAreaTabPage, ToggleHatchBckgrdColorHdl_Impl ) );
 
-    aLbGradient.SetSelectHdl(
-        LINK( this, SvxAreaTabPage, ModifyGradientHdl_Impl ) );
-    aLbHatching.SetSelectHdl(
-        LINK( this, SvxAreaTabPage, ModifyHatchingHdl_Impl ) );
-    aLbBitmap.SetSelectHdl(
-        LINK( this, SvxAreaTabPage, ModifyBitmapHdl_Impl ) );
+    m_pLbGradient->SetSelectHdl( LINK( this, SvxAreaTabPage, ModifyGradientHdl_Impl ) );
+    m_pLbHatching->SetSelectHdl( LINK( this, SvxAreaTabPage, ModifyHatchingHdl_Impl ) );
+    m_pLbBitmap->SetSelectHdl(   LINK( this, SvxAreaTabPage, ModifyBitmapHdl_Impl ) );
 
-    aTsbStepCount.SetClickHdl(
-        LINK( this, SvxAreaTabPage, ModifyStepCountHdl_Impl ) );
-    aNumFldStepCount.SetModifyHdl(
-        LINK( this, SvxAreaTabPage, ModifyStepCountHdl_Impl ) );
+    m_pTsbStepCount->SetClickHdl( LINK( this, SvxAreaTabPage, ModifyStepCountHdl_Impl ) );
+    m_pNumFldStepCount->SetModifyHdl( LINK( this, SvxAreaTabPage, ModifyStepCountHdl_Impl ) );
 
     Link aLink( LINK( this, SvxAreaTabPage, ModifyTileHdl_Impl ) );
-    aTsbTile.SetClickHdl( aLink );
-    aTsbStretch.SetClickHdl( aLink );
-    aTsbOriginal.SetClickHdl( aLink );
-    aMtrFldXSize.SetModifyHdl( aLink );
-    aMtrFldYSize.SetModifyHdl( aLink );
-    aRbtRow.SetClickHdl( aLink );
-    aRbtColumn.SetClickHdl( aLink );
-    aMtrFldOffset.SetModifyHdl( aLink );
-    aMtrFldXOffset.SetModifyHdl( aLink );
-    aMtrFldYOffset.SetModifyHdl( aLink );
-    aTsbScale.SetClickHdl( LINK( this, SvxAreaTabPage, ClickScaleHdl_Impl ) );
+    m_pTsbTile->SetClickHdl( aLink );
+    m_pTsbStretch->SetClickHdl( aLink );
+    m_pTsbOriginal->SetClickHdl( aLink );
+    m_pMtrFldXSize->SetModifyHdl( aLink );
+    m_pMtrFldYSize->SetModifyHdl( aLink );
+    m_pRbtRow->SetClickHdl( aLink );
+    m_pRbtColumn->SetClickHdl( aLink );
+    m_pMtrFldOffset->SetModifyHdl( aLink );
+    m_pMtrFldXOffset->SetModifyHdl( aLink );
+    m_pMtrFldYOffset->SetModifyHdl( aLink );
+    m_pTsbScale->SetClickHdl( LINK( this, SvxAreaTabPage, ClickScaleHdl_Impl ) );
 
-    aTypeLB.SetSelectHdl( LINK( this, SvxAreaTabPage, SelectDialogTypeHdl_Impl ) );
+    m_pTypeLB->SetSelectHdl( LINK( this, SvxAreaTabPage, SelectDialogTypeHdl_Impl ) );
 
     // #i76307# always paint the preview in LTR, because this is what the document does
-    aCtlXRectPreview.EnableRTL(sal_False);
+    m_pCtlXRectPreview->EnableRTL(sal_False);
 
-    aNumFldStepCount.SetAccessibleRelationLabeledBy( &aTsbStepCount );
-    aCtlPosition.SetAccessibleRelationMemberOf( &aFlPosition );
-    aLbHatchBckgrdColor.SetAccessibleRelationLabeledBy( &aCbxHatchBckgrd );
-    aLbHatchBckgrdColor.SetAccessibleName(aCbxHatchBckgrd.GetText());
+    // Calcualte size of dropdown listboxes
+    Size aSize = LogicToPixel(Size(108, 103), MAP_APPFONT);
 
-    aLbColor.SetAccessibleRelationMemberOf( &aFlProp );
-    aMtrFldOffset.SetAccessibleRelationLabeledBy(&aFlOffset);
-    aMtrFldOffset.SetAccessibleName(aFlOffset.GetText());
+    m_pLbColor->set_width_request(aSize.Width());
+    m_pLbColor->set_height_request(aSize.Height());
+    //m_pLbColor->
 
-    //fdo#61241 lock down size of this tab page until it's
-    //converted to .ui (remember to use some sizegroups
-    //that take into account hidden frames)
-    Size aSize(GetSizePixel());
-    set_width_request(aSize.Width());
-    set_height_request(aSize.Height());
+    m_pLbGradient->set_width_request(aSize.Width());
+    m_pLbGradient->set_height_request(aSize.Height());
+    m_pLbHatching->set_width_request(aSize.Width());
+    m_pLbHatching->set_height_request(aSize.Height());
+    m_pLbBitmap->set_width_request(aSize.Width());
+    m_pLbBitmap->set_height_request(aSize.Height());
+
+    // Calculate size of display boxes
+    Size aSize2 = LogicToPixel(Size(110, 42), MAP_APPFONT);
+    m_pCtlBitmapPreview->set_width_request(aSize2.Width());
+    m_pCtlBitmapPreview->set_height_request(aSize2.Height());
+    m_pCtlXRectPreview->set_width_request(aSize2.Width());
+    m_pCtlXRectPreview->set_height_request(aSize2.Height());
 }
 
 // -----------------------------------------------------------------------
@@ -766,12 +745,12 @@ SvxAreaTabPage::SvxAreaTabPage( Window* pParent, const SfxItemSet& rInAttrs ) :
 void SvxAreaTabPage::Construct()
 {
     // fill colortables / lists
-    aLbColor.Fill( pColorList );
-    aLbHatchBckgrdColor.Fill ( pColorList );
+    m_pLbColor->Fill( pColorList );
+    m_pLbHatchBckgrdColor->Fill ( pColorList );
 
-    aLbGradient.Fill( pGradientList );
-    aLbHatching.Fill( pHatchingList );
-    aLbBitmap.Fill( pBitmapList );
+    m_pLbGradient->Fill( pGradientList );
+    m_pLbHatching->Fill( pHatchingList );
+    m_pLbBitmap->Fill( pBitmapList );
 }
 
 // -----------------------------------------------------------------------
@@ -799,17 +778,17 @@ void SvxAreaTabPage::ActivatePage( const SfxItemSet& rSet )
                     pBitmapList = ( (SvxAreaTabDialog*) GetParentDialog() )->
                                             GetNewBitmapList();
 
-                _nPos = aLbBitmap.GetSelectEntryPos();
+                _nPos = m_pLbBitmap->GetSelectEntryPos();
 
-                aLbBitmap.Clear();
-                aLbBitmap.Fill( pBitmapList );
-                nCount = aLbBitmap.GetEntryCount();
+                m_pLbBitmap->Clear();
+                m_pLbBitmap->Fill( pBitmapList );
+                nCount = m_pLbBitmap->GetEntryCount();
                 if( nCount == 0 )
                     ; // This case should never occur
                 else if( nCount <= _nPos )
-                    aLbBitmap.SelectEntryPos( 0 );
+                    m_pLbBitmap->SelectEntryPos( 0 );
                 else
-                    aLbBitmap.SelectEntryPos( _nPos );
+                    m_pLbBitmap->SelectEntryPos( _nPos );
                 ModifyBitmapHdl_Impl( this );
             }
 
@@ -819,17 +798,17 @@ void SvxAreaTabPage::ActivatePage( const SfxItemSet& rSet )
                     pHatchingList = ( (SvxAreaTabDialog*) GetParentDialog() )->
                                             GetNewHatchingList();
 
-                _nPos = aLbHatching.GetSelectEntryPos();
+                _nPos = m_pLbHatching->GetSelectEntryPos();
 
-                aLbHatching.Clear();
-                aLbHatching.Fill( pHatchingList );
-                nCount = aLbHatching.GetEntryCount();
+                m_pLbHatching->Clear();
+                m_pLbHatching->Fill( pHatchingList );
+                nCount = m_pLbHatching->GetEntryCount();
                 if( nCount == 0 )
                     ; // This case should never occur
                 else if( nCount <= _nPos )
-                    aLbHatching.SelectEntryPos( 0 );
+                    m_pLbHatching->SelectEntryPos( 0 );
                 else
-                    aLbHatching.SelectEntryPos( _nPos );
+                    m_pLbHatching->SelectEntryPos( _nPos );
                 ModifyHatchingHdl_Impl( this );
 
                 ModifyHatchBckgrdColorHdl_Impl( this );
@@ -841,17 +820,17 @@ void SvxAreaTabPage::ActivatePage( const SfxItemSet& rSet )
                     pGradientList = ( (SvxAreaTabDialog*) GetParentDialog() )->
                                             GetNewGradientList();
 
-                _nPos = aLbGradient.GetSelectEntryPos();
+                _nPos = m_pLbGradient->GetSelectEntryPos();
 
-                aLbGradient.Clear();
-                aLbGradient.Fill( pGradientList );
-                nCount = aLbGradient.GetEntryCount();
+                m_pLbGradient->Clear();
+                m_pLbGradient->Fill( pGradientList );
+                nCount = m_pLbGradient->GetEntryCount();
                 if( nCount == 0 )
                     ; // This case should never occur
                 else if( nCount <= _nPos )
-                    aLbGradient.SelectEntryPos( 0 );
+                    m_pLbGradient->SelectEntryPos( 0 );
                 else
-                    aLbGradient.SelectEntryPos( _nPos );
+                    m_pLbGradient->SelectEntryPos( _nPos );
                 ModifyGradientHdl_Impl( this );
             }
 
@@ -861,61 +840,61 @@ void SvxAreaTabPage::ActivatePage( const SfxItemSet& rSet )
                     pColorList = ( (SvxAreaTabDialog*) GetParentDialog() )->
                                             GetNewColorList();
                 // aLbColor
-                _nPos = aLbColor.GetSelectEntryPos();
-                aLbColor.Clear();
-                aLbColor.Fill( pColorList );
-                nCount = aLbColor.GetEntryCount();
+                _nPos = m_pLbColor->GetSelectEntryPos();
+                m_pLbColor->Clear();
+                m_pLbColor->Fill( pColorList );
+                nCount = m_pLbColor->GetEntryCount();
                 if( nCount == 0 )
                     ; // This case should never occur
                 else if( nCount <= _nPos )
-                    aLbColor.SelectEntryPos( 0 );
+                    m_pLbColor->SelectEntryPos( 0 );
                 else
-                    aLbColor.SelectEntryPos( _nPos );
+                    m_pLbColor->SelectEntryPos( _nPos );
 
                 ModifyColorHdl_Impl( this );
 
                 // Backgroundcolor of hatch
-                _nPos = aLbHatchBckgrdColor.GetSelectEntryPos();
-                aLbHatchBckgrdColor.Clear();
-                aLbHatchBckgrdColor.Fill( pColorList );
-                nCount = aLbHatchBckgrdColor.GetEntryCount();
+                _nPos = m_pLbHatchBckgrdColor->GetSelectEntryPos();
+                m_pLbHatchBckgrdColor->Clear();
+                m_pLbHatchBckgrdColor->Fill( pColorList );
+                nCount = m_pLbHatchBckgrdColor->GetEntryCount();
                 if( nCount == 0 )
                     ; // This case should never occur
                 else if( nCount <= _nPos )
-                    aLbHatchBckgrdColor.SelectEntryPos( 0 );
+                    m_pLbHatchBckgrdColor->SelectEntryPos( 0 );
                 else
-                    aLbHatchBckgrdColor.SelectEntryPos( _nPos );
+                    m_pLbHatchBckgrdColor->SelectEntryPos( _nPos );
 
                 ModifyHatchBckgrdColorHdl_Impl( this );
             }
 
             // evaluate if any other Tabpage set another filltype
-            if( aTypeLB.GetSelectEntryPos() > XFILL_NONE)
+            if( m_pTypeLB->GetSelectEntryPos() > XFILL_NONE)
             {
                 switch( nPageType )
                 {
                     case PT_GRADIENT:
-                        aTypeLB.SelectEntryPos( XFILL_GRADIENT );
-                        aLbGradient.SelectEntryPos( _nPos );
+                        m_pTypeLB->SelectEntryPos( XFILL_GRADIENT );
+                        m_pLbGradient->SelectEntryPos( _nPos );
                         ClickGradientHdl_Impl();
                     break;
 
                     case PT_HATCH:
-                        aTypeLB.SelectEntryPos( XFILL_HATCH );
-                        aLbHatching.SelectEntryPos( _nPos );
+                        m_pTypeLB->SelectEntryPos( XFILL_HATCH );
+                        m_pLbHatching->SelectEntryPos( _nPos );
                         ClickHatchingHdl_Impl();
                     break;
 
                     case PT_BITMAP:
-                        aTypeLB.SelectEntryPos( XFILL_BITMAP );
-                        aLbBitmap.SelectEntryPos( _nPos );
+                        m_pTypeLB->SelectEntryPos( XFILL_BITMAP );
+                        m_pLbBitmap->SelectEntryPos( _nPos );
                         ClickBitmapHdl_Impl();
                     break;
 
                     case PT_COLOR:
-                        aTypeLB.SelectEntryPos( XFILL_SOLID );
-                        aLbColor.SelectEntryPos( _nPos );
-                        aLbHatchBckgrdColor.SelectEntryPos( _nPos );
+                        m_pTypeLB->SelectEntryPos( XFILL_SOLID );
+                        m_pLbColor->SelectEntryPos( _nPos );
+                        m_pLbHatchBckgrdColor->SelectEntryPos( _nPos );
                         ClickColorHdl_Impl();
                     break;
                 }
@@ -932,13 +911,13 @@ int SvxAreaTabPage::DeactivatePage( SfxItemSet* _pSet )
     if( nDlgType == 0 ) // area dialog
     {
         sal_uInt16 nPosOrig = nPos;
-        XFillStyle eStyle = (XFillStyle) aTypeLB.GetSelectEntryPos();
+        XFillStyle eStyle = (XFillStyle) m_pTypeLB->GetSelectEntryPos();
         switch( eStyle )
         {
             case XFILL_GRADIENT:
             {
                         nPageType = PT_GRADIENT;
-                        nPos = aLbGradient.GetSelectEntryPos();
+                        nPos = m_pLbGradient->GetSelectEntryPos();
                         if( nPosOrig != nPos )
                             *pnGradientListState |= CT_MODIFIED;
             }
@@ -946,7 +925,7 @@ int SvxAreaTabPage::DeactivatePage( SfxItemSet* _pSet )
             case XFILL_HATCH:
             {
                 nPageType = PT_HATCH;
-                nPos = aLbHatching.GetSelectEntryPos();
+                nPos = m_pLbHatching->GetSelectEntryPos();
                 if( nPosOrig != nPos )
                     *pnHatchingListState |= CT_MODIFIED;
             }
@@ -954,7 +933,7 @@ int SvxAreaTabPage::DeactivatePage( SfxItemSet* _pSet )
             case XFILL_BITMAP:
             {
                 nPageType = PT_BITMAP;
-                nPos = aLbBitmap.GetSelectEntryPos();
+                nPos = m_pLbBitmap->GetSelectEntryPos();
                 if( nPosOrig != nPos )
                     *pnBitmapListState |= CT_MODIFIED;
             }
@@ -962,7 +941,7 @@ int SvxAreaTabPage::DeactivatePage( SfxItemSet* _pSet )
             case XFILL_SOLID:
             {
                 nPageType = PT_COLOR;
-                nPos = aLbColor.GetSelectEntryPos();
+                nPos = m_pLbColor->GetSelectEntryPos();
                 if( nPosOrig != nPos )
                     *pnColorListState |= CT_MODIFIED;
             }
@@ -987,8 +966,8 @@ sal_Bool SvxAreaTabPage::FillItemSet( SfxItemSet& rAttrs )
     if( nDlgType != 0 || *pbAreaTP )
     {
         const SfxPoolItem* pOld = NULL;
-        XFillStyle eStyle = (XFillStyle) aTypeLB.GetSelectEntryPos();
-        XFillStyle eSavedStyle = (XFillStyle) aTypeLB.GetSavedValue();
+        XFillStyle eStyle = (XFillStyle) m_pTypeLB->GetSelectEntryPos();
+        XFillStyle eSavedStyle = (XFillStyle) m_pTypeLB->GetSavedValue();
         switch( eStyle )
         {
             case XFILL_NONE:
@@ -1007,12 +986,12 @@ sal_Bool SvxAreaTabPage::FillItemSet( SfxItemSet& rAttrs )
             break;
             case XFILL_SOLID:
             {
-                 _nPos = aLbColor.GetSelectEntryPos();
+                _nPos = m_pLbColor->GetSelectEntryPos();
                  if( _nPos != LISTBOX_ENTRY_NOTFOUND &&
-                     _nPos != aLbColor.GetSavedValue() )
+                     _nPos != m_pLbColor->GetSavedValue() )
                  {
-                     XFillColorItem aItem( aLbColor.GetSelectEntry(),
-                                           aLbColor.GetSelectEntryColor() );
+                     XFillColorItem aItem( m_pLbColor->GetSelectEntry(),
+                                           m_pLbColor->GetSelectEntryColor() );
                      pOld = GetOldItem( rAttrs, XATTR_FILLCOLOR );
                      if ( !pOld || !( *(const XFillColorItem*)pOld == aItem ) )
                      {
@@ -1037,12 +1016,12 @@ sal_Bool SvxAreaTabPage::FillItemSet( SfxItemSet& rAttrs )
             break;
             case XFILL_GRADIENT:
             {
-                _nPos = aLbGradient.GetSelectEntryPos();
+                _nPos = m_pLbGradient->GetSelectEntryPos();
                 if( _nPos != LISTBOX_ENTRY_NOTFOUND &&
-                    _nPos != aLbGradient.GetSavedValue() )
+                    _nPos != m_pLbGradient->GetSavedValue() )
                 {
                     XGradient aGradient = pGradientList->GetGradient( _nPos )->GetGradient();
-                    String aString = aLbGradient.GetSelectEntry();
+                    String aString = m_pLbGradient->GetSelectEntry();
                     XFillGradientItem aItem( aString, aGradient );
                     pOld = GetOldItem( rAttrs, XATTR_FILLGRADIENT );
                     if ( !pOld || !( *(const XFillGradientItem*)pOld == aItem ) )
@@ -1068,12 +1047,12 @@ sal_Bool SvxAreaTabPage::FillItemSet( SfxItemSet& rAttrs )
             break;
             case XFILL_HATCH:
             {
-                _nPos = aLbHatching.GetSelectEntryPos();
+                _nPos = m_pLbHatching->GetSelectEntryPos();
                 if( _nPos != LISTBOX_ENTRY_NOTFOUND &&
-                   _nPos != aLbHatching.GetSavedValue() )
+                   _nPos != m_pLbHatching->GetSavedValue() )
                 {
                     XHatch aHatching = pHatchingList->GetHatch( _nPos )->GetHatch();
-                    String aString = aLbHatching.GetSelectEntry();
+                    String aString = m_pLbHatching->GetSelectEntry();
                     XFillHatchItem aItem( aString, aHatching );
                     pOld = GetOldItem( rAttrs, XATTR_FILLHATCH );
                     if ( !pOld || !( *(const XFillHatchItem*)pOld == aItem ) )
@@ -1082,14 +1061,14 @@ sal_Bool SvxAreaTabPage::FillItemSet( SfxItemSet& rAttrs )
                         bModified = sal_True;
                     }
                 }
-                XFillBackgroundItem aItem ( aCbxHatchBckgrd.IsChecked() );
+                XFillBackgroundItem aItem ( m_pCbxHatchBckgrd->IsChecked() );
                 rAttrs.Put( aItem );
-                nPos = aLbHatchBckgrdColor.GetSelectEntryPos();
+                nPos = m_pLbHatchBckgrdColor->GetSelectEntryPos();
                 if( nPos != LISTBOX_ENTRY_NOTFOUND &&
-                     nPos != aLbHatchBckgrdColor.GetSavedValue() )
+                     nPos != m_pLbHatchBckgrdColor->GetSavedValue() )
                 {
-                    XFillColorItem aFillColorItem( aLbHatchBckgrdColor.GetSelectEntry(),
-                                          aLbHatchBckgrdColor.GetSelectEntryColor() );
+                    XFillColorItem aFillColorItem( m_pLbHatchBckgrdColor->GetSelectEntry(),
+                                          m_pLbHatchBckgrdColor->GetSelectEntryColor() );
                     pOld = GetOldItem( rAttrs, XATTR_FILLCOLOR );
                     if ( !pOld || !( *(const XFillColorItem*)pOld == aFillColorItem ) )
                     {
@@ -1114,12 +1093,12 @@ sal_Bool SvxAreaTabPage::FillItemSet( SfxItemSet& rAttrs )
             break;
             case XFILL_BITMAP:
             {
-                nPos = aLbBitmap.GetSelectEntryPos();
+                nPos = m_pLbBitmap->GetSelectEntryPos();
                 if( nPos != LISTBOX_ENTRY_NOTFOUND &&
-                    nPos != aLbBitmap.GetSavedValue() )
+                    nPos != m_pLbBitmap->GetSavedValue() )
                 {
                     const XBitmapEntry* pXBitmapEntry = pBitmapList->GetBitmap(nPos);
-                    const String aString(aLbBitmap.GetSelectEntry());
+                    const String aString(m_pLbBitmap->GetSelectEntry());
                     const XFillBitmapItem aFillBitmapItem(aString, pXBitmapEntry->GetGraphicObject());
                     pOld = GetOldItem( rAttrs, XATTR_FILLBITMAP );
                     if ( !pOld || !( *(const XFillBitmapItem*)pOld == aFillBitmapItem ) )
@@ -1146,23 +1125,23 @@ sal_Bool SvxAreaTabPage::FillItemSet( SfxItemSet& rAttrs )
        }
 
         // step size
-        if( aTsbStepCount.IsEnabled() )
+        if( m_pTsbStepCount->IsEnabled() )
         {
             sal_uInt16 nValue = 0;
             sal_Bool   bValueModified = sal_False;
-            TriState eState = aTsbStepCount.GetState();
+            TriState eState = m_pTsbStepCount->GetState();
             if( eState == STATE_CHECK )
             {
-                if( eState != aTsbStepCount.GetSavedValue() )
+                if( eState != m_pTsbStepCount->GetSavedValue() )
                     bValueModified = sal_True;
             }
             else
             {
                 // condition != Disabled ?
-                if( !aNumFldStepCount.GetText().isEmpty() )
+                if( !m_pNumFldStepCount->GetText().isEmpty() )
                 {
-                    nValue = (sal_uInt16) aNumFldStepCount.GetValue();
-                    if( nValue != (sal_uInt16) aNumFldStepCount.GetSavedValue().toInt32() )
+                    nValue = (sal_uInt16) m_pNumFldStepCount->GetValue();
+                    if( nValue != (sal_uInt16) m_pNumFldStepCount->GetSavedValue().toInt32() )
                         bValueModified = sal_True;
                 }
             }
@@ -1178,10 +1157,10 @@ sal_Bool SvxAreaTabPage::FillItemSet( SfxItemSet& rAttrs )
             }
         }
 
-        if( aTsbTile.IsEnabled() )
+        if( m_pTsbTile->IsEnabled() )
         {
-            TriState eState = aTsbTile.GetState();
-            if( eState != aTsbTile.GetSavedValue() )
+            TriState eState = m_pTsbTile->GetState();
+            if( eState != m_pTsbTile->GetSavedValue() )
             {
                 XFillBmpTileItem aFillBmpTileItem(
                     sal::static_int_cast< sal_Bool >( eState ) );
@@ -1194,10 +1173,10 @@ sal_Bool SvxAreaTabPage::FillItemSet( SfxItemSet& rAttrs )
             }
         }
 
-        if( aTsbStretch.IsEnabled() )
+        if( m_pTsbStretch->IsEnabled() )
         {
-            TriState eState = aTsbStretch.GetState();
-            if( eState != aTsbStretch.GetSavedValue() )
+            TriState eState = m_pTsbStretch->GetState();
+            if( eState != m_pTsbStretch->GetSavedValue() )
             {
                 XFillBmpStretchItem aFillBmpStretchItem(
                     sal::static_int_cast< sal_Bool >( eState ) );
@@ -1215,16 +1194,16 @@ sal_Bool SvxAreaTabPage::FillItemSet( SfxItemSet& rAttrs )
         // SizeX = 0; SizeY = 0; Log = sal_True
 
         //aTsbScale
-        TriState eState = aTsbScale.GetState();
-        if( eState != aTsbScale.GetSavedValue() ||
-            ( !aTsbScale.IsEnabled() &&
-              aTsbOriginal.IsEnabled() &&
-              aTsbScale.GetSavedValue() != STATE_CHECK ) )
+        TriState eState = m_pTsbScale->GetState();
+        if( eState != m_pTsbScale->GetSavedValue() ||
+            ( !m_pTsbScale->IsEnabled() &&
+              m_pTsbOriginal->IsEnabled() &&
+              m_pTsbScale->GetSavedValue() != STATE_CHECK ) )
         {
             XFillBmpSizeLogItem* pItem = NULL;
-            if( aTsbScale.IsEnabled() )
+            if( m_pTsbScale->IsEnabled() )
                 pItem = new XFillBmpSizeLogItem( eState == STATE_NOCHECK );
-            else if( aTsbOriginal.IsEnabled() && aTsbOriginal.GetState() == STATE_CHECK )
+            else if( m_pTsbOriginal->IsEnabled() && m_pTsbOriginal->GetState() == STATE_CHECK )
                 pItem = new XFillBmpSizeLogItem( sal_True );
 
             if( pItem )
@@ -1240,27 +1219,27 @@ sal_Bool SvxAreaTabPage::FillItemSet( SfxItemSet& rAttrs )
         }
 
         //aMtrFldXSize
-        String aStr = aMtrFldXSize.GetText();
+        String aStr = m_pMtrFldXSize->GetText();
         {
             XFillBmpSizeXItem* pItem = NULL;
-            TriState eScaleState = aTsbScale.GetState();
+            TriState eScaleState = m_pTsbScale->GetState();
 
-            if( aMtrFldXSize.IsEnabled() &&
+            if( m_pMtrFldXSize->IsEnabled() &&
                 aStr.Len() > 0  &&
-                aStr != aMtrFldXSize.GetSavedValue() )
+                aStr != m_pMtrFldXSize->GetSavedValue() )
             {
                 if( eScaleState == STATE_NOCHECK )
-                    pItem = new XFillBmpSizeXItem( GetCoreValue( aMtrFldXSize, ePoolUnit ) );
+                    pItem = new XFillBmpSizeXItem( GetCoreValue( *m_pMtrFldXSize, ePoolUnit ) );
                 else
                 {
                     // Percentage values are set negatively, so that
                     // they aren't scaled; this is considered in the item.
-                    pItem = new XFillBmpSizeXItem( -labs( static_cast<long>(aMtrFldXSize.GetValue()) ) );
+                    pItem = new XFillBmpSizeXItem( -labs( static_cast<long>(m_pMtrFldXSize->GetValue()) ) );
                 }
             }
-            else if( aTsbOriginal.IsEnabled() &&
-                     aTsbOriginal.GetState() == STATE_CHECK &&
-                     !aMtrFldXSize.GetSavedValue().isEmpty() )
+            else if( m_pTsbOriginal->IsEnabled() &&
+                     m_pTsbOriginal->GetState() == STATE_CHECK &&
+                     !m_pMtrFldXSize->GetSavedValue().isEmpty() )
                 pItem = new XFillBmpSizeXItem( 0 );
 
             if( pItem )
@@ -1276,28 +1255,28 @@ sal_Bool SvxAreaTabPage::FillItemSet( SfxItemSet& rAttrs )
         }
 
         //aMtrFldYSize
-        aStr = aMtrFldYSize.GetText();
+        aStr = m_pMtrFldYSize->GetText();
         {
             XFillBmpSizeYItem* pItem = NULL;
-            TriState eScaleState = aTsbScale.GetState();
+            TriState eScaleState = m_pTsbScale->GetState();
 
-            if( aMtrFldYSize.IsEnabled() &&
+            if( m_pMtrFldYSize->IsEnabled() &&
                 aStr.Len() > 0  &&
-                aStr != aMtrFldYSize.GetSavedValue() )
+                aStr != m_pMtrFldYSize->GetSavedValue() )
             {
                 if( eScaleState == STATE_NOCHECK )
-                    pItem = new XFillBmpSizeYItem( GetCoreValue( aMtrFldYSize, ePoolUnit ) );
+                    pItem = new XFillBmpSizeYItem( GetCoreValue( *m_pMtrFldYSize, ePoolUnit ) );
                 else
                 {
                     // Percentage values are set negatively, so that
                     // they aren't scaled by the MetricItem;
                     // this is considered in the item.
-                    pItem = new XFillBmpSizeYItem( -labs( static_cast<long>(aMtrFldYSize.GetValue()) ) );
+                    pItem = new XFillBmpSizeYItem( -labs( static_cast<long>(m_pMtrFldYSize->GetValue()) ) );
                 }
             }
-            else if( aTsbOriginal.IsEnabled() &&
-                     aTsbOriginal.GetState() == STATE_CHECK &&
-                     !aMtrFldYSize.GetSavedValue().isEmpty() )
+            else if( m_pTsbOriginal->IsEnabled() &&
+                     m_pTsbOriginal->GetState() == STATE_CHECK &&
+                     !m_pMtrFldYSize->GetSavedValue().isEmpty() )
                 pItem = new XFillBmpSizeYItem( 0 );
 
             if( pItem )
@@ -1315,17 +1294,17 @@ sal_Bool SvxAreaTabPage::FillItemSet( SfxItemSet& rAttrs )
         //aRbtRow
         //aRbtColumn
         //aMtrFldOffset
-        if( aMtrFldOffset.IsEnabled() )
+        if( m_pMtrFldOffset->IsEnabled() )
         {
-            String aMtrString = aMtrFldOffset.GetText();
+            String aMtrString = m_pMtrFldOffset->GetText();
             if( ( aMtrString.Len() > 0  &&
-                  aMtrString != aMtrFldOffset.GetSavedValue() ) ||
-                  aRbtRow.GetSavedValue() != aRbtRow.IsChecked() ||
-                  aRbtColumn.GetSavedValue() != aRbtColumn.IsChecked() )
+                  aMtrString != m_pMtrFldOffset->GetSavedValue() ) ||
+                  m_pRbtRow->GetSavedValue() != m_pRbtRow->IsChecked() ||
+                  m_pRbtColumn->GetSavedValue() != m_pRbtColumn->IsChecked() )
             {
-                if( aRbtRow.IsChecked() )
+                if( m_pRbtRow->IsChecked() )
                 {
-                    XFillBmpTileOffsetXItem aFillBmpTileOffsetXItem( (sal_uInt16) aMtrFldOffset.GetValue() );
+                    XFillBmpTileOffsetXItem aFillBmpTileOffsetXItem( (sal_uInt16) m_pMtrFldOffset->GetValue() );
                     pOld = GetOldItem( rAttrs, XATTR_FILLBMP_TILEOFFSETX );
                     if ( !pOld || !( *(const XFillBmpTileOffsetXItem*)pOld == aFillBmpTileOffsetXItem ) )
                     {
@@ -1334,9 +1313,9 @@ sal_Bool SvxAreaTabPage::FillItemSet( SfxItemSet& rAttrs )
                         bModified = sal_True;
                     }
                 }
-                else if( aRbtColumn.IsChecked() )
+                else if( m_pRbtColumn->IsChecked() )
                 {
-                    XFillBmpTileOffsetYItem aFillBmpTileOffsetYItem( (sal_uInt16) aMtrFldOffset.GetValue() );
+                    XFillBmpTileOffsetYItem aFillBmpTileOffsetYItem( (sal_uInt16) m_pMtrFldOffset->GetValue() );
                     pOld = GetOldItem( rAttrs, XATTR_FILLBMP_TILEOFFSETY );
                     if ( !pOld || !( *(const XFillBmpTileOffsetYItem*)pOld == aFillBmpTileOffsetYItem ) )
                     {
@@ -1349,10 +1328,10 @@ sal_Bool SvxAreaTabPage::FillItemSet( SfxItemSet& rAttrs )
         }
 
         //aCtlPosition
-        if( aCtlPosition.IsEnabled() )
+        if( m_pCtlPosition->IsEnabled() )
         {
             sal_Bool bPut = sal_False;
-            RECT_POINT _eRP = aCtlPosition.GetActualRP();
+            RECT_POINT _eRP = m_pCtlPosition->GetActualRP();
 
             if( SFX_ITEM_DONTCARE == rOutAttrs.GetItemState( XATTR_FILLBMP_POS ) )
                 bPut = sal_True;
@@ -1375,13 +1354,13 @@ sal_Bool SvxAreaTabPage::FillItemSet( SfxItemSet& rAttrs )
         }
 
         //aMtrFldXOffset
-        if( aMtrFldXOffset.IsEnabled() )
+        if( m_pMtrFldXOffset->IsEnabled() )
         {
-            String sMtrXOffset = aMtrFldXOffset.GetText();
+            String sMtrXOffset = m_pMtrFldXOffset->GetText();
             if( sMtrXOffset.Len() > 0  &&
-                sMtrXOffset != aMtrFldXOffset.GetSavedValue() )
+                sMtrXOffset != m_pMtrFldXOffset->GetSavedValue() )
             {
-                XFillBmpPosOffsetXItem aFillBmpPosOffsetXItem( (sal_uInt16) aMtrFldXOffset.GetValue() );
+                XFillBmpPosOffsetXItem aFillBmpPosOffsetXItem( (sal_uInt16) m_pMtrFldXOffset->GetValue() );
                 pOld = GetOldItem( rAttrs, XATTR_FILLBMP_POSOFFSETX );
                 if ( !pOld || !( *(const XFillBmpPosOffsetXItem*)pOld == aFillBmpPosOffsetXItem ) )
                 {
@@ -1392,13 +1371,13 @@ sal_Bool SvxAreaTabPage::FillItemSet( SfxItemSet& rAttrs )
         }
 
         //aMtrFldYOffset
-        if( aMtrFldYOffset.IsEnabled() )
+        if( m_pMtrFldYOffset->IsEnabled() )
         {
-            String sMtrYOffset = aMtrFldYOffset.GetText();
+            String sMtrYOffset = m_pMtrFldYOffset->GetText();
             if( sMtrYOffset.Len() > 0  &&
-                sMtrYOffset != aMtrFldYOffset.GetSavedValue() )
+                sMtrYOffset != m_pMtrFldYOffset->GetSavedValue() )
             {
-                XFillBmpPosOffsetYItem aFillBmpPosOffsetYItem( (sal_uInt16) aMtrFldYOffset.GetValue() );
+                XFillBmpPosOffsetYItem aFillBmpPosOffsetYItem( (sal_uInt16) m_pMtrFldYOffset->GetValue() );
                 pOld = GetOldItem( rAttrs, XATTR_FILLBMP_POSOFFSETY );
                 if ( !pOld || !( *(const XFillBmpPosOffsetYItem*)pOld == aFillBmpPosOffsetYItem ) )
                 {
@@ -1423,7 +1402,7 @@ void SvxAreaTabPage::Reset( const SfxItemSet& rAttrs )
     {
         eXFS = (XFillStyle) ( ( ( const XFillStyleItem& ) rAttrs.
                                 Get( GetWhich( XATTR_FILLSTYLE ) ) ).GetValue() );
-        aTypeLB.SelectEntryPos( sal::static_int_cast< sal_uInt16 >( eXFS ) );
+        m_pTypeLB->SelectEntryPos( sal::static_int_cast< sal_uInt16 >( eXFS ) );
         switch( eXFS )
         {
             case XFILL_NONE:
@@ -1436,8 +1415,8 @@ void SvxAreaTabPage::Reset( const SfxItemSet& rAttrs )
                     XFillColorItem aColorItem( ( const XFillColorItem& )
                                         rAttrs.Get( XATTR_FILLCOLOR ) );
 
-                    aLbColor.SelectEntry( aColorItem.GetColorValue() );
-                    aLbHatchBckgrdColor.SelectEntry( aColorItem.GetColorValue() );
+                    m_pLbColor->SelectEntry( aColorItem.GetColorValue() );
+                    m_pLbHatchBckgrdColor->SelectEntry( aColorItem.GetColorValue() );
                 }
                 ClickColorHdl_Impl();
 
@@ -1451,7 +1430,7 @@ void SvxAreaTabPage::Reset( const SfxItemSet& rAttrs )
                     String    aString( aGradientItem.GetName() );
                     XGradient aGradient( aGradientItem.GetGradientValue() );
 
-                    aLbGradient.SelectEntryByList( pGradientList, aString, aGradient );
+                    m_pLbGradient->SelectEntryByList( pGradientList, aString, aGradient );
                 }
                 ClickGradientHdl_Impl();
             break;
@@ -1459,14 +1438,14 @@ void SvxAreaTabPage::Reset( const SfxItemSet& rAttrs )
             case XFILL_HATCH:
                 if( SFX_ITEM_DONTCARE != rAttrs.GetItemState( XATTR_FILLHATCH ) )
                 {
-                    aLbHatching.SelectEntry( ( ( const XFillHatchItem& )
+                    m_pLbHatching->SelectEntry( ( ( const XFillHatchItem& )
                                     rAttrs.Get( XATTR_FILLHATCH ) ).GetName() );
                 }
                 ClickHatchingHdl_Impl();
 
                 if ( SFX_ITEM_DONTCARE != rAttrs.GetItemState ( XATTR_FILLBACKGROUND ) )
                 {
-                    aCbxHatchBckgrd.Check ( ( ( const XFillBackgroundItem& ) rAttrs.Get ( XATTR_FILLBACKGROUND ) ).GetValue() );
+                    m_pCbxHatchBckgrd->Check ( ( ( const XFillBackgroundItem& ) rAttrs.Get ( XATTR_FILLBACKGROUND ) ).GetValue() );
                 }
                 ToggleHatchBckgrdColorHdl_Impl( this );
                 if( SFX_ITEM_DONTCARE != rAttrs.GetItemState( XATTR_FILLCOLOR ) )
@@ -1474,8 +1453,8 @@ void SvxAreaTabPage::Reset( const SfxItemSet& rAttrs )
                     XFillColorItem aColorItem( ( const XFillColorItem& )
                                         rAttrs.Get( XATTR_FILLCOLOR ) );
 
-                    aLbColor.SelectEntry( aColorItem.GetColorValue() );
-                    aLbHatchBckgrdColor.SelectEntry( aColorItem.GetColorValue() );
+                    m_pLbColor->SelectEntry( aColorItem.GetColorValue() );
+                    m_pLbHatchBckgrdColor->SelectEntry( aColorItem.GetColorValue() );
                 }
             break;
 
@@ -1487,7 +1466,7 @@ void SvxAreaTabPage::Reset( const SfxItemSet& rAttrs )
                                         rAttrs.Get( XATTR_FILLBITMAP ) );
 
                     String aString( aBitmapItem.GetName() );
-                    aLbBitmap.SelectEntry( aString );
+                    m_pLbBitmap->SelectEntry( aString );
                 }
                 ClickBitmapHdl_Impl();
             }
@@ -1500,83 +1479,81 @@ void SvxAreaTabPage::Reset( const SfxItemSet& rAttrs )
     else
     {
         // make all LBs not accessible
-        aLbColor.Hide();
-        aLbGradient.Hide();
-        aLbHatching.Hide();
-        aLbBitmap.Hide();
-        aCtlBitmapPreview.Hide();
-        aLbColor.Disable();
-        aLbColor.Show();
+        m_pFillLB->Hide();
+
+        m_pCtlBitmapPreview->Hide();
+        m_pLbColor->Disable();
+        m_pLbColor->Show();
 
         // so that Reset() also works correctly with Back
-        aTypeLB.SetNoSelection();
+        m_pTypeLB->SetNoSelection();
     }
 
     // step size
     if( ( rAttrs.GetItemState( XATTR_GRADIENTSTEPCOUNT ) != SFX_ITEM_DONTCARE ) ||
         ( rAttrs.GetItemState( XATTR_FILLSTYLE ) != SFX_ITEM_DONTCARE ) )
     {
-        aTsbStepCount.EnableTriState( sal_False );
+        m_pTsbStepCount->EnableTriState( sal_False );
         sal_uInt16 nValue = ( ( const XGradientStepCountItem& ) rAttrs.Get( XATTR_GRADIENTSTEPCOUNT ) ).GetValue();
         if( nValue == 0 )
         {
-            aTsbStepCount.SetState( STATE_CHECK );
-            aNumFldStepCount.SetText( String() );
+            m_pTsbStepCount->SetState( STATE_CHECK );
+            m_pNumFldStepCount->SetText( String() );
         }
         else
         {
-            aTsbStepCount.SetState( STATE_NOCHECK );
-            aNumFldStepCount.SetValue( nValue );
+            m_pTsbStepCount->SetState( STATE_NOCHECK );
+            m_pNumFldStepCount->SetValue( nValue );
         }
-        ModifyStepCountHdl_Impl( &aTsbStepCount );
+        ModifyStepCountHdl_Impl( m_pTsbStepCount );
     }
     else
     {
-        aTsbStepCount.SetState( STATE_DONTKNOW );
-        aNumFldStepCount.SetText( String() );
+        m_pTsbStepCount->SetState( STATE_DONTKNOW );
+        m_pNumFldStepCount->SetText( String() );
     }
 
     // attributes for the bitmap filling
 
     if( rAttrs.GetItemState( XATTR_FILLBMP_TILE ) != SFX_ITEM_DONTCARE )
     {
-        aTsbTile.EnableTriState( sal_False );
+        m_pTsbTile->EnableTriState( sal_False );
 
         if( ( ( const XFillBmpTileItem& ) rAttrs.Get( XATTR_FILLBMP_TILE ) ).GetValue() )
-            aTsbTile.SetState( STATE_CHECK );
+            m_pTsbTile->SetState( STATE_CHECK );
         else
-            aTsbTile.SetState( STATE_NOCHECK );
+            m_pTsbTile->SetState( STATE_NOCHECK );
     }
     else
-        aTsbTile.SetState( STATE_DONTKNOW );
+        m_pTsbTile->SetState( STATE_DONTKNOW );
 
     if( rAttrs.GetItemState( XATTR_FILLBMP_STRETCH ) != SFX_ITEM_DONTCARE )
     {
-        aTsbStretch.EnableTriState( sal_False );
+        m_pTsbStretch->EnableTriState( sal_False );
 
         if( ( ( const XFillBmpStretchItem& ) rAttrs.Get( XATTR_FILLBMP_STRETCH ) ).GetValue() )
-            aTsbStretch.SetState( STATE_CHECK );
+            m_pTsbStretch->SetState( STATE_CHECK );
         else
-            aTsbStretch.SetState( STATE_NOCHECK );
+            m_pTsbStretch->SetState( STATE_NOCHECK );
     }
     else
-        aTsbStretch.SetState( STATE_DONTKNOW );
+        m_pTsbStretch->SetState( STATE_DONTKNOW );
 
 
     //aTsbScale
     if( rAttrs.GetItemState( XATTR_FILLBMP_SIZELOG ) != SFX_ITEM_DONTCARE )
     {
-        aTsbScale.EnableTriState( sal_False );
+        m_pTsbScale->EnableTriState( sal_False );
 
         if( ( ( const XFillBmpSizeLogItem& ) rAttrs.Get( XATTR_FILLBMP_SIZELOG ) ).GetValue() )
-            aTsbScale.SetState( STATE_NOCHECK );
+            m_pTsbScale->SetState( STATE_NOCHECK );
         else
-            aTsbScale.SetState( STATE_CHECK );
+            m_pTsbScale->SetState( STATE_CHECK );
 
         ClickScaleHdl_Impl( NULL );
     }
     else
-        aTsbScale.SetState( STATE_DONTKNOW );
+        m_pTsbScale->SetState( STATE_DONTKNOW );
 
 
     // determine status for the original size
@@ -1586,58 +1563,58 @@ void SvxAreaTabPage::Reset( const SfxItemSet& rAttrs )
     if( rAttrs.GetItemState( XATTR_FILLBMP_SIZEX ) != SFX_ITEM_DONTCARE )
     {
         sal_Int32 nValue = ( ( const XFillBmpSizeXItem& ) rAttrs.Get( XATTR_FILLBMP_SIZEX ) ).GetValue();
-        if( aTsbScale.GetState() == STATE_CHECK )
+        if( m_pTsbScale->GetState() == STATE_CHECK )
         {
             // If there's a percentage value in the item,
             // it is negative because of the MetricItems.
-            aMtrFldXSize.SetValue( labs( nValue ) );
+            m_pMtrFldXSize->SetValue( labs( nValue ) );
         }
         else
-            SetMetricValue( aMtrFldXSize, nValue, ePoolUnit );
-        aMtrFldXSize.SaveValue();
+            SetMetricValue( *m_pMtrFldXSize, nValue, ePoolUnit );
+        m_pMtrFldXSize->SaveValue();
 
         if( nValue == 0 )
         {
             eOriginal = STATE_CHECK;
             // value would be too small otherwise when turning off the original size
             // (performance problem)
-            aMtrFldXSize.SetValue( 100 );
+            m_pMtrFldXSize->SetValue( 100 );
         }
     }
     else
     {
-        aMtrFldXSize.SetText( String() );
-        aMtrFldXSize.SaveValue();
+        m_pMtrFldXSize->SetText( String() );
+        m_pMtrFldXSize->SaveValue();
     }
 
     //aMtrFldYSize
     if( rAttrs.GetItemState( XATTR_FILLBMP_SIZEY ) != SFX_ITEM_DONTCARE )
     {
         sal_Int32 nValue = ( ( const XFillBmpSizeYItem& ) rAttrs.Get( XATTR_FILLBMP_SIZEY ) ).GetValue();
-        if( aTsbScale.GetState() == STATE_CHECK )
+        if( m_pTsbScale->GetState() == STATE_CHECK )
         {
             // If there's a percentage value in the item,
             // it is negative because of the MetricItems.
-            aMtrFldYSize.SetValue( labs( nValue ) );
+            m_pMtrFldYSize->SetValue( labs( nValue ) );
         }
         else
-            SetMetricValue( aMtrFldYSize, nValue, ePoolUnit );
-        aMtrFldYSize.SaveValue();
+            SetMetricValue( *m_pMtrFldYSize, nValue, ePoolUnit );
+        m_pMtrFldYSize->SaveValue();
 
         if( nValue == 0 )
-            aMtrFldYSize.SetValue( 100 ); //s.o.
+            m_pMtrFldYSize->SetValue( 100 ); //s.o.
         else
             eOriginal = STATE_NOCHECK;
     }
     else
     {
-        aMtrFldYSize.SetText( String() );
-        aMtrFldYSize.SaveValue();
+        m_pMtrFldYSize->SetText( String() );
+        m_pMtrFldYSize->SaveValue();
         eOriginal = STATE_NOCHECK;
     }
 
     // aTsbOriginal
-    aTsbOriginal.SetState( eOriginal );
+    m_pTsbOriginal->SetState( eOriginal );
 
     // #93372# Setting proper state after changing button
     ModifyTileHdl_Impl( NULL );
@@ -1650,72 +1627,72 @@ void SvxAreaTabPage::Reset( const SfxItemSet& rAttrs )
         sal_uInt16 nValue = ( ( const XFillBmpTileOffsetXItem& ) rAttrs.Get( XATTR_FILLBMP_TILEOFFSETX ) ).GetValue();
         if( nValue > 0 )
         {
-            aMtrFldOffset.SetValue( nValue );
-            aRbtRow.Check();
+            m_pMtrFldOffset->SetValue( nValue );
+            m_pRbtRow->Check();
         }
         else if( rAttrs.GetItemState( XATTR_FILLBMP_TILEOFFSETY ) != SFX_ITEM_DONTCARE )
         {
             nValue = ( ( const XFillBmpTileOffsetYItem& ) rAttrs.Get( XATTR_FILLBMP_TILEOFFSETY ) ).GetValue();
             if( nValue > 0 )
             {
-                aMtrFldOffset.SetValue( nValue );
-                aRbtColumn.Check();
+                m_pMtrFldOffset->SetValue( nValue );
+                m_pRbtColumn->Check();
             }
         }
         else
-            aMtrFldOffset.SetValue( 0 );
+            m_pMtrFldOffset->SetValue( 0 );
     }
     else
-        aMtrFldOffset.SetText( String() );
+        m_pMtrFldOffset->SetText( String() );
 
 
     //aCtlPosition
     if( rAttrs.GetItemState( XATTR_FILLBMP_POS ) != SFX_ITEM_DONTCARE )
     {
         RECT_POINT eValue = ( ( const XFillBmpPosItem& ) rAttrs.Get( XATTR_FILLBMP_POS ) ).GetValue();
-        aCtlPosition.SetActualRP( eValue );
+        m_pCtlPosition->SetActualRP( eValue );
     }
     else
-        aCtlPosition.Reset();
+        m_pCtlPosition->Reset();
 
     //aMtrFldXOffset
     if( rAttrs.GetItemState( XATTR_FILLBMP_POSOFFSETX ) != SFX_ITEM_DONTCARE )
     {
         sal_Int32 nValue = ( ( const XFillBmpPosOffsetXItem& ) rAttrs.Get( XATTR_FILLBMP_POSOFFSETX ) ).GetValue();
-        aMtrFldXOffset.SetValue( nValue );
+        m_pMtrFldXOffset->SetValue( nValue );
     }
     else
-        aMtrFldXOffset.SetText( String() );
+        m_pMtrFldXOffset->SetText( String() );
 
     //aMtrFldYOffset
     if( rAttrs.GetItemState( XATTR_FILLBMP_POSOFFSETY ) != SFX_ITEM_DONTCARE )
     {
         sal_Int32 nValue = ( ( const XFillBmpPosOffsetYItem& ) rAttrs.Get( XATTR_FILLBMP_POSOFFSETY ) ).GetValue();
-        aMtrFldYOffset.SetValue( nValue );
+        m_pMtrFldYOffset->SetValue( nValue );
     }
     else
-        aMtrFldYOffset.SetText( String() );
+        m_pMtrFldYOffset->SetText( String() );
 
     // not earlier so that tile and stretch are considered
-    if( aTypeLB.GetSelectEntryPos() == XFILL_BITMAP )
+    if( m_pTypeLB->GetSelectEntryPos() == XFILL_BITMAP )
         ClickBitmapHdl_Impl();
 
-    aTypeLB.SaveValue();
-    aLbColor.SaveValue();
-    aLbGradient.SaveValue();
-    aLbHatching.SaveValue();
-    aLbHatchBckgrdColor.SaveValue();
-    aLbBitmap.SaveValue();
-    aTsbStepCount.SaveValue();
-    aNumFldStepCount.SaveValue();
-    aTsbTile.SaveValue();
-    aTsbStretch.SaveValue();
-    aTsbScale.SaveValue();
-    aRbtRow.SaveValue();
-    aRbtColumn.SaveValue();
-    aMtrFldOffset.SaveValue();
-    aMtrFldXOffset.SaveValue();
-    aMtrFldYOffset.SaveValue();
+    m_pTypeLB->SaveValue();
+    m_pLbColor->SaveValue();
+    m_pLbGradient->SaveValue();
+    m_pLbHatching->SaveValue();
+    m_pLbHatchBckgrdColor->SaveValue();
+    m_pLbBitmap->SaveValue();
+    m_pTsbStepCount->SaveValue();
+    m_pNumFldStepCount->SaveValue();
+    m_pTsbTile->SaveValue();
+    m_pTsbStretch->SaveValue();
+    m_pTsbScale->SaveValue();
+    m_pRbtRow->SaveValue();
+    m_pRbtColumn->SaveValue();
+    m_pMtrFldOffset->SaveValue();
+    m_pMtrFldXOffset->SaveValue();
+    m_pMtrFldYOffset->SaveValue();
 }
 
 // -----------------------------------------------------------------------
@@ -1736,7 +1713,7 @@ sal_uInt16* SvxAreaTabPage::GetRanges()
 //------------------------------------------------------------------------
 IMPL_LINK_NOARG(SvxAreaTabPage, SelectDialogTypeHdl_Impl)
 {
-    switch( (XFillStyle)aTypeLB.GetSelectEntryPos() )
+    switch( (XFillStyle)m_pTypeLB->GetSelectEntryPos() )
     {
         case XFILL_NONE: ClickInvisibleHdl_Impl(); break;
         case XFILL_SOLID: ClickColorHdl_Impl(); break;
@@ -1750,89 +1727,46 @@ IMPL_LINK_NOARG(SvxAreaTabPage, SelectDialogTypeHdl_Impl)
 
 void SvxAreaTabPage::ClickInvisibleHdl_Impl()
 {
-    aTsbTile.Hide();
-    aTsbStretch.Hide();
-    aTsbScale.Hide();
-    aTsbOriginal.Hide();
-    aFtXSize.Hide();
-    aMtrFldXSize.Hide();
-    aFtYSize.Hide();
-    aMtrFldYSize.Hide();
-    aFlSize.Hide();
-    aRbtRow.Hide();
-    aRbtColumn.Hide();
-    aMtrFldOffset.Hide();
-    aFlOffset.Hide();
-    aCtlPosition.Hide();
-    aFtXOffset.Hide();
-    aMtrFldXOffset.Hide();
-    aFtYOffset.Hide();
-    aMtrFldYOffset.Hide();
-    aFlPosition.Hide();
+    m_pBxBitmap->Hide();
 
-    aLbColor.Hide();
-    aLbGradient.Hide();
-    aLbHatching.Hide();
-    aLbBitmap.Hide();
-    aCtlXRectPreview.Hide();
-    aCtlBitmapPreview.Hide();
+    m_pFillLB->Hide();
 
-    aFlStepCount.Hide();
-    aTsbStepCount.Hide();
-    aNumFldStepCount.Hide();
+    m_pCtlXRectPreview->Hide();
+    m_pCtlBitmapPreview->Hide();
+
+    m_pFlStepCount->Hide();
 
     // Controls for Hatch-Background
-    aCbxHatchBckgrd.Hide();
-    aLbHatchBckgrdColor.Hide();
+    m_pFlHatchBckgrd->Hide();
 
     rXFSet.Put( XFillStyleItem( XFILL_NONE ) );
-    aCtlXRectPreview.SetAttributes( aXFillAttr.GetItemSet() );
-    aCtlBitmapPreview.SetAttributes( aXFillAttr.GetItemSet() );
+    m_pCtlXRectPreview->SetAttributes( aXFillAttr.GetItemSet() );
+    m_pCtlBitmapPreview->SetAttributes( aXFillAttr.GetItemSet() );
 
-    aCtlXRectPreview.Invalidate();
-    aCtlBitmapPreview.Invalidate();
+    m_pCtlXRectPreview->Invalidate();
+    m_pCtlBitmapPreview->Invalidate();
 }
 
 //------------------------------------------------------------------------
 
 void SvxAreaTabPage::ClickColorHdl_Impl()
 {
-    aTsbTile.Hide();
-    aTsbStretch.Hide();
-    aTsbScale.Hide();
-    aTsbOriginal.Hide();
-    aFtXSize.Hide();
-    aMtrFldXSize.Hide();
-    aFtYSize.Hide();
-    aMtrFldYSize.Hide();
-    aFlSize.Hide();
-    aRbtRow.Hide();
-    aRbtColumn.Hide();
-    aMtrFldOffset.Hide();
-    aFlOffset.Hide();
-    aCtlPosition.Hide();
-    aFtXOffset.Hide();
-    aMtrFldXOffset.Hide();
-    aFtYOffset.Hide();
-    aMtrFldYOffset.Hide();
-    aFlPosition.Hide();
+    m_pBxBitmap->Hide();
 
-    aLbColor.Enable();
-    aLbColor.Show();
-    aLbGradient.Hide();
-    aLbHatching.Hide();
-    aLbBitmap.Hide();
-    aCtlXRectPreview.Enable();
-    aCtlXRectPreview.Show();
-    aCtlBitmapPreview.Hide();
+    m_pFillLB->Show();
+    m_pLbColor->Enable();
+    m_pLbColor->Show();
+    m_pLbGradient->Hide();
+    m_pLbHatching->Hide();
+    m_pLbBitmap->Hide();
+    m_pCtlXRectPreview->Enable();
+    m_pCtlXRectPreview->Show();
+    m_pCtlBitmapPreview->Hide();
 
-    aFlStepCount.Hide();
-    aTsbStepCount.Hide();
-    aNumFldStepCount.Hide();
+    m_pFlStepCount->Hide();
 
     // Controls for Hatch-Background
-    aCbxHatchBckgrd.Hide();
-    aLbHatchBckgrdColor.Hide();
+    m_pFlHatchBckgrd->Hide();
 
     // set table text
     OUString        aString( CUI_RES( RID_SVXSTR_TABLE ) ); aString += ": ";
@@ -1857,13 +1791,13 @@ void SvxAreaTabPage::ClickColorHdl_Impl()
 IMPL_LINK_NOARG(SvxAreaTabPage, ModifyColorHdl_Impl)
 {
     const SfxPoolItem* pPoolItem = NULL;
-    sal_uInt16 _nPos = aLbColor.GetSelectEntryPos();
-    aLbHatchBckgrdColor.SelectEntryPos( _nPos );
+    sal_uInt16 _nPos = m_pLbColor->GetSelectEntryPos();
+    m_pLbHatchBckgrdColor->SelectEntryPos( _nPos );
     if( _nPos != LISTBOX_ENTRY_NOTFOUND )
     {
         rXFSet.Put( XFillStyleItem( XFILL_SOLID ) );
         rXFSet.Put( XFillColorItem( String(),
-                                    aLbColor.GetSelectEntryColor() ) );
+                                    m_pLbColor->GetSelectEntryColor() ) );
     }
     // NEW
     else if( SFX_ITEM_SET == rOutAttrs.GetItemState( GetWhich( XATTR_FILLCOLOR ), sal_True, &pPoolItem ) )
@@ -1875,8 +1809,8 @@ IMPL_LINK_NOARG(SvxAreaTabPage, ModifyColorHdl_Impl)
     else
         rXFSet.Put( XFillStyleItem( XFILL_NONE ) );
 
-    aCtlXRectPreview.SetAttributes( aXFillAttr.GetItemSet() );
-    aCtlXRectPreview.Invalidate();
+    m_pCtlXRectPreview->SetAttributes( aXFillAttr.GetItemSet() );
+    m_pCtlXRectPreview->Invalidate();
 
     return( 0L );
 }
@@ -1884,44 +1818,26 @@ IMPL_LINK_NOARG(SvxAreaTabPage, ModifyColorHdl_Impl)
 
 void SvxAreaTabPage::ClickGradientHdl_Impl()
 {
-    aTsbTile.Hide();
-    aTsbStretch.Hide();
-    aTsbScale.Hide();
-    aTsbOriginal.Hide();
-    aFtXSize.Hide();
-    aMtrFldXSize.Hide();
-    aFtYSize.Hide();
-    aMtrFldYSize.Hide();
-    aFlSize.Hide();
-    aRbtRow.Hide();
-    aRbtColumn.Hide();
-    aMtrFldOffset.Hide();
-    aFlOffset.Hide();
-    aCtlPosition.Hide();
-    aFtXOffset.Hide();
-    aMtrFldXOffset.Hide();
-    aFtYOffset.Hide();
-    aMtrFldYOffset.Hide();
-    aFlPosition.Hide();
+    m_pBxBitmap->Hide();
 
-    aLbColor.Hide();
-    aLbGradient.Enable();
-    aLbGradient.Show();
-    aLbHatching.Hide();
-    aLbBitmap.Hide();
-    aCtlXRectPreview.Enable();
-    aCtlXRectPreview.Show();
-    aCtlBitmapPreview.Hide();
+    m_pFillLB->Show();
+    m_pLbColor->Hide();
+    m_pLbGradient->Enable();
+    m_pLbGradient->Show();
+    m_pLbHatching->Hide();
+    m_pLbBitmap->Hide();
+    m_pCtlXRectPreview->Enable();
+    m_pCtlXRectPreview->Show();
+    m_pCtlBitmapPreview->Hide();
 
-    aFlStepCount.Enable();
-    aFlStepCount.Show();
-    aTsbStepCount.Enable();
-    aTsbStepCount.Show();
-    aNumFldStepCount.Show();
+    m_pFlStepCount->Enable();
+    m_pFlStepCount->Show();
+    m_pTsbStepCount->Enable();
+    m_pTsbStepCount->Show();
+    m_pNumFldStepCount->Show();
 
     // Controls for Hatch-Background
-    aCbxHatchBckgrd.Hide();
-    aLbHatchBckgrdColor.Hide();
+    m_pFlHatchBckgrd->Hide();
 
     // set table text
     OUString        aString( CUI_RES( RID_SVXSTR_TABLE ) ); aString += ": ";
@@ -1939,7 +1855,7 @@ void SvxAreaTabPage::ClickGradientHdl_Impl()
         aString += aURL.getBase();
 
     ModifyGradientHdl_Impl( this );
-    ModifyStepCountHdl_Impl( &aTsbStepCount );
+    ModifyStepCountHdl_Impl( m_pTsbStepCount );
 }
 
 //------------------------------------------------------------------------
@@ -1947,7 +1863,7 @@ void SvxAreaTabPage::ClickGradientHdl_Impl()
 IMPL_LINK_NOARG(SvxAreaTabPage, ModifyGradientHdl_Impl)
 {
     const SfxPoolItem* pPoolItem = NULL;
-    sal_uInt16 _nPos = aLbGradient.GetSelectEntryPos();
+    sal_uInt16 _nPos = m_pLbGradient->GetSelectEntryPos();
     if( _nPos != LISTBOX_ENTRY_NOTFOUND )
     {
         // fill ItemSet and pass it on to aCtlXRectPreview
@@ -1965,8 +1881,8 @@ IMPL_LINK_NOARG(SvxAreaTabPage, ModifyGradientHdl_Impl)
     else
         rXFSet.Put( XFillStyleItem( XFILL_NONE ) );
 
-    aCtlXRectPreview.SetAttributes( aXFillAttr.GetItemSet() );
-    aCtlXRectPreview.Invalidate();
+    m_pCtlXRectPreview->SetAttributes( aXFillAttr.GetItemSet() );
+    m_pCtlXRectPreview->Invalidate();
 
     return( 0L );
 }
@@ -1975,44 +1891,24 @@ IMPL_LINK_NOARG(SvxAreaTabPage, ModifyGradientHdl_Impl)
 
 void SvxAreaTabPage::ClickHatchingHdl_Impl()
 {
-    aLbColor.Hide();
-    aLbGradient.Hide();
-    aLbHatching.Enable();
-    aLbHatching.Show();
-    aLbBitmap.Hide();
-    aCtlXRectPreview.Enable();
-    aCtlXRectPreview.Show();
-    aCtlBitmapPreview.Hide();
+    m_pFillLB->Show();
+    m_pLbColor->Hide();
+    m_pLbGradient->Hide();
+    m_pLbHatching->Enable();
+    m_pLbHatching->Show();
+    m_pLbBitmap->Hide();
+    m_pCtlXRectPreview->Enable();
+    m_pCtlXRectPreview->Show();
+    m_pCtlBitmapPreview->Hide();
 
-    aFlStepCount.Hide();
-    aTsbStepCount.Hide();
-    aNumFldStepCount.Hide();
+    m_pFlStepCount->Hide();
 
-    aTsbTile.Hide();
-    aTsbStretch.Hide();
-    aTsbScale.Hide();
-    aTsbOriginal.Hide();
-    aFtXSize.Hide();
-    aMtrFldXSize.Hide();
-    aFtYSize.Hide();
-    aMtrFldYSize.Hide();
-    aFlSize.Hide();
-    aRbtRow.Hide();
-    aRbtColumn.Hide();
-    aMtrFldOffset.Hide();
-    aFlOffset.Hide();
-    aCtlPosition.Hide();
-    aFtXOffset.Hide();
-    aMtrFldXOffset.Hide();
-    aFtYOffset.Hide();
-    aMtrFldYOffset.Hide();
-    aFlPosition.Hide();
+    m_pBxBitmap->Hide();
 
     // Controls for Hatch-Background
-    aCbxHatchBckgrd.Show();
-    aLbHatchBckgrdColor.Show();
-    aCbxHatchBckgrd.Enable();
-    aLbHatchBckgrdColor.Enable();
+    m_pFlHatchBckgrd->Show();
+    m_pCbxHatchBckgrd->Enable();
+    m_pLbHatchBckgrdColor->Enable();
 
     // set table text
     OUString        aString( CUI_RES( RID_SVXSTR_TABLE ) ); aString += ": ";
@@ -2039,7 +1935,7 @@ void SvxAreaTabPage::ClickHatchingHdl_Impl()
 IMPL_LINK_NOARG(SvxAreaTabPage, ModifyHatchingHdl_Impl)
 {
     const SfxPoolItem* pPoolItem = NULL;
-    sal_uInt16 _nPos = aLbHatching.GetSelectEntryPos();
+    sal_uInt16 _nPos = m_pLbHatching->GetSelectEntryPos();
     if( _nPos != LISTBOX_ENTRY_NOTFOUND )
     {
         // fill ItemSet and pass it on to aCtlXRectPreview
@@ -2056,8 +1952,8 @@ IMPL_LINK_NOARG(SvxAreaTabPage, ModifyHatchingHdl_Impl)
     else
         rXFSet.Put( XFillStyleItem( XFILL_NONE ) );
 
-    aCtlXRectPreview.SetAttributes( aXFillAttr.GetItemSet() );
-    aCtlXRectPreview.Invalidate();
+    m_pCtlXRectPreview->SetAttributes( aXFillAttr.GetItemSet() );
+    m_pCtlXRectPreview->Invalidate();
 
     return( 0L );
 }
@@ -2067,12 +1963,11 @@ IMPL_LINK_NOARG(SvxAreaTabPage, ModifyHatchingHdl_Impl)
 IMPL_LINK_NOARG(SvxAreaTabPage, ModifyHatchBckgrdColorHdl_Impl)
 {
     const SfxPoolItem* pPoolItem = NULL;
-    sal_uInt16 _nPos = aLbHatchBckgrdColor.GetSelectEntryPos();
-    aLbColor.SelectEntryPos( _nPos );
+    sal_uInt16 _nPos = m_pLbHatchBckgrdColor->GetSelectEntryPos();
+    m_pLbColor->SelectEntryPos( _nPos );
     if( _nPos != LISTBOX_ENTRY_NOTFOUND )
     {
-        rXFSet.Put( XFillColorItem( String(),
-                                    aLbHatchBckgrdColor.GetSelectEntryColor() ) );
+        rXFSet.Put( XFillColorItem( String(), m_pLbHatchBckgrdColor->GetSelectEntryColor() ) );
     }
     else if( SFX_ITEM_SET == rOutAttrs.GetItemState( GetWhich( XATTR_FILLCOLOR ), sal_True, &pPoolItem ) )
     {
@@ -2082,8 +1977,8 @@ IMPL_LINK_NOARG(SvxAreaTabPage, ModifyHatchBckgrdColorHdl_Impl)
     else
         rXFSet.Put( XFillStyleItem( XFILL_NONE ) );
 
-    aCtlXRectPreview.SetAttributes( aXFillAttr.GetItemSet() );
-    aCtlXRectPreview.Invalidate();
+    m_pCtlXRectPreview->SetAttributes( aXFillAttr.GetItemSet() );
+    m_pCtlXRectPreview->Invalidate();
 
     return( 0L );
 }
@@ -2093,20 +1988,20 @@ IMPL_LINK_NOARG(SvxAreaTabPage, ModifyHatchBckgrdColorHdl_Impl)
 IMPL_LINK_NOARG(SvxAreaTabPage, ToggleHatchBckgrdColorHdl_Impl)
 {
     // switch on/off backgroundcolor for hatches
-    aLbHatchBckgrdColor.Enable( aCbxHatchBckgrd.IsChecked() );
+    m_pLbHatchBckgrdColor->Enable( m_pCbxHatchBckgrd->IsChecked() );
 
-    XFillBackgroundItem aItem( aCbxHatchBckgrd.IsChecked() );
+    XFillBackgroundItem aItem( m_pCbxHatchBckgrd->IsChecked() );
     rXFSet.Put ( aItem, XATTR_FILLBACKGROUND );
 
-    aCtlXRectPreview.SetAttributes( aXFillAttr.GetItemSet() );
-    aCtlXRectPreview.Invalidate();
+    m_pCtlXRectPreview->SetAttributes( aXFillAttr.GetItemSet() );
+    m_pCtlXRectPreview->Invalidate();
 
-    if( aLbHatchBckgrdColor.GetSelectEntryPos() == LISTBOX_ENTRY_NOTFOUND )
+    if( m_pLbHatchBckgrdColor->GetSelectEntryPos() == LISTBOX_ENTRY_NOTFOUND )
     {
         if ( SFX_ITEM_SET == rOutAttrs.GetItemState( XATTR_FILLCOLOR ) )//>= SFX_ITEM_DEFAULT )
         {
             XFillColorItem aColorItem( (const XFillColorItem&)rOutAttrs.Get( XATTR_FILLCOLOR ) );
-            aLbHatchBckgrdColor.SelectEntry( aColorItem.GetColorValue() );
+            m_pLbHatchBckgrdColor->SelectEntry( aColorItem.GetColorValue() );
         }
     }
 
@@ -2117,61 +2012,28 @@ IMPL_LINK_NOARG(SvxAreaTabPage, ToggleHatchBckgrdColorHdl_Impl)
 
 void SvxAreaTabPage::ClickBitmapHdl_Impl()
 {
-    aLbColor.Hide();
-    aLbGradient.Hide();
-    aLbHatching.Hide();
-    aLbBitmap.Enable();
-    aLbBitmap.Show();
-    aCtlBitmapPreview.Enable();
-    aCtlBitmapPreview.Show();
-    aCtlXRectPreview.Hide();
-    aFlStepCount.Hide();
-    aTsbStepCount.Hide();
-    aNumFldStepCount.Hide();
+    m_pFillLB->Show();
+    m_pLbColor->Hide();
+    m_pLbGradient->Hide();
+    m_pLbHatching->Hide();
+    m_pLbBitmap->Enable();
+    m_pLbBitmap->Show();
+    m_pCtlBitmapPreview->Enable();
+    m_pCtlBitmapPreview->Show();
+    m_pCtlXRectPreview->Hide();
 
-    aTsbTile.Enable();
-    aTsbStretch.Enable();
-    aTsbScale.Enable();
-    aTsbOriginal.Enable();
-    aFtXSize.Enable();
-    aMtrFldXSize.Enable();
-    aFtYSize.Enable();
-    aMtrFldYSize.Enable();
-    aFlSize.Enable();
-    aCtlPosition.Enable();
-    aFtXOffset.Enable();
-    aMtrFldXOffset.Enable();
-    aFtYOffset.Enable();
-    aMtrFldYOffset.Enable();
-    aFlPosition.Enable();
-    aRbtRow.Enable();
-    aRbtColumn.Enable();
-    aMtrFldOffset.Enable();
-    aFlOffset.Enable();
+    m_pFlStepCount->Hide();
+
+    m_pBxTile->Enable();
+
+    m_pFlSize->Enable();
+    m_pFlPosition->Enable();
+    m_pFlOffset->Enable();
 
     // Controls for Hatch-Background
-    aCbxHatchBckgrd.Hide();
-    aLbHatchBckgrdColor.Hide();
+    m_pFlHatchBckgrd->Hide();
 
-    aTsbTile.Show();
-    aTsbStretch.Show();
-    aTsbScale.Show();
-    aTsbOriginal.Show();
-    aFtXSize.Show();
-    aMtrFldXSize.Show();
-    aFtYSize.Show();
-    aMtrFldYSize.Show();
-    aFlSize.Show();
-    aCtlPosition.Show();
-    aFtXOffset.Show();
-    aMtrFldXOffset.Show();
-    aFtYOffset.Show();
-    aMtrFldYOffset.Show();
-    aFlPosition.Show();
-    aRbtRow.Show();
-    aRbtColumn.Show();
-    aMtrFldOffset.Show();
-    aFlOffset.Show();
+    m_pBxBitmap->Show();
 
     // set table text
     OUString        aString( CUI_RES( RID_SVXSTR_TABLE ) ); aString += ": ";
@@ -2189,7 +2051,7 @@ void SvxAreaTabPage::ClickBitmapHdl_Impl()
         aString += aURL.getBase();
 
     ModifyBitmapHdl_Impl( this );
-    ModifyTileHdl_Impl( &aTsbOriginal );
+    ModifyTileHdl_Impl( m_pTsbOriginal );
 }
 
 //------------------------------------------------------------------------
@@ -2197,7 +2059,7 @@ void SvxAreaTabPage::ClickBitmapHdl_Impl()
 IMPL_LINK_NOARG(SvxAreaTabPage, ModifyBitmapHdl_Impl)
 {
     const SfxPoolItem* pPoolItem = NULL;
-    sal_uInt16 _nPos = aLbBitmap.GetSelectEntryPos();
+    sal_uInt16 _nPos = m_pLbBitmap->GetSelectEntryPos();
     if( _nPos != LISTBOX_ENTRY_NOTFOUND )
     {
         // fill ItemSet and pass it on to aCtlXRectPreview
@@ -2214,8 +2076,8 @@ IMPL_LINK_NOARG(SvxAreaTabPage, ModifyBitmapHdl_Impl)
     else
         rXFSet.Put( XFillStyleItem( XFILL_NONE ) );
 
-    aCtlBitmapPreview.SetAttributes( aXFillAttr.GetItemSet() );
-    aCtlBitmapPreview.Invalidate();
+    m_pCtlBitmapPreview->SetAttributes( aXFillAttr.GetItemSet() );
+    m_pCtlBitmapPreview->Invalidate();
 
     return( 0L );
 }
@@ -2224,29 +2086,29 @@ IMPL_LINK_NOARG(SvxAreaTabPage, ModifyBitmapHdl_Impl)
 
 IMPL_LINK( SvxAreaTabPage, ModifyStepCountHdl_Impl, void *, p )
 {
-    if( p == &aTsbStepCount )
+    if( p == m_pTsbStepCount )
     {
-        if( aTsbStepCount.GetState() == STATE_NOCHECK )
+        if( m_pTsbStepCount->GetState() == STATE_NOCHECK )
         {
-            if( aNumFldStepCount.GetText().isEmpty() )
-                aNumFldStepCount.SetText(OUString("64"));
+            if( m_pNumFldStepCount->GetText().isEmpty() )
+                m_pNumFldStepCount->SetText(OUString("64"));
 
-            aNumFldStepCount.Enable();
+            m_pNumFldStepCount->Enable();
         }
         else
-            aNumFldStepCount.Disable();
+            m_pNumFldStepCount->Disable();
     }
 
     sal_uInt16 nValue = 0;
-    if( aTsbStepCount.GetState() != STATE_CHECK )
+    if( m_pTsbStepCount->GetState() != STATE_CHECK )
     {
         // condition != Disabled ?
-        if( !aNumFldStepCount.GetText().isEmpty() )
-            nValue = (sal_uInt16) aNumFldStepCount.GetValue();
+        if( !m_pNumFldStepCount->GetText().isEmpty() )
+            nValue = (sal_uInt16) m_pNumFldStepCount->GetValue();
     }
     rXFSet.Put( XGradientStepCountItem( nValue ) );
-    aCtlXRectPreview.SetAttributes( aXFillAttr.GetItemSet() );
-    aCtlXRectPreview.Invalidate();
+    m_pCtlXRectPreview->SetAttributes( aXFillAttr.GetItemSet() );
+    m_pCtlXRectPreview->Invalidate();
 
     return( 0L );
 }
@@ -2255,187 +2117,137 @@ IMPL_LINK( SvxAreaTabPage, ModifyStepCountHdl_Impl, void *, p )
 
 IMPL_LINK_NOARG(SvxAreaTabPage, ModifyTileHdl_Impl)
 {
-    TriState eState = aTsbTile.GetState();
+    TriState eState = m_pTsbTile->GetState();
     if( eState == STATE_CHECK )
     {
-        aTsbStretch.Disable();
-        aRbtRow.Enable();
-        aRbtColumn.Enable();
-        aMtrFldOffset.Enable();
-        aFlOffset.Enable();
+        m_pTsbStretch->Disable();
+        m_pFlOffset->Enable();
 
-        aCtlPosition.Enable();
-        aCtlPosition.Invalidate();
-        aFtXOffset.Enable();
-        aMtrFldXOffset.Enable();
-        aFtYOffset.Enable();
-        aMtrFldYOffset.Enable();
-        aFlPosition.Enable();
+        m_pCtlPosition->Invalidate();
+        m_pFlPosition->Enable();
 
-        aTsbScale.Enable();
-        aTsbOriginal.Enable();
-        aFtXSize.Enable();
-        aMtrFldXSize.Enable();
-        aFtYSize.Enable();
-        aMtrFldYSize.Enable();
-        aFlSize.Enable();
+        m_pFlSize->Enable();
     }
     else if( eState == STATE_NOCHECK )
     {
-        aTsbStretch.Enable();
-        aRbtRow.Disable();
-        aRbtColumn.Disable();
-        aMtrFldOffset.Disable();
-        aFlOffset.Disable();
+        m_pTsbStretch->Enable();
+        m_pFlOffset->Disable();
 
-        aCtlPosition.Disable();
-        aCtlPosition.Invalidate();
-        aFtXOffset.Disable();
-        aMtrFldXOffset.Disable();
-        aFtYOffset.Disable();
-        aMtrFldYOffset.Disable();
-        aFlPosition.Disable();
+        m_pCtlPosition->Invalidate();
+        m_pFlPosition->Disable();
 
-        if( aTsbStretch.GetState() != STATE_NOCHECK )
+        if( m_pTsbStretch->GetState() != STATE_NOCHECK )
         {
-            aTsbScale.Disable();
-            aTsbOriginal.Disable();
-            aFtXSize.Disable();
-            aMtrFldXSize.Disable();
-            aFtYSize.Disable();
-            aMtrFldYSize.Disable();
-            aFlSize.Disable();
+
+            m_pFlSize->Disable();
         }
         else
         {
-            aTsbScale.Enable();
-            aTsbOriginal.Enable();
-            aFtXSize.Enable();
-            aMtrFldXSize.Enable();
-            aFtYSize.Enable();
-            aMtrFldYSize.Enable();
-            aFlSize.Enable();
+            m_pFlSize->Enable();
         }
     }
     else
     {
-        aTsbStretch.Disable();
-        aRbtRow.Disable();
-        aRbtColumn.Disable();
-        aMtrFldOffset.Disable();
-        aFlOffset.Disable();
+        m_pTsbStretch->Disable();
+        m_pFlOffset->Disable();
 
-        aCtlPosition.Disable();
-        aCtlPosition.Invalidate();
-        aFtXOffset.Disable();
-        aMtrFldXOffset.Disable();
-        aFtYOffset.Disable();
-        aMtrFldYOffset.Disable();
-        aFlPosition.Disable();
+        m_pCtlPosition->Invalidate();
+        m_pFlPosition->Disable();
 
-        aTsbScale.Disable();
-        aTsbOriginal.Disable();
-        aFtXSize.Disable();
-        aMtrFldXSize.Disable();
-        aFtYSize.Disable();
-        aMtrFldYSize.Disable();
-        aFlSize.Disable();
+        m_pFlSize->Disable();
     }
 
-    if( aTsbOriginal.GetState() == STATE_CHECK )
+    if( m_pTsbOriginal->GetState() == STATE_CHECK )
     {
-        aMtrFldXSize.SetText( String() );
-        aMtrFldYSize.SetText( String() );
-        aFtXSize.Disable();
-        aFtYSize.Disable();
-        aMtrFldXSize.Disable();
-        aMtrFldYSize.Disable();
-        aTsbScale.Disable();
+        m_pMtrFldXSize->SetText( String() );
+        m_pMtrFldYSize->SetText( String() );
+        m_pGridX_Y->Disable();
+        m_pTsbScale->Disable();
     }
     else
     {
-        aMtrFldXSize.SetValue( aMtrFldXSize.GetValue() );
-        aMtrFldYSize.SetValue( aMtrFldYSize.GetValue() );
+        m_pMtrFldXSize->SetValue( m_pMtrFldXSize->GetValue() );
+        m_pMtrFldYSize->SetValue( m_pMtrFldYSize->GetValue() );
     }
 
     rXFSet.Put( XFillBmpTileItem( sal::static_int_cast< sal_Bool >( eState ) ) );
 
-    if( aTsbStretch.IsEnabled() )
+    if( m_pTsbStretch->IsEnabled() )
         rXFSet.Put(
             XFillBmpStretchItem(
-                sal::static_int_cast< sal_Bool >( aTsbStretch.GetState() ) ) );
+                sal::static_int_cast< sal_Bool >( m_pTsbStretch->GetState() ) ) );
 
-    if( aTsbScale.IsEnabled() )
-        rXFSet.Put( XFillBmpSizeLogItem( aTsbScale.GetState() == STATE_NOCHECK ) );
+    if( m_pTsbScale->IsEnabled() )
+        rXFSet.Put( XFillBmpSizeLogItem( m_pTsbScale->GetState() == STATE_NOCHECK ) );
 
-    if( aMtrFldXSize.IsEnabled() )
+    if( m_pMtrFldXSize->IsEnabled() )
     {
         XFillBmpSizeXItem* pItem = NULL;
-        TriState eScaleState = aTsbScale.GetState();
+        TriState eScaleState = m_pTsbScale->GetState();
 
         if( eScaleState == STATE_NOCHECK )
-            pItem = new XFillBmpSizeXItem( GetCoreValue( aMtrFldXSize, ePoolUnit ) );
+            pItem = new XFillBmpSizeXItem( GetCoreValue( *m_pMtrFldXSize, ePoolUnit ) );
         else
-            pItem = new XFillBmpSizeXItem( -labs( static_cast<long>(aMtrFldXSize.GetValue()) ) );
+            pItem = new XFillBmpSizeXItem( -labs( static_cast<long>(m_pMtrFldXSize->GetValue()) ) );
 
         rXFSet.Put( *pItem );
 
         delete pItem;
     }
-    else if( aTsbOriginal.IsEnabled() && aTsbOriginal.GetState() == STATE_CHECK )
+    else if( m_pTsbOriginal->IsEnabled() && m_pTsbOriginal->GetState() == STATE_CHECK )
     {
         // original size -> size == 0
         rXFSet.Put( XFillBmpSizeXItem( 0 ) );
         rXFSet.Put( XFillBmpSizeLogItem( sal_True ) );
     }
 
-    if( aMtrFldYSize.IsEnabled() )
+    if( m_pMtrFldYSize->IsEnabled() )
     {
         XFillBmpSizeYItem* pItem = NULL;
-        TriState eScaleState = aTsbScale.GetState();
+        TriState eScaleState = m_pTsbScale->GetState();
 
         if( eScaleState == STATE_NOCHECK )
-            pItem = new XFillBmpSizeYItem( GetCoreValue( aMtrFldYSize, ePoolUnit ) );
+            pItem = new XFillBmpSizeYItem( GetCoreValue( *m_pMtrFldYSize, ePoolUnit ) );
         else
-            pItem = new XFillBmpSizeYItem( -labs( static_cast<long>(aMtrFldYSize.GetValue()) ) );
+            pItem = new XFillBmpSizeYItem( -labs( static_cast<long>(m_pMtrFldYSize->GetValue()) ) );
 
         rXFSet.Put( *pItem );
 
         delete pItem;
     }
-    else if( aTsbOriginal.IsEnabled() && aTsbOriginal.GetState() == STATE_CHECK )
+    else if( m_pTsbOriginal->IsEnabled() && m_pTsbOriginal->GetState() == STATE_CHECK )
     {
         // original size -> size == 0
         rXFSet.Put( XFillBmpSizeYItem( 0 ) );
         rXFSet.Put( XFillBmpSizeLogItem( sal_True ) );
     }
 
-    if( aMtrFldOffset.IsEnabled() )
+    if( m_pMtrFldOffset->IsEnabled() )
     {
-        if( aRbtRow.IsChecked() )
+        if( m_pRbtRow->IsChecked() )
         {
-            rXFSet.Put( XFillBmpTileOffsetXItem( (sal_uInt16) aMtrFldOffset.GetValue() ) );
+            rXFSet.Put( XFillBmpTileOffsetXItem( (sal_uInt16) m_pMtrFldOffset->GetValue() ) );
             rXFSet.Put( XFillBmpTileOffsetYItem( (sal_uInt16) 0 ) );
         }
-        else if( aRbtColumn.IsChecked() )
+        else if( m_pRbtColumn->IsChecked() )
         {
             rXFSet.Put( XFillBmpTileOffsetXItem( (sal_uInt16) 0 ) );
-            rXFSet.Put( XFillBmpTileOffsetYItem( (sal_uInt16) aMtrFldOffset.GetValue() ) );
+            rXFSet.Put( XFillBmpTileOffsetYItem( (sal_uInt16) m_pMtrFldOffset->GetValue() ) );
         }
     }
 
-    if( aCtlPosition.IsEnabled() )
-        rXFSet.Put( XFillBmpPosItem( aCtlPosition.GetActualRP() ) );
+    if( m_pCtlPosition->IsEnabled() )
+        rXFSet.Put( XFillBmpPosItem( m_pCtlPosition->GetActualRP() ) );
 
-    if( aMtrFldXOffset.IsEnabled() )
-        rXFSet.Put( XFillBmpPosOffsetXItem( (sal_uInt16) aMtrFldXOffset.GetValue() ) );
+    if( m_pMtrFldXOffset->IsEnabled() )
+        rXFSet.Put( XFillBmpPosOffsetXItem( (sal_uInt16) m_pMtrFldXOffset->GetValue() ) );
 
-    if( aMtrFldYOffset.IsEnabled() )
-        rXFSet.Put( XFillBmpPosOffsetYItem( (sal_uInt16) aMtrFldYOffset.GetValue() ) );
+    if( m_pMtrFldYOffset->IsEnabled() )
+        rXFSet.Put( XFillBmpPosOffsetYItem( (sal_uInt16) m_pMtrFldYOffset->GetValue() ) );
 
 
-    aCtlBitmapPreview.SetAttributes( aXFillAttr.GetItemSet() );
-    aCtlBitmapPreview.Invalidate();
+    m_pCtlBitmapPreview->SetAttributes( aXFillAttr.GetItemSet() );
+    m_pCtlBitmapPreview->Invalidate();
 
     return( 0L );
 }
@@ -2444,33 +2256,33 @@ IMPL_LINK_NOARG(SvxAreaTabPage, ModifyTileHdl_Impl)
 
 IMPL_LINK_NOARG(SvxAreaTabPage, ClickScaleHdl_Impl)
 {
-    if( aTsbScale.GetState() == STATE_CHECK )
+    if( m_pTsbScale->GetState() == STATE_CHECK )
     {
-        aMtrFldXSize.SetDecimalDigits( 0 );
-        aMtrFldXSize.SetUnit( FUNIT_CUSTOM );
-        aMtrFldXSize.SetValue( 100 );
-        aMtrFldXSize.SetMax( 100 );
-        aMtrFldXSize.SetLast( 100 );
+        m_pMtrFldXSize->SetDecimalDigits( 0 );
+        m_pMtrFldXSize->SetUnit( FUNIT_CUSTOM );
+        m_pMtrFldXSize->SetValue( 100 );
+        m_pMtrFldXSize->SetMax( 100 );
+        m_pMtrFldXSize->SetLast( 100 );
 
-        aMtrFldYSize.SetDecimalDigits( 0 );
-        aMtrFldYSize.SetUnit( FUNIT_CUSTOM );
-        aMtrFldYSize.SetValue( 100 );
-        aMtrFldYSize.SetMax( 100 );
-        aMtrFldYSize.SetLast( 100 );
+        m_pMtrFldYSize->SetDecimalDigits( 0 );
+        m_pMtrFldYSize->SetUnit( FUNIT_CUSTOM );
+        m_pMtrFldYSize->SetValue( 100 );
+        m_pMtrFldYSize->SetMax( 100 );
+        m_pMtrFldYSize->SetLast( 100 );
     }
     else
     {
-        aMtrFldXSize.SetDecimalDigits( 2 );
-        aMtrFldXSize.SetUnit( eFUnit );
-        aMtrFldXSize.SetValue( 100 );
-        aMtrFldXSize.SetMax( 999900 );
-        aMtrFldXSize.SetLast( 100000 );
+        m_pMtrFldXSize->SetDecimalDigits( 2 );
+        m_pMtrFldXSize->SetUnit( eFUnit );
+        m_pMtrFldXSize->SetValue( 100 );
+        m_pMtrFldXSize->SetMax( 999900 );
+        m_pMtrFldXSize->SetLast( 100000 );
 
-        aMtrFldYSize.SetDecimalDigits( 2 );
-        aMtrFldYSize.SetUnit( eFUnit );
-        aMtrFldYSize.SetValue( 100 );
-        aMtrFldYSize.SetMax( 999900 );
-        aMtrFldYSize.SetLast( 100000 );
+        m_pMtrFldYSize->SetDecimalDigits( 2 );
+        m_pMtrFldYSize->SetUnit( eFUnit );
+        m_pMtrFldYSize->SetValue( 100 );
+        m_pMtrFldYSize->SetMax( 999900 );
+        m_pMtrFldYSize->SetLast( 100000 );
     }
 
     ModifyTileHdl_Impl( NULL );

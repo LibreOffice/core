@@ -71,7 +71,11 @@
                         generic-name="Color ListBox" parent="GtkComboBox"
                         icon-name="widget-gtk-combobox">
       <properties>
-        <property id="dropdown" default="True" common="True"/>
+        <property save="True" query="False" id="dropdown" default="True" name="Use DropDown">
+          <parameter-spec>
+            <type>GParamBoolean</type>
+          </parameter-spec>
+        </property>
       </properties>
     </glade-widget-class>
 
@@ -79,15 +83,55 @@
                         generic-name="Other Color ListBox" parent="GtkComboBox"
                         icon-name="widget-gtk-combobox">
       <properties>
-        <property id="dropdown" default="True" common="True"/>
+        <property save="True" query="False" id="dropdown" default="True" name="Use DropDown">
+          <parameter-spec>
+            <type>GParamBoolean</type>
+          </parameter-spec>
+        </property>
       </properties>
     </glade-widget-class>
-
+    <glade-widget-class title="Gradient ListBox" name="svxlo-GradientLB"
+                        generic-name="GradientListBox" parent="GtkComboBox"
+                        icon-name="widget-gtk-combobox">
+      <properties>
+        <property save="True" query="False" id="dropdown" default="True" name="Use DropDown">
+          <parameter-spec>
+            <type>GParamBoolean</type>
+          </parameter-spec>
+        </property>
+      </properties>
+    </glade-widget-class>
+    <glade-widget-class title="Hatching ListBox" name="svxlo-HatchingLB"
+                        generic-name="HatchingListBox" parent="GtkComboBox"
+                        icon-name="widget-gtk-combobox">
+      <properties>
+        <property save="True" query="False" id="dropdown" default="True" name="Use DropDown">
+          <parameter-spec>
+            <type>GParamBoolean</type>
+          </parameter-spec>
+        </property>
+      </properties>
+    </glade-widget-class>
+    <glade-widget-class title="Bitmap ListBox" name="svxlo-BitmapLB"
+                        generic-name="BitmapListBox" parent="GtkComboBox"
+                        icon-name="widget-gtk-combobox">
+      <properties>
+        <property save="True" query="False" id="dropdown" default="True" name="Use DropDown">
+          <parameter-spec>
+            <type>GParamBoolean</type>
+          </parameter-spec>
+        </property>
+      </properties>
+    </glade-widget-class>
     <glade-widget-class title="Font Name ListBox" name="svtlo-FontNameBox"
                         generic-name="Font name ListBox" parent="GtkComboBox"
                         icon-name="widget-gtk-combobox">
       <properties>
-        <property id="dropdown" default="True" common="True"/>
+        <property save="True" query="False" id="dropdown" default="True" name="Use DropDown">
+          <parameter-spec>
+            <type>GParamBoolean</type>
+          </parameter-spec>
+        </property>
       </properties>
     </glade-widget-class>
 
@@ -99,7 +143,11 @@
                         generic-name="Font Size ListBox" parent="GtkComboBox"
                         icon-name="widget-gtk-combobox">
       <properties>
-        <property id="dropdown" default="True" common="True"/>
+        <property save="True" query="False" id="dropdown" default="True" name="Use DropDown">
+          <parameter-spec>
+            <type>GParamBoolean</type>
+          </parameter-spec>
+        </property>
       </properties>
     </glade-widget-class>
 
@@ -107,7 +155,11 @@
                         generic-name="Line ListBox" parent="GtkComboBox"
                         icon-name="widget-gtk-combobox">
       <properties>
-        <property id="dropdown" default="True" common="True"/>
+        <property save="True" query="False" id="dropdown" default="True" name="Use DropDown">
+          <parameter-spec>
+            <type>GParamBoolean</type>
+          </parameter-spec>
+        </property>
       </properties>
     </glade-widget-class>
 
@@ -119,7 +171,11 @@
                         generic-name="FontStyleBox" parent="GtkComboBox"
                         icon-name="widget-gtk-combobox">
       <properties>
-        <property id="dropdown" default="True" common="True"/>
+        <property save="True" query="False" id="dropdown" default="True" name="Use DropDown">
+          <parameter-spec>
+            <type>GParamBoolean</type>
+          </parameter-spec>
+        </property>
       </properties>
     </glade-widget-class>
 
@@ -228,12 +284,6 @@
     <glade-widget-class title="Numbering Type ListBox" name="swlo-SwNumberingTypeListBox"
                         generic-name="NumberingTypeListBox" parent="GtkComboBox"
                         icon-name="widget-gtk-combobox"/>
-    <glade-widget-class title="Gradiant ListBox" name="svxlo-GradientLB"
-                        generic-name="GradiantListBox" parent="GtkComboBox"
-                        icon-name="widget-gtk-combobox"/>
-    <glade-widget-class title="Hatching ListBox" name="svxlo-HatchingLB"
-                        generic-name="HatchingListBox" parent="GtkComboBox"
-                        icon-name="widget-gtk-combobox"/>
     <glade-widget-class title="Category ComboBox" name="swuilo-CategoryBox"
                         generic-name="CategoryComboBox" parent="GtkComboBox"
                         icon-name="widget-gtk-combobox"/>
@@ -281,7 +331,7 @@
                         icon-name="widget-gtk-spinbutton"/>
     <glade-widget-class title="Relative Numeric Field" name="svxlo-SvxRelativeField"
                         generic-name="Relative Numeric Field" parent="GtkSpinButton"
-                        icon-name="widget-gtk-spinbutton"/>                        
+                        icon-name="widget-gtk-spinbutton"/>
 
     <glade-widget-class title="SvtURLBox" name="svtlo-SvtURLBox"
                         generic-name="URLBox" parent="VclComboBoxText"

@@ -27,10 +27,6 @@
 #define MTR_FLD_DISTANCE 1
 #define TSB_INVISIBLE 1
 #define TSB_SHOW_SHADOW 2
-#define TSB_STEPCOUNT 3
-#define TSB_TILE 4
-#define TSB_STRETCH 5
-#define TSB_ORIGINAL 6
 
 #define LB_COLOR 1
 #define LB_GRADIENT 2
@@ -57,9 +53,6 @@
 #define LB_SHADOW_COLOR 10
 #define FL_PROP 2
 #define FL_SIZE 3
-#define FL_POSITION 4
-#define FL_OFFSET 5
-#define FL_STEPCOUNT 7
 
 #define BTN_WORK_ON 2
 #define CTL_COLORTABLE 3
@@ -77,27 +70,10 @@
 #define MTR_FLD_3 3
 #define MTR_FLD_4 4
 #define FT_TABLE_NAME 7
-#define MTR_FLD_X_SIZE 4
-#define MTR_FLD_Y_SIZE 5
-#define TSB_SCALE 1
-#define FT_X_OFFSET 1
-#define FT_Y_OFFSET 2
-#define MTR_FLD_X_OFFSET 1
-#define MTR_FLD_Y_OFFSET 2
-#define LB_AREA_TYPE 19
-#define RBT_ROW 6
-#define RBT_COLUMN 7
-#define MTR_FLD_OFFSET 3
 
 #define FT_TRANSPARENT 9
-#define FT_X_SIZE 10
-#define FT_Y_SIZE 11
 #define FT_BITMAPS_HIDDEN 12
 
 #define MTR_SHADOW_TRANSPARENT 11
-
-// Hatch-Background on Area-TabPage
-#define CB_HATCHBCKGRD          21
-#define LB_HATCHBCKGRDCOLOR     22
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
