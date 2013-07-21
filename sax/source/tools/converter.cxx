@@ -1223,18 +1223,6 @@ lcl_AppendTimezone(OUStringBuffer & i_rBuffer, sal_Int16 const nOffset)
     }
 }
 
-void Converter::convertDateTZ( OUStringBuffer& rBuffer,
-                com::sun::star::util::DateWithTimezone const& rDate)
-{
-    convertDate(rBuffer, rDate.DateInTZ, &rDate.Timezone);
-}
-
-void Converter::convertDateTimeTZ( OUStringBuffer& rBuffer,
-            com::sun::star::util::DateTimeWithTimezone const& rDateTime)
-{
-    convertDateTime(rBuffer, rDateTime.DateTimeInTZ, &rDateTime.Timezone);
-}
-
 /** convert util::Date to ISO "date" string */
 void Converter::convertDate(
         OUStringBuffer& i_rBuffer,

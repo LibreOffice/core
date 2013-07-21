@@ -153,8 +153,6 @@ oox::xls::SheetDataBuffer::writeXfIdRangeListProperties(int, int, oox::xls::ApiC
 oox::xls::StylesBuffer::writeStyleXfToPropertySet(oox::PropertySet&, int) const
 oox::xls::WorksheetGlobals::getColumns(oox::ValueRange const&) const
 oox::xls::WorksheetGlobals::getRows(oox::ValueRange const&) const
-sax::Converter::convertDateTZ(rtl::OUStringBuffer&, com::sun::star::util::DateWithTimezone const&)
-sax::Converter::convertDateTimeTZ(rtl::OUStringBuffer&, com::sun::star::util::DateTimeWithTimezone const&)
 sc::CellTextAttr::CellTextAttr(unsigned short, unsigned char)
 sc::sidebar::CellLineStyleValueSet::GetSelItem()
 sc::sidebar::CellLineStyleValueSet::SetCusEnable(bool)
