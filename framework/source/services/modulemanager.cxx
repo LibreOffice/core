@@ -34,7 +34,6 @@
 #include <comphelper/sequenceasvector.hxx>
 #include <comphelper/enumhelper.hxx>
 
-#include <rtl/logfile.hxx>
 
 namespace framework
 {

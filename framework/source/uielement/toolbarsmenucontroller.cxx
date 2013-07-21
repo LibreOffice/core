@@ -53,7 +53,6 @@
 #include <vcl/window.hxx>
 #include <svtools/menuoptions.hxx>
 #include <unotools/cmdoptions.hxx>
-#include <rtl/logfile.hxx>
 #include <svtools/miscopt.hxx>
 
 //_________________________________________________________________________________________________________________

@@ -21,7 +21,6 @@
 #include <services.h>
 #include <svl/inettype.hxx>
 #include <tools/string.hxx>
-#include <rtl/logfile.hxx>
 
 namespace framework
 {

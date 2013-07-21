@@ -32,7 +32,6 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 
 #include <comphelper/processfactory.hxx>
-#include <rtl/logfile.hxx>
 #include <comphelper/attributelist.hxx>
 
 

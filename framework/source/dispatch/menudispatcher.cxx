@@ -41,7 +41,6 @@
 #include <tools/rcid.h>
 #include <osl/mutex.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-#include <rtl/logfile.hxx>
 
 #include <ucbhelper/content.hxx>
 

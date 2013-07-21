@@ -31,7 +31,6 @@
 #include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/embed/XPackageStructureCreator.hpp>
 
-#include <rtl/logfile.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <vcl/svapp.hxx>
 
@@ -105,7 +104,6 @@ ModuleUIConfigurationManagerSupplier::ModuleUIConfigurationManagerSupplier( cons
     , m_xContext( xContext )
     , m_aListenerContainer( m_aLock.getShareableOslMutex() )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "ModuleUIConfigurationManagerSupplier::ModuleUIConfigurationManagerSupplier" );
     try
     {
         // Retrieve known modules and insert them into our boost::unordered_map to speed-up access time.
@@ -139,7 +137,6 @@ ModuleUIConfigurationManagerSupplier::~ModuleUIConfigurationManagerSupplier()
 void SAL_CALL ModuleUIConfigurationManagerSupplier::dispose()
 throw ( RuntimeException )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "ModuleUIConfigurationManagerSupplier::dispose" );
     Reference< XComponent > xThis( static_cast< OWeakObject* >(this), UNO_QUERY );
 
     css::lang::EventObject aEvent( xThis );
@@ -154,7 +151,6 @@ throw ( RuntimeException )
 void SAL_CALL ModuleUIConfigurationManagerSupplier::addEventListener( const Reference< XEventListener >& xListener )
 throw ( RuntimeException )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "ModuleUIConfigurationManagerSupplier::addEventListener" );
     {
         ResetableGuard aGuard( m_aLock );
 
@@ -169,7 +165,6 @@ throw ( RuntimeException )
 void SAL_CALL ModuleUIConfigurationManagerSupplier::removeEventListener( const Reference< XEventListener >& xListener )
 throw ( RuntimeException )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "ModuleUIConfigurationManagerSupplier::removeEventListener" );
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     m_aListenerContainer.removeInterface( ::getCppuType( ( const Reference< XEventListener >* ) NULL ), xListener );
 }
@@ -178,7 +173,6 @@ throw ( RuntimeException )
 Reference< XUIConfigurationManager > SAL_CALL ModuleUIConfigurationManagerSupplier::getUIConfigurationManager( const OUString& ModuleIdentifier )
 throw ( NoSuchElementException, RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "ModuleUIConfigurationManagerSupplier::getUIConfigurationManager" );
     ResetableGuard aGuard( m_aLock );
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
