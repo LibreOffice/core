@@ -518,6 +518,11 @@ public:
     const TextSelection& GetTextSelection() const;
     void ResizeListBox();
     void SelectFirstEntry(); //selects first entry in ListBox
+    void ClearAndHide();
+    /*
+     * clears if typed anything, then hides
+     * the window, clear internal variables
+     * */
 
 };
 
