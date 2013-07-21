@@ -443,6 +443,13 @@ void EditorWindow::MouseButtonDown( const MouseEvent &rEvt )
     GrabFocus();
     if ( pEditView )
         pEditView->MouseButtonDown( rEvt );
+    if( pCodeCompleteWnd->IsVisible() )
+    {
+        if( pEditView->GetSelection() != pCodeCompleteWnd->GetTextSelection() )
+        {//selection changed, code complete window should be hidden
+            pCodeCompleteWnd->ClearAndHide();
+        }
+    }
 }
 
 void EditorWindow::Command( const CommandEvent& rCEvt )
@@ -2373,8 +2380,8 @@ void CodeCompleteListBox::InsertSelectedEntry()
     if( aFuncBuffer.toString() != OUString("") )
     {
         // if the user typed in something: remove, and insert
-        TextPaM aEnd(pCodeCompleteWindow->aTextSelection.GetEnd().GetPara(), pCodeCompleteWindow->aTextSelection.GetEnd().GetIndex() + aFuncBuffer.getLength());
-        TextPaM aStart(pCodeCompleteWindow->aTextSelection.GetEnd().GetPara(), pCodeCompleteWindow->aTextSelection.GetEnd().GetIndex() );
+        TextPaM aEnd(pCodeCompleteWindow->aTextSelection.GetEnd().GetPara(), pCodeCompleteWindow->GetTextSelection().GetEnd().GetIndex() + aFuncBuffer.getLength());
+        TextPaM aStart(pCodeCompleteWindow->aTextSelection.GetEnd().GetPara(), pCodeCompleteWindow->GetTextSelection().GetEnd().GetIndex() );
         pCodeCompleteWindow->pParent->GetEditView()->SetSelection(TextSelection(aStart, aEnd));
         pCodeCompleteWindow->pParent->GetEditView()->DeleteSelected();
 
@@ -2422,9 +2429,10 @@ long CodeCompleteListBox::PreNotify( NotifyEvent& rNEvt )
             switch( aChar )
             {
                 case KEY_ESCAPE: // hide, do nothing
-                    pCodeCompleteWindow->Hide();
+                    pCodeCompleteWindow->ClearAndHide();
+                    /*pCodeCompleteWindow->Hide();
                     pCodeCompleteWindow->pParent->GetEditView()->SetSelection( pCodeCompleteWindow->pParent->GetEditView()->CursorEndOfLine(pCodeCompleteWindow->GetTextSelection().GetStart()) );
-                    //pCodeCompleteWindow->pParent->GrabFocus();
+                    //pCodeCompleteWindow->pParent->GrabFocus();*/
                     return 0;
                 case KEY_TAB: case KEY_SPACE:
                 /* space, tab the user probably have typed in the whole
@@ -2438,8 +2446,8 @@ long CodeCompleteListBox::PreNotify( NotifyEvent& rNEvt )
                 case KEY_BACKSPACE: case KEY_DELETE:
                     if( aFuncBuffer.toString() != OUString("") )
                     {
-                        TextPaM aEnd(pCodeCompleteWindow->aTextSelection.GetEnd().GetPara(), pCodeCompleteWindow->aTextSelection.GetEnd().GetIndex() + aFuncBuffer.getLength());
-                        TextPaM aStart(pCodeCompleteWindow->aTextSelection.GetEnd().GetPara(), pCodeCompleteWindow->aTextSelection.GetEnd().GetIndex() + aFuncBuffer.getLength()-1);
+                        TextPaM aEnd(pCodeCompleteWindow->aTextSelection.GetEnd().GetPara(), pCodeCompleteWindow->GetTextSelection().GetEnd().GetIndex() + aFuncBuffer.getLength());
+                        TextPaM aStart(pCodeCompleteWindow->aTextSelection.GetEnd().GetPara(), pCodeCompleteWindow->GetTextSelection().GetEnd().GetIndex() + aFuncBuffer.getLength()-1);
                         aFuncBuffer.stripEnd(aFuncBuffer[aFuncBuffer.getLength()-1]);
                         pCodeCompleteWindow->pParent->GetEditView()->SetSelection(TextSelection(aStart, aEnd));
                         pCodeCompleteWindow->pParent->GetEditView()->DeleteSelected();
@@ -2521,12 +2529,13 @@ void CodeCompleteWindow::ResizeListBox()
         const Font& aFont = pListBox->GetUnzoomedControlPointFont();
 
         aSize.setHeight( aFont.GetSize().getHeight() * 16 );
-        aSize.setWidth( pListBox->CalcSize(aLongestEntry.getLength(),pListBox->GetEntryCount()).getWidth() );
+        aSize.setWidth( pListBox->CalcSize(aLongestEntry.getLength(), pListBox->GetEntryCount()).getWidth() );
 
         pListBox->SetSizePixel( aSize );
         aSize.setWidth( aSize.getWidth() + 1 );
         aSize.setHeight( aSize.getHeight() + 1 );
         SetSizePixel( aSize );
+        pListBox->GrabFocus();
     }
 }
 
@@ -2536,6 +2545,17 @@ void CodeCompleteWindow::SelectFirstEntry()
     {
          pListBox->SelectEntryPos( 0 );
     }
+}
+
+void CodeCompleteWindow::ClearAndHide()
+{
+    TextPaM aEnd(aTextSelection.GetEnd().GetPara(), GetTextSelection().GetEnd().GetIndex() + pListBox->aFuncBuffer.getLength());
+    TextPaM aStart(aTextSelection.GetEnd().GetPara(), GetTextSelection().GetEnd().GetIndex() );
+    pParent->GetEditView()->SetSelection(TextSelection(aStart, aEnd));
+    pParent->GetEditView()->DeleteSelected();
+    Hide();
+    ClearListBox();
+    pParent->GrabFocus();
 }
 
 } // namespace basctl
