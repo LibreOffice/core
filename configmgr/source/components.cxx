@@ -479,7 +479,7 @@ Components::Components(
     OUString conf(
         expand(
             OUString("${CONFIGURATION_LAYERS}")));
-    RTL_LOGFILE_TRACE("configmgr : begin parsing");
+    SAL_INFO( "configmgr", "configmgr : begin parsing" );
     int layer = 0;
     for (sal_Int32 i = 0;;) {
         while (i != conf.getLength() && conf[i] == ' ') {
@@ -561,7 +561,7 @@ Components::Components(
         }
         i = n;
     }
-    RTL_LOGFILE_TRACE("configmgr : end parsing");
+    SAL_INFO( "configmgr", "configmgr : end parsing" );
 }
 
 Components::~Components()
