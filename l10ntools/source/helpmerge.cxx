@@ -263,11 +263,12 @@ void HelpParser::ProcessHelp( LangHashMap* aLangHM , const OString& sCur , ResDa
                     aLangHM->erase( sCur );
                 }
             }
-            else if( pResData == NULL )
+            else if( pResData )
             {
-                fprintf(stdout,"Can't find GID=%s LID=%s TYP=%s\n",
-                    pResData->sGId.getStr(), pResData->sId.getStr(),
-                    pResData->sResTyp.getStr());
+                SAL_WARN(
+                    "l10ntools",
+                    "Can't find GID=" << pResData->sGId.getStr() << " LID="
+                        << pResData->sId.getStr() << " TYP=" << pResData->sResTyp.getStr() << "\n");
             }
             pXMLElement->ChangeLanguageTag(
                 OStringToOUString(sCur, RTL_TEXTENCODING_ASCII_US));
