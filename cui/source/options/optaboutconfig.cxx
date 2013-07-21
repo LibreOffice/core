@@ -9,6 +9,8 @@
 
 #include "optaboutconfig.hxx"
 #include "optHeaderTabListbox.hxx"
+#include <svtools/svlbitm.hxx>
+#include <svtools/treelistentry.hxx>
 
 using namespace svx;
 
@@ -56,5 +58,17 @@ CuiAboutConfigTabPage::~CuiAboutConfigTabPage()
 SfxTabPage* CuiAboutConfigTabPage::Create( Window* pParent, const SfxItemSet& rItemSet )
 {
     return ( new CuiAboutConfigTabPage( pParent, rItemSet) );
+}
+
+void CuiAboutConfigTabPage::InsertEntry( OUString& rProp, OUString&  rStatus, OUString& rType, OUString& rValue)
+{
+    SvTreeListEntry* pEntry = new SvTreeListEntry;
+
+    pEntry->AddItem( new SvLBoxString( pEntry, 0, rProp));
+    pEntry->AddItem( new SvLBoxString( pEntry, 0, rStatus));
+    pEntry->AddItem( new SvLBoxString( pEntry, 0, rType));
+    pEntry->AddItem( new SvLBoxString( pEntry, 0, rValue));
+
+    pPrefBox->Insert( pEntry );
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -28,11 +28,12 @@ private:
     PushButton* m_pEditBtn;
 
     ::svx::OptHeaderTabListBox* pPrefBox;
+    CuiAboutConfigTabPage( Window* pParent, const SfxItemSet& rItemSet );
+    ~CuiAboutConfigTabPage();
 public:
-   CuiAboutConfigTabPage( Window* pParent, const SfxItemSet& rItemSet );
-   ~CuiAboutConfigTabPage();
-
    static SfxTabPage* Create( Window* pParent, const SfxItemSet& rItemset );
+
+   void     InsertEntry(OUString& rProp, OUString&  rStatus, OUString& rType, OUString& rValue);
 
 };
 
