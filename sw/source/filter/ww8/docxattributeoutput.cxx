@@ -422,7 +422,9 @@ void DocxAttributeOutput::StartParagraphProperties( const SwTxtNode& rNode )
     if ( aNextIndex.GetNode().IsTxtNode() )
     {
         const SwTxtNode* pTxtNode = static_cast< SwTxtNode* >( &aNextIndex.GetNode() );
-        m_rExport.OutputSectionBreaks( pTxtNode->GetpSwAttrSet(), *pTxtNode );
+        // If next node has no string - it is an empty node, so no need to output the section break
+        if (!pTxtNode->GetTxt().isEmpty())
+            m_rExport.OutputSectionBreaks( pTxtNode->GetpSwAttrSet(), *pTxtNode );
     }
     else if ( aNextIndex.GetNode().IsTableNode() )
     {
