@@ -83,7 +83,7 @@ AquaA11yFocusListener::focusedObjectChanged(const Reference< XAccessible >& xAcc
             if( xContext.is() )
             {
                 m_focusedObject = [ AquaA11yFactory wrapperForAccessibleContext: xContext ];
-                NSAccessibilityPostNotification(m_focusedObject, NSAccessibilityFocusedUIElementChangedNotification);
+                NSAccessibilityPostNotification(NSApp, NSAccessibilityFocusedUIElementChangedNotification);
             }
         }
     } catch(const RuntimeException &) {
