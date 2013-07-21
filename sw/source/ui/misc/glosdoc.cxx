@@ -49,28 +49,27 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
 // PUBLIC METHODES -------------------------------------------------------
-static String lcl_CheckFileName( const OUString& rNewFilePath,
-                          const String& rNewGroupName )
+static OUString lcl_CheckFileName( const OUString& rNewFilePath,
+                          const OUString& rNewGroupName )
 {
-    String sRet;
+    const sal_Int32 nLen = rNewGroupName.getLength();
+    OUStringBuffer aBuf(nLen);
     //group name should contain only A-Z and a-z and spaces
-    for( xub_StrLen i = 0; i < rNewGroupName.Len(); i++ )
+    for( sal_Int32 i=0; i < nLen; ++i )
     {
-        sal_Unicode cChar = rNewGroupName.GetChar(i);
+        const sal_Unicode cChar = rNewGroupName[i];
         if (comphelper::string::isalnumAscii(cChar) ||
             cChar == '_' || cChar == 0x20)
         {
-            sRet += cChar;
+            aBuf.append(cChar);
         }
     }
-    sRet = comphelper::string::strip(sRet, ' ');
 
-    if( sRet.Len() )
+    const OUString sRet = aBuf.makeStringAndClear().trim();
+    if ( !sRet.isEmpty() )
     {
-        String sTmpDir(rNewFilePath);
-        sTmpDir += INET_PATH_TOKEN;
-        sTmpDir += sRet;
-        sTmpDir += SwGlossaries::GetExtension();
+        const OUString sTmpDir = rNewFilePath + OUString(INET_PATH_TOKEN)
+            + sRet + SwGlossaries::GetExtension();
         if (!FStatHelper::IsDocument( sTmpDir ))
             return sRet;
     }
@@ -199,7 +198,7 @@ sal_Bool SwGlossaries::NewGroupDoc(String& rGroupName, const String& rTitle)
     sal_uInt16 nNewPath = (sal_uInt16)rGroupName.GetToken(1, GLOS_DELIM).ToInt32();
     if (static_cast<size_t>(nNewPath) >= m_PathArr.size())
         return sal_False;
-    String sNewFilePath(m_PathArr[nNewPath]);
+    const OUString sNewFilePath(m_PathArr[nNewPath]);
     String sNewGroup = lcl_CheckFileName(sNewFilePath, rGroupName.GetToken(0, GLOS_DELIM));
     sNewGroup += GLOS_DELIM;
     sNewGroup += rGroupName.GetToken(1, GLOS_DELIM);
@@ -222,10 +221,10 @@ sal_Bool    SwGlossaries::RenameGroupDoc(
     if (static_cast<size_t>(nOldPath) >= m_PathArr.size())
         return sal_False;
 
-    String sOldFileURL(m_PathArr[nOldPath]);
-    sOldFileURL += INET_PATH_TOKEN;
-    sOldFileURL += rOldGroup.GetToken(0, GLOS_DELIM);
-    sOldFileURL += SwGlossaries::GetExtension();
+    const OUString sOldFileURL = m_PathArr[nOldPath]
+        + OUString(INET_PATH_TOKEN)
+        + rOldGroup.GetToken(0, GLOS_DELIM)
+        + SwGlossaries::GetExtension();
     if (!FStatHelper::IsDocument( sOldFileURL ))
     {
         OSL_FAIL("group doesn't exist!");
@@ -236,14 +235,14 @@ sal_Bool    SwGlossaries::RenameGroupDoc(
     if (static_cast<size_t>(nNewPath) >= m_PathArr.size())
         return sal_False;
 
-    String sNewFilePath(m_PathArr[nNewPath]);
-    String sNewFileName = lcl_CheckFileName(
+    OUString sNewFilePath(m_PathArr[nNewPath]);
+    OUString sNewFileName = lcl_CheckFileName(
                         sNewFilePath, rNewGroup.GetToken(0, GLOS_DELIM));
-    const sal_uInt16 nFileNameLen = sNewFileName.Len();
+    const sal_Int32 nFileNameLen = sNewFileName.getLength();
     sNewFileName += SwGlossaries::GetExtension();
-    String sTempNewFilePath(sNewFilePath);
-    sTempNewFilePath += INET_PATH_TOKEN;
-    sTempNewFilePath += sNewFileName ;
+    const OUString sTempNewFilePath = sNewFilePath
+        + OUString(INET_PATH_TOKEN)
+        + sNewFileName;
     if (FStatHelper::IsDocument( sTempNewFilePath ))
     {
         OSL_FAIL("group already exists!");
@@ -255,7 +254,7 @@ sal_Bool    SwGlossaries::RenameGroupDoc(
 
     RemoveFileFromList( rOldGroup );
 
-    rNewGroup = sNewFileName.Copy(0, nFileNameLen);
+    rNewGroup = sNewFileName.copy(0, nFileNameLen);
     rNewGroup += GLOS_DELIM;
     rNewGroup += OUString::number(nNewPath);
     if (m_GlosArr.empty())
@@ -267,8 +266,7 @@ sal_Bool    SwGlossaries::RenameGroupDoc(
         m_GlosArr.push_back(rNewGroup);
     }
 
-    sNewFilePath += INET_PATH_TOKEN;
-    sNewFilePath += sNewFileName ;
+    sNewFilePath += OUString(INET_PATH_TOKEN) + sNewFileName;
     SwTextBlocks* pNewBlock = new SwTextBlocks( sNewFilePath );
     pNewBlock->SetName(rNewTitle);
     delete pNewBlock;
