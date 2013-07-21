@@ -604,38 +604,6 @@ void exportRangeToSomewhere( SvXMLExport& rExport, const OUString& rValue )
     rExport.GetDocHandler()->characters( rValue );
 }
 
-Reference< chart2::XRegressionCurve > getRegressionCurve(
-    const Reference< chart2::XDataSeries > & xDataSeries )
-{
-    Reference< chart2::XRegressionCurve > xResult;
-
-    Reference< chart2::XRegressionCurveContainer > xRegCurveCnt( xDataSeries, uno::UNO_QUERY );
-    if( xRegCurveCnt.is())
-    {
-        // find equation properties of first regression curve
-        Sequence< Reference< chart2::XRegressionCurve > > aCurveSeq(
-            xRegCurveCnt->getRegressionCurves() );
-        for( sal_Int32 nI=0; nI<aCurveSeq.getLength(); ++nI )
-        {
-            // skip mean-value line
-            Reference< lang::XServiceName > xServiceName( aCurveSeq[nI], uno::UNO_QUERY );
-            if( xServiceName.is())
-            {
-                OUString aServiceName( xServiceName->getServiceName());
-                if( aServiceName == "com.sun.star.chart2.MeanValueRegressionCurve" )
-                    continue;
-            }
-            // take first non-empty curve
-            if( aCurveSeq[nI].is())
-            {
-                xResult.set( aCurveSeq[nI] );
-                break;
-            }
-        }
-    }
-    return xResult;
-}
-
 void setXMLRangePropertyAtDataSequence(
     const Reference< chart2::data::XDataSequence > & xDataSequence,
     const OUString & rXMLRange )

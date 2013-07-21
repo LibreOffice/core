@@ -99,13 +99,6 @@ namespace SchXMLTools
 
     void exportRangeToSomewhere( SvXMLExport& rExport, const OUString& rValue );
 
-    /** returns the properties of the equation of the first regression curve
-        that is no mean-value line
-     */
-    ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XRegressionCurve > getRegressionCurve(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XDataSeries > & xDataSeries );
-
     /** checks if the data sequence has the property "CachedXMLRange" (true for
         internal data sequences), and if so sets this property to the range
         given in rXMLRange

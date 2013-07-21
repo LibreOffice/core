@@ -59,7 +59,6 @@ ScRefCellValue::commit(ScColumn&, int) const
 ScUndoSetCell::ScUndoSetCell(ScDocShell*, ScAddress const&, ScCellValue const&)
 ScVbaFormat<ooo::vba::excel::XStyle>::getAddIndent()
 ScVbaFormat<ooo::vba::excel::XStyle>::setAddIndent(com::sun::star::uno::Any const&)
-SchXMLTools::getRegressionCurve(com::sun::star::uno::Reference<com::sun::star::chart2::XDataSeries> const&)
 ServerFont::GetGlyphBitmap1(int, RawBitmap&) const
 ServerFont::GetGlyphBitmap8(int, RawBitmap&) const
 SfxAppMenuControl_Impl::RegisterControl(unsigned short, SfxModule*)
