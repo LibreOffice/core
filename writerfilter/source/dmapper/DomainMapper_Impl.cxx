@@ -2265,7 +2265,7 @@ if(!bFilled)
             {OUString("DOCPROPERTY"),   "",                         "", FIELD_DOCPROPERTY },
             {OUString("DOCVARIABLE"),   "User",                     "", FIELD_DOCVARIABLE  },
             {OUString("EDITTIME"),      "DocInfo.EditTime",         "", FIELD_EDITTIME     },
-            {OUString("EQ"),            "",                         "", FIELD_EQ     },
+            {OUString("EQ"),            "CombinedCharacters",       "", FIELD_EQ     },     // In order to create the field object, must specify the cFieldServiceName for 'eq' tag as 'CombinedCharacters'. This string is defined in 'Source\xmloff\source\text\txtflde.cxx'.
             {OUString("FILLIN"),        "Input",                    "", FIELD_FILLIN       },
             {OUString("FILENAME"),      "FileName",                 "", FIELD_FILENAME     },
 //            {OUString("FILESIZE"),      "",                         "", FIELD_FILESIZE     },
@@ -2818,6 +2818,16 @@ void DomainMapper_Impl::CloseFieldCommand()
                 sCommand = sCommand.copy( 0, nSpaceIndex );
 
             FieldConversionMap_t::iterator aIt = aFieldConversionMap.find(sCommand);
+
+            // First check whether the given field tag exists or not in the conversion map.
+            // If it can't find the appropriate field in the conversion map, convert the given field tag
+            // to the upper-cases. Then, check it again.
+            if(aIt == aFieldConversionMap.end())
+            {
+                sCommand = sCommand.toAsciiUpperCase();
+                aIt = aFieldConversionMap.find(sCommand);
+            }
+
             if(aIt != aFieldConversionMap.end())
             {
                 uno::Reference< beans::XPropertySet > xFieldProperties;
@@ -2828,9 +2838,19 @@ void DomainMapper_Impl::CloseFieldCommand()
                 case FIELD_DOCPROPERTY:
                 case FIELD_TOC:
                 case FIELD_TC:
+                    bCreateField = false;
+                    break;
                 case FIELD_EQ:
+                {
+                    // If eqaution field contains the '\o' tag, it must create the field object for equation.
+                    // So it sets the bCreateField variable as a true or false in the below codes.
+                    OUString aCommand = pContext->GetCommand().trim();
+                    if (aCommand.indexOf("\\o") > 0)
+                        bCreateField = true;
+                    else
                         bCreateField = false;
                         break;
+                }
                 case FIELD_FORMCHECKBOX :
                 case FIELD_FORMTEXT :
                 case FIELD_FORMDROPDOWN :
@@ -2958,27 +2978,91 @@ void DomainMapper_Impl::CloseFieldCommand()
                         nSpaceIndex = aCommand.indexOf(' ');
                         if(nSpaceIndex > 0)
                             aCommand = aCommand.copy(nSpaceIndex).trim();
-                        if (aCommand.startsWith("\\s"))
+
+                        if (bCreateField == false)
                         {
-                            aCommand = aCommand.copy(2);
-                            if (aCommand.startsWith("\\do"))
+                            if (aCommand.startsWith("\\s"))
                             {
-                                aCommand = aCommand.copy(3);
-                                sal_Int32 nStartIndex = aCommand.indexOf('(');
-                                sal_Int32 nEndIndex = aCommand.indexOf(')');
-                                if (nStartIndex > 0 && nEndIndex > 0)
+                                aCommand = aCommand.copy(2);
+                                if (aCommand.startsWith("\\do"))
                                 {
-                                    // nDown is the requested "lower by" value in points.
-                                    sal_Int32 nDown = aCommand.copy(0, nStartIndex).toInt32();
-                                    OUString aContent = aCommand.copy(nStartIndex + 1, nEndIndex - nStartIndex - 1);
-                                    PropertyMapPtr pCharContext = GetTopContext();
-                                    // dHeight is the font size of the current style.
-                                    double dHeight = 0;
-                                    if (GetPropertyFromStyleSheet(PROP_CHAR_HEIGHT) >>= dHeight)
-                                        // Character escapement should be given in negative percents for subscripts.
-                                        pCharContext->Insert(PROP_CHAR_ESCAPEMENT, uno::makeAny( sal_Int16(- 100 * nDown / dHeight) ) );
-                                    appendTextPortion(aContent, pCharContext);
+                                    aCommand = aCommand.copy(3);
+                                    sal_Int32 nStartIndex = aCommand.indexOf('(');
+                                    sal_Int32 nEndIndex = aCommand.indexOf(')');
+                                    if (nStartIndex > 0 && nEndIndex > 0)
+                                    {
+                                        // nDown is the requested "lower by" value in points.
+                                        sal_Int32 nDown = aCommand.copy(0, nStartIndex).toInt32();
+                                        OUString aContent = aCommand.copy(nStartIndex + 1, nEndIndex - nStartIndex - 1);
+                                        PropertyMapPtr pCharContext = GetTopContext();
+                                        // dHeight is the font size of the current style.
+                                        double dHeight = 0;
+                                        if (GetPropertyFromStyleSheet(PROP_CHAR_HEIGHT) >>= dHeight)
+                                            // Character escapement should be given in negative percents for subscripts.
+                                            pCharContext->Insert(PROP_CHAR_ESCAPEMENT, uno::makeAny( sal_Int16(- 100 * nDown / dHeight) ) );
+                                        appendTextPortion(aContent, pCharContext);
+                                    }
                                 }
+                            }
+                        }
+                        else
+                        {
+                            /* If equation field contains the '\o' tag, it must add the code for analyzing the '\up' tag.
+                               It is not necessary to get the height and set it to the PropertyMapPtr.
+                               Instead, it uses m_pLastCharacterContext to set the height, because m_pLastCharacterContext stores
+                               the character property of field.
+                            */
+                            OUString aContent;
+
+                            if (aCommand.startsWith("\\o") && aCommand.indexOf('(') > 0)
+                            {
+                                sal_Int32 nIndex = aCommand.indexOf('(');
+                                aCommand = aCommand.copy(nIndex + 1);
+                            }
+
+                            if (aCommand.startsWith("\\s"))
+                            {
+                                aCommand = aCommand.copy(2);
+                                if (aCommand.startsWith("\\up") || aCommand.startsWith("\\do"))
+                                {
+                                    aCommand = aCommand.copy(3);
+                                    sal_Int32 nStartIndex = aCommand.indexOf('(');
+                                    sal_Int32 nEndIndex = aCommand.indexOf(')');
+                                    if (nStartIndex > 0 && nEndIndex > 0)
+                                    {
+                                        aContent = aCommand.copy(nStartIndex + 1, nEndIndex - nStartIndex - 1);
+                                        // nUpper is the requested "higher by" value in points.
+                                        sal_Int32 nUpper = aCommand.copy(0, nStartIndex).toInt32();
+                                        m_pLastCharacterContext->Insert(PROP_CHAR_HEIGHT, uno::makeAny( sal_Int16(nUpper*2) ), true );
+                                     }
+                                }
+                            }
+
+                            sal_Int32 nCommaIndex = aCommand.indexOf(',');
+                            if (nCommaIndex > 0)
+                                aCommand = aCommand.copy(nCommaIndex+1).trim();
+
+                            if (aCommand.startsWith("\\s"))
+                            {
+                                aCommand = aCommand.copy(2);
+                                if (aCommand.startsWith("\\do") || aCommand.startsWith("\\up"))
+                                {
+                                    aCommand = aCommand.copy(3);
+                                    sal_Int32 nStartIndex = aCommand.indexOf('(');
+                                    sal_Int32 nEndIndex = aCommand.indexOf(')');
+                                    if (nStartIndex > 0 && nEndIndex > 0)
+                                    {
+                                        // nDown is the requested "lower by" value in points.
+                                        //sal_Int32 nDown = aCommand.copy(0, nStartIndex).toInt32();
+                                        OUString aContent1 = aCommand.copy(nStartIndex + 1, nEndIndex - nStartIndex - 1);
+                                        aContent += aContent1;
+                                    }
+                                }
+                            }
+
+                            if (!aContent.isEmpty())
+                            {
+                                xFieldProperties->setPropertyValue( rPropNameSupplier.GetName( PROP_CONTENT ), uno::makeAny( aContent ) );
                             }
                         }
                     }

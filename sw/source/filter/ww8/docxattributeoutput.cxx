@@ -838,39 +838,274 @@ void DocxAttributeOutput::DoWriteCmd( String& rCmd )
 
 }
 
-void DocxAttributeOutput::CmdField_Impl( FieldInfos& rInfos )
+// This function is made by referring the case RES_COMBINED_CHARS of AttributeOutputBase::TextField() function
+// and DocxAttributeOutput::DoWriteCmd() function.
+void DocxAttributeOutput::DoWriteEqField( FieldInfos& rInfos )
 {
-    m_pSerializer->startElementNS( XML_w, XML_r, FSEND );
-    xub_StrLen nNbToken = comphelper::string::getTokenCount(rInfos.sCmd, '\t');
+    const SwField* pFld = rInfos.pField;
+    String sStr;
+    OString sFontSize;
+    sal_Unicode sSpace = 0x3000;
+    xub_StrLen nIndex;
 
-    for ( xub_StrLen i = 0; i < nNbToken; i++ )
+    // It uses the font size stored in the exporter object
+    // to calculate the font size of the equation field
+    long nHeight = GetExport().getFontSize();
+    nHeight = (nHeight + 10) / 20; // Font Size in points;
+
+    // Divide the combined char string into its up and down part. Get the
+    // font size and fill in the defaults as up == half the font size and
+    // down == a fifth the font size
+
+    // 1. Write the information of the 'up' tag
+    // 1.1 Get the information of 'up' tag
+    xub_StrLen nAbove = (pFld->GetPar1().getLength()+1)/2;
+    sStr = FieldString(ww::eEQ);
+    sStr.ToLowerAscii();
+    sStr.AppendAscii("\\o(\\s\\up ");
+    sStr += OUString::number(nHeight/2);
+
+    sStr.Append('(');
+
+    // 1.2 Export the information of 'up' tag
+    sFontSize = OString("");
+    DoWriteEqFieldElement(sStr, sFontSize);
+
+    // 2. Write the text for the 'up' tag
+    // 2.1 Get the text for 'up' tag
+    sStr = String(pFld->GetPar1(), 0, nAbove);
+    sFontSize = OString::valueOf( sal_Int32( nHeight ) );
+
+    // 2.2 Check whether the text contains the space (0x3000) or not
+    nIndex = sStr.Search(sSpace);
+    if (nIndex == STRING_NOTFOUND)
     {
-        String sToken = rInfos.sCmd.GetToken( i, '\t' );
-        if ( rInfos.eType ==  ww::eCREATEDATE
-          || rInfos.eType ==  ww::eSAVEDATE
-          || rInfos.eType ==  ww::ePRINTDATE
-          || rInfos.eType ==  ww::eDATE
-          || rInfos.eType ==  ww::eTIME )
+        // No 'space' found
+        // Export the text for 'up' tag
+        DoWriteEqFieldElement(sStr, sFontSize);
+    }
+    else
+    {
+        // 'space' was found
+        String sStr1;
+        if (nIndex == 0)
         {
-           sToken.SearchAndReplaceAll( String( "NNNN" ), String( "dddd"  ) );
-           sToken.SearchAndReplaceAll( String( "NN" ), String( "ddd"  ) );
-        }
-        // Write the Field command
-        DoWriteCmd( sToken );
+            // Export the space
+            sStr1 = sStr.Copy(0, 1);
+            DoWriteEqFieldElement(sStr1, sFontSize);
 
-        // Replace tabs by </instrText><tab/><instrText>
-        if ( i < ( nNbToken - 1 ) )
-            RunText( OUString( "\t" ) );
+            // Export the text for 'up' tag
+            sStr1 = sStr.Copy(1, sStr.Len() - 1);
+            DoWriteEqFieldElement(sStr1, sFontSize);
+        }
+        else
+        {
+            // Export the text for 'up' tag
+            sStr1 = sStr.Copy(0, nIndex);
+            DoWriteEqFieldElement(sStr1, sFontSize);
+
+            // Export the space
+            sStr1 = sStr.Copy(nIndex, 1);
+            DoWriteEqFieldElement(sStr1, sFontSize);
+
+            // Export the text for 'up' tag
+            sStr1 = sStr.Copy(nIndex + 1, sStr.Len() - nIndex - 1);
+            if (sStr1.Len() > 0)
+                DoWriteEqFieldElement(sStr1, sFontSize);
+        }
     }
 
-    m_pSerializer->endElementNS( XML_w, XML_r );
+    // 3. Write the information of the 'do' tag
+    // 3.1 Get the information of 'do' tag
+    sStr = String("),\\s\\do ");
+    sStr += OUString::number(nHeight/5);
 
-    // Write the Field separator
-    m_pSerializer->startElementNS( XML_w, XML_r, FSEND );
-    m_pSerializer->singleElementNS( XML_w, XML_fldChar,
-          FSNS( XML_w, XML_fldCharType ), "separate",
-          FSEND );
-    m_pSerializer->endElementNS( XML_w, XML_r );
+    sStr.Append('(');
+
+    // 3.2 Export the information of 'do' tag
+    sFontSize = OString("");
+    DoWriteEqFieldElement(sStr, sFontSize);
+
+    // 4. Write the text for the 'do' tag
+    // 4.1 Get the text for 'do' tag
+    sStr = String(pFld->GetPar1(), nAbove, pFld->GetPar1().getLength() - nAbove);
+    sFontSize = OString::valueOf( sal_Int32( nHeight ) );
+
+    // 4.2 Check whether the text contains the space (0x3000) or not
+    nIndex = sStr.Search(sSpace);
+    if (nIndex == STRING_NOTFOUND)
+    {
+        // No 'space' found
+        // Export the text for 'up' tag
+        DoWriteEqFieldElement(sStr, sFontSize);
+    }
+    else
+    {
+        // 'space' was found
+        String sStr1;
+        if (nIndex == 0)
+        {
+            // Export the space
+            sStr1 = sStr.Copy(0, 1);
+            DoWriteEqFieldElement(sStr1, sFontSize);
+
+            // Export the text for 'do' tag
+            sStr1 = sStr.Copy(1, sStr.Len() - 1);
+            DoWriteEqFieldElement(sStr1, sFontSize);
+        }
+        else
+        {
+            // Export the text for 'do' tag
+            sStr1 = sStr.Copy(0, nIndex);
+            DoWriteEqFieldElement(sStr1, sFontSize);
+
+            // Export the space
+            sStr1 = sStr.Copy(nIndex, 1);
+            DoWriteEqFieldElement(sStr1, sFontSize);
+
+            // Export the text for 'do' tag
+            sStr1 = sStr.Copy(nIndex + 1, sStr.Len() - nIndex - 1);
+            if (sStr1.Len() > 0)
+                DoWriteEqFieldElement(sStr1, sFontSize);
+        }
+    }
+
+    // 5. Write the final text
+    // 5.1 Get the final text
+    sStr = String("))");
+
+    // 5.2 Export the final text
+    sFontSize = OString("");
+    DoWriteEqFieldElement(sStr, sFontSize);
+}
+
+void DocxAttributeOutput::DoWriteEqFieldElement( String& sStr, OString& sFontSize )
+{
+    String sSpace;
+    sSpace.Assign(sal_Unicode(0x3000));;
+
+    m_pSerializer->startElementNS( XML_w, XML_r, FSEND ); // <w:r> start
+
+    // Export the font information
+    DoWriteRunProperty(sFontSize);
+
+    // Check whether the exported text is the space or not
+    if (sStr.Equals(sSpace) == true)
+    {
+        // Export the space , "preserve"
+        m_pSerializer->startElementNS( XML_w, XML_instrText, FSNS( XML_xml, XML_space ), "preserve", FSEND );
+        m_pSerializer->writeEscaped( OUString( sStr ) );
+        m_pSerializer->endElementNS( XML_w, XML_instrText );
+    }
+    else
+    {
+        DoWriteCmd( sStr ); // <w:instrText>
+    }
+
+    m_pSerializer->endElementNS( XML_w, XML_r ); // <w:r> end
+}
+
+void DocxAttributeOutput::DoWriteRunProperty( OString& sFontSize )
+{
+    // Get the font information
+    FastAttributeList* pAttr = m_pSerializer->createAttrList();
+    pAttr->add(FSNS(XML_w, XML_ascii), m_lastCharProperty.sFontNameUtf8_ascii);
+    pAttr->add(FSNS(XML_w, XML_hAnsi), m_lastCharProperty.sFontNameUtf8_hAnsi);
+
+    XFastAttributeListRef xAttrList( pAttr );
+
+    m_pSerializer->startElementNS( XML_w, XML_rPr, FSEND ); // <w:rPr> start
+    m_pSerializer->singleElementNS( XML_w, XML_rFonts, xAttrList ); // <w:rFonts>
+
+    if (m_lastCharProperty.bBold == true) {
+        m_pSerializer->singleElementNS( XML_w, XML_b, FSEND ); // <w:b>
+    }
+
+    if (m_lastCharProperty.bItalic == true) {
+        m_pSerializer->singleElementNS( XML_w, XML_i, FSEND ); // <w:i>
+    }
+
+    OString sNone = OString("none");
+    if (m_lastCharProperty.rUnderline.sUnderlineValue.compareTo(sNone) != 0) { // <w:u>
+        sal_Char* pUnderlineValue = (sal_Char*)m_lastCharProperty.rUnderline.sUnderlineValue.getStr();
+        Color aUnderlineColor = m_lastCharProperty.rUnderline.aUnderlineColor;
+
+        if (m_lastCharProperty.rUnderline.bUnderlineHasColor)
+        {
+            // Underline has a color
+            m_pSerializer->singleElementNS( XML_w, XML_u,
+                                            FSNS( XML_w, XML_val ), pUnderlineValue,
+                                            FSNS( XML_w, XML_color ), msfilter::util::ConvertColor( aUnderlineColor ).getStr(),
+                                        FSEND );
+        }
+        else
+        {
+            // Underline has no color
+            m_pSerializer->singleElementNS( XML_w, XML_u, FSNS( XML_w, XML_val ), pUnderlineValue, FSEND );
+        }
+    }
+
+    if (sFontSize.isEmpty() == false)
+    {
+        m_pSerializer->singleElementNS( XML_w, XML_sz, FSNS( XML_w, XML_val ), sFontSize.getStr(), FSEND ); // <w:sz>
+    }
+
+    m_pSerializer->endElementNS( XML_w, XML_rPr ); // <w:rPr> end
+}
+
+void DocxAttributeOutput::InitCharProperty()
+{
+    m_lastCharProperty.sFontNameUtf8_ascii = OString("");
+    m_lastCharProperty.sFontNameUtf8_hAnsi = OString("");
+    m_lastCharProperty.sFontNameUtf8_eastAsia = OString("");
+
+    m_lastCharProperty.bBold = false;
+    m_lastCharProperty.bItalic = false;
+    m_lastCharProperty.rUnderline.sUnderlineValue = OString("none");
+    m_lastCharProperty.rUnderline.bUnderlineHasColor = false;
+    m_lastCharProperty.rUnderline.aUnderlineColor = 0;
+}
+
+void DocxAttributeOutput::CmdField_Impl( FieldInfos& rInfos )
+{
+    if ( rInfos.eType == ww::eEQ)
+    {
+        DoWriteEqField(rInfos);
+    }
+    else
+    {
+        m_pSerializer->startElementNS( XML_w, XML_r, FSEND );
+        xub_StrLen nNbToken = comphelper::string::getTokenCount(rInfos.sCmd, '\t');
+
+        for ( xub_StrLen i = 0; i < nNbToken; i++ )
+        {
+            String sToken = rInfos.sCmd.GetToken( i, '\t' );
+            if ( rInfos.eType ==  ww::eCREATEDATE
+              || rInfos.eType ==  ww::eSAVEDATE
+              || rInfos.eType ==  ww::ePRINTDATE
+              || rInfos.eType ==  ww::eDATE
+              || rInfos.eType ==  ww::eTIME )
+            {
+               sToken.SearchAndReplaceAll( String( "NNNN" ), String( "dddd"  ) );
+               sToken.SearchAndReplaceAll( String( "NN" ), String( "ddd"  ) );
+            }
+            // Write the Field command
+            DoWriteCmd( sToken );
+
+            // Replace tabs by </instrText><tab/><instrText>
+            if ( i < ( nNbToken - 1 ) )
+                RunText( OUString( "\t" ) );
+        }
+
+        m_pSerializer->endElementNS( XML_w, XML_r );
+
+        // Write the Field separator
+        m_pSerializer->startElementNS( XML_w, XML_r, FSEND );
+        m_pSerializer->singleElementNS( XML_w, XML_fldChar,
+              FSNS( XML_w, XML_fldCharType ), "separate",
+              FSEND );
+        m_pSerializer->endElementNS( XML_w, XML_r );
+    }
 }
 
 void DocxAttributeOutput::EndField_Impl( FieldInfos& rInfos )
@@ -891,7 +1126,8 @@ void DocxAttributeOutput::EndField_Impl( FieldInfos& rInfos )
                FSEND );
     }
 
-    if (rInfos.pField ) // For hyperlinks and TOX
+    // If the type of field is the EQ (equation), it doesn't need to export the text of equation field again.
+    if (rInfos.pField && rInfos.eType !=  ww::eEQ) // For hyperlinks and TOX
     {
         // Write the Field latest value
         m_pSerializer->startElementNS( XML_w, XML_r, FSEND );
@@ -918,6 +1154,16 @@ void DocxAttributeOutput::EndField_Impl( FieldInfos& rInfos )
     if ( rInfos.bClose  )
     {
         m_pSerializer->startElementNS( XML_w, XML_r, FSEND );
+
+        // Export the run property for fldCharType 'end'
+        if (rInfos.eType == ww::eEQ) {
+            long nHeight = GetExport().getFontSize();
+            nHeight = (nHeight + 10) / 20; //Font Size in points;
+
+            OString sFontSize = OString::valueOf( sal_Int32( nHeight*2 ) );
+            DoWriteRunProperty( sFontSize );
+        }
+
         m_pSerializer->singleElementNS( XML_w, XML_fldChar,
               FSNS( XML_w, XML_fldCharType ), "end",
               FSEND );
@@ -973,6 +1219,8 @@ void DocxAttributeOutput::InitCollectedRunProperties()
     m_pFontsAttrList = NULL;
     m_pEastAsianLayoutAttrList = NULL;
     m_pCharLangAttrList = NULL;
+
+    InitCharProperty();
 
     // Write the elements in the spec order
     static const sal_Int32 aOrder[] =
@@ -3606,6 +3854,10 @@ void DocxAttributeOutput::CharFont( const SvxFontItem& rFont)
     OString sFontNameUtf8 = OUStringToOString(sFontName, RTL_TEXTENCODING_UTF8);
     m_pFontsAttrList->add(FSNS(XML_w, XML_ascii), sFontNameUtf8);
     m_pFontsAttrList->add(FSNS(XML_w, XML_hAnsi), sFontNameUtf8);
+
+    // Font information
+    m_lastCharProperty.sFontNameUtf8_ascii = sFontNameUtf8;
+    m_lastCharProperty.sFontNameUtf8_hAnsi = sFontNameUtf8;
 }
 
 void DocxAttributeOutput::CharFontSize( const SvxFontHeightItem& rFontSize)
@@ -3617,6 +3869,8 @@ void DocxAttributeOutput::CharFontSize( const SvxFontHeightItem& rFontSize)
         case RES_CHRATR_FONTSIZE:
         case RES_CHRATR_CJK_FONTSIZE:
             m_pSerializer->singleElementNS( XML_w, XML_sz, FSNS( XML_w, XML_val ), fontSize.getStr(), FSEND );
+            // Store the font size - it is needed the export by the equation field
+            GetExport().setFontSize(rFontSize.GetHeight());
             break;
         case RES_CHRATR_CTL_FONTSIZE:
             m_pSerializer->singleElementNS( XML_w, XML_szCs, FSNS( XML_w, XML_val ), fontSize.getStr(), FSEND );
@@ -3659,6 +3913,12 @@ void DocxAttributeOutput::CharPosture( const SvxPostureItem& rPosture )
         m_pSerializer->singleElementNS( XML_w, XML_i, FSEND );
     else
         m_pSerializer->singleElementNS( XML_w, XML_i, FSNS( XML_w, XML_val ), "false", FSEND );
+
+    // Save the italic information
+    if ( rPosture.GetPosture() != ITALIC_NONE )
+        m_lastCharProperty.bItalic = true;
+    else
+        m_lastCharProperty.bItalic = false;
 }
 
 void DocxAttributeOutput::CharShadow( const SvxShadowedItem& rShadow )
@@ -3710,6 +3970,11 @@ void DocxAttributeOutput::CharUnderline( const SvxUnderlineItem& rUnderline )
         // Underline has no color
         m_pSerializer->singleElementNS( XML_w, XML_u, FSNS( XML_w, XML_val ), pUnderlineValue, FSEND );
     }
+
+    // Save the underline information
+    m_lastCharProperty.rUnderline.sUnderlineValue = OString(pUnderlineValue);
+    m_lastCharProperty.rUnderline.bUnderlineHasColor = bUnderlineHasColor;
+    m_lastCharProperty.rUnderline.aUnderlineColor = aUnderlineColor;
 }
 
 void DocxAttributeOutput::CharWeight( const SvxWeightItem& rWeight )
@@ -3718,6 +3983,12 @@ void DocxAttributeOutput::CharWeight( const SvxWeightItem& rWeight )
         m_pSerializer->singleElementNS( XML_w, XML_b, FSEND );
     else
         m_pSerializer->singleElementNS( XML_w, XML_b, FSNS( XML_w, XML_val ), "false", FSEND );
+
+    // Save the wegiht information
+    if ( rWeight.GetWeight() == WEIGHT_BOLD )
+        m_lastCharProperty.bBold = true;
+    else
+        m_lastCharProperty.bBold = false;
 }
 
 void DocxAttributeOutput::CharAutoKern( const SvxAutoKernItem& )
@@ -3764,6 +4035,9 @@ void DocxAttributeOutput::CharFontCJK( const SvxFontItem& rFont )
     OUString sFontName(rFont.GetFamilyName());
     OString sFontNameUtf8 = OUStringToOString(sFontName, RTL_TEXTENCODING_UTF8);
     m_pFontsAttrList->add(FSNS(XML_w, XML_eastAsia), sFontNameUtf8);
+
+    // Font information
+    m_lastCharProperty.sFontNameUtf8_eastAsia = sFontNameUtf8;
 }
 
 void DocxAttributeOutput::CharPostureCJK( const SvxPostureItem& rPosture )
@@ -3789,7 +4063,6 @@ void DocxAttributeOutput::CharFontCTL( const SvxFontItem& rFont )
     OUString sFontName(rFont.GetFamilyName());
     OString sFontNameUtf8 = OUStringToOString(sFontName, RTL_TEXTENCODING_UTF8);
     m_pFontsAttrList->add(FSNS(XML_w, XML_cs), sFontNameUtf8);
-
 }
 
 void DocxAttributeOutput::CharPostureCTL( const SvxPostureItem& rPosture)
@@ -5199,6 +5472,7 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, FSHelperPtr pSeri
       m_nextFontId( 1 ),
       m_bBtLr(false)
 {
+    InitCharProperty();
 }
 
 DocxAttributeOutput::~DocxAttributeOutput()

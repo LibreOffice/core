@@ -2016,10 +2016,14 @@ void RtfAttributeOutput::CharFontSize( const SvxFontHeightItem& rFontSize)
         case RES_CHRATR_FONTSIZE:
             m_aStylesEnd.append(OOO_STRING_SVTOOLS_RTF_FS);
             m_aStylesEnd.append((sal_Int32)(rFontSize.GetHeight() / 10 ));
+            // Store the font size - it is needed the export by the equation field
+            GetExport().setFontSize(rFontSize.GetHeight());
             break;
         case RES_CHRATR_CJK_FONTSIZE:
             m_aStyles.append(OOO_STRING_SVTOOLS_RTF_FS);
             m_aStyles.append((sal_Int32)(rFontSize.GetHeight() / 10 ));
+            // Store the font size - it is needed the export by the equation field
+            GetExport().setFontSize(rFontSize.GetHeight());
             break;
         case RES_CHRATR_CTL_FONTSIZE:
             m_aStyles.append(OOO_STRING_SVTOOLS_RTF_AFS);

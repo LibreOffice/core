@@ -1390,6 +1390,8 @@ void WW8AttributeOutput::CharFontSize( const SvxFontHeightItem& rHeight )
             case RES_CHRATR_FONTSIZE:
             case RES_CHRATR_CJK_FONTSIZE:
                 nId = NS_sprm::LN_CHps;
+                // Store the font size - it is needed the export by the equation field
+                GetExport().setFontSize(rHeight.GetHeight());
                 break;
             case RES_CHRATR_CTL_FONTSIZE:
                 nId = NS_sprm::LN_CHpsBi;
@@ -2890,8 +2892,8 @@ void AttributeOutputBase::TextField( const SwFmtFld& rField )
         else
             nScript = i18n::ScriptType::ASIAN;
 
-        long nHeight = ((SvxFontHeightItem&)(GetExport().GetItem(
-            GetWhichOfScript(RES_CHRATR_FONTSIZE,nScript)))).GetHeight();;
+        // Use the font size stored in the exporter object to calculate the font size of equation field
+        long nHeight = GetExport().getFontSize();
 
         nHeight = (nHeight + 10) / 20; //Font Size in points;
 
