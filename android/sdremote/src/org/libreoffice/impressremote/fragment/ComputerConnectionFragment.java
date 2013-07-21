@@ -82,8 +82,7 @@ public class ComputerConnectionFragment extends SherlockFragment implements Serv
     }
 
     private void bindService() {
-        Intent aServiceIntent = new Intent(getActivity(), CommunicationService.class);
-
+        Intent aServiceIntent = Intents.buildCommunicationServiceIntent(getActivity());
         getActivity().bindService(aServiceIntent, this, Context.BIND_AUTO_CREATE);
     }
 
@@ -140,18 +139,21 @@ public class ComputerConnectionFragment extends SherlockFragment implements Serv
                 String aPin = aIntent.getStringExtra(Intents.Extras.PIN);
 
                 mComputerConnectionFragment.setUpPinValidationInstructions(aPin);
+                mComputerConnectionFragment.refreshActionBarMenu();
 
                 return;
             }
 
             if (Intents.Actions.PAIRING_SUCCESSFUL.equals(aIntent.getAction())) {
                 mComputerConnectionFragment.setUpPresentation();
+                mComputerConnectionFragment.refreshActionBarMenu();
 
                 return;
             }
 
             if (Intents.Actions.CONNECTION_FAILED.equals(aIntent.getAction())) {
                 mComputerConnectionFragment.setUpErrorMessage();
+                mComputerConnectionFragment.refreshActionBarMenu();
             }
         }
     }
@@ -219,9 +221,28 @@ public class ComputerConnectionFragment extends SherlockFragment implements Serv
         aViewAnimator.setDisplayedChild(aViewAnimator.indexOfChild(aMessageLayout));
     }
 
+    private void refreshActionBarMenu() {
+        getSherlockActivity().supportInvalidateOptionsMenu();
+    }
+
     @Override
     public void onCreateOptionsMenu(Menu aMenu, MenuInflater aMenuInflater) {
+        if (!shouldActionBarMenuBeDisplayed()) {
+            aMenu.clear();
+            return;
+        }
+
         aMenuInflater.inflate(R.menu.menu_action_bar_computer_connection, aMenu);
+    }
+
+    private boolean shouldActionBarMenuBeDisplayed() {
+        if (getView() == null) {
+            return false;
+        }
+
+        ViewAnimator aViewAnimator = (ViewAnimator) getView().findViewById(R.id.view_animator);
+
+        return aViewAnimator.getCurrentView().getId() == R.id.layout_error_message;
     }
 
     @Override
@@ -230,6 +251,7 @@ public class ComputerConnectionFragment extends SherlockFragment implements Serv
             case R.id.menu_reconnect:
                 showProgressBar();
                 connectToComputer();
+                refreshActionBarMenu();
                 return true;
 
             default:
