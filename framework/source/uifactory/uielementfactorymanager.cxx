@@ -36,7 +36,6 @@
 #include <rtl/ustrbuf.hxx>
 #include <cppuhelper/weak.hxx>
 #include <vcl/svapp.hxx>
-#include <rtl/logfile.hxx>
 
 //_________________________________________________________________________________________________________________
 //  Defines
@@ -84,7 +83,6 @@ ConfigurationAccess_FactoryManager::ConfigurationAccess_FactoryManager( const Re
     m_sRoot(_sRoot),
     m_bConfigAccessInitialized( sal_False )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "UIElementFactoryManager::ConfigurationAccess_FactoryManager" );
     m_xConfigProvider = theDefaultProvider::get( rxContext );
 }
 
@@ -100,7 +98,6 @@ ConfigurationAccess_FactoryManager::~ConfigurationAccess_FactoryManager()
 
 OUString ConfigurationAccess_FactoryManager::getFactorySpecifierFromTypeNameModule( const OUString& rType, const OUString& rName, const OUString& rModule ) const
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "UIElementFactoryManager::getFactorySpecifierFromTypeNameModule" );
     // SAFE
     ResetableGuard aLock( m_aLock );
 
@@ -136,7 +133,6 @@ OUString ConfigurationAccess_FactoryManager::getFactorySpecifierFromTypeNameModu
 
 void ConfigurationAccess_FactoryManager::addFactorySpecifierToTypeNameModule( const OUString& rType, const OUString& rName, const OUString& rModule, const OUString& rServiceSpecifier )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "UIElementFactoryManager::addFactorySpecifierToTypeNameModule" );
     // SAFE
     ResetableGuard aLock( m_aLock );
 
@@ -153,7 +149,6 @@ void ConfigurationAccess_FactoryManager::addFactorySpecifierToTypeNameModule( co
 
 void ConfigurationAccess_FactoryManager::removeFactorySpecifierFromTypeNameModule( const OUString& rType, const OUString& rName, const OUString& rModule )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "UIElementFactoryManager::removeFactorySpecifierFromTypeNameModule" );
     // SAFE
     ResetableGuard aLock( m_aLock );
 
@@ -169,7 +164,6 @@ void ConfigurationAccess_FactoryManager::removeFactorySpecifierFromTypeNameModul
 
 Sequence< Sequence< PropertyValue > > ConfigurationAccess_FactoryManager::getFactoriesDescription() const
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "UIElementFactoryManager::getFactoriesDescription" );
     // SAFE
     ResetableGuard aLock( m_aLock );
 
@@ -213,7 +207,6 @@ Sequence< Sequence< PropertyValue > > ConfigurationAccess_FactoryManager::getFac
 // container.XContainerListener
 void SAL_CALL ConfigurationAccess_FactoryManager::elementInserted( const ContainerEvent& aEvent ) throw(RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "UIElementFactoryManager::elementInserted" );
     OUString   aType;
     OUString   aName;
     OUString   aModule;
@@ -233,7 +226,6 @@ void SAL_CALL ConfigurationAccess_FactoryManager::elementInserted( const Contain
 
 void SAL_CALL ConfigurationAccess_FactoryManager::elementRemoved ( const ContainerEvent& aEvent ) throw(RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "UIElementFactoryManager::elementRemoved " );
     OUString   aType;
     OUString   aName;
     OUString   aModule;
@@ -253,7 +245,6 @@ void SAL_CALL ConfigurationAccess_FactoryManager::elementRemoved ( const Contain
 
 void SAL_CALL ConfigurationAccess_FactoryManager::elementReplaced( const ContainerEvent& aEvent ) throw(RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "UIElementFactoryManager::elementReplaced" );
     OUString   aType;
     OUString   aName;
     OUString   aModule;
@@ -275,7 +266,6 @@ void SAL_CALL ConfigurationAccess_FactoryManager::elementReplaced( const Contain
 // lang.XEventListener
 void SAL_CALL ConfigurationAccess_FactoryManager::disposing( const EventObject& ) throw(RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "UIElementFactoryManager::disposing" );
     // SAFE
     // remove our reference to the config access
     ResetableGuard aLock( m_aLock );
@@ -284,7 +274,6 @@ void SAL_CALL ConfigurationAccess_FactoryManager::disposing( const EventObject& 
 
 void ConfigurationAccess_FactoryManager::readConfigurationData()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "UIElementFactoryManager::readConfigurationData" );
     // SAFE
     ResetableGuard aLock( m_aLock );
 
@@ -342,7 +331,6 @@ void ConfigurationAccess_FactoryManager::readConfigurationData()
 
 sal_Bool ConfigurationAccess_FactoryManager::impl_getElementProps( const Any& aElement, OUString& rType, OUString& rName, OUString& rModule, OUString& rServiceSpecifier ) const
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "UIElementFactoryManager::impl_getElementProps" );
     Reference< XPropertySet > xPropertySet;
     aElement >>= xPropertySet;
 
@@ -384,7 +372,6 @@ UIElementFactoryManager::UIElementFactoryManager( const Reference< XComponentCon
     m_bConfigRead( sal_False ),
     m_xContext(rxContext)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "UIElementFactoryManager::UIElementFactoryManager" );
     m_pConfigAccess = new ConfigurationAccess_FactoryManager( rxContext, OUString( "/org.openoffice.Office.UI.Factories/Registered/UIElementFactories" ) );
     m_pConfigAccess->acquire();
     m_xModuleManager = ModuleManager::create( rxContext );
@@ -404,7 +391,6 @@ Reference< XUIElement > SAL_CALL UIElementFactoryManager::createUIElement(
     const Sequence< PropertyValue >& Args )
 throw ( ::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "UIElementFactoryManager::createUIElement" );
     // SAFE
     ResetableGuard aLock( m_aLock );
 
@@ -453,7 +439,6 @@ throw ( ::com::sun::star::container::NoSuchElementException, ::com::sun::star::l
 Sequence< Sequence< PropertyValue > > SAL_CALL UIElementFactoryManager::getRegisteredFactories()
 throw ( RuntimeException )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "UIElementFactoryManager::getRegisteredFactories" );
     // SAFE
     ResetableGuard aLock( m_aLock );
 
@@ -469,7 +454,6 @@ throw ( RuntimeException )
 Reference< XUIElementFactory > SAL_CALL UIElementFactoryManager::getFactory( const OUString& aResourceURL, const OUString& aModuleId )
 throw ( RuntimeException )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "UIElementFactoryManager::getFactory" );
     ResetableGuard aLock( m_aLock );
 
     if ( !m_bConfigRead )
@@ -497,7 +481,6 @@ throw ( RuntimeException )
 void SAL_CALL UIElementFactoryManager::registerFactory( const OUString& aType, const OUString& aName, const OUString& aModuleId, const OUString& aFactoryImplementationName )
 throw ( ElementExistException, RuntimeException )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "UIElementFactoryManager::registerFactory" );
     // SAFE
     ResetableGuard aLock( m_aLock );
 
@@ -514,7 +497,6 @@ throw ( ElementExistException, RuntimeException )
 void SAL_CALL UIElementFactoryManager::deregisterFactory( const OUString& aType, const OUString& aName, const OUString& aModuleId )
 throw ( NoSuchElementException, RuntimeException )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "UIElementFactoryManager::deregisterFactory" );
     // SAFE
     ResetableGuard aLock( m_aLock );
 

@@ -37,7 +37,6 @@
 
 #include <com/sun/star/util/XChangesNotifier.hpp>
 
-#include <rtl/logfile.hxx>
 
 #include <rtl/logfile.h>
 
@@ -78,7 +77,6 @@ DEFINE_INIT_SERVICE(ModuleAcceleratorConfiguration,
 ModuleAcceleratorConfiguration::ModuleAcceleratorConfiguration(const css::uno::Reference< css::uno::XComponentContext >& xContext)
     : XCUBasedAcceleratorConfiguration(xContext)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "ModuleAcceleratorConfiguration::ModuleAcceleratorConfiguration" );
 }
 
 //-----------------------------------------------
@@ -91,7 +89,6 @@ void SAL_CALL ModuleAcceleratorConfiguration::initialize(const css::uno::Sequenc
     throw(css::uno::Exception       ,
           css::uno::RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "ModuleAcceleratorConfiguration::initialize" );
     // SAFE -> ----------------------------------
     WriteGuard aWriteLock(m_aLock);
 
@@ -120,7 +117,6 @@ void SAL_CALL ModuleAcceleratorConfiguration::initialize(const css::uno::Sequenc
 //-----------------------------------------------
 void ModuleAcceleratorConfiguration::impl_ts_fillCache()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "ModuleAcceleratorConfiguration::impl_ts_fillCache" );
     // SAFE -> ----------------------------------
     ReadGuard aReadLock(m_aLock);
     m_sModuleCFG = m_sModule;

@@ -34,7 +34,6 @@
 #include <vcl/cmdevt.hxx>
 #include <osl/mutex.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-#include <rtl/logfile.hxx>
 
 
 namespace framework{

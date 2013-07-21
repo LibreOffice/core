@@ -72,7 +72,6 @@
 #include <osl/file.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <svtools/acceleratorexecute.hxx>
-#include <rtl/logfile.hxx>
 #include "svtools/miscopt.hxx"
 #include <uielement/menubarmerger.hxx>
 
@@ -182,7 +181,6 @@ MenuBarManager::MenuBarManager(
     , m_xURLTransformer(_xURLTransformer)
     , m_nSymbolsStyle( SvtMiscOptions().GetCurrentSymbolsStyle() )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "MenuBarManager::MenuBarManager" );
     m_xPopupMenuControllerFactory = frame::PopupMenuControllerFactory::create(m_xContext);
     FillMenuManager( pMenu, rFrame, rDispatchProvider, rModuleIdentifier, bDelete, bDeleteChildren );
 }
@@ -205,7 +203,6 @@ MenuBarManager::MenuBarManager(
     , m_xURLTransformer(_xURLTransformer)
     , m_nSymbolsStyle( SvtMiscOptions().GetCurrentSymbolsStyle() )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "MenuBarManager::MenuBarManager" );
     Init(rFrame,pAddonMenu,bDelete,bDeleteChildren);
 }
 
@@ -227,7 +224,6 @@ MenuBarManager::MenuBarManager(
     , m_xURLTransformer(_xURLTransformer)
     , m_nSymbolsStyle( SvtMiscOptions().GetCurrentSymbolsStyle() )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "MenuBarManager::MenuBarManager" );
     Init(rFrame,pAddonPopupMenu,bDelete,bDeleteChildren,true);
 }
 
@@ -263,7 +259,6 @@ void SAL_CALL MenuBarManager::release() throw()
 
 Any SAL_CALL MenuBarManager::getMenuHandle( const Sequence< sal_Int8 >& /*ProcessId*/, sal_Int16 SystemType ) throw (RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "MenuBarManager::getMenuHandle" );
     ResetableGuard aGuard( m_aLock );
 
     if ( m_bDisposed )
@@ -309,7 +304,6 @@ MenuBarManager::~MenuBarManager()
 
 void MenuBarManager::Destroy()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "MenuBarManager::Destroy" );
     SolarMutexGuard aGuard;
 
     if ( !m_bDisposed )
@@ -342,7 +336,6 @@ void MenuBarManager::Destroy()
 // XComponent
 void SAL_CALL MenuBarManager::dispose() throw( RuntimeException )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "MenuBarManager::dispose" );
     Reference< XComponent > xThis( static_cast< OWeakObject* >(this), UNO_QUERY );
 
     EventObject aEvent( xThis );
@@ -393,7 +386,6 @@ void SAL_CALL MenuBarManager::dispose() throw( RuntimeException )
 
 void SAL_CALL MenuBarManager::addEventListener( const Reference< XEventListener >& xListener ) throw( RuntimeException )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "MenuBarManager::addEventListener" );
     ResetableGuard aGuard( m_aLock );
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
@@ -405,7 +397,6 @@ void SAL_CALL MenuBarManager::addEventListener( const Reference< XEventListener 
 
 void SAL_CALL MenuBarManager::removeEventListener( const Reference< XEventListener >& xListener ) throw( RuntimeException )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "MenuBarManager::removeEventListener" );
     ResetableGuard aGuard( m_aLock );
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     m_aListenerContainer.removeInterface( ::getCppuType( ( const Reference< XEventListener >* ) NULL ), xListener );
@@ -414,7 +405,6 @@ void SAL_CALL MenuBarManager::removeEventListener( const Reference< XEventListen
 void SAL_CALL MenuBarManager::elementInserted( const ::com::sun::star::ui::ConfigurationEvent& Event )
 throw (RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "MenuBarManager::elementInserted" );
     ResetableGuard aGuard( m_aLock );
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
@@ -431,14 +421,12 @@ throw (RuntimeException)
 void SAL_CALL MenuBarManager::elementRemoved( const ::com::sun::star::ui::ConfigurationEvent& Event )
 throw (RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "MenuBarManager::elementRemoved" );
     elementInserted(Event);
 }
 
 void SAL_CALL MenuBarManager::elementReplaced( const ::com::sun::star::ui::ConfigurationEvent& Event )
 throw (RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "MenuBarManager::elementReplaced" );
     elementInserted(Event);
 }
 
@@ -446,7 +434,6 @@ throw (RuntimeException)
 void SAL_CALL MenuBarManager::frameAction( const FrameActionEvent& Action )
 throw ( RuntimeException )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "MenuBarManager::frameAction" );
     ResetableGuard aGuard( m_aLock );
 
     if ( m_bDisposed )
@@ -468,7 +455,6 @@ throw ( RuntimeException )
 void SAL_CALL MenuBarManager::statusChanged( const FeatureStateEvent& Event )
 throw ( RuntimeException )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "MenuBarManager::statusChanged" );
     OUString aFeatureURL = Event.FeatureURL.Complete;
 
     SolarMutexGuard aSolarGuard;
@@ -565,7 +551,6 @@ throw ( RuntimeException )
 // Helper to retrieve own structure from item ID
 MenuBarManager::MenuItemHandler* MenuBarManager::GetMenuItemHandler( sal_uInt16 nItemId )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "MenuBarManager::GetMenuItemHandler" );
     ResetableGuard aGuard( m_aLock );
 
     std::vector< MenuItemHandler* >::iterator p;
@@ -582,7 +567,6 @@ MenuBarManager::MenuItemHandler* MenuBarManager::GetMenuItemHandler( sal_uInt16 
 // Helper to set request images flag
 void MenuBarManager::RequestImages()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "MenuBarManager::RequestImages" );
 
     m_bRetrieveImages = sal_True;
     const sal_uInt32 nCount = m_aMenuItemHandlerVector.size();
@@ -600,7 +584,6 @@ void MenuBarManager::RequestImages()
 // Helper to reset objects to prepare shutdown
 void MenuBarManager::RemoveListener()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "MenuBarManager::RemoveListener" );
     ResetableGuard aGuard( m_aLock );
 
     // Check service manager reference. Remove listener can be called due
@@ -682,7 +665,6 @@ void MenuBarManager::RemoveListener()
 
 void SAL_CALL MenuBarManager::disposing( const EventObject& Source ) throw ( RuntimeException )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "MenuBarManager::disposing(evt)" );
     MenuItemHandler* pMenuItemDisposing = NULL;
 
     ResetableGuard aGuard( m_aLock );
@@ -748,7 +730,6 @@ void SAL_CALL MenuBarManager::disposing( const EventObject& Source ) throw ( Run
 
 void MenuBarManager::CheckAndAddMenuExtension( Menu* pMenu )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "MenuBarManager::CheckAndAddMenuExtension" );
 
     // retrieve menu extension item
     MenuExtensionItem aMenuItem( GetMenuExtension() );
@@ -819,7 +800,6 @@ private:
 
 IMPL_LINK( MenuBarManager, Activate, Menu *, pMenu )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "MenuBarManager::Activate" );
     if ( pMenu == m_pVCLMenu )
     {
         com::sun::star::uno::ContextLayer layer(
@@ -1019,7 +999,6 @@ IMPL_LINK( MenuBarManager, Activate, Menu *, pMenu )
 
 IMPL_LINK( MenuBarManager, Deactivate, Menu *, pMenu )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "MenuBarManager::Deactivate" );
     if ( pMenu == m_pVCLMenu )
     {
         m_bActive = sal_False;
@@ -1055,7 +1034,6 @@ IMPL_LINK( MenuBarManager, AsyncSettingsHdl, Timer*,)
 
 IMPL_LINK( MenuBarManager, Select, Menu *, pMenu )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "MenuBarManager::Select" );
     URL                     aTargetURL;
     Sequence<PropertyValue> aArgs;
     Reference< XDispatch >  xDispatch;
@@ -1133,7 +1111,6 @@ IMPL_LINK_NOARG(MenuBarManager, Highlight)
 
 sal_Bool MenuBarManager::MustBeHidden( PopupMenu* pPopupMenu, const Reference< XURLTransformer >& rTransformer )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "MenuBarManager::MustBeHidden" );
     if ( pPopupMenu )
     {
         URL               aTargetURL;
@@ -1183,7 +1160,6 @@ String MenuBarManager::RetrieveLabelFromCommand( const String& aCmdURL )
 
 sal_Bool MenuBarManager::CreatePopupMenuController( MenuItemHandler* pMenuItemHandler )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "MenuBarManager::CreatePopupMenuController" );
     OUString aItemCommand( pMenuItemHandler->aMenuItemURL );
 
     // Try instanciate a popup menu controller. It is stored in the menu item handler.
@@ -1220,7 +1196,6 @@ sal_Bool MenuBarManager::CreatePopupMenuController( MenuItemHandler* pMenuItemHa
 
 void MenuBarManager::FillMenuManager( Menu* pMenu, const Reference< XFrame >& rFrame, const Reference< XDispatchProvider >& rDispatchProvider, const OUString& rModuleIdentifier, sal_Bool bDelete, sal_Bool bDeleteChildren )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "MenuBarManager::FillMenuManager" );
     m_xFrame            = rFrame;
     m_bActive           = sal_False;
     m_bDeleteMenu       = bDelete;
@@ -1492,7 +1467,6 @@ void MenuBarManager::impl_RetrieveShortcutsFromConfiguration(
     const Sequence< OUString >& rCommands,
     std::vector< MenuItemHandler* >& aMenuShortCuts )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "MenuBarManager::impl_RetrieveShortcutsFromConfiguration" );
     if ( rAccelCfg.is() )
     {
         try
@@ -1513,7 +1487,6 @@ void MenuBarManager::impl_RetrieveShortcutsFromConfiguration(
 
 void MenuBarManager::RetrieveShortcuts( std::vector< MenuItemHandler* >& aMenuShortCuts )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "MenuBarManager::RetrieveShortcuts" );
     if ( !m_bModuleIdentified )
     {
         m_bModuleIdentified = sal_True;
@@ -1610,7 +1583,6 @@ void MenuBarManager::RetrieveShortcuts( std::vector< MenuItemHandler* >& aMenuSh
 
 void MenuBarManager::RetrieveImageManagers()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "MenuBarManager::RetrieveImageManagers" );
     if ( !m_xDocImageManager.is() )
     {
         Reference< XController > xController = m_xFrame->getController();
@@ -1664,7 +1636,6 @@ void MenuBarManager::FillMenuWithConfiguration(
     const Reference< XIndexAccess >&    rItemContainer,
     const Reference< XURLTransformer >& rTransformer )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "MenuBarManager::FillMenuWithConfiguration" );
     Reference< XDispatchProvider > xEmptyDispatchProvider;
     MenuBarManager::FillMenu( nId, pMenu, rModuleIdentifier, rItemContainer, xEmptyDispatchProvider );
 
@@ -1700,7 +1671,6 @@ void MenuBarManager::FillMenu(
     const Reference< XIndexAccess >&      rItemContainer,
     const Reference< XDispatchProvider >& rDispatchProvider )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "MenuBarManager::FillMenu" );
     // Fill menu bar with container contents
      for ( sal_Int32 n = 0; n < rItemContainer->getCount(); n++ )
     {
@@ -1809,7 +1779,6 @@ void MenuBarManager::MergeAddonMenus(
     const MergeMenuInstructionContainer& aMergeInstructionContainer,
     const OUString& rModuleIdentifier )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "MenuBarManager::MergeAddonMenus" );
     // set start value for the item ID for the new addon menu items
     sal_uInt16 nItemId = ADDONMENU_MERGE_ITEMID_START;
 
@@ -1861,7 +1830,6 @@ void MenuBarManager::MergeAddonMenus(
 
 void MenuBarManager::SetItemContainer( const Reference< XIndexAccess >& rItemContainer )
 {
-    RTL_LOGFILE_CONTEXT( aLog, "framework (cd100003) ::MenuBarManager::SetItemContainer" );
 
     ResetableGuard aGuard( m_aLock );
 
@@ -1922,7 +1890,6 @@ void MenuBarManager::SetItemContainer( const Reference< XIndexAccess >& rItemCon
 
 void MenuBarManager::GetPopupController( PopupControllerCache& rPopupController )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "MenuBarManager::GetPopupController" );
 
     SolarMutexGuard aSolarMutexGuard;
 
@@ -1973,7 +1940,6 @@ const Reference< XComponentContext >& MenuBarManager::getComponentContext()
 
 void MenuBarManager::AddMenu(MenuBarManager* pSubMenuManager,const OUString& _sItemCommand,sal_uInt16 _nItemId)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "MenuBarManager::AddMenu" );
     Reference< XStatusListener > xSubMenuManager( static_cast< OWeakObject *>( pSubMenuManager ), UNO_QUERY );
     m_xFrame->addFrameActionListener( Reference< XFrameActionListener >( xSubMenuManager, UNO_QUERY ));
 
@@ -1990,7 +1956,6 @@ void MenuBarManager::AddMenu(MenuBarManager* pSubMenuManager,const OUString& _sI
 
 sal_uInt16 MenuBarManager::FillItemCommand(OUString& _rItemCommand, Menu* _pMenu,sal_uInt16 _nIndex) const
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "MenuBarManager::FillItemCommand" );
     sal_uInt16 nItemId = _pMenu->GetItemId( _nIndex );
 
     _rItemCommand = _pMenu->GetItemCommand( nItemId );
@@ -2005,7 +1970,6 @@ sal_uInt16 MenuBarManager::FillItemCommand(OUString& _rItemCommand, Menu* _pMenu
 }
 void MenuBarManager::Init(const Reference< XFrame >& rFrame,AddonMenu* pAddonMenu,sal_Bool bDelete,sal_Bool bDeleteChildren,bool _bHandlePopUp)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "MenuBarManager::Init" );
     m_bActive           = sal_False;
     m_bDeleteMenu       = bDelete;
     m_bDeleteChildren   = bDeleteChildren;
