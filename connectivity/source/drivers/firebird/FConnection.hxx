@@ -36,6 +36,8 @@
 #ifndef CONNECTIVITY_SCONNECTION_HXX
 #define CONNECTIVITY_SCONNECTION_HXX
 
+#include "Blob.hxx"
+
 #include <com/sun/star/sdbc/SQLWarning.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/document/DocumentEvent.hpp>
@@ -180,6 +182,15 @@ namespace connectivity
             ::rtl::OUString         getConnectionURL()  const { return m_sConnectionURL; }
             sal_Bool                isEmbedded()        const { return m_bIsEmbedded; }
             isc_tr_handle&          getTransaction();
+
+            /**
+             * Create a new Blob tied to this connection. Blobs are tied to a
+             * transaction and not to a statement, hence the connection should
+             * deal with their management.
+             */
+            ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XBlob>
+                createBlob(ISC_QUAD* pBlobID)
+                throw(::com::sun::star::sdbc::SQLException);
 
             /**
              * Evaluate a firebird status vector and throw exceptions as necessary.

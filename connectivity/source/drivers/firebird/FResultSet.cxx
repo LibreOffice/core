@@ -447,7 +447,7 @@ T OResultSet::retrieveValue(sal_Int32 columnIndex)
 }
 
 template <>
-OUString OResultSet::retrieveValue<OUString>(sal_Int32 columnIndex)
+OUString OResultSet::retrieveValue(sal_Int32 columnIndex)
 {
     if ((m_bWasNull = isNull(columnIndex)))
         return OUString();
@@ -474,6 +474,14 @@ OUString OResultSet::retrieveValue<OUString>(sal_Int32 columnIndex)
         return OUString();
         // TODO: Possibly do some sort of type conversion?
     }
+}
+
+template <>
+ISC_QUAD* OResultSet::retrieveValue(sal_Int32 columnIndex)
+{
+    if ((m_bWasNull = isNull(columnIndex)))
+        return 0;
+    return (ISC_QUAD*) m_pSqlda->sqlvar[columnIndex-1].sqldata;
 }
 
 template <typename T>
@@ -601,14 +609,17 @@ uno::Reference< XClob > SAL_CALL OResultSet::getClob( sal_Int32 columnIndex ) th
 
     return NULL;
 }
-// -------------------------------------------------------------------------
-uno::Reference< XBlob > SAL_CALL OResultSet::getBlob( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+
+uno::Reference< XBlob > SAL_CALL OResultSet::getBlob(sal_Int32 columnIndex)
+    throw(SQLException, RuntimeException)
 {
-    (void) columnIndex;
     MutexGuard aGuard(m_pConnection->getMutex());
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
-    return NULL;
+    ISC_QUAD* pBlobID = safelyRetrieveValue< ISC_QUAD* >(columnIndex);
+    if (!pBlobID)
+        return 0;
+    return m_pConnection->createBlob(pBlobID);
 }
 // -------------------------------------------------------------------------
 

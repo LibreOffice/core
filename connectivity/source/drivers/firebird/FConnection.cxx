@@ -285,6 +285,22 @@ void OConnection::construct(const ::rtl::OUString& url, const Sequence< Property
 IMPLEMENT_SERVICE_INFO(OConnection, "com.sun.star.sdbc.drivers.firebird.OConnection",
                                                     "com.sun.star.sdbc.Connection")
 
+Reference< XBlob> OConnection::createBlob(ISC_QUAD* pBlobId)
+    throw(SQLException)
+{
+    SAL_INFO("connectivity.firebird", "createBlob()");
+    MutexGuard aGuard(m_aMutex);
+    checkDisposed(OConnection_BASE::rBHelper.bDisposed);
+
+    Reference< XBlob > xReturn = new Blob(&m_DBHandler,
+                                          &m_transactionHandle,
+                                          *pBlobId);
+
+    m_aStatements.push_back(WeakReferenceHelper(xReturn));
+    return xReturn;
+}
+
+
 //----- XConnection ----------------------------------------------------------
 Reference< XStatement > SAL_CALL OConnection::createStatement( )
                                         throw(SQLException, RuntimeException)

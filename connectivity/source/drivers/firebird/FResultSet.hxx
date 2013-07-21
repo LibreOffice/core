@@ -243,7 +243,10 @@ namespace connectivity
         };
 
         // Specialisations have to be in the namespace and can't be within the class.
-        template <> ::rtl::OUString OResultSet::retrieveValue< ::rtl::OUString >(sal_Int32 columnIndex);
+        template <> ::rtl::OUString
+            OResultSet::retrieveValue(sal_Int32 columnIndex);
+        template <> ISC_QUAD*
+             OResultSet::retrieveValue(sal_Int32 columnIndex);
     }
 }
 #endif // CONNECTIVITY_SRESULTSET_HXX

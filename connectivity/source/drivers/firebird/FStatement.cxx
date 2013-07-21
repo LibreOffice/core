@@ -322,7 +322,7 @@ int OStatement_Base::prepareAndDescribeStatement(const OUString& sqlIn,
                 pVar->sqldata = (char *)malloc(sizeof(time_t));
                 break;
             case SQL_BLOB:
-                assert(false); // We cannot deal with blobs in DSQL
+                pVar->sqldata = (char*) malloc(sizeof(ISC_QUAD));
                 break;
             case SQL_ARRAY:
                 assert(false); // TODO: implement
