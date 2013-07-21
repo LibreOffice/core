@@ -872,11 +872,6 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
     (void) schemaPattern;
     (void) types;
     // TODO: implement types
-    // TODO: RDB$DESCRIPTION is a BLOB column with user defined data.
-    // Blobs cannot be retrieved with DSQL queries so we need to define
-    // all the data we will be using at compile time instead -- i.e. we need
-    // to specifically do the whole isc_* stuff here with the datatypes
-    // compiled in.
     SAL_INFO("connectivity.firebird", "getTables() with "
              "TableNamePattern: " << tableNamePattern);
 
@@ -888,7 +883,8 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
     // TODO: OUStringBuf
     OUStringBuffer queryBuf(
             "SELECT "
-            "RDB$RELATION_NAME, RDB$SYSTEM_FLAG, RDB$RELATION_TYPE " //, RDB$DESCRIPTION
+            "RDB$RELATION_NAME, RDB$SYSTEM_FLAG, RDB$RELATION_TYPE, "
+            "RDB$DESCRIPTION "
             "FROM RDB$RELATIONS "
             "WHERE (RDB$RELATION_TYPE = 0 OR RDB$RELATION_TYPE = 1)");
 
@@ -914,10 +910,19 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
     {
         ODatabaseMetaDataResultSet::ORow aCurrentRow(3);
 
-        OUString aTableName   = xRow->getString(1);
-        sal_Int16 systemFlag  = xRow->getShort(2);
-        sal_Int16 tableType   = xRow->getShort(3);
-        OUString aDescription; // xRow->getString(4);
+        OUString aTableName             = xRow->getString(1);
+        sal_Int16 systemFlag            = xRow->getShort(2);
+        sal_Int16 tableType             = xRow->getShort(3);
+        uno::Reference< XBlob > xBlob   = xRow->getBlob(4);
+
+        OUString aDescription;
+        if (xBlob.is())
+        {
+            sal_Int32 aBlobLength = (sal_Int32) xBlob->length();
+            aDescription = OUString((char*) xBlob->getBytes(0, aBlobLength).getArray(),
+                                    aBlobLength,
+                                    RTL_TEXTENCODING_UTF8);
+        }
 
         OUString aTableType;
         if( 1 == systemFlag )
