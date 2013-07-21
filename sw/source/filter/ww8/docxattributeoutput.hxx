@@ -54,6 +54,24 @@ struct FieldInfos
     FieldInfos() : pField(NULL), pFieldmark(NULL), eType(ww::eUNKNOWN), bOpen(false), bClose(false){}
 };
 
+// These structures stores the information for char property (eg, bold, underline, italic, etc)
+struct UnderlineInfo
+{
+    OString sUnderlineValue;
+    bool  bUnderlineHasColor;
+    Color aUnderlineColor;
+};
+
+struct LastCharProperty
+{
+    OString sFontNameUtf8_ascii;
+    OString sFontNameUtf8_hAnsi;
+    OString sFontNameUtf8_eastAsia;
+    bool bBold;
+    bool bItalic;
+    UnderlineInfo rUnderline;
+};
+
 enum DocxColBreakStatus
 {
     COLBRK_NONE,
@@ -677,6 +695,16 @@ private:
 
     /// Is fake rotation detected, so rotation with 90 degrees should be ignored in this cell?
     bool m_bBtLr;
+
+    /// Export the information of the equation field
+    void DoWriteEqField( FieldInfos& rInfos );
+    void DoWriteEqFieldElement( String& sStr, OString& sFontSize );
+
+    void DoWriteRunProperty( OString& sFontSize );
+    void InitCharProperty();
+
+    /// Save the font information and char property for exporting the equation field
+    LastCharProperty m_lastCharProperty;
 
 public:
     DocxAttributeOutput( DocxExport &rExport, ::sax_fastparser::FSHelperPtr pSerializer, oox::drawingml::DrawingML* pDrawingML );
