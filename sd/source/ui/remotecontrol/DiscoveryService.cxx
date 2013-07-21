@@ -45,18 +45,13 @@ using namespace osl;
 using namespace rtl;
 using namespace sd;
 
-void SAL_CALL DiscoveryService::run()
-{
-
-}
-
 DiscoveryService::DiscoveryService()
 {
-  #ifdef MACOSX
+#ifdef MACOSX
     OSXNetworkService * service = [[OSXNetworkService alloc] init];
     [service publishImpressRemoteServiceOnLocalNetworkWithName: @""];
-  #endif
-  /*
+#endif
+// #else
     mSocket = socket( AF_INET, SOCK_DGRAM, IPPROTO_UDP );
 
     sockaddr_in aAddr;
@@ -79,9 +74,9 @@ DiscoveryService::DiscoveryService()
     multicastRequest.imr_interface.s_addr = htonl(INADDR_ANY);
 
     rc = setsockopt( mSocket, IPPROTO_IP, IP_ADD_MEMBERSHIP,
-#ifdef WNT
+  #ifdef WNT
         (const char*)
-#endif
+  #endif
         &multicastRequest, sizeof(multicastRequest));
 
     if (rc)
@@ -89,43 +84,47 @@ DiscoveryService::DiscoveryService()
         SAL_WARN("sd", "DiscoveryService: setsockopt failed: " << errno);
         return; // would be better to throw, but unsure if caller handles that
     }
-    */
+// #endif
 }
 
 DiscoveryService::~DiscoveryService()
 {
-// #ifdef WNT
-//     closesocket( mSocket );
-// #else
-//     close( mSocket );
+// #ifndef MACOSX
+  #ifdef WNT
+      closesocket( mSocket );
+  #else
+      close( mSocket );
+  #endif
 // #endif
-// }
+}
 
-// void SAL_CALL DiscoveryService::run()
-// {
-//     char aBuffer[BUFFER_SIZE];
-//     while ( true )
-//     {
-//         memset( aBuffer, 0, sizeof(char) * BUFFER_SIZE );
-//         sockaddr_in aAddr;
-//         socklen_t aLen = sizeof( aAddr );
-//         recvfrom( mSocket, aBuffer, BUFFER_SIZE, 0, (sockaddr*) &aAddr, &aLen );
-//         OString aString( aBuffer, strlen( "LOREMOTE_SEARCH" ) );
-//         if ( aString == "LOREMOTE_SEARCH" )
-//         {
-//             OStringBuffer aStringBuffer("LOREMOTE_ADVERTISE\n");
-//             aStringBuffer.append( OUStringToOString(
-//                 osl::SocketAddr::getLocalHostname(), RTL_TEXTENCODING_UTF8 ) )
-//                 .append( "\n\n" );
-//             if ( sendto( mSocket, aStringBuffer.getStr(),
-//                 aStringBuffer.getLength(), 0, (sockaddr*) &aAddr,
-//                          sizeof(aAddr) ) <= 0 )
-//             {
-//                 // Read error or closed socket -- we are done.
-//                 return;
-//             }
-//         }
-//     }
+void SAL_CALL DiscoveryService::run()
+{
+// #ifndef MACOSX
+    char aBuffer[BUFFER_SIZE];
+    while ( true )
+    {
+        memset( aBuffer, 0, sizeof(char) * BUFFER_SIZE );
+        sockaddr_in aAddr;
+        socklen_t aLen = sizeof( aAddr );
+        recvfrom( mSocket, aBuffer, BUFFER_SIZE, 0, (sockaddr*) &aAddr, &aLen );
+        OString aString( aBuffer, strlen( "LOREMOTE_SEARCH" ) );
+        if ( aString == "LOREMOTE_SEARCH" )
+        {
+            OStringBuffer aStringBuffer("LOREMOTE_ADVERTISE\n");
+            aStringBuffer.append( OUStringToOString(
+                osl::SocketAddr::getLocalHostname(), RTL_TEXTENCODING_UTF8 ) )
+                .append( "\n\n" );
+            if ( sendto( mSocket, aStringBuffer.getStr(),
+                aStringBuffer.getLength(), 0, (sockaddr*) &aAddr,
+                         sizeof(aAddr) ) <= 0 )
+            {
+                // Read error or closed socket -- we are done.
+                return;
+            }
+        }
+    }
+// #endif
 }
 
 DiscoveryService *sd::DiscoveryService::spService = NULL;

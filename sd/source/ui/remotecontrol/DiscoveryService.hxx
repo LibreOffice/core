@@ -47,8 +47,8 @@ namespace sd
             static DiscoveryService *spService;
             virtual void SAL_CALL run();
 
-//             osl::DatagramSocket mSocket;
-            // int mSocket;
+            // osl::DatagramSocket mSocket;
+            int mSocket;
 
     };
 }
