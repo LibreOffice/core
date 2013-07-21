@@ -65,28 +65,23 @@ static String lcl_CheckFileName( const OUString& rNewFilePath,
     }
     sRet = comphelper::string::strip(sRet, ' ');
 
-    bool bOk = false;
     if( sRet.Len() )
     {
         String sTmpDir(rNewFilePath);
         sTmpDir += INET_PATH_TOKEN;
         sTmpDir += sRet;
         sTmpDir += SwGlossaries::GetExtension();
-        bOk = !FStatHelper::IsDocument( sTmpDir );
+        if (!FStatHelper::IsDocument( sTmpDir ))
+            return sRet;
     }
 
-    if( !bOk )
-    {
-        OUString rSG = SwGlossaries::GetExtension();
-        //generate generic name
-        utl::TempFile aTemp(OUString("group"),
-            &rSG, &rNewFilePath );
-        aTemp.EnableKillingFile();
+    OUString rSG = SwGlossaries::GetExtension();
+    //generate generic name
+    utl::TempFile aTemp(OUString("group"), &rSG, &rNewFilePath );
+    aTemp.EnableKillingFile();
 
-        INetURLObject aTempURL( aTemp.GetURL() );
-        sRet = aTempURL.GetBase();
-    }
-    return sRet;
+    INetURLObject aTempURL( aTemp.GetURL() );
+    return aTempURL.GetBase();
 }
 
 /*------------------------------------------------------------------------
@@ -223,63 +218,62 @@ sal_Bool SwGlossaries::NewGroupDoc(String& rGroupName, const String& rTitle)
 sal_Bool    SwGlossaries::RenameGroupDoc(
     const String& rOldGroup, String& rNewGroup, const String& rNewTitle )
 {
-    sal_Bool bRet = sal_False;
     sal_uInt16 nOldPath = (sal_uInt16)rOldGroup.GetToken(1, GLOS_DELIM).ToInt32();
-    if (static_cast<size_t>(nOldPath) < m_PathArr.size())
+    if (static_cast<size_t>(nOldPath) >= m_PathArr.size())
+        return sal_False;
+
+    String sOldFileURL(m_PathArr[nOldPath]);
+    sOldFileURL += INET_PATH_TOKEN;
+    sOldFileURL += rOldGroup.GetToken(0, GLOS_DELIM);
+    sOldFileURL += SwGlossaries::GetExtension();
+    if (!FStatHelper::IsDocument( sOldFileURL ))
     {
-        String sOldFileURL(m_PathArr[nOldPath]);
-        sOldFileURL += INET_PATH_TOKEN;
-        sOldFileURL += rOldGroup.GetToken(0, GLOS_DELIM);
-        sOldFileURL += SwGlossaries::GetExtension();
-        sal_Bool bExist = FStatHelper::IsDocument( sOldFileURL );
-        OSL_ENSURE(bExist, "group doesn't exist!");
-        if(bExist)
-        {
-            sal_uInt16 nNewPath = (sal_uInt16)rNewGroup.GetToken(1, GLOS_DELIM).ToInt32();
-            if (static_cast<size_t>(nNewPath) < m_PathArr.size())
-            {
-                String sNewFilePath(m_PathArr[nNewPath]);
-                String sNewFileName = lcl_CheckFileName(
-                                    sNewFilePath, rNewGroup.GetToken(0, GLOS_DELIM));
-                const sal_uInt16 nFileNameLen = sNewFileName.Len();
-                sNewFileName += SwGlossaries::GetExtension();
-                String sTempNewFilePath(sNewFilePath);
-                sTempNewFilePath += INET_PATH_TOKEN;
-                sTempNewFilePath += sNewFileName ;
-                bExist = FStatHelper::IsDocument( sTempNewFilePath );
-                OSL_ENSURE(!bExist, "group already exists!");
-                if(!bExist)
-                {
-                    sal_Bool bCopyCompleted = SWUnoHelper::UCB_CopyFile(
-                                        sOldFileURL, sTempNewFilePath, sal_True );
-                    if(bCopyCompleted)
-                    {
-                        bRet = sal_True;
-                        RemoveFileFromList( rOldGroup );
-
-                        rNewGroup = sNewFileName.Copy(0, nFileNameLen);
-                        rNewGroup += GLOS_DELIM;
-                        rNewGroup += OUString::number(nNewPath);
-                        if (m_GlosArr.empty())
-                        {
-                            GetNameList();
-                        }
-                        else
-                        {
-                            m_GlosArr.push_back(rNewGroup);
-                        }
-
-                        sNewFilePath += INET_PATH_TOKEN;
-                        sNewFilePath += sNewFileName ;
-                        SwTextBlocks* pNewBlock = new SwTextBlocks( sNewFilePath );
-                        pNewBlock->SetName(rNewTitle);
-                        delete pNewBlock;
-                    }
-                }
-            }
-        }
+        OSL_FAIL("group doesn't exist!");
+        return sal_False;
     }
-    return bRet;
+
+    sal_uInt16 nNewPath = (sal_uInt16)rNewGroup.GetToken(1, GLOS_DELIM).ToInt32();
+    if (static_cast<size_t>(nNewPath) >= m_PathArr.size())
+        return sal_False;
+
+    String sNewFilePath(m_PathArr[nNewPath]);
+    String sNewFileName = lcl_CheckFileName(
+                        sNewFilePath, rNewGroup.GetToken(0, GLOS_DELIM));
+    const sal_uInt16 nFileNameLen = sNewFileName.Len();
+    sNewFileName += SwGlossaries::GetExtension();
+    String sTempNewFilePath(sNewFilePath);
+    sTempNewFilePath += INET_PATH_TOKEN;
+    sTempNewFilePath += sNewFileName ;
+    if (FStatHelper::IsDocument( sTempNewFilePath ))
+    {
+        OSL_FAIL("group already exists!");
+        return sal_False;
+    }
+
+    if (!SWUnoHelper::UCB_CopyFile(sOldFileURL, sTempNewFilePath, sal_True ))
+        return sal_False;
+
+    RemoveFileFromList( rOldGroup );
+
+    rNewGroup = sNewFileName.Copy(0, nFileNameLen);
+    rNewGroup += GLOS_DELIM;
+    rNewGroup += OUString::number(nNewPath);
+    if (m_GlosArr.empty())
+    {
+        GetNameList();
+    }
+    else
+    {
+        m_GlosArr.push_back(rNewGroup);
+    }
+
+    sNewFilePath += INET_PATH_TOKEN;
+    sNewFilePath += sNewFileName ;
+    SwTextBlocks* pNewBlock = new SwTextBlocks( sNewFilePath );
+    pNewBlock->SetName(rNewTitle);
+    delete pNewBlock;
+
+    return sal_True;
 }
 
 /*------------------------------------------------------------------------
