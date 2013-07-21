@@ -750,6 +750,10 @@ public:
     /// Returns the index of a picture bullet, used in numberings.
     int GetGrfIndex(const SvxBrushItem& rBrush);
 
+    /// Set \ Get font size
+    void setFontSize( sal_Int32 nFontSize )     { m_nFontSize = nFontSize; }
+    sal_Int32 getFontSize()                     { return m_nFontSize; }
+
 protected:
     /// Format-dependant part of the actual export.
     virtual void ExportDocument_Impl() = 0;
@@ -839,6 +843,8 @@ public:
     static void CorrectTabStopInSet( SfxItemSet& rSet, sal_uInt16 nAbsLeft );
 
 private:
+    sal_Int32 m_nFontSize;
+
     /// No copying.
     MSWordExportBase( const MSWordExportBase& );
     /// No copying.

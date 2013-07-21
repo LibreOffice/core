@@ -2890,8 +2890,8 @@ void AttributeOutputBase::TextField( const SwFmtFld& rField )
         else
             nScript = i18n::ScriptType::ASIAN;
 
-        long nHeight = ((SvxFontHeightItem&)(GetExport().GetItem(
-            GetWhichOfScript(RES_CHRATR_FONTSIZE,nScript)))).GetHeight();;
+        // Use the font size stored in the exporter object to calculate the font size of equation field
+        long nHeight = GetExport().getFontSize();
 
         nHeight = (nHeight + 10) / 20; //Font Size in points;
 

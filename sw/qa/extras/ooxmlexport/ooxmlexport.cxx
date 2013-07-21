@@ -96,6 +96,7 @@ public:
     void testFdo58577();
     void testBnc581614();
     void testFdo66929();
+    void testFdo66401();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -162,6 +163,7 @@ void Test::run()
         {"fdo58577.odt", &Test::testFdo58577},
         {"bnc581614.doc", &Test::testBnc581614},
         {"fdo66929.docx", &Test::testFdo66929},
+        {"fdo66401.docx", &Test::testFdo66401},
     };
     // Don't test the first import of these, for some reason those tests fail
     const char* aBlacklist[] = {
@@ -967,6 +969,43 @@ void Test::testFdo66929()
     CPPUNIT_ASSERT_EQUAL( sal_Int32( 127 ), getProperty< sal_Int32 >( xFrame, "TopBorderDistance" ) );
     CPPUNIT_ASSERT_EQUAL( sal_Int32( 254 ), getProperty< sal_Int32 >( xFrame, "RightBorderDistance" ) );
     CPPUNIT_ASSERT_EQUAL( sal_Int32( 127 ), getProperty< sal_Int32 >( xFrame, "BottomBorderDistance" ) );
+}
+
+void Test::testFdo66401()
+{
+    // The problem was that 'Combine Characters' fields were not imported and were not exported
+    uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
+    uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
+    OUString aValue;
+
+    uno::Reference<lang::XServiceInfo> xServiceInfo1(xFields->nextElement(), uno::UNO_QUERY);
+    if (xServiceInfo1->supportsService("com.sun.star.text.TextField.CombinedCharacters"))
+    {
+        uno::Reference<beans::XPropertySet> xPropertySet1(xServiceInfo1, uno::UNO_QUERY);
+        xPropertySet1->getPropertyValue("Content") >>= aValue;
+        OUString expectStr1 = OUString("E") + OUString("\xE3\x80\x80", 3, RTL_TEXTENCODING_UTF8) + OUString("\xE3\x80\x80", 3, RTL_TEXTENCODING_UTF8) + OUString("x");
+        CPPUNIT_ASSERT_EQUAL(expectStr1, aValue);
+    }
+    else
+    {
+        // Shouldn't reach here
+        CPPUNIT_FAIL("Could not find service supporting 'CombinedCharacters'");
+    }
+
+    uno::Reference<lang::XServiceInfo> xServiceInfo2(xFields->nextElement(), uno::UNO_QUERY);
+    if (xServiceInfo2->supportsService("com.sun.star.text.TextField.CombinedCharacters"))
+    {
+        uno::Reference<beans::XPropertySet> xPropertySet2(xServiceInfo2, uno::UNO_QUERY);
+        xPropertySet2->getPropertyValue("Content") >>= aValue;
+        OUString expectStr2 = OUString("m") + OUString("\xE3\x80\x80", 3, RTL_TEXTENCODING_UTF8) + OUString("\xE3\x80\x80", 3, RTL_TEXTENCODING_UTF8) + OUString("p");
+        CPPUNIT_ASSERT_EQUAL(expectStr2, aValue);
+    }
+    else
+    {
+        // Shouldn't reach here
+        CPPUNIT_FAIL("Could not find service supporting 'CombinedCharacters'");
+    }
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
