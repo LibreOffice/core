@@ -530,7 +530,7 @@ bool AquaSalGraphics::GetImplFontCapabilities(vcl::FontCapabilities &rFontCapabi
 // -----------------------------------------------------------------------
 
 // fake a SFNT font directory entry for a font table
-// see http://developer.apple.com/textfonts/TTRefMan/RM06/Chap6.html#Directory
+// see http://developer.apple.com/fonts/TTRefMan/RM06/Chap6.html#Directory
 static void FakeDirEntry( const char aTag[5], ByteCount nOfs, ByteCount nLen,
     const unsigned char* /*pData*/, unsigned char*& rpDest )
 {
