@@ -18,7 +18,7 @@ namespace svx
 {
     class OptHeaderTabListBox;
 }
-struct CuiAboutConfigTabPage_Impl;
+class CuiAboutConfigTabPage;
 
 class CuiAboutConfigTabPage : public SfxTabPage
 {
@@ -28,8 +28,6 @@ private:
     PushButton* m_pEditBtn;
 
     ::svx::OptHeaderTabListBox* pPrefBox;
-
-    CuiAboutConfigTabPage_Impl* m_pImpl;
 public:
    CuiAboutConfigTabPage( Window* pParent, const SfxItemSet& rItemSet );
    ~CuiAboutConfigTabPage();
