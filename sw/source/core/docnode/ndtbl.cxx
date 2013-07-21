@@ -404,7 +404,7 @@ const SwTable* SwDoc::InsertTable( const SwInsertTableOptions& rInsTblOpts,
         ::lcl_SetDfltBorders( pTableFmt );
 
     SwTable * pNdTbl = &pTblNd->GetTable();
-    pNdTbl->RegisterToFormat( *pTableFmt );
+    pNdTbl->GetTableFmt()->RegisterToFormat( *pTableFmt );
 
     pNdTbl->SetRowsToRepeat( nRowsToRepeat );
     pNdTbl->SetTableModel( bNewModel );
@@ -658,7 +658,7 @@ const SwTable* SwDoc::TextToTable( const SwInsertTableOptions& rInsTblOpts,
 
     // Set Orientation in the Table's Fmt
     pTableFmt->SetFmtAttr( SwFmtHoriOrient( 0, eAdjust ) );
-    pNdTbl->RegisterToFormat( *pTableFmt );
+    pNdTbl->GetTableFmt()->RegisterToFormat( *pTableFmt );
 
     if( rInsTblOpts.mnInsMode & tabopts::DEFAULT_BORDER )
     {
