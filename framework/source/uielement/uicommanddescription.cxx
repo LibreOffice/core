@@ -41,7 +41,6 @@
 #include <vcl/mnemonic.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/string.hxx>
-#include <rtl/logfile.hxx>
 
 //_________________________________________________________________________________________________________________
 //  Defines
@@ -377,7 +376,6 @@ void ConfigurationAccess_UICommand::impl_fill(const Reference< XNameAccess >& _x
 }
 sal_Bool ConfigurationAccess_UICommand::fillCache()
 {
-    RTL_LOGFILE_CONTEXT( aLog, "framework (cd100003) ::ConfigurationAccess_UICommand::fillCache" );
 
     if ( m_bCacheFilled )
         return sal_True;
@@ -626,7 +624,6 @@ UICommandDescription::UICommandDescription( const Reference< XComponentContext >
     m_aPrivateResourceURL( PRIVATE_RESOURCE_URL ),
     m_xContext( rxContext )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "UICommandDescription::UICommandDescription" );
     Reference< XNameAccess > xEmpty;
     OUString aGenericUICommand( "GenericCommands" );
     m_xGenericUICommands = new ConfigurationAccess_UICommand( aGenericUICommand, xEmpty, m_xContext );
@@ -690,7 +687,6 @@ Reference< XNameAccess > UICommandDescription::impl_createConfigAccess(const OUS
 Any SAL_CALL UICommandDescription::getByName( const OUString& aName )
 throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "UICommandDescription::getByName" );
     Any a;
 
     ResetableGuard aLock( m_aLock );
@@ -732,7 +728,6 @@ throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::la
 Sequence< OUString > SAL_CALL UICommandDescription::getElementNames()
 throw (::com::sun::star::uno::RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "UICommandDescription::getElementNames" );
     ResetableGuard aLock( m_aLock );
 
     Sequence< OUString > aSeq( m_aModuleToCommandFileMap.size() );
@@ -751,7 +746,6 @@ throw (::com::sun::star::uno::RuntimeException)
 sal_Bool SAL_CALL UICommandDescription::hasByName( const OUString& aName )
 throw (::com::sun::star::uno::RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "UICommandDescription::hasByName" );
     ResetableGuard aLock( m_aLock );
 
     ModuleToCommandFileMap::const_iterator pIter = m_aModuleToCommandFileMap.find( aName );
@@ -762,14 +756,12 @@ throw (::com::sun::star::uno::RuntimeException)
 Type SAL_CALL UICommandDescription::getElementType()
 throw (::com::sun::star::uno::RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "UICommandDescription::getElementType" );
     return( ::getCppuType( (const Reference< XNameAccess >*)NULL ) );
 }
 
 sal_Bool SAL_CALL UICommandDescription::hasElements()
 throw (::com::sun::star::uno::RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "UICommandDescription::hasElements" );
     // generic UI commands are always available!
     return sal_True;
 }

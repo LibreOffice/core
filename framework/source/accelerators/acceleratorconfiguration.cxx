@@ -50,7 +50,6 @@
 #include <com/sun/star/util/XChangesNotifier.hpp>
 #include <comphelper/configurationhelper.hxx>
 #include <unotools/configpaths.hxx>
-#include <rtl/logfile.hxx>
 #include <svtools/acceleratorexecute.hxx>
 #include <stdio.h>
 
@@ -681,7 +680,7 @@ void SAL_CALL XCUBasedAcceleratorConfiguration::setKeyEvent(const css::awt::KeyE
                                                     throw(css::lang::IllegalArgumentException,
                                                     css::uno::RuntimeException         )
 {
-    RTL_LOGFILE_PRODUCT_CONTEXT( aLog, "XCUBasedAcceleratorConfiguration::setKeyEvent" );
+    SAL_INFO( "fwk.accelerators", "XCUBasedAcceleratorConfiguration::setKeyEvent" );
 
     if (
         (aKeyEvent.KeyCode   == 0) &&
@@ -939,7 +938,7 @@ void SAL_CALL XCUBasedAcceleratorConfiguration::reload()
     throw(css::uno::Exception       ,
         css::uno::RuntimeException)
 {
-    RTL_LOGFILE_PRODUCT_CONTEXT( aLog, "XCUBasedAcceleratorConfiguration::reload()" );
+    SAL_INFO( "fwk.accelerators", "XCUBasedAcceleratorConfiguration::reload()" );
 
     // SAFE -> ----------------------------------
     WriteGuard aWriteLock(m_aLock);
@@ -980,7 +979,7 @@ void SAL_CALL XCUBasedAcceleratorConfiguration::store()
     throw(css::uno::Exception       ,
           css::uno::RuntimeException)
 {
-    RTL_LOGFILE_PRODUCT_CONTEXT( aLog, "XCUBasedAcceleratorConfiguration::store()" );
+    SAL_INFO( "fwk.accelerators", "XCUBasedAcceleratorConfiguration::store()" );
 
     // SAFE -> ----------------------------------
     ReadGuard aReadLock(m_aLock);
@@ -1154,7 +1153,7 @@ void SAL_CALL XCUBasedAcceleratorConfiguration::removeResetListener(const css::u
 void SAL_CALL XCUBasedAcceleratorConfiguration::changesOccurred(const css::util::ChangesEvent& aEvent)
     throw(css::uno::RuntimeException)
 {
-    RTL_LOGFILE_PRODUCT_CONTEXT( aLog, "XCUBasedAcceleratorConfiguration::changesOccurred()" );
+    SAL_INFO( "fwk.accelerators", "XCUBasedAcceleratorConfiguration::changesOccurred()" );
 
     css::uno::Reference< css::container::XHierarchicalNameAccess > xHAccess;
     aEvent.Base >>= xHAccess;

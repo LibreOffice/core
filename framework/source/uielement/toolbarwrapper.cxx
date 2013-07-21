@@ -40,7 +40,6 @@
 #include <svtools/miscopt.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/toolbox.hxx>
-#include <rtl/logfile.hxx>
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;

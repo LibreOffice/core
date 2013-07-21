@@ -36,7 +36,6 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
 #include <rtl/ustring.hxx>
-#include <rtl/logfile.hxx>
 
 namespace framework{
 
@@ -110,7 +109,6 @@ ________________________________________________________________________________
     /*===========================================================================================================*/                                 \
     css::uno::Reference< css::uno::XInterface > SAL_CALL CLASS::impl_createInstance( const css::uno::Reference< css::lang::XMultiServiceFactory >& xServiceManager ) throw( css::uno::Exception )  \
     {                                                                                                                                                                                              \
-        RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework","Ocke.Janssen@sun.com",U2B(IMPLEMENTATIONNAME).getStr());                                                                                                               \
         /* create new instance of service */                                                                                                                                                       \
         CLASS* pClass = new CLASS( xServiceManager );                                                                                                                                              \
         /* hold it alive by increasing his ref count!!! */                                                                                                                                         \

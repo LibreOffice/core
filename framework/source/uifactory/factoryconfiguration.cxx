@@ -32,7 +32,6 @@
 
 #include <rtl/ustrbuf.hxx>
 #include <cppuhelper/weak.hxx>
-#include <rtl/logfile.hxx>
 
 //_________________________________________________________________________________________________________________
 //  Defines
@@ -70,7 +69,6 @@ ConfigurationAccess_ControllerFactory::ConfigurationAccess_ControllerFactory( co
     m_bConfigAccessInitialized( sal_False ),
     m_bAskValue(_bAskValue)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "ConfigurationAccess_ControllerFactory::ConfigurationAccess_ControllerFactory" );
     m_xConfigProvider = configuration::theDefaultProvider::get( rxContext );
 }
 
@@ -86,7 +84,6 @@ ConfigurationAccess_ControllerFactory::~ConfigurationAccess_ControllerFactory()
 
 OUString ConfigurationAccess_ControllerFactory::getServiceFromCommandModule( const OUString& rCommandURL, const OUString& rModule ) const
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "ConfigurationAccess_ControllerFactory::getServiceFromCommandModule" );
     // SAFE
     ResetableGuard aLock( m_aLock );
     MenuControllerMap::const_iterator pIter = m_aMenuControllerMap.find( getHashKeyFromStrings( rCommandURL, rModule ));
@@ -106,7 +103,6 @@ OUString ConfigurationAccess_ControllerFactory::getServiceFromCommandModule( con
 }
 OUString ConfigurationAccess_ControllerFactory::getValueFromCommandModule( const OUString& rCommandURL, const OUString& rModule ) const
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "ConfigurationAccess_ControllerFactory::getValueFromCommandModule" );
     // SAFE
     ResetableGuard aLock( m_aLock );
 
@@ -132,7 +128,6 @@ void ConfigurationAccess_ControllerFactory::addServiceToCommandModule(
     const OUString& rModule,
     const OUString& rServiceSpecifier )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "ConfigurationAccess_ControllerFactory::addServiceToCommandModule" );
     // SAFE
     ResetableGuard aLock( m_aLock );
 
@@ -144,7 +139,6 @@ void ConfigurationAccess_ControllerFactory::removeServiceFromCommandModule(
     const OUString& rCommandURL,
     const OUString& rModule )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "ConfigurationAccess_ControllerFactory::removeServiceFromCommandModule" );
     // SAFE
     ResetableGuard aLock( m_aLock );
 
@@ -155,7 +149,6 @@ void ConfigurationAccess_ControllerFactory::removeServiceFromCommandModule(
 // container.XContainerListener
 void SAL_CALL ConfigurationAccess_ControllerFactory::elementInserted( const ContainerEvent& aEvent ) throw(RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "ConfigurationAccess_ControllerFactory::elementInserted" );
     OUString   aCommand;
     OUString   aModule;
     OUString   aService;
@@ -177,7 +170,6 @@ void SAL_CALL ConfigurationAccess_ControllerFactory::elementInserted( const Cont
 
 void SAL_CALL ConfigurationAccess_ControllerFactory::elementRemoved ( const ContainerEvent& aEvent ) throw(RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "ConfigurationAccess_ControllerFactory::elementRemoved" );
     OUString   aCommand;
     OUString   aModule;
     OUString   aService;
@@ -197,14 +189,12 @@ void SAL_CALL ConfigurationAccess_ControllerFactory::elementRemoved ( const Cont
 
 void SAL_CALL ConfigurationAccess_ControllerFactory::elementReplaced( const ContainerEvent& aEvent ) throw(RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "ConfigurationAccess_ControllerFactory::elementReplaced" );
     elementInserted(aEvent);
 }
 
 // lang.XEventListener
 void SAL_CALL ConfigurationAccess_ControllerFactory::disposing( const EventObject& ) throw(RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "ConfigurationAccess_ControllerFactory::disposing" );
     // SAFE
     // remove our reference to the config access
     ResetableGuard aLock( m_aLock );
@@ -213,7 +203,6 @@ void SAL_CALL ConfigurationAccess_ControllerFactory::disposing( const EventObjec
 
 void ConfigurationAccess_ControllerFactory::readConfigurationData()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "ConfigurationAccess_ControllerFactory::readConfigurationData" );
     // SAFE
     ResetableGuard aLock( m_aLock );
 
@@ -256,7 +245,6 @@ void ConfigurationAccess_ControllerFactory::readConfigurationData()
 
 void ConfigurationAccess_ControllerFactory::updateConfigurationData()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "ConfigurationAccess_ControllerFactory::updateConfigurationData" );
     // SAFE
     ResetableGuard aLock( m_aLock );
     if ( m_xConfigAccess.is() )
@@ -294,7 +282,6 @@ void ConfigurationAccess_ControllerFactory::updateConfigurationData()
 
 sal_Bool ConfigurationAccess_ControllerFactory::impl_getElementProps( const Any& aElement, OUString& aCommand, OUString& aModule, OUString& aServiceSpecifier,OUString& aValue  ) const
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "ConfigurationAccess_ControllerFactory::impl_getElementProps" );
     Reference< XPropertySet > xPropertySet;
     aElement >>= xPropertySet;
 

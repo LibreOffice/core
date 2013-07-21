@@ -46,7 +46,6 @@
 #include <unotools/configitem.hxx>
 #include <cppuhelper/weak.hxx>
 #include <rtl/ustring.hxx>
-#include <rtl/logfile.hxx>
 
 namespace framework{
 
