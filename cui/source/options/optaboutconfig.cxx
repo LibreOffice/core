@@ -9,6 +9,7 @@
 
 #include "optaboutconfig.hxx"
 #include "optHeaderTabListbox.hxx"
+#include <svtools/accessibilityoption.hxx>
 
 using namespace svx;
 
@@ -17,8 +18,17 @@ using namespace svx;
 #define ITEMID_STATUS   3
 #define ITEMID_VALUE    4
 
+struct CuiAboutConfigTabPage_Impl
+{
+    SvtAccessibilityOptions     m_aAccConfig;
+    CuiAccessibilityOptionsTabPage_Impl()
+        : m_aAccConfig(){}
+    //FIXME use this struct for all options possible.
+}
+
 CuiAboutConfigTabPage::CuiAboutConfigTabPage( Window* pParent, const SfxItemSet& rItemSet )
-    :SfxTabPage( pParent, "AboutConfig", "cui/ui/aboutconfigdialog.ui", rItemSet)
+    :SfxTabPage( pParent, "AboutConfig", "cui/ui/aboutconfigdialog.ui", rItemSet),
+    m_pImpl(new CuiAboutConfigTabPage_Impl)
 {
     get(m_pDefaultBtn,"default");
     get(m_pEditBtn, "edit");
@@ -56,5 +66,9 @@ CuiAboutConfigTabPage::~CuiAboutConfigTabPage()
 SfxTabPage* CuiAboutConfigTabPage::Create( Window* pParent, const SfxItemSet& rItemSet )
 {
     return ( new CuiAboutConfigTabPage( pParent, rItemSet) );
+}
+
+sal_Bool CuiAboutConfigTabPage::FillItemSet()
+{
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
