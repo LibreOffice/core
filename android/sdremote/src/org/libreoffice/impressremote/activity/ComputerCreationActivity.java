@@ -68,10 +68,8 @@ public class ComputerCreationActivity extends SherlockFragmentActivity implement
     public void onClick(View aView) {
         if (aView.equals(getCancelButton())) {
             cancelCreation();
-
             return;
         }
-
 
         if (aView.equals(getSaveButton())) {
             saveServer();
@@ -88,13 +86,13 @@ public class ComputerCreationActivity extends SherlockFragmentActivity implement
 
         if (!isIpAddressValid(aIpAddress)) {
             getIpAddressEdit().setError(getText(R.string.message_ip_address_validation));
+            return;
         }
 
         if (TextUtils.isEmpty(aName)) {
-            getNameEdit().setError(getText(R.string.message_name_validation));
+            finish(aIpAddress, aIpAddress);
         }
-
-        if (isServerInformationValid(aIpAddress, aName)) {
+        else {
             finish(aIpAddress, aName);
         }
     }
@@ -109,10 +107,6 @@ public class ComputerCreationActivity extends SherlockFragmentActivity implement
 
     private EditText getNameEdit() {
         return (EditText) findViewById(R.id.edit_name);
-    }
-
-    private boolean isServerInformationValid(String aIpAddress, String aName) {
-        return isIpAddressValid(aIpAddress) && !TextUtils.isEmpty(aName);
     }
 
     private boolean isIpAddressValid(String aIpAddress) {

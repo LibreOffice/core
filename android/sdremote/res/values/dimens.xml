@@ -15,6 +15,7 @@
     <dimen name="padding_vertical_pin">10dp</dimen>
     <dimen name="padding_vertical_error_message">10dp</dimen>
     <dimen name="padding_vertical_edit">8dp</dimen>
+    <dimen name="padding_vertical_notice">16dp</dimen>
 
     <dimen name="margin_vertical_action_bar_divider">12dp</dimen>
     <dimen name="margin_slide">8dp</dimen>

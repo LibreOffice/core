@@ -8,7 +8,7 @@
     <EditText
         android:id="@+id/edit_ip_address"
         android:singleLine="true"
-        android:inputType="text"
+        android:inputType="phone"
         android:hint="@string/hint_ip_address"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
@@ -16,9 +16,17 @@
     <EditText
         android:id="@+id/edit_name"
         android:singleLine="true"
-        android:inputType="text"
+        android:inputType="text|textCapSentences"
         android:hint="@string/hint_name"
         android:paddingTop="@dimen/padding_vertical_edit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        style="?textAppearanceSmall"
+        android:text="@string/message_name_notice"
+        android:gravity="center_horizontal"
+        android:paddingTop="@dimen/padding_vertical_notice"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
