@@ -958,23 +958,11 @@ AbstractScMetricInputDlg * ScAbstractDialogFactory_Impl::CreateScMetricInputDlg 
 
 
 
-AbstractScMoveTableDlg * ScAbstractDialogFactory_Impl::CreateScMoveTableDlg(  Window* pParent,
-                                                                              const String& rDefault,
-                                                                              int nId )
+AbstractScMoveTableDlg * ScAbstractDialogFactory_Impl::CreateScMoveTableDlg(Window* pParent,
+    const String& rDefault)
 {
-    ScMoveTableDlg * pDlg=NULL;
-    switch ( nId )
-    {
-        case RID_SCDLG_MOVETAB :
-            pDlg = new ScMoveTableDlg( pParent, rDefault );
-            break;
-        default:
-            break;
-    }
-
-    if ( pDlg )
-        return new AbstractScMoveTableDlg_Impl( pDlg );
-    return 0;
+    ScMoveTableDlg * pDlg = new ScMoveTableDlg( pParent, rDefault );
+    return new AbstractScMoveTableDlg_Impl( pDlg );
 }
 
 AbstractScNameCreateDlg * ScAbstractDialogFactory_Impl::CreateScNameCreateDlg(Window * pParent, sal_uInt16 nFlags)

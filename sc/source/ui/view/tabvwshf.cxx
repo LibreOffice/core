@@ -502,9 +502,8 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                     OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
-                    AbstractScMoveTableDlg* pDlg = pFact->CreateScMoveTableDlg( GetDialogParent(),
-                                                                                aDefaultName,
-                                                                                RID_SCDLG_MOVETAB );
+                    AbstractScMoveTableDlg* pDlg = pFact->CreateScMoveTableDlg(GetDialogParent(),
+                        aDefaultName);
                     OSL_ENSURE(pDlg, "Dialog create fail!");
 
                     SCTAB nTableCount = pDoc->GetTableCount();

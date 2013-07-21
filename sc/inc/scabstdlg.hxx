@@ -416,9 +416,8 @@ public:
                                                                 long            nFirst    = 1,
                                                                 long          nLast     = 100 ) = 0;
 
-    virtual AbstractScMoveTableDlg * CreateScMoveTableDlg(  Window* pParent,  //add for ScMoveTableDlg
-                                                            const String& rDefault,
-                                                            int nId ) = 0;
+    virtual AbstractScMoveTableDlg * CreateScMoveTableDlg(Window * pParent,
+        const String& rDefault) = 0;
 
     virtual AbstractScNameCreateDlg * CreateScNameCreateDlg(Window * pParent,
         sal_uInt16 nFlags) = 0;

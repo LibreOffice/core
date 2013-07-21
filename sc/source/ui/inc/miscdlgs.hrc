@@ -64,19 +64,8 @@
 #define FL_SEP1         51
 #define FL_SEP2         52
 
-// Insert/Delete Sheet
-#define FT_DEST         1
-#define LB_DEST         2
-#define FT_INSERT       3
-#define LB_INSERT       4
-#define BTN_COPY        5
+// Insert/Delete/Move/Copy Sheet
 #define STR_NEWDOC      6
-#define BTN_MOVE        7
-#define FL_ACTION       8
-#define FL_LOCATION     9
-#define FL_NAME         11
-#define FT_TABNAME      12
-#define FT_TABNAME_WARN 13
 #define STR_CURRENTDOC  14
 #define STR_TABNAME_WARN_USED    15
 #define STR_TABNAME_WARN_EMPTY   16
