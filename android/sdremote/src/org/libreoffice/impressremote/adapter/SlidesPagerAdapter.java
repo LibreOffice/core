@@ -24,14 +24,11 @@ public class SlidesPagerAdapter extends PagerAdapter {
     private final SlideShow mSlideShow;
 
     public SlidesPagerAdapter(Context aContext, SlideShow aSlideShow) {
-        mLayoutInflater = buildLayoutInflater(aContext);
+        mLayoutInflater = LayoutInflater.from(aContext);
 
         mSlideShow = aSlideShow;
     }
 
-    private LayoutInflater buildLayoutInflater(Context aContext) {
-        return (LayoutInflater) aContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-    }
     @Override
     public int getCount() {
         return mSlideShow.getSlidesCount();
@@ -41,7 +38,12 @@ public class SlidesPagerAdapter extends PagerAdapter {
     public Object instantiateItem(ViewGroup aViewGroup, int aPosition) {
         ImageView aSlideView = (ImageView) getView(aViewGroup);
 
-        aSlideView.setImageBitmap(mSlideShow.getSlidePreview(aPosition));
+        if (isSlidePreviewAvailable(aPosition)) {
+            aSlideView.setImageBitmap(mSlideShow.getSlidePreview(aPosition));
+        }
+        else {
+            aSlideView.setImageResource(R.drawable.slide_unknown);
+        }
 
         aViewGroup.addView(aSlideView);
 
@@ -50,6 +52,10 @@ public class SlidesPagerAdapter extends PagerAdapter {
 
     private View getView(ViewGroup aViewGroup) {
         return mLayoutInflater.inflate(R.layout.view_pager_slide, aViewGroup, false);
+    }
+
+    private boolean isSlidePreviewAvailable(int aSlideIndex) {
+        return mSlideShow.getSlidePreview(aSlideIndex) != null;
     }
 
     @Override
@@ -66,6 +72,8 @@ public class SlidesPagerAdapter extends PagerAdapter {
 
     @Override
     public int getItemPosition(Object aObject) {
+        // TODO: think about it, seems like a hack
+
         return POSITION_NONE;
     }
 }

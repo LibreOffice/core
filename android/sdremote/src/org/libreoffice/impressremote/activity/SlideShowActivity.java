@@ -8,23 +8,37 @@
  */
 package org.libreoffice.impressremote.activity;
 
+import android.content.BroadcastReceiver;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.LocalBroadcastManager;
 
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import org.libreoffice.impressremote.R;
+import org.libreoffice.impressremote.communication.CommunicationService;
+import org.libreoffice.impressremote.communication.SlideShow;
 import org.libreoffice.impressremote.fragment.SlidesGridFragment;
 import org.libreoffice.impressremote.fragment.SlidesPagerFragment;
+import org.libreoffice.impressremote.util.Intents;
 
-public class SlideShowActivity extends SherlockFragmentActivity {
+public class SlideShowActivity extends SherlockFragmentActivity implements ServiceConnection {
     private static enum Mode {
         PAGER, GRID
     }
 
     private Mode mMode;
+
+    private CommunicationService mCommunicationService;
+    private IntentsReceiver mIntentsReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,8 +47,9 @@ public class SlideShowActivity extends SherlockFragmentActivity {
         mMode = Mode.PAGER;
 
         setUpHomeButton();
-
         setUpFragment();
+
+        bindService();
     }
 
     private void setUpHomeButton() {
@@ -42,27 +57,115 @@ public class SlideShowActivity extends SherlockFragmentActivity {
     }
 
     private void setUpFragment() {
+        setUpFragment(buildFragment());
+    }
+
+    private Fragment buildFragment() {
         switch (mMode) {
             case PAGER:
-                setUpFragment(SlidesPagerFragment.newInstance());
-                break;
+                return SlidesPagerFragment.newInstance();
 
             case GRID:
-                setUpFragment(SlidesGridFragment.newInstance());
-                break;
+                return SlidesGridFragment.newInstance();
 
             default:
-                setUpFragment(SlidesPagerFragment.newInstance());
-                break;
+                return SlidesPagerFragment.newInstance();
         }
     }
 
     private void setUpFragment(Fragment aFragment) {
         FragmentTransaction aTransaction = getSupportFragmentManager().beginTransaction();
+        aTransaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
 
         aTransaction.replace(android.R.id.content, aFragment);
 
         aTransaction.commit();
+    }
+
+    private void bindService() {
+        Intent aIntent = Intents.buildCommunicationServiceIntent(this);
+        bindService(aIntent, this, Context.BIND_AUTO_CREATE);
+    }
+
+    @Override
+    public void onServiceConnected(ComponentName mComponentName, IBinder aBinder) {
+        CommunicationService.CBinder aServiceBinder = (CommunicationService.CBinder) aBinder;
+        mCommunicationService = aServiceBinder.getService();
+
+        startSlideShow();
+    }
+
+    private void startSlideShow() {
+        mCommunicationService.getTransmitter().startPresentation();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        registerIntentsReceiver();
+    }
+
+    private void registerIntentsReceiver() {
+        mIntentsReceiver = new IntentsReceiver(this);
+        IntentFilter aIntentFilter = buildIntentsReceiverFilter();
+
+        getBroadcastManager().registerReceiver(mIntentsReceiver, aIntentFilter);
+    }
+
+    private static final class IntentsReceiver extends BroadcastReceiver {
+        private final SlideShowActivity mSlideShowActivity;
+
+        private IntentsReceiver(SlideShowActivity aSlideShowActivity) {
+            mSlideShowActivity = aSlideShowActivity;
+        }
+
+        @Override
+        public void onReceive(Context aContext, Intent aIntent) {
+            if (Intents.Actions.SLIDE_CHANGED.equals(aIntent.getAction())) {
+                mSlideShowActivity.setUpSlideShowInformation();
+            }
+        }
+    }
+
+    private IntentFilter buildIntentsReceiverFilter() {
+        IntentFilter aIntentFilter = new IntentFilter();
+        aIntentFilter.addAction(Intents.Actions.SLIDE_CHANGED);
+
+        return aIntentFilter;
+    }
+
+    private LocalBroadcastManager getBroadcastManager() {
+        return LocalBroadcastManager.getInstance(getApplicationContext());
+    }
+
+    private void setUpSlideShowInformation() {
+        if (!isServiceBound()) {
+            return;
+        }
+
+        getSupportActionBar().setTitle(buildSlideShowProgress());
+        getSupportActionBar().setSubtitle(buildSlideShowTimerProgress());
+    }
+
+    private String buildSlideShowProgress() {
+        SlideShow aSlideShow = mCommunicationService.getSlideShow();
+
+        int aCurrentSlideIndex = aSlideShow.getHumanCurrentSlideIndex();
+        int aSlidesCount = aSlideShow.getSlidesCount();
+
+        return getString(R.string.mask_slide_show_progress, aCurrentSlideIndex, aSlidesCount);
+    }
+
+    private String buildSlideShowTimerProgress() {
+        return null;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        setUpSlideShowInformation();
     }
 
     @Override
@@ -104,6 +207,11 @@ public class SlideShowActivity extends SherlockFragmentActivity {
 
                 return true;
 
+            case android.R.id.home:
+                navigateUp();
+
+                return true;
+
             default:
                 return super.onOptionsItemSelected(aMenuItem);
         }
@@ -111,6 +219,50 @@ public class SlideShowActivity extends SherlockFragmentActivity {
 
     private void refreshActionBarMenu() {
         supportInvalidateOptionsMenu();
+    }
+
+    private void navigateUp() {
+        finish();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        unregisterIntentsReceiver();
+    }
+
+    private void unregisterIntentsReceiver() {
+        try {
+            getBroadcastManager().unregisterReceiver(mIntentsReceiver);
+        } catch (IllegalArgumentException e) {
+            // Receiver not registered.
+            // Fixed in Honeycomb: Android’s issue #6191.
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        unbindService();
+    }
+
+    private void unbindService() {
+        if (!isServiceBound()) {
+            return;
+        }
+
+        unbindService(this);
+    }
+
+    private boolean isServiceBound() {
+        return mCommunicationService != null;
+    }
+
+    @Override
+    public void onServiceDisconnected(ComponentName aComponentName) {
+        mCommunicationService = null;
     }
 }
 

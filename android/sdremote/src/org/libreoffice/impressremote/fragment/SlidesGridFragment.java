@@ -61,8 +61,6 @@ public class SlidesGridFragment extends SherlockFragment implements ServiceConne
 
         mCommunicationService = aServiceBinder.getService();
 
-        mCommunicationService.getTransmitter().startPresentation();
-
         setUpSlidesGrid();
     }
 

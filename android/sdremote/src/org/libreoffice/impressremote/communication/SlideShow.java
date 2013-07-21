@@ -48,6 +48,10 @@ public class SlideShow {
         return mCurrentSlideIndex;
     }
 
+    public int getHumanCurrentSlideIndex() {
+        return getCurrentSlideIndex() + 1;
+    }
+
     public void setSlidePreview(int aSlideIndex, byte[] aSlidePreviewBytes) {
         Bitmap aSlidePreview = BitmapFactory
             .decodeByteArray(aSlidePreviewBytes, 0, aSlidePreviewBytes.length);

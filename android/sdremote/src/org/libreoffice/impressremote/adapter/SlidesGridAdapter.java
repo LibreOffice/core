@@ -25,13 +25,9 @@ public class SlidesGridAdapter extends BaseAdapter {
     private final SlideShow mSlideShow;
 
     public SlidesGridAdapter(Context aContext, SlideShow aSlideShow) {
-        mLayoutInflater = buildLayoutInflater(aContext);
+        mLayoutInflater = LayoutInflater.from(aContext);
 
         mSlideShow = aSlideShow;
-    }
-
-    private LayoutInflater buildLayoutInflater(Context aContext) {
-        return (LayoutInflater) aContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
     @Override
@@ -57,8 +53,7 @@ public class SlidesGridAdapter extends BaseAdapter {
         if (isSlidePreviewAvailable(aPosition)) {
             aSlideViewHolder.aSlidePreview.setImageBitmap(mSlideShow.getSlidePreview(aPosition));
         } else {
-            aSlideViewHolder.aSlidePreview.setImageResource(
-                R.drawable.slide_unknown);
+            aSlideViewHolder.aSlidePreview.setImageResource(R.drawable.slide_unknown);
         }
 
         aSlideViewHolder.aSlideIndex.setText(buildSlideIndex(aPosition));

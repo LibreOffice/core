@@ -61,8 +61,6 @@ public class SlidesPagerFragment extends SherlockFragment implements ServiceConn
 
         mCommunicationService = aServiceBinder.getService();
 
-        mCommunicationService.getTransmitter().startPresentation();
-
         setUpSlidesPager();
     }
 
@@ -71,6 +69,8 @@ public class SlidesPagerFragment extends SherlockFragment implements ServiceConn
             mCommunicationService.getSlideShow());
 
         getSlidesPager().setAdapter(aSlidesPagerAdapter);
+
+        getSlidesPager().setCurrentItem(mCommunicationService.getSlideShow().getCurrentSlideIndex());
 
         getSlidesPager().setPageMargin(getSlidesMarginInPx());
 

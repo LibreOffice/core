@@ -26,8 +26,7 @@ public class ComputersAdapter extends ArrayAdapter<Server> {
     public ComputersAdapter(Context aContext) {
         super(aContext, R.layout.list_item);
 
-        mLayoutInflater = (LayoutInflater) aContext
-            .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        mLayoutInflater = LayoutInflater.from(aContext);
     }
 
     @Override
@@ -44,8 +43,7 @@ public class ComputersAdapter extends ArrayAdapter<Server> {
             return aConvertView;
         }
 
-        return mLayoutInflater
-            .inflate(R.layout.list_item, aParentViewGroup, false);
+        return mLayoutInflater.inflate(R.layout.list_item, aParentViewGroup, false);
     }
 
     private String buildListItemText(int aPosition) {
