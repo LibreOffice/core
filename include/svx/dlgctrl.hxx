@@ -252,6 +252,7 @@ class SVX_DLLPUBLIC BitmapLB : public ListBox
 {
 public:
     explicit BitmapLB(Window* pParent, ResId Id);
+    explicit BitmapLB(Window* pParent, WinBits aWB);
 
     virtual void Fill(const XBitmapListRef &pList);
 
