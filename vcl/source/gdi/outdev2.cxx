@@ -1151,6 +1151,7 @@ void OutputDevice::DrawImage( const Point& rPos, const Size& rSize,
 Bitmap OutputDevice::GetBitmap( const Point& rSrcPt, const Size& rSize ) const
 {
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
+    OSL_ENSURE(OUTDEV_PRINTER != GetOutDevType(), "OutputDevice::GetBitmap with sorce type OUTDEV_PRINTER should not be used (!)");
 
     Bitmap  aBmp;
     long    nX = ImplLogicXToDevicePixel( rSrcPt.X() );
@@ -1160,7 +1161,7 @@ Bitmap OutputDevice::GetBitmap( const Point& rSrcPt, const Size& rSize ) const
 
     if ( mpGraphics || ( (OutputDevice*) this )->ImplGetGraphics() )
     {
-        if ( nWidth && nHeight )
+        if ( nWidth > 0 && nHeight  > 0 && nX <= (mnOutWidth + mnOutOffX) && nY <= (mnOutHeight + mnOutOffY))
         {
             Rectangle   aRect( Point( nX, nY ), Size( nWidth, nHeight ) );
             bool        bClipped = false;
@@ -1218,7 +1219,13 @@ Bitmap OutputDevice::GetBitmap( const Point& rSrcPt, const Size& rSize ) const
                         aPosAry.mnDestHeight = nHeight;
 
                         if ( (nWidth > 0) && (nHeight > 0) )
+                        {
                             (((OutputDevice*)&aVDev)->mpGraphics)->CopyBits( &aPosAry, mpGraphics, this, this );
+                        }
+                        else
+                        {
+                            OSL_ENSURE(false, "CopyBits with negative width or height (!)");
+                        }
 
                         aBmp = aVDev.GetBitmap( Point(), aVDev.GetOutputSizePixel() );
                      }
