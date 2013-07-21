@@ -419,6 +419,13 @@ void SmEditWindow::KeyInput(const KeyEvent& rKEvt)
     {
         StartCursorMove();
 
+        bool autoClose = false;
+        ESelection aSelection = pEditView->GetSelection();
+        OUString selected = pEditView->GetEditEngine()->GetText(aSelection);
+
+        if (selected.trim() == "<?>")
+            autoClose = true;
+
         if (!pEditView)
             CreateEditView();
         if ( !pEditView->PostKeyEvent(rKEvt) )
@@ -466,13 +473,13 @@ void SmEditWindow::KeyInput(const KeyEvent& rKEvt)
         else if (charCode == '(')
             close = "  )";
 
-        // auto close the current character
-        if (!close.isEmpty())
+        // auto close the current character only when needed
+        if (!close.isEmpty() && autoClose)
         {
             pEditView->InsertText(close);
             // position it at center of brackets
-            ESelection aSelection = pEditView->GetSelection();
-            aSelection.nStartPos = aSelection.nEndPos = aSelection.nEndPos - 2;
+            aSelection.nStartPos += 2;
+            aSelection.nEndPos = aSelection.nStartPos;
             pEditView->SetSelection(aSelection);
         }
 
