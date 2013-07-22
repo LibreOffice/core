@@ -325,30 +325,21 @@ Reference< XStatement > SAL_CALL OConnection::createStatement( )
 }
 
 Reference< XPreparedStatement > SAL_CALL OConnection::prepareStatement(
-            const ::rtl::OUString& _sSql ) throw(SQLException, RuntimeException)
+            const OUString& _sSql)
+    throw(SQLException, RuntimeException)
 {
-    SAL_INFO("connectivity.firebird", "prepareStatement(). "
-             "Got called with sql: " << _sSql);
-
-    MutexGuard aGuard( m_aMutex );
+    SAL_INFO("connectivity.firebird", "prepareStatement() "
+             "called with sql: " << _sSql);
+    MutexGuard aGuard(m_aMutex);
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
 
-    // the pre
     if(m_aTypeInfo.empty())
         buildTypeInfo();
 
-    SAL_INFO("connectivity.firebird", "prepareStatement(). "
-             "Creating prepared statement.");
-
-    // create a statement
-    // the statement can only be executed more than once
     Reference< XPreparedStatement > xReturn = new OPreparedStatement(this,
                                                                      m_aTypeInfo,
                                                                      _sSql);
     m_aStatements.push_back(WeakReferenceHelper(xReturn));
-
-    SAL_INFO("connectivity.firebird", "prepareStatement(). "
-             "Prepared Statement created.");
 
     return xReturn;
 }

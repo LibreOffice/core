@@ -215,8 +215,7 @@ OUString OStatement_Base::sanitizeSqlString(const OUString& sqlIn)
 
 int OStatement_Base::prepareAndDescribeStatement(const OUString& sqlIn,
                                                  isc_stmt_handle& aStatementHandle,
-                                                 XSQLDA*& pOutSqlda,
-                                                 XSQLVAR*& pVar)
+                                                 XSQLDA*& pOutSqlda)
 {
     MutexGuard aGuard(m_pConnection->getMutex());
 
@@ -281,7 +280,7 @@ int OStatement_Base::prepareAndDescribeStatement(const OUString& sqlIn,
                                  1,
                                  pOutSqlda);
     }
-    pVar = pOutSqlda->sqlvar;
+    XSQLVAR* pVar = pOutSqlda->sqlvar;
 
     // Process each XSQLVAR parameter structure in the output XSQLDA
     if (aErr)
@@ -364,16 +363,13 @@ uno::Reference< XResultSet > SAL_CALL OStatement_Base::executeQuery(const OUStri
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
 
     XSQLDA* pOutSqlda = 0;
-    XSQLVAR* pVar = 0;
     isc_stmt_handle aStatementHandle = 0;
     int aErr = 0;
 
 
     aErr = prepareAndDescribeStatement(sql,
                                        aStatementHandle,
-                                       pOutSqlda,
-                                       pVar);
-
+                                       pOutSqlda);
     if (aErr)
     {
         SAL_WARN("connectivity.firebird", "prepareAndDescribeStatement failed");
@@ -411,15 +407,13 @@ sal_Bool SAL_CALL OStatement_Base::execute(const OUString& sql) throw(SQLExcepti
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
 
     XSQLDA* pOutSqlda = 0;
-    XSQLVAR* pVar = 0;
     isc_stmt_handle aStatementHandle = 0;
     int aErr = 0;
 
 
     aErr = prepareAndDescribeStatement(sql,
                                        aStatementHandle,
-                                       pOutSqlda,
-                                       pVar);
+                                       pOutSqlda);
 
     if (aErr)
     {

@@ -77,7 +77,6 @@ namespace connectivity
 
             OConnection*                                m_pConnection;
 
-            XSQLDA *                                    m_OUTsqlda;
             XSQLDA *                                    m_INsqlda;
             ISC_STATUS_ARRAY                            m_statusVector;
         protected:
@@ -104,8 +103,7 @@ namespace connectivity
             virtual ~OStatement_Base();
             int prepareAndDescribeStatement(const OUString& sqlIn,
                                                   isc_stmt_handle& aStatementHandle,
-                                                  XSQLDA*& pOutSqlda,
-                                                  XSQLVAR*& pVar);
+                                                  XSQLDA*& pOutSqlda);
             ::rtl::OUString sanitizeSqlString(const OUString& sqlIn);
         public:
 
@@ -147,7 +145,6 @@ namespace connectivity
             // other methods
             OConnection* getOwnConnection() const { return m_pConnection;}
 
-            inline XSQLDA * getOUTsqlda()            const { return m_OUTsqlda; }
             inline XSQLDA * getINsqlda()             const { return m_INsqlda; }
         };
 
