@@ -30,6 +30,7 @@
 #include "xlstyle.hxx"
 #include "xeroot.hxx"
 #include "conditio.hxx"
+#include "dbdata.hxx"
 #include <boost/shared_ptr.hpp>
 #include <boost/scoped_ptr.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>
@@ -772,34 +773,37 @@ class XclExpTableStyleElement : public XclExpRecordBase, protected XclExpRoot
 public:
     XclExpTableStyleElement( const XclExpRoot& rRoot, OUString& rType, int iSize, int iDxfId );
     virtual ~XclExpTableStyleElement();
-    virtual void SaveXml( XclExpStream& rStrm );
+    virtual void SaveXml( XclExpXmlStream& rStrm );
 private:
     OUString maType;
-    int maSize;
-    int maDxfId;
+    int miSize;
+    int miDxfId;
 };
 
 class XclExpTableStyle : public XclExpRecordBase, protected XclExpRoot
 {
 public:
-    XclExpTableStyle( const XclExpRoot& rRoot, OUString& rTableStyleName );
+    XclExpTableStyle( const XclExpRoot& rRoot, ScDBDataFormatting& rTableStyle, XclExpDxfs& rDxfs );
     virtual ~XclExpTableStyle();
     virtual void SaveXml( XclExpXmlStream& rStrm );
 private:
     typedef boost::ptr_vector< XclExpTableStyleElement > StyleElementContainer;
     StyleElementContainer maStyleElementContainer;
+    ScDBDataFormatting maTableStyle;
     OUString maTableStyleName;
+    int miCount;
 };
 
 class XclExpTableStyles : public XclExpRecordBase, protected XclExpRoot
 {
 public:
-    XclExpTableStyles( const XclExpRoot& rRoot );
+    XclExpTableStyles( const XclExpRoot& rRoot, XclExpDxfs& rDxfs );
     virtual ~XclExpTableStyles();
     virtual void SaveXml( XclExpXmlStream& rStrm );
 private:
     typedef boost::ptr_vector< XclExpTableStyle > StyleContainer;
     StyleContainer maStyleContainer;
+    int miCount;
 };
 
 // ============================================================================

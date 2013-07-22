@@ -212,7 +212,7 @@ void XclExpRoot::InitializeGlobals()
         // BIFF8: only one link manager for all sheets
         mrExpData.mxLocLinkMgr = mrExpData.mxGlobLinkMgr;
         mrExpData.mxDxfs.reset( new XclExpDxfs( GetRoot() ) );
-        mrExpData.mxTableStyles.reset( new XclExpTableStyles( GetRoot() ) );
+        mrExpData.mxTableStyles.reset( new XclExpTableStyles( GetRoot(), GetDxfs() ) );
     }
 
     if( GetOutput() == EXC_OUTPUT_XML_2007 )

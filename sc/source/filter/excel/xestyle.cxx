@@ -3134,8 +3134,8 @@ void XclExpDxf::SaveXml( XclExpXmlStream& rStrm )
 XclExpTableStyleElement::XclExpTableStyleElement( const XclExpRoot& rRoot, OUString& rType, int iSize, int iDxfId )
     :XclExpRoot( rRoot),
     maType( rType ),
-    maDxfId( iDxfId ),
-    maSize( iSize )
+    miSize( iSize ),
+    miDxfId( iDxfId )
 {
 }
 
@@ -3143,16 +3143,54 @@ XclExpTableStyleElement::~XclExpTableStyleElement()
 {
 }
 
-void XclExpTableStyleElement::SaveXml( XclExpStream& rStrm )
+void XclExpTableStyleElement::SaveXml( XclExpXmlStream& rStrm )
 {
+    sax_fastparser::FSHelperPtr& rStyleSheet = rStrm.GetCurrentStream();
+    rStyleSheet->singleElement( XML_tableStyleElement,
+            XML_type, OUStringToOString(maType, RTL_TEXTENCODING_UTF8 ).getStr(),
+            XML_size, OString::number(miSize).getStr(),
+            XML_dxfId, OString::number(miDxfId).getStr(),
+            FSEND );
 }
 
 // ============================================================================
 
-XclExpTableStyle::XclExpTableStyle( const XclExpRoot& rRoot, OUString& rTableStyleName )
+XclExpTableStyle::XclExpTableStyle( const XclExpRoot& rRoot, ScDBDataFormatting& rTableStyle, XclExpDxfs& rDxfs )
     :XclExpRoot( rRoot ),
-    maTableStyleName( rTableStyleName )
+    maTableStyle( rTableStyle )
 {
+    //Get the table style name
+    maTableStyleName = maTableStyle.GetTableStyleName();
+    //Keep adding table style elements
+    OUString aStyleString;
+    OUString aElementType;
+    int aiDxfId;
+    if( !(aStyleString = maTableStyle.GetFirstRowStripeStyle()).isEmpty() )
+    {
+        //Resolve this string style sheet name to a dxf id
+        aiDxfId = rDxfs.GetDxfId( aStyleString );
+        aElementType = "firstRowStripe";
+        maStyleElementContainer.push_back( new XclExpTableStyleElement( rRoot, aElementType, 1, aiDxfId ) );
+    }
+    if( !(aStyleString = maTableStyle.GetSecondRowStripeStyle()).isEmpty() )
+    {
+        aiDxfId = rDxfs.GetDxfId( aStyleString );
+        aElementType = "secondRowStripe";
+        maStyleElementContainer.push_back( new XclExpTableStyleElement( rRoot, aElementType, 1, aiDxfId ) );
+    }
+    if( !(aStyleString = maTableStyle.GetFirstColStripeStyle()).isEmpty() )
+    {
+        aiDxfId = rDxfs.GetDxfId( aStyleString );
+        aElementType = "firstColumnStripe";
+        maStyleElementContainer.push_back( new XclExpTableStyleElement( rRoot, aElementType, 1, aiDxfId ) );
+    }
+    if( !(aStyleString = maTableStyle.GetSecondColStripeStyle()).isEmpty() )
+    {
+        aiDxfId = rDxfs.GetDxfId( aStyleString );
+        aElementType = "secondColumnStripe";
+        maStyleElementContainer.push_back( new XclExpTableStyleElement( rRoot, aElementType, 1, aiDxfId ) );
+    }
+    miCount = maStyleElementContainer.size();
 }
 
 XclExpTableStyle::~XclExpTableStyle()
@@ -3161,13 +3199,47 @@ XclExpTableStyle::~XclExpTableStyle()
 
 void XclExpTableStyle::SaveXml( XclExpXmlStream& rStrm )
 {
+    sax_fastparser::FSHelperPtr& rStyleSheet = rStrm.GetCurrentStream();
+    rStyleSheet->startElement( XML_tableStyle,  XML_name, OUStringToOString(maTableStyleName, RTL_TEXTENCODING_UTF8 ).getStr(), XML_count, OString::number(miCount).getStr(), FSEND );
+    for ( StyleElementContainer::iterator itr = maStyleElementContainer.begin(); itr != maStyleElementContainer.end(); ++itr )
+    {
+        itr->SaveXml( rStrm );
+    }
+    rStyleSheet->endElement( XML_tableStyle );
 }
 
 // ===========================================================================
 
-XclExpTableStyles::XclExpTableStyles( const XclExpRoot& rRoot )
+XclExpTableStyles::XclExpTableStyles( const XclExpRoot& rRoot, XclExpDxfs& rDxfs )
     :XclExpRoot( rRoot )
 {
+    //Search through the collection of ScDBData (Database Ranges)
+    //checking for any table styles associated with them
+    miCount = 0;
+    ScDBCollection* pDBCollection = rRoot.GetDoc().GetDBCollection();
+    //Now iterate through this collection gathering style names
+    if( pDBCollection )
+    {
+        ScDBCollection::NamedDBs& aNamedDBs = pDBCollection->getNamedDBs();
+        ScDBCollection::NamedDBs::iterator itr = aNamedDBs.begin();
+        ScDBCollection::NamedDBs::iterator itrEnd = aNamedDBs.end();
+        for(; itr!= itrEnd; ++itr)
+        {
+            /*Probably have an issue here..looks like the imported DB is
+            taken into the DBCollection as a named DB, but the DB Range
+            we define by Data->define range is not classified as a named DB.
+            I haven't investigated why yet. For now allow me to consider only
+            the named DBs for table style information.
+            */
+            ScDBDataFormatting aDBFormatting;
+            (*itr).GetTableFormatting( aDBFormatting );
+            if( &(aDBFormatting) )//Probably non-standard?
+            {
+                miCount++;
+                maStyleContainer.push_back( new XclExpTableStyle( rRoot, aDBFormatting, rDxfs ) );
+            }
+        }
+    }
 }
 
 XclExpTableStyles::~XclExpTableStyles()
@@ -3176,6 +3248,13 @@ XclExpTableStyles::~XclExpTableStyles()
 
 void XclExpTableStyles::SaveXml( XclExpXmlStream& rStrm )
 {
+    sax_fastparser::FSHelperPtr& rStyleSheet = rStrm.GetCurrentStream();
+    rStyleSheet->startElement( XML_tableStyles, XML_count, OString::number(miCount).getStr(), FSEND );
+    for ( StyleContainer::iterator itr = maStyleContainer.begin(); itr != maStyleContainer.end(); ++itr )
+    {
+        itr->SaveXml( rStrm );
+    }
+    rStyleSheet->endElement( XML_tableStyles );
 }
 
 // ============================================================================
@@ -3204,6 +3283,7 @@ void XclExpXmlStyleSheet::SaveXml( XclExpXmlStream& rStrm )
     CreateRecord( EXC_ID_XFLIST )->SaveXml( rStrm );
     CreateRecord( EXC_ID_DXFS )->SaveXml( rStrm );
     CreateRecord( EXC_ID_PALETTE )->SaveXml( rStrm );
+    CreateRecord( EXC_ID_TABLESTYLES )->SaveXml( rStrm );
 
     aStyleSheet->endElement( XML_styleSheet );
 
