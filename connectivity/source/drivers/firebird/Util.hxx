@@ -18,8 +18,16 @@ namespace connectivity
 {
     namespace firebird
     {
-        sal_Int32 getColumnTypeFromFBType(int aType);
-        ::rtl::OUString getColumnTypeNameFromFBType(int aType);
+        sal_Int32 getColumnTypeFromFBType(short aType);
+        ::rtl::OUString getColumnTypeNameFromFBType(short aType);
+
+        /**
+         * Internally (i.e. in RDB$FIELD_TYPE) firebird stores the data type
+         * for a column as defined in blr_*, however in the firebird
+         * api the SQL_* types are used, hence we need to be able to convert
+         * between the two when retrieving column metadata.
+         */
+        short getFBTypeFromBlrType(short blrType);
     }
 }
 #endif //CONNECTIVITY_FIREBIRD_UTIL_HXX

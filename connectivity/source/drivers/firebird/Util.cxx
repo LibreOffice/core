@@ -17,7 +17,7 @@ using namespace ::rtl;
 
 using namespace ::com::sun::star::sdbc;
 
-sal_Int32 firebird::getColumnTypeFromFBType(int aType)
+sal_Int32 firebird::getColumnTypeFromFBType(short aType)
 {
     aType &= ~1; // Remove last bit -- it is used to denote whether column
                  // can store Null, not needed for type determination
@@ -59,7 +59,7 @@ sal_Int32 firebird::getColumnTypeFromFBType(int aType)
     }
 }
 
-OUString firebird::getColumnTypeNameFromFBType(int aType)
+OUString firebird::getColumnTypeNameFromFBType(short aType)
 {
     aType &= ~1; // Remove last bit -- it is used to denote whether column
                 // can store Null, not needed for type determination
@@ -101,4 +101,51 @@ OUString firebird::getColumnTypeNameFromFBType(int aType)
     }
 }
 
+short getFBTypeFromBlrType(short blrType)
+{
+    switch (blrType)
+    {
+    case blr_text:
+        return SQL_TEXT;
+    case blr_text2:
+        assert(false);
+        return 0; // No idea if this should be supported
+    case blr_varying:
+        return SQL_VARYING;
+    case blr_varying2:
+        assert(false);
+        return 0; // No idea if this should be supported
+    case blr_short:
+        return SQL_SHORT;
+    case blr_long:
+        return SQL_LONG;
+    case blr_float:
+        return SQL_FLOAT;
+    case blr_double:
+        return SQL_DOUBLE;
+    case blr_d_float:
+        return SQL_D_FLOAT;
+    case blr_timestamp:
+        return SQL_TIMESTAMP;
+    case blr_blob:
+        return SQL_BLOB;
+//     case blr_SQL_ARRAY:
+//         return OUString("SQL_ARRAY");
+    case blr_sql_time:
+        return SQL_TYPE_TIME;
+    case blr_sql_date:
+        return SQL_TYPE_DATE;
+    case blr_int64:
+        return SQL_INT64;
+//     case SQL_NULL:
+//         return OUString("SQL_NULL");
+    case blr_quad:
+        return SQL_QUAD;
+    default:
+        // If this happens we have hit one of the extra types in ibase.h
+        // look up blr_* for a list, e.g. blr_domain_name, blr_not_nullable etc.
+        assert(false);
+        return 0;
+    }
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
