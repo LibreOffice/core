@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAXn//+Rc\u003d",
+        "filename": "starmath/source/view.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1459,
+      "author": {
+        "id": 1000186
+      },
+      "writtenOn": "2013-07-22T10:40:44Z",
+      "side": 1,
+      "message": "No because this variable holds the result of the import of a formula file, and this data is used some lines below.",
+      "parentUuid": "AAAAXn//+TY\u003d",
+      "revId": "92e2dd25e32c9fa0802be21315935c0c56a1edda",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAXn//+Tc\u003d",
         "filename": "starmath/source/view.cxx",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2013-07-22T03:22:33Z",
       "side": 1,
       "message": "If we don\u0027t use it internally, let us just bin that bSuccess completely.",
+      "revId": "92e2dd25e32c9fa0802be21315935c0c56a1edda",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//+RY\u003d",
+        "filename": "starmath/source/view.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1498,
+      "author": {
+        "id": 1000186
+      },
+      "writtenOn": "2013-07-22T10:40:44Z",
+      "side": 1,
+      "message": "Same as above, this variable holds the result of the import of formula, and this data is used some lines below this point.",
+      "parentUuid": "AAAAXn//+Tc\u003d",
       "revId": "92e2dd25e32c9fa0802be21315935c0c56a1edda",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
