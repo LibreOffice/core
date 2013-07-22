@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXn//+TY\u003d",
+        "filename": "starmath/source/view.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1459,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2013-07-22T03:22:33Z",
+      "side": 1,
+      "message": "do we need to have still bRet around if we are not returning it?",
+      "revId": "92e2dd25e32c9fa0802be21315935c0c56a1edda",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//+Tc\u003d",
+        "filename": "starmath/source/view.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1498,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2013-07-22T03:22:33Z",
+      "side": 1,
+      "message": "If we don\u0027t use it internally, let us just bin that bSuccess completely.",
+      "revId": "92e2dd25e32c9fa0802be21315935c0c56a1edda",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
