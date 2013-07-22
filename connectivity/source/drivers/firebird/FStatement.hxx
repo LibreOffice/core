@@ -33,8 +33,8 @@
  *
  *************************************************************************/
 
-#ifndef CONNECTIVITY_SSTATEMENT_HXX
-#define CONNECTIVITY_SSTATEMENT_HXX
+#ifndef CONNECTIVITY_FIREBIRD_STATEMENT_HXX
+#define CONNECTIVITY_FIREBIRD_STATEMENT_HXX
 
 #include <com/sun/star/sdbc/XStatement.hpp>
 #include <com/sun/star/sdbc/XWarningsSupplier.hpp>
@@ -188,6 +188,6 @@ namespace connectivity
         };
     }
 }
-#endif // CONNECTIVITY_SSTATEMENT_HXX
+#endif // CONNECTIVITY_FIREBIRD_STATEMENT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

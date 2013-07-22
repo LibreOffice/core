@@ -33,8 +33,8 @@
  *
  *************************************************************************/
 
-#ifndef CONNECTIVITY_SDRIVER_HXX
-#define CONNECTIVITY_SDRIVER_HXX
+#ifndef CONNECTIVITY_FIREBIRD_DRIVER_HXX
+#define CONNECTIVITY_FIREBIRD_DRIVER_HXX
 
 #include <com/sun/star/sdbc/XDriver.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -84,6 +84,6 @@ namespace connectivity
 
 }
 
-#endif // CONNECTIVITY_SDRIVER_HXX
+#endif // CONNECTIVITY_FIREBIRD_DRIVER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -33,8 +33,8 @@
  *
  *************************************************************************/
 
-#ifndef _CONNECTIVITY_FSUBCOMPONENT_HXX_
-#define _CONNECTIVITY_FSUBCOMPONENT_HXX_
+#ifndef CONNECTIVITY_FIREBIRD_SUBCOMPONENT_HXX
+#define CONNECTIVITY_FIREBIRD_SUBCOMPONENT_HXX
 
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/interfacecontainer.h>
@@ -158,6 +158,6 @@ namespace connectivity
 
     }
 }
-#endif // _CONNECTIVITY_FSUBCOMPONENT_HXX_
+#endif // CONNECTIVITY_FIREBIRD_SUBCOMPONENT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

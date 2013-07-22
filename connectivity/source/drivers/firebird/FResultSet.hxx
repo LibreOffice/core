@@ -33,8 +33,8 @@
  *
  *************************************************************************/
 
-#ifndef CONNECTIVITY_SRESULTSET_HXX
-#define CONNECTIVITY_SRESULTSET_HXX
+#ifndef CONNECTIVITY_FIREBIRD_RESULTSET_HXX
+#define CONNECTIVITY_FIREBIRD_RESULTSET_HXX
 
 #include "FStatement.hxx"
 
@@ -249,6 +249,6 @@ namespace connectivity
              OResultSet::retrieveValue(sal_Int32 columnIndex);
     }
 }
-#endif // CONNECTIVITY_SRESULTSET_HXX
+#endif // CONNECTIVITY_FIREBIRD_RESULTSET_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

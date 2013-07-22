@@ -33,8 +33,8 @@
  *
  *************************************************************************/
 
-#ifndef CONNECTIVITY_SRESULSETMETADATA_HXX
-#define CONNECTIVITY_SRESULSETMETADATA_HXX
+#ifndef CONNECTIVITY_FIREBIRD_RESULTSETMETADATA_HXX
+#define CONNECTIVITY_FIREBIRD_RESULTSETMETADATA_HXX
 
 #include "FConnection.hxx"
 
@@ -118,6 +118,6 @@ namespace connectivity
     }
 }
 
-#endif // CONNECTIVITY_SRESULSETMETADATA_HXX
+#endif // CONNECTIVITY_FIREBIRD_RESULTSETMETADATA_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

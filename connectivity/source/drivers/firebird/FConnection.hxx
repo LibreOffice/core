@@ -33,8 +33,8 @@
  *
  *************************************************************************/
 
-#ifndef CONNECTIVITY_SCONNECTION_HXX
-#define CONNECTIVITY_SCONNECTION_HXX
+#ifndef CONNECTIVITY_FIREBIRD_CONNECTION_HXX
+#define CONNECTIVITY_FIREBIRD_CONNECTION_HXX
 
 #include "Blob.hxx"
 
