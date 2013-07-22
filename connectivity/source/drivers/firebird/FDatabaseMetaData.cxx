@@ -1039,7 +1039,7 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getColumns(
             short aColumnNumber = xRow->getShort(5);
             // Firebird stores column numbers beginning with 0 internally
             // SDBC expects column numbering to begin with 1.
-            aCurrentRow.push_back(new ORowSetValueDecorator(aColumnNumber + 1));
+            aCurrentRow.push_back(new ORowSetValueDecorator(sal_Int32(aColumnNumber + 1)));
         }
         // 18. Is nullable
         if (xRow->getShort(9))
