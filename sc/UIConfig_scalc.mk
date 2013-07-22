@@ -63,6 +63,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/scalc,\
 	sc/uiconfig/scalc/ui/allheaderfooterdialog \
 	sc/uiconfig/scalc/ui/analysisofvariancedialog \
 	sc/uiconfig/scalc/ui/cellprotectionpage \
+	sc/uiconfig/scalc/ui/consolidatedialog \
 	sc/uiconfig/scalc/ui/createnamesdialog \
 	sc/uiconfig/scalc/ui/dataform \
 	sc/uiconfig/scalc/ui/definename \

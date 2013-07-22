@@ -67,7 +67,6 @@ $(eval $(call gb_SrsTarget_add_files,sc/res,\
     sc/source/ui/styleui/styledlg.src \
     sc/source/ui/dbgui/pivot.src \
     sc/source/ui/dbgui/dpgroupdlg.src \
-    sc/source/ui/dbgui/consdlg.src \
     sc/source/ui/dbgui/pvfundlg.src \
     sc/source/ui/dbgui/dapitype.src \
     sc/source/ui/dbgui/imoptdlg.src \
