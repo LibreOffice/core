@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXn//+SI\u003d",
+        "filename": "sw/source/core/doc/docdesc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2013-07-22T10:07:24Z",
+      "side": 1,
+      "message": "Why not use just if( !aCnt.GetCntntIdx() || !bLeft ) here?",
+      "revId": "27dddf946d17ba6ea5f0c1bda6710a22ed6b3895",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
