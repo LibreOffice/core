@@ -11,8 +11,15 @@
 #include "optHeaderTabListbox.hxx"
 #include <svtools/svlbitm.hxx>
 #include <svtools/treelistentry.hxx>
+#include <comphelper/processfactory.hxx>
+#include <com/sun/star/configuration/theDefaultProvider.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/container/XNameAccess.hpp>
+#include <com/sun/star/beans/NamedValue.hpp>
+
 
 using namespace svx;
+using namespace ::com::sun::star;
 
 #define ITEMID_PREF     1
 #define ITEMID_TYPE     2
@@ -70,5 +77,32 @@ void CuiAboutConfigTabPage::InsertEntry( OUString& rProp, OUString&  rStatus, OU
     pEntry->AddItem( new SvLBoxString( pEntry, 0, rValue));
 
     pPrefBox->Insert( pEntry );
+}
+
+sal_Bool CuiAboutConfigTabPage::FillItems()
+{
+    return sal_False;
+}
+
+uno::Reference< container::XNameAccess > CuiAboutConfigTabPage::getConfigAccess()
+{
+    uno::Reference< uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
+
+    uno::Reference< lang::XMultiServiceFactory > xConfigProvider(
+                com::sun::star::configuration::theDefaultProvider::get( xContext  ) );
+
+    beans::NamedValue aProperty;
+    aProperty.Name = "nodepath";
+    aProperty.Value = uno::makeAny( OUString("org.openoffice") );
+
+    uno::Sequence< uno::Any > aArgumentList( 1 );
+    aArgumentList[0] = uno::makeAny( aProperty );
+
+    uno::Reference< container::XNameAccess > xNameAccess(
+                xConfigProvider->createInstanceWithArguments(
+                    "com.sun.star.configuration.ConfigurationAccess", aArgumentList ),
+                uno::UNO_QUERY_THROW );
+
+    return xNameAccess;
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

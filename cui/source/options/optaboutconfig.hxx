@@ -13,6 +13,7 @@
 #include <sfx2/tabdlg.hxx>
 #include <svtools/simptabl.hxx>
 #include "optHeaderTabListbox.hxx"
+#include <com/sun/star/container/XNameAccess.hpp>
 
 namespace svx
 {
@@ -34,6 +35,8 @@ public:
    static SfxTabPage* Create( Window* pParent, const SfxItemSet& rItemset );
 
    void     InsertEntry(OUString& rProp, OUString&  rStatus, OUString& rType, OUString& rValue);
+   sal_Bool FillItems();
+   com::sun::star::uno::Reference< com::sun::star::container::XNameAccess > getConfigAccess();
 
 };
 
