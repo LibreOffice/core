@@ -18,7 +18,6 @@
  */
 
 #include "xmlfiltercommon.hrc"
-#include "xmlfiltertabpagebasic.hrc"
 #include "xmlfiltertabpagexslt.hrc"
 #include "xmlfilterhelpids.hrc"
 

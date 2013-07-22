@@ -19,6 +19,7 @@ $(eval $(call gb_UIConfig_add_uifiles,filter,\
     filter/uiconfig/ui/pdfviewpage \
 	filter/uiconfig/ui/testxmlfilter \
 	filter/uiconfig/ui/xmlfiltersettings \
+	filter/uiconfig/ui/xmlfiltertabpagegeneral \
 ))
 
 # vim: set noet sw=4 ts=4:

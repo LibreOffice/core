@@ -26,7 +26,6 @@
 #include "xmlfilterdialogstrings.hrc"
 #include "xmlfiltertabdialog.hxx"
 #include "xmlfiltercommon.hrc"
-#include "xmlfiltertabpagebasic.hrc"
 #include "xmlfiltertabpagexslt.hrc"
 #include "xmlfiltertabpagebasic.hxx"
 #include "xmlfiltertabpagexslt.hxx"
@@ -140,7 +139,7 @@ bool XMLFilterTabDialog::onOk()
                     {
                         nErrorPage = RID_XML_FILTER_TABPAGE_BASIC;
                         nErrorId = STR_ERROR_FILTER_NAME_EXISTS;
-                        pFocusWindow = &(mpBasicPage->maEDFilterName);
+                        pFocusWindow = (mpBasicPage->m_pEDFilterName);
                         aReplace1 = mpNewInfo->maFilterName;
                     }
 
@@ -195,7 +194,7 @@ bool XMLFilterTabDialog::onOk()
                                 {
                                     nErrorPage = RID_XML_FILTER_TABPAGE_BASIC;
                                     nErrorId = STR_ERROR_TYPE_NAME_EXISTS;
-                                    pFocusWindow = &(mpBasicPage->maEDInterfaceName);
+                                    pFocusWindow = (mpBasicPage->m_pEDInterfaceName);
                                     aReplace1 = mpNewInfo->maInterfaceName;
                                     aReplace2 = *pFilterName;
                                 }

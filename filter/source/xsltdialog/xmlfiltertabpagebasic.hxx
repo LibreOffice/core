@@ -41,19 +41,11 @@ public:
     static OUString decodeComment( const OUString& rComment );
     static OUString encodeComment( const OUString& rComment );
 
-    FixedText       maFTFilterName;
-    Edit            maEDFilterName;
-
-    FixedText       maFTApplication;
-    ComboBox        maCBApplication;
-
-    FixedText       maFTInterfaceName;
-    Edit            maEDInterfaceName;
-
-    FixedText       maFTExtension;
-    Edit            maEDExtension;
-    FixedText       maFTDescription;
-    MultiLineEdit   maEDDescription;
+    Edit*              m_pEDFilterName;
+    ComboBox*          m_pCBApplication;
+    Edit*              m_pEDInterfaceName;
+    Edit*              m_pEDExtension;
+    VclMultiLineEdit*  m_pEDDescription;
 };
 
 #endif
