@@ -77,7 +77,6 @@ namespace connectivity
 
             OConnection*                                m_pConnection;
 
-            XSQLDA *                                    m_INsqlda;
             ISC_STATUS_ARRAY                            m_statusVector;
         protected:
 
@@ -146,7 +145,6 @@ namespace connectivity
             // other methods
             OConnection* getOwnConnection() const { return m_pConnection;}
 
-            inline XSQLDA * getINsqlda()             const { return m_INsqlda; }
         };
 
         class OStatement_BASE2  :public OStatement_Base

@@ -33,19 +33,26 @@
  *
  *************************************************************************/
 
-#include <stdio.h>
-#include <osl/diagnose.h>
+#include "FConnection.hxx"
 #include "FPreparedStatement.hxx"
-#include <com/sun/star/sdbc/DataType.hpp>
 #include "FResultSetMetaData.hxx"
 #include "FResultSet.hxx"
-#include <cppuhelper/typeprovider.hxx>
-#include <com/sun/star/lang/DisposedException.hpp>
-#include "propertyids.hxx"
+#include "Util.hxx"
+
 #include <comphelper/sequence.hxx>
+#include <cppuhelper/typeprovider.hxx>
+#include <osl/diagnose.h>
+#include <propertyids.hxx>
+
+#include <com/sun/star/sdbc/DataType.hpp>
+#include <com/sun/star/lang/DisposedException.hpp>
+
+using namespace connectivity::firebird;
 
 using namespace ::comphelper;
-using namespace connectivity::firebird;
+using namespace ::osl;
+
+using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
@@ -67,173 +74,247 @@ OPreparedStatement::OPreparedStatement( OConnection* _pConnection,
                                         const OUString& sql)
     :OStatement_BASE2(_pConnection)
     ,m_aTypeInfo(_TypeInfo)
-    ,m_nNumParams(0)
     ,m_sSqlStatement(sql)
-    ,m_bPrepared(sal_False)
+    ,m_statementHandle(0)
+    ,m_pOutSqlda(0)
+    ,m_pInSqlda(0)
 {
-    SAL_INFO("connectivity.firebird", "OPreparedStatement_BASE(). "
+    SAL_INFO("connectivity.firebird", "OPreparedStatement(). "
              "sql: " << sql);
-
-//     prepareQuery(m_sSqlStatement);
-    (void) sql;
 }
 
-// -----------------------------------------------------------------------------
+void OPreparedStatement::ensurePrepared()
+    throw (SQLException)
+{
+    MutexGuard aGuard(m_pConnection->getMutex());
+    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+
+    if (m_statementHandle)
+        return;
+
+    ISC_STATUS aErr = 0;
+
+    if (!m_pInSqlda)
+    {
+        m_pInSqlda = (XSQLDA*) malloc(XSQLDA_LENGTH(10));
+        m_pInSqlda->version = SQLDA_VERSION1;
+        m_pInSqlda->sqln = 10;
+    } // TODO: free this on closing
+
+    aErr = prepareAndDescribeStatement(m_sSqlStatement,
+                                       m_statementHandle,
+                                       m_pOutSqlda,
+                                       m_pInSqlda);
+    if (aErr)
+    {
+        SAL_WARN("connectivity.firebird", "prepareAndDescribeStatement failed");
+    }
+    else if (m_statementHandle)
+    {
+        isc_dsql_describe_bind(m_statusVector,
+                               &m_statementHandle,
+                               1,
+                               m_pInSqlda);
+    }
+
+    if (aErr)
+    {
+        SAL_WARN("connectivity.firebird", "isc_dsql_describe_bind failed");
+    }
+    else if (m_pInSqlda->sqld > m_pInSqlda->sqln) // Not large enough
+    {
+        short nItems = m_pInSqlda->sqld;
+        free(m_pInSqlda);
+        m_pInSqlda = (XSQLDA*) malloc(XSQLDA_LENGTH(nItems));
+        m_pInSqlda->version = SQLDA_VERSION1;
+        m_pInSqlda->sqln = nItems;
+        isc_dsql_describe_bind(m_statusVector,
+                               &m_statementHandle,
+                               1,
+                               m_pInSqlda);
+    }
+//         char aItems[] = {
+//             isc_info_sql_num_variables
+//         };
+//         char aResultBuffer[8];
+//         isc_dsql_sql_info(m_statusVector,
+//                           &m_statementHandle,
+//                           sizeof(aItems),
+//                           aItems,
+//                           sizeof(aResultBuffer),
+//                           aResultBuffer);
+//         if (aResultBuffer[0] == isc_info_sql_num_variables)
+//         {
+//             short aVarLength = (short) isc_vax_integer(aResultBuffer+1, 2);
+//             m_nNumParams = isc_vax_integer(aResultBuffer+3, aVarLength);
+//         }
+//     }
+    mallocSQLVAR(m_pInSqlda);
+    OConnection::evaluateStatusVector(m_statusVector,
+                                      m_sSqlStatement,
+                                      *this);
+}
+
 OPreparedStatement::~OPreparedStatement()
 {
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OPreparedStatement::acquire() throw()
 {
     OStatement_BASE2::acquire();
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OPreparedStatement::release() throw()
 {
     OStatement_BASE2::release();
 }
-// -----------------------------------------------------------------------------
-Any SAL_CALL OPreparedStatement::queryInterface( const Type & rType ) throw(RuntimeException)
+
+Any SAL_CALL OPreparedStatement::queryInterface(const Type& rType)
+    throw(RuntimeException)
 {
     Any aRet = OStatement_BASE2::queryInterface(rType);
     if(!aRet.hasValue())
         aRet = OPreparedStatement_BASE::queryInterface(rType);
     return aRet;
 }
-// -------------------------------------------------------------------------
-::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL OPreparedStatement::getTypes(  ) throw(::com::sun::star::uno::RuntimeException)
-{
-    return concatSequences(OPreparedStatement_BASE::getTypes(),OStatement_BASE2::getTypes());
-}
-// -------------------------------------------------------------------------
 
-Reference< XResultSetMetaData > SAL_CALL OPreparedStatement::getMetaData(  ) throw(SQLException, RuntimeException)
+uno::Sequence< Type > SAL_CALL OPreparedStatement::getTypes()
+    throw(RuntimeException)
+{
+    return concatSequences(OPreparedStatement_BASE::getTypes(),
+                           OStatement_BASE2::getTypes());
+}
+
+Reference< XResultSetMetaData > SAL_CALL OPreparedStatement::getMetaData()
+    throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_pConnection->getMutex() );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
 
+    // TODO: implement
 //     if(!m_xMetaData.is())
 //         m_xMetaData = new OResultSetMetaData(m_pConnection, m_pSqlda);
     // TODO: uncomment once PreparedStatement reimplemented with SQLDA
     return m_xMetaData;
 }
-// -------------------------------------------------------------------------
 
-void SAL_CALL OPreparedStatement::close(  ) throw(SQLException, RuntimeException)
+void SAL_CALL OPreparedStatement::close() throw(SQLException, RuntimeException)
 {
     SAL_INFO("connectivity.firebird", "close()");
 
-    ::osl::MutexGuard aGuard( m_pConnection->getMutex() );
+    MutexGuard aGuard( m_pConnection->getMutex() );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
 
-
-    // Reset last warning message
-
-    try {
-        clearWarnings ();
-        OStatement_BASE2::close();
-    }
-    catch (SQLException &) {
-        // If we get an error, ignore
+    if (m_statementHandle)
+    {
+        // TODO: implement
     }
 
-    // Remove this Statement object from the Connection object's
-    // list
+    OStatement_BASE2::close();
 }
-// -------------------------------------------------------------------------
 
-sal_Bool SAL_CALL OPreparedStatement::execute(  ) throw(SQLException, RuntimeException)
+sal_Bool SAL_CALL OPreparedStatement::execute()
+    throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_pConnection->getMutex() );
+    MutexGuard aGuard( m_pConnection->getMutex() );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
 
-
-    // same as in statement with the difference that this statement also can contain parameter
+    // TODO: implement
     return sal_False;
 }
-// -------------------------------------------------------------------------
 
-sal_Int32 SAL_CALL OPreparedStatement::executeUpdate(  ) throw(SQLException, RuntimeException)
+sal_Int32 SAL_CALL OPreparedStatement::executeUpdate()
+    throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_pConnection->getMutex() );
+    MutexGuard aGuard( m_pConnection->getMutex() );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
 
-    // same as in statement with the difference that this statement also can contain parameter
+    // TODO: implement
     return 0;
 }
-// -------------------------------------------------------------------------
 
-void SAL_CALL OPreparedStatement::setString( sal_Int32 parameterIndex, const ::rtl::OUString& x ) throw(SQLException, RuntimeException)
+void SAL_CALL OPreparedStatement::setString(sal_Int32 nParameterIndex,
+                                            const OUString& x)
+    throw(SQLException, RuntimeException)
 {
     SAL_INFO("connectivity.firebird", "setString(). "
-             "parameterIndex: " << parameterIndex << " , "
+             "parameterIndex: " << nParameterIndex << " , "
              "x: " << x);
 
-    ::osl::MutexGuard aGuard( m_pConnection->getMutex() );
+    MutexGuard aGuard( m_pConnection->getMutex() );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+    ensurePrepared();
 
-    if (NULL == m_INsqlda)
-    {
-        SAL_WARN("connectivity.firebird", "setString(). "
-                 "The query has not input parameters.");
-        return;
-    }
+    checkParameterIndex(nParameterIndex);
 
     OString str = OUStringToOString(x , RTL_TEXTENCODING_UTF8 );
-    SAL_INFO("connectivity.firebird", "setString(). "
-             "Setting parameter as: " << str);
 
-    XSQLVAR *var = m_INsqlda->sqlvar + (parameterIndex - 1);
+    XSQLVAR* pVar = m_pOutSqlda->sqlvar + (nParameterIndex - 1);
 
-    int dtype = (var->sqltype & ~1); // drop flag bit for now
-    switch(dtype) {
+    int dtype = (pVar->sqltype & ~1); // drop flag bit for now
+    switch (dtype) {
     case SQL_VARYING:
-        var->sqltype = SQL_TEXT;
+        pVar->sqltype = SQL_TEXT;
     case SQL_TEXT:
-        var->sqllen = str.getLength();
-        var->sqldata = (char *)malloc(sizeof(char)*var->sqllen);
-        sprintf(var->sqldata , "%s", str.getStr());
+        if (str.getLength() > pVar->sqllen)
+        { // Cut off overflow
+            memcpy(pVar->sqldata, str.getStr(), pVar->sqllen);
+        }
+        else
+        {
+            memcpy(pVar->sqldata, str.getStr(), str.getLength());
+            // Fill remainder with spaces
+            // TODO: would 0 be better here for filling?
+            memset(pVar->sqldata + str.getLength(), ' ', pVar->sqllen - str.getLength());
+        }
         break;
     default:
-        OSL_ASSERT( false );
+        // TODO: sane error message
+        throw SQLException();
     }
-
-    sprintf(var->sqldata , "%s", OUStringToOString(x , RTL_TEXTENCODING_UTF8 ).getStr());
 }
-// -------------------------------------------------------------------------
 
-Reference< XConnection > SAL_CALL OPreparedStatement::getConnection(  ) throw(SQLException, RuntimeException)
+Reference< XConnection > SAL_CALL OPreparedStatement::getConnection()
+    throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_pConnection->getMutex() );
+    MutexGuard aGuard( m_pConnection->getMutex() );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
 
-    return (Reference< XConnection >)m_pConnection;
+    return Reference< XConnection >(m_pConnection);
 }
-// -------------------------------------------------------------------------
 
-Reference< XResultSet > SAL_CALL OPreparedStatement::executeQuery(  ) throw(SQLException, RuntimeException)
+Reference< XResultSet > SAL_CALL OPreparedStatement::executeQuery()
+    throw(SQLException, RuntimeException)
 {
     SAL_INFO("connectivity.firebird", "executeQuery(). "
              "Got called with sql: " <<  m_sSqlStatement);
 
-    ::osl::MutexGuard aGuard( m_pConnection->getMutex() );
+    MutexGuard aGuard( m_pConnection->getMutex() );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+    ensurePrepared();
 
-//     ISC_STATUS_ARRAY status; /* status vector */
+    ISC_STATUS aErr;
 
-//     if (isc_dsql_execute(status, &m_pConnection->getTransaction(), &m_statementHandle, 1, m_INsqlda))
-//         if (pr_error(status, "execute query"))
-//             return NULL;
+    aErr = isc_dsql_execute(m_statusVector,
+                                &m_pConnection->getTransaction(),
+                                &m_statementHandle,
+                                1,
+                                m_pInSqlda);
+    if (aErr)
+    {
+        SAL_WARN("connectivity.firebird", "isc_dsql_execute failed" );
+        OConnection::evaluateStatusVector(m_statusVector,
+                                          "isc_dsql_execute",
+                                          *this);
+    }
 
-    isc_stmt_handle aHandle = 0;
-    Reference< OResultSet > pResult( new OResultSet( m_pConnection, this, aHandle, 0) );
-    //initializeResultSet( pResult.get() );
-    Reference< XResultSet > xRS = pResult.get();
+    uno::Reference< OResultSet > pResult(new OResultSet(m_pConnection,
+                                                        uno::Reference< XStatement >(this),
+                                                        m_statementHandle,
+                                                        m_pOutSqlda));
+    m_xResultSet = pResult.get();
 
-    SAL_INFO("connectivity.firebird", "executeQuery(). "
-             "Query executed.");
-
-    return xRS;
+    return m_xResultSet;
 }
 // -------------------------------------------------------------------------
 
@@ -490,13 +571,15 @@ void OPreparedStatement::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,cons
             OStatement_Base::setFastPropertyValue_NoBroadcast(nHandle,rValue);
     }
 }
-// -----------------------------------------------------------------------------
-void OPreparedStatement::checkParameterIndex(sal_Int32 _parameterIndex)
+
+void OPreparedStatement::checkParameterIndex(sal_Int32 nParameterIndex)
+    throw(SQLException)
 {
-    if( !_parameterIndex || _parameterIndex > m_nNumParams)
+    ensurePrepared();
+    if ((nParameterIndex == 0) || (nParameterIndex > m_pOutSqlda->sqld))
         throw SQLException();
+    // TODO: sane error message here.
 }
-// -----------------------------------------------------------------------------
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

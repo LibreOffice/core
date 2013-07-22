@@ -73,21 +73,22 @@ namespace connectivity
             };
 
             ::std::vector< Parameter>       m_aParameters;
-            //====================================================================
-            // Data attributes
-            //====================================================================
+
             TTypeInfoVector                 m_aTypeInfo;    // Hashtable containing an entry
                                                                         //  for each row returned by
                                                                         //  DatabaseMetaData.getTypeInfo.
 
-            sal_Int32                       m_nNumParams;       // Number of parameter markers
-                                                                //  for the prepared statement
-
             ::rtl::OUString                                                                 m_sSqlStatement;
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData >  m_xMetaData;
-            sal_Bool                                                                        m_bPrepared;
 
-            void checkParameterIndex(sal_Int32 _parameterIndex);
+            isc_stmt_handle m_statementHandle;
+            XSQLDA*         m_pOutSqlda;
+            XSQLDA*         m_pInSqlda;
+            void checkParameterIndex(sal_Int32 nParameterIndex)
+                throw(::com::sun::star::sdbc::SQLException);
+
+            void ensurePrepared()
+                throw(::com::sun::star::sdbc::SQLException);
 
         protected:
             virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,
@@ -117,7 +118,7 @@ namespace connectivity
             virtual sal_Bool SAL_CALL execute(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > SAL_CALL getConnection(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             // XParameters
-            virtual void SAL_CALL setNull( sal_Int32 parameterIndex, sal_Int32 sqlType ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            virtual void SAL_CALL setNull( sal_Int32 nParameterIndex, sal_Int32 sqlType ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             virtual void SAL_CALL setObjectNull( sal_Int32 parameterIndex, sal_Int32 sqlType, const ::rtl::OUString& typeName ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             virtual void SAL_CALL setBoolean( sal_Int32 parameterIndex, sal_Bool x ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             virtual void SAL_CALL setByte( sal_Int32 parameterIndex, sal_Int8 x ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);

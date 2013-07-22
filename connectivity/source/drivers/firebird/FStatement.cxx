@@ -210,7 +210,7 @@ OUString OStatement_Base::sanitizeSqlString(const OUString& sqlIn)
 {
     // TODO: verify this is all we need.
     static const sal_Unicode pattern('"');
-    static const sal_Unicode empty('\'');
+    static const sal_Unicode empty(' ');
     return sqlIn.replace(pattern, empty);
 }
 
@@ -297,10 +297,12 @@ int OStatement_Base::prepareAndDescribeStatement(const OUString& sqlIn,
     return aErr;
 }
 
-uno::Reference< XResultSet > SAL_CALL OStatement_Base::executeQuery(const OUString& sql) throw(SQLException, RuntimeException)
+uno::Reference< XResultSet > SAL_CALL OStatement_Base::executeQuery(const OUString& sqlIn) throw(SQLException, RuntimeException)
 {
     MutexGuard aGuard(m_pConnection->getMutex());
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+
+    const OUString sql = sanitizeSqlString(sqlIn);
 
     XSQLDA* pOutSqlda = 0;
     isc_stmt_handle aStatementHandle = 0;
