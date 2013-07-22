@@ -51,9 +51,6 @@ public:
     virtual void    Simplify( bool bIsBase );
 
 private:
-    CGPoint         GetTextDrawPosition(void) const;
-    double          GetWidth(void) const;
-
     const CTTextStyle* const    mpTextStyle;
 
     // CoreText specific objects
@@ -64,12 +61,17 @@ private:
 
     // cached details about the resulting layout
     // mutable members since these details are all lazy initialized
-    mutable double  mfCachedWidth;          // cached value of resulting typographical width
+    mutable long    mnCachedWidth;          // cached value of resulting typographical width
 
     // x-offset relative to layout origin
     // currently only used in RTL-layouts
-    mutable double  mfBaseAdv;
+    mutable long    mnBaseAdv;
 };
+
+typedef std::vector<CGGlyph> CGGlyphVector;
+typedef std::vector<CGPoint> CGPointVector;
+typedef std::vector<CGSize>  CGSizeVector;
+typedef std::vector<CFIndex> CFIndexVector;
 
 // =======================================================================
 
@@ -78,8 +80,8 @@ CTLayout::CTLayout( const CTTextStyle* pTextStyle )
 ,   mpAttrString( NULL )
 ,   mpCTLine( NULL )
 ,   mnCharCount( 0 )
-,   mfCachedWidth( -1 )
-,   mfBaseAdv( 0 )
+,   mnCachedWidth( -1 )
+,   mnBaseAdv( 0 )
 {
 }
 
@@ -146,7 +148,7 @@ void CTLayout::AdjustLayout( ImplLayoutArgs& rArgs )
     // in RTL-layouts trailing spaces are leftmost
     // TODO: use BiDi-algorithm to thoroughly check this assumption
     if( rArgs.mnFlags & SAL_LAYOUT_BIDI_RTL)
-        mfBaseAdv = fTrailingSpace;
+        mnBaseAdv = lrint(fTrailingSpace);
 
     // return early if there is nothing to do
     if( nPixelWidth <= 0 )
@@ -168,40 +170,7 @@ void CTLayout::AdjustLayout( ImplLayoutArgs& rArgs )
     }
     CFRelease( mpCTLine );
     mpCTLine = pNewCTLine;
-    mfCachedWidth = nPixelWidth;
-}
-
-// -----------------------------------------------------------------------
-
-// When drawing right aligned text, rounding errors in the position returned by
-// GetDrawPosition() cause the right margin of the text to change whenever text
-// width changes causing "jumping letters" effect. So here we calculate the
-// drawing position relative to the right margin on our own to avoid the
-// rounding errors. That is basically a hack, and it should go away if one day
-// we managed to get rid of those rounding errors.
-//
-// We continue using GetDrawPosition() for non-right aligned text, to minimize
-// any unforeseen side effects.
-CGPoint CTLayout::GetTextDrawPosition(void) const
-{
-    float fPosX, fPosY;
-
-    if (mnLayoutFlags & SAL_LAYOUT_RIGHT_ALIGN)
-    {
-        // text is always drawn at its leftmost point
-        const Point aPos = DrawBase();
-        fPosX = aPos.X() + mfBaseAdv - GetWidth();
-        fPosY = aPos.Y();
-    }
-    else
-    {
-        const Point aPos = GetDrawPosition(Point(mfBaseAdv, 0));
-        fPosX = aPos.X();
-        fPosY = aPos.Y();
-    }
-
-    CGPoint aTextPos = { +fPosX, -fPosY };
-    return aTextPos;
+    mnCachedWidth = nPixelWidth;
 }
 
 void CTLayout::DrawText( SalGraphics& rGraphics ) const
@@ -221,7 +190,8 @@ void CTLayout::DrawText( SalGraphics& rGraphics ) const
     CGContextSetShouldAntialias( rAquaGraphics.mrContext, !rAquaGraphics.mbNonAntialiasedText );
 
     // Draw the text
-    CGPoint aTextPos = GetTextDrawPosition();
+    const Point aVclPos = GetDrawPosition(Point(mnBaseAdv, 0));
+    CGPoint aTextPos = { (CGFloat) +aVclPos.X(), (CGFloat) -aVclPos.Y() };
 
     if( mpTextStyle->mfFontRotation != 0.0 )
     {
@@ -232,8 +202,56 @@ void CTLayout::DrawText( SalGraphics& rGraphics ) const
         aTextPos = CGPointApplyAffineTransform( aTextPos, aInvMatrix );
     }
 
+    CGColorRef pCGColor = (CGColorRef)CFDictionaryGetValue(mpTextStyle->GetStyleDict(),
+                                                           kCTForegroundColorAttributeName);
+    if (pCGColor)
+    {
+        CGContextSetFillColorWithColor(rAquaGraphics.mrContext, pCGColor);
+        CGContextSetStrokeColorWithColor(rAquaGraphics.mrContext, pCGColor);
+    }
+    else
+    {
+        CGContextSetRGBFillColor(rAquaGraphics.mrContext, 0.0, 0.0, 0.0, 1.0);
+    }
+
     CGContextSetTextPosition( rAquaGraphics.mrContext, aTextPos.x, aTextPos.y );
-    CTLineDraw( mpCTLine, rAquaGraphics.mrContext );
+
+    CGGlyphVector aCGGlyphVec;
+    CGSizeVector aSizeVec;
+
+    CFArrayRef aGlyphRuns = CTLineGetGlyphRuns(mpCTLine);
+    const int nRunCount = CFArrayGetCount(aGlyphRuns);
+
+    for (int nRunIndex = 0; nRunIndex < nRunCount; ++nRunIndex)
+    {
+        CTRunRef pGlyphRun = (CTRunRef)CFArrayGetValueAtIndex(aGlyphRuns, nRunIndex);
+        const CFIndex nGlyphCount = CTRunGetGlyphCount(pGlyphRun);
+        const CFRange aFullRange = CFRangeMake(0, nGlyphCount);
+
+        aCGGlyphVec.reserve(nGlyphCount);
+        aSizeVec.reserve(nGlyphCount);
+        CTRunGetGlyphs(pGlyphRun, aFullRange, &aCGGlyphVec[0]);
+        CTRunGetAdvances(pGlyphRun, aFullRange, &aSizeVec[0]);
+
+        for (int i = 0; i != nGlyphCount; ++i)
+            aSizeVec[i].width = lrint(aSizeVec[i].width);
+
+        CFDictionaryRef aAttributes = CTRunGetAttributes(pGlyphRun);
+        CTFontRef pCTFont = (CTFontRef)CFDictionaryGetValue(aAttributes, kCTFontAttributeName);
+        CGFontRef pCGFont = CTFontCopyGraphicsFont(pCTFont, NULL);
+        if (!pCGFont)
+        {
+            SAL_INFO("vcl.coretext.layout", "Error pCGFont is NULL");
+            return;
+        }
+
+        CGContextSetFont(rAquaGraphics.mrContext, pCGFont);
+        CFRelease(pCGFont);
+        CGContextSetFontSize(rAquaGraphics.mrContext, CTFontGetSize(pCTFont));
+
+        CGContextShowGlyphsWithAdvances(rAquaGraphics.mrContext, &aCGGlyphVec[0], &aSizeVec[0], nGlyphCount);
+    }
+
 #ifndef IOS
     // request an update of the changed window area
     if( rAquaGraphics.IsWindowGraphics() )
@@ -264,10 +282,6 @@ int CTLayout::GetNextGlyphs( int nLen, sal_GlyphId* pGlyphIDs, Point& rPos, int&
     int nCount = 0;
     int nSubIndex = nStart;
 
-    typedef std::vector<CGGlyph> CGGlyphVector;
-    typedef std::vector<CGPoint> CGPointVector;
-    typedef std::vector<CGSize>  CGSizeVector;
-    typedef std::vector<CFIndex> CFIndexVector;
     CGGlyphVector aCGGlyphVec;
     CGPointVector aCGPointVec;
     CGSizeVector  aCGSizeVec;
@@ -358,60 +372,49 @@ int CTLayout::GetNextGlyphs( int nLen, sal_GlyphId* pGlyphIDs, Point& rPos, int&
     return nCount;
 }
 
-// -----------------------------------------------------------------------
-
-double CTLayout::GetWidth() const
-{
-    if( (mnCharCount <= 0) || !mpCTLine )
-        return 0;
-
-    if( mfCachedWidth < 0.0 ) {
-        mfCachedWidth = CTLineGetTypographicBounds( mpCTLine, NULL, NULL, NULL);
-    }
-
-    return mfCachedWidth;
-}
-
 long CTLayout::GetTextWidth() const
 {
-    return lrint(GetWidth());
+    return FillDXArray(NULL);
 }
-// -----------------------------------------------------------------------
 
 long CTLayout::FillDXArray( sal_Int32* pDXArray ) const
 {
-    // short circuit requests which don't need full details
-    if( !pDXArray )
-        return GetTextWidth();
+    long nPixelWidth = 0;
 
-    long nPixWidth = GetTextWidth();
-    if( pDXArray ) {
-        // initialize the result array
-        for( int i = 0; i < mnCharCount; ++i)
+    // initialize the result array
+    if (pDXArray)
+        for (int i = 0; i < mnCharCount; ++i)
             pDXArray[i] = 0;
-        // handle each glyph run
-        CFArrayRef aGlyphRuns = CTLineGetGlyphRuns( mpCTLine );
-        const int nRunCount = CFArrayGetCount( aGlyphRuns );
-        typedef std::vector<CGSize> CGSizeVector;
-        CGSizeVector aSizeVec;
-        typedef std::vector<CFIndex> CFIndexVector;
-        CFIndexVector aIndexVec;
-        for( int nRunIndex = 0; nRunIndex < nRunCount; ++nRunIndex ) {
-            CTRunRef pGlyphRun = (CTRunRef)CFArrayGetValueAtIndex( aGlyphRuns, nRunIndex );
-            const CFIndex nGlyphCount = CTRunGetGlyphCount( pGlyphRun );
-            const CFRange aFullRange = CFRangeMake( 0, nGlyphCount );
-            aSizeVec.reserve( nGlyphCount );
-            aIndexVec.reserve( nGlyphCount );
-            CTRunGetAdvances( pGlyphRun, aFullRange, &aSizeVec[0] );
-            CTRunGetStringIndices( pGlyphRun, aFullRange, &aIndexVec[0] );
-            for( int i = 0; i != nGlyphCount; ++i ) {
+
+    // handle each glyph run
+    CFArrayRef aGlyphRuns = CTLineGetGlyphRuns( mpCTLine );
+    const int nRunCount = CFArrayGetCount( aGlyphRuns );
+    CGSizeVector aSizeVec;
+    CFIndexVector aIndexVec;
+    for (int nRunIndex = 0; nRunIndex < nRunCount; ++nRunIndex)
+    {
+        CTRunRef pGlyphRun = (CTRunRef)CFArrayGetValueAtIndex(aGlyphRuns, nRunIndex);
+        const CFIndex nGlyphCount = CTRunGetGlyphCount(pGlyphRun);
+        const CFRange aFullRange = CFRangeMake(0, nGlyphCount);
+        aSizeVec.reserve(nGlyphCount);
+        aIndexVec.reserve(nGlyphCount);
+        CTRunGetAdvances(pGlyphRun, aFullRange, &aSizeVec[0]);
+        CTRunGetStringIndices(pGlyphRun, aFullRange, &aIndexVec[0]);
+        for (int i = 0; i != nGlyphCount; ++i)
+        {
+            if (pDXArray)
+            {
                 const int nRelIdx = aIndexVec[i];
-                pDXArray[ nRelIdx ] += lrint(aSizeVec[i].width);
+                pDXArray[nRelIdx] += lrint(aSizeVec[i].width);
             }
+            nPixelWidth += lrint(aSizeVec[i].width);
         }
     }
 
-    return nPixWidth;
+    if (mnCachedWidth < 0)
+        mnCachedWidth = nPixelWidth;
+
+    return mnCachedWidth;
 }
 
 // -----------------------------------------------------------------------
@@ -476,8 +479,8 @@ bool CTLayout::GetBoundRect( SalGraphics& rGraphics, Rectangle& rVCLRect ) const
     CGContextScaleCTM( rAquaGraphics.mrContext, 1.0, -1.0 );
     CGContextSetShouldAntialias( rAquaGraphics.mrContext, !rAquaGraphics.mbNonAntialiasedText );
 
-    const CGPoint aVclPos = GetTextDrawPosition();
-    CGPoint aTextPos = GetTextDrawPosition();
+    const Point aVclPos = GetDrawPosition(Point(mnBaseAdv, 0));
+    CGPoint aTextPos = { (CGFloat) +aVclPos.X(), (CGFloat) -aVclPos.Y() };
 
     if( mpTextStyle->mfFontRotation != 0.0 )
     {
@@ -500,10 +503,10 @@ bool CTLayout::GetBoundRect( SalGraphics& rGraphics, Rectangle& rVCLRect ) const
 
     CGContextRestoreGState( rAquaGraphics.mrContext );
 
-    rVCLRect.Left()   = aVclPos.x + lrint(aMacRect.origin.x);
-    rVCLRect.Right()  = aVclPos.x + lrint(aMacRect.origin.x + aMacRect.size.width);
-    rVCLRect.Bottom() = aVclPos.x - lrint(aMacRect.origin.y);
-    rVCLRect.Top()    = aVclPos.x - lrint(aMacRect.origin.y + aMacRect.size.height);
+    rVCLRect.Left()   = aVclPos.X() + lrint(aMacRect.origin.x);
+    rVCLRect.Right()  = aVclPos.X() + lrint(aMacRect.origin.x + aMacRect.size.width);
+    rVCLRect.Bottom() = aVclPos.X() - lrint(aMacRect.origin.y);
+    rVCLRect.Top()    = aVclPos.X() - lrint(aMacRect.origin.y + aMacRect.size.height);
 
     return true;
 }
