@@ -51,7 +51,7 @@ $(deb_WORKDIR)/%/DEBIAN/control: $(deb_SRCDIR)/control $(call gb_CustomTarget_ge
 		-e 's/%PRODUCTNAME/$(PRODUCTNAME.$*) $(PRODUCTVERSION)/' \
 		-e 's/%PREFIX/$(UNIXFILENAME.$*)/' \
 		-e 's/%ICONPREFIX/$(UNIXFILENAME.$*)/' \
-		> $(deb_WORKDIR)/$*/usr/lib/menu/$*
+		> $(deb_WORKDIR)/$*/usr/lib/menu/$*$(PKGVERSIONSHORT)
 	echo "Package: $*$(PKGVERSIONSHORT)-debian-menus" >$@
 	cat $< | tr -d "\015" | \
 		sed 's/%productname/$(PRODUCTNAME.$*) $(PRODUCTVERSION)/' \
