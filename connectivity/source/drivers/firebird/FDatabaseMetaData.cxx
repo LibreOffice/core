@@ -35,10 +35,12 @@
 
 #include "FDatabaseMetaData.hxx"
 #include "FDatabaseMetaDataResultSet.hxx"
+#include "Util.hxx"
 
 #include <ibase.h>
 #include <rtl/ustrbuf.hxx>
 
+#include <com/sun/star/sdbc/ColumnValue.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/sdbc/ResultSetType.hpp>
 #include <com/sun/star/sdbc/ResultSetConcurrency.hpp>
@@ -849,18 +851,193 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getColumnPrivileges(
     (void) columnNamePattern;
     return NULL;
 }
-// -------------------------------------------------------------------------
+
 uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getColumns(
-    const Any& catalog, const OUString& schemaPattern, const OUString& tableNamePattern,
-    const OUString& columnNamePattern ) throw(SQLException, RuntimeException)
+        const Any& catalog,
+        const OUString& schemaPattern,
+        const OUString& tableNamePattern,
+        const OUString& columnNamePattern)
+    throw(SQLException, RuntimeException)
 {
-    (void) catalog;
-    (void) schemaPattern;
-    (void) tableNamePattern;
-    (void) columnNamePattern;
-    return NULL;
+    (void) catalog;         // Unsupported in firebird
+    (void) schemaPattern;   // Unsupported in firebird
+    SAL_INFO("connectivity.firebird", "getColumns() with "
+             "TableNamePattern: " << tableNamePattern <<
+             " & ColumnNamePattern: " << columnNamePattern);
+
+    OUStringBuffer queryBuf("SELECT "
+        "relfields.RDB$RELATION_NAME, " // 1
+        "relfields.RDB$FIELD_NAME, "    // 2
+        "relfields.RDB$DESCRIPTION,"    // 3
+        "relfields.RDB$DEFAULT_VALUE, " // 4
+        "relfields.RDB$FIELD_POSITION, "// 5
+        "fields.RDB$FIELD_TYPE, "       // 6
+        "fields.RDB$FIELD_LENGTH, "     // 7
+        "fields.RDB$FIELD_PRECISION, "  // 8
+        "fields.RDB$NULL_FLAG "         // 9
+        "FROM RDB$RELATION_FIELDS relfields "
+        "JOIN RDB$FIELDS fields "
+        "on (relfields.RDB$FIELD_NAME = fields.RDB$FIELD_NAME) ");
+
+    if (!tableNamePattern.isEmpty())
+    {
+        OUString sAppend;
+        if (tableNamePattern.match("%"))
+            sAppend = "AND RDB$RELATION_NAME LIKE '%' ";
+        else
+            sAppend = "AND RDB$RELATION_NAME = '%' ";
+
+        queryBuf.append(sAppend.replaceAll("%", tableNamePattern));
+    }
+
+    if (!columnNamePattern.isEmpty())
+    {
+        OUString sAppend;
+        if (columnNamePattern.match("%"))
+            sAppend = "AND RDB$FIELD_NAME LIKE '%' ";
+        else
+            sAppend = "AND RDB$FIELD_NAME = '%' ";
+
+        queryBuf.append(sAppend.replaceAll("%", columnNamePattern));
+    }
+
+    OUString query = queryBuf.makeStringAndClear();
+
+    uno::Reference< XStatement > statement = m_pConnection->createStatement();
+    uno::Reference< XResultSet > rs = statement->executeQuery(query.getStr());
+    uno::Reference< XRow > xRow( rs, UNO_QUERY_THROW );
+
+    ODatabaseMetaDataResultSet::ORows aResults;
+
+    while( rs->next() )
+    {
+        ODatabaseMetaDataResultSet::ORow aCurrentRow(16);
+
+        // 1. TABLE_CAT (catalog) may be null -- thus we omit it.
+        // 2. TABLE_SCHEM (schema) may be null -- thus we omit it.
+        // 3. TABLE_NAME
+        {
+            OUString aTableName = xRow->getString(1);
+            aCurrentRow.push_back(new ORowSetValueDecorator(aTableName));
+        }
+        // 4. Column Name
+        {
+            OUString aColumnName = xRow->getString(2);
+            aCurrentRow.push_back(new ORowSetValueDecorator(aColumnName));
+        }
+
+        // 5. Datatype
+        short aType = getFBTypeFromBlrType(xRow->getShort(6));
+        aCurrentRow.push_back(new ORowSetValueDecorator(getColumnTypeFromFBType(aType)));
+        // 6. Typename (SQL_*)
+        aCurrentRow.push_back(new ORowSetValueDecorator(getColumnTypeNameFromFBType(aType)));
+
+        // 7. Column Sizes
+        {
+            sal_Int32 aColumnSize = 0;
+            switch (aType)
+            {
+                case SQL_TEXT:
+                case SQL_VARYING:
+                    aColumnSize = xRow->getShort(7);
+                    break;
+                case SQL_SHORT:
+                case SQL_LONG:
+                case SQL_FLOAT:
+                case SQL_DOUBLE:
+                case SQL_D_FLOAT:
+                case SQL_INT64:
+                case SQL_QUAD:
+                    aColumnSize = xRow->getShort(8);
+                    break;
+                case SQL_TIMESTAMP:
+                case SQL_BLOB:
+                case SQL_ARRAY:
+                case SQL_TYPE_TIME:
+                case SQL_TYPE_DATE:
+                case SQL_NULL:
+                    // TODO: implement.
+                    break;
+            }
+            aCurrentRow.push_back(new ORowSetValueDecorator(aColumnSize));
+        }
+        // 8. Unused
+        aCurrentRow.push_back(new ORowSetValueDecorator());
+        // 9. Decimal Digits
+        // TODO: implement
+        aCurrentRow.push_back(new ORowSetValueDecorator(0));
+        // 10. Radix
+        aCurrentRow.push_back(new ORowSetValueDecorator(10));
+        // 11. Nullable
+        if (xRow->getShort(9))
+        {
+            aCurrentRow.push_back(new ORowSetValueDecorator(ColumnValue::NO_NULLS));
+        }
+        else
+        {
+            aCurrentRow.push_back(new ORowSetValueDecorator(ColumnValue::NULLABLE));
+        }
+        // 12. Comments -- may be omitted
+        {
+            uno::Reference< XBlob > xDescriptionBlob = xRow->getBlob(3);
+            if (xDescriptionBlob.is())
+            {
+                sal_Int32 aBlobLength = (sal_Int32) xDescriptionBlob->length();
+                OUString aDescription = OUString((char*) xDescriptionBlob->getBytes(0, aBlobLength).getArray(),
+                                        aBlobLength,
+                                        RTL_TEXTENCODING_UTF8);
+                aCurrentRow.push_back(new ORowSetValueDecorator(aDescription));
+            }
+        }
+        // 13. Default --  may be omitted.
+        {
+            uno::Reference< XBlob > xDefaultValueBlob = xRow->getBlob(4);
+            if (xDefaultValueBlob.is())
+            {
+                // TODO: push to back
+            }
+        }
+        // 14. Unused
+        aCurrentRow.push_back(new ORowSetValueDecorator());
+        // 15. Unused
+        aCurrentRow.push_back(new ORowSetValueDecorator());
+        // 16. Bytes in Column for char
+        if (aType == SQL_TEXT)
+        {
+            aCurrentRow.push_back(new ORowSetValueDecorator(xRow->getShort(7)));
+        }
+        else if (aType == SQL_VARYING)
+        {
+            aCurrentRow.push_back(new ORowSetValueDecorator(32767));
+        }
+        else
+        {
+            aCurrentRow.push_back(new ORowSetValueDecorator(0));
+        }
+        // 17. Index in column
+        {
+            short aColumnNumber = xRow->getShort(5);
+            aCurrentRow.push_back(new ORowSetValueDecorator(aColumnNumber));
+        }
+        // 18. Is nullable
+        if (xRow->getShort(9))
+        {
+            aCurrentRow.push_back(new ORowSetValueDecorator("NO"));
+        }
+        else
+        {
+            aCurrentRow.push_back(new ORowSetValueDecorator("YES"));
+        }
+
+        aResults.push_back(aCurrentRow);
+    }
+    ODatabaseMetaDataResultSet* pResultSet = new ODatabaseMetaDataResultSet(ODatabaseMetaDataResultSet::eTables);
+    uno::Reference< XResultSet > xResultSet = pResultSet;
+    pResultSet->setRows( aResults );
+
+    return xResultSet;
 }
-// -------------------------------------------------------------------------
+
 uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
         const Any& catalog,
         const OUString& schemaPattern,
@@ -880,7 +1057,6 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
     uno::Reference< XStatement > statement = m_pConnection->createStatement();
 
     static const OUString wld("%");
-    // TODO: OUStringBuf
     OUStringBuffer queryBuf(
             "SELECT "
             "RDB$RELATION_NAME, RDB$SYSTEM_FLAG, RDB$RELATION_TYPE, "
