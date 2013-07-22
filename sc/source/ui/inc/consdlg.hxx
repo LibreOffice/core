@@ -23,6 +23,7 @@
 #include <vcl/fixed.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/group.hxx>
+#include <vcl/layout.hxx>
 #include <vcl/morebtn.hxx>
 #include "global.hxx"
 #include "anyrefdg.hxx"
@@ -53,36 +54,28 @@ protected:
     virtual void    Deactivate();
 
 private:
-    FixedText       aFtFunc;
-    ListBox         aLbFunc;
+    ListBox*         pLbFunc;
+    ListBox*         pLbConsAreas;
 
-    FixedText       aFtConsAreas;
-    MultiListBox    aLbConsAreas;
+    ListBox*         pLbDataArea;
+    formula::RefEdit*        pEdDataArea;
+    formula::RefButton*      pRbDataArea;
 
-    ListBox         aLbDataArea;
-    FixedText       aFtDataArea;
-    formula::RefEdit        aEdDataArea;
-    formula::RefButton      aRbDataArea;
+    ListBox*         pLbDestArea;
+    formula::RefEdit*        pEdDestArea;
+    formula::RefButton*      pRbDestArea;
 
-    ListBox         aLbDestArea;
-    FixedText       aFtDestArea;
-    formula::RefEdit        aEdDestArea;
-    formula::RefButton      aRbDestArea;
+    VclExpander*     pExpander;
+    CheckBox*        pBtnByRow;
+    CheckBox*        pBtnByCol;
 
-    FixedLine       aFlConsBy;
-    CheckBox        aBtnByRow;
-    CheckBox        aBtnByCol;
+    CheckBox*        pBtnRefs;
 
-    FixedLine       aFlSep;
-    FixedLine       aFlOptions;
-    CheckBox        aBtnRefs;
-
-    OKButton        aBtnOk;
-    CancelButton    aBtnCancel;
-    HelpButton      aBtnHelp;
-    PushButton      aBtnAdd;
-    PushButton      aBtnRemove;
-    MoreButton      aBtnMore;
+    OKButton*        pBtnOk;
+    CancelButton*    pBtnCancel;
+    HelpButton*      pBtnHelp;
+    PushButton*      pBtnAdd;
+    PushButton*      pBtnRemove;
 
     String          aStrUndefined;
 

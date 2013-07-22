@@ -29,7 +29,7 @@
 #include "scresid.hxx"
 
 #include "globstr.hrc"
-#include "consdlg.hrc"
+#include "sc.hrc" // consdlg.hrc has been deleted
 
 #define _CONSDLG_CXX
 #include "consdlg.hxx"
@@ -67,39 +67,8 @@ public:
 ScConsolidateDlg::ScConsolidateDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
                                     const SfxItemSet&   rArgSet )
 
-    :   ScAnyRefDlg ( pB, pCW, pParent, RID_SCDLG_CONSOLIDATE ),
+    :   ScAnyRefDlg ( pB, pCW, pParent, "ConsolidateDialog" , "modules/scalc/ui/consolidatedialog.ui" ),
         //
-        aFtFunc         ( this, ScResId( FT_FUNC ) ),
-        aLbFunc         ( this, ScResId( LB_FUNC ) ),
-
-        aFtConsAreas    ( this, ScResId( FT_CONSAREAS ) ),
-        aLbConsAreas    ( this, ScResId( LB_CONSAREAS ) ),
-
-        aLbDataArea     ( this, ScResId( LB_DATA_AREA ) ),
-        aFtDataArea     ( this, ScResId( FT_DATA_AREA ) ),
-        aEdDataArea     ( this, this, &aFtDataArea, ScResId( ED_DATA_AREA ) ),
-        aRbDataArea     ( this, ScResId( RB_DATA_AREA ), &aEdDataArea, this ),
-
-        aLbDestArea     ( this, ScResId( LB_DEST_AREA ) ),
-        aFtDestArea     ( this, ScResId( FT_DEST_AREA ) ),
-        aEdDestArea     ( this, this, &aFtDestArea, ScResId( ED_DEST_AREA ) ),
-        aRbDestArea     ( this, ScResId( RB_DEST_AREA ), &aEdDestArea, this),
-
-        aFlConsBy       ( this, ScResId( FL_CONSBY ) ),
-        aBtnByRow       ( this, ScResId( BTN_BYROW ) ),
-        aBtnByCol       ( this, ScResId( BTN_BYCOL) ),
-
-        aFlSep          ( this, ScResId( FL_SEP ) ),
-        aFlOptions      ( this, ScResId( FL_OPTIONS ) ),
-        aBtnRefs        ( this, ScResId( BTN_REFS ) ),
-
-        aBtnOk          ( this, ScResId( BTN_OK ) ),
-        aBtnCancel      ( this, ScResId( BTN_CANCEL ) ),
-        aBtnHelp        ( this, ScResId( BTN_HELP ) ),
-        aBtnAdd         ( this, ScResId( BTN_ADD ) ),
-        aBtnRemove      ( this, ScResId( BTN_REMOVE ) ),
-        aBtnMore        ( this, ScResId( BTN_MORE ) ),
-
         aStrUndefined   ( ScResId( SCSTR_UNDEFINED ) ),
         //
         theConsData     ( ((const ScConsolidateItem&)
@@ -115,10 +84,30 @@ ScConsolidateDlg::ScConsolidateDlg( SfxBindings* pB, SfxChildWindow* pCW, Window
         nAreaDataCount  ( 0 ),
         nWhichCons      ( rArgSet.GetPool()->GetWhich( SID_CONSOLIDATE ) ),
 
-        pRefInputEdit   ( &aEdDataArea )
+        pRefInputEdit   ( pEdDataArea )
 {
+    get(pLbFunc,"func");
+    get(pLbConsAreas,"consareas");
+
+    get(pLbDataArea,"lbdataarea");
+    get(pEdDataArea,"eddataarea");
+    get(pRbDataArea,"rbdataarea");
+
+    get(pLbDestArea,"lbdestarea");
+    get(pEdDestArea,"eddestarea");
+    get(pRbDestArea,"rbdestarea");
+
+    get(pExpander,"more");
+    get(pBtnByRow,"byrow");
+    get(pBtnByCol,"bycol");
+    get(pBtnRefs,"refs");
+
+    get(pBtnOk,"ok");
+    get(pBtnCancel,"cancel");
+    get(pBtnAdd,"add");
+    get(pBtnRemove,"delete");
+
     Init();
-    FreeResource();
 }
 
 
@@ -140,38 +129,41 @@ void ScConsolidateDlg::Init()
     String aStr;
     sal_uInt16 i=0;
 
-    aEdDataArea .SetGetFocusHdl( LINK( this, ScConsolidateDlg, GetFocusHdl ) );
-    aEdDestArea .SetGetFocusHdl( LINK( this, ScConsolidateDlg, GetFocusHdl ) );
-    aLbDataArea .SetGetFocusHdl( LINK( this, ScConsolidateDlg, GetFocusHdl ) );
-    aLbDestArea .SetGetFocusHdl( LINK( this, ScConsolidateDlg, GetFocusHdl ) );
-    aEdDataArea .SetModifyHdl   ( LINK( this, ScConsolidateDlg, ModifyHdl ) );
-    aEdDestArea .SetModifyHdl   ( LINK( this, ScConsolidateDlg, ModifyHdl ) );
-    aLbConsAreas.SetSelectHdl   ( LINK( this, ScConsolidateDlg, SelectHdl ) );
-    aLbDataArea .SetSelectHdl   ( LINK( this, ScConsolidateDlg, SelectHdl ) );
-    aLbDestArea .SetSelectHdl   ( LINK( this, ScConsolidateDlg, SelectHdl ) );
-    aBtnOk      .SetClickHdl    ( LINK( this, ScConsolidateDlg, OkHdl ) );
-    aBtnCancel  .SetClickHdl    ( LINK( this, ScConsolidateDlg, ClickHdl ) );
-    aBtnAdd     .SetClickHdl    ( LINK( this, ScConsolidateDlg, ClickHdl ) );
-    aBtnRemove  .SetClickHdl    ( LINK( this, ScConsolidateDlg, ClickHdl ) );
+    pRbDataArea->SetReferences(this, pEdDataArea);
+    pRbDestArea->SetReferences(this, pEdDestArea);
 
-    aBtnMore.AddWindow( &aFlConsBy );
-    aBtnMore.AddWindow( &aBtnByRow );
-    aBtnMore.AddWindow( &aBtnByCol );
-    aBtnMore.AddWindow( &aFlSep );
-    aBtnMore.AddWindow( &aFlOptions );
-    aBtnMore.AddWindow( &aBtnRefs );
+    pEdDataArea ->SetGetFocusHdl( LINK( this, ScConsolidateDlg, GetFocusHdl ) );
+    pEdDestArea ->SetGetFocusHdl( LINK( this, ScConsolidateDlg, GetFocusHdl ) );
+    pLbDataArea ->SetGetFocusHdl( LINK( this, ScConsolidateDlg, GetFocusHdl ) );
+    pLbDestArea ->SetGetFocusHdl( LINK( this, ScConsolidateDlg, GetFocusHdl ) );
+    pEdDataArea ->SetModifyHdl   ( LINK( this, ScConsolidateDlg, ModifyHdl ) );
+    pEdDestArea ->SetModifyHdl   ( LINK( this, ScConsolidateDlg, ModifyHdl ) );
+    pLbConsAreas->SetSelectHdl   ( LINK( this, ScConsolidateDlg, SelectHdl ) );
+    pLbDataArea ->SetSelectHdl   ( LINK( this, ScConsolidateDlg, SelectHdl ) );
+    pLbDestArea ->SetSelectHdl   ( LINK( this, ScConsolidateDlg, SelectHdl ) );
+    pBtnOk      ->SetClickHdl    ( LINK( this, ScConsolidateDlg, OkHdl ) );
+    pBtnCancel  ->SetClickHdl    ( LINK( this, ScConsolidateDlg, ClickHdl ) );
+    pBtnAdd     ->SetClickHdl    ( LINK( this, ScConsolidateDlg, ClickHdl ) );
+    pBtnRemove  ->SetClickHdl    ( LINK( this, ScConsolidateDlg, ClickHdl ) );
 
-    aBtnAdd.Disable();
-    aBtnRemove.Disable();
+    pBtnAdd->Disable();
+    pBtnRemove->Disable();
 
-    aBtnByRow.Check( theConsData.bByRow );
-    aBtnByCol.Check( theConsData.bByCol );
-    aBtnRefs .Check( theConsData.bReferenceData );
+    pBtnByRow->Check( theConsData.bByRow );
+    pBtnByCol->Check( theConsData.bByCol );
+    pBtnRefs->Check( theConsData.bReferenceData );
 
-    aLbFunc.SelectEntryPos( FuncToLbPos( theConsData.eFunction ) );
+    pLbFunc->SelectEntryPos( FuncToLbPos( theConsData.eFunction ) );
+
+    // Hack: pLbConsAreas used to be MultiLB. We don't have VCL builder equivalent
+    // of it yet. So enable selecting multiple items here
+    pLbConsAreas->EnableMultiSelection( sal_True );
+
+    pLbConsAreas->set_width_request(pLbConsAreas->approximate_char_width() * 16);
+    pLbConsAreas->SetDropDownLineCount(5);
 
     // Einlesen der Konsolidierungsbereiche
-    aLbConsAreas.Clear();
+    pLbConsAreas->Clear();
     const formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
     for ( i=0; i<theConsData.nDataAreaCount; i++ )
     {
@@ -181,7 +173,7 @@ void ScConsolidateDlg::Init()
             ScRange( rArea.nColStart, rArea.nRowStart, rArea.nTab,
                     rArea.nColEnd, rArea.nRowEnd, rArea.nTab ).Format( aStr,
                         SCR_ABS_3D, pDoc, eConv );
-            aLbConsAreas.InsertEntry( aStr );
+            pLbConsAreas->InsertEntry( aStr );
         }
     }
 
@@ -189,10 +181,10 @@ void ScConsolidateDlg::Init()
     {
         ScAddress( theConsData.nCol, theConsData.nRow, theConsData.nTab
                 ).Format( aStr, SCA_ABS_3D, pDoc, eConv );
-        aEdDestArea.SetText( aStr );
+        pEdDestArea->SetText( aStr );
     }
     else
-        aEdDestArea.SetText( EMPTY_STRING );
+        pEdDestArea->SetText( EMPTY_STRING );
 
     //----------------------------------------------------------
 
@@ -227,12 +219,12 @@ void ScConsolidateDlg::Init()
     }
 
     FillAreaLists();
-    ModifyHdl( &aEdDestArea );
-    aLbDataArea.SelectEntryPos( 0 );
-    aEdDataArea.SetText( EMPTY_STRING );
-    aEdDataArea.GrabFocus();
+    ModifyHdl( pEdDestArea );
+    pLbDataArea->SelectEntryPos( 0 );
+    pEdDataArea->SetText( EMPTY_STRING );
+    pEdDataArea->GrabFocus();
 
-    aFlSep.SetStyle( aFlSep.GetStyle() | WB_VERT );
+    //aFlSep.SetStyle( aFlSep.GetStyle() | WB_VERT );
 
     //@BugID 54702 Enablen/Disablen nur noch in Basisklasse
     //SFX_APPWINDOW->Enable();
@@ -242,10 +234,10 @@ void ScConsolidateDlg::Init()
 //----------------------------------------------------------------------------
 void ScConsolidateDlg::FillAreaLists()
 {
-    aLbDataArea.Clear();
-    aLbDestArea.Clear();
-    aLbDataArea.InsertEntry( aStrUndefined );
-    aLbDestArea.InsertEntry( aStrUndefined );
+    pLbDataArea->Clear();
+    pLbDestArea->Clear();
+    pLbDataArea->InsertEntry( aStrUndefined );
+    pLbDestArea->InsertEntry( aStrUndefined );
 
     if ( pRangeUtil && pAreaData && (nAreaDataCount > 0) )
     {
@@ -253,10 +245,10 @@ void ScConsolidateDlg::FillAreaLists()
               (i<nAreaDataCount) && (pAreaData[i].aStrName.Len()>0);
               i++ )
         {
-            aLbDataArea.InsertEntry( pAreaData[i].aStrName, i+1 );
+            pLbDataArea->InsertEntry( pAreaData[i].aStrName, i+1 );
 
 //          if ( !pAreaData[i].bIsDbArea )
-                aLbDestArea.InsertEntry( pAreaData[i].aStrName, i+1 );
+                pLbDestArea->InsertEntry( pAreaData[i].aStrName, i+1 );
         }
     }
 }
@@ -281,9 +273,9 @@ void ScConsolidateDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
         if ( rRef.aStart.Tab() != rRef.aEnd.Tab() )
             nFmt |= SCA_TAB2_3D;
 
-        if ( pRefInputEdit == &aEdDataArea)
+        if ( pRefInputEdit == pEdDataArea)
             rRef.Format( aStr, nFmt, pDocP, eConv );
-        else if ( pRefInputEdit == &aEdDestArea )
+        else if ( pRefInputEdit == pEdDestArea )
             rRef.aStart.Format( aStr, nFmt, pDocP, eConv );
 
         pRefInputEdit->SetRefString( aStr );
@@ -335,7 +327,7 @@ void ScConsolidateDlg::Deactivate()
 sal_Bool ScConsolidateDlg::VerifyEdit( formula::RefEdit* pEd )
 {
     if ( !pRangeUtil || !pDoc || !pViewData ||
-         ((pEd != &aEdDataArea) && (pEd != &aEdDestArea)) )
+         ((pEd != pEdDataArea) && (pEd != pEdDestArea)) )
         return false;
 
     SCTAB   nTab    = pViewData->GetTabNo();
@@ -343,12 +335,12 @@ sal_Bool ScConsolidateDlg::VerifyEdit( formula::RefEdit* pEd )
     String  theCompleteStr;
     const formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
 
-    if ( pEd == &aEdDataArea )
+    if ( pEd == pEdDataArea )
     {
         bEditOk = pRangeUtil->IsAbsArea( pEd->GetText(), pDoc,
                                          nTab, &theCompleteStr, NULL, NULL, eConv );
     }
-    else if ( pEd == &aEdDestArea )
+    else if ( pEd == pEdDestArea )
     {
         String aPosStr;
 
@@ -370,18 +362,18 @@ sal_Bool ScConsolidateDlg::VerifyEdit( formula::RefEdit* pEd )
 
 IMPL_LINK( ScConsolidateDlg, GetFocusHdl, Control*, pCtr )
 {
-    if ( pCtr ==(Control*)&aEdDataArea ||
-         pCtr ==(Control*)&aEdDestArea)
+    if ( pCtr ==(Control*)pEdDataArea ||
+         pCtr ==(Control*)pEdDestArea)
     {
         pRefInputEdit = (formula::RefEdit*)pCtr;
     }
-    else if(pCtr ==(Control*)&aLbDataArea )
+    else if(pCtr ==(Control*)pLbDataArea )
     {
-        pRefInputEdit = &aEdDataArea;
+        pRefInputEdit = pEdDataArea;
     }
-    else if(pCtr ==(Control*)&aLbDestArea )
+    else if(pCtr ==(Control*)pLbDestArea )
     {
-        pRefInputEdit = &aEdDestArea;
+        pRefInputEdit = pEdDestArea;
     }
     return 0;
 }
@@ -391,13 +383,13 @@ IMPL_LINK( ScConsolidateDlg, GetFocusHdl, Control*, pCtr )
 
 IMPL_LINK_NOARG(ScConsolidateDlg, OkHdl)
 {
-    sal_uInt16 nDataAreaCount = aLbConsAreas.GetEntryCount();
+    sal_uInt16 nDataAreaCount = pLbConsAreas->GetEntryCount();
 
     if ( nDataAreaCount > 0 )
     {
         ScRefAddress aDestAddress;
         SCTAB       nTab = pViewData->GetTabNo();
-        String      aDestPosStr( aEdDestArea.GetText() );
+        String      aDestPosStr( pEdDestArea->GetText() );
         const formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
 
         if ( pRangeUtil->IsAbsPos( aDestPosStr, pDoc, nTab, NULL, &aDestAddress, eConv ) )
@@ -410,7 +402,7 @@ IMPL_LINK_NOARG(ScConsolidateDlg, OkHdl)
             for ( i=0; i<nDataAreaCount; i++ )
             {
                 pArea = new ScArea;
-                pRangeUtil->MakeArea( aLbConsAreas.GetEntry( i ),
+                pRangeUtil->MakeArea( pLbConsAreas->GetEntry( i ),
                                       *pArea, pDoc, nTab, eConv );
                 ppDataAreas[i] = pArea;
             }
@@ -418,10 +410,10 @@ IMPL_LINK_NOARG(ScConsolidateDlg, OkHdl)
             theOutParam.nCol            = aDestAddress.Col();
             theOutParam.nRow            = aDestAddress.Row();
             theOutParam.nTab            = aDestAddress.Tab();
-            theOutParam.eFunction       = LbPosToFunc( aLbFunc.GetSelectEntryPos() );
-            theOutParam.bByCol          = aBtnByCol.IsChecked();
-            theOutParam.bByRow          = aBtnByRow.IsChecked();
-            theOutParam.bReferenceData  = aBtnRefs.IsChecked();
+            theOutParam.eFunction       = LbPosToFunc( pLbFunc->GetSelectEntryPos() );
+            theOutParam.bByCol          = pBtnByCol->IsChecked();
+            theOutParam.bByRow          = pBtnByRow->IsChecked();
+            theOutParam.bReferenceData  = pBtnRefs->IsChecked();
             theOutParam.SetAreas( ppDataAreas, nDataAreaCount );
 
             for ( i=0; i<nDataAreaCount; i++ )
@@ -440,7 +432,7 @@ IMPL_LINK_NOARG(ScConsolidateDlg, OkHdl)
         else
         {
             INFOBOX( STR_INVALID_TABREF );
-            aEdDestArea.GrabFocus();
+            pEdDestArea->GrabFocus();
         }
     }
     else
@@ -453,13 +445,13 @@ IMPL_LINK_NOARG(ScConsolidateDlg, OkHdl)
 
 IMPL_LINK( ScConsolidateDlg, ClickHdl, PushButton*, pBtn )
 {
-    if ( pBtn == &aBtnCancel )
+    if ( pBtn == pBtnCancel )
         Close();
-    else if ( pBtn == &aBtnAdd )
+    else if ( pBtn == pBtnAdd )
     {
-        if ( !aEdDataArea.GetText().isEmpty() )
+        if ( !pEdDataArea->GetText().isEmpty() )
         {
-            String      aNewEntry( aEdDataArea.GetText() );
+            String      aNewEntry( pEdDataArea->GetText() );
             ScArea**    ppAreas = NULL;
             sal_uInt16      nAreaCount = 0;
             const formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
@@ -481,37 +473,37 @@ IMPL_LINK( ScConsolidateDlg, ClickHdl, PushButton*, pBtn )
                                 rArea.nColEnd, rArea.nRowEnd, rArea.nTab
                                 ).Format( aNewArea, SCR_ABS_3D, pDoc, eConv );
 
-                        if ( aLbConsAreas.GetEntryPos( aNewArea )
+                        if ( pLbConsAreas->GetEntryPos( aNewArea )
                              == LISTBOX_ENTRY_NOTFOUND )
                         {
-                            aLbConsAreas.InsertEntry( aNewArea );
+                            pLbConsAreas->InsertEntry( aNewArea );
                         }
                         delete ppAreas[i];
                     }
                 }
                 delete [] ppAreas;
             }
-            else if ( VerifyEdit( &aEdDataArea ) )
+            else if ( VerifyEdit( pEdDataArea ) )
             {
-                String aNewArea( aEdDataArea.GetText() );
+                String aNewArea( pEdDataArea->GetText() );
 
-                if ( aLbConsAreas.GetEntryPos( aNewArea ) == LISTBOX_ENTRY_NOTFOUND )
-                    aLbConsAreas.InsertEntry( aNewArea );
+                if ( pLbConsAreas->GetEntryPos( aNewArea ) == LISTBOX_ENTRY_NOTFOUND )
+                    pLbConsAreas->InsertEntry( aNewArea );
                 else
                     INFOBOX( STR_AREA_ALREADY_INSERTED );
             }
             else
             {
                 INFOBOX( STR_INVALID_TABREF );
-                aEdDataArea.GrabFocus();
+                pEdDataArea->GrabFocus();
             }
         }
     }
-    else if ( pBtn == &aBtnRemove )
+    else if ( pBtn == pBtnRemove )
     {
-        while ( aLbConsAreas.GetSelectEntryCount() )
-            aLbConsAreas.RemoveEntry( aLbConsAreas.GetSelectEntryPos() );
-        aBtnRemove.Disable();
+        while ( pLbConsAreas->GetSelectEntryCount() )
+            pLbConsAreas->RemoveEntry( pLbConsAreas->GetSelectEntryPos() );
+        pBtnRemove->Disable();
     }
     return 0;
 }
@@ -521,16 +513,16 @@ IMPL_LINK( ScConsolidateDlg, ClickHdl, PushButton*, pBtn )
 
 IMPL_LINK( ScConsolidateDlg, SelectHdl, ListBox*, pLb )
 {
-    if ( pLb == &aLbConsAreas )
+    if ( pLb == pLbConsAreas )
     {
-        if ( aLbConsAreas.GetSelectEntryCount() > 0 )
-            aBtnRemove.Enable();
+        if ( pLbConsAreas->GetSelectEntryCount() > 0 )
+            pBtnRemove->Enable();
         else
-            aBtnRemove.Disable();
+            pBtnRemove->Disable();
     }
-    else if ( (pLb == &aLbDataArea) || (pLb == &aLbDestArea) )
+    else if ( (pLb == pLbDataArea) || (pLb == pLbDestArea) )
     {
-        Edit*   pEd = (pLb == &aLbDataArea) ? &aEdDataArea : &aEdDestArea;
+        Edit*   pEd = (pLb == pLbDataArea) ? pEdDataArea : pEdDestArea;
         sal_uInt16  nSelPos = pLb->GetSelectEntryPos();
 
         if (    pRangeUtil
@@ -542,20 +534,20 @@ IMPL_LINK( ScConsolidateDlg, SelectHdl, ListBox*, pLb )
             {
                 String aString( pAreaData[nSelPos-1].aStrArea );
 
-                if ( pLb == &aLbDestArea )
+                if ( pLb == pLbDestArea )
                     pRangeUtil->CutPosString( aString, aString );
 
                 pEd->SetText( aString );
 
-                if ( pEd == &aEdDataArea )
-                    aBtnAdd.Enable();
+                if ( pEd == pEdDataArea )
+                    pBtnAdd->Enable();
             }
         }
         else
         {
             pEd->SetText( EMPTY_STRING );
-            if ( pEd == &aEdDataArea )
-                aBtnAdd.Enable();
+            if ( pEd == pEdDataArea )
+                pBtnAdd->Enable();
         }
     }
     return 0;
@@ -566,19 +558,19 @@ IMPL_LINK( ScConsolidateDlg, SelectHdl, ListBox*, pLb )
 
 IMPL_LINK( ScConsolidateDlg, ModifyHdl, formula::RefEdit*, pEd )
 {
-    if ( pEd == &aEdDataArea )
+    if ( pEd == pEdDataArea )
     {
         String aAreaStr( pEd->GetText() );
         if ( aAreaStr.Len() > 0 )
         {
-            aBtnAdd.Enable();
+            pBtnAdd->Enable();
         }
         else
-            aBtnAdd.Disable();
+            pBtnAdd->Disable();
     }
-    else if ( pEd == &aEdDestArea )
+    else if ( pEd == pEdDestArea )
     {
-        aLbDestArea.SelectEntryPos(0);
+        pLbDestArea->SelectEntryPos(0);
     }
     return 0;
 }
