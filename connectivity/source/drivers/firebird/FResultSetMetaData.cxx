@@ -73,7 +73,7 @@ sal_Int32 SAL_CALL OResultSetMetaData::getColumnType(sal_Int32 column)
 {
     verifyValidColumn(column);
 
-    int aType = m_pSqlda->sqlvar[column-1].sqltype;
+    short aType = m_pSqlda->sqlvar[column-1].sqltype;
 
     return getColumnTypeFromFBType(aType);
 }
@@ -122,7 +122,7 @@ OUString SAL_CALL OResultSetMetaData::getColumnTypeName(sal_Int32 column)
 {
     verifyValidColumn(column);
 
-    int aType = m_pSqlda->sqlvar[column-1].sqltype;
+    short aType = m_pSqlda->sqlvar[column-1].sqltype;
 
     return getColumnTypeNameFromFBType(aType);
 }
