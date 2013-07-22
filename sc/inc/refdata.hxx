@@ -23,6 +23,7 @@
 #include "global.hxx"
 #include "address.hxx"
 #include "scdllapi.h"
+#include "calcmacros.hxx"
 
 /// Single reference (one address) into the sheet
 struct SC_DLLPUBLIC ScSingleRefData
@@ -91,6 +92,10 @@ struct SC_DLLPUBLIC ScSingleRefData
             void CalcAbsIfRel( const ScAddress& rPos );
             bool operator==( const ScSingleRefData& ) const;
             bool operator!=( const ScSingleRefData& ) const;
+
+#if DEBUG_FORMULA_COMPILER
+    void Dump() const;
+#endif
 };
 
 inline void ScSingleRefData::InitAddress( SCCOL nColP, SCROW nRowP, SCTAB nTabP )
@@ -178,6 +183,10 @@ struct ScComplexRefData
         relative references. */
     ScComplexRefData& Extend( const ScSingleRefData & rRef, const ScAddress & rPos );
     ScComplexRefData& Extend( const ScComplexRefData & rRef, const ScAddress & rPos );
+
+#if DEBUG_FORMULA_COMPILER
+    void Dump() const;
+#endif
 };
 
 inline bool ScComplexRefData::ValidExternal() const

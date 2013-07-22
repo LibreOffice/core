@@ -67,10 +67,18 @@ ScAddress ScSingleRefData::toAbs( const ScAddress& rPos ) const
     SCROW nRetRow = Flags.bRowRel ? nRelRow + rPos.Row() : nRow;
     SCTAB nRetTab = Flags.bTabRel ? nRelTab + rPos.Tab() : nTab;
 
-    if (!ValidCol(nRetCol) || !ValidRow(nRetRow) || !ValidTab(nRetTab))
-        return ScAddress(ScAddress::INITIALIZE_INVALID);
+    ScAddress aAbs(ScAddress::INITIALIZE_INVALID);
 
-    return ScAddress(nRetCol, nRetRow, nRetTab);
+    if (ValidCol(nRetCol))
+        aAbs.SetCol(nRetCol);
+
+    if (ValidRow(nRetRow))
+        aAbs.SetRow(nRetRow);
+
+    if (ValidTab(nRetTab))
+        aAbs.SetTab(nRetTab);
+
+    return aAbs;
 }
 
 void ScSingleRefData::SetAddress( const ScAddress& rAddr, const ScAddress& rPos )
@@ -148,6 +156,20 @@ bool ScSingleRefData::operator!=( const ScSingleRefData& r ) const
 {
     return !operator==(r);
 }
+
+#if DEBUG_FORMULA_COMPILER
+void ScSingleRefData::Dump() const
+{
+    cout << "  address type column: " << (IsColRel()?"relative":"absolute")
+        << "  row : " << (IsRowRel()?"relative":"absolute") << "  sheet: "
+        << (IsTabRel()?"relative":"absolute") << endl;
+    cout << "  deleted column: " << (IsColDeleted()?"yes":"no")
+        << "  row : " << (IsRowDeleted()?"yes":"no") << "  sheet: "
+        << (IsTabDeleted()?"yes":"no") << endl;
+    cout << "  absolute pos column: " << nCol << "  row: " << nRow << "  sheet: " << nTab << endl;
+    cout << "  relative pos column: " << nRelCol << "  row: " << nRelRow << "  sheet: " << nRelTab << endl;
+}
+#endif
 
 static void lcl_putInOrder( ScSingleRefData & rRef1, ScSingleRefData & rRef2 )
 {
@@ -329,5 +351,30 @@ void ScComplexRefData::SetRange( const ScRange& rRange, const ScAddress& rPos )
     Ref1.SetAddress(rRange.aStart, rPos);
     Ref2.SetAddress(rRange.aEnd, rPos);
 }
+
+#if DEBUG_FORMULA_COMPILER
+void ScComplexRefData::Dump() const
+{
+    cout << "  ref 1" << endl;
+    cout << "    address type column: " << (Ref1.IsColRel()?"relative":"absolute")
+        << "  row: " << (Ref1.IsRowRel()?"relative":"absolute")
+        << "  sheet: " << (Ref1.IsTabRel()?"relative":"absolute") << endl;
+    cout << "    deleted column: " << (Ref1.IsColDeleted()?"yes":"no")
+        << "  row: " << (Ref1.IsRowDeleted()?"yes":"no")
+        << "  sheet: " << (Ref1.IsTabDeleted()?"yes":"no") << endl;
+    cout << "    absolute pos column: " << Ref1.nCol << "  row: " << Ref1.nRow << "  sheet: " << Ref1.nTab << endl;
+    cout << "    relative pos column: " << Ref1.nRelCol << "  row: " << Ref1.nRelRow << "  sheet: " << Ref1.nRelTab << endl;
+
+    cout << "  ref 2" << endl;
+    cout << "    address type column: " << (Ref2.IsColRel()?"relative":"absolute")
+        << "  row: " << (Ref2.IsRowRel()?"relative":"absolute")
+        << "  sheet: " << (Ref2.IsTabRel()?"relative":"absolute") << endl;
+    cout << "    deleted column: " << (Ref2.IsColDeleted()?"yes":"no")
+        << "  row: " << (Ref2.IsRowDeleted()?"yes":"no")
+        << "  sheet: " << (Ref2.IsTabDeleted()?"yes":"no") << endl;
+    cout << "    absolute pos column: " << Ref2.nCol << "  row: " << Ref2.nRow << "  sheet: " << Ref2.nTab << endl;
+    cout << "    relative pos column: " << Ref2.nRelCol << "  row: " << Ref2.nRelRow << "  sheet: " << Ref2.nRelTab << endl;
+}
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

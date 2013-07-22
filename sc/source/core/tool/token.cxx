@@ -751,14 +751,7 @@ bool ScSingleRefToken::operator==( const FormulaToken& r ) const
 void ScSingleRefToken::Dump() const
 {
     cout << "-- ScSingleRefToken" << endl;
-    cout << "  address type column: " << (aSingleRef.IsColRel()?"relative":"absolute")
-        << "  row : " << (aSingleRef.IsRowRel()?"relative":"absolute") << "  sheet: "
-        << (aSingleRef.IsTabRel()?"relative":"absolute") << endl;
-    cout << "  deleted column: " << (aSingleRef.IsColDeleted()?"yes":"no")
-        << "  row : " << (aSingleRef.IsRowDeleted()?"yes":"no") << "  sheet: "
-        << (aSingleRef.IsTabDeleted()?"yes":"no") << endl;
-    cout << "  absolute pos column: " << aSingleRef.nCol << "  row: " << aSingleRef.nRow << "  sheet: " << aSingleRef.nTab << endl;
-    cout << "  relative pos column: " << aSingleRef.nRelCol << "  row: " << aSingleRef.nRelRow << "  sheet: " << aSingleRef.nRelTab << endl;
+    aSingleRef.Dump();
 }
 #endif
 
@@ -777,25 +770,7 @@ bool ScDoubleRefToken::operator==( const FormulaToken& r ) const
 void ScDoubleRefToken::Dump() const
 {
     cout << "-- ScDoubleRefToken" << endl;
-    cout << "  ref 1" << endl;
-    cout << "    address type column: " << (aDoubleRef.Ref1.IsColRel()?"relative":"absolute")
-        << "  row: " << (aDoubleRef.Ref1.IsRowRel()?"relative":"absolute")
-        << "  sheet: " << (aDoubleRef.Ref1.IsTabRel()?"relative":"absolute") << endl;
-    cout << "    deleted column: " << (aDoubleRef.Ref1.IsColDeleted()?"yes":"no")
-        << "  row: " << (aDoubleRef.Ref1.IsRowDeleted()?"yes":"no")
-        << "  sheet: " << (aDoubleRef.Ref1.IsTabDeleted()?"yes":"no") << endl;
-    cout << "    absolute pos column: " << aDoubleRef.Ref1.nCol << "  row: " << aDoubleRef.Ref1.nRow << "  sheet: " << aDoubleRef.Ref1.nTab << endl;
-    cout << "    relative pos column: " << aDoubleRef.Ref1.nRelCol << "  row: " << aDoubleRef.Ref1.nRelRow << "  sheet: " << aDoubleRef.Ref1.nRelTab << endl;
-
-    cout << "  ref 2" << endl;
-    cout << "    address type column: " << (aDoubleRef.Ref2.IsColRel()?"relative":"absolute")
-        << "  row: " << (aDoubleRef.Ref2.IsRowRel()?"relative":"absolute")
-        << "  sheet: " << (aDoubleRef.Ref2.IsTabRel()?"relative":"absolute") << endl;
-    cout << "    deleted column: " << (aDoubleRef.Ref2.IsColDeleted()?"yes":"no")
-        << "  row: " << (aDoubleRef.Ref2.IsRowDeleted()?"yes":"no")
-        << "  sheet: " << (aDoubleRef.Ref2.IsTabDeleted()?"yes":"no") << endl;
-    cout << "    absolute pos column: " << aDoubleRef.Ref2.nCol << "  row: " << aDoubleRef.Ref2.nRow << "  sheet: " << aDoubleRef.Ref2.nTab << endl;
-    cout << "    relative pos column: " << aDoubleRef.Ref2.nRelCol << "  row: " << aDoubleRef.Ref2.nRelRow << "  sheet: " << aDoubleRef.Ref2.nRelTab << endl;
+    aDoubleRef.Dump();
 }
 #endif
 
