@@ -21,41 +21,34 @@
 
 #include "xmlfilterdialogstrings.hrc"
 #include "xmlfiltertabpagebasic.hxx"
-#include "xmlfiltertabpagebasic.hrc"
 #include "xmlfiltersettingsdialog.hxx"
 #include "xmlfilterhelpids.hrc"
 
 XMLFilterTabPageBasic::XMLFilterTabPageBasic( Window* pParent, ResMgr& rResMgr ) :
-    TabPage( pParent, ResId( RID_XML_FILTER_TABPAGE_BASIC, rResMgr ) ),
-    maFTFilterName( this, ResId( FT_XML_FILTER_NAME, rResMgr ) ),
-    maEDFilterName( this, ResId( ED_XML_FILTER_NAME, rResMgr ) ),
-    maFTApplication( this, ResId( FT_XML_APPLICATION, rResMgr ) ),
-    maCBApplication( this, ResId( CB_XML_APPLICATION, rResMgr ) ),
-    maFTInterfaceName( this, ResId( FT_XML_INTERFACE_NAME, rResMgr ) ),
-    maEDInterfaceName( this, ResId( ED_XML_INTERFACE_NAME, rResMgr ) ),
-    maFTExtension( this, ResId( FT_XML_EXTENSION, rResMgr ) ),
-    maEDExtension( this, ResId( ED_XML_EXTENSION, rResMgr ) ),
-    maFTDescription( this, ResId( FT_XML_DESCRIPTION, rResMgr ) ),
-    maEDDescription( this, ResId( ED_XML_DESCRIPTION, rResMgr ) )
+    TabPage( pParent, "XmlFilterTabPageGeneral","filter/ui/xmlfiltertabpagegeneral.ui")
 {
-    maCBApplication.SetHelpId( HID_XML_FILTER_APPLICATION );
-    maEDDescription.SetHelpId( HID_XML_FILTER_DESCRIPTION );
+    get(m_pEDFilterName,   "filtername");
+    get(m_pCBApplication,  "application");
+    get(m_pEDInterfaceName,"interfacename");
+    get(m_pEDExtension,    "extension");
+    get(m_pEDDescription,  "description");
 
-    FreeResource();
+    m_pCBApplication->SetHelpId( HID_XML_FILTER_APPLICATION );
+    m_pEDDescription->SetHelpId( HID_XML_FILTER_DESCRIPTION );
+
 
     std::vector< application_info_impl* >& rInfos = getApplicationInfos();
     std::vector< application_info_impl* >::iterator aIter( rInfos.begin() );
     while( aIter != rInfos.end() )
     {
         OUString aEntry( (*aIter++)->maDocumentUIName );
-        maCBApplication.InsertEntry( aEntry );
+        m_pCBApplication->InsertEntry( aEntry );
     }
 }
 
 XMLFilterTabPageBasic::~XMLFilterTabPageBasic()
 {
 }
-
 static OUString checkExtensions( const OUString& rExtensions )
 {
     const sal_Unicode* pSource = rExtensions.getStr();
@@ -86,19 +79,19 @@ bool XMLFilterTabPageBasic::FillInfo( filter_info_impl* pInfo )
 {
     if( pInfo )
     {
-        if( !maEDFilterName.GetText().isEmpty() )
-            pInfo->maFilterName = maEDFilterName.GetText();
+        if( !m_pEDFilterName->GetText().isEmpty() )
+            pInfo->maFilterName = m_pEDFilterName->GetText();
 
-        if( !maCBApplication.GetText().isEmpty() )
-            pInfo->maDocumentService = maCBApplication.GetText();
+        if( !m_pCBApplication->GetText().isEmpty() )
+            pInfo->maDocumentService = m_pCBApplication->GetText();
 
-        if( !maEDInterfaceName.GetText().isEmpty() )
-            pInfo->maInterfaceName = maEDInterfaceName.GetText();
+        if( !m_pEDInterfaceName->GetText().isEmpty() )
+            pInfo->maInterfaceName = m_pEDInterfaceName->GetText();
 
-        if( !maEDExtension.GetText().isEmpty() )
-            pInfo->maExtension = checkExtensions( maEDExtension.GetText() );
+        if( !m_pEDExtension->GetText().isEmpty() )
+            pInfo->maExtension = checkExtensions( m_pEDExtension->GetText() );
 
-        pInfo->maComment = string_encode( maEDDescription.GetText() );
+        pInfo->maComment = string_encode( m_pEDDescription->GetText() );
 
         if( !pInfo->maDocumentService.isEmpty() )
         {
@@ -125,18 +118,18 @@ void XMLFilterTabPageBasic::SetInfo(const filter_info_impl* pInfo)
 {
     if( pInfo )
     {
-        maEDFilterName.SetText( string_decode(pInfo->maFilterName) );
+        m_pEDFilterName->SetText( string_decode(pInfo->maFilterName) );
         /*
         if( pInfo->maDocumentService.getLength() )
             maCBApplication.SetText( getApplicationUIName( pInfo->maDocumentService ) );
         */
         if( !pInfo->maExportService.isEmpty() )
-            maCBApplication.SetText( getApplicationUIName( pInfo->maExportService ) );
+            m_pCBApplication->SetText( getApplicationUIName( pInfo->maExportService ) );
         else
-            maCBApplication.SetText( getApplicationUIName( pInfo->maImportService ) );
-        maEDInterfaceName.SetText( string_decode(pInfo->maInterfaceName) );
-        maEDExtension.SetText( pInfo->maExtension );
-        maEDDescription.SetText( string_decode( pInfo->maComment ) );
+            m_pCBApplication->SetText( getApplicationUIName( pInfo->maImportService ) );
+        m_pEDInterfaceName->SetText( string_decode(pInfo->maInterfaceName) );
+        m_pEDExtension->SetText( pInfo->maExtension );
+        m_pEDDescription->SetText( string_decode( pInfo->maComment ) );
     }
 }
 
