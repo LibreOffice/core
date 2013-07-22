@@ -22,7 +22,6 @@
 // ---- needed as long as we have no contexts for components ---
 #include <vcl/svapp.hxx>
 //---------------------------------------------------
-#include <comphelper/configurationhelper.hxx>
 #include <osl/thread.h>
 #include <com/sun/star/util/XMacroExpander.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
