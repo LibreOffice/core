@@ -834,22 +834,10 @@ AbstractScFillSeriesDlg* ScAbstractDialogFactory_Impl::CreateScFillSeriesDlg( Wi
                                                             String          aStartStr,
                                                             double          fStep,
                                                             double          fMax,
-                                                            sal_uInt16          nPossDir,
-                                                            int nId)
+                                                            sal_uInt16          nPossDir)
 {
-    ScFillSeriesDlg * pDlg=NULL;
-    switch ( nId )
-    {
-        case RID_SCDLG_FILLSERIES :
-            pDlg = new ScFillSeriesDlg( pParent, rDocument,eFillDir, eFillCmd,eFillDateCmd, aStartStr,fStep,fMax,nPossDir);
-            break;
-        default:
-            break;
-    }
-
-    if ( pDlg )
+    ScFillSeriesDlg * pDlg = new ScFillSeriesDlg( pParent, rDocument,eFillDir, eFillCmd,eFillDateCmd, aStartStr,fStep,fMax,nPossDir);
         return new AbstractScFillSeriesDlg_Impl( pDlg );
-    return 0;
 }
 
 AbstractScGroupDlg* ScAbstractDialogFactory_Impl::CreateAbstractScGroupDlg( Window* pParent,

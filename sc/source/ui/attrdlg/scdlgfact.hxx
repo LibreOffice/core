@@ -449,8 +449,7 @@ public:
                                                             String          aStartStr,
                                                             double          fStep,
                                                             double          fMax,
-                                                            sal_uInt16          nPossDir,
-                                                            int nId);
+                                                            sal_uInt16          nPossDir);
     virtual AbstractScGroupDlg * CreateAbstractScGroupDlg( Window* pParent, //add for ScGroupDlg
                                                             bool bUnGroup = false,
                                                             bool bRows = true);

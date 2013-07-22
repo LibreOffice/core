@@ -76,28 +76,7 @@
 #define LB_ENTRYLIST    11
 
 // Row fillers
-#define FL_DIRECTION    1
-#define BTN_LEFT        2
-#define BTN_RIGHT       3
-#define BTN_TOP         4
-#define BTN_BOTTOM      5
-#define FL_TYPE         11
-#define BTN_ARITHMETIC  12
-#define BTN_GEOMETRIC   13
-#define BTN_DATE        14
-#define BTN_AUTOFILL    15
-#define FL_TIME_UNIT    21
-#define BTN_DAY         22
-#define BTN_DAY_OF_WEEK 23
-#define BTN_MONTH       24
-#define BTN_YEAR        25
-#define FT_INCREMENT    30
-#define ED_INCREMENT    39
-#define FT_END_VALUE    40
-#define ED_END_VALUES   49
 #define STR_VALERR      50
-#define FT_START_VALUE  51
-#define ED_START_VALUES 52
 
 // Auto format
 #define LB_FORMAT           1

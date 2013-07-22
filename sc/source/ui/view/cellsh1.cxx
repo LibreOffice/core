@@ -706,8 +706,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                                                             *pDoc,
                                                             eFillDir, eFillCmd, eFillDateCmd,
                                                             aStartStr, fIncVal, fMaxVal,
-                                                            nPossDir,
-                                                            RID_SCDLG_FILLSERIES);
+                                                            nPossDir);
                     OSL_ENSURE(pDlg, "Dialog create fail!");
 
                     if ( nStartCol != nEndCol && nStartRow != nEndRow )
