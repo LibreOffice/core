@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include "ModuleHelper.hxx"
-#include <comphelper/configurationhelper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <osl/thread.h>
 #include <com/sun/star/util/XMacroExpander.hpp>
