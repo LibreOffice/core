@@ -51,7 +51,7 @@ struct RefUpdateContext
 struct RefUpdateResult
 {
     bool mbValueChanged;
-    bool mbRangeSizeModified;
+    bool mbReferenceModified;
 
     RefUpdateResult();
     RefUpdateResult(const RefUpdateResult& r);

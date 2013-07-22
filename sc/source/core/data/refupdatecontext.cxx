@@ -24,9 +24,9 @@ bool RefUpdateContext::isDeleted() const
     return (meMode == URM_INSDEL) && (mnColDelta < 0 || mnRowDelta < 0 || mnTabDelta < 0);
 }
 
-RefUpdateResult::RefUpdateResult() : mbValueChanged(false), mbRangeSizeModified(false) {}
+RefUpdateResult::RefUpdateResult() : mbValueChanged(false), mbReferenceModified(false) {}
 RefUpdateResult::RefUpdateResult(const RefUpdateResult& r) :
-    mbValueChanged(r.mbValueChanged), mbRangeSizeModified(r.mbRangeSizeModified) {}
+    mbValueChanged(r.mbValueChanged), mbReferenceModified(r.mbReferenceModified) {}
 
 }
 

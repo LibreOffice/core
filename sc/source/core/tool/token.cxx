@@ -2392,7 +2392,10 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnShift( const sc::RefUpdateCon
                 }
 
                 if (rCxt.maRange.In(aAbs))
+                {
                     aAbs.Move(rCxt.mnColDelta, rCxt.mnRowDelta, rCxt.mnTabDelta);
+                    aRes.mbReferenceModified = true;
+                }
 
                 rRef.SetAddress(aAbs, aNewPos);
             }
@@ -2419,7 +2422,7 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnShift( const sc::RefUpdateCon
                             // The reference range has been shrunk.
                             rRef.SetRange(aAbs, aNewPos);
                             aRes.mbValueChanged = true;
-                            aRes.mbRangeSizeModified = true;
+                            aRes.mbReferenceModified = true;
                             break;
                         }
                     }
@@ -2432,7 +2435,7 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnShift( const sc::RefUpdateCon
                         // The reference range has been expanded.
                         rRef.SetRange(aAbs, aNewPos);
                         aRes.mbValueChanged = true;
-                        aRes.mbRangeSizeModified = true;
+                        aRes.mbReferenceModified = true;
                         break;
                     }
 
@@ -2441,13 +2444,16 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnShift( const sc::RefUpdateCon
                         // The reference range has been expanded on the edge.
                         rRef.SetRange(aAbs, aNewPos);
                         aRes.mbValueChanged = true;
-                        aRes.mbRangeSizeModified = true;
+                        aRes.mbReferenceModified = true;
                         break;
                     }
                 }
 
                 if (rCxt.maRange.In(aAbs))
+                {
                     aAbs.Move(rCxt.mnColDelta, rCxt.mnRowDelta, rCxt.mnTabDelta);
+                    aRes.mbReferenceModified = true;
+                }
                 else if (rCxt.maRange.Intersects(aAbs))
                 {
                     // Part of the referenced range is being shifted. This

@@ -2274,11 +2274,12 @@ bool ScFormulaCell::UpdateReferenceOnShift(
     {
         // Update cell or range references.
         sc::RefUpdateResult aRes = pCode->AdjustReferenceOnShift(rCxt, aOldPos);
-        bRangeModified = aRes.mbRangeSizeModified;
+        bRangeModified = aRes.mbReferenceModified;
         bValChanged = aRes.mbValueChanged;
     }
 
-    bCellStateChanged |= bValChanged;
+    if (bValChanged || bRangeModified)
+        bCellStateChanged = true;
 
     if (bOnRefMove)
         // Cell may reference itself, e.g. ocColumn, ocRow without parameter
