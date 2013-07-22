@@ -8,8 +8,8 @@
  *
  */
 
-#ifndef ANOVA_ONE_FACTOR_DIALOG_HXX
-#define ANOVA_ONE_FACTOR_DIALOG_HXX
+#ifndef ANALYSIS_OF_VARIANCE_DIALOG_HXX
+#define ANALYSIS_OF_VARIANCE_DIALOG_HXX
 
 #include "global.hxx"
 #include "address.hxx"
