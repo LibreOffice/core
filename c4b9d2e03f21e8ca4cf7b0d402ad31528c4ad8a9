@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXn//+Qg\u003d",
+        "filename": "filter/source/xsltdialog/xmlfiltertabpagebasic.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000105
+      },
+      "writtenOn": "2013-07-22T11:45:40Z",
+      "side": 1,
+      "message": "I am not sure if it\u0027s correct to remove rResMgr argument.",
+      "revId": "c4b9d2e03f21e8ca4cf7b0d402ad31528c4ad8a9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//+QY\u003d",
+        "filename": "filter/uiconfig/ui/xmlfiltertabpagegeneral.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1000105
+      },
+      "writtenOn": "2013-07-22T11:45:40Z",
+      "side": 1,
+      "message": "VclComboBoxNumeric works great but is it the correct one?",
+      "revId": "c4b9d2e03f21e8ca4cf7b0d402ad31528c4ad8a9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
