@@ -115,11 +115,9 @@ $(eval $(call gb_Rdb_add_components,services,\
 	$(if $(ENABLE_LPSOLVE), \
 		sccomp/source/solver/solver \
 	) \
-	$(if $(filter-out IOS,$(OS)), \
-		writerfilter/util/writerfilter \
-		writerperfect/util/wpftwriter \
-		writerperfect/util/wpftdraw \
-	) \
+	writerfilter/util/writerfilter \
+	writerperfect/util/wpftwriter \
+	writerperfect/util/wpftdraw \
 	$(if $(filter MACOSX,$(OS)), \
 		$(if $(filter-out X86_64,$(CPUNAME)), \
 			avmedia/source/quicktime/avmediaQuickTime \
