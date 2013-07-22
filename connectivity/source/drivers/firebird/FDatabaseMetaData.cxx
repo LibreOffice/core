@@ -965,9 +965,9 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getColumns(
         aCurrentRow.push_back(new ORowSetValueDecorator());
         // 9. Decimal Digits
         // TODO: implement
-        aCurrentRow.push_back(new ORowSetValueDecorator(0));
+        aCurrentRow.push_back(new ORowSetValueDecorator(sal_Int32(0)));
         // 10. Radix
-        aCurrentRow.push_back(new ORowSetValueDecorator(10));
+        aCurrentRow.push_back(new ORowSetValueDecorator(sal_Int32(10)));
         // 11. Nullable
         if (xRow->getShort(9))
         {
@@ -1008,11 +1008,11 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getColumns(
         }
         else if (aType == SQL_VARYING)
         {
-            aCurrentRow.push_back(new ORowSetValueDecorator(32767));
+            aCurrentRow.push_back(new ORowSetValueDecorator(sal_Int32(32767)));
         }
         else
         {
-            aCurrentRow.push_back(new ORowSetValueDecorator(0));
+            aCurrentRow.push_back(new ORowSetValueDecorator(sal_Int32(0)));
         }
         // 17. Index in column
         {
