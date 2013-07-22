@@ -19,6 +19,9 @@
 
 #include <basic/codecompletecache.hxx>
 
+const OUString CodeCompleteDataCache::GLOB_KEY = OUString("global key");
+const OUString CodeCompleteDataCache::NOT_FOUND = OUString("not found");
+
 std::ostream& operator<< (std::ostream& aStream, const CodeCompleteDataCache& aCache)
 {
     for( CodeCompleteVarScopes::const_iterator aIt = aCache.aVarScopes.begin(); aIt != aCache.aVarScopes.end(); ++aIt )
@@ -52,12 +55,12 @@ OUString CodeCompleteDataCache::GetVariableType( const OUString& sVarName, const
 {
     CodeCompleteVarScopes::const_iterator aIt = aVarScopes.find( sProcName );
     if( aIt == aVarScopes.end() )//procedure does not exist
-        return NOT_FOUND;
+        return CodeCompleteDataCache::NOT_FOUND;
 
     CodeCompleteVarTypes aVarTypes = aIt->second;
     CodeCompleteVarTypes::const_iterator aOtherIt = aVarTypes.find( sVarName );
     if( aOtherIt == aVarTypes.end() )
-        return NOT_FOUND;
+        return CodeCompleteDataCache::NOT_FOUND;
     else
         return aOtherIt->second;
 }

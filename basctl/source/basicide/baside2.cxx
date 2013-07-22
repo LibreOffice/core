@@ -1009,6 +1009,11 @@ void ModulWindow::ExecuteCommand (SfxRequest& rReq)
             rLayout.BasicRemoveWatch();
         }
         break;
+        case SID_BASICIDE_CODECOMPLETITION:
+        {
+            std::cerr << "code completition enabled" << std::endl;
+        }
+        break;
         case SID_CUT:
         {
             if ( !IsReadOnly() )
