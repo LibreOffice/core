@@ -18,6 +18,7 @@
  */
 
 #include <basic/codecompletecache.hxx>
+#include <iostream>
 
 const OUString CodeCompleteDataCache::GLOB_KEY = OUString("global key");
 const OUString CodeCompleteDataCache::NOT_FOUND = OUString("not found");
