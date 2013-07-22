@@ -103,7 +103,8 @@ namespace connectivity
             virtual ~OStatement_Base();
             int prepareAndDescribeStatement(const OUString& sqlIn,
                                                   isc_stmt_handle& aStatementHandle,
-                                                  XSQLDA*& pOutSqlda);
+                                                  XSQLDA*& pOutSqlda,
+                                                  XSQLDA* pInSqlda=0);
             ::rtl::OUString sanitizeSqlString(const OUString& sqlIn);
         public:
 

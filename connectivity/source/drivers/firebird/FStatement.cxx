@@ -36,8 +36,7 @@
 #include "FStatement.hxx"
 #include "FConnection.hxx"
 #include "FResultSet.hxx"
-#include <propertyids.hxx>
-#include <TConnection.hxx>
+#include "Util.hxx"
 
 #include <ibase.h>
 
@@ -45,7 +44,9 @@
 #include <cppuhelper/typeprovider.hxx>
 #include <osl/diagnose.h>
 #include <osl/thread.h>
+#include <propertyids.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <TConnection.hxx>
 
 #include <com/sun/star/sdbc/ResultSetConcurrency.hpp>
 #include <com/sun/star/sdbc/ResultSetType.hpp>
@@ -215,7 +216,8 @@ OUString OStatement_Base::sanitizeSqlString(const OUString& sqlIn)
 
 int OStatement_Base::prepareAndDescribeStatement(const OUString& sqlIn,
                                                  isc_stmt_handle& aStatementHandle,
-                                                 XSQLDA*& pOutSqlda)
+                                                 XSQLDA*& pOutSqlda,
+                                                 XSQLDA* pInSqlda)
 {
     MutexGuard aGuard(m_pConnection->getMutex());
 
@@ -247,7 +249,7 @@ int OStatement_Base::prepareAndDescribeStatement(const OUString& sqlIn,
                                 0,
                                 OUStringToOString(sql, RTL_TEXTENCODING_UTF8).getStr(),
                                 1,
-                                NULL);
+                                pInSqlda);
     }
 
     if (aErr)
@@ -280,7 +282,6 @@ int OStatement_Base::prepareAndDescribeStatement(const OUString& sqlIn,
                                  1,
                                  pOutSqlda);
     }
-    XSQLVAR* pVar = pOutSqlda->sqlvar;
 
     // Process each XSQLVAR parameter structure in the output XSQLDA
     if (aErr)
@@ -290,68 +291,7 @@ int OStatement_Base::prepareAndDescribeStatement(const OUString& sqlIn,
     }
     else
     {
-        // TODO: confirm the sizings below.
-        for (int i=0; i < pOutSqlda->sqld; i++, pVar++)
-        {
-            int dtype = (pVar->sqltype & ~1); /* drop flag bit for now */
-            switch(dtype) {
-            case SQL_TEXT:
-                pVar->sqldata = (char *)malloc(sizeof(char)*pVar->sqllen);
-                break;
-            case SQL_VARYING:
-                pVar->sqltype = SQL_TEXT;
-                pVar->sqldata = (char *)malloc(sizeof(char)*pVar->sqllen);
-                break;
-            case SQL_SHORT:
-                pVar->sqldata = (char *)malloc(sizeof(char)*pVar->sqllen);
-                break;
-            case SQL_LONG:
-                pVar->sqldata = (char *)malloc(sizeof(long));
-                break;
-            case SQL_FLOAT:
-                pVar->sqldata = (char *)malloc(sizeof(double));
-                break;
-            case SQL_DOUBLE:
-                pVar->sqldata = (char *)malloc(sizeof(double));
-                break;
-            case SQL_D_FLOAT:
-                pVar->sqldata = (char *)malloc(sizeof(double));
-                break;
-            case SQL_TIMESTAMP:
-                pVar->sqldata = (char *)malloc(sizeof(time_t));
-                break;
-            case SQL_BLOB:
-                pVar->sqldata = (char*) malloc(sizeof(ISC_QUAD));
-                break;
-            case SQL_ARRAY:
-                assert(false); // TODO: implement
-                break;
-            case SQL_TYPE_TIME:
-                assert(false); // TODO: implement
-                break;
-            case SQL_TYPE_DATE:
-                assert(false); // TODO: implement
-                break;
-            case SQL_INT64:
-                pVar->sqldata = (char *)malloc(sizeof(int));
-                break;
-            case SQL_NULL:
-                assert(false); // TODO: implement
-                break;
-            case SQL_QUAD:
-                assert(false); // TODO: implement
-                break;
-            default:
-                SAL_WARN("connectivity.firebird", "Unknown type: " << dtype);
-                assert(false);
-                break;
-            }
-            if (pVar->sqltype & 1)
-            {
-                /* allocate variable to hold NULL status */
-                pVar->sqlind = (short *)malloc(sizeof(short));
-            }
-        }
+        mallocSQLVAR(pOutSqlda);
     }
 
     return aErr;

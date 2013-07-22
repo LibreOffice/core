@@ -9,8 +9,6 @@
 
 #include "Util.hxx"
 
-#include <ibase.h>
-
 using namespace ::connectivity;
 
 using namespace ::rtl;
@@ -146,6 +144,73 @@ short firebird::getFBTypeFromBlrType(short blrType)
         // look up blr_* for a list, e.g. blr_domain_name, blr_not_nullable etc.
         assert(false);
         return 0;
+    }
+}
+
+void firebird::mallocSQLVAR(XSQLDA* pSqlda)
+{
+    // TODO: confirm the sizings below.
+    XSQLVAR* pVar = pSqlda->sqlvar;
+    for (int i=0; i < pSqlda->sqld; i++, pVar++)
+    {
+        int dtype = (pVar->sqltype & ~1); /* drop flag bit for now */
+        switch(dtype) {
+        case SQL_TEXT:
+            pVar->sqldata = (char *)malloc(sizeof(char)*pVar->sqllen);
+            break;
+        case SQL_VARYING:
+            pVar->sqltype = SQL_TEXT;
+            pVar->sqldata = (char *)malloc(sizeof(char)*pVar->sqllen);
+            break;
+        case SQL_SHORT:
+            pVar->sqldata = (char *)malloc(sizeof(short));
+            break;
+        case SQL_LONG:
+            pVar->sqldata = (char *)malloc(sizeof(long));
+            break;
+        case SQL_FLOAT:
+            pVar->sqldata = (char *)malloc(sizeof(double));
+            break;
+        case SQL_DOUBLE:
+            pVar->sqldata = (char *)malloc(sizeof(double));
+            break;
+        case SQL_D_FLOAT:
+            pVar->sqldata = (char *)malloc(sizeof(double));
+            break;
+        case SQL_TIMESTAMP:
+            pVar->sqldata = (char *)malloc(sizeof(time_t));
+            break;
+        case SQL_BLOB:
+            pVar->sqldata = (char*) malloc(sizeof(ISC_QUAD));
+            break;
+        case SQL_ARRAY:
+            assert(false); // TODO: implement
+            break;
+        case SQL_TYPE_TIME:
+            assert(false); // TODO: implement
+            break;
+        case SQL_TYPE_DATE:
+            assert(false); // TODO: implement
+            break;
+        case SQL_INT64:
+            pVar->sqldata = (char *)malloc(sizeof(int));
+            break;
+        case SQL_NULL:
+            assert(false); // TODO: implement
+            break;
+        case SQL_QUAD:
+            assert(false); // TODO: implement
+            break;
+        default:
+            SAL_WARN("connectivity.firebird", "Unknown type: " << dtype);
+            assert(false);
+            break;
+        }
+        if (pVar->sqltype & 1)
+        {
+            /* allocate variable to hold NULL status */
+            pVar->sqlind = (short *)malloc(sizeof(short));
+        }
     }
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
