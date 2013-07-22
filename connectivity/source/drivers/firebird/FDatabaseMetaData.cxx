@@ -245,7 +245,7 @@ sal_Int32 SAL_CALL ODatabaseMetaData::getMaxIndexLength(  ) throw(SQLException, 
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ODatabaseMetaData::supportsNonNullableColumns(  ) throw(SQLException, RuntimeException)
 {
-    return sal_False;
+    return sal_True;
 }
 // -------------------------------------------------------------------------
 OUString SAL_CALL ODatabaseMetaData::getIdentifierQuoteString(  ) throw(SQLException, RuntimeException)
@@ -921,10 +921,12 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getColumns(
 
     while( rs->next() )
     {
-        ODatabaseMetaDataResultSet::ORow aCurrentRow(16);
+        ODatabaseMetaDataResultSet::ORow aCurrentRow(18);
 
-        // 1. TABLE_CAT (catalog) may be null -- thus we omit it.
-        // 2. TABLE_SCHEM (schema) may be null -- thus we omit it.
+        // 1. TABLE_CAT (catalog) may be null
+        aCurrentRow.push_back(new ORowSetValueDecorator());
+        // 2. TABLE_SCHEM (schema) may be null
+        aCurrentRow.push_back(new ORowSetValueDecorator());
         // 3. TABLE_NAME
         {
             OUString aTableName = xRow->getString(1);
@@ -989,23 +991,25 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getColumns(
         }
         // 12. Comments -- may be omitted
         {
+            OUString aDescription;
             uno::Reference< XBlob > xDescriptionBlob = xRow->getBlob(3);
             if (xDescriptionBlob.is())
             {
                 sal_Int32 aBlobLength = (sal_Int32) xDescriptionBlob->length();
-                OUString aDescription = OUString((char*) xDescriptionBlob->getBytes(0, aBlobLength).getArray(),
+                aDescription = OUString((char*) xDescriptionBlob->getBytes(0, aBlobLength).getArray(),
                                         aBlobLength,
                                         RTL_TEXTENCODING_UTF8);
-                aCurrentRow.push_back(new ORowSetValueDecorator(aDescription));
             }
+            aCurrentRow.push_back(new ORowSetValueDecorator(aDescription));
         }
         // 13. Default --  may be omitted.
         {
             uno::Reference< XBlob > xDefaultValueBlob = xRow->getBlob(4);
             if (xDefaultValueBlob.is())
             {
-                // TODO: push to back
+                // TODO: Implement
             }
+            aCurrentRow.push_back(new ORowSetValueDecorator());
         }
         // 14. Unused
         aCurrentRow.push_back(new ORowSetValueDecorator());
@@ -1024,10 +1028,12 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getColumns(
         {
             aCurrentRow.push_back(new ORowSetValueDecorator(sal_Int32(0)));
         }
-        // 17. Index in column
+        // 17. Index of column
         {
             short aColumnNumber = xRow->getShort(5);
-            aCurrentRow.push_back(new ORowSetValueDecorator(aColumnNumber));
+            // Firebird stores column numbers beginning with 0 internally
+            // SDBC expects column numbering to begin with 1.
+            aCurrentRow.push_back(new ORowSetValueDecorator(aColumnNumber + 1));
         }
         // 18. Is nullable
         if (xRow->getShort(9))

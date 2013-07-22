@@ -340,10 +340,10 @@ uno::Reference< XResultSet > SAL_CALL OStatement_Base::executeQuery(const OUStri
     return m_xResultSet;
 }
 
-sal_Bool SAL_CALL OStatement_Base::execute(const OUString& sql) throw(SQLException, RuntimeException)
+sal_Bool SAL_CALL OStatement_Base::execute(const OUString& sqlIn) throw(SQLException, RuntimeException)
 {
     SAL_INFO("connectivity.firebird", "executeQuery(). "
-             "Got called with sql: " << sql);
+             "Got called with sql: " << sqlIn);
 
     MutexGuard aGuard(m_pConnection->getMutex());
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
@@ -352,6 +352,7 @@ sal_Bool SAL_CALL OStatement_Base::execute(const OUString& sql) throw(SQLExcepti
     isc_stmt_handle aStatementHandle = 0;
     int aErr = 0;
 
+    const OUString sql = sanitizeSqlString(sqlIn);
 
     aErr = prepareAndDescribeStatement(sql,
                                        aStatementHandle,
