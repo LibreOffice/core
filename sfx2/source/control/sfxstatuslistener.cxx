@@ -48,11 +48,7 @@ using namespace ::com::sun::star::frame::status;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::util;
 
-SFX_IMPL_XINTERFACE_3( SfxStatusListener, OWeakObject, ::com::sun::star::lang::XComponent, ::com::sun::star::frame::XStatusListener, ::com::sun::star::lang::XEventListener )
-SFX_IMPL_XTYPEPROVIDER_3( SfxStatusListener, ::com::sun::star::lang::XComponent, ::com::sun::star::frame::XStatusListener, ::com::sun::star::lang::XEventListener )
-
 SfxStatusListener::SfxStatusListener( const Reference< XDispatchProvider >& rDispatchProvider, sal_uInt16 nSlotId, const OUString& rCommand ) :
-    cppu::OWeakObject(),
     m_nSlotID( nSlotId ),
     m_xDispatchProvider( rDispatchProvider )
 {

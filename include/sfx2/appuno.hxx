@@ -39,21 +39,20 @@
 #include <com/sun/star/uno/Any.h>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Sequence.hxx>
-#include <cppuhelper/weak.hxx>
 #include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/implbase4.hxx>
+#include <cppuhelper/implbase5.hxx>
 
 #include <tools/errcode.hxx>
 #include <sfx2/sfxuno.hxx>
 
 class SfxObjectShell;
-class SfxMacroLoader  :     public ::com::sun::star::frame::XDispatchProvider,
-                            public ::com::sun::star::frame::XNotifyingDispatch,
-                            public ::com::sun::star::frame::XSynchronousDispatch,
-                            public ::com::sun::star::lang::XTypeProvider,
-                            public ::com::sun::star::lang::XServiceInfo,
-                            public ::com::sun::star::lang::XInitialization,
-                            public ::cppu::OWeakObject
+class SfxMacroLoader  :     public ::cppu::WeakImplHelper5<
+                                       css::frame::XDispatchProvider,
+                                       css::frame::XNotifyingDispatch,
+                                       css::frame::XSynchronousDispatch,
+                                       css::lang::XServiceInfo,
+                                       css::lang::XInitialization >
 {
     ::com::sun::star::uno::WeakReference < ::com::sun::star::frame::XFrame > m_xFrame;
 
@@ -61,7 +60,7 @@ class SfxMacroLoader  :     public ::com::sun::star::frame::XDispatchProvider,
 
 public:
     // XInterface, XTypeProvider, XServiceInfo
-    SFX_DECL_XINTERFACE_XTYPEPROVIDER_XSERVICEINFO
+    SFX_DECL_XSERVICEINFO
 
     SfxMacroLoader( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& )
     {}

@@ -26,7 +26,7 @@
 #include <com/sun/star/ui/XUIElement.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <com/sun/star/frame/XLayoutManagerListener.hpp>
-#include <cppuhelper/weak.hxx>
+#include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/propshlp.hxx>
 
 #include <rtl/ustring.hxx>
@@ -172,16 +172,13 @@ struct SfxObjectBarList_Impl
 
 //--------------------------------------------------------------------
 
-class LayoutManagerListener : public ::com::sun::star::frame::XLayoutManagerListener,
-                              public ::com::sun::star::lang::XTypeProvider,
-                              public ::com::sun::star::lang::XComponent,
-                              public ::cppu::OWeakObject
+class LayoutManagerListener : public ::cppu::WeakImplHelper2<
+                                         css::frame::XLayoutManagerListener,
+                                         css::lang::XComponent >
 {
     public:
         LayoutManagerListener( SfxWorkWindow* pWrkWin );
         virtual ~LayoutManagerListener();
-
-        SFX_DECL_XINTERFACE_XTYPEPROVIDER
 
         void setFrame( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame );
 

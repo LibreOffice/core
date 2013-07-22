@@ -152,9 +152,6 @@ DBG_NAME(SfxWorkWindow)
 // Help to make changes to the alignment compatible!
 
 
-SFX_IMPL_XINTERFACE_3( LayoutManagerListener, OWeakObject, ::com::sun::star::frame::XLayoutManagerListener, ::com::sun::star::lang::XEventListener, ::com::sun::star::lang::XComponent )
-SFX_IMPL_XTYPEPROVIDER_3( LayoutManagerListener, ::com::sun::star::frame::XLayoutManagerListener, ::com::sun::star::lang::XEventListener, ::com::sun::star::lang::XComponent )
-
 LayoutManagerListener::LayoutManagerListener(
     SfxWorkWindow* pWrkWin ) :
     m_bHasFrame( sal_False ),

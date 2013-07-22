@@ -30,7 +30,7 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/frame/XStatusListener.hpp>
 
-#include <sfx2/sfxuno.hxx>
+#include <cppuhelper/implbase2.hxx>
 
 // Interface for implementations which needs to get notifications about state changes
 class SfxStatusListenerInterface
@@ -42,14 +42,11 @@ class SfxStatusListenerInterface
         ~SfxStatusListenerInterface() {}
 };
 
-class SFX2_DLLPUBLIC SfxStatusListener :
-                          public ::com::sun::star::frame::XStatusListener   ,
-                          public ::com::sun::star::lang::XTypeProvider      ,
-                          public ::com::sun::star::lang::XComponent         ,
-                          public ::cppu::OWeakObject
+class SFX2_DLLPUBLIC SfxStatusListener : public ::cppu::WeakImplHelper2<
+                          css::frame::XStatusListener,
+                          css::lang::XComponent>
 {
     public:
-        SFX_DECL_XINTERFACE_XTYPEPROVIDER
 
         SfxStatusListener( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >& rDispatchProvider, sal_uInt16 nSlotId, const OUString& aCommand );
         virtual ~SfxStatusListener();

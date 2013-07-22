@@ -25,7 +25,7 @@
 #include <svl/itemset.hxx>
 #include <svtools/itemdel.hxx>
 #include <svl/visitem.hxx>
-#include <cppuhelper/weak.hxx>
+#include <cppuhelper/implbase1.hxx>
 #include <comphelper/processfactory.hxx>
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
@@ -42,12 +42,9 @@ using namespace ::com::sun::star::frame::status;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::util;
 
-class SfxQueryStatus_Impl : public ::com::sun::star::frame::XStatusListener ,
-                            public ::com::sun::star::lang::XTypeProvider    ,
-                            public ::cppu::OWeakObject
+class SfxQueryStatus_Impl : public ::cppu::WeakImplHelper1< css::frame::XStatusListener >
 {
     public:
-        SFX_DECL_XINTERFACE_XTYPEPROVIDER
 
         SfxQueryStatus_Impl( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >& rDispatchProvider, sal_uInt16 nSlotId, const OUString& aCommand );
         virtual ~SfxQueryStatus_Impl();
@@ -75,11 +72,7 @@ class SfxQueryStatus_Impl : public ::com::sun::star::frame::XStatusListener ,
         com::sun::star::uno::Reference< com::sun::star::frame::XDispatch >         m_xDispatch;
 };
 
-SFX_IMPL_XINTERFACE_2( SfxQueryStatus_Impl, OWeakObject, ::com::sun::star::frame::XStatusListener, ::com::sun::star::lang::XEventListener )
-SFX_IMPL_XTYPEPROVIDER_2( SfxQueryStatus_Impl, ::com::sun::star::frame::XStatusListener, ::com::sun::star::lang::XEventListener )
-
 SfxQueryStatus_Impl::SfxQueryStatus_Impl( const Reference< XDispatchProvider >& rDispatchProvider, sal_uInt16 nSlotId, const OUString& rCommand ) :
-    cppu::OWeakObject(),
     m_bQueryInProgress( sal_False ),
     m_eState( SFX_ITEM_DISABLED ),
     m_pItem( 0 ),

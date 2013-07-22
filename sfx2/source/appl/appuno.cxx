@@ -1714,8 +1714,6 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, uno::Sequence<b
     rArgs = aSequ;
 }
 
-SFX_IMPL_XINTERFACE_5( SfxMacroLoader, OWeakObject, frame::XDispatchProvider, frame::XNotifyingDispatch, frame::XDispatch, frame::XSynchronousDispatch,lang::XInitialization )
-SFX_IMPL_XTYPEPROVIDER_5( SfxMacroLoader, frame::XDispatchProvider, frame::XNotifyingDispatch, frame::XDispatch, frame::XSynchronousDispatch,lang::XInitialization  )
 SFX_IMPL_XSERVICEINFO( SfxMacroLoader, PROTOCOLHANDLER_SERVICENAME, "com.sun.star.comp.sfx2.SfxMacroLoader" )
 SFX_IMPL_SINGLEFACTORY( SfxMacroLoader )
 

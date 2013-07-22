@@ -89,9 +89,6 @@ const char* URLTypeNames[URLType_COUNT] =
     "double"
 };
 
-SFX_IMPL_XINTERFACE_2( SfxUnoControllerItem, OWeakObject, ::com::sun::star::frame::XStatusListener, ::com::sun::star::lang::XEventListener )
-SFX_IMPL_XTYPEPROVIDER_2( SfxUnoControllerItem, ::com::sun::star::frame::XStatusListener, ::com::sun::star::lang::XEventListener )
-
 SfxUnoControllerItem::SfxUnoControllerItem( SfxControllerItem *pItem, SfxBindings& rBind, const String& rCmd )
     : pCtrlItem( pItem )
     , pBindings( &rBind )
@@ -277,10 +274,6 @@ void SAL_CALL SfxStatusDispatcher::dispatchWithNotification(
 {
 }
 
-SFX_IMPL_XINTERFACE_2( SfxStatusDispatcher, OWeakObject, ::com::sun::star::frame::XNotifyingDispatch, ::com::sun::star::frame::XDispatch )
-SFX_IMPL_XTYPEPROVIDER_2( SfxStatusDispatcher, ::com::sun::star::frame::XNotifyingDispatch, ::com::sun::star::frame::XDispatch )
-//IMPLNAME "com.sun.star.comp.sfx2.StatusDispatcher",
-
 SfxStatusDispatcher::SfxStatusDispatcher()
     : aListeners( aMutex )
 {
@@ -304,10 +297,6 @@ void SAL_CALL SfxStatusDispatcher::removeStatusListener( const ::com::sun::star:
 {
     aListeners.removeInterface( aURL.Complete, aListener );
 }
-
-SFX_IMPL_XINTERFACE_1( SfxOfficeDispatch, SfxStatusDispatcher, ::com::sun::star::lang::XUnoTunnel )
-SFX_IMPL_XTYPEPROVIDER_2( SfxOfficeDispatch, ::com::sun::star::frame::XNotifyingDispatch, ::com::sun::star::lang::XUnoTunnel )
-
 
 //-------------------------------------------------------------------------
 // XUnoTunnel

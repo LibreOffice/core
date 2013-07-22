@@ -28,19 +28,15 @@
 #include <com/sun/star/frame/FeatureStateEvent.hpp>
 #include <com/sun/star/frame/DispatchDescriptor.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <cppuhelper/weak.hxx>
+#include <cppuhelper/implbase1.hxx>
 
 #include <sfx2/bindings.hxx>
 
 #include "slotserv.hxx"
 
-#include <sfx2/sfxuno.hxx>
-
 class SfxControllerItem;
 class SfxDispatcher;
-class BindDispatch_Impl :   public ::com::sun::star::frame::XStatusListener ,
-                            public ::com::sun::star::lang::XTypeProvider    ,
-                            public ::cppu::OWeakObject
+class BindDispatch_Impl :   public ::cppu::WeakImplHelper1< css::frame::XStatusListener >
 {
 friend class SfxStateCache;
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >          xDisp;
@@ -54,8 +50,6 @@ public:
                                 const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > & rDisp,
                                 const ::com::sun::star::util::URL& rURL,
                                 SfxStateCache* pStateCache, const SfxSlot* pSlot );
-
-    SFX_DECL_XINTERFACE_XTYPEPROVIDER
 
     virtual void SAL_CALL           statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event ) throw ( ::com::sun::star::uno::RuntimeException );
     virtual void SAL_CALL           disposing( const ::com::sun::star::lang::EventObject& Source ) throw ( ::com::sun::star::uno::RuntimeException );
