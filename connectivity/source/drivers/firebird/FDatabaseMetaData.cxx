@@ -705,11 +705,17 @@ sal_Int32 SAL_CALL ODatabaseMetaData::getMaxUserNameLength(  ) throw(SQLExceptio
 {
     return 31;
 }
-// -------------------------------------------------------------------------
-sal_Bool SAL_CALL ODatabaseMetaData::supportsResultSetType( sal_Int32 setType ) throw(SQLException, RuntimeException)
+
+sal_Bool SAL_CALL ODatabaseMetaData::supportsResultSetType(sal_Int32 setType)
+    throw(SQLException, RuntimeException)
 {
-    (void) setType;
-    return sal_False;
+    switch (setType)
+    {
+        case ResultSetType::FORWARD_ONLY:
+            return sal_True;
+        default:
+            return sal_False;
+    }
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ODatabaseMetaData::supportsResultSetConcurrency( sal_Int32 setType, sal_Int32 concurrency ) throw(SQLException, RuntimeException)
@@ -1038,11 +1044,11 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getColumns(
         // 18. Is nullable
         if (xRow->getShort(9))
         {
-            aCurrentRow.push_back(new ORowSetValueDecorator("NO"));
+            aCurrentRow.push_back(new ORowSetValueDecorator(OUString("NO")));
         }
         else
         {
-            aCurrentRow.push_back(new ORowSetValueDecorator("YES"));
+            aCurrentRow.push_back(new ORowSetValueDecorator(OUString("YES")));
         }
 
         aResults.push_back(aCurrentRow);
