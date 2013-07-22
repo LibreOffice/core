@@ -1,0 +1,10 @@
+--- foo/foo/foo/boost/random/binomial_distribution.hpp
++++ foo/foo/foo/boost/random/binomial_distribution.hpp
+@@ -278,6 +278,7 @@
+         m = static_cast<IntType>((t_lcl+1)*p_lcl);
+ 
+         if(use_inversion()) {
++            btrd.r = btrd.nr = btrd.npq = btrd.b = btrd.a = btrd.c = btrd.alpha = btrd.v_r = btrd.u_rv_r = 0;
+             q_n = pow((1 - p_lcl), static_cast<RealType>(t_lcl));
+         } else {
+             btrd.r = p_lcl/(1-p_lcl);
