@@ -16,10 +16,14 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
+#include <com/sun/star/container/XNameAccess.hpp>
+#include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 
 
 using namespace svx;
 using namespace ::com::sun::star;
+using namespace com::sun::star::uno;
+using namespace com::sun::star::container;
 
 #define ITEMID_PREF     1
 #define ITEMID_TYPE     2
@@ -79,12 +83,43 @@ void CuiAboutConfigTabPage::InsertEntry( OUString& rProp, OUString&  rStatus, OU
     pPrefBox->Insert( pEntry );
 }
 
-sal_Bool CuiAboutConfigTabPage::FillItems()
+
+void CuiAboutConfigTabPage::FillItems( Reference< XNameAccess >xNameAccess, OUString sPath)
 {
-    return sal_False;
+    sal_Bool bIsLeafNode;
+
+    //Reference< XNameAccess > xNextNameAccess;
+    Reference< XHierarchicalNameAccess > xHierarchicalNameAccess( xNameAccess, uno::UNO_QUERY_THROW );
+    //Reference< XHierarchicalNameAccess > xNextHierarchicalNameAccess;
+
+    uno::Sequence< OUString > seqItems = xNameAccess->getElementNames();
+    for( sal_Int16 i = 0; i < seqItems.getLength(); ++i )
+    {
+        Any aNode = xHierarchicalNameAccess->getByHierarchicalName( seqItems[i] );
+        Reference< XHierarchicalNameAccess >xNextHierarchicalNameAccess( aNode, uno::UNO_QUERY_THROW );
+        Reference< XNameAccess > xNextNameAccess( xNextHierarchicalNameAccess, uno::UNO_QUERY_THROW );
+
+        bIsLeafNode = sal_True;
+
+        try
+        {
+            uno::Sequence < OUString  > seqNext = xNextNameAccess->getElementNames();
+            FillItems( xNextNameAccess, sPath + OUString("/") + seqItems[i] );
+            bIsLeafNode = sal_False;
+
+        }
+        catch( uno::Exception& )
+        {
+        }
+
+        if( bIsLeafNode )
+        {
+            //InsertEntry( sPath, "", "", "");
+        }
+    }
 }
 
-uno::Reference< container::XNameAccess > CuiAboutConfigTabPage::getConfigAccess()
+Reference< XNameAccess > CuiAboutConfigTabPage::getConfigAccess()
 {
     uno::Reference< uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
 
