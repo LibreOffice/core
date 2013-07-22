@@ -184,7 +184,7 @@ sal_Int32 SAL_CALL OResultSetMetaData::getScale(sal_Int32 column)
 sal_Int32 SAL_CALL OResultSetMetaData::isNullable(sal_Int32 column)
     throw(SQLException, RuntimeException)
 {
-    if (*m_pSqlda->sqlvar[column-1].sqlind & 1)
+    if (m_pSqlda->sqlvar[column-1].sqltype & 1)
         return ColumnValue::NULLABLE;
     else
         return ColumnValue::NO_NULLS;
