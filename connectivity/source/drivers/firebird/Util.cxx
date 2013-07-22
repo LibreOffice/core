@@ -101,7 +101,7 @@ OUString firebird::getColumnTypeNameFromFBType(short aType)
     }
 }
 
-short getFBTypeFromBlrType(short blrType)
+short firebird::getFBTypeFromBlrType(short blrType)
 {
     switch (blrType)
     {
