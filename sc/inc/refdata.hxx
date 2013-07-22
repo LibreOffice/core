@@ -64,12 +64,12 @@ struct SC_DLLPUBLIC ScSingleRefData
     inline  void SetTabRel( bool bVal ) { Flags.bTabRel = (bVal ? true : false ); }
     inline  bool IsTabRel() const       { return Flags.bTabRel; }
 
-    inline  void SetColDeleted( bool bVal ) { Flags.bColDeleted = (bVal ? true : false ); }
-    inline  bool IsColDeleted() const       { return Flags.bColDeleted; }
-    inline  void SetRowDeleted( bool bVal ) { Flags.bRowDeleted = (bVal ? true : false ); }
-    inline  bool IsRowDeleted() const       { return Flags.bRowDeleted; }
-    inline  void SetTabDeleted( bool bVal ) { Flags.bTabDeleted = (bVal ? true : false ); }
-    inline  bool IsTabDeleted() const       { return Flags.bTabDeleted; }
+    void SetColDeleted( bool bVal );
+    bool IsColDeleted() const;
+    void SetRowDeleted( bool bVal );
+    bool IsRowDeleted() const;
+    void SetTabDeleted( bool bVal );
+    bool IsTabDeleted() const;
     bool IsDeleted() const;
 
     inline  void SetFlag3D( bool bVal ) { Flags.bFlag3D = (bVal ? true : false ); }

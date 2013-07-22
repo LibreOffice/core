@@ -751,9 +751,14 @@ bool ScSingleRefToken::operator==( const FormulaToken& r ) const
 void ScSingleRefToken::Dump() const
 {
     cout << "-- ScSingleRefToken" << endl;
-    cout << "  relative column: " << aSingleRef.IsColRel() << "  row : " << aSingleRef.IsRowRel() << "  sheet: " << aSingleRef.IsTabRel() << endl;
-    cout << "  absolute column: " << aSingleRef.nCol << "  row: " << aSingleRef.nRow << "  sheet: " << aSingleRef.nTab << endl;
-    cout << "  relative column: " << aSingleRef.nRelCol << "  row: " << aSingleRef.nRelRow << "  sheet: " << aSingleRef.nRelTab << endl;
+    cout << "  address type column: " << (aSingleRef.IsColRel()?"relative":"absolute")
+        << "  row : " << (aSingleRef.IsRowRel()?"relative":"absolute") << "  sheet: "
+        << (aSingleRef.IsTabRel()?"relative":"absolute") << endl;
+    cout << "  deleted column: " << (aSingleRef.IsColDeleted()?"yes":"no")
+        << "  row : " << (aSingleRef.IsRowDeleted()?"yes":"no") << "  sheet: "
+        << (aSingleRef.IsTabDeleted()?"yes":"no") << endl;
+    cout << "  absolute pos column: " << aSingleRef.nCol << "  row: " << aSingleRef.nRow << "  sheet: " << aSingleRef.nTab << endl;
+    cout << "  relative pos column: " << aSingleRef.nRelCol << "  row: " << aSingleRef.nRelRow << "  sheet: " << aSingleRef.nRelTab << endl;
 }
 #endif
 
@@ -773,14 +778,24 @@ void ScDoubleRefToken::Dump() const
 {
     cout << "-- ScDoubleRefToken" << endl;
     cout << "  ref 1" << endl;
-    cout << "    relative column: " << aDoubleRef.Ref1.IsColRel() << "  row: " << aDoubleRef.Ref1.IsRowRel() << "  sheet: " << aDoubleRef.Ref1.IsTabRel() << endl;
-    cout << "    absolute column: " << aDoubleRef.Ref1.nCol << "  row: " << aDoubleRef.Ref1.nRow << "  sheet: " << aDoubleRef.Ref1.nTab << endl;
-    cout << "    relative column: " << aDoubleRef.Ref1.nRelCol << "  row: " << aDoubleRef.Ref1.nRelRow << "  sheet: " << aDoubleRef.Ref1.nRelTab << endl;
+    cout << "    address type column: " << (aDoubleRef.Ref1.IsColRel()?"relative":"absolute")
+        << "  row: " << (aDoubleRef.Ref1.IsRowRel()?"relative":"absolute")
+        << "  sheet: " << (aDoubleRef.Ref1.IsTabRel()?"relative":"absolute") << endl;
+    cout << "    deleted column: " << (aDoubleRef.Ref1.IsColDeleted()?"yes":"no")
+        << "  row: " << (aDoubleRef.Ref1.IsRowDeleted()?"yes":"no")
+        << "  sheet: " << (aDoubleRef.Ref1.IsTabDeleted()?"yes":"no") << endl;
+    cout << "    absolute pos column: " << aDoubleRef.Ref1.nCol << "  row: " << aDoubleRef.Ref1.nRow << "  sheet: " << aDoubleRef.Ref1.nTab << endl;
+    cout << "    relative pos column: " << aDoubleRef.Ref1.nRelCol << "  row: " << aDoubleRef.Ref1.nRelRow << "  sheet: " << aDoubleRef.Ref1.nRelTab << endl;
 
     cout << "  ref 2" << endl;
-    cout << "    relative column: " << aDoubleRef.Ref2.IsColRel() << "  row: " << aDoubleRef.Ref2.IsRowRel() << "  sheet: " << aDoubleRef.Ref2.IsTabRel() << endl;
-    cout << "    absolute column: " << aDoubleRef.Ref2.nCol << "  row: " << aDoubleRef.Ref2.nRow << "  sheet: " << aDoubleRef.Ref2.nTab << endl;
-    cout << "    relative column: " << aDoubleRef.Ref2.nRelCol << "  row: " << aDoubleRef.Ref2.nRelRow << "  sheet: " << aDoubleRef.Ref2.nRelTab << endl;
+    cout << "    address type column: " << (aDoubleRef.Ref2.IsColRel()?"relative":"absolute")
+        << "  row: " << (aDoubleRef.Ref2.IsRowRel()?"relative":"absolute")
+        << "  sheet: " << (aDoubleRef.Ref2.IsTabRel()?"relative":"absolute") << endl;
+    cout << "    deleted column: " << (aDoubleRef.Ref2.IsColDeleted()?"yes":"no")
+        << "  row: " << (aDoubleRef.Ref2.IsRowDeleted()?"yes":"no")
+        << "  sheet: " << (aDoubleRef.Ref2.IsTabDeleted()?"yes":"no") << endl;
+    cout << "    absolute pos column: " << aDoubleRef.Ref2.nCol << "  row: " << aDoubleRef.Ref2.nRow << "  sheet: " << aDoubleRef.Ref2.nTab << endl;
+    cout << "    relative pos column: " << aDoubleRef.Ref2.nRelCol << "  row: " << aDoubleRef.Ref2.nRelRow << "  sheet: " << aDoubleRef.Ref2.nRelTab << endl;
 }
 #endif
 
@@ -2385,11 +2400,11 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnShift( const sc::RefUpdateCon
     FormulaToken** pEnd = p + static_cast<size_t>(nLen);
     for (; p != pEnd; ++p)
     {
-        ScToken* pToken = static_cast<ScToken*>(*p);
-        switch (pToken->GetType())
+        switch ((*p)->GetType())
         {
             case svSingleRef:
             {
+                ScToken* pToken = static_cast<ScToken*>(*p);
                 ScSingleRefData& rRef = pToken->GetSingleRef();
                 ScAddress aAbs = rRef.toAbs(rOldPos);
 
@@ -2409,6 +2424,7 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnShift( const sc::RefUpdateCon
             break;
             case svDoubleRef:
             {
+                ScToken* pToken = static_cast<ScToken*>(*p);
                 ScComplexRefData& rRef = pToken->GetDoubleRef();
                 ScRange aAbs = rRef.toAbs(rOldPos);
 
@@ -2475,12 +2491,86 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnShift( const sc::RefUpdateCon
     return aRes;
 }
 
+namespace {
+
+bool adjustSingleRef( ScSingleRefData& rRef, SCTAB nDelPos, SCTAB nSheets, const ScAddress& rOldPos, const ScAddress& rNewPos )
+{
+    ScAddress aAbs = rRef.toAbs(rOldPos);
+    if (nDelPos <= aAbs.Tab() && aAbs.Tab() < nDelPos + nSheets)
+    {
+        rRef.SetTabDeleted(true);
+        return true;
+    }
+
+    if (nDelPos < aAbs.Tab())
+    {
+        // Reference sheet needs to be adjusted.
+        aAbs.IncTab(-1*nSheets);
+        rRef.SetAddress(aAbs, rNewPos);
+        return true;
+    }
+    else if (rOldPos.Tab() != rNewPos.Tab())
+    {
+        // Cell itself has moved.
+        rRef.SetAddress(aAbs, rNewPos);
+        return true;
+    }
+
+    return false;
+}
+
+}
+
+bool ScTokenArray::AdjustReferenceOnDeletedTab( SCTAB nDelPos, SCTAB nSheets, const ScAddress& rOldPos )
+{
+    bool bRefChanged = false;
+    ScAddress aNewPos = rOldPos;
+    if (nDelPos < rOldPos.Tab())
+        aNewPos.IncTab(-1*nSheets);
+
+    FormulaToken** p = pCode;
+    FormulaToken** pEnd = p + static_cast<size_t>(nLen);
+    for (; p != pEnd; ++p)
+    {
+        switch ((*p)->GetType())
+        {
+            case svSingleRef:
+            {
+                ScToken* pToken = static_cast<ScToken*>(*p);
+                ScSingleRefData& rRef = pToken->GetSingleRef();
+                if (adjustSingleRef(rRef, nDelPos, nSheets, rOldPos, aNewPos))
+                    bRefChanged = true;
+            }
+            break;
+            case svDoubleRef:
+            {
+                ScToken* pToken = static_cast<ScToken*>(*p);
+                ScComplexRefData& rRef = pToken->GetDoubleRef();
+                if (adjustSingleRef(rRef.Ref1, nDelPos, nSheets, rOldPos, aNewPos))
+                    bRefChanged = true;
+                if (adjustSingleRef(rRef.Ref2, nDelPos, nSheets, rOldPos, aNewPos))
+                    bRefChanged = true;
+            }
+            break;
+            default:
+                ;
+        }
+    }
+    return bRefChanged;
+}
+
 #if DEBUG_FORMULA_COMPILER
 void ScTokenArray::Dump() const
 {
     for (sal_uInt16 i = 0; i < nLen; ++i)
     {
-        const ScToken* p = static_cast<const ScToken*>(pCode[i]);
+        const ScToken* p = dynamic_cast<const ScToken*>(pCode[i]);
+        if (!p)
+        {
+            cout << "-- (non ScToken)" << endl;
+            continue;
+        }
+
         p->Dump();
     }
 }

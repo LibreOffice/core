@@ -19,6 +19,36 @@
 
 #include "refdata.hxx"
 
+void ScSingleRefData::SetColDeleted( bool bVal )
+{
+    Flags.bColDeleted = (bVal ? true : false );
+}
+
+bool ScSingleRefData::IsColDeleted() const
+{
+    return Flags.bColDeleted;
+}
+
+void ScSingleRefData::SetRowDeleted( bool bVal )
+{
+    Flags.bRowDeleted = (bVal ? true : false );
+}
+
+bool ScSingleRefData::IsRowDeleted() const
+{
+    return Flags.bRowDeleted;
+}
+
+void ScSingleRefData::SetTabDeleted( bool bVal )
+{
+    Flags.bTabDeleted = (bVal ? true : false );
+}
+
+bool ScSingleRefData::IsTabDeleted() const
+{
+    return Flags.bTabDeleted;
+}
+
 bool ScSingleRefData::IsDeleted() const
 {
     return IsColDeleted() || IsRowDeleted() || IsTabDeleted();

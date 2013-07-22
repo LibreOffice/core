@@ -129,6 +129,17 @@ public:
      */
     sc::RefUpdateResult AdjustReferenceOnShift( const sc::RefUpdateContext& rCxt, const ScAddress& rOldPos );
 
+    /**
+     * Adjust all references on sheet deletion.
+     *
+     * @param nDelPos position of sheet being deleted.
+     * @param nSheets number of sheets to delete.
+     * @param rOldPos position of formula cell prior to the deletion.
+     *
+     * @return true if at least one reference has changed its sheet reference.
+     */
+    bool AdjustReferenceOnDeletedTab( SCTAB nDelPos, SCTAB nSheets, const ScAddress& rOldPos );
+
 #if DEBUG_FORMULA_COMPILER
     void Dump() const;
 #endif

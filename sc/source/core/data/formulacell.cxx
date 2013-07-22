@@ -2644,44 +2644,24 @@ void ScFormulaCell::UpdateInsertTab(SCTAB nTable, SCTAB nNewSheets)
         aPos.IncTab();
 }
 
-bool ScFormulaCell::UpdateDeleteTab(SCTAB nTable, bool bIsMove, SCTAB nSheets)
+bool ScFormulaCell::UpdateDeleteTab(SCTAB nTable, bool /*bIsMove*/, SCTAB nSheets)
 {
-    bool bRefChanged = false;
     bool bPosChanged = ( aPos.Tab() >= nTable + nSheets ? true : false );
     pCode->Reset();
-    if( pCode->GetNextReferenceRPN() && !pDocument->IsClipOrUndo() )
+    if (pDocument->IsClipOrUndo() || !pCode->GetNextReferenceRPN())
     {
-        EndListeningTo( pDocument );
-        // IncTab _after_ EndListeningTo und _before_ Compiler UpdateDeleteTab!
-        if ( bPosChanged )
+        if (bPosChanged)
             aPos.IncTab(-1*nSheets);
-        ScRangeData* pRangeData;
-        ScCompiler aComp(pDocument, aPos, *pCode);
-        aComp.SetGrammar(pDocument->GetGrammar());
-        pRangeData = aComp.UpdateDeleteTab(nTable, bIsMove, false, bRefChanged, nSheets);
-        if (pRangeData) // Exchange Shared Formula with real Formula
-        {
-            pDocument->RemoveFromFormulaTree( this );   // update formula count
-            delete pCode;
-            pCode = pRangeData->GetCode()->Clone();
-            ScCompiler aComp2(pDocument, aPos, *pCode);
-            aComp2.SetGrammar(pDocument->GetGrammar());
-            aComp2.CompileTokenArray();
-            aComp2.MoveRelWrap(pRangeData->GetMaxCol(), pRangeData->GetMaxRow());
-            aComp2.UpdateDeleteTab( nTable, false, false, bRefChanged, nSheets );
-            // If the shared formula contained a named range/formula containing
-            // an absolute reference to a sheet, those have to be readjusted.
-            aComp2.UpdateInsertTab( nTable,true, nSheets );
-            // bRefChanged could have been reset at the last UpdateDeleteTab
-            bRefChanged = true;
-            bCompile = true;
-        }
-        // no StartListeningTo because pTab[nTab] not yet correct!
+        return false;
     }
-    else if ( bPosChanged )
+
+    EndListeningTo( pDocument );
+    // IncTab _after_ EndListeningTo und _before_ Compiler UpdateDeleteTab!
+    ScAddress aOldPos = aPos;
+    if ( bPosChanged )
         aPos.IncTab(-1*nSheets);
 
-    return bRefChanged;
+    return pCode->AdjustReferenceOnDeletedTab(nTable, nSheets, aOldPos);
 }
 
 void ScFormulaCell::UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos, SCTAB nTabNo )
