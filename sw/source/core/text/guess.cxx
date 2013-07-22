@@ -112,6 +112,12 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
         if ( nLineWidth < 0 ) nLineWidth = 0;
     }
 
+    // Decrease the line width with the right and left border width
+    if( rInf.GetFont()->GetRightBorder() )
+        nLineWidth -= rInf.GetFont()->GetRightBorder().get().GetScaledWidth();
+    if( rInf.GetFont()->GetLeftBorder() )
+        nLineWidth -= rInf.GetFont()->GetLeftBorder().get().GetScaledWidth();
+
     const bool bUnbreakableNumberings = rInf.GetTxtFrm()->GetTxtNode()->
             getIDocumentSettingAccess()->get(IDocumentSettingAccess::UNBREAKABLE_NUMBERINGS);
 

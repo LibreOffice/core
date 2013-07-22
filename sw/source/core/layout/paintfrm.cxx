@@ -4561,13 +4561,11 @@ static void
 lcl_MakeBorderLine(SwRect const& rRect,
         bool const isVerticalInModel,
         bool const isLeftOrTopBorderInModel,
+        bool const isVertical,
         SvxBorderLine const& rBorder,
         SvxBorderLine const*const pLeftOrTopNeighbour,
         SvxBorderLine const*const pRightOrBottomNeighbour)
 {
-    // fdo#44010: for vertical text lcl_PaintTopBottomLine produces vertical
-    // borders and lcl_PaintLeftRightLine horizontal ones.
-    bool const isVertical(rRect.Height() > rRect.Width());
     bool const isLeftOrTopBorder((isVerticalInModel == isVertical)
             ? isLeftOrTopBorderInModel
             : (isLeftOrTopBorderInModel != isVertical));
@@ -4713,7 +4711,8 @@ static void lcl_PaintLeftRightLine( const bool         _bLeft,
     if ( lcl_GetLineWidth( pLeftRightBorder ) > 0 )
     {
         lcl_MakeBorderLine(
-            aRect, true, _bLeft, *pLeftRightBorder, pTopBorder, pBottomBorder);
+            aRect, true, _bLeft, aRect.Height() > aRect.Width(),
+            *pLeftRightBorder, pTopBorder, pBottomBorder);
     }
 }
 
@@ -4759,7 +4758,84 @@ static void lcl_PaintTopBottomLine( const bool         _bTop,
     if ( lcl_GetLineWidth( pTopBottomBorder ) > 0 )
     {
         lcl_MakeBorderLine(
-            aRect, false, _bTop, *pTopBottomBorder, rBox.GetLeft(), rBox.GetRight());
+            aRect, false, _bTop, aRect.Height() > aRect.Width(),
+            *pTopBottomBorder, rBox.GetLeft(), rBox.GetRight());
+    }
+}
+
+void PaintCharacterBorder(
+    const SwFont& rFont,
+    const SwRect& rPaintArea )
+{
+    SwRect aAlignedRect(rPaintArea);
+    SwAlignRect(aAlignedRect, pGlobalShell);
+
+    if( rFont.GetTopBorder() )
+    {
+        Point aLeftTop (
+            aAlignedRect.Left(),
+            aAlignedRect.Top());
+        Point aRightBottom (
+            aAlignedRect.Right(),
+            aAlignedRect.Top() + rFont.GetTopBorder().get().GetScaledWidth());
+
+        lcl_MakeBorderLine(
+            SwRect( aLeftTop, aRightBottom),
+            false, true, false,
+            rFont.GetTopBorder().get(),
+            rFont.GetLeftBorder().get_ptr(),
+            rFont.GetRightBorder().get_ptr());
+    }
+
+    if( rFont.GetBottomBorder() )
+    {
+        Point aLeftTop (
+            aAlignedRect.Left(),
+            aAlignedRect.Bottom() - rFont.GetBottomBorder().get().GetScaledWidth());
+        Point aRightBottom (
+            aAlignedRect.Right(),
+            aAlignedRect.Bottom());
+
+        lcl_MakeBorderLine(
+            SwRect( aLeftTop, aRightBottom),
+            false, false, false,
+            rFont.GetBottomBorder().get(),
+            rFont.GetLeftBorder().get_ptr(),
+            rFont.GetRightBorder().get_ptr());
+    }
+
+    if( rFont.GetLeftBorder() )
+    {
+        Point aLeftTop (
+            aAlignedRect.Left(),
+            aAlignedRect.Top());
+        Point aRightBottom (
+            aAlignedRect.Left() + rFont.GetLeftBorder().get().GetScaledWidth(),
+            aAlignedRect.Bottom());
+
+        lcl_MakeBorderLine(
+            SwRect( aLeftTop, aRightBottom),
+            true, true, true,
+            rFont.GetLeftBorder().get(),
+            rFont.GetTopBorder().get_ptr(),
+            rFont.GetBottomBorder().get_ptr());
+    }
+
+    if( rFont.GetRightBorder() )
+    {
+        Point aLeftTop (
+            aAlignedRect.Right() - rFont.GetRightBorder().get().GetScaledWidth(),
+            aAlignedRect.Top());
+        Point aRightBottom (
+            aAlignedRect.Right(),
+            aAlignedRect.Bottom());
+
+        lcl_MakeBorderLine(
+            SwRect( aLeftTop, aRightBottom),
+            true, false, true,
+            rFont.GetRightBorder().get(),
+            rFont.GetTopBorder().get_ptr(),
+            rFont.GetBottomBorder().get_ptr());
     }
 }
 

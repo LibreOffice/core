@@ -559,6 +559,7 @@ void SwTxtPortion::Paint( const SwTxtPaintInfo &rInf ) const
     else if( GetLen() )
     {
         rInf.DrawBackBrush( *this );
+        rInf.DrawBorder( *this );
 
         // do we have to repaint a post it portion?
         if( rInf.OnWin() && pPortion && !pPortion->Width() )

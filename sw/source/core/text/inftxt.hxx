@@ -267,7 +267,7 @@ public:
     inline sal_Unicode GetChar( const sal_Int32 nPos ) const
     { if (m_pTxt && !m_pTxt->isEmpty()) return (*m_pTxt)[ nPos ]; return 0; }
 
-    inline KSHORT      GetTxtHeight() const;
+    KSHORT      GetTxtHeight() const;
 
     //
     // GetTxtSize
@@ -294,7 +294,7 @@ public:
                                            const sal_uInt16 nComp,
                                            xub_StrLen& rExtraCharPos ) const;
 
-    inline KSHORT GetAscent() const;
+    KSHORT GetAscent() const;
 
     inline sal_Int32 GetIdx() const { return m_nIdx; }
     inline void SetIdx( const sal_Int32 nNew ) { m_nIdx = nNew; }
@@ -441,6 +441,8 @@ public:
     void DrawViewOpt( const SwLinePortion &rPor, const MSHORT nWhich ) const;
     inline void DrawBackBrush( const SwLinePortion &rPor ) const
     { /* if( pFnt->GetBackColor() ) */ _DrawBackBrush( rPor ); }
+
+    void DrawBorder( const SwLinePortion &rPor ) const;
 
     void DrawCheckBox( const SwFieldFormPortion &rPor, bool checked) const;
 
@@ -778,19 +780,6 @@ public:
 /*************************************************************************
  * Inline implementations of SwTxtSizeInfo
  *************************************************************************/
-
-inline KSHORT SwTxtSizeInfo::GetAscent() const
-{
-    OSL_ENSURE( GetOut(), "SwTxtSizeInfo::GetAscent() without m_pOut" );
-    return ((SwFont*)GetFont())->GetAscent( m_pVsh, *GetOut() );
-}
-
-inline KSHORT SwTxtSizeInfo::GetTxtHeight() const
-{
-    OSL_ENSURE( GetOut(), "SwTxtSizeInfo::GetTxtHeight() without m_pOut" );
-    return ((SwFont*)GetFont())->GetHeight( m_pVsh, *GetOut() );
-}
-
 inline SwPosSize SwTxtSizeInfo::GetTxtSize( const XubString &rTxt ) const
 {
     return GetTxtSize( m_pOut, 0, rTxt, 0, rTxt.Len(), 0 );

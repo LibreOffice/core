@@ -922,6 +922,12 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
                             }
                         }
                         pPor->SetLen( nOldLen );
+
+                        // Shift the cursor with the right border width
+                        // Note: nX remains positive because GetTxtSize() also include the width of the right border
+                        if( GetInfo().GetFont()->GetRightBorder() && aInf.GetIdx() < nOfst && nOfst < aInf.GetIdx() + pPor->GetLen() )
+                                nX -= GetInfo().GetFont()->GetRightBorder().get().GetScaledWidth();
+
                     }
                     bWidth = sal_False;
                     break;
@@ -1245,6 +1251,7 @@ sal_Bool SwTxtCursor::GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
         if( nOut > 0 )
             pOrig->Pos().X() -= nOut + 10;
     }
+
     return bRet;
 }
 
@@ -1609,6 +1616,11 @@ xub_StrLen SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
                                          aSizeInf.GetTxt(),
                                          aSizeInf.GetIdx(),
                                          pPor->GetLen() );
+
+                // Shift the offset with the left border width
+                if( GetInfo().GetFont()->GetLeftBorder() )
+                    nX = std::max(0, nX - GetInfo().GetFont()->GetLeftBorder().get().GetScaledWidth());
+
                 aDrawInf.SetOfst( nX );
 
                 if ( nSpaceAdd )

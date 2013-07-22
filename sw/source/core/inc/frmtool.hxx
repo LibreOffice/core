@@ -26,6 +26,7 @@
 #include "swcache.hxx"
 // #i96772#
 #include <editeng/lrspitem.hxx>
+#include <swfont.hxx>
 
 class SwPageFrm;
 class SwFlyFrm;
@@ -63,6 +64,9 @@ void SwAlignRect( SwRect &rRect, const ViewShell *pSh );
 // method to align graphic rectangle
 // Created declaration here to avoid <extern> declarations
 void SwAlignGrfRect( SwRect *pGrfRect, const OutputDevice &rOut );
+
+// Paint character border using frame painting code
+void PaintCharacterBorder( const SwFont& rFont, const SwRect& rPaintArea);
 
 // get Fly, if no List is given use the current shell
 // Implementation in feshview.cxx

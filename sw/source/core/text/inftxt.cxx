@@ -67,6 +67,7 @@
 // #i12836# enhanced pdf export
 #include <EnhancedPDFExportHelper.hxx>
 #include <docufld.hxx>
+#include <frmtool.hxx>
 
 #include <unomid.h>
 
@@ -366,6 +367,52 @@ void SwTxtSizeInfo::NoteAnimation() const
             "SwTxtSizeInfo::NoteAnimation() changed m_pOut" );
 }
 
+
+KSHORT SwTxtSizeInfo::GetAscent() const
+{
+    SAL_WARN_IF( !GetOut(), "sw.text.txtinfo", "SwTxtSizeInfo::GetAscent() without m_pOut" );
+
+    sal_uInt16 nAscent = ((SwFont*)GetFont())->GetAscent( m_pVsh, *GetOut() );
+
+    if( GetFont()->GetTopBorder() )
+        nAscent += GetFont()->GetTopBorder().get().GetScaledWidth();
+
+    return nAscent;
+}
+
+KSHORT SwTxtSizeInfo::GetTxtHeight() const
+{
+    SAL_WARN_IF( !GetOut(), "sw.text.txtinfo", "SwTxtSizeInfo::GetTxtHeight() without m_pOut" );
+
+    sal_uInt16 nHeight = ((SwFont*)GetFont())->GetHeight( m_pVsh, *GetOut() );
+
+    if( GetFont()->GetTopBorder() )
+        nHeight += GetFont()->GetTopBorder().get().GetScaledWidth();
+    if( GetFont()->GetBottomBorder() )
+        nHeight += GetFont()->GetBottomBorder().get().GetScaledWidth();
+
+    return nHeight;
+}
+
+static void lcl_IncreaseSizeWithBorders(SwPosSize& rSize, const SwFont& rFont)
+{
+
+    sal_uInt16 nWidth = rSize.Width();
+    sal_uInt16 nHeight = rSize.Height();
+
+    if( rFont.GetTopBorder() )
+        nHeight += rFont.GetTopBorder().get().GetScaledWidth();
+    if( rFont.GetBottomBorder() )
+        nHeight += rFont.GetBottomBorder().get().GetScaledWidth();
+    if( rFont.GetRightBorder() )
+        nWidth += rFont.GetRightBorder().get().GetScaledWidth();
+    if( rFont.GetLeftBorder() )
+        nWidth += rFont.GetLeftBorder().get().GetScaledWidth();
+
+    rSize.Height(nHeight);
+    rSize.Width(nWidth);
+}
+
 SwPosSize SwTxtSizeInfo::GetTxtSize( OutputDevice* pOutDev,
                                      const SwScriptInfo* pSI,
                                      const XubString& rTxt,
@@ -379,6 +426,7 @@ SwPosSize SwTxtSizeInfo::GetTxtSize( OutputDevice* pOutDev,
     aDrawInf.SetSnapToGrid( SnapToGrid() );
     aDrawInf.SetKanaComp( nComp );
     SwPosSize aSize = m_pFnt->_GetTxtSize( aDrawInf );
+    lcl_IncreaseSizeWithBorders(aSize,*m_pFnt);
     return aSize;
 }
 
@@ -400,7 +448,9 @@ SwPosSize SwTxtSizeInfo::GetTxtSize() const
     aDrawInf.SetFont( m_pFnt );
     aDrawInf.SetSnapToGrid( SnapToGrid() );
     aDrawInf.SetKanaComp( nComp );
-    return m_pFnt->_GetTxtSize( aDrawInf );
+    SwPosSize aSize = m_pFnt->_GetTxtSize( aDrawInf );
+    lcl_IncreaseSizeWithBorders(aSize,*m_pFnt);
+    return aSize;
 }
 
 void SwTxtSizeInfo::GetTxtSize( const SwScriptInfo* pSI, const xub_StrLen nIndex,
@@ -413,6 +463,7 @@ void SwTxtSizeInfo::GetTxtSize( const SwScriptInfo* pSI, const xub_StrLen nIndex
     aDrawInf.SetSnapToGrid( SnapToGrid() );
     aDrawInf.SetKanaComp( nComp );
     SwPosSize aSize = m_pFnt->_GetTxtSize( aDrawInf );
+    lcl_IncreaseSizeWithBorders(aSize,*m_pFnt);
     nMaxSizeDiff = (sal_uInt16)aDrawInf.GetKanaDiff();
     nMinSize = aSize.Width();
 }
@@ -610,8 +661,16 @@ void SwTxtPaintInfo::_DrawText( const XubString &rText, const SwLinePortion &rPo
     SwDrawTextInfo aDrawInf( m_pFrm->getRootFrm()->GetCurrShell(), *m_pOut, pSI, rText, nStart, nLength,
                              rPor.Width(), bBullet );
 
-    aDrawInf.SetLeft( GetPaintRect().Left() );
-    aDrawInf.SetRight( GetPaintRect().Right() );
+    if( m_pFnt->GetLeftBorder() )
+        aDrawInf.SetLeft( GetPaintRect().Left() + m_pFnt->GetLeftBorder().get().GetScaledWidth() );
+    else
+        aDrawInf.SetLeft( GetPaintRect().Left() );
+
+    if( m_pFnt->GetRightBorder() )
+        aDrawInf.SetRight( GetPaintRect().Right() - m_pFnt->GetRightBorder().get().GetScaledWidth() );
+    else
+        aDrawInf.SetRight( GetPaintRect().Right());
+
     aDrawInf.SetUnderFnt( m_pUnderFnt );
 
     const long nSpaceAdd = ( rPor.IsBlankPortion() || rPor.IsDropPortion() ||
@@ -641,11 +700,16 @@ void SwTxtPaintInfo::_DrawText( const XubString &rText, const SwLinePortion &rPo
                              rPor.GetPortion()->InFixMargGrp() ||
                              rPor.GetPortion()->IsHolePortion() );
 
+    // Draw text next to the left border
+    Point aFontPos(aPos);
+    if( m_pFnt->GetLeftBorder() )
+       aFontPos.X() += m_pFnt->GetLeftBorder().get().GetScaledWidth();
+
     if( GetTxtFly()->IsOn() )
     {
         // aPos needs to be the TopLeft, because we cannot calculate the
         // ClipRects otherwise
-        const Point aPoint( aPos.X(), aPos.Y() - rPor.GetAscent() );
+        const Point aPoint( aFontPos.X(), aFontPos.Y() - rPor.GetAscent() );
         const Size aSize( rPor.Width(), rPor.Height() );
         aDrawInf.SetPos( aPoint );
         aDrawInf.SetSize( aSize );
@@ -658,7 +722,7 @@ void SwTxtPaintInfo::_DrawText( const XubString &rText, const SwLinePortion &rPo
     }
     else
     {
-        aDrawInf.SetPos( aPos );
+        aDrawInf.SetPos( aFontPos );
         if( bKern )
             m_pFnt->_DrawStretchText( aDrawInf );
         else
@@ -1150,6 +1214,16 @@ void SwTxtPaintInfo::_DrawBackBrush( const SwLinePortion &rPor ) const
         DrawRect( aIntersect, sal_True, sal_False );
 
         pTmpOut->Pop();
+    }
+}
+
+void SwTxtPaintInfo::DrawBorder( const SwLinePortion &rPor ) const
+{
+    SwRect aDrawArea;
+    CalcRect( rPor, &aDrawArea );
+    if ( aDrawArea.HasArea() )
+    {
+        PaintCharacterBorder(*m_pFnt, aDrawArea);
     }
 }
 
