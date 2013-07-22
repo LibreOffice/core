@@ -1261,30 +1261,34 @@ void readLayoutPropFromFile(const Reference<XElement>& root, const rtl::OUString
                 Reference<XNodeList> layoutchildrens = layoutnode->getChildNodes();
                 presobjsize = layoutchildrens->getLength();         //get the length of that of the layout(number of pres objects)
                 for( long j=0; j< presobjsize ; j++)
-                {
+                {   rtl::OUString nodename;
                     Reference<XNode> presobj = layoutchildrens->item(j);    //get the j'th presobj for that layout
-                    Reference<XNamedNodeMap> presObjAttributes = presobj->getAttributes();
-                    Reference<XNode> presObjKindAttr = presObjAttributes->getNamedItem("kind");
-                    sPresObjKindAttName = presObjKindAttr->getNodeValue();  //get the value of it's presobj kind
-                    if(sPresObjKindAttName==sPresObjKind)
+                    nodename=presobj->getNodeName();
+                    if(nodename=="presobj")//check whether children is blank 'text-node' or 'presobj' node
                     {
-                        Reference<XNode> presObjPosX = presObjAttributes->getNamedItem("layout-pos-x");
-                        rtl::OUString sValue = presObjPosX->getNodeValue();
-                        propvalue[0] = sValue.toDouble();
-                        Reference<XNode> presObjPosY = presObjAttributes->getNamedItem("layout-pos-y");
-                        sValue = presObjPosY->getNodeValue();
-                        propvalue[1] = sValue.toDouble();
-                        Reference<XNode> presObjSizeHeight = presObjAttributes->getNamedItem("layout-size-height");
-                        sValue = presObjSizeHeight->getNodeValue();
-                        propvalue[2] = sValue.toDouble();
-                        Reference<XNode> presObjSizeWidth = presObjAttributes->getNamedItem("layout-size-width");
-                        sValue = presObjSizeWidth->getNodeValue();
-                        propvalue[3] = sValue.toDouble();
-                        bnoprop=false;
-                        break;
+                        Reference<XNamedNodeMap> presObjAttributes = presobj->getAttributes();
+                        Reference<XNode> presObjKindAttr = presObjAttributes->getNamedItem("kind");
+                        sPresObjKindAttName = presObjKindAttr->getNodeValue();  //get the value of it's presobj kind
+                        if(sPresObjKindAttName==sPresObjKind)
+                        {
+                            Reference<XNode> presObjPosX = presObjAttributes->getNamedItem("layout-pos-x");
+                            rtl::OUString sValue = presObjPosX->getNodeValue();
+                            propvalue[0] = sValue.toDouble();
+                            Reference<XNode> presObjPosY = presObjAttributes->getNamedItem("layout-pos-y");
+                            sValue = presObjPosY->getNodeValue();
+                            propvalue[1] = sValue.toDouble();
+                            Reference<XNode> presObjSizeHeight = presObjAttributes->getNamedItem("layout-size-height");
+                            sValue = presObjSizeHeight->getNodeValue();
+                            propvalue[2] = sValue.toDouble();
+                            Reference<XNode> presObjSizeWidth = presObjAttributes->getNamedItem("layout-size-width");
+                            sValue = presObjSizeWidth->getNodeValue();
+                            propvalue[3] = sValue.toDouble();
+                            bnoprop=false;
+                            break;
+                        }
+                        else
+                            continue;
                     }
-                    else
-                        continue;
                 }
             }
             else
