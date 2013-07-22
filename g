@@ -90,6 +90,14 @@ local hook
     for repo in ${SUBMODULES_ALL?} ; do
         refresh_submodule_hooks $repo
     done
+    # In our workflow, it's always gerrit that does the submodule updates, so
+    # better ignoring them to avoid accidentally including those changes in our
+    # commits.
+    # 'git submodule status' can be still used to see if a submodule has such
+    # changes.
+    for repo in ${SUBMODULES_CONFIGURED?} ; do
+        git config submodule.$repo.ignore all
+    done
     popd > /dev/null
 
 }
