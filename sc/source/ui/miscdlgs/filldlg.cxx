@@ -52,40 +52,8 @@ ScFillSeriesDlg::ScFillSeriesDlg( Window*       pParent,
                                   double        fStep,
                                   double        fMax,
                                   sal_uInt16        nPossDir )
-
-    :   ModalDialog     ( pParent, ScResId( RID_SCDLG_FILLSERIES ) ),
-
-        aFtStartVal     ( this, ScResId( FT_START_VALUE ) ),
-        aEdStartVal     ( this, ScResId( ED_START_VALUES ) ),
+    : ModalDialog(pParent, "FillSeriesDialog", "modules/scalc/ui/filldlg.ui"),
         aStartStrVal    ( aStartStr),
-
-        aFtEndVal       ( this, ScResId( FT_END_VALUE ) ),
-        aEdEndVal       ( this, ScResId( ED_END_VALUES ) ),
-
-        aFtIncrement    ( this, ScResId( FT_INCREMENT ) ),
-        aEdIncrement    ( this, ScResId( ED_INCREMENT ) ),
-
-        aFlDirection    ( this, ScResId( FL_DIRECTION ) ),
-        aBtnDown        ( this, ScResId( BTN_BOTTOM ) ),
-        aBtnRight       ( this, ScResId( BTN_RIGHT ) ),
-        aBtnUp          ( this, ScResId( BTN_TOP ) ),
-        aBtnLeft        ( this, ScResId( BTN_LEFT ) ),
-        aFlSep1         ( this, ScResId( FL_SEP1 ) ),
-        aFlType         ( this, ScResId( FL_TYPE ) ),
-        aBtnArithmetic  ( this, ScResId( BTN_ARITHMETIC ) ),
-        aBtnGeometric   ( this, ScResId( BTN_GEOMETRIC ) ),
-        aBtnDate        ( this, ScResId( BTN_DATE ) ),
-        aBtnAutoFill    ( this, ScResId( BTN_AUTOFILL ) ),
-        aFlSep2         ( this, ScResId( FL_SEP2 ) ),
-        aFlTimeUnit     ( this, ScResId( FL_TIME_UNIT ) ),
-        aBtnDay         ( this, ScResId( BTN_DAY ) ),
-        aBtnDayOfWeek   ( this, ScResId( BTN_DAY_OF_WEEK ) ),
-        aBtnMonth       ( this, ScResId( BTN_MONTH ) ),
-        aBtnYear        ( this, ScResId( BTN_YEAR ) ),
-
-        aBtnOk          ( this, ScResId( BTN_OK ) ),
-        aBtnCancel      ( this, ScResId( BTN_CANCEL ) ),
-        aBtnHelp        ( this, ScResId( BTN_HELP ) ),
         aErrMsgInvalidVal( SC_RESSTR(STR_VALERR) ),
         rDoc            ( rDocument ),
         theFillDir      ( eFillDir ),
@@ -94,8 +62,28 @@ ScFillSeriesDlg::ScFillSeriesDlg( Window*       pParent,
         fIncrement      ( fStep ),
         fEndVal         ( fMax )
 {
+    get(m_pFtStartVal, "startL");
+    get(m_pEdStartVal, "startValue");
+    get(m_pFtEndVal, "endL");
+    get(m_pEdEndVal, "endValue");
+    get(m_pFtIncrement, "incrementL");
+    get(m_pEdIncrement, "increment");
+    get(m_pBtnDown, "down");
+    get(m_pBtnRight, "right");
+    get(m_pBtnUp, "up");
+    get(m_pBtnLeft, "left");
+    get(m_pBtnArithmetic, "linear");
+    get(m_pBtnGeometric, "growth");
+    get(m_pBtnDate, "date");
+    get(m_pBtnAutoFill, "autofill");
+    get(m_pFtTimeUnit, "tuL");
+    get(m_pBtnDay, "day");
+    get(m_pBtnDayOfWeek, "week");
+    get(m_pBtnMonth, "month");
+    get(m_pBtnYear, "year");
+    get(m_pBtnOk, "ok");
+
     Init( nPossDir );
-    FreeResource();
 }
 
 
@@ -112,13 +100,13 @@ void ScFillSeriesDlg::SetEdStartValEnabled(bool bFlag)
     bStartValFlag=bFlag;
     if(bFlag)
     {
-       aFtStartVal.Enable();
-       aEdStartVal.Enable();
+       m_pFtStartVal->Enable();
+       m_pEdStartVal->Enable();
     }
     else
     {
-       aFtStartVal.Disable();
-       aEdStartVal.Disable();
+       m_pFtStartVal->Disable();
+       m_pEdStartVal->Disable();
     }
 }
 
@@ -126,38 +114,38 @@ void ScFillSeriesDlg::SetEdStartValEnabled(bool bFlag)
 
 void ScFillSeriesDlg::Init( sal_uInt16 nPossDir )
 {
-    aBtnOk.SetClickHdl         ( LINK( this, ScFillSeriesDlg, OKHdl ) );
-    aBtnArithmetic.SetClickHdl ( LINK( this, ScFillSeriesDlg, DisableHdl ) );
-    aBtnGeometric.SetClickHdl  ( LINK( this, ScFillSeriesDlg, DisableHdl ) );
-    aBtnDate.SetClickHdl       ( LINK( this, ScFillSeriesDlg, DisableHdl ) );
-    aBtnAutoFill.SetClickHdl   ( LINK( this, ScFillSeriesDlg, DisableHdl ) );
+    m_pBtnOk->SetClickHdl         ( LINK( this, ScFillSeriesDlg, OKHdl ) );
+    m_pBtnArithmetic->SetClickHdl ( LINK( this, ScFillSeriesDlg, DisableHdl ) );
+    m_pBtnGeometric->SetClickHdl  ( LINK( this, ScFillSeriesDlg, DisableHdl ) );
+    m_pBtnDate->SetClickHdl       ( LINK( this, ScFillSeriesDlg, DisableHdl ) );
+    m_pBtnAutoFill->SetClickHdl   ( LINK( this, ScFillSeriesDlg, DisableHdl ) );
 
     if( nPossDir == FDS_OPT_NONE )
     {
-        aBtnLeft.Disable();
-        aBtnRight.Disable();
-        aBtnDown.Disable();
-        aBtnUp.Disable();
+        m_pBtnLeft->Disable();
+        m_pBtnRight->Disable();
+        m_pBtnDown->Disable();
+        m_pBtnUp->Disable();
     }
 
     if( nPossDir == FDS_OPT_HORZ )
     {
-        aBtnDown.Disable();
-        aBtnUp.Disable();
+        m_pBtnDown->Disable();
+        m_pBtnUp->Disable();
     }
 
     if( nPossDir == FDS_OPT_VERT )
     {
-        aBtnLeft.Disable();
-        aBtnRight.Disable();
+        m_pBtnLeft->Disable();
+        m_pBtnRight->Disable();
     }
 
     switch ( theFillDir )
     {
-        case FILL_TO_LEFT:      aBtnLeft.Check();   break;
-        case FILL_TO_RIGHT:     aBtnRight.Check();  break;
-        case FILL_TO_BOTTOM:    aBtnDown.Check();   break;
-        case FILL_TO_TOP:       aBtnUp.Check();     break;
+        case FILL_TO_LEFT:      m_pBtnLeft->Check();   break;
+        case FILL_TO_RIGHT:     m_pBtnRight->Check();  break;
+        case FILL_TO_BOTTOM:    m_pBtnDown->Check();   break;
+        case FILL_TO_TOP:       m_pBtnUp->Check();     break;
         default:
         break;
     }
@@ -165,20 +153,20 @@ void ScFillSeriesDlg::Init( sal_uInt16 nPossDir )
     switch ( theFillCmd )
     {
         case FILL_LINEAR:
-            aBtnArithmetic.Check();
-            DisableHdl( &aBtnArithmetic );
+            m_pBtnArithmetic->Check();
+            DisableHdl( m_pBtnArithmetic );
             break;
         case FILL_GROWTH:
-            aBtnGeometric.Check();
-            DisableHdl( &aBtnGeometric );
+            m_pBtnGeometric->Check();
+            DisableHdl( m_pBtnGeometric );
             break;
         case FILL_DATE:
-            aBtnDate.Check();
-            DisableHdl( &aBtnDate );
+            m_pBtnDate->Check();
+            DisableHdl( m_pBtnDate );
             break;
         case FILL_AUTO:
-            aBtnAutoFill.Check();
-            DisableHdl( &aBtnAutoFill );
+            m_pBtnAutoFill->Check();
+            DisableHdl( m_pBtnAutoFill );
             break;
         default:
         break;
@@ -186,31 +174,28 @@ void ScFillSeriesDlg::Init( sal_uInt16 nPossDir )
 
     switch ( theFillDateCmd )
     {
-        case FILL_DAY:          aBtnDay.Check();        break;
-        case FILL_WEEKDAY:      aBtnDayOfWeek.Check();  break;
-        case FILL_MONTH:        aBtnMonth.Check();      break;
-        case FILL_YEAR:         aBtnYear.Check();       break;
+        case FILL_DAY:          m_pBtnDay->Check();        break;
+        case FILL_WEEKDAY:      m_pBtnDayOfWeek->Check();  break;
+        case FILL_MONTH:        m_pBtnMonth->Check();      break;
+        case FILL_YEAR:         m_pBtnYear->Check();       break;
         default:
         break;
     }
 
     fStartVal = MAXDOUBLE;
 
-    aEdStartVal.SetText( aStartStrVal);
+    m_pEdStartVal->SetText( aStartStrVal);
 
     OUString aIncrTxt;
     rDoc.GetFormatTable()->GetInputLineString( fIncrement, 0, aIncrTxt );
-    aEdIncrement.SetText( aIncrTxt );
+    m_pEdIncrement->SetText( aIncrTxt );
 
     OUString aEndTxt;
     if ( fEndVal != MAXDOUBLE )
         rDoc.GetFormatTable()->GetInputLineString( fEndVal, 0, aEndTxt );
-    aEdEndVal.SetText( aEndTxt );
+    m_pEdEndVal->SetText( aEndTxt );
 
     bStartValFlag = false;
-
-    aFlSep1.SetStyle( aFlSep1.GetStyle() | WB_VERT );
-    aFlSep2.SetStyle( aFlSep2.GetStyle() | WB_VERT );
 }
 
 
@@ -219,9 +204,9 @@ void ScFillSeriesDlg::Init( sal_uInt16 nPossDir )
 bool ScFillSeriesDlg::CheckStartVal()
 {
     bool bValOk = false;
-    OUString aStr = aEdStartVal.GetText();
+    OUString aStr = m_pEdStartVal->GetText();
 
-    if ( aStr.isEmpty() || aBtnAutoFill.IsChecked())
+    if ( aStr.isEmpty() || m_pBtnAutoFill->IsChecked())
     {
         fStartVal = MAXDOUBLE;
         bValOk = true;
@@ -240,7 +225,7 @@ bool ScFillSeriesDlg::CheckStartVal()
 bool ScFillSeriesDlg::CheckIncrementVal()
 {
     sal_uInt32 nKey = 0;
-    OUString aStr = aEdIncrement.GetText();
+    OUString aStr = m_pEdIncrement->GetText();
 
     return rDoc.GetFormatTable()->IsNumberFormat( aStr, nKey, fIncrement );
 }
@@ -251,7 +236,7 @@ bool ScFillSeriesDlg::CheckIncrementVal()
 bool ScFillSeriesDlg::CheckEndVal()
 {
     bool bValOk = false;
-    OUString aStr = aEdEndVal.GetText();
+    OUString aStr = m_pEdEndVal->GetText();
 
     if (aStr.isEmpty())
     {
@@ -273,36 +258,36 @@ bool ScFillSeriesDlg::CheckEndVal()
 
 IMPL_LINK( ScFillSeriesDlg, DisableHdl, Button *, pBtn )
 {
-    if ( pBtn == &aBtnDate )
+    if ( pBtn == m_pBtnDate )
     {
-        aBtnDay.Enable();
-        aBtnDayOfWeek.Enable();
-        aBtnMonth.Enable();
-        aBtnYear.Enable();
-        aFlTimeUnit.Enable();
+        m_pBtnDay->Enable();
+        m_pBtnDayOfWeek->Enable();
+        m_pBtnMonth->Enable();
+        m_pBtnYear->Enable();
+        m_pFtTimeUnit->Enable();
     }
     else
     {
-        aBtnDay.Disable();
-        aBtnDayOfWeek.Disable();
-        aBtnMonth.Disable();
-        aBtnYear.Disable();
-        aFlTimeUnit.Disable();
+        m_pBtnDay->Disable();
+        m_pBtnDayOfWeek->Disable();
+        m_pBtnMonth->Disable();
+        m_pBtnYear->Disable();
+        m_pFtTimeUnit->Disable();
     }
 
-    if ( pBtn != &aBtnAutoFill )
+    if ( pBtn != m_pBtnAutoFill )
     {
-        aFtIncrement.Enable();
-        aEdIncrement.Enable();
-        aFtEndVal.Enable();
-        aEdEndVal.Enable();
+        m_pFtIncrement->Enable();
+        m_pEdIncrement->Enable();
+        m_pFtEndVal->Enable();
+        m_pEdEndVal->Enable();
     }
     else
     {
-        aFtIncrement.Disable();
-        aEdIncrement.Disable();
-        aFtEndVal.Disable();
-        aEdEndVal.Disable();
+        m_pFtIncrement->Disable();
+        m_pEdIncrement->Disable();
+        m_pFtEndVal->Disable();
+        m_pEdEndVal->Disable();
     }
     return 0;
 }
@@ -312,37 +297,37 @@ IMPL_LINK( ScFillSeriesDlg, DisableHdl, Button *, pBtn )
 
 IMPL_LINK_NOARG(ScFillSeriesDlg, OKHdl)
 {
-    if ( aBtnLeft.IsChecked() )             theFillDir = FILL_TO_LEFT;
-    else if ( aBtnRight.IsChecked() )       theFillDir = FILL_TO_RIGHT;
-    else if ( aBtnDown.IsChecked() )        theFillDir = FILL_TO_BOTTOM;
-    else if ( aBtnUp.IsChecked() )          theFillDir = FILL_TO_TOP;
+    if ( m_pBtnLeft->IsChecked() )             theFillDir = FILL_TO_LEFT;
+    else if ( m_pBtnRight->IsChecked() )       theFillDir = FILL_TO_RIGHT;
+    else if ( m_pBtnDown->IsChecked() )        theFillDir = FILL_TO_BOTTOM;
+    else if ( m_pBtnUp->IsChecked() )          theFillDir = FILL_TO_TOP;
 
-    if ( aBtnArithmetic.IsChecked() )       theFillCmd = FILL_LINEAR;
-    else if ( aBtnGeometric.IsChecked() )   theFillCmd = FILL_GROWTH;
-    else if ( aBtnDate.IsChecked() )        theFillCmd = FILL_DATE;
-    else if ( aBtnAutoFill.IsChecked() )    theFillCmd = FILL_AUTO;
+    if ( m_pBtnArithmetic->IsChecked() )       theFillCmd = FILL_LINEAR;
+    else if ( m_pBtnGeometric->IsChecked() )   theFillCmd = FILL_GROWTH;
+    else if ( m_pBtnDate->IsChecked() )        theFillCmd = FILL_DATE;
+    else if ( m_pBtnAutoFill->IsChecked() )    theFillCmd = FILL_AUTO;
 
-    if ( aBtnDay.IsChecked() )              theFillDateCmd = FILL_DAY;
-    else if ( aBtnDayOfWeek.IsChecked() )   theFillDateCmd = FILL_WEEKDAY;
-    else if ( aBtnMonth.IsChecked() )       theFillDateCmd = FILL_MONTH;
-    else if ( aBtnYear.IsChecked() )        theFillDateCmd = FILL_YEAR;
+    if ( m_pBtnDay->IsChecked() )              theFillDateCmd = FILL_DAY;
+    else if ( m_pBtnDayOfWeek->IsChecked() )   theFillDateCmd = FILL_WEEKDAY;
+    else if ( m_pBtnMonth->IsChecked() )       theFillDateCmd = FILL_MONTH;
+    else if ( m_pBtnYear->IsChecked() )        theFillDateCmd = FILL_YEAR;
 
     sal_Bool  bAllOk = true;
     Edit* pEdWrong = NULL;
     if ( !CheckStartVal() )
     {
         bAllOk = false;
-        pEdWrong = &aEdStartVal;
+        pEdWrong = m_pEdStartVal;
     }
     else if ( !CheckIncrementVal() )
     {
         bAllOk = false;
-        pEdWrong = &aEdIncrement;
+        pEdWrong = m_pEdIncrement;
     }
     else if ( !CheckEndVal() )
     {
         bAllOk = false;
-        pEdWrong = &aEdEndVal;
+        pEdWrong = m_pEdEndVal;
     }
     if ( bAllOk )
         EndDialog( RET_OK );

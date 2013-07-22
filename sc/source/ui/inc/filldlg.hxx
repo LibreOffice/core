@@ -54,43 +54,37 @@ public:
     double      GetStep() const             { return fIncrement; }
     double      GetMax() const              { return fEndVal; }
 
-    OUString GetStartStr() const       { return aEdStartVal.GetText(); }
+    OUString GetStartStr() const       { return m_pEdStartVal->GetText(); }
 
     void SetEdStartValEnabled(bool bFlag = false);
 
 private:
-    FixedText       aFtStartVal;
-    Edit            aEdStartVal;
+    FixedText* m_pFtStartVal;
+    Edit* m_pEdStartVal;
     const OUString aStartStrVal;
 
-    FixedText       aFtEndVal;
-    Edit            aEdEndVal;
+    FixedText* m_pFtEndVal;
+    Edit* m_pEdEndVal;
 
-    FixedText       aFtIncrement;
-    Edit            aEdIncrement;
-    FixedLine       aFlDirection;
-    RadioButton     aBtnDown;
-    RadioButton     aBtnRight;
-    RadioButton     aBtnUp;
-    RadioButton     aBtnLeft;
+    FixedText* m_pFtIncrement;
+    Edit* m_pEdIncrement;
+    RadioButton* m_pBtnDown;
+    RadioButton* m_pBtnRight;
+    RadioButton* m_pBtnUp;
+    RadioButton* m_pBtnLeft;
 
-    FixedLine       aFlSep1;
-    FixedLine       aFlType;
-    RadioButton     aBtnArithmetic;
-    RadioButton     aBtnGeometric;
-    RadioButton     aBtnDate;
-    RadioButton     aBtnAutoFill;
+    RadioButton* m_pBtnArithmetic;
+    RadioButton* m_pBtnGeometric;
+    RadioButton* m_pBtnDate;
+    RadioButton* m_pBtnAutoFill;
 
-    FixedLine       aFlSep2;
-    FixedLine       aFlTimeUnit;
-    RadioButton     aBtnDay;
-    RadioButton     aBtnDayOfWeek;
-    RadioButton     aBtnMonth;
-    RadioButton     aBtnYear;
+    FixedText* m_pFtTimeUnit;
+    RadioButton* m_pBtnDay;
+    RadioButton* m_pBtnDayOfWeek;
+    RadioButton* m_pBtnMonth;
+    RadioButton* m_pBtnYear;
 
-    OKButton        aBtnOk;
-    CancelButton    aBtnCancel;
-    HelpButton      aBtnHelp;
+    OKButton* m_pBtnOk;
 
     const OUString aErrMsgInvalidVal;
 
