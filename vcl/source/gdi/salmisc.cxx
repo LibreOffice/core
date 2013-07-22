@@ -391,12 +391,12 @@ BitmapBuffer* StretchAndConvert(
     }
 
     // horizontal mapping table
-    if( nDstDX != nSrcDX )
+    if( (nDstDX != nSrcDX) && (nDstDX != 0) )
     {
-        const double fFactorX = ( nDstDX > 1 ) ? (double) ( nSrcDX - 1 ) / ( nDstDX - 1 ) : 0.0;
+        const double fFactorX = (double)nSrcDX / nDstDX;
 
         for( i = 0L; i < nDstDX; i++ )
-            pMapX[ i ] = nSrcX + FRound( i * fFactorX );
+            pMapX[ i ] = nSrcX + static_cast<int>( i * fFactorX );
     }
     else
     {
@@ -405,12 +405,12 @@ BitmapBuffer* StretchAndConvert(
     }
 
     // vertical mapping table
-    if( nDstDY != nSrcDY )
+    if( (nDstDY != nSrcDY) && (nDstDY != 0) )
     {
-        const double fFactorY = ( nDstDY > 1 ) ? (double) ( nSrcDY - 1 ) / ( nDstDY - 1 ) : 0.0;
+        const double fFactorY = (double)nSrcDY / nDstDY;
 
         for( i = 0L; i < nDstDY; i++ )
-            pMapY[ i ] = nSrcY + FRound( i * fFactorY );
+            pMapY[ i ] = nSrcY + static_cast<int>( i * fFactorY );
     }
     else
     {
