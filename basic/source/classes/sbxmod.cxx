@@ -1821,7 +1821,7 @@ CodeCompleteDataCache SbModule::GetCodeCompleteDataFromParse()
         }
         aCache.InsertProcedure( pSymDef->GetName(), aLocVarTypes );
     }
-    aCache.InsertProcedure( aCache.GLOB_KEY, aGlobVarTypes );
+    aCache.InsertProcedure( CodeCompleteDataCache::GLOB_KEY, aGlobVarTypes );
 
     delete pParser;
     return aCache;

@@ -525,8 +525,8 @@ void EditorWindow::KeyInput( const KeyEvent& rKEvt )
                 aVect.push_back( aLine.copy(r.nBegin, r.nEnd - r.nBegin) );
         }
         OUString sBaseName = aVect[0];//variable name
-        OUString sVarType = aCodeCompleteCache.GetVariableType(sBaseName, aCodeCompleteCache.GLOB_KEY);
-        if( sVarType == aCodeCompleteCache.NOT_FOUND )
+        OUString sVarType = aCodeCompleteCache.GetVariableType(sBaseName, CodeCompleteDataCache::GLOB_KEY);
+        if( sVarType == CodeCompleteDataCache::NOT_FOUND )
             sVarType = aCodeCompleteCache.GetVariableType(sBaseName, sActSub);
 
         Reference< lang::XMultiServiceFactory > xFactory( comphelper::getProcessServiceFactory(), UNO_SET_THROW );
@@ -575,7 +575,6 @@ void EditorWindow::KeyInput( const KeyEvent& rKEvt )
                 }
             }
         }
-
     }
     if ( !bDone && ( !TextEngine::DoesKeyChangeText( rKEvt ) || ImpCanModify()  ) )
     {
@@ -884,7 +883,7 @@ OUString EditorWindow::GetActualSubName( sal_uLong nLine )
             }
         }
     }
-    return aCodeCompleteCache.GLOB_KEY;
+    return CodeCompleteDataCache::GLOB_KEY;
 }
 
 void EditorWindow::SetScrollBarRanges()

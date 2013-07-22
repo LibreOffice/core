@@ -42,8 +42,8 @@ private:
     CodeCompleteVarScopes aVarScopes;
 
 public:
-    const OUString GLOB_KEY = OUString("global key");
-    const OUString NOT_FOUND = OUString("not found");
+    static const OUString GLOB_KEY;
+    static const OUString NOT_FOUND;
 
     CodeCompleteDataCache(){}
     virtual ~CodeCompleteDataCache(){}

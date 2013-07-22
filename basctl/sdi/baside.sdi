@@ -138,6 +138,12 @@ shell basctl_Shell
         StateMethod = GetState;
     ]
 
+    SID_BASICIDE_CODECOMPLETITION
+    [
+        ExecMethod  = ExecuteCurrent;
+        StateMethod = GetState;
+    ]
+
     SID_BASICIDE_LIBSELECTED
     [
         ExecMethod  = ExecuteGlobal;
