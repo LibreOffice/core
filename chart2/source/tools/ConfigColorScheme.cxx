@@ -157,7 +157,7 @@ void ConfigColorScheme::retrieveConfigColors()
         return static_cast< sal_Int32 >( m_aColorSequence[ nIndex % m_nNumberOfColors ] );
 
     // fall-back: hard-coded standard colors
-    static sal_Int32 nDefaultColors[] =  {
+    static const sal_Int32 nDefaultColors[] =  {
         0x9999ff, 0x993366, 0xffffcc,
         0xccffff, 0x660066, 0xff8080,
         0x0066cc, 0xccccff, 0x000080,

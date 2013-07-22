@@ -245,11 +245,11 @@ static void lcl_lineOut( const char* pStr, const char* pPreStr = NULL, const cha
 
 const char* lcl_getSpaces( int nSpaceCount )
 {
-    static sal_Char Spaces[] = "                                                                                                    "
+    static const sal_Char Spaces[] = "                                                                                                    "
         "                                                                                                    "
         "                                                                                                    ";
-    static int nAvailableSpaceCount = strlen( Spaces );
-    static sal_Char* pSpacesEnd = Spaces + nAvailableSpaceCount;
+    static const int nAvailableSpaceCount = strlen( Spaces );
+    static const sal_Char* pSpacesEnd = Spaces + nAvailableSpaceCount;
 
     if( nSpaceCount > nAvailableSpaceCount )
         nSpaceCount = nAvailableSpaceCount;

@@ -135,7 +135,7 @@ sal_Bool DocPasswordHelper::IsModifyPasswordCorrect( const OUString& aPassword, 
 sal_uInt32 DocPasswordHelper::GetWordHashAsUINT32(
                 const OUString& aUString )
 {
-    static sal_uInt16 pInitialCode[] = {
+    static const sal_uInt16 pInitialCode[] = {
         0xE1F0, // 1
         0x1D0F, // 2
         0xCC9C, // 3
@@ -153,7 +153,7 @@ sal_uInt32 DocPasswordHelper::GetWordHashAsUINT32(
         0x4EC3  // 15
     };
 
-    static sal_uInt16 pEncryptionMatrix[15][7] = {
+    static const sal_uInt16 pEncryptionMatrix[15][7] = {
         { 0xAEFC, 0x4DD9, 0x9BB2, 0x2745, 0x4E8A, 0x9D14, 0x2A09}, // last-14
         { 0x7B61, 0xF6C2, 0xFDA5, 0xEB6B, 0xC6F7, 0x9DCF, 0x2BBF}, // last-13
         { 0x4563, 0x8AC6, 0x05AD, 0x0B5A, 0x16B4, 0x2D68, 0x5AD0}, // last-12

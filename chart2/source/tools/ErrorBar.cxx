@@ -53,7 +53,7 @@ bool lcl_isInternalData( const uno::Reference< chart2::data::XLabeledDataSequenc
 
 const SfxItemPropertySet* GetErrorBarPropertySet()
 {
-    static SfxItemPropertyMapEntry aErrorBarPropertyMap_Impl[] =
+    static const SfxItemPropertyMapEntry aErrorBarPropertyMap_Impl[] =
     {
         {MAP_CHAR_LEN("ShowPositiveError"),0,&getBooleanCppuType(), 0, 0},
         {MAP_CHAR_LEN("ShowNegativeError"),1,&getBooleanCppuType(), 0, 0},

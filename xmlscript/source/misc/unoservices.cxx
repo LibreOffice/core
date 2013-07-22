@@ -60,7 +60,7 @@ namespace xmlscript
 
     // -----------------------------------------------------------------------------
 
-    static struct ::cppu::ImplementationEntry s_entries [] =
+    static const struct ::cppu::ImplementationEntry s_entries [] =
     {
         {
             create_DocumentHandlerImpl, getImplementationName_DocumentHandlerImpl,

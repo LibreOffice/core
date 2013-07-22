@@ -51,7 +51,7 @@ const ErrDesc allDesc[] = {
 const char *
 getCertError(PRErrorCode errNum)
 {
-    static char sEmpty[] = "";
+    static const char sEmpty[] = "";
     const int numDesc = SAL_N_ELEMENTS(allDesc);
     for (int i = 0; i < numDesc; i++)
     {

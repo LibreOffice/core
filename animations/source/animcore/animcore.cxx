@@ -646,7 +646,7 @@ void AnimationNode::initTypeProvider( sal_Int16 nNodeType ) throw()
         mpId[nNodeType] = new Sequence< sal_Int8 >( 16 );
         rtl_createUuid( (sal_uInt8 *)mpId[nNodeType]->getArray(), 0, sal_True );
 
-        static sal_Int32 type_numbers[] =
+        static const sal_Int32 type_numbers[] =
         {
             7, // CUSTOM
             9, // PAR
