@@ -64,6 +64,8 @@
 #include "RandomNumberGeneratorDialog.hxx"
 #include "SamplingDialog.hxx"
 #include "DescriptiveStatisticsDialog.hxx"
+#include "AnalysisOfVarianceDialog.hxx"
+
 
 //------------------------------------------------------------------
 
@@ -315,24 +317,27 @@ SfxModelessDialog* ScTabViewShell::CreateRefDialog(
         }
         break;
 
-        case SID_OPENDLG_RANDOM_NUMBER_GENERATOR:
+        case SID_RANDOM_NUMBER_GENERATOR_DIALOG:
         {
-            ScViewData*  pViewData  = GetViewData();
-            pResult = new ScRandomNumberGeneratorDialog( pB, pCW, pParent, pViewData );
+            pResult = new ScRandomNumberGeneratorDialog( pB, pCW, pParent, GetViewData() );
         }
         break;
 
         case SID_SAMPLING_DIALOG:
         {
-            ScViewData*  pViewData  = GetViewData();
-            pResult = new ScSamplingDialog( pB, pCW, pParent, pViewData );
+            pResult = new ScSamplingDialog( pB, pCW, pParent, GetViewData() );
         }
         break;
 
         case SID_DESCRIPTIVE_STATISTICS_DIALOG:
         {
-            ScViewData*  pViewData  = GetViewData();
-            pResult = new ScDescriptiveStatisticsDialog( pB, pCW, pParent, pViewData );
+            pResult = new ScDescriptiveStatisticsDialog( pB, pCW, pParent, GetViewData() );
+        }
+        break;
+
+        case SID_ANALYSIS_OF_VARIANCE_DIALOG:
+        {
+            pResult = new ScAnalysisOfVarianceDialog( pB, pCW, pParent, GetViewData() );
         }
         break;
 

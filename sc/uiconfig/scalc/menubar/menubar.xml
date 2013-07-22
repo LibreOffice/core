@@ -478,6 +478,7 @@
                 <menu:menupopup>
                     <menu:menuitem menu:id=".uno:SamplingDialog"/>
                     <menu:menuitem menu:id=".uno:DescriptiveStatisticsDialog"/>
+                    <menu:menuitem menu:id=".uno:AnalysisOfVarianceDialog"/>
                 </menu:menupopup>
             </menu:menu>
         </menu:menupopup>

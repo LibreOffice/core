@@ -55,124 +55,27 @@ static const StatisticCalculation lclCalcDefinitions[] =
     { 0,                       NULL }
 };
 
+static const OUString lclWildcardRange("%RANGE%");
+
 }
 
 ScDescriptiveStatisticsDialog::ScDescriptiveStatisticsDialog(
                     SfxBindings* pSfxBindings, SfxChildWindow* pChildWindow,
                     Window* pParent, ScViewData* pViewData ) :
-    ScAnyRefDlg     ( pSfxBindings, pChildWindow, pParent,
-                      "DescriptiveStatisticsDialog", "modules/scalc/ui/descriptivestatisticsdialog.ui" ),
-    mViewData       ( pViewData ),
-    mDocument       ( pViewData->GetDocument() ),
-    mAddressDetails ( mDocument->GetAddressConvention(), 0, 0 ),
-    mCurrentAddress ( pViewData->GetCurX(), pViewData->GetCurY(), pViewData->GetTabNo() ),
-    mDialogLostFocus( false )
-{
-    get(mpInputRangeLabel,  "input-range-label");
-    get(mpInputRangeEdit,   "input-range-edit");
-    get(mpInputRangeButton, "input-range-button");
-    mpInputRangeEdit->SetReferences(this, mpInputRangeLabel);
-    mpInputRangeButton->SetReferences(this, mpInputRangeEdit);
-
-    get(mpOutputRangeLabel,  "output-range-label");
-    get(mpOutputRangeEdit,   "output-range-edit");
-    get(mpOutputRangeButton, "output-range-button");
-    mpOutputRangeEdit->SetReferences(this, mpOutputRangeLabel);
-    mpOutputRangeButton->SetReferences(this, mpOutputRangeEdit);
-
-    get(mpButtonOk,     "ok");
-    get(mpButtonApply,  "apply");
-    get(mpButtonClose,  "close");
-
-    Init();
-    GetRangeFromSelection();
-}
-
-void ScDescriptiveStatisticsDialog::Init()
-{
-    mpButtonOk->SetClickHdl( LINK( this, ScDescriptiveStatisticsDialog, OkClicked ) );
-    mpButtonClose->SetClickHdl( LINK( this, ScDescriptiveStatisticsDialog, CloseClicked ) );
-    mpButtonApply->SetClickHdl( LINK( this, ScDescriptiveStatisticsDialog, ApplyClicked ) );
-    mpButtonOk->Enable(false);
-    mpButtonApply->Enable(false);
-
-    Link aLink = LINK( this, ScDescriptiveStatisticsDialog, GetFocusHandler );
-    mpInputRangeEdit->SetGetFocusHdl( aLink );
-    mpInputRangeButton->SetGetFocusHdl( aLink );
-    mpOutputRangeEdit->SetGetFocusHdl( aLink );
-    mpOutputRangeButton->SetGetFocusHdl( aLink );
-
-    aLink = LINK( this, ScDescriptiveStatisticsDialog, LoseFocusHandler );
-    mpInputRangeEdit->SetLoseFocusHdl( aLink );
-    mpInputRangeButton->SetLoseFocusHdl( aLink );
-    mpOutputRangeEdit->SetLoseFocusHdl( aLink );
-    mpOutputRangeButton->SetLoseFocusHdl( aLink );
-
-    mpOutputRangeEdit->GrabFocus();
-}
-
-void ScDescriptiveStatisticsDialog::GetRangeFromSelection()
-{
-    OUString aCurrentString;
-    mViewData->GetSimpleArea(mInputRange);
-    mInputRange.Format(aCurrentString, SCR_ABS_3D, mDocument, mAddressDetails);
-    mpInputRangeEdit->SetText(aCurrentString);
-}
+    ScStatisticsInputOutputDialog(
+            pSfxBindings, pChildWindow, pParent, pViewData,
+            "DescriptiveStatisticsDialog", "modules/scalc/ui/descriptivestatisticsdialog.ui" )
+{}
 
 ScDescriptiveStatisticsDialog::~ScDescriptiveStatisticsDialog()
 {}
-
-void ScDescriptiveStatisticsDialog::SetActive()
-{
-    if ( mDialogLostFocus )
-    {
-        mDialogLostFocus = false;
-        if( mpActiveEdit )
-            mpActiveEdit->GrabFocus();
-    }
-    else
-    {
-        GrabFocus();
-    }
-    RefInputDone();
-}
 
 sal_Bool ScDescriptiveStatisticsDialog::Close()
 {
     return DoClose( ScDescriptiveStatisticsDialogWrapper::GetChildWindowId() );
 }
 
-void ScDescriptiveStatisticsDialog::SetReference( const ScRange& rReferenceRange, ScDocument* pDocument )
-{
-    if ( mpActiveEdit )
-    {
-        if ( rReferenceRange.aStart != rReferenceRange.aEnd )
-            RefInputStart( mpActiveEdit );
-
-        String aReferenceString;
-
-        if ( mpActiveEdit == mpInputRangeEdit )
-        {
-            mInputRange = rReferenceRange;
-            mInputRange.Format( aReferenceString, SCR_ABS_3D, pDocument, mAddressDetails );
-            mpInputRangeEdit->SetRefString( aReferenceString );
-        }
-        else if ( mpActiveEdit == mpOutputRangeEdit )
-        {
-            mOutputAddress = rReferenceRange.aStart;
-
-            sal_uInt16 nFormat = ( mOutputAddress.Tab() == mCurrentAddress.Tab() ) ? SCA_ABS : SCA_ABS_3D;
-            mOutputAddress.Format( aReferenceString, nFormat, pDocument, pDocument->GetAddressConvention() );
-            mpOutputRangeEdit->SetRefString( aReferenceString );
-
-            // Enable OK, Cancel if output range is set
-            mpButtonOk->Enable(!mpOutputRangeEdit->GetText().isEmpty());
-            mpButtonApply->Enable(!mpOutputRangeEdit->GetText().isEmpty());
-        }
-    }
-}
-
-void ScDescriptiveStatisticsDialog::ApplyCalculationsFormulas( )
+void ScDescriptiveStatisticsDialog::CalculateInputAndWriteToOutput( )
 {
     OUString aUndo(SC_RESSTR(STR_DESCRIPTIVE_STATISTICS_UNDO_NAME));
     ScDocShell* pDocShell = mViewData->GetDocShell();
@@ -211,7 +114,6 @@ void ScDescriptiveStatisticsDialog::ApplyCalculationsFormulas( )
             );
 
             aColumnRange.Format( aReferenceString, SCR_ABS, mDocument, mAddressDetails );
-            OUString sRange("%RANGE%");
             OUString aFormulaString;
             OUString aFormulaTemplate;
 
@@ -219,7 +121,7 @@ void ScDescriptiveStatisticsDialog::ApplyCalculationsFormulas( )
             {
                 aAddress = ScAddress(outCol, outRow, outTab);
                 aFormulaTemplate = OUString::createFromAscii(lclCalcDefinitions[i].aFormula);
-                aFormulaString = aFormulaTemplate.replaceAll(sRange, aReferenceString);
+                aFormulaString = aFormulaTemplate.replaceAll(lclWildcardRange, aReferenceString);
                 pDocShell->GetDocFunc().SetFormulaCell(aAddress, new ScFormulaCell(mDocument, aAddress, aFormulaString), true);
                 outRow++;
             }
@@ -231,47 +133,6 @@ void ScDescriptiveStatisticsDialog::ApplyCalculationsFormulas( )
     ScRange aOutputRange(mOutputAddress, ScAddress(outTab, outRow, outTab) );
     pUndoManager->LeaveListAction();
     pDocShell->PostPaint( aOutputRange, PAINT_GRID );
-}
-
-IMPL_LINK( ScDescriptiveStatisticsDialog, OkClicked, PushButton*, /*pButton*/ )
-{
-    ApplyClicked(NULL);
-    CloseClicked(NULL);
-    return 0;
-}
-
-
-IMPL_LINK( ScDescriptiveStatisticsDialog, ApplyClicked, PushButton*, /*pButton*/ )
-{
-    ApplyCalculationsFormulas();
-    return 0;
-}
-
-IMPL_LINK( ScDescriptiveStatisticsDialog, CloseClicked, PushButton*, /*pButton*/ )
-{
-    Close();
-    return 0;
-}
-
-IMPL_LINK( ScDescriptiveStatisticsDialog, GetFocusHandler, Control*, pCtrl )
-{
-    mpActiveEdit = NULL;
-
-    if(      (pCtrl == (Control*) mpInputRangeEdit)  || (pCtrl == (Control*) mpInputRangeButton) )
-        mpActiveEdit = mpInputRangeEdit;
-    else if( (pCtrl == (Control*) mpOutputRangeEdit) || (pCtrl == (Control*) mpOutputRangeButton) )
-        mpActiveEdit = mpOutputRangeEdit;
-
-    if( mpActiveEdit )
-        mpActiveEdit->SetSelection( Selection( 0, SELECTION_MAX ) );
-
-    return 0;
-}
-
-IMPL_LINK_NOARG(ScDescriptiveStatisticsDialog, LoseFocusHandler)
-{
-    mDialogLostFocus = !IsActive();
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

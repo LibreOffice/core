@@ -21,8 +21,11 @@
 #define SC_REFFACT_HXX
 
 #include <sfx2/childwin.hxx>
+#include "ChildWindowWrapper.hxx"
 
 #include "dbfunc.hxx"
+
+#include "sc.hrc"
 
 #define DECL_WRAPPER_WITHID(Class) \
     class Class : public SfxChildWindow                                         \
@@ -50,9 +53,22 @@ DECL_WRAPPER_WITHID(ScColRowNameRangesDlgWrapper)
 DECL_WRAPPER_WITHID(ScFormulaDlgWrapper)
 DECL_WRAPPER_WITHID(ScHighlightChgDlgWrapper)
 
-DECL_WRAPPER_WITHID(ScRandomNumberGeneratorDialogWrapper)
-DECL_WRAPPER_WITHID(ScSamplingDialogWrapper)
-DECL_WRAPPER_WITHID(ScDescriptiveStatisticsDialogWrapper)
+class ScDescriptiveStatisticsDialogWrapper :
+    public ChildWindowWrapper<SID_DESCRIPTIVE_STATISTICS_DIALOG>
+{};
+
+class ScSamplingDialogWrapper :
+    public ChildWindowWrapper<SID_SAMPLING_DIALOG>
+{};
+
+class ScRandomNumberGeneratorDialogWrapper :
+    public ChildWindowWrapper<SID_RANDOM_NUMBER_GENERATOR_DIALOG>
+{};
+
+class ScAnalysisOfVarianceDialogWrapper :
+    public ChildWindowWrapper<SID_ANALYSIS_OF_VARIANCE_DIALOG>
+{};
+
 
 class ScAcceptChgDlgWrapper: public SfxChildWindow
 {

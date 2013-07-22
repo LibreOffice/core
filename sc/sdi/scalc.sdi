@@ -2942,7 +2942,7 @@ SfxVoidItem GoalSeekDialog SID_OPENDLG_SOLVE
     GroupId = GID_OPTIONS;
 ]
 
-SfxVoidItem RandomNumberGeneratorDialog SID_OPENDLG_RANDOM_NUMBER_GENERATOR
+SfxVoidItem RandomNumberGeneratorDialog SID_RANDOM_NUMBER_GENERATOR_DIALOG
 ()
 [
     /* flags: */
@@ -2991,6 +2991,30 @@ SfxVoidItem SamplingDialog SID_SAMPLING_DIALOG
 ]
 
 SfxVoidItem DescriptiveStatisticsDialog SID_DESCRIPTIVE_STATISTICS_DIALOG
+()
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = TRUE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_OPTIONS;
+]
+
+SfxVoidItem AnalysisOfVarianceDialog SID_ANALYSIS_OF_VARIANCE_DIALOG
 ()
 [
     /* flags: */

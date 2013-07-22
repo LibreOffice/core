@@ -8,8 +8,8 @@
  *
  */
 
-#ifndef DESCRIPTIVE_STATISTICS_DIALOG_HXX
-#define DESCRIPTIVE_STATISTICS_DIALOG_HXX
+#ifndef ANOVA_ONE_FACTOR_DIALOG_HXX
+#define ANOVA_ONE_FACTOR_DIALOG_HXX
 
 #include "global.hxx"
 #include "address.hxx"
@@ -21,16 +21,18 @@
 
 #include "StatisticsInputOutputDialog.hxx"
 
-class ScDescriptiveStatisticsDialog : public ScStatisticsInputOutputDialog
+class ScAnalysisOfVarianceDialog : public ScStatisticsInputOutputDialog
 {
 public:
-    ScDescriptiveStatisticsDialog(
+    ScAnalysisOfVarianceDialog(
         SfxBindings* pB, SfxChildWindow* pCW,
         Window* pParent, ScViewData* pViewData );
 
-    virtual ~ScDescriptiveStatisticsDialog();
+    virtual ~ScAnalysisOfVarianceDialog();
 
     virtual sal_Bool Close();
+
+    NumericField* mpAlpha;
 
 protected:
     virtual void CalculateInputAndWriteToOutput();
