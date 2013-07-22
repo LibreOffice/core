@@ -46,6 +46,7 @@ $(eval $(call gb_Library_add_exception_objects,firebird_sdbc,\
     connectivity/source/drivers/firebird/FResultSetMetaData \
     connectivity/source/drivers/firebird/FServices \
     connectivity/source/drivers/firebird/FStatement \
+    connectivity/source/drivers/firebird/Util \
 ))
 
 # vim: set noet sw=4 ts=4:

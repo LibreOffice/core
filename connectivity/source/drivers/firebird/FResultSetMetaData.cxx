@@ -34,6 +34,7 @@
  *************************************************************************/
 
 #include "FResultSetMetaData.hxx"
+#include "Util.hxx"
 
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 
@@ -74,44 +75,7 @@ sal_Int32 SAL_CALL OResultSetMetaData::getColumnType(sal_Int32 column)
 
     int aType = m_pSqlda->sqlvar[column-1].sqltype;
 
-    aType &= ~1; // Remove last bit -- it is used to denote whether column
-                // can store Null, not needed for type determination
-    switch (aType)
-    {
-        case SQL_TEXT:
-            return DataType::CHAR;
-        case SQL_VARYING:
-            return DataType::VARCHAR;
-        case SQL_SHORT:
-            return DataType::SMALLINT;
-        case SQL_LONG:
-            return DataType::INTEGER;
-        case SQL_FLOAT:
-            return DataType::REAL;
-        case SQL_DOUBLE:
-            return DataType::DOUBLE;
-        case SQL_D_FLOAT:
-            return DataType::FLOAT;
-        case SQL_TIMESTAMP:
-            return DataType::TIMESTAMP;
-        case SQL_BLOB:
-            return DataType::BLOB;
-        case SQL_ARRAY:
-            return DataType::ARRAY;
-        case SQL_TYPE_TIME:
-            return DataType::TIME;
-        case SQL_TYPE_DATE:
-            return DataType::DATE;
-        case SQL_INT64:
-            return DataType::BIGINT;
-        case SQL_NULL:
-            return DataType::SQLNULL;
-        case SQL_QUAD:      // Is a "Blob ID" according to the docs
-            return 0;       // TODO: verify
-        default:
-            assert(false); // Should never happen
-            return 0;
-    }
+    return getColumnTypeFromFBType(aType);
 }
 
 sal_Bool SAL_CALL OResultSetMetaData::isCaseSensitive(sal_Int32 column)
@@ -160,44 +124,7 @@ OUString SAL_CALL OResultSetMetaData::getColumnTypeName(sal_Int32 column)
 
     int aType = m_pSqlda->sqlvar[column-1].sqltype;
 
-    aType &= ~1; // Remove last bit -- it is used to denote whether column
-                // can store Null, not needed for type determination
-    switch (aType)
-    {
-        case SQL_TEXT:
-            return OUString("SQL_TEXT");
-        case SQL_VARYING:
-            return OUString("SQL_VARYING");
-        case SQL_SHORT:
-            return OUString("SQL_SHORT");
-        case SQL_LONG:
-            return OUString("SQL_LONG");
-        case SQL_FLOAT:
-            return OUString("SQL_FLOAT");
-        case SQL_DOUBLE:
-            return OUString("SQL_DOUBLE");
-        case SQL_D_FLOAT:
-            return OUString("SQL_D_FLOAT");
-        case SQL_TIMESTAMP:
-            return OUString("SQL_TIMESTAMP");
-        case SQL_BLOB:
-            return OUString("SQL_BLOB");
-        case SQL_ARRAY:
-            return OUString("SQL_ARRAY");
-        case SQL_TYPE_TIME:
-            return OUString("SQL_TYPE_TIME");
-        case SQL_TYPE_DATE:
-            return OUString("SQL_TYPE_DATE");
-        case SQL_INT64:
-            return OUString("SQL_INT64");
-        case SQL_NULL:
-            return OUString("SQL_NULL");
-        case SQL_QUAD:
-            return OUString("SQL_QUAD");
-        default:
-            assert(false); // Should never happen
-            return OUString();
-    }
+    return getColumnTypeNameFromFBType(aType);
 }
 
 OUString SAL_CALL OResultSetMetaData::getColumnLabel(sal_Int32 column)
