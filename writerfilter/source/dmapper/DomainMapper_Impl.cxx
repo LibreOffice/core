@@ -1635,6 +1635,11 @@ void DomainMapper_Impl::PopFootOrEndnote()
     if (!m_aTextAppendStack.empty())
         m_aTextAppendStack.pop();
 
+    if (m_aRedlines.size() == 1)
+    {
+        SAL_WARN("writerfilter", "PopFootOrEndnote() is called without PushFootOrEndnote()?");
+        return;
+    }
     m_aRedlines.pop();
 }
 
