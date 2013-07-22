@@ -182,7 +182,7 @@ sal_Int32 SAL_CALL ODatabaseMetaData::getMaxStatementLength() throw(SQLException
 
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxTableNameLength() throw(SQLException, RuntimeException)
 {
-    return 32;
+    return 31;
 }
 // -------------------------------------------------------------------------
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxTablesInSelect(  ) throw(SQLException, RuntimeException)
@@ -877,31 +877,41 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getColumns(
         "fields.RDB$NULL_FLAG "         // 9
         "FROM RDB$RELATION_FIELDS relfields "
         "JOIN RDB$FIELDS fields "
-        "on (relfields.RDB$FIELD_NAME = fields.RDB$FIELD_NAME) ");
+        "on (fields.RDB$FIELD_NAME = relfields.RDB$FIELD_SOURCE) ");
 
+    if (!tableNamePattern.isEmpty() && !columnNamePattern.isEmpty())
+    {
+        queryBuf.append("WHERE ");
+    }
     if (!tableNamePattern.isEmpty())
     {
         OUString sAppend;
         if (tableNamePattern.match("%"))
-            sAppend = "AND RDB$RELATION_NAME LIKE '%' ";
+            sAppend = "relfields.RDB$RELATION_NAME LIKE '%' ";
         else
-            sAppend = "AND RDB$RELATION_NAME = '%' ";
+            sAppend = "relfields.RDB$RELATION_NAME = '%' ";
 
         queryBuf.append(sAppend.replaceAll("%", tableNamePattern));
     }
 
     if (!columnNamePattern.isEmpty())
     {
+        if (!tableNamePattern.isEmpty())
+            queryBuf.append("AND ");
+
         OUString sAppend;
         if (columnNamePattern.match("%"))
-            sAppend = "AND RDB$FIELD_NAME LIKE '%' ";
+            sAppend = "relfields.RDB$FIELD_NAME LIKE '%' ";
         else
-            sAppend = "AND RDB$FIELD_NAME = '%' ";
+            sAppend = "relfields.RDB$FIELD_NAME = '%' ";
 
         queryBuf.append(sAppend.replaceAll("%", columnNamePattern));
     }
 
     OUString query = queryBuf.makeStringAndClear();
+
+    SAL_INFO("connectivity.firebird", "Retrieving columns with " <<
+                OUStringToOString(query,RTL_TEXTENCODING_UTF8).getStr());
 
     uno::Reference< XStatement > statement = m_pConnection->createStatement();
     uno::Reference< XResultSet > rs = statement->executeQuery(query.getStr());
