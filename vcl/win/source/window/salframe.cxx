@@ -1910,62 +1910,36 @@ void WinSalFrame::SetApplicationID( const OUString &rApplicationID )
         // http://msdn.microsoft.com/en-us/library/windows/desktop/dd378430(v=vs.85).aspx
         // A window's properties must be removed before the window is closed.
 
-        WCHAR szShell32[MAX_PATH];
-        GetSystemDirectoryW( szShell32, MAX_PATH );
-        wcscat( szShell32, L"\\Shell32.dll" );
+        typedef HRESULT ( WINAPI *SHGETPROPERTYSTOREFORWINDOW )( HWND, REFIID, void ** );
+        SHGETPROPERTYSTOREFORWINDOW pSHGetPropertyStoreForWindow;
+        pSHGetPropertyStoreForWindow = ( SHGETPROPERTYSTOREFORWINDOW )GetProcAddress(
+                                       GetModuleHandleW (L"shell32.dll"), "SHGetPropertyStoreForWindow" );
 
-        HINSTANCE hinstDll = LoadLibraryW( szShell32 );
-
-        if( hinstDll )
+        // A mere presence of the symbol means we are at least on Windows 7 or Windows Server 2008 R2
+        if( pSHGetPropertyStoreForWindow )
         {
-            DLLVERSIONINFO dvi;
-            ZeroMemory(&dvi, sizeof(dvi));
-            dvi.cbSize = sizeof(dvi);
-
-            DLLGETVERSIONPROC pDllGetVersion;
-            pDllGetVersion = ( DLLGETVERSIONPROC )GetProcAddress( hinstDll, "DllGetVersion" );
-            HRESULT hr = (*pDllGetVersion)(&dvi);
-
-            if( SUCCEEDED(hr) )
+            IPropertyStore *pps;
+            HRESULT hr = pSHGetPropertyStoreForWindow ( mhWnd, IID_PPV_ARGS(&pps) );
+            if ( SUCCEEDED(hr) )
             {
-                #define PACKVERSION(major,minor) MAKELONG(minor,major)
-                DWORD dwVersion = PACKVERSION( dvi.dwMajorVersion, dvi.dwMinorVersion );
-                // shell32 in Windows 7 is version 6.1.
-                if( dwVersion >= PACKVERSION(6,1) )
+                PROPVARIANT pv;
+                if ( !rApplicationID.isEmpty() )
                 {
-                    typedef HRESULT ( WINAPI *SHGETPROPERTYSTOREFORWINDOW )( HWND, REFIID, void ** );
-                    SHGETPROPERTYSTOREFORWINDOW pSHGetPropertyStoreForWindow;
-                    pSHGetPropertyStoreForWindow =
-                        ( SHGETPROPERTYSTOREFORWINDOW ) GetProcAddress( hinstDll, "SHGetPropertyStoreForWindow" );
-
-                    if( pSHGetPropertyStoreForWindow )
-                    {
-                        IPropertyStore *pps;
-                        HRESULT hr = ( *pSHGetPropertyStoreForWindow ) ( mhWnd, IID_PPV_ARGS(&pps) );
-                        if ( SUCCEEDED(hr) )
-                        {
-                            PROPVARIANT pv;
-                            if ( !rApplicationID.isEmpty() )
-                            {
-                                hr = InitPropVariantFromString( rApplicationID.getStr(), &pv );
-                                mbPropertiesStored = TRUE;
-                            }
-                            else
-                                // if rApplicationID we remove the property from the window, if present
-                                PropVariantInit( &pv );
-
-                            if ( SUCCEEDED(hr) )
-                            {
-                                hr = pps->SetValue( PKEY_AppUserModel_ID, pv );
-                                PropVariantClear( &pv );
-                            }
-                            pps->Release();
-                        }
-                    }
+                    hr = InitPropVariantFromString( rApplicationID.getStr(), &pv );
+                    mbPropertiesStored = TRUE;
                 }
+                else
+                    // if rApplicationID we remove the property from the window, if present
+                    PropVariantInit( &pv );
+
+                if ( SUCCEEDED(hr) )
+                {
+                    hr = pps->SetValue( PKEY_AppUserModel_ID, pv );
+                    PropVariantClear( &pv );
+                }
+                pps->Release();
             }
         }
-        FreeLibrary( hinstDll );
     }
 }
 
