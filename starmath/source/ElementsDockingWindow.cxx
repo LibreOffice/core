@@ -178,11 +178,6 @@ SmElementsControl::SmElementsControl(Window *pParent, const ResId& rResId) :
     maFormat.SetBaseSize(PixelToLogic(Size(0, 24)));
 }
 
-SmElementsControl::~SmElementsControl()
-{
-    delete mpDocShell;
-}
-
 void SmElementsControl::setVerticalMode(bool bVerticalMode)
 {
     mbVerticalMode = bVerticalMode;
