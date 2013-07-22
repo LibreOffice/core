@@ -29,7 +29,7 @@
 
 -(void)netService:(NSNetService *)aNetService 
     didNotPublish:(NSDictionary *)dict {
-    NSLog(@"Service did not publish: %@", dict);
+    NSLog(@"Service %p did not publish: %@", aNetService, dict);
 }
 
 - (void)dealloc {
