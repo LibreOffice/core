@@ -177,6 +177,9 @@ $(call gb_Helper_make_userfriendly_targets,$(1),Module)
 $(if $(filter-out libreoffice instsetoo_native android ios,$(1)),\
     $(call gb_Postprocess_register_target,AllModulesButInstsetNative,Module,$(1)))
 
+$(call gb_Postprocess_get_target,AllModuleTests) : $(call gb_Module_get_check_target,$(1))
+$(call gb_Postprocess_get_clean_target,AllModuleTests) : $(call gb_Module_get_clean_target,$(1))
+
 endef
 
 # This is called inside the included file and pushes one target on each stack.

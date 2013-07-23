@@ -45,6 +45,7 @@ $(call gb_Postprocess_Postprocess,AllModulesButInstsetNative,All modules but ins
 $(call gb_Postprocess_Postprocess,AllPackages,All packages,$(WORKDIR)/Package/)
 $(call gb_Postprocess_Postprocess,AllResources,All resources,$(WORKDIR)/AllLangRes/)
 $(call gb_Postprocess_Postprocess,AllUIConfigs,All UI configuration files,$(WORKDIR)/UIConfig/)
+$(call gb_Postprocess_Postprocess,AllModuleTests,All modules' tests,$(WORKDIR)/Module/check/)
 
 endef
 

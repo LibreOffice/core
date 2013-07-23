@@ -22,7 +22,8 @@ $(call gb_CustomTarget_get_workdir,postprocess/signing)/signing.done: \
 	$(SRCDIR)/postprocess/signing/no_signing.txt \
 
 $(call gb_CustomTarget_get_workdir,postprocess/signing)/signing.done : \
-		$(call gb_Postprocess_get_target,AllLibraries) $(call gb_Postprocess_get_target,AllExecutables)
+		$(call gb_Postprocess_get_target,AllLibraries) $(call gb_Postprocess_get_target,AllExecutables) \
+		$(call gb_Postprocess_get_target,AllModuleTests)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),PRL,2)
 ifeq ($(COM),MSC)
 ifneq ($(ENABLE_DBGUTIL),TRUE)
