@@ -611,9 +611,9 @@ const SwTOXType* SwDoc::InsertTOXType( const SwTOXType& rTyp )
 }
 
 String SwDoc::GetUniqueTOXBaseName( const SwTOXType& rType,
-                                    const String sChkStr ) const
+                                    const String& rChkStr ) const
 {
-    bool bUseChkStr = sChkStr.Len()>0;
+    bool bUseChkStr = rChkStr.Len()>0;
     String aName( rType.GetTypeName() );
     xub_StrLen nNmLen = aName.Len();
 
@@ -639,7 +639,7 @@ String SwDoc::GetUniqueTOXBaseName( const SwTOXType& rType,
                 if( nNum-- && nNum < mpSectionFmtTbl->size() )
                     pSetFlags[ nNum / 8 ] |= (0x01 << ( nNum & 0x07 ));
             }
-            if( bUseChkStr && sChkStr.Equals( rNm ) )
+            if( bUseChkStr && rChkStr.Equals( rNm ) )
                 bUseChkStr = false;
         }
     }
@@ -666,7 +666,7 @@ String SwDoc::GetUniqueTOXBaseName( const SwTOXType& rType,
     }
     delete [] pSetFlags;
     if ( bUseChkStr )
-        return sChkStr;
+        return rChkStr;
     return aName += OUString::number( ++nNum );
 }
 

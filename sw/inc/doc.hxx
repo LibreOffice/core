@@ -1395,13 +1395,13 @@ public:
                                             bool bExpand = false );
     const SwTOXBaseSection* InsertTableOf( sal_uLong nSttNd, sal_uLong nEndNd,
                                             const SwTOXBase& rTOX,
-                                            const SfxItemSet* pSet = 0                                          );
+                                            const SfxItemSet* pSet = 0 );
     const SwTOXBase* GetCurTOX( const SwPosition& rPos ) const;
     const SwAttrSet& GetTOXBaseAttrSet(const SwTOXBase& rTOX) const;
 
     bool DeleteTOX( const SwTOXBase& rTOXBase, bool bDelNodes = false );
     String GetUniqueTOXBaseName( const SwTOXType& rType,
-                                const String sChkStr ) const;
+                                 const String& rChkStr ) const;
 
     bool SetTOXBaseName(const SwTOXBase& rTOXBase, const String& rName);
     void SetTOXBaseProtection(const SwTOXBase& rTOXBase, sal_Bool bProtect);
