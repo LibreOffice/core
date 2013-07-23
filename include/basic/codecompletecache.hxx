@@ -26,11 +26,30 @@
 #include <boost/utility.hpp>
 #include <boost/unordered_map.hpp>
 #include <rtl/ustring.hxx>
+#include <svtools/miscopt.hxx>
 
 typedef boost::unordered_map< OUString, OUString, OUStringHash > CodeCompleteVarTypes;
 /* variable name, type */
 typedef boost::unordered_map< OUString, CodeCompleteVarTypes, OUStringHash > CodeCompleteVarScopes;
 /* procedure, CodeCompleteVarTypes */
+
+class BASIC_DLLPUBLIC CodeCompleteOptions
+{
+/*
+ * class to store basic code completition
+ * options
+ * */
+private:
+    bool bIsCodeCompleteOn;
+    SvtMiscOptions aMiscOptions;
+
+public:
+    CodeCompleteOptions();
+
+    static bool IsCodeCompleteOn();
+    static void SetCodeCompleteOn( const bool& b );
+    static bool IsExtendedTypeDeclaration();
+};
 
 class BASIC_DLLPUBLIC CodeCompleteDataCache
 {
@@ -48,7 +67,7 @@ public:
     CodeCompleteDataCache(){}
     virtual ~CodeCompleteDataCache(){}
 
-    friend std::ostream& operator<< (std::ostream& aStream, const CodeCompleteDataCache& aCache);
+    friend BASIC_DLLPUBLIC std::ostream& operator<< (std::ostream& aStream, const CodeCompleteDataCache& aCache);
 
     void SetVars( const CodeCompleteVarScopes& aScopes );
     const CodeCompleteVarScopes& GetVars() const;

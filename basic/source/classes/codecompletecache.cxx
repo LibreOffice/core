@@ -19,9 +19,41 @@
 
 #include <basic/codecompletecache.hxx>
 #include <iostream>
+#include <rtl/instance.hxx>
 
 const OUString CodeCompleteDataCache::GLOB_KEY = OUString("global key");
 const OUString CodeCompleteDataCache::NOT_FOUND = OUString("not found");
+
+namespace
+{
+    class theCodeCompleteOptions: public ::rtl::Static< CodeCompleteOptions, theCodeCompleteOptions >{};
+}
+
+CodeCompleteOptions::CodeCompleteOptions()
+: bIsCodeCompleteOn( false )
+{
+}
+
+bool CodeCompleteOptions::IsCodeCompleteOn()
+{
+    /*if( !theCodeCompleteOptions::get().aMiscOptions.IsExperimentalMode() )
+        return false;
+    else*/
+    return theCodeCompleteOptions::get().aMiscOptions.IsExperimentalMode() && theCodeCompleteOptions::get().bIsCodeCompleteOn;
+}
+
+void CodeCompleteOptions::SetCodeCompleteOn( const bool& b )
+{
+    if( !theCodeCompleteOptions::get().aMiscOptions.IsExperimentalMode() )
+        theCodeCompleteOptions::get().bIsCodeCompleteOn = false;
+    else
+        theCodeCompleteOptions::get().bIsCodeCompleteOn = b;
+}
+
+bool CodeCompleteOptions::IsExtendedTypeDeclaration()
+{
+    return CodeCompleteOptions::IsCodeCompleteOn();
+}
 
 std::ostream& operator<< (std::ostream& aStream, const CodeCompleteDataCache& aCache)
 {

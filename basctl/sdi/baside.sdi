@@ -35,6 +35,13 @@ shell basctl_Shell
         StateMethod = GetState;
         ExecMethod  = ExecuteCurrent;
     ]
+
+    SID_BASICIDE_CODECOMPLETITION
+    [
+        StateMethod = GetState;
+        ExecMethod  = ExecuteCurrent;
+    ]
+
     SID_BASICIDE_HIDECURPAGE
     [
         ExecMethod  = ExecuteCurrent;
@@ -135,12 +142,6 @@ shell basctl_Shell
     // ========================================================
     SID_BASICIDE_LIBSELECTOR
     [
-        StateMethod = GetState;
-    ]
-
-    SID_BASICIDE_CODECOMPLETITION
-    [
-        ExecMethod  = ExecuteCurrent;
         StateMethod = GetState;
     ]
 

@@ -48,7 +48,6 @@
 #include <vcl/help.hxx>
 
 #include <vector>
-#include <svtools/miscopt.hxx>
 #include "com/sun/star/reflection/XIdlReflection.hpp"
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/processfactory.hxx>
@@ -486,7 +485,6 @@ bool EditorWindow::ImpCanModify()
 
 void EditorWindow::KeyInput( const KeyEvent& rKEvt )
 {
-    SvtMiscOptions aMiscOptions;
     if ( !pEditView )   // Happens in Win95
         return;
 
@@ -501,7 +499,7 @@ void EditorWindow::KeyInput( const KeyEvent& rKEvt )
     // see if there is an accelerator to be processed first
     bool bDone = SfxViewShell::Current()->KeyInput( rKEvt );
 
-    if( rKEvt.GetKeyCode().GetCode() == KEY_POINT && aMiscOptions.IsExperimentalMode() )
+    if( rKEvt.GetKeyCode().GetCode() == KEY_POINT && CodeCompleteOptions::IsCodeCompleteOn() )
     {
         rModulWindow.UpdateModule();
         TextSelection aSel = GetEditView()->GetSelection();
@@ -829,14 +827,20 @@ void EditorWindow::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
         {
             ParagraphInsertedDeleted( rTextHint.GetValue(), true );
             DoDelayedSyntaxHighlight( rTextHint.GetValue() );
-            rModulWindow.UpdateModule();
-            aCodeCompleteCache.SetVars(rModulWindow.GetSbModule()->GetCodeCompleteDataFromParse().GetVars());
+            if( CodeCompleteOptions::IsCodeCompleteOn() )
+            {
+                rModulWindow.UpdateModule();
+                aCodeCompleteCache.SetVars(rModulWindow.GetSbModule()->GetCodeCompleteDataFromParse().GetVars());
+            }
         }
         else if( rTextHint.GetId() == TEXT_HINT_PARAREMOVED )
         {
             ParagraphInsertedDeleted( rTextHint.GetValue(), false );
-            rModulWindow.UpdateModule();
-            aCodeCompleteCache.SetVars(rModulWindow.GetSbModule()->GetCodeCompleteDataFromParse().GetVars());
+            if( CodeCompleteOptions::IsCodeCompleteOn() )
+            {
+                rModulWindow.UpdateModule();
+                aCodeCompleteCache.SetVars(rModulWindow.GetSbModule()->GetCodeCompleteDataFromParse().GetVars());
+            }
         }
         else if( rTextHint.GetId() == TEXT_HINT_PARACONTENTCHANGED )
         {
@@ -850,7 +854,7 @@ void EditorWindow::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                 pBindings->Invalidate( SID_COPY );
             }
         }
-        else if( rTextHint.GetId() == TEXT_HINT_MODIFIED )
+        else if( rTextHint.GetId() == TEXT_HINT_MODIFIED && CodeCompleteOptions::IsCodeCompleteOn() )
         {
             rModulWindow.UpdateModule();
             aCodeCompleteCache.SetVars(rModulWindow.GetSbModule()->GetCodeCompleteDataFromParse().GetVars());

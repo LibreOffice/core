@@ -1783,7 +1783,6 @@ IMPL_LINK( ErrorHdlResetter, BasicErrorHdl, StarBASIC *, /*pBasic*/)
 CodeCompleteDataCache SbModule::GetCodeCompleteDataFromParse()
 {
     CodeCompleteDataCache aCache;
-
     ErrorHdlResetter aErrHdl;
     SbxBase::ResetError();
 

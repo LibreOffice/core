@@ -24,6 +24,7 @@ class SbiParser;
 class SbModule;
 #include "opcodes.hxx"
 #include "buffer.hxx"
+#include <basic/codecompletecache.hxx>
 
 class SbiCodeGen {
     SbiParser* pParser;         // for error messages, line, column etc.
