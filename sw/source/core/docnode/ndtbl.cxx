@@ -329,8 +329,8 @@ const SwTable* SwDoc::InsertTable( const SwInsertTableOptions& rInsTblOpts,
 
     // Create the Box/Line/Table construct
     SwTableLineFmt* pLineFmt = MakeTableLineFmt();
-    SwTableFmt* pTableFmt = pTAFmt ? pTAFmt->GetTableStyle()
-                        : MakeTblFrmFmt( aTblName, GetDfltFrmFmt() );
+    SwTableFmt* pTableStyle = pTAFmt ? pTAFmt->GetTableStyle() : NULL;
+    SwTableFmt* pTableFmt = MakeTblFrmFmt( aTblName, pTableStyle );
 
     /* If the node to insert the table at is a context node and has a
        non-default FRAMEDIR propagate it to the table. */
@@ -350,10 +350,6 @@ const SwTable* SwDoc::InsertTable( const SwInsertTableOptions& rInsTblOpts,
     pTableFmt->SetFmtAttr( SwFmtHoriOrient( 0, eAdjust ) );
     // All lines use the left-to-right Fill-Order!
     pLineFmt->SetFmtAttr( SwFmtFillOrder( ATT_LEFT_TO_RIGHT ) );
-    pTableFmt->GetFirstLineFmt()->SetFmtAttr( SwFmtFillOrder( ATT_LEFT_TO_RIGHT ) );
-    pTableFmt->GetOddLineFmt()->SetFmtAttr( SwFmtFillOrder( ATT_LEFT_TO_RIGHT ) );
-    pTableFmt->GetEvenLineFmt()->SetFmtAttr( SwFmtFillOrder( ATT_LEFT_TO_RIGHT ) );
-    pTableFmt->GetLastLineFmt()->SetFmtAttr( SwFmtFillOrder( ATT_LEFT_TO_RIGHT ) );
 
     // Set USHRT_MAX as the Table's default SSize
     SwTwips nWidth = USHRT_MAX;
@@ -404,7 +400,7 @@ const SwTable* SwDoc::InsertTable( const SwInsertTableOptions& rInsTblOpts,
         ::lcl_SetDfltBorders( pTableFmt );
 
     SwTable * pNdTbl = &pTblNd->GetTable();
-    pNdTbl->GetTableFmt()->RegisterToFormat( *pTableFmt );
+    pNdTbl->RegisterToFormat( *pTableFmt );
 
     pNdTbl->SetRowsToRepeat( nRowsToRepeat );
     pNdTbl->SetTableModel( bNewModel );
@@ -603,15 +599,11 @@ const SwTable* SwDoc::TextToTable( const SwInsertTableOptions& rInsTblOpts,
     // Create the Box/Line/Table construct
     SwTableBoxFmt* pBoxFmt = MakeTableBoxFmt();
     SwTableLineFmt* pLineFmt = MakeTableLineFmt();
-    SwTableFmt* pTableFmt = pTAFmt ? pTAFmt->GetTableStyle()
-                        : MakeTblFrmFmt( GetUniqueTblName(), GetDfltFrmFmt() );
+    SwTableFmt* pTableStyle = pTAFmt ? pTAFmt->GetTableStyle() : NULL;
+    SwTableFmt* pTableFmt = MakeTblFrmFmt( GetUniqueTblName(), pTableStyle );
 
     // All Lines have a left-to-right Fill Order
     pLineFmt->SetFmtAttr( SwFmtFillOrder( ATT_LEFT_TO_RIGHT ));
-    pTableFmt->GetFirstLineFmt()->SetFmtAttr( SwFmtFillOrder( ATT_LEFT_TO_RIGHT ));
-    pTableFmt->GetOddLineFmt()->SetFmtAttr( SwFmtFillOrder( ATT_LEFT_TO_RIGHT ));
-    pTableFmt->GetEvenLineFmt()->SetFmtAttr( SwFmtFillOrder( ATT_LEFT_TO_RIGHT ));
-    pTableFmt->GetLastLineFmt()->SetFmtAttr( SwFmtFillOrder( ATT_LEFT_TO_RIGHT ));
     // The Table's SSize is USHRT_MAX
     pTableFmt->SetFmtAttr( SwFmtFrmSize( ATT_VAR_SIZE, USHRT_MAX ));
     if( !(rInsTblOpts.mnInsMode & tabopts::SPLIT_LAYOUT) )
@@ -658,7 +650,8 @@ const SwTable* SwDoc::TextToTable( const SwInsertTableOptions& rInsTblOpts,
 
     // Set Orientation in the Table's Fmt
     pTableFmt->SetFmtAttr( SwFmtHoriOrient( 0, eAdjust ) );
-    pNdTbl->GetTableFmt()->RegisterToFormat( *pTableFmt );
+
+    pNdTbl->RegisterToFormat( *pTableFmt );
 
     if( rInsTblOpts.mnInsMode & tabopts::DEFAULT_BORDER )
     {
