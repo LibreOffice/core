@@ -78,7 +78,7 @@ public class TableCellLayoutController extends SectionLayoutController
             else if (!"string".equals(valueType))
             {
                 attributeMap.setAttribute(OfficeNamespaces.OFFICE_NS,
-                    FormatValueUtility.VALUE_TYPE, "string");
+                    FormatValueUtility.VALUE_TYPE, "void");
             }
         }
         catch (Exception e)
@@ -101,7 +101,7 @@ public class TableCellLayoutController extends SectionLayoutController
         if (!FormatValueUtility.shouldPrint(this, element))
         {
             attributeMap.setAttribute(OfficeNamespaces.OFFICE_NS,
-                                      FormatValueUtility.VALUE_TYPE, "string");
+                                      FormatValueUtility.VALUE_TYPE, "void");
             return null;
         }
         return FormatValueUtility.computeDataFlag(element, getFlowController());
