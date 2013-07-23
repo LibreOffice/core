@@ -78,9 +78,9 @@ struct SC_DLLPUBLIC ScSingleRefData
     inline  void SetRelName( bool bVal )    { Flags.bRelName = (bVal ? true : false ); }
     inline  bool IsRelName() const          { return Flags.bRelName; }
 
-    inline  bool Valid() const;
+    bool Valid() const;
     /// In external references nTab is -1
-    inline  bool ValidExternal() const;
+    bool ValidExternal() const;
 
     ScAddress toAbs( const ScAddress& rPos ) const;
     void SetAddress( const ScAddress& rAddr, const ScAddress& rPos );
@@ -95,20 +95,6 @@ struct SC_DLLPUBLIC ScSingleRefData
     void Dump() const;
 #endif
 };
-
-inline bool ScSingleRefData::Valid() const
-{
-    return  nCol >= 0 && nCol <= MAXCOL &&
-            nRow >= 0 && nRow <= MAXROW &&
-            nTab >= 0 && nTab <= MAXTAB;
-}
-
-inline bool ScSingleRefData::ValidExternal() const
-{
-    return  nCol >= 0 && nCol <= MAXCOL &&
-            nRow >= 0 && nRow <= MAXROW &&
-            nTab == -1;
-}
 
 /// Complex reference (a range) into the sheet
 struct ScComplexRefData
@@ -134,13 +120,13 @@ struct ScComplexRefData
             Ref1.InitAddress( nCol1, nRow1, nTab1 );
             Ref2.InitAddress( nCol2, nRow2, nTab2 );
         }
-    inline bool IsDeleted() const
-        { return Ref1.IsDeleted() || Ref2.IsDeleted(); }
-    inline bool Valid() const
-        { return Ref1.Valid() && Ref2.Valid(); }
+
+    bool IsDeleted() const;
+    bool Valid() const;
+
     /** In external references nTab is -1 for the start tab and -1 for the end
         tab if one sheet, or >=0 if more than one sheets. */
-    inline  bool ValidExternal() const;
+    bool ValidExternal() const;
 
     SC_DLLPUBLIC ScRange toAbs( const ScAddress& rPos ) const;
     void SetRange( const ScRange& rRange, const ScAddress& rPos );
@@ -159,14 +145,6 @@ struct ScComplexRefData
     void Dump() const;
 #endif
 };
-
-inline bool ScComplexRefData::ValidExternal() const
-{
-    return Ref1.ValidExternal() &&
-        Ref2.nCol >= 0 && Ref2.nCol <= MAXCOL &&
-        Ref2.nRow >= 0 && Ref2.nRow <= MAXROW &&
-        Ref2.nTab >= Ref1.nTab;
-}
 
 #endif
 

@@ -75,6 +75,20 @@ bool ScSingleRefData::IsDeleted() const
     return IsColDeleted() || IsRowDeleted() || IsTabDeleted();
 }
 
+bool ScSingleRefData::Valid() const
+{
+    return  nCol >= 0 && nCol <= MAXCOL &&
+            nRow >= 0 && nRow <= MAXROW &&
+            nTab >= 0 && nTab <= MAXTAB;
+}
+
+bool ScSingleRefData::ValidExternal() const
+{
+    return  nCol >= 0 && nCol <= MAXCOL &&
+            nRow >= 0 && nRow <= MAXROW &&
+            nTab == -1;
+}
+
 ScAddress ScSingleRefData::toAbs( const ScAddress& rPos ) const
 {
     SCCOL nRetCol = Flags.bColRel ? nRelCol + rPos.Col() : nCol;
@@ -290,6 +304,24 @@ ScComplexRefData& ScComplexRefData::Extend( const ScSingleRefData & rRef, const 
 ScComplexRefData& ScComplexRefData::Extend( const ScComplexRefData & rRef, const ScAddress & rPos )
 {
     return Extend( rRef.Ref1, rPos).Extend( rRef.Ref2, rPos);
+}
+
+bool ScComplexRefData::IsDeleted() const
+{
+    return Ref1.IsDeleted() || Ref2.IsDeleted();
+}
+
+bool ScComplexRefData::Valid() const
+{
+    return Ref1.Valid() && Ref2.Valid();
+}
+
+bool ScComplexRefData::ValidExternal() const
+{
+    return Ref1.ValidExternal() &&
+        Ref2.nCol >= 0 && Ref2.nCol <= MAXCOL &&
+        Ref2.nRow >= 0 && Ref2.nRow <= MAXROW &&
+        Ref2.nTab >= Ref1.nTab;
 }
 
 ScRange ScComplexRefData::toAbs( const ScAddress& rPos ) const
