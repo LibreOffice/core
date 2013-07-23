@@ -1120,11 +1120,9 @@ AC_ARG_ENABLE(desktop-gui-elements,
 
 AC_ARG_ENABLE(macosx-code-signing,
     AS_HELP_STRING([--enable-macosx-code-signing<=identity>],
-        [Sign executables, dylibs, frameworks and the app bundle. The
-         default is to do signing if there is a suitable certificate
-         in your keychain, so if you don't want that, use the
-         corresponding --disable option. Experimental work in
-         progress, don't use unless you are working on this.]),
+        [Sign executables, dylibs, frameworks and the app bundle. If you
+         don't provide an identity the first suitable certificate
+         in your keychain is used.]),
 ,)
 
 AC_ARG_ENABLE(macosx-sandbox,
