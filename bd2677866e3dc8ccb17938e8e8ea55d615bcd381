@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXn//+Jk\u003d",
+        "filename": "sfx2/source/doc/objcont.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2013-07-23T21:27:05Z",
+      "side": 1,
+      "message": "Change me! indeed :)",
+      "revId": "bd2677866e3dc8ccb17938e8e8ea55d615bcd381",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
