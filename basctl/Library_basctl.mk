@@ -90,6 +90,7 @@ $(eval $(call gb_Library_add_exception_objects,basctl,\
 	basctl/source/basicide/linenumberwindow \
 	basctl/source/basicide/localizationmgr \
 	basctl/source/basicide/macrodlg \
+	basctl/source/basicide/codecompleteoptionsdlg \
 	basctl/source/basicide/moduldl2 \
 	basctl/source/basicide/moduldlg \
 	basctl/source/basicide/objdlg \

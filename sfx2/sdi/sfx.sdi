@@ -3819,7 +3819,7 @@ SfxVoidItem MatchGroup SID_BASICIDE_MATCHGROUP
     GroupId = GID_MACRO;
 ]
 
-SfxBoolItem BasicCodeCompletition SID_BASICIDE_CODECOMPLETITION
+SfxVoidItem CodeCompleteOptionsDialog SID_BASICIDE_CODECOMPLETITION
 
 [
     /* flags: */
@@ -3829,7 +3829,7 @@ SfxBoolItem BasicCodeCompletition SID_BASICIDE_CODECOMPLETITION
     HasCoreId = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
-    Toggle = TRUE,
+    Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;

@@ -671,7 +671,10 @@ void SbModule::EndDefinitions( sal_Bool bNewState )
         if( p )
         {
             if( p->bInvalid )
+            {
+                std::cerr << "invalid definition: " << p->GetName() << std::endl;
                 pMethods->Remove( p );
+            }
             else
             {
                 p->bInvalid = bNewState;

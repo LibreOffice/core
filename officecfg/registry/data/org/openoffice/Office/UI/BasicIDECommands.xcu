@@ -8,9 +8,9 @@
           <value xml:lang="en-US">Goto Line Number...</value>
         </prop>
       </node>
-      <node oor:name=".uno:BasicCodeCompletition" oor:op="replace">
+      <node oor:name=".uno:CodeCompleteOptionsDialog" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Enable Code Completition</value>
+          <value xml:lang="en-US">Code Completition Options</value>
         </prop>
       </node>
       <node oor:name=".uno:ShowLines" oor:op="replace">
