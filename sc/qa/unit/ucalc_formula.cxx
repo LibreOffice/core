@@ -117,20 +117,40 @@ void Test::testFormulaHashAndTag()
 void Test::testFormulaRefData()
 {
     ScAddress aAddr(4,5,3), aPos(2,2,2);
-    ScSingleRefData aRefData;
-    aRefData.InitAddress(aAddr);
-    CPPUNIT_ASSERT_MESSAGE("Wrong ref data state.", !aRefData.IsRowRel() && !aRefData.IsColRel() && !aRefData.IsTabRel());
-    ASSERT_EQUAL_TYPE(SCCOL, 4, aRefData.GetCol());
-    ASSERT_EQUAL_TYPE(SCROW, 5, aRefData.GetRow());
-    ASSERT_EQUAL_TYPE(SCTAB, 3, aRefData.GetTab());
+    ScSingleRefData aRef;
+    aRef.InitAddress(aAddr);
+    CPPUNIT_ASSERT_MESSAGE("Wrong ref data state.", !aRef.IsRowRel() && !aRef.IsColRel() && !aRef.IsTabRel());
+    ASSERT_EQUAL_TYPE(SCCOL, 4, aRef.GetCol());
+    ASSERT_EQUAL_TYPE(SCROW, 5, aRef.GetRow());
+    ASSERT_EQUAL_TYPE(SCTAB, 3, aRef.GetTab());
 
-    aRefData.SetRowRel(true);
-    aRefData.SetColRel(true);
-    aRefData.SetTabRel(true);
-    aRefData.SetAddress(aAddr, aPos);
-    ASSERT_EQUAL_TYPE(SCCOL, 2, aRefData.GetCol());
-    ASSERT_EQUAL_TYPE(SCROW, 3, aRefData.GetRow());
-    ASSERT_EQUAL_TYPE(SCTAB, 1, aRefData.GetTab());
+    aRef.SetRowRel(true);
+    aRef.SetColRel(true);
+    aRef.SetTabRel(true);
+    aRef.SetAddress(aAddr, aPos);
+    ASSERT_EQUAL_TYPE(SCCOL, 2, aRef.GetCol());
+    ASSERT_EQUAL_TYPE(SCROW, 3, aRef.GetRow());
+    ASSERT_EQUAL_TYPE(SCTAB, 1, aRef.GetTab());
+
+    // Test extension of range reference.
+
+    ScComplexRefData aDoubleRef;
+    aDoubleRef.InitRange(ScRange(2,2,0,4,4,0));
+
+    aRef.InitAddress(ScAddress(6,5,0));
+
+    aDoubleRef.Extend(aRef, ScAddress());
+    ScRange aTest = aDoubleRef.toAbs(ScAddress());
+    CPPUNIT_ASSERT_MESSAGE("Wrong start position of extended range.", aTest.aStart == ScAddress(2,2,0));
+    CPPUNIT_ASSERT_MESSAGE("Wrong end position of extended range.", aTest.aEnd == ScAddress(6,5,0));
+
+    ScComplexRefData aDoubleRef2;
+    aDoubleRef2.InitRangeRel(ScRange(1,2,0,8,6,0), ScAddress(5,5,0));
+    aDoubleRef.Extend(aDoubleRef2, ScAddress(5,5,0));
+    aTest = aDoubleRef.toAbs(ScAddress(5,5,0));
+
+    CPPUNIT_ASSERT_MESSAGE("Wrong start position of extended range.", aTest.aStart == ScAddress(1,2,0));
+    CPPUNIT_ASSERT_MESSAGE("Wrong end position of extended range.", aTest.aEnd == ScAddress(8,6,0));
 }
 
 namespace {
