@@ -75,7 +75,6 @@
 
 #include <osl/mutex.hxx>
 
-#include <rtl/logfile.hxx>
 
 #include <sfx2/app.hxx>
 #include <sfx2/bindings.hxx>
@@ -1127,7 +1126,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
 
             Reference < XDispatchProvider > xProv( xTargetFrame, UNO_QUERY );
             Reference < XDispatch > xDisp = xProv.is() ? xProv->queryDispatch( aURL, aTarget, FrameSearchFlag::ALL ) : Reference < XDispatch >();;
-            RTL_LOGFILE_PRODUCT_CONTEXT( aLog2, "PERFORMANCE - SfxApplication::OpenDocExec_Impl" );
+            SAL_INFO( "sfx2.appl", "PERFORMANCE - SfxApplication::OpenDocExec_Impl" );
             if ( xDisp.is() )
                 xDisp->dispatch( aURL, aArgs );
         }

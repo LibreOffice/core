@@ -201,6 +201,12 @@ certain functionality.
 @li @c sdext.pdfimport.pdfparse
 @li @c sdext.presenter
 
+@section sfx2
+
+@li @c sfx2
+@li @c sfx2.doc
+@li @c sfx2.appl
+
 @section sfx
 
 @li @c sfx
