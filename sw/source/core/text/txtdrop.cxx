@@ -281,9 +281,11 @@ void SwDropPortion::PaintTxt( const SwTxtPaintInfo &rInf ) const
 
     const SwDropPortionPart* pCurrPart = GetPart();
     const xub_StrLen nOldLen = GetLen();
+    const KSHORT nOldAscent = GetAscent();
 
     const SwTwips nBasePosY  = rInf.Y();
     ((SwTxtPaintInfo&)rInf).Y( nBasePosY + nY );
+    ((SwDropPortion*)this)->SetAscent( nOldAscent + nY );
     SwDropSave aSave( rInf );
     // for text inside drop portions we let vcl handle the text directions
     SwLayoutModeModifier aLayoutModeModifier( *rInf.GetOut() );
@@ -304,6 +306,7 @@ void SwDropPortion::PaintTxt( const SwTxtPaintInfo &rInf ) const
 
     ((SwTxtPaintInfo&)rInf).Y( nBasePosY );
     ((SwDropPortion*)this)->SetLen( nOldLen );
+    ((SwDropPortion*)this)->SetAscent( nOldAscent );
 }
 
 /*************************************************************************
