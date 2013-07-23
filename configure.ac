@@ -8159,15 +8159,26 @@ if test "x$enable_firebird_sdbc" = "xyes"; then
             FIREBIRD_CFLAGS=`$FIREBIRDCONFIG --cflags`
             FIREBIRD_LIBS=`$FIREBIRDCONFIG --embedlibs`
         fi
+        AC_MSG_RESULT([includes `$FIREBIRD_CFLAGS', libraries `$FIREBIRD_LIBS'])
         AC_MSG_CHECKING([Firebird version])
-        FIREBIRD_MAJOR=`echo $FIREBIRD_VERSION | cut -d"." -f1`
-        FIREBIRD_MINOR=`echo $FIREBIRD_VERSION | cut -d"." -f2`
-        if test "$FIREBIRD_MAJOR" -eq "2" -a "$FIREBIRD_MINOR" -eq "5"; then
-            AC_MSG_RESULT([OK])
+        if test -n "${FIREBIRD_VERSION}"; then
+            FIREBIRD_MAJOR=`echo $FIREBIRD_VERSION | cut -d"." -f1`
+            FIREBIRD_MINOR=`echo $FIREBIRD_VERSION | cut -d"." -f2`
+            if test "$FIREBIRD_MAJOR" -eq "2" -a "$FIREBIRD_MINOR" -eq "5"; then
+                AC_MSG_RESULT([OK])
+            else
+                AC_MSG_ERROR([Ensure firebird 2.5.x is installed])
+            fi
         else
-            AC_MSG_ERROR([Ensure firebird 2.5.x is installed])
+            __save_CFLAGS="${CFLAGS}"
+            CFLAGS="${CFLAGS} ${FIREBIRD_CFLAGS}"
+            AC_COMPILE_IFELSE([AC_LANG_SOURCE([[#include <ibase.h>
+#if defined(FB_API_VER) && FB_API_VER == 25
+#else
+#error "Wrong Firebird API version"
+#endif]])],AC_MSG_RESULT([OK]),AC_MSG_ERROR([Ensure firebird 2.5.x is installed]))
+            CFLAGS="${__save_CFLAGS}"
         fi
-        AC_MSG_RESULT([includes $FIREBIRD_CFLAGS, libraries $FIREBIRD_LIBS])
         ENABLE_FIREBIRD_SDBC="TRUE"
     elif test "$enable_database_connectivity" != yes; then
         AC_MSG_RESULT([none])
