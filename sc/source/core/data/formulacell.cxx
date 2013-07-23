@@ -2267,18 +2267,18 @@ bool ScFormulaCell::UpdateReferenceOnShift(
         pOldCode.reset(pCode->Clone());
 
     bool bValChanged = false;
-    bool bRangeModified = false;    // any range, not only shared formula
+    bool bRefModified = false;
     bool bRefSizeChanged = false;
 
     if (bHasRefs)
     {
         // Update cell or range references.
         sc::RefUpdateResult aRes = pCode->AdjustReferenceOnShift(rCxt, aOldPos);
-        bRangeModified = aRes.mbReferenceModified;
+        bRefModified = aRes.mbReferenceModified;
         bValChanged = aRes.mbValueChanged;
     }
 
-    if (bValChanged || bRangeModified)
+    if (bValChanged || bRefModified)
         bCellStateChanged = true;
 
     if (bOnRefMove)
@@ -2304,7 +2304,7 @@ bool ScFormulaCell::UpdateReferenceOnShift(
         bHasRelName = HasRelNameReference();
         // Reference changed and new listening needed?
         // Except in Insert/Delete without specialties.
-        bNewListening = (bRangeModified || bColRowNameCompile
+        bNewListening = (bRefModified || bColRowNameCompile
                 || (bValChanged && (bInDeleteUndo || bRefSizeChanged)) || bHasRelName);
 
         if ( bNewListening )
@@ -2312,12 +2312,12 @@ bool ScFormulaCell::UpdateReferenceOnShift(
     }
 
     // NeedDirty for changes except for Copy and Move/Insert without RelNames
-    bool bNeedDirty = (bRangeModified || bValChanged || bColRowNameCompile || bOnRefMove);
+    bool bNeedDirty = (bValChanged || bColRowNameCompile || bOnRefMove);
 
     if (pUndoDoc && (bValChanged || bOnRefMove))
         setOldCodeToUndo(pUndoDoc, aUndoPos, pOldCode.get(), eTempGrammar, cMatrixFlag);
 
-    if ( ( bCompile = (bCompile || bRangeModified || bColRowNameCompile) ) != 0 )
+    if ( (bCompile = (bCompile || bColRowNameCompile)) != 0 )
     {
         CompileTokenArray( bNewListening ); // no Listening
         bNeedDirty = true;
