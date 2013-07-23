@@ -14,8 +14,8 @@
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
+#include <com/sun/star/beans/Property.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 
@@ -83,14 +83,20 @@ void CuiAboutConfigTabPage::InsertEntry( OUString& rProp, OUString&  rStatus, OU
     pPrefBox->Insert( pEntry );
 }
 
+void CuiAboutConfigTabPage::Reset( const SfxItemSet& )
+{
+   pPrefBox->Clear();
+
+   Reference< XNameAccess > xConfigAccess = getConfigAccess();
+
+   FillItems( xConfigAccess, OUString("org.openoffice") );
+}
 
 void CuiAboutConfigTabPage::FillItems( Reference< XNameAccess >xNameAccess, OUString sPath)
 {
     sal_Bool bIsLeafNode;
 
-    //Reference< XNameAccess > xNextNameAccess;
     Reference< XHierarchicalNameAccess > xHierarchicalNameAccess( xNameAccess, uno::UNO_QUERY_THROW );
-    //Reference< XHierarchicalNameAccess > xNextHierarchicalNameAccess;
 
     uno::Sequence< OUString > seqItems = xNameAccess->getElementNames();
     for( sal_Int16 i = 0; i < seqItems.getLength(); ++i )
@@ -115,6 +121,8 @@ void CuiAboutConfigTabPage::FillItems( Reference< XNameAccess >xNameAccess, OUSt
         if( bIsLeafNode )
         {
             //InsertEntry( sPath, "", "", "");
+            //Reference< beans::Property > aProperty = xHierarchicalNameAccess->getAsProperty();//getPropertyValue( seqItems[ i ] );
+            //InsertEntry( sPath + OUString("/") + seqItems[ i ], OUString(""), OUString(""), xNameAccess->getPropertyValue( seqItems[ i ] ) );
         }
     }
 }
