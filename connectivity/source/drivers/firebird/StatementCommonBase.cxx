@@ -59,20 +59,20 @@ using namespace ::osl;
 using namespace ::rtl;
 using namespace ::std;
 
-OStatement_Base::OStatement_Base(OConnection* _pConnection)
-    : OStatement_BASE(_pConnection->getMutex()),
-      OPropertySetHelper(OStatement_BASE::rBHelper),
+OStatementCommonBase::OStatementCommonBase(OConnection* _pConnection)
+    : OStatementCommonBase_Base(_pConnection->getMutex()),
+      OPropertySetHelper(OStatementCommonBase_Base::rBHelper),
       m_pConnection(_pConnection),
-      rBHelper(OStatement_BASE::rBHelper)
+      rBHelper(OStatementCommonBase_Base::rBHelper)
 {
     m_pConnection->acquire();
 }
 
-OStatement_Base::~OStatement_Base()
+OStatementCommonBase::~OStatementCommonBase()
 {
 }
 
-void OStatement_Base::disposeResultSet()
+void OStatementCommonBase::disposeResultSet()
 {
     //free the cursor if alive
 //     uno::Reference< XComponent > xComp(m_xResultSet.get(), UNO_QUERY);
@@ -82,47 +82,47 @@ void OStatement_Base::disposeResultSet()
 }
 
 //-----------------------------------------------------------------------------
-Any SAL_CALL OStatement_Base::queryInterface( const Type & rType ) throw(RuntimeException)
+Any SAL_CALL OStatementCommonBase::queryInterface( const Type & rType ) throw(RuntimeException)
 {
-    Any aRet = OStatement_BASE::queryInterface(rType);
+    Any aRet = OStatementCommonBase_Base::queryInterface(rType);
     if(!aRet.hasValue())
         aRet = OPropertySetHelper::queryInterface(rType);
     return aRet;
 }
 // -------------------------------------------------------------------------
-Sequence< Type > SAL_CALL OStatement_Base::getTypes(  ) throw(RuntimeException)
+Sequence< Type > SAL_CALL OStatementCommonBase::getTypes(  ) throw(RuntimeException)
 {
     ::cppu::OTypeCollection aTypes(
         ::cppu::UnoType< uno::Reference< XMultiPropertySet > >::get(),
         ::cppu::UnoType< uno::Reference< XFastPropertySet > >::get(),
         ::cppu::UnoType< uno::Reference< XPropertySet > >::get());
 
-    return concatSequences(aTypes.getTypes(),OStatement_BASE::getTypes());
+    return concatSequences(aTypes.getTypes(),OStatementCommonBase_Base::getTypes());
 }
 // -------------------------------------------------------------------------
 
-void SAL_CALL OStatement_Base::cancel(  ) throw(RuntimeException)
+void SAL_CALL OStatementCommonBase::cancel(  ) throw(RuntimeException)
 {
     MutexGuard aGuard(m_pConnection->getMutex());
-    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+    checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
     // cancel the current sql statement
 }
 // -------------------------------------------------------------------------
 
-void SAL_CALL OStatement_Base::close(  ) throw(SQLException, RuntimeException)
+void SAL_CALL OStatementCommonBase::close(  ) throw(SQLException, RuntimeException)
 {
     SAL_INFO("connectivity.firebird", "close().");
 
     {
         MutexGuard aGuard(m_pConnection->getMutex());
-        checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+        checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
 
     }
     dispose();
 }
 
 
-OUString OStatement_Base::sanitizeSqlString(const OUString& sqlIn)
+OUString OStatementCommonBase::sanitizeSqlString(const OUString& sqlIn)
 {
     // TODO: verify this is all we need.
     static const sal_Unicode pattern('"');
@@ -130,7 +130,7 @@ OUString OStatement_Base::sanitizeSqlString(const OUString& sqlIn)
     return sqlIn.replace(pattern, empty);
 }
 
-int OStatement_Base::prepareAndDescribeStatement(const OUString& sqlIn,
+int OStatementCommonBase::prepareAndDescribeStatement(const OUString& sqlIn,
                                                  isc_stmt_handle& aStatementHandle,
                                                  XSQLDA*& pOutSqlda,
                                                  XSQLDA* pInSqlda)
@@ -214,25 +214,25 @@ int OStatement_Base::prepareAndDescribeStatement(const OUString& sqlIn,
 }
 
 // ---- XMultipleResults - UNSUPPORTED ----------------------------------------
-uno::Reference< XResultSet > SAL_CALL OStatement_Base::getResultSet() throw(SQLException, RuntimeException)
+uno::Reference< XResultSet > SAL_CALL OStatementCommonBase::getResultSet() throw(SQLException, RuntimeException)
 {
     // TODO: verify we really can't support this
     return uno::Reference< XResultSet >();
 //     MutexGuard aGuard( m_aMutex );
-//     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+//     checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
 
 //     return m_xResultSet;
 }
 
-sal_Bool SAL_CALL OStatement_Base::getMoreResults() throw(SQLException, RuntimeException)
+sal_Bool SAL_CALL OStatementCommonBase::getMoreResults() throw(SQLException, RuntimeException)
 {
     // TODO: verify we really can't support this
     return sal_False;
 //     MutexGuard aGuard( m_aMutex );
-//     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+//     checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
 }
 
-sal_Int32 SAL_CALL OStatement_Base::getUpdateCount() throw(SQLException, RuntimeException)
+sal_Int32 SAL_CALL OStatementCommonBase::getUpdateCount() throw(SQLException, RuntimeException)
 {
     // TODO: verify we really can't support this
     return 0;
@@ -240,16 +240,16 @@ sal_Int32 SAL_CALL OStatement_Base::getUpdateCount() throw(SQLException, Runtime
 
 
 // ---- XWarningsSupplier - UNSUPPORTED ----------------------------------------
-Any SAL_CALL OStatement_Base::getWarnings() throw(SQLException, RuntimeException)
+Any SAL_CALL OStatementCommonBase::getWarnings() throw(SQLException, RuntimeException)
 {
     return Any();
 }
 
-void SAL_CALL OStatement_Base::clearWarnings() throw(SQLException, RuntimeException)
+void SAL_CALL OStatementCommonBase::clearWarnings() throw(SQLException, RuntimeException)
 {
 }
 
-::cppu::IPropertyArrayHelper* OStatement_Base::createArrayHelper( ) const
+::cppu::IPropertyArrayHelper* OStatementCommonBase::createArrayHelper( ) const
 {
     // this properties are define by the service statement
     // they must in alphabetic order
@@ -271,12 +271,12 @@ void SAL_CALL OStatement_Base::clearWarnings() throw(SQLException, RuntimeExcept
 }
 
 
-::cppu::IPropertyArrayHelper & OStatement_Base::getInfoHelper()
+::cppu::IPropertyArrayHelper & OStatementCommonBase::getInfoHelper()
 {
-    return *const_cast<OStatement_Base*>(this)->getArrayHelper();
+    return *const_cast<OStatementCommonBase*>(this)->getArrayHelper();
 }
 // -------------------------------------------------------------------------
-sal_Bool OStatement_Base::convertFastPropertyValue(
+sal_Bool OStatementCommonBase::convertFastPropertyValue(
                             Any & rConvertedValue,
                             Any & rOldValue,
                             sal_Int32 nHandle,
@@ -292,7 +292,7 @@ sal_Bool OStatement_Base::convertFastPropertyValue(
     return bConverted;
 }
 // -------------------------------------------------------------------------
-void OStatement_Base::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& rValue) throw (Exception)
+void OStatementCommonBase::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& rValue) throw (Exception)
 {
     (void) rValue;
     // set the value to what ever is necessary
@@ -313,7 +313,7 @@ void OStatement_Base::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const A
     }
 }
 // -------------------------------------------------------------------------
-void OStatement_Base::getFastPropertyValue(Any& rValue,sal_Int32 nHandle) const
+void OStatementCommonBase::getFastPropertyValue(Any& rValue,sal_Int32 nHandle) const
 {
     (void) rValue;
     switch(nHandle)
@@ -333,17 +333,17 @@ void OStatement_Base::getFastPropertyValue(Any& rValue,sal_Int32 nHandle) const
     }
 }
 
-void SAL_CALL OStatement_Base::acquire() throw()
+void SAL_CALL OStatementCommonBase::acquire() throw()
 {
-    OStatement_BASE::acquire();
+    OStatementCommonBase_Base::acquire();
 }
 
-void SAL_CALL OStatement_Base::release() throw()
+void SAL_CALL OStatementCommonBase::release() throw()
 {
-    OStatement_BASE::release();
+    OStatementCommonBase_Base::release();
 }
 
-uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL OStatement_Base::getPropertySetInfo(  ) throw(RuntimeException)
+uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL OStatementCommonBase::getPropertySetInfo(  ) throw(RuntimeException)
 {
     return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
 }

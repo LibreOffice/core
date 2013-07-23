@@ -58,10 +58,10 @@ namespace connectivity
                                         ::com::sun::star::sdbc::XParameters,
                                         ::com::sun::star::sdbc::XPreparedBatchExecution,
                                         ::com::sun::star::sdbc::XResultSetMetaDataSupplier,
-                                        ::com::sun::star::lang::XServiceInfo> OPreparedStatement_BASE;
+                                        ::com::sun::star::lang::XServiceInfo> OPreparedStatement_Base;
 
-        class OPreparedStatement :  public  OStatement_Base,
-                                    public  OPreparedStatement_BASE
+        class OPreparedStatement :  public  OStatementCommonBase,
+                                    public  OPreparedStatement_Base
         {
         protected:
             struct Parameter

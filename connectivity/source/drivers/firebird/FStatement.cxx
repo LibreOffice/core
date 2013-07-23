@@ -38,6 +38,7 @@
 #include "FResultSet.hxx"
 #include "Util.hxx"
 
+#include <comphelper/sequence.hxx>
 #include <osl/diagnose.h>
 #include <osl/thread.h>
 #include <rtl/ustrbuf.hxx>
@@ -84,20 +85,12 @@ IMPLEMENT_SERVICE_INFO(OStatement,"com.sun.star.sdbcx.OStatement","com.sun.star.
 
 void SAL_CALL OStatement::acquire() throw()
 {
-    OStatement_Base::acquire();
+    OStatementCommonBase::acquire();
 }
 
 void SAL_CALL OStatement::release() throw()
 {
-    OStatement_Base::release();
-}
-
-Any SAL_CALL OStatement::queryInterface( const Type & rType ) throw(RuntimeException)
-{
-    Any aRet = ::cppu::queryInterface(rType,static_cast< XBatchExecution*> (this));
-    if(!aRet.hasValue())
-        aRet = OStatement_Base::queryInterface(rType);
-    return aRet;
+    OStatementCommonBase::release();
 }
 
 // ---- XStatement -----------------------------------------------------------
@@ -106,7 +99,7 @@ sal_Int32 SAL_CALL OStatement::executeUpdate(const OUString& sqlIn)
 {
     // TODO: close ResultSet if existing -- so so in all 3 execute methods.
     MutexGuard aGuard(m_pConnection->getMutex());
-    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+    checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
 
     const OUString sql = sanitizeSqlString(sqlIn);
 
@@ -132,7 +125,7 @@ uno::Reference< XResultSet > SAL_CALL OStatement::executeQuery(const OUString& s
     throw(SQLException, RuntimeException)
 {
     MutexGuard aGuard(m_pConnection->getMutex());
-    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+    checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
 
     const OUString sql = sanitizeSqlString(sqlIn);
 
@@ -179,7 +172,7 @@ sal_Bool SAL_CALL OStatement::execute(const OUString& sqlIn)
              "Got called with sql: " << sqlIn);
 
     MutexGuard aGuard(m_pConnection->getMutex());
-    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+    checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
 
     XSQLDA* pOutSqlda = 0;
     isc_stmt_handle aStatementHandle = 0;
@@ -216,8 +209,26 @@ uno::Reference< XConnection > SAL_CALL OStatement::getConnection()
     throw(SQLException, RuntimeException)
 {
     MutexGuard aGuard(m_pConnection->getMutex());
-    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+    checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
 
     return (uno::Reference< XConnection >)m_pConnection;
 }
+
+Any SAL_CALL OStatement::queryInterface( const Type & rType ) throw(RuntimeException)
+{
+    Any aRet = OStatement_Base::queryInterface(rType);
+    if(!aRet.hasValue())
+        aRet = ::cppu::queryInterface(rType,static_cast< XBatchExecution*> (this));
+    if(!aRet.hasValue())
+        aRet = OStatementCommonBase::queryInterface(rType);
+    return aRet;
+}
+
+uno::Sequence< Type > SAL_CALL OStatement::getTypes()
+    throw(RuntimeException)
+{
+    return concatSequences(OStatement_Base::getTypes(),
+                           OStatementCommonBase::getTypes());
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

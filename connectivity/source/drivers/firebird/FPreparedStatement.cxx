@@ -72,7 +72,7 @@ IMPLEMENT_SERVICE_INFO(OPreparedStatement,"com.sun.star.sdbcx.firebird.PreparedS
 OPreparedStatement::OPreparedStatement( OConnection* _pConnection,
                                         const TTypeInfoVector& _TypeInfo,
                                         const OUString& sql)
-    :OStatement_Base(_pConnection)
+    :OStatementCommonBase(_pConnection)
     ,m_aTypeInfo(_TypeInfo)
     ,m_sSqlStatement(sql)
     ,m_statementHandle(0)
@@ -87,7 +87,7 @@ void OPreparedStatement::ensurePrepared()
     throw (SQLException)
 {
     MutexGuard aGuard(m_pConnection->getMutex());
-    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+    checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
 
     if (m_statementHandle)
         return;
@@ -161,34 +161,35 @@ OPreparedStatement::~OPreparedStatement()
 
 void SAL_CALL OPreparedStatement::acquire() throw()
 {
-    OStatement_Base::acquire();
+    OStatementCommonBase::acquire();
 }
 
 void SAL_CALL OPreparedStatement::release() throw()
 {
-    OStatement_Base::release();
+    OStatementCommonBase::release();
 }
 
 Any SAL_CALL OPreparedStatement::queryInterface(const Type& rType)
     throw(RuntimeException)
 {
-    Any aRet = OStatement_Base::queryInterface(rType);
+    Any aRet = OStatementCommonBase::queryInterface(rType);
     if(!aRet.hasValue())
-        aRet = OPreparedStatement_BASE::queryInterface(rType);
+        aRet = OPreparedStatement_Base::queryInterface(rType);
     return aRet;
 }
 
 uno::Sequence< Type > SAL_CALL OPreparedStatement::getTypes()
     throw(RuntimeException)
 {
-    return OPreparedStatement_BASE::getTypes();
+    return concatSequences(OPreparedStatement_Base::getTypes(),
+                           OStatementCommonBase::getTypes());
 }
 
 Reference< XResultSetMetaData > SAL_CALL OPreparedStatement::getMetaData()
     throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_pConnection->getMutex() );
-    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+    checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
 
     // TODO: implement
 //     if(!m_xMetaData.is())
@@ -202,21 +203,21 @@ void SAL_CALL OPreparedStatement::close() throw(SQLException, RuntimeException)
     SAL_INFO("connectivity.firebird", "close()");
 
     MutexGuard aGuard( m_pConnection->getMutex() );
-    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+    checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
 
     if (m_statementHandle)
     {
         // TODO: implement
     }
 
-    OStatement_Base::close();
+    OStatementCommonBase::close();
 }
 
 sal_Bool SAL_CALL OPreparedStatement::execute()
     throw(SQLException, RuntimeException)
 {
     MutexGuard aGuard( m_pConnection->getMutex() );
-    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+    checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
 
     // TODO: implement
     return sal_False;
@@ -226,7 +227,7 @@ sal_Int32 SAL_CALL OPreparedStatement::executeUpdate()
     throw(SQLException, RuntimeException)
 {
     MutexGuard aGuard( m_pConnection->getMutex() );
-    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+    checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
 
     // TODO: implement
     return 0;
@@ -241,7 +242,7 @@ void SAL_CALL OPreparedStatement::setString(sal_Int32 nParameterIndex,
              "x: " << x);
 
     MutexGuard aGuard( m_pConnection->getMutex() );
-    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+    checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
     ensurePrepared();
 
     checkParameterIndex(nParameterIndex);
@@ -277,7 +278,7 @@ Reference< XConnection > SAL_CALL OPreparedStatement::getConnection()
     throw(SQLException, RuntimeException)
 {
     MutexGuard aGuard( m_pConnection->getMutex() );
-    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+    checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
 
     return Reference< XConnection >(m_pConnection);
 }
@@ -289,7 +290,7 @@ Reference< XResultSet > SAL_CALL OPreparedStatement::executeQuery()
              "Got called with sql: " <<  m_sSqlStatement);
 
     MutexGuard aGuard( m_pConnection->getMutex() );
-    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+    checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
     ensurePrepared();
 
     ISC_STATUS aErr;
@@ -322,7 +323,7 @@ void SAL_CALL OPreparedStatement::setBoolean( sal_Int32 parameterIndex, sal_Bool
     (void) parameterIndex;
     (void) x;
     ::osl::MutexGuard aGuard( m_pConnection->getMutex() );
-    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+    checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
 
 }
 // -------------------------------------------------------------------------
@@ -331,7 +332,7 @@ void SAL_CALL OPreparedStatement::setByte( sal_Int32 parameterIndex, sal_Int8 x 
     (void) parameterIndex;
     (void) x;
     ::osl::MutexGuard aGuard( m_pConnection->getMutex() );
-    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+    checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
 
 
 }
@@ -342,7 +343,7 @@ void SAL_CALL OPreparedStatement::setDate( sal_Int32 parameterIndex, const Date&
     (void) parameterIndex;
     (void) aData;
     ::osl::MutexGuard aGuard( m_pConnection->getMutex() );
-    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+    checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
 
 }
 // -------------------------------------------------------------------------
@@ -353,7 +354,7 @@ void SAL_CALL OPreparedStatement::setTime( sal_Int32 parameterIndex, const Time&
     (void) parameterIndex;
     (void) aVal;
     ::osl::MutexGuard aGuard( m_pConnection->getMutex() );
-    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+    checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
 
 }
 // -------------------------------------------------------------------------
@@ -363,7 +364,7 @@ void SAL_CALL OPreparedStatement::setTimestamp( sal_Int32 parameterIndex, const 
     (void) parameterIndex;
     (void) aVal;
     ::osl::MutexGuard aGuard( m_pConnection->getMutex() );
-    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+    checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
 
 }
 // -------------------------------------------------------------------------
@@ -373,7 +374,7 @@ void SAL_CALL OPreparedStatement::setDouble( sal_Int32 parameterIndex, double x 
     (void) parameterIndex;
     (void) x;
     ::osl::MutexGuard aGuard( m_pConnection->getMutex() );
-    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+    checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
 
 }
 
@@ -384,7 +385,7 @@ void SAL_CALL OPreparedStatement::setFloat( sal_Int32 parameterIndex, float x ) 
     (void) parameterIndex;
     (void) x;
     ::osl::MutexGuard aGuard( m_pConnection->getMutex() );
-    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+    checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
 
 }
 // -------------------------------------------------------------------------
@@ -394,7 +395,7 @@ void SAL_CALL OPreparedStatement::setInt( sal_Int32 parameterIndex, sal_Int32 x 
     (void) parameterIndex;
     (void) x;
     ::osl::MutexGuard aGuard( m_pConnection->getMutex() );
-    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+    checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
 
 }
 // -------------------------------------------------------------------------
@@ -404,7 +405,7 @@ void SAL_CALL OPreparedStatement::setLong( sal_Int32 parameterIndex, sal_Int64 a
     (void) parameterIndex;
     (void) aVal;
     ::osl::MutexGuard aGuard( m_pConnection->getMutex() );
-    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+    checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
 
 }
 // -------------------------------------------------------------------------
@@ -414,7 +415,7 @@ void SAL_CALL OPreparedStatement::setNull( sal_Int32 parameterIndex, sal_Int32 s
     (void) parameterIndex;
     (void) sqlType;
     ::osl::MutexGuard aGuard( m_pConnection->getMutex() );
-    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+    checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
 
 }
 // -------------------------------------------------------------------------
@@ -424,7 +425,7 @@ void SAL_CALL OPreparedStatement::setClob( sal_Int32 parameterIndex, const Refer
     (void) parameterIndex;
     (void) x;
     ::osl::MutexGuard aGuard( m_pConnection->getMutex() );
-    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+    checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
 
 }
 // -------------------------------------------------------------------------
@@ -434,7 +435,7 @@ void SAL_CALL OPreparedStatement::setBlob( sal_Int32 parameterIndex, const Refer
     (void) parameterIndex;
     (void) x;
     ::osl::MutexGuard aGuard( m_pConnection->getMutex() );
-    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+    checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
 
 }
 // -------------------------------------------------------------------------
@@ -444,7 +445,7 @@ void SAL_CALL OPreparedStatement::setArray( sal_Int32 parameterIndex, const Refe
     (void) parameterIndex;
     (void) x;
     ::osl::MutexGuard aGuard( m_pConnection->getMutex() );
-    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+    checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
 
 }
 // -------------------------------------------------------------------------
@@ -454,7 +455,7 @@ void SAL_CALL OPreparedStatement::setRef( sal_Int32 parameterIndex, const Refere
     (void) parameterIndex;
     (void) x;
     ::osl::MutexGuard aGuard( m_pConnection->getMutex() );
-    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+    checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
 
 }
 // -------------------------------------------------------------------------
@@ -465,7 +466,7 @@ void SAL_CALL OPreparedStatement::setObjectWithInfo( sal_Int32 parameterIndex, c
     (void) x;
     (void) sqlType;
     (void) scale;
-    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+    checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
     ::osl::MutexGuard aGuard( m_pConnection->getMutex() );
 
 }
@@ -477,7 +478,7 @@ void SAL_CALL OPreparedStatement::setObjectNull( sal_Int32 parameterIndex, sal_I
     (void) sqlType;
     (void) typeName;
     ::osl::MutexGuard aGuard( m_pConnection->getMutex() );
-    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+    checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
 
 }
 // -------------------------------------------------------------------------
@@ -487,7 +488,7 @@ void SAL_CALL OPreparedStatement::setObject( sal_Int32 parameterIndex, const Any
     (void) parameterIndex;
     (void) x;
     ::osl::MutexGuard aGuard( m_pConnection->getMutex() );
-    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+    checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
 
 }
 // -------------------------------------------------------------------------
@@ -497,7 +498,7 @@ void SAL_CALL OPreparedStatement::setShort( sal_Int32 parameterIndex, sal_Int16 
     (void) parameterIndex;
     (void) x;
     ::osl::MutexGuard aGuard( m_pConnection->getMutex() );
-    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+    checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
 
 }
 // -------------------------------------------------------------------------
@@ -507,7 +508,7 @@ void SAL_CALL OPreparedStatement::setBytes( sal_Int32 parameterIndex, const Sequ
     (void) parameterIndex;
     (void) x;
     ::osl::MutexGuard aGuard( m_pConnection->getMutex() );
-    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+    checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
 
 }
 // -------------------------------------------------------------------------
@@ -519,7 +520,7 @@ void SAL_CALL OPreparedStatement::setCharacterStream( sal_Int32 parameterIndex, 
     (void) x;
     (void) length;
     ::osl::MutexGuard aGuard( m_pConnection->getMutex() );
-    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+    checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
 
 }
 // -------------------------------------------------------------------------
@@ -530,7 +531,7 @@ void SAL_CALL OPreparedStatement::setBinaryStream( sal_Int32 parameterIndex, con
     (void) x;
     (void) length;
     ::osl::MutexGuard aGuard( m_pConnection->getMutex() );
-    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+    checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
 
 }
 // -------------------------------------------------------------------------
@@ -567,7 +568,7 @@ void OPreparedStatement::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,cons
         case PROPERTY_ID_USEBOOKMARKS:
             break;
         default:
-            OStatement_Base::setFastPropertyValue_NoBroadcast(nHandle,rValue);
+            OStatementCommonBase::setFastPropertyValue_NoBroadcast(nHandle,rValue);
     }
 }
 

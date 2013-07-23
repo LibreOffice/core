@@ -70,7 +70,7 @@ namespace connectivity
                                                 ::com::sun::star::document::XDocumentEventListener
                                             > OConnection_BASE;
 
-        class OStatement_Base;
+        class OStatementCommonBase;
         class FirebirdDriver;
         class ODatabaseMetaData;
 

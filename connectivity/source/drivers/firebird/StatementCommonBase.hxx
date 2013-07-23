@@ -61,11 +61,11 @@ namespace connectivity
         typedef ::cppu::WeakComponentImplHelper4<   ::com::sun::star::sdbc::XWarningsSupplier,
                                                     ::com::sun::star::util::XCancellable,
                                                     ::com::sun::star::sdbc::XCloseable,
-                                                    ::com::sun::star::sdbc::XMultipleResults> OStatement_BASE;
+                                                    ::com::sun::star::sdbc::XMultipleResults> OStatementCommonBase_Base;
 
-        class OStatement_Base       :   public  OStatement_BASE,
+        class OStatementCommonBase  :   public  OStatementCommonBase_Base,
                                         public  ::cppu::OPropertySetHelper,
-                                        public  OPropertyArrayUsageHelper<OStatement_Base>
+                                        public  OPropertyArrayUsageHelper<OStatementCommonBase>
 
         {
         protected:
@@ -98,7 +98,7 @@ namespace connectivity
             virtual void SAL_CALL getFastPropertyValue(
                                                                 ::com::sun::star::uno::Any& rValue,
                                                                 sal_Int32 nHandle) const;
-            virtual ~OStatement_Base();
+            virtual ~OStatementCommonBase();
             int prepareAndDescribeStatement(const OUString& sqlIn,
                                                   isc_stmt_handle& aStatementHandle,
                                                   XSQLDA*& pOutSqlda,
@@ -107,11 +107,11 @@ namespace connectivity
         public:
 
             ::cppu::OBroadcastHelper& rBHelper;
-            OStatement_Base(OConnection* _pConnection);
-            using OStatement_BASE::operator ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >;
+            OStatementCommonBase(OConnection* _pConnection);
+            using OStatementCommonBase_Base::operator ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >;
 
             // OComponentHelper
-            virtual void SAL_CALL disposing(void){OStatement_BASE::disposing();}
+            virtual void SAL_CALL disposing(void){OStatementCommonBase_Base::disposing();}
             // XInterface
             virtual void SAL_CALL release() throw();
             virtual void SAL_CALL acquire() throw();

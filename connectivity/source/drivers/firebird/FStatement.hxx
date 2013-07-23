@@ -49,10 +49,10 @@ namespace connectivity
         // once the general restructuring of Statement/PreparedStatement is
         // complete.
         typedef ::cppu::ImplHelper1< ::com::sun::star::sdbc::XStatement >
-            OStatementStatement_BASE;
+            OStatement_Base;
 
-        class OStatement :  public OStatement_Base,
-                            public OStatementStatement_BASE,
+        class OStatement :  public OStatementCommonBase,
+                            public OStatement_Base,
                             public ::com::sun::star::sdbc::XBatchExecution,
                             public ::com::sun::star::lang::XServiceInfo
         {
@@ -61,12 +61,11 @@ namespace connectivity
         public:
             // a constructor, which is required for returning objects:
             OStatement( OConnection* _pConnection)
-                : OStatement_Base( _pConnection)
+                : OStatementCommonBase( _pConnection)
             {}
 
             DECLARE_SERVICE_INFO();
 
-            virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
             virtual void SAL_CALL acquire() throw();
             virtual void SAL_CALL release() throw();
 
@@ -87,6 +86,17 @@ namespace connectivity
             virtual void SAL_CALL addBatch( const ::rtl::OUString& sql ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             virtual void SAL_CALL clearBatch(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             virtual ::com::sun::star::uno::Sequence< sal_Int32 > SAL_CALL executeBatch(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+
+            // XInterface
+            virtual ::com::sun::star::uno::Any SAL_CALL
+                queryInterface(const ::com::sun::star::uno::Type & rType)
+                throw(::com::sun::star::uno::RuntimeException);
+
+            //XTypeProvider
+            virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL
+                getTypes()
+                throw(::com::sun::star::uno::RuntimeException);
+
         };
     }
 }
