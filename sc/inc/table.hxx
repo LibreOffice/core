@@ -862,6 +862,24 @@ public:
 
     void SetFormulaResults( SCCOL nCol, SCROW nRow, const double* pResults, size_t nLen );
 
+    /**
+     * Have formula cells with NeedsListening() == true start listening to the
+     * document.
+     */
+    void StartNeededListeners();
+
+    /**
+     * Mark dirty those formula cells that has named ranges with relative
+     * references.
+     */
+    void SetRelNameDirty();
+
+    /**
+     * Broadcast dirty formula cells that contain functions such as CELL(),
+     * COLUMN() or ROW() which may change its value on move.
+     */
+    void BroadcastRecalcOnRefMove();
+
 #if DEBUG_COLUMN_STORAGE
     void DumpFormulaGroups( SCCOL nCol ) const;
 #endif
@@ -968,8 +986,6 @@ private:
     void StartListening( sc::StartListeningContext& rCxt, SCCOL nCol, SCROW nRow, SvtListener& rListener );
     void EndListening( sc::EndListeningContext& rCxt, SCCOL nCol, SCROW nRow, SvtListener& rListener );
     void        StartAllListeners();
-    void        StartNeededListeners(); // only for cells where NeedsListening()==TRUE
-    void        SetRelNameDirty();
 
     void        SetLoadingMedium(bool bLoading);
 

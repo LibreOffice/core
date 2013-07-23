@@ -431,6 +431,7 @@ public:
     void        StartAllListeners();
     void        StartNeededListeners(); // only for cells where NeedsListening()==true
     void        SetRelNameDirty();
+    void BroadcastRecalcOnRefMove();
 
     void        CompileDBFormula();
     void        CompileDBFormula( bool bCreateFormulaString );

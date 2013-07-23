@@ -2144,6 +2144,7 @@ void resetColumnPosition(sc::CellStoreType& rCells, SCCOL nCol)
 
 void ScColumn::SwapCol(ScColumn& rCol)
 {
+    maBroadcasters.swap(rCol.maBroadcasters);
     maCells.swap(rCol.maCells);
     maCellTextAttrs.swap(rCol.maCellTextAttrs);
 
@@ -2163,7 +2164,6 @@ void ScColumn::SwapCol(ScColumn& rCol)
 
     CellStorageModified();
     rCol.CellStorageModified();
-
 }
 
 void ScColumn::MoveTo(SCROW nStartRow, SCROW nEndRow, ScColumn& rCol)
@@ -3004,11 +3004,39 @@ void ScColumn::SetDirtyAfterLoad()
     sc::ProcessFormula(maCells, aFunc);
 }
 
+namespace {
+
+class RecalcOnRefMoveCollector
+{
+    std::vector<SCROW> maDirtyRows;
+public:
+    void operator() (size_t nRow, ScFormulaCell* pCell)
+    {
+        if (pCell->GetDirty() && pCell->GetCode()->IsRecalcModeOnRefMove())
+            maDirtyRows.push_back(nRow);
+    }
+
+    const std::vector<SCROW>& getDirtyRows() const
+    {
+        return maDirtyRows;
+    }
+};
+
+}
+
 void ScColumn::SetRelNameDirty()
 {
     sc::AutoCalcSwitch aSwitch(*pDocument, false);
     SetRelNameDirtyHandler aFunc;
     sc::ProcessFormula(maCells, aFunc);
+}
+
+void ScColumn::BroadcastRecalcOnRefMove()
+{
+    sc::AutoCalcSwitch aSwitch(*pDocument, false);
+    RecalcOnRefMoveCollector aFunc;
+    sc::ProcessFormula(maCells, aFunc);
+    BroadcastCells(aFunc.getDirtyRows());
 }
 
 void ScColumn::CalcAll()

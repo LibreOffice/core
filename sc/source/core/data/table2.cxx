@@ -48,6 +48,7 @@
 #include "editutil.hxx"
 #include "mtvcellfunc.hxx"
 #include "refupdatecontext.hxx"
+#include "scopetools.hxx"
 
 #include "scitems.hxx"
 #include <editeng/boxitem.hxx>
@@ -1705,6 +1706,12 @@ void ScTable::SetRelNameDirty()
     pDocument->SetAutoCalc( bOldAutoCalc );
 }
 
+void ScTable::BroadcastRecalcOnRefMove()
+{
+    sc::AutoCalcSwitch aSwitch(*pDocument, false);
+    for (SCCOL i = 0; i <= MAXCOL; ++i)
+        aCol[i].BroadcastRecalcOnRefMove();
+}
 
 void ScTable::SetLoadingMedium(bool bLoading)
 {

@@ -1334,6 +1334,36 @@ bool ScDocument::CanInsertCol( const ScRange& rRange ) const
     return bTest;
 }
 
+namespace {
+
+struct StartNeededListenersHandler : std::unary_function<ScTable*, void>
+{
+    void operator() (ScTable* p)
+    {
+        if (p)
+            p->StartNeededListeners();
+    }
+};
+
+struct SetRelNameDirtyHandler : std::unary_function<ScTable*, void>
+{
+    void operator() (ScTable* p)
+    {
+        if (p)
+            p->SetRelNameDirty();
+    }
+};
+
+struct BroadcastRecalcOnRefMoveHandler : std::unary_function<ScTable*, void>
+{
+    void operator() (ScTable* p)
+    {
+        if (p)
+            p->BroadcastRecalcOnRefMove();
+    }
+};
+
+}
 
 bool ScDocument::InsertCol( SCROW nStartRow, SCTAB nStartTab,
                             SCROW nEndRow,   SCTAB nEndTab,
@@ -1394,17 +1424,15 @@ bool ScDocument::InsertCol( SCROW nStartRow, SCTAB nStartTab,
             StartAllListeners();
         }
         else
-        {// Listeners have been removed in UpdateReference
-            TableContainer::iterator it = maTabs.begin();
-            for (; it != maTabs.end(); ++it)
-                if (*it)
-                    (*it)->StartNeededListeners();
-            // at least all cells using range names pointing relative
-            // to the moved range must recalculate
-            it = maTabs.begin();
-            for (; it != maTabs.end(); ++it)
-                if (*it)
-                    (*it)->SetRelNameDirty();
+        {
+            // Listeners have been removed in UpdateReference
+            std::for_each(maTabs.begin(), maTabs.end(), StartNeededListenersHandler());
+            // at least all cells using range names pointing relative to the
+            // moved range must recalculate.
+            std::for_each(maTabs.begin(), maTabs.end(), SetRelNameDirtyHandler());
+            // Cells containing functions such as CELL, COLUMN or ROW may have
+            // changed their values on relocation. Broadcast them.
+            std::for_each(maTabs.begin(), maTabs.end(), BroadcastRecalcOnRefMoveHandler());
         }
         bRet = true;
     }
