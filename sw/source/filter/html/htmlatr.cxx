@@ -920,7 +920,7 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
         }
 
         if( rHWrt.bCfgOutStyles &&
-            (pFmtInfo->aClass.Len() || pFmtInfo->bScriptDependent) )
+            (!pFmtInfo->aClass.isEmpty() || pFmtInfo->bScriptDependent) )
         {
             sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_class)
                 .append("=\"");
@@ -2706,7 +2706,7 @@ static Writer& OutHTML_SvxFont( Writer& rWrt, const SfxPoolItem& rHt )
 
     if( rHTMLWrt.bTagOn )
     {
-        String aNames;
+        OUString aNames;
         SwHTMLWriter::PrepareFontList( ((const SvxFontItem&)rHt), aNames, 0,
                            rHTMLWrt.IsHTMLMode(HTMLMODE_FONT_GENERIC) );
         OStringBuffer sOut;
@@ -3115,7 +3115,7 @@ static Writer& OutHTML_SwTxtCharFmt( Writer& rWrt, const SfxPoolItem& rHt )
         else
             sOut.append(OOO_STRING_SVTOOLS_HTML_span);
         if( rHTMLWrt.bCfgOutStyles &&
-            (pFmtInfo->aClass.Len() || pFmtInfo->bScriptDependent) )
+            (!pFmtInfo->aClass.isEmpty() || pFmtInfo->bScriptDependent) )
         {
             sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_class)
                 .append("=\"");
