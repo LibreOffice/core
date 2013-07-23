@@ -2697,7 +2697,7 @@ bool ScCompiler::IsDoubleReference( const String& rName )
         if ( !(nFlags & SCA_VALID_TAB2) )
             aRef.Ref2.SetTabDeleted( true );        // #REF!
         aRef.Ref2.SetFlag3D( ( nFlags & SCA_TAB2_3D ) != 0 );
-        aRef.CalcRelFromAbs( aPos );
+        aRef.SetRange(aRange, aPos);
         if (aExtInfo.mbExternal)
         {
             ScExternalRefManager* pRefMgr = pDoc->GetExternalRefManager();
@@ -2745,7 +2745,7 @@ bool ScCompiler::IsSingleReference( const String& rName )
                 aRef.nTab = MAXTAB+3;
             nFlags |= SCA_VALID;
         }
-        aRef.CalcRelFromAbs( aPos );
+        aRef.SetAddress(aAddr, aPos);
 
         if (aExtInfo.mbExternal)
         {
@@ -3040,14 +3040,11 @@ bool ScCompiler::IsColRowName( const String& rName )
                         if ( ScGlobal::GetpTransliteration()->isEqual( aStr, aName ) )
                         {
                             aRef.InitFlags();
-                            aRef.nCol = aIter.GetPos().Col();
-                            aRef.nRow = aIter.GetPos().Row();
-                            aRef.nTab = aIter.GetPos().Tab();
                             if ( !jRow )
                                 aRef.SetColRel( true );     // ColName
                             else
                                 aRef.SetRowRel( true );     // RowName
-                            aRef.CalcRelFromAbs( aPos );
+                            aRef.SetAddress(aIter.GetPos(), aPos);
                             bInList = bFound = true;
                         }
                     }
@@ -3225,14 +3222,14 @@ bool ScCompiler::IsColRowName( const String& rName )
             else
                 aAdr = aOne;
             aRef.InitAddress( aAdr );
-            if ( (aRef.nRow != MAXROW && pDoc->HasStringData(
-                    aRef.nCol, aRef.nRow + 1, aRef.nTab ))
-              || (aRef.nRow != 0 && pDoc->HasStringData(
-                    aRef.nCol, aRef.nRow - 1, aRef.nTab )) )
+            if ( (aAdr.Row() != MAXROW && pDoc->HasStringData(
+                    aAdr.Col(), aAdr.Row() + 1, aAdr.Tab()))
+              || (aAdr.Row() != 0 && pDoc->HasStringData(
+                    aAdr.Col(), aAdr.Row() - 1, aAdr.Tab())))
                 aRef.SetRowRel( true );     // RowName
             else
                 aRef.SetColRel( true );     // ColName
-            aRef.CalcRelFromAbs( aPos );
+            aRef.SetAddress(aAdr, aPos);
         }
     }
     if ( bFound )

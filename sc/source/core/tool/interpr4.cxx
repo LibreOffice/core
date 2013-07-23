@@ -3538,13 +3538,10 @@ void ScInterpreter::ScDBArea()
     {
         ScComplexRefData aRefData;
         aRefData.InitFlags();
-        pDBData->GetArea( (SCTAB&) aRefData.Ref1.nTab,
-                          (SCCOL&) aRefData.Ref1.nCol,
-                          (SCROW&) aRefData.Ref1.nRow,
-                          (SCCOL&) aRefData.Ref2.nCol,
-                          (SCROW&) aRefData.Ref2.nRow);
-        aRefData.Ref2.nTab    = aRefData.Ref1.nTab;
-        aRefData.CalcRelFromAbs( aPos );
+        ScRange aRange;
+        pDBData->GetArea(aRange);
+        aRange.aEnd.SetTab(aRange.aStart.Tab());
+        aRefData.SetRange(aRange, aPos);
         PushTempToken( new ScDoubleRefToken( aRefData ) );
     }
     else
