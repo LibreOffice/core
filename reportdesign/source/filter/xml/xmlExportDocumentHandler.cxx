@@ -184,7 +184,7 @@ void SAL_CALL ExportDocumentHandler::startElement(const ::rtl::OUString & _sName
         m_xDelegatee->startElement(sTableCalc,NULL);
         pList = new SvXMLAttributeList();
         uno::Reference< xml::sax::XAttributeList > xNullAttr = pList;
-        pList->AddAttribute(lcl_createAttribute(XML_NP_TABLE,XML_DATE_VALUE),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("1900-01-01")));
+        pList->AddAttribute(lcl_createAttribute(XML_NP_TABLE,XML_DATE_VALUE),OUString("1899-12-30"));
 
         const ::rtl::OUString sNullDate = lcl_createAttribute(XML_NP_TABLE,XML_NULL_DATE);
         m_xDelegatee->startElement(sNullDate,xNullAttr);

@@ -1715,7 +1715,7 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
         final XmlWriter xmlWriter = getXmlWriter();
         xmlWriter.writeTag(OfficeNamespaces.TABLE_NS, "calculation-settings", null, XmlWriterSupport.OPEN);
         final AttributeMap nullDateAttributes = new AttributeMap();
-        nullDateAttributes.setAttribute(OfficeNamespaces.TABLE_NS, "date-value", "1900-01-01");
+        nullDateAttributes.setAttribute(OfficeNamespaces.TABLE_NS, "date-value", "1899-12-30");
         xmlWriter.writeTag(OfficeNamespaces.TABLE_NS, "null-date", buildAttributeList(nullDateAttributes), XmlWriterSupport.CLOSE);
         xmlWriter.writeCloseTag();
     }
