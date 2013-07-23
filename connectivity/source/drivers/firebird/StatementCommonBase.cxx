@@ -121,32 +121,6 @@ void SAL_CALL OStatement_Base::close(  ) throw(SQLException, RuntimeException)
     dispose();
 }
 
-// ---- XStatement -----------------------------------------------------------
-sal_Int32 SAL_CALL OStatement_Base::executeUpdate(const OUString& sqlIn)
-    throw(SQLException, RuntimeException)
-{
-    // TODO: close ResultSet if existing -- so so in all 3 execute methods.
-    MutexGuard aGuard(m_pConnection->getMutex());
-    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
-
-    const OUString sql = sanitizeSqlString(sqlIn);
-
-    int aErr = isc_dsql_execute_immediate(m_statusVector,
-                                          &m_pConnection->getDBHandle(),
-                                          &m_pConnection->getTransaction(),
-                                          0,
-                                          OUStringToOString(sql, RTL_TEXTENCODING_UTF8).getStr(),
-                                          1,
-                                          NULL);
-
-    if (aErr)
-        SAL_WARN("connectivity.firebird", "isc_dsql_execute_immediate failed" );
-
-    m_pConnection->evaluateStatusVector(m_statusVector, sql, *this);
-    // TODO: get number of changed rows with SELECT ROW_COUNT (use executeQuery)
-    //     return getUpdateCount();
-    return 0;
-}
 
 OUString OStatement_Base::sanitizeSqlString(const OUString& sqlIn)
 {
@@ -237,97 +211,6 @@ int OStatement_Base::prepareAndDescribeStatement(const OUString& sqlIn,
     }
 
     return aErr;
-}
-
-uno::Reference< XResultSet > SAL_CALL OStatement_Base::executeQuery(const OUString& sqlIn) throw(SQLException, RuntimeException)
-{
-    MutexGuard aGuard(m_pConnection->getMutex());
-    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
-
-    const OUString sql = sanitizeSqlString(sqlIn);
-
-    XSQLDA* pOutSqlda = 0;
-    isc_stmt_handle aStatementHandle = 0;
-    int aErr = 0;
-
-
-    aErr = prepareAndDescribeStatement(sql,
-                                       aStatementHandle,
-                                       pOutSqlda);
-    if (aErr)
-    {
-        SAL_WARN("connectivity.firebird", "prepareAndDescribeStatement failed");
-    }
-    else
-    {
-        aErr = isc_dsql_execute(m_statusVector,
-                                &m_pConnection->getTransaction(),
-                                &aStatementHandle,
-                                1,
-                                NULL);
-        if (aErr)
-            SAL_WARN("connectivity.firebird", "isc_dsql_execute failed" );
-    }
-
-    uno::Reference< OResultSet > pResult(new OResultSet(m_pConnection,
-                                                        uno::Reference< XStatement >(this),
-                                                        aStatementHandle,
-                                                        pOutSqlda));
-    //initializeResultSet( pResult.get() );
-     m_xResultSet = pResult.get();
-
-    // TODO: deal with cleanup
-//    close();
-    m_pConnection->evaluateStatusVector(m_statusVector, sql, *this);
-    return m_xResultSet;
-}
-
-sal_Bool SAL_CALL OStatement_Base::execute(const OUString& sqlIn) throw(SQLException, RuntimeException)
-{
-    SAL_INFO("connectivity.firebird", "executeQuery(). "
-             "Got called with sql: " << sqlIn);
-
-    MutexGuard aGuard(m_pConnection->getMutex());
-    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
-
-    XSQLDA* pOutSqlda = 0;
-    isc_stmt_handle aStatementHandle = 0;
-    int aErr = 0;
-
-    const OUString sql = sanitizeSqlString(sqlIn);
-
-    aErr = prepareAndDescribeStatement(sql,
-                                       aStatementHandle,
-                                       pOutSqlda);
-
-    if (aErr)
-    {
-        SAL_WARN("connectivity.firebird", "prepareAndDescribeStatement failed" );
-    }
-    else
-    {
-        aErr = isc_dsql_execute(m_statusVector,
-                                &m_pConnection->getTransaction(),
-                                &aStatementHandle,
-                                1,
-                                NULL);
-        if (aErr)
-            SAL_WARN("connectivity.firebird", "isc_dsql_execute failed" );
-    }
-
-    m_pConnection->evaluateStatusVector(m_statusVector, sql, *this);
-
-    // returns true when a resultset is available
-    return sal_False;
-}
-
-uno::Reference< XConnection > SAL_CALL OStatement_Base::getConnection()
-    throw(SQLException, RuntimeException)
-{
-    MutexGuard aGuard(m_pConnection->getMutex());
-    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
-
-    return (uno::Reference< XConnection >)m_pConnection;
 }
 
 // ---- XMultipleResults - UNSUPPORTED ----------------------------------------

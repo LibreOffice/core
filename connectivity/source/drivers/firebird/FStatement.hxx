@@ -38,12 +38,21 @@
 
 #include "StatementCommonBase.hxx"
 
+#include <cppuhelper/implbase1.hxx>
+
 namespace connectivity
 {
     namespace firebird
     {
 
+        // The name OStatementStatement_BASE is temporary and will be changed
+        // once the general restructuring of Statement/PreparedStatement is
+        // complete.
+        typedef ::cppu::ImplHelper1< ::com::sun::star::sdbc::XStatement >
+            OStatementStatement_BASE;
+
         class OStatement :  public OStatement_Base,
+                            public OStatementStatement_BASE,
                             public ::com::sun::star::sdbc::XBatchExecution,
                             public ::com::sun::star::lang::XServiceInfo
         {
@@ -60,6 +69,20 @@ namespace connectivity
             virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
             virtual void SAL_CALL acquire() throw();
             virtual void SAL_CALL release() throw();
+
+            // XStatement
+            virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet > SAL_CALL
+                executeQuery(const ::rtl::OUString& sql)
+                throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            virtual sal_Int32 SAL_CALL executeUpdate(const ::rtl::OUString& sqlIn)
+                throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            virtual sal_Bool SAL_CALL
+                execute(const ::rtl::OUString& sql)
+                throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > SAL_CALL
+                getConnection()
+                throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+
             // XBatchExecution - UNSUPPORTED
             virtual void SAL_CALL addBatch( const ::rtl::OUString& sql ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             virtual void SAL_CALL clearBatch(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);

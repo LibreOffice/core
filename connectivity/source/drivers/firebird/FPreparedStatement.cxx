@@ -308,7 +308,7 @@ Reference< XResultSet > SAL_CALL OPreparedStatement::executeQuery()
     }
 
     uno::Reference< OResultSet > pResult(new OResultSet(m_pConnection,
-                                                        uno::Reference< XStatement >(this),
+                                                        uno::Reference< XInterface >(*this),
                                                         m_statementHandle,
                                                         m_pOutSqlda));
     m_xResultSet = pResult.get();

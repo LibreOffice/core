@@ -66,7 +66,7 @@ using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::util;
 
 OResultSet::OResultSet(OConnection* pConnection,
-                       const uno::Reference< XStatement >& xStatement,
+                       const uno::Reference< XInterface >& xStatement,
                        isc_stmt_handle& aStatementHandle,
                        XSQLDA* pSqlda)
     : OResultSet_BASE(pConnection->getMutex())

@@ -82,7 +82,7 @@ namespace connectivity
         {
         protected:
             OConnection* m_pConnection;
-            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XStatement >& m_xStatement;
+            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& m_xStatement;
 
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData>        m_xMetaData;
 
@@ -136,7 +136,7 @@ namespace connectivity
             DECLARE_SERVICE_INFO();
 
             OResultSet(OConnection* pConnection,
-                       const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XStatement >& xStatement,
+                       const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xStatement,
                        isc_stmt_handle& aStatementHandle,
                        XSQLDA* aSqlda);
 
