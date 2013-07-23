@@ -24,7 +24,6 @@
 
 #include <math.h>
 
-#include <rtl/logfile.hxx>
 #include <rtl/math.hxx>
 
 #include <com/sun/star/rendering/XCanvas.hpp>
@@ -66,7 +65,6 @@ namespace slideshow
                                   const GDIMetaFileSharedPtr&           rMtf,
                                   const ShapeAttributeLayerSharedPtr&   rAttr ) const
         {
-            RTL_LOGFILE_CONTEXT( aLog, "::presentation::internal::ViewShape::prefetch()" );
             ENSURE_OR_RETURN_FALSE( rMtf,
                                "ViewShape::prefetch(): no valid metafile!" );
 
@@ -188,8 +186,6 @@ namespace slideshow
                               const ::basegfx::B2DPolyPolygon*      pClip,
                               const VectorOfDocTreeNodes&           rSubsets ) const
         {
-            RTL_LOGFILE_CONTEXT( aLog, "::presentation::internal::ViewShape::draw()" );
-
             ::cppcanvas::RendererSharedPtr pRenderer(
                 getRenderer( rDestinationCanvas, rMtf, rAttr ) );
 
@@ -305,8 +301,6 @@ namespace slideshow
                                       double                                nPrio,
                                       bool                                  bIsVisible ) const
         {
-            RTL_LOGFILE_CONTEXT( aLog, "::presentation::internal::ViewShape::renderSprite()" );
-
             // TODO(P1): For multiple views, it might pay off to reorg Shape and ViewShape,
             // in that all the common setup steps here are refactored to Shape (would then
             // have to be performed only _once_ per Shape paint).
@@ -524,8 +518,6 @@ namespace slideshow
                                 const VectorOfDocTreeNodes&         rSubsets,
                                 bool                                bIsVisible ) const
         {
-            RTL_LOGFILE_CONTEXT( aLog, "::presentation::internal::ViewShape::render()" );
-
             // TODO(P1): For multiple views, it might pay off to reorg Shape and ViewShape,
             // in that all the common setup steps here are refactored to Shape (would then
             // have to be performed only _once_ per Shape paint).
@@ -858,7 +850,6 @@ namespace slideshow
                                 int                         nUpdateFlags,
                                 bool                        bIsVisible ) const
         {
-            RTL_LOGFILE_CONTEXT( aLog, "::presentation::internal::ViewShape::update()" );
             ENSURE_OR_RETURN_FALSE( mpViewLayer->getCanvas(), "ViewShape::update(): Invalid layer canvas" );
 
             // Shall we render to a sprite, or to a plain canvas?

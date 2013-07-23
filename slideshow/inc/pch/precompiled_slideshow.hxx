@@ -194,7 +194,6 @@
 #include <osl/diagnose.hxx>
 #include <queue>
 #include <rtl/instance.hxx>
-#include <rtl/logfile.hxx>
 #include <rtl/math.hxx>
 #include <rtl/ref.hxx>
 #include <rtl/ustrbuf.hxx>
