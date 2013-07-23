@@ -5284,7 +5284,7 @@ bool ScCompiler::HandleSingleRef()
                     aRefData.SetColRel( true );
                 else
                     aRefData.SetRowRel( true );
-                aRefData.CalcRelFromAbs( aPos );
+                aRefData.SetAddress(aRange.aStart, aPos);
                 pNew->AddSingleReference( aRefData );
             }
             else
@@ -5301,7 +5301,7 @@ bool ScCompiler::HandleSingleRef()
                     aRefData.Ref1.SetRowRel( true );
                     aRefData.Ref2.SetRowRel( true );
                 }
-                aRefData.CalcRelFromAbs( aPos );
+                aRefData.SetRange(aRange, aPos);
                 if ( bInList )
                     pNew->AddDoubleReference( aRefData );
                 else
@@ -5328,13 +5328,10 @@ bool ScCompiler::HandleDbData()
     {
         ScComplexRefData aRefData;
         aRefData.InitFlags();
-        pDBData->GetArea(   (SCTAB&) aRefData.Ref1.nTab,
-                            (SCCOL&) aRefData.Ref1.nCol,
-                            (SCROW&) aRefData.Ref1.nRow,
-                            (SCCOL&) aRefData.Ref2.nCol,
-                            (SCROW&) aRefData.Ref2.nRow);
-        aRefData.Ref2.nTab    = aRefData.Ref1.nTab;
-        aRefData.CalcRelFromAbs( aPos );
+        ScRange aRange;
+        pDBData->GetArea(aRange);
+        aRange.aEnd.SetTab(aRange.aStart.Tab());
+        aRefData.SetRange(aRange, aPos);
         ScTokenArray* pNew = new ScTokenArray();
         pNew->AddDoubleReference( aRefData );
         PushTokenArray( pNew, true );

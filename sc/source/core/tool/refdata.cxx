@@ -19,6 +19,27 @@
 
 #include "refdata.hxx"
 
+void ScSingleRefData::InitAddress( const ScAddress& rAdr )
+{
+    InitAddress( rAdr.Col(), rAdr.Row(), rAdr.Tab());
+}
+
+void ScSingleRefData::InitAddress( SCCOL nColP, SCROW nRowP, SCTAB nTabP )
+{
+    InitFlags();
+    nCol = nColP;
+    nRow = nRowP;
+    nTab = nTabP;
+}
+
+void ScSingleRefData::InitAddressRel( const ScAddress& rAdr, const ScAddress& rPos )
+{
+    SetColRel(true);
+    SetRowRel(true);
+    SetTabRel(true);
+    SetAddress(rAdr, rPos);
+}
+
 void ScSingleRefData::SetColDeleted( bool bVal )
 {
     Flags.bColDeleted = (bVal ? true : false );

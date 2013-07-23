@@ -295,20 +295,14 @@ void LotusToSc::ReadSRD( ScSingleRefData& rSRD, sal_uInt8 nRelBit )
     Read( nTab );
     Read( nCol );
 
-    sal_Bool b3D = ( static_cast< SCTAB >( nTab ) != aEingPos.Tab() );
+    bool b3D = (static_cast<SCTAB>(nTab) != aEingPos.Tab());
 
     rSRD.SetColRel( ( nRelBit & 0x01 ) != 0 );
-    rSRD.nCol = static_cast< SCsCOL >( nCol );
-
     rSRD.SetRowRel( ( nRelBit & 0x02 ) != 0 );
-    rSRD.nRow = static_cast< SCsROW >( nRow );
-
     rSRD.SetTabRel( ( ( nRelBit & 0x04) != 0 ) || !b3D );
-    rSRD.nTab = static_cast< SCsTAB >( nTab );
-
     rSRD.SetFlag3D( b3D );
 
-    rSRD.CalcRelFromAbs( aEingPos );
+    rSRD.SetAddress(ScAddress(nCol, nRow, nTab), aEingPos);
 }
 
 

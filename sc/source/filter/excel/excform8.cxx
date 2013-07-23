@@ -319,31 +319,33 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
                     case 0x03:              //  Col         4       -       ref
                     case 0x06:              //  RwV         4       -       val
                     case 0x07:              //  ColV        4       -       val
+                    {
                         aIn >> nRow >> nCol;
-
-                        aSRD.InitAddress( ScAddress( static_cast<SCCOL>(nCol & 0xFF), static_cast<SCROW>(nRow), aEingPos.Tab() ) );
+                        ScAddress aAddr(static_cast<SCCOL>(nCol & 0xFF), static_cast<SCROW>(nRow), aEingPos.Tab());
+                        aSRD.InitAddress(aAddr);
 
                         if( nEptg == 0x02 || nEptg == 0x06 )
-                            aSRD.SetRowRel( sal_True );
+                            aSRD.SetRowRel(true);
                         else
-                            aSRD.SetColRel( sal_True );
+                            aSRD.SetColRel(true);
 
-                        aSRD.CalcRelFromAbs( aEingPos );
+                        aSRD.SetAddress(aAddr, aEingPos);
 
                         aStack << aPool.StoreNlf( aSRD );
-                        break;
+                    }
+                    break;
                     case 0x0A:              //  Radical     13      -       ref
+                    {
                         aIn >> nRow >> nCol;
                         aIn.Ignore( 9 );
-
-                        aSRD.InitAddress( ScAddress( static_cast<SCCOL>(nCol & 0xFF), static_cast<SCROW>(nRow), aEingPos.Tab() ) );
-
-                        aSRD.SetColRel( sal_True );
-
-                        aSRD.CalcRelFromAbs( aEingPos );
+                        ScAddress aAddr(static_cast<SCCOL>(nCol & 0xFF), static_cast<SCROW>(nRow), aEingPos.Tab());
+                        aSRD.InitAddress(aAddr);
+                        aSRD.SetColRel(true);
+                        aSRD.SetAddress(aAddr, aEingPos);
 
                         aStack << aPool.StoreNlf( aSRD );
-                        break;
+                    }
+                    break;
                     case 0x0B:              //  RadicalS    13      x       ref
                         aIn.Ignore( 13 );
                         aExtensions.push_back( EXTENSION_NLR );

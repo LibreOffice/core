@@ -54,10 +54,10 @@ struct SC_DLLPUBLIC ScSingleRefData
     /// No default ctor, because used in ScRawToken union, set InitFlags!
     inline  void InitFlags() { mnFlagValue = 0; }    ///< all FALSE
     /// InitAddress: InitFlags and set address
-    inline  void InitAddress( const ScAddress& rAdr );
-    inline  void InitAddress( SCCOL nCol, SCROW nRow, SCTAB nTab );
+    void InitAddress( const ScAddress& rAdr );
+    void InitAddress( SCCOL nCol, SCROW nRow, SCTAB nTab );
     /// InitAddressRel: InitFlags and set address, everything relative to rPos
-    inline  void InitAddressRel( const ScAddress& rAdr, const ScAddress& rPos );
+    void InitAddressRel( const ScAddress& rAdr, const ScAddress& rPos );
     inline  void SetColRel( bool bVal ) { Flags.bColRel = (bVal ? true : false ); }
     inline  bool IsColRel() const{ return Flags.bColRel; }
     inline  void SetRowRel( bool bVal ) { Flags.bRowRel = (bVal ? true : false ); }
@@ -96,29 +96,6 @@ struct SC_DLLPUBLIC ScSingleRefData
     void Dump() const;
 #endif
 };
-
-inline void ScSingleRefData::InitAddress( SCCOL nColP, SCROW nRowP, SCTAB nTabP )
-{
-    InitFlags();
-    nCol = nColP;
-    nRow = nRowP;
-    nTab = nTabP;
-}
-
-inline void ScSingleRefData::InitAddress( const ScAddress& rAdr )
-{
-    InitAddress( rAdr.Col(), rAdr.Row(), rAdr.Tab());
-}
-
-inline void ScSingleRefData::InitAddressRel( const ScAddress& rAdr,
-                                            const ScAddress& rPos )
-{
-    InitAddress( rAdr.Col(), rAdr.Row(), rAdr.Tab());
-    SetColRel( true );
-    SetRowRel( true );
-    SetTabRel( true );
-    CalcRelFromAbs( rPos );
-}
 
 inline bool ScSingleRefData::Valid() const
 {
