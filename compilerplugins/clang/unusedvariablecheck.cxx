@@ -8,6 +8,13 @@
  *
  */
 
+#include <config_global.h>
+
+// If there is support for warn_unused attribute even in STL classes, then there's
+// no point in having this check enabled, otherwise keep it at least for STL
+// (LO classes won't get duplicated warnings, as the attribute is different).
+#if !HAVE_GCC_ATTRIBUTE_WARN_UNUSED_STL
+
 #include "unusedvariablecheck.hxx"
 
 #include <clang/AST/Attr.h>
@@ -101,3 +108,5 @@ bool UnusedVariableCheck::VisitVarDecl( const VarDecl* var )
 static Plugin::Registration< UnusedVariableCheck > X( "unusedvariablecheck" );
 
 } // namespace
+
+#endif

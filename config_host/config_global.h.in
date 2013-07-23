@@ -23,5 +23,9 @@ Any change in this header will cause a rebuild of almost everything.
 #define HAVE_GCC_PRAGMA_DIAGNOSTIC_SCOPE 0
 #define HAVE_THREADSAFE_STATICS 0
 #define HAVE_SYSLOG_H 0
+/* Compiler supports __attribute__((warn_unused)). */
+#define HAVE_GCC_ATTRIBUTE_WARN_UNUSED 0
+/* C++ library uses __attribute__((warn_unused)) for basic types like std::string. */
+#define HAVE_GCC_ATTRIBUTE_WARN_UNUSED_STL 0
 
 #endif

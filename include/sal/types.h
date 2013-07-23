@@ -551,13 +551,13 @@ template< typename T1, typename T2 > inline T1 static_int_cast(T2 n) {
  or external constructors or destructors. Classes marked with SAL_WARN_UNUSED
  will be warned about.
 
- Currently implemented by a Clang compiler plugin.
-
  @since LibreOffice 4.0
 
 */
 
-#if defined __clang__
+#if HAVE_GCC_ATTRIBUTE_WARN_UNUSED
+#define SAL_WARN_UNUSED __attribute__((warn_unused))
+#elif defined __clang__
 #define SAL_WARN_UNUSED __attribute__((annotate("lo_warn_unused")))
 #else
 #define SAL_WARN_UNUSED

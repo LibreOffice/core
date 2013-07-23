@@ -5668,6 +5668,34 @@ if test "$GCC" = "yes"; then
             AC_MSG_RESULT([yes])
         ], [AC_MSG_RESULT([no])])
     AC_LANG_POP([C++])
+
+    AC_MSG_CHECKING([whether $CXX supports __attribute__((warn_unused))])
+    AC_LANG_PUSH([C++])
+    save_CXXFLAGS=$CXXFLAGS
+    CXXFLAGS="$CFLAGS -Werror -Wunknown-pragmas"
+    AC_COMPILE_IFELSE([AC_LANG_SOURCE([
+            struct __attribute__((warn_unused)) dummy {};
+        ])], [
+            AC_DEFINE([HAVE_GCC_ATTRIBUTE_WARN_UNUSED],[1])
+            AC_MSG_RESULT([yes])
+        ], [AC_MSG_RESULT([no])])
+    CXXFLAGS=$save_CXXFLAGS
+    AC_LANG_POP([C++])
+
+    AC_MSG_CHECKING([whether STL uses __attribute__((warn_unused))])
+    AC_LANG_PUSH([C++])
+    save_CXXFLAGS=$CXXFLAGS
+    CXXFLAGS="$CFLAGS -Werror -Wunused"
+    AC_COMPILE_IFELSE([AC_LANG_SOURCE([
+            #include <string>
+            void f() { std::string s; }
+        ])], [
+            AC_MSG_RESULT([no])
+        ], [
+            AC_DEFINE([HAVE_GCC_ATTRIBUTE_WARN_UNUSED_STL],[1])
+            AC_MSG_RESULT([yes])])
+    CXXFLAGS=$save_CXXFLAGS
+    AC_LANG_POP([C++])
 fi
 
 AC_SUBST(HAVE_GCC_NO_LONG_DOUBLE)
