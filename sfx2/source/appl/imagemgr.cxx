@@ -29,7 +29,6 @@
 #include <svtools/imagemgr.hxx>
 #include <comphelper/processfactory.hxx>
 #include <rtl/ustring.hxx>
-#include <rtl/logfile.hxx>
 
 #include "sfx2/imgmgr.hxx"
 #include <sfx2/app.hxx>

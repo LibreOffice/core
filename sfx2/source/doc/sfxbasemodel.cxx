@@ -74,7 +74,6 @@
 #include <svtools/transfer.hxx>
 #include <svtools/ehdl.hxx>
 #include <svtools/sfxecode.hxx>
-#include <rtl/logfile.hxx>
 #include <rtl/strbuf.hxx>
 #include <framework/configimporter.hxx>
 #include <framework/interaction.hxx>
@@ -1556,8 +1555,7 @@ void SAL_CALL SfxBaseModel::storeSelf( const    Sequence< beans::PropertyValue >
                 io::IOException,
                 RuntimeException )
 {
-    RTL_LOGFILE_PRODUCT_CONTEXT( aPerfLog, "PERFORMANCE - SfxBaseModel::storeSelf" );
-
+    SAL_INFO( "sfx2.doc", "PERFORMANCE - SfxBaseModel::storeSelf" );
     SfxModelGuard aGuard( *this );
 
     if ( m_pData->m_pObjectShell.Is() )
@@ -1685,8 +1683,7 @@ void SAL_CALL SfxBaseModel::storeAsURL( const   OUString&                   rURL
                                         const   Sequence< beans::PropertyValue >&  rArgs   )
         throw (io::IOException, RuntimeException)
 {
-    RTL_LOGFILE_PRODUCT_CONTEXT( aPerfLog, "PERFORMANCE - SfxBaseModel::storeAsURL" );
-
+    SAL_INFO( "sfx2.doc", "PERFORMANCE - SfxBaseModel::storeAsURL" );
     SfxModelGuard aGuard( *this );
 
     if ( m_pData->m_pObjectShell.Is() )
