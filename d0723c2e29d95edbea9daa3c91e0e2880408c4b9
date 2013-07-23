@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXn//+Lw\u003d",
+        "filename": "fpicker/source/win32/filepicker/VistaFilePicker.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 225,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2013-07-23T11:08:17Z",
+      "side": 1,
+      "message": "the new value should be \"false\" not \"true\", right?",
+      "revId": "d0723c2e29d95edbea9daa3c91e0e2880408c4b9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
