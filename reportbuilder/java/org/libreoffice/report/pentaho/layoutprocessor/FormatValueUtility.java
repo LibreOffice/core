@@ -84,9 +84,9 @@ public class FormatValueUtility
         }
         else if (value instanceof Date)
         {
-            variableSection.setAttribute(OfficeNamespaces.OFFICE_NS, VALUE_TYPE, "float");
-            ret = HSSFDateUtil.getExcelDate((Date) value).toString();
-            variableSection.setAttribute(OfficeNamespaces.OFFICE_NS, VALUE, ret);
+            variableSection.setAttribute(OfficeNamespaces.OFFICE_NS, VALUE_TYPE, "date");
+            ret = formatDate((Date) value);
+            variableSection.setAttribute(OfficeNamespaces.OFFICE_NS, "date-value", ret);
         }
         else if (value instanceof Number)
         {
