@@ -555,7 +555,7 @@ template< typename T1, typename T2 > inline T1 static_int_cast(T2 n) {
 
 */
 
-#if HAVE_GCC_ATTRIBUTE_WARN_UNUSED
+#if defined HAVE_GCC_ATTRIBUTE_WARN_UNUSED
 #define SAL_WARN_UNUSED __attribute__((warn_unused))
 #elif defined __clang__
 #define SAL_WARN_UNUSED __attribute__((annotate("lo_warn_unused")))
