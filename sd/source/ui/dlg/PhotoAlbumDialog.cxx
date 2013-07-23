@@ -9,7 +9,6 @@
 
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/processfactory.hxx>
-#include <comphelper/configurationhelper.hxx>
 
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/drawing/XMasterPagesSupplier.hpp>
@@ -24,6 +23,7 @@
 #include <unotools/pathoptions.hxx>
 #include <unotools/useroptions.hxx>
 #include <unotools/ucbstreamhelper.hxx>
+#include <officecfg/Office/Impress.hxx>
 
 #include <vcl/msgbox.hxx>
 #include <svx/unoshape.hxx>
@@ -455,18 +455,9 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, FileHdl)
     );
     // Read configuration
     OUString sUrl(".");
-    Reference< XInterface > xCfg;
     try
     {
-        xCfg = ::comphelper::ConfigurationHelper::openConfig(
-            ::comphelper::getProcessComponentContext(),
-            OUString("/org.openoffice.Office.Impress/"),
-            ::comphelper::ConfigurationHelper::E_READONLY);
-
-        ::comphelper::ConfigurationHelper::readRelativeKey(
-            xCfg,
-            OUString("Pictures"),
-            OUString("Path")) >>= sUrl;
+        sUrl = officecfg::Office::Impress::Pictures::Path::get();
     }
     catch(const Exception&)
     {
@@ -489,18 +480,10 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, FileHdl)
             // Write out configuration
             try
             {
-                xCfg = ::comphelper::ConfigurationHelper::openConfig(
-                    ::comphelper::getProcessComponentContext(),
-                    OUString("/org.openoffice.Office.Impress/"),
-                    ::comphelper::ConfigurationHelper::E_STANDARD);
-
-                ::comphelper::ConfigurationHelper::writeRelativeKey(
-                    xCfg,
-                    OUString("Pictures"),
-                    OUString("Path"),
-                    uno::makeAny(sUrl));
-
-                ::comphelper::ConfigurationHelper::flush(xCfg);
+                boost::shared_ptr< comphelper::ConfigurationChanges > batch(
+                    comphelper::ConfigurationChanges::create());
+                officecfg::Office::Impress::Pictures::Path::set(sUrl, batch);
+                batch->commit();
             }
             catch(const Exception&)
             {
