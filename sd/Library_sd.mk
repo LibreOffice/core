@@ -551,7 +551,7 @@ $(eval $(call gb_Library_add_defs,sd,\
 
 ifeq ($(ENABLE_SDREMOTE_BLUETOOTH),YES)
 
-ifneq ($(OS),MACOSX))
+ifneq ($(OS),MACOSX)
 
 $(eval $(call gb_Library_add_exception_objects,sd,\
     sd/source/ui/remotecontrol/BluetoothServer \
