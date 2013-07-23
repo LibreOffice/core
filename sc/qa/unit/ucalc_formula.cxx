@@ -817,6 +817,27 @@ void Test::testFormulaRefUpdateSheets()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testFuncCOLUMN()
+{
+    m_pDoc->InsertTab(0, "Formula");
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
+
+    m_pDoc->SetString(ScAddress(5,10,0), "=COLUMN()");
+    CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(ScAddress(5,10,0)));
+
+    m_pDoc->SetString(ScAddress(0,1,0), "=F11");
+    CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(ScAddress(0,1,0)));
+
+    // Move the formula cell with COLUMN() function to change its value.
+    m_pDoc->InsertCol(ScRange(5,0,0,5,MAXROW,0));
+    CPPUNIT_ASSERT_EQUAL(7.0, m_pDoc->GetValue(ScAddress(6,10,0)));
+
+    // The cell that references the moved cell should update its value as well.
+    CPPUNIT_ASSERT_EQUAL(7.0, m_pDoc->GetValue(ScAddress(0,1,0)));
+
+    m_pDoc->DeleteTab(0);
+}
+
 void Test::testFuncSUM()
 {
     OUString aTabName("foo");
