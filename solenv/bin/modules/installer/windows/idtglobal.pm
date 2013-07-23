@@ -475,6 +475,16 @@ sub write_idt_header
         push(@{$idtref}, $oneline);
     }
 
+    if ( $definestring eq "msishortcutproperty" )
+    {
+        $oneline = "MsiShortcutProperty\tShortcut_\tPropertyKey\tPropVariantValue\n";
+        push(@{$idtref}, $oneline);
+        $oneline = "s72\ts72\tS255\tS255\n";
+        push(@{$idtref}, $oneline);
+        $oneline = "MsiShortcutProperty\tMsiShortcutProperty\n";
+        push(@{$idtref}, $oneline);
+    }
+
     if ( $definestring eq "registry" )
     {
         $oneline = "Registry\tRoot\tKey\tName\tValue\tComponent_\n";
