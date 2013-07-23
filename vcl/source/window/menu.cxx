@@ -1978,7 +1978,7 @@ sal_Bool Menu::GetItemImageMirrorMode( sal_uInt16 nItemId ) const
         return sal_False;
 }
 
-void Menu::SetItemCommand( sal_uInt16 nItemId, const String& rCommand )
+void Menu::SetItemCommand( sal_uInt16 nItemId, const OUString& rCommand )
 {
     size_t        nPos;
     MenuItemData* pData = pItemList->GetData( nItemId, nPos );
@@ -1987,14 +1987,14 @@ void Menu::SetItemCommand( sal_uInt16 nItemId, const String& rCommand )
         pData->aCommandStr = rCommand;
 }
 
-const XubString& Menu::GetItemCommand( sal_uInt16 nItemId ) const
+const OUString Menu::GetItemCommand( sal_uInt16 nItemId ) const
 {
     MenuItemData* pData = pItemList->GetData( nItemId );
 
-    if ( pData )
+    if (pData)
         return pData->aCommandStr;
-    else
-        return ImplGetSVEmptyStr();
+
+    return OUString();
 }
 
 void Menu::SetHelpCommand( sal_uInt16 nItemId, const XubString& rStr )

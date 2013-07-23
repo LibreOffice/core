@@ -448,8 +448,8 @@ public:
     sal_Bool                IsItemVisible( sal_uInt16 nItemId ) const;
     sal_Bool                IsItemReallyVisible( sal_uInt16 nItemId ) const;
 
-    void                SetItemCommand( sal_uInt16 nItemId, const XubString& rCommand );
-    const XubString&    GetItemCommand( sal_uInt16 nItemId ) const;
+    void                SetItemCommand( sal_uInt16 nItemId, const OUString& rCommand );
+    const OUString      GetItemCommand( sal_uInt16 nItemId ) const;
 
     using Window::SetQuickHelpText;
     void                SetQuickHelpText( sal_uInt16 nItemId, const XubString& rText );

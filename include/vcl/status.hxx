@@ -164,8 +164,8 @@ public:
     void                SetItemData( sal_uInt16 nItemId, void* pNewData );
     void*               GetItemData( sal_uInt16 nItemId ) const;
 
-    void                SetItemCommand( sal_uInt16 nItemId, const XubString& rCommand );
-    const XubString&    GetItemCommand( sal_uInt16 nItemId );
+    void                SetItemCommand( sal_uInt16 nItemId, const OUString& rCommand );
+    const OUString      GetItemCommand( sal_uInt16 nItemId );
 
     void                SetHelpText( sal_uInt16 nItemId, const XubString& rText );
     const XubString&    GetHelpText( sal_uInt16 nItemId ) const;

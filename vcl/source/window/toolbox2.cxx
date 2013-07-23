@@ -1795,24 +1795,24 @@ sal_Bool ToolBox::IsItemReallyVisible( sal_uInt16 nItemId ) const
 
 // -----------------------------------------------------------------------
 
-void ToolBox::SetItemCommand( sal_uInt16 nItemId, const XubString& rCommand )
+void ToolBox::SetItemCommand(sal_uInt16 nItemId, const OUString& rCommand)
 {
     ImplToolItem* pItem = ImplGetItem( nItemId );
 
-    if ( pItem )
+    if (pItem)
         pItem->maCommandStr = rCommand;
 }
 
 // -----------------------------------------------------------------------
 
-const XubString& ToolBox::GetItemCommand( sal_uInt16 nItemId ) const
+const OUString ToolBox::GetItemCommand( sal_uInt16 nItemId ) const
 {
     ImplToolItem* pItem = ImplGetItem( nItemId );
 
-    if ( pItem )
+    if (pItem)
         return pItem->maCommandStr;
-    else
-        return ImplGetSVEmptyStr();
+
+    return OUString();
 }
 
 // -----------------------------------------------------------------------

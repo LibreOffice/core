@@ -1308,7 +1308,7 @@ const XubString& StatusBar::GetItemText( sal_uInt16 nItemId ) const
 
 // -----------------------------------------------------------------------
 
-void StatusBar::SetItemCommand( sal_uInt16 nItemId, const XubString& rCommand )
+void StatusBar::SetItemCommand( sal_uInt16 nItemId, const OUString& rCommand )
 {
     sal_uInt16 nPos = GetItemPos( nItemId );
 
@@ -1323,14 +1323,14 @@ void StatusBar::SetItemCommand( sal_uInt16 nItemId, const XubString& rCommand )
 
 // -----------------------------------------------------------------------
 
-const XubString& StatusBar::GetItemCommand( sal_uInt16 nItemId )
+const OUString StatusBar::GetItemCommand( sal_uInt16 nItemId )
 {
     sal_uInt16 nPos = GetItemPos( nItemId );
 
     if ( nPos != STATUSBAR_ITEM_NOTFOUND )
         return (*mpItemList)[ nPos ]->maCommand;
 
-    return ImplGetSVEmptyStr();
+    return OUString();
 }
 
 // -----------------------------------------------------------------------

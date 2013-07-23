@@ -277,8 +277,8 @@ public:
     void                SetItemImageMirrorMode( sal_uInt16 nItemId, sal_Bool bMirror );
     sal_Bool            GetItemImageMirrorMode( sal_uInt16 ) const;
 
-    void                SetItemCommand( sal_uInt16 nItemId, const XubString& rCommand );
-    const XubString&    GetItemCommand( sal_uInt16 nItemId ) const;
+    void                SetItemCommand( sal_uInt16 nItemId, const OUString& rCommand );
+    const OUString      GetItemCommand( sal_uInt16 nItemId ) const;
 
     void                SetHelpText( sal_uInt16 nItemId, const XubString& rString );
     const XubString&    GetHelpText( sal_uInt16 nItemId ) const;
