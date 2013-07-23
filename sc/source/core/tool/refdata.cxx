@@ -120,30 +120,6 @@ SCTAB ScSingleRefData::GetTab() const
     return Flags.bTabRel ? nRelTab : nTab;
 }
 
-void ScSingleRefData::CalcAbsIfRel( const ScAddress& rPos )
-{
-    if ( Flags.bColRel )
-    {
-        nCol = nRelCol + rPos.Col();
-        if ( !ValidCol( nCol ) )
-            Flags.bColDeleted = sal_True;
-    }
-    if ( Flags.bRowRel )
-    {
-        nRow = nRelRow + rPos.Row();
-        if ( !ValidRow( nRow ) )
-            Flags.bRowDeleted = sal_True;
-    }
-    if ( Flags.bTabRel )
-    {
-        nTab = nRelTab + rPos.Tab();
-        if ( !ValidTab( nTab ) )
-            Flags.bTabDeleted = sal_True;
-    }
-}
-
-
-
 bool ScSingleRefData::operator==( const ScSingleRefData& r ) const
 {
     return mnFlagValue == r.mnFlagValue &&
