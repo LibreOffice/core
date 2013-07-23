@@ -40,7 +40,6 @@
 #include "osl/file.hxx"
 #include "osl/mutex.hxx"
 #include "rtl/bootstrap.hxx"
-#include "rtl/logfile.h"
 #include "rtl/ref.hxx"
 #include "rtl/string.h"
 #include "rtl/ustrbuf.hxx"
@@ -479,7 +478,6 @@ Components::Components(
     OUString conf(
         expand(
             OUString("${CONFIGURATION_LAYERS}")));
-    SAL_INFO( "configmgr", "configmgr : begin parsing" );
     int layer = 0;
     for (sal_Int32 i = 0;;) {
         while (i != conf.getLength() && conf[i] == ' ') {
@@ -561,7 +559,6 @@ Components::Components(
         }
         i = n;
     }
-    SAL_INFO( "configmgr", "configmgr : end parsing" );
 }
 
 Components::~Components()
