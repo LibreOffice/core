@@ -454,16 +454,7 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, FileHdl)
         SFXWB_GRAPHIC | SFXWB_MULTISELECTION
     );
     // Read configuration
-    OUString sUrl(".");
-    try
-    {
-        sUrl = officecfg::Office::Impress::Pictures::Path::get();
-    }
-    catch(const Exception&)
-    {
-        OSL_FAIL("Could not find config for Create Photo Album function");
-    }
-
+    OUString sUrl(officecfg::Office::Impress::Pictures::Path::get());
 
     INetURLObject aFile( SvtPathOptions().GetPalettePath() );
     if (sUrl != "")
@@ -478,16 +469,11 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, FileHdl)
         {
             sUrl = aDlg.GetDisplayDirectory();
             // Write out configuration
-            try
             {
                 boost::shared_ptr< comphelper::ConfigurationChanges > batch(
                     comphelper::ConfigurationChanges::create());
                 officecfg::Office::Impress::Pictures::Path::set(sUrl, batch);
                 batch->commit();
-            }
-            catch(const Exception&)
-            {
-                OSL_FAIL("Could not find config for Create Photo Album function");
             }
 
             for ( sal_Int32 i = 0; i < aFilesArr.getLength(); i++ )
