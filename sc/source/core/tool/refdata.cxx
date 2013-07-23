@@ -268,70 +268,31 @@ void ScComplexRefData::PutInOrder()
     lcl_putInOrder( Ref1, Ref2);
 }
 
-
-static void lcl_adjustInOrder( ScSingleRefData & rRef1, ScSingleRefData & rRef2, bool bFirstLeader )
-{
-    // a1:a2:a3, bFirstLeader: rRef1==a1==r1, rRef2==a3==r2
-    //                   else: rRef1==a3==r2, rRef2==a2==r1
-    ScSingleRefData& r1 = (bFirstLeader ? rRef1 : rRef2);
-    ScSingleRefData& r2 = (bFirstLeader ? rRef2 : rRef1);
-    if (r1.Flags.bFlag3D && !r2.Flags.bFlag3D)
-    {
-        // [$]Sheet1.A5:A6 on Sheet2 do still refer only Sheet1.
-        r2.nTab = r1.nTab;
-        r2.nRelTab = r1.nRelTab;
-        r2.Flags.bTabRel = r1.Flags.bTabRel;
-    }
-    lcl_putInOrder( rRef1, rRef2);
-}
-
-
 ScComplexRefData& ScComplexRefData::Extend( const ScSingleRefData & rRef, const ScAddress & rPos )
 {
-    CalcAbsIfRel( rPos);
-    ScSingleRefData aRef = rRef;
-    aRef.CalcAbsIfRel( rPos);
-    bool bInherit3D = Ref1.IsFlag3D() && !Ref2.IsFlag3D();
-    bool bInherit3Dtemp = bInherit3D && !rRef.IsFlag3D();
-    if (aRef.nCol < Ref1.nCol || aRef.nRow < Ref1.nRow || aRef.nTab < Ref1.nTab)
-    {
-        lcl_adjustInOrder( Ref1, aRef, true);
-        aRef = rRef;
-        aRef.CalcAbsIfRel( rPos);
-    }
-    if (aRef.nCol > Ref2.nCol || aRef.nRow > Ref2.nRow || aRef.nTab > Ref2.nTab)
-    {
-        if (bInherit3D)
-            Ref2.SetFlag3D( true);
-        lcl_adjustInOrder( aRef, Ref2, false);
-        if (bInherit3Dtemp)
-            Ref2.SetFlag3D( false);
-        aRef = rRef;
-        aRef.CalcAbsIfRel( rPos);
-    }
-    // In Ref2 use absolute/relative addressing from non-extended parts if
-    // equal and therefor not adjusted.
-    // A$5:A5 => A$5:A$5:A5 => A$5:A5, and not A$5:A$5
-    // A$6:$A5 => A$6:A$6:$A5 => A5:$A$6
-    if (Ref2.nCol == aRef.nCol)
-        Ref2.SetColRel( aRef.IsColRel());
-    if (Ref2.nRow == aRef.nRow)
-        Ref2.SetRowRel( aRef.IsRowRel());
-    // $Sheet1.$A$5:$A$6 => $Sheet1.$A$5:$A$5:$A$6 => $Sheet1.$A$5:$A$6, and
-    // not $Sheet1.$A$5:Sheet1.$A$6 (with invisible second 3D, but relative).
-    if (Ref2.nTab == aRef.nTab)
-        Ref2.SetTabRel( bInherit3Dtemp ? Ref1.IsTabRel() : aRef.IsTabRel());
-    Ref2.CalcRelFromAbs( rPos);
-    // Force 3D if necessary. References to other sheets always.
-    if (Ref1.nTab != rPos.Tab())
-        Ref1.SetFlag3D( true);
-    // In the second part only if different sheet thus not inherited.
-    if (Ref2.nTab != Ref1.nTab)
-        Ref2.SetFlag3D( true);
-    // Merge Flag3D to Ref2 in case there was nothing to inherit and/or range
-    // wasn't extended as in A5:A5:Sheet1.A5 if on Sheet1.
-    if (rRef.IsFlag3D())
-        Ref2.SetFlag3D( true);
+    ScRange aAbsRange = toAbs(rPos);
+    ScAddress aAbs = rRef.toAbs(rPos);
+
+    if (aAbs.Col() < aAbsRange.aStart.Col())
+        aAbsRange.aStart.SetCol(aAbs.Col());
+
+    if (aAbs.Row() < aAbsRange.aStart.Row())
+        aAbsRange.aStart.SetRow(aAbs.Row());
+
+    if (aAbs.Tab() < aAbsRange.aStart.Tab())
+        aAbsRange.aStart.SetTab(aAbs.Tab());
+
+    if (aAbsRange.aEnd.Col() < aAbs.Col())
+        aAbsRange.aEnd.SetCol(aAbs.Col());
+
+    if (aAbsRange.aEnd.Row() < aAbs.Row())
+        aAbsRange.aEnd.SetRow(aAbs.Row());
+
+    if (aAbsRange.aEnd.Tab() < aAbs.Tab())
+        aAbsRange.aEnd.SetTab(aAbs.Tab());
+
+    SetRange(aAbsRange, rPos);
+
     return *this;
 }
 
