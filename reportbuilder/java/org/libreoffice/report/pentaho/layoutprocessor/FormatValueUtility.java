@@ -85,7 +85,7 @@ public class FormatValueUtility
         else if (value instanceof Date)
         {
             variableSection.setAttribute(OfficeNamespaces.OFFICE_NS, VALUE_TYPE, "float");
-            ret = HSSFDateUtil.getExcelDate((Date) value, false, 2).toString();
+            ret = HSSFDateUtil.getExcelDate((Date) value).toString();
             variableSection.setAttribute(OfficeNamespaces.OFFICE_NS, VALUE, ret);
         }
         else if (value instanceof Number)
@@ -112,8 +112,7 @@ public class FormatValueUtility
         }
         else
         {
-            variableSection.setAttribute(OfficeNamespaces.OFFICE_NS, VALUE_TYPE, "string");
-            variableSection.setAttribute(OfficeNamespaces.OFFICE_NS, STRING_VALUE, "");
+            variableSection.setAttribute(OfficeNamespaces.OFFICE_NS, VALUE_TYPE, "void");
         }
         return ret;
     }
@@ -122,61 +121,39 @@ public class FormatValueUtility
     {
         if (value instanceof Time)
         {
+            variableSection.setAttribute(OfficeNamespaces.OFFICE_NS, VALUE_TYPE, "time");
             variableSection.setAttribute(OfficeNamespaces.OFFICE_NS, "time-value", formatTime((Time) value));
         }
         else if (value instanceof java.sql.Date)
         {
-            if ("float".equals(valueType) || valueType == null)
-            {
-                // This is to work around fdo#63478
-                variableSection.setAttribute(OfficeNamespaces.OFFICE_NS, VALUE, HSSFDateUtil.getExcelDate((Date) value, false, 0).toString());
-            }
-            else
-            {
-                variableSection.setAttribute(OfficeNamespaces.OFFICE_NS, "date-value", formatDate((Date) value));
-            }
+            variableSection.setAttribute(OfficeNamespaces.OFFICE_NS, VALUE_TYPE, "date");
+            variableSection.setAttribute(OfficeNamespaces.OFFICE_NS, "date-value", formatDate((Date) value));
         }
         else if (value instanceof Date)
         {
-            // This is what we *should* do, but see fdo#63478
-            // variableSection.setAttribute(OfficeNamespaces.OFFICE_NS, VALUE_TYPE, "date");
-            // variableSection.setAttribute(OfficeNamespaces.OFFICE_NS, "date-value", formatDate((Date) value));
-            // so we do that instead to work around:
-            variableSection.setAttribute(OfficeNamespaces.OFFICE_NS, VALUE_TYPE, "float");
-            variableSection.setAttribute(OfficeNamespaces.OFFICE_NS, VALUE, HSSFDateUtil.getExcelDate((Date) value, false, 0).toString());
+            variableSection.setAttribute(OfficeNamespaces.OFFICE_NS, VALUE_TYPE, "date");
+            variableSection.setAttribute(OfficeNamespaces.OFFICE_NS, "date-value", formatDate((Date) value));
         }
         else if (value instanceof BigDecimal)
         {
-            if ("date".equals(valueType))
-            {
-                variableSection.setAttribute(OfficeNamespaces.OFFICE_NS, "date-value", formatDate(HSSFDateUtil.getJavaDate((BigDecimal) value, false, 0)));
-            }
-            else
-            {
-                variableSection.setAttribute(OfficeNamespaces.OFFICE_NS, VALUE, String.valueOf(value));
-            }
+            variableSection.setAttribute(OfficeNamespaces.OFFICE_NS, VALUE_TYPE, "float");
+            variableSection.setAttribute(OfficeNamespaces.OFFICE_NS, VALUE, String.valueOf(value));
         }
         else if (value instanceof Number)
         {
+            variableSection.setAttribute(OfficeNamespaces.OFFICE_NS, VALUE_TYPE, "float");
             variableSection.setAttribute(OfficeNamespaces.OFFICE_NS, VALUE, String.valueOf(value));
         }
         else if (value instanceof Boolean)
         {
-            if ("float".equals(valueType))
+            variableSection.setAttribute(OfficeNamespaces.OFFICE_NS, VALUE_TYPE, "boolean");
+            if (Boolean.TRUE.equals(value))
             {
-                float fvalue = Boolean.TRUE.equals(value) ? 1 : 0;
-                variableSection.setAttribute(OfficeNamespaces.OFFICE_NS, VALUE, String.valueOf(fvalue));
+                variableSection.setAttribute(OfficeNamespaces.OFFICE_NS, BOOLEAN_VALUE, OfficeToken.TRUE);
             }
             else
             {
-                if (Boolean.TRUE.equals(value))
-                {
-                    variableSection.setAttribute(OfficeNamespaces.OFFICE_NS, BOOLEAN_VALUE, OfficeToken.TRUE);
-                }
-                else
-                {
-                    variableSection.setAttribute(OfficeNamespaces.OFFICE_NS, BOOLEAN_VALUE, OfficeToken.FALSE);
-                }
+                variableSection.setAttribute(OfficeNamespaces.OFFICE_NS, BOOLEAN_VALUE, OfficeToken.FALSE);
             }
         }
         else if (value != null)
@@ -198,7 +175,7 @@ public class FormatValueUtility
         }
         else
         {
-            variableSection.setAttribute(OfficeNamespaces.OFFICE_NS, STRING_VALUE, "");
+            variableSection.setAttribute(OfficeNamespaces.OFFICE_NS, VALUE_TYPE, "void");
         }
     }
 
