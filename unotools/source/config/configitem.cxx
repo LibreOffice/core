@@ -487,23 +487,11 @@ Sequence< Any > ConfigItem::GetProperties(const Sequence< OUString >& rNames)
             }
             catch (const Exception& rEx)
             {
-#if OSL_DEBUG_LEVEL > 0
-                OString sMsg("XHierarchicalNameAccess: ");
-                sMsg += OString(rEx.Message.getStr(),
-                    rEx.Message.getLength(),
-                     RTL_TEXTENCODING_ASCII_US);
-                sMsg += OString("\n/org.openoffice.");
-                sMsg += OString(sSubTree.getStr(),
-                    sSubTree.getLength(),
-                     RTL_TEXTENCODING_ASCII_US);
-                sMsg += OString("/");
-                sMsg += OString(pNames[i].getStr(),
-                    pNames[i].getLength(),
-                     RTL_TEXTENCODING_ASCII_US);
-                OSL_FAIL(sMsg.getStr());
-#else
-                (void) rEx; // avoid warning
-#endif
+                SAL_WARN(
+                    "unotools.config",
+                    "ignoring XHierarchicalNameAccess to /org.openoffice."
+                        << sSubTree << "/" << pNames[i] << " Exception: "
+                        << rEx.Message);
             }
         }
 
