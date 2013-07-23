@@ -62,7 +62,6 @@
 #include <cppuhelper/typeprovider.hxx>
 #include <rtl/uri.hxx>
 #include <rtl/random.h>
-#include <rtl/logfile.hxx>
 #include <rtl/instance.hxx>
 #include <osl/time.h>
 #include "com/sun/star/io/XAsyncOutputMonitor.hpp"
@@ -580,7 +579,6 @@ void ZipPackage::getZipFileContents()
 void SAL_CALL ZipPackage::initialize( const uno::Sequence< Any >& aArguments )
         throw( Exception, RuntimeException )
 {
-    RTL_LOGFILE_TRACE_AUTHOR ( "package", "mg115289", "{ ZipPackage::initialize" );
     sal_Bool bHaveZipFile = sal_True;
     uno::Reference< XProgressHandler > xProgressHandler;
     beans::NamedValue aNamedValue;
@@ -785,8 +783,6 @@ void SAL_CALL ZipPackage::initialize( const uno::Sequence< Any >& aArguments )
             }
         }
     }
-
-    RTL_LOGFILE_TRACE_AUTHOR ( "package", "mg115289", "} ZipPackage::initialize" );
 }
 
 //--------------------------------------------------------
@@ -1371,9 +1367,6 @@ void SAL_CALL ZipPackage::commitChanges()
         throw WrappedTargetException(OSL_LOG_PREFIX "This package is read only!",
                 static_cast < OWeakObject * > ( this ), makeAny ( aException ) );
     }
-
-    RTL_LOGFILE_TRACE_AUTHOR ( "package", "mg115289", "{ ZipPackage::commitChanges" );
-
     // first the writeTempFile is called, if it returns a stream the stream should be written to the target
     // if no stream was returned, the file was written directly, nothing should be done
 
@@ -1527,8 +1520,6 @@ void SAL_CALL ZipPackage::commitChanges()
 
     // after successful storing it can be set to false
     m_bMediaTypeFallbackUsed = sal_False;
-
-    RTL_LOGFILE_TRACE_AUTHOR ( "package", "mg115289", "} ZipPackage::commitChanges" );
 }
 
 //--------------------------------------------------------
