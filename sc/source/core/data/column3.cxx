@@ -920,7 +920,6 @@ void ScColumn::CopyFromClip(
             aRef.nRow = nDestRow - nDy; // Source row
             aDestPos.SetRow( nDestRow );
 
-            aRef.CalcRelFromAbs( aDestPos );
             ScTokenArray aArr;
             aArr.AddSingleReference( aRef );
             SetFormulaCell(nDestRow, new ScFormulaCell(pDocument, aDestPos, &aArr));

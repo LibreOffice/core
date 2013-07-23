@@ -708,8 +708,8 @@ void ScConsData::OutputToDocument( ScDocument* pDestDoc, SCCOL nCol, SCROW nRow,
         String aString;
 
         ScSingleRefData aSRef;      // Daten fuer Referenz-Formelzellen
-        aSRef.InitFlags();
-        aSRef.SetFlag3D(sal_True);
+        aSRef.InitFlags(); // This reference is absolute at all times.
+        aSRef.SetFlag3D(true);
 
         ScComplexRefData aCRef;         // Daten fuer Summen-Zellen
         aCRef.InitFlags();
@@ -741,9 +741,7 @@ void ScConsData::OutputToDocument( ScDocument* pDestDoc, SCCOL nCol, SCROW nRow,
                                 {
                                     //  Referenz einfuegen (absolut, 3d)
 
-                                    aSRef.nCol = aRef.nCol;
-                                    aSRef.nRow = aRef.nRow;
-                                    aSRef.nTab = aRef.nTab;
+                                    aSRef.SetAddress(ScAddress(aRef.nCol,aRef.nRow,aRef.nTab), ScAddress());
 
                                     ScTokenArray aRefArr;
                                     aRefArr.AddSingleReference(aSRef);
@@ -760,11 +758,9 @@ void ScConsData::OutputToDocument( ScDocument* pDestDoc, SCCOL nCol, SCROW nRow,
                             ScAddress aDest( sal::static_int_cast<SCCOL>(nCol+nArrX),
                                              sal::static_int_cast<SCROW>(nRow+nArrY+nNeeded), nTab );
 
-                            aCRef.Ref1.nTab = aCRef.Ref2.nTab = nTab;
-                            aCRef.Ref1.nCol = aCRef.Ref2.nCol = sal::static_int_cast<SCsCOL>( nCol+nArrX );
-                            aCRef.Ref1.nRow = nRow+nArrY;
-                            aCRef.Ref2.nRow = nRow+nArrY+nNeeded-1;
-                            aCRef.CalcRelFromAbs( aDest );
+                            ScRange aRange(sal::static_int_cast<SCCOL>(nCol+nArrX), nRow+nArrY, nTab);
+                            aRange.aEnd.SetRow(nRow+nArrY+nNeeded-1);
+                            aCRef.SetRange(aRange, aDest);
 
                             ScTokenArray aArr;
                             aArr.AddOpCode(eOpCode);            // ausgewaehlte Funktion
