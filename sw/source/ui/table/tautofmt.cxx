@@ -89,7 +89,7 @@ private:
     void    PaintCells      ();
 
     sal_uInt8                GetFormatIndex( size_t nCol, size_t nRow ) const;
-    const SvxBoxItem&   GetBoxItem( size_t nCol, size_t nRow ) const;
+    const SvxBoxItem*   GetBoxItem( size_t nCol, size_t nRow ) const;
 
     void                DrawString( size_t nCol, size_t nRow );
     void                DrawStrings();
@@ -584,21 +584,23 @@ rCTLFont.MethodName( Value );
 
 void AutoFmtPreview::MakeFonts( sal_uInt8 nIndex, Font& rFont, Font& rCJKFont, Font& rCTLFont )
 {
-    const SwTableBoxFmt& rBoxFmt = *pCurData->GetBoxFmt( nIndex );
-
     rFont = rCJKFont = rCTLFont = GetFont();
     Size aFontSize( rFont.GetSize().Width(), 10 );
 
-    lcl_SetFontProperties( rFont, rBoxFmt.GetFont(), rBoxFmt.GetWeight(), rBoxFmt.GetPosture() );
-    lcl_SetFontProperties( rCJKFont, rBoxFmt.GetCJKFont(), rBoxFmt.GetCJKWeight(), rBoxFmt.GetCJKPosture() );
-    lcl_SetFontProperties( rCTLFont, rBoxFmt.GetCTLFont(), rBoxFmt.GetCTLWeight(), rBoxFmt.GetCTLPosture() );
+    if ( pCurData )
+    {
+        const SwTableBoxFmt& rBoxFmt = *pCurData->GetBoxFmt( nIndex );
+        lcl_SetFontProperties( rFont, rBoxFmt.GetFont(), rBoxFmt.GetWeight(), rBoxFmt.GetPosture() );
+        lcl_SetFontProperties( rCJKFont, rBoxFmt.GetCJKFont(), rBoxFmt.GetCJKWeight(), rBoxFmt.GetCJKPosture() );
+        lcl_SetFontProperties( rCTLFont, rBoxFmt.GetCTLFont(), rBoxFmt.GetCTLWeight(), rBoxFmt.GetCTLPosture() );
 
-    SETONALLFONTS( SetUnderline,    (FontUnderline)rBoxFmt.GetUnderline().GetValue() );
-    SETONALLFONTS( SetOverline,     (FontUnderline)rBoxFmt.GetOverline().GetValue() );
-    SETONALLFONTS( SetStrikeout,    (FontStrikeout)rBoxFmt.GetCrossedOut().GetValue() );
-    SETONALLFONTS( SetOutline,      rBoxFmt.GetContour().GetValue() );
-    SETONALLFONTS( SetShadow,       rBoxFmt.GetShadowed().GetValue() );
-    SETONALLFONTS( SetColor,        rBoxFmt.GetColor().GetValue() );
+        SETONALLFONTS( SetUnderline,    (FontUnderline)rBoxFmt.GetUnderline().GetValue() );
+        SETONALLFONTS( SetOverline,     (FontUnderline)rBoxFmt.GetOverline().GetValue() );
+        SETONALLFONTS( SetStrikeout,    (FontStrikeout)rBoxFmt.GetCrossedOut().GetValue() );
+        SETONALLFONTS( SetOutline,      rBoxFmt.GetContour().GetValue() );
+        SETONALLFONTS( SetShadow,       rBoxFmt.GetShadowed().GetValue() );
+        SETONALLFONTS( SetColor,        rBoxFmt.GetColor().GetValue() );
+    }
     SETONALLFONTS( SetSize,         aFontSize );
     SETONALLFONTS( SetTransparent,  sal_True );
 }
@@ -616,9 +618,12 @@ sal_uInt8 AutoFmtPreview::GetFormatIndex( size_t nCol, size_t nRow ) const
     return pnFmtMap[ maArray.GetCellIndex( nCol, nRow, mbRTL ) ];
 }
 
-const SvxBoxItem& AutoFmtPreview::GetBoxItem( size_t nCol, size_t nRow ) const
+const SvxBoxItem* AutoFmtPreview::GetBoxItem( size_t nCol, size_t nRow ) const
 {
-    return pCurData->GetBoxFmt( GetFormatIndex( nCol, nRow ) )->GetBox();
+    if ( pCurData )
+        return &pCurData->GetBoxFmt( GetFormatIndex( nCol, nRow ) )->GetBox();
+    else
+        return NULL;
 }
 
 void AutoFmtPreview::DrawString( size_t nCol, size_t nRow )
@@ -664,7 +669,7 @@ void AutoFmtPreview::DrawString( size_t nCol, size_t nRow )
         case 23:    nVal = 39; nNum = 13;   goto MAKENUMSTR;
         case 24:    nVal = 108; nNum = 15;  goto MAKENUMSTR;
 MAKENUMSTR:
-            if( pCurData->IsValueFormat() )
+            if( pCurData && pCurData->IsValueFormat() )
             {
                 String sFmt; LanguageType eLng, eSys;
                 pCurData->GetBoxFmt( (sal_uInt8)nNum )->GetValueFormat( sFmt, eLng, eSys );
@@ -693,7 +698,7 @@ MAKENUMSTR:
 
         Size theMaxStrSize( cellRect.GetWidth() - FRAME_OFFSET,
                             cellRect.GetHeight() - FRAME_OFFSET );
-        if( pCurData->IsFont() )
+        if( pCurData && pCurData->IsFont() )
         {
             Font aFont, aCJKFont, aCTLFont;
             MakeFonts( nFmtIndex, aFont, aCJKFont, aCTLFont );
@@ -705,7 +710,7 @@ MAKENUMSTR:
         aScriptedText.SetText( cellString, m_xBreak );
         aStrSize = aScriptedText.GetTextSize();
 
-        if( pCurData->IsFont() &&
+        if( pCurData && pCurData->IsFont() &&
             theMaxStrSize.Height() < aStrSize.Height() )
         {
                 // If the string in this font does not
@@ -733,7 +738,7 @@ MAKENUMSTR:
         // horizontal
         if( mbRTL )
             aPos.X() += nRightX;
-        else if (pCurData->IsJustify())
+        else if (pCurData && pCurData->IsJustify())
         {
             sal_uInt16 nHorPos = (sal_uInt16)
                     ((cellRect.GetWidth()-aStrSize.Width())/2);
@@ -799,14 +804,14 @@ void AutoFmtPreview::DrawBackground()
 void AutoFmtPreview::PaintCells()
 {
     // 1) background
-    if ( pCurData->IsBackground() )
+    if ( pCurData && pCurData->IsBackground() )
         DrawBackground();
 
     // 2) values
     DrawStrings();
 
     // 3) border
-    if ( pCurData->IsFrame() )
+    if ( pCurData && pCurData->IsFrame() )
         maArray.DrawArray( aVD );
 }
 
@@ -846,14 +851,18 @@ void AutoFmtPreview::CalcLineMap()
         {
             svx::frame::Style aStyle;
 
-            const SvxBoxItem& rItem = GetBoxItem( nCol, nRow );
-            lclSetStyleFromBorder( aStyle, rItem.GetLeft() );
+            const SvxBoxItem* pItem = GetBoxItem( nCol, nRow );
+            if ( pItem )
+                lclSetStyleFromBorder( aStyle, pItem->GetLeft() );
             maArray.SetCellStyleLeft( nCol, nRow, aStyle );
-            lclSetStyleFromBorder( aStyle, rItem.GetRight() );
+            if ( pItem )
+                lclSetStyleFromBorder( aStyle, pItem->GetRight() );
             maArray.SetCellStyleRight( nCol, nRow, aStyle );
-            lclSetStyleFromBorder( aStyle, rItem.GetTop() );
+            if ( pItem )
+                lclSetStyleFromBorder( aStyle, pItem->GetTop() );
             maArray.SetCellStyleTop( nCol, nRow, aStyle );
-            lclSetStyleFromBorder( aStyle, rItem.GetBottom() );
+            if ( pItem )
+                lclSetStyleFromBorder( aStyle, pItem->GetBottom() );
             maArray.SetCellStyleBottom( nCol, nRow, aStyle );
 
 // FIXME - uncomment to draw diagonal borders
@@ -868,7 +877,7 @@ void AutoFmtPreview::CalcLineMap()
 void AutoFmtPreview::NotifyChange( const SwTableAutoFmt& rNewData )
 {
     pCurData  = const_cast< SwTableAutoFmt* >( &rNewData );
-    bFitWidth = pCurData->IsJustify();//sal_True;  //???
+    bFitWidth = pCurData && pCurData->IsJustify();//sal_True;  //???
     CalcCellArray( bFitWidth );
     CalcLineMap();
     DoPaint( Rectangle( Point(0,0), GetSizePixel() ) );
