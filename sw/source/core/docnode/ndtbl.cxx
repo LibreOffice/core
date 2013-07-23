@@ -331,8 +331,8 @@ const SwTable* SwDoc::InsertTable( const SwInsertTableOptions& rInsTableOpts,
 
     // Create the Box/Line/Table construct
     SwTableLineFormat* pLineFormat = MakeTableLineFormat();
-    SwTableFormat* pTableFormat = pTAFormat ? pTAFormat->GetTableStyle()
-                        : MakeTableFrameFormat( aTableName, GetDfltFrameFormat() );
+    SwTableFormat* pTableStyle = pTAFormat ? pTAFormat->GetTableStyle() : NULL;
+    SwTableFormat* pTableFormat = MakeTableFrameFormat( aTableName, pTableStyle );
 
     /* If the node to insert the table at is a context node and has a
        non-default FRAMEDIR propagate it to the table. */
@@ -352,10 +352,6 @@ const SwTable* SwDoc::InsertTable( const SwInsertTableOptions& rInsTableOpts,
     pTableFormat->SetFormatAttr( SwFormatHoriOrient( 0, eAdjust ) );
     // All lines use the left-to-right Fill-Order!
     pLineFormat->SetFormatAttr( SwFormatFillOrder( ATT_LEFT_TO_RIGHT ) );
-    pTableFormat->GetFirstLineFormat()->SetFormatAttr( SwFormatFillOrder( ATT_LEFT_TO_RIGHT ) );
-    pTableFormat->GetOddLineFormat()->SetFormatAttr( SwFormatFillOrder( ATT_LEFT_TO_RIGHT ) );
-    pTableFormat->GetEvenLineFormat()->SetFormatAttr( SwFormatFillOrder( ATT_LEFT_TO_RIGHT ) );
-    pTableFormat->GetLastLineFormat()->SetFormatAttr( SwFormatFillOrder( ATT_LEFT_TO_RIGHT ) );
 
     // Set USHRT_MAX as the Table's default SSize
     SwTwips nWidth = USHRT_MAX;
@@ -406,7 +402,7 @@ const SwTable* SwDoc::InsertTable( const SwInsertTableOptions& rInsTableOpts,
         ::lcl_SetDfltBorders( pTableFormat );
 
     SwTable& rNdTable = pTableNd->GetTable();
-    rNdTable.GetFrameFormat()->RegisterToFormat( *pTableFormat );
+    rNdTable.RegisterToFormat( *pTableFormat );
 
     rNdTable.SetRowsToRepeat( nRowsToRepeat );
     rNdTable.SetTableModel( bNewModel );
@@ -604,15 +600,11 @@ const SwTable* SwDoc::TextToTable( const SwInsertTableOptions& rInsTableOpts,
     // Create the Box/Line/Table construct
     SwTableBoxFormat* pBoxFormat = MakeTableBoxFormat();
     SwTableLineFormat* pLineFormat = MakeTableLineFormat();
-    SwTableFormat* pTableFormat = pTAFormat ? pTAFormat->GetTableStyle()
-                        : MakeTableFrameFormat( GetUniqueTableName(), GetDfltFrameFormat() );
+    SwTableFormat* pTableStyle = pTAFormat ? pTAFormat->GetTableStyle() : NULL;
+    SwTableFormat* pTableFormat = MakeTableFrameFormat( GetUniqueTableName(), pTableStyle );
 
     // All Lines have a left-to-right Fill Order
     pLineFormat->SetFormatAttr( SwFormatFillOrder( ATT_LEFT_TO_RIGHT ));
-    pTableFormat->GetFirstLineFormat()->SetFormatAttr( SwFormatFillOrder( ATT_LEFT_TO_RIGHT ));
-    pTableFormat->GetOddLineFormat()->SetFormatAttr( SwFormatFillOrder( ATT_LEFT_TO_RIGHT ));
-    pTableFormat->GetEvenLineFormat()->SetFormatAttr( SwFormatFillOrder( ATT_LEFT_TO_RIGHT ));
-    pTableFormat->GetLastLineFormat()->SetFormatAttr( SwFormatFillOrder( ATT_LEFT_TO_RIGHT ));
     // The Table's SSize is USHRT_MAX
     pTableFormat->SetFormatAttr( SwFormatFrmSize( ATT_VAR_SIZE, USHRT_MAX ));
     if( !(rInsTableOpts.mnInsMode & tabopts::SPLIT_LAYOUT) )
@@ -658,7 +650,8 @@ const SwTable* SwDoc::TextToTable( const SwInsertTableOptions& rInsTableOpts,
 
     // Set Orientation in the Table's Format
     pTableFormat->SetFormatAttr( SwFormatHoriOrient( 0, eAdjust ) );
-    rNdTable.GetFrameFormat()->RegisterToFormat( *pTableFormat );
+
+    rNdTable.RegisterToFormat( *pTableFormat );
 
     if( rInsTableOpts.mnInsMode & tabopts::DEFAULT_BORDER )
     {
