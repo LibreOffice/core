@@ -35,6 +35,12 @@ FolderItem gid_Folderitem_LibreOffice
     Parameter = "";
 End
 
+FolderItemProperty git_Folderitem_LibreOffice_AppIDProperty
+    ShortcutID = gid_Folderitem_LibreOffice;
+    Key = "System.AppUserModel.ID"
+    Value = "TheDocumentFoundation.LibreOffice.Startcenter"
+End
+
 FolderItem gid_Folderitem_Soffice_Desktop
 #ifdef ENABLE_SILENT_MSI
     Name = "%PRODUCTNAME";
@@ -51,4 +57,10 @@ FolderItem gid_Folderitem_Soffice_Desktop
     WkDir = gid_Brand_Dir_Program;
     Parameter = "";
     ComponentCondition = "CREATEDESKTOPLINK=1";
+End
+
+FolderItemProperty git_Folderitem_Soffice_Desktop_AppIDProperty
+    ShortcutID = gid_Folderitem_Soffice_Desktop;
+    Key = "System.AppUserModel.ID"
+    Value = "TheDocumentFoundation.LibreOffice.Startcenter"
 End
