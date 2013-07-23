@@ -89,6 +89,7 @@ public:
     void testFormulaRefUpdate();
     void testFormulaRefUpdateRange();
     void testFormulaRefUpdateSheets();
+    void testFormulaRefUpdateMove();
     void testFuncCOLUMN();
     void testFuncROW();
     void testFuncSUM();
@@ -280,6 +281,7 @@ public:
     CPPUNIT_TEST(testFormulaRefUpdate);
     CPPUNIT_TEST(testFormulaRefUpdateRange);
     CPPUNIT_TEST(testFormulaRefUpdateSheets);
+    CPPUNIT_TEST(testFormulaRefUpdateMove);
     CPPUNIT_TEST(testFuncCOLUMN);
     CPPUNIT_TEST(testFuncROW);
     CPPUNIT_TEST(testFuncSUM);

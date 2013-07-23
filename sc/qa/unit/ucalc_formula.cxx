@@ -18,6 +18,8 @@
 #include "formulacell.hxx"
 #include "inputopt.hxx"
 #include "scmod.hxx"
+#include "docsh.hxx"
+#include "docfunc.hxx"
 
 #include <boost/scoped_ptr.hpp>
 
@@ -833,6 +835,54 @@ void Test::testFormulaRefUpdateSheets()
 
     if (!checkFormula(*m_pDoc, ScAddress(1,2,0), "SUM(#REF!.$B$2:$C$3)"))
         CPPUNIT_FAIL("Wrong formula in Sheet2.B3.");
+
+    m_pDoc->DeleteTab(0);
+}
+
+void Test::testFormulaRefUpdateMove()
+{
+    m_pDoc->InsertTab(0, "Sheet1");
+
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
+
+    // Set value to B4:B6.
+    m_pDoc->SetValue(ScAddress(1,3,0), 1);
+    m_pDoc->SetValue(ScAddress(1,4,0), 2);
+    m_pDoc->SetValue(ScAddress(1,5,0), 3);
+
+    // Set formulas to A9:A12 that references B4:B6.
+    m_pDoc->SetString(ScAddress(0,8,0), "=SUM(B4:B6)");
+    m_pDoc->SetString(ScAddress(0,9,0), "=SUM($B$4:$B$6)");
+    m_pDoc->SetString(ScAddress(0,10,0), "=B5");
+    m_pDoc->SetString(ScAddress(0,11,0), "=$B$6");
+
+    CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(0,8,0));
+    CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(0,9,0));
+    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(0,10,0));
+    CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(0,11,0));
+
+    // Move B4:B6 to D4 (two columsn to the right).
+    ScDocFunc& rFunc = getDocShell().GetDocFunc();
+    bool bMoved = rFunc.MoveBlock(ScRange(1,3,0,1,5,0), ScAddress(3,3,0), true, false, false, false);
+    CPPUNIT_ASSERT_MESSAGE("Failed to move B4:B6.", bMoved);
+
+    // The results of the formula cells that reference the moved range should remain the same.
+    CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(0,8,0));
+    CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(0,9,0));
+    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(0,10,0));
+    CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(0,11,0));
+
+    if (!checkFormula(*m_pDoc, ScAddress(0,8,0), "SUM(D4:D6)"))
+        CPPUNIT_FAIL("Wrong formula.");
+
+    if (!checkFormula(*m_pDoc, ScAddress(0,9,0), "SUM($D$4:$D$6)"))
+        CPPUNIT_FAIL("Wrong formula.");
+
+    if (!checkFormula(*m_pDoc, ScAddress(0,10,0), "D5"))
+        CPPUNIT_FAIL("Wrong formula.");
+
+    if (!checkFormula(*m_pDoc, ScAddress(0,11,0), "$D$6"))
+        CPPUNIT_FAIL("Wrong formula.");
 
     m_pDoc->DeleteTab(0);
 }
