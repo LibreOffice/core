@@ -1660,18 +1660,20 @@ void ScFiltersTest::testRichTextContentODS()
 
     // first line is bold.
     pEditText->GetCharAttribs(0, aAttribs);
-    bool bHasBold = false;
-    for (it = aAttribs.begin(), itEnd = aAttribs.end(); it != itEnd; ++it)
     {
-        if (it->pAttr->Which() == EE_CHAR_WEIGHT)
+        bool bHasBold = false;
+        for (it = aAttribs.begin(), itEnd = aAttribs.end(); it != itEnd; ++it)
         {
-            const SvxWeightItem& rItem = static_cast<const SvxWeightItem&>(*it->pAttr);
-            bHasBold = (rItem.GetWeight() == WEIGHT_BOLD);
-            if (bHasBold)
-                break;
+            if (it->pAttr->Which() == EE_CHAR_WEIGHT)
+            {
+                const SvxWeightItem& rItem = static_cast<const SvxWeightItem&>(*it->pAttr);
+                bHasBold = (rItem.GetWeight() == WEIGHT_BOLD);
+                if (bHasBold)
+                    break;
+            }
         }
+        CPPUNIT_ASSERT_MESSAGE("First line should be bold.", bHasBold);
     }
-    CPPUNIT_ASSERT_MESSAGE("First line should be bold.", bHasBold);
 
     // second line is italic.
     pEditText->GetCharAttribs(1, aAttribs);
@@ -1737,6 +1739,45 @@ void ScFiltersTest::testRichTextContentODS()
     CPPUNIT_ASSERT_MESSAGE("Failed to get the URL data.", pData && pData->GetClassId() == text::textfield::Type::URL);
     const SvxURLField* pURLData = static_cast<const SvxURLField*>(pData);
     CPPUNIT_ASSERT_MESSAGE("URL is not absolute with respect to the file system.", pURLData->GetURL().startsWith("file:///"));
+
+    // Embedded spaces as <text:s text:c='4' />, normal text
+    aPos.IncRow();
+    CPPUNIT_ASSERT_EQUAL(CELLTYPE_STRING, pDoc->GetCellType(aPos));
+    CPPUNIT_ASSERT_EQUAL(OUString("one     two"), pDoc->GetString(aPos.Col(), aPos.Row(), aPos.Tab()));
+
+    // Leading space as <text:s />.
+    aPos.IncRow();
+    CPPUNIT_ASSERT_EQUAL(CELLTYPE_STRING, pDoc->GetCellType(aPos));
+    CPPUNIT_ASSERT_EQUAL(OUString(" =3+4"), pDoc->GetString(aPos.Col(), aPos.Row(), aPos.Tab()));
+
+    // Embedded spaces with <text:s text:c='4' /> inside a <text:span>, text
+    // partly bold.
+    aPos.IncRow();
+    CPPUNIT_ASSERT_EQUAL(CELLTYPE_EDIT, pDoc->GetCellType(aPos));
+    pEditText = pDoc->GetEditText(aPos);
+    CPPUNIT_ASSERT_MESSAGE("Failed to retrieve edit text object.", pEditText);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), pEditText->GetParagraphCount());
+    aParaText = pEditText->GetText(0);
+    CPPUNIT_ASSERT_EQUAL(OUString("one     two"), aParaText);
+    pEditText->GetCharAttribs(0, aAttribs);
+    {
+        bool bHasBold = false;
+        for (it = aAttribs.begin(), itEnd = aAttribs.end(); it != itEnd; ++it)
+        {
+            if (it->pAttr->Which() == EE_CHAR_WEIGHT)
+            {
+                const SvxWeightItem& rItem = static_cast<const SvxWeightItem&>(*it->pAttr);
+                bHasBold = (rItem.GetWeight() == WEIGHT_BOLD);
+                if (bHasBold)
+                {
+                    OUString aSeg = aParaText.copy(it->nStart, it->nEnd - it->nStart);
+                    CPPUNIT_ASSERT_EQUAL(OUString("e     t"), aSeg);
+                    break;
+                }
+            }
+        }
+        CPPUNIT_ASSERT_MESSAGE("Expected a bold sequence.", bHasBold);
+    }
 
     xDocSh->DoClose();
 }
