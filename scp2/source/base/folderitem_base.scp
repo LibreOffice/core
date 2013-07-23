@@ -30,4 +30,10 @@ FolderItem gid_Folderitem_Sbase
     Parameter = "";
     ALL_LANG(Tooltip, STR_FI_TOOLTIP_BASE);
 End
+
+FolderItemProperty git_Folderitem_Sbase_AppIDProperty
+    ShortcutID = gid_Folderitem_Sbase;
+    Key = "System.AppUserModel.ID"
+    Value = "TheDocumentFoundation.LibreOffice.Base"
+End
 #endif

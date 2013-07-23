@@ -64,6 +64,7 @@ use installer::windows::inifile;
 use installer::windows::media;
 use installer::windows::mergemodule;
 use installer::windows::msiglobal;
+use installer::windows::msishortcutproperty;
 use installer::windows::msp;
 use installer::windows::property;
 use installer::windows::removefile;
@@ -351,6 +352,7 @@ sub run {
 
     my $folderinproductarrayref;
     my $folderitemsinproductarrayref;
+    my $folderitempropertiesinproductarrayref;
     my $registryitemsinproductarrayref;
     my $windowscustomactionsarrayref;
     my $mergemodulesarrayref;
@@ -366,6 +368,10 @@ sub run {
         $folderitemsinproductarrayref = installer::setupscript::get_all_items_from_script($setupscriptref, "FolderItem");
 
         installer::setupscript::add_predefined_folder($folderitemsinproductarrayref, $folderinproductarrayref);
+
+        installer::logger::print_message( "... analyzing folderitemproperties ... \n" );
+
+        $folderitempropertiessinproductarrayref = installer::setupscript::get_all_items_from_script($setupscriptref, "FolderItemProperty");
 
         installer::logger::print_message( "... analyzing registryitems ... \n" );
 
@@ -1385,6 +1391,8 @@ sub run {
             installer::windows::createfolder::create_createfolder_table($directoriesforepmarrayref, $filesinproductlanguageresolvedarrayref, $newidtdir, $allvariableshashref);
 
             installer::windows::upgrade::create_upgrade_table($newidtdir, $allvariableshashref);
+
+            installer::windows::msishortcutproperty::create_msishortcutproperty_table($folderitempropertiesinproductlanguageresolvedarrayref, $folderitemsinproductlanguageresolvedarrayref, $newidtdir);
 
             if (( ! $installer::globals::languagepack ) && ( ! $installer::globals::helppack )) # the following tables not for language packs or help packs
             {
