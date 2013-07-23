@@ -89,7 +89,7 @@ void CuiAboutConfigTabPage::Reset( const SfxItemSet& )
 
    Reference< XNameAccess > xConfigAccess = getConfigAccess();
 
-   FillItems( xConfigAccess, OUString("org.openoffice") );
+   FillItems( xConfigAccess, OUString("org.openoffice.Office.Canvas") );
 }
 
 void CuiAboutConfigTabPage::FillItems( Reference< XNameAccess >xNameAccess, OUString sPath)
@@ -102,13 +102,13 @@ void CuiAboutConfigTabPage::FillItems( Reference< XNameAccess >xNameAccess, OUSt
     for( sal_Int16 i = 0; i < seqItems.getLength(); ++i )
     {
         Any aNode = xHierarchicalNameAccess->getByHierarchicalName( seqItems[i] );
-        Reference< XHierarchicalNameAccess >xNextHierarchicalNameAccess( aNode, uno::UNO_QUERY_THROW );
-        Reference< XNameAccess > xNextNameAccess( xNextHierarchicalNameAccess, uno::UNO_QUERY_THROW );
 
         bIsLeafNode = sal_True;
 
         try
         {
+            Reference< XHierarchicalNameAccess >xNextHierarchicalNameAccess( aNode, uno::UNO_QUERY_THROW );
+            Reference< XNameAccess > xNextNameAccess( xNextHierarchicalNameAccess, uno::UNO_QUERY_THROW );
             uno::Sequence < OUString  > seqNext = xNextNameAccess->getElementNames();
             FillItems( xNextNameAccess, sPath + OUString("/") + seqItems[i] );
             bIsLeafNode = sal_False;
@@ -122,7 +122,7 @@ void CuiAboutConfigTabPage::FillItems( Reference< XNameAccess >xNameAccess, OUSt
         {
             //InsertEntry( sPath, "", "", "");
             //Reference< beans::Property > aProperty = xHierarchicalNameAccess->getAsProperty();//getPropertyValue( seqItems[ i ] );
-            //InsertEntry( sPath + OUString("/") + seqItems[ i ], OUString(""), OUString(""), xNameAccess->getPropertyValue( seqItems[ i ] ) );
+            //InsertEntry( sPath + OUString("/") + seqItems[ i ], OUString(""), OUString(""), xHierarchicalNameAccess->getByHierarchicalName( seqItems[ i ] ).Value );
         }
     }
 }
@@ -136,7 +136,7 @@ Reference< XNameAccess > CuiAboutConfigTabPage::getConfigAccess()
 
     beans::NamedValue aProperty;
     aProperty.Name = "nodepath";
-    aProperty.Value = uno::makeAny( OUString("org.openoffice") );
+    aProperty.Value = uno::makeAny( OUString("org.openoffice.Office.Canvas") );
 
     uno::Sequence< uno::Any > aArgumentList( 1 );
     aArgumentList[0] = uno::makeAny( aProperty );
