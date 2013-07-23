@@ -67,32 +67,15 @@
 
 #include <map>
 
-#include <comphelper/configurationhelper.hxx>
 #include <comphelper/stlunosequence.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/outdev.hxx>
+#include <officecfg/Office/Common.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::rtl;
 namespace writerfilter {
 namespace dmapper{
-
-sal_Bool lcl_IsUsingEnhancedFields( const uno::Reference< uno::XComponentContext >& rxContext )
-{
-    bool bResult(sal_False);
-    try
-    {
-        OUString writerConfig = "org.openoffice.Office.Common";
-
-        uno::Reference< uno::XInterface > xCfgAccess = ::comphelper::ConfigurationHelper::openConfig( rxContext, writerConfig, ::comphelper::ConfigurationHelper::E_READONLY );
-        ::comphelper::ConfigurationHelper::readRelativeKey( xCfgAccess, OUString( "Filter/Microsoft/Import"  ), OUString( "ImportWWFieldsAsEnhancedFields"  ) ) >>= bResult;
-
-    }
-    catch( const uno::Exception& )
-    {
-    }
-    return bResult;
-}
 
 // Populate Dropdown Field properties from FFData structure
 void lcl_handleDropdownField( const uno::Reference< beans::XPropertySet >& rxFieldProps, FFDataHandler::Pointer_t pFFDataHandler )
@@ -206,7 +189,7 @@ DomainMapper_Impl::DomainMapper_Impl(
     getTableManager( ).setHandler(m_pTableHandler);
 
     getTableManager( ).startLevel();
-    m_bUsingEnhancedFields = lcl_IsUsingEnhancedFields( m_xComponentContext );
+    m_bUsingEnhancedFields = officecfg::Office::Common::Filter::Microsoft::Import::ImportWWFieldsAsEnhancedFields::get();
 
     m_pSdtHelper = new SdtHelper(*this);
 

@@ -10,6 +10,7 @@
 $(eval $(call gb_Library_Library,writerfilter))
 
 $(eval $(call gb_Library_use_custom_headers,writerfilter,\
+        officecfg/registry \
 	oox/generated \
 	writerfilter/source \
 ))
