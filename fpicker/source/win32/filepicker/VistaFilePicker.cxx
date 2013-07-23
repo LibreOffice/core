@@ -37,12 +37,15 @@
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 
 #include <cppuhelper/interfacecontainer.h>
-#include <comphelper/configurationhelper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <osl/diagnose.h>
 #include <osl/mutex.hxx>
 #include <osl/file.hxx>
 #include <tchar.h>
+#ifdef RGB
+#undef RGB
+#endif
+#include <officecfg/Office/Common.hxx>
 
 #ifdef _MSC_VER
 #pragma warning (push, 1)
@@ -215,18 +218,15 @@ void SAL_CALL VistaFilePicker::setDisplayDirectory(const OUString& sDirectory)
     throw (css::lang::IllegalArgumentException,
            css::uno::RuntimeException         )
 {
-    const OUString aPackage("org.openoffice.Office.Common/");
-    const OUString aRelPath("Path/Info");
-    const OUString aKey("WorkPathChanged");
+    bool bChanged = officecfg::Office::Common::Path::Info::WorkPathChanged::get();
 
-    css::uno::Any aValue = ::comphelper::ConfigurationHelper::readDirectKey(
-        comphelper::getComponentContext(m_xSMGR), aPackage, aRelPath, aKey, ::comphelper::ConfigurationHelper::E_READONLY);
-
-    bool bChanged(false);
-    if (( aValue >>= bChanged ) && bChanged )
+    if (bChanged )
     {
-        ::comphelper::ConfigurationHelper::writeDirectKey(
-            comphelper::getComponentContext(m_xSMGR), aPackage, aRelPath, aKey, css::uno::makeAny(false), ::comphelper::ConfigurationHelper::E_STANDARD);
+        boost::shared_ptr< comphelper::ConfigurationChanges > batch(
+            comphelper::ConfigurationChanges::create());
+        officecfg::Office::Common::Path::Info::WorkPathChanged::set(
+            false, batch);
+        batch->commit();
     }
 
     RequestRef rRequest(new Request());
