@@ -186,7 +186,7 @@ class SwCSS1OutMode
 public:
 
     SwCSS1OutMode( SwHTMLWriter& rHWrt, sal_uInt16 nMode, bool bStartFirst=true,
-                   const String *pSelector=0 ) :
+                   const OUString *pSelector=0 ) :
         rWrt( rHWrt ),
         nOldMode( rHWrt.nCSS1OutMode )
     {
@@ -207,7 +207,7 @@ public:
 
 void SwHTMLWriter::OutCSS1_Property( const sal_Char *pProp,
                                      const sal_Char *pVal,
-                                     const String *pSVal )
+                                     const OUString *pSVal )
 {
     OStringBuffer sOut;
 
@@ -661,15 +661,15 @@ void SwHTMLWriter::OutStyleSheet( const SwPageDesc& rPageDesc, sal_Bool bUsed )
 // wenn pPseudo gesetzt ist werden Styles-Sheets ausgegeben,
 // sonst wird nur nach Token und Class fuer ein Format gesucht
 sal_uInt16 SwHTMLWriter::GetCSS1Selector( const SwFmt *pFmt, OString& rToken,
-                                      String& rClass, sal_uInt16& rRefPoolId,
-                                      String *pPseudo )
+                                      OUString& rClass, sal_uInt16& rRefPoolId,
+                                      OUString *pPseudo )
 {
     sal_uInt16 nDeep = 0;
     rToken = OString();
-    rClass.Erase();
+    rClass = "";
     rRefPoolId = 0;
     if( pPseudo )
-        pPseudo->Erase();
+        *pPseudo = "";
 
     sal_Bool bChrFmt = RES_CHRFMT==pFmt->Which();
 
@@ -683,8 +683,8 @@ sal_uInt16 SwHTMLWriter::GetCSS1Selector( const SwFmt *pFmt, OString& rToken,
         if( USER_FMT & nPoolId )
         {
             // Benutzer-Vorlagen
-            const String& rNm = pPFmt->GetName();
-            switch( rNm.GetChar(0) )
+            const OUString& rNm = pPFmt->GetName();
+            switch( rNm[0] )
             {
                         // nicht mehr unterstuetzt:
                         // OOO_STRING_SVTOOLS_HTML_author
@@ -694,7 +694,7 @@ sal_uInt16 SwHTMLWriter::GetCSS1Selector( const SwFmt *pFmt, OString& rToken,
                         // OOO_STRING_SVTOOLS_HTML_insertedtext
                         // OOO_STRING_SVTOOLS_HTML_language
                         // OOO_STRING_SVTOOLS_HTML_person
-            case 'B':   if( !bChrFmt && rNm.EqualsAscii(OOO_STRING_SVTOOLS_HTML_blockquote) )
+            case 'B':   if( !bChrFmt && rNm == OOO_STRING_SVTOOLS_HTML_blockquote )
                         {
                             rRefPoolId = RES_POOLCOLL_HTML_BLOCKQUOTE;
                             rToken = OString(OOO_STRING_SVTOOLS_HTML_blockquote);
@@ -702,19 +702,19 @@ sal_uInt16 SwHTMLWriter::GetCSS1Selector( const SwFmt *pFmt, OString& rToken,
                         break;
             case 'C':   if( bChrFmt )
                         {
-                            if( rNm.EqualsAscii(OOO_STRING_SVTOOLS_HTML_citiation) )
+                            if( rNm == OOO_STRING_SVTOOLS_HTML_citiation )
                             {
                                 rRefPoolId = RES_POOLCHR_HTML_CITIATION;
                                 rToken = OString(OOO_STRING_SVTOOLS_HTML_citiation);
                             }
-                            else if( rNm.EqualsAscii(OOO_STRING_SVTOOLS_HTML_code) )
+                            else if( rNm == OOO_STRING_SVTOOLS_HTML_code )
                             {
                                 rRefPoolId = RES_POOLCHR_HTML_CODE;
                                 rToken = OString(OOO_STRING_SVTOOLS_HTML_code);
                             }
                         }
                         break;
-            case 'D':   if( bChrFmt && rNm.EqualsAscii(OOO_STRING_SVTOOLS_HTML_definstance) )
+            case 'D':   if( bChrFmt && rNm == OOO_STRING_SVTOOLS_HTML_definstance )
                         {
                             rRefPoolId = RES_POOLCHR_HTML_DEFINSTANCE;
                             rToken = OString(OOO_STRING_SVTOOLS_HTML_definstance);
@@ -745,23 +745,23 @@ sal_uInt16 SwHTMLWriter::GetCSS1Selector( const SwFmt *pFmt, OString& rToken,
                             }
                         }
                         break;
-            case 'E':   if( bChrFmt && rNm.EqualsAscii( OOO_STRING_SVTOOLS_HTML_emphasis ) )
+            case 'E':   if( bChrFmt && rNm == OOO_STRING_SVTOOLS_HTML_emphasis )
                         {
                             rRefPoolId = RES_POOLCHR_HTML_EMPHASIS;
                             rToken = OString(OOO_STRING_SVTOOLS_HTML_emphasis);
                         }
                         break;
-            case 'H':   if( !bChrFmt && rNm.EqualsAscii( OOO_STRING_SVTOOLS_HTML_horzrule ) )
+            case 'H':   if( !bChrFmt && rNm == OOO_STRING_SVTOOLS_HTML_horzrule )
                             // HR nicht ausgeben!
                             bStop = (nDeep==0);
                         break;
-            case 'K':   if( bChrFmt && rNm.EqualsAscii( OOO_STRING_SVTOOLS_HTML_keyboard ) )
+            case 'K':   if( bChrFmt && rNm == OOO_STRING_SVTOOLS_HTML_keyboard )
                         {
                             rRefPoolId = RES_POOLCHR_HTML_KEYBOARD;
                             rToken = OString(OOO_STRING_SVTOOLS_HTML_keyboard);
                         }
                         break;
-            case 'L':   if( !bChrFmt && rNm.EqualsAscii( OOO_STRING_SVTOOLS_HTML_listing ) )
+            case 'L':   if( !bChrFmt && rNm == OOO_STRING_SVTOOLS_HTML_listing )
                         {
                             // Listing als PRE exportieren bzw. von
                             // PRE abgeleitete Vorlage exportieren
@@ -770,7 +770,7 @@ sal_uInt16 SwHTMLWriter::GetCSS1Selector( const SwFmt *pFmt, OString& rToken,
                             nDeep = CSS1_FMT_CMPREF;
                         }
                         break;
-            case 'P':   if( !bChrFmt && rNm.EqualsAscii( OOO_STRING_SVTOOLS_HTML_preformtxt ) )
+            case 'P':   if( !bChrFmt && rNm == OOO_STRING_SVTOOLS_HTML_preformtxt )
                         {
                             rRefPoolId = RES_POOLCOLL_HTML_PRE;
                             rToken = OString(OOO_STRING_SVTOOLS_HTML_preformtxt);
@@ -778,31 +778,31 @@ sal_uInt16 SwHTMLWriter::GetCSS1Selector( const SwFmt *pFmt, OString& rToken,
                         break;
             case 'S':   if( bChrFmt )
                         {
-                            if( rNm.EqualsAscii( OOO_STRING_SVTOOLS_HTML_sample ) )
+                            if( rNm == OOO_STRING_SVTOOLS_HTML_sample )
                             {
                                 rRefPoolId = RES_POOLCHR_HTML_SAMPLE;
                                 rToken = OString(OOO_STRING_SVTOOLS_HTML_sample);
                             }
-                            else if( rNm.EqualsAscii( OOO_STRING_SVTOOLS_HTML_strong ) )
+                            else if( rNm == OOO_STRING_SVTOOLS_HTML_strong )
                             {
                                 rRefPoolId = RES_POOLCHR_HTML_STRONG;
                                 rToken = OString(OOO_STRING_SVTOOLS_HTML_strong);
                             }
                         }
                         break;
-            case 'T':   if( bChrFmt && rNm.EqualsAscii( OOO_STRING_SVTOOLS_HTML_teletype ) )
+            case 'T':   if( bChrFmt && rNm == OOO_STRING_SVTOOLS_HTML_teletype )
                         {
                             rRefPoolId = RES_POOLCHR_HTML_TELETYPE;
                             rToken = OString(OOO_STRING_SVTOOLS_HTML_teletype);
                         }
                         break;
-            case 'V':   if( bChrFmt && rNm.EqualsAscii( OOO_STRING_SVTOOLS_HTML_variable ) )
+            case 'V':   if( bChrFmt && rNm == OOO_STRING_SVTOOLS_HTML_variable )
                         {
                             rRefPoolId = RES_POOLCHR_HTML_VARIABLE;
                             rToken = OString(OOO_STRING_SVTOOLS_HTML_variable);
                         }
                         break;
-            case 'X':   if( !bChrFmt && rNm.EqualsAscii( OOO_STRING_SVTOOLS_HTML_xmp ) )
+            case 'X':   if( !bChrFmt && rNm == OOO_STRING_SVTOOLS_HTML_xmp )
                         {
                             // XMP als PRE exportieren (aber nicht die
                             // Vorlage als Style)
@@ -893,7 +893,7 @@ sal_uInt16 SwHTMLWriter::GetCSS1Selector( const SwFmt *pFmt, OString& rToken,
                 if( !nDeep )
                 {
                     rToken = OString(OOO_STRING_SVTOOLS_HTML_parabreak);
-                    rClass.AssignAscii( OOO_STRING_SVTOOLS_HTML_sdfootnote );
+                    rClass = OOO_STRING_SVTOOLS_HTML_sdfootnote;
                     rRefPoolId = RES_POOLCOLL_TEXT;
                     nDeep = CSS1_FMT_CMPREF;
                 }
@@ -902,7 +902,7 @@ sal_uInt16 SwHTMLWriter::GetCSS1Selector( const SwFmt *pFmt, OString& rToken,
                 if( !nDeep )
                 {
                     rToken = OString(OOO_STRING_SVTOOLS_HTML_parabreak);
-                    rClass.AssignAscii( OOO_STRING_SVTOOLS_HTML_sdendnote );
+                    rClass = OOO_STRING_SVTOOLS_HTML_sdendnote;
                     rRefPoolId = RES_POOLCOLL_TEXT;
                     nDeep = CSS1_FMT_CMPREF;
                 }
@@ -941,14 +941,14 @@ sal_uInt16 SwHTMLWriter::GetCSS1Selector( const SwFmt *pFmt, OString& rToken,
                 if( pPseudo )
                 {
                     rToken = OString(OOO_STRING_SVTOOLS_HTML_anchor);
-                    pPseudo->AssignAscii( sCSS1_link );
+                    *pPseudo = OStringToOUString( sCSS1_link, RTL_TEXTENCODING_ASCII_US );
                 }
                 break;
             case RES_POOLCHR_INET_VISIT:
                 if( pPseudo )
                 {
                     rToken = OString(OOO_STRING_SVTOOLS_HTML_anchor);
-                    pPseudo->AssignAscii( sCSS1_visited );
+                    *pPseudo = OStringToOUString( sCSS1_visited, RTL_TEXTENCODING_ASCII_US );
                 }
                 break;
             }
@@ -990,30 +990,27 @@ sal_uInt16 SwHTMLWriter::GetCSS1Selector( const SwFmt *pFmt, OString& rToken,
         // <CLASS> ergibt sich aus dem Namen der Vorlage durch entfernen
         // aller Zeichen vor und inklusive dem ersten '.'
         rClass = pFmt->GetName();
-        xub_StrLen nPos = rClass.Search( '.' );
-        if( nPos != STRING_NOTFOUND && rClass.Len() > nPos+1 )
+        sal_Int32 nPos = rClass.indexOf( '.' );
+        if( nPos >= 0 && rClass.getLength() > nPos+1 )
         {
-            rClass.Erase( 0, nPos+1 );
+            rClass = rClass.replaceAt( 0, nPos+1, "" );
         }
 
         rClass = GetAppCharClass().lowercase( rClass );
-        while( STRING_NOTFOUND != rClass.SearchAndReplace( '.', '-' ) )
-            ;
-        while( STRING_NOTFOUND != rClass.SearchAndReplace( ' ', '-' ) )
-            ;
-        while( STRING_NOTFOUND != rClass.SearchAndReplace( '_', '-' ) )
-            ;
+        rClass = rClass.replaceAll( ".", "-" );
+        rClass = rClass.replaceAll( " ", "-" );
+        rClass = rClass.replaceAll( "_", "-" );
     }
 
     return nDeep;
 }
 
-static sal_uInt16 GetCSS1Selector( const SwFmt *pFmt, String& rSelector,
+static sal_uInt16 GetCSS1Selector( const SwFmt *pFmt, OUString& rSelector,
                                sal_uInt16& rRefPoolId )
 {
     OString aToken;
-    String aClass;
-    String aPseudo;
+    OUString aClass;
+    OUString aPseudo;
 
     sal_uInt16 nDeep = SwHTMLWriter::GetCSS1Selector( pFmt, aToken, aClass,
                                                   rRefPoolId, &aPseudo );
@@ -1022,12 +1019,12 @@ static sal_uInt16 GetCSS1Selector( const SwFmt *pFmt, String& rSelector,
         if( !aToken.isEmpty() )
             rSelector = OStringToOUString(aToken, RTL_TEXTENCODING_ASCII_US);
         else
-            rSelector.Erase();
+            rSelector = "";
 
-        if( aClass.Len() )
-            (rSelector += '.') += aClass;
-        if( aPseudo.Len() )
-            (rSelector += ':') += aPseudo;
+        if( !aClass.isEmpty() )
+            rSelector += "." + aClass;
+        if( !aPseudo.isEmpty() )
+            rSelector += ":" + aPseudo;
     }
 
     return nDeep;
@@ -1163,57 +1160,57 @@ void SwHTMLWriter::SubtractItemSet( SfxItemSet& rItemSet,
 }
 
 void SwHTMLWriter::PrepareFontList( const SvxFontItem& rFontItem,
-                                    String& rNames,
+                                    OUString& rNames,
                                     sal_Unicode cQuote, sal_Bool bGeneric )
 {
     rNames = aEmptyStr;
-    const String& rName = rFontItem.GetFamilyName();
+    const OUString& rName = rFontItem.GetFamilyName();
     sal_Bool bContainsKeyword = sal_False;
-    if( rName.Len() )
+    if( !rName.isEmpty() )
     {
         sal_Int32 nStrPos = 0;
         while( nStrPos != -1 )
         {
-            String aName = rName.GetToken( 0, ';', nStrPos );
+            OUString aName = rName.getToken( 0, ';', nStrPos );
             aName = comphelper::string::strip(aName, ' ');
-            if( !aName.Len() )
+            if( aName.isEmpty() )
                 continue;
 
             sal_Bool bIsKeyword = sal_False;
-            switch( aName.GetChar( 0 ) )
+            switch( aName[0] )
             {
             case 'c':
             case 'C':
-                bIsKeyword = aName.EqualsIgnoreCaseAscii( sCSS1_PV_cursive );
+                bIsKeyword = aName.equalsIgnoreAsciiCaseAscii( sCSS1_PV_cursive );
                 break;
 
             case 'f':
             case 'F':
-                bIsKeyword = aName.EqualsIgnoreCaseAscii( sCSS1_PV_fantasy );
+                bIsKeyword = aName.equalsIgnoreAsciiCaseAscii( sCSS1_PV_fantasy );
                 break;
 
             case 'm':
             case 'M':
-                bIsKeyword = aName.EqualsIgnoreCaseAscii( sCSS1_PV_monospace );
+                bIsKeyword = aName.equalsIgnoreAsciiCaseAscii( sCSS1_PV_monospace );
                 break;
 
             case 's':
             case 'S':
                 bIsKeyword =
-                    aName.EqualsIgnoreCaseAscii( sCSS1_PV_serif ) ||
-                    aName.EqualsIgnoreCaseAscii( sCSS1_PV_sans_serif );
+                    aName.equalsIgnoreAsciiCaseAscii( sCSS1_PV_serif ) ||
+                    aName.equalsIgnoreAsciiCaseAscii( sCSS1_PV_sans_serif );
                 break;
             }
 
             bContainsKeyword |= bIsKeyword;
 
-            if( rNames.Len() )
-                rNames.AppendAscii( ", " );
+            if( !rNames.isEmpty() )
+                rNames += ", ";
             if( cQuote && !bIsKeyword )
-                rNames += cQuote;
+                rNames += OUString( cQuote );
             rNames += aName;
             if( cQuote && !bIsKeyword )
-                rNames += cQuote;
+                rNames += OUString( cQuote );
         }
     }
 
@@ -1233,9 +1230,9 @@ void SwHTMLWriter::PrepareFontList( const SvxFontItem& rFontItem,
 
         if( pStr )
         {
-            if( rNames.Len() )
-                rNames.AppendAscii( ", " );
-            rNames.AppendAscii( pStr );
+            if( !rNames.isEmpty() )
+                rNames += ", ";
+            rNames += OStringToOUString( pStr, RTL_TEXTENCODING_ASCII_US );
         }
     }
 }
@@ -1331,7 +1328,7 @@ sal_Bool SwHTMLWriter::HasScriptDependentItems( const SfxItemSet& rItemSet,
     return sal_False;
 }
 
-static bool OutCSS1Rule( SwHTMLWriter& rHTMLWrt, const String& rSelector,
+static bool OutCSS1Rule( SwHTMLWriter& rHTMLWrt, const OUString& rSelector,
                     const SfxItemSet& rItemSet, sal_Bool bHasClass,
                      bool bCheckForPseudo  )
 {
@@ -1339,16 +1336,16 @@ static bool OutCSS1Rule( SwHTMLWriter& rHTMLWrt, const String& rSelector,
     if( SwHTMLWriter::HasScriptDependentItems( rItemSet, bHasClass ) )
     {
         bScriptDependent = true;
-        String aSelector( rSelector );
+        OUString aSelector( rSelector );
 
-        String aPseudo;
+        OUString aPseudo;
         if( bCheckForPseudo )
         {
-            xub_StrLen nPos = aSelector.SearchBackward( ':' );
-            if( STRING_NOTFOUND != nPos )
+            sal_Int32 nPos = aSelector.lastIndexOf( ':' );
+            if( nPos >= 0 )
             {
-                aPseudo = aSelector.Copy( nPos );
-                aSelector.Erase( nPos );
+                aPseudo = aSelector.copy( nPos );
+                aSelector =aSelector.copy( 0, nPos );
             }
         }
 
@@ -1373,27 +1370,22 @@ static bool OutCSS1Rule( SwHTMLWriter& rHTMLWrt, const String& rSelector,
                                        0 );
             aScriptItemSet.Put( rItemSet );
 
-            String aNewSelector( aSelector );
-            aNewSelector.AppendAscii( RTL_CONSTASCII_STRINGPARAM(".western") );
-            aNewSelector.Append( aPseudo );
+            OUString aNewSelector( aSelector );
+            aNewSelector += ".western" + aPseudo;
             {
                 SwCSS1OutMode aMode( rHTMLWrt, CSS1_OUTMODE_WESTERN|CSS1_OUTMODE_RULE|CSS1_OUTMODE_TEMPLATE,
                                      true, &aNewSelector );
                 rHTMLWrt.OutCSS1_SfxItemSet( aScriptItemSet, sal_False );
             }
 
-            aNewSelector = aSelector;
-            aNewSelector.AppendAscii( RTL_CONSTASCII_STRINGPARAM(".cjk") );
-            aNewSelector.Append( aPseudo );
+            aNewSelector = aSelector + ".cjk" + aPseudo;
             {
                 SwCSS1OutMode aMode( rHTMLWrt, CSS1_OUTMODE_CJK|CSS1_OUTMODE_RULE|CSS1_OUTMODE_TEMPLATE,
                                      true, &aNewSelector );
                 rHTMLWrt.OutCSS1_SfxItemSet( aScriptItemSet, sal_False );
             }
 
-            aNewSelector = aSelector;
-            aNewSelector.AppendAscii( RTL_CONSTASCII_STRINGPARAM(".ctl") );
-            aNewSelector.Append( aPseudo );
+            aNewSelector = aSelector + ".ctl" + aPseudo;
             {
                 SwCSS1OutMode aMode( rHTMLWrt, CSS1_OUTMODE_CTL|CSS1_OUTMODE_RULE|CSS1_OUTMODE_TEMPLATE,
                                      true, &aNewSelector );
@@ -1405,27 +1397,22 @@ static bool OutCSS1Rule( SwHTMLWriter& rHTMLWrt, const String& rSelector,
             // If ther are script dependencies and we are derived from a tag,
             // when we have to export a style dependent class for all
             // scripts
-            String aNewSelector( aSelector );
-            aNewSelector.AppendAscii( RTL_CONSTASCII_STRINGPARAM("-western") );
-            aNewSelector.Append( aPseudo );
+            OUString aNewSelector( aSelector );
+            aNewSelector += "-western" + aPseudo;
             {
                 SwCSS1OutMode aMode( rHTMLWrt, CSS1_OUTMODE_WESTERN|CSS1_OUTMODE_RULE|CSS1_OUTMODE_TEMPLATE,
                                      true, &aNewSelector );
                 rHTMLWrt.OutCSS1_SfxItemSet( rItemSet, sal_False );
             }
 
-            aNewSelector = aSelector;
-            aNewSelector.AppendAscii( RTL_CONSTASCII_STRINGPARAM("-cjk") );
-            aNewSelector.Append( aPseudo );
+            aNewSelector = aSelector + "-cjk" + aPseudo;
             {
                 SwCSS1OutMode aMode( rHTMLWrt, CSS1_OUTMODE_CJK|CSS1_OUTMODE_RULE|CSS1_OUTMODE_TEMPLATE,
                                      true, &aNewSelector );
                 rHTMLWrt.OutCSS1_SfxItemSet( rItemSet, sal_False );
             }
 
-            aNewSelector = aSelector;
-            aNewSelector.AppendAscii( RTL_CONSTASCII_STRINGPARAM("-ctl") );
-            aNewSelector.Append( aPseudo );
+            aNewSelector = aSelector + "-ctl" + aPseudo;
             {
                 SwCSS1OutMode aMode( rHTMLWrt, CSS1_OUTMODE_CTL|CSS1_OUTMODE_RULE|CSS1_OUTMODE_TEMPLATE,
                                      true, &aNewSelector );
@@ -1449,7 +1436,7 @@ static bool OutCSS1Rule( SwHTMLWriter& rHTMLWrt, const String& rSelector,
 }
 
 static void OutCSS1DropCapRule(
-                    SwHTMLWriter& rHTMLWrt, const String& rSelector,
+                    SwHTMLWriter& rHTMLWrt, const OUString& rSelector,
                     const SwFmtDrop& rDrop, sal_Bool bHasClass,
                      bool bHasScriptDependencies  )
 {
@@ -1457,14 +1444,14 @@ static void OutCSS1DropCapRule(
     if( (bHasScriptDependencies && bHasClass) ||
          (pDCCharFmt && SwHTMLWriter::HasScriptDependentItems( pDCCharFmt->GetAttrSet(), sal_False ) ) )
     {
-        String aSelector( rSelector );
+        OUString aSelector( rSelector );
 
-        String aPseudo;
-        xub_StrLen nPos = aSelector.SearchBackward( ':' );
-        if( STRING_NOTFOUND != nPos )
+        OUString aPseudo;
+        sal_Int32 nPos = aSelector.lastIndexOf( ':' );
+        if( nPos >= 0 )
         {
-            aPseudo = aSelector.Copy( nPos );
-            aSelector.Erase( nPos );
+            aPseudo = aSelector.copy( nPos );
+            aSelector = aSelector.copy( 0, nPos );
         }
 
         if( !bHasClass )
@@ -1487,27 +1474,22 @@ static void OutCSS1DropCapRule(
             if( pDCCharFmt )
                 aScriptItemSet.Set( pDCCharFmt->GetAttrSet(), sal_True );
 
-            String aNewSelector( aSelector );
-            aNewSelector.AppendAscii( RTL_CONSTASCII_STRINGPARAM(".western") );
-            aNewSelector.Append( aPseudo );
+            OUString aNewSelector( aSelector );
+            aNewSelector += ".western" + aPseudo;
             {
                 SwCSS1OutMode aMode( rHTMLWrt, CSS1_OUTMODE_WESTERN|CSS1_OUTMODE_RULE|CSS1_OUTMODE_DROPCAP,
                                      true, &aNewSelector );
                 OutCSS1_SwFmtDropAttrs(  rHTMLWrt, rDrop, &aScriptItemSet );
             }
 
-            aNewSelector = aSelector;
-            aNewSelector.AppendAscii( RTL_CONSTASCII_STRINGPARAM(".cjk") );
-            aNewSelector.Append( aPseudo );
+            aNewSelector = aSelector + ".cjk" + aPseudo;
             {
                 SwCSS1OutMode aMode( rHTMLWrt, CSS1_OUTMODE_CJK|CSS1_OUTMODE_RULE|CSS1_OUTMODE_DROPCAP,
                                      true, &aNewSelector );
                 OutCSS1_SwFmtDropAttrs(  rHTMLWrt, rDrop, &aScriptItemSet );
             }
 
-            aNewSelector = aSelector;
-            aNewSelector.AppendAscii( RTL_CONSTASCII_STRINGPARAM(".ctl") );
-            aNewSelector.Append( aPseudo );
+            aNewSelector = aSelector + ".ctl" + aPseudo;
             {
                 SwCSS1OutMode aMode( rHTMLWrt, CSS1_OUTMODE_CTL|CSS1_OUTMODE_RULE|CSS1_OUTMODE_DROPCAP,
                                      true, &aNewSelector );
@@ -1519,27 +1501,22 @@ static void OutCSS1DropCapRule(
             // If ther are script dependencies and we are derived from a tag,
             // when we have to export a style dependent class for all
             // scripts
-            String aNewSelector( aSelector );
-            aNewSelector.AppendAscii( RTL_CONSTASCII_STRINGPARAM("-western") );
-            aNewSelector.Append( aPseudo );
+            OUString aNewSelector( aSelector );
+            aNewSelector += "-western" + aPseudo;
             {
                 SwCSS1OutMode aMode( rHTMLWrt, CSS1_OUTMODE_WESTERN|CSS1_OUTMODE_RULE|CSS1_OUTMODE_DROPCAP,
                                      true, &aNewSelector );
                 OutCSS1_SwFmtDropAttrs(  rHTMLWrt, rDrop );
             }
 
-            aNewSelector = aSelector;
-            aNewSelector.AppendAscii( RTL_CONSTASCII_STRINGPARAM("-cjk") );
-            aNewSelector.Append( aPseudo );
+            aNewSelector = aSelector + "-cjk" + aPseudo;
             {
                 SwCSS1OutMode aMode( rHTMLWrt, CSS1_OUTMODE_CJK|CSS1_OUTMODE_RULE|CSS1_OUTMODE_DROPCAP,
                                      true, &aNewSelector );
                 OutCSS1_SwFmtDropAttrs(  rHTMLWrt, rDrop );
             }
 
-            aNewSelector = aSelector;
-            aNewSelector.AppendAscii( RTL_CONSTASCII_STRINGPARAM("-ctl") );
-            aNewSelector.Append( aPseudo );
+            aNewSelector = aSelector + "-ctl" + aPseudo;
             {
                 SwCSS1OutMode aMode( rHTMLWrt, CSS1_OUTMODE_CTL|CSS1_OUTMODE_RULE|CSS1_OUTMODE_DROPCAP,
                                      true, &aNewSelector );
@@ -1583,7 +1560,7 @@ static Writer& OutCSS1_SwFmt( Writer& rWrt, const SwFmt& rFmt,
     }
 
     // den Selector und die auszugebende Attr-Set-Tiefe ermitteln
-    String aSelector;
+    OUString aSelector;
     sal_uInt16 nRefPoolId = 0;
     sal_uInt16 nDeep = GetCSS1Selector( &rFmt, aSelector, nRefPoolId );
     if( !nDeep )
@@ -1661,19 +1638,19 @@ static Writer& OutCSS1_SwFmt( Writer& rWrt, const SwFmt& rFmt,
         if( USER_FMT & nPoolFmtId )
         {
             // Benutzer-Vorlagen
-            const String& rNm = rFmt.GetName();
-            switch( rNm.GetChar(0) )
+            const OUString& rNm = rFmt.GetName();
+            switch( rNm[0] )
             {
-            case 'D':   if( rNm.EqualsAscii("DD 1") || rNm.EqualsAscii("DT 1") )
+            case 'D':   if( rNm == "DD 1" || rNm == "DT 1" )
                             rHTMLWrt.nDfltBottomMargin = 0;
                         break;
-            case 'L':   if(rNm.EqualsAscii(OOO_STRING_SVTOOLS_HTML_listing) )
+            case 'L':   if(rNm == OOO_STRING_SVTOOLS_HTML_listing )
                             rHTMLWrt.nDfltBottomMargin = 0;
                         break;
-            case 'P':   if( rNm.EqualsAscii(OOO_STRING_SVTOOLS_HTML_preformtxt) )
+            case 'P':   if( rNm == OOO_STRING_SVTOOLS_HTML_preformtxt )
                             rHTMLWrt.nDfltBottomMargin = 0;
                         break;
-            case 'X':   if( rNm.EqualsAscii(OOO_STRING_SVTOOLS_HTML_xmp) )
+            case 'X':   if( rNm == OOO_STRING_SVTOOLS_HTML_xmp )
                             rHTMLWrt.nDfltBottomMargin = 0;
                         break;
             }
@@ -1736,9 +1713,8 @@ static Writer& OutCSS1_SwFmt( Writer& rWrt, const SwFmt& rFmt,
     const SfxPoolItem *pItem;
     if( SFX_ITEM_SET==aItemSet.GetItemState( RES_PARATR_DROP, sal_False, &pItem ))
     {
-        String sOut( aSelector );
-        sOut.Append( ':');
-        sOut.AppendAscii( sCSS1_first_letter );
+        OUString sOut( aSelector );
+        sOut += ":" + OStringToOUString( sCSS1_first_letter, RTL_TEXTENCODING_ASCII_US );
         const SwFmtDrop *pDrop = (const SwFmtDrop *)pItem;
         OutCSS1DropCapRule( rHTMLWrt, sOut, *pDrop, CSS1_FMT_ISTAG != nDeep, bHasScriptDependencies );
     }
@@ -1759,8 +1735,7 @@ static Writer& OutCSS1_SwPageDesc( Writer& rWrt, const SwPageDesc& rPageDesc,
     else if( pTemplate )
         pRefPageDesc = pTemplate->GetPageDescFromPool( nRefPoolId, false );
 
-    String aSelector = OUString('@');
-    aSelector.AppendAscii( sCSS1_page );
+    OUString aSelector = "@" + OStringToOUString( sCSS1_page, RTL_TEXTENCODING_ASCII_US );
 
     if( bPseudo )
     {
@@ -1772,10 +1747,7 @@ static Writer& OutCSS1_SwPageDesc( Writer& rWrt, const SwPageDesc& rPageDesc,
         case RES_POOLPAGE_RIGHT:    pPseudo = sCSS1_right;  break;
         }
         if( pPseudo )
-        {
-            aSelector.Append( ':' );
-            aSelector.AppendAscii( pPseudo );
-        }
+            aSelector += ":" + OStringToOUString( pPseudo, RTL_TEXTENCODING_ASCII_US );
     }
 
     SwCSS1OutMode aMode( rHTMLWrt, CSS1_OUTMODE_RULE_ON|CSS1_OUTMODE_TEMPLATE,
@@ -1861,14 +1833,13 @@ static Writer& OutCSS1_SwFtnInfo( Writer& rWrt, const SwEndNoteInfo& rInfo,
 {
     SwHTMLWriter & rHTMLWrt = (SwHTMLWriter&)rWrt;
 
-    String aSelector;
+    OUString aSelector;
 
     if( nNotes > 0 )
     {
-        aSelector.AssignAscii( OOO_STRING_SVTOOLS_HTML_anchor );
-        aSelector.Append( '.');
-        aSelector.AppendAscii( bEndNote ? OOO_STRING_SVTOOLS_HTML_sdendnote_anc
-                                        : OOO_STRING_SVTOOLS_HTML_sdfootnote_anc );
+        aSelector = (OUString)OOO_STRING_SVTOOLS_HTML_anchor + "." +
+                    OStringToOUString( bEndNote ? OOO_STRING_SVTOOLS_HTML_sdendnote_anc
+                                       : OOO_STRING_SVTOOLS_HTML_sdfootnote_anc, RTL_TEXTENCODING_ASCII_US );
         SwCSS1OutMode aMode( rHTMLWrt, CSS1_OUTMODE_RULE|CSS1_OUTMODE_TEMPLATE,
                              true, &aSelector );
         rHTMLWrt.OutCSS1_PropertyAscii( sCSS1_P_font_size,
@@ -1897,10 +1868,9 @@ static Writer& OutCSS1_SwFtnInfo( Writer& rWrt, const SwEndNoteInfo& rInfo,
         }
         if( aItemSet.Count() )
         {
-            aSelector.AssignAscii( OOO_STRING_SVTOOLS_HTML_anchor );
-            aSelector.Append( '.');
-            aSelector.AppendAscii( bEndNote ? OOO_STRING_SVTOOLS_HTML_sdendnote_sym
-                                        : OOO_STRING_SVTOOLS_HTML_sdfootnote_sym );
+            aSelector = (OUString)OOO_STRING_SVTOOLS_HTML_anchor + "." +
+                        OStringToOUString( bEndNote ? OOO_STRING_SVTOOLS_HTML_sdendnote_sym
+                                            : OOO_STRING_SVTOOLS_HTML_sdfootnote_sym, RTL_TEXTENCODING_ASCII_US );
             if( OutCSS1Rule( rHTMLWrt, aSelector, aItemSet, sal_True, false ))
                 rHTMLWrt.aScriptTextStyles.insert( pSymCharFmt->GetName() );
         }
@@ -2260,9 +2230,8 @@ void SwHTMLWriter::OutCSS1_TableFrmFmtOptions( const SwFrmFmt& rFrmFmt )
 
 void SwHTMLWriter::OutCSS1_TableCellBorderHack(SwFrmFmt const& rFrmFmt)
 {
-    SwCSS1OutMode const aMode(*this,
-        CSS1_OUTMODE_STYLE_OPT_ON|CSS1_OUTMODE_ENCODE|CSS1_OUTMODE_TABLEBOX,
-        true, 0);
+    SwCSS1OutMode const aMode( *this,
+        CSS1_OUTMODE_STYLE_OPT_ON|CSS1_OUTMODE_ENCODE|CSS1_OUTMODE_TABLEBOX );
     OutCSS1_SvxBox(*this, rFrmFmt.GetBox());
     if (!bFirstCSS1Property)
     {
@@ -2611,7 +2580,7 @@ static Writer& OutCSS1_SvxFont( Writer& rWrt, const SfxPoolItem& rHt )
     OSL_ENSURE( !rHTMLWrt.IsCSS1Source(CSS1_OUTMODE_HINT),
             "Font wirklich als Hint ausgeben?" );
 
-    String sOut;
+    OUString sOut;
     // MS IE3b1 hat mit einfachen Haekchen Probleme
     sal_uInt16 nMode = rHTMLWrt.nCSS1OutMode & CSS1_OUTMODE_ANY_ON;
     sal_Unicode cQuote = nMode == CSS1_OUTMODE_RULE_ON ? '\"' : '\'';
@@ -2754,7 +2723,7 @@ static Writer& OutCSS1_SvxLanguage( Writer& rWrt, const SfxPoolItem& rHt )
     if( LANGUAGE_DONTKNOW == eLang )
         return rWrt;
 
-    String sOut = LanguageTag::convertToBcp47( eLang );
+    OUString sOut = LanguageTag::convertToBcp47( eLang );
 
     rHTMLWrt.OutCSS1_Property( sCSS1_P_so_language, sOut );
 
