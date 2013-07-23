@@ -10,10 +10,6 @@
 
 $(eval $(call gb_Library_Library,fps))
 
-$(eval $(call gb_Library_use_custom_headers,fps,\
-	officecfg/registry \
-))
-
 $(eval $(call gb_Library_add_nativeres,fps,fps/Fps))
 
 $(eval $(call gb_Library_set_componentfile,fps,fpicker/source/win32/fps))
