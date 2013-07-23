@@ -4045,11 +4045,16 @@ int RTFDocumentImpl::popState()
         case DESTINATION_COMPANY:
             {
                 OUString aName = aState.nDestinationState == DESTINATION_OPERATOR ? OUString("Operator") : OUString("Company");
+                uno::Any aValue = uno::makeAny(m_aStates.top().aDestinationText.makeStringAndClear());
                 if (m_xDocumentProperties.is())
                 {
                     uno::Reference<beans::XPropertyContainer> xUserDefinedProperties = m_xDocumentProperties->getUserDefinedProperties();
-                    xUserDefinedProperties->addProperty(aName, beans::PropertyAttribute::REMOVABLE,
-                            uno::makeAny(m_aStates.top().aDestinationText.makeStringAndClear()));
+                    uno::Reference<beans::XPropertySet> xPropertySet(xUserDefinedProperties, uno::UNO_QUERY);
+                    uno::Reference<beans::XPropertySetInfo> xPropertySetInfo = xPropertySet->getPropertySetInfo();
+                    if (xPropertySetInfo->hasPropertyByName(aName))
+                        xPropertySet->setPropertyValue(aName, aValue);
+                    else
+                        xUserDefinedProperties->addProperty(aName, beans::PropertyAttribute::REMOVABLE, aValue);
                 }
             }
             break;

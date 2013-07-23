@@ -155,6 +155,7 @@ public:
     void testGroupshape();
     void testFdo66565();
     void testFdo54900();
+    void testFdo64637();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -294,6 +295,7 @@ void Test::run()
         {"groupshape.rtf", &Test::testGroupshape},
         {"fdo66565.rtf", &Test::testFdo66565},
         {"fdo54900.rtf", &Test::testFdo54900},
+        {"fdo64637.rtf", &Test::testFdo64637},
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -1430,6 +1432,14 @@ void Test::testFdo54900()
     uno::Reference<text::XTextRange> xCell(xTable->getCellByName("A1"), uno::UNO_QUERY);
     // Paragraph was aligned to left, should be center.
     CPPUNIT_ASSERT_EQUAL(style::ParagraphAdjust_CENTER, static_cast<style::ParagraphAdjust>(getProperty<sal_Int16>(getParagraphOfText(1, xCell->getText()), "ParaAdjust")));
+}
+
+void Test::testFdo64637()
+{
+    // The problem was that the custom "Company" property was added twice, the second invocation resulted in an exception.
+    uno::Reference<document::XDocumentPropertiesSupplier> xDocumentPropertiesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPropertySet(xDocumentPropertiesSupplier->getDocumentProperties()->getUserDefinedProperties(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("bbb"), getProperty<OUString>(xPropertySet, "Company"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
