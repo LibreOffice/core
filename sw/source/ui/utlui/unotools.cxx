@@ -112,7 +112,14 @@ void SwOneExampleFrame::CreateControl()
     uno::Reference< lang::XMultiServiceFactory >
                                     xMgr = comphelper::getProcessServiceFactory();
     uno::Reference< uno::XComponentContext > xContext = comphelper::getProcessComponentContext();
-    m_xFrameControl = frame::FrameControl::create(xContext);
+    try
+    {
+        m_xFrameControl = frame::FrameControl::create(xContext);
+    }
+    catch ( css::uno::DeploymentException& )
+    {
+        return;
+    }
 
     uno::Reference< awt::XWindowPeer >  xParent( aTopWindow.GetComponentInterface() );
 
