@@ -75,13 +75,6 @@ bool ScSingleRefData::IsDeleted() const
     return IsColDeleted() || IsRowDeleted() || IsTabDeleted();
 }
 
-void ScSingleRefData::CalcRelFromAbs( const ScAddress& rPos )
-{
-    nRelCol = nCol - rPos.Col();
-    nRelRow = nRow - rPos.Row();
-    nRelTab = nTab - rPos.Tab();
-}
-
 ScAddress ScSingleRefData::toAbs( const ScAddress& rPos ) const
 {
     SCCOL nRetCol = Flags.bColRel ? nRelCol + rPos.Col() : nCol;

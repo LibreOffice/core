@@ -830,39 +830,47 @@ ScRefUpdateRes ScRefUpdate::Move(
 void ScRefUpdate::MoveRelWrap( ScDocument* pDoc, const ScAddress& rPos,
                                SCCOL nMaxCol, SCROW nMaxRow, ScComplexRefData& rRef )
 {
+    ScRange aAbsRange = rRef.toAbs(rPos);
     if( rRef.Ref1.IsColRel() )
     {
-        rRef.Ref1.nCol = rRef.Ref1.nRelCol + rPos.Col();
-        lcl_MoveItWrap( rRef.Ref1.nCol, static_cast<SCsCOL>(0), nMaxCol );
+        SCCOL nCol = aAbsRange.aStart.Col();
+        lcl_MoveItWrap(nCol, static_cast<SCsCOL>(0), nMaxCol);
+        aAbsRange.aStart.SetCol(nCol);
     }
     if( rRef.Ref2.IsColRel() )
     {
-        rRef.Ref2.nCol = rRef.Ref2.nRelCol + rPos.Col();
-        lcl_MoveItWrap( rRef.Ref2.nCol, static_cast<SCsCOL>(0), nMaxCol );
+        SCCOL nCol = aAbsRange.aEnd.Col();
+        lcl_MoveItWrap(nCol, static_cast<SCsCOL>(0), nMaxCol);
+        aAbsRange.aEnd.SetCol(nCol);
     }
     if( rRef.Ref1.IsRowRel() )
     {
-        rRef.Ref1.nRow = rRef.Ref1.nRelRow + rPos.Row();
-        lcl_MoveItWrap( rRef.Ref1.nRow, static_cast<SCsROW>(0), nMaxRow );
+        SCROW nRow = aAbsRange.aStart.Row();
+        lcl_MoveItWrap(nRow, static_cast<SCsROW>(0), nMaxRow);
+        aAbsRange.aStart.SetRow(nRow);
     }
     if( rRef.Ref2.IsRowRel() )
     {
-        rRef.Ref2.nRow = rRef.Ref2.nRelRow + rPos.Row();
-        lcl_MoveItWrap( rRef.Ref2.nRow, static_cast<SCsROW>(0), nMaxRow );
+        SCROW nRow = aAbsRange.aEnd.Row();
+        lcl_MoveItWrap(nRow, static_cast<SCsROW>(0), nMaxRow);
+        aAbsRange.aEnd.SetRow(nRow);
     }
     SCsTAB nMaxTab = (SCsTAB) pDoc->GetTableCount() - 1;
     if( rRef.Ref1.IsTabRel() )
     {
-        rRef.Ref1.nTab = rRef.Ref1.nRelTab + rPos.Tab();
-        lcl_MoveItWrap( rRef.Ref1.nTab, static_cast<SCsTAB>(0), static_cast<SCTAB>(nMaxTab) );
+        SCTAB nTab = aAbsRange.aStart.Tab();
+        lcl_MoveItWrap(nTab, static_cast<SCsTAB>(0), static_cast<SCTAB>(nMaxTab));
+        aAbsRange.aStart.SetTab(nTab);
     }
     if( rRef.Ref2.IsTabRel() )
     {
-        rRef.Ref2.nTab = rRef.Ref2.nRelTab + rPos.Tab();
-        lcl_MoveItWrap( rRef.Ref2.nTab, static_cast<SCsTAB>(0), static_cast<SCTAB>(nMaxTab) );
+        SCTAB nTab = aAbsRange.aEnd.Tab();
+        lcl_MoveItWrap(nTab, static_cast<SCsTAB>(0), static_cast<SCTAB>(nMaxTab));
+        aAbsRange.aEnd.SetTab(nTab);
     }
-    rRef.PutInOrder();
-    rRef.CalcRelFromAbs( rPos );
+
+    aAbsRange.PutInOrder();
+    rRef.SetRange(aAbsRange, rPos);
 }
 
 //------------------------------------------------------------------

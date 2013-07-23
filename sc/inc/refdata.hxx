@@ -88,7 +88,6 @@ struct SC_DLLPUBLIC ScSingleRefData
     SCCOL GetCol() const;
     SCTAB GetTab() const;
 
-            void CalcRelFromAbs( const ScAddress& rPos );
             bool operator==( const ScSingleRefData& ) const;
             bool operator!=( const ScSingleRefData& ) const;
 
@@ -135,8 +134,6 @@ struct ScComplexRefData
             Ref1.InitAddress( nCol1, nRow1, nTab1 );
             Ref2.InitAddress( nCol2, nRow2, nTab2 );
         }
-    inline void CalcRelFromAbs( const ScAddress& rPos )
-        { Ref1.CalcRelFromAbs( rPos ); Ref2.CalcRelFromAbs( rPos ); }
     inline bool IsDeleted() const
         { return Ref1.IsDeleted() || Ref2.IsDeleted(); }
     inline bool Valid() const
