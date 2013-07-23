@@ -219,7 +219,7 @@ struct SwHTMLFmtInfo
     const SwFmt *pRefFmt;   // das Vergleichs-Format
 
     OString aToken;          // das auszugebende Token
-    String aClass;          // die auszugebende Klasse
+    OUString aClass;          // die auszugebende Klasse
 
     SfxItemSet *pItemSet;   // der auszugebende Attribut-Set
 
@@ -445,9 +445,9 @@ public:
                                        const sal_Char *pVal );
     inline void OutCSS1_PropertyAscii( const sal_Char *pProp,
                                        const OString& rVal );
-    inline void OutCSS1_Property( const sal_Char *pProp, const String& rVal );
+    inline void OutCSS1_Property( const sal_Char *pProp, const OUString& rVal );
     void OutCSS1_Property( const sal_Char *pProp, const sal_Char *pVal,
-                           const String *pSVal );
+                           const OUString *pSVal );
     void OutCSS1_UnitProperty( const sal_Char *pProp, long nVal );
     void OutCSS1_PixelProperty( const sal_Char *pProp, long nVal, sal_Bool bVert );
     void OutCSS1_SfxItemSet( const SfxItemSet& rItemSet, sal_Bool bDeep=sal_True );
@@ -519,8 +519,8 @@ public:
     static const SdrObject *GetHTMLControl( const SwDrawFrmFmt& rFmt );
     static const SdrObject *GetMarqueeTextObj( const SwDrawFrmFmt& rFmt );
     static sal_uInt16 GetCSS1Selector( const SwFmt *pFmt, OString& rToken,
-                                   String& rClass, sal_uInt16& rRefPoolId,
-                                   String *pPseudo=0 );
+                                   OUString& rClass, sal_uInt16& rRefPoolId,
+                                   OUString *pPseudo=0 );
 
     static const SwFmt *GetTemplateFmt( sal_uInt16 nPoolId, IDocumentStylePoolAccess* /*SwDoc*/ pTemplate );
     static const SwFmt *GetParentFmt( const SwFmt& rFmt, sal_uInt16 nDeep );
@@ -546,7 +546,7 @@ public:
     inline bool IsCSS1Script( sal_uInt16 n ) const;
 
     static const sal_Char *GetNumFormat( sal_uInt16 nFmt );
-    static void PrepareFontList( const SvxFontItem& rFontItem, String& rNames,
+    static void PrepareFontList( const SvxFontItem& rFontItem, OUString& rNames,
                                  sal_Unicode cQuote, sal_Bool bGeneric );
     static sal_uInt16 GetCSS1ScriptForScriptType( sal_uInt16 nScriptType );
     static sal_uInt16 GetLangWhichIdFromScript( sal_uInt16 nScript );
@@ -578,7 +578,7 @@ inline void SwHTMLWriter::OutCSS1_PropertyAscii( const sal_Char *pProp,
 }
 
 inline void SwHTMLWriter::OutCSS1_Property( const sal_Char *pProp,
-                                            const String& rVal )
+                                            const OUString& rVal )
 {
     OutCSS1_Property( pProp, 0, &rVal );
 }
