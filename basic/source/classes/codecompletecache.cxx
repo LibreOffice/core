@@ -30,29 +30,34 @@ namespace
 }
 
 CodeCompleteOptions::CodeCompleteOptions()
-: bIsCodeCompleteOn( false )
+: bIsCodeCompleteOn( false ),
+bIsProcedureAutoCompleteOn( false )
 {
 }
 
 bool CodeCompleteOptions::IsCodeCompleteOn()
 {
-    /*if( !theCodeCompleteOptions::get().aMiscOptions.IsExperimentalMode() )
-        return false;
-    else*/
     return theCodeCompleteOptions::get().aMiscOptions.IsExperimentalMode() && theCodeCompleteOptions::get().bIsCodeCompleteOn;
 }
 
 void CodeCompleteOptions::SetCodeCompleteOn( const bool& b )
 {
-    if( !theCodeCompleteOptions::get().aMiscOptions.IsExperimentalMode() )
-        theCodeCompleteOptions::get().bIsCodeCompleteOn = false;
-    else
-        theCodeCompleteOptions::get().bIsCodeCompleteOn = b;
+    theCodeCompleteOptions::get().bIsCodeCompleteOn = b;
 }
 
 bool CodeCompleteOptions::IsExtendedTypeDeclaration()
 {
     return CodeCompleteOptions::IsCodeCompleteOn();
+}
+
+bool CodeCompleteOptions::IsProcedureAutoCompleteOn()
+{
+    return theCodeCompleteOptions::get().aMiscOptions.IsExperimentalMode() && theCodeCompleteOptions::get().bIsProcedureAutoCompleteOn;
+}
+
+void CodeCompleteOptions::SetProcedureAutoCompleteOn( const bool& b )
+{
+    theCodeCompleteOptions::get().bIsProcedureAutoCompleteOn = b;
 }
 
 std::ostream& operator<< (std::ostream& aStream, const CodeCompleteDataCache& aCache)

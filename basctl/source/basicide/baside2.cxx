@@ -54,6 +54,7 @@
 #include <cassert>
 #include <basic/codecompletecache.hxx>
 #include <svtools/miscopt.hxx>
+#include "codecompleteoptionsdlg.hxx"
 
 namespace basctl
 {
@@ -1013,8 +1014,8 @@ void ModulWindow::ExecuteCommand (SfxRequest& rReq)
         break;
         case SID_BASICIDE_CODECOMPLETITION:
         {
-            SFX_REQUEST_ARG(rReq, pItem, SfxBoolItem, rReq.GetSlot(), false);
-            CodeCompleteOptions::SetCodeCompleteOn( pItem && pItem->GetValue() );
+            boost::scoped_ptr< CodeCompleteOptionsDlg > pDlg( new CodeCompleteOptionsDlg( this ) );
+            pDlg->Execute();
         }
         break;
         case SID_CUT:
@@ -1166,15 +1167,9 @@ void ModulWindow::GetState( SfxItemSet &rSet )
             case SID_BASICIDE_CODECOMPLETITION:
             {
                 SvtMiscOptions aMiscOptions;
-                if( aMiscOptions.IsExperimentalMode() )
-                {
-                    rSet.Put(SfxBoolItem( nWh, CodeCompleteOptions::IsCodeCompleteOn() ));
-                    std::cerr <<"code complete set to: " << CodeCompleteOptions::IsCodeCompleteOn() << std::endl;
-                }
-                else
+                if( !aMiscOptions.IsExperimentalMode() )
                 {
                     rSet.Put( SfxVisibilityItem(nWh, false) );
-                    //CodeCompleteOptions::SetCodeCompleteOn( false );
                 }
             }
             break;

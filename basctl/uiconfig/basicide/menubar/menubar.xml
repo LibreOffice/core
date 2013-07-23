@@ -61,7 +61,7 @@
             <menu:menuitem menu:id=".uno:StatusBarVisible"/>
             <menu:menuitem menu:id=".uno:ShowImeStatusWindow"/>
             <menu:menuitem menu:id=".uno:ShowLines"/>
-            <menu:menuitem menu:id=".uno:BasicCodeCompletition"/>
+            <menu:menuitem menu:id=".uno:CodeCompleteOptionsDialog"/>
             <menu:menuitem menu:id=".uno:GotoLine"/>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:FullScreen"/>
