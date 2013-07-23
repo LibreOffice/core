@@ -402,6 +402,7 @@ SvXMLImportContext* ScXMLCellFieldSContext::CreateChildContext(
     if (mnCount)
     {
         PushSpaces();
+        mnCount = 0;
     }
 
     return new SvXMLImportContext(GetImport(), nPrefix, rLocalName);
