@@ -55,8 +55,7 @@ bool parseSegment(
         }
     }
     throw css::uno::RuntimeException(
-        OUString("bad path ") + path,
-        css::uno::Reference< css::uno::XInterface >());
+        "bad path " + path, css::uno::Reference< css::uno::XInterface >());
 }
 
 }

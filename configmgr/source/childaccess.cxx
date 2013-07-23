@@ -166,8 +166,7 @@ void ChildAccess::setParent(css::uno::Reference< css::uno::XInterface > const &)
     osl::MutexGuard g(*lock_);
     checkLocalizedPropertyAccess();
     throw css::lang::NoSupportException(
-        OUString("setParent"),
-        static_cast< cppu::OWeakObject * >(this));
+        "setParent", static_cast< cppu::OWeakObject * >(this));
 }
 
 sal_Int64 ChildAccess::getSomething(

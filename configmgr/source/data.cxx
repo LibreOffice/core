@@ -132,7 +132,7 @@ sal_Int32 Data::parseSegment(
     }
     if (templateName != 0) {
         if (i - index == 1 && path[index] == '*') {
-            *templateName = OUString();
+            *templateName = "";
         } else {
             *templateName = path.copy(index, i - index);
         }
@@ -159,8 +159,7 @@ OUString Data::fullTemplateName(
 {
     if (component.indexOf(':') != -1 || name.indexOf(':') != -1) {
         throw css::uno::RuntimeException(
-            (OUString("bad component/name pair containing colon ") +
-             component + OUString("/") +
+            ("bad component/name pair containing colon " + component + "/" +
              name),
             css::uno::Reference< css::uno::XInterface >());
     }
@@ -203,8 +202,7 @@ rtl::Reference< Node > Data::resolvePathRepresentation(
 {
     if (pathRepresentation.isEmpty() || pathRepresentation[0] != '/') {
         throw css::uno::RuntimeException(
-            (OUString("bad path ") +
-             pathRepresentation),
+            "bad path " + pathRepresentation,
             css::uno::Reference< css::uno::XInterface >());
     }
     if (path != 0) {
@@ -226,8 +224,7 @@ rtl::Reference< Node > Data::resolvePathRepresentation(
     if (n == -1 || setElement)
     {
         throw css::uno::RuntimeException(
-            (OUString("bad path ") +
-             pathRepresentation),
+            "bad path " + pathRepresentation,
             css::uno::Reference< css::uno::XInterface >());
     }
     NodeMap const & components = getComponents();
@@ -251,8 +248,7 @@ rtl::Reference< Node > Data::resolvePathRepresentation(
             pathRepresentation[n++] != '/')
         {
             throw css::uno::RuntimeException(
-                (OUString("bad path ") +
-                 pathRepresentation),
+                "bad path " + pathRepresentation,
                 css::uno::Reference< css::uno::XInterface >());
         }
         // for backwards compatibility, ignore a final slash
@@ -266,13 +262,12 @@ rtl::Reference< Node > Data::resolvePathRepresentation(
             return p;
         }
         parent = p;
-        templateName = OUString();
+        templateName = "";
         n = parseSegment(
             pathRepresentation, n, &seg, &setElement, &templateName);
         if (n == -1) {
             throw css::uno::RuntimeException(
-                (OUString("bad path ") +
-                 pathRepresentation),
+                "bad path " + pathRepresentation,
                 css::uno::Reference< css::uno::XInterface >());
         }
         // For backwards compatibility, allow set members to be accessed with
@@ -283,8 +278,7 @@ rtl::Reference< Node > Data::resolvePathRepresentation(
             case Node::KIND_LOCALIZED_PROPERTY:
                 if (!templateName.isEmpty()) {
                     throw css::uno::RuntimeException(
-                        (OUString("bad path ") +
-                         pathRepresentation),
+                        "bad path " + pathRepresentation,
                     css::uno::Reference< css::uno::XInterface >());
                 }
                 break;
@@ -294,23 +288,20 @@ rtl::Reference< Node > Data::resolvePathRepresentation(
                         templateName))
                 {
                     throw css::uno::RuntimeException(
-                        (OUString("bad path ") +
-                         pathRepresentation),
+                        "bad path " + pathRepresentation,
                     css::uno::Reference< css::uno::XInterface >());
                 }
                 break;
             default:
                 throw css::uno::RuntimeException(
-                    (OUString("bad path ") +
-                     pathRepresentation),
+                    "bad path " + pathRepresentation,
                     css::uno::Reference< css::uno::XInterface >());
             }
             if (!templateName.isEmpty() && p != 0) {
                 assert(!p->getTemplateName().isEmpty());
                 if (!equalTemplateNames(templateName, p->getTemplateName())) {
                     throw css::uno::RuntimeException(
-                        (OUString("bad path ") +
-                         pathRepresentation),
+                        "bad path " + pathRepresentation,
                         css::uno::Reference< css::uno::XInterface >());
                 }
             }
@@ -338,8 +329,7 @@ Additions * Data::addExtensionXcuAdditions(
                 url, rtl::Reference< ExtensionXcu >())).first);
     if (i->second.is()) {
         throw css::uno::RuntimeException(
-            (OUString("already added extension xcu ") +
-             url),
+            "already added extension xcu " + url,
             css::uno::Reference< css::uno::XInterface >());
     }
     i->second = item;

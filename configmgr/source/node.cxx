@@ -37,8 +37,7 @@ namespace configmgr {
 NodeMap & Node::getMembers() {
     assert(false);
     throw css::uno::RuntimeException(
-        OUString("this cannot happen"),
-        css::uno::Reference< css::uno::XInterface >());
+        "this cannot happen", css::uno::Reference< css::uno::XInterface >());
 }
 
 OUString Node::getTemplateName() const {

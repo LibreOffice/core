@@ -193,7 +193,7 @@ void Broadcaster::send() {
     }
     if (exception.hasValue()) {
         throw css::lang::WrappedTargetRuntimeException(
-            (OUString("configmgr exceptions during listener notification") +
+            ("configmgr exceptions during listener notification" +
              messages.makeStringAndClear()),
             css::uno::Reference< css::uno::XInterface >(),
             exception);

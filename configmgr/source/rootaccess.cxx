@@ -128,8 +128,7 @@ void RootAccess::addChangesListener(
         checkLocalizedPropertyAccess();
         if (!aListener.is()) {
             throw css::uno::RuntimeException(
-                OUString("null listener"),
-                static_cast< cppu::OWeakObject * >(this));
+                "null listener", static_cast< cppu::OWeakObject * >(this));
         }
         if (!isDisposed()) {
             changesListeners_.insert(aListener);
@@ -226,9 +225,7 @@ rtl::Reference< Node > RootAccess::getNode() {
             pathRepresentation_, &canonic, &path_, &finalizedLayer);
         if (!node_.is()) {
             throw css::uno::RuntimeException(
-                (OUString("cannot find ") +
-                 pathRepresentation_),
-                0);
+                "cannot find " + pathRepresentation_, 0);
                 // RootAccess::queryInterface indirectly calls
                 // RootAccess::getNode, so if this RootAccess were passed out in
                 // RuntimeException.Context, client code that called
@@ -273,11 +270,9 @@ void RootAccess::addSupportedServiceNames(
     std::vector< OUString > * services)
 {
     assert(services != 0);
-    services->push_back(
-        OUString("com.sun.star.configuration.AccessRootElement"));
+    services->push_back("com.sun.star.configuration.AccessRootElement");
     if (update_) {
-        services->push_back(
-            OUString("com.sun.star.configuration.UpdateRootElement"));
+        services->push_back("com.sun.star.configuration.UpdateRootElement");
     }
 }
 

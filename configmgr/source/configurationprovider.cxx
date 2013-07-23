@@ -52,7 +52,6 @@
 #include "osl/mutex.hxx"
 #include "sal/types.h"
 #include "rtl/ref.hxx"
-#include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
 
 #include <i18nlangtag/languagetag.hxx>
@@ -73,8 +72,8 @@ char const updateAccessServiceName[] =
 
 void badNodePath() {
     throw css::uno::Exception(
-        OUString("com.sun.star.configuration.ConfigurationProvider expects a"
-                " single, non-empty, string nodepath argument"),
+        ("com.sun.star.configuration.ConfigurationProvider expects a single,"
+         " non-empty, string nodepath argument"),
         0);
 }
 
@@ -198,8 +197,8 @@ Service::createInstanceWithArguments(
             break;
         } else {
             throw css::uno::Exception(
-                OUString("com.sun.star.configuration.ConfigurationProvider"
-                        " expects NamedValue or PropertyValue arguments"),
+                ("com.sun.star.configuration.ConfigurationProvider expects"
+                 " NamedValue or PropertyValue arguments"),
                 0);
         }
         // For backwards compatibility, allow "nodepath" and "Locale" in any
@@ -215,9 +214,8 @@ Service::createInstanceWithArguments(
                 locale.isEmpty())
             {
                 throw css::uno::Exception(
-                    OUString("com.sun.star.configuration.ConfigurationProvider"
-                            " expects at most one, non-empty, string Locale"
-                            " argument"),
+                    ("com.sun.star.configuration.ConfigurationProvider expects"
+                     " at most one, non-empty, string Locale argument"),
                     0);
             }
         }
@@ -228,27 +226,24 @@ Service::createInstanceWithArguments(
     // For backwards compatibility, allow a nodepath that misses the leading
     // slash:
     if (nodepath[0] != '/') {
-        nodepath = OUString("/") + nodepath;
+        nodepath = "/" + nodepath;
     }
     if (locale.isEmpty()) {
         //TODO: should the Access use the dynamically changing locale_ instead?
         locale = locale_;
         if (locale.isEmpty()) {
-            locale = OUString("en-US");
+            locale = "en-US";
         }
     }
     bool update;
-    if ( ServiceSpecifier == accessServiceName )
-    {
+    if (ServiceSpecifier == accessServiceName) {
         update = false;
-    } else if ( ServiceSpecifier == updateAccessServiceName )
-    {
+    } else if (ServiceSpecifier == updateAccessServiceName) {
         update = true;
     } else {
         throw css::uno::Exception(
-            (OUString("com.sun.star.configuration.ConfigurationProvider does not"
-                    " support service ") +
-             ServiceSpecifier),
+            ("com.sun.star.configuration.ConfigurationProvider does not support"
+             " service " + ServiceSpecifier),
             static_cast< cppu::OWeakObject * >(this));
     }
     osl::MutexGuard guard(*lock_);
@@ -257,9 +252,8 @@ Service::createInstanceWithArguments(
         new RootAccess(components, nodepath, locale, update));
     if (root->isValue()) {
         throw css::uno::Exception(
-            (OUString("com.sun.star.configuration.ConfigurationProvider: there is"
-                    " a leaf value at nodepath ") +
-             nodepath),
+            ("com.sun.star.configuration.ConfigurationProvider: there is a leaf"
+             " value at nodepath " + nodepath),
             static_cast< cppu::OWeakObject * >(this));
     }
     components.addRootAccess(root);
@@ -270,8 +264,8 @@ css::uno::Sequence< OUString > Service::getAvailableServiceNames()
     throw (css::uno::RuntimeException)
 {
     css::uno::Sequence< OUString > names(2);
-    names[0] = OUString(RTL_CONSTASCII_USTRINGPARAM(accessServiceName));
-    names[1] = OUString(RTL_CONSTASCII_USTRINGPARAM(updateAccessServiceName));
+    names[0] = accessServiceName;
+    names[1] = updateAccessServiceName;
     return names;
 }
 
@@ -417,9 +411,8 @@ Factory::createInstanceWithArgumentsAndContext(
                 value = v2.Value;
             } else {
                 throw css::uno::Exception(
-                    OUString("com.sun.star.configuration.ConfigurationProvider"
-                            " factory expects NamedValue or PropertyValue"
-                            " arguments"),
+                    ("com.sun.star.configuration.ConfigurationProvider factory"
+                     " expects NamedValue or PropertyValue arguments"),
                     0);
             }
             // For backwards compatibility, allow "Locale" and (ignored)
@@ -429,15 +422,15 @@ Factory::createInstanceWithArgumentsAndContext(
                     locale.isEmpty())
                 {
                     throw css::uno::Exception(
-                        OUString("com.sun.star.configuration."
-                                "ConfigurationProvider factory expects at most"
-                                " one, non-empty, string Locale argument"),
+                        ("com.sun.star.configuration.ConfigurationProvider"
+                         " factory expects at most one, non-empty, string"
+                         " Locale argument"),
                         0);
                 }
             } else if (!name.equalsIgnoreAsciiCase("enableasync")) {
                 throw css::uno::Exception(
-                    OUString("com.sun.star.configuration.ConfigurationProvider"
-                            " factory: unknown argument ") + name,
+                    ("com.sun.star.configuration.ConfigurationProvider factory:"
+                     " unknown argument " + name),
                     0);
             }
         }
@@ -450,8 +443,7 @@ Factory::createInstanceWithArgumentsAndContext(
 css::uno::Reference< css::uno::XInterface > createDefault(
     css::uno::Reference< css::uno::XComponentContext > const & context)
 {
-    return static_cast< cppu::OWeakObject * >(
-        new Service(context, OUString()));
+    return static_cast< cppu::OWeakObject * >(new Service(context, ""));
 }
 
 OUString getImplementationName() {

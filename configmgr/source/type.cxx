@@ -61,7 +61,7 @@ Type elementType(Type type) {
     default:
         assert(false);
         throw css::uno::RuntimeException(
-            OUString("this cannot happen"),
+            "this cannot happen",
             css::uno::Reference< css::uno::XInterface >());
     }
 }
@@ -102,7 +102,7 @@ css::uno::Type mapType(Type type) {
     default:
         assert(false);
         throw css::uno::RuntimeException(
-            OUString("this cannot happen"),
+            "this cannot happen",
             css::uno::Reference< css::uno::XInterface >());
     }
 }

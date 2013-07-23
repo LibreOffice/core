@@ -69,7 +69,7 @@ OString convertToUtf8(
              RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR)))
     {
         throw css::uno::RuntimeException(
-            OUString("cannot convert to UTF-8"),
+            "cannot convert to UTF-8",
             css::uno::Reference< css::uno::XInterface >());
     }
     return s;
@@ -110,8 +110,7 @@ void writeData(oslFileHandle handle, char const * begin, sal_Int32 length) {
         n != static_cast< sal_uInt32 >(length))
     {
         throw css::uno::RuntimeException(
-            OUString("write failure"),
-            css::uno::Reference< css::uno::XInterface >());
+            "write failure", css::uno::Reference< css::uno::XInterface >());
     }
 }
 
@@ -500,8 +499,7 @@ void writeModifications(
     } else {
         assert(node.is());
         OUString pathRep(
-            parentPathRepresentation +
-            OUString("/") +
+            parentPathRepresentation + "/" +
             Data::createSegment(node->getTemplateName(), nodeName));
         for (Modifications::Node::Children::const_iterator i(
                  modifications.children.begin());
@@ -534,8 +532,7 @@ void writeModFile(
         return;
     default:
         throw css::uno::RuntimeException(
-            (OUString("cannot create directory ") +
-             dir),
+            "cannot create directory " + dir,
             css::uno::Reference< css::uno::XInterface >());
     }
     TempFile tmp;
@@ -550,8 +547,7 @@ void writeModFile(
         return;
     default:
         throw css::uno::RuntimeException(
-            (OUString("cannot create temporary file in ") +
-             dir),
+            "cannot create temporary file in " + dir,
             css::uno::Reference< css::uno::XInterface >());
     }
     writeData(
@@ -569,8 +565,7 @@ void writeModFile(
          j != data.modifications.getRoot().children.end(); ++j)
     {
         writeModifications(
-            components, tmp.handle, OUString(), rtl::Reference< Node >(),
-            j->first,
+            components, tmp.handle, "", rtl::Reference< Node >(), j->first,
             Data::findNode(Data::NO_LAYER, data.getComponents(), j->first),
             j->second);
     }
@@ -579,14 +574,12 @@ void writeModFile(
     tmp.closed = true;
     if (e != osl_File_E_None) {
         throw css::uno::RuntimeException(
-            (OUString("cannot close ") +
-             tmp.url),
+            "cannot close " + tmp.url,
             css::uno::Reference< css::uno::XInterface >());
     }
     if (osl::File::move(tmp.url, url) != osl::FileBase::E_None) {
         throw css::uno::RuntimeException(
-            (OUString("cannot move ") +
-             tmp.url),
+            "cannot move " + tmp.url,
             css::uno::Reference< css::uno::XInterface >());
     }
     tmp.handle = 0;

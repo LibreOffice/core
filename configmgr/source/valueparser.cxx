@@ -171,8 +171,7 @@ template< typename T > css::uno::Any parseSingleValue(
     T val;
     if (!parseValue(text, &val)) {
         throw css::uno::RuntimeException(
-            OUString("invalid value"),
-            css::uno::Reference< css::uno::XInterface >());
+            "invalid value", css::uno::Reference< css::uno::XInterface >());
     }
     return css::uno::makeAny(val);
 }
@@ -196,7 +195,7 @@ template< typename T > css::uno::Any parseListValue(
                     xmlreader::Span(t.begin, i == -1 ? t.length : i), &val))
             {
                 throw css::uno::RuntimeException(
-                    OUString("invalid value"),
+                    "invalid value",
                     css::uno::Reference< css::uno::XInterface >());
             }
             seq.push_back(val);
@@ -216,7 +215,7 @@ css::uno::Any parseValue(
     switch (type) {
     case TYPE_ANY:
         throw css::uno::RuntimeException(
-            OUString("invalid value of type any"),
+            "invalid value of type any",
             css::uno::Reference< css::uno::XInterface >());
     case TYPE_BOOLEAN:
         return parseSingleValue< sal_Bool >(text);
@@ -250,7 +249,7 @@ css::uno::Any parseValue(
     default:
         assert(false);
         throw css::uno::RuntimeException(
-            OUString("this cannot happen"),
+            "this cannot happen",
             css::uno::Reference< css::uno::XInterface >());
     }
 }
@@ -333,8 +332,7 @@ bool ValueParser::startElement(
                 pad_.add(RTL_CONSTASCII_STRINGPARAM("\xEF\xBF\xBF"));
             } else {
                 throw css::uno::RuntimeException(
-                    (OUString("bad unicode scalar attribute in ") +
-                     reader.getUrl()),
+                    "bad unicode scalar attribute in " + reader.getUrl(),
                     css::uno::Reference< css::uno::XInterface >());
             }
             state_ = State(state_ + 1);
@@ -345,9 +343,7 @@ bool ValueParser::startElement(
         break;
     }
     throw css::uno::RuntimeException(
-        (OUString("bad member <") +
-         name.convertFromUtf8() +
-         OUString("> in ") + reader.getUrl()),
+        "bad member <" + name.convertFromUtf8() + "> in " + reader.getUrl(),
         css::uno::Reference< css::uno::XInterface >());
 }
 

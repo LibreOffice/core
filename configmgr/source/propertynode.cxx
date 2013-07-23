@@ -61,7 +61,7 @@ css::uno::Any PropertyNode::getValue(Components & components) {
         if (val.IsPresent) {
             value_ = val.Value; //TODO: check value type
         }
-        externalDescriptor_ = OUString(); // must not throw
+        externalDescriptor_ = ""; // must not throw
     }
     SAL_WARN_IF(
         !(value_.hasValue() || nillable_), "configmgr",
@@ -72,7 +72,7 @@ css::uno::Any PropertyNode::getValue(Components & components) {
 void PropertyNode::setValue(int layer, css::uno::Any const & value) {
     setLayer(layer);
     value_ = value;
-    externalDescriptor_ = OUString();
+    externalDescriptor_ = "";
 }
 
 void PropertyNode::setExternal(int layer, OUString const & descriptor) {
