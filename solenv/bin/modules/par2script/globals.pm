@@ -34,13 +34,13 @@ BEGIN
 
     @allitems = ("Installation", "ScpAction", "Directory", "File",
                  "Shortcut", "Unixlink", "Module", "Profile", "ProfileItem",
-                 "Folder", "FolderItem", "RegistryItem", "WindowsCustomAction",
-                 "MergeModule");
+                 "Folder", "FolderItem", "FolderItemProperty", "RegistryItem",
+                 "WindowsCustomAction", "MergeModule");
 
     @items_assigned_at_modules = ("File", "Directory", "Unixlink");
     @items_with_directories = ("File", "Profile", "Shortcut", "Unixlink");
     @items_with_moduleid = ("Profile", "ProfileItem", "FolderItem", "RegistryItem");
-    @items_without_moduleid = ("File", "Directory", "Shortcut", "Unixlink");
+    @items_without_moduleid = ("File", "FolderItemProperty", "Directory", "Shortcut", "Unixlink");
 
     %searchkeys = ("File" => "Files", "Directory" => "Dirs", "Unixlink" => "Unixlinks");
 
