@@ -28,6 +28,7 @@
 #include "com/sun/star/reflection/XInterfaceMemberTypeDescription.hpp"
 #include "com/sun/star/reflection/XIdlMethod.hpp"
 #include "com/sun/star/uno/Exception.hpp"
+#include <basic/codecompletecache.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -207,7 +208,7 @@ void SbiParser::DefVar( SbiOpcode eOp, bool bStatic )
     bool bSwitchPool = false;
     bool bPersistantGlobal = false;
     SbiToken eFirstTok = eCurTok;
-    SvtMiscOptions aMiscOptions;
+
     if( pProc && ( eCurTok == GLOBAL || eCurTok == PUBLIC || eCurTok == PRIVATE ) )
         Error( SbERR_NOT_IN_SUBR, eCurTok );
     if( eCurTok == PUBLIC || eCurTok == GLOBAL )
@@ -404,9 +405,18 @@ void SbiParser::DefVar( SbiOpcode eOp, bool bStatic )
             if( !bCompatible && !pDef->IsNew() )
             {
                 OUString aTypeName( aGblStrings.Find( pDef->GetTypeId() ) );
-                if( rTypeArray->Find( aTypeName, SbxCLASS_OBJECT ) == NULL && (aMiscOptions.IsExperimentalMode() && !IsUnoInterface(aTypeName)))
+                /*std::cerr <<"CodeCompleteOptions::IsExtendedTypeDeclaration():" << CodeCompleteOptions::IsExtendedTypeDeclaration() << std::endl;
+                std::cerr << "IsUnoInterface("<<aTypeName<<"):"<< IsUnoInterface(aTypeName) << std::endl;
+                std::cerr << "finally: " << (CodeCompleteOptions::IsExtendedTypeDeclaration() && !IsUnoInterface(aTypeName)) << std::endl;*/
+                if( rTypeArray->Find( aTypeName, SbxCLASS_OBJECT ) == NULL )
                 {
-                    Error( SbERR_UNDEF_TYPE, aTypeName );
+                    if(!CodeCompleteOptions::IsExtendedTypeDeclaration())
+                        Error( SbERR_UNDEF_TYPE, aTypeName );
+                    else
+                    {
+                        if(!IsUnoInterface(aTypeName))
+                            Error( SbERR_UNDEF_TYPE, aTypeName );
+                    }
                 }
             }
 
