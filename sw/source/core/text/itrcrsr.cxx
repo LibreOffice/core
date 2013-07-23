@@ -1259,7 +1259,7 @@ xub_StrLen SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
     // If necessary, as catch up, do the adjustment
     GetAdjusted();
 
-    const XubString &rText = GetInfo().GetTxt();
+    const OUString &rText = GetInfo().GetTxt();
     xub_StrLen nOffset = 0;
 
     // x is the horizontal offset within the line.
@@ -1452,7 +1452,7 @@ xub_StrLen SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
             ( pPor->IsMarginPortion() && !pPor->GetPortion() &&
               // 46598: Consider the situation: We might end up behind the last character,
               // in the last line of a centered paragraph
-              nCurrStart < rText.Len() ) )
+              nCurrStart < rText.getLength() ) )
             --nCurrStart;
         else if( pPor->InFldGrp() && ((SwFldPortion*)pPor)->IsFollow()
                  && nWidth > nX )
@@ -1523,7 +1523,9 @@ xub_StrLen SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
         }
     }
 
-    if( bLastPortion && (pCurr->GetNext() || pFrm->GetFollow() ) )
+    // Skip space at the end of the line
+    if( bLastPortion && (pCurr->GetNext() || pFrm->GetFollow() )
+        && rText[nCurrStart + nLength - 1] == ' ' )
         --nLength;
 
     if( nWidth > nX ||
@@ -1592,8 +1594,7 @@ xub_StrLen SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
             else
                 nOldProp = 0;
             {
-                OUString aText = rText;
-                SwTxtSizeInfo aSizeInf( GetInfo(), &aText, nCurrStart );
+                SwTxtSizeInfo aSizeInf( GetInfo(), &rText, nCurrStart );
                 ((SwTxtCursor*)this)->SeekAndChg( aSizeInf );
                 SwTxtSlot aDiffTxt( &aSizeInf, ((SwTxtPortion*)pPor), false, false );
                 SwFontSave aSave( aSizeInf, pPor->IsDropPortion() ?
