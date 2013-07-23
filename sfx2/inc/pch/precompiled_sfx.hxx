@@ -620,7 +620,6 @@
 #include <rsc/rscsfx.hxx>
 #include <rtl/bootstrap.hxx>
 #include <rtl/instance.hxx>
-#include <rtl/logfile.hxx>
 #include <rtl/math.hxx>
 #include <rtl/random.h>
 #include <rtl/ref.hxx>
