@@ -436,10 +436,10 @@ SvxRuler::~SvxRuler()
 
 void SvxRuler::NormalizePosition(long& rValue) const
 {
-    long aNewPositionLogic = pEditWin->PixelToLogic(Size(0, rValue), GetMapMode()).Height();
+    long aNewPositionLogic = pEditWin->PixelToLogic(Size(0, rValue), GetCurrentMapMode()).Height();
     long aTickDivider = GetCurrentRulerUnit().nTick1;
     aNewPositionLogic = (aNewPositionLogic / aTickDivider) * aTickDivider;
-    rValue = pEditWin->LogicToPixel(Size(0, aNewPositionLogic), GetMapMode()).Height();
+    rValue = pEditWin->LogicToPixel(Size(0, aNewPositionLogic), GetCurrentMapMode()).Height();
 }
 
 long SvxRuler::ConvertHPosPixel(long nVal) const

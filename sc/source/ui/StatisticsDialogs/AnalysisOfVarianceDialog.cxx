@@ -35,14 +35,14 @@ static const char* lclBasicStatisticsLabels[] =
     "Groups", "Count", "Sum", "Mean", "Variance", NULL
 };
 
+static const char* lclBasicStatisticsFormula[] =
+{
+    "=COUNT(%RANGE%)", "=SUM(%RANGE%)", "=AVERAGE(%RANGE%)", "=VAR(%RANGE%)", NULL
+};
+
 static const char* lclAnovaLabels[] =
 {
     "Source of Variation", "SS", "df", "MS", "F", "P-value", "F critical", NULL
-};
-
-static const char* lclAnovaFormula[] =
-{
-    "=COUNT(%RANGE%)", "=SUM(%RANGE%)", "=AVERAGE(%RANGE%)", "=VAR(%RANGE%)", NULL
 };
 
 static const OUString lclWildcardRange("%RANGE%");
@@ -64,16 +64,6 @@ OUString lclCreateMultiParameterFormula(
     }
     return aResult;
 }
-
-class CellAddressIterator
-{
-public:
-    CellAddressIterator(ScAddress& aStartAddress)
-    {}
-
-    virtual ~CellAddressIterator()
-    {}
-};
 
 }
 
@@ -147,10 +137,10 @@ void ScAnalysisOfVarianceDialog::CalculateInputAndWriteToOutput( )
             OUString aFormulaString;
             OUString aFormulaTemplate;
 
-            for(sal_Int32 i = 0; lclAnovaFormula[i] != NULL; i++)
+            for(sal_Int32 i = 0; lclBasicStatisticsFormula[i] != NULL; i++)
             {
                 aAddress = ScAddress(outCol, outRow, outTab);
-                aFormulaTemplate = OUString::createFromAscii(lclAnovaFormula[i]);
+                aFormulaTemplate = OUString::createFromAscii(lclBasicStatisticsFormula[i]);
                 aFormulaString = aFormulaTemplate.replaceAll(lclWildcardRange, aReferenceString);
                 pDocShell->GetDocFunc().SetFormulaCell(aAddress, new ScFormulaCell(mDocument, aAddress, aFormulaString), true);
                 outCol++;

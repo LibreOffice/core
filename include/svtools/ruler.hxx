@@ -693,7 +693,7 @@ private:
 
 protected:
     long GetRulerVirHeight() const;
-    MapMode GetMapMode() const { return maMapMode; }
+    MapMode GetCurrentMapMode() const { return maMapMode; }
     RulerUnitData GetCurrentRulerUnit() const;
 
 public:
