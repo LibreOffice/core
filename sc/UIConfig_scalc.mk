@@ -83,6 +83,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/scalc,\
 	sc/uiconfig/scalc/ui/leftfooterdialog \
 	sc/uiconfig/scalc/ui/leftheaderdialog \
 	sc/uiconfig/scalc/ui/managenamesdialog \
+	sc/uiconfig/scalc/ui/movetabdialog \
 	sc/uiconfig/scalc/ui/optcalculatepage \
 	sc/uiconfig/scalc/ui/optchangespage \
 	sc/uiconfig/scalc/ui/optcompatibilitypage \

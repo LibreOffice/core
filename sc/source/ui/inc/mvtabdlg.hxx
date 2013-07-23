@@ -52,21 +52,16 @@ private:
     bool IsCurrentDocSelected() const;
 
 private:
-    FixedLine       aFlAction;
-    RadioButton     aBtnMove;
-    RadioButton     aBtnCopy;
-    FixedLine       aFlLocation;
-    FixedText       aFtDoc;
-    ListBox         aLbDoc;
-    FixedText       aFtTable;
-    ListBox         aLbTable;
-    FixedLine       aFlName;
-    FixedText       aFtTabName;
-    Edit            aEdTabName;
-    FixedText       aFtWarn;
-    OKButton        aBtnOk;
-    CancelButton    aBtnCancel;
-    HelpButton      aBtnHelp;
+    RadioButton*     pBtnMove;
+    RadioButton*     pBtnCopy;
+    ListBox*         pLbDoc;
+    ListBox*         pLbTable;
+    FixedText*       pFtTabName;
+    Edit*            pEdTabName;
+    FixedText*       pFtWarn;
+    OKButton*        pBtnOk;
+    CancelButton*    pBtnCancel;
+    HelpButton*      pBtnHelp;
 
     OUString   maStrTabNameUsed;
     OUString   maStrTabNameEmpty;

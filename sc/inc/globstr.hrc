@@ -704,6 +704,12 @@
 #define STR_RNG_PARAMETER_STANDARD_NUMBER_OF_TRIALS 571
 #define STR_RNG_PARAMETER_STANDARD_NU_VALUE         572
 
+#define STR_CURRENTDOC              573
+#define STR_NEWDOC                  574
+#define STR_TABNAME_WARN_USED       575
+#define STR_TABNAME_WARN_EMPTY      576
+#define STR_TABNAME_WARN_INVALID    577 //mvtabdlg.cxx
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
