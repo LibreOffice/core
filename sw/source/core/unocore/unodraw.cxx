@@ -2028,7 +2028,7 @@ void SwXShape::attach(const uno::Reference< text::XTextRange > & xTextRange)
             {
                 uno::Any aPos;
                 aPos <<= xTextRange;
-                setPropertyValue(S2U("TextRange"), aPos);
+                setPropertyValue("TextRange", aPos);
                 uno::Reference< drawing::XShape > xTemp( (cppu::OWeakObject*) this, uno::UNO_QUERY );
                 xDP->add( xTemp );
             }

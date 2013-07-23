@@ -66,11 +66,6 @@ bool GetEncryptionData_Impl( const SfxItemSet* pSet, css::uno::Sequence< css::be
 
 #define FrameSearchFlags            sal_Int32
 
-// Macros to convert string -> unicode and unicode -> string.
-// We use UTF8 everytime. Its the best way to do this!
-#define S2U(STRING)                             OStringToOUString(STRING, RTL_TEXTENCODING_UTF8)
-#define U2S(STRING)                             OUStringToOString(STRING, RTL_TEXTENCODING_UTF8)
-
 //________________________________________________________________________________________________________________________
 //  macros for declaration and definition of uno-services
 //________________________________________________________________________________________________________________________
