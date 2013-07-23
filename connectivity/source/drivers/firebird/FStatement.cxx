@@ -98,39 +98,6 @@ void OStatement_Base::disposeResultSet()
 //     m_xResultSet = uno::Reference< XResultSet>();
 }
 
-void OStatement_BASE2::disposing()
-{
-    MutexGuard aGuard(m_pConnection->getMutex());
-
-    disposeResultSet();
-
-    if (m_pConnection)
-        m_pConnection->release();
-    m_pConnection = NULL;
-
-//     if (NULL != m_OUTsqlda)
-//     {
-//         int i;
-//         XSQLVAR *var;
-//         for (i=0, var = m_OUTsqlda->sqlvar; i < m_OUTsqlda->sqld; i++, var++)
-//             free(var->sqldata);
-//         free(m_OUTsqlda);
-//         m_OUTsqlda = NULL;
-//     }
-//     if (NULL != m_INsqlda)
-//     {
-//         free(m_INsqlda);
-//         m_INsqlda = NULL;
-//     }
-
-    dispose_ChildImpl();
-    OStatement_Base::disposing();
-}
-//-----------------------------------------------------------------------------
-void SAL_CALL OStatement_BASE2::release() throw()
-{
-    relase_ChildImpl();
-}
 //-----------------------------------------------------------------------------
 Any SAL_CALL OStatement_Base::queryInterface( const Type & rType ) throw(RuntimeException)
 {
@@ -537,12 +504,12 @@ void SAL_CALL OStatement_Base::release() throw()
 
 void SAL_CALL OStatement::acquire() throw()
 {
-    OStatement_BASE2::acquire();
+    OStatement_Base::acquire();
 }
 
 void SAL_CALL OStatement::release() throw()
 {
-    OStatement_BASE2::release();
+    OStatement_Base::release();
 }
 
 uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL OStatement_Base::getPropertySetInfo(  ) throw(RuntimeException)

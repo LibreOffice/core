@@ -72,7 +72,7 @@ IMPLEMENT_SERVICE_INFO(OPreparedStatement,"com.sun.star.sdbcx.firebird.PreparedS
 OPreparedStatement::OPreparedStatement( OConnection* _pConnection,
                                         const TTypeInfoVector& _TypeInfo,
                                         const OUString& sql)
-    :OStatement_BASE2(_pConnection)
+    :OStatement_Base(_pConnection)
     ,m_aTypeInfo(_TypeInfo)
     ,m_sSqlStatement(sql)
     ,m_statementHandle(0)
@@ -161,18 +161,18 @@ OPreparedStatement::~OPreparedStatement()
 
 void SAL_CALL OPreparedStatement::acquire() throw()
 {
-    OStatement_BASE2::acquire();
+    OStatement_Base::acquire();
 }
 
 void SAL_CALL OPreparedStatement::release() throw()
 {
-    OStatement_BASE2::release();
+    OStatement_Base::release();
 }
 
 Any SAL_CALL OPreparedStatement::queryInterface(const Type& rType)
     throw(RuntimeException)
 {
-    Any aRet = OStatement_BASE2::queryInterface(rType);
+    Any aRet = OStatement_Base::queryInterface(rType);
     if(!aRet.hasValue())
         aRet = OPreparedStatement_BASE::queryInterface(rType);
     return aRet;
@@ -181,8 +181,7 @@ Any SAL_CALL OPreparedStatement::queryInterface(const Type& rType)
 uno::Sequence< Type > SAL_CALL OPreparedStatement::getTypes()
     throw(RuntimeException)
 {
-    return concatSequences(OPreparedStatement_BASE::getTypes(),
-                           OStatement_BASE2::getTypes());
+    return OPreparedStatement_BASE::getTypes();
 }
 
 Reference< XResultSetMetaData > SAL_CALL OPreparedStatement::getMetaData()
@@ -210,7 +209,7 @@ void SAL_CALL OPreparedStatement::close() throw(SQLException, RuntimeException)
         // TODO: implement
     }
 
-    OStatement_BASE2::close();
+    OStatement_Base::close();
 }
 
 sal_Bool SAL_CALL OPreparedStatement::execute()

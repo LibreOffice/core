@@ -147,24 +147,7 @@ namespace connectivity
 
         };
 
-        class OStatement_BASE2  :public OStatement_Base
-                                ,public OSubComponent<OStatement_BASE2, OStatement_BASE>
-
-        {
-            friend class OSubComponent<OStatement_BASE2, OStatement_BASE>;
-        public:
-            OStatement_BASE2(OConnection* _pConnection)
-                : OStatement_Base(_pConnection),
-                  OSubComponent<OStatement_BASE2, OStatement_BASE>((::cppu::OWeakObject*)_pConnection, this)
-            {}
-
-            // OComponentHelper
-            virtual void SAL_CALL disposing(void);
-            // XInterface
-            virtual void SAL_CALL release() throw();
-        };
-
-        class OStatement :  public OStatement_BASE2,
+        class OStatement :  public OStatement_Base,
                             public ::com::sun::star::sdbc::XBatchExecution,
                             public ::com::sun::star::lang::XServiceInfo
         {
@@ -173,7 +156,7 @@ namespace connectivity
         public:
             // a constructor, which is required for returning objects:
             OStatement( OConnection* _pConnection)
-                : OStatement_BASE2( _pConnection)
+                : OStatement_Base( _pConnection)
             {}
 
             DECLARE_SERVICE_INFO();

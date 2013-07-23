@@ -56,7 +56,7 @@ namespace connectivity
                                         ::com::sun::star::sdbc::XResultSetMetaDataSupplier,
                                         ::com::sun::star::lang::XServiceInfo> OPreparedStatement_BASE;
 
-        class OPreparedStatement :  public  OStatement_BASE2,
+        class OPreparedStatement :  public  OStatement_Base,
                                     public  OPreparedStatement_BASE
         {
         protected:
