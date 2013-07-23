@@ -152,7 +152,6 @@
 #include <com/sun/star/xml/sax/SAXException.hpp>
 #include <com/sun/star/xml/sax/XParser.hpp>
 #include <comphelper/classids.hxx>
-#include <comphelper/configurationhelper.hxx>
 #include <comphelper/embeddedobjectcontainer.hxx>
 #include <comphelper/mediadescriptor.hxx>
 #include <comphelper/servicehelper.hxx>
