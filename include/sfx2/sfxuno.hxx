@@ -64,7 +64,7 @@ SFX2_DLLPUBLIC void TransformItems(         sal_uInt16                          
 
 bool GetEncryptionData_Impl( const SfxItemSet* pSet, css::uno::Sequence< css::beans::NamedValue >& aEncryptionData );
 
-#define FrameSearchFlags            sal_Int32
+typedef sal_Int32 FrameSearchFlags;
 
 //________________________________________________________________________________________________________________________
 //  macros for declaration and definition of uno-services
