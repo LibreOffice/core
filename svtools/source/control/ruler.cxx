@@ -105,20 +105,7 @@ public:
     ImplRulerData&      operator=( const ImplRulerData& rData );
 };
 
-
-struct ImplRulerUnitData
-{
-    MapUnit         eMapUnit;           // MAP_UNIT zum Umrechnen
-    long            nTickUnit;          // Teiler fuer Einheit
-    long            nTick1;             // Schrittweite
-    long            nTick2;             // Tick fuer halbe Werte
-    long            nTick3;             // Tick fuer Zahlenausgabe
-    long            n100THMM;           // Teiler fuer Einheit
-    sal_uInt16          nUnitDigits;        // Anzahl Nachkommastellen
-    sal_Char        aUnitStr[8];        // Einheiten-String
-};
-
-static ImplRulerUnitData aImplRulerUnitTab[RULER_UNIT_COUNT] =
+static RulerUnitData aImplRulerUnitTab[RULER_UNIT_COUNT] =
 {
 { MAP_100TH_MM,        100,    25,     50,    100,     100, 3, " mm"    }, // MM
 { MAP_100TH_MM,       1000,   250,    500,   1000,    1000, 3, " cm"    }, // CM
@@ -2775,6 +2762,11 @@ long Ruler::GetNullOffset() const { return mpData->nNullOff; }
 long    Ruler::GetMargin1() const { return mpData->nMargin1; }
 long    Ruler::GetMargin2() const { return mpData->nMargin2; }
 long Ruler::GetRulerVirHeight() const { return mnVirHeight; }
+
+RulerUnitData Ruler::GetCurrentRulerUnit() const
+{
+    return aImplRulerUnitTab[mnUnitIndex];
+}
 
 void Ruler::DrawTicks()
 {

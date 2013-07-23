@@ -22,7 +22,7 @@
 #include <vcl/menu.hxx>
 #include <svtools/ruler.hxx>
 #include <svl/lstner.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 class SvxProtectItem;
 class SvxRulerItem;
@@ -123,6 +123,9 @@ class SVX_DLLPUBLIC SvxRuler: public Ruler, public SfxListener
     void UpdateFrame();
     void UpdateColumns();
     void UpdateObject();
+
+    // Normalize position to the ruler's tick value
+    void NormalizePosition(long& rValue) const;
 
     long PixelHAdjust(long lPos, long lPos2) const;
     long PixelVAdjust(long lPos, long lPos2) const;

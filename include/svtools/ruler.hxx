@@ -586,6 +586,18 @@ struct RulerLine
     sal_uInt16  nStyle;
 };
 
+struct RulerUnitData
+{
+    MapUnit         eMapUnit;           // MAP_UNIT for calculaion
+    long            nTickUnit;          // Unit divider
+    long            nTick1;             // Minimal step
+    long            nTick2;             // Tick half unit
+    long            nTick3;             // Tick whole unit
+    long            n100THMM;           // 100mm Unit divider
+    sal_uInt16      nUnitDigits;        // Number of digits
+    sal_Char        aUnitStr[8];        // Unit string
+};
+
 class ImplRulerData;
 // ---------
 // - Ruler -
@@ -681,6 +693,8 @@ private:
 
 protected:
     long GetRulerVirHeight() const;
+    MapMode GetMapMode() const { return maMapMode; }
+    RulerUnitData GetCurrentRulerUnit() const;
 
 public:
                         Ruler( Window* pParent, WinBits nWinStyle = WB_STDRULER );
