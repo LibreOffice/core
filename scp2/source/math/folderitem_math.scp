@@ -30,4 +30,10 @@ FolderItem gid_Folderitem_Smath
     Parameter = "";
     ALL_LANG(Tooltip, STR_FI_TOOLTIP_MATH);
 End
+
+FolderItemProperty git_Folderitem_Smath_AppIDProperty
+    ShortcutID = gid_Folderitem_Smath;
+    Key = "System.AppUserModel.ID"
+    Value = "TheDocumentFoundation.LibreOffice.Math"
+End
 #endif
