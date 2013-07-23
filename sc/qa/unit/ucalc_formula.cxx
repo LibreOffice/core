@@ -855,6 +855,43 @@ void Test::testFuncCOLUMN()
     // The cell that references the moved cell should update its value as well.
     CPPUNIT_ASSERT_EQUAL(7.0, m_pDoc->GetValue(ScAddress(0,1,0)));
 
+    // Move the column in the other direction.
+    m_pDoc->DeleteCol(ScRange(5,0,0,5,MAXROW,0));
+
+    CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(ScAddress(5,10,0)));
+
+    // The cell that references the moved cell should update its value as well.
+    CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(ScAddress(0,1,0)));
+
+    m_pDoc->DeleteTab(0);
+}
+
+void Test::testFuncROW()
+{
+    m_pDoc->InsertTab(0, "Formula");
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
+
+    m_pDoc->SetString(ScAddress(5,10,0), "=ROW()");
+    CPPUNIT_ASSERT_EQUAL(11.0, m_pDoc->GetValue(ScAddress(5,10,0)));
+
+    m_pDoc->SetString(ScAddress(0,1,0), "=F11");
+    CPPUNIT_ASSERT_EQUAL(11.0, m_pDoc->GetValue(ScAddress(0,1,0)));
+
+    // Insert 2 new rows at row 4.
+    m_pDoc->InsertRow(ScRange(0,3,0,MAXCOL,4,0));
+    CPPUNIT_ASSERT_EQUAL(13.0, m_pDoc->GetValue(ScAddress(5,12,0)));
+
+    // The cell that references the moved cell should update its value as well.
+    CPPUNIT_ASSERT_EQUAL(13.0, m_pDoc->GetValue(ScAddress(0,1,0)));
+
+    // Delete 2 rows to move it back.
+    m_pDoc->DeleteRow(ScRange(0,3,0,MAXCOL,4,0));
+
+    CPPUNIT_ASSERT_EQUAL(11.0, m_pDoc->GetValue(ScAddress(5,10,0)));
+
+    // The cell that references the moved cell should update its value as well.
+    CPPUNIT_ASSERT_EQUAL(11.0, m_pDoc->GetValue(ScAddress(0,1,0)));
+
     m_pDoc->DeleteTab(0);
 }
 
