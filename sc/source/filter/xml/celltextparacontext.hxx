@@ -134,6 +134,27 @@ public:
         sal_uInt16 nPrefix, const OUString& rLocalName, const com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList>& xAttrList);
 };
 
+/**
+ * This context handles <text:s> element inside <text:p> or <text:span>.
+ */
+class ScXMLCellFieldSContext : public ScXMLImportContext
+{
+    ScXMLCellTextParaContext& mrParentCxt;
+    OUString  maStyleName;
+    sal_Int32 mnCount;
+
+    void PushSpaces();
+public:
+    ScXMLCellFieldSContext(ScXMLImport& rImport, sal_uInt16 nPrefix, const OUString& rLName, ScXMLCellTextParaContext& rParent);
+
+    void SetStyleName(const OUString& rStyleName);
+
+    virtual void StartElement(const com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList>& xAttrList);
+    virtual void EndElement();
+    virtual SvXMLImportContext* CreateChildContext(
+        sal_uInt16 nPrefix, const OUString& rLocalName, const com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList>& xAttrList);
+};
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

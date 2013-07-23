@@ -1848,6 +1848,7 @@ const SvXMLTokenMap& ScXMLImport::GetCellTextParaElemTokenMap()
     {
         static SvXMLTokenMapEntry aMap[] =
         {
+            { XML_NAMESPACE_TEXT, XML_S, XML_TOK_CELL_TEXT_S },
             { XML_NAMESPACE_TEXT, XML_SPAN, XML_TOK_CELL_TEXT_SPAN },
             { XML_NAMESPACE_TEXT, XML_SHEET_NAME, XML_TOK_CELL_TEXT_SHEET_NAME },
             { XML_NAMESPACE_TEXT, XML_DATE, XML_TOK_CELL_TEXT_DATE },
@@ -1871,6 +1872,7 @@ const SvXMLTokenMap& ScXMLImport::GetCellTextSpanElemTokenMap()
             { XML_NAMESPACE_TEXT, XML_DATE, XML_TOK_CELL_TEXT_SPAN_ELEM_DATE },
             { XML_NAMESPACE_TEXT, XML_TITLE, XML_TOK_CELL_TEXT_SPAN_ELEM_TITLE },
             { XML_NAMESPACE_TEXT, XML_A, XML_TOK_CELL_TEXT_SPAN_ELEM_URL },
+            { XML_NAMESPACE_TEXT, XML_S, XML_TOK_CELL_TEXT_SPAN_ELEM_S },
             XML_TOKEN_MAP_END
         };
 
@@ -1908,6 +1910,21 @@ const SvXMLTokenMap& ScXMLImport::GetCellTextURLAttrTokenMap()
         pCellTextURLAttrTokenMap = new SvXMLTokenMap(aMap);
     }
     return *pCellTextURLAttrTokenMap;
+}
+
+const SvXMLTokenMap& ScXMLImport::GetCellTextSAttrTokenMap()
+{
+    if (!pCellTextSAttrTokenMap)
+    {
+        static const SvXMLTokenMapEntry aMap[] =
+        {
+            { XML_NAMESPACE_TEXT, XML_C, XML_TOK_CELL_TEXT_S_ATTR_C },
+            XML_TOKEN_MAP_END
+        };
+
+        pCellTextSAttrTokenMap = new SvXMLTokenMap(aMap);
+    }
+    return *pCellTextSAttrTokenMap;
 }
 
 SvXMLImportContext *ScXMLImport::CreateContext( sal_uInt16 nPrefix,
@@ -2035,6 +2052,7 @@ ScXMLImport::ScXMLImport(
     pCellTextSpanElemTokenMap(NULL),
     pCellTextSpanAttrTokenMap(NULL),
     pCellTextURLAttrTokenMap(NULL),
+    pCellTextSAttrTokenMap(NULL),
     aTables(*this),
     pMyNamedExpressions(NULL),
     pMyLabelRanges(NULL),
@@ -2176,6 +2194,7 @@ ScXMLImport::~ScXMLImport() throw()
     delete pCellTextSpanElemTokenMap;
     delete pCellTextSpanAttrTokenMap;
     delete pCellTextURLAttrTokenMap;
+    delete pCellTextSAttrTokenMap;
 
     delete pChangeTrackingImportHelper;
     delete pNumberFormatAttributesExportHelper;
