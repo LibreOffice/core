@@ -263,7 +263,7 @@ def _uno_import( name, *optargs, **kwargs ):
     try:
 #       print "optargs = " + repr(optargs)
         return _g_delegatee( name, *optargs, **kwargs )
-    except ImportError:
+    except ImportError as e:
         # process optargs
         globals, locals, fromlist = list(optargs)[:3] + [kwargs.get('globals',{}), kwargs.get('locals',{}), kwargs.get('fromlist',[])][len(optargs):]
         if not fromlist:
@@ -279,28 +279,51 @@ def _uno_import( name, *optargs, **kwargs ):
         d = mod.__dict__
 
     RuntimeException = pyuno.getClass( "com.sun.star.uno.RuntimeException" )
+    unknown = object() # unknown/missing sentinel
     for x in fromlist:
        if x not in d:
+          d[x] = unknown
           if x.startswith( "typeOf" ):
              try: 
                 d[x] = pyuno.getTypeByName( name + "." + x[6:len(x)] )
-             except RuntimeException as e:
-                raise ImportError( "type " + name + "." + x[6:len(x)] +" is unknown" )
+             except RuntimeException:
+                pass
           else:
             try:
                 # check for structs, exceptions or interfaces
                 d[x] = pyuno.getClass( name + "." + x )
-            except RuntimeException as e:
+            except RuntimeException:
                 # check for enums 
                 try:
                    d[x] = Enum( name , x )
-                except RuntimeException as e2:
+                except RuntimeException:
                    # check for constants
                    try:
                       d[x] = getConstantByName( name + "." + x )
-                   except RuntimeException as e3:
-                      # no known uno type !
-                      raise ImportError( "type "+ name + "." +x + " is unknown" )
+                   except RuntimeException:
+                      pass
+
+          if d[x] is unknown:
+             # Remove unknown placeholder we created
+             del d[x]
+
+             # This can be a bad uno reference, or it can just result from any
+             # python import failure (in a "from xxx import yyy" statement).
+             # Synthesize a general purpose exception, reusing the original
+             # traceback to provide information for either case.  We don't use
+             # the original python exception as uno failures will typically
+             # just reflect a missing top level module (such as "com").
+
+             # Note that we raise this outside of the nested exception handlers
+             # above, or otherwise Python 3 will generate additional tracebacks
+             # for each of the nested exceptions.
+
+             e = ImportError("No module named '%s' or '%s.%s' is unknown" %
+                             (name, name, x))
+             e.__traceback__ = sys.exc_info()[2]
+
+             raise e
+
     return mod
 
 # private function, don't use
