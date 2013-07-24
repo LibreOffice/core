@@ -35,7 +35,7 @@ endif
 
 $(eval $(call gb_Library_set_precompiled_header,vcl,$(SRCDIR)/vcl/inc/pch/precompiled_vcl))
 
-$(eval $(call gb_Library_use_custom_headers,vcl,vcl/generic/fontmanager))
+$(eval $(call gb_Library_use_custom_headers,vcl,officecfg/registry vcl/generic/fontmanager))
 
 $(eval $(call gb_Library_set_include,vcl,\
     $$(INCLUDE) \

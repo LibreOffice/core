@@ -55,7 +55,6 @@
 
 #include <com/sun/star/uno/Any.hxx>
 
-#include <comphelper/configurationhelper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 
@@ -65,6 +64,8 @@
 
 #include <vcl/unohelp.hxx>
 #include <vcl/unohelp2.hxx>
+
+#include <officecfg/Office/Common.hxx>
 
 
 
@@ -904,50 +905,10 @@ void Edit::ImplInsertText( const OUString& rStr, const Selection* pNewSel, sal_B
 
         // determine if input-sequence-checking should be applied or not
         //
-        static OUString sModule( "/org.openoffice.Office.Common/I18N" );
-        static OUString sRelNode( "CTL" );
-        static OUString sCTLSequenceChecking( "CTLSequenceChecking" );
-        static OUString sCTLSequenceCheckingRestricted( "CTLSequenceCheckingRestricted" );
-        static OUString sCTLSequenceCheckingTypeAndReplace( "CTLSequenceCheckingTypeAndReplace" );
-        static OUString sCTLFont( "CTLFont" );
-        //
-        sal_Bool bCTLSequenceChecking               = sal_False;
-        sal_Bool bCTLSequenceCheckingRestricted     = sal_False;
-        sal_Bool bCTLSequenceCheckingTypeAndReplace = sal_False;
-        sal_Bool bCTLFontEnabled                    = sal_False;
-        bool bIsInputSequenceChecking               = false;
-        //
-        // get access to the configuration of this office module
-        try
-        {
-            uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
-            uno::Reference< container::XNameAccess > xModuleCfg( ::comphelper::ConfigurationHelper::openConfig(
-                                    xContext,
-                                    sModule,
-                                    ::comphelper::ConfigurationHelper::E_READONLY ),
-                                uno::UNO_QUERY );
-
-            //!! get values from configuration.
-            //!! we can't use SvtCTLOptions here since vcl must not be linked
-            //!! against svtools. (It is already the other way around.)
-            Any aCTLSequenceChecking                = ::comphelper::ConfigurationHelper::readRelativeKey( xModuleCfg, sRelNode, sCTLSequenceChecking );
-            Any aCTLSequenceCheckingRestricted      = ::comphelper::ConfigurationHelper::readRelativeKey( xModuleCfg, sRelNode, sCTLSequenceCheckingRestricted );
-            Any aCTLSequenceCheckingTypeAndReplace  = ::comphelper::ConfigurationHelper::readRelativeKey( xModuleCfg, sRelNode, sCTLSequenceCheckingTypeAndReplace );
-            Any aCTLFontEnabled                     = ::comphelper::ConfigurationHelper::readRelativeKey( xModuleCfg, sRelNode, sCTLFont );
-            aCTLSequenceChecking                >>= bCTLSequenceChecking;
-            aCTLSequenceCheckingRestricted      >>= bCTLSequenceCheckingRestricted;
-            aCTLSequenceCheckingTypeAndReplace  >>= bCTLSequenceCheckingTypeAndReplace;
-            aCTLFontEnabled                     >>= bCTLFontEnabled;
-        }
-        catch(...)
-        {
-            bIsInputSequenceChecking = false;   // continue with inserting the new text
-        }
-        //
         uno::Reference < i18n::XBreakIterator > xBI( ImplGetBreakIterator(), UNO_QUERY );
-        bIsInputSequenceChecking = rStr.getLength() == 1 &&
-                bCTLFontEnabled &&
-                bCTLSequenceChecking &&
+        bool bIsInputSequenceChecking = rStr.getLength() == 1 &&
+                officecfg::Office::Common::I18N::CTL::CTLFont::get() &&
+                officecfg::Office::Common::I18N::CTL::CTLSequenceChecking::get() &&
                 aSelection.Min() > 0 && /* first char needs not to be checked */
                 xBI.is() && i18n::ScriptType::COMPLEX == xBI->getScriptType( rStr, 0 );
 
@@ -957,14 +918,14 @@ void Edit::ImplInsertText( const OUString& rStr, const Selection* pNewSel, sal_B
         {
             sal_Unicode cChar = rStr[0];
             sal_Int32 nTmpPos = static_cast< sal_Int32 >( aSelection.Min() );
-            sal_Int16 nCheckMode = bCTLSequenceCheckingRestricted ?
+            sal_Int16 nCheckMode = officecfg::Office::Common::I18N::CTL::CTLSequenceCheckingRestricted::get()?
                     i18n::InputSequenceCheckMode::STRICT : i18n::InputSequenceCheckMode::BASIC;
 
             // the text that needs to be checked is only the one
             // before the current cursor position
             OUString aOldText( maText.getStr(), nTmpPos);
             OUString aTmpText( aOldText );
-            if (bCTLSequenceCheckingTypeAndReplace)
+            if (officecfg::Office::Common::I18N::CTL::CTLSequenceCheckingTypeAndReplace::get())
             {
                 xISC->correctInputSequence( aTmpText, nTmpPos - 1, cChar, nCheckMode );
 
