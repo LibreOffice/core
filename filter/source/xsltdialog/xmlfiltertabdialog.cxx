@@ -67,12 +67,12 @@ XMLFilterTabDialog::XMLFilterTabDialog( Window *pParent, ResMgr& rResMgr, const 
     maTabCtrl.SetActivatePageHdl( LINK( this, XMLFilterTabDialog, ActivatePageHdl ) );
     maTabCtrl.SetDeactivatePageHdl( LINK( this, XMLFilterTabDialog, DeactivatePageHdl ) );
 
-    mpBasicPage = new XMLFilterTabPageBasic( &maTabCtrl, mrResMgr );
+    mpBasicPage = new XMLFilterTabPageBasic(&maTabCtrl);
     mpBasicPage->SetInfo( mpNewInfo );
 
     maTabCtrl.SetTabPage( RID_XML_FILTER_TABPAGE_BASIC, mpBasicPage );
 
-    Size aSiz = mpBasicPage->GetSizePixel();
+    Size aSiz = mpBasicPage->GetOptimalSize();
     Size aCtrlSiz = maTabCtrl.GetTabPageSizePixel();
     // set size on TabControl only if smaller than TabPage
     if ( aCtrlSiz.Width() < aSiz.Width() || aCtrlSiz.Height() < aSiz.Height() )

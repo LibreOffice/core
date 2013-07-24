@@ -24,18 +24,15 @@
 #include "xmlfiltersettingsdialog.hxx"
 #include "xmlfilterhelpids.hrc"
 
-XMLFilterTabPageBasic::XMLFilterTabPageBasic( Window* pParent, ResMgr& rResMgr ) :
-    TabPage( pParent, "XmlFilterTabPageGeneral","filter/ui/xmlfiltertabpagegeneral.ui")
+XMLFilterTabPageBasic::XMLFilterTabPageBasic(Window* pParent)
+    : TabPage(pParent, "XmlFilterTabPageGeneral", "filter/ui/xmlfiltertabpagegeneral.ui")
 {
     get(m_pEDFilterName,   "filtername");
     get(m_pCBApplication,  "application");
     get(m_pEDInterfaceName,"interfacename");
     get(m_pEDExtension,    "extension");
     get(m_pEDDescription,  "description");
-
-    m_pCBApplication->SetHelpId( HID_XML_FILTER_APPLICATION );
-    m_pEDDescription->SetHelpId( HID_XML_FILTER_DESCRIPTION );
-
+    m_pEDDescription->set_height_request(m_pEDDescription->GetTextHeight() * 4);
 
     std::vector< application_info_impl* >& rInfos = getApplicationInfos();
     std::vector< application_info_impl* >::iterator aIter( rInfos.begin() );

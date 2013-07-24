@@ -32,7 +32,7 @@ class filter_info_impl;
 class XMLFilterTabPageBasic : public TabPage
 {
 public:
-    XMLFilterTabPageBasic( Window* pParent, ResMgr& rResMgr );
+    XMLFilterTabPageBasic(Window* pParent);
     virtual ~XMLFilterTabPageBasic();
 
     bool FillInfo( filter_info_impl* pInfo );
