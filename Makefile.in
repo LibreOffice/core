@@ -37,6 +37,7 @@ $(BUILDDIR)/config_host.mk : \
 		$(SRCDIR)/Makefile.in \
 		$(SRCDIR)/instsetoo_native/util/openoffice.lst.in \
 		$(SRCDIR)/configure.ac \
+		$(wildcard $(SRCDIR)/config_host/*.h.in) \
 		$(if $(wildcard $(BUILDDIR)/autogen.input),$(BUILDDIR)/autogen.input,$(if $(wildcard $(BUILDDIR)/autogen.lastrun),$(BUILDDIR)/autogen.lastrun))
 	$(SRCDIR)/autogen.sh
 
