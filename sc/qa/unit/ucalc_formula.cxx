@@ -907,6 +907,28 @@ void Test::testFormulaRefUpdateMove()
     if (!checkFormula(*m_pDoc, ScAddress(1,12,0), "$D$6"))
         CPPUNIT_FAIL("Wrong formula.");
 
+    // The value cells are in D4:D6. Push D4:D5 to the right but leave D6
+    // where it is.
+    m_pDoc->InsertCol(ScRange(3,0,0,3,4,0));
+
+    // Only the values of B10 and B11 should be updated.
+    CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(1,9,0));
+    CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(1,10,0));
+    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(1,11,0));
+    CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(1,12,0));
+
+    if (!checkFormula(*m_pDoc, ScAddress(1,9,0), "SUM(D4:D6)"))
+        CPPUNIT_FAIL("Wrong formula.");
+
+    if (!checkFormula(*m_pDoc, ScAddress(1,10,0), "SUM($D$4:$D$6)"))
+        CPPUNIT_FAIL("Wrong formula.");
+
+    if (!checkFormula(*m_pDoc, ScAddress(1,11,0), "E5"))
+        CPPUNIT_FAIL("Wrong formula.");
+
+    if (!checkFormula(*m_pDoc, ScAddress(1,12,0), "$D$6"))
+        CPPUNIT_FAIL("Wrong formula.");
+
     m_pDoc->DeleteTab(0);
 }
 
