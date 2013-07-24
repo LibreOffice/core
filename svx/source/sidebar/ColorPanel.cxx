@@ -50,34 +50,6 @@ ColorPanel::~ColorPanel (void)
 {
 }
 
-
-
-
-sal_Int32 ColorPanel::GetPreferredHeight (sal_Int32 nWidth)
-{
-    sal_Int32 nPreferredHeight = 0;
-    if (GetItemCount()>0)
-    {
-        Image aImage = GetItemImage(GetItemId(0));
-        Size aItemSize = CalcItemSizePixel (aImage.GetSizePixel());
-        if (nWidth>0 && aItemSize.Width()>0)
-        {
-            int nColumnCount = nWidth / aItemSize.Width();
-            if (nColumnCount <= 0)
-                nColumnCount = 1;
-            else if (nColumnCount > 4)
-                nColumnCount = 4;
-            int nRowCount = (GetItemCount() + nColumnCount-1)
-                / nColumnCount;
-            nPreferredHeight = nRowCount * aItemSize.Height();
-        }
-    }
-    return nPreferredHeight;
-}
-
-
-
-
 void ColorPanel::Resize (void)
 {
     ::Window::Resize();

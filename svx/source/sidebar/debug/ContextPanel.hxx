@@ -36,9 +36,6 @@ public:
     ContextPanel (::Window* pParent);
     virtual ~ContextPanel (void);
 
-    // From Window
-    sal_Int32 GetPreferredHeight (sal_Int32 nWidth);
-
     // From IContextChangeReceiverInterface
     virtual void HandleContextChange (const ::sfx2::sidebar::EnumContext aContext);
 

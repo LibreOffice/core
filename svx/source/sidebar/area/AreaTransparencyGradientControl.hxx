@@ -37,7 +37,6 @@ public:
         AreaPropertyPanel& rPanel);
     virtual ~AreaTransparencyGradientControl (void);
 
-    void ToGetFocus();
     void Rearrange(XFillFloatTransparenceItem* pGradientItem);
     void InitStatus(XFillFloatTransparenceItem* pGradientItem);
     void ExecuteValueModify( sal_uInt8 nStartCol, sal_uInt8 nEndCol );

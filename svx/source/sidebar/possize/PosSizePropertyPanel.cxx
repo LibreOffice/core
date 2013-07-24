@@ -119,20 +119,6 @@ PosSizePropertyPanel::~PosSizePropertyPanel()
 {
 }
 
-
-
-void PosSizePropertyPanel::ShowMenu (void)
-{
-    if (mpBindings != NULL)
-    {
-        SfxDispatcher* pDispatcher = mpBindings->GetDispatcher();
-        if (pDispatcher != NULL)
-            pDispatcher->Execute(SID_ATTR_TRANSFORM, SFX_CALLMODE_ASYNCHRON);
-    }
-}
-
-
-
 namespace
 {
     bool hasText(const SdrView& rSdrView)

@@ -40,25 +40,10 @@ ContextPanel::~ContextPanel (void)
 {
 }
 
-
-
-
-sal_Int32 ContextPanel::GetPreferredHeight (sal_Int32 /*nWidth*/)
-{
-    const sal_Int32 nHeight (maContextName.GetPosPixel().Y() + maContextName.GetSizePixel().Height() + 5);
-    return nHeight;
-}
-
-
-
-
 void ContextPanel::HandleContextChange (const sfx2::sidebar::EnumContext aContext)
 {
     maApplicationName.SetText(aContext.GetApplicationName());
     maContextName.SetText(aContext.GetContextName());
 }
-
-
-
 
 } } // end of namespace ::svx::sidebar

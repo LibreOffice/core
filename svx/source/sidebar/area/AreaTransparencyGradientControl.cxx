@@ -111,20 +111,6 @@ AreaTransparencyGradientControl::~AreaTransparencyGradientControl (void)
 {
 }
 
-
-
-
-void AreaTransparencyGradientControl::ToGetFocus()
-{
-    if(maMtrTrgrCenterX.IsVisible())
-        maMtrTrgrCenterX.GrabFocus();
-    else
-        maMtrTrgrAngle.GrabFocus();
-}
-
-
-
-
 void AreaTransparencyGradientControl::Rearrange(XFillFloatTransparenceItem* pGradientItem)
 {
     InitStatus(pGradientItem);
