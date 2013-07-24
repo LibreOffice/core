@@ -3116,6 +3116,10 @@ void RtfAttributeOutput::FormatFrameDirection( const SvxFrameDirectionItem& rDir
     }
 }
 
+void RtfAttributeOutput::ParaGrabBag(const SfxGrabBagItem& /*rItem*/)
+{
+}
+
 void RtfAttributeOutput::WriteExpand( const SwField* pFld )
 {
     SAL_INFO("sw.rtf", OSL_THIS_FUNC);

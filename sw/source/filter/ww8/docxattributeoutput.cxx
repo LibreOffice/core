@@ -73,6 +73,7 @@
 #include <svx/svdobj.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/xflgrit.hxx>
+#include <svl/grabbagitem.hxx>
 #include <sfx2/sfxbasemodel.hxx>
 
 #include <anchoredobject.hxx>
@@ -5218,6 +5219,18 @@ void DocxAttributeOutput::FormatFrameDirection( const SvxFrameDirectionItem& rDi
     {
         if ( bBiDi )
             m_pSerializer->singleElementNS( XML_w, XML_bidi, FSNS( XML_w, XML_val ), "1", FSEND );
+    }
+}
+
+void DocxAttributeOutput::ParaGrabBag(const SfxGrabBagItem& rItem)
+{
+    const std::map<OUString, com::sun::star::uno::Any>& rMap = rItem.GetGrabBag();
+    for (std::map<OUString, com::sun::star::uno::Any>::const_iterator i = rMap.begin(); i != rMap.end(); ++i)
+    {
+        if (i->first == "MirrorIndents")
+            m_pSerializer->singleElementNS(XML_w, XML_mirrorIndents, FSEND);
+        else
+            SAL_INFO("sw.ww8", "DocxAttributeOutput::ParaGrabBag: unhandled grab bag property " << i->first);
     }
 }
 

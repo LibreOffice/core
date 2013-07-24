@@ -383,6 +383,9 @@ protected:
     /// Sfx item RES_FRAMEDIR
     virtual void FormatFrameDirection( const SvxFrameDirectionItem& );
 
+    /// Sfx item RES_PARATR_GRABBAG
+    virtual void ParaGrabBag( const SfxGrabBagItem& );
+
     /// Write the expanded field
     virtual void WriteExpand( const SwField* pFld );
 

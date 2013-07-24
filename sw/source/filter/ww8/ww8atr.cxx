@@ -30,6 +30,7 @@
 #include <svl/zformat.hxx>
 #include <svl/itemiter.hxx>
 #include <svl/whiter.hxx>
+#include <svl/grabbagitem.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/tstpitem.hxx>
 #include <editeng/adjustitem.hxx>
@@ -4708,6 +4709,10 @@ void WW8AttributeOutput::FormatFrameDirection( const SvxFrameDirectionItem& rDir
     }
 }
 
+void WW8AttributeOutput::ParaGrabBag(const SfxGrabBagItem& /*rItem*/)
+{
+}
+
 // "Separate paragraphs"
 void WW8AttributeOutput::ParaSplit( const SvxFmtSplitItem& rSplit )
 {
@@ -5242,6 +5247,9 @@ void AttributeOutputBase::OutputItem( const SfxPoolItem& rHt )
             break;
         case RES_FRAMEDIR:
             FormatFrameDirection( static_cast< const SvxFrameDirectionItem& >( rHt ) );
+            break;
+        case RES_PARATR_GRABBAG:
+            ParaGrabBag(static_cast<const SfxGrabBagItem&>(rHt));
             break;
 
         default:
