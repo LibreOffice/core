@@ -237,6 +237,24 @@ void OutputDevice::ImplUpdateAllFontData( bool bNewFontLists )
 {
     ImplSVData* pSVData = ImplGetSVData();
 
+    // clear global font lists to have them updated
+    pSVData->maGDIData.mpScreenFontCache->Invalidate();
+    if ( bNewFontLists )
+    {
+        pSVData->maGDIData.mpScreenFontList->Clear();
+        Window * pFrame = pSVData->maWinData.mpFirstFrame;
+        if ( pFrame )
+        {
+            if ( pFrame->ImplGetGraphics() )
+            {
+                // Stupid typecast here and somewhere ((OutputDevice*)&aVDev)->, because bug in .NET2002 compiler
+                OutputDevice *pDevice = (OutputDevice*)pFrame;
+                pDevice->mpGraphics->ClearDevFontCache();
+                pDevice->mpGraphics->GetDevFontList(pFrame->mpWindowImpl->mpFrameData->mpFontList);
+            }
+        }
+    }
+
     // update all windows
     Window* pFrame = pSVData->maWinData.mpFirstFrame;
     while ( pFrame )
@@ -267,24 +285,6 @@ void OutputDevice::ImplUpdateAllFontData( bool bNewFontLists )
     {
         pPrinter->ImplUpdateFontData( bNewFontLists );
         pPrinter = pPrinter->mpNext;
-    }
-
-    // clear global font lists to have them updated
-    pSVData->maGDIData.mpScreenFontCache->Invalidate();
-    if ( bNewFontLists )
-    {
-        pSVData->maGDIData.mpScreenFontList->Clear();
-        pFrame = pSVData->maWinData.mpFirstFrame;
-        if ( pFrame )
-        {
-            if ( pFrame->ImplGetGraphics() )
-            {
-                // Stupid typecast here and somewhere ((OutputDevice*)&aVDev)->, because bug in .NET2002 compiler
-                OutputDevice *pDevice = (OutputDevice*)pFrame;
-                pDevice->mpGraphics->ClearDevFontCache();
-                pDevice->mpGraphics->GetDevFontList(pFrame->mpWindowImpl->mpFrameData->mpFontList);
-            }
-        }
     }
 }
 
