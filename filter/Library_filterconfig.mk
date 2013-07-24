@@ -23,6 +23,8 @@ $(eval $(call gb_Library_set_componentfile,filterconfig,filter/source/config/cac
 
 $(eval $(call gb_Library_use_external,filterconfig,boost_headers))
 
+$(eval $(call gb_Library_use_custom_headers,filterconfig,officecfg/registry))
+
 $(eval $(call gb_Library_use_sdk_api,filterconfig))
 
 $(eval $(call gb_Library_set_include,filterconfig,\

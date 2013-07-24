@@ -165,9 +165,7 @@
 #define  CFGPACKAGE_TD_TYPES           _FILTER_CONFIG_FROM_ASCII_("/org.openoffice.TypeDetection.Types" )
 #define  CFGPACKAGE_TD_FILTERS         _FILTER_CONFIG_FROM_ASCII_("/org.openoffice.TypeDetection.Filter")
 #define  CFGPACKAGE_TD_OTHERS          _FILTER_CONFIG_FROM_ASCII_("/org.openoffice.TypeDetection.Misc"  )
-#define  CFGPACKAGE_TD_UISORT          _FILTER_CONFIG_FROM_ASCII_("/org.openoffice.TypeDetection.UISort/ModuleDependendFilterOrder")
 #define  CFGPACKAGE_TD_OLD             _FILTER_CONFIG_FROM_ASCII_("/org.openoffice.Office.TypeDetection")
-#define  CFGPACKAGE_OOO_MODULES        _FILTER_CONFIG_FROM_ASCII_("/org.openoffice.Setup/Office/Factories")
 
 /** @short  some default values.
  */
