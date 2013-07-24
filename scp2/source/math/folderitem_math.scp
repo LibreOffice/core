@@ -33,7 +33,7 @@ End
 
 FolderItemProperty git_Folderitem_Smath_AppIDProperty
     ShortcutID = gid_Folderitem_Smath;
-    Key = "System.AppUserModel.ID"
-    Value = "TheDocumentFoundation.LibreOffice.Math"
+    Key = "System.AppUserModel.ID";
+    Value = "TheDocumentFoundation.LibreOffice.Math";
 End
 #endif
