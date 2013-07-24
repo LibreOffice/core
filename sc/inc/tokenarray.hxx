@@ -129,6 +129,9 @@ public:
      */
     sc::RefUpdateResult AdjustReferenceOnShift( const sc::RefUpdateContext& rCxt, const ScAddress& rOldPos );
 
+    sc::RefUpdateResult AdjustReferenceOnMove(
+        const sc::RefUpdateContext& rCxt, const ScAddress& rOldPos, const ScAddress& rNewPos );
+
     /**
      * Adjust all references on sheet deletion.
      *

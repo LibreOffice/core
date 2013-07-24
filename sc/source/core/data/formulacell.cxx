@@ -2365,7 +2365,6 @@ bool ScFormulaCell::UpdateReferenceOnMove(
         aOldPos.Set(aPos.Col() - rCxt.mnColDelta, aPos.Row() - rCxt.mnRowDelta, aPos.Tab() - rCxt.mnTabDelta);
     }
 
-
     // Check presence of any references or column row names.
     pCode->Reset();
     bool bHasRefs = (pCode->GetNextReferenceRPN() != NULL);
@@ -2389,22 +2388,19 @@ bool ScFormulaCell::UpdateReferenceOnMove(
         pOldCode.reset(pCode->Clone());
 
     bool bValChanged = false;
-    bool bRangeModified = false;    // any range, not only shared formula
+    bool bRefModified = false;
     bool bRefSizeChanged = false;
 
     if (bHasRefs)
     {
         // Update cell or range references.
-        ScCompiler aComp(pDocument, aPos, *pCode);
-        aComp.SetGrammar(pDocument->GetGrammar());
-        aComp.UpdateReference(
-            URM_MOVE, aOldPos, rCxt.maRange,
-            rCxt.mnColDelta, rCxt.mnRowDelta, rCxt.mnTabDelta,
-            bValChanged, bRefSizeChanged);
-        bRangeModified = aComp.HasModifiedRange();
+        sc::RefUpdateResult aRes = pCode->AdjustReferenceOnMove(rCxt, aOldPos, aPos);
+        bRefModified = aRes.mbReferenceModified;
+        bValChanged = aRes.mbValueChanged;
     }
 
-    bCellStateChanged |= bValChanged;
+    if (bValChanged || bRefModified)
+        bCellStateChanged = true;
 
     if (bOnRefMove)
         // Cell may reference itself, e.g. ocColumn, ocRow without parameter
@@ -2429,7 +2425,7 @@ bool ScFormulaCell::UpdateReferenceOnMove(
         bHasRelName = HasRelNameReference();
         // Reference changed and new listening needed?
         // Except in Insert/Delete without specialties.
-        bNewListening = (bRangeModified || bColRowNameCompile
+        bNewListening = (bRefModified || bColRowNameCompile
                 || bValChanged || bHasRelName)
             // #i36299# Don't duplicate action during cut&paste / drag&drop
             // on a cell in the range moved, start/end listeners is done
@@ -2442,7 +2438,7 @@ bool ScFormulaCell::UpdateReferenceOnMove(
 
     bool bNeedDirty = false;
     // NeedDirty for changes except for Copy and Move/Insert without RelNames
-    if ( bRangeModified || bColRowNameCompile ||
+    if ( bRefModified || bColRowNameCompile ||
          (bValChanged && bHasRelName && (bHasRelName || bInDeleteUndo || bRefSizeChanged)) || bOnRefMove)
         bNeedDirty = true;
 
@@ -2451,7 +2447,7 @@ bool ScFormulaCell::UpdateReferenceOnMove(
 
     bValChanged = false;
 
-    if ( ( bCompile = (bCompile || bValChanged || bRangeModified || bColRowNameCompile) ) != 0 )
+    if ( ( bCompile = (bCompile || bValChanged || bRefModified || bColRowNameCompile) ) != 0 )
     {
         CompileTokenArray( bNewListening ); // no Listening
         bNeedDirty = true;

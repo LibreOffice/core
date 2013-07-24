@@ -2472,6 +2472,58 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnShift( const sc::RefUpdateCon
     return aRes;
 }
 
+sc::RefUpdateResult ScTokenArray::AdjustReferenceOnMove(
+    const sc::RefUpdateContext& rCxt, const ScAddress& rOldPos, const ScAddress& rNewPos )
+{
+    // When moving, the range is the destination range. We need to use the old
+    // range prior to the move for hit analysis.
+    ScRange aOldRange = rCxt.maRange;
+    aOldRange.Move(-rCxt.mnColDelta, -rCxt.mnRowDelta, -rCxt.mnTabDelta);
+
+    sc::RefUpdateResult aRes;
+
+    FormulaToken** p = pCode;
+    FormulaToken** pEnd = p + static_cast<size_t>(nLen);
+    for (; p != pEnd; ++p)
+    {
+        switch ((*p)->GetType())
+        {
+            case svSingleRef:
+            {
+                ScToken* pToken = static_cast<ScToken*>(*p);
+                ScSingleRefData& rRef = pToken->GetSingleRef();
+                ScAddress aAbs = rRef.toAbs(rOldPos);
+                if (aOldRange.In(aAbs))
+                {
+                    aAbs.Move(rCxt.mnColDelta, rCxt.mnRowDelta, rCxt.mnTabDelta);
+                    aRes.mbReferenceModified = true;
+                }
+
+                rRef.SetAddress(aAbs, rNewPos);
+            }
+            break;
+            case svDoubleRef:
+            {
+                ScToken* pToken = static_cast<ScToken*>(*p);
+                ScComplexRefData& rRef = pToken->GetDoubleRef();
+                ScRange aAbs = rRef.toAbs(rOldPos);
+                if (aOldRange.In(aAbs))
+                {
+                    aAbs.Move(rCxt.mnColDelta, rCxt.mnRowDelta, rCxt.mnTabDelta);
+                    aRes.mbReferenceModified = true;
+                }
+
+                rRef.SetRange(aAbs, rNewPos);
+            }
+            break;
+            default:
+                ;
+        }
+    }
+
+    return aRes;
+}
+
 namespace {
 
 bool adjustSingleRef( ScSingleRefData& rRef, SCTAB nDelPos, SCTAB nSheets, const ScAddress& rOldPos, const ScAddress& rNewPos )
