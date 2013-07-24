@@ -113,26 +113,56 @@ static bool AquaGetScrollRect( /* TODO: int nScreen, */  ControlPart nPart,
     switch( nPart )
     {
         case PART_BUTTON_UP:
-            if( GetSalData()->mbIsScrollbarDoubleMax )
-                rResultRect.Top() = rControlRect.Bottom() - 2*BUTTON_HEIGHT;
-            rResultRect.Bottom() = rResultRect.Top() + BUTTON_HEIGHT;
+            if (NSAppKitVersionNumber < NSAppKitVersionNumber10_7)
+            {
+                if( GetSalData()->mbIsScrollbarDoubleMax )
+                    rResultRect.Top() = rControlRect.Bottom() - 2*BUTTON_HEIGHT;
+                rResultRect.Bottom() = rResultRect.Top() + BUTTON_HEIGHT;
+            }
+            else
+            {
+                rResultRect.Bottom() = rResultRect.Top();
+            }
             break;
 
         case PART_BUTTON_DOWN:
-            rResultRect.Top() = rControlRect.Bottom() - BUTTON_HEIGHT;
+            if (NSAppKitVersionNumber < NSAppKitVersionNumber10_7)
+            {
+                rResultRect.Top() = rControlRect.Bottom() - BUTTON_HEIGHT;
+            }
+            else
+            {
+                rResultRect.Top() = rResultRect.Bottom();
+            }
             break;
 
         case PART_BUTTON_LEFT:
-            if( GetSalData()->mbIsScrollbarDoubleMax )
-                rResultRect.Left() = rControlRect.Right() - 2*BUTTON_WIDTH;
-            rResultRect.Right() = rResultRect.Left() + BUTTON_WIDTH;
+            if (NSAppKitVersionNumber < NSAppKitVersionNumber10_7)
+            {
+                if( GetSalData()->mbIsScrollbarDoubleMax )
+                    rResultRect.Left() = rControlRect.Right() - 2*BUTTON_WIDTH;
+                rResultRect.Right() = rResultRect.Left() + BUTTON_WIDTH;
+            }
+            else
+            {
+                rResultRect.Right() = rResultRect.Left();
+            }
             break;
 
         case PART_BUTTON_RIGHT:
-            rResultRect.Left() = rControlRect.Right() - BUTTON_WIDTH;
+            if (NSAppKitVersionNumber < NSAppKitVersionNumber10_7)
+            {
+                rResultRect.Left() = rControlRect.Right() - BUTTON_WIDTH;
+            }
+            else
+            {
+                rResultRect.Left() = rResultRect.Right();
+            }
             break;
 
         case PART_TRACK_HORZ_AREA:
+            if (NSAppKitVersionNumber >= NSAppKitVersionNumber10_7)
+                break;
             rResultRect.Right() -= BUTTON_WIDTH + 1;
             if( GetSalData()->mbIsScrollbarDoubleMax )
                 rResultRect.Right() -= BUTTON_WIDTH;
@@ -141,6 +171,8 @@ static bool AquaGetScrollRect( /* TODO: int nScreen, */  ControlPart nPart,
             break;
 
         case PART_TRACK_VERT_AREA:
+            if (NSAppKitVersionNumber >= NSAppKitVersionNumber10_7)
+                break;
             rResultRect.Bottom() -= BUTTON_HEIGHT + 1;
             if( GetSalData()->mbIsScrollbarDoubleMax )
                 rResultRect.Bottom() -= BUTTON_HEIGHT;
@@ -148,6 +180,8 @@ static bool AquaGetScrollRect( /* TODO: int nScreen, */  ControlPart nPart,
                 rResultRect.Top() += BUTTON_HEIGHT + 1;
             break;
         case PART_THUMB_HORZ:
+            if (NSAppKitVersionNumber >= NSAppKitVersionNumber10_7)
+                break;
             if( GetSalData()->mbIsScrollbarDoubleMax )
             {
                 rResultRect.Left() += 8;
@@ -160,6 +194,8 @@ static bool AquaGetScrollRect( /* TODO: int nScreen, */  ControlPart nPart,
             }
             break;
         case PART_THUMB_VERT:
+            if (NSAppKitVersionNumber >= NSAppKitVersionNumber10_7)
+                break;
             if( GetSalData()->mbIsScrollbarDoubleMax )
             {
                 rResultRect.Top() += 8;
@@ -172,24 +208,32 @@ static bool AquaGetScrollRect( /* TODO: int nScreen, */  ControlPart nPart,
             }
             break;
         case PART_TRACK_HORZ_LEFT:
+            if (NSAppKitVersionNumber >= NSAppKitVersionNumber10_7)
+                break;
             if( GetSalData()->mbIsScrollbarDoubleMax )
                 rResultRect.Right() += 8;
             else
                 rResultRect.Right() += 4;
             break;
         case PART_TRACK_HORZ_RIGHT:
+            if (NSAppKitVersionNumber >= NSAppKitVersionNumber10_7)
+                break;
             if( GetSalData()->mbIsScrollbarDoubleMax )
                 rResultRect.Left() += 6;
             else
                 rResultRect.Left() += 4;
             break;
         case PART_TRACK_VERT_UPPER:
+            if (NSAppKitVersionNumber >= NSAppKitVersionNumber10_7)
+                break;
             if( GetSalData()->mbIsScrollbarDoubleMax )
                 rResultRect.Bottom() += 8;
             else
                 rResultRect.Bottom() += 4;
             break;
         case PART_TRACK_VERT_LOWER:
+            if (NSAppKitVersionNumber >= NSAppKitVersionNumber10_7)
+                break;
             if( GetSalData()->mbIsScrollbarDoubleMax )
                 rResultRect.Top() += 8;
             else
@@ -351,7 +395,8 @@ sal_Bool AquaSalGraphics::hitTestNativeControl( ControlType nType, ControlPart n
         Rectangle aRect;
         bool bValid = AquaGetScrollRect( /* TODO: m_nScreen */ nPart, rControlRegion, aRect );
         rIsInside = bValid ? aRect.IsInside( rPos ) : sal_False;
-        if( GetSalData()->mbIsScrollbarDoubleMax )
+        if( NSAppKitVersionNumber < NSAppKitVersionNumber10_7 &&
+            GetSalData()->mbIsScrollbarDoubleMax )
         {
             // in double max mode the actual trough is a little smaller than the track
             // there is some visual filler that is not sensitive
