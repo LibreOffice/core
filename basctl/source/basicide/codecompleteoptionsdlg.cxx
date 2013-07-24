@@ -40,9 +40,9 @@ CodeCompleteOptionsDlg::CodeCompleteOptionsDlg( Window* pWindow )
     pOkBtn->SetClickHdl( LINK( this, CodeCompleteOptionsDlg, OkHdl ) );
     pCancelBtn->SetClickHdl( LINK( this, CodeCompleteOptionsDlg, CancelHdl ) );
 
-    pCodeCompleteChk->Check(CodeCompleteOptions::IsCodeCompleteOn()); //set it on, if needed
+    pCodeCompleteChk->Check( CodeCompleteOptions::IsCodeCompleteOn() );
+    pAutocloseProcChk->Check( CodeCompleteOptions::IsProcedureAutoCompleteOn() );
 
-    pAutocloseProcChk->Enable( false );
     pAutocloseBracesChk->Enable( false );
     pAutocloseQuotesChk->Enable( false );
 }
@@ -54,6 +54,7 @@ CodeCompleteOptionsDlg::~CodeCompleteOptionsDlg()
 IMPL_LINK_NOARG(CodeCompleteOptionsDlg, OkHdl)
 {
     CodeCompleteOptions::SetCodeCompleteOn( pCodeCompleteChk->IsChecked() );
+    CodeCompleteOptions::SetProcedureAutoCompleteOn( pCodeCompleteChk->IsChecked() );
     Close();
     return 0;
 }

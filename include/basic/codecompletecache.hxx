@@ -33,6 +33,7 @@ typedef boost::unordered_map< OUString, OUString, OUStringHash > CodeCompleteVar
 typedef boost::unordered_map< OUString, CodeCompleteVarTypes, OUStringHash > CodeCompleteVarScopes;
 /* procedure, CodeCompleteVarTypes */
 
+
 class BASIC_DLLPUBLIC CodeCompleteOptions
 {
 /*
@@ -63,11 +64,9 @@ class BASIC_DLLPUBLIC CodeCompleteDataCache
  * */
 private:
     CodeCompleteVarScopes aVarScopes;
+    CodeCompleteVarTypes aGlobalVars;
 
 public:
-    static const OUString GLOB_KEY;
-    static const OUString NOT_FOUND;
-
     CodeCompleteDataCache(){}
     virtual ~CodeCompleteDataCache(){}
 
@@ -76,9 +75,11 @@ public:
     void SetVars( const CodeCompleteVarScopes& aScopes );
     const CodeCompleteVarScopes& GetVars() const;
 
-    void InsertProcedure( const OUString& sProcName, const CodeCompleteVarTypes& aVarTypes );
-    OUString GetVariableType( const OUString& sVarName, const OUString& sProcName ) const;
+    void InsertGlobalVar( const OUString& sVarName, const OUString& sVarType );
+    void InsertLocalVar( const OUString& sProcName, const OUString& sVarName, const OUString& sVarType );
+    OUString GetVarType( const OUString& sVarName );
     void print() const; // wrapper for operator<<, prints to std::cerr
+    void Clear();
 };
 
 #endif // CODECOMPLETECACHE_H

@@ -508,10 +508,11 @@ void EditorWindow::KeyInput( const KeyEvent& rKEvt )
     if( rKEvt.GetKeyCode().GetCode() == KEY_POINT && CodeCompleteOptions::IsCodeCompleteOn() )
     {
         rModulWindow.UpdateModule();
+        rModulWindow.GetSbModule()->GetCodeCompleteDataFromParse(aCodeCompleteCache);
         TextSelection aSel = GetEditView()->GetSelection();
         sal_uLong nLine =  aSel.GetStart().GetPara();
         OUString aLine( pEditEngine->GetText( nLine ) ); // the line being modified
-        OUString sActSub = GetActualSubName( nLine );
+        //OUString sActSub = GetActualSubName( nLine );
         std::vector< OUString > aVect;
 
         HighlightPortions aPortions;
@@ -523,9 +524,7 @@ void EditorWindow::KeyInput( const KeyEvent& rKEvt )
                 aVect.push_back( aLine.copy(r.nBegin, r.nEnd - r.nBegin) );
         }
         OUString sBaseName = aVect[0];//variable name
-        OUString sVarType = aCodeCompleteCache.GetVariableType(sBaseName, CodeCompleteDataCache::GLOB_KEY);
-        if( sVarType == CodeCompleteDataCache::NOT_FOUND )
-            sVarType = aCodeCompleteCache.GetVariableType(sBaseName, sActSub);
+        OUString sVarType = aCodeCompleteCache.GetVarType( sBaseName );
 
         Reference< lang::XMultiServiceFactory > xFactory( comphelper::getProcessServiceFactory(), UNO_SET_THROW );
         Reference< reflection::XIdlReflection > xRefl( xFactory->createInstance("com.sun.star.reflection.CoreReflection"), UNO_QUERY_THROW );
@@ -833,20 +832,10 @@ void EditorWindow::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
         {
             ParagraphInsertedDeleted( rTextHint.GetValue(), true );
             DoDelayedSyntaxHighlight( rTextHint.GetValue() );
-            if( CodeCompleteOptions::IsCodeCompleteOn() )
-            {
-                rModulWindow.UpdateModule();
-                aCodeCompleteCache.SetVars(rModulWindow.GetSbModule()->GetCodeCompleteDataFromParse().GetVars());
-            }
         }
         else if( rTextHint.GetId() == TEXT_HINT_PARAREMOVED )
         {
             ParagraphInsertedDeleted( rTextHint.GetValue(), false );
-            if( CodeCompleteOptions::IsCodeCompleteOn() )
-            {
-                rModulWindow.UpdateModule();
-                aCodeCompleteCache.SetVars(rModulWindow.GetSbModule()->GetCodeCompleteDataFromParse().GetVars());
-            }
         }
         else if( rTextHint.GetId() == TEXT_HINT_PARACONTENTCHANGED )
         {
@@ -859,11 +848,6 @@ void EditorWindow::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                 pBindings->Invalidate( SID_CUT );
                 pBindings->Invalidate( SID_COPY );
             }
-        }
-        else if( rTextHint.GetId() == TEXT_HINT_MODIFIED && CodeCompleteOptions::IsCodeCompleteOn() )
-        {
-            rModulWindow.UpdateModule();
-            aCodeCompleteCache.SetVars(rModulWindow.GetSbModule()->GetCodeCompleteDataFromParse().GetVars());
         }
     }
 }
@@ -882,12 +866,11 @@ OUString EditorWindow::GetActualSubName( sal_uLong nLine )
             pMeth->GetLineRange(l1,l2);
             if( (l1 <= nLine+1) && (nLine+1 <= l2) )
             {
-                //std::cerr << "sName: " << sName << std::endl;
                 return sName;
             }
         }
     }
-    return CodeCompleteDataCache::GLOB_KEY;
+    return OUString("");
 }
 
 void EditorWindow::SetScrollBarRanges()
@@ -2380,7 +2363,7 @@ IMPL_LINK_NOARG(CodeCompleteListBox, ImplDoubleClickHdl)
 
 void CodeCompleteListBox::InsertSelectedEntry()
 {
-    if( aFuncBuffer.toString() != OUString("") )
+    if( !aFuncBuffer.toString().isEmpty() )
     {
         // if the user typed in something: remove, and insert
         TextPaM aEnd(pCodeCompleteWindow->aTextSelection.GetEnd().GetPara(), pCodeCompleteWindow->GetTextSelection().GetEnd().GetIndex() + aFuncBuffer.getLength());
@@ -2388,7 +2371,7 @@ void CodeCompleteListBox::InsertSelectedEntry()
         pCodeCompleteWindow->pParent->GetEditView()->SetSelection(TextSelection(aStart, aEnd));
         pCodeCompleteWindow->pParent->GetEditView()->DeleteSelected();
 
-        if( GetEntry( GetSelectEntryPos() ) != OUString("") )
+        if( !((OUString) GetEntry( GetSelectEntryPos() )).isEmpty() )
         {//if the user selected something
             pCodeCompleteWindow->pParent->GetEditView()->InsertText( (OUString) GetEntry(GetSelectEntryPos()), sal_True );
             pCodeCompleteWindow->Hide();
@@ -2404,7 +2387,7 @@ void CodeCompleteListBox::InsertSelectedEntry()
     }
     else
     {
-        if( GetEntry( GetSelectEntryPos() ) != OUString("") )
+        if( !((OUString) GetEntry( GetSelectEntryPos() )).isEmpty() )
         {//if the user selected something
             pCodeCompleteWindow->pParent->GetEditView()->InsertText( (OUString) GetEntry(GetSelectEntryPos()), sal_True );
             pCodeCompleteWindow->Hide();
@@ -2433,9 +2416,6 @@ long CodeCompleteListBox::PreNotify( NotifyEvent& rNEvt )
             {
                 case KEY_ESCAPE: // hide, do nothing
                     pCodeCompleteWindow->ClearAndHide();
-                    /*pCodeCompleteWindow->Hide();
-                    pCodeCompleteWindow->pParent->GetEditView()->SetSelection( pCodeCompleteWindow->pParent->GetEditView()->CursorEndOfLine(pCodeCompleteWindow->GetTextSelection().GetStart()) );
-                    //pCodeCompleteWindow->pParent->GrabFocus();*/
                     return 0;
                 case KEY_TAB: case KEY_SPACE:
                 /* space, tab the user probably have typed in the whole
@@ -2528,7 +2508,7 @@ void CodeCompleteWindow::ResizeListBox()
                 aLongestEntry = pListBox->GetEntry( i );
         }
 
-        Size aSize = pListBox->GetOptimalSize();
+        Size aSize = pListBox->CalcSize( aLongestEntry.getLength(), std::min( (sal_uInt16) 4, pListBox->GetEntryCount()) );
         const Font& aFont = pListBox->GetUnzoomedControlPointFont();
 
         aSize.setHeight( aFont.GetSize().getHeight() * 16 );

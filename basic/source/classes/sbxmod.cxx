@@ -90,9 +90,6 @@ typedef ::std::map< sal_Int16, Any, ::std::less< sal_Int16 > > OutParamMap;
 ::com::sun::star::uno::Any sbxToUnoValue( SbxVariable* pVar );
 void unoToSbxValue( SbxVariable* pVar, const ::com::sun::star::uno::Any& aValue );
 
-/*const OUString CodeCompleteDataCache::GLOB_KEY = OUString("global key");
-const OUString CodeCompleteDataCache::NOT_FOUND = OUString("not found");*/
-
 class DocObjectWrapper : public DocObjectWrapper_BASE
 {
     Reference< XAggregation >  m_xAggProxy;
@@ -672,7 +669,6 @@ void SbModule::EndDefinitions( sal_Bool bNewState )
         {
             if( p->bInvalid )
             {
-                std::cerr << "invalid definition: " << p->GetName() << std::endl;
                 pMethods->Remove( p );
             }
             else
@@ -941,12 +937,15 @@ void SbModule::SetSource32( const OUString& r )
         }
         // Definition of the method
         SbMethod* pMeth = NULL;
+        OUString sMethName;
         if( eEndTok != NIL )
         {
             sal_uInt16 nLine1 = aTok.GetLine();
             if( aTok.Next() == SYMBOL )
             {
                 OUString aName_( aTok.GetSym() );
+                //std::cerr << "method name: " << aName_ << std::endl;
+                sMethName = aName_;
                 SbxDataType t = aTok.GetType();
                 if( t == SbxVARIANT && eEndTok == ENDSUB )
                 {
@@ -970,12 +969,25 @@ void SbModule::SetSource32( const OUString& r )
                 if( aTok.Next() == eEndTok )
                 {
                     pMeth->nLine2 = aTok.GetLine();
+                    //std::cerr << "there is end for "<< sMethName << std::endl;
                     break;
                 }
             }
             if( aTok.IsEof() )
             {
                 pMeth->nLine2 = aTok.GetLine();
+                std::cerr << "EOF reached, no end for "<< sMethName <<", line " << aTok.GetLine() << std::endl;
+                //std::cerr << "write end to: " << aOUSource.getLength() / pMeth->nLine2 << std::endl;
+                sal_Int32 nPos=0;
+                sal_Int32 nCounter = 0;
+                std::cerr << "source length: " << aOUSource.getLength() << std::endl;
+                for(sal_uInt32 i=0; i < aOUSource.getLength() ; ++i)
+                {
+                    nPos++;
+                    if( aOUSource[i] == '\n' && nCounter != aTok.GetLine() )
+                        nCounter++;
+                }
+                std::cerr << "newline index: " << nPos << std::endl;
             }
         }
     }
@@ -1783,9 +1795,8 @@ IMPL_LINK( ErrorHdlResetter, BasicErrorHdl, StarBASIC *, /*pBasic*/)
     return 0;
 }
 
-CodeCompleteDataCache SbModule::GetCodeCompleteDataFromParse()
+void SbModule::GetCodeCompleteDataFromParse(CodeCompleteDataCache& aCache)
 {
-    CodeCompleteDataCache aCache;
     ErrorHdlResetter aErrHdl;
     SbxBase::ResetError();
 
@@ -1794,7 +1805,8 @@ CodeCompleteDataCache SbModule::GetCodeCompleteDataFromParse()
 
     while( pParser->Parse() ) {}
     SbiSymPool* pPool = pParser->pPool;
-    CodeCompleteVarTypes aGlobVarTypes;
+    //CodeCompleteVarTypes aGlobVarTypes;
+    aCache.Clear();
     for( sal_uInt16 i = 0; i < pPool->GetSize(); ++i )
     {
         SbiSymDef* pSymDef = pPool->Get(i);
@@ -1802,13 +1814,13 @@ CodeCompleteDataCache SbModule::GetCodeCompleteDataFromParse()
         {
             if( !pParser->aGblStrings.Find( pSymDef->GetTypeId() ).isEmpty() )
             {
-                //std::cerr << "global " << pSymDef->GetName() << std::endl;
-                aGlobVarTypes.insert( CodeCompleteVarTypes::value_type( pSymDef->GetName(), pParser->aGblStrings.Find( pSymDef->GetTypeId() ) ) );
+                //aGlobVarTypes.insert( CodeCompleteVarTypes::value_type( pSymDef->GetName(), pParser->aGblStrings.Find( pSymDef->GetTypeId() ) ) );
+                aCache.InsertGlobalVar( pSymDef->GetName(), pParser->aGblStrings.Find(pSymDef->GetTypeId()) );
             }
         }
 
         SbiSymPool& pChildPool = pSymDef->GetPool();
-        CodeCompleteVarTypes aLocVarTypes;
+        //CodeCompleteVarTypes aLocVarTypes;
         for(sal_uInt16 j = 0; j < pChildPool.GetSize(); ++j )
         {
             SbiSymDef* pChildSymDef = pChildPool.Get(j);
@@ -1816,17 +1828,16 @@ CodeCompleteDataCache SbModule::GetCodeCompleteDataFromParse()
             {
                 if( !pParser->aGblStrings.Find( pChildSymDef->GetTypeId() ).isEmpty() )
                 {
-                    //std::cerr << "local " << pChildSymDef->GetName() << std::endl;
-                    aLocVarTypes.insert( CodeCompleteVarTypes::value_type( pChildSymDef->GetName(), pParser->aGblStrings.Find( pChildSymDef->GetTypeId() ) ) );
+                    //aLocVarTypes.insert( CodeCompleteVarTypes::value_type( pChildSymDef->GetName(), pParser->aGblStrings.Find( pChildSymDef->GetTypeId() ) ) );
+                    aCache.InsertLocalVar( pSymDef->GetName(), pChildSymDef->GetName(), pParser->aGblStrings.Find(pChildSymDef->GetTypeId()) );
                 }
             }
         }
-        aCache.InsertProcedure( pSymDef->GetName(), aLocVarTypes );
+        //aCache.InsertProcedure( pSymDef->GetName(), aLocVarTypes );
     }
-    aCache.InsertProcedure( CodeCompleteDataCache::GLOB_KEY, aGlobVarTypes );
+    //aCache.InsertProcedure( CodeCompleteDataCache::GLOB_KEY, aGlobVarTypes );
 
     delete pParser;
-    return aCache;
 }
 
 SbxArrayRef SbModule::GetMethods()

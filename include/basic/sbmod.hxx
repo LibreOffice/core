@@ -152,7 +152,8 @@ public:
     void     RemoveVars();
     ::com::sun::star::uno::Reference< ::com::sun::star::script::XInvocation > GetUnoModule();
     bool createCOMWrapperForIface( ::com::sun::star::uno::Any& o_rRetAny, SbClassModuleObject* pProxyClassModuleObject );
-    CodeCompleteDataCache GetCodeCompleteDataFromParse();
+    //CodeCompleteDataCache GetCodeCompleteDataFromParse();
+    void GetCodeCompleteDataFromParse(CodeCompleteDataCache& aCache);
     SbxArrayRef GetMethods();
 };
 
