@@ -1,0 +1,157 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXn//+Hw\u003d",
+        "filename": "sw/source/filter/html/css1atr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 669,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2013-07-24T11:47:39Z",
+      "side": 1,
+      "message": "Note that in most cases OUString() can be written simply as \"\", resulting in exactly the same code, so cases like this can be also written as:\nrClass \u003d \"\";",
+      "revId": "238fe678fd4964e790e7b3c490126d0288963f57",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//+Hs\u003d",
+        "filename": "sw/source/filter/html/css1atr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1002,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2013-07-24T11:47:39Z",
+      "side": 1,
+      "message": "Similarly to the above, all these OUString() constructor calls can be written as string literals, so e.g. OUString( \u0027.\u0027 ) can be simply \".\" .",
+      "revId": "238fe678fd4964e790e7b3c490126d0288963f57",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//+Ho\u003d",
+        "filename": "sw/source/filter/html/css1atr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1027,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2013-07-24T11:47:39Z",
+      "side": 1,
+      "message": "Please don\u0027t reuse this String idiom when converting to OUString. It is both more readable and more efficient to write : rSelector +\u003d \".\" + aClass;",
+      "revId": "238fe678fd4964e790e7b3c490126d0288963f57",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//+Hk\u003d",
+        "filename": "sw/source/filter/html/css1atr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1176,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2013-07-24T11:47:39Z",
+      "side": 1,
+      "message": "This looks incorrect to me, it should be aName.isEmpty().",
+      "revId": "238fe678fd4964e790e7b3c490126d0288963f57",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//+Hg\u003d",
+        "filename": "sw/source/filter/html/css1atr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1184,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2013-07-24T11:47:39Z",
+      "side": 1,
+      "message": "Actually these can be written as aName.equalsIgnoreAsciiCaseAscii( sCSS1_PV_cursive ) , note the extra Ascii there, but an even better way would be to fix declarations of sCSS1_PV_cursive etc. to make them const, which is clearly missing and should be there.",
+      "revId": "238fe678fd4964e790e7b3c490126d0288963f57",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//+Hc\u003d",
+        "filename": "sw/source/filter/html/css1atr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1374,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2013-07-24T11:47:39Z",
+      "side": 1,
+      "message": "Why not simply aNewSelector +\u003d \".western\"; ?",
+      "revId": "238fe678fd4964e790e7b3c490126d0288963f57",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//+HY\u003d",
+        "filename": "sw/source/filter/html/css1atr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1384,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2013-07-24T11:47:39Z",
+      "side": 1,
+      "message": "Note that when dealing with OUString, it\u0027s more efficient (and probably also more readable) to use just one statement instead of several, so e.g. just aNewSelector \u003d aSelector + \".cjk\" + aPseudo; . This doesn\u0027t not work in all cases though, e.g. sometimes when the ?: operator is involved.",
+      "revId": "238fe678fd4964e790e7b3c490126d0288963f57",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//+HM\u003d",
+        "filename": "sw/source/filter/html/htmlatr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 923,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2013-07-24T11:47:39Z",
+      "side": 1,
+      "message": "getLength() -\u003e isEmpty() mistake.",
+      "revId": "238fe678fd4964e790e7b3c490126d0288963f57",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//+HI\u003d",
+        "filename": "sw/source/filter/html/htmlatr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3118,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2013-07-24T11:47:39Z",
+      "side": 1,
+      "message": "And one more.",
+      "revId": "238fe678fd4964e790e7b3c490126d0288963f57",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
