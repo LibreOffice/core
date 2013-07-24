@@ -16,6 +16,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/Property.hpp>
+#include <com/sun/star/beans/XProperty.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 
@@ -75,6 +76,7 @@ void CuiAboutConfigTabPage::InsertEntry( OUString& rProp, OUString&  rStatus, OU
 {
     SvTreeListEntry* pEntry = new SvTreeListEntry;
 
+    pEntry->AddItem( new SvLBoxContextBmp( pEntry, 0, Image(), Image(), 0)); //It is needed, otherwise causes crash
     pEntry->AddItem( new SvLBoxString( pEntry, 0, rProp));
     pEntry->AddItem( new SvLBoxString( pEntry, 0, rStatus));
     pEntry->AddItem( new SvLBoxString( pEntry, 0, rType));
@@ -121,9 +123,10 @@ void CuiAboutConfigTabPage::FillItems( Reference< XNameAccess >xNameAccess, OUSt
 
         if( bIsLeafNode )
         {
-            //InsertEntry( sPath, "", "", "");
-            //Reference< beans::Property > aProperty = xHierarchicalNameAccess->getAsProperty();//getPropertyValue( seqItems[ i ] );
-            //InsertEntry( sPath + OUString("/") + seqItems[ i ], OUString(""), OUString(""), xHierarchicalNameAccess->getByHierarchicalName( seqItems[ i ] ).Value );
+            Reference< beans::XProperty > xProperty ( xNameAccess, uno::UNO_QUERY_THROW ) ;
+            beans::Property aProp = xProperty->getAsProperty();
+            OUString test = aProp.Type.getTypeName();
+            InsertEntry( sPath, test,  sPath, sPath );//for testing only will change
         }
     }
 }
