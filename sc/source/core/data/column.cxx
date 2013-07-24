@@ -1613,6 +1613,7 @@ void ScColumn::MarkScenarioIn( ScMarkData& rDestMark ) const
 
 void ScColumn::SwapCol(ScColumn& rCol)
 {
+    maBroadcasters.swap(rCol.maBroadcasters);
     maItems.swap(rCol.maItems);
     maCellTextAttrs.swap(rCol.maCellTextAttrs);
 
