@@ -190,6 +190,8 @@ public:
     virtual void SAL_CALL setEraseInk( sal_Int32 nEraseInkSize ) throw (css::uno::RuntimeException);
     virtual void SAL_CALL setPenMode( bool bSwitchPenMode) throw (css::uno::RuntimeException);
     virtual void SAL_CALL setEraserMode( bool bSwitchEraserMode ) throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setPointerMode( bool bSwitchPointerMode) throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setPointerPosition( const ::com::sun::star::geometry::RealPoint2D& pos ) throw (css::uno::RuntimeException);
     virtual ::sal_Bool SAL_CALL isRunning(  ) throw (css::uno::RuntimeException);
     virtual ::sal_Int32 SAL_CALL getSlideCount(  ) throw (css::uno::RuntimeException);
     virtual css::uno::Reference< css::drawing::XDrawPage > SAL_CALL getSlideByIndex( ::sal_Int32 Index ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException);

@@ -1142,6 +1142,19 @@ bool SlideshowImpl::startShowImpl( const Sequence< beans::PropertyValue >& aProp
                         makeAny( xBitmap ),
                         beans::PropertyState_DIRECT_VALUE ) );
             }
+
+            BitmapEx pointerSymbolBitmap( SdResId(BMP_WAIT_ICON) );
+            const Reference<rendering::XBitmap> xPointerBitmap(
+                vcl::unotools::xBitmapFromBitmapEx(
+                    xSpriteCanvas->getDevice(), pointerSymbolBitmap ) );
+            if (xPointerBitmap.is())
+            {
+                mxShow->setProperty(
+                    beans::PropertyValue( "PointerSymbolBitmap" ,
+                        -1,
+                        makeAny( xPointerBitmap ),
+                        beans::PropertyState_DIRECT_VALUE ) );
+            }
         }
 
         const sal_Int32 nCount = aProperties.getLength();
@@ -3040,6 +3053,33 @@ void SAL_CALL SlideshowImpl::setPenMode( bool bSwitchPenMode ) throw (RuntimeExc
 
 }
 
+// --------------------------------------------------------------------
+void SAL_CALL SlideshowImpl::setPointerMode( bool bSwitchPointerMode ) throw (css::uno::RuntimeException)
+{
+    SolarMutexGuard aSolarGuard;
+    if (mxShow.is()) try
+    {
+        mxShow->setProperty(
+                    beans::PropertyValue( "PointerVisible" ,
+                        -1,
+                        makeAny( bSwitchPointerMode ),
+                        beans::PropertyState_DIRECT_VALUE ) );
+    }
+}
+
+// --------------------------------------------------------------------
+void SAL_CALL SlideshowImpl::setPointerPosition( const ::com::sun::star::geometry::RealPoint2D& pos ) throw (css::uno::RuntimeException)
+{
+    SolarMutexGuard aSolarGuard;
+    if (mxShow.is()) try
+        {
+            mxShow->setProperty(
+                        beans::PropertyValue( "PointerPosition" ,
+                            -1,
+                            makeAny( pos ),
+                            beans::PropertyState_DIRECT_VALUE ) );
+        }
+}
 // --------------------------------------------------------------------
 
 void SAL_CALL SlideshowImpl::setEraseAllInk(bool bEraseAllInk) throw (RuntimeException)
