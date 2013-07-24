@@ -354,6 +354,17 @@ bool SwTableBoxFormat::Load( SvStream& rStream, const SwAfVersions& rVersions, s
     READ( aBox, SvxBoxItem, rVersions.nBoxVersion )
     SetBox( aBox );
 
+    // Unused, but needed to be loaded to not mess the other styles
+    if( nVer >= AUTOFORMAT_DATA_ID_680DR14 )
+    {
+        SvxLineItem aTLBR( 0 );
+        READ( aTLBR, SvxLineItem, rVersions.nLineVersion)
+
+        SvxLineItem aBLTR( 0 );
+        READ( aBLTR, SvxLineItem, rVersions.nLineVersion)
+    }
+    // <- close
+
     SvxBrushItem aBackground = SvxBrushItem( RES_BACKGROUND );
     READ( aBackground, SvxBrushItem, rVersions.nBrushVersion )
     SetBackground( aBackground );
@@ -373,6 +384,38 @@ bool SwTableBoxFormat::Load( SvStream& rStream, const SwAfVersions& rVersions, s
         READ( aVerticalAlignment, SwFormatVertOrient, rVersions.m_nVerticalAlignmentVersion );
         SetVerticalAlignment( aVerticalAlignment );
     }
+
+    // Unused, but needed to be loaded to not mess the other styles
+    SvxHorJustifyItem aHorJustify( SVX_HOR_JUSTIFY_STANDARD, 0 );
+    READ( aHorJustify, SvxHorJustifyItem, rVersions.nHorJustifyVersion )
+
+    SvxVerJustifyItem aVerJustify( SVX_VER_JUSTIFY_STANDARD, 0 );
+    READ( aVerJustify, SvxVerJustifyItem, rVersions.nVerJustifyVersion )
+
+    SvxOrientationItem aOrientation( SVX_ORIENTATION_STANDARD, 0 );
+    READ( aOrientation, SvxOrientationItem, rVersions.nOrientationVersion )
+
+    SvxMarginItem aMargin( 0 );
+    READ( aMargin, SvxMarginItem, rVersions.nMarginVersion )
+
+    SfxBoolItem aLinebreak( 0 );
+    pNew = aLinebreak.Create(rStream, rVersions.nBoolVersion );
+    aLinebreak.SetValue( ((SfxBoolItem*)pNew)->GetValue() );
+    delete pNew;
+
+    if ( nVer >= AUTOFORMAT_DATA_ID_504 )
+    {
+        SfxInt32Item aRotateAngle( 0 );
+        pNew = aRotateAngle.Create( rStream, rVersions.nInt32Version );
+        aRotateAngle.SetValue( ((SfxInt32Item*)pNew)->GetValue() );
+        delete pNew;
+
+        SvxRotateModeItem aRotateMode( SVX_ROTATE_MODE_STANDARD, 0 );
+        pNew = aRotateMode.Create( rStream, rVersions.nRotateModeVersion );
+        aRotateMode.SetValue( ((SvxRotateModeItem*)pNew)->GetValue() );
+        delete pNew;
+    }
+    // <- close
 
     if( 0 == rVersions.nNumFormatVersion )
     {
