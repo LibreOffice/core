@@ -39,11 +39,6 @@
 ScMoveTableDlg::ScMoveTableDlg(Window* pParent, const OUString& rDefault)
 
     :   ModalDialog ( pParent, "MoveCopySheetDialog", "modules/scalc/ui/movecopysheet.ui" ),
-        //
-        maStrTabNameUsed( SC_RESSTR(STR_TABNAME_WARN_USED) ),
-        maStrTabNameEmpty( SC_RESSTR(STR_TABNAME_WARN_EMPTY) ),
-        maStrTabNameInvalid( SC_RESSTR(STR_TABNAME_WARN_INVALID) ),
-        //
         maDefaultName( rDefault ),
         mnCurrentDocPos( 0 ),
         nDocument   ( 0 ),
@@ -55,10 +50,22 @@ ScMoveTableDlg::ScMoveTableDlg(Window* pParent, const OUString& rDefault)
     get(pBtnMove, "move");
     get(pBtnCopy, "copy");
     get(pLbDoc, "toDocument");
+
+    assert(pLbDoc->GetEntryCount() == 2);
+    msCurrentDoc = pLbDoc->GetEntry(0);
+    msNewDoc = pLbDoc->GetEntry(1);
+    pLbDoc->Clear();
+    assert(pLbDoc->GetEntryCount() == 0);
+
     get(pLbTable, "insertBefore");
+    pLbTable->set_height_request(pLbTable->GetTextHeight() * 8);
     get(pEdTabName, "newName");
     get(pFtWarn, "newNameWarn");
     get(pBtnOk, "ok");
+
+    msStrTabNameUsed = get<FixedText>("warnunused")->GetText();
+    msStrTabNameEmpty = get<FixedText>("warnempty")->GetText();
+    msStrTabNameInvalid = get<FixedText>("warninvalid")->GetText();
 
     Init();
 }
@@ -150,8 +157,8 @@ void ScMoveTableDlg::CheckNewTabName()
     if (aNewName.isEmpty())
     {
         // New sheet name is empty.  This is not good.
-        pFtWarn->SetText(maStrTabNameEmpty);
-        pFtWarn->Show();
+        pFtWarn->SetControlBackground(Color(COL_YELLOW));
+        pFtWarn->SetText(msStrTabNameEmpty);
         pBtnOk->Disable();
         return;
     }
@@ -159,8 +166,8 @@ void ScMoveTableDlg::CheckNewTabName()
     if (!ScDocument::ValidTabName(aNewName))
     {
         // New sheet name contains invalid characters.
-        pFtWarn->SetText(maStrTabNameInvalid);
-        pFtWarn->Show();
+        pFtWarn->SetControlBackground(Color(COL_YELLOW));
+        pFtWarn->SetText(msStrTabNameInvalid);
         pBtnOk->Disable();
         return;
     }
@@ -180,13 +187,14 @@ void ScMoveTableDlg::CheckNewTabName()
 
     if ( bFound )
     {
-        pFtWarn->SetText(maStrTabNameUsed);
-        pFtWarn->Show();
+        pFtWarn->SetControlBackground(Color(COL_YELLOW));
+        pFtWarn->SetText(msStrTabNameUsed);
         pBtnOk->Disable();
     }
     else
     {
-        pFtWarn->Hide();
+        pFtWarn->SetControlBackground();
+        pFtWarn->SetText(OUString());
         pBtnOk->Enable();
     }
 }
@@ -213,8 +221,6 @@ void ScMoveTableDlg::Init()
     pBtnMove->Check( true );
     pBtnCopy->Check( false );
     pEdTabName->Enable(false);
-    pFtWarn->SetControlBackground( Color( COL_YELLOW ) );
-    pFtWarn->Hide();
     InitDocListBox();
     SelHdl( pLbDoc );
 }
@@ -244,7 +250,7 @@ void ScMoveTableDlg::InitDocListBox()
             {
                 mnCurrentDocPos = nSelPos = i;
                 aEntryName += sal_Unicode( ' ' );
-                aEntryName += String( ScResId( STR_CURRENTDOC ) );
+                aEntryName += msCurrentDoc;
             }
 
             pLbDoc->InsertEntry( aEntryName, i );
@@ -256,7 +262,7 @@ void ScMoveTableDlg::InitDocListBox()
     }
 
     pLbDoc->SetUpdateMode( sal_True );
-    pLbDoc->InsertEntry( String( ScResId( STR_NEWDOC ) ) );
+    pLbDoc->InsertEntry(msNewDoc);
     pLbDoc->SelectEntryPos( nSelPos );
 }
 

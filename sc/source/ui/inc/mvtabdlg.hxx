@@ -60,9 +60,12 @@ private:
     FixedText*       pFtWarn;
     OKButton*        pBtnOk;
 
-    OUString   maStrTabNameUsed;
-    OUString   maStrTabNameEmpty;
-    OUString   maStrTabNameInvalid;
+    OUString   msCurrentDoc;
+    OUString   msNewDoc;
+
+    OUString   msStrTabNameUsed;
+    OUString   msStrTabNameEmpty;
+    OUString   msStrTabNameInvalid;
 
     const OUString maDefaultName;
 

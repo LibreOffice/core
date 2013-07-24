@@ -64,13 +64,6 @@
 #define FL_SEP1         51
 #define FL_SEP2         52
 
-// Insert/Delete/Move/Copy Sheet
-#define STR_NEWDOC      6
-#define STR_CURRENTDOC  14
-#define STR_TABNAME_WARN_USED    15
-#define STR_TABNAME_WARN_EMPTY   16
-#define STR_TABNAME_WARN_INVALID 17
-
 // String input
 #define ED_INPUT        10
 
