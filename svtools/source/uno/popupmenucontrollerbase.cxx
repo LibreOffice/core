@@ -29,7 +29,6 @@
 #include <vcl/menu.hxx>
 #include <vcl/svapp.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <rtl/logfile.hxx>
 #include <osl/mutex.hxx>
 #include <comphelper/processfactory.hxx>
 

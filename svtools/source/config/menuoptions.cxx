@@ -26,7 +26,6 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <vcl/svapp.hxx>
 
-#include <rtl/logfile.hxx>
 #include "itemholder2.hxx"
 
 #include <list>
@@ -441,7 +440,6 @@ SvtMenuOptions::SvtMenuOptions()
     // ... and initialize our data container only if it not already!
     if( m_pDataContainer == NULL )
     {
-        RTL_LOGFILE_CONTEXT(aLog, "svtools ( ??? ) ::SvtMenuOptions_Impl::ctor()");
         m_pDataContainer = new SvtMenuOptions_Impl();
 
         svtools::ItemHolder2::holdConfigItem(E_MENUOPTIONS);

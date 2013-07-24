@@ -24,7 +24,6 @@
 #include "tools/debug.hxx"
 #include "vcl/settings.hxx"
 #include "vcl/svapp.hxx"
-#include <rtl/logfile.hxx>
 #include <sal/macros.h>
 
 #define DEFAULT_DRAGMODE    2
@@ -53,8 +52,6 @@ SvtTabAppearanceCfg::SvtTabAppearanceCfg()
     ,bFontAntialiasing  ( sal_True )
 #endif
 {
-    RTL_LOGFILE_CONTEXT(aLog, "svtools SvtTabAppearanceCfg::SvtTabAppearanceCfg()");
-
     const Sequence<OUString>& rNames = GetPropertyNames();
     Sequence<Any> aValues = GetProperties(rNames);
     const Any* pValues = aValues.getConstArray();

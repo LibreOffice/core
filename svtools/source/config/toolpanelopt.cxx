@@ -25,7 +25,6 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <tools/link.hxx>
 
-#include <rtl/logfile.hxx>
 #include <rtl/instance.hxx>
 #include "itemholder2.hxx"
 
@@ -318,7 +317,6 @@ SvtToolPanelOptions::SvtToolPanelOptions()
     // ... and initialize our data container only if it not already exist!
     if( m_pDataContainer == NULL )
     {
-       RTL_LOGFILE_CONTEXT(aLog, "svtools ( ??? ) ::SvtToolPanelOptions_Impl::ctor()");
        m_pDataContainer = new SvtToolPanelOptions_Impl;
     }
 }

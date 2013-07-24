@@ -24,7 +24,6 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 
-#include <rtl/logfile.hxx>
 #include <rtl/instance.hxx>
 
 using namespace ::utl;
@@ -334,7 +333,6 @@ SvtSlideSorterBarOptions::SvtSlideSorterBarOptions()
     // ... and initialize our data container only if it not already exist!
     if( m_pDataContainer == NULL )
     {
-       RTL_LOGFILE_CONTEXT(aLog, "svtools ( ??? ) ::SvtSlideSorterBarOptions_Impl::ctor()");
        m_pDataContainer = new SvtSlideSorterBarOptions_Impl;
     }
 }

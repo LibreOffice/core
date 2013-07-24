@@ -34,7 +34,6 @@
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <ucbhelper/content.hxx>
 #include <tools/rcid.h>
-#include <rtl/logfile.hxx>
 #include <unotools/configmgr.hxx>
 #include <svtools/svtools.hrc>
 #include <svtools/imagemgr.hrc>
@@ -357,8 +356,6 @@ static sal_uInt16 GetFolderImageId_Impl( const String& rURL )
 
 static sal_uInt16 GetImageId_Impl( const INetURLObject& rObject, sal_Bool bDetectFolder )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aTimeLog, "svtools", "hb93813", "SvFileInformationManager::GetImageId_Impl()" );
-
     String aExt, sURL = rObject.GetMainURL( INetURLObject::NO_DECODE );
     sal_uInt16 nImage = IMG_FILE;
 
@@ -527,8 +524,6 @@ static Image GetImageFromList_Impl( sal_uInt16 nImageId, sal_Bool bBig )
 
 String SvFileInformationManager::GetDescription_Impl( const INetURLObject& rObject, sal_Bool bDetectFolder )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aTimeLog, "svtools", "hb93813", "SvFileInformationManager::GetDescription_Impl()" );
-
     OUString sExtension(rObject.getExtension());
     String sDescription, sURL( rObject.GetMainURL( INetURLObject::NO_DECODE ) );
     sal_uInt16 nResId = 0;

@@ -23,7 +23,6 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <tools/debug.hxx>
 #include <vcl/outdev.hxx>
-#include <rtl/logfile.hxx>
 
 #include <boost/ptr_container/ptr_vector.hpp>
 
@@ -53,8 +52,6 @@ SvtFontSubstConfig::SvtFontSubstConfig() :
     bIsEnabled(sal_False),
     pImpl(new SvtFontSubstConfig_Impl)
 {
-    RTL_LOGFILE_CONTEXT(aLog, "svtools SvtFontSubstConfig::SvtFontSubstConfig()");
-
     Sequence<OUString> aNames(1);
     aNames.getArray()[0] = cReplacement;
     Sequence<Any> aValues = GetProperties(aNames);
