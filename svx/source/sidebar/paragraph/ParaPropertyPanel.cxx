@@ -633,16 +633,6 @@ IMPL_LINK( ParaPropertyPanel, ImplPopupModeEndHdl, FloatingWindow*, EMPTYARG )
     return 0;
 }
 
-void ParaPropertyPanel::ShowMenu (void)
-{
-    if (mpBindings != NULL)
-    {
-        SfxDispatcher* pDispatcher = mpBindings->GetDispatcher();
-        if (pDispatcher != NULL)
-            pDispatcher->Execute(SID_PARA_DLG, SFX_CALLMODE_ASYNCHRON);
-    }
-}
-
 void ParaPropertyPanel::ParaBKGStateChanged(sal_uInt16 /*nSID*/, SfxItemState eState, const SfxPoolItem* pState)
 {
     if( eState >= SFX_ITEM_DEFAULT && pState->ISA(SvxColorItem))

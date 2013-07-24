@@ -66,7 +66,6 @@ public:
         const bool bIsEnabled);
 
     SfxBindings* GetBindings();
-    void ShowMenu (void);
 
 private:
     //Position

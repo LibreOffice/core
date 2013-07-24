@@ -4,8 +4,6 @@
 (anonymous namespace)::StringTokenizer::getNextToken()
 (anonymous namespace)::VBATest::testMiscOLEStuff()
 AffineMatrixItem::GetAffineMatrix2D() const
-BitmapWriteAccess::DrawPolyPolygon(PolyPolygon const&)
-BitmapWriteAccess::DrawPolygon(Polygon const&)
 DbgRegisterNamedUserChannel(rtl::OUString const&, void (*)(char const*))
 EditTextObjectImpl::SetParaAttribs(int, SfxItemSet const&)
 FontSelectPatternAttributes::FontSelectPatternAttributes(PhysicalFontFace const&, Size const&, float, int, bool)
@@ -195,10 +193,7 @@ std::auto_ptr<formula::FormulaTokenArray>::auto_ptr(std::auto_ptr_ref<formula::F
 svx::DialControl::GetLinkedField() const
 svx::DialControl::GetModifyHdl() const
 svx::sidebar::AreaPropertyPanel::LinkStubImplPopupModeEndHdl(void*, void*)
-svx::sidebar::AreaTransparencyGradientControl::ToGetFocus()
 svx::sidebar::BulletsTypeMgr::BulletsTypeMgr(unsigned short, SfxItemSet const*)
-svx::sidebar::ColorPanel::GetPreferredHeight(int)
-svx::sidebar::ContextPanel::GetPreferredHeight(int)
 svx::sidebar::GraphyicBulletsTypeMgr::GraphyicBulletsTypeMgr(unsigned short, SfxItemSet const*)
 svx::sidebar::LinePropertyPanel::LinkStubImplPopupModeEndHdl(void*, void*)
 svx::sidebar::LineWidthControl::GetValueSet()
@@ -210,9 +205,6 @@ svx::sidebar::NumberingTypeMgr::NumberingTypeMgr(unsigned short, SfxItemSet cons
 svx::sidebar::OutlineTypeMgr::OutlineTypeMgr(unsigned short, SfxItemSet const*)
 svx::sidebar::ParaPropertyPanel::InitImageList(boost::scoped_ptr<ToolBox>&, ImageList&, ImageList&)
 svx::sidebar::ParaPropertyPanel::LinkStubImplPopupModeEndHdl(void*, void*)
-svx::sidebar::ParaPropertyPanel::ShowMenu()
-svx::sidebar::PosSizePropertyPanel::ShowMenu()
-svx::sidebar::TextCharacterSpacingControl::ToGetFocus()
 unoidl::UnoidlProvider::getConstant(unsigned int) const
 utl::ConfigItem::getUniqueSetElementName(rtl::OUString const&, rtl::OUString&)
 utl::toISO8601(com::sun::star::util::Time const&)

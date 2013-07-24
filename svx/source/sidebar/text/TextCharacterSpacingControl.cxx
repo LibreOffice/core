@@ -137,13 +137,6 @@ void TextCharacterSpacingControl::initial()
     maVSSpacing.StartSelection();
     maVSSpacing.Show();
 }
-void TextCharacterSpacingControl::ToGetFocus()
-{
-    if(!mbVS)
-        maLBKerning.GrabFocus();
-    else
-        maVSSpacing.GrabFocus();
-}
 
 void TextCharacterSpacingControl::Rearrange(bool bLBAvailable,bool bAvailable, long nKerning)
 {

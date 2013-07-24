@@ -49,8 +49,6 @@ private:
     */
     int CalculateRowCount (const Size& rItemSize, int nColumnCount);
     void Fill (void);
-
-    sal_Int32 GetPreferredHeight (sal_Int32 nWidth);
 };
 
 } } // end of namespace ::svx::sidebar

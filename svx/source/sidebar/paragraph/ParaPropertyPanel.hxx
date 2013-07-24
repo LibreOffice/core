@@ -80,7 +80,6 @@ public:
         const SfxPoolItem* pState,
         const bool bIsEnabled);
 
-    void ShowMenu (void);
     sal_uInt16 GetBulletTypeIndex(){ return mnBulletTypeIndex; }
     sal_uInt16 GetNumTypeIndex(){ return mnNumTypeIndex; }
     FieldUnit GetCurrentUnit( SfxItemState eState, const SfxPoolItem* pState );

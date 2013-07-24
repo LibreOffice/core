@@ -285,27 +285,6 @@ void BitmapWriteAccess::FillPolygon( const Polygon& rPoly )
     }
 }
 
-// ------------------------------------------------------------------
-
-void BitmapWriteAccess::DrawPolygon( const Polygon& rPoly )
-{
-    if( mpFillColor )
-        FillPolygon( rPoly );
-
-    if( mpLineColor && ( !mpFillColor || ( *mpFillColor != *mpLineColor ) ) )
-    {
-        const sal_uInt16 nSize = rPoly.GetSize();
-
-        for( sal_uInt16 i = 0, nSize1 = nSize - 1; i < nSize1; i++ )
-            DrawLine( rPoly[ i ], rPoly[ i + 1 ] );
-
-        if( rPoly[ nSize - 1 ] != rPoly[ 0 ] )
-            DrawLine( rPoly[ nSize - 1 ], rPoly[ 0 ] );
-    }
-}
-
-// ------------------------------------------------------------------
-
 void BitmapWriteAccess::FillPolyPolygon( const PolyPolygon& rPolyPoly )
 {
     const sal_uInt16 nCount = rPolyPoly.Count();
@@ -342,32 +321,6 @@ void BitmapWriteAccess::FillPolyPolygon( const PolyPolygon& rPolyPoly )
             //          SetPixel( nY, nX, rFillColor );
             //
             //aRegion.EndEnumRects( aRegHandle );
-        }
-    }
-}
-
-// ------------------------------------------------------------------
-
-void BitmapWriteAccess::DrawPolyPolygon( const PolyPolygon& rPolyPoly )
-{
-    if( mpFillColor )
-        FillPolyPolygon( rPolyPoly );
-
-    if( mpLineColor && ( !mpFillColor || ( *mpFillColor != *mpLineColor ) ) )
-    {
-        for( sal_uInt16 n = 0, nCount = rPolyPoly.Count(); n < nCount; )
-        {
-            const Polygon&  rPoly = rPolyPoly[ n++ ];
-            const sal_uInt16    nSize = rPoly.GetSize();
-
-            if( nSize )
-            {
-                for( sal_uInt16 i = 0, nSize1 = nSize - 1; i < nSize1; i++ )
-                    DrawLine( rPoly[ i ], rPoly[ i + 1 ] );
-
-                if( rPoly[ nSize - 1 ] != rPoly[ 0 ] )
-                    DrawLine( rPoly[ nSize - 1 ], rPoly[ 0 ] );
-            }
         }
     }
 }

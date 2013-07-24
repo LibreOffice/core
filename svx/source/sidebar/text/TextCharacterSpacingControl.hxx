@@ -46,7 +46,6 @@ public:
         svx::sidebar::TextPropertyPanel& rPanel,
         SfxBindings* pBindings);
     virtual ~TextCharacterSpacingControl();
-    void ToGetFocus();
     void Rearrange(bool bLBAvailable,bool bAvailable, long nKerning);
     //virtual void Paint(const Rectangle& rect);
 
