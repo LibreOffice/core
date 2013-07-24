@@ -274,6 +274,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	icg \
 	idx \
 	ime \
+	$(if $(filter $(OS)$(COM),WNTMSC),instooofiltmsi) \
 	ipb \
 	ipd \
 	ips \
