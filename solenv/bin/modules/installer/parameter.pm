@@ -349,6 +349,11 @@ sub setglobalvariables
         $installer::globals::unpackpath = cwd();
     }
 
+    if ($installer::globals::workpath eq "")  # workpath not set
+    {
+        $installer::globals::workpath = cwd();
+    }
+
     if ( $installer::globals::localunpackdir ne "" ) { $installer::globals::unpackpath = $installer::globals::localunpackdir; }
 
     if (!($installer::globals::unpackpath eq ""))

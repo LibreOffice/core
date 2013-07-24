@@ -59,6 +59,8 @@ BEGIN
     $ismacbuild = 0;
     $ismacdmgbuild = 0;
     $unpackpath = "";
+    $workpath = ""; # installation working dir; some helper scripts are
+    # placed here by gbuild
     $idttemplatepath = "";
     $idtlanguagepath = "";
     $buildid = "Not set";
