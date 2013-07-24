@@ -109,39 +109,34 @@ sub create_msishortcutproperty_table
 {
     my ($folderitempropertiesref, $folderitemsref, $basedir) = @_;
 
-    for ( my $m = 0; $m <= $#{$languagesarrayref}; $m++ )
+    my @msishortcutpropertytable = ();
+
+    installer::windows::idtglobal::write_idt_header(\@msishortcutpropertytable, "msishortcutproperty");
+
+    # The entries defined in scp as FolderItemProperties
+
+    for ( my $j = 0; $j <= $#{$folderitempropertiesref}; $j++ )
     {
-        my @msishortcutpropertytable = ();
+        my $onelink = ${$folderitempropertiesref}[$j];
+        my %msishortcutproperty = ();
 
-        installer::windows::idtglobal::write_idt_header(\@msishortcutpropertytable, "msishortcutproperty");
+        $msishortcutproperty{'MsiShortcutProperty'} = get_msishortcutproperty_identifier($onelink);
+        $msishortcutproperty{'Shortcut_'} = get_msishorcutproperty_shortcut($onelink, $folderitemsref);
+        $msishortcutproperty{'PropertyKey'} = get_msishortcutproperty_propertykey($onelink);
+        $msishortcutproperty{'PropVariantValue'} = get_msishortcutproperty_propvariantvalue($onelink);
 
-        # The entries defined in scp as FolderItemProperties
-        # These shortcuts will fill the icons table.
+        my $oneline = $msishortcutproperty{'MsiShortcutProperty'} . "\t" . $msishortcutproperty{'Shortcut_'} . "\t"
+                    . $msishortcutproperty{'PropertyKey'} . "\t" . $msishortcutproperty{'PropVariantValue'} . "\n";
 
-        for ( my $j = 0; $j <= $#{$folderitempropertiesref}; $j++ )
-        {
-            my $onelink = ${$folderitempropertiesref}[$j];
-
-            my %msishortcutproperty = ();
-
-            $msishortcutproperty{'MsiShortcutProperty'} = get_msishortcutproperty_identifier($onelink);
-            $msishortcutproperty{'Shortcut_'} = get_msishorcutproperty_shortcut($onelink, $folderitemsref);
-            $msishortcutproperty{'PropertyKey'} = get_msishortcutproperty_propertykey($onelink);
-            $msishortcutproperty{'PropVariantValue'} = get_msishortcutproperty_propvariantvalue($onelink);
-
-            my $oneline = $msishortcutproperty{'MsiShortcutProperty'} . "\t" . $msishortcutproperty{'Shortcut_'} . "\t"
-                        . $msishortcutproperty{'PropertyKey'} . "\t" . $msishortcutproperty{'PropVariantValue'} . "\n";
-
-            push(@msishortcutpropertytable, $oneline);
-        }
-
-        # Saving the file
-
-        my $msishortcutpropertytablename = $basedir . $installer::globals::separator . "MsiShortcutProperty.idt" . "." . $onelanguage;
-        installer::files::save_file($msishortcutpropertytablename ,\@msishortcutpropertytable);
-        my $infoline = "Created idt file: $msishortcutpropertytablename\n";
-        push(@installer::globals::logfileinfo, $infoline);
+        push(@msishortcutpropertytable, $oneline);
     }
+
+    # Saving the file
+
+    my $msishortcutpropertytablename = $basedir . $installer::globals::separator . "MsiShorP.idt";
+    installer::files::save_file($msishortcutpropertytablename ,\@msishortcutpropertytable);
+    my $infoline = "Created idt file: $msishortcutpropertytablename\n";
+    push(@installer::globals::logfileinfo, $infoline);
 }
 
 

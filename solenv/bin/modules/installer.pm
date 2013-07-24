@@ -1392,7 +1392,7 @@ sub run {
 
             installer::windows::upgrade::create_upgrade_table($newidtdir, $allvariableshashref);
 
-            installer::windows::msishortcutproperty::create_msishortcutproperty_table($folderitempropertiesinproductlanguageresolvedarrayref, $folderitemsinproductlanguageresolvedarrayref, $newidtdir);
+            installer::windows::msishortcutproperty::create_msishortcutproperty_table($folderitempropertiesinproductarrayref, $folderitemsinproductlanguageresolvedarrayref, $newidtdir);
 
             if (( ! $installer::globals::languagepack ) && ( ! $installer::globals::helppack )) # the following tables not for language packs or help packs
             {

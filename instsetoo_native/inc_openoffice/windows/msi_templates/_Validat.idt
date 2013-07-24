@@ -296,6 +296,10 @@ MsiFileHash	HashPart2	N							Size of file in bytes (long integer).
 MsiFileHash	HashPart3	N							Size of file in bytes (long integer).
 MsiFileHash	HashPart4	N							Size of file in bytes (long integer).
 MsiFileHash	Options	N	0	32767					Various options and attributes for this hash.
+MsiShortcutProperty	MsiShortcutProperty	N					Identifier		Unique identifier for this row of the MsiShortcutProperty table
+MsiShortcutProperty	Shortcut_	N					Identifier		A key into the Shortcut table that identifies the shortcut having a property set
+MsiShortcutProperty	PropertyKey	N					Formatted		A string value that provides information for the PROPERTYKEY structure
+MsiShortcutProperty	PropVariantValue	N					Formatted		A string value that provides information for the PROPVARIANT structure.
 ODBCAttribute	Attribute	N					Text		Name of ODBC driver attribute
 ODBCAttribute	Driver_	N			ODBCDriver	1	Identifier		Reference to ODBC driver in ODBCDriver table
 ODBCAttribute	Value	Y					Text		Value for ODBC driver attribute
