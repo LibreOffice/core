@@ -80,7 +80,7 @@ sub get_msishortcutproperty_propertykey
     my ($msishortcutproperty) = @_;
 
     my $propertykey = "";
-    if ( $msishortcutproperty->{'PropertyKey'} ) { $propertykey = $msishortcutproperty->{'PropertyKey'}; }
+    if ( $msishortcutproperty->{'Key'} ) { $propertykey = $msishortcutproperty->{'Key'}; }
 
     return $propertykey;
 }
@@ -94,7 +94,7 @@ sub get_msishortcutproperty_propvariantvalue
     my ($msishortcutproperty) = @_;
 
     my $propvariantvalue = "";
-    if ( $msishortcutproperty->{'PropVariantValue'} ) { $propvariantvalue = $msishortcutproperty->{'PropVariantValue'}; }
+    if ( $msishortcutproperty->{'Value'} ) { $propvariantvalue = $msishortcutproperty->{'Value'}; }
 
     return $propvariantvalue;
 }
