@@ -263,7 +263,7 @@ def _uno_import( name, *optargs, **kwargs ):
     try:
 #       print "optargs = " + repr(optargs)
         return _g_delegatee( name, *optargs, **kwargs )
-    except ImportError as e:
+    except ImportError:
         # process optargs
         globals, locals, fromlist = list(optargs)[:3] + [kwargs.get('globals',{}), kwargs.get('locals',{}), kwargs.get('fromlist',[])][len(optargs):]
         if not fromlist:
