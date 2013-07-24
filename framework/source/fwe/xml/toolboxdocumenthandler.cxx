@@ -58,6 +58,7 @@ static const char ITEM_DESCRIPTOR_TYPE[]        = "Type";
 static const char ITEM_DESCRIPTOR_STYLE[]       = "Style";
 static const char ITEM_DESCRIPTOR_VISIBLE[]     = "IsVisible";
 static const char ITEM_DESCRIPTOR_WIDTH[]       = "Width";
+static const char ITEM_DESCRIPTOR_TEXTVISIBLE[] = "IsTextVisible";
 
 static void ExtractToolbarParameters( const Sequence< PropertyValue > rProp,
                                       OUString&                       rCommandURL,
@@ -67,7 +68,8 @@ static void ExtractToolbarParameters( const Sequence< PropertyValue > rProp,
                                       sal_Int16&                      rStyle,
                                       sal_Int16&                      rWidth,
                                       sal_Bool&                       rVisible,
-                                      sal_Int16&                      rType )
+                                      sal_Int16&                      rType,
+                                      sal_Bool&                       rTextVisible )
 {
     for ( sal_Int32 i = 0; i < rProp.getLength(); i++ )
     {
@@ -90,6 +92,8 @@ static void ExtractToolbarParameters( const Sequence< PropertyValue > rProp,
             rProp[i].Value >>= rWidth;
         else if ( rProp[i].Name.equalsAscii( ITEM_DESCRIPTOR_STYLE ))
             rProp[i].Value >>= rStyle;
+        else if ( rProp[i].Name.equalsAscii( ITEM_DESCRIPTOR_TEXTVISIBLE ))
+            rProp[i].Value >>= rTextVisible;
     }
 }
 
@@ -130,6 +134,7 @@ ToolBarEntryProperty ToolBoxEntries[OReadToolBoxDocumentHandler::TB_XML_ENTRY_CO
     { OReadToolBoxDocumentHandler::TB_NS_XLINK,     ATTRIBUTE_URL               },
     { OReadToolBoxDocumentHandler::TB_NS_TOOLBAR,   ATTRIBUTE_ITEMBITS          },
     { OReadToolBoxDocumentHandler::TB_NS_TOOLBAR,   ATTRIBUTE_VISIBLE           },
+    { OReadToolBoxDocumentHandler::TB_NS_TOOLBAR,   ATTRIBUTE_TEXTVISIBLE       },
     { OReadToolBoxDocumentHandler::TB_NS_TOOLBAR,   ATTRIBUTE_WIDTH             },
     { OReadToolBoxDocumentHandler::TB_NS_TOOLBAR,   ATTRIBUTE_USER              },
     { OReadToolBoxDocumentHandler::TB_NS_TOOLBAR,   ATTRIBUTE_HELPID            },
@@ -147,7 +152,8 @@ OReadToolBoxDocumentHandler::OReadToolBoxDocumentHandler( const Reference< XInde
     m_aHelpURL( ITEM_DESCRIPTOR_HELPURL ),
     m_aTooltip( ITEM_DESCRIPTOR_TOOLTIP ),
     m_aIsVisible( ITEM_DESCRIPTOR_VISIBLE ),
-    m_aCommandURL( ITEM_DESCRIPTOR_COMMANDURL )
+    m_aCommandURL( ITEM_DESCRIPTOR_COMMANDURL ),
+    m_aIsTextVisible( ITEM_DESCRIPTOR_TEXTVISIBLE )
  {
     OUString aNamespaceToolBar( XMLNS_TOOLBAR );
     OUString aNamespaceXLink( XMLNS_XLINK );
@@ -304,6 +310,7 @@ throw(  SAXException, RuntimeException )
                 OUString        aBitmapName;
                 sal_uInt16      nItemBits( 0 );
                 sal_Bool        bVisible( sal_True );
+                sal_Bool        bTextVisible( sal_False );
 
                 for ( sal_Int16 n = 0; n < xAttribs->getLength(); n++ )
                 {
@@ -347,6 +354,21 @@ throw(  SAXException, RuntimeException )
                                 {
                                     OUString aErrorMessage = getErrorLineString();
                                     aErrorMessage += "Attribute toolbar:visible must have value 'true' or 'false'!";
+                                    throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
+                                }
+                            }
+                            break;
+
+                            case TB_ATTRIBUTE_TEXTVISIBLE:
+                            {
+                                if ( xAttribs->getValueByIndex( n ) == ATTRIBUTE_BOOLEAN_TRUE )
+                                    bTextVisible = sal_True;
+                                else if ( xAttribs->getValueByIndex( n ) == ATTRIBUTE_BOOLEAN_FALSE )
+                                    bTextVisible = sal_False;
+                                else
+                                {
+                                    OUString aErrorMessage = getErrorLineString();
+                                    aErrorMessage += "Attribute toolbar:textvisible must have value 'true' or 'false'!";
                                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                                 }
                             }
@@ -414,7 +436,7 @@ throw(  SAXException, RuntimeException )
 
                 if ( !aCommandURL.isEmpty() )
                 {
-                    Sequence< PropertyValue > aToolbarItemProp( 7 );
+                    Sequence< PropertyValue > aToolbarItemProp( 8 );
                     aToolbarItemProp[0].Name = m_aCommandURL;
                     aToolbarItemProp[1].Name = m_aHelpURL;
                     aToolbarItemProp[2].Name = m_aLabel;
@@ -422,6 +444,7 @@ throw(  SAXException, RuntimeException )
                     aToolbarItemProp[4].Name = m_aStyle;
                     aToolbarItemProp[5].Name = m_aIsVisible;
                     aToolbarItemProp[6].Name = m_aTooltip;
+                    aToolbarItemProp[7].Name = m_aIsTextVisible;
 
                     //fix for fdo#39370
                     /// check whether RTL interface or not
@@ -447,6 +470,7 @@ throw(  SAXException, RuntimeException )
                     aToolbarItemProp[4].Value <<= nItemBits;
                     aToolbarItemProp[5].Value <<= bVisible;
                     aToolbarItemProp[6].Value <<= aTooltip;
+                    aToolbarItemProp[7].Value <<= bTextVisible;
 
                     m_rItemContainer->insertByIndex( m_rItemContainer->getCount(), makeAny( aToolbarItemProp ) );
                 }
@@ -739,13 +763,14 @@ void OWriteToolBoxDocumentHandler::WriteToolBoxDocument() throw
             OUString    aHelpURL;
             OUString    aTooltip;
             sal_Bool    bVisible( sal_True );
+            sal_Bool    bTextVisible( sal_False );
             sal_Int16   nType( ::com::sun::star::ui::ItemType::DEFAULT );
             sal_Int16   nWidth( 0 );
             sal_Int16   nStyle( 0 );
 
-            ExtractToolbarParameters( aProps, aCommandURL, aLabel, aHelpURL, aTooltip, nStyle, nWidth, bVisible, nType );
+            ExtractToolbarParameters( aProps, aCommandURL, aLabel, aHelpURL, aTooltip, nStyle, nWidth, bVisible, nType, bTextVisible );
             if ( nType == ::com::sun::star::ui::ItemType::DEFAULT )
-                WriteToolBoxItem( aCommandURL, aLabel, aHelpURL, aTooltip, nStyle, nWidth, bVisible );
+                WriteToolBoxItem( aCommandURL, aLabel, aHelpURL, aTooltip, nStyle, nWidth, bVisible, bTextVisible );
             else if ( nType == ::com::sun::star::ui::ItemType::SEPARATOR_SPACE )
                 WriteToolBoxSpace();
             else if ( nType == ::com::sun::star::ui::ItemType::SEPARATOR_LINE )
@@ -772,7 +797,8 @@ void OWriteToolBoxDocumentHandler::WriteToolBoxItem(
     const OUString& rTooltip,
     sal_Int16       nStyle,
     sal_Int16       nWidth,
-    sal_Bool        bVisible )
+    sal_Bool        bVisible,
+    sal_Bool        bTextVisible )
 throw ( SAXException, RuntimeException )
 {
     ::comphelper::AttributeList* pList = new ::comphelper::AttributeList;
@@ -799,6 +825,14 @@ throw ( SAXException, RuntimeException )
         pList->AddAttribute( m_aXMLToolbarNS + OUString( ATTRIBUTE_VISIBLE ),
                              m_aAttributeType,
                              OUString( ATTRIBUTE_BOOLEAN_FALSE ) );
+    }
+
+
+    if ( bTextVisible == sal_True )
+    {
+        pList->AddAttribute( m_aXMLToolbarNS + OUString( ATTRIBUTE_TEXTVISIBLE ),
+                             m_aAttributeType,
+                             OUString( ATTRIBUTE_BOOLEAN_TRUE ) );
     }
 
     if ( !rHelpURL.isEmpty() )
