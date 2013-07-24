@@ -225,12 +225,58 @@ void OConnection::construct(const ::rtl::OUString& url, const Sequence< Property
         }
     }
 
+    char dpbBuffer[1 + 3 + 257 + 257 ]; // Expand as needed
+    int dpbLength = 0;
+    {
+        char* dpb;
+        char userName[256] = "";
+        char userPassword[256] = "";
+
+        dpb = dpbBuffer;
+        *dpb++ = isc_dpb_version1;
+
+        *dpb++ = isc_dpb_sql_dialect;
+        *dpb++ = 1; // 1 byte long
+        *dpb++ = FIREBIRD_SQL_DIALECT;
+        // Do any more dpbBuffer additions here
+
+        if (!m_bIsEmbedded) // TODO: || m_bIsLocalFile
+        {
+            // TODO: parse password from connection string as needed?
+        }
+
+        if (strlen(userName))
+        {
+            int nUsernameLength = strlen(userName);
+            *dpb++ = isc_dpb_user_name;
+            *dpb++ = (char) nUsernameLength;
+            strcpy(dpb, userName);
+            dpb+= nUsernameLength;
+        }
+
+        if (strlen(userPassword))
+        {
+            int nPasswordLength = strlen(userPassword);
+            *dpb++ = isc_dpb_password;
+            *dpb++ = (char) nPasswordLength;
+            strcpy(dpb, userPassword);
+            dpb+= nPasswordLength;
+        }
+
+        dpbLength = dpb - dpbBuffer;
+    }
+
     ISC_STATUS_ARRAY status;            /* status vector */
 
     if (bIsNewDatabase)
     {
-        if (isc_create_database(status, m_sURL.getLength(), OUStringToOString(m_sURL, RTL_TEXTENCODING_UTF8).getStr(),
-                                                            &m_DBHandler, 0, NULL, 0))
+        if (isc_create_database(status,
+                                m_sURL.getLength(),
+                                OUStringToOString(m_sURL,RTL_TEXTENCODING_UTF8).getStr(),
+                                &m_DBHandler,
+                                dpbLength,
+                                dpbBuffer,
+                                0))
         {
             if(pr_error(status, "create new database"))
                 return;
@@ -238,8 +284,12 @@ void OConnection::construct(const ::rtl::OUString& url, const Sequence< Property
     }
     else
     {
-        if (isc_attach_database(status, m_sURL.getLength(), OUStringToOString(m_sURL, RTL_TEXTENCODING_UTF8).getStr(),
-                                                        &m_DBHandler, 0, NULL))
+        if (isc_attach_database(status,
+                                m_sURL.getLength(),
+                                OUStringToOString(m_sURL, RTL_TEXTENCODING_UTF8).getStr(),
+                                &m_DBHandler,
+                                dpbLength,
+                                dpbBuffer))
             if (pr_error(status, "attach database"))
                 return;
     }
