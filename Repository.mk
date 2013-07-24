@@ -307,6 +307,8 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	pcr \
 	pdffilter \
 	$(if $(DISABLE_SCRIPTING),,protocolhandler) \
+       $(if $(filter $(OS)$(COM),WNTMSC),qslnkmsi) \
+       $(if $(filter $(OS)$(COM),WNTMSC),reg4allmsdoc) \
 	res \
 	sax \
 	sb \
@@ -315,10 +317,13 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	sd \
 	sdd \
 	sdfilt \
+       $(if $(filter $(OS)$(COM),WNTMSC),sdqsmsi) \
 	sdui \
+       $(if $(filter $(OS)$(COM),WNTMSC),sellangmsi) \
 	sfx \
 	simplecanvas \
 	slideshow \
+       $(if $(filter $(OS)$(COM),WNTMSC),sn_tools) \
 	sot \
 	$(if $(ENABLE_HEADLESS),,spl) \
 	$(if $(DISABLE_SCRIPTING),,stringresource) \
