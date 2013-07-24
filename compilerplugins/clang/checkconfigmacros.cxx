@@ -43,7 +43,11 @@ class CheckConfigMacros
         virtual void MacroUndefined( const Token& macroToken, const MacroDirective* info ) override;
         virtual void Ifdef( SourceLocation location, const Token& macroToken, const MacroDirective* info ) override;
         virtual void Ifndef( SourceLocation location, const Token& macroToken, const MacroDirective* info ) override;
+#if __clang_major__ == 3 && __clang_minor__ < 4
         virtual void Defined( const Token& macroToken, const MacroDirective* info ) override;
+#else
+        virtual void Defined( const Token& macroToken, const MacroDirective* info, SourceRange Range ) override;
+#endif
 #endif
     private:
         void checkMacro( const Token& macroToken, SourceLocation location );
@@ -109,8 +113,10 @@ void CheckConfigMacros::Ifndef( SourceLocation location, const Token& macroToken
 
 #if __clang_major__ < 3 || __clang_major__ == 3 && __clang_minor__ < 3
 void CheckConfigMacros::Defined( const Token& macroToken )
-#else
+#elif __clang_major__ == 3 && __clang_minor__ < 4
 void CheckConfigMacros::Defined( const Token& macroToken, const MacroDirective* )
+#else
+void CheckConfigMacros::Defined( const Token& macroToken, const MacroDirective* , SourceRange )
 #endif
     {
     checkMacro( macroToken, macroToken.getLocation());
