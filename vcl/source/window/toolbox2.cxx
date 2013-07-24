@@ -304,7 +304,7 @@ void ImplToolItem::DetermineButtonDrawStyle( ButtonType eButtonType, sal_Bool& r
         bHasText = sal_True;
 
     // prefer images if symbolonly buttons are drawn
-    // prefer texts if textonly buttons are dreawn
+    // prefer texts if textonly buttons are drawn
 
     if ( eButtonType == BUTTON_SYMBOL )         // drawing icons only
     {
@@ -332,7 +332,12 @@ void ImplToolItem::DetermineButtonDrawStyle( ButtonType eButtonType, sal_Bool& r
             rbText  = sal_False;
         }
     }
-    else                                        // drawing icons and text both
+    else if ( eButtonType == BUTTON_SYMBOLTEXT )      // drawing icons and text both
+    {
+        rbImage = sal_True;
+        rbText  = sal_True;
+    }
+    else                                              // drawing icons and text both - but with per toolbar setting
     {
         rbImage = sal_True;
         rbText  = sal_True;

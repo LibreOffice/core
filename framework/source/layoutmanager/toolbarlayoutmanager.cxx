@@ -1451,7 +1451,7 @@ void ToolbarLayoutManager::implts_setElementData( UIElement& rElement, const uno
             }
             if ( pToolBox )
             {
-                if (( rElement.m_nStyle < 0 ) || ( rElement.m_nStyle > BUTTON_SYMBOLTEXT ))
+                if (( rElement.m_nStyle < 0 ) || ( rElement.m_nStyle > BUTTON_SYMBOLTEXT_PERTOOLBAR ))
                     rElement.m_nStyle = BUTTON_SYMBOL;
                 pToolBox->SetButtonType( (ButtonType)rElement.m_nStyle );
                 if ( rElement.m_bNoClose )
