@@ -25,7 +25,6 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 
-#include <rtl/logfile.hxx>
 #include <rtl/instance.hxx>
 #include "itemholder1.hxx"
 
@@ -331,7 +330,6 @@ SvtFontOptions::SvtFontOptions()
     // ... and initialize ouer data container only if it not already exist!
     if( m_pDataContainer == NULL )
     {
-        RTL_LOGFILE_CONTEXT(aLog, "unotools ( ??? ) ::SvtFontOptions_Impl::ctor()");
         m_pDataContainer = new SvtFontOptions_Impl;
 
         ItemHolder1::holdConfigItem(E_FONTOPTIONS);

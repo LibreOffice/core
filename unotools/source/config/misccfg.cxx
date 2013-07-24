@@ -26,7 +26,6 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <osl/mutex.hxx>
-#include <rtl/logfile.hxx>
 #include "itemholder1.hxx"
 
 using namespace com::sun::star::uno;
@@ -77,8 +76,6 @@ SfxMiscCfg::SfxMiscCfg() :
     bNotFound (sal_False),
     nYear2000( 1930 )
 {
-    RTL_LOGFILE_CONTEXT(aLog, "svl SfxMiscCfg::SfxMiscCfg()");
-
     Load();
 }
 
@@ -190,7 +187,6 @@ MiscCfg::MiscCfg( )
     ::osl::MutexGuard aGuard( LocalSingleton::get() );
     if ( !pOptions )
     {
-        RTL_LOGFILE_CONTEXT(aLog, "unotools ( ??? ) SfxMiscCfg::ctor()");
         pOptions = new SfxMiscCfg;
 
         ItemHolder1::holdConfigItem(E_MISCCFG);

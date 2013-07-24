@@ -26,7 +26,6 @@
 #include <tools/solar.h>
 #include <osl/mutex.hxx>
 #include <rtl/instance.hxx>
-#include <rtl/logfile.hxx>
 #include "itemholder1.hxx"
 
 #include <com/sun/star/beans/Property.hpp>
@@ -254,7 +253,6 @@ SvtUserOptions::SvtUserOptions ()
 
     if (pSharedImpl.expired())
     {
-        RTL_LOGFILE_CONTEXT(aLog, "unotools ( ??? ) SvtUserOptions::Impl::ctor()");
         pImpl.reset(new Impl);
         pSharedImpl = pImpl;
         ItemHolder1::holdConfigItem(E_USEROPTIONS);

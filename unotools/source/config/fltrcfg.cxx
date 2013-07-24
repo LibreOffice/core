@@ -21,7 +21,6 @@
 #include <unotools/fltrcfg.hxx>
 #include <tools/debug.hxx>
 
-#include <rtl/logfile.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 
@@ -300,7 +299,6 @@ SvtFilterOptions::SvtFilterOptions() :
     ConfigItem( "Office.Common/Filter/Microsoft" ),
     pImp(new SvtFilterOptions_Impl)
 {
-    RTL_LOGFILE_CONTEXT(aLog, "unotools SvtFilterOptions::SvtFilterOptions()");
     EnableNotification(GetPropertyNames());
     Load();
 }

@@ -447,7 +447,7 @@ void SecurityEnvironment_NssImpl::updateSlots()
 //              if( pSymKey == NULL )
 //              {
 //                  PK11_FreeSlot( pSlot ) ;
-//                  RTL_LOGFILE_TRACE( "XMLSEC: Error - pSymKey is NULL" );
+//                  SAL_INFO( "xmlsecurity", "XMLSEC: Error - pSymKey is NULL" );
 //                  continue;
 //              }
                 addCryptoSlot(pSlot);

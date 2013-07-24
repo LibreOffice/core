@@ -28,7 +28,6 @@
 #include <osl/mutex.hxx>
 #include <comphelper/configurationhelper.hxx>
 #include <comphelper/processfactory.hxx>
-#include <rtl/logfile.hxx>
 #include "itemholder1.hxx"
 
 using namespace utl;
@@ -857,7 +856,6 @@ SvtSaveOptions::SvtSaveOptions()
     ::osl::MutexGuard aGuard( LocalSingleton::get() );
     if ( !pOptions )
     {
-        RTL_LOGFILE_CONTEXT(aLog, "unotools ( ??? ) ::SvtSaveOptions_Impl::ctor()");
         pOptions = new SvtLoadSaveOptions_Impl;
         pOptions->pSaveOpt = new SvtSaveOptions_Impl;
         pOptions->pLoadOpt = new SvtLoadOptions_Impl;

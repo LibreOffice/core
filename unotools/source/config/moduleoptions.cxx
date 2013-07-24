@@ -26,7 +26,6 @@
 #include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
 
-#include <rtl/logfile.hxx>
 #include <rtl/instance.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
@@ -1003,7 +1002,6 @@ SvtModuleOptions::SvtModuleOptions()
     ++m_nRefCount;
     if( m_nRefCount == 1 )
     {
-        RTL_LOGFILE_CONTEXT(aLog, "unotools ( ??? ) ::SvtModuleOptions_Impl::ctor()");
         m_pDataContainer = new SvtModuleOptions_Impl();
 
         ItemHolder1::holdConfigItem(E_MODULEOPTIONS);

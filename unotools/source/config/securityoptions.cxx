@@ -32,7 +32,6 @@
 
 #include <unotools/pathoptions.hxx>
 
-#include <rtl/logfile.hxx>
 #include "itemholder1.hxx"
 
 //_________________________________________________________________________________________________________________
@@ -1045,7 +1044,6 @@ SvtSecurityOptions::SvtSecurityOptions()
     // ... and initialize ouer data container only if it not already exist!
     if( m_pDataContainer == NULL )
     {
-        RTL_LOGFILE_CONTEXT(aLog, "unotools ( ??? ) ::SvtSecurityOptions_Impl::ctor()");
         m_pDataContainer = new SvtSecurityOptions_Impl;
 
         ItemHolder1::holdConfigItem(E_SECURITYOPTIONS);
