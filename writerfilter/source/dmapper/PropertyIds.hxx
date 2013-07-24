@@ -299,6 +299,7 @@ enum PropertyIds
         ,PROP_GRAPHIC_BITMAP
         ,PROP_CHAR_SHADING_VALUE
         ,PROP_FIRST_IS_SHARED
+        ,PROP_MIRROR_INDENTS
     };
 struct PropertyNameSupplier_Impl;
 class PropertyNameSupplier

@@ -67,9 +67,10 @@ enum BorderPosition
 struct PropertyDefinition
 {
     PropertyIds eId;
+    bool m_bGrabBag;
 
-    PropertyDefinition( PropertyIds _eId ) :
-        eId( _eId ){}
+    PropertyDefinition( PropertyIds _eId, bool bGrabBag = false ) :
+        eId( _eId ), m_bGrabBag(bGrabBag){}
 
     bool    operator== (const PropertyDefinition& rDef) const
             {   return rDef.eId == eId; }
@@ -102,7 +103,7 @@ public:
     bool hasEmptyPropertyValues() const {return !m_aValues.getLength();}
     /** Add property, usually overwrites already available attributes. It shouldn't overwrite in case of default attributes
      */
-    void Insert( PropertyIds eId, const ::com::sun::star::uno::Any& rAny, bool bOverwrite = true );
+    void Insert( PropertyIds eId, const ::com::sun::star::uno::Any& rAny, bool bOverwrite = true, bool bGrabBag = false );
     void InsertProps(const boost::shared_ptr<PropertyMap> pMap);
 
     const ::com::sun::star::uno::Reference< ::com::sun::star::text::XFootnote>&  GetFootnote() const;

@@ -3326,6 +3326,9 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
     case NS_sprm::LN_PContextualSpacing:
         rContext->Insert(PROP_PARA_CONTEXT_MARGIN, uno::makeAny( sal_Bool( nIntValue ) ));
     break;
+    case 0x2470: // mirrorIndents
+        rContext->Insert(PROP_MIRROR_INDENTS, uno::makeAny(sal_Bool(nIntValue)), true, true);
+    break;
     case NS_ooxml::LN_EG_SectPrContents_formProt: //section protection, only form editing is enabled - unsupported
     case NS_ooxml::LN_EG_SectPrContents_vAlign:
     case NS_ooxml::LN_EG_RPrBase_fitText:
