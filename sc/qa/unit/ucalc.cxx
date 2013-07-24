@@ -1027,15 +1027,17 @@ void Test::testCellBroadcaster()
     // Clear everything again
     clearRange(m_pDoc, ScRange(0,0,0,10,100,0));
 
-    // Switch to R1C1 to make it easier to input relative references in multiple cells.
-    FormulaGrammarSwitch aFGSwitch(m_pDoc, formula::FormulaGrammar::GRAM_ENGLISH_XL_R1C1);
-
-    // Have B1:B20 reference A1:A20.
-    val = 0.0;
-    for (SCROW i = 0; i < 20; ++i)
     {
-        m_pDoc->SetValue(ScAddress(0,i,0), val++);
-        m_pDoc->SetString(ScAddress(1,i,0), "=RC[-1]");
+        // Switch to R1C1 to make it easier to input relative references in multiple cells.
+        FormulaGrammarSwitch aFGSwitch(m_pDoc, formula::FormulaGrammar::GRAM_ENGLISH_XL_R1C1);
+
+        // Have B1:B20 reference A1:A20.
+        val = 0.0;
+        for (SCROW i = 0; i < 20; ++i)
+        {
+            m_pDoc->SetValue(ScAddress(0,i,0), val++);
+            m_pDoc->SetString(ScAddress(1,i,0), "=RC[-1]");
+        }
     }
 
     // Ensure that the formula cells show correct values, and the referenced
@@ -1058,6 +1060,40 @@ void Test::testCellBroadcaster()
         pBC = m_pDoc->GetBroadcaster(ScAddress(0,i,0));
         CPPUNIT_ASSERT_MESSAGE("Broadcaster should have been deleted.", !pBC);
     }
+
+    // Clear everything again
+    clearRange(m_pDoc, ScRange(0,0,0,10,100,0));
+
+    m_pDoc->SetValue(ScAddress(0,0,0), 2.0);
+    m_pDoc->SetString(ScAddress(1,0,0), "=A1");
+    m_pDoc->SetString(ScAddress(2,0,0), "=B1");
+    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(0,0,0));
+    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(1,0,0));
+    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(2,0,0));
+
+    pBC = m_pDoc->GetBroadcaster(ScAddress(0,0,0));
+    CPPUNIT_ASSERT_MESSAGE("Broadcaster should exist here.", pBC);
+    pBC = m_pDoc->GetBroadcaster(ScAddress(1,0,0));
+    CPPUNIT_ASSERT_MESSAGE("Broadcaster should exist here.", pBC);
+
+    // Change the value of A1 and make sure everyone follows suit.
+    m_pDoc->SetValue(ScAddress(0,0,0), 3.5);
+    CPPUNIT_ASSERT_EQUAL(3.5, m_pDoc->GetValue(0,0,0));
+    CPPUNIT_ASSERT_EQUAL(3.5, m_pDoc->GetValue(1,0,0));
+    CPPUNIT_ASSERT_EQUAL(3.5, m_pDoc->GetValue(2,0,0));
+
+    // Insert a column at column B.
+    m_pDoc->InsertCol(ScRange(1,0,0,1,MAXROW,0));
+    pBC = m_pDoc->GetBroadcaster(ScAddress(0,0,0));
+    CPPUNIT_ASSERT_MESSAGE("Broadcaster should exist here.", pBC);
+    pBC = m_pDoc->GetBroadcaster(ScAddress(2,0,0));
+    CPPUNIT_ASSERT_MESSAGE("Broadcaster should exist here.", pBC);
+
+    // Change the value of A1 again.
+    m_pDoc->SetValue(ScAddress(0,0,0), 5.5);
+    CPPUNIT_ASSERT_EQUAL(5.5, m_pDoc->GetValue(0,0,0));
+    CPPUNIT_ASSERT_EQUAL(5.5, m_pDoc->GetValue(2,0,0));
+    CPPUNIT_ASSERT_EQUAL(5.5, m_pDoc->GetValue(3,0,0));
 
     m_pDoc->DeleteTab(0);
 }
