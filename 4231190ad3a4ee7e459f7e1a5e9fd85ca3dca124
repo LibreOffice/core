@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXn//+Ik\u003d",
+        "filename": "writerfilter/source/dmapper/DomainMapper_Impl.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2013-07-24T07:10:55Z",
+      "side": 1,
+      "message": "just a post-facto nit (to remember in future conversions like this), is that many of the officecfg:: functions take an XComponentContext argument defaulted to comphelper::getProcessComponentContext(), so when a context is readily available at the place of call, it should be passed in, i.e., here,\n\n  ...::get(m_xComponentContext);",
+      "revId": "4231190ad3a4ee7e459f7e1a5e9fd85ca3dca124",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
