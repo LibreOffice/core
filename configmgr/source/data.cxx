@@ -208,7 +208,7 @@ rtl::Reference< Node > Data::resolvePathRepresentation(
     if (path != 0) {
         path->clear();
     }
-    if ( pathRepresentation == "/" ) {
+    if (pathRepresentation == "/") {
         if (canonicRepresentation != 0) {
             *canonicRepresentation = pathRepresentation;
         }
