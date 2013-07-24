@@ -545,7 +545,7 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const Rectangle& rRect 
                         if ( pFillType )
                             pAttrList->add( XML_type, pFillType );
                     }
-                    else
+                    else if (!rProps.GetOpt(ESCHER_Prop_fillColor, nValue))
                         pAttrList->add( XML_on, "false" );
 
                     if ( rProps.GetOpt( ESCHER_Prop_fillColor, nValue ) )
