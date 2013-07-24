@@ -48,7 +48,8 @@
 #include <com/sun/star/report/XFunction.hpp>
 #include <com/sun/star/awt/FontDescriptor.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
-#include <com/sun/star/table/BorderLine.hpp>
+#include <com/sun/star/table/BorderLine2.hpp>
+#include <com/sun/star/table/BorderLineStyle.hpp>
 #include <com/sun/star/report/XFixedLine.hpp>
 #include <com/sun/star/frame/XController.hpp>
 #include "RptDef.hxx"
@@ -1174,10 +1175,12 @@ void ORptExport::exportAutoStyle(XPropertySet* _xProp,const Reference<XFormatted
     if ( xFixedLine.is() )
     {
         uno::Reference<beans::XPropertySet> xBorderProp = OXMLHelper::createBorderPropertySet();
-        table::BorderLine aValue;
+        table::BorderLine2 aValue;
         aValue.Color = COL_BLACK;
         aValue.InnerLineWidth = aValue.LineDistance = 0;
         aValue.OuterLineWidth = 2;
+        aValue.LineStyle = table::BorderLineStyle::SOLID;
+        aValue.LineWidth = 2;
 
         awt::Point aPos = xFixedLine->getPosition();
         awt::Size aSize = xFixedLine->getSize();
@@ -1220,7 +1223,8 @@ void ORptExport::exportAutoStyle(XPropertySet* _xProp,const Reference<XFormatted
 
         xBorderProp->setPropertyValue(sBorderProp,uno::makeAny(aValue));
 
-        aValue.Color = aValue.OuterLineWidth = 0;
+        aValue.Color = aValue.OuterLineWidth = aValue.LineWidth = 0;
+        aValue.LineStyle = table::BorderLineStyle::NONE;
         uno::Any aEmpty;
         aEmpty <<= aValue;
         ::std::for_each(aProps.begin(),aProps.end(),
