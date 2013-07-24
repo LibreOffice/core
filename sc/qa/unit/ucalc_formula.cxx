@@ -884,6 +884,29 @@ void Test::testFormulaRefUpdateMove()
     if (!checkFormula(*m_pDoc, ScAddress(0,11,0), "$D$6"))
         CPPUNIT_FAIL("Wrong formula.");
 
+    // Move A9:A12 to B10:B13.
+    bMoved = rFunc.MoveBlock(ScRange(0,8,0,0,11,0), ScAddress(1,9,0), true, false, false, false);
+    CPPUNIT_ASSERT_MESSAGE("Failed to move A9:A12 to B10:B13", bMoved);
+
+    // The results of these formula cells should still stay the same.
+    CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(1,9,0));
+    CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(1,10,0));
+    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(1,11,0));
+    CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(1,12,0));
+
+    // Displayed formulas should stay the same since the referenced range hasn't moved.
+    if (!checkFormula(*m_pDoc, ScAddress(1,9,0), "SUM(D4:D6)"))
+        CPPUNIT_FAIL("Wrong formula.");
+
+    if (!checkFormula(*m_pDoc, ScAddress(1,10,0), "SUM($D$4:$D$6)"))
+        CPPUNIT_FAIL("Wrong formula.");
+
+    if (!checkFormula(*m_pDoc, ScAddress(1,11,0), "D5"))
+        CPPUNIT_FAIL("Wrong formula.");
+
+    if (!checkFormula(*m_pDoc, ScAddress(1,12,0), "$D$6"))
+        CPPUNIT_FAIL("Wrong formula.");
+
     m_pDoc->DeleteTab(0);
 }
 
