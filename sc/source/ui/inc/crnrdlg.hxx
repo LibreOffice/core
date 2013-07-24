@@ -47,22 +47,20 @@ public:
     virtual sal_Bool    Close();
 
 private:
-    FixedLine       aFlAssign;
-    ListBox         aLbRange;
+    ListBox*         pLbRange;
 
-    formula::RefEdit        aEdAssign;
-    formula::RefButton      aRbAssign;
-    RadioButton     aBtnColHead;
-    RadioButton     aBtnRowHead;
-    FixedText       aFtAssign2;
-    formula::RefEdit        aEdAssign2;
-    formula::RefButton      aRbAssign2;
+    formula::RefEdit*        pEdAssign;
+    formula::RefButton*      pRbAssign;
+    RadioButton*     pBtnColHead;
+    RadioButton*     pBtnRowHead;
+    formula::RefEdit*        pEdAssign2;
+    formula::RefButton*      pRbAssign2;
 
-    OKButton        aBtnOk;
-    CancelButton    aBtnCancel;
-    HelpButton      aBtnHelp;
-    PushButton      aBtnAdd;
-    PushButton      aBtnRemove;
+    OKButton*        pBtnOk;
+    CancelButton*    pBtnCancel;
+    HelpButton*      pBtnHelp;
+    PushButton*      pBtnAdd;
+    PushButton*      pBtnRemove;
 
     ScRange         theCurArea;
     ScRange         theCurData;

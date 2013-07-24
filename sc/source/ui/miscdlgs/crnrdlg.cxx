@@ -21,7 +21,6 @@
 #include "document.hxx"
 #include "scresid.hxx"
 #include "globstr.hrc"
-#include "crnrdlg.hrc"
 #include "docsh.hxx"
 
 #define _CRNRDLG_CXX
@@ -68,24 +67,7 @@ ScColRowNameRangesDlg::ScColRowNameRangesDlg( SfxBindings* pB,
                                 Window* pParent,
                                 ScViewData* ptrViewData )
 
-    :   ScAnyRefDlg ( pB, pCW, pParent, RID_SCDLG_COLROWNAMERANGES ),
-
-        aFlAssign       ( this, ScResId( FL_ASSIGN ) ),
-        aLbRange        ( this, ScResId( LB_RANGE ) ),
-
-        aEdAssign       ( this, this, &aFlAssign, ScResId( ED_AREA ) ),
-        aRbAssign       ( this, ScResId( RB_AREA ), &aEdAssign, this ),
-        aBtnColHead     ( this, ScResId( BTN_COLHEAD ) ),
-        aBtnRowHead     ( this, ScResId( BTN_ROWHEAD ) ),
-        aFtAssign2      ( this, ScResId( FT_DATA_LABEL ) ),
-        aEdAssign2      ( this, this, &aFtAssign2, ScResId( ED_DATA ) ),
-        aRbAssign2      ( this, ScResId( RB_DATA ), &aEdAssign2, this ),
-
-        aBtnOk          ( this, ScResId( BTN_OK ) ),
-        aBtnCancel      ( this, ScResId( BTN_CANCEL ) ),
-        aBtnHelp        ( this, ScResId( BTN_HELP ) ),
-        aBtnAdd         ( this, ScResId( BTN_ADD ) ),
-        aBtnRemove      ( this, ScResId( BTN_REMOVE ) ),
+    :   ScAnyRefDlg ( pB, pCW, pParent, "NameRangesDialog" , "modules/scalc/ui/namerangesdialog.ui" ),
 
         pViewData       ( ptrViewData ),
         pDoc            ( ptrViewData->GetDocument() ),
@@ -93,13 +75,28 @@ ScColRowNameRangesDlg::ScColRowNameRangesDlg( SfxBindings* pB,
         pEdActive       ( NULL ),
         bDlgLostFocus   ( false )
 {
+    get(pLbRange,"range");
+
+    get(pEdAssign,"edassign");
+    get(pRbAssign,"rbassign");
+    pRbAssign->SetReferences(this, pEdAssign);
+    get(pBtnColHead,"colhead");
+    get(pBtnRowHead,"rowhead");
+    get(pEdAssign2,"edassign2");
+    get(pRbAssign2,"rbassign2");
+    pRbAssign2->SetReferences(this, pEdAssign2);
+
+    get(pBtnOk,"ok");
+    get(pBtnCancel,"cancel");
+    get(pBtnAdd,"add");
+    get(pBtnRemove,"delete");
+
     xColNameRanges = pDoc->GetColNameRanges()->Clone();
     xRowNameRanges = pDoc->GetRowNameRanges()->Clone();
     Init();
-    FreeResource();
 
-    aRbAssign.SetAccessibleRelationMemberOf(&aEdAssign);
-    aRbAssign2.SetAccessibleRelationMemberOf(&aEdAssign);
+    pRbAssign->SetAccessibleRelationMemberOf(pEdAssign);
+    pRbAssign2->SetAccessibleRelationMemberOf(pEdAssign);
 }
 
 
@@ -140,29 +137,31 @@ ScColRowNameRangesDlg::~ScColRowNameRangesDlg()
 
 void ScColRowNameRangesDlg::Init()
 {
-    aBtnOk.SetClickHdl      ( LINK( this, ScColRowNameRangesDlg, OkBtnHdl ) );
-    aBtnCancel.SetClickHdl  ( LINK( this, ScColRowNameRangesDlg, CancelBtnHdl ) );
-    aBtnAdd.SetClickHdl     ( LINK( this, ScColRowNameRangesDlg, AddBtnHdl ) );
-    aBtnRemove.SetClickHdl  ( LINK( this, ScColRowNameRangesDlg, RemoveBtnHdl ) );
-    aLbRange.SetSelectHdl   ( LINK( this, ScColRowNameRangesDlg, Range1SelectHdl ) );
-    aEdAssign.SetModifyHdl  ( LINK( this, ScColRowNameRangesDlg, Range1DataModifyHdl ) );
-    aBtnColHead.SetClickHdl ( LINK( this, ScColRowNameRangesDlg, ColClickHdl ) );
-    aBtnRowHead.SetClickHdl ( LINK( this, ScColRowNameRangesDlg, RowClickHdl ) );
-    aEdAssign2.SetModifyHdl ( LINK( this, ScColRowNameRangesDlg, Range2DataModifyHdl ) );
+    pBtnOk->SetClickHdl      ( LINK( this, ScColRowNameRangesDlg, OkBtnHdl ) );
+    pBtnCancel->SetClickHdl  ( LINK( this, ScColRowNameRangesDlg, CancelBtnHdl ) );
+    pBtnAdd->SetClickHdl     ( LINK( this, ScColRowNameRangesDlg, AddBtnHdl ) );
+    pBtnRemove->SetClickHdl  ( LINK( this, ScColRowNameRangesDlg, RemoveBtnHdl ) );
+    pLbRange->SetSelectHdl   ( LINK( this, ScColRowNameRangesDlg, Range1SelectHdl ) );
+    pEdAssign->SetModifyHdl  ( LINK( this, ScColRowNameRangesDlg, Range1DataModifyHdl ) );
+    pBtnColHead->SetClickHdl ( LINK( this, ScColRowNameRangesDlg, ColClickHdl ) );
+    pBtnRowHead->SetClickHdl ( LINK( this, ScColRowNameRangesDlg, RowClickHdl ) );
+    pEdAssign2->SetModifyHdl ( LINK( this, ScColRowNameRangesDlg, Range2DataModifyHdl ) );
 
     Link aLink = LINK( this, ScColRowNameRangesDlg, GetFocusHdl );
-    aEdAssign.SetGetFocusHdl( aLink );
-    aRbAssign.SetGetFocusHdl( aLink );
-    aEdAssign2.SetGetFocusHdl( aLink );
-    aRbAssign2.SetGetFocusHdl( aLink );
+    pEdAssign->SetGetFocusHdl( aLink );
+    pRbAssign->SetGetFocusHdl( aLink );
+    pEdAssign2->SetGetFocusHdl( aLink );
+    pRbAssign2->SetGetFocusHdl( aLink );
 
     aLink = LINK( this, ScColRowNameRangesDlg, LoseFocusHdl );
-    aEdAssign.SetLoseFocusHdl( aLink );
-    aRbAssign.SetLoseFocusHdl( aLink );
-    aEdAssign2.SetLoseFocusHdl( aLink );
-    aRbAssign2.SetLoseFocusHdl( aLink );
+    pEdAssign->SetLoseFocusHdl( aLink );
+    pRbAssign->SetLoseFocusHdl( aLink );
+    pEdAssign2->SetLoseFocusHdl( aLink );
+    pRbAssign2->SetLoseFocusHdl( aLink );
 
-    pEdActive = &aEdAssign;
+    pLbRange->SetDropDownLineCount(10);
+
+    pEdActive = pEdAssign;
 
     UpdateNames();
 
@@ -181,18 +180,18 @@ void ScColRowNameRangesDlg::Init()
     }
     else
     {
-        aBtnColHead.Check( sal_True );
-        aBtnRowHead.Check( false );
-        aEdAssign.SetText( EMPTY_STRING );
-        aEdAssign2.SetText( EMPTY_STRING );
+        pBtnColHead->Check( sal_True );
+        pBtnRowHead->Check( false );
+        pEdAssign->SetText( EMPTY_STRING );
+        pEdAssign2->SetText( EMPTY_STRING );
     }
 
-    aLbRange.SetBorderStyle( WINDOW_BORDER_MONO );
-    aBtnColHead.Enable();
-    aBtnRowHead.Enable();
-    aEdAssign.Enable();
-    aEdAssign.GrabFocus();
-    aRbAssign.Enable();
+    pLbRange->SetBorderStyle( WINDOW_BORDER_MONO );
+    pBtnColHead->Enable();
+    pBtnRowHead->Enable();
+    pEdAssign->Enable();
+    pEdAssign->GrabFocus();
+    pRbAssign->Enable();
 
     Range1SelectHdl( 0 );
 }
@@ -224,8 +223,8 @@ void ScColRowNameRangesDlg::SetColRowData( const ScRange& rLabelRange,sal_Bool b
     SCROW nRow2 = theCurArea.aEnd.Row();
     if ( (static_cast<SCCOLROW>(nCol2 - nCol1) >= nRow2 - nRow1) || (nCol1 == 0 && nCol2 == MAXCOL) )
     {   // Spaltenkoepfe und Grenzfall gesamte Tabelle
-        aBtnColHead.Check( sal_True );
-        aBtnRowHead.Check( false );
+        pBtnColHead->Check( sal_True );
+        pBtnRowHead->Check( false );
         if ( nRow2 == MAXROW  )
         {
             if ( nRow1 == 0 )
@@ -244,8 +243,8 @@ void ScColRowNameRangesDlg::SetColRowData( const ScRange& rLabelRange,sal_Bool b
     }
     else
     {   // Zeilenkoepfe
-        aBtnRowHead.Check( sal_True );
-        aBtnColHead.Check( false );
+        pBtnRowHead->Check( sal_True );
+        pBtnColHead->Check( false );
         if ( nCol2 == MAXCOL )
         {   // Head rechts, Data links
             theCurData.aStart.SetCol( 0 );
@@ -264,17 +263,17 @@ void ScColRowNameRangesDlg::SetColRowData( const ScRange& rLabelRange,sal_Bool b
         theCurArea.Format( aStr, SCR_ABS_3D, pDoc, eConv );
 
         if(bRef)
-            aEdAssign.SetRefString( aStr );
+            pEdAssign->SetRefString( aStr );
         else
-            aEdAssign.SetText( aStr );
+            pEdAssign->SetText( aStr );
 
-        aEdAssign.SetSelection( Selection( SELECTION_MAX, SELECTION_MAX ) );
+        pEdAssign->SetSelection( Selection( SELECTION_MAX, SELECTION_MAX ) );
         theCurData.Format( aStr, SCR_ABS_3D, pDoc, eConv );
 
         if(bRef)
-            aEdAssign2.SetRefString( aStr );
+            pEdAssign2->SetRefString( aStr );
         else
-            aEdAssign2.SetText( aStr );
+            pEdAssign2->SetText( aStr );
     }
     else
     {
@@ -282,19 +281,19 @@ void ScColRowNameRangesDlg::SetColRowData( const ScRange& rLabelRange,sal_Bool b
 
         if(bRef)
         {
-            aEdAssign.SetRefString( EMPTY_STRING );
-            aEdAssign2.SetRefString( EMPTY_STRING );
+            pEdAssign->SetRefString( EMPTY_STRING );
+            pEdAssign2->SetRefString( EMPTY_STRING );
         }
         else
         {
-            aEdAssign.SetText( EMPTY_STRING );
-            aEdAssign2.SetText( EMPTY_STRING );
+            pEdAssign->SetText( EMPTY_STRING );
+            pEdAssign2->SetText( EMPTY_STRING );
         }
 
-        aBtnColHead.Disable();
-        aBtnRowHead.Disable();
-        aEdAssign2.Disable();
-        aRbAssign2.Disable();
+        pBtnColHead->Disable();
+        pBtnRowHead->Disable();
+        pEdAssign2->Disable();
+        pRbAssign2->Disable();
     }
 }
 
@@ -317,7 +316,7 @@ void ScColRowNameRangesDlg::SetColRowData( const ScRange& rLabelRange,sal_Bool b
 void ScColRowNameRangesDlg::AdjustColRowData( const ScRange& rDataRange,sal_Bool bRef)
 {
     theCurData = rDataRange;
-    if ( aBtnColHead.IsChecked() )
+    if ( pBtnColHead->IsChecked() )
     {   // Datenbereich gleiche Spalten wie Koepfe
         theCurData.aStart.SetCol( theCurArea.aStart.Col() );
         theCurData.aEnd.SetCol( theCurArea.aEnd.Col() );
@@ -367,11 +366,11 @@ void ScColRowNameRangesDlg::AdjustColRowData( const ScRange& rDataRange,sal_Bool
     theCurData.Format( aStr, SCR_ABS_3D, pDoc, pDoc->GetAddressConvention() );
 
     if(bRef)
-        aEdAssign2.SetRefString( aStr );
+        pEdAssign2->SetRefString( aStr );
     else
-        aEdAssign2.SetText( aStr );
+        pEdAssign2->SetText( aStr );
 
-    aEdAssign2.SetSelection( Selection( SELECTION_MAX, SELECTION_MAX ) );
+    pEdAssign2->SetSelection( Selection( SELECTION_MAX, SELECTION_MAX ) );
 }
 
 
@@ -399,14 +398,14 @@ void ScColRowNameRangesDlg::SetReference( const ScRange& rRef, ScDocument* /* pD
         if ( rRef.aStart != rRef.aEnd )
             RefInputStart( pEdActive );
 
-        if ( pEdActive == &aEdAssign )
+        if ( pEdActive == pEdAssign )
             SetColRowData( rRef, sal_True );
         else
             AdjustColRowData( rRef, sal_True );
-        aBtnColHead.Enable();
-        aBtnRowHead.Enable();
-        aBtnAdd.Enable();
-        aBtnRemove.Disable();
+        pBtnColHead->Enable();
+        pBtnRowHead->Enable();
+        pBtnAdd->Enable();
+        pBtnRemove->Disable();
     }
 }
 
@@ -456,9 +455,9 @@ void ScColRowNameRangesDlg::SetActive()
     else
         GrabFocus();
 
-    if( pEdActive == &aEdAssign )
+    if( pEdActive == pEdAssign )
         Range1DataModifyHdl( 0 );
-    else if( pEdActive == &aEdAssign2 )
+    else if( pEdActive == pEdAssign2 )
         Range2DataModifyHdl( 0 );
 
     RefInputDone();
@@ -481,11 +480,11 @@ void ScColRowNameRangesDlg::SetActive()
 
 void ScColRowNameRangesDlg::UpdateNames()
 {
-    aLbRange.SetUpdateMode( false );
+    pLbRange->SetUpdateMode( false );
     //-----------------------------------------------------------
-    aLbRange.Clear();
+    pLbRange->Clear();
     aRangeMap.clear();
-    aEdAssign.SetText( EMPTY_STRING );
+    pEdAssign->SetText( EMPTY_STRING );
 
     size_t nCount, j;
     sal_uInt16 nPos; //@008 Hilfsvariable q eingefuegt
@@ -505,8 +504,8 @@ void ScColRowNameRangesDlg::UpdateNames()
     aString = strDelim;
     aString += ScGlobal::GetRscString( STR_COLUMN );
     aString += strDelim;
-    nPos = aLbRange.InsertEntry( aString );
-    aLbRange.SetEntryData( nPos, (void*)nEntryDataDelim );
+    nPos = pLbRange->InsertEntry( aString );
+    pLbRange->SetEntryData( nPos, (void*)nEntryDataDelim );
     if ( (nCount = xColNameRanges->size()) > 0 )
     {
         ScRangePair** ppSortArray = xColNameRanges->CreateNameSortedArray(
@@ -543,17 +542,17 @@ void ScColRowNameRangesDlg::UpdateNames()
             //@008 String einfuegen in Listbox
             String aInsStr = aString;
             aInsStr += strShow;
-            nPos = aLbRange.InsertEntry( aInsStr );
+            nPos = pLbRange->InsertEntry( aInsStr );
             aRangeMap.insert( NameRangeMap::value_type(aInsStr, aRange) );
-            aLbRange.SetEntryData( nPos, (void*)nEntryDataCol );
+            pLbRange->SetEntryData( nPos, (void*)nEntryDataCol );
         }
         delete [] ppSortArray;
     }
     aString = strDelim;
     aString += ScGlobal::GetRscString( STR_ROW );
     aString += strDelim;
-    nPos = aLbRange.InsertEntry( aString );
-    aLbRange.SetEntryData( nPos, (void*)nEntryDataDelim );
+    nPos = pLbRange->InsertEntry( aString );
+    pLbRange->SetEntryData( nPos, (void*)nEntryDataDelim );
     if ( (nCount = xRowNameRanges->size()) > 0 )
     {
         ScRangePair** ppSortArray = xRowNameRanges->CreateNameSortedArray(
@@ -588,15 +587,15 @@ void ScColRowNameRangesDlg::UpdateNames()
 
             String aInsStr = aString;
             aInsStr += strShow;
-            nPos = aLbRange.InsertEntry( aInsStr );
+            nPos = pLbRange->InsertEntry( aInsStr );
             aRangeMap.insert( NameRangeMap::value_type(aInsStr, aRange) );
-            aLbRange.SetEntryData( nPos, (void*)nEntryDataRow );
+            pLbRange->SetEntryData( nPos, (void*)nEntryDataRow );
         }
         delete [] ppSortArray;
     }
     //-----------------------------------------------------------
-    aLbRange.SetUpdateMode( sal_True );
-    aLbRange.Invalidate();
+    pLbRange->SetUpdateMode( sal_True );
+    pLbRange->Invalidate();
 }
 
 
@@ -630,24 +629,24 @@ void ScColRowNameRangesDlg::UpdateRangeData( const ScRange& rRange, sal_Bool bCo
         String aStr;
         theCurArea = rRange;
         theCurArea.Format( aStr, SCR_ABS_3D, pDoc, eConv );
-        aEdAssign.SetText( aStr );
-        aBtnAdd.Disable();
-        aBtnRemove.Enable();
-        aBtnColHead.Check( bColName );
-        aBtnRowHead.Check( !bColName );
+        pEdAssign->SetText( aStr );
+        pBtnAdd->Disable();
+        pBtnRemove->Enable();
+        pBtnColHead->Check( bColName );
+        pBtnRowHead->Check( !bColName );
         theCurData = pPair->GetRange(1);
         theCurData.Format( aStr, SCR_ABS_3D, pDoc, eConv );
-        aEdAssign2.SetText( aStr );
+        pEdAssign2->SetText( aStr );
     }
     else
     {
-        aBtnAdd.Enable();
-        aBtnRemove.Disable();
+        pBtnAdd->Enable();
+        pBtnRemove->Disable();
     }
-    aBtnColHead.Enable();
-    aBtnRowHead.Enable();
-    aEdAssign2.Enable();
-    aRbAssign2.Enable();
+    pBtnColHead->Enable();
+    pBtnRowHead->Enable();
+    pEdAssign2->Enable();
+    pRbAssign2->Enable();
 }
 
 
@@ -749,8 +748,8 @@ IMPL_LINK_NOARG_INLINE_END(ScColRowNameRangesDlg, CancelBtnHdl)
 
 IMPL_LINK_NOARG(ScColRowNameRangesDlg, AddBtnHdl)
 {
-    String aNewArea( aEdAssign.GetText() );
-    String aNewData( aEdAssign2.GetText() );
+    String aNewArea( pEdAssign->GetText() );
+    String aNewData( pEdAssign2->GetText() );
 
     if ( aNewArea.Len() > 0 && aNewData.Len() > 0 )
     {
@@ -773,20 +772,20 @@ IMPL_LINK_NOARG(ScColRowNameRangesDlg, AddBtnHdl)
                 xRowNameRanges->Remove( pPair );
                 delete pPair;
             }
-            if ( aBtnColHead.IsChecked() )
+            if ( pBtnColHead->IsChecked() )
                 xColNameRanges->Join( ScRangePair( theCurArea, theCurData ) );
             else
                 xRowNameRanges->Join( ScRangePair( theCurArea, theCurData ) );
 
             UpdateNames();
 
-            aEdAssign.GrabFocus();
-            aBtnAdd.Disable();
-            aBtnRemove.Disable();
-            aEdAssign.SetText( EMPTY_STRING );
-            aBtnColHead.Check( sal_True );
-            aBtnRowHead.Check( false );
-            aEdAssign2.SetText( EMPTY_STRING );
+            pEdAssign->GrabFocus();
+            pBtnAdd->Disable();
+            pBtnRemove->Disable();
+            pEdAssign->SetText( EMPTY_STRING );
+            pBtnColHead->Check( sal_True );
+            pBtnRowHead->Check( false );
+            pEdAssign2->SetText( EMPTY_STRING );
             theCurArea = ScRange();
             theCurData = theCurArea;
             Range1SelectHdl( 0 );
@@ -795,9 +794,9 @@ IMPL_LINK_NOARG(ScColRowNameRangesDlg, AddBtnHdl)
         {
             ERRORBOX( ScGlobal::GetRscString(STR_INVALIDTABNAME) );
             if ( !bOk1 )
-                aEdAssign.GrabFocus();
+                pEdAssign->GrabFocus();
             else
-                aEdAssign2.GrabFocus();
+                pEdAssign2->GrabFocus();
         }
     }
     return 0;
@@ -821,10 +820,10 @@ IMPL_LINK_NOARG(ScColRowNameRangesDlg, AddBtnHdl)
 
 IMPL_LINK_NOARG(ScColRowNameRangesDlg, RemoveBtnHdl)
 {
-    String aRangeStr = aLbRange.GetSelectEntry();
-    sal_uInt16 nSelectPos = aLbRange.GetSelectEntryPos();
+    String aRangeStr = pLbRange->GetSelectEntry();
+    sal_uInt16 nSelectPos = pLbRange->GetSelectEntryPos();
     sal_Bool bColName =
-        ((sal_uLong)aLbRange.GetEntryData( nSelectPos ) == nEntryDataCol);
+        ((sal_uLong)pLbRange->GetEntryData( nSelectPos ) == nEntryDataCol);
     NameRangeMap::const_iterator itr = aRangeMap.find(aRangeStr);
     if (itr == aRangeMap.end())
         return 0;
@@ -853,7 +852,7 @@ IMPL_LINK_NOARG(ScColRowNameRangesDlg, RemoveBtnHdl)
             delete pPair;
 
             UpdateNames();
-            sal_uInt16 nCnt = aLbRange.GetEntryCount();
+            sal_uInt16 nCnt = pLbRange->GetEntryCount();
             if ( nSelectPos >= nCnt )
             {
                 if ( nCnt )
@@ -861,19 +860,19 @@ IMPL_LINK_NOARG(ScColRowNameRangesDlg, RemoveBtnHdl)
                 else
                     nSelectPos = 0;
             }
-            aLbRange.SelectEntryPos( nSelectPos );
+            pLbRange->SelectEntryPos( nSelectPos );
             if ( nSelectPos &&
-                    (sal_uLong)aLbRange.GetEntryData( nSelectPos ) == nEntryDataDelim )
-                aLbRange.SelectEntryPos( --nSelectPos );    // ---Zeile---
+                    (sal_uLong)pLbRange->GetEntryData( nSelectPos ) == nEntryDataDelim )
+                pLbRange->SelectEntryPos( --nSelectPos );    // ---Zeile---
 
-            aLbRange.GrabFocus();
-            aBtnAdd.Disable();
-            aBtnRemove.Disable();
-            aEdAssign.SetText( EMPTY_STRING );
+            pLbRange->GrabFocus();
+            pBtnAdd->Disable();
+            pBtnRemove->Disable();
+            pEdAssign->SetText( EMPTY_STRING );
             theCurArea = theCurData = ScRange();
-            aBtnColHead.Check( sal_True );
-            aBtnRowHead.Check( false );
-            aEdAssign2.SetText( EMPTY_STRING );
+            pBtnColHead->Check( sal_True );
+            pBtnRowHead->Check( false );
+            pEdAssign2->SetText( EMPTY_STRING );
             Range1SelectHdl( 0 );
         }
     }
@@ -899,69 +898,69 @@ IMPL_LINK_NOARG(ScColRowNameRangesDlg, RemoveBtnHdl)
 
 IMPL_LINK_NOARG(ScColRowNameRangesDlg, Range1SelectHdl)
 {
-    sal_uInt16 nSelectPos = aLbRange.GetSelectEntryPos();
-    sal_uInt16 nCnt = aLbRange.GetEntryCount();
+    sal_uInt16 nSelectPos = pLbRange->GetSelectEntryPos();
+    sal_uInt16 nCnt = pLbRange->GetEntryCount();
     sal_uInt16 nMoves = 0;
     while ( nSelectPos < nCnt
-            && (sal_uLong)aLbRange.GetEntryData( nSelectPos ) == nEntryDataDelim )
+            && (sal_uLong)pLbRange->GetEntryData( nSelectPos ) == nEntryDataDelim )
     {   // skip Delimiter
         ++nMoves;
-        aLbRange.SelectEntryPos( ++nSelectPos );
+        pLbRange->SelectEntryPos( ++nSelectPos );
     }
-    String aRangeStr = aLbRange.GetSelectEntry();
+    String aRangeStr = pLbRange->GetSelectEntry();
     if ( nMoves )
     {
         if ( nSelectPos > 1 && nSelectPos >= nCnt )
         {   // am Ende nicht auf dem " --- Zeile --- " Delimiter stehenbleiben
             // wenn davor Eintraege existieren
             nSelectPos = nCnt - 2;
-            aLbRange.SelectEntryPos( nSelectPos );
-            aRangeStr = aLbRange.GetSelectEntry();
+            pLbRange->SelectEntryPos( nSelectPos );
+            aRangeStr = pLbRange->GetSelectEntry();
         }
         else if ( nSelectPos > 2 && nSelectPos < nCnt && aRangeStr.Len()
-                  && OUString(aRangeStr) == aEdAssign.GetText() )
+                  && OUString(aRangeStr) == pEdAssign->GetText() )
         {   // nach oben wandern statt nach unten auf die vorherige Position
             nSelectPos -= 2;
-            aLbRange.SelectEntryPos( nSelectPos );
-            aRangeStr = aLbRange.GetSelectEntry();
+            pLbRange->SelectEntryPos( nSelectPos );
+            aRangeStr = pLbRange->GetSelectEntry();
         }
     }
     NameRangeMap::const_iterator itr = aRangeMap.find(aRangeStr);
     if ( itr != aRangeMap.end() )
     {
         sal_Bool bColName =
-            ((sal_uLong)aLbRange.GetEntryData( nSelectPos ) == nEntryDataCol);
+            ((sal_uLong)pLbRange->GetEntryData( nSelectPos ) == nEntryDataCol);
         UpdateRangeData( itr->second, bColName );
-        aBtnAdd.Disable();
-        aBtnRemove.Enable();
+        pBtnAdd->Disable();
+        pBtnRemove->Enable();
     }
     else
     {
-        if ( !aEdAssign.GetText().isEmpty() )
+        if ( !pEdAssign->GetText().isEmpty() )
         {
-            if ( !aEdAssign2.GetText().isEmpty() )
-                aBtnAdd.Enable();
+            if ( !pEdAssign2->GetText().isEmpty() )
+                pBtnAdd->Enable();
             else
-                aBtnAdd.Disable();
-            aBtnColHead.Enable();
-            aBtnRowHead.Enable();
-            aEdAssign2.Enable();
-            aRbAssign2.Enable();
+                pBtnAdd->Disable();
+            pBtnColHead->Enable();
+            pBtnRowHead->Enable();
+            pEdAssign2->Enable();
+            pRbAssign2->Enable();
         }
         else
         {
-            aBtnAdd.Disable();
-            aBtnColHead.Disable();
-            aBtnRowHead.Disable();
-            aEdAssign2.Disable();
-            aRbAssign2.Disable();
+            pBtnAdd->Disable();
+            pBtnColHead->Disable();
+            pBtnRowHead->Disable();
+            pEdAssign2->Disable();
+            pRbAssign2->Disable();
         }
-        aBtnRemove.Disable();
-        aEdAssign.GrabFocus();
+        pBtnRemove->Disable();
+        pEdAssign->GrabFocus();
     }
 
-    aEdAssign.Enable();
-    aRbAssign.Enable();
+    pEdAssign->Enable();
+    pRbAssign->Enable();
 
     return 0;
 }
@@ -984,7 +983,7 @@ IMPL_LINK_NOARG(ScColRowNameRangesDlg, Range1SelectHdl)
 
 IMPL_LINK_NOARG(ScColRowNameRangesDlg, Range1DataModifyHdl)
 {
-    String aNewArea( aEdAssign.GetText() );
+    String aNewArea( pEdAssign->GetText() );
     sal_Bool bValid = false;
     if ( aNewArea.Len() > 0 )
     {
@@ -997,21 +996,21 @@ IMPL_LINK_NOARG(ScColRowNameRangesDlg, Range1DataModifyHdl)
     }
     if ( bValid )
     {
-        aBtnAdd.Enable();
-        aBtnColHead.Enable();
-        aBtnRowHead.Enable();
-        aEdAssign2.Enable();
-        aRbAssign2.Enable();
+        pBtnAdd->Enable();
+        pBtnColHead->Enable();
+        pBtnRowHead->Enable();
+        pEdAssign2->Enable();
+        pRbAssign2->Enable();
     }
     else
     {
-        aBtnAdd.Disable();
-        aBtnColHead.Disable();
-        aBtnRowHead.Disable();
-        aEdAssign2.Disable();
-        aRbAssign2.Disable();
+        pBtnAdd->Disable();
+        pBtnColHead->Disable();
+        pBtnRowHead->Disable();
+        pEdAssign2->Disable();
+        pRbAssign2->Disable();
     }
-    aBtnRemove.Disable();
+    pBtnRemove->Disable();
     return 0;
 }
 
@@ -1033,21 +1032,21 @@ IMPL_LINK_NOARG(ScColRowNameRangesDlg, Range1DataModifyHdl)
 
 IMPL_LINK_NOARG(ScColRowNameRangesDlg, Range2DataModifyHdl)
 {
-    String aNewData( aEdAssign2.GetText() );
+    String aNewData( pEdAssign2->GetText() );
     if ( aNewData.Len() > 0 )
     {
         ScRange aRange;
         if ( (aRange.ParseAny( aNewData, pDoc, pDoc->GetAddressConvention() ) & SCA_VALID) == SCA_VALID )
         {
             AdjustColRowData( aRange );
-            aBtnAdd.Enable();
+            pBtnAdd->Enable();
         }
         else
-            aBtnAdd.Disable();
+            pBtnAdd->Disable();
     }
     else
     {
-        aBtnAdd.Disable();
+        pBtnAdd->Disable();
     }
     return 0;
 }
@@ -1071,16 +1070,16 @@ IMPL_LINK_NOARG(ScColRowNameRangesDlg, Range2DataModifyHdl)
 
 IMPL_LINK_NOARG(ScColRowNameRangesDlg, ColClickHdl)
 {
-    if ( !aBtnColHead.GetSavedValue() )
+    if ( !pBtnColHead->GetSavedValue() )
     {
-        aBtnColHead.Check( sal_True );
-        aBtnRowHead.Check( false );
+        pBtnColHead->Check( sal_True );
+        pBtnRowHead->Check( false );
         if ( theCurArea.aStart.Row() == 0 && theCurArea.aEnd.Row() == MAXROW )
         {
             theCurArea.aEnd.SetRow( MAXROW - 1 );
             String aStr;
             theCurArea.Format( aStr, SCR_ABS_3D, pDoc, pDoc->GetAddressConvention() );
-            aEdAssign.SetText( aStr );
+            pEdAssign->SetText( aStr );
         }
         ScRange aRange( theCurData );
         aRange.aStart.SetRow( std::min( (long)(theCurArea.aEnd.Row() + 1), (long)MAXROW ) );
@@ -1109,16 +1108,16 @@ IMPL_LINK_NOARG(ScColRowNameRangesDlg, ColClickHdl)
 
 IMPL_LINK_NOARG(ScColRowNameRangesDlg, RowClickHdl)
 {
-    if ( !aBtnRowHead.GetSavedValue() )
+    if ( !pBtnRowHead->GetSavedValue() )
     {
-        aBtnRowHead.Check( sal_True );
-        aBtnColHead.Check( false );
+        pBtnRowHead->Check( sal_True );
+        pBtnColHead->Check( false );
         if ( theCurArea.aStart.Col() == 0 && theCurArea.aEnd.Col() == MAXCOL )
         {
             theCurArea.aEnd.SetCol( MAXCOL - 1 );
             String aStr;
             theCurArea.Format( aStr, SCR_ABS_3D, pDoc, pDoc->GetAddressConvention() );
-            aEdAssign.SetText( aStr );
+            pEdAssign->SetText( aStr );
         }
         ScRange aRange( theCurData );
         aRange.aStart.SetCol( static_cast<SCCOL>(std::min( (long)(theCurArea.aEnd.Col() + 1), (long)MAXCOL )) );
@@ -1131,10 +1130,10 @@ IMPL_LINK_NOARG(ScColRowNameRangesDlg, RowClickHdl)
 
 IMPL_LINK( ScColRowNameRangesDlg, GetFocusHdl, Control*, pCtrl )
 {
-    if( (pCtrl == (Control*)&aEdAssign) || (pCtrl == (Control*)&aRbAssign) )
-        pEdActive = &aEdAssign;
-    else if( (pCtrl == (Control*)&aEdAssign2) || (pCtrl == (Control*)&aRbAssign2) )
-        pEdActive = &aEdAssign2;
+    if( (pCtrl == (Control*)pEdAssign) || (pCtrl == (Control*)pRbAssign) )
+        pEdActive = pEdAssign;
+    else if( (pCtrl == (Control*)pEdAssign2) || (pCtrl == (Control*)pRbAssign2) )
+        pEdActive = pEdAssign2;
     else
         pEdActive = NULL;
 
