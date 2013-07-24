@@ -71,7 +71,7 @@ endef
 download: $(WORKDIR)/download
 
 $(WORKDIR)/download: $(BUILDDIR)/config_host.mk $(SRCDIR)/download.lst $(SRCDIR)/Makefile.fetch
-	@mkdir -p $(TARFILE_LOCATION)/tmp
+	-@mkdir -p $(TARFILE_LOCATION)/tmp
 	@date >> $(fetch_LOGFILE)
 	$(foreach item, \
 		$(call fetch_Optional,LIBATOMIC_OPS,LIBATOMIC_OPS_TARBALL) \
