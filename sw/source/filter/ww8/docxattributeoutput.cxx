@@ -2860,12 +2860,24 @@ void DocxAttributeOutput::WriteOutliner(const OutlinerParaObject& rParaObj)
         xub_StrLen nEnd = aStr.Len();
 
         m_pSerializer->startElementNS( XML_w, XML_p, FSEND );
+
+        // Write paragraph properties.
+        m_pSerializer->startElementNS(XML_w, XML_pPr, FSEND);
+        aAttrIter.OutParaAttr(false);
+        m_pSerializer->endElementNS(XML_w, XML_pPr);
+
         do {
             xub_StrLen nNextAttr = aAttrIter.WhereNext();
             if( nNextAttr > nEnd )
                 nNextAttr = nEnd;
 
             m_pSerializer->startElementNS( XML_w, XML_r, FSEND );
+
+            // Write run properties.
+            m_pSerializer->startElementNS(XML_w, XML_rPr, FSEND);
+            aAttrIter.OutAttr(nAktPos);
+            m_pSerializer->endElementNS(XML_w, XML_rPr);
+
             bool bTxtAtr = aAttrIter.IsTxtAttr( nAktPos );
             if( !bTxtAtr )
             {
