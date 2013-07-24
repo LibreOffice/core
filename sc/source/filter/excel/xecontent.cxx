@@ -391,12 +391,9 @@ XclExpHyperlink::XclExpHyperlink( const XclExpRoot& rRoot, const SvxURLField& rU
             mxRepr.reset( new String( aFileName ) );
 
         msTarget = XclXmlUtils::ToOUString( aLink );
-        if( eProtocol == INET_PROT_SMB )
-        {
-            // ooxml expects the file:/// part appended ( or at least
-            // ms2007 does, ms2010 is more tolerant )
-            msTarget = "file:///" + msTarget;
-        }
+        // ooxml expects the file:/// part appended ( or at least
+        // ms2007 does, ms2010 is more tolerant )
+        msTarget = "file:///" + msTarget;
     }
     else if( eProtocol != INET_PROT_NOT_VALID )
     {
