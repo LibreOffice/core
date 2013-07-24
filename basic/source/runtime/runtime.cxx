@@ -64,6 +64,7 @@
 #include "sb.hrc"
 #include "sbintern.hxx"
 #include "sbunoobj.hxx"
+#include "basic/codecompletecache.hxx"
 
 using com::sun::star::uno::Reference;
 
@@ -3264,7 +3265,7 @@ bool SbiRuntime::checkClass_Impl( const SbxVariableRef& refVal,
         {
             if( !implIsClass( pObj, aClass ) )
             {
-                if ( bVBAEnabled && pObj->IsA( TYPE(SbUnoObject) ) )
+                if ( ( bVBAEnabled || CodeCompleteOptions::IsExtendedTypeDeclaration() ) && pObj->IsA( TYPE(SbUnoObject) ) )
                 {
                     SbUnoObject* pUnoObj = PTR_CAST(SbUnoObject,pObj);
                     bOk = checkUnoObjectType( pUnoObj, aClass );
