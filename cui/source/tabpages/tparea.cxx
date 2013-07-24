@@ -648,6 +648,21 @@ SvxAreaTabPage::SvxAreaTabPage( Window* pParent, const SfxItemSet& rInAttrs ) :
 
     get(m_pCtlXRectPreview,"CTL_COLOR_PREVIEW");
 
+    //so that even for "none" the size requested is the largest
+    //size required for any of the areas which might be selected
+    //later, so that there's sufficient space
+    VclContainer *pMainFrame = get<VclContainer>("mainframe");
+    Size aIncrementsSize(m_pFlStepCount->get_preferred_size());
+    Size aHatchSize(m_pFlHatchBckgrd->get_preferred_size());
+    Size aBitmapSize(m_pBxBitmap->get_preferred_size());
+    Size aMainFrame(
+        std::max(std::max(aIncrementsSize.Width(), aHatchSize.Width()), aBitmapSize.Width()),
+        std::max(std::max(aIncrementsSize.Height(), aHatchSize.Height()), aBitmapSize.Height()));
+    pMainFrame->set_width_request(aMainFrame.Width());
+    pMainFrame->set_height_request(aMainFrame.Height());
+
+
+
     // groups that overlay each other
     m_pLbBitmap->Hide();
     m_pCtlBitmapPreview->Hide();
@@ -2259,13 +2274,13 @@ IMPL_LINK_NOARG(SvxAreaTabPage, ClickScaleHdl_Impl)
     if( m_pTsbScale->GetState() == STATE_CHECK )
     {
         m_pMtrFldXSize->SetDecimalDigits( 0 );
-        m_pMtrFldXSize->SetUnit( FUNIT_CUSTOM );
+        m_pMtrFldXSize->SetUnit(FUNIT_PERCENT);
         m_pMtrFldXSize->SetValue( 100 );
         m_pMtrFldXSize->SetMax( 100 );
         m_pMtrFldXSize->SetLast( 100 );
 
         m_pMtrFldYSize->SetDecimalDigits( 0 );
-        m_pMtrFldYSize->SetUnit( FUNIT_CUSTOM );
+        m_pMtrFldYSize->SetUnit(FUNIT_PERCENT);
         m_pMtrFldYSize->SetValue( 100 );
         m_pMtrFldYSize->SetMax( 100 );
         m_pMtrFldYSize->SetLast( 100 );

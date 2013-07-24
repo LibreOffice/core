@@ -923,6 +923,9 @@ extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeColorLB(Window *pParent, Vc
     WinBits nWinBits = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_SIMPLEMODE|WB_TABSTOP;
     if (bDropdown)
         nWinBits |= WB_DROPDOWN;
+    OString sBorder = VclBuilder::extractCustomProperty(rMap);
+    if (!sBorder.isEmpty())
+        nWinBits |= WB_BORDER;
     ColorLB *pListBox = new ColorLB(pParent, nWinBits);
     pListBox->EnableAutoSize(true);
     return pListBox;

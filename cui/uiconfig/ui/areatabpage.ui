@@ -2,6 +2,18 @@
 <interface>
   <!-- interface-requires gtk+ 3.0 -->
   <!-- interface-requires LibreOffice 1.0 -->
+  <object class="GtkAdjustment" id="adjustment1">
+    <property name="lower">3</property>
+    <property name="upper">256</property>
+    <property name="value">64</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustment2">
+    <property name="upper">100</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
   <object class="GtkBox" id="AreaTabPage">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -44,7 +56,7 @@
                     <property name="orientation">vertical</property>
                     <property name="spacing">6</property>
                     <child>
-                      <object class="svxlo-ColorLB" id="LB_COLOR">
+                      <object class="svxlo-ColorLB" id="LB_COLOR:border">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="dropdown">False</property>
@@ -56,9 +68,10 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="svxlo-GradientLB" id="LB_GRADIENT">
+                      <object class="svxlo-GradientLB" id="LB_GRADIENT:border">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="dropdown">False</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -67,9 +80,10 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="svxlo-HatchingLB" id="LB_HATCHING">
+                      <object class="svxlo-HatchingLB" id="LB_HATCHING:border">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="dropdown">False</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -78,7 +92,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="svxlo-BitmapLB" id="LB_BITMAP">
+                      <object class="svxlo-BitmapLB" id="LB_BITMAP:border">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                       </object>
@@ -167,28 +181,28 @@
       </packing>
     </child>
     <child>
-      <object class="GtkBox" id="box2">
+      <object class="GtkBox" id="mainframe">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="hexpand">True</property>
         <property name="orientation">vertical</property>
         <child>
           <object class="GtkFrame" id="FL_STEPCOUNT">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="hexpand">True</property>
             <property name="label_xalign">0</property>
             <property name="shadow_type">none</property>
             <child>
               <object class="GtkAlignment" id="alignment2">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="hexpand">True</property>
                 <property name="top_padding">6</property>
                 <property name="left_padding">12</property>
                 <child>
                   <object class="GtkBox" id="box6">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="hexpand">True</property>
                     <property name="orientation">vertical</property>
                     <property name="spacing">6</property>
                     <child>
@@ -209,16 +223,23 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkSpinButton" id="NUM_FLD_STEPCOUNT">
+                      <object class="GtkAlignment" id="alignment8">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="halign">end</property>
-                        <property name="invisible_char">•</property>
+                        <property name="left_padding">12</property>
+                        <child>
+                          <object class="GtkSpinButton" id="NUM_FLD_STEPCOUNT">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="halign">start</property>
+                            <property name="invisible_char">•</property>
+                            <property name="adjustment">adjustment1</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="pack_type">end</property>
                         <property name="position">1</property>
                       </packing>
                     </child>
@@ -248,6 +269,7 @@
           <object class="GtkFrame" id="FL_HATCHCOLORS">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="hexpand">True</property>
             <property name="label_xalign">0</property>
             <property name="shadow_type">none</property>
             <child>
@@ -279,9 +301,17 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="svxlo-ColorLB" id="LB_HATCHBCKGRDCOLOR">
+                      <object class="GtkAlignment" id="alignment7">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="left_padding">12</property>
+                        <child>
+                          <object class="svxlo-ColorLB" id="LB_HATCHBCKGRDCOLOR">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="halign">start</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -315,7 +345,9 @@
           <object class="GtkBox" id="boxBITMAP">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="hexpand">True</property>
             <property name="orientation">vertical</property>
+            <property name="spacing">12</property>
             <child>
               <object class="GtkFrame" id="FL_SIZE">
                 <property name="visible">True</property>
@@ -339,6 +371,7 @@
                             <property name="can_focus">False</property>
                             <property name="orientation">vertical</property>
                             <property name="spacing">6</property>
+                            <property name="homogeneous">True</property>
                             <child>
                               <object class="GtkCheckButton" id="TSB_ORIGINAL">
                                 <property name="label" translatable="yes">_Original</property>
@@ -395,7 +428,7 @@
                                 <property name="xalign">0</property>
                                 <property name="label" translatable="yes">Wi_dth</property>
                                 <property name="use_underline">True</property>
-                                <property name="mnemonic_widget">MTR_FLD_X_SIZE:0%</property>
+                                <property name="mnemonic_widget">MTR_FLD_X_SIZE:0.00cm</property>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -411,7 +444,7 @@
                                 <property name="xalign">0</property>
                                 <property name="label" translatable="yes">H_eight</property>
                                 <property name="use_underline">True</property>
-                                <property name="mnemonic_widget">MTR_FLD_Y_SIZE:0%</property>
+                                <property name="mnemonic_widget">MTR_FLD_Y_SIZE:0.00cm</property>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -421,10 +454,11 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkSpinButton" id="MTR_FLD_X_SIZE:0%">
+                              <object class="GtkSpinButton" id="MTR_FLD_X_SIZE:0.00cm">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="invisible_char">•</property>
+                                <property name="digits">2</property>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
@@ -434,10 +468,11 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkSpinButton" id="MTR_FLD_Y_SIZE:0%">
+                              <object class="GtkSpinButton" id="MTR_FLD_Y_SIZE:0.00cm">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="invisible_char">•</property>
+                                <property name="digits">2</property>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
@@ -495,11 +530,38 @@
                         <property name="orientation">vertical</property>
                         <property name="spacing">6</property>
                         <child>
-                          <object class="svxlo-SvxRectCtl" id="CTL_POSITION">
+                          <object class="GtkBox" id="box3">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="hexpand">True</property>
-                            <property name="vexpand">True</property>
+                            <property name="homogeneous">True</property>
+                            <child>
+                              <object class="svxlo-SvxRectCtl" id="CTL_POSITION">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="hexpand">True</property>
+                                <property name="vexpand">True</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkBox" id="box5">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="orientation">vertical</property>
+                                <child>
+                                  <placeholder/>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">1</property>
+                              </packing>
+                            </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -511,17 +573,16 @@
                           <object class="GtkGrid" id="gridOFFSET">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="halign">center</property>
                             <property name="row_spacing">6</property>
                             <property name="column_spacing">12</property>
-                            <property name="column_homogeneous">True</property>
                             <child>
                               <object class="GtkLabel" id="FT_Y_OFFSET">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
+                                <property name="xalign">0</property>
                                 <property name="label" translatable="yes">_Y Offset</property>
                                 <property name="use_underline">True</property>
-                                <property name="mnemonic_widget">MTR_FLD_Y_SIZE:0%</property>
+                                <property name="mnemonic_widget">MTR_FLD_Y_SIZE:0.00cm</property>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -534,9 +595,10 @@
                               <object class="GtkLabel" id="FT_X_OFFSET">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
+                                <property name="xalign">0</property>
                                 <property name="label" translatable="yes">_X Offset</property>
                                 <property name="use_underline">True</property>
-                                <property name="mnemonic_widget">MTR_FLD_X_SIZE:0%</property>
+                                <property name="mnemonic_widget">MTR_FLD_X_SIZE:0.00cm</property>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -549,7 +611,9 @@
                               <object class="GtkSpinButton" id="MTR_FLD_X_OFFSET:0%">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
+                                <property name="halign">start</property>
                                 <property name="invisible_char">•</property>
+                                <property name="adjustment">adjustment2</property>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
@@ -562,7 +626,9 @@
                               <object class="GtkSpinButton" id="MTR_FLD_Y_OFFSET:0%">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
+                                <property name="halign">start</property>
                                 <property name="invisible_char">•</property>
+                                <property name="adjustment">adjustment2</property>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
@@ -604,7 +670,6 @@
               <object class="GtkBox" id="boxTILE">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="halign">center</property>
                 <property name="spacing">12</property>
                 <property name="homogeneous">True</property>
                 <child>
@@ -665,7 +730,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="row_spacing">6</property>
-                        <property name="column_spacing">6</property>
+                        <property name="column_spacing">12</property>
                         <child>
                           <object class="GtkRadioButton" id="RBT_ROW">
                             <property name="label" translatable="yes">Ro_w</property>
@@ -708,7 +773,9 @@
                           <object class="GtkSpinButton" id="MTR_FLD_OFFSET:0%">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="halign">start</property>
                             <property name="invisible_char">•</property>
+                            <property name="adjustment">adjustment2</property>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -789,10 +856,10 @@
   <object class="GtkSizeGroup" id="sizegroup1">
     <widgets>
       <widget name="LB_AREA_TYPE"/>
-      <widget name="LB_COLOR"/>
-      <widget name="LB_GRADIENT"/>
-      <widget name="LB_HATCHING"/>
-      <widget name="LB_BITMAP"/>
+      <widget name="LB_COLOR:border"/>
+      <widget name="LB_GRADIENT:border"/>
+      <widget name="LB_HATCHING:border"/>
+      <widget name="LB_BITMAP:border"/>
       <widget name="CTL_COLOR_PREVIEW"/>
       <widget name="CTL_BITMAP_PREVIEW"/>
     </widgets>
@@ -803,11 +870,12 @@
       <widget name="gridX_Y"/>
     </widgets>
   </object>
-  <object class="GtkSizeGroup" id="sizegroup3"/>
-  <object class="GtkSizeGroup" id="sizegroup4">
+  <object class="GtkSizeGroup" id="sizegroup3">
     <widgets>
-      <widget name="NUM_FLD_STEPCOUNT"/>
-      <widget name="LB_HATCHBCKGRDCOLOR"/>
+      <widget name="FT_Y_OFFSET"/>
+      <widget name="FT_X_OFFSET"/>
+      <widget name="RBT_ROW"/>
+      <widget name="RBT_COLUMN"/>
     </widgets>
   </object>
 </interface>
