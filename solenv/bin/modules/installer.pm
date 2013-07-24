@@ -371,7 +371,7 @@ sub run {
 
         installer::logger::print_message( "... analyzing folderitemproperties ... \n" );
 
-        $folderitempropertiessinproductarrayref = installer::setupscript::get_all_items_from_script($setupscriptref, "FolderItemProperty");
+        $folderitempropertiesinproductarrayref = installer::setupscript::get_all_items_from_script($setupscriptref, "FolderItemProperty");
 
         installer::logger::print_message( "... analyzing registryitems ... \n" );
 
@@ -1392,7 +1392,7 @@ sub run {
 
             installer::windows::upgrade::create_upgrade_table($newidtdir, $allvariableshashref);
 
-            installer::windows::msishortcutproperty::create_msishortcutproperty_table($folderitempropertiesinproductarrayref, $folderitemsinproductlanguageresolvedarrayref, $newidtdir);
+            installer::windows::msishortcutproperty::create_msishortcutproperty_table($folderitempropertiesinproductarrayref, $folderitemsinproductarrayref, $newidtdir);
 
             if (( ! $installer::globals::languagepack ) && ( ! $installer::globals::helppack )) # the following tables not for language packs or help packs
             {
