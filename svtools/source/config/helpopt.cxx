@@ -28,7 +28,6 @@
 #include <osl/mutex.hxx>
 #include <comphelper/stl_types.hxx>
 
-#include <rtl/logfile.hxx>
 #include "itemholder2.hxx"
 
 using namespace utl;
@@ -264,7 +263,6 @@ SvtHelpOptions::SvtHelpOptions()
     ++nRefCount;
     if ( !pOptions )
     {
-        RTL_LOGFILE_CONTEXT(aLog, "svtools ( ??? ) ::SvtHelpOptions_Impl::ctor()");
         pOptions = new SvtHelpOptions_Impl;
 
         svtools::ItemHolder2::holdConfigItem(E_HELPOPTIONS);

@@ -43,7 +43,6 @@
 #include <com/sun/star/chart2/XDefaultSizeTransmitter.hpp>
 #include <cppuhelper/implbase4.hxx>
 #include "vcl/svapp.hxx"
-#include <rtl/logfile.hxx>
 #include <osl/mutex.hxx>
 
 using namespace com::sun::star;
@@ -566,12 +565,11 @@ void EmbeddedObjectRef::SetGraphic( const Graphic& rGraphic, const OUString& rMe
 
 SvStream* EmbeddedObjectRef::GetGraphicStream( bool bUpdate ) const
 {
-    RTL_LOGFILE_CONTEXT( aLog, "svtools (mv76033) svt::EmbeddedObjectRef::GetGraphicStream" );
     DBG_ASSERT( bUpdate || mpImpl->pContainer, "Can't retrieve current graphic!" );
     uno::Reference < io::XInputStream > xStream;
     if ( mpImpl->pContainer && !bUpdate )
     {
-        RTL_LOGFILE_CONTEXT_TRACE( aLog, "getting stream from container" );
+        SAL_INFO( "svtools.misc", "getting stream from container" );
         // try to get graphic stream from container storage
         xStream = mpImpl->pContainer->GetGraphicStream(mpImpl->mxObj, &mpImpl->aMediaType);
         if ( xStream.is() )
@@ -602,7 +600,7 @@ SvStream* EmbeddedObjectRef::GetGraphicStream( bool bUpdate ) const
 
     if ( !xStream.is() )
     {
-        RTL_LOGFILE_CONTEXT_TRACE( aLog, "getting stream from object" );
+        SAL_INFO( "svtools.misc", "getting stream from object" );
         // update wanted or no stream in container storage available
         xStream = GetGraphicReplacementStream(mpImpl->nViewAspect, mpImpl->mxObj, &mpImpl->aMediaType);
 

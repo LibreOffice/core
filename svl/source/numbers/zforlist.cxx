@@ -40,7 +40,6 @@
 
 #include <unotools/syslocaleoptions.hxx>
 #include <unotools/digitgroupingiterator.hxx>
-#include <rtl/logfile.hxx>
 #include <rtl/instance.hxx>
 #include <rtl/strbuf.hxx>
 
@@ -220,8 +219,6 @@ SvNumberFormatter::~SvNumberFormatter()
 
 void SvNumberFormatter::ImpConstruct( LanguageType eLang )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aTimeLog, "svl", "er93726", "SvNumberFormatter::ImpConstruct" );
-
     if ( eLang == LANGUAGE_DONTKNOW )
     {
         eLang = UNKNOWN_SUBSTITUTE;
@@ -3673,8 +3670,6 @@ void SvNumberFormatter::ImpInitCurrencyTable()
     }
     bInitializing = true;
 
-    RTL_LOGFILE_CONTEXT_AUTHOR( aTimeLog, "svl", "er93726", "SvNumberFormatter::ImpInitCurrencyTable" );
-
     LanguageType eSysLang = SvtSysLocale().GetLanguageTag().getLanguageType();
     LocaleDataWrapper* pLocaleData = new LocaleDataWrapper(
         ::comphelper::getProcessComponentContext(),
@@ -3696,7 +3691,7 @@ void SvNumberFormatter::ImpInitCurrencyTable()
     ::com::sun::star::uno::Sequence< ::com::sun::star::lang::Locale > xLoc =
         LocaleDataWrapper::getInstalledLocaleNames();
     sal_Int32 nLocaleCount = xLoc.getLength();
-    RTL_LOGFILE_CONTEXT_TRACE1( aTimeLog, "number of locales: %ld", nLocaleCount );
+    SAL_INFO( "svl.numbers", "number of locales: \"" << nLocaleCount << "\"" );
     Locale const * const pLocales = xLoc.getConstArray();
     NfCurrencyTable &rCurrencyTable = theCurrencyTable::get();
     NfCurrencyTable &rLegacyOnlyCurrencyTable = theLegacyOnlyCurrencyTable::get();
