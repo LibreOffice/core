@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXn//+Gc\u003d",
+        "filename": "svx/source/unodraw/unoshap2.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1906,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2013-07-24T12:26:25Z",
+      "side": 1,
+      "message": "This adds the MirroredX (and other) UNO props without updating idl doc / ODF filters. This has to be fixed somehow. Maybe implement a ShapeInteropGrabBag (similar to ParaInteropGrabBag)?",
+      "revId": "1b6b4371e76a70fba10bd952392b99f8f79340d9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
