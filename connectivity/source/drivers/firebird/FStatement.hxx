@@ -45,9 +45,6 @@ namespace connectivity
     namespace firebird
     {
 
-        // The name OStatementStatement_BASE is temporary and will be changed
-        // once the general restructuring of Statement/PreparedStatement is
-        // complete.
         typedef ::cppu::ImplHelper1< ::com::sun::star::sdbc::XStatement >
             OStatement_Base;
 

@@ -103,7 +103,6 @@ namespace connectivity
                                                   isc_stmt_handle& aStatementHandle,
                                                   XSQLDA*& pOutSqlda,
                                                   XSQLDA* pInSqlda=0);
-            ::rtl::OUString sanitizeSqlString(const OUString& sqlIn);
         public:
 
             ::cppu::OBroadcastHelper& rBHelper;

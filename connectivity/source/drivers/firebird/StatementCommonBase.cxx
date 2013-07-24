@@ -122,23 +122,12 @@ void SAL_CALL OStatementCommonBase::close(  ) throw(SQLException, RuntimeExcepti
     dispose();
 }
 
-
-OUString OStatementCommonBase::sanitizeSqlString(const OUString& sqlIn)
-{
-    // TODO: verify this is all we need.
-    static const sal_Unicode pattern('"');
-    static const sal_Unicode empty(' ');
-    return sqlIn.replace(pattern, empty);
-}
-
-int OStatementCommonBase::prepareAndDescribeStatement(const OUString& sqlIn,
+int OStatementCommonBase::prepareAndDescribeStatement(const OUString& sql,
                                                  isc_stmt_handle& aStatementHandle,
                                                  XSQLDA*& pOutSqlda,
                                                  XSQLDA* pInSqlda)
 {
     MutexGuard aGuard(m_pConnection->getMutex());
-
-    const OUString sql = sanitizeSqlString(sqlIn);
 
     if (!pOutSqlda)
     {

@@ -95,14 +95,12 @@ void SAL_CALL OStatement::release() throw()
 }
 
 // ---- XStatement -----------------------------------------------------------
-sal_Int32 SAL_CALL OStatement::executeUpdate(const OUString& sqlIn)
+sal_Int32 SAL_CALL OStatement::executeUpdate(const OUString& sql)
     throw(SQLException, RuntimeException)
 {
     // TODO: close ResultSet if existing -- so so in all 3 execute methods.
     MutexGuard aGuard(m_pConnection->getMutex());
     checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
-
-    const OUString sql = sanitizeSqlString(sqlIn);
 
     int aErr = isc_dsql_execute_immediate(m_statusVector,
                                           &m_pConnection->getDBHandle(),
@@ -122,13 +120,11 @@ sal_Int32 SAL_CALL OStatement::executeUpdate(const OUString& sqlIn)
 }
 
 
-uno::Reference< XResultSet > SAL_CALL OStatement::executeQuery(const OUString& sqlIn)
+uno::Reference< XResultSet > SAL_CALL OStatement::executeQuery(const OUString& sql)
     throw(SQLException, RuntimeException)
 {
     MutexGuard aGuard(m_pConnection->getMutex());
     checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
-
-    const OUString sql = sanitizeSqlString(sqlIn);
 
     XSQLDA* pOutSqlda = 0;
     isc_stmt_handle aStatementHandle = 0;
@@ -166,11 +162,11 @@ uno::Reference< XResultSet > SAL_CALL OStatement::executeQuery(const OUString& s
     return m_xResultSet;
 }
 
-sal_Bool SAL_CALL OStatement::execute(const OUString& sqlIn)
+sal_Bool SAL_CALL OStatement::execute(const OUString& sql)
     throw(SQLException, RuntimeException)
 {
     SAL_INFO("connectivity.firebird", "executeQuery(). "
-             "Got called with sql: " << sqlIn);
+             "Got called with sql: " << sql);
 
     MutexGuard aGuard(m_pConnection->getMutex());
     checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
@@ -178,8 +174,6 @@ sal_Bool SAL_CALL OStatement::execute(const OUString& sqlIn)
     XSQLDA* pOutSqlda = 0;
     isc_stmt_handle aStatementHandle = 0;
     int aErr = 0;
-
-    const OUString sql = sanitizeSqlString(sqlIn);
 
     aErr = prepareAndDescribeStatement(sql,
                                        aStatementHandle,
