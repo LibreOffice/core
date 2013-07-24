@@ -2822,7 +2822,7 @@ reg_get_value()
 {
     # Return value: $regvalue
     unset regvalue
-    _regvalue=`cat "/proc/registry/$1" 2> /dev/null`
+    _regvalue=`cat "/proc/registry32/$1" 2> /dev/null`
 
     if test $? -eq 0; then
         regvalue=$_regvalue
