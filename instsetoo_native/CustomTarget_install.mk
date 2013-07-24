@@ -29,6 +29,11 @@ $(eval $(call gb_CustomTarget_register_targets,instsetoo_native/install,\
 $(call gb_CustomTarget_get_workdir,instsetoo_native/install)/install.phony: \
 	$(SOLARENV)/bin/make_installer.pl \
 	$(foreach ulf,$(instsetoo_ULFLIST),$(call gb_CustomTarget_get_workdir,instsetoo_native/install)/win_ulffiles/$(ulf).ulf) \
+	$(if $(filter-out WNT,$(OS)),\
+		$(addprefix $(call gb_CustomTarget_get_workdir,instsetoo_native/install)/,\
+			bin/find-requires-gnome.sh \
+			bin/find-requires-x11.sh) \
+	) \
 	$(call gb_Postprocess_get_target,AllModulesButInstsetNative)
 
 $(call gb_CustomTarget_get_workdir,instsetoo_native/install)/bin/find-requires-%.sh: $(SRCDIR)/instsetoo_native/inc_openoffice/unix/find-requires-%.sh

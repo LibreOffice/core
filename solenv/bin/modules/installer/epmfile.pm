@@ -1702,7 +1702,7 @@ sub prepare_packages
     if ( $installer::globals::isrpmbuild )
     {
         set_topdir_in_specfile($changefile, $filename, $newepmdir);
-        set_autoprovreq_in_specfile($changefile, $onepackage->{'findrequires'}, "$installer::globals::unpackpath" . "/bin");
+        set_autoprovreq_in_specfile($changefile, $onepackage->{'findrequires'}, "$installer::globals::workpath" . "/bin");
         set_packager_in_specfile($changefile);
         if ( is_extension_package($changefile) ) { set_prereq_in_specfile($changefile); }
         set_license_in_specfile($changefile, $variableshashref);
