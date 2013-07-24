@@ -31,11 +31,11 @@
 #include <com/sun/star/container/XNameReplace.hpp>
 
 #include <comphelper/processfactory.hxx>
-#include <comphelper/configurationhelper.hxx>
 #include <rtl/bootstrap.hxx>
 #include <tools/diagnose_ex.h>
 #include <vcl/msgbox.hxx>
 #include <osl/process.h>
+#include <officecfg/Office/Addons.hxx>
 
 using namespace com::sun::star;
 
@@ -105,15 +105,10 @@ IMPL_LINK_NOARG(NewerVersionWarningDialog, UpdateHdl)
 
             // TODO: do we need to respect the bUpdateCheckEnabled flag? Finally, its meaning is "are automatic
             // updates enabled", but this here is not an automatic update, but one triggered explicitly by the user.
+            css::uno::Reference< css::container::XNameAccess > xOfficeHelp = officecfg::Office::Addons::AddonUI::OfficeHelp::get(xContext);
 
-            uno::Any aVal = ::comphelper::ConfigurationHelper::readDirectKey(
-                                    xContext,
-                                    "org.openoffice.Office.Addons/",
-                                    "AddonUI/OfficeHelp/UpdateCheckJob",
-                                    "URL",
-                                    ::comphelper::ConfigurationHelper::E_READONLY );
             util::URL aURL;
-            if ( aVal >>= aURL.Complete )
+            if ( xOfficeHelp->getByName("UpdateCheckJob") >>= aURL.Complete )
             {
                 uno::Reference< util::XURLTransformer > xTransformer( util::URLTransformer::create(xContext) );
                 xTransformer->parseStrict( aURL );
