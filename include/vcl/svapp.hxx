@@ -232,8 +232,8 @@ public:
     static Window*              GetTopWindow( long nIndex );
     static Window*              GetActiveTopWindow();
 
-    static void                 SetAppName( const String& rUniqueName );
-    static String               GetAppName();
+    static void                 SetAppName( const OUString& rUniqueName );
+    static OUString             GetAppName();
     static bool                 LoadBrandBitmap (const char* pName, BitmapEx &rBitmap);
 
     // default name of the application for message dialogs and printing

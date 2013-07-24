@@ -1225,20 +1225,20 @@ Window* Application::GetActiveTopWindow()
 
 // -----------------------------------------------------------------------
 
-void Application::SetAppName( const XubString& rUniqueName )
+void Application::SetAppName( const OUString& rUniqueName )
 {
     ImplSVData* pSVData = ImplGetSVData();
 
     // create if does not exist
     if ( !pSVData->maAppData.mpAppName )
-        pSVData->maAppData.mpAppName = new XubString( rUniqueName );
+        pSVData->maAppData.mpAppName = new OUString( rUniqueName );
     else
         *(pSVData->maAppData.mpAppName) = rUniqueName;
 }
 
 // -----------------------------------------------------------------------
 
-XubString Application::GetAppName()
+OUString Application::GetAppName()
 {
     ImplSVData* pSVData = ImplGetSVData();
     if ( pSVData->maAppData.mpAppName )
@@ -1270,7 +1270,7 @@ OUString Application::GetDisplayName()
     else if ( pSVData->maWinData.mpAppWin )
         return pSVData->maWinData.mpAppWin->GetText();
     else
-        return ImplGetSVEmptyStr();
+        return OUString("");
 }
 
 // -----------------------------------------------------------------------
