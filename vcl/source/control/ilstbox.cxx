@@ -175,7 +175,7 @@ sal_uInt16 ImplEntryList::InsertEntry( sal_uInt16 nPos, ImplEntryType* pNewEntry
     {
         const comphelper::string::NaturalStringSorter &rSorter = theSorter::get();
 
-        const XubString& rStr = pNewEntry->maStr;
+        const OUString& rStr = pNewEntry->maStr;
         sal_uLong nLow, nHigh, nMid;
 
         nHigh = maEntries.size();
@@ -268,7 +268,7 @@ void ImplEntryList::RemoveEntry( sal_uInt16 nPos )
 
 // -----------------------------------------------------------------------
 
-sal_uInt16 ImplEntryList::FindEntry( const XubString& rString, sal_Bool bSearchMRUArea ) const
+sal_uInt16 ImplEntryList::FindEntry( const OUString& rString, sal_Bool bSearchMRUArea ) const
 {
     sal_uInt16 nEntries = maEntries.size();
     for ( sal_uInt16 n = bSearchMRUArea ? 0 : GetMRUCount(); n < nEntries; n++ )
@@ -282,7 +282,7 @@ sal_uInt16 ImplEntryList::FindEntry( const XubString& rString, sal_Bool bSearchM
 
     // -----------------------------------------------------------------------
 
-sal_uInt16 ImplEntryList::FindMatchingEntry( const XubString& rStr, sal_uInt16 nStart, sal_Bool bForward, sal_Bool bLazy ) const
+sal_uInt16 ImplEntryList::FindMatchingEntry( const OUString& rStr, sal_uInt16 nStart, sal_Bool bForward, sal_Bool bLazy ) const
 {
     sal_uInt16  nPos = LISTBOX_ENTRY_NOTFOUND;
     sal_uInt16  nEntryCount = GetEntryCount();
@@ -296,7 +296,15 @@ sal_uInt16 ImplEntryList::FindMatchingEntry( const XubString& rStr, sal_uInt16 n
             n--;
 
         ImplEntryType* pImplEntry = GetEntry( n );
-        bool bMatch = bLazy ? rI18nHelper.MatchString( rStr, pImplEntry->maStr ) != 0 : ( rStr.Match( pImplEntry->maStr ) == STRING_MATCH );
+        bool bMatch;
+        if ( bLazy  )
+        {
+            bMatch = rI18nHelper.MatchString( rStr, pImplEntry->maStr ) != 0;
+        }
+        else
+        {
+            bMatch = rStr.isEmpty() || (rStr == pImplEntry->maStr );
+        }
         if ( bMatch )
         {
             nPos = n;
@@ -1878,8 +1886,8 @@ void ImplListBoxWindow::DrawEntry( sal_uInt16 nPos, sal_Bool bDrawImage, sal_Boo
     {
         MetricVector* pVector = bLayout ? &mpControlData->mpLayoutData->m_aUnicodeBoundRects : NULL;
         OUString* pDisplayText = bLayout ? &mpControlData->mpLayoutData->m_aDisplayText : NULL;
-        XubString aStr( mpEntryList->GetEntryText( nPos ) );
-        if ( aStr.Len() )
+        OUString aStr( mpEntryList->GetEntryText( nPos ) );
+        if ( !aStr.isEmpty() )
         {
             long nMaxWidth = std::max( static_cast< long >( mnMaxWidth ),
                                   GetOutputSizePixel().Width() - 2*mnBorder );
@@ -2687,7 +2695,7 @@ void ImplListBox::SetMRUEntries( const OUString& rEntries, sal_Unicode cSep )
     sal_Int32 nIndex = 0;
     do
     {
-        XubString aEntry = rEntries.getToken( 0, cSep, nIndex );
+        OUString aEntry = rEntries.getToken( 0, cSep, nIndex );
         // Accept only existing entries
         if ( GetEntryList()->FindEntry( aEntry ) != LISTBOX_ENTRY_NOTFOUND )
         {

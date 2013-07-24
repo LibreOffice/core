@@ -129,8 +129,8 @@ public:
     ImplEntryType*          GetMutableEntryPtr( sal_uInt16 nPos ) const { return GetEntry( nPos ); }
     void                    Clear();
 
-    sal_uInt16          FindMatchingEntry( const XubString& rStr, sal_uInt16 nStart = 0, sal_Bool bForward = sal_True, sal_Bool bLazy = sal_True ) const;
-    sal_uInt16          FindEntry( const XubString& rStr, sal_Bool bSearchMRUArea = sal_False ) const;
+    sal_uInt16          FindMatchingEntry( const OUString& rStr, sal_uInt16 nStart = 0, sal_Bool bForward = sal_True, sal_Bool bLazy = sal_True ) const;
+    sal_uInt16          FindEntry( const OUString& rStr, sal_Bool bSearchMRUArea = sal_False ) const;
     sal_uInt16          FindEntry( const void* pData ) const;
 
     /// helper: add up heights up to index nEndIndex.
