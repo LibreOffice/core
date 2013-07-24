@@ -85,11 +85,12 @@ void CuiAboutConfigTabPage::InsertEntry( OUString& rProp, OUString&  rStatus, OU
 
 void CuiAboutConfigTabPage::Reset( const SfxItemSet& )
 {
+   OUString sRootNodePath = "/";
    pPrefBox->Clear();
 
-   Reference< XNameAccess > xConfigAccess = getConfigAccess();
+   Reference< XNameAccess > xConfigAccess = getConfigAccess( sRootNodePath );
 
-   FillItems( xConfigAccess, OUString("org.openoffice.Office.Canvas") );
+   FillItems( xConfigAccess, sRootNodePath );
 }
 
 void CuiAboutConfigTabPage::FillItems( Reference< XNameAccess >xNameAccess, OUString sPath)
@@ -127,7 +128,7 @@ void CuiAboutConfigTabPage::FillItems( Reference< XNameAccess >xNameAccess, OUSt
     }
 }
 
-Reference< XNameAccess > CuiAboutConfigTabPage::getConfigAccess()
+Reference< XNameAccess > CuiAboutConfigTabPage::getConfigAccess( OUString sNodePath )
 {
     uno::Reference< uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
 
@@ -136,7 +137,7 @@ Reference< XNameAccess > CuiAboutConfigTabPage::getConfigAccess()
 
     beans::NamedValue aProperty;
     aProperty.Name = "nodepath";
-    aProperty.Value = uno::makeAny( OUString("org.openoffice.Office.Canvas") );
+    aProperty.Value = uno::makeAny( sNodePath );
 
     uno::Sequence< uno::Any > aArgumentList( 1 );
     aArgumentList[0] = uno::makeAny( aProperty );

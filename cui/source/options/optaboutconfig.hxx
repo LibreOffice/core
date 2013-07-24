@@ -37,7 +37,7 @@ public:
    void     InsertEntry(OUString& rProp, OUString&  rStatus, OUString& rType, OUString& rValue);
    void     Reset( const SfxItemSet& );
    void     FillItems( com::sun::star::uno::Reference < com::sun::star::container::XNameAccess > xNameAccess, OUString sPath);
-   com::sun::star::uno::Reference< com::sun::star::container::XNameAccess > getConfigAccess();
+   com::sun::star::uno::Reference< com::sun::star::container::XNameAccess > getConfigAccess( OUString sNodePath );
 
 };
 
