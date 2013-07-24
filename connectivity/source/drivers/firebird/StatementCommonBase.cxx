@@ -33,6 +33,7 @@
  *
  *************************************************************************/
 
+#include "FDriver.hxx"
 #include "FResultSet.hxx"
 #include "StatementCommonBase.hxx"
 #include "Util.hxx"
@@ -164,7 +165,7 @@ int OStatementCommonBase::prepareAndDescribeStatement(const OUString& sqlIn,
                                 &aStatementHandle,
                                 0,
                                 OUStringToOString(sql, RTL_TEXTENCODING_UTF8).getStr(),
-                                1,
+                                FIREBIRD_SQL_DIALECT,
                                 pInSqlda);
     }
 

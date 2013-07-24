@@ -45,6 +45,11 @@ namespace connectivity
 {
     namespace firebird
     {
+        // The SQL dialect in use
+        // Has to be used in various isc_* calls.
+        // 3: Is IB6 -- minimum required for delimited identifiers.
+        static const int FIREBIRD_SQL_DIALECT = 3;
+
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL FirebirdDriver_CreateInstance(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory) throw( ::com::sun::star::uno::Exception );
 
         typedef ::cppu::WeakComponentImplHelper2<   ::com::sun::star::sdbc::XDriver,

@@ -33,6 +33,7 @@
  *
  *************************************************************************/
 
+#include "FDriver.hxx"
 #include "FStatement.hxx"
 #include "FConnection.hxx"
 #include "FResultSet.hxx"
@@ -108,7 +109,7 @@ sal_Int32 SAL_CALL OStatement::executeUpdate(const OUString& sqlIn)
                                           &m_pConnection->getTransaction(),
                                           0,
                                           OUStringToOString(sql, RTL_TEXTENCODING_UTF8).getStr(),
-                                          1,
+                                          FIREBIRD_SQL_DIALECT,
                                           NULL);
 
     if (aErr)
