@@ -279,15 +279,14 @@ def _uno_import( name, *optargs, **kwargs ):
         d = mod.__dict__
 
     RuntimeException = pyuno.getClass( "com.sun.star.uno.RuntimeException" )
-    unknown = object() # unknown/missing sentinel
     for x in fromlist:
        if x not in d:
-          d[x] = unknown
+          failed = False
           if x.startswith( "typeOf" ):
              try: 
                 d[x] = pyuno.getTypeByName( name + "." + x[6:len(x)] )
              except RuntimeException:
-                pass
+                failed = True
           else:
             try:
                 # check for structs, exceptions or interfaces
@@ -301,12 +300,9 @@ def _uno_import( name, *optargs, **kwargs ):
                    try:
                       d[x] = getConstantByName( name + "." + x )
                    except RuntimeException:
-                      pass
+                      failed = True
 
-          if d[x] is unknown:
-             # Remove unknown placeholder we created
-             del d[x]
-
+          if failed:
              # This can be a bad uno reference, or it can just result from any
              # python import failure (in a "from xxx import yyy" statement).
              # Synthesize a general purpose exception, reusing the original
