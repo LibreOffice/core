@@ -72,28 +72,6 @@ void AquaBlinker::Blink( AquaSalFrame* pFrame, const Rectangle& rRect, int nTime
     pNew->Start();
 }
 
-ControlPart ImplgetCounterPart( ControlPart nPart )
-{
-    ControlPart nCounterPart = 0;
-    switch (nPart)
-    {
-        case PART_BUTTON_UP:
-            nCounterPart = PART_BUTTON_DOWN;
-            break;
-        case PART_BUTTON_DOWN:
-            nCounterPart = PART_BUTTON_UP;
-            break;
-        case PART_BUTTON_LEFT:
-            nCounterPart = PART_BUTTON_RIGHT;
-            break;
-        case PART_BUTTON_RIGHT:
-            nCounterPart = PART_BUTTON_LEFT;
-            break;
-    }
-    return nCounterPart;
-}
-
-
 // Helper returns an HIRect
 
 static HIRect ImplGetHIRectFromRectangle(Rectangle aRect)
