@@ -26,11 +26,11 @@
 #include <vcl/fixed.hxx>
 #include <vcl/layout.hxx>
 #include <actctrl.hxx>
-#include <com/sun/star/container/XNameAccess.hpp>
-#include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/frame/XController.hpp>
-#include <com/sun/star/frame/XFrameControl.hpp>
 #include <com/sun/star/text/XTextCursor.hpp>
+#include <com/sun/star/container/XNameAccess.hpp>
+#include <com/sun/star/awt/XControl.hpp>
+#include <com/sun/star/container/XNamed.hpp>
 #include <tools/resary.hxx>
 #include "swdllapi.h"
 
@@ -68,7 +68,7 @@ class SwView;
 
 class SW_DLLPUBLIC SwOneExampleFrame
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrameControl >  m_xFrameControl;
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >         _xControl;
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >         _xModel;
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController >    _xController;
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextCursor >     _xCursor;
@@ -102,10 +102,10 @@ public:
                     String* pURL = 0);
     ~SwOneExampleFrame();
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrameControl > & GetFrameControl() {return m_xFrameControl; }
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > &        GetModel()      {return _xModel;}
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController > &   GetController() {return _xController;}
-    ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextCursor > &    GetTextCursor() {return _xCursor;}
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl > &       GetControl()    {return _xControl; }
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > &       GetModel()      {return _xModel;}
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController > &  GetController() {return _xController;}
+    ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextCursor > &   GetTextCursor() {return _xCursor;}
 
     void ClearDocument( sal_Bool bStartTimer = sal_False );
 

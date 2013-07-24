@@ -46,17 +46,6 @@ using namespace ::com::sun::star::util  ;
 
 namespace unocontrols{
 
-#define SERVICENAME_FRAMECONTROL                        "com.sun.star.frame.FrameControl"
-#define IMPLEMENTATIONNAME_FRAMECONTROL                 "stardiv.UnoControls.FrameControl"
-#define PROPERTYNAME_LOADERARGUMENTS                    "LoaderArguments"
-#define PROPERTYNAME_COMPONENTURL                       "ComponentURL"
-#define PROPERTYNAME_FRAME                              "Frame"
-#define PROPERTY_COUNT                                  3                                                       // you must count the propertys
-#define PROPERTYHANDLE_COMPONENTURL                     0                                                       // Id must be the index into the array
-#define PROPERTYHANDLE_FRAME                            1
-#define PROPERTYHANDLE_LOADERARGUMENTS                  2
-
-
 //______________________________________________________________________________________________________________
 //  construct/destruct
 //______________________________________________________________________________________________________________

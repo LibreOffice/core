@@ -19,7 +19,8 @@
 #ifndef __com_sun_star_frame_FrameControl_idl__
 #define __com_sun_star_frame_FrameControl_idl__
 
-#include <com/sun/star/frame/XFrameControl.idl>
+#include <com/sun/star/awt/UnoControl.idl>
+#include <com/sun/star/beans/XPropertySet.idl>
 
 
  module com {  module sun {  module star {  module frame {
@@ -33,7 +34,26 @@
     any UI.
     </p>
  */
-published service FrameControl : XFrameControl;
+published service FrameControl
+{
+    /** the base service of all controls
+     */
+    service com::sun::star::awt::UnoControl;
+
+    /** contains the type of the component which is loaded into the frame,
+        or the document which implicitly specifies the type
+     */
+    [property] string ComponentUrl;
+
+    /** the frame held by this control
+
+        <p>
+        The Frame is created if the control
+        is shown and the #ComponentUrl is set.
+        </p>
+     */
+    [property, readonly] string Frame;
+};
 
 
 }; }; }; };

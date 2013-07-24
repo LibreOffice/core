@@ -38,7 +38,6 @@
 #include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/view/XViewSettingsSupplier.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
-#include <com/sun/star/frame/FrameControl.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <comphelper/processfactory.hxx>
 #include <sfx2/dispatch.hxx>
@@ -107,51 +106,62 @@ SwOneExampleFrame::~SwOneExampleFrame()
 
 void SwOneExampleFrame::CreateControl()
 {
-    if(m_xFrameControl.is())
+    if(_xControl.is())
         return ;
     uno::Reference< lang::XMultiServiceFactory >
                                     xMgr = comphelper::getProcessServiceFactory();
     uno::Reference< uno::XComponentContext > xContext = comphelper::getProcessComponentContext();
-    m_xFrameControl = frame::FrameControl::create(xContext);
+    uno::Reference< uno::XInterface >  xInst = xMgr->createInstance( "com.sun.star.frame.FrameControl" );
+    _xControl = uno::Reference< awt::XControl >(xInst, uno::UNO_QUERY);
+    if(_xControl.is())
+    {
+        uno::Reference< awt::XWindowPeer >  xParent( aTopWindow.GetComponentInterface() );
 
-    uno::Reference< awt::XWindowPeer >  xParent( aTopWindow.GetComponentInterface() );
+        uno::Reference< awt::XToolkit >  xToolkit( awt::Toolkit::create(xContext), uno::UNO_QUERY_THROW );
 
-    uno::Reference< awt::XToolkit >  xToolkit( awt::Toolkit::create(xContext), uno::UNO_QUERY_THROW );
+        _xControl->createPeer( xToolkit, xParent );
 
-    m_xFrameControl->createPeer( xToolkit, xParent );
+        uno::Reference< awt::XWindow >  xWin( _xControl, uno::UNO_QUERY );
+        xWin->setVisible(sal_False);
+        Size aWinSize(aTopWindow.GetOutputSizePixel());
+        xWin->setPosSize( 0, 0, aWinSize.Width(), aWinSize.Height(), awt::PosSize::SIZE );
 
-    m_xFrameControl->setVisible(sal_False);
-    Size aWinSize(aTopWindow.GetOutputSizePixel());
-    m_xFrameControl->setPosSize( 0, 0, aWinSize.Width(), aWinSize.Height(), awt::PosSize::SIZE );
+        uno::Reference< beans::XPropertySet >  xPrSet(xInst, uno::UNO_QUERY);
+        uno::Any aURL;
+        // create new doc
+        OUString sTempURL(cFactory);
+        if(sArgumentURL.Len())
+            sTempURL = sArgumentURL;
+        aURL <<= sTempURL;
 
-    // create new doc
-    OUString sTempURL(cFactory);
-    if(sArgumentURL.Len())
-        sTempURL = sArgumentURL;
+        uno::Sequence<beans::PropertyValue> aSeq(3);
+        beans::PropertyValue* pValues = aSeq.getArray();
+        pValues[0].Name = "ReadOnly";
+        sal_Bool bTrue = sal_True;
+        pValues[0].Value.setValue(&bTrue, ::getBooleanCppuType());
+        pValues[1].Name = "OpenFlags";
+        pValues[1].Value <<= OUString("-RB");
+        pValues[2].Name = "Referer";
+        pValues[2].Value <<= OUString("private:user");
+        uno::Any aArgs;
+        aArgs.setValue(&aSeq, ::getCppuType((uno::Sequence<beans::PropertyValue>*)0));
 
-    uno::Sequence<beans::PropertyValue> aSeq(3);
-    beans::PropertyValue* pValues = aSeq.getArray();
-    pValues[0].Name = "ReadOnly";
-    sal_Bool bTrue = sal_True;
-    pValues[0].Value.setValue(&bTrue, ::getBooleanCppuType());
-    pValues[1].Name = "OpenFlags";
-    pValues[1].Value <<= OUString("-RB");
-    pValues[2].Name = "Referer";
-    pValues[2].Value <<= OUString("private:user");
+        xPrSet->setPropertyValue( "LoaderArguments", aArgs );
+        //save and set readonly???
 
-    m_xFrameControl->setLoaderArguments( aSeq );
-    //save and set readonly???
+        xPrSet->setPropertyValue("ComponentURL", aURL);
 
-    m_xFrameControl->setComponentURL( sTempURL );
-
-    aLoadedTimer.Start();
-    bServiceAvailable = sal_True;
+        aLoadedTimer.Start();
+        bServiceAvailable = sal_True;
+    }
 }
 
 void    SwOneExampleFrame::DisposeControl()
 {
     _xCursor = 0;
-    m_xFrameControl.clear();
+    if(_xControl.is())
+        _xControl->dispose();
+    _xControl = 0;
     _xModel = 0;
     _xController = 0;
 }
@@ -183,11 +193,14 @@ static void disableScrollBars(uno::Reference< beans::XPropertySet > xViewProps,
 
 IMPL_LINK( SwOneExampleFrame, TimeoutHdl, Timer*, pTimer )
 {
-    if(!m_xFrameControl.is())
+    if(!_xControl.is())
         return 0;
 
     // now get the model
-    uno::Reference< frame::XFrame >  xFrm = m_xFrameControl->getFrame();
+    uno::Reference< beans::XPropertySet >  xPrSet(_xControl, uno::UNO_QUERY);
+    uno::Any aFrame = xPrSet->getPropertyValue("Frame");
+    uno::Reference< frame::XFrame >  xFrm;
+    aFrame >>= xFrm;
 
     uno::Reference< beans::XPropertySet > xPropSet( xFrm, uno::UNO_QUERY );
     if ( xPropSet.is() )
@@ -349,8 +362,9 @@ IMPL_LINK( SwOneExampleFrame, TimeoutHdl, Timer*, pTimer )
             xPProp->setPropertyValue(OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_RIGHT_MARGIN)), aZero);
         }
 
+        uno::Reference< awt::XWindow >  xWin( _xControl, uno::UNO_QUERY );
         Size aWinSize(aTopWindow.GetOutputSizePixel());
-        m_xFrameControl->setPosSize( 0, 0, aWinSize.Width(), aWinSize.Height(), awt::PosSize::SIZE );
+        xWin->setPosSize( 0, 0, aWinSize.Width(), aWinSize.Height(), awt::PosSize::SIZE );
 
         // can only be done here - the SFX changes the ScrollBar values
         disableScrollBars(xViewProps, nStyleFlags&EX_SHOW_ONLINE_LAYOUT);
@@ -363,7 +377,7 @@ IMPL_LINK( SwOneExampleFrame, TimeoutHdl, Timer*, pTimer )
         if(xScrCrsr.is())
             xScrCrsr->screenUp();
 
-        m_xFrameControl->setVisible( sal_True );
+        xWin->setVisible( sal_True );
         aTopWindow.Show();
 
         if( xTunnel.is() )
