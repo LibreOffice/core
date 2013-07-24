@@ -130,7 +130,9 @@ void ScConsolidateDlg::Init()
     sal_uInt16 i=0;
 
     pRbDataArea->SetReferences(this, pEdDataArea);
+    pEdDataArea->SetReferences(this, get<FixedText>("ftdataarea"));
     pRbDestArea->SetReferences(this, pEdDestArea);
+    pEdDestArea->SetReferences(this, get<FixedText>("ftdestarea"));
 
     pEdDataArea ->SetGetFocusHdl( LINK( this, ScConsolidateDlg, GetFocusHdl ) );
     pEdDestArea ->SetGetFocusHdl( LINK( this, ScConsolidateDlg, GetFocusHdl ) );
