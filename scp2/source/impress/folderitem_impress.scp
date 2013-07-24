@@ -33,7 +33,7 @@ End
 
 FolderItemProperty git_Folderitem_Simpress_AppIDProperty
     ShortcutID = gid_Folderitem_Simpress;
-    Key = "System.AppUserModel.ID"
-    Value = "TheDocumentFoundation.LibreOffice.Impress"
+    Key = "System.AppUserModel.ID";
+    Value = "TheDocumentFoundation.LibreOffice.Impress";
 End
 #endif

@@ -37,8 +37,8 @@ End
 
 FolderItemProperty git_Folderitem_LibreOffice_AppIDProperty
     ShortcutID = gid_Folderitem_LibreOffice;
-    Key = "System.AppUserModel.ID"
-    Value = "TheDocumentFoundation.LibreOffice.Startcenter"
+    Key = "System.AppUserModel.ID";
+    Value = "TheDocumentFoundation.LibreOffice.Startcenter";
 End
 
 FolderItem gid_Folderitem_Soffice_Desktop
@@ -61,6 +61,6 @@ End
 
 FolderItemProperty git_Folderitem_Soffice_Desktop_AppIDProperty
     ShortcutID = gid_Folderitem_Soffice_Desktop;
-    Key = "System.AppUserModel.ID"
-    Value = "TheDocumentFoundation.LibreOffice.Startcenter"
+    Key = "System.AppUserModel.ID";
+    Value = "TheDocumentFoundation.LibreOffice.Startcenter";
 End

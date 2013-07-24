@@ -33,7 +33,7 @@ End
 
 FolderItemProperty git_Folderitem_Swriter_AppIDProperty
     ShortcutID = gid_Folderitem_Swriter;
-    Key = "System.AppUserModel.ID"
-    Value = "TheDocumentFoundation.LibreOffice.Writer"
+    Key = "System.AppUserModel.ID";
+    Value = "TheDocumentFoundation.LibreOffice.Writer";
 End
 #endif

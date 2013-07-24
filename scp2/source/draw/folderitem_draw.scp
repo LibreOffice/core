@@ -33,7 +33,7 @@ End
 
 FolderItemProperty git_Folderitem_Sdraw_AppIDProperty
     ShortcutID = gid_Folderitem_Sdraw;
-    Key = "System.AppUserModel.ID"
-    Value = "TheDocumentFoundation.LibreOffice.Draw"
+    Key = "System.AppUserModel.ID";
+    Value = "TheDocumentFoundation.LibreOffice.Draw";
 End
 #endif

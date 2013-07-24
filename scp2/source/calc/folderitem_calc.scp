@@ -33,7 +33,7 @@ End
 
 FolderItemProperty git_Folderitem_Scalc_AppIDProperty
     ShortcutID = gid_Folderitem_Scalc;
-    Key = "System.AppUserModel.ID"
-    Value = "TheDocumentFoundation.LibreOffice.Calc"
+    Key = "System.AppUserModel.ID";
+    Value = "TheDocumentFoundation.LibreOffice.Calc";
 End
 #endif

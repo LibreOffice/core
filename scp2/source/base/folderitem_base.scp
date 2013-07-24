@@ -33,7 +33,7 @@ End
 
 FolderItemProperty git_Folderitem_Sbase_AppIDProperty
     ShortcutID = gid_Folderitem_Sbase;
-    Key = "System.AppUserModel.ID"
-    Value = "TheDocumentFoundation.LibreOffice.Base"
+    Key = "System.AppUserModel.ID";
+    Value = "TheDocumentFoundation.LibreOffice.Base";
 End
 #endif
