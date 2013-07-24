@@ -790,8 +790,7 @@ void SvxAreaTabPage::ActivatePage( const SfxItemSet& rSet )
             if( *pnBitmapListState )
             {
                 if( *pnBitmapListState & CT_CHANGED )
-                    pBitmapList = ( (SvxAreaTabDialog*) GetParentDialog() )->
-                                            GetNewBitmapList();
+                    pBitmapList = ( (SvxAreaTabDialog*) GetParentDialog() )->GetNewBitmapList();
 
                 _nPos = m_pLbBitmap->GetSelectEntryPos();
 
@@ -810,8 +809,7 @@ void SvxAreaTabPage::ActivatePage( const SfxItemSet& rSet )
             if( *pnHatchingListState )
             {
                 if( *pnHatchingListState & CT_CHANGED )
-                    pHatchingList = ( (SvxAreaTabDialog*) GetParentDialog() )->
-                                            GetNewHatchingList();
+                    pHatchingList = ( (SvxAreaTabDialog*) GetParentDialog() )->GetNewHatchingList();
 
                 _nPos = m_pLbHatching->GetSelectEntryPos();
 
@@ -832,8 +830,7 @@ void SvxAreaTabPage::ActivatePage( const SfxItemSet& rSet )
             if( *pnGradientListState )
             {
                 if( *pnGradientListState & CT_CHANGED )
-                    pGradientList = ( (SvxAreaTabDialog*) GetParentDialog() )->
-                                            GetNewGradientList();
+                    pGradientList = ( (SvxAreaTabDialog*) GetParentDialog() )->GetNewGradientList();
 
                 _nPos = m_pLbGradient->GetSelectEntryPos();
 
@@ -852,8 +849,7 @@ void SvxAreaTabPage::ActivatePage( const SfxItemSet& rSet )
             if( *pnColorListState )
             {
                 if( *pnColorListState & CT_CHANGED )
-                    pColorList = ( (SvxAreaTabDialog*) GetParentDialog() )->
-                                            GetNewColorList();
+                    pColorList = ( (SvxAreaTabDialog*) GetParentDialog() )->GetNewColorList();
                 // aLbColor
                 _nPos = m_pLbColor->GetSelectEntryPos();
                 m_pLbColor->Clear();
@@ -1513,7 +1509,7 @@ void SvxAreaTabPage::Reset( const SfxItemSet& rAttrs )
         if( nValue == 0 )
         {
             m_pTsbStepCount->SetState( STATE_CHECK );
-            m_pNumFldStepCount->SetText( String() );
+            m_pNumFldStepCount->SetText( "" );
         }
         else
         {
@@ -1525,7 +1521,7 @@ void SvxAreaTabPage::Reset( const SfxItemSet& rAttrs )
     else
     {
         m_pTsbStepCount->SetState( STATE_DONTKNOW );
-        m_pNumFldStepCount->SetText( String() );
+        m_pNumFldStepCount->SetText( "" );
     }
 
     // attributes for the bitmap filling
@@ -1598,7 +1594,7 @@ void SvxAreaTabPage::Reset( const SfxItemSet& rAttrs )
     }
     else
     {
-        m_pMtrFldXSize->SetText( String() );
+        m_pMtrFldXSize->SetText( "" );
         m_pMtrFldXSize->SaveValue();
     }
 
@@ -1623,7 +1619,7 @@ void SvxAreaTabPage::Reset( const SfxItemSet& rAttrs )
     }
     else
     {
-        m_pMtrFldYSize->SetText( String() );
+        m_pMtrFldYSize->SetText( "" );
         m_pMtrFldYSize->SaveValue();
         eOriginal = STATE_NOCHECK;
     }
@@ -1658,7 +1654,7 @@ void SvxAreaTabPage::Reset( const SfxItemSet& rAttrs )
             m_pMtrFldOffset->SetValue( 0 );
     }
     else
-        m_pMtrFldOffset->SetText( String() );
+        m_pMtrFldOffset->SetText( "" );
 
 
     //aCtlPosition
@@ -1677,7 +1673,7 @@ void SvxAreaTabPage::Reset( const SfxItemSet& rAttrs )
         m_pMtrFldXOffset->SetValue( nValue );
     }
     else
-        m_pMtrFldXOffset->SetText( String() );
+        m_pMtrFldXOffset->SetText( "" );
 
     //aMtrFldYOffset
     if( rAttrs.GetItemState( XATTR_FILLBMP_POSOFFSETY ) != SFX_ITEM_DONTCARE )
@@ -1686,7 +1682,7 @@ void SvxAreaTabPage::Reset( const SfxItemSet& rAttrs )
         m_pMtrFldYOffset->SetValue( nValue );
     }
     else
-        m_pMtrFldYOffset->SetText( String() );
+        m_pMtrFldYOffset->SetText( "" );
 
     // not earlier so that tile and stretch are considered
     if( m_pTypeLB->GetSelectEntryPos() == XFILL_BITMAP )
@@ -1811,8 +1807,7 @@ IMPL_LINK_NOARG(SvxAreaTabPage, ModifyColorHdl_Impl)
     if( _nPos != LISTBOX_ENTRY_NOTFOUND )
     {
         rXFSet.Put( XFillStyleItem( XFILL_SOLID ) );
-        rXFSet.Put( XFillColorItem( String(),
-                                    m_pLbColor->GetSelectEntryColor() ) );
+        rXFSet.Put( XFillColorItem( String(), m_pLbColor->GetSelectEntryColor() ) );
     }
     // NEW
     else if( SFX_ITEM_SET == rOutAttrs.GetItemState( GetWhich( XATTR_FILLCOLOR ), sal_True, &pPoolItem ) )
@@ -1885,8 +1880,7 @@ IMPL_LINK_NOARG(SvxAreaTabPage, ModifyGradientHdl_Impl)
         XGradientEntry* pEntry = pGradientList->GetGradient( _nPos );
 
         rXFSet.Put( XFillStyleItem( XFILL_GRADIENT ) );
-        rXFSet.Put( XFillGradientItem( String(),
-                                       pEntry->GetGradient() ) );
+        rXFSet.Put( XFillGradientItem( String(), pEntry->GetGradient() ) );
     }
     else if( SFX_ITEM_SET == rOutAttrs.GetItemState( GetWhich( XATTR_FILLGRADIENT ), sal_True, &pPoolItem ) )
     {
@@ -2106,7 +2100,7 @@ IMPL_LINK( SvxAreaTabPage, ModifyStepCountHdl_Impl, void *, p )
         if( m_pTsbStepCount->GetState() == STATE_NOCHECK )
         {
             if( m_pNumFldStepCount->GetText().isEmpty() )
-                m_pNumFldStepCount->SetText(OUString("64"));
+                m_pNumFldStepCount->SetText("64");
 
             m_pNumFldStepCount->Enable();
         }
@@ -2174,8 +2168,8 @@ IMPL_LINK_NOARG(SvxAreaTabPage, ModifyTileHdl_Impl)
 
     if( m_pTsbOriginal->GetState() == STATE_CHECK )
     {
-        m_pMtrFldXSize->SetText( String() );
-        m_pMtrFldYSize->SetText( String() );
+        m_pMtrFldXSize->SetText( "" );
+        m_pMtrFldYSize->SetText( "" );
         m_pGridX_Y->Disable();
         m_pTsbScale->Disable();
     }
