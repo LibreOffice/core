@@ -72,6 +72,7 @@ public:
     void testI120928();
     void testN822175();
     void testFdo58577();
+    void testFdo60990();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -121,6 +122,7 @@ void Test::run()
         {"i120928.docx", &Test::testI120928},
         {"n822175.odt", &Test::testN822175},
         {"fdo58577.odt", &Test::testFdo58577},
+        {"fdo60990.odt", &Test::testFdo60990},
     };
     // Don't test the first import of these, for some reason those tests fail
     const char* aBlacklist[] = {
@@ -692,6 +694,19 @@ void Test::testFdo58577()
     uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xIndexAccess->getCount());
+}
+
+void Test::testFdo60990()
+{
+    // The shape had no background, no paragraph adjust and no font color.
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShape(xDraws->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x00CFE7F5), getProperty<sal_Int32>(xShape, "BackColor"));
+    uno::Reference<text::XText> xText = uno::Reference<text::XTextRange>(xShape, uno::UNO_QUERY)->getText();
+    uno::Reference<text::XTextRange> xParagraph = getParagraphOfText(1, xText);
+    CPPUNIT_ASSERT_EQUAL(style::ParagraphAdjust_CENTER, static_cast<style::ParagraphAdjust>(getProperty<sal_Int16>(xParagraph, "ParaAdjust")));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x00FF00), getProperty<sal_Int32>(getRun(xParagraph, 1), "CharColor"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
