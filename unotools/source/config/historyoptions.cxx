@@ -28,7 +28,6 @@
 #include <deque>
 #include <algorithm>
 
-#include <rtl/logfile.hxx>
 #include "itemholder1.hxx"
 
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -590,7 +589,6 @@ SvtHistoryOptions::SvtHistoryOptions()
     // ... and initialize ouer data container only if it not already exist!
     if( m_pDataContainer == NULL )
     {
-        RTL_LOGFILE_CONTEXT(aLog, "unotools ( ??? ) ::SvtHistoryOptions_Impl::ctor()");
         m_pDataContainer = new SvtHistoryOptions_Impl;
 
         ItemHolder1::holdConfigItem(E_HISTORYOPTIONS);

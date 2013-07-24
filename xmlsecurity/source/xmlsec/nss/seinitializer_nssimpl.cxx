@@ -32,7 +32,6 @@
 #include <rtl/strbuf.hxx>
 #include <osl/file.hxx>
 #include <osl/thread.h>
-#include <rtl/logfile.hxx>
 #include <com/sun/star/xml/crypto/SecurityEnvironment.hpp>
 #include <com/sun/star/xml/crypto/XMLSecurityContext.hpp>
 

@@ -25,7 +25,6 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 
-#include <rtl/logfile.hxx>
 #include "itemholder1.hxx"
 
 using namespace ::utl                   ;
@@ -291,7 +290,6 @@ SvtLocalisationOptions::SvtLocalisationOptions()
     // ... and initialize ouer data container only if it not already exist!
     if( m_pDataContainer == NULL )
     {
-        RTL_LOGFILE_CONTEXT(aLog, "unotools ( ??? ) ::SvtLocalisationOptions_Impl::ctor()");
         m_pDataContainer = new SvtLocalisationOptions_Impl;
 
         ItemHolder1::holdConfigItem(E_LOCALISATIONOPTIONS);

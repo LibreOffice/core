@@ -20,7 +20,6 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/instance.hxx>
-#include <rtl/logfile.hxx>
 #include <i18nlangtag/mslangid.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <tools/string.hxx>
@@ -531,7 +530,6 @@ SvtSysLocaleOptions::SvtSysLocaleOptions()
     MutexGuard aGuard( GetMutex() );
     if ( !pOptions )
     {
-        RTL_LOGFILE_CONTEXT(aLog, "svl ( ??? ) ::SvtSysLocaleOptions_Impl::ctor()");
         pOptions = new SvtSysLocaleOptions_Impl;
 
         ItemHolder1::holdConfigItem(E_SYSLOCALEOPTIONS);

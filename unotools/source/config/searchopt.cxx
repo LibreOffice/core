@@ -26,7 +26,6 @@
 #include <com/sun/star/i18n/TransliterationModulesExtra.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Any.h>
-#include <rtl/logfile.hxx>
 #include <sal/macros.h>
 
 
@@ -75,7 +74,6 @@ public:
 SvtSearchOptions_Impl::SvtSearchOptions_Impl() :
     ConfigItem( OUString("Office.Common/SearchOptions") )
 {
-    RTL_LOGFILE_CONTEXT(aLog, "unotools SvtSearchOptions_Impl::SvtSearchOptions_Impl()");
     nFlags = 0x0003FFFF;    // set all options values to 'true'
     Load();
     SetModified( sal_False );
