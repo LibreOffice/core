@@ -49,7 +49,7 @@
 #include <tools/wldcrd.hxx>
 #include <i18nlangtag/languagetag.hxx>
 
-#include <comphelper/configurationhelper.hxx>
+#include <officecfg/Setup.hxx>
 
 
 namespace filter{
@@ -2404,12 +2404,7 @@ sal_Bool FilterCache::impl_isModuleInstalled(const OUString& sModule)
     ::osl::ResettableMutexGuard aLock(m_aLock);
     if (! m_xModuleCfg.is())
     {
-        m_xModuleCfg = css::uno::Reference< css::container::XNameAccess >(
-                            ::comphelper::ConfigurationHelper::openConfig(
-                                comphelper::getProcessComponentContext(),
-                                "org.openoffice.Setup/Office/Factories",
-                                ::comphelper::ConfigurationHelper::E_READONLY),
-                            css::uno::UNO_QUERY_THROW);
+        m_xModuleCfg = officecfg::Setup::Office::Factories::get();
     }
 
     xCfg = m_xModuleCfg;

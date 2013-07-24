@@ -26,8 +26,9 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/enumhelper.hxx>
-#include <comphelper/configurationhelper.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <officecfg/Setup.hxx>
+#include <officecfg/TypeDetection/UISort.hxx>
 
 
 namespace filter{
@@ -475,22 +476,9 @@ OUStringList FilterFactory::impl_getListOfInstalledModules() const
     aLock.clear();
     // <- SAFE ----------------------
 
-    try
-    {
-        css::uno::Reference< css::container::XNameAccess > xModuleConfig(
-            ::comphelper::ConfigurationHelper::openConfig( xContext,
-                                                          CFGPACKAGE_OOO_MODULES,
-                                                          ::comphelper::ConfigurationHelper::E_READONLY),
-            css::uno::UNO_QUERY_THROW);
-        OUStringList lModules(xModuleConfig->getElementNames());
-        return lModules;
-    }
-    catch(const css::uno::RuntimeException&)
-        { throw; }
-    catch(const css::uno::Exception&)
-        {}
-
-    return OUStringList();
+    css::uno::Reference< css::container::XNameAccess > xModuleConfig = officecfg::Setup::Office::Factories::get(xContext);
+    OUStringList lModules(xModuleConfig->getElementNames());
+    return lModules;
 }
 
 
@@ -560,13 +548,8 @@ OUStringList FilterFactory::impl_readSortedFilterListFromConfig(const OUString& 
 
     try
     {
-        css::uno::Reference< css::container::XNameAccess > xUISortConfig(
-            ::comphelper::ConfigurationHelper::openConfig( xContext,
-                                                          CFGPACKAGE_TD_UISORT,
-                                                          ::comphelper::ConfigurationHelper::E_READONLY),
-            css::uno::UNO_QUERY_THROW);
-
-        // dont ccheck the module name here. If it does not exists, an exception is thrown and catched below.
+        css::uno::Reference< css::container::XNameAccess > xUISortConfig = officecfg::TypeDetection::UISort::ModuleDependendFilterOrder::get(xContext);
+        // dont check the module name here. If it does not exists, an exception is thrown and catched below.
         // We return an empty list as result then.
         css::uno::Reference< css::container::XNameAccess > xModule;
         xUISortConfig->getByName(sModule) >>= xModule;
