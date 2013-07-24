@@ -66,13 +66,13 @@ namespace svx
         void SetSelectHdl( const Link& rLink );
 
         void Clear();
-        void InsertEntry( const XubString& rStr );
+        void InsertEntry( const OUString& rStr );
         void SelectEntryPos( sal_uInt16 nPos );
 
         sal_uInt16 GetEntryCount() const;
 
-        XubString GetEntry( sal_uInt16 nPos ) const;
-        XubString GetSelectEntry() const;
+        OUString GetEntry( sal_uInt16 nPos ) const;
+        OUString GetSelectEntry() const;
 
         virtual void StateChanged( StateChangedType nStateChange );
 

@@ -464,7 +464,7 @@ namespace svx
         m_aListBox.Clear();
         m_aValueSet.Clear();
     }
-    void SuggestionDisplay::InsertEntry( const XubString& rStr )
+    void SuggestionDisplay::InsertEntry( const OUString& rStr )
     {
         sal_uInt16 nItemId = m_aListBox.InsertEntry( rStr ) + 1; //itemid == pos+1 (id 0 has special meaning)
         m_aValueSet.InsertItem( nItemId );
@@ -480,11 +480,11 @@ namespace svx
     {
         return m_aListBox.GetEntryCount();
     }
-    XubString SuggestionDisplay::GetEntry( sal_uInt16 nPos ) const
+    OUString SuggestionDisplay::GetEntry( sal_uInt16 nPos ) const
     {
         return m_aListBox.GetEntry( nPos );
     }
-    XubString SuggestionDisplay::GetSelectEntry() const
+    OUString SuggestionDisplay::GetSelectEntry() const
     {
         return m_aListBox.GetSelectEntry();
     }
