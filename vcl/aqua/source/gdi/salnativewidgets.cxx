@@ -451,17 +451,6 @@ sal_Bool AquaSalGraphics::drawNativeControl(ControlType nType,
     Rectangle buttonRect = rControlRegion;
     HIRect rc = ImplGetHIRectFromRectangle(buttonRect);
 
-    /** Scrollbar parts code equivalent **
-    PART_BUTTON_UP 101
-    PART_BUTTON_DOWN 102
-    PART_THUMB_VERT 211
-    PART_TRACK_VERT_UPPER 201
-    PART_TRACK_VERT_LOWER 203
-
-    PART_DRAW_BACKGROUND_HORZ 1000
-    PART_DRAW_BACKGROUND_VERT 1001
-    **/
-
     switch( nType )
     {
 
