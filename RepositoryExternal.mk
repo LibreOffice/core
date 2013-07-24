@@ -1710,7 +1710,7 @@ $(call gb_LinkTarget_set_include,$(1),\
 )
 
 $(call gb_LinkTarget_add_defs,$(1),\
-    -DENABLE_GIO \
+	-DENABLE_GIO \
 )
 
 $(call gb_LinkTarget_add_libs,$(1),$(GIO_LIBS))
@@ -1724,6 +1724,31 @@ define gb_LinkTarget__use_gio
 endef
 
 endif # ENABLE_GIO
+
+ifeq ($(ENABLE_AVAHI),TRUE)
+
+define gb_LinkTarget__use_avahi
+$(call gb_LinkTarget_set_include,$(1),\
+	$$(INCLUDE) \
+	$(AVAHI_CFLAGS) \
+)
+
+$(call gb_LinkTarget_add_defs,$(1),\
+    -DENABLE_AVAHI \
+)
+
+$(call gb_LinkTarget_add_libs,$(1),$(AVAHI_LIBS))
+
+endef
+
+else # ENABLE_AVAHI
+
+define gb_LinkTarget__use_AVAHI
+
+endef
+
+endif # ENABLE_AVAHI
+
 
 define gb_LinkTarget__use_gtk
 $(call gb_LinkTarget_set_include,$(1),\

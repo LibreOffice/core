@@ -942,6 +942,11 @@ AC_ARG_ENABLE(gio,
         [Determines whether to use the GIO support.]),
 ,enable_gio=yes)
 
+AC_ARG_ENABLE(avahi,
+    AS_HELP_STRING([--disable-avahi],
+        [Determines whether to use the avahi support for impress remote zeroconf.]),
+,enable_avahi=yes)
+
 AC_ARG_ENABLE(telepathy,
     AS_HELP_STRING([--enable-telepathy],
         [Determines whether to enable Telepathy for collaboration.]),
@@ -11379,6 +11384,25 @@ fi
 AC_SUBST(SYSTEM_CAIRO)
 AC_SUBST(CAIRO_CFLAGS)
 AC_SUBST(CAIRO_LIBS)
+
+dnl ===================================================================
+dnl Test whether to use avahi
+dnl ===================================================================
+AC_MSG_CHECKING([whether to enable avahi support])
+if test "$_os" != "WINNT" -a "$_os" != "Darwin" -a "$enable_avahi" = "yes"; then
+    PKG_CHECK_MODULES([AVAHI], [avahi-client >= 0.6.10],
+                      [ENABLE_AVAHI="TRUE"], [ENABLE_AVAHI=""])
+    if test "$ENABLE_AVAHI" = "TRUE"; then
+        AC_DEFINE(ENABLE_AVAHI)
+        AVAHI_CFLAGS=$(printf '%s' "$AVAHI_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
+    fi
+else
+    AC_MSG_RESULT([no])
+fi
+
+AC_SUBST(ENABLE_AVAHI)
+AC_SUBST(AVAHI_CFLAGS)
+AC_SUBST(AVAHI_LIBS)
 
 dnl ===================================================================
 dnl Test whether to use liblangtag

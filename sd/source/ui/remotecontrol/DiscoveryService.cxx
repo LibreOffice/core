@@ -41,6 +41,10 @@
   #import "OSXNetworkService.h"
 #endif
 
+#ifdef LINUX
+  #include "AvahiNetworkService.hxx"
+#endif
+
 using namespace osl;
 using namespace rtl;
 using namespace sd;
@@ -51,7 +55,12 @@ DiscoveryService::DiscoveryService()
     OSXNetworkService * service = [[OSXNetworkService alloc] init];
     [service publishImpressRemoteServiceOnLocalNetworkWithName: @""];
 #endif
-// #else
+
+#ifdef LINUX
+// Avahi for Linux
+    start_avahi_service("HP");
+#endif
+
     mSocket = socket( AF_INET, SOCK_DGRAM, IPPROTO_UDP );
 
     sockaddr_in aAddr;
@@ -89,7 +98,10 @@ DiscoveryService::DiscoveryService()
 
 DiscoveryService::~DiscoveryService()
 {
-// #ifndef MACOSX
+  #ifdef LINUX
+      clean_avahi_service();
+  #endif
+
   #ifdef WNT
       closesocket( mSocket );
   #else
