@@ -34,6 +34,11 @@
 #define OPENCLWRAPPER_CL_MAP_WRITE_FLAG CL_MAP_WRITE
 #endif
 
+#define MaxTextExtent 4096
+//support AMD opencl
+#define CL_QUEUE_THREAD_HANDLE_AMD 0x403E
+#define CL_MAP_WRITE_INVALIDATE_REGION (1 << 2)
+
 #if defined(_MSC_VER)
 #ifndef strcasecmp
 #define strcasecmp strcmp
@@ -42,7 +47,8 @@
 
 typedef unsigned int uint;
 
-typedef struct _KernelEnv {
+typedef struct _KernelEnv
+{
     cl_context mpkContext;
     cl_command_queue mpkCmdQueue;
     cl_program mpkProgram;
@@ -50,7 +56,8 @@ typedef struct _KernelEnv {
     char mckKernelName[150];
 } KernelEnv;
 
-typedef struct _OpenCLEnv {
+typedef struct _OpenCLEnv
+{
     cl_platform_id mpOclPlatformID;
     cl_context mpOclContext;
     cl_device_id mpOclDevsID;
@@ -61,29 +68,30 @@ typedef struct _OpenCLEnv {
 extern "C" {
 #endif
 
-//user defined, this is function wrapper which is used to set the input parameters ,
+//user defined, this is function wrapper which is used to set the input parameters,
 //luanch kernel and copy data from GPU to CPU or CPU to GPU.
-typedef int (*cl_kernel_function)(void **userdata, KernelEnv *kenv);
+typedef int ( *cl_kernel_function )( void **userdata, KernelEnv *kenv );
 
 #if defined __cplusplus
 
 }
 #endif
 
-#define CHECK_OPENCL(status)              \
-if(status != CL_SUCCESS)                  \
-{                                          \
-    printf ("OpenCL error code is %d at " SAL_DETAIL_WHERE "\n", status);    \
-    return 0;                            \
+#define CHECK_OPENCL(status,name)    \
+if( status != CL_SUCCESS )    \
+{    \
+    printf ("OpenCL error code is %d at " SAL_DETAIL_WHERE " when %s .\n", status, name);    \
+    return 0;    \
 }
 
 
-#define MAX_KERNEL_STRING_LEN    64
+#define MAX_KERNEL_STRING_LEN 64
 #define MAX_CLFILE_NUM 50
 #define MAX_CLKERNEL_NUM 200
 #define MAX_KERNEL_NAME_LEN 64
 
-typedef struct _GPUEnv {
+typedef struct _GPUEnv
+{
     //share vb in all modules in hb library
     cl_platform_id mpPlatformID;
     cl_device_type mDevType;
@@ -98,44 +106,40 @@ typedef struct _GPUEnv {
          cl_kernel_function mpArryKnelFuncs[MAX_CLKERNEL_NUM];
     int mnKernelCount, mnFileCount, // only one kernel file
         mnIsUserCreated; // 1: created , 0:no create and needed to create by opencl wrapper
+    int mnKhrFp64Flag;
+    int mnAmdFp64Flag;
 
 } GPUEnv;
 
-typedef struct {
+typedef struct
+{
     char kernelName[MAX_KERNEL_NAME_LEN + 1];
     char *kernelStr;
 } kernel_node;
 
-class OpenclCalcBase{
+class OpenclCalcBase
+{
 public:
     OpenclCalcBase(){};
     virtual ~OpenclCalcBase(){};
-#ifdef GPU_64BITS
-    virtual int OclHostSignedAdd(double *lData,double *rData,double *rResult,int rowSize)=0;
-    virtual int OclHostSignedSub(double *lData,double *rData,double *rResult,int rowSize)=0;
-    virtual int OclHostSignedMul(double *lData,double *rData,double *rResult,int rowSize)=0;
-    virtual int OclHostSignedDiv(double *lData,double *rData,double *rResult,int rowSize)=0;
-    virtual int OclHostFormulaMax(double *srcData,int *startPos,int *endPos,double *output,int outputSize)=0;
-    virtual int OclHostFormulaMin(double *srcData,int *startPos,int *endPos,double *output,int outputSize)=0;
-    virtual int OclHostFormulaAverage(double *srcData,int *startPos,int *endPos,double *output,int outputSize)=0;
-#endif
-    virtual int OclHostSignedAdd32Bits(float *fpLeftData,float *fpRightData,double *rResult,int nRowSize)=0;
-    virtual int OclHostSignedSub32Bits(float *fpLeftData,float *fpRightData,double *rResult,int nRowSize)=0;
-    virtual int OclHostSignedMul32Bits(float *fpLeftData,float *fpRightData,double *rResult,int nRowSize)=0;
-    virtual int OclHostSignedDiv32Bits(float *fpLeftData,float *fpRightData,double *rResult,int nRowSize)=0;
-    virtual int OclHostFormulaMax32Bits(float *fpSrcData,uint *npStartPos,uint *npEndPos,double *output,int outputSize)=0;
-    virtual int OclHostFormulaMin32Bits(float *fpSrcData,uint *npStartPos,uint *npEndPos,double *output,int outputSize)=0;
-    virtual int OclHostFormulaAverage32Bits(float *fpSrcData,uint *npStartPos,uint *npEndPos,double *output,int outputSize)=0;
+    virtual int OclHostArithmeticOperator64Bits( const char* aKernelName, double *fpLeftData, double *fpRightData, double *&rResult, int nRowSize )=0;
+    virtual int OclHostFormulaStatistics64Bits( const char* aKernelName, double *fpSrcData, uint *npStartPos, uint *npEndPos, double *&output, int outputSize )=0;
+    virtual int OclHostFormulaCount64Bits( uint *npStartPos, uint *npEndPos, double *&dpOutput, int nSize)=0;
+    virtual int OclHostFormulaSumProduct64Bits( double *fpSumProMergeLfData, double *fpSumProMergeRrData, uint *npSumSize, double *&dpOutput, int nSize )=0;
 
+    virtual int OclHostArithmeticOperator32Bits( const char* aKernelName, float *fpLeftData, float *fpRightData, double *rResult, int nRowSize )=0;
+    virtual int OclHostFormulaStatistics32Bits( const char* aKernelName, float *fpSrcData, uint *npStartPos, uint *npEndPos, double *output, int outputSize )=0;
+    virtual int OclHostFormulaCount32Bits( uint *npStartPos, uint *npEndPos, double *dpOutput, int nSize)=0;
+    virtual int OclHostFormulaSumProduct32Bits( float *fpSumProMergeLfData, float *fpSumProMergeRrData, uint *npSumSize, double *dpOutput, int nSize )=0;
 
-    //virtual int OclHostFormulaCount(int *start,int *end,float *output,int size)=0;
-    //virtual int OclHostFormulaSum(float *srcData,int *startPos,int *endPos,float *output,int outputSize)=0;
-    //virtual int OclHostFormulaSumProduct(float *pdSrcData,int *pnStart,int *pnEnd,float *pdOutput,int nSize)=0;
+    virtual double *OclSimpleDeltaOperation( OpCode eOp, const double *pOpArray, const double *pSubtractSingle, size_t nElements )=0;
+
 
 };
 
 
-class OpenclDevice {
+class OpenclDevice
+{
 
 public:
     static GPUEnv gpuEnv;
@@ -145,26 +149,26 @@ public:
     static int InitEnv();
     static int RegistOpenclKernel();
     static int ReleaseOpenclRunEnv();
-    static int InitOpenclRunEnv(GPUEnv *gpu);
-    static int ReleaseOpenclEnv(GPUEnv *gpuInfo);
-    static int CompileKernelFile(GPUEnv *gpuInfo, const char *buildOption);
-    static int InitOpenclRunEnv(int argc, const char *buildOptionKernelfiles);
-    static int CachedOfKernerPrg(const GPUEnv *gpuEnvCached, const char * clFileName);
-    static int GeneratBinFromKernelSource(cl_program program, const char * clFileName);
-    static int WriteBinaryToFile(const char* fileName, const char* birary, size_t numBytes);
-    static int BinaryGenerated(const char * clFileName, FILE ** fhandle);
-    static int CompileKernelFile(const char *filename, GPUEnv *gpuInfo, const char *buildOption);
+    static int InitOpenclRunEnv( GPUEnv *gpu );
+    static int ReleaseOpenclEnv( GPUEnv *gpuInfo );
+    static int CompileKernelFile( GPUEnv *gpuInfo, const char *buildOption );
+    static int InitOpenclRunEnv( int argc );
+    static int CachedOfKernerPrg( const GPUEnv *gpuEnvCached, const char * clFileName );
+    static int GeneratBinFromKernelSource( cl_program program, const char * clFileName );
+    static int WriteBinaryToFile( const char* fileName, const char* birary, size_t numBytes );
+    static int BinaryGenerated( const char * clFileName, FILE ** fhandle );
+    static int CompileKernelFile( const char *filename, GPUEnv *gpuInfo, const char *buildOption );
 
-    int InitOpenclAttr(OpenCLEnv * env);
-    int ReleaseKernel(KernelEnv * env);
-    int SetKernelEnv(KernelEnv *envInfo);
-    int CreateKernel(char * kernelname, KernelEnv * env);
-    int RunKernel(const char *kernelName, void **userdata);
-    int ConvertToString(const char *filename, char **source);
-    int CheckKernelName(KernelEnv *envInfo,const char *kernelName);
-    int RegisterKernelWrapper(const char *kernelName,cl_kernel_function function);
-    int RunKernelWrapper(cl_kernel_function function, const char * kernelName, void **usrdata);
-    int GetKernelEnvAndFunc(const char *kernelName, KernelEnv *env,cl_kernel_function *function);
+    int InitOpenclAttr( OpenCLEnv * env );
+    int ReleaseKernel( KernelEnv * env );
+    int SetKernelEnv( KernelEnv *envInfo );
+    int CreateKernel( char * kernelname, KernelEnv * env );
+    int RunKernel( const char *kernelName, void **userdata );
+    int ConvertToString( const char *filename, char **source );
+    int CheckKernelName( KernelEnv *envInfo, const char *kernelName );
+    int RegisterKernelWrapper( const char *kernelName, cl_kernel_function function );
+    int RunKernelWrapper( cl_kernel_function function, const char * kernelName, void **usrdata );
+    int GetKernelEnvAndFunc( const char *kernelName, KernelEnv *env, cl_kernel_function *function );
 
 
 #ifdef WIN32
@@ -174,27 +178,13 @@ public:
 #endif
 
     int GetOpenclState();
-    void SetOpenclState(int state);
-    inline static int AddKernelConfig(int kCount, const char *kName);
+    void SetOpenclState( int state );
+    inline static int AddKernelConfig( int kCount, const char *kName );
 
 };
 
-#define NUM 4//(16*16*16)
-typedef enum _formulax_ {
-    MIN,
-    MAX,
-    SUM,
-    AVG,
-    COUNT,
-    SUMPRODUCT,
-    MINVERSE,
-    SIGNEDADD,
-    SIGNEDNUL,
-    SIGNEDDIV,
-    SIGNEDSUB
-} formulax;
-
-class OclCalc: public OpenclDevice,OpenclCalcBase {
+class OclCalc: public OpenclDevice,OpenclCalcBase
+{
 
 public:
     KernelEnv kEnv;
@@ -203,40 +193,35 @@ public:
     cl_mem mpClmemEndPos;
     cl_mem mpClmemLeftData;
     cl_mem mpClmemRightData;
-
+    cl_mem mpClmemMergeLfData;
+    cl_mem mpClmemMergeRtData;
+    cl_mem mpClmemMatixSumSize;
+    unsigned int nFormulaColSize;
+    unsigned int nFormulaRowSize;
 
     OclCalc();
     ~OclCalc();
-    double OclTest();
-    double OclTestDll();
-    double OclMin();
-    double OclProcess(cl_kernel_function function, double *data, formulax type);
 
-#ifdef GPU_64BITS
-    int OclHostSignedAdd(double *lData,double *rData,double *rResult,int rowSize);
-    int OclHostSignedSub(double *lData,double *rData,double *rResult,int rowSize);
-    int OclHostSignedMul(double *lData,double *rData,double *rResult,int rowSize);
-    int OclHostSignedDiv(double *lData,double *rData,double *rResult,int rowSize);
-    int OclHostFormulaMax(double *srcData,int *startPos,int *endPos,double *output,int outputSize);
-    int OclHostFormulaMin(double *srcData,int *startPos,int *endPos,double *output,int outputSize);
-    int OclHostFormulaAverage(double *srcData,int *startPos,int *endPos,double *output,int outputSize);
-#endif
-    int OclHostSignedAdd32Bits(float *fpLeftData,float *fpRightData,double *rResult,int nRowSize);
-    int OclHostSignedSub32Bits(float *fpLeftData,float *fpRightData,double *rResult,int nRowSize);
-    int OclHostSignedMul32Bits(float *fpLeftData,float *fpRightData,double *rResult,int nRowSize);
-    int OclHostSignedDiv32Bits(float *fpLeftData,float *fpRightData,double *rResult,int nRowSize);
-    int OclHostFormulaMax32Bits(float *fpSrcData,uint *npStartPos,uint *npEndPos,double *output,int outputSize);
-    int OclHostFormulaMin32Bits(float *fpSrcData,uint *npStartPos,uint *npEndPos,double *output,int outputSize);
-    int OclHostFormulaAverage32Bits(float *fpSrcData,uint *npStartPos,uint *npEndPos,double *output,int outputSize);
-    double *OclSimpleDeltaOperation(OpCode eOp, const double *pOpArray, const double *pSubtractSingle, size_t nElements);
-
-    //int OclHostFormulaCount(int *startPos,int *endPos,float *output,int outputSize);
-    //int OclHostFormulaSum(float *srcData,int *startPos,int *endPos,float *output,int outputSize);
-    //int OclHostFormulaSumProduct(float *pdSrcData,int *pnStart,int *pnEnd,float *pdOutput,int nSize);
+// for 64bits double
+    int OclHostArithmeticOperator64Bits( const char* aKernelName, double *fpLeftData, double *fpRightData, double *&rResult, int nRowSize );
+    int OclHostFormulaStatistics64Bits( const char* aKernelName, double *fpSrcData, uint *npStartPos, uint *npEndPos, double *&output, int outputSize);
+    int OclHostFormulaCount64Bits( uint *npStartPos, uint *npEndPos, double *&dpOutput, int nSize );
+    int OclHostFormulaSumProduct64Bits( double *fpSumProMergeLfData, double *fpSumProMergeRrData, uint *npSumSize, double *&dpOutput, int nSize);
+// for 32bits float
+    int OclHostArithmeticOperator32Bits( const char* aKernelName, float *fpLeftData, float *fpRightData, double *rResult, int nRowSize );
+    int OclHostFormulaStatistics32Bits( const char* aKernelName, float *fpSrcData, uint *npStartPos, uint *npEndPos, double *output, int outputSize);
+    int OclHostFormulaCount32Bits( uint *npStartPos, uint *npEndPos, double *dpOutput, int nSize );
+    int OclHostFormulaSumProduct32Bits( float *fpSumProMergeLfData, float *fpSumProMergeRrData, uint *npSumSize, double *dpOutput, int nSize );
+// for groundwater
+    double *OclSimpleDeltaOperation( OpCode eOp, const double *pOpArray, const double *pSubtractSingle, size_t nElements );
 
     ///////////////////////////////////////////////////////////////
-    int CreateBuffer(float *&fpSrcData,uint *&npStartPos,uint *&npEndPos,int nBufferSize);
-    int CreateBuffer(float *&fpLeftData,float *&fpRightData,int nBufferSize);
+    int CreateBuffer64Bits( double *&fpSrcData, uint *&npStartPos, uint *&npEndPos, int nBufferSize );
+    int CreateBuffer64Bits( double *&fpLeftData, double *&fpRightData, int nBufferSize );
+    int CreateBuffer64Bits( double *&fpSumProMergeLfData, double *&fpSumProMergeRtData, uint *&npSumSize, int nMatixSize, int nBufferSize );
+    int CreateBuffer32Bits( float *&fpSrcData, uint *&npStartPos, uint *&npEndPos, int nBufferSize );
+    int CreateBuffer32Bits( float *&fpLeftData, float *&fpRightData, int nBufferSize );
+    int CreateBuffer32Bits( float *&fpSumProMergeLfData, float *&fpSumProMergeRtData, uint *&npSumSize, int nMatixSize, int nBufferSize );
 };
 
 #endif

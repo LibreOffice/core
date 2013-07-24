@@ -104,7 +104,7 @@ bool FormulaGroupInterpreterOpenCL::interpret(ScDocument& rDoc, const ScAddress&
     size_t rowSize = xGroup->mnLength;
     fprintf(stderr,"rowSize at begin is ...%ld.\n",(long)rowSize);
     // The row quantity can be gotten from p2->GetArrayLength()
-    int nCount1 = 0, nCount2 = 0, nCount3 = 0;
+    uint nCount1 = 0, nCount2 = 0, nCount3 = 0;
     int nOclOp = 0;
     double *rResult = NULL; // Point to the output data from GPU
     rResult = (double *)malloc(sizeof(double) * rowSize*2);// For 2 columns(B,C)
@@ -115,18 +115,41 @@ bool FormulaGroupInterpreterOpenCL::interpret(ScDocument& rDoc, const ScAddress&
     }
     memset(rResult,0,rowSize);
     float * fpOclSrcData = NULL; // Point to the input data from CPU
+    double * dpOclSrcData = NULL;
     uint * npOclStartPos = NULL; // The first position for calculation,for example,the A1 in (=MAX(A1:A100))
     uint * npOclEndPos   = NULL; // The last position for calculation,for example, the A100 in (=MAX(A1:A100))
     float * fpLeftData   = NULL; // Left input for binary operator(+,-,*,/),for example,(=leftData+rightData)
     float * fpRightData  = NULL; // Right input for binary operator(+,-,*,/),for example,(=leftData/rightData)
                                  // The rightData can't be zero for "/"
+    double * dpLeftData = NULL;
+    double * dpRightData = NULL;
+
+    float * fpSaveData=NULL;            //It is a temp pointer point the preparing memory;
+    float * fpSumProMergeLfData = NULL; //It merge the more col to one col is the left operator
+    float * fpSumProMergeRtData = NULL; //It merge the more col to one col is the right operator
+    double * dpSaveData=NULL;
+    double * dpSumProMergeLfData = NULL;
+    double * dpSumProMergeRtData = NULL;
+    uint * npSumSize=NULL;      //It is a array to save the matix sizt(col *row)
+    int nSumproductSize=0;      //It is the merge array size
+    bool aIsAlloc=false;        //It is a flag to judge the fpSumProMergeLfData existed
+    unsigned int nCountMatix=0; //It is a count to save the calculate times
     static OclCalc ocl_calc;
+    bool isSumProduct=false;
     if(ocl_calc.GetOpenclState())
     {
         // Don't know how large the size will be applied previously, so create them as the rowSize or 65536
         // Don't know which formulae will be used previously, so create buffers for different formulae used probably
-        ocl_calc.CreateBuffer(fpOclSrcData,npOclStartPos,npOclEndPos,rowSize);
-        ocl_calc.CreateBuffer(fpLeftData,fpRightData,rowSize);
+        if(ocl_calc.gpuEnv.mnKhrFp64Flag==1 || ocl_calc.gpuEnv.mnAmdFp64Flag==1)
+        {
+            ocl_calc.CreateBuffer64Bits(dpOclSrcData,npOclStartPos,npOclEndPos,rowSize);
+            ocl_calc.CreateBuffer64Bits(dpLeftData,dpRightData,rowSize);
+        }
+        else
+        {
+            ocl_calc.CreateBuffer32Bits(fpOclSrcData,npOclStartPos,npOclEndPos,rowSize);
+            ocl_calc.CreateBuffer32Bits(fpLeftData,fpRightData,rowSize);
+        }
         //printf("pptrr is %d,%d,%d\n",fpOclSrcData,npOclStartPos,npOclEndPos);
     }
 ///////////////////////////////////////////////////////////////////////////////////////////
@@ -159,11 +182,54 @@ bool FormulaGroupInterpreterOpenCL::interpret(ScDocument& rDoc, const ScAddress&
                     if (!p2->IsEndFixed())
                         nRowEnd += i;
                     size_t nRowSize = nRowEnd - nRowStart + 1;
+                    //store the a matix`s rowsize and colsize,use it to calculate the matix`s size
+                    ocl_calc.nFormulaRowSize = nRowSize;
+                    ocl_calc.nFormulaColSize = nColSize;
                     ScMatrixRef pMat(new ScMatrix(nColSize, nRowSize, 0.0));
                     if(ocl_calc.GetOpenclState())
                     {
                         npOclStartPos[i] = nRowStart; // record the start position
                         npOclEndPos[i]   = nRowEnd;   // record the end position
+                    }
+                    int nTempOpcode;
+                    const formula::FormulaToken* pTemp = p;
+                    pTemp=aCode2.Next();
+                    nTempOpcode=pTemp->GetOpCode();
+                    while(1)
+                    {
+                        nTempOpcode=pTemp->GetOpCode();
+                        if(nTempOpcode!=ocOpen && nTempOpcode!=ocPush)
+                            break;
+                         pTemp=aCode2.Next();
+                    }
+                    if((!aIsAlloc) && (ocl_calc.GetOpenclState())&& (nTempOpcode == ocSumProduct))
+                    {
+                        //nColSize * rowSize is the data size , but except the the head of data will use less the nRowSize
+                        //the other all use nRowSize times . and it must aligen so add nRowSize-1.
+                        nSumproductSize = nRowSize+nColSize * rowSize*nRowSize-1;
+                        if(ocl_calc.gpuEnv.mnKhrFp64Flag==1 || ocl_calc.gpuEnv.mnAmdFp64Flag==1)
+                            ocl_calc.CreateBuffer64Bits(dpSumProMergeLfData,dpSumProMergeRtData,npSumSize,nSumproductSize,rowSize);
+                        else
+                            ocl_calc.CreateBuffer32Bits(fpSumProMergeLfData,fpSumProMergeRtData,npSumSize,nSumproductSize,rowSize);
+                        aIsAlloc = true;
+                        isSumProduct=true;
+                    }
+                    if(isSumProduct)
+                    {
+                        if(ocl_calc.gpuEnv.mnKhrFp64Flag==1 || ocl_calc.gpuEnv.mnAmdFp64Flag==1)
+                        {
+                            if(nCountMatix%2==0)
+                                dpSaveData = dpSumProMergeLfData;
+                            else
+                                dpSaveData = dpSumProMergeRtData;
+                        }
+                        else
+                        {
+                            if(nCountMatix%2==0)
+                                fpSaveData = fpSumProMergeLfData;
+                            else
+                                fpSaveData = fpSumProMergeRtData;
+                        }
                     }
                     for (size_t nCol = 0; nCol < nColSize; ++nCol)
                     {
@@ -177,9 +243,21 @@ bool FormulaGroupInterpreterOpenCL::interpret(ScDocument& rDoc, const ScAddress&
                         {
                             for( size_t u=nRowStart; u<=nRowEnd; u++ )
                             {
-                                // Many video cards can't support double type in kernel, so need transfer the double to float
-                                fpOclSrcData[u] = (float)pArray[u];
-                                //fprintf(stderr,"fpOclSrcData[%d] is %f.\n",u,fpOclSrcData[u]);
+                                if(ocl_calc.gpuEnv.mnKhrFp64Flag==1 || ocl_calc.gpuEnv.mnAmdFp64Flag==1)
+                                {
+                                    dpOclSrcData[u] = pArray[u];
+                                    //fprintf(stderr,"dpOclSrcData[%d] is %f.\n",u,dpOclSrcData[u]);
+                                    if(isSumProduct)
+                                        dpSaveData[u+nRowSize*nCol + nRowStart* nColSize * nRowSize-nRowStart] = pArray[u];
+                                }
+                                else
+                                {
+                                    // Many video cards can't support double type in kernel, so need transfer the double to float
+                                    fpOclSrcData[u] = (float)pArray[u];
+                                    //fprintf(stderr,"fpOclSrcData[%d] is %f.\n",u,fpOclSrcData[u]);
+                                    if(isSumProduct)
+                                        fpSaveData[u+nRowSize*nCol + nRowStart* nColSize * nRowSize-nRowStart] = (float)pArray[u];
+                                }
                             }
                         }
 
@@ -195,6 +273,11 @@ bool FormulaGroupInterpreterOpenCL::interpret(ScDocument& rDoc, const ScAddress&
 
                     ScMatrixToken aTok(pMat);
                     aCode2.AddToken(aTok);
+                    if(isSumProduct)
+                    {
+                        npSumSize[nCountMatix/2] =nRowSize*nColSize;
+                        nCountMatix++;
+                    }
                 }
                 break;
                 default:
@@ -214,21 +297,32 @@ bool FormulaGroupInterpreterOpenCL::interpret(ScDocument& rDoc, const ScAddress&
                 OpCode eOp = pCur->GetOpCode();
                 if(eOp==0)
                 {
-                     if(nCount3%2==0)
-                         fpLeftData[nCount1++] = (float)pCur->GetDouble();
-                     else
-                         fpRightData[nCount2++] = (float)pCur->GetDouble();
-                     nCount3++;
+                    if(ocl_calc.gpuEnv.mnKhrFp64Flag==1 || ocl_calc.gpuEnv.mnAmdFp64Flag==1)
+                    {
+                        if(nCount3%2==0)
+                            dpLeftData[nCount1++] = pCur->GetDouble();
+                        else
+                            dpRightData[nCount2++] = pCur->GetDouble();
+                        nCount3++;
+                    }
+                    else
+                    {
+                        if(nCount3%2==0)
+                            fpLeftData[nCount1++] = (float)pCur->GetDouble();
+                        else
+                            fpRightData[nCount2++] = (float)pCur->GetDouble();
+                        nCount3++;
+                    }
                 }
-                else if( eOp!=ocOpen && eOp!=ocClose )
+                else if( eOp!=ocOpen && eOp!=ocClose &&eOp != ocSep)
                     nOclOp = eOp;
 
 //              if(count1>0){//dbg
-//                  fprintf(stderr,"leftData is %f.\n",leftData[count1-1]);
+//                  fprintf(stderr,"leftData is %f.\n",fpLeftData[count1-1]);
 //                  count1--;
 //              }
 //              if(count2>0){//dbg
-//                  fprintf(stderr,"rightData is %f.\n",rightData[count2-1]);
+//                  fprintf(stderr,"rightData is %f.\n",fpRightData[count2-1]);
 //                  count2--;
 //              }
             }
@@ -249,52 +343,99 @@ bool FormulaGroupInterpreterOpenCL::interpret(ScDocument& rDoc, const ScAddress&
     // For GPU calculation
     if(getenv("SC_GPU")&&ocl_calc.GetOpenclState())
     {
-            fprintf(stderr,"ggGPU flow...\n\n");
-            printf(" oclOp is... %d\n",nOclOp);
-            osl_getSystemTime(&aTimeBefore); //timer
+        fprintf(stderr,"ggGPU flow...\n\n");
+        printf(" oclOp is... %d\n",nOclOp);
+        osl_getSystemTime(&aTimeBefore); //timer
+        if(ocl_calc.gpuEnv.mnKhrFp64Flag==1 || ocl_calc.gpuEnv.mnAmdFp64Flag==1)
+        {
+            fprintf(stderr,"ggGPU double precision flow...\n\n");
+            //double precision
             switch(nOclOp)
             {
                 case ocAdd:
-                    ocl_calc.OclHostSignedAdd32Bits(fpLeftData,fpRightData,rResult,nCount1);
+                    ocl_calc.OclHostArithmeticOperator64Bits("oclSignedAdd",dpLeftData,dpRightData,rResult,nCount1);
                     break;
                 case ocSub:
-                    ocl_calc.OclHostSignedSub32Bits(fpLeftData,fpRightData,rResult,nCount1);
+                    ocl_calc.OclHostArithmeticOperator64Bits("oclSignedSub",dpLeftData,dpRightData,rResult,nCount1);
                     break;
                 case ocMul:
-                    ocl_calc.OclHostSignedMul32Bits(fpLeftData,fpRightData,rResult,nCount1);
+                    ocl_calc.OclHostArithmeticOperator64Bits("oclSignedMul",dpLeftData,dpRightData,rResult,nCount1);
                     break;
                 case ocDiv:
-                    ocl_calc.OclHostSignedDiv32Bits(fpLeftData,fpRightData,rResult,nCount1);
+                    ocl_calc.OclHostArithmeticOperator64Bits("oclSignedDiv",dpLeftData,dpRightData,rResult,nCount1);
                     break;
                 case ocMax:
-                    ocl_calc.OclHostFormulaMax32Bits(fpOclSrcData,npOclStartPos,npOclEndPos,rResult,rowSize);
+                    ocl_calc.OclHostFormulaStatistics64Bits("oclFormulaMax",dpOclSrcData,npOclStartPos,npOclEndPos,rResult,rowSize);
                     break;
                 case ocMin:
-                    ocl_calc.OclHostFormulaMin32Bits(fpOclSrcData,npOclStartPos,npOclEndPos,rResult,rowSize);
+                    ocl_calc.OclHostFormulaStatistics64Bits("oclFormulaMin",dpOclSrcData,npOclStartPos,npOclEndPos,rResult,rowSize);
                     break;
                 case ocAverage:
-                    ocl_calc.OclHostFormulaAverage32Bits(fpOclSrcData,npOclStartPos,npOclEndPos,rResult,rowSize);
+                    ocl_calc.OclHostFormulaStatistics64Bits("oclFormulaAverage",dpOclSrcData,npOclStartPos,npOclEndPos,rResult,rowSize);
                     break;
                 case ocSum:
-                    //ocl_calc.OclHostFormulaSum(srcData,rangeStart,rangeEnd,rResult,rowSize);
+                    ocl_calc.OclHostFormulaStatistics64Bits("oclFormulaSum",dpOclSrcData,npOclStartPos,npOclEndPos,rResult,rowSize);
                     break;
                 case ocCount:
-                    //ocl_calc.OclHostFormulaCount(rangeStart,rangeEnd,rResult,rowSize);
+                    ocl_calc.OclHostFormulaCount64Bits(npOclStartPos,npOclEndPos,rResult,rowSize);
                     break;
                 case ocSumProduct:
-                    //ocl_calc.OclHostFormulaSumProduct(srcData,rangeStart,rangeEnd,rResult,rowSize);
+                    ocl_calc.OclHostFormulaSumProduct64Bits(dpSumProMergeLfData,dpSumProMergeRtData,npSumSize,rResult,rowSize);
                     break;
                 default:
                     fprintf(stderr,"No OpenCL function for this calculation.\n");
                     break;
-            }
-            /////////////////////////////////////////////////////
-            osl_getSystemTime(&aTimeAfter);
-            double diff = getTimeDiff(aTimeAfter, aTimeBefore);
-            //if (diff >= 1.0)
+              }
+        }
+        else
+        {
+            fprintf(stderr,"ggGPU float precision flow...\n\n");
+            //float precision
+            switch(nOclOp)
             {
-                fprintf(stderr,"OpenCL,diff...%f.\n",diff);
-            }
+                case ocAdd:
+                    ocl_calc.OclHostArithmeticOperator32Bits("oclSignedAdd",fpLeftData,fpRightData,rResult,nCount1);
+                    break;
+                case ocSub:
+                    ocl_calc.OclHostArithmeticOperator32Bits("oclSignedSub",fpLeftData,fpRightData,rResult,nCount1);
+                    break;
+                case ocMul:
+                    ocl_calc.OclHostArithmeticOperator32Bits("oclSignedMul",fpLeftData,fpRightData,rResult,nCount1);
+                    break;
+                case ocDiv:
+                    ocl_calc.OclHostArithmeticOperator32Bits("oclSignedDiv",fpLeftData,fpRightData,rResult,nCount1);
+                    break;
+                case ocMax:
+                    ocl_calc.OclHostFormulaStatistics32Bits("oclFormulaMax",fpOclSrcData,npOclStartPos,npOclEndPos,rResult,rowSize);
+                    break;
+                case ocMin:
+                    ocl_calc.OclHostFormulaStatistics32Bits("oclFormulaMin",fpOclSrcData,npOclStartPos,npOclEndPos,rResult,rowSize);
+                    break;
+                case ocAverage:
+                    ocl_calc.OclHostFormulaStatistics32Bits("oclFormulaAverage",fpOclSrcData,npOclStartPos,npOclEndPos,rResult,rowSize);
+                    break;
+                case ocSum:
+                    ocl_calc.OclHostFormulaStatistics32Bits("oclFormulaSum",fpOclSrcData,npOclStartPos,npOclEndPos,rResult,rowSize);
+                    break;
+                case ocCount:
+                    ocl_calc.OclHostFormulaCount32Bits(npOclStartPos,npOclEndPos,rResult,rowSize);
+                    break;
+                case ocSumProduct:
+                    ocl_calc.OclHostFormulaSumProduct32Bits(fpSumProMergeLfData,fpSumProMergeRtData,npSumSize,rResult,rowSize);
+                    break;
+                default:
+                    fprintf(stderr,"No OpenCL function for this calculation.\n");
+                    break;
+              }
+        }
+
+        /////////////////////////////////////////////////////
+        osl_getSystemTime(&aTimeAfter);
+        double diff = getTimeDiff(aTimeAfter, aTimeBefore);
+        //if (diff >= 1.0)
+        {
+            fprintf(stderr,"OpenCL,diff...%f.\n",diff);
+        }
 /////////////////////////////////////////////////////
 
 //rResult[i];
@@ -302,17 +443,12 @@ bool FormulaGroupInterpreterOpenCL::interpret(ScDocument& rDoc, const ScAddress&
 //               fprintf(stderr,"After GPU,rRsults[%d] is ...%f\n",i,rResult[i]);
 //           }
 
-            // Insert the double data, in rResult[i] back into the document
-            rDoc.SetFormulaResults(rTopPos, rResult, xGroup->mnLength);
-        }
+        // Insert the double data, in rResult[i] back into the document
+        rDoc.SetFormulaResults(rTopPos, rResult, xGroup->mnLength);
+    }
 
-        if(rResult)
-            free(rResult);
-
-        if(getenv("SC_GPUSAMPLE")){
-            //fprintf(stderr,"FormulaGroupInterpreter::interpret(),iniflag...%d\n",ocl_calc.GetOpenclState());
-            //ocl_calc.OclTest();//opencl test sample for debug
-        }
+    if(rResult)
+        free(rResult);
 
     return true;
 }
