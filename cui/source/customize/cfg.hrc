@@ -96,4 +96,6 @@
 #define BUTTON_STR_UP   (130 + CFG_OFFSET)
 #define BUTTON_STR_DOWN (131 + CFG_OFFSET)
 
+#define ID_ICONS_AND_TEXT_PER_TOOLBAR (132 + CFG_OFFSET)
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

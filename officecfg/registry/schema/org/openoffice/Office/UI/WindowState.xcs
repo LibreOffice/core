@@ -104,7 +104,7 @@
       </prop>
       <prop oor:name="Style" oor:type="xs:int" oor:nillable="false">
         <info>
-          <desc>Specifies the style of a toolbar. This property is only used by toolbar user interface elements. 0 = symbol buttons, 1 = text buttons, 2 = symbols+text buttons</desc>
+          <desc>Specifies the style of a toolbar. This property is only used by toolbar user interface elements. 0 = symbol buttons, 1 = text buttons, 2 = symbols+text buttons, 3 = symbols+text per item buttons</desc>
         </info>
         <value>0</value>
       </prop>

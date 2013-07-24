@@ -52,6 +52,7 @@ class FWE_DLLPUBLIC OReadToolBoxDocumentHandler : private ThreadHelpBase,   // S
             TB_ATTRIBUTE_URL,
             TB_ATTRIBUTE_ITEMBITS,
             TB_ATTRIBUTE_VISIBLE,
+            TB_ATTRIBUTE_TEXTVISIBLE,
             TB_ATTRIBUTE_WIDTH,
             TB_ATTRIBUTE_USER,
             TB_ATTRIBUTE_HELPID,
@@ -149,6 +150,7 @@ class FWE_DLLPUBLIC OReadToolBoxDocumentHandler : private ThreadHelpBase,   // S
         OUString                                                                   m_aTooltip;
         OUString                                                                   m_aIsVisible;
         OUString                                                                   m_aCommandURL;
+        OUString                                                                   m_aIsTextVisible;
 };
 
 
@@ -165,8 +167,7 @@ class FWE_DLLPUBLIC OWriteToolBoxDocumentHandler : private ThreadHelpBase   // S
               ::com::sun::star::uno::RuntimeException );
 
     protected:
-        virtual void WriteToolBoxItem( const OUString& aCommandURL, const OUString& aLabel, const OUString& aHelpURL, const OUString& aTooltip, sal_Int16 nStyle,
-                                       sal_Int16 nWidth, sal_Bool bVisible ) throw
+        virtual void WriteToolBoxItem( const OUString& aCommandURL, const OUString& aLabel, const OUString& aHelpURL, const OUString& aTooltip, sal_Int16 nStyle, sal_Int16 nWidth, sal_Bool bVisible, sal_Bool bTextVisible ) throw
             ( ::com::sun::star::xml::sax::SAXException,
               ::com::sun::star::uno::RuntimeException );
 

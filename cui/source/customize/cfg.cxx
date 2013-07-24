@@ -3344,6 +3344,15 @@ IMPL_LINK( SvxToolbarConfigPage, ToolbarSelectHdl, MenuButton *, pButton )
 
             break;
         }
+        case ID_ICONS_AND_TEXT_PER_TOOLBAR:
+        {
+            pToolbar->SetStyle( 3 );
+            pSaveInData->SetSystemStyle( m_xFrame, pToolbar->GetCommand(), 3 );
+
+            aTopLevelListBox.GetSelectHdl().Call( this );
+
+            break;
+        }
     }
     return 1;
 }
@@ -3749,9 +3758,13 @@ void ToolbarSaveInData::SetSystemStyle(
         {
             toolbox->SetButtonType( BUTTON_TEXT );
         }
-        if ( nStyle == 2 )
+        else if ( nStyle == 2 )
         {
             toolbox->SetButtonType( BUTTON_SYMBOLTEXT );
+        }
+        else if ( nStyle == 3 )
+        {
+            toolbox->SetButtonType( BUTTON_SYMBOLTEXT_PERTOOLBAR );
         }
     }
 }

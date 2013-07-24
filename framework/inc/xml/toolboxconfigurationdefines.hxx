@@ -39,6 +39,7 @@
 #define ATTRIBUTE_URL               "href"
 #define ATTRIBUTE_ITEMBITS          "property"
 #define ATTRIBUTE_VISIBLE           "visible"
+#define ATTRIBUTE_TEXTVISIBLE       "textvisible"
 #define ATTRIBUTE_WIDTH             "width"
 #define ATTRIBUTE_USER              "userdefined"
 #define ATTRIBUTE_HELPID            "helpid"

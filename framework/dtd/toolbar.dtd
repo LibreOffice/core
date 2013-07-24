@@ -29,6 +29,7 @@
 <!ATTLIST toolbar:toolbaritem
 	xlink:href CDATA #REQUIRED
 	toolbar:visible %boolean; "true"
+	toolbar:textvisible %boolean; "false"
 	toolbar:userdefined %boolean; "false"
 	toolbar:text CDATA #IMPLIED
 	toolbar:width %numeric; "0"
@@ -52,6 +53,7 @@
 	toolbar:dockinglines %numeric; "1"
 	toolbar:align %alignment; "left"
 	toolbar:visible %boolean; "false"
+	toolbar:textvisible %boolean; "false"
 	toolbar:floating %boolean; "false"
 	toolbar:style %style; "symbol"
 	toolbar:userdefname CDATA #IMPLIED

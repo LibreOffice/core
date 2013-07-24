@@ -330,6 +330,13 @@ Menu MODIFY_TOOLBAR
             AutoCheck = TRUE ;
             Text [ en-US ] = "Icons & Text" ;
         };
+        MenuItem
+        {
+            Identifier = ID_ICONS_AND_TEXT_PER_TOOLBAR ;
+            RadioCheck = TRUE ;
+            AutoCheck = TRUE ;
+            Text [ en-US ] = "Icons & Text per item" ;
+        };
     };
 };
 
