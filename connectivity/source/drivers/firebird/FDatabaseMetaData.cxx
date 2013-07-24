@@ -87,7 +87,7 @@ OUString SAL_CALL ODatabaseMetaData::getCatalogSeparator() throw(SQLException, R
 
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxCatalogNameLength() throw(SQLException, RuntimeException)
 {
-    return 0;
+    return -1;
 }
 
 OUString SAL_CALL ODatabaseMetaData::getCatalogTerm() throw(SQLException, RuntimeException)
@@ -148,7 +148,7 @@ sal_Int32 SAL_CALL ODatabaseMetaData::getMaxCharLiteralLength() throw(SQLExcepti
 
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxColumnNameLength() throw(SQLException, RuntimeException)
 {
-    return 32;
+    return 31;
 }
 
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxColumnsInIndex() throw(SQLException, RuntimeException)
@@ -196,36 +196,68 @@ sal_Bool SAL_CALL ODatabaseMetaData::doesMaxRowSizeIncludeBlobs(  ) throw(SQLExc
 {
     return sal_False;
 }
-// -------------------------------------------------------------------------
-sal_Bool SAL_CALL ODatabaseMetaData::storesLowerCaseQuotedIdentifiers(  ) throw(SQLException, RuntimeException)
+
+// ---- Identifiers -----------------------------------------------------------
+// Only quoted identifiers are case sensitive, unquoted are case insensitive
+OUString SAL_CALL ODatabaseMetaData::getIdentifierQuoteString()
+    throw(SQLException, RuntimeException)
+{
+    OUString aVal('"');
+    return aVal;
+}
+
+sal_Bool SAL_CALL ODatabaseMetaData::supportsMixedCaseQuotedIdentifiers(  ) throw(SQLException, RuntimeException)
+{
+    return sal_True;
+}
+
+sal_Bool SAL_CALL ODatabaseMetaData::storesLowerCaseQuotedIdentifiers()
+    throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
-// -------------------------------------------------------------------------
-sal_Bool SAL_CALL ODatabaseMetaData::storesLowerCaseIdentifiers(  ) throw(SQLException, RuntimeException)
+
+sal_Bool SAL_CALL ODatabaseMetaData::storesMixedCaseQuotedIdentifiers()
+    throw(SQLException, RuntimeException)
+{
+    // TODO: confirm this -- the documentation is highly ambiguous
+    // However it seems this should be true as quoted identifiers ARE
+    // stored mixed case.
+    return sal_True;
+}
+
+sal_Bool SAL_CALL ODatabaseMetaData::storesUpperCaseQuotedIdentifiers()
+    throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
-// -------------------------------------------------------------------------
-sal_Bool SAL_CALL ODatabaseMetaData::storesMixedCaseQuotedIdentifiers(  ) throw(SQLException, RuntimeException)
+
+// ---- Unquoted Identifiers -------------------------------------------------
+// All unquoted identifers are stored upper case.
+sal_Bool SAL_CALL ODatabaseMetaData::supportsMixedCaseIdentifiers()
+    throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
-// -------------------------------------------------------------------------
-sal_Bool SAL_CALL ODatabaseMetaData::storesMixedCaseIdentifiers(  ) throw(SQLException, RuntimeException)
+
+sal_Bool SAL_CALL ODatabaseMetaData::storesLowerCaseIdentifiers()
+    throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
-// -------------------------------------------------------------------------
-sal_Bool SAL_CALL ODatabaseMetaData::storesUpperCaseQuotedIdentifiers(  ) throw(SQLException, RuntimeException)
+
+sal_Bool SAL_CALL ODatabaseMetaData::storesMixedCaseIdentifiers()
+    throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
-// -------------------------------------------------------------------------
-sal_Bool SAL_CALL ODatabaseMetaData::storesUpperCaseIdentifiers(  ) throw(SQLException, RuntimeException)
+
+sal_Bool SAL_CALL ODatabaseMetaData::storesUpperCaseIdentifiers()
+    throw(SQLException, RuntimeException)
 {
-    return sal_False;
+    return sal_True;
 }
+
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ODatabaseMetaData::supportsAlterTableWithAddColumn(  ) throw(SQLException, RuntimeException)
 {
@@ -246,13 +278,6 @@ sal_Int32 SAL_CALL ODatabaseMetaData::getMaxIndexLength(  ) throw(SQLException, 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsNonNullableColumns(  ) throw(SQLException, RuntimeException)
 {
     return sal_True;
-}
-// -------------------------------------------------------------------------
-OUString SAL_CALL ODatabaseMetaData::getIdentifierQuoteString(  ) throw(SQLException, RuntimeException)
-{
-    // normally this is "
-    OUString aVal("\"");
-    return aVal;
 }
 // -------------------------------------------------------------------------
 OUString SAL_CALL ODatabaseMetaData::getExtraNameCharacters(  ) throw(SQLException, RuntimeException)
@@ -365,13 +390,13 @@ sal_Int32 SAL_CALL ODatabaseMetaData::getMaxStatements(  ) throw(SQLException, R
 // -------------------------------------------------------------------------
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxProcedureNameLength(  ) throw(SQLException, RuntimeException)
 {
-    sal_Int32 nValue = 0; // 0 means no limit
+    sal_Int32 nValue = 31; // TODO: confirm
     return nValue;
 }
 // -------------------------------------------------------------------------
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxSchemaNameLength(  ) throw(SQLException, RuntimeException)
 {
-    sal_Int32 nValue = 0; // 0 means no limit
+    sal_Int32 nValue = -1; // 0 means no limit
     return nValue;
 }
 
@@ -492,16 +517,6 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsUnion(  ) throw(SQLException, Runti
 sal_Bool SAL_CALL ODatabaseMetaData::supportsUnionAll(  ) throw(SQLException, RuntimeException)
 {
     return sal_True;
-}
-// -------------------------------------------------------------------------
-sal_Bool SAL_CALL ODatabaseMetaData::supportsMixedCaseIdentifiers(  ) throw(SQLException, RuntimeException)
-{
-    return sal_False;
-}
-// -------------------------------------------------------------------------
-sal_Bool SAL_CALL ODatabaseMetaData::supportsMixedCaseQuotedIdentifiers(  ) throw(SQLException, RuntimeException)
-{
-    return sal_False;
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ODatabaseMetaData::nullsAreSortedAtEnd(  ) throw(SQLException, RuntimeException)
@@ -841,8 +856,9 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTypeInfo(  ) throw(S
     pResultSet->setRows(aRows);
     return xResultSet;
 }
-// -----------------------------------------------------------------------------
-uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getSchemas(  ) throw(SQLException, RuntimeException)
+
+uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getSchemas()
+    throw(SQLException, RuntimeException)
 {
     return NULL;
 }
