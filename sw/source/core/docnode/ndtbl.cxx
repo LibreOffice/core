@@ -137,16 +137,59 @@ static void lcl_SetDfltBoxAttr( SwFrameFormat& rFormat, sal_uInt8 nId )
     rFormat.SetFormatAttr( aBox );
 }
 
-static void lcl_SetDfltBorders( SwTableFormat* pFormat )
+typedef std::map<SwFrameFormat *, SwTableBoxFormat *> DfltBoxAttrMap_t;
+typedef std::vector<DfltBoxAttrMap_t *> DfltBoxAttrList_t;
+
+static void
+lcl_SetDfltBoxAttr(SwTableBox& rBox, DfltBoxAttrList_t & rBoxFormatArr,
+        sal_uInt8 const nId, SwTableAutoFormat const*const pAutoFormat = 0)
 {
-    for( sal_uInt8 n = 0; n < 4; ++n )
+    DfltBoxAttrMap_t * pMap = rBoxFormatArr[ nId ];
+    if (!pMap)
     {
-        for( sal_uInt8 i = 0; i < 4; i++ )
-        {
-            sal_uInt8 nId = (i < 3 ? 0 : 1) + (n ? 2 : 0);
-            ::lcl_SetDfltBoxAttr( *pFormat->GetBoxFormat( 4 * n + i ), nId );
-        }
+        pMap = new DfltBoxAttrMap_t;
+        rBoxFormatArr[ nId ] = pMap;
     }
+
+    SwTableBoxFormat* pNewTableBoxFormat = 0;
+    SwFrameFormat* pBoxFrameFormat = rBox.GetFrameFormat();
+    DfltBoxAttrMap_t::iterator const iter(pMap->find(pBoxFrameFormat));
+    if (pMap->end() != iter)
+    {
+        pNewTableBoxFormat = iter->second;
+    }
+    else
+    {
+        SwDoc* pDoc = pBoxFrameFormat->GetDoc();
+        // format does not exist, so create it
+        pNewTableBoxFormat = pDoc->MakeTableBoxFormat();
+        pNewTableBoxFormat->SetFormatAttr( pBoxFrameFormat->GetAttrSet().Get( RES_FRM_SIZE ) );
+
+        if( pAutoFormat )
+            pAutoFormat->UpdateToSet( nId, (SfxItemSet&)pNewTableBoxFormat->GetAttrSet(),
+                                    SwTableAutoFormat::UPDATE_BOX,
+                                    pDoc->GetNumberFormatter( sal_True ) );
+        else
+            ::lcl_SetDfltBoxAttr( *pNewTableBoxFormat, nId );
+
+        (*pMap)[pBoxFrameFormat] = pNewTableBoxFormat;
+    }
+    rBox.ChgFrameFormat( pNewTableBoxFormat );
+}
+
+static SwTableBoxFormat *lcl_CreateDfltBoxFormat( SwDoc &rDoc, std::vector<SwTableBoxFormat*> &rBoxFormatArr,
+                                    sal_uInt16 nCols, sal_uInt8 nId )
+{
+    if ( !rBoxFormatArr[nId] )
+    {
+        SwTableBoxFormat* pBoxFormat = rDoc.MakeTableBoxFormat();
+        if( USHRT_MAX != nCols )
+            pBoxFormat->SetFormatAttr( SwFormatFrmSize( ATT_VAR_SIZE,
+                                            USHRT_MAX / nCols, 0 ));
+        ::lcl_SetDfltBoxAttr( *pBoxFormat, nId );
+        rBoxFormatArr[ nId ] = pBoxFormat;
+    }
+    return rBoxFormatArr[nId];
 }
 
 SwTableNode* SwDoc::IsIdxInTable(const SwNodeIndex& rIdx)
@@ -398,14 +441,21 @@ const SwTable* SwDoc::InsertTable( const SwInsertTableOptions& rInsTableOpts,
         }
     }
 
-    if( !pTAFormat && bDfltBorders )
-        ::lcl_SetDfltBorders( pTableFormat );
-
     SwTable& rNdTable = pTableNd->GetTable();
     rNdTable.RegisterToFormat( *pTableFormat );
 
     rNdTable.SetRowsToRepeat( nRowsToRepeat );
     rNdTable.SetTableModel( bNewModel );
+
+    std::vector<SwTableBoxFormat*> aBoxFormatArr;
+    SwTableBoxFormat* pBoxFormat = 0;
+    if( !bDfltBorders )
+    {
+        pBoxFormat = MakeTableBoxFormat();
+        pBoxFormat->SetFormatAttr( SwFormatFrmSize( ATT_VAR_SIZE, USHRT_MAX / nCols, 0 ));
+    }
+    else
+        aBoxFormatArr.resize( 4, NULL );
 
     SwNodeIndex aNdIdx( *pTableNd, 1 ); // Set to StartNode of first Box
     SwTableLines& rLines = rNdTable.GetTabLines();
@@ -416,10 +466,14 @@ const SwTable* SwDoc::InsertTable( const SwInsertTableOptions& rInsTableOpts,
         SwTableBoxes& rBoxes = pLine->GetTabBoxes();
         for( sal_uInt16 i = 0; i < nCols; ++i )
         {
-            SwTableBoxFormat *pBoxF = MakeTableBoxFormat();
-            if( USHRT_MAX != nCols )
-                pBoxF->SetFormatAttr( SwFormatFrmSize( ATT_VAR_SIZE,
-                                            USHRT_MAX / nCols, 0 ) );
+            SwTableBoxFormat *pBoxF;
+            if( bDfltBorders )
+            {
+                sal_uInt8 nBoxId = (i < nCols - 1 ? 0 : 1) + (n ? 2 : 0 );
+                pBoxF = ::lcl_CreateDfltBoxFormat( *this, aBoxFormatArr, nCols, nBoxId);
+            }
+            else
+                pBoxF = pBoxFormat;
 
             // For AutoFormat on input: the columns are set when inserting the Table
             // The Array contains the columns positions and not their widths!
@@ -655,10 +709,19 @@ const SwTable* SwDoc::TextToTable( const SwInsertTableOptions& rInsTableOpts,
 
     if( rInsTableOpts.mnInsMode & tabopts::DEFAULT_BORDER )
     {
-        if( !pTAFormat )
-            ::lcl_SetDfltBorders( pTableFormat );
+        sal_uInt8 nBoxArrLen = 4;
+        boost::scoped_ptr< DfltBoxAttrList_t > aBoxFormatArr1;
+        boost::scoped_ptr< std::vector<SwTableBoxFormat*> > aBoxFormatArr2;
+        if( bUseBoxFormat )
+        {
+            aBoxFormatArr1.reset(new DfltBoxAttrList_t( nBoxArrLen, NULL ));
+        }
+        else
+        {
+            aBoxFormatArr2.reset(new std::vector<SwTableBoxFormat*>( nBoxArrLen, NULL ));
+        }
 
-        SwTableBoxFormat *pBoxF = MakeTableBoxFormat();
+        SwTableBoxFormat *pBoxF = 0;
         SwTableLines& rLines = rNdTable.GetTabLines();
         sal_uInt16 nRows = rLines.size();
         for( sal_uInt16 n = 0; n < nRows; ++n )
@@ -668,10 +731,18 @@ const SwTable* SwDoc::TextToTable( const SwInsertTableOptions& rInsTableOpts,
             for( SwTableBoxes::size_type i = 0; i < nCols; ++i )
             {
                 SwTableBox* pBox = rBoxes[ i ];
+                bool bChgSz = false;
 
-                if( !bUseBoxFormat )
+                sal_uInt8 nId = (i < nCols - 1 ? 0 : 1) + (n ? 2 : 0 );
+                if( bUseBoxFormat )
+                    ::lcl_SetDfltBoxAttr( *pBox, *aBoxFormatArr1, nId );
+                else
                 {
-                    pBoxF->SetFormatAttr( pBox->GetFrameFormat()->GetFrmSize() );
+                    bChgSz = 0 == (*aBoxFormatArr2)[ nId ];
+                    pBoxF = ::lcl_CreateDfltBoxFormat( *this, *aBoxFormatArr2,
+                                                    USHRT_MAX, nId );
+                    if( bChgSz )
+                        pBoxF->SetFormatAttr( pBox->GetFrameFormat()->GetFrmSize() );
                     pBox->ChgFrameFormat( pBoxF );
                 }
             }
