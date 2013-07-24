@@ -38,7 +38,7 @@
 #include <xmloff/contextid.hxx>
 #include <xmloff/txtprmap.hxx>
 #include <com/sun/star/sdb/XOfficeDatabaseDocument.hpp>
-#include <com/sun/star/table/BorderLine.hpp>
+#include <com/sun/star/table/BorderLine2.hpp>
 #include <xmloff/XMLConstantsPropertyHandler.hxx>
 #include <com/sun/star/report/ForceNewPage.hpp>
 #include <com/sun/star/report/ReportPrintOption.hpp>
@@ -329,10 +329,10 @@ uno::Reference<beans::XPropertySet> OXMLHelper::createBorderPropertySet()
 {
     static comphelper::PropertyMapEntry pMap[] =
     {
-        {PROPERTY_BORDERLEFT.ascii,   static_cast<sal_uInt16>(PROPERTY_BORDERLEFT.length),        0,          &::getCppuType((const table::BorderLine*)0)         ,PropertyAttribute::BOUND,0},
-        {PROPERTY_BORDERRIGHT.ascii,  static_cast<sal_uInt16>(PROPERTY_BORDERRIGHT.length),       1,          &::getCppuType((const table::BorderLine*)0)         ,PropertyAttribute::BOUND,0},
-        {PROPERTY_BORDERTOP.ascii,    static_cast<sal_uInt16>(PROPERTY_BORDERTOP.length),         2,          &::getCppuType((const table::BorderLine*)0)         ,PropertyAttribute::BOUND,0},
-        {PROPERTY_BORDERBOTTOM.ascii, static_cast<sal_uInt16>(PROPERTY_BORDERBOTTOM.length),      3,          &::getCppuType((const table::BorderLine*)0)         ,PropertyAttribute::BOUND,0},
+        {PROPERTY_BORDERLEFT.ascii,   static_cast<sal_uInt16>(PROPERTY_BORDERLEFT.length),        0,          &::getCppuType((const table::BorderLine2*)0)         ,PropertyAttribute::BOUND,0},
+        {PROPERTY_BORDERRIGHT.ascii,  static_cast<sal_uInt16>(PROPERTY_BORDERRIGHT.length),       1,          &::getCppuType((const table::BorderLine2*)0)         ,PropertyAttribute::BOUND,0},
+        {PROPERTY_BORDERTOP.ascii,    static_cast<sal_uInt16>(PROPERTY_BORDERTOP.length),         2,          &::getCppuType((const table::BorderLine2*)0)         ,PropertyAttribute::BOUND,0},
+        {PROPERTY_BORDERBOTTOM.ascii, static_cast<sal_uInt16>(PROPERTY_BORDERBOTTOM.length),      3,          &::getCppuType((const table::BorderLine2*)0)         ,PropertyAttribute::BOUND,0},
         { NULL, 0, 0, NULL, 0, 0 }
     };
     return comphelper::GenericPropertySet_CreateInstance(new comphelper::PropertySetInfo(pMap));
