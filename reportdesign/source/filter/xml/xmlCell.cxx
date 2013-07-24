@@ -31,7 +31,7 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/report/XShape.hpp>
 #include <com/sun/star/report/XFixedLine.hpp>
-#include <com/sun/star/table/BorderLine.hpp>
+#include <com/sun/star/table/BorderLine2.hpp>
 #include "xmlstrings.hrc"
 #include "xmlTable.hxx"
 #include "xmlFormattedField.hxx"
@@ -228,10 +228,12 @@ void OXMLCell::EndElement()
             try
             {
                 pAutoStyle->FillPropertySet(xBorderProp);
-                table::BorderLine aRight,aLeft;
+                table::BorderLine2 aRight,aLeft;
                 xBorderProp->getPropertyValue(PROPERTY_BORDERRIGHT) >>= aRight;
                 xBorderProp->getPropertyValue(PROPERTY_BORDERLEFT) >>= aLeft;
-                xFixedLine->setOrientation( (aRight.OuterLineWidth != 0 || aLeft.OuterLineWidth != 0) ? 1 : 0);
+                const sal_Int16 rWidth = (aRight.LineWidth == 0) ? aRight.OuterLineWidth : aRight.LineWidth;
+                const sal_Int16 lWidth = (aLeft.LineWidth  == 0) ? aLeft.OuterLineWidth  : aLeft.LineWidth;
+                xFixedLine->setOrientation( (rWidth != 0 || lWidth != 0) ? 1 : 0);
                }
             catch(uno::Exception&)
             {
