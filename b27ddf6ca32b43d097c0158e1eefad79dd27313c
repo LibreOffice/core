@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXn//+Gk\u003d",
+        "filename": "sw/source/core/fields/docufld.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2512,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2013-07-24T12:20:51Z",
+      "side": 1,
+      "message": "Wouldn\u0027t it make sense to split this part out to a separate commit? Sounds like a regression from 263153842741d7ce21cc0bf1c5296a55a1138024, where String::Copy() made sure not to access beyond the end of the string, while in case of OUString, the caller has to make sure about that when calling copy(). I mean this part is clearly OK and has nothing to do with the DOCX changes.",
+      "revId": "b27ddf6ca32b43d097c0158e1eefad79dd27313c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//+Gw\u003d",
+        "filename": "sw/source/filter/ww8/ww8atr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2894,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2013-07-24T12:20:51Z",
+      "side": 1,
+      "message": "Given that only DocxAttributeOutput::CharFontSize() calls setFontSize(), won\u0027t this change cause a problem for the DOC and RTF exports?",
+      "revId": "b27ddf6ca32b43d097c0158e1eefad79dd27313c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
