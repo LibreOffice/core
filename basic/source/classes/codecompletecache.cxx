@@ -21,9 +21,6 @@
 #include <iostream>
 #include <rtl/instance.hxx>
 
-const OUString CodeCompleteDataCache::GLOB_KEY = OUString("global key");
-const OUString CodeCompleteDataCache::NOT_FOUND = OUString("not found");
-
 namespace
 {
     class theCodeCompleteOptions: public ::rtl::Static< CodeCompleteOptions, theCodeCompleteOptions >{};
@@ -62,6 +59,12 @@ void CodeCompleteOptions::SetProcedureAutoCompleteOn( const bool& b )
 
 std::ostream& operator<< (std::ostream& aStream, const CodeCompleteDataCache& aCache)
 {
+    aStream << "Global variables" << std::endl;
+    for(CodeCompleteVarTypes::const_iterator aIt = aCache.aGlobalVars.begin(); aIt != aCache.aGlobalVars.end(); ++aIt )
+    {
+        aStream << aIt->first << "," << aIt->second << std::endl;
+    }
+    aStream << "Local variables" << std::endl;
     for( CodeCompleteVarScopes::const_iterator aIt = aCache.aVarScopes.begin(); aIt != aCache.aVarScopes.end(); ++aIt )
     {
         aStream << aIt->first << std::endl;
@@ -80,32 +83,61 @@ const CodeCompleteVarScopes& CodeCompleteDataCache::GetVars() const
     return aVarScopes;
 }
 
-void CodeCompleteDataCache::InsertProcedure( const OUString& sProcName, const CodeCompleteVarTypes& aVarTypes )
-{
-    aVarScopes.insert( CodeCompleteVarScopes::value_type(sProcName, aVarTypes) );
-}
 void CodeCompleteDataCache::SetVars( const CodeCompleteVarScopes& aScopes )
 {
     aVarScopes = aScopes;
 }
 
-OUString CodeCompleteDataCache::GetVariableType( const OUString& sVarName, const OUString& sProcName ) const
-{
-    CodeCompleteVarScopes::const_iterator aIt = aVarScopes.find( sProcName );
-    if( aIt == aVarScopes.end() )//procedure does not exist
-        return CodeCompleteDataCache::NOT_FOUND;
-
-    CodeCompleteVarTypes aVarTypes = aIt->second;
-    CodeCompleteVarTypes::const_iterator aOtherIt = aVarTypes.find( sVarName );
-    if( aOtherIt == aVarTypes.end() )
-        return CodeCompleteDataCache::NOT_FOUND;
-    else
-        return aOtherIt->second;
-}
-
 void CodeCompleteDataCache::print() const
 {
     std::cerr << *this << std::endl;
+}
+
+void CodeCompleteDataCache::Clear()
+{
+    aVarScopes.clear();
+}
+
+void CodeCompleteDataCache::InsertGlobalVar( const OUString& sVarName, const OUString& sVarType )
+{
+    aGlobalVars.insert( CodeCompleteVarTypes::value_type(sVarName, sVarType) );
+}
+
+void CodeCompleteDataCache::InsertLocalVar( const OUString& sProcName, const OUString& sVarName, const OUString& sVarType )
+{
+    CodeCompleteVarScopes::const_iterator aIt = aVarScopes.find( sProcName );
+    if( aIt == aVarScopes.end() ) //new procedure
+    {
+        CodeCompleteVarTypes aTypes;
+        aTypes.insert( CodeCompleteVarTypes::value_type(sVarName, sVarType) );
+        aVarScopes.insert( CodeCompleteVarScopes::value_type(sProcName, aTypes) );
+    }
+    else
+    {
+        CodeCompleteVarTypes aTypes = aVarScopes[ sProcName ];
+        aTypes.insert( CodeCompleteVarTypes::value_type(sVarName, sVarType) );
+        aVarScopes[ sProcName ] = aTypes;
+    }
+}
+
+OUString CodeCompleteDataCache::GetVarType( const OUString& sVarName )
+{
+    for( CodeCompleteVarScopes::const_iterator aIt = aVarScopes.begin(); aIt != aVarScopes.end(); ++aIt )
+    {
+        CodeCompleteVarTypes aTypes = aIt->second;
+        for( CodeCompleteVarTypes::const_iterator aOtherIt = aTypes.begin(); aOtherIt != aTypes.end(); ++aOtherIt )
+        {
+            if( aOtherIt->first == sVarName )
+                return aOtherIt->second;
+        }
+    }
+    //not a local, search global scope
+    for( CodeCompleteVarTypes::const_iterator aIt = aGlobalVars.begin(); aIt != aGlobalVars.end(); ++aIt )
+    {
+        if( aIt->first == sVarName )
+            return aIt->second;
+    }
+    return OUString(""); //not found
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
