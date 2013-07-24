@@ -160,6 +160,7 @@ RES_PARATR_BEGIN = RES_TXTATR_END,
     RES_PARATR_CONNECT_BORDER,                      // 73
     RES_PARATR_OUTLINELEVEL,                        // 74
     RES_PARATR_RSID,								// 75
+    RES_PARATR_GRABBAG,
 RES_PARATR_END
 };
 

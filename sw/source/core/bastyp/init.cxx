@@ -59,6 +59,7 @@
 #include <editeng/protitem.hxx>
 #include <editeng/prszitem.hxx>
 #include <editeng/rsiditem.hxx>
+#include <svl/grabbagitem.hxx>
 #include <editeng/scriptspaceitem.hxx>
 #include <editeng/shaditem.hxx>
 #include <editeng/spltitem.hxx>
@@ -328,6 +329,7 @@ SfxItemInfo aSlotTab[] =
 
     { SID_ATTR_PARA_OUTLINE_LEVEL, SFX_ITEM_POOLABLE }, // RES_PARATR_OUTLINELEVEL //#outline level
     { 0, SFX_ITEM_POOLABLE },                           // RES_PARATR_RSID
+    { 0, SFX_ITEM_POOLABLE },                           // RES_PARATR_GRABBAG
     { 0, SFX_ITEM_POOLABLE },                           // RES_PARATR_LIST_ID
     { 0, SFX_ITEM_POOLABLE },                           // RES_PARATR_LIST_LEVEL
     { 0, SFX_ITEM_POOLABLE },                           // RES_PARATR_LIST_ISRESTART
@@ -544,6 +546,7 @@ void _InitCore()
 
     aAttrTab[ RES_PARATR_OUTLINELEVEL - POOLATTR_BEGIN ] =  new SfxUInt16Item( RES_PARATR_OUTLINELEVEL, 0 );
     aAttrTab[ RES_PARATR_RSID - POOLATTR_BEGIN ] =          new SvxRsidItem( 0, RES_PARATR_RSID );
+    aAttrTab[ RES_PARATR_GRABBAG - POOLATTR_BEGIN ] =       new SfxGrabBagItem( RES_PARATR_GRABBAG );
 
     aAttrTab[ RES_PARATR_LIST_ID - POOLATTR_BEGIN ] =       new SfxStringItem( RES_PARATR_LIST_ID, aEmptyStr );
     aAttrTab[ RES_PARATR_LIST_LEVEL - POOLATTR_BEGIN ] =    new SfxInt16Item( RES_PARATR_LIST_LEVEL, 0 );

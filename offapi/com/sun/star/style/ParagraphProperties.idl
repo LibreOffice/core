@@ -30,6 +30,7 @@
 #include <com/sun/star/table/BorderLine.idl>
 #include <com/sun/star/style/BreakType.idl>
 #include <com/sun/star/container/XNameContainer.idl>
+#include <com/sun/star/beans/PropertyValue.idl>
 
 
  module com {  module sun {  module star {  module style {
@@ -137,6 +138,15 @@ published service ParagraphProperties
      */
     [optional, property] boolean ParaContextMargin;
 
+    /** Grab bag of paragraph properties, used as a string-any map for interim interop purposes.
+
+        @since LibreOffice 4.2
+
+        <p>This property is intentionally not handled by the ODF filter. Any
+        member that should be handled there should be first moved out from this grab
+        bag to a separate property.</p>
+    */
+    [optional, property] sequence<com::sun::star::beans::PropertyValue> ParaInteropGrabBag;
 
     /** determines if the paragraph is included in the
         line numbering.
