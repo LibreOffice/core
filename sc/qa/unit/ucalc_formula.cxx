@@ -907,9 +907,10 @@ void Test::testFormulaRefUpdateMove()
     if (!checkFormula(*m_pDoc, ScAddress(1,12,0), "$D$6"))
         CPPUNIT_FAIL("Wrong formula.");
 
-    // The value cells are in D4:D6. Push D4:D5 to the right but leave D6
+    // The value cells are in D4:D6. Move D4:D5 to the right but leave D6
     // where it is.
-    m_pDoc->InsertCol(ScRange(3,0,0,3,4,0));
+    bMoved = rFunc.MoveBlock(ScRange(3,3,0,3,4,0), ScAddress(4,3,0), true, false, false, false);
+    CPPUNIT_ASSERT_MESSAGE("Failed to move D4:D5 to E4:E5", bMoved);
 
     // Only the values of B10 and B11 should be updated.
     CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(1,9,0));
