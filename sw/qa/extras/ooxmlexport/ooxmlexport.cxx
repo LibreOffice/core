@@ -98,6 +98,7 @@ public:
     void testFdo66929();
     void testFdo66145();
     void testPageBorderSpacingExportCase2();
+    void testGrabBag();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -114,7 +115,7 @@ private:
      * xml stream, so that you can do the asserting.
      */
     xmlDocPtr parseExport();
-    void assertXPath(xmlDocPtr pXmlDoc, OString aXPath, OString aAttribute, OUString aExpectedValue);
+    void assertXPath(xmlDocPtr pXmlDoc, OString aXPath, OString aAttribute = OString(), OUString aExpectedValue = OUString());
 };
 
 void Test::run()
@@ -174,6 +175,7 @@ void Test::run()
         {"bnc581614.doc", &Test::testBnc581614},
         {"fdo66929.docx", &Test::testFdo66929},
         {"page-borders-export-case-2.docx", &Test::testPageBorderSpacingExportCase2},
+        {"grabbag.docx", &Test::testGrabBag},
     };
     // Don't test the first import of these, for some reason those tests fail
     const char* aBlacklist[] = {
@@ -227,6 +229,8 @@ void Test::assertXPath(xmlDocPtr pXmlDoc, OString aXPath, OString aAttribute, OU
     xmlXPathObjectPtr pXmlXpathObj = xmlXPathEvalExpression(BAD_CAST(aXPath.getStr()), pXmlXpathCtx);
     xmlNodeSetPtr pXmlNodes = pXmlXpathObj->nodesetval;
     CPPUNIT_ASSERT_EQUAL(1, xmlXPathNodeSetGetLength(pXmlNodes));
+    if (aAttribute.isEmpty())
+        return;
     xmlNodePtr pXmlNode = pXmlNodes->nodeTab[0];
     OUString aValue = OUString::createFromAscii((const char*)xmlGetProp(pXmlNode, BAD_CAST(aAttribute.getStr())));
     CPPUNIT_ASSERT_EQUAL(aExpectedValue, aValue);
@@ -1010,6 +1014,13 @@ void Test::testFdo66145()
     // The Writer ignored the 'First Is Shared' flag
     uno::Reference<beans::XPropertySet> xPropertySet(getStyles("PageStyles")->getByName("First Page"), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(false, bool(getProperty<sal_Bool>(xPropertySet, "FirstIsShared")));
+}
+
+void Test::testGrabBag()
+{
+    // w:mirrorIndents was lost on roundtrip, now should be handled as a grab bag property
+    xmlDocPtr pXmlDoc = parseExport();
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:pPr/w:mirrorIndents");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
