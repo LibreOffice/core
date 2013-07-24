@@ -2504,76 +2504,23 @@ bool ScFormulaCell::UpdateReferenceOnCopy(
         // on reference update. Bail out.
         return false;
 
-    bool bCellStateChanged = false;
     boost::scoped_ptr<ScTokenArray> pOldCode;
     if (pUndoDoc)
         pOldCode.reset(pCode->Clone());
 
-    bool bValChanged = false;
-    bool bRangeModified = false;    // any range, not only shared formula
-    bool bRefSizeChanged = false;
-
-    if (bHasRefs)
-    {
-        // Update cell or range references.
-        ScCompiler aComp(pDocument, aPos, *pCode);
-        aComp.SetGrammar(pDocument->GetGrammar());
-        aComp.UpdateReference(
-            URM_COPY, aOldPos, rCxt.maRange, rCxt.mnColDelta, rCxt.mnRowDelta, rCxt.mnTabDelta,
-            bValChanged, bRefSizeChanged);
-        bRangeModified = aComp.HasModifiedRange();
-    }
-
-    bCellStateChanged |= bValChanged;
-
     if (bOnRefMove)
         // Cell may reference itself, e.g. ocColumn, ocRow without parameter
-        bOnRefMove = (bValChanged || (aPos != aOldPos));
+        bOnRefMove = (aPos != aOldPos);
 
-    bool bColRowNameCompile = false;
-    bool bNewListening = false;
-    bool bInDeleteUndo = false;
+    bool bNeedDirty = bOnRefMove;
 
-    if (bHasRefs)
-    {
-        // Upon Insert ColRowNames have to be recompiled in case the
-        // insertion occurs right in front of the range.
-        if (bHasColRowNames)
-            bColRowNameCompile = checkCompileColRowName(rCxt, *pDocument, *pCode, aOldPos, aPos, bValChanged);
-
-        ScChangeTrack* pChangeTrack = pDocument->GetChangeTrack();
-        bInDeleteUndo = (pChangeTrack && pChangeTrack->IsInDeleteUndo());
-
-        // Reference changed and new listening needed?
-        // Except in Insert/Delete without specialties.
-        bNewListening =
-            (bRangeModified || bColRowNameCompile || (bValChanged && (bInDeleteUndo || bRefSizeChanged)));
-
-        if ( bNewListening )
-            EndListeningTo(pDocument, pOldCode.get(), aOldPos);
-    }
-
-    bool bNeedDirty = false;
-    // NeedDirty for changes except for Copy and Move/Insert without RelNames
-    if ( bRangeModified || bColRowNameCompile || bOnRefMove)
-        bNeedDirty = true;
-
-    if (pUndoDoc && (bValChanged || bOnRefMove))
+    if (pUndoDoc && bOnRefMove)
         setOldCodeToUndo(pUndoDoc, aUndoPos, pOldCode.get(), eTempGrammar, cMatrixFlag);
 
-    bValChanged = false;
-
-    if ( ( bCompile = (bCompile || bValChanged || bRangeModified || bColRowNameCompile) ) != 0 )
+    if (bCompile)
     {
-        CompileTokenArray( bNewListening ); // no Listening
+        CompileTokenArray(false); // no Listening
         bNeedDirty = true;
-    }
-
-    if ( !bInDeleteUndo )
-    {   // In ChangeTrack Delete-Reject listeners are established in
-        // InsertCol/InsertRow
-        if ( bNewListening )
-            StartListeningTo( pDocument );
     }
 
     if (bNeedDirty)
@@ -2582,7 +2529,7 @@ bool ScFormulaCell::UpdateReferenceOnCopy(
         SetDirty();
     }
 
-    return bCellStateChanged;
+    return false;
 }
 
 bool ScFormulaCell::UpdateReference(
