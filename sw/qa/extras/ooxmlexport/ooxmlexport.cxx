@@ -100,6 +100,7 @@ public:
     void testPageBorderSpacingExportCase2();
     void testGrabBag();
     void testFdo66781();
+    void testFdo60990();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -178,6 +179,7 @@ void Test::run()
         {"page-borders-export-case-2.docx", &Test::testPageBorderSpacingExportCase2},
         {"grabbag.docx", &Test::testGrabBag},
         {"fdo66781.docx", &Test::testFdo66781},
+        {"fdo60990.odt", &Test::testFdo60990},
     };
     // Don't test the first import of these, for some reason those tests fail
     const char* aBlacklist[] = {
@@ -1046,6 +1048,19 @@ void Test::testFdo66781()
 
     // Shouldn't reach here
     CPPUNIT_FAIL("Did not find bullet with level 0");
+}
+
+void Test::testFdo60990()
+{
+    // The shape had no background, no paragraph adjust and no font color.
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShape(xDraws->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x00CFE7F5), getProperty<sal_Int32>(xShape, "BackColor"));
+    uno::Reference<text::XText> xText = uno::Reference<text::XTextRange>(xShape, uno::UNO_QUERY)->getText();
+    uno::Reference<text::XTextRange> xParagraph = getParagraphOfText(1, xText);
+    CPPUNIT_ASSERT_EQUAL(style::ParagraphAdjust_CENTER, static_cast<style::ParagraphAdjust>(getProperty<sal_Int16>(xParagraph, "ParaAdjust")));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x00FF00), getProperty<sal_Int32>(getRun(xParagraph, 1), "CharColor"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
