@@ -67,6 +67,7 @@
 #include <com/sun/star/bridge/oleautomation/Currency.hpp>
 #include <com/sun/star/bridge/oleautomation/XAutomationObject.hpp>
 #include <com/sun/star/script/XAutomationInvocation.hpp>
+#include "basic/codecompletecache.hxx"
 
 using com::sun::star::uno::Reference;
 using namespace com::sun::star::uno;
@@ -1731,16 +1732,24 @@ bool checkUnoObjectType( SbUnoObject* pUnoObj, const OUString& rClass )
             which matches the interface names 'ooo.vba.excel.XWorkbooks' or
             'ooo.vba.msforms.XLabel'.
          */
-        OUString aClassName( "." );
-        sal_Int32 nClassNameDot = rClass.lastIndexOf( '.' );
-        if( nClassNameDot >= 0 )
+        OUString aClassName;
+        if ( SbiRuntime::isVBAEnabled() )
         {
-            aClassName += rClass.copy( 0, nClassNameDot + 1 ) + "X" + rClass.copy( nClassNameDot + 1 );
+            aClassName = ".";
+            sal_Int32 nClassNameDot = rClass.lastIndexOf( '.' );
+            if( nClassNameDot >= 0 )
+            {
+                aClassName += rClass.copy( 0, nClassNameDot + 1 ) + OUString( sal_Unicode( 'X' ) ) + rClass.copy( nClassNameDot + 1 );
+            }
+            else
+            {
+                aClassName += OUString( sal_Unicode( 'X' ) ) + rClass;
+            }
         }
-        else
-        {
-            aClassName += "X" + rClass;
-        }
+        else // assume extended type declaration support for basic ( can't get here
+             // otherwise.
+            aClassName = rClass;
+
         Sequence< Type > aTypeSeq = xTypeProvider->getTypes();
         const Type* pTypeArray = aTypeSeq.getConstArray();
         sal_uInt32 nIfaceCount = aTypeSeq.getLength();
@@ -1779,7 +1788,7 @@ bool checkUnoObjectType( SbUnoObject* pUnoObj, const OUString& rClass )
 
             // match interface name with passed class name
             OSL_TRACE("Checking if object implements %s", OUStringToOString( aClassName, RTL_TEXTENCODING_UTF8 ).getStr() );
-            if ( (aClassName.getLength() < aInterfaceName.getLength()) &&
+            if ( (aClassName.getLength() <= aInterfaceName.getLength()) &&
                     aInterfaceName.matchIgnoreAsciiCase( aClassName, aInterfaceName.getLength() - aClassName.getLength() ) )
             {
                 result = true;
