@@ -594,7 +594,7 @@ const SvXMLTokenMap& ODBFilter::GetDocElemTokenMap() const
 {
     if ( !m_pDocElemTokenMap.get() )
     {
-        static SvXMLTokenMapEntry aElemTokenMap[]=
+        static const SvXMLTokenMapEntry aElemTokenMap[]=
         {
             { XML_NAMESPACE_OFFICE, XML_SETTINGS,           XML_TOK_DOC_SETTINGS    },
             { XML_NAMESPACE_OOO,    XML_SETTINGS,           XML_TOK_DOC_SETTINGS    },
@@ -616,7 +616,7 @@ const SvXMLTokenMap& ODBFilter::GetDatabaseElemTokenMap() const
 {
     if ( !m_pDatabaseElemTokenMap.get() )
     {
-        static SvXMLTokenMapEntry aElemTokenMap[]=
+        static const SvXMLTokenMapEntry aElemTokenMap[]=
         {
             { XML_NAMESPACE_DB, XML_DATASOURCE,             XML_TOK_DATASOURCE  },
             { XML_NAMESPACE_DB, XML_FORMS,                  XML_TOK_FORMS},
@@ -636,7 +636,7 @@ const SvXMLTokenMap& ODBFilter::GetDataSourceElemTokenMap() const
 {
     if ( !m_pDataSourceElemTokenMap.get() )
     {
-        static SvXMLTokenMapEntry aElemTokenMap[]=
+        static const SvXMLTokenMapEntry aElemTokenMap[]=
         {
             { XML_NAMESPACE_DB,     XML_CONNECTION_RESOURCE,            XML_TOK_CONNECTION_RESOURCE},
             { XML_NAMESPACE_DB,     XML_SUPPRESS_VERSION_COLUMNS,       XML_TOK_SUPPRESS_VERSION_COLUMNS},
@@ -687,7 +687,7 @@ const SvXMLTokenMap& ODBFilter::GetLoginElemTokenMap() const
 {
     if ( !m_pLoginElemTokenMap.get() )
     {
-        static SvXMLTokenMapEntry aElemTokenMap[]=
+        static const SvXMLTokenMapEntry aElemTokenMap[]=
         {
             { XML_NAMESPACE_DB, XML_USER_NAME,              XML_TOK_USER_NAME},
             { XML_NAMESPACE_DB, XML_IS_PASSWORD_REQUIRED,   XML_TOK_IS_PASSWORD_REQUIRED},
@@ -704,7 +704,7 @@ const SvXMLTokenMap& ODBFilter::GetDatabaseDescriptionElemTokenMap() const
 {
     if ( !m_pDatabaseDescriptionElemTokenMap.get() )
     {
-        static SvXMLTokenMapEntry aElemTokenMap[]=
+        static const SvXMLTokenMapEntry aElemTokenMap[]=
         {
             { XML_NAMESPACE_DB, XML_FILE_BASED_DATABASE,    XML_TOK_FILE_BASED_DATABASE},
             { XML_NAMESPACE_DB, XML_SERVER_DATABASE,        XML_TOK_SERVER_DATABASE},
@@ -719,7 +719,7 @@ const SvXMLTokenMap& ODBFilter::GetDataSourceInfoElemTokenMap() const
 {
     if ( !m_pDataSourceInfoElemTokenMap.get() )
     {
-        static SvXMLTokenMapEntry aElemTokenMap[]=
+        static const SvXMLTokenMapEntry aElemTokenMap[]=
         {
             { XML_NAMESPACE_DB, XML_ADDITIONAL_COLUMN_STATEMENT,XML_TOK_ADDITIONAL_COLUMN_STATEMENT},
             { XML_NAMESPACE_DB, XML_ROW_RETRIEVING_STATEMENT,   XML_TOK_ROW_RETRIEVING_STATEMENT},
@@ -745,7 +745,7 @@ const SvXMLTokenMap& ODBFilter::GetDocumentsElemTokenMap() const
 {
     if ( !m_pDocumentsElemTokenMap.get() )
     {
-        static SvXMLTokenMapEntry aElemTokenMap[]=
+        static const SvXMLTokenMapEntry aElemTokenMap[]=
         {
             { XML_NAMESPACE_DB, XML_COMPONENT,              XML_TOK_COMPONENT},
             { XML_NAMESPACE_DB, XML_COMPONENT_COLLECTION,   XML_TOK_COMPONENT_COLLECTION},
@@ -765,7 +765,7 @@ const SvXMLTokenMap& ODBFilter::GetComponentElemTokenMap() const
 {
     if ( !m_pComponentElemTokenMap.get() )
     {
-        static SvXMLTokenMapEntry aElemTokenMap[]=
+        static const SvXMLTokenMapEntry aElemTokenMap[]=
         {
             { XML_NAMESPACE_XLINK,  XML_HREF,           XML_TOK_HREF    },
             { XML_NAMESPACE_XLINK,  XML_TYPE,           XML_TOK_TYPE    },
@@ -784,7 +784,7 @@ const SvXMLTokenMap& ODBFilter::GetQueryElemTokenMap() const
 {
     if ( !m_pQueryElemTokenMap.get() )
     {
-        static SvXMLTokenMapEntry aElemTokenMap[]=
+        static const SvXMLTokenMapEntry aElemTokenMap[]=
         {
             { XML_NAMESPACE_DB, XML_COMMAND,            XML_TOK_COMMAND },
             { XML_NAMESPACE_DB, XML_ESCAPE_PROCESSING,  XML_TOK_ESCAPE_PROCESSING   },
@@ -808,7 +808,7 @@ const SvXMLTokenMap& ODBFilter::GetColumnElemTokenMap() const
 {
     if ( !m_pColumnElemTokenMap.get() )
     {
-        static SvXMLTokenMapEntry aElemTokenMap[]=
+        static const SvXMLTokenMapEntry aElemTokenMap[]=
         {
             { XML_NAMESPACE_DB, XML_NAME,                       XML_TOK_COLUMN_NAME             },
             { XML_NAMESPACE_DB, XML_STYLE_NAME,                 XML_TOK_COLUMN_STYLE_NAME       },

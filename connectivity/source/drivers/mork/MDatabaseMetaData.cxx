@@ -846,7 +846,7 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsBatchUpdates(  ) throw(SQLException
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTableTypes(  ) throw(SQLException, RuntimeException)
 {
     // there exists no possibility to get table types so we have to check
-    static OUString sTableTypes[] =
+    static const OUString sTableTypes[] =
     {
         OUString("TABLE"),
         OUString("VIEW")

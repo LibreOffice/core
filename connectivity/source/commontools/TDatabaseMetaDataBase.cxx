@@ -94,7 +94,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaDataBase::getTypeInfo(  ) throw(SQ
 
         if ( xRow.is() )
         {
-            static sal_Int32 pTypes[] = {
+            static const sal_Int32 pTypes[] = {
                                         DataType::VARCHAR
                                         ,DataType::INTEGER
                                         ,DataType::INTEGER
@@ -137,7 +137,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaDataBase::getTypeInfo(  ) throw(SQ
             {
                 ::connectivity::ODatabaseMetaDataResultSet::ORow aRow;
                 aRow.push_back(ODatabaseMetaDataResultSet::getEmptyValue());
-                sal_Int32* pType = pTypes;
+                const sal_Int32* pType = pTypes;
                 for (sal_Int32 i = 1; i <= sal_Int32(sizeof(pTypes)/sizeof(pTypes[0])); ++i,++pType)
                 {
                     ORowSetValue aValue;

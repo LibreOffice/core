@@ -815,7 +815,7 @@ sal_Bool callColumnFormatDialog(Window* _pParent,
         { SID_ATTR_NUMBERFORMAT_ONE_AREA,   SFX_ITEM_POOLABLE },
         { SID_ATTR_NUMBERFORMAT_INFO,       SFX_ITEM_POOLABLE }
     };
-    static sal_uInt16 aAttrMap[] =
+    static const sal_uInt16 aAttrMap[] =
     {
         SBA_DEF_RANGEFORMAT, SBA_ATTR_ALIGN_HOR_JUSTIFY,
         SID_ATTR_NUMBERFORMAT_ONE_AREA, SID_ATTR_NUMBERFORMAT_ONE_AREA,

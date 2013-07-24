@@ -1004,7 +1004,7 @@ Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getTableTypes(  ) throw
     /* Dont need to change as evoab driver supports only table */
 
     // there exists no possibility to get table types so we have to check
-    static OUString sTableTypes[] =
+    static const OUString sTableTypes[] =
     {
         OUString("TABLE"),
         // Currently we only support a 'TABLE' nothing more complex

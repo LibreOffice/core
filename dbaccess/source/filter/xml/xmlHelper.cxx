@@ -55,7 +55,7 @@ const XMLPropertyHandler* OPropertyHandlerFactory::GetPropertyHandler(sal_Int32 
         case XML_DB_TYPE_EQUAL:
             if ( !m_pDisplayHandler.get() )
             {
-                static SvXMLEnumMapEntry aDisplayMap[] =
+                static const SvXMLEnumMapEntry aDisplayMap[] =
                 {
                     { XML_VISIBLE,      sal_True },
                     { XML_COLLAPSE,     sal_False },
