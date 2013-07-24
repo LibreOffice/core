@@ -80,11 +80,13 @@ ScColRowNameRangesDlg::ScColRowNameRangesDlg( SfxBindings* pB,
     get(pEdAssign,"edassign");
     get(pRbAssign,"rbassign");
     pRbAssign->SetReferences(this, pEdAssign);
+    pEdAssign->SetReferences(this, get<VclFrame>("rangeframe")->get_label_widget());
     get(pBtnColHead,"colhead");
     get(pBtnRowHead,"rowhead");
     get(pEdAssign2,"edassign2");
     get(pRbAssign2,"rbassign2");
     pRbAssign2->SetReferences(this, pEdAssign2);
+    pEdAssign2->SetReferences(this, get<FixedText>("datarange"));
 
     get(pBtnOk,"ok");
     get(pBtnCancel,"cancel");
@@ -94,9 +96,6 @@ ScColRowNameRangesDlg::ScColRowNameRangesDlg( SfxBindings* pB,
     xColNameRanges = pDoc->GetColNameRanges()->Clone();
     xRowNameRanges = pDoc->GetRowNameRanges()->Clone();
     Init();
-
-    pRbAssign->SetAccessibleRelationMemberOf(pEdAssign);
-    pRbAssign2->SetAccessibleRelationMemberOf(pEdAssign);
 }
 
 

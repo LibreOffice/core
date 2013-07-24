@@ -58,7 +58,6 @@ private:
 
     OKButton*        pBtnOk;
     CancelButton*    pBtnCancel;
-    HelpButton*      pBtnHelp;
     PushButton*      pBtnAdd;
     PushButton*      pBtnRemove;
 

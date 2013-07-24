@@ -98,8 +98,6 @@
 #define HID_SC_SCENARIO_DELETE                                  "SC_HID_SC_SCENARIO_DELETE"
 #define HID_SC_SCENARIO_EDIT                                    "SC_HID_SC_SCENARIO_EDIT"
 
-#define HID_COLROWNAMERANGES                                    "SC_HID_COLROWNAMERANGES"
-
 #define HID_FUNCTION_BOX                                        "SC_HID_FUNCTION_BOX"
 #define HID_SC_REDLIN_CTR                                       "SC_HID_SC_REDLIN_CTR"
 
