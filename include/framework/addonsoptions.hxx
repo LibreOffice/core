@@ -282,13 +282,6 @@ class FWE_DLLPUBLIC AddonsOptions
         *//*-*****************************************************************************************************/
         bool GetMergeToolbarInstructions( const OUString& rToolbarName, MergeToolbarInstructionContainer& rToolbar ) const;
 
-        /**
-         *  @short      Gets the UI name of a single addon toolbar
-         *  @return     The UI name of the toolbar as specified in the Addons.xcu configuration
-         *  @onerror    Returns an empty string
-         */
-        const ::rtl::OUString GetAddonsToolbarUIName( sal_uInt32 nIndex ) const;
-
         /*-****************************************************************************************************//**
             @short      Gets the Add-On help menu part of all addon components registered
             @descr      -

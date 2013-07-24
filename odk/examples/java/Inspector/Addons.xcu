@@ -20,24 +20,19 @@
     <node oor:name="AddonUI">
         <node oor:name="OfficeToolBar">
             <node oor:name="org.openoffice.Office.addon.Inspector" oor:op="replace">
-                <prop oor:name="Title" oor:type="xs:string">
-                    <value xml:lang="en-US">Object Inspector</value>
-                </prop>
-                <node oor:name="ToolBarItems">
-                    <node oor:name="toolBar_Inspector" oor:op="replace">
-                        <prop oor:name="URL" oor:type="xs:string">
-                            <value>org.openoffice.Office.addon.Inspector:inspect</value>
-                        </prop>
-                        <prop oor:name="Title" oor:type="xs:string">
-                            <value xml:lang="en-US">Object Inspector</value>
-                        </prop>
-                        <prop oor:name="Target" oor:type="xs:string">
-                            <value>_self</value>
-                        </prop>
-                        <prop oor:name="Context" oor:type="xs:string">
-                            <value></value>
-                        </prop>
-                    </node>
+                <node oor:name="toolBar_Inspector" oor:op="replace">
+                    <prop oor:name="URL" oor:type="xs:string">
+                        <value>org.openoffice.Office.addon.Inspector:inspect</value>
+                    </prop>
+                    <prop oor:name="Title" oor:type="xs:string">
+                        <value xml:lang="en-US">Object Inspector</value>
+                    </prop>
+                    <prop oor:name="Target" oor:type="xs:string">
+                        <value>_self</value>
+                    </prop>
+                    <prop oor:name="Context" oor:type="xs:string">
+                          <value></value>
+                    </prop>
                 </node>
             </node>
         </node>

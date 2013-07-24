@@ -20,156 +20,151 @@
     <node oor:name="AddonUI">
         <node oor:name="OfficeToolBar">
             <node oor:name="com.sun.star.comp.framework.addon.complextoolbarcontrols" oor:op="replace">
-                <prop oor:name="Title" oor:type="xs:string">
-                    <value xml:lang="en-US">Complex Toolbar Controls</value>
-                </prop>
-                <node oor:name="ToolBarItems">
-                    <node oor:name="m1" oor:op="replace">
-                        <prop oor:name="URL" oor:type="xs:string">
-                            <value>vnd.demo.complextoolbarcontrols.demoaddon:ImageButtonCmd</value>
-                        </prop>
-                        <prop oor:name="Title" oor:type="xs:string">
-                            <value xml:lang="en-US">Image Button</value>
-                        </prop>
-                        <prop oor:name="Target" oor:type="xs:string">
-                            <value>_self</value>
-                        </prop>
-                        <prop oor:name="Context" oor:type="xs:string">
-                            <value>com.sun.star.text.TextDocument,com.sun.star.sheet.SpreadsheetDocument</value>
-                        </prop>
-                        <prop oor:name="ControlType" oor:type="xs:string">
-                            <value>ImageButton</value>
-                        </prop>
-                    </node>
-                    <node oor:name="m2" oor:op="replace">
-                        <prop oor:name="URL" oor:type="xs:string">
-                            <value>vnd.demo.complextoolbarcontrols.demoaddon:ComboboxCmd</value>
-                        </prop>
-                        <prop oor:name="Title" oor:type="xs:string">
-                            <value xml:lang="en-US">ComboBox</value>
-                        </prop>
-                        <prop oor:name="Target" oor:type="xs:string">
-                            <value>_self</value>
-                        </prop>
-                        <prop oor:name="Context" oor:type="xs:string">
-                            <value>com.sun.star.text.TextDocument,com.sun.star.sheet.SpreadsheetDocument</value>
-                        </prop>
-                        <prop oor:name="ControlType" oor:type="xs:string">
-                            <value>Combobox</value>
-                        </prop>
-                        <prop oor:name="Width" oor:type="xs:long">
-                            <value>200</value>
-                        </prop>
-                    </node>
-                    <node oor:name="m3" oor:op="replace">
-                        <prop oor:name="URL" oor:type="xs:string">
-                            <value>private:separator</value>
-                        </prop>
-                    </node>
-                    <node oor:name="m4" oor:op="replace">
-                        <prop oor:name="URL" oor:type="xs:string">
-                            <value>vnd.demo.complextoolbarcontrols.demoaddon:SpinfieldCmd</value>
-                        </prop>
-                        <prop oor:name="Title" oor:type="xs:string">
-                            <value xml:lang="en-US">Spinfield</value>
-                        </prop>
-                        <prop oor:name="Target" oor:type="xs:string">
-                            <value>_self</value>
-                        </prop>
-                        <prop oor:name="Context" oor:type="xs:string">
-                            <value>com.sun.star.text.TextDocument,com.sun.star.sheet.SpreadsheetDocument</value>
-                        </prop>
-                        <prop oor:name="ControlType" oor:type="xs:string">
-                            <value>Spinfield</value>
-                        </prop>
-                        <prop oor:name="Width" oor:type="xs:long">
-                            <value>70</value>
-                        </prop>
-                    </node>
-                    <node oor:name="m5" oor:op="replace">
-                        <prop oor:name="URL" oor:type="xs:string">
-                            <value>private:separator</value>
-                        </prop>
-                    </node>
-                    <node oor:name="m6" oor:op="replace">
-                        <prop oor:name="URL" oor:type="xs:string">
-                            <value>vnd.demo.complextoolbarcontrols.demoaddon:EditfieldCmd</value>
-                        </prop>
-                        <prop oor:name="Title" oor:type="xs:string">
-                            <value xml:lang="en-US">Editfield</value>
-                        </prop>
-                        <prop oor:name="Target" oor:type="xs:string">
-                            <value>_self</value>
-                        </prop>
-                        <prop oor:name="Context" oor:type="xs:string">
-                            <value>com.sun.star.text.TextDocument,com.sun.star.sheet.SpreadsheetDocument</value>
-                        </prop>
-                        <prop oor:name="ControlType" oor:type="xs:string">
-                            <value>Editfield</value>
-                        </prop>
-                        <prop oor:name="Width" oor:type="xs:long">
-                            <value>130</value>
-                        </prop>
-                    </node>
-                    <node oor:name="m7" oor:op="replace">
-                        <prop oor:name="URL" oor:type="xs:string">
-                            <value>private:separator</value>
-                        </prop>
-                    </node>
-                    <node oor:name="m8" oor:op="replace">
-                        <prop oor:name="URL" oor:type="xs:string">
-                            <value>vnd.demo.complextoolbarcontrols.demoaddon:DropdownboxCmd</value>
-                        </prop>
-                        <prop oor:name="Title" oor:type="xs:string">
-                            <value xml:lang="en-US">Dropdownbox</value>
-                        </prop>
-                        <prop oor:name="Target" oor:type="xs:string">
-                            <value>_self</value>
-                        </prop>
-                        <prop oor:name="Context" oor:type="xs:string">
-                            <value>com.sun.star.text.TextDocument,com.sun.star.sheet.SpreadsheetDocument</value>
-                        </prop>
-                        <prop oor:name="ControlType" oor:type="xs:string">
-                            <value>Dropdownbox</value>
-                        </prop>
-                        <prop oor:name="Width" oor:type="xs:long">
-                            <value>80</value>
-                        </prop>
-                    </node>
-                    <node oor:name="m9" oor:op="replace">
-                        <prop oor:name="URL" oor:type="xs:string">
-                            <value>vnd.demo.complextoolbarcontrols.demoaddon:ToggleDropdownButtonCmd</value>
-                        </prop>
-                        <prop oor:name="Title" oor:type="xs:string">
-                            <value xml:lang="en-US">Toggle Dropdown Button</value>
-                        </prop>
-                        <prop oor:name="Target" oor:type="xs:string">
-                            <value>_self</value>
-                        </prop>
-                        <prop oor:name="Context" oor:type="xs:string">
-                            <value>com.sun.star.text.TextDocument,com.sun.star.sheet.SpreadsheetDocument</value>
-                        </prop>
-                        <prop oor:name="ControlType" oor:type="xs:string">
-                            <value>ToggleDropdownButton</value>
-                        </prop>
-                    </node>
-                    <node oor:name="m10" oor:op="replace">
-                        <prop oor:name="URL" oor:type="xs:string">
-                            <value>vnd.demo.complextoolbarcontrols.demoaddon:DropdownButtonCmd</value>
-                        </prop>
-                        <prop oor:name="Title" oor:type="xs:string">
-                            <value xml:lang="en-US">Dropdown Button</value>
-                        </prop>
-                        <prop oor:name="Target" oor:type="xs:string">
-                            <value>_self</value>
-                        </prop>
-                        <prop oor:name="Context" oor:type="xs:string">
-                            <value>com.sun.star.text.TextDocument,com.sun.star.sheet.SpreadsheetDocument</value>
-                        </prop>
-                        <prop oor:name="ControlType" oor:type="xs:string">
-                            <value>DropdownButton</value>
-                        </prop>
-                    </node>
+                <node oor:name="m1" oor:op="replace">
+                    <prop oor:name="URL" oor:type="xs:string">
+                        <value>vnd.demo.complextoolbarcontrols.demoaddon:ImageButtonCmd</value>
+                    </prop>
+                    <prop oor:name="Title" oor:type="xs:string">
+                        <value xml:lang="en-US">Image Button</value>
+                    </prop>
+                    <prop oor:name="Target" oor:type="xs:string">
+                        <value>_self</value>
+                    </prop>
+                    <prop oor:name="Context" oor:type="xs:string">
+                        <value>com.sun.star.text.TextDocument,com.sun.star.sheet.SpreadsheetDocument</value>
+                    </prop>
+                    <prop oor:name="ControlType" oor:type="xs:string">
+                        <value>ImageButton</value>
+                    </prop>
+                </node>
+                <node oor:name="m2" oor:op="replace">
+                    <prop oor:name="URL" oor:type="xs:string">
+                        <value>vnd.demo.complextoolbarcontrols.demoaddon:ComboboxCmd</value>
+                    </prop>
+                    <prop oor:name="Title" oor:type="xs:string">
+                        <value xml:lang="en-US">ComboBox</value>
+                    </prop>
+                    <prop oor:name="Target" oor:type="xs:string">
+                        <value>_self</value>
+                    </prop>
+                    <prop oor:name="Context" oor:type="xs:string">
+                        <value>com.sun.star.text.TextDocument,com.sun.star.sheet.SpreadsheetDocument</value>
+                    </prop>
+                    <prop oor:name="ControlType" oor:type="xs:string">
+                        <value>Combobox</value>
+                    </prop>
+                    <prop oor:name="Width" oor:type="xs:long">
+                        <value>200</value>
+                    </prop>
+                </node>
+                <node oor:name="m3" oor:op="replace">
+                    <prop oor:name="URL" oor:type="xs:string">
+                        <value>private:separator</value>
+                    </prop>
+                </node>
+                <node oor:name="m4" oor:op="replace">
+                    <prop oor:name="URL" oor:type="xs:string">
+                        <value>vnd.demo.complextoolbarcontrols.demoaddon:SpinfieldCmd</value>
+                    </prop>
+                    <prop oor:name="Title" oor:type="xs:string">
+                        <value xml:lang="en-US">Spinfield</value>
+                    </prop>
+                    <prop oor:name="Target" oor:type="xs:string">
+                        <value>_self</value>
+                    </prop>
+                    <prop oor:name="Context" oor:type="xs:string">
+                        <value>com.sun.star.text.TextDocument,com.sun.star.sheet.SpreadsheetDocument</value>
+                    </prop>
+                    <prop oor:name="ControlType" oor:type="xs:string">
+                        <value>Spinfield</value>
+                    </prop>
+                    <prop oor:name="Width" oor:type="xs:long">
+                        <value>70</value>
+                    </prop>
+                </node>
+                <node oor:name="m5" oor:op="replace">
+                    <prop oor:name="URL" oor:type="xs:string">
+                        <value>private:separator</value>
+                    </prop>
+                </node>
+                <node oor:name="m6" oor:op="replace">
+                    <prop oor:name="URL" oor:type="xs:string">
+                        <value>vnd.demo.complextoolbarcontrols.demoaddon:EditfieldCmd</value>
+                    </prop>
+                    <prop oor:name="Title" oor:type="xs:string">
+                        <value xml:lang="en-US">Editfield</value>
+                    </prop>
+                    <prop oor:name="Target" oor:type="xs:string">
+                        <value>_self</value>
+                    </prop>
+                    <prop oor:name="Context" oor:type="xs:string">
+                        <value>com.sun.star.text.TextDocument,com.sun.star.sheet.SpreadsheetDocument</value>
+                    </prop>
+                    <prop oor:name="ControlType" oor:type="xs:string">
+                        <value>Editfield</value>
+                    </prop>
+                    <prop oor:name="Width" oor:type="xs:long">
+                        <value>130</value>
+                    </prop>
+                </node>
+                <node oor:name="m7" oor:op="replace">
+                    <prop oor:name="URL" oor:type="xs:string">
+                        <value>private:separator</value>
+                    </prop>
+                </node>
+                <node oor:name="m8" oor:op="replace">
+                    <prop oor:name="URL" oor:type="xs:string">
+                        <value>vnd.demo.complextoolbarcontrols.demoaddon:DropdownboxCmd</value>
+                    </prop>
+                    <prop oor:name="Title" oor:type="xs:string">
+                        <value xml:lang="en-US">Dropdownbox</value>
+                    </prop>
+                    <prop oor:name="Target" oor:type="xs:string">
+                        <value>_self</value>
+                    </prop>
+                    <prop oor:name="Context" oor:type="xs:string">
+                        <value>com.sun.star.text.TextDocument,com.sun.star.sheet.SpreadsheetDocument</value>
+                    </prop>
+                    <prop oor:name="ControlType" oor:type="xs:string">
+                        <value>Dropdownbox</value>
+                    </prop>
+                    <prop oor:name="Width" oor:type="xs:long">
+                        <value>80</value>
+                    </prop>
+                </node>
+                <node oor:name="m9" oor:op="replace">
+                    <prop oor:name="URL" oor:type="xs:string">
+                        <value>vnd.demo.complextoolbarcontrols.demoaddon:ToggleDropdownButtonCmd</value>
+                    </prop>
+                    <prop oor:name="Title" oor:type="xs:string">
+                        <value xml:lang="en-US">Toggle Dropdown Button</value>
+                    </prop>
+                    <prop oor:name="Target" oor:type="xs:string">
+                        <value>_self</value>
+                    </prop>
+                    <prop oor:name="Context" oor:type="xs:string">
+                        <value>com.sun.star.text.TextDocument,com.sun.star.sheet.SpreadsheetDocument</value>
+                    </prop>
+                    <prop oor:name="ControlType" oor:type="xs:string">
+                        <value>ToggleDropdownButton</value>
+                    </prop>
+                </node>
+                <node oor:name="m10" oor:op="replace">
+                    <prop oor:name="URL" oor:type="xs:string">
+                        <value>vnd.demo.complextoolbarcontrols.demoaddon:DropdownButtonCmd</value>
+                    </prop>
+                    <prop oor:name="Title" oor:type="xs:string">
+                        <value xml:lang="en-US">Dropdown Button</value>
+                    </prop>
+                    <prop oor:name="Target" oor:type="xs:string">
+                        <value>_self</value>
+                    </prop>
+                    <prop oor:name="Context" oor:type="xs:string">
+                        <value>com.sun.star.text.TextDocument,com.sun.star.sheet.SpreadsheetDocument</value>
+                    </prop>
+                    <prop oor:name="ControlType" oor:type="xs:string">
+                        <value>DropdownButton</value>
+                    </prop>
                 </node>
             </node>
         </node>

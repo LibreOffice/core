@@ -397,6 +397,7 @@ $(eval $(call gb_Package_add_files_with_dir,odk_examples,$(gb_Package_SDKDIRNAME
     cpp/DocumentLoader/test.odt \
     cpp/complextoolbarcontrols/Addons.xcu \
     cpp/complextoolbarcontrols/CalcListener.cxx \
+    cpp/complextoolbarcontrols/CalcWindowState.xcu \
     cpp/complextoolbarcontrols/Jobs.xcu \
     cpp/complextoolbarcontrols/ListenerHelper.cxx \
     cpp/complextoolbarcontrols/ListenerHelper.h \
@@ -409,6 +410,7 @@ $(eval $(call gb_Package_add_files_with_dir,odk_examples,$(gb_Package_SDKDIRNAME
     cpp/complextoolbarcontrols/MyProtocolHandler.h \
     cpp/complextoolbarcontrols/ProtocolHandler.xcu \
     cpp/complextoolbarcontrols/WriterListener.cxx \
+    cpp/complextoolbarcontrols/WriterWindowState.xcu \
     cpp/complextoolbarcontrols/exports.cxx \
     cpp/complextoolbarcontrols/logo_big.png \
     cpp/complextoolbarcontrols/logo_small.png \

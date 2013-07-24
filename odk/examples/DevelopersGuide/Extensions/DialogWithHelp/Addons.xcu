@@ -17,63 +17,58 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 -->
 <oor:component-data xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" oor:name="Addons" oor:package="org.openoffice.Office">
-    <node oor:name="AddonUI">
-        <node oor:name="OfficeMenuBar">
-            <node oor:name="com.foocorp.foo-ext:Menu" oor:op="replace">
-                <prop oor:name="Title" oor:type="xs:string">
-                    <value/>
-                    <value xml:lang="en">Foo E~xtension</value>
-                </prop>
-                <prop oor:name="Target" oor:type="xs:string">
-                    <value>_self</value>
-                </prop>
-                <prop oor:name="ImageIdentifier" oor:type="xs:string">
-                    <value/>
-                </prop>
-                <node oor:name="Submenu">
-                    <node oor:name="m1" oor:op="replace">
-                        <prop oor:name="URL" oor:type="xs:string">
-                            <value>vnd.sun.star.script:DialogWithHelp.Module1.main?language=Basic&amp;location=application</value>
-                        </prop>
-                        <prop oor:name="ImageIdentifier" oor:type="xs:string">
-                            <value/>
-                        </prop>
-                        <prop oor:name="Target" oor:type="xs:string">
-                            <value>_self</value>
-                        </prop>
-                        <prop oor:name="Title" oor:type="xs:string">
-                            <value/>
-                            <value xml:lang="en">Start Foo Dialog...</value>
-                        </prop>
-                    </node>
-                    <node oor:name="m3" oor:op="replace">
-                    </node>
-                </node>
-            </node>
+  <node oor:name="AddonUI">
+    <node oor:name="OfficeMenuBar">
+      <node oor:name="com.foocorp.foo-ext:Menu" oor:op="replace">
+        <prop oor:name="Title" oor:type="xs:string">
+          <value/>
+          <value xml:lang="en">Foo E~xtension</value>
+        </prop>
+        <prop oor:name="Target" oor:type="xs:string">
+          <value>_self</value>
+        </prop>
+        <prop oor:name="ImageIdentifier" oor:type="xs:string">
+          <value/>
+        </prop>
+        <node oor:name="Submenu">
+          <node oor:name="m1" oor:op="replace">
+            <prop oor:name="URL" oor:type="xs:string">
+              <value>vnd.sun.star.script:DialogWithHelp.Module1.main?language=Basic&amp;location=application</value>
+            </prop>
+            <prop oor:name="ImageIdentifier" oor:type="xs:string">
+              <value/>
+            </prop>
+            <prop oor:name="Target" oor:type="xs:string">
+              <value>_self</value>
+            </prop>
+            <prop oor:name="Title" oor:type="xs:string">
+              <value/>
+              <value xml:lang="en">Start Foo Dialog...</value>
+            </prop>
+          </node>
+          <node oor:name="m3" oor:op="replace">
+          </node>
         </node>
-        <node oor:name="OfficeToolBar">
-            <node oor:name="com.foocorp.foo-ext:ToolbarItem1" oor:op="replace">
-                <prop oor:name="Title" oor:type="xs:string">
-                    <value xml:lang="en-US">Foo Toolbar</value>
-                </prop>
-                <node oor:name="ToolBarItems">
-                    <node oor:name="m1" oor:op="replace">
-                        <prop oor:name="URL">
-                            <value>vnd.sun.star.script:DialogWithHelp.Module1.main?language=Basic&amp;location=application</value>
-                        </prop>
-                        <prop oor:name="Title">
-                            <value xml:lang="en-US">Foo Toolbar Item</value>
-                            <value xml:lang="de">Foo Toolbar Eintrag</value>
-                        </prop>
-                        <prop oor:name="Target" oor:type="xs:string">
-                            <value>_self</value>
-                        </prop>
-                        <prop oor:name="Context" oor:type="xs:string">
-                            <value>com.sun.star.text.TextDocument</value>
-                        </prop>
-                    </node>
-                </node>
-            </node>
-        </node>
+      </node>
     </node>
+    <node oor:name="OfficeToolBar">
+      <node oor:name="com.foocorp.foo-ext:ToolbarItem1" oor:op="replace">
+        <node oor:name="m1" oor:op="replace">
+          <prop oor:name="URL">
+            <value>vnd.sun.star.script:DialogWithHelp.Module1.main?language=Basic&amp;location=application</value>
+          </prop>
+          <prop oor:name="Title">
+            <value xml:lang="en-US">Foo Toolbar Item</value>
+            <value xml:lang="de">Foo Toolbar Eintrag</value>
+          </prop>
+          <prop oor:name="Target" oor:type="xs:string">
+            <value>_self</value>
+          </prop>
+          <prop oor:name="Context" oor:type="xs:string">
+            <value>com.sun.star.text.TextDocument</value>
+          </prop>
+        </node>
+      </node>
+    </node>
+  </node>
 </oor:component-data>

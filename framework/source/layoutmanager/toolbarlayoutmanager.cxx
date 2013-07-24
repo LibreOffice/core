@@ -1040,10 +1040,7 @@ void ToolbarLayoutManager::implts_createAddonsToolBars()
                     }
                 }
 
-                OUString aAddonUIName = m_pAddonOptions->GetAddonsToolbarUIName( i );
-                const bool bAddonUIName = aAddonUIName.getLength();
-                OUString aAddonTitle = bAddonUIName ?
-                    aAddonUIName : implts_generateGenericAddonToolbarTitle( i+1 );
+                OUString aGenericAddonTitle = implts_generateGenericAddonToolbarTitle( i+1 );
 
                 if ( !aElement.m_aName.isEmpty() )
                 {
@@ -1051,9 +1048,9 @@ void ToolbarLayoutManager::implts_createAddonsToolBars()
                     // UI changes for this document.
                     implts_setElementData( aElement, xDockWindow );
                     aElement.m_xUIElement = xUIElement;
-                    if ( aElement.m_aUIName.isEmpty() && !bAddonUIName)
+                    if ( aElement.m_aUIName.isEmpty() )
                     {
-                        aElement.m_aUIName = aAddonTitle;
+                        aElement.m_aUIName = aGenericAddonTitle;
                         implts_writeWindowStateData( aElement );
                     }
                 }
@@ -1064,9 +1061,9 @@ void ToolbarLayoutManager::implts_createAddonsToolBars()
                     aNewToolbar.m_bFloating = true;
                     implts_readWindowStateData( aAddonToolBarName, aNewToolbar );
                     implts_setElementData( aNewToolbar, xDockWindow );
-                    if ( aNewToolbar.m_aUIName.isEmpty() && !bAddonUIName)
+                    if ( aNewToolbar.m_aUIName.isEmpty() )
                     {
-                        aNewToolbar.m_aUIName = aAddonTitle;
+                        aNewToolbar.m_aUIName = aGenericAddonTitle;
                         implts_writeWindowStateData( aNewToolbar );
                     }
                     implts_insertToolbar( aNewToolbar );
@@ -1079,7 +1076,7 @@ void ToolbarLayoutManager::implts_createAddonsToolBars()
                     SolarMutexGuard aGuard;
                     Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
                     if ( pWindow->GetText().isEmpty() )
-                        pWindow->SetText( aAddonTitle );
+                        pWindow->SetText( aGenericAddonTitle );
                     if ( pWindow->GetType() == WINDOW_TOOLBOX )
                     {
                         ToolBox* pToolbar = (ToolBox *)pWindow;
