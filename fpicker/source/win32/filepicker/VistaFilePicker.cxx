@@ -218,12 +218,13 @@ void SAL_CALL VistaFilePicker::setDisplayDirectory(const OUString& sDirectory)
     throw (css::lang::IllegalArgumentException,
            css::uno::RuntimeException         )
 {
-    bool bChanged = officecfg::Office::Common::Path::Info::WorkPathChanged::get();
-
+    bool bChanged = officecfg::Office::Common::Path::Info::WorkPathChanged::get(
+        comphelper::getComponentContext(m_xSMGR));
     if (bChanged )
     {
         boost::shared_ptr< comphelper::ConfigurationChanges > batch(
-            comphelper::ConfigurationChanges::create());
+            comphelper::ConfigurationChanges::create(
+                comphelper::getComponentContext(m_xSMGR)));
         officecfg::Office::Common::Path::Info::WorkPathChanged::set(
             false, batch);
         batch->commit();
