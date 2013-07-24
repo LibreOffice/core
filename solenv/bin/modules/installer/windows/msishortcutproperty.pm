@@ -143,3 +143,6 @@ sub create_msishortcutproperty_table
         push(@installer::globals::logfileinfo, $infoline);
     }
 }
+
+
+1;
