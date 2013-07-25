@@ -33,7 +33,7 @@ namespace
 {
 
 struct StatisticCalculation {
-    const sal_Int16 aCalculationNameId;
+    sal_Int16 aCalculationNameId;
     const char*     aFormula;
 };
 
