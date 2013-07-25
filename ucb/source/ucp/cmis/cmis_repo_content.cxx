@@ -25,6 +25,7 @@
 #include <ucbhelper/proxydecider.hxx>
 
 #include "auth_provider.hxx"
+#include "certvalidation_handler.hxx"
 #include "cmis_content.hxx"
 #include "cmis_provider.hxx"
 #include "cmis_repo_content.hxx"
@@ -132,6 +133,11 @@ namespace cmis
 
         if ( m_aRepositories.empty() )
         {
+            // Set the SSL Validation handler
+            libcmis::CertValidationHandlerPtr certHandler(
+                    new CertValidationHandler( xEnv, m_xContext, aBindingUrl.GetHost( ) ) );
+            libcmis::SessionFactory::setCertificateValidationHandler( certHandler );
+
             // Get the auth credentials
             AuthProvider authProvider( xEnv, m_xIdentifier->getContentIdentifier( ), m_aURL.getBindingUrl( ) );
 
@@ -139,20 +145,27 @@ namespace cmis
             string rPassword = OUSTR_TO_STDSTR( m_aURL.getPassword( ) );
             if ( authProvider.authenticationQuery( rUsername, rPassword ) )
             {
-                // Create a session to get repositories
-                libcmis::OAuth2DataPtr oauth2Data = NULL;
+                try
+                {
+                    // Create a session to get repositories
+                    libcmis::OAuth2DataPtr oauth2Data = NULL;
 
-                libcmis::Session* session = libcmis::SessionFactory::createSession(
-                        OUSTR_TO_STDSTR( m_aURL.getBindingUrl( ) ),
-                        rUsername, rPassword, "", sal_False, oauth2Data );
-                if (session == NULL )
-                    ucbhelper::cancelCommandExecution(
-                                        ucb::IOErrorCode_INVALID_DEVICE,
-                                        uno::Sequence< uno::Any >( 0 ),
-                                        xEnv,
-                                        OUString( ) );
-                m_aRepositories = session->getRepositories( );
-                delete session;
+                    libcmis::Session* session = libcmis::SessionFactory::createSession(
+                            OUSTR_TO_STDSTR( m_aURL.getBindingUrl( ) ),
+                            rUsername, rPassword, "", sal_False, oauth2Data );
+                    if (session == NULL )
+                        ucbhelper::cancelCommandExecution(
+                                            ucb::IOErrorCode_INVALID_DEVICE,
+                                            uno::Sequence< uno::Any >( 0 ),
+                                            xEnv,
+                                            OUString( ) );
+                    m_aRepositories = session->getRepositories( );
+                    delete session;
+                }
+                catch (const libcmis::Exception& e)
+                {
+                    SAL_INFO( "cmisucp", "Error getting repositories: " << e.what() );
+                }
             }
             else
             {

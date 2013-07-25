@@ -43,6 +43,7 @@
 #include <ucbhelper/proxydecider.hxx>
 
 #include "auth_provider.hxx"
+#include "certvalidation_handler.hxx"
 #include "cmis_content.hxx"
 #include "cmis_provider.hxx"
 #include "cmis_resultset.hxx"
@@ -317,6 +318,11 @@ namespace cmis
 
         if ( NULL == m_pSession )
         {
+            // Set the SSL Validation handler
+            libcmis::CertValidationHandlerPtr certHandler(
+                    new CertValidationHandler( xEnv, m_xContext, aBindingUrl.GetHost( ) ) );
+            libcmis::SessionFactory::setCertificateValidationHandler( certHandler );
+
             // Get the auth credentials
             AuthProvider authProvider( xEnv, m_xIdentifier->getContentIdentifier( ), m_aURL.getBindingUrl( ) );
 
