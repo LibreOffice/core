@@ -944,12 +944,14 @@ void VLegend::createShapes(
 
             bool bSymbolsLeftSide = lcl_shouldSymbolsBePlacedOnTheLeftSide( xLegendProp, m_nDefaultWritingMode );
 
-            // place entries
-            aLegendSize = lcl_placeLegendEntries( aViewEntries, eExpansion, bSymbolsLeftSide, fViewFontSize, aMaxSymbolExtent
-                , aTextProperties, xLegendContainer, m_xShapeFactory, aLegendSize );
+            if( aViewEntries.size() ) {
+                // place entries
+                aLegendSize = lcl_placeLegendEntries( aViewEntries, eExpansion, bSymbolsLeftSide, fViewFontSize, aMaxSymbolExtent,
+                                                      aTextProperties, xLegendContainer, m_xShapeFactory, aLegendSize );
 
-            if( xBorder.is() )
-                xBorder->setSize( aLegendSize );
+                if( xBorder.is() )
+                    xBorder->setSize( aLegendSize );
+            }
         }
     }
     catch( const uno::Exception & ex )
