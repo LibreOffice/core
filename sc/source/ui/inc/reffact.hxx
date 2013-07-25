@@ -55,19 +55,31 @@ DECL_WRAPPER_WITHID(ScHighlightChgDlgWrapper)
 
 class ScDescriptiveStatisticsDialogWrapper :
     public ChildWindowWrapper<SID_DESCRIPTIVE_STATISTICS_DIALOG>
-{};
+{
+private:
+    ScDescriptiveStatisticsDialogWrapper() SAL_DELETED_FUNCTION;
+};
 
 class ScSamplingDialogWrapper :
     public ChildWindowWrapper<SID_SAMPLING_DIALOG>
-{};
+{
+private:
+    ScSamplingDialogWrapper() SAL_DELETED_FUNCTION;
+};
 
 class ScRandomNumberGeneratorDialogWrapper :
     public ChildWindowWrapper<SID_RANDOM_NUMBER_GENERATOR_DIALOG>
-{};
+{
+private:
+    ScRandomNumberGeneratorDialogWrapper() SAL_DELETED_FUNCTION;
+};
 
 class ScAnalysisOfVarianceDialogWrapper :
     public ChildWindowWrapper<SID_ANALYSIS_OF_VARIANCE_DIALOG>
-{};
+{
+private:
+    ScAnalysisOfVarianceDialogWrapper() SAL_DELETED_FUNCTION;
+};
 
 
 class ScAcceptChgDlgWrapper: public SfxChildWindow
