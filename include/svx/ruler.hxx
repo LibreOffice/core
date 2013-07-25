@@ -124,8 +124,8 @@ class SVX_DLLPUBLIC SvxRuler: public Ruler, public SfxListener
     void UpdateColumns();
     void UpdateObject();
 
-    // Normalize position to the ruler's tick value
-    void NormalizePosition(long& rValue) const;
+    // Convert position to stick to ruler ticks
+    long MakePositionSticky(long rValue, bool aSnapToFrameMargin = true) const;
 
     long PixelHAdjust(long lPos, long lPos2) const;
     long PixelVAdjust(long lPos, long lPos2) const;

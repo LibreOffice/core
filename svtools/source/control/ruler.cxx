@@ -90,6 +90,8 @@ private:
     long                nNullOff;
     long                nMargin1;
     long                nMargin2;
+    long                nLeftFrameMargin;
+    long                nRightFrameMargin;
     sal_uInt16              nLines;
     sal_uInt16              nBorders;
     sal_uInt16              nIndents;
@@ -1032,11 +1034,12 @@ void Ruler::ImplFormat()
     if ( mbCalc )
         ImplCalc();
     mpData->nNullVirOff = mnWinOff+mpData->nPageOff+mpData->nNullOff-mnVirOff;
+
     nNullVirOff = mpData->nNullVirOff;
     nVirLeft    = mpData->nRulVirOff;
-    nVirRight   = nVirLeft+mpData->nRulWidth-1;
+    nVirRight   = nVirLeft + mpData->nRulWidth - 1;
     nVirTop     = 0;
-    nVirBottom  = mnVirHeight-1;
+    nVirBottom  = mnVirHeight - 1;
 
     if ( !IsReallyVisible() )
         return;
@@ -1138,10 +1141,15 @@ void Ruler::ImplFormat()
     }
 
     // Lineal-Beschriftung (nur wenn keine Bemassungspfeile)
-    long    nMin = nVirLeft;
-    long    nMax = nP2;
-    long    nStart = mpData->bTextRTL ? mpData->nMargin2 + nNullVirOff : nNullVirOff;
-    long    nCenter = nVirTop+((nVirBottom-nVirTop)/2);
+    long nMin = nVirLeft;
+    long nMax = nP2;
+    long nCenter = nVirTop + ((nVirBottom - nVirTop) / 2);
+    long nStart = 0;
+
+    if (mpData->bTextRTL)
+        nStart = mpData->nRightFrameMargin + nNullVirOff;
+    else
+        nStart = mpData->nLeftFrameMargin + nNullVirOff;
 
     // Nicht Schatten uebermalen
     if ( nP1 > nVirLeft )
@@ -2493,6 +2501,24 @@ void Ruler::SetNullOffset( long nPos )
     if ( mpData->nNullOff != nPos )
     {
         mpData->nNullOff = nPos;
+        ImplUpdate();
+    }
+}
+
+void Ruler::SetLeftFrameMargin( long nPos )
+{
+    if ( (mpData->nLeftFrameMargin != nPos) )
+    {
+        mpData->nLeftFrameMargin  = nPos;
+        ImplUpdate();
+    }
+}
+
+void Ruler::SetRightFrameMargin( long nPos )
+{
+    if ( (mpData->nRightFrameMargin != nPos) )
+    {
+        mpData->nRightFrameMargin  = nPos;
         ImplUpdate();
     }
 }

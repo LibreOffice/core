@@ -771,6 +771,9 @@ public:
     void                SetMargin2( long nPos, sal_uInt16 nMarginStyle = RULER_MARGIN_SIZEABLE );
     long                GetMargin2() const;
 
+    void                SetLeftFrameMargin( long nPos );
+    void                SetRightFrameMargin( long nPos );
+
     void                SetLines( sal_uInt16 n = 0, const RulerLine* pLineAry = NULL );
 
     void                SetBorders( sal_uInt16 n = 0, const RulerBorder* pBrdAry = NULL );
