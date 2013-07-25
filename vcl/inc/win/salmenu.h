@@ -57,8 +57,8 @@ public:
 
     MENUITEMINFOW mInfo;
     void*     mpMenu;       // pointer to corresponding VCL menu
-    XubString mText;        // the item text
-    XubString mAccelText;   // the accelerator string
+    OUString  mText;        // the item text
+    OUString  mAccelText;   // the accelerator string
     Bitmap    maBitmap;     // item image
     int       mnId;         // item id
     WinSalMenu*  mpSalMenu;    // the menu where this item is inserted
