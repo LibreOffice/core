@@ -684,7 +684,6 @@ void SmDocShell::Repaint()
 
 SmDocShell::SmDocShell( const sal_uInt64 i_nSfxCreationFlags ) :
     SfxObjectShell( i_nSfxCreationFlags ),
-    pModel              ( new SmModel(this) ),
     pTree               ( 0 ),
     pEditEngineItemPool ( 0 ),
     pEditEngine         ( 0 ),
@@ -704,8 +703,10 @@ SmDocShell::SmDocShell( const sal_uInt64 i_nSfxCreationFlags ) :
     StartListening(aFormat);
     StartListening(*pp->GetConfig());
 
-    SetBaseModel( pModel );
+    SetBaseModel( new SmModel(this) );
 }
+
+
 
 SmDocShell::~SmDocShell()
 {
@@ -716,6 +717,7 @@ SmDocShell::~SmDocShell()
     EndListening(aFormat);
     EndListening(*pp->GetConfig());
 
+
     if(pCursor)
         delete pCursor;
     pCursor = NULL;
@@ -724,7 +726,6 @@ SmDocShell::~SmDocShell()
     SfxItemPool::Free(pEditEngineItemPool);
     delete pTree;
     delete pPrinter;
-    delete pModel;
 }
 
 
