@@ -734,6 +734,13 @@ sub searchoffice
         return $officepath;
     }
 
+    # Before trying versioned directories, check if the sdk is directly under
+    # the office path.
+    $officepath = $main::sdkpath . "/..";
+    if (-d $officepath && -e "$officepath/program/soffice") {
+        return $officepath;
+    }
+
     my $tmpversion = $main::OO_MAJORVERSION + 6;
     if ( $main::OO_MINORVERSION > 0) {
         $tmpversion = "$tmpversion.$main::OO_MINORVERSION";
