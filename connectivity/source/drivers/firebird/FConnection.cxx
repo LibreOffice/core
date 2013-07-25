@@ -122,24 +122,6 @@ void SAL_CALL OConnection::release() throw()
 {
     relase_ChildImpl();
 }
-// -----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
-
-/*    Print the status, the SQLCODE, and exit.
- *    Also, indicate which operation the error occured on.
- */
-static int pr_error(const ISC_STATUS* status, const char* operation)
-{
-    SAL_WARN("connectivity.firebird", "=> OConnection static pr_error().");
-
-    isc_print_status(status);
-
-    SAL_WARN("connectivity.firebird", "=> OConnection static pr_error(). "
-             "PROBLEM ON " << operation << ". "
-             "SQLCODE: " << isc_sqlcode(status) << ".");
-
-    return 1;
-}
 
 void OConnection::construct(const ::rtl::OUString& url, const Sequence< PropertyValue >& info)
     throw(SQLException)
@@ -267,31 +249,37 @@ void OConnection::construct(const ::rtl::OUString& url, const Sequence< Property
     }
 
     ISC_STATUS_ARRAY status;            /* status vector */
-
+    ISC_STATUS aErr;
     if (bIsNewDatabase)
     {
-        if (isc_create_database(status,
-                                m_sURL.getLength(),
-                                OUStringToOString(m_sURL,RTL_TEXTENCODING_UTF8).getStr(),
-                                &m_DBHandler,
-                                dpbLength,
-                                dpbBuffer,
-                                0))
+        aErr = isc_create_database(status,
+                                   m_sURL.getLength(),
+                                   OUStringToOString(m_sURL,RTL_TEXTENCODING_UTF8).getStr(),
+                                   &m_DBHandler,
+                                   dpbLength,
+                                   dpbBuffer,
+                                   0);
+        if (aErr)
         {
-            if(pr_error(status, "create new database"))
-                return;
+            evaluateStatusVector(status,
+                                 "isc_create_database",
+                                 *this);
         }
     }
     else
     {
-        if (isc_attach_database(status,
-                                m_sURL.getLength(),
-                                OUStringToOString(m_sURL, RTL_TEXTENCODING_UTF8).getStr(),
-                                &m_DBHandler,
-                                dpbLength,
-                                dpbBuffer))
-            if (pr_error(status, "attach database"))
-                return;
+        aErr = isc_attach_database(status,
+                                   m_sURL.getLength(),
+                                   OUStringToOString(m_sURL, RTL_TEXTENCODING_UTF8).getStr(),
+                                   &m_DBHandler,
+                                   dpbLength,
+                                   dpbBuffer);
+        if (aErr)
+        {
+            evaluateStatusVector(status,
+                                 "isc_attach_database",
+                                 *this);
+        }
     }
 
     if (m_bIsEmbedded) // Add DocumentEventListener to save the .fdb as needed
@@ -742,8 +730,11 @@ void OConnection::disposing()
     }
 
     if (isc_detach_database(status, &m_DBHandler))
-        if (pr_error(status, "dattach database"))
-            return;
+    {
+        evaluateStatusVector(status,
+                             "isc_detach_database",
+                             *this);
+    }
     // TODO: write to storage again?
     if (m_bIsEmbedded)
     {
