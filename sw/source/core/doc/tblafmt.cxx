@@ -964,7 +964,7 @@ SwTableAutoFmtTbl::SwTableAutoFmtTbl(SwDoc* pDoc)
     String sNm;
     // FIXME Yuk! we are creating the table styles ATM, but in the targetted
     // ideal, the table styles are created with the document
-    SwStyleNameMapper::GetUIName( RES_POOLCOLL_STANDARD, sNm );
+    sNm = SwStyleNameMapper::GetUIName( RES_POOLCOLL_STANDARD, sNm );
     SwTableFmt* pStyle = pDoc->FindTblFmtByName(sNm);
     if ( !pStyle )
         pStyle = pDoc->MakeTblFrmFmt(sNm, NULL);
