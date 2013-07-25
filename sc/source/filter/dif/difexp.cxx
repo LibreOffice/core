@@ -182,7 +182,7 @@ FltError ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument* pDoc
                 break;
                 case CELLTYPE_EDIT:
                 case CELLTYPE_STRING:
-                    aString = aCell.getString();
+                    aString = aCell.getString(pDoc);
                     bWriteStringData = true;
                 break;
                 case CELLTYPE_FORMULA:

@@ -854,7 +854,7 @@ void XclExpChTrCellContent::GetCellData(
                 XclExpHyperlinkHelper aLinkHelper( rRoot, aPosition );
                 if (rScCell.mpEditText)
                 {
-                    sCellStr = ScEditUtil::GetString(*rScCell.mpEditText);
+                    sCellStr = ScEditUtil::GetString(*rScCell.mpEditText, &GetDoc());
                     rpData->mpFormattedString = XclExpStringHelper::CreateCellString(
                         rRoot, *rScCell.mpEditText, NULL, aLinkHelper);
                 }

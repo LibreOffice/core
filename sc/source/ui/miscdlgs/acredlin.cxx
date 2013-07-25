@@ -663,7 +663,7 @@ SvTreeListEntry* ScAcceptChgDlg::InsertChangeActionContent(const ScChangeActionC
     if(nSpecial==RD_SPECIAL_CONTENT)
     {
         OUString aTmp;
-        pScChangeAction->GetOldString(aTmp);
+        pScChangeAction->GetOldString(aTmp, pDoc);
         a2String = aTmp;
         if(a2String.Len()==0) a2String=aStrEmpty;
 
@@ -677,7 +677,7 @@ SvTreeListEntry* ScAcceptChgDlg::InsertChangeActionContent(const ScChangeActionC
     else
     {
         OUString aTmp;
-        pScChangeAction->GetNewString(aTmp);
+        pScChangeAction->GetNewString(aTmp, pDoc);
         a2String = aTmp;
         if(a2String.Len()==0)
         {

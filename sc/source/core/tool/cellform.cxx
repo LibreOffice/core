@@ -34,14 +34,14 @@
 const ScFormulaCell* pLastFormulaTreeTop = 0;
 
 void ScCellFormat::GetString( ScRefCellValue& rCell, sal_uLong nFormat, OUString& rString,
-                              Color** ppColor, SvNumberFormatter& rFormatter,
+                              Color** ppColor, SvNumberFormatter& rFormatter, const ScDocument* pDoc,
                               bool bNullVals, bool bFormula, ScForceTextFmt eForceTextFmt,
                               bool bUseStarFormat )
 {
     *ppColor = NULL;
     if (&rFormatter==NULL)
     {
-        rString = OUString();
+        rString = EMPTY_OUSTRING;
         return;
     }
 
@@ -51,7 +51,7 @@ void ScCellFormat::GetString( ScRefCellValue& rCell, sal_uLong nFormat, OUString
             rFormatter.GetOutputString(*rCell.mpString, nFormat, rString, ppColor, bUseStarFormat);
         break;
         case CELLTYPE_EDIT:
-            rFormatter.GetOutputString(rCell.getString(), nFormat, rString, ppColor );
+            rFormatter.GetOutputString(rCell.getString(pDoc), nFormat, rString, ppColor );
         break;
         case CELLTYPE_VALUE:
         {
@@ -223,7 +223,7 @@ OUString ScCellFormat::GetString(
 }
 
 void ScCellFormat::GetInputString(
-    ScRefCellValue& rCell, sal_uLong nFormat, OUString& rString, SvNumberFormatter& rFormatter )
+    ScRefCellValue& rCell, sal_uLong nFormat, OUString& rString, SvNumberFormatter& rFormatter, const ScDocument* pDoc )
 {
     if (&rFormatter == NULL)
     {
@@ -236,7 +236,7 @@ void ScCellFormat::GetInputString(
     {
         case CELLTYPE_STRING:
         case CELLTYPE_EDIT:
-            aString = rCell.getString();
+            aString = rCell.getString(pDoc);
         break;
         case CELLTYPE_VALUE:
             rFormatter.GetInputLineString(rCell.mfValue, nFormat, aString );

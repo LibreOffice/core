@@ -1379,7 +1379,7 @@ static OUString lcl_GetInputString( ScDocument* pDoc, const ScAddress& rPos, sal
         }
     }
     else
-        ScCellFormat::GetInputString(aCell, nNumFmt, aVal, *pFormatter);
+        ScCellFormat::GetInputString(aCell, nNumFmt, aVal, *pFormatter, pDoc);
 
     //  ggf. ein ' davorhaengen wie in ScTabViewShell::UpdateInputHandler
     if ( eType == CELLTYPE_STRING || eType == CELLTYPE_EDIT )
@@ -2313,7 +2313,7 @@ void ScCellRangesBase::SetOnePropertyValue( const SfxItemPropertySimpleEntry* pE
                             ScRefCellValue aCell;
                             aCell.assign(*pDoc, aAddr);
 
-                            OUString aStr = aCell.getString();
+                            OUString aStr = aCell.getString(pDoc);
                             EditEngine aEngine( pDoc->GetEnginePool() );
                             aEngine.SetEditTextObjectPool(pDoc->GetEditPool());
 
