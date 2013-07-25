@@ -84,6 +84,7 @@ void SwFont::SetTopBorder( const editeng::SvxBorderLine* pTopBorder )
     else
         m_aTopBorder = boost::none;
     bFntChg = sal_True;
+    aSub[SW_LATIN].pMagic = aSub[SW_CJK].pMagic = aSub[SW_CTL].pMagic = 0;
 }
 
 void SwFont::SetBottomBorder( const editeng::SvxBorderLine* pBottomBorder )
@@ -93,6 +94,7 @@ void SwFont::SetBottomBorder( const editeng::SvxBorderLine* pBottomBorder )
     else
         m_aBottomBorder = boost::none;
     bFntChg = sal_True;
+    aSub[SW_LATIN].pMagic = aSub[SW_CJK].pMagic = aSub[SW_CTL].pMagic = 0;
 }
 
 void SwFont::SetRightBorder( const editeng::SvxBorderLine* pRightBorder )
@@ -102,6 +104,7 @@ void SwFont::SetRightBorder( const editeng::SvxBorderLine* pRightBorder )
     else
         m_aRightBorder = boost::none;
     bFntChg = sal_True;
+    aSub[SW_LATIN].pMagic = aSub[SW_CJK].pMagic = aSub[SW_CTL].pMagic = 0;
 }
 
 void SwFont::SetLeftBorder( const editeng::SvxBorderLine* pLeftBorder )
@@ -111,6 +114,7 @@ void SwFont::SetLeftBorder( const editeng::SvxBorderLine* pLeftBorder )
     else
         m_aLeftBorder = boost::none;
     bFntChg = sal_True;
+    aSub[SW_LATIN].pMagic = aSub[SW_CJK].pMagic = aSub[SW_CTL].pMagic = 0;
 }
 
 // maps directions for vertical layout
