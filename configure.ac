@@ -800,9 +800,9 @@ AC_ARG_ENABLE(atl,
 ,)
 
 AC_ARG_ENABLE(avahi,
-    AS_HELP_STRING([--disable-avahi],
-        [Determines whether to use the avahi support for impress remote zeroconf.]),
-,enable_avahi=yes)
+    AS_HELP_STRING([--enable-avahi],
+        [Determines whether to use Avahi to advertise Impress to remote controls.]),
+,)
 
 AC_ARG_ENABLE(werror,
     AS_HELP_STRING([--enable-werror],
