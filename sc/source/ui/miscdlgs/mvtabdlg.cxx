@@ -157,6 +157,7 @@ void ScMoveTableDlg::CheckNewTabName()
     if (aNewName.isEmpty())
     {
         // New sheet name is empty.  This is not good.
+        pFtWarn->Show(sal_True);
         pFtWarn->SetControlBackground(Color(COL_YELLOW));
         pFtWarn->SetText(msStrTabNameEmpty);
         pBtnOk->Disable();
@@ -166,6 +167,7 @@ void ScMoveTableDlg::CheckNewTabName()
     if (!ScDocument::ValidTabName(aNewName))
     {
         // New sheet name contains invalid characters.
+        pFtWarn->Show(sal_True);
         pFtWarn->SetControlBackground(Color(COL_YELLOW));
         pFtWarn->SetText(msStrTabNameInvalid);
         pBtnOk->Disable();
@@ -187,12 +189,14 @@ void ScMoveTableDlg::CheckNewTabName()
 
     if ( bFound )
     {
+        pFtWarn->Show(sal_True);
         pFtWarn->SetControlBackground(Color(COL_YELLOW));
         pFtWarn->SetText(msStrTabNameUsed);
         pBtnOk->Disable();
     }
     else
     {
+        pFtWarn->Hide(sal_True);
         pFtWarn->SetControlBackground();
         pFtWarn->SetText(OUString());
         pBtnOk->Enable();
@@ -221,6 +225,7 @@ void ScMoveTableDlg::Init()
     pBtnMove->Check( true );
     pBtnCopy->Check( false );
     pEdTabName->Enable(false);
+    pFtWarn->Hide(sal_True);
     InitDocListBox();
     SelHdl( pLbDoc );
 }
