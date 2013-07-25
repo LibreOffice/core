@@ -703,7 +703,7 @@ bool SvxCSS1Parser::SelectorParsed( CSS1Selector *pSelector, bool bFirst )
 }
 
 
-sal_Bool SvxCSS1Parser::DeclarationParsed( const String& rProperty,
+sal_Bool SvxCSS1Parser::DeclarationParsed( const OUString& rProperty,
                                        const CSS1Expression *pExpr )
 {
     OSL_ENSURE( pExpr, "DeclarationParsed() without Expression" );
@@ -717,7 +717,7 @@ sal_Bool SvxCSS1Parser::DeclarationParsed( const String& rProperty,
 }
 
 
-SvxCSS1Parser::SvxCSS1Parser( SfxItemPool& rPool, const String& rBaseURL, sal_uInt16 nMinFixLineSp,
+SvxCSS1Parser::SvxCSS1Parser( SfxItemPool& rPool, const OUString& rBaseURL, sal_uInt16 nMinFixLineSp,
                               sal_uInt16 *pWhichIds, sal_uInt16 nWhichIds ) :
     CSS1Parser(),
     sBaseURL( rBaseURL ),
@@ -785,67 +785,67 @@ SvxCSS1Parser::~SvxCSS1Parser()
     delete pSearchEntry;
 }
 
-void SvxCSS1Parser::InsertId( const String& rId,
+void SvxCSS1Parser::InsertId( const OUString& rId,
                               const SfxItemSet& rItemSet,
                               const SvxCSS1PropertyInfo& rProp )
 {
     InsertMapEntry( rId, rItemSet, rProp, aIds );
 }
 
-const SvxCSS1MapEntry* SvxCSS1Parser::GetId( const String& rId ) const
+const SvxCSS1MapEntry* SvxCSS1Parser::GetId( const OUString& rId ) const
 {
     CSS1Map::const_iterator itr = aIds.find(rId);
     return itr == aIds.end() ? NULL : itr->second;
 }
 
-void SvxCSS1Parser::InsertClass( const String& rClass,
+void SvxCSS1Parser::InsertClass( const OUString& rClass,
                                  const SfxItemSet& rItemSet,
                                  const SvxCSS1PropertyInfo& rProp )
 {
     InsertMapEntry( rClass, rItemSet, rProp, aClasses );
 }
 
-const SvxCSS1MapEntry* SvxCSS1Parser::GetClass( const String& rClass ) const
+const SvxCSS1MapEntry* SvxCSS1Parser::GetClass( const OUString& rClass ) const
 {
     CSS1Map::const_iterator itr = aClasses.find(rClass);
     return itr == aClasses.end() ? NULL : itr->second;
 }
 
-void SvxCSS1Parser::InsertPage( const String& rPage,
+void SvxCSS1Parser::InsertPage( const OUString& rPage,
                                 sal_Bool bPseudo,
                                 const SfxItemSet& rItemSet,
                                 const SvxCSS1PropertyInfo& rProp )
 {
-    String aKey( rPage );
+    OUString aKey( rPage );
     if( bPseudo )
-        aKey.Insert( ':', 0 );
+        aKey = ":" + aKey;
     InsertMapEntry( aKey, rItemSet, rProp, aPages );
 }
 
-SvxCSS1MapEntry* SvxCSS1Parser::GetPage( const String& rPage, bool bPseudo )
+SvxCSS1MapEntry* SvxCSS1Parser::GetPage( const OUString& rPage, bool bPseudo )
 {
-    String aKey( rPage );
+    OUString aKey( rPage );
     if( bPseudo )
-        aKey.Insert( ':', 0 );
+        aKey = ":" + aKey;
 
     CSS1Map::iterator itr = aPages.find(aKey);
     return itr == aPages.end() ? NULL : itr->second;
 }
 
-void SvxCSS1Parser::InsertTag( const String& rTag,
+void SvxCSS1Parser::InsertTag( const OUString& rTag,
                                const SfxItemSet& rItemSet,
                                const SvxCSS1PropertyInfo& rProp )
 {
     InsertMapEntry( rTag, rItemSet, rProp, aTags );
 }
 
-SvxCSS1MapEntry* SvxCSS1Parser::GetTag( const String& rTag )
+SvxCSS1MapEntry* SvxCSS1Parser::GetTag( const OUString& rTag )
 {
     CSS1Map::iterator itr = aTags.find(rTag);
     return itr == aTags.end() ? NULL : itr->second;
 }
 
-sal_Bool SvxCSS1Parser::ParseStyleSheet( const String& rIn )
+sal_Bool SvxCSS1Parser::ParseStyleSheet( const OUString& rIn )
 {
     pItemSet = pSheetItemSet;
     pPropInfo = pSheetPropInfo;
@@ -868,7 +868,7 @@ sal_Bool SvxCSS1Parser::ParseStyleSheet( const String& rIn )
     return bSuccess;
 }
 
-sal_Bool SvxCSS1Parser::ParseStyleOption( const String& rIn,
+sal_Bool SvxCSS1Parser::ParseStyleOption( const OUString& rIn,
                                       SfxItemSet& rItemSet,
                                       SvxCSS1PropertyInfo& rPropInfo )
 {
@@ -886,13 +886,13 @@ sal_Bool SvxCSS1Parser::ParseStyleOption( const String& rIn,
 
 
 sal_Bool SvxCSS1Parser::GetEnum( const CSS1PropertyEnum *pPropTable,
-                          const String &rValue, sal_uInt16& rEnum )
+                          const OUString &rValue, sal_uInt16& rEnum )
 {
-    String aValue( rValue );
-    aValue.ToLowerAscii();
+    OUString aValue( rValue.toAsciiLowerCase() );
+
     while( pPropTable->pName )
     {
-        if( !rValue.EqualsIgnoreCaseAscii( pPropTable->pName ) )
+        if( !rValue.equalsIgnoreAsciiCaseAscii( pPropTable->pName ) )
             pPropTable++;
         else
             break;
@@ -941,7 +941,7 @@ const FontList *SvxCSS1Parser::GetFontList() const
         return 0;
 }
 
-void SvxCSS1Parser::InsertMapEntry( const String& rKey,
+void SvxCSS1Parser::InsertMapEntry( const OUString& rKey,
                                     const SfxItemSet& rItemSet,
                                     const SvxCSS1PropertyInfo& rProp,
                                     CSS1Map& rMap )
@@ -3122,7 +3122,7 @@ struct CSS1PropEntry
     union
     {
         const sal_Char  *sName;
-        String          *pName;
+        OUString          *pName;
     };
     FnParseCSS1Prop pFunc;
 };
@@ -3204,16 +3204,16 @@ static int SAL_CALL CSS1PropEntryCompare( const void *pFirst, const void *pSecon
             nRet = strcmp( ((CSS1PropEntry*)pFirst)->sName ,
                     ((CSS1PropEntry*)pSecond)->sName );
         else
-            nRet = -1 * ((CSS1PropEntry*)pSecond)->pName->CompareToAscii(
+            nRet = -1 * ((CSS1PropEntry*)pSecond)->pName->compareToAscii(
                             ((CSS1PropEntry*)pFirst)->sName );
     }
     else
     {
         if( ((CSS1PropEntry*)pSecond)->pFunc )
-            nRet = ((CSS1PropEntry*)pFirst)->pName->CompareToAscii(
+            nRet = ((CSS1PropEntry*)pFirst)->pName->compareToAscii(
                         ((CSS1PropEntry*)pSecond)->sName );
         else
-            nRet = ((CSS1PropEntry*)pFirst)->pName->CompareTo(
+            nRet = ((CSS1PropEntry*)pFirst)->pName->compareTo(
                         *((CSS1PropEntry*)pSecond)->pName );
     }
 
@@ -3221,7 +3221,7 @@ static int SAL_CALL CSS1PropEntryCompare( const void *pFirst, const void *pSecon
 }
 }
 
-void SvxCSS1Parser::ParseProperty( const String& rProperty,
+void SvxCSS1Parser::ParseProperty( const OUString& rProperty,
                                    const CSS1Expression *pExpr )
 {
     OSL_ENSURE( pItemSet, "DeclarationParsed() without ItemSet" );
@@ -3235,8 +3235,7 @@ void SvxCSS1Parser::ParseProperty( const String& rProperty,
         bSortedPropFns = sal_True;
     }
 
-    String aTmp( rProperty );
-    aTmp.ToLowerAscii();
+    OUString aTmp( rProperty.toAsciiLowerCase() );
 
     CSS1PropEntry aSrch;
     aSrch.pName = &aTmp;

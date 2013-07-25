@@ -137,10 +137,10 @@ void SwHTMLParser::SplitAttrTab( const SwPosition& rNewPos )
         aParaAttrs.clear();
 
     const SwNodeIndex* pOldEndPara = &pPam->GetPoint()->nNode;
-    xub_StrLen nOldEndCnt = pPam->GetPoint()->nContent.GetIndex();
+    sal_Int32 nOldEndCnt = pPam->GetPoint()->nContent.GetIndex();
 
     const SwNodeIndex& rNewSttPara = rNewPos.nNode;
-    xub_StrLen nNewSttCnt = rNewPos.nContent.GetIndex();
+    sal_Int32 nNewSttCnt = rNewPos.nContent.GetIndex();
 
     sal_Bool bMoveBack = sal_False;
 
@@ -461,13 +461,13 @@ sal_Bool SwHTMLParser::DoPositioning( SfxItemSet &rItemSet,
     return bRet;
 }
 
-sal_Bool SwHTMLParser::CreateContainer( const String& rClass,
+sal_Bool SwHTMLParser::CreateContainer( const OUString& rClass,
                                     SfxItemSet &rItemSet,
                                     SvxCSS1PropertyInfo &rPropInfo,
                                     _HTMLAttrContext *pContext )
 {
     sal_Bool bRet = sal_False;
-    if( rClass.EqualsIgnoreCaseAscii(sCSS1_class_abs_pos) &&
+    if( rClass.equalsIgnoreAsciiCaseAscii(sCSS1_class_abs_pos) &&
         pCSS1Parser->MayBePositioned( rPropInfo ) )
     {
         // Container-Klasse

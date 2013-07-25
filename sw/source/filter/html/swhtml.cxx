@@ -3428,7 +3428,8 @@ void SwHTMLParser::InsertAttrs( _HTMLAttrs& rAttrs )
 
 void SwHTMLParser::NewStdAttr( int nToken )
 {
-    String aId, aStyle, aClass, aLang, aDir;
+    String aId, aStyle, aLang, aDir;
+    OUString aClass;
 
     const HTMLOptions& rHTMLOptions = GetOptions();
     for (size_t i = rHTMLOptions.size(); i; )
@@ -3465,7 +3466,7 @@ void SwHTMLParser::NewStdAttr( int nToken )
 
         if( ParseStyleOptions( aStyle, aId, aClass, aItemSet, aPropInfo, &aLang, &aDir ) )
         {
-            if( HTML_SPAN_ON != nToken || !aClass.Len() ||
+            if( HTML_SPAN_ON != nToken || aClass.isEmpty() ||
                 !CreateContainer( aClass, aItemSet, aPropInfo, pCntxt ) )
                 DoPositioning( aItemSet, aPropInfo, pCntxt );
             InsertAttrs( aItemSet, aPropInfo, pCntxt, sal_True );
@@ -4557,7 +4558,7 @@ void SwHTMLParser::SetTxtCollAttrs( _HTMLAttrContext *pContext )
     SwTxtFmtColl *pCollToSet = 0;   // die zu setzende Vorlage
     SfxItemSet *pItemSet = 0;       // der Set fuer harte Attrs
     sal_uInt16 nTopColl = pContext ? pContext->GetTxtFmtColl() : 0;
-    const String& rTopClass = pContext ? pContext->GetClass() : aEmptyStr;
+    const OUString& rTopClass = pContext ? pContext->GetClass() : aEmptyStr;
     sal_uInt16 nDfltColl = RES_POOLCOLL_TEXT;
 
     sal_Bool bInPRE=sal_False;                          // etwas Kontext Info
@@ -4778,7 +4779,8 @@ void SwHTMLParser::SetTxtCollAttrs( _HTMLAttrContext *pContext )
 
 void SwHTMLParser::NewCharFmt( int nToken )
 {
-    String aId, aStyle, aClass, aLang, aDir;
+    String aId, aStyle, aLang, aDir;
+    OUString aClass;
 
     const HTMLOptions& rHTMLOptions = GetOptions();
     for (size_t i = rHTMLOptions.size(); i; )
@@ -4820,7 +4822,7 @@ void SwHTMLParser::NewCharFmt( int nToken )
 
         if( ParseStyleOptions( aStyle, aId, aEmptyStr, aItemSet, aPropInfo, &aLang, &aDir ) )
         {
-            OSL_ENSURE( !aClass.Len() || !pCSS1Parser->GetClass( aClass ),
+            OSL_ENSURE( aClass.isEmpty() || !pCSS1Parser->GetClass( aClass ),
                     "Class wird nicht beruecksichtigt" );
             DoPositioning( aItemSet, aPropInfo, pCntxt );
             InsertAttrs( aItemSet, aPropInfo, pCntxt, sal_True );

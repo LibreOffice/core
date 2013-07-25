@@ -521,7 +521,7 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
     sal_Bool DoPositioning( SfxItemSet &rItemSet,
                         SvxCSS1PropertyInfo &rPropInfo,
                         _HTMLAttrContext *pContext );
-    sal_Bool CreateContainer( const String& rClass, SfxItemSet &rItemSet,
+    sal_Bool CreateContainer( const OUString& rClass, SfxItemSet &rItemSet,
                           SvxCSS1PropertyInfo &rPropInfo,
                           _HTMLAttrContext *pContext );
     sal_Bool EndSection( sal_Bool bLFStripped=sal_False );
@@ -849,7 +849,7 @@ private:
 
     void ParseMoreMetaOptions();
 
-    sal_Bool FileDownload( const String& rURL, String& rStr );
+    sal_Bool FileDownload( const String& rURL, OUString& rStr );
     void InsertLink();
 
     void InsertIDOption();
