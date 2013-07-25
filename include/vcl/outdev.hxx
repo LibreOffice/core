@@ -618,19 +618,19 @@ public:
                                   MetricVector* pVector = NULL, OUString* pDisplayText = NULL,
                                   ::vcl::ITextLayout* _pTextLayout = NULL );
     Rectangle           GetTextRect( const Rectangle& rRect,
-                                     const XubString& rStr, sal_uInt16 nStyle = TEXT_DRAW_WORDBREAK,
+                                     const OUString& rStr, sal_uInt16 nStyle = TEXT_DRAW_WORDBREAK,
                                      TextRectInfo* pInfo = NULL,
                                      const ::vcl::ITextLayout* _pTextLayout = NULL ) const;
     OUString            GetEllipsisString( const OUString& rStr, long nMaxWidth,
                                            sal_uInt16 nStyle = TEXT_DRAW_ENDELLIPSIS ) const;
-    void                DrawCtrlText( const Point& rPos, const XubString& rStr,
+    void                DrawCtrlText( const Point& rPos, const OUString& rStr,
                                       xub_StrLen nIndex = 0, xub_StrLen nLen = STRING_LEN,
                                       sal_uInt16 nStyle = TEXT_DRAW_MNEMONIC, MetricVector* pVector = NULL, OUString* pDisplayText = NULL );
-    long                GetCtrlTextWidth( const XubString& rStr, xub_StrLen nIndex = 0,
+    long                GetCtrlTextWidth( const OUString& rStr, xub_StrLen nIndex = 0,
                                           xub_StrLen nLen = STRING_LEN,
                                           sal_uInt16 nStyle = TEXT_DRAW_MNEMONIC ) const;
-    static XubString    GetNonMnemonicString( const XubString& rStr, xub_StrLen& rMnemonicPos );
-    static XubString    GetNonMnemonicString( const XubString& rStr )
+    static OUString    GetNonMnemonicString( const OUString& rStr, xub_StrLen& rMnemonicPos );
+    static OUString    GetNonMnemonicString( const OUString& rStr )
                             { xub_StrLen nDummy; return GetNonMnemonicString( rStr, nDummy ); }
 
     sal_Bool                GetTextBoundRect( Rectangle& rRect,
@@ -905,7 +905,7 @@ public:
     const Font&         GetFont() const { return maFont; }
 
     SystemFontData        GetSysFontData( int nFallbacklevel ) const;
-    SystemTextLayoutData  GetSysTextLayoutData( const Point& rStartPt, const XubString& rStr,
+    SystemTextLayoutData  GetSysTextLayoutData( const Point& rStartPt, const OUString& rStr,
                                                 xub_StrLen nIndex = 0, xub_StrLen nLen = STRING_LEN,
                                                 const sal_Int32* pDXAry = NULL ) const;
 

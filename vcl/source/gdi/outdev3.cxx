@@ -6151,7 +6151,7 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const Rectangle& r
     if ( nStyle & TEXT_DRAW_MULTILINE )
     {
 
-        XubString               aLastLine;
+        String                  aLastLine;
         ImplMultiTextLineInfo   aMultiLineInfo;
         ImplTextLineInfo*       pLineInfo;
         xub_StrLen              i;
@@ -6426,7 +6426,7 @@ void OutputDevice::DrawText( const Rectangle& rRect, const OUString& rOrigStr, s
 }
 
 Rectangle OutputDevice::GetTextRect( const Rectangle& rRect,
-                                     const XubString& rStr, sal_uInt16 nStyle,
+                                     const OUString& rStr, sal_uInt16 nStyle,
                                      TextRectInfo* pInfo,
                                      const ::vcl::ITextLayout* _pTextLayout ) const
 {
@@ -6689,13 +6689,13 @@ OUString OutputDevice::ImplGetEllipsisString( const OutputDevice& rTargetDevice,
     return aStr;
 }
 
-void OutputDevice::DrawCtrlText( const Point& rPos, const XubString& rStr,
+void OutputDevice::DrawCtrlText( const Point& rPos, const OUString& rStr,
                                  xub_StrLen nIndex, xub_StrLen nLen,
                                  sal_uInt16 nStyle, MetricVector* pVector, OUString* pDisplayText )
 {
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
-    if ( !IsDeviceOutputNecessary() || (nIndex >= rStr.Len()) )
+    if ( !IsDeviceOutputNecessary() || (nIndex >= rStr.getLength()) )
         return;
 
     // better get graphics here because ImplDrawMnemonicLine() will not
@@ -6707,12 +6707,12 @@ void OutputDevice::DrawCtrlText( const Point& rPos, const XubString& rStr,
     if ( mbOutputClipped )
         return;
 
-    if( nIndex >= rStr.Len() )
+    if( nIndex >= rStr.getLength() )
         return;
-    if( (sal_uLong)nIndex+nLen >= rStr.Len() )
-        nLen = rStr.Len() - nIndex;
+    if( (sal_Int32)nIndex+nLen >= rStr.getLength() )
+        nLen = rStr.getLength() - nIndex;
 
-    XubString   aStr = rStr;
+    OUString   aStr = rStr;
     xub_StrLen  nMnemonicPos = STRING_NOTFOUND;
 
     long        nMnemonicX = 0;
@@ -6819,7 +6819,7 @@ void OutputDevice::DrawCtrlText( const Point& rPos, const XubString& rStr,
         mpAlphaVDev->DrawCtrlText( rPos, rStr, nIndex, nLen, nStyle, pVector, pDisplayText );
 }
 
-long OutputDevice::GetCtrlTextWidth( const String& rStr,
+long OutputDevice::GetCtrlTextWidth( const OUString& rStr,
                                      xub_StrLen nIndex, xub_StrLen nLen,
                                      sal_uInt16 nStyle ) const
 {
@@ -6828,7 +6828,7 @@ long OutputDevice::GetCtrlTextWidth( const String& rStr,
     if ( nStyle & TEXT_DRAW_MNEMONIC )
     {
         xub_StrLen  nMnemonicPos;
-        XubString   aStr = GetNonMnemonicString( rStr, nMnemonicPos );
+        OUString   aStr = GetNonMnemonicString( rStr, nMnemonicPos );
         if ( nMnemonicPos != STRING_NOTFOUND )
         {
             if ( nMnemonicPos < nIndex )
@@ -6843,7 +6843,7 @@ long OutputDevice::GetCtrlTextWidth( const String& rStr,
         return GetTextWidth( rStr, nIndex, nLen );
 }
 
-String OutputDevice::GetNonMnemonicString( const String& rStr, xub_StrLen& rMnemonicPos )
+OUString OutputDevice::GetNonMnemonicString( const OUString& rStr, xub_StrLen& rMnemonicPos )
 {
     String   aStr    = rStr;
     xub_StrLen  nLen    = aStr.Len();
@@ -7083,7 +7083,7 @@ SystemFontData OutputDevice::GetSysFontData(int nFallbacklevel) const
  *
  * @return SystemTextLayoutData
  **/
-SystemTextLayoutData OutputDevice::GetSysTextLayoutData(const Point& rStartPt, const XubString& rStr, xub_StrLen nIndex, xub_StrLen nLen,
+SystemTextLayoutData OutputDevice::GetSysTextLayoutData(const Point& rStartPt, const OUString& rStr, xub_StrLen nIndex, xub_StrLen nLen,
                                                         const sal_Int32* pDXAry) const
 {
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
