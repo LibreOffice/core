@@ -21,6 +21,7 @@
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <com/sun/star/text/WrapTextMode.hpp>
 #include <com/sun/star/text/WritingMode.hpp>
+#include <com/sun/star/text/TextContentAnchorType.hpp>
 
 #include <ooxml/resourceids.hxx> // NS_ooxml namespace
 #include <filter/msfilter/escherex.hxx>
@@ -650,6 +651,7 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose)
             // Sets the ShadowFormat UNO property.
             oox::PropertySet(xShape).setProperties(aPropMap);
         }
+        xPropertySet->setPropertyValue("AnchorType", uno::makeAny(text::TextContentAnchorType_AT_CHARACTER));
     }
 
     if (m_rImport.isInBackground())
