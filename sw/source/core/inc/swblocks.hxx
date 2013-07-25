@@ -109,7 +109,7 @@ public:
 
     virtual sal_uLong Delete( sal_uInt16 ) = 0;
     virtual sal_uLong Rename( sal_uInt16, const String&, const String& ) = 0;
-    virtual sal_uLong CopyBlock( SwImpBlocks& rImp, String& rShort, const String& rLong) = 0;
+    virtual sal_uLong CopyBlock( SwImpBlocks& rImp, OUString& rShort, const OUString& rLong) = 0;
     virtual sal_uLong GetDoc( sal_uInt16 ) = 0;
     virtual sal_uLong BeginPutDoc( const String&, const String& ) = 0;
     virtual sal_uLong PutDoc() = 0;

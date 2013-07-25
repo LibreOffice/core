@@ -104,11 +104,10 @@ void SwGlossaryHdl::GlossaryDlg()
 // the group is created temporarily for faster access
 void SwGlossaryHdl::SetCurGroup(const String &rGrp, sal_Bool bApi, sal_Bool bAlwaysCreateNew )
 {
-    String sGroup(rGrp);
-    if(STRING_NOTFOUND == sGroup.Search(GLOS_DELIM) && !FindGroupName(sGroup))
+    OUString sGroup(rGrp);
+    if (sGroup.indexOf(GLOS_DELIM)<0 && !FindGroupName(sGroup))
     {
-        sGroup += GLOS_DELIM;
-        sGroup += '0';
+        sGroup += OUString(GLOS_DELIM) + "0";
     }
     if(pCurGrp)
     {
@@ -116,7 +115,7 @@ void SwGlossaryHdl::SetCurGroup(const String &rGrp, sal_Bool bApi, sal_Bool bAlw
         if(!bAlwaysCreateNew)
         {
             INetURLObject aTemp( pCurGrp->GetFileName() );
-            String sCurBase = aTemp.getBase();
+            const OUString sCurBase = aTemp.getBase();
             aTemp.removeSegment();
             const String sCurEntryPath = aTemp.GetMainURL(INetURLObject::NO_DECODE);
             const std::vector<String> & rPathArr =
@@ -130,10 +129,10 @@ void SwGlossaryHdl::SetCurGroup(const String &rGrp, sal_Bool bApi, sal_Bool bAlw
                     break;
                 }
             }
-            String sPath = sGroup.GetToken(1, GLOS_DELIM);
-            sal_uInt16 nComparePath = (sal_uInt16)sPath.ToInt32();
+            const OUString sPath = sGroup.getToken(1, GLOS_DELIM);
+            sal_uInt16 nComparePath = (sal_uInt16)sPath.toInt32();
             if(nCurrentPath == nComparePath &&
-                sGroup.GetToken(0, GLOS_DELIM) == sCurBase)
+                sGroup.getToken(0, GLOS_DELIM) == sCurBase)
                 bPathEqual = true;
         }
 
@@ -158,40 +157,40 @@ sal_uInt16 SwGlossaryHdl::GetGroupCnt() const
     return rStatGlossaries.GetGroupCnt();
 }
 
-String SwGlossaryHdl::GetGroupName( sal_uInt16 nId, String* pTitle )
+OUString SwGlossaryHdl::GetGroupName( sal_uInt16 nId, OUString* pTitle )
 {
-    String sRet = rStatGlossaries.GetGroupName(nId);
+    OUString sRet = rStatGlossaries.GetGroupName(nId);
     if(pTitle)
     {
         SwTextBlocks* pGroup = rStatGlossaries.GetGroupDoc(sRet, sal_False);
         if(pGroup && !pGroup->GetError())
         {
             *pTitle = pGroup->GetName();
-            if(!pTitle->Len())
+            if (pTitle->isEmpty())
             {
-                *pTitle = sRet.GetToken(0, GLOS_DELIM);
+                *pTitle = sRet.getToken(0, GLOS_DELIM);
                 pGroup->SetName(*pTitle);
             }
             rStatGlossaries.PutGroupDoc( pGroup );
         }
         else
-            sRet.Erase();
+            sRet = OUString();
     }
     return sRet;
 }
 
-sal_Bool SwGlossaryHdl::NewGroup(String &rGrpName, const String& rTitle)
+sal_Bool SwGlossaryHdl::NewGroup(OUString &rGrpName, const OUString& rTitle)
 {
-    if(STRING_NOTFOUND == rGrpName.Search(GLOS_DELIM))
+    if (rGrpName.indexOf(GLOS_DELIM)<0)
         FindGroupName(rGrpName);
     return rStatGlossaries.NewGroupDoc(rGrpName, rTitle);
 }
 
-sal_Bool SwGlossaryHdl::RenameGroup(const String & rOld, String& rNew, const String& rNewTitle)
+sal_Bool SwGlossaryHdl::RenameGroup(const OUString& rOld, OUString& rNew, const OUString& rNewTitle)
 {
     sal_Bool bRet = sal_False;
-    String sOldGroup(rOld);
-    if(STRING_NOTFOUND == rOld.Search(GLOS_DELIM))
+    OUString sOldGroup(rOld);
+    if (rOld.indexOf(GLOS_DELIM)<0)
         FindGroupName(sOldGroup);
     if(rOld == rNew)
     {
@@ -205,11 +204,10 @@ sal_Bool SwGlossaryHdl::RenameGroup(const String & rOld, String& rNew, const Str
     }
     else
     {
-        String sNewGroup(rNew);
-        if(STRING_NOTFOUND == sNewGroup.Search(GLOS_DELIM))
+        OUString sNewGroup(rNew);
+        if (sNewGroup.indexOf(GLOS_DELIM)<0)
         {
-            sNewGroup += GLOS_DELIM;
-            sNewGroup += '0';
+            sNewGroup += OUString(GLOS_DELIM) + "0";
         }
         bRet = rStatGlossaries.RenameGroupDoc(sOldGroup, sNewGroup, rNewTitle);
         rNew = sNewGroup;
@@ -217,8 +215,8 @@ sal_Bool SwGlossaryHdl::RenameGroup(const String & rOld, String& rNew, const Str
     return bRet;
 }
 
-sal_Bool SwGlossaryHdl::CopyOrMove( const String& rSourceGroupName,  String& rSourceShortName,
-                        const String& rDestGroupName, const String& rLongName, sal_Bool bMove )
+sal_Bool SwGlossaryHdl::CopyOrMove( const OUString& rSourceGroupName, OUString& rSourceShortName,
+                        const OUString& rDestGroupName, const OUString& rLongName, sal_Bool bMove )
 {
     SwTextBlocks* pSourceGroup = rStatGlossaries.GetGroupDoc(rSourceGroupName, sal_False);
 
@@ -243,14 +241,14 @@ sal_Bool SwGlossaryHdl::CopyOrMove( const String& rSourceGroupName,  String& rSo
 // delete a autotext-file-group
 sal_Bool SwGlossaryHdl::DelGroup(const String &rGrpName)
 {
-    String sGroup(rGrpName);
-    if(STRING_NOTFOUND == sGroup.Search(GLOS_DELIM))
+    OUString sGroup(rGrpName);
+    if (sGroup.indexOf(GLOS_DELIM)<0)
         FindGroupName(sGroup);
     if( rStatGlossaries.DelGroupDoc(sGroup) )
     {
         if(pCurGrp)
         {
-            const String aMac_Tmp(pCurGrp->GetName());
+            const OUString aMac_Tmp(pCurGrp->GetName());
             if(aMac_Tmp == sGroup)
                 DELETEZ(pCurGrp);
         }
@@ -371,8 +369,8 @@ sal_Bool SwGlossaryHdl::ExpandGlossary()
     OSL_ENSURE(pFact, "Dialogdiet fail!");
     ::GlossaryGetCurrGroup fnGetCurrGroup = pFact->GetGlossaryCurrGroupFunc();
     OSL_ENSURE(fnGetCurrGroup, "Dialogdiet fail!");
-    String sGroupName( (*fnGetCurrGroup)() );
-    if(STRING_NOTFOUND == sGroupName.Search(GLOS_DELIM))
+    OUString sGroupName( (*fnGetCurrGroup)() );
+    if (sGroupName.indexOf(GLOS_DELIM)<0)
         FindGroupName(sGroupName);
     pGlossary = rStatGlossaries.GetGroupDoc(sGroupName);
 
@@ -681,7 +679,7 @@ sal_Bool SwGlossaryHdl::Rename(const String& rOldShort, const String& rNewShortN
 }
 
 
-sal_Bool SwGlossaryHdl::IsReadOnly( const String* pGrpNm ) const
+sal_Bool SwGlossaryHdl::IsReadOnly( const OUString* pGrpNm ) const
 {
     SwTextBlocks *pGlossary = 0;
 
@@ -710,7 +708,7 @@ sal_Bool SwGlossaryHdl::IsOld() const
 }
 
 // find group without path index
-sal_Bool SwGlossaryHdl::FindGroupName(String & rGroup)
+sal_Bool SwGlossaryHdl::FindGroupName(OUString& rGroup)
 {
     return rStatGlossaries.FindGroupName(rGroup);
 }

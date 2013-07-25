@@ -244,8 +244,8 @@ sal_uLong SwXMLTextBlocks::Rename( sal_uInt16 nIdx, const String& rNewShort, con
     return 0;
 }
 
-sal_uLong SwXMLTextBlocks::CopyBlock( SwImpBlocks& rDestImp, String& rShort,
-                                                    const String& rLong)
+sal_uLong SwXMLTextBlocks::CopyBlock( SwImpBlocks& rDestImp, OUString& rShort,
+                                                    const OUString& rLong)
 {
     sal_uLong nError = 0;
     OpenFile(sal_True);

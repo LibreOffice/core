@@ -96,7 +96,7 @@ SwGlossaryGroupDlg::SwGlossaryGroupDlg(Window * pParent,
     const sal_uInt16 nCount = pHdl->GetGroupCnt();
     for( sal_uInt16 i = 0; i < nCount; ++i)
     {
-        String sTitle;
+        OUString sTitle;
         String sGroup = pHdl->GetGroupName(i, &sTitle);
         if(!sGroup.Len())
             continue;
@@ -158,7 +158,7 @@ void SwGlossaryGroupDlg::Apply()
     {
         OUString const sOld(
                 ::comphelper::string::getToken(*it, 0, RENAME_TOKEN_DELIM));
-        String sNew(
+        OUString sNew(
                 ::comphelper::string::getToken(*it, 1, RENAME_TOKEN_DELIM));
         OUString const sTitle(
                 ::comphelper::string::getToken(*it, 2, RENAME_TOKEN_DELIM));
@@ -171,8 +171,8 @@ void SwGlossaryGroupDlg::Apply()
     for (OUVector_t::const_iterator it(m_InsertedArr.begin());
             it != m_InsertedArr.end(); ++it)
     {
-        String sNewGroup = *it;
-        String sNewTitle = sNewGroup.GetToken(0, GLOS_DELIM);
+        OUString sNewGroup = *it;
+        OUString sNewTitle = sNewGroup.getToken(0, GLOS_DELIM);
         if( sNewGroup != aActGroup )
         {
             pGlosHdl->NewGroup(sNewGroup, sNewTitle);
@@ -209,9 +209,9 @@ IMPL_LINK( SwGlossaryGroupDlg, SelectHdl, SvTabListBox*, EMPTYARG  )
 
 IMPL_LINK_NOARG(SwGlossaryGroupDlg, NewHdl)
 {
-    String sGroup(m_pNameED->GetText());
-    sGroup += GLOS_DELIM;
-    sGroup += OUString::number(m_pPathLB->GetSelectEntryPos());
+    OUString sGroup = m_pNameED->GetText()
+        + OUString(GLOS_DELIM)
+        + OUString::number(m_pPathLB->GetSelectEntryPos());
     OSL_ENSURE(!pGlosHdl->FindGroupName(sGroup), "group already available!");
     m_InsertedArr.push_back(sGroup);
     String sTemp(m_pNameED->GetText());
@@ -290,11 +290,10 @@ IMPL_LINK_NOARG(SwGlossaryGroupDlg, RenameHdl)
     GlosBibUserData* pUserData = (GlosBibUserData*)pEntry->GetUserData();
     String sEntry(pUserData->sGroupName);
 
-    String sNewName(m_pNameED->GetText());
-    String sNewTitle(sNewName);
-
-    sNewName += GLOS_DELIM;
-    sNewName += OUString::number(m_pPathLB->GetSelectEntryPos());
+    const OUString sNewTitle(m_pNameED->GetText());
+    OUString sNewName = sNewTitle
+        + OUString(GLOS_DELIM)
+        + OUString::number(m_pPathLB->GetSelectEntryPos());
     OSL_ENSURE(!pGlosHdl->FindGroupName(sNewName), "group already available!");
 
     // if the name to be renamed is among the new ones - replace
@@ -387,7 +386,7 @@ IMPL_LINK_NOARG(SwGlossaryGroupDlg, ModifyHdl)
     return 0;
 }
 
-sal_Bool SwGlossaryGroupDlg::IsDeleteAllowed(const String &rGroup)
+sal_Bool SwGlossaryGroupDlg::IsDeleteAllowed(const OUString &rGroup)
 {
     sal_Bool bDel = (!pGlosHdl->IsReadOnly(&rGroup));
 
@@ -398,7 +397,7 @@ sal_Bool SwGlossaryGroupDlg::IsDeleteAllowed(const String &rGroup)
     for (OUVector_t::const_iterator it(m_InsertedArr.begin());
             it != m_InsertedArr.end(); ++it)
     {
-        if (String(*it) == rGroup)
+        if (*it == rGroup)
         {
             bDel = sal_True;
             break;

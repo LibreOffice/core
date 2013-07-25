@@ -331,8 +331,8 @@ public:
 
     sal_Bool   Delete( sal_uInt16 );
     sal_uInt16 Rename( sal_uInt16, const String*, const String* );
-    sal_uLong  CopyBlock( SwTextBlocks& rSource, String& rSrcShort,
-                                    const String& rLong );
+    sal_uLong  CopyBlock( SwTextBlocks& rSource, OUString& rSrcShort,
+                                    const OUString& rLong );
 
     sal_Bool   BeginGetDoc( sal_uInt16 );   // Read text modules.
     void   EndGetDoc();                     // Release text modules.

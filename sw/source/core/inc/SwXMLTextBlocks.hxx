@@ -60,7 +60,7 @@ public:
     //virtual sal_Bool   IsOld() const;
     virtual sal_uLong Delete( sal_uInt16 );
     virtual sal_uLong Rename( sal_uInt16, const String&, const String& );
-    virtual sal_uLong CopyBlock( SwImpBlocks& rImp, String& rShort, const String& rLong);
+    virtual sal_uLong CopyBlock( SwImpBlocks& rImp, OUString& rShort, const OUString& rLong);
     virtual void  ClearDoc();
     virtual sal_uLong GetDoc( sal_uInt16 );
     virtual sal_uLong BeginPutDoc( const String&, const String& );
