@@ -1708,9 +1708,9 @@ OUString SdrTableObj::TakeObjNameSingul() const
 
 // --------------------------------------------------------------------
 
-void SdrTableObj::TakeObjNamePlural(XubString& rName) const
+OUString SdrTableObj::TakeObjNamePlural() const
 {
-    rName = ImpGetResStr(STR_ObjNamePluralTable);
+    return ImpGetResStr(STR_ObjNamePluralTable);
 }
 
 // --------------------------------------------------------------------

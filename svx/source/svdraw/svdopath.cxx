@@ -1974,21 +1974,23 @@ OUString SdrPathObj::TakeObjNameSingul() const
     return sName.makeStringAndClear();
 }
 
-void SdrPathObj::TakeObjNamePlural(XubString& rName) const
+OUString SdrPathObj::TakeObjNamePlural() const
 {
+    OUString sName;
     switch(meKind)
     {
-        case OBJ_LINE    : rName=ImpGetResStr(STR_ObjNamePluralLINE    ); break;
-        case OBJ_PLIN    : rName=ImpGetResStr(STR_ObjNamePluralPLIN    ); break;
-        case OBJ_POLY    : rName=ImpGetResStr(STR_ObjNamePluralPOLY    ); break;
-        case OBJ_PATHLINE: rName=ImpGetResStr(STR_ObjNamePluralPATHLINE); break;
-        case OBJ_FREELINE: rName=ImpGetResStr(STR_ObjNamePluralFREELINE); break;
-        case OBJ_SPLNLINE: rName=ImpGetResStr(STR_ObjNamePluralNATSPLN); break;
-        case OBJ_PATHFILL: rName=ImpGetResStr(STR_ObjNamePluralPATHFILL); break;
-        case OBJ_FREEFILL: rName=ImpGetResStr(STR_ObjNamePluralFREEFILL); break;
-        case OBJ_SPLNFILL: rName=ImpGetResStr(STR_ObjNamePluralPERSPLN); break;
+        case OBJ_LINE    : sName=ImpGetResStr(STR_ObjNamePluralLINE    ); break;
+        case OBJ_PLIN    : sName=ImpGetResStr(STR_ObjNamePluralPLIN    ); break;
+        case OBJ_POLY    : sName=ImpGetResStr(STR_ObjNamePluralPOLY    ); break;
+        case OBJ_PATHLINE: sName=ImpGetResStr(STR_ObjNamePluralPATHLINE); break;
+        case OBJ_FREELINE: sName=ImpGetResStr(STR_ObjNamePluralFREELINE); break;
+        case OBJ_SPLNLINE: sName=ImpGetResStr(STR_ObjNamePluralNATSPLN); break;
+        case OBJ_PATHFILL: sName=ImpGetResStr(STR_ObjNamePluralPATHFILL); break;
+        case OBJ_FREEFILL: sName=ImpGetResStr(STR_ObjNamePluralFREEFILL); break;
+        case OBJ_SPLNFILL: sName=ImpGetResStr(STR_ObjNamePluralPERSPLN); break;
         default: break;
     }
+    return sName;
 }
 
 basegfx::B2DPolyPolygon SdrPathObj::TakeXorPoly() const

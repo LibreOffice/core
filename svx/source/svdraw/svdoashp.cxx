@@ -2838,9 +2838,9 @@ OUString SdrObjCustomShape::TakeObjNameSingul() const
     return sName.makeStringAndClear();
 }
 
-void SdrObjCustomShape::TakeObjNamePlural(XubString& rName) const
+OUString SdrObjCustomShape::TakeObjNamePlural() const
 {
-    rName=ImpGetResStr(STR_ObjNamePluralCUSTOMSHAPE);
+    return ImpGetResStr(STR_ObjNamePluralCUSTOMSHAPE);
 }
 
 basegfx::B2DPolyPolygon SdrObjCustomShape::TakeXorPoly() const

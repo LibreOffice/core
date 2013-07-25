@@ -92,7 +92,7 @@ public:
     void SetFixedTail() { mbFixedTail = sal_True; }
 
     virtual OUString TakeObjNameSingul() const;
-    virtual void TakeObjNamePlural(String& rName) const;
+    virtual OUString TakeObjNamePlural() const;
 
     virtual basegfx::B2DPolyPolygon TakeXorPoly() const;
     virtual void SetModel(SdrModel* pNewModel);

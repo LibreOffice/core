@@ -165,9 +165,9 @@ OUString E3dLatheObj::TakeObjNameSingul() const
 
 // Get the name of the object (plural)
 
-void E3dLatheObj::TakeObjNamePlural(XubString& rName) const
+OUString E3dLatheObj::TakeObjNamePlural() const
 {
-    rName=ImpGetResStr(STR_ObjNamePluralLathe3d);
+    return ImpGetResStr(STR_ObjNamePluralLathe3d);
 }
 
 bool E3dLatheObj::IsBreakObjPossible()

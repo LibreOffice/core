@@ -576,14 +576,13 @@ const XubString& SdrMarkList::GetMarkDescription() const
         {
             if(pMark->GetMarkedSdrObj())
             {
-                pMark->GetMarkedSdrObj()->TakeObjNamePlural(aNam);
-                XubString aStr1;
-                sal_Bool bEq(sal_True);
+                aNam = pMark->GetMarkedSdrObj()->TakeObjNamePlural();
+                bool bEq(true);
 
                 for(sal_uLong i = 1; i < GetMarkCount() && bEq; i++)
                 {
                     SdrMark* pMark2 = GetMark(i);
-                    pMark2->GetMarkedSdrObj()->TakeObjNamePlural(aStr1);
+                    OUString aStr1(pMark2->GetMarkedSdrObj()->TakeObjNamePlural());
                     bEq = aNam.Equals(aStr1);
                 }
 
@@ -670,11 +669,10 @@ const XubString& SdrMarkList::GetPointMarkDescription(sal_Bool bGlue) const
         {
             if(pMark->GetMarkedSdrObj())
             {
-                pMark->GetMarkedSdrObj()->TakeObjNamePlural(aNam);
+                aNam = pMark->GetMarkedSdrObj()->TakeObjNamePlural();
             }
 
-            XubString aStr1;
-            sal_Bool bEq(sal_True);
+            bool bEq(true);
 
             for(sal_uLong i(n1stMarkNum + 1L); i < GetMarkCount() && bEq; i++)
             {
@@ -683,7 +681,7 @@ const XubString& SdrMarkList::GetPointMarkDescription(sal_Bool bGlue) const
 
                 if(pPts && !pPts->empty() && pMark2->GetMarkedSdrObj())
                 {
-                    pMark2->GetMarkedSdrObj()->TakeObjNamePlural(aStr1);
+                    OUString aStr1(pMark2->GetMarkedSdrObj()->TakeObjNamePlural());
                     bEq = aNam.Equals(aStr1);
                 }
             }

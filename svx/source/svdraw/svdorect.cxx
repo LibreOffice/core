@@ -249,19 +249,29 @@ OUString SdrRectObj::TakeObjNameSingul() const
     return sName.makeStringAndClear();
 }
 
-void SdrRectObj::TakeObjNamePlural(XubString& rName) const
+OUString SdrRectObj::TakeObjNamePlural() const
 {
-    if (IsTextFrame()) SdrTextObj::TakeObjNamePlural(rName);
-    else {
-        sal_uInt16 nResId=STR_ObjNamePluralRECT;
-        if (aGeo.nShearWink!=0) {
-            nResId+=4;  // parallelogram or rhombus
-        } else {
-            if (aRect.GetWidth()==aRect.GetHeight()) nResId+=2; // square
-        }
-        if (GetEckenradius()!=0) nResId+=8; // rounded down
-        rName=ImpGetResStr(nResId);
+    if (IsTextFrame())
+    {
+        return SdrTextObj::TakeObjNamePlural();
     }
+
+    sal_uInt16 nResId=STR_ObjNamePluralRECT;
+
+    if (aGeo.nShearWink!=0)
+    {
+        nResId+=4;  // parallelogram or rhombus
+    }
+    else
+    {
+        if (aRect.GetWidth()==aRect.GetHeight())
+            nResId+=2; // square
+    }
+
+    if (GetEckenradius()!=0)
+        nResId+=8; // rounded down
+
+    return ImpGetResStr(nResId);
 }
 
 SdrRectObj* SdrRectObj::Clone() const

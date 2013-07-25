@@ -2914,9 +2914,7 @@ bool SvxShape::getPropertyValueImpl( const OUString&, const SfxItemPropertySimpl
 
     case OWN_ATTR_UINAME_PLURAL:
     {
-        String aTmp;
-        mpObj->TakeObjNamePlural( aTmp );
-        rValue <<= OUString( aTmp );
+        rValue <<= mpObj->TakeObjNamePlural();
         break;
     }
     case OWN_ATTR_METAFILE:

@@ -158,9 +158,9 @@ OUString SdrMediaObj::TakeObjNameSingul() const
 
 // ------------------------------------------------------------------------------
 
-void SdrMediaObj::TakeObjNamePlural(XubString& rName) const
+OUString SdrMediaObj::TakeObjNamePlural() const
 {
-    rName=ImpGetResStr(STR_ObjNamePluralMEDIA);
+    return ImpGetResStr(STR_ObjNamePluralMEDIA);
 }
 
 // ------------------------------------------------------------------------------

@@ -91,7 +91,7 @@ public:
     virtual SdrObject* getFullDragClone() const;
 
     virtual OUString TakeObjNameSingul() const;
-    virtual void TakeObjNamePlural(XubString& rName) const;
+    virtual OUString TakeObjNamePlural() const;
 
     virtual void SetContextWritingMode( const sal_Int16 _nContextWritingMode );
 

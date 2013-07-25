@@ -99,7 +99,7 @@ public:
     virtual void TakeUnrotatedSnapRect(Rectangle& rRect) const;
 
     virtual OUString TakeObjNameSingul() const;
-    virtual void TakeObjNamePlural(String& rName) const;
+    virtual OUString TakeObjNamePlural() const;
 
     virtual SdrCircObj* Clone() const;
     virtual void RecalcSnapRect();

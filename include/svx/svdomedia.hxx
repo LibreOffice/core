@@ -51,7 +51,7 @@ public:
         virtual sal_uInt16              GetObjIdentifier() const;
 
         virtual OUString            TakeObjNameSingul() const;
-        virtual void                TakeObjNamePlural(String& rName) const;
+        virtual OUString            TakeObjNamePlural() const;
 
         virtual SdrMediaObj*            Clone() const;
         SdrMediaObj&                operator=(const SdrMediaObj& rObj);

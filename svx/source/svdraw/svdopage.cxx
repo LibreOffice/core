@@ -182,9 +182,9 @@ OUString SdrPageObj::TakeObjNameSingul() const
     return sName.makeStringAndClear();
 }
 
-void SdrPageObj::TakeObjNamePlural(XubString& rName) const
+OUString SdrPageObj::TakeObjNamePlural() const
 {
-    rName=ImpGetResStr(STR_ObjNamePluralPAGE);
+    return ImpGetResStr(STR_ObjNamePluralPAGE);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

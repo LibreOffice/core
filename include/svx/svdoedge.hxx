@@ -240,7 +240,7 @@ public:
     virtual SdrEdgeObj* Clone() const;
     SdrEdgeObj& operator=(const SdrEdgeObj& rObj);
     virtual OUString TakeObjNameSingul() const;
-    virtual void TakeObjNamePlural(String& rName) const;
+    virtual OUString TakeObjNamePlural() const;
 
     void    SetEdgeTrackPath( const basegfx::B2DPolyPolygon& rPoly );
     basegfx::B2DPolyPolygon GetEdgeTrackPath() const;

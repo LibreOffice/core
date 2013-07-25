@@ -1034,19 +1034,21 @@ OUString SdrTextObj::TakeObjNameSingul() const
     return sName.makeStringAndClear();
 }
 
-void SdrTextObj::TakeObjNamePlural(XubString& rName) const
+OUString SdrTextObj::TakeObjNamePlural() const
 {
+    OUString sName;
     switch (eTextKind) {
-        case OBJ_OUTLINETEXT: rName=ImpGetResStr(STR_ObjNamePluralOUTLINETEXT); break;
-        case OBJ_TITLETEXT  : rName=ImpGetResStr(STR_ObjNamePluralTITLETEXT);   break;
+        case OBJ_OUTLINETEXT: sName=ImpGetResStr(STR_ObjNamePluralOUTLINETEXT); break;
+        case OBJ_TITLETEXT  : sName=ImpGetResStr(STR_ObjNamePluralTITLETEXT);   break;
         default: {
             if (IsLinkedText()) {
-                rName=ImpGetResStr(STR_ObjNamePluralTEXTLNK);
+                sName=ImpGetResStr(STR_ObjNamePluralTEXTLNK);
             } else {
-                rName=ImpGetResStr(STR_ObjNamePluralTEXT);
+                sName=ImpGetResStr(STR_ObjNamePluralTEXT);
             }
         } break;
     } // switch
+    return sName;
 }
 
 SdrTextObj* SdrTextObj::Clone() const

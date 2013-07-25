@@ -759,9 +759,9 @@ OUString SdrMeasureObj::TakeObjNameSingul() const
     return sName.makeStringAndClear();
 }
 
-void SdrMeasureObj::TakeObjNamePlural(XubString& rName) const
+OUString SdrMeasureObj::TakeObjNamePlural() const
 {
-    rName=ImpGetResStr(STR_ObjNamePluralMEASURE);
+    return ImpGetResStr(STR_ObjNamePluralMEASURE);
 }
 
 basegfx::B2DPolyPolygon SdrMeasureObj::TakeXorPoly() const

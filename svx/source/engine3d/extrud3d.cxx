@@ -137,9 +137,9 @@ OUString E3dExtrudeObj::TakeObjNameSingul() const
 
 // Get the name of the object (plural)
 
-void E3dExtrudeObj::TakeObjNamePlural(XubString& rName) const
+OUString E3dExtrudeObj::TakeObjNamePlural() const
 {
-    rName=ImpGetResStr(STR_ObjNamePluralExtrude3d);
+    return ImpGetResStr(STR_ObjNamePluralExtrude3d);
 }
 
 bool E3dExtrudeObj::IsBreakObjPossible()

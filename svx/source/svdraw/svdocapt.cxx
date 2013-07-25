@@ -256,9 +256,9 @@ OUString SdrCaptionObj::TakeObjNameSingul() const
     return sName.makeStringAndClear();
 }
 
-void SdrCaptionObj::TakeObjNamePlural(XubString& rName) const
+OUString SdrCaptionObj::TakeObjNamePlural() const
 {
-    rName=ImpGetResStr(STR_ObjNamePluralCAPTION);
+    return ImpGetResStr(STR_ObjNamePluralCAPTION);
 }
 
 basegfx::B2DPolyPolygon SdrCaptionObj::TakeXorPoly() const

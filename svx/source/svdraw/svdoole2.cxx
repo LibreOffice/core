@@ -1609,9 +1609,9 @@ OUString SdrOle2Obj::TakeObjNameSingul() const
 
 // -----------------------------------------------------------------------------
 
-void SdrOle2Obj::TakeObjNamePlural(XubString& rName) const
+OUString SdrOle2Obj::TakeObjNamePlural() const
 {
-    rName=ImpGetResStr(bFrame ? STR_ObjNamePluralFrame : STR_ObjNamePluralOLE2);
+    return ImpGetResStr(bFrame ? STR_ObjNamePluralFrame : STR_ObjNamePluralOLE2);
 }
 
 // -----------------------------------------------------------------------------

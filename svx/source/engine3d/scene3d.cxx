@@ -588,9 +588,9 @@ OUString E3dScene::TakeObjNameSingul() const
     return sName.makeStringAndClear();
 }
 
-void E3dScene::TakeObjNamePlural(XubString& rName) const
+OUString E3dScene::TakeObjNamePlural() const
 {
-    rName=ImpGetResStr(STR_ObjNamePluralScene3d);
+    return ImpGetResStr(STR_ObjNamePluralScene3d);
 }
 
 // The NbcRotate routine overloads the one of the SdrObject. The idea is

@@ -150,7 +150,7 @@ public:
     virtual sal_uInt16          GetObjIdentifier() const;
 
     virtual OUString        TakeObjNameSingul() const;
-    virtual void            TakeObjNamePlural(String& rName) const;
+    virtual OUString        TakeObjNamePlural() const;
 
     // #i25616#
     virtual basegfx::B2DPolyPolygon TakeXorPoly() const;

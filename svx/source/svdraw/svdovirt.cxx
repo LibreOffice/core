@@ -169,11 +169,12 @@ OUString SdrVirtObj::TakeObjNameSingul() const
     return sName.makeStringAndClear();
 }
 
-void SdrVirtObj::TakeObjNamePlural(XubString& rName) const
+OUString SdrVirtObj::TakeObjNamePlural() const
 {
-    rRefObj.TakeObjNamePlural(rName);
-    rName.Insert(sal_Unicode('['), 0);
-    rName += sal_Unicode(']');
+    OUStringBuffer sName(rRefObj.TakeObjNamePlural());
+    sName.insert(0, '[');
+    sName.append(']');
+    return sName.makeStringAndClear();
 }
 
 void operator +=(PolyPolygon& rPoly, const Point& rOfs)

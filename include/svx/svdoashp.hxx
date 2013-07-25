@@ -224,7 +224,7 @@ public:
     SdrObjCustomShape& operator=(const SdrObjCustomShape& rObj);
 
     virtual OUString TakeObjNameSingul() const;
-    virtual void TakeObjNamePlural(String& rName) const;
+    virtual OUString TakeObjNamePlural() const;
 
     virtual basegfx::B2DPolyPolygon TakeCreatePoly( const SdrDragStat& rDrag) const;
 

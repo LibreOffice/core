@@ -766,53 +766,57 @@ OUString SdrGrafObj::TakeObjNameSingul() const
     return sName.makeStringAndClear();
 }
 
-void SdrGrafObj::TakeObjNamePlural( XubString& rName ) const
+OUString SdrGrafObj::TakeObjNamePlural() const
 {
-    if(pGraphic)
+    if(!pGraphic)
+        return OUString();
+
+    const SvgDataPtr& rSvgDataPtr = pGraphic->GetGraphic().getSvgData();
+
+    OUStringBuffer sName;
+
+    if(rSvgDataPtr.get())
     {
-        const SvgDataPtr& rSvgDataPtr = pGraphic->GetGraphic().getSvgData();
-
-        if(rSvgDataPtr.get())
+        sName.append(ImpGetResStr(STR_ObjNamePluralGRAFSVG));
+    }
+    else
+    {
+        switch( pGraphic->GetType() )
         {
-            rName = ImpGetResStr(STR_ObjNamePluralGRAFSVG);
-        }
-        else
-        {
-            switch( pGraphic->GetType() )
+            case GRAPHIC_BITMAP:
             {
-                case GRAPHIC_BITMAP:
-                {
-                    const sal_uInt16 nId = ( ( pGraphic->IsTransparent() || ( (const SdrGrafTransparenceItem&) GetObjectItem( SDRATTR_GRAFTRANSPARENCE ) ).GetValue() ) ?
-                                         ( IsLinkedGraphic() ? STR_ObjNamePluralGRAFBMPTRANSLNK : STR_ObjNamePluralGRAFBMPTRANS ) :
-                                         ( IsLinkedGraphic() ? STR_ObjNamePluralGRAFBMPLNK : STR_ObjNamePluralGRAFBMP ) );
+                const sal_uInt16 nId = ( ( pGraphic->IsTransparent() || ( (const SdrGrafTransparenceItem&) GetObjectItem( SDRATTR_GRAFTRANSPARENCE ) ).GetValue() ) ?
+                                     ( IsLinkedGraphic() ? STR_ObjNamePluralGRAFBMPTRANSLNK : STR_ObjNamePluralGRAFBMPTRANS ) :
+                                     ( IsLinkedGraphic() ? STR_ObjNamePluralGRAFBMPLNK : STR_ObjNamePluralGRAFBMP ) );
 
-                    rName=ImpGetResStr( nId );
-                }
-                break;
-
-                case GRAPHIC_GDIMETAFILE:
-                    rName=ImpGetResStr( IsLinkedGraphic() ? STR_ObjNamePluralGRAFMTFLNK : STR_ObjNamePluralGRAFMTF );
-                break;
-
-                case GRAPHIC_NONE:
-                    rName=ImpGetResStr( IsLinkedGraphic() ? STR_ObjNamePluralGRAFNONELNK : STR_ObjNamePluralGRAFNONE );
-                break;
-
-                default:
-                    rName=ImpGetResStr(  IsLinkedGraphic() ? STR_ObjNamePluralGRAFLNK : STR_ObjNamePluralGRAF );
-                break;
+                sName.append(ImpGetResStr(nId));
             }
-        }
+            break;
 
-        const String aName(GetName());
+            case GRAPHIC_GDIMETAFILE:
+                sName.append(ImpGetResStr(IsLinkedGraphic() ? STR_ObjNamePluralGRAFMTFLNK : STR_ObjNamePluralGRAFMTF));
+            break;
 
-        if( aName.Len() )
-        {
-            rName.AppendAscii( " '" );
-            rName += aName;
-            rName += sal_Unicode( '\'' );
+            case GRAPHIC_NONE:
+                sName.append(ImpGetResStr(IsLinkedGraphic() ? STR_ObjNamePluralGRAFNONELNK : STR_ObjNamePluralGRAFNONE));
+            break;
+
+            default:
+                sName.append(ImpGetResStr(IsLinkedGraphic() ? STR_ObjNamePluralGRAFLNK : STR_ObjNamePluralGRAF));
+            break;
         }
     }
+
+    const OUString aName(GetName());
+
+    if (!aName.isEmpty())
+    {
+        sName.append(" '");
+        sName.append(aName);
+        sName.append('\'');
+    }
+
+    return sName.makeStringAndClear();
 }
 
 SdrObject* SdrGrafObj::getFullDragClone() const

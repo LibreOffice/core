@@ -1653,9 +1653,9 @@ OUString SdrEdgeObj::TakeObjNameSingul() const
     return sName.makeStringAndClear();
 }
 
-void SdrEdgeObj::TakeObjNamePlural(XubString& rName) const
+OUString SdrEdgeObj::TakeObjNamePlural() const
 {
-    rName=ImpGetResStr(STR_ObjNamePluralEDGE);
+    return ImpGetResStr(STR_ObjNamePluralEDGE);
 }
 
 basegfx::B2DPolyPolygon SdrEdgeObj::TakeXorPoly() const

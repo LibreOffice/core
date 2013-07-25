@@ -318,13 +318,11 @@ OUString SdrObjGroup::TakeObjNameSingul() const
 }
 
 
-void SdrObjGroup::TakeObjNamePlural(XubString& rName) const
+OUString SdrObjGroup::TakeObjNamePlural() const
 {
-    if (pSub->GetObjCount()==0) {
-        rName=ImpGetResStr(STR_ObjNamePluralGRUPEMPTY);
-    } else {
-        rName=ImpGetResStr(STR_ObjNamePluralGRUP);
-    }
+    if (pSub->GetObjCount()==0)
+        return ImpGetResStr(STR_ObjNamePluralGRUPEMPTY);
+    return ImpGetResStr(STR_ObjNamePluralGRUP);
 }
 
 

@@ -624,7 +624,7 @@ public:
 
     // TakeObjName...() ist fuer die Anzeige in der UI, z.B. "3 Rahmen selektiert".
     virtual OUString TakeObjNameSingul() const;
-    virtual void TakeObjNamePlural(String& rName) const;
+    virtual OUString TakeObjNamePlural() const;
 
     // Das Xor-Polygon wird von der View zu Draggen des Objektes benoetigt.
     // Alle Polygone innerhalb des PolyPolygon werden als PolyLine interpretiert.

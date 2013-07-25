@@ -98,7 +98,7 @@ private:
 
     // TakeObjName...() is for the display in the UI, for example "3 frames selected".
     virtual OUString TakeObjNameSingul() const;
-    virtual void TakeObjNamePlural(String& rName) const;
+    virtual OUString TakeObjNamePlural() const;
 
     // set/get local parameters with geometry recreation
     void SetPolyPoly2D(const basegfx::B2DPolyPolygon& rNew);

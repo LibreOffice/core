@@ -71,7 +71,7 @@ public:
     SdrObjGroup& operator=(const SdrObjGroup& rObj);
 
     virtual OUString TakeObjNameSingul() const;
-    virtual void TakeObjNamePlural(String& rName) const;
+    virtual OUString TakeObjNamePlural() const;
 
     virtual void RecalcSnapRect();
     virtual basegfx::B2DPolyPolygon TakeXorPoly() const;

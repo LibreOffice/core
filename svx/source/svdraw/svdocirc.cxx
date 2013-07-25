@@ -316,7 +316,7 @@ OUString SdrCircObj::TakeObjNameSingul() const
     return sName.makeStringAndClear();
 }
 
-void SdrCircObj::TakeObjNamePlural(XubString& rName) const
+OUString SdrCircObj::TakeObjNamePlural() const
 {
     sal_uInt16 nID=STR_ObjNamePluralCIRC;
     if (aRect.GetWidth()==aRect.GetHeight() && aGeo.nShearWink==0) {
@@ -336,7 +336,7 @@ void SdrCircObj::TakeObjNamePlural(XubString& rName) const
             default: break;
         }
     }
-    rName=ImpGetResStr(nID);
+    return ImpGetResStr(nID);
 }
 
 SdrCircObj* SdrCircObj::Clone() const

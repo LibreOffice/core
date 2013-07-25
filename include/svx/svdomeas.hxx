@@ -96,7 +96,7 @@ public:
     virtual SdrMeasureObj* Clone() const;
 
     virtual OUString TakeObjNameSingul() const;
-    virtual void TakeObjNamePlural(String& rName) const;
+    virtual OUString TakeObjNamePlural() const;
 
     virtual basegfx::B2DPolyPolygon TakeXorPoly() const;
     virtual sal_uInt32 GetHdlCount() const;

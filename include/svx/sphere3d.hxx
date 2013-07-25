@@ -69,7 +69,7 @@ public:
 
     // TakeObjName...() is for displaying in the UI, eg "3 selected frames."
     virtual OUString TakeObjNameSingul() const;
-    virtual void TakeObjNamePlural(String& rName) const;
+    virtual OUString TakeObjNamePlural() const;
 };
 
 #endif // _E3D_SPHERE3D_HXX

@@ -1105,9 +1105,9 @@ OUString SdrObject::TakeObjNameSingul() const
     return sName.makeStringAndClear();
 }
 
-void SdrObject::TakeObjNamePlural(XubString& rName) const
+OUString SdrObject::TakeObjNamePlural() const
 {
-    rName=ImpGetResStr(STR_ObjNamePluralNONE);
+    return ImpGetResStr(STR_ObjNamePluralNONE);
 }
 
 void SdrObject::ImpTakeDescriptionStr(sal_uInt16 nStrCacheID, OUString& rStr, sal_uInt16 nVal) const

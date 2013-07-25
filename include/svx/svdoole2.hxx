@@ -142,7 +142,7 @@ public:
     virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const;
     virtual sal_uInt16 GetObjIdentifier() const;
     virtual OUString TakeObjNameSingul() const;
-    virtual void TakeObjNamePlural(String& rName) const;
+    virtual OUString TakeObjNamePlural() const;
 
     SdrOle2Obj* Clone() const;
     SdrOle2Obj& operator=(const SdrOle2Obj& rObj);

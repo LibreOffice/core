@@ -1794,7 +1794,7 @@ void SdrEditView::UnGroupMarked()
         BegUndo(String(), String(), SDRREPFUNC_OBJ_UNGROUP);
 
     sal_uIntPtr nCount=0;
-    XubString aName1;
+    OUString aName1;
     OUString aName;
     bool bNameOk=false;
     for (sal_uIntPtr nm=GetMarkedObjectCount(); nm>0;) {
@@ -1806,15 +1806,14 @@ void SdrEditView::UnGroupMarked()
             nCount++;
             if (nCount==1) {
                 aName = pGrp->TakeObjNameSingul();  // retrieve name of group
-                pGrp->TakeObjNamePlural(aName1); // retrieve name of group
+                aName1 = pGrp->TakeObjNamePlural(); // retrieve name of group
                 bNameOk=true;
             } else {
                 if (nCount==2) aName=aName1; // set plural name
                 if (bNameOk) {
-                    XubString aStr;
-                    pGrp->TakeObjNamePlural(aStr); // retrieve name of group
+                    OUString aStr(pGrp->TakeObjNamePlural()); // retrieve name of group
 
-                    if(!aStr.Equals(aName))
+                    if (aStr != aName)
                         bNameOk = false;
                 }
             }

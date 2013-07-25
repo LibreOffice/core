@@ -60,7 +60,7 @@ public:
     SdrPageObj& operator=(const SdrPageObj& rObj);
 
     virtual OUString TakeObjNameSingul() const;
-    virtual void TakeObjNamePlural(String& rName) const;
+    virtual OUString TakeObjNamePlural() const;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

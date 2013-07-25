@@ -271,9 +271,9 @@ OUString SdrUnoObj::TakeObjNameSingul() const
     return sName.makeStringAndClear();
 }
 
-void SdrUnoObj::TakeObjNamePlural(XubString& rName) const
+OUString SdrUnoObj::TakeObjNamePlural() const
 {
-    rName = ImpGetResStr(STR_ObjNamePluralUno);
+    return ImpGetResStr(STR_ObjNamePluralUno);
 }
 
 SdrUnoObj* SdrUnoObj::Clone() const

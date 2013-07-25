@@ -144,9 +144,9 @@ OUString E3dSphereObj::TakeObjNameSingul() const
 
 // Get the name of the object (plural)
 
-void E3dSphereObj::TakeObjNamePlural(XubString& rName) const
+OUString E3dSphereObj::TakeObjNamePlural() const
 {
-    rName=ImpGetResStr(STR_ObjNamePluralSphere3d);
+    return ImpGetResStr(STR_ObjNamePluralSphere3d);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

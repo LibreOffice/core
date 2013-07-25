@@ -681,9 +681,9 @@ OUString E3dObject::TakeObjNameSingul() const
 
 // Get the name of the object (plural)
 
-void E3dObject::TakeObjNamePlural(XubString& rName) const
+OUString E3dObject::TakeObjNamePlural() const
 {
-    rName=ImpGetResStr(STR_ObjNamePluralObj3d);
+    return ImpGetResStr(STR_ObjNamePluralObj3d);
 }
 
 E3dObject* E3dObject::Clone() const

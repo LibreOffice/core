@@ -422,7 +422,7 @@ public:
     // Wird zur Bestimmung des Textankerbereichs benoetigt
     virtual void TakeUnrotatedSnapRect(Rectangle& rRect) const;
     virtual OUString TakeObjNameSingul() const;
-    virtual void TakeObjNamePlural(String& rName) const;
+    virtual OUString TakeObjNamePlural() const;
     virtual SdrTextObj* Clone() const;
     SdrTextObj& operator=(const SdrTextObj& rObj);
     virtual basegfx::B2DPolyPolygon TakeXorPoly() const;
