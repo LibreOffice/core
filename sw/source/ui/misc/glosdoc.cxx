@@ -110,7 +110,7 @@ sal_uInt16 SwGlossaries::GetGroupCnt()
 /*------------------------------------------------------------------------
     Description: supplies the group's name
 ------------------------------------------------------------------------*/
-sal_Bool SwGlossaries::FindGroupName(String & rGroup)
+sal_Bool SwGlossaries::FindGroupName(OUString& rGroup)
 {
     // if the group name doesn't contain a path, a suitable group entry
     // can the searched for here;
@@ -118,8 +118,8 @@ sal_Bool SwGlossaries::FindGroupName(String & rGroup)
     sal_uInt16 i;
     for(i= 0; i < nCount; i++)
     {
-        String sTemp(GetGroupName(i));
-        if(rGroup.Equals( sTemp.GetToken(0, GLOS_DELIM)))
+        const OUString sTemp(GetGroupName(i));
+        if (rGroup==sTemp.getToken(0, GLOS_DELIM))
         {
             rGroup = sTemp;
             return sal_True;
@@ -130,11 +130,11 @@ sal_Bool SwGlossaries::FindGroupName(String & rGroup)
     const ::utl::TransliterationWrapper& rSCmp = GetAppCmpStrIgnore();
     for(i = 0; i < nCount; i++)
     {
-        String sTemp( GetGroupName( i ));
-        sal_uInt16 nPath = (sal_uInt16)sTemp.GetToken(1, GLOS_DELIM).ToInt32();
+        const OUString sTemp( GetGroupName( i ));
+        sal_uInt16 nPath = (sal_uInt16)sTemp.getToken(1, GLOS_DELIM).toInt32();
 
         if (!SWUnoHelper::UCB_IsCaseSensitiveFileName( m_PathArr[nPath] )
-             && rSCmp.isEqual( rGroup, sTemp.GetToken( 0, GLOS_DELIM) ) )
+             && rSCmp.isEqual( rGroup, sTemp.getToken( 0, GLOS_DELIM) ) )
         {
             rGroup = sTemp;
             return sal_True;
@@ -153,8 +153,8 @@ String SwGlossaries::GetGroupName(sal_uInt16 nGroupId)
 String  SwGlossaries::GetGroupTitle( const String& rGroupName )
 {
     String  sRet;
-    String sGroup(rGroupName);
-    if(STRING_NOTFOUND == sGroup.Search(GLOS_DELIM))
+    OUString sGroup(rGroupName);
+    if (sGroup.indexOf(GLOS_DELIM)<0)
         FindGroupName(sGroup);
     SwTextBlocks* pGroup = GetGroupDoc(sGroup, sal_False);
     if(pGroup)
@@ -200,15 +200,15 @@ void SwGlossaries::PutGroupDoc(SwTextBlocks *pBlock) {
                    also created as file so that groups remain there later
                    (without access).
 ------------------------------------------------------------------------*/
-sal_Bool SwGlossaries::NewGroupDoc(String& rGroupName, const String& rTitle)
+sal_Bool SwGlossaries::NewGroupDoc(OUString& rGroupName, const OUString& rTitle)
 {
-    sal_uInt16 nNewPath = (sal_uInt16)rGroupName.GetToken(1, GLOS_DELIM).ToInt32();
+    sal_uInt16 nNewPath = (sal_uInt16)rGroupName.getToken(1, GLOS_DELIM).toInt32();
     if (static_cast<size_t>(nNewPath) >= m_PathArr.size())
         return sal_False;
     const OUString sNewFilePath(m_PathArr[nNewPath]);
-    String sNewGroup = lcl_CheckFileName(sNewFilePath, rGroupName.GetToken(0, GLOS_DELIM));
+    String sNewGroup = lcl_CheckFileName(sNewFilePath, rGroupName.getToken(0, GLOS_DELIM));
     sNewGroup += GLOS_DELIM;
-    sNewGroup += rGroupName.GetToken(1, GLOS_DELIM);
+    sNewGroup += rGroupName.getToken(1, GLOS_DELIM);
     SwTextBlocks *pBlock = GetGlosDoc( sNewGroup );
     if(pBlock)
     {
@@ -222,14 +222,14 @@ sal_Bool SwGlossaries::NewGroupDoc(String& rGroupName, const String& rTitle)
 }
 
 sal_Bool    SwGlossaries::RenameGroupDoc(
-    const String& rOldGroup, String& rNewGroup, const String& rNewTitle )
+    const OUString& rOldGroup, OUString& rNewGroup, const OUString& rNewTitle )
 {
-    sal_uInt16 nOldPath = (sal_uInt16)rOldGroup.GetToken(1, GLOS_DELIM).ToInt32();
+    sal_uInt16 nOldPath = (sal_uInt16)rOldGroup.getToken(1, GLOS_DELIM).toInt32();
     if (static_cast<size_t>(nOldPath) >= m_PathArr.size())
         return sal_False;
 
     const OUString sOldFileURL =
-        lcl_FullPathName(m_PathArr[nOldPath], rOldGroup.GetToken(0, GLOS_DELIM));
+        lcl_FullPathName(m_PathArr[nOldPath], rOldGroup.getToken(0, GLOS_DELIM));
 
     if (!FStatHelper::IsDocument( sOldFileURL ))
     {
@@ -237,12 +237,12 @@ sal_Bool    SwGlossaries::RenameGroupDoc(
         return sal_False;
     }
 
-    sal_uInt16 nNewPath = (sal_uInt16)rNewGroup.GetToken(1, GLOS_DELIM).ToInt32();
+    sal_uInt16 nNewPath = (sal_uInt16)rNewGroup.getToken(1, GLOS_DELIM).toInt32();
     if (static_cast<size_t>(nNewPath) >= m_PathArr.size())
         return sal_False;
 
     const OUString sNewFileName = lcl_CheckFileName(m_PathArr[nNewPath],
-                                                    rNewGroup.GetToken(0, GLOS_DELIM));
+                                                    rNewGroup.getToken(0, GLOS_DELIM));
     const OUString sNewFileURL = lcl_FullPathName(m_PathArr[nNewPath], sNewFileName);
 
     if (FStatHelper::IsDocument( sNewFileURL ))
@@ -256,9 +256,7 @@ sal_Bool    SwGlossaries::RenameGroupDoc(
 
     RemoveFileFromList( rOldGroup );
 
-    rNewGroup = sNewFileName;
-    rNewGroup += GLOS_DELIM;
-    rNewGroup += OUString::number(nNewPath);
+    rNewGroup = sNewFileName + OUString(GLOS_DELIM) + OUString::number(nNewPath);
     if (m_GlosArr.empty())
     {
         GetNameList();

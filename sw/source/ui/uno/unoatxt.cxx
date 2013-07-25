@@ -187,13 +187,12 @@ uno::Reference< text::XAutoTextGroup >  SwXAutoTextContainer::insertNewByName(
         aIllegal.Message = "group name must contain a-z, A-z, '_', ' ' only";
         throw aIllegal;
     }
-    String sGroup(aGroupName);
-    if(STRING_NOTFOUND == sGroup.Search(GLOS_DELIM))
+    OUString sGroup(aGroupName);
+    if (sGroup.indexOf(GLOS_DELIM)<0)
     {
-        sGroup += GLOS_DELIM;
-        sGroup += "0";
+        sGroup += OUString(GLOS_DELIM) + "0";
     }
-    pGlossaries->NewGroupDoc(sGroup, sGroup.GetToken(0, GLOS_DELIM));
+    pGlossaries->NewGroupDoc(sGroup, sGroup.getToken(0, GLOS_DELIM));
 
     uno::Reference< text::XAutoTextGroup > xGroup = pGlossaries->GetAutoTextGroup( sGroup, true );
     OSL_ENSURE( xGroup.is(), "SwXAutoTextContainer::insertNewByName: no UNO object created? How this?" );
@@ -487,17 +486,16 @@ void SwXAutoTextGroup::setName(const OUString& rName) throw( uno::RuntimeExcepti
     if ( sName == rName ||
        ( nNewNumeric == nOldNumeric && aNewPrefix == aOldPrefix ) )
         return;
-    String sNewGroup(rName);
-    if(STRING_NOTFOUND == sNewGroup.Search(GLOS_DELIM))
+    OUString sNewGroup(rName);
+    if (sNewGroup.indexOf(GLOS_DELIM)<0)
     {
-        sNewGroup += GLOS_DELIM;
-        sNewGroup += "0";
+        sNewGroup += OUString(GLOS_DELIM) + "0";
     }
 
     //the name must be saved, the group may be invalidated while in RenameGroupDoc()
     SwGlossaries* pTempGlossaries = pGlossaries;
 
-    String sPreserveTitle( pGlossaries->GetGroupTitle( sName ) );
+    OUString sPreserveTitle( pGlossaries->GetGroupTitle( sName ) );
     if ( !pGlossaries->RenameGroupDoc( sName, sNewGroup, sPreserveTitle ) )
         throw uno::RuntimeException();
     else
