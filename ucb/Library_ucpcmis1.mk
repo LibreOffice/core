@@ -35,6 +35,7 @@ $(eval $(call gb_Library_use_externals,ucpcmis1,\
 
 $(eval $(call gb_Library_add_exception_objects,ucpcmis1,\
 	ucb/source/ucp/cmis/auth_provider \
+	ucb/source/ucp/cmis/certvalidation_handler \
 	ucb/source/ucp/cmis/cmis_content \
 	ucb/source/ucp/cmis/cmis_repo_content \
 	ucb/source/ucp/cmis/cmis_datasupplier \
