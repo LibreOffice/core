@@ -191,15 +191,6 @@ namespace connectivity
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XBlob>
                 createBlob(ISC_QUAD* pBlobID)
                 throw(::com::sun::star::sdbc::SQLException);
-
-            /**
-             * Evaluate a firebird status vector and throw exceptions as necessary.
-             * The content of the status vector is included in the thrown exception.
-             */
-            static void evaluateStatusVector( ISC_STATUS_ARRAY& aStatusVector,
-                                       const ::rtl::OUString& aCause,
-                                       const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxContext)
-                throw (::com::sun::star::sdbc::SQLException);
         };
     }
 }

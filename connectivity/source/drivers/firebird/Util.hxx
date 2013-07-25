@@ -15,11 +15,22 @@
 #include <rtl/ustring.hxx>
 
 #include <com/sun/star/sdbc/DataType.hpp>
+#include <com/sun/star/sdbc/SQLException.hpp>
 
 namespace connectivity
 {
     namespace firebird
     {
+
+        /**
+         * Evaluate a firebird status vector and throw exceptions as necessary.
+         * The content of the status vector is included in the thrown exception.
+         */
+        void evaluateStatusVector(ISC_STATUS_ARRAY& aStatusVector,
+                                  const ::rtl::OUString& aCause,
+                                  const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxContext)
+                throw (::com::sun::star::sdbc::SQLException);
+
         sal_Int32 getColumnTypeFromFBType(short aType);
         ::rtl::OUString getColumnTypeNameFromFBType(short aType);
 

@@ -150,9 +150,7 @@ void OPreparedStatement::ensurePrepared()
 //         }
 //     }
     mallocSQLVAR(m_pInSqlda);
-    OConnection::evaluateStatusVector(m_statusVector,
-                                      m_sSqlStatement,
-                                      *this);
+    evaluateStatusVector(m_statusVector, m_sSqlStatement, *this);
 }
 
 OPreparedStatement::~OPreparedStatement()
@@ -303,9 +301,7 @@ Reference< XResultSet > SAL_CALL OPreparedStatement::executeQuery()
     if (aErr)
     {
         SAL_WARN("connectivity.firebird", "isc_dsql_execute failed" );
-        OConnection::evaluateStatusVector(m_statusVector,
-                                          "isc_dsql_execute",
-                                          *this);
+        evaluateStatusVector(m_statusVector, "isc_dsql_execute", *this);
     }
 
     uno::Reference< OResultSet > pResult(new OResultSet(m_pConnection,

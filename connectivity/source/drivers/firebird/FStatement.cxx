@@ -113,7 +113,7 @@ sal_Int32 SAL_CALL OStatement::executeUpdate(const OUString& sql)
     if (aErr)
         SAL_WARN("connectivity.firebird", "isc_dsql_execute_immediate failed" );
 
-    m_pConnection->evaluateStatusVector(m_statusVector, sql, *this);
+    evaluateStatusVector(m_statusVector, sql, *this);
     // TODO: get number of changed rows with SELECT ROW_COUNT (use executeQuery)
     //     return getUpdateCount();
     return 0;
@@ -158,7 +158,7 @@ uno::Reference< XResultSet > SAL_CALL OStatement::executeQuery(const OUString& s
 
     // TODO: deal with cleanup
 //    close();
-    m_pConnection->evaluateStatusVector(m_statusVector, sql, *this);
+    evaluateStatusVector(m_statusVector, sql, *this);
     return m_xResultSet;
 }
 
@@ -194,7 +194,7 @@ sal_Bool SAL_CALL OStatement::execute(const OUString& sql)
             SAL_WARN("connectivity.firebird", "isc_dsql_execute failed" );
     }
 
-    m_pConnection->evaluateStatusVector(m_statusVector, sql, *this);
+    evaluateStatusVector(m_statusVector, sql, *this);
 
     // returns true when a resultset is available
     return sal_False;

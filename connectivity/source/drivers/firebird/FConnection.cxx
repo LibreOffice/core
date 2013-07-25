@@ -34,11 +34,12 @@
  *************************************************************************/
 
 #include "FConnection.hxx"
-
 #include "FDatabaseMetaData.hxx"
 #include "FDriver.hxx"
-#include "FStatement.hxx"
 #include "FPreparedStatement.hxx"
+#include "FStatement.hxx"
+#include "Util.hxx"
+
 
 #include <com/sun/star/document/XDocumentEventBroadcaster.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
@@ -261,9 +262,7 @@ void OConnection::construct(const ::rtl::OUString& url, const Sequence< Property
                                    0);
         if (aErr)
         {
-            evaluateStatusVector(status,
-                                 "isc_create_database",
-                                 *this);
+            evaluateStatusVector(status, "isc_create_database", *this);
         }
     }
     else
@@ -276,9 +275,7 @@ void OConnection::construct(const ::rtl::OUString& url, const Sequence< Property
                                    dpbBuffer);
         if (aErr)
         {
-            evaluateStatusVector(status,
-                                 "isc_attach_database",
-                                 *this);
+            evaluateStatusVector(status, "isc_attach_database", *this);
         }
     }
 
@@ -731,9 +728,7 @@ void OConnection::disposing()
 
     if (isc_detach_database(status, &m_DBHandler))
     {
-        evaluateStatusVector(status,
-                             "isc_detach_database",
-                             *this);
+        evaluateStatusVector(status, "isc_detach_database", *this);
     }
     // TODO: write to storage again?
     if (m_bIsEmbedded)
@@ -747,33 +742,6 @@ void OConnection::disposing()
 
     dispose_ChildImpl();
     cppu::WeakComponentImplHelperBase::disposing();
-}
-
-void SAL_CALL OConnection::evaluateStatusVector( ISC_STATUS_ARRAY& aStatusVector,
-                                                 const OUString& aCause,
-                                                 const uno::Reference< XInterface >& _rxContext)
-    throw(SQLException)
-{
-    if (aStatusVector[0]==1 && aStatusVector[1]) // indicates error
-    {
-        OUStringBuffer buf;
-        char msg[512]; // Size is based on suggestion in docs.
-        const ISC_STATUS* pStatus = (const ISC_STATUS*) &aStatusVector;
-
-        buf.appendAscii("firebird_sdbc error:");
-        while(fb_interpret(msg, sizeof(msg), &pStatus))
-        {
-            // TODO: verify encoding
-            buf.appendAscii("\n*");
-            buf.append(OUString(msg, strlen(msg), RTL_TEXTENCODING_UTF8));
-        }
-        buf.appendAscii("\ncaused by\n'").append(aCause).appendAscii("'\n");
-
-        OUString error = buf.makeStringAndClear();
-        SAL_WARN( "connectivity.firebird", error );
-
-        throw SQLException( error, _rxContext, OUString(), 1, Any() );
-    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -9,6 +9,7 @@
 
 #include "Blob.hxx"
 #include "FConnection.hxx"
+#include "Util.hxx"
 
 #include "connectivity/dbexception.hxx"
 
@@ -52,9 +53,7 @@ void Blob::ensureBlobIsOpened()
                           0,
                           NULL);
     if (aErr)
-        OConnection::evaluateStatusVector(m_statusVector,
-                                          "isc_open_blob2",
-                                          *this);
+        evaluateStatusVector(m_statusVector, "isc_open_blob2", *this);
 
 }
 
@@ -71,9 +70,7 @@ void SAL_CALL Blob::disposing(void)
         {
             try
             {
-                OConnection::evaluateStatusVector(m_statusVector,
-                                                  "isc_close_blob",
-                                                  *this);
+                evaluateStatusVector(m_statusVector, "isc_close_blob", *this);
             }
             catch (SQLException e)
             {
@@ -105,9 +102,8 @@ sal_Int64 SAL_CALL Blob::length()
                   aBlobItems,
                   sizeof(aResultBuffer),
                   aResultBuffer);
-    OConnection::evaluateStatusVector(m_statusVector,
-                                      "isc_blob_info",
-                                      *this);
+
+    evaluateStatusVector(m_statusVector, "isc_blob_info", *this);
     if (*aResultBuffer == isc_info_blob_total_length)
     {
         short aResultLength = (short) isc_vax_integer(aResultBuffer, 2);
@@ -152,9 +148,7 @@ uno::Sequence< sal_Int8 > SAL_CALL  Blob::getBytes(sal_Int64 aPosition, sal_Int3
         if (aErr)
         {
             m_blobData = uno::Sequence< sal_Int8 >(0);
-            OConnection::evaluateStatusVector(m_statusVector,
-                                              "isc_get_segment",
-                                              *this);
+            evaluateStatusVector(m_statusVector, "isc_get_segment", *this);
         }
     }
 

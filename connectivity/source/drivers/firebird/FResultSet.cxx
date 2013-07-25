@@ -35,6 +35,8 @@
 
 #include "FResultSet.hxx"
 #include "FResultSetMetaData.hxx"
+#include "Util.hxx"
+
 #include <propertyids.hxx>
 #include <TConnection.hxx>
 
@@ -125,9 +127,7 @@ sal_Bool SAL_CALL OResultSet::next() throw(SQLException, RuntimeException)
     {
         SAL_WARN("connectivity.firebird", "Error when populating data");
         // Throws sql exception as appropriate
-        OConnection::evaluateStatusVector(m_statusVector,
-                                          "isc_dsql_fetch",
-                                          *this);
+        evaluateStatusVector(m_statusVector, "isc_dsql_fetch", *this);
         return sal_False;
     }
 }
@@ -286,9 +286,7 @@ void OResultSet::disposing(void)
                                 &m_statementHandle,
                                 DSQL_drop);
         try {
-            OConnection::evaluateStatusVector(m_statusVector,
-                                              "isc_dsql_free_statement",
-                                              *this);
+            evaluateStatusVector(m_statusVector, "isc_dsql_free_statement", *this);
         }
         catch (SQLException e)
         {
