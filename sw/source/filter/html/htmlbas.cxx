@@ -232,12 +232,12 @@ void SwHTMLParser::AddScriptSource()
     }
 }
 
-void SwHTMLParser::InsertBasicDocEvent( OUString aEvent, const String& rName,
+void SwHTMLParser::InsertBasicDocEvent( OUString aEvent, const OUString& rName,
                                         ScriptType eScrType,
-                                        const String& rScrType )
+                                        const OUString& rScrType )
 {
-    OSL_ENSURE( rName.Len(), "InsertBasicDocEvent() ohne Macro gerufen" );
-    if( !rName.Len() )
+    OSL_ENSURE( !rName.isEmpty(), "InsertBasicDocEvent() ohne Macro gerufen" );
+    if( rName.isEmpty() )
         return;
 
     SwDocShell *pDocSh = pDoc->GetDocShell();
@@ -245,8 +245,8 @@ void SwHTMLParser::InsertBasicDocEvent( OUString aEvent, const String& rName,
     if( !pDocSh )
         return;
 
-    String sEvent(convertLineEnd(rName, GetSystemLineEnd()));
-    String sScriptType;
+    OUString sEvent(convertLineEnd(rName, GetSystemLineEnd()));
+    OUString sScriptType;
     if( EXTENDED_STYPE == eScrType )
         sScriptType = rScrType;
 
@@ -273,7 +273,7 @@ void SwHTMLWriter::OutBasic()
     for( sal_uInt16 i=0; i<pBasicMan->GetLibCount(); i++ )
     {
         StarBASIC *pBasic = pBasicMan->GetLib( i  );
-        const String& rLibName = pBasic->GetName();
+        const OUString& rLibName = pBasic->GetName();
 
         SbxArray *pModules = pBasic->GetModules();
         for( sal_uInt16 j=0; j<pModules->Count(); j++ )
@@ -300,7 +300,7 @@ void SwHTMLWriter::OutBasic()
                     << "\">";
             }
 
-            const String& rModName = pModule->GetName();
+            const OUString& rModName = pModule->GetName();
             Strm() << SwHTMLWriter::sNewLine;   // nicht einruecken!
             HTMLOutFuncs::OutScript( Strm(), GetBaseURL(), pModule->GetSource(),
                                      sLang, eType, aEmptyStr,

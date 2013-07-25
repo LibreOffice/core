@@ -698,7 +698,7 @@ private:
     sal_uInt16 IncGrfsThatResizeTable();
 
     void GetDefaultScriptType( ScriptType& rType,
-                               String& rTypeStr ) const;
+                               OUString& rTypeStr ) const;
 
     // die eigentlichen Einfuege-Methoden fuer <IMG>, <EMBED> und <APPLET>
     // und <PARAM>
@@ -748,8 +748,8 @@ private:
     void AddScriptSource();
 
     // ein Event in die SFX-Konfiguation eintragen (htmlbas.cxx)
-    void InsertBasicDocEvent( OUString aEventName, const String& rName,
-                              ScriptType eScrType, const String& rScrType );
+    void InsertBasicDocEvent( OUString aEventName, const OUString& rName,
+                              ScriptType eScrType, const OUString& rScrType );
 
     // ein Event an ein VC-Control anhaengen (htmlform.cxx)
     void InsertBasicCtrlEvent( sal_uInt16 nEvent, const String& rName );

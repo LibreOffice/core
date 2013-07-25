@@ -88,11 +88,11 @@ struct HTMLOutFuncs
     SVT_DLLPUBLIC static SvStream& OutScript( SvStream& rStrm,
                                 const String& rBaseURL,
                                 const String& rSource,
-                                const String& rLanguage,
+                                const OUString& rLanguage,
                                 ScriptType eScriptType,
                                 const String& rSrc,
-                                const String *pSBLibrary = 0,
-                                const String *pSBModule = 0,
+                                const OUString *pSBLibrary = 0,
+                                const OUString *pSBModule = 0,
                         rtl_TextEncoding eDestEnc = RTL_TEXTENCODING_MS_1252,
                         String *pNonConvertableChars = 0 );
 
