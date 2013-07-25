@@ -771,7 +771,7 @@ struct ConventionOOO_A1 : public Convention_A1
     {
         if( rRef.IsFlag3D() || bForceTab )
         {
-            if (!ValidTab(rAbsRef.Tab()))
+            if (!ValidTab(rAbsRef.Tab()) || rRef.IsTabDeleted())
             {
                 if (!rRef.IsTabRel())
                     rBuffer.append(sal_Unicode('$'));

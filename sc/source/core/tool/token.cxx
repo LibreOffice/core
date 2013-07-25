@@ -2536,7 +2536,7 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnMove(
 
 namespace {
 
-bool adjustSingleRef( ScSingleRefData& rRef, SCTAB nDelPos, SCTAB nSheets, const ScAddress& rOldPos, const ScAddress& rNewPos )
+bool adjustSingleRefOnDeletedTab( ScSingleRefData& rRef, SCTAB nDelPos, SCTAB nSheets, const ScAddress& rOldPos, const ScAddress& rNewPos )
 {
     ScAddress aAbs = rRef.toAbs(rOldPos);
     if (nDelPos <= aAbs.Tab() && aAbs.Tab() < nDelPos + nSheets)
@@ -2549,6 +2549,26 @@ bool adjustSingleRef( ScSingleRefData& rRef, SCTAB nDelPos, SCTAB nSheets, const
     {
         // Reference sheet needs to be adjusted.
         aAbs.IncTab(-1*nSheets);
+        rRef.SetAddress(aAbs, rNewPos);
+        return true;
+    }
+    else if (rOldPos.Tab() != rNewPos.Tab())
+    {
+        // Cell itself has moved.
+        rRef.SetAddress(aAbs, rNewPos);
+        return true;
+    }
+
+    return false;
+}
+
+bool adjustSingleRefOnInsertedTab( ScSingleRefData& rRef, SCTAB nInsPos, SCTAB nSheets, const ScAddress& rOldPos, const ScAddress& rNewPos )
+{
+    ScAddress aAbs = rRef.toAbs(rOldPos);
+    if (nInsPos <= aAbs.Tab())
+    {
+        // Reference sheet needs to be adjusted.
+        aAbs.IncTab(nSheets);
         rRef.SetAddress(aAbs, rNewPos);
         return true;
     }
@@ -2581,7 +2601,7 @@ bool ScTokenArray::AdjustReferenceOnDeletedTab( SCTAB nDelPos, SCTAB nSheets, co
             {
                 ScToken* pToken = static_cast<ScToken*>(*p);
                 ScSingleRefData& rRef = pToken->GetSingleRef();
-                if (adjustSingleRef(rRef, nDelPos, nSheets, rOldPos, aNewPos))
+                if (adjustSingleRefOnDeletedTab(rRef, nDelPos, nSheets, rOldPos, aNewPos))
                     bRefChanged = true;
             }
             break;
@@ -2589,9 +2609,47 @@ bool ScTokenArray::AdjustReferenceOnDeletedTab( SCTAB nDelPos, SCTAB nSheets, co
             {
                 ScToken* pToken = static_cast<ScToken*>(*p);
                 ScComplexRefData& rRef = pToken->GetDoubleRef();
-                if (adjustSingleRef(rRef.Ref1, nDelPos, nSheets, rOldPos, aNewPos))
+                if (adjustSingleRefOnDeletedTab(rRef.Ref1, nDelPos, nSheets, rOldPos, aNewPos))
                     bRefChanged = true;
-                if (adjustSingleRef(rRef.Ref2, nDelPos, nSheets, rOldPos, aNewPos))
+                if (adjustSingleRefOnDeletedTab(rRef.Ref2, nDelPos, nSheets, rOldPos, aNewPos))
+                    bRefChanged = true;
+            }
+            break;
+            default:
+                ;
+        }
+    }
+    return bRefChanged;
+}
+
+bool ScTokenArray::AdjustReferenceOnInsertedTab( SCTAB nInsPos, SCTAB nSheets, const ScAddress& rOldPos )
+{
+    bool bRefChanged = false;
+    ScAddress aNewPos = rOldPos;
+    if (nInsPos <= rOldPos.Tab())
+        aNewPos.IncTab(nSheets);
+
+    FormulaToken** p = pCode;
+    FormulaToken** pEnd = p + static_cast<size_t>(nLen);
+    for (; p != pEnd; ++p)
+    {
+        switch ((*p)->GetType())
+        {
+            case svSingleRef:
+            {
+                ScToken* pToken = static_cast<ScToken*>(*p);
+                ScSingleRefData& rRef = pToken->GetSingleRef();
+                if (adjustSingleRefOnInsertedTab(rRef, nInsPos, nSheets, rOldPos, aNewPos))
+                    bRefChanged = true;
+            }
+            break;
+            case svDoubleRef:
+            {
+                ScToken* pToken = static_cast<ScToken*>(*p);
+                ScComplexRefData& rRef = pToken->GetDoubleRef();
+                if (adjustSingleRefOnInsertedTab(rRef.Ref1, nInsPos, nSheets, rOldPos, aNewPos))
+                    bRefChanged = true;
+                if (adjustSingleRefOnInsertedTab(rRef.Ref2, nInsPos, nSheets, rOldPos, aNewPos))
                     bRefChanged = true;
             }
             break;

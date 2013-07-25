@@ -2555,37 +2555,24 @@ bool ScFormulaCell::UpdateReference(
 
 void ScFormulaCell::UpdateInsertTab(SCTAB nTable, SCTAB nNewSheets)
 {
-    bool bPosChanged = ( aPos.Tab() >= nTable ? true : false );
+    bool bPosChanged = (nTable <= aPos.Tab());
     pCode->Reset();
-    if( pCode->GetNextReferenceRPN() && !pDocument->IsClipOrUndo() )
+    if (pDocument->IsClipOrUndo() || !pCode->GetNextReferenceRPN())
     {
-        EndListeningTo( pDocument );
-        // IncTab _after_ EndListeningTo and _before_ Compiler UpdateInsertTab!
-        if ( bPosChanged )
+        if (bPosChanged)
             aPos.IncTab(nNewSheets);
-        ScRangeData* pRangeData;
-        ScCompiler aComp(pDocument, aPos, *pCode);
-        aComp.SetGrammar(pDocument->GetGrammar());
-        pRangeData = aComp.UpdateInsertTab( nTable, false, nNewSheets );
-        if (pRangeData) // Exchange Shared Formula with real Formula
-        {
-            bool bRefChanged;
-            pDocument->RemoveFromFormulaTree( this );   // update formula count
-            delete pCode;
-            pCode = new ScTokenArray( *pRangeData->GetCode() );
-            ScCompiler aComp2(pDocument, aPos, *pCode);
-            aComp2.SetGrammar(pDocument->GetGrammar());
-            aComp2.MoveRelWrap(pRangeData->GetMaxCol(), pRangeData->GetMaxRow());
-            aComp2.UpdateInsertTab( nTable, false, nNewSheets );
-            // If the shared formula contained a named range/formula containing
-            // an absolute reference to a sheet, those have to be readjusted.
-            aComp2.UpdateDeleteTab( nTable, false, true, bRefChanged, nNewSheets );
-            bCompile = true;
-        }
-        // no StartListeningTo because pTab[nTab] does not exsist!
+
+        return;
     }
-    else if ( bPosChanged )
-        aPos.IncTab();
+
+    EndListeningTo( pDocument );
+    ScAddress aOldPos = aPos;
+    // IncTab _after_ EndListeningTo and _before_ Compiler UpdateInsertTab!
+    if (bPosChanged)
+        aPos.IncTab(nNewSheets);
+
+    pCode->AdjustReferenceOnInsertedTab(nTable, nNewSheets, aOldPos);
+    // no StartListeningTo because the new sheets have not been inserted yet.
 }
 
 bool ScFormulaCell::UpdateDeleteTab(SCTAB nTable, bool /*bIsMove*/, SCTAB nSheets)

@@ -143,6 +143,8 @@ public:
      */
     bool AdjustReferenceOnDeletedTab( SCTAB nDelPos, SCTAB nSheets, const ScAddress& rOldPos );
 
+    bool AdjustReferenceOnInsertedTab( SCTAB nInsPos, SCTAB nSheets, const ScAddress& rOldPos );
+
 #if DEBUG_FORMULA_COMPILER
     void Dump() const;
 #endif

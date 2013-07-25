@@ -765,12 +765,12 @@ void Test::testFormulaRefUpdateSheets()
 
     // Set formulas to B2 and B3 on sheet Sheet2.
     m_pDoc->SetString(ScAddress(1,1,1), "=SUM(Sheet1.B2:C3)");
-    m_pDoc->SetString(ScAddress(1,2,1), "=SUM(Sheet1.$B$2:$C$3)");
+    m_pDoc->SetString(ScAddress(1,2,1), "=SUM($Sheet1.$B$2:$C$3)");
 
     if (!checkFormula(*m_pDoc, ScAddress(1,1,1), "SUM(Sheet1.B2:C3)"))
         CPPUNIT_FAIL("Wrong formula in Sheet2.B2.");
 
-    if (!checkFormula(*m_pDoc, ScAddress(1,2,1), "SUM(Sheet1.$B$2:$C$3)"))
+    if (!checkFormula(*m_pDoc, ScAddress(1,2,1), "SUM($Sheet1.$B$2:$C$3)"))
         CPPUNIT_FAIL("Wrong formula in Sheet2.B3.");
 
     // Swap the sheets.
@@ -783,7 +783,7 @@ void Test::testFormulaRefUpdateSheets()
     if (!checkFormula(*m_pDoc, ScAddress(1,1,0), "SUM(Sheet1.B2:C3)"))
         CPPUNIT_FAIL("Wrong formula in Sheet2.B2.");
 
-    if (!checkFormula(*m_pDoc, ScAddress(1,2,0), "SUM(Sheet1.$B$2:$C$3)"))
+    if (!checkFormula(*m_pDoc, ScAddress(1,2,0), "SUM($Sheet1.$B$2:$C$3)"))
         CPPUNIT_FAIL("Wrong formula in Sheet2.B3.");
 
     // Swap back.
@@ -796,7 +796,7 @@ void Test::testFormulaRefUpdateSheets()
     if (!checkFormula(*m_pDoc, ScAddress(1,1,1), "SUM(Sheet1.B2:C3)"))
         CPPUNIT_FAIL("Wrong formula in Sheet2.B2.");
 
-    if (!checkFormula(*m_pDoc, ScAddress(1,2,1), "SUM(Sheet1.$B$2:$C$3)"))
+    if (!checkFormula(*m_pDoc, ScAddress(1,2,1), "SUM($Sheet1.$B$2:$C$3)"))
         CPPUNIT_FAIL("Wrong formula in Sheet2.B3.");
 
     // Insert a new sheet between the two.
@@ -810,7 +810,7 @@ void Test::testFormulaRefUpdateSheets()
     if (!checkFormula(*m_pDoc, ScAddress(1,1,2), "SUM(Sheet1.B2:C3)"))
         CPPUNIT_FAIL("Wrong formula in Sheet2.B2.");
 
-    if (!checkFormula(*m_pDoc, ScAddress(1,2,2), "SUM(Sheet1.$B$2:$C$3)"))
+    if (!checkFormula(*m_pDoc, ScAddress(1,2,2), "SUM($Sheet1.$B$2:$C$3)"))
         CPPUNIT_FAIL("Wrong formula in Sheet2.B3.");
 
     // Delete the temporary sheet.
@@ -822,7 +822,30 @@ void Test::testFormulaRefUpdateSheets()
     if (!checkFormula(*m_pDoc, ScAddress(1,1,1), "SUM(Sheet1.B2:C3)"))
         CPPUNIT_FAIL("Wrong formula in Sheet2.B2.");
 
-    if (!checkFormula(*m_pDoc, ScAddress(1,2,1), "SUM(Sheet1.$B$2:$C$3)"))
+    if (!checkFormula(*m_pDoc, ScAddress(1,2,1), "SUM($Sheet1.$B$2:$C$3)"))
+        CPPUNIT_FAIL("Wrong formula in Sheet2.B3.");
+
+    // Insert a new sheet before the first one.
+    m_pDoc->InsertTab(0, "Temp");
+
+    m_pDoc->GetName(1, aName);
+    CPPUNIT_ASSERT_EQUAL(OUString("Sheet1"), aName);
+    m_pDoc->GetName(2, aName);
+    CPPUNIT_ASSERT_EQUAL(OUString("Sheet2"), aName);
+
+    if (!checkFormula(*m_pDoc, ScAddress(1,1,2), "SUM(Sheet1.B2:C3)"))
+        CPPUNIT_FAIL("Wrong formula in Sheet2.B2.");
+
+    if (!checkFormula(*m_pDoc, ScAddress(1,2,2), "SUM($Sheet1.$B$2:$C$3)"))
+        CPPUNIT_FAIL("Wrong formula in Sheet2.B3.");
+
+    // Delete the temporary sheet.
+    m_pDoc->DeleteTab(0);
+
+    if (!checkFormula(*m_pDoc, ScAddress(1,1,1), "SUM(Sheet1.B2:C3)"))
+        CPPUNIT_FAIL("Wrong formula in Sheet2.B2.");
+
+    if (!checkFormula(*m_pDoc, ScAddress(1,2,1), "SUM($Sheet1.$B$2:$C$3)"))
         CPPUNIT_FAIL("Wrong formula in Sheet2.B3.");
 
     // Delete Sheet1.
@@ -833,7 +856,7 @@ void Test::testFormulaRefUpdateSheets()
     if (!checkFormula(*m_pDoc, ScAddress(1,1,0), "SUM(#REF!.B2:C3)"))
         CPPUNIT_FAIL("Wrong formula in Sheet2.B2.");
 
-    if (!checkFormula(*m_pDoc, ScAddress(1,2,0), "SUM(#REF!.$B$2:$C$3)"))
+    if (!checkFormula(*m_pDoc, ScAddress(1,2,0), "SUM($#REF!.$B$2:$C$3)"))
         CPPUNIT_FAIL("Wrong formula in Sheet2.B3.");
 
     m_pDoc->DeleteTab(0);
