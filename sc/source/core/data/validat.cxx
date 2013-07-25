@@ -494,7 +494,7 @@ bool ScValidationData::IsDataValid( ScRefCellValue& rCell, const ScAddress& rPos
         break;
         case CELLTYPE_EDIT:
             if (rCell.mpEditText)
-                aString = ScEditUtil::GetString(*rCell.mpEditText);
+                aString = ScEditUtil::GetString(*rCell.mpEditText, GetDocument());
             bIsVal = false;
         break;
         case CELLTYPE_FORMULA:

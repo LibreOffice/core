@@ -485,7 +485,7 @@ double ScInterpreter::GetCellValueOrZero( const ScAddress& rPos, ScRefCellValue&
         {
             // SUM(A1:A2) differs from A1+A2. No good. But people insist on
             // it ... #i5658#
-            OUString aStr = rCell.getString();
+            OUString aStr = rCell.getString(pDok);
             fValue = ConvertStringToValue( aStr );
         }
         break;
@@ -505,7 +505,7 @@ void ScInterpreter::GetCellString( OUString& rStr, ScRefCellValue& rCell )
     {
         case CELLTYPE_STRING:
         case CELLTYPE_EDIT:
-            rStr = rCell.getString();
+            rStr = rCell.getString(pDok);
         break;
         case CELLTYPE_FORMULA:
         {
@@ -669,7 +669,7 @@ bool ScInterpreter::CreateStringArr(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                     {
                         case CELLTYPE_STRING:
                         case CELLTYPE_EDIT:
-                            aStr = aCell.getString();
+                            aStr = aCell.getString(pDok);
                             break;
                         case CELLTYPE_FORMULA:
                             if (!aCell.mpFormula->IsValue())
@@ -773,7 +773,7 @@ bool ScInterpreter::CreateCellArr(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                     {
                         case CELLTYPE_STRING :
                         case CELLTYPE_EDIT :
-                            aStr = aCell.getString();
+                            aStr = aCell.getString(pDok);
                             nType = 1;
                             break;
                         case CELLTYPE_VALUE :
@@ -3391,7 +3391,7 @@ bool ScInterpreter::SetSbxVariable( SbxVariable* pVar, const ScAddress& rPos )
             break;
             case CELLTYPE_STRING :
             case CELLTYPE_EDIT :
-                pVar->PutString(aCell.getString());
+                pVar->PutString(aCell.getString(pDok));
             break;
             case CELLTYPE_FORMULA :
                 nErr = aCell.mpFormula->GetErrCode();

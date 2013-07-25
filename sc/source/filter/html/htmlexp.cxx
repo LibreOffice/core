@@ -1141,7 +1141,7 @@ void ScHTMLExport::WriteCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
                 break;
             //! else: fallthru
         default:
-            ScCellFormat::GetString(aCell, nFormat, aStrOut, &pColor, *pFormatter);
+            ScCellFormat::GetString(aCell, nFormat, aStrOut, &pColor, *pFormatter, pDoc);
     }
 
     if ( !bFieldText )

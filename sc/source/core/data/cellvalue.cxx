@@ -579,7 +579,7 @@ double ScRefCellValue::getValue()
     return 0.0;
 }
 
-OUString ScRefCellValue::getString()
+OUString ScRefCellValue::getString( const ScDocument* pDoc )
 {
     switch (meType)
     {
@@ -589,7 +589,7 @@ OUString ScRefCellValue::getString()
             return *mpString;
         case CELLTYPE_EDIT:
             if (mpEditText)
-                return ScEditUtil::GetString(*mpEditText);
+                return ScEditUtil::GetString(*mpEditText, pDoc);
         break;
         case CELLTYPE_FORMULA:
             return mpFormula->GetString();

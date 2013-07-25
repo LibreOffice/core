@@ -282,7 +282,7 @@ sal_Bool ScRangeToSequence::FillMixedArray( uno::Any& rAny, ScDocument* pDoc, co
             else if (aCell.hasNumeric())
                 rElement <<= aCell.getValue();
             else
-                rElement <<= aCell.getString();
+                rElement <<= aCell.getString(pDoc);
         }
         pRowAry[nRow] = aColSeq;
     }

@@ -454,7 +454,7 @@ bool ScDBQueryDataIterator::DataAccessInternal::getCurrent(Value& rValue)
                         incPos();
                     else
                     {
-                        rValue.maString = aCell.getString();
+                        rValue.maString = aCell.getString(mpDoc);
                         rValue.mfValue = 0.0;
                         rValue.mnError = 0;
                         rValue.mbIsNumber = false;
@@ -933,7 +933,7 @@ CellType ScCellIterator::getType() const
 
 OUString ScCellIterator::getString()
 {
-    return maCurCell.getString();
+    return maCurCell.getString(mpDoc);
 }
 
 const EditTextObject* ScCellIterator::getEditText() const
@@ -1408,7 +1408,7 @@ bool ScQueryCellIterator::BinarySearch()
         OUString aCellStr;
         sal_uLong nFormat = pCol->GetNumberFormat(toLogicalPos(aLoPos));
         aCell.assign(aLoPos.first, aLoPos.second);
-        ScCellFormat::GetInputString(aCell, nFormat, aCellStr, rFormatter);
+        ScCellFormat::GetInputString(aCell, nFormat, aCellStr, rFormatter, pDoc);
         sal_Int32 nTmp = pCollator->compareString(aCellStr, rEntry.GetQueryItem().maString);
         if ((rEntry.eOp == SC_LESS_EQUAL && nTmp > 0) ||
                 (rEntry.eOp == SC_GREATER_EQUAL && nTmp < 0) ||
@@ -1455,7 +1455,7 @@ bool ScQueryCellIterator::BinarySearch()
         {
             sal_uLong nFormat = pCol->GetNumberFormat(toLogicalPos(aLastInRange));
             OUString aStr;
-            ScCellFormat::GetInputString(aCell, nFormat, aStr, rFormatter);
+            ScCellFormat::GetInputString(aCell, nFormat, aStr, rFormatter, pDoc);
             aLastInRangeString = aStr;
         }
         else
@@ -1558,7 +1558,7 @@ bool ScQueryCellIterator::BinarySearch()
             OUString aCellStr;
             sal_uLong nFormat = pCol->GetNumberFormat(i);
             aCell.assign(aPos.first, aPos.second);
-            ScCellFormat::GetInputString(aCell, nFormat, aCellStr, rFormatter);
+            ScCellFormat::GetInputString(aCell, nFormat, aCellStr, rFormatter, pDoc);
 
             nRes = pCollator->compareString(aCellStr, rEntry.GetQueryItem().maString);
             if (nRes < 0 && bLessEqual)

@@ -702,7 +702,8 @@ class ScChangeActionContent : public ScChangeAction
 
     void SetValueString( OUString& rValue, ScCellValue& rCell, const OUString& rStr, ScDocument* pDoc );
 
-    void GetValueString( OUString& rStr, const OUString& rValue, const ScCellValue& rCell ) const;
+    void GetValueString( OUString& rStr, const OUString& rValue, const ScCellValue& rCell,
+                         const ScDocument* pDoc ) const;
 
     void GetFormulaString( OUString& rStr, const ScFormulaCell* pCell ) const;
 
@@ -788,8 +789,8 @@ public:
     // assigns string / creates forumula cell
     void SetOldValue( const OUString& rOld, ScDocument* pDoc );
 
-    void GetOldString( OUString& rStr ) const;
-    void GetNewString( OUString& rStr ) const;
+    void GetOldString( OUString& rStr, const ScDocument* pDoc ) const;
+    void GetNewString( OUString& rStr, const ScDocument* pDoc ) const;
     SC_DLLPUBLIC const ScCellValue& GetOldCell() const;
     SC_DLLPUBLIC const ScCellValue& GetNewCell() const;
     virtual void GetDescription(

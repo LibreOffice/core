@@ -1935,7 +1935,7 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt 
                         }
                         else
                         {
-                            ScCellFormat::GetInputString(*pCell, nFormat, aString, rFormatter);
+                            ScCellFormat::GetInputString(*pCell, nFormat, aString, rFormatter, &aDocument);
                             bString = false;
                         }
                     }
@@ -1985,7 +1985,7 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt 
                     }
                     else
                     {
-                        ScCellFormat::GetInputString(*pCell, nFormat, aString, rFormatter);
+                        ScCellFormat::GetInputString(*pCell, nFormat, aString, rFormatter, &aDocument);
                         bString = false;
                     }
                 }

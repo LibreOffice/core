@@ -621,7 +621,7 @@ bool checkHorizontalIterator(ScDocument* pDoc, const char* pData[][_Size], size_
         if (pChecks[i].nRow != nRow)
             return false;
 
-        if (OUString::createFromAscii(pChecks[i].pVal) != pCell->getString())
+        if (OUString::createFromAscii(pChecks[i].pVal) != pCell->getString(pDoc))
             return false;
     }
 

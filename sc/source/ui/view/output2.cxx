@@ -501,6 +501,7 @@ bool ScDrawStringsVars::SetText( ScRefCellValue& rCell )
             ScCellFormat::GetString( rCell,
                                      nFormat, aOUString, &pColor,
                                      *pOutput->mpDoc->GetFormatTable(),
+                                     pOutput->mpDoc,
                                      pOutput->mbShowNullValues,
                                      pOutput->mbShowFormulas,
                                      ftCheck, true );
@@ -2287,6 +2288,7 @@ bool ScOutputData::DrawEditParam::readCellContent(
         ScCellFormat::GetString( maCell,
                                  nFormat,aString, &pColor,
                                  *pDoc->GetFormatTable(),
+                                 pDoc,
                                  bShowNullValues,
                                  bShowFormulas,
                                  ftCheck );
@@ -4933,6 +4935,7 @@ void ScOutputData::DrawRotated(sal_Bool bPixelToLogic)
                                 ScCellFormat::GetString( aCell,
                                                          nFormat,aString, &pColor,
                                                          *mpDoc->GetFormatTable(),
+                                                         mpDoc,
                                                          mbShowNullValues,
                                                          mbShowFormulas,
                                                          ftCheck );

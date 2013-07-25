@@ -449,7 +449,7 @@ bool ScColumn::UpdateScriptType( sc::CellTextAttr& rAttr, SCROW nRow )
     OUString aStr;
     Color* pColor;
     sal_uLong nFormat = pPattern->GetNumberFormat(pFormatter, pCondSet);
-    ScCellFormat::GetString(aCell, nFormat, aStr, &pColor, *pFormatter);
+    ScCellFormat::GetString(aCell, nFormat, aStr, &pColor, *pFormatter, pDocument);
 
     // Store the real script type to the array.
     rAttr.mnScriptType = pDocument->GetStringScriptType(aStr);
@@ -1733,7 +1733,7 @@ class FilterEntriesHandler
         SvNumberFormatter* pFormatter = mrColumn.GetDoc().GetFormatTable();
         OUString aStr;
         sal_uLong nFormat = mrColumn.GetNumberFormat(nRow);
-        ScCellFormat::GetInputString(rCell, nFormat, aStr, *pFormatter);
+        ScCellFormat::GetInputString(rCell, nFormat, aStr, *pFormatter, &mrColumn.GetDoc());
 
         if (rCell.hasString())
         {
@@ -1834,9 +1834,10 @@ class StrCellIterator
     PosType maPos;
     sc::CellStoreType::const_iterator miBeg;
     sc::CellStoreType::const_iterator miEnd;
+    const ScDocument* mpDoc;
 public:
-    StrCellIterator(const sc::CellStoreType& rCells, SCROW nStart) :
-        maPos(rCells.position(nStart)), miBeg(rCells.begin()), miEnd(rCells.end()) {}
+    StrCellIterator(const sc::CellStoreType& rCells, SCROW nStart, const ScDocument* pDoc) :
+        maPos(rCells.position(nStart)), miBeg(rCells.begin()), miEnd(rCells.end()), mpDoc(pDoc) {}
 
     bool valid() const { return (maPos.first != miEnd); }
 
@@ -1929,7 +1930,7 @@ public:
             case sc::element_type_edittext:
             {
                 const EditTextObject* p = sc::edittext_block::at(*maPos.first->data, maPos.second);
-                return ScEditUtil::GetString(*p);
+                return ScEditUtil::GetString(*p, mpDoc);
             }
             default:
                 ;
@@ -1956,8 +1957,8 @@ bool ScColumn::GetDataEntries(
     // going upward and downward directions in parallel. The start position
     // cell must be skipped.
 
-    StrCellIterator aItrUp(maCells, nStartRow);
-    StrCellIterator aItrDown(maCells, nStartRow+1);
+    StrCellIterator aItrUp(maCells, nStartRow, pDocument);
+    StrCellIterator aItrDown(maCells, nStartRow+1, pDocument);
 
     bool bMoveUp = aItrUp.valid();
     if (!bMoveUp)
@@ -2179,7 +2180,7 @@ void ScColumn::GetString( SCROW nRow, OUString& rString ) const
 
     sal_uLong nFormat = GetNumberFormat(nRow);
     Color* pColor = NULL;
-    ScCellFormat::GetString(aCell, nFormat, rString, &pColor, *(pDocument->GetFormatTable()));
+    ScCellFormat::GetString(aCell, nFormat, rString, &pColor, *(pDocument->GetFormatTable()), pDocument);
 }
 
 const OUString* ScColumn::GetStringCell( SCROW nRow ) const
@@ -2212,7 +2213,7 @@ void ScColumn::GetInputString( SCROW nRow, OUString& rString ) const
 {
     ScRefCellValue aCell = GetCellValue(nRow);
     sal_uLong nFormat = GetNumberFormat(nRow);
-    ScCellFormat::GetInputString(aCell, nFormat, rString, *(pDocument->GetFormatTable()));
+    ScCellFormat::GetInputString(aCell, nFormat, rString, *(pDocument->GetFormatTable()), pDocument);
 }
 
 double ScColumn::GetValue( SCROW nRow ) const
@@ -2431,7 +2432,7 @@ class MaxStringLenHandler
         Color* pColor;
         OUString aString;
         sal_uInt32 nFormat = static_cast<const SfxUInt32Item*>(mrColumn.GetAttr(nRow, ATTR_VALUE_FORMAT))->GetValue();
-        ScCellFormat::GetString(rCell, nFormat, aString, &pColor, *mpFormatter);
+        ScCellFormat::GetString(rCell, nFormat, aString, &pColor, *mpFormatter, &mrColumn.GetDoc());
         sal_Int32 nLen = 0;
         if (mbOctetEncoding)
         {
@@ -2517,7 +2518,7 @@ class MaxNumStringLenHandler
         OUString aString;
         sal_uInt32 nFormat = static_cast<const SfxUInt32Item*>(
             mrColumn.GetAttr(nRow, ATTR_VALUE_FORMAT))->GetValue();
-        ScCellFormat::GetInputString(rCell, nFormat, aString, *mpFormatter);
+        ScCellFormat::GetInputString(rCell, nFormat, aString, *mpFormatter, &mrColumn.GetDoc());
         sal_Int32 nLen = aString.getLength();
         if (nLen <= 0)
             // Ignore empty string.

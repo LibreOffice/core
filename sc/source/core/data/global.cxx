@@ -77,6 +77,7 @@
 #include "scmod.hxx"
 #include "appoptio.hxx"
 #include "random.hxx"
+#include "editutil.hxx"
 
 // -----------------------------------------------------------------------
 
@@ -117,6 +118,7 @@ ScFunctionMgr*  ScGlobal::pStarCalcFunctionMgr  = NULL;
 
 ScUnitConverter* ScGlobal::pUnitConverter = NULL;
 SvNumberFormatter* ScGlobal::pEnglishFormatter = NULL;
+ScFieldEditEngine* ScGlobal::pFieldEditEngine = NULL;
 
 double          ScGlobal::nScreenPPTX           = 96.0;
 double          ScGlobal::nScreenPPTY           = 96.0;
@@ -684,6 +686,7 @@ void ScGlobal::Clear()
     DELETEZ(pStrClipDocName);
 
     DELETEZ(pUnitConverter);
+    DELETEZ(pFieldEditEngine);
 
     ScDocumentPool::DeleteVersionMaps();
 
@@ -1193,6 +1196,19 @@ IntlWrapper*         ScGlobal::GetScIntlWrapper()
         pLocale = new ::com::sun::star::lang::Locale( Application::GetSettings().GetLanguageTag().getLocale());
     }
     return pLocale;
+}
+
+ScFieldEditEngine& ScGlobal::GetStaticFieldEditEngine()
+{
+    if (!pFieldEditEngine)
+    {
+        // Creating a ScFieldEditEngine with pDocument=NULL leads to document
+        // specific fields not being resolvable! See
+        // ScFieldEditEngine::CalcFieldValue(). pEnginePool=NULL lets
+        // EditEngine internally create and delete a default pool.
+        pFieldEditEngine = new ScFieldEditEngine( NULL, NULL);
+    }
+    return *pFieldEditEngine;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

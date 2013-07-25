@@ -68,40 +68,49 @@ OUString ScEditUtil::ModifyDelimiters( const OUString& rOld )
     return aRet;
 }
 
-static String lcl_GetDelimitedString( const EditEngine& rEngine, const sal_Char c )
+static OUString lcl_GetDelimitedString( const EditEngine& rEngine, const sal_Char c )
 {
-    String aRet;
     sal_Int32 nParCount = rEngine.GetParagraphCount();
+    OUStringBuffer aRet( nParCount * 80 );
     for (sal_Int32 nPar=0; nPar<nParCount; nPar++)
     {
         if (nPar > 0)
-            aRet += c;
-        aRet += rEngine.GetText( nPar );
+            aRet.append(c);
+        aRet.append( rEngine.GetText( nPar ));
     }
-    return aRet;
+    return aRet.makeStringAndClear();
 }
 
-String ScEditUtil::GetSpaceDelimitedString( const EditEngine& rEngine )
+OUString ScEditUtil::GetSpaceDelimitedString( const EditEngine& rEngine )
 {
     return lcl_GetDelimitedString(rEngine, ' ');
 }
 
-String ScEditUtil::GetMultilineString( const EditEngine& rEngine )
+OUString ScEditUtil::GetMultilineString( const EditEngine& rEngine )
 {
     return lcl_GetDelimitedString(rEngine, '\n');
 }
 
-OUString ScEditUtil::GetString( const EditTextObject& rEditText )
+OUString ScEditUtil::GetString( const EditTextObject& rEditText, const ScDocument* pDoc )
 {
-    OUStringBuffer aRet;
-    sal_Int32 n = rEditText.GetParagraphCount();
-    for (sal_Int32 i = 0; i < n; ++i)
+    // ScFieldEditEngine is needed to resolve field contents.
+    if (pDoc)
     {
-        if (i > 0)
-            aRet.append('\n');
-        aRet.append(rEditText.GetText(i));
+        /* TODO: make ScDocument::GetEditEngine() const? Most likely it's only
+         * not const because of the pointer assignment, make that mutable, and
+         * then remove the ugly const_cast here. */
+        EditEngine& rEE = const_cast<ScDocument*>(pDoc)->GetEditEngine();
+        rEE.SetText( rEditText);
+        return GetMultilineString( rEE);
     }
-    return aRet.makeStringAndClear();
+    else
+    {
+        static osl::Mutex aMutex;
+        osl::MutexGuard aGuard( aMutex);
+        EditEngine& rEE = ScGlobal::GetStaticFieldEditEngine();
+        rEE.SetText( rEditText);
+        return GetMultilineString( rEE);
+    }
 }
 
 EditTextObject* ScEditUtil::CreateURLObjectFromURL( ScDocument& rDoc, const OUString& rURL, const OUString& rText )
@@ -817,6 +826,12 @@ OUString ScFieldEditEngine::CalcFieldValue( const SvxFieldItem& rField,
             const SvxExtTimeField* pField = static_cast<const SvxExtTimeField*>(pFieldData);
             if (mpDoc)
                 aRet = pField->GetFormatted(*mpDoc->GetFormatTable(), ScGlobal::eLnge);
+            else
+            {
+                /* TODO: quite expensive, we could have a global formatter? */
+                SvNumberFormatter aFormatter( comphelper::getProcessComponentContext(), ScGlobal::eLnge );
+                aRet = pField->GetFormatted( aFormatter, ScGlobal::eLnge);
+            }
         }
         break;
         case text::textfield::Type::DATE:
@@ -827,10 +842,18 @@ OUString ScFieldEditEngine::CalcFieldValue( const SvxFieldItem& rField,
         break;
         case text::textfield::Type::DOCINFO_TITLE:
         {
-            SfxObjectShell* pDocShell = mpDoc->GetDocumentShell();
-            aRet = pDocShell->getDocProperties()->getTitle();
+            if (mpDoc)
+            {
+                SfxObjectShell* pDocShell = mpDoc->GetDocumentShell();
+                if (pDocShell)
+                {
+                    aRet = pDocShell->getDocProperties()->getTitle();
+                    if (aRet.isEmpty())
+                        aRet = pDocShell->GetTitle();
+                }
+            }
             if (aRet.isEmpty())
-                aRet = pDocShell->GetTitle();
+                aRet = "?";
         }
         break;
         case text::textfield::Type::TABLE:
@@ -838,7 +861,7 @@ OUString ScFieldEditEngine::CalcFieldValue( const SvxFieldItem& rField,
             const SvxTableField* pField = static_cast<const SvxTableField*>(pFieldData);
             SCTAB nTab = pField->GetTab();
             OUString aName;
-            if (mpDoc->GetName(nTab, aName))
+            if (mpDoc && mpDoc->GetName(nTab, aName))
                 aRet = aName;
             else
                 aRet = "?";

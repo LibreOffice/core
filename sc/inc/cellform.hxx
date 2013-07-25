@@ -43,7 +43,7 @@ public:
 
     static void GetString(
         ScRefCellValue& rCell, sal_uLong nFormat, OUString& rString,
-        Color** ppColor, SvNumberFormatter& rFormatter, bool bNullVals = true,
+        Color** ppColor, SvNumberFormatter& rFormatter, const ScDocument* pDoc, bool bNullVals = true,
         bool bFormula  = false, ScForceTextFmt eForceTextFmt = ftDontForce,
         bool bUseStarFormat = false );
 
@@ -53,7 +53,8 @@ public:
         bool bFormula  = false, ScForceTextFmt eForceTextFmt = ftDontForce, bool bUseStarFormat = false );
 
     static void GetInputString(
-        ScRefCellValue& rCell, sal_uLong nFormat, OUString& rString, SvNumberFormatter& rFormatter );
+        ScRefCellValue& rCell, sal_uLong nFormat, OUString& rString, SvNumberFormatter& rFormatter,
+        const ScDocument* pDoc );
 };
 
 

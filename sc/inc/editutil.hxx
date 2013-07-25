@@ -54,12 +54,19 @@ public:
     static OUString ModifyDelimiters( const OUString& rOld );
 
     /// Retrieves string with paragraphs delimited by spaces
-    static String GetSpaceDelimitedString( const EditEngine& rEngine );
+    static OUString GetSpaceDelimitedString( const EditEngine& rEngine );
 
     /// Retrieves string with paragraphs delimited by new lines ('\n').
-    static String GetMultilineString( const EditEngine& rEngine );
+    static OUString GetMultilineString( const EditEngine& rEngine );
 
-    SC_DLLPUBLIC static OUString GetString( const EditTextObject& rEditText );
+    /** Retrieves string with paragraphs delimited by new lines ('\n').
+
+        @param pDoc
+               If not NULL, use pDoc->GetEditEngine() to retrieve field content.
+               If NULL, a static mutex-guarded ScFieldEditEngine is used that
+               is not capable of resolving document specific fields; avoid.
+     */
+    SC_DLLPUBLIC static OUString GetString( const EditTextObject& rEditText, const ScDocument* pDoc );
 
     static EditTextObject* CreateURLObjectFromURL(
         ScDocument& rDoc, const OUString& rURL, const OUString& rText );

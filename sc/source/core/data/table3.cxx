@@ -1418,7 +1418,7 @@ public:
             else
             {
                 sal_uLong nFormat = mrTab.GetNumberFormat( static_cast<SCCOL>(rEntry.nField), nRow );
-                ScCellFormat::GetInputString(rCell, nFormat, aCellStr, *mrDoc.GetFormatTable());
+                ScCellFormat::GetInputString(rCell, nFormat, aCellStr, *mrDoc.GetFormatTable(), &mrDoc);
             }
         }
         else

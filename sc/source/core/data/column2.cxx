@@ -245,7 +245,7 @@ long ScColumn::GetNeededSize(
         Color* pColor;
         OUString aValStr;
         ScCellFormat::GetString(
-            aCell, nFormat, aValStr, &pColor, *pFormatter, true, rOptions.bFormula, ftCheck);
+            aCell, nFormat, aValStr, &pColor, *pFormatter, pDocument, true, rOptions.bFormula, ftCheck);
 
         if (!aValStr.isEmpty())
         {
@@ -407,7 +407,7 @@ long ScColumn::GetNeededSize(
             Color* pColor;
             OUString aString;
             ScCellFormat::GetString(
-                aCell, nFormat, aString, &pColor, *pFormatter, true,
+                aCell, nFormat, aString, &pColor, *pFormatter, pDocument, true,
                 rOptions.bFormula, ftCheck);
 
             if (!aString.isEmpty())
@@ -546,7 +546,7 @@ class MaxStrLenFinder
         Color* pColor;
         OUString aValStr;
         ScCellFormat::GetString(
-            rCell, mnFormat, aValStr, &pColor, *mrDoc.GetFormatTable(), true, false, ftCheck);
+            rCell, mnFormat, aValStr, &pColor, *mrDoc.GetFormatTable(), &mrDoc, true, false, ftCheck);
 
         if (aValStr.getLength() > mnMaxLen)
         {
@@ -628,7 +628,7 @@ sal_uInt16 ScColumn::GetOptimalColWidth(
         {
             ScRefCellValue aCell = GetCellValue(pParam->mnMaxTextRow);
             ScCellFormat::GetString(
-                aCell, nFormat, aLongStr, &pColor, *pFormatter, true, false, ftCheck);
+                aCell, nFormat, aLongStr, &pColor, *pFormatter, pDocument, true, false, ftCheck);
         }
         else
         {
@@ -1897,9 +1897,10 @@ class ToMatrixHandler
     ScMatrix& mrMat;
     SCCOL mnMatCol;
     SCROW mnTopRow;
+    const ScDocument* mpDoc;
 public:
-    ToMatrixHandler(ScMatrix& rMat, SCCOL nMatCol, SCROW nTopRow) :
-        mrMat(rMat), mnMatCol(nMatCol), mnTopRow(nTopRow) {}
+    ToMatrixHandler(ScMatrix& rMat, SCCOL nMatCol, SCROW nTopRow, const ScDocument* pDoc) :
+        mrMat(rMat), mnMatCol(nMatCol), mnTopRow(nTopRow), mpDoc(pDoc) {}
 
     void operator() (size_t nRow, double fVal)
     {
@@ -1923,7 +1924,7 @@ public:
 
     void operator() (size_t nRow, const EditTextObject* pStr)
     {
-        mrMat.PutString(ScEditUtil::GetString(*pStr), mnMatCol, nRow - mnTopRow);
+        mrMat.PutString(ScEditUtil::GetString(*pStr, mpDoc), mnMatCol, nRow - mnTopRow);
     }
 };
 
@@ -1934,7 +1935,7 @@ bool ScColumn::ResolveStaticReference( ScMatrix& rMat, SCCOL nMatCol, SCROW nRow
     if (nRow1 > nRow2)
         return false;
 
-    ToMatrixHandler aFunc(rMat, nMatCol, nRow1);
+    ToMatrixHandler aFunc(rMat, nMatCol, nRow1, pDocument);
     sc::ParseAllNonEmpty(maCells.begin(), maCells, nRow1, nRow2, aFunc);
     return true;
 }
@@ -1982,10 +1983,11 @@ class FillMatrixHandler
 
     SCCOL mnCol;
     SCTAB mnTab;
+    const ScDocument* mpDoc;
 
 public:
-    FillMatrixHandler(ScMatrix& rMat, size_t nMatCol, size_t nTopRow, SCCOL nCol, SCTAB nTab) :
-        mrMat(rMat), mnMatCol(nMatCol), mnTopRow(nTopRow), mnCol(nCol), mnTab(nTab) {}
+    FillMatrixHandler(ScMatrix& rMat, size_t nMatCol, size_t nTopRow, SCCOL nCol, SCTAB nTab, const ScDocument* pDoc) :
+        mrMat(rMat), mnMatCol(nMatCol), mnTopRow(nTopRow), mnCol(nCol), mnTab(nTab), mpDoc(pDoc) {}
 
     void operator() (const sc::CellStoreType::value_type& node, size_t nOffset, size_t nDataSize)
     {
@@ -2014,7 +2016,7 @@ public:
                 sc::edittext_block::const_iterator itEnd = it;
                 std::advance(itEnd, nDataSize);
                 for (; it != itEnd; ++it)
-                    aStrs.push_back(ScEditUtil::GetString(**it));
+                    aStrs.push_back(ScEditUtil::GetString(**it, mpDoc));
 
                 const OUString* p = &aStrs[0];
                 mrMat.PutString(p, nDataSize, mnMatCol, nMatRow);
@@ -2091,7 +2093,7 @@ public:
 
 void ScColumn::FillMatrix( ScMatrix& rMat, size_t nMatCol, SCROW nRow1, SCROW nRow2 ) const
 {
-    FillMatrixHandler aFunc(rMat, nMatCol, nRow1, nCol, nTab);
+    FillMatrixHandler aFunc(rMat, nMatCol, nRow1, nCol, nTab, pDocument);
     sc::ParseBlock(maCells.begin(), maCells, aFunc, nRow1, nRow2);
 }
 

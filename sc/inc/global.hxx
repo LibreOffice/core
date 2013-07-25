@@ -485,6 +485,7 @@ class CalendarWrapper;
 class CollatorWrapper;
 class IntlWrapper;
 class OutputDevice;
+class ScFieldEditEngine;
 
 namespace com { namespace sun { namespace star {
     namespace lang {
@@ -533,6 +534,8 @@ class ScGlobal
     static ::utl::TransliterationWrapper* pCaseTransliteration;
     static IntlWrapper*         pScIntlWrapper;
     static ::com::sun::star::lang::Locale*      pLocale;
+
+    static ScFieldEditEngine*   pFieldEditEngine;
 
 public:
     static SvtSysLocale*        pSysLocale;
@@ -694,6 +697,10 @@ SC_DLLPUBLIC    static const sal_Unicode* FindUnquoted( const sal_Unicode* pStri
 
     /** Obtain the ordinal suffix for a number according to the system locale */
     static String           GetOrdinalSuffix( sal_Int32 nNumber);
+
+    /** A static instance of ScFieldEditEngine not capable of resolving
+        document specific fields, to be used only by ScEditUtil::GetString(). */
+    static ScFieldEditEngine&   GetStaticFieldEditEngine();
 };
 #endif
 

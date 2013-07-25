@@ -1480,7 +1480,7 @@ void ScColumn::CopyStaticToDocument(SCROW nRow1, SCROW nRow2, ScColumn& rDestCol
                 for (; itData != itDataEnd; ++itData)
                 {
                     const EditTextObject& rObj = **itData;
-                    aConverted.push_back(ScEditUtil::GetString(rObj));
+                    aConverted.push_back(ScEditUtil::GetString(rObj, pDocument));
                 }
                 aDestPos.miCellPos = rDestCol.maCells.set(aDestPos.miCellPos, nCurRow, aConverted.begin(), aConverted.end());
             }

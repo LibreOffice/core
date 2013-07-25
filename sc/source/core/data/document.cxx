@@ -3241,7 +3241,7 @@ sal_uInt16 ScDocument::GetStringForFormula( const ScAddress& rPos, OUString& rSt
     {
         case CELLTYPE_STRING:
         case CELLTYPE_EDIT:
-            aStr = aCell.getString();
+            aStr = aCell.getString(this);
         break;
         case CELLTYPE_FORMULA:
         {
