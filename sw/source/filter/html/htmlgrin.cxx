@@ -295,7 +295,7 @@ void SwHTMLParser::RegisterFlyFrm( SwFrmFmt *pFlyFmt )
 /*  */
 
 void SwHTMLParser::GetDefaultScriptType( ScriptType& rType,
-                                         String& rTypeStr ) const
+                                         OUString& rTypeStr ) const
 {
     SwDocShell *pDocSh = pDoc->GetDocShell();
     SvKeyValueIterator* pHeaderAttrs = pDocSh ? pDocSh->GetHeaderAttributes()
@@ -322,7 +322,7 @@ void SwHTMLParser::InsertImage()
     SvxMacroItem aMacroItem(RES_FRMMACRO);
 
     ScriptType eDfltScriptType;
-    String sDfltScriptType;
+    OUString sDfltScriptType;
     GetDefaultScriptType( eDfltScriptType, sDfltScriptType );
 
     const HTMLOptions& rHTMLOptions = GetOptions();
@@ -801,7 +801,7 @@ void SwHTMLParser::InsertBodyOptions()
     sal_Bool bLinkColor=sal_False, bVLinkColor=sal_False;
 
     ScriptType eDfltScriptType;
-    String sDfltScriptType;
+    OUString sDfltScriptType;
     GetDefaultScriptType( eDfltScriptType, sDfltScriptType );
 
     const HTMLOptions& rHTMLOptions = GetOptions();
@@ -882,8 +882,8 @@ void SwHTMLParser::InsertBodyOptions()
 
         if( bSetEvent )
         {
-            const String& rEvent = rOption.GetString();
-            if( rEvent.Len() )
+            const OUString& rEvent = rOption.GetString();
+            if( !rEvent.isEmpty() )
                 InsertBasicDocEvent( aEvent, rEvent, eScriptType2,
                                      sDfltScriptType );
         }
@@ -1035,7 +1035,7 @@ void SwHTMLParser::NewAnchor()
     sal_Bool bHasHRef = sal_False, bFixed = sal_False;
 
     ScriptType eDfltScriptType;
-    String sDfltScriptType;
+    OUString sDfltScriptType;
     GetDefaultScriptType( eDfltScriptType, sDfltScriptType );
 
     const HTMLOptions& rHTMLOptions = GetOptions();

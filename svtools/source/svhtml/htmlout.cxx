@@ -783,11 +783,11 @@ SvStream& HTMLOutFuncs::Out_ImageMap( SvStream& rStream,
 SvStream& HTMLOutFuncs::OutScript( SvStream& rStrm,
                                    const String& rBaseURL,
                                    const String& rSource,
-                                   const String& rLanguage,
+                                   const OUString& rLanguage,
                                    ScriptType eScriptType,
                                    const String& rSrc,
-                                   const String *pSBLibrary,
-                                   const String *pSBModule,
+                                   const OUString *pSBLibrary,
+                                   const OUString *pSBModule,
                                    rtl_TextEncoding eDestEnc,
                                    String *pNonConvertableChars )
 {
@@ -799,7 +799,7 @@ SvStream& HTMLOutFuncs::OutScript( SvStream& rStrm,
     sOut.append('<')
         .append(RTL_CONSTASCII_STRINGPARAM(OOO_STRING_SVTOOLS_HTML_script));
 
-    if( rLanguage.Len() )
+    if( !rLanguage.isEmpty() )
     {
         sOut.append(' ')
             .append(RTL_CONSTASCII_STRINGPARAM(OOO_STRING_SVTOOLS_HTML_O_language))

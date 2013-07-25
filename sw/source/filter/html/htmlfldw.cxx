@@ -512,7 +512,7 @@ Writer& OutHTML_SwFmtFld( Writer& rWrt, const SfxPoolItem& rHt )
             rHTMLWrt.OutNewLine( sal_True );
 
         sal_Bool bURL = ((const SwScriptField *)pFld)->IsCodeURL();
-        const String& rType = pFld->GetPar1();
+        const OUString& rType = pFld->GetPar1();
         String aContents, aURL;
         if(bURL)
             aURL = pFld->GetPar2();
