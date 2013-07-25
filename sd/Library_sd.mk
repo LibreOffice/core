@@ -549,7 +549,7 @@ $(eval $(call gb_Library_add_objcxxobjects,sd,\
 
 else
 
-ifeq ($(OS),LINUX)
+ifeq ($(ENABLE_AVAHI),TRUE)
 $(eval $(call gb_Library_add_exception_objects,sd,\
 	sd/source/ui/remotecontrol/AvahiNetworkService \
 ))
