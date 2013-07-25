@@ -10,7 +10,6 @@
 #include <errno.h>
 #include <stdlib.h>
 #include <string.h>
-#include <unistd.h>
 #include <algorithm>
 #include <vector>
 #include <iostream>
@@ -29,6 +28,7 @@
   #include <ws2tcpip.h>
   typedef int socklen_t;
 #else
+  #include <unistd.h>
   #include <sys/types.h>
   #include <sys/socket.h>
   #include <netinet/in.h>
@@ -58,12 +58,14 @@ DiscoveryService::DiscoveryService()
     zService = new OSXNetworkService();
 #endif
 #ifdef LINUX
+    #ifdef ENABLE_AVAHI
     // Avahi for Linux
     char hostname[1024];
     hostname[1023] = '\0';
     gethostname(hostname, 1023);
 
     zService = new AvahiNetworkService(hostname);
+    #endif
 #endif
 
     zService->setup();

@@ -95,12 +95,20 @@ $(eval $(call gb_Library_use_libraries,sd,\
 ))
 
 ifeq ($(OS), LINUX)
+ifeq ($(ENABLE_AVAHI),TRUE)
 $(eval $(call gb_Library_use_externals,sd,\
 	boost_headers \
 	libxml2 \
 	dbus \
 	avahi \
 ))
+else
+$(eval $(call gb_Library_use_externals,sd,\
+	boost_headers \
+	libxml2 \
+	dbus \
+))
+endif
 else
 $(eval $(call gb_Library_use_externals,sd,\
 	boost_headers \

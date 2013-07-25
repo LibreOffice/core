@@ -72,12 +72,20 @@ $(eval $(call gb_CppunitTest_use_system_darwin_frameworks,sd_uimpress,\
 endif
 
 ifeq ($(OS), LINUX)
-$(eval $(call gb_CppunitTest_use_externals,sd_uimpress,\
-	boost_headers \
-        gtk \
-        dbus \
-        avahi \
+ifeq ($(ENABLE_AVAHI),TRUE)
+$(eval $(call gb_Library_use_externals,sd,\
+    boost_headers \
+    gtk \
+    dbus \
+    avahi \
 ))
+else
+$(eval $(call gb_Library_use_externals,sd,\
+    boost_headers \
+    gtk \
+    dbus \
+))
+endif
 else
 $(eval $(call gb_CppunitTest_use_externals,sd_uimpress,\
 	boost_headers \
