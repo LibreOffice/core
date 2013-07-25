@@ -41,6 +41,8 @@
 #include <libxml/xpathInternals.h>
 #include <libxml/parserInternals.h>
 
+#define EMU_TO_MM100(EMU) (EMU / 360)
+
 class Test : public SwModelTestBase
 {
 public:
@@ -96,6 +98,7 @@ public:
     void testFdo58577();
     void testBnc581614();
     void testFdo66929();
+    void testFdo65718();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -162,6 +165,7 @@ void Test::run()
         {"fdo58577.odt", &Test::testFdo58577},
         {"bnc581614.doc", &Test::testBnc581614},
         {"fdo66929.docx", &Test::testFdo66929},
+        {"fdo65718.docx", &Test::testFdo65718},
     };
     // Don't test the first import of these, for some reason those tests fail
     const char* aBlacklist[] = {
@@ -967,6 +971,27 @@ void Test::testFdo66929()
     CPPUNIT_ASSERT_EQUAL( sal_Int32( 127 ), getProperty< sal_Int32 >( xFrame, "TopBorderDistance" ) );
     CPPUNIT_ASSERT_EQUAL( sal_Int32( 254 ), getProperty< sal_Int32 >( xFrame, "RightBorderDistance" ) );
     CPPUNIT_ASSERT_EQUAL( sal_Int32( 127 ), getProperty< sal_Int32 >( xFrame, "BottomBorderDistance" ) );
+}
+
+void Test::testFdo65718()
+{
+    // The problem was that the exporter always exported values of "0" for an images distance from text.
+    // the actual attributes where 'distT', 'distB', 'distL', 'distR'
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPropertySet(xDraws->getByIndex(0), uno::UNO_QUERY);
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32( EMU_TO_MM100(0) ), getProperty<sal_Int32>(xPropertySet, "TopMargin") );
+    CPPUNIT_ASSERT_EQUAL(sal_Int32( EMU_TO_MM100(0) ), getProperty<sal_Int32>(xPropertySet, "BottomMargin") );
+
+    // Going to do '+1' because the 'getProperty' return 318 (instead of 317.5)
+    // I think this is because it returns an integer, instead of a float.
+    // The actual exporting to DOCX exports the correct value (114300 = 317.5 * 360)
+    // The exporting to DOCX uses the 'SvxLRSpacing' that stores the value in TWIPS (180 TWIPS)
+    // However, the 'LeftMargin' property is an integer property that holds that value in 'MM100' (should hold 317.5, but it is 318)
+    // So I had to add the hack of the '+1' to make the test-case pass
+    CPPUNIT_ASSERT_EQUAL(sal_Int32( EMU_TO_MM100(114300) + 1 ), getProperty<sal_Int32>(xPropertySet, "LeftMargin") );
+    CPPUNIT_ASSERT_EQUAL(sal_Int32( EMU_TO_MM100(114300) + 1), getProperty<sal_Int32>(xPropertySet, "RightMargin") );
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
