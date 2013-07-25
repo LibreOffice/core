@@ -306,7 +306,7 @@ void ScColumn::UpdateScriptType( sc::CellTextAttr& rAttr, SCROW nRow )
     OUString aStr;
     Color* pColor;
     sal_uLong nFormat = pPattern->GetNumberFormat(pFormatter, pCondSet);
-    ScCellFormat::GetString(aCell, nFormat, aStr, &pColor, *pFormatter);
+    ScCellFormat::GetString(aCell, nFormat, aStr, &pColor, *pFormatter, pDocument);
 
     // Store the real script type to the array.
     rAttr.mnScriptType = pDocument->GetStringScriptType(aStr);
@@ -1491,7 +1491,7 @@ void ScColumn::GetFilterEntries(SCROW nStartRow, SCROW nEndRow, std::vector<ScTy
         aCell.assign(*maItems[nIndex].pCell);
         sal_uLong nFormat = GetNumberFormat( nRow );
 
-        ScCellFormat::GetInputString(aCell, nFormat, aString, *pFormatter);
+        ScCellFormat::GetInputString(aCell, nFormat, aString, *pFormatter, pDocument);
 
         if ( pDocument->HasStringData( nCol, nRow, nTab ) )
         {
@@ -1711,7 +1711,7 @@ void ScColumn::GetString( SCROW nRow, OUString& rString ) const
             aCell.mpFormula->MaybeInterpret();
 
         sal_uLong nFormat = GetNumberFormat( nRow );
-        ScCellFormat::GetString(aCell, nFormat, rString, &pColor, *(pDocument->GetFormatTable()));
+        ScCellFormat::GetString(aCell, nFormat, rString, &pColor, *(pDocument->GetFormatTable()), pDocument);
     }
     else
         rString = EMPTY_OUSTRING;
@@ -1751,7 +1751,7 @@ void ScColumn::GetInputString( SCROW nRow, OUString& rString ) const
         ScRefCellValue aCell;
         aCell.assign(*maItems[nIndex].pCell);
         sal_uLong nFormat = GetNumberFormat( nRow );
-        ScCellFormat::GetInputString(aCell, nFormat, rString, *(pDocument->GetFormatTable()));
+        ScCellFormat::GetInputString(aCell, nFormat, rString, *(pDocument->GetFormatTable()), pDocument);
     }
     else
         rString = OUString();
@@ -1929,7 +1929,7 @@ sal_Int32 ScColumn::GetMaxStringLen( SCROW nRowStart, SCROW nRowEnd, CharSet eCh
             Color* pColor;
             sal_uLong nFormat = (sal_uLong) ((SfxUInt32Item*) GetAttr(
                 nRow, ATTR_VALUE_FORMAT ))->GetValue();
-            ScCellFormat::GetString(aCell, nFormat, aString, &pColor, *pNumFmt);
+            ScCellFormat::GetString(aCell, nFormat, aString, &pColor, *pNumFmt, pDocument);
             sal_Int32 nLen;
             if (bIsOctetTextEncoding)
             {
@@ -1981,7 +1981,7 @@ xub_StrLen ScColumn::GetMaxNumberStringLen(
             {
                 sal_uLong nFormat = (sal_uLong) ((SfxUInt32Item*) GetAttr(
                     nRow, ATTR_VALUE_FORMAT ))->GetValue();
-                ScCellFormat::GetInputString(aCell, nFormat, aString, *pNumFmt);
+                ScCellFormat::GetInputString(aCell, nFormat, aString, *pNumFmt, pDocument);
                 xub_StrLen nLen = aString.getLength();
                 if ( nLen )
                 {

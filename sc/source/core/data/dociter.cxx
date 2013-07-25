@@ -1040,7 +1040,7 @@ CellType ScCellIterator::getType() const
 
 OUString ScCellIterator::getString()
 {
-    return maCurCell.getString();
+    return maCurCell.getString(mpDoc);
 }
 
 const EditTextObject* ScCellIterator::getEditText() const
@@ -1478,7 +1478,7 @@ ScBaseCell* ScQueryCellIterator::BinarySearch()
         OUString aCellStr;
         sal_uLong nFormat = pCol->GetNumberFormat( pCol->maItems[nLo].nRow);
         aCell.assign(*pCol->maItems[nLo].pCell);
-        ScCellFormat::GetInputString(aCell, nFormat, aCellStr, rFormatter);
+        ScCellFormat::GetInputString(aCell, nFormat, aCellStr, rFormatter, pDoc);
         sal_Int32 nTmp = pCollator->compareString(aCellStr, rEntry.GetQueryItem().maString);
         if ((rEntry.eOp == SC_LESS_EQUAL && nTmp > 0) ||
                 (rEntry.eOp == SC_GREATER_EQUAL && nTmp < 0) ||
@@ -1508,7 +1508,7 @@ ScBaseCell* ScQueryCellIterator::BinarySearch()
         {
             sal_uLong nFormat = pCol->GetNumberFormat( pCol->maItems[nLastInRange].nRow);
             OUString aStr;
-            ScCellFormat::GetInputString(aCell, nFormat, aStr, rFormatter);
+            ScCellFormat::GetInputString(aCell, nFormat, aStr, rFormatter, pDoc);
             aLastInRangeString = aStr;
         }
         else
@@ -1609,7 +1609,7 @@ ScBaseCell* ScQueryCellIterator::BinarySearch()
             OUString aCellStr;
             sal_uLong nFormat = pCol->GetNumberFormat( pCol->maItems[i].nRow);
             aCell.assign(*pCol->maItems[i].pCell);
-            ScCellFormat::GetInputString(aCell, nFormat, aCellStr, rFormatter);
+            ScCellFormat::GetInputString(aCell, nFormat, aCellStr, rFormatter, pDoc);
 
             nRes = pCollator->compareString(aCellStr, rEntry.GetQueryItem().maString);
             if (nRes < 0 && bLessEqual)

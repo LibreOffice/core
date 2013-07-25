@@ -153,7 +153,7 @@ void ScChangeTrackingExportHelper::WriteGenerated(const ScChangeAction* pGenerat
     SvXMLElementExport aElemPrev(rExport, XML_NAMESPACE_TABLE, XML_CELL_CONTENT_DELETION, true, true);
     WriteBigRange(pGeneratedAction->GetBigRange(), XML_CELL_ADDRESS);
     OUString sValue;
-    static_cast<const ScChangeActionContent*>(pGeneratedAction)->GetNewString(sValue);
+    static_cast<const ScChangeActionContent*>(pGeneratedAction)->GetNewString(sValue, rExport.GetDocument());
     WriteCell(static_cast<const ScChangeActionContent*>(pGeneratedAction)->GetNewCell(), sValue);
 }
 
@@ -172,7 +172,7 @@ void ScChangeTrackingExportHelper::WriteDeleted(const ScChangeAction* pDeletedAc
                 if (static_cast<const ScChangeActionContent*>(pDeletedAction)->IsTopContent() && pDeletedAction->IsDeletedIn())
                 {
                     OUString sValue;
-                    pContentAction->GetNewString(sValue);
+                    pContentAction->GetNewString(sValue, rExport.GetDocument());
                     WriteCell(pContentAction->GetNewCell(), sValue);
                 }
             }
@@ -307,7 +307,7 @@ void ScChangeTrackingExportHelper::WriteEditCell(const ScCellValue& rCell)
 
     OUString sString;
     if (rCell.mpEditText)
-        sString = ScEditUtil::GetString(*rCell.mpEditText);
+        sString = ScEditUtil::GetString(*rCell.mpEditText, rExport.GetDocument());
 
     rExport.AddAttribute(XML_NAMESPACE_OFFICE, XML_VALUE_TYPE, XML_STRING);
     SvXMLElementExport aElemC(rExport, XML_NAMESPACE_TABLE, XML_CHANGE_TRACK_TABLE_CELL, true, true);
@@ -424,7 +424,7 @@ void ScChangeTrackingExportHelper::WriteContentChange(ScChangeAction* pAction)
             rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_ID, GetChangeID(pPrevAction->GetActionNumber()));
         SvXMLElementExport aElemPrev(rExport, XML_NAMESPACE_TABLE, XML_PREVIOUS, true, true);
         OUString sValue;
-        static_cast<ScChangeActionContent*>(pAction)->GetOldString(sValue);
+        static_cast<ScChangeActionContent*>(pAction)->GetOldString(sValue, rExport.GetDocument());
         WriteCell(static_cast<ScChangeActionContent*>(pAction)->GetOldCell(), sValue);
     }
 }

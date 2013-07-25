@@ -40,6 +40,7 @@
 #include "docfunc.hxx"
 #include "markdata.hxx"
 #include "colorscale.hxx"
+#include "editutil.hxx"
 
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>
@@ -1610,6 +1611,8 @@ void ScFiltersTest::testRichTextContentODS()
     aParaText = pEditText->GetText(0);
     CPPUNIT_ASSERT_MESSAGE("Unexpected text.", aParaText.indexOf("Sheet name is ") == 0);
     CPPUNIT_ASSERT_MESSAGE("Sheet name field item not found.", pEditText->HasField(text::textfield::Type::TABLE));
+    CPPUNIT_ASSERT_EQUAL(OUString("Sheet name is Test."), ScEditUtil::GetString(*pEditText, pDoc));
+    CPPUNIT_ASSERT_EQUAL(OUString("Sheet name is ?."), ScEditUtil::GetString(*pEditText, NULL));
 
     // Cell with URL field item.
     aPos.IncRow();
@@ -1620,6 +1623,8 @@ void ScFiltersTest::testRichTextContentODS()
     aParaText = pEditText->GetText(0);
     CPPUNIT_ASSERT_MESSAGE("Unexpected text.", aParaText.indexOf("URL: ") == 0);
     CPPUNIT_ASSERT_MESSAGE("URL field item not found.", pEditText->HasField(text::textfield::Type::URL));
+    CPPUNIT_ASSERT_EQUAL(OUString("URL: http://libreoffice.org"), ScEditUtil::GetString(*pEditText, pDoc));
+    CPPUNIT_ASSERT_EQUAL(OUString("URL: http://libreoffice.org"), ScEditUtil::GetString(*pEditText, NULL));
 
     // Cell with Date field item.
     aPos.IncRow();
@@ -1630,6 +1635,8 @@ void ScFiltersTest::testRichTextContentODS()
     aParaText = pEditText->GetText(0);
     CPPUNIT_ASSERT_MESSAGE("Unexpected text.", aParaText.indexOf("Date: ") == 0);
     CPPUNIT_ASSERT_MESSAGE("Date field item not found.", pEditText->HasField(text::textfield::Type::DATE));
+    CPPUNIT_ASSERT_MESSAGE("Date field not resolved with pDoc.", ScEditUtil::GetString(*pEditText, pDoc).indexOf("/20") > 0);
+    CPPUNIT_ASSERT_MESSAGE("Date field not resolved with NULL.", ScEditUtil::GetString(*pEditText, NULL).indexOf("/20") > 0);
 
     // Cell with DocInfo title field item.
     aPos.IncRow();
@@ -1640,6 +1647,8 @@ void ScFiltersTest::testRichTextContentODS()
     aParaText = pEditText->GetText(0);
     CPPUNIT_ASSERT_MESSAGE("Unexpected text.", aParaText.indexOf("Title: ") == 0);
     CPPUNIT_ASSERT_MESSAGE("DocInfo title field item not found.", pEditText->HasField(text::textfield::Type::DOCINFO_TITLE));
+    CPPUNIT_ASSERT_EQUAL(OUString("Title: Test Document"), ScEditUtil::GetString(*pEditText, pDoc));
+    CPPUNIT_ASSERT_EQUAL(OUString("Title: ?"), ScEditUtil::GetString(*pEditText, NULL));
 
     // Cell with sentence with both bold and italic sequences.
     aPos.IncRow();

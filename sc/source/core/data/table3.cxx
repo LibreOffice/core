@@ -1364,7 +1364,7 @@ public:
                 sal_uLong nFormat = mrTab.GetNumberFormat( static_cast<SCCOL>(rEntry.nField), nRow );
                 ScRefCellValue aCell;
                 aCell.assign(*pCell);
-                ScCellFormat::GetInputString(aCell, nFormat, aCellStr, *mrDoc.GetFormatTable());
+                ScCellFormat::GetInputString(aCell, nFormat, aCellStr, *mrDoc.GetFormatTable(), &mrDoc);
             }
         }
         else

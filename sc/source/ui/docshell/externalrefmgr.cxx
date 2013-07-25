@@ -1273,7 +1273,7 @@ static FormulaToken* convertToToken( ScRefCellValue& rCell )
     {
         case CELLTYPE_EDIT:
         case CELLTYPE_STRING:
-            return new formula::FormulaStringToken(rCell.getString());
+            return new formula::FormulaStringToken(rCell.getString(NULL));
         case CELLTYPE_VALUE:
             return new formula::FormulaDoubleToken(rCell.mfValue);
         case CELLTYPE_FORMULA:
@@ -1363,7 +1363,7 @@ static ScTokenArray* convertToTokenArray(
                 {
                     case CELLTYPE_EDIT:
                     case CELLTYPE_STRING:
-                        xMat->PutString(aCell.getString(), nC, nR);
+                        xMat->PutString(aCell.getString(NULL), nC, nR);
                     break;
                     case CELLTYPE_VALUE:
                         xMat->PutDouble(aCell.mfValue, nC, nR);

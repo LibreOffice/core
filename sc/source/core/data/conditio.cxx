@@ -734,7 +734,8 @@ void ScConditionEntry::Interpret( const ScAddress& rPos )
     bFirstRun = false;
 }
 
-static bool lcl_GetCellContent( ScRefCellValue& rCell, bool bIsStr1, double& rArg, OUString& rArgStr )
+static bool lcl_GetCellContent( ScRefCellValue& rCell, bool bIsStr1, double& rArg, OUString& rArgStr,
+        const ScDocument* pDoc )
 {
 
     if (rCell.isEmpty())
@@ -762,7 +763,7 @@ static bool lcl_GetCellContent( ScRefCellValue& rCell, bool bIsStr1, double& rAr
             if (rCell.meType == CELLTYPE_STRING)
                 rArgStr = *rCell.mpString;
             else if (rCell.mpEditText)
-                rArgStr = ScEditUtil::GetString(*rCell.mpEditText);
+                rArgStr = ScEditUtil::GetString(*rCell.mpEditText, pDoc);
         break;
         default:
             ;
@@ -806,7 +807,7 @@ void ScConditionEntry::FillCache() const
 
                     double nVal = 0.0;
                     OUString aStr;
-                    if (!lcl_GetCellContent(aCell, false, nVal, aStr))
+                    if (!lcl_GetCellContent(aCell, false, nVal, aStr, mpDoc))
                     {
                         std::pair<ScConditionEntryCache::StringCacheType::iterator, bool> aResult =
                             mpCache->maStrings.insert(
@@ -1270,7 +1271,7 @@ bool ScConditionEntry::IsCellValid( ScRefCellValue& rCell, const ScAddress& rPos
 
     double nArg = 0.0;
     OUString aArgStr;
-    bool bVal = lcl_GetCellContent( rCell, bIsStr1, nArg, aArgStr );
+    bool bVal = lcl_GetCellContent( rCell, bIsStr1, nArg, aArgStr, mpDoc );
     if (bVal)
         return IsValid( nArg, rPos );
     else

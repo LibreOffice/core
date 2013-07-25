@@ -248,7 +248,7 @@ long ScColumn::GetNeededSize(
             Color* pColor;
             OUString aValStr;
             ScCellFormat::GetString(
-                aCell, nFormat, aValStr, &pColor, *pFormatter, true, rOptions.bFormula, ftCheck);
+                aCell, nFormat, aValStr, &pColor, *pFormatter, pDocument, true, rOptions.bFormula, ftCheck);
 
             if (!aValStr.isEmpty())
             {
@@ -410,7 +410,7 @@ long ScColumn::GetNeededSize(
                 Color* pColor;
                 OUString aString;
                 ScCellFormat::GetString(
-                    aCell, nFormat, aString, &pColor, *pFormatter, true,
+                    aCell, nFormat, aString, &pColor, *pFormatter, pDocument, true,
                     rOptions.bFormula, ftCheck);
 
                 if (!aString.isEmpty())
@@ -569,7 +569,7 @@ sal_uInt16 ScColumn::GetOptimalColWidth(
         {
             ScRefCellValue aCell = GetCellValue(pParam->mnMaxTextRow);
             ScCellFormat::GetString(
-                aCell, nFormat, aLongStr, &pColor, *pFormatter, true, false, ftCheck);
+                aCell, nFormat, aLongStr, &pColor, *pFormatter, pDocument, true, false, ftCheck);
         }
         else
         {
@@ -584,7 +584,7 @@ sal_uInt16 ScColumn::GetOptimalColWidth(
                 aCell.assign(*maItems[nIndex].pCell);
                 OUString aValStr;
                 ScCellFormat::GetString(
-                    aCell, nFormat, aValStr, &pColor, *pFormatter, true, false, ftCheck);
+                    aCell, nFormat, aValStr, &pColor, *pFormatter, pDocument, true, false, ftCheck);
 
                 if (aValStr.getLength() > nLongLen)
                 {

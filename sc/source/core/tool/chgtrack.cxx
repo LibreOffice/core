@@ -1501,15 +1501,15 @@ void ScChangeActionContent::SetOldValue( const OUString& rOld, ScDocument* pDoc 
 }
 
 
-void ScChangeActionContent::GetOldString( OUString& rStr ) const
+void ScChangeActionContent::GetOldString( OUString& rStr, const ScDocument* pDoc ) const
 {
-    GetValueString(rStr, maOldValue, maOldCell);
+    GetValueString(rStr, maOldValue, maOldCell, pDoc);
 }
 
 
-void ScChangeActionContent::GetNewString( OUString& rStr ) const
+void ScChangeActionContent::GetNewString( OUString& rStr, const ScDocument* pDoc ) const
 {
-    GetValueString(rStr, maNewValue, maNewCell);
+    GetValueString(rStr, maNewValue, maNewCell, pDoc);
 }
 
 const ScCellValue& ScChangeActionContent::GetOldCell() const
@@ -1540,7 +1540,7 @@ void ScChangeActionContent::GetDescription(
         nPos += aTmpStr.getLength();
     }
 
-    GetOldString( aTmpStr );
+    GetOldString( aTmpStr, pDoc );
     if (aTmpStr.isEmpty())
         aTmpStr = ScGlobal::GetRscString( STR_CHANGED_BLANK );
 
@@ -1551,7 +1551,7 @@ void ScChangeActionContent::GetDescription(
         nPos += aTmpStr.getLength();
     }
 
-    GetNewString( aTmpStr );
+    GetNewString( aTmpStr, pDoc );
     if (aTmpStr.isEmpty())
         aTmpStr = ScGlobal::GetRscString( STR_CHANGED_BLANK );
 
@@ -1715,7 +1715,7 @@ void ScChangeActionContent::GetStringOfCell(
         break;
         case CELLTYPE_EDIT:
             if (rCell.mpEditText)
-                rStr = ScEditUtil::GetString(*rCell.mpEditText);
+                rStr = ScEditUtil::GetString(*rCell.mpEditText, pDoc);
         break;
         case CELLTYPE_FORMULA:
             rCell.mpFormula->GetFormula(rStr);
@@ -1850,7 +1850,7 @@ void ScChangeActionContent::SetCell( OUString& rStr, ScCellValue& rCell, sal_uLo
 
 
 void ScChangeActionContent::GetValueString(
-    OUString& rStr, const OUString& rValue, const ScCellValue& rCell ) const
+    OUString& rStr, const OUString& rValue, const ScCellValue& rCell, const ScDocument* pDoc ) const
 {
     if (!rValue.isEmpty())
     {
@@ -1865,7 +1865,7 @@ void ScChangeActionContent::GetValueString(
         break;
         case CELLTYPE_EDIT :
             if (rCell.mpEditText)
-                rStr = ScEditUtil::GetString(*rCell.mpEditText);
+                rStr = ScEditUtil::GetString(*rCell.mpEditText, pDoc);
         break;
         case CELLTYPE_VALUE :   // ist immer in rValue
             rStr = rValue;
@@ -4578,7 +4578,7 @@ ScChangeTrack* ScChangeTrack::Clone( ScDocument* pDocument ) const
             ScCellValue aClonedNewCell;
             aClonedNewCell.assign(rNewCell, *pDocument);
             OUString aNewValue;
-            pContent->GetNewString( aNewValue );
+            pContent->GetNewString( aNewValue, pDocument );
             pClonedTrack->nGeneratedMin = pGenerated->GetActionNumber() + 1;
             pClonedTrack->AddLoadedGenerated(aClonedNewCell, pGenerated->GetBigRange(), aNewValue);
         }
@@ -4663,7 +4663,7 @@ ScChangeTrack* ScChangeTrack::Clone( ScDocument* pDocument ) const
                     ScCellValue aClonedOldCell;
                     aClonedOldCell.assign(rOldCell, *pDocument);
                     OUString aOldValue;
-                    pContent->GetOldString( aOldValue );
+                    pContent->GetOldString( aOldValue, pDocument );
 
                     ScChangeActionContent* pClonedContent = new ScChangeActionContent(
                         pAction->GetActionNumber(),

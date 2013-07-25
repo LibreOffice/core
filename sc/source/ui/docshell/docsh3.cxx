@@ -940,7 +940,7 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
 #if OSL_DEBUG_LEVEL > 0
                 OUString aValue;
                 if ( eSourceType == SC_CAT_CONTENT )
-                    ((const ScChangeActionContent*)pSourceAction)->GetNewString( aValue );
+                    ((const ScChangeActionContent*)pSourceAction)->GetNewString( aValue, &aDocument );
                 OStringBuffer aError(OUStringToOString(aValue,
                     osl_getThreadTextEncoding()));
                 aError.append(RTL_CONSTASCII_STRINGPARAM(" weggelassen"));
@@ -1005,7 +1005,7 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
                             OSL_ENSURE( aSourceRange.aStart == aSourceRange.aEnd, "huch?" );
                             ScAddress aPos = aSourceRange.aStart;
                             OUString aValue;
-                            ((const ScChangeActionContent*)pSourceAction)->GetNewString( aValue );
+                            ((const ScChangeActionContent*)pSourceAction)->GetNewString( aValue, &aDocument );
                             sal_uInt8 eMatrix = MM_NONE;
                             const ScCellValue& rCell = ((const ScChangeActionContent*)pSourceAction)->GetNewCell();
                             if (rCell.meType == CELLTYPE_FORMULA)
