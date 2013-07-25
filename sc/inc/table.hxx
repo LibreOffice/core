@@ -853,6 +853,12 @@ public:
     void DeleteBroadcasters( sc::ColumnBlockPosition& rBlockPos, SCCOL nCol, SCROW nRow1, SCROW nRow2 );
     bool HasBroadcaster( SCCOL nCol ) const;
 
+    /**
+     * Broadcast dirty formula cells that contain functions such as CELL(),
+     * COLUMN() or ROW() which may change its value on move.
+     */
+    void BroadcastRecalcOnRefMove();
+
     /** Replace behaves differently to the Search; adjust the rCol and rRow accordingly.
 
         'Replace' replaces at the 'current' position, but in order to achieve

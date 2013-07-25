@@ -1115,6 +1115,18 @@ bool ScDocument::CanInsertRow( const ScRange& rRange ) const
     return bTest;
 }
 
+namespace {
+
+struct BroadcastRecalcOnRefMoveHandler : std::unary_function<ScTable*, void>
+{
+    void operator() (ScTable* p)
+    {
+        if (p)
+            p->BroadcastRecalcOnRefMove();
+    }
+};
+
+}
 
 bool ScDocument::InsertRow( SCCOL nStartCol, SCTAB nStartTab,
                             SCCOL nEndCol,   SCTAB nEndTab,
@@ -1194,6 +1206,10 @@ bool ScDocument::InsertRow( SCCOL nStartCol, SCTAB nStartTab,
             for (; it != maTabs.end(); ++it)
                 if (*it)
                     (*it)->SetRelNameDirty();
+
+            // Cells containing functions such as CELL, COLUMN or ROW may have
+            // changed their values on relocation. Broadcast them.
+            std::for_each(maTabs.begin(), maTabs.end(), BroadcastRecalcOnRefMoveHandler());
         }
         bRet = true;
     }
@@ -1285,6 +1301,10 @@ void ScDocument::DeleteRow( SCCOL nStartCol, SCTAB nStartTab,
         for (; it != maTabs.end(); ++it)
             if (*it)
                 (*it)->SetRelNameDirty();
+
+        // Cells containing functions such as CELL, COLUMN or ROW may have
+        // changed their values on relocation. Broadcast them.
+        std::for_each(maTabs.begin(), maTabs.end(), BroadcastRecalcOnRefMoveHandler());
     }
 
     SetAutoCalc( bOldAutoCalc );
@@ -1390,6 +1410,10 @@ bool ScDocument::InsertCol( SCROW nStartRow, SCTAB nStartTab,
             for (; it != maTabs.end(); ++it)
                 if (*it)
                     (*it)->SetRelNameDirty();
+
+            // Cells containing functions such as CELL, COLUMN or ROW may have
+            // changed their values on relocation. Broadcast them.
+            std::for_each(maTabs.begin(), maTabs.end(), BroadcastRecalcOnRefMoveHandler());
         }
         bRet = true;
     }
@@ -1479,6 +1503,10 @@ void ScDocument::DeleteCol(SCROW nStartRow, SCTAB nStartTab, SCROW nEndRow, SCTA
         for (; it != maTabs.end(); ++it)
             if (*it)
                 (*it)->SetRelNameDirty();
+
+        // Cells containing functions such as CELL, COLUMN or ROW may have
+        // changed their values on relocation. Broadcast them.
+        std::for_each(maTabs.begin(), maTabs.end(), BroadcastRecalcOnRefMoveHandler());
     }
 
     SetAutoCalc( bOldAutoCalc );
