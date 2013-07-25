@@ -5478,7 +5478,7 @@ float OutputDevice::approximate_char_width() const
     return GetTextWidth("aemnnxEM") / 8.0;
 }
 
-void OutputDevice::DrawTextArray( const Point& rStartPt, const String& rStr,
+void OutputDevice::DrawTextArray( const Point& rStartPt, const OUString& rStr,
                                   const sal_Int32* pDXAry,
                                   xub_StrLen nIndex, xub_StrLen nLen )
 {
@@ -5620,7 +5620,7 @@ bool OutputDevice::GetCaretPositions( const OUString& rStr, sal_Int32* pCaretXAr
 }
 
 void OutputDevice::DrawStretchText( const Point& rStartPt, sal_uLong nWidth,
-                                    const String& rStr,
+                                    const OUString& rStr,
                                     xub_StrLen nIndex, xub_StrLen nLen )
 {
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );

@@ -581,7 +581,7 @@ public:
     /// Height where any character of the current font fits; in logic coordinates.
     long                GetTextHeight() const;
     float               approximate_char_width() const;
-    void                DrawTextArray( const Point& rStartPt, const XubString& rStr,
+    void                DrawTextArray( const Point& rStartPt, const OUString& rStr,
                                        const sal_Int32* pDXAry = NULL,
                                        xub_StrLen nIndex = 0,
                                        xub_StrLen nLen = STRING_LEN );
@@ -592,7 +592,7 @@ public:
                                       sal_Int32* pDXAry = NULL, long nWidth = 0,
                                       sal_Bool bCellBreaking = sal_True ) const;
     void                DrawStretchText( const Point& rStartPt, sal_uLong nWidth,
-                                         const XubString& rStr,
+                                         const OUString& rStr,
                                          xub_StrLen nIndex = 0, xub_StrLen nLen = STRING_LEN );
     xub_StrLen          GetTextBreak( const OUString& rStr, long nTextWidth,
                                       sal_Int32 nIndex = 0, sal_Int32 nLen = -1,
