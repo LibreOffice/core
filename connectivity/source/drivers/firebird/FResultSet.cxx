@@ -92,34 +92,6 @@ OResultSet::~OResultSet()
 {
 }
 
-// void OResultSet::ensureDataAvailable() throw (SQLException)
-// {
-//     MutexGuard aGuard(m_pConnection->getMutex());
-//     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-//
-//     if (!m_bIsPopulated)
-//     {
-//
-//         ISC_STATUS aErr = isc_dsql_free_statement(m_statusVector,
-//                                                   &m_statementHandle,
-//                                                   DSQL_drop);
-//         // TODO: cleanup the XSQLDA, probably in the destructor?
-//
-//         // fetchstat == 100L if fetching of data completed successfully.
-//         if ((fetchStat != 100L) || aErr)
-//         {
-//             SAL_WARN("connectivity.firebird", "Error when populating data");
-//             OConnection::evaluateStatusVector(m_statusVector,
-//                                               "isc_dsql_free_statement",
-//                                               *this);
-//         }
-//
-//         SAL_INFO("connectivity.firebird", "Populated dataset with " << m_rowCount << " rows.");
-//         m_bIsPopulated = true;
-//     }
-// }
-
-
 // ---- XResultSet -- Row retrieval methods ------------------------------------
 sal_Int32 SAL_CALL OResultSet::getRow() throw(SQLException, RuntimeException)
 {
@@ -158,44 +130,6 @@ sal_Bool SAL_CALL OResultSet::next() throw(SQLException, RuntimeException)
                                           *this);
         return sal_False;
     }
-
-            //         {
-//             m_rowCount++;
-//
-//             TRow aRow(m_fieldCount);
-//             m_sqlData.push_back(aRow);
-//             TRow& rRow = m_sqlData.back();
-//
-//             XSQLVAR* pVar = m_pSqlda->sqlvar;
-//             for (int i = 0; i < m_fieldCount; pVar++, i++)
-//             {
-//                 if ((pVar->sqltype & 1) == 0) // Means: Cannot contain NULL
-//                 {
-//                     // TODO: test for null here and set as appropriate
-//                 }
-//                 else // Means: Can contain NULL
-//                 {
-//                     // otherwise we need to test for SQL_TYPE and SQL_TYPE+1 below
-//                     pVar->sqltype--;
-//                 }
-//                 switch (pVar->sqltype)
-//                 {
-//                     case SQL_SHORT:
-//                         rRow[i] = (sal_Int16) *pVar->sqldata;
-//                         break;
-//                     case SQL_LONG:
-//                         rRow[i] = (sal_Int32) *pVar->sqldata;
-//                         break;
-//                     case SQL_INT64:
-//                         rRow[i] = (sal_Int64) *pVar->sqldata;
-//                         break;
-//                     // TODO: remember sqlscale for decimal types
-//                     default:
-//                         rRow[i] = OUString(pVar->sqldata, pVar->sqllen, RTL_TEXTENCODING_UTF8);
-//                         break;
-//                 }
-//             }
-//         }
 }
 
 sal_Bool SAL_CALL OResultSet::previous() throw(SQLException, RuntimeException)
