@@ -79,7 +79,7 @@ public:
     sal_uInt16 GetSideFlags() { return nSideFlags; }
 
     // TakeObjName...() is for the display in the UI, for example "3 frames selected".
-    virtual void TakeObjNameSingul(String& rName) const;
+    virtual OUString TakeObjNameSingul() const;
     virtual void TakeObjNamePlural(String& rName) const;
 };
 

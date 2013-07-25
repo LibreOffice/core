@@ -90,7 +90,7 @@ public:
     virtual bool supportsFullDrag() const;
     virtual SdrObject* getFullDragClone() const;
 
-    virtual void TakeObjNameSingul(XubString& rName) const;
+    virtual OUString TakeObjNameSingul() const;
     virtual void TakeObjNamePlural(XubString& rName) const;
 
     virtual void SetContextWritingMode( const sal_Int16 _nContextWritingMode );

@@ -184,7 +184,7 @@ public:
     basegfx::B3DPolyPolygon CreateWireframe() const;
 
     // TakeObjName...() is for the display in the UI, for example "3 frames selected".
-    virtual void TakeObjNameSingul(String& rName) const;
+    virtual OUString TakeObjNameSingul() const;
     virtual void TakeObjNamePlural(String& rName) const;
     sal_uInt16 GetLogicalGroup() { return 0; }
     virtual E3dObject* Clone() const;

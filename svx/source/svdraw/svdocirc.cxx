@@ -283,7 +283,7 @@ void SdrCircObj::RecalcXPoly()
     mpXPoly = new XPolygon(aPolyCirc);
 }
 
-void SdrCircObj::TakeObjNameSingul(XubString& rName) const
+OUString SdrCircObj::TakeObjNameSingul() const
 {
     sal_uInt16 nID=STR_ObjNameSingulCIRC;
     if (aRect.GetWidth()==aRect.GetHeight() && aGeo.nShearWink==0) {
@@ -303,16 +303,17 @@ void SdrCircObj::TakeObjNameSingul(XubString& rName) const
             default: break;
         }
     }
-    rName=ImpGetResStr(nID);
+    OUStringBuffer sName(ImpGetResStr(nID));
 
-    String aName( GetName() );
-    if(aName.Len())
+    OUString aName(GetName());
+    if (!aName.isEmpty())
     {
-        rName += sal_Unicode(' ');
-        rName += sal_Unicode('\'');
-        rName += aName;
-        rName += sal_Unicode('\'');
+        sName.append(' ');
+        sName.append('\'');
+        sName.append(aName);
+        sName.append('\'');
     }
+    return sName.makeStringAndClear();
 }
 
 void SdrCircObj::TakeObjNamePlural(XubString& rName) const

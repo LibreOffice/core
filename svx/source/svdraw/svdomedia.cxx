@@ -139,19 +139,21 @@ sal_uInt16 SdrMediaObj::GetObjIdentifier() const
 
 // ------------------------------------------------------------------------------
 
-void SdrMediaObj::TakeObjNameSingul(XubString& rName) const
+OUString SdrMediaObj::TakeObjNameSingul() const
 {
-    rName=ImpGetResStr(STR_ObjNameSingulMEDIA);
+    OUStringBuffer sName(ImpGetResStr(STR_ObjNameSingulMEDIA));
 
-    String aName( GetName() );
+    OUString aName(GetName());
 
-    if(aName.Len())
+    if (!aName.isEmpty())
     {
-        rName += sal_Unicode(' ');
-        rName += sal_Unicode('\'');
-        rName += aName;
-        rName += sal_Unicode('\'');
+        sName.append(' ');
+        sName.append('\'');
+        sName.append(aName);
+        sName.append('\'');
     }
+
+    return sName.makeStringAndClear();
 }
 
 // ------------------------------------------------------------------------------

@@ -205,7 +205,7 @@ public:
 
     virtual bool AdjustTextFrameWidthAndHeight(Rectangle& rR, bool bHgt = true, bool bWdt = true) const;
     virtual bool AdjustTextFrameWidthAndHeight(bool bHgt = true, bool bWdt = true);
-    virtual void TakeObjNameSingul(String& rName) const;
+    virtual OUString TakeObjNameSingul() const;
     virtual void TakeObjNamePlural(String& rName) const;
     virtual SdrTableObj* Clone() const;
     SdrTableObj& operator=(const SdrTableObj& rObj);

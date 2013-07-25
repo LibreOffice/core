@@ -573,18 +573,19 @@ void E3dScene::RotateScene (const Point& rRef, long /*nWink*/, double sn, double
     NbcMove (Differenz);  // Actually executes the coordinate transformation.
 }
 
-void E3dScene::TakeObjNameSingul(XubString& rName) const
+OUString E3dScene::TakeObjNameSingul() const
 {
-    rName=ImpGetResStr(STR_ObjNameSingulScene3d);
+    OUStringBuffer sName(ImpGetResStr(STR_ObjNameSingulScene3d));
 
-    String aName( GetName() );
-    if(aName.Len())
+    OUString aName(GetName());
+    if (!aName.isEmpty())
     {
-        rName += sal_Unicode(' ');
-        rName += sal_Unicode('\'');
-        rName += aName;
-        rName += sal_Unicode('\'');
+        sName.append(' ');
+        sName.append('\'');
+        sName.append(aName);
+        sName.append('\'');
     }
+    return sName.makeStringAndClear();
 }
 
 void E3dScene::TakeObjNamePlural(XubString& rName) const

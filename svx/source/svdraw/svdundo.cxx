@@ -221,8 +221,7 @@ void SdrUndoObj::GetDescriptionStringForObject( const SdrObject& _rForObject, sa
         }
         else
         {
-            XubString aStr;
-            _rForObject.TakeObjNameSingul(aStr);
+            OUString aStr(_rForObject.TakeObjNameSingul());
             rStr.Insert(aStr, nPos);
         }
     }

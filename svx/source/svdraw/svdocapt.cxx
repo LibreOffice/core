@@ -240,18 +240,20 @@ SdrCaptionObj* SdrCaptionObj::Clone() const
     return CloneHelper< SdrCaptionObj >();
 }
 
-void SdrCaptionObj::TakeObjNameSingul(XubString& rName) const
+OUString SdrCaptionObj::TakeObjNameSingul() const
 {
-    rName=ImpGetResStr(STR_ObjNameSingulCAPTION);
+    OUStringBuffer sName(ImpGetResStr(STR_ObjNameSingulCAPTION));
 
-    String aName( GetName() );
-    if(aName.Len())
+    OUString aName(GetName());
+    if (!aName.isEmpty())
     {
-        rName += sal_Unicode(' ');
-        rName += sal_Unicode('\'');
-        rName += aName;
-        rName += sal_Unicode('\'');
+        sName.append(' ');
+        sName.append('\'');
+        sName.append(aName);
+        sName.append('\'');
     }
+
+    return sName.makeStringAndClear();
 }
 
 void SdrCaptionObj::TakeObjNamePlural(XubString& rName) const

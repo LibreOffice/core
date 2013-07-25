@@ -95,7 +95,7 @@ public:
     virtual void TakeUnrotatedSnapRect(Rectangle& rRect) const;
     virtual SdrMeasureObj* Clone() const;
 
-    virtual void TakeObjNameSingul(String& rName) const;
+    virtual OUString TakeObjNameSingul() const;
     virtual void TakeObjNamePlural(String& rName) const;
 
     virtual basegfx::B2DPolyPolygon TakeXorPoly() const;

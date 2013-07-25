@@ -86,7 +86,7 @@ public:
     virtual E3dExtrudeObj* Clone() const;
 
     // TakeObjName...() is for the display in the UI (for example "3 frames selected")
-    virtual void TakeObjNameSingul(String& rName) const;
+    virtual OUString TakeObjNameSingul() const;
     virtual void TakeObjNamePlural(String& rName) const;
 
     // set/get local parameters with geometry regeneration

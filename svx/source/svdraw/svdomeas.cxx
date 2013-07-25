@@ -743,18 +743,20 @@ SdrMeasureObj* SdrMeasureObj::Clone() const
     return CloneHelper< SdrMeasureObj >();
 }
 
-void SdrMeasureObj::TakeObjNameSingul(XubString& rName) const
+OUString SdrMeasureObj::TakeObjNameSingul() const
 {
-    rName=ImpGetResStr(STR_ObjNameSingulMEASURE);
+    OUStringBuffer sName(ImpGetResStr(STR_ObjNameSingulMEASURE));
 
-    String aName( GetName() );
-    if(aName.Len())
+    OUString aName( GetName() );
+    if (!aName.isEmpty())
     {
-        rName += sal_Unicode(' ');
-        rName += sal_Unicode('\'');
-        rName += aName;
-        rName += sal_Unicode('\'');
+        sName.append(' ');
+        sName.append('\'');
+        sName.append(aName);
+        sName.append('\'');
     }
+
+    return sName.makeStringAndClear();
 }
 
 void SdrMeasureObj::TakeObjNamePlural(XubString& rName) const

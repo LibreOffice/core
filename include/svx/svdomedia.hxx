@@ -50,7 +50,7 @@ public:
         virtual void                TakeObjInfo(SdrObjTransformInfoRec& rInfo) const;
         virtual sal_uInt16              GetObjIdentifier() const;
 
-        virtual void                TakeObjNameSingul(String& rName) const;
+        virtual OUString            TakeObjNameSingul() const;
         virtual void                TakeObjNamePlural(String& rName) const;
 
         virtual SdrMediaObj*            Clone() const;

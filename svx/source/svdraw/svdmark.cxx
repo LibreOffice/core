@@ -569,7 +569,7 @@ const XubString& SdrMarkList::GetMarkDescription() const
         {
             if(pMark->GetMarkedSdrObj())
             {
-                pMark->GetMarkedSdrObj()->TakeObjNameSingul(aNam);
+                aNam = pMark->GetMarkedSdrObj()->TakeObjNameSingul();
             }
         }
         else
@@ -663,7 +663,7 @@ const XubString& SdrMarkList::GetPointMarkDescription(sal_Bool bGlue) const
         {
             if(pMark->GetMarkedSdrObj())
             {
-                pMark->GetMarkedSdrObj()->TakeObjNameSingul(aNam);
+                aNam = pMark->GetMarkedSdrObj()->TakeObjNameSingul();
             }
         }
         else

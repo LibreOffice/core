@@ -151,20 +151,22 @@ SdrVirtObj& SdrVirtObj::operator=(const SdrVirtObj& rObj)
     return *this;
 }
 
-void SdrVirtObj::TakeObjNameSingul(XubString& rName) const
+OUString SdrVirtObj::TakeObjNameSingul() const
 {
-    rRefObj.TakeObjNameSingul(rName);
-    rName.Insert(sal_Unicode('['), 0);
-    rName += sal_Unicode(']');
+    OUStringBuffer sName(rRefObj.TakeObjNameSingul());
+    sName.insert(0, '[');
+    sName.append(']');
 
-    String aName( GetName() );
-    if(aName.Len())
+    OUString aName(GetName());
+    if (!aName.isEmpty())
     {
-        rName += sal_Unicode(' ');
-        rName += sal_Unicode('\'');
-        rName += aName;
-        rName += sal_Unicode('\'');
+        sName.append(' ');
+        sName.append('\'');
+        sName.append(aName);
+        sName.append('\'');
     }
+
+    return sName.makeStringAndClear();
 }
 
 void SdrVirtObj::TakeObjNamePlural(XubString& rName) const

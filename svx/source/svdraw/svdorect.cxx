@@ -219,32 +219,34 @@ void SdrRectObj::TakeUnrotatedSnapRect(Rectangle& rRect) const
     }
 }
 
-void SdrRectObj::TakeObjNameSingul(XubString& rName) const
+OUString SdrRectObj::TakeObjNameSingul() const
 {
     if (IsTextFrame())
     {
-        SdrTextObj::TakeObjNameSingul(rName);
+        return SdrTextObj::TakeObjNameSingul();
     }
-    else
-    {
-        sal_uInt16 nResId=STR_ObjNameSingulRECT;
-        if (aGeo.nShearWink!=0) {
-            nResId+=4;  // parallelogram or, maybe, rhombus
-        } else {
-            if (aRect.GetWidth()==aRect.GetHeight()) nResId+=2; // square
-        }
-        if (GetEckenradius()!=0) nResId+=8; // rounded down
-        rName=ImpGetResStr(nResId);
 
-        String aName( GetName() );
-        if(aName.Len())
-        {
-            rName += sal_Unicode(' ');
-            rName += sal_Unicode('\'');
-            rName += aName;
-            rName += sal_Unicode('\'');
-        }
+    OUStringBuffer sName;
+
+    sal_uInt16 nResId=STR_ObjNameSingulRECT;
+    if (aGeo.nShearWink!=0) {
+        nResId+=4;  // parallelogram or, maybe, rhombus
+    } else {
+        if (aRect.GetWidth()==aRect.GetHeight()) nResId+=2; // square
     }
+    if (GetEckenradius()!=0) nResId+=8; // rounded down
+    sName.append(ImpGetResStr(nResId));
+
+    OUString aName(GetName());
+    if (!aName.isEmpty())
+    {
+        sName.append(' ');
+        sName.append('\'');
+        sName.append(aName);
+        sName.append('\'');
+    }
+
+    return sName.makeStringAndClear();
 }
 
 void SdrRectObj::TakeObjNamePlural(XubString& rName) const

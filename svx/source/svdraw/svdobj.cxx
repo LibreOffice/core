@@ -1090,18 +1090,19 @@ SdrObject& SdrObject::operator=(const SdrObject& rObj)
     return *this;
 }
 
-void SdrObject::TakeObjNameSingul(XubString& rName) const
+OUString SdrObject::TakeObjNameSingul() const
 {
-    rName=ImpGetResStr(STR_ObjNameSingulNONE);
+    OUStringBuffer sName(ImpGetResStr(STR_ObjNameSingulNONE));
 
-    String aName( GetName() );
-    if(aName.Len())
+    OUString aName(GetName());
+    if (!aName.isEmpty())
     {
-        rName += sal_Unicode(' ');
-        rName += sal_Unicode('\'');
-        rName += aName;
-        rName += sal_Unicode('\'');
+        sName.append(' ');
+        sName.append('\'');
+        sName.append(aName);
+        sName.append('\'');
     }
+    return sName.makeStringAndClear();
 }
 
 void SdrObject::TakeObjNamePlural(XubString& rName) const
@@ -1116,8 +1117,7 @@ void SdrObject::ImpTakeDescriptionStr(sal_uInt16 nStrCacheID, OUString& rStr, sa
     if (nPos >= 0)
     {
         // Replace '%1' with the object name.
-        XubString aObjName;
-        TakeObjNameSingul(aObjName);
+        OUString aObjName(TakeObjNameSingul());
         rStr = rStr.replaceAt(nPos, 2, aObjName);
     }
 

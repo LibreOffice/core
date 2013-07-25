@@ -664,18 +664,19 @@ basegfx::B3DPolyPolygon E3dObject::CreateWireframe() const
 
 // Get the name of the object (singular)
 
-void E3dObject::TakeObjNameSingul(XubString& rName) const
+OUString E3dObject::TakeObjNameSingul() const
 {
-    rName=ImpGetResStr(STR_ObjNameSingulObj3d);
+    OUStringBuffer sName(ImpGetResStr(STR_ObjNameSingulObj3d));
 
-    String aName( GetName() );
-    if(aName.Len())
+    OUString aName(GetName());
+    if (!aName.isEmpty())
     {
-        rName += sal_Unicode(' ');
-        rName += sal_Unicode('\'');
-        rName += aName;
-        rName += sal_Unicode('\'');
+        sName.append(' ');
+        sName.append('\'');
+        sName.append(aName);
+        sName.append('\'');
     }
+    return sName.makeStringAndClear();
 }
 
 // Get the name of the object (plural)

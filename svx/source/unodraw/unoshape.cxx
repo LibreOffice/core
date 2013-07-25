@@ -2908,9 +2908,7 @@ bool SvxShape::getPropertyValueImpl( const OUString&, const SfxItemPropertySimpl
 
     case OWN_ATTR_UINAME_SINGULAR:
     {
-        String aTmp;
-        mpObj->TakeObjNameSingul( aTmp );
-        rValue <<= OUString( aTmp );
+        rValue <<= mpObj->TakeObjNameSingul();
         break;
     }
 

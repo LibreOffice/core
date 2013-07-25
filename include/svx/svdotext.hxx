@@ -421,7 +421,7 @@ public:
 
     // Wird zur Bestimmung des Textankerbereichs benoetigt
     virtual void TakeUnrotatedSnapRect(Rectangle& rRect) const;
-    virtual void TakeObjNameSingul(String& rName) const;
+    virtual OUString TakeObjNameSingul() const;
     virtual void TakeObjNamePlural(String& rName) const;
     virtual SdrTextObj* Clone() const;
     SdrTextObj& operator=(const SdrTextObj& rObj);

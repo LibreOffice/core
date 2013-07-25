@@ -127,18 +127,19 @@ void E3dSphereObj::SetSize(const basegfx::B3DVector& rNew)
 
 // Get the name of the object (singular)
 
-void E3dSphereObj::TakeObjNameSingul(XubString& rName) const
+OUString E3dSphereObj::TakeObjNameSingul() const
 {
-    rName=ImpGetResStr(STR_ObjNameSingulSphere3d);
+    OUStringBuffer sName(ImpGetResStr(STR_ObjNameSingulSphere3d));
 
-    String aName( GetName() );
-    if(aName.Len())
+    OUString aName(GetName());
+    if (!aName.isEmpty())
     {
-        rName += sal_Unicode(' ');
-        rName += sal_Unicode('\'');
-        rName += aName;
-        rName += sal_Unicode('\'');
+        sName.append(' ');
+        sName.append('\'');
+        sName.append(aName);
+        sName.append('\'');
     }
+    return sName.makeStringAndClear();
 }
 
 // Get the name of the object (plural)

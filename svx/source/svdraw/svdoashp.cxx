@@ -2824,17 +2824,18 @@ SdrObjCustomShape& SdrObjCustomShape::operator=(const SdrObjCustomShape& rObj)
 }
 
 
-void SdrObjCustomShape::TakeObjNameSingul(XubString& rName) const
+OUString SdrObjCustomShape::TakeObjNameSingul() const
 {
-    rName = ImpGetResStr(STR_ObjNameSingulCUSTOMSHAPE);
-    String aNm( GetName() );
-    if( aNm.Len() )
+    OUStringBuffer sName(ImpGetResStr(STR_ObjNameSingulCUSTOMSHAPE));
+    OUString aNm(GetName());
+    if (!aNm.isEmpty())
     {
-        rName += sal_Unicode(' ');
-        rName += sal_Unicode('\'');
-        rName += aNm;
-        rName += sal_Unicode('\'');
+        sName.append(' ');
+        sName.append('\'');
+        sName.append(aNm);
+        sName.append('\'');
     }
+    return sName.makeStringAndClear();
 }
 
 void SdrObjCustomShape::TakeObjNamePlural(XubString& rName) const

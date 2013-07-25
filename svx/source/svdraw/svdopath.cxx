@@ -1866,8 +1866,10 @@ SdrPathObj& SdrPathObj::operator=(const SdrPathObj& rObj)
     return *this;
 }
 
-void SdrPathObj::TakeObjNameSingul(XubString& rName) const
+OUString SdrPathObj::TakeObjNameSingul() const
 {
+    OUStringBuffer sName;
+
     if(OBJ_LINE == meKind)
     {
         sal_uInt16 nId(STR_ObjNameSingulLINE);
@@ -1901,7 +1903,7 @@ void SdrPathObj::TakeObjNameSingul(XubString& rName) const
             }
         }
 
-        rName = ImpGetResStr(nId);
+        sName.append(ImpGetResStr(nId));
     }
     else if(OBJ_PLIN == meKind || OBJ_POLY == meKind)
     {
@@ -1919,7 +1921,7 @@ void SdrPathObj::TakeObjNameSingul(XubString& rName) const
                 nId = STR_ObjNameSingulPLIN;
             }
 
-            rName = ImpGetResStr(nId);
+            sName.append(ImpGetResStr(nId));
         }
         else
         {
@@ -1941,38 +1943,35 @@ void SdrPathObj::TakeObjNameSingul(XubString& rName) const
                 nId = STR_ObjNameSingulPLIN_PntAnz;
             }
 
-            rName = ImpGetResStr(nId);
-            sal_uInt16 nPos(rName.SearchAscii("%2")); // #i96537#
-
-            if(STRING_NOTFOUND != nPos)
-            {
-                rName.Erase(nPos, 2);
-                rName.Insert(OUString::number(nPointCount), nPos);
-            }
+            OUString sTemp(ImpGetResStr(nId));
+            // #i96537#
+            sName.append(sTemp.replaceFirst("%2", OUString::number(nPointCount)));
         }
     }
     else
     {
         switch (meKind)
         {
-            case OBJ_PATHLINE: rName=ImpGetResStr(STR_ObjNameSingulPATHLINE); break;
-            case OBJ_FREELINE: rName=ImpGetResStr(STR_ObjNameSingulFREELINE); break;
-            case OBJ_SPLNLINE: rName=ImpGetResStr(STR_ObjNameSingulNATSPLN); break;
-            case OBJ_PATHFILL: rName=ImpGetResStr(STR_ObjNameSingulPATHFILL); break;
-            case OBJ_FREEFILL: rName=ImpGetResStr(STR_ObjNameSingulFREEFILL); break;
-            case OBJ_SPLNFILL: rName=ImpGetResStr(STR_ObjNameSingulPERSPLN); break;
+            case OBJ_PATHLINE: sName.append(ImpGetResStr(STR_ObjNameSingulPATHLINE)); break;
+            case OBJ_FREELINE: sName.append(ImpGetResStr(STR_ObjNameSingulFREELINE)); break;
+            case OBJ_SPLNLINE: sName.append(ImpGetResStr(STR_ObjNameSingulNATSPLN)); break;
+            case OBJ_PATHFILL: sName.append(ImpGetResStr(STR_ObjNameSingulPATHFILL)); break;
+            case OBJ_FREEFILL: sName.append(ImpGetResStr(STR_ObjNameSingulFREEFILL)); break;
+            case OBJ_SPLNFILL: sName.append(ImpGetResStr(STR_ObjNameSingulPERSPLN)); break;
             default: break;
         }
     }
 
-    String aName(GetName());
-    if(aName.Len())
+    OUString aName(GetName());
+    if (!aName.isEmpty())
     {
-        rName += sal_Unicode(' ');
-        rName += sal_Unicode('\'');
-        rName += aName;
-        rName += sal_Unicode('\'');
+        sName.append(' ');
+        sName.append('\'');
+        sName.append(aName);
+        sName.append('\'');
     }
+
+    return sName.makeStringAndClear();
 }
 
 void SdrPathObj::TakeObjNamePlural(XubString& rName) const

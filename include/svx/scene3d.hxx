@@ -214,7 +214,7 @@ public:
     void RotateScene(const Point& rRef, long nWink, double sn, double cs);
 
     // TakeObjName...() is for the display in the UI, for example "3 frames selected".
-    virtual void TakeObjNameSingul(String& rName) const;
+    virtual OUString TakeObjNameSingul() const;
     virtual void TakeObjNamePlural(String& rName) const;
 
     // get transformations

@@ -239,7 +239,7 @@ public:
     virtual void TakeUnrotatedSnapRect(Rectangle& rRect) const;
     virtual SdrEdgeObj* Clone() const;
     SdrEdgeObj& operator=(const SdrEdgeObj& rObj);
-    virtual void TakeObjNameSingul(String& rName) const;
+    virtual OUString TakeObjNameSingul() const;
     virtual void TakeObjNamePlural(String& rName) const;
 
     void    SetEdgeTrackPath( const basegfx::B2DPolyPolygon& rPoly );

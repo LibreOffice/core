@@ -1176,7 +1176,7 @@ XubString SdrView::GetStatusText()
 
         if(!aStr.Len())
         {
-            pAktCreate->TakeObjNameSingul(aName);
+            aName = pAktCreate->TakeObjNameSingul();
             aStr = ImpGetResStr(STR_ViewCreateObj);
         }
     }

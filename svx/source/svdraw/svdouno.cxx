@@ -255,18 +255,20 @@ void SdrUnoObj::SetContextWritingMode( const sal_Int16 _nContextWritingMode )
     }
 }
 
-void SdrUnoObj::TakeObjNameSingul(XubString& rName) const
+OUString SdrUnoObj::TakeObjNameSingul() const
 {
-    rName = ImpGetResStr(STR_ObjNameSingulUno);
+    OUStringBuffer sName(ImpGetResStr(STR_ObjNameSingulUno));
 
-    String aName( GetName() );
-    if(aName.Len())
+    OUString aName(GetName());
+    if (!aName.isEmpty())
     {
-        rName += sal_Unicode(' ');
-        rName += sal_Unicode('\'');
-        rName += aName;
-        rName += sal_Unicode('\'');
+        sName.append(' ');
+        sName.append('\'');
+        sName.append(aName);
+        sName.append('\'');
     }
+
+    return sName.makeStringAndClear();
 }
 
 void SdrUnoObj::TakeObjNamePlural(XubString& rName) const

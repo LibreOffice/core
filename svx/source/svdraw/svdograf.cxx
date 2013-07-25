@@ -713,53 +713,57 @@ void SdrGrafObj::ImpSetLinkedGraphic( const Graphic& rGraphic )
     GetModel()->SetChanged( bIsChanged );
 }
 
-void SdrGrafObj::TakeObjNameSingul(XubString& rName) const
+OUString SdrGrafObj::TakeObjNameSingul() const
 {
-    if(pGraphic)
+    if (!pGraphic)
+        return OUString();
+
+    const SvgDataPtr& rSvgDataPtr = pGraphic->GetGraphic().getSvgData();
+
+    OUStringBuffer sName;
+
+    if(rSvgDataPtr.get())
     {
-        const SvgDataPtr& rSvgDataPtr = pGraphic->GetGraphic().getSvgData();
-
-        if(rSvgDataPtr.get())
+        sName.append(ImpGetResStr(STR_ObjNameSingulGRAFSVG));
+    }
+    else
+    {
+        switch( pGraphic->GetType() )
         {
-            rName = ImpGetResStr(STR_ObjNameSingulGRAFSVG);
-        }
-        else
-        {
-            switch( pGraphic->GetType() )
+            case GRAPHIC_BITMAP:
             {
-                case GRAPHIC_BITMAP:
-                {
-                    const sal_uInt16 nId = ( ( pGraphic->IsTransparent() || ( (const SdrGrafTransparenceItem&) GetObjectItem( SDRATTR_GRAFTRANSPARENCE ) ).GetValue() ) ?
-                                         ( IsLinkedGraphic() ? STR_ObjNameSingulGRAFBMPTRANSLNK : STR_ObjNameSingulGRAFBMPTRANS ) :
-                                         ( IsLinkedGraphic() ? STR_ObjNameSingulGRAFBMPLNK : STR_ObjNameSingulGRAFBMP ) );
+                const sal_uInt16 nId = ( ( pGraphic->IsTransparent() || ( (const SdrGrafTransparenceItem&) GetObjectItem( SDRATTR_GRAFTRANSPARENCE ) ).GetValue() ) ?
+                                     ( IsLinkedGraphic() ? STR_ObjNameSingulGRAFBMPTRANSLNK : STR_ObjNameSingulGRAFBMPTRANS ) :
+                                     ( IsLinkedGraphic() ? STR_ObjNameSingulGRAFBMPLNK : STR_ObjNameSingulGRAFBMP ) );
 
-                    rName=ImpGetResStr( nId );
-                }
-                break;
-
-                case GRAPHIC_GDIMETAFILE:
-                    rName=ImpGetResStr( IsLinkedGraphic() ? STR_ObjNameSingulGRAFMTFLNK : STR_ObjNameSingulGRAFMTF );
-                break;
-
-                case GRAPHIC_NONE:
-                    rName=ImpGetResStr( IsLinkedGraphic() ? STR_ObjNameSingulGRAFNONELNK : STR_ObjNameSingulGRAFNONE );
-                break;
-
-                default:
-                    rName=ImpGetResStr(  IsLinkedGraphic() ? STR_ObjNameSingulGRAFLNK : STR_ObjNameSingulGRAF );
-                break;
+                sName.append(ImpGetResStr(nId));
             }
-        }
+            break;
 
-        const String aName(GetName());
+            case GRAPHIC_GDIMETAFILE:
+                sName.append(ImpGetResStr(IsLinkedGraphic() ? STR_ObjNameSingulGRAFMTFLNK : STR_ObjNameSingulGRAFMTF));
+            break;
 
-        if( aName.Len() )
-        {
-            rName.AppendAscii( " '" );
-            rName += aName;
-            rName += sal_Unicode( '\'' );
+            case GRAPHIC_NONE:
+                sName.append(ImpGetResStr(IsLinkedGraphic() ? STR_ObjNameSingulGRAFNONELNK : STR_ObjNameSingulGRAFNONE));
+            break;
+
+            default:
+                sName.append(ImpGetResStr(IsLinkedGraphic() ? STR_ObjNameSingulGRAFLNK : STR_ObjNameSingulGRAF));
+            break;
         }
     }
+
+    const OUString aName(GetName());
+
+    if (!aName.isEmpty())
+    {
+        sName.append(" '");
+        sName.append(aName);
+        sName.append('\'' );
+    }
+
+    return sName.makeStringAndClear();
 }
 
 void SdrGrafObj::TakeObjNamePlural( XubString& rName ) const

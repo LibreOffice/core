@@ -966,7 +966,7 @@ void SdrTextObj::ImpSetCharStretching(SdrOutliner& rOutliner, const Size& rTextS
     }
 }
 
-void SdrTextObj::TakeObjNameSingul(XubString& rName) const
+OUString SdrTextObj::TakeObjNameSingul() const
 {
     XubString aStr;
 
@@ -1020,17 +1020,18 @@ void SdrTextObj::TakeObjNameSingul(XubString& rName) const
         }
     }
 
-    rName = aStr;
+    OUStringBuffer sName(aStr);
 
-    String aName( GetName() );
-    if(aName.Len())
+    OUString aName(GetName());
+    if (!aName.isEmpty())
     {
-        rName += sal_Unicode(' ');
-        rName += sal_Unicode('\'');
-        rName += aName;
-        rName += sal_Unicode('\'');
+        sName.append(' ');
+        sName.append('\'');
+        sName.append(aName);
+        sName.append('\'');
     }
 
+    return sName.makeStringAndClear();
 }
 
 void SdrTextObj::TakeObjNamePlural(XubString& rName) const

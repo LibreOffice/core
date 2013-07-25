@@ -623,7 +623,7 @@ public:
     SdrObject& operator=(const SdrObject& rObj);
 
     // TakeObjName...() ist fuer die Anzeige in der UI, z.B. "3 Rahmen selektiert".
-    virtual void TakeObjNameSingul(String& rName) const;
+    virtual OUString TakeObjNameSingul() const;
     virtual void TakeObjNamePlural(String& rName) const;
 
     // Das Xor-Polygon wird von der View zu Draggen des Objektes benoetigt.

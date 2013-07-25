@@ -1591,18 +1591,20 @@ sal_uInt16 SdrOle2Obj::GetObjIdentifier() const
 
 // -----------------------------------------------------------------------------
 
-void SdrOle2Obj::TakeObjNameSingul(XubString& rName) const
+OUString SdrOle2Obj::TakeObjNameSingul() const
 {
-    rName = ImpGetResStr(bFrame ? STR_ObjNameSingulFrame : STR_ObjNameSingulOLE2);
+    OUStringBuffer sName(ImpGetResStr(bFrame ? STR_ObjNameSingulFrame : STR_ObjNameSingulOLE2));
 
-    const String aName(GetName());
+    const OUString aName(GetName());
 
-    if( aName.Len() )
+    if (!aName.isEmpty())
     {
-        rName.AppendAscii(" '");
-        rName += aName;
-        rName += sal_Unicode('\'');
+        sName.append(" '");
+        sName.append(aName);
+        sName.append('\'');
     }
+
+    return sName.makeStringAndClear();
 }
 
 // -----------------------------------------------------------------------------

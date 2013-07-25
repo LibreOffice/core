@@ -97,7 +97,7 @@ private:
     virtual SdrObject* DoConvertToPolyObj(sal_Bool bBezier, bool bAddText) const;
 
     // TakeObjName...() is for the display in the UI, for example "3 frames selected".
-    virtual void TakeObjNameSingul(String& rName) const;
+    virtual OUString TakeObjNameSingul() const;
     virtual void TakeObjNamePlural(String& rName) const;
 
     // set/get local parameters with geometry recreation

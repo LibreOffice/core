@@ -223,7 +223,7 @@ public:
     virtual SdrObjCustomShape* Clone() const;
     SdrObjCustomShape& operator=(const SdrObjCustomShape& rObj);
 
-    virtual void TakeObjNameSingul(String& rName) const;
+    virtual OUString TakeObjNameSingul() const;
     virtual void TakeObjNamePlural(String& rName) const;
 
     virtual basegfx::B2DPolyPolygon TakeCreatePoly( const SdrDragStat& rDrag) const;

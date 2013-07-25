@@ -166,18 +166,20 @@ SdrPageObj& SdrPageObj::operator=(const SdrPageObj& rObj)
     return *this;
 }
 
-void SdrPageObj::TakeObjNameSingul(XubString& rName) const
+OUString SdrPageObj::TakeObjNameSingul() const
 {
-    rName=ImpGetResStr(STR_ObjNameSingulPAGE);
+    OUStringBuffer sName(ImpGetResStr(STR_ObjNameSingulPAGE));
 
-    String aName( GetName() );
-    if(aName.Len())
+    OUString aName(GetName());
+    if (!aName.isEmpty())
     {
-        rName += sal_Unicode(' ');
-        rName += sal_Unicode('\'');
-        rName += aName;
-        rName += sal_Unicode('\'');
+        sName.append(' ');
+        sName.append('\'');
+        sName.append(aName);
+        sName.append('\'');
     }
+
+    return sName.makeStringAndClear();
 }
 
 void SdrPageObj::TakeObjNamePlural(XubString& rName) const

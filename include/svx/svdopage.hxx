@@ -59,7 +59,7 @@ public:
     virtual SdrPageObj* Clone() const;
     SdrPageObj& operator=(const SdrPageObj& rObj);
 
-    virtual void TakeObjNameSingul(String& rName) const;
+    virtual OUString TakeObjNameSingul() const;
     virtual void TakeObjNamePlural(String& rName) const;
 };
 

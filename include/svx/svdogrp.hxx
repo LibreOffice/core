@@ -70,7 +70,7 @@ public:
     virtual SdrObjGroup* Clone() const;
     SdrObjGroup& operator=(const SdrObjGroup& rObj);
 
-    virtual void TakeObjNameSingul(String& rName) const;
+    virtual OUString TakeObjNameSingul() const;
     virtual void TakeObjNamePlural(String& rName) const;
 
     virtual void RecalcSnapRect();

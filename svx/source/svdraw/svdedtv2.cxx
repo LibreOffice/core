@@ -1795,7 +1795,7 @@ void SdrEditView::UnGroupMarked()
 
     sal_uIntPtr nCount=0;
     XubString aName1;
-    XubString aName;
+    OUString aName;
     bool bNameOk=false;
     for (sal_uIntPtr nm=GetMarkedObjectCount(); nm>0;) {
         nm--;
@@ -1805,7 +1805,7 @@ void SdrEditView::UnGroupMarked()
         if (pSrcLst!=NULL) {
             nCount++;
             if (nCount==1) {
-                pGrp->TakeObjNameSingul(aName);  // retrieve name of group
+                aName = pGrp->TakeObjNameSingul();  // retrieve name of group
                 pGrp->TakeObjNamePlural(aName1); // retrieve name of group
                 bNameOk=true;
             } else {

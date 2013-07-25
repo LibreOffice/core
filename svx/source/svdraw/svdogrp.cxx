@@ -291,26 +291,30 @@ SdrObjGroup& SdrObjGroup::operator=(const SdrObjGroup& rObj)
 }
 
 
-void SdrObjGroup::TakeObjNameSingul(XubString& rName) const
+OUString SdrObjGroup::TakeObjNameSingul() const
 {
+    OUStringBuffer sName;
+
     if(!pSub->GetObjCount())
     {
-        rName = ImpGetResStr(STR_ObjNameSingulGRUPEMPTY);
+        sName.append(ImpGetResStr(STR_ObjNameSingulGRUPEMPTY));
     }
     else
     {
-        rName = ImpGetResStr(STR_ObjNameSingulGRUP);
+        sName.append(ImpGetResStr(STR_ObjNameSingulGRUP));
     }
 
-    const String aName(GetName());
+    const OUString aName(GetName());
 
-    if(aName.Len())
+    if (!aName.isEmpty())
     {
-        rName += sal_Unicode(' ');
-        rName += sal_Unicode('\'');
-        rName += aName;
-        rName += sal_Unicode('\'');
+        sName.append(' ');
+        sName.append('\'');
+        sName.append(aName);
+        sName.append('\'');
     }
+
+    return sName.makeStringAndClear();
 }
 
 

@@ -94,7 +94,7 @@ public:
     virtual SdrPathObj* Clone() const;
     SdrPathObj& operator=(const SdrPathObj& rObj);
 
-    virtual void TakeObjNameSingul(String& rName) const;
+    virtual OUString TakeObjNameSingul() const;
     virtual void TakeObjNamePlural(String& rName) const;
     virtual basegfx::B2DPolyPolygon TakeXorPoly() const;
     virtual void RecalcSnapRect();

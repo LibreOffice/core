@@ -110,18 +110,19 @@ void E3dCubeObj::SetPosIsCenter(sal_Bool bNew)
 
 // Get the name of the object (singular)
 
-void E3dCubeObj::TakeObjNameSingul(XubString& rName) const
+OUString E3dCubeObj::TakeObjNameSingul() const
 {
-    rName=ImpGetResStr(STR_ObjNameSingulCube3d);
+    OUStringBuffer sName(ImpGetResStr(STR_ObjNameSingulCube3d));
 
-    String aName( GetName() );
-    if(aName.Len())
+    OUString aName(GetName());
+    if (!aName.isEmpty())
     {
-        rName += sal_Unicode(' ');
-        rName += sal_Unicode('\'');
-        rName += aName;
-        rName += sal_Unicode('\'');
+        sName.append(' ');
+        sName.append('\'');
+        sName.append(aName);
+        sName.append('\'');
     }
+    return sName.makeStringAndClear();
 }
 
 // Get the name of the object (plural)

@@ -72,7 +72,7 @@ public:
     virtual SdrVirtObj* Clone() const;
     SdrVirtObj& operator=(const SdrVirtObj& rObj);
 
-    virtual void TakeObjNameSingul(String& rName) const;
+    virtual OUString TakeObjNameSingul() const;
     virtual void TakeObjNamePlural(String& rName) const;
 
     virtual basegfx::B2DPolyPolygon TakeXorPoly() const;

@@ -68,7 +68,7 @@ public:
     void SetSize(const basegfx::B3DVector& rNew);
 
     // TakeObjName...() is for displaying in the UI, eg "3 selected frames."
-    virtual void TakeObjNameSingul(String& rName) const;
+    virtual OUString TakeObjNameSingul() const;
     virtual void TakeObjNamePlural(String& rName) const;
 };
 
