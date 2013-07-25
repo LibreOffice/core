@@ -39,6 +39,7 @@
 #include "format.hxx"
 #include "parse.hxx"
 #include "smmod.hxx"
+#include "unomodel.hxx"
 
 class SmNode;
 class SfxMenuBarManager;
@@ -95,6 +96,7 @@ class SmDocShell : public SfxObjectShell, public SfxListener
     OUString            aText;
     SmFormat            aFormat;
     SmParser            aInterpreter;
+    SmModel            *pModel;
     OUString            aAccText;
     SmNode             *pTree;
     SfxMenuBarManager  *pMenuMgr;
