@@ -12,6 +12,8 @@
 #include <string.h>
 #include <algorithm>
 #include <vector>
+#include <thread>
+#include <iostream>
 
 #include <comphelper/processfactory.hxx>
 #include <rtl/strbuf.hxx>
@@ -52,13 +54,17 @@ using namespace sd;
 DiscoveryService::DiscoveryService()
 {
 #ifdef MACOSX
-    OSXNetworkService * service = [[OSXNetworkService alloc] init];
-    [service publishImpressRemoteServiceOnLocalNetworkWithName: @""];
+// Bonjour for OSX
+    osxservice = [[OSXNetworkService alloc] init];
+    [osxservice publishImpressRemoteServiceOnLocalNetworkWithName: @""];
 #endif
-
 #ifdef LINUX
 // Avahi for Linux
-    start_avahi_service("HP");
+    char hostname[1024];
+    hostname[1023] = '\0';
+    gethostname(hostname, 1023);
+    std::cerr << " AVAHI SETUP Called" << std::endl;
+    avahi_setup(hostname);
 #endif
 
     mSocket = socket( AF_INET, SOCK_DGRAM, IPPROTO_UDP );
@@ -99,7 +105,11 @@ DiscoveryService::DiscoveryService()
 DiscoveryService::~DiscoveryService()
 {
   #ifdef LINUX
-      clean_avahi_service();
+      avahi_shutdown();
+  #endif
+
+  #ifdef MACOSX
+      [osxservice dealloc];
   #endif
 
   #ifdef WNT
@@ -107,12 +117,10 @@ DiscoveryService::~DiscoveryService()
   #else
       close( mSocket );
   #endif
-// #endif
 }
 
 void SAL_CALL DiscoveryService::run()
 {
-// #ifndef MACOSX
     char aBuffer[BUFFER_SIZE];
     while ( true )
     {
@@ -136,7 +144,6 @@ void SAL_CALL DiscoveryService::run()
             }
         }
     }
-// #endif
 }
 
 DiscoveryService *sd::DiscoveryService::spService = NULL;

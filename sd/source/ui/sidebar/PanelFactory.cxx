@@ -78,7 +78,7 @@ Reference<XInterface> SAL_CALL PanelFactory_createInstance (
     if (!bSidebar)
     {
         SAL_WARN( "sd", "Creating a disabled sidebar factory" );
-	return NULL;
+    return NULL;
     }
 
     return Reference<XInterface>(static_cast<XWeak*>(new PanelFactory(rxContext)));

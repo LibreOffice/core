@@ -1,22 +1,3 @@
-/***
-  This file is part of avahi.
-
-  avahi is free software; you can redistribute it and/or modify it
-  under the terms of the GNU Lesser General Public License as
-  published by the Free Software Foundation; either version 2.1 of the
-  License, or (at your option) any later version.
-
-  avahi is distributed in the hope that it will be useful, but WITHOUT
-  ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
-  or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General
-  Public License for more details.
-
-  You should have received a copy of the GNU Lesser General Public
-  License along with avahi; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
-  USA.
-***/
-
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
@@ -30,71 +11,20 @@
 #include <avahi-client/publish.h>
 
 #include <avahi-common/alternative.h>
-#include <avahi-common/simple-watch.h>
 #include <avahi-common/malloc.h>
 #include <avahi-common/error.h>
 #include <avahi-common/timeval.h>
+#include <avahi-common/thread-watch.h>
 
 #include "AvahiNetworkService.hxx"
 
+static AvahiClient *client = NULL;
+static AvahiThreadedPoll *threaded_poll = NULL;
 static AvahiEntryGroup *group = NULL;
-static AvahiSimplePoll *simple_poll = NULL;
 static char *name = NULL;
 
 static void create_services(AvahiClient *c);
-static void entry_group_callback(AvahiEntryGroup *g, AvahiEntryGroupState state, AVAHI_GCC_UNUSED void *userdata);
-
 static void client_callback(AvahiClient *c, AvahiClientState state, AVAHI_GCC_UNUSED void * userdata);
-
-int start_avahi_service(const char * serviceName){
-    AvahiClient *client = NULL;
-    int error;
-    int ret = 1;
-
-    name = avahi_strdup(serviceName);
-
-    /* Allocate main loop object */
-    if (!(simple_poll = avahi_simple_poll_new())) {
-        fprintf(stderr, "Failed to create simple poll object.\n");
-        goto fail;
-    }
-
-    /* Allocate a new client */
-    client = avahi_client_new(avahi_simple_poll_get(simple_poll), static_cast<AvahiClientFlags>(0), client_callback, NULL, &error);
-
-    /* Check wether creating the client object succeeded */
-    if (!client) {
-        fprintf(stderr, "Failed to create client: %s\n", avahi_strerror(error));
-        goto fail;
-    }
-
-    /* Run the main loop */
-    avahi_simple_poll_loop(simple_poll);
-
-    ret = 0;
-
-fail:
-
-    /* Cleanup things */
-
-    if (client)
-        avahi_client_free(client);
-
-    if (simple_poll)
-        avahi_simple_poll_free(simple_poll);
-
-    avahi_free(name);
-
-    return ret;
-}
-
-
-void clean_avahi_service(){
-    if (simple_poll)
-      avahi_simple_poll_free(simple_poll);
-
-    avahi_free(name);
-}
 
 static void entry_group_callback(AvahiEntryGroup *g, AvahiEntryGroupState state, AVAHI_GCC_UNUSED void *userdata) {
     assert(g == group || group == NULL);
@@ -129,7 +59,7 @@ static void entry_group_callback(AvahiEntryGroup *g, AvahiEntryGroupState state,
             fprintf(stderr, "Entry group failure: %s\n", avahi_strerror(avahi_client_errno(avahi_entry_group_get_client(g))));
 
             /* Some kind of failure happened while we were registering our services */
-            avahi_simple_poll_quit(simple_poll);
+            avahi_threaded_poll_quit(threaded_poll);
             break;
 
         case AVAHI_ENTRY_GROUP_UNCOMMITED:
@@ -167,12 +97,12 @@ static void create_services(AvahiClient *c) {
          * same name should be put in the same entry group. */
 
         /* Add the service for IPP */
-        if ((ret = avahi_entry_group_add_service(group, AVAHI_IF_UNSPEC, AVAHI_PROTO_UNSPEC, static_cast<AvahiPublishFlags>(0), name, "_impressremote._tcp", NULL, NULL, 1599, "test=blah", r, NULL)) < 0) {
+        if ((ret = avahi_entry_group_add_service(group, AVAHI_IF_UNSPEC, AVAHI_PROTO_UNSPEC, static_cast<AvahiPublishFlags>(0), name, "_impressremote._libreoffice._tcp", NULL, NULL, 1599, "local", r, NULL)) < 0) {
 
             if (ret == AVAHI_ERR_COLLISION)
                 goto collision;
 
-            fprintf(stderr, "Failed to add _ipp._tcp service: %s\n", avahi_strerror(ret));
+            fprintf(stderr, "Failed to add _impressremote._libreoffice._tcp service: %s\n", avahi_strerror(ret));
             goto fail;
         }
 
@@ -201,7 +131,7 @@ collision:
     return;
 
 fail:
-    avahi_simple_poll_quit(simple_poll);
+    avahi_shutdown();
 }
 
 static void client_callback(AvahiClient *c, AvahiClientState state, AVAHI_GCC_UNUSED void * userdata) {
@@ -220,7 +150,7 @@ static void client_callback(AvahiClient *c, AvahiClientState state, AVAHI_GCC_UN
         case AVAHI_CLIENT_FAILURE:
 
             fprintf(stderr, "Client failure: %s\n", avahi_strerror(avahi_client_errno(c)));
-            avahi_simple_poll_quit(simple_poll);
+            avahi_shutdown();
 
             break;
 
@@ -245,4 +175,40 @@ static void client_callback(AvahiClient *c, AvahiClientState state, AVAHI_GCC_UN
         case AVAHI_CLIENT_CONNECTING:
             ;
     }
+}
+
+
+
+
+void avahi_setup(const char * sname) {
+   /* Call this when the application starts up. */
+   int error = 0;
+   name = avahi_strdup( sname );
+   if (!(threaded_poll = avahi_threaded_poll_new())) {
+     fprintf(stderr, "avahi_threaded_poll_new '%s' failed.\n", name);
+     return;
+   }
+
+   if (!(client = avahi_client_new(avahi_threaded_poll_get(threaded_poll), static_cast<AvahiClientFlags>(0), client_callback, NULL, &error))) {
+     fprintf(stderr, "avahi_client_new failed.\n");
+     return;
+   }
+
+   create_services(client);
+
+   /* Finally, start the event loop thread */
+   if (avahi_threaded_poll_start(threaded_poll) < 0) {
+     fprintf(stderr, "avahi_threaded_poll_start failed.\n");
+     return;
+   }
+
+   fprintf(stderr, "setup done.\n");
+}
+
+void avahi_shutdown(void) {
+  /* Call this when the app shuts down */
+
+  avahi_threaded_poll_stop(threaded_poll);
+  avahi_client_free(client);
+  avahi_threaded_poll_free(threaded_poll);
 }

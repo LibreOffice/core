@@ -1,5 +1,6 @@
 #ifndef AVAHI_NETWORK_SERVICE_H
 #define AVAHI_NETWORK_SERVICE_H
-    int start_avahi_service(const char * serviceName);
-    void clean_avahi_service();
+
+    void avahi_setup(const char *);
+    void avahi_shutdown(void);
 #endif

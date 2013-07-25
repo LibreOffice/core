@@ -20,6 +20,15 @@
 #include <rtl/ref.hxx>
 #include <osl/thread.hxx>
 
+#ifdef MACOSX
+  #include <osl/conditn.hxx> // Include this early to avoid error as check() gets defined by some SDK header to empty
+  #include <premac.h>
+  #import <CoreFoundation/CoreFoundation.h>
+  #include <postmac.h>
+  #import "OSXNetworkService.h"
+#endif
+
+
 /**
 * The port for use for the main communication between LibO and remote control app.
 */
@@ -48,6 +57,9 @@ namespace sd
             virtual void SAL_CALL run();
 
             // osl::DatagramSocket mSocket;
+            #ifdef MACOSX
+            OSXNetworkService * osxservice;
+            #endif
             int mSocket;
 
     };

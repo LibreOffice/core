@@ -75,6 +75,7 @@ $(eval $(call gb_CppunitTest_use_externals,sd_uimpress,\
 	boost_headers \
     gtk \
     dbus \
+    avahi \
 ))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,sd_uimpress,\
