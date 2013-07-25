@@ -28,6 +28,7 @@
 #include <com/sun/star/setup/UpdateCheckConfig.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
+#include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/container/XNameReplace.hpp>
 
 #include <comphelper/processfactory.hxx>
@@ -105,10 +106,10 @@ IMPL_LINK_NOARG(NewerVersionWarningDialog, UpdateHdl)
 
             // TODO: do we need to respect the bUpdateCheckEnabled flag? Finally, its meaning is "are automatic
             // updates enabled", but this here is not an automatic update, but one triggered explicitly by the user.
-            css::uno::Reference< css::container::XNameAccess > xOfficeHelp = officecfg::Office::Addons::AddonUI::OfficeHelp::get(xContext);
+            css::uno::Reference< css::container::XHierarchicalNameAccess > xOfficeHelp(officecfg::Office::Addons::AddonUI::OfficeHelp::get(xContext), css::uno::UNO_QUERY_THROW);
 
             util::URL aURL;
-            if ( xOfficeHelp->getByName("UpdateCheckJob") >>= aURL.Complete )
+            if ( xOfficeHelp->getByHierarchicalName("['UpdateCheckJob']/URL") >>= aURL.Complete )
             {
                 uno::Reference< util::XURLTransformer > xTransformer( util::URLTransformer::create(xContext) );
                 xTransformer->parseStrict( aURL );
