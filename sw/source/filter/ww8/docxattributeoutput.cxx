@@ -2295,17 +2295,20 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size
     if ( aRelId.isEmpty() )
         return;
 
-    m_pSerializer->startElementNS( XML_w, XML_drawing,
-            FSEND );
+    m_pSerializer->startElementNS( XML_w, XML_drawing, FSEND );
+
+    const SvxLRSpaceItem pLRSpaceItem = pFrmFmt->GetLRSpace(false);
+    const SvxULSpaceItem pULSpaceItem = pFrmFmt->GetULSpace(false);
+
     bool isAnchor = pFrmFmt->GetAnchor().GetAnchorId() != FLY_AS_CHAR;
     if( isAnchor )
     {
         ::sax_fastparser::FastAttributeList* attrList = m_pSerializer->createAttrList();
         attrList->add( XML_behindDoc, pFrmFmt->GetOpaque().GetValue() ? "0" : "1" );
-        attrList->add( XML_distT, "0" );
-        attrList->add( XML_distB, "0" );
-        attrList->add( XML_distL, "0" );
-        attrList->add( XML_distR, "0" );
+        attrList->add( XML_distT, OString::valueOf( TwipsToEMU( pULSpaceItem.GetUpper() ) ).getStr( ) );
+        attrList->add( XML_distB, OString::valueOf( TwipsToEMU( pULSpaceItem.GetLower() ) ).getStr( ) );
+        attrList->add( XML_distL, OString::valueOf( TwipsToEMU( pLRSpaceItem.GetLeft() ) ).getStr( ) );
+        attrList->add( XML_distR, OString::valueOf( TwipsToEMU( pLRSpaceItem.GetRight() ) ).getStr( ) );
         attrList->add( XML_simplePos, "0" );
         attrList->add( XML_locked, "0" );
         attrList->add( XML_layoutInCell, "1" );
@@ -2428,7 +2431,10 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size
     else
     {
         m_pSerializer->startElementNS( XML_wp, XML_inline,
-                XML_distT, "0", XML_distB, "0", XML_distL, "0", XML_distR, "0",
+                XML_distT, OString::valueOf( TwipsToEMU( pULSpaceItem.GetUpper() ) ).getStr( ),
+                XML_distB, OString::valueOf( TwipsToEMU( pULSpaceItem.GetLower() ) ).getStr( ),
+                XML_distL, OString::valueOf( TwipsToEMU( pLRSpaceItem.GetLeft() ) ).getStr( ),
+                XML_distR, OString::valueOf( TwipsToEMU( pLRSpaceItem.GetRight() ) ).getStr( ),
                 FSEND );
     }
     // now the common parts
