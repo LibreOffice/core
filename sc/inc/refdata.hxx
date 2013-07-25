@@ -65,6 +65,13 @@ struct SC_DLLPUBLIC ScSingleRefData
     inline  void SetTabRel( bool bVal ) { Flags.bTabRel = (bVal ? true : false ); }
     inline  bool IsTabRel() const       { return Flags.bTabRel; }
 
+    void SetAbsCol( SCCOL nVal );
+    void SetRelCol( SCCOL nVal );
+    void SetAbsRow( SCROW nVal );
+    void SetRelRow( SCROW nVal );
+    void SetAbsTab( SCTAB nVal );
+    void SetRelTab( SCTAB nVal );
+
     void SetColDeleted( bool bVal );
     bool IsColDeleted() const;
     void SetRowDeleted( bool bVal );
@@ -84,9 +91,9 @@ struct SC_DLLPUBLIC ScSingleRefData
 
     ScAddress toAbs( const ScAddress& rPos ) const;
     void SetAddress( const ScAddress& rAddr, const ScAddress& rPos );
-    SCROW GetRow() const;
-    SCCOL GetCol() const;
-    SCTAB GetTab() const;
+    SCROW Row() const;
+    SCCOL Col() const;
+    SCTAB Tab() const;
 
             bool operator==( const ScSingleRefData& ) const;
             bool operator!=( const ScSingleRefData& ) const;

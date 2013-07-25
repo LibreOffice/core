@@ -1425,60 +1425,37 @@ ConvErr ExcelToSc8::ConvertExternName( const ScTokenArray*& rpArray, XclImpStrea
 
 void ExcelToSc8::ExcRelToScRel8( sal_uInt16 nRow, sal_uInt16 nC, ScSingleRefData &rSRD, const sal_Bool bName )
 {
-    const sal_Bool      bColRel = ( nC & 0x4000 ) != 0;
-    const sal_Bool      bRowRel = ( nC & 0x8000 ) != 0;
-    const sal_uInt8     nCol = static_cast<sal_uInt8>(nC);
-
-    rSRD.SetColRel( bColRel );
-    rSRD.SetRowRel( bRowRel );
+    const bool bColRel = ( nC & 0x4000 ) != 0;
+    const bool bRowRel = ( nC & 0x8000 ) != 0;
+    const sal_uInt8 nCol = static_cast<sal_uInt8>(nC);
 
     if( bName )
     {
         // C O L
         if( bColRel )
-            //                                                          rel Col
-            rSRD.nRelCol = static_cast<SCsCOL>(static_cast<sal_Int8>(nC));
+            rSRD.SetRelCol(nC);
         else
-            //                                                          abs Col
-            rSRD.nCol = static_cast<SCCOL>(nCol);
+            rSRD.SetAbsCol(nCol);
 
         // R O W
         if( bRowRel )
-            //                                                          rel Row
-            rSRD.nRelRow = static_cast<SCsROW>(static_cast<sal_Int16>(nRow));
+            rSRD.SetRelRow(nRow);
         else
-            //                                                          abs Row
-            rSRD.nRow = std::min( static_cast<SCROW>(nRow), MAXROW);
-
-        // T A B
-        // abs needed if rel in shared formula for ScCompiler UpdateNameReference
-        if ( rSRD.IsTabRel() && !rSRD.IsFlag3D() )
-            rSRD.nTab = GetCurrScTab();
+            rSRD.SetAbsRow(std::min( static_cast<SCROW>(nRow), MAXROW));
     }
     else
     {
         // C O L
         if ( bColRel )
-        {
-            rSRD.nRelCol = static_cast<SCsCOL>(nCol) - aEingPos.Col();
-            rSRD.nCol = rSRD.nRelCol;
-        }
+            rSRD.SetRelCol(static_cast<SCCOL>(nCol) - aEingPos.Col());
         else
-            rSRD.nCol = static_cast<SCCOL>(nCol);
+            rSRD.SetAbsCol(nCol);
 
         // R O W
         if ( bRowRel )
-        {
-            rSRD.nRelRow = static_cast<SCsROW>(nRow) - aEingPos.Row();
-            rSRD.nRow = rSRD.nRelRow;
-        }
+            rSRD.SetRelRow(static_cast<SCROW>(nRow) - aEingPos.Row());
         else
-            rSRD.nRow = static_cast<SCROW>(nRow);
-
-        // T A B
-        // #i10184# abs needed if rel in shared formula for ScCompiler UpdateNameReference
-        if ( rSRD.IsTabRel() && !rSRD.IsFlag3D() )
-            rSRD.nTab = GetCurrScTab() + rSRD.nRelTab;
+            rSRD.SetAbsRow(nRow);
     }
 }
 

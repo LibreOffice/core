@@ -55,13 +55,6 @@ namespace
     {
         rRef.InitFlags();
 
-        rRef.nCol    = static_cast<SCsCOL>(rAPI.Column);
-        rRef.nRow    = static_cast<SCsROW>(rAPI.Row);
-        rRef.nTab    = static_cast<SCsTAB>(rAPI.Sheet);
-        rRef.nRelCol = static_cast<SCsCOL>(rAPI.RelativeColumn);
-        rRef.nRelRow = static_cast<SCsROW>(rAPI.RelativeRow);
-        rRef.nRelTab = static_cast<SCsTAB>(rAPI.RelativeSheet);
-
         rRef.SetColRel(     ( rAPI.Flags & sheet::ReferenceFlags::COLUMN_RELATIVE ) != 0 );
         rRef.SetRowRel(     ( rAPI.Flags & sheet::ReferenceFlags::ROW_RELATIVE    ) != 0 );
         rRef.SetTabRel(     ( rAPI.Flags & sheet::ReferenceFlags::SHEET_RELATIVE  ) != 0 );
@@ -70,27 +63,47 @@ namespace
         rRef.SetTabDeleted( ( rAPI.Flags & sheet::ReferenceFlags::SHEET_DELETED   ) != 0 );
         rRef.SetFlag3D(     ( rAPI.Flags & sheet::ReferenceFlags::SHEET_3D        ) != 0 );
         rRef.SetRelName(    ( rAPI.Flags & sheet::ReferenceFlags::RELATIVE_NAME   ) != 0 );
+
+        if (rRef.IsColRel())
+            rRef.SetRelCol(static_cast<SCCOL>(rAPI.RelativeColumn));
+        else
+            rRef.SetAbsCol(static_cast<SCCOL>(rAPI.Column));
+
+        if (rRef.IsRowRel())
+            rRef.SetRelRow(static_cast<SCROW>(rAPI.RelativeRow));
+        else
+            rRef.SetAbsRow(static_cast<SCROW>(rAPI.Row));
+
+        if (rRef.IsTabRel())
+            rRef.SetRelTab(static_cast<SCsTAB>(rAPI.RelativeSheet));
+        else
+            rRef.SetAbsTab(static_cast<SCsTAB>(rAPI.Sheet));
     }
 
     void lcl_ExternalRefToCalc( ScSingleRefData& rRef, const sheet::SingleReference& rAPI )
     {
         rRef.InitFlags();
 
-        rRef.nCol    = static_cast<SCsCOL>(rAPI.Column);
-        rRef.nRow    = static_cast<SCsROW>(rAPI.Row);
-        rRef.nTab    = 0;
-        rRef.nRelCol = static_cast<SCsCOL>(rAPI.RelativeColumn);
-        rRef.nRelRow = static_cast<SCsROW>(rAPI.RelativeRow);
-        rRef.nRelTab = 0;
-
         rRef.SetColRel(     ( rAPI.Flags & sheet::ReferenceFlags::COLUMN_RELATIVE ) != 0 );
         rRef.SetRowRel(     ( rAPI.Flags & sheet::ReferenceFlags::ROW_RELATIVE    ) != 0 );
-        rRef.SetTabRel(     false );    // sheet index must be absolute for external refs
         rRef.SetColDeleted( ( rAPI.Flags & sheet::ReferenceFlags::COLUMN_DELETED  ) != 0 );
         rRef.SetRowDeleted( ( rAPI.Flags & sheet::ReferenceFlags::ROW_DELETED     ) != 0 );
         rRef.SetTabDeleted( false );    // sheet must not be deleted for external refs
         rRef.SetFlag3D(     ( rAPI.Flags & sheet::ReferenceFlags::SHEET_3D        ) != 0 );
         rRef.SetRelName(    false );
+
+        if (rRef.IsColRel())
+            rRef.SetRelCol(static_cast<SCCOL>(rAPI.RelativeColumn));
+        else
+            rRef.SetAbsCol(static_cast<SCCOL>(rAPI.Column));
+
+        if (rRef.IsRowRel())
+            rRef.SetRelRow(static_cast<SCROW>(rAPI.RelativeRow));
+        else
+            rRef.SetAbsRow(static_cast<SCROW>(rAPI.Row));
+
+        // sheet index must be absolute for external refs
+        rRef.SetAbsTab(0);
     }
 //
 } // namespace
@@ -449,9 +462,6 @@ static ScSingleRefData lcl_ScToken_InitSingleRef()
 {
     ScSingleRefData aRef;
     aRef.InitAddress( ScAddress() );
-    aRef.nRelCol = 0;
-    aRef.nRelRow = 0;
-    aRef.nRelTab = 0;
     return aRef;
 }
 

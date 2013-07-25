@@ -122,17 +122,17 @@ void Test::testFormulaRefData()
     ScSingleRefData aRef;
     aRef.InitAddress(aAddr);
     CPPUNIT_ASSERT_MESSAGE("Wrong ref data state.", !aRef.IsRowRel() && !aRef.IsColRel() && !aRef.IsTabRel());
-    ASSERT_EQUAL_TYPE(SCCOL, 4, aRef.GetCol());
-    ASSERT_EQUAL_TYPE(SCROW, 5, aRef.GetRow());
-    ASSERT_EQUAL_TYPE(SCTAB, 3, aRef.GetTab());
+    ASSERT_EQUAL_TYPE(SCCOL, 4, aRef.Col());
+    ASSERT_EQUAL_TYPE(SCROW, 5, aRef.Row());
+    ASSERT_EQUAL_TYPE(SCTAB, 3, aRef.Tab());
 
     aRef.SetRowRel(true);
     aRef.SetColRel(true);
     aRef.SetTabRel(true);
     aRef.SetAddress(aAddr, aPos);
-    ASSERT_EQUAL_TYPE(SCCOL, 2, aRef.GetCol());
-    ASSERT_EQUAL_TYPE(SCROW, 3, aRef.GetRow());
-    ASSERT_EQUAL_TYPE(SCTAB, 1, aRef.GetTab());
+    ASSERT_EQUAL_TYPE(SCCOL, 2, aRef.Col());
+    ASSERT_EQUAL_TYPE(SCROW, 3, aRef.Row());
+    ASSERT_EQUAL_TYPE(SCTAB, 1, aRef.Tab());
 
     // Test extension of range reference.
 

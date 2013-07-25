@@ -1391,7 +1391,7 @@ void ScConditionEntry::SourceChanged( const ScAddress& rChanged )
                     SCsTAB nTab2;
 
                     if ( aProv.Ref1.IsColRel() )
-                        nCol2 = rChanged.Col() - aProv.Ref1.nRelCol;
+                        nCol2 = rChanged.Col() - aProv.Ref1.Col();
                     else
                     {
                         bHit &= ( rChanged.Col() >= aProv.Ref1.nCol );
@@ -1413,7 +1413,7 @@ void ScConditionEntry::SourceChanged( const ScAddress& rChanged )
                     }
 
                     if ( aProv.Ref2.IsColRel() )
-                        nCol1 = rChanged.Col() - aProv.Ref2.nRelCol;
+                        nCol1 = rChanged.Col() - aProv.Ref2.Col();
                     else
                     {
                         bHit &= ( rChanged.Col() <= aProv.Ref2.nCol );

@@ -1594,57 +1594,48 @@ void ExcelToSc::ExcRelToScRel( sal_uInt16 nRow, sal_uInt8 nCol, ScSingleRefData 
     {
         // C O L
         if( nRow & 0x4000 )
-        {//                                                         rel Col
-            rSRD.SetColRel( sal_True );
-            rSRD.nRelCol = static_cast<SCsCOL>(static_cast<sal_Int8>(nCol));
-        }
+            rSRD.SetRelCol(nCol);
         else
-        {//                                                         abs Col
-            rSRD.SetColRel( false );
-            rSRD.nCol = static_cast<SCCOL>(nCol);
-        }
+            rSRD.SetAbsCol(nCol);
 
         // R O W
         if( nRow & 0x8000 )
         {//                                                         rel Row
-            rSRD.SetRowRel( sal_True );
             if( nRow & 0x2000 ) // Bit 13 set?
-                //                                              -> Row negative
-                rSRD.nRelRow = static_cast<SCsROW>(static_cast<sal_Int16>(nRow | 0xC000));
+                // Row negative
+                rSRD.SetRelRow(nRow | 0xC000);
             else
-                //                                              -> Row positive
-                rSRD.nRelRow = static_cast<SCsROW>(nRow & nRowMask);
+                // Row positive
+                rSRD.SetRelRow(nRow & nRowMask);
         }
         else
         {//                                                         abs Row
-            rSRD.SetRowRel( false );
-            rSRD.nRow = static_cast<SCROW>(nRow & nRowMask);
+            rSRD.SetAbsRow(nRow & nRowMask);
         }
 
         // T A B
         // abs needed if rel in shared formula for ScCompiler UpdateNameReference
         if ( rSRD.IsTabRel() && !rSRD.IsFlag3D() )
-            rSRD.nTab = GetCurrScTab();
+            rSRD.SetAbsTab(GetCurrScTab());
     }
     else
     {
-        // C O L
-        rSRD.SetColRel( ( nRow & 0x4000 ) > 0 );
-        rSRD.nCol = static_cast<SCsCOL>(nCol);
+        bool bColRel = (nRow & 0x4000) > 0;
+        bool bRowRel = (nRow & 0x8000) > 0;
 
-        // R O W
-        rSRD.SetRowRel( ( nRow & 0x8000 ) > 0 );
-        rSRD.nRow = static_cast<SCsROW>(nRow & nRowMask);
+        if (bColRel)
+            rSRD.SetRelCol(nCol - aEingPos.Col());
+        else
+            rSRD.SetAbsCol(nCol);
 
-        if ( rSRD.IsColRel() )
-            rSRD.nRelCol = rSRD.nCol - aEingPos.Col();
-        if ( rSRD.IsRowRel() )
-            rSRD.nRelRow = rSRD.nRow - aEingPos.Row();
+        rSRD.SetAbsRow(nRow & nRowMask);
+        if (bRowRel)
+            rSRD.SetRelRow(rSRD.Row() - aEingPos.Row());
 
         // T A B
         // #i10184# abs needed if rel in shared formula for ScCompiler UpdateNameReference
         if ( rSRD.IsTabRel() && !rSRD.IsFlag3D() )
-            rSRD.nTab = GetCurrScTab() + rSRD.nRelTab;
+            rSRD.SetAbsTab(GetCurrScTab() + rSRD.Tab());
     }
 }
 
@@ -1756,9 +1747,9 @@ void ExcelToSc::SetComplCol( ScComplexRefData &rCRD )
 {
     ScSingleRefData &rSRD = rCRD.Ref2;
     if( rSRD.IsColRel() )
-        rSRD.nRelCol = MAXCOL - aEingPos.Col();
+        rSRD.SetRelCol(MAXCOL - aEingPos.Col());
     else
-        rSRD.nCol = MAXCOL;
+        rSRD.SetAbsCol(MAXCOL);
 }
 
 
@@ -1766,9 +1757,9 @@ void ExcelToSc::SetComplRow( ScComplexRefData &rCRD )
 {
     ScSingleRefData &rSRD = rCRD.Ref2;
     if( rSRD.IsRowRel() )
-        rSRD.nRelRow = MAXROW - aEingPos.Row();
+        rSRD.SetRelRow(MAXROW - aEingPos.Row());
     else
-        rSRD.nRow = MAXROW;
+        rSRD.SetAbsRow(MAXROW);
 }
 
 void ExcelToSc::ReadExtensionArray( unsigned int n, XclImpStream& aIn )

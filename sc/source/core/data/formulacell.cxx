@@ -2718,17 +2718,17 @@ void ScFormulaCell::TransposeReference()
             ScSingleRefData& rRef2 = (bDouble ? t->GetDoubleRef().Ref2 : rRef1);
             if ( !bDouble || (rRef2.IsColRel() && rRef2.IsRowRel()) )
             {
-                sal_Int16 nTemp;
+                SCCOLROW nTemp;
 
-                nTemp = rRef1.nRelCol;
-                rRef1.nRelCol = static_cast<SCCOL>(rRef1.nRelRow);
-                rRef1.nRelRow = static_cast<SCROW>(nTemp);
+                nTemp = rRef1.Col();
+                rRef1.SetRelCol(rRef1.Row());
+                rRef1.SetRelRow(nTemp);
 
                 if ( bDouble )
                 {
-                    nTemp = rRef2.nRelCol;
-                    rRef2.nRelCol = static_cast<SCCOL>(rRef2.nRelRow);
-                    rRef2.nRelRow = static_cast<SCROW>(nTemp);
+                    nTemp = rRef2.Col();
+                    rRef2.SetRelCol(rRef2.Row());
+                    rRef2.SetRelRow(nTemp);
                 }
 
                 bFound = true;

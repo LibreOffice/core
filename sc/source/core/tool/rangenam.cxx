@@ -213,22 +213,22 @@ void ScRangeData::GuessPosition()
     while ( ( t = static_cast<ScToken*>(pCode->GetNextReference()) ) != NULL )
     {
         ScSingleRefData& rRef1 = t->GetSingleRef();
-        if ( rRef1.IsColRel() && rRef1.nRelCol < nMinCol )
-            nMinCol = rRef1.nRelCol;
-        if ( rRef1.IsRowRel() && rRef1.nRelRow < nMinRow )
-            nMinRow = rRef1.nRelRow;
-        if ( rRef1.IsTabRel() && rRef1.nRelTab < nMinTab )
-            nMinTab = rRef1.nRelTab;
+        if ( rRef1.IsColRel() && rRef1.Col() < nMinCol )
+            nMinCol = rRef1.Col();
+        if ( rRef1.IsRowRel() && rRef1.Row() < nMinRow )
+            nMinRow = rRef1.Row();
+        if ( rRef1.IsTabRel() && rRef1.Tab() < nMinTab )
+            nMinTab = rRef1.Tab();
 
         if ( t->GetType() == svDoubleRef )
         {
             ScSingleRefData& rRef2 = t->GetDoubleRef().Ref2;
-            if ( rRef2.IsColRel() && rRef2.nRelCol < nMinCol )
-                nMinCol = rRef2.nRelCol;
-            if ( rRef2.IsRowRel() && rRef2.nRelRow < nMinRow )
-                nMinRow = rRef2.nRelRow;
-            if ( rRef2.IsTabRel() && rRef2.nRelTab < nMinTab )
-                nMinTab = rRef2.nRelTab;
+            if ( rRef2.IsColRel() && rRef2.Col() < nMinCol )
+                nMinCol = rRef2.Col();
+            if ( rRef2.IsRowRel() && rRef2.Row() < nMinRow )
+                nMinRow = rRef2.Row();
+            if ( rRef2.IsTabRel() && rRef2.Tab() < nMinTab )
+                nMinTab = rRef2.Tab();
         }
     }
 

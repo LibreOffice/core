@@ -40,6 +40,42 @@ void ScSingleRefData::InitAddressRel( const ScAddress& rAdr, const ScAddress& rP
     SetAddress(rAdr, rPos);
 }
 
+void ScSingleRefData::SetAbsCol( SCCOL nVal )
+{
+    Flags.bColRel = false;
+    nCol = nVal;
+}
+
+void ScSingleRefData::SetRelCol( SCCOL nVal )
+{
+    Flags.bColRel = true;
+    nRelCol = nVal;
+}
+
+void ScSingleRefData::SetAbsRow( SCROW nVal )
+{
+    Flags.bRowRel = false;
+    nRow = nVal;
+}
+
+void ScSingleRefData::SetRelRow( SCROW nVal )
+{
+    Flags.bRowRel = true;
+    nRelRow = nVal;
+}
+
+void ScSingleRefData::SetAbsTab( SCTAB nVal )
+{
+    Flags.bTabRel = false;
+    nTab = nVal;
+}
+
+void ScSingleRefData::SetRelTab( SCTAB nVal )
+{
+    Flags.bTabRel = true;
+    nRelTab = nVal;
+}
+
 void ScSingleRefData::SetColDeleted( bool bVal )
 {
     Flags.bColDeleted = (bVal ? true : false );
@@ -127,21 +163,21 @@ void ScSingleRefData::SetAddress( const ScAddress& rAddr, const ScAddress& rPos 
         nTab = rAddr.Tab();
 }
 
-SCROW ScSingleRefData::GetRow() const
+SCROW ScSingleRefData::Row() const
 {
     if (Flags.bRowDeleted)
         return -1;
     return Flags.bRowRel ? nRelRow : nRow;
 }
 
-SCCOL ScSingleRefData::GetCol() const
+SCCOL ScSingleRefData::Col() const
 {
     if (Flags.bColDeleted)
         return -1;
     return Flags.bColRel ? nRelCol : nCol;
 }
 
-SCTAB ScSingleRefData::GetTab() const
+SCTAB ScSingleRefData::Tab() const
 {
     if (Flags.bTabDeleted)
         return -1;

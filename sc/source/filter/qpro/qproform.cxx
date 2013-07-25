@@ -35,40 +35,34 @@ void QProToSc::ReadSRD( ScSingleRefData& rSRD, sal_Int8 nPage, sal_Int8 nCol, sa
     rSRD.InitAddress( ScAddress( nCol, (~nTmp + 1), 0 ) );
     if( nRelBit & 0x4000 )
     {
-        rSRD.nRelCol = nCol;
-        rSRD.SetColRel( sal_True );
+        rSRD.SetRelCol(nCol);
     }
     else
     {
-        rSRD.nCol = nCol;
-        rSRD.SetColRel( false );
+        rSRD.SetAbsCol(nCol);
     }
+
     if( nRelBit & 0x2000 )
     {
-        rSRD.nRelRow = (~nTmp + 1);
-        rSRD.nRelRow = (sal_Int16)(nTmp << 3);
-        rSRD.nRelRow /= 8;
-        rSRD.SetRowRel( sal_True );
+        SCROW nRelRow = (~nTmp + 1);
+        nRelRow = (sal_Int16)(nTmp << 3); // This looks weird... Mistake?
+        nRelRow /= 8;
+        rSRD.SetRelRow(nRelRow);
     }
     else
     {
-        rSRD.nRow = nTmp;
-        rSRD.SetRowRel( false );
+        rSRD.SetAbsRow(nTmp);
     }
     if( nRelBit & 0x8000 )
     {
-        rSRD.nRelTab = nPage;
-        rSRD.SetTabRel( sal_True );
-        // absolute tab needed in caller for comparison in case of DoubleRef
-        rSRD.nTab = aEingPos.Tab() + nPage;
+        rSRD.SetRelTab(nPage);
     }
     else
     {
-        rSRD.nTab = nPage;
-        rSRD.SetTabRel( false );
+        rSRD.SetAbsTab(nPage);
     }
-    if (rSRD.nTab != aEingPos.Tab())
-        rSRD.SetFlag3D( sal_True);
+    if (rSRD.toAbs(aEingPos).Tab() != aEingPos.Tab())
+        rSRD.SetFlag3D(true);
 }
 
 QProToSc::QProToSc( SvStream& rStream, const ScAddress& rRefPos ) :

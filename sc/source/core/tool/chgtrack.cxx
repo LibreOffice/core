@@ -1977,19 +1977,16 @@ static void lcl_InvalidateReference( ScToken& rTok, const ScBigAddress& rPos )
     if ( rPos.Col() < 0 || MAXCOL < rPos.Col() )
     {
         rRef1.nCol = SCCOL_MAX;
-        rRef1.nRelCol = SCCOL_MAX;
         rRef1.SetColDeleted( true );
     }
     if ( rPos.Row() < 0 || MAXROW < rPos.Row() )
     {
         rRef1.nRow = SCROW_MAX;
-        rRef1.nRelRow = SCROW_MAX;
         rRef1.SetRowDeleted( true );
     }
     if ( rPos.Tab() < 0 || MAXTAB < rPos.Tab() )
     {
         rRef1.nTab = SCTAB_MAX;
-        rRef1.nRelTab = SCTAB_MAX;
         rRef1.SetTabDeleted( true );
     }
     if ( rTok.GetType() == formula::svDoubleRef )
@@ -1998,19 +1995,16 @@ static void lcl_InvalidateReference( ScToken& rTok, const ScBigAddress& rPos )
         if ( rPos.Col() < 0 || MAXCOL < rPos.Col() )
         {
             rRef2.nCol = SCCOL_MAX;
-            rRef2.nRelCol = SCCOL_MAX;
             rRef2.SetColDeleted( true );
         }
         if ( rPos.Row() < 0 || MAXROW < rPos.Row() )
         {
             rRef2.nRow = SCROW_MAX;
-            rRef2.nRelRow = SCROW_MAX;
             rRef2.SetRowDeleted( true );
         }
         if ( rPos.Tab() < 0 || MAXTAB < rPos.Tab() )
         {
             rRef2.nTab = SCTAB_MAX;
-            rRef2.nRelTab = SCTAB_MAX;
             rRef2.SetTabDeleted( true );
         }
     }

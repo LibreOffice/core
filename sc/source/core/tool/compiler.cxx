@@ -1448,8 +1448,9 @@ r1c1_add_col( OUStringBuffer &rBuf, const ScSingleRefData& rRef, const ScAddress
     rBuf.append( sal_Unicode( 'C' ) );
     if( rRef.IsColRel() )
     {
-        if (rRef.nRelCol != 0)
-            rBuf.append("[").append( OUString::number( rRef.nRelCol ) ).append("]");
+        SCCOL nCol = rRef.Col();
+        if (nCol != 0)
+            rBuf.append("[").append(OUString::number(nCol)).append("]");
     }
     else
         rBuf.append( OUString::number( rAbsRef.Col() + 1 ) );

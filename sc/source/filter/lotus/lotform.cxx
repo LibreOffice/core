@@ -215,24 +215,22 @@ void LotusToSc::LotusRelToScRel( sal_uInt16 nCol, sal_uInt16 nRow, ScSingleRefDa
     // Col-Bemachung
     if( nCol & 0x8000 )
     {
-        rSRD.SetColRel( sal_True );
         if( nCol & 0x0080 )
             nCol |= 0xFF00;
         else
             nCol &= 0x00FF;
-        // #i36252# first cast unsigned 16-bit to signed 16-bit, and then to SCsCOL
-        rSRD.nRelCol = static_cast< SCsCOL >( static_cast< sal_Int16 >( nCol ) );
+        // #i36252# first cast unsigned 16-bit to signed 16-bit, and then to SCCOL
+        rSRD.SetRelCol(static_cast<SCCOL>(static_cast<sal_Int16>(nCol)));
     }
     else
     {
-        rSRD.SetColRel( false );
-        rSRD.nCol = static_cast< SCsCOL >( nCol & 0x00FF );
+        rSRD.SetAbsCol(static_cast<SCCOL>(nCol & 0x00FF));
     }
 
     // Row-Bemachung
     if( nRow & 0x8000 )
     {
-        rSRD.SetRowRel( sal_True );
+        rSRD.SetRowRel(true);
         // vorzeichenrichtige Erweiterung
         switch( eTyp )
         {
@@ -259,7 +257,7 @@ void LotusToSc::LotusRelToScRel( sal_uInt16 nCol, sal_uInt16 nRow, ScSingleRefDa
     }
     else
     {
-        rSRD.SetRowRel( false );
+        rSRD.SetRowRel(false);
         switch( eTyp )
         {
             // 5432 1098 7654 3210
@@ -279,10 +277,10 @@ void LotusToSc::LotusRelToScRel( sal_uInt16 nCol, sal_uInt16 nRow, ScSingleRefDa
     }
 
     if( rSRD.IsRowRel() )
-        // #i36252# first cast unsigned 16-bit to signed 16-bit, and then to SCsROW
-        rSRD.nRelRow = static_cast< SCsROW >( static_cast< sal_Int16 >( nRow ) );
+        // #i36252# first cast unsigned 16-bit to signed 16-bit, and then to SCROW
+        rSRD.SetRelRow(static_cast<SCROW>(static_cast<sal_Int16>(nRow)));
     else
-        rSRD.nRow = static_cast< SCsROW >( nRow );
+        rSRD.SetAbsRow(static_cast<SCROW>(nRow));
 }
 
 
