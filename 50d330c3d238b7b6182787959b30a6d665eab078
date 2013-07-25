@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXn//9/4\u003d",
+        "filename": "sw/source/filter/html/css1atr.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2265,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2013-07-25T10:58:39Z",
+      "side": 0,
+      "message": "where true,0) dropped on purpose ?",
+      "revId": "50d330c3d238b7b6182787959b30a6d665eab078",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXn//+AE\u003d",
+        "filename": "sw/source/filter/html/css1atr.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 994,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2013-07-25T10:58:39Z",
+      "side": 1,
+      "message": "Not found is nPos \u003d\u003d -1  or found is nPos \u003e\u003d 0\ndo not use STRING_* constant with OUString",
+      "revId": "ab72e05f58324c15633323e032f5a32c71649ead",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//+AA\u003d",
+        "filename": "sw/source/filter/html/css1atr.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1348,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2013-07-25T10:58:39Z",
+      "side": 1,
+      "message": "Erase(nPos) \u003d\u003e copy(0, nPos)\n\nreplaceAt would only be necessary if Erase(nPos, nLen)\nwhen nPos \u003e 0 and nLen !\u003d rest of the string... iow the rare cases when we want to remove an pice of the trsing in the middle of it",
+      "revId": "ab72e05f58324c15633323e032f5a32c71649ead",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//9/8\u003d",
+        "filename": "sw/source/filter/html/css1atr.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1454,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2013-07-25T10:58:39Z",
+      "side": 1,
+      "message": "ditto.",
+      "revId": "ab72e05f58324c15633323e032f5a32c71649ead",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
