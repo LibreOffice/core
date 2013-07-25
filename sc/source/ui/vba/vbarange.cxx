@@ -170,7 +170,8 @@
 
 #include <ooo/vba/excel/Range.hpp>
 #include <com/sun/star/bridge/oleautomation/Date.hpp>
-
+#include "tokenarray.hxx"
+#include "tokenuno.hxx"
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 using ::std::vector;
@@ -1969,6 +1970,15 @@ ScVbaRange::getFormulaArray() throw (uno::RuntimeException)
         return xRange->getFormulaArray();
     }
 
+    // return a formula if there is one or else an array
+    // still not sure when the return as array code should run
+    // ( I think it is if there is more than one formula ) at least
+    // that is what the doc says ( but I am not even sure how to detect that )
+    // for the moment any tests we have pass
+    uno::Reference< sheet::XArrayFormulaRange> xFormulaArray( mxRange, uno::UNO_QUERY_THROW );
+    if ( xFormulaArray.is() && !xFormulaArray->getArrayFormula().isEmpty() )
+        return uno::makeAny( xFormulaArray->getArrayFormula() );
+
     uno::Reference< sheet::XCellRangeFormula> xCellRangeFormula( mxRange, uno::UNO_QUERY_THROW );
     uno::Reference< script::XTypeConverter > xConverter = getTypeConverter( mxContext );
     uno::Any aSingleValueOrMatrix;
@@ -1999,8 +2009,26 @@ ScVbaRange::setFormulaArray(const uno::Any& rFormula) throw (uno::RuntimeExcepti
     }
     // #TODO need to distinguish between getFormula and getFormulaArray e.g. (R1C1)
     // but for the moment its just easier to treat them the same for setting
+    // seems
+    uno::Reference< lang::XMultiServiceFactory > xModelFactory( getUnoModel(), uno::UNO_QUERY_THROW );
+    uno::Reference< sheet::XFormulaParser > xParser( xModelFactory->createInstance( "com.sun.star.sheet.FormulaParser" ), uno::UNO_QUERY_THROW );
+    uno::Reference< sheet::XCellRangeAddressable > xSource( mxRange, uno::UNO_QUERY_THROW);
 
-    setFormula( rFormula );
+    table::CellRangeAddress aRangeAddress = xSource->getRangeAddress();
+    // #TODO check if api orders the address
+    // e.g. do we need to order the RangeAddress to get the topleft ( or can we assume it
+    // is in the correct order )
+    table::CellAddress aAddress;
+    aAddress.Sheet = aRangeAddress.Sheet;
+    aAddress.Column = aRangeAddress.StartColumn;
+    aAddress.Row = aRangeAddress.StartRow;
+    OUString sFormula;
+    rFormula >>= sFormula;
+    uno::Sequence<sheet::FormulaToken> aTokens = xParser->parseFormula( sFormula, aAddress );
+    ScTokenArray aTokenArray;
+    (void)ScTokenConversion::ConvertToTokenArray( *getScDocument(), aTokenArray, aTokens );
+
+    getScDocShell()->GetDocFunc().EnterMatrix( *getScRangeList()[0], NULL, &aTokenArray, OUString(), sal_True, sal_True, EMPTY_STRING, formula::FormulaGrammar::GRAM_PODF_A1 );
 }
 
 OUString
