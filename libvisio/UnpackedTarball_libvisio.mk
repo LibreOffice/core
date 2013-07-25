@@ -13,6 +13,7 @@ $(eval $(call gb_UnpackedTarball_set_tarball,libvisio,$(VISIO_TARBALL)))
 
 $(eval $(call gb_UnpackedTarball_add_patches,libvisio,\
 	libvisio/libvisio-0.0.30-msvc.patch.1 \
+	libvisio/libvisio-wpx_seek_end.patch.1 \
 ))
 
 # vim: set noet sw=4 ts=4:
