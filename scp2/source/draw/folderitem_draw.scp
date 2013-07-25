@@ -31,7 +31,7 @@ FolderItem gid_Folderitem_Sdraw
     ALL_LANG(Tooltip, STR_FI_TOOLTIP_DRAW);
 End
 
-FolderItemProperty git_Folderitem_Sdraw_AppIDProperty
+FolderItemProperty git_Folderitemproperty_Sdraw_AppID
     ShortcutID = gid_Folderitem_Sdraw;
     Key = "System.AppUserModel.ID";
     Value = "TheDocumentFoundation.LibreOffice.Draw";
