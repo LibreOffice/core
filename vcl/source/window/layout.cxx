@@ -984,6 +984,11 @@ VclGrid::Value accumulateValues(const VclGrid::Value &i, const VclGrid::Value &j
 
 Size VclGrid::calculateRequisition() const
 {
+    return calculateRequisitionForSpacings(get_row_spacing(), get_column_spacing());
+}
+
+Size VclGrid::calculateRequisitionForSpacings(sal_Int32 nRowSpacing, sal_Int32 nColSpacing) const
+{
     array_type A = assembleGrid();
 
     if (isNullGrid(A))
@@ -1004,7 +1009,7 @@ Size VclGrid::calculateRequisition() const
         nTotalWidth = std::accumulate(aWidths.begin(), aWidths.end(), Value(), accumulateValues).m_nValue;
     }
 
-    nTotalWidth += get_column_spacing() * (aWidths.size()-1);
+    nTotalWidth += nColSpacing * (aWidths.size()-1);
 
     long nTotalHeight = 0;
     if (get_row_homogeneous())
@@ -1017,7 +1022,7 @@ Size VclGrid::calculateRequisition() const
         nTotalHeight = std::accumulate(aHeights.begin(), aHeights.end(), Value(), accumulateValues).m_nValue;
     }
 
-    nTotalHeight += get_row_spacing() * (aHeights.size()-1);
+    nTotalHeight += nRowSpacing * (aHeights.size()-1);
 
     return Size(nTotalWidth, nTotalHeight);
 }
@@ -1041,9 +1046,12 @@ void VclGrid::setAllocation(const Size& rAllocation)
         calcMaxs(A, aWidths, aHeights);
     }
 
+    sal_Int32 nColSpacing(get_column_spacing());
+    sal_Int32 nRowSpacing(get_row_spacing());
+
     long nAvailableWidth = rAllocation.Width();
     if (nMaxX)
-        nAvailableWidth -= get_column_spacing() * (nMaxX - 1);
+        nAvailableWidth -= nColSpacing * (nMaxX - 1);
     if (get_column_homogeneous())
     {
         for (sal_Int32 x = 0; x < nMaxX; ++x)
@@ -1057,9 +1065,20 @@ void VclGrid::setAllocation(const Size& rAllocation)
                 ++nExpandables;
         long nExtraWidthForExpanders = nExpandables ? (rAllocation.Width() - aRequisition.Width()) / nExpandables : 0;
 
-        if (rAllocation.Width() < aRequisition.Width())
+        //We don't fit and there is no volunteer to be shrunk
+        if (!nExpandables && rAllocation.Width() < aRequisition.Width())
         {
-            long nExtraWidth = (rAllocation.Width() - aRequisition.Width() - nExtraWidthForExpanders * nExpandables) / nMaxX;
+            //first reduce spacing, to a min of 3
+            while (nColSpacing >= 6)
+            {
+                nColSpacing /= 2;
+                aRequisition = calculateRequisitionForSpacings(nRowSpacing, nColSpacing);
+                if (aRequisition.Width() >= rAllocation.Width())
+                    break;
+            }
+
+            //share out the remaining pain to everyone
+            long nExtraWidth = (rAllocation.Width() - aRequisition.Width()) / nMaxX;
 
             for (sal_Int32 x = 0; x < nMaxX; ++x)
                 aWidths[x].m_nValue += nExtraWidth;
@@ -1075,7 +1094,7 @@ void VclGrid::setAllocation(const Size& rAllocation)
 
     long nAvailableHeight = rAllocation.Height();
     if (nMaxY)
-        nAvailableHeight -= get_row_spacing() * (nMaxY - 1);
+        nAvailableHeight -= nRowSpacing * (nMaxY - 1);
     if (get_row_homogeneous())
     {
         for (sal_Int32 y = 0; y < nMaxY; ++y)
@@ -1089,9 +1108,20 @@ void VclGrid::setAllocation(const Size& rAllocation)
                 ++nExpandables;
         long nExtraHeightForExpanders = nExpandables ? (rAllocation.Height() - aRequisition.Height()) / nExpandables : 0;
 
-        if (rAllocation.Height() < aRequisition.Height())
+        //We don't fit and there is no volunteer to be shrunk
+        if (!nExpandables && rAllocation.Height() < aRequisition.Height())
         {
-            long nExtraHeight = (rAllocation.Height() - aRequisition.Height() - nExtraHeightForExpanders * nExpandables) / nMaxY;
+            //first reduce spacing, to a min of 3
+            while (nRowSpacing >= 6)
+            {
+                nRowSpacing /= 2;
+                aRequisition = calculateRequisitionForSpacings(nRowSpacing, nColSpacing);
+                if (aRequisition.Height() >= rAllocation.Height())
+                    break;
+            }
+
+            //share out the remaining pain to everyone
+            long nExtraHeight = (rAllocation.Height() - aRequisition.Height()) / nMaxY;
 
             for (sal_Int32 y = 0; y < nMaxY; ++y)
                 aHeights[y].m_nValue += nExtraHeight;
@@ -1119,18 +1149,18 @@ void VclGrid::setAllocation(const Size& rAllocation)
                 sal_Int32 nWidth = rEntry.nSpanWidth;
                 for (sal_Int32 nSpanX = 0; nSpanX < nWidth; ++nSpanX)
                     aChildAlloc.Width() += aWidths[x+nSpanX].m_nValue;
-                aChildAlloc.Width() += get_column_spacing()*(nWidth-1);
+                aChildAlloc.Width() += nColSpacing*(nWidth-1);
 
                 sal_Int32 nHeight = rEntry.nSpanHeight;
                 for (sal_Int32 nSpanY = 0; nSpanY < nHeight; ++nSpanY)
                     aChildAlloc.Height() += aHeights[y+nSpanY].m_nValue;
-                aChildAlloc.Height() += get_row_spacing()*(nHeight-1);
+                aChildAlloc.Height() += nRowSpacing*(nHeight-1);
 
                 setLayoutAllocation(*pChild, aAllocPos, aChildAlloc);
             }
-            aAllocPos.Y() += aHeights[y].m_nValue + get_row_spacing();
+            aAllocPos.Y() += aHeights[y].m_nValue + nRowSpacing;
         }
-        aAllocPos.X() += aWidths[x].m_nValue + get_column_spacing();
+        aAllocPos.X() += aWidths[x].m_nValue + nColSpacing;
         aAllocPos.Y() = 0;
     }
 }
