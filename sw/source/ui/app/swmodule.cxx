@@ -300,7 +300,7 @@ void SwDLL::RegisterControls()
     SwTbxAnchor::RegisterControl(FN_TOOL_ANCHOR, pMod );
     SwTbxInsertCtrl::RegisterControl(FN_INSERT_CTRL, pMod );
     SwTbxInsertCtrl::RegisterControl(FN_INSERT_OBJ_CTRL, pMod );
-    SwTbxAutoTextCtrl::RegisterControl(FN_INSERT_FIELD_CTRL, pMod );
+    SwTbxFieldCtrl::RegisterControl(FN_INSERT_FIELD_CTRL, pMod );
     SwTbxAutoTextCtrl::RegisterControl(FN_GLOSSARY_DLG, pMod );
 
     SvxTbxCtlCustomShapes::RegisterControl( SID_DRAWTBX_CS_BASIC, pMod );

@@ -57,7 +57,8 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::frame;
 
 SFX_IMPL_TOOLBOX_CONTROL( SwTbxInsertCtrl, SfxImageItem);
-SFX_IMPL_TOOLBOX_CONTROL( SwTbxAutoTextCtrl, SfxBoolItem );
+SFX_IMPL_TOOLBOX_CONTROL( SwTbxAutoTextCtrl, SfxVoidItem );
+SFX_IMPL_TOOLBOX_CONTROL( SwTbxFieldCtrl, SfxBoolItem );
 
 SwTbxInsertCtrl::SwTbxInsertCtrl(
     sal_uInt16 nSlotId,
@@ -187,44 +188,30 @@ SfxPopupWindow* SwTbxAutoTextCtrl::CreatePopupWindow()
         {
             Link aLnk = LINK(this, SwTbxAutoTextCtrl, PopupHdl);
 
-            if (GetSlotId() == FN_INSERT_FIELD_CTRL)
+            pPopup = new PopupMenu;
+            SwGlossaryList* pGlossaryList = ::GetGlossaryList();
+            sal_uInt16 nGroupCount = pGlossaryList->GetGroupCount();
+            for(sal_uInt16 i = 1; i <= nGroupCount; i++)
             {
-                pPopup = new PopupMenu(SW_RES(RID_INSERT_FIELD_CTRL));
-                pPopup->SetSelectHdl(aLnk);
-
-                if (::GetHtmlMode(pView->GetDocShell()) & HTMLMODE_ON)
+                // Acquire group name with path extension
+                String sTitle;
+                pGlossaryList->GetGroupName(i - 1, sal_False, &sTitle);
+                sal_uInt16 nBlockCount = pGlossaryList->GetBlockCount(i -1);
+                if(nBlockCount)
                 {
-                    pPopup->RemoveItem(pPopup->GetItemPos(FN_INSERT_FLD_PGCOUNT));
-                    pPopup->RemoveItem(pPopup->GetItemPos(FN_INSERT_FLD_TOPIC));
-                }
-            }
-            else
-            {
-                pPopup = new PopupMenu;
-                SwGlossaryList* pGlossaryList = ::GetGlossaryList();
-                sal_uInt16 nGroupCount = pGlossaryList->GetGroupCount();
-                for(sal_uInt16 i = 1; i <= nGroupCount; i++)
-                {
-                    // Acquire group name with path extension
-                    String sTitle;
-                    pGlossaryList->GetGroupName(i - 1, sal_False, &sTitle);
-                    sal_uInt16 nBlockCount = pGlossaryList->GetBlockCount(i -1);
-                    if(nBlockCount)
+                    sal_uInt16 nIndex = 100 * (i);
+                    // but insert without extension
+                    pPopup->InsertItem( i, sTitle);
+                    PopupMenu* pSub = new PopupMenu;
+                    pSub->SetSelectHdl(aLnk);
+                    pPopup->SetPopupMenu(i, pSub);
+                    for(sal_uInt16 j = 0; j < nBlockCount; j++)
                     {
-                        sal_uInt16 nIndex = 100 * (i);
-                        // but insert without extension
-                        pPopup->InsertItem( i, sTitle);
-                        PopupMenu* pSub = new PopupMenu;
-                        pSub->SetSelectHdl(aLnk);
-                        pPopup->SetPopupMenu(i, pSub);
-                        for(sal_uInt16 j = 0; j < nBlockCount; j++)
-                        {
-                            String sEntry;
-                            String sLongName(pGlossaryList->GetBlockName(i - 1, j, sEntry));
-                            sEntry.AppendAscii(" - ");
-                            sEntry += sLongName;
-                            pSub->InsertItem(++nIndex, sEntry);
-                        }
+                        String sEntry;
+                        String sLongName(pGlossaryList->GetBlockName(i - 1, j, sEntry));
+                        sEntry.AppendAscii(" - ");
+                        sEntry += sLongName;
+                        pSub->InsertItem(++nIndex, sEntry);
                     }
                 }
             }
@@ -250,71 +237,33 @@ SfxPopupWindowType SwTbxAutoTextCtrl::GetPopupWindowType() const
     return SFX_POPUPWINDOW_ONTIMEOUT;
 }
 
-void SwTbxAutoTextCtrl::StateChanged( sal_uInt16 nSID,
-                                              SfxItemState eState,
+void SwTbxAutoTextCtrl::StateChanged( sal_uInt16,
+                                              SfxItemState,
                                               const SfxPoolItem* pState )
 {
     GetToolBox().EnableItem( GetId(), (GetItemState(pState) != SFX_ITEM_DISABLED) );
-    if(FN_INSERT_FIELD_CTRL == nSID && eState >= SFX_ITEM_DEFAULT)
-    {
-        GetToolBox().CheckItem( GetId(), ((SfxBoolItem*)pState)->GetValue() );
-    }
 }
 
 IMPL_LINK(SwTbxAutoTextCtrl, PopupHdl, PopupMenu*, pMenu)
 {
     sal_uInt16 nId = pMenu->GetCurItemId();
 
-    if ( GetSlotId() == FN_INSERT_FIELD_CTRL)
-    {
-        Sequence< PropertyValue > aArgs;
-        const char* pChar = 0;
-        switch(nId)
-        {
-            case FN_INSERT_FLD_DATE:
-                pChar = ".uno:InsertDateField";
-            break;
-            case FN_INSERT_FLD_TIME:
-                pChar = ".uno:InsertTimeField";
-            break;
-            case FN_INSERT_FLD_PGNUMBER:
-                pChar = ".uno:InsertPageNumberField";
-            break;
-            case FN_INSERT_FLD_PGCOUNT:
-                pChar = ".uno:InsertPageCountField";
-            break;
-            case FN_INSERT_FLD_TOPIC:
-                pChar = ".uno:InsertTopicField";
-            break;
-            case FN_INSERT_FLD_TITLE:
-                pChar = ".uno:InsertTitleField";
-            break;
-            case FN_INSERT_FLD_AUTHOR:
-                pChar = ".uno:InsertAuthorField";
-            break;
-            default:
-                pChar = ".uno:InsertFieldCtrl";
-        }
-        Dispatch( OUString::createFromAscii( pChar ),aArgs );
-    }
-    else
-    {
-        sal_uInt16 nBlock = nId / 100;
+    sal_uInt16 nBlock = nId / 100;
 
-        SwGlossaryList* pGlossaryList = ::GetGlossaryList();
-        String sShortName;
-        String sGroup = pGlossaryList->GetGroupName(nBlock - 1, false);
-        pGlossaryList->GetBlockName(nBlock - 1, nId - (100 * nBlock) - 1, sShortName);
+    SwGlossaryList* pGlossaryList = ::GetGlossaryList();
+    String sShortName;
+    String sGroup = pGlossaryList->GetGroupName(nBlock - 1, false);
+    pGlossaryList->GetBlockName(nBlock - 1, nId - (100 * nBlock) - 1, sShortName);
 
-        SwGlossaryHdl* pGlosHdl = pView->GetGlosHdl();
-        SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-        OSL_ENSURE(pFact, "Dialogdiet fail!");
-        ::GlossarySetActGroup fnSetActGroup = pFact->SetGlossaryActGroupFunc();
-        if ( fnSetActGroup )
-            (*fnSetActGroup)( sGroup );
-        pGlosHdl->SetCurGroup(sGroup, sal_True);
-        pGlosHdl->InsertGlossary(sShortName);
-    }
+    SwGlossaryHdl* pGlosHdl = pView->GetGlosHdl();
+    SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
+    OSL_ENSURE(pFact, "Dialogdiet fail!");
+    ::GlossarySetActGroup fnSetActGroup = pFact->SetGlossaryActGroupFunc();
+    if ( fnSetActGroup )
+        (*fnSetActGroup)( sGroup );
+    pGlosHdl->SetCurGroup(sGroup, sal_True);
+    pGlosHdl->InsertGlossary(sShortName);
+
     return 0;
 }
 
@@ -322,18 +271,135 @@ void SwTbxAutoTextCtrl::DelPopup()
 {
     if(pPopup)
     {
-        if (GetSlotId() != FN_INSERT_FIELD_CTRL)
+        for( sal_uInt16 i = 0; i < pPopup->GetItemCount(); i ++ )
         {
-            for( sal_uInt16 i = 0; i < pPopup->GetItemCount(); i ++ )
-            {
-                PopupMenu* pSubPopup = pPopup->GetPopupMenu(pPopup->GetItemId(i));
-                delete pSubPopup;
-            }
+            PopupMenu* pSubPopup = pPopup->GetPopupMenu(pPopup->GetItemId(i));
+            delete pSubPopup;
         }
         delete pPopup;
         pPopup = 0;
     }
 }
+
+SwTbxFieldCtrl::SwTbxFieldCtrl(
+    sal_uInt16 nSlotId,
+    sal_uInt16 nId,
+    ToolBox& rTbx ) :
+    SfxToolBoxControl( nSlotId, nId, rTbx ),
+    pPopup(0),
+    pView(0)
+{
+    rTbx.SetItemBits( nId, TIB_DROPDOWN | rTbx.GetItemBits( nId ) );
+}
+
+SwTbxFieldCtrl::~SwTbxFieldCtrl()
+{
+    DelPopup();
+}
+
+SfxPopupWindow* SwTbxFieldCtrl::CreatePopupWindow()
+{
+    pView = ::GetActiveView();
+    if(pView && !pView->GetDocShell()->IsReadOnly() &&
+       !pView->GetWrtShell().HasReadonlySel() )
+    {
+        ToolBox& rBox = GetToolBox();
+
+        Rectangle aItemRect( rBox.GetItemRect( GetId() ) );
+        Point aPt(rBox.OutputToScreenPixel(aItemRect.TopLeft()));
+        aPt.X() += aItemRect.GetWidth()/2;
+        aPt.Y() += aItemRect.GetHeight()/2;
+        if(pView)
+        {
+            Link aLnk = LINK(this, SwTbxFieldCtrl, PopupHdl);
+
+            pPopup = new PopupMenu(SW_RES(RID_INSERT_FIELD_CTRL));
+            pPopup->SetSelectHdl(aLnk);
+
+            if (::GetHtmlMode(pView->GetDocShell()) & HTMLMODE_ON)
+            {
+                pPopup->RemoveItem(pPopup->GetItemPos(FN_INSERT_FLD_PGCOUNT));
+                pPopup->RemoveItem(pPopup->GetItemPos(FN_INSERT_FLD_TOPIC));
+            }
+        }
+        ToolBox* pToolBox = &GetToolBox();
+        sal_uInt16 nId = GetId();
+        pToolBox->SetItemDown( nId, sal_True );
+
+        pPopup->Execute( pToolBox, pToolBox->GetItemRect( nId ),
+            (pToolBox->GetAlign() == WINDOWALIGN_TOP || pToolBox->GetAlign() == WINDOWALIGN_BOTTOM) ?
+                POPUPMENU_EXECUTE_DOWN : POPUPMENU_EXECUTE_RIGHT );
+
+        pToolBox->SetItemDown( nId, sal_False );
+    }
+    GetToolBox().EndSelection();
+    DelPopup();
+    return 0;
+
+}
+
+SfxPopupWindowType SwTbxFieldCtrl::GetPopupWindowType() const
+{
+    return SFX_POPUPWINDOW_ONTIMEOUT;
+}
+
+void SwTbxFieldCtrl::StateChanged( sal_uInt16,
+                                              SfxItemState eState,
+                                              const SfxPoolItem* pState )
+{
+    GetToolBox().EnableItem( GetId(), (GetItemState(pState) != SFX_ITEM_DISABLED) );
+    if (eState >= SFX_ITEM_DEFAULT)
+    {
+        GetToolBox().CheckItem( GetId(), ((SfxBoolItem*)pState)->GetValue() );
+    }
+}
+
+IMPL_LINK(SwTbxFieldCtrl, PopupHdl, PopupMenu*, pMenu)
+{
+    sal_uInt16 nId = pMenu->GetCurItemId();
+
+    Sequence< PropertyValue > aArgs;
+    const char* pChar = 0;
+    switch(nId)
+    {
+        case FN_INSERT_FLD_DATE:
+            pChar = ".uno:InsertDateField";
+        break;
+        case FN_INSERT_FLD_TIME:
+            pChar = ".uno:InsertTimeField";
+        break;
+        case FN_INSERT_FLD_PGNUMBER:
+            pChar = ".uno:InsertPageNumberField";
+        break;
+        case FN_INSERT_FLD_PGCOUNT:
+            pChar = ".uno:InsertPageCountField";
+        break;
+        case FN_INSERT_FLD_TOPIC:
+            pChar = ".uno:InsertTopicField";
+        break;
+        case FN_INSERT_FLD_TITLE:
+            pChar = ".uno:InsertTitleField";
+        break;
+        case FN_INSERT_FLD_AUTHOR:
+            pChar = ".uno:InsertAuthorField";
+        break;
+        default:
+            pChar = ".uno:InsertFieldCtrl";
+    }
+    Dispatch( OUString::createFromAscii( pChar ),aArgs );
+
+    return 0;
+}
+
+void SwTbxFieldCtrl::DelPopup()
+{
+    if(pPopup)
+    {
+        delete pPopup;
+        pPopup = 0;
+    }
+}
+
 
 // Navigation-Popup
 // determine the order of the toolbox items

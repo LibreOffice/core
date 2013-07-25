@@ -95,7 +95,7 @@ public:
     SFX_DECL_TOOLBOX_CONTROL();
 
     SwTbxAutoTextCtrl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
-    ~SwTbxAutoTextCtrl();
+    virtual ~SwTbxAutoTextCtrl();
 
     virtual SfxPopupWindowType  GetPopupWindowType() const;
     virtual SfxPopupWindow*     CreatePopupWindow();
@@ -105,6 +105,29 @@ public:
 
     DECL_LINK(PopupHdl, PopupMenu*);
 };
+
+class SwTbxFieldCtrl : public SfxToolBoxControl
+{
+    PopupMenu*              pPopup;
+    SwView*                 pView;
+
+
+    void                    DelPopup();
+public:
+    SFX_DECL_TOOLBOX_CONTROL();
+
+    SwTbxFieldCtrl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
+    virtual ~SwTbxFieldCtrl();
+
+    virtual SfxPopupWindowType  GetPopupWindowType() const;
+    virtual SfxPopupWindow*     CreatePopupWindow();
+    virtual void                StateChanged( sal_uInt16 nSID,
+                                              SfxItemState eState,
+                                              const SfxPoolItem* pState );
+
+    DECL_LINK(PopupHdl, PopupMenu*);
+};
+
 
 
 //----------------------------------------------------------------------------
