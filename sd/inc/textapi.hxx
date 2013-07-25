@@ -46,7 +46,7 @@ public:
 
     OutlinerParaObject* CreateText();
     void                SetText( OutlinerParaObject& rText );
-    String              GetText();
+    OUString            GetText();
 
     static TextApiObject* getImplementation( const ::com::sun::star::uno::Reference< ::com::sun::star::text::XText >& );
 

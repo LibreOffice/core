@@ -469,10 +469,10 @@ void AnnotationManagerImpl::ExecuteReplyToAnnotation( SfxRequest& rReq )
         aStr.Append( OUString( getAnnotationDateTimeString( xAnnotation ) ) );
         aStr.Append( OUString("): \"") );
 
-        String sQuote( pTextApi->GetText() );
+        OUString sQuote( pTextApi->GetText() );
 
-        if( sQuote.Len() == 0 )
-            sQuote = OUString( "..." );
+        if( sQuote.isEmpty() )
+            sQuote = "...";
         aStr.Append( sQuote );
         aStr.Append( OUString("\"\n") );
 
