@@ -1144,18 +1144,18 @@ ANCHOR_SETEVENT:
 
     sal_Bool bEnAnchor = sal_False, bFtnAnchor = sal_False, bFtnEnSymbol = sal_False;
     String aFtnName;
-    String aStrippedClass( aClass );
+    OUString aStrippedClass( aClass );
     SwCSS1Parser::GetScriptFromClass( aStrippedClass, sal_False );
-    if( aStrippedClass.Len() >=9  && bHasHRef && sHRef.Len() > 1 &&
-        ('s' == aStrippedClass.GetChar(0) || 'S' == aStrippedClass.GetChar(0)) &&
-        ('d' == aStrippedClass.GetChar(1) || 'D' == aStrippedClass.GetChar(1)) )
+    if( aStrippedClass.getLength() >=9  && bHasHRef && sHRef.Len() > 1 &&
+        ('s' == aStrippedClass[0] || 'S' == aStrippedClass[0]) &&
+        ('d' == aStrippedClass[1] || 'D' == aStrippedClass[1]) )
     {
-        if( aStrippedClass.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_sdendnote_anc ) )
+        if( aStrippedClass.equalsIgnoreAsciiCaseAscii( OOO_STRING_SVTOOLS_HTML_sdendnote_anc ) )
             bEnAnchor = sal_True;
-        else if( aStrippedClass.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_sdfootnote_anc ) )
+        else if( aStrippedClass.equalsIgnoreAsciiCaseAscii( OOO_STRING_SVTOOLS_HTML_sdfootnote_anc ) )
             bFtnAnchor = sal_True;
-        else if( aStrippedClass.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_sdendnote_sym ) ||
-                 aStrippedClass.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_sdfootnote_sym ) )
+        else if( aStrippedClass.equalsIgnoreAsciiCaseAscii( OOO_STRING_SVTOOLS_HTML_sdendnote_sym ) ||
+                 aStrippedClass.equalsIgnoreAsciiCaseAscii( OOO_STRING_SVTOOLS_HTML_sdfootnote_sym ) )
             bFtnEnSymbol = sal_True;
         if( bEnAnchor || bFtnAnchor || bFtnEnSymbol )
         {

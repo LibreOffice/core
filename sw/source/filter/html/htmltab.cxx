@@ -2997,7 +2997,7 @@ SvxBrushItem* SwHTMLParser::CreateBrushItem( const Color *pColor,
 
         if( rClass.Len() )
         {
-            String aClass( rClass );
+            OUString aClass( rClass );
             SwCSS1Parser::GetScriptFromClass( aClass );
             const SvxCSS1MapEntry *pClass = pCSS1Parser->GetClass( aClass );
             if( pClass )

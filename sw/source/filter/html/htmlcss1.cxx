@@ -101,7 +101,7 @@ void SwCSS1Parser::ChgPageDesc( const SwPageDesc *pPageDesc,
     OSL_ENSURE( i<nPageDescs, "Seitenvorlage nicht gefunden" );
 }
 
-SwCSS1Parser::SwCSS1Parser( SwDoc *pD, sal_uInt32 aFHeights[7], const String& rBaseURL, sal_Bool bNewDoc ) :
+SwCSS1Parser::SwCSS1Parser( SwDoc *pD, sal_uInt32 aFHeights[7], const OUString& rBaseURL, sal_Bool bNewDoc ) :
     SvxCSS1Parser( pD->GetAttrPool(), rBaseURL, MM50/2,
                    (sal_uInt16*)&aItemIds, sizeof(aItemIds) / sizeof(sal_uInt16) ),
     pDoc( pD ),
@@ -241,9 +241,9 @@ void SwCSS1Parser::SetLinkCharFmts()
         bBodyVLinkSet |= bColorSet;
     }
 
-    String sTmp( OUString(OOO_STRING_SVTOOLS_HTML_anchor) );
-    sTmp.Append( ':' );
-    sTmp.AppendAscii( sCSS1_link );
+    OUString sTmp = OUString( OOO_STRING_SVTOOLS_HTML_anchor ) + ":" +
+                        OUString( sCSS1_link, sizeof(sCSS1_link), RTL_TEXTENCODING_ASCII_US );
+
     pStyleEntry = GetTag( sTmp );
     if( pStyleEntry )
     {
@@ -256,9 +256,9 @@ void SwCSS1Parser::SetLinkCharFmts()
         bBodyLinkSet |= bColorSet;
     }
 
-    sTmp.AssignAscii( OOO_STRING_SVTOOLS_HTML_anchor );
-    sTmp.Assign( ':' );
-    sTmp.AppendAscii( sCSS1_visited );
+    sTmp = OUString( OOO_STRING_SVTOOLS_HTML_anchor ) + ":" +
+            OUString( sCSS1_visited, sizeof(sCSS1_visited) ,RTL_TEXTENCODING_ASCII_US );
+
     pStyleEntry = GetTag( sTmp );
     if( pStyleEntry )
     {
@@ -346,16 +346,16 @@ void SwCSS1Parser::SetTableTxtColl( sal_Bool bHeader )
             "Aufruf von SetTableTxtColl unnoetig" );
 
     sal_uInt16 nPoolId;
-    String sTag;
+    OUString sTag;
     if( bHeader )
     {
         nPoolId = RES_POOLCOLL_TABLE_HDLN;
-        sTag.AssignAscii( OOO_STRING_SVTOOLS_HTML_tableheader );
+        sTag = OOO_STRING_SVTOOLS_HTML_tableheader;
     }
     else
     {
         nPoolId = RES_POOLCOLL_TABLE;
-        sTag.AssignAscii( OOO_STRING_SVTOOLS_HTML_tabledata );
+        sTag = OOO_STRING_SVTOOLS_HTML_tabledata;
     }
 
     SwTxtFmtColl *pColl = 0;
@@ -369,9 +369,7 @@ void SwCSS1Parser::SetTableTxtColl( sal_Bool bHeader )
                          pStyleEntry->GetPropertyInfo(), this );
     }
 
-    String sTmp( sTag );
-    sTmp.Append( ' ' );
-    sTmp.AppendAscii( OOO_STRING_SVTOOLS_HTML_parabreak );
+    OUString sTmp = sTag + " " + OOO_STRING_SVTOOLS_HTML_parabreak;
     pStyleEntry = GetTag( sTmp );
     if( pStyleEntry )
     {
@@ -574,14 +572,14 @@ const SvxBrushItem& SwCSS1Parser::GetPageDescBackground() const
         ->GetMaster().GetBackground();
 }
 
-sal_uInt16 SwCSS1Parser::GetScriptFromClass( String& rClass,
+sal_uInt16 SwCSS1Parser::GetScriptFromClass( OUString& rClass,
                                       sal_Bool bSubClassOnly )
 {
     sal_uInt16 nScriptFlags = CSS1_SCRIPT_ALL;
-    xub_StrLen nLen = rClass.Len();
-    xub_StrLen nPos = nLen > 4 ? rClass.SearchBackward( '-' ) : STRING_NOTFOUND;
+    sal_Int32 nLen = rClass.getLength();
+    sal_Int32 nPos = nLen > 4 ? rClass.lastIndexOf( '-' ) : -1;
 
-    if( STRING_NOTFOUND == nPos )
+    if( nPos == -1 )
     {
         if( bSubClassOnly )
             return nScriptFlags;
@@ -596,17 +594,17 @@ sal_uInt16 SwCSS1Parser::GetScriptFromClass( String& rClass,
     switch( nLen )
     {
     case 3:
-        if( rClass.EqualsIgnoreCaseAscii( "cjk", nPos, 3 ) )
+        if( rClass.matchIgnoreAsciiCaseAsciiL( "cjk", 3, nPos ) )
         {
             nScriptFlags = CSS1_SCRIPT_CJK;
         }
-        else if( rClass.EqualsIgnoreCaseAscii( "ctl", nPos, 3 ) )
+        else if( rClass.matchIgnoreAsciiCaseAsciiL( "ctl", 3, nPos ) )
         {
             nScriptFlags = CSS1_SCRIPT_CTL;
         }
         break;
     case 7:
-        if( rClass.EqualsIgnoreCaseAscii( "western", nPos, 7 ) )
+        if( rClass.matchIgnoreAsciiCaseAsciiL( "western", 7, nPos ) )
         {
             nScriptFlags = CSS1_SCRIPT_WESTERN;
         }
@@ -616,11 +614,11 @@ sal_uInt16 SwCSS1Parser::GetScriptFromClass( String& rClass,
     {
         if( nPos )
         {
-            rClass.Erase( nPos-1 );
+            rClass = rClass.copy( 0, nPos-1 );
         }
         else
         {
-            rClass.Erase();
+            rClass = "";
         }
     }
 
@@ -628,30 +626,30 @@ sal_uInt16 SwCSS1Parser::GetScriptFromClass( String& rClass,
 }
 
 static CSS1SelectorType GetTokenAndClass( const CSS1Selector *pSelector,
-                              String& rToken, String& rClass,
+                              OUString& rToken, OUString& rClass,
                               sal_uInt16& rScriptFlags )
 {
     rToken = pSelector->GetString();
-    rClass.Erase();
+    rClass = "";
     rScriptFlags = CSS1_SCRIPT_ALL;
 
     CSS1SelectorType eType = pSelector->GetType();
     if( CSS1_SELTYPE_ELEM_CLASS==eType  )
     {
-        xub_StrLen nPos = rToken.Search( '.' );
-        OSL_ENSURE( nPos != STRING_NOTFOUND, "kein Punkt in Class-Selektor???" );
-        if( nPos != STRING_NOTFOUND )
+        sal_Int32 nPos = rToken.indexOf( '.' );
+        OSL_ENSURE( nPos >= 0, "kein Punkt in Class-Selektor???" );
+        if( nPos >= 0 )
         {
-            rClass = rToken.Copy( nPos+1 );
-            rToken.Erase( nPos );
+            rClass = rToken.copy( nPos+1 );
+            rToken = rToken.copy( 0, nPos );
 
             rScriptFlags = SwCSS1Parser::GetScriptFromClass( rClass, sal_False );
-            if( !rClass.Len() )
+            if( rClass.isEmpty() )
                 eType = CSS1_SELTYPE_ELEMENT;
         }
     }
 
-    rToken.ToUpperAscii();
+    rToken = rToken.toAsciiUpperCase();
     return eType;
 }
 
@@ -723,7 +721,7 @@ sal_Bool SwCSS1Parser::StyleParsed( const CSS1Selector *pSelector,
     }
     else if( CSS1_SELTYPE_CLASS==eSelType && !pNext )
     {
-        String aClass( pSelector->GetString() );
+        OUString aClass( pSelector->GetString() );
         sal_uInt16 nScript = GetScriptFromClass( aClass );
         if( CSS1_SCRIPT_ALL != nScript )
         {
@@ -744,7 +742,7 @@ sal_Bool SwCSS1Parser::StyleParsed( const CSS1Selector *pSelector,
              pNext->GetString().EqualsIgnoreCaseAscii(sCSS1_right) ||
              pNext->GetString().EqualsIgnoreCaseAscii(sCSS1_first)) ) )
         {
-            String aName;
+            OUString aName;
             if( pNext )
                 aName = pNext->GetString();
             InsertPage( aName,
@@ -758,7 +756,8 @@ sal_Bool SwCSS1Parser::StyleParsed( const CSS1Selector *pSelector,
         return sal_True;
 
     // Token und Class zu dem Selektor holen
-    String aToken2, aClass;
+    OUString aToken2;
+    OUString aClass;
     sal_uInt16 nScript;
     eSelType = GetTokenAndClass( pSelector, aToken2, aClass, nScript );
     int nToken2 = GetHTMLToken( aToken2 );
@@ -782,20 +781,19 @@ sal_Bool SwCSS1Parser::StyleParsed( const CSS1Selector *pSelector,
             {
                 // vielleicht A:visited oder A:link
 
-                String aPseudo( pNext->GetString() );
-                aPseudo.ToLowerAscii();
-
+                OUString aPseudo( pNext->GetString() );
+                aPseudo = aPseudo.toAsciiLowerCase();
                 sal_Bool bInsert = sal_False;
-                switch( aPseudo.GetChar( 0 ))
+                switch( aPseudo[0] )
                 {
                     case 'l':
-                        if( aPseudo.EqualsAscii(sCSS1_link) )
+                        if( aPseudo.equalsAscii( sCSS1_link ) )
                         {
                             bInsert = sal_True;
                         }
                         break;
                     case 'v':
-                        if( aPseudo.EqualsAscii(sCSS1_visited) )
+                        if( aPseudo.equalsAscii( sCSS1_visited ) )
                         {
                             bInsert = sal_True;
                         }
@@ -803,8 +801,7 @@ sal_Bool SwCSS1Parser::StyleParsed( const CSS1Selector *pSelector,
                 }
                 if( bInsert )
                 {
-                    String sTmp( aToken2 );
-                    (sTmp += ':') += aPseudo;
+                    OUString sTmp = aToken2 + ":" + aPseudo;
                     if( CSS1_SCRIPT_ALL != nScript )
                     {
                         SfxItemSet aScriptItemSet( rItemSet );
@@ -860,13 +857,13 @@ sal_Bool SwCSS1Parser::StyleParsed( const CSS1Selector *pSelector,
         }
     }
     else if( CSS1_SELTYPE_ELEM_CLASS==eSelType &&  HTML_ANCHOR_ON==nToken2 &&
-             !pNext && aClass.Len() >= 9 &&
-             ('s' == aClass.GetChar(0) || 'S' == aClass.GetChar(0)) )
+             !pNext && aClass.getLength() >= 9 &&
+             ('s' == aClass[0] || 'S' == aClass[0]) )
     {
         sal_uInt16 nPoolFmtId = 0;
-        if( aClass.EqualsIgnoreCaseAscii(OOO_STRING_SVTOOLS_HTML_sdendnote_sym) )
+        if( aClass.equalsIgnoreAsciiCaseAscii(OOO_STRING_SVTOOLS_HTML_sdendnote_sym) )
             nPoolFmtId = RES_POOLCHR_ENDNOTE;
-        else if( aClass.EqualsIgnoreCaseAscii(OOO_STRING_SVTOOLS_HTML_sdfootnote_sym) )
+        else if( aClass.equalsIgnoreAsciiCaseAscii(OOO_STRING_SVTOOLS_HTML_sdfootnote_sym) )
             nPoolFmtId = RES_POOLCHR_FOOTNOTE;
         if( nPoolFmtId )
         {
@@ -909,12 +906,12 @@ sal_Bool SwCSS1Parser::StyleParsed( const CSS1Selector *pSelector,
         nPoolCollId = RES_POOLCOLL_HEADLINE6;
         break;
     case HTML_PARABREAK_ON:
-        if( aClass.Len() >= 9 &&
-            ('s' == aClass.GetChar(0) || 'S' == aClass.GetChar(0)) )
+        if( aClass.getLength() >= 9 &&
+            ('s' == aClass[0] || 'S' == aClass[0]) )
         {
-            if( aClass.EqualsIgnoreCaseAscii(OOO_STRING_SVTOOLS_HTML_sdendnote) )
+            if( aClass.equalsIgnoreAsciiCaseAscii(OOO_STRING_SVTOOLS_HTML_sdendnote) )
                 nPoolCollId = RES_POOLCOLL_ENDNOTE;
-            else if( aClass.EqualsIgnoreCaseAscii(OOO_STRING_SVTOOLS_HTML_sdfootnote) )
+            else if( aClass.equalsIgnoreAsciiCaseAscii(OOO_STRING_SVTOOLS_HTML_sdfootnote) )
                 nPoolCollId = RES_POOLCOLL_FOOTNOTE;
 
             if( nPoolCollId )
@@ -954,7 +951,7 @@ sal_Bool SwCSS1Parser::StyleParsed( const CSS1Selector *pSelector,
                   CSS1_SELTYPE_ELEM_CLASS==eNextType) )
         {
             // nicht TH und TD, aber TH P und TD P
-            String aSubToken, aSubClass;
+            OUString aSubToken, aSubClass;
             GetTokenAndClass( pNext, aSubToken, aSubClass, nScript );
             if( HTML_PARABREAK_ON == GetHTMLToken( aSubToken ) )
             {
@@ -962,7 +959,7 @@ sal_Bool SwCSS1Parser::StyleParsed( const CSS1Selector *pSelector,
                 pNext = pNext->GetNext();
                 eNextType = pNext ? pNext->GetType() : CSS1_SELTYPE_ELEMENT;
 
-                if( aClass.Len() || pNext )
+                if( !aClass.isEmpty() || pNext )
                 {
                     nPoolCollId = static_cast< sal_uInt16 >(
                         HTML_TABLEHEADER_ON == nToken2 ? RES_POOLCOLL_TABLE_HDLN
@@ -970,9 +967,7 @@ sal_Bool SwCSS1Parser::StyleParsed( const CSS1Selector *pSelector,
                 }
                 else
                 {
-                    String sTmp( aToken2 );
-                    sTmp += ' ';
-                    sTmp.AppendAscii( OOO_STRING_SVTOOLS_HTML_parabreak );
+                    OUString sTmp = aToken2 + " " + OOO_STRING_SVTOOLS_HTML_parabreak;
 
                     if( CSS1_SCRIPT_ALL == nScript )
                     {
@@ -1008,9 +1003,9 @@ sal_Bool SwCSS1Parser::StyleParsed( const CSS1Selector *pSelector,
             // Die Vorlage Suchen bzw. Anlegen
             SwTxtFmtColl *pColl = GetTxtFmtColl( nPoolCollId, aEmptyStr );
             SwTxtFmtColl* pParentColl = 0;
-            if( aClass.Len() )
+            if( !aClass.isEmpty() )
             {
-                String aName( pColl->GetName() );
+                OUString aName( pColl->GetName() );
                 AddClassName( aName, aClass );
 
                 pParentColl = pColl;
@@ -1104,9 +1099,9 @@ sal_Bool SwCSS1Parser::StyleParsed( const CSS1Selector *pSelector,
     if( pCFmt )
     {
         SwCharFmt *pParentCFmt = 0;
-        if( aClass.Len() )
+        if( !aClass.isEmpty() )
         {
-            String aName( pCFmt->GetName() );
+            OUString aName( pCFmt->GetName() );
             AddClassName( aName, aClass );
             pParentCFmt = pCFmt;
 
@@ -1156,7 +1151,7 @@ const FontList *SwCSS1Parser::GetFontList() const
 }
 
 
-SwCharFmt* SwCSS1Parser::GetChrFmt( sal_uInt16 nToken2, const String& rClass ) const
+SwCharFmt* SwCSS1Parser::GetChrFmt( sal_uInt16 nToken2, const OUString& rClass ) const
 {
     // die entsprechende Vorlage suchen
     sal_uInt16 nPoolId = 0;
@@ -1195,7 +1190,7 @@ SwCharFmt* SwCSS1Parser::GetChrFmt( sal_uInt16 nToken2, const String& rClass ) c
     }
     else
     {
-        String sCName( OUString::createFromAscii(sName) );
+        OUString sCName( OUString::createFromAscii(sName) );
         pCFmt = pDoc->FindCharFmtByName( sCName );
         if( !pCFmt )
         {
@@ -1208,11 +1203,11 @@ SwCharFmt* SwCSS1Parser::GetChrFmt( sal_uInt16 nToken2, const String& rClass ) c
 
     // Wenn es eine Klasse gibt, die Klassen-Vorlage suchen aber nicht
     // neu anlegen.
-    String aClass( rClass );
+    OUString aClass( rClass );
     GetScriptFromClass( aClass, sal_False );
-    if( aClass.Len() )
+    if( !aClass.isEmpty() )
     {
-        String aTmp( pCFmt->GetName() );
+        OUString aTmp( pCFmt->GetName() );
         AddClassName( aTmp, aClass );
         SwCharFmt *pClassCFmt = pDoc->FindCharFmtByName( aTmp );
         if( pClassCFmt )
@@ -1273,21 +1268,21 @@ SwCharFmt *SwCSS1Parser::GetCharFmtFromPool( sal_uInt16 nPoolId ) const
 }
 
 SwTxtFmtColl *SwCSS1Parser::GetTxtFmtColl( sal_uInt16 nTxtColl,
-                                           const String& rClass )
+                                           const OUString& rClass )
 {
     SwTxtFmtColl* pColl = 0;
 
-    String aClass( rClass );
+    OUString aClass( rClass );
     GetScriptFromClass( aClass, sal_False );
-    if( RES_POOLCOLL_TEXT == nTxtColl && aClass.Len() >= 9 &&
-        ('s' == aClass.GetChar(0) || 'S' == aClass.GetChar(0) ) )
+    if( RES_POOLCOLL_TEXT == nTxtColl && aClass.getLength() >= 9 &&
+        ('s' == aClass[0] || 'S' == aClass[0] ) )
     {
-        if( aClass.EqualsIgnoreCaseAscii(OOO_STRING_SVTOOLS_HTML_sdendnote) )
+        if( aClass.equalsIgnoreAsciiCaseAscii(OOO_STRING_SVTOOLS_HTML_sdendnote) )
         {
             nTxtColl = RES_POOLCOLL_ENDNOTE;
             aClass = aEmptyStr;
         }
-        else if( aClass.EqualsIgnoreCaseAscii(OOO_STRING_SVTOOLS_HTML_sdfootnote) )
+        else if( aClass.equalsIgnoreAsciiCaseAscii(OOO_STRING_SVTOOLS_HTML_sdfootnote) )
         {
             nTxtColl = RES_POOLCOLL_FOOTNOTE;
             aClass = aEmptyStr;
@@ -1305,9 +1300,9 @@ SwTxtFmtColl *SwCSS1Parser::GetTxtFmtColl( sal_uInt16 nTxtColl,
     }
 
     OSL_ENSURE( pColl, "Keine Absatz-Vorlage???" );
-    if( aClass.Len() )
+    if( !aClass.isEmpty() )
     {
-        String aTmp( pColl->GetName() );
+        OUString aTmp( pColl->GetName() );
         AddClassName( aTmp, aClass );
         SwTxtFmtColl* pClassColl = pDoc->FindTxtFmtCollByName( aTmp );
 
@@ -1483,11 +1478,11 @@ sal_Bool SwCSS1Parser::MayBePositioned( const SvxCSS1PropertyInfo& rPropInfo,
 
 
 
-void SwCSS1Parser::AddClassName( String& rFmtName, const String& rClass )
+void SwCSS1Parser::AddClassName( OUString& rFmtName, const OUString& rClass )
 {
-    OSL_ENSURE( rClass.Len(), "Style-Klasse ohne Laenge?" );
+    OSL_ENSURE( !rClass.isEmpty(), "Style-Klasse ohne Laenge?" );
 
-    (rFmtName += '.') += rClass;
+    rFmtName += "." + rClass;
 }
 
 
@@ -1537,7 +1532,7 @@ void SwCSS1Parser::FillDropCap( SwFmtDrop& rDrop,
     if( rItemSet.Count() )
     {
         SwCharFmt *pCFmt = 0;
-        String aName;
+        OUString aName;
         if( pName )
         {
             aName = *pName;
@@ -1548,10 +1543,8 @@ void SwCSS1Parser::FillDropCap( SwFmtDrop& rDrop,
         {
             do
             {
-                aName.AssignAscii( sCSS1_first_letter );
-                aName.Append( ' ' );
-                aName.Append(
-                    OUString::number( (sal_Int32)(++nDropCapCnt) ) );
+                aName = OUString( sCSS1_first_letter, sizeof(sCSS1_first_letter) ,RTL_TEXTENCODING_ASCII_US ) +
+                        " " + OUString::number( (sal_Int32)(++nDropCapCnt) );
             }
             while( pDoc->FindCharFmtByName(aName) );
         }
@@ -1724,7 +1717,7 @@ void SwHTMLParser::EndStyle()
 }
 
 sal_Bool SwHTMLParser::FileDownload( const String& rURL,
-                                 String& rStr )
+                                 OUString& rStr )
 {
     // View wegschmeissen (wegen Reschedule)
     ViewShell *pOldVSh = CallEndAction();
@@ -1745,8 +1738,8 @@ sal_Bool SwHTMLParser::FileDownload( const String& rURL,
                         ? (xub_StrLen)aStream.Tell()
                         : STRING_MAXLEN;
 
-        rStr = String( (const sal_Char *)aStream.GetData(), nLen,
-                       GetSrcEncoding() );
+        rStr = OUString( (const sal_Char *)aStream.GetData(), nLen
+                            , GetSrcEncoding() );
     }
 
 
@@ -1829,7 +1822,7 @@ void SwHTMLParser::InsertLink()
             else
             {
                 // File synchron holen
-                String sSource;
+                OUString sSource;
                 if( FileDownload( sHRef, sSource ) )
                     pCSS1Parser->ParseStyleSheet( sSource );
             }
@@ -1838,13 +1831,13 @@ void SwHTMLParser::InsertLink()
 
     if( bFinishDownload )
     {
-        String sSource;
-        if( FinishFileDownload(sSource) && sSource.Len() )
+        OUString sSource;
+        if( FinishFileDownload( sSource ) && !sSource.isEmpty() )
             pCSS1Parser->ParseStyleSheet( sSource );
     }
 }
 
-sal_Bool SwCSS1Parser::ParseStyleSheet( const String& rIn )
+sal_Bool SwCSS1Parser::ParseStyleSheet( const OUString& rIn )
 {
     if( !SvxCSS1Parser::ParseStyleSheet( rIn ) )
         return sal_False;
@@ -1908,7 +1901,7 @@ sal_Bool SwHTMLParser::ParseStyleOptions( const String &rStyle,
 
     if( rClass.Len() )
     {
-        String aClass( rClass );
+        OUString aClass( rClass );
         SwCSS1Parser::GetScriptFromClass( aClass );
         const SvxCSS1MapEntry *pClass = pCSS1Parser->GetClass( aClass );
         if( pClass )
@@ -2254,7 +2247,7 @@ void SwHTMLParser::GetULSpaceFromContext( sal_uInt16& nUpper,
                                           sal_uInt16& nLower ) const
 {
     sal_uInt16 nDfltColl = 0;
-    String aDfltClass;
+    OUString aDfltClass;
 
     sal_uInt16 nPos = aContexts.size();
     while( nPos > nContextStAttrMin )

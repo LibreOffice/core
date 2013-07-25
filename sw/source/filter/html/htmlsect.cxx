@@ -64,7 +64,8 @@ using namespace ::com::sun::star;
 
 void SwHTMLParser::NewDivision( int nToken )
 {
-    String aId, aHRef, aStyle, aClass, aLang, aDir;
+    String aId, aHRef, aStyle, aLang, aDir;
+    OUString aClass;
     SvxAdjust eAdjust = HTML_CENTER_ON==nToken ? SVX_ADJUST_CENTER
                                                : SVX_ADJUST_END;
 
@@ -134,7 +135,7 @@ void SwHTMLParser::NewDivision( int nToken )
                 NewMultiCol( aPropInfo.nColumnCount );
                 return;
             }
-            bPositioned = HTML_DIVISION_ON == nToken && aClass.Len() &&
+            bPositioned = HTML_DIVISION_ON == nToken && !aClass.isEmpty() &&
                           CreateContainer( aClass, aItemSet, aPropInfo,
                                            pCntxt );
             if( !bPositioned )

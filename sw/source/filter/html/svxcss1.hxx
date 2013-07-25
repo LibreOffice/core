@@ -204,7 +204,7 @@ inline sal_Bool operator<( const SvxCSS1MapEntry& rE1,  const SvxCSS1MapEntry& r
 class SvxCSS1Parser : public CSS1Parser
 {
     typedef ::boost::ptr_vector<CSS1Selector> CSS1Selectors;
-    typedef ::boost::ptr_map<String, SvxCSS1MapEntry> CSS1Map;
+    typedef ::boost::ptr_map<OUString, SvxCSS1MapEntry> CSS1Map;
     CSS1Selectors aSelectors;   // Liste der "offenen" Selectoren
 
     CSS1Map aIds;
@@ -212,7 +212,7 @@ class SvxCSS1Parser : public CSS1Parser
     CSS1Map aPages;
     CSS1Map aTags;
 
-    String sBaseURL;
+    OUString sBaseURL;
 
     SfxItemSet *pSheetItemSet;  // der Item-Set fuer Style-Sheets
     SfxItemSet *pItemSet;       // der aktuelle Item-Set
@@ -228,7 +228,7 @@ class SvxCSS1Parser : public CSS1Parser
 
     sal_Bool bIgnoreFontFamily;
 
-    void ParseProperty( const String& rProperty,
+    void ParseProperty( const OUString& rProperty,
                         const CSS1Expression *pExpr );
 
     std::vector<sal_uInt16> aWhichMap;        // Which-Map des Parser
@@ -260,14 +260,14 @@ protected:
     // Diese Methode wird fuer jede geparste Property aufgerufen
     // sie fuegt das Item in den ItemSet 'pItemSet' ein
     // Sie sollte in abgeleiteten Parsern nicht mehr ueberladen werden!
-    virtual sal_Bool DeclarationParsed( const String& rProperty,
+    virtual sal_Bool DeclarationParsed( const OUString& rProperty,
                                     const CSS1Expression *pExpr );
 
 public:
 
 
     SvxCSS1Parser( SfxItemPool& rPool,
-                    const String& rBaseURL,
+                    const OUString& rBaseURL,
                    sal_uInt16 nMinFixLineSp,
                    sal_uInt16 *pWhichIds=0, sal_uInt16 nWhichIds=0 );
     virtual ~SvxCSS1Parser();
@@ -277,16 +277,16 @@ public:
 
     // Parsen eines Style-Sheets. Fuer jeden gefundenen Selektor
     // wird StyleParsed mit dem entsprechenem Item-Set aufgerufen
-    virtual sal_Bool ParseStyleSheet( const String& rIn );
+    virtual sal_Bool ParseStyleSheet( const OUString& rIn );
 
     // Parsen einer Style-Option. Hier wird einfach nur der Item-Set
     // gefuellt.
-    sal_Bool ParseStyleOption( const String& rIn, SfxItemSet& rItemSet,
+    sal_Bool ParseStyleOption( const OUString& rIn, SfxItemSet& rItemSet,
                            SvxCSS1PropertyInfo& rPropInfo );
 
     // Umwandeln eines Strings in den Wert eines Enums
     static sal_Bool GetEnum( const CSS1PropertyEnum *pPropTable,
-                         const String& rValue, sal_uInt16 &rEnum );
+                         const OUString& rValue, sal_uInt16 &rEnum );
 
     // Pixel in Twips wandeln
     static void PixelToTwip( long &nWidth, long &nHeight );
@@ -298,29 +298,29 @@ public:
 
     const sal_uInt16 *GetWhichMap() const { return &aWhichMap[0]; }
 
-    void InsertMapEntry( const String& rKey, const SfxItemSet& rItemSet,
+    void InsertMapEntry( const OUString& rKey, const SfxItemSet& rItemSet,
                          const SvxCSS1PropertyInfo& rProp, CSS1Map& rMap );
 
-    void InsertId( const String& rId, const SfxItemSet& rItemSet,
+    void InsertId( const OUString& rId, const SfxItemSet& rItemSet,
                    const SvxCSS1PropertyInfo& rProp );
 
-    const SvxCSS1MapEntry* GetId( const String& rId ) const;
+    const SvxCSS1MapEntry* GetId( const OUString& rId ) const;
 
-    void InsertClass( const String& rClass, const SfxItemSet& rItemSet,
+    void InsertClass( const OUString& rClass, const SfxItemSet& rItemSet,
                       const SvxCSS1PropertyInfo& rProp );
 
-    const SvxCSS1MapEntry* GetClass( const String& rClass ) const;
+    const SvxCSS1MapEntry* GetClass( const OUString& rClass ) const;
 
-    void InsertPage( const String& rPage, sal_Bool bPseudo,
+    void InsertPage( const OUString& rPage, sal_Bool bPseudo,
                             const SfxItemSet& rItemSet,
                             const SvxCSS1PropertyInfo& rProp );
 
-    SvxCSS1MapEntry* GetPage( const String& rPage, bool bPseudo );
+    SvxCSS1MapEntry* GetPage( const OUString& rPage, bool bPseudo );
 
-    void InsertTag( const String& rTag, const SfxItemSet& rItemSet,
+    void InsertTag( const OUString& rTag, const SfxItemSet& rItemSet,
                       const SvxCSS1PropertyInfo& rProp );
 
-    SvxCSS1MapEntry* GetTag( const String& rTag );
+    SvxCSS1MapEntry* GetTag( const OUString& rTag );
 
     void MergeStyles( const SfxItemSet& rSrcSet,
                       const SvxCSS1PropertyInfo& rSrcInfo,
@@ -337,7 +337,7 @@ public:
     bool IsSetCJKProps() const { return (nScriptFlags & CSS1_SCRIPT_CJK) != 0; }
     bool IsSetCTLProps() const { return (nScriptFlags & CSS1_SCRIPT_CTL) != 0; }
 
-    const String& GetBaseURL() const { return sBaseURL;}
+    const OUString& GetBaseURL() const { return sBaseURL;}
 
 };
 
