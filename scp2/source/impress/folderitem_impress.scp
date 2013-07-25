@@ -31,7 +31,7 @@ FolderItem gid_Folderitem_Simpress
     ALL_LANG(Tooltip, STR_FI_TOOLTIP_IMPRESS);
 End
 
-FolderItemProperty git_Folderitem_Simpress_AppIDProperty
+FolderItemProperty git_Folderitemproperty_Simpress_AppID
     ShortcutID = gid_Folderitem_Simpress;
     Key = "System.AppUserModel.ID";
     Value = "TheDocumentFoundation.LibreOffice.Impress";
