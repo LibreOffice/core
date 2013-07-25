@@ -2855,7 +2855,9 @@ Size Edit::CalcMinimumSizeForText(const OUString &rString) const
     Size aSize;
     if (mnWidthInChars != -1)
     {
-        aSize = CalcSize(mnWidthInChars);
+        //CalcSize calls CalcWindowSize, but we will call that also in this
+        //function, so undo the first one with CalcOutputSize
+        aSize = CalcOutputSize(CalcSize(mnWidthInChars));
     }
     else
     {
@@ -2868,9 +2870,13 @@ Size Edit::CalcMinimumSizeForText(const OUString &rString) const
         aSize.Height() = GetTextHeight();
         aSize.Width() = GetTextWidth(aString);
         aSize.Width() += ImplGetExtraOffset() * 2;
+
         // do not create edit fields in which one cannot enter anything
         // a default minimum width should exist for at least 3 characters
-        Size aMinSize(CalcSize(3));
+
+        //CalcSize calls CalcWindowSize, but we will call that also in this
+        //function, so undo the first one with CalcOutputSize
+        Size aMinSize(CalcOutputSize(CalcSize(3)));
         if (aSize.Width() < aMinSize.Width())
             aSize.Width() = aMinSize.Width();
     }
