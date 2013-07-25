@@ -188,11 +188,11 @@ Reference< XResultSetMetaData > SAL_CALL OPreparedStatement::getMetaData()
 {
     ::osl::MutexGuard aGuard( m_pConnection->getMutex() );
     checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
+    ensurePrepared();
 
-    // TODO: implement
-//     if(!m_xMetaData.is())
-//         m_xMetaData = new OResultSetMetaData(m_pConnection, m_pSqlda);
-    // TODO: uncomment once PreparedStatement reimplemented with SQLDA
+    if(!m_xMetaData.is())
+        m_xMetaData = new OResultSetMetaData(m_pConnection, m_pOutSqlda);
+
     return m_xMetaData;
 }
 
@@ -247,7 +247,7 @@ void SAL_CALL OPreparedStatement::setString(sal_Int32 nParameterIndex,
 
     OString str = OUStringToOString(x , RTL_TEXTENCODING_UTF8 );
 
-    XSQLVAR* pVar = m_pOutSqlda->sqlvar + (nParameterIndex - 1);
+    XSQLVAR* pVar = m_pInSqlda->sqlvar + (nParameterIndex - 1);
 
     int dtype = (pVar->sqltype & ~1); // drop flag bit for now
     switch (dtype) {
