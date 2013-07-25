@@ -10,6 +10,7 @@ package org.libreoffice.impressremote.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -19,6 +20,9 @@ import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import org.libreoffice.impressremote.adapter.ComputersPagerAdapter;
+import org.libreoffice.impressremote.fragment.ComputersFragment;
+import org.libreoffice.impressremote.util.BluetoothOperator;
+import org.libreoffice.impressremote.util.FragmentOperator;
 import org.libreoffice.impressremote.util.Intents;
 import org.libreoffice.impressremote.R;
 
@@ -26,6 +30,20 @@ public class ComputersActivity extends SherlockFragmentActivity implements Actio
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        setUpContent();
+    }
+
+    private void setUpContent() {
+        if (BluetoothOperator.isAvailable()) {
+            setUpComputersLists();
+        }
+        else {
+            setUpComputersList();
+        }
+    }
+
+    private void setUpComputersLists() {
         setContentView(R.layout.activity_computers);
 
         setUpTabs();
@@ -35,12 +53,8 @@ public class ComputersActivity extends SherlockFragmentActivity implements Actio
     private void setUpTabs() {
         ActionBar aActionBar = getSupportActionBar();
 
-        aActionBar.addTab(buildBluetoothServersTab());
-        aActionBar.addTab(buildWiFiServersTab());
-    }
-
-    private ActionBar.Tab buildBluetoothServersTab() {
-        return buildActionBarTab(R.string.title_bluetooth);
+        aActionBar.addTab(buildActionBarTab(R.string.title_bluetooth));
+        aActionBar.addTab(buildActionBarTab(R.string.title_wifi));
     }
 
     private ActionBar.Tab buildActionBarTab(int aTitleResourceId) {
@@ -69,13 +83,11 @@ public class ComputersActivity extends SherlockFragmentActivity implements Actio
     public void onTabReselected(ActionBar.Tab aTab, FragmentTransaction aTransaction) {
     }
 
-    private ActionBar.Tab buildWiFiServersTab() {
-        return buildActionBarTab(R.string.title_wifi);
-    }
-
     private void setUpComputersPager() {
-        getComputersPager().setAdapter(buildComputersPagerAdapter());
-        getComputersPager().setOnPageChangeListener(this);
+        ViewPager aComputersPager = getComputersPager();
+
+        aComputersPager.setAdapter(buildComputersPagerAdapter());
+        aComputersPager.setOnPageChangeListener(this);
     }
 
     private PagerAdapter buildComputersPagerAdapter() {
@@ -93,6 +105,12 @@ public class ComputersActivity extends SherlockFragmentActivity implements Actio
 
     @Override
     public void onPageScrollStateChanged(int aPosition) {
+    }
+
+    private void setUpComputersList() {
+        Fragment aComputersFragment = ComputersFragment.newInstance(ComputersFragment.Type.WIFI);
+
+        FragmentOperator.setUpFragment(this, aComputersFragment);
     }
 
     @Override

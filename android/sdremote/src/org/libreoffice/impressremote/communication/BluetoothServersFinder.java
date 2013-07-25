@@ -22,6 +22,7 @@ import android.content.IntentFilter;
 import android.os.Handler;
 import android.support.v4.content.LocalBroadcastManager;
 
+import org.libreoffice.impressremote.util.BluetoothOperator;
 import org.libreoffice.impressremote.util.Intents;
 import org.libreoffice.impressremote.communication.Server.Protocol;
 
@@ -40,28 +41,23 @@ class BluetoothServersFinder extends BroadcastReceiver implements ServersFinder,
 
     @Override
     public void startSearch() {
-        if (!isBluetoothAvailable()) {
+        if (!BluetoothOperator.isAvailable()) {
             return;
         }
 
-        if (BluetoothAdapter.getDefaultAdapter().isDiscovering()) {
+        if (BluetoothOperator.getAdapter().isDiscovering()) {
             return;
         }
 
         setUpSearchResultsReceiver();
 
-        BluetoothAdapter.getDefaultAdapter().startDiscovery();
-    }
-
-    private boolean isBluetoothAvailable() {
-        return BluetoothAdapter.getDefaultAdapter() != null;
+        BluetoothOperator.getAdapter().startDiscovery();
     }
 
     private void setUpSearchResultsReceiver() {
-        IntentFilter aSearchResultsFilter = new IntentFilter(
-            BluetoothDevice.ACTION_FOUND);
-        aSearchResultsFilter
-            .addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
+        IntentFilter aSearchResultsFilter = new IntentFilter();
+        aSearchResultsFilter.addAction(BluetoothDevice.ACTION_FOUND);
+        aSearchResultsFilter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
 
         mContext.registerReceiver(this, aSearchResultsFilter);
     }
@@ -73,15 +69,12 @@ class BluetoothServersFinder extends BroadcastReceiver implements ServersFinder,
                 .getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
 
             addServer(buildServer(aBluetoothDevice));
-
             callUpdatingServersList();
 
             return;
         }
 
-        if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED
-            .equals(aIntent.getAction())) {
-
+        if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(aIntent.getAction())) {
             startDiscoveryDelayed();
         }
     }
@@ -107,7 +100,7 @@ class BluetoothServersFinder extends BroadcastReceiver implements ServersFinder,
         // but check whether device is on in case the user manually
         // disabled bluetooth
 
-        if (!BluetoothAdapter.getDefaultAdapter().isEnabled()) {
+        if (!BluetoothOperator.getAdapter().isEnabled()) {
             return;
         }
 
@@ -117,18 +110,18 @@ class BluetoothServersFinder extends BroadcastReceiver implements ServersFinder,
 
     @Override
     public void run() {
-        BluetoothAdapter.getDefaultAdapter().startDiscovery();
+        BluetoothOperator.getAdapter().startDiscovery();
     }
 
     @Override
     public void stopSearch() {
-        if (!isBluetoothAvailable()) {
+        if (!BluetoothOperator.isAvailable()) {
             return;
         }
 
         tearDownSearchResultsReceiver();
 
-        BluetoothAdapter.getDefaultAdapter().cancelDiscovery();
+        BluetoothOperator.getAdapter().cancelDiscovery();
     }
 
     private void tearDownSearchResultsReceiver() {

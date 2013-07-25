@@ -32,6 +32,10 @@ public class Server implements Parcelable {
         return new Server(Protocol.TCP, aAddress, aName);
     }
 
+    public static Server newBluetoothInstance(String aAddress, String aName) {
+        return new Server(Protocol.BLUETOOTH, aAddress, aName);
+    }
+
     public Protocol getProtocol() {
         return mProtocol;
     }
