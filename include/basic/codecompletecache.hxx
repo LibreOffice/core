@@ -27,12 +27,26 @@
 #include <boost/unordered_map.hpp>
 #include <rtl/ustring.hxx>
 #include <svtools/miscopt.hxx>
+#include <vector>
+
+enum BASIC_DLLPUBLIC AutocompleteType
+{
+    ACSUB,
+    ACFUNC
+};
+
+struct IncompleteProcData
+{
+    OUString sProcName;
+    sal_uInt16 nLine;
+    AutocompleteType aType;
+};
 
 typedef boost::unordered_map< OUString, OUString, OUStringHash > CodeCompleteVarTypes;
 /* variable name, type */
 typedef boost::unordered_map< OUString, CodeCompleteVarTypes, OUStringHash > CodeCompleteVarScopes;
 /* procedure, CodeCompleteVarTypes */
-
+typedef std::vector< IncompleteProcData > IncompleteProcedures;
 
 class BASIC_DLLPUBLIC CodeCompleteOptions
 {

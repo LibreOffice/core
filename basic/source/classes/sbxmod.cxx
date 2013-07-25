@@ -894,6 +894,10 @@ void SbModule::SetSource32( const OUString& r )
     StartDefinitions();
     SbiTokenizer aTok( r );
     aTok.SetCompatible( IsVBACompat() );
+    if( CodeCompleteOptions::IsProcedureAutoCompleteOn() )
+    {
+        aIncompleteProcs.clear();
+    }
     while( !aTok.IsEof() )
     {
         SbiToken eEndTok = NIL;
@@ -976,22 +980,27 @@ void SbModule::SetSource32( const OUString& r )
             if( aTok.IsEof() )
             {
                 pMeth->nLine2 = aTok.GetLine();
-                std::cerr << "EOF reached, no end for "<< sMethName <<", line " << aTok.GetLine() << std::endl;
-                //std::cerr << "write end to: " << aOUSource.getLength() / pMeth->nLine2 << std::endl;
-                sal_Int32 nPos=0;
-                sal_Int32 nCounter = 0;
-                std::cerr << "source length: " << aOUSource.getLength() << std::endl;
-                for(sal_uInt32 i=0; i < aOUSource.getLength() ; ++i)
+                if( CodeCompleteOptions::IsProcedureAutoCompleteOn() )
                 {
-                    nPos++;
-                    if( aOUSource[i] == '\n' && nCounter != aTok.GetLine() )
-                        nCounter++;
+                    IncompleteProcData aProcData;
+                    aProcData.sProcName = sMethName;
+                    aProcData.nLine = pMeth->nLine2;
+
+                    if( eEndTok == ENDSUB )
+                        aProcData.aType = ACSUB;
+                    if( eEndTok == ENDFUNC )
+                        aProcData.aType = ACFUNC;
+                    aIncompleteProcs.push_back(aProcData);
                 }
-                std::cerr << "newline index: " << nPos << std::endl;
             }
         }
     }
     EndDefinitions( sal_True );
+}
+
+IncompleteProcedures SbModule::GetIncompleteProcedures() const
+{
+    return aIncompleteProcs;
 }
 
 // Broadcast of a hint to all Basics
