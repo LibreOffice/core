@@ -114,10 +114,23 @@ namespace connectivity
             virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException);
 
             // XPreparedStatement
-            virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet > SAL_CALL executeQuery(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            virtual sal_Int32 SAL_CALL executeUpdate(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            virtual sal_Bool SAL_CALL execute(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > SAL_CALL getConnection(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet > SAL_CALL
+                executeQuery()
+                throw(::com::sun::star::sdbc::SQLException,
+                      ::com::sun::star::uno::RuntimeException);
+            virtual sal_Int32 SAL_CALL
+                executeUpdate()
+                throw(::com::sun::star::sdbc::SQLException,
+                      ::com::sun::star::uno::RuntimeException);
+            virtual sal_Bool SAL_CALL
+                execute()
+                throw(::com::sun::star::sdbc::SQLException,
+                      ::com::sun::star::uno::RuntimeException);
+            virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > SAL_CALL
+                getConnection()
+                throw(::com::sun::star::sdbc::SQLException,
+                      ::com::sun::star::uno::RuntimeException);
+
             // XParameters
             virtual void SAL_CALL setNull( sal_Int32 nParameterIndex, sal_Int32 sqlType ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             virtual void SAL_CALL setObjectNull( sal_Int32 parameterIndex, sal_Int32 sqlType, const ::rtl::OUString& typeName ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);

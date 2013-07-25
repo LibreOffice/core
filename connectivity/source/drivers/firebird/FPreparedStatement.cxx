@@ -211,26 +211,6 @@ void SAL_CALL OPreparedStatement::close() throw(SQLException, RuntimeException)
     OStatementCommonBase::close();
 }
 
-sal_Bool SAL_CALL OPreparedStatement::execute()
-    throw(SQLException, RuntimeException)
-{
-    MutexGuard aGuard( m_pConnection->getMutex() );
-    checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
-
-    // TODO: implement
-    return sal_False;
-}
-
-sal_Int32 SAL_CALL OPreparedStatement::executeUpdate()
-    throw(SQLException, RuntimeException)
-{
-    MutexGuard aGuard( m_pConnection->getMutex() );
-    checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
-
-    // TODO: implement
-    return 0;
-}
-
 void SAL_CALL OPreparedStatement::setString(sal_Int32 nParameterIndex,
                                             const OUString& x)
     throw(SQLException, RuntimeException)
@@ -281,11 +261,11 @@ Reference< XConnection > SAL_CALL OPreparedStatement::getConnection()
     return Reference< XConnection >(m_pConnection);
 }
 
-Reference< XResultSet > SAL_CALL OPreparedStatement::executeQuery()
+sal_Bool SAL_CALL OPreparedStatement::execute()
     throw(SQLException, RuntimeException)
 {
     SAL_INFO("connectivity.firebird", "executeQuery(). "
-             "Got called with sql: " <<  m_sSqlStatement);
+        "Got called with sql: " <<  m_sSqlStatement);
 
     MutexGuard aGuard( m_pConnection->getMutex() );
     checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
@@ -302,6 +282,29 @@ Reference< XResultSet > SAL_CALL OPreparedStatement::executeQuery()
     {
         SAL_WARN("connectivity.firebird", "isc_dsql_execute failed" );
         evaluateStatusVector(m_statusVector, "isc_dsql_execute", *this);
+    }
+
+    // TODO: check we actually got results -- ?
+
+    return sal_True;
+    // TODO: implement handling of multiple ResultSets.
+}
+
+sal_Int32 SAL_CALL OPreparedStatement::executeUpdate()
+    throw(SQLException, RuntimeException)
+{
+    execute();
+    // TODO: get the number of rows changed -- look in Statement::executeUpdate for details
+    return 0;
+}
+
+Reference< XResultSet > SAL_CALL OPreparedStatement::executeQuery()
+    throw(SQLException, RuntimeException)
+{
+    if (!execute())
+    {
+        // execute succeeded but no results
+        throw SQLException(); // TODO: add message to exception
     }
 
     uno::Reference< OResultSet > pResult(new OResultSet(m_pConnection,
