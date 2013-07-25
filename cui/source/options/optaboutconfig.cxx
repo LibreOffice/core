@@ -123,10 +123,38 @@ void CuiAboutConfigTabPage::FillItems( Reference< XNameAccess >xNameAccess, OUSt
 
         if( bIsLeafNode )
         {
-            Reference< beans::XProperty > xProperty ( xNameAccess, uno::UNO_QUERY_THROW ) ;
-            beans::Property aProp = xProperty->getAsProperty();
-            OUString test = aProp.Type.getTypeName();
-            InsertEntry( sPath, test,  sPath, sPath );//for testing only will change
+            Any aProp = xHierarchicalNameAccess->getByHierarchicalName(seqItems[i]); //xProperty->getAsProperty();
+
+            OUString test;
+            if( aProp.hasValue() )
+            {
+                switch( aProp.getValueType().getTypeClass() )
+                {
+                    case ::com::sun::star::uno::TypeClass_UNSIGNED_SHORT :
+                    case ::com::sun::star::uno::TypeClass_SHORT :
+                    case ::com::sun::star::uno::TypeClass_UNSIGNED_LONG :
+                    case ::com::sun::star::uno::TypeClass_LONG :
+                    //case ::com::sun::star::uno::TypeClass_INT :
+                    {
+                        sal_Int32 nVal = 0;
+                        if(aProp >>= nVal)
+                        {
+                            OUString aNumber( OUString::valueOf( nVal ) );
+                            test = aNumber;
+                        }
+                    }
+                    break;
+
+                    default:
+                    {
+                        test = OUString("test");
+                    }
+                }
+            }
+
+            OUString sType = aProp.getValueTypeName();//.getTypeName() ;//Type.getTypeName();
+            OUString sPrefName = sPath + OUString("-") + seqItems[i] ;
+            InsertEntry( sPrefName, test, sType , sPath );//for testing only will change
         }
     }
 }
