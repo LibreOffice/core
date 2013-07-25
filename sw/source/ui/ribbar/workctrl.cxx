@@ -207,6 +207,7 @@ SfxPopupWindow* SwTbxAutoTextCtrl::CreatePopupWindow()
                 {
                     // Acquire group name with path extension
                     String sTitle;
+                    pGlossaryList->GetGroupName(i - 1, sal_False, &sTitle);
                     sal_uInt16 nBlockCount = pGlossaryList->GetBlockCount(i -1);
                     if(nBlockCount)
                     {
@@ -303,6 +304,7 @@ IMPL_LINK(SwTbxAutoTextCtrl, PopupHdl, PopupMenu*, pMenu)
         SwGlossaryList* pGlossaryList = ::GetGlossaryList();
         String sShortName;
         String sGroup = pGlossaryList->GetGroupName(nBlock - 1, false);
+        pGlossaryList->GetBlockName(nBlock - 1, nId - (100 * nBlock) - 1, sShortName);
 
         SwGlossaryHdl* pGlosHdl = pView->GetGlosHdl();
         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
