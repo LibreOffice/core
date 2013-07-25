@@ -213,9 +213,10 @@ void ResultSetMetaData::checkTable()
             }
             if( tables.is() )
             {
-                OUString name = getTableName( 1 );
-//                 if( tables->hasByName( name ) )
-                tables->getByName( name ) >>= m_table;
+                const OUString name   (getTableName ( 1 ));
+                const OUString schema (getSchemaName( 1 ));
+                const OUString composedName( schema.isEmpty() ? name : (schema + "." + name) );
+                tables->getByName( composedName ) >>= m_table;
             }
         }
     }
