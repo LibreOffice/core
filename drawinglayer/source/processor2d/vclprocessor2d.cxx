@@ -449,7 +449,8 @@ namespace drawinglayer
                 // parts will be uncovered, extend aBitmapEx with a mask bitmap
                 const Bitmap aContent(aBitmapEx.GetBitmap());
 #if defined(MACOSX)
-                const AlphaMask aMaskBmp( aContent.GetSizePixel());
+                AlphaMask aMaskBmp( aContent.GetSizePixel());
+                aMaskBmp.Erase( 0);
 #else
                 Bitmap aMaskBmp( aContent.GetSizePixel(), 1);
                 aMaskBmp.Erase(Color(COL_BLACK)); // #122758# Initialize to non-transparent
