@@ -51,18 +51,18 @@ class GetDevSizeList;
 class ImplDevFontListData
 {
 public:
-                        ImplDevFontListData( const String& rSearchName );
+                        ImplDevFontListData( const OUString& rSearchName );
                         ~ImplDevFontListData();
 
     const OUString&     GetFamilyName() const    { return maName; }
-    const String&       GetSearchName() const    { return maSearchName; }
+    const OUString&       GetSearchName() const    { return maSearchName; }
     const OUString&     GetAliasNames() const    { return maMapNames; }
     bool                IsScalable() const       { return mpFirst->IsScalable(); }
     int                 GetMinQuality() const    { return mnMinQuality; }
 
     bool                AddFontFace( PhysicalFontFace* );
     void                InitMatchData( const utl::FontSubstConfiguration&,
-                            const String& rSearchName );
+                            const OUString& rSearchName );
     PhysicalFontFace*   FindBestFontFace( const FontSelectPattern& rFSD ) const;
 
     void                GetFontHeights( std::set<int>& rHeights ) const;
@@ -74,11 +74,11 @@ private:
 friend class ImplDevFontList; // TODO: remove soon
     PhysicalFontFace*   mpFirst;            // linked list of physical font faces
     OUString            maName;             // Fontname (original font family name)
-    String              maSearchName;       // normalized font family name
+    OUString            maSearchName;       // normalized font family name
     OUString            maMapNames;         // fontname aliases
     sal_uIntPtr         mnTypeFaces;        // Typeface Flags
     sal_uIntPtr         mnMatchType;        // MATCH - Type
-    String              maMatchFamilyName;  // MATCH - FamilyName
+    OUString            maMatchFamilyName;  // MATCH - FamilyName
     FontWeight          meMatchWeight;      // MATCH - Weight
     FontWidth           meMatchWidth;       // MATCH - Width
     FontFamily          meFamily;
@@ -112,16 +112,16 @@ public:
 class ImplGetDevSizeList
 {
 private:
-    String              maFontName;
+    OUString            maFontName;
     std::vector<int>    maSizeList;
 
 public:
-                        ImplGetDevSizeList( const String& rFontName )
+                        ImplGetDevSizeList( const OUString& rFontName )
                         : maFontName( rFontName ) { maSizeList.reserve( 32 ); }
     void                Add( int nHeight )      { maSizeList.push_back( nHeight ); }
     int                 Count() const           { return maSizeList.size(); }
     int                 Get( int nIndex ) const { return maSizeList[ nIndex ]; }
-    const String&       GetFontName() const     { return maFontName; }
+    const OUString&     GetFontName() const     { return maFontName; }
 };
 
 // ------------------------
@@ -148,8 +148,8 @@ protected:
 
 struct ImplFontSubstEntry
 {
-    String                    maName;
-    String                    maReplaceName;
+    OUString                  maName;
+    OUString                  maReplaceName;
     OUString                  maSearchName;
     OUString                  maSearchReplaceName;
     sal_uInt16                mnFlags;
@@ -164,13 +164,13 @@ private:
     typedef std::list<ImplFontSubstEntry> FontSubstList;
     FontSubstList maFontSubstList;
 public:
-    void    AddFontSubstitute( const String& rFontName, const String& rSubstName, sal_uInt16 nFlags );
+    void    AddFontSubstitute( const OUString& rFontName, const OUString& rSubstName, sal_uInt16 nFlags );
     void    RemoveFontSubstitute( int nIndex );
     int     GetFontSubstituteCount() const { return maFontSubstList.size(); };
     bool    Empty() const { return maFontSubstList.empty(); }
     void    Clear() { maFontSubstList.clear(); }
 
-    bool    FindFontSubstitute( String& rSubstName, const String& rFontName, sal_uInt16 nFlags ) const;
+    bool    FindFontSubstitute( OUString& rSubstName, const OUString& rFontName, sal_uInt16 nFlags ) const;
 };
 
 // PreMatchFontSubstitution

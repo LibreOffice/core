@@ -324,8 +324,8 @@ void OutputDevice::AddFontSubstitute( const OUString& rFontName,
     ImplGetSVData()->maGDIData.mbFontSubChanged = sal_True;
 }
 
-void ImplDirectFontSubstitution::AddFontSubstitute( const String& rFontName,
-    const String& rSubstFontName, sal_uInt16 nFlags )
+void ImplDirectFontSubstitution::AddFontSubstitute( const OUString& rFontName,
+    const OUString& rSubstFontName, sal_uInt16 nFlags )
 {
     maFontSubstList.push_back( ImplFontSubstEntry( rFontName, rSubstFontName, nFlags ) );
 }
@@ -374,8 +374,8 @@ sal_uInt16 OutputDevice::GetFontSubstituteCount()
     return (sal_uInt16)nCount;
 }
 
-bool ImplDirectFontSubstitution::FindFontSubstitute( String& rSubstName,
-    const String& rSearchName, sal_uInt16 nFlags ) const
+bool ImplDirectFontSubstitution::FindFontSubstitute( OUString& rSubstName,
+    const OUString& rSearchName, sal_uInt16 nFlags ) const
 {
     // TODO: get rid of O(N) searches
     FontSubstList::const_iterator it = maFontSubstList.begin();
@@ -402,7 +402,7 @@ static void ImplFontSubstitute( OUString& rFontName,
     DBG_ASSERT( aTempName == rFontName, "ImplFontSubstitute() called without a searchname" );
 #endif
 
-    String aSubstFontName;
+    OUString aSubstFontName;
 
     // apply user-configurable font replacement (eg, from the list in Tools->Options)
     const ImplDirectFontSubstitution* pSubst = ImplGetSVData()->maGDIData.mpDirectFontSubst;
@@ -616,34 +616,33 @@ Font OutputDevice::GetDefaultFont( sal_uInt16 nType, LanguageType eLang,
     return aFont;
 }
 
-static unsigned ImplIsCJKFont( const String& rFontName )
+static unsigned ImplIsCJKFont( const OUString& rFontName )
 {
     // Test, if Fontname includes CJK characters --> In this case we
     // mention that it is a CJK font
-    const sal_Unicode* pStr = rFontName.GetBuffer();
-    while ( *pStr )
+    for(int i = 0; i < rFontName.getLength(); i++)
     {
+        const sal_Unicode ch = rFontName[i];
         // japanese
-        if ( ((*pStr >= 0x3040) && (*pStr <= 0x30FF)) ||
-             ((*pStr >= 0x3190) && (*pStr <= 0x319F)) )
+        if ( ((ch >= 0x3040) && (ch <= 0x30FF)) ||
+             ((ch >= 0x3190) && (ch <= 0x319F)) )
             return IMPL_FONT_ATTR_CJK|IMPL_FONT_ATTR_CJK_JP;
 
         // korean
-        if ( ((*pStr >= 0xAC00) && (*pStr <= 0xD7AF)) ||
-             ((*pStr >= 0x3130) && (*pStr <= 0x318F)) ||
-             ((*pStr >= 0x1100) && (*pStr <= 0x11FF)) )
+        if ( ((ch >= 0xAC00) && (ch <= 0xD7AF)) ||
+             ((ch >= 0x3130) && (ch <= 0x318F)) ||
+             ((ch >= 0x1100) && (ch <= 0x11FF)) )
             return IMPL_FONT_ATTR_CJK|IMPL_FONT_ATTR_CJK_KR;
 
         // chinese
-        if ( ((*pStr >= 0x3400) && (*pStr <= 0x9FFF)) )
+        if ( ((ch >= 0x3400) && (ch <= 0x9FFF)) )
             return IMPL_FONT_ATTR_CJK|IMPL_FONT_ATTR_CJK_TC|IMPL_FONT_ATTR_CJK_SC;
 
         // cjk
-        if ( ((*pStr >= 0x3000) && (*pStr <= 0xD7AF)) ||
-             ((*pStr >= 0xFF00) && (*pStr <= 0xFFEE)) )
+        if ( ((ch >= 0x3000) && (ch <= 0xD7AF)) ||
+             ((ch >= 0xFF00) && (ch <= 0xFFEE)) )
             return IMPL_FONT_ATTR_CJK;
 
-        pStr++;
     }
 
     return 0;
@@ -739,7 +738,7 @@ public:
     int                 mnFaceMatch;
     int                 mnHeightMatch;
     int                 mnWidthMatch;
-    const sal_Unicode*  mpTargetStyleName;
+    const OUString*     mpTargetStyleName;
 };
 
 bool PhysicalFontFace::IsBetterMatch( const FontSelectPattern& rFSD, FontMatchStatus& rStatus ) const
@@ -751,7 +750,7 @@ bool PhysicalFontFace::IsBetterMatch( const FontSelectPattern& rFSD, FontMatchSt
         nMatch += 240000;
 
     if( rStatus.mpTargetStyleName
-    &&  GetStyleName().equalsIgnoreAsciiCase( rStatus.mpTargetStyleName ) )
+    &&  GetStyleName().equalsIgnoreAsciiCase( *rStatus.mpTargetStyleName ) )
         nMatch += 120000;
 
     if( (rFSD.GetPitch() != PITCH_DONTKNOW) && (rFSD.GetPitch() == GetPitch()) )
@@ -910,7 +909,7 @@ size_t ImplFontEntry::GFBCacheKey_Hash::operator()( const GFBCacheKey& rData ) c
     return a(rData.first) ^ b(rData.second);
 }
 
-inline void ImplFontEntry::AddFallbackForUnicode( sal_UCS4 cChar, FontWeight eWeight, const String& rFontName )
+inline void ImplFontEntry::AddFallbackForUnicode( sal_UCS4 cChar, FontWeight eWeight, const OUString& rFontName )
 {
     if( !mpUnicodeFallbackList )
         mpUnicodeFallbackList = new UnicodeFallbackList;
@@ -930,7 +929,7 @@ inline bool ImplFontEntry::GetFallbackForUnicode( sal_UCS4 cChar, FontWeight eWe
     return true;
 }
 
-inline void ImplFontEntry::IgnoreFallbackForUnicode( sal_UCS4 cChar, FontWeight eWeight, const String& rFontName )
+inline void ImplFontEntry::IgnoreFallbackForUnicode( sal_UCS4 cChar, FontWeight eWeight, const OUString& rFontName )
 {
 //  DBG_ASSERT( mpUnicodeFallbackList, "ImplFontEntry::IgnoreFallbackForUnicode no list" );
     UnicodeFallbackList::iterator it = mpUnicodeFallbackList->find( GFBCacheKey(cChar,eWeight) );
@@ -941,7 +940,7 @@ inline void ImplFontEntry::IgnoreFallbackForUnicode( sal_UCS4 cChar, FontWeight 
         mpUnicodeFallbackList->erase( it );
 }
 
-ImplDevFontListData::ImplDevFontListData( const String& rSearchName )
+ImplDevFontListData::ImplDevFontListData( const OUString& rSearchName )
 :   mpFirst( NULL ),
     maSearchName( rSearchName ),
     mnTypeFaces( 0 ),
@@ -1064,7 +1063,7 @@ bool ImplDevFontListData::AddFontFace( PhysicalFontFace* pNewData )
 
 // get font attributes using the normalized font family name
 void ImplDevFontListData::InitMatchData( const utl::FontSubstConfiguration& rFontSubst,
-    const String& rSearchName )
+    const OUString& rSearchName )
 {
     OUString aShortName;
     OUString aMatchFamilyName(maMatchFamilyName);
@@ -1089,11 +1088,15 @@ PhysicalFontFace* ImplDevFontListData::FindBestFontFace( const FontSelectPattern
         return mpFirst;
 
     // FontName+StyleName should map to FamilyName+StyleName
-    const String& rSearchName = rFSD.maTargetName;
-    const sal_Unicode* pTargetStyleName = NULL;
-    if( (rSearchName.Len() > maSearchName.Len())
-    &&   rSearchName.Equals( maSearchName, 0, maSearchName.Len() ) )
-        pTargetStyleName = rSearchName.GetBuffer() + maSearchName.Len() + 1;
+    const OUString& rSearchName = rFSD.maTargetName;
+    OUString aTargetStyleName;
+    const OUString* pTargetStyleName = NULL;
+    if(    (rSearchName.getLength() > maSearchName.getLength())
+        && rSearchName.startsWith( maSearchName ) )
+    {
+        aTargetStyleName = rSearchName.copy(maSearchName.getLength() + 1);
+        pTargetStyleName = &aTargetStyleName;
+    }
 
     // TODO: linear search improve!
     PhysicalFontFace* pFontFace = mpFirst;
@@ -1731,9 +1734,9 @@ ImplDevFontListData* ImplDevFontList::ImplFindByAttributes( sal_uLong nSearchTyp
 
         // test font name substrings
         // TODO: calculate name matching score using e.g. Levenstein distance
-        if( (rSearchFamilyName.getLength() >= 4) && (pData->maMatchFamilyName.Len() >= 4)
+        if( (rSearchFamilyName.getLength() >= 4) && (pData->maMatchFamilyName.getLength() >= 4)
         &&    ((rSearchFamilyName.indexOf( pData->maMatchFamilyName ) != -1)
-            || (pData->maMatchFamilyName.Search( rSearchFamilyName ) != STRING_NOTFOUND)) )
+            || (pData->maMatchFamilyName.indexOf( rSearchFamilyName ) != -1)) )
                     nTestMatch += 5000;
 
         // test SERIF attribute
@@ -6141,7 +6144,7 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const Rectangle& r
     TextAlign   eAlign          = rTargetDevice.GetTextAlign();
     xub_StrLen  nMnemonicPos    = STRING_NOTFOUND;
 
-    String aStr = rOrigStr;
+    OUString aStr = rOrigStr;
     if ( nStyle & TEXT_DRAW_MNEMONIC )
         aStr = GetNonMnemonicString( aStr, nMnemonicPos );
 
@@ -6151,7 +6154,7 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const Rectangle& r
     if ( nStyle & TEXT_DRAW_MULTILINE )
     {
 
-        String                  aLastLine;
+        OUString                aLastLine;
         ImplMultiTextLineInfo   aMultiLineInfo;
         ImplTextLineInfo*       pLineInfo;
         xub_StrLen              i;
@@ -6173,14 +6176,16 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const Rectangle& r
                     nFormatLines = nLines-1;
 
                     pLineInfo = aMultiLineInfo.GetLine( nFormatLines );
-                    aLastLine = convertLineEnd(aStr.Copy(pLineInfo->GetIndex()), LINEEND_LF);
+                    aLastLine = convertLineEnd(aStr.copy(pLineInfo->GetIndex()), LINEEND_LF);
                     // Replace all LineFeeds with Spaces
-                    xub_StrLen nLastLineLen = aLastLine.Len();
+                    OUStringBuffer aLastLineBuffer(aLastLine);
+                    xub_StrLen nLastLineLen = aLastLineBuffer.getLength();
                     for ( i = 0; i < nLastLineLen; i++ )
                     {
-                        if ( aLastLine.GetChar( i ) == '\n' )
-                            aLastLine.SetChar( i, ' ' );
+                        if ( aLastLineBuffer[ i ] == '\n' )
+                            aLastLineBuffer[ i ] = ' ';
                     }
+                    aLastLine = aLastLineBuffer.makeStringAndClear();
                     aLastLine = ImplGetEllipsisString( rTargetDevice, aLastLine, nWidth, nStyle, _rLayout );
                     nStyle &= ~(TEXT_DRAW_VCENTER | TEXT_DRAW_BOTTOM);
                     nStyle |= TEXT_DRAW_TOP;
@@ -6253,7 +6258,7 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const Rectangle& r
 
 
             // If there still is a last line, we output it left-aligned as the line would be clipped
-            if ( aLastLine.Len() )
+            if ( !aLastLine.isEmpty() )
                 _rLayout.DrawText( aPos, aLastLine, 0, STRING_LEN, pVector, pDisplayText );
 
             // Reset clipping
@@ -6273,7 +6278,7 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const Rectangle& r
                 aStr = ImplGetEllipsisString( rTargetDevice, aStr, nWidth, nStyle, _rLayout );
                 nStyle &= ~(TEXT_DRAW_CENTER | TEXT_DRAW_RIGHT);
                 nStyle |= TEXT_DRAW_LEFT;
-                nTextWidth = _rLayout.GetTextWidth( aStr, 0, aStr.Len() );
+                nTextWidth = _rLayout.GetTextWidth( aStr, 0, aStr.getLength() );
             }
         }
         else
@@ -6304,8 +6309,8 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const Rectangle& r
         long nMnemonicWidth = 0;
         if ( nMnemonicPos != STRING_NOTFOUND )
         {
-            sal_Int32* pCaretXArray = (sal_Int32*) alloca( 2 * sizeof(sal_Int32) * aStr.Len() );
-            /*sal_Bool bRet =*/ _rLayout.GetCaretPositions( aStr, pCaretXArray, 0, aStr.Len() );
+            sal_Int32* pCaretXArray = (sal_Int32*) alloca( 2 * sizeof(sal_Int32) * aStr.getLength() );
+            /*sal_Bool bRet =*/ _rLayout.GetCaretPositions( aStr, pCaretXArray, 0, aStr.getLength() );
             long lc_x1 = pCaretXArray[2*(nMnemonicPos)];
             long lc_x2 = pCaretXArray[2*(nMnemonicPos)+1];
             nMnemonicWidth = rTargetDevice.ImplLogicWidthToDevicePixel( ::abs((int)(lc_x1 - lc_x2)) );
@@ -6438,7 +6443,7 @@ Rectangle OutputDevice::GetTextRect( const Rectangle& rRect,
     long                nMaxWidth;
     long                nTextHeight = GetTextHeight();
 
-    String aStr = rStr;
+    OUString aStr = rStr;
     if ( nStyle & TEXT_DRAW_MNEMONIC )
         aStr = GetNonMnemonicString( aStr );
 
@@ -6499,7 +6504,7 @@ Rectangle OutputDevice::GetTextRect( const Rectangle& rRect,
     else
     {
         nLines      = 1;
-        nMaxWidth   = _pTextLayout ? _pTextLayout->GetTextWidth( aStr, 0, aStr.Len() ) : GetTextWidth( aStr );
+        nMaxWidth   = _pTextLayout ? _pTextLayout->GetTextWidth( aStr, 0, aStr.getLength() ) : GetTextWidth( aStr );
 
         if ( pInfo )
         {

@@ -361,9 +361,9 @@ public: // TODO: make data members private
     short               mnOrientation;      // text angle in 3600 system
     bool                mbInit;             // true if maMetric member is valid
 
-    void                AddFallbackForUnicode( sal_UCS4, FontWeight eWeight, const String& rFontName );
+    void                AddFallbackForUnicode( sal_UCS4, FontWeight eWeight, const OUString& rFontName );
     bool                GetFallbackForUnicode( sal_UCS4, FontWeight eWeight, OUString* pFontName ) const;
-    void                IgnoreFallbackForUnicode( sal_UCS4, FontWeight eWeight, const String& rFontName );
+    void                IgnoreFallbackForUnicode( sal_UCS4, FontWeight eWeight, const OUString& rFontName );
 
 private:
     // cache of Unicode characters and replacement font names
