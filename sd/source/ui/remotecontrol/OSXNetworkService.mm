@@ -13,7 +13,7 @@
  #import "OSXNetworkService.h"
 #include <postmac.h>
 
-@implementation OSXNetworkService
+@implementation OSXBonjourService
 
 - (void) publishImpressRemoteServiceOnLocalNetworkWithName:(NSString *)sName
 {

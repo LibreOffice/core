@@ -107,6 +107,7 @@ basegfx::B2DPoint PointerSymbol::calcSpritePos(
                                                       uno::UNO_QUERY_THROW );
     const geometry::IntegerSize2D realSize( xBitmap->getSize() );
     return basegfx::B2DPoint(
+        // pos.X pos.Y are given in 0..1, beginning from the upper left corner of the currentSlide.
         std::min<sal_Int32>( realSize.Width * pos.X, LEFT_BORDER_SPACE ),
         std::max<sal_Int32>( 0, realSize.Height * (1-pos.Y) - mxBitmap->getSize().Height
                                                 - LOWER_BORDER_SPACE ) );

@@ -121,12 +121,12 @@ void Receiver::executeCommand( const std::vector<OString> &aCommand )
     }
     else if (aCommand[0].equals( "pointer_started" ))
     {
-        xSlideShowController->setPointerMode(true);
+        // xSlideShowController->setPointerMode(true);
         std::cerr << "Pointer started, we display the pointer on screen"<< std::endl;
     }
     else if (aCommand[0].equals( "pointer_dismissed" ))
     {
-        xSlideShowController->setPointerMode(false);
+        // xSlideShowController->setPointerMode(false);
         std::cerr << "Pointer dismissed, we hide the pointer on screen"<< std::endl;
     }
     else if (aCommand[0].equals( "pointer_coordination" ))
@@ -136,7 +136,7 @@ void Receiver::executeCommand( const std::vector<OString> &aCommand )
         std::cerr << "("<<x<<","<<y<<")"<< std::endl;
         const ::com::sun::star::geometry::RealPoint2D pos(x,y);
         // Same problem here...
-        xSlideShowController->setPointerPosition(pos);
+        // xSlideShowController->setPointerPosition(pos);
     }
     else if ( aCommand[0].equals( "presentation_resume" ) )
     {

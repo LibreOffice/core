@@ -19,7 +19,7 @@
   #import <Foundation/NSRunLoop.h>
  #include <postmac.h>
 
-@interface OSXNetworkService : NSObject<NSNetServiceDelegate>
+@interface OSXBonjourService : NSObject<NSNetServiceDelegate>
 {
     NSNetService *netService;
 }

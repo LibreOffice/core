@@ -799,6 +799,11 @@ AC_ARG_ENABLE(atl,
     ],
 ,)
 
+AC_ARG_ENABLE(avahi,
+    AS_HELP_STRING([--disable-avahi],
+        [Determines whether to use the avahi support for impress remote zeroconf.]),
+,enable_avahi=yes)
+
 AC_ARG_ENABLE(werror,
     AS_HELP_STRING([--enable-werror],
         [Turn warnings to errors. (Has no effect in modules where the treating
@@ -941,11 +946,6 @@ AC_ARG_ENABLE(gio,
     AS_HELP_STRING([--disable-gio],
         [Determines whether to use the GIO support.]),
 ,enable_gio=yes)
-
-AC_ARG_ENABLE(avahi,
-    AS_HELP_STRING([--disable-avahi],
-        [Determines whether to use the avahi support for impress remote zeroconf.]),
-,enable_avahi=yes)
 
 AC_ARG_ENABLE(telepathy,
     AS_HELP_STRING([--enable-telepathy],

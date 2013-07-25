@@ -47,7 +47,8 @@ public:
     /** Hides the pointer symbol.
      */
     void hide() { setVisible(false); }
-
+    /** Use this method to update the pointer's position
+    */
     virtual void viewsChanged(const ::com::sun::star::geometry::RealPoint2D& pos);
 
 private:

@@ -3065,6 +3065,11 @@ void SAL_CALL SlideshowImpl::setPointerMode( bool bSwitchPointerMode ) throw (cs
                         makeAny( bSwitchPointerMode ),
                         beans::PropertyState_DIRECT_VALUE ) );
     }
+    catch ( Exception& )
+    {
+        SAL_WARN( "sd.slideshow", "sd::SlideShowImpl::setPointerMode(), "
+            "exception caught: " << comphelper::anyToString( cppu::getCaughtException() ));
+    }
 }
 
 // --------------------------------------------------------------------
@@ -3072,13 +3077,18 @@ void SAL_CALL SlideshowImpl::setPointerPosition( const ::com::sun::star::geometr
 {
     SolarMutexGuard aSolarGuard;
     if (mxShow.is()) try
-        {
-            mxShow->setProperty(
-                        beans::PropertyValue( "PointerPosition" ,
-                            -1,
-                            makeAny( pos ),
-                            beans::PropertyState_DIRECT_VALUE ) );
-        }
+    {
+        mxShow->setProperty(
+                    beans::PropertyValue( "PointerPosition" ,
+                        -1,
+                        makeAny( pos ),
+                        beans::PropertyState_DIRECT_VALUE ) );
+    }
+    catch ( Exception& )
+    {
+        SAL_WARN( "sd.slideshow", "sd::SlideShowImpl::setPointerPosition(), "
+            "exception caught: " << comphelper::anyToString( cppu::getCaughtException() ));
+    }
 }
 // --------------------------------------------------------------------
 

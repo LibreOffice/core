@@ -94,12 +94,20 @@ $(eval $(call gb_Library_use_libraries,sd,\
 	$(gb_UWINAPI) \
 ))
 
+ifeq ($(OS), LINUX)
 $(eval $(call gb_Library_use_externals,sd,\
 	boost_headers \
 	libxml2 \
 	dbus \
 	avahi \
 ))
+else
+$(eval $(call gb_Library_use_externals,sd,\
+	boost_headers \
+	libxml2 \
+	dbus \
+))
+endif
 
 ifeq ($(OS),WNT)
 $(eval $(call gb_Library_use_system_win32_libs,sd,\
@@ -534,10 +542,6 @@ $(eval $(call gb_Library_add_exception_objects,sd,\
 ifeq ($(OS),MACOSX)
 $(eval $(call gb_Library_add_objcxxobjects,sd,\
 	sd/source/ui/remotecontrol/DiscoveryService \
-	sd/source/ui/remotecontrol/OSXNetworkService \
-))
-
-$(eval $(call gb_Library_add_exception_objects,sd,\
 	sd/source/ui/remotecontrol/OSXNetworkService \
 ))
 

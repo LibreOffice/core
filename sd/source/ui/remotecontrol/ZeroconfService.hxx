@@ -15,13 +15,12 @@
 
 struct sockaddr_in;
 
+typedef unsigned int uint;
+
 namespace sd{
 
     class ZeroconfService
     {
-    private:
-        int mSocket;
-
     protected:
         std::string name;
         uint port;

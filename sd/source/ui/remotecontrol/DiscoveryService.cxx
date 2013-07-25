@@ -13,7 +13,6 @@
 #include <unistd.h>
 #include <algorithm>
 #include <vector>
-#include <thread>
 #include <iostream>
 
 #include <comphelper/processfactory.hxx>

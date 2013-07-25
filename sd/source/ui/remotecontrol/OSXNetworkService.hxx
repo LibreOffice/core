@@ -7,7 +7,6 @@
 #include <string.h>
 #include <algorithm>
 #include <vector>
-#include <thread>
 #include <iostream>
 
 #include <osl/conditn.hxx> // Include this early to avoid error as check() gets defined by some SDK header to empty
@@ -22,16 +21,16 @@ namespace sd {
     class OSXNetworkService : public ZeroconfService
     {
     private:
-        OSXNetworkService osxservice;
+        OSXBonjourService *osxservice;
     public:
-        OSXNetworkService(const string& aname = "", uint aport = 1599)
+        OSXNetworkService(const std::string& aname = "", unsigned int aport = 1599)
             : ZeroconfService(aname, aport){}
 
         void clear() {
             [osxservice dealloc];
         }
         void setup() {
-            osxservice = [[OSXNetworkService alloc] init];
+            osxservice = [[OSXBonjourService alloc] init];
             [osxservice publishImpressRemoteServiceOnLocalNetworkWithName: @""];
         };
     };
