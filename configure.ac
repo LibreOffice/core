@@ -6996,7 +6996,7 @@ AC_MSG_CHECKING([which libwpd to use])
 if test "$with_system_libwpd" = "yes"; then
     AC_MSG_RESULT([external])
     SYSTEM_LIBWPD=YES
-    PKG_CHECK_MODULES( WPD, libwpd-0.9 libwpd-stream-0.9 )
+    PKG_CHECK_MODULES( WPD, libwpd-0.9 >= 0.9.5 libwpd-stream-0.9 >= 0.9.5 )
 elif test $_os = iOS; then
     AC_MSG_RESULT([none])
 else
