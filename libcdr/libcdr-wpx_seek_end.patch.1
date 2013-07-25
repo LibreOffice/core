@@ -1,0 +1,14 @@
+--- a/src/lib/CDRZipStream.cpp
++++ b/src/lib/CDRZipStream.cpp
+@@ -160,11 +160,7 @@ WPXInputStream *libcdr::CDRZipStream::getDocumentOLEStream(const char *name)
+ 
+ bool libcdr::CDRZipStreamImpl::findCentralDirectoryEnd()
+ {
+-#if defined(LIBWPD_STREAM_VERSION_MAJOR) && defined(LIBWPD_STREAM_VERSION_MINOR) && defined(LIBWPD_STREAM_VERSION_REVISION) \
+-  && (LIBWPD_STREAM_VERSION_MAJOR > 0 || (LIBWPD_STREAM_VERSION_MAJOR == 0 && (LIBWPD_STREAM_VERSION_MINOR > 9 \
+-  || (LIBWPD_STREAM_VERSION_MINOR == 9 && LIBWPD_STREAM_VERSION_REVISION >= 5))))
+   if (m_cdir_offset || m_input->seek(-1024, WPX_SEEK_END))
+-#endif
+     m_input->seek(m_cdir_offset, WPX_SEEK_SET);
+   try
+   {
