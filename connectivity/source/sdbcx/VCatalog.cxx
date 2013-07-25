@@ -110,7 +110,7 @@ Reference< XNameAccess > SAL_CALL OCatalog::getTables(  ) throw(RuntimeException
         // allowed
     }
 
-    return const_cast<OCatalog*>(this)->m_pTables;
+    return m_pTables;
 }
 // -------------------------------------------------------------------------
 // XViewsSupplier
@@ -134,7 +134,7 @@ Reference< XNameAccess > SAL_CALL OCatalog::getViews(  ) throw(RuntimeException)
         // allowed
     }
 
-    return const_cast<OCatalog*>(this)->m_pViews;
+    return m_pViews;
 }
 // -------------------------------------------------------------------------
 // XUsersSupplier
@@ -158,7 +158,7 @@ Reference< XNameAccess > SAL_CALL OCatalog::getUsers(  ) throw(RuntimeException)
         // allowed
     }
 
-    return const_cast<OCatalog*>(this)->m_pUsers;
+    return m_pUsers;
 }
 // -------------------------------------------------------------------------
 // XGroupsSupplier
@@ -182,7 +182,7 @@ Reference< XNameAccess > SAL_CALL OCatalog::getGroups(  ) throw(RuntimeException
         // allowed
     }
 
-    return const_cast<OCatalog*>(this)->m_pGroups;
+    return m_pGroups;
 }
 // -----------------------------------------------------------------------------
 OUString OCatalog::buildName(const Reference< XRow >& _xRow)
