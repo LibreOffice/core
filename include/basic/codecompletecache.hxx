@@ -57,6 +57,7 @@ class BASIC_DLLPUBLIC CodeCompleteOptions
 private:
     bool bIsCodeCompleteOn;
     bool bIsProcedureAutoCompleteOn;
+    bool bIsAutoCloseQuotesOn;
     SvtMiscOptions aMiscOptions;
 
 public:
@@ -68,6 +69,9 @@ public:
 
     static bool IsProcedureAutoCompleteOn();
     static void SetProcedureAutoCompleteOn( const bool& b );
+
+    static bool IsAutoCloseQuotesOn();
+    static void SetAutoCloseQuotesOn( const bool& b );
 };
 
 class BASIC_DLLPUBLIC CodeCompleteDataCache

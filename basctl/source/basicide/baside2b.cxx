@@ -505,10 +505,27 @@ void EditorWindow::KeyInput( const KeyEvent& rKEvt )
     // see if there is an accelerator to be processed first
     bool bDone = SfxViewShell::Current()->KeyInput( rKEvt );
 
+    if( rKEvt.GetCharCode() == '"' && CodeCompleteOptions::IsAutoCloseQuotesOn() )
+    {//autoclose double quotes
+        TextSelection aSel = GetEditView()->GetSelection();
+        sal_uLong nLine =  aSel.GetStart().GetPara();
+        OUString aLine( pEditEngine->GetText( nLine ) ); // the line being modified
+
+        HighlightPortions aPortions;
+        aHighlighter.getHighlightPortions( nLine, aLine, aPortions );
+        if( aLine[aLine.getLength()-1] != '"' && (aPortions[aPortions.size()-1].tokenType != 4) )
+        {
+            GetEditView()->InsertText(OUString("\""));
+            //leave the cursor on it's place: inside the two double quotes
+            TextPaM aEnd(nLine, aSel.GetEnd().GetIndex());
+            GetEditView()->SetSelection( TextSelection( aEnd, aEnd ) );
+        }
+    }
+
     if( rKEvt.GetKeyCode().GetCode() == KEY_RETURN && CodeCompleteOptions::IsProcedureAutoCompleteOn() )
     {//autoclose implementation
         TextSelection aSel = GetEditView()->GetSelection();
-        sal_uLong nLine =  aSel.GetStart().GetPara();
+        sal_uLong nLine = aSel.GetStart().GetPara();
         OUString sActSub = GetActualSubName( nLine );
         IncompleteProcedures aProcData = rModulWindow.GetSbModule()->GetIncompleteProcedures();
         for( unsigned int i = 0; i < aProcData.size(); ++i )
