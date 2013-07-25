@@ -493,7 +493,7 @@ void ScConditionEntry::SetFormula2( const ScTokenArray& rArray )
     }
 }
 
-static void lcl_CondUpdateInsertTab( ScTokenArray& rCode, SCTAB nInsTab, SCTAB nPosTab, bool& rChanged, SCTAB nTabs )
+static void lcl_CondUpdateInsertTab( ScTokenArray& rCode, SCTAB nInsTab, bool& rChanged, SCTAB nTabs )
 {
     //  Insert table: only update absolute table references.
     //  (Similar to ScCompiler::UpdateInsertTab with bIsName=true, result is the same as for named ranges)
@@ -504,19 +504,17 @@ static void lcl_CondUpdateInsertTab( ScTokenArray& rCode, SCTAB nInsTab, SCTAB n
     while( p )
     {
         ScSingleRefData& rRef1 = p->GetSingleRef();
-        if ( !rRef1.IsTabRel() && nInsTab <= rRef1.nTab )
+        if (!rRef1.IsTabRel() && nInsTab <= rRef1.Tab())
         {
-            rRef1.nTab += nTabs;
-            rRef1.nRelTab = rRef1.nTab - nPosTab;
+            rRef1.SetAbsTab(rRef1.Tab() + nTabs);
             rChanged = true;
         }
         if( p->GetType() == svDoubleRef )
         {
             ScSingleRefData& rRef2 = p->GetDoubleRef().Ref2;
-            if ( !rRef2.IsTabRel() && nInsTab <= rRef2.nTab )
+            if (!rRef2.IsTabRel() && nInsTab <= rRef2.Tab())
             {
-                rRef2.nTab += nTabs;
-                rRef2.nRelTab = rRef2.nTab - nPosTab;
+                rRef2.SetAbsTab(rRef2.Tab() + nTabs);
                 rChanged = true;
             }
         }
@@ -543,7 +541,7 @@ void ScConditionEntry::UpdateReference( UpdateRefMode eUpdateRefMode,
     {
         bool bChanged1 = false;
         if ( bInsertTab )
-            lcl_CondUpdateInsertTab( *pFormula1, rRange.aStart.Tab(), aOldSrcPos.Tab(), bChanged1, nDz );
+            lcl_CondUpdateInsertTab( *pFormula1, rRange.aStart.Tab(), bChanged1, nDz );
         else
         {
             ScCompiler aComp( mpDoc, aSrcPos, *pFormula1 );
@@ -565,7 +563,7 @@ void ScConditionEntry::UpdateReference( UpdateRefMode eUpdateRefMode,
     {
         bool bChanged2 = false;
         if ( bInsertTab )
-            lcl_CondUpdateInsertTab( *pFormula2, rRange.aStart.Tab(), aOldSrcPos.Tab(), bChanged2, nDz );
+            lcl_CondUpdateInsertTab( *pFormula2, rRange.aStart.Tab(), bChanged2, nDz );
         else
         {
             ScCompiler aComp( mpDoc, aSrcPos, *pFormula2);
@@ -1399,17 +1397,17 @@ void ScConditionEntry::SourceChanged( const ScAddress& rChanged )
                         nCol2 = MAXCOL;
                     }
                     if ( aProv.Ref1.IsRowRel() )
-                        nRow2 = rChanged.Row() - aProv.Ref1.nRelRow;
+                        nRow2 = rChanged.Row() - aProv.Ref1.Row();
                     else
                     {
-                        bHit &= ( rChanged.Row() >= aProv.Ref1.nRow );
+                        bHit &= ( rChanged.Row() >= aProv.Ref1.Row() );
                         nRow2 = MAXROW;
                     }
                     if ( aProv.Ref1.IsTabRel() )
-                        nTab2 = rChanged.Tab() - aProv.Ref1.nRelTab;
+                        nTab2 = rChanged.Tab() - aProv.Ref1.Tab();
                     else
                     {
-                        bHit &= ( rChanged.Tab() >= aProv.Ref1.nTab );
+                        bHit &= (rChanged.Tab() >= aProv.Ref1.Tab());
                         nTab2 = MAXTAB;
                     }
 
@@ -1421,17 +1419,17 @@ void ScConditionEntry::SourceChanged( const ScAddress& rChanged )
                         nCol1 = 0;
                     }
                     if ( aProv.Ref2.IsRowRel() )
-                        nRow1 = rChanged.Row() - aProv.Ref2.nRelRow;
+                        nRow1 = rChanged.Row() - aProv.Ref2.Row();
                     else
                     {
-                        bHit &= ( rChanged.Row() <= aProv.Ref2.nRow );
+                        bHit &= (rChanged.Row() <= aProv.Ref2.Row());
                         nRow1 = 0;
                     }
                     if ( aProv.Ref2.IsTabRel() )
-                        nTab1 = rChanged.Tab() - aProv.Ref2.nRelTab;
+                        nTab1 = rChanged.Tab() - aProv.Ref2.Tab();
                     else
                     {
-                        bHit &= ( rChanged.Tab() <= aProv.Ref2.nTab );
+                        bHit &= (rChanged.Tab() <= aProv.Ref2.Tab());
                         nTab1 = 0;
                     }
 

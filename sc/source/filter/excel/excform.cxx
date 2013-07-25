@@ -521,8 +521,7 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, XclImpStream& aIn, s
                 aIn >> nUINT16 >> nByte;
                 aSRD.nCol = static_cast<SCsCOL>(nByte);
                 aSRD.nRow = nUINT16 & 0x3FFF;
-                aSRD.nRelTab = 0;
-                aSRD.SetTabRel( sal_True );
+                aSRD.SetRelTab(0);
                 aSRD.SetFlag3D( bRangeName );
 
                 ExcRelToScRel( nUINT16, nByte, aSRD, bRangeName );
@@ -553,9 +552,8 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, XclImpStream& aIn, s
 
                 aIn >> nRowFirst >> nRowLast >> nColFirst >> nColLast;
 
-                rSRef1.nRelTab = rSRef2.nRelTab = 0;
-                rSRef1.SetTabRel( sal_True );
-                rSRef2.SetTabRel( sal_True );
+                rSRef1.SetRelTab(0);
+                rSRef2.SetRelTab(0);
                 rSRef1.SetFlag3D( bRangeName );
                 rSRef2.SetFlag3D( bRangeName );
 
@@ -603,8 +601,7 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, XclImpStream& aIn, s
             {
                 aIn >> nUINT16 >> nByte;    // >> Attribute, Row >> Col
 
-                aSRD.nRelTab = 0;
-                aSRD.SetTabRel( sal_True );
+                aSRD.SetRelTab(0);
                 aSRD.SetFlag3D( bRangeName );
 
                 ExcRelToScRel( nUINT16, nByte, aSRD, bRNorSF );
@@ -619,9 +616,8 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, XclImpStream& aIn, s
                 sal_uInt16                  nRowFirst, nRowLast;
                 sal_uInt8                   nColFirst, nColLast;
 
-                aCRD.Ref1.nRelTab = aCRD.Ref2.nRelTab = 0;
-                aCRD.Ref1.SetTabRel( sal_True );
-                aCRD.Ref2.SetTabRel( sal_True );
+                aCRD.Ref1.SetRelTab(0);
+                aCRD.Ref2.SetRelTab(0);
                 aCRD.Ref1.SetFlag3D( bRangeName );
                 aCRD.Ref2.SetFlag3D( bRangeName );
 
@@ -1036,8 +1032,7 @@ ConvErr ExcelToSc::Convert( _ScRangeListTabs& rRangeList, XclImpStream& aIn, sal
                 aIn >> nUINT16 >> nByte;
                 aSRD.nCol = static_cast<SCsCOL>(nByte);
                 aSRD.nRow = nUINT16 & 0x3FFF;
-                aSRD.nRelTab = 0;
-                aSRD.SetTabRel( sal_True );
+                aSRD.SetRelTab(0);
                 aSRD.SetFlag3D( bRangeName );
 
                 ExcRelToScRel( nUINT16, nByte, aSRD, bRangeName );
@@ -1055,9 +1050,8 @@ ConvErr ExcelToSc::Convert( _ScRangeListTabs& rRangeList, XclImpStream& aIn, sal
 
                 aIn >> nRowFirst >> nRowLast >> nColFirst >> nColLast;
 
-                rSRef1.nRelTab = rSRef2.nRelTab = 0;
-                rSRef1.SetTabRel( sal_True );
-                rSRef2.SetTabRel( sal_True );
+                rSRef1.SetRelTab(0);
+                rSRef2.SetRelTab(0);
                 rSRef1.SetFlag3D( bRangeName );
                 rSRef2.SetFlag3D( bRangeName );
 
@@ -1100,8 +1094,7 @@ ConvErr ExcelToSc::Convert( _ScRangeListTabs& rRangeList, XclImpStream& aIn, sal
             {
                 aIn >> nUINT16 >> nByte;    // >> Attribute, Row >> Col
 
-                aSRD.nRelTab = 0;
-                aSRD.SetTabRel( sal_True );
+                aSRD.SetRelTab(0);
                 aSRD.SetFlag3D( bRangeName );
 
                 ExcRelToScRel( nUINT16, nByte, aSRD, bRNorSF );
@@ -1116,9 +1109,8 @@ ConvErr ExcelToSc::Convert( _ScRangeListTabs& rRangeList, XclImpStream& aIn, sal
                 sal_uInt16                  nRowFirst, nRowLast;
                 sal_uInt8                   nColFirst, nColLast;
 
-                aCRD.Ref1.nRelTab = aCRD.Ref2.nRelTab = 0;
-                aCRD.Ref1.SetTabRel( sal_True );
-                aCRD.Ref2.SetTabRel( sal_True );
+                aCRD.Ref1.SetRelTab(0);
+                aCRD.Ref2.SetRelTab(0);
                 aCRD.Ref1.SetFlag3D( bRangeName );
                 aCRD.Ref2.SetFlag3D( bRangeName );
 

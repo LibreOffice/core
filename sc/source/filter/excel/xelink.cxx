@@ -965,8 +965,8 @@ void XclExpExtName::WriteAddData( XclExpStream& rStrm )
 
                 bool bColRel = rRef.IsColRel();
                 bool bRowRel = rRef.IsRowRel();
-                sal_uInt16 nCol = static_cast< sal_uInt16 >( bColRel ? rRef.nRelCol : rRef.nCol );
-                sal_uInt16 nRow = static_cast< sal_uInt16 >( bRowRel ? rRef.nRelRow : rRef.nRow );
+                sal_uInt16 nCol = static_cast<sal_uInt16>(rRef.Col());
+                sal_uInt16 nRow = static_cast<sal_uInt16>(rRef.Row());
                 if (bColRel) nCol |= 0x4000;
                 if (bRowRel) nCol |= 0x8000;
 
@@ -996,10 +996,10 @@ void XclExpExtName::WriteAddData( XclExpStream& rStrm )
                 bool bCol2Rel = r2.IsColRel();
                 bool bRow2Rel = r2.IsRowRel();
 
-                sal_uInt16 nCol1 = static_cast< sal_uInt16 >( bCol1Rel ? r1.nRelCol : r1.nCol );
-                sal_uInt16 nCol2 = static_cast< sal_uInt16 >( bCol2Rel ? r2.nRelCol : r2.nCol );
-                sal_uInt16 nRow1 = static_cast< sal_uInt16 >( bRow1Rel ? r1.nRelRow : r1.nRow );
-                sal_uInt16 nRow2 = static_cast< sal_uInt16 >( bRow2Rel ? r2.nRelRow : r2.nRow );
+                sal_uInt16 nCol1 = static_cast<sal_uInt16>(r1.Col());
+                sal_uInt16 nCol2 = static_cast<sal_uInt16>(r2.Col());
+                sal_uInt16 nRow1 = static_cast<sal_uInt16>(r1.Row());
+                sal_uInt16 nRow2 = static_cast<sal_uInt16>(r2.Row());
                 if (bCol1Rel) nCol1 |= 0x4000;
                 if (bRow1Rel) nCol1 |= 0x8000;
                 if (bCol2Rel) nCol2 |= 0x4000;

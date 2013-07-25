@@ -1461,9 +1461,9 @@ r1c1_add_row( OUStringBuffer &rBuf, const ScSingleRefData& rRef, const ScAddress
     rBuf.append( sal_Unicode( 'R' ) );
     if( rRef.IsRowRel() )
     {
-        if (rRef.nRelRow != 0)
+        if (rRef.Row() != 0)
         {
-            rBuf.append("[").append( OUString::number( rRef.nRelRow ) ).append("]");
+            rBuf.append("[").append( OUString::number(rRef.Row()) ).append("]");
         }
     }
     else

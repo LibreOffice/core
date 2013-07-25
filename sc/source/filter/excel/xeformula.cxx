@@ -1801,8 +1801,17 @@ bool XclExpFmlaCompImpl::IsRef2D( const ScSingleRefData& rRefData ) const
     /*  rRefData.IsFlag3D() determines if sheet name is always visible, even on
         the own sheet. If 3D references are allowed, the passed reference does
         not count as 2D reference. */
-    return (!mxData->mpLinkMgr || !rRefData.IsFlag3D()) && !rRefData.IsTabDeleted() &&
-        (rRefData.IsTabRel() ? (rRefData.nRelTab == 0) : (static_cast< SCTAB >( rRefData.nTab ) == GetCurrScTab()));
+
+    if (mxData->mpLinkMgr && rRefData.IsFlag3D())
+        return false;
+
+    if (rRefData.IsTabDeleted())
+        return false;
+
+    if (rRefData.IsTabRel())
+        return rRefData.Tab() == 0;
+    else
+        return rRefData.Tab() == GetCurrScTab();
 }
 
 bool XclExpFmlaCompImpl::IsRef2D( const ScComplexRefData& rRefData ) const
@@ -1841,16 +1850,12 @@ void XclExpFmlaCompImpl::ConvertRefData(
         // *** no reference position (shared, names, condfmt) - use relative values ***
 
         // convert column index (2-step-cast ScsCOL->sal_Int16->sal_uInt16 to get all bits correctly)
-        sal_Int16 nXclRelCol = static_cast< sal_Int16 >( rRefData.IsColRel() ? rRefData.nRelCol : rRefData.nCol );
+        sal_Int16 nXclRelCol = static_cast<sal_Int16>(rRefData.Col());
         rXclPos.mnCol = static_cast< sal_uInt16 >( nXclRelCol ) & mnMaxColMask;
 
         // convert row index (2-step-cast ScsROW->sal_Int16->sal_uInt16 to get all bits correctly)
-        sal_Int16 nXclRelRow = static_cast< sal_Int32 >( rRefData.IsRowRel() ? rRefData.nRelRow : rRefData.nRow );
+        sal_Int16 nXclRelRow = static_cast<sal_Int32>(rRefData.Row());
         rXclPos.mnRow = static_cast< sal_uInt32 >( nXclRelRow ) & mnMaxRowMask;
-
-        // resolve relative tab index if possible
-        if( rRefData.IsTabRel() && !IsInGlobals() && (GetCurrScTab() < GetDoc().GetTableCount()) )
-            rRefData.nTab = static_cast< SCsTAB >( GetCurrScTab() + rRefData.nRelTab );
     }
 
     // flags for relative column and row
@@ -2536,12 +2541,11 @@ void lclInitOwnTab( ScSingleRefData& rRef, const ScAddress& rScPos, SCTAB nCurrS
     if( b3DRefOnly )
     {
         // no reduction to 2D reference, if global link manager is used
-        rRef.SetFlag3D( sal_True );
+        rRef.SetFlag3D(true);
     }
     else if( rScPos.Tab() == nCurrScTab )
     {
-        rRef.SetTabRel( sal_True );
-        rRef.nRelTab = 0;
+        rRef.SetRelTab(0);
     }
 }
 

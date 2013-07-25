@@ -288,16 +288,30 @@ SC_IMPL_DUMMY_PROPERTY_LISTENER( ScFormulaParserObj )
 
 static void lcl_ExternalRefToApi( sheet::SingleReference& rAPI, const ScSingleRefData& rRef )
 {
-    rAPI.Column         = rRef.nCol;
-    rAPI.Row            = rRef.nRow;
+    rAPI.Column         = 0;
+    rAPI.Row            = 0;
     rAPI.Sheet          = 0;
-    rAPI.RelativeColumn = rRef.nRelCol;
-    rAPI.RelativeRow    = rRef.nRelRow;
+    rAPI.RelativeColumn = 0;
+    rAPI.RelativeRow    = 0;
     rAPI.RelativeSheet  = 0;
 
     sal_Int32 nFlags = 0;
-    if ( rRef.IsColRel() )     nFlags |= sheet::ReferenceFlags::COLUMN_RELATIVE;
-    if ( rRef.IsRowRel() )     nFlags |= sheet::ReferenceFlags::ROW_RELATIVE;
+    if ( rRef.IsColRel() )
+    {
+        nFlags |= sheet::ReferenceFlags::COLUMN_RELATIVE;
+        rAPI.RelativeColumn = rRef.Col();
+    }
+    else
+        rAPI.Column = rRef.Col();
+
+    if ( rRef.IsRowRel() )
+    {
+        nFlags |= sheet::ReferenceFlags::ROW_RELATIVE;
+        rAPI.RelativeRow = rRef.Row();
+    }
+    else
+        rAPI.Row = rRef.Row();
+
     if ( rRef.IsColDeleted() ) nFlags |= sheet::ReferenceFlags::COLUMN_DELETED;
     if ( rRef.IsRowDeleted() ) nFlags |= sheet::ReferenceFlags::ROW_DELETED;
     if ( rRef.IsFlag3D() )     nFlags |= sheet::ReferenceFlags::SHEET_3D;
@@ -307,17 +321,43 @@ static void lcl_ExternalRefToApi( sheet::SingleReference& rAPI, const ScSingleRe
 
 static void lcl_SingleRefToApi( sheet::SingleReference& rAPI, const ScSingleRefData& rRef )
 {
-    rAPI.Column         = rRef.nCol;
-    rAPI.Row            = rRef.nRow;
-    rAPI.Sheet          = rRef.nTab;
-    rAPI.RelativeColumn = rRef.nRelCol;
-    rAPI.RelativeRow    = rRef.nRelRow;
-    rAPI.RelativeSheet  = rRef.nRelTab;
-
     sal_Int32 nFlags = 0;
-    if ( rRef.IsColRel() )     nFlags |= sheet::ReferenceFlags::COLUMN_RELATIVE;
-    if ( rRef.IsRowRel() )     nFlags |= sheet::ReferenceFlags::ROW_RELATIVE;
-    if ( rRef.IsTabRel() )     nFlags |= sheet::ReferenceFlags::SHEET_RELATIVE;
+    if ( rRef.IsColRel() )
+    {
+        nFlags |= sheet::ReferenceFlags::COLUMN_RELATIVE;
+        rAPI.RelativeColumn = rRef.Col();
+        rAPI.Column = 0;
+    }
+    else
+    {
+        rAPI.RelativeColumn = 0;
+        rAPI.Column = rRef.Col();
+    }
+
+    if ( rRef.IsRowRel() )
+    {
+        nFlags |= sheet::ReferenceFlags::ROW_RELATIVE;
+        rAPI.RelativeRow = rRef.Row();
+        rAPI.Row = 0;
+    }
+    else
+    {
+        rAPI.RelativeRow = 0;
+        rAPI.Row = rRef.Row();
+    }
+
+    if ( rRef.IsTabRel() )
+    {
+        nFlags |= sheet::ReferenceFlags::SHEET_RELATIVE;
+        rAPI.RelativeSheet = rRef.Tab();
+        rAPI.Sheet = 0;
+    }
+    else
+    {
+        rAPI.RelativeSheet = 0;
+        rAPI.Sheet = rRef.Tab();
+    }
+
     if ( rRef.IsColDeleted() ) nFlags |= sheet::ReferenceFlags::COLUMN_DELETED;
     if ( rRef.IsRowDeleted() ) nFlags |= sheet::ReferenceFlags::ROW_DELETED;
     if ( rRef.IsTabDeleted() ) nFlags |= sheet::ReferenceFlags::SHEET_DELETED;

@@ -872,13 +872,13 @@ bool checkRelativeRefToken(ScDocument& rDoc, const ScAddress& rPos, SCsCOL nRelC
         return false;
 
     ScSingleRefData& rRef = pToken->GetSingleRef();
-    if (!rRef.IsColRel() || rRef.nRelCol != nRelCol)
+    if (!rRef.IsColRel() || rRef.Col() != nRelCol)
     {
         cerr << "Unexpected relative column address." << endl;
         return false;
     }
 
-    if (!rRef.IsRowRel() || rRef.nRelRow != nRelRow)
+    if (!rRef.IsRowRel() || rRef.Row() != nRelRow)
     {
         cerr << "Unexpected relative row address." << endl;
         return false;

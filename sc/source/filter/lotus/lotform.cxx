@@ -395,9 +395,7 @@ ConvErr LotusToSc::Convert( const ScTokenArray*& rpErg, sal_Int32& rRest,
         pIndexToType = IndexToType;
         pIndexToToken = IndexToToken;
 
-        rR.SetTabRel( sal_True );
-        rR.nTab = aEingPos.Tab();
-        rR.nRelTab = 0;
+        rR.SetRelTab(0);
         rR.SetFlag3D( false );
     }
 

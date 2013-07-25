@@ -424,17 +424,15 @@ LotusRangeList::LotusRangeList( void )
     nIdCnt = 1;
 
     pSingRef = &aComplRef.Ref1;
-    pSingRef->nTab = pSingRef->nRelTab = 0;
+    pSingRef->SetRelTab(0);
     pSingRef->SetColRel( false );
     pSingRef->SetRowRel( false );
-    pSingRef->SetTabRel( sal_True );
     pSingRef->SetFlag3D( false );
 
     pSingRef = &aComplRef.Ref2;
-    pSingRef->nTab = pSingRef->nRelTab = 0;
+    pSingRef->SetRelTab(0);
     pSingRef->SetColRel( false );
     pSingRef->SetRowRel( false );
-    pSingRef->SetTabRel( sal_True );
     pSingRef->SetFlag3D( false );
 }
 

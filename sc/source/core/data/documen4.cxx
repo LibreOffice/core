@@ -176,7 +176,7 @@ void ScDocument::InsertMatrixFormula(SCCOL nCol1, SCROW nRow1,
 
         if (nTab != nTab1)
         {
-            aRefData.nRelTab = nTab - aBasePos.Tab();
+            aRefData.SetRelTab(nTab - aBasePos.Tab());
             t->GetSingleRef() = aRefData;
         }
 
