@@ -688,171 +688,154 @@ void SAL_CALL OResultSet::moveToCurrentRow() throw(SQLException, RuntimeExceptio
 {
     throwFunctionNotSupportedException("XResultSetUpdate::moveToCurrentRow", *this);
 }
-// -------------------------------------------------------------------------
 
-void SAL_CALL OResultSet::updateNull( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+// ---- XRowUpdate - UNSUPPORTED ---------------------------------------------
+void SAL_CALL OResultSet::updateNull(sal_Int32 columnIndex)
+    throw(SQLException, RuntimeException)
 {
     (void) columnIndex;
-    MutexGuard aGuard(m_pConnection->getMutex());
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
+    throwFunctionNotSupportedException("XRowUpdate::updateNull", *this);
 }
-// -------------------------------------------------------------------------
 
-void SAL_CALL OResultSet::updateBoolean( sal_Int32 columnIndex, sal_Bool x ) throw(SQLException, RuntimeException)
-{
-    (void) columnIndex;
-    (void) x;
-    MutexGuard aGuard(m_pConnection->getMutex());
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-
-}
-// -------------------------------------------------------------------------
-void SAL_CALL OResultSet::updateByte( sal_Int32 columnIndex, sal_Int8 x ) throw(SQLException, RuntimeException)
+void SAL_CALL OResultSet::updateBoolean(sal_Int32 columnIndex, sal_Bool x)
+    throw(SQLException, RuntimeException)
 {
     (void) columnIndex;
     (void) x;
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-    MutexGuard aGuard(m_pConnection->getMutex());
-
+    throwFunctionNotSupportedException("XRowUpdate::updateBoolean", *this);
 }
-// -------------------------------------------------------------------------
 
-void SAL_CALL OResultSet::updateShort( sal_Int32 columnIndex, sal_Int16 x ) throw(SQLException, RuntimeException)
+void SAL_CALL OResultSet::updateByte(sal_Int32 columnIndex, sal_Int8 x)
+    throw(SQLException, RuntimeException)
 {
     (void) columnIndex;
     (void) x;
-    MutexGuard aGuard(m_pConnection->getMutex());
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-
+    throwFunctionNotSupportedException("XRowUpdate::updateByte", *this);
 }
-// -------------------------------------------------------------------------
-void SAL_CALL OResultSet::updateInt( sal_Int32 columnIndex, sal_Int32 x ) throw(SQLException, RuntimeException)
+
+void SAL_CALL OResultSet::updateShort(sal_Int32 columnIndex, sal_Int16 x)
+    throw(SQLException, RuntimeException)
 {
     (void) columnIndex;
     (void) x;
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-    MutexGuard aGuard(m_pConnection->getMutex());
-
+    throwFunctionNotSupportedException("XRowUpdate::updateShort", *this);
 }
-// -------------------------------------------------------------------------
-void SAL_CALL OResultSet::updateLong( sal_Int32 columnIndex, sal_Int64 x ) throw(SQLException, RuntimeException)
+
+void SAL_CALL OResultSet::updateInt(sal_Int32 columnIndex, sal_Int32 x)
+    throw(SQLException, RuntimeException)
 {
     (void) columnIndex;
     (void) x;
-    MutexGuard aGuard(m_pConnection->getMutex());
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-
+    throwFunctionNotSupportedException("XRowUpdate::updateInt", *this);
 }
-// -----------------------------------------------------------------------
-void SAL_CALL OResultSet::updateFloat( sal_Int32 columnIndex, float x ) throw(SQLException, RuntimeException)
+
+void SAL_CALL OResultSet::updateLong(sal_Int32 columnIndex, sal_Int64 x)
+    throw(SQLException, RuntimeException)
 {
     (void) columnIndex;
     (void) x;
-    MutexGuard aGuard(m_pConnection->getMutex());
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-
+    throwFunctionNotSupportedException("XRowUpdate::updateLong", *this);
 }
-// -------------------------------------------------------------------------
 
-void SAL_CALL OResultSet::updateDouble( sal_Int32 columnIndex, double x ) throw(SQLException, RuntimeException)
+void SAL_CALL OResultSet::updateFloat(sal_Int32 columnIndex, float x)
+    throw(SQLException, RuntimeException)
 {
     (void) columnIndex;
     (void) x;
-    MutexGuard aGuard(m_pConnection->getMutex());
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-
+    throwFunctionNotSupportedException("XRowUpdate::updateFloat", *this);
 }
-// -------------------------------------------------------------------------
-void SAL_CALL OResultSet::updateString( sal_Int32 columnIndex, const OUString& x ) throw(SQLException, RuntimeException)
+
+void SAL_CALL OResultSet::updateDouble(sal_Int32 columnIndex, double x)
+    throw(SQLException, RuntimeException)
 {
     (void) columnIndex;
     (void) x;
-    MutexGuard aGuard(m_pConnection->getMutex());
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-
+    throwFunctionNotSupportedException("XRowUpdate::updateDouble", *this);
 }
-// -------------------------------------------------------------------------
-void SAL_CALL OResultSet::updateBytes( sal_Int32 columnIndex, const Sequence< sal_Int8 >& x ) throw(SQLException, RuntimeException)
+
+void SAL_CALL OResultSet::updateString(sal_Int32 columnIndex, const OUString& x)
+    throw(SQLException, RuntimeException)
 {
     (void) columnIndex;
     (void) x;
-    MutexGuard aGuard(m_pConnection->getMutex());
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-
+    throwFunctionNotSupportedException("XRowUpdate::updateString", *this);
 }
-// -------------------------------------------------------------------------
-void SAL_CALL OResultSet::updateDate( sal_Int32 columnIndex, const Date& x ) throw(SQLException, RuntimeException)
+
+void SAL_CALL OResultSet::updateBytes(sal_Int32 columnIndex, const Sequence< sal_Int8 >& x)
+    throw(SQLException, RuntimeException)
 {
     (void) columnIndex;
     (void) x;
-    MutexGuard aGuard(m_pConnection->getMutex());
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-
+    throwFunctionNotSupportedException("XRowUpdate::updateBytes", *this);
 }
-// -------------------------------------------------------------------------
 
-void SAL_CALL OResultSet::updateTime( sal_Int32 columnIndex, const Time& x ) throw(SQLException, RuntimeException)
+void SAL_CALL OResultSet::updateDate(sal_Int32 columnIndex, const Date& x)
+    throw(SQLException, RuntimeException)
 {
     (void) columnIndex;
     (void) x;
-    MutexGuard aGuard(m_pConnection->getMutex());
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-
+    throwFunctionNotSupportedException("XRowUpdate::updateDate", *this);
 }
-// -------------------------------------------------------------------------
 
-void SAL_CALL OResultSet::updateTimestamp( sal_Int32 columnIndex, const DateTime& x ) throw(SQLException, RuntimeException)
+void SAL_CALL OResultSet::updateTime(sal_Int32 columnIndex, const Time& x)
+    throw(SQLException, RuntimeException)
 {
     (void) columnIndex;
     (void) x;
-    MutexGuard aGuard(m_pConnection->getMutex());
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-
+    throwFunctionNotSupportedException("XRowUpdate::updateTime", *this);
 }
-// -------------------------------------------------------------------------
 
-void SAL_CALL OResultSet::updateBinaryStream( sal_Int32 columnIndex, const uno::Reference< XInputStream >& x, sal_Int32 length ) throw(SQLException, RuntimeException)
+void SAL_CALL OResultSet::updateTimestamp(sal_Int32 columnIndex, const DateTime& x)
+    throw(SQLException, RuntimeException)
+{
+    (void) columnIndex;
+    (void) x;
+    throwFunctionNotSupportedException("XRowUpdate::updateTimeStamp", *this);
+}
+
+void SAL_CALL OResultSet::updateBinaryStream(sal_Int32 columnIndex,
+                                             const uno::Reference< XInputStream >& x,
+                                             sal_Int32 length)
+    throw(SQLException, RuntimeException)
 {
     (void) columnIndex;
     (void) x;
     (void) length;
-    MutexGuard aGuard(m_pConnection->getMutex());
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-
+    throwFunctionNotSupportedException("XRowUpdate::updateBinaryStream", *this);
 }
-// -------------------------------------------------------------------------
-void SAL_CALL OResultSet::updateCharacterStream( sal_Int32 columnIndex, const uno::Reference< XInputStream >& x, sal_Int32 length ) throw(SQLException, RuntimeException)
+
+void SAL_CALL OResultSet::updateCharacterStream(sal_Int32 columnIndex,
+                                                const uno::Reference< XInputStream >& x,
+                                                sal_Int32 length)
+    throw(SQLException, RuntimeException)
 {
     (void) columnIndex;
     (void) x;
     (void) length;
-    MutexGuard aGuard(m_pConnection->getMutex());
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-
+    throwFunctionNotSupportedException("XRowUpdate::updateCharacterStream", *this);
 }
-// -------------------------------------------------------------------------
-void SAL_CALL OResultSet::refreshRow(  ) throw(SQLException, RuntimeException)
-{
-    MutexGuard aGuard(m_pConnection->getMutex());
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
-}
-// -------------------------------------------------------------------------
-void SAL_CALL OResultSet::updateObject( sal_Int32 columnIndex, const Any& x ) throw(SQLException, RuntimeException)
+void SAL_CALL OResultSet::updateObject(sal_Int32 columnIndex, const Any& x)
+    throw(SQLException, RuntimeException)
 {
     (void) columnIndex;
     (void) x;
-    MutexGuard aGuard(m_pConnection->getMutex());
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-
+    throwFunctionNotSupportedException("XRowUpdate::updateObject", *this);
 }
-// -------------------------------------------------------------------------
 
-void SAL_CALL OResultSet::updateNumericObject( sal_Int32 columnIndex, const Any& x, sal_Int32 scale ) throw(SQLException, RuntimeException)
+void SAL_CALL OResultSet::updateNumericObject(sal_Int32 columnIndex,
+                                              const Any& x,
+                                              sal_Int32 scale)
+    throw(SQLException, RuntimeException)
 {
     (void) columnIndex;
     (void) x;
     (void) scale;
+    throwFunctionNotSupportedException("XRowUpdate::updateNumericObject", *this);
+}
+// -------------------------------------------------------------------------
+void SAL_CALL OResultSet::refreshRow(  ) throw(SQLException, RuntimeException)
+{
     MutexGuard aGuard(m_pConnection->getMutex());
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
