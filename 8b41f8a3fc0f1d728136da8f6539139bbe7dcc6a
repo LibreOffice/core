@@ -1,0 +1,123 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXn//+Ao\u003d",
+        "filename": "sw/source/filter/html/htmlatr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2013-07-25T10:49:38Z",
+      "side": 1,
+      "message": "that is a bizarre cast for c++",
+      "revId": "8b41f8a3fc0f1d728136da8f6539139bbe7dcc6a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//+Ak\u003d",
+        "filename": "sw/source/filter/html/htmlatr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2013-07-25T10:49:38Z",
+      "side": 1,
+      "message": "that should be rNm.startsWith(sDTDD)",
+      "revId": "8b41f8a3fc0f1d728136da8f6539139bbe7dcc6a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//+AU\u003d",
+        "filename": "sw/source/filter/html/htmlatr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1463,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2013-07-25T10:49:38Z",
+      "side": 1,
+      "message": "why the swap of argument order here ?\ndid you swap the user too at line 1586 ?",
+      "revId": "8b41f8a3fc0f1d728136da8f6539139bbe7dcc6a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//+AY\u003d",
+        "filename": "sw/source/filter/html/htmlatr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2986,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2013-07-25T10:49:38Z",
+      "side": 1,
+      "message": "combine the 2 above\nOUString sTmp(aUrl.toAsciiUpperCase())",
+      "revId": "8b41f8a3fc0f1d728136da8f6539139bbe7dcc6a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//+Ac\u003d",
+        "filename": "sw/source/filter/html/htmlatr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2991,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2013-07-25T10:49:38Z",
+      "side": 1,
+      "message": "Erase(n) is copy(0, n)",
+      "revId": "8b41f8a3fc0f1d728136da8f6539139bbe7dcc6a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//+AQ\u003d",
+        "filename": "sw/source/filter/html/htmlbas.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2013-07-25T10:49:38Z",
+      "side": 1,
+      "message": "no STRING_NO_FOUND is 0xffff.\nwhen converting to OUString not_found is -1\n\nThat is actually exactly what make String \u003d\u003e OUString tricky:\ndetecting the place where the special value 65536 is used to mean something else than its face value.",
+      "revId": "8b41f8a3fc0f1d728136da8f6539139bbe7dcc6a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//+AM\u003d",
+        "filename": "sw/source/filter/html/htmlbas.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 239,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2013-07-25T10:49:38Z",
+      "side": 1,
+      "message": "! isEmtpty() there too",
+      "revId": "8b41f8a3fc0f1d728136da8f6539139bbe7dcc6a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
