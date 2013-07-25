@@ -76,10 +76,10 @@ protected:
     using CSS1Parser::ParseStyleSheet;
 
 public:
-    SwCSS1Parser( SwDoc *pDoc, sal_uInt32 aFHeight[7], const String& rBaseURL, sal_Bool bNewDoc );
+    SwCSS1Parser( SwDoc *pDoc, sal_uInt32 aFHeight[7], const OUString& rBaseURL, sal_Bool bNewDoc );
     virtual ~SwCSS1Parser();
 
-    virtual sal_Bool ParseStyleSheet( const String& rIn );
+    virtual sal_Bool ParseStyleSheet( const OUString& rIn );
 
     // Die Font-Hoehe fuer eine bestimmte Font-Groesse (0-6) ermitteln
     virtual sal_uInt32 GetFontHeight( sal_uInt16 nSize ) const;
@@ -89,10 +89,10 @@ public:
 
     // das Zeichen-Format zu einem Token und einer ggf leeren Klasse
     // ermitteln
-    SwCharFmt* GetChrFmt( sal_uInt16 nToken, const String& rClass ) const;
+    SwCharFmt* GetChrFmt( sal_uInt16 nToken, const OUString& rClass ) const;
 
     // eine TextFmtColl zu einer Pool-Id ermitteln
-    SwTxtFmtColl *GetTxtFmtColl( sal_uInt16 nTxtColl, const String& rClass );
+    SwTxtFmtColl *GetTxtFmtColl( sal_uInt16 nTxtColl, const OUString& rClass );
 
     // This methods do the same as the one of SwDoc, but change the
     // encoding if required.
@@ -130,14 +130,14 @@ public:
                       const SvxCSS1PropertyInfo& rPropInfo );
 
 
-    static void AddClassName( String& rFmtName, const String& rClass );
+    static void AddClassName( OUString& rFmtName, const OUString& rClass );
 
-    static inline void AddFirstLetterExt( String& rFmtName );
+    static inline void AddFirstLetterExt( OUString& rFmtName );
 
     static sal_Bool MayBePositioned( const SvxCSS1PropertyInfo& rPropInfo,
                                  sal_Bool bAutoWidth=sal_False );
 
-    static sal_uInt16 GetScriptFromClass( String& rClass,
+    static sal_uInt16 GetScriptFromClass( OUString& rClass,
                                       sal_Bool bSubClassOnly = sal_True );
 
     sal_Bool IsBodyBGColorSet() const { return bBodyBGColorSet; }
@@ -166,9 +166,9 @@ public:
 };
 
 
-inline void SwCSS1Parser::AddFirstLetterExt( String& rFmtName )
+inline void SwCSS1Parser::AddFirstLetterExt( OUString& rFmtName )
 {
-    rFmtName.AppendAscii( ".FL", 3 );   // first letter
+    rFmtName += ".FL";   // first letter
 }
 
 inline const SwPageDesc* SwCSS1Parser::GetFirstPageDesc( sal_Bool bCreate )

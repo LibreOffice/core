@@ -191,7 +191,7 @@ class CSS1Parser
 
     sal_Unicode cNextCh;                // naechstes Zeichen
 
-    xub_StrLen nInPos;                  // aktuelle Position im Input-String
+    sal_Int32 nInPos;                  // aktuelle Position im Input-String
 
     sal_uInt32 nlLineNr;                    // akt. Zeilen Nummer
     sal_uInt32 nlLinePos;               // akt. Spalten Nummer
@@ -201,11 +201,11 @@ class CSS1Parser
     CSS1ParserState eState;         // der akteulle Zustand der Parsers
     CSS1Token nToken;               // das aktuelle Token
 
-    String aIn;                     // der zu parsende String
-    String aToken;                  // das Token als String
+    OUString aIn;                     // der zu parsende String
+    OUString aToken;                  // das Token als String
 
     // Parsen vorbereiten
-    void InitRead( const String& rIn );
+    void InitRead( const OUString& rIn );
 
     // das naechste Zeichen holen
     sal_Unicode GetNextChar();
@@ -225,7 +225,7 @@ class CSS1Parser
     // Parsen von Teilen der Grammatik
     void ParseRule();
     CSS1Selector *ParseSelector();
-    CSS1Expression *ParseDeclaration( String& rProperty );
+    CSS1Expression *ParseDeclaration( OUString& rProperty );
 
 protected:
 
@@ -234,11 +234,11 @@ protected:
     // Den Inhalt eines HTML-Style-Elements parsen.
     // Fuer jeden Selektor und jede Deklaration wird
     // SelectorParsed() bzw. DeclarationParsed() aufgerufen.
-    sal_Bool ParseStyleSheet( const String& rIn );
+    sal_Bool ParseStyleSheet( const OUString& rIn );
 
     // Den Inhalt einer HTML-Style-Option parsen.
     // F�r jede Deklaration wird DeclarationParsed() aufgerufen.
-    sal_Bool ParseStyleOption( const String& rIn );
+    sal_Bool ParseStyleOption( const OUString& rIn );
 
     // Diese Methode wird aufgerufen, wenn ein Selektor geparsed wurde
     // Wenn 'bFirst' gesetzt ist, beginnt mit dem Selektor eine neue
@@ -250,7 +250,7 @@ protected:
     // Diese Methode wird fuer jede geparsete Property aufgerufen. Wird
     // sal_True zurueckgegeben wird der Selektor geloscht, sonst nicht.
     // Die Implementierung dieser Methode gibt nur sal_True zuruck.
-    virtual sal_Bool DeclarationParsed( const String& rProperty,
+    virtual sal_Bool DeclarationParsed( const OUString& rProperty,
                                     const CSS1Expression *pExpr );
 
 public:

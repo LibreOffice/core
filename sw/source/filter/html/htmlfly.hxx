@@ -89,7 +89,7 @@ class SwHTMLPosFlyFrm
     const SdrObject     *pSdrObject;    // ggf. Sdr-Objekt
     SwNodeIndex         *pNdIdx;        // Node-Index
     sal_uInt32              nOrdNum;        // Aus SwPosFlyFrm
-    xub_StrLen          nCntntIdx;      // seine Position im Content
+    sal_Int32          nCntntIdx;      // seine Position im Content
     sal_uInt8               nOutputMode;    // Ausgabe-Infos
 
 public:
@@ -105,7 +105,7 @@ public:
 
     const SwNodeIndex& GetNdIndex() const { return *pNdIdx; }
 
-    xub_StrLen GetCntntIndex() const    { return nCntntIdx; }
+    sal_Int32 GetCntntIndex() const    { return nCntntIdx; }
 
     sal_uInt8 GetOutMode() const { return nOutputMode; }
 

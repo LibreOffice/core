@@ -84,7 +84,7 @@ protected:
 
     // End of an asynchronous file download. Returns TRUE if the download
     // was successful. The read file is then passed into String.
-    sal_Bool FinishFileDownload( String& rStr );
+    sal_Bool FinishFileDownload( OUString& rStr );
 
     // Returns TRUE if a file was downloaded and if FileDownloadFinished
     // has not yet been called
