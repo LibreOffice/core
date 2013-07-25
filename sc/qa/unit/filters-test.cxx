@@ -84,8 +84,8 @@ public:
     CPPUNIT_TEST(testContentXLSX);
     CPPUNIT_TEST(testContentLotus123);
     CPPUNIT_TEST(testContentDIF);
-//  CPPUNIT_TEST(testSharedFormulaXLS);
-//  CPPUNIT_TEST(testSharedFormulaXLSX);
+    CPPUNIT_TEST(testSharedFormulaXLS);
+    CPPUNIT_TEST(testSharedFormulaXLSX);
     CPPUNIT_TEST(testLegacyCellAnchoredRotatedShape);
 
 #if TEST_BUG_FILES

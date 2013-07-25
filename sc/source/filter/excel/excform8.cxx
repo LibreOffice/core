@@ -1433,9 +1433,9 @@ void ExcelToSc8::ExcRelToScRel8( sal_uInt16 nRow, sal_uInt16 nC, ScSingleRefData
     {
         // C O L
         if( bColRel )
-            rSRD.SetRelCol(nC);
+            rSRD.SetRelCol(static_cast<SCCOL>(static_cast<sal_Int8>(nC)));
         else
-            rSRD.SetAbsCol(nCol);
+            rSRD.SetAbsCol(static_cast<SCCOL>(nCol));
 
         // R O W
         if( bRowRel )
