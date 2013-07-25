@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <comphelper/string.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/stream.hxx>
 #include <vcl/msgbox.hxx>
@@ -128,8 +127,7 @@ void SwGlossaryGroupDlg::Apply()
     for (OUVector_t::const_iterator it(m_RemovedArr.begin());
             it != m_RemovedArr.end(); ++it)
     {
-        const String sDelGroup =
-            ::comphelper::string::getToken(*it, 0, '\t');
+        const String sDelGroup = it->getToken(0, '\t');
         if( sDelGroup == aActGroup )
         {
             //when the current group is deleted, the current group has to be relocated
@@ -141,7 +139,7 @@ void SwGlossaryGroupDlg::Apply()
             }
         }
         String sMsg(SW_RES(STR_QUERY_DELETE_GROUP1));
-        String sTitle( ::comphelper::string::getToken(*it, 1, '\t') );
+        String sTitle( it->getToken(1, '\t') );
         if(sTitle.Len())
             sMsg += sTitle;
         else
@@ -156,12 +154,9 @@ void SwGlossaryGroupDlg::Apply()
     for (OUVector_t::const_iterator it(m_RenamedArr.begin());
             it != m_RenamedArr.end(); ++it)
     {
-        OUString const sOld(
-                ::comphelper::string::getToken(*it, 0, RENAME_TOKEN_DELIM));
-        OUString sNew(
-                ::comphelper::string::getToken(*it, 1, RENAME_TOKEN_DELIM));
-        OUString const sTitle(
-                ::comphelper::string::getToken(*it, 2, RENAME_TOKEN_DELIM));
+        OUString const sOld(it->getToken(0, RENAME_TOKEN_DELIM));
+        OUString sNew(it->getToken(1, RENAME_TOKEN_DELIM));
+        OUString const sTitle(it->getToken(2, RENAME_TOKEN_DELIM));
         pGlosHdl->RenameGroup(sOld, sNew, sTitle);
         if (it == m_RenamedArr.begin())
         {
@@ -259,8 +254,7 @@ IMPL_LINK( SwGlossaryGroupDlg, DeleteHdl, Button*, pButton  )
         for (OUVector_t::iterator it(m_RenamedArr.begin());
                 it != m_RenamedArr.end(); ++it)
         {
-            if (::comphelper::string::getToken(*it, 0, RENAME_TOKEN_DELIM)
-                    == sEntry)
+            if (it->getToken(0, RENAME_TOKEN_DELIM) == sEntry)
             {
                 m_RenamedArr.erase(it);
                 bDelete = false;
