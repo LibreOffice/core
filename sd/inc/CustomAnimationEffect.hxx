@@ -99,8 +99,8 @@ public:
 
     double          getAbsoluteDuration() const { return mfAbsoluteDuration; }
 
-    const String&   getName() const { return maName; }
-    void            setName( const String& rName ) { maName = rName; }
+    const OUString& getName() const { return maName; }
+    void            setName( const OUString& rName ) { maName = rName; }
 
     sal_Int16       getIterateType() const { return mnIterateType; }
     SD_DLLPUBLIC void           setIterateType( sal_Int16 nIterateType );
@@ -205,7 +205,7 @@ private:
 
     EffectSequenceHelper* mpEffectSequence;
 
-    String          maName;
+    OUString        maName;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode > mxNode;
     ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAudio > mxAudio;
