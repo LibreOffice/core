@@ -666,6 +666,10 @@ struct ImplEntryMetrics
 };
 
 // -----------------------------------------------------------------------
+void ImplListBoxWindow::EnableQuickSelection( const bool& b )
+{
+    maQuickSelectionEngine.SetEnabled( b );
+}
 
 void ImplListBoxWindow::ImplUpdateEntryMetrics( ImplEntryType& rEntry )
 {

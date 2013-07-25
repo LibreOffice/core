@@ -96,7 +96,8 @@ namespace vcl
     }
 
     QuickSelectionEngine::QuickSelectionEngine( ISearchableStringList& _entryList )
-        :m_pData( new QuickSelectionEngine_Data( _entryList ) )
+        :m_pData( new QuickSelectionEngine_Data( _entryList ) ),
+        bEnabled( true )
     {
     }
 
@@ -104,11 +105,14 @@ namespace vcl
     {
     }
 
+    void QuickSelectionEngine::SetEnabled( const bool& b )
+    {
+        bEnabled = b;
+    }
+
     bool QuickSelectionEngine::HandleKeyEvent( const KeyEvent& _keyEvent )
     {
-        sal_Unicode c = _keyEvent.GetCharCode();
-
-        if ( ( c >= 32 ) && ( c != 127 ) && !_keyEvent.GetKeyCode().IsMod2() )
+        if( bEnabled )
         {
             m_pData->sCurrentSearchString += OUString(c);
             OSL_TRACE( "QuickSelectionEngine::HandleKeyEvent: searching for %s", OUStringToOString(m_pData->sCurrentSearchString, RTL_TEXTENCODING_UTF8).getStr() );
@@ -125,34 +129,59 @@ namespace vcl
             }
 
             OUString aSearchTemp( m_pData->sCurrentSearchString );
+            sal_Unicode c = _keyEvent.GetCharCode();
 
-            StringEntryIdentifier pMatchingEntry = findMatchingEntry( aSearchTemp, *m_pData );
-            OSL_TRACE( "QuickSelectionEngine::HandleKeyEvent: found %p", pMatchingEntry );
-            if ( !pMatchingEntry && (aSearchTemp.getLength() > 1) && !!m_pData->aSingleSearchChar )
+            if ( ( c >= 32 ) && ( c != 127 ) && !_keyEvent.GetKeyCode().IsMod2() )
             {
-                // if there's only one letter in the search string, use a different search mode
-                aSearchTemp = OUString(*m_pData->aSingleSearchChar);
-                pMatchingEntry = findMatchingEntry( aSearchTemp, *m_pData );
-            }
+                m_pData->sCurrentSearchString += c;
+                OSL_TRACE( "QuickSelectionEngine::HandleKeyEvent: searching for %s", OUStringToOString(m_pData->sCurrentSearchString, RTL_TEXTENCODING_UTF8).getStr() );
 
-            if ( pMatchingEntry )
-            {
-                m_pData->rEntryList.SelectEntry( pMatchingEntry );
-                m_pData->aSearchTimeout.Start();
-            }
-            else
-            {
-                lcl_reset( *m_pData );
-            }
+                if ( m_pData->sCurrentSearchString.Len() == 1 )
+                {   // first character in the search -> remmeber
+                    m_pData->aSingleSearchChar.reset( c );
+                }
+                else if ( m_pData->sCurrentSearchString.Len() > 1 )
+                {
+                    if ( !!m_pData->aSingleSearchChar && ( *m_pData->aSingleSearchChar != c ) )
+                        // we already have a "single char", but the current one is different -> reset
+                        m_pData->aSingleSearchChar.reset();
+                }
 
-            return true;
+                OUString aSearchTemp( m_pData->sCurrentSearchString );
+
+                StringEntryIdentifier pMatchingEntry = findMatchingEntry( aSearchTemp, *m_pData );
+                OSL_TRACE( "QuickSelectionEngine::HandleKeyEvent: found %p", pMatchingEntry );
+                if ( !pMatchingEntry && (aSearchTemp.getLength() > 1) && !!m_pData->aSingleSearchChar )
+                {
+                    // if there's only one letter in the search string, use a different search mode
+                    aSearchTemp = OUString(*m_pData->aSingleSearchChar);
+                    pMatchingEntry = findMatchingEntry( aSearchTemp, *m_pData );
+                }
+
+                if ( pMatchingEntry )
+                {
+                    m_pData->rEntryList.SelectEntry( pMatchingEntry );
+                    m_pData->aSearchTimeout.Start();
+                }
+                else
+                {
+                    lcl_reset( *m_pData );
+                }
+
+                return true;
+            }
+            return false;
         }
-        return false;
+        else
+        {
+            return false;
+        }
     }
 
     void QuickSelectionEngine::Reset()
     {
-        lcl_reset( *m_pData );
+        if( bEnabled )
+            lcl_reset( *m_pData );
     }
 
 } // namespace vcl
