@@ -535,20 +535,25 @@ void SAL_CALL OPreparedStatement::setBinaryStream( sal_Int32 parameterIndex, con
 void SAL_CALL OPreparedStatement::clearParameters(  ) throw(SQLException, RuntimeException)
 {
 }
-// -------------------------------------------------------------------------
-void SAL_CALL OPreparedStatement::clearBatch(  ) throw(SQLException, RuntimeException)
-{
-}
-// -------------------------------------------------------------------------
 
-void SAL_CALL OPreparedStatement::addBatch( ) throw(SQLException, RuntimeException)
+// ---- Batch methods -- unsupported -----------------------------------------
+void SAL_CALL OPreparedStatement::clearBatch()
+    throw(SQLException, RuntimeException)
 {
+    // Unsupported
 }
-// -------------------------------------------------------------------------
 
-Sequence< sal_Int32 > SAL_CALL OPreparedStatement::executeBatch(  ) throw(SQLException, RuntimeException)
+void SAL_CALL OPreparedStatement::addBatch()
+    throw(SQLException, RuntimeException)
 {
-    return Sequence< sal_Int32 > ();
+    // Unsupported by firebird
+}
+
+Sequence< sal_Int32 > SAL_CALL OPreparedStatement::executeBatch()
+    throw(SQLException, RuntimeException)
+{
+    // Unsupported by firebird
+    return Sequence< sal_Int32 >();
 }
 // -------------------------------------------------------------------------
 void OPreparedStatement::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& rValue) throw (Exception)
