@@ -87,7 +87,7 @@ HTMLOutEvent aAnchorEventTable[] =
 
 static Writer& OutHTML_SvxAdjust( Writer& rWrt, const SfxPoolItem& rHt );
 
-sal_uInt16 SwHTMLWriter::GetDefListLvl( const String& rNm, sal_uInt16 nPoolId )
+sal_uInt16 SwHTMLWriter::GetDefListLvl( const OUString& rNm, sal_uInt16 nPoolId )
 {
     if( nPoolId == RES_POOLCOLL_HTML_DD )
     {
@@ -98,17 +98,16 @@ sal_uInt16 SwHTMLWriter::GetDefListLvl( const String& rNm, sal_uInt16 nPoolId )
         return 1 | HTML_DLCOLL_DT;
     }
 
-    String sDTDD( OUString(OOO_STRING_SVTOOLS_HTML_dt) );
-    sDTDD += ' ';
-    if( COMPARE_EQUAL == sDTDD.CompareTo( rNm, sDTDD.Len() ) )
+    OUString sDTDD( OOO_STRING_SVTOOLS_HTML_dt );
+    sDTDD += " ";
+    if( rNm.startsWith(sDTDD) )
         // DefinitionList - term
-        return (sal_uInt16)rNm.Copy( sDTDD.Len() ).ToInt32() | HTML_DLCOLL_DT;
+        return (sal_uInt16)rNm.copy( sDTDD.getLength() ).toInt32() | HTML_DLCOLL_DT;
 
-    sDTDD.AssignAscii( OOO_STRING_SVTOOLS_HTML_dd );
-    sDTDD += ' ';
-    if( COMPARE_EQUAL == sDTDD.CompareTo( rNm, sDTDD.Len() ) )
+    sDTDD = OUString( OOO_STRING_SVTOOLS_HTML_dd ) + " ";
+    if( rNm.startsWith(sDTDD) )
         // DefinitionList - definition
-        return (sal_uInt16)rNm.Copy( sDTDD.Len() ).ToInt32() | HTML_DLCOLL_DD;
+        return (sal_uInt16)rNm.copy( sDTDD.getLength() ).toInt32() | HTML_DLCOLL_DD;
 
     return 0;
 }
@@ -529,7 +528,7 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
                                       rHWrt.nCSS1Script,
                                       false );
         rHWrt.aTxtCollInfos.insert( pFmtInfo );
-        String aName( rFmt.GetName() );
+        OUString aName( rFmt.GetName() );
         if( 0 != rHWrt.aScriptParaStyles.count( aName ) )
             ((SwHTMLFmtInfo *)pFmtInfo)->bScriptDependent = true;
     }
@@ -925,21 +924,21 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
             sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_class)
                 .append("=\"");
             rWrt.Strm() << sOut.makeStringAndClear().getStr();
-            String aClass( pFmtInfo->aClass );
+            OUString aClass( pFmtInfo->aClass );
             if( pFmtInfo->bScriptDependent )
             {
-                if( aClass.Len() )
-                   aClass += '-';
+                if( !aClass.isEmpty() )
+                   aClass += "-";
                 switch( rHWrt.nCSS1Script )
                 {
                 case CSS1_OUTMODE_WESTERN:
-                    aClass.AppendAscii( RTL_CONSTASCII_STRINGPARAM("western") );
+                    aClass += "western";
                     break;
                 case CSS1_OUTMODE_CJK:
-                    aClass.AppendAscii( RTL_CONSTASCII_STRINGPARAM("cjk") );
+                    aClass += "cjk";
                     break;
                 case CSS1_OUTMODE_CTL:
-                    aClass.AppendAscii( RTL_CONSTASCII_STRINGPARAM("ctl") );
+                    aClass += "ctl";
                     break;
                 }
             }
@@ -1058,26 +1057,26 @@ void OutHTML_SwFmtOff( Writer& rWrt, const SwHTMLTxtCollOutputInfo& rInfo )
 
 class HTMLSttEndPos
 {
-    xub_StrLen nStart;
-    xub_StrLen nEnd;
+    sal_Int32 nStart;
+    sal_Int32 nEnd;
     SfxPoolItem* pItem;
 
 public:
 
-    HTMLSttEndPos( const SfxPoolItem& rItem, xub_StrLen nStt, xub_StrLen nE );
+    HTMLSttEndPos( const SfxPoolItem& rItem, sal_Int32 nStt, sal_Int32 nE );
     ~HTMLSttEndPos();
 
     const SfxPoolItem *GetItem() const { return pItem; }
 
-    void SetStart( xub_StrLen nStt ) { nStart = nStt; }
-    xub_StrLen GetStart() const { return nStart; }
+    void SetStart( sal_Int32 nStt ) { nStart = nStt; }
+    sal_Int32 GetStart() const { return nStart; }
 
-    xub_StrLen GetEnd() const { return nEnd; }
-    void SetEnd( xub_StrLen nE ) { nEnd = nE; }
+    sal_Int32 GetEnd() const { return nEnd; }
+    void SetEnd( sal_Int32 nE ) { nEnd = nE; }
 };
 
-HTMLSttEndPos::HTMLSttEndPos( const SfxPoolItem& rItem, xub_StrLen nStt,
-                                                        xub_StrLen nE ) :
+HTMLSttEndPos::HTMLSttEndPos( const SfxPoolItem& rItem, sal_Int32 nStt,
+                                                        sal_Int32 nE ) :
     nStart( nStt ),
     nEnd( nE ),
     pItem( rItem.Clone() )
@@ -1105,7 +1104,7 @@ class HTMLEndPosLst
 {
     _HTMLEndLst aStartLst;  // nach Anfangs-Psoitionen sortierte Liste
     _HTMLEndLst aEndLst;    // nach End-Psotionen sortierte Liste
-    std::deque<xub_StrLen> aScriptChgLst;    // positions where script changes
+    std::deque<sal_Int32> aScriptChgLst;    // positions where script changes
                                     // 0 is not contained in this list,
                                     // but the text length
     // the script that is valif up to the position
@@ -1115,7 +1114,7 @@ class HTMLEndPosLst
     SwDoc *pDoc;            // das aktuelle Dokument
     SwDoc* pTemplate;       // die HTML-Vorlage (oder 0)
     const Color* pDfltColor;// die Default-Vordergrund-Farbe
-    std::set<String>& rScriptTxtStyles;    //
+    std::set<OUString>& rScriptTxtStyles;    //
 
     sal_uLong nHTMLMode;
     sal_Bool bOutStyles : 1;    // werden Styles exportiert
@@ -1134,29 +1133,29 @@ class HTMLEndPosLst
     HTMLOnOffState GetHTMLItemState( const SfxPoolItem& rItem );
 
     // Existiert ein bestimmtes On-Tag-Item
-    sal_Bool ExistsOnTagItem( sal_uInt16 nWhich, xub_StrLen nPos );
+    sal_Bool ExistsOnTagItem( sal_uInt16 nWhich, sal_Int32 nPos );
 
     // Existiert ein Item zum ausschalten eines Attributs, das genauso
     // exportiert wird wie das uebergebene Item im gleichen Bereich?
-    sal_Bool ExistsOffTagItem( sal_uInt16 nWhich, xub_StrLen nStartPos,
-                                          xub_StrLen nEndPos );
+    sal_Bool ExistsOffTagItem( sal_uInt16 nWhich, sal_Int32 nStartPos,
+                                          sal_Int32 nEndPos );
 
 
     // das Ende eines gesplitteten Items anpassen
-    void FixSplittedItem( HTMLSttEndPos *pPos, sal_uInt16 nStartPos,
-                          xub_StrLen nNewEnd );
+    void FixSplittedItem( HTMLSttEndPos *pPos, sal_Int32 nNewEnd,
+                            sal_uInt16 nStartPos );
 
     // Ein Attribut in die Listen eintragen und ggf. aufteilen
-    void InsertItem( const SfxPoolItem& rItem, xub_StrLen nStart,
-                                               xub_StrLen nEnd );
+    void InsertItem( const SfxPoolItem& rItem, sal_Int32 nStart,
+                                               sal_Int32 nEnd );
 
     // Ein bereits vorhandenes Attribut aufteilen
-    void SplitItem( const SfxPoolItem& rItem, xub_StrLen nStart,
-                                              xub_StrLen nEnd );
+    void SplitItem( const SfxPoolItem& rItem, sal_Int32 nStart,
+                                              sal_Int32 nEnd );
 
     // Insert without taking care of script
-    void InsertNoScript( const SfxPoolItem& rItem, xub_StrLen nStart,
-                          xub_StrLen nEnd, SwHTMLFmtInfos& rFmtInfos,
+    void InsertNoScript( const SfxPoolItem& rItem, sal_Int32 nStart,
+                          sal_Int32 nEnd, SwHTMLFmtInfos& rFmtInfos,
                          sal_Bool bParaAttrs=sal_False );
 
     const SwHTMLFmtInfo *GetFmtInfo( const SwFmt& rFmt,
@@ -1166,24 +1165,24 @@ public:
 
     HTMLEndPosLst( SwDoc *pDoc, SwDoc* pTemplate, const Color* pDfltColor,
                    sal_Bool bOutStyles, sal_uLong nHTMLMode,
-                   const String& rText, std::set<String>& rStyles );
+                   const OUString& rText, std::set<OUString>& rStyles );
     ~HTMLEndPosLst();
 
     // Ein Attribut einfuegen
-    void Insert( const SfxPoolItem& rItem, xub_StrLen nStart,  xub_StrLen nEnd,
+    void Insert( const SfxPoolItem& rItem, sal_Int32 nStart,  sal_Int32 nEnd,
                  SwHTMLFmtInfos& rFmtInfos, sal_Bool bParaAttrs=sal_False );
-    void Insert( const SfxItemSet& rItemSet, xub_StrLen nStart, xub_StrLen nEnd,
+    void Insert( const SfxItemSet& rItemSet, sal_Int32 nStart, sal_Int32 nEnd,
                  SwHTMLFmtInfos& rFmtInfos, sal_Bool bDeep,
                  sal_Bool bParaAttrs=sal_False );
-    void Insert( const SwDrawFrmFmt& rFmt, xub_StrLen nPos,
+    void Insert( const SwDrawFrmFmt& rFmt, sal_Int32 nPos,
                  SwHTMLFmtInfos& rFmtInfos );
 
-    sal_uInt16 GetScriptAtPos( xub_StrLen nPos,
+    sal_uInt16 GetScriptAtPos( sal_Int32 nPos,
                                sal_uInt16 nWeak=CSS1_OUTMODE_ANY_SCRIPT );
 
-    void OutStartAttrs( SwHTMLWriter& rHWrt, xub_StrLen nPos,
+    void OutStartAttrs( SwHTMLWriter& rHWrt, sal_Int32 nPos,
                         HTMLOutContext *pContext = 0 );
-    void OutEndAttrs( SwHTMLWriter& rHWrt, xub_StrLen nPos,
+    void OutEndAttrs( SwHTMLWriter& rHWrt, sal_Int32 nPos,
                       HTMLOutContext *pContext = 0 );
 
     sal_uInt16 Count() const { return aEndLst.size(); }
@@ -1220,7 +1219,7 @@ void HTMLEndPosLst::_InsertItem( HTMLSttEndPos *pPos, sal_uInt16 nEndPos )
 {
     // In der Start-Liste das Attribut hinter allen vorher und an
     // der gleichen Position gestarteten Attributen einfuegen
-    xub_StrLen nStart = pPos->GetStart();
+    sal_Int32 nStart = pPos->GetStart();
     sal_uInt16 i;
 
     for( i = 0; i < aStartLst.size() &&
@@ -1392,7 +1391,7 @@ HTMLOnOffState HTMLEndPosLst::GetHTMLItemState( const SfxPoolItem& rItem )
     return eState;
 }
 
-sal_Bool HTMLEndPosLst::ExistsOnTagItem( sal_uInt16 nWhich, xub_StrLen nPos )
+sal_Bool HTMLEndPosLst::ExistsOnTagItem( sal_uInt16 nWhich, sal_Int32 nPos )
 {
     for( sal_uInt16 i=0; i<aStartLst.size(); i++ )
     {
@@ -1420,8 +1419,8 @@ sal_Bool HTMLEndPosLst::ExistsOnTagItem( sal_uInt16 nWhich, xub_StrLen nPos )
     return sal_False;
 }
 
-sal_Bool HTMLEndPosLst::ExistsOffTagItem( sal_uInt16 nWhich, xub_StrLen nStartPos,
-                                      xub_StrLen nEndPos )
+sal_Bool HTMLEndPosLst::ExistsOffTagItem( sal_uInt16 nWhich, sal_Int32 nStartPos,
+                                      sal_Int32 nEndPos )
 {
     if( nWhich != RES_CHRATR_CROSSEDOUT &&
         nWhich != RES_CHRATR_UNDERLINE &&
@@ -1461,8 +1460,8 @@ sal_Bool HTMLEndPosLst::ExistsOffTagItem( sal_uInt16 nWhich, xub_StrLen nStartPo
     return sal_False;
 }
 
-void HTMLEndPosLst::FixSplittedItem( HTMLSttEndPos *pPos, xub_StrLen nNewEnd,
-                                     sal_uInt16 nStartPos )
+void HTMLEndPosLst::FixSplittedItem( HTMLSttEndPos *pPos, sal_Int32 nNewEnd,
+                                        sal_uInt16 nStartPos )
 {
     // die End-Position entsprechend fixen
     pPos->SetEnd( nNewEnd );
@@ -1483,7 +1482,7 @@ void HTMLEndPosLst::FixSplittedItem( HTMLSttEndPos *pPos, xub_StrLen nNewEnd,
     for( sal_uInt16 i=nStartPos+1; i<aStartLst.size(); i++ )
     {
         HTMLSttEndPos *pTest = aStartLst[i];
-        xub_StrLen nTestEnd = pTest->GetEnd();
+        sal_Int32 nTestEnd = pTest->GetEnd();
         if( pTest->GetStart() >= nNewEnd )
         {
             // das Test-Attribut und alle folgenden beginnen, nachdem das
@@ -1514,14 +1513,14 @@ void HTMLEndPosLst::FixSplittedItem( HTMLSttEndPos *pPos, xub_StrLen nNewEnd,
 }
 
 
-void HTMLEndPosLst::InsertItem( const SfxPoolItem& rItem, xub_StrLen nStart,
-                                                          xub_StrLen nEnd )
+void HTMLEndPosLst::InsertItem( const SfxPoolItem& rItem, sal_Int32 nStart,
+                                                          sal_Int32 nEnd )
 {
     sal_uInt16 i;
     for( i = 0; i < aEndLst.size(); i++ )
     {
         HTMLSttEndPos *pTest = aEndLst[i];
-        xub_StrLen nTestEnd = pTest->GetEnd();
+        sal_Int32 nTestEnd = pTest->GetEnd();
         if( nTestEnd <= nStart )
         {
             // das Test-Attribut endet, bevor das neue beginnt
@@ -1548,8 +1547,8 @@ void HTMLEndPosLst::InsertItem( const SfxPoolItem& rItem, xub_StrLen nStart,
 
 
 
-void HTMLEndPosLst::SplitItem( const SfxPoolItem& rItem, xub_StrLen nStart,
-                                                           xub_StrLen nEnd )
+void HTMLEndPosLst::SplitItem( const SfxPoolItem& rItem, sal_Int32 nStart,
+                                                           sal_Int32 nEnd )
 {
     sal_uInt16 nWhich = rItem.Which();
 
@@ -1559,8 +1558,8 @@ void HTMLEndPosLst::SplitItem( const SfxPoolItem& rItem, xub_StrLen nStart,
     for( sal_uInt16 i=0; i<aStartLst.size(); i++ )
     {
         HTMLSttEndPos *pTest = aStartLst[i];
-        xub_StrLen nTestStart = pTest->GetStart();
-        xub_StrLen nTestEnd = pTest->GetEnd();
+        sal_Int32 nTestStart = pTest->GetStart();
+        sal_Int32 nTestEnd = pTest->GetEnd();
 
         if( nTestStart >= nEnd )
         {
@@ -1627,7 +1626,7 @@ const SwHTMLFmtInfo *HTMLEndPosLst::GetFmtInfo( const SwFmt& rFmt,
         pFmtInfo = new SwHTMLFmtInfo( &rFmt, pDoc, pTemplate,
                                       bOutStyles );
         rFmtInfos.insert( pFmtInfo );
-        String aName( rFmt.GetName() );
+        OUString aName( rFmt.GetName() );
         if( 0 != rScriptTxtStyles.count( aName ) )
             ((SwHTMLFmtInfo *)pFmtInfo)->bScriptDependent = true;
     }
@@ -1637,8 +1636,8 @@ const SwHTMLFmtInfo *HTMLEndPosLst::GetFmtInfo( const SwFmt& rFmt,
 
 HTMLEndPosLst::HTMLEndPosLst( SwDoc *pD, SwDoc* pTempl,
                               const Color* pDfltCol, sal_Bool bStyles,
-                              sal_uLong nMode, const String& rText,
-                              std::set<String>& rStyles ):
+                              sal_uLong nMode, const OUString& rText,
+                              std::set<OUString>& rStyles ):
     pDoc( pD ),
     pTemplate( pTempl ),
     pDfltColor( pDfltCol ),
@@ -1646,12 +1645,12 @@ HTMLEndPosLst::HTMLEndPosLst( SwDoc *pD, SwDoc* pTempl,
     nHTMLMode( nMode ),
     bOutStyles( bStyles )
 {
-    xub_StrLen nEndPos = rText.Len();
-    xub_StrLen nPos = 0;
+    sal_Int32 nEndPos = rText.getLength();
+    sal_Int32 nPos = 0;
     while( nPos < nEndPos )
     {
         sal_uInt16 nScript = g_pBreakIt->GetBreakIter()->getScriptType( rText, nPos );
-        nPos = (xub_StrLen)g_pBreakIt->GetBreakIter()->endOfScript( rText, nPos, nScript );
+        nPos = g_pBreakIt->GetBreakIter()->endOfScript( rText, nPos, nScript );
         aScriptChgLst.push_back( nPos );
         aScriptLst.push_back( nScript );
     }
@@ -1666,7 +1665,7 @@ HTMLEndPosLst::~HTMLEndPosLst()
 
 
 void HTMLEndPosLst::InsertNoScript( const SfxPoolItem& rItem,
-                            xub_StrLen nStart, xub_StrLen nEnd,
+                            sal_Int32 nStart, sal_Int32 nEnd,
                             SwHTMLFmtInfos& rFmtInfos, sal_Bool bParaAttrs )
 {
     // kein Bereich ?? dann nicht aufnehmen, wird nie wirksam !!
@@ -1789,7 +1788,7 @@ void HTMLEndPosLst::InsertNoScript( const SfxPoolItem& rItem,
 }
 
 void HTMLEndPosLst::Insert( const SfxPoolItem& rItem,
-                            xub_StrLen nStart, xub_StrLen nEnd,
+                            sal_Int32 nStart, sal_Int32 nEnd,
                             SwHTMLFmtInfos& rFmtInfos, sal_Bool bParaAttrs )
 {
     sal_Bool bDependsOnScript = sal_False, bDependsOnAnyScript = sal_False;
@@ -1850,10 +1849,10 @@ void HTMLEndPosLst::Insert( const SfxPoolItem& rItem,
 
     if( bDependsOnScript )
     {
-        xub_StrLen nPos = nStart;
+        sal_Int32 nPos = nStart;
         for( size_t i=0; i < aScriptChgLst.size(); i++ )
         {
-            xub_StrLen nChgPos = aScriptChgLst[i];
+            sal_Int32 nChgPos = aScriptChgLst[i];
             if( nPos >= nChgPos )
             {
                 // the hint starts behind or at the next script change,
@@ -1886,7 +1885,7 @@ void HTMLEndPosLst::Insert( const SfxPoolItem& rItem,
 }
 
 void HTMLEndPosLst::Insert( const SfxItemSet& rItemSet,
-                            xub_StrLen nStart, xub_StrLen nEnd,
+                            sal_Int32 nStart, sal_Int32 nEnd,
                             SwHTMLFmtInfos& rFmtInfos,
                             sal_Bool bDeep, sal_Bool bParaAttrs )
 {
@@ -1905,7 +1904,7 @@ void HTMLEndPosLst::Insert( const SfxItemSet& rItemSet,
     }
 }
 
-void HTMLEndPosLst::Insert( const SwDrawFrmFmt& rFmt, xub_StrLen nPos,
+void HTMLEndPosLst::Insert( const SwDrawFrmFmt& rFmt, sal_Int32 nPos,
                             SwHTMLFmtInfos& rFmtInfos )
 {
     // der Type-Cast ist nur noetig, um nicht seinetwegen
@@ -1929,7 +1928,7 @@ void HTMLEndPosLst::Insert( const SwDrawFrmFmt& rFmt, xub_StrLen nPos,
     }
 }
 
-sal_uInt16 HTMLEndPosLst::GetScriptAtPos( xub_StrLen nPos ,
+sal_uInt16 HTMLEndPosLst::GetScriptAtPos( sal_Int32 nPos ,
                                              sal_uInt16 nWeak )
 {
     sal_uInt16 nRet = CSS1_OUTMODE_ANY_SCRIPT;
@@ -1950,7 +1949,7 @@ sal_uInt16 HTMLEndPosLst::GetScriptAtPos( xub_StrLen nPos ,
     return nRet;
 }
 
-void HTMLEndPosLst::OutStartAttrs( SwHTMLWriter& rHWrt, xub_StrLen nPos,
+void HTMLEndPosLst::OutStartAttrs( SwHTMLWriter& rHWrt, sal_Int32 nPos,
                                       HTMLOutContext *pContext  )
 {
     rHWrt.bTagOn = sal_True;
@@ -1959,7 +1958,7 @@ void HTMLEndPosLst::OutStartAttrs( SwHTMLWriter& rHWrt, xub_StrLen nPos,
     for( sal_uInt16 i=0; i< aStartLst.size(); i++ )
     {
         HTMLSttEndPos *pPos = aStartLst[i];
-        xub_StrLen nStart = pPos->GetStart();
+        sal_Int32 nStart = pPos->GetStart();
         if( nStart > nPos )
         {
             // dieses und alle folgenden Attribute werden erst noch geoeffnet
@@ -1987,7 +1986,7 @@ void HTMLEndPosLst::OutStartAttrs( SwHTMLWriter& rHWrt, xub_StrLen nPos,
     }
 }
 
-void HTMLEndPosLst::OutEndAttrs( SwHTMLWriter& rHWrt, xub_StrLen nPos,
+void HTMLEndPosLst::OutEndAttrs( SwHTMLWriter& rHWrt, sal_Int32 nPos,
                                      HTMLOutContext *pContext )
 {
     rHWrt.bTagOn = sal_False;
@@ -1997,9 +1996,9 @@ void HTMLEndPosLst::OutEndAttrs( SwHTMLWriter& rHWrt, xub_StrLen nPos,
     while( i < aEndLst.size() )
     {
         HTMLSttEndPos *pPos = aEndLst[i];
-        xub_StrLen nEnd = pPos->GetEnd();
+        sal_Int32 nEnd = pPos->GetEnd();
 
-        if( STRING_MAXLEN==nPos || nEnd == nPos )
+        if( SAL_MAX_INT32 == nPos || nEnd == nPos )
         {
             if( pContext )
             {
@@ -2032,8 +2031,8 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
     SwTxtNode * pNd = &((SwTxtNode&)rNode);
     SwHTMLWriter & rHTMLWrt = (SwHTMLWriter&)rWrt;
 
-    const String& rStr = pNd->GetTxt();
-    xub_StrLen nEnde = rStr.Len();
+    const OUString& rStr = pNd->GetTxt();
+    sal_Int32 nEnde = rStr.getLength();
 
     // Besonderheit: leere Node und HR-Vorlage (horizontaler Strich)
     //              nur ein <HR> ausgeben
@@ -2271,9 +2270,9 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
     rHTMLWrt.bLFPossible = sal_False;
 
     // Text, der aus einer Outline-Numerierung kommt ermitteln
-    xub_StrLen nOffset = 0;
-    String aOutlineTxt;
-    String aFullText;
+    sal_Int32 nOffset = 0;
+    OUString aOutlineTxt;
+    OUString aFullText;
 
     // export numbering string as plain text only for the outline numbering,
     // because the outline numbering isn't exported as a numbering - see <SwHTMLNumRuleInfo::Set(..)>
@@ -2281,14 +2280,14 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
          pNd->GetNumRule() == pNd->GetDoc()->GetOutlineNumRule() )
     {
         aOutlineTxt = pNd->GetNumString();
-        nOffset = nOffset + aOutlineTxt.Len();
+        nOffset = nOffset + aOutlineTxt.getLength();
         aFullText = aOutlineTxt;
     }
-    String aFootEndNoteSym;
+    OUString aFootEndNoteSym;
     if( rHTMLWrt.pFmtFtn )
     {
         aFootEndNoteSym = rHTMLWrt.GetFootEndNoteSym( *rHTMLWrt.pFmtFtn );
-        nOffset = nOffset + aFootEndNoteSym.Len();
+        nOffset = nOffset + aFootEndNoteSym.getLength();
         aFullText += aFootEndNoteSym;
     }
 
@@ -2305,7 +2304,7 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
     }
 
 
-    if( aOutlineTxt.Len() || rHTMLWrt.pFmtFtn )
+    if( !aOutlineTxt.isEmpty() || rHTMLWrt.pFmtFtn )
     {
         // Absatz-Attribute ausgeben, damit der Text die Attribute des
         // Absatzes bekommt.
@@ -2315,14 +2314,14 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
         // beachten. Da man die ueber die UI nicht setzen kann, ignorieren
         // wir sie erstmal.
 
-        if( aOutlineTxt.Len() )
+        if( !aOutlineTxt.isEmpty() )
             HTMLOutFuncs::Out_String( rWrt.Strm(), aOutlineTxt,
                                          rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters);
 
         if( rHTMLWrt.pFmtFtn )
         {
             rHTMLWrt.OutFootEndNoteSym( *rHTMLWrt.pFmtFtn, aFootEndNoteSym,
-                                        aEndPosLst.GetScriptAtPos( aOutlineTxt.Len(), rHTMLWrt.nCSS1Script ) );
+                                        aEndPosLst.GetScriptAtPos( aOutlineTxt.getLength(), rHTMLWrt.nCSS1Script ) );
             rHTMLWrt.pFmtFtn = 0;
         }
     }
@@ -2333,7 +2332,7 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
 
 
     sal_uInt16 nAttrPos = 0;
-    xub_StrLen nStrPos = rHTMLWrt.pCurPam->GetPoint()->nContent.GetIndex();
+    sal_Int32 nStrPos = rHTMLWrt.pCurPam->GetPoint()->nContent.GetIndex();
     const SwTxtAttr * pHt = 0;
     sal_uInt16 nCntAttr = pNd->HasHints() ? pNd->GetSwpHints().Count() : 0;
     if( nCntAttr && nStrPos > *( pHt = pNd->GetSwpHints()[ 0 ] )->GetStart() )
@@ -2348,7 +2347,7 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
 
             if ( pHt->GetEnd() && !pHt->HasDummyChar() )
             {
-                xub_StrLen nHtEnd = *pHt->GetEnd(),
+                sal_Int32 nHtEnd = *pHt->GetEnd(),
                        nHtStt = *pHt->GetStart();
                 if( !rHTMLWrt.bWriteAll && nHtEnd <= nStrPos )
                     continue;
@@ -2364,8 +2363,8 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
                                        rHTMLWrt.aChrFmtInfos );
                 else
                 {
-                    xub_StrLen nTmpStt = nHtStt < nStrPos ? nStrPos : nHtStt;
-                    xub_StrLen nTmpEnd = nHtEnd < nEnde ? nHtEnd : nEnde;
+                    sal_Int32 nTmpStt = nHtStt < nStrPos ? nStrPos : nHtStt;
+                    sal_Int32 nTmpEnd = nHtEnd < nEnde ? nHtEnd : nEnde;
                     aEndPosLst.Insert( pHt->GetAttr(), nTmpStt + nOffset,
                                        nTmpEnd + nOffset,
                                        rHTMLWrt.aChrFmtInfos );
@@ -2389,7 +2388,7 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
     {
         HTMLOutContext aContext( rHTMLWrt.eDestEnc );
 
-        xub_StrLen nPreSplitPos = 0;
+        sal_Int32 nPreSplitPos = 0;
         for( ; nStrPos < nEnde; nStrPos++ )
         {
             aEndPosLst.OutEndAttrs( rHTMLWrt, nStrPos + nOffset, &aContext );
@@ -2460,7 +2459,7 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
             if( pTxtHt )
             {
                 rHTMLWrt.bLFPossible = !rHTMLWrt.nLastParaToken && nStrPos > 0 &&
-                                       rStr.GetChar(nStrPos-1) == ' ';
+                                       rStr[nStrPos-1] == ' ';
                 sal_uInt16 nCSS1Script = rHTMLWrt.nCSS1Script;
                 rHTMLWrt.nCSS1Script = aEndPosLst.GetScriptAtPos(
                                                 nStrPos + nOffset, nCSS1Script );
@@ -2473,10 +2472,10 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
             if( bOutChar )
             {
                 // #i120442#: get the UTF-32 codepoint by converting an eventual UTF-16 unicode surrogate pair
-                sal_uInt64 c = rStr.GetChar( nStrPos );
+                sal_uInt64 c = rStr[nStrPos];
                 if( nStrPos < nEnde - 1 )
                 {
-                    const sal_Unicode d = rStr.GetChar( nStrPos + 1 );
+                    const sal_Unicode d = rStr[nStrPos + 1];
                     if( (c >= 0xd800 && c <= 0xdbff) && (d >= 0xdc00 && d <= 0xdfff) )
                     {
                         sal_uInt64 templow = d&0x03ff;
@@ -2490,14 +2489,14 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
                 // at a space character unless in a PRE-context
                 if( ' '==c && !rHTMLWrt.nLastParaToken  )
                 {
-                    xub_StrLen nLineLen;
+                    sal_Int32 nLineLen;
                     if( rHTMLWrt.nLastParaToken )
                         nLineLen = nStrPos - nPreSplitPos;
                     else
                         nLineLen = rHTMLWrt.GetLineLen();
 
-                    xub_StrLen nWordLen = rStr.Search( ' ', nStrPos+1 );
-                    if( nWordLen == STRING_NOTFOUND )
+                    sal_Int32 nWordLen = rStr.indexOf( ' ', nStrPos+1 );
+                    if( nWordLen == -1 )
                         nWordLen = nEnde;
                     nWordLen -= nStrPos;
 
@@ -2541,7 +2540,7 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
         HTMLOutFuncs::FlushToAscii( rWrt.Strm(), aContext );
     }
 
-    aEndPosLst.OutEndAttrs( rHTMLWrt, STRING_MAXLEN );
+    aEndPosLst.OutEndAttrs( rHTMLWrt, SAL_MAX_INT32 );
 
     // Die an der letzten Position verankerten Rahmen ausgeben
     if( bFlysLeft )
@@ -2603,7 +2602,7 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
     // wenn ein LF nicht schon erlaubt ist wird es erlaubt, wenn der
     // Absatz mit einem ' ' endet
     if( !rHTMLWrt.bLFPossible && !rHTMLWrt.nLastParaToken &&
-        nEnde > 0 && ' ' == rStr.GetChar(nEnde-1) )
+        nEnde > 0 && ' ' == rStr[nEnde-1] )
         rHTMLWrt.bLFPossible = sal_True;
 
     rHTMLWrt.bTagOn = sal_False;
@@ -2918,12 +2917,12 @@ Writer& OutHTML_INetFmt( Writer& rWrt, const SwFmtINetFmt& rINetFmt, sal_Bool bO
 {
     SwHTMLWriter& rHTMLWrt = (SwHTMLWriter&)rWrt;
 
-    String aURL( rINetFmt.GetValue() );
+    OUString aURL( rINetFmt.GetValue() );
     const SvxMacroTableDtor *pMacTable = rINetFmt.GetMacroTbl();
     sal_Bool bEvents = pMacTable != 0 && !pMacTable->empty();
 
     // Gibt es ueberhaupt etwas auszugeben?
-    if( !aURL.Len() && !bEvents && rINetFmt.GetName().isEmpty() )
+    if( aURL.isEmpty() && !bEvents && rINetFmt.GetName().isEmpty() )
         return rWrt;
 
     // Tag aus? Dann nur ein </A> ausgeben.
@@ -2979,17 +2978,16 @@ Writer& OutHTML_INetFmt( Writer& rWrt, const SwFmtINetFmt& rINetFmt, sal_Bool bO
 
     rWrt.Strm() << sOut.makeStringAndClear().getStr();
 
-    String sRel;
+    OUString sRel;
 
-    if( aURL.Len() || bEvents )
+    if( !aURL.isEmpty() || bEvents )
     {
-        String sTmp( aURL );
-        sTmp.ToUpperAscii();
-        xub_StrLen nPos = sTmp.SearchAscii( "\" REL=" );
-        if( nPos!=STRING_NOTFOUND )
+        OUString sTmp( aURL.toAsciiUpperCase() );
+        sal_Int32 nPos = sTmp.indexOf( "\" REL=" );
+        if( nPos >= 0 )
         {
-            sRel = aURL.Copy( nPos+1 );
-            aURL.Erase( nPos );
+            sRel = aURL.copy( nPos+1 );
+            aURL = aURL.copy( 0, nPos);
         }
         aURL = comphelper::string::strip(aURL, ' ');
 
@@ -3008,8 +3006,8 @@ Writer& OutHTML_INetFmt( Writer& rWrt, const SwFmtINetFmt& rINetFmt, sal_Bool bO
         sOut.append('\"');
     }
 
-    const String& rTarget = rINetFmt.GetTargetFrame();
-    if( rTarget.Len() )
+    const OUString& rTarget = rINetFmt.GetTargetFrame();
+    if( !rTarget.isEmpty() )
     {
         sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_target).append("=\"");
         rWrt.Strm() << sOut.makeStringAndClear().getStr();
@@ -3017,7 +3015,7 @@ Writer& OutHTML_INetFmt( Writer& rWrt, const SwFmtINetFmt& rINetFmt, sal_Bool bO
         sOut.append('\"');
     }
 
-    if( sRel.Len() )
+    if( !sRel.isEmpty() )
         sOut.append(OUStringToOString(sRel, RTL_TEXTENCODING_ASCII_US));
 
     if( !sOut.isEmpty() )
@@ -3120,21 +3118,21 @@ static Writer& OutHTML_SwTxtCharFmt( Writer& rWrt, const SfxPoolItem& rHt )
             sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_class)
                 .append("=\"");
             rWrt.Strm() << sOut.makeStringAndClear().getStr();
-            String aClass( pFmtInfo->aClass );
+            OUString aClass( pFmtInfo->aClass );
             if( pFmtInfo->bScriptDependent )
             {
-                if( aClass.Len() )
-                   aClass += '-';
+                if( !aClass.isEmpty() )
+                   aClass += "-";
                 switch( rHTMLWrt.nCSS1Script )
                 {
                 case CSS1_OUTMODE_WESTERN:
-                    aClass.AppendAscii( RTL_CONSTASCII_STRINGPARAM("western") );
+                    aClass += "western";
                     break;
                 case CSS1_OUTMODE_CJK:
-                    aClass.AppendAscii( RTL_CONSTASCII_STRINGPARAM("cjk") );
+                    aClass += "cjk";
                     break;
                 case CSS1_OUTMODE_CTL:
-                    aClass.AppendAscii( RTL_CONSTASCII_STRINGPARAM("ctl") );
+                    aClass += "ctl";
                     break;
                 }
             }
