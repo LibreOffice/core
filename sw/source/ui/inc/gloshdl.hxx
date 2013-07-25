@@ -51,10 +51,10 @@ public:
     void    GlossaryDlg();
 
     sal_uInt16  GetGroupCnt() const;
-    String  GetGroupName( sal_uInt16, String* pTitle = 0 );
-    sal_Bool    NewGroup(String & rGroupName, const String& rTitle);
+    OUString    GetGroupName( sal_uInt16, OUString* pTitle = 0 );
+    sal_Bool    NewGroup(OUString & rGroupName, const OUString& rTitle);
     sal_Bool    DelGroup(const String &);
-    sal_Bool    RenameGroup(const String & rOld, String& rNew, const String& rNewTitle);
+    sal_Bool    RenameGroup(const OUString& rOld, OUString& rNew, const OUString& rNewTitle);
     void    SetCurGroup(const String &aGrp, sal_Bool bApi = sal_False, sal_Bool bAlwaysCreateNew = sal_False);
 
     const String &GetCurGroup() const { return aCurGrp; }
@@ -66,8 +66,8 @@ public:
 
     sal_Bool    Rename( const String& rOldShortName,  const String& rNewShortName,
                         const String& rNewName);
-    sal_Bool    CopyOrMove( const String& rSourceGroupName,  String& rSourceShortName,
-                        const String& rDestGroupName, const String& rLongName, sal_Bool bMove );
+    sal_Bool    CopyOrMove( const OUString& rSourceGroupName, OUString& rSourceShortName,
+                        const OUString& rDestGroupName, const OUString& rLongName, sal_Bool bMove );
     sal_Bool    HasShortName(const String &rShortName) const;
     // when NewGlossary is called from Basic then the previously set group should
     // be newly created if applicable.
@@ -88,10 +88,10 @@ public:
                       SvxMacro& rEnd,
                       SwTextBlocks* pGlossary = 0 );
 
-    sal_Bool    IsReadOnly( const String* = 0 ) const;
+    sal_Bool    IsReadOnly( const OUString* = 0 ) const;
     sal_Bool    IsOld() const;
 
-    sal_Bool    FindGroupName(String & rGroup); // find group without path index
+    sal_Bool    FindGroupName(OUString& rGroup); // find group without path index
 
     sal_Bool    ImportGlossaries( const String& rName );
 

@@ -108,7 +108,7 @@ public:
     String                  GetGroupName(sal_uInt16 );
     String                  GetGroupTitle( const String& rGroupName );
 
-    sal_Bool            FindGroupName(String & rGroup);
+    sal_Bool            FindGroupName(OUString& rGroup);
 
     SwTextBlocks*   GetGroupDoc(const String &rName,
                                 sal_Bool bCreate = sal_False);
@@ -119,8 +119,8 @@ public:
 
     String          GetCompleteGroupName( const OUString& GroupName );
 
-    sal_Bool            NewGroupDoc(String &rGroupName, const String& rTitle);
-    sal_Bool            RenameGroupDoc(const String& sOldGroup, String& sNewGroup, const String& rNewTitle);
+    sal_Bool            NewGroupDoc(OUString &rGroupName, const OUString& rTitle);
+    sal_Bool            RenameGroupDoc(const OUString& sOldGroup, OUString& sNewGroup, const OUString& rNewTitle);
     sal_Bool            DelGroupDoc(const String &);
     SwDocShellRef   EditGroupDoc(const String &rGrpName, const String& rShortName, sal_Bool bShow = sal_True );
     void            SaveGroupDoc(const String &rGrpName, const String& rLongName );

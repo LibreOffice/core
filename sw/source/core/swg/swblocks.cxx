@@ -387,8 +387,8 @@ sal_uInt16 SwTextBlocks::Rename( sal_uInt16 n, const String* s, const String* l 
     return nIdx;
 }
 
-sal_uLong SwTextBlocks::CopyBlock( SwTextBlocks& rSource, String& rSrcShort,
-                                const String& rLong )
+sal_uLong SwTextBlocks::CopyBlock( SwTextBlocks& rSource, OUString& rSrcShort,
+                                const OUString& rLong )
 {
     bool bIsOld = false;
     if (rSource.pImp)

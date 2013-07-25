@@ -91,7 +91,7 @@ class SwGlossaryGroupDlg : public SvxStandardDialog
 
     String          sCreatedGroup;
 
-    sal_Bool            IsDeleteAllowed(const String &rGroup);
+    sal_Bool            IsDeleteAllowed(const OUString &rGroup);
 
 protected:
     virtual void Apply();

@@ -677,23 +677,23 @@ void SwGlossaryDlg::Init()
     const String sSelStr(::GetCurrGlosGroup()->GetToken(0, GLOS_DELIM));
     const sal_uInt16 nSelPath = static_cast< sal_uInt16 >(::GetCurrGlosGroup()->GetToken(1, GLOS_DELIM).ToInt32());
     // #i66304# - "My AutoText" comes from mytexts.bau, but should be translated
-    const String sMyAutoTextEnglish(RTL_CONSTASCII_USTRINGPARAM("My AutoText"));
-    const String sMyAutoTextTranslated(SW_RESSTR(STR_MY_AUTOTEXT));
+    const OUString sMyAutoTextEnglish("My AutoText");
+    const OUString sMyAutoTextTranslated(SW_RES(STR_MY_AUTOTEXT));
     for(sal_uInt16 nId = 0; nId < nCnt; ++nId )
     {
-        String sTitle;
-        String sGroupName(pGlossaryHdl->GetGroupName(nId, &sTitle));
-        if(!sGroupName.Len())
+        OUString sTitle;
+        OUString sGroupName(pGlossaryHdl->GetGroupName(nId, &sTitle));
+        if(sGroupName.isEmpty())
             continue;
-        if(!sTitle.Len())
-            sTitle = sGroupName.GetToken( 0, GLOS_DELIM );
+        if(sTitle.isEmpty())
+            sTitle = sGroupName.getToken( 0, GLOS_DELIM );
         if(sTitle == sMyAutoTextEnglish)
             sTitle = sMyAutoTextTranslated;
         SvTreeListEntry* pEntry = m_pCategoryBox->InsertEntry( sTitle );
-        sal_uInt16 nPath = static_cast< sal_uInt16 >(sGroupName.GetToken( 1, GLOS_DELIM ).ToInt32());
+        sal_uInt16 nPath = static_cast< sal_uInt16 >(sGroupName.getToken( 1, GLOS_DELIM ).toInt32());
 
         GroupUserData* pData = new GroupUserData;
-        pData->sGroupName = sGroupName.GetToken(0, GLOS_DELIM);
+        pData->sGroupName = sGroupName.getToken(0, GLOS_DELIM);
         pData->nPathIdx = nPath;
         pData->bReadonly = pGlossaryHdl->IsReadOnly(&sGroupName);
 
@@ -923,9 +923,9 @@ DragDropMode SwGlTreeListBox::NotifyStartDrag(
         SvTreeListEntry* pParent = GetParent(pEntry);
 
         GroupUserData* pGroupData = (GroupUserData*)pParent->GetUserData();
-        String sEntry(pGroupData->sGroupName);
-        sEntry += GLOS_DELIM;
-        sEntry += OUString::number(pGroupData->nPathIdx);
+        OUString sEntry = pGroupData->sGroupName
+            + OUString(GLOS_DELIM)
+            + OUString::number(pGroupData->nPathIdx);
         sal_Int8 nDragOption = DND_ACTION_COPY;
         eRet = SV_DRAGDROP_CTRL_COPY;
         if(!pDlg->pGlossaryHdl->IsReadOnly(&sEntry))
@@ -971,17 +971,17 @@ sal_Bool  SwGlTreeListBox::NotifyMoving(   SvTreeListEntry*  pTarget,
         SwWait aWait( *pDlg->pSh->GetView().GetDocShell(), sal_True );
 
         GroupUserData* pGroupData = (GroupUserData*)pSrcParent->GetUserData();
-        String sSourceGroup(pGroupData->sGroupName);
-        sSourceGroup += GLOS_DELIM;
-        sSourceGroup += OUString::number(pGroupData->nPathIdx);
+        OUString sSourceGroup = pGroupData->sGroupName
+            + OUString(GLOS_DELIM)
+            + OUString::number(pGroupData->nPathIdx);
         pDlg->pGlossaryHdl->SetCurGroup(sSourceGroup);
-        String sTitle(GetEntryText(pEntry));
-        String sShortName(*(String*)pEntry->GetUserData());
+        OUString sTitle(GetEntryText(pEntry));
+        OUString sShortName(*(String*)pEntry->GetUserData());
 
         GroupUserData* pDestData = (GroupUserData*)pDestParent->GetUserData();
-        String sDestName = pDestData->sGroupName;
-        sDestName += GLOS_DELIM;
-        sDestName += OUString::number(pDestData->nPathIdx);
+        OUString sDestName = pDestData->sGroupName
+            + OUString(GLOS_DELIM)
+            + OUString::number(pDestData->nPathIdx);
         bRet = pDlg->pGlossaryHdl->CopyOrMove( sSourceGroup,  sShortName,
                         sDestName, sTitle, sal_True );
         if(bRet)
@@ -1017,18 +1017,18 @@ sal_Bool  SwGlTreeListBox::NotifyCopying(   SvTreeListEntry*  pTarget,
         SwWait aWait( *pDlg->pSh->GetView().GetDocShell(), sal_True );
 
         GroupUserData* pGroupData = (GroupUserData*)pSrcParent->GetUserData();
-        String sSourceGroup(pGroupData->sGroupName);
-        sSourceGroup += GLOS_DELIM;
-        sSourceGroup += OUString::number(pGroupData->nPathIdx);
+        OUString sSourceGroup = pGroupData->sGroupName
+            + OUString(GLOS_DELIM)
+            + OUString::number(pGroupData->nPathIdx);
 
         pDlg->pGlossaryHdl->SetCurGroup(sSourceGroup);
-        String sTitle(GetEntryText(pEntry));
-        String sShortName(*(String*)pEntry->GetUserData());
+        OUString sTitle(GetEntryText(pEntry));
+        OUString sShortName(*(String*)pEntry->GetUserData());
 
         GroupUserData* pDestData = (GroupUserData*)pDestParent->GetUserData();
-        String sDestName = pDestData->sGroupName;
-        sDestName += GLOS_DELIM;
-        sDestName += OUString::number(pDestData->nPathIdx);
+        OUString sDestName = pDestData->sGroupName
+            + OUString(GLOS_DELIM)
+            + OUString::number(pDestData->nPathIdx);
 
         bRet = pDlg->pGlossaryHdl->CopyOrMove( sSourceGroup,  sShortName,
                         sDestName, sTitle, sal_False );
