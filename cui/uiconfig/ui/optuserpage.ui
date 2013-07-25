@@ -161,6 +161,7 @@
                   <object class="GtkEntry" id="firstname">
                     <property name="can_focus">True</property>
                     <property name="no_show_all">True</property>
+                    <property name="valign">center</property>
                     <property name="hexpand">True</property>
                     <property name="invisible_char">•</property>
                     <child internal-child="accessible">
@@ -180,6 +181,7 @@
                   <object class="GtkEntry" id="lastname">
                     <property name="can_focus">True</property>
                     <property name="no_show_all">True</property>
+                    <property name="valign">center</property>
                     <property name="hexpand">True</property>
                     <property name="invisible_char">•</property>
                     <child internal-child="accessible">
@@ -199,6 +201,7 @@
                   <object class="GtkEntry" id="shortname">
                     <property name="can_focus">True</property>
                     <property name="no_show_all">True</property>
+                    <property name="valign">center</property>
                     <property name="invisible_char">•</property>
                     <property name="width_chars">7</property>
                     <child internal-child="accessible">
@@ -231,6 +234,7 @@
                   <object class="GtkEntry" id="city">
                     <property name="can_focus">True</property>
                     <property name="no_show_all">True</property>
+                    <property name="valign">center</property>
                     <property name="hexpand">True</property>
                     <property name="invisible_char">•</property>
                     <child internal-child="accessible">
@@ -250,6 +254,7 @@
                   <object class="GtkEntry" id="state">
                     <property name="can_focus">True</property>
                     <property name="no_show_all">True</property>
+                    <property name="valign">center</property>
                     <property name="hexpand">True</property>
                     <property name="invisible_char">•</property>
                     <child internal-child="accessible">
@@ -269,6 +274,7 @@
                   <object class="GtkEntry" id="zip">
                     <property name="can_focus">True</property>
                     <property name="no_show_all">True</property>
+                    <property name="valign">center</property>
                     <property name="invisible_char">•</property>
                     <property name="width_chars">15</property>
                     <child internal-child="accessible">
@@ -302,6 +308,7 @@
                   <object class="GtkEntry" id="title">
                     <property name="can_focus">True</property>
                     <property name="no_show_all">True</property>
+                    <property name="valign">center</property>
                     <property name="hexpand">True</property>
                     <property name="invisible_char">•</property>
                     <child internal-child="accessible">
@@ -321,6 +328,7 @@
                   <object class="GtkEntry" id="position">
                     <property name="can_focus">True</property>
                     <property name="no_show_all">True</property>
+                    <property name="valign">center</property>
                     <property name="hexpand">True</property>
                     <property name="invisible_char">•</property>
                     <child internal-child="accessible">
@@ -353,6 +361,7 @@
                   <object class="GtkEntry" id="home">
                     <property name="can_focus">True</property>
                     <property name="no_show_all">True</property>
+                    <property name="valign">center</property>
                     <property name="hexpand">True</property>
                     <property name="invisible_char">•</property>
                     <child internal-child="accessible">
@@ -372,6 +381,7 @@
                   <object class="GtkEntry" id="work">
                     <property name="can_focus">True</property>
                     <property name="no_show_all">True</property>
+                    <property name="valign">center</property>
                     <property name="hexpand">True</property>
                     <property name="invisible_char">•</property>
                     <child internal-child="accessible">
@@ -405,6 +415,7 @@
                   <object class="GtkEntry" id="fax">
                     <property name="can_focus">True</property>
                     <property name="no_show_all">True</property>
+                    <property name="valign">center</property>
                     <property name="hexpand">True</property>
                     <property name="invisible_char">•</property>
                     <child internal-child="accessible">
@@ -424,6 +435,7 @@
                   <object class="GtkEntry" id="email">
                     <property name="can_focus">True</property>
                     <property name="no_show_all">True</property>
+                    <property name="valign">center</property>
                     <property name="hexpand">True</property>
                     <property name="invisible_char">•</property>
                     <child internal-child="accessible">
@@ -488,6 +500,7 @@
                   <object class="GtkEntry" id="ruslastname">
                     <property name="can_focus">True</property>
                     <property name="no_show_all">True</property>
+                    <property name="valign">center</property>
                     <property name="hexpand">True</property>
                     <property name="invisible_char">•</property>
                     <property name="invisible_char_set">True</property>
@@ -508,6 +521,7 @@
                   <object class="GtkEntry" id="rusfathersname">
                     <property name="can_focus">True</property>
                     <property name="no_show_all">True</property>
+                    <property name="valign">center</property>
                     <property name="hexpand">True</property>
                     <property name="invisible_char">•</property>
                     <property name="invisible_char_set">True</property>
@@ -528,6 +542,7 @@
                   <object class="GtkEntry" id="russhortname">
                     <property name="can_focus">True</property>
                     <property name="no_show_all">True</property>
+                    <property name="valign">center</property>
                     <property name="invisible_char">•</property>
                     <property name="width_chars">7</property>
                     <property name="invisible_char_set">True</property>
@@ -548,6 +563,7 @@
                   <object class="GtkEntry" id="rusfirstname">
                     <property name="can_focus">True</property>
                     <property name="no_show_all">True</property>
+                    <property name="valign">center</property>
                     <property name="hexpand">True</property>
                     <property name="invisible_char">•</property>
                     <property name="invisible_char_set">True</property>
@@ -597,6 +613,7 @@
                   <object class="GtkEntry" id="eastlastname">
                     <property name="can_focus">True</property>
                     <property name="no_show_all">True</property>
+                    <property name="valign">center</property>
                     <property name="hexpand">True</property>
                     <property name="invisible_char">•</property>
                     <property name="invisible_char_set">True</property>
@@ -617,6 +634,7 @@
                   <object class="GtkEntry" id="eastfirstname">
                     <property name="can_focus">True</property>
                     <property name="no_show_all">True</property>
+                    <property name="valign">center</property>
                     <property name="hexpand">True</property>
                     <property name="invisible_char">•</property>
                     <property name="invisible_char_set">True</property>
@@ -637,6 +655,7 @@
                   <object class="GtkEntry" id="eastshortname">
                     <property name="can_focus">True</property>
                     <property name="no_show_all">True</property>
+                    <property name="valign">center</property>
                     <property name="invisible_char">•</property>
                     <property name="width_chars">7</property>
                     <property name="invisible_char_set">True</property>
@@ -686,6 +705,7 @@
                   <object class="GtkEntry" id="russtreet">
                     <property name="can_focus">True</property>
                     <property name="no_show_all">True</property>
+                    <property name="valign">center</property>
                     <property name="hexpand">True</property>
                     <property name="invisible_char">•</property>
                     <property name="invisible_char_set">True</property>
@@ -706,6 +726,7 @@
                   <object class="GtkEntry" id="apartnum">
                     <property name="can_focus">True</property>
                     <property name="no_show_all">True</property>
+                    <property name="valign">center</property>
                     <property name="invisible_char">•</property>
                     <property name="width_chars">15</property>
                     <property name="invisible_char_set">True</property>
@@ -755,6 +776,7 @@
                   <object class="GtkEntry" id="icity">
                     <property name="can_focus">True</property>
                     <property name="no_show_all">True</property>
+                    <property name="valign">center</property>
                     <property name="hexpand">True</property>
                     <property name="invisible_char">•</property>
                     <property name="invisible_char_set">True</property>
@@ -775,6 +797,7 @@
                   <object class="GtkEntry" id="izip">
                     <property name="can_focus">True</property>
                     <property name="no_show_all">True</property>
+                    <property name="valign">center</property>
                     <property name="invisible_char">•</property>
                     <property name="width_chars">15</property>
                     <property name="invisible_char_set">True</property>
@@ -808,6 +831,7 @@
                   <object class="GtkEntry" id="street">
                     <property name="can_focus">True</property>
                     <property name="no_show_all">True</property>
+                    <property name="valign">center</property>
                     <property name="hexpand">True</property>
                     <property name="invisible_char">•</property>
                     <property name="invisible_char_set">True</property>
@@ -836,6 +860,7 @@
                   <object class="GtkEntry" id="country">
                     <property name="can_focus">True</property>
                     <property name="no_show_all">True</property>
+                    <property name="valign">center</property>
                     <property name="hexpand">True</property>
                     <property name="invisible_char">•</property>
                     <property name="invisible_char_set">True</property>
@@ -864,6 +889,7 @@
                   <object class="GtkEntry" id="company">
                     <property name="can_focus">True</property>
                     <property name="no_show_all">True</property>
+                    <property name="valign">center</property>
                     <property name="hexpand">True</property>
                     <property name="invisible_char">•</property>
                     <property name="invisible_char_set">True</property>

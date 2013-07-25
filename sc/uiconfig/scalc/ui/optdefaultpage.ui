@@ -67,6 +67,7 @@
                   <object class="GtkEntry" id="sheetprefix">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="valign">center</property>
                     <property name="invisible_char">●</property>
                   </object>
                   <packing>

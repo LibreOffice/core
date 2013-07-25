@@ -43,6 +43,7 @@
               <object class="cuilo-SvxNoSpaceEdit" id="http">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="valign">center</property>
                 <property name="hexpand">True</property>
               </object>
               <packing>
@@ -56,6 +57,7 @@
               <object class="cuilo-SvxNoSpaceEdit" id="https">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="valign">center</property>
                 <property name="hexpand">True</property>
               </object>
               <packing>
@@ -69,6 +71,7 @@
               <object class="cuilo-SvxNoSpaceEdit" id="ftp">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="valign">center</property>
                 <property name="hexpand">True</property>
               </object>
               <packing>
@@ -82,6 +85,7 @@
               <object class="GtkEntry" id="noproxy">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="valign">center</property>
                 <property name="hexpand">True</property>
                 <property name="invisible_char">●</property>
               </object>
@@ -96,6 +100,7 @@
               <object class="cuilo-SvxNoSpaceEdit" id="httpport">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="valign">center</property>
                 <property name="max_length">5</property>
                 <property name="width_chars">5</property>
                 <property name="only_numeric">True</property>
@@ -111,6 +116,7 @@
               <object class="cuilo-SvxNoSpaceEdit" id="httpsport">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="valign">center</property>
                 <property name="max_length">5</property>
                 <property name="width_chars">5</property>
                 <property name="only_numeric">True</property>
@@ -126,6 +132,7 @@
               <object class="cuilo-SvxNoSpaceEdit" id="ftpport">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="valign">center</property>
                 <property name="max_length">5</property>
                 <property name="width_chars">5</property>
                 <property name="only_numeric">True</property>

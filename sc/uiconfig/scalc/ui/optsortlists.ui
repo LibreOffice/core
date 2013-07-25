@@ -53,6 +53,7 @@
               <object class="GtkEntry" id="copyfrom">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="valign">center</property>
                 <property name="hexpand">True</property>
                 <property name="invisible_char">●</property>
               </object>
