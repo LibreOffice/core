@@ -100,6 +100,7 @@ class SmElementsControl : public Control
 
 public:
     SmElementsControl(Window *pParent, const ResId& rResId);
+    virtual ~SmElementsControl();
 
     void setElementSetId(sal_uInt16 aSetId);
 
