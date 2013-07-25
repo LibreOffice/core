@@ -7,7 +7,6 @@
 #include <string.h>
 #include <algorithm>
 #include <vector>
-#include <thread>
 #include <iostream>
 
 #include <avahi-client/client.h>
