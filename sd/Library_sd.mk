@@ -537,6 +537,10 @@ $(eval $(call gb_Library_add_objcxxobjects,sd,\
 	sd/source/ui/remotecontrol/OSXNetworkService \
 ))
 
+$(eval $(call gb_Library_add_exception_objects,sd,\
+	sd/source/ui/remotecontrol/OSXNetworkService \
+))
+
 else
 
 ifeq ($(OS),LINUX)

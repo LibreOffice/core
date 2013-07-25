@@ -10,6 +10,7 @@
 #include <errno.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 #include <algorithm>
 #include <vector>
 #include <thread>
@@ -40,7 +41,7 @@
   #include <premac.h>
   #import <CoreFoundation/CoreFoundation.h>
   #include <postmac.h>
-  #import "OSXNetworkService.h"
+  #import "OSXNetworkService.hxx"
 #endif
 
 #ifdef LINUX
@@ -54,19 +55,21 @@ using namespace sd;
 DiscoveryService::DiscoveryService()
 {
 #ifdef MACOSX
-// Bonjour for OSX
-    osxservice = [[OSXNetworkService alloc] init];
-    [osxservice publishImpressRemoteServiceOnLocalNetworkWithName: @""];
+    // Bonjour for OSX
+    zService = new OSXNetworkService();
 #endif
 #ifdef LINUX
-// Avahi for Linux
+    // Avahi for Linux
     char hostname[1024];
     hostname[1023] = '\0';
     gethostname(hostname, 1023);
-    std::cerr << " AVAHI SETUP Called" << std::endl;
-    avahi_setup(hostname);
+
+    zService = new AvahiNetworkService(hostname);
 #endif
 
+    zService->setup();
+
+    // Old implementation for backward compatibility matter
     mSocket = socket( AF_INET, SOCK_DGRAM, IPPROTO_UDP );
 
     sockaddr_in aAddr;
@@ -89,9 +92,9 @@ DiscoveryService::DiscoveryService()
     multicastRequest.imr_interface.s_addr = htonl(INADDR_ANY);
 
     rc = setsockopt( mSocket, IPPROTO_IP, IP_ADD_MEMBERSHIP,
-  #ifdef WNT
+    #ifdef WNT
         (const char*)
-  #endif
+    #endif
         &multicastRequest, sizeof(multicastRequest));
 
     if (rc)
@@ -99,28 +102,22 @@ DiscoveryService::DiscoveryService()
         SAL_WARN("sd", "DiscoveryService: setsockopt failed: " << errno);
         return; // would be better to throw, but unsure if caller handles that
     }
-// #endif
 }
 
 DiscoveryService::~DiscoveryService()
 {
-  #ifdef LINUX
-      avahi_shutdown();
-  #endif
-
-  #ifdef MACOSX
-      [osxservice dealloc];
-  #endif
-
   #ifdef WNT
       closesocket( mSocket );
   #else
-      close( mSocket );
+     close( mSocket );
   #endif
+
+  zService->clear();
 }
 
 void SAL_CALL DiscoveryService::run()
 {
+  // Kept for backwrad compatibility
     char aBuffer[BUFFER_SIZE];
     while ( true )
     {

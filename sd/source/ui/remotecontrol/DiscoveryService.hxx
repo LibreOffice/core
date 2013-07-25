@@ -11,39 +11,16 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#ifndef _WIN32
-#include <unistd.h>
-#endif
-#include <sys/types.h>
 
 #include <osl/socket.hxx>
-#include <rtl/ref.hxx>
 #include <osl/thread.hxx>
 
-#ifdef MACOSX
-  #include <osl/conditn.hxx> // Include this early to avoid error as check() gets defined by some SDK header to empty
-  #include <premac.h>
-  #import <CoreFoundation/CoreFoundation.h>
-  #include <postmac.h>
-  #import "OSXNetworkService.h"
-#endif
-
-
-/**
-* The port for use for the main communication between LibO and remote control app.
-*/
-#define PORT_DISCOVERY 1598
-#define BUFFER_SIZE 200
-
-#define CHARSET RTL_TEXTENCODING_UTF8
+#include "ZeroconfService.hxx"
 
 struct sockaddr_in;
 
 namespace sd
 {
-
-
-
     class DiscoveryService : public osl::Thread
     {
         public:
@@ -55,13 +32,9 @@ namespace sd
 
             static DiscoveryService *spService;
             virtual void SAL_CALL run();
-
-            // osl::DatagramSocket mSocket;
-            #ifdef MACOSX
-            OSXNetworkService * osxservice;
-            #endif
             int mSocket;
 
+            ZeroconfService * zService;
     };
 }
 

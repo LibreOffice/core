@@ -2,20 +2,43 @@
 #define ZEROCONF_SERVICE
 
 #include <string>
+#include <stdio.h>
+#include <stdlib.h>
 
-class ZeroconfService
-{
-private:
-    string name;
-    uint port;
+/**
+* The port for use for the main communication between LibO and remote control app.
+*/
+#define PORT_DISCOVERY 1598
+#define BUFFER_SIZE 200
 
-public:
-    ZeroconfService(string aname = "", uint aport = 1599);
-    ~ZeroconfService();
-    // Clean up the service when closing
-    virtual void clear() = 0;
-    // Bonjour for OSX, Avahi for Linux
-    virtual void setup() = 0;
-};
+#define CHARSET RTL_TEXTENCODING_UTF8
 
+struct sockaddr_in;
+
+namespace sd{
+
+    class ZeroconfService
+    {
+    private:
+        int mSocket;
+
+    protected:
+        std::string name;
+        uint port;
+
+    public:
+        explicit ZeroconfService(const std::string& aname, uint aport)
+            :name(aname), port(aport){}
+
+        std::string getName() const {return name;}
+        void setName(const char * n) {name = n;}
+        uint getPort() const {return port;}
+
+        // Clean up the service when closing
+        virtual void clear() = 0;
+        // Bonjour for OSX, Avahi for Linux
+        virtual void setup() = 0;
+    };
+
+}
 #endif
