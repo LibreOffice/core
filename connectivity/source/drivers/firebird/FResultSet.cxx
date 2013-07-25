@@ -40,6 +40,7 @@
 #include <propertyids.hxx>
 #include <TConnection.hxx>
 
+#include <connectivity/dbexception.hxx>
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <rtl/string.hxx>
@@ -54,6 +55,7 @@ using namespace ::comphelper;
 using namespace ::connectivity;
 using namespace ::connectivity::firebird;
 using namespace ::cppu;
+using namespace ::dbtools;
 using namespace ::osl;
 using namespace ::rtl;
 
@@ -656,52 +658,35 @@ Any SAL_CALL OResultSet::getWarnings(  ) throw(SQLException, RuntimeException)
 {
     return Any();
 }
-// -------------------------------------------------------------------------
-void SAL_CALL OResultSet::insertRow(  ) throw(SQLException, RuntimeException)
+// ---- XResultSetUpdate - UNSUPPORTED ---------------------------------------
+void SAL_CALL OResultSet::insertRow() throw(SQLException, RuntimeException)
 {
-    MutexGuard aGuard(m_pConnection->getMutex());
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-
-    // you only have to implement this if you want to insert new rows
+    throwFunctionNotSupportedException("XResultSetUpdate::insertRow", *this);
 }
-// -------------------------------------------------------------------------
-void SAL_CALL OResultSet::updateRow(  ) throw(SQLException, RuntimeException)
+
+void SAL_CALL OResultSet::updateRow() throw(SQLException, RuntimeException)
 {
-    MutexGuard aGuard(m_pConnection->getMutex());
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-
-
-    // only when you allow updates
+    throwFunctionNotSupportedException("XResultSetUpdate::updateRow", *this);
 }
-// -------------------------------------------------------------------------
-void SAL_CALL OResultSet::deleteRow(  ) throw(SQLException, RuntimeException)
+
+void SAL_CALL OResultSet::deleteRow() throw(SQLException, RuntimeException)
 {
-    MutexGuard aGuard(m_pConnection->getMutex());
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
+    throwFunctionNotSupportedException("XResultSetUpdate::deleteRow", *this);
 }
-// -------------------------------------------------------------------------
 
-void SAL_CALL OResultSet::cancelRowUpdates(  ) throw(SQLException, RuntimeException)
+void SAL_CALL OResultSet::cancelRowUpdates() throw(SQLException, RuntimeException)
 {
-    MutexGuard aGuard(m_pConnection->getMutex());
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
+    throwFunctionNotSupportedException("XResultSetUpdate::cancelRowUpdates", *this);
 }
-// -------------------------------------------------------------------------
 
-void SAL_CALL OResultSet::moveToInsertRow(  ) throw(SQLException, RuntimeException)
+void SAL_CALL OResultSet::moveToInsertRow() throw(SQLException, RuntimeException)
 {
-    MutexGuard aGuard(m_pConnection->getMutex());
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-
-
-    // only when you allow insert's
+    throwFunctionNotSupportedException("XResultSetUpdate::moveToInsertRow", *this);
 }
-// -------------------------------------------------------------------------
 
-void SAL_CALL OResultSet::moveToCurrentRow(  ) throw(SQLException, RuntimeException)
+void SAL_CALL OResultSet::moveToCurrentRow() throw(SQLException, RuntimeException)
 {
-    MutexGuard aGuard(m_pConnection->getMutex());
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
+    throwFunctionNotSupportedException("XResultSetUpdate::moveToCurrentRow", *this);
 }
 // -------------------------------------------------------------------------
 
