@@ -28,6 +28,7 @@ namespace sd{
     public:
         explicit ZeroconfService(const std::string& aname, uint aport)
             :name(aname), port(aport){}
+        virtual ~ZeroconfService(){}
 
         std::string getName() const {return name;}
         void setName(const char * n) {name = n;}

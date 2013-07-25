@@ -28,7 +28,7 @@ namespace sd {
     public:
         AvahiNetworkService(const std::string& aname = "", uint aport = 1599)
             : ZeroconfService(aname, aport){}
-        ~AvahiNetworkService();
+        virtual ~AvahiNetworkService(){}
 
         void clear();
         void setup();
