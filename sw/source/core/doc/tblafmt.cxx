@@ -960,7 +960,7 @@ SwTableAutoFormatTable::SwTableAutoFormatTable(SwDoc* pDoc)
     OUString sNm;
     // FIXME Yuk! we are creating the table styles ATM, but in the targetted
     // ideal, the table styles are created with the document
-    SwStyleNameMapper::GetUIName( RES_POOLCOLL_STANDARD, sNm );
+    sNm = SwStyleNameMapper::GetUIName( RES_POOLCOLL_STANDARD, sNm );
     SwTableFormat* pStyle = pDoc->FindTableFormatByName(sNm);
     if ( !pStyle )
         pStyle = pDoc->MakeTableFrameFormat(sNm, NULL);
