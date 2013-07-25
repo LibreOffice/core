@@ -42,9 +42,9 @@ CodeCompleteOptionsDlg::CodeCompleteOptionsDlg( Window* pWindow )
 
     pCodeCompleteChk->Check( CodeCompleteOptions::IsCodeCompleteOn() );
     pAutocloseProcChk->Check( CodeCompleteOptions::IsProcedureAutoCompleteOn() );
+    pAutocloseQuotesChk->Check( CodeCompleteOptions::IsAutoCloseQuotesOn() );
 
     pAutocloseBracesChk->Enable( false );
-    pAutocloseQuotesChk->Enable( false );
 }
 
 CodeCompleteOptionsDlg::~CodeCompleteOptionsDlg()
@@ -55,6 +55,7 @@ IMPL_LINK_NOARG(CodeCompleteOptionsDlg, OkHdl)
 {
     CodeCompleteOptions::SetCodeCompleteOn( pCodeCompleteChk->IsChecked() );
     CodeCompleteOptions::SetProcedureAutoCompleteOn( pAutocloseProcChk->IsChecked() );
+    CodeCompleteOptions::SetAutoCloseQuotesOn( pAutocloseQuotesChk->IsChecked() );
     Close();
     return 0;
 }
