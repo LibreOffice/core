@@ -388,6 +388,7 @@ public:
 private:
     void calcMaxs(const array_type &A, std::vector<Value> &rWidths, std::vector<Value> &rHeights) const;
 
+    Size calculateRequisitionForSpacings(sal_Int32 nRowSpacing, sal_Int32 nColSpacing) const;
     virtual Size calculateRequisition() const;
     virtual void setAllocation(const Size &rAllocation);
 public:
