@@ -89,6 +89,7 @@
            didFindService:(NSNetService *)aNetService
                moreComing:(BOOL)moreComing
 {
+    [self.comManager.autoDiscoveryServers removeObject:aNetService];
     [self.comManager.autoDiscoveryServers addObject:aNetService];
     
     NSLog(@"Got service %p with hostname %@\n", aNetService,
@@ -110,24 +111,6 @@
                moreComing:(BOOL)moreComing
 {
     NSLog(@"Did remove");
-    NSString * ipString;
-    
-    if ([[aNetService addresses] count] > 0){
-        NSData * address = [[aNetService addresses] objectAtIndex: 0];
-        struct sockaddr_in *socketAddress = (struct sockaddr_in *) [address bytes];
-        ipString = [NSString stringWithFormat: @"%s",inet_ntoa(socketAddress->sin_addr)];
-    }
-    
-    for (Server * s in self.comManager.autoDiscoveryServers) {
-        if (ipString){
-            if ([s.serverName isEqualToString:aNetService.name] && [s.serverAddress isEqualToString:ipString])
-                [self.comManager.autoDiscoveryServers removeObjectIdenticalTo:s];
-        } else {
-            if ([s.serverName isEqualToString:aNetService.name])
-                [self.comManager.autoDiscoveryServers removeObjectIdenticalTo:s];
-        }
-    }
-    // in case any residuous netServices still stay in the list
     [self.comManager.autoDiscoveryServers removeObject:aNetService];
     
     if(!moreComing)
@@ -185,14 +168,13 @@
                                                                                            [self disableSpinner];
                                                                                            [self performSegueWithIdentifier:@"SlideShowPreview" sender:self ];
                                                                                        }];
-    [super viewDidAppear:animated];
-    
     NSLog(@"Clear auto discovered servers");
     [self.comManager.autoDiscoveryServers removeAllObjects];
     self.serviceBrowser = [[NSNetServiceBrowser alloc] init];
     [self.serviceBrowser setDelegate:self];
-    [self.serviceBrowser searchForServicesOfType:@"_impressRemote._tcp" inDomain:@"local"];
+    [self.serviceBrowser searchForServicesOfType:@"_impressremote._tcp" inDomain:@"local"];
     [self.serviceBrowser scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
+    [super viewDidAppear:animated];
 }
 
 - (void) viewWillDisappear:(BOOL)animated
@@ -270,10 +252,10 @@
     
     switch (section) {
         case 0:
-            sectionName = [NSString stringWithFormat:@"Visible computers"];
+            sectionName = [NSString stringWithFormat:@"Detected connections"];
             break;
         case 1:
-            sectionName = [NSString stringWithFormat:@"Manual computers"];
+            sectionName = [NSString stringWithFormat:@"Custom connections"];
             break;
     }
     

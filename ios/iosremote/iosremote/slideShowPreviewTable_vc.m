@@ -207,6 +207,7 @@
     UITableViewCell * cell = [tableView cellForRowAtIndexPath:indexPath];
     UISwitch * toggle = [[[cell accessoryView] subviews] objectAtIndex:0];
     [toggle setOn:![toggle isOn] animated:YES];
+    [cell setSelected:NO animated:YES];
 }
 
 - (void)viewDidUnload {
