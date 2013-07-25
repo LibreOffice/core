@@ -505,6 +505,29 @@ void EditorWindow::KeyInput( const KeyEvent& rKEvt )
     // see if there is an accelerator to be processed first
     bool bDone = SfxViewShell::Current()->KeyInput( rKEvt );
 
+    if( rKEvt.GetKeyCode().GetCode() == KEY_RETURN && CodeCompleteOptions::IsProcedureAutoCompleteOn() )
+    {//autoclose implementation
+        TextSelection aSel = GetEditView()->GetSelection();
+        sal_uLong nLine =  aSel.GetStart().GetPara();
+        OUString sActSub = GetActualSubName( nLine );
+        IncompleteProcedures aProcData = rModulWindow.GetSbModule()->GetIncompleteProcedures();
+        for( unsigned int i = 0; i < aProcData.size(); ++i )
+        {
+            if( aProcData[i].sProcName == sActSub )
+            {//found the procedure to autocomplete
+                TextPaM aEnd( aProcData[i].nLine, 0 );
+                TextPaM aStart( aProcData[i].nLine, 0 );
+                GetEditView()->SetSelection( TextSelection( aStart, aEnd ) );
+                if( aProcData[i].aType == AutocompleteType::ACSUB )
+                    GetEditView()->InsertText( OUString("\nEnd Sub\n") );
+                if( aProcData[i].aType == AutocompleteType::ACFUNC )
+                    GetEditView()->InsertText( OUString("\nEnd Function\n") );
+                GetEditView()->SetSelection( aSel );
+                break;
+            }
+        }
+    }
+
     if( rKEvt.GetKeyCode().GetCode() == KEY_POINT && CodeCompleteOptions::IsCodeCompleteOn() )
     {
         rModulWindow.UpdateModule();
@@ -512,7 +535,6 @@ void EditorWindow::KeyInput( const KeyEvent& rKEvt )
         TextSelection aSel = GetEditView()->GetSelection();
         sal_uLong nLine =  aSel.GetStart().GetPara();
         OUString aLine( pEditEngine->GetText( nLine ) ); // the line being modified
-        //OUString sActSub = GetActualSubName( nLine );
         std::vector< OUString > aVect;
 
         HighlightPortions aPortions;

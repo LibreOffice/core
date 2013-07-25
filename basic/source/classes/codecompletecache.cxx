@@ -28,7 +28,7 @@ namespace
 
 CodeCompleteOptions::CodeCompleteOptions()
 : bIsCodeCompleteOn( false ),
-bIsProcedureAutoCompleteOn( false )
+bIsProcedureAutoCompleteOn( true )
 {
 }
 
