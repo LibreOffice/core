@@ -53,22 +53,24 @@ using namespace sd;
 
 DiscoveryService::DiscoveryService()
 {
+    zService = NULL;
+
 #ifdef MACOSX
     // Bonjour for OSX
     zService = new OSXNetworkService();
 #endif
-#ifdef LINUX
-    #ifdef ENABLE_AVAHI
+
+#ifdef ENABLE_AVAHI
     // Avahi for Linux
     char hostname[1024];
     hostname[1023] = '\0';
     gethostname(hostname, 1023);
 
     zService = new AvahiNetworkService(hostname);
-    #endif
 #endif
 
-    zService->setup();
+    if (zService)
+        zService->setup();
 
     // Old implementation for backward compatibility matter
     mSocket = socket( AF_INET, SOCK_DGRAM, IPPROTO_UDP );
@@ -113,7 +115,8 @@ DiscoveryService::~DiscoveryService()
      close( mSocket );
   #endif
 
-  zService->clear();
+     if (zService)
+         zService->clear();
 }
 
 void SAL_CALL DiscoveryService::run()
