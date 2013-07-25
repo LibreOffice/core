@@ -2509,7 +2509,7 @@ SwFieldType* SwCombinedCharFieldType::Copy() const
 SwCombinedCharField::SwCombinedCharField( SwCombinedCharFieldType* pFTyp,
                                             const OUString& rChars )
     : SwField( pFTyp, 0 ),
-    sCharacters( rChars.copy( 0, MAX_COMBINED_CHARACTERS ))
+    sCharacters( rChars.copy( 0, std::min<sal_Int32>(rChars.getLength(), MAX_COMBINED_CHARACTERS) ))
 {
 }
 
