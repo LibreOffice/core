@@ -2175,6 +2175,27 @@ void ScColumn::SetRelNameDirty()
     pDocument->SetAutoCalc( bOldAutoCalc );
 }
 
+void ScColumn::BroadcastRecalcOnRefMove()
+{
+    bool bOldAutoCalc = pDocument->GetAutoCalc();
+    pDocument->SetAutoCalc( false );    // no multiple recalculation
+
+    ScHint aHint(SC_HINT_DATACHANGED, ScAddress(nCol, 0, nTab));
+    for (SCSIZE i=0; i<maItems.size(); i++)
+    {
+        if (maItems[i].pCell->GetCellType() != CELLTYPE_FORMULA)
+            continue;
+
+        ScFormulaCell* p = static_cast<ScFormulaCell*>(maItems[i].pCell);
+        if (p->GetDirty() && p->GetCode()->IsRecalcModeOnRefMove())
+        {
+            aHint.GetAddress().SetRow(maItems[i].nRow);
+            pDocument->Broadcast(aHint);
+        }
+
+    }
+    pDocument->SetAutoCalc( bOldAutoCalc );
+}
 
 void ScColumn::CalcAll()
 {

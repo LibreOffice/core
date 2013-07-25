@@ -1664,6 +1664,14 @@ void ScTable::SetRelNameDirty()
     pDocument->SetAutoCalc( bOldAutoCalc );
 }
 
+void ScTable::BroadcastRecalcOnRefMove()
+{
+    bool bOldAutoCalc = pDocument->GetAutoCalc();
+    pDocument->SetAutoCalc( false );    // Mehrfachberechnungen vermeiden
+    for (SCCOL i = 0; i <= MAXCOL; ++i)
+        aCol[i].BroadcastRecalcOnRefMove();
+    pDocument->SetAutoCalc( bOldAutoCalc );
+}
 
 void ScTable::SetLoadingMedium(bool bLoading)
 {
