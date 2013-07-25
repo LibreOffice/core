@@ -10,7 +10,9 @@
  *
  */
 
+#include <com/sun/star/security/CertificateContainer.hpp>
 #include <com/sun/star/security/XCertificate.hpp>
+#include <com/sun/star/security/XCertificateContainer.hpp>
 #include <com/sun/star/security/CertificateValidity.hpp>
 #include <com/sun/star/xml/crypto/SEInitializer.hpp>
 #include <com/sun/star/xml/crypto/XSecurityEnvironment.hpp>
@@ -59,6 +61,26 @@ namespace cmis
                         xSecurityEnv->createCertificateFromAscii(
                             sCleanCert ) );
 
+                uno::Reference< security::XCertificateContainer > xCertificateContainer;
+                try
+                {
+                    xCertificateContainer = security::CertificateContainer::create( m_xContext );
+                }
+                catch ( uno::Exception const & )
+                {
+                }
+
+                if ( xCertificateContainer.is( ) )
+                {
+                    security::CertificateContainerStatus status(
+                        xCertificateContainer->hasCertificate(
+                            m_sHostname, xCert->getSubjectName() ) );
+
+                    if ( status != security::CertificateContainerStatus_NOCERT )
+                        return status == security::CertificateContainerStatus_TRUSTED;
+                }
+
+                // If we had no certificate, ask what to do
                 std::vector< uno::Reference< security::XCertificate > > vecCerts;
 
                 for ( ++pIt; pIt != aCertificates.end(); ++pIt )
@@ -90,6 +112,10 @@ namespace cmis
                         uno::Reference< task::XInteractionApprove > xApprove(
                             xSelection.get(), uno::UNO_QUERY );
                         bValidate = xApprove.is();
+
+                        // Store the decision in the container
+                        xCertificateContainer->addCertificate(
+                            m_sHostname, xCert->getSubjectName(), bValidate );
                     }
                 }
             }
