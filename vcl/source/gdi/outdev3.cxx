@@ -5364,7 +5364,7 @@ void OutputDevice::DrawWaveLine( const Point& rStartPos, const Point& rEndPos,
         mpAlphaVDev->DrawWaveLine( rStartPos, rEndPos, nStyle );
 }
 
-void OutputDevice::DrawText( const Point& rStartPt, const String& rStr,
+void OutputDevice::DrawText( const Point& rStartPt, const OUString& rStr,
                              xub_StrLen nIndex, xub_StrLen nLen,
                              MetricVector* pVector, OUString* pDisplayText
                              )
@@ -5406,7 +5406,7 @@ void OutputDevice::DrawText( const Point& rStartPt, const String& rStr,
 
                 if( aClip.IsOver( *it ) )
                     bAppend = true;
-                else if( rStr.GetChar( nIndex ) == ' ' && bInserted )
+                else if( rStr[ nIndex ] == ' ' && bInserted )
                 {
                     MetricVector::const_iterator next = it;
                     ++next;
@@ -5418,7 +5418,7 @@ void OutputDevice::DrawText( const Point& rStartPt, const String& rStr,
                 {
                     pVector->push_back( *it );
                     if( pDisplayText )
-                        *pDisplayText += OUString(rStr.GetChar( nIndex ));
+                        *pDisplayText += OUString(rStr[ nIndex ]);
                     bInserted = true;
                 }
             }
@@ -5427,7 +5427,7 @@ void OutputDevice::DrawText( const Point& rStartPt, const String& rStr,
         {
             GetGlyphBoundRects( rStartPt, rStr, nIndex, nLen, nIndex, *pVector );
             if( pDisplayText )
-                *pDisplayText += rStr.Copy( nIndex, nLen );
+                *pDisplayText += rStr.copy( nIndex, nLen );
         }
     }
 
@@ -6084,7 +6084,7 @@ xub_StrLen OutputDevice::GetTextBreak( const OUString& rStr, long nTextWidth,
 }
 
 void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const Rectangle& rRect,
-                                 const String& rOrigStr, sal_uInt16 nStyle,
+                                 const OUString& rOrigStr, sal_uInt16 nStyle,
                                  MetricVector* pVector, OUString* pDisplayText,
                                  ::vcl::ITextLayout& _rLayout )
 {
@@ -6380,7 +6380,7 @@ void OutputDevice::AddTextRectActions( const Rectangle& rRect,
     mpMetaFile = pMtf;
 }
 
-void OutputDevice::DrawText( const Rectangle& rRect, const String& rOrigStr, sal_uInt16 nStyle,
+void OutputDevice::DrawText( const Rectangle& rRect, const OUString& rOrigStr, sal_uInt16 nStyle,
                              MetricVector* pVector, OUString* pDisplayText,
                              ::vcl::ITextLayout* _pTextLayout )
 {
@@ -6396,7 +6396,7 @@ void OutputDevice::DrawText( const Rectangle& rRect, const String& rOrigStr, sal
     if ( mpMetaFile && !bDecomposeTextRectAction )
         mpMetaFile->AddAction( new MetaTextRectAction( rRect, rOrigStr, nStyle ) );
 
-    if ( ( !IsDeviceOutputNecessary() && !pVector && !bDecomposeTextRectAction ) || !rOrigStr.Len() || rRect.IsEmpty() )
+    if ( ( !IsDeviceOutputNecessary() && !pVector && !bDecomposeTextRectAction ) || rOrigStr.isEmpty() || rRect.IsEmpty() )
         return;
 
     // we need a graphics

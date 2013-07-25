@@ -315,7 +315,7 @@ namespace vcl
     {
     }
 
-    Rectangle ControlTextRenderer::DrawText( const Rectangle& _rRect, const XubString& _rText, sal_uInt16 _nStyle,
+    Rectangle ControlTextRenderer::DrawText( const Rectangle& _rRect, const OUString& _rText, sal_uInt16 _nStyle,
         MetricVector* _pVector, OUString* _pDisplayText )
     {
         return m_pImpl->DrawText( _rRect, _rText, _nStyle, _pVector, _pDisplayText );

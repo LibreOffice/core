@@ -393,7 +393,7 @@ public:
                                                        long nMaxWidth, sal_uInt16 nStyle, const ::vcl::ITextLayout& _rLayout );
     static
     SAL_DLLPRIVATE void         ImplDrawText( OutputDevice& rTargetDevice, const Rectangle& rRect,
-                                              const String& rOrigStr, sal_uInt16 nStyle,
+                                              const OUString& rOrigStr, sal_uInt16 nStyle,
                                               MetricVector* pVector, OUString* pDisplayText, ::vcl::ITextLayout& _rLayout );
     SAL_DLLPRIVATE void         ImplDrawTextBackground( const SalLayout& );
     SAL_DLLPRIVATE void         ImplDrawTextLines( SalLayout&, FontStrikeout eStrikeout, FontUnderline eUnderline, FontUnderline eOverline, sal_Bool bWordLine, sal_Bool bUnderlineAbove );
@@ -574,7 +574,7 @@ public:
                                       FontUnderline eOverline,
                                       sal_Bool bUnderlineAbove = sal_False );
 
-    void                DrawText( const Point& rStartPt, const XubString& rStr,
+    void                DrawText( const Point& rStartPt, const OUString& rStr,
                                   xub_StrLen nIndex = 0, xub_StrLen nLen = STRING_LEN,
                                   MetricVector* pVector = NULL, OUString* pDisplayText = NULL );
     long                GetTextWidth( const OUString& rStr, sal_Int32 nIndex = 0, sal_Int32 nLen = -1 ) const;
@@ -614,7 +614,7 @@ public:
                                             sal_uInt16           nStyle,
                                             GDIMetaFile&     rMtf );
     void                DrawText( const Rectangle& rRect,
-                                  const XubString& rStr, sal_uInt16 nStyle = 0,
+                                  const OUString& rStr, sal_uInt16 nStyle = 0,
                                   MetricVector* pVector = NULL, OUString* pDisplayText = NULL,
                                   ::vcl::ITextLayout* _pTextLayout = NULL );
     Rectangle           GetTextRect( const Rectangle& rRect,
