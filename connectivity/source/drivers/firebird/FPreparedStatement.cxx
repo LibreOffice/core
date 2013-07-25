@@ -61,11 +61,6 @@ using namespace com::sun::star::container;
 using namespace com::sun::star::io;
 using namespace com::sun::star::util;
 
-typedef struct vary {
-    short vary_length;
-    char vary_string[1];
-} VARY;
-
 IMPLEMENT_SERVICE_INFO(OPreparedStatement,"com.sun.star.sdbcx.firebird.PreparedStatement","com.sun.star.sdbc.PreparedStatement");
 
 
