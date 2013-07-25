@@ -108,7 +108,7 @@ public:
     void                Dispose();
     void                SetText( OutlinerParaObject& rText );
     OutlinerParaObject* CreateText();
-    String              GetText();
+    OUString            GetText();
     SdDrawDocument*     GetDoc() { return pImpl->mpDoc; }
 };
 
@@ -174,7 +174,7 @@ void TextApiObject::SetText( OutlinerParaObject& rText )
     maSelection.nStartPara = EE_PARA_MAX_COUNT;
 }
 
-String TextApiObject::GetText()
+OUString TextApiObject::GetText()
 {
     return mpSource->GetText();
 }
@@ -273,12 +273,12 @@ OutlinerParaObject* TextAPIEditSource::CreateText()
         return 0;
 }
 
-String TextAPIEditSource::GetText()
+OUString TextAPIEditSource::GetText()
 {
     if ( pImpl->mpDoc && pImpl->mpOutliner )
         return pImpl->mpOutliner->GetEditEngine().GetText();
     else
-        return String();
+        return OUString();
 }
 
 } // namespace sd
