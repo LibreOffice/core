@@ -382,6 +382,7 @@ public:
 
     bool GetEdgeBlending() const { return mbEdgeBlending; }
     void SetEdgeBlending(bool bNew) { mbEdgeBlending = bNew; }
+    void EnableQuickSelection( const bool& b );
 
 protected:
     // ISearchableStringList

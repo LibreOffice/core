@@ -75,9 +75,11 @@ namespace vcl
 
         bool    HandleKeyEvent( const KeyEvent& _rKEvt );
         void    Reset();
+        void SetEnabled( const bool& b );
 
     private:
         ::std::auto_ptr< QuickSelectionEngine_Data >    m_pData;
+        bool bEnabled;
 
     private:
         QuickSelectionEngine();                                         // never implemented

@@ -476,10 +476,6 @@ class CodeCompleteListBox: public ListBox
 {
 friend class CodeCompleteWindow;
 private:
-    std::vector< OUString > aEntryVect;
-    /* vector to hold all entries for showing/hiding
-     * when typing a letter/word
-     * */
     OUStringBuffer aFuncBuffer;
     /* a buffer to build up function name when typing
      * a function name, used for showing/hiding listbox values

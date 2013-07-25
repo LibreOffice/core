@@ -125,11 +125,8 @@ OUString CodeCompleteDataCache::GetVarType( const OUString& sVarName )
     for( CodeCompleteVarScopes::const_iterator aIt = aVarScopes.begin(); aIt != aVarScopes.end(); ++aIt )
     {
         CodeCompleteVarTypes aTypes = aIt->second;
-        for( CodeCompleteVarTypes::const_iterator aOtherIt = aTypes.begin(); aOtherIt != aTypes.end(); ++aOtherIt )
-        {
-            if( aOtherIt->first == sVarName )
-                return aOtherIt->second;
-        }
+        if( aTypes[sVarName] != OUString("") )
+            return aTypes[sVarName];
     }
     //not a local, search global scope
     for( CodeCompleteVarTypes::const_iterator aIt = aGlobalVars.begin(); aIt != aGlobalVars.end(); ++aIt )

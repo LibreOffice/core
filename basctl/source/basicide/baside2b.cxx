@@ -2425,6 +2425,10 @@ long CodeCompleteListBox::PreNotify( NotifyEvent& rNEvt )
                         pCodeCompleteWindow->pParent->GetEditView()->DeleteSelected();
                         SetVisibleEntries();
                     }
+                    else
+                    {
+                        pCodeCompleteWindow->ClearAndHide();
+                    }
                     return 0;
                 case KEY_RETURN:
                     InsertSelectedEntry();
@@ -2437,12 +2441,13 @@ long CodeCompleteListBox::PreNotify( NotifyEvent& rNEvt )
 
 void CodeCompleteListBox::SetVisibleEntries()
 {
-    Clear();
-    for( unsigned int j=0; j < aEntryVect.size(); ++j )
+    for(sal_uInt16 i=0; i< GetEntryCount(); ++i)
     {
-        if( aEntryVect[j].startsWithIgnoreAsciiCase(aFuncBuffer.toString()) )
+        OUString sEntry = (OUString) GetEntry(i);
+        if( sEntry.startsWithIgnoreAsciiCase( aFuncBuffer.toString() ) )
         {
-            InsertEntry(aEntryVect[j]);
+            SelectEntry(sEntry);
+            break;
         }
     }
 }
@@ -2461,18 +2466,17 @@ void CodeCompleteWindow::InitListBox()
     pListBox->SetSizePixel( Size(150,150) ); //default, this will adopt the line length
     pListBox->Show();
     pListBox->GrabFocus();
+    pListBox->EnableQuickSelection( false );
 }
 
 void CodeCompleteWindow::InsertEntry( const OUString& aStr )
 {
     pListBox->InsertEntry( aStr );
-    pListBox->aEntryVect.push_back( aStr );
 }
 
 void CodeCompleteWindow::ClearListBox()
 {
     pListBox->Clear();
-    pListBox->aEntryVect.clear();
     pListBox->aFuncBuffer.makeStringAndClear();
 }
 

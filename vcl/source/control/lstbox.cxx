@@ -38,6 +38,10 @@
 
 #include <com/sun/star/datatransfer/dnd/XDropTarget.hpp>
 
+void ListBox::EnableQuickSelection( const bool& b )
+{
+    mpImplLB->GetMainWindow()->EnableQuickSelection(b);
+}
 
 ListBox::ListBox( WindowType nType ) : Control( nType )
 {
