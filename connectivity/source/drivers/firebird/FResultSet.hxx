@@ -296,7 +296,10 @@ namespace connectivity
                       ::com::sun::star::uno::RuntimeException);
 
             // XColumnLocate
-            virtual sal_Int32 SAL_CALL findColumn( const ::rtl::OUString& columnName ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            virtual sal_Int32 SAL_CALL findColumn(const ::rtl::OUString& columnName)
+                throw(::com::sun::star::sdbc::SQLException,
+                      ::com::sun::star::uno::RuntimeException);
+
             // XRowLocate
             virtual ::com::sun::star::uno::Any SAL_CALL getBookmark(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             virtual sal_Bool SAL_CALL moveToBookmark( const ::com::sun::star::uno::Any& bookmark ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);

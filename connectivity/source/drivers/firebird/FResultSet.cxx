@@ -318,24 +318,25 @@ Any SAL_CALL OResultSet::queryInterface( const Type & rType ) throw(RuntimeExcep
 
     return concatSequences(aTypes.getTypes(),OResultSet_BASE::getTypes());
 }
-// -------------------------------------------------------------------------
-
-sal_Int32 SAL_CALL OResultSet::findColumn( const OUString& columnName ) throw(SQLException, RuntimeException)
+// ---- XColumnLocate ---------------------------------------------------------
+sal_Int32 SAL_CALL OResultSet::findColumn(const OUString& columnName)
+    throw(SQLException, RuntimeException)
 {
-
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-
-    // find the first column with the name columnName
-
     MutexGuard aGuard(m_pConnection->getMutex());
+    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
     uno::Reference< XResultSetMetaData > xMeta = getMetaData();
     sal_Int32 nLen = xMeta->getColumnCount();
-    sal_Int32 i = 1;
-    for(;i<=nLen;++i)
-        if(xMeta->isCaseSensitive(i) ? columnName == xMeta->getColumnName(i) :
-                columnName.equalsIgnoreAsciiCase(xMeta->getColumnName(i)))
+    sal_Int32 i;
+
+    for(i = 1; i<=nLen; ++i)
+    {
+        // We assume case sensitive, otherwise you'd have to test
+        // xMeta->isCaseSensitive and use qualsIgnoreAsciiCase as needed.
+        if (columnName == xMeta->getColumnName(i))
             break;
+    }
+
     return i;
 }
 // -------------------------------------------------------------------------

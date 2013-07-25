@@ -81,6 +81,11 @@ sal_Int32 SAL_CALL OResultSetMetaData::getColumnType(sal_Int32 column)
 sal_Bool SAL_CALL OResultSetMetaData::isCaseSensitive(sal_Int32 column)
     throw(SQLException, RuntimeException)
 {
+    // Firebird is generally case sensitive when using quoted identifiers.
+    // IF THIS CHANGES make ResultSet::findColumn to be case-insenstive as needed.
+    // Generally names that are entirely UPPERCASE are case insensitive, however
+    // there remains some ambiguity if there is another mixed-case-named column
+    // of the same name. For safety always assume case insensitive.
     (void) column;
     return sal_False;
 }
