@@ -1925,7 +1925,7 @@ void WinSalFrame::SetApplicationID( const OUString &rApplicationID )
                 PROPVARIANT pv;
                 if ( !rApplicationID.isEmpty() )
                 {
-                    hr = InitPropVariantFromString( rApplicationID.getStr(), &pv );
+                    hr = InitPropVariantFromString( ( PCWSTR )rApplicationID.getStr(), &pv );
                     mbPropertiesStored = TRUE;
                 }
                 else
