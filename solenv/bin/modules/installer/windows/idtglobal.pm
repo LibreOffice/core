@@ -479,7 +479,7 @@ sub write_idt_header
     {
         $oneline = "MsiShortcutProperty\tShortcut_\tPropertyKey\tPropVariantValue\n";
         push(@{$idtref}, $oneline);
-        $oneline = "s72\ts72\tS255\tS255\n";
+        $oneline = "s72\ts72\ts255\ts255\n";
         push(@{$idtref}, $oneline);
         $oneline = "MsiShortcutProperty\tMsiShortcutProperty\n";
         push(@{$idtref}, $oneline);
