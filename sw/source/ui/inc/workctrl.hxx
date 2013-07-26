@@ -151,7 +151,7 @@ class SwScrollNaviPopup : public SfxPopupWindow
     FixedInfo       aInfoField;
     ImageList       aIList;
 
-    String          sQuickHelp[2 * NID_COUNT];
+    OUString        sQuickHelp[2 * NID_COUNT];
 
     void            ApplyImageList();
 
@@ -179,7 +179,7 @@ class SwNaviImageButton : public ImageButton
 {
         SwScrollNaviPopup*  pPopup;
         Image               aImage;
-        String              sQuickText;
+        OUString            sQuickText;
         SfxPopupWindow*     pPopupWindow;
         SfxPopupWindow*     pFloatingWindow;
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > m_xFrame;

@@ -467,13 +467,13 @@ SwScrollNaviPopup::SwScrollNaviPopup( sal_uInt16 nId, const Reference< XFrame >&
     for( i = 0; i < NID_COUNT; i++)
     {
         sal_uInt16 nNaviId = aNavigationInsertIds[i];
-        String sText;
+        OUString sText;
         ToolBoxItemBits  nTbxBits = 0;
         if((NID_PREV != nNaviId) && (NID_NEXT != nNaviId))
         {
             // -2, there's no string for Next/Prev
             sal_uInt16 nResStr = ST_TBL - 2 + nNaviId - NID_START;
-            sText = String(SW_RES(nResStr));
+            sText = SW_RESSTR(nResStr);
             nTbxBits = TIB_CHECKABLE;
         }
         aToolBox.InsertItem(nNaviId, sText, nTbxBits);
@@ -487,7 +487,7 @@ SwScrollNaviPopup::SwScrollNaviPopup( sal_uInt16 nId, const Reference< XFrame >&
     // these are global strings
     for( i = 0; i < 2 * NID_COUNT; i++)
     {
-        sQuickHelp[i] = String(SW_RES(STR_IMGBTN_START + i));
+        sQuickHelp[i] = SW_RESSTR(STR_IMGBTN_START + i);
     }
 
     Size aImgSize = aIList.GetImageSize();
@@ -595,7 +595,7 @@ String  SwScrollNaviPopup::GetQuickHelpText(sal_Bool bNext)
     nResId += SwView::GetMoveType() - NID_START;
     if(!bNext)
         nResId += NID_COUNT;
-    return String(SW_RES(nResId));
+    return SW_RESSTR(nResId);
 }
 
 void SwNaviImageButton::Click()
@@ -660,7 +660,7 @@ SwNaviImageButton::SwNaviImageButton(
     ImageButton(pParent, SW_RES(BTN_NAVI)),
         pPopup(0),
         aImage(SW_RES(IMG_BTN)),
-        sQuickText(SW_RES(ST_QUICK)),
+        sQuickText(SW_RESSTR(ST_QUICK)),
         pPopupWindow(0),
         pFloatingWindow(0),
         m_xFrame( rFrame )
@@ -715,8 +715,7 @@ SwZoomBox_Impl::SwZoomBox_Impl(
     {   25, 50, 75, 100, 150, 200 };
     for(sal_uInt16 i = 0; i < sizeof(aZoomValues)/sizeof(sal_uInt16); i++)
     {
-        String sEntry = OUString::number(aZoomValues[i]);
-        sEntry += '%';
+        OUString sEntry = OUString::number(aZoomValues[i]) + "%";
         InsertEntry(sEntry);
     }
 }
@@ -728,8 +727,8 @@ void    SwZoomBox_Impl::Select()
 {
     if ( !IsTravelSelect() )
     {
-        String sEntry(comphelper::string::remove(GetText(), '%'));
-        sal_uInt16 nZoom = (sal_uInt16)sEntry.ToInt32();
+        OUString sEntry(comphelper::string::remove(GetText(), '%'));
+        sal_uInt16 nZoom = (sal_uInt16)sEntry.toInt32();
         if(nZoom < MINZOOM)
             nZoom = MINZOOM;
         if(nZoom > MAXZOOM)
@@ -831,8 +830,8 @@ void SwPreviewZoomControl::StateChanged( sal_uInt16 /*nSID*/,
     SwZoomBox_Impl* pBox = (SwZoomBox_Impl*)GetToolBox().GetItemWindow( GetId() );
     if(SFX_ITEM_AVAILABLE <= eState)
     {
-        String sZoom(OUString::number(((const SfxUInt16Item*)pState)->GetValue()));
-        sZoom += '%';
+        OUString sZoom(OUString::number(((const SfxUInt16Item*)pState)->GetValue()));
+        sZoom += "%";
         pBox->SetText(sZoom);
         pBox->SaveValue();
     }

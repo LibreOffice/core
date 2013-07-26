@@ -63,11 +63,11 @@ void SwTextShell::ExecGlossary(SfxRequest &rReq)
         case FN_NEW_GLOSSARY:
             if(pItem && pArgs->Count() == 3 )
             {
-                String aGroup = (( const SfxStringItem *)pItem)->GetValue();
-                String aName;
+                OUString aGroup = (( const SfxStringItem *)pItem)->GetValue();
+                OUString aName;
                 if(SFX_ITEM_SET ==  pArgs->GetItemState(FN_PARAM_1, sal_False, &pItem ))
                     aName = (( const SfxStringItem *)pItem)->GetValue();
-                String aShortName;
+                OUString aShortName;
                 if(SFX_ITEM_SET ==  pArgs->GetItemState(FN_PARAM_2, sal_False, &pItem ))
                     aShortName = (( const SfxStringItem *)pItem)->GetValue();
 
@@ -86,7 +86,7 @@ void SwTextShell::ExecGlossary(SfxRequest &rReq)
         case FN_SET_ACT_GLOSSARY:
             if(pItem)
             {
-                String aGroup = (( const SfxStringItem *)pItem)->GetValue();
+                OUString aGroup = (( const SfxStringItem *)pItem)->GetValue();
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "Dialogdiet fail!");
                 ::GlossarySetActGroup fnSetActGroup = pFact->SetGlossaryActGroupFunc();
@@ -99,8 +99,8 @@ void SwTextShell::ExecGlossary(SfxRequest &rReq)
         {
             if(pItem && pArgs->Count() > 1)
             {
-                String aGroup = (( const SfxStringItem *)pItem)->GetValue();
-                String aName;
+                OUString aGroup = (( const SfxStringItem *)pItem)->GetValue();
+                OUString aName;
                 if(SFX_ITEM_SET ==  pArgs->GetItemState(FN_PARAM_1, sal_False, &pItem ))
                     aName = (( const SfxStringItem *)pItem)->GetValue();
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
