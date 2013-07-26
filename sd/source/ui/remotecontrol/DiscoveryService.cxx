@@ -16,6 +16,7 @@
 
 #include <comphelper/processfactory.hxx>
 #include <rtl/strbuf.hxx>
+#include <config_features.h>
 
 #include "DiscoveryService.hxx"
 
@@ -43,7 +44,7 @@
   #import "OSXNetworkService.hxx"
 #endif
 
-#ifdef LINUX
+#if HAVE_FEATURE_AVAHI
   #include "AvahiNetworkService.hxx"
 #endif
 
@@ -60,7 +61,7 @@ DiscoveryService::DiscoveryService()
     zService = new OSXNetworkService();
 #endif
 
-#ifdef ENABLE_AVAHI
+#if HAVE_FEATURE_AVAHI
     // Avahi for Linux
     char hostname[1024];
     hostname[1023] = '\0';

@@ -11393,6 +11393,7 @@ if test "$_os" != "WINNT" -a "$_os" != "Darwin" -a "$enable_avahi" = "yes"; then
                       [ENABLE_AVAHI="TRUE"], [ENABLE_AVAHI=""])
     if test "$ENABLE_AVAHI" = "TRUE"; then
         AC_DEFINE(ENABLE_AVAHI)
+        AC_DEFINE(HAVE_FEATURE_AVAHI)
         AVAHI_CFLAGS=$(printf '%s' "$AVAHI_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
     fi
 fi

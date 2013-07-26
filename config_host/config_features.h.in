@@ -66,4 +66,6 @@
 
 #define HAVE_FEATURE_OPENCL 0
 
+#define HAVE_FEATURE_AVAHI 0
+
 #endif
