@@ -167,6 +167,39 @@ void CuiAboutConfigTabPage::FillItems( Reference< XNameAccess >xNameAccess, OUSt
                     }
                     break;
 
+                    case ::com::sun::star::uno::TypeClass_SEQUENCE :
+                    //case ::com::sun::star::uno::TypeClass_ARRAY :
+                    {
+                        test = OUString("");
+                        if( OUString("[]long").equals(aProp.getValueTypeName()) )
+                        {
+                            uno::Sequence<sal_Int32> seqLong;
+                            if( aProp >>= seqLong )
+                            {
+                                //test = OUString("Congrats bro!");
+                                for(sal_Int16 nInd=0;  nInd < seqLong.getLength(); ++nInd)
+                                {
+                                    OUString sNumber( OUString::valueOf(seqLong[nInd]) );
+                                    test += sNumber;
+                                    test += OUString(",");
+                                }
+                            }
+                        }
+
+                        if( OUString("[]string") == aProp.getValueTypeName() )
+                        {
+                            uno::Sequence< OUString > seqOUString;
+                            if( aProp >>= seqOUString )
+                            {
+                                for( sal_Int16 nInd=0; nInd < seqOUString.getLength(); ++nInd )
+                                {
+                                    test += seqOUString[nInd] + OUString(",");
+                                }
+                            }
+                        }
+                    }
+                    break;
+
                     default:
                     {
                         test = OUString("test");
