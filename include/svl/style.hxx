@@ -203,9 +203,9 @@ friend class SfxStyleSheetBase;
 
     SfxStyleSheetBasePool_Impl *pImp;
 
-private:
-    SVL_DLLPRIVATE SfxStyleSheetIterator&      GetIterator_Impl();
 protected:
+    SfxStyleSheetIterator&      GetIterator_Impl();
+
     OUString                    aAppName;
     SfxItemPool&                rPool;
     SfxStyles                   aStyles;
