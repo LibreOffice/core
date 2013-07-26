@@ -66,6 +66,18 @@
 
 #define HAVE_FEATURE_OPENCL 0
 
+/* 
+ * Whether the OS has Avahi support, 
+ * This library is used for zeroconf service publication on the local network
+ * for the Impress remote control, so that the remote can automatically 
+ * discover the running libO instance and its IP address. 
+ * 
+ * This library should be present on most mordern linux distributions
+ * but not on "all" of them. For now, you should add --enable-avahi for 
+ * this to be taken into account. Otherwise the test of its presence 
+ * will not take place.
+ */
+
 #define HAVE_FEATURE_AVAHI 0
 
 #endif
