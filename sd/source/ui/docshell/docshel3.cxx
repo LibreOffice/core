@@ -212,12 +212,6 @@ void DrawDocShell::Execute( SfxRequest& rReq )
     }
 }
 
-void DrawDocShell::SetOrganizerSearchMask(SfxStyleSheetBasePool* pBasePool) const
-{
-    pBasePool->SetSearchMask(SD_STYLE_FAMILY_GRAPHICS, SFXSTYLEBIT_USERDEF | SFXSTYLEBIT_USED);
-}
-
-
 void DrawDocShell::SetDocShellFunction( const ::sd::FunctionReference& xFunction )
 {
     if( mxDocShellFunction.is() )

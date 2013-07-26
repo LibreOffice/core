@@ -135,7 +135,6 @@ class SW_DLLPUBLIC SwDocShell: public SfxObjectShell, public SfxListener
 
 
     using SfxObjectShell::GetVisArea;
-    using SfxObjectShell::GetStyleFamilyBitmap;
 
 protected:
     /// override to update text fields
@@ -198,9 +197,6 @@ public:
 
     /// For Style PI.
     virtual SfxStyleSheetBasePool*  GetStyleSheetPool();
-
-    /// For Organizer.
-    virtual Bitmap      GetStyleFamilyBitmap( SfxStyleFamily eFamily );
 
     /// Set View for actions via Shell.
     void          SetView(SwView* pVw);

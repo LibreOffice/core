@@ -94,7 +94,6 @@ public:
     virtual Printer*        GetDocumentPrinter();
     virtual void            OnDocumentPrinterChanged(Printer* pNewPrinter);
     virtual SfxStyleSheetBasePool* GetStyleSheetPool();
-    virtual void            SetOrganizerSearchMask(SfxStyleSheetBasePool* pBasePool) const;
     virtual Size            GetFirstPageSize();
     virtual void            FillClass(SvGlobalName* pClassName, sal_uInt32*  pFormat, OUString* pAppName, OUString* pFullTypeName, OUString* pShortTypeName, sal_Int32 nFileFormat, sal_Bool bTemplate = sal_False ) const;
     virtual void            SetModified( sal_Bool = sal_True );

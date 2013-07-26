@@ -508,24 +508,6 @@ public:
 #define DEF_CONTENT_COUNT 1
 
 
-    virtual void                SetOrganizerSearchMask(
-                                    SfxStyleSheetBasePool* ) const;
-
-    virtual sal_Bool            CanHaveChildren(
-                                        sal_uInt16 nIdx1,
-                                        sal_uInt16 nIdx2 = INDEX_IGNORE
-                                );
-
-    virtual void                GetContent( String &,
-                                        Bitmap &rClosedBitmap,
-                                        Bitmap &rOpenedBitmap,
-                                        sal_Bool   &bCanDelete,
-                                        sal_uInt16 nPos,
-                                        sal_uInt16 nIdx1
-                                );
-
-    virtual Bitmap              GetStyleFamilyBitmap(SfxStyleFamily eFamily);
-
     virtual void                LoadStyles( SfxObjectShell &rSource );
     void                        ReadNote( INote * );
     void                        UpdateNote( INote * );

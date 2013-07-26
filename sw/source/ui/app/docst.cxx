@@ -1320,11 +1320,4 @@ void SwDocShell::FormatPage(
     Edit( rPage, aEmptyStr, SFX_STYLE_FAMILY_PAGE, 0, sal_False, nSlot, &rActShell);
 }
 
-Bitmap SwDocShell::GetStyleFamilyBitmap( SfxStyleFamily eFamily )
-{
-    if( SFX_STYLE_FAMILY_PSEUDO == eFamily )
-        return Bitmap( SW_RES( BMP_STYLES_FAMILY_NUM ));
-    return SfxObjectShell::GetStyleFamilyBitmap( eFamily );
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
