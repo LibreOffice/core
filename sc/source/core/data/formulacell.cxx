@@ -2598,31 +2598,19 @@ bool ScFormulaCell::UpdateDeleteTab(SCTAB nTable, bool /*bIsMove*/, SCTAB nSheet
 void ScFormulaCell::UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos, SCTAB nTabNo )
 {
     pCode->Reset();
-    if( pCode->GetNextReferenceRPN() && !pDocument->IsClipOrUndo() )
+    if (!pCode->GetNextReferenceRPN() || pDocument->IsClipOrUndo())
     {
-        EndListeningTo( pDocument );
-        // SetTab _after_ EndListeningTo und _before_ Compiler UpdateMoveTab !
-        aPos.SetTab( nTabNo );
-        ScRangeData* pRangeData;
-        ScCompiler aComp(pDocument, aPos, *pCode);
-        aComp.SetGrammar(pDocument->GetGrammar());
-        pRangeData = aComp.UpdateMoveTab( nOldPos, nNewPos, false );
-        if (pRangeData) // Exchange Shared Formula with real Formula
-        {
-            pDocument->RemoveFromFormulaTree( this );   // update formula count
-            delete pCode;
-            pCode = pRangeData->GetCode()->Clone();
-            ScCompiler aComp2(pDocument, aPos, *pCode);
-            aComp2.SetGrammar(pDocument->GetGrammar());
-            aComp2.CompileTokenArray();
-            aComp2.MoveRelWrap(pRangeData->GetMaxCol(), pRangeData->GetMaxRow());
-            aComp2.UpdateMoveTab( nOldPos, nNewPos, true );
-            bCompile = true;
-        }
-        // no StartListeningTo because pTab[nTab] not yet correct!
+        aPos.SetTab(nTabNo);
+        return;
     }
-    else
-        aPos.SetTab( nTabNo );
+
+    EndListeningTo(pDocument);
+    ScAddress aOldPos = aPos;
+    // SetTab _after_ EndListeningTo und _before_ Compiler UpdateMoveTab !
+    aPos.SetTab(nTabNo);
+
+    // no StartListeningTo because pTab[nTab] not yet correct!
+    pCode->AdjustReferenceOnMovedTab(nOldPos, nNewPos, aOldPos);
 }
 
 void ScFormulaCell::UpdateInsertTabAbs(SCTAB nTable)

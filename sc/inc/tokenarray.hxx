@@ -145,6 +145,8 @@ public:
 
     bool AdjustReferenceOnInsertedTab( SCTAB nInsPos, SCTAB nSheets, const ScAddress& rOldPos );
 
+    void AdjustReferenceOnMovedTab( SCTAB nOldPos, SCTAB nNewPos, const ScAddress& rOldPos );
+
 #if DEBUG_FORMULA_COMPILER
     void Dump() const;
 #endif

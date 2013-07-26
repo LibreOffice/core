@@ -813,6 +813,36 @@ void Test::testFormulaRefUpdateSheets()
     if (!checkFormula(*m_pDoc, ScAddress(1,2,2), "SUM($Sheet1.$B$2:$C$3)"))
         CPPUNIT_FAIL("Wrong formula in Sheet2.B3.");
 
+    // Move the last sheet (Sheet2) to the first position.
+    m_pDoc->MoveTab(2, 0);
+
+    if (!checkFormula(*m_pDoc, ScAddress(1,1,0), "SUM(Sheet1.B2:C3)"))
+        CPPUNIT_FAIL("Wrong formula in Sheet2.B2.");
+
+    if (!checkFormula(*m_pDoc, ScAddress(1,2,0), "SUM($Sheet1.$B$2:$C$3)"))
+        CPPUNIT_FAIL("Wrong formula in Sheet2.B3.");
+
+    // Move back.
+    m_pDoc->MoveTab(0, 2);
+
+    if (!checkFormula(*m_pDoc, ScAddress(1,1,2), "SUM(Sheet1.B2:C3)"))
+        CPPUNIT_FAIL("Wrong formula in Sheet2.B2.");
+
+    if (!checkFormula(*m_pDoc, ScAddress(1,2,2), "SUM($Sheet1.$B$2:$C$3)"))
+        CPPUNIT_FAIL("Wrong formula in Sheet2.B3.");
+
+    // Move the "Temp" sheet to the last position.
+    m_pDoc->MoveTab(1, 2);
+
+    if (!checkFormula(*m_pDoc, ScAddress(1,1,1), "SUM(Sheet1.B2:C3)"))
+        CPPUNIT_FAIL("Wrong formula in Sheet2.B2.");
+
+    if (!checkFormula(*m_pDoc, ScAddress(1,2,1), "SUM($Sheet1.$B$2:$C$3)"))
+        CPPUNIT_FAIL("Wrong formula in Sheet2.B3.");
+
+    // Move back.
+    m_pDoc->MoveTab(2, 1);
+
     // Delete the temporary sheet.
     m_pDoc->DeleteTab(1);
 
@@ -847,6 +877,26 @@ void Test::testFormulaRefUpdateSheets()
 
     if (!checkFormula(*m_pDoc, ScAddress(1,2,1), "SUM($Sheet1.$B$2:$C$3)"))
         CPPUNIT_FAIL("Wrong formula in Sheet2.B3.");
+
+    // Append a bunch of sheets.
+    m_pDoc->InsertTab(2, "Temp1");
+    m_pDoc->InsertTab(3, "Temp2");
+    m_pDoc->InsertTab(4, "Temp3");
+
+    // Move these tabs around. This shouldn't affects the first 2 sheets.
+    m_pDoc->MoveTab(2, 4);
+    m_pDoc->MoveTab(3, 2);
+
+    if (!checkFormula(*m_pDoc, ScAddress(1,1,1), "SUM(Sheet1.B2:C3)"))
+        CPPUNIT_FAIL("Wrong formula in Sheet2.B2.");
+
+    if (!checkFormula(*m_pDoc, ScAddress(1,2,1), "SUM($Sheet1.$B$2:$C$3)"))
+        CPPUNIT_FAIL("Wrong formula in Sheet2.B3.");
+
+    // Delete the temp sheets.
+    m_pDoc->DeleteTab(4);
+    m_pDoc->DeleteTab(3);
+    m_pDoc->DeleteTab(2);
 
     // Delete Sheet1.
     m_pDoc->DeleteTab(0);

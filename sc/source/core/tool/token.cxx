@@ -2660,6 +2660,79 @@ bool ScTokenArray::AdjustReferenceOnInsertedTab( SCTAB nInsPos, SCTAB nSheets, c
     return bRefChanged;
 }
 
+namespace {
+
+void adjustTabOnMove( ScAddress& rPos, SCTAB nOldPos, SCTAB nNewPos )
+{
+    // Sheets below the lower bound or above the uppper bound will not change.
+    SCTAB nLowerBound = std::min(nOldPos, nNewPos);
+    SCTAB nUpperBound = std::max(nOldPos, nNewPos);
+
+    if (rPos.Tab() < nLowerBound || nUpperBound < rPos.Tab())
+        // Outside the boundary. Nothing to adjust.
+        return;
+
+    if (rPos.Tab() == nOldPos)
+    {
+        rPos.SetTab(nNewPos);
+        return;
+    }
+
+    // It's somewhere in between.
+    if (nOldPos < nNewPos)
+    {
+        // Moving a sheet to the right. The rest of the sheets shifts to the left.
+        rPos.IncTab(-1);
+    }
+    else
+    {
+        // Moving a sheet to the left. The rest of the sheets shifts to the right.
+        rPos.IncTab();
+    }
+}
+
+}
+
+void ScTokenArray::AdjustReferenceOnMovedTab( SCTAB nOldPos, SCTAB nNewPos, const ScAddress& rOldPos )
+{
+    if (nOldPos == nNewPos)
+        return;
+
+    ScAddress aNewPos = rOldPos;
+    adjustTabOnMove(aNewPos, nOldPos, nNewPos);
+
+    FormulaToken** p = pCode;
+    FormulaToken** pEnd = p + static_cast<size_t>(nLen);
+    for (; p != pEnd; ++p)
+    {
+        switch ((*p)->GetType())
+        {
+            case svSingleRef:
+            {
+                ScToken* pToken = static_cast<ScToken*>(*p);
+                ScSingleRefData& rRef = pToken->GetSingleRef();
+                ScAddress aAbs = rRef.toAbs(rOldPos);
+                adjustTabOnMove(aAbs, nOldPos, nNewPos);
+                rRef.SetAddress(aAbs, aNewPos);
+
+            }
+            break;
+            case svDoubleRef:
+            {
+                ScToken* pToken = static_cast<ScToken*>(*p);
+                ScComplexRefData& rRef = pToken->GetDoubleRef();
+                ScRange aAbs = rRef.toAbs(rOldPos);
+                adjustTabOnMove(aAbs.aStart, nOldPos, nNewPos);
+                adjustTabOnMove(aAbs.aEnd, nOldPos, nNewPos);
+                rRef.SetRange(aAbs, aNewPos);
+            }
+            break;
+            default:
+                ;
+        }
+    }
+}
+
 #if DEBUG_FORMULA_COMPILER
 void ScTokenArray::Dump() const
 {
