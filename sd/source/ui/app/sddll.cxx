@@ -25,6 +25,7 @@
 #include <svx/fmobjfac.hxx>
 #include <svx/svdfield.hxx>
 #include <svx/objfac3d.hxx>
+#include <vcl/svapp.hxx>
 
 #include "sddll.hxx"
 #include "DrawDocShell.hxx"
@@ -116,7 +117,8 @@ void SdDLL::Init()
 
     // register your exotic remote controlls here
 #ifdef ENABLE_SDREMOTE
-    RegisterRemotes();
+    if ( !Application::IsHeadlessModeRequested() )
+        RegisterRemotes();
 #endif
 }
 
