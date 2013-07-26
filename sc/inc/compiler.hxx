@@ -457,7 +457,6 @@ public:
                                   const ScAddress& rOldPos, const ScRange&,
                                   SCsCOL nDx, SCsROW nDy, SCsTAB nDz );
 
-    ScRangeData* UpdateInsertTab(SCTAB nTable, bool bIsName, SCTAB nNewSheets = 1 );
     ScRangeData* UpdateDeleteTab(SCTAB nTable, bool bIsMove, bool bIsName, bool& bCompile, SCTAB nSheets = 1);
     ScRangeData* UpdateMoveTab(SCTAB nOldPos, SCTAB nNewPos, bool bIsName );
 
