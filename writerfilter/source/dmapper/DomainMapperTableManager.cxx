@@ -140,20 +140,24 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
                             the final sizing of the table, but then must use the contents of each cell to determine final column widths.
                             (See 17.18.87 of the ISO/IEC 29500-1:2011.)
                             */
-                            bool bFixed = false;
+                            bool bFixed = true;
                             sal_Int32 nRowFixedWidth = 0;
                             if (!m_aCellWidths.empty())
                             {
-                                // Step 1. Check whether any cell has fixed width in the given row of table.
+                                // Step 1. Check whether all cells have fixed widths in the given row of table.
                                 ::std::vector< IntVectorPtr >::iterator itr;
                                 for (itr = m_aCellWidths.begin(); itr != m_aCellWidths.end(); itr ++)
                                 {
                                     IntVectorPtr itrVal = (*itr);
                                     for (std::vector<sal_Int32>::const_iterator aValIter = itrVal->begin(); aValIter != itrVal->end(); ++aValIter)
                                     {
+                                        if (*aValIter == -1)
+                                        {
+                                            bFixed = false;
+                                            break;
+                                        }
                                         // Sum the width of cells to find the total width of given row
                                         nRowFixedWidth += (*aValIter);
-                                        bFixed = true;
                                     }
                                 }
                             }
@@ -368,7 +372,10 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
                     {
                         MeasureHandlerPtr pMeasureHandler(new MeasureHandler());
                         pProperties->resolve(*pMeasureHandler);
-                        getCurrentCellWidths()->push_back(pMeasureHandler->getMeasureValue());
+                        if (sal::static_int_cast<Id>(pMeasureHandler->getUnit()) == NS_ooxml::LN_Value_ST_TblWidth_auto)
+                            getCurrentCellWidths()->push_back(sal_Int32(-1));
+                        else
+                            getCurrentCellWidths()->push_back(pMeasureHandler->getMeasureValue());
                         if (getTableDepthDifference() > 0)
                             m_bPushCurrentWidth = true;
                     }

@@ -137,6 +137,7 @@ public:
     void testGroupshapeSdt();
     void testBnc779620();
     void testDefaultSectBreakCols();
+    void testFdo66474();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -238,6 +239,7 @@ void Test::run()
         {"groupshape-sdt.docx", &Test::testGroupshapeSdt},
         {"bnc779620.docx", &Test::testBnc779620},
         {"default-sect-break-cols.docx", &Test::testDefaultSectBreakCols},
+        {"fdo66474.docx", &Test::testFdo66474},
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -1667,6 +1669,15 @@ void Test::testDefaultSectBreakCols()
     uno::Reference<beans::XPropertySet> xPageStyle(getStyles("PageStyles")->getByName(DEFAULT_STYLE), uno::UNO_QUERY);
     xTextColumns = getProperty< uno::Reference<text::XTextColumns> >(xPageStyle, "TextColumns");
     CPPUNIT_ASSERT_EQUAL(sal_Int16(0), xTextColumns->getColumnCount());
+}
+
+void Test::testFdo66474()
+{
+    // The table wasn't relative (relative with was 0), so the table didn't
+    // take the full available width, like it would have to.
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables( ), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(100), getProperty<sal_Int16>(xTables->getByIndex(0), "RelativeWidth"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
