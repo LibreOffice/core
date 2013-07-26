@@ -240,6 +240,27 @@ namespace tools_urlobj
             }
         }
 
+        void urlobjTest_emptyPath() {
+            {
+                INetURLObject url(OUString("http://example.com"));
+                CPPUNIT_ASSERT_EQUAL(INET_PROT_HTTP, url.GetProtocol());
+                CPPUNIT_ASSERT_EQUAL(OUString("example.com"), url.GetHost());
+                CPPUNIT_ASSERT_EQUAL(OUString("/"), url.GetURLPath());
+            }
+            {
+                // This is an invalid http URL per RFC 2616:
+                INetURLObject url(OUString("http://example.com?query"));
+                CPPUNIT_ASSERT(url.HasError());
+            }
+            {
+                INetURLObject url(OUString("http://example.com#fragment"));
+                CPPUNIT_ASSERT_EQUAL(INET_PROT_HTTP, url.GetProtocol());
+                CPPUNIT_ASSERT_EQUAL(OUString("example.com"), url.GetHost());
+                CPPUNIT_ASSERT_EQUAL(OUString("/"), url.GetURLPath());
+                CPPUNIT_ASSERT_EQUAL(OUString("fragment"), url.GetMark());
+            }
+        }
+
         // Change the following lines only, if you add, remove or rename
         // member functions of the current class,
         // because these macros are need by auto register mechanism.
@@ -252,6 +273,7 @@ namespace tools_urlobj
         CPPUNIT_TEST( urlobjTest_005 );
         CPPUNIT_TEST( urlobjTest_006 );
         CPPUNIT_TEST( urlobjCmisTest );
+        CPPUNIT_TEST( urlobjTest_emptyPath );
         CPPUNIT_TEST_SUITE_END(  );
     };                          // class createPool
 
