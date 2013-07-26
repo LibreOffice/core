@@ -2942,7 +2942,7 @@ bool INetURLObject::parsePath(INetProtocol eScheme,
 
         case INET_PROT_FTP:
         case INET_PROT_IMAP:
-            if (pPos < pEnd && *pPos != '/')
+            if (pPos < pEnd && *pPos != '/' && *pPos != nFragmentDelimiter)
                 return false;
             while (pPos < pEnd && *pPos != nFragmentDelimiter)
             {
@@ -2962,7 +2962,7 @@ bool INetURLObject::parsePath(INetProtocol eScheme,
         case INET_PROT_HTTPS:
         case INET_PROT_SMB:
         case INET_PROT_CMIS:
-            if (pPos < pEnd && *pPos != '/')
+            if (pPos < pEnd && *pPos != '/' && *pPos != nFragmentDelimiter)
                 return false;
             while (pPos < pEnd && *pPos != nQueryDelimiter
                    && *pPos != nFragmentDelimiter)
