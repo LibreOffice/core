@@ -184,24 +184,32 @@ sal_uInt16  SwGlossaryList::GetGroupCount()
     return aGroupArr.size();
 }
 
-String SwGlossaryList::GetGroupName(sal_uInt16 nPos, bool bNoPath, String* pTitle)
+OUString SwGlossaryList::GetGroupName(sal_uInt16 nPos, bool bNoPath)
 {
     OSL_ENSURE(aGroupArr.size() > nPos, "group not available");
-    String sRet;
     if(nPos < aGroupArr.size())
     {
         AutoTextGroup* pGroup = aGroupArr[nPos];
-        sRet = pGroup->sName;
+        OUString sRet = pGroup->sName;
         if(bNoPath)
-            sRet = sRet.GetToken(0, GLOS_DELIM);
-        if(pTitle)
-            *pTitle = pGroup->sTitle;
+            sRet = sRet.getToken(0, GLOS_DELIM);
+        return sRet;
     }
-    return sRet;
-
+    return OUString();
 }
 
-sal_uInt16  SwGlossaryList::GetBlockCount(sal_uInt16 nGroup)
+OUString SwGlossaryList::GetGroupTitle(sal_uInt16 nPos)
+{
+    OSL_ENSURE(aGroupArr.size() > nPos, "group not available");
+    if(nPos < aGroupArr.size())
+    {
+        AutoTextGroup* pGroup = aGroupArr[nPos];
+        return pGroup->sTitle;
+    }
+    return OUString();
+}
+
+sal_uInt16 SwGlossaryList::GetBlockCount(sal_uInt16 nGroup)
 {
     OSL_ENSURE(aGroupArr.size() > nGroup, "group not available");
     if(nGroup < aGroupArr.size())
@@ -212,16 +220,26 @@ sal_uInt16  SwGlossaryList::GetBlockCount(sal_uInt16 nGroup)
     return 0;
 }
 
-String  SwGlossaryList::GetBlockName(sal_uInt16 nGroup, sal_uInt16 nBlock, String& rShortName)
+OUString SwGlossaryList::GetBlockLongName(sal_uInt16 nGroup, sal_uInt16 nBlock)
 {
     OSL_ENSURE(aGroupArr.size() > nGroup, "group not available");
     if(nGroup < aGroupArr.size())
     {
         AutoTextGroup* pGroup = aGroupArr[nGroup];
-        rShortName = pGroup->sShortNames.GetToken(nBlock, STRING_DELIM);
         return pGroup->sLongNames.GetToken(nBlock, STRING_DELIM);
     }
-    return aEmptyStr;
+    return OUString();
+}
+
+OUString SwGlossaryList::GetBlockShortName(sal_uInt16 nGroup, sal_uInt16 nBlock)
+{
+    OSL_ENSURE(aGroupArr.size() > nGroup, "group not available");
+    if(nGroup < aGroupArr.size())
+    {
+        AutoTextGroup* pGroup = aGroupArr[nGroup];
+        return pGroup->sShortNames.GetToken(nBlock, STRING_DELIM);
+    }
+    return OUString();
 }
 
 void SwGlossaryList::Update()

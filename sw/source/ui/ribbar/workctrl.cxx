@@ -193,9 +193,7 @@ SfxPopupWindow* SwTbxAutoTextCtrl::CreatePopupWindow()
             sal_uInt16 nGroupCount = pGlossaryList->GetGroupCount();
             for(sal_uInt16 i = 1; i <= nGroupCount; i++)
             {
-                // Acquire group name with path extension
-                String sTitle;
-                pGlossaryList->GetGroupName(i - 1, sal_False, &sTitle);
+                OUString sTitle = pGlossaryList->GetGroupTitle(i - 1);
                 sal_uInt16 nBlockCount = pGlossaryList->GetBlockCount(i -1);
                 if(nBlockCount)
                 {
@@ -207,10 +205,10 @@ SfxPopupWindow* SwTbxAutoTextCtrl::CreatePopupWindow()
                     pPopup->SetPopupMenu(i, pSub);
                     for(sal_uInt16 j = 0; j < nBlockCount; j++)
                     {
-                        String sEntry;
-                        String sLongName(pGlossaryList->GetBlockName(i - 1, j, sEntry));
-                        sEntry.AppendAscii(" - ");
-                        sEntry += sLongName;
+                        OUString sLongName(pGlossaryList->GetBlockLongName(i - 1, j));
+                        OUString sShortName(pGlossaryList->GetBlockShortName(i - 1, j));
+
+                        OUString sEntry = sShortName + " - " + sLongName;
                         pSub->InsertItem(++nIndex, sEntry);
                     }
                 }
@@ -251,9 +249,9 @@ IMPL_LINK(SwTbxAutoTextCtrl, PopupHdl, PopupMenu*, pMenu)
     sal_uInt16 nBlock = nId / 100;
 
     SwGlossaryList* pGlossaryList = ::GetGlossaryList();
-    String sShortName;
-    String sGroup = pGlossaryList->GetGroupName(nBlock - 1, false);
-    pGlossaryList->GetBlockName(nBlock - 1, nId - (100 * nBlock) - 1, sShortName);
+    OUString sGroup = pGlossaryList->GetGroupName(nBlock - 1, false);
+    OUString sShortName =
+        pGlossaryList->GetBlockShortName(nBlock - 1, nId - (100 * nBlock) - 1);
 
     SwGlossaryHdl* pGlosHdl = pView->GetGlosHdl();
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();

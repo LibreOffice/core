@@ -419,9 +419,9 @@ sal_Bool SwGlossaryHdl::Expand( const String& rShortName,
         sal_uInt16 nGroupCount = pGlossaryList->GetGroupCount();
         for(sal_uInt16 i = 1; i <= nGroupCount; i++)
         {
+            OUString sTitle = pGlossaryList->GetGroupTitle(i - 1);
             // get group name with path-extension
-            String sTitle;
-            String sGroupName = pGlossaryList->GetGroupName(i - 1, false, &sTitle);
+            OUString sGroupName = pGlossaryList->GetGroupName(i - 1, false);
             if(sGroupName == pGlossary->GetName())
                 continue;
             sal_uInt16 nBlockCount = pGlossaryList->GetBlockCount(i -1);
@@ -429,9 +429,9 @@ sal_Bool SwGlossaryHdl::Expand( const String& rShortName,
             {
                 for(sal_uInt16 j = 0; j < nBlockCount; j++)
                 {
-                    String sEntry;
-                    String sLongName(pGlossaryList->GetBlockName(i - 1, j, sEntry));
-                    if( rSCmp.isEqual( rShortName, sEntry ))
+                    OUString sLongName(pGlossaryList->GetBlockLongName(i - 1, j));
+                    OUString sShortName(pGlossaryList->GetBlockShortName(i - 1, j));
+                    if( rSCmp.isEqual( rShortName, sShortName ))
                     {
                         TextBlockInfo_Impl* pData = new TextBlockInfo_Impl;
                         pData->sTitle = sTitle;
