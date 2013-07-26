@@ -19,7 +19,6 @@
 
 
 #include <hintids.hxx>
-#include <rtl/logfile.hxx>
 #include <vcl/outdev.hxx>
 #include <sfx2/printer.hxx>
 #include <editeng/eeitem.hxx>
@@ -519,8 +518,6 @@ _ZSortFly::_ZSortFly( const SwFrmFmt* pFrmFmt, const SwFmtAnchor* pFlyAn,
 // from scratch.
 void SwDoc::InitDrawModel()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "SW", "JP93722",  "SwDoc::InitDrawModel" );
-
     // !! Attention: there is similar code in the Sw3 Reader (sw3imp.cxx) that
     // also has to be maintained!!
     if ( mpDrawModel )
@@ -555,7 +552,7 @@ void SwDoc::InitDrawModel()
     // set FontHeight pool defaults without changing static SdrEngineDefaults
      GetAttrPool().SetPoolDefaultItem(SvxFontHeightItem( 240, 100, EE_CHAR_FONTHEIGHT ));
 
-    RTL_LOGFILE_CONTEXT_TRACE( aLog, "before create DrawDocument" );
+    SAL_INFO( "sw.doc", "before create DrawDocument" );
     // The document owns the SdrModel. We always have two layers and one page.
     mpDrawModel = new SwDrawDocument( this );
 
@@ -585,16 +582,14 @@ void SwDoc::InitDrawModel()
 
     SdrPage* pMasterPage = mpDrawModel->AllocPage( sal_False );
     mpDrawModel->InsertPage( pMasterPage );
-    RTL_LOGFILE_CONTEXT_TRACE( aLog, "after create DrawDocument" );
-
-    RTL_LOGFILE_CONTEXT_TRACE( aLog, "before create Spellchecker/Hyphenator" );
+    SAL_INFO( "sw.doc", "after create DrawDocument" );
+    SAL_INFO( "sw.doc", "before create Spellchecker/Hyphenator" );
     SdrOutliner& rOutliner = mpDrawModel->GetDrawOutliner();
     uno::Reference< XSpellChecker1 > xSpell = ::GetSpellChecker();
     rOutliner.SetSpeller( xSpell );
     uno::Reference<XHyphenator> xHyphenator( ::GetHyphenator() );
     rOutliner.SetHyphenator( xHyphenator );
-    RTL_LOGFILE_CONTEXT_TRACE( aLog, "after create Spellchecker/Hyphenator" );
-
+    SAL_INFO( "sw.doc", "after create Spellchecker/Hyphenator" );
     SetCalcFieldValueHdl(&rOutliner);
     SetCalcFieldValueHdl(&mpDrawModel->GetHitTestOutliner());
 

@@ -40,7 +40,6 @@
 #include <linguistic/lngprops.hxx>
 #include <com/sun/star/document/UpdateDocMode.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
-#include <rtl/logfile.hxx>
 #include <sfx2/docfilt.hxx>
 #include <svx/xtable.hxx>
 #include <svx/drawitem.hxx>
@@ -92,8 +91,6 @@ using namespace ::com::sun::star;
 // Load Document
 sal_Bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "SW", "JP93722",  "SwDocShell::InitNew" );
-
     sal_Bool bRet = SfxObjectShell::InitNew( xStor );
     OSL_ENSURE( GetMapUnit() == MAP_TWIP, "map unit is not twip!" );
     sal_Bool bHTMLTemplSet = sal_False;
@@ -326,7 +323,6 @@ SwDocShell::SwDocShell( SfxObjectCreateMode eMode ) :
     nUpdateDocMode(document::UpdateDocMode::ACCORDING_TO_CONFIG),
     bInUpdateFontList(false)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "SW", "JP93722",  "SwDocShell::SwDocShell" );
     Init_Impl();
 }
 
@@ -341,7 +337,6 @@ SwDocShell::SwDocShell( const sal_uInt64 i_nSfxCreationFlags ) :
     nUpdateDocMode(document::UpdateDocMode::ACCORDING_TO_CONFIG),
     bInUpdateFontList(false)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "SW", "JP93722",  "SwDocShell::SwDocShell" );
     Init_Impl();
 }
 
@@ -356,7 +351,6 @@ SwDocShell::SwDocShell( SwDoc *pD, SfxObjectCreateMode eMode ):
     nUpdateDocMode(document::UpdateDocMode::ACCORDING_TO_CONFIG),
     bInUpdateFontList(false)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "SW", "JP93722",  "SwDocShell::SwDocShell" );
     Init_Impl();
 }
 
@@ -473,11 +467,10 @@ void SwDocShell::ReactivateModel()
 // Load, Default-Format
 sal_Bool  SwDocShell::Load( SfxMedium& rMedium )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "SW", "JP93722",  "SwDocShell::Load" );
     sal_Bool bRet = sal_False;
     if( SfxObjectShell::Load( rMedium ))
     {
-        RTL_LOGFILE_CONTEXT_TRACE( aLog, "after SfxInPlaceObject::Load" );
+        SAL_INFO( "sw.ui", "after SfxInPlaceObject::Load" );
         if( pDoc )              // for last version!!
             RemoveLink();       // release the existing
 
@@ -526,12 +519,11 @@ sal_Bool  SwDocShell::Load( SfxMedium& rMedium )
                     if( pReader )
                     {
                         // set Doc's DocInfo at DocShell-Medium
-                        RTL_LOGFILE_CONTEXT_TRACE( aLog, "before ReadDocInfo" );
+                        SAL_INFO( "sw.ui", "before ReadDocInfo" );
                         SwReader aRdr( rMedium, aEmptyStr, pDoc );
-                        RTL_LOGFILE_CONTEXT_TRACE( aLog, "before Read" );
+                        SAL_INFO( "sw.ui", "before Read" );
                         nErr = aRdr.Read( *pReader );
-                        RTL_LOGFILE_CONTEXT_TRACE( aLog, "after Read" );
-
+                        SAL_INFO( "sw.ui", "after Read" );
                         // If a XML document is loaded, the global doc/web doc
                         // flags have to be set, because they aren't loaded
                         // by this formats.
@@ -574,7 +566,6 @@ sal_Bool  SwDocShell::Load( SfxMedium& rMedium )
 
 sal_Bool  SwDocShell::LoadFrom( SfxMedium& rMedium )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "SW", "JP93722",  "SwDocShell::LoadFrom" );
     sal_Bool bRet = sal_False;
     if( pDoc )
         RemoveLink();

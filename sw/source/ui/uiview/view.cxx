@@ -24,7 +24,6 @@
 #include <hintids.hxx>
 #include <comphelper/string.hxx>
 #include <officecfg/Office/Common.hxx>
-#include <rtl/logfile.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/inputctx.hxx>
 #include <basic/sbxobj.hxx>
@@ -739,8 +738,6 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
     // If the view is switch from one to another, the 'old' view is given by
     // parameter <pOldSh>.
 
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "SW", "JP93722",  "SwView::SwView" );
-
     m_bCenterCrsr = m_bTopCrsr = m_bAlwaysShowSel = m_bTabColFromDoc = m_bTabRowFromDoc =
     m_bSetTabColFromDoc = m_bSetTabRowFromDoc = m_bAttrChgNotified = m_bAttrChgNotifiedWithRegistrations =
     m_bVerbsActive = m_bDrawRotate = m_bInOuterResizePixel = m_bInInnerResizePixel =
@@ -799,7 +796,7 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
             bOldShellWasSrcView = sal_True;
     }
 
-    RTL_LOGFILE_CONTEXT_TRACE( aLog, "before create WrtShell" );
+    SAL_INFO( "sw.ui", "before create WrtShell" );
     if(PTR_CAST( SwView, pExistingSh))
     {
         m_pWrtShell = new SwWrtShell( *((SwView*)pExistingSh)->m_pWrtShell,
@@ -855,8 +852,7 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
             }
         }
     }
-    RTL_LOGFILE_CONTEXT_TRACE( aLog, "after create WrtShell" );
-
+    SAL_INFO( "sw.ui", "after create WrtShell" );
     m_pHRuler = new SwCommentRuler(m_pWrtShell, &GetViewFrame()->GetWindow(), m_pEditWin,
                 SVXRULER_SUPPORT_TABS |
                 SVXRULER_SUPPORT_PARAGRAPH_MARGINS |

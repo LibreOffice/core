@@ -18,7 +18,6 @@
  */
 
 #include <sfx2/printer.hxx>
-#include <rtl/logfile.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <docsh.hxx>
@@ -39,8 +38,6 @@
 
 void ViewShell::Init( const SwViewOption *pNewOpt )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "SW", "JP93722",  "ViewShell::Init" );
-
     mbDocSizeChgd = sal_False;
 
     // We play it save: Remove old font information whenever the printer
@@ -79,8 +76,7 @@ void ViewShell::Init( const SwViewOption *pNewOpt )
     if( pDShell && pDShell->IsReadOnly() )
         mpOpt->SetReadonly( sal_True );
 
-    RTL_LOGFILE_CONTEXT_TRACE( aLog, "View::Init - before InitPrt" );
-
+    SAL_INFO( "sw.core", "View::Init - before InitPrt" );
     // --> FME 2007-11-06 #i82967#
     OutputDevice* pPDFOut = 0;
 
@@ -103,8 +99,7 @@ void ViewShell::Init( const SwViewOption *pNewOpt )
     }
     // <--
 
-    RTL_LOGFILE_CONTEXT_TRACE( aLog, "View::Init - after InitPrt" );
-
+    SAL_INFO( "sw.core", "View::Init - after InitPrt" );
     if( GetWin() )
     {
         mpOpt->Init( GetWin() );
@@ -170,8 +165,6 @@ ViewShell::ViewShell( SwDoc& rDocument, Window *pWindow,
     mpPrePostOutDev(0), // #i72754#
     maPrePostMapMode()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "SW", "JP93722",  "ViewShell::SwViewShell" );
-
     // OD 2004-06-01 #i26791# - in order to suppress event handling in
     // <SwDrawContact::Changed> during contruction of <ViewShell> instance
     mbInConstructor = true;
@@ -246,8 +239,6 @@ ViewShell::ViewShell( ViewShell& rShell, Window *pWindow,
     mpPrePostOutDev(0), // #i72754#
     maPrePostMapMode()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "SW", "JP93722",  "ViewShell::SwViewShell" );
-
     // OD 2004-06-01 #i26791# - in order to suppress event handling in
     // <SwDrawContact::Changed> during contruction of <ViewShell> instance
     mbInConstructor = true;

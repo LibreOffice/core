@@ -44,7 +44,6 @@
 #include <svx/xmlgrhlp.hxx>
 #include <svx/xmleohlp.hxx>
 #include <comphelper/genericpropertyset.hxx>
-#include <rtl/logfile.hxx>
 #include <rtl/strbuf.hxx>
 #include <sfx2/frame.hxx>
 #include <unotools/ucbstreamhelper.hxx>
@@ -139,8 +138,6 @@ sal_Int32 ReadThroughComponent(
     OSL_ENSURE(rxContext.is(), "factory missing");
     OSL_ENSURE(NULL != pFilterName,"I need a service name for the component!");
 
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "sw", "mb93740", "ReadThroughComponent" );
-
     // prepare ParserInputSrouce
     xml::sax::InputSource aParserInput;
     aParserInput.sSystemId = rName;
@@ -148,8 +145,7 @@ sal_Int32 ReadThroughComponent(
 
     // get parser
     uno::Reference< xml::sax::XParser > xParser = xml::sax::Parser::create(rxContext);
-    RTL_LOGFILE_CONTEXT_TRACE( aLog, "parser created" );
-
+    SAL_INFO( "sw.filter", "parser created" );
     // get filter
     OUString aFilterName(OUString::createFromAscii(pFilterName));
     uno::Reference< xml::sax::XDocumentHandler > xFilter(
@@ -158,8 +154,7 @@ sal_Int32 ReadThroughComponent(
     SAL_WARN_IF(!xFilter.is(), "sw", "Can't instantiate filter component: " << aFilterName);
     if( !xFilter.is() )
         return ERR_SWG_READ_ERROR;
-    RTL_LOGFILE_CONTEXT_TRACE1( aLog, "%s created", pFilterName );
-
+    SAL_INFO( "sw.filter", "" << pFilterName << " created" );
     // connect parser and filter
     xParser->setDocumentHandler( xFilter );
 
@@ -172,8 +167,7 @@ sal_Int32 ReadThroughComponent(
     // if we do profiling, we want to know the stream
     OString aString(OUStringToOString(rStreamName,
         RTL_TEXTENCODING_ASCII_US));
-    RTL_LOGFILE_TRACE_AUTHOR1( "sw", "mb93740",
-        "ReadThroughComponent : parsing \"%s\"", aString.getStr() );
+    SAL_INFO( "sw.filter", "ReadThroughComponent : parsing \"" << aString.getStr() << "\"" );
 #endif
 
     // finally, parser the stream

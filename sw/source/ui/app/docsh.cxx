@@ -19,7 +19,6 @@
 
 
 #include <hintids.hxx>
-#include <rtl/logfile.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
@@ -216,8 +215,6 @@ Reader* SwDocShell::StartConvertFrom(SfxMedium& rMedium, SwReader** ppRdr,
 // Loading
 sal_Bool SwDocShell::ConvertFrom( SfxMedium& rMedium )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "SW", "JP93722",  "SwDocShell::ConvertFrom" );
-
     SwReader* pRdr;
     SwRead pRead = StartConvertFrom(rMedium, &pRdr);
     if (!pRead)
@@ -273,7 +270,6 @@ sal_Bool SwDocShell::ConvertFrom( SfxMedium& rMedium )
 // Saving the Default-Format, Stg present
 sal_Bool SwDocShell::Save()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "SW", "JP93722",  "SwDocShell::Save" );
     //#i3370# remove quick help to prevent saving of autocorrection suggestions
     if(pView)
         pView->GetEditWin().StopQuickHelp();
@@ -362,8 +358,6 @@ sal_Bool SwDocShell::Save()
 // Save using the Defaultformat
 sal_Bool SwDocShell::SaveAs( SfxMedium& rMedium )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "SW", "JP93722",  "SwDocShell::SaveAs" );
-
     SwWait aWait( *this, sal_True );
     //#i3370# remove quick help to prevent saving of autocorrection suggestions
     if(pView)
@@ -498,7 +492,6 @@ static SwSrcView* lcl_GetSourceView( SwDocShell* pSh )
 
 sal_Bool SwDocShell::ConvertTo( SfxMedium& rMedium )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "SW", "JP93722",  "SwDocShell::ConvertTo" );
     const SfxFilter* pFlt = rMedium.GetFilter();
     if( !pFlt )
         return sal_False;
@@ -734,7 +727,6 @@ sal_Bool SwDocShell::ConvertTo( SfxMedium& rMedium )
 // do not yet activate, must deliver TRUE
 sal_Bool SwDocShell::SaveCompleted( const uno::Reference < embed::XStorage >& xStor  )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "SW", "JP93722",  "SwDocShell::SaveCompleted" );
     sal_Bool bRet = SfxObjectShell::SaveCompleted( xStor );
     if( bRet )
     {
