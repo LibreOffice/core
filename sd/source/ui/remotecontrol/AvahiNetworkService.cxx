@@ -10,7 +10,7 @@
 #include <avahi-common/malloc.h>
 #include <avahi-common/error.h>
 #include <avahi-common/timeval.h>
-#include <avahi-common/thread-watch.h>
+#include "avahi-common/thread-watch.h"
 
 #include "AvahiNetworkService.hxx"
 #include "ZeroconfService.hxx"
