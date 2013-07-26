@@ -41,7 +41,6 @@
 #include <com/sun/star/reflection/XInterfaceMethodTypeDescription.hpp>
 
 #include "svx/fmtools.hxx"
-#include <rtl/logfile.hxx>
 #include <svl/macitem.hxx>
 #include <tools/shl.hxx>
 #include <tools/diagnose_ex.h>
@@ -178,7 +177,6 @@ FmXUndoEnvironment::FmXUndoEnvironment(FmFormModel& _rModel)
                    ,bReadOnly( sal_False )
                    ,m_bDisposed( false )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXUndoEnvironment::FmXUndoEnvironment" );
     DBG_CTOR(FmXUndoEnvironment,NULL);
     try
     {
@@ -203,7 +201,6 @@ FmXUndoEnvironment::~FmXUndoEnvironment()
 //------------------------------------------------------------------------------
 void FmXUndoEnvironment::dispose()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXUndoEnvironment::dispose" );
     OSL_ENSURE( !m_bDisposed, "FmXUndoEnvironment::dispose: disposed twice?" );
     if ( !m_bDisposed )
         return;
@@ -252,7 +249,6 @@ void FmXUndoEnvironment::dispose()
 //------------------------------------------------------------------------------
 void FmXUndoEnvironment::ModeChanged()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXUndoEnvironment::ModeChanged" );
     OSL_PRECOND( rModel.GetObjectShell(), "FmXUndoEnvironment::ModeChanged: no object shell anymore!" );
     if ( !rModel.GetObjectShell() )
         return;
@@ -296,7 +292,6 @@ void FmXUndoEnvironment::ModeChanged()
 //------------------------------------------------------------------------------
 void FmXUndoEnvironment::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXUndoEnvironment::Notify" );
     if (rHint.ISA(SdrHint))
     {
         SdrHint* pSdrHint = (SdrHint*)&rHint;
@@ -346,7 +341,6 @@ void FmXUndoEnvironment::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 //------------------------------------------------------------------
 void FmXUndoEnvironment::Inserted(SdrObject* pObj)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXUndoEnvironment::Inserted" );
     if (pObj->GetObjInventor() == FmFormInventor)
     {
         FmFormObj* pFormObj = PTR_CAST(FmFormObj, pObj);
@@ -399,7 +393,6 @@ namespace
 //------------------------------------------------------------------------------
 void FmXUndoEnvironment::Inserted(FmFormObj* pObj)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXUndoEnvironment::Inserted" );
     DBG_ASSERT( pObj, "FmXUndoEnvironment::Inserted: invalid object!" );
     if ( !pObj )
         return;
@@ -457,7 +450,6 @@ void FmXUndoEnvironment::Inserted(FmFormObj* pObj)
 //------------------------------------------------------------------
 void FmXUndoEnvironment::Removed(SdrObject* pObj)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXUndoEnvironment::Removed" );
     if ( pObj->IsVirtualObj() )
         // for virtual objects, we've already been notified of the removal of the master
         // object, which is sufficient here
@@ -479,7 +471,6 @@ void FmXUndoEnvironment::Removed(SdrObject* pObj)
 //------------------------------------------------------------------------------
 void FmXUndoEnvironment::Removed(FmFormObj* pObj)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXUndoEnvironment::Removed" );
     DBG_ASSERT( pObj, "FmXUndoEnvironment::Removed: invalid object!" );
     if ( !pObj )
         return;
@@ -526,7 +517,6 @@ void FmXUndoEnvironment::Removed(FmFormObj* pObj)
 //------------------------------------------------------------------------------
 void SAL_CALL FmXUndoEnvironment::disposing(const EventObject& e) throw( RuntimeException )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXUndoEnvironment::disposing" );
     // check if it's an object we have cached information about
     if (m_pPropertySetCache)
     {
@@ -545,7 +535,6 @@ void SAL_CALL FmXUndoEnvironment::disposing(const EventObject& e) throw( Runtime
 //------------------------------------------------------------------------------
 void SAL_CALL FmXUndoEnvironment::propertyChange(const PropertyChangeEvent& evt) throw(::com::sun::star::uno::RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXUndoEnvironment::propertyChange" );
     ::osl::ClearableMutexGuard aGuard( m_aMutex );
 
     if (!IsLocked())
@@ -741,7 +730,6 @@ void SAL_CALL FmXUndoEnvironment::propertyChange(const PropertyChangeEvent& evt)
 //------------------------------------------------------------------------------
 void SAL_CALL FmXUndoEnvironment::elementInserted(const ContainerEvent& evt) throw(::com::sun::star::uno::RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXUndoEnvironment::elementInserted" );
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -757,7 +745,6 @@ void SAL_CALL FmXUndoEnvironment::elementInserted(const ContainerEvent& evt) thr
 //------------------------------------------------------------------------------
 void FmXUndoEnvironment::implSetModified()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXUndoEnvironment::implSetModified" );
     if ( !IsLocked() && rModel.GetObjectShell() )
     {
         rModel.GetObjectShell()->SetModified( sal_True );
@@ -767,7 +754,6 @@ void FmXUndoEnvironment::implSetModified()
 //------------------------------------------------------------------------------
 void SAL_CALL FmXUndoEnvironment::elementReplaced(const ContainerEvent& evt) throw(::com::sun::star::uno::RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXUndoEnvironment::elementReplaced" );
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -785,7 +771,6 @@ void SAL_CALL FmXUndoEnvironment::elementReplaced(const ContainerEvent& evt) thr
 //------------------------------------------------------------------------------
 void SAL_CALL FmXUndoEnvironment::elementRemoved(const ContainerEvent& evt) throw(::com::sun::star::uno::RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXUndoEnvironment::elementRemoved" );
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -799,14 +784,12 @@ void SAL_CALL FmXUndoEnvironment::elementRemoved(const ContainerEvent& evt) thro
 //------------------------------------------------------------------------------
 void SAL_CALL FmXUndoEnvironment::modified( const EventObject& /*aEvent*/ ) throw (RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXUndoEnvironment::modified" );
     implSetModified();
 }
 
 //------------------------------------------------------------------------------
 void FmXUndoEnvironment::AddForms(const Reference< XNameContainer > & rForms)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXUndoEnvironment::AddForms" );
     Lock();
     AddElement(rForms);
     UnLock();
@@ -815,7 +798,6 @@ void FmXUndoEnvironment::AddForms(const Reference< XNameContainer > & rForms)
 //------------------------------------------------------------------------------
 void FmXUndoEnvironment::RemoveForms(const Reference< XNameContainer > & rForms)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXUndoEnvironment::RemoveForms" );
     Lock();
     RemoveElement(rForms);
     UnLock();
@@ -824,7 +806,6 @@ void FmXUndoEnvironment::RemoveForms(const Reference< XNameContainer > & rForms)
 //------------------------------------------------------------------------------
 void FmXUndoEnvironment::TogglePropertyListening(const Reference< XInterface > & Element)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXUndoEnvironment::TogglePropertyListening" );
     // am Container horchen
     Reference< XIndexContainer >  xContainer(Element, UNO_QUERY);
     if (xContainer.is())
@@ -852,7 +833,6 @@ void FmXUndoEnvironment::TogglePropertyListening(const Reference< XInterface > &
 //------------------------------------------------------------------------------
 void FmXUndoEnvironment::switchListening( const Reference< XIndexContainer >& _rxContainer, bool _bStartListening ) SAL_THROW(())
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXUndoEnvironment::switchListening" );
     OSL_PRECOND( _rxContainer.is(), "FmXUndoEnvironment::switchListening: invalid container!" );
     if ( !_rxContainer.is() )
         return;
@@ -910,7 +890,6 @@ void FmXUndoEnvironment::switchListening( const Reference< XIndexContainer >& _r
 //------------------------------------------------------------------------------
 void FmXUndoEnvironment::switchListening( const Reference< XInterface >& _rxObject, bool _bStartListening ) SAL_THROW(())
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXUndoEnvironment::switchListening" );
     OSL_PRECOND( _rxObject.is(), "FmXUndoEnvironment::switchListening: how should I listen at a NULL object?" );
 
     try
@@ -945,7 +924,6 @@ void FmXUndoEnvironment::switchListening( const Reference< XInterface >& _rxObje
 //------------------------------------------------------------------------------
 void FmXUndoEnvironment::AddElement(const Reference< XInterface >& _rxElement )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXUndoEnvironment::AddElement" );
     OSL_ENSURE( !m_bDisposed, "FmXUndoEnvironment::AddElement: not when I'm already disposed!" );
 
     // am Container horchen
@@ -959,7 +937,6 @@ void FmXUndoEnvironment::AddElement(const Reference< XInterface >& _rxElement )
 //------------------------------------------------------------------------------
 void FmXUndoEnvironment::RemoveElement(const Reference< XInterface >& _rxElement)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXUndoEnvironment::RemoveElement" );
     if ( m_bDisposed )
         return;
 
@@ -994,7 +971,6 @@ FmUndoPropertyAction::FmUndoPropertyAction(FmFormModel& rNewMod, const PropertyC
                      ,aNewValue(evt.NewValue)
                      ,aOldValue(evt.OldValue)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmUndoPropertyAction::FmUndoPropertyAction" );
     if (rNewMod.GetObjectShell())
         rNewMod.GetObjectShell()->SetModified(sal_True);
     if(static_STR_UNDO_PROPERTY.Len() == 0)
@@ -1005,7 +981,6 @@ FmUndoPropertyAction::FmUndoPropertyAction(FmFormModel& rNewMod, const PropertyC
 //------------------------------------------------------------------------------
 void FmUndoPropertyAction::Undo()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmUndoPropertyAction::Undo" );
     FmXUndoEnvironment& rEnv = ((FmFormModel&)rMod).GetUndoEnv();
 
     if (xObj.is() && !rEnv.IsLocked())
@@ -1026,7 +1001,6 @@ void FmUndoPropertyAction::Undo()
 //------------------------------------------------------------------------------
 void FmUndoPropertyAction::Redo()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmUndoPropertyAction::Redo" );
     FmXUndoEnvironment& rEnv = ((FmFormModel&)rMod).GetUndoEnv();
 
     if (xObj.is() && !rEnv.IsLocked())
@@ -1047,7 +1021,6 @@ void FmUndoPropertyAction::Redo()
 //------------------------------------------------------------------------------
 OUString FmUndoPropertyAction::GetComment() const
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmUndoPropertyAction::GetComment" );
     String aStr(static_STR_UNDO_PROPERTY);
 
     aStr.SearchAndReplace( OUString('#'), aPropertyName );
@@ -1067,7 +1040,6 @@ FmUndoContainerAction::FmUndoContainerAction(FmFormModel& _rMod,
                       ,m_nIndex( nIdx )
                       ,m_eAction( _eAction )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmUndoContainerAction::FmUndoContainerAction" );
     OSL_ENSURE( nIdx >= 0, "FmUndoContainerAction::FmUndoContainerAction: invalid index!" );
         // some old code suggested this could be a valid argument. However, this code was
         // buggy, and it *seemed* that nobody used it - so it was removed.
@@ -1120,7 +1092,6 @@ void FmUndoContainerAction::DisposeElement( const Reference< XInterface > & xEle
 //------------------------------------------------------------------------------
 void FmUndoContainerAction::implReInsert( ) SAL_THROW( ( Exception ) )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmUndoContainerAction::implReInsert" );
     if ( m_xContainer->getCount() >= m_nIndex )
     {
         // insert the element
@@ -1150,7 +1121,6 @@ void FmUndoContainerAction::implReInsert( ) SAL_THROW( ( Exception ) )
 //------------------------------------------------------------------------------
 void FmUndoContainerAction::implReRemove( ) SAL_THROW( ( Exception ) )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmUndoContainerAction::implReRemove" );
     Reference< XInterface > xElement;
     if ( ( m_nIndex >= 0 ) && ( m_nIndex < m_xContainer->getCount() ) )
         m_xContainer->getByIndex( m_nIndex ) >>= xElement;
@@ -1179,7 +1149,6 @@ void FmUndoContainerAction::implReRemove( ) SAL_THROW( ( Exception ) )
 //------------------------------------------------------------------------------
 void FmUndoContainerAction::Undo()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmUndoContainerAction::Undo" );
     FmXUndoEnvironment& rEnv = static_cast< FmFormModel& >( rMod ).GetUndoEnv();
 
     if ( m_xContainer.is() && !rEnv.IsLocked() && m_xElement.is() )
@@ -1209,7 +1178,6 @@ void FmUndoContainerAction::Undo()
 //------------------------------------------------------------------------------
 void FmUndoContainerAction::Redo()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmUndoContainerAction::Redo" );
     FmXUndoEnvironment& rEnv = static_cast< FmFormModel& >( rMod ).GetUndoEnv();
     if ( m_xContainer.is() && !rEnv.IsLocked() && m_xElement.is() )
     {
@@ -1241,7 +1209,6 @@ FmUndoModelReplaceAction::FmUndoModelReplaceAction(FmFormModel& _rMod, SdrUnoObj
     ,m_xReplaced(_xReplaced)
     ,m_pObject(_pObject)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmUndoModelReplaceAction::FmUndoModelReplaceAction" );
 }
 
 //------------------------------------------------------------------------------
@@ -1267,7 +1234,6 @@ void FmUndoModelReplaceAction::DisposeElement( const ::com::sun::star::uno::Refe
 //------------------------------------------------------------------------------
 void FmUndoModelReplaceAction::Undo()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmUndoModelReplaceAction::Undo" );
     try
     {
         Reference< XControlModel > xCurrentModel( m_pObject->GetUnoControlModel() );
@@ -1307,7 +1273,6 @@ void FmUndoModelReplaceAction::Undo()
 //------------------------------------------------------------------------------
 OUString FmUndoModelReplaceAction::GetComment() const
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmUndoModelReplaceAction::GetComment" );
     return SVX_RESSTR(RID_STR_UNDO_MODEL_REPLACE);
 }
 

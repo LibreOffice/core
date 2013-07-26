@@ -253,6 +253,7 @@ certain functionality.
 @li @c svx.tbxcrtls - ToolboxControl
 @li @c svx.sdr
 @li @c svx.uno
+@li @c svx.svdraw
 
 @section toolkit
 

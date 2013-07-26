@@ -73,7 +73,6 @@
 #include <connectivity/dbexception.hxx>
 #include <connectivity/dbtools.hxx>
 #include <cppuhelper/typeprovider.hxx>
-#include <rtl/logfile.hxx>
 #include <rtl/math.hxx>
 #include <sfx2/bindings.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
@@ -125,7 +124,6 @@ namespace
 //  ------------------------------------------------------------------------------
 void displayException(const Any& _rExcept, Window* _pParent)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "fmtools::displayException" );
     // check whether we need to display it
     if ( !lcl_shouldDisplayError( _rExcept ) )
         return;
@@ -206,7 +204,6 @@ sal_Int32 getElementPos(const Reference< ::com::sun::star::container::XIndexAcce
 //------------------------------------------------------------------
 OUString getLabelName(const Reference< ::com::sun::star::beans::XPropertySet>& xControlModel)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "fmtools::getLabelName" );
     if (!xControlModel.is())
         return OUString();
 
@@ -364,7 +361,6 @@ void FmXDisposeMultiplexer::dispose()
 //------------------------------------------------------------------------------
 sal_Int16 getControlTypeByObject(const Reference< ::com::sun::star::lang::XServiceInfo>& _rxObject)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "fmtools::getControlTypeByObject" );
     // ask for the persistent service name
     Reference< ::com::sun::star::io::XPersistObject> xPersistence(_rxObject, UNO_QUERY);
     DBG_ASSERT(xPersistence.is(), "::getControlTypeByObject : argument shold be an ::com::sun::star::io::XPersistObject !");
@@ -439,7 +435,6 @@ sal_Int16 getControlTypeByObject(const Reference< ::com::sun::star::lang::XServi
 //------------------------------------------------------------------------------
 sal_Bool isRowSetAlive(const Reference< XInterface >& _rxRowSet)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "fmtools::isRowSetAlive" );
     sal_Bool bIsAlive = sal_False;
     Reference< ::com::sun::star::sdbcx::XColumnsSupplier> xSupplyCols(_rxRowSet, UNO_QUERY);
     Reference< ::com::sun::star::container::XIndexAccess> xCols;

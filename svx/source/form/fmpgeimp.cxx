@@ -50,7 +50,6 @@
 #include <comphelper/uno3.hxx>
 #include <comphelper/types.hxx>
 #include <unotools/streamwrap.hxx>
-#include <rtl/logfile.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -74,7 +73,6 @@ FmFormPageImpl::FmFormPageImpl( FmFormPage& _rPage )
                ,m_bAttemptedFormCreation( false )
                ,m_bInFind( false )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFormPageImpl::FmFormPageImpl" );
     DBG_CTOR(FmFormPageImpl,NULL);
 }
 
@@ -317,7 +315,6 @@ Reference< XMap > FmFormPageImpl::impl_createControlShapeMap_nothrow()
 //------------------------------------------------------------------------------
 const Reference< css::form::XForms >& FmFormPageImpl::getForms( bool _bForceCreate )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFormPageImpl::getForms" );
     if ( m_xForms.is() || !_bForceCreate )
         return m_xForms;
 
@@ -359,7 +356,6 @@ FmFormPageImpl::~FmFormPageImpl()
 //------------------------------------------------------------------------------
 bool FmFormPageImpl::validateCurForm()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFormPageImpl::validateCurForm" );
     if ( !xCurrentForm.is() )
         return false;
 
@@ -374,14 +370,12 @@ bool FmFormPageImpl::validateCurForm()
 //------------------------------------------------------------------------------
 void FmFormPageImpl::setCurForm(Reference< ::com::sun::star::form::XForm >  xForm)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFormPageImpl::setCurForm" );
     xCurrentForm = xForm;
 }
 
 //------------------------------------------------------------------------------
 Reference< XForm >  FmFormPageImpl::getDefaultForm()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFormPageImpl::getDefaultForm" );
     Reference< XForm > xForm;
 
     Reference< XForms > xForms( getForms() );
@@ -469,7 +463,6 @@ Reference< ::com::sun::star::form::XForm >  FmFormPageImpl::findPlaceInFormCompo
     const Reference< XFormComponent > & rContent, const Reference< XDataSource > & rDatabase,
     const OUString& rDBTitle, const OUString& rCursorSource, sal_Int32 nCommandType )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFormPageImpl::findPlaceInFormComponentHierarchy" );
     // if the control already is child of a form, don't do anything
     if (!rContent.is() || rContent->getParent().is())
         return NULL;
@@ -564,7 +557,6 @@ Reference< XForm >  FmFormPageImpl::findFormForDataSource(
         const Reference< XForm > & rForm, const Reference< XDataSource > & _rxDatabase,
         const OUString& _rCursorSource, sal_Int32 nCommandType)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFormPageImpl::findFormForDataSource" );
     Reference< XForm >          xResultForm;
     Reference< XRowSet >        xDBForm(rForm, UNO_QUERY);
     Reference< XPropertySet >   xFormProps(rForm, UNO_QUERY);

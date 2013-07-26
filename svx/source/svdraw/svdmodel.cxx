@@ -23,7 +23,6 @@
 #include <math.h>
 
 #include <osl/endian.h>
-#include <rtl/logfile.hxx>
 #include <rtl/strbuf.hxx>
 
 #include <com/sun/star/lang/XComponent.hpp>
@@ -221,7 +220,7 @@ SdrModel::SdrModel(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* pPers, sal
     maPages()
 {
 #ifdef TIMELOG
-    RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "svx", "aw93748", "SdrModel::SdrModel(...)" );
+    SAL_INFO( "svx.svdraw", "SdrModel::SdrModel(...)" );
 #endif
 
     DBG_CTOR(SdrModel,NULL);
@@ -235,7 +234,7 @@ SdrModel::SdrModel(const String& rPath, SfxItemPool* pPool, ::comphelper::IEmbed
     aTablePath(rPath)
 {
 #ifdef TIMELOG
-    RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "svx", "aw93748", "SdrModel::SdrModel(...)" );
+    SAL_INFO( "svx.svdraw", "SdrModel::SdrModel(...)" );
 #endif
 
     DBG_CTOR(SdrModel,NULL);
@@ -248,7 +247,7 @@ SdrModel::SdrModel(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* pPers, boo
     maPages()
 {
 #ifdef TIMELOG
-    RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "svx", "aw93748", "SdrModel::SdrModel(...)" );
+    SAL_INFO( "svx.svdraw", "SdrModel::SdrModel(...)" );
 #endif
 
     DBG_CTOR(SdrModel,NULL);
@@ -262,7 +261,7 @@ SdrModel::SdrModel(const String& rPath, SfxItemPool* pPool, ::comphelper::IEmbed
     aTablePath(rPath)
 {
 #ifdef TIMELOG
-    RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "svx", "aw93748", "SdrModel::SdrModel(...)" );
+    SAL_INFO( "svx.svdraw", "SdrModel::SdrModel(...)" );
 #endif
 
     DBG_CTOR(SdrModel,NULL);
@@ -277,7 +276,7 @@ SdrModel::SdrModel(const SdrModel& /*rSrcModel*/):
     maPages()
 {
 #ifdef TIMELOG
-    RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "svx", "aw93748", "SdrModel::SdrModel(...)" );
+    SAL_INFO( "svx.svdraw", "SdrModel::SdrModel(...)" );
 #endif
 
     // not yet implemented
@@ -287,7 +286,7 @@ SdrModel::SdrModel(const SdrModel& /*rSrcModel*/):
 SdrModel::~SdrModel()
 {
 #ifdef TIMELOG
-    RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "svx", "aw93748", "SdrModel::~SdrModel(...)" );
+    SAL_INFO( "svx.svdraw", "SdrModel::~SdrModel(...)" );
 #endif
 
     DBG_DTOR(SdrModel,NULL);

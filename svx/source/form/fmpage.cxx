@@ -47,7 +47,6 @@
 #include "svx/fmtools.hxx"
 using namespace ::svxform;
 #include <comphelper/property.hxx>
-#include <rtl/logfile.hxx>
 
 using com::sun::star::uno::Reference;
 using com::sun::star::uno::UNO_QUERY;
@@ -62,7 +61,6 @@ FmFormPage::FmFormPage(FmFormModel& rModel, StarBASIC* _pBasic, bool bMasterPage
            ,m_pImpl( new FmFormPageImpl( *this ) )
            ,m_pBasic(_pBasic)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFormPage::FmFormPage" );
 }
 
 //------------------------------------------------------------------
@@ -72,7 +70,6 @@ FmFormPage::FmFormPage(const FmFormPage& rPage)
            ,m_pBasic(0)
 {
     m_pImpl->initFrom( rPage.GetImpl() );
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFormPage::FmFormPage" );
     m_sPageName = rPage.m_sPageName;
 }
 
@@ -85,7 +82,6 @@ FmFormPage::~FmFormPage()
 //------------------------------------------------------------------
 void FmFormPage::SetModel(SdrModel* pNewModel)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFormPage::SetModel" );
     /* #35055# */
     // we want to call the super's "SetModel" method even if the model is the
     // same, in case code somewhere in the system depends on it.  But our code
@@ -120,7 +116,6 @@ void FmFormPage::SetModel(SdrModel* pNewModel)
 //------------------------------------------------------------------
 SdrPage* FmFormPage::Clone() const
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFormPage::Clone" );
     return new FmFormPage(*this);
     // hier fehlt noch ein kopieren der Objekte
 }
@@ -129,7 +124,6 @@ SdrPage* FmFormPage::Clone() const
 void FmFormPage::InsertObject(SdrObject* pObj, sal_uLong nPos,
                               const SdrInsertReason* pReason)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFormPage::InsertObject" );
     SdrPage::InsertObject( pObj, nPos, pReason );
     if (GetModel() && (!pReason || pReason->GetReason() != SDRREASON_STREAMING))
         ((FmFormModel*)GetModel())->GetUndoEnv().Inserted(pObj);
@@ -138,7 +132,6 @@ void FmFormPage::InsertObject(SdrObject* pObj, sal_uLong nPos,
 //------------------------------------------------------------------
 const Reference< css::form::XForms > & FmFormPage::GetForms( bool _bForceCreate ) const
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFormPage::GetForms" );
     const SdrPage& rMasterPage( *this );
     const FmFormPage* pFormPage = dynamic_cast< const FmFormPage* >( &rMasterPage );
     OSL_ENSURE( pFormPage, "FmFormPage::GetForms: referenced page is no FmFormPage - is this allowed?!" );
@@ -152,7 +145,6 @@ const Reference< css::form::XForms > & FmFormPage::GetForms( bool _bForceCreate 
 sal_Bool FmFormPage::RequestHelp( Window* pWindow, SdrView* pView,
                               const HelpEvent& rEvt )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFormPage::RequestHelp" );
     if( pView->IsAction() )
         return sal_False;
 
@@ -218,7 +210,6 @@ sal_Bool FmFormPage::RequestHelp( Window* pWindow, SdrView* pView,
 //------------------------------------------------------------------
 SdrObject* FmFormPage::RemoveObject(sal_uLong nObjNum)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFormPage::RemoveObject" );
     SdrObject* pObj = SdrPage::RemoveObject(nObjNum);
     if (pObj && GetModel())
         ((FmFormModel*)GetModel())->GetUndoEnv().Removed(pObj);

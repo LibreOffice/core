@@ -37,7 +37,6 @@
 #include "fmobj.hxx"
 #include <sfx2/objsh.hxx>
 #include <tools/diagnose_ex.h>
-#include <rtl/logfile.hxx>
 #include <com/sun/star/container/XContainer.hpp>
 
 //............................................................................
@@ -63,21 +62,18 @@ namespace svxform
         ,m_nLocks(0)
         ,m_bCanUndo(sal_True)
     {
-        RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "OFormComponentObserver::OFormComponentObserver" );
     }
 
     // XPropertyChangeListener
     //------------------------------------------------------------------------
     void SAL_CALL OFormComponentObserver::disposing(const EventObject& Source) throw( RuntimeException )
     {
-        RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "OFormComponentObserver::disposing" );
         Remove( Source.Source );
     }
 
     //------------------------------------------------------------------------
     void SAL_CALL OFormComponentObserver::propertyChange(const PropertyChangeEvent& evt) throw(RuntimeException)
     {
-        RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "OFormComponentObserver::propertyChange" );
         if( !m_pNavModel ) return;
         if( evt.PropertyName != FM_PROP_NAME ) return;
 
@@ -103,7 +99,6 @@ namespace svxform
     //------------------------------------------------------------------------------
     void SAL_CALL OFormComponentObserver::elementInserted(const ContainerEvent& evt) throw(RuntimeException)
     {
-        RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "OFormComponentObserver::elementInserted" );
         if (IsLocked() || !m_pNavModel)
             return;
 
@@ -120,7 +115,6 @@ namespace svxform
     //------------------------------------------------------------------------------
     void OFormComponentObserver::Insert(const Reference< XInterface > & xIface, sal_Int32 nIndex)
     {
-        RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "OFormComponentObserver::Insert" );
         Reference< XForm >  xForm(xIface, UNO_QUERY);
         if (xForm.is())
         {
@@ -144,7 +138,6 @@ namespace svxform
     //------------------------------------------------------------------------------
     void SAL_CALL OFormComponentObserver::elementReplaced(const ContainerEvent& evt) throw(RuntimeException)
     {
-        RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "OFormComponentObserver::elementReplaced" );
         if (IsLocked() || !m_pNavModel)
             return;
 
@@ -176,7 +169,6 @@ namespace svxform
     //------------------------------------------------------------------------------
     void OFormComponentObserver::Remove( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxElement )
     {
-        RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "OFormComponentObserver::Remove" );
         if (IsLocked() || !m_pNavModel)
             return;
 
@@ -194,7 +186,6 @@ namespace svxform
     //------------------------------------------------------------------------------
     void SAL_CALL OFormComponentObserver::elementRemoved(const ContainerEvent& evt) throw(RuntimeException)
     {
-        RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "OFormComponentObserver::elementRemoved" );
         Reference< XInterface > xElement;
         evt.Element >>= xElement;
         Remove( xElement );
@@ -211,7 +202,6 @@ namespace svxform
                     ,m_pFormModel(NULL)
                     ,m_aNormalImages( _rNormalImages )
     {
-        RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "NavigatorTreeModel::NavigatorTreeModel" );
         m_pPropChangeList = new OFormComponentObserver(this);
         m_pPropChangeList->acquire();
         m_pRootList = new FmEntryDataList();
@@ -242,7 +232,6 @@ namespace svxform
     //------------------------------------------------------------------------
     void NavigatorTreeModel::SetModified( sal_Bool bMod )
     {
-        RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "NavigatorTreeModel::SetModified" );
         if( !m_pFormShell ) return;
         SfxObjectShell* pObjShell = m_pFormShell->GetFormModel()->GetObjectShell();
         if( !pObjShell ) return;
@@ -252,7 +241,6 @@ namespace svxform
     //------------------------------------------------------------------------
     void NavigatorTreeModel::Clear()
     {
-        RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "NavigatorTreeModel::Clear" );
         Reference< css::form::XForms >  xForms( GetForms());
         if(xForms.is())
             xForms->removeContainerListener((XContainerListener*)m_pPropChangeList);
@@ -270,7 +258,6 @@ namespace svxform
     //------------------------------------------------------------------------
     Reference< css::form::XForms >  NavigatorTreeModel::GetForms() const
     {
-        RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "NavigatorTreeModel::GetForms" );
         if( !m_pFormShell || !m_pFormShell->GetCurPage())
             return NULL;
         else
@@ -280,7 +267,6 @@ namespace svxform
     //------------------------------------------------------------------------
     void NavigatorTreeModel::Insert(FmEntryData* pEntry, sal_uLong nRelPos, sal_Bool bAlterModel)
     {
-        RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "NavigatorTreeModel::Insert" );
         if (IsListening(*m_pFormModel))
             EndListening(*m_pFormModel);
 
@@ -380,7 +366,6 @@ namespace svxform
     //------------------------------------------------------------------------
     void NavigatorTreeModel::Remove(FmEntryData* pEntry, sal_Bool bAlterModel)
     {
-        RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "NavigatorTreeModel::Remove" );
         //////////////////////////////////////////////////////////////////////
         // Form und Parent holen
         if (!pEntry || !m_pFormModel)
@@ -471,7 +456,6 @@ namespace svxform
     //------------------------------------------------------------------------
     void NavigatorTreeModel::RemoveForm(FmFormData* pFormData)
     {
-        RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "NavigatorTreeModel::RemoveForm" );
         //////////////////////////////////////////////////////////////////////
         // Form und Parent holen
         if (!pFormData || !m_pFormModel)
@@ -504,7 +488,6 @@ namespace svxform
     //------------------------------------------------------------------------
     void NavigatorTreeModel::RemoveFormComponent(FmControlData* pControlData)
     {
-        RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "NavigatorTreeModel::RemoveFormComponent" );
         //////////////////////////////////////////////////////////////////////
         // Control und Parent holen
         if (!pControlData)
@@ -520,7 +503,6 @@ namespace svxform
     //------------------------------------------------------------------------
     void NavigatorTreeModel::ClearBranch( FmFormData* pParentData )
     {
-        RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "NavigatorTreeModel::ClearBranch" );
         //////////////////////////////////////////////////////////////////////
         // Alle Eintraege dieses Zweiges loeschen
         FmEntryDataList* pChildList = pParentData->GetChildList();
@@ -538,7 +520,6 @@ namespace svxform
     //------------------------------------------------------------------------
     void NavigatorTreeModel::FillBranch( FmFormData* pFormData )
     {
-        RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "NavigatorTreeModel::FillBranch" );
         //////////////////////////////////////////////////////////////
         // Forms aus der Root einfuegen
         if( pFormData == NULL )
@@ -603,7 +584,6 @@ namespace svxform
     //------------------------------------------------------------------------
     void NavigatorTreeModel::InsertForm(const Reference< XForm > & xForm, sal_uInt32 nRelPos)
     {
-        RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "NavigatorTreeModel::InsertForm" );
         FmFormData* pFormData = (FmFormData*)FindData( xForm, GetRootList() );
         if (pFormData)
             return;
@@ -623,7 +603,6 @@ namespace svxform
     //------------------------------------------------------------------------
     void NavigatorTreeModel::InsertFormComponent(const Reference< XFormComponent > & xComp, sal_uInt32 nRelPos)
     {
-        RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "NavigatorTreeModel::InsertFormComponent" );
         //////////////////////////////////////////////////////////
         // ParentData setzen
         Reference< XInterface >  xIFace( xComp->getParent());
@@ -656,7 +635,6 @@ namespace svxform
         const Reference< XFormComponent > & xNew
     )
     {
-        RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "NavigatorTreeModel::ReplaceFormComponent" );
         FmEntryData* pData = FindData(xOld, GetRootList(), sal_True);
         DBG_ASSERT(pData && pData->ISA(FmControlData), "NavigatorTreeModel::ReplaceFormComponent : invalid argument !");
         ((FmControlData*)pData)->ModelReplaced( xNew, m_aNormalImages );
@@ -668,7 +646,6 @@ namespace svxform
     //------------------------------------------------------------------------
     FmEntryData* NavigatorTreeModel::FindData(const Reference< XInterface > & xElement, FmEntryDataList* pDataList, sal_Bool bRecurs)
     {
-        RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "NavigatorTreeModel::FindData" );
         // normalize
         Reference< XInterface > xIFace( xElement, UNO_QUERY );
 
@@ -690,7 +667,6 @@ namespace svxform
     //------------------------------------------------------------------------
     FmEntryData* NavigatorTreeModel::FindData( const OUString& rText, FmFormData* pParentData, sal_Bool bRecurs )
     {
-        RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "NavigatorTreeModel::FindData" );
         FmEntryDataList* pDataList;
         if( !pParentData )
             pDataList = GetRootList();
@@ -723,7 +699,6 @@ namespace svxform
     //------------------------------------------------------------------------
     void NavigatorTreeModel::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
     {
-        RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "NavigatorTreeModel::Notify" );
         if( rHint.ISA(SdrHint) )
         {
             SdrHint* pSdrHint = (SdrHint*)&rHint;
@@ -754,7 +729,6 @@ namespace svxform
     //------------------------------------------------------------------------
     void NavigatorTreeModel::InsertSdrObj( const SdrObject* pObj )
     {
-        RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "NavigatorTreeModel::InsertSdrObj" );
         const FmFormObj* pFormObject = FmFormObj::GetFormObject( pObj );
         if ( pFormObject )
         {
@@ -782,7 +756,6 @@ namespace svxform
     //------------------------------------------------------------------------
     void NavigatorTreeModel::RemoveSdrObj( const SdrObject* pObj )
     {
-        RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "NavigatorTreeModel::RemoveSdrObj" );
         const FmFormObj* pFormObject = FmFormObj::GetFormObject( pObj );
         if ( pFormObject )
         {
@@ -808,7 +781,6 @@ namespace svxform
 
     sal_Bool NavigatorTreeModel::InsertFormComponent(FmNavRequestSelectHint& rHint, SdrObject* pObject)
     {
-        RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "NavigatorTreeModel::InsertFormComponent" );
         if ( pObject->ISA(SdrObjGroup) )
         {   // rekursiv absteigen
             const SdrObjList *pChildren = ((SdrObjGroup*)pObject)->GetSubList();
@@ -847,7 +819,6 @@ namespace svxform
 
     void NavigatorTreeModel::BroadcastMarkedObjects(const SdrMarkList& mlMarked)
     {
-        RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "NavigatorTreeModel::BroadcastMarkedObjects" );
         // gehen wir durch alle markierten Objekte und suchen wir die raus, mit denen ich was anfangen kann
         FmNavRequestSelectHint rshRequestSelection;
         sal_Bool bIsMixedSelection = sal_False;
@@ -870,7 +841,6 @@ namespace svxform
     //------------------------------------------------------------------------
     void NavigatorTreeModel::UpdateContent( const Reference< css::form::XForms > & xForms )
     {
-        RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "NavigatorTreeModel::UpdateContent" );
         //////////////////////////////////////////////////////////////////////
         // Model von der Root aufwaerts neu fuellen
         Clear();
@@ -893,7 +863,6 @@ namespace svxform
     //------------------------------------------------------------------------
     void NavigatorTreeModel::UpdateContent( FmFormShell* pShell )
     {
-        RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "NavigatorTreeModel::UpdateContent" );
         //////////////////////////////////////////////////////////////////////
         // Wenn Shell sich nicht veraendert hat, nichts machen
         FmFormPage* pNewPage = pShell ? pShell->GetCurPage() : NULL;
@@ -935,7 +904,6 @@ namespace svxform
     //------------------------------------------------------------------------
     Reference< XIndexContainer >  NavigatorTreeModel::GetFormComponents( FmFormData* pFormData )
     {
-        RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "NavigatorTreeModel::GetFormComponents" );
         //////////////////////////////////////////////////////////////////////
         // Von der Form Components holen
         if (pFormData)
@@ -947,7 +915,6 @@ namespace svxform
     //------------------------------------------------------------------------
     sal_Bool NavigatorTreeModel::Rename( FmEntryData* pEntryData, const OUString& rNewText )
     {
-        RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "NavigatorTreeModel::Rename" );
         //////////////////////////////////////////////////////////////////////
         // Wenn Name schon vorhanden, Fehlermeldung
         pEntryData->SetText( rNewText );
@@ -983,7 +950,6 @@ namespace svxform
     //------------------------------------------------------------------
     SdrObject* NavigatorTreeModel::Search(SdrObjListIter& rIter, const Reference< XFormComponent > & xComp)
     {
-        RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "NavigatorTreeModel::Search" );
         while (rIter.IsMore())
         {
             SdrObject* pObj = rIter.Next();

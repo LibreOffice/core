@@ -85,7 +85,6 @@
 #include <comphelper/solarmutex.hxx>
 #include <comphelper/string.hxx>
 #include <connectivity/dbtools.hxx>
-#include <rtl/logfile.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/frame.hxx>

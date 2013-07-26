@@ -56,7 +56,6 @@
 #include <com/sun/star/form/binding/XValueBinding.hpp>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
-#include <rtl/logfile.hxx>
 
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
