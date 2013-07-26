@@ -202,7 +202,6 @@
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <comphelper/accessibleeventnotifier.hxx>
 #include <comphelper/accessiblewrapper.hxx>
-#include <comphelper/configurationhelper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysetinfo.hxx>
 #include <comphelper/sequenceashashmap.hxx>
