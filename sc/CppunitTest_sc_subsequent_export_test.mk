@@ -83,6 +83,7 @@ $(eval $(call gb_CppunitTest_use_components,sc_subsequent_export_test,\
     framework/util/fwk \
     i18npool/util/i18npool \
     i18npool/source/search/i18nsearch \
+    linguistic/source/lng \
     oox/util/oox \
     package/source/xstor/xstor \
     package/util/package2 \
@@ -103,9 +104,9 @@ $(eval $(call gb_CppunitTest_use_components,sc_subsequent_export_test,\
     unotools/util/utl \
     unoxml/source/rdf/unordf \
     unoxml/source/service/unoxml \
+    xmloff/util/xo \
     xmlsecurity/util/xsec_fw \
     xmlsecurity/util/xmlsecurity \
-    xmloff/util/xo \
 ))
 
 ifeq ($(OS),WNT)

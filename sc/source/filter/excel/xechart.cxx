@@ -877,14 +877,8 @@ void lclAddDoubleRefData(
         SCsTAB nScTab2, SCsCOL nScCol2, SCsROW nScRow2 )
 {
     ScComplexRefData aComplexRef;
-    aComplexRef.InitFlags();
+    aComplexRef.InitRange(ScRange(nScCol1,nScRow1,nScTab1,nScCol2,nScRow2,nScTab2));
     aComplexRef.Ref1.SetFlag3D( true );
-    aComplexRef.Ref1.nTab = nScTab1;
-    aComplexRef.Ref1.nCol = nScCol1;
-    aComplexRef.Ref1.nRow = nScRow1;
-    aComplexRef.Ref2.nTab = nScTab2;
-    aComplexRef.Ref2.nCol = nScCol2;
-    aComplexRef.Ref2.nRow = nScRow2;
 
     if( orArray.GetLen() > 0 )
         orArray.AddOpCode( ocUnion );

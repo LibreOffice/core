@@ -18,9 +18,10 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/sfxmodelfactory.hxx>
 #include <svl/stritem.hxx>
+
+#include "drwlayer.hxx"
 #include "svx/svdpage.hxx"
 #include "svx/svdoole2.hxx"
-
 #include "editeng/wghtitem.hxx"
 #include "editeng/postitem.hxx"
 #include "editeng/udlnitem.hxx"
@@ -33,7 +34,6 @@
 #include <dbdata.hxx>
 #include "validat.hxx"
 #include "formulacell.hxx"
-#include "drwlayer.hxx"
 #include "userdat.hxx"
 #include "dpobject.hxx"
 #include "dpsave.hxx"
@@ -1302,48 +1302,10 @@ void ScFiltersTest::testChartImportODS()
     CPPUNIT_ASSERT_EQUAL(OUString("Title"), aName);
 
     // Retrieve the chart object instance from the 2nd page (for the 2nd sheet).
-    ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
-    CPPUNIT_ASSERT_MESSAGE("Failed to retrieve the drawing layer object.", pDrawLayer);
-    const SdrPage* pPage = pDrawLayer->GetPage(1); // for the 2nd sheet.
-    CPPUNIT_ASSERT_MESSAGE("Failed to retrieve the page object.", pPage);
-    CPPUNIT_ASSERT_MESSAGE("This page should contain one drawing object.", pPage->GetObjCount() == 1);
-    const SdrObject* pObj = pPage->GetObj(0);
-    CPPUNIT_ASSERT_MESSAGE("Failed to retrieve the drawing object.", pObj);
-    CPPUNIT_ASSERT_MESSAGE("This is not an OLE2 object.", pObj->GetObjIdentifier() == OBJ_OLE2);
-    const SdrOle2Obj& rOleObj = static_cast<const SdrOle2Obj&>(*pObj);
-    CPPUNIT_ASSERT_MESSAGE("This should be a chart object.", rOleObj.IsChart());
+    const SdrOle2Obj* pOleObj = getSingleChartObject(*pDoc, 1);
+    CPPUNIT_ASSERT_MESSAGE("Failed to retrieve a chart object from the 2nd sheet.", pOleObj);
 
-    // Make sure the chart object has correct range references.
-    Reference<frame::XModel> xModel = rOleObj.getXModel();
-    CPPUNIT_ASSERT_MESSAGE("Failed to get the embedded object interface.", xModel.is());
-    Reference<chart2::XChartDocument> xChartDoc(xModel, UNO_QUERY);
-    CPPUNIT_ASSERT_MESSAGE("Failed to get the chart document interface.", xChartDoc.is());
-    Reference<chart2::data::XDataSource> xDataSource(xChartDoc, UNO_QUERY);
-    CPPUNIT_ASSERT_MESSAGE("Failed to get the data source interface.", xDataSource.is());
-    Sequence<Reference<chart2::data::XLabeledDataSequence> > xDataSeqs = xDataSource->getDataSequences();
-    CPPUNIT_ASSERT_MESSAGE("There should be at least one data sequences.", xDataSeqs.getLength() > 0);
-    Reference<chart2::data::XDataReceiver> xDataRec(xChartDoc, UNO_QUERY);
-    CPPUNIT_ASSERT_MESSAGE("Failed to get the data receiver interface.", xDataRec.is());
-    Sequence<OUString> aRangeReps = xDataRec->getUsedRangeRepresentations();
-    CPPUNIT_ASSERT_MESSAGE("There should be at least one range representations.", aRangeReps.getLength() > 0);
-
-    ScRangeList aRanges;
-    for (sal_Int32 i = 0, n = aRangeReps.getLength(); i < n; ++i)
-    {
-        ScRange aRange;
-        sal_uInt16 nRes = aRange.Parse(aRangeReps[i], pDoc, pDoc->GetAddressConvention());
-        if (nRes & SCA_VALID)
-            // This is a range address.
-            aRanges.Append(aRange);
-        else
-        {
-            // Parse it as a single cell address.
-            ScAddress aAddr;
-            nRes = aAddr.Parse(aRangeReps[i], pDoc, pDoc->GetAddressConvention());
-            CPPUNIT_ASSERT_MESSAGE("Failed to parse a range representation.", (nRes & SCA_VALID));
-            aRanges.Append(aAddr);
-        }
-    }
+    ScRangeList aRanges = getChartRanges(*pDoc, *pOleObj);
 
     CPPUNIT_ASSERT_MESSAGE("Data series title cell not found.", aRanges.In(ScAddress(1,0,3))); // B1 on Title
     CPPUNIT_ASSERT_MESSAGE("Data series label range not found.", aRanges.In(ScRange(0,1,2,0,3,2))); // A2:A4 on Data

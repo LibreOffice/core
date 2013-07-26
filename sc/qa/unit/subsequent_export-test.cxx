@@ -28,6 +28,8 @@
 #include "cellform.hxx"
 #include "formulacell.hxx"
 
+#include "svx/svdoole2.hxx"
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
@@ -53,6 +55,7 @@ public:
     void testNamedRangeBugfdo62729();
 
     void testInlineArrayXLS();
+    void testEmbeddedChartXLS();
 
     CPPUNIT_TEST_SUITE(ScExportTest);
     CPPUNIT_TEST(test);
@@ -66,6 +69,7 @@ public:
     CPPUNIT_TEST(testMiscRowHeightExport);
     CPPUNIT_TEST(testNamedRangeBugfdo62729);
     CPPUNIT_TEST(testInlineArrayXLS);
+    CPPUNIT_TEST(testEmbeddedChartXLS);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -355,6 +359,7 @@ void ScExportTest::testInlineArrayXLS()
     CPPUNIT_ASSERT(xShell.Is());
 
     ScDocShellRef xDocSh = saveAndReload(xShell, XLS);
+    xShell->DoClose();
     CPPUNIT_ASSERT(xDocSh.Is());
 
     ScDocument* pDoc = xDocSh->GetDocument();
@@ -368,6 +373,34 @@ void ScExportTest::testInlineArrayXLS()
 
     // B8:C10 as well.
     checkMatrixRange(*pDoc, ScRange(1,7,0,2,9,0));
+
+    xDocSh->DoClose();
+}
+
+void ScExportTest::testEmbeddedChartXLS()
+{
+    ScDocShellRef xShell = loadDoc("embedded-chart.", XLS);
+    CPPUNIT_ASSERT(xShell.Is());
+
+    ScDocShellRef xDocSh = saveAndReload(xShell, XLS);
+    xShell->DoClose();
+    CPPUNIT_ASSERT(xDocSh.Is());
+
+    ScDocument* pDoc = xDocSh->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+
+    // Make sure the 2nd sheet is named 'Chart1'.
+    OUString aName;
+    pDoc->GetName(1, aName);
+    CPPUNIT_ASSERT_EQUAL(OUString("Chart1"), aName);
+
+    const SdrOle2Obj* pOleObj = getSingleChartObject(*pDoc, 1);
+    CPPUNIT_ASSERT_MESSAGE("Failed to retrieve a chart object from the 2nd sheet.", pOleObj);
+
+    ScRangeList aRanges = getChartRanges(*pDoc, *pOleObj);
+    CPPUNIT_ASSERT_MESSAGE("Label range (B3:B5) not found.", aRanges.In(ScRange(1,2,1,1,4,1)));
+    CPPUNIT_ASSERT_MESSAGE("Data label (C2) not found.", aRanges.In(ScAddress(2,1,1)));
+    CPPUNIT_ASSERT_MESSAGE("Data range (C3:C5) not found.", aRanges.In(ScRange(2,2,1,2,4,1)));
 
     xDocSh->DoClose();
 }

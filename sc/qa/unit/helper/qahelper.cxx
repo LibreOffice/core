@@ -9,6 +9,9 @@
 
 #include "qahelper.hxx"
 #include "csv_handler.hxx"
+#include "drwlayer.hxx"
+#include "svx/svdpage.hxx"
+#include "svx/svdoole2.hxx"
 
 #if defined WNT
 #define __ORCUS_STATIC_LIB
@@ -16,6 +19,14 @@
 #include <orcus/csv_parser.hpp>
 
 #include <fstream>
+
+#include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/text/textfield/Type.hpp>
+#include <com/sun/star/chart2/XChartDocument.hpp>
+#include <com/sun/star/chart2/data/XDataReceiver.hpp>
+
+using namespace com::sun::star;
+using namespace ::com::sun::star::uno;
 
 FileFormat aFileFormats[] = {
     { "ods" , "calc8", "", ODS_FORMAT_TYPE },
@@ -105,6 +116,123 @@ void testCondFile(OUString& aFileName, ScDocument* pDoc, SCTAB nTab)
         aErrorMsg.append(e.what());
         CPPUNIT_ASSERT_MESSAGE(aErrorMsg.getStr(), false);
     }
+}
+
+const SdrOle2Obj* getSingleChartObject(ScDocument& rDoc, sal_uInt16 nPage)
+{
+    // Retrieve the chart object instance from the 2nd page (for the 2nd sheet).
+    ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer();
+    if (!pDrawLayer)
+    {
+        cout << "Failed to retrieve the drawing layer object." << endl;
+        return NULL;
+    }
+
+    const SdrPage* pPage = pDrawLayer->GetPage(nPage);
+    if (!pPage)
+    {
+        cout << "Failed to retrieve the page object." << endl;
+        return NULL;
+    }
+
+    if (pPage->GetObjCount() != 1)
+    {
+        cout << "This page should contain one drawing object." << endl;
+        return NULL;
+    }
+
+    const SdrObject* pObj = pPage->GetObj(0);
+    if (!pObj)
+    {
+        cout << "Failed to retrieve the drawing object." << endl;
+        return NULL;
+    }
+
+    if (pObj->GetObjIdentifier() != OBJ_OLE2)
+    {
+        cout << "This is not an OLE2 object." << endl;
+        return NULL;
+    }
+
+    const SdrOle2Obj& rOleObj = static_cast<const SdrOle2Obj&>(*pObj);
+    if (!rOleObj.IsChart())
+    {
+        cout << "This should be a chart object." << endl;
+        return NULL;
+    }
+
+    return &rOleObj;
+}
+
+std::vector<OUString> getChartRangeRepresentations(const SdrOle2Obj& rChartObj)
+{
+    std::vector<OUString> aRangeReps;
+
+    // Make sure the chart object has correct range references.
+    Reference<frame::XModel> xModel = rChartObj.getXModel();
+    if (!xModel.is())
+    {
+        cout << "Failed to get the embedded object interface." << endl;
+        return aRangeReps;
+    }
+
+    Reference<chart2::XChartDocument> xChartDoc(xModel, UNO_QUERY);
+    if (!xChartDoc.is())
+    {
+        cout << "Failed to get the chart document interface." << endl;
+        return aRangeReps;
+    }
+
+    Reference<chart2::data::XDataSource> xDataSource(xChartDoc, UNO_QUERY);
+    if (!xDataSource.is())
+    {
+        cout << "Failed to get the data source interface." << endl;
+        return aRangeReps;
+    }
+
+    Sequence<Reference<chart2::data::XLabeledDataSequence> > xDataSeqs = xDataSource->getDataSequences();
+    if (!xDataSeqs.getLength())
+    {
+        cout << "There should be at least one data sequences." << endl;
+        return aRangeReps;
+    }
+
+    Reference<chart2::data::XDataReceiver> xDataRec(xChartDoc, UNO_QUERY);
+    if (!xDataRec.is())
+    {
+        cout << "Failed to get the data receiver interface." << endl;
+        return aRangeReps;
+    }
+
+    Sequence<OUString> aRangeRepSeqs = xDataRec->getUsedRangeRepresentations();
+    for (sal_Int32 i = 0, n = aRangeRepSeqs.getLength(); i < n; ++i)
+        aRangeReps.push_back(aRangeRepSeqs[i]);
+
+    return aRangeReps;
+}
+
+ScRangeList getChartRanges(ScDocument& rDoc, const SdrOle2Obj& rChartObj)
+{
+    std::vector<OUString> aRangeReps = getChartRangeRepresentations(rChartObj);
+    ScRangeList aRanges;
+    for (size_t i = 0, n = aRangeReps.size(); i < n; ++i)
+    {
+        ScRange aRange;
+        sal_uInt16 nRes = aRange.Parse(aRangeReps[i], &rDoc, rDoc.GetAddressConvention());
+        if (nRes & SCA_VALID)
+            // This is a range address.
+            aRanges.Append(aRange);
+        else
+        {
+            // Parse it as a single cell address.
+            ScAddress aAddr;
+            nRes = aAddr.Parse(aRangeReps[i], &rDoc, rDoc.GetAddressConvention());
+            CPPUNIT_ASSERT_MESSAGE("Failed to parse a range representation.", (nRes & SCA_VALID));
+            aRanges.Append(aAddr);
+        }
+    }
+
+    return aRanges;
 }
 
 ScDocShellRef ScBootstrapFixture::load( bool bReadWrite,

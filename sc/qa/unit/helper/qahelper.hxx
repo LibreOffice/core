@@ -50,6 +50,9 @@ SC_DLLPUBLIC bool testEqualsWithTolerance( long nVal1, long nVal2, long nTol );
 
 #define CHECK_OPTIMAL 0x1
 
+class SdrOle2Obj;
+class ScRangeList;
+
 // data format for row height tests
 struct TestParam
 {
@@ -86,7 +89,11 @@ SC_DLLPUBLIC void testFile(OUString& aFileName, ScDocument* pDoc, SCTAB nTab, St
 //need own handler because conditional formatting strings must be generated
 SC_DLLPUBLIC void testCondFile(OUString& aFileName, ScDocument* pDoc, SCTAB nTab);
 
-SC_DLLPUBLIC void clearRange(ScDocument* pDoc, const ScRange& rRange);
+SC_DLLPUBLIC const SdrOle2Obj* getSingleChartObject(ScDocument& rDoc, sal_uInt16 nPage);
+
+SC_DLLPUBLIC std::vector<OUString> getChartRangeRepresentations(const SdrOle2Obj& rChartObj);
+
+SC_DLLPUBLIC ScRangeList getChartRanges(ScDocument& rDoc, const SdrOle2Obj& rChartObj);
 
 inline std::string print(const ScAddress& rAddr)
 {
