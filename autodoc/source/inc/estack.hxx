@@ -74,7 +74,6 @@ class EStack : private std::slist<ELEM>
 
     // INQUIRY
     const value_type &  top() const             { return base::front(); }
-    size_type           size() const            { return base::size(); }
     bool                empty() const           { return base::empty(); }
 
     // ACCESS
