@@ -35,7 +35,8 @@ TYPEINIT1( SwAutoCorrect, SvxAutoCorrect );
     //      koennen aus der Wortliste herausgeholt werden!)
     //      rShort ist der Stream-Name - gecryptet!
 
-sal_Bool SwAutoCorrect::GetLongText( const uno::Reference < embed::XStorage >& rStg, const String& rFileName, const String& rShort, String& rLong )
+sal_Bool SwAutoCorrect::GetLongText( const uno::Reference < embed::XStorage >& rStg,
+                                     const String& rFileName, const String& rShort, OUString& rLong )
 {
     sal_uLong nRet = 0;
     if (rStg.is())
@@ -47,13 +48,14 @@ sal_Bool SwAutoCorrect::GetLongText( const uno::Reference < embed::XStorage >& r
     else {
        OSL_ENSURE( rStg.is(), "Someone passed SwAutoCorrect::GetLongText a dud storage!");
     }
-    return !IsError( nRet ) && rLong.Len();
+    return !IsError( nRet ) && !rLong.isEmpty();
 }
 
     //  - Text mit Attributierung (kann nur der SWG - SWG-Format!)
     //      rShort ist der Stream-Name - gecryptet!
-sal_Bool SwAutoCorrect::PutText( const uno::Reference < embed::XStorage >&  rStg, const String& rFileName, const String& rShort,
-                            SfxObjectShell& rObjSh, String& rLong )
+sal_Bool SwAutoCorrect::PutText( const uno::Reference < embed::XStorage >&  rStg,
+                                 const String& rFileName, const String& rShort,
+                                 SfxObjectShell& rObjSh, OUString& rLong )
 {
     if( !rObjSh.IsA( TYPE(SwDocShell) ) )
         return sal_False;

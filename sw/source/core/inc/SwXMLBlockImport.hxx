@@ -21,7 +21,6 @@
 #define _SW_XMLBLOCKIMPORT_HXX
 
 #include <xmloff/xmlimp.hxx>
-#include <tools/string.hxx>
 
 class SwXMLTextBlocks;
 class SwXMLBlockListImport : public SvXMLImport
@@ -65,10 +64,10 @@ protected:
 
 public:
     sal_Bool bTextOnly;
-    String &m_rText;
+    OUString &m_rText;
     SwXMLTextBlockImport(
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xContext,
-        SwXMLTextBlocks &rBlocks, String &rNewText, sal_Bool bNewTextOnly );
+        SwXMLTextBlocks &rBlocks, OUString &rNewText, sal_Bool bNewTextOnly );
 
     SwXMLTextBlocks& getBlockList ( void )
     {

@@ -1609,14 +1609,15 @@ sal_Bool SvxAutoCorrect::MakeCombinedChanges( std::vector<SvxAutocorrWord>& aNew
 
     //  - return the replacement text (only for SWG-Format, all other
     //      can be taken from the word list!)
-sal_Bool SvxAutoCorrect::GetLongText( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >&, const String&, const String& , String& )
+sal_Bool SvxAutoCorrect::GetLongText( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >&,
+                                      const String&, const String&, OUString& )
 {
     return sal_False;
 }
 
     // Text with attribution (only the SWG - SWG format!)
-sal_Bool SvxAutoCorrect::PutText( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >&, const String&, const String&, SfxObjectShell&,
-                                String& )
+sal_Bool SvxAutoCorrect::PutText( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >&,
+                                  const String&, const String&, SfxObjectShell&, OUString& )
 {
     return sal_False;
 }
@@ -2541,7 +2542,7 @@ sal_Bool SvxAutoCorrectLanguageLists::PutText( const String& rShort,
     MakeUserStorage_Impl();
 
     sal_Bool bRet = sal_False;
-    String sLong;
+    OUString sLong;
     try
     {
         uno::Reference < embed::XStorage > xStg = comphelper::OStorageHelper::GetStorageFromURL( sUserAutoCorrFile, embed::ElementModes::READWRITE );
