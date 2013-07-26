@@ -18,7 +18,6 @@
  */
 
 #include "logging.hxx"
-#include <rtl/logfile.hxx>
 
 //.........................................................................
 namespace xmloff

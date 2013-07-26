@@ -29,7 +29,6 @@
 #include <xmloff/nmspmap.hxx>
 #include <comphelper/extract.hxx>
 #include "strings.hxx"
-#include <rtl/logfile.hxx>
 
 //.........................................................................
 namespace xmloff

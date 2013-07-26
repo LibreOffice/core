@@ -515,7 +515,6 @@
 #include <osl/mutex.hxx>
 #include <osl/thread.h>
 #include <rtl/instance.hxx>
-#include <rtl/logfile.hxx>
 #include <rtl/math.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>

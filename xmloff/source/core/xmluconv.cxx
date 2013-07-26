@@ -27,7 +27,6 @@
 #include <xmloff/xmlement.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <rtl/math.hxx>
-#include <rtl/logfile.hxx>
 
 #include <tools/date.hxx>
 #include <tools/time.hxx>

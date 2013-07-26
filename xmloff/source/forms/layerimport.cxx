@@ -50,7 +50,6 @@
 #include "xmloff/xformsimport.hxx"
 #include <xmloff/xmltoken.hxx>
 #include "xmloff/xmlnmspe.hxx"
-#include <rtl/logfile.hxx>
 #include <rtl/strbuf.hxx>
 #include <algorithm>
 

@@ -68,7 +68,6 @@
 #include "xmloff/XMLFilterServiceNames.h"
 #include "xmloff/XMLEmbeddedObjectExportFilter.hxx"
 #include "XMLBasicExportFilter.hxx"
-#include <rtl/logfile.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <comphelper/extract.hxx>
 #include <comphelper/servicehelper.hxx>
@@ -801,9 +800,6 @@ void SAL_CALL SvXMLExport::initialize( const uno::Sequence< uno::Any >& aArgumen
 // XFilter
 sal_Bool SAL_CALL SvXMLExport::filter( const uno::Sequence< beans::PropertyValue >& aDescriptor ) throw(uno::RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogContext, "xmloff", "mb93740",
-                                "SvXMLExport::filter" );
-
     // check for xHandler first... should have been supplied in initialize
     if( !mxHandler.is() )
         return sal_False;
@@ -843,13 +839,11 @@ sal_Bool SAL_CALL SvXMLExport::filter( const uno::Sequence< beans::PropertyValue
             // print a trace message with the URL
             OString aUrl(OUStringToOString(GetModel()->getURL(),
                              RTL_TEXTENCODING_ASCII_US));
-            RTL_LOGFILE_CONTEXT_TRACE1( aLogContext, "%s", aUrl.getStr() );
-
+            SAL_INFO( "xmloff.core", aUrl.getStr() );
             // we also want a trace message with the document class
             OString aClass(OUStringToOString(GetXMLToken(meClass),
                                RTL_TEXTENCODING_ASCII_US));
-            RTL_LOGFILE_CONTEXT_TRACE1( aLogContext, "class=\"%s\"",
-                                        aClass.getStr() );
+            SAL_INFO( "xmloff.core", "class=\""  << aClass.getStr() << "\"" );
         }
 #endif
 
