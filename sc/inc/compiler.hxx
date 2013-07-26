@@ -451,14 +451,6 @@ public:
                                   SCsCOL nDx, SCsROW nDy, SCsTAB nDz,
                                   bool& rChanged, bool& rRefSizeChanged );
 
-    /// Only once for converted shared formulas,
-    /// token array has to be compiled afterwards.
-    void UpdateSharedFormulaReference( UpdateRefMode eUpdateRefMode,
-                                  const ScAddress& rOldPos, const ScRange&,
-                                  SCsCOL nDx, SCsROW nDy, SCsTAB nDz );
-
-    ScRangeData* UpdateMoveTab(SCTAB nOldPos, SCTAB nNewPos, bool bIsName );
-
     bool HasModifiedRange();
 
     /** If the character is allowed as first character in sheet names or

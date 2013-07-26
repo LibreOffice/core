@@ -587,16 +587,13 @@ void ScConditionEntry::UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos )
 {
     if (pFormula1)
     {
-        ScCompiler aComp( mpDoc, aSrcPos, *pFormula1);
-        aComp.SetGrammar(mpDoc->GetGrammar());
-        aComp.UpdateMoveTab(nOldPos, nNewPos, true );
+        pFormula1->AdjustReferenceOnMovedTab(nOldPos, nNewPos, aSrcPos);
         DELETEZ(pFCell1);
     }
+
     if (pFormula2)
     {
-        ScCompiler aComp( mpDoc, aSrcPos, *pFormula2);
-        aComp.SetGrammar(mpDoc->GetGrammar());
-        aComp.UpdateMoveTab(nOldPos, nNewPos, true );
+        pFormula2->AdjustReferenceOnMovedTab(nOldPos, nNewPos, aSrcPos);
         DELETEZ(pFCell2);
     }
 }
