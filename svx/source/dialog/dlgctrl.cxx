@@ -1972,6 +1972,34 @@ SvxXShadowPreview::SvxXShadowPreview( Window* pParent, const ResId& rResId )
     mpRectangleShadow->SetModel(&getModel());
 }
 
+SvxXShadowPreview::SvxXShadowPreview( Window* pParent )
+:   SvxPreviewBase( pParent),
+mpRectangleObject(0),
+mpRectangleShadow(0)
+{
+    InitSettings(true, true);
+
+    // prepare size
+    Size aSize = GetOutputSize();
+    aSize.Width() = aSize.Width() / 3;
+    aSize.Height() = aSize.Height() / 3;
+
+    // create RectangleObject
+    const Rectangle aObjectSize( Point( aSize.Width(), aSize.Height() ), aSize );
+    mpRectangleObject = new SdrRectObj(aObjectSize);
+    mpRectangleObject->SetModel(&getModel());
+
+    // create ShadowObject
+    const Rectangle aShadowSize( Point( aSize.Width(), aSize.Height() ), aSize );
+    mpRectangleShadow = new SdrRectObj(aShadowSize);
+    mpRectangleShadow->SetModel(&getModel());
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxXShadowPreview (Window *pParent, VclBuilder::stringmap &)
+{
+    return new SvxXShadowPreview(pParent);
+}
+
 SvxXShadowPreview::~SvxXShadowPreview()
 {
     SdrObject::Free(mpRectangleObject);
