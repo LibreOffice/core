@@ -482,7 +482,7 @@ void  DrawViewShell::ExecRuler(SfxRequest& rReq)
          rReq.GetSlot() == SID_ATTR_LONG_ULSPACE )
     {
         pUndoGroup = new SdUndoGroup(GetDoc());
-        String aString(SdResId(STR_UNDO_CHANGE_PAGEBORDER));
+        OUString aString(SdResId(STR_UNDO_CHANGE_PAGEBORDER));
         pUndoGroup->SetComment(aString);
     }
 

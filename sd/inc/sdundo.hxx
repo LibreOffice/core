@@ -33,13 +33,13 @@ public:
                                 : mpDoc(pSdDrawDocument)  {}
     virtual                 ~SdUndoAction() {}
 
-    void                    SetComment(String& rStr) { maComment = rStr; }
-    virtual OUString   GetComment() const { return maComment; }
+    void                    SetComment(OUString& rStr) { maComment = rStr; }
+    virtual OUString        GetComment() const { return maComment; }
     virtual SdUndoAction*   Clone() const { return NULL; }
 
 protected:
     SdDrawDocument* mpDoc;
-    String maComment;
+    OUString maComment;
 };
 
 #endif     // _SD_SDUNDO_HXX

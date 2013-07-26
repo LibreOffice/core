@@ -195,14 +195,14 @@ void ViewShell::Implementation::ProcessModifyPageSlot (
 
         if( pUndoManager )
         {
-            String aComment( SdResId(STR_UNDO_MODIFY_PAGE) );
+            OUString aComment( SdResId(STR_UNDO_MODIFY_PAGE) );
             pUndoManager->EnterListAction(aComment, aComment);
             ModifyPageUndoAction* pAction = new ModifyPageUndoAction(
                 pDocument, pUndoPage, aNewName, aNewAutoLayout, bBVisible, bBObjsVisible);
             pUndoManager->AddUndoAction(pAction);
 
-            // Clear the selection because the selectec object may be removed as
-            // a result of the ssignment of the layout.
+            // Clear the selection because the selected object may be removed as
+            // a result of the assignment of the layout.
             mrViewShell.GetDrawView()->UnmarkAll();
 
             if (!bHandoutMode)

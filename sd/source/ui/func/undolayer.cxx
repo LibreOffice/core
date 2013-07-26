@@ -47,7 +47,7 @@ SdLayerModifyUndoAction::SdLayerModifyUndoAction(
     mbNewIsLocked( bNewIsLocked ),
     mbNewIsPrintable( bNewIsPrintable )
 {
-    String aString(SdResId(STR_MODIFYLAYER));
+    OUString aString(SdResId(STR_MODIFYLAYER));
     SetComment(aString);
 }
 
