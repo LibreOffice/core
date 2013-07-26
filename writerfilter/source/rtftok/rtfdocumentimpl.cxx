@@ -4691,6 +4691,11 @@ int RTFDocumentImpl::popState()
         m_aStates.top().nCells = aState.nCells;
         m_aStates.top().aTableCellsSprms = aState.aTableCellsSprms;
         m_aStates.top().aTableCellsAttributes = aState.aTableCellsAttributes;
+
+        // Also the inherited properties should be kept accross groups.
+        m_aStates.top().aTableInheritingCellsSprms = aState.aTableInheritingCellsSprms;
+        m_aStates.top().aTableInheritingCellsAttributes = aState.aTableInheritingCellsAttributes;
+        m_aStates.top().nInheritingCells = aState.nInheritingCells;
     }
 
     return 0;
