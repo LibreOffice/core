@@ -761,7 +761,7 @@ bool ScSingleRefToken::operator==( const FormulaToken& r ) const
 void ScSingleRefToken::Dump() const
 {
     cout << "-- ScSingleRefToken" << endl;
-    aSingleRef.Dump();
+    aSingleRef.Dump(1);
 }
 #endif
 
@@ -780,7 +780,7 @@ bool ScDoubleRefToken::operator==( const FormulaToken& r ) const
 void ScDoubleRefToken::Dump() const
 {
     cout << "-- ScDoubleRefToken" << endl;
-    aDoubleRef.Dump();
+    aDoubleRef.Dump(1);
 }
 #endif
 
