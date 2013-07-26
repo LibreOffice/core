@@ -2279,6 +2279,7 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
                 lcl_eraseNestedAttribute(m_aStates.top().aParagraphSprms, NS_ooxml::LN_CT_PPrBase_spacing, NS_ooxml::LN_CT_Spacing_after);
                 m_aStates.top().aParagraphSprms.erase(NS_sprm::LN_PDxaLeft);
                 m_aStates.top().aParagraphSprms.erase(NS_sprm::LN_PDxaRight);
+                m_aStates.top().aParagraphSprms.erase(NS_sprm::LN_PJc);
             }
             m_aStates.top().resetFrame();
             break;
