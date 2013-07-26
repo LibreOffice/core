@@ -332,6 +332,7 @@ certain functionality.
 @li @c sw.core - Writer core
 @li @c sw.docx
 @li @c sw.envelp
+@li @c sw.fmtui
 @li @c sw.level2
 @li @c sw.rtf - .rtf export filter
 @li @c sw.text.txtinfo
