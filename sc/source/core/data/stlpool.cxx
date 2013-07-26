@@ -81,7 +81,7 @@ void ScStyleSheetPool::SetDocument( ScDocument* pDocument )
 //------------------------------------------------------------------------
 
 SfxStyleSheetBase& ScStyleSheetPool::Make( const OUString& rName,
-                                           SfxStyleFamily eFam, sal_uInt16 mask, sal_uInt16 nPos )
+                                           SfxStyleFamily eFam, sal_uInt16 mask)
 {
     //  When updating styles from a template, Office 5.1 sometimes created
     //  files with multiple default styles.
@@ -98,11 +98,11 @@ SfxStyleSheetBase& ScStyleSheetPool::Make( const OUString& rName,
             OUString aNewName = ScGlobal::GetRscString(STR_STYLENAME_STANDARD);
             aNewName += OUString::number( nAdd );
             if ( Find( aNewName, eFam ) == NULL )
-                return SfxStyleSheetPool::Make( aNewName, eFam, mask, nPos );
+                return SfxStyleSheetPool::Make(aNewName, eFam, mask);
         }
     }
 
-    return SfxStyleSheetPool::Make( rName, eFam, mask, nPos );
+    return SfxStyleSheetPool::Make(rName, eFam, mask);
 }
 
 //------------------------------------------------------------------------

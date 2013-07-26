@@ -197,7 +197,8 @@ public:
 
     virtual void Replace( SfxStyleSheetBase& rSource,
                           SfxStyleSheetBase& rTarget );
-    virtual SfxStyleSheetBase& Make(const OUString&, SfxStyleFamily, sal_uInt16 nMask, sal_uInt16 nPos = 0xffff);
+    virtual SfxStyleSheetBase& Make(const OUString&, SfxStyleFamily,
+            sal_uInt16 nMask) SAL_OVERRIDE;
 
     virtual SfxStyleSheetBase* Find( const OUString&, SfxStyleFamily eFam,
                                     sal_uInt16 n=SFXSTYLEBIT_ALL );

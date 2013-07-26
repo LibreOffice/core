@@ -2053,8 +2053,7 @@ void SAL_CALL SwDocStyleSheetPool::release(  ) throw ()
 
 SfxStyleSheetBase&   SwDocStyleSheetPool::Make( const OUString&   rName,
                                                 SfxStyleFamily  eFam,
-                                                sal_uInt16          _nMask,
-                                                sal_uInt16          /*nPos*/ )
+                                                sal_uInt16          _nMask)
 {
     mxStyleSheet->PresetName(rName);
     mxStyleSheet->PresetParent(aEmptyStr);

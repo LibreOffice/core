@@ -61,7 +61,7 @@ SfxSimpleHint(SFX_HINT_DYING) from:
 
 SfxStyleSheetHint( SFX_STYLESHEET_CREATED, *p ) from:
    SfxStyleSheetBasePool::Make( const String& rName,
-   SfxStyleFamily eFam, sal_uInt16 mask, sal_uInt16 nPos)
+   SfxStyleFamily eFam, sal_uInt16 mask)
 
 SfxStyleSheetHint( SFX_STYLESHEET_CHANGED, *pNew ) from:
    SfxStyleSheetBasePool::Add( SfxStyleSheetBase& rSheet )
@@ -234,8 +234,7 @@ public:
 
     virtual SfxStyleSheetBase&  Make(const OUString&,
                                      SfxStyleFamily eFam,
-                                     sal_uInt16 nMask = SFXSTYLEBIT_ALL ,
-                                     sal_uInt16 nPos = 0xffff);
+                                     sal_uInt16 nMask = SFXSTYLEBIT_ALL);
 
     virtual void             Replace(
         SfxStyleSheetBase& rSource, SfxStyleSheetBase& rTarget );

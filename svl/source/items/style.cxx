@@ -627,27 +627,18 @@ SfxStyleSheetBase* SfxStyleSheetBasePool::Create( const SfxStyleSheetBase& r )
     return new SfxStyleSheetBase( r );
 }
 
-SfxStyleSheetBase& SfxStyleSheetBasePool::Make( const OUString& rName, SfxStyleFamily eFam, sal_uInt16 mask, sal_uInt16 nPos)
+SfxStyleSheetBase& SfxStyleSheetBasePool::Make( const OUString& rName, SfxStyleFamily eFam, sal_uInt16 mask)
 {
     OSL_ENSURE( eFam != SFX_STYLE_FAMILY_ALL, "svl::SfxStyleSheetBasePool::Make(), FamilyAll is not a allowed Familie" );
 
     SfxStyleSheetIterator aIter(this, eFam, mask);
     rtl::Reference< SfxStyleSheetBase > xStyle( aIter.Find( rName ) );
     OSL_ENSURE( !xStyle.is(), "svl::SfxStyleSheetBasePool::Make(), StyleSheet already exists" );
-    SfxStyleSheetIterator& rIter = GetIterator_Impl();
 
     if( !xStyle.is() )
     {
         xStyle = Create( rName, eFam, mask );
-        if(0xffff == nPos || nPos == aStyles.size() || nPos == rIter.Count())
-        {
-            aStyles.push_back( xStyle );
-        }
-        else
-        {
-            rIter[nPos];
-            aStyles.insert( aStyles.begin() + rIter.GetPos(), xStyle );
-        }
+        aStyles.push_back(xStyle);
         Broadcast( SfxStyleSheetHint( SFX_STYLESHEET_CREATED, *xStyle.get() ) );
     }
     return *xStyle.get();

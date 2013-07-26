@@ -54,7 +54,7 @@ public:
     const OUString*     GetForceStdName() const { return pForceStdName; }
 
     virtual SfxStyleSheetBase& Make( const OUString&, SfxStyleFamily eFam,
-                                     sal_uInt16 nMask = SFXSTYLEBIT_ALL, sal_uInt16 nPos = 0xffff );
+                                     sal_uInt16 nMask = SFXSTYLEBIT_ALL) SAL_OVERRIDE;
 
 protected:
     virtual             ~ScStyleSheetPool();
