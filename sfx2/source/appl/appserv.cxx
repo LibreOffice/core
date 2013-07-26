@@ -122,6 +122,9 @@
 #include <sfx2/zoomitem.hxx>
 #include "templatedlg.hxx"
 
+#include <officecfg/Office/Common.hxx>
+#include <officecfg/Setup.hxx>
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::uno;
@@ -990,31 +993,6 @@ namespace
 #endif // !DISABLE_SCRIPTING
 }
 
-static OUString getConfigurationStringValue(
-    const OUString& rPackage,
-    const OUString& rRelPath,
-    const OUString& rKey,
-    const OUString& rDefaultValue )
-{
-    OUString aDefVal( rDefaultValue );
-
-    try
-    {
-        ::comphelper::ConfigurationHelper::readDirectKey(
-            comphelper::getProcessComponentContext(),
-            rPackage,
-            rRelPath,
-            rKey,
-            ::comphelper::ConfigurationHelper::E_READONLY) >>= aDefVal;
-    }
-    catch(const com::sun::star::uno::RuntimeException&)
-    { throw; }
-    catch(const com::sun::star::uno::Exception&)
-    {}
-
-    return aDefVal;
-}
-
 void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
 {
     switch ( rReq.GetSlot() )
@@ -1066,12 +1044,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
                     css::system::SystemShellExecute::create(xContext) );
 
                 // read repository URL from configuration
-                OUString sTemplRepoURL =
-                    getConfigurationStringValue(
-                        OUString("org.openoffice.Office.Common"),
-                        OUString("Dictionaries"),
-                        OUString("RepositoryURL"),
-                        OUString());
+                OUString sTemplRepoURL(officecfg::Office::Common::Dictionaries::RepositoryURL::get());
 
                 if ( xSystemShell.is() && !sTemplRepoURL.isEmpty() )
                 {
@@ -1079,11 +1052,9 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
                     aURLBuf.appendAscii(RTL_CONSTASCII_STRINGPARAM("?lang="));
 
                     // read locale from configuration
-                    OUString sLocale = getConfigurationStringValue(
-                        OUString("org.openoffice.Setup"),
-                        OUString("L10N"),
-                        OUString("ooLocale"),
-                        OUString("en-US"));
+                    OUString sLocale(officecfg::Setup::L10N::ooLocale::get());
+                    if (sLocale.isEmpty())
+                        sLocale = "en-US";
 
                     aURLBuf.append( sLocale );
                     xSystemShell->execute(

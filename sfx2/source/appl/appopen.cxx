@@ -45,7 +45,6 @@
 #include <cppuhelper/implbase1.hxx>
 #include <rtl/ustring.hxx>
 
-#include <comphelper/configurationhelper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequenceasvector.hxx>
 #include <comphelper/storagehelper.hxx>
@@ -101,6 +100,8 @@
 #include <sfx2/event.hxx>
 #include "templatedlg.hxx"
 #include "openuriexternally.hxx"
+
+#include <officecfg/Office/ProtocolHandler.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
@@ -897,38 +898,27 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
                     aProtocols[0] = OUString("private:*");
                     aProtocols[1] = OUString("vnd.sun.star.*");
 
-                    try
+                    // get registered protocol handlers from configuration
+                    Reference < XNameAccess > xAccess(officecfg::Office::ProtocolHandler::HandlerSet::get());
+                    Sequence < OUString > aNames = xAccess->getElementNames();
+                    for ( sal_Int32 nName = 0; nName < aNames.getLength(); nName ++)
                     {
-                        // get registered protocol handlers from configuration
-                        Reference < XNameAccess > xAccess( ::comphelper::ConfigurationHelper::openConfig( ::comphelper::getProcessComponentContext(),
-                            OUString("org.openoffice.Office.ProtocolHandler/HandlerSet"), ::comphelper::ConfigurationHelper::E_READONLY ), UNO_QUERY );
-                        if ( xAccess.is() )
+                        Reference < XPropertySet > xSet;
+                        Any aRet = xAccess->getByName( aNames[nName] );
+                        aRet >>= xSet;
+                        if ( xSet.is() )
                         {
-                            Sequence < OUString > aNames = xAccess->getElementNames();
-                            for ( sal_Int32 nName = 0; nName < aNames.getLength(); nName ++)
-                            {
-                                Reference < XPropertySet > xSet;
-                                Any aRet = xAccess->getByName( aNames[nName] );
-                                aRet >>= xSet;
-                                if ( xSet.is() )
-                                {
-                                    // copy protocols
-                                    aRet = xSet->getPropertyValue("Protocols");
-                                    Sequence < OUString > aTmp;
-                                    aRet >>= aTmp;
+                            // copy protocols
+                            aRet = xSet->getPropertyValue("Protocols");
+                            Sequence < OUString > aTmp;
+                            aRet >>= aTmp;
 
-                                    // todo: add operator+= to SequenceAsVector class and use SequenceAsVector for aProtocols
-                                    sal_Int32 nLength = aProtocols.getLength();
-                                    aProtocols.realloc( nLength+aTmp.getLength() );
-                                    for ( sal_Int32 n=0; n<aTmp.getLength(); n++ )
-                                        aProtocols[(++nLength)-1] = aTmp[n];
-                                }
-                            }
+                            // todo: add operator+= to SequenceAsVector class and use SequenceAsVector for aProtocols
+                            sal_Int32 nLength = aProtocols.getLength();
+                            aProtocols.realloc( nLength+aTmp.getLength() );
+                            for ( sal_Int32 n=0; n<aTmp.getLength(); n++ )
+                                aProtocols[(++nLength)-1] = aTmp[n];
                         }
-                    }
-                    catch ( Exception& )
-                    {
-                        // registered protocols could not be read
                     }
 
                     sal_Bool bFound = sal_False;
