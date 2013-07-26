@@ -135,7 +135,7 @@ public:
     /** Inserts a new ARRAY record into the buffer and returns it. */
     XclExpArrayRef      CreateArray( const ScTokenArray& rScTokArr, const ScRange& rScRange );
     /** Tries to find an ARRAY record that corresponds to an ocMatRef token. */
-    XclExpArrayRef      FindArray( const ScTokenArray& rScTokArr ) const;
+    XclExpArrayRef FindArray( const ScTokenArray& rScTokArr, const ScAddress& rBasePos ) const;
 
 private:
     typedef ::std::map< ScAddress, XclExpArrayRef > XclExpArrayMap;

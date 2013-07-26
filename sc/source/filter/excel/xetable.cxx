@@ -148,23 +148,24 @@ XclExpArrayRef XclExpArrayBuffer::CreateArray( const ScTokenArray& rScTokArr, co
     return rxRec;
 }
 
-XclExpArrayRef XclExpArrayBuffer::FindArray( const ScTokenArray& rScTokArr ) const
+XclExpArrayRef XclExpArrayBuffer::FindArray( const ScTokenArray& rScTokArr, const ScAddress& rBasePos ) const
 {
     XclExpArrayRef xRec;
     // try to extract a matrix reference token
-    if( rScTokArr.GetLen() == 1 )
-    {
-        const formula::FormulaToken* pToken = rScTokArr.GetArray()[ 0 ];
-        if( pToken && (pToken->GetOpCode() == ocMatRef) )
-        {
-            const ScSingleRefData& rRef = static_cast<const ScToken*>(pToken)->GetSingleRef();
-            ScAddress aBasePos( rRef.nCol, rRef.nRow, GetCurrScTab() );
-            XclExpArrayMap::const_iterator aIt = maRecMap.find( aBasePos );
-            if( aIt != maRecMap.end() )
-                xRec = aIt->second;
-        }
-    }
-    return xRec;
+    if (rScTokArr.GetLen() != 1)
+        // Must consist of a single reference token.
+        return xRec;
+
+    const formula::FormulaToken* pToken = rScTokArr.GetArray()[0];
+    if (!pToken || pToken->GetOpCode() != ocMatRef)
+        // not a matrix reference token.
+        return xRec;
+
+    const ScSingleRefData& rRef = static_cast<const ScToken*>(pToken)->GetSingleRef();
+    ScAddress aAbsPos = rRef.toAbs(rBasePos);
+    XclExpArrayMap::const_iterator it = maRecMap.find(aAbsPos);
+
+    return (it == maRecMap.end()) ? xRec : xRec = it->second;
 }
 
 // Shared formulas ============================================================
@@ -840,7 +841,7 @@ XclExpFormulaCell::XclExpFormulaCell(
         case MM_REFERENCE:
         {
             // other formula cell covered by a matrix - find the ARRAY record
-            mxAddRec = rArrayBfr.FindArray( rScTokArr );
+            mxAddRec = rArrayBfr.FindArray(rScTokArr, aScPos);
             // should always be found, if Calc document is not broken
             OSL_ENSURE( mxAddRec, "XclExpFormulaCell::XclExpFormulaCell - no matrix found" );
         }
