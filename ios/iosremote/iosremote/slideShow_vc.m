@@ -191,6 +191,11 @@
         CGPoint loc = [touch locationInView:self.touchPointerImage];
         if (loc.x >= 0 && loc.x <= self.touchPointerImage.frame.size.width
             && loc.y >= 0 && loc.y <= self.touchPointerImage.frame.size.height){
+            CGPoint pointerInPercentage;
+            pointerInPercentage.x = loc.x / self.touchPointerImage.frame.size.width;
+            pointerInPercentage.y = loc.y / self.touchPointerImage.frame.size.height;
+            [self.comManager.transmitter setPointerVisibleAt:pointerInPercentage];
+            
             CGPoint p;
             p.x = loc.x + self.touchPointerImage.frame.origin.x;
             p.y = loc.y + self.touchPointerImage.frame.origin.y;
@@ -230,6 +235,7 @@
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
 {
     [self.movingPointer setHidden:YES];
+    [self.comManager.transmitter setPointerDismissed];
 }
 
 #pragma mark - System defaults

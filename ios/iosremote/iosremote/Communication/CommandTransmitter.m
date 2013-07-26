@@ -48,6 +48,15 @@
     [self.client sendCommand:[NSString stringWithFormat:@"pointer_coordination\n%f\n%f\n\n", aPoint.x, aPoint.y]];
 }
 
+- (void) setPointerVisibleAt: (CGPoint)aPoint
+{
+    [self.client sendCommand:[NSString stringWithFormat:@"pointer_started\n%f\n%f\n\n", aPoint.x, aPoint.y]];
+}
+
+- (void) setPointerDismissed
+{
+    [self.client sendCommand:@"pointer_dismissed\n\n"];
+}
 
 /**
  * Blank the screen to the default colour (set server-side), which is

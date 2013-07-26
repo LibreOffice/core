@@ -27,6 +27,11 @@
 - (void) startPresentation;
 - (void) stopPresentation;
 
+// Update pointer position
 - (void) pointerCoordination:(CGPoint) aPoint;
+// Set pointer to the proper position and set it to visible on screen.
+- (void) setPointerVisibleAt: (CGPoint)aPoint;
+// Dismiss the pointer when touch ended.
+- (void) setPointerDismissed;
 
 @end
