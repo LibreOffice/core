@@ -23,10 +23,9 @@
 #include <vector>
 
 #include <vcl/combobox.hxx>
-
 #include <vcl/fixed.hxx>
+#include <vcl/layout.hxx>
 
-#include <vcl/morebtn.hxx>
 #include "anyrefdg.hxx"
 #include "dbdata.hxx"
 #include "expftext.hxx"
@@ -51,37 +50,33 @@ public:
     virtual sal_Bool    Close();
 
 private:
-    FixedLine           aFlName;
-    ComboBox            aEdName;
+    ComboBox*           m_pEdName;
 
-    FixedLine           aFlAssign;
-    formula::RefEdit            aEdAssign;
-    formula::RefButton          aRbAssign;
+    VclFrame*           m_pAssignFrame;
+    formula::RefEdit*   m_pEdAssign;
+    formula::RefButton* m_pRbAssign;
 
-    FixedLine           aFlOptions;
-    CheckBox            aBtnHeader;
-    CheckBox            aBtnDoSize;
-    CheckBox            aBtnKeepFmt;
-    CheckBox            aBtnStripData;
-    ScExpandedFixedText aFTSource;
-    FixedText           aFTOperations;
+    VclContainer*       m_pOptions;
+    CheckBox*           m_pBtnHeader;
+    CheckBox*           m_pBtnDoSize;
+    CheckBox*           m_pBtnKeepFmt;
+    CheckBox*           m_pBtnStripData;
+    FixedText*          m_pFTSource;
+    FixedText*          m_pFTOperations;
 
-    OKButton        aBtnOk;
-    CancelButton    aBtnCancel;
-    HelpButton      aBtnHelp;
-    PushButton      aBtnAdd;
-    PushButton      aBtnRemove;
-    MoreButton      aBtnMore;
+    OKButton*           m_pBtnOk;
+    CancelButton*       m_pBtnCancel;
+    PushButton*         m_pBtnAdd;
+    PushButton*         m_pBtnRemove;
 
     sal_Bool            bSaved;
 
+    OUString        aStrAdd;
+    OUString        aStrModify;
+    OUString        aStrInvalid;
 
-    const String    aStrAdd;
-    const String    aStrModify;
-    const String    aStrInvalid;
-
-    String          aStrSource;
-    String          aStrOperations;
+    OUString        aStrSource;
+    OUString        aStrOperations;
 
     ScViewData*     pViewData;
     ScDocument*     pDoc;
@@ -92,7 +87,6 @@ private:
     ScRange         theCurArea;
     std::vector<ScRange> aRemoveList;
 
-#ifdef _DBNAMDLG_CXX
 private:
     void            Init();
     void            UpdateNames();
@@ -105,7 +99,6 @@ private:
     DECL_LINK( RemoveBtnHdl, void * );
     DECL_LINK( NameModifyHdl, void * );
     DECL_LINK( AssModifyHdl, void * );
-#endif
 };
 
 

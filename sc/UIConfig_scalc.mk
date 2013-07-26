@@ -66,6 +66,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/scalc,\
 	sc/uiconfig/scalc/ui/consolidatedialog \
 	sc/uiconfig/scalc/ui/createnamesdialog \
 	sc/uiconfig/scalc/ui/dataform \
+	sc/uiconfig/scalc/ui/definedatabaserangedialog \
 	sc/uiconfig/scalc/ui/definename \
 	sc/uiconfig/scalc/ui/deletecells \
 	sc/uiconfig/scalc/ui/deletecontents \

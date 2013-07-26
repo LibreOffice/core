@@ -24,13 +24,9 @@
 #include "document.hxx"
 #include "scresid.hxx"
 #include "globstr.hrc"
-#include "dbnamdlg.hrc"
 #include "rangenam.hxx"     // IsNameValid
 #include "globalnames.hxx"
-
-#define _DBNAMDLG_CXX
 #include "dbnamdlg.hxx"
-#undef _DBNAMDLG_CXX
 
 
 //============================================================================
@@ -118,56 +114,49 @@ void DBSaveData::Restore()
 
 //----------------------------------------------------------------------------
 
-ScDbNameDlg::ScDbNameDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
-                          ScViewData*   ptrViewData )
-
-    :   ScAnyRefDlg ( pB, pCW, pParent, RID_SCDLG_DBNAMES ),
-        //
-        aFlName         ( this, ScResId( FL_NAME ) ),
-        aEdName         ( this, ScResId( ED_NAME ) ),
-
-        aFlAssign       ( this, ScResId( FL_ASSIGN ) ),
-        aEdAssign       ( this, this, &aFlAssign, ScResId( ED_DBAREA ) ),
-        aRbAssign       ( this, ScResId( RB_DBAREA ), &aEdAssign, this ),
-
-        aFlOptions      ( this, ScResId( FL_OPTIONS ) ),
-        aBtnHeader      ( this, ScResId( BTN_HEADER ) ),
-        aBtnDoSize      ( this, ScResId( BTN_SIZE ) ),
-        aBtnKeepFmt     ( this, ScResId( BTN_FORMAT ) ),
-        aBtnStripData   ( this, ScResId( BTN_STRIPDATA ) ),
-        aFTSource       ( this, ScResId( FT_SOURCE ) ),
-        aFTOperations   ( this, ScResId( FT_OPERATIONS ) ),
-
-        aBtnOk          ( this, ScResId( BTN_OK ) ),
-        aBtnCancel      ( this, ScResId( BTN_CANCEL ) ),
-        aBtnHelp        ( this, ScResId( BTN_HELP ) ),
-        aBtnAdd         ( this, ScResId( BTN_ADD ) ),
-        aBtnRemove      ( this, ScResId( BTN_REMOVE ) ),
-        aBtnMore        ( this, ScResId( BTN_MORE ) ),
-
-        aStrAdd         ( ScResId( STR_ADD ) ),
-        aStrModify      ( ScResId( STR_MODIFY ) ),
-        aStrInvalid     ( ScResId( STR_DB_INVALID ) ),
-        //
-        pViewData       ( ptrViewData ),
-        pDoc            ( ptrViewData->GetDocument() ),
-        bRefInputMode   ( false ),
-        aAddrDetails    ( pDoc->GetAddressConvention(), 0, 0 ),
-        aLocalDbCol     ( *(pDoc->GetDBCollection()) )
+ScDbNameDlg::ScDbNameDlg(SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
+    ScViewData* ptrViewData)
+    : ScAnyRefDlg(pB, pCW, pParent,
+        "DefineDatabaseRangeDialog",
+            "modules/scalc/ui/definedatabaserangedialog.ui")
+    , pViewData(ptrViewData)
+    , pDoc(ptrViewData->GetDocument())
+    , bRefInputMode(false)
+    , aAddrDetails(pDoc->GetAddressConvention(), 0, 0)
+    , aLocalDbCol(*(pDoc->GetDBCollection()))
 {
-    // WB_NOLABEL can't be set in resource...
-    aFTSource.SetStyle( aFTSource.GetStyle() | WB_NOLABEL );
-    aFTOperations.SetStyle( aFTOperations.GetStyle() | WB_NOLABEL );
+    get(m_pEdName, "entry");
+    m_pEdName->set_height_request(m_pEdName->GetOptimalSize().Height() + m_pEdName->GetTextHeight() * 8);
+    get(m_pEdAssign, "assign");
+    get(m_pAssignFrame, "RangeFrame");
+    m_pEdAssign->SetReferences(this, m_pAssignFrame->get_label_widget());
+    get(m_pRbAssign, "assignrb");
+    m_pRbAssign->SetReferences(this, m_pEdAssign);
+    get(m_pOptions, "Options");
+    get(m_pBtnHeader, "ContainsColumnLabels");
+    get(m_pBtnDoSize, "InsertOrDeleteCells");
+    get(m_pBtnKeepFmt, "KeepFormatting");
+    get(m_pBtnStripData, "DontSaveImportedData");
+    get(m_pFTSource, "Source");
+    get(m_pFTOperations, "Operations");
+    get(m_pBtnOk, "ok");
+    get(m_pBtnCancel, "cancel");
+    get(m_pBtnAdd, "add");
+    aStrAdd = m_pBtnAdd->GetText();
+    aStrModify = get<Window>("modify")->GetText();
+    get(m_pBtnRemove, "delete");
+    aStrInvalid = get<Window>("invalid")->GetText();
+
+    m_pFTSource->SetStyle(m_pFTSource->GetStyle() | WB_NOLABEL);
+    m_pFTOperations->SetStyle(m_pFTOperations->GetStyle() | WB_NOLABEL);
 
     //  damit die Strings in der Resource bei den FixedTexten bleiben koennen:
-    aStrSource      = aFTSource.GetText();
-    aStrOperations  = aFTOperations.GetText();
+    aStrSource      = m_pFTSource->GetText();
+    aStrOperations  = m_pFTOperations->GetText();
 
-    pSaveObj = new DBSaveData( aEdAssign, aBtnHeader,
-                        aBtnDoSize, aBtnKeepFmt, aBtnStripData, theCurArea );
+    pSaveObj = new DBSaveData( *m_pEdAssign, *m_pBtnHeader,
+                        *m_pBtnDoSize, *m_pBtnKeepFmt, *m_pBtnStripData, theCurArea );
     Init();
-    FreeResource();
-    aRbAssign.SetAccessibleRelationMemberOf(&aFlAssign);
 }
 
 
@@ -183,22 +172,14 @@ ScDbNameDlg::~ScDbNameDlg()
 
 void ScDbNameDlg::Init()
 {
-    aBtnHeader.Check( sal_True );       // Default: mit Spaltenkoepfen
+    m_pBtnHeader->Check( sal_True );       // Default: mit Spaltenkoepfen
 
-    aBtnMore.AddWindow( &aFlOptions );
-    aBtnMore.AddWindow( &aBtnHeader );
-    aBtnMore.AddWindow( &aBtnDoSize );
-    aBtnMore.AddWindow( &aBtnKeepFmt );
-    aBtnMore.AddWindow( &aBtnStripData );
-    aBtnMore.AddWindow( &aFTSource );
-    aBtnMore.AddWindow( &aFTOperations );
-
-    aBtnOk.SetClickHdl      ( LINK( this, ScDbNameDlg, OkBtnHdl ) );
-    aBtnCancel.SetClickHdl  ( LINK( this, ScDbNameDlg, CancelBtnHdl ) );
-    aBtnAdd.SetClickHdl     ( LINK( this, ScDbNameDlg, AddBtnHdl ) );
-    aBtnRemove.SetClickHdl  ( LINK( this, ScDbNameDlg, RemoveBtnHdl ) );
-    aEdName.SetModifyHdl    ( LINK( this, ScDbNameDlg, NameModifyHdl ) );
-    aEdAssign.SetModifyHdl  ( LINK( this, ScDbNameDlg, AssModifyHdl ) );
+    m_pBtnOk->SetClickHdl      ( LINK( this, ScDbNameDlg, OkBtnHdl ) );
+    m_pBtnCancel->SetClickHdl  ( LINK( this, ScDbNameDlg, CancelBtnHdl ) );
+    m_pBtnAdd->SetClickHdl     ( LINK( this, ScDbNameDlg, AddBtnHdl ) );
+    m_pBtnRemove->SetClickHdl  ( LINK( this, ScDbNameDlg, RemoveBtnHdl ) );
+    m_pEdName->SetModifyHdl    ( LINK( this, ScDbNameDlg, NameModifyHdl ) );
+    m_pEdAssign->SetModifyHdl  ( LINK( this, ScDbNameDlg, AssModifyHdl ) );
     UpdateNames();
 
     String  theAreaStr;
@@ -245,20 +226,20 @@ void ScDbNameDlg::Init()
                 {
                     OUString aDBName = pDBData->GetName();
                     if ( aDBName != STR_DB_LOCAL_NONAME )
-                        aEdName.SetText(aDBName);
+                        m_pEdName->SetText(aDBName);
 
-                    aBtnHeader.Check( pDBData->HasHeader() );
-                    aBtnDoSize.Check( pDBData->IsDoSize() );
-                    aBtnKeepFmt.Check( pDBData->IsKeepFmt() );
-                    aBtnStripData.Check( pDBData->IsStripData() );
+                    m_pBtnHeader->Check( pDBData->HasHeader() );
+                    m_pBtnDoSize->Check( pDBData->IsDoSize() );
+                    m_pBtnKeepFmt->Check( pDBData->IsKeepFmt() );
+                    m_pBtnStripData->Check( pDBData->IsStripData() );
                     SetInfoStrings( pDBData );
                 }
             }
         }
     }
 
-    aEdAssign.SetText( theAreaStr );
-    aEdName.GrabFocus();
+    m_pEdAssign->SetText( theAreaStr );
+    m_pEdName->GrabFocus();
     bSaved=sal_True;
     pSaveObj->Save();
     NameModifyHdl( 0 );
@@ -274,7 +255,7 @@ void ScDbNameDlg::SetInfoStrings( const ScDBData* pDBData )
         aBuf.append(sal_Unicode(' '));
         aBuf.append(pDBData->GetSourceString());
     }
-    aFTSource.SetText(aBuf.makeStringAndClear());
+    m_pFTSource->SetText(aBuf.makeStringAndClear());
 
     aBuf.append(aStrOperations);
     if (pDBData)
@@ -282,7 +263,7 @@ void ScDbNameDlg::SetInfoStrings( const ScDBData* pDBData )
         aBuf.append(sal_Unicode(' '));
         aBuf.append(pDBData->GetOperations());
     }
-    aFTOperations.SetText(aBuf.makeStringAndClear());
+    m_pFTOperations->SetText(aBuf.makeStringAndClear());
 }
 
 //----------------------------------------------------------------------------
@@ -291,23 +272,18 @@ void ScDbNameDlg::SetInfoStrings( const ScDBData* pDBData )
 
 void ScDbNameDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
 {
-    if ( aEdAssign.IsEnabled() )
+    if ( m_pEdAssign->IsEnabled() )
     {
         if ( rRef.aStart != rRef.aEnd )
-            RefInputStart( &aEdAssign );
+            RefInputStart(m_pEdAssign);
 
         theCurArea = rRef;
 
         String aRefStr;
         theCurArea.Format( aRefStr, ABS_DREF3D, pDocP, aAddrDetails );
-        aEdAssign.SetRefString( aRefStr );
-        aBtnHeader.Enable();
-        aBtnDoSize.Enable();
-        aBtnKeepFmt.Enable();
-        aBtnStripData.Enable();
-        aFTSource.Enable();
-        aFTOperations.Enable();
-        aBtnAdd.Enable();
+        m_pEdAssign->SetRefString( aRefStr );
+        m_pOptions->Enable();
+        m_pBtnAdd->Enable();
         bSaved=sal_True;
         pSaveObj->Save();
     }
@@ -325,7 +301,7 @@ sal_Bool ScDbNameDlg::Close()
 
 void ScDbNameDlg::SetActive()
 {
-    aEdAssign.GrabFocus();
+    m_pEdAssign->GrabFocus();
 
     //  kein NameModifyHdl, weil sonst Bereiche nicht geaendert werden koennen
     //  (nach dem Aufziehen der Referenz wuerde der alte Inhalt wieder angezeigt)
@@ -342,26 +318,26 @@ void ScDbNameDlg::UpdateNames()
 
     const DBsType& rDBs = aLocalDbCol.getNamedDBs();
 
-    aEdName.SetUpdateMode( false );
+    m_pEdName->SetUpdateMode( false );
     //-----------------------------------------------------------
-    aEdName.Clear();
-    aEdAssign.SetText( EMPTY_STRING );
+    m_pEdName->Clear();
+    m_pEdAssign->SetText( EMPTY_STRING );
 
     if (!rDBs.empty())
     {
         DBsType::const_iterator itr = rDBs.begin(), itrEnd = rDBs.end();
         for (; itr != itrEnd; ++itr)
-            aEdName.InsertEntry(itr->GetName());
+            m_pEdName->InsertEntry(itr->GetName());
     }
     else
     {
-        aBtnAdd.SetText( aStrAdd );
-        aBtnAdd.Disable();
-        aBtnRemove.Disable();
+        m_pBtnAdd->SetText( aStrAdd );
+        m_pBtnAdd->Disable();
+        m_pBtnRemove->Disable();
     }
     //-----------------------------------------------------------
-    aEdName.SetUpdateMode( sal_True );
-    aEdName.Invalidate();
+    m_pEdName->SetUpdateMode( sal_True );
+    m_pEdName->Invalidate();
 }
 
 //------------------------------------------------------------------------
@@ -384,24 +360,19 @@ void ScDbNameDlg::UpdateDBData( const String& rStrName )
                               ScAddress( nColEnd,   nRowEnd,   nTab ) );
         OUString theArea;
         theCurArea.Format( theArea, ABS_DREF3D, pDoc, aAddrDetails );
-        aEdAssign.SetText( theArea );
-        aBtnAdd.SetText( aStrModify );
-        aBtnHeader.Check( pData->HasHeader() );
-        aBtnDoSize.Check( pData->IsDoSize() );
-        aBtnKeepFmt.Check( pData->IsKeepFmt() );
-        aBtnStripData.Check( pData->IsStripData() );
+        m_pEdAssign->SetText( theArea );
+        m_pBtnAdd->SetText( aStrModify );
+        m_pBtnHeader->Check( pData->HasHeader() );
+        m_pBtnDoSize->Check( pData->IsDoSize() );
+        m_pBtnKeepFmt->Check( pData->IsKeepFmt() );
+        m_pBtnStripData->Check( pData->IsStripData() );
         SetInfoStrings( pData );
     }
 
-    aBtnAdd.SetText( aStrModify );
-    aBtnAdd.Enable();
-    aBtnRemove.Enable();
-    aBtnHeader.Enable();
-    aBtnDoSize.Enable();
-    aBtnKeepFmt.Enable();
-    aBtnStripData.Enable();
-    aFTSource.Enable();
-    aFTOperations.Enable();
+    m_pBtnAdd->SetText( aStrModify );
+    m_pBtnAdd->Enable();
+    m_pBtnRemove->Enable();
+    m_pOptions->Enable();
 }
 
 //------------------------------------------------------------------------
@@ -444,8 +415,8 @@ IMPL_LINK_NOARG_INLINE_END(ScDbNameDlg, CancelBtnHdl)
 
 IMPL_LINK_NOARG(ScDbNameDlg, AddBtnHdl)
 {
-    String  aNewName = comphelper::string::strip(aEdName.GetText(), ' ');
-    String  aNewArea = aEdAssign.GetText();
+    String  aNewName = comphelper::string::strip(m_pEdName->GetText(), ' ');
+    String  aNewArea = m_pEdAssign->GetText();
 
     if ( aNewName.Len() > 0 && aNewArea.Len() > 0 )
     {
@@ -453,7 +424,7 @@ IMPL_LINK_NOARG(ScDbNameDlg, AddBtnHdl)
         {
             //  weil jetzt editiert werden kann, muss erst geparst werden
             ScRange aTmpRange;
-            String aText = aEdAssign.GetText();
+            String aText = m_pEdAssign->GetText();
             if ( aTmpRange.ParseAny( aText, pDoc, aAddrDetails ) & SCA_VALID )
             {
                 theCurArea = aTmpRange;
@@ -468,10 +439,10 @@ IMPL_LINK_NOARG(ScDbNameDlg, AddBtnHdl)
                     pOldEntry->MoveTo( aStart.Tab(), aStart.Col(), aStart.Row(),
                                                         aEnd.Col(), aEnd.Row() );
                     pOldEntry->SetByRow( sal_True );
-                    pOldEntry->SetHeader( aBtnHeader.IsChecked() );
-                    pOldEntry->SetDoSize( aBtnDoSize.IsChecked() );
-                    pOldEntry->SetKeepFmt( aBtnKeepFmt.IsChecked() );
-                    pOldEntry->SetStripData( aBtnStripData.IsChecked() );
+                    pOldEntry->SetHeader( m_pBtnHeader->IsChecked() );
+                    pOldEntry->SetDoSize( m_pBtnDoSize->IsChecked() );
+                    pOldEntry->SetKeepFmt( m_pBtnKeepFmt->IsChecked() );
+                    pOldEntry->SetStripData( m_pBtnStripData->IsChecked() );
                 }
                 else
                 {
@@ -480,26 +451,26 @@ IMPL_LINK_NOARG(ScDbNameDlg, AddBtnHdl)
                     ScDBData* pNewEntry = new ScDBData( aNewName, aStart.Tab(),
                                                         aStart.Col(), aStart.Row(),
                                                         aEnd.Col(), aEnd.Row(),
-                                                        sal_True, aBtnHeader.IsChecked() );
-                    pNewEntry->SetDoSize( aBtnDoSize.IsChecked() );
-                    pNewEntry->SetKeepFmt( aBtnKeepFmt.IsChecked() );
-                    pNewEntry->SetStripData( aBtnStripData.IsChecked() );
+                                                        sal_True, m_pBtnHeader->IsChecked() );
+                    pNewEntry->SetDoSize( m_pBtnDoSize->IsChecked() );
+                    pNewEntry->SetKeepFmt( m_pBtnKeepFmt->IsChecked() );
+                    pNewEntry->SetStripData( m_pBtnStripData->IsChecked() );
 
                     aLocalDbCol.getNamedDBs().insert(pNewEntry);
                 }
 
                 UpdateNames();
 
-                aEdName.SetText( EMPTY_STRING );
-                aEdName.GrabFocus();
-                aBtnAdd.SetText( aStrAdd );
-                aBtnAdd.Disable();
-                aBtnRemove.Disable();
-                aEdAssign.SetText( EMPTY_STRING );
-                aBtnHeader.Check( sal_True );       // Default: mit Spaltenkoepfen
-                aBtnDoSize.Check( false );
-                aBtnKeepFmt.Check( false );
-                aBtnStripData.Check( false );
+                m_pEdName->SetText( EMPTY_STRING );
+                m_pEdName->GrabFocus();
+                m_pBtnAdd->SetText( aStrAdd );
+                m_pBtnAdd->Disable();
+                m_pBtnRemove->Disable();
+                m_pEdAssign->SetText( EMPTY_STRING );
+                m_pBtnHeader->Check( sal_True );       // Default: mit Spaltenkoepfen
+                m_pBtnDoSize->Check( false );
+                m_pBtnKeepFmt->Check( false );
+                m_pBtnStripData->Check( false );
                 SetInfoStrings( NULL );     // leer
                 theCurArea = ScRange();
                 bSaved=sal_True;
@@ -509,15 +480,15 @@ IMPL_LINK_NOARG(ScDbNameDlg, AddBtnHdl)
             else
             {
                 ERRORBOX( aStrInvalid );
-                aEdAssign.SetSelection( Selection( 0, SELECTION_MAX ) );
-                aEdAssign.GrabFocus();
+                m_pEdAssign->SetSelection( Selection( 0, SELECTION_MAX ) );
+                m_pEdAssign->GrabFocus();
             }
         }
         else
         {
             ERRORBOX( ScGlobal::GetRscString(STR_INVALIDNAME) );
-            aEdName.SetSelection( Selection( 0, SELECTION_MAX ) );
-            aEdName.GrabFocus();
+            m_pEdName->SetSelection( Selection( 0, SELECTION_MAX ) );
+            m_pEdName->GrabFocus();
         }
     }
     return 0;
@@ -540,7 +511,7 @@ public:
 
 IMPL_LINK_NOARG(ScDbNameDlg, RemoveBtnHdl)
 {
-    OUString aStrEntry = aEdName.GetText();
+    OUString aStrEntry = m_pEdName->GetText();
     ScDBCollection::NamedDBs& rDBs = aLocalDbCol.getNamedDBs();
     ScDBCollection::NamedDBs::iterator itr =
         ::std::find_if(rDBs.begin(), rDBs.end(), FindByName(aStrEntry));
@@ -569,17 +540,17 @@ IMPL_LINK_NOARG(ScDbNameDlg, RemoveBtnHdl)
 
             UpdateNames();
 
-            aEdName.SetText( EMPTY_STRING );
-            aEdName.GrabFocus();
-            aBtnAdd.SetText( aStrAdd );
-            aBtnAdd.Disable();
-            aBtnRemove.Disable();
-            aEdAssign.SetText( EMPTY_STRING );
+            m_pEdName->SetText( EMPTY_STRING );
+            m_pEdName->GrabFocus();
+            m_pBtnAdd->SetText( aStrAdd );
+            m_pBtnAdd->Disable();
+            m_pBtnRemove->Disable();
+            m_pEdAssign->SetText( EMPTY_STRING );
             theCurArea = ScRange();
-            aBtnHeader.Check( sal_True );       // Default: mit Spaltenkoepfen
-            aBtnDoSize.Check( false );
-            aBtnKeepFmt.Check( false );
-            aBtnStripData.Check( false );
+            m_pBtnHeader->Check( sal_True );       // Default: mit Spaltenkoepfen
+            m_pBtnDoSize->Check( false );
+            m_pBtnKeepFmt->Check( false );
+            m_pBtnStripData->Check( false );
             SetInfoStrings( NULL );     // leer
             bSaved=false;
             pSaveObj->Restore();
@@ -593,25 +564,18 @@ IMPL_LINK_NOARG(ScDbNameDlg, RemoveBtnHdl)
 
 IMPL_LINK_NOARG(ScDbNameDlg, NameModifyHdl)
 {
-    OUString  theName     = aEdName.GetText();
+    OUString  theName     = m_pEdName->GetText();
     sal_Bool    bNameFound  = (COMBOBOX_ENTRY_NOTFOUND
-                           != aEdName.GetEntryPos( theName ));
+                           != m_pEdName->GetEntryPos( theName ));
 
     if ( theName.isEmpty() )
     {
-        if (aBtnAdd.GetText() != aStrAdd)
-            aBtnAdd.SetText( aStrAdd );
-        aBtnAdd     .Disable();
-        aBtnRemove  .Disable();
-        aFlAssign   .Disable();
-        aBtnHeader  .Disable();
-        aBtnDoSize  .Disable();
-        aBtnKeepFmt .Disable();
-        aBtnStripData.Disable();
-        aFTSource   .Disable();
-        aFTOperations.Disable();
-        aEdAssign   .Disable();
-        aRbAssign   .Disable();
+        if (m_pBtnAdd->GetText() != aStrAdd)
+            m_pBtnAdd->SetText( aStrAdd );
+        m_pBtnAdd->Disable();
+        m_pBtnRemove->Disable();
+        m_pAssignFrame->Disable();
+        m_pOptions->Disable();
         //bSaved=sal_False;
         //pSaveObj->Restore();
         //@BugID 54702 Enablen/Disablen nur noch in Basisklasse
@@ -622,8 +586,8 @@ IMPL_LINK_NOARG(ScDbNameDlg, NameModifyHdl)
     {
         if ( bNameFound )
         {
-            if (aBtnAdd.GetText() != aStrModify)
-                aBtnAdd.SetText( aStrModify );
+            if (m_pBtnAdd->GetText() != aStrModify)
+                m_pBtnAdd->SetText( aStrModify );
 
             if(!bSaved)
             {
@@ -634,38 +598,26 @@ IMPL_LINK_NOARG(ScDbNameDlg, NameModifyHdl)
         }
         else
         {
-            if (aBtnAdd.GetText() != aStrAdd)
-                aBtnAdd.SetText( aStrAdd );
+            if (m_pBtnAdd->GetText() != aStrAdd)
+                m_pBtnAdd->SetText( aStrAdd );
 
             bSaved=false;
             pSaveObj->Restore();
 
-            if ( !aEdAssign.GetText().isEmpty() )
+            if ( !m_pEdAssign->GetText().isEmpty() )
             {
-                aBtnAdd.Enable();
-                aBtnHeader.Enable();
-                aBtnDoSize.Enable();
-                aBtnKeepFmt.Enable();
-                aBtnStripData.Enable();
-                aFTSource.Enable();
-                aFTOperations.Enable();
+                m_pBtnAdd->Enable();
+                m_pOptions->Enable();
             }
             else
             {
-                aBtnAdd.Disable();
-                aBtnHeader.Disable();
-                aBtnDoSize.Disable();
-                aBtnKeepFmt.Disable();
-                aBtnStripData.Disable();
-                aFTSource.Disable();
-                aFTOperations.Disable();
+                m_pBtnAdd->Disable();
+                m_pOptions->Disable();
             }
-            aBtnRemove.Disable();
+            m_pBtnRemove->Disable();
         }
 
-        aFlAssign.Enable();
-        aEdAssign.Enable();
-        aRbAssign.Enable();
+        m_pAssignFrame->Enable();
 
         //@BugID 54702 Enablen/Disablen nur noch in Basisklasse
         //SFX_APPWINDOW->Enable();
@@ -681,7 +633,7 @@ IMPL_LINK_NOARG(ScDbNameDlg, AssModifyHdl)
     //  hier parsen fuer Save() etc.
 
     ScRange aTmpRange;
-    String aText = aEdAssign.GetText();
+    String aText = m_pEdAssign->GetText();
     if ( aTmpRange.ParseAny( aText, pDoc, aAddrDetails ) & SCA_VALID )
         theCurArea = aTmpRange;
 

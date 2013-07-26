@@ -1212,7 +1212,12 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
         OString sPattern = extractCustomProperty(rMap);
         extractModel(id, rMap);
 
-        WinBits nBits = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_DROPDOWN;
+        WinBits nBits = WB_LEFT|WB_VCENTER|WB_3DLOOK;
+
+        bool bDropdown = VclBuilder::extractDropdown(rMap);
+
+        if (bDropdown)
+            nBits |= WB_DROPDOWN;
 
         if (!sPattern.isEmpty())
         {

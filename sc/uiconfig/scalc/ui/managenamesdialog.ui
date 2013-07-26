@@ -357,7 +357,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="spacing">12</property>
-                <property name="layout_style">start</property>
+                <property name="layout_style">spread</property>
                 <child>
                   <object class="GtkButton" id="add">
                     <property name="label">gtk-add</property>
