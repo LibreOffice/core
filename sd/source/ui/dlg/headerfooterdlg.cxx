@@ -325,7 +325,7 @@ void HeaderFooterDialog::Cancel( TabPage* )
 void HeaderFooterDialog::apply( bool bToAll, bool bForceSlides )
 {
     SdUndoGroup* pUndoGroup = new SdUndoGroup(mpDoc);
-    String aComment( GetText() );
+    OUString aComment( GetText() );
     pUndoGroup->SetComment( aComment );
 
     HeaderFooterSettings aNewSettings;

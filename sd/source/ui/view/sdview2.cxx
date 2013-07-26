@@ -811,7 +811,7 @@ sal_Int8 View::ExecuteDrop( const ExecuteDropEvent& rEvt, DropTargetHelper& rTar
                                 pAction->SetSecondSoundOn(pInfo->mbSecondSoundOn, pInfo->mbSecondSoundOn);
                                 pAction->SetSecondPlayFull(pInfo->mbSecondPlayFull, pInfo->mbSecondPlayFull);
 
-                                String aString(SdResId(STR_UNDO_ANIMATION));
+                                OUString aString(SdResId(STR_UNDO_ANIMATION));
                                 pAction->SetComment(aString);
                                 mpDocSh->GetUndoManager()->AddUndoAction(pAction);
                                 pInfo->meClickAction = eClickAction;

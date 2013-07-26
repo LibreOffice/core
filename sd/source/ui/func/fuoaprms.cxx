@@ -619,7 +619,7 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
         nSecondPlayFullSet == ATTR_SET)
     {
         // String for undo-group and list-action
-        String aComment(SdResId(STR_UNDO_ANIMATION));
+        OUString aComment(SdResId(STR_UNDO_ANIMATION));
 
         // with 'following curves', we have an additional UndoAction
         // therefore cling? here
