@@ -62,7 +62,6 @@
 #include "appdata.hxx"
 #include <sfx2/viewfrm.hxx>
 
-#include <comphelper/configurationhelper.hxx>
 #include <comphelper/string.hxx>
 
 using namespace ::com::sun::star;
