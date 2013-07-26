@@ -30,13 +30,8 @@
 #include <boost/ptr_container/ptr_set.hpp>
 #include <boost/ptr_container/ptr_map.hpp>
 
-//------------------------------------------------------------------------
-
 class ScDocument;
-
-
-
-//------------------------------------------------------------------------
+class ScTokenArray;
 
 typedef sal_uInt16 RangeType;
 
@@ -51,10 +46,6 @@ typedef sal_uInt16 RangeType;
 #define RT_ABSPOS           ((RangeType)0x0080)
 #define RT_SHARED           ((RangeType)0x0100)
 #define RT_SHAREDMOD        ((RangeType)0x0200)
-
-//------------------------------------------------------------------------
-
-class ScTokenArray;
 
 class ScRangeData
 {
@@ -77,6 +68,9 @@ private:
     void CompileRangeData( const String& rSymbol, bool bSetError );
     void InitCode();
 public:
+
+    enum TabRefUpdateMode { Insert = 1, Delete = 2, Move = 3 };
+
     typedef ::std::map<sal_uInt16, sal_uInt16> IndexMap;
 
     SC_DLLPUBLIC                ScRangeData( ScDocument* pDoc,
@@ -139,7 +133,7 @@ public:
     SC_DLLPUBLIC bool           IsValidReference( ScRange& rRef ) const;
     bool                        IsRangeAtBlock( const ScRange& ) const;
 
-    void            UpdateTabRef(SCTAB nOldTable, sal_uInt16 nFlag, SCTAB nNewTable, SCTAB nNewSheets);
+    void UpdateTabRef(SCTAB nOldTable, TabRefUpdateMode eMode, SCTAB nNewTable, SCTAB nNewSheets);
 
     void            ValidateTabRefs();
 
@@ -189,7 +183,7 @@ public:
     SC_DLLPUBLIC ScRangeData* findByIndex(sal_uInt16 i) const;
     void UpdateReference(UpdateRefMode eUpdateRefMode, const ScRange& rRange,
                          SCsCOL nDx, SCsROW nDy, SCsTAB nDz, bool bLocal = false);
-    void UpdateTabRef(SCTAB nTable, sal_uInt16 nFlag, SCTAB nNewTable = 0, SCTAB nNewSheets = 1);
+    void UpdateTabRef(SCTAB nTable, ScRangeData::TabRefUpdateMode eMode, SCTAB nNewTable = 0, SCTAB nNewSheets = 1);
     void UpdateTranspose(const ScRange& rSource, const ScAddress& rDest);
     void UpdateGrow(const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY);
 

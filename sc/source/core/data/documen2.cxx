@@ -712,7 +712,7 @@ bool ScDocument::MoveTab( SCTAB nOldPos, SCTAB nNewPos, ScProgress* pProgress )
             SCsTAB nDz = ((SCsTAB)nNewPos) - (SCsTAB)nOldPos;
             ScRange aSourceRange( 0,0,nOldPos, MAXCOL,MAXROW,nOldPos );
             if (pRangeName)
-                pRangeName->UpdateTabRef(nOldPos, 3, nNewPos);
+                pRangeName->UpdateTabRef(nOldPos, ScRangeData::Move, nNewPos);
             pDBCollection->UpdateMoveTab( nOldPos, nNewPos );
             xColNameRanges->UpdateReference( URM_REORDER, this, aSourceRange, 0,0,nDz );
             xRowNameRanges->UpdateReference( URM_REORDER, this, aSourceRange, 0,0,nDz );
@@ -799,7 +799,7 @@ bool ScDocument::CopyTab( SCTAB nOldPos, SCTAB nNewPos, const ScMarkData* pOnlyM
                 xColNameRanges->UpdateReference( URM_INSDEL, this, aRange, 0,0,1 );
                 xRowNameRanges->UpdateReference( URM_INSDEL, this, aRange, 0,0,1 );
                 if (pRangeName)
-                    pRangeName->UpdateTabRef(nNewPos, 1);
+                    pRangeName->UpdateTabRef(nNewPos, ScRangeData::Insert);
                 pDBCollection->UpdateReference(
                                     URM_INSDEL, 0,0,nNewPos, MAXCOL,MAXROW,MAXTAB, 0,0,1 );
                 if (pDPCollection)

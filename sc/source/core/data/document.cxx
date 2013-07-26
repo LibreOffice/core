@@ -461,7 +461,7 @@ bool ScDocument::InsertTab( SCTAB nPos, const OUString& rName,
                 xColNameRanges->UpdateReference( URM_INSDEL, this, aRange, 0,0,1 );
                 xRowNameRanges->UpdateReference( URM_INSDEL, this, aRange, 0,0,1 );
                 if (pRangeName)
-                    pRangeName->UpdateTabRef( nPos, 1 );
+                    pRangeName->UpdateTabRef(nPos, ScRangeData::Insert);
                 pDBCollection->UpdateReference(
                                     URM_INSDEL, 0,0,nPos, MAXCOL,MAXROW,MAXTAB, 0,0,1 );
                 if (pDPCollection)
@@ -546,7 +546,7 @@ bool ScDocument::InsertTabs( SCTAB nPos, const std::vector<OUString>& rNames,
                 xColNameRanges->UpdateReference( URM_INSDEL, this, aRange, 0,0,nNewSheets );
                 xRowNameRanges->UpdateReference( URM_INSDEL, this, aRange, 0,0,nNewSheets );
                 if (pRangeName)
-                    pRangeName->UpdateTabRef( nPos, 1, 0, nNewSheets);
+                    pRangeName->UpdateTabRef(nPos, ScRangeData::Insert, 0, nNewSheets);
                 pDBCollection->UpdateReference(
                                     URM_INSDEL, 0,0,nPos, MAXCOL,MAXROW,MAXTAB, 0,0,nNewSheets );
                 if (pDPCollection)
@@ -637,7 +637,7 @@ bool ScDocument::DeleteTab( SCTAB nTab )
                 xColNameRanges->UpdateReference( URM_INSDEL, this, aRange, 0,0,-1 );
                 xRowNameRanges->UpdateReference( URM_INSDEL, this, aRange, 0,0,-1 );
                 if (pRangeName)
-                    pRangeName->UpdateTabRef( nTab, 2 );
+                    pRangeName->UpdateTabRef(nTab, ScRangeData::Delete);
                 pDBCollection->UpdateReference(
                                     URM_INSDEL, 0,0,nTab, MAXCOL,MAXROW,MAXTAB, 0,0,-1 );
                 if (pDPCollection)
@@ -717,7 +717,7 @@ bool ScDocument::DeleteTabs( SCTAB nTab, SCTAB nSheets )
                         pDetOpList->DeleteOnTab( nTab + aTab );
                     DeleteAreaLinksOnTab( nTab + aTab );
                     if (pRangeName)
-                        pRangeName->UpdateTabRef( nTab + aTab, 2 );
+                        pRangeName->UpdateTabRef(nTab + aTab, ScRangeData::Delete);
                 }
                 // normal reference update
 

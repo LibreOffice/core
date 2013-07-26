@@ -1591,10 +1591,10 @@ void ScTable::UpdateInsertTab(SCTAB nTable, SCTAB nNewSheets)
     for (SCCOL i=0; i <= MAXCOL; i++) aCol[i].UpdateInsertTab(nTable, nNewSheets);
 
     if (mpRangeName)
-        mpRangeName->UpdateTabRef( nTable, 1, 0, nNewSheets);
-
-    if (mpRangeName)
-        mpRangeName->UpdateTabRef( nTable, 1);
+    {
+        mpRangeName->UpdateTabRef(nTable, ScRangeData::Insert, 0, nNewSheets);
+        mpRangeName->UpdateTabRef(nTable, ScRangeData::Insert);
+    }
 
     if (IsStreamValid())
         SetStreamValid(false);
@@ -1618,14 +1618,9 @@ void ScTable::UpdateDeleteTab( SCTAB nTable, SCTAB nSheets )
     if (mpRangeName)
     {
         for (SCTAB aTab = 0; aTab < nSheets; ++aTab)
-        {
-            mpRangeName->UpdateTabRef( nTable + aTab, 2 );
-        }
-    }
+            mpRangeName->UpdateTabRef(nTable + aTab, ScRangeData::Delete);
 
-    if (mpRangeName)
-    {
-        mpRangeName->UpdateTabRef( nTable, 2 );
+        mpRangeName->UpdateTabRef(nTable, ScRangeData::Delete);
     }
 
     if (IsStreamValid())
@@ -1647,7 +1642,7 @@ void ScTable::UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos, SCTAB nTabNo,
     }
 
     if (mpRangeName)
-        mpRangeName->UpdateTabRef(nOldPos, 3, nNewPos);
+        mpRangeName->UpdateTabRef(nOldPos, ScRangeData::Move, nNewPos);
 
     if (IsStreamValid())
         SetStreamValid(false);

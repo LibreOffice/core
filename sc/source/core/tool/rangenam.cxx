@@ -416,40 +416,26 @@ bool ScRangeData::IsValidReference( ScRange& rRange ) const
     return false;
 }
 
-void ScRangeData::UpdateTabRef(SCTAB nOldTable, sal_uInt16 nFlag, SCTAB nNewTable, SCTAB nNewSheets)
+void ScRangeData::UpdateTabRef(SCTAB nOldTable, TabRefUpdateMode eMode, SCTAB nNewTable, SCTAB nNewSheets)
 {
     pCode->Reset();
-    if( pCode->GetNextReference() )
+    if (!pCode->GetNextReference())
+        return;
+
+    switch (eMode)
     {
-        ScRangeData* pRangeData = NULL;     // must not be dereferenced
-        bool bChanged;
-        ScCompiler aComp( pDoc, aPos, *pCode);
-        aComp.SetGrammar(pDoc->GetGrammar());
-        switch (nFlag)
+        case Insert:
+            pCode->AdjustReferenceOnInsertedTab(nOldTable, nNewSheets, aPos);
+        break;
+        case Delete:
+            pCode->AdjustReferenceOnDeletedTab(nOldTable, nNewSheets, aPos);
+        break;
+        case Move:
+            pCode->AdjustReferenceOnMovedTab(nOldTable, nNewTable, aPos);
+        break;
+        default:
         {
-            case 1:                                     // simple InsertTab (doc.cxx)
-                pRangeData = aComp.UpdateInsertTab(nOldTable, true, nNewSheets );   // und CopyTab (doc2.cxx)
-                break;
-            case 2:                                     // simple delete (doc.cxx)
-                pRangeData = aComp.UpdateDeleteTab(nOldTable, false, true, bChanged);
-                break;
-            case 3:                                     // move (doc2.cxx)
-            {
-                pRangeData = aComp.UpdateMoveTab(nOldTable, nNewTable, true );
-            }
-                break;
-            default:
-            {
-                OSL_FAIL("ScRangeName::UpdateTabRef: Unknown Flag");
-            }
-                break;
-        }
-        if (eType&RT_SHARED)
-        {
-            if (pRangeData)
-                eType = eType | RT_SHAREDMOD;
-            else
-                eType = eType & ~RT_SHAREDMOD;
+            OSL_FAIL("ScRangeName::UpdateTabRef: Unknown Flag");
         }
     }
 }
@@ -755,11 +741,11 @@ void ScRangeName::UpdateReference(
         itr->second->UpdateReference(eUpdateRefMode, rRange, nDx, nDy, nDz, bLocal);
 }
 
-void ScRangeName::UpdateTabRef(SCTAB nTable, sal_uInt16 nFlag, SCTAB nNewTable, SCTAB nNewSheets)
+void ScRangeName::UpdateTabRef(SCTAB nTable, ScRangeData::TabRefUpdateMode eMode, SCTAB nNewTable, SCTAB nNewSheets)
 {
     DataType::iterator itr = maData.begin(), itrEnd = maData.end();
     for (; itr != itrEnd; ++itr)
-        itr->second->UpdateTabRef(nTable, nFlag, nNewTable, nNewSheets);
+        itr->second->UpdateTabRef(nTable, eMode, nNewTable, nNewSheets);
 }
 
 void ScRangeName::UpdateTranspose(const ScRange& rSource, const ScAddress& rDest)
