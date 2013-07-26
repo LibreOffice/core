@@ -372,7 +372,7 @@ IMPL_LINK_NOARG_INLINE_END(SfxNewFileDialog_Impl, LoadFile)
 sal_uInt16  SfxNewFileDialog_Impl::GetSelectedTemplatePos() const
 {
     sal_uInt16 nEntry=aTemplateLb.GetSelectEntryPos();
-    String aSel=aRegionLb.GetSelectEntry().Copy();
+    String aSel=aRegionLb.GetSelectEntry();
     sal_uInt16 nc=aSel.Search('(');
     if (nc-1&&nc!=STRING_NOTFOUND)
         aSel.Erase(nc-1);

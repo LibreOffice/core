@@ -3473,9 +3473,9 @@ sal_Bool SvxCharTwoLinesPage::FillItemSet( SfxItemSet& rSet )
     const SfxPoolItem* pOld = GetOldItem( rSet, SID_ATTR_CHAR_TWO_LINES );
     sal_Bool bOn = m_pTwoLinesBtn->IsChecked();
     sal_Unicode cStart = ( bOn && m_pStartBracketLB->GetSelectEntryPos() > 0 )
-        ? m_pStartBracketLB->GetSelectEntry().GetChar(0) : 0;
+        ? m_pStartBracketLB->GetSelectEntry()[0] : 0;
     sal_Unicode cEnd = ( bOn && m_pEndBracketLB->GetSelectEntryPos() > 0 )
-        ? m_pEndBracketLB->GetSelectEntry().GetChar(0) : 0;
+        ? m_pEndBracketLB->GetSelectEntry()[0] : 0;
 
     if ( pOld )
     {
@@ -3499,9 +3499,9 @@ sal_Bool SvxCharTwoLinesPage::FillItemSet( SfxItemSet& rSet )
 void    SvxCharTwoLinesPage::UpdatePreview_Impl()
 {
     sal_Unicode cStart = m_pStartBracketLB->GetSelectEntryPos() > 0
-        ? m_pStartBracketLB->GetSelectEntry().GetChar(0) : 0;
+        ? m_pStartBracketLB->GetSelectEntry()[0] : 0;
     sal_Unicode cEnd = m_pEndBracketLB->GetSelectEntryPos() > 0
-        ? m_pEndBracketLB->GetSelectEntry().GetChar(0) : 0;
+        ? m_pEndBracketLB->GetSelectEntry()[0] : 0;
     m_pPreviewWin->SetBrackets(cStart, cEnd);
     m_pPreviewWin->SetTwoLines(m_pTwoLinesBtn->IsChecked());
     m_pPreviewWin->Invalidate();

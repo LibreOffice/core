@@ -1119,7 +1119,7 @@ void AnimationWindow::CreateAnimObj (::sd::View& rView )
             sal_uInt16          nPos = aLbLoopCount.GetSelectEntryPos();
 
             if( nPos != LISTBOX_ENTRY_NOTFOUND && nPos != aLbLoopCount.GetEntryCount() - 1 ) // endless
-                nLoopCount = (long) aLbLoopCount.GetSelectEntry().ToInt32();
+                nLoopCount = (long) aLbLoopCount.GetSelectEntry().toInt32();
 
             aAnimBmp.aBmpEx = *pBitmapEx;
             aAnimBmp.aPosPix = aPt;

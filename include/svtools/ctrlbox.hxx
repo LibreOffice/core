@@ -196,8 +196,6 @@ public:
     void            SelectEntry( const XubString& rStr, sal_Bool bSelect = sal_True )
                         { ListBox::SelectEntry( rStr, bSelect ); }
     void            SelectEntry( const Color& rColor, sal_Bool bSelect = sal_True );
-    XubString       GetSelectEntry( sal_uInt16 nSelIndex = 0 ) const
-                        { return ListBox::GetSelectEntry( nSelIndex ); }
     Color           GetSelectEntryColor( sal_uInt16 nSelIndex = 0 ) const;
     bool            IsEntrySelected(const OUString& rStr ) const
     {

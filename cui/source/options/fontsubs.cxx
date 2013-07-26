@@ -175,7 +175,7 @@ sal_Bool  SvxFontSubstTabPage::FillItemSet( SfxItemSet& )
         comphelper::ConfigurationChanges::create());
     if(m_pFontHeightLB->GetSavedValue() != m_pFontHeightLB->GetSelectEntryPos())
         officecfg::Office::Common::Font::SourceViewFont::FontHeight::set(
-            static_cast< sal_Int16 >(m_pFontHeightLB->GetSelectEntry().ToInt32()),
+            static_cast< sal_Int16 >(m_pFontHeightLB->GetSelectEntry().toInt32()),
             batch);
     if(m_pNonPropFontsOnlyCB->GetSavedValue() != m_pNonPropFontsOnlyCB->IsChecked())
         officecfg::Office::Common::Font::SourceViewFont::

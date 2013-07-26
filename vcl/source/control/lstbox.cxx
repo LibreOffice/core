@@ -1090,7 +1090,7 @@ sal_uInt16 ListBox::GetEntryCount() const
 }
 
 
-XubString ListBox::GetSelectEntry( sal_uInt16 nIndex ) const
+OUString ListBox::GetSelectEntry(sal_uInt16 nIndex) const
 {
     return GetEntry( GetSelectEntryPos( nIndex ) );
 }

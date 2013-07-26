@@ -1950,7 +1950,7 @@ void SmSymDefineDialog::UpdateButtons()
         bool bEqual = pOrigSymbol
                     && aTmpSymbolSetName.equalsIgnoreAsciiCase(aOldSymbolSetName.GetText())
                     && aTmpSymbolName.equals(pOrigSymbol->GetName())
-                    && aFonts.GetSelectEntry().EqualsIgnoreCaseAscii(
+                    && aFonts.GetSelectEntry().equalsIgnoreAsciiCase(
                             pOrigSymbol->GetFace().GetName())
                     && aStyles.GetText().equalsIgnoreAsciiCase(
                             GetFontStyles().GetStyleName(pOrigSymbol->GetFace()))

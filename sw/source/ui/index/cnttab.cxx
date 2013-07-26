@@ -2632,7 +2632,7 @@ IMPL_LINK(SwTOXEntryTabPage, TokenSelectedHdl, SwFormToken*, pToken)
     if(aAuthInsertPB.IsVisible())
     {
         bool bText = TOKEN_TEXT == pToken->eTokenType;
-        aAuthInsertPB.Enable(bText && aAuthFieldsLB.GetSelectEntry().Len());
+        aAuthInsertPB.Enable(bText && !aAuthFieldsLB.GetSelectEntry().isEmpty());
         aAuthRemovePB.Enable(!bText);
     }
 

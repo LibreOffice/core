@@ -1217,7 +1217,7 @@ IMPL_LINK( SwAuthorMarkPane, CompEntryHdl, ListBox*, pBox)
                             pEntry->GetAuthorField((ToxAuthorityField)i) : OUString();
         }
     }
-    if(!pBox->GetSelectEntry().Len())
+    if (pBox->GetSelectEntry().isEmpty())
     {
         for(sal_uInt16 i = 0; i < AUTH_FIELD_END; i++)
             m_sFields[i] = aEmptyStr;

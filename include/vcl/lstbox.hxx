@@ -131,9 +131,9 @@ public:
     virtual void        SelectEntry( const XubString& rStr, sal_Bool bSelect = sal_True );
     virtual void        SelectEntryPos( sal_uInt16 nPos, sal_Bool bSelect = sal_True );
 
-    virtual sal_uInt16      GetSelectEntryCount() const;
-    virtual XubString   GetSelectEntry( sal_uInt16 nSelIndex = 0 ) const;
-    virtual sal_uInt16      GetSelectEntryPos( sal_uInt16 nSelIndex = 0 ) const;
+    virtual sal_uInt16  GetSelectEntryCount() const;
+    virtual OUString    GetSelectEntry( sal_uInt16 nSelIndex = 0 ) const;
+    virtual sal_uInt16  GetSelectEntryPos( sal_uInt16 nSelIndex = 0 ) const;
 
     virtual bool        IsEntrySelected(const OUString& rStr) const;
     virtual sal_Bool        IsEntryPosSelected( sal_uInt16 nPos ) const;

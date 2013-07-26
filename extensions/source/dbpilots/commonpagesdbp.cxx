@@ -430,7 +430,7 @@ namespace dbp
     //---------------------------------------------------------------------
     void OMaybeListSelectionPage::implCommit(String& _rSelection)
     {
-        _rSelection = m_pYes->IsChecked() ? m_pList->GetSelectEntry() : String();
+        _rSelection = m_pYes->IsChecked() ? m_pList->GetSelectEntry() : OUString();
     }
 
     //---------------------------------------------------------------------

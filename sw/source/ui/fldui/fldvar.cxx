@@ -1153,7 +1153,7 @@ sal_Bool SwFldVarPage::FillItemSet(SfxItemSet& )
         {
             nSubType = (nFormat == ULONG_MAX) ? nsSwGetSetExpType::GSE_STRING : nsSwGetSetExpType::GSE_EXPR;
 
-            if (nFormat == ULONG_MAX && aNumFormatLB.GetSelectEntry().Equals(SW_RESSTR(FMT_USERVAR_CMD)))
+            if (nFormat == ULONG_MAX && aNumFormatLB.GetSelectEntry() == SW_RESSTR(FMT_USERVAR_CMD))
                 nSubType |= nsSwExtendedSubType::SUB_CMD;
 
             if (aInvisibleCB.IsChecked())
