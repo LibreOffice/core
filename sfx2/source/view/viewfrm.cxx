@@ -94,7 +94,7 @@
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/configuration.hxx>
-#include "officecfg/Office/Common.hxx"
+#include <officecfg/Office/Common.hxx>
 
 #include <boost/optional.hpp>
 
@@ -2330,62 +2330,44 @@ void SfxViewFrame::ExecView_Impl
 */
 sal_Bool impl_maxOpenDocCountReached()
 {
-    try
+    css::uno::Reference< css::uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+    boost::optional<sal_Int32> x(officecfg::Office::Common::Misc::MaxOpenDocuments::get(xContext));
+    // NIL means: count of allowed documents = infinite !
+    if (!x)
+        return sal_False;
+    sal_Int32 nMaxDocs(x.get());
+    sal_Int32 nOpenDocs = 0;
+
+    css::uno::Reference< css::frame::XDesktop2 >  xDesktop = css::frame::Desktop::create(xContext);
+    css::uno::Reference< css::container::XIndexAccess > xCont(xDesktop->getFrames(), css::uno::UNO_QUERY_THROW);
+
+    sal_Int32 c = xCont->getCount();
+    sal_Int32 i = 0;
+
+    for (i=0; i<c; ++i)
     {
-        css::uno::Reference< css::uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
-        css::uno::Any aVal = ::comphelper::ConfigurationHelper::readDirectKey(
-                                xContext,
-                                OUString("org.openoffice.Office.Common/"),
-                                OUString("Misc"),
-                                OUString("MaxOpenDocuments"),
-                                ::comphelper::ConfigurationHelper::E_READONLY);
-
-        // NIL means: count of allowed documents = infinite !
-        if ( ! aVal.hasValue())
-            return sal_False;
-
-        sal_Int32 nOpenDocs = 0;
-        sal_Int32 nMaxDocs  = 0;
-        aVal >>= nMaxDocs;
-
-        css::uno::Reference< css::frame::XDesktop2 >  xDesktop = css::frame::Desktop::create(xContext);
-        css::uno::Reference< css::container::XIndexAccess > xCont   (xDesktop->getFrames()                 , css::uno::UNO_QUERY_THROW);
-
-        sal_Int32 c = xCont->getCount();
-        sal_Int32 i = 0;
-
-        for (i=0; i<c; ++i)
+        try
         {
-            try
-            {
-                css::uno::Reference< css::frame::XFrame > xFrame;
-                xCont->getByIndex(i) >>= xFrame;
-                if ( ! xFrame.is())
-                    continue;
+            css::uno::Reference< css::frame::XFrame > xFrame;
+            xCont->getByIndex(i) >>= xFrame;
+            if ( ! xFrame.is())
+                continue;
 
-                // a) do not count the help window
-                if ( xFrame->getName() == "OFFICE_HELP_TASK" )
-                    continue;
+            // a) do not count the help window
+            if ( xFrame->getName() == "OFFICE_HELP_TASK" )
+                continue;
 
-                // b) count all other frames
-                ++nOpenDocs;
-            }
-            catch(const css::uno::Exception&)
-                // A IndexOutOfBoundException can happen in multithreaded
-                // environments, where any other thread can change this
-                // container !
-                { continue; }
+            // b) count all other frames
+            ++nOpenDocs;
         }
-
-        return (nOpenDocs >= nMaxDocs);
+        catch(const css::uno::Exception&)
+            // A IndexOutOfBoundException can happen in multithreaded
+            // environments, where any other thread can change this
+            // container !
+            { continue; }
     }
-    catch(const css::uno::Exception&)
-        {}
 
-    // Any internal error is no reason to stop opening documents !
-    // Limitation of opening documents is a special "nice to  have" feature.
-    // Otherwhise it can happen, that NO document will be opened ...
-    return sal_False;
+    return (nOpenDocs >= nMaxDocs);
 }
 
 //-------------------------------------------------------------------------
