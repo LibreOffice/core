@@ -566,7 +566,7 @@ public:
                                             SCCOL nEndCol, SCROW nEndRow,
                                             const ScMarkData& rMark ) const;
 
-    bool            GetMatrixFormulaRange( const ScAddress& rCellPos, ScRange& rMatrix );
+    SC_DLLPUBLIC bool GetMatrixFormulaRange( const ScAddress& rCellPos, ScRange& rMatrix );
 
     bool            IsEmbedded() const;
     void            GetEmbedded( ScRange& rRange ) const;

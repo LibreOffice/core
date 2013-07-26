@@ -26,6 +26,7 @@
 #include "scitems.hxx"
 #include "document.hxx"
 #include "cellform.hxx"
+#include "formulacell.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -51,6 +52,8 @@ public:
     void testMiscRowHeightExport();
     void testNamedRangeBugfdo62729();
 
+    void testInlineArrayXLS();
+
     CPPUNIT_TEST_SUITE(ScExportTest);
     CPPUNIT_TEST(test);
 #if !defined(MACOSX) && !defined(DRAGONFLY)
@@ -62,6 +65,7 @@ public:
     CPPUNIT_TEST(testColorScaleExportXLSX);
     CPPUNIT_TEST(testMiscRowHeightExport);
     CPPUNIT_TEST(testNamedRangeBugfdo62729);
+    CPPUNIT_TEST(testInlineArrayXLS);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -315,6 +319,55 @@ void ScExportTest::testNamedRangeBugfdo62729()
     pNames = pDoc->GetRangeName();
     //after reload should still have a named range
     CPPUNIT_ASSERT(pNames->size() == 1 );
+
+    xDocSh->DoClose();
+}
+
+namespace {
+
+void checkMatrixRange(ScDocument& rDoc, const ScRange& rRange)
+{
+    ScRange aMatRange;
+    ScAddress aMatOrigin;
+    for (SCCOL nCol = rRange.aStart.Col(); nCol <= rRange.aEnd.Col(); ++nCol)
+    {
+        for (SCROW nRow = rRange.aStart.Row(); nRow <= rRange.aEnd.Row(); ++nRow)
+        {
+            ScAddress aPos(nCol, nRow, rRange.aStart.Tab());
+            bool bIsMatrix = rDoc.GetMatrixFormulaRange(aPos, aMatRange);
+            CPPUNIT_ASSERT_MESSAGE("Matrix expected, but not found.", bIsMatrix);
+            CPPUNIT_ASSERT_MESSAGE("Wrong matrix range.", rRange == aMatRange);
+            const ScFormulaCell* pCell = rDoc.GetFormulaCell(aPos);
+            CPPUNIT_ASSERT_MESSAGE("This must be a formula cell.", pCell);
+
+            bIsMatrix = pCell->GetMatrixOrigin(aMatOrigin);
+            CPPUNIT_ASSERT_MESSAGE("Not a part of matrix formula.", bIsMatrix);
+            CPPUNIT_ASSERT_MESSAGE("Wrong matrix origin.", aMatOrigin == aMatRange.aStart);
+        }
+    }
+}
+
+}
+
+void ScExportTest::testInlineArrayXLS()
+{
+    ScDocShellRef xShell = loadDoc("inline-array.", XLS);
+    CPPUNIT_ASSERT(xShell.Is());
+
+    ScDocShellRef xDocSh = saveAndReload(xShell, XLS);
+    CPPUNIT_ASSERT(xDocSh.Is());
+
+    ScDocument* pDoc = xDocSh->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+
+    // B2:C3 contains a matrix.
+    checkMatrixRange(*pDoc, ScRange(1,1,0,2,2,0));
+
+    // B5:D6 contains a matrix.
+    checkMatrixRange(*pDoc, ScRange(1,4,0,3,5,0));
+
+    // B8:C10 as well.
+    checkMatrixRange(*pDoc, ScRange(1,7,0,2,9,0));
 
     xDocSh->DoClose();
 }
