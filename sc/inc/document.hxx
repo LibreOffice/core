@@ -589,8 +589,8 @@ public:
                                         bool bExternalDocument = false );
     SC_DLLPUBLIC bool           InsertTabs( SCTAB nPos, const std::vector<OUString>& rNames,
                                 bool bExternalDocument = false, bool bNamesValid = false );
-    SC_DLLPUBLIC bool           DeleteTabs( SCTAB nTab, SCTAB nSheets, ScDocument* pRefUndoDoc = NULL );
-    SC_DLLPUBLIC bool           DeleteTab( SCTAB nTab, ScDocument* pRefUndoDoc = NULL );
+    SC_DLLPUBLIC bool DeleteTabs( SCTAB nTab, SCTAB nSheets );
+    SC_DLLPUBLIC bool DeleteTab( SCTAB nTab );
     SC_DLLPUBLIC bool           RenameTab( SCTAB nTab, const OUString& rName,
                                 bool bUpdateRef = true,
                                 bool bExternalDocument = false );

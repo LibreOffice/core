@@ -604,7 +604,7 @@ bool ScDocument::InsertTabs( SCTAB nPos, const std::vector<OUString>& rNames,
 }
 
 
-bool ScDocument::DeleteTab( SCTAB nTab, ScDocument* pRefUndoDoc )
+bool ScDocument::DeleteTab( SCTAB nTab )
 {
     bool bValid = false;
     if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()))
@@ -653,8 +653,7 @@ bool ScDocument::DeleteTab( SCTAB nTab, ScDocument* pRefUndoDoc )
 
                 for (SCTAB i = 0, n = static_cast<SCTAB>(maTabs.size()); i < n; ++i)
                     if (maTabs[i])
-                        maTabs[i]->UpdateDeleteTab(
-                            nTab, false, pRefUndoDoc ? pRefUndoDoc->maTabs[i] : 0);
+                        maTabs[i]->UpdateDeleteTab(nTab);
 
                 TableContainer::iterator it = maTabs.begin() + nTab;
                 delete *it;
@@ -689,7 +688,7 @@ bool ScDocument::DeleteTab( SCTAB nTab, ScDocument* pRefUndoDoc )
 }
 
 
-bool ScDocument::DeleteTabs( SCTAB nTab, SCTAB nSheets, ScDocument* pRefUndoDoc )
+bool ScDocument::DeleteTabs( SCTAB nTab, SCTAB nSheets )
 {
     bool bValid = false;
     if (ValidTab(nTab) && (nTab + nSheets) < static_cast<SCTAB>(maTabs.size()))
@@ -740,8 +739,7 @@ bool ScDocument::DeleteTabs( SCTAB nTab, SCTAB nSheets, ScDocument* pRefUndoDoc 
 
                 for (SCTAB i = 0, n = static_cast<SCTAB>(maTabs.size()); i < n; ++i)
                     if (maTabs[i])
-                        maTabs[i]->UpdateDeleteTab(
-                            nTab, false, pRefUndoDoc ? pRefUndoDoc->maTabs[i] : 0,nSheets);
+                        maTabs[i]->UpdateDeleteTab(nTab, nSheets);
 
                 TableContainer::iterator it = maTabs.begin() + nTab;
                 TableContainer::iterator itEnd = it + nSheets;

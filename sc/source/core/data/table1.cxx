@@ -1603,7 +1603,7 @@ void ScTable::UpdateInsertTab(SCTAB nTable, SCTAB nNewSheets)
         mpCondFormatList->UpdateReference( URM_INSDEL, ScRange(0,0, nTable, MAXCOL, MAXROW, nTable+nNewSheets-1),0,0, nNewSheets);
 }
 
-void ScTable::UpdateDeleteTab( SCTAB nTable, bool bIsMove, ScTable* pRefUndo, SCTAB nSheets )
+void ScTable::UpdateDeleteTab( SCTAB nTable, SCTAB nSheets )
 {
     if (nTab > nTable)
     {
@@ -1612,11 +1612,8 @@ void ScTable::UpdateDeleteTab( SCTAB nTable, bool bIsMove, ScTable* pRefUndo, SC
             pDBDataNoName->UpdateMoveTab(nTab + 1,nTab);
     }
 
-    SCCOL i;
-    if (pRefUndo)
-        for (i=0; i <= MAXCOL; i++) aCol[i].UpdateDeleteTab(nTable, bIsMove, &pRefUndo->aCol[i], nSheets);
-    else
-        for (i=0; i <= MAXCOL; i++) aCol[i].UpdateDeleteTab(nTable, bIsMove, NULL, nSheets);
+    for (SCCOL i = 0; i <= MAXCOL; ++i)
+        aCol[i].UpdateDeleteTab(nTable, nSheets);
 
     if (mpRangeName)
     {

@@ -211,7 +211,7 @@ public:
 
     void            UpdateInsertTab(SCTAB nTable, SCTAB nNewSheets = 1);
     void            UpdateInsertTabAbs(SCTAB nTable);
-    bool            UpdateDeleteTab(SCTAB nTable, bool bIsMove = false, SCTAB nSheets = 1);
+    bool UpdateDeleteTab(SCTAB nTable, SCTAB nSheets = 1);
     void            UpdateMoveTab(SCTAB nOldPos, SCTAB nNewPos, SCTAB nTabNo);
     void            UpdateRenameTab(SCTAB nTable, const OUString& rName);
     bool            TestTabRefAbs(SCTAB nTable);

@@ -3052,7 +3052,7 @@ sal_Bool ScDocFunc::DeleteTable( SCTAB nTab, sal_Bool bRecord, sal_Bool /* bApi 
         pUndoData = new ScRefUndoData( pDoc );
     }
 
-    if (pDoc->DeleteTab( nTab, pUndoDoc ))
+    if (pDoc->DeleteTab(nTab))
     {
         if (bRecord)
         {

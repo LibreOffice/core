@@ -2575,7 +2575,7 @@ void ScFormulaCell::UpdateInsertTab(SCTAB nTable, SCTAB nNewSheets)
     // no StartListeningTo because the new sheets have not been inserted yet.
 }
 
-bool ScFormulaCell::UpdateDeleteTab(SCTAB nTable, bool /*bIsMove*/, SCTAB nSheets)
+bool ScFormulaCell::UpdateDeleteTab(SCTAB nTable, SCTAB nSheets)
 {
     bool bPosChanged = ( aPos.Tab() >= nTable + nSheets ? true : false );
     pCode->Reset();

@@ -2086,7 +2086,7 @@ bool ScViewFunc::DeleteTables( const SCTAB nTab, SCTAB nSheets )
     while ( nNewTab > 0 && !pDoc->IsVisible( nNewTab ) )
         --nNewTab;
 
-    if (pDoc->DeleteTabs(nTab, nSheets, NULL))
+    if (pDoc->DeleteTabs(nTab, nSheets))
     {
         if( bVbaEnabled )
         {
@@ -2195,7 +2195,7 @@ sal_Bool ScViewFunc::DeleteTables(const vector<SCTAB> &TheTabs, sal_Bool bRecord
     {
         OUString sCodeName;
         sal_Bool bHasCodeName = pDoc->GetCodeName( TheTabs[i], sCodeName );
-        if (pDoc->DeleteTab( TheTabs[i], pUndoDoc ))
+        if (pDoc->DeleteTab(TheTabs[i]))
         {
             bDelDone = sal_True;
             if( bVbaEnabled )
