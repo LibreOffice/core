@@ -610,7 +610,7 @@ public:
         DrawText().
      */
     void                AddTextRectActions( const Rectangle& rRect,
-                                            const String&    rOrigStr,
+                                            const OUString&    rOrigStr,
                                             sal_uInt16           nStyle,
                                             GDIMetaFile&     rMtf );
     void                DrawText( const Rectangle& rRect,
@@ -634,21 +634,21 @@ public:
                             { xub_StrLen nDummy; return GetNonMnemonicString( rStr, nDummy ); }
 
     sal_Bool                GetTextBoundRect( Rectangle& rRect,
-                            const String& rStr, xub_StrLen nBase = 0, xub_StrLen nIndex = 0, xub_StrLen nLen = STRING_LEN,
+                            const OUString& rStr, xub_StrLen nBase = 0, xub_StrLen nIndex = 0, xub_StrLen nLen = STRING_LEN,
                             sal_uLong nLayoutWidth = 0, const sal_Int32* pDXArray = NULL ) const;
     sal_Bool                GetTextOutline( PolyPolygon&,
-                            const String& rStr, xub_StrLen nBase = 0, xub_StrLen nIndex = 0,
+                            const OUString& rStr, xub_StrLen nBase = 0, xub_StrLen nIndex = 0,
                             xub_StrLen nLen = STRING_LEN, sal_Bool bOptimize = sal_True,
                             sal_uLong nLayoutWidth = 0, const sal_Int32* pDXArray = NULL ) const;
     sal_Bool                GetTextOutlines( PolyPolyVector&,
-                            const String& rStr, xub_StrLen nBase = 0, xub_StrLen nIndex = 0,
+                            const OUString& rStr, xub_StrLen nBase = 0, xub_StrLen nIndex = 0,
                             xub_StrLen nLen = STRING_LEN, sal_Bool bOptimize = sal_True,
                             sal_uLong nLayoutWidth = 0, const sal_Int32* pDXArray = NULL ) const;
     sal_Bool                GetTextOutlines( ::basegfx::B2DPolyPolygonVector&,
-                            const String& rStr, xub_StrLen nBase = 0, xub_StrLen nIndex = 0,
+                            const OUString& rStr, xub_StrLen nBase = 0, xub_StrLen nIndex = 0,
                             xub_StrLen nLen = STRING_LEN, sal_Bool bOptimize = sal_True,
                             sal_uLong nLayoutWidth = 0, const sal_Int32* pDXArray = NULL ) const;
-    sal_Bool                GetGlyphBoundRects( const Point& rOrigin, const String& rStr, int nIndex,
+    sal_Bool                GetGlyphBoundRects( const Point& rOrigin, const OUString& rStr, int nIndex,
                             int nLen, int nBase, MetricVector& rVector );
 
     void                DrawPixel( const Point& rPt );
@@ -1077,19 +1077,19 @@ public:
     void                Erase();
     void                Erase( const Rectangle& rRect ) { DrawWallpaper( rRect, GetBackground() ); }
 
-    sal_Bool                AddTempDevFont( const String& rFileURL, const String& rFontName );
+    sal_Bool            AddTempDevFont( const OUString& rFileURL, const OUString& rFontName );
     int                 GetDevFontCount() const;
     FontInfo            GetDevFont( int nDevFontIndex ) const;
     int                 GetDevFontSizeCount( const Font& ) const;
     Size                GetDevFontSize( const Font& rFont, int nSizeIndex ) const;
-    sal_Bool                IsFontAvailable( const String& rFontName ) const;
+    sal_Bool            IsFontAvailable( const OUString& rFontName ) const;
 
     FontMetric          GetFontMetric() const;
     FontMetric          GetFontMetric( const Font& rFont ) const;
     sal_Bool                GetFontCharMap( FontCharMap& rFontCharMap ) const;
     bool                GetFontCapabilities( vcl::FontCapabilities& rFontCapabilities ) const;
 
-    xub_StrLen          HasGlyphs( const Font& rFont, const String& rStr,
+    xub_StrLen          HasGlyphs( const Font& rFont, const OUString& rStr,
                             xub_StrLen nIndex = 0, xub_StrLen nLen = STRING_LEN ) const;
 
     long                GetMinKashida() const;
@@ -1097,24 +1097,24 @@ public:
     // i60594
     // validate kashida positions against the current font
     // returns count of invalid kashida positions
-    xub_StrLen          ValidateKashidas ( const String& rTxt,
+    xub_StrLen          ValidateKashidas ( const OUString& rTxt,
                                             xub_StrLen nIdx, xub_StrLen nLen,
                                             xub_StrLen nKashCount, // number of suggested kashida positions (in)
                                             const xub_StrLen* pKashidaPos, // suggested kashida positions (in)
                                             xub_StrLen* pKashidaPosDropped // invalid kashida positions (out)
                                             ) const;
 
-    sal_uInt16              GetBitCount() const;
+    sal_uInt16          GetBitCount() const;
 
-    sal_Bool                GetTextIsRTL( const OUString&, sal_Int32 nIndex, sal_Int32 nLen ) const;
+    sal_Bool            GetTextIsRTL( const OUString&, sal_Int32 nIndex, sal_Int32 nLen ) const;
 
     /** Query the existence and depth of the alpha channel
 
         @return 0, if no alpha channel available, and the bit depth of
         the alpha channel otherwise.
      */
-    sal_uInt16              GetAlphaBitCount() const;
-    sal_uLong               GetColorCount() const;
+    sal_uInt16          GetAlphaBitCount() const;
+    sal_uLong           GetColorCount() const;
 
     void                Push( sal_uInt16 nFlags = PUSH_ALL );
     void                Pop();

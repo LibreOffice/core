@@ -6352,13 +6352,13 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const Rectangle& r
 }
 
 void OutputDevice::AddTextRectActions( const Rectangle& rRect,
-                                       const String&    rOrigStr,
-                                       sal_uInt16           nStyle,
+                                       const OUString&  rOrigStr,
+                                       sal_uInt16       nStyle,
                                        GDIMetaFile&     rMtf )
 {
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
-    if ( !rOrigStr.Len() || rRect.IsEmpty() )
+    if ( rOrigStr.isEmpty() || rRect.IsEmpty() )
         return;
 
     // we need a graphics
@@ -6918,7 +6918,7 @@ FontInfo OutputDevice::GetDevFont( int nDevFontIndex ) const
     return aFontInfo;
 }
 
-sal_Bool OutputDevice::AddTempDevFont( const String& rFileURL, const String& rFontName )
+sal_Bool OutputDevice::AddTempDevFont( const OUString& rFileURL, const OUString& rFontName )
 {
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
@@ -6981,7 +6981,7 @@ Size OutputDevice::GetDevFontSize( const Font& rFont, int nSizeIndex ) const
     return aSize;
 }
 
-sal_Bool OutputDevice::IsFontAvailable( const String& rFontName ) const
+sal_Bool OutputDevice::IsFontAvailable( const OUString& rFontName ) const
 {
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
@@ -7148,7 +7148,7 @@ long OutputDevice::GetMinKashida() const
     return ImplDevicePixelToLogicWidth( pMetric->mnMinKashida );
 }
 
-xub_StrLen OutputDevice::ValidateKashidas ( const String& rTxt,
+xub_StrLen OutputDevice::ValidateKashidas ( const OUString& rTxt,
                                             xub_StrLen nIdx, xub_StrLen nLen,
                                             xub_StrLen nKashCount,
                                             const xub_StrLen* pKashidaPos,
@@ -7171,7 +7171,7 @@ xub_StrLen OutputDevice::ValidateKashidas ( const String& rTxt,
     return nDropped;
 }
 
-sal_Bool OutputDevice::GetGlyphBoundRects( const Point& rOrigin, const String& rStr,
+sal_Bool OutputDevice::GetGlyphBoundRects( const Point& rOrigin, const OUString& rStr,
     int nIndex, int nLen, int nBase, MetricVector& rVector )
 {
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
@@ -7179,7 +7179,7 @@ sal_Bool OutputDevice::GetGlyphBoundRects( const Point& rOrigin, const String& r
     rVector.clear();
 
     if( nLen == STRING_LEN )
-        nLen = rStr.Len() - nIndex;
+        nLen = rStr.getLength() - nIndex;
 
     Rectangle aRect;
     for( int i = 0; i < nLen; i++ )
@@ -7194,7 +7194,7 @@ sal_Bool OutputDevice::GetGlyphBoundRects( const Point& rOrigin, const String& r
 }
 
 sal_Bool OutputDevice::GetTextBoundRect( Rectangle& rRect,
-    const String& rStr, xub_StrLen nBase, xub_StrLen nIndex, xub_StrLen nLen,
+    const OUString& rStr, xub_StrLen nBase, xub_StrLen nIndex, xub_StrLen nLen,
     sal_uLong nLayoutWidth, const sal_Int32* pDXAry ) const
 {
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
@@ -7369,7 +7369,7 @@ sal_Bool OutputDevice::GetTextBoundRect( Rectangle& rRect,
 }
 
 sal_Bool OutputDevice::GetTextOutlines( ::basegfx::B2DPolyPolygonVector& rVector,
-    const String& rStr, xub_StrLen nBase, xub_StrLen nIndex, xub_StrLen nLen,
+    const OUString& rStr, xub_StrLen nBase, xub_StrLen nIndex, xub_StrLen nLen,
     sal_Bool bOptimize, sal_uLong nTWidth, const sal_Int32* pDXArray ) const
 {
     // the fonts need to be initialized
@@ -7383,7 +7383,7 @@ sal_Bool OutputDevice::GetTextOutlines( ::basegfx::B2DPolyPolygonVector& rVector
     sal_Bool bRet = sal_False;
     rVector.clear();
     if( nLen == STRING_LEN )
-        nLen = rStr.Len() - nIndex;
+        nLen = rStr.getLength() - nIndex;
     rVector.reserve( nLen );
 
     // we want to get the Rectangle in logical units, so to
@@ -7596,7 +7596,7 @@ sal_Bool OutputDevice::GetTextOutlines( ::basegfx::B2DPolyPolygonVector& rVector
 }
 
 sal_Bool OutputDevice::GetTextOutlines( PolyPolyVector& rResultVector,
-    const String& rStr, xub_StrLen nBase, xub_StrLen nIndex,
+    const OUString& rStr, xub_StrLen nBase, xub_StrLen nIndex,
     xub_StrLen nLen, sal_Bool bOptimize, sal_uLong nTWidth, const sal_Int32* pDXArray ) const
 {
     rResultVector.clear();
@@ -7617,7 +7617,7 @@ sal_Bool OutputDevice::GetTextOutlines( PolyPolyVector& rResultVector,
 }
 
 sal_Bool OutputDevice::GetTextOutline( PolyPolygon& rPolyPoly,
-    const String& rStr, xub_StrLen nBase, xub_StrLen nIndex, xub_StrLen nLen,
+    const OUString& rStr, xub_StrLen nBase, xub_StrLen nIndex, xub_StrLen nLen,
     sal_Bool bOptimize, sal_uLong nTWidth, const sal_Int32* pDXArray ) const
 {
     rPolyPoly.Clear();
@@ -7710,17 +7710,17 @@ sal_Bool OutputDevice::GetFontCharMap( FontCharMap& rFontCharMap ) const
     return sal_True;
 }
 
-xub_StrLen OutputDevice::HasGlyphs( const Font& rTempFont, const String& rStr,
+xub_StrLen OutputDevice::HasGlyphs( const Font& rTempFont, const OUString& rStr,
     xub_StrLen nIndex, xub_StrLen nLen ) const
 {
-    if( nIndex >= rStr.Len() )
+    if( nIndex >= rStr.getLength() )
         return nIndex;
     xub_StrLen nEnd = nIndex + nLen;
-    if( (sal_uLong)nIndex+nLen > rStr.Len() )
-        nEnd = rStr.Len();
+    if( (sal_Int32)nIndex+nLen > rStr.getLength() )
+        nEnd = rStr.getLength();
 
     DBG_ASSERT( nIndex < nEnd, "StartPos >= EndPos?" );
-    DBG_ASSERT( nEnd <= rStr.Len(), "String too short" );
+    DBG_ASSERT( nEnd <= rStr.getLength(), "String too short" );
 
     // to get the map temporarily set font
     const Font aOrigFont = GetFont();
@@ -7733,9 +7733,8 @@ xub_StrLen OutputDevice::HasGlyphs( const Font& rTempFont, const String& rStr,
     if( bRet == sal_False )
         return nIndex;
 
-    const sal_Unicode* pStr = rStr.GetBuffer();
-    for( pStr += nIndex; nIndex < nEnd; ++pStr, ++nIndex )
-        if( ! aFontCharMap.HasChar( *pStr ) )
+    for( sal_Int32 i = nIndex; nIndex < nEnd; ++i, ++nIndex )
+        if( ! aFontCharMap.HasChar( rStr[i] ) )
             return nIndex;
 
     return STRING_LEN;
