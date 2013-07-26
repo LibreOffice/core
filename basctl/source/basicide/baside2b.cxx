@@ -513,7 +513,7 @@ void EditorWindow::KeyInput( const KeyEvent& rKEvt )
 
         HighlightPortions aPortions;
         aHighlighter.getHighlightPortions( nLine, aLine, aPortions );
-        if( aLine[aLine.getLength()-1] != '"' && (aPortions[aPortions.size()-1].tokenType != 4) )
+        if( aLine.getLength() > 0 && aLine[aLine.getLength()-1] != '"' && (aPortions[aPortions.size()-1].tokenType != 4) )
         {
             GetEditView()->InsertText(OUString("\""));
             //leave the cursor on it's place: inside the two double quotes
