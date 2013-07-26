@@ -240,13 +240,14 @@ void SwParaDlg::PageCreated(sal_uInt16 nId, SfxTabPage& rPage)
         ((SwParagraphNumTabPage&)rPage).EnableNewStart();
         ListBox & rBox = ((SwParagraphNumTabPage&)rPage).GetStyleBox();
         SfxStyleSheetBasePool* pPool = rView.GetDocShell()->GetStyleSheetPool();
-        pPool->SetSearchMask(SFX_STYLE_FAMILY_PSEUDO, SFXSTYLEBIT_ALL);
-        const SfxStyleSheetBase* pBase = pPool->First();
+        SfxStyleSheetIterator iter(pPool,
+            SFX_STYLE_FAMILY_PSEUDO, SFXSTYLEBIT_ALL);
+        SfxStyleSheetBase const* pBase = iter.First();
         std::set<String> aNames;
         while(pBase)
         {
             aNames.insert(pBase->GetName());
-            pBase = pPool->Next();
+            pBase = iter.Next();
         }
         for(std::set<String>::const_iterator it = aNames.begin(); it != aNames.end(); ++it)
             rBox.InsertEntry(*it);

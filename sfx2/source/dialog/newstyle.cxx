@@ -81,11 +81,13 @@ SfxNewStyleDlg::SfxNewStyleDlg( Window* pParent, SfxStyleSheetBasePool& rInPool 
     aColBox.SetDoubleClickHdl(LINK(this, SfxNewStyleDlg, OKHdl));
 //    aColBox.SetAccessibleName(SfxResId(FL_COL).toString());
 
-    SfxStyleSheetBase *pStyle = rPool.First();
+    SfxStyleSheetIterator iter(&rPool,
+        rPool.GetSearchFamily(), rPool.GetSearchMask());
+    SfxStyleSheetBase *pStyle = iter.First();
     while ( pStyle )
     {
         aColBox.InsertEntry(pStyle->GetName());
-        pStyle = rPool.Next();
+        pStyle = iter.Next();
     }
 }
 

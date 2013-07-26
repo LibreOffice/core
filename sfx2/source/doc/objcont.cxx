@@ -319,21 +319,15 @@ void SfxObjectShell::LoadStyles
 */
 
 {
-    struct Styles_Impl
-    {
-        SfxStyleSheetBase *pSource;
-        SfxStyleSheetBase *pDest;
-    };
-
     SfxStyleSheetBasePool *pSourcePool = rSource.GetStyleSheetPool();
     DBG_ASSERT(pSourcePool, "Source-DocumentShell ohne StyleSheetPool");
     SfxStyleSheetBasePool *pMyPool = GetStyleSheetPool();
     DBG_ASSERT(pMyPool, "Dest-DocumentShell ohne StyleSheetPool");
-    pSourcePool->SetSearchMask(SFX_STYLE_FAMILY_ALL, SFXSTYLEBIT_ALL);
-    Styles_Impl *pFound = new Styles_Impl[pSourcePool->Count()];
-    sal_uInt16 nFound = 0;
+    SfxStyleSheetIterator iter(pSourcePool,
+        SFX_STYLE_FAMILY_ALL, SFXSTYLEBIT_ALL);
+    std::vector<std::pair<SfxStyleSheetBase*, SfxStyleSheetBase*> > found;
 
-    SfxStyleSheetBase *pSource = pSourcePool->First();
+    SfxStyleSheetBase *pSource = iter.First();
     while ( pSource )
     {
         SfxStyleSheetBase *pDest =
@@ -344,21 +338,19 @@ void SfxObjectShell::LoadStyles
                     pSource->GetFamily(), pSource->GetMask());
             // Setting of Parents, the next style
         }
-        pFound[nFound].pSource = pSource;
-        pFound[nFound].pDest = pDest;
-        ++nFound;
-        pSource = pSourcePool->Next();
+        found.push_back(std::make_pair(pSource, pDest));
+        pSource = iter.Next();
     }
 
-    for ( sal_uInt16 i = 0; i < nFound; ++i )
+    for (size_t i = 0; i < found.size(); ++i)
     {
-        pFound[i].pDest->GetItemSet().PutExtended(pFound[i].pSource->GetItemSet(), SFX_ITEM_DONTCARE, SFX_ITEM_DEFAULT);
-        if(pFound[i].pSource->HasParentSupport())
-            pFound[i].pDest->SetParent(pFound[i].pSource->GetParent());
-        if(pFound[i].pSource->HasFollowSupport())
-            pFound[i].pDest->SetFollow(pFound[i].pSource->GetParent());
+        found[i].second->GetItemSet().PutExtended(found[i].first->GetItemSet(),
+                SFX_ITEM_DONTCARE, SFX_ITEM_DEFAULT);
+        if (found[i].first->HasParentSupport())
+            found[i].second->SetParent(found[i].first->GetParent());
+        if (found[i].first->HasFollowSupport())
+            found[i].second->SetFollow(found[i].first->GetParent());
     }
-    delete [] pFound;
 }
 
 //--------------------------------------------------------------------

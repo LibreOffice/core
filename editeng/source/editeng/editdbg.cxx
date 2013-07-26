@@ -419,12 +419,12 @@ void EditDbg::ShowEditEngineData( EditEngine* pEE, sal_Bool bInfoBox )
 
     if ( pEE->pImpEditEngine->GetStyleSheetPool() )
     {
-        sal_uLong nStyles = pEE->pImpEditEngine->GetStyleSheetPool() ? pEE->pImpEditEngine->GetStyleSheetPool()->Count() : 0;
+        SfxStyleSheetIterator aIter( pEE->pImpEditEngine->GetStyleSheetPool(), SFX_STYLE_FAMILY_ALL );
+        sal_uLong nStyles = pEE->pImpEditEngine->GetStyleSheetPool() ? aIter.Count() : 0;
         fprintf( fp, "\n\n================================================================================" );
         fprintf( fp, "\n==================   Stylesheets   =============================================" );
         fprintf( fp, "\n================================================================================" );
-        fprintf( fp, "\n#Template:   %lu\n", nStyles );
-        SfxStyleSheetIterator aIter( pEE->pImpEditEngine->GetStyleSheetPool(), SFX_STYLE_FAMILY_ALL );
+        fprintf( fp, "\n#Styles:     %lu\n", nStyles );
         SfxStyleSheetBase* pStyle = aIter.First();
         while ( pStyle )
         {

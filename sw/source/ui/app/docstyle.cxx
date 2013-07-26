@@ -476,8 +476,6 @@ void SwDocStyleSheet::SetHidden( sal_Bool bValue )
 
     if( bChg )
     {
-        // calling pPool->First() here would be quite slow...
-        dynamic_cast<SwDocStyleSheetPool*>(pPool)->InvalidateIterator(); // internal list has to be updated
         pPool->Broadcast( SfxStyleSheetHint( SFX_STYLESHEET_MODIFIED, *this ) );
         SwEditShell* pSh = rDoc.GetEditShell();
         if( pSh )
@@ -913,7 +911,6 @@ bool  SwDocStyleSheet::SetName( const OUString& rStr)
 
     if( bChg )
     {
-        pPool->First();  // internal list has to be updated
         pPool->Broadcast( SfxStyleSheetHint( SFX_STYLESHEET_MODIFIED, *this ) );
         SwEditShell* pSh = rDoc.GetEditShell();
         if( pSh )
@@ -2865,21 +2862,6 @@ void SwStyleSheetIterator::AppendStyleList(const boost::ptr_vector<String>& rLis
         if ( ( !bTestUsed && bMatchHidden ) || ( bTestUsed && bUsed ) )
             aLst.Append( cType, rList[i] );
     }
-}
-
-void SwDocStyleSheetPool::InvalidateIterator()
-{
-    dynamic_cast<SwStyleSheetIterator&>(GetIterator_Impl()).InvalidateIterator();
-}
-
-void  SwStyleSheetIterator::InvalidateIterator()
-{
-    // potentially we could send an SfxHint to Notify but currently it's
-    // iterating over the vector anyway so would still be slow - why does
-    // this iterator not use a map?
-    bFirstCalled = false;
-    nLastPos = 0;
-    aLst.Erase();
 }
 
 void  SwStyleSheetIterator::Notify( SfxBroadcaster&, const SfxHint& rHint )

@@ -420,13 +420,14 @@ void SwTemplateDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
                 }//<-end
                 ListBox & rBox = ((SwParagraphNumTabPage&)rPage).GetStyleBox();
                 SfxStyleSheetBasePool* pPool = pWrtShell->GetView().GetDocShell()->GetStyleSheetPool();
-                pPool->SetSearchMask(SFX_STYLE_FAMILY_PSEUDO, SFXSTYLEBIT_ALL);
-                const SfxStyleSheetBase* pBase = pPool->First();
+                SfxStyleSheetIterator iter(pPool,
+                    SFX_STYLE_FAMILY_PSEUDO, SFXSTYLEBIT_ALL);
+                const SfxStyleSheetBase* pBase = iter.First();
                 std::set<String> aNames;
                 while(pBase)
                 {
                     aNames.insert(pBase->GetName());
-                    pBase = pPool->Next();
+                    pBase = iter.Next();
                 }
                 for(std::set<String>::const_iterator it = aNames.begin(); it != aNames.end(); ++it)
                     rBox.InsertEntry(*it);
@@ -488,12 +489,13 @@ void SwTemplateDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
                 {
                     SfxStyleSheetBasePool* pStyleSheetPool = pWrtShell->
                                 GetView().GetDocShell()->GetStyleSheetPool();
-                    pStyleSheetPool->SetSearchMask(SFX_STYLE_FAMILY_PARA);
-                    SfxStyleSheetBase *pFirstStyle = pStyleSheetPool->First();
+                    SfxStyleSheetIterator iter(pStyleSheetPool,
+                            SFX_STYLE_FAMILY_PARA, SFXSTYLEBIT_ALL);
+                    SfxStyleSheetBase *pFirstStyle = iter.First();
                     while(pFirstStyle)
                     {
                         aList.push_back( pFirstStyle->GetName() );
-                        pFirstStyle = pStyleSheetPool->Next();
+                        pFirstStyle = iter.Next();
                     }
                 }
                 aSet.Put (SfxStringListItem(SID_COLLECT_LIST, &aList));

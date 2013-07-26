@@ -1494,11 +1494,12 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
             // only worry about presentation templates
             String aName;
             SdStyleSheetPool* pSourceStyleSheetPool = (SdStyleSheetPool*) pSourceDoc->GetStyleSheetPool();
-            pSourceStyleSheetPool->SetSearchMask(SD_STYLE_FAMILY_MASTERPAGE);
+            SfxStyleSheetIterator iter(pSourceStyleSheetPool,
+                    SD_STYLE_FAMILY_MASTERPAGE, SFXSTYLEBIT_ALL);
             static_cast<SdStyleSheetPool*>( mxStyleSheetPool.get())->SetSearchMask(SD_STYLE_FAMILY_MASTERPAGE);
 
             SdStyleSheetVector aCreatedStyles;          // List of created stylesheets
-            SfxStyleSheetBase* pHisSheet = pSourceStyleSheetPool->First();
+            SfxStyleSheetBase* pHisSheet = iter.First();
 
             while (pHisSheet)
             {
@@ -1561,7 +1562,7 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
                     aReplList.push_back(aReplData);
                 }
 
-                pHisSheet = (SfxStyleSheet*) pSourceStyleSheetPool->Next();
+                pHisSheet = iter.Next();
             }
 
             // If new styles were created: re-create parent chaining of the item

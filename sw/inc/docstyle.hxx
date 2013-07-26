@@ -175,8 +175,6 @@ public:
     virtual SfxStyleSheetBase* Find(const OUString& rStr);
 
     virtual void Notify( SfxBroadcaster&, const SfxHint& );
-
-    void InvalidateIterator();
 };
 
 
@@ -219,8 +217,6 @@ public:
 
     virtual void SAL_CALL acquire(  ) throw ();
     virtual void SAL_CALL release(  ) throw ();
-
-    void InvalidateIterator();
 
 protected:
     virtual ~SwDocStyleSheetPool();

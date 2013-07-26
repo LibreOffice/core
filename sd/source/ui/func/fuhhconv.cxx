@@ -163,7 +163,9 @@ void FuHangulHanjaConversion::ConvertStyles( sal_Int16 nTargetLanguage, const Fo
     if( !pStyleSheetPool )
         return;
 
-    SfxStyleSheetBase* pStyle = pStyleSheetPool->First();
+    SfxStyleSheetIterator iter(pStyleSheetPool,
+        pStyleSheetPool->GetSearchFamily(), pStyleSheetPool->GetSearchMask());
+    SfxStyleSheetBase* pStyle = iter.First();
     while( pStyle )
     {
         SfxItemSet& rSet = pStyle->GetItemSet();
@@ -186,7 +188,7 @@ void FuHangulHanjaConversion::ConvertStyles( sal_Int16 nTargetLanguage, const Fo
             rSet.Put( aFontItem );
         }
 
-        pStyle = pStyleSheetPool->Next();
+        pStyle = iter.Next();
     }
 
     mpDoc->SetLanguage( EE_CHAR_LANGUAGE_CJK, nTargetLanguage );

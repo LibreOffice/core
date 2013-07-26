@@ -447,13 +447,16 @@ const SfxItemSet& ScHTMLExport::PageDefaults( SCTAB nTab )
     // remember defaults for compare in WriteCell
     if ( !aHTMLStyle.bInitialized )
     {
-        pStylePool->SetSearchMask( SFX_STYLE_FAMILY_PARA, SFXSTYLEBIT_ALL );
         pStyleSheet = pStylePool->Find(
                 ScGlobal::GetRscString(STR_STYLENAME_STANDARD),
                 SFX_STYLE_FAMILY_PARA );
         OSL_ENSURE( pStyleSheet, "ParaStyle not found! :-(" );
         if (!pStyleSheet)
-            pStyleSheet = pStylePool->First();
+        {
+            SfxStyleSheetIterator iter(pStylePool,
+                    SFX_STYLE_FAMILY_PARA, SFXSTYLEBIT_ALL);
+            pStyleSheet = iter.First();
+        }
         const SfxItemSet& rSetPara = pStyleSheet->GetItemSet();
 
         aHTMLStyle.nDefaultScriptType = ScGlobal::GetDefaultScriptType();
@@ -470,11 +473,14 @@ const SfxItemSet& ScHTMLExport::PageDefaults( SCTAB nTab )
 
     // Page style sheet printer settings, e.g. for background graphics.
     // There's only one background graphic in HTML!
-    pStylePool->SetSearchMask( SFX_STYLE_FAMILY_PAGE, SFXSTYLEBIT_ALL );
     pStyleSheet = pStylePool->Find( pDoc->GetPageStyle( nTab ), SFX_STYLE_FAMILY_PAGE );
     OSL_ENSURE( pStyleSheet, "PageStyle not found! :-(" );
     if (!pStyleSheet)
-        pStyleSheet = pStylePool->First();
+    {
+        SfxStyleSheetIterator iter(pStylePool,
+             SFX_STYLE_FAMILY_PAGE, SFXSTYLEBIT_ALL);
+        pStyleSheet = iter.First();
+    }
     const SfxItemSet& rSet = pStyleSheet->GetItemSet();
     if ( !aHTMLStyle.bInitialized )
     {

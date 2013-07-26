@@ -204,8 +204,6 @@ friend class SfxStyleSheetBase;
     SfxStyleSheetBasePool_Impl *pImp;
 
 protected:
-    SfxStyleSheetIterator&      GetIterator_Impl();
-
     OUString                    aAppName;
     SfxItemPool&                rPool;
     SfxStyles                   aStyles;
@@ -229,8 +227,6 @@ public:
     const SfxItemPool&          GetPool() const;
 
     virtual SfxStyleSheetIteratorPtr CreateIterator(SfxStyleFamily, sal_uInt16 nMask);
-    virtual sal_uInt16              Count();
-    virtual SfxStyleSheetBase*  operator[](sal_uInt16 nIdx);
 
     virtual SfxStyleSheetBase&  Make(const OUString&,
                                      SfxStyleFamily eFam,
@@ -248,8 +244,6 @@ public:
     SfxStyleSheetBasePool&      operator+=( const SfxStyleSheetBasePool& );
 
     const SfxStyles&            GetStyles();
-    virtual SfxStyleSheetBase*  First();
-    virtual SfxStyleSheetBase*  Next();
     virtual SfxStyleSheetBase*  Find( const OUString&, SfxStyleFamily eFam, sal_uInt16 n=SFXSTYLEBIT_ALL );
 
     virtual bool                SetParent(SfxStyleFamily eFam,
