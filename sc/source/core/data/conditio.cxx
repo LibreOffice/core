@@ -544,12 +544,12 @@ void ScConditionEntry::UpdateReference( UpdateRefMode eUpdateRefMode,
             lcl_CondUpdateInsertTab( *pFormula1, rRange.aStart.Tab(), bChanged1, nDz );
         else
         {
-            ScCompiler aComp( mpDoc, aSrcPos, *pFormula1 );
-            aComp.SetGrammar(mpDoc->GetGrammar());
             if ( bDeleteTab )
-                aComp.UpdateDeleteTab( rRange.aStart.Tab(), false, true, bChanged1, static_cast<SCTAB>(-1 * nDz) );
+                pFormula1->AdjustReferenceOnDeletedTab(rRange.aStart.Tab(), static_cast<SCTAB>(-1*nDz), aSrcPos);
             else
             {
+                ScCompiler aComp( mpDoc, aSrcPos, *pFormula1 );
+                aComp.SetGrammar(mpDoc->GetGrammar());
                 bool bSizeChanged;
                 aComp.UpdateReference( eUpdateRefMode, aOldSrcPos, rRange, nDx,
                         nDy, nDz, bChanged1, bSizeChanged );
@@ -566,12 +566,12 @@ void ScConditionEntry::UpdateReference( UpdateRefMode eUpdateRefMode,
             lcl_CondUpdateInsertTab( *pFormula2, rRange.aStart.Tab(), bChanged2, nDz );
         else
         {
-            ScCompiler aComp( mpDoc, aSrcPos, *pFormula2);
-            aComp.SetGrammar(mpDoc->GetGrammar());
             if ( bDeleteTab )
-                aComp.UpdateDeleteTab( rRange.aStart.Tab(), false, true, bChanged2, static_cast<SCTAB>(-1*nDz) );
+                pFormula2->AdjustReferenceOnDeletedTab(rRange.aStart.Tab(), static_cast<SCTAB>(-1*nDz), aSrcPos);
             else
             {
+                ScCompiler aComp( mpDoc, aSrcPos, *pFormula2);
+                aComp.SetGrammar(mpDoc->GetGrammar());
                 bool bSizeChanged;
                 aComp.UpdateReference( eUpdateRefMode, aOldSrcPos, rRange, nDx,
                         nDy, nDz, bChanged2, bSizeChanged );
