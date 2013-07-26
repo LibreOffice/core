@@ -522,24 +522,21 @@ class SvxBitmapTabPage : public SvxTabPage
     using TabPage::DeactivatePage;
 
 private:
-    SvxPixelCtl         aCtlPixel;
-    FixedText           aFtPixelEdit;
-    FixedText           aFtColor;
-    ColorLB             aLbColor;
-    FixedText           aFtBackgroundColor;
-    ColorLB             aLbBackgroundColor;
-    FixedText           aLbBitmapsHidden;
-    BitmapLB            aLbBitmaps;
-    FixedLine           aFlProp;
-    SvxXRectPreview     aCtlPreview;
-    PushButton          aBtnAdd;
-    PushButton          aBtnModify;
-    PushButton          aBtnImport;
-    PushButton          aBtnDelete;
-    ImageButton         aBtnLoad;
-    ImageButton         aBtnSave;
+    VclBox*             m_pBxPixelEditor;
+    SvxPixelCtl*        m_pCtlPixel;
+    ColorLB*            m_pLbColor;
+    ColorLB*            m_pLbBackgroundColor;
+    FixedText*          m_pLbBitmapsHidden;
+    BitmapLB*           m_pLbBitmaps;
+    SvxXRectPreview*    m_pCtlPreview;
+    PushButton*         m_pBtnAdd;
+    PushButton*         m_pBtnModify;
+    PushButton*         m_pBtnImport;
+    PushButton*         m_pBtnDelete;
+    PushButton*         m_pBtnLoad;
+    PushButton*         m_pBtnSave;
 
-    SvxBitmapCtl        aBitmapCtl;
+    SvxBitmapCtl*       m_pBitmapCtl;
 
     const SfxItemSet&   rOutAttrs;
 
@@ -575,6 +572,7 @@ private:
 
 public:
     SvxBitmapTabPage( Window* pParent, const SfxItemSet& rInAttrs  );
+    ~SvxBitmapTabPage();
 
     void    Construct();
 

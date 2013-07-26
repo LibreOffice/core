@@ -140,7 +140,7 @@ class SVX_DLLPUBLIC SvxBitmapCtl
 {
 protected:
     Size            aSize;
-    sal_uInt16          nLines;
+    sal_uInt16      nLines;
     Color           aPixelColor, aBackgroundColor;
     const sal_uInt16*   pBmpArray;
 
@@ -177,8 +177,9 @@ protected:
     void    ChangePixel( sal_uInt16 nPixel );
 
 public:
-            SvxPixelCtl( Window* pParent, const ResId& rResId,
-                        sal_uInt16 nNumber = 8 );
+            SvxPixelCtl( Window* pParent, const ResId& rResId,  sal_uInt16 nNumber = 8 );
+            SvxPixelCtl( Window* pParent, sal_uInt16 nNumber = 8 );
+
             ~SvxPixelCtl();
 
     virtual void Paint( const Rectangle& rRect );

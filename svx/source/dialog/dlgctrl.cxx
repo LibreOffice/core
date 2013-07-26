@@ -766,6 +766,27 @@ SvxPixelCtl::SvxPixelCtl( Window* pParent, const ResId& rResId, sal_uInt16 nNumb
     memset(pPixel, 0, nSquares * sizeof(sal_uInt16));
 }
 
+SvxPixelCtl::SvxPixelCtl( Window* pParent, sal_uInt16 nNumber ) :
+Control     ( pParent, WB_BORDER ),
+nLines      ( nNumber ),
+bPaintable  ( sal_True )
+{
+    //aRectSize = GetOutputSize();
+    aRectSize = LogicToPixel(Size(72, 72), MAP_APPFONT);
+
+    SetPixelColor( Color( COL_BLACK ) );
+    SetBackgroundColor( Color( COL_WHITE ) );
+    SetLineColor( Application::GetSettings().GetStyleSettings().GetShadowColor() );
+
+    nSquares = nLines * nLines;
+    pPixel = new sal_uInt16[ nSquares ];
+    memset(pPixel, 0, nSquares * sizeof(sal_uInt16));
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxPixelCtl(Window *pParent, sal_uInt16 nNumber)
+{
+    return new SvxPixelCtl(pParent, 8 ); //nNumber);
+}
 // Destructor dealocating the dynamic array
 
 SvxPixelCtl::~SvxPixelCtl( )
