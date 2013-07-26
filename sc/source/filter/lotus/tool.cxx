@@ -465,16 +465,16 @@ void LotusRangeList::Append( LotusRange* pLR, const String& rName )
 
     ScSingleRefData*    pSingRef = &aComplRef.Ref1;
 
-    pSingRef->nCol = pLR->nColStart;
-    pSingRef->nRow = pLR->nRowStart;
+    pSingRef->SetAbsCol(pLR->nColStart);
+    pSingRef->SetAbsRow(pLR->nRowStart);
 
     if( pLR->IsSingle() )
         aTokArray.AddSingleReference( *pSingRef );
     else
     {
         pSingRef = &aComplRef.Ref2;
-        pSingRef->nCol = pLR->nColEnd;
-        pSingRef->nRow = pLR->nRowEnd;
+        pSingRef->SetAbsCol(pLR->nColEnd);
+        pSingRef->SetAbsRow(pLR->nRowEnd);
         aTokArray.AddDoubleReference( aComplRef );
     }
 
@@ -515,11 +515,12 @@ void RangeNameBufferWK3::Add( const String& rOrgName, const ScComplexRefData& rC
 
     const ScSingleRefData& rRef1 = rCRD.Ref1;
     const ScSingleRefData& rRef2 = rCRD.Ref2;
-
-    if( rRef1.nCol == rRef2.nCol && rRef1.nRow == rRef2.nRow && rRef1.nTab == rRef2.nTab )
+    ScAddress aAbs1 = rRef1.toAbs(ScAddress());
+    ScAddress aAbs2 = rRef2.toAbs(ScAddress());
+    if (aAbs1 == aAbs2)
     {
         pScTokenArray->AddSingleReference( rCRD.Ref1 );
-        aInsert.bSingleRef = sal_True;
+        aInsert.bSingleRef = true;
     }
     else
     {
