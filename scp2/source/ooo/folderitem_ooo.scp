@@ -35,7 +35,7 @@ FolderItem gid_Folderitem_LibreOffice
     Parameter = "";
 End
 
-FolderItemProperty git_Folderitemproperty_LibreOffice_AppID
+FolderItemProperty gid_Fip_LibreOffice_AppID
     ShortcutID = gid_Folderitem_LibreOffice;
     Key = "System.AppUserModel.ID";
     Value = "TheDocumentFoundation.LibreOffice.Startcenter";
@@ -59,7 +59,7 @@ FolderItem gid_Folderitem_Soffice_Desktop
     ComponentCondition = "CREATEDESKTOPLINK=1";
 End
 
-FolderItemProperty git_Folderitemproperty_Soffice_Desktop_AppID
+FolderItemProperty gid_Fip_Soffice_Desktop_AppID
     ShortcutID = gid_Folderitem_Soffice_Desktop;
     Key = "System.AppUserModel.ID";
     Value = "TheDocumentFoundation.LibreOffice.Startcenter";

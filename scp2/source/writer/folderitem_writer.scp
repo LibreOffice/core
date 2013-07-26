@@ -31,7 +31,7 @@ FolderItem gid_Folderitem_Swriter
     ALL_LANG(Tooltip, STR_FI_TOOLTIP_WRITER);
 End
 
-FolderItemProperty git_Folderitemproperty_Swriter_AppID
+FolderItemProperty gid_Fip_Swriter_AppID
     ShortcutID = gid_Folderitem_Swriter;
     Key = "System.AppUserModel.ID";
     Value = "TheDocumentFoundation.LibreOffice.Writer";
