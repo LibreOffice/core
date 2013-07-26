@@ -1860,8 +1860,6 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
                     m_aStates.top().aTableCellsSprms = m_aStates.top().aTableInheritingCellsSprms;
                     m_aStates.top().aTableCellsAttributes = m_aStates.top().aTableInheritingCellsAttributes;
                     m_aStates.top().nCells = m_aStates.top().nInheritingCells;
-                    // This can't be the first row, and we need cell width only there
-                    while(m_aStates.top().aTableRowSprms.erase(NS_ooxml::LN_CT_TblGridBase_gridCol)) ;
                 }
                 for (int i = 0; i < m_aStates.top().nCells; ++i)
                 {
