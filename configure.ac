@@ -2819,11 +2819,10 @@ if test \( -z "$enable_readonly_installset" -a "$ENABLE_MACOSX_SANDBOX" = YES \)
 fi
 if test "$enable_readonly_installset" = yes; then
     AC_MSG_RESULT([yes])
-    ENABLE_READONLY_INSTALLSET=YES
+    AC_DEFINE(HAVE_FEATURE_READONLY_INSTALLSET)
 else
     AC_MSG_RESULT([no])
 fi
-AC_SUBST(ENABLE_READONLY_INSTALLSET)
 
 dnl ===================================================================
 dnl Windows specific tests and stuff

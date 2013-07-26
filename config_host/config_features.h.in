@@ -88,4 +88,14 @@
 
 #define HAVE_FEATURE_MACOSX_SANDBOX 0
 
+/* READONLY_INSTALLSET - whether to treat the installation as read-only
+ *
+ * Prevents attempts by LibreOffice to write into its installation. That means
+ * at least that no "system-wide" extensions can be added, if the location for
+ * them is the traditional one. Experimental work in progress, not actually implemented.
+ */
+
+#define HAVE_FEATURE_READONLY_INSTALLSET 0
+
+
 #endif
