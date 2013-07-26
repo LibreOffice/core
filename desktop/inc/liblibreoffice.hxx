@@ -10,17 +10,26 @@
 #ifndef _LIBLIBREOFFICE_HXX
 #define _LIBLIBREOFFICE_HXX
 
-typedef struct _LODocument LODocument;
+class LODocument
+{
+public:
+    virtual ~LODocument() {}
+
+    virtual bool saveAs (const char *url) = 0;
+};
 
 class LibLibreOffice
 {
 public:
-    virtual bool initialize (const char *installPath) = 0;
+    virtual ~LibLibreOffice () {};
+
+    virtual bool        initialize (const char *installPath) = 0;
 
     virtual LODocument *documentLoad (const char *url) = 0;
-    virtual bool   documentSave (const char *url) = 0;
 
-    virtual ~LibLibreOffice () {};
+    // return the last error as a string, free me.
+    virtual char       *getError() = 0;
+
 };
 
 LibLibreOffice *lo_init (const char *install_path);

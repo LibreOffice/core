@@ -942,8 +942,7 @@ void DocumentHolder::setTitle(const OUString& aDocumentName)
                     m_xDocument->getArgs();
                 for(sal_Int32 j = 0; j < aSeq.getLength(); ++j)
                 {
-                    if(aSeq[j].Name ==
-                       OUString("FilterName"))
+                    if(aSeq[j].Name == "FilterName")
                     {
                         aSeq[j].Value >>= aFilterName;
                         break;

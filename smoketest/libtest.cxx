@@ -8,6 +8,7 @@
  */
 
 #include <stdio.h>
+#include <malloc.h>
 #include <assert.h>
 #include <liblibreoffice.hxx>
 
@@ -28,10 +29,30 @@ int main (int argc, char **argv)
     LODocument *pDocument = pOffice->documentLoad( argv[2] );
     if( !pDocument )
     {
-        fprintf( stderr, "failed to load document '%s'\n", argv[2] );
+        char *pError = pOffice->getError();
+        fprintf( stderr, "failed to load document '%s': '%s'\n",
+                 argv[2], pError );
+        free (pError);
         return -1;
     }
+
+    if( argc > 3 )
+    {
+        fprintf( stderr, "save document as '%s'\n", argv[3] );
+        if ( !pDocument->saveAs( argv[ 3 ] ) )
+        {
+            char *pError = pOffice->getError();
+            fprintf( stderr, "failed to save document '%s'\n", pError);
+            free (pError);
+        }
+        else
+            fprintf( stderr, "Save succeeded\n" );
+    }
     fprintf( stderr, "all tests passed." );
+
+    delete pDocument;
+    delete pOffice;
+
     return 0;
 }
 

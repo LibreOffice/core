@@ -7,9 +7,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <liblibreoffice_impl.hxx>
-
 #include <stdio.h>
+#include <string.h>
+
+#include "liblibreoffice.hxx"
 
 #include <tools/errinf.hxx>
 #include <osl/file.hxx>
@@ -20,7 +21,9 @@
 #include <comphelper/processfactory.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
+#include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -34,34 +37,111 @@
 
 using namespace ::com::sun::star;
 
+class LibLODocument_Impl;
+class LibLibreOffice_Impl;
+
+static LibLibreOffice_Impl *gImpl = NULL;
+
+class LibLODocument_Impl : public LODocument
+{
+    uno::Reference < css::lang::XComponent > mxComponent;
+public:
+    LibLODocument_Impl( const uno::Reference < css::lang::XComponent > &xComponent )
+            : mxComponent( xComponent )
+        { }
+    virtual bool saveAs (const char *url);
+};
+
+class LibLibreOffice_Impl : public LibLibreOffice
+{
+public:
+    rtl::OUString       maLastExceptionMsg;
+
+    virtual bool        initialize (const char *installPath);
+
+    virtual LODocument *documentLoad (const char *url);
+
+    virtual char       *getError();
+
+    virtual ~LibLibreOffice_Impl ();
+};
+
 // Wonder global state ...
 static uno::Reference<css::uno::XComponentContext> xContext;
 static uno::Reference<css::lang::XMultiServiceFactory> xSFactory;
 static uno::Reference<css::lang::XMultiComponentFactory> xFactory;
 
+static OUString getUString( const char *str )
+{
+    if( !str )
+        return OUString( "" );
+    return OStringToOUString( OString( str, strlen (str) ),
+                              RTL_TEXTENCODING_UTF8 );
+}
+
 LODocument *
 LibLibreOffice_Impl::documentLoad( const char *docUrl )
 {
-    OUString sUrl = OUString::createFromAscii (docUrl);
+    OUString sUrl = getUString( docUrl );
     OUString sAbsoluteDocUrl, sWorkingDir, sDocPathUrl;
 
     uno::Reference < css::frame::XDesktop2 > xComponentLoader =
             css::frame::Desktop::create(xContext);
 
     osl_getProcessWorkingDir(&sWorkingDir.pData);
-    osl::FileBase::getFileURLFromSystemPath(sUrl, sDocPathUrl);
+    osl::FileBase::getFileURLFromSystemPath( sUrl, sDocPathUrl );
     osl::FileBase::getAbsoluteFileURL(sWorkingDir, sDocPathUrl, sAbsoluteDocUrl);
 
-    uno::Reference < css::lang::XComponent > xComponent = xComponentLoader->loadComponentFromURL(
-            sAbsoluteDocUrl, OUString("_blank"), 0,
-            uno::Sequence < css::beans::PropertyValue >());
+    maLastExceptionMsg = "";
+    try {
+        uno::Reference < css::lang::XComponent > xComponent =
+            xComponentLoader->loadComponentFromURL(
+                sAbsoluteDocUrl, OUString("_blank"), 0,
+                uno::Sequence < css::beans::PropertyValue >());
+        if( xComponentLoader.is() )
+            return new LibLODocument_Impl( xComponent );
+        else
+            maLastExceptionMsg = "unknown load failure";
+    } catch (const uno::Exception &ex) {
+        maLastExceptionMsg = ex.Message;
+    }
     return NULL;
 }
 
-bool
-LibLibreOffice_Impl::documentSave( const char * )
+bool LibLODocument_Impl::saveAs (const char *url)
 {
-    return 1;
+    OUString sURL = getUString( url );
+
+    try {
+        uno::Reference< frame::XModel > xDocument( mxComponent, uno::UNO_QUERY_THROW );
+        uno::Sequence< beans::PropertyValue > aSeq = xDocument->getArgs();
+
+        OUString aFilterName;
+        for( sal_Int32 i = 0; i < aSeq.getLength(); ++i )
+        {
+            if( aSeq[i].Name == "FilterName" )
+                aSeq[i].Value >>= aFilterName;
+        }
+        aSeq.realloc(2);
+        aSeq[0].Name = "Overwrite";
+        aSeq[0].Value <<= sal_True;
+        aSeq[1].Name = "FilterName";
+        aSeq[1].Value <<= aFilterName;
+
+        uno::Reference< frame::XStorable > xStorable( mxComponent, uno::UNO_QUERY_THROW );
+        xStorable->storeAsURL( sURL, aSeq );
+
+        return true;
+    } catch (const uno::Exception &ex) {
+        gImpl->maLastExceptionMsg = "exception " + ex.Message;
+        return false;
+    }
+}
+
+char *LibLibreOffice_Impl::getError()
+{
+    OString aStr = rtl::OUStringToOString( maLastExceptionMsg, RTL_TEXTENCODING_UTF8 );
+    return strndup( aStr.getStr(), aStr.getLength() );
 }
 
 static void
@@ -154,12 +234,17 @@ extern "C" {
 
 LibLibreOffice *liblibreoffice_hook(void)
 {
-    fprintf( stderr, "create libreoffice object\n" );
-    return new LibLibreOffice_Impl();
+    if( !gImpl )
+    {
+        fprintf( stderr, "create libreoffice object\n" );
+        gImpl = new LibLibreOffice_Impl();
+    }
+    return gImpl;
 }
 
 LibLibreOffice_Impl::~LibLibreOffice_Impl ()
 {
+    gImpl = NULL;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
