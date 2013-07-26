@@ -218,6 +218,9 @@
     <glade-widget-class title="Rectangle Preview" name="svxlo-SvxXRectPreview"
                         generic-name="Rectangle Preview Window" parent="GtkDrawingArea"
                         icon-name="widget-gtk-drawingarea"/>
+    <glade-widget-class title="Shadow Preview" name="svxlo-SvxXShadowPreview"
+                        generic-name="Shadow Preview Window" parent="GtkDrawingArea"
+                            icon-name="widget-gtk-drawingarea"/>
     <glade-widget-class title="Frame Selector" name="svxlo-SvxFrameSelector"
                         generic-name="Frame Border Preview Window" parent="GtkDrawingArea"
                         icon-name="widget-gtk-drawingarea"/>

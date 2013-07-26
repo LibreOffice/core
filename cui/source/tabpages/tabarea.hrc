@@ -22,11 +22,8 @@
 #define BTN_EMBED 7
 #define CTL_PREVIEW 1
 #define CTL_POSITION 2
-#define CTL_COLOR_PREVIEW 5
 #define CTL_BITMAP_PREVIEW 6
-#define MTR_FLD_DISTANCE 1
 #define TSB_INVISIBLE 1
-#define TSB_SHOW_SHADOW 2
 
 #define LB_COLOR 1
 #define LB_GRADIENT 2
@@ -41,16 +38,12 @@
 #define BTN_DELETE 4
 #define FT_COLOR 1
 #define FT_BACKGROUND_COLOR 2
-#define FT_POSITION 2
-#define FT_DISTANCE 1
 #define MTR_FLD_ANGLE 3
 #define CTL_ANGLE 2
 #define NUM_FLD_STEPCOUNT 1
 #define FT_PIXEL_EDIT 4
 #define CTL_PIXEL 2
 #define FT_TYPE 7
-#define FT_SHADOW_COLOR 10
-#define LB_SHADOW_COLOR 10
 #define FL_PROP 2
 #define FL_SIZE 3
 
@@ -71,9 +64,6 @@
 #define MTR_FLD_4 4
 #define FT_TABLE_NAME 7
 
-#define FT_TRANSPARENT 9
 #define FT_BITMAPS_HIDDEN 12
-
-#define MTR_SHADOW_TRANSPARENT 11
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

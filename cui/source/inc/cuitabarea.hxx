@@ -303,17 +303,13 @@ class SvxShadowTabPage : public SvxTabPage
     using TabPage::DeactivatePage;
 
 private:
-    FixedLine           aFlProp;
-    TriStateBox         aTsbShowShadow;
-    FixedText           aFtPosition;
-    SvxRectCtl          aCtlPosition;
-    FixedText           aFtDistance;
-    MetricField         aMtrDistance;
-    FixedText           aFtShadowColor;
-    ColorLB             aLbShadowColor;
-    FixedText           aFtTransparent;
-    MetricField         aMtrTransparent;
-    SvxXShadowPreview   aCtlXRectPreview;
+    TriStateBox*        m_pTsbShowShadow;
+    VclGrid*            m_pGridShadow;
+    SvxRectCtl*         m_pCtlPosition;
+    MetricField*        m_pMtrDistance;
+    ColorLB*            m_pLbShadowColor;
+    MetricField*        m_pMtrTransparent;
+    SvxXShadowPreview*  m_pCtlXRectPreview;
 
     const SfxItemSet&   rOutAttrs;
     RECT_POINT          eRP;
