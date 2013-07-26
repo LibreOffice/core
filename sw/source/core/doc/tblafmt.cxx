@@ -747,12 +747,12 @@ void SwTableAutoFormat::UpdateToSet(sal_uInt8 nPos, SfxItemSet& rSet,
 
 void SwTableAutoFormat::RestoreTableProperties(SwTable &table) const
 {
-    m_pTableStyle->RestoreTableProperties( table );
+    SwTableFormat::RestoreTableProperties( m_pTableStyle, table );
 }
 
 void SwTableAutoFormat::StoreTableProperties(const SwTable &table)
 {
-    m_pTableStyle->StoreTableProperties( table );
+    m_pTableStyle = SwTableFormat::StoreTableProperties( table );
 }
 
 bool SwTableFormat::Load( SvStream& rStream, const SwAfVersions& rVersions, SwDoc* pDoc, sal_uInt16 nVal )

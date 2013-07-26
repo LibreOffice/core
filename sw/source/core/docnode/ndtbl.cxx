@@ -3571,7 +3571,7 @@ bool SwDoc::SetTableAutoFormat( const SwSelBoxes& rBoxes, const SwTableAutoForma
         GetIDocumentUndoRedo().DoUndo(false);
     }
 
-    rNew.GetTableStyle()->RestoreTableProperties(table);
+    rNew.RestoreTableProperties(table);
 
     if( pUndo )
     {

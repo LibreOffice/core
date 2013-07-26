@@ -243,57 +243,42 @@ sal_uInt16 SwTableFormat::GetRepeatHeading() const
     return (static_cast<const SfxUInt16Item&>( GetFormatAttr( FN_PARAM_TABLE_HEADLINE ) )).GetValue();
 }
 
-void SwTableFormat::RestoreTableProperties(SwTable &table) const
+void SwTableFormat::RestoreTableProperties( SwTableFormat* pSrcFormat, SwTable &table )
 {
-    SwTableFormat *pFormat = static_cast<SwTableFormat*>(table.GetFrameFormat()->GetRegisteredIn());
-    if (!pFormat)
+    SwTableFormat *pHardFormat = table.GetFrameFormat();
+    if( !pHardFormat )
         return;
 
-    SwDoc *pDoc = pFormat->GetDoc();
-    if (!pDoc)
+    SwDoc *pDoc = pHardFormat->GetDoc();
+    if( !pDoc )
         return;
 
-    pFormat->CopyTableFormatInfo( this );
+    SwTableFormat *pTableStyle = (SwTableFormat*)pHardFormat->GetRegisteredIn();
+    sal_Bool bRowSplit = sal_True;
+    sal_uInt16 nRepeatHeading = 0;
+
+    if( pSrcFormat )
+    {
+        pHardFormat->RegisterToFormat( *pSrcFormat );
+        bRowSplit = pSrcFormat->GetRowSplit();
+        nRepeatHeading = pSrcFormat->GetRepeatHeading();
+    }
+    else
+        pTableStyle->Remove( pHardFormat );
 
     SwEditShell *pShell = pDoc->GetEditShell();
-    pDoc->SetRowSplit( *pShell->getShellCrsr( false ), SwFormatRowSplit( GetRowSplit() ) );
+    pDoc->SetRowSplit( *pShell->getShellCrsr( false ), SwFormatRowSplit( bRowSplit ) );
 
-    table.SetRowsToRepeat( GetRepeatHeading() );
+    table.SetRowsToRepeat( nRepeatHeading );
 }
 
-void SwTableFormat::StoreTableProperties(const SwTable &table)
+SwTableFormat* SwTableFormat::StoreTableProperties( const SwTable &table )
 {
-    SwTableFormat *pFormat = static_cast<SwTableFormat*>(table.GetFrameFormat()->GetRegisteredIn());
-    if (!pFormat)
-        return;
+    SwTableFormat *pHardFormat = table.GetFrameFormat();
+    if( !pHardFormat )
+        return NULL;
 
-    SwDoc *pDoc = pFormat->GetDoc();
-    if (!pDoc)
-        return;
-
-    SwEditShell *pShell = pDoc->GetEditShell();
-    SwFormatRowSplit *pRowSplit = 0;
-    pDoc->GetRowSplit( *pShell->getShellCrsr( false ), pRowSplit );
-    SetRowSplit( pRowSplit ? pRowSplit->GetValue() : sal_False );
-    delete pRowSplit;
-    pRowSplit = 0;
-
-    CopyTableFormatInfo( pFormat );
-}
-
-void SwTableFormat::CopyTableFormatInfo( const SwTableFormat* pTableFormat )
-{
-    SetFormatAttr( pTableFormat->GetAttrSet() );
-
-    m_pFstLineFormat.reset( new SwTableLineFormat ( *pTableFormat->GetFirstLineFormat() ) );
-    m_pLstLineFormat.reset( new SwTableLineFormat ( *pTableFormat->GetLastLineFormat() ) );
-    m_pOddLineFormat.reset( new SwTableLineFormat ( *pTableFormat->GetOddLineFormat() ) );
-    m_pEvnLineFormat.reset( new SwTableLineFormat ( *pTableFormat->GetEvenLineFormat() ) );
-
-    m_pFstColFormat.reset( new SwTableLineFormat ( *pTableFormat->GetFirstColFormat() ) );
-    m_pLstColFormat.reset( new SwTableLineFormat ( *pTableFormat->GetLastColFormat() ) );
-    m_pOddColFormat.reset( new SwTableLineFormat ( *pTableFormat->GetOddColFormat() ) );
-    m_pEvnColFormat.reset( new SwTableLineFormat ( *pTableFormat->GetEvenColFormat() ) );
+    return (SwTableFormat*)pHardFormat->GetRegisteredIn();
 }
 
 SwTableLineFormat::SwTableLineFormat( SwAttrPool& rPool, const sal_Char* pFormatNm,

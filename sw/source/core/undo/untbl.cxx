@@ -1425,12 +1425,12 @@ SwUndoTableAutoFormat::UndoRedo(bool const bUndo, ::sw::UndoRedoContext & rConte
     OSL_ENSURE( pTableNd, "no TableNode" );
 
     SwTable& table = pTableNd->GetTable();
-    SwTableFormat* pOrig = new SwTableFormat( *static_cast<SwTableFormat*>(table.GetFrameFormat()->GetRegisteredIn()) );
+    SwTableFormat* pOrig = (SwTableFormat*)table.GetFrameFormat()->GetRegisteredIn();
 
     if( bUndo )
         table.SetRowsToRepeat( m_nRepeatHeading );
 
-    pSaveFormat->RestoreTableProperties( table );
+    SwTableFormat::RestoreTableProperties( pSaveFormat, table );
     delete pSaveFormat;
     pSaveFormat = pOrig;
 }
