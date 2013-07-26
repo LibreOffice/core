@@ -633,11 +633,11 @@ class RecoveryDialog : public IExtendedTabPage
             E_RECOVERY_HANDLED              // the recovery wizard page was shown already ... and will be shown now again ...
         };
         sal_Int32 m_eRecoveryState;
-        sal_Bool  m_bWaitForUser;
-        sal_Bool  m_bWaitForCore;
-        sal_Bool  m_bUserDecideNext;
-        sal_Bool  m_bWasRecoveryStarted;
-        sal_Bool  m_bRecoveryOnly;
+        bool  m_bWaitForUser;
+        bool  m_bWaitForCore;
+        bool  m_bUserDecideNext;
+        bool  m_bWasRecoveryStarted;
+        bool  m_bRecoveryOnly;
 
     //-------------------------------------------
     // member

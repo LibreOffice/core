@@ -29,6 +29,10 @@ $(eval $(call gb_Library_set_include,svx,\
 
 $(eval $(call gb_Library_use_sdk_api,svx))
 
+$(eval $(call gb_Library_use_custom_headers,svx,\
+        officecfg/registry \
+))
+
 $(eval $(call gb_Library_add_defs,svx,\
     -DSVX_DLLIMPLEMENTATION \
     -DBOOST_SPIRIT_USE_OLD_NAMESPACE \

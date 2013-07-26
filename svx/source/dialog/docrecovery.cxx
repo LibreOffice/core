@@ -25,7 +25,6 @@
 #include "docrecovery.hxx"
 #include "docrecovery.hrc"
 
-#include <comphelper/configurationhelper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/string.hxx>
@@ -56,6 +55,7 @@
 #include <unotools/pathoptions.hxx>
 #include <unotools/localfilehelper.hxx>
 #include "svtools/treelistentry.hxx"
+#include <officecfg/Office/Recovery.hxx>
 
 namespace svx{
     namespace DocRecovery{
@@ -959,11 +959,11 @@ RecoveryDialog::RecoveryDialog(Window*       pParent,
     , m_pDefButton          ( NULL                                                       )
     , m_pCore               ( pCore                                                      )
     , m_eRecoveryState      (RecoveryDialog::E_RECOVERY_PREPARED)
-    , m_bWaitForUser        (sal_False)
-    , m_bWaitForCore        (sal_False)
-    , m_bUserDecideNext     (sal_False)
-    , m_bWasRecoveryStarted (sal_False)
-    , m_bRecoveryOnly       (sal_False)
+    , m_bWaitForUser        (false)
+    , m_bWaitForCore        (false)
+    , m_bUserDecideNext     (false)
+    , m_bWasRecoveryStarted (false)
+    , m_bRecoveryOnly       (false)
 {
     static long nTabs[] = { 2, 0, 40*RECOV_CONTROLWIDTH/100 };
     m_aFileListLB.SetTabs( &nTabs[0] );
@@ -971,18 +971,7 @@ RecoveryDialog::RecoveryDialog(Window*       pParent,
 
     FreeResource();
 
-    OUString CFG_PACKAGE_RECOVERY( "org.openoffice.Office.Recovery/" );
-    OUString CFG_PATH_CRASHREPORTER( "CrashReporter"                 );
-    OUString CFG_ENTRY_ENABLED( "Enabled"                       );
-
-    sal_Bool bCrashRepEnabled( sal_False );
-    css::uno::Any aVal = ::comphelper::ConfigurationHelper::readDirectKey(
-                                pCore->getComponentContext(),
-                                CFG_PACKAGE_RECOVERY,
-                                CFG_PATH_CRASHREPORTER,
-                                CFG_ENTRY_ENABLED,
-                                ::comphelper::ConfigurationHelper::E_READONLY);
-    aVal >>= bCrashRepEnabled;
+    bool bCrashRepEnabled(officecfg::Office::Recovery::CrashReporter::Enabled::get());
     m_bRecoveryOnly = !bCrashRepEnabled;
 
     PluginProgress* pProgress   = new PluginProgress( &m_aProgrParent, pCore->getComponentContext() );
@@ -1044,7 +1033,7 @@ short RecoveryDialog::execute()
                 // This decision will be made inside the NextBtn handler.
                 m_aNextBtn.Enable(sal_True);
                 m_aCancelBtn.Enable(sal_True);
-                m_bWaitForUser = sal_True;
+                m_bWaitForUser = true;
                 while(m_bWaitForUser)
                     Application::Yield();
                 if (m_bUserDecideNext)
@@ -1057,7 +1046,7 @@ short RecoveryDialog::execute()
         case RecoveryDialog::E_RECOVERY_IN_PROGRESS :
              {
                 // user decided to start recovery ...
-                m_bWasRecoveryStarted = sal_True;
+                m_bWasRecoveryStarted = true;
                 // do it asynchronous (to allow repaints)
                 // and wait for this asynchronous operation.
                 m_aDescrFT.SetText( m_aTitleRecoveryInProgress );
@@ -1067,7 +1056,7 @@ short RecoveryDialog::execute()
                 m_pCore->setUpdateListener(this);
                 m_pCore->doRecovery();
 
-                m_bWaitForCore = sal_True;
+                m_bWaitForCore = true;
                 while(m_bWaitForCore)
                     Application::Yield();
 
@@ -1095,7 +1084,7 @@ short RecoveryDialog::execute()
                     m_aCancelBtn.Enable(sal_True);
                  }
 
-                 m_bWaitForUser = sal_True;
+                 m_bWaitForUser = true;
                  while(m_bWaitForUser)
                      Application::Yield();
 
@@ -1233,7 +1222,7 @@ short RecoveryDialog::execute()
 
         case RecoveryDialog::E_RECOVERY_HANDLED :
              {
-                 m_bWaitForUser = sal_True;
+                 m_bWaitForUser = true;
                  while(m_bWaitForUser)
                      Application::Yield();
 
@@ -1321,14 +1310,14 @@ void RecoveryDialog::end()
         m_pDefButton->GrabFocus();
         m_pDefButton = NULL;
     }
-    m_bWaitForCore = sal_False;
+    m_bWaitForCore = false;
 }
 
 //===============================================
 IMPL_LINK_NOARG(RecoveryDialog, NextButtonHdl)
 {
-    m_bUserDecideNext = sal_True;
-    m_bWaitForUser    = sal_False;
+    m_bUserDecideNext = true;
+    m_bWaitForUser    = false;
     return 0;
 }
 
@@ -1340,8 +1329,8 @@ IMPL_LINK_NOARG(RecoveryDialog, CancelButtonHdl)
         if (impl_askUserForWizardCancel(this, RID_SVXQB_EXIT_RECOVERY) == DLG_RET_CANCEL)
             return 0;
     }
-    m_bUserDecideNext = sal_False;
-    m_bWaitForUser    = sal_False;
+    m_bUserDecideNext = false;
+    m_bWaitForUser    = false;
     return 0;
 }
 

@@ -26,11 +26,11 @@
 #include <osl/file.hxx>
 #include <rtl/bootstrap.hxx>
 #include <comphelper/processfactory.hxx>
-#include <comphelper/configurationhelper.hxx>
 
 #include <vcl/svapp.hxx>
 
 #include <boost/scoped_ptr.hpp>
+#include <officecfg/Office/Recovery.hxx>
 
 
 #define IMPLEMENTATIONNAME_RECOVERYUI       OUString("com.sun.star.comp.svx.RecoveryUI")
@@ -276,18 +276,7 @@ void RecoveryUI::impl_doRecovery()
 {
     bool bRecoveryOnly( false );
 
-    OUString CFG_PACKAGE_RECOVERY( "org.openoffice.Office.Recovery/");
-    OUString CFG_PATH_CRASHREPORTER(  "CrashReporter" );
-    OUString CFG_ENTRY_ENABLED( "Enabled" );
-
-    sal_Bool bCrashRepEnabled(sal_False);
-    css::uno::Any aVal = ::comphelper::ConfigurationHelper::readDirectKey(
-                                m_xContext,
-                                CFG_PACKAGE_RECOVERY,
-                                CFG_PATH_CRASHREPORTER,
-                                CFG_ENTRY_ENABLED,
-                                ::comphelper::ConfigurationHelper::E_READONLY);
-    aVal >>= bCrashRepEnabled;
+    bool bCrashRepEnabled(officecfg::Office::Recovery::CrashReporter::Enabled::get());
     bRecoveryOnly = !bCrashRepEnabled;
 
     // create core service, which implements the real "emergency save" algorithm.
