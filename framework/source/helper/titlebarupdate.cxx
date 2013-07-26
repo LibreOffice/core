@@ -186,6 +186,7 @@ void TitleBarUpdate::impl_updateApplicationID(const css::uno::Reference< css::fr
         sApplicationID += OUString(sal_Unicode('-'));
         sApplicationID += sDesktopName.toAsciiLowerCase();
 #endif
+#endif
     }
     catch(const css::uno::Exception&)
     {
