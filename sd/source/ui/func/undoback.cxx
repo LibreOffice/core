@@ -36,7 +36,7 @@ SdBackgroundObjUndoAction::SdBackgroundObjUndoAction(
     mrPage(rPage),
     mpItemSet(new SfxItemSet(rItenSet))
 {
-    String aString( SdResId( STR_UNDO_CHANGE_PAGEFORMAT ) );
+    OUString aString( SdResId( STR_UNDO_CHANGE_PAGEFORMAT ) );
     SetComment( aString );
 }
 

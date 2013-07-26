@@ -264,7 +264,7 @@ void lcl_CreateUndoForPages(
     SdDrawDocument* pDoc            = pDocSh->GetDoc();
     if( pManager && pDocSh && pDoc )
     {
-        String aComment( SdResId(STR_UNDO_SLIDE_PARAMS) );
+        OUString aComment( SdResId(STR_UNDO_SLIDE_PARAMS) );
         pManager->EnterListAction(aComment, aComment);
         SdUndoGroup* pUndoGroup = new SdUndoGroup( pDoc );
         pUndoGroup->SetComment( aComment );

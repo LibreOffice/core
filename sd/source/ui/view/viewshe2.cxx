@@ -469,7 +469,7 @@ void ViewShell::SetPageSizeAndBorder(PageKind ePageKind, const Size& rNewSize,
     SdPage* pPage = 0;
     SdUndoGroup* pUndoGroup = NULL;
     pUndoGroup = new SdUndoGroup(GetDoc());
-    String aString(SdResId(STR_UNDO_CHANGE_PAGEFORMAT));
+    OUString aString(SdResId(STR_UNDO_CHANGE_PAGEFORMAT));
     pUndoGroup->SetComment(aString);
     SfxViewShell* pViewShell = GetViewShell();
     OSL_ASSERT (pViewShell!=NULL);
