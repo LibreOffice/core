@@ -52,7 +52,6 @@
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
 #include "svtools/treelistentry.hxx"
-#include <rtl/logfile.hxx>
 //............................................................................
 namespace svxform
 {
@@ -141,7 +140,6 @@ namespace svxform
         ,m_bInitialUpdate(sal_True)
         ,m_bKeyboardCut( sal_False )
     {
-        RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "NavigatorTree::NavigatorTree" );
         SetHelpId( HID_FORM_NAVIGATOR );
 
         m_aNavigatorImages = ImageList( SVX_RES( RID_SVXIMGLIST_FMEXPL ) );
@@ -185,14 +183,12 @@ namespace svxform
     //------------------------------------------------------------------------
     void NavigatorTree::Clear()
     {
-        RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "NavigatorTree::Clear" );
         m_pNavModel->Clear();
     }
 
     //------------------------------------------------------------------------
     void NavigatorTree::UpdateContent( FmFormShell* pFormShell )
     {
-        RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "NavigatorTree::UpdateContent" );
         if (m_bInitialUpdate)
         {
             GrabFocus();
@@ -228,7 +224,6 @@ namespace svxform
     //------------------------------------------------------------------------------
     sal_Bool NavigatorTree::implAllowExchange( sal_Int8 _nAction, sal_Bool* _pHasNonHidden )
     {
-        RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "NavigatorTree::implAllowExchange" );
         SvTreeListEntry* pCurEntry = GetCurEntry();
         if (!pCurEntry)
             return sal_False;
@@ -265,8 +260,6 @@ namespace svxform
     //------------------------------------------------------------------------------
     sal_Bool NavigatorTree::implPrepareExchange( sal_Int8 _nAction )
     {
-        RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "NavigatorTree::implPrepareExchange" );
-
         EndSelection();
 
         sal_Bool bHasNonHidden = sal_False;
@@ -303,7 +296,6 @@ namespace svxform
     //------------------------------------------------------------------------------
     void NavigatorTree::StartDrag( sal_Int8 /*nAction*/, const ::Point& /*rPosPixel*/ )
     {
-        RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "NavigatorTree::StartDrag" );
         EndSelection();
 
         if ( !implPrepareExchange( DND_ACTION_COPYMOVE ) )
@@ -317,7 +309,6 @@ namespace svxform
     //------------------------------------------------------------------------------
     void NavigatorTree::Command( const CommandEvent& rEvt )
     {
-        RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "NavigatorTree::Command" );
         sal_Bool bHandled = sal_False;
         switch( rEvt.GetCommand() )
         {
@@ -546,7 +537,6 @@ namespace svxform
     //------------------------------------------------------------------------
     SvTreeListEntry* NavigatorTree::FindEntry( FmEntryData* pEntryData )
     {
-        RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "NavigatorTree::FindEntry" );
         if( !pEntryData ) return NULL;
         SvTreeListEntry* pCurEntry = First();
         FmEntryData* pCurEntryData;
@@ -565,7 +555,6 @@ namespace svxform
     //------------------------------------------------------------------------
     void NavigatorTree::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
     {
-        RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "NavigatorTree::Notify" );
         if( rHint.ISA(FmNavRemovedHint) )
         {
             FmNavRemovedHint* pRemovedHint = (FmNavRemovedHint*)&rHint;
@@ -626,7 +615,6 @@ namespace svxform
     //------------------------------------------------------------------------
     SvTreeListEntry* NavigatorTree::Insert( FmEntryData* pEntryData, sal_uIntPtr nRelPos )
     {
-        RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "NavigatorTree::Insert" );
         //////////////////////////////////////////////////////////////////////
         // Aktuellen Eintrag einfuegen
         SvTreeListEntry* pParentEntry = FindEntry( pEntryData->GetParent() );
@@ -664,7 +652,6 @@ namespace svxform
     //------------------------------------------------------------------------
     void NavigatorTree::Remove( FmEntryData* pEntryData )
     {
-        RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "NavigatorTree::Remove" );
         if( !pEntryData )
             return;
 
@@ -701,7 +688,6 @@ namespace svxform
     //------------------------------------------------------------------------
     sal_Bool NavigatorTree::IsFormEntry( SvTreeListEntry* pEntry )
     {
-        RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "NavigatorTree::IsFormEntry" );
         FmEntryData* pEntryData = (FmEntryData*)pEntry->GetUserData();
         return !pEntryData || pEntryData->ISA(FmFormData);
     }
@@ -709,7 +695,6 @@ namespace svxform
     //------------------------------------------------------------------------
     sal_Bool NavigatorTree::IsFormComponentEntry( SvTreeListEntry* pEntry )
     {
-        RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "NavigatorTree::IsFormComponentEntry" );
         FmEntryData* pEntryData = (FmEntryData*)pEntry->GetUserData();
         return pEntryData && pEntryData->ISA(FmControlData);
     }
@@ -717,7 +702,6 @@ namespace svxform
     //------------------------------------------------------------------------
     sal_Bool NavigatorTree::implAcceptPaste( )
     {
-        RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "NavigatorTree::implAcceptPaste" );
         SvTreeListEntry* pFirstSelected = FirstSelected();
         if ( !pFirstSelected || NextSelected( pFirstSelected ) )
             // no selected entry, or at least two selected entries
@@ -733,14 +717,12 @@ namespace svxform
     //------------------------------------------------------------------------
     sal_Int8 NavigatorTree::implAcceptDataTransfer( const DataFlavorExVector& _rFlavors, sal_Int8 _nAction, const ::Point& _rDropPos, sal_Bool _bDnD )
     {
-        RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "NavigatorTree::implAcceptDataTransfer" );
         return implAcceptDataTransfer( _rFlavors, _nAction, GetEntry( _rDropPos ), _bDnD );
     }
 
     //------------------------------------------------------------------------
     sal_Int8 NavigatorTree::implAcceptDataTransfer( const DataFlavorExVector& _rFlavors, sal_Int8 _nAction, SvTreeListEntry* _pTargetEntry, sal_Bool _bDnD )
     {
-        RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "NavigatorTree::implAcceptDataTransfer" );
         // no target -> no drop
         if (!_pTargetEntry)
             return DND_ACTION_NONE;
@@ -879,7 +861,6 @@ namespace svxform
     //------------------------------------------------------------------------
     sal_Int8 NavigatorTree::AcceptDrop( const AcceptDropEvent& rEvt )
     {
-        RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "NavigatorTree::AcceptDrop" );
         ::Point aDropPos = rEvt.maPosPixel;
 
         // kuemmern wir uns erst mal um moeglich DropActions (Scrollen und Aufklappen)
@@ -935,14 +916,12 @@ namespace svxform
     //------------------------------------------------------------------------
     sal_Int8 NavigatorTree::implExecuteDataTransfer( const OControlTransferData& _rData, sal_Int8 _nAction, const ::Point& _rDropPos, sal_Bool _bDnD )
     {
-        RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "NavigatorTree::implExecuteDataTransfer" );
         return implExecuteDataTransfer( _rData, _nAction, GetEntry( _rDropPos ), _bDnD );
     }
 
     //------------------------------------------------------------------------
     sal_Int8 NavigatorTree::implExecuteDataTransfer( const OControlTransferData& _rData, sal_Int8 _nAction, SvTreeListEntry* _pTargetEntry, sal_Bool _bDnD )
     {
-        RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "NavigatorTree::implExecuteDataTransfer" );
         const DataFlavorExVector& rDataFlavors = _rData.GetDataFlavorExVector();
 
         if ( DND_ACTION_NONE == implAcceptDataTransfer( rDataFlavors, _nAction, _pTargetEntry, _bDnD ) )
@@ -1205,7 +1184,6 @@ namespace svxform
     //------------------------------------------------------------------------
     sal_Int8 NavigatorTree::ExecuteDrop( const ExecuteDropEvent& rEvt )
     {
-        RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "NavigatorTree::ExecuteDrop" );
         sal_Int8 nResult( DND_ACTION_NONE );
 
         if ( m_aControlExchange.isDragSource() )
@@ -1222,7 +1200,6 @@ namespace svxform
     //------------------------------------------------------------------------
     void NavigatorTree::doPaste()
     {
-        RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "NavigatorTree::doPaste" );
            try
         {
             if ( m_aControlExchange.isClipboardOwner() )
@@ -1250,7 +1227,6 @@ namespace svxform
     //------------------------------------------------------------------------
     void NavigatorTree::doCopy()
     {
-        RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "NavigatorTree::doCopy" );
         if ( implPrepareExchange( DND_ACTION_COPY ) )
         {
             m_aControlExchange.setClipboardListener( LINK( this, NavigatorTree, OnClipboardAction ) );
@@ -1261,7 +1237,6 @@ namespace svxform
     //------------------------------------------------------------------------
     void NavigatorTree::ModelHasRemoved( SvTreeListEntry* _pEntry )
     {
-        RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "NavigatorTree::ModelHasRemoved" );
         SvTreeListEntry* pTypedEntry = static_cast< SvTreeListEntry* >( _pEntry );
         if ( doingKeyboardCut() )
             m_aCutEntries.erase( pTypedEntry );
@@ -1280,7 +1255,6 @@ namespace svxform
     //------------------------------------------------------------------------
     void NavigatorTree::doCut()
     {
-        RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "NavigatorTree::doCut" );
         if ( implPrepareExchange( DND_ACTION_MOVE ) )
         {
             m_aControlExchange.setClipboardListener( LINK( this, NavigatorTree, OnClipboardAction ) );
@@ -1305,7 +1279,6 @@ namespace svxform
     //------------------------------------------------------------------------
     void NavigatorTree::KeyInput(const ::KeyEvent& rKEvt)
     {
-        RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "NavigatorTree::KeyInput" );
         const KeyCode& rCode = rKEvt.GetKeyCode();
 
         // delete?
@@ -1341,7 +1314,6 @@ namespace svxform
     //------------------------------------------------------------------------
     sal_Bool NavigatorTree::EditingEntry( SvTreeListEntry* pEntry, Selection& rSelection )
     {
-        RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "NavigatorTree::EditingEntry" );
         if (!SvTreeListBox::EditingEntry( pEntry, rSelection ))
             return sal_False;
 
@@ -1352,7 +1324,6 @@ namespace svxform
     //------------------------------------------------------------------------
     void NavigatorTree::NewForm( SvTreeListEntry* pParentEntry )
     {
-        RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "NavigatorTree::NewForm" );
         //////////////////////////////////////////////////////////////////////
         // ParentFormData holen
         if( !IsFormEntry(pParentEntry) )
@@ -1415,7 +1386,6 @@ namespace svxform
     //------------------------------------------------------------------------
     FmControlData* NavigatorTree::NewControl( const OUString& rServiceName, SvTreeListEntry* pParentEntry, sal_Bool bEditName )
     {
-        RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "NavigatorTree::NewControl" );
         //////////////////////////////////////////////////////////////////////
         // ParentForm holen
         if (!GetNavModel()->GetFormShell())
@@ -1465,7 +1435,6 @@ namespace svxform
     //------------------------------------------------------------------------
     OUString NavigatorTree::GenerateName( FmEntryData* pEntryData )
     {
-        RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "NavigatorTree::GenerateName" );
         const sal_uInt16 nMaxCount = 99;
         OUString aNewName;
 
@@ -1500,7 +1469,6 @@ namespace svxform
     //------------------------------------------------------------------------
     sal_Bool NavigatorTree::EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewText )
     {
-        RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "NavigatorTree::EditedEntry" );
         if (EditingCanceled())
             return sal_True;
 
@@ -1620,7 +1588,6 @@ namespace svxform
     //------------------------------------------------------------------------
     void NavigatorTree::ShowSelectionProperties(sal_Bool bForce)
     {
-        RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "NavigatorTree::ShowSelectionProperties" );
         // zuerst brauche ich die FormShell
         FmFormShell* pFormShell = GetNavModel()->GetFormShell();
         if (!pFormShell)
@@ -1709,7 +1676,6 @@ namespace svxform
     //------------------------------------------------------------------------
     void NavigatorTree::DeleteSelection()
     {
-        RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "NavigatorTree::DeleteSelection" );
         // die Root darf ich natuerlich nicht mitloeschen
         sal_Bool bRootSelected = IsSelected(m_pRootEntry);
         sal_uIntPtr nSelectedEntries = GetSelectionCount();
@@ -1851,7 +1817,6 @@ namespace svxform
     //------------------------------------------------------------------------
     void NavigatorTree::CollectSelectionData(SELDATA_ITEMS sdiHow)
     {
-        RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "NavigatorTree::CollectSelectionData" );
         DBG_ASSERT(sdiHow != SDI_DIRTY, "NavigatorTree::CollectSelectionData : ever thought about your parameter ? DIRTY ?");
         if (sdiHow == m_sdiState)
             return;
@@ -1926,7 +1891,6 @@ namespace svxform
     //------------------------------------------------------------------------
     void NavigatorTree::SynchronizeSelection(FmEntryDataArray& arredToSelect)
     {
-        RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "NavigatorTree::SynchronizeSelection" );
         LockSelectionHandling();
         if (arredToSelect.empty())
         {
@@ -1990,7 +1954,6 @@ namespace svxform
     //------------------------------------------------------------------------
     void NavigatorTree::SynchronizeSelection()
     {
-        RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "NavigatorTree::SynchronizeSelection" );
         // Shell und View
         FmFormShell* pFormShell = GetNavModel()->GetFormShell();
         if(!pFormShell) return;
@@ -2004,7 +1967,6 @@ namespace svxform
     //------------------------------------------------------------------------
     void NavigatorTree::SynchronizeMarkList()
     {
-        RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "NavigatorTree::SynchronizeMarkList" );
         // die Shell werde ich brauchen ...
         FmFormShell* pFormShell = GetNavModel()->GetFormShell();
         if (!pFormShell) return;
@@ -2074,7 +2036,6 @@ namespace svxform
     //------------------------------------------------------------------------
     sal_Bool NavigatorTree::IsHiddenControl(FmEntryData* pEntryData)
     {
-        RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "NavigatorTree::IsHiddenControl" );
         if (pEntryData == NULL) return sal_False;
 
         Reference< XPropertySet > xProperties( pEntryData->GetPropertySet() );
@@ -2089,7 +2050,6 @@ namespace svxform
     //------------------------------------------------------------------------
     sal_Bool NavigatorTree::Select( SvTreeListEntry* pEntry, sal_Bool bSelect )
     {
-        RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "NavigatorTree::Select" );
         if (bSelect == IsSelected(pEntry))  // das passiert manchmal, ich glaube, die Basisklasse geht zu sehr auf Nummer sicher ;)
             return sal_True;
 
@@ -2099,7 +2059,6 @@ namespace svxform
     //------------------------------------------------------------------------
     void NavigatorTree::UnmarkAllViewObj()
     {
-        RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "NavigatorTree::UnmarkAllViewObj" );
         FmFormShell* pFormShell = GetNavModel()->GetFormShell();
         if( !pFormShell )
             return;
@@ -2109,7 +2068,6 @@ namespace svxform
     //------------------------------------------------------------------------
     void NavigatorTree::MarkViewObj(FmFormData* pFormData, sal_Bool bMark, sal_Bool bDeep )
     {
-        RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "NavigatorTree::MarkViewObjects" );
         FmFormShell* pFormShell = GetNavModel()->GetFormShell();
         if( !pFormShell )
             return;
@@ -2158,7 +2116,6 @@ namespace svxform
     //------------------------------------------------------------------------
     void NavigatorTree::CollectObjects(FmFormData* pFormData, sal_Bool bDeep, ::std::set< Reference< XFormComponent > >& _rObjects)
     {
-        RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "NavigatorTree::MarkViewObjects" );
         FmEntryDataList* pChildList = pFormData->GetChildList();
         FmEntryData* pEntryData;
         FmControlData* pControlData;
@@ -2177,7 +2134,6 @@ namespace svxform
     //------------------------------------------------------------------------
     void NavigatorTree::MarkViewObj( FmControlData* pControlData, sal_Bool bMarkHandles, sal_Bool bMark)
     {
-        RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "NavigatorTree::MarkViewObj" );
         if( !pControlData )
             return;
         FmFormShell* pFormShell = GetNavModel()->GetFormShell();
