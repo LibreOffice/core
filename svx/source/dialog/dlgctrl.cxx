@@ -1949,10 +1949,10 @@ void SvxXRectPreview::Paint( const Rectangle& )
     LocalPostPaint();
 }
 
-SvxXShadowPreview::SvxXShadowPreview( Window* pParent, const ResId& rResId )
-:   SvxPreviewBase( pParent, rResId ),
-    mpRectangleObject(0),
-    mpRectangleShadow(0)
+SvxXShadowPreview::SvxXShadowPreview( Window* pParent )
+    : SvxPreviewBase(pParent)
+    , mpRectangleObject(0)
+    , mpRectangleShadow(0)
 {
     InitSettings(true, true);
 
@@ -1970,6 +1970,11 @@ SvxXShadowPreview::SvxXShadowPreview( Window* pParent, const ResId& rResId )
     const Rectangle aShadowSize( Point( aSize.Width(), aSize.Height() ), aSize );
     mpRectangleShadow = new SdrRectObj(aShadowSize);
     mpRectangleShadow->SetModel(&getModel());
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxXShadowPreview (Window *pParent, VclBuilder::stringmap &)
+{
+    return new SvxXShadowPreview(pParent);
 }
 
 SvxXShadowPreview::~SvxXShadowPreview()
@@ -1992,14 +1997,22 @@ void SvxXShadowPreview::SetShadowAttributes(const SfxItemSet& rItemSet)
 
 void SvxXShadowPreview::SetShadowPosition(const Point& rPos)
 {
-    Rectangle aObjectPosition(mpRectangleObject->GetSnapRect());
-    aObjectPosition.Move(rPos.X(), rPos.Y());
-    mpRectangleShadow->SetSnapRect(aObjectPosition);
+    maShadowOffset = rPos;
 }
 
 void SvxXShadowPreview::Paint( const Rectangle& )
 {
     LocalPrePaint();
+
+    // prepare size
+    Size aSize = GetOutputSize();
+    aSize.Width() = aSize.Width() / 3;
+    aSize.Height() = aSize.Height() / 3;
+
+    Rectangle aObjectRect(Point(aSize.Width(), aSize.Height()), aSize);
+    mpRectangleObject->SetSnapRect(aObjectRect);
+    aObjectRect.Move(maShadowOffset.X(), maShadowOffset.Y());
+    mpRectangleShadow->SetSnapRect(aObjectRect);
 
     sdr::contact::SdrObjectVector aObjectVector;
 

@@ -428,11 +428,14 @@ public:
 class SVX_DLLPUBLIC SvxXShadowPreview : public SvxPreviewBase
 {
 private:
-    SdrObject*                                      mpRectangleObject;
-    SdrObject*                                      mpRectangleShadow;
+    Point maShadowOffset;
+
+    SdrObject* mpRectangleObject;
+    SdrObject* mpRectangleShadow;
 
 public:
-    SvxXShadowPreview( Window* pParent, const ResId& rResId );
+    SvxXShadowPreview(Window *pParent);
+
     virtual ~SvxXShadowPreview();
 
     void SetRectangleAttributes(const SfxItemSet& rItemSet);
