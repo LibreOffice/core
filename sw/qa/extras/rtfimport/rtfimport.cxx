@@ -157,6 +157,7 @@ public:
     void testFdo54900();
     void testFdo64637();
     void testN820504();
+    void testFdo67365();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -299,6 +300,7 @@ void Test::run()
         {"fdo54900.rtf", &Test::testFdo54900},
         {"fdo64637.rtf", &Test::testFdo64637},
         {"n820504.rtf", &Test::testN820504},
+        {"fdo67365.rtf", &Test::testFdo67365},
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -1451,6 +1453,21 @@ void Test::testN820504()
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AT_CHARACTER, getProperty<text::TextContentAnchorType>(xDraws->getByIndex(0), "AnchorType"));
+}
+
+void Test::testFdo67365()
+{
+    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(), uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<table::XTableRows> xRows = xTable->getRows();
+    // The table only had 3 rows.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), xRows->getCount());
+    // This was 4999, i.e. the two cells of the row had equal widths instead of a larger and a smaller cell.
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(5290), getProperty< uno::Sequence<text::TableColumnSeparator> >(xRows->getByIndex(2), "TableColumnSeparators")[0].Position);
+    uno::Reference<text::XTextRange> xCell(xTable->getCellByName("A2"), uno::UNO_QUERY);
+    // Paragraph was aligned to center, should be left.
+    CPPUNIT_ASSERT_EQUAL(style::ParagraphAdjust_LEFT, static_cast<style::ParagraphAdjust>(getProperty<sal_Int16>(getParagraphOfText(1, xCell->getText()), "ParaAdjust")));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
