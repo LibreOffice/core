@@ -145,6 +145,28 @@ void CuiAboutConfigTabPage::FillItems( Reference< XNameAccess >xNameAccess, OUSt
                     }
                     break;
 
+                    case ::com::sun::star::uno::TypeClass_BOOLEAN :
+                    {
+                        sal_Bool bVal = sal_False;
+                        if(aProp >>= bVal  )
+                        {
+                            OUString sBoolean( OUString::valueOf( bVal ) );
+                            test = sBoolean;
+                        }
+                    }
+                    break;
+
+                    case ::com::sun::star::uno::TypeClass_STRING :
+                    {
+                        OUString sString;
+                        if(aProp >>= sString)
+                        {
+                            test = sString;
+                        }
+
+                    }
+                    break;
+
                     default:
                     {
                         test = OUString("test");
