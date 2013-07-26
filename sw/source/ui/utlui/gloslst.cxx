@@ -94,7 +94,7 @@ IMPL_LINK_NOARG(SwGlossDecideDlg, SelectHdl)
 }
 
 SwGlossaryList::SwGlossaryList() :
-    bFilled(sal_False)
+    bFilled(false)
 {
     SvtPathOptions aPathOpt;
     sPath = aPathOpt.GetAutoTextPath();
@@ -128,14 +128,14 @@ sal_Bool SwGlossaryList::GetShortName(const String& rLongName,
 
         for(sal_uInt16 j = 0; j < pGroup->nCount; j++)
         {
-            String sLong = pGroup->sLongNames.GetToken(j, STRING_DELIM);
+            OUString sLong = pGroup->sLongNames.getToken(j, STRING_DELIM);
             if(rLongName != sLong)
                 continue;
 
             TripleString pTriple;
             pTriple.sGroup = pGroup->sName;
             pTriple.sBlock = sLong;
-            pTriple.sShort = pGroup->sShortNames.GetToken(j, STRING_DELIM);
+            pTriple.sShort = pGroup->sShortNames.getToken(j, STRING_DELIM);
             aTripleStrings.push_back(pTriple);
             ++nFound;
         }
@@ -153,9 +153,7 @@ sal_Bool SwGlossaryList::GetShortName(const String& rLongName,
     else if(1 < nCount)
     {
         SwGlossDecideDlg aDlg(0);
-        String sTitle = aDlg.GetText();
-        sTitle += ' ';
-        sTitle += aTripleStrings.front().sBlock;
+        OUString sTitle = aDlg.GetText() + " " + aTripleStrings.front().sBlock;
         aDlg.SetText(sTitle);
 
         ListBox& rLB = aDlg.GetListBox();
@@ -226,7 +224,7 @@ OUString SwGlossaryList::GetBlockLongName(sal_uInt16 nGroup, sal_uInt16 nBlock)
     if(nGroup < aGroupArr.size())
     {
         AutoTextGroup* pGroup = aGroupArr[nGroup];
-        return pGroup->sLongNames.GetToken(nBlock, STRING_DELIM);
+        return pGroup->sLongNames.getToken(nBlock, STRING_DELIM);
     }
     return OUString();
 }
@@ -237,7 +235,7 @@ OUString SwGlossaryList::GetBlockShortName(sal_uInt16 nGroup, sal_uInt16 nBlock)
     if(nGroup < aGroupArr.size())
     {
         AutoTextGroup* pGroup = aGroupArr[nGroup];
-        return pGroup->sShortNames.GetToken(nBlock, STRING_DELIM);
+        return pGroup->sShortNames.getToken(nBlock, STRING_DELIM);
     }
     return OUString();
 }
@@ -248,11 +246,11 @@ void SwGlossaryList::Update()
         Start();
 
     SvtPathOptions aPathOpt;
-    String sTemp( aPathOpt.GetAutoTextPath() );
+    OUString sTemp( aPathOpt.GetAutoTextPath() );
     if(sTemp != sPath)
     {
         sPath = sTemp;
-        bFilled = sal_False;
+        bFilled = false;
         ClearGroups();
     }
     SwGlossaries* pGlossaries = ::GetGlossaries();
@@ -263,19 +261,16 @@ void SwGlossaryList::Update()
         sal_uInt16 nGroupCount = pGlossaries->GetGroupCnt();
         for(sal_uInt16 i = 0; i < nGroupCount; i++)
         {
-            String sGrpName = pGlossaries->GetGroupName(i);
-            sal_uInt16 nPath = (sal_uInt16)sGrpName.GetToken(1, GLOS_DELIM).ToInt32();
+            OUString sGrpName = pGlossaries->GetGroupName(i);
+            sal_uInt16 nPath = (sal_uInt16)sGrpName.getToken(1, GLOS_DELIM).toInt32();
             if( static_cast<size_t>(nPath) < rPathArr.size() )
             {
                 AutoTextGroup* pGroup = new AutoTextGroup;
                 pGroup->sName = sGrpName;
 
                 FillGroup(pGroup, pGlossaries);
-                String sName = rPathArr[nPath];
-                sName += INET_PATH_TOKEN;
-                sName += pGroup->sName.GetToken(0, GLOS_DELIM);
-                sName += sExt;
-
+                OUString sName = rPathArr[nPath] + OUString(INET_PATH_TOKEN) +
+                    pGroup->sName.getToken(0, GLOS_DELIM) + sExt;
                 FStatHelper::GetModifiedDateTimeOfFile( sName,
                                                 &pGroup->aDateModified,
                                                 &pGroup->aDateModified );
@@ -283,7 +278,7 @@ void SwGlossaryList::Update()
                 aGroupArr.insert( aGroupArr.begin(), pGroup );
             }
         }
-        bFilled = sal_True;
+        bFilled = true;
     }
     else
     {
@@ -300,10 +295,10 @@ void SwGlossaryList::Update()
                 String* pTitle = aFiles[ nFiles ];
                 ::DateTime* pDT = (::DateTime*) aDateTimeArr[ static_cast<sal_uInt16>(nFiles) ];
 
-                String sName( pTitle->Copy( 0, pTitle->Len() - sExt.Len() ));
+                OUString sName( pTitle->Copy( 0, pTitle->Len() - sExt.Len() ));
 
                 aFoundGroupNames.push_back(sName);
-                sName += GLOS_DELIM;
+                sName += OUString(GLOS_DELIM);
                 sName += OUString::number( static_cast<sal_uInt16>(nPath) );
                 AutoTextGroup* pFound = FindGroup( sName );
                 if( !pFound )
@@ -331,14 +326,14 @@ void SwGlossaryList::Update()
             {
                 // maybe remove deleted groups
                 AutoTextGroup* pGroup = aGroupArr[i - 1];
-                sal_uInt16 nGroupPath = (sal_uInt16)pGroup->sName.GetToken( 1,
-                                                        GLOS_DELIM).ToInt32();
+                sal_uInt16 nGroupPath = (sal_uInt16)pGroup->sName.getToken( 1,
+                                                        GLOS_DELIM).toInt32();
                 // Only the groups will be checked which are registered
                 // for the current subpath.
                 if( nGroupPath == static_cast<sal_uInt16>(nPath) )
                 {
                     bool bFound = false;
-                    String sCompareGroup = pGroup->sName.GetToken(0, GLOS_DELIM);
+                    OUString sCompareGroup = pGroup->sName.getToken(0, GLOS_DELIM);
                     for(std::vector<String>::const_iterator j = aFoundGroupNames.begin(); j != aFoundGroupNames.end() && !bFound; ++j)
                         bFound = (sCompareGroup == *j);
 
@@ -360,7 +355,7 @@ void SwGlossaryList::Timeout()
         Update();
 }
 
-AutoTextGroup*  SwGlossaryList::FindGroup(const String& rGroupName)
+AutoTextGroup* SwGlossaryList::FindGroup(const OUString& rGroupName)
 {
     for(sal_uInt16 i = 0; i < aGroupArr.size(); i++)
     {
@@ -382,9 +377,9 @@ void SwGlossaryList::FillGroup(AutoTextGroup* pGroup, SwGlossaries* pGlossaries)
     for(sal_uInt16 j = 0; j < pGroup->nCount; j++)
     {
         pGroup->sLongNames  += pBlock->GetLongName(j);
-        pGroup->sLongNames  += STRING_DELIM;
+        pGroup->sLongNames  += OUString(STRING_DELIM);
         pGroup->sShortNames += pBlock->GetShortName(j);
-        pGroup->sShortNames += STRING_DELIM;
+        pGroup->sShortNames += OUString(STRING_DELIM);
     }
     pGlossaries->PutGroupDoc(pBlock);
 }
@@ -406,9 +401,9 @@ bool SwGlossaryList::HasLongName(const String& rBegin, std::vector<String> *pLon
         AutoTextGroup* pGroup = aGroupArr[i];
         for(sal_uInt16 j = 0; j < pGroup->nCount; j++)
         {
-            String sBlock = pGroup->sLongNames.GetToken(j, STRING_DELIM);
-            if( rSCmp.isEqual( sBlock.Copy(0, nBeginLen), rBegin ) &&
-                nBeginLen + 1 < sBlock.Len())
+            OUString sBlock = pGroup->sLongNames.getToken(j, STRING_DELIM);
+            if( nBeginLen + 1 < sBlock.getLength() &&
+                rSCmp.isEqual( sBlock.copy(0, nBeginLen), rBegin ))
             {
                 pLongNames->push_back( sBlock );
                 nFound++;
@@ -427,7 +422,7 @@ void    SwGlossaryList::ClearGroups()
         delete aGroupArr[ i ];
 
     aGroupArr.clear();
-    bFilled = sal_False;
+    bFilled = false;
 }
 
 

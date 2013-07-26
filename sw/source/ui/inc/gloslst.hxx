@@ -30,11 +30,11 @@ class vector;
 
 struct AutoTextGroup
 {
-    sal_uInt16      nCount;
-    String      sName;
-    String      sTitle;
-    String      sLongNames;   // by 0x0A separated long names
-    String      sShortNames;  // by 0x0A separated short names
+    sal_uInt16  nCount;
+    OUString    sName;
+    OUString    sTitle;
+    OUString    sLongNames;   // by 0x0A separated long names
+    OUString    sShortNames;  // by 0x0A separated short names
     DateTime    aDateModified;
 
     AutoTextGroup() : aDateModified( DateTime::EMPTY ) {}
@@ -46,10 +46,10 @@ typedef std::vector<AutoTextGroup*> AutoTextGroups;
 class SwGlossaryList : public AutoTimer
 {
     AutoTextGroups  aGroupArr;
-    String          sPath;
-    sal_Bool            bFilled;
+    OUString        sPath;
+    bool            bFilled;
 
-    AutoTextGroup*  FindGroup(const String& rGroupName);
+    AutoTextGroup*  FindGroup(const OUString& rGroupName);
     void            FillGroup(AutoTextGroup* pGroup, SwGlossaries* pGloss);
 
 public:
