@@ -64,6 +64,9 @@ public:
 	typedef typename _super::const_iterator slist_cit;
 #ifndef STLP4_SLIST_WITH_LIST
 	slist_mit insert( slist_cit aI, const T& rT) { return _super::insert_after( aI, rT); }
+#else
+private:
+	size_t size() const; // prevent use of slist::size() as forward_list doesn't have a size() method
 #endif
 };
 
