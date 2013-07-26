@@ -340,11 +340,12 @@ void ScDocShell::LoadStylesArgs( ScDocShell& rSource, bool bReplace, bool bCellS
 }
 
 
-sal_Bool ScDocShell::Insert( SfxObjectShell &rSource,
+sal_Bool ScDocShell::InsertStuffWithIndexes( SfxObjectShell &rSource,
                                 sal_uInt16 nSourceIdx1, sal_uInt16 nSourceIdx2, sal_uInt16 nSourceIdx3,
                                 sal_uInt16 &nIdx1, sal_uInt16 &nIdx2, sal_uInt16 &nIdx3, sal_uInt16 &rIdxDeleted )
 {
-    sal_Bool bRet = SfxObjectShell::Insert( rSource, nSourceIdx1, nSourceIdx2, nSourceIdx3,
+    sal_Bool bRet = SfxObjectShell::InsertStuffWithIndexes(
+                rSource, nSourceIdx1, nSourceIdx2, nSourceIdx3,
                                             nIdx1, nIdx2, nIdx3, rIdxDeleted );
     if (bRet)
         lcl_AdjustPool( GetStyleSheetPool() );      // SetItems anpassen

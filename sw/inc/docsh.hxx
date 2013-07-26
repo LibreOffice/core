@@ -200,18 +200,18 @@ public:
     virtual SfxStyleSheetBasePool*  GetStyleSheetPool();
 
     /// For Organizer.
-    virtual sal_Bool Insert(SfxObjectShell &rSource,
+    virtual sal_Bool InsertStuffWithIndexes(SfxObjectShell &rSource,
                         sal_uInt16  nSourceIdx1,
                         sal_uInt16  nSourceIdx2,
                         sal_uInt16  nSourceIdx3,
                         sal_uInt16& nIdx1,
                         sal_uInt16& nIdx2,
                         sal_uInt16& nIdx3,
-                        sal_uInt16& nRemovedIdx);
+                        sal_uInt16& nRemovedIdx) SAL_OVERRIDE;
 
-    virtual sal_Bool Remove(sal_uInt16 nIdx1,
+    virtual sal_Bool RemoveStuffWithIndexes(sal_uInt16 nIdx1,
                         sal_uInt16 nIdx2 = INDEX_IGNORE,
-                        sal_uInt16 nIdx3 = INDEX_IGNORE);
+                        sal_uInt16 nIdx3 = INDEX_IGNORE) SAL_OVERRIDE;
 
     virtual Bitmap      GetStyleFamilyBitmap( SfxStyleFamily eFamily );
 

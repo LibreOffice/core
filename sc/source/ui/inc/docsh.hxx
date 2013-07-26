@@ -209,9 +209,9 @@ public:
     virtual void    PrepareReload();
     virtual sal_Bool    IsInformationLost();
     virtual void    LoadStyles( SfxObjectShell &rSource );
-    virtual sal_Bool    Insert( SfxObjectShell &rSource,
+    virtual sal_Bool    InsertStuffWithIndexes( SfxObjectShell &rSource,
                                 sal_uInt16 nSourceIdx1, sal_uInt16 nSourceIdx2, sal_uInt16 nSourceIdx3,
-                                sal_uInt16 &nIdx1, sal_uInt16 &nIdx2, sal_uInt16 &nIdx3, sal_uInt16 &rIdxDeleted );
+                                sal_uInt16 &nIdx1, sal_uInt16 &nIdx2, sal_uInt16 &nIdx3, sal_uInt16 &rIdxDeleted ) SAL_OVERRIDE;
 
     virtual sal_Bool    SaveCompleted( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& );      // SfxInPlaceObject
     virtual sal_Bool    DoSaveCompleted( SfxMedium * pNewStor);     // SfxObjectShell

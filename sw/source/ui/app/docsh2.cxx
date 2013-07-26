@@ -324,7 +324,7 @@ sal_uInt16 SwDocShell::PrepareClose( sal_Bool bUI, sal_Bool bForBrowsing )
 }
 
 // Organizer
-sal_Bool SwDocShell::Insert( SfxObjectShell &rSource,
+sal_Bool SwDocShell::InsertStuffWithIndexes( SfxObjectShell &rSource,
     sal_uInt16  nSourceIdx1,        // SourcePool: uppermost content level (templates/macros)
     sal_uInt16  nSourceIdx2,        // Index in the content
     sal_uInt16  nSourceIdx3,        // Index in the content level
@@ -515,7 +515,7 @@ sal_Bool SwDocShell::Insert( SfxObjectShell &rSource,
         bRet = sal_True;
     }
     else
-        bRet = SfxObjectShell::Insert( rSource,
+        bRet = SfxObjectShell::InsertStuffWithIndexes( rSource,
                     nSourceIdx1,
                     nSourceIdx2,
                     nSourceIdx3,
@@ -535,7 +535,7 @@ sal_Bool SwDocShell::Insert( SfxObjectShell &rSource,
 }
 
 // template Remove
-sal_Bool SwDocShell::Remove(sal_uInt16 nIdx1,       // see Insert
+sal_Bool SwDocShell::RemoveStuffWithIndexes(sal_uInt16 nIdx1,       // see Insert
                         sal_uInt16 nIdx2,
                         sal_uInt16 nIdx3)
 {
@@ -589,7 +589,7 @@ sal_Bool SwDocShell::Remove(sal_uInt16 nIdx1,       // see Insert
         bRet = sal_True;
     }
     else
-        bRet = SfxObjectShell::Remove(  nIdx1,
+        bRet = SfxObjectShell::RemoveStuffWithIndexes(  nIdx1,
                                         nIdx2,
                                         nIdx3 );
 

@@ -419,7 +419,7 @@ Bitmap SfxObjectShell::GetStyleFamilyBitmap(SfxStyleFamily eFamily)
 
 //--------------------------------------------------------------------
 
-sal_Bool SfxObjectShell::Insert(SfxObjectShell &rSource,
+sal_Bool SfxObjectShell::InsertStuffWithIndexes(SfxObjectShell &rSource,
                               sal_uInt16 nSourceIdx1,
                               sal_uInt16 nSourceIdx2,
                               sal_uInt16 /*nSourceIdx3*/,
@@ -552,7 +552,7 @@ sal_Bool SfxObjectShell::Insert(SfxObjectShell &rSource,
 
 //--------------------------------------------------------------------
 
-sal_Bool SfxObjectShell::Remove
+sal_Bool SfxObjectShell::RemoveStuffWithIndexes
 (
     sal_uInt16 nIdx1,
     sal_uInt16 nIdx2,
