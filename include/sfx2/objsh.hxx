@@ -526,19 +526,6 @@ public:
 
     virtual Bitmap              GetStyleFamilyBitmap(SfxStyleFamily eFamily);
 
-    virtual sal_Bool            InsertStuffWithIndexes( SfxObjectShell &rSource,
-                                        sal_uInt16 nSourceIdx1,
-                                        sal_uInt16 nSourceIdx2,
-                                        sal_uInt16 nSourceIdx3,
-                                        sal_uInt16 &nIdx1,
-                                        sal_uInt16 &nIdx2,
-                                        sal_uInt16 &nIdx3,
-                                        sal_uInt16 &rIdxDeleted);
-
-    virtual sal_Bool            RemoveStuffWithIndexes( sal_uInt16 nIdx1,
-                                        sal_uInt16 nIdx2 = INDEX_IGNORE,
-                                        sal_uInt16 nIdx3 = INDEX_IGNORE);
-
     virtual void                LoadStyles( SfxObjectShell &rSource );
     void                        ReadNote( INote * );
     void                        UpdateNote( INote * );
