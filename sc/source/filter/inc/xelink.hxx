@@ -166,9 +166,9 @@ public:
                                       XclExpRefLogEntry* pRefLogEntry = NULL );
 
     /** Stores the cell with the given address in a CRN record list. */
-    void                StoreCell( const ScSingleRefData& rRef );
+    void StoreCell( const ScSingleRefData& rRef, const ScAddress& rPos );
     /** Stores all cells in the given range in a CRN record list. */
-    void                StoreCellRange( const ScComplexRefData& rRef );
+    void StoreCellRange( const ScComplexRefData& rRef, const ScAddress& rPos );
 
     void StoreCell( sal_uInt16 nFileId, const String& rTabName, const ScAddress& rPos );
 

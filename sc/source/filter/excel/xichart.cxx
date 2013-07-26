@@ -802,11 +802,11 @@ sal_uInt16 XclImpChSourceLink::GetCellCount() const
                 {
                     // cell range
                     const ScComplexRefData& rComplexRef = static_cast< const ScToken* >( pToken )->GetDoubleRef();
-                    const ScSingleRefData& rRef1 = rComplexRef.Ref1;
-                    const ScSingleRefData& rRef2 = rComplexRef.Ref2;
-                    sal_uInt32 nTabs = static_cast< sal_uInt32 >( rRef2.nTab - rRef1.nTab + 1 );
-                    sal_uInt32 nCols = static_cast< sal_uInt32 >( rRef2.nCol - rRef1.nCol + 1 );
-                    sal_uInt32 nRows = static_cast< sal_uInt32 >( rRef2.nRow - rRef1.nRow + 1 );
+                    ScAddress aAbs1 = rComplexRef.Ref1.toAbs(ScAddress());
+                    ScAddress aAbs2 = rComplexRef.Ref2.toAbs(ScAddress());
+                    sal_uInt32 nTabs = static_cast<sal_uInt32>(aAbs2.Tab() - aAbs1.Tab() + 1);
+                    sal_uInt32 nCols = static_cast<sal_uInt32>(aAbs2.Col() - aAbs1.Col() + 1);
+                    sal_uInt32 nRows = static_cast<sal_uInt32>(aAbs2.Row() - aAbs1.Row() + 1);
                     nCellCount += nCols * nRows * nTabs;
                 }
                 break;

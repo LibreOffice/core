@@ -941,20 +941,20 @@ sal_uInt16 XclExpChSourceLink::ConvertDataSequence( Reference< XDataSequence > x
             {
                 // split 3-dimensional ranges into single sheets
                 const ScComplexRefData& rComplexRef = static_cast< const ScToken* >( pToken )->GetDoubleRef();
-                const ScSingleRefData& rRef1 = rComplexRef.Ref1;
-                const ScSingleRefData& rRef2 = rComplexRef.Ref2;
-                for( SCsTAB nScTab = rRef1.nTab; nScTab <= rRef2.nTab; ++nScTab )
+                ScAddress aAbs1 = rComplexRef.Ref1.toAbs(ScAddress());
+                ScAddress aAbs2 = rComplexRef.Ref2.toAbs(ScAddress());
+                for (SCsTAB nScTab = aAbs1.Tab(); nScTab <= aAbs2.Tab(); ++nScTab)
                 {
                     // split 2-dimensional ranges into single columns
-                    if( bSplitToColumns && (rRef1.nCol < rRef2.nCol) && (rRef1.nRow < rRef2.nRow) )
-                        for( SCsCOL nScCol = rRef1.nCol; nScCol <= rRef2.nCol; ++nScCol )
-                            lclAddDoubleRefData( aArray, *pToken, nScTab, nScCol, rRef1.nRow, nScTab, nScCol, rRef2.nRow );
+                    if (bSplitToColumns && (aAbs1.Col() < aAbs2.Col()) && (aAbs1.Row() < aAbs2.Row()))
+                        for (SCCOL nScCol = aAbs1.Col(); nScCol <= aAbs2.Col(); ++nScCol)
+                            lclAddDoubleRefData(aArray, *pToken, nScTab, nScCol, aAbs1.Row(), nScTab, nScCol, aAbs2.Row());
                     else
-                        lclAddDoubleRefData( aArray, *pToken, nScTab, rRef1.nCol, rRef1.nRow, nScTab, rRef2.nCol, rRef2.nRow );
+                        lclAddDoubleRefData(aArray, *pToken, nScTab, aAbs1.Col(), aAbs1.Row(), nScTab, aAbs2.Col(), aAbs2.Row());
                 }
-                sal_uInt32 nTabs = static_cast< sal_uInt32 >( rRef2.nTab - rRef1.nTab + 1 );
-                sal_uInt32 nCols = static_cast< sal_uInt32 >( rRef2.nCol - rRef1.nCol + 1 );
-                sal_uInt32 nRows = static_cast< sal_uInt32 >( rRef2.nRow - rRef1.nRow + 1 );
+                sal_uInt32 nTabs = static_cast<sal_uInt32>(aAbs2.Tab() - aAbs1.Tab() + 1);
+                sal_uInt32 nCols = static_cast<sal_uInt32>(aAbs2.Col() - aAbs1.Col() + 1);
+                sal_uInt32 nRows = static_cast<sal_uInt32>(aAbs2.Row() - aAbs1.Row() + 1);
                 nValueCount += nCols * nRows * nTabs;
             }
             break;

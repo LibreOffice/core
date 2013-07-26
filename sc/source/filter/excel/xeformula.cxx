@@ -1879,8 +1879,8 @@ void XclExpFmlaCompImpl::ConvertRefData(
 {
     // convert start and end of the range
     ConvertRefData( rRefData.Ref1, rXclRange.maFirst, bNatLangRef, false, false );
-    bool bTruncMaxCol = !rRefData.Ref1.IsColDeleted() && (rRefData.Ref1.nCol == 0);
-    bool bTruncMaxRow = !rRefData.Ref1.IsRowDeleted() && (rRefData.Ref1.nRow == 0);
+    bool bTruncMaxCol = !rRefData.Ref1.IsColDeleted() && (rXclRange.maFirst.mnCol == 0);
+    bool bTruncMaxRow = !rRefData.Ref1.IsRowDeleted() && (rXclRange.maFirst.mnRow == 0);
     ConvertRefData( rRefData.Ref2, rXclRange.maLast, bNatLangRef, bTruncMaxCol, bTruncMaxRow );
 }
 
@@ -1916,7 +1916,7 @@ void XclExpFmlaCompImpl::ProcessCellRef( const XclExpScToken& rTokData )
     {
         // store external cell contents in CRN records
         if( mxData->mrCfg.mbFromCell && mxData->mpLinkMgr && mxData->mpScBasePos )
-            mxData->mpLinkMgr->StoreCell( aRefData );
+            mxData->mpLinkMgr->StoreCell(aRefData, *mxData->mpScBasePos);
 
         // create the tRef, tRefErr, tRefN, tRef3d, or tRefErr3d token
         if( !mxData->mrCfg.mb3DRefOnly && IsRef2D( aRefData ) )
@@ -1961,7 +1961,7 @@ void XclExpFmlaCompImpl::ProcessRangeRef( const XclExpScToken& rTokData )
 
     // store external cell contents in CRN records
     if( mxData->mrCfg.mbFromCell && mxData->mpLinkMgr && mxData->mpScBasePos )
-        mxData->mpLinkMgr->StoreCellRange( aRefData );
+        mxData->mpLinkMgr->StoreCellRange(aRefData, *mxData->mpScBasePos);
 
     // create the tArea, tAreaErr, tAreaN, tArea3d, or tAreaErr3d token
     if( !mxData->mrCfg.mb3DRefOnly && IsRef2D( aRefData ) )

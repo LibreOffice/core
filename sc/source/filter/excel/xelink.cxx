@@ -470,7 +470,7 @@ public:
                                XclExpRefLogEntry* pRefLogEntry ) = 0;
 
     /** Derived classes store all cells in the given range in a CRN record list. */
-    virtual void        StoreCellRange( const ScSingleRefData& rRef1, const ScSingleRefData& rRef2 ) = 0;
+    virtual void StoreCellRange( const ScSingleRefData& rRef1, const ScSingleRefData& rRef2, const ScAddress& rPos ) = 0;
 
     virtual void StoreCell( sal_uInt16 nFileId, const String& rTabName, const ScAddress& rPos ) = 0;
     virtual void StoreCellRange( sal_uInt16 nFileId, const String& rTabName, const ScRange& rRange ) = 0;
@@ -518,7 +518,7 @@ public:
                                sal_uInt16& rnExtSheet, sal_uInt16& rnFirstSBTab, sal_uInt16& rnLastSBTab,
                                XclExpRefLogEntry* pRefLogEntry );
 
-    virtual void        StoreCellRange( const ScSingleRefData& rRef1, const ScSingleRefData& rRef2 );
+    virtual void StoreCellRange( const ScSingleRefData& rRef1, const ScSingleRefData& rRef2, const ScAddress& rPos );
 
     virtual void StoreCell( sal_uInt16 nFileId, const String& rTabName, const ScAddress& rPos );
     virtual void StoreCellRange( sal_uInt16 nFileId, const String& rTabName, const ScRange& rRange );
@@ -588,7 +588,7 @@ public:
                                sal_uInt16& rnExtSheet, sal_uInt16& rnFirstSBTab, sal_uInt16& rnLastSBTab,
                                XclExpRefLogEntry* pRefLogEntry );
 
-    virtual void        StoreCellRange( const ScSingleRefData& rRef1, const ScSingleRefData& rRef2 );
+    virtual void StoreCellRange( const ScSingleRefData& rRef1, const ScSingleRefData& rRef2, const ScAddress& rPos );
 
     virtual void StoreCell( sal_uInt16 nFileId, const String& rTabName, const ScAddress& rPos );
     virtual void StoreCellRange( sal_uInt16 nFileId, const String& rTabName, const ScRange& rRange );
@@ -1959,7 +1959,7 @@ void XclExpLinkManagerImpl5::FindExtSheet(
     // not implemented
 }
 
-void XclExpLinkManagerImpl5::StoreCellRange( const ScSingleRefData& /*rRef1*/, const ScSingleRefData& /*rRef2*/ )
+void XclExpLinkManagerImpl5::StoreCellRange( const ScSingleRefData& /*rRef1*/, const ScSingleRefData& /*rRef2*/, const ScAddress& /*rPos*/ )
 {
     // not implemented
 }
@@ -2140,17 +2140,17 @@ void XclExpLinkManagerImpl8::FindExtSheet(
     rnLastSBTab  = aXti.mnLastSBTab;
 }
 
-void XclExpLinkManagerImpl8::StoreCellRange( const ScSingleRefData& rRef1, const ScSingleRefData& rRef2 )
+void XclExpLinkManagerImpl8::StoreCellRange( const ScSingleRefData& rRef1, const ScSingleRefData& rRef2, const ScAddress& rPos )
 {
-    if( !rRef1.IsDeleted() && !rRef2.IsDeleted() && (rRef1.nTab >= 0) && (rRef2.nTab >= 0) )
+    ScAddress aAbs1 = rRef1.toAbs(rPos);
+    ScAddress aAbs2 = rRef2.toAbs(rPos);
+    if (!rRef1.IsDeleted() && !rRef2.IsDeleted() && (aAbs1.Tab() >= 0) && (aAbs2.Tab() >= 0))
     {
         const XclExpTabInfo& rTabInfo = GetTabInfo();
-        SCTAB nFirstScTab = static_cast< SCTAB >( rRef1.nTab );
-        SCTAB nLastScTab = static_cast< SCTAB >( rRef2.nTab );
-        ScRange aRange(
-            static_cast< SCCOL >( rRef1.nCol ), static_cast< SCROW >( rRef1.nRow ), 0,
-            static_cast< SCCOL >( rRef2.nCol ), static_cast< SCROW >( rRef2.nRow ), 0 );
-        for( SCTAB nScTab = nFirstScTab; nScTab <= nLastScTab; ++nScTab )
+        SCTAB nFirstScTab = aAbs1.Tab();
+        SCTAB nLastScTab = aAbs2.Tab();
+        ScRange aRange(aAbs1.Col(), aAbs1.Row(), 0, aAbs2.Col(), aAbs2.Row(), 0);
+        for (SCTAB nScTab = nFirstScTab; nScTab <= nLastScTab; ++nScTab)
         {
             if( rTabInfo.IsExternalTab( nScTab ) )
             {
@@ -2297,14 +2297,14 @@ void XclExpLinkManager::FindExtSheet( sal_uInt16 nFileId, const String& rTabName
     mxImpl->FindExtSheet( nFileId, rTabName, nXclTabSpan, rnExtSheet, rnFirstSBTab, rnLastSBTab, pRefLogEntry );
 }
 
-void XclExpLinkManager::StoreCell( const ScSingleRefData& rRef )
+void XclExpLinkManager::StoreCell( const ScSingleRefData& rRef, const ScAddress& rPos )
 {
-    mxImpl->StoreCellRange( rRef, rRef );
+    mxImpl->StoreCellRange(rRef, rRef, rPos);
 }
 
-void XclExpLinkManager::StoreCellRange( const ScComplexRefData& rRef )
+void XclExpLinkManager::StoreCellRange( const ScComplexRefData& rRef, const ScAddress& rPos )
 {
-    mxImpl->StoreCellRange( rRef.Ref1, rRef.Ref2 );
+    mxImpl->StoreCellRange(rRef.Ref1, rRef.Ref2, rPos);
 }
 
 void XclExpLinkManager::StoreCell( sal_uInt16 nFileId, const String& rTabName, const ScAddress& rPos )
