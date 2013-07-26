@@ -34,7 +34,7 @@ private:
 
     CheckBox* pCodeCompleteChk;
     CheckBox* pAutocloseProcChk;
-    CheckBox* pAutocloseBracesChk;
+    CheckBox* pAutocloseParenChk;
     CheckBox* pAutocloseQuotesChk;
 
     DECL_LINK(OkHdl, void*);

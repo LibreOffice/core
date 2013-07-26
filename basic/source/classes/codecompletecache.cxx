@@ -29,7 +29,8 @@ namespace
 CodeCompleteOptions::CodeCompleteOptions()
 : bIsCodeCompleteOn( false ),
 bIsProcedureAutoCompleteOn( false ),
-bIsAutoCloseQuotesOn( false )
+bIsAutoCloseQuotesOn( false ),
+bIsAutoCloseParenthesisOn( false )
 {
 }
 
@@ -66,6 +67,16 @@ bool CodeCompleteOptions::IsAutoCloseQuotesOn()
 void CodeCompleteOptions::SetAutoCloseQuotesOn( const bool& b )
 {
     theCodeCompleteOptions::get().bIsAutoCloseQuotesOn = b;
+}
+
+bool CodeCompleteOptions::IsAutoCloseParenthesisOn()
+{
+    return theCodeCompleteOptions::get().aMiscOptions.IsExperimentalMode() && theCodeCompleteOptions::get().bIsAutoCloseParenthesisOn;
+}
+
+void CodeCompleteOptions::SetAutoCloseParenthesisOn( const bool& b )
+{
+    theCodeCompleteOptions::get().bIsAutoCloseParenthesisOn = b;
 }
 
 std::ostream& operator<< (std::ostream& aStream, const CodeCompleteDataCache& aCache)

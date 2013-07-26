@@ -145,8 +145,8 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkCheckButton" id="autoclose_braces">
-                            <property name="label" translatable="yes">Autoclose Braces</property>
+                          <object class="GtkCheckButton" id="autoclose_paren">
+                            <property name="label" translatable="yes">Autoclose Parenthesis</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>

@@ -34,7 +34,7 @@ CodeCompleteOptionsDlg::CodeCompleteOptionsDlg( Window* pWindow )
 
     get(pCodeCompleteChk, "codecomplete_enable");
     get(pAutocloseProcChk, "autoclose_proc");
-    get(pAutocloseBracesChk, "autoclose_braces");
+    get(pAutocloseParenChk, "autoclose_paren");
     get(pAutocloseQuotesChk, "autoclose_quotes");
 
     pOkBtn->SetClickHdl( LINK( this, CodeCompleteOptionsDlg, OkHdl ) );
@@ -43,8 +43,7 @@ CodeCompleteOptionsDlg::CodeCompleteOptionsDlg( Window* pWindow )
     pCodeCompleteChk->Check( CodeCompleteOptions::IsCodeCompleteOn() );
     pAutocloseProcChk->Check( CodeCompleteOptions::IsProcedureAutoCompleteOn() );
     pAutocloseQuotesChk->Check( CodeCompleteOptions::IsAutoCloseQuotesOn() );
-
-    pAutocloseBracesChk->Enable( false );
+    pAutocloseParenChk->Check( CodeCompleteOptions::IsAutoCloseParenthesisOn() );
 }
 
 CodeCompleteOptionsDlg::~CodeCompleteOptionsDlg()
@@ -56,6 +55,7 @@ IMPL_LINK_NOARG(CodeCompleteOptionsDlg, OkHdl)
     CodeCompleteOptions::SetCodeCompleteOn( pCodeCompleteChk->IsChecked() );
     CodeCompleteOptions::SetProcedureAutoCompleteOn( pAutocloseProcChk->IsChecked() );
     CodeCompleteOptions::SetAutoCloseQuotesOn( pAutocloseQuotesChk->IsChecked() );
+    CodeCompleteOptions::SetAutoCloseParenthesisOn( pAutocloseParenChk->IsChecked() );
     Close();
     return 0;
 }

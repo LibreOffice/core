@@ -522,6 +522,21 @@ void EditorWindow::KeyInput( const KeyEvent& rKEvt )
         }
     }
 
+    if( rKEvt.GetCharCode() == '(' && CodeCompleteOptions::IsAutoCloseParenthesisOn() )
+    {//autoclose parenthesis
+        TextSelection aSel = GetEditView()->GetSelection();
+        sal_uLong nLine =  aSel.GetStart().GetPara();
+        OUString aLine( pEditEngine->GetText( nLine ) ); // the line being modified
+
+        if( aLine.getLength() > 0 && aLine[aSel.GetEnd().GetIndex()-1] != '(' )
+        {
+            GetEditView()->InsertText(OUString(")"));
+            //leave the cursor on it's place: inside the parenthesis
+            TextPaM aEnd(nLine, aSel.GetEnd().GetIndex());
+            GetEditView()->SetSelection( TextSelection( aEnd, aEnd ) );
+        }
+    }
+
     if( rKEvt.GetKeyCode().GetCode() == KEY_RETURN && CodeCompleteOptions::IsProcedureAutoCompleteOn() )
     {//autoclose implementation
         TextSelection aSel = GetEditView()->GetSelection();
