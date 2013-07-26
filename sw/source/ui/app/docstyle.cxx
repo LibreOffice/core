@@ -1047,7 +1047,7 @@ SfxItemSet&   SwDocStyleSheet::GetItemSet()
 
                 if( nFamily == SFX_STYLE_FAMILY_CHAR )
                 {
-                    SAL_WARN_IF(!pCharFmt, "sw.app.docstyle", "Where's SwCharFmt");
+                    SAL_WARN_IF(!pCharFmt, "sw.ui", "Where's SwCharFmt");
                     aCoreSet.Put(pCharFmt->GetAttrSet());
                     aCoreSet.Put( aBoxInfo );
 

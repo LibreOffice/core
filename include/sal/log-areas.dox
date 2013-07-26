@@ -328,14 +328,12 @@ certain functionality.
 @section Writer
 
 @li @c sw
-@li @c sw.app.docstyle
 @li @c sw.core - Writer core
 @li @c sw.docx
 @li @c sw.envelp
-@li @c sw.fmtui
 @li @c sw.level2
 @li @c sw.rtf - .rtf export filter
-@li @c sw.text.txtinfo
+@li @c sw.ui
 @li @c sw.uno - Writer UNO interfaces
 @li @c sw.ww8 - .doc/.docx export filter, .doc import filter (not writerfilter)
 @li @c sw.ww8.level2 - further info for sw.ww8

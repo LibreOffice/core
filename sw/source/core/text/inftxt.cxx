@@ -370,7 +370,7 @@ void SwTxtSizeInfo::NoteAnimation() const
 
 KSHORT SwTxtSizeInfo::GetAscent() const
 {
-    SAL_WARN_IF( !GetOut(), "sw.text.txtinfo", "SwTxtSizeInfo::GetAscent() without m_pOut" );
+    SAL_WARN_IF( !GetOut(), "sw.core", "SwTxtSizeInfo::GetAscent() without m_pOut" );
 
     sal_uInt16 nAscent = ((SwFont*)GetFont())->GetAscent( m_pVsh, *GetOut() );
 
@@ -382,7 +382,7 @@ KSHORT SwTxtSizeInfo::GetAscent() const
 
 KSHORT SwTxtSizeInfo::GetTxtHeight() const
 {
-    SAL_WARN_IF( !GetOut(), "sw.text.txtinfo", "SwTxtSizeInfo::GetTxtHeight() without m_pOut" );
+    SAL_WARN_IF( !GetOut(), "sw.core", "SwTxtSizeInfo::GetTxtHeight() without m_pOut" );
 
     sal_uInt16 nHeight = ((SwFont*)GetFont())->GetHeight( m_pVsh, *GetOut() );
 
