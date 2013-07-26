@@ -266,13 +266,13 @@ sal_uLong SwXMLTextBlocks::GetMacroTable( sal_uInt16 nIdx,
 }
 
 
-sal_uLong SwXMLTextBlocks::GetBlockText( const String& rShort, String& rText )
+sal_uLong SwXMLTextBlocks::GetBlockText( const String& rShort, OUString& rText )
 {
     sal_uLong n = 0;
     sal_Bool bTextOnly = sal_True;
     String aFolderName = GeneratePackageName ( rShort );
     String aStreamName = aFolderName + OUString(".xml");
-    rText.Erase();
+    rText = OUString();
 
     try
     {

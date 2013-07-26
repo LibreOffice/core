@@ -224,16 +224,16 @@ SwXMLTextBlockParContext::SwXMLTextBlockParContext(
 
 void SwXMLTextBlockParContext::Characters( const OUString& rChars )
 {
-    rLocalRef.m_rText.Append ( rChars.getStr());
+    rLocalRef.m_rText += rChars;
 }
 SwXMLTextBlockParContext::~SwXMLTextBlockParContext ( void )
 {
     if (rLocalRef.bTextOnly)
-        rLocalRef.m_rText.AppendAscii( "\015" );
+        rLocalRef.m_rText += "\015";
     else
     {
-        if (rLocalRef.m_rText.GetChar ( rLocalRef.m_rText.Len()) != ' ' )
-            rLocalRef.m_rText.AppendAscii( " " );
+        if (!rLocalRef.m_rText.endsWith( " " ))
+            rLocalRef.m_rText += " ";
     }
 }
 

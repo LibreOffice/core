@@ -65,8 +65,8 @@ public:
     virtual sal_uLong GetDoc( sal_uInt16 );
     virtual sal_uLong BeginPutDoc( const String&, const String& );
     virtual sal_uLong PutDoc();
-    virtual sal_uLong GetText( sal_uInt16, String& );
-    virtual sal_uLong PutText( const String&, const String&, const String& );
+    virtual sal_uLong GetText( sal_uInt16, OUString& );
+    virtual sal_uLong PutText( const String&, const String&, const OUString& );
     virtual sal_uLong MakeBlockList();
 
     virtual short GetFileType ( void ) const;
@@ -76,7 +76,7 @@ public:
     static sal_Bool IsFileUCBStorage( const String & rFileName);
 
     // Methods for the new Autocorrecter
-    sal_uLong GetText( const String& rShort, String& );
+    sal_uLong GetText( const String& rShort, OUString& );
 
     virtual sal_Bool IsOnlyTextBlock( const String& rShort ) const;
     virtual sal_Bool IsOnlyTextBlock( sal_uInt16 nIdx ) const;
@@ -95,7 +95,7 @@ public:
     //void  SetDoc( SwDoc * pNewDoc);
     sal_uLong StartPutBlock( const String& rShort, const String& rPackageName );
     sal_uLong PutBlock( SwPaM& rPaM, const String& rLong );
-    sal_uLong GetBlockText( const String& rShort, String& rText );
+    sal_uLong GetBlockText( const String& rShort, OUString& rText );
     sal_uLong PutBlockText( const String& rShort, const String& rName, const String& rText,  const String& rPackageName );
     void MakeBlockText( const String& rText );
 

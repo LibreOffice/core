@@ -100,7 +100,8 @@ SvXMLWordContext::SvXMLWordContext(
    SvXMLImportContext ( rImport, nPrefix, rLocalName ),
    rLocalRef(rImport)
 {
-    String sRight, sWrong;
+    OUString sRight;
+    OUString sWrong;
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
 
     for (sal_Int16 i=0; i < nAttrCount; i++)
@@ -121,15 +122,15 @@ SvXMLWordContext::SvXMLWordContext(
             }
         }
     }
-    if (!sWrong.Len() || !sRight.Len() )
+    if (sWrong.isEmpty() || sRight.isEmpty())
         return;
 
     sal_Bool bOnlyTxt = sRight != sWrong;
     if( !bOnlyTxt )
     {
-        String sLongSave( sRight );
+        const OUString sLongSave( sRight );
         if( !rLocalRef.rAutoCorrect.GetLongText( rLocalRef.xStorage, String(), sWrong, sRight ) &&
-            sLongSave.Len() )
+            !sLongSave.isEmpty() )
         {
             sRight = sLongSave;
             bOnlyTxt = sal_True;

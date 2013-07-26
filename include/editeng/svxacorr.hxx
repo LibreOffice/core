@@ -267,8 +267,8 @@ class EDITENG_DLLPUBLIC SvxAutoCorrect
 protected:
     //  - Text with attribution (only the SWG - SWG format!)
     //      rShort is the stream name - encrypted!
-    virtual sal_Bool PutText( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& rStg, const String& rFileName, const String& rShort, SfxObjectShell& ,
-                            String& );
+    virtual sal_Bool PutText( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& rStg,
+                              const String& rFileName, const String& rShort, SfxObjectShell&, OUString& );
 
     // required language in the table add if possible only when the file exists
     sal_Bool    CreateLanguageFile(LanguageType eLang, sal_Bool bNewFile = sal_True);
@@ -279,7 +279,8 @@ public:
 
     sal_Unicode GetQuote( sal_Unicode cInsChar, sal_Bool bSttQuote,
                             LanguageType eLang ) const;
-    virtual sal_Bool GetLongText( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& rStg, const String& rFileName, const String& rShort, String& rLong );
+    virtual sal_Bool GetLongText( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& rStg,
+                                  const String& rFileName, const String& rShort, OUString& rLong );
 
     TYPEINFO();
 

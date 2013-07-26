@@ -60,7 +60,7 @@ class SwImpBlocks
 protected:
     String aFile;                       // physikalischer Dateiname
     String aName;                       // logischer Name der Datei
-    String aCur;                        // aktueller Text
+    OUString aCur;                      // aktueller Text
     String aShort, aLong;               // Kurz- und Langname (PutDoc)
     String sBaseURL;                    // base URL - has to be set at the Readers and Writers
     SwBlockNames aNames;                // Liste aller Bausteine
@@ -113,8 +113,8 @@ public:
     virtual sal_uLong GetDoc( sal_uInt16 ) = 0;
     virtual sal_uLong BeginPutDoc( const String&, const String& ) = 0;
     virtual sal_uLong PutDoc() = 0;
-    virtual sal_uLong GetText( sal_uInt16, String& ) = 0;
-    virtual sal_uLong PutText( const String&, const String&, const String& ) = 0;
+    virtual sal_uLong GetText( sal_uInt16, OUString& ) = 0;
+    virtual sal_uLong PutText( const String&, const String&, const OUString& ) = 0;
     virtual sal_uLong MakeBlockList() = 0;
 
     virtual sal_uLong OpenFile( sal_Bool bReadOnly = sal_True ) = 0;

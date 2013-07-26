@@ -414,12 +414,12 @@ sal_uLong SwXMLTextBlocks::PutDoc()
     return nErr;
 }
 
-sal_uLong SwXMLTextBlocks::GetText( sal_uInt16 nIdx, String& rText )
+sal_uLong SwXMLTextBlocks::GetText( sal_uInt16 nIdx, OUString& rText )
 {
     return GetBlockText( aNames[ nIdx ]->aShort, rText );
 }
 
-sal_uLong SwXMLTextBlocks::GetText( const String& rShort, String& rText )
+sal_uLong SwXMLTextBlocks::GetText( const String& rShort, OUString& rText )
 {
     return GetBlockText( rShort, rText );
 }
@@ -572,7 +572,7 @@ OUString SwXMLTextBlocks::GeneratePackageName ( const String& rShort )
 }
 
 sal_uLong SwXMLTextBlocks::PutText( const String& rShort, const String& rName,
-                                const String& rText )
+                                    const OUString& rText )
 {
     sal_uLong nRes = 0;
     aShort = rShort;
