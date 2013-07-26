@@ -442,19 +442,19 @@ ResMgr* ImpGetResMgr()
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-String ImpGetResStr(sal_uInt16 nResID)
+OUString ImpGetResStr(sal_uInt16 nResID)
 {
-    return String(ResId(nResID, *ImpGetResMgr()));
+    return ResId(nResID, *ImpGetResMgr()).toString();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 namespace sdr
 {
-String GetResourceString(sal_uInt16 nResID)
-{
-    return ImpGetResStr( nResID );
-}
+    OUString GetResourceString(sal_uInt16 nResID)
+    {
+        return ImpGetResStr(nResID);
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

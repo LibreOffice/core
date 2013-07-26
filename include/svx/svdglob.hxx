@@ -39,7 +39,7 @@ ResMgr* ImpGetResMgr();
 // SDR_StringCacheBegin (256) to SDR_StringCacheEnd
 // are cached.
 // See also SvdStr.Hrc
-SVX_DLLPUBLIC String ImpGetResStr(sal_uInt16 nResID);
+SVX_DLLPUBLIC OUString ImpGetResStr(sal_uInt16 nResID);
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 

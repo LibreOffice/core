@@ -248,9 +248,7 @@ inline SdrGlobalData& GetSdrGlobalData()
 
 namespace sdr
 {
-
-SVX_DLLPUBLIC String GetResourceString(sal_uInt16 nResID);
-
+    SVX_DLLPUBLIC OUString GetResourceString(sal_uInt16 nResID);
 }
 
 /////////////////////////////////////////////////////////////////////
