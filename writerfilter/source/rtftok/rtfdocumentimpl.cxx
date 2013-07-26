@@ -1838,8 +1838,6 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
                     m_aStates.top().aTableCellsSprms = m_aStates.top().aTableInheritingCellsSprms;
                     m_aStates.top().aTableCellsAttributes = m_aStates.top().aTableInheritingCellsAttributes;
                     m_aStates.top().nCells = m_aStates.top().nInheritingCells;
-                    // This can't be the first row, and we need cell width only there
-                    while(m_aStates.top().aTableRowSprms.erase(NS_ooxml::LN_CT_TblGridBase_gridCol)) ;
                 }
                 for (int i = 0; i < m_aStates.top().nCells; ++i)
                 {
@@ -2260,6 +2258,7 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
                 lcl_eraseNestedAttribute(m_aStates.top().aParagraphSprms, NS_ooxml::LN_CT_PPrBase_spacing, NS_ooxml::LN_CT_Spacing_after);
                 m_aStates.top().aParagraphSprms.erase(NS_sprm::LN_PDxaLeft);
                 m_aStates.top().aParagraphSprms.erase(NS_sprm::LN_PDxaRight);
+                m_aStates.top().aParagraphSprms.erase(NS_sprm::LN_PJc);
             }
             m_aStates.top().resetFrame();
             break;
@@ -4633,6 +4632,11 @@ int RTFDocumentImpl::popState()
         m_aStates.top().nCells = aState.nCells;
         m_aStates.top().aTableCellsSprms = aState.aTableCellsSprms;
         m_aStates.top().aTableCellsAttributes = aState.aTableCellsAttributes;
+
+        // Also the inherited properties should be kept accross groups.
+        m_aStates.top().aTableInheritingCellsSprms = aState.aTableInheritingCellsSprms;
+        m_aStates.top().aTableInheritingCellsAttributes = aState.aTableInheritingCellsAttributes;
+        m_aStates.top().nInheritingCells = aState.nInheritingCells;
     }
 
     return 0;
