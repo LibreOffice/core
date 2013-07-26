@@ -34,7 +34,6 @@
 
 #include <vcl/svapp.hxx>
 #include <i18nlangtag/languagetag.hxx>
-#include <comphelper/configurationhelper.hxx>
 
 #define IMPLEMENTATIONNAME_GLOBALACCELERATORCONFIGURATION       DECLARE_ASCII("com.sun.star.comp.framework.GlobalAcceleratorConfiguration")
 

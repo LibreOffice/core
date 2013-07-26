@@ -33,8 +33,6 @@
 #include <comphelper/sequenceashashmap.hxx>
 #include <vcl/svapp.hxx>
 
-#include <comphelper/configurationhelper.hxx>
-
 #include <com/sun/star/util/XChangesNotifier.hpp>
 
 
