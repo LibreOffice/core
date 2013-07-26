@@ -65,24 +65,22 @@ if test -d $DESTDIR$INSTALLDIR/sdk ; then
     echo "$DOCDIR/sdk/examples"                                 >>$DESTDIR/gid_Module_Root_SDK
 
     # generate default profiles
-    for file in setsdkenv_unix.csh setsdkenv_unix.sh ; do
-        sed -e "s,@OO_SDK_NAME@,openoffice.org${PRODUCTVERSION}_sdk," \
-	    -e "s,@OO_SDK_HOME@,$INSTALLDIR/sdk," \
-	    -e "s,@OFFICE_HOME@,$INSTALLDIR," \
-	    -e "s,@OO_SDK_URE_HOME@,$INSTALLDIR/ure-link," \
-	    -e "s,@OO_SDK_MAKE_HOME@,/usr/bin," \
-	    -e "s,@OO_SDK_ZIP_HOME@,/usr/bin," \
-	    -e "s,@OO_SDK_CPP_HOME@,/usr/bin," \
-	    -e "s,@OO_SDK_SED_HOME@,/usr/bin," \
-	    -e "s,@OO_SDK_CAT_HOME@,/usr/bin," \
-	    -e "s,@OO_SDK_CC_55_OR_HIGHER@,," \
-	    -e "s,@OO_SDK_JAVA_HOME@,$JAVA_HOME," \
-	    -e "s,@OO_SDK_OUTPUT_DIR@,\$HOME," \
-	    -e "s,@SDK_AUTO_DEPLOYMENT@,NO," \
-            $DESTDIR$INSTALLDIR/sdk/$file.in \
-	    > $DESTDIR$INSTALLDIR/sdk/$file
-	chmod 755 $DESTDIR$INSTALLDIR/sdk/$file
-	echo $INSTALLDIR/sdk/$file >>$DESTDIR/gid_Module_Root_SDK
-    done
+    sed -e "s,@OO_SDK_NAME@,openoffice.org${PRODUCTVERSION}_sdk," \
+        -e "s,@OO_SDK_HOME@,$INSTALLDIR/sdk," \
+        -e "s,@OFFICE_HOME@,$INSTALLDIR," \
+        -e "s,@OO_SDK_URE_HOME@,$INSTALLDIR/ure-link," \
+        -e "s,@OO_SDK_MAKE_HOME@,/usr/bin," \
+        -e "s,@OO_SDK_ZIP_HOME@,/usr/bin," \
+        -e "s,@OO_SDK_CPP_HOME@,/usr/bin," \
+        -e "s,@OO_SDK_SED_HOME@,/usr/bin," \
+        -e "s,@OO_SDK_CAT_HOME@,/usr/bin," \
+        -e "s,@OO_SDK_CC_55_OR_HIGHER@,," \
+        -e "s,@OO_SDK_JAVA_HOME@,$JAVA_HOME," \
+        -e "s,@OO_SDK_OUTPUT_DIR@,\$HOME," \
+        -e "s,@SDK_AUTO_DEPLOYMENT@,NO," \
+            $DESTDIR$INSTALLDIR/sdk/setsdkenv_unix.sh.in \
+        > $DESTDIR$INSTALLDIR/sdk/setsdkenv_unix.sh
+    chmod 755 $DESTDIR$INSTALLDIR/sdk/setsdkenv_unix.sh
+    echo $INSTALLDIR/sdk/setsdkenv_unix.sh >>$DESTDIR/gid_Module_Root_SDK
 
 fi
