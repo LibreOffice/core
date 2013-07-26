@@ -49,6 +49,7 @@ public:
     void testDataBarExportODS();
     void testDataBarExportXLSX();
     void testMiscRowHeightExport();
+    void testNamedRangeBugfdo62729();
 
     CPPUNIT_TEST_SUITE(ScExportTest);
     CPPUNIT_TEST(test);
@@ -60,6 +61,7 @@ public:
     CPPUNIT_TEST(testColorScaleExportODS);
     CPPUNIT_TEST(testColorScaleExportXLSX);
     CPPUNIT_TEST(testMiscRowHeightExport);
+    CPPUNIT_TEST(testNamedRangeBugfdo62729);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -287,6 +289,34 @@ void ScExportTest::testMiscRowHeightExport()
         { "miscemptyrepeatedrowheights.", ODS, XLS, SAL_N_ELEMENTS(EmptyRepeatRowData), EmptyRepeatRowData },
     };
     miscRowHeightsTest( aTestValues, SAL_N_ELEMENTS(aTestValues) );
+}
+
+
+void ScExportTest::testNamedRangeBugfdo62729()
+{
+    ScDocShellRef xShell = loadDoc("fdo62729.", ODS);
+    CPPUNIT_ASSERT(xShell.Is());
+    ScDocument* pDoc = xShell->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+
+    ScRangeName* pNames = pDoc->GetRangeName();
+    //should be just a single named range
+    CPPUNIT_ASSERT(pNames->size() == 1 );
+    pDoc->DeleteTab(0);
+    //should be still a single named range
+    CPPUNIT_ASSERT(pNames->size() == 1 );
+    ScDocShellRef xDocSh = saveAndReload(xShell, ODS);
+    xShell->DoClose();
+
+    CPPUNIT_ASSERT(xDocSh.Is());
+    pDoc = xDocSh->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+
+    pNames = pDoc->GetRangeName();
+    //after reload should still have a named range
+    CPPUNIT_ASSERT(pNames->size() == 1 );
+
+    xDocSh->DoClose();
 }
 
 ScExportTest::ScExportTest()
