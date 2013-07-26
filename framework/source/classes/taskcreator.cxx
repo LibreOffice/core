@@ -28,8 +28,9 @@
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 
-#include <comphelper/configurationhelper.hxx>
 #include <vcl/svapp.hxx>
+
+#include <officecfg/Office/TabBrowse.hxx>
 
 namespace framework{
 
@@ -78,12 +79,9 @@ css::uno::Reference< css::frame::XFrame > TaskCreator::createTask( const OUStrin
             ( TargetHelper::matchSpecialTarget(sName, TargetHelper::E_DEFAULT) )
            )
         {
-            ::comphelper::ConfigurationHelper::readDirectKey(
-                xContext,
-                "org.openoffice.Office.TabBrowse",
-                "TaskCreatorService",
-                "ImplementationName",
-                ::comphelper::ConfigurationHelper::E_READONLY) >>= sCreator;
+
+            boost::optional<OUString> x(officecfg::Office::TabBrowse::TaskCreatorService::ImplementationName::get(xContext));
+            if (x) sCreator = x.get();
         }
 
         xCreator = css::uno::Reference< css::lang::XSingleServiceFactory >(
