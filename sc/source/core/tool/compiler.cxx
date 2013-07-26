@@ -833,7 +833,7 @@ struct ConventionOOO_A1 : public Convention_A1
             if (!bSingleRef)
             {
                 rBuffer.append(sal_Unicode(':'));
-                MakeOneRefStrImpl(rBuffer, rComp, aRef.Ref2, aAbs2, (aRef.Ref2.nTab != aRef.Ref1.nTab), bODF);
+                MakeOneRefStrImpl(rBuffer, rComp, aRef.Ref2, aAbs2, aAbs1.Tab() != aAbs2.Tab(), bODF);
             }
         }
         if (bODF)
