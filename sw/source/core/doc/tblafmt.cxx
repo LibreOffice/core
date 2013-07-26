@@ -751,12 +751,12 @@ void SwTableAutoFmt::UpdateToSet(sal_uInt8 nPos, SfxItemSet& rSet,
 
 void SwTableAutoFmt::RestoreTableProperties(SwTable &table) const
 {
-    m_pTableStyle->RestoreTableProperties( table );
+    SwTableFmt::RestoreTableProperties( m_pTableStyle, table );
 }
 
 void SwTableAutoFmt::StoreTableProperties(const SwTable &table)
 {
-    m_pTableStyle->StoreTableProperties( table );
+    m_pTableStyle = SwTableFmt::StoreTableProperties( table );
 }
 
 sal_Bool SwTableFmt::Load( SvStream& rStream, const SwAfVersions& rVersions, SwDoc* pDoc, sal_uInt16 nVal )

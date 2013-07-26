@@ -121,10 +121,8 @@ public:
     sal_Bool GetRowSplit() const;
     sal_uInt16 GetRepeatHeading() const;
 
-    void RestoreTableProperties( SwTable &table ) const;
-    void StoreTableProperties( const SwTable &table );
-
-    void CopyTableFormatInfo( const SwTableFmt* pTableFormat );
+    static void RestoreTableProperties( SwTableFmt* pSrcFmt, SwTable &table );
+    static SwTableFmt* StoreTableProperties( const SwTable &table );
 
     sal_Bool Load( SvStream& rStream, const SwAfVersions& rVersions, SwDoc* pDoc, sal_uInt16 nVal );
 

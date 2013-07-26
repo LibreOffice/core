@@ -3564,7 +3564,7 @@ sal_Bool SwDoc::SetTableAutoFmt( const SwSelBoxes& rBoxes, const SwTableAutoFmt&
         GetIDocumentUndoRedo().DoUndo(false);
     }
 
-    rNew.GetTableStyle()->RestoreTableProperties(table);
+    rNew.RestoreTableProperties(table);
 
     if( pUndo )
     {

@@ -1428,12 +1428,12 @@ SwUndoTblAutoFmt::UndoRedo(bool const bUndo, ::sw::UndoRedoContext & rContext)
     OSL_ENSURE( pTblNd, "no TableNode" );
 
     SwTable& table = pTblNd->GetTable();
-    SwTableFmt* pOrig = new SwTableFmt( *(SwTableFmt*)table.GetTableFmt()->GetRegisteredIn() );
+    SwTableFmt* pOrig = (SwTableFmt*)table.GetTableFmt()->GetRegisteredIn();
 
     if( bUndo )
         table.SetRowsToRepeat( m_nRepeatHeading );
 
-    pSaveFmt->RestoreTableProperties( table );
+    SwTableFmt::RestoreTableProperties( pSaveFmt, table );
     delete pSaveFmt;
     pSaveFmt = pOrig;
 }

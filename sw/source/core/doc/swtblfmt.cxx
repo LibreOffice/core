@@ -241,57 +241,42 @@ sal_uInt16 SwTableFmt::GetRepeatHeading() const
     return (static_cast<const SfxUInt16Item&>( GetFmtAttr( FN_PARAM_TABLE_HEADLINE ) )).GetValue();
 }
 
-void SwTableFmt::RestoreTableProperties(SwTable &table) const
+void SwTableFmt::RestoreTableProperties( SwTableFmt* pSrcFmt, SwTable &table )
 {
-    SwTableFmt *pFormat = (SwTableFmt*)table.GetTableFmt()->GetRegisteredIn();
-    if (!pFormat)
+    SwTableFmt *pHardFmt = table.GetTableFmt();
+    if( !pHardFmt )
         return;
 
-    SwDoc *pDoc = pFormat->GetDoc();
-    if (!pDoc)
+    SwDoc *pDoc = pHardFmt->GetDoc();
+    if( !pDoc )
         return;
 
-    pFormat->CopyTableFormatInfo( this );
+    SwTableFmt *pTableStyle = (SwTableFmt*)pHardFmt->GetRegisteredIn();
+    sal_Bool bRowSplit = sal_True;
+    sal_uInt16 nRepeatHeading = 0;
+
+    if( pSrcFmt )
+    {
+        pHardFmt->RegisterToFormat( *pSrcFmt );
+        bRowSplit = pSrcFmt->GetRowSplit();
+        nRepeatHeading = pSrcFmt->GetRepeatHeading();
+    }
+    else
+        pTableStyle->Remove( pHardFmt );
 
     SwEditShell *pShell = pDoc->GetEditShell();
-    pDoc->SetRowSplit( *pShell->getShellCrsr( false ), SwFmtRowSplit( GetRowSplit() ) );
+    pDoc->SetRowSplit( *pShell->getShellCrsr( false ), SwFmtRowSplit( bRowSplit ) );
 
-    table.SetRowsToRepeat( GetRepeatHeading() );
+    table.SetRowsToRepeat( nRepeatHeading );
 }
 
-void SwTableFmt::StoreTableProperties(const SwTable &table)
+SwTableFmt* SwTableFmt::StoreTableProperties( const SwTable &table )
 {
-    SwTableFmt *pFormat = (SwTableFmt*)table.GetTableFmt()->GetRegisteredIn();
-    if (!pFormat)
-        return;
+    SwTableFmt *pHardFmt = table.GetTableFmt();
+    if( !pHardFmt )
+        return NULL;
 
-    SwDoc *pDoc = pFormat->GetDoc();
-    if (!pDoc)
-        return;
-
-    SwEditShell *pShell = pDoc->GetEditShell();
-    SwFmtRowSplit *pRowSplit = 0;
-    pDoc->GetRowSplit( *pShell->getShellCrsr( false ), pRowSplit );
-    SetRowSplit( pRowSplit ? pRowSplit->GetValue() : sal_False );
-    delete pRowSplit;
-    pRowSplit = 0;
-
-    CopyTableFormatInfo( pFormat );
-}
-
-void SwTableFmt::CopyTableFormatInfo( const SwTableFmt* pTableFormat )
-{
-    SetFmtAttr( pTableFormat->GetAttrSet() );
-
-    m_pFstLineFmt.reset( new SwTableLineFmt ( *pTableFormat->GetFirstLineFmt() ) );
-    m_pLstLineFmt.reset( new SwTableLineFmt ( *pTableFormat->GetLastLineFmt() ) );
-    m_pOddLineFmt.reset( new SwTableLineFmt ( *pTableFormat->GetOddLineFmt() ) );
-    m_pEvnLineFmt.reset( new SwTableLineFmt ( *pTableFormat->GetEvenLineFmt() ) );
-
-    m_pFstColFmt.reset( new SwTableLineFmt ( *pTableFormat->GetFirstColFmt() ) );
-    m_pLstColFmt.reset( new SwTableLineFmt ( *pTableFormat->GetLastColFmt() ) );
-    m_pOddColFmt.reset( new SwTableLineFmt ( *pTableFormat->GetOddColFmt() ) );
-    m_pEvnColFmt.reset( new SwTableLineFmt ( *pTableFormat->GetEvenColFmt() ) );
+    return (SwTableFmt*)pHardFmt->GetRegisteredIn();
 }
 
 SwTableLineFmt::SwTableLineFmt( SwAttrPool& rPool, const sal_Char* pFmtNm,
