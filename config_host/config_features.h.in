@@ -80,4 +80,12 @@
 
 #define HAVE_FEATURE_AVAHI 0
 
+/* MACOSX_SANDBOX - whether LibreOffice runs in an OS X sandbox
+ *
+ * When building LibreOffice for distribution through the Mac App Store,
+ * it must be sandboxed.
+ */
+
+#define HAVE_FEATURE_MACOSX_SANDBOX 0
+
 #endif

@@ -2742,6 +2742,7 @@ if test $_os = Darwin; then
         AC_MSG_ERROR([OS X sandboxing requires code signing])
     elif test -n "$MACOSX_CODESIGNING_IDENTITY" -a "$enable_macosx_sandbox" = yes; then
         ENABLE_MACOSX_SANDBOX=YES
+        AC_DEFINE(HAVE_FEATURE_MACOSX_SANDBOX)
         AC_MSG_RESULT([yes])
     else
         AC_MSG_RESULT([no])

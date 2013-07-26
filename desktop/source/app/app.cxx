@@ -598,7 +598,7 @@ void Desktop::Init()
         OfficeIPCThread::Status aStatus = OfficeIPCThread::EnableOfficeIPCThread();
         if ( aStatus == OfficeIPCThread::IPC_STATUS_PIPE_ERROR )
         {
-#ifdef MACOSX
+#if HAVE_FEATURE_MACOSX_SANDBOX
             // In a sandboxed LO, on 10.8.2 at least, creating the
             // Unix domain socket fails. Ignore that as hopefully
             // people running a sandboxed LO won't attempt starting it
@@ -1159,7 +1159,7 @@ namespace {
 void restartOnMac(bool passArguments) {
 #if defined MACOSX
     OfficeIPCThread::DisableOfficeIPCThread();
-#ifdef ENABLE_MACOSX_SANDBOX
+#if HAVE_FEATURE_MACOSX_SANDBOX
     (void) passArguments; // avoid warnings
     ResMgr *resMgr = Desktop::GetDesktopResManager();
     OUString aMessage = OUString( String( ResId( STR_LO_MUST_BE_RESTARTED, *resMgr )));
