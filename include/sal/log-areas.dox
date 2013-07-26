@@ -414,6 +414,7 @@ certain functionality.
 @li @c vbahelper
 @li @c xmlhelp
 @li @c xmlreader
+@li @c reportdesign
 
 */
 /* vim:set ft=cpp shiftwidth=4 softtabstop=4 expandtab: */

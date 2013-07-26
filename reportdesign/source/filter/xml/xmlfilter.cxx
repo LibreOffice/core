@@ -34,7 +34,6 @@
 #include <xmloff/txtimp.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/XMLFontStylesContext.hxx>
-#include <rtl/logfile.hxx>
 #include <com/sun/star/xml/sax/InputSource.hpp>
 #include <com/sun/star/xml/sax/XParser.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -133,16 +132,13 @@ sal_Int32 ReadThroughComponent(
     OSL_ENSURE(xModelComponent.is(), "document missing");
     OSL_ENSURE(rContext.is(), "factory missing");
 
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "rptxml", "oj", "ReadThroughComponent" );
-
     // prepare ParserInputSrouce
     InputSource aParserInput;
     aParserInput.aInputStream = xInputStream;
 
     // get parser
     uno::Reference< XParser > xParser = xml::sax::Parser::create(rContext);
-    RTL_LOGFILE_CONTEXT_TRACE( aLog, "parser created" );
-
+    SAL_INFO( "reportdesign", "parser created" );
     // get filter
     OSL_ENSURE( _xFilter.is(), "Can't instantiate filter component." );
     if( !_xFilter.is() )
@@ -158,8 +154,7 @@ sal_Int32 ReadThroughComponent(
 
 #ifdef TIMELOG
     // if we do profiling, we want to know the stream
-    RTL_LOGFILE_TRACE_AUTHOR1( "rptxml", "oj",
-                               "ReadThroughComponent : parsing \"%s\"", pStreamName );
+    SAL_INFO( "reportdesign", "rptxml ReadThroughComponent : parsing \"" << pStreamName << "\"" );
 #endif
 
     // finally, parser the stream
