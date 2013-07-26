@@ -263,11 +263,14 @@ def _uno_import( name, *optargs, **kwargs ):
     try:
 #       print "optargs = " + repr(optargs)
         return _g_delegatee( name, *optargs, **kwargs )
-    except ImportError:
+    except ImportError as e:
         # process optargs
         globals, locals, fromlist = list(optargs)[:3] + [kwargs.get('globals',{}), kwargs.get('locals',{}), kwargs.get('fromlist',[])][len(optargs):]
-        if not fromlist:
+        # from import form only, but skip if an uno lookup has already failed
+        if not fromlist or hasattr(e, '_uno_import_failed'):
             raise
+        # hang onto exception for possible use on subsequent uno lookup failure
+        py_import_exc = e
     modnames = name.split( "." )
     mod = None
     d = sys.modules
@@ -303,22 +306,32 @@ def _uno_import( name, *optargs, **kwargs ):
                       failed = True
 
           if failed:
-             # This can be a bad uno reference, or it can just result from any
-             # python import failure (in a "from xxx import yyy" statement).
-             # Synthesize a general purpose exception, reusing the original
-             # traceback to provide information for either case.  We don't use
-             # the original python exception as uno failures will typically
-             # just reflect a missing top level module (such as "com").
+              # We have an import failure, but cannot distinguish between
+              # uno and non-uno errors as uno lookups are attempted for all
+              # "from xxx import yyy" imports following a python failure.
+              # 
+              # The traceback from the original python exception is kept to
+              # pinpoint the actual failing location, but in Python 3 the
+              # original message is most likely unhelpful for uno failures,
+              # as it will most commonly be a missing top level module,
+              # like 'com'.  Our exception appends the uno lookup failure.
+              # This is more ambiguous, but it plus the traceback should be
+              # sufficient to identify a root cause for python or uno issues.
+              #
+              # Our exception is raised outside of the nested exception
+              # handlers above, to avoid Python 3 nested exception
+              # information for the RuntimeExceptions during lookups.
+              # 
+              # Finally, a private attribute is used to prevent further
+              # processing if this failure was in a nested import.  That
+              # keeps the exception relevant to the primary failure point,
+              # preventing us from re-processing our own import errors.
 
-             # Note that we raise this outside of the nested exception handlers
-             # above, or otherwise Python 3 will generate additional tracebacks
-             # for each of the nested exceptions.
-
-             e = ImportError("No module named '%s' or '%s.%s' is unknown" %
-                             (name, name, x))
-             e.__traceback__ = sys.exc_info()[2]
-
-             raise e
+              uno_import_exc = ImportError(
+                  "%s (or '%s.%s' is unknown)" % (py_import_exc, name, x)
+                  ).with_traceback(py_import_exc.__traceback__)
+              uno_import_exc._uno_import_failed = True
+              raise uno_import_exc
 
     return mod
 
