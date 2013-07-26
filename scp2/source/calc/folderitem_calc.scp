@@ -31,7 +31,7 @@ FolderItem gid_Folderitem_Scalc
     ALL_LANG(Tooltip, STR_FI_TOOLTIP_CALC);
 End
 
-FolderItemProperty git_Folderitemproperty_Scalc_AppID
+FolderItemProperty gid_Fip_Scalc_AppID
     ShortcutID = gid_Folderitem_Scalc;
     Key = "System.AppUserModel.ID";
     Value = "TheDocumentFoundation.LibreOffice.Calc";
