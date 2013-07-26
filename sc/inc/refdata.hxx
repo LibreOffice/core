@@ -67,10 +67,13 @@ struct SC_DLLPUBLIC ScSingleRefData
 
     void SetAbsCol( SCCOL nVal );
     void SetRelCol( SCCOL nVal );
+    void IncCol( SCCOL nInc );
     void SetAbsRow( SCROW nVal );
     void SetRelRow( SCROW nVal );
+    void IncRow( SCROW nInc );
     void SetAbsTab( SCTAB nVal );
     void SetRelTab( SCTAB nVal );
+    void IncTab( SCTAB nInc );
 
     void SetColDeleted( bool bVal );
     bool IsColDeleted() const;

@@ -74,9 +74,9 @@ bool ScDocument::Solver(SCCOL nFCol, SCROW nFRow, SCTAB nFTab,
         {
             ScSingleRefData aRefData;
             aRefData.InitFlags();
-            aRefData.nCol = nVCol;
-            aRefData.nRow = nVRow;
-            aRefData.nTab = nVTab;
+            aRefData.SetAbsCol(nVCol);
+            aRefData.SetAbsRow(nVRow);
+            aRefData.SetAbsTab(nVTab);
 
             ScTokenArray aArr;
             aArr.AddOpCode( ocBackSolver );
@@ -84,9 +84,9 @@ bool ScDocument::Solver(SCCOL nFCol, SCROW nFRow, SCTAB nFTab,
             aArr.AddSingleReference( aRefData );
             aArr.AddOpCode( ocSep );
 
-            aRefData.nCol = nFCol;
-            aRefData.nRow = nFRow;
-            aRefData.nTab = nFTab;
+            aRefData.SetAbsCol(nFCol);
+            aRefData.SetAbsRow(nFRow);
+            aRefData.SetAbsTab(nFTab);
 
             aArr.AddSingleReference( aRefData );
             aArr.AddOpCode( ocSep );

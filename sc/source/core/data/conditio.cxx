@@ -1390,7 +1390,7 @@ void ScConditionEntry::SourceChanged( const ScAddress& rChanged )
                         nCol2 = rChanged.Col() - aProv.Ref1.Col();
                     else
                     {
-                        bHit &= ( rChanged.Col() >= aProv.Ref1.nCol );
+                        bHit &= (rChanged.Col() >= aProv.Ref1.Col());
                         nCol2 = MAXCOL;
                     }
                     if ( aProv.Ref1.IsRowRel() )
@@ -1412,7 +1412,7 @@ void ScConditionEntry::SourceChanged( const ScAddress& rChanged )
                         nCol1 = rChanged.Col() - aProv.Ref2.Col();
                     else
                     {
-                        bHit &= ( rChanged.Col() <= aProv.Ref2.nCol );
+                        bHit &= ( rChanged.Col() <= aProv.Ref2.Col() );
                         nCol1 = 0;
                     }
                     if ( aProv.Ref2.IsRowRel() )

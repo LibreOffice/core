@@ -519,12 +519,12 @@ void Chart2Positioner::glueState()
         ScComplexRefData aData;
         if (ScRefTokenHelper::getDoubleRefDataFromToken(aData, p))
         {
-            if (aData.Ref1.nTab == aData.Ref2.nTab)
+            if (aData.Ref1.Tab() == aData.Ref2.Tab())
                 meGlue = GLUETYPE_NONE;
             else
                 meGlue = GLUETYPE_COLS;
-            mnStartCol = aData.Ref1.nCol;
-            mnStartRow = aData.Ref1.nRow;
+            mnStartCol = aData.Ref1.Col();
+            mnStartRow = aData.Ref1.Row();
         }
         else
         {
@@ -537,8 +537,8 @@ void Chart2Positioner::glueState()
 
     ScComplexRefData aData;
     ScRefTokenHelper::getDoubleRefDataFromToken(aData, mrRefTokens.front());
-    mnStartCol = aData.Ref1.nCol;
-    mnStartRow = aData.Ref1.nRow;
+    mnStartCol = aData.Ref1.Col();
+    mnStartRow = aData.Ref1.Row();
 
     SCCOL nEndCol = 0;
     SCROW nEndRow = 0;
@@ -546,8 +546,8 @@ void Chart2Positioner::glueState()
          ; itr != itrEnd; ++itr)
     {
         ScRefTokenHelper::getDoubleRefDataFromToken(aData, *itr);
-        SCCOLROW n1 = aData.Ref1.nCol;
-        SCCOLROW n2 = aData.Ref2.nCol;
+        SCCOLROW n1 = aData.Ref1.Col();
+        SCCOLROW n2 = aData.Ref2.Col();
         if (n1 > MAXCOL)
             n1 = MAXCOL;
         if (n2 > MAXCOL)
@@ -620,10 +620,10 @@ void Chart2Positioner::calcGlueState(SCCOL nColSize, SCROW nRowSize)
     {
         ScComplexRefData aData;
         ScRefTokenHelper::getDoubleRefDataFromToken(aData, *itr);
-        SCCOL nCol1 = static_cast<SCCOL>(aData.Ref1.nCol) - mnStartCol;
-        SCCOL nCol2 = static_cast<SCCOL>(aData.Ref2.nCol) - mnStartCol;
-        SCROW nRow1 = static_cast<SCROW>(aData.Ref1.nRow) - mnStartRow;
-        SCROW nRow2 = static_cast<SCROW>(aData.Ref2.nRow) - mnStartRow;
+        SCCOL nCol1 = aData.Ref1.Col() - mnStartCol;
+        SCCOL nCol2 = aData.Ref2.Col() - mnStartCol;
+        SCROW nRow1 = aData.Ref1.Row() - mnStartRow;
+        SCROW nRow2 = aData.Ref2.Row() - mnStartRow;
         for (SCCOL nCol = nCol1; nCol <= nCol2; ++nCol)
             for (SCROW nRow = nRow1; nRow <= nRow2; ++nRow)
             {
@@ -739,9 +739,9 @@ void Chart2Positioner::createPositionMap()
             break;
         const ScSingleRefData& s = aData.Ref1;
         const ScSingleRefData& e = aData.Ref2;
-        SCCOL nCol1 = s.nCol, nCol2 = e.nCol;
-        SCROW nRow1 = s.nRow, nRow2 = e.nRow;
-        SCTAB nTab1 = s.nTab, nTab2 = e.nTab;
+        SCCOL nCol1 = s.Col(), nCol2 = e.Col();
+        SCROW nRow1 = s.Row(), nRow2 = e.Row();
+        SCTAB nTab1 = s.Tab(), nTab2 = e.Tab();
 
         for (SCTAB nTab = nTab1; nTab <= nTab2; ++nTab)
         {
@@ -771,9 +771,9 @@ void Chart2Positioner::createPositionMap()
                     aCellData.SetColRel(false);
                     aCellData.SetRowRel(false);
                     aCellData.SetTabRel(false);
-                    aCellData.nCol = nCol;
-                    aCellData.nRow = nRow;
-                    aCellData.nTab = nTab;
+                    aCellData.SetAbsCol(nCol);
+                    aCellData.SetAbsRow(nRow);
+                    aCellData.SetAbsTab(nTab);
 
                     if (pCol->find(nInsRow) == pCol->end())
                     {
@@ -1135,31 +1135,31 @@ bool lcl_addUpperLeftCornerIfMissing(vector<ScTokenRef>& rRefTokens,
         case svSingleRef:
         {
             const ScSingleRefData& rData = pToken->GetSingleRef();
-            nMinCol = rData.nCol;
-            nMinRow = rData.nRow;
-            nMaxCol = rData.nCol;
-            nMaxRow = rData.nRow;
-            nTab = rData.nTab;
+            nMinCol = rData.Col();
+            nMinRow = rData.Row();
+            nMaxCol = rData.Col();
+            nMaxRow = rData.Row();
+            nTab = rData.Tab();
         }
         break;
         case svDoubleRef:
         {
             const ScComplexRefData& rData = pToken->GetDoubleRef();
-            nMinCol = min(rData.Ref1.nCol, rData.Ref2.nCol);
-            nMinRow = min(rData.Ref1.nRow, rData.Ref2.nRow);
-            nMaxCol = max(rData.Ref1.nCol, rData.Ref2.nCol);
-            nMaxRow = max(rData.Ref1.nRow, rData.Ref2.nRow);
-            nTab = rData.Ref1.nTab;
+            nMinCol = min(rData.Ref1.Col(), rData.Ref2.Col());
+            nMinRow = min(rData.Ref1.Row(), rData.Ref2.Row());
+            nMaxCol = max(rData.Ref1.Col(), rData.Ref2.Col());
+            nMaxRow = max(rData.Ref1.Row(), rData.Ref2.Row());
+            nTab = rData.Ref1.Tab();
         }
         break;
         case svExternalSingleRef:
         {
             const ScSingleRefData& rData = pToken->GetSingleRef();
-            nMinCol = rData.nCol;
-            nMinRow = rData.nRow;
-            nMaxCol = rData.nCol;
-            nMaxRow = rData.nRow;
-            nTab = rData.nTab;
+            nMinCol = rData.Col();
+            nMinRow = rData.Row();
+            nMaxCol = rData.Col();
+            nMaxRow = rData.Row();
+            nTab = rData.Tab();
             nFileId = pToken->GetIndex();
             aExtTabName = pToken->GetString();
             bExternal = true;
@@ -1168,11 +1168,11 @@ bool lcl_addUpperLeftCornerIfMissing(vector<ScTokenRef>& rRefTokens,
         case svExternalDoubleRef:
         {
             const ScComplexRefData& rData = pToken->GetDoubleRef();
-            nMinCol = min(rData.Ref1.nCol, rData.Ref2.nCol);
-            nMinRow = min(rData.Ref1.nRow, rData.Ref2.nRow);
-            nMaxCol = max(rData.Ref1.nCol, rData.Ref2.nCol);
-            nMaxRow = max(rData.Ref1.nRow, rData.Ref2.nRow);
-            nTab = rData.Ref1.nTab;
+            nMinCol = min(rData.Ref1.Col(), rData.Ref2.Col());
+            nMinRow = min(rData.Ref1.Row(), rData.Ref2.Row());
+            nMaxCol = max(rData.Ref1.Col(), rData.Ref2.Col());
+            nMaxRow = max(rData.Ref1.Row(), rData.Ref2.Row());
+            nTab = rData.Ref1.Tab();
             nFileId = pToken->GetIndex();
             aExtTabName = pToken->GetString();
             bExternal = true;
@@ -1194,11 +1194,11 @@ bool lcl_addUpperLeftCornerIfMissing(vector<ScTokenRef>& rRefTokens,
             {
                 const ScSingleRefData& rData = pToken->GetSingleRef();
 
-                nMinCol = min(nMinCol, rData.nCol);
-                nMinRow = min(nMinRow, rData.nRow);
-                nMaxCol = max(nMaxCol, rData.nCol);
-                nMaxRow = max(nMaxRow, rData.nRow);
-                if (nTab != rData.nTab || bExternal)
+                nMinCol = min(nMinCol, rData.Col());
+                nMinRow = min(nMinRow, rData.Row());
+                nMaxCol = max(nMaxCol, rData.Col());
+                nMaxRow = max(nMaxRow, rData.Row());
+                if (nTab != rData.Tab() || bExternal)
                     return false;
             }
             break;
@@ -1206,17 +1206,17 @@ bool lcl_addUpperLeftCornerIfMissing(vector<ScTokenRef>& rRefTokens,
             {
                 const ScComplexRefData& rData = pToken->GetDoubleRef();
 
-                nMinCol = min(nMinCol, rData.Ref1.nCol);
-                nMinCol = min(nMinCol, rData.Ref2.nCol);
-                nMinRow = min(nMinRow, rData.Ref1.nRow);
-                nMinRow = min(nMinRow, rData.Ref2.nRow);
+                nMinCol = min(nMinCol, rData.Ref1.Col());
+                nMinCol = min(nMinCol, rData.Ref2.Col());
+                nMinRow = min(nMinRow, rData.Ref1.Row());
+                nMinRow = min(nMinRow, rData.Ref2.Row());
 
-                nMaxCol = max(nMaxCol, rData.Ref1.nCol);
-                nMaxCol = max(nMaxCol, rData.Ref2.nCol);
-                nMaxRow = max(nMaxRow, rData.Ref1.nRow);
-                nMaxRow = max(nMaxRow, rData.Ref2.nRow);
+                nMaxCol = max(nMaxCol, rData.Ref1.Col());
+                nMaxCol = max(nMaxCol, rData.Ref2.Col());
+                nMaxRow = max(nMaxRow, rData.Ref1.Row());
+                nMaxRow = max(nMaxRow, rData.Ref2.Row());
 
-                if (nTab != rData.Ref1.nTab || bExternal)
+                if (nTab != rData.Ref1.Tab() || bExternal)
                     return false;
             }
             break;
@@ -1230,10 +1230,10 @@ bool lcl_addUpperLeftCornerIfMissing(vector<ScTokenRef>& rRefTokens,
 
                 const ScSingleRefData& rData = pToken->GetSingleRef();
 
-                nMinCol = min(nMinCol, rData.nCol);
-                nMinRow = min(nMinRow, rData.nRow);
-                nMaxCol = max(nMaxCol, rData.nCol);
-                nMaxRow = max(nMaxRow, rData.nRow);
+                nMinCol = min(nMinCol, rData.Col());
+                nMinRow = min(nMinRow, rData.Row());
+                nMaxCol = max(nMaxCol, rData.Col());
+                nMaxRow = max(nMaxRow, rData.Row());
             }
             break;
             case svExternalDoubleRef:
@@ -1246,15 +1246,15 @@ bool lcl_addUpperLeftCornerIfMissing(vector<ScTokenRef>& rRefTokens,
 
                 const ScComplexRefData& rData = pToken->GetDoubleRef();
 
-                nMinCol = min(nMinCol, rData.Ref1.nCol);
-                nMinCol = min(nMinCol, rData.Ref2.nCol);
-                nMinRow = min(nMinRow, rData.Ref1.nRow);
-                nMinRow = min(nMinRow, rData.Ref2.nRow);
+                nMinCol = min(nMinCol, rData.Ref1.Col());
+                nMinCol = min(nMinCol, rData.Ref2.Col());
+                nMinRow = min(nMinRow, rData.Ref1.Row());
+                nMinRow = min(nMinRow, rData.Ref2.Row());
 
-                nMaxCol = max(nMaxCol, rData.Ref1.nCol);
-                nMaxCol = max(nMaxCol, rData.Ref2.nCol);
-                nMaxRow = max(nMaxRow, rData.Ref1.nRow);
-                nMaxRow = max(nMaxRow, rData.Ref2.nRow);
+                nMaxCol = max(nMaxCol, rData.Ref1.Col());
+                nMaxCol = max(nMaxCol, rData.Ref2.Col());
+                nMaxRow = max(nMaxRow, rData.Ref1.Row());
+                nMaxRow = max(nMaxRow, rData.Ref2.Row());
             }
             break;
             default:
@@ -1285,17 +1285,17 @@ bool lcl_addUpperLeftCornerIfMissing(vector<ScTokenRef>& rRefTokens,
             case svExternalSingleRef:
             {
                 const ScSingleRefData& rData = pToken->GetSingleRef();
-                if (rData.nCol == nMinCol && rData.nRow == nMinRow)
+                if (rData.Col() == nMinCol && rData.Row() == nMinRow)
                     // The corner cell is contained.
                     return false;
 
-                if (rData.nCol == nMinCol+nCornerColumnCount && rData.nRow == nMinRow)
+                if (rData.Col() == nMinCol+nCornerColumnCount && rData.Row() == nMinRow)
                     bRight = true;
 
-                if (rData.nCol == nMinCol && rData.nRow == nMinRow+nCornerRowCount)
+                if (rData.Col() == nMinCol && rData.Row() == nMinRow+nCornerRowCount)
                     bBottom = true;
 
-                if (rData.nCol == nMinCol+nCornerColumnCount && rData.nRow == nMinRow+nCornerRowCount)
+                if (rData.Col() == nMinCol+nCornerColumnCount && rData.Row() == nMinRow+nCornerRowCount)
                     bDiagonal = true;
             }
             break;
@@ -1305,21 +1305,21 @@ bool lcl_addUpperLeftCornerIfMissing(vector<ScTokenRef>& rRefTokens,
                 const ScComplexRefData& rData = pToken->GetDoubleRef();
                 const ScSingleRefData& r1 = rData.Ref1;
                 const ScSingleRefData& r2 = rData.Ref2;
-                if (r1.nCol <= nMinCol && nMinCol <= r2.nCol &&
-                    r1.nRow <= nMinRow && nMinRow <= r2.nRow)
+                if (r1.Col() <= nMinCol && nMinCol <= r2.Col() &&
+                    r1.Row() <= nMinRow && nMinRow <= r2.Row())
                     // The corner cell is contained.
                     return false;
 
-                if (r1.nCol <= nMinCol+nCornerColumnCount && nMinCol+nCornerColumnCount <= r2.nCol &&
-                    r1.nRow <= nMinRow && nMinRow <= r2.nRow)
+                if (r1.Col() <= nMinCol+nCornerColumnCount && nMinCol+nCornerColumnCount <= r2.Col() &&
+                    r1.Row() <= nMinRow && nMinRow <= r2.Row())
                     bRight = true;
 
-                if (r1.nCol <= nMinCol && nMinCol <= r2.nCol &&
-                    r1.nRow <= nMinRow+nCornerRowCount && nMinRow+nCornerRowCount <= r2.nRow)
+                if (r1.Col() <= nMinCol && nMinCol <= r2.Col() &&
+                    r1.Row() <= nMinRow+nCornerRowCount && nMinRow+nCornerRowCount <= r2.Row())
                     bBottom = true;
 
-                if (r1.nCol <= nMinCol+nCornerColumnCount && nMinCol+nCornerColumnCount <= r2.nCol &&
-                    r1.nRow <= nMinRow+nCornerRowCount && nMinRow+nCornerRowCount <= r2.nRow)
+                if (r1.Col() <= nMinCol+nCornerColumnCount && nMinCol+nCornerColumnCount <= r2.Col() &&
+                    r1.Row() <= nMinRow+nCornerRowCount && nMinRow+nCornerRowCount <= r2.Row())
                     bDiagonal = true;
             }
             break;
@@ -1335,12 +1335,9 @@ bool lcl_addUpperLeftCornerIfMissing(vector<ScTokenRef>& rRefTokens,
     ScSingleRefData aData;
     aData.InitFlags();
     aData.SetFlag3D(true);
-    aData.SetColRel(false);
-    aData.SetRowRel(false);
-    aData.SetTabRel(false);
-    aData.nCol = nMinCol;
-    aData.nRow = nMinRow;
-    aData.nTab = nTab;
+    aData.SetAbsCol(nMinCol);
+    aData.SetAbsRow(nMinRow);
+    aData.SetAbsTab(nTab);
 
     if( nCornerRowCount==1 && nCornerColumnCount==1 )
     {
@@ -1359,8 +1356,8 @@ bool lcl_addUpperLeftCornerIfMissing(vector<ScTokenRef>& rRefTokens,
     else
     {
         ScSingleRefData aDataEnd(aData);
-        aDataEnd.nCol += (nCornerColumnCount-1);
-        aDataEnd.nRow += (nCornerRowCount-1);
+        aDataEnd.IncCol(nCornerColumnCount-1);
+        aDataEnd.IncRow(nCornerRowCount-1);
         ScComplexRefData r;
         r.Ref1=aData;
         r.Ref2=aDataEnd;
@@ -1403,7 +1400,7 @@ public:
         SCROW nMinRow = MAXROW, nMaxRow = 0;
 
         // Determine the smallest range that encompasses the data ranges of all sheets.
-        SCTAB nTab1 = s.nTab, nTab2 = e.nTab;
+        SCTAB nTab1 = s.Tab(), nTab2 = e.Tab();
         for (SCTAB nTab = nTab1; nTab <= nTab2; ++nTab)
         {
             SCCOL nCol1 = 0, nCol2 = MAXCOL;
@@ -1416,14 +1413,14 @@ public:
         }
 
         // Shrink range to the data range if applicable.
-        if (s.nCol < nMinCol)
-            s.nCol = nMinCol;
-        if (s.nRow < nMinRow)
-            s.nRow = nMinRow;
-        if (e.nCol > nMaxCol)
-            e.nCol = nMaxCol;
-        if (e.nRow > nMaxRow)
-            e.nRow = nMaxRow;
+        if (s.Col() < nMinCol)
+            s.SetAbsCol(nMinCol);
+        if (s.Row() < nMinRow)
+            s.SetAbsRow(nMinRow);
+        if (e.Col() > nMaxCol)
+            e.SetAbsCol(nMaxCol);
+        if (e.Row() > nMaxRow)
+            e.SetAbsRow(nMaxRow);
     }
 };
 
@@ -1689,16 +1686,16 @@ void RangeAnalyzer::initRangeAnalyzer( const vector<ScTokenRef>& rTokens )
             const ScComplexRefData& r = aRefToken->GetDoubleRef();
             if (r.Ref1.nTab == r.Ref2.nTab)
             {
-                mnColumnCount = std::max<SCCOL>( mnColumnCount, static_cast<SCCOL>(abs(r.Ref2.nCol - r.Ref1.nCol)+1) );
-                mnRowCount = std::max<SCROW>( mnRowCount, static_cast<SCROW>(abs(r.Ref2.nRow - r.Ref1.nRow)+1) );
+                mnColumnCount = std::max<SCCOL>(mnColumnCount, static_cast<SCCOL>(abs(r.Ref2.Col() - r.Ref1.Col())+1));
+                mnRowCount = std::max<SCROW>(mnRowCount, static_cast<SCROW>(abs(r.Ref2.Row() - r.Ref1.Row())+1));
                 if( mnStartColumn == -1 )
                 {
-                    mnStartColumn = r.Ref1.nCol;
-                    mnStartRow = r.Ref1.nRow;
+                    mnStartColumn = r.Ref1.Col();
+                    mnStartRow = r.Ref1.Row();
                 }
                 else
                 {
-                    if( mnStartColumn != r.Ref1.nCol && mnStartRow != r.Ref1.nRow )
+                    if (mnStartColumn != r.Ref1.Col() && mnStartRow != r.Ref1.Row())
                         mbAmbiguous=true;
                 }
             }
@@ -1712,12 +1709,12 @@ void RangeAnalyzer::initRangeAnalyzer( const vector<ScTokenRef>& rTokens )
             mnRowCount = std::max<SCROW>( mnRowCount, 1);
             if( mnStartColumn == -1 )
             {
-                mnStartColumn = r.nCol;
-                mnStartRow = r.nRow;
+                mnStartColumn = r.Col();
+                mnStartRow = r.Row();
             }
             else
             {
-                if( mnStartColumn != r.nCol && mnStartRow != r.nRow )
+                if (mnStartColumn != r.Col() && mnStartRow != r.Row())
                     mbAmbiguous=true;
             }
         }

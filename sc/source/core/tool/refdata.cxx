@@ -52,6 +52,14 @@ void ScSingleRefData::SetRelCol( SCCOL nVal )
     nRelCol = nVal;
 }
 
+void ScSingleRefData::IncCol( SCCOL nInc )
+{
+    if (Flags.bColRel)
+        nRelCol += nInc;
+    else
+        nCol += nInc;
+}
+
 void ScSingleRefData::SetAbsRow( SCROW nVal )
 {
     Flags.bRowRel = false;
@@ -64,6 +72,14 @@ void ScSingleRefData::SetRelRow( SCROW nVal )
     nRelRow = nVal;
 }
 
+void ScSingleRefData::IncRow( SCROW nInc )
+{
+    if (Flags.bRowRel)
+        nRelRow += nInc;
+    else
+        nRow += nInc;
+}
+
 void ScSingleRefData::SetAbsTab( SCTAB nVal )
 {
     Flags.bTabRel = false;
@@ -74,6 +90,14 @@ void ScSingleRefData::SetRelTab( SCTAB nVal )
 {
     Flags.bTabRel = true;
     nRelTab = nVal;
+}
+
+void ScSingleRefData::IncTab( SCTAB nInc )
+{
+    if (Flags.bTabRel)
+        nRelTab += nInc;
+    else
+        nTab += nInc;
 }
 
 void ScSingleRefData::SetColDeleted( bool bVal )

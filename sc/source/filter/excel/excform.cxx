@@ -519,8 +519,8 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, XclImpStream& aIn, s
             case 0x6A:
             case 0x2A: // Deleted Cell Reference                [323 273]
                 aIn >> nUINT16 >> nByte;
-                aSRD.nCol = static_cast<SCsCOL>(nByte);
-                aSRD.nRow = nUINT16 & 0x3FFF;
+                aSRD.SetAbsCol(static_cast<SCsCOL>(nByte));
+                aSRD.SetAbsRow(nUINT16 & 0x3FFF);
                 aSRD.SetRelTab(0);
                 aSRD.SetFlag3D( bRangeName );
 
@@ -1030,8 +1030,8 @@ ConvErr ExcelToSc::Convert( _ScRangeListTabs& rRangeList, XclImpStream& aIn, sal
             case 0x64:
             case 0x24: // Cell Reference                        [319 270]
                 aIn >> nUINT16 >> nByte;
-                aSRD.nCol = static_cast<SCsCOL>(nByte);
-                aSRD.nRow = nUINT16 & 0x3FFF;
+                aSRD.SetAbsCol(static_cast<SCsCOL>(nByte));
+                aSRD.SetAbsRow(nUINT16 & 0x3FFF);
                 aSRD.SetRelTab(0);
                 aSRD.SetFlag3D( bRangeName );
 
@@ -1188,12 +1188,10 @@ ConvErr ExcelToSc::Convert( _ScRangeListTabs& rRangeList, XclImpStream& aIn, sal
                     if( nTabLast != nTabFirst )
                     {
                         aCRD.Ref1 = aSRD;
-                        aCRD.Ref2.nCol = aSRD.nCol;
-                        aCRD.Ref2.nRow = aSRD.nRow;
-                        aCRD.Ref2.nTab = static_cast<SCTAB>(nTabLast);
+                        aCRD.Ref2 = aSRD;
+                        aCRD.Ref2.SetAbsTab(static_cast<SCTAB>(nTabLast));
                         b3D = ( static_cast<SCTAB>(nTabLast) != aEingPos.Tab() );
                         aCRD.Ref2.SetFlag3D( b3D );
-                        aCRD.Ref2.SetTabRel( false );
                         rRangeList.Append( aCRD, nTab );
                     }
                     else

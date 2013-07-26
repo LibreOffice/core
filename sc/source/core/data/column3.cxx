@@ -909,15 +909,14 @@ void ScColumn::CopyFromClip(
 
         //  Create reference (Source Position)
         ScSingleRefData aRef;
-        aRef.nCol = rColumn.nCol;
-        //  Adapt nRow
-        aRef.nTab = rColumn.nTab;
         aRef.InitFlags(); // -> All absolute
+        aRef.SetAbsCol(rColumn.nCol);
+        aRef.SetAbsTab(rColumn.nTab);
         aRef.SetFlag3D(true);
 
         for (SCROW nDestRow = nRow1; nDestRow <= nRow2; nDestRow++)
         {
-            aRef.nRow = nDestRow - nDy; // Source row
+            aRef.SetAbsRow(nDestRow - nDy); // Source row
             aDestPos.SetRow( nDestRow );
 
             ScTokenArray aArr;
