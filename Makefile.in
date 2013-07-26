@@ -259,7 +259,7 @@ install-strip:
 	echo "$(INSTALLDIR)/program/soffice"
 
 ifeq ($(ENABLE_MACOSX_SANDBOX),YES)
-entitlements:=--entitlements $(SRC_ROOT)/lo.xcent
+entitlements:=--entitlements $(BUILDDIR)/lo.xcent
 endif
 
 dev-install: build
