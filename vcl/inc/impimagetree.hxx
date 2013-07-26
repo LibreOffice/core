@@ -73,14 +73,14 @@ private:
     typedef boost::unordered_map<
         OUString, std::pair< bool, BitmapEx >, OUStringHash > IconCache;
     typedef boost::unordered_map<
-        OUString, OUString, OUStringHash > IconLinkCache;
+        OUString, OUString, OUStringHash > IconLinkHash;
 
     OUString m_style;
     Path m_path;
     CheckStyleCache m_checkStyleCache;
     IconCache m_iconCache;
     bool m_cacheIcons;
-    IconLinkCache m_iconLinkCache;
+    IconLinkHash m_linkHash;
 
     void setStyle(OUString const & style );
 

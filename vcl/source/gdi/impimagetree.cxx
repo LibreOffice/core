@@ -223,7 +223,7 @@ void ImplImageTree::shutDown() {
         // for safety; empty m_style means "not initialized"
     m_iconCache.clear();
     m_checkStyleCache.clear();
-    m_iconLinkCache.clear();
+    m_linkHash.clear();
 }
 
 void ImplImageTree::setStyle(OUString const & style) {
@@ -232,7 +232,7 @@ void ImplImageTree::setStyle(OUString const & style) {
         m_style = style;
         resetPaths();
         m_iconCache.clear();
-        m_iconLinkCache.clear();
+        m_linkHash.clear();
         loadImageLinks();
     }
 }
@@ -378,14 +378,14 @@ void ImplImageTree::parseLinkFile(boost::shared_ptr< SvStream > pStream)
                 "Link is incomplete." );
             continue;
         }
-        m_iconLinkCache[aLink] = aOriginal;
+        m_linkHash[aLink] = aOriginal;
     }
 }
 
 OUString const & ImplImageTree::getRealImageName(OUString const & name)
 {
-    IconLinkCache::iterator it(m_iconLinkCache.find(name));
-    if (it == m_iconLinkCache.end())
+    IconLinkHash::iterator it(m_linkHash.find(name));
+    if (it == m_linkHash.end())
         return name;
     return it->second;
 }
