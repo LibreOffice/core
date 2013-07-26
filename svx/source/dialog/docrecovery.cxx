@@ -971,7 +971,7 @@ RecoveryDialog::RecoveryDialog(Window*       pParent,
 
     FreeResource();
 
-    bool bCrashRepEnabled(officecfg::Office::Recovery::CrashReporter::Enabled::get());
+    bool bCrashRepEnabled(officecfg::Office::Recovery::CrashReporter::Enabled::get(pCore->getComponentContext()));
     m_bRecoveryOnly = !bCrashRepEnabled;
 
     PluginProgress* pProgress   = new PluginProgress( &m_aProgrParent, pCore->getComponentContext() );

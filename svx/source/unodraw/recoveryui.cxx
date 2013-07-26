@@ -276,7 +276,7 @@ void RecoveryUI::impl_doRecovery()
 {
     bool bRecoveryOnly( false );
 
-    bool bCrashRepEnabled(officecfg::Office::Recovery::CrashReporter::Enabled::get());
+    bool bCrashRepEnabled(officecfg::Office::Recovery::CrashReporter::Enabled::get(m_xContext));
     bRecoveryOnly = !bCrashRepEnabled;
 
     // create core service, which implements the real "emergency save" algorithm.
