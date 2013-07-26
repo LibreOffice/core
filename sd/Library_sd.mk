@@ -553,14 +553,6 @@ ifeq ($(ENABLE_AVAHI),TRUE)
 $(eval $(call gb_Library_add_exception_objects,sd,\
 	sd/source/ui/remotecontrol/AvahiNetworkService \
 ))
-
-$(eval $(call gb_Library_add_cobjects,sd,\
-	sd/source/ui/remotecontrol/avahi-common/thread-watch \
-))
-
-$(eval $(call gb_Library_add_libs,sd,\
-	-lpthread \
-))
 endif
 
 $(eval $(call gb_Library_add_exception_objects,sd,\
