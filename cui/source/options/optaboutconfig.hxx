@@ -31,6 +31,8 @@ private:
     ::svx::OptHeaderTabListBox* pPrefBox;
     CuiAboutConfigTabPage( Window* pParent, const SfxItemSet& rItemSet );
     ~CuiAboutConfigTabPage();
+
+    DECL_LINK( HeaderSelect_Impl, HeaderBar * );
 public:
    static SfxTabPage* Create( Window* pParent, const SfxItemSet& rItemset );
 

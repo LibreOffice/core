@@ -47,10 +47,10 @@ CuiAboutConfigTabPage::CuiAboutConfigTabPage( Window* pParent, const SfxItemSet&
     pPrefBox = new svx::OptHeaderTabListBox( *m_pPrefCtrl, nBits );
 
     HeaderBar &rBar = pPrefBox->GetTheHeaderBar();
-    rBar.InsertItem( ITEMID_PREF, get<FixedText>("preference")->GetText(), 0, HIB_LEFT | HIB_VCENTER );
-    rBar.InsertItem( ITEMID_TYPE, get<FixedText>("status")->GetText(), 0,  HIB_LEFT | HIB_VCENTER );
-    rBar.InsertItem( ITEMID_STATUS, get<FixedText>("type")->GetText(), 0,  HIB_LEFT | HIB_VCENTER );
-    rBar.InsertItem( ITEMID_VALUE, get<FixedText>("value")->GetText(), 0,  HIB_LEFT | HIB_VCENTER );
+    rBar.InsertItem( ITEMID_PREF, get<FixedText>("preference")->GetText(), 0, HIB_LEFT | HIB_VCENTER | HIB_CLICKABLE | HIB_UPARROW);
+    rBar.InsertItem( ITEMID_TYPE, get<FixedText>("status")->GetText(), 0,  HIB_LEFT | HIB_VCENTER | HIB_CLICKABLE | HIB_UPARROW );
+    rBar.InsertItem( ITEMID_STATUS, get<FixedText>("type")->GetText(), 0,  HIB_LEFT | HIB_VCENTER | HIB_CLICKABLE | HIB_UPARROW );
+    rBar.InsertItem( ITEMID_VALUE, get<FixedText>("value")->GetText(), 0,  HIB_LEFT | HIB_VCENTER | HIB_CLICKABLE | HIB_UPARROW );
 
     long aTabs[] = {4,0,12,12,12};
 
@@ -235,4 +235,32 @@ Reference< XNameAccess > CuiAboutConfigTabPage::getConfigAccess( OUString sNodeP
 
     return xNameAccess;
 }
+
+IMPL_LINK( CuiAboutConfigTabPage, HeaderSelect_Impl, HeaderBar*, pBar )
+{
+    if ( pBar && pBar->GetCurItemId() != ITEMID_TYPE )
+        return 0;
+
+    HeaderBarItemBits nBits = pBar->GetItemBits(ITEMID_TYPE);
+    sal_Bool bUp = ( ( nBits & HIB_UPARROW ) == HIB_UPARROW );
+    SvSortMode eMode = SortAscending;
+
+    if ( bUp )
+    {
+        nBits &= ~HIB_UPARROW;
+        nBits |= HIB_DOWNARROW;
+        eMode = SortDescending;
+    }
+    else
+    {
+        nBits &= ~HIB_DOWNARROW;
+        nBits |= HIB_UPARROW;
+    }
+    pBar->SetItemBits( ITEMID_TYPE, nBits );
+    SvTreeList* pModel = pPrefBox->GetModel();
+    pModel->SetSortMode( eMode );
+    pModel->Resort();
+    return 1;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
