@@ -13,7 +13,6 @@ $(eval $(call gb_UnpackedTarball_set_tarball,langtag,$(LIBLANGTAG_TARBALL)))
 
 $(eval $(call gb_UnpackedTarball_add_patches,langtag,\
 	liblangtag/liblangtag-0.5.1-msvc-warning.patch \
-	liblangtag/liblangtag-0.5.1-reg2xml-encoding-problem.patch \
 	liblangtag/liblangtag-0.5.1-vsnprintf.patch \
 	liblangtag/liblangtag-0.5.1-msvc-ssize_t.patch \
 	liblangtag/liblangtag-0.5.1-msvc-snprintf.patch \
