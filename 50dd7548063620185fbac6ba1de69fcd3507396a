@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXn//97o\u003d",
+        "filename": "sd/source/ui/annotations/annotationmanager.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 474,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2013-07-26T04:55:58Z",
+      "side": 1,
+      "message": "please don\u0027t do that\nkeep the \nif (condition)\n   stmt\n\nstructure",
+      "revId": "50dd7548063620185fbac6ba1de69fcd3507396a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
