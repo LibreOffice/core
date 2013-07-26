@@ -832,7 +832,7 @@ void PagePropertyPanel::ChangeColumnImage( const sal_uInt16 nColumnType )
 
 void PagePropertyPanel::StartUndo()
 {
-    if ( mxUndoManager.is() );
+    if ( mxUndoManager.is() )
     {
         mxUndoManager->enterUndoContext( A2S("") );
     }
@@ -841,7 +841,7 @@ void PagePropertyPanel::StartUndo()
 
 void PagePropertyPanel::EndUndo()
 {
-    if ( mxUndoManager.is() );
+    if ( mxUndoManager.is() )
     {
         mxUndoManager->leaveUndoContext();
     }
