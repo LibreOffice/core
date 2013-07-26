@@ -54,7 +54,7 @@ gb_Module_CLEANTARGETSTACK :=
 gb_Module_CURRENTMAKEFILE :=
 
 $(call gb_Module_get_almost_target,%) :
-	$(call gb_Output_announce,$*,$(false),ALM,5)
+	$(call gb_Output_announce,$*,$(true),ALM,5)
 	-$(call gb_Helper_abbreviate_dirs,\
 		mkdir -p $(dir $@) && \
 		touch $@)
