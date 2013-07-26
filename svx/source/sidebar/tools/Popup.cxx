@@ -67,7 +67,7 @@ void Popup::Show (ToolBox& rToolBox)
     {
         mpContainer->SetSizePixel(mpControl->GetOutputSizePixel());
 
-        const Point aPos (mpParent->OutputToScreenPixel(rToolBox.GetPosPixel()));
+        const Point aPos (rToolBox.GetParent()->OutputToScreenPixel(rToolBox.GetPosPixel()));
         const Size aSize (rToolBox.GetSizePixel());
         const Rectangle aRect (aPos, aSize);
 
