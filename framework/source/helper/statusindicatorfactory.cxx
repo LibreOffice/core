@@ -42,10 +42,10 @@
 
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/mediadescriptor.hxx>
-#include <comphelper/configurationhelper.hxx>
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
 
+#include <officecfg/Office/Common.hxx>
 
 namespace framework{
 
@@ -413,14 +413,7 @@ void StatusIndicatorFactory::implts_makeParentVisibleIfAllowed()
     Window* pWindow = VCLUnoHelper::GetWindow(xParentWindow);
     if ( pWindow )
     {
-        bool bForceFrontAndFocus(false);
-        ::comphelper::ConfigurationHelper::readDirectKey(
-            xContext,
-            OUString("org.openoffice.Office.Common/View"),
-            OUString("NewDocumentHandling"),
-            OUString("ForceFocusAndToFront"),
-            ::comphelper::ConfigurationHelper::E_READONLY) >>= bForceFrontAndFocus;
-
+        bool bForceFrontAndFocus(officecfg::Office::Common::View::NewDocumentHandling::ForceFocusAndToFront::get(xContext));
         pWindow->Show(sal_True, bForceFrontAndFocus ? SHOW_FOREGROUNDTASK : 0 );
     }
 
