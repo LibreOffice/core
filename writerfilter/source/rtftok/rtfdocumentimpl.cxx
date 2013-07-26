@@ -1327,6 +1327,7 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
         case RTF_SHP:
             m_bNeedCrOrig = m_bNeedCr;
             m_aStates.top().nDestinationState = DESTINATION_SHAPE;
+            m_aStates.top().bInShape = true;
             break;
         case RTF_SHPINST:
             m_aStates.top().nDestinationState = DESTINATION_SHAPEINSTRUCTION;
@@ -3930,7 +3931,8 @@ int RTFDocumentImpl::popState()
             break;
         case DESTINATION_PICPROP:
         case DESTINATION_SHAPEINSTRUCTION:
-            if (!m_bObject && !aState.bInListpicture && !m_aStates.top().bHadShapeText && !m_aStates.top().bInShapeGroup)
+            // Don't trigger a shape import in case we're only leaving the \shpinst of the groupshape itself.
+            if (!m_bObject && !aState.bInListpicture && !aState.bHadShapeText && !(aState.bInShapeGroup && !aState.bInShape))
                 m_pSdrImport->resolve(m_aStates.top().aShape, true);
             break;
         case DESTINATION_BOOKMARKSTART:
@@ -4808,6 +4810,7 @@ RTFParserState::RTFParserState(RTFDocumentImpl *pDocumentImpl)
     bInBackground(false),
     bHadShapeText(false),
     bInShapeGroup(false),
+    bInShape(false),
     bCreatedShapeGroup(false),
     bStartedTrackchange(false)
 {

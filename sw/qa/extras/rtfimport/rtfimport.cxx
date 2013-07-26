@@ -294,6 +294,7 @@ void Test::run()
         {"fdo47802.rtf", &Test::testFdo47802},
         {"fdo39001.rtf", &Test::testFdo39001},
         {"groupshape.rtf", &Test::testGroupshape},
+        {"groupshape-notext.rtf", &Test::testGroupshape},
         {"fdo66565.rtf", &Test::testFdo66565},
         {"fdo54900.rtf", &Test::testFdo54900},
         {"fdo64637.rtf", &Test::testFdo64637},
