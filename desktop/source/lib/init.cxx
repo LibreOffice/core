@@ -9,6 +9,7 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 
 #include "liblibreoffice.hxx"
 
@@ -141,7 +142,9 @@ bool LibLODocument_Impl::saveAs (const char *url)
 char *LibLibreOffice_Impl::getError()
 {
     OString aStr = rtl::OUStringToOString( maLastExceptionMsg, RTL_TEXTENCODING_UTF8 );
-    return strndup( aStr.getStr(), aStr.getLength() );
+    char *pMem = (char *) malloc (aStr.getLength() + 1);
+    strcpy( pMem, aStr.getStr() );
+    return pMem;
 }
 
 static void
