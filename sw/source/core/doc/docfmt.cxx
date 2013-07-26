@@ -18,7 +18,6 @@
  */
 
 #include <hintids.hxx>
-#include <rtl/logfile.hxx>
 #include <svl/itemiter.hxx>
 #include <sfx2/app.hxx>
 #include <editeng/tstpitem.hxx>
@@ -2373,8 +2372,6 @@ SwTableLineFmt* SwDoc::MakeTableLineFmt()
 
 void SwDoc::_CreateNumberFormatter()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "SW", "JP93722",  "SwDoc::_CreateNumberFormatter" );
-
     OSL_ENSURE( !mpNumberFormatter, "is already there" );
 
 
