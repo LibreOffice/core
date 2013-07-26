@@ -29,7 +29,6 @@
 #include "SchXMLEnumConverter.hxx"
 
 #include <tools/debug.hxx>
-#include <rtl/logfile.hxx>
 #include <comphelper/processfactory.hxx>
 #include <tools/globname.hxx>
 #include <comphelper/classids.hxx>

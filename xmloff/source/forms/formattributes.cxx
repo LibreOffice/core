@@ -25,7 +25,6 @@
 #include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmluconv.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <rtl/logfile.hxx>
 //.........................................................................
 namespace xmloff
 {

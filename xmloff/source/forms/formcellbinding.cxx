@@ -33,7 +33,6 @@
 #include <com/sun/star/beans/NamedValue.hpp>
 #include "strings.hxx"
 #include <osl/diagnose.h>
-#include <rtl/logfile.hxx>
 
 #include <functional>
 #include <algorithm>
