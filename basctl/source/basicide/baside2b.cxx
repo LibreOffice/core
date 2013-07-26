@@ -54,6 +54,7 @@
 #include <comphelper/configurationhelper.hxx>
 #include "com/sun/star/reflection/XInterfaceMemberTypeDescription.hpp"
 #include "com/sun/star/reflection/XIdlMethod.hpp"
+#include "com/sun/star/reflection/XIdlField.hpp"
 
 namespace basctl
 {
@@ -505,6 +506,7 @@ void EditorWindow::KeyInput( const KeyEvent& rKEvt )
     // see if there is an accelerator to be processed first
     bool bDone = SfxViewShell::Current()->KeyInput( rKEvt );
 
+
     if( rKEvt.GetCharCode() == '"' && CodeCompleteOptions::IsAutoCloseQuotesOn() )
     {//autoclose double quotes
         TextSelection aSel = GetEditView()->GetSelection();
@@ -513,12 +515,15 @@ void EditorWindow::KeyInput( const KeyEvent& rKEvt )
 
         HighlightPortions aPortions;
         aHighlighter.getHighlightPortions( nLine, aLine, aPortions );
-        if( aLine.getLength() > 0 && aLine[aLine.getLength()-1] != '"' && (aPortions[aPortions.size()-1].tokenType != 4) )
+        if( aPortions.size() != 0 )
         {
-            GetEditView()->InsertText(OUString("\""));
-            //leave the cursor on it's place: inside the two double quotes
-            TextPaM aEnd(nLine, aSel.GetEnd().GetIndex());
-            GetEditView()->SetSelection( TextSelection( aEnd, aEnd ) );
+            if( aLine.getLength() > 0 && aLine[aLine.getLength()-1] != '"' && (aPortions[aPortions.size()-1].tokenType != 4) )
+            {
+                GetEditView()->InsertText(OUString("\""));
+                //leave the cursor on it's place: inside the two double quotes
+                TextPaM aEnd(nLine, aSel.GetEnd().GetIndex());
+                GetEditView()->SetSelection( TextSelection( aEnd, aEnd ) );
+            }
         }
     }
 
@@ -571,58 +576,78 @@ void EditorWindow::KeyInput( const KeyEvent& rKEvt )
 
         HighlightPortions aPortions;
         aHighlighter.getHighlightPortions( nLine, aLine, aPortions );
-        for ( size_t i = 0; i < aPortions.size(); i++ )
+        if( aPortions.size() != 0 )
         {
-            HighlightPortion& r = aPortions[i];
-            if( r.tokenType == 1 ) // extract the identifers(methods, base variable)
-                aVect.push_back( aLine.copy(r.nBegin, r.nEnd - r.nBegin) );
-        }
-        OUString sBaseName = aVect[0];//variable name
-        OUString sVarType = aCodeCompleteCache.GetVarType( sBaseName );
-
-        Reference< lang::XMultiServiceFactory > xFactory( comphelper::getProcessServiceFactory(), UNO_SET_THROW );
-        Reference< reflection::XIdlReflection > xRefl( xFactory->createInstance("com.sun.star.reflection.CoreReflection"), UNO_QUERY_THROW );
-
-        if( xRefl.is() )
-        {
-            Reference< reflection::XIdlClass > xClass = xRefl->forName(sVarType);//get the base class for reflection
-            if( xClass != NULL )
+            for ( size_t i = 0; i < aPortions.size(); i++ )
             {
-                unsigned int j = 1;
-                OUString sMethName;
-                while( j != aVect.size() )
-                {
-                    sMethName = aVect[j];
-                    Reference< reflection::XIdlMethod> xMethod = xClass->getMethod( sMethName );
-                    if( xMethod != NULL ) //method OK
-                    {
-                        xClass = xMethod->getReturnType();
-                        if( xClass == NULL )
-                            break;
-                    }
-                    else
-                    {
-                        break;
-                    }
-                    j++;
-                }
-                Sequence< Reference< reflection::XIdlMethod > > aMethods = xClass->getMethods();
-                if( aMethods.getLength() != 0 )
-                {
-                    Rectangle aRect = ( (TextEngine*) GetEditEngine() )->PaMtoEditCursor( aSel.GetEnd() , false );
-                    aSel.GetStart().GetIndex() += 1;
-                    aSel.GetEnd().GetIndex() += 1;
-                    pCodeCompleteWnd->ClearListBox();
-                    pCodeCompleteWnd->SetTextSelection(aSel);
+                HighlightPortion& r = aPortions[i];
+                if( r.tokenType == 1 ) // extract the identifers(methods, base variable)
+                    aVect.push_back( aLine.copy(r.nBegin, r.nEnd - r.nBegin) );
+            }
 
-                    pCodeCompleteWnd->SetPosPixel( aRect.BottomRight() );
-                    for(sal_Int32 l = 0; l < aMethods.getLength(); ++l)
+            OUString sBaseName = aVect[0];//variable name
+            OUString sVarType = aCodeCompleteCache.GetVarType( sBaseName );
+
+            Reference< lang::XMultiServiceFactory > xFactory( comphelper::getProcessServiceFactory(), UNO_SET_THROW );
+            Reference< reflection::XIdlReflection > xRefl( xFactory->createInstance("com.sun.star.reflection.CoreReflection"), UNO_QUERY_THROW );
+
+            if( xRefl.is() )
+            {
+                Reference< reflection::XIdlClass > xClass = xRefl->forName(sVarType);//get the base class for reflection
+                if( xClass != NULL )
+                {
+                    unsigned int j = 1;
+                    OUString sMethName;
+                    while( j != aVect.size() )
                     {
-                        pCodeCompleteWnd->InsertEntry( OUString(aMethods[l]->getName()) );
+                        sMethName = aVect[j];
+                        Reference< reflection::XIdlMethod> xMethod = xClass->getMethod( sMethName );
+                        if( xMethod != NULL ) //method OK
+                        {
+                            xClass = xMethod->getReturnType();
+                            if( xClass == NULL )
+                                break;
+                        }
+                        else
+                        {
+                            break;
+                        }
+                        j++;
                     }
-                    pCodeCompleteWnd->Show();
-                    pCodeCompleteWnd->ResizeListBox();
-                    pCodeCompleteWnd->SelectFirstEntry();
+                    Sequence< Reference< reflection::XIdlMethod > > aMethods = xClass->getMethods();
+                    Sequence< Reference< reflection::XIdlField > > aFields = xClass->getFields();
+                    std::vector< OUString > aEntryVect;
+
+                    if( aMethods.getLength() != 0 )
+                    {
+                        for(sal_Int32 l = 0; l < aMethods.getLength(); ++l)
+                        {
+                            aEntryVect.push_back(OUString(aMethods[l]->getName()));
+                        }
+                    }
+                    if( aFields.getLength() != 0 )
+                    {
+                        for(sal_Int32 l = 0; l < aFields.getLength(); ++l)
+                        {
+                            aEntryVect.push_back(OUString(aFields[l]->getName()));
+                        }
+                    }
+                    if( aEntryVect.size() > 0 )
+                    {
+                        Rectangle aRect = ( (TextEngine*) GetEditEngine() )->PaMtoEditCursor( aSel.GetEnd() , false );
+                        aSel.GetStart().GetIndex() += 1;
+                        aSel.GetEnd().GetIndex() += 1;
+                        pCodeCompleteWnd->ClearListBox();
+                        pCodeCompleteWnd->SetTextSelection(aSel);
+                        for(unsigned int l = 0; l < aEntryVect.size(); ++l)
+                        {
+                            pCodeCompleteWnd->InsertEntry( aEntryVect[l] );
+                        }
+                        pCodeCompleteWnd->SetPosPixel( aRect.BottomRight() );
+                        pCodeCompleteWnd->Show();
+                        pCodeCompleteWnd->ResizeListBox();
+                        pCodeCompleteWnd->SelectFirstEntry();
+                    }
                 }
             }
         }
