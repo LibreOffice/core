@@ -125,6 +125,7 @@ public:
     void testTableAutoColumnFixedSize();
     void testFdo46361();
     void testFdo65632();
+    void testFdo66474();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -215,6 +216,7 @@ void Test::run()
         {"table-auto-column-fixed-size.docx", &Test::testTableAutoColumnFixedSize},
         {"fdo46361.docx", &Test::testFdo46361},
         {"fdo65632.docx", &Test::testFdo65632},
+        {"fdo66474.docx", &Test::testFdo66474},
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -1514,6 +1516,15 @@ void Test::testFdo65632()
     uno::Reference<text::XText> xText(xFootnotes->getByIndex(0), uno::UNO_QUERY);
     //uno::Reference<text::XTextRange> xParagraph = getParagraphOfText(1, xText);
     CPPUNIT_ASSERT_EQUAL(OUString("Text"), getProperty<OUString>(getRun(getParagraphOfText(1, xText), 1), "TextPortionType"));
+}
+
+void Test::testFdo66474()
+{
+    // The table wasn't relative (relative with was 0), so the table didn't
+    // take the full available width, like it would have to.
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables( ), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(100), getProperty<sal_Int16>(xTables->getByIndex(0), "RelativeWidth"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
