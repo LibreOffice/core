@@ -30,6 +30,10 @@ void SFX2_DLLPUBLIC setPreviewsToSamePlace(Window *pParent, VclBuilderContainer 
 
 Size SFX2_DLLPUBLIC getParagraphPreviewOptimalSize(const Window *pReference);
 
+Size SFX2_DLLPUBLIC getDrawPreviewOptimalSize(const Window *pReference);
+
+Size SFX2_DLLPUBLIC getDrawListBoxOptimalSize(const Window *pReference);
+
 OUString SFX2_DLLPUBLIC getWidestTime(const LocaleDataWrapper& rWrapper);
 
 OUString SFX2_DLLPUBLIC formatTime(const DateTime& rDateTime, const LocaleDataWrapper& rWrapper);

@@ -78,11 +78,11 @@ SvxGradientTabPage::SvxGradientTabPage
     get(m_pLbColorTo,      "colortolb");
     get(m_pMtrColorTo,     "colortomtr");
     get(m_pLbGradients,    "gradientslb");
-    Size aSize = LogicToPixel(Size(88, 110), MAP_APPFONT);
+    Size aSize = getDrawListBoxOptimalSize(this);
     m_pLbGradients->set_width_request(aSize.Width());
     m_pLbGradients->set_height_request(aSize.Height());
     get(m_pCtlPreview,     "previewctl");
-    aSize = LogicToPixel(Size(88, 42), MAP_APPFONT);
+    aSize = getDrawPreviewOptimalSize(this);
     m_pCtlPreview->set_width_request(aSize.Width());
     m_pCtlPreview->set_height_request(aSize.Height());
     get(m_pBtnAdd,         "add");

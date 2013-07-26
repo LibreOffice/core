@@ -96,6 +96,10 @@ SvxRectCtl::SvxRectCtl(Window* pParent, RECT_POINT eRpt,
     Resize_Impl();
 }
 
+Size SvxRectCtl::GetOptimalSize() const
+{
+    return LogicToPixel(Size(39, 39), MAP_APPFONT);
+}
 
 extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxRectCtl(Window *pParent, VclBuilder::stringmap &)
 {

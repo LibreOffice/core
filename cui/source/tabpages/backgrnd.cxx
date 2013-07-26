@@ -21,6 +21,7 @@
 #include <vcl/builder.hxx>
 #include <vcl/msgbox.hxx>
 #include <tools/urlobj.hxx>
+#include <sfx2/dialoghelper.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/docfile.hxx>
 #include <svl/cntwall.hxx>
@@ -370,11 +371,11 @@ SvxBackgroundTabPage::SvxBackgroundTabPage(Window* pParent, const SfxItemSet& rC
     // Initialize gradient controls
     get(m_pBackGroundGradientFrame, "backgroundgradientframe");
     get(m_pLbGradients, "gradientslb");
-    Size aSize = LogicToPixel(Size(88, 110), MAP_APPFONT);
+    Size aSize = getDrawListBoxOptimalSize(this);
     m_pLbGradients->set_width_request(aSize.Width());
     m_pLbGradients->set_height_request(aSize.Height());
     get(m_pCtlPreview, "previewctl");
-    aSize = LogicToPixel(Size(88, 42), MAP_APPFONT);
+    aSize = getDrawPreviewOptimalSize(this);
     m_pCtlPreview->set_width_request(aSize.Width());
     m_pCtlPreview->set_height_request(aSize.Height());
 

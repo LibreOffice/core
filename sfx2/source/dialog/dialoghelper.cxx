@@ -57,6 +57,16 @@ Size getParagraphPreviewOptimalSize(const Window *pReference)
     return pReference->LogicToPixel(Size(68 , 112), MAP_APPFONT);
 }
 
+Size getDrawPreviewOptimalSize(const Window *pReference)
+{
+    return pReference->LogicToPixel(Size(88, 42), MAP_APPFONT);
+}
+
+Size getDrawListBoxOptimalSize(const Window *pReference)
+{
+    return pReference->LogicToPixel(Size(88, 110), MAP_APPFONT);
+}
+
 OUString SFX2_DLLPUBLIC getWidestTime(const LocaleDataWrapper& rWrapper)
 {
     Date aDate(22, 12, 2000);

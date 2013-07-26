@@ -2,11 +2,6 @@
 <interface>
   <!-- interface-requires gtk+ 3.0 -->
   <!-- interface-requires LibreOffice 1.0 -->
-  <object class="GtkAdjustment" id="adjustmentDistance">
-    <property name="upper">999</property>
-    <property name="step_increment">1</property>
-    <property name="page_increment">10</property>
-  </object>
   <object class="GtkAdjustment" id="adjustmentPercent">
     <property name="upper">100</property>
     <property name="step_increment">5</property>
@@ -33,9 +28,10 @@
             <property name="spacing">12</property>
             <property name="homogeneous">True</property>
             <child>
-              <object class="GtkBox" id="box2">
+              <object class="GtkBox" id="maingrid">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="vexpand">True</property>
                 <property name="orientation">vertical</property>
                 <property name="spacing">6</property>
                 <child>
@@ -59,6 +55,7 @@
                   <object class="GtkGrid" id="gridSHADOW">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="vexpand">True</property>
                     <property name="row_spacing">6</property>
                     <property name="column_spacing">12</property>
                     <child>
@@ -93,8 +90,6 @@
                       <object class="svxlo-SvxRectCtl" id="CTL_POSITION">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="hexpand">True</property>
-                        <property name="vexpand">True</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -146,13 +141,7 @@
                         <property name="halign">start</property>
                         <property name="left_padding">12</property>
                         <child>
-                          <object class="GtkLabel" id="FT_POSITION">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">_Position</property>
-                            <property name="use_underline">True</property>
-                            <property name="mnemonic_widget">CTL_POSITION</property>
-                          </object>
+                          <placeholder/>
                         </child>
                       </object>
                       <packing>
@@ -270,6 +259,11 @@
         </attributes>
       </object>
     </child>
+  </object>
+  <object class="GtkAdjustment" id="adjustmentDistance">
+    <property name="upper">999</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
   </object>
   <object class="GtkSizeGroup" id="sizegroup1">
     <widgets>

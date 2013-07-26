@@ -110,6 +110,7 @@ public:
     virtual void        StateChanged( StateChangedType nStateChange );
     virtual void        DataChanged( const DataChangedEvent& rDCEvt );
     virtual void        Resize();
+    virtual Size        GetOptimalSize() const;
 
     void                Reset();
     RECT_POINT          GetActualRP() const;
