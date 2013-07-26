@@ -480,7 +480,7 @@ void SlideSorterView::Layout ()
                 PageObjectLayouter::WindowCoordinateSystem));
             if (maPreviewSize != aNewPreviewSize && GetPreviewCache())
             {
-                mpPreviewCache->ChangeSize(aNewPreviewSize, true);
+                mpPreviewCache->ChangeSize(aNewPreviewSize, false);
                 maPreviewSize = aNewPreviewSize;
             }
         }
@@ -810,7 +810,7 @@ void SlideSorterView::ConfigurationChanged (
         mpPreviewCache.reset(
             new cache::PageCache(
                 mpLayouter->GetPageObjectSize(),
-                true,
+                false,
                 cache::SharedCacheContext(new ViewCacheContext(mrSlideSorter))));
     }
 
