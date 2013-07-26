@@ -61,7 +61,6 @@
 #include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
 #include <comphelper/processfactory.hxx>
-#include <comphelper/configurationhelper.hxx>
 #include <comphelper/mimeconfighelper.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/window.hxx>
@@ -90,6 +89,8 @@
 #include <boost/scoped_ptr.hpp>
 
 #include <com/sun/star/frame/Desktop.hpp>
+
+#include <officecfg/Office/Common.hxx>
 
 // flags that specify requested operation
 #define EXPORT_REQUESTED            1
@@ -646,42 +647,20 @@ sal_Int8 ModelData_Impl::CheckSaveAcceptable( sal_Int8 nCurStatus )
 
     if ( nResult != STATUS_NO_ACTION && GetStorable()->hasLocation() )
     {
-        // check whether save is acceptable by the configuration
-        // it is done only for documents that have persistence already
-        uno::Reference< uno::XInterface > xCommonConfig = ::comphelper::ConfigurationHelper::openConfig(
-                            comphelper::getProcessComponentContext(),
-                            OUString( "/org.openoffice.Office.Common" ),
-                            ::comphelper::ConfigurationHelper::E_STANDARD );
-        if ( !xCommonConfig.is() )
-            throw uno::RuntimeException(); // should the saving proceed as usual instead?
-
-        try
+        // the saving is acceptable
+        // in case the configuration entry is not set or set to false
+        // or in case of version creation
+        OUString aVersionCommentString = OUString("VersionComment");
+        if ( officecfg::Office::Common::Save::Document::AlwaysSaveAs::get()
+          && GetMediaDescr().find( aVersionCommentString ) == GetMediaDescr().end() )
         {
-            sal_Bool bAlwaysSaveAs = sal_False;
-
-            // the saving is acceptable
-            // in case the configuration entry is not set or set to false
-            // or in case of version creation
-            OUString aVersionCommentString = OUString("VersionComment");
-            if ( ( ::comphelper::ConfigurationHelper::readRelativeKey(
-                    xCommonConfig,
-                    OUString( "Save/Document/" ),
-                    OUString( "AlwaysSaveAs" ) ) >>= bAlwaysSaveAs )
-              && bAlwaysSaveAs
-            && GetMediaDescr().find( aVersionCommentString ) == GetMediaDescr().end() )
-            {
-                // notify the user that SaveAs is going to be done
-                Window* pWin = SfxStoringHelper::GetModelWindow( m_xModel );
-                QueryBox aMessageBox( pWin, WB_OK_CANCEL | WB_DEF_OK, SfxResId(STR_NEW_FILENAME_SAVE).toString() );
-                if ( aMessageBox.Execute() == RET_OK )
-                    nResult = STATUS_SAVEAS;
-                else
-                    nResult = STATUS_NO_ACTION;
-            }
-        }
-        catch( const uno::Exception& )
-        {
-            // impossibility to get the configuration access means normal saving flow for now
+            // notify the user that SaveAs is going to be done
+            Window* pWin = SfxStoringHelper::GetModelWindow( m_xModel );
+            QueryBox aMessageBox( pWin, WB_OK_CANCEL | WB_DEF_OK, SfxResId(STR_NEW_FILENAME_SAVE).toString() );
+            if ( aMessageBox.Execute() == RET_OK )
+                nResult = STATUS_SAVEAS;
+            else
+                nResult = STATUS_NO_ACTION;
         }
     }
 

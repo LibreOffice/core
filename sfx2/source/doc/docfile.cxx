@@ -88,7 +88,6 @@
 
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/mediadescriptor.hxx>
-#include <comphelper/configurationhelper.hxx>
 #include <comphelper/docpasswordhelper.hxx>
 #include <tools/inetmime.hxx>
 #include <unotools/ucblockbytes.hxx>
@@ -141,55 +140,13 @@ static const sal_Int8 LOCK_UI_TRY = 2;
 
 bool IsSystemFileLockingUsed()
 {
-    // check whether system file locking has been used, the default value is false
-    bool bUseSystemLock = false;
-    try
-    {
-
-        uno::Reference< uno::XInterface > xCommonConfig = ::comphelper::ConfigurationHelper::openConfig(
-                            ::comphelper::getProcessComponentContext(),
-                            OUString( "/org.openoffice.Office.Common"  ),
-                            ::comphelper::ConfigurationHelper::E_STANDARD );
-        if ( !xCommonConfig.is() )
-            throw uno::RuntimeException();
-
-        ::comphelper::ConfigurationHelper::readRelativeKey(
-                xCommonConfig,
-                OUString( "Misc/"  ),
-                OUString( "UseDocumentSystemFileLocking"  ) ) >>= bUseSystemLock;
-    }
-    catch( const uno::Exception& )
-    {
-    }
-
-    return bUseSystemLock;
+    return officecfg::Office::Common::Misc::UseDocumentSystemFileLocking::get();
 }
 
 //----------------------------------------------------------------
 bool IsOOoLockFileUsed()
 {
-    // check whether system file locking has been used, the default value is false
-    bool bOOoLockFileUsed = false;
-    try
-    {
-
-        uno::Reference< uno::XInterface > xCommonConfig = ::comphelper::ConfigurationHelper::openConfig(
-                            ::comphelper::getProcessComponentContext(),
-                            OUString( "/org.openoffice.Office.Common"  ),
-                            ::comphelper::ConfigurationHelper::E_STANDARD );
-        if ( !xCommonConfig.is() )
-            throw uno::RuntimeException();
-
-        ::comphelper::ConfigurationHelper::readRelativeKey(
-                xCommonConfig,
-                OUString( "Misc/"  ),
-                OUString( "UseDocumentOOoLockFile"  ) ) >>= bOOoLockFileUsed;
-    }
-    catch( const uno::Exception& )
-    {
-    }
-
-    return bOOoLockFileUsed;
+    return officecfg::Office::Common::Misc::UseDocumentOOoLockFile::get();
 }
 
 bool IsLockingUsed()

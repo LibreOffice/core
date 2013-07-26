@@ -63,7 +63,6 @@
 #include <com/sun/star/task/ErrorCodeRequest.hpp>
 #include <unotools/securityoptions.hxx>
 
-#include <comphelper/configurationhelper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 
