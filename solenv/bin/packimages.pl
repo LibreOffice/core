@@ -73,8 +73,11 @@ read_links(\%links, $global_path);
 for my $path (@custom_path) {
     read_links(\%links, $path);
 }
+check_links(\%links);
 
 my $zip_hash_ref = create_zip_list($global_hash_ref, $module_hash_ref, $custom_hash_ref);
+remove_links_from_zip_list($zip_hash_ref, \%links);
+
 $do_rebuild = is_file_newer($zip_hash_ref) if $do_rebuild == 0;
 if ( $do_rebuild == 1 ) {
     create_zip_archive($zip_hash_ref, \%links);
@@ -490,4 +493,37 @@ sub write_links($)
     }
     binmode $tmp; # force flush
     return $tmp;
+}
+
+# Ensure that no link points to another link
+sub check_links($)
+{
+    my $links = shift;
+
+    for my $link (keys %{$links}) {
+        my $value = $links->{$link};
+        if (defined $links->{$value}) {
+            die "Link to another link: $link -> $value -> " . $links->{$value};
+        }
+    }
+}
+
+# remove any files from our zip list that are linked
+sub remove_links_from_zip_list($$)
+{
+    my $zip_hash_ref = shift;
+    my $links = shift;
+    for my $link (keys %{$links}) {
+        if (defined $zip_hash_ref->{$link}) {
+            delete $zip_hash_ref->{$link};
+        } else {
+            print STDERR "Note: redundant '$link' -> '" .
+                         $links->{$link} . "' not found in filelist\n";
+        }
+        my $target = $links->{$link};
+        if (!defined $zip_hash_ref->{$target}) {
+            print STDERR "Warning: link '$link' to missing icon '" .
+                         $links->{$link} . "'\n";
+        }
+    }
 }
