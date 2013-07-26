@@ -497,7 +497,7 @@ Layouter::Implementation::Implementation (
       mnHorizontalGap(10 - 2*Theme_FocusIndicatorWidth),
       maMinimalSize(132,98),
       maPreferredSize(200,150),
-      maMaximalSize(300,200),
+      maMaximalSize(600,400),
       mnMinimalColumnCount(1),
       mnMaximalColumnCount(15),
       mnPageCount(0),
