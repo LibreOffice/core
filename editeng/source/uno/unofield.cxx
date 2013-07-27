@@ -52,11 +52,6 @@ using namespace ::com::sun::star;
 #define WID_STRING2 6
 #define WID_STRING3 7
 
-inline bool isValidFieldId(sal_Int32 nId)
-{
-    return nId >= 0;
-}
-
 class SvxUnoFieldData_Impl
 {
 public:
