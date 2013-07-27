@@ -45,7 +45,7 @@ LineWidthControl::LineWidthControl (
       maMFWidth( this, SVX_RES(MF_WIDTH)),
       meMapUnit(SFX_MAPUNIT_TWIP),
       rStr(NULL),
-      mstrPT(SVX_RES(STR_PT)),
+      mstrPT(SVX_RESSTR(STR_PT)),
       mnCustomWidth(0),
       mbCustom(false),
       mbColseByEdit(false),
@@ -132,15 +132,15 @@ void LineWidthControl::Initialize()
 
     rStr = new XubString[9];
     //modify,
-    rStr[0] = String("05", 2, RTL_TEXTENCODING_ASCII_US);
-    rStr[1] = String("08", 2, RTL_TEXTENCODING_ASCII_US);
-    rStr[2] = String("10", 2, RTL_TEXTENCODING_ASCII_US);
-    rStr[3] = String("15", 2, RTL_TEXTENCODING_ASCII_US);
-    rStr[4] = String("23", 2, RTL_TEXTENCODING_ASCII_US);
-    rStr[5] = String("30", 2, RTL_TEXTENCODING_ASCII_US);
-    rStr[6] = String("45", 2, RTL_TEXTENCODING_ASCII_US);
-    rStr[7] = String("60", 2, RTL_TEXTENCODING_ASCII_US);
-    rStr[8] = String( SVX_RES(STR_WIDTH_LAST_CUSTOM) );
+    rStr[0] = OUString("05");
+    rStr[1] = OUString("08");
+    rStr[2] = OUString("10");
+    rStr[3] = OUString("15");
+    rStr[4] = OUString("23");
+    rStr[5] = OUString("30");
+    rStr[6] = OUString("45");
+    rStr[7] = OUString("60");
+    rStr[8] = SVX_RESSTR(STR_WIDTH_LAST_CUSTOM);
 
     const LocaleDataWrapper& rLocaleWrapper( Application::GetSettings().GetLocaleDataWrapper() );
     const sal_Unicode cSep = rLocaleWrapper.getNumDecimalSep()[0];

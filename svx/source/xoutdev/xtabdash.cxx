@@ -68,7 +68,7 @@ uno::Reference< container::XNameContainer > XDashList::createInstance()
 
 bool XDashList::Create()
 {
-    XubString aStr( SVX_RES( RID_SVXSTR_LINESTYLE ) );
+    XubString aStr(SVX_RESSTR(RID_SVXSTR_LINESTYLE));
     xub_StrLen nLen;
 
     aStr.AppendAscii(" 1");
@@ -206,7 +206,7 @@ String XDashList::GetStringForUiSolidLine() const
 {
     if(!maStringSolidLine.Len())
     {
-        const_cast< XDashList* >(this)->maStringSolidLine = String(ResId(RID_SVXSTR_SOLID, DIALOG_MGR()));
+        const_cast< XDashList* >(this)->maStringSolidLine = ResId(RID_SVXSTR_SOLID, DIALOG_MGR()).toString();
     }
 
     return maStringSolidLine;
@@ -218,7 +218,7 @@ String XDashList::GetStringForUiNoLine() const
     {
         // formally was RID_SVXSTR_INVISIBLE, but tomake equal
         // everywhere, use RID_SVXSTR_NONE
-        const_cast< XDashList* >(this)->maStringNoLine = String(ResId(RID_SVXSTR_NONE, DIALOG_MGR()));
+        const_cast< XDashList* >(this)->maStringNoLine = ResId(RID_SVXSTR_NONE, DIALOG_MGR()).toString();
     }
 
     return maStringNoLine;

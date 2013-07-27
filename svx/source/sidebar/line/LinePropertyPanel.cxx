@@ -60,13 +60,11 @@ using ::sfx2::sidebar::Theme;
 const char UNO_SELECTWIDTH[] = ".uno:SelectWidth";
 const char UNO_SELECTCOLOR[] = ".uno:SelectColor";
 
-#define A2S(pString) (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(pString)))
-
 namespace {
     void FillLineEndListBox(ListBox& rListBoxStart, ListBox& rListBoxEnd, const XLineEndList& rList)
     {
         const sal_uInt32 nCount(rList.Count());
-        const String sNone(SVX_RES(RID_SVXSTR_NONE));
+        const OUString sNone(SVX_RESSTR(RID_SVXSTR_NONE));
 
         rListBoxStart.SetUpdateMode(false);
         rListBoxEnd.SetUpdateMode(false);
@@ -304,11 +302,11 @@ LinePropertyPanel* LinePropertyPanel::Create (
     SfxBindings* pBindings)
 {
     if (pParent == NULL)
-        throw lang::IllegalArgumentException(A2S("no parent Window given to LinePropertyPanel::Create"), NULL, 0);
+        throw lang::IllegalArgumentException(OUString("no parent Window given to LinePropertyPanel::Create"), NULL, 0);
     if ( ! rxFrame.is())
-        throw lang::IllegalArgumentException(A2S("no XFrame given to LinePropertyPanel::Create"), NULL, 1);
+        throw lang::IllegalArgumentException(OUString("no XFrame given to LinePropertyPanel::Create"), NULL, 1);
     if (pBindings == NULL)
-        throw lang::IllegalArgumentException(A2S("no SfxBindings given to LinePropertyPanel::Create"), NULL, 2);
+        throw lang::IllegalArgumentException(OUString("no SfxBindings given to LinePropertyPanel::Create"), NULL, 2);
 
     return new LinePropertyPanel(
         pParent,

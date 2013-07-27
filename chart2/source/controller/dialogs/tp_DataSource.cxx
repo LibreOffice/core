@@ -294,7 +294,7 @@ DataSourceTabPage::DataSourceTabPage(
     }
 
     m_aFixedTextRange = OUString( m_aFT_RANGE.GetText() );
-    this->SetText( String( SchResId( STR_OBJECT_DATASERIES_PLURAL ) ) );
+    this->SetText( SCH_RESSTR( STR_OBJECT_DATASERIES_PLURAL ) );
 
     // set handlers
     m_apLB_SERIES->SetSelectHdl( LINK( this, DataSourceTabPage, SeriesSelectionChangedHdl ));
@@ -347,8 +347,8 @@ DataSourceTabPage::DataSourceTabPage(
     if( m_apLB_SERIES->First())
         m_apLB_SERIES->Select( m_apLB_SERIES->First());
     m_apLB_SERIES->GrabFocus();
-    m_aBTN_UP.SetAccessibleName(String(SchResId(STR_BUTTON_UP)));
-    m_aBTN_DOWN.SetAccessibleName(String(SchResId(STR_BUTTON_DOWN)));
+    m_aBTN_UP.SetAccessibleName(SCH_RESSTR(STR_BUTTON_UP));
+    m_aBTN_DOWN.SetAccessibleName(SCH_RESSTR(STR_BUTTON_DOWN));
 }
 
 DataSourceTabPage::~DataSourceTabPage()
@@ -472,7 +472,7 @@ void DataSourceTabPage::fillSeriesListBox()
         {
             if( nUnnamedSeriesIndex > 1 )
             {
-                OUString aResString( String( ::chart::SchResId( STR_DATA_UNNAMED_SERIES_WITH_INDEX )));
+                OUString aResString(::chart::SchResId( STR_DATA_UNNAMED_SERIES_WITH_INDEX ).toString());
 
                 // replace index of unnamed series
                 const OUString aReplacementStr( "%NUMBER" );
@@ -483,7 +483,7 @@ void DataSourceTabPage::fillSeriesListBox()
                                          OUString::valueOf(nUnnamedSeriesIndex)));
             }
             if( aLabel.isEmpty() )
-                aLabel = String( ::chart::SchResId( STR_DATA_UNNAMED_SERIES ));
+                aLabel = ::chart::SchResId( STR_DATA_UNNAMED_SERIES ).toString();
 
             ++nUnnamedSeriesIndex;
         }
@@ -637,8 +637,7 @@ IMPL_LINK_NOARG(DataSourceTabPage, MainRangeButtonClickedHdl)
 
     if( bHasSelectedEntry && (m_aLB_ROLE.FirstSelected() != 0))
     {
-        String aStr( SchResId( STR_DATA_SELECT_RANGE_FOR_SERIES ));
-        OUString aUIStr( aStr );
+        OUString aUIStr(SCH_RESSTR(STR_DATA_SELECT_RANGE_FOR_SERIES));
 
         // replace role
         OUString aReplacement( "%VALUETYPE" );
@@ -674,10 +673,10 @@ IMPL_LINK_NOARG(DataSourceTabPage, CategoriesRangeButtonClickedHdl)
         ! updateModelFromControl( m_pCurrentRangeChoosingField ))
         return 0;
 
-    String aStr( SchResId( m_aFT_CATEGORIES.IsVisible() ? STR_DATA_SELECT_RANGE_FOR_CATEGORIES : STR_DATA_SELECT_RANGE_FOR_DATALABELS ));
+    OUString aStr( SCH_RESSTR( m_aFT_CATEGORIES.IsVisible() ? STR_DATA_SELECT_RANGE_FOR_CATEGORIES : STR_DATA_SELECT_RANGE_FOR_DATALABELS ));
     lcl_enableRangeChoosing( true, m_pParentDialog );
     m_rDialogModel.getRangeSelectionHelper()->chooseRange(
-        m_rDialogModel.getCategoriesRange(), OUString( aStr ), *this );
+        m_rDialogModel.getCategoriesRange(), aStr, *this );
     return 0;
 }
 

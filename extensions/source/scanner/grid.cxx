@@ -56,16 +56,16 @@ GridWindow::GridWindow(double* pXValues, double* pYValues, int nValues, Window* 
     m_aResetTypeBox( this, SaneResId( GRID_DIALOG_TYPE_BOX ) ),
     m_aResetButton( this, SaneResId( GRID_DIALOG_RESET_BTN ) )
 {
-    sal_uInt16 nPos = m_aResetTypeBox.InsertEntry( String( SaneResId( RESET_TYPE_LINEAR_ASCENDING ) ) );
+    sal_uInt16 nPos = m_aResetTypeBox.InsertEntry( SaneResId( RESET_TYPE_LINEAR_ASCENDING ).toString() );
     m_aResetTypeBox.SetEntryData( nPos, (void *)RESET_TYPE_LINEAR_ASCENDING );
 
-    nPos = m_aResetTypeBox.InsertEntry( String( SaneResId( RESET_TYPE_LINEAR_DESCENDING ) ) );
+    nPos = m_aResetTypeBox.InsertEntry( SaneResId( RESET_TYPE_LINEAR_DESCENDING ).toString() );
     m_aResetTypeBox.SetEntryData( nPos, (void *)RESET_TYPE_LINEAR_DESCENDING );
 
-    nPos = m_aResetTypeBox.InsertEntry( String( SaneResId( RESET_TYPE_RESET ) ) );
+    nPos = m_aResetTypeBox.InsertEntry( SaneResId( RESET_TYPE_RESET ).toString() );
     m_aResetTypeBox.SetEntryData( nPos, (void *)RESET_TYPE_RESET );
 
-    nPos = m_aResetTypeBox.InsertEntry( String( SaneResId( RESET_TYPE_EXPONENTIAL ) ) );
+    nPos = m_aResetTypeBox.InsertEntry( SaneResId( RESET_TYPE_EXPONENTIAL ).toString() );
     m_aResetTypeBox.SetEntryData( nPos, (void *)RESET_TYPE_EXPONENTIAL );
 
     m_aResetTypeBox.SelectEntryPos( 0 );

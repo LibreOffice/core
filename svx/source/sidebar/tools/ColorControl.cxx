@@ -97,8 +97,8 @@ ColorControl::ColorControl (
       mpFloatingWindow(pFloatingWindow),
       msNoColorString(
           pNoColorStringResId
-              ? String(*pNoColorStringResId)
-              : String()),
+              ? pNoColorStringResId->toString()
+              : OUString()),
       maNoColorGetter(rNoColorGetter),
       maColorSetter(rColorSetter)
 {

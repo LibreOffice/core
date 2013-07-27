@@ -37,7 +37,7 @@ TextSeparatorResources::TextSeparatorResources( Window* pWindow )
     , m_aEntryMap()
     , m_nDefaultPos(0)
 {
-    m_aFT_Separator.SetText( String( SchResId( STR_TEXT_SEPARATOR )) );
+    m_aFT_Separator.SetText( SCH_RESSTR( STR_TEXT_SEPARATOR ) );
     m_aFT_Separator.SetSizePixel( m_aFT_Separator.CalcMinimumSize() );
 
     m_aLB_Separator.SetDropDownLineCount(m_aLB_Separator.GetEntryCount());

@@ -32,7 +32,7 @@ RangeSelectionButton::RangeSelectionButton( Window *pParent, const ResId& rResId
     ImageButton( pParent, rResId )
 {
     SetModeImage( Image( SchResId( IMG_SELECTRANGE) ) );
-    this->SetQuickHelpText(SchResId(STR_TIP_SELECT_RANGE));
+    this->SetQuickHelpText(SCH_RESSTR(STR_TIP_SELECT_RANGE));
 }
 
 RangeSelectionButton::~RangeSelectionButton()

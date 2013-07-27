@@ -111,7 +111,7 @@ bool DrawCommandDispatch::isFeatureSupported( const OUString& rCommandURL )
     XLineEndListRef pLineEndList = rModel.GetLineEndList();
     if ( pLineEndList.is() )
     {
-        String aName( SVX_RES( nResId ) );
+        String aName( SVX_RESSTR( nResId ) );
         long nCount = pLineEndList->Count();
         for ( long nIndex = 0; nIndex < nCount; ++nIndex )
         {

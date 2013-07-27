@@ -970,9 +970,7 @@ void ToolbarLayoutManager::setDockingAreaOffsets( const ::Rectangle aOffsets )
 
 OUString ToolbarLayoutManager::implts_generateGenericAddonToolbarTitle( sal_Int32 nNumber ) const
 {
-    String aAddonGenericTitle;
-
-    aAddonGenericTitle = String( FwkResId( STR_TOOLBAR_TITLE_ADDON ));
+    String aAddonGenericTitle(FWK_RESSTR(STR_TOOLBAR_TITLE_ADDON));
     const vcl::I18nHelper& rI18nHelper = Application::GetSettings().GetUILocaleI18nHelper();
 
     String aNumStr = rI18nHelper.GetNum( nNumber, 0, sal_False, sal_False );

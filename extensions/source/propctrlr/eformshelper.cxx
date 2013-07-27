@@ -548,7 +548,7 @@ namespace pcr
                     if ( xBinding.is() )
                     {
                         // find a nice name for it
-                        String sBaseName( PcrRes( RID_STR_BINDING_UI_NAME ) );
+                        String sBaseName(PcrRes(RID_STR_BINDING_UI_NAME).toString());
                         sBaseName += OUString(" ");
                         String sNewName;
                         sal_Int32 nNumber = 1;

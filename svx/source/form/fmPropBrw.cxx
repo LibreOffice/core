@@ -183,7 +183,7 @@ OUString GetUIHeadlineName(sal_Int16 nClassId, const Any& aUnoObj)
             nClassNameResourceId = RID_STR_CONTROL; break;
     }
 
-    return OUString( String( SVX_RES( nClassNameResourceId ) ) );
+    return SVX_RESSTR(nClassNameResourceId);
 }
 
 //========================================================================
@@ -421,13 +421,13 @@ void FmPropBrw::implSetNewSelection( const InterfaceBag& _rSelection )
 
         if ( _rSelection.empty() )
         {
-            sTitle = String( SVX_RES( RID_STR_NO_PROPERTIES ) );
+            sTitle = SVX_RESSTR(RID_STR_NO_PROPERTIES);
         }
         else if ( _rSelection.size() > 1 )
         {
             // no form component and (no form or no name) -> Multiselection
-            sTitle = String( SVX_RES( RID_STR_PROPERTIES_CONTROL ) );
-            sTitle += String( SVX_RES( RID_STR_PROPTITLE_MULTISELECT ) );
+            sTitle = SVX_RESSTR(RID_STR_PROPERTIES_CONTROL);
+            sTitle += SVX_RESSTR(RID_STR_PROPTITLE_MULTISELECT);
         }
         else
         {
@@ -437,15 +437,15 @@ void FmPropBrw::implSetNewSelection( const InterfaceBag& _rSelection )
                 sal_Int16 nClassID = FormComponentType::CONTROL;
                 xSingleSelection->getPropertyValue( FM_PROP_CLASSID ) >>= nClassID;
 
-                sTitle = String( SVX_RES( RID_STR_PROPERTIES_CONTROL ) );
-                sTitle += String( GetUIHeadlineName( nClassID, makeAny( xSingleSelection ) ) );
+                sTitle = SVX_RESSTR(RID_STR_PROPERTIES_CONTROL);
+                sTitle += GetUIHeadlineName(nClassID, makeAny(xSingleSelection));
             }
             else if ( Reference< XForm >( xSingleSelection, UNO_QUERY ).is() )
-                sTitle = String( SVX_RES( RID_STR_PROPERTIES_FORM ) );
+                sTitle = SVX_RESSTR(RID_STR_PROPERTIES_FORM);
         }
 
         if ( implIsReadOnlyModel() )
-            sTitle += String( SVX_RES( RID_STR_READONLY_VIEW ) );
+            sTitle += SVX_RESSTR(RID_STR_READONLY_VIEW);
 
         SetText( sTitle );
 

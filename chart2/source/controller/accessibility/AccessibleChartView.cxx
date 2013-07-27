@@ -110,7 +110,7 @@ awt::Point AccessibleChartView::GetUpperLeftOnScreen() const
 OUString SAL_CALL AccessibleChartView::getAccessibleName()
     throw (uno::RuntimeException)
 {
-    return OUString( String( SchResId( STR_OBJECT_DIAGRAM )));
+    return SCH_RESSTR(STR_OBJECT_DIAGRAM);
 }
 
 OUString SAL_CALL AccessibleChartView::getAccessibleDescription()

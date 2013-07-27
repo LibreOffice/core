@@ -73,7 +73,7 @@ void ChartController::StartTextEdit( const Point* pMousePixel )
 
     OSL_PRECOND( !m_pTextActionUndoGuard.get(), "ChartController::StartTextEdit: already have a TextUndoGuard!?" );
     m_pTextActionUndoGuard.reset( new UndoGuard(
-        String( SchResId( STR_ACTION_EDIT_TEXT ) ), m_xUndoManager ) );
+        SCH_RESSTR( STR_ACTION_EDIT_TEXT ), m_xUndoManager ) );
     SdrOutliner* pOutliner = m_pDrawViewWrapper->getOutliner();
 
     //#i77362 change notification for changes on additional shapes are missing

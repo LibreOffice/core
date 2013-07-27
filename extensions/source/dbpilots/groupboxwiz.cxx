@@ -490,7 +490,7 @@ namespace dbp
     OOptionDBFieldPage::OOptionDBFieldPage( OControlWizard* _pParent )
         :ODBFieldPage(_pParent)
     {
-        setDescriptionText(String(ModuleRes(RID_STR_GROUPWIZ_DBFIELD)));
+        setDescriptionText(ModuleRes(RID_STR_GROUPWIZ_DBFIELD).toString());
     }
 
     //---------------------------------------------------------------------

@@ -176,16 +176,16 @@ void RecentFilesMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >
             pVCLPopupMenu->InsertSeparator();
             // Clear List menu entry
             pVCLPopupMenu->InsertItem( sal_uInt16( nCount + 1 ),
-                                       String( FwkResId( STR_CLEAR_RECENT_FILES ) ) );
+                                       FWK_RESSTR(STR_CLEAR_RECENT_FILES) );
             pVCLPopupMenu->SetItemCommand( sal_uInt16( nCount + 1 ),
                                            OUString( RTL_CONSTASCII_USTRINGPARAM( CMD_CLEAR_LIST ) ) );
             pVCLPopupMenu->SetHelpText( sal_uInt16( nCount + 1 ),
-                                        String( FwkResId( STR_CLEAR_RECENT_FILES_HELP ) ) );
+                                        FWK_RESSTR(STR_CLEAR_RECENT_FILES_HELP) );
         }
         else
         {
             // No recent documents => insert "no document" string
-            pVCLPopupMenu->InsertItem( 1, String( FwkResId( STR_NODOCUMENT ) ) );
+            pVCLPopupMenu->InsertItem( 1, FWK_RESSTR(STR_NODOCUMENT) );
             // Do not disable it, otherwise the Toolbar controller and MenuButton
             // will display SV_RESID_STRING_NOSELECTIONPOSSIBLE instead of STR_NODOCUMENT
             pVCLPopupMenu->SetItemBits( 1, pVCLPopupMenu->GetItemBits( 1 ) | MIB_NOSELECT );

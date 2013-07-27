@@ -1556,7 +1556,7 @@ bool ChartController::execute_KeyInput( const KeyEvent& rKEvt )
         if( ! bReturn )
         {
             SolarMutexGuard aGuard;
-            InfoBox( m_pChartWindow, String(SchResId( STR_ACTION_NOTPOSSIBLE ))).Execute();
+            InfoBox( m_pChartWindow, SCH_RESSTR( STR_ACTION_NOTPOSSIBLE )).Execute();
         }
     }
 

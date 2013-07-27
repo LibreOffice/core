@@ -78,10 +78,10 @@ CreationWizard::CreationWizard( Window* pParent, const uno::Reference< frame::XM
     if( m_nOnePageOnlyIndex < 0 || m_nOnePageOnlyIndex >= nPageCount )
     {
         m_nOnePageOnlyIndex = -1;
-        this->setTitleBase(String(SchResId(STR_DLG_CHART_WIZARD)));
+        this->setTitleBase(SCH_RESSTR(STR_DLG_CHART_WIZARD));
     }
     else
-        this->setTitleBase(String());
+        this->setTitleBase(OUString());
 
     declarePath( PATH_FULL
         , STATE_CHARTTYPE
@@ -219,7 +219,7 @@ String CreationWizard::getStateDisplayName( WizardState nState ) const
     default:
         break;
     }
-    return String(SchResId(nResId));
+    return SCH_RESSTR(nResId);
 }
 
 //.............................................................................

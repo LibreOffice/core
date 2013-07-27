@@ -107,7 +107,7 @@ namespace pcr
 
             const bool bIsTextFormat = ( pEntry && pEntry->IsTextFormat() );
             if ( bIsTextFormat )
-                getTypedControlWindow()->SetText( String( PcrRes( RID_STR_TEXT_FORMAT ) ) );
+                getTypedControlWindow()->SetText( PcrRes( RID_STR_TEXT_FORMAT ).toString() );
             else
                 getTypedControlWindow()->SetValue( pEntry ? getPreviewValue( *pEntry ) : 1234.56789 );
         }
@@ -269,7 +269,7 @@ namespace pcr
         :OFileUrlControl_Base( PropertyControlType::Unknown, pParent, nWinStyle | WB_DROPDOWN )
     {
         getTypedControlWindow()->SetDropDownLineCount( 10 );
-        getTypedControlWindow()->SetPlaceHolder( String( PcrRes( RID_EMBED_IMAGE_PLACEHOLDER ) ) ) ;
+        getTypedControlWindow()->SetPlaceHolder( PcrRes( RID_EMBED_IMAGE_PLACEHOLDER ).toString() ) ;
     }
 
     //------------------------------------------------------------------

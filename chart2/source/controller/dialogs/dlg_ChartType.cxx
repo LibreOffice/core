@@ -50,7 +50,7 @@ ChartTypeDialog::ChartTypeDialog( Window* pParent
 {
     FreeResource();
 
-    this->SetText(String(SchResId(STR_PAGE_CHARTTYPE)));
+    this->SetText(SCH_RESSTR(STR_PAGE_CHARTTYPE));
 
     //don't create the tabpages before FreeResource, otherwise the help ids are not matched correctly
     m_pChartTypeTabPage = new ChartTypeTabPage(this,uno::Reference< XChartDocument >::query(m_xChartModel),m_xCC,true/*live update*/,true/*hide title description*/);

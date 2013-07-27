@@ -101,7 +101,7 @@ void Shell::ExecuteCurrent( SfxRequest& rReq )
                         nActModWindows++;
                 }
 
-                if ( nActModWindows <= 1 || ( !rSearchItem.GetSelection() && QueryBox( pCurWin, WB_YES_NO|WB_DEF_YES, String(IDEResId(RID_STR_SEARCHALLMODULES)) ).Execute() == RET_YES ) )
+                if ( nActModWindows <= 1 || ( !rSearchItem.GetSelection() && QueryBox( pCurWin, WB_YES_NO|WB_DEF_YES, IDEResId(RID_STR_SEARCHALLMODULES).toString() ).Execute() == RET_YES ) )
                 {
                     for (WindowTableIt it = aWindowTable.begin(); it != aWindowTable.end(); ++it)
                     {
@@ -180,7 +180,7 @@ void Shell::ExecuteCurrent( SfxRequest& rReq )
                         SetCurWindow( pWin, true );
                 }
                 if ( !nFound && !bCanceled )
-                    InfoBox( pCurWin, String(IDEResId(RID_STR_SEARCHNOTFOUND)) ).Execute();
+                    InfoBox( pCurWin, IDEResId(RID_STR_SEARCHNOTFOUND).toString() ).Execute();
             }
 
             rReq.Done();

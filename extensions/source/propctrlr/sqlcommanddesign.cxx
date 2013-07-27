@@ -272,7 +272,7 @@ namespace pcr
             if ( xTitle.is() )
             {
                 ::svt::OLocalResourceAccess aEnumStrings( PcrRes( RID_RSC_ENUM_COMMAND_TYPE ), RSC_RESOURCE );
-                OUString sDisplayName = String( PcrRes( CommandType::COMMAND + 1 ) );
+                OUString sDisplayName = PcrRes(CommandType::COMMAND + 1).toString();
                 xTitle->setTitle( sDisplayName );
             }
         }

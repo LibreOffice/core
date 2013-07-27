@@ -438,7 +438,7 @@ sal_Bool PSWriter::WritePS( const Graphic& rGraphic, SvStream& rTargetStream, Fi
         pResMgr = ResMgr::CreateResMgr( "eps", Application::GetSettings().GetUILanguageTag() );
         if( pResMgr )
         {
-            InfoBox aInfoBox( NULL, String( ResId( KEY_VERSION_CHECK, *pResMgr ) ) );
+            InfoBox aInfoBox( NULL, ResId(KEY_VERSION_CHECK, *pResMgr).toString() );
             aInfoBox.Execute();
             delete pResMgr;
         }

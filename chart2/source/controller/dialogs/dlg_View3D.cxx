@@ -67,9 +67,9 @@ View3DDialog::View3DDialog(Window* pParent, const uno::Reference< frame::XModel 
     m_pAppearance = new ThreeD_SceneAppearance_TabPage(&m_aTabControl,xChartModel,m_aControllerLocker);
     m_pIllumination = new ThreeD_SceneIllumination_TabPage(&m_aTabControl,xSceneProperties,xChartModel,pColorTable);
 
-    m_aTabControl.InsertPage( TP_3D_SCENEGEOMETRY, String(SchResId(STR_PAGE_PERSPECTIVE)) );
-    m_aTabControl.InsertPage( TP_3D_SCENEAPPEARANCE, String(SchResId(STR_PAGE_APPEARANCE)) );
-    m_aTabControl.InsertPage( TP_3D_SCENEILLUMINATION, String(SchResId(STR_PAGE_ILLUMINATION)) );
+    m_aTabControl.InsertPage( TP_3D_SCENEGEOMETRY, SCH_RESSTR(STR_PAGE_PERSPECTIVE) );
+    m_aTabControl.InsertPage( TP_3D_SCENEAPPEARANCE, SCH_RESSTR(STR_PAGE_APPEARANCE) );
+    m_aTabControl.InsertPage( TP_3D_SCENEILLUMINATION, SCH_RESSTR(STR_PAGE_ILLUMINATION) );
 
     m_aTabControl.SetTabPage( TP_3D_SCENEGEOMETRY, m_pGeometry );
     m_aTabControl.SetTabPage( TP_3D_SCENEAPPEARANCE, m_pAppearance );

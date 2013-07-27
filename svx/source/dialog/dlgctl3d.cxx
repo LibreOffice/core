@@ -966,7 +966,7 @@ void SvxLightCtl3D::Init()
     maHorScroller.SetHelpId(HID_CTRL3D_HSCROLL);
     maVerScroller.SetHelpId(HID_CTRL3D_VSCROLL);
     maSwitcher.SetHelpId(HID_CTRL3D_SWITCHER);
-    maSwitcher.SetAccessibleName(String(SVX_RES(STR_SWITCH)));
+    maSwitcher.SetAccessibleName(SVX_RESSTR(STR_SWITCH));
 
     // Light preview
     maLightControl.Show();

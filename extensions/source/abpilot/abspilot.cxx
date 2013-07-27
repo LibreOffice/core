@@ -116,7 +116,7 @@ namespace abp
 #else
         m_aSettings.eType = AST_OTHER;
 #endif
-        m_aSettings.sDataSourceName = String(ModuleRes(RID_STR_DEFAULT_NAME));
+        m_aSettings.sDataSourceName = ModuleRes(RID_STR_DEFAULT_NAME).toString();
         m_aSettings.bRegisterDataSource = false;
         m_aSettings.bIgnoreNoTable = false;
 
@@ -150,7 +150,7 @@ namespace abp
         if ( nResId )
         {
             svt::OLocalResourceAccess aAccess( ModuleRes( RID_DLG_ADDRESSBOOKSOURCEPILOT ), RSC_MODALDIALOG );
-            sDisplayName = String( ModuleRes( nResId ) );
+            sDisplayName = ModuleRes(nResId).toString();
         }
 
         return sDisplayName;

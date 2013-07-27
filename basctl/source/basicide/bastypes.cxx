@@ -562,7 +562,7 @@ long TabBar::AllowRenaming()
     bool const bValid = IsValidSbxName(GetEditText());
 
     if ( !bValid )
-        ErrorBox( this, WB_OK | WB_DEF_OK, String( IDEResId( RID_STR_BADSBXNAME ) ) ).Execute();
+        ErrorBox( this, WB_OK | WB_DEF_OK, IDEResId(RID_STR_BADSBXNAME).toString() ).Execute();
 
     return bValid ? TABBAR_RENAMING_YES : TABBAR_RENAMING_NO;
 }

@@ -228,7 +228,7 @@ Svx3DWin::Svx3DWin( SfxBindings* pInBindings,
         mpRemember2DAttributes(NULL),
         bOnly3DChanged      ( sal_False )
 {
-    String accname(SVX_RES(RID_SVXFLOAT3D_COLOR_LIGHT_PRE));
+    OUString accname(SVX_RESSTR(RID_SVXFLOAT3D_COLOR_LIGHT_PRE));
     aCtlLightPreview.SetAccessibleName(accname);
     aCtlPreview.SetAccessibleName(accname);
     aLbAmbientlight.SetAccessibleName(aFTAmbientlight.GetDisplayText());
@@ -3053,14 +3053,14 @@ sal_Bool Svx3DWin::LBSelectColor( ColorLB* pLb, const Color& rColor )
     pLb->SelectEntry( rColor );
     if( pLb->GetSelectEntryCount() == 0 )
     {
-        String aStr(SVX_RES(RID_SVXFLOAT3D_FIX_R));
+        String aStr(SVX_RESSTR(RID_SVXFLOAT3D_FIX_R));
 
         aStr += OUString::number((sal_Int32)rColor.GetRed());
         aStr += sal_Unicode(' ');
-        aStr += String(SVX_RES(RID_SVXFLOAT3D_FIX_G));
+        aStr += SVX_RESSTR(RID_SVXFLOAT3D_FIX_G);
         aStr += OUString::number((sal_Int32)rColor.GetGreen());
         aStr += sal_Unicode(' ');
-        aStr += String(SVX_RES(RID_SVXFLOAT3D_FIX_B));
+        aStr += SVX_RESSTR(RID_SVXFLOAT3D_FIX_B);
         aStr += OUString::number((sal_Int32)rColor.GetBlue());
 
         sal_uInt16 nPos = pLb->InsertEntry( rColor, aStr );

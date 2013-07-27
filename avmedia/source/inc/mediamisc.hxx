@@ -20,6 +20,7 @@
 class ResMgr;
 
 #define AVMEDIA_RESID( nId ) ResId( nId, * ::avmedia::GetResMgr() )
+#define AVMEDIA_RESSTR( nId ) AVMEDIA_RESID( nId ).toString()
 
 #define AVMEDIA_MANAGER_SERVICE_PREFERRED "com.sun.star.comp.avmedia.Manager_VLC"
 #ifdef WNT

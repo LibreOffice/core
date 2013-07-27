@@ -231,7 +231,7 @@ void OpCodeList::putDefaultOpCode( FormulaCompiler::NonConstOpCodeMapPtr xMap, s
     ResId aRes(nOp,*ResourceManager::getResManager());
     aRes.SetRT(RSC_STRING);
     if (IsAvailableRes(aRes))
-        xMap->putOpCode(aRes, OpCode(nOp));
+        xMap->putOpCode(aRes.toString(), OpCode(nOp));
 }
 // -----------------------------------------------------------------------------
 // static

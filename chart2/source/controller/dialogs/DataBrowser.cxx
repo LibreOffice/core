@@ -146,8 +146,8 @@ void SeriesHeaderEdit::MouseButtonDown( const MouseEvent& rMEvt )
     Edit::MouseButtonDown( rMEvt );
 
     if( m_bShowWarningBox )
-        WarningBox( this, WinBits( WB_OK ),
-                    String( SchResId( STR_INVALID_NUMBER ))).Execute();
+        WarningBox(this, WinBits( WB_OK ),
+                   SCH_RESSTR(STR_INVALID_NUMBER)).Execute();
 }
 
 class SeriesHeader
@@ -779,13 +779,13 @@ void DataBrowser::MouseButtonDown( const BrowserMouseEvent& rEvt )
 
 void DataBrowser::ShowWarningBox()
 {
-    WarningBox( this, WinBits( WB_OK ),
-                String( SchResId( STR_INVALID_NUMBER ))).Execute();
+    WarningBox(this, WinBits( WB_OK ),
+               SCH_RESSTR(STR_INVALID_NUMBER)).Execute();
 }
 
 bool DataBrowser::ShowQueryBox()
 {
-    QueryBox* pQueryBox = new QueryBox( this, WB_YES_NO, String( SchResId( STR_DATA_EDITOR_INCORRECT_INPUT )));
+    QueryBox* pQueryBox = new QueryBox(this, WB_YES_NO, SCH_RESSTR(STR_DATA_EDITOR_INCORRECT_INPUT));
 
     return ( pQueryBox->Execute() == RET_YES );
 }

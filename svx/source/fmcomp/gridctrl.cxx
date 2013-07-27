@@ -395,8 +395,8 @@ DbGridControl::NavigationBar::NavigationBar(Window* pParent, WinBits nStyle)
     m_aLastBtn.SetClickHdl(LINK(this,NavigationBar,OnClick));
     m_aNewBtn.SetClickHdl(LINK(this,NavigationBar,OnClick));
 
-    m_aRecordText.SetText(XubString(SVX_RES(RID_STR_REC_TEXT)));
-    m_aRecordOf.SetText(XubString(SVX_RES(RID_STR_REC_FROM_TEXT)));
+    m_aRecordText.SetText(SVX_RESSTR(RID_STR_REC_TEXT));
+    m_aRecordOf.SetText(SVX_RESSTR(RID_STR_REC_FROM_TEXT));
     m_aRecordCount.SetText(OUString('?'));
 
     m_nDefaultWidth = ArrangeControls();
@@ -944,7 +944,7 @@ DbGridControl::DbGridControl(
 {
     DBG_CTOR(DbGridControl,NULL);
 
-    String sName(SVX_RES(RID_STR_NAVIGATIONBAR));
+    OUString sName(SVX_RESSTR(RID_STR_NAVIGATIONBAR));
     m_aBar.SetAccessibleName(sName);
     m_aBar.Show();
     ImplInitWindow( InitAll );

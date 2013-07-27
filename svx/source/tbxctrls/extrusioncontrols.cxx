@@ -96,7 +96,7 @@ ExtrusionDirectionWindow::ExtrusionDirectionWindow(
 
     for( i = DIRECTION_NW; i <= DIRECTION_SE; i++ )
     {
-        String aText( SVX_RES( STR_DIRECTION + i ) );
+        OUString aText( SVX_RESSTR( STR_DIRECTION + i ) );
         mpDirectionSet->InsertItem( i+1, maImgDirection[ i ], aText );
     }
 
@@ -104,8 +104,8 @@ ExtrusionDirectionWindow::ExtrusionDirectionWindow(
 
     appendEntry( 2, mpDirectionSet );
     appendSeparator();
-    appendEntry( 0, String( SVX_RES( STR_PERSPECTIVE ) ), maImgPerspective );
-    appendEntry( 1, String( SVX_RES( STR_PARALLEL    ) ), maImgParallel    );
+    appendEntry( 0, SVX_RESSTR( STR_PERSPECTIVE ), maImgPerspective );
+    appendEntry( 1, SVX_RESSTR( STR_PARALLEL    ), maImgParallel    );
 
     SetOutputSizePixel( getMenuSize() );
 
@@ -351,8 +351,8 @@ ExtrusionDepthWindow::ExtrusionDepthWindow(
     appendEntry( 2, aEmpty, maImgDepth2 );
     appendEntry( 3, aEmpty, maImgDepth3 );
     appendEntry( 4, aEmpty, maImgDepth4 );
-    appendEntry( 5, String( SVX_RES( STR_INFINITY ) ), maImgDepthInfinity );
-    appendEntry( 6, String( SVX_RES( STR_CUSTOM ) ) );
+    appendEntry( 5, SVX_RESSTR( STR_INFINITY ), maImgDepthInfinity );
+    appendEntry( 6, SVX_RESSTR( STR_CUSTOM ) );
 
     SetOutputSizePixel( getMenuSize() );
 
@@ -390,7 +390,7 @@ void ExtrusionDepthWindow::implFillStrings( FieldUnit eUnit )
 
     for( int i = 0; i < 5; i++ )
     {
-        String aStr( SVX_RES( nResource + i ) );
+        OUString aStr( SVX_RESSTR( nResource + i ) );
         setEntryText( i, aStr );
     };
 }
@@ -612,9 +612,9 @@ ExtrusionLightingWindow::ExtrusionLightingWindow( svt::ToolboxController& rContr
 
     appendEntry( 3, mpLightingSet );
     appendSeparator();
-    appendEntry( 0, String( SVX_RES( STR_BRIGHT ) ), maImgBright );
-    appendEntry( 1, String( SVX_RES( STR_NORMAL ) ), maImgNormal );
-    appendEntry( 2, String( SVX_RES( STR_DIM    ) ), maImgDim    );
+    appendEntry( 0, SVX_RESSTR( STR_BRIGHT ), maImgBright );
+    appendEntry( 1, SVX_RESSTR( STR_NORMAL ), maImgNormal );
+    appendEntry( 2, SVX_RESSTR( STR_DIM    ), maImgDim    );
 
     SetOutputSizePixel( getMenuSize() );
 
@@ -838,10 +838,10 @@ ExtrusionSurfaceWindow::ExtrusionSurfaceWindow(
     SetHelpId( HID_MENU_EXTRUSION_SURFACE );
     SetSelectHdl( LINK( this, ExtrusionSurfaceWindow, SelectHdl ) );
 
-    appendEntry( 0, String( SVX_RES( STR_WIREFRAME ) ), maImgSurface1 );
-    appendEntry( 1, String( SVX_RES( STR_MATTE     ) ), maImgSurface2 );
-    appendEntry( 2, String( SVX_RES( STR_PLASTIC   ) ), maImgSurface3 );
-    appendEntry( 3, String( SVX_RES( STR_METAL     ) ), maImgSurface4 );
+    appendEntry( 0, SVX_RESSTR( STR_WIREFRAME ), maImgSurface1 );
+    appendEntry( 1, SVX_RESSTR( STR_MATTE     ), maImgSurface2 );
+    appendEntry( 2, SVX_RESSTR( STR_PLASTIC   ), maImgSurface3 );
+    appendEntry( 3, SVX_RESSTR( STR_METAL     ), maImgSurface4 );
 
     SetOutputSizePixel( getMenuSize() );
 

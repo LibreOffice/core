@@ -59,7 +59,7 @@ TitlesAndObjectsTabPage::TitlesAndObjectsTabPage( svt::OWizardMachine* pParent
 {
     FreeResource();
 
-    this->SetText( String( SchResId( STR_PAGE_CHART_ELEMENTS ) ) );
+    this->SetText( SCH_RESSTR( STR_PAGE_CHART_ELEMENTS ) );
 
     Font aFont( m_aFT_TitleDescription.GetControlFont() );
     aFont.SetWeight( WEIGHT_BOLD );

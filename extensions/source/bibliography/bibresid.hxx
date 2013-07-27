@@ -30,7 +30,7 @@ class BibResId : public ResId
     BibResId( sal_uInt16 nId );
 };
 
-
+#define BIB_RESSTR(i)   BibResId(i).toString()
 
 #endif // ADRRESID_HXX
 

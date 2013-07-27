@@ -66,7 +66,7 @@ uno::Reference< container::XNameContainer > XHatchList::createInstance()
 
 bool XHatchList::Create()
 {
-    XubString aStr( SVX_RES( RID_SVXSTR_HATCH ) );
+    XubString aStr( SVX_RESSTR( RID_SVXSTR_HATCH ) );
     xub_StrLen nLen;
 
     aStr.AppendAscii(" 1");

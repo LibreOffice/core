@@ -36,7 +36,7 @@ namespace pcr
     {
         SetBackground();
         SetPaintTransparent(sal_True);
-        m_aSeparator.SetText( String( PcrRes( RID_STR_HELP_SECTION_LABEL ) ) );
+        m_aSeparator.SetText( PcrRes(RID_STR_HELP_SECTION_LABEL).toString() );
         m_aSeparator.SetBackground();
         m_aSeparator.Show();
 

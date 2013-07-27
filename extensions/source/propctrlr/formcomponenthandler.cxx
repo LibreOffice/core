@@ -141,7 +141,7 @@ namespace pcr
     FormComponentPropertyHandler::FormComponentPropertyHandler( const Reference< XComponentContext >& _rxContext )
         :FormComponentPropertyHandler_Base( _rxContext )
         ,::comphelper::OPropertyContainer(FormComponentPropertyHandler_Base::rBHelper)
-        ,m_sDefaultValueString( String( PcrRes( RID_STR_STANDARD ) ) )
+        ,m_sDefaultValueString( PcrRes(RID_STR_STANDARD).toString() )
         ,m_eComponentClass( eUnknown )
         ,m_bComponentIsSubForm( false )
         ,m_bHaveListSource( false )
@@ -562,7 +562,7 @@ namespace pcr
             OUString sControlValue;
             OSL_VERIFY( _rControlValue >>= sControlValue );
             // Don't convert a placeholder
-            if ( nPropId == PROPERTY_ID_IMAGE_URL && sControlValue.equals( String( PcrRes( RID_EMBED_IMAGE_PLACEHOLDER ) ) ) )
+            if ( nPropId == PROPERTY_ID_IMAGE_URL && sControlValue.equals( PcrRes(RID_EMBED_IMAGE_PLACEHOLDER).toString() ) )
                 aPropertyValue <<= sControlValue;
             else
             {
@@ -760,7 +760,7 @@ namespace pcr
             OUStringBuffer displayName;
             if ( aFont.Name.isEmpty() )
             {
-                displayName.append( String( PcrRes( RID_STR_FONT_DEFAULT ) ) );
+                displayName.append( PcrRes(RID_STR_FONT_DEFAULT).toString() );
             }
             else
             {
@@ -783,7 +783,7 @@ namespace pcr
                     if ( eWeight > WEIGHT_NORMAL )
                         nStyleResID = RID_STR_FONTSTYLE_BOLD;
                 }
-                displayName.append( String( PcrRes( nStyleResID ) ) );
+                displayName.append(PcrRes(nStyleResID).toString());
 
                 // font size
                 if ( aFont.Height )
@@ -2717,7 +2717,7 @@ namespace pcr
 
             SvNumberFormatter* pFormatter = pSupplier->GetNumberFormatter();
             double dPreviewVal = OFormatSampleControl::getPreviewValue(pFormatter,nFormatKey);
-            SvxNumberInfoItem aFormatter( pFormatter, dPreviewVal, String( PcrRes( RID_STR_TEXT_FORMAT ) ), SID_ATTR_NUMBERFORMAT_INFO );
+            SvxNumberInfoItem aFormatter( pFormatter, dPreviewVal, PcrRes(RID_STR_TEXT_FORMAT).toString(), SID_ATTR_NUMBERFORMAT_INFO );
             aCoreSet.Put( aFormatter );
 
             // a tab dialog with a single page

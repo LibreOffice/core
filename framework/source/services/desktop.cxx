@@ -117,7 +117,7 @@ DEFINE_INIT_SERVICE                     (   Desktop,
                                                 m_xDispatchHelper = css::uno::Reference< css::frame::XDispatchProvider >( static_cast< ::cppu::OWeakObject* >(pInterceptionHelper), css::uno::UNO_QUERY );
 
                                                 OUStringBuffer sUntitledPrefix (256);
-                                                sUntitledPrefix.append      (OUString( String( FwkResId( STR_UNTITLED_DOCUMENT ))));
+                                                sUntitledPrefix.append      (FWK_RESSTR(STR_UNTITLED_DOCUMENT));
                                                 sUntitledPrefix.appendAscii (" ");
 
                                                 ::comphelper::NumberedCollection* pNumbers = new ::comphelper::NumberedCollection ();

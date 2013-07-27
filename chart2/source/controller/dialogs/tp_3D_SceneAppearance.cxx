@@ -108,8 +108,8 @@ ThreeD_SceneAppearance_TabPage::ThreeD_SceneAppearance_TabPage(
                 , m_rControllerLockHelper( rControllerLockHelper )
 {
     FreeResource();
-    m_aLB_Scheme.InsertEntry(String(SchResId(STR_3DSCHEME_SIMPLE)),POS_3DSCHEME_SIMPLE);
-    m_aLB_Scheme.InsertEntry(String(SchResId(STR_3DSCHEME_REALISTIC)),POS_3DSCHEME_REALISTIC);
+    m_aLB_Scheme.InsertEntry(SCH_RESSTR(STR_3DSCHEME_SIMPLE),POS_3DSCHEME_SIMPLE);
+    m_aLB_Scheme.InsertEntry(SCH_RESSTR(STR_3DSCHEME_REALISTIC),POS_3DSCHEME_REALISTIC);
     m_aLB_Scheme.SetDropDownLineCount(2);
 
     m_aLB_Scheme.SetSelectHdl( LINK( this, ThreeD_SceneAppearance_TabPage, SelectSchemeHdl ) );
@@ -281,7 +281,7 @@ void ThreeD_SceneAppearance_TabPage::updateScheme()
             break;
         case ThreeDLookScheme_Unknown:
             {
-                m_aLB_Scheme.InsertEntry(String(SchResId(STR_3DSCHEME_CUSTOM)),POS_3DSCHEME_CUSTOM);
+                m_aLB_Scheme.InsertEntry(SCH_RESSTR(STR_3DSCHEME_CUSTOM),POS_3DSCHEME_CUSTOM);
                 m_aLB_Scheme.SelectEntryPos( POS_3DSCHEME_CUSTOM );
                 m_aLB_Scheme.SetDropDownLineCount(3);
             }

@@ -25,15 +25,15 @@
 
 SvxPrtQryBox::SvxPrtQryBox(Window* pParent) :
     MessBox(pParent, 0,
-            String(SVX_RES(RID_SVXSTR_QRY_PRINT_TITLE)),
-            String(SVX_RES(RID_SVXSTR_QRY_PRINT_MSG)))
+            SVX_RESSTR(RID_SVXSTR_QRY_PRINT_TITLE),
+            SVX_RESSTR(RID_SVXSTR_QRY_PRINT_MSG))
 {
     SetImage( QueryBox::GetStandardImage() );
 
-    AddButton(String(SVX_RES(RID_SVXSTR_QRY_PRINT_SELECTION)), RET_OK,
+    AddButton(SVX_RESSTR(RID_SVXSTR_QRY_PRINT_SELECTION), RET_OK,
             BUTTONDIALOG_DEFBUTTON | BUTTONDIALOG_OKBUTTON | BUTTONDIALOG_FOCUSBUTTON);
 
-    AddButton(String(SVX_RES(RID_SVXSTR_QRY_PRINT_ALL)), 2, 0);
+    AddButton(SVX_RESSTR(RID_SVXSTR_QRY_PRINT_ALL), 2, 0);
     AddButton(BUTTON_CANCEL, RET_CANCEL, BUTTONDIALOG_CANCELBUTTON);
     SetButtonHelpText( RET_OK, OUString() );
 }

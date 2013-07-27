@@ -506,23 +506,20 @@ throw ( RuntimeException )
                     // Replacement for place holders
                     if ( aItemText.matchAsciiL( "($1)", 4 ))
                     {
-                        String aResStr = String( FwkResId( STR_UPDATEDOC ));
-                        OUString aTmp( aResStr );
+                        OUString aTmp(FWK_RESSTR(STR_UPDATEDOC));
                         aTmp += OUString( " " );
                         aTmp += aItemText.copy( 4 );
                         aItemText = aTmp;
                     }
                     else if ( aItemText.matchAsciiL( "($2)", 4 ))
                     {
-                        String aResStr = String( FwkResId( STR_CLOSEDOC_ANDRETURN ));
-                        OUString aTmp( aResStr );
+                        OUString aTmp(FWK_RESSTR(STR_CLOSEDOC_ANDRETURN));
                         aTmp += aItemText.copy( 4 );
                         aItemText = aTmp;
                     }
                     else if ( aItemText.matchAsciiL( "($3)", 4 ))
                     {
-                        String aResStr = String( FwkResId( STR_SAVECOPYDOC ));
-                        OUString aTmp( aResStr );
+                        OUString aTmp(FWK_RESSTR(STR_SAVECOPYDOC));
                         aTmp += aItemText.copy( 4 );
                         aItemText = aTmp;
                     }
@@ -1339,7 +1336,7 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, const Reference< XFrame >& rF
                             pPopup->InsertSeparator();
 
                         // Use resource to load popup menu title
-                        String aAddonsStrRes = String( FwkResId( STR_MENU_ADDONS ));
+                        OUString aAddonsStrRes(FWK_RESSTR(STR_MENU_ADDONS));
                         pPopup->InsertItem( ITEMID_ADDONLIST, aAddonsStrRes );
                         pPopup->SetPopupMenu( ITEMID_ADDONLIST, pSubMenu );
 

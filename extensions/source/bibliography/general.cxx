@@ -215,35 +215,35 @@ BibGeneralPage::BibGeneralPage(Window* pParent, BibDataManager* pMan):
     aCustom5FT(&aControlParentWin,      BibResId(FT_CUSTOM5     )),
     aHoriScroll(this, WB_HORZ),
     aVertScroll(this, WB_VERT),
-    sErrorPrefix(BibResId(ST_ERROR_PREFIX)),
+    sErrorPrefix(BIB_RESSTR(ST_ERROR_PREFIX)),
     pDatMan(pMan)
 {
     aControlParentWin.Show();
     aControlParentWin.SetHelpId(HID_BIB_CONTROL_PARENT);
     aStdSize = GetOutputSizePixel();
 
-    aBibTypeArr[0] = String(BibResId(ST_TYPE_ARTICLE));
-    aBibTypeArr[1] = String(BibResId(ST_TYPE_BOOK));
-    aBibTypeArr[2] = String(BibResId(ST_TYPE_BOOKLET));
-    aBibTypeArr[3] = String(BibResId(ST_TYPE_CONFERENCE));
-    aBibTypeArr[4] = String(BibResId(ST_TYPE_INBOOK ));
-    aBibTypeArr[5] = String(BibResId(ST_TYPE_INCOLLECTION));
-    aBibTypeArr[6] = String(BibResId(ST_TYPE_INPROCEEDINGS));
-    aBibTypeArr[7] = String(BibResId(ST_TYPE_JOURNAL       ));
-    aBibTypeArr[8] = String(BibResId(ST_TYPE_MANUAL    ));
-    aBibTypeArr[9] = String(BibResId(ST_TYPE_MASTERSTHESIS));
-    aBibTypeArr[10] = String(BibResId(ST_TYPE_MISC      ));
-    aBibTypeArr[11] = String(BibResId(ST_TYPE_PHDTHESIS ));
-    aBibTypeArr[12] = String(BibResId(ST_TYPE_PROCEEDINGS   ));
-    aBibTypeArr[13] = String(BibResId(ST_TYPE_TECHREPORT    ));
-    aBibTypeArr[14] = String(BibResId(ST_TYPE_UNPUBLISHED   ));
-    aBibTypeArr[15] = String(BibResId(ST_TYPE_EMAIL     ));
-    aBibTypeArr[16] = String(BibResId(ST_TYPE_WWW           ));
-    aBibTypeArr[17] = String(BibResId(ST_TYPE_CUSTOM1       ));
-    aBibTypeArr[18] = String(BibResId(ST_TYPE_CUSTOM2       ));
-    aBibTypeArr[19] = String(BibResId(ST_TYPE_CUSTOM3       ));
-    aBibTypeArr[20] = String(BibResId(ST_TYPE_CUSTOM4       ));
-    aBibTypeArr[21] = String(BibResId(ST_TYPE_CUSTOM5       ));
+    aBibTypeArr[0] = BIB_RESSTR(ST_TYPE_ARTICLE);
+    aBibTypeArr[1] = BIB_RESSTR(ST_TYPE_BOOK);
+    aBibTypeArr[2] = BIB_RESSTR(ST_TYPE_BOOKLET);
+    aBibTypeArr[3] = BIB_RESSTR(ST_TYPE_CONFERENCE);
+    aBibTypeArr[4] = BIB_RESSTR(ST_TYPE_INBOOK );
+    aBibTypeArr[5] = BIB_RESSTR(ST_TYPE_INCOLLECTION);
+    aBibTypeArr[6] = BIB_RESSTR(ST_TYPE_INPROCEEDINGS);
+    aBibTypeArr[7] = BIB_RESSTR(ST_TYPE_JOURNAL       );
+    aBibTypeArr[8] = BIB_RESSTR(ST_TYPE_MANUAL    );
+    aBibTypeArr[9] = BIB_RESSTR(ST_TYPE_MASTERSTHESIS);
+    aBibTypeArr[10] = BIB_RESSTR(ST_TYPE_MISC      );
+    aBibTypeArr[11] = BIB_RESSTR(ST_TYPE_PHDTHESIS );
+    aBibTypeArr[12] = BIB_RESSTR(ST_TYPE_PROCEEDINGS   );
+    aBibTypeArr[13] = BIB_RESSTR(ST_TYPE_TECHREPORT    );
+    aBibTypeArr[14] = BIB_RESSTR(ST_TYPE_UNPUBLISHED   );
+    aBibTypeArr[15] = BIB_RESSTR(ST_TYPE_EMAIL     );
+    aBibTypeArr[16] = BIB_RESSTR(ST_TYPE_WWW           );
+    aBibTypeArr[17] = BIB_RESSTR(ST_TYPE_CUSTOM1       );
+    aBibTypeArr[18] = BIB_RESSTR(ST_TYPE_CUSTOM2       );
+    aBibTypeArr[19] = BIB_RESSTR(ST_TYPE_CUSTOM3       );
+    aBibTypeArr[20] = BIB_RESSTR(ST_TYPE_CUSTOM4       );
+    aBibTypeArr[21] = BIB_RESSTR(ST_TYPE_CUSTOM5       );
 
     FreeResource();
 
@@ -617,37 +617,37 @@ void BibGeneralPage::InitFixedTexts( void )
 {
     String      aFixedStrings[ FIELD_COUNT ] =
     {
-        String( BibResId( ST_IDENTIFIER     ) ),
-        String( BibResId( ST_AUTHTYPE       ) ),
-        String( BibResId( ST_AUTHOR         ) ),
-        String( BibResId( ST_TITLE          ) ),
-        String( BibResId( ST_MONTH          ) ),
-        String( BibResId( ST_YEAR           ) ),
-        String( BibResId( ST_ISBN           ) ),
-        String( BibResId( ST_BOOKTITLE      ) ),
-        String( BibResId( ST_CHAPTER        ) ),
-        String( BibResId( ST_EDITION        ) ),
-        String( BibResId( ST_EDITOR         ) ),
-        String( BibResId( ST_HOWPUBLISHED   ) ),
-        String( BibResId( ST_INSTITUTION    ) ),
-        String( BibResId( ST_JOURNAL        ) ),
-        String( BibResId( ST_NOTE           ) ),
-        String( BibResId( ST_ANNOTE         ) ),
-        String( BibResId( ST_NUMBER         ) ),
-        String( BibResId( ST_ORGANIZATION   ) ),
-        String( BibResId( ST_PAGE           ) ),
-        String( BibResId( ST_PUBLISHER      ) ),
-        String( BibResId( ST_ADDRESS        ) ),
-        String( BibResId( ST_SCHOOL         ) ),
-        String( BibResId( ST_SERIES         ) ),
-        String( BibResId( ST_REPORT         ) ),
-        String( BibResId( ST_VOLUME         ) ),
-        String( BibResId( ST_URL            ) ),
-        String( BibResId( ST_CUSTOM1        ) ),
-        String( BibResId( ST_CUSTOM2        ) ),
-        String( BibResId( ST_CUSTOM3        ) ),
-        String( BibResId( ST_CUSTOM4        ) ),
-        String( BibResId( ST_CUSTOM5        ) )
+        BIB_RESSTR( ST_IDENTIFIER     ),
+        BIB_RESSTR( ST_AUTHTYPE       ),
+        BIB_RESSTR( ST_AUTHOR         ),
+        BIB_RESSTR( ST_TITLE          ),
+        BIB_RESSTR( ST_MONTH          ),
+        BIB_RESSTR( ST_YEAR           ),
+        BIB_RESSTR( ST_ISBN           ),
+        BIB_RESSTR( ST_BOOKTITLE      ),
+        BIB_RESSTR( ST_CHAPTER        ),
+        BIB_RESSTR( ST_EDITION        ),
+        BIB_RESSTR( ST_EDITOR         ),
+        BIB_RESSTR( ST_HOWPUBLISHED   ),
+        BIB_RESSTR( ST_INSTITUTION    ),
+        BIB_RESSTR( ST_JOURNAL        ),
+        BIB_RESSTR( ST_NOTE           ),
+        BIB_RESSTR( ST_ANNOTE         ),
+        BIB_RESSTR( ST_NUMBER         ),
+        BIB_RESSTR( ST_ORGANIZATION   ),
+        BIB_RESSTR( ST_PAGE           ),
+        BIB_RESSTR( ST_PUBLISHER      ),
+        BIB_RESSTR( ST_ADDRESS        ),
+        BIB_RESSTR( ST_SCHOOL         ),
+        BIB_RESSTR( ST_SERIES         ),
+        BIB_RESSTR( ST_REPORT         ),
+        BIB_RESSTR( ST_VOLUME         ),
+        BIB_RESSTR( ST_URL            ),
+        BIB_RESSTR( ST_CUSTOM1        ),
+        BIB_RESSTR( ST_CUSTOM2        ),
+        BIB_RESSTR( ST_CUSTOM3        ),
+        BIB_RESSTR( ST_CUSTOM4        ),
+        BIB_RESSTR( ST_CUSTOM5        )
     };
 
     aFixedTexts[0] = &aIdentifierFT;

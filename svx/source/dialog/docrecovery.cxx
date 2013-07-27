@@ -951,11 +951,11 @@ RecoveryDialog::RecoveryDialog(Window*       pParent,
     , m_aBottomFL           ( this           , SVX_RES  ( FL_RECOV_BOTTOM                ) )
     , m_aNextBtn            ( this           , SVX_RES  ( BTN_RECOV_NEXT                 ) )
     , m_aCancelBtn          ( this           , SVX_RES  ( BTN_RECOV_CANCEL               ) )
-    , m_aNextStr            (                  SVX_RES  ( STR_RECOVERY_NEXT              ) )
-    , m_aTitleRecoveryInProgress(              SVX_RES  ( STR_RECOVERY_INPROGRESS        ) )
-    , m_aTitleRecoveryReport(                  SVX_RES  ( STR_RECOVERY_REPORT            ) )
-    , m_aRecoveryOnlyFinish (                  SVX_RES  ( STR_RECOVERYONLY_FINISH        ) )
-    , m_aRecoveryOnlyFinishDescr(              SVX_RES  ( STR_RECOVERYONLY_FINISH_DESCR  ) )
+    , m_aNextStr            (SVX_RESSTR(STR_RECOVERY_NEXT))
+    , m_aTitleRecoveryInProgress(SVX_RESSTR(STR_RECOVERY_INPROGRESS))
+    , m_aTitleRecoveryReport(SVX_RESSTR(STR_RECOVERY_REPORT))
+    , m_aRecoveryOnlyFinish (SVX_RESSTR(STR_RECOVERYONLY_FINISH))
+    , m_aRecoveryOnlyFinishDescr(SVX_RESSTR(STR_RECOVERYONLY_FINISH_DESCR))
     , m_pDefButton          ( NULL                                                       )
     , m_pCore               ( pCore                                                      )
     , m_eRecoveryState      (RecoveryDialog::E_RECOVERY_PREPARED)
@@ -967,7 +967,7 @@ RecoveryDialog::RecoveryDialog(Window*       pParent,
 {
     static long nTabs[] = { 2, 0, 40*RECOV_CONTROLWIDTH/100 };
     m_aFileListLB.SetTabs( &nTabs[0] );
-    m_aFileListLB.InsertHeaderEntry( String( SVX_RES( STR_HEADERBAR ) ) );
+    m_aFileListLB.InsertHeaderEntry(SVX_RESSTR(STR_HEADERBAR));
 
     FreeResource();
 

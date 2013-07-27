@@ -250,7 +250,7 @@ IMPL_LINK( DataLabelResources, NumberFormatDialogHdl, PushButton *, pButton )
 
     NumberFormatDialog aDlg(m_pWindow, aNumberSet);
     if( bPercent )
-        aDlg.SetText( String( SchResId( STR_DLG_NUMBERFORMAT_FOR_PERCENTAGE_VALUE ) ) );
+        aDlg.SetText( SCH_RESSTR( STR_DLG_NUMBERFORMAT_FOR_PERCENTAGE_VALUE ) );
     if( RET_OK == aDlg.Execute() )
     {
         const SfxItemSet* pResult = aDlg.GetOutputItemSet();

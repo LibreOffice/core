@@ -162,8 +162,8 @@ Dim3DLookResourceGroup::Dim3DLookResourceGroup( Window* pWindow )
 {
     m_aCB_3DLook.SetToggleHdl( LINK( this, Dim3DLookResourceGroup, Dim3DLookCheckHdl ) );
 
-    m_aLB_Scheme.InsertEntry(String(SchResId(STR_3DSCHEME_SIMPLE)));
-    m_aLB_Scheme.InsertEntry(String(SchResId(STR_3DSCHEME_REALISTIC)));
+    m_aLB_Scheme.InsertEntry(SCH_RESSTR(STR_3DSCHEME_SIMPLE));
+    m_aLB_Scheme.InsertEntry(SCH_RESSTR(STR_3DSCHEME_REALISTIC));
     m_aLB_Scheme.SetDropDownLineCount(2);
 
     m_aLB_Scheme.SetSelectHdl( LINK( this, Dim3DLookResourceGroup, SelectSchemeHdl ) );
@@ -459,7 +459,7 @@ SplinePropertiesDialog::SplinePropertiesDialog( Window* pParent )
     get(m_pFT_SplineOrder, "PolynomialsLabel");
     get(m_pMF_SplineOrder, "PolynomialsSpinButton");
 
-    this->SetText( String( SchResId( STR_DLG_SMOOTH_LINE_PROPERTIES ) ) );
+    this->SetText( SCH_RESSTR( STR_DLG_SMOOTH_LINE_PROPERTIES ) );
 
     m_pLB_Spline_Type->SetSelectHdl( LINK (this, SplinePropertiesDialog, SplineTypeListBoxHdl ) );
 }
@@ -627,9 +627,9 @@ SplineResourceGroup::SplineResourceGroup( Window* pWindow )
         , m_aPB_DetailsDialog( pWindow, SchResId( PB_SPLINE_DIALOG ) )
         , m_pSplinePropertiesDialog()
 {
-    m_aLB_LineType.InsertEntry(String(SchResId(STR_LINETYPE_STRAIGHT)));
-    m_aLB_LineType.InsertEntry(String(SchResId(STR_LINETYPE_SMOOTH)));
-    m_aLB_LineType.InsertEntry(String(SchResId(STR_LINETYPE_STEPPED)));
+    m_aLB_LineType.InsertEntry(SCH_RESSTR(STR_LINETYPE_STRAIGHT));
+    m_aLB_LineType.InsertEntry(SCH_RESSTR(STR_LINETYPE_SMOOTH));
+    m_aLB_LineType.InsertEntry(SCH_RESSTR(STR_LINETYPE_STEPPED));
     m_aLB_LineType.SetDropDownLineCount(3);
     m_aLB_LineType.SetSelectHdl( LINK( this, SplineResourceGroup, LineTypeChangeHdl ) );
     m_aLB_LineType.SetAccessibleName(m_aFT_LineType.GetText());
@@ -716,7 +716,7 @@ void SplineResourceGroup::fillControls( const ChartTypeParameter& rParameter )
             m_aLB_LineType.SelectEntryPos(POS_LINETYPE_SMOOTH);
             m_aPB_DetailsDialog.Enable(true);
             m_aPB_DetailsDialog.SetClickHdl( LINK( this, SplineResourceGroup, SplineDetailsDialogHdl ) );
-            m_aPB_DetailsDialog.SetQuickHelpText( String( SchResId(STR_DLG_SMOOTH_LINE_PROPERTIES) ) );
+            m_aPB_DetailsDialog.SetQuickHelpText( SCH_RESSTR(STR_DLG_SMOOTH_LINE_PROPERTIES) );
             getSplinePropertiesDialog().fillControls( rParameter );
             break;
         case CurveStyle_STEP_START:
@@ -726,7 +726,7 @@ void SplineResourceGroup::fillControls( const ChartTypeParameter& rParameter )
             m_aLB_LineType.SelectEntryPos(POS_LINETYPE_STEPPED);
             m_aPB_DetailsDialog.Enable(true);
             m_aPB_DetailsDialog.SetClickHdl( LINK( this, SplineResourceGroup, SteppedDetailsDialogHdl ) );
-            m_aPB_DetailsDialog.SetQuickHelpText( String( SchResId(STR_DLG_STEPPED_LINE_PROPERTIES) ) );
+            m_aPB_DetailsDialog.SetQuickHelpText( SCH_RESSTR(STR_DLG_STEPPED_LINE_PROPERTIES) );
             getSteppedPropertiesDialog().fillControls( rParameter );
             break;
         default:
@@ -915,7 +915,7 @@ ChartTypeTabPage::ChartTypeTabPage( Window* pParent
         m_aFT_ChooseType.SetStyle( m_aFT_ChooseType.GetStyle() | WB_NOLABEL );
     }
 
-    this->SetText( String(SchResId(STR_PAGE_CHARTTYPE)) );
+    this->SetText( SCH_RESSTR(STR_PAGE_CHARTTYPE) );
 
     m_aMainTypeList.SetStyle(m_aMainTypeList.GetStyle() | WB_ITEMBORDER | WB_DOUBLEBORDER | WB_FLATVALUESET | WB_3DLOOK );
     m_aMainTypeList.SetSelectHdl( LINK( this, ChartTypeTabPage, SelectMainTypeHdl ) );

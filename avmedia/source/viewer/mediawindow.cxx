@@ -255,7 +255,7 @@ bool MediaWindow::executeMediaURLDialog(Window* /* pParent */,
     const OUString                  aSeparator( ";"  );
     OUString                        aAllTypes;
 
-    aDlg.SetTitle( AVMEDIA_RESID( (o_pbLink)
+    aDlg.SetTitle( AVMEDIA_RESSTR( (o_pbLink)
                 ? AVMEDIA_STR_INSERTMEDIA_DLG : AVMEDIA_STR_OPENMEDIA_DLG ) );
 
     getMediaFilters( aFilters );
@@ -273,7 +273,7 @@ bool MediaWindow::executeMediaURLDialog(Window* /* pParent */,
     }
 
     // add filter for all media types
-    aDlg.AddFilter( AVMEDIA_RESID( AVMEDIA_STR_ALL_MEDIAFILES ), aAllTypes );
+    aDlg.AddFilter( AVMEDIA_RESSTR( AVMEDIA_STR_ALL_MEDIAFILES ), aAllTypes );
 
     for( i = 0; i < aFilters.size(); ++i )
     {
@@ -292,7 +292,7 @@ bool MediaWindow::executeMediaURLDialog(Window* /* pParent */,
     }
 
     // add filter for all types
-    aDlg.AddFilter( AVMEDIA_RESID( AVMEDIA_STR_ALL_FILES ), OUString( "*.*"  ) );
+    aDlg.AddFilter( AVMEDIA_RESSTR( AVMEDIA_STR_ALL_FILES ), OUString( "*.*"  ) );
 
     uno::Reference<ui::dialogs::XFilePicker> const xFP(aDlg.GetFilePicker());
     uno::Reference<ui::dialogs::XFilePickerControlAccess> const xCtrlAcc(xFP,

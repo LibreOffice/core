@@ -49,7 +49,7 @@ uno::Reference< container::XNameContainer > XBitmapList::createInstance()
 
 bool XBitmapList::Create()
 {
-    String aStr(SVX_RES(RID_SVXSTR_BITMAP));
+    String aStr(SVX_RESSTR(RID_SVXSTR_BITMAP));
     sal_uInt16 aArray[64];
     Bitmap aBitmap;
     const xub_StrLen nLen(aStr.Len() - 1);

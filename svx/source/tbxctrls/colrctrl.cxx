@@ -99,7 +99,7 @@ SvxColorValueSet_docking::SvxColorValueSet_docking( Window* _pParent, const ResI
     DragSourceHelper( this ),
     mbLeftButton(true)
 {
-    SetAccessibleName(String( SVX_RES( STR_COLORTABLE )  ));
+    SetAccessibleName(SVX_RESSTR(STR_COLORTABLE));
 }
 
 /*************************************************************************

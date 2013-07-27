@@ -72,7 +72,7 @@ OUString lcl_getDataSeriesName( const OUString& rObjectCID, const Reference< fra
 
 OUString lcl_getFullSeriesName( const OUString& rObjectCID, const Reference< frame::XModel >& xChartModel )
 {
-    OUString aRet = String(SchResId(STR_TIP_DATASERIES));
+    OUString aRet(SCH_RESSTR(STR_TIP_DATASERIES));
     OUString aWildcard( "%SERIESNAME" );
     sal_Int32 nIndex = aRet.indexOf( aWildcard );
     if( nIndex != -1 )
@@ -206,103 +206,103 @@ OUString ObjectNameProvider::getName( ObjectType eObjectType, bool bPlural )
     switch( eObjectType )
     {
         case OBJECTTYPE_PAGE:
-                aRet=String(SchResId(STR_OBJECT_PAGE));
+                aRet=SCH_RESSTR(STR_OBJECT_PAGE);
                 break;
         case OBJECTTYPE_TITLE:
             {
                 if(bPlural)
-                    aRet=String(SchResId(STR_OBJECT_TITLES));
+                    aRet=SCH_RESSTR(STR_OBJECT_TITLES);
                 else
-                    aRet=String(SchResId(STR_OBJECT_TITLE));
+                    aRet=SCH_RESSTR(STR_OBJECT_TITLE);
             }
                 break;
         case OBJECTTYPE_LEGEND:
-                aRet=String(SchResId(STR_OBJECT_LEGEND));
+                aRet=SCH_RESSTR(STR_OBJECT_LEGEND);
                 break;
         case OBJECTTYPE_LEGEND_ENTRY:
-                aRet=String(SchResId(STR_OBJECT_LEGEND_SYMBOL));//@todo change string if we do differenciate symbol and legend entry in future
+                aRet=SCH_RESSTR(STR_OBJECT_LEGEND_SYMBOL);//@todo change string if we do differenciate symbol and legend entry in future
                 break;
         case OBJECTTYPE_DIAGRAM:
-                aRet=String(SchResId(STR_OBJECT_DIAGRAM));
+                aRet=SCH_RESSTR(STR_OBJECT_DIAGRAM);
                 break;
         case OBJECTTYPE_DIAGRAM_WALL:
-                aRet=String(SchResId(STR_OBJECT_DIAGRAM_WALL));
+                aRet=SCH_RESSTR(STR_OBJECT_DIAGRAM_WALL);
                 break;
         case OBJECTTYPE_DIAGRAM_FLOOR:
-                aRet=String(SchResId(STR_OBJECT_DIAGRAM_FLOOR));
+                aRet=SCH_RESSTR(STR_OBJECT_DIAGRAM_FLOOR);
                 break;
         case OBJECTTYPE_AXIS:
             {
                 if(bPlural)
-                    aRet=String(SchResId(STR_OBJECT_AXES));
+                    aRet=SCH_RESSTR(STR_OBJECT_AXES);
                 else
-                    aRet=String(SchResId(STR_OBJECT_AXIS));
+                    aRet=SCH_RESSTR(STR_OBJECT_AXIS);
             }
                 break;
         case OBJECTTYPE_AXIS_UNITLABEL:
-                aRet=String(SchResId(STR_OBJECT_LABEL));//@todo maybe a more concrete name
+                aRet=SCH_RESSTR(STR_OBJECT_LABEL);//@todo maybe a more concrete name
                 break;
         case OBJECTTYPE_GRID:
         case OBJECTTYPE_SUBGRID: //maybe todo: different names for subgrids
             {
                 if(bPlural)
-                    aRet=String(SchResId(STR_OBJECT_GRIDS));
+                    aRet=SCH_RESSTR(STR_OBJECT_GRIDS);
                 else
-                    aRet=String(SchResId(STR_OBJECT_GRID));
+                    aRet=SCH_RESSTR(STR_OBJECT_GRID);
             }
                 break;
         case OBJECTTYPE_DATA_SERIES:
             {
                 if(bPlural)
-                    aRet=String(SchResId(STR_OBJECT_DATASERIES_PLURAL));
+                    aRet=SCH_RESSTR(STR_OBJECT_DATASERIES_PLURAL);
                 else
-                    aRet=String(SchResId(STR_OBJECT_DATASERIES));
+                    aRet=SCH_RESSTR(STR_OBJECT_DATASERIES);
             }
                 break;
         case OBJECTTYPE_DATA_POINT:
             {
                 if(bPlural)
-                    aRet=String(SchResId(STR_OBJECT_DATAPOINTS));
+                    aRet=SCH_RESSTR(STR_OBJECT_DATAPOINTS);
                 else
-                    aRet=String(SchResId(STR_OBJECT_DATAPOINT));
+                    aRet=SCH_RESSTR(STR_OBJECT_DATAPOINT);
             }
                 break;
         case OBJECTTYPE_DATA_LABELS:
-                aRet=String(SchResId(STR_OBJECT_DATALABELS));
+                aRet=SCH_RESSTR(STR_OBJECT_DATALABELS);
                 break;
         case OBJECTTYPE_DATA_LABEL:
-                aRet=String(SchResId(STR_OBJECT_LABEL));
+                aRet=SCH_RESSTR(STR_OBJECT_LABEL);
                 break;
         case OBJECTTYPE_DATA_ERRORS_X:
-                aRet=String(SchResId(STR_OBJECT_ERROR_BARS_X));
+                aRet=SCH_RESSTR(STR_OBJECT_ERROR_BARS_X);
                 break;
         case OBJECTTYPE_DATA_ERRORS_Y:
-                aRet=String(SchResId(STR_OBJECT_ERROR_BARS_Y));
+                aRet=SCH_RESSTR(STR_OBJECT_ERROR_BARS_Y);
                 break;
         case OBJECTTYPE_DATA_ERRORS_Z:
-                aRet=String(SchResId(STR_OBJECT_ERROR_BARS_Z));
+                aRet=SCH_RESSTR(STR_OBJECT_ERROR_BARS_Z);
                 break;
         case OBJECTTYPE_DATA_AVERAGE_LINE:
-                aRet=String(SchResId(STR_OBJECT_AVERAGE_LINE));
+                aRet=SCH_RESSTR(STR_OBJECT_AVERAGE_LINE);
                 break;
         case OBJECTTYPE_DATA_CURVE:
             {
                 if(bPlural)
-                    aRet=String(SchResId(STR_OBJECT_CURVES));
+                    aRet=SCH_RESSTR(STR_OBJECT_CURVES);
                 else
-                    aRet=String(SchResId(STR_OBJECT_CURVE));
+                    aRet=SCH_RESSTR(STR_OBJECT_CURVE);
             }
                 break;
         case OBJECTTYPE_DATA_STOCK_RANGE:
                 break;
         case OBJECTTYPE_DATA_STOCK_LOSS:
-                aRet=String(SchResId(STR_OBJECT_STOCK_LOSS));
+                aRet=SCH_RESSTR(STR_OBJECT_STOCK_LOSS);
                 break;
         case OBJECTTYPE_DATA_STOCK_GAIN:
-                aRet=String(SchResId(STR_OBJECT_STOCK_GAIN));
+                aRet=SCH_RESSTR(STR_OBJECT_STOCK_GAIN);
                 break;
         case OBJECTTYPE_DATA_CURVE_EQUATION:
-                aRet=String(SchResId(STR_OBJECT_CURVE_EQUATION));
+                aRet=SCH_RESSTR(STR_OBJECT_CURVE_EQUATION);
                 break;
         default: //OBJECTTYPE_UNKNOWN
             ;
@@ -329,21 +329,21 @@ OUString ObjectNameProvider::getAxisName( const OUString& rObjectCID
     {
         case 0://x-axis
             if( nAxisIndex == 0 )
-                aRet=String(SchResId(STR_OBJECT_AXIS_X));
+                aRet=SCH_RESSTR(STR_OBJECT_AXIS_X);
             else
-                aRet=String(SchResId(STR_OBJECT_SECONDARY_X_AXIS));
+                aRet=SCH_RESSTR(STR_OBJECT_SECONDARY_X_AXIS);
             break;
         case 1://y-axis
             if( nAxisIndex == 0 )
-                aRet=String(SchResId(STR_OBJECT_AXIS_Y));
+                aRet=SCH_RESSTR(STR_OBJECT_AXIS_Y);
             else
-                aRet=String(SchResId(STR_OBJECT_SECONDARY_Y_AXIS));
+                aRet=SCH_RESSTR(STR_OBJECT_SECONDARY_Y_AXIS);
             break;
         case 2://z-axis
-            aRet=String(SchResId(STR_OBJECT_AXIS_Z));
+            aRet=SCH_RESSTR(STR_OBJECT_AXIS_Z);
             break;
         default://axis
-            aRet=String(SchResId(STR_OBJECT_AXIS));
+            aRet=SCH_RESSTR(STR_OBJECT_AXIS);
             break;
     }
 
@@ -357,25 +357,25 @@ OUString ObjectNameProvider::getTitleNameByType( TitleHelper::eTitleType eType )
     switch(eType)
     {
         case TitleHelper::MAIN_TITLE:
-            aRet=String(SchResId(STR_OBJECT_TITLE_MAIN));
+            aRet=SCH_RESSTR(STR_OBJECT_TITLE_MAIN);
             break;
         case TitleHelper::SUB_TITLE:
-            aRet=String(SchResId(STR_OBJECT_TITLE_SUB));
+            aRet=SCH_RESSTR(STR_OBJECT_TITLE_SUB);
             break;
         case TitleHelper::X_AXIS_TITLE:
-            aRet=String(SchResId(STR_OBJECT_TITLE_X_AXIS));
+            aRet=SCH_RESSTR(STR_OBJECT_TITLE_X_AXIS);
             break;
         case TitleHelper::Y_AXIS_TITLE:
-            aRet=String(SchResId(STR_OBJECT_TITLE_Y_AXIS));
+            aRet=SCH_RESSTR(STR_OBJECT_TITLE_Y_AXIS);
             break;
         case TitleHelper::Z_AXIS_TITLE:
-            aRet=String(SchResId(STR_OBJECT_TITLE_Z_AXIS));
+            aRet=SCH_RESSTR(STR_OBJECT_TITLE_Z_AXIS);
             break;
         case TitleHelper::SECONDARY_X_AXIS_TITLE:
-            aRet=String(SchResId(STR_OBJECT_TITLE_SECONDARY_X_AXIS));
+            aRet=SCH_RESSTR(STR_OBJECT_TITLE_SECONDARY_X_AXIS);
             break;
         case TitleHelper::SECONDARY_Y_AXIS_TITLE:
-            aRet=String(SchResId(STR_OBJECT_TITLE_SECONDARY_Y_AXIS));
+            aRet=SCH_RESSTR(STR_OBJECT_TITLE_SECONDARY_Y_AXIS);
             break;
         default:
             OSL_FAIL("unknown title type");
@@ -383,7 +383,7 @@ OUString ObjectNameProvider::getTitleNameByType( TitleHelper::eTitleType eType )
     }
 
     if( aRet.isEmpty() )
-        aRet=String(SchResId(STR_OBJECT_TITLE));
+        aRet=SCH_RESSTR(STR_OBJECT_TITLE);
 
     return aRet;
 }
@@ -402,7 +402,7 @@ OUString ObjectNameProvider::getTitleName( const OUString& rObjectCID
             aRet = ObjectNameProvider::getTitleNameByType( eType );
     }
     if( aRet.isEmpty() )
-        aRet=String(SchResId(STR_OBJECT_TITLE));
+        aRet=SCH_RESSTR(STR_OBJECT_TITLE);
 
     return aRet;
 }
@@ -427,16 +427,16 @@ OUString ObjectNameProvider::getGridName( const OUString& rObjectCID
         switch(nDimensionIndex)
         {
             case 0://x-axis
-                aRet=String(SchResId(STR_OBJECT_GRID_MAJOR_X));
+                aRet=SCH_RESSTR(STR_OBJECT_GRID_MAJOR_X);
                 break;
             case 1://y-axis
-                aRet=String(SchResId(STR_OBJECT_GRID_MAJOR_Y));
+                aRet=SCH_RESSTR(STR_OBJECT_GRID_MAJOR_Y);
                 break;
             case 2://z-axis
-                aRet=String(SchResId(STR_OBJECT_GRID_MAJOR_Z));
+                aRet=SCH_RESSTR(STR_OBJECT_GRID_MAJOR_Z);
                 break;
             default://axis
-                aRet=String(SchResId(STR_OBJECT_GRID));
+                aRet=SCH_RESSTR(STR_OBJECT_GRID);
                 break;
         }
     }
@@ -445,16 +445,16 @@ OUString ObjectNameProvider::getGridName( const OUString& rObjectCID
         switch(nDimensionIndex)
         {
             case 0://x-axis
-                aRet=String(SchResId(STR_OBJECT_GRID_MINOR_X));
+                aRet=SCH_RESSTR(STR_OBJECT_GRID_MINOR_X);
                 break;
             case 1://y-axis
-                aRet=String(SchResId(STR_OBJECT_GRID_MINOR_Y));
+                aRet=SCH_RESSTR(STR_OBJECT_GRID_MINOR_Y);
                 break;
             case 2://z-axis
-                aRet=String(SchResId(STR_OBJECT_GRID_MINOR_Z));
+                aRet=SCH_RESSTR(STR_OBJECT_GRID_MINOR_Z);
                 break;
             default://axis
-                aRet=String(SchResId(STR_OBJECT_GRID));
+                aRet=SCH_RESSTR(STR_OBJECT_GRID);
                 break;
         }
     }
@@ -493,14 +493,14 @@ OUString ObjectNameProvider::getHelpText( const OUString& rObjectCID, const Refe
         {
             OUString aNewLine( "\n" );
 
-            aRet=String(SchResId(STR_TIP_DATAPOINT_INDEX));
+            aRet=SCH_RESSTR(STR_TIP_DATAPOINT_INDEX);
             aRet+=aNewLine;
-            aRet+=String(SchResId(STR_TIP_DATASERIES));
+            aRet+=SCH_RESSTR(STR_TIP_DATASERIES);
             aRet+=aNewLine;
-            aRet+=String(SchResId(STR_TIP_DATAPOINT_VALUES));
+            aRet+=SCH_RESSTR(STR_TIP_DATAPOINT_VALUES);
         }
         else
-            aRet=String(SchResId(STR_TIP_DATAPOINT));
+            aRet=SCH_RESSTR(STR_TIP_DATAPOINT);
 
         Reference< XDiagram > xDiagram( ChartModelHelper::findDiagram( xChartModel ) );
         Reference< XDataSeries > xSeries( ObjectIdentifier::getDataSeriesForCID( rObjectCID , xChartModel ), uno::UNO_QUERY );
@@ -554,7 +554,7 @@ OUString ObjectNameProvider::getHelpText( const OUString& rObjectCID, const Refe
     {
         if( bVerbose )
         {
-            aRet = String( SchResId( STR_OBJECT_CURVE_WITH_PARAMETERS ));
+            aRet = SCH_RESSTR( STR_OBJECT_CURVE_WITH_PARAMETERS );
             Reference< chart2::XDataSeries > xSeries( ObjectIdentifier::getDataSeriesForCID( rObjectCID , xChartModel ));
             Reference< chart2::XRegressionCurveContainer > xCurveCnt( xSeries, uno::UNO_QUERY );
             if( xCurveCnt.is())
@@ -603,7 +603,7 @@ OUString ObjectNameProvider::getHelpText( const OUString& rObjectCID, const Refe
     {
         if( bVerbose )
         {
-            aRet = String( SchResId( STR_OBJECT_AVERAGE_LINE_WITH_PARAMETERS ));
+            aRet = SCH_RESSTR(STR_OBJECT_AVERAGE_LINE_WITH_PARAMETERS);
             Reference< chart2::XDataSeries > xSeries( ObjectIdentifier::getDataSeriesForCID( rObjectCID , xChartModel ));
             Reference< chart2::XRegressionCurveContainer > xCurveCnt( xSeries, uno::UNO_QUERY );
             if( xCurveCnt.is())
@@ -670,7 +670,7 @@ OUString ObjectNameProvider::getSelectedObjectText( const OUString & rObjectCID,
 
     if( OBJECTTYPE_DATA_POINT == eObjectType )
     {
-        aRet = String( SchResId( STR_STATUS_DATAPOINT_MARKED ));
+        aRet = SCH_RESSTR( STR_STATUS_DATAPOINT_MARKED );
 
         Reference< XDiagram > xDiagram( ChartModelHelper::findDiagram( xChartModel ) );
         Reference< XDataSeries > xSeries( ObjectIdentifier::getDataSeriesForCID( rObjectCID , xChartModel ), uno::UNO_QUERY );
@@ -706,7 +706,7 @@ OUString ObjectNameProvider::getSelectedObjectText( const OUString & rObjectCID,
         const OUString aHelpText( getHelpText( rObjectCID, xChartModel, bVerbose ));
         if( !aHelpText.isEmpty())
         {
-            aRet = String( SchResId( STR_STATUS_OBJECT_MARKED ));
+            aRet = SCH_RESSTR( STR_STATUS_OBJECT_MARKED );
             replaceParamterInString( aRet, "%OBJECTNAME", aHelpText );
         }
     }
@@ -778,7 +778,7 @@ OUString ObjectNameProvider::getName_ObjectForSeries(
     Reference< XDataSeries > xSeries( ObjectIdentifier::getDataSeriesForCID( rSeriesCID , xChartModel ), uno::UNO_QUERY );
     if( xSeries.is() )
     {
-        OUString aRet = String(SchResId(STR_OBJECT_FOR_SERIES));
+        OUString aRet = SCH_RESSTR(STR_OBJECT_FOR_SERIES);
         replaceParamterInString( aRet, "%OBJECTNAME", getName( eObjectType, false /*bPlural*/ ) );
         replaceParamterInString( aRet, "%SERIESNAME", lcl_getDataSeriesName( rSeriesCID, xChartModel ) );
         return aRet;
@@ -789,7 +789,7 @@ OUString ObjectNameProvider::getName_ObjectForSeries(
 
 OUString ObjectNameProvider::getName_ObjectForAllSeries( ObjectType eObjectType )
 {
-    OUString aRet = String(SchResId(STR_OBJECT_FOR_ALL_SERIES));
+    OUString aRet = SCH_RESSTR(STR_OBJECT_FOR_ALL_SERIES);
     replaceParamterInString( aRet, "%OBJECTNAME", getName( eObjectType, true /*bPlural*/ ) );
     return aRet;
 }

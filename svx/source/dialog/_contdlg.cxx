@@ -304,7 +304,7 @@ sal_Bool SvxSuperContourDlg::Close()
     if ( aTbx1.IsItemEnabled( TBI_APPLY ) )
     {
         QueryBox    aQBox( this, WB_YES_NO_CANCEL | WB_DEF_YES,
-                           String( CONT_RESID( STR_CONTOURDLG_MODIFY ) ) );
+                           CONT_RESID(STR_CONTOURDLG_MODIFY).toString() );
         const long  nRet = aQBox.Execute();
 
         if ( nRet == RET_YES )
@@ -439,7 +439,7 @@ IMPL_LINK( SvxSuperContourDlg, Tbx1ClickHdl, ToolBox*, pTbx )
         {
             if ( aTbx1.IsItemChecked( TBI_WORKPLACE ) )
             {
-                QueryBox aQBox( this, WB_YES_NO | WB_DEF_NO, String( CONT_RESID( STR_CONTOURDLG_WORKPLACE ) ) );
+                QueryBox aQBox( this, WB_YES_NO | WB_DEF_NO, CONT_RESID(STR_CONTOURDLG_WORKPLACE).toString() );
 
                 if ( !aContourWnd.IsContourChanged() || ( aQBox.Execute() == RET_YES ) )
                     aContourWnd.SetWorkplaceMode( sal_True );
@@ -535,7 +535,7 @@ IMPL_LINK( SvxSuperContourDlg, Tbx1ClickHdl, ToolBox*, pTbx )
                 aStbStatus.Invalidate();
             else if ( bGraphicLinked )
             {
-                QueryBox aQBox( this, WB_YES_NO | WB_DEF_YES, String( CONT_RESID( STR_CONTOURDLG_LINKED ) ) );
+                QueryBox aQBox( this, WB_YES_NO | WB_DEF_YES, CONT_RESID(STR_CONTOURDLG_LINKED).toString() );
 
                 if ( aQBox.Execute() != RET_YES )
                 {
@@ -733,7 +733,7 @@ IMPL_LINK( SvxSuperContourDlg, PipetteClickHdl, ContourWindow*, pWnd )
 
             if( !!aMask )
             {
-                QueryBox    aQBox( this, WB_YES_NO | WB_DEF_YES, String( CONT_RESID( STR_CONTOURDLG_NEWPIPETTE ) ) );
+                QueryBox    aQBox( this, WB_YES_NO | WB_DEF_YES, CONT_RESID(STR_CONTOURDLG_NEWPIPETTE).toString() );
                 sal_Bool        bNewContour;
 
                 aRedoGraphic = Graphic();

@@ -1289,7 +1289,7 @@ void SAL_CALL ChartController::executeDispatch_ChartType()
 {
     // using assignment for broken gcc 3.3
     UndoLiveUpdateGuard aUndoGuard = UndoLiveUpdateGuard(
-        String( SchResId( STR_ACTION_EDIT_CHARTTYPE )), m_xUndoManager );
+        SCH_RESSTR( STR_ACTION_EDIT_CHARTTYPE ), m_xUndoManager );
 
     SolarMutexGuard aSolarGuard;
     //prepare and open dialog
@@ -1310,7 +1310,7 @@ void SAL_CALL ChartController::executeDispatch_SourceData()
         return;
 
     UndoLiveUpdateGuard aUndoGuard = UndoLiveUpdateGuard(
-        String( SchResId( STR_ACTION_EDIT_DATA_RANGES )), m_xUndoManager );
+        SCH_RESSTR(STR_ACTION_EDIT_DATA_RANGES), m_xUndoManager );
     if( xChartDoc.is())
     {
         SolarMutexGuard aSolarGuard;
@@ -1335,7 +1335,7 @@ void SAL_CALL ChartController::executeDispatch_MoveSeries( sal_Bool bForward )
     UndoGuardWithSelection aUndoGuard(
         ActionDescriptionProvider::createDescription(
             (bForward ? ActionDescriptionProvider::MOVE_TOTOP : ActionDescriptionProvider::MOVE_TOBOTTOM),
-            String( SchResId( STR_OBJECT_DATASERIES ))),
+            SCH_RESSTR(STR_OBJECT_DATASERIES)),
         m_xUndoManager );
 
     bool bChanged = DiagramHelper::moveSeries( ChartModelHelper::findDiagram( getModel() ), xGivenDataSeries, bForward );

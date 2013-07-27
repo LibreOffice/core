@@ -59,7 +59,7 @@ namespace svx
         */
         String getString( sal_uInt16 _nResId )
         {
-            return String( ResId( _nResId, *m_pResMgr ) );
+            return ResId(_nResId, *m_pResMgr).toString();
         }
 
         size_t  size() const    { return m_aStrings.size(); }

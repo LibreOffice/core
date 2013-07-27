@@ -785,10 +785,10 @@ void LibPage::InsertLib()
     Reference< uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
     // file open dialog
     Reference < XFilePicker3 > xFP = FilePicker::createWithMode(xContext, TemplateDescription::FILEOPEN_SIMPLE);
-    xFP->setTitle( String( IDEResId( RID_STR_APPENDLIBS ) ) );
+    xFP->setTitle(IDEResId(RID_STR_APPENDLIBS).toString());
 
     // filter
-    OUString aTitle = String( IDEResId( RID_STR_BASIC ) );
+    OUString aTitle(IDEResId(RID_STR_BASIC).toString());
     OUString aFilter;
     aFilter =  "*.sbl;*.xlc;*.xlb" ;        // library files
     aFilter += ";*.sdw;*.sxw;*.odt" ;       // text
@@ -1245,10 +1245,10 @@ void LibPage::ExportAsPackage( const String& aLibName )
 
     Reference < XFilePicker3 > xFP = FilePicker::createWithMode(xContext, TemplateDescription::FILESAVE_SIMPLE);
 
-    xFP->setTitle( String( IDEResId( RID_STR_EXPORTPACKAGE ) ) );
+    xFP->setTitle(IDEResId(RID_STR_EXPORTPACKAGE).toString());
 
     // filter
-    OUString aTitle = String( IDEResId( RID_STR_PACKAGE_BUNDLE ) );
+    OUString aTitle(IDEResId(RID_STR_PACKAGE_BUNDLE).toString());
     OUString aFilter;
     aFilter = "*.oxt" ;       // library files
     xFP->appendFilter( aTitle, aFilter );
@@ -1365,7 +1365,7 @@ void LibPage::ExportAsBasic( const String& aLibName )
     Reference< XFolderPicker2 > xFolderPicker = FolderPicker::create(xContext);
     Reference< task::XInteractionHandler2 > xHandler( task::InteractionHandler::createWithParent(xContext, 0) );
 
-    xFolderPicker->setTitle( String( IDEResId( RID_STR_EXPORTBASIC ) ) );
+    xFolderPicker->setTitle(IDEResId(RID_STR_EXPORTBASIC).toString());
 
     // set display directory and filter
     String aPath =GetExtraData()->GetAddLibPath();
@@ -1569,17 +1569,17 @@ void createLibImpl( Window* pWin, const ScriptDocument& rDocument,
 
         if ( aLibName.getLength() > 30 )
         {
-            ErrorBox( pWin, WB_OK | WB_DEF_OK, String( IDEResId( RID_STR_LIBNAMETOLONG ) ) ).Execute();
+            ErrorBox( pWin, WB_OK | WB_DEF_OK, IDEResId(RID_STR_LIBNAMETOLONG).toString() ).Execute();
         }
         else if ( !IsValidSbxName( aLibName ) )
         {
             ErrorBox( pWin, WB_OK | WB_DEF_OK,
-                        String( IDEResId( RID_STR_BADSBXNAME ) ) ).Execute();
+                        IDEResId(RID_STR_BADSBXNAME).toString() ).Execute();
         }
         else if ( rDocument.hasLibrary( E_SCRIPTS, aLibName ) || rDocument.hasLibrary( E_DIALOGS, aLibName ) )
         {
             ErrorBox( pWin, WB_OK | WB_DEF_OK,
-                        String( IDEResId( RID_STR_SBXNAMEALLREADYUSED2 ) ) ).Execute();
+                        IDEResId(RID_STR_SBXNAMEALLREADYUSED2).toString() ).Execute();
         }
         else
         {

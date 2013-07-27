@@ -84,7 +84,7 @@ namespace abp
                 // ........................................................
                 // create an instance of the dialog service
                 Reference< XWindow > xDialogParent = VCLUnoHelper::GetInterface( _pParent );
-                OUString sTitle = String( ModuleRes( RID_STR_FIELDDIALOGTITLE ) );
+                OUString sTitle(ModuleRes(RID_STR_FIELDDIALOGTITLE).toString());
                 Reference< XExecutableDialog > xDialog = AddressBookSourceDialog::createWithDataSource(_rxORB,
                                                            // the parent window
                                                            xDialogParent,

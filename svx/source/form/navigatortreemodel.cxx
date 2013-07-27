@@ -291,7 +291,7 @@ namespace svxform
 
             if( bUndo )
             {
-                XubString aUndoStr(SVX_RES(RID_STR_UNDO_CONTAINER_INSERT));
+                XubString aUndoStr(SVX_RESSTR(RID_STR_UNDO_CONTAINER_INSERT));
                 aUndoStr.SearchAndReplace(OUString('#'), aStr);
                 m_pFormModel->BegUndo(aUndoStr);
             }

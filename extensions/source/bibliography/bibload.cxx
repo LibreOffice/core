@@ -239,7 +239,7 @@ void BibliographyLoader::load(const Reference< XFrame > & rFrame, const OUString
     if(xPrSet.is())
     {
         Any aTitle;
-        aTitle <<= OUString(String(BibResId(RID_BIB_STR_FRAME_TITLE)));
+        aTitle <<= BibResId(RID_BIB_STR_FRAME_TITLE).toString();
         xPrSet->setPropertyValue("Title", aTitle);
     }
     if(aPartName.EqualsAscii("View") || aPartName.EqualsAscii("View1"))

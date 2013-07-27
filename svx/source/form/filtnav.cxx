@@ -491,7 +491,7 @@ void SAL_CALL FmFilterAdapter::disjunctiveTermRemoved( const FilterEvent& _Event
     // if the first term was removed, then the to-be first term needs its text updated
     if ( _Event.DisjunctiveTerm == 0 )
     {
-        rTermItems[1]->SetText( String( SVX_RES( RID_STR_FILTER_FILTER_FOR ) ) );
+        rTermItems[1]->SetText( SVX_RESSTR(RID_STR_FILTER_FILTER_FOR));
         FmFilterTextChangedHint aChangeHint( rTermItems[1] );
         m_pModel->Broadcast( aChangeHint );
     }
@@ -527,7 +527,7 @@ void SAL_CALL FmFilterAdapter::disjunctiveTermAdded( const FilterEvent& _Event )
 
     const ::std::vector< FmFilterData* >::iterator insertPos = pFormItem->GetChildren().begin() + nInsertPos;
 
-    FmFilterItems* pFilterItems = new FmFilterItems( pFormItem, String( SVX_RES( RID_STR_FILTER_FILTER_OR ) ) );
+    FmFilterItems* pFilterItems = new FmFilterItems(pFormItem, SVX_RESSTR(RID_STR_FILTER_FILTER_OR));
     m_pModel->Insert( insertPos, pFilterItems );
 }
 
@@ -630,7 +630,7 @@ void FmFilterModel::Update(const Reference< XIndexAccess > & xControllers, FmPar
             Reference< XFilterController > xFilterController( pFormItem->GetFilterController(), UNO_SET_THROW );
 
             // insert the existing filters for the form
-            String aTitle( SVX_RES( RID_STR_FILTER_FILTER_FOR ) );
+            OUString aTitle(SVX_RESSTR(RID_STR_FILTER_FILTER_FOR));
 
             Sequence< Sequence< OUString > > aExpressions = xFilterController->getPredicateExpressions();
             for (   const Sequence< OUString >* pConjunctionTerm = aExpressions.getConstArray();
@@ -1246,7 +1246,7 @@ sal_Bool FmFilterNavigator::EditedEntry( SvTreeListEntry* pEntry, const OUString
         {
             // display the error and return sal_False
             SQLContext aError;
-            aError.Message = String(SVX_RES(RID_STR_SYNTAXERROR));
+            aError.Message = SVX_RESSTR(RID_STR_SYNTAXERROR);
             aError.Details = aErrorMsg;
             displayException(aError, this);
 

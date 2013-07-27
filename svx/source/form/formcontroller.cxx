@@ -490,7 +490,7 @@ void FmXAutoControl::createPeer( const Reference< XToolkit > & rxToolkit, const 
     Reference< XTextComponent >  xText(getPeer() , UNO_QUERY);
     if (xText.is())
     {
-        xText->setText(OUString(String(SVX_RES(RID_STR_AUTOFIELD))));
+        xText->setText(SVX_RESSTR(RID_STR_AUTOFIELD));
         xText->setEditable(sal_False);
     }
 }
@@ -3654,7 +3654,7 @@ namespace
     void displayErrorSetFocus( const String& _rMessage, const Reference< XControl >& _rxFocusControl, Window* _pDialogParent )
     {
         SQLContext aError;
-        aError.Message = String( SVX_RES( RID_STR_WRITEERROR ) );
+        aError.Message = SVX_RESSTR(RID_STR_WRITEERROR);
         aError.Details = _rMessage;
         displayException( aError, _pDialogParent );
 
@@ -3777,7 +3777,7 @@ sal_Bool SAL_CALL FormController::approveRowChange(const RowChangeEvent& _rEvent
             if ( !rColInfo.xColumn->getString().isEmpty() || !rColInfo.xColumn->wasNull() )
                 continue;
 
-            String sMessage( SVX_RES( RID_ERR_FIELDREQUIRED ) );
+            String sMessage( SVX_RESSTR( RID_ERR_FIELDREQUIRED ) );
             sMessage.SearchAndReplace( OUString('#'), rColInfo.sName );
 
             // the control to focus
@@ -4059,7 +4059,7 @@ sal_Bool SAL_CALL FormController::confirmDelete(const RowChangeEvent& aEvent) th
         SQLWarning aWarning;
         aWarning.Message = sTitle;
         SQLWarning aDetails;
-        aDetails.Message = String( SVX_RES( RID_STR_DELETECONFIRM ) );
+        aDetails.Message = SVX_RESSTR(RID_STR_DELETECONFIRM);
         aWarning.NextException <<= aDetails;
 
         OInteractionRequest* pRequest = new OInteractionRequest( makeAny( aWarning ) );

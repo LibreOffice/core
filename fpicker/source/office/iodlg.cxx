@@ -789,7 +789,7 @@ IMPL_STATIC_LINK( SvtFileDialog, NewFolderHdl_Impl, PushButton*, EMPTYARG )
     SmartContent aContent( pThis->_pFileView->GetViewURL( ) );
     OUString aTitle;
     aContent.getTitle( aTitle );
-    svtools::QueryFolderNameDialog aDlg( pThis, aTitle, String( SvtResId( STR_SVT_NEW_FOLDER ) ) );
+    svtools::QueryFolderNameDialog aDlg( pThis, aTitle, SVT_RESSTR(STR_SVT_NEW_FOLDER) );
     sal_Bool bHandled = sal_False;
 
     while ( !bHandled )
@@ -1176,7 +1176,7 @@ IMPL_STATIC_LINK( SvtFileDialog, OpenHdl_Impl, void*, pVoid )
         {
             if ( ::utl::UCBContentHelper::Exists( aFileObj.GetMainURL( INetURLObject::NO_DECODE ) ) )
             {
-                String aMsg = SvtResId( STR_SVT_ALREADYEXISTOVERWRITE );
+                String aMsg = SVT_RESSTR( STR_SVT_ALREADYEXISTOVERWRITE );
                 aMsg.SearchAndReplace(
                     String( RTL_CONSTASCII_USTRINGPARAM( "$filename$" ) ),
                     aFileObj.getName(INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET)
@@ -1216,7 +1216,7 @@ IMPL_STATIC_LINK( SvtFileDialog, OpenHdl_Impl, void*, pVoid )
 
                 if ( !bExists )
                 {
-                    String sError( SvtResId( RID_FILEOPEN_NOTEXISTENTFILE ) );
+                    String sError( SVT_RESSTR( RID_FILEOPEN_NOTEXISTENTFILE ) );
 
                     String sInvalidFile( aFileObj.GetMainURL( INetURLObject::DECODE_TO_IURI ) );
                     if ( INET_PROT_FILE == aFileObj.GetProtocol() )
@@ -2064,7 +2064,7 @@ short SvtFileDialog::PrepareExecute()
 
                 if ( bEmpty )
                 {
-                    ErrorBox aBox( this, WB_OK, SvtResId( STR_SVT_NOREMOVABLEDEVICE ) );
+                    ErrorBox aBox( this, WB_OK, SVT_RESSTR( STR_SVT_NOREMOVABLEDEVICE ) );
                     aBox.Execute();
                     return 0;
                 }
@@ -2908,7 +2908,7 @@ void SvtFileDialog::AddControls_Impl( )
         _pPrevBmp = new FixedBitmap( this, WinBits( WB_BORDER ) );
         _pPrevBmp->SetBackground( Wallpaper( Color( COL_WHITE ) ) );
         _pPrevBmp->Show();
-        _pPrevBmp->SetAccessibleName(SvtResId(STR_PREVIEW));
+        _pPrevBmp->SetAccessibleName(SVT_RESSTR(STR_PREVIEW));
     }
 
     if ( _nExtraBits & SFX_EXTRA_AUTOEXTENSION )

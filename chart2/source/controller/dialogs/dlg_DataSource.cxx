@@ -167,8 +167,8 @@ DataSourceDialog::DataSourceDialog(
     m_pDataSourceTabPage = new DataSourceTabPage( m_pTabControl, *(m_apDialogModel.get()),
                                     m_apDocTemplateProvider.get(), this, true /* bHideDescription */ );
 
-    m_pTabControl->InsertPage( TP_RANGECHOOSER, String( SchResId( STR_PAGE_DATA_RANGE )));
-    m_pTabControl->InsertPage( TP_DATA_SOURCE,  String( SchResId( STR_OBJECT_DATASERIES_PLURAL )));
+    m_pTabControl->InsertPage( TP_RANGECHOOSER, SCH_RESSTR(STR_PAGE_DATA_RANGE) );
+    m_pTabControl->InsertPage( TP_DATA_SOURCE,  SCH_RESSTR(STR_OBJECT_DATASERIES_PLURAL) );
 
     m_pTabControl->SetTabPage( TP_RANGECHOOSER, m_pRangeChooserTabePage );
     m_pTabControl->SetTabPage( TP_DATA_SOURCE,  m_pDataSourceTabPage );

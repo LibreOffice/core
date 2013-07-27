@@ -88,12 +88,12 @@ AreaTransparencyGradientControl::AreaTransparencyGradientControl (
     maBtnLeft45.SetItemImage(1,maRotLeft);
     Size aTbxSize = maBtnLeft45.CalcWindowSizePixel();
     maBtnLeft45.SetOutputSizePixel( aTbxSize );
-    maBtnLeft45.SetQuickHelpText(1, String(SVX_RES(STR_HELP_LEFT)));    //acc wj
+    maBtnLeft45.SetQuickHelpText(1, SVX_RESSTR(STR_HELP_LEFT));    //acc wj
 
     maBtnRight45.SetItemImage(1,maRotRight);
     aTbxSize = maBtnRight45.CalcWindowSizePixel();
     maBtnRight45.SetOutputSizePixel( aTbxSize );
-    maBtnRight45.SetQuickHelpText(1, String(SVX_RES(STR_HELP_RIGHT)));  //acc wj
+    maBtnRight45.SetQuickHelpText(1, SVX_RESSTR(STR_HELP_RIGHT));  //acc wj
 
     maBtnLeft45.SetBackground(Wallpaper());
     maBtnLeft45.SetPaintTransparent(true);

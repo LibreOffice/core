@@ -1376,7 +1376,7 @@ namespace pcr
     {
         try
         {
-            OUString sPlcHolder = String( PcrRes( RID_EMBED_IMAGE_PLACEHOLDER ) );
+            OUString sPlcHolder = PcrRes(RID_EMBED_IMAGE_PLACEHOLDER).toString();
             bool bIsPlaceHolderValue = false;
 
             if ( rName.equals( PROPERTY_IMAGE_URL ) )

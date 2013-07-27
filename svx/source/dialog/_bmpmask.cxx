@@ -575,7 +575,7 @@ void SvxBmpMask::SetColorList( const XColorListRef &pList )
 {
     if ( pList.is() && ( pList != pColLst ) )
     {
-        const String aTransp( BMP_RESID( RID_SVXDLG_BMPMASK_STR_TRANSP ) );
+        const String aTransp(BMP_RESID(RID_SVXDLG_BMPMASK_STR_TRANSP).toString());
 
         pColLst = pList;
 
@@ -1210,7 +1210,7 @@ void SvxBmpMask::ApplyStyle()
 */
 void SvxBmpMask::SetAccessibleNames (void)
 {
-    String sSourceColor (BMP_RESID( RID_SVXDLG_BMPMASK_STR_SOURCECOLOR));
+    String sSourceColor(BMP_RESID(RID_SVXDLG_BMPMASK_STR_SOURCECOLOR).toString());
     String sSourceColorN;
 
     sSourceColorN = sSourceColor;

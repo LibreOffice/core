@@ -272,7 +272,7 @@ namespace pcr
             if ( m_sDetailLabel.isEmpty() )
             {
                 ::svt::OLocalResourceAccess aStringAccess( PcrRes( RID_DLG_FORMLINKS ), RSC_MODALDIALOG );
-                m_sDetailLabel = String( PcrRes( STR_DETAIL_FORM ) );
+                m_sDetailLabel = PcrRes(STR_DETAIL_FORM).toString();
             }
             sDetailType = m_sDetailLabel;
         }
@@ -285,7 +285,7 @@ namespace pcr
             if ( m_sMasterLabel.isEmpty() )
             {
                 ::svt::OLocalResourceAccess aStringAccess( PcrRes( RID_DLG_FORMLINKS ), RSC_MODALDIALOG );
-                m_sMasterLabel = String( PcrRes( STR_MASTER_FORM ) );
+                m_sMasterLabel = PcrRes(STR_MASTER_FORM).toString();
             }
             sMasterType = m_sMasterLabel;
         }

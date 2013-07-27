@@ -825,7 +825,7 @@ void SAL_CALL ChartController::executeDispatch_View3D()
     {
         // using assignment for broken gcc 3.3
         UndoLiveUpdateGuard aUndoGuard = UndoLiveUpdateGuard(
-            String( SchResId( STR_ACTION_EDIT_3D_VIEW )),
+            SCH_RESSTR( STR_ACTION_EDIT_3D_VIEW ),
             m_xUndoManager );
 
         //open dialog

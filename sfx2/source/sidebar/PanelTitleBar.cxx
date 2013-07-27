@@ -51,7 +51,7 @@ PanelTitleBar::PanelTitleBar (
       mnMenuItemIndex(1),
       mxFrame(),
       msMoreOptionsCommand(),
-      msAccessibleNamePrefix(String(SfxResId(SFX_STR_SIDEBAR_ACCESSIBILITY_PANEL_PREFIX)))
+      msAccessibleNamePrefix(SFX2_RESSTR(SFX_STR_SIDEBAR_ACCESSIBILITY_PANEL_PREFIX))
 {
     OSL_ASSERT(mpPanel != NULL);
 
@@ -99,7 +99,7 @@ void PanelTitleBar::SetMoreOptionsCommand (
             maToolBox.SetOutStyle(TOOLBOX_STYLE_FLAT);
             maToolBox.SetQuickHelpText(
                 mnMenuItemIndex,
-                String(SfxResId(SFX_STR_SIDEBAR_MORE_OPTIONS)));
+                SFX2_RESSTR(SFX_STR_SIDEBAR_MORE_OPTIONS));
         }
     }
 }

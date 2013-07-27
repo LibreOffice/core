@@ -54,7 +54,7 @@ LightButton::LightButton( Window* pParent, const ResId& rResId, sal_Int32 nLight
 {
     SetModeImage( Image( SVX_RES(RID_SVXIMAGE_LIGHT_OFF)   ) );
 
-    String aTipHelpStr( SchResId(STR_TIP_LIGHTSOURCE_X) );
+    String aTipHelpStr( SCH_RESSTR(STR_TIP_LIGHTSOURCE_X) );
     OUString aTipHelp( aTipHelpStr  );
     const OUString aReplacementStr( "%LIGHTNUMBER" );
     sal_Int32 nIndex = aTipHelp.indexOf( aReplacementStr );
@@ -96,7 +96,7 @@ ColorButton::ColorButton( Window* pParent, const ResId& rResId )
             : ImageButton( pParent, rResId )
 {
     SetModeImage( Image( SVX_RES(RID_SVXIMAGE_COLORDLG) ) );
-    this->SetQuickHelpText( String( SchResId(STR_TIP_CHOOSECOLOR) ) );
+    this->SetQuickHelpText( SCH_RESSTR(STR_TIP_CHOOSECOLOR) );
 }
 
 ColorButton::~ColorButton()
@@ -345,7 +345,7 @@ ThreeD_SceneIllumination_TabPage::ThreeD_SceneIllumination_TabPage( Window* pWin
     m_aBtn_Light6.SetAccessibleRelationLabeledBy(&m_aFT_LightSource);
     m_aBtn_Light7.SetAccessibleRelationLabeledBy(&m_aFT_LightSource);
     m_aBtn_Light8.SetAccessibleRelationLabeledBy(&m_aFT_LightSource);
-    m_aCtl_Preview.SetAccessibleName(String(SchResId( STR_LIGHT_PREVIEW )));
+    m_aCtl_Preview.SetAccessibleName(SCH_RESSTR( STR_LIGHT_PREVIEW ));
 }
 
 ThreeD_SceneIllumination_TabPage::~ThreeD_SceneIllumination_TabPage()

@@ -55,7 +55,7 @@ void ChartController::executeDispatch_EditData()
             SolarMutexGuard aSolarGuard;
             // using assignment for broken gcc 3.3
             UndoLiveUpdateGuardWithData aUndoGuard = UndoLiveUpdateGuardWithData(
-                String( SchResId( STR_ACTION_EDIT_CHART_DATA )),
+                SCH_RESSTR( STR_ACTION_EDIT_CHART_DATA ),
                 m_xUndoManager );
             DataEditor aDataEditorDialog( pParent, xChartDoc, m_xCC );
             // the dialog has no OK/Cancel

@@ -49,12 +49,12 @@ namespace pcr
             {
                 Reference< XInterface >  xIFace;
                 aUnoObj >>= xIFace;
-                sClassName = String(PcrRes(RID_STR_PROPTITLE_EDIT));
+                sClassName = PcrRes(RID_STR_PROPTITLE_EDIT).toString();
                 if (xIFace.is())
                 {   // we have a chance to check if it's a formatted field model
                     Reference< XServiceInfo >  xInfo(xIFace, UNO_QUERY);
                     if (xInfo.is() && (xInfo->supportsService(SERVICE_COMPONENT_FORMATTEDFIELD)))
-                        sClassName = String(PcrRes(RID_STR_PROPTITLE_FORMATTED));
+                        sClassName = PcrRes(RID_STR_PROPTITLE_FORMATTED).toString();
                     else if (!xInfo.is())
                     {
                         // couldn't distinguish between formatted and edit with the service name, so try with the properties
@@ -63,7 +63,7 @@ namespace pcr
                         {
                             Reference< XPropertySetInfo >  xPropsInfo = xProps->getPropertySetInfo();
                             if (xPropsInfo.is() && xPropsInfo->hasPropertyByName(PROPERTY_FORMATSSUPPLIER))
-                                sClassName = String(PcrRes(RID_STR_PROPTITLE_FORMATTED));
+                                sClassName = PcrRes(RID_STR_PROPTITLE_FORMATTED).toString();
                         }
                     }
                 }
@@ -71,44 +71,44 @@ namespace pcr
             break;
 
             case FormComponentType::COMMANDBUTTON:
-                sClassName = String(PcrRes(RID_STR_PROPTITLE_PUSHBUTTON)); break;
+                sClassName = PcrRes(RID_STR_PROPTITLE_PUSHBUTTON).toString(); break;
             case FormComponentType::RADIOBUTTON:
-                sClassName = String(PcrRes(RID_STR_PROPTITLE_RADIOBUTTON)); break;
+                sClassName = PcrRes(RID_STR_PROPTITLE_RADIOBUTTON).toString(); break;
             case FormComponentType::CHECKBOX:
-                sClassName = String(PcrRes(RID_STR_PROPTITLE_CHECKBOX)); break;
+                sClassName = PcrRes(RID_STR_PROPTITLE_CHECKBOX).toString(); break;
             case FormComponentType::LISTBOX:
-                sClassName = String(PcrRes(RID_STR_PROPTITLE_LISTBOX)); break;
+                sClassName = PcrRes(RID_STR_PROPTITLE_LISTBOX).toString(); break;
             case FormComponentType::COMBOBOX:
-                sClassName = String(PcrRes(RID_STR_PROPTITLE_COMBOBOX)); break;
+                sClassName = PcrRes(RID_STR_PROPTITLE_COMBOBOX).toString(); break;
             case FormComponentType::GROUPBOX:
-                sClassName = String(PcrRes(RID_STR_PROPTITLE_GROUPBOX)); break;
+                sClassName = PcrRes(RID_STR_PROPTITLE_GROUPBOX).toString(); break;
             case FormComponentType::IMAGEBUTTON:
-                sClassName = String(PcrRes(RID_STR_PROPTITLE_IMAGEBUTTON)); break;
+                sClassName = PcrRes(RID_STR_PROPTITLE_IMAGEBUTTON).toString(); break;
             case FormComponentType::FIXEDTEXT:
-                sClassName = String(PcrRes(RID_STR_PROPTITLE_FIXEDTEXT)); break;
+                sClassName = PcrRes(RID_STR_PROPTITLE_FIXEDTEXT).toString(); break;
             case FormComponentType::GRIDCONTROL:
-                sClassName = String(PcrRes(RID_STR_PROPTITLE_DBGRID)); break;
+                sClassName = PcrRes(RID_STR_PROPTITLE_DBGRID).toString(); break;
             case FormComponentType::FILECONTROL:
-                sClassName = String(PcrRes(RID_STR_PROPTITLE_FILECONTROL)); break;
+                sClassName = PcrRes(RID_STR_PROPTITLE_FILECONTROL).toString(); break;
 
             case FormComponentType::DATEFIELD:
-                sClassName = String(PcrRes(RID_STR_PROPTITLE_DATEFIELD)); break;
+                sClassName = PcrRes(RID_STR_PROPTITLE_DATEFIELD).toString(); break;
             case FormComponentType::TIMEFIELD:
-                sClassName = String(PcrRes(RID_STR_PROPTITLE_TIMEFIELD)); break;
+                sClassName = PcrRes(RID_STR_PROPTITLE_TIMEFIELD).toString(); break;
             case FormComponentType::NUMERICFIELD:
-                sClassName = String(PcrRes(RID_STR_PROPTITLE_NUMERICFIELD)); break;
+                sClassName = PcrRes(RID_STR_PROPTITLE_NUMERICFIELD).toString(); break;
             case FormComponentType::CURRENCYFIELD:
-                sClassName = String(PcrRes(RID_STR_PROPTITLE_CURRENCYFIELD)); break;
+                sClassName = PcrRes(RID_STR_PROPTITLE_CURRENCYFIELD).toString(); break;
             case FormComponentType::PATTERNFIELD:
-                sClassName = String(PcrRes(RID_STR_PROPTITLE_PATTERNFIELD)); break;
+                sClassName = PcrRes(RID_STR_PROPTITLE_PATTERNFIELD).toString(); break;
             case FormComponentType::IMAGECONTROL:
-                sClassName = String(PcrRes(RID_STR_PROPTITLE_IMAGECONTROL)); break;
+                sClassName = PcrRes(RID_STR_PROPTITLE_IMAGECONTROL).toString(); break;
             case FormComponentType::HIDDENCONTROL:
-                sClassName = String(PcrRes(RID_STR_PROPTITLE_HIDDENCONTROL)); break;
+                sClassName = PcrRes(RID_STR_PROPTITLE_HIDDENCONTROL).toString(); break;
 
             case FormComponentType::CONTROL:
             default:
-                sClassName = String(PcrRes(RID_STR_PROPTITLE_UNKNOWNCONTROL)); break;
+                sClassName = PcrRes(RID_STR_PROPTITLE_UNKNOWNCONTROL).toString(); break;
         }
 
         return sClassName;

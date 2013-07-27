@@ -80,7 +80,7 @@ namespace pcr
     //========================================================================
 #define DEF_INFO( ident, uinameres, helpid, flags )   \
     OPropertyInfoImpl( PROPERTY_##ident, PROPERTY_ID_##ident, \
-            String( PcrRes( RID_STR_##uinameres ) ), HID_PROP_##helpid, flags )
+            PcrRes( RID_STR_##uinameres ).toString(), HID_PROP_##helpid, flags )
 
 #define DEF_INFO_1( ident, uinameres, helpid, flag1 ) \
     DEF_INFO( ident, uinameres, helpid, PROP_FLAG_##flag1 )
@@ -517,7 +517,7 @@ namespace pcr
             PcrRes aLocalId( i );
             while ( aEnumStrings.IsAvailableRes( aLocalId.SetRT( RSC_STRING ) ) )
             {
-                aReturn.push_back( String( aLocalId ) );
+                aReturn.push_back( aLocalId.toString() );
                 aLocalId = PcrRes( ++i );
             }
         }

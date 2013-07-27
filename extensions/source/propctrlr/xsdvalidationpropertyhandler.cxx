@@ -534,7 +534,7 @@ namespace pcr
         }
 
         // confirmation message
-        String sConfirmation( PcrRes( RID_STR_CONFIRM_DELETE_DATA_TYPE ) );
+        String sConfirmation( PcrRes( RID_STR_CONFIRM_DELETE_DATA_TYPE ).toString() );
         sConfirmation.SearchAndReplaceAscii( "#type#", pType->getName() );
         QueryBox aQuery( NULL, WB_YES_NO, sConfirmation ); // TODO/eForms: proper parent
         if ( aQuery.Execute() != RET_YES )

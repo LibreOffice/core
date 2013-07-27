@@ -79,8 +79,8 @@ namespace abp
             *pArguments++ <<= PropertyValue(OUString("ParentWindow"), -1, makeAny(xDialogParent), PropertyState_DIRECT_VALUE);
 
             // the title of the dialog
-            String sAdminDialogTitle(ModuleRes(RID_STR_ADMINDIALOGTITLE));
-            *pArguments++ <<= PropertyValue(OUString("Title"), -1, makeAny(OUString(sAdminDialogTitle)), PropertyState_DIRECT_VALUE);
+            OUString sAdminDialogTitle(ModuleRes(RID_STR_ADMINDIALOGTITLE).toString());
+            *pArguments++ <<= PropertyValue(OUString("Title"), -1, makeAny(sAdminDialogTitle), PropertyState_DIRECT_VALUE);
 
             // the name of the new data source
             *pArguments++ <<= PropertyValue(OUString("InitialSelection"), -1, makeAny(m_xDataSource), PropertyState_DIRECT_VALUE);

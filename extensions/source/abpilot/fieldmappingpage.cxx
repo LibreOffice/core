@@ -80,9 +80,9 @@ namespace abp
     void FieldMappingPage::implUpdateHint()
     {
         const AddressSettings& rSettings = getSettings();
-        String sHint;
+        OUString sHint;
         if ( 0 == rSettings.aFieldMapping.size() )
-            sHint = String( ModuleRes( RID_STR_NOFIELDSASSIGNED ) );
+            sHint = ModuleRes(RID_STR_NOFIELDSASSIGNED).toString();
         m_aHint.SetText( sHint );
     }
 

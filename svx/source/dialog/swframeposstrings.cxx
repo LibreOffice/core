@@ -36,7 +36,7 @@ SvxSwFramePosString_Impl::SvxSwFramePosString_Impl() :
     for(sal_uInt16 i = 0; i < SvxSwFramePosString::STR_MAX; i++)
     {
         //string ids have to start at 1
-        aStrings[i] = String(SVX_RES(i + 1));
+        aStrings[i] = SVX_RESSTR(i + 1);
     }
     FreeResource();
 }

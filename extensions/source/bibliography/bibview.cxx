@@ -134,7 +134,7 @@ namespace bib
             else if(bExecute)
             {
                 sErrorString += '\n';
-                sErrorString += String( BibResId( RID_MAP_QUESTION ) );
+                sErrorString += BIB_RESSTR(RID_MAP_QUESTION);
                 QueryBox aQuery( this, WB_YES_NO, sErrorString );
                 aQuery.SetDefaultCheckBoxText();
                 short nResult = aQuery.Execute();

@@ -82,21 +82,21 @@ OUString lcl_ConvertRole( const OUString & rRoleString, bool bFromInternalToUI )
 
     if( aTranslationMap.empty() )
     {
-        aTranslationMap[ "categories" ] =   OUString( String( ::chart::SchResId( STR_DATA_ROLE_CATEGORIES )));
-        aTranslationMap[ "error-bars-x" ] = OUString( String( ::chart::SchResId( STR_DATA_ROLE_X_ERROR )));
-        aTranslationMap[ "error-bars-x-positive" ] = OUString( String( ::chart::SchResId( STR_DATA_ROLE_X_ERROR_POSITIVE )));
-        aTranslationMap[ "error-bars-x-negative" ] = OUString( String( ::chart::SchResId( STR_DATA_ROLE_X_ERROR_NEGATIVE )));
-        aTranslationMap[ "error-bars-y" ] = OUString( String( ::chart::SchResId( STR_DATA_ROLE_Y_ERROR )));
-        aTranslationMap[ "error-bars-y-positive" ] = OUString( String( ::chart::SchResId( STR_DATA_ROLE_Y_ERROR_POSITIVE )));
-        aTranslationMap[ "error-bars-y-negative" ] = OUString( String( ::chart::SchResId( STR_DATA_ROLE_Y_ERROR_NEGATIVE )));
-        aTranslationMap[ "label" ] =        OUString( String( ::chart::SchResId( STR_DATA_ROLE_LABEL )));
-        aTranslationMap[ "values-first" ] = OUString( String( ::chart::SchResId( STR_DATA_ROLE_FIRST )));
-        aTranslationMap[ "values-last" ] =  OUString( String( ::chart::SchResId( STR_DATA_ROLE_LAST )));
-        aTranslationMap[ "values-max" ] =   OUString( String( ::chart::SchResId( STR_DATA_ROLE_MAX )));
-        aTranslationMap[ "values-min" ] =   OUString( String( ::chart::SchResId( STR_DATA_ROLE_MIN )));
-        aTranslationMap[ "values-x" ] =     OUString( String( ::chart::SchResId( STR_DATA_ROLE_X )));
-        aTranslationMap[ "values-y" ] =     OUString( String( ::chart::SchResId( STR_DATA_ROLE_Y )));
-        aTranslationMap[ "values-size" ] =  OUString( String( ::chart::SchResId( STR_DATA_ROLE_SIZE )));
+        aTranslationMap[ "categories" ] =   ::chart::SchResId( STR_DATA_ROLE_CATEGORIES ).toString();
+        aTranslationMap[ "error-bars-x" ] = ::chart::SchResId( STR_DATA_ROLE_X_ERROR ).toString();
+        aTranslationMap[ "error-bars-x-positive" ] = ::chart::SchResId( STR_DATA_ROLE_X_ERROR_POSITIVE ).toString();
+        aTranslationMap[ "error-bars-x-negative" ] = ::chart::SchResId( STR_DATA_ROLE_X_ERROR_NEGATIVE ).toString();
+        aTranslationMap[ "error-bars-y" ] = ::chart::SchResId( STR_DATA_ROLE_Y_ERROR ).toString();
+        aTranslationMap[ "error-bars-y-positive" ] = ::chart::SchResId( STR_DATA_ROLE_Y_ERROR_POSITIVE ).toString();
+        aTranslationMap[ "error-bars-y-negative" ] = ::chart::SchResId( STR_DATA_ROLE_Y_ERROR_NEGATIVE ).toString();
+        aTranslationMap[ "label" ] =        ::chart::SchResId( STR_DATA_ROLE_LABEL ).toString();
+        aTranslationMap[ "values-first" ] = ::chart::SchResId( STR_DATA_ROLE_FIRST ).toString();
+        aTranslationMap[ "values-last" ] =  ::chart::SchResId( STR_DATA_ROLE_LAST ).toString();
+        aTranslationMap[ "values-max" ] =   ::chart::SchResId( STR_DATA_ROLE_MAX ).toString();
+        aTranslationMap[ "values-min" ] =   ::chart::SchResId( STR_DATA_ROLE_MIN ).toString();
+        aTranslationMap[ "values-x" ] =     ::chart::SchResId( STR_DATA_ROLE_X ).toString();
+        aTranslationMap[ "values-y" ] =     ::chart::SchResId( STR_DATA_ROLE_Y ).toString();
+        aTranslationMap[ "values-size" ] =  ::chart::SchResId( STR_DATA_ROLE_SIZE ).toString();
     }
 
     if( bFromInternalToUI )
@@ -308,7 +308,7 @@ Reference< XDataSeries > lcl_CreateNewSeries(
         {
             ::std::vector< Reference< data::XLabeledDataSequence > > aNewSequences;
             const OUString aRoleOfSeqForSeriesLabel = xChartType->getRoleOfSequenceForSeriesLabel();
-            const OUString aLabel( String( ::chart::SchResId( STR_DATA_UNNAMED_SERIES )));
+            const OUString aLabel(::chart::SchResId(STR_DATA_UNNAMED_SERIES).toString());
             const Sequence< OUString > aRoles( xChartType->getSupportedMandatoryRoles());
             const Sequence< OUString > aOptRoles( xChartType->getSupportedOptionalRoles());
             sal_Int32 nI = 0;
@@ -721,7 +721,7 @@ OUString DialogModel::ConvertRoleFromInternalToUI( const OUString & rRoleString 
 
 OUString DialogModel::GetRoleDataLabel()
 {
-    return OUString( String( ::chart::SchResId( STR_OBJECT_DATALABELS )));
+    return ::chart::SchResId(STR_OBJECT_DATALABELS).toString();
 }
 
 sal_Int32 DialogModel::GetRoleIndexForSorting( const OUString & rInternalRoleString )

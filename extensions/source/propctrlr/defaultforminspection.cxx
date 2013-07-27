@@ -181,7 +181,7 @@ namespace pcr
         for ( sal_Int32 i=0; i<nCategories; ++i, ++pReturn )
         {
             pReturn->ProgrammaticName = OUString::createFromAscii( aCategories[i].programmaticName );
-            pReturn->UIName = String( PcrRes( aCategories[i].uiNameResId ) );
+            pReturn->UIName = PcrRes( aCategories[i].uiNameResId ).toString();
             pReturn->HelpURL = HelpIdUrl::getHelpURL( aCategories[i].helpId );
         }
 

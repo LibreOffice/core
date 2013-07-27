@@ -536,10 +536,10 @@ IMPL_LINK( FmGridHeader, OnAsyncExecuteDrop, void*, /*NOTINTERESTEDIN*/ )
 
         if (bDateNTimeCol)
         {
-            String sTimePostfix( SVX_RES( RID_STR_POSTFIX_TIME ) );
+            OUString sTimePostfix(SVX_RESSTR(RID_STR_POSTFIX_TIME));
             xCol->setPropertyValue(FM_PROP_LABEL, makeAny( OUString( sFieldName + sTimePostfix ) ) );
 
-            String sDatePostfix( SVX_RES( RID_STR_POSTFIX_DATE ) );
+            OUString sDatePostfix(SVX_RESSTR( RID_STR_POSTFIX_DATE));
             xSecondCol->setPropertyValue(FM_PROP_LABEL, makeAny( OUString( sFieldName + sDatePostfix ) ) );
         }
         else
@@ -557,9 +557,9 @@ IMPL_LINK( FmGridHeader, OnAsyncExecuteDrop, void*, /*NOTINTERESTEDIN*/ )
         {
             String sRealName,sPurePostfix;
 
-            String aPostfix[] = {
-                String( SVX_RES( RID_STR_POSTFIX_DATE ) ),
-                String( SVX_RES( RID_STR_POSTFIX_TIME ) )
+            OUString aPostfix[] = {
+                SVX_RESSTR(RID_STR_POSTFIX_DATE),
+                SVX_RESSTR(RID_STR_POSTFIX_TIME)
             };
 
             for ( size_t i=0; i<2; ++i )

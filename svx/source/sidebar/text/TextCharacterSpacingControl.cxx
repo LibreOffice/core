@@ -50,11 +50,11 @@ TextCharacterSpacingControl::TextCharacterSpacingControl (
 
 ,   maImgCus        (SVX_RES(IMG_CUSTOM))
 ,   maImgCusGrey    (SVX_RES(IMG_CUSTOM_GRAY))
-,   maStrCus        (SVX_RES(STR_CUSTOM))
-,   maStrCusE       (SVX_RES(STR_CUSTOM_E_TIP)) //add
-,   maStrCusC       (SVX_RES(STR_CUSTOM_C_TIP)) //add
-,   maStrCusN       (SVX_RES(STR_NORMAL_TIP))   //add
-,   maStrUnit       (SVX_RES(STR_PT))           //add
+,   maStrCus        (SVX_RESSTR(STR_CUSTOM))
+,   maStrCusE       (SVX_RESSTR(STR_CUSTOM_E_TIP)) //add
+,   maStrCusC       (SVX_RESSTR(STR_CUSTOM_C_TIP)) //add
+,   maStrCusN       (SVX_RESSTR(STR_NORMAL_TIP))   //add
+,   maStrUnit       (SVX_RESSTR(STR_PT))           //add
 
 ,   mnCustomKern(0)
 ,   mnLastCus ( SPACING_NOCUSTOM )
@@ -112,19 +112,19 @@ void TextCharacterSpacingControl::initial()
     mpImgSel[4] = Image(SVX_RES(IMG_VERY_LOOSE_S));
 
     mpStr = new XubString[5];
-    mpStr[0] = XubString(SVX_RES(STR_VERY_TIGHT));
-    mpStr[1] = XubString(SVX_RES(STR_TIGHT));
-    mpStr[2] = XubString(SVX_RES(STR_NORMAL));
-    mpStr[3] = XubString(SVX_RES(STR_LOOSE));
-    mpStr[4] = XubString(SVX_RES(STR_VERY_LOOSE));
+    mpStr[0] = SVX_RESSTR(STR_VERY_TIGHT);
+    mpStr[1] = SVX_RESSTR(STR_TIGHT);
+    mpStr[2] = SVX_RESSTR(STR_NORMAL);
+    mpStr[3] = SVX_RESSTR(STR_LOOSE);
+    mpStr[4] = SVX_RESSTR(STR_VERY_LOOSE);
 
 
     mpStrTip = new XubString[5];
-    mpStrTip[0] = XubString(SVX_RES(STR_VERY_TIGHT_TIP));
-    mpStrTip[1] = XubString(SVX_RES(STR_TIGHT_TIP));
-    mpStrTip[2] = XubString(SVX_RES(STR_NORMAL_TIP));
-    mpStrTip[3] = XubString(SVX_RES(STR_LOOSE_TIP));
-    mpStrTip[4] = XubString(SVX_RES(STR_VERY_LOOSE_TIP));
+    mpStrTip[0] = SVX_RESSTR(STR_VERY_TIGHT_TIP);
+    mpStrTip[1] = SVX_RESSTR(STR_TIGHT_TIP);
+    mpStrTip[2] = SVX_RESSTR(STR_NORMAL_TIP);
+    mpStrTip[3] = SVX_RESSTR(STR_LOOSE_TIP);
+    mpStrTip[4] = SVX_RESSTR(STR_VERY_LOOSE_TIP);
 
     for (int i=0;i<5;i++)
         maVSSpacing.AddItem(mpImg[i], &mpImgSel[i],mpStr[i],&mpStrTip[i]);

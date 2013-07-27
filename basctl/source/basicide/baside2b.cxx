@@ -466,7 +466,7 @@ bool EditorWindow::ImpCanModify()
     {
         // If in Trace-mode, abort the trace or refuse input
         // Remove markers in the modules in Notify at Basic::Stoped
-        if ( QueryBox( 0, WB_OK_CANCEL, String( IDEResId( RID_STR_WILLSTOPPRG ) ) ).Execute() == RET_OK )
+        if ( QueryBox( 0, WB_OK_CANCEL, IDEResId(RID_STR_WILLSTOPPRG).toString() ).Execute() == RET_OK )
         {
             rModulWindow.GetBasicStatus().bIsRunning = false;
             StopBasic();
@@ -624,7 +624,7 @@ void EditorWindow::CreateEditEngine()
     // for the text then if the source code is long...
     pProgress.reset(new ProgressInfo(
         GetShell()->GetViewFrame()->GetObjectShell(),
-        String(IDEResId(RID_STR_GENERATESOURCE)),
+        IDEResId(RID_STR_GENERATESOURCE).toString(),
         nLines*4
     ));
     setTextEngineText(*pEditEngine, aOUSource);
@@ -1220,8 +1220,8 @@ WatchWindow::WatchWindow (Layout* pParent) :
                                   | WB_HASLINESATROOT | WB_HASBUTTONSATROOT ),
     aHeaderBar( this, WB_BUTTONSTYLE | WB_BORDER )
 {
-    aXEdit.SetAccessibleName(String(IDEResId( RID_STR_WATCHNAME)));
-    aTreeListBox.SetAccessibleName(String(IDEResId(RID_STR_WATCHNAME)));
+    aXEdit.SetAccessibleName(IDEResId(RID_STR_WATCHNAME).toString());
+    aTreeListBox.SetAccessibleName(IDEResId(RID_STR_WATCHNAME).toString());
 
     long nTextLen = GetTextWidth( aWatchStr ) + DWBORDER + 3;
     aXEdit.SetPosPixel( Point( nTextLen, 3 ) );
@@ -1260,9 +1260,9 @@ WatchWindow::WatchWindow (Layout* pParent) :
     long nVarTabWidth = 220;
     long nValueTabWidth = 100;
     long nTypeTabWidth = 1250;
-    aHeaderBar.InsertItem( ITEM_ID_VARIABLE, String( IDEResId( RID_STR_WATCHVARIABLE ) ), nVarTabWidth );
-    aHeaderBar.InsertItem( ITEM_ID_VALUE, String( IDEResId( RID_STR_WATCHVALUE ) ), nValueTabWidth );
-    aHeaderBar.InsertItem( ITEM_ID_TYPE, String( IDEResId( RID_STR_WATCHTYPE ) ), nTypeTabWidth );
+    aHeaderBar.InsertItem( ITEM_ID_VARIABLE, IDEResId(RID_STR_WATCHVARIABLE).toString(), nVarTabWidth );
+    aHeaderBar.InsertItem( ITEM_ID_VALUE, IDEResId(RID_STR_WATCHVALUE).toString(), nValueTabWidth );
+    aHeaderBar.InsertItem( ITEM_ID_TYPE, IDEResId(RID_STR_WATCHTYPE).toString(), nTypeTabWidth );
 
     long tabs[ 4 ];
     tabs[ 0 ] = 3; // two tabs
@@ -1278,7 +1278,7 @@ WatchWindow::WatchWindow (Layout* pParent) :
 
     aTreeListBox.Show();
 
-    SetText( String( IDEResId( RID_STR_WATCHNAME ) ) );
+    SetText(IDEResId(RID_STR_WATCHNAME).toString());
 
     SetHelpId( HID_BASICIDE_WATCHWINDOW );
 
@@ -1510,14 +1510,14 @@ StackWindow::StackWindow (Layout* pParent) :
     aStackStr( IDEResId( RID_STR_STACK ) )
 {
     aTreeListBox.SetHelpId(HID_BASICIDE_STACKWINDOW_LIST);
-    aTreeListBox.SetAccessibleName(String( IDEResId(RID_STR_STACKNAME)));
+    aTreeListBox.SetAccessibleName(IDEResId(RID_STR_STACKNAME).toString());
     aTreeListBox.SetPosPixel( Point( DWBORDER, nVirtToolBoxHeight ) );
     aTreeListBox.SetHighlightRange();
     aTreeListBox.SetSelectionMode( NO_SELECTION );
     aTreeListBox.InsertEntry( String(), 0, false, LIST_APPEND );
     aTreeListBox.Show();
 
-    SetText( String( IDEResId( RID_STR_STACKNAME ) ) );
+    SetText(IDEResId(RID_STR_STACKNAME).toString());
 
     SetHelpId( HID_BASICIDE_STACKWINDOW );
 

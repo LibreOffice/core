@@ -321,7 +321,7 @@ SvxFmTbxCtlRecText::~SvxFmTbxCtlRecText()
 //-----------------------------------------------------------------------
 Window* SvxFmTbxCtlRecText::CreateItemWindow( Window* pParent )
 {
-    XubString aText( SVX_RES(RID_STR_REC_TEXT) );
+    OUString aText(SVX_RESSTR(RID_STR_REC_TEXT));
     FixedText* pFixedText = new FixedText( pParent );
     Size aSize( pFixedText->GetTextWidth( aText ), pFixedText->GetTextHeight( ) );
     pFixedText->SetText( aText );
@@ -355,7 +355,7 @@ SvxFmTbxCtlRecFromText::~SvxFmTbxCtlRecFromText()
 //-----------------------------------------------------------------------
 Window* SvxFmTbxCtlRecFromText::CreateItemWindow( Window* pParent )
 {
-    XubString aText( SVX_RES(RID_STR_REC_FROM_TEXT) );
+    OUString aText(SVX_RESSTR(RID_STR_REC_FROM_TEXT));
     FixedText* pFixedText = new FixedText( pParent, WB_CENTER );
     Size aSize( pFixedText->GetTextWidth( aText ), pFixedText->GetTextHeight( ) );
     aSize.Width() += 12;

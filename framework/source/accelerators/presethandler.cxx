@@ -182,16 +182,16 @@ OUString lcl_getLocalizedMessage(::sal_Int32 nID)
     switch(nID)
     {
         case ID_CORRUPT_UICONFIG_SHARE :
-                sMessage = OUString( String( FwkResId( STR_CORRUPT_UICFG_SHARE )));
+                sMessage = FWK_RESSTR(STR_CORRUPT_UICFG_SHARE);
 
                 break;
 
         case ID_CORRUPT_UICONFIG_USER :
-                sMessage = OUString( String( FwkResId( STR_CORRUPT_UICFG_USER )));
+                sMessage = FWK_RESSTR(STR_CORRUPT_UICFG_USER);
                 break;
 
         case ID_CORRUPT_UICONFIG_GENERAL :
-                sMessage = OUString( String( FwkResId( STR_CORRUPT_UICFG_GENERAL )));
+                sMessage = FWK_RESSTR(STR_CORRUPT_UICFG_GENERAL);
                 break;
     }
 

@@ -3335,7 +3335,7 @@ void SvxRuler::Command( const CommandEvent& rCEvt )
                 nStyle |= (sal_uInt16)(bHorz ? WB_HORZ : WB_VERT);
                 DrawTab(&aDev, aFillColor, aPt, nStyle);
                 aMenu.InsertItem(i+1,
-                                 String(ResId(RID_SVXSTR_RULER_START+i, DIALOG_MGR())),
+                                 ResId(RID_SVXSTR_RULER_START+i, DIALOG_MGR()).toString(),
                                  Image(aDev.GetBitmap(Point(), aSz), Color(COL_WHITE)));
                 aMenu.CheckItem(i+1, i == pTabs[pRuler_Imp->nIdx+TAB_GAP].nStyle);
                 aDev.SetOutputSize(aSz); // delete device

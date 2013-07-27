@@ -775,7 +775,7 @@ const Subset* SubsetMap::GetSubsetByUnicode( sal_UCS4 cChar ) const
 }
 
 inline Subset::Subset( sal_UCS4 nMin, sal_UCS4 nMax, int resId)
-:   mnRangeMin(nMin), mnRangeMax(nMax), maRangeName( SVX_RES(resId) )
+:   mnRangeMin(nMin), mnRangeMax(nMax), maRangeName( SVX_RESSTR(resId) )
 {}
 
 void SubsetMap::InitList()

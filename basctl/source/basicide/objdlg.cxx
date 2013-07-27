@@ -43,10 +43,10 @@ ObjectCatalog::ObjectCatalog (Window* pParent) :
     aTree(this, IDEResId(RID_TLB_MACROS))
 {
     SetHelpId("basctl:FloatingWindow:RID_BASICIDE_OBJCAT");
-    SetText(String(IDEResId(RID_BASICIDE_OBJCAT)));
+    SetText(IDEResId(RID_BASICIDE_OBJCAT).toString());
 
     // title
-    aTitle.SetText(String(IDEResId(RID_BASICIDE_OBJCAT)));
+    aTitle.SetText(IDEResId(RID_BASICIDE_OBJCAT).toString());
     aTitle.SetStyle(WB_CENTER);
 
     // tree list
@@ -56,7 +56,7 @@ ObjectCatalog::ObjectCatalog (Window* pParent) :
         WB_HASLINES | WB_HASLINESATROOT |
         WB_HASBUTTONS | WB_HASBUTTONSATROOT
     );
-    aTree.SetAccessibleName(String(IDEResId(RID_STR_TLB_MACROS)));
+    aTree.SetAccessibleName(IDEResId(RID_STR_TLB_MACROS).toString());
     aTree.SetHelpId(HID_BASICIDE_OBJECTCAT);
     aTree.ScanAllEntries();
     aTree.GrabFocus();

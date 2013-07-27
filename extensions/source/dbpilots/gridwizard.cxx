@@ -166,11 +166,11 @@ namespace dbp
 
                 case DataType::TIMESTAMP:
                     aColumnServiceNames.push_back(OUString("DateField"));
-                    aColumnLabelPostfixes.push_back(String(ModuleRes(RID_STR_DATEPOSTFIX)));
+                    aColumnLabelPostfixes.push_back(ModuleRes(RID_STR_DATEPOSTFIX).toString());
 
                     aFormFieldNames.push_back(*pSelectedFields);
                     aColumnServiceNames.push_back(OUString("TimeField"));
-                    aColumnLabelPostfixes.push_back(String(ModuleRes(RID_STR_TIMEPOSTFIX)));
+                    aColumnLabelPostfixes.push_back(ModuleRes(RID_STR_TIMEPOSTFIX).toString());
                     break;
 
                 default:

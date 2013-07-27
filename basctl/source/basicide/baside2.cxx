@@ -455,7 +455,7 @@ bool ModulWindow::LoadBasic()
             AssertValidEditEngine();
             sal_uLong nLines = CalcLineCount( *pStream );
             // nLines*4: ReadText/Formatting/Highlighting/Formatting
-            GetEditorWindow().CreateProgress( String( IDEResId( RID_STR_GENERATESOURCE ) ), nLines*4 );
+            GetEditorWindow().CreateProgress( IDEResId(RID_STR_GENERATESOURCE).toString(), nLines*4 );
             GetEditEngine()->SetUpdateMode( false );
             GetEditView()->Read( *pStream );
             GetEditEngine()->SetUpdateMode( true );
@@ -516,7 +516,7 @@ bool ModulWindow::SaveBasicSource()
                 bDone = true;
         }
         else
-            ErrorBox( this, WB_OK | WB_DEF_OK, IDEResId( RID_STR_COULDNTWRITE) ).Execute();
+            ErrorBox( this, WB_OK | WB_DEF_OK, IDEResId(RID_STR_COULDNTWRITE).toString() ).Execute();
     }
 
     return bDone;
@@ -1468,7 +1468,7 @@ void ModulWindowLayout::UpdateDebug (bool bBasicStopped)
 
 void ModulWindowLayout::Paint (Rectangle const&)
 {
-    DrawText(Point(), String(IDEResId(RID_STR_NOMODULE)));
+    DrawText(Point(), IDEResId(RID_STR_NOMODULE).toString());
 }
 
 // virtual

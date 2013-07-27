@@ -116,7 +116,7 @@ namespace pcr
 
             // insert the root
             Image aRootImage = m_aModelImages.GetImage(RID_SVXIMG_FORMS);
-            SvTreeListEntry* pRoot = m_aControlTree.InsertEntry(PcrRes(RID_STR_FORMS), aRootImage, aRootImage);
+            SvTreeListEntry* pRoot = m_aControlTree.InsertEntry(PcrRes(RID_STR_FORMS).toString(), aRootImage, aRootImage);
 
             // build the tree
             m_pInitialSelection = NULL;

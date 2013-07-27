@@ -82,36 +82,36 @@ void TextUnderlineControl::initial()
 
     // 'none' item
     maVSUnderline.SetStyle( maVSUnderline.GetStyle()| WB_NONEFIELD | WB_MENUSTYLEVALUESET );
-    maVSUnderline.SetText( String(SVX_RES(STR_WITHOUT) ) );
+    maVSUnderline.SetText( SVX_RESSTR(STR_WITHOUT) );
 
-    maVSUnderline.InsertItem(1, maIMGSingle ,String(SVX_RES(STR_SINGLE)));
+    maVSUnderline.InsertItem(1, maIMGSingle, SVX_RESSTR(STR_SINGLE));
     maVSUnderline.SetItemData(1, (void*)(sal_uInt64)UNDERLINE_SINGLE);
 
-    maVSUnderline.InsertItem(2, maIMGDouble ,String(SVX_RES(STR_DOUBLE)));
+    maVSUnderline.InsertItem(2, maIMGDouble, SVX_RESSTR(STR_DOUBLE));
     maVSUnderline.SetItemData(2, (void*)(sal_uInt64)UNDERLINE_DOUBLE);
 
-    maVSUnderline.InsertItem(3, maIMGBold, String(SVX_RES(STR_BOLD)));
+    maVSUnderline.InsertItem(3, maIMGBold, SVX_RESSTR(STR_BOLD));
     maVSUnderline.SetItemData(3,(void*)(sal_uInt64)UNDERLINE_BOLD);
 
-    maVSUnderline.InsertItem(4, maIMGDot, String(SVX_RES(STR_DOT)));
+    maVSUnderline.InsertItem(4, maIMGDot, SVX_RESSTR(STR_DOT));
     maVSUnderline.SetItemData(4,(void*)(sal_uInt64)UNDERLINE_DOTTED);
 
-    maVSUnderline.InsertItem(5, maIMGDotBold, String(SVX_RES(STR_DOT_BOLD)));
+    maVSUnderline.InsertItem(5, maIMGDotBold, SVX_RESSTR(STR_DOT_BOLD));
     maVSUnderline.SetItemData(5,(void*)(sal_uInt64)UNDERLINE_BOLDDOTTED);
 
-    maVSUnderline.InsertItem(6, maIMGDash, String(SVX_RES(STR_DASH)));
+    maVSUnderline.InsertItem(6, maIMGDash, SVX_RESSTR(STR_DASH));
     maVSUnderline.SetItemData(6,(void*)(sal_uInt64)UNDERLINE_DASH);
 
-    maVSUnderline.InsertItem(7, maIMGDashLong,String(SVX_RES(STR_DASH_LONG)));
+    maVSUnderline.InsertItem(7, maIMGDashLong, SVX_RESSTR(STR_DASH_LONG));
     maVSUnderline.SetItemData(7,(void*)(sal_uInt64)UNDERLINE_LONGDASH);
 
-    maVSUnderline.InsertItem(8, maIMGDashDot, String(SVX_RES(STR_DASH_DOT)));
+    maVSUnderline.InsertItem(8, maIMGDashDot, SVX_RESSTR(STR_DASH_DOT));
     maVSUnderline.SetItemData(8,(void*)(sal_uInt64)UNDERLINE_DASHDOT);
 
-    maVSUnderline.InsertItem(9, maIMGDashDotDot, String(SVX_RES(STR_DASH_DOT_DOT)));
+    maVSUnderline.InsertItem(9, maIMGDashDotDot, SVX_RESSTR(STR_DASH_DOT_DOT));
     maVSUnderline.SetItemData(9,(void*)(sal_uInt64)UNDERLINE_DASHDOTDOT);
 
-    maVSUnderline.InsertItem(10, maIMGWave, String(SVX_RES(STR_WAVE)));
+    maVSUnderline.InsertItem(10, maIMGWave, SVX_RESSTR(STR_WAVE));
     maVSUnderline.SetItemData(10,(void*)(sal_uInt64)UNDERLINE_WAVE);
 
     maVSUnderline.SetColCount( 1 );

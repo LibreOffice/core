@@ -387,7 +387,7 @@ Reference< XForm >  FmFormPageImpl::getDefaultForm()
         if ( Reference<XNameAccess>(xForms,UNO_QUERY_THROW)->hasElements() )
         {
             // suche die Standardform
-            OUString sStandardFormname = String( SVX_RES( RID_STR_STDFORMNAME ) );
+            OUString sStandardFormname = SVX_RESSTR(RID_STR_STDFORMNAME);
 
             try
             {
@@ -416,8 +416,8 @@ Reference< XForm >  FmFormPageImpl::getDefaultForm()
 
         if( pModel->IsUndoEnabled() )
         {
-            XubString aStr(SVX_RES(RID_STR_FORM));
-            XubString aUndoStr(SVX_RES(RID_STR_UNDO_CONTAINER_INSERT));
+            OUString aStr(SVX_RESSTR(RID_STR_FORM));
+            XubString aUndoStr(SVX_RESSTR(RID_STR_UNDO_CONTAINER_INSERT));
             aUndoStr.SearchAndReplace(OUString('#'), aStr);
             pModel->BegUndo(aUndoStr);
         }
@@ -431,7 +431,7 @@ Reference< XForm >  FmFormPageImpl::getDefaultForm()
             xFormProps->setPropertyValue( FM_PROP_COMMANDTYPE, makeAny( sal_Int32( CommandType::TABLE ) ) );
 
             // and the "Standard" name
-            OUString sName = String( SVX_RES( RID_STR_STDFORMNAME ) );
+            OUString sName = SVX_RESSTR(RID_STR_STDFORMNAME);
             xFormProps->setPropertyValue( FM_PROP_NAME, makeAny( sName ) );
 
             if( pModel->IsUndoEnabled() )
@@ -498,8 +498,8 @@ Reference< ::com::sun::star::form::XForm >  FmFormPageImpl::findPlaceInFormCompo
 
             if( bUndo )
             {
-                XubString aStr(SVX_RES(RID_STR_FORM));
-                XubString aUndoStr(SVX_RES(RID_STR_UNDO_CONTAINER_INSERT));
+                OUString aStr(SVX_RESSTR(RID_STR_FORM));
+                XubString aUndoStr(SVX_RESSTR(RID_STR_UNDO_CONTAINER_INSERT));
                 aUndoStr.SearchAndReplace(OUString('#'), aStr);
                 pModel->BegUndo(aUndoStr);
             }
@@ -526,7 +526,7 @@ Reference< ::com::sun::star::form::XForm >  FmFormPageImpl::findPlaceInFormCompo
 
             const bool bTableOrQuery = ( CommandType::TABLE == nCommandType ) || ( CommandType::QUERY == nCommandType );
             OUString sName = FormControlFactory::getUniqueName( xNamedSet,
-                bTableOrQuery ? rCursorSource : OUString( String( SVX_RES( RID_STR_STDFORMNAME ) ) ) );
+                bTableOrQuery ? rCursorSource : SVX_RESSTR(RID_STR_STDFORMNAME) );
 
             xFormProps->setPropertyValue( FM_PROP_NAME, makeAny( sName ) );
 

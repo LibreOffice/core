@@ -226,7 +226,7 @@ sal_Bool SvxIMapDlg::Close()
     if ( aTbxIMapDlg1.IsItemEnabled( TBI_APPLY ) )
     {
         QueryBox    aQBox( this, WB_YES_NO_CANCEL | WB_DEF_YES,
-                           String( SVX_RES( STR_IMAPDLG_MODIFY ) ) );
+                           SVX_RESSTR( STR_IMAPDLG_MODIFY ) );
         const long  nRet = aQBox.Execute();
 
         if( nRet == RET_YES )
@@ -241,7 +241,7 @@ sal_Bool SvxIMapDlg::Close()
     else if( pIMapWnd->IsChanged() )
     {
         QueryBox    aQBox( this, WB_YES_NO_CANCEL | WB_DEF_YES,
-                           String( SVX_RES( STR_IMAPDLG_SAVE ) ) );
+                           SVX_RESSTR( STR_IMAPDLG_SAVE ) );
         const long  nRet = aQBox.Execute();
 
         if( nRet == RET_YES )
@@ -730,7 +730,7 @@ IMPL_LINK_NOARG(SvxIMapDlg, UpdateHdl)
     {
         if ( pIMapWnd->IsChanged() &&
              ( QueryBox( this, WB_YES_NO | WB_DEF_YES,
-             String( SVX_RES( STR_IMAPDLG_SAVE ) ) ).Execute() == RET_YES ) )
+             SVX_RESSTR( STR_IMAPDLG_SAVE ) ).Execute() == RET_YES ) )
         {
             DoSave();
         }

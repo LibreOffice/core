@@ -159,7 +159,7 @@ MenuManager::MenuManager(
                             pPopupMenu->InsertSeparator();
 
                         // Use resource to load popup menu title
-                        String aAddonsStrRes = String( FwkResId( STR_MENU_ADDONS ));
+                        OUString aAddonsStrRes(FWK_RESSTR(STR_MENU_ADDONS));
                         pPopupMenu->InsertItem( ITEMID_ADDONLIST, aAddonsStrRes );
                         pPopupMenu->SetPopupMenu( ITEMID_ADDONLIST, pSubMenu );
 

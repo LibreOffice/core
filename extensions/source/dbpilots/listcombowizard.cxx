@@ -77,11 +77,11 @@ namespace dbp
         {
             case FormComponentType::LISTBOX:
                 m_bListBox = sal_True;
-                setTitleBase(String(ModuleRes(RID_STR_LISTWIZARD_TITLE)));
+                setTitleBase(ModuleRes(RID_STR_LISTWIZARD_TITLE).toString());
                 return sal_True;
             case FormComponentType::COMBOBOX:
                 m_bListBox = sal_False;
-                setTitleBase(String(ModuleRes(RID_STR_COMBOWIZARD_TITLE)));
+                setTitleBase(ModuleRes(RID_STR_COMBOWIZARD_TITLE).toString());
                 return sal_True;
         }
         return sal_False;
@@ -370,7 +370,7 @@ namespace dbp
         ,m_aDisplayedField      (this, ModuleRes(ET_DISPLAYEDFIELD))
         ,m_aInfo                (this, ModuleRes(FT_CONTENTFIELD_INFO))
     {
-        m_aInfo.SetText(String(ModuleRes( isListBox() ? STR_FIELDINFO_LISTBOX : STR_FIELDINFO_COMBOBOX)));
+        m_aInfo.SetText(ModuleRes( isListBox() ? STR_FIELDINFO_LISTBOX : STR_FIELDINFO_COMBOBOX).toString());
         FreeResource();
         m_aSelectTableField.SetSelectHdl(LINK(this, OContentFieldSelection, OnFieldSelected));
         m_aSelectTableField.SetDoubleClickHdl(LINK(this, OContentFieldSelection, OnTableDoubleClicked));
@@ -517,7 +517,7 @@ namespace dbp
     OComboDBFieldPage::OComboDBFieldPage( OControlWizard* _pParent )
         :ODBFieldPage(_pParent)
     {
-        setDescriptionText(String(ModuleRes(RID_STR_COMBOWIZ_DBFIELD)));
+        setDescriptionText(ModuleRes(RID_STR_COMBOWIZ_DBFIELD).toString());
     }
 
     //---------------------------------------------------------------------

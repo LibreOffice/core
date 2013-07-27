@@ -67,7 +67,7 @@ uno::Reference< container::XNameContainer > XGradientList::createInstance()
 
 bool XGradientList::Create()
 {
-    XubString aStr( SVX_RES( RID_SVXSTR_GRADIENT ) );
+    XubString aStr( SVX_RESSTR( RID_SVXSTR_GRADIENT ) );
     xub_StrLen nLen;
 
     aStr.AppendAscii(" 1");

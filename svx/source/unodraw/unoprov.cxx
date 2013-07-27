@@ -1182,19 +1182,19 @@ bool SvxUnoConvertResourceString( int nSourceResIds, int nDestResIds, int nCount
     {
         sal_uInt16 nResId = (sal_uInt16)(nSourceResIds + i);
         const ResId aRes( SVX_RES(nResId));
-        const String aCompare( aRes );
+        const String aCompare( aRes.toString() );
         if( aShortString == aCompare )
         {
             sal_uInt16 nNewResId = (sal_uInt16)(nDestResIds + i);
             ResId aNewRes( SVX_RES( nNewResId ));
-            rString.Replace( 0, aShortString.Len(), String( aNewRes ) );
+            rString.Replace( 0, aShortString.Len(), aNewRes.toString() );
             return true;
         }
         else if( rString == aCompare )
         {
             sal_uInt16 nNewResId = (sal_uInt16)(nDestResIds + i);
             ResId aNewRes( SVX_RES( nNewResId ));
-            rString = String( aNewRes );
+            rString = aNewRes.toString();
             return true;
         }
     }

@@ -88,8 +88,8 @@ SvxPasswordDialog::SvxPasswordDialog( Window* pParent, sal_Bool bAllowEmptyPassw
     aOKBtn          ( this, SVX_RES( BTN_PASSWD_OK ) ),
     aEscBtn         ( this, SVX_RES( BTN_PASSWD_ESC ) ),
     aHelpBtn        ( this, SVX_RES( BTN_PASSWD_HELP ) ),
-    aOldPasswdErrStr    ( SVX_RES( STR_ERR_OLD_PASSWD ) ),
-    aRepeatPasswdErrStr ( SVX_RES( STR_ERR_REPEAT_PASSWD ) ),
+    aOldPasswdErrStr    ( SVX_RESSTR( STR_ERR_OLD_PASSWD ) ),
+    aRepeatPasswdErrStr ( SVX_RESSTR( STR_ERR_REPEAT_PASSWD ) ),
     bEmpty  ( bAllowEmptyPasswords )
 {
     FreeResource();

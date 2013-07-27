@@ -72,13 +72,13 @@ void UndoCommandDispatch::fireStatusEvent(
         if( m_xUndoManager->isUndoPossible())
         {
             // using assignment for broken gcc 3.3
-            OUString aUndo = OUString( String( SvtResId( STR_UNDO )));
+            OUString aUndo = SvtResId( STR_UNDO ).toString();
             aUndoState <<= ( aUndo + m_xUndoManager->getCurrentUndoActionTitle());
         }
         if( m_xUndoManager->isRedoPossible())
         {
             // using assignment for broken gcc 3.3
-            OUString aRedo = OUString( String( SvtResId( STR_REDO )));
+            OUString aRedo = SvtResId( STR_REDO ).toString();
             aRedoState <<= ( aRedo + m_xUndoManager->getCurrentRedoActionTitle());
         }
 

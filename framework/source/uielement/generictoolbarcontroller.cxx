@@ -227,23 +227,20 @@ throw ( RuntimeException )
                 // Replacement for place holders
                 if ( aStrValue.matchAsciiL( "($1)", 4 ))
                 {
-                    String aResStr = String( FwkResId( STR_UPDATEDOC ));
-                    OUString aTmp( aResStr );
+                    OUString aTmp(FwkResId(STR_UPDATEDOC));
                     aTmp += OUString( " " );
                     aTmp += aStrValue.copy( 4 );
                     aStrValue = aTmp;
                 }
                 else if ( aStrValue.matchAsciiL( "($2)", 4 ))
                 {
-                    String aResStr = String( FwkResId( STR_CLOSEDOC_ANDRETURN ));
-                    OUString aTmp( aResStr );
+                    OUString aTmp(FWK_RESSTR(STR_CLOSEDOC_ANDRETURN));
                     aTmp += aStrValue.copy( 4 );
                     aStrValue = aTmp;
                 }
                 else if ( aStrValue.matchAsciiL( "($3)", 4 ))
                 {
-                    String aResStr = String( FwkResId( STR_SAVECOPYDOC ));
-                    OUString aTmp( aResStr );
+                    OUString aTmp(FWK_RESSTR(STR_SAVECOPYDOC));
                     aTmp += aStrValue.copy( 4 );
                     aStrValue = aTmp;
                 }

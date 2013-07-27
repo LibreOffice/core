@@ -77,7 +77,7 @@ void DeckTitleBar::SetCloserVisible (const bool bIsCloserVisible)
                 Theme::GetImage(Theme::Image_Closer));
             maToolBox.SetQuickHelpText(
                 mnCloserItemIndex,
-                String(SfxResId(SFX_STR_SIDEBAR_CLOSE_DECK)));
+                SFX2_RESSTR(SFX_STR_SIDEBAR_CLOSE_DECK));
         }
         else
             maToolBox.RemoveItem(

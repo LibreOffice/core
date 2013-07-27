@@ -73,13 +73,13 @@ ParaLineSpacingControl::ParaLineSpacingControl(Window* pParent, svx::sidebar::Pa
     , maSelSpacing2    (SVX_RES(IMG_SEL_SPACING2))
     , maImgCus         (SVX_RES(IMG_CUSTOM))
     , maImgCusGrey     (SVX_RES(IMG_CUSTOM_GRAY))
-    , maStrCus         (SVX_RES(STR_LCVALUE))
+    , maStrCus         (SVX_RESSTR(STR_LCVALUE))
     , mpImg(NULL)
     , mpImgSel(NULL)
     , mpStr(NULL)
     , mpStrTip(NULL)
-    , maLine(SVX_RES(STR_LSPACING))
-    , maOf(SVX_RES(STR_LS_OF))
+    , maLine(SVX_RESSTR(STR_LSPACING))
+    , maOf(SVX_RESSTR(STR_LS_OF))
     , maValue( 0 )
     , maPos( 0 )
 {
@@ -127,16 +127,16 @@ void ParaLineSpacingControl::initial()
     mpImgSel[3] = maSelSpacing2;
 
     mpStr = new XubString[4];
-    mpStr[0] = XubString(SVX_RES(STR_SPACING1));
-    mpStr[1] = XubString(SVX_RES(STR_SPACING115));
-    mpStr[2] = XubString(SVX_RES(STR_SPACING15));
-    mpStr[3] = XubString(SVX_RES(STR_SPACING2));
+    mpStr[0] = SVX_RESSTR(STR_SPACING1);
+    mpStr[1] = SVX_RESSTR(STR_SPACING115);
+    mpStr[2] = SVX_RESSTR(STR_SPACING15);
+    mpStr[3] = SVX_RESSTR(STR_SPACING2);
 
     mpStrTip = new XubString[4];
-    mpStrTip[0] = XubString(SVX_RES(STR_LS_SINGLE));
-    mpStrTip[1] = XubString(SVX_RES(STR_LS_115));
-    mpStrTip[2] = XubString(SVX_RES(STR_LS_15));
-    mpStrTip[3] = XubString(SVX_RES(STR_LS_DOUBLE));
+    mpStrTip[0] = SVX_RESSTR(STR_LS_SINGLE);
+    mpStrTip[1] = SVX_RESSTR(STR_LS_115);
+    mpStrTip[2] = SVX_RESSTR(STR_LS_15);
+    mpStrTip[3] = SVX_RESSTR(STR_LS_DOUBLE);
     for (int i=0;i<4;i++)
         maLineSpacing.AddItem(mpImg[i], &mpImgSel[i],mpStr[i],&mpStrTip[i]);
 

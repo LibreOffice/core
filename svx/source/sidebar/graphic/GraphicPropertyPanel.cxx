@@ -85,10 +85,10 @@ void GraphicPropertyPanel::Initialize()
     mpMtrTrans->SetModifyHdl( LINK( this, GraphicPropertyPanel, ModifyTransHdl ) );
     mpMtrTrans->SetAccessibleName(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Transparency")));
 
-    mpLBColorMode->InsertEntry(String(SVX_RES(RID_SVXSTR_GRAFMODE_STANDARD)));
-    mpLBColorMode->InsertEntry(String(SVX_RES(RID_SVXSTR_GRAFMODE_GREYS)));
-    mpLBColorMode->InsertEntry(String(SVX_RES(RID_SVXSTR_GRAFMODE_MONO)));
-    mpLBColorMode->InsertEntry(String(SVX_RES(RID_SVXSTR_GRAFMODE_WATERMARK)));
+    mpLBColorMode->InsertEntry(SVX_RESSTR(RID_SVXSTR_GRAFMODE_STANDARD));
+    mpLBColorMode->InsertEntry(SVX_RESSTR(RID_SVXSTR_GRAFMODE_GREYS));
+    mpLBColorMode->InsertEntry(SVX_RESSTR(RID_SVXSTR_GRAFMODE_MONO));
+    mpLBColorMode->InsertEntry(SVX_RESSTR(RID_SVXSTR_GRAFMODE_WATERMARK));
     mpLBColorMode->SetSelectHdl( LINK( this, GraphicPropertyPanel, ClickColorModeHdl ));
     mpLBColorMode->SetAccessibleName(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Color mode")));
 

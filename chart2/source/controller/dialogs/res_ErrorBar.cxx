@@ -153,8 +153,8 @@ ErrorBarResources::ErrorBarResources( Window* pParent, Dialog * pParentDialog,
 
     m_aIbRangePositive.SetClickHdl( LINK( this, ErrorBarResources, ChooseRange ));
     m_aIbRangeNegative.SetClickHdl( LINK( this, ErrorBarResources, ChooseRange ));
-    m_aIbRangePositive.SetQuickHelpText( String( SchResId( STR_TIP_SELECT_RANGE )));
-    m_aIbRangeNegative.SetQuickHelpText( String( SchResId( STR_TIP_SELECT_RANGE )));
+    m_aIbRangePositive.SetQuickHelpText(SCH_RESSTR(STR_TIP_SELECT_RANGE));
+    m_aIbRangeNegative.SetQuickHelpText(SCH_RESSTR(STR_TIP_SELECT_RANGE));
 
     FillValueSets();
     Reset( rInAttrs );
@@ -198,7 +198,7 @@ void ErrorBarResources::SetChartDocumentForRangeChoosing(
     OSL_ASSERT( m_apRangeSelectionHelper.get());
     if( m_bHasInternalDataProvider )
     {
-        m_aRbRange.SetText( String( SchResId( STR_CONTROLTEXT_ERROR_BARS_FROM_DATA )));
+        m_aRbRange.SetText(SCH_RESSTR(STR_CONTROLTEXT_ERROR_BARS_FROM_DATA));
     }
 
     if( m_aRbRange.IsChecked())
@@ -451,12 +451,12 @@ IMPL_LINK( ErrorBarResources, ChooseRange, RangeSelectionButton *, pButton )
     if( pButton == &m_aIbRangePositive )
     {
         m_pCurrentRangeChoosingField = &m_aEdRangePositive;
-        aUIString = String( SchResId( STR_DATA_SELECT_RANGE_FOR_POSITIVE_ERRORBARS ));
+        aUIString = SCH_RESSTR( STR_DATA_SELECT_RANGE_FOR_POSITIVE_ERRORBARS );
     }
     else
     {
         m_pCurrentRangeChoosingField = &m_aEdRangeNegative;
-        aUIString = String( SchResId( STR_DATA_SELECT_RANGE_FOR_NEGATIVE_ERRORBARS ));
+        aUIString = SCH_RESSTR( STR_DATA_SELECT_RANGE_FOR_NEGATIVE_ERRORBARS );
     }
 
     assert( m_pParentDialog );

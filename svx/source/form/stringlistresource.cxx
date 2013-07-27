@@ -35,8 +35,7 @@ namespace svx
         ResId aLocalID( nLocalID, *_rResId.GetResMgr() );
         while ( IsAvailableRes( aLocalID.SetRT( RSC_STRING ) ) )
         {
-            String sLocalString( aLocalID );
-            m_aStrings.push_back( sLocalString );
+            m_aStrings.push_back( aLocalID.toString() );
             aLocalID = ResId( ++nLocalID, *_rResId.GetResMgr() );
         }
     }

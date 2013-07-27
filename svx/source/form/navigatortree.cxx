@@ -595,7 +595,7 @@ namespace svxform
             //////////////////////////////////////////////////////////////////////
             // Default-Eintrag "Formulare"
             Image aRootImage( m_aNavigatorImages.GetImage( RID_SVXIMG_FORMS ) );
-            m_pRootEntry = InsertEntry( SVX_RES(RID_STR_FORMS), aRootImage, aRootImage,
+            m_pRootEntry = InsertEntry( SVX_RESSTR(RID_STR_FORMS), aRootImage, aRootImage,
                 NULL, sal_False, 0, NULL );
         }
         else if (!m_bMarkingObjects && rHint.ISA(FmNavRequestSelectHint))

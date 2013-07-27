@@ -133,8 +133,8 @@ RangeChooserTabPage::RangeChooserTabPage( Window* pParent
         m_aFT_Caption.SetStyle( m_aFT_Caption.GetStyle() | WB_NOLABEL );
     }
 
-    this->SetText( String(SchResId(STR_PAGE_DATA_RANGE)) );
-    m_aIB_Range.SetQuickHelpText( String(SchResId(STR_TIP_SELECT_RANGE)) );
+    this->SetText( SCH_RESSTR(STR_PAGE_DATA_RANGE) );
+    m_aIB_Range.SetQuickHelpText( SCH_RESSTR(STR_TIP_SELECT_RANGE) );
 
     // set defaults as long as DetectArguments does not work
     m_aRB_Columns.Check();
@@ -354,7 +354,7 @@ IMPL_LINK_NOARG(RangeChooserTabPage, ChooseRangeHdl)
 {
     OUString aRange = m_aED_Range.GetText();
     // using assignment for broken gcc 3.3
-    OUString aTitle = String( SchResId( STR_PAGE_DATA_RANGE ) );
+    OUString aTitle = SCH_RESSTR( STR_PAGE_DATA_RANGE );
 
     lcl_enableRangeChoosing( true, m_pParentDialog );
     m_rDialogModel.getRangeSelectionHelper()->chooseRange( aRange, aTitle, *this );

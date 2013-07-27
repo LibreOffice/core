@@ -440,7 +440,7 @@ void MacroChooser::CheckButtons()
     bNewDelIsDel = pMethod ? true : false;
     if (bPrev != bNewDelIsDel && nMode == All)
     {
-        String aBtnText( bNewDelIsDel ? IDEResId( RID_STR_BTNDEL) : IDEResId( RID_STR_BTNNEW ) );
+        OUString aBtnText( bNewDelIsDel ? IDEResId(RID_STR_BTNDEL).toString() : IDEResId(RID_STR_BTNNEW).toString() );
         m_pDelButton->SetText( aBtnText );
     }
 
@@ -622,7 +622,7 @@ IMPL_LINK( MacroChooser, ButtonHdl, Button *, pButton )
                 ScriptDocument aDocument( ScriptDocument::getDocumentForBasicManager( pBasMgr ) );
                 if ( aDocument.isDocument() && !aDocument.allowMacros() )
                 {
-                    WarningBox( this, WB_OK, String( IDEResId( RID_STR_CANNOTRUNMACRO ) ) ).Execute();
+                    WarningBox( this, WB_OK, IDEResId(RID_STR_CANNOTRUNMACRO).toString() ).Execute();
                     return 0;
                 }
             }
@@ -631,7 +631,7 @@ IMPL_LINK( MacroChooser, ButtonHdl, Button *, pButton )
         {
             if ( !IsValidSbxName(m_pMacroNameEdit->GetText()) )
             {
-                ErrorBox( this, WB_OK | WB_DEF_OK, String( IDEResId( RID_STR_BADSBXNAME ) ) ).Execute();
+                ErrorBox( this, WB_OK | WB_DEF_OK, IDEResId(RID_STR_BADSBXNAME).toString() ).Execute();
                 m_pMacroNameEdit->SetSelection( Selection( 0, m_pMacroNameEdit->GetText().getLength() ) );
                 m_pMacroNameEdit->GrabFocus();
                 return 0;
@@ -699,7 +699,7 @@ IMPL_LINK( MacroChooser, ButtonHdl, Button *, pButton )
             {
                 if ( !IsValidSbxName(m_pMacroNameEdit->GetText()) )
                 {
-                    ErrorBox( this, WB_OK | WB_DEF_OK, String( IDEResId( RID_STR_BADSBXNAME ) ) ).Execute();
+                    ErrorBox( this, WB_OK | WB_DEF_OK, IDEResId(RID_STR_BADSBXNAME).toString() ).Execute();
                     m_pMacroNameEdit->SetSelection( Selection( 0, m_pMacroNameEdit->GetText().getLength() ) );
                     m_pMacroNameEdit->GrabFocus();
                     return 1;
@@ -804,7 +804,7 @@ void MacroChooser::SetMode (Mode nM)
     {
         case All:
         {
-            m_pRunButton->SetText( String( IDEResId( RID_STR_RUN ) ) );
+            m_pRunButton->SetText(IDEResId(RID_STR_RUN).toString());
             EnableButton(*m_pDelButton, true);
             EnableButton(*m_pOrganizeButton, true);
             break;
@@ -812,7 +812,7 @@ void MacroChooser::SetMode (Mode nM)
 
         case ChooseOnly:
         {
-            m_pRunButton->SetText( String( IDEResId( RID_STR_CHOOSE ) ) );
+            m_pRunButton->SetText(IDEResId(RID_STR_CHOOSE).toString());
             EnableButton(*m_pDelButton, false);
             EnableButton(*m_pOrganizeButton, false);
             break;
@@ -820,7 +820,7 @@ void MacroChooser::SetMode (Mode nM)
 
         case Recording:
         {
-            m_pRunButton->SetText( String( IDEResId( RID_STR_RECORD ) ) );
+            m_pRunButton->SetText(IDEResId(RID_STR_RECORD).toString());
             EnableButton(*m_pDelButton, false);
             EnableButton(*m_pOrganizeButton, false);
 

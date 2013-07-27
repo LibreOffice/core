@@ -80,7 +80,7 @@ FontWorkGalleryDialog::FontWorkGalleryDialog( SdrView* pSdrView, Window* pParent
         mnThemeId           ( 0xffff ),
         mpSdrView           ( pSdrView ),
         mpModel             ( (FmFormModel*)pSdrView->GetModel() ),
-        maStrClickToAddText ( SVX_RES( STR_CLICK_TO_ADD_TEXT ) ),
+        maStrClickToAddText ( SVX_RESSTR( STR_CLICK_TO_ADD_TEXT ) ),
         mppSdrObject        ( NULL ),
         mpDestModel         ( NULL )
 {
@@ -178,7 +178,7 @@ void FontWorkGalleryDialog::fillFavorites(sal_uInt16 nThemeId)
     sal_uInt32 nFavorite;
     for( nFavorite = 1; nFavorite <= nFavCount; nFavorite++ )
     {
-        String aStr(SVX_RES(RID_SVXFLOAT3D_FAVORITE));
+        String aStr(SVX_RESSTR(RID_SVXFLOAT3D_FAVORITE));
         aStr += sal_Unicode(' ');
         aStr += OUString::number((sal_Int32)nFavorite);
         Image aThumbImage( maFavoritesHorizontal[nFavorite-1] );
@@ -336,11 +336,11 @@ FontworkAlignmentWindow::FontworkAlignmentWindow( svt::ToolboxController& rContr
     SetHelpId( HID_POPUP_FONTWORK_ALIGN );
     SetSelectHdl( LINK( this, FontworkAlignmentWindow, SelectHdl ) );
 
-    appendEntry( 0, String( SVX_RES( STR_ALIGN_LEFT    ) ), maImgAlgin1 );
-    appendEntry( 1, String( SVX_RES( STR_ALIGN_CENTER  ) ), maImgAlgin2 );
-    appendEntry( 2, String( SVX_RES( STR_ALIGN_RIGHT   ) ), maImgAlgin3 );
-    appendEntry( 3, String( SVX_RES( STR_ALIGN_WORD    ) ), maImgAlgin4 );
-    appendEntry( 4, String( SVX_RES( STR_ALIGN_STRETCH ) ), maImgAlgin5 );
+    appendEntry( 0, SVX_RESSTR( STR_ALIGN_LEFT    ), maImgAlgin1 );
+    appendEntry( 1, SVX_RESSTR( STR_ALIGN_CENTER  ), maImgAlgin2 );
+    appendEntry( 2, SVX_RESSTR( STR_ALIGN_RIGHT   ), maImgAlgin3 );
+    appendEntry( 3, SVX_RESSTR( STR_ALIGN_WORD    ), maImgAlgin4 );
+    appendEntry( 4, SVX_RESSTR( STR_ALIGN_STRETCH ), maImgAlgin5 );
 
     SetOutputSizePixel( getMenuSize() );
 
@@ -388,11 +388,11 @@ void FontworkAlignmentWindow::DataChanged( const DataChangedEvent& rDCEvt )
 
     if( ( rDCEvt.GetType() == DATACHANGED_SETTINGS ) && ( rDCEvt.GetFlags() & SETTINGS_STYLE ) )
     {
-        appendEntry( 0, String( SVX_RES( STR_ALIGN_LEFT    ) ), maImgAlgin1 );
-        appendEntry( 1, String( SVX_RES( STR_ALIGN_CENTER  ) ), maImgAlgin2 );
-        appendEntry( 2, String( SVX_RES( STR_ALIGN_RIGHT   ) ), maImgAlgin3 );
-        appendEntry( 3, String( SVX_RES( STR_ALIGN_WORD    ) ), maImgAlgin4 );
-        appendEntry( 4, String( SVX_RES( STR_ALIGN_STRETCH ) ), maImgAlgin5 );
+        appendEntry( 0, SVX_RESSTR( STR_ALIGN_LEFT    ), maImgAlgin1 );
+        appendEntry( 1, SVX_RESSTR( STR_ALIGN_CENTER  ), maImgAlgin2 );
+        appendEntry( 2, SVX_RESSTR( STR_ALIGN_RIGHT   ), maImgAlgin3 );
+        appendEntry( 3, SVX_RESSTR( STR_ALIGN_WORD    ), maImgAlgin4 );
+        appendEntry( 4, SVX_RESSTR( STR_ALIGN_STRETCH ), maImgAlgin5 );
     }
 }
 
@@ -523,14 +523,14 @@ FontworkCharacterSpacingWindow::FontworkCharacterSpacingWindow( svt::ToolboxCont
     SetHelpId( HID_POPUP_FONTWORK_CHARSPACE );
     SetSelectHdl( LINK( this, FontworkCharacterSpacingWindow, SelectHdl ) );
 
-    appendEntry( 0, String( SVX_RES( STR_CHARS_SPACING_VERY_TIGHT ) ), MIB_RADIOCHECK );
-    appendEntry( 1, String( SVX_RES( STR_CHARS_SPACING_TIGHT      ) ), MIB_RADIOCHECK );
-    appendEntry( 2, String( SVX_RES( STR_CHARS_SPACING_NORMAL     ) ), MIB_RADIOCHECK );
-    appendEntry( 3, String( SVX_RES( STR_CHARS_SPACING_LOOSE      ) ), MIB_RADIOCHECK );
-    appendEntry( 4, String( SVX_RES( STR_CHARS_SPACING_VERY_LOOSE ) ), MIB_RADIOCHECK );
-    appendEntry( 5, String( SVX_RES( STR_CHARS_SPACING_CUSTOM     ) ), MIB_RADIOCHECK );
+    appendEntry( 0, SVX_RESSTR( STR_CHARS_SPACING_VERY_TIGHT ), MIB_RADIOCHECK );
+    appendEntry( 1, SVX_RESSTR( STR_CHARS_SPACING_TIGHT      ), MIB_RADIOCHECK );
+    appendEntry( 2, SVX_RESSTR( STR_CHARS_SPACING_NORMAL     ), MIB_RADIOCHECK );
+    appendEntry( 3, SVX_RESSTR( STR_CHARS_SPACING_LOOSE      ), MIB_RADIOCHECK );
+    appendEntry( 4, SVX_RESSTR( STR_CHARS_SPACING_VERY_LOOSE ), MIB_RADIOCHECK );
+    appendEntry( 5, SVX_RESSTR( STR_CHARS_SPACING_CUSTOM     ), MIB_RADIOCHECK );
     appendSeparator();
-    appendEntry( 6, String( SVX_RES( STR_CHARS_SPACING_KERN_PAIRS ) ), MIB_CHECKABLE  );
+    appendEntry( 6, SVX_RESSTR( STR_CHARS_SPACING_KERN_PAIRS ), MIB_CHECKABLE  );
 
     SetOutputSizePixel( getMenuSize() );
 

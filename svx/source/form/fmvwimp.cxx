@@ -1290,7 +1290,7 @@ SdrObject* FmXFormView::implCreateFieldControl( const ::svx::ODataAccessDescript
                     break;
                 case DataType::TIMESTAMP:
                     bDateNTimeField = sal_True;
-                    sLabelPostfix = String( SVX_RES( RID_STR_POSTFIX_DATE ) );
+                    sLabelPostfix = SVX_RESSTR(RID_STR_POSTFIX_DATE);
                     // DON'T break !
                 case DataType::DATE:
                     nOBJID = OBJ_FM_DATEFIELD;
@@ -1332,7 +1332,7 @@ SdrObject* FmXFormView::implCreateFieldControl( const ::svx::ODataAccessDescript
         {   // so far we created a date field only, but we also need a time field
             pLabel = pControl = NULL;
             if  (   createControlLabelPair( *pOutDev, 0, 1000, xField, xNumberFormats, OBJ_FM_TIMEFIELD,
-                        String( SVX_RES( RID_STR_POSTFIX_TIME ) ), pLabel, pControl,
+                        SVX_RESSTR(RID_STR_POSTFIX_TIME), pLabel, pControl,
                         xDataSource, sDataSource, sCommand, nCommandType )
                 )
             {

@@ -359,7 +359,7 @@ OUString ChooseMacro( const uno::Reference< frame::XModel >& rxLimitToDocument, 
                     {
                         // error
                         bError = true;
-                        ErrorBox( NULL, WB_OK | WB_DEF_OK, String( IDEResId( RID_STR_ERRORCHOOSEMACRO ) ) ).Execute();
+                        ErrorBox( NULL, WB_OK | WB_DEF_OK, IDEResId(RID_STR_ERRORCHOOSEMACRO).toString() ).Execute();
                     }
                 }
             }

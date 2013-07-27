@@ -936,7 +936,7 @@ void SfxTemplateManagerDlg::OnTemplateImport ()
     sfx2::FileDialogHelper aFileDlg(nDialogType, SFXWB_MULTISELECTION);
 
     // add "All" filter
-    aFileDlg.AddFilter( String(SfxResId( STR_SFX_FILTERNAME_ALL) ),
+    aFileDlg.AddFilter( SfxResId(STR_SFX_FILTERNAME_ALL).toString(),
                         OUString(FILEDIALOG_FILTER_ALL) );
 
     // add template filter

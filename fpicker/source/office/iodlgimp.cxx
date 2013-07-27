@@ -196,7 +196,7 @@ void SvtUpButton_Impl::FillURLMenu( PopupMenu* _pMenu )
         if ( nCount == 1 )
         {
             // adjust the title of the top level entry (the workspace)
-            _pMenu->SetItemText( --nItemId, SvtSimpleResId( STR_SVT_MIMETYPE_CNT_FSYSBOX ) );
+            _pMenu->SetItemText( --nItemId, SvtSimpleResId(STR_SVT_MIMETYPE_CNT_FSYSBOX).toString() );
         }
         --nCount;
     }

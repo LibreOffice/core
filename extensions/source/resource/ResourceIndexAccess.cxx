@@ -161,7 +161,7 @@ Any SAL_CALL ResourceStringIndexAccess::getByIndex(sal_Int32 nIdx)
             OUString("string resource for id not available"),
             Reference<XInterface>());
 
-    return makeAny(OUString(String(aId)));
+    return makeAny(aId.toString());
 }
 
 Any SAL_CALL ResourceStringListIndexAccess::getByIndex(sal_Int32 nIdx)

@@ -874,14 +874,14 @@ void SidebarController::ShowDetailMenu (const ::rtl::OUString& rsMenuCommand) co
 
     // Add entry for docking or un-docking the tool panel.
     if (mpParentWindow->IsFloatingMode())
-        pMenu->InsertItem(MID_LOCK_TASK_PANEL, String(SfxResId(STR_SFX_DOCK)));
+        pMenu->InsertItem(MID_LOCK_TASK_PANEL, SFX2_RESSTR(STR_SFX_DOCK));
     else
-        pMenu->InsertItem(MID_UNLOCK_TASK_PANEL, String(SfxResId(STR_SFX_UNDOCK)));
+        pMenu->InsertItem(MID_UNLOCK_TASK_PANEL, SFX2_RESSTR(STR_SFX_UNDOCK));
 
     pCustomizationMenu->InsertSeparator();
-    pCustomizationMenu->InsertItem(MID_RESTORE_DEFAULT, String(SfxResId(STRING_RESTORE)));
+    pCustomizationMenu->InsertItem(MID_RESTORE_DEFAULT, SFX2_RESSTR(STRING_RESTORE));
 
-    pMenu->InsertItem(MID_CUSTOMIZATION, String(SfxResId(STRING_CUSTOMIZATION)));
+    pMenu->InsertItem(MID_CUSTOMIZATION, SFX2_RESSTR(STRING_CUSTOMIZATION));
     pMenu->SetPopupMenu(MID_CUSTOMIZATION, pCustomizationMenu);
 
     pMenu->RemoveDisabledEntries(sal_False, sal_False);

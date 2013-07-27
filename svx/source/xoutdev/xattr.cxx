@@ -224,7 +224,7 @@ String NameOrIndex::CheckNamedItem( const NameOrIndex* pCheckItem, const sal_uIn
     {
         sal_Int32 nUserIndex = 1;
         const ResId aRes(SVX_RES(nPrefixResId));
-        String aUser( aRes );
+        String aUser( aRes.toString() );
         aUser += sal_Unicode( ' ' );
 
         if( pDefaults.get() )
@@ -1889,7 +1889,7 @@ XLineStartItem* XLineStartItem::checkForUniqueItem( SdrModel* pModel ) const
 
             sal_Int32 nUserIndex = 1;
             const ResId aRes(SVX_RES(RID_SVXSTR_LINEEND));
-            const String aUser( aRes );
+            const String aUser( aRes.toString() );
 
             if( pPool1 )
             {
@@ -2241,7 +2241,7 @@ XLineEndItem* XLineEndItem::checkForUniqueItem( SdrModel* pModel ) const
 
             sal_Int32 nUserIndex = 1;
             const ResId aRes(SVX_RES(RID_SVXSTR_LINEEND));
-            const String aUser( aRes );
+            const String aUser( aRes.toString() );
 
             if( pPool1 )
             {

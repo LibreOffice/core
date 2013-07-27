@@ -841,9 +841,9 @@ namespace svxform
         {
             // now, we can access the local resources from the dialog's
             // resource context
-            m_sDoc_UI      = String( ResId( STR_REPLACE_DOC, *pMgr ) );
-            m_sInstance_UI = String( ResId( STR_REPLACE_INST, *pMgr ) );
-            m_sNone_UI     = String( ResId( STR_REPLACE_NONE, *pMgr ) );
+            m_sDoc_UI      = ResId( STR_REPLACE_DOC, *pMgr ).toString();
+            m_sInstance_UI = ResId( STR_REPLACE_INST, *pMgr ).toString();
+            m_sNone_UI     = ResId( STR_REPLACE_NONE, *pMgr ).toString();
         }
 
     public:
@@ -912,9 +912,9 @@ namespace svxform
         // load UI resources from resource file
         virtual void _initResources(ResMgr* pMgr)
         {
-            m_sPost_UI = String( ResId( STR_METHOD_POST, *pMgr ) );
-            m_sPut_UI  = String( ResId( STR_METHOD_PUT, *pMgr ) );
-            m_sGet_UI  = String( ResId( STR_METHOD_GET, *pMgr ) );
+            m_sPost_UI = ResId( STR_METHOD_POST, *pMgr ).toString();
+            m_sPut_UI  = ResId( STR_METHOD_PUT, *pMgr ).toString();
+            m_sGet_UI  = ResId( STR_METHOD_GET, *pMgr ).toString();
         }
 
     public:
@@ -2500,10 +2500,10 @@ namespace svxform
         m_xUIHelper     ( _rUIHelper ),
         m_pItemNode     ( _pNode ),
         m_eItemType     ( DITNone ),
-        m_sFL_Element   ( SVX_RES( STR_FIXEDLINE_ELEMENT ) ),
-        m_sFL_Attribute ( SVX_RES( STR_FIXEDLINE_ATTRIBUTE ) ),
-        m_sFL_Binding   ( SVX_RES( STR_FIXEDLINE_BINDING ) ),
-        m_sFT_BindingExp( SVX_RES( STR_FIXEDTEXT_BINDING ) )
+        m_sFL_Element   ( SVX_RESSTR( STR_FIXEDLINE_ELEMENT ) ),
+        m_sFL_Attribute ( SVX_RESSTR( STR_FIXEDLINE_ATTRIBUTE ) ),
+        m_sFL_Binding   ( SVX_RESSTR( STR_FIXEDLINE_BINDING ) ),
+        m_sFT_BindingExp( SVX_RESSTR( STR_FIXEDTEXT_BINDING ) )
 
     {
         FreeResource();
@@ -3148,9 +3148,9 @@ namespace svxform
     {
         static long aStaticTabs[]= { 3, 0, 35, 200 };
         m_aNamespacesList.SvSimpleTable::SetTabs( aStaticTabs );
-        String sHeader = String( SVX_RES( STR_HEADER_PREFIX ) );
+        String sHeader = SVX_RESSTR( STR_HEADER_PREFIX );
         sHeader += '\t';
-        sHeader += String( SVX_RES( STR_HEADER_URL ) );
+        sHeader += SVX_RESSTR(STR_HEADER_URL);
         m_aNamespacesList.InsertHeaderEntry(
             sHeader, HEADERBAR_APPEND, HIB_LEFT /*| HIB_FIXEDPOS | HIB_FIXED*/ );
 
@@ -3318,7 +3318,7 @@ namespace svxform
 
     {
         if ( _bIsEdit )
-            SetText( String( SVX_RES( STR_EDIT_TEXT ) ) );
+            SetText(SVX_RESSTR(STR_EDIT_TEXT));
 
         FreeResource();
 
@@ -3484,9 +3484,9 @@ namespace svxform
     void AddSubmissionDialog::FillAllBoxes()
     {
         // method box
-        m_aMethodLB.InsertEntry( String( SVX_RES( STR_METHOD_POST   ) ) );
-        m_aMethodLB.InsertEntry( String( SVX_RES( STR_METHOD_PUT ) ) );
-        m_aMethodLB.InsertEntry( String( SVX_RES( STR_METHOD_GET ) ) );
+        m_aMethodLB.InsertEntry( SVX_RESSTR( STR_METHOD_POST   ) );
+        m_aMethodLB.InsertEntry( SVX_RESSTR( STR_METHOD_PUT ) );
+        m_aMethodLB.InsertEntry( SVX_RESSTR( STR_METHOD_GET ) );
         m_aMethodLB.SelectEntryPos(0);
 
         // binding box
@@ -3543,9 +3543,9 @@ namespace svxform
         }
 
         // replace box
-        m_aReplaceLB.InsertEntry( String( SVX_RES( STR_REPLACE_NONE ) ) );
-        m_aReplaceLB.InsertEntry( String( SVX_RES( STR_REPLACE_INST ) ) );
-        m_aReplaceLB.InsertEntry( String( SVX_RES( STR_REPLACE_DOC ) ) );
+        m_aReplaceLB.InsertEntry( SVX_RESSTR( STR_REPLACE_NONE ) );
+        m_aReplaceLB.InsertEntry( SVX_RESSTR( STR_REPLACE_INST ) );
+        m_aReplaceLB.InsertEntry( SVX_RESSTR( STR_REPLACE_DOC ) );
 
 
         // init the controls with the values of the submission
@@ -3612,7 +3612,7 @@ namespace svxform
 
     {
         if ( _bEdit )
-            SetText( String( SVX_RES( STR_EDIT_TEXT ) ) );
+            SetText(SVX_RESSTR(STR_EDIT_TEXT));
 
         FreeResource();
     }
@@ -3643,7 +3643,7 @@ namespace svxform
 
     {
         if ( _bEdit )
-            SetText( String( SVX_RES( STR_EDIT_TEXT ) ) );
+            SetText(SVX_RESSTR(STR_EDIT_TEXT));
 
         FreeResource();
 
@@ -3651,7 +3651,7 @@ namespace svxform
         m_aFilePickerBtn.SetClickHdl( LINK( this, AddInstanceDialog, FilePickerHdl ) );
 
         // load the filter name from fps_office resource
-        m_sAllFilterName = String( ResId( STR_FILTERNAME_ALL, *ResMgr::CreateResMgr("fps_office") ) );
+        m_sAllFilterName = ResId(STR_FILTERNAME_ALL, *ResMgr::CreateResMgr("fps_office")).toString();
     }
 
     AddInstanceDialog::~AddInstanceDialog()

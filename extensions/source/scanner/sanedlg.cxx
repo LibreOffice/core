@@ -132,7 +132,7 @@ short SaneDlg::Execute()
     if( ! Sane::IsSane() )
     {
         ErrorBox aErrorBox( NULL, WB_OK | WB_DEF_OK,
-                            String( SaneResId( RID_SANE_NOSANELIB_TXT ) ) );
+                            SaneResId(RID_SANE_NOSANELIB_TXT).toString() );
         aErrorBox.Execute();
         return sal_False;
     }
@@ -411,7 +411,7 @@ IMPL_LINK( SaneDlg, ClickBtnHdl, Button*, pButton )
     {
         if( pButton == &maDeviceInfoButton )
         {
-            String aString( SaneResId( RID_SANE_DEVICEINFO_TXT ) );
+            String aString(SaneResId(RID_SANE_DEVICEINFO_TXT).toString());
             String aSR( RTL_CONSTASCII_USTRINGPARAM( "%s" ) );
             aString.SearchAndReplace( aSR, Sane::GetName( mrSane.GetDeviceNumber() ) );
             aString.SearchAndReplace( aSR, Sane::GetVendor( mrSane.GetDeviceNumber() ) );
@@ -711,7 +711,7 @@ void SaneDlg::AcquirePreview()
     int nOption = mrSane.GetOptionByName( "preview" );
     if( nOption == -1 )
     {
-        String aString( SaneResId( RID_SANE_NORESOLUTIONOPTION_TXT ) );
+        OUString aString(SaneResId(RID_SANE_NORESOLUTIONOPTION_TXT).toString());
         WarningBox aBox( this, WB_OK_CANCEL | WB_DEF_OK, aString );
         if( aBox.Execute() == RET_CANCEL )
             return;
@@ -723,7 +723,7 @@ void SaneDlg::AcquirePreview()
     if( ! mrSane.Start( aTransporter ) )
     {
         ErrorBox aErrorBox( this, WB_OK | WB_DEF_OK,
-                            String( SaneResId( RID_SANE_SCANERROR_TXT ) ) );
+                            SaneResId( RID_SANE_SCANERROR_TXT).toString() );
         aErrorBox.Execute();
     }
     else

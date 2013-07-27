@@ -360,42 +360,42 @@ MappingDialog_Impl::MappingDialog_Impl(Window* pParent, BibDataManager* pMan) :
     aCustom4LB(this,            BibResId( LB_CUSTOM4        )),
     aCustom5FT(this,            BibResId( FT_CUSTOM5        )),
     aCustom5LB(this,            BibResId( LB_CUSTOM5        )),
-    sNone(BibResId(ST_NONE)),
+    sNone(BIB_RESSTR(ST_NONE)),
     bModified(sal_False)
 {
     FreeResource();
 
-    aIdentifierFT.SetText(String(         BibResId( ST_IDENTIFIER    )));
-    aAuthorityTypeFT.SetText(String(      BibResId( ST_AUTHTYPE )));
-    aAuthorFT.SetText(String(             BibResId( ST_AUTHOR        )));
-    aTitleFT.SetText(String(              BibResId( ST_TITLE         )));
-    aMonthFT.SetText(String(              BibResId( ST_MONTH         )));
-    aYearFT.SetText(String(               BibResId( ST_YEAR          )));
-    aISBNFT.SetText(String(               BibResId( ST_ISBN          )));
-    aBooktitleFT.SetText(String(          BibResId( ST_BOOKTITLE     )));
-    aChapterFT.SetText(String(            BibResId( ST_CHAPTER       )));
-    aEditionFT.SetText(String(            BibResId( ST_EDITION       )));
-    aEditorFT.SetText(String(             BibResId( ST_EDITOR        )));
-    aHowpublishedFT.SetText(String(       BibResId( ST_HOWPUBLISHED  )));
-    aInstitutionFT.SetText(String(        BibResId( ST_INSTITUTION   )));
-    aJournalFT.SetText(String(            BibResId( ST_JOURNAL       )));
-    aNoteFT.SetText(String(               BibResId( ST_NOTE          )));
-    aAnnoteFT.SetText(String(             BibResId( ST_ANNOTE        )));
-    aNumberFT.SetText(String(             BibResId( ST_NUMBER        )));
-    aOrganizationsFT.SetText(String(      BibResId( ST_ORGANIZATION )));
-    aPagesFT.SetText(String(              BibResId( ST_PAGE         )));
-    aPublisherFT.SetText(String(          BibResId( ST_PUBLISHER     )));
-    aAddressFT.SetText(String(            BibResId( ST_ADDRESS       )));
-    aSchoolFT.SetText(String(             BibResId( ST_SCHOOL        )));
-    aSeriesFT.SetText(String(             BibResId( ST_SERIES        )));
-    aReportTypeFT.SetText(String(         BibResId( ST_REPORT    )));
-    aVolumeFT.SetText(String(             BibResId( ST_VOLUME        )));
-    aURLFT.SetText(String(                BibResId( ST_URL           )));
-    aCustom1FT.SetText(String(            BibResId( ST_CUSTOM1       )));
-    aCustom2FT.SetText(String(            BibResId( ST_CUSTOM2       )));
-    aCustom3FT.SetText(String(            BibResId( ST_CUSTOM3       )));
-    aCustom4FT.SetText(String(            BibResId( ST_CUSTOM4       )));
-    aCustom5FT.SetText(String(            BibResId( ST_CUSTOM5       )));
+    aIdentifierFT.SetText(BIB_RESSTR(ST_IDENTIFIER));
+    aAuthorityTypeFT.SetText(BIB_RESSTR(ST_AUTHTYPE));
+    aAuthorFT.SetText(BIB_RESSTR(ST_AUTHOR));
+    aTitleFT.SetText(BIB_RESSTR(ST_TITLE));
+    aMonthFT.SetText(BIB_RESSTR(ST_MONTH));
+    aYearFT.SetText(BIB_RESSTR(ST_YEAR));
+    aISBNFT.SetText(BIB_RESSTR(ST_ISBN));
+    aBooktitleFT.SetText(BIB_RESSTR(ST_BOOKTITLE));
+    aChapterFT.SetText(BIB_RESSTR(ST_CHAPTER));
+    aEditionFT.SetText(BIB_RESSTR(ST_EDITION));
+    aEditorFT.SetText(BIB_RESSTR(ST_EDITOR));
+    aHowpublishedFT.SetText(BIB_RESSTR(ST_HOWPUBLISHED));
+    aInstitutionFT.SetText(BIB_RESSTR(ST_INSTITUTION));
+    aJournalFT.SetText(BIB_RESSTR(ST_JOURNAL));
+    aNoteFT.SetText(BIB_RESSTR(ST_NOTE));
+    aAnnoteFT.SetText(BIB_RESSTR(ST_ANNOTE));
+    aNumberFT.SetText(BIB_RESSTR(ST_NUMBER));
+    aOrganizationsFT.SetText(BIB_RESSTR(ST_ORGANIZATION));
+    aPagesFT.SetText(BIB_RESSTR(ST_PAGE));
+    aPublisherFT.SetText(BIB_RESSTR(ST_PUBLISHER));
+    aAddressFT.SetText(BIB_RESSTR(ST_ADDRESS));
+    aSchoolFT.SetText(BIB_RESSTR(ST_SCHOOL));
+    aSeriesFT.SetText(BIB_RESSTR(ST_SERIES));
+    aReportTypeFT.SetText(BIB_RESSTR(ST_REPORT));
+    aVolumeFT.SetText(BIB_RESSTR(ST_VOLUME));
+    aURLFT.SetText(BIB_RESSTR(ST_URL));
+    aCustom1FT.SetText(BIB_RESSTR(ST_CUSTOM1));
+    aCustom2FT.SetText(BIB_RESSTR(ST_CUSTOM2));
+    aCustom3FT.SetText(BIB_RESSTR(ST_CUSTOM3));
+    aCustom4FT.SetText(BIB_RESSTR(ST_CUSTOM4));
+    aCustom5FT.SetText(BIB_RESSTR(ST_CUSTOM5));
 
     aOKBT.SetClickHdl(LINK(this, MappingDialog_Impl, OkHdl));
     String sTitle = GetText();
@@ -556,8 +556,8 @@ DBChangeDialog_Impl::DBChangeDialog_Impl(Window* pParent, BibDataManager* pMan )
     aSelectionGB(this,  BibResId( GB_SELECTION )),
     aSelectionLB(this,  BibResId( LB_SELECTION )),
     aSelectionHB(this,  BibResId( HB_SELECTION )),
-    aEntryST(BibResId(ST_ENTRY)),
-    aURLST( BibResId(ST_URL)),
+    aEntryST(BIB_RESSTR(ST_ENTRY)),
+    aURLST(BIB_RESSTR(ST_URL)),
     pDatMan(pMan)
 {
     FreeResource();
