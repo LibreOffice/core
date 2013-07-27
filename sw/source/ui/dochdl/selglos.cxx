@@ -30,7 +30,7 @@
 
 // CTOR / DTOR -----------------------------------------------------------
 
-SwSelGlossaryDlg::SwSelGlossaryDlg(Window * pParent, const String &rShortName)
+SwSelGlossaryDlg::SwSelGlossaryDlg(Window * pParent, const OUString &rShortName)
     : ModalDialog(pParent, SW_RES(DLG_SEL_GLOS)),
     aGlosBox(this, SW_RES( LB_GLOS)),
     aGlosFL(this, SW_RES( FL_GLOS)),
@@ -38,9 +38,7 @@ SwSelGlossaryDlg::SwSelGlossaryDlg(Window * pParent, const String &rShortName)
     aCancelBtn(this, SW_RES( BT_CANCEL)),
     aHelpBtn(this, SW_RES(BT_HELP))
 {
-    String sText(aGlosFL.GetText());
-    sText += rShortName;
-    aGlosFL.SetText(sText);
+    aGlosFL.SetText(aGlosFL.GetText() + rShortName);
     FreeResource();
 
     aGlosBox.SetDoubleClickHdl(LINK(this, SwSelGlossaryDlg, DoubleClickHdl));
