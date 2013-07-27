@@ -1821,6 +1821,19 @@ void testExtRefFuncT(ScDocument* pDoc, ScDocument* pExtDoc)
     CPPUNIT_ASSERT_MESSAGE("Unexpected result with T.", aRes.isEmpty());
 }
 
+void testExtRefFuncOFFSET(ScDocument* pDoc, ScDocument* pExtDoc)
+{
+    Test::clearRange(pDoc, ScRange(0, 0, 0, 1, 9, 0));
+    Test::clearRange(pExtDoc, ScRange(0, 0, 0, 1, 9, 0));
+
+    sc::AutoCalcSwitch aACSwitch(*pDoc, true);
+
+    // External document has sheet named 'Data', and the internal doc has sheet named 'Test'.
+    pExtDoc->SetValue(ScAddress(0,1,0), 1.2); // Set 1.2 to A2.
+    pDoc->SetString(ScAddress(0,0,0), "=OFFSET('file:///extdata.fake'#Data.$A$1;1;0;1;1)");
+    CPPUNIT_ASSERT_EQUAL(1.2, pDoc->GetValue(ScAddress(0,0,0)));
+}
+
 void Test::testExternalRefFunctions()
 {
     ScDocShellRef xExtDocSh = new ScDocShell;
@@ -1876,6 +1889,7 @@ void Test::testExternalRefFunctions()
 
     pRefMgr->clearCache(nFileId);
     testExtRefFuncT(m_pDoc, pExtDoc);
+    testExtRefFuncOFFSET(m_pDoc, pExtDoc);
 
     // Unload the external document shell.
     xExtDocSh->DoClose();
