@@ -37,19 +37,17 @@ protected:
 
     DECL_LINK(DoubleClickHdl, ListBox*);
 public:
-    SwSelGlossaryDlg(Window * pParent, const String &rShortName);
+    SwSelGlossaryDlg(Window * pParent, const OUString &rShortName);
     ~SwSelGlossaryDlg();
-    void InsertGlos(const String &rRegion, const String &rGlosName);    // inline
+    void InsertGlos(const OUString &rRegion, const OUString &rGlosName);    // inline
     sal_uInt16 GetSelectedIdx() const;  // inline
     void SelectEntryPos(sal_uInt16 nIdx);   // inline
 };
 
-inline void SwSelGlossaryDlg::InsertGlos(const String &rRegion,
-                                const String &rGlosName)
+inline void SwSelGlossaryDlg::InsertGlos(const OUString &rRegion,
+                                const OUString &rGlosName)
 {
-    String aTmp( rRegion );
-    aTmp += ':';
-    aTmp += rGlosName;
+    const OUString aTmp = rRegion + ":" + rGlosName;
     aGlosBox.InsertEntry( aTmp );
 }
 inline sal_uInt16 SwSelGlossaryDlg::GetSelectedIdx() const
