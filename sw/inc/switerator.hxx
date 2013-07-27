@@ -20,14 +20,14 @@
 #define _SWITERATOR_HXX
 
 #include <calbck.hxx>
-#include <osl/diagnose.h>
+#include <sal/log.hxx>
 
 template< class TElementType, class TSource > class SwIterator
 {
     SwClientIter aClientIter;
 public:
 
-    SwIterator( const TSource& rSrc ) : aClientIter(rSrc) { OSL_ENSURE( TElementType::IsOf( TYPE(SwClient) ), "Incompatible types!" ); }
+    SwIterator( const TSource& rSrc ) : aClientIter(rSrc) { SAL_WARN_IF( !TElementType::IsOf( TYPE(SwClient) ), "sw", "Incompatible types!" ); }
     TElementType* First()     { SwClient* p = aClientIter.First(TYPE(TElementType)); return PTR_CAST(TElementType,p); }
     TElementType* Last()      { SwClient* p = aClientIter.Last( TYPE(TElementType)); return PTR_CAST(TElementType,p); }
     TElementType* Next()      { SwClient* p = aClientIter.Next();     return PTR_CAST(TElementType,p); }
