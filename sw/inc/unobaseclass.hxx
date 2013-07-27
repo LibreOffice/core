@@ -87,7 +87,6 @@ void ClientModify(SwClient* pClient, const SfxPoolItem *pOld, const SfxPoolItem 
 
 
 #include <boost/utility.hpp>
-#include <osl/diagnose.h>
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 
@@ -103,7 +102,7 @@ namespace sw {
             UnoImplPtr(T *const i_p)
                 : m_p(i_p)
             {
-                OSL_ENSURE(i_p, "UnoImplPtr: null");
+                SAL_WARN_IF(!i_p, "sw", "UnoImplPtr: null");
             }
 
             ~UnoImplPtr()

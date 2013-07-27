@@ -28,7 +28,6 @@
 #include <modeltoviewhelper.hxx>
 #include <SwNumberTreeTypes.hxx>
 #include <IDocumentContentOperations.hxx>
-#include <osl/diagnose.h>
 
 #include <sfx2/Metadatable.hxx>
 
@@ -818,12 +817,12 @@ public:
 
 inline SwpHints & SwTxtNode::GetSwpHints()
 {
-    OSL_ASSERT( m_pSwpHints );
+    assert( m_pSwpHints );
     return *m_pSwpHints;
 }
 inline const SwpHints &SwTxtNode::GetSwpHints() const
 {
-    OSL_ASSERT( m_pSwpHints );
+    assert( m_pSwpHints );
     return *m_pSwpHints;
 }
 
