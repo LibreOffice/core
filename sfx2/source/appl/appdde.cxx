@@ -230,16 +230,19 @@ public:
 
 class SfxDdeDocTopics_Impl : public std::vector<SfxDdeDocTopic_Impl*> {};
 
+#if defined( WNT )
+
+namespace {
+
 //========================================================================
 
-sal_Bool SfxAppEvent_Impl( ApplicationEvent &rAppEvent,
-                           const OUString& rCmd, const OUString& rEvent,
+sal_Bool SfxAppEvent_Impl( const OUString& rCmd, const OUString& rEvent,
                            ApplicationEvent::Type eType )
 
 /*  [Description]
 
     Checks if 'rCmd' of the event 'rEvent' is (without '(') and then assemble
-    this data into a <ApplicationEvent>, which can be excecuted through
+    this data into a <ApplicationEvent>, which is then excecuted through
     <Application::AppEvent()>. If 'rCmd' is the given event 'rEvent', then
     TRUE is returned, otherwise FALSE.
 
@@ -250,37 +253,59 @@ sal_Bool SfxAppEvent_Impl( ApplicationEvent &rAppEvent,
 */
 
 {
-    OUString sEvent(rEvent);
-    sEvent += "(";
+    OUString sEvent(rEvent + "(");
     if (rCmd.startsWithIgnoreAsciiCase(sEvent))
     {
-        OUStringBuffer aData( rCmd );
-        aData.remove(0, sEvent.getLength());
-        if ( aData.getLength() > 2 )
+        sal_Int32 start = sEvent.getLength();
+        if ( rCmd.getLength() - start >= 2 )
         {
             // Transform into the ApplicationEvent Format
-            aData.remove( aData.getLength() - 1, 1 );
-            for ( sal_Int32 n = 0; n < aData.getLength(); )
+            //TODO: I /assume/ that rCmd should match the syntax of
+            // <http://msdn.microsoft.com/en-us/library/ms648995.aspx>
+            // "WM_DDE_EXECUTE message" but does not (handle commands enclosed
+            // in [...]; handle commas separating multiple arguments; handle
+            // double "", ((, )), [[, ]] in quoted arguments); see also the mail
+            // thread starting at <http://lists.freedesktop.org/archives/
+            // libreoffice/2013-July/054779.html> "DDE on Windows."
+            std::vector<OUString> aData;
+            for ( sal_Int32 n = start; n < rCmd.getLength() - 1; )
             {
-                switch ( aData[n] )
+                // Resiliently read arguments either starting with " and
+                // spanning to the next " (if any; TODO: do we need to undo any
+                // escaping within the string?) or with neither " nor SPC and
+                // spanning to the next SPC (if any; TODO: is this from not
+                // wrapped in "..." relevant? it would have been parsed by the
+                // original code even if that was only by accident, so I left it
+                // in), with runs of SPCs treated like single ones:
+                switch ( rCmd[n] )
                 {
                 case '"':
-                    aData.remove( n, 1 );
-                    while ( n < aData.getLength() && aData[n] != '"' )
-                        ++n;
-                    if ( n < aData.getLength() )
-                        aData.remove( n, 1 );
-                    break;
+                    {
+                        sal_Int32 i = rCmd.indexOf('"', ++n);
+                        if (i < 0 || i > rCmd.getLength() - 1) {
+                            i = rCmd.getLength() - 1;
+                        }
+                        aData.push_back(rCmd.copy(n, i - n));
+                        n = i + 1;
+                        break;
+                    }
                 case ' ':
-                    aData[n++] = '\n';
-                    break;
-                default:
                     ++n;
                     break;
+                default:
+                    {
+                        sal_Int32 i = rCmd.indexOf(' ', n);
+                        if (i < 0 || i > rCmd.getLength() - 1) {
+                            i = rCmd.getLength() - 1;
+                        }
+                        aData.push_back(rCmd.copy(n, i - n));
+                        n = i + 1;
+                        break;
+                    }
                 }
             }
 
-            rAppEvent = ApplicationEvent(eType, aData.makeStringAndClear());
+            GetpApp()->AppEvent( ApplicationEvent(eType, aData) );
             return sal_True;
         }
     }
@@ -288,7 +313,8 @@ sal_Bool SfxAppEvent_Impl( ApplicationEvent &rAppEvent,
     return sal_False;
 }
 
-#if defined( WNT )
+}
+
 long SfxApplication::DdeExecute
 (
     const String&   rCmd  // Expressed in our BASIC-Syntax
@@ -306,11 +332,8 @@ long SfxApplication::DdeExecute
 
 {
     // Print or Open-Event?
-    ApplicationEvent aAppEvent;
-    if ( SfxAppEvent_Impl( aAppEvent, rCmd, "Print", ApplicationEvent::TYPE_PRINT ) ||
-         SfxAppEvent_Impl( aAppEvent, rCmd, "Open", ApplicationEvent::TYPE_OPEN ) )
-        GetpApp()->AppEvent( aAppEvent );
-    else
+    if ( !( SfxAppEvent_Impl( rCmd, "Print", ApplicationEvent::TYPE_PRINT ) ||
+            SfxAppEvent_Impl( rCmd, "Open", ApplicationEvent::TYPE_OPEN ) ) )
     {
         // all others are BASIC
         StarBASIC* pBasic = GetBasic();
@@ -324,6 +347,7 @@ long SfxApplication::DdeExecute
     }
     return 1;
 }
+
 #endif
 
 long SfxObjectShell::DdeExecute
