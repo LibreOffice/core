@@ -304,8 +304,8 @@ void SwXAutoTextGroup::renameByName(const OUString& aElementName,
         sal_uInt16 nIdx = pGlosGroup->GetIndex( aElementName);
         if(USHRT_MAX == nIdx)
             throw lang::IllegalArgumentException();
-        String aNewShort( aNewElementName);
-        String aNewName( aNewElementTitle);
+        OUString aNewShort(aNewElementName);
+        OUString aNewName(aNewElementTitle);
         sal_uInt16 nOldLongIdx = pGlosGroup->GetLongIndex( aNewShort );
         sal_uInt16 nOldIdx = pGlosGroup->GetIndex( aNewName );
 
