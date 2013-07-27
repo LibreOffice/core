@@ -51,14 +51,12 @@ public class SlidesGridFragment extends SherlockFragment implements ServiceConne
 
     private void bindService() {
         Intent aServiceIntent = new Intent(getActivity(), CommunicationService.class);
-
         getActivity().bindService(aServiceIntent, this, Context.BIND_AUTO_CREATE);
     }
 
     @Override
     public void onServiceConnected(ComponentName aComponentName, IBinder aBinder) {
         CommunicationService.CBinder aServiceBinder = (CommunicationService.CBinder) aBinder;
-
         mCommunicationService = aServiceBinder.getService();
 
         setUpSlidesGrid();
@@ -109,14 +107,23 @@ public class SlidesGridFragment extends SherlockFragment implements ServiceConne
 
         @Override
         public void onReceive(Context aContext, Intent aIntent) {
-            if (Intents.Actions.SLIDE_PREVIEW.equals(aIntent.getAction())) {
+            if (Intents.Actions.SLIDE_SHOW_RUNNING.equals(aIntent.getAction())) {
                 mSlidesGridFragment.refreshSlidesGrid();
+
+                return;
+            }
+
+            if (Intents.Actions.SLIDE_PREVIEW.equals(aIntent.getAction())) {
+                int aSlideIndex = aIntent.getIntExtra(Intents.Extras.SLIDE_INDEX, 0);
+
+                mSlidesGridFragment.refreshSlidePreview(aSlideIndex);
             }
         }
     }
 
     private IntentFilter buildIntentsReceiverFilter() {
         IntentFilter aIntentFilter = new IntentFilter();
+        aIntentFilter.addAction(Intents.Actions.SLIDE_SHOW_RUNNING);
         aIntentFilter.addAction(Intents.Actions.SLIDE_PREVIEW);
 
         return aIntentFilter;
@@ -130,6 +137,17 @@ public class SlidesGridFragment extends SherlockFragment implements ServiceConne
 
     private void refreshSlidesGrid() {
         getSlidesGrid().invalidateViews();
+    }
+
+    private void refreshSlidePreview(int aSlideIndex) {
+        GridView aSlidesGrid = getSlidesGrid();
+        View aSlideView = aSlidesGrid.getChildAt(aSlideIndex);
+
+        if (aSlideView == null) {
+            return;
+        }
+
+        aSlidesGrid.getAdapter().getView(aSlideIndex, aSlideView, aSlidesGrid);
     }
 
     @Override

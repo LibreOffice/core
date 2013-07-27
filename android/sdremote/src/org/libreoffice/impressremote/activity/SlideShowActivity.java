@@ -245,7 +245,21 @@ public class SlideShowActivity extends SherlockFragmentActivity implements Servi
     protected void onDestroy() {
         super.onDestroy();
 
+        disconnectComputer();
+
         unbindService();
+    }
+
+    private void disconnectComputer() {
+        if (!isServiceBound()) {
+            return;
+        }
+
+        mCommunicationService.disconnect();
+    }
+
+    private boolean isServiceBound() {
+        return mCommunicationService != null;
     }
 
     private void unbindService() {
@@ -254,10 +268,6 @@ public class SlideShowActivity extends SherlockFragmentActivity implements Servi
         }
 
         unbindService(this);
-    }
-
-    private boolean isServiceBound() {
-        return mCommunicationService != null;
     }
 
     @Override

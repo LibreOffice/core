@@ -8,8 +8,6 @@
  */
 package org.libreoffice.impressremote.communication;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.util.SparseArray;
 
 
@@ -17,7 +15,7 @@ public class SlideShow {
     private int mSlidesCount;
     private int mCurrentSlideIndex;
 
-    private final SparseArray<Bitmap> mSlidePreviews;
+    private final SparseArray<byte[]> mSlidePreviewsBytes;
     private final SparseArray<String> mSlideNotes;
 
     private final Timer mTimer;
@@ -26,7 +24,7 @@ public class SlideShow {
         this.mSlidesCount = 0;
         this.mCurrentSlideIndex = 0;
 
-        this.mSlidePreviews = new SparseArray<Bitmap>();
+        this.mSlidePreviewsBytes = new SparseArray<byte[]>();
         this.mSlideNotes = new SparseArray<String>();
 
         this.mTimer = new Timer();
@@ -52,15 +50,12 @@ public class SlideShow {
         return getCurrentSlideIndex() + 1;
     }
 
-    public void setSlidePreview(int aSlideIndex, byte[] aSlidePreviewBytes) {
-        Bitmap aSlidePreview = BitmapFactory
-            .decodeByteArray(aSlidePreviewBytes, 0, aSlidePreviewBytes.length);
-
-        mSlidePreviews.put(aSlideIndex, aSlidePreview);
+    public void setSlidePreviewBytes(int aSlideIndex, byte[] aSlidePreviewBytes) {
+        mSlidePreviewsBytes.put(aSlideIndex, aSlidePreviewBytes);
     }
 
-    public Bitmap getSlidePreview(int aSlideIndex) {
-        return mSlidePreviews.get(aSlideIndex);
+    public byte[] getSlidePreviewBytes(int aSlideIndex) {
+        return mSlidePreviewsBytes.get(aSlideIndex);
     }
 
     public void setSlideNotes(int aSlideIndex, String aSlideNotes) {
@@ -85,7 +80,7 @@ public class SlideShow {
         mSlidesCount = 0;
         mCurrentSlideIndex = 0;
 
-        mSlidePreviews.clear();
+        mSlidePreviewsBytes.clear();
         mSlideNotes.clear();
     }
 }

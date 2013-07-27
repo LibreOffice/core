@@ -264,7 +264,7 @@ public class CommunicationService extends Service implements Runnable, MessagesL
 
     @Override
     public void onSlidePreview(int aSlideIndex, byte[] aPreview) {
-        mSlideShow.setSlidePreview(aSlideIndex, aPreview);
+        mSlideShow.setSlidePreviewBytes(aSlideIndex, aPreview);
 
         Intent aIntent = Intents.buildSlidePreviewIntent(aSlideIndex);
         LocalBroadcastManager.getInstance(this).sendBroadcast(aIntent);

@@ -17,14 +17,17 @@ import android.widget.ImageView;
 
 import org.libreoffice.impressremote.R;
 import org.libreoffice.impressremote.communication.SlideShow;
+import org.libreoffice.impressremote.util.ImageLoader;
 
 public class SlidesPagerAdapter extends PagerAdapter {
     private final LayoutInflater mLayoutInflater;
+    private final ImageLoader mImageLoader;
 
     private final SlideShow mSlideShow;
 
     public SlidesPagerAdapter(Context aContext, SlideShow aSlideShow) {
         mLayoutInflater = LayoutInflater.from(aContext);
+        mImageLoader = new ImageLoader(aContext.getResources(), R.drawable.slide_unknown);
 
         mSlideShow = aSlideShow;
     }
@@ -39,10 +42,10 @@ public class SlidesPagerAdapter extends PagerAdapter {
         ImageView aSlideView = (ImageView) getView(aViewGroup);
 
         if (isSlidePreviewAvailable(aPosition)) {
-            aSlideView.setImageBitmap(mSlideShow.getSlidePreview(aPosition));
+            setUpSlidePreview(aSlideView, aPosition);
         }
         else {
-            aSlideView.setImageResource(R.drawable.slide_unknown);
+            setUpUnknownSlidePreview(aSlideView);
         }
 
         aViewGroup.addView(aSlideView);
@@ -55,7 +58,17 @@ public class SlidesPagerAdapter extends PagerAdapter {
     }
 
     private boolean isSlidePreviewAvailable(int aSlideIndex) {
-        return mSlideShow.getSlidePreview(aSlideIndex) != null;
+        return mSlideShow.getSlidePreviewBytes(aSlideIndex) != null;
+    }
+
+    private void setUpSlidePreview(ImageView aSlideView, int aPosition) {
+        byte[] aSlidePreviewBytes = mSlideShow.getSlidePreviewBytes(aPosition);
+
+        mImageLoader.loadImage(aSlideView, aSlidePreviewBytes);
+    }
+
+    private void setUpUnknownSlidePreview(ImageView aSlideView) {
+        aSlideView.setImageResource(R.drawable.slide_unknown);
     }
 
     @Override

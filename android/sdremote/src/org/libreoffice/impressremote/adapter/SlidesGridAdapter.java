@@ -18,14 +18,17 @@ import android.widget.TextView;
 
 import org.libreoffice.impressremote.R;
 import org.libreoffice.impressremote.communication.SlideShow;
+import org.libreoffice.impressremote.util.ImageLoader;
 
 public class SlidesGridAdapter extends BaseAdapter {
     private final LayoutInflater mLayoutInflater;
+    private final ImageLoader mImageLoader;
 
     private final SlideShow mSlideShow;
 
     public SlidesGridAdapter(Context aContext, SlideShow aSlideShow) {
         mLayoutInflater = LayoutInflater.from(aContext);
+        mImageLoader = new ImageLoader(aContext.getResources(), R.drawable.slide_unknown);
 
         mSlideShow = aSlideShow;
     }
@@ -37,7 +40,7 @@ public class SlidesGridAdapter extends BaseAdapter {
 
     @Override
     public Object getItem(int aPosition) {
-        return mSlideShow.getSlidePreview(aPosition);
+        return mSlideShow.getSlidePreviewBytes(aPosition);
     }
 
     @Override
@@ -51,12 +54,12 @@ public class SlidesGridAdapter extends BaseAdapter {
         ViewHolder aSlideViewHolder = getViewHolder(aSlideView);
 
         if (isSlidePreviewAvailable(aPosition)) {
-            aSlideViewHolder.aSlidePreview.setImageBitmap(mSlideShow.getSlidePreview(aPosition));
+            setUpSlidePreview(aSlideViewHolder, aPosition);
         } else {
-            aSlideViewHolder.aSlidePreview.setImageResource(R.drawable.slide_unknown);
+            setUpUnknownSlidePreview(aSlideViewHolder);
         }
 
-        aSlideViewHolder.aSlideIndex.setText(buildSlideIndex(aPosition));
+        aSlideViewHolder.mSlideIndex.setText(buildSlideIndex(aPosition));
 
         return aSlideView;
     }
@@ -78,21 +81,31 @@ public class SlidesGridAdapter extends BaseAdapter {
     }
 
     private static final class ViewHolder {
-        public ImageView aSlidePreview;
-        public TextView aSlideIndex;
+        public ImageView mSlidePreview;
+        public TextView mSlideIndex;
     }
 
     private ViewHolder buildViewHolder(View aView) {
         ViewHolder aViewHolder = new ViewHolder();
 
-        aViewHolder.aSlidePreview = (ImageView) aView.findViewById(R.id.image_slide_preview);
-        aViewHolder.aSlideIndex = (TextView) aView.findViewById(R.id.text_slide_index);
+        aViewHolder.mSlidePreview = (ImageView) aView.findViewById(R.id.image_slide_preview);
+        aViewHolder.mSlideIndex = (TextView) aView.findViewById(R.id.text_slide_index);
 
         return aViewHolder;
     }
 
     private boolean isSlidePreviewAvailable(int aSlideIndex) {
-        return mSlideShow.getSlidePreview(aSlideIndex) != null;
+        return mSlideShow.getSlidePreviewBytes(aSlideIndex) != null;
+    }
+
+    private void setUpSlidePreview(ViewHolder aSlideViewHolder, int aPosition) {
+        byte[] aSlidePreviewBytes = mSlideShow.getSlidePreviewBytes(aPosition);
+
+        mImageLoader.loadImage(aSlideViewHolder.mSlidePreview, aSlidePreviewBytes);
+    }
+
+    private void setUpUnknownSlidePreview(ViewHolder aSlideViewHolder) {
+        aSlideViewHolder.mSlidePreview.setImageResource(R.drawable.slide_unknown);
     }
 
     private String buildSlideIndex(int aPosition) {
