@@ -426,7 +426,7 @@ void SvxBorderLine::GuessLinesWidths( SvxBorderStyle nStyle, sal_uInt16 nOut, sa
 
     if ( nStyle == DOUBLE )
     {
-        static SvxBorderStyle aDoubleStyles[] =
+        static const SvxBorderStyle aDoubleStyles[] =
         {
             DOUBLE,
             THINTHICK_SMALLGAP,
@@ -437,7 +437,7 @@ void SvxBorderLine::GuessLinesWidths( SvxBorderStyle nStyle, sal_uInt16 nOut, sa
             THICKTHIN_LARGEGAP
         };
 
-        size_t const len = SAL_N_ELEMENTS(aDoubleStyles);
+        static size_t const len = SAL_N_ELEMENTS(aDoubleStyles);
         long nWidth = 0;
         SvxBorderStyle nTestStyle(NONE);
         for (size_t i = 0; i < len && nWidth == 0; ++i)

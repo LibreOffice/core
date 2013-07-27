@@ -69,7 +69,7 @@ public:
 
 const SfxItemPropertySet* ImplGetFieldItemPropertySet( sal_Int32 mnId )
 {
-    static SfxItemPropertyMapEntry aExDateTimeFieldPropertyMap_Impl[] =
+    static const SfxItemPropertyMapEntry aExDateTimeFieldPropertyMap_Impl[] =
     {
         { MAP_CHAR_LEN(UNO_TC_PROP_DATE_TIME), WID_DATE,  &::getCppuType((const util::DateTime*)0), 0, 0 },
         { MAP_CHAR_LEN(UNO_TC_PROP_IS_FIXED),  WID_BOOL1, &::getBooleanCppuType(),                  0, 0 },
@@ -77,16 +77,16 @@ const SfxItemPropertySet* ImplGetFieldItemPropertySet( sal_Int32 mnId )
         { MAP_CHAR_LEN(UNO_TC_PROP_NUMFORMAT), WID_INT32, &::getCppuType((const sal_Int32*)0),      0, 0 },
         {0,0,0,0,0,0}
     };
-    static SfxItemPropertySet aExDateTimeFieldPropertySet_Impl(aExDateTimeFieldPropertyMap_Impl);
+    static const SfxItemPropertySet aExDateTimeFieldPropertySet_Impl(aExDateTimeFieldPropertyMap_Impl);
 
-    static SfxItemPropertyMapEntry aDateTimeFieldPropertyMap_Impl[] =
+    static const SfxItemPropertyMapEntry aDateTimeFieldPropertyMap_Impl[] =
     {
         { MAP_CHAR_LEN(UNO_TC_PROP_IS_DATE), WID_BOOL2, &::getBooleanCppuType(), 0, 0 },
         {0,0,0,0,0,0}
     };
-    static SfxItemPropertySet aDateTimeFieldPropertySet_Impl(aDateTimeFieldPropertyMap_Impl);
+    static const SfxItemPropertySet aDateTimeFieldPropertySet_Impl(aDateTimeFieldPropertyMap_Impl);
 
-    static SfxItemPropertyMapEntry aUrlFieldPropertyMap_Impl[] =
+    static const SfxItemPropertyMapEntry aUrlFieldPropertyMap_Impl[] =
     {
 
         { MAP_CHAR_LEN(UNO_TC_PROP_URL_FORMAT),         WID_INT16,   &::getCppuType((const sal_Int16*)0), 0, 0 },
@@ -95,24 +95,24 @@ const SfxItemPropertySet* ImplGetFieldItemPropertySet( sal_Int32 mnId )
         { MAP_CHAR_LEN(UNO_TC_PROP_URL),                WID_STRING3, &::getCppuType((const OUString*)0),  0, 0 },
         {0,0,0,0,0,0}
     };
-    static SfxItemPropertySet aUrlFieldPropertySet_Impl(aUrlFieldPropertyMap_Impl);
+    static const SfxItemPropertySet aUrlFieldPropertySet_Impl(aUrlFieldPropertyMap_Impl);
 
-    static SfxItemPropertyMapEntry aEmptyPropertyMap_Impl[] =
+    static const SfxItemPropertyMapEntry aEmptyPropertyMap_Impl[] =
     {
         {0,0,0,0,0,0}
     };
-    static SfxItemPropertySet aEmptyPropertySet_Impl(aEmptyPropertyMap_Impl);
+    static const SfxItemPropertySet aEmptyPropertySet_Impl(aEmptyPropertyMap_Impl);
 
-    static SfxItemPropertyMapEntry aExtFileFieldPropertyMap_Impl[] =
+    static const SfxItemPropertyMapEntry aExtFileFieldPropertyMap_Impl[] =
     {
         { MAP_CHAR_LEN(UNO_TC_PROP_IS_FIXED),             WID_BOOL1,   &::getBooleanCppuType(),             0, 0 },
         { MAP_CHAR_LEN(UNO_TC_PROP_FILE_FORMAT),          WID_INT16,   &::getCppuType((const sal_Int16*)0), 0, 0 },
         { MAP_CHAR_LEN(UNO_TC_PROP_CURRENT_PRESENTATION), WID_STRING1, &::getCppuType((const OUString*)0),  0, 0 },
         {0,0,0,0,0,0}
     };
-    static SfxItemPropertySet aExtFileFieldPropertySet_Impl(aExtFileFieldPropertyMap_Impl);
+    static const SfxItemPropertySet aExtFileFieldPropertySet_Impl(aExtFileFieldPropertyMap_Impl);
 
-    static SfxItemPropertyMapEntry aAuthorFieldPropertyMap_Impl[] =
+    static const SfxItemPropertyMapEntry aAuthorFieldPropertyMap_Impl[] =
     {
         { MAP_CHAR_LEN(UNO_TC_PROP_IS_FIXED),             WID_BOOL1,  &::getBooleanCppuType(),             0, 0 },
         { MAP_CHAR_LEN(UNO_TC_PROP_CURRENT_PRESENTATION), WID_STRING1,&::getCppuType((const OUString*)0),  0, 0 },
@@ -121,14 +121,14 @@ const SfxItemPropertySet* ImplGetFieldItemPropertySet( sal_Int32 mnId )
         { MAP_CHAR_LEN(UNO_TC_PROP_AUTHOR_FULLNAME),      WID_BOOL2,  &::getBooleanCppuType(),             0, 0 },
         {0,0,0,0,0,0}
     };
-    static SfxItemPropertySet aAuthorFieldPropertySet_Impl(aAuthorFieldPropertyMap_Impl);
+    static const SfxItemPropertySet aAuthorFieldPropertySet_Impl(aAuthorFieldPropertyMap_Impl);
 
-    static SfxItemPropertyMapEntry aMeasureFieldPropertyMap_Impl[] =
+    static const SfxItemPropertyMapEntry aMeasureFieldPropertyMap_Impl[] =
     {
         { MAP_CHAR_LEN(UNO_TC_PROP_MEASURE_KIND), WID_INT16,  &::getCppuType((const sal_Int16*)0), 0, 0 },
         {0,0,0,0,0,0}
     };
-    static SfxItemPropertySet aMeasureFieldPropertySet_Impl(aMeasureFieldPropertyMap_Impl);
+    static const SfxItemPropertySet aMeasureFieldPropertySet_Impl(aMeasureFieldPropertyMap_Impl);
 
     switch( mnId )
     {

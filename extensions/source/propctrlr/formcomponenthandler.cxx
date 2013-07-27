@@ -181,7 +181,7 @@ namespace pcr
         sal_Int32   nPropNameLength;
     };
 
-    static LanguageDependentProp aLanguageDependentProp[] =
+    static const LanguageDependentProp aLanguageDependentProp[] =
     {
         { "Text",            4 },
         { "Label",           5 },
@@ -198,7 +198,7 @@ namespace pcr
         {
             bool bRet = false;
 
-            LanguageDependentProp* pLangDepProp = aLanguageDependentProp;
+            const LanguageDependentProp* pLangDepProp = aLanguageDependentProp;
             while( pLangDepProp->pPropName != 0 )
             {
                 if( aName.equalsAsciiL( pLangDepProp->pPropName, pLangDepProp->nPropNameLength ))

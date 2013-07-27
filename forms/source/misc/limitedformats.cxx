@@ -90,7 +90,7 @@ namespace frm
         {
             case FormComponentType::TIMEFIELD:
             {
-                static FormatEntry s_aFormats[] = {
+                static const FormatEntry s_aFormats[] = {
                     { "HH:MM", -1, ltEnglishUS },
                     { "HH:MM:SS", -1, ltEnglishUS },
                     { "HH:MM AM/PM", -1, ltEnglishUS },
@@ -103,7 +103,7 @@ namespace frm
             }
             case FormComponentType::DATEFIELD:
             {
-                static FormatEntry s_aFormats[] = {
+                static const FormatEntry s_aFormats[] = {
                     { "T-M-JJ", -1, ltGerman },
                     { "TT-MM-JJ", -1, ltGerman },
                     { "TT-MM-JJJJ", -1, ltGerman },

@@ -143,7 +143,7 @@ XubString GetColorString( const Color& rCol )
         RGB_COLORDATA( rCol.GetRed(), rCol.GetGreen(), rCol.GetBlue() );
     sal_uInt16 nColor = 0;
 
-    static ColorData aColAry[] = {
+    static const ColorData aColAry[] = {
         COL_BLACK, COL_BLUE, COL_GREEN, COL_CYAN,
         COL_RED, COL_MAGENTA, COL_BROWN, COL_GRAY,
         COL_LIGHTGRAY, COL_LIGHTBLUE, COL_LIGHTGREEN, COL_LIGHTCYAN,
