@@ -56,7 +56,7 @@ public:
 
 inline SwTxtNode& SwTxtFld::GetTxtNode() const
 {
-    OSL_ENSURE( m_pTxtNode, "SwTxtFld:: where is my TxtNode?" );
+    assert( m_pTxtNode );
     return *m_pTxtNode;
 }
 

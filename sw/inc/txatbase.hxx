@@ -148,7 +148,7 @@ inline const xub_StrLen* SwTxtAttr::GetAnyEnd() const
 
 inline const SfxPoolItem& SwTxtAttr::GetAttr() const
 {
-    OSL_ENSURE( m_pAttr, "SwTxtAttr: where is my attribute?" );
+    assert( m_pAttr );
     return *m_pAttr;
 }
 
@@ -170,71 +170,62 @@ inline void SwTxtAttr::SetDontExpand( bool bDontExpand )
 
 inline const SwFmtCharFmt& SwTxtAttr::GetCharFmt() const
 {
-    OSL_ENSURE( m_pAttr && m_pAttr->Which() == RES_TXTATR_CHARFMT,
-        "Wrong attribute" );
+    assert( m_pAttr && m_pAttr->Which() == RES_TXTATR_CHARFMT );
     return (const SwFmtCharFmt&)(*m_pAttr);
 }
 
 inline const SwFmtAutoFmt& SwTxtAttr::GetAutoFmt() const
 {
-    OSL_ENSURE( m_pAttr && m_pAttr->Which() == RES_TXTATR_AUTOFMT,
-        "Wrong attribute" );
+    assert( m_pAttr && m_pAttr->Which() == RES_TXTATR_AUTOFMT );
     return (const SwFmtAutoFmt&)(*m_pAttr);
 }
 
 inline const SwFmtFld& SwTxtAttr::GetFld() const
 {
-    OSL_ENSURE( m_pAttr && m_pAttr->Which() == RES_TXTATR_FIELD,
-        "Wrong attribute" );
+    assert( m_pAttr && m_pAttr->Which() == RES_TXTATR_FIELD );
     return (const SwFmtFld&)(*m_pAttr);
 }
 
 inline const SwFmtFtn& SwTxtAttr::GetFtn() const
 {
-    OSL_ENSURE( m_pAttr && m_pAttr->Which() == RES_TXTATR_FTN, "Wrong attribute" );
+    assert( m_pAttr && m_pAttr->Which() == RES_TXTATR_FTN );
     return (const SwFmtFtn&)(*m_pAttr);
 }
 
 inline const SwFmtFlyCnt& SwTxtAttr::GetFlyCnt() const
 {
-    OSL_ENSURE( m_pAttr && m_pAttr->Which() == RES_TXTATR_FLYCNT,
-        "Wrong attribute" );
+    assert( m_pAttr && m_pAttr->Which() == RES_TXTATR_FLYCNT );
     return (const SwFmtFlyCnt&)(*m_pAttr);
 }
 
 inline const SwTOXMark& SwTxtAttr::GetTOXMark() const
 {
-    OSL_ENSURE( m_pAttr && m_pAttr->Which() == RES_TXTATR_TOXMARK,
-        "Wrong attribute" );
+    assert( m_pAttr && m_pAttr->Which() == RES_TXTATR_TOXMARK );
     return (const SwTOXMark&)(*m_pAttr);
 }
 
 inline const SwFmtRefMark& SwTxtAttr::GetRefMark() const
 {
-    OSL_ENSURE( m_pAttr && m_pAttr->Which() == RES_TXTATR_REFMARK,
-        "Wrong attribute" );
+    assert( m_pAttr && m_pAttr->Which() == RES_TXTATR_REFMARK );
     return (const SwFmtRefMark&)(*m_pAttr);
 }
 
 inline const SwFmtINetFmt& SwTxtAttr::GetINetFmt() const
 {
-    OSL_ENSURE( m_pAttr && m_pAttr->Which() == RES_TXTATR_INETFMT,
-        "Wrong attribute" );
+    assert( m_pAttr && m_pAttr->Which() == RES_TXTATR_INETFMT );
     return (const SwFmtINetFmt&)(*m_pAttr);
 }
 
 inline const SwFmtRuby& SwTxtAttr::GetRuby() const
 {
-    OSL_ENSURE( m_pAttr && m_pAttr->Which() == RES_TXTATR_CJK_RUBY,
-        "Wrong attribute" );
+    assert( m_pAttr && m_pAttr->Which() == RES_TXTATR_CJK_RUBY );
     return (const SwFmtRuby&)(*m_pAttr);
 }
 
 inline const SwFmtMeta& SwTxtAttr::GetMeta() const
 {
-    OSL_ENSURE( m_pAttr && (m_pAttr->Which() == RES_TXTATR_META ||
-                        m_pAttr->Which() == RES_TXTATR_METAFIELD),
-        "Wrong attribute" );
+    assert( m_pAttr && (m_pAttr->Which() == RES_TXTATR_META ||
+        m_pAttr->Which() == RES_TXTATR_METAFIELD) );
     return (const SwFmtMeta&)(*m_pAttr);
 }
 

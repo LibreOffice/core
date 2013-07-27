@@ -24,7 +24,6 @@
 #include <i18nlangtag/lang.h>
 #include <svl/poolitem.hxx>
 #include <tools/string.hxx>
-#include <osl/diagnose.h>
 
 #include <editeng/svxenum.hxx>
 #include <swtypes.hxx>
@@ -525,12 +524,12 @@ public:
 
     const String&           GetStyleNames(sal_uInt16 nLevel) const
                                 {
-                                OSL_ENSURE( nLevel < MAXLEVEL, "Which level?");
+                                SAL_WARN_IF( nLevel >= MAXLEVEL, "sw", "Which level?");
                                 return aStyleNames[nLevel];
                                 }
     void                    SetStyleNames(const String& rSet, sal_uInt16 nLevel)
                                 {
-                                OSL_ENSURE( nLevel < MAXLEVEL, "Which level?");
+                                SAL_WARN_IF( nLevel >= MAXLEVEL, "sw", "Which level?");
                                 aStyleNames[nLevel] = rSet;
                                 }
     sal_Bool                    IsFromChapter() const { return bFromChapter;}
@@ -591,73 +590,73 @@ inline void SwTOXMark::SetAlternativeText(const String& rAlt)
 
 inline void SwTOXMark::SetLevel( sal_uInt16 nLvl )
 {
-    OSL_ENSURE( !GetTOXType() || GetTOXType()->GetType() != TOX_INDEX, "Falscher Feldtyp");
+    SAL_WARN_IF( GetTOXType() && GetTOXType()->GetType() == TOX_INDEX, "sw", "Wrong type");
     nLevel = nLvl;
 }
 
 inline void SwTOXMark::SetPrimaryKey( const String& rKey )
 {
-    OSL_ENSURE( GetTOXType()->GetType() == TOX_INDEX, "Falscher Feldtyp");
+    SAL_WARN_IF( GetTOXType()->GetType() != TOX_INDEX, "sw", "Wrong type");
     aPrimaryKey = rKey;
 }
 
 inline void SwTOXMark::SetSecondaryKey( const String& rKey )
 {
-    OSL_ENSURE(GetTOXType()->GetType() == TOX_INDEX, "Falscher Feldtyp");
+    SAL_WARN_IF(GetTOXType()->GetType() != TOX_INDEX, "sw", "Wrong type");
     aSecondaryKey = rKey;
 }
 
 inline void SwTOXMark::SetTextReading( const String& rTxt )
 {
-    OSL_ENSURE(GetTOXType()->GetType() == TOX_INDEX, "Falscher Feldtyp");
+    SAL_WARN_IF(GetTOXType()->GetType() != TOX_INDEX, "sw", "Wrong type");
     aTextReading = rTxt;
 }
 
 inline void SwTOXMark::SetPrimaryKeyReading( const String& rKey )
 {
-    OSL_ENSURE(GetTOXType()->GetType() == TOX_INDEX, "Falscher Feldtyp");
+    SAL_WARN_IF(GetTOXType()->GetType() != TOX_INDEX, "sw", "Wrong type");
     aPrimaryKeyReading = rKey;
 }
 
 inline void SwTOXMark::SetSecondaryKeyReading( const String& rKey )
 {
-    OSL_ENSURE(GetTOXType()->GetType() == TOX_INDEX, "Falscher Feldtyp");
+    SAL_WARN_IF(GetTOXType()->GetType() != TOX_INDEX, "sw", "Wrong type");
     aSecondaryKeyReading = rKey;
 }
 
 inline sal_uInt16 SwTOXMark::GetLevel() const
 {
-    OSL_ENSURE( !GetTOXType() || GetTOXType()->GetType() != TOX_INDEX, "Falscher Feldtyp");
+    SAL_WARN_IF( GetTOXType() && GetTOXType()->GetType() == TOX_INDEX, "sw", "Wrong type");
     return nLevel;
 }
 
 inline const String& SwTOXMark::GetPrimaryKey() const
 {
-    OSL_ENSURE(GetTOXType()->GetType() == TOX_INDEX, "Falscher Feldtyp");
+    SAL_WARN_IF(GetTOXType()->GetType() != TOX_INDEX, "sw", "Wrong type");
     return aPrimaryKey;
 }
 
 inline const String& SwTOXMark::GetSecondaryKey() const
 {
-    OSL_ENSURE(GetTOXType()->GetType() == TOX_INDEX, "Falscher Feldtyp");
+    SAL_WARN_IF(GetTOXType()->GetType() != TOX_INDEX, "sw", "Wrong type");
     return aSecondaryKey;
 }
 
 inline const String& SwTOXMark::GetTextReading() const
 {
-    OSL_ENSURE(GetTOXType()->GetType() == TOX_INDEX, "Falscher Feldtyp");
+    SAL_WARN_IF(GetTOXType()->GetType() != TOX_INDEX, "sw", "Wrong type");
     return aTextReading;
 }
 
 inline const String& SwTOXMark::GetPrimaryKeyReading() const
 {
-    OSL_ENSURE(GetTOXType()->GetType() == TOX_INDEX, "Falscher Feldtyp");
+    SAL_WARN_IF(GetTOXType()->GetType() != TOX_INDEX, "sw", "Wrong type");
     return aPrimaryKeyReading;
 }
 
 inline const String& SwTOXMark::GetSecondaryKeyReading() const
 {
-    OSL_ENSURE(GetTOXType()->GetType() == TOX_INDEX, "Falscher Feldtyp");
+    SAL_WARN_IF(GetTOXType()->GetType() != TOX_INDEX, "sw", "Wrong type");
     return aSecondaryKeyReading;
 }
 
@@ -666,13 +665,13 @@ inline const String& SwTOXMark::GetSecondaryKeyReading() const
 //
 inline void SwForm::SetTemplate(sal_uInt16 nLevel, const String& rTemplate)
 {
-    OSL_ENSURE(nLevel < GetFormMax(), "Index >= FORM_MAX");
+    SAL_WARN_IF(nLevel >= GetFormMax(), "sw", "Index >= GetFormMax()");
     aTemplate[nLevel] = rTemplate;
 }
 
 inline const String& SwForm::GetTemplate(sal_uInt16 nLevel) const
 {
-    OSL_ENSURE(nLevel < GetFormMax(), "Index >= FORM_MAX");
+    SAL_WARN_IF(nLevel >= GetFormMax(), "sw", "Index >= GetFormMax()");
     return aTemplate[nLevel];
 }
 
@@ -730,31 +729,31 @@ inline TOXTypes SwTOXBase::GetType() const
 
 inline void SwTOXBase::SetLevel(sal_uInt16 nLev)
 {
-    OSL_ENSURE(GetTOXType()->GetType() != TOX_INDEX, "Falscher Feldtyp");
+    SAL_WARN_IF(GetTOXType()->GetType() == TOX_INDEX, "sw", "Wrong type");
     aData.nLevel = nLev;
 }
 
 inline sal_uInt16 SwTOXBase::GetLevel() const
 {
-    OSL_ENSURE(GetTOXType()->GetType() != TOX_INDEX, "Falscher Feldtyp");
+    SAL_WARN_IF(GetTOXType()->GetType() == TOX_INDEX, "sw", "Wrong type");
     return aData.nLevel;
 }
 
 inline void SwTOXBase::SetTemplateName(const String& rName)
 {
-    OSL_FAIL("SwTOXBase::SetTemplateName obsolete");
+    SAL_WARN("sw", "SwTOXBase::SetTemplateName obsolete");
     aStyleNames[0] = rName;
 }
 
 inline sal_uInt16 SwTOXBase::GetOptions() const
 {
-    OSL_ENSURE(GetTOXType()->GetType() == TOX_INDEX, "Falscher Feldtyp");
+    SAL_WARN_IF(GetTOXType()->GetType() != TOX_INDEX, "sw", "Wrong type");
     return aData.nOptions;
 }
 
 inline void SwTOXBase::SetOptions(sal_uInt16 nOpt)
 {
-    OSL_ENSURE(GetTOXType()->GetType() == TOX_INDEX, "Falscher Feldtyp");
+    SAL_WARN_IF(GetTOXType()->GetType() != TOX_INDEX, "sw", "Wrong type");
     aData.nOptions = nOpt;
 }
 
