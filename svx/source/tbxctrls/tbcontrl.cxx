@@ -420,11 +420,11 @@ void SvxStyleBox_Impl::Select()
 
         if ( pPool )
         {
-            SfxStyleSheetIterator iter(pPool, eStyleFamily, SFXSTYLEBIT_ALL);
+            pPool->SetSearchMask( eStyleFamily, SFXSTYLEBIT_ALL );
 
-            pStyle = iter.First();
+            pStyle = pPool->First();
             while ( pStyle && OUString( pStyle->GetName() ) != aSearchEntry )
-                pStyle = iter.Next();
+                pStyle = pPool->Next();
         }
 
         if ( !pStyle )
@@ -569,11 +569,11 @@ void SvxStyleBox_Impl::UserDraw( const UserDrawEvent& rUDEvt )
 
         if ( pPool )
         {
-            SfxStyleSheetIterator iter(pPool, eStyleFamily, SFXSTYLEBIT_ALL);
+            pPool->SetSearchMask( eStyleFamily, SFXSTYLEBIT_ALL );
 
-            pStyle = iter.First();
+            pStyle = pPool->First();
             while ( pStyle && OUString( pStyle->GetName() ) != aStyleName )
-                pStyle = iter.Next();
+                pStyle = pPool->Next();
         }
 
         if ( !pStyle )
@@ -1942,16 +1942,17 @@ void SvxStyleToolBoxControl::FillStyleBox()
     if ( pStyleSheetPool && pBox && nActFamily!=0xffff )
     {
         const SfxStyleFamily    eFamily     = GetActFamily();
+        sal_uInt16                  nCount      = pStyleSheetPool->Count();
         SfxStyleSheetBase*      pStyle      = NULL;
         bool                    bDoFill     = false;
 
-        SfxStyleSheetIterator iter(pStyleSheetPool, eFamily, SFXSTYLEBIT_USED);
+        pStyleSheetPool->SetSearchMask( eFamily, SFXSTYLEBIT_USED );
 
         // Check whether fill is necessary
-        pStyle = iter.First();
+        pStyle = pStyleSheetPool->First();
         //!!! TODO: This condition isn't right any longer, because we always show some default entries
         //!!! so the list doesn't show the count
-        if (iter.Count() != pBox->GetEntryCount())
+        if ( nCount != pBox->GetEntryCount() )
         {
             bDoFill = true;
         }
@@ -1961,7 +1962,7 @@ void SvxStyleToolBoxControl::FillStyleBox()
             while ( pStyle && !bDoFill )
             {
                 bDoFill = ( pBox->GetEntry(i) != pStyle->GetName() );
-                pStyle = iter.Next();
+                pStyle = pStyleSheetPool->Next();
                 i++;
             }
         }
@@ -1975,7 +1976,7 @@ void SvxStyleToolBoxControl::FillStyleBox()
                 sal_uInt16  _i;
                 sal_uInt32  nCnt = pImpl->aDefaultStyles.size();
 
-                pStyle = iter.First();
+                pStyle = pStyleSheetPool->First();
 
                 if( pImpl->bSpecModeWriter || pImpl->bSpecModeCalc )
                 {
@@ -1996,7 +1997,7 @@ void SvxStyleToolBoxControl::FillStyleBox()
 
                         if( bInsert )
                             pBox->InsertEntry( aName );
-                        pStyle = iter.Next();
+                        pStyle = pStyleSheetPool->Next();
                     }
                 }
                 else
@@ -2004,7 +2005,7 @@ void SvxStyleToolBoxControl::FillStyleBox()
                     while ( pStyle )
                     {
                         pBox->InsertEntry( pStyle->GetName() );
-                        pStyle = iter.Next();
+                        pStyle = pStyleSheetPool->Next();
                     }
                 }
             }

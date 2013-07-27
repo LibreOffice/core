@@ -231,9 +231,8 @@ SfxStyleSheetBasePool* ScDocShell::GetStyleSheetPool()
 
 static void lcl_AdjustPool( SfxStyleSheetBasePool* pStylePool )
 {
-    SfxStyleSheetIterator iter(pStylePool,
-            SFX_STYLE_FAMILY_PAGE, SFXSTYLEBIT_ALL);
-    SfxStyleSheetBase *pStyle = iter.First();
+    pStylePool->SetSearchMask(SFX_STYLE_FAMILY_PAGE, SFXSTYLEBIT_ALL);
+    SfxStyleSheetBase *pStyle = pStylePool->First();
     while ( pStyle )
     {
         SfxItemSet& rStyleSet = pStyle->GetItemSet();
@@ -254,7 +253,7 @@ static void lcl_AdjustPool( SfxStyleSheetBasePool* pStylePool )
             rStyleSet.Put(SvxSetItem(ATTR_PAGE_FOOTERSET,pDestSet));
         }
 
-        pStyle = iter.Next();
+        pStyle = pStylePool->Next();
     }
 }
 

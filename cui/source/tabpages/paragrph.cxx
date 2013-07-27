@@ -1942,9 +1942,8 @@ SvxExtParagraphTabPage::SvxExtParagraphTabPage( Window* pParent, const SfxItemSe
     if ( pSh )
     {
         SfxStyleSheetBasePool* pPool = pSh->GetStyleSheetPool();
-        SfxStyleSheetIterator iter(pPool,
-            SFX_STYLE_FAMILY_PAGE, SFXSTYLEBIT_ALL);
-        SfxStyleSheetBase* pStyle = iter.First();
+        pPool->SetSearchMask( SFX_STYLE_FAMILY_PAGE );
+        SfxStyleSheetBase* pStyle = pPool->First();
         String aStdName;
 
         while( pStyle )
@@ -1953,7 +1952,7 @@ SvxExtParagraphTabPage::SvxExtParagraphTabPage( Window* pParent, const SfxItemSe
                 // first style == standard style
                 aStdName = pStyle->GetName();
             m_pApplyCollBox->InsertEntry( pStyle->GetName() );
-            pStyle = iter.Next();
+            pStyle = pPool->Next();
         }
         nStdPos = m_pApplyCollBox->GetEntryPos( aStdName );
     }

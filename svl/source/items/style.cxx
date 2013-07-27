@@ -83,7 +83,8 @@ SfxStyleSheetHint::SfxStyleSheetHint
 
 class SfxStyleSheetBasePool_Impl
 {
-    // TODO: move members here
+public:
+    SfxStyleSheetIteratorPtr pIter;
 };
 
 
@@ -530,6 +531,16 @@ void SfxStyleSheetBasePool::Replace( SfxStyleSheetBase& rSource, SfxStyleSheetBa
     rTargetSet.Put( rSourceSet );
 }
 
+SfxStyleSheetIterator& SfxStyleSheetBasePool::GetIterator_Impl()
+{
+    if( !pImp->pIter || (pImp->pIter->GetSearchMask() != nMask) || (pImp->pIter->GetSearchFamily() != nSearchFamily) )
+    {
+        pImp->pIter = CreateIterator( nSearchFamily, nMask );
+    }
+
+    return *pImp->pIter;
+}
+
 SfxStyleSheetBasePool::SfxStyleSheetBasePool( SfxItemPool& r )
     : aAppName(r.GetName())
     , rPool(r)
@@ -671,6 +682,16 @@ SfxStyleSheetBasePool& SfxStyleSheetBasePool::operator+=( const SfxStyleSheetBas
     return *this;
 }
 
+sal_uInt16 SfxStyleSheetBasePool::Count()
+{
+    return GetIterator_Impl().Count();
+}
+
+SfxStyleSheetBase *SfxStyleSheetBasePool::operator[](sal_uInt16 nIdx)
+{
+    return GetIterator_Impl()[nIdx];
+}
+
 SfxStyleSheetBase* SfxStyleSheetBasePool::Find(const OUString& rName,
                                                SfxStyleFamily eFam,
                                                sal_uInt16 mask)
@@ -682,6 +703,16 @@ SfxStyleSheetBase* SfxStyleSheetBasePool::Find(const OUString& rName,
 const SfxStyles& SfxStyleSheetBasePool::GetStyles()
 {
     return aStyles;
+}
+
+SfxStyleSheetBase* SfxStyleSheetBasePool::First()
+{
+    return GetIterator_Impl().First();
+}
+
+SfxStyleSheetBase* SfxStyleSheetBasePool::Next()
+{
+    return GetIterator_Impl().Next();
 }
 
 void SfxStyleSheetBasePool::Remove( SfxStyleSheetBase* p )
@@ -760,8 +791,9 @@ void SfxStyleSheetBasePool::ChangeParent(const OUString& rOld,
                                          const OUString& rNew,
                                          bool bVirtual)
 {
-    SfxStyleSheetIterator iter(this, GetSearchFamily(), SFXSTYLEBIT_ALL);
-    for (SfxStyleSheetBase* p = iter.First(); p; p = iter.Next())
+    const sal_uInt16 nTmpMask = GetSearchMask();
+    SetSearchMask(GetSearchFamily(), SFXSTYLEBIT_ALL);
+    for( SfxStyleSheetBase* p = First(); p; p = Next() )
     {
         if( p->GetParent() == rOld )
         {
@@ -771,6 +803,7 @@ void SfxStyleSheetBasePool::ChangeParent(const OUString& rOld,
                 p->aParent = rNew;
         }
     }
+    SetSearchMask(GetSearchFamily(), nTmpMask);
 }
 
 void SfxStyleSheetBase::Load( SvStream&, sal_uInt16 )

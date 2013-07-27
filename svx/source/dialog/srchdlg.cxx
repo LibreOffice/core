@@ -894,16 +894,16 @@ void SvxSearchDialog::Init_Impl( int bSearchPattern )
             m_pSearchTmplLB->Clear();
             m_pReplaceTmplLB->Clear();
             SfxStyleSheetBasePool* pStylePool = pShell->GetStyleSheetPool();
-            SfxStyleSheetIterator iter(pStylePool, pSearchItem->GetFamily(),
+            pStylePool->SetSearchMask( pSearchItem->GetFamily(),
                                        SFXSTYLEBIT_ALL );
-            SfxStyleSheetBase* pBase = iter.First();
+            SfxStyleSheetBase* pBase = pStylePool->First();
 
             while ( pBase )
             {
                 if ( pBase->IsUsed() )
                     m_pSearchTmplLB->InsertEntry( pBase->GetName() );
                 m_pReplaceTmplLB->InsertEntry( pBase->GetName() );
-                pBase = iter.Next();
+                pBase = pStylePool->Next();
             }
             m_pSearchTmplLB->SelectEntry( pSearchItem->GetSearchString() );
             m_pReplaceTmplLB->SelectEntry( pSearchItem->GetReplaceString() );
@@ -1564,18 +1564,17 @@ void SvxSearchDialog::TemplatesChanged_Impl( SfxStyleSheetBasePool& rPool )
     String aOldRepl( m_pReplaceTmplLB->GetSelectEntry() );
     m_pSearchTmplLB->Clear();
     m_pReplaceTmplLB->Clear();
+    rPool.SetSearchMask( pSearchItem->GetFamily(), SFXSTYLEBIT_ALL );
     m_pSearchTmplLB->SetUpdateMode( sal_False );
     m_pReplaceTmplLB->SetUpdateMode( sal_False );
-    SfxStyleSheetIterator iter(&rPool,
-            pSearchItem->GetFamily(), SFXSTYLEBIT_ALL);
-    SfxStyleSheetBase* pBase = iter.First();
+    SfxStyleSheetBase* pBase = rPool.First();
 
     while ( pBase )
     {
         if ( pBase->IsUsed() )
             m_pSearchTmplLB->InsertEntry( pBase->GetName() );
         m_pReplaceTmplLB->InsertEntry( pBase->GetName() );
-        pBase = iter.Next();
+        pBase = rPool.Next();
     }
     m_pSearchTmplLB->SetUpdateMode( sal_True );
     m_pReplaceTmplLB->SetUpdateMode( sal_True );

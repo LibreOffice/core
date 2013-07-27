@@ -171,14 +171,13 @@ void SwEndNoteOptionPage::Reset( const SfxItemSet& )
 
         // styles   special regions
         // paragraph
-    SfxStyleSheetBasePool *const pSPool =
-        pSh->GetView().GetDocShell()->GetStyleSheetPool();
-    SfxStyleSheetIterator iter(pSPool, SFX_STYLE_FAMILY_PARA, SWSTYLEBIT_EXTRA);
-    SfxStyleSheetBase *pStyle = iter.First();
+    SfxStyleSheetBasePool* pStyleSheetPool = pSh->GetView().GetDocShell()->GetStyleSheetPool();
+    pStyleSheetPool->SetSearchMask(SFX_STYLE_FAMILY_PARA, SWSTYLEBIT_EXTRA);
+    SfxStyleSheetBase *pStyle = pStyleSheetPool->First();
     while(pStyle)
     {
         m_pParaTemplBox->InsertEntry(pStyle->GetName());
-        pStyle = iter.Next();
+        pStyle = pStyleSheetPool->Next();
     }
 
     String sStr;

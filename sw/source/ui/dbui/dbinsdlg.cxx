@@ -348,15 +348,14 @@ SwInsertDBColAutoPilot::SwInsertDBColAutoPilot( SwView& rView,
     // fill paragraph templates-ListBox
     {
         SfxStyleSheetBasePool* pPool = pView->GetDocShell()->GetStyleSheetPool();
-        SfxStyleSheetIterator iter(pPool,
-                SFX_STYLE_FAMILY_PARA, SFXSTYLEBIT_ALL);
+        pPool->SetSearchMask( SFX_STYLE_FAMILY_PARA, SFXSTYLEBIT_ALL );
         aLbDbParaColl.InsertEntry( sNoTmpl );
 
-        const SfxStyleSheetBase* pBase = iter.First();
+        const SfxStyleSheetBase* pBase = pPool->First();
         while( pBase )
         {
             aLbDbParaColl.InsertEntry( pBase->GetName() );
-            pBase = iter.Next();
+            pBase = pPool->Next();
         }
         aLbDbParaColl.SelectEntryPos( 0 );
     }

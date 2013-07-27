@@ -598,9 +598,9 @@ void FillCharStyleListBox(ListBox& rToFill, SwDocShell* pDocSh, bool bSorted, bo
 {
     sal_Bool bHasOffset = rToFill.GetEntryCount() > 0;
     SfxStyleSheetBasePool* pPool = pDocSh->GetStyleSheetPool();
+    pPool->SetSearchMask(SFX_STYLE_FAMILY_CHAR, SFXSTYLEBIT_ALL);
     SwDoc* pDoc = pDocSh->GetDoc();
-    SfxStyleSheetIterator iter(pPool, SFX_STYLE_FAMILY_CHAR, SFXSTYLEBIT_ALL);
-    const SfxStyleSheetBase* pBase = iter.First();
+    const SfxStyleSheetBase* pBase = pPool->First();
     String sStandard;
     SwStyleNameMapper::FillUIName( RES_POOLCOLL_STANDARD, sStandard );
     while(pBase)
@@ -615,7 +615,7 @@ void FillCharStyleListBox(ListBox& rToFill, SwDocShell* pDocSh, bool bSorted, bo
             sal_IntPtr nPoolId = SwStyleNameMapper::GetPoolIdFromUIName( pBase->GetName(), nsSwGetPoolIdFromName::GET_POOLID_CHRFMT );
             rToFill.SetEntryData( nPos, (void*) (nPoolId));
         }
-        pBase = iter.Next();
+        pBase = pPool->Next();
     }
     // non-pool styles
     const SwCharFmts* pFmts = pDoc->GetCharFmts();

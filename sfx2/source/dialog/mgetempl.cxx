@@ -83,6 +83,7 @@ SfxManageStyleSheetPage::SfxManageStyleSheetPage(Window* pParent, const SfxItemS
     if ( pPool )
     {
         pPool->SetSearchMask( pStyle->GetFamily() );
+        pPool->First();     // for SW - update internal list
     }
 
     if ( pStyle->GetName().isEmpty() && pPool )
@@ -118,14 +119,12 @@ SfxManageStyleSheetPage::SfxManageStyleSheetPage(Window* pParent, const SfxItemS
 
     if ( pStyle->HasFollowSupport() && pPool )
     {
-        SfxStyleSheetIterator iter(pPool, pStyle->GetFamily(), SFXSTYLEBIT_ALL);
-
-        SfxStyleSheetBase* pPoolStyle = iter.First();
+        SfxStyleSheetBase* pPoolStyle = pPool->First();
 
         while ( pPoolStyle )
         {
             m_pFollowLb->InsertEntry( pPoolStyle->GetName() );
-            pPoolStyle = iter.Next();
+            pPoolStyle = pPool->Next();
         }
 
         // A new Template is not yet in the Pool
@@ -144,9 +143,7 @@ SfxManageStyleSheetPage::SfxManageStyleSheetPage(Window* pParent, const SfxItemS
             // the base template can be set to NULL
             m_pBaseLb->InsertEntry( SfxResId(STR_NONE).toString() );
 
-        SfxStyleSheetIterator iter(pPool, pStyle->GetFamily(), SFXSTYLEBIT_ALL);
-
-        SfxStyleSheetBase* pPoolStyle = iter.First();
+        SfxStyleSheetBase* pPoolStyle = pPool->First();
 
         while ( pPoolStyle )
         {
@@ -154,7 +151,7 @@ SfxManageStyleSheetPage::SfxManageStyleSheetPage(Window* pParent, const SfxItemS
             // own name as base template
             if ( aStr != aName )
                 m_pBaseLb->InsertEntry( aStr );
-            pPoolStyle = iter.Next();
+            pPoolStyle = pPool->Next();
         }
     }
     else

@@ -184,14 +184,14 @@ void SwCondCollPage::Reset(const SfxItemSet &/*rSet*/)
     aTbLinks.Clear();
 
     SfxStyleSheetBasePool* pPool = rSh.GetView().GetDocShell()->GetStyleSheetPool();
+    pPool->SetSearchMask(SFX_STYLE_FAMILY_PARA, SFXSTYLEBIT_ALL);
     aStyleLB.Clear();
-    SfxStyleSheetIterator iter(pPool, SFX_STYLE_FAMILY_PARA, SFXSTYLEBIT_ALL);
-    const SfxStyleSheetBase* pBase = iter.First();
+    const SfxStyleSheetBase* pBase = pPool->First();
     while( pBase )
     {
         if(!pFmt || pBase->GetName() != pFmt->GetName())
             aStyleLB.InsertEntry(pBase->GetName());
-        pBase = iter.Next();
+        pBase = pPool->Next();
     }
     aStyleLB.SelectEntryPos(0);
 
@@ -274,14 +274,14 @@ IMPL_LINK( SwCondCollPage, SelectHdl, ListBox*, pBox)
         sal_uInt16 nSearchFlags = pBox->GetSelectEntryPos();
         nSearchFlags = *(sal_uInt16*)aFilterLB.GetEntryData(nSearchFlags);
         SfxStyleSheetBasePool* pPool = rSh.GetView().GetDocShell()->GetStyleSheetPool();
-        SfxStyleSheetIterator iter(pPool, SFX_STYLE_FAMILY_PARA, nSearchFlags);
-        const SfxStyleSheetBase* pBase = iter.First();
+        pPool->SetSearchMask(SFX_STYLE_FAMILY_PARA, nSearchFlags);
+        const SfxStyleSheetBase* pBase = pPool->First();
 
         while( pBase )
         {
             if(!pFmt || pBase->GetName() != pFmt->GetName())
                 aStyleLB.InsertEntry(pBase->GetName());
-            pBase = iter.Next();
+            pBase = pPool->Next();
         }
         aStyleLB.SelectEntryPos(0);
         SelectHdl(&aStyleLB);

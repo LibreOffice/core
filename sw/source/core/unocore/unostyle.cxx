@@ -1900,15 +1900,14 @@ static void lcl_SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
                     //
                     sal_Int16 nIdx = GetCommandContextIndex( pSeq[i].Name );
 
-                    SfxStyleSheetIterator iter(pBasePool,
-                        SFX_STYLE_FAMILY_PARA, SFXSTYLEBIT_ALL);
+                    pBasePool->SetSearchMask( SFX_STYLE_FAMILY_PARA, SFXSTYLEBIT_ALL );
                     sal_Bool bStyleFound = sal_False;
-                    const SfxStyleSheetBase* pBase = iter.First();
+                    const SfxStyleSheetBase* pBase = pBasePool->First();
                     while (pBase && !bStyleFound)
                     {
                         if(pBase->GetName() == aStyleName)
                             bStyleFound = sal_True;
-                        pBase = iter.Next();
+                        pBase = pBasePool->Next();
                     }
 
                     if (nIdx == -1 || !bStyleFound)

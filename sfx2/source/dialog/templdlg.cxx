@@ -1227,10 +1227,7 @@ void SfxCommonTemplateDialog_Impl::EnableTreeDrag( sal_Bool bEnable )
 {
     if ( pStyleSheetPool )
     {
-        SfxStyleSheetIterator iter(pStyleSheetPool,
-            pStyleSheetPool->GetSearchFamily(),
-            pStyleSheetPool->GetSearchMask());
-        SfxStyleSheetBase* pStyle = iter.First();
+        SfxStyleSheetBase* pStyle = pStyleSheetPool->First();
         if ( pTreeBox )
         {
             if ( pStyle && pStyle->HasParentSupport() && bEnable )
@@ -1251,10 +1248,8 @@ void SfxCommonTemplateDialog_Impl::FillTreeBox()
     {
         const SfxStyleFamilyItem *pItem = GetFamilyItem_Impl();
         pStyleSheetPool->SetSearchMask(pItem->GetFamily(), SFXSTYLEBIT_ALL_VISIBLE);
-        SfxStyleSheetIterator iter(pStyleSheetPool,
-                pItem->GetFamily(), SFXSTYLEBIT_ALL_VISIBLE);
         StyleTreeArr_Impl aArr;
-        SfxStyleSheetBase *pStyle = iter.First();
+        SfxStyleSheetBase *pStyle = pStyleSheetPool->First();
         if(pStyle && pStyle->HasParentSupport() && bTreeDrag )
             pTreeBox->SetDragDropMode(SV_DRAGDROP_CTRL_MOVE);
         else
@@ -1264,7 +1259,7 @@ void SfxCommonTemplateDialog_Impl::FillTreeBox()
             StyleTree_Impl* pNew =
                 new StyleTree_Impl(pStyle->GetName(), pStyle->GetParent());
             aArr.push_back(pNew);
-            pStyle = iter.Next();
+            pStyle = pStyleSheetPool->Next();
         }
         MakeTree_Impl(aArr);
         ExpandedEntries_t aEntries;
@@ -1397,10 +1392,7 @@ void SfxCommonTemplateDialog_Impl::UpdateStyles_Impl(sal_uInt16 nFlags)
         {
             EnableItem(SID_STYLE_WATERCAN,sal_False);
 
-            SfxStyleSheetIterator iter(pStyleSheetPool,
-                pStyleSheetPool->GetSearchFamily(),
-                pStyleSheetPool->GetSearchMask());
-            SfxStyleSheetBase *pStyle = iter.First();
+            SfxStyleSheetBase *pStyle = pStyleSheetPool->First();
             SvTreeListEntry* pEntry = aFmtLb.First();
             std::vector<OUString> aStrings;
 
@@ -1415,7 +1407,7 @@ void SfxCommonTemplateDialog_Impl::UpdateStyles_Impl(sal_uInt16 nFlags)
                 for(nPos = aStrings.size(); nPos && aSorter.compare(aStrings[nPos-1], pStyle->GetName()) > 0; --nPos)
                 {};
                 aStrings.insert(aStrings.begin() + nPos, pStyle->GetName());
-                pStyle = iter.Next();
+                pStyle = pStyleSheetPool->Next();
             }
 
             size_t nCount = aStrings.size();
