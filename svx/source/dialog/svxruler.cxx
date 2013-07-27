@@ -434,18 +434,21 @@ SvxRuler::~SvxRuler()
 
 long SvxRuler::MakePositionSticky(long aPosition, bool aSnapToFrameMargin) const
 {
-    long aLeftFramePosition = ConvertHPosPixel(GetLeftFrameMargin());
+    long aLeftFramePosition  = ConvertHPosPixel(GetLeftFrameMargin());
     long aRightFramePosition = ConvertHPosPixel(GetRightFrameMargin());
+
     long aTick = GetCurrentRulerUnit().nTick1;
+    long aTickPixel = pEditWin->LogicToPixel(Size(0, aTick), GetCurrentMapMode()).Height();
     long aHalfTick = aTick / 2;
+    long aHalfTickPixel = aTickPixel / 2;
 
     if (aSnapToFrameMargin)
     {
-        if (aPosition > aLeftFramePosition - aHalfTick && aPosition < aLeftFramePosition + aHalfTick)
+        if (aPosition > aLeftFramePosition - aHalfTickPixel && aPosition < aLeftFramePosition + aHalfTickPixel)
         {
             return aLeftFramePosition;
         }
-        else if (aPosition > aRightFramePosition - aHalfTick && aPosition < aRightFramePosition + aHalfTick)
+        else if (aPosition > aRightFramePosition - aHalfTickPixel && aPosition < aRightFramePosition + aHalfTickPixel)
         {
             return aRightFramePosition;
         }
