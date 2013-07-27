@@ -23,12 +23,12 @@
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
+        <property name="orientation">vertical</property>
         <property name="spacing">12</property>
         <child internal-child="action_area">
           <object class="GtkButtonBox" id="dialog-action_area1">
             <property name="can_focus">False</property>
-            <property name="orientation">vertical</property>
-            <property name="layout_style">start</property>
+            <property name="layout_style">end</property>
             <child>
               <object class="GtkButton" id="ok">
                 <property name="label">gtk-ok</property>
@@ -71,6 +71,7 @@
                 <property name="expand">False</property>
                 <property name="fill">True</property>
                 <property name="position">2</property>
+                <property name="secondary">True</property>
               </packing>
             </child>
           </object>
@@ -86,6 +87,8 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="valign">center</property>
+            <property name="margin_left">6</property>
+            <property name="margin_right">6</property>
             <property name="hexpand">True</property>
             <property name="vexpand">True</property>
             <property name="row_spacing">6</property>
