@@ -83,7 +83,9 @@ SwXMLBlockContext::SwXMLBlockContext(
     SvXMLImportContext ( rImport, nPrefix, rLocalName )
 {
     static const CharClass & rCC = GetAppCharClass();
-    String aShort, aLong, aPackageName;
+    OUString aShort;
+    OUString aLong;
+    OUString aPackageName;
     sal_Bool bTextOnly = sal_False;
 
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
@@ -114,7 +116,7 @@ SwXMLBlockContext::SwXMLBlockContext(
             }
         }
     }
-    if (!aShort.Len() || !aLong.Len() || !aPackageName.Len())
+    if (aShort.isEmpty() || aLong.isEmpty() || aPackageName.isEmpty())
         return;
     rImport.getBlockList().AddName( aShort, aLong, aPackageName, bTextOnly);
 }

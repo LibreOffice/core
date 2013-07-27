@@ -50,7 +50,7 @@ using ::xmloff::token::GetXMLToken;
 
 sal_uLong SwXMLTextBlocks::GetDoc( sal_uInt16 nIdx )
 {
-    String aFolderName ( GetPackageName ( nIdx ) );
+    OUString aFolderName ( GetPackageName ( nIdx ) );
 
     if (!IsOnlyTextBlock ( nIdx ) )
     {
@@ -86,7 +86,7 @@ sal_uLong SwXMLTextBlocks::GetDoc( sal_uInt16 nIdx )
     }
     else
     {
-        String aStreamName = aFolderName + OUString(".xml");
+        OUString aStreamName = aFolderName + ".xml";
         try
         {
             xRoot = xBlkRoot->openStorageElement( aFolderName, embed::ElementModes::READ );
@@ -266,12 +266,12 @@ sal_uLong SwXMLTextBlocks::GetMacroTable( sal_uInt16 nIdx,
 }
 
 
-sal_uLong SwXMLTextBlocks::GetBlockText( const String& rShort, OUString& rText )
+sal_uLong SwXMLTextBlocks::GetBlockText( const OUString& rShort, OUString& rText )
 {
     sal_uLong n = 0;
     sal_Bool bTextOnly = sal_True;
-    String aFolderName = GeneratePackageName ( rShort );
-    String aStreamName = aFolderName + OUString(".xml");
+    OUString aFolderName = GeneratePackageName ( rShort );
+    OUString aStreamName = aFolderName + ".xml";
     rText = OUString();
 
     try
@@ -329,8 +329,8 @@ sal_uLong SwXMLTextBlocks::GetBlockText( const String& rShort, OUString& rText )
     return n;
 }
 
-sal_uLong SwXMLTextBlocks::PutBlockText( const String& rShort, const String& ,
-                                     const String& rText,  const String& rPackageName )
+sal_uLong SwXMLTextBlocks::PutBlockText( const OUString& rShort, const OUString& ,
+                                         const OUString& rText,  const OUString& rPackageName )
 {
     GetIndex ( rShort );
     /*
@@ -340,8 +340,8 @@ sal_uLong SwXMLTextBlocks::PutBlockText( const String& rShort, const String& ,
         xBlkRoot->Commit ( );
     }
     */
-    String aFolderName( rPackageName );
-    String aStreamName = aFolderName + OUString(".xml");
+    OUString aFolderName( rPackageName );
+    OUString aStreamName = aFolderName + ".xml";
 
     uno::Reference< uno::XComponentContext > xContext =
         comphelper::getProcessComponentContext();

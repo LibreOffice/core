@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <algorithm>
+
 #include <sfx2/docfilt.hxx>
 #include <sot/storage.hxx>
 #include <tools/urlobj.hxx>
@@ -43,27 +45,27 @@
 // Hash-Code errechnen (muss nicht eindeutig sein)
 
 
-sal_uInt16 SwImpBlocks::Hash( const String& r )
+sal_uInt16 SwImpBlocks::Hash( const OUString& r )
 {
     sal_uInt16 n = 0;
-    xub_StrLen nLen = r.Len();
-    if( nLen > 8 )
-        nLen = 8;
-    const sal_Unicode* p = r.GetBuffer();
-    while( nLen-- )
-        n = ( n << 1 ) + *p++;
+    // std::min requires an explicit cast to sal_Int32 on 32bit platforms
+    const sal_Int32 nLen = std::min(r.getLength(), static_cast<sal_Int32>(8));
+    for (sal_Int32 i=0; i<nLen; ++i)
+    {
+        n = ( n << 1 ) + r[i];
+    }
     return n;
 }
 
 
-SwBlockName::SwBlockName( const String& rShort, const String& rLong )
+SwBlockName::SwBlockName( const OUString& rShort, const OUString& rLong )
     : aShort( rShort ), aLong( rLong ), aPackageName (rShort),
     bIsOnlyTxtFlagInit( sal_False ), bIsOnlyTxt( sal_False )
 {
     nHashS = SwImpBlocks::Hash( rShort );
     nHashL = SwImpBlocks::Hash( rLong );
 }
-SwBlockName::SwBlockName( const String& rShort, const String& rLong, const String& rPackageName)
+SwBlockName::SwBlockName( const OUString& rShort, const OUString& rLong, const OUString& rPackageName)
     : aShort( rShort ), aLong( rLong ), aPackageName (rPackageName),
     bIsOnlyTxtFlagInit( sal_False ), bIsOnlyTxt( sal_False )
 {
@@ -74,7 +76,7 @@ SwBlockName::SwBlockName( const String& rShort, const String& rLong, const Strin
 
 // Ist die angegebene Datei ein Storage oder gibt es sie nicht?
 
-short SwImpBlocks::GetFileType( const String& rFile )
+short SwImpBlocks::GetFileType( const OUString& rFile )
 {
     if( !FStatHelper::IsDocument( rFile ) )
         return SWBLK_NO_FILE;
@@ -87,7 +89,7 @@ short SwImpBlocks::GetFileType( const String& rFile )
 }
 
 
-SwImpBlocks::SwImpBlocks( const String& rFile, sal_Bool )
+SwImpBlocks::SwImpBlocks( const OUString& rFile, sal_Bool )
     : aFile( rFile ),
     aDateModified( Date::EMPTY ),
     aTimeModified( Time::EMPTY ),
@@ -97,7 +99,7 @@ SwImpBlocks::SwImpBlocks( const String& rFile, sal_Bool )
     FStatHelper::GetModifiedDateTimeOfFile( rFile,
                                             &aDateModified, &aTimeModified );
     INetURLObject aObj(rFile);
-    aObj.setExtension( aEmptyStr );
+    aObj.setExtension( OUString() );
     aName = aObj.GetBase();
 }
 
@@ -131,10 +133,10 @@ sal_uInt16 SwImpBlocks::GetCount() const
 }
 
 // Case Insensitive
-sal_uInt16 SwImpBlocks::GetIndex( const String& rShort ) const
+sal_uInt16 SwImpBlocks::GetIndex( const OUString& rShort ) const
 {
-    String s( GetAppCharClass().uppercase( rShort ) );
-    sal_uInt16 nHash = Hash( s );
+    const OUString s( GetAppCharClass().uppercase( rShort ) );
+    const sal_uInt16 nHash = Hash( s );
     for( sal_uInt16 i = 0; i < aNames.size(); i++ )
     {
         const SwBlockName* pName = aNames[ i ];
@@ -146,7 +148,7 @@ sal_uInt16 SwImpBlocks::GetIndex( const String& rShort ) const
 }
 
 
-sal_uInt16 SwImpBlocks::GetLongIndex( const String& rLong ) const
+sal_uInt16 SwImpBlocks::GetLongIndex( const OUString& rLong ) const
 {
     sal_uInt16 nHash = Hash( rLong );
     for( sal_uInt16 i = 0; i < aNames.size(); i++ )
@@ -160,19 +162,19 @@ sal_uInt16 SwImpBlocks::GetLongIndex( const String& rLong ) const
 }
 
 
-const String& SwImpBlocks::GetShortName( sal_uInt16 n ) const
+OUString SwImpBlocks::GetShortName( sal_uInt16 n ) const
 {
     if( n < aNames.size() )
         return aNames[n]->aShort;
-    return aEmptyStr;
+    return OUString();
 }
 
 
-const String& SwImpBlocks::GetLongName( sal_uInt16 n ) const
+OUString SwImpBlocks::GetLongName( sal_uInt16 n ) const
 {
     if( n < aNames.size() )
         return aNames[n]->aLong;
-    return aEmptyStr;
+    return OUString();
 }
 
 OUString SwImpBlocks::GetPackageName( sal_uInt16 n ) const
@@ -182,7 +184,7 @@ OUString SwImpBlocks::GetPackageName( sal_uInt16 n ) const
     return OUString();
 }
 
-void SwImpBlocks::AddName( const String& rShort, const String& rLong,
+void SwImpBlocks::AddName( const OUString& rShort, const OUString& rLong,
                             sal_Bool bOnlyTxt )
 {
     sal_uInt16 nIdx = GetIndex( rShort );
@@ -216,7 +218,7 @@ void SwImpBlocks::Touch()
                                             &aDateModified, &aTimeModified );
 }
 
-sal_Bool SwImpBlocks::IsOnlyTextBlock( const String& ) const
+sal_Bool SwImpBlocks::IsOnlyTextBlock( const OUString& ) const
 {
     return sal_False;
 }
@@ -240,11 +242,11 @@ sal_Bool SwImpBlocks::PutMuchEntries( sal_Bool )
 ////////////////////////////////////////////////////////////////////////////
 
 
-SwTextBlocks::SwTextBlocks( const String& rFile )
+SwTextBlocks::SwTextBlocks( const OUString& rFile )
     : pImp( 0 ), nErr( 0 )
 {
     INetURLObject aObj(rFile);
-    String sFileName = aObj.GetMainURL( INetURLObject::NO_DECODE );
+    const OUString sFileName = aObj.GetMainURL( INetURLObject::NO_DECODE );
     switch( SwImpBlocks::GetFileType( rFile ) )
     {
     case SWBLK_XML:     pImp = new SwXMLTextBlocks( sFileName ); break;
@@ -259,13 +261,13 @@ SwTextBlocks::~SwTextBlocks()
     delete pImp;
 }
 
-const String& SwTextBlocks::GetName()
+OUString SwTextBlocks::GetName()
 {
-    return pImp ? pImp->aName : aEmptyStr;
+    return pImp ? pImp->aName : OUString();
 }
 
 
-void SwTextBlocks::SetName( const String& r )
+void SwTextBlocks::SetName( const OUString& r )
 {
     if( pImp )
         pImp->SetName( r );
@@ -290,27 +292,27 @@ sal_uInt16 SwTextBlocks::GetCount() const
 }
 
 
-sal_uInt16 SwTextBlocks::GetIndex( const String& r ) const
+sal_uInt16 SwTextBlocks::GetIndex( const OUString& r ) const
 {
     return pImp ? pImp->GetIndex( r ) : (sal_uInt16) -1;
 }
 
 
-sal_uInt16 SwTextBlocks::GetLongIndex( const String& r ) const
+sal_uInt16 SwTextBlocks::GetLongIndex( const OUString& r ) const
 {
     return pImp ? (sal_uInt16)(pImp->GetLongIndex( r )) : (sal_uInt16) -1;
 }
 
 
-const String& SwTextBlocks::GetShortName( sal_uInt16 n ) const
+OUString SwTextBlocks::GetShortName( sal_uInt16 n ) const
 {
     if( pImp )
         return pImp->GetShortName( n );
-    return aEmptyStr;
+    return OUString();
 }
 
 
-const String& SwTextBlocks::GetLongName( sal_uInt16 n ) const
+OUString SwTextBlocks::GetLongName( sal_uInt16 n ) const
 {
     if( pImp )
         return pImp->GetLongName( n );
@@ -346,18 +348,19 @@ sal_Bool SwTextBlocks::Delete( sal_uInt16 n )
 }
 
 
-sal_uInt16 SwTextBlocks::Rename( sal_uInt16 n, const String* s, const String* l )
+sal_uInt16 SwTextBlocks::Rename( sal_uInt16 n, const OUString* s, const OUString* l )
 {
     sal_uInt16 nIdx = (sal_uInt16)-1;
     if( pImp && !pImp->bInPutMuchBlocks )
     {
         pImp->nCur = nIdx;
-        String aNew, aLong;
+        OUString aNew;
+        OUString aLong;
         if( s )
             aNew = aLong = *s;
         if( l )
             aLong = *l;
-        if( !aNew.Len() )
+        if( aNew.isEmpty() )
         {
             OSL_ENSURE( !this, "Kein Kurzname in Rename angegeben" );
             nErr = ERR_SWG_INTERNAL_ERROR; return (sal_uInt16) -1;
@@ -439,7 +442,7 @@ void SwTextBlocks::EndGetDoc()
 }
 
 
-sal_Bool SwTextBlocks::BeginPutDoc( const String& s, const String& l )
+sal_Bool SwTextBlocks::BeginPutDoc( const OUString& s, const OUString& l )
 {
     if( pImp )
     {
@@ -454,7 +457,7 @@ sal_Bool SwTextBlocks::BeginPutDoc( const String& s, const String& l )
         }
         if( bOk )
         {
-            String aNew = GetAppCharClass().uppercase(s);
+            const OUString aNew = GetAppCharClass().uppercase(s);
             nErr = pImp->BeginPutDoc( aNew, l );
         }
         if( nErr )
@@ -493,8 +496,8 @@ sal_uInt16 SwTextBlocks::PutDoc()
     return nIdx;
 }
 
-sal_uInt16 SwTextBlocks::PutText( const String& rShort, const String& rName,
-                              const String& rTxt )
+sal_uInt16 SwTextBlocks::PutText( const OUString& rShort, const OUString& rName,
+                                  const OUString& rTxt )
 {
     sal_uInt16 nIdx = (sal_uInt16) -1;
     if( pImp )
@@ -510,7 +513,7 @@ sal_uInt16 SwTextBlocks::PutText( const String& rShort, const String& rName,
         }
         if( bOk )
         {
-            String aNew = GetAppCharClass().uppercase( rShort );
+            OUString aNew = GetAppCharClass().uppercase( rShort );
             nErr = pImp->PutText( aNew, rName, rTxt );
             pImp->nCur = (sal_uInt16) -1;
             if( !nErr )
@@ -553,7 +556,7 @@ void SwTextBlocks::ClearDoc()
 }
 
 
-const String& SwTextBlocks::GetFileName() const
+OUString SwTextBlocks::GetFileName() const
 {
     return pImp->GetFileName();
 }
@@ -582,7 +585,7 @@ sal_Bool SwTextBlocks::IsOnlyTextBlock( sal_uInt16 nIdx ) const
     return bRet;
 }
 
-sal_Bool SwTextBlocks::IsOnlyTextBlock( const String& rShort ) const
+sal_Bool SwTextBlocks::IsOnlyTextBlock( const OUString& rShort ) const
 {
     sal_uInt16 nIdx = pImp->GetIndex( rShort );
     if( USHRT_MAX != nIdx )
@@ -627,15 +630,14 @@ void SwTextBlocks::EndPutMuchBlockEntries()
         pImp->PutMuchEntries( sal_False );
 }
 
-String    SwTextBlocks::GetBaseURL() const
+OUString SwTextBlocks::GetBaseURL() const
 {
-    String sRet;
     if(pImp)
-        sRet = pImp->GetBaseURL();
-    return sRet;
+        return pImp->GetBaseURL();
+    return OUString();
 }
 
-void SwTextBlocks::SetBaseURL( const String& rURL )
+void SwTextBlocks::SetBaseURL( const OUString& rURL )
 {
     if(pImp)
         pImp->SetBaseURL(rURL);

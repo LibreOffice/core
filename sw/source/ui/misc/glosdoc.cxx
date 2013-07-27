@@ -324,7 +324,7 @@ SwTextBlocks* SwGlossaries::GetGlosDoc( const String &rName, sal_Bool bCreate ) 
                 bOk = !IsError( pTmp->GetError() );
             }
 
-            if( bOk && !pTmp->GetName().Len() )
+            if( bOk && pTmp->GetName().isEmpty() )
                 pTmp->SetName( rName );
         }
     }

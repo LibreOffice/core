@@ -19,8 +19,6 @@
 #ifndef _SWBLOCKS_HXX
 #define _SWBLOCKS_HXX
 
-#include <tools/string.hxx>
-
 #include <tools/datetime.hxx>
 #include <o3tl/sorted_vector.hxx>
 
@@ -36,15 +34,15 @@ class SwBlockName
     friend class SwImpBlocks;
     sal_uInt16 nHashS, nHashL;          // Hash-Codes zum Checken
 public:
-    String aShort;                      // Short name
-    String aLong;                       // Long name
+    OUString aShort;                    // Short name
+    OUString aLong;                     // Long name
     OUString aPackageName;         // Package name
     sal_Bool bIsOnlyTxtFlagInit : 1;        // ist das Flag gueltig?
     sal_Bool bIsOnlyTxt : 1;                // unformatted text
     sal_Bool bInPutMuchBlocks : 1;          // put serveral block entries
 
-    SwBlockName( const String& rShort, const String& rLong );
-    SwBlockName( const String& rShort, const String& rLong, const String& rPackageName );
+    SwBlockName( const OUString& rShort, const OUString& rLong );
+    SwBlockName( const OUString& rShort, const OUString& rLong, const OUString& rPackageName );
 
     // fuer das Einsortieren in das Array
     bool operator==( const SwBlockName& r ) const { return aShort == r.aShort; }
@@ -58,11 +56,11 @@ class SwImpBlocks
 {
     friend class SwTextBlocks;
 protected:
-    String aFile;                       // physikalischer Dateiname
-    String aName;                       // logischer Name der Datei
+    OUString aFile;                     // physikalischer Dateiname
+    OUString aName;                     // logischer Name der Datei
     OUString aCur;                      // aktueller Text
-    String aShort, aLong;               // Kurz- und Langname (PutDoc)
-    String sBaseURL;                    // base URL - has to be set at the Readers and Writers
+    OUString aShort, aLong;             // Kurz- und Langname (PutDoc)
+    OUString sBaseURL;                  // base URL - has to be set at the Readers and Writers
     SwBlockNames aNames;                // Liste aller Bausteine
     Date aDateModified;                 // fuers abgleichen bei den Aktionen
     Time aTimeModified;
@@ -72,10 +70,10 @@ protected:
     sal_Bool bInPutMuchBlocks : 1;          // put serveral block entries
     sal_Bool bInfoChanged : 1;              // any Info of TextBlock is changed
 
-    SwImpBlocks( const String&, sal_Bool = sal_False );
+    SwImpBlocks( const OUString&, sal_Bool = sal_False );
     virtual ~SwImpBlocks();
 
-    static short GetFileType( const String& );
+    static short GetFileType( const OUString& );
     virtual short GetFileType() const = 0;
 #define SWBLK_NO_FILE   0               // nicht da
 #define SWBLK_NONE      1               // keine TB-Datei
@@ -85,42 +83,42 @@ protected:
 
     virtual void   ClearDoc();                  // Doc-Inhalt loeschen
     SwPaM* MakePaM();                   // PaM ueber Doc aufspannen
-    virtual void   AddName( const String&, const String&, sal_Bool bOnlyTxt = sal_False );
+    virtual void   AddName( const OUString&, const OUString&, sal_Bool bOnlyTxt = sal_False );
     sal_Bool   IsFileChanged() const;
     void   Touch();
 
 public:
-    static sal_uInt16 Hash( const String& );        // Hashcode fuer Blocknamen
+    static sal_uInt16 Hash( const OUString& );      // Hashcode fuer Blocknamen
     sal_uInt16 GetCount() const;                    // Anzahl Textbausteine ermitteln
-    sal_uInt16 GetIndex( const String& ) const;     // Index fuer Kurznamen ermitteln
-    sal_uInt16 GetLongIndex( const String& ) const; //Index fuer Langnamen ermitteln
-    const String& GetShortName( sal_uInt16 ) const; // Kurzname fuer Index zurueck
-    const String& GetLongName( sal_uInt16 ) const;  // Langname fuer Index zurueck
+    sal_uInt16 GetIndex( const OUString& ) const;     // Index fuer Kurznamen ermitteln
+    sal_uInt16 GetLongIndex( const OUString& ) const; //Index fuer Langnamen ermitteln
+    OUString GetShortName( sal_uInt16 ) const;     // Kurzname fuer Index zurueck
+    OUString GetLongName( sal_uInt16 ) const;      // Langname fuer Index zurueck
     OUString GetPackageName( sal_uInt16 ) const;   // Langname fuer Index zurueck
 
-    const String& GetFileName() const {return aFile;}   // phys. Dateinamen liefern
-    void SetName( const String& rName )                 // logic name
+    OUString GetFileName() const {return aFile;}   // phys. Dateinamen liefern
+    void SetName( const OUString& rName )          // logic name
         { aName = rName; bInfoChanged = sal_True; }
-    const String & GetName( void )
+    OUString GetName( void )
         { return aName; }
 
-    const String&       GetBaseURL() const { return sBaseURL;}
-    void                SetBaseURL( const String& rURL ) { sBaseURL = rURL; }
+    OUString            GetBaseURL() const { return sBaseURL;}
+    void                SetBaseURL( const OUString& rURL ) { sBaseURL = rURL; }
 
     virtual sal_uLong Delete( sal_uInt16 ) = 0;
-    virtual sal_uLong Rename( sal_uInt16, const String&, const String& ) = 0;
+    virtual sal_uLong Rename( sal_uInt16, const OUString&, const OUString& ) = 0;
     virtual sal_uLong CopyBlock( SwImpBlocks& rImp, OUString& rShort, const OUString& rLong) = 0;
     virtual sal_uLong GetDoc( sal_uInt16 ) = 0;
-    virtual sal_uLong BeginPutDoc( const String&, const String& ) = 0;
+    virtual sal_uLong BeginPutDoc( const OUString&, const OUString& ) = 0;
     virtual sal_uLong PutDoc() = 0;
     virtual sal_uLong GetText( sal_uInt16, OUString& ) = 0;
-    virtual sal_uLong PutText( const String&, const String&, const OUString& ) = 0;
+    virtual sal_uLong PutText( const OUString&, const OUString&, const OUString& ) = 0;
     virtual sal_uLong MakeBlockList() = 0;
 
     virtual sal_uLong OpenFile( sal_Bool bReadOnly = sal_True ) = 0;
     virtual void  CloseFile() = 0;
 
-    virtual sal_Bool IsOnlyTextBlock( const String& rShort ) const;
+    virtual sal_Bool IsOnlyTextBlock( const OUString& rShort ) const;
 
     virtual sal_uLong GetMacroTable( sal_uInt16 nIdx, SvxMacroTableDtor& rMacroTbl,
                                  sal_Bool bFileAlreadyOpen = sal_False );

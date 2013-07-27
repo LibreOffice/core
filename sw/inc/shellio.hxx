@@ -306,46 +306,46 @@ class SW_DLLPUBLIC SwTextBlocks
     sal_uLong        nErr;
 
 public:
-    SwTextBlocks( const String& );
+    SwTextBlocks( const OUString& );
     ~SwTextBlocks();
 
     void Flush(){}
 
     SwDoc* GetDoc();
     void   ClearDoc();                  // Delete Doc-contents.
-    const  String& GetName();
-    void   SetName( const String& );
+    OUString GetName();
+    void   SetName( const OUString& );
     sal_uLong GetError() const { return nErr; }
 
-    String GetBaseURL() const;
-    void   SetBaseURL( const String& rURL );
+    OUString GetBaseURL() const;
+    void   SetBaseURL( const OUString& rURL );
 
     sal_Bool   IsOld() const;
     sal_uLong  ConvertToNew();              // Convert text modules.
 
     sal_uInt16 GetCount() const;                        // Get count text modules.
-    sal_uInt16 GetIndex( const String& ) const;         // Get index of short names.
-    sal_uInt16 GetLongIndex( const String& ) const;     // Get index of long names.
-    const  String& GetShortName( sal_uInt16 ) const;    // Get short name for index.
-    const  String& GetLongName( sal_uInt16 ) const;     // Get long name for index.
+    sal_uInt16 GetIndex( const OUString& ) const;       // Get index of short names.
+    sal_uInt16 GetLongIndex( const OUString& ) const;   // Get index of long names.
+    OUString GetShortName( sal_uInt16 ) const;          // Get short name for index.
+    OUString GetLongName( sal_uInt16 ) const;           // Get long name for index.
 
     sal_Bool   Delete( sal_uInt16 );
-    sal_uInt16 Rename( sal_uInt16, const String*, const String* );
+    sal_uInt16 Rename( sal_uInt16, const OUString*, const OUString* );
     sal_uLong  CopyBlock( SwTextBlocks& rSource, OUString& rSrcShort,
                                     const OUString& rLong );
 
     sal_Bool   BeginGetDoc( sal_uInt16 );   // Read text modules.
     void   EndGetDoc();                     // Release text modules.
 
-    sal_Bool   BeginPutDoc( const String&, const String& ); // Begin save.
+    sal_Bool   BeginPutDoc( const OUString&, const OUString& ); // Begin save.
     sal_uInt16 PutDoc();                                    // End save.
 
-    sal_uInt16 PutText( const String&, const String&, const String& ); // Save (short name, text).
+    sal_uInt16 PutText( const OUString&, const OUString&, const OUString& ); // Save (short name, text).
 
     sal_Bool IsOnlyTextBlock( sal_uInt16 ) const;
-    sal_Bool IsOnlyTextBlock( const String& rShort ) const;
+    sal_Bool IsOnlyTextBlock( const OUString& rShort ) const;
 
-    const String& GetFileName() const;      // Filename of pImp.
+    OUString GetFileName() const;           // Filename of pImp.
     sal_Bool IsReadOnly() const;            // ReadOnly-flag of pImp.
 
     sal_Bool GetMacroTable( sal_uInt16 nIdx, SvxMacroTableDtor& rMacroTbl );
