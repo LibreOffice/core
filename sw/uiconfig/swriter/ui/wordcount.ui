@@ -28,6 +28,7 @@
                 <property name="expand">False</property>
                 <property name="fill">True</property>
                 <property name="position">0</property>
+                <property name="secondary">True</property>
               </packing>
             </child>
             <child>
@@ -57,6 +58,8 @@
           <object class="GtkGrid" id="grid1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="margin_left">6</property>
+            <property name="margin_right">6</property>
             <property name="hexpand">True</property>
             <property name="row_spacing">6</property>
             <property name="column_spacing">12</property>
@@ -64,8 +67,8 @@
               <object class="GtkLabel" id="label1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="xalign">0</property>
-                <property name="xpad">10</property>
+                <property name="margin_bottom">6</property>
+                <property name="xalign">1</property>
                 <property name="label" translatable="yes">Words</property>
               </object>
               <packing>
@@ -79,8 +82,7 @@
               <object class="GtkLabel" id="label2">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="xalign">0</property>
-                <property name="xpad">10</property>
+                <property name="xalign">1</property>
                 <property name="label" translatable="yes">Characters including spaces</property>
               </object>
               <packing>
@@ -94,8 +96,7 @@
               <object class="GtkLabel" id="label3">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="xalign">0</property>
-                <property name="xpad">10</property>
+                <property name="xalign">1</property>
                 <property name="label" translatable="yes">Characters excluding spaces</property>
               </object>
               <packing>
@@ -245,8 +246,7 @@
               <object class="GtkLabel" id="cjkcharsft">
                 <property name="can_focus">False</property>
                 <property name="no_show_all">True</property>
-                <property name="xalign">0</property>
-                <property name="xpad">10</property>
+                <property name="xalign">1</property>
                 <property name="label" translatable="yes">Asian characters and Korean syllables</property>
               </object>
               <packing>
