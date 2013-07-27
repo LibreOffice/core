@@ -32,6 +32,8 @@
     <string name="hint_ip_address">IP address</string>
     <string name="hint_name">Name</string>
 
+    <string name="header_notes">Notes</string>
+
     <string name="mask_slide_show_progress">Slide %1$d from %2$d</string>
 
 </resources>

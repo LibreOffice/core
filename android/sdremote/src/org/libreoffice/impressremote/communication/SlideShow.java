@@ -65,11 +65,11 @@ public class SlideShow {
     public String getSlideNotes(int aSlideIndex) {
         String aSlideNotes = mSlideNotes.get(aSlideIndex);
 
-        if (aSlideNotes != null) {
-            return aSlideNotes;
-        } else {
+        if (aSlideNotes == null) {
             return "";
         }
+
+        return aSlideNotes;
     }
 
     public Timer getTimer() {

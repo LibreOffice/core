@@ -1,11 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <!-- It is a good practice to follow official design metrics. -->
+    <!-- http://developer.android.com/design/style/metrics-grids.html -->
+
     <dimen name="padding_action_bar_button_drawable">8dp</dimen>
     <dimen name="padding_creation_layout">16dp</dimen>
     <dimen name="padding_slides_grid">4dp</dimen>
     <dimen name="padding_slides_pager">16dp</dimen>
     <dimen name="padding_slide">4dp</dimen>
+    <dimen name="padding_header_underline">4dp</dimen>
+    <dimen name="padding_slides_pager_layout">8dp</dimen>
+    <dimen name="padding_header">8dp</dimen>
+    <dimen name="padding_slide_notes">8dp</dimen>
 
     <dimen name="padding_horizontal_list_item">8dp</dimen>
     <dimen name="padding_horizontal_connection_layout">40dp</dimen>
@@ -28,7 +35,5 @@
     <dimen name="text_size_error_title">20sp</dimen>
 
     <dimen name="spacing_slides_grid">4dp</dimen>
-
-    <dimen name="height_slides_pager">250dp</dimen>
 
 </resources>

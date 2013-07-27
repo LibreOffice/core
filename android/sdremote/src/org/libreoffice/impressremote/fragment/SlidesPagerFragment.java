@@ -17,13 +17,21 @@ import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.text.Html;
+import android.text.TextUtils;
+import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextSwitcher;
+import android.widget.TextView;
+import android.widget.ViewAnimator;
 
 import com.actionbarsherlock.app.SherlockFragment;
+import org.libreoffice.impressremote.communication.SlideShow;
 import org.libreoffice.impressremote.util.Intents;
 import org.libreoffice.impressremote.R;
 import org.libreoffice.impressremote.adapter.SlidesPagerAdapter;
@@ -50,52 +58,94 @@ public class SlidesPagerFragment extends SherlockFragment implements ServiceConn
     }
 
     private void bindService() {
-        Intent aServiceIntent = new Intent(getActivity(), CommunicationService.class);
-
+        Intent aServiceIntent = Intents.buildCommunicationServiceIntent(getActivity());
         getActivity().bindService(aServiceIntent, this, Context.BIND_AUTO_CREATE);
     }
 
     @Override
     public void onServiceConnected(ComponentName aComponentName, IBinder aBinder) {
         CommunicationService.CBinder aServiceBinder = (CommunicationService.CBinder) aBinder;
-
         mCommunicationService = aServiceBinder.getService();
 
         setUpSlidesPager();
     }
 
     private void setUpSlidesPager() {
-        SlidesPagerAdapter aSlidesPagerAdapter = new SlidesPagerAdapter(getActivity(),
-            mCommunicationService.getSlideShow());
+        ViewPager aSlidesPager = getSlidesPager();
 
-        getSlidesPager().setAdapter(aSlidesPagerAdapter);
-
-        getSlidesPager().setCurrentItem(mCommunicationService.getSlideShow().getCurrentSlideIndex());
-
-        getSlidesPager().setPageMargin(getSlidesMarginInPx());
-
-        getSlidesPager().setOnPageChangeListener(this);
+        aSlidesPager.setAdapter(buildSlidesAdapter());
+        aSlidesPager.setCurrentItem(mCommunicationService.getSlideShow().getCurrentSlideIndex());
+        aSlidesPager.setPageMargin(getSlidesMarginInPx());
+        aSlidesPager.setOnPageChangeListener(this);
     }
 
     private ViewPager getSlidesPager() {
         return (ViewPager) getView().findViewById(R.id.pager_slides);
     }
 
-    private int getSlidesMarginInPx() {
-        float aSlideMarginInDp = getResources().getDimension(R.dimen.margin_slide);
+    private PagerAdapter buildSlidesAdapter() {
+        SlideShow aSlideShow = mCommunicationService.getSlideShow();
 
-        return (int) TypedValue
-            .applyDimension(TypedValue.COMPLEX_UNIT_PX, aSlideMarginInDp,
-                getResources().getDisplayMetrics());
+        return new SlidesPagerAdapter(getActivity(), aSlideShow);
     }
 
-    @Override
-    public void onPageScrolled(int aPosition, float aPositionOffset, int aPositionOffsetPixels) {
+    private int getSlidesMarginInPx() {
+        int aPxUnit = TypedValue.COMPLEX_UNIT_PX;
+        float aSlideMarginInDp = getResources().getDimension(R.dimen.margin_slide);
+        DisplayMetrics aDisplayMetrics = getResources().getDisplayMetrics();
+
+        return (int) TypedValue.applyDimension(aPxUnit, aSlideMarginInDp, aDisplayMetrics);
     }
 
     @Override
     public void onPageSelected(int aPosition) {
         mCommunicationService.getTransmitter().setCurrentSlide(aPosition);
+
+        setUpSlideNotes(aPosition);
+    }
+
+    private void setUpSlideNotes(int aSlideIndex) {
+        if (areSlideNotesAvailable(aSlideIndex)) {
+            showSlideNotes(aSlideIndex);
+        }
+        else {
+            hideSlideNotes();
+        }
+    }
+
+    private boolean areSlideNotesAvailable(int aSlideIndex) {
+        String aSlideNotes = mCommunicationService.getSlideShow().getSlideNotes(aSlideIndex);
+
+        return !TextUtils.isEmpty(Html.fromHtml(aSlideNotes).toString().trim());
+    }
+
+    private void showSlideNotes(int aSlideIndex) {
+        ViewAnimator aViewAnimator = (ViewAnimator) getView().findViewById(R.id.view_animator);
+        ViewGroup aNotesLayout = (ViewGroup) getView().findViewById(R.id.layout_notes);
+
+        if (aViewAnimator.getDisplayedChild() != aViewAnimator.indexOfChild(aNotesLayout)) {
+            aViewAnimator.setDisplayedChild(aViewAnimator.indexOfChild(aNotesLayout));
+        }
+
+        setSlideNotes(aSlideIndex);
+    }
+
+    private void setSlideNotes(int aSlideIndex) {
+        TextSwitcher aSlideNotesTextSwitcher = (TextSwitcher) getView().findViewById(R.id.text_switcher_notes);
+        String aSlideNotes = mCommunicationService.getSlideShow().getSlideNotes(aSlideIndex);
+
+        aSlideNotesTextSwitcher.setText(Html.fromHtml(aSlideNotes));
+    }
+
+    private void hideSlideNotes() {
+        ViewAnimator aViewAnimator = (ViewAnimator) getView().findViewById(R.id.view_animator);
+        View aEmptyView = getView().findViewById(R.id.view_empty);
+
+        aViewAnimator.setDisplayedChild(aViewAnimator.indexOfChild(aEmptyView));
+    }
+
+    @Override
+    public void onPageScrolled(int aPosition, float aPositionOffset, int aPositionOffsetPixels) {
     }
 
     @Override
@@ -131,7 +181,7 @@ public class SlidesPagerFragment extends SherlockFragment implements ServiceConn
         @Override
         public void onReceive(Context aContext, Intent aIntent) {
             if (Intents.Actions.SLIDE_PREVIEW.equals(aIntent.getAction())) {
-                mSlidesGridFragment.refreshSlidesGrid();
+                mSlidesGridFragment.refreshSlidesPager();
             }
         }
     }
@@ -149,7 +199,7 @@ public class SlidesPagerFragment extends SherlockFragment implements ServiceConn
         return LocalBroadcastManager.getInstance(aContext);
     }
 
-    private void refreshSlidesGrid() {
+    private void refreshSlidesPager() {
         getSlidesPager().getAdapter().notifyDataSetChanged();
     }
 
