@@ -97,8 +97,6 @@ namespace frm
                     { "HH:MM:SS AM/PM", -1, ltEnglishUS },
                     { NULL, -1, ltSystem }
                 };
-                // don't switch this table here to const. The compiler could be tempted to really place this
-                // in a non-writeable segment, but we want to fill in the format keys later ....
                 return s_aFormats;
             }
             case FormComponentType::DATEFIELD:
