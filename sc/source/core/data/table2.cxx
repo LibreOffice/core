@@ -971,10 +971,7 @@ void ScTable::TransposeClip( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
 
                 ScAddress aDestPos( static_cast<SCCOL>(nRow-nRow1), static_cast<SCROW>(nCol-nCol1), pTransClip->nTab );
                 ScSingleRefData aRef;
-                aRef.nCol = nCol;
-                aRef.nRow = nRow;
-                aRef.nTab = nTab;
-                aRef.InitFlags();                           // -> all absolute
+                aRef.InitAddress(ScAddress(nCol,nRow,nTab));
                 aRef.SetFlag3D(true);
                 ScTokenArray aArr;
                 aArr.AddSingleReference( aRef );

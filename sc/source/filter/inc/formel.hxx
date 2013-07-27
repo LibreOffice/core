@@ -65,8 +65,8 @@ public:
     _ScRangeListTabs ();
     ~_ScRangeListTabs();
 
-    void Append( ScSingleRefData aSRD, SCTAB nTab, bool bLimit = true );
-    void Append( ScComplexRefData aCRD, SCTAB nTab, bool bLimit = true );
+    void Append( const ScAddress& aSRD, SCTAB nTab, bool bLimit = true );
+    void Append( const ScRange& aCRD, SCTAB nTab, bool bLimit = true );
 
     const ScRange* First ( SCTAB nTab = 0 );
     const ScRange* Next ();

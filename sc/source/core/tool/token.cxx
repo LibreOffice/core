@@ -2070,13 +2070,13 @@ void AdjustSingleRefData( ScSingleRefData& rRef, const ScAddress& rOldPos, const
     SCsTAB nTabs = rNewPos.Tab() - rOldPos.Tab();
 
     if (!rRef.IsColRel())
-        rRef.nCol += nCols;
+        rRef.IncCol(nCols);
 
     if (!rRef.IsRowRel())
-        rRef.nRow += nRows;
+        rRef.IncRow(nRows);
 
     if (!rRef.IsTabRel())
-        rRef.nTab += nTabs;
+        rRef.IncTab(nTabs);
 }
 
 }

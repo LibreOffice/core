@@ -1107,8 +1107,8 @@ bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
     // now insert the formulas
     ScComplexRefData aRef;
     aRef.InitFlags();
-    aRef.Ref1.nTab = nTab;
-    aRef.Ref2.nTab = nTab;
+    aRef.Ref1.SetAbsTab(nTab);
+    aRef.Ref2.SetAbsTab(nTab);
     for ( ::std::vector< RowEntry >::const_iterator iEntry( aRowVector.begin());
             iEntry != aRowVector.end(); ++iEntry)
     {
@@ -1117,10 +1117,10 @@ bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
         ScSubTotalFunc* eResFunc = rParam.pFunctions[iEntry->nGroupNo];
         for ( SCCOL nResult=0; nResult < nResCount; ++nResult )
         {
-            aRef.Ref1.nCol = nResCols[nResult];
-            aRef.Ref1.nRow = iEntry->nFuncStart;
-            aRef.Ref2.nCol = nResCols[nResult];
-            aRef.Ref2.nRow = iEntry->nFuncEnd;
+            aRef.Ref1.SetAbsCol(nResCols[nResult]);
+            aRef.Ref1.SetAbsRow(iEntry->nFuncStart);
+            aRef.Ref2.SetAbsCol(nResCols[nResult]);
+            aRef.Ref2.SetAbsRow(iEntry->nFuncEnd);
 
             ScTokenArray aArr;
             aArr.AddOpCode( ocSubTotal );

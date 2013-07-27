@@ -29,18 +29,20 @@ _ScRangeListTabs::~_ScRangeListTabs()
 }
 
 
-void _ScRangeListTabs::Append( ScSingleRefData a, SCTAB nTab, const bool b )
+void _ScRangeListTabs::Append( const ScAddress& aSRD, SCTAB nTab, const bool b )
 {
+    ScAddress a = aSRD;
+
     if( b )
     {
-        if( a.nTab > MAXTAB )
-            a.nTab = MAXTAB;
+        if (a.Tab() > MAXTAB)
+            a.SetTab(MAXTAB);
 
-        if( a.nCol > MAXCOL )
-            a.nCol = MAXCOL;
+        if (a.Col() > MAXCOL)
+            a.SetCol(MAXCOL);
 
-        if( a.nRow > MAXROW )
-            a.nRow = MAXROW;
+        if (a.Row() > MAXROW)
+            a.SetRow(MAXROW);
     }
     else
     {
@@ -50,7 +52,7 @@ void _ScRangeListTabs::Append( ScSingleRefData a, SCTAB nTab, const bool b )
     if( nTab == SCTAB_MAX)
         return;
     if( nTab < 0)
-        nTab = a.nTab;
+        nTab = a.Tab();
 
     if (nTab < 0 || MAXTAB < nTab)
         return;
@@ -68,46 +70,43 @@ void _ScRangeListTabs::Append( ScSingleRefData a, SCTAB nTab, const bool b )
 
         itr = r.first;
     }
-    itr->second->push_back(ScRange(a.nCol,a.nRow,a.nTab));
+    itr->second->push_back(ScRange(a.Col(),a.Row(),a.Tab()));
 }
 
-void _ScRangeListTabs::Append( ScComplexRefData a, SCTAB nTab, bool b )
+void _ScRangeListTabs::Append( const ScRange& aCRD, SCTAB nTab, bool b )
 {
+    ScRange a = aCRD;
+
     if( b )
     {
         // ignore 3D ranges
-        if( a.Ref1.nTab != a.Ref2.nTab )
+        if (a.aStart.Tab() != a.aEnd.Tab())
             return;
 
-        SCsTAB& rTab = a.Ref1.nTab;
-        if( rTab > MAXTAB )
-            rTab = MAXTAB;
-        else if( rTab < 0 )
-            rTab = 0;
+        if (a.aStart.Tab() > MAXTAB)
+            a.aStart.SetTab(MAXTAB);
+        else if (a.aStart.Tab() < 0)
+            a.aStart.SetTab(0);
 
-        SCsCOL& rCol1 = a.Ref1.nCol;
-        if( rCol1 > MAXCOL )
-            rCol1 = MAXCOL;
-        else if( rCol1 < 0 )
-            rCol1 = 0;
+        if (a.aStart.Col() > MAXCOL)
+            a.aStart.SetCol(MAXCOL);
+        else if (a.aStart.Col() < 0)
+            a.aStart.SetCol(0);
 
-        SCsROW& rRow1 = a.Ref1.nRow;
-        if( rRow1 > MAXROW )
-            rRow1 = MAXROW;
-        else if( rRow1 < 0 )
-            rRow1 = 0;
+        if (a.aStart.Row() > MAXROW)
+            a.aStart.SetRow(MAXROW);
+        else if (a.aStart.Row() < 0)
+            a.aStart.SetRow(0);
 
-        SCsCOL& rCol2 = a.Ref2.nCol;
-        if( rCol2 > MAXCOL )
-            rCol2 = MAXCOL;
-        else if( rCol2 < 0 )
-            rCol2 = 0;
+        if (a.aEnd.Col() > MAXCOL)
+            a.aEnd.SetCol(MAXCOL);
+        else if (a.aEnd.Col() < 0)
+            a.aEnd.SetCol(0);
 
-        SCsROW& rRow2 = a.Ref2.nRow;
-        if( rRow2 > MAXROW )
-            rRow2 = MAXROW;
-        else if( rRow2 < 0 )
-            rRow2 = 0;
+        if (a.aEnd.Row() > MAXROW)
+            a.aEnd.SetRow(MAXROW);
+        else if (a.aEnd.Row() < 0)
+            a.aEnd.SetRow(0);
     }
     else
     {
@@ -121,7 +120,7 @@ void _ScRangeListTabs::Append( ScComplexRefData a, SCTAB nTab, bool b )
         return;
 
     if( nTab < -1)
-        nTab = a.Ref1.nTab;
+        nTab = a.aStart.Tab();
 
     if (nTab < 0 || MAXTAB < nTab)
         return;
@@ -139,9 +138,7 @@ void _ScRangeListTabs::Append( ScComplexRefData a, SCTAB nTab, bool b )
 
         itr = r.first;
     }
-    itr->second->push_back(
-        ScRange(a.Ref1.nCol,a.Ref1.nRow,a.Ref1.nTab,
-                a.Ref2.nCol,a.Ref2.nRow,a.Ref2.nTab));
+    itr->second->push_back(a);
 }
 
 const ScRange* _ScRangeListTabs::First( SCTAB n )
