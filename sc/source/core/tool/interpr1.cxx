@@ -7454,6 +7454,7 @@ void ScInterpreter::ScOffset()
                 nCol1 = (SCCOL)((long)nCol1+nColPlus);
                 nRow1 = (SCROW)((long)nRow1+nRowPlus);
                 nCol2 = (SCCOL)((long)nCol1+nColNew-1);
+                nRow2 = (SCROW)((long)nRow1+nRowNew-1);
                 nTab2 = nTab1;
                 if (!ValidCol(nCol1) || !ValidRow(nRow1) ||
                     !ValidCol(nCol2) || !ValidRow(nRow2))
