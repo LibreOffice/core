@@ -107,7 +107,6 @@
 #define WND_BRSPRV 1
 #define MN_ADDMENU 2
 #define MN_ADD 6
-#define MN_ADD_LINK 8
 #define MN_PREVIEW 10
 #define MN_DELETE 12
 #define MN_BACKGROUND 14

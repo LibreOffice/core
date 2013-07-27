@@ -173,10 +173,6 @@ void DrawViewShell::ExecGallery(SfxRequest& rReq)
             SdrPageView* pPV = mpDrawView->GetSdrPageView();
             mpDrawView->InsertObjectAtView(pGrafObj, *pPV, SDRINSERT_SETDEFLAYER);
         }
-
-        // Soll nur ein Link benutzt werden?
-        if( pGrafObj && pGalleryItem->IsLink() )
-            pGrafObj->SetGraphicLink( pGalleryItem->GetURL(), pGalleryItem->GetFilterName() );
     }
     // insert sound
     else if( nType == com::sun::star::gallery::GalleryItemType::MEDIA )
