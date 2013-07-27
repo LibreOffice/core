@@ -498,8 +498,6 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
 
                 aIn >> nRow >> nCol;
 
-                aSRD.nCol = static_cast<SCCOL>(nCol);
-                aSRD.nRow = nRow & 0x3FFF;
                 aSRD.SetRelTab(0);
                 aSRD.SetFlag3D( bRangeName && !bCondFormat );
 
@@ -1050,8 +1048,6 @@ ConvErr ExcelToSc8::Convert( _ScRangeListTabs& rRangeList, XclImpStream& aIn, sa
 
                 aIn >> nRow >> nCol;
 
-                aSRD.nCol = static_cast<SCCOL>(nCol);
-                aSRD.nRow = nRow & 0x3FFF;
                 aSRD.SetRelTab(0);
                 aSRD.SetFlag3D( bRangeName && !bCondFormat );
 
@@ -1191,9 +1187,8 @@ ConvErr ExcelToSc8::Convert( _ScRangeListTabs& rRangeList, XclImpStream& aIn, sa
                     if( nFirstScTab != nLastScTab )
                     {
                         aCRD.Ref1 = aSRD;
-                        aCRD.Ref2.nCol = aSRD.nCol;
-                        aCRD.Ref2.nRow = aSRD.nRow;
-                        aCRD.Ref2.nTab = nLastScTab;
+                        aCRD.Ref2 = aSRD;
+                        aCRD.Ref2.SetAbsTab(nLastScTab);
                         rRangeList.Append( aCRD, nTab );
                     }
                     else

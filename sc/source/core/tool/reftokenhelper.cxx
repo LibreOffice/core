@@ -171,24 +171,12 @@ void ScRefTokenHelper::getRangeListFromTokens(
 void ScRefTokenHelper::getTokenFromRange(ScTokenRef& pToken, const ScRange& rRange)
 {
     ScComplexRefData aData;
-    aData.InitFlags();
-    aData.Ref1.nCol = rRange.aStart.Col();
-    aData.Ref1.nRow = rRange.aStart.Row();
-    aData.Ref1.nTab = rRange.aStart.Tab();
-    aData.Ref1.SetColRel(false);
-    aData.Ref1.SetRowRel(false);
-    aData.Ref1.SetTabRel(false);
+    aData.InitRange(rRange);
     aData.Ref1.SetFlag3D(true);
 
-    aData.Ref2.nCol = rRange.aEnd.Col();
-    aData.Ref2.nRow = rRange.aEnd.Row();
-    aData.Ref2.nTab = rRange.aEnd.Tab();
-    aData.Ref2.SetColRel(false);
-    aData.Ref2.SetRowRel(false);
-    aData.Ref2.SetTabRel(false);
     // Display sheet name on 2nd reference only when the 1st and 2nd refs are on
     // different sheets.
-    aData.Ref2.SetFlag3D(aData.Ref1.nTab != aData.Ref2.nTab);
+    aData.Ref2.SetFlag3D(rRange.aStart.Tab() != rRange.aEnd.Tab());
 
     pToken.reset(new ScDoubleRefToken(aData));
 }

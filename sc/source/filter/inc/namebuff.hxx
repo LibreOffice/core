@@ -214,31 +214,14 @@ inline void RangeNameBufferWK3::Add( const String& rName, const ScRange& aScRang
 {
     ScComplexRefData        aCRD;
     ScSingleRefData*        pSRD;
-    const ScAddress*    pScAddr;
 
     pSRD = &aCRD.Ref1;
-    pScAddr = &aScRange.aStart;
-    pSRD->SetFlag3D( sal_True );
-    pSRD->nCol = pScAddr->Col();
-    pSRD->nRow = pScAddr->Row();
-    pSRD->nTab = pScAddr->Tab();
-
-    // zunaechst ALLE Refs nur absolut
-    pSRD->SetColRel( false );
-    pSRD->SetRowRel( false );
-    pSRD->SetTabRel( false );
+    pSRD->InitAddress(aScRange.aStart);
+    pSRD->SetFlag3D(true);
 
     pSRD = &aCRD.Ref2;
-    pScAddr = &aScRange.aEnd;
-    pSRD->SetFlag3D( sal_True );
-    pSRD->nCol = pScAddr->Col();
-    pSRD->nRow = pScAddr->Row();
-    pSRD->nTab = pScAddr->Tab();
-
-    // zunaechst ALLE Refs nur absolut
-    pSRD->SetColRel( false );
-    pSRD->SetRowRel( false );
-    pSRD->SetTabRel( false );
+    pSRD->InitAddress(aScRange.aEnd);
+    pSRD->SetFlag3D(true);
 
     Add( rName, aCRD );
 }

@@ -55,8 +55,8 @@ bool ScDetectiveRefIter::GetNextRef( ScRange& rRange )
     if( p )
     {
         SingleDoubleRefProvider aProv( *p );
-        rRange.aStart.Set( aProv.Ref1.nCol, aProv.Ref1.nRow, aProv.Ref1.nTab );
-        rRange.aEnd.Set( aProv.Ref2.nCol, aProv.Ref2.nRow, aProv.Ref2.nTab );
+        rRange.aStart = aProv.Ref1.toAbs(aPos);
+        rRange.aEnd = aProv.Ref2.toAbs(aPos);
         bRet = true;
     }
 

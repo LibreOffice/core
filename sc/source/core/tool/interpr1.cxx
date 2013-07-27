@@ -3989,8 +3989,9 @@ void ScInterpreter::ScColumns()
                 String aTabName;
                 ScComplexRefData aRef;
                 PopExternalDoubleRef( nFileId, aTabName, aRef);
-                nVal += static_cast<sal_uLong>(aRef.Ref2.nTab - aRef.Ref1.nTab + 1) *
-                    static_cast<sal_uLong>(aRef.Ref2.nCol - aRef.Ref1.nCol + 1);
+                ScRange aAbs = aRef.toAbs(aPos);
+                nVal += static_cast<sal_uLong>(aAbs.aEnd.Tab() - aAbs.aStart.Tab() + 1) *
+                    static_cast<sal_uLong>(aAbs.aEnd.Col() - aAbs.aStart.Col() + 1);
             }
             break;
             default:

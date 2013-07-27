@@ -355,13 +355,7 @@ static sal_Bool lcl_AddFunctionToken( ScTokenArray& rArray, const OUString& rNam
 static void lcl_AddRef( ScTokenArray& rArray, long nStartRow, long nColCount, long nRowCount )
 {
     ScComplexRefData aRef;
-    aRef.InitFlags();
-    aRef.Ref1.nTab = 0;
-    aRef.Ref2.nTab = 0;
-    aRef.Ref1.nCol = 0;
-    aRef.Ref1.nRow = (SCROW) nStartRow;
-    aRef.Ref2.nCol = (SCCOL) (nColCount - 1);
-    aRef.Ref2.nRow = (SCROW) (nStartRow + nRowCount - 1);
+    aRef.InitRange(ScRange(0,nStartRow,0,nColCount-1,nStartRow+nRowCount-1,0));
     rArray.AddDoubleReference(aRef);
 }
 
